@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Request version="2.0"> 
+  <Head> 
+    <InstitutionID/>          
+    <TxCode>1376</TxCode>
+  </Head>  
+  <Body> 
+        <OrderNo/>  
+	<PaymentNo/>  
+	<SMSValidationCode/>
+  </Body> 
+</Request>

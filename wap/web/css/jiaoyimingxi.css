@@ -1,0 +1,73 @@
+
+.back {
+    height: 50px;
+    line-height: 45px;
+    background: #f34334;
+    text-align: center;
+}
+.back img {
+    height: 30px!important;
+    cursor: pointer;
+}
+.jiaoyi {
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    font-size: 14px!important;
+    background: #e8eaf0;
+}
+.jiaoyi div {
+    padding: 0;
+}
+.md-height {
+    height:64px;
+}
+.md-height div {
+    padding: 0;
+    text-align: center;
+}
+.data {
+    margin:10px 0;
+    padding:auto 0;
+    height: 44px;
+    text-align: center;
+}
+.data span {
+    display: block;
+    height: 20px;
+}
+.data1 {
+    font-size: 14px!important;
+    line-height: 20px;
+}
+.data2 {
+    font-size: 14px!important;
+    line-height: 14px;
+}
+.revenue {
+    line-height: 64px;
+    color: #161616;
+}
+.revenue i{
+    font-size: 12px;
+    color: #8c8c8c;
+}
+.money {
+    line-height: 64px;
+    color: #ff493b;
+}
+.money1 {
+    line-height: 64px;
+    color: #578640;
+}
+@media screen and (max-width: 320px)  {
+    .jiaoyi{
+        font-size: 10px!important;
+    }
+    .data1{
+        font-size: 10px!important;
+    }
+    .data2{
+        font-size: 10px!important;
+    }
+}

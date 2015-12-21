@@ -1,0 +1,181 @@
+.left-txt {
+    padding: 0;
+    text-align: right;
+    font-size: 15px;
+    color:#161616;
+}
+.right-txt {
+    padding-left: 0;
+    text-align:center;
+    font-size: 15px;
+    /*font-weight: 600;*/
+    color:#161616;
+}
+/*.safe-txt {*/
+    /*padding-left: 8px;*/
+    /*font-size: 15px;*/
+    /*color:#161616;*/
+/*}*/
+/*.safe-lf {*/
+    /*padding:0;*/
+/*}*/
+input.safe-lf {
+    margin-top:13px;
+    line-height: 24px;
+}
+.bg-height img {
+    height: 60px;
+    line-height: 60px;
+}
+.row input.login-info {
+    padding-left: 18px;
+    width:100%;
+    height: 42px;
+    line-height: 42px;
+    border-bottom:0;
+    background: #fff;
+}
+.sm-height,.bg-height {
+    background:#fff;
+}
+div.headpic {
+    padding: 0;
+    margin: auto auto;
+}
+.headpic img {
+    width:40px;
+    height:40px;
+}
+.headpic-img-box {
+    border-radius:20px;/* Opera 10.5+, �Լ�ʹ����IE-CSS3��IE����� */
+    -moz-border-radius: 20px;/* Firefox */
+    -webkit-border-radius: 20px; /* Safari �� Chrome */
+    width:40px;
+    height:40px;
+}
+.sm-height div.arrow img {
+    margin:15px 0;
+    width:16px;
+    height: 22px;
+}
+.sm-height div.arrow a {
+    width:100%;
+    line-height: 50px;
+    font-size: 13px;
+    color:#007aff;
+    text-decoration: none;
+    cursor:pointer;
+}
+.row .textarea {
+    width:100%;
+    height:190px;
+    line-height:30px;
+    color:#161616;
+}
+.row .txt {
+    width:100%;
+    height:52px;
+    line-height:50px;
+    color:#161616;
+    background:#fff;
+}
+.surplus {
+    height: 36px;
+    font-size:13px;
+    color: #7c7c7c;
+    line-height: 34px;
+}
+.surplus a {
+    height: 36px;
+    font-size:12px;
+    color: #007aff;
+    line-height: 34px;
+}
+.produce {
+    padding-top: 10px;
+    padding-bottom:10px;
+    height:135px;
+    font-size:12px;
+    color:#fff;
+    background: #f44336;
+}
+.produce div {
+    height:26px;
+    line-height:20px;
+}
+.produce div.first-hang{
+    padding-left:30px;
+    padding-bottom:15px;
+    height:32px;
+    line-height:30px;
+    font-size:13px;
+}
+.eye input {
+    width:35px;
+    height: 20px;
+}
+.yz-code input {
+    width:100px ;
+    height: 40px;
+}
+.account {
+    text-align:center;
+    font-size:14px;
+    background:#fff;
+}
+.account div {
+    margin:0 auto;
+    width:50%;
+    height: 52px;
+    line-height: 50px;
+    color: #171717;
+}
+.rg-line {
+    border-right:1px solid #e8eaf0;
+}
+.account .active {
+    margin:0 auto;
+    color: #f44336;
+    background:#e8eaf0;
+}
+.account-title{
+    height: 50px;
+    line-height: 50px;
+    font-size:13px;
+    color: #fff;
+    background: #f44336;
+}
+.account-title img {
+    margin: auto 0;
+    height:38px;
+}
+.set {
+    color:#fff;
+    font-size:13px;
+}
+.earning {
+    padding:16px 0;
+    height:auto;
+    color:#7c7c7c;
+    background: #fff;
+}
+.earning .earn-tit{
+    font-size:14px ;
+    line-height:14px;
+}
+.earning .earn-num1 {
+    height: 58px;
+    line-height: 52px;
+    font-size: 24px;
+    color:#7c7c7c;
+}
+.earning .earn-num2 {
+    height: 36px;
+    line-height: 36px;
+    font-size: 18px;
+    color: #f44336;
+}
+.shouyi {
+    height:36px;
+    line-height: 34px;
+}

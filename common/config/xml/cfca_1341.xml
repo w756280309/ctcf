@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Request version="2.0"> 
+  <Head> 
+    <TxCode>1341</TxCode> 
+  </Head>  
+  <Body> 
+	<InstitutionID/>  
+	<SerialNumber/>  
+	<OrderNo/>  
+	<Amount/>  
+	<Remark/>  
+	<AccountType/>  
+	<PaymentAccountName/>  
+	<PaymentAccountNumber/>  
+	<BankAccount> 
+	<BankID/>  
+	<AccountName/>  
+	<AccountNumber/>  
+	<BranchName/>  
+	<Province/>  
+	<City/> 
+	</BankAccount> 
+  </Body> 
+</Request>
