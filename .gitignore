@@ -16,5 +16,8 @@
 /backend/web/upload/product/*
 !/backend/web/upload/product/.gitkeep
 
-/*/runtime/
+/*/runtime/*
+!/backend/runtime/.gitkeep
+!/wap/runtime/.gitkeep
+
 /*/web/assets/
