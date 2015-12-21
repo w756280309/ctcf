@@ -6,7 +6,7 @@
 /backend/web/upload/adv/*
 !/backend/web/upload/adv/.gitkeep
 /backend/web/upload/contract/*
-!/backend/web/upload/contract/.gitkeep
+!/backend/web/upload/contract/.gitkeep  
 /backend/web/upload/contract_template/*
 !/backend/web/upload/contract_template/.gitkeep
 /backend/web/upload/editorUpload/*
@@ -21,3 +21,6 @@
 !/wap/runtime/.gitkeep
 
 /*/web/assets/
+
+.htaccess
+/nbproject/
