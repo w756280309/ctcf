@@ -209,7 +209,7 @@ class RepaymentController extends BaseController {
         }
         //$deal->setScenario('status');
         //$deal->status = OnlineProduct::STATUS_OVER;
-        $opres = OnlineProduct::updateAll(['status'=>OnlineProduct::STATUS_OVER,,'sort'=>60],['id'=>$pid]);
+        $opres = OnlineProduct::updateAll(['status'=>OnlineProduct::STATUS_OVER,'sort'=>60],['id'=>$pid]);
         if (!$opres) {
             $transaction->rollBack();
             return ['result'=>0,'message'=>'还款失败，修改标的状态错误'];
