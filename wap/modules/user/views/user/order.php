@@ -1,8 +1,5 @@
 <?php
-use yii\helpers\Html;
-use yii\bootstrap\ActiveForm;
 $this->title="我的理财";
-
 ?>
 <link rel="stylesheet" href="/css/bind.css"/>
     <link rel="stylesheet" href="/css/licai.css"/>
@@ -24,6 +21,7 @@ $this->title="我的理财";
                     <div class="swiper-slide <?= empty($type)?"dian":"" ?>" onclick="window.location.href='/user/user/myorder'">全部</div>
                     <div class="swiper-slide <?= $type==2?"dian":"" ?>" onclick="window.location.href='/user/user/myorder?type=2'">募集期</div>
                     <div class="swiper-slide <?= $type==3?"dian":"" ?>" onclick="window.location.href='/user/user/myorder?type=3'">满标</div>
+                    <div class="swiper-slide <?= $type==7?"dian":"" ?>" onclick="window.location.href='/user/user/myorder?type=7'">提前结束</div>
                     <div class="swiper-slide <?= $type==5?"dian":"" ?>" onclick="window.location.href='/user/user/myorder?type=5'">还款中</div>
                     <div class="swiper-slide <?= $type==6?"dian":"" ?>" onclick="window.location.href='/user/user/myorder?type=6'">已还清</div>
 <!--                    <div class="swiper-slide <?= $type==4?"dian":"" ?>" onclick="window.location.href='/user/user/myorder?type=4'">流标</div>-->
