@@ -1,6 +1,4 @@
 <?php
-use yii\helpers\Html;
-use yii\bootstrap\ActiveForm;
 $this->title="交易明细";
 ?>
 <link rel="stylesheet" href="/css/base.css"/>
@@ -19,8 +17,8 @@ $this->title="交易明细";
             <span class="data1"><?= $val['created_at']?date('Y-m-d',$val['created_at']):"" ?></span>
             <span class="data2"><?= $val['created_at']?date('H:i:s',$val['created_at']):"" ?></span>
         </div>
-        <div class="col-xs-3 revenue"><?= Yii::$app->params['mingxi']['type'][$val['type']] ?><i style="font-style: normal"><?= $desc[$key]?"(".$desc[$key].")":"" ?></i></div>
-        <?php if($val['type'] == 0 || $val['type'] == 4 || ($val['type'] == 2 && $val['status'] == 3)) { ?>
+        <div class="col-xs-3 revenue"><?= Yii::$app->params['mingxi'][$val['type']] ?></div>
+        <?php if($val['type'] == 0 || $val['type'] == 4) { ?>
         <div class="col-xs-3 money"><?= "+".$val['in_money'] ?></div>
         <?php }else if($val['type'] == 1 || $val['type'] == 2){ ?>
         <div class="col-xs-3 money"><?= "-".$val['out_money'] ?></div>
