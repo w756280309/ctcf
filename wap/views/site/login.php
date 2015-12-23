@@ -44,7 +44,7 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
                 <a href="/site/resetpass" class="forget-mima">忘记密码？</a>
                 <div class="col-xs-3"></div>
                 <div class="col-xs-6 login-sign-btn">
-                    <input id="login-btn" class="btn-common btn-normal" name="start" type="submit" value="登录" >
+                    <input id="login-btn" class="btn-common btn-normal" name="start" type="button" value="登录" >
                 </div>
                 <div class="col-xs-3"></div>
 
@@ -119,6 +119,5 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
     <?php $this->endBody() ?>
 		
 </body>
-<script src="/js/login.js"></script>
 </html>
 <?php $this->endPage() ?>
