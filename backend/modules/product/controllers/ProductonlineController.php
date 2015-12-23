@@ -31,7 +31,6 @@ class ProductonlineController extends BaseController {
             $rongziInfo[$v['id']] = $v['org_name'];
         }     
         $model = $id ? OnlineProduct::findOne($id) : new OnlineProduct();
-        //$ctmodel = $id ? (ContractTemplate::findOne(['pid'=>$id])?ContractTemplate::findOne(['pid'=>$id]):new ContractTemplate()) : new ContractTemplate();
         $ctmodel = array();
         $model->scenario = 'create';
          
@@ -47,9 +46,6 @@ class ProductonlineController extends BaseController {
             $ctmodel = ContractTemplate::find()->where(['pid'=>$id])->asArray()->all();
         }
         
-//        if ($model->load(Yii::$app->request->post())&&$model->validate()&&$ctmodel->load(Yii::$app->request->post())&&$ctmodel->validate()) {
-//        if ($model->load(Yii::$app->request->post()) &&$ctmodel->load(Yii::$app->request->post())) {
-//            var_dump($model->validate(),$model->getErrors(),$ctmodel->validate());exit;
         if ($model->load(Yii::$app->request->post())&&$model->validate()) {
             if(empty($id)){
                 $model->sn = OnlineProduct::createSN();
@@ -58,7 +54,7 @@ class ProductonlineController extends BaseController {
             $old = $model->oldAttributes;
             $new = $model->attributes;
             $diff = \Yii::$app->functions->timediff(strtotime(date('Y-m-d',  strtotime($model->start_date))),  strtotime(date('Y-m-d',strtotime($model->finish_date))));
-            //var_dump($diff);;exit;
+
             $start = strtotime($model->start_date);
             $end = strtotime($model->end_date);
             $finish = strtotime($model->finish_date);
@@ -79,13 +75,16 @@ class ProductonlineController extends BaseController {
                 if(!empty($id) && $model->online_status == OnlineProduct::STATUS_ONLINE) {
                     if($model->status == OnlineProduct::STATUS_FULL && $jixi_time < $model->full_time) {
                         $err = '计息开始时间必须大于项目满标时间';
-                    }else if($model->status == OnlineProduct::STATUS_FOUND && $jixi_time < $model->full_time) {//?????
+                    }else if($model->status == OnlineProduct::STATUS_FOUND && $jixi_time < $model->full_time) {
                         $err = '计息开始时间必须大于项目提前募集结束时间';
                     }else if($jixi_time > $finish) {
                         $err = '计息开始时间必须小于项目的截止时间';
                     }
                 }
             }
+            
+            $con_name_arr = Yii::$app->request->post('name');
+            $con_content_arr = Yii::$app->request->post('content');
             
             if($model->expires>$diff['day']){
                 $model->addError('expires',"项目天数 应该小于等于 项目截止日 - 募集开始时间;当前天数：".$diff['day'].'天');
@@ -95,11 +94,11 @@ class ProductonlineController extends BaseController {
                 $model->addError('finish_date',"募集开始时间小于募集结束时间小于项目结束日");
             }else if(!empty($err)) {
                 $model->addError('jixi_time', $err);
+            }else if(empty($con_name_arr) || empty($con_content_arr)) {
+                $model->addError('contract_type','合同协议至少要输入一份');
             }else{
                 $transaction = Yii::$app->db->beginTransaction();
-//                if($old['contract_type']!=$new['contract_type']&&$new['contract_type']==1){
-//                    ContractTemplate::deleteAll(['pid'=>$id]);
-//                }
+                
                 $model->start_date = strtotime($model->start_date);
                 $model->end_date = strtotime($model->end_date);
                 $model->finish_date = strtotime($model->finish_date);
@@ -112,10 +111,7 @@ class ProductonlineController extends BaseController {
                     var_dump($model->getErrors());
                     $transaction->rollBack();
                     exit('录入ProductOnline异常');
-                } else {
-                    $con_name_arr = Yii::$app->request->post('name');
-                    $con_content_arr = Yii::$app->request->post('content');
-                    
+                } else {                    
                     if ($id) {
                         ContractTemplate::deleteAll(['pid'=>$id]);
                     }
@@ -132,15 +128,7 @@ class ProductonlineController extends BaseController {
                         }
                     }
                 }
-//                if($model->contract_type==0){
-//                    $ctmodel->pid=$model->id;
-//                    $ctmodel->type=1;
-//                    $cfre = $ctmodel->save();
-//                    if (!$cfre) {
-//                        $transaction->rollBack();
-//                        exit('录入ContractTemplate异常');
-//                    }                
-//                }
+                
                 $transaction->commit();
                 return $this->redirect(['list']);
             }

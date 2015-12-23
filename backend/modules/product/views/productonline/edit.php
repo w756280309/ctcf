@@ -238,6 +238,9 @@ $form->field($model, 'borrow_uid', ['template' => '{input}{error}', 'inputOption
                 
                 
                 <h3 class="form-section">项目合同信息</h3>
+                <?=
+                $form->field($model, 'contract_type', ['template' => '{error}']);
+                ?> 
                 <?php if(empty($pid)) { ?>
                 <div class="row-fluid">
                         <div class="span12 ">
