@@ -7,13 +7,22 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
 <link rel="stylesheet" href="/css/bind.css"/>
 <link rel="stylesheet" href="/css/chongzhi.css"/>
 <link rel="stylesheet" href="/css/base.css"/>
-
+<style type="text/css">
+    .ryzm-disabled {
+    color: #fff !important;
+    background:#f44336 ;
+    border: 1px solid #f44336;
+}
+</style>
     <!--银行卡-->
         <div class="row bank-card">
             <div class="col-xs-2 bank-img"><img src="/images/bankicon/<?= $user_bank->bank_id ?>.png" alt=""/></div>
             <div class="col-xs-8 bank-content">
                 <div class="bank-content1"><?= $user_bank->bank_name ?></div>
-                <div class="bank-content2">尾号<?= $user_bank->card_number?substr($user_bank->card_number, -4):"" ?> 储蓄卡</div>
+                <div class="bank-content2">
+                    尾号<?= $user_bank->card_number?substr($user_bank->card_number, -4):"" ?> 储蓄卡
+                    &emsp;银行预留手机号 <?= substr_replace(Yii::$app->user->identity->mobile,'****',3,-4); ?>
+                </div>
             </div>
             <div class="col-xs-2"></div>
         </div>
@@ -27,12 +36,20 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
         <!--充值金额-->
         <form method="post" class="cmxform" id="form" action="/user/userbank/recharge" data-to="1">
             <input name="_csrf" type="hidden" id="_csrf" value="<?= Yii::$app->request->csrfToken ?>">
+            <input id="qpay-recharge-sn" name="RechargeRecord[sn]" id="" type="hidden" />
             <div class="row kahao">
                 <div class="hidden-xs col-sm-1"></div>
                 <div class="col-xs-3 col-sm-1">充值金额</div>
                 <div class="col-xs-9 col-sm-8 safe-lf"><input type="text" id="fund"  name='RechargeRecord[fund]' placeholder="输入充值金额"/></div>
                 <div class="hidden-xs col-sm-1"></div>
             </div>
+            <div class="row kahao">
+                <div class="hidden-xs col-sm-1"></div>
+                <div class="col-xs-3 col-sm-1">短信验证码</div>
+                <div class="col-xs-9 col-sm-8 safe-lf"><input type="text" id="yzm"  name='yzm' placeholder="输入验证码"/></div>
+                <div class="hidden-xs col-sm-1"><input class="yzm yzm-normal" name="createsms" id="createsms" value="获取验证码" type="button" style="margin-top:-4px;font-size:12px;height:28px;line-height:27px;color: white !important"></div>
+            </div>
+           
             <input type="text" name="" style="display:none"/>
             <!--限额提醒-->
             <div class="row dan">
@@ -51,6 +68,19 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
         </form>
         <script type="text/javascript">
         var csrf;
+        function validateform(){
+            if($('#fund').val()==''){
+                toast(this,'充值金额不能为空');
+                $(this).removeClass("btn-press").addClass("btn-normal");
+                return false;
+            }
+            if($('#fund').val()==0){
+                toast(this,'充值金额不能为零');
+                $(this).removeClass("btn-press").addClass("btn-normal");
+                return false;
+            }
+            return true;
+        }
         $(function(){
            var err = '<?= $data['code'] ?>';
            var mess = '<?= $data['message'] ?>';
@@ -62,21 +92,87 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
            csrf = $("meta[name=csrf-token]").attr('content');
            $('#rechargebtn').bind('click',function(){
                $(this).addClass("btn-press").removeClass("btn-normal");
-               if($('#fund').val()==''){
-                   toast(this,'充值金额不能为空');
-                   $(this).removeClass("btn-press").addClass("btn-normal");
+               if(!validateform()){
                    return false;
                }
-               if($('#fund').val()==0){
-                   toast(this,'充值金额不能为零');
-                   $(this).removeClass("btn-press").addClass("btn-normal");
-                   return false;
-               }
-               subForm("#form");
+               subRecharge();
+               //subForm("#form");
                $(this).removeClass("btn-press").addClass("btn-normal");
            });
 
+           $('#createsms').on('click', function(e) {
+                e.preventDefault();
+                if(!validateform()){
+                   return false;
+               }
+                var $form = $('#form');
+                var xhr = $.post(
+                    '/user/userbank/getpaysms',
+                    $form.serialize()
+                );
+
+                xhr.done(function(data) {
+                    $('#qpay-recharge-sn').val(data['rechargeSn']);
+                    qpay_timedown();
+                });
+
+                xhr.fail(function(jqXHR) {
+                    var errMsg = jqXHR.responseJSON && jqXHR.responseJSON.message
+                        ? jqXHR.responseJSON.message
+                        : '未知错误，请刷新重试或联系客服';
+
+                    toast(null, errMsg);
+                });
+                
+            });
         })    
+        
+        function subRecharge(){
+                if(!validateform()){
+                   return false;
+               }
+                var $form = $('#form');
+                var xhr = $.post(
+                    $form.attr('action'),
+                    $form.serialize()
+                );
+
+                xhr.done(function(data) {
+                    location.href=data['next']
+                });
+
+                xhr.fail(function(jqXHR) {
+                    var errMsg = jqXHR.responseJSON && jqXHR.responseJSON.message
+                        ? jqXHR.responseJSON.message
+                        : '未知错误，请刷新重试或联系客服';
+
+                    toast(null, errMsg);
+                });
+        }
+        
+        //60秒倒计时
+        var InterValObj; //timer变量，控制时间
+        var curCount;//当前剩余秒数
+        var count = 60; //间隔函数，1秒执行
+        function qpay_timedown() {
+            curCount = count;
+            $('#createsms').addClass("ryzm-disabled");
+            $("#createsms").attr("disabled", "true");
+            $("#createsms").val(curCount + "s后重发");
+            InterValObj = window.setInterval(qpay_SetRemainTime, 1000); //启动计时器，1秒执行一次
+        }
+
+        function qpay_SetRemainTime() {
+            if (curCount == 0) {
+                window.clearInterval(InterValObj);//停止计时器
+                $('#createsms').removeAttr("disabled");//启用按钮
+                $('#createsms').removeClass("ryzm-disabled");
+                $("#createsms").val("重新发送");
+            } else {
+                curCount--;
+                $("#createsms").val(curCount + "s后重发");
+            }
+        };
         </script>
 
     
