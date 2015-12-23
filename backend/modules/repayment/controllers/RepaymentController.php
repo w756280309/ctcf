@@ -229,7 +229,7 @@ class RepaymentController extends BaseController {
 //        if($product->status==OnlineProduct::STATUS_FULL){
 //            $boolstatus=TRUE;
 //        }
-        if($product->status!=OnlineProduct::STATUS_FULL){
+        if(!in_array($product->status, [OnlineProduct::STATUS_FULL,OnlineProduct::STATUS_FOUND])){
             return ['result'=>0,'message'=>'标的状态异常，当前状态码：'.$product->status]; 
         }
         if($fk->status==3){

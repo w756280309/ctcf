@@ -58,7 +58,7 @@ class OrderCore {
         $ua->available_balance = $bcrond->bcround(bcsub($ua->available_balance, $price),2);
         if ($ua->available_balance * 1 < 0) {
             $transaction->rollBack();
-            return ['code'=>PayService::ERROR_MONEY_LESS,  'message'=>PayService::getErrorByCode(PayService::ERROR_MONEY_LESS),'tourl'=>'/order/order/ordererror'];
+            return ['code'=>PayService::ERROR_MONEY_LESS,  'message'=>PayService::getErrorByCode(PayService::ERROR_MONEY_LESS)];
         }
         $ua->freeze_balance = $bcrond->bcround(bcadd($ua->freeze_balance, $price),2);
         $ua->out_sum = $bcrond->bcround(bcadd($ua->out_sum, $price),2);

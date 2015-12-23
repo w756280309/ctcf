@@ -117,7 +117,7 @@ use yii\widgets\LinkPager;
                                             <?php if ($val['status'] < 2){ ?>
                                             | <a href="javascript:del('/product/productonline/del','<?= $val['id'] ?>')" class="btn mini red ajax_op" op="status" data-index="<?= $val['status'] ?>" index="<?= $val['id'] ?>"><i class="icon-minus-sign"></i>删除</a>
                                             <?php } ?>
-                                            <?php if ($val['online_status'] == 1 && $val['status']==3 && empty($val['fk_examin_time'])){ ?>
+                                            <?php if ($val['online_status'] == 1 && ($val['status']==3 || $val['status']==7) && empty($val['fk_examin_time'])){ ?>
                                             | <a href="javascript:openwin('/order/onlinefangkuan/examinfk?pid=<?= $val['id'] ?>',800,400)" class="btn mini green"><i class="icon-edit"></i> 放款审核</a>
                                             <?php } ?>
                                             <?php if ($val['online_status'] == 1 && $val['status'] > 1){ ?>
@@ -126,7 +126,7 @@ use yii\widgets\LinkPager;
                                             <?php if ($val['status'] == 5||$val['status'] == 6){ ?>
                                             | <a href="/repayment/repayment?pid=<?= $val['id'] ?>" class="btn mini green"><i class="icon-edit"></i> 还款</a>
                                             <?php } ?>
-                                            <?php if (($val['fk_examin_time'])>0&&$val['status'] == 3){ ?>
+                                            <?php if (($val['fk_examin_time'])>0&&($val['status'] == 3||$val['status'] == 7)){ ?>
                                             | <a href="javascript:fk('<?= $val['id'] ?>');" class="btn mini green"><i class="icon-edit"></i> 放款</a>
                                             <?php } ?>
                                             <?php if ($val['online_status']==1&&(in_array($val['status'],[3,5,7]))&&$val['is_jixi']==0){ ?>
@@ -217,15 +217,16 @@ use yii\widgets\LinkPager;
     function corfirmJixi(pid){
         var csrftoken= '<?= Yii::$app->request->getCsrfToken(); ?>';
              if(confirm('确认计息吗？')){
-                 //openLoading();
+                 openLoading();
                  $.post('/product/productonline/jixicorfirm',{id:pid,_csrf:csrftoken},function(data)
                     {
+                        cloaseLoading()
                         alert(data.message);
                         //console.log(data);
                         if(data.result==1){
-                           // location.reload();
+                           location.reload();
                         }
-                        //cloaseLoading()
+                        
                     });  
              }
     }
@@ -238,8 +239,7 @@ use yii\widgets\LinkPager;
                 openLoading();//打开loading
                 $.post("/product/productonline/end-product", {pid: pid, _csrf:csrf}, function (result) {
                     cloaseLoading();//关闭loading
-                    newalert(result['res'],'');
-                    location.reload();
+                    newalert(result['res'],'',1);
                 });   
             })
     }

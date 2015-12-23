@@ -57,40 +57,6 @@ class OrderController extends BaseController {
         return ['code' => 0, 'message' => '验证通过'];
     }
 
-//    public function actionDoorder($sn=null){
-//        $buystatus = OnlineProduct::checkOnlinePro($sn);//不等于100时候不能投资
-//        //$buystatus = OnlineProduct::checkOnlinePro($sn,  $this->uid,$balance);//不等于100时候不能投资  balace是用户余额
-//        
-//        //判断是否合规 合规执行此操作
-//        if($buystatus==OnlineProduct::ERROR_SUCCESS){
-//            $deal = OnlineProduct::findOne(['sn'=>$sn]);
-//            $price = Yii::$app->request->post('order_money');
-//            $order = new OnlineOrder();
-//            $order->order_money = $price;
-//            $order->uid =  \Yii::$app->user->id;
-//            if ($order->load(Yii::$app->request->post()) && $order->validate()) {
-//                $transaction = Yii::$app->db->beginTransaction();
-//                $order->uid = Yii::$app->user->id;
-//                $order->sn = OnlineOrder::createSN();
-//                //$order->drawpwd = \Yii::$app->security->generatePasswordHash($this->drawpwd);
-//                $order->online_pid = $id;
-//                $order->order_time = time();
-//                $order->refund_method = $model->refund_method;
-//                $order->yield_rate = $model->yield_rate;
-//                $order->expires = $model->expires;
-//                $ore = $order->save();
-//                $transaction->commit();
-//            }
-//            
-//            return $this->render('index',['deal'=>$deal,'param'=>$param]);
-//        }else{//标的异常
-//            $msg = OnlineProduct::getErrorByCode($buystatus);
-//            exit($msg);
-//        }
-//        
-//    }
-
-
     /**
      * 购买标的
      * @param type $sn

@@ -200,6 +200,7 @@ class UserbankController extends BaseController {
             Yii::$app->response->format = Response::FORMAT_JSON;
             $pending = Yii::$app->session->get('cfca_qpay_recharge');
             $sms = \Yii::$app->request->post('yzm');
+            $from = \Yii::$app->request->post('from');
             if($pending===null){
                 return $this->createErrorResponse('请先发送短信码');
             }else{
@@ -217,7 +218,7 @@ class UserbankController extends BaseController {
                 if($ret['code']===0){
                     \Yii::$app->session->remove('cfca_qpay_recharge');
                     return [
-                    'next' => $ret['tourl'],
+                    'next' => empty($from)?$ret['tourl']:$from,
                 ];
                 }else{
                     return $this->createErrorResponse($ret['message']);

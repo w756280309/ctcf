@@ -78,25 +78,12 @@ $(function () {
                                 var html = "";
                                 $.each(data.deals, function (i, item) {
 
-                                    //{
-                                    //    "k":"2",
-                                    //    "num":"D15111616094583969727",
-                                    //    "title":"test1",
-                                    //    "yr":"10.00",
-                                    //    "status":"6",
-                                    //    "qixian":"5",
-                                    //    "money":"200000.00",
-                                    //    "start":"00:00",
-                                    //    "finish_rate":"1.0000",
-                                    //    "start_desc":"11月16日",
-                                    //    "statusval":"已还清"
-                                    //}
                                     var itemyr = changeTwoDecimal(item.yr);
                                     var className = (item.status==1 || item.status==2)?"column-title-rg":"column-title-rg1";
                                     var finishHtml = "";
                                     if(item.status==1){
                                         finishHtml = '<div class="column-clock"><span>'+item.start_desc+'</span>'+item.start+'</div>';
-                                    }else if(item.status==2){
+                                    }else if(item.status==2||item.status==7){
                                         finishHtml = '<div class="column-clock column-clock_per">'+item.finish_rate+'%</div>';
                                     }else{
                                         finishHtml = '<div class="column-clock column-clock_per">100%</div>'

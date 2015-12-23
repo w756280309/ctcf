@@ -109,7 +109,7 @@ use yii\helpers\Html;
                     </div>
             </div>
             <?php 
-            if($deal->status==3&&empty($deal->fk_examin_time)){ 
+            if(($deal->status==3||$deal->status==7)&&empty($deal->fk_examin_time)){ 
             //if(1==1){ 
             ?>
             <div class="form-actions">

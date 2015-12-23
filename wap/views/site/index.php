@@ -41,7 +41,7 @@ $this->registerCssFile('/css/index.css', ['depends' => 'yii\web\YiiAsset']);
                 <canvas data-status="<?= $val['status'] ?>" data-per="<?= number_format($val['finish_rate']*100,0) ?>"></canvas>
                 <?php if($val['status']==1){ ?>
                 <div class="column-clock"><span><?=$val['start_desc']?></span><?=$val['start']?></div>
-                <?php }else if($val['status']==2){ ?>
+                <?php }else if($val['status']==2||$val['status']==7){ ?>
                 <div class="column-clock column-clock_per"><?=  number_format($val['finish_rate']*100,0)?>%</div>
                 <?php }else{ ?>
                 <div class="column-clock column-clock_per">100%</div>
