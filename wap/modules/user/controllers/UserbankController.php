@@ -476,7 +476,7 @@ class UserbankController extends BaseController {
         return $this->render('tixian', ['user_bank' => $user_bank, 'user_acount' => $user_acount]);
     }
 
-    public function actionChecktradepwd() {
+    public function actionChecktradepwd($money=null) {
         $this->layout = "@app/modules/order/views/layouts/buy";
         if (Yii::$app->request->isAjax) {
             Yii::$app->response->format = Response::FORMAT_JSON;
@@ -487,6 +487,29 @@ class UserbankController extends BaseController {
         if($user && $user->status == User::STATUS_DELETED) {
             $this->redirect('/site/usererror');
         }
+        
+        $draw = new DrawRecord();
+        $draw->uid = $uid;
+        $draw->money = $money;
+        $data = '';
+        if($draw->validate()) {
+            $us = new UserService();
+            $re = $us->checkDraw($uid, $draw->money);
+            if($re['code']) {
+                $data = ['tourl' => '/user/userbank/tixian', 'code' => $re['code'], 'message' => $re['message']];
+            }
+        } else {
+            $message = $draw->firstErrors;
+            $data = ['tourl' => '/user/userbank/tixian', 'code' => 1, 'message' => current($message)]; 
+        }
+        
+        if(!empty($data)) {
+            if (Yii::$app->request->isAjax) {
+                return $data;
+            } else {
+                return $this->render('checktradepwd', ['status' => 0, 'data' => $data]);
+            }        
+        }
 
         $user_bank = UserBanks::find()->where(['uid' => $uid])->one();
         $user_acount = UserAccount::find()->where(['type' => UserAccount::TYPE_BUY, 'uid' => $uid])->one();
@@ -494,13 +517,11 @@ class UserbankController extends BaseController {
         $model = new EditpassForm();
         $model->scenario = 'checktradepwd';
         if($model->load(Yii::$app->request->post()) && $model->validate()) {
-            $money = Yii::$app->request->post('money');
-            $us = new UserService();
-            $re = $us->checkDraw($uid, $money);
-            if($re['code']) {
-                return $re;
+            $money_r = Yii::$app->request->post('money');
+            if($money != $money_r) {
+                return $this->redirect('/user/userbank/tixian');
             }
-
+            
             $transaction = Yii::$app->db->beginTransaction();
             //录入draw_record记录
             $draw = new DrawRecord;

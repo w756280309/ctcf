@@ -1,9 +1,6 @@
 <?php
-use yii\helpers\Html;
-use yii\bootstrap\ActiveForm;
 $this->title="交易密码";
 $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','position' => 1]);
-$money = $money?$money:Yii::$app->request->get('money');
 ?>
 <link rel="stylesheet" href="/css/base.css"/>
 <link rel="stylesheet" href="/css/bind.css"/>
@@ -17,7 +14,7 @@ $money = $money?$money:Yii::$app->request->get('money');
         <div class="hidden-xs col-sm-1"></div>
     </div>
     <!--充值金额-->
-    <form method="post" class="cmxform" id="form" action="/user/userbank/checktradepwd" data-to="1">
+    <form method="post" class="cmxform" id="form" action="/user/userbank/checktradepwd?money=<?= $money ?>" data-to="1">
         <input name="_csrf" type="hidden" id="_csrf" value="<?= Yii::$app->request->csrfToken ?>">
         <input name="money" type="hidden" value="<?= $money ?>">
         <div class="row kahao">
@@ -52,6 +49,13 @@ $money = $money?$money:Yii::$app->request->get('money');
     <script type="text/javascript">
     var csrf;
     $(function(){
+       var err = '<?= $data['code'] ?>';
+       var mess = '<?= $data['message'] ?>';
+       var tourl = '<?= $data['tourl'] ?>';
+       if(err == '1') {
+           toasturl(tourl,mess);
+       }
+        
        csrf = $("meta[name=csrf-token]").attr('content');
        $('#checktrade').bind('click',function(){
            $(this).addClass("btn-press").removeClass("btn-normal");

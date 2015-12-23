@@ -145,21 +145,19 @@ class DrawrecordController extends BaseController {
         ]);
     }
 
+    /*
+     * 会员管理 提现申请页面
+     */
     public function actionApply($name = null, $mobile = null) {
-        $temp = new User();
-        //搜索数据，逻辑是：两个输入框，有四种情况，两个都填入内容，一个填入（两种情况），两个都不填
-        $query = '';
-        if (!empty($name) && !empty($mobile)) {
-            $query = "real_name like '%$name%' and mobile='$mobile'";
-        } elseif (!empty($name) && empty($mobile)) {
-            $query = "real_name like '%$name%'";
-        } elseif (empty($name) && !empty($mobile)) {
-            $query = "mobile='$mobile'";
-        } else {
-            $query = "";
+        $query = User::find();
+        
+        if(!empty($name)) {
+            $query->andFilterWhere(['like','real_name',$name]);
+        }        
+        if(!empty($mobile)) {
+            $query->andFilterWhere(['like','mobile',$mobile]);
         }
-        $query = $temp->find()->Where($query);
-
+        
         $tzUser = $query->andWhere("type=1")->select('id,usercode,mobile,real_name')->asArray()->all();
         $res = [];
         foreach ($tzUser as $k => $v) {

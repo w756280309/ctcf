@@ -5,7 +5,6 @@ namespace app\modules\user\controllers;
 use Yii;
 use app\controllers\BaseController;
 use yii\web\Response;
-use common\models\user\User;
 use common\core\UserAccountCore;
 use common\models\user\MoneyRecord;
 use common\service\OrderService;
@@ -26,31 +25,16 @@ class UserController extends BaseController {
         return $this->render('index',['ua'=>$ua,'user'=>$this->user,'ljsy'=>$leijishouyi,'dhsbj'=>$dhsbj,'zcze'=>$zcze, 'data' => $data]);
     }
     
+    /*
+     * 输出个人交易明细记录
+     * 输出信息均为成功记录，仅包括四类：充值、提现、投资、还款
+     */
     public function actionMingxi() {
         $this->layout = "@app/modules/order/views/layouts/buy";
-        $model = MoneyRecord::find()->where(['uid' => $this->uid])->select('created_at,type,in_money,out_money,balance,status')->orderBy("id desc")->asArray()->all();
-        $arr = array();
-        $desc = array();
-        foreach($model as $key => $val) {
-            if($val['status'] == MoneyRecord::STATUS_SUCCESS) {
-                $arr[$key] = $val;
-            } else {          
-                if($val['type'] == MoneyRecord::TYPE_RECHARGE || $val['type'] == MoneyRecord::TYPE_DRAW) {
-                    if($val['status'] == MoneyRecord::STATUS_ZERO) {
-                        $desc[$key] = '处理中';
-                        $arr[$key] = $val;
-                    } else if($val['status'] == MoneyRecord::STATUS_FAIL) {
-                        $desc[$key] = '失败';
-                        $arr[$key] = $val;
-                    }
-                }
-                if($val['type'] == MoneyRecord::TYPE_ORDER && $val['status'] == MoneyRecord::STATUS_REFUND) {
-                    $desc[$key] = '退款';
-                    $arr[$key] = $val;
-                }
-            }
-        }        
-        return $this->render('mingxi',['model' => $arr, 'desc' => $desc]);
+        $type = [MoneyRecord::TYPE_RECHARGE,  MoneyRecord::TYPE_DRAW,  MoneyRecord::TYPE_ORDER,  MoneyRecord::TYPE_HUANKUAN];
+        $model = MoneyRecord::find()->where(['uid' => $this->uid, 'type' => $type, 'status' => MoneyRecord::STATUS_SUCCESS])->select('created_at,type,in_money,out_money,balance,status')->orderBy("id desc")->asArray()->all();
+      
+        return $this->render('mingxi',['model' => $model]);
     }
 
     public function actionMyorder($type=null,$page=1){

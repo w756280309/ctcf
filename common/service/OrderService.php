@@ -55,7 +55,7 @@ class OrderService {
         $code = ($page>$tp)?1:0;
         $message = ($page>$tp)?'数据错误':'消息返回';
         foreach ($query as $key=>$dat){
-            $query[$key]['statusval'] = Yii::$app->params['productonline']['status'][$dat['pstatus']];
+            $query[$key]['statusval'] = Yii::$app->params['deal_status'][$dat['pstatus']];
             $query[$key]['order_time'] = $dat['order_time']?date('Y-m-d',$dat['order_time']):"";
             if(in_array($dat['pstatus'], [OnlineProduct::STATUS_NOW,  OnlineProduct::STATUS_FULL])){
                 $query[$key]['profit'] = '--';//$loan->loan(1,$dat['order_money'],$dat['yield_rate'],$dat['expiress']);

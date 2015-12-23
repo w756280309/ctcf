@@ -63,7 +63,7 @@ class DrawRecord extends \yii\db\ActiveRecord {
 //            ['drawpwd', 'validatePassword'], wyf 注释的，因为写录入数据逻辑，该字段以后在考虑
             [['money'], 'match', 'pattern' => '/^[0-9]+([.]{1}[0-9]{1,2})?$/', 'message' => '提现金额格式错误'],
             [['account_id', 'uid', 'status', 'created_at', 'updated_at'], 'integer'],
-            [['money'], 'number', 'min' => 0.01, 'max' => 10000000],
+            [['money'], 'number', 'min' => 1, 'max' => 10000000],
             [['sn', 'bank_id', 'bank_username', 'bank_account'], 'string', 'max' => 30]
         ];
     }
