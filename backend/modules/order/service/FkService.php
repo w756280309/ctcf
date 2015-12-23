@@ -14,7 +14,7 @@ use common\models\product\OnlineProduct;
 class FkService {
     
     /**
-     * 验证标的是否允许放款操作
+     * 判断条件必须是管理员和项目状态必须是满标或者项目成立
      * @param type $pid
      * @return boolean
      */
@@ -29,7 +29,8 @@ class FkService {
         if(empty($product)){
             return ['res'=>0,'msg'=>'项目无法获取']; 
         }
-        if($product->status!=OnlineProduct::STATUS_FULL){
+        
+        if(!in_array($product->status, [OnlineProduct::STATUS_FULL,OnlineProduct::STATUS_FOUND])){
             return ['res'=>0,'msg'=>'项目不可放款']; 
         }
         return TRUE;

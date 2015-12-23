@@ -30,7 +30,7 @@ $this->registerJs('var cp=' . $header['cp'] . ';', 1);
                         <canvas data-status="<?= $val['status'] ?>" data-per="<?= $val['finish_rate'] ?>"></canvas>
                         <?php if ($val['status'] == 1) { ?>
                             <div class="column-clock"><span><?= $val['start_desc'] ?></span><?= $val['start'] ?></div>
-                        <?php } else if ($val['status'] == 2) { ?>
+                        <?php } else if ($val['status'] == 2||$val['status'] == 7) { ?>
                             <div
                                 class="column-clock column-clock_per"><?= $val['finish_rate'] ?>
                                 %

@@ -57,15 +57,13 @@ class OrderService {
         foreach ($query as $key=>$dat){
             $query[$key]['statusval'] = Yii::$app->params['deal_status'][$dat['pstatus']];
             $query[$key]['order_time'] = $dat['order_time']?date('Y-m-d',$dat['order_time']):"";
-            if(in_array($dat['pstatus'], [OnlineProduct::STATUS_NOW,  OnlineProduct::STATUS_FULL])){
-                $query[$key]['profit'] = '--';//$loan->loan(1,$dat['order_money'],$dat['yield_rate'],$dat['expiress']);
+            if(in_array($dat['pstatus'], [OnlineProduct::STATUS_NOW,  OnlineProduct::STATUS_FULL,  OnlineProduct::STATUS_FOUND])){
+                $query[$key]['profit'] = '--';
                 $query[$key]['returndate'] = date('Y-m-d',$dat['finish_date']);
-                //$query[$key]['returndate'] = $loan->returnDate(date('Y-m-d',$dat['penddate']),$dat['expiress']);
             }else if($dat['pstatus']==OnlineProduct::STATUS_HUAN){
                 $replayment = \common\models\order\OnlineRepaymentPlan::findOne(['order_id'=>$dat['id'],'online_pid'=>$dat['online_pid']]);
                 $query[$key]['profit'] = $replayment->lixi;
                 $query[$key]['returndate'] = date('Y-m-d',$dat['finish_date']);
-                //$query[$key]['returndate'] = date('Y-m-d',$replayment->refund_time);
             }else{
                 $replayment = \common\models\order\OnlineRepaymentRecord::findOne(['order_id'=>$dat['id'],'online_pid'=>$dat['online_pid']]);
                 $query[$key]['profit'] = $replayment->lixi;

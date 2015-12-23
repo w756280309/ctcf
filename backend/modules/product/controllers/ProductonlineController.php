@@ -47,9 +47,6 @@ class ProductonlineController extends BaseController {
             $ctmodel = ContractTemplate::find()->where(['pid'=>$id])->asArray()->all();
         }
         
-//        if ($model->load(Yii::$app->request->post())&&$model->validate()&&$ctmodel->load(Yii::$app->request->post())&&$ctmodel->validate()) {
-//        if ($model->load(Yii::$app->request->post()) &&$ctmodel->load(Yii::$app->request->post())) {
-//            var_dump($model->validate(),$model->getErrors(),$ctmodel->validate());exit;
         if ($model->load(Yii::$app->request->post())&&$model->validate()) {
             if(empty($id)){
                 $model->sn = OnlineProduct::createSN();
@@ -132,15 +129,7 @@ class ProductonlineController extends BaseController {
                         }
                     }
                 }
-//                if($model->contract_type==0){
-//                    $ctmodel->pid=$model->id;
-//                    $ctmodel->type=1;
-//                    $cfre = $ctmodel->save();
-//                    if (!$cfre) {
-//                        $transaction->rollBack();
-//                        exit('录入ContractTemplate异常');
-//                    }                
-//                }
+
                 $transaction->commit();
                 return $this->redirect(['list']);
             }
@@ -268,14 +257,6 @@ class ProductonlineController extends BaseController {
     }
     //贷款的详细信息
     public function actionDetail($id=null){
-
-//        $order = new OnlineOrder();
-//        $sql = "select real_name,mobile,order_time,o.status from online_order as o left join user as u on o.uid = u.id";
-////        $sql = "select * from user";
-//        $result = yii\db\ActiveRecord::findBySql("$sql")->all();
-//        var_dump($result);
-//        die;
-        
 //        联表查出表前的记录。包括：已募集金额 **元 剩余可投金额：*元 已投资人数：**人 剩余时间：1天15小时6分
         $totalMoney = (new \Yii\db\Query())
                 ->select('sum(order_money) as money')
@@ -289,18 +270,7 @@ class ProductonlineController extends BaseController {
                 ->from(['online_order o'])
                 ->innerJoin('user u','o.uid = u.id')
                 ->all();
-//                ->where('t.id in ('.$ids.')')->orderBy('tar.id desc');//->groupBy('tf.task_id')
-        
-                
-                
-                
-//            $table = $query->createCommand()->getRawSql();
-//                $querynew = (new \yii\db\Query())
-//                ->select('*')
-//                ->from(["(".$table.")T"])
-//                ->groupBy('task_id'); //echo $querynew->createCommand()->getRawSql();exit;
-//                $model = $querynew->all();
-        
+
         return $this->render('detail',['info'=>$query,'totalMoney'=>$totalMoney]);
     }
     //搜索
@@ -436,13 +406,4 @@ class ProductonlineController extends BaseController {
         return ['res'=>$res,'msg'=>"",'data'=>''];
     }
     
-//    public function actionTest() {
-//        $res = new OnlineProduct;
-//        $model = OnlineProduct::findOne(54);
-//        OnlineProduct::populateRecord($res, $model);
-//        $res->scenario = 'create';
-//        $res->save();
-//        var_dump($res->getErrors());exit;
-//    }
-
 }
