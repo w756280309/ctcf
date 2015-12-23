@@ -15,7 +15,7 @@ use yii\web\Response;
 /**
  * OrderController implements the CRUD actions for OfflineOrder model.
  */
-class OnlineFangkuanController extends BaseController
+class OnlinefangkuanController extends BaseController
 {
     public function actionList($uid=1,$status=null,$time=null){
         //联表查出对应的放款用户名username
