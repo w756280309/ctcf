@@ -49,6 +49,9 @@ class SiteController extends Controller
                 //'logout' => ['post'],
                 ],
             ],
+             'requestbehavior' => [
+                'class' => 'common\components\RequestBehavior'
+            ]
         ];
     }
 

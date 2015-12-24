@@ -14,6 +14,18 @@ use common\core\OrderAccountCore;
 class DealController extends Controller {
 
     /**
+     * 行为设置，对于请求如果是ajax请求返回json
+     * @return type
+     */
+    public function behaviors() {
+        return [
+            'requestbehavior' => [
+                'class' => 'common\components\RequestBehavior'
+            ],
+        ];
+    }
+
+    /**
      * 获取理财列表
      * @param type $page
      * @return type
@@ -44,7 +56,7 @@ class DealController extends Controller {
         ];
 
         if (Yii::$app->request->isAjax) {
-            Yii::$app->response->format = Response::FORMAT_JSON;
+            //Yii::$app->response->format = Response::FORMAT_JSON;
             $message = ($page > $tp) ? '数据错误' : '消息返回';
             return ['header' => $header, 'deals' => $deals, 'code' => $code, 'message' => $message];
         }
@@ -91,7 +103,7 @@ class DealController extends Controller {
      * @return type
      */
     public function actionOrderlist($pid = null) {
-        Yii::$app->response->format = Response::FORMAT_JSON;
+        //Yii::$app->response->format = Response::FORMAT_JSON;
         if (empty($pid)) {
             return ['orders' => [], 'code' => 1, 'message' => "pid参数不能为空"];
         }
@@ -109,7 +121,7 @@ class DealController extends Controller {
      * @param type $sn 标的sn
      */
     public function actionToorder($sn = null) {
-        Yii::$app->response->format = Response::FORMAT_JSON;
+        //Yii::$app->response->format = Response::FORMAT_JSON;
         $pay = new PayService(PayService::REQUEST_AJAX);
         $ret = $pay->toCart($sn);
         return $ret;

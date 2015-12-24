@@ -42,6 +42,9 @@ class BaseController extends Controller
                     ],
                 ],
             ],
+            'requestbehavior' => [
+                'class' => 'common\components\RequestBehavior'
+            ],
             \common\filters\UserAccountAcesssControl::className()
         ];
     }
