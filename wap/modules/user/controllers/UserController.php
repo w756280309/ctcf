@@ -5,6 +5,7 @@ namespace app\modules\user\controllers;
 use Yii;
 use app\controllers\BaseController;
 use yii\web\Response;
+use yii\data\Pagination;
 use common\core\UserAccountCore;
 use common\models\user\MoneyRecord;
 use common\service\OrderService;
@@ -25,29 +26,56 @@ class UserController extends BaseController {
         return $this->render('index',['ua'=>$ua,'user'=>$this->user,'ljsy'=>$leijishouyi,'dhsbj'=>$dhsbj,'zcze'=>$zcze, 'data' => $data]);
     }
     
-    /*
+    /**
      * 输出个人交易明细记录
      * 输出信息均为成功记录，仅包括四类：充值、提现、投资、还款
      */
-    public function actionMingxi() {
+    public function actionMingxi($page = 1, $size = 10) {
         $this->layout = "@app/modules/order/views/layouts/buy";
-        $type = [MoneyRecord::TYPE_RECHARGE,  MoneyRecord::TYPE_DRAW,  MoneyRecord::TYPE_ORDER,  MoneyRecord::TYPE_HUANKUAN];
-        $model = MoneyRecord::find()->where(['uid' => $this->uid, 'type' => $type, 'status' => MoneyRecord::STATUS_SUCCESS])->select('created_at,type,in_money,out_money,balance,status')->orderBy("id desc")->asArray()->all();
-      
-        return $this->render('mingxi',['model' => $model]);
+        $type = [MoneyRecord::TYPE_RECHARGE, MoneyRecord::TYPE_DRAW, MoneyRecord::TYPE_ORDER, MoneyRecord::TYPE_HUANKUAN];
+        $data = MoneyRecord::find()->where(['uid' => $this->uid, 'type' => $type, 'status' => MoneyRecord::STATUS_SUCCESS])->select('created_at,type,in_money,out_money,balance,status');
+        $count = $data->count();
+        $pages = new Pagination(['totalCount' => $count, 'pageSize' => $size]);
+        $model = $data->offset(($page - 1) * $size)->limit($pages->limit)->orderBy('id desc')->asArray()->all();
+
+        foreach ($model as $key => $val) {
+            $model[$key]['created_at_date'] = date('Y-m-d',$val['created_at']);
+            $model[$key]['created_at_time'] = date('H:i:s',$val['created_at']);
+            $model[$key]['type'] = Yii::$app->params['mingxi'][$val['type']];
+            if ($val['type'] == 0 || $val['type'] == 4) {
+                $model[$key]['in_money'] = "+".$val['in_money'];
+            } elseif ($val['type'] == 1 || $val['type'] == 2) {
+                $model[$key]['out_money'] = "-".$val['out_money'];
+            }
+        }
+        $tp = ceil($count / $size);
+        $code = ($page > $tp) ? 1 : 0;
+
+        $header = [
+            'count' => intval($count),
+            'size' => $size,
+            'tp' => $tp,
+            'cp' => intval($page)
+        ];
+
+        if (Yii::$app->request->isAjax) {
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            $message = ($page > $tp) ? '数据错误' : '消息返回';
+            return ['header' => $header, 'data' => $model, 'code' => $code, 'message' => $message];
+        }
+
+        return $this->render('mingxi', ['model' => $model, 'header' => $header]);
     }
 
-    public function actionMyorder($type=null,$page=1){
+    public function actionMyorder($type = null, $page = 1) {
         $this->layout = "@app/modules/user/views/layouts/myorder";
         $os = new OrderService();
-        $list = $os->getUserOrderList($this->uid,$type,$page);
-        if(Yii::$app->request->isAjax){
+        $list = $os->getUserOrderList($this->uid, $type, $page);
+        if (Yii::$app->request->isAjax) {
             Yii::$app->response->format = Response::FORMAT_JSON;
             return $list;
         }
-        return $this->render('order',['list'=>$list, 'type'=>$type]);
+        return $this->render('order', ['list' => $list, 'type' => $type]);
     }
-    
-    
-    
+
 }
