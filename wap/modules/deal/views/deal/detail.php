@@ -67,7 +67,7 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
         <div class="row tab-conten">
             <div class="col-xs-1"></div>
             <div class="col-xs-10">
-                <?=$deal['description']?>
+                <?=  \yii\helpers\HtmlPurifier::process($deal['description'])?>
             </div>
             <div class="col-xs-1"></div>
         </div>
