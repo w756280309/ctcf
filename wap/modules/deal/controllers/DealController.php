@@ -13,10 +13,13 @@ use common\core\OrderAccountCore;
 
 class DealController extends Controller {
 
-    //public $layout='main';
+    /**
+     * 获取理财列表
+     * @param type $page
+     * @return type
+     */
     public function actionIndex($page = 1) {
         $this->layout='test';
-        
         $data = OnlineProduct::find()->where(['del_status'=>OnlineProduct::STATUS_USE,'online_status'=>OnlineProduct::STATUS_ONLINE])->select('id k,sn as num,title,yield_rate as yr,status,expires as qixian,money,start_date as start,finish_rate');
         $count = $data->count();
         $size = 5;
@@ -56,10 +59,12 @@ class DealController extends Controller {
      */
     public function actionDetail($sn = null) {
         if(empty($sn)){
-            echo "标的编号不能为空";exit;
+            throw new \yii\web\HttpException(500,'标的编号不能为空');
         }
         $deals = OnlineProduct::find()->where(['online_status'=>OnlineProduct::STATUS_ONLINE,'del_status'=>OnlineProduct::STATUS_USE,'sn'=>$sn])->asArray()->one();
-        
+        if(empty($deals)){
+            throw new \yii\web\HttpException(404,'此页面找不到');
+        }
         $orderbalance=0;
         if($deals['status']>=OnlineProduct::STATUS_NOW){//募集期的取剩余
             $oac = new OrderAccountCore();
@@ -81,6 +86,11 @@ class DealController extends Controller {
         return $this->render('detail',['deal'=>$deals]);
     }
     
+    /**
+     * 获取投资记录
+     * @param type $pid
+     * @return type
+     */
     public function actionOrderlist($pid = null){
         Yii::$app->response->format = Response::FORMAT_JSON;
         if(empty($pid)){
@@ -101,35 +111,10 @@ class DealController extends Controller {
      */
     public function actionToorder($sn = null){
         Yii::$app->response->format = Response::FORMAT_JSON;
-        //return ['code'=>1,'message'=>'abc','tourl'=>'/user/userbank/editbuspass'];
         $pay = new PayService(PayService::REQUEST_AJAX);
         $ret = $pay->toCart($sn);
         return $ret;
     }
 
-    /**
-     * 
-     */
-    public function actionDealstatus($ks = null){
-        $idarr = explode($ks, ',');
-        /////验证传来的参数 start
-        foreach($idarr as $id){
-            if(!is_integer($id)){
-                return ['code'=>1,'message'=>"错误返回"];
-            }
-        }
-//        $query = (new \yii\db\Query())
-//                    ->select('a.company_id,b.*')
-//                    ->from(['file_class a'])
-//                    ->leftJoin('file b', 'a.id=b.sid')
-//                    ->where("a.status = 1 and b.status = 1")
-//                    ->andWhere(['a.company_id' => $company_id])
-//                    ->orderBy('b.id desc'); 
-//        $rec = $query->all();
-        
-        /////验证传来的参数 end
-        
-        
-    }
     
 }
