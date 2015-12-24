@@ -143,7 +143,7 @@ class SiteController extends Controller
 
         return $this->render('login', [
             'model' => $model,
-            'from' => ($from)
+            'from' => $from
         ]);
     }
 
