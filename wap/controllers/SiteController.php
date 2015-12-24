@@ -111,62 +111,64 @@ class SiteController extends Controller
         return $this->render('index',['adv'=>$adv,'deals'=>$deals]);
     }
 
-    public function actionLogin()
-    {
-        $this->layout=false;
+    public function actionLogin() {
+        $this->layout = false;
         if (!\Yii::$app->user->isGuest) {
             return $this->goHome();
         }
-        
+
         if (Yii::$app->request->isAjax) {
             Yii::$app->response->format = Response::FORMAT_JSON;
         }
 
         $model = new LoginForm();
         $from = Yii::$app->request->referrer;
-        $from=Yii::$app->functions->dealurl($from);
+        $from = Yii::$app->functions->dealurl($from);
+
+        $is_flag = Yii::$app->request->post('is_flag');    //是否需要校验图形验证码标志位
+        if($is_flag && !is_bool($is_flag)) {
+            exit("变量is_flag的类型错误");
+        }
         
-        $err_flag = Yii::$app->request->post('err_flag');
-        if($err_flag == true) {
+        if ($is_flag) {
             $model->scenario = 'verifycode';
         } else {
             $model->scenario = 'login';
         }
-        
+
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            if($model->login()) {
+            if ($model->login()) {
                 $post_from = Yii::$app->request->post('from');
-                if(!empty($post_from)){
+                if (!empty($post_from)) {
                     return ['code' => 0, 'message' => '登录成功', 'tourl' => $post_from];
-                }else{
+                } else {
                     $url = Yii::$app->getUser()->getReturnUrl();
                     return ['code' => 0, 'message' => '登录成功', 'tourl' => $url];
                 }
             }
         }
-        
+
         $login = new LoginService();
         
-        if($model->getErrors('password')) {
+        if ($model->getErrors('password')) {
             $login->logFailure(Yii::$app->request, $model->phone, LoginLog::TYPE_WAP);
         }
-        
-        $err_flag = ($err_flag==true)?true:$login->isCaptchaRequired(Yii::$app->request, $model->phone);
-        
-        if($model->getErrors()) {
+
+        $is_flag = $is_flag? $is_flag : $login->isCaptchaRequired(Yii::$app->request, $model->phone);
+
+        if ($model->getErrors()) {
             $message = $model->firstErrors;
-            Yii::$app->response->format = Response::FORMAT_JSON;
-            if($err_flag == true) {
+            if ($is_flag) {
                 return ['tourl' => '/site/login', 'code' => 1, 'message' => current($message)];
             }
-            
+
             return ['code' => 1, 'message' => current($message)];
         }
 
         return $this->render('login', [
-            'model' => $model,
-            'from' =>  $from,
-            'err_flag' => $err_flag
+                    'model' => $model,
+                    'from' => $from,
+                    'is_flag' => $is_flag
         ]);
     }
 

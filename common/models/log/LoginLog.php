@@ -22,6 +22,19 @@ class LoginLog extends \yii\db\ActiveRecord
     const TYPE_BACKEND = 3;
     
     /**
+     * 构造函数
+     */
+    public function __construct($config = [])
+    {
+        if (empty($config) || empty($config['ip']) || empty($config['type'])) {
+            exit("LoginLog参数错误");
+        }
+        
+        Yii::configure($this, $config);        
+        $this->init();
+    }
+    
+    /**
      * @inheritdoc
      */
     public static function tableName()

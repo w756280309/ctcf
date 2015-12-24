@@ -41,10 +41,10 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
                     </div>
                 </div>
                 
-                <?php if($err_flag) { ?>
+                <?php if($is_flag) { ?>
                 <div class="row sm-height border-bottom">
                     <div class="col-xs-9 col">
-                        <input name="err_flag" type="hidden" value="<?= $err_flag ?>">
+                        <input name="is_flag" type="hidden" value="<?= $is_flag ?>">
                         <input class="login-info" type="text" id="verifycode" placeholder="请输入验证码" name="LoginForm[verifyCode]" maxlength="6" >
                     </div>
                     <div class="col-xs-3 yz-code text-align-rg col" style="height:52px;background: #fff;" >
@@ -74,7 +74,7 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
 <!--    <script src="/js/is.js"></script>-->
     <script>
         var csrf;
-        var err_flag = '<?= $err_flag?1:0 ?>';
+        var is_flag = '<?= $is_flag?1:0 ?>';
         $(function(){
             csrf = $("meta[name=csrf-token]").attr('content');
             $('#login-btn').bind('click',function(){
@@ -101,7 +101,7 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
                     $(this).removeClass("btn-press").addClass("btn-normal");
                     return false;
                 }
-                if (err_flag == 1) {
+                if (is_flag == 1) {
                     if ($('#verifycode').val()=='') {
                         toast(this,'验证码不能为空');
                         $(this).removeClass("btn-press").addClass("btn-normal");

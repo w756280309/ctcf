@@ -1,7 +1,6 @@
 <?php
 namespace common\service;
 
-use Yii;
 use common\models\log\LoginLog;
 
 /**
@@ -30,12 +29,12 @@ class LoginService {
     /**
      * 检查登陆日志表，判断是否为半小时内累计登陆失败次数为大于三的情况，如果是，返回true
      * @param $request 请求对象  $loginId 登陆用户名 $seconds 限定分钟数 $count 登陆失败次数
-     * @return boolen
+     * @return boolean
      */
     public function isCaptchaRequired($request, $loginId, $seconds = 1800, $count = 3) {
         $start_time = time() - $seconds;
         $data = LoginLog::find()->where(['ip' => $request->userIP])->orWhere(['user_name' => $loginId]);
         $num = $data->andFilterWhere(['>','created_at',$start_time])->count();
-        return $num>=$count?TRUE:FALSE;
+        return $num>=$count;
     }
 }
