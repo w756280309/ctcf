@@ -39,25 +39,23 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
                     <div class="col-xs-3 col login-eye border-bottom" style="height:52px" >
                            <img src="/images/eye-close.png" width="26" height="20" alt="闭眼">
                     </div>
-                </div>                
-                <a href="/site/resetpass" class="forget-mima">忘记密码？</a>
+                </div>
                 
                 <?php if($err_flag) { ?>
                 <div class="row sm-height border-bottom">
-                    <div class="col-xs-3 safe-txt text-align-ct">验证码</div>
-                    <div class="col-xs-5 safe-lf" style="padding-right: 0;">
-                        <input type="text" id="sms" placeholder="请输入验证码" name="EditpassForm[verifyCode]" maxlength="6" >
+                    <div class="col-xs-9 col">
+                        <input name="err_flag" type="hidden" value="<?= $err_flag ?>">
+                        <input class="login-info" type="text" id="verifycode" placeholder="请输入验证码" name="LoginForm[verifyCode]" maxlength="6" >
                     </div>
-                    <div class="col-xs-4 yz-code text-align-rg col">
-
+                    <div class="col-xs-3 yz-code text-align-rg col" style="height:52px;background: #fff;" >
                         <?= $form->field($model, 'verifyCode')->widget(Captcha::className(), [
-                                                            'template' => '{image}','captchaAction'=>'/site/captcha'
-                                                            ]) ?>
-
+                                                        'template' => '{image}','captchaAction'=>'/site/captcha'
+                                                        ]) ?>
                     </div>
                 </div>
                 <?php } ?>
                 
+                <a href="/site/resetpass" class="forget-mima">忘记密码？</a>
                 <div class="col-xs-3"></div>
                 <div class="col-xs-6 login-sign-btn">
                     <input id="login-btn" class="btn-common btn-normal" name="start" type="button" value="登录" >
@@ -76,6 +74,7 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
 <!--    <script src="/js/is.js"></script>-->
     <script>
         var csrf;
+        var err_flag = '<?= $err_flag?1:0 ?>';
         $(function(){
             csrf = $("meta[name=csrf-token]").attr('content');
             $('#login-btn').bind('click',function(){
@@ -101,6 +100,18 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
                     toast(this,'密码长度最少6位');
                     $(this).removeClass("btn-press").addClass("btn-normal");
                     return false;
+                }
+                if (err_flag == 1) {
+                    if ($('#verifycode').val()=='') {
+                        toast(this,'验证码不能为空');
+                        $(this).removeClass("btn-press").addClass("btn-normal");
+                        return false;
+                    }
+                    if ($('#verifycode').val().length!=6) {
+                        toast(this,'验证码长度必须为6位');
+                        $(this).removeClass("btn-press").addClass("btn-normal");
+                        return false;
+                    }
                 }
                 subForm("#login",'#login-btn');
 

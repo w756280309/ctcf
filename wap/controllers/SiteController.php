@@ -125,6 +125,14 @@ class SiteController extends Controller
         $model = new LoginForm();
         $from = Yii::$app->request->referrer;
         $from=Yii::$app->functions->dealurl($from);
+        
+        $err_flag = Yii::$app->request->post('err_flag');
+        if($err_flag == true) {
+            $model->scenario = 'verifycode';
+        } else {
+            $model->scenario = 'login';
+        }
+        
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             if($model->login()) {
                 $post_from = Yii::$app->request->post('from');
@@ -137,16 +145,21 @@ class SiteController extends Controller
             }
         }
         
-        $err_flag = false;
-        $log = new LoginService(LoginLog::TYPE_WAP, $model->phone);
-        if($log->checkLog()) {
-            $err_flag = true;
+        $login = new LoginService();
+        
+        if($model->getErrors('password')) {
+            $login->logFailure(Yii::$app->request, $model->phone, LoginLog::TYPE_WAP);
         }
         
+        $err_flag = ($err_flag==true)?true:$login->isCaptchaRequired(Yii::$app->request, $model->phone);
+        
         if($model->getErrors()) {
-            $res = $log->log();
             $message = $model->firstErrors;
             Yii::$app->response->format = Response::FORMAT_JSON;
+            if($err_flag == true) {
+                return ['tourl' => '/site/login', 'code' => 1, 'message' => current($message)];
+            }
+            
             return ['code' => 1, 'message' => current($message)];
         }
 

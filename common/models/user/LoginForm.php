@@ -23,7 +23,8 @@ class LoginForm extends Model
     public function scenarios()
     {
         return [
-            'verifycode' => ['verifyCode'],   //需要校验图形验证码
+            'login' => ['phone','password','rememberMe'],
+            'verifycode' => ['phone','password','verifyCode','rememberMe'],   //需要校验图形验证码
         ];        
     }  
     
@@ -60,6 +61,7 @@ class LoginForm extends Model
         return [
             'phone' => '手机号码',
             'password' => '密码',
+            'verifyCode' => ''
         ];
     }
     

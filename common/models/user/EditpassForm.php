@@ -48,7 +48,7 @@ class EditpassForm extends Model
             ['password', 'validateTradePwd','on' => ['edit','checktradepwd']],
             [['password','new_pass','r_pass'], 'match', 'pattern' => '/^[0-9]{6,6}$/','message' => '交易密码必须为6位纯数字','on' => ['add','edit','checktradepwd']],
             
-            [['password','new_pass'], 'string', 'length' => [6, 12], 'on' => 'edituserpass'],
+            [['password','new_pass'], 'string', 'length' => [6, 20], 'on' => 'edituserpass'],
             ['password', 'validatePassword','on' => 'edituserpass'],
             ['new_pass', 'match', 'pattern' => '/(?!^\d+$)(?!^[a-zA-Z]+$)^[0-9a-zA-Z]{6,20}$/','message' => '新密码必须为数字和字母的组合','on' => 'edituserpass'],
             ['verifyCode', 'captcha', 'on' => ['edit','edituserpass']],

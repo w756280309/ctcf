@@ -16,32 +16,26 @@ class LoginService {
     /**
      * 添加登陆失败时的日志信息
      * @param $request 请求对象 $loginId 登陆用户名 $type 登陆渠道
-     * @return boolen
      */
     public function logFailure($request, $loginId, $type) {
         $log = new LoginLog([
-            'ip' => $request->userId,
+            'ip' => $request->userIP,
             'type' => $type,
             'user_name' => $loginId
         ]);
         
-        return $log->save();
+        $log->save();
     }
    
     /**
      * 检查登陆日志表，判断是否为半小时内累计登陆失败次数为大于三的情况，如果是，返回true
+     * @param $request 请求对象  $loginId 登陆用户名 $seconds 限定分钟数 $count 登陆失败次数
+     * @return boolen
      */
-    public function checkLog() {
-        $start_time = time() - 30 * 60;        
-        $data = LoginLog::find()->where(['ip' => $this->ip])->orWhere(['user_name' => $this->user_name]);
+    public function isCaptchaRequired($request, $loginId, $seconds = 1800, $count = 3) {
+        $start_time = time() - $seconds;
+        $data = LoginLog::find()->where(['ip' => $request->userIP])->orWhere(['user_name' => $loginId]);
         $num = $data->andFilterWhere(['>','created_at',$start_time])->count();
-        return $num>3?TRUE:FALSE;
+        return $num>=$count?TRUE:FALSE;
     }
-    
-    /*
-     * 给user_name赋值
-     */
-//    public function setUsername($value) {
-//        $this->user_name = $value;
-//    }
 }
