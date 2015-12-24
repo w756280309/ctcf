@@ -17,6 +17,10 @@ use yii\behaviors\TimestampBehavior;
  */
 class LoginLog extends \yii\db\ActiveRecord
 {
+    const TYPE_WAP = 1;
+    const TYPE_PC = 2;
+    const TYPE_BACKEND = 3;
+    
     /**
      * @inheritdoc
      */

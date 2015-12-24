@@ -1,6 +1,7 @@
 <?php
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
+use yii\captcha\Captcha;
 
 frontend\assets\WapAsset::register($this);
 $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','position' => 1]);
@@ -29,8 +30,6 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
         <div class="row">
             <?php $form = ActiveForm::begin(['id' => 'login', 'action' => "/site/login", 'options' => ['data-to'=>'1']]); ?>
             <input name="from" type="hidden" value="<?=$from ?>">
-<!--            <form action="/site/login" method="post" id="login">
-                <input name="_csrf" type="hidden" id="_csrf" value=" //Yii::$app->request->csrfToken ">-->
                 <input id="iphone" class="login-info" name="LoginForm[phone]" maxlength="11" type="tel" placeholder="请输入手机号" AUTOCOMPLETE="off" >
 
                <div class="row sm-height">
@@ -40,8 +39,25 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
                     <div class="col-xs-3 col login-eye border-bottom" style="height:52px" >
                            <img src="/images/eye-close.png" width="26" height="20" alt="闭眼">
                     </div>
-                </div>
+                </div>                
                 <a href="/site/resetpass" class="forget-mima">忘记密码？</a>
+                
+                <?php if($err_flag) { ?>
+                <div class="row sm-height border-bottom">
+                    <div class="col-xs-3 safe-txt text-align-ct">验证码</div>
+                    <div class="col-xs-5 safe-lf" style="padding-right: 0;">
+                        <input type="text" id="sms" placeholder="请输入验证码" name="EditpassForm[verifyCode]" maxlength="6" >
+                    </div>
+                    <div class="col-xs-4 yz-code text-align-rg col">
+
+                        <?= $form->field($model, 'verifyCode')->widget(Captcha::className(), [
+                                                            'template' => '{image}','captchaAction'=>'/site/captcha'
+                                                            ]) ?>
+
+                    </div>
+                </div>
+                <?php } ?>
+                
                 <div class="col-xs-3"></div>
                 <div class="col-xs-6 login-sign-btn">
                     <input id="login-btn" class="btn-common btn-normal" name="start" type="button" value="登录" >
