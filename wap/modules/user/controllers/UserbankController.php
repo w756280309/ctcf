@@ -19,7 +19,10 @@ use Yii;
 use yii\web\Response;
 
 class UserbankController extends BaseController {
-    //实名认证表单页
+    /**
+     * 实名认证表单页
+     * @return type
+     */
     public function actionIdcardrz() {
         $this->layout = "@app/modules/order/views/layouts/buy";
         if (Yii::$app->request->isAjax) {
@@ -54,7 +57,10 @@ class UserbankController extends BaseController {
         return $this->render('idcardrz');
     }
 
-    //绑定银行卡表单页
+    /**
+     * 绑定银行卡表单页
+     * @return type
+     */
     public function actionBindbank() {
         $uid = $this->uid;
         $this->layout = "@app/modules/order/views/layouts/buy";
@@ -107,7 +113,10 @@ class UserbankController extends BaseController {
         return $this->render('bindbank', ['banklist' => $arr]);
     }
 
-    //设置交易密码表单页
+    /**
+     * 设置交易密码表单页
+     * @return type
+     */
     public function actionAddbuspass() {
         $this->layout = "@app/modules/order/views/layouts/buy";
         if (Yii::$app->request->isAjax) {
@@ -140,7 +149,10 @@ class UserbankController extends BaseController {
         return $this->render('addbuspass');
     }
 
-    //修改交易密码表单页
+    /**
+     * 修改交易密码表单页
+     * @return type
+     */
     public function actionEditbuspass() {
         $this->layout = "@app/modules/order/views/layouts/buy";
         if (Yii::$app->request->isAjax) {
@@ -187,15 +199,15 @@ class UserbankController extends BaseController {
         }
         $user_bank = UserBanks::find()->where(['uid' => $uid])->select('id,binding_sn,bank_id,bank_name,card_number,status')->one();
         $user_acount = UserAccount::find()->where(['type' => UserAccount::TYPE_BUY, 'uid' => $uid])->select('id,uid,in_sum,available_balance')->one();
-        if($user_acount->in_sum == 0) {
-            $cond = 0 | BankService::IDCARDRZ_VALIDATE_N | BankService::BINDBANK_VALIDATE_N | BankService::CHARGEPWD_VALIDATE_N;
-            $data = BankService::check($uid,$cond);
-            if($data[code] == 1) {
-                return $this->render('recharge',['user_bank' => $user_bank, 'user_acount' => $user_acount, 'data' => $data]);
-            }
+        
+        //检查用户是否绑卡
+        $cond = 0 | BankService::IDCARDRZ_VALIDATE_N | BankService::BINDBANK_VALIDATE_N | BankService::CHARGEPWD_VALIDATE_N;
+        $data = BankService::check($uid,$cond);
+        if ($data[code] == 1 && \Yii::$app->request->isAjax) {
+            return ['next' => $data['tourl']];
+            //return $this->render('recharge',['user_bank' => $user_bank, 'user_acount' => $user_acount, 'data' => $data]);
         }
-//        $pending = Yii::$app->session->get('cfca_qpay_recharge');
-//        var_dump($pending);
+            
         if(\Yii::$app->request->isAjax){
             Yii::$app->response->format = Response::FORMAT_JSON;
             $pending = Yii::$app->session->get('cfca_qpay_recharge');
@@ -205,7 +217,6 @@ class UserbankController extends BaseController {
                 return $this->createErrorResponse('请先发送短信码');
             }else{
                 $recharge = RechargeRecord::find()->where(['sn'=>$pending['recharge_sn']])->one();
-                //var_dump($recharge,$pending['recharge_sn']);exit;
                 if(empty($recharge)||$recharge->status!=0){
                     return $this->createErrorResponse('支付异常');
                 }
@@ -225,7 +236,7 @@ class UserbankController extends BaseController {
                 }                
             }
         }
-        return $this->render('recharge',['user_bank' => $user_bank, 'user_acount' => $user_acount]);
+        return $this->render('recharge',['user_bank' => $user_bank, 'user_acount' => $user_acount, 'data' => $data]);
     }
     
     /**
@@ -266,12 +277,11 @@ class UserbankController extends BaseController {
         $user_bank = UserBanks::find()->where(['uid' => $uid])->select('id,binding_sn,bank_id,bank_name,card_number,status')->one();
         $user_acount = UserAccount::find()->where(['type' => UserAccount::TYPE_BUY, 'uid' => $uid])->select('id,uid,in_sum,available_balance')->one();
 
-        if($user_acount->in_sum == 0) {
-            $cond = 0 | BankService::IDCARDRZ_VALIDATE_N | BankService::BINDBANK_VALIDATE_N | BankService::CHARGEPWD_VALIDATE_N;
-            $data = BankService::check($uid,$cond);
-            if($data[code] == 1) {
-                return $this->createErrorResponse($data['message']);
-            }
+        //检查是否已经绑卡
+        $cond = 0 | BankService::IDCARDRZ_VALIDATE_N | BankService::BINDBANK_VALIDATE_N | BankService::CHARGEPWD_VALIDATE_N;
+        $data = BankService::check($uid,$cond);
+        if($data[code] == 1) {
+            return $this->createErrorResponse($data['message']);
         }
 
         $recharge = new RechargeRecord();
