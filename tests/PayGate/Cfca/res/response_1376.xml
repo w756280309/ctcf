@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Response>
+    <Head>
+        <Code>2000</Code>
+        <Message>MESSAGE</Message>
+    </Head>
+    <Body>
+        <InstitutionID>1</InstitutionID>
+        <OrderNo>ORDER_NO</OrderNo>
+        <PaymentNo>PAYMENT_NO</PaymentNo>
+        <VerifyStatus>40</VerifyStatus>
+        <Status>20</Status>
+        <BankTxTime>20151225091847</BankTxTime>
+        <ResponseCode/>
+        <ResponseMessage/>
+    </Body>
+</Response>
