@@ -31,11 +31,6 @@ class TradeLog extends \yii\db\ActiveRecord
         ];
     }
     
-    public static function eventTest($parm){
-        var_dump($parm);
-        //echo "you should :".$parm->data.'<br>';
-    }
-    
     /**
      * @inheritdoc
      */

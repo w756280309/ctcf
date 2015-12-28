@@ -4,14 +4,13 @@ namespace app\modules\user\controllers\qpay;
 
 use app\controllers\BaseController;
 use common\lib\cfca\Cfca;
-use common\models\user\User;
 use PayGate\Cfca\Message\Request1375;
 use PayGate\Cfca\Message\Request1376;
 use common\models\user\RechargeRecord;
 use PayGate\Cfca\Response\Response1376;
 use common\models\user\MoneyRecord;
-use XmlUtils\XmlUtils;
 use common\lib\bchelp\BcRound;
+use PayLog\PayLogUtils;
 use Yii;
 use yii\base\Model;
 use yii\web\Response;
@@ -26,7 +25,7 @@ class QrechargeController extends BaseController
         if($this->isDenyVisit) {
             return $this->createErrorResponse('用户被禁止访问');
         }
-        
+
         if(empty($ubank)){
             return $this->createErrorResponse('请先绑卡');
         }
@@ -48,7 +47,7 @@ class QrechargeController extends BaseController
             $rec_model->load(Yii::$app->request->post())
             && $rec_model->validate()
         ) {
-            
+
             $req = new Request1375(
                 Yii::$app->params['cfca']['institutionId'],
                 $safe['bindingSn'],
@@ -56,6 +55,11 @@ class QrechargeController extends BaseController
             );
             $cfca = new Cfca();
             $resp = $cfca->request($req);
+
+            //记录日志
+            $log = new PayLogUtils($cpuser,$req,$resp);
+            $log->buildLog();
+
             if (false === $resp) {
                 return $this->createErrorResponse('服务器异常');
             } elseif ($resp instanceof CfcaResponse && !$resp->isSuccess()) {
@@ -72,6 +76,7 @@ class QrechargeController extends BaseController
                 $rec_model->save();
                 return ['rechargeSn' => $req->getRechargeSn()];
             }
+
         }
 
         return $this->createErrorResponse($rec_model);
@@ -91,7 +96,7 @@ class QrechargeController extends BaseController
         if($pending===null){
             return $this->createErrorResponse('请先发送短信码');
         }
-       
+
         $sms = \Yii::$app->request->post('yzm');
         $from = \Yii::$app->request->post('from');
         $recharge = RechargeRecord::find()->where(['sn'=>$pending['recharge_sn']])->one();
@@ -111,8 +116,8 @@ class QrechargeController extends BaseController
             ];
         }else{
             return $this->createErrorResponse($ret['message']);
-        }   
-        
+        }
+
     }
 
     /**
@@ -123,16 +128,21 @@ class QrechargeController extends BaseController
     public function rechargecheckpay($recharge,$yzm){
         $rq1376 = new Request1376(
                 Yii::$app->params['cfca']['institutionId'],
-                $recharge->sn, 
+                $recharge->sn,
                 $yzm
         );
-        
+
         $cfca = new Cfca();
         $resp = $cfca->request($rq1376);
         if (false === $resp) {
             return $this->createErrorResponse('服务器异常');
         }
-        $resp1376 = new Response1376($resp->getText());    
+        $resp1376 = new Response1376($resp->getText());
+
+        //记录日志
+        $log = new PayLogUtils($this->user,$rq1376,$resp);
+        $log->buildLog();
+
         if ($resp1376->isSuccess()) {
             $bankTxTime = $resp1376->getBankTxTime();
             $user_acount = $this->user->accountInfo;
@@ -172,8 +182,8 @@ class QrechargeController extends BaseController
             return $this->createErrorResponse('支付失败');
         }
     }
-    
-    
+
+
     private function createErrorResponse($modelOrMessage = null)
     {
         Yii::$app->response->statusCode = 400;
