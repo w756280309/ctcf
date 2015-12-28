@@ -37,8 +37,10 @@ class LoginForm extends Model
             ['phone', 'required', 'message' => '手机号码不能为空'],
             ['password', 'required', 'message' => '密码不能为空'],
             ['verifyCode', 'required', 'message' => '图形验证码不能为空', 'on' => 'verifycode'],
+            ['verifyCode', 'string', 'length' => 6],
             ['verifyCode', 'captcha', 'on' => 'verifycode'],
             [['phone'],'match','pattern'=>'/^(13[0-9]|14[0-9]|15[0-9]|17[0-9]|18[0-9])\d{8}$/','message'=>'您输入的手机号不正确'],
+            [['phone'],'string','length' => 11],
             [['phone'],'checkPhone'],
             [
                 'password',
@@ -46,6 +48,8 @@ class LoginForm extends Model
                 'length' => [6, 20],
 
             ],
+            //验证密码格式 不能是纯数字，或是纯字母
+            ['password', 'match', 'pattern' => '/(?!^\d+$)(?!^[a-zA-Z]+$)^[0-9a-zA-Z]{6,20}$/','message' => '密码必须为数字和字母的组合'],
             // rememberMe must be a boolean value
             ['rememberMe', 'boolean'],
             // password is validated by validatePassword()
