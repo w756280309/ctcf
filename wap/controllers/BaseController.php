@@ -3,7 +3,7 @@
  * Created by PhpStorm.
  * User: xmac
  * Date: 15-3-19
- * Time: 下午3:51
+ * Time: 下午3:51.
  */
 namespace app\controllers;
 
@@ -18,9 +18,11 @@ class BaseController extends Controller
     protected $user;
     protected $ubank;//用户绑卡信息
     protected $isDenyVisit = false; //是否拒绝访问 true 拒绝 false为允许访问
-    public function init() {
+
+    public function init()
+    {
         error_reporting(E_ALL ^ E_NOTICE);
-        if(\Yii::$app->user->isGuest){
+        if (\Yii::$app->user->isGuest) {
             $this->uid = 0;
         }else{
             $this->uid=\Yii::$app->user->id;
@@ -30,6 +32,7 @@ class BaseController extends Controller
         }
         parent::init();
     }
+
     public function behaviors()
     {
         return [
@@ -39,18 +42,18 @@ class BaseController extends Controller
                     [
                         'allow' => true,
                         'actions' => ['login', 'signup'],
-                        'roles' => ['?'],//访客注册登录
+                        'roles' => ['?'], //访客注册登录
                     ],
                     [
                         'allow' => true,
-                        'roles' => ['@'],//登录用户退出
+                        'roles' => ['@'], //登录用户退出
                     ],
                 ],
             ],
             'requestbehavior' => [
-                'class' => 'common\components\RequestBehavior'
+                'class' => 'common\components\RequestBehavior',
             ],
-            \common\filters\UserAccountAcesssControl::className()
+            \common\filters\UserAccountAcesssControl::className(),
         ];
     }
 }
