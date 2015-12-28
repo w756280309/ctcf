@@ -185,7 +185,7 @@ class UserbankController extends BaseController {
 
         return $this->render('editbuspass',['model'=>$model]);
     }
-    
+
     /**
      * 快捷支付
      */
@@ -199,244 +199,15 @@ class UserbankController extends BaseController {
         }
         $user_bank = UserBanks::find()->where(['uid' => $uid])->select('id,binding_sn,bank_id,bank_name,card_number,status')->one();
         $user_acount = UserAccount::find()->where(['type' => UserAccount::TYPE_BUY, 'uid' => $uid])->select('id,uid,in_sum,available_balance')->one();
-        
+
         //检查用户是否绑卡
         $cond = 0 | BankService::IDCARDRZ_VALIDATE_N | BankService::BINDBANK_VALIDATE_N | BankService::CHARGEPWD_VALIDATE_N;
         $data = BankService::check($uid,$cond);
         if ($data[code] == 1 && \Yii::$app->request->isAjax) {
             return ['next' => $data['tourl']];
-            //return $this->render('recharge',['user_bank' => $user_bank, 'user_acount' => $user_acount, 'data' => $data]);
         }
-            
-        if(\Yii::$app->request->isAjax){
-            Yii::$app->response->format = Response::FORMAT_JSON;
-            $pending = Yii::$app->session->get('cfca_qpay_recharge');
-            $sms = \Yii::$app->request->post('yzm');
-            $from = \Yii::$app->request->post('from');
-            if($pending===null){
-                return $this->createErrorResponse('请先发送短信码');
-            }else{
-                $recharge = RechargeRecord::find()->where(['sn'=>$pending['recharge_sn']])->one();
-                if(empty($recharge)||$recharge->status!=0){
-                    return $this->createErrorResponse('支付异常');
-                }
-                if (
-                        bccomp($recharge->fund , $pending['recharge_fund'])!=0
-                ) {
-                    return $this->createErrorResponse('支付金额已经修改，请重新请求短信验证码');
-                }
-                $ret = $this->rechargecheckpay($recharge,$sms);
-                if($ret['code']===0){
-                    \Yii::$app->session->remove('cfca_qpay_recharge');
-                    return [
-                    'next' => empty($from)?$ret['tourl']:$from,
-                ];
-                }else{
-                    return $this->createErrorResponse($ret['message']);
-                }                
-            }
-        }
+
         return $this->render('recharge',['user_bank' => $user_bank, 'user_acount' => $user_acount, 'data' => $data]);
-    }
-    
-    /**
-     * 可提供公用的函数
-     * @param $modelOrMessage
-     * @return type
-     */
-    private function createErrorResponse($modelOrMessage = null)
-    {
-        Yii::$app->response->statusCode = 400;
-        $message = null;
-
-        if (is_string($modelOrMessage)) {
-            $message = $modelOrMessage;
-        } elseif (
-            $modelOrMessage instanceof Model
-            && $modelOrMessage->hasErrors()
-        ) {
-            $message = current($modelOrMessage->getFirstErrors());
-        }
-
-        return [
-            'message' => $message,
-        ];
-    }
-
-    /**
-     * 获取快捷支付短信码
-     */
-    public function actionGetpaysms() {
-        Yii::$app->response->format = Response::FORMAT_JSON;
-        $uid = $this->uid;
-        $user = User::findOne($uid);
-        if($user && $user->status == User::STATUS_DELETED) {
-            return $this->createErrorResponse('用户被禁止访问');
-        }
-
-        $user_bank = UserBanks::find()->where(['uid' => $uid])->select('id,binding_sn,bank_id,bank_name,card_number,status')->one();
-        $user_acount = UserAccount::find()->where(['type' => UserAccount::TYPE_BUY, 'uid' => $uid])->select('id,uid,in_sum,available_balance')->one();
-
-        //检查是否已经绑卡
-        $cond = 0 | BankService::IDCARDRZ_VALIDATE_N | BankService::BINDBANK_VALIDATE_N | BankService::CHARGEPWD_VALIDATE_N;
-        $data = BankService::check($uid,$cond);
-        if($data[code] == 1) {
-            return $this->createErrorResponse($data['message']);
-        }
-
-        $recharge = new RechargeRecord();
-        $recharge->bank_id = "$user_bank->bank_id";
-        $recharge->uid = $uid;
-        
-        if($recharge->load(Yii::$app->request->post()) && $recharge->validate()) {
-            $recharge->sn = RechargeRecord::createSN();
-            $transaction = Yii::$app->db->beginTransaction();
-            //录入recharge_record记录
-            $recharge->pay_id = 0;
-            $recharge->account_id = $user_acount->id;
-            $recharge->pay_bank_id = strval($user_bank->bank_id);
-            $recharge->bankNotificationTime = '0';
-            $recharge->status = RechargeRecord::STATUS_NO;
-            //var_dump($recharge);exit;
-            if(!$recharge->save()) {
-                $transaction->rollBack();
-                return $this->createErrorResponse('充值失败');
-            }
-            
-            $xml_path = Yii::getAlias('@common')."/config/xml/cfca_1375.xml";
-            $xmltx1375 = file_get_contents($xml_path);
-            $InstitutionID = \Yii::$app->params['cfca']['institutionId'];
-            $simpleXML = new \SimpleXMLElement($xmltx1375);
-            $simpleXML->Head->InstitutionID = $InstitutionID;
-            $simpleXML->Body->OrderNo = $recharge->sn;
-            $simpleXML->Body->PaymentNo = $recharge->sn;
-            $simpleXML->Body->TxSNBinding = $user_bank->binding_sn;
-            $simpleXML->Body->Amount = $recharge->fund*100;
-
-            $payment = new \common\lib\cfca\Payment();
-            $xmlStr = $simpleXML->asXML();
-            $message = base64_encode(trim($xmlStr));
-            $signature = $payment->cfcasign_pkcs12(trim($xmlStr));
-            $response = $payment->cfcatx_transfer($message, $signature);
-            $plainText = (base64_decode($response[0]));//去掉了前边的trim
-            $ok = $payment->cfcaverify($plainText, $response[1]); 
-            if($ok!=1){
-                $transaction->rollBack();
-                return $this->createErrorResponse('充值失败,验签失败');               
-            }else{
-                $response_XML= new \SimpleXMLElement($plainText);
-                if($response_XML->Head->Code == "2000"){
-                    $transaction->commit();
-                    // 调用 存session 防止修改
-                    Yii::$app->session->set('cfca_qpay_recharge', [
-                        'recharge_sn' => $recharge->sn,
-                        'recharge_fund' => $recharge->fund,
-                        '_time' => time(),
-                    ]);
-                    return ['rechargeSn' => $recharge->sn];
-                }else{
-                    $transaction->rollBack();
-                    return $this->createErrorResponse($response_XML->Head->Message);      
-                }
-            }
-        }
-
-        if($recharge->getErrors()) {
-            $message = $recharge->firstErrors;
-            return ['code' => 1, 'message' => current($message)];
-        }
-
-        return $this->render('recharge',['user_bank' => $user_bank, 'user_acount' => $user_acount]);
-    }
-
-
-    /**
-     * 快捷支付输入验证码【20151222取消使用】
-     */
-//    public function actionRechargepay($s=null){
-//        exit;
-//        if(!empty($s)){
-//            $recharge = RechargeRecord::find()->where(['sn'=>$s])->one();
-//            if(!empty($recharge)&&$recharge->status==RechargeRecord::STATUS_NO){
-//                $this->layout = "@app/modules/order/views/layouts/buy";      
-//                return $this->render('rechargepay',['recharge' => $recharge]);
-//            }  else {
-//                //错误页面
-//            }
-//        }else{
-//            //错误页面
-//        }
-//    }
-    
-    /**
-     * $recharge 充值数据
-     * $yzm 中金短信
-     * 快捷支付输入验证码验证支付短信码
-     */
-    public function rechargecheckpay($recharge,$yzm){
-        $payment = new \common\lib\cfca\Payment();
-        $xml = Yii::getAlias('@common')."/config/xml/cfca_1376.xml";
-        $content = file_get_contents($xml);  
-        $simpleXML = new \SimpleXMLElement($content);
-        $simpleXML->Head->InstitutionID = \Yii::$app->params['cfca']['institutionId'];//测试
-        $simpleXML->Body->OrderNo = $recharge->sn;
-        $simpleXML->Body->PaymentNo = $recharge->sn;
-        $simpleXML->Body->SMSValidationCode = $yzm;
-        $xmlStr = $simpleXML->asXML();
-        $message = base64_encode(trim($xmlStr));
-        $signature = $payment->cfcasign_pkcs12(trim($xmlStr));
-        $response = $payment->cfcatx_transfer($message, $signature);
-        $plainText = (base64_decode($response[0]));
-        $ok = $payment->cfcaverify($plainText, $response[1]);
-        if($ok!=1){
-            return ['code' => 1, 'message' => '充值失败,验签失败'];
-        }else{
-            $response_XML= new \SimpleXMLElement($plainText);
-            if($response_XML->Head->Code == "2000"){
-                if($response_XML->Body->Status==20){
-                    $bankTxTime = $response_XML->Body->BankTxTime;
-                    $uid = $this->uid;
-                    $user_acount = UserAccount::find()->where(['type' => UserAccount::TYPE_BUY, 'uid' => $uid])->select('id,uid,in_sum,available_balance')->one();
-                    //录入money_record记录
-                    $transaction = Yii::$app->db->beginTransaction();
-                    RechargeRecord::updateAll(['status'=>1,'bankNotificationTime'=>$bankTxTime],['id'=>$recharge->id]);
-                    $bc = new BcRound();
-                    bcscale(14);
-                    $money_record = new MoneyRecord();
-                    $money_record->sn = MoneyRecord::createSN();
-                    $money_record->type = MoneyRecord::TYPE_RECHARGE;
-                    $money_record->osn = $recharge->sn;
-                    $money_record->account_id = $user_acount->id;
-                    $money_record->uid = $uid;
-                    $money_record->balance = $bc->bcround(bcadd($user_acount->available_balance, $recharge->fund),2);
-                    $money_record->in_money = $recharge->fund;
-                    $money_record->status = MoneyRecord::STATUS_SUCCESS;
-
-                    if(!$money_record->save()) {
-                        $transaction->rollBack();
-                        return ['code' => 1, 'message' => '充值失败'];
-                    }
-
-                    //录入user_acount记录
-                    $user_acount->uid = $user_acount->uid;
-                    $user_acount->account_balance = $bc->bcround(bcadd($user_acount->account_balance, $recharge->fund),2);
-                    $user_acount->available_balance = $bc->bcround(bcadd($user_acount->available_balance, $recharge->fund),2);
-                    $user_acount->in_sum = $bc->bcround(bcadd($user_acount->in_sum, $recharge->fund),2);
-
-                    if(!$user_acount->save()) {
-                        $transaction->rollBack();
-                        return ['code' => 1, 'message' => '充值失败'];
-                    }
-
-                    $transaction->commit();
-                    return ['tourl' => '/user/user', 'code' => 0, 'message' => '充值成功'];
-                }else{
-                    return ['code' => 1, 'message' => '充值失败'];//包含处理中和充值失败
-                }
-            }else{
-                return ['code' => 1, 'message' => $response_XML->Head->Message];       
-            }
-        }
     }
 
 
@@ -498,7 +269,7 @@ class UserbankController extends BaseController {
         if($user && $user->status == User::STATUS_DELETED) {
             $this->redirect('/site/usererror');
         }
-        
+
         $draw = new DrawRecord();
         $draw->uid = $uid;
         $draw->money = $money;
@@ -511,15 +282,15 @@ class UserbankController extends BaseController {
             }
         } else {
             $message = $draw->firstErrors;
-            $data = ['tourl' => '/user/userbank/tixian', 'code' => 1, 'message' => current($message)]; 
+            $data = ['tourl' => '/user/userbank/tixian', 'code' => 1, 'message' => current($message)];
         }
-        
+
         if(!empty($data)) {
             if (Yii::$app->request->isAjax) {
                 return $data;
             } else {
                 return $this->render('checktradepwd', ['status' => 0, 'data' => $data]);
-            }        
+            }
         }
 
         $user_bank = UserBanks::find()->where(['uid' => $uid])->one();
@@ -532,7 +303,7 @@ class UserbankController extends BaseController {
             if($money != $money_r) {
                 return $this->redirect('/user/userbank/tixian');
             }
-            
+
             $transaction = Yii::$app->db->beginTransaction();
             //录入draw_record记录
             $draw = new DrawRecord;

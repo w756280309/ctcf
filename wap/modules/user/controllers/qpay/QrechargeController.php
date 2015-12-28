@@ -91,13 +91,9 @@ class QrechargeController extends BaseController
         if($pending===null){
             return $this->createErrorResponse('请先发送短信码');
         }
-        // 已验证的数据:无需验证
-        $safe = [
-            'bindingSn' => $ubank->binding_sn,
-        ];
+       
         $sms = \Yii::$app->request->post('yzm');
         $from = \Yii::$app->request->post('from');
-        
         $recharge = RechargeRecord::find()->where(['sn'=>$pending['recharge_sn']])->one();
         if(empty($recharge)||$recharge->status!=0){
             return $this->createErrorResponse('支付异常');
@@ -155,7 +151,6 @@ class QrechargeController extends BaseController
                 'in_money' => $recharge->fund,
                 'status' => MoneyRecord::STATUS_SUCCESS
             ]);
-            
             if(!$money_record->save()) {
                 $transaction->rollBack();
                 return $this->createErrorResponse('充值失败');

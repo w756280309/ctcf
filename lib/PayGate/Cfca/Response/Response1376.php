@@ -15,15 +15,6 @@ class Response1376 extends Response
         return 40 === $this->verifyStatus
             && 20 === $this->paymentStatus;
     }
-
-    public function jsonSerialize()
-    {
-        return array_merge([
-            'institutionId' => $this->institutionId,
-            'code' => $this->code,
-            'message' => $this->message,
-        ], $this->getSerializationData());
-    }
     
     public function getSerializationData()
     {
