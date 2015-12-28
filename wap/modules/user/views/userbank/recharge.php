@@ -108,7 +108,7 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
                }
                 var $form = $('#form');
                 var xhr = $.post(
-                    '/user/userbank/getpaysms',
+                    '/user/qpay/qrecharge/init',//'/user/userbank/getpaysms',
                     $form.serialize()
                 );
 

@@ -262,7 +262,7 @@ class UserbankController extends BaseController {
             'message' => $message,
         ];
     }
-    
+
     /**
      * 获取快捷支付短信码
      */

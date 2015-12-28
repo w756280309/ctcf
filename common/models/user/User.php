@@ -640,8 +640,18 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
         return $code.str_pad($num, $pad_length,0,STR_PAD_LEFT );  
     }
     
+    /**
+     * 获取用户投资账户
+     * @return account
+     */
     public function getAccountInfo() {
-        return $this->hasOne(UserAccount::className(), ['uid' => id, 'type' => type]);
+        return $this->hasOne(UserAccount::className(), ['uid' => 'id'])->where(['type' => self::USER_TYPE_PERSONAL]);
     }
 
+    /**
+     * 获取绑卡相关信息
+     */
+    public function getBank(){
+        return $this->hasOne(UserBanks::className(), ['uid' => 'id'])->where(['status' => UserBanks::STATUS_YES]);
+    }
 }
