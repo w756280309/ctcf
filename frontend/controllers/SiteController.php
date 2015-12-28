@@ -69,14 +69,14 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
+        $this->layout = false;
         return $this->render('index');
     }
-    
+
     /**
      * PC端登陆页面
      */
-    public function actionLogin()
-    {
+    public function actionLogin() {
         $this->layout = false;
         if (!\Yii::$app->user->isGuest) {
             return $this->goHome();
@@ -86,9 +86,9 @@ class SiteController extends Controller
 
         $is_flag = Yii::$app->request->post('is_flag');    //是否需要校验图形验证码标志位
         if($is_flag && !is_bool($is_flag)) {
-            $is_flag = false;
+            $is_flag = true;
         }
-        
+
         if ($is_flag) {
             $model->scenario = 'verifycode';
         } else {
@@ -100,7 +100,7 @@ class SiteController extends Controller
         }
 
         $login = new LoginService();
-        
+
         if ($model->getErrors('password')) {
             $login->logFailure(Yii::$app->request, $model->phone, LoginLog::TYPE_PC);
         }
@@ -111,7 +111,7 @@ class SiteController extends Controller
                     'model' => $model,
                     'is_flag' => $is_flag
         ]);
-      
+
     }
 
     public function actionLogout()

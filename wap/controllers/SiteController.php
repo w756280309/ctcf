@@ -73,7 +73,7 @@ class SiteController extends Controller
         ];
     }
 
-    
+
     public function actionError()
     {
         $exception = \Yii::$app->errorHandler->exception;
@@ -98,7 +98,7 @@ class SiteController extends Controller
         $ac =5;
         $dc = 5;
         $adv = Adv::find()->where(['status' => 0, 'del_status' => 0])->select('image,link,description')->limit($ac)->orderBy("id desc")->asArray()->all();
-     
+
         $deals = OnlineProduct::find()->where(['del_status'=>OnlineProduct::STATUS_USE,'online_status'=>OnlineProduct::STATUS_ONLINE])->select('id k,sn as num,title,yield_rate as yr,status,expires as qixian,money,start_date start,finish_rate')->limit($dc)->orderBy("sort asc,id desc")->asArray()->all();
         foreach($deals as $key => $val)
         {
@@ -127,9 +127,9 @@ class SiteController extends Controller
 
         $is_flag = Yii::$app->request->post('is_flag');    //是否需要校验图形验证码标志位
         if($is_flag && !is_bool($is_flag)) {
-            exit("变量is_flag的类型错误");
+            $is_flag = true;
         }
-        
+
         if ($is_flag) {
             $model->scenario = 'verifycode';
         } else {
@@ -149,7 +149,7 @@ class SiteController extends Controller
         }
 
         $login = new LoginService();
-        
+
         if ($model->getErrors('password')) {
             $login->logFailure(Yii::$app->request, $model->phone, LoginLog::TYPE_WAP);
         }
@@ -177,18 +177,18 @@ class SiteController extends Controller
         \Yii::$app->user->logout();
         return $this->goHome();
     }
-    
+
     public function actionEditpass() {
         $this->layout = "@app/modules/order/views/layouts/buy";
         if (Yii::$app->user->isGuest) {
             return $this->redirect('/site/login');
         }
-        
+
         if (Yii::$app->request->isAjax) {
             Yii::$app->response->format = Response::FORMAT_JSON;
         }
-        
-        $model = new EditpassForm();      
+
+        $model = new EditpassForm();
         $model->scenario = 'edituserpass';
         if($model->load(Yii::$app->request->post())) {
             if($model->edituserpass()) {
@@ -200,20 +200,20 @@ class SiteController extends Controller
             $message = $model->firstErrors;
             return ['code' => 1, 'message' => current($message)];
         }
-        
+
         return $this->render('editpass',['model' => $model]);
     }
-    
+
     public function actionResetpass() {
-        $this->layout = false; 
+        $this->layout = false;
         if (!\Yii::$app->user->isGuest) {
             return $this->goHome();
         }
-        
+
         if (Yii::$app->request->isAjax) {
             Yii::$app->response->format = Response::FORMAT_JSON;
         }
-        
+
         $model = new SignupForm();
         if($model->load(Yii::$app->request->post())&&Yii::$app->request->isAjax) {
             Yii::$app->response->format = Response::FORMAT_JSON;
@@ -226,7 +226,7 @@ class SiteController extends Controller
                 return ['code' => 1, 'message' => current($message)];
             }
         }
-        
+
         return $this->render('resetpass');
     }
 
@@ -275,52 +275,52 @@ class SiteController extends Controller
                 return ['code'=>1,"message"=>current($error)];
             }
         }
-        
+
         return $this->render('signup');
-    }    
-    
+    }
+
     public function actionTestdata($page = 1){
         Yii::$app->response->format = Response::FORMAT_JSON;
         $count = \common\models\adminuser\Auth::find()->count();
         $size = 5;
-        $pages = new Pagination(['totalCount' => $count, 'pageSize' => $size]);   
-        
+        $pages = new Pagination(['totalCount' => $count, 'pageSize' => $size]);
+
         $models = \common\models\adminuser\Auth::find()->offset(($page-1)*$size)->limit($pages->limit)->asArray()->all();
         $tp = ceil($count/$size);
         $code = ($page>$tp)?1:0;
         $message = ($page>$tp)?'数据错误':'消息返回';
         return ['header'=>['count'=>  intval($count),'size'=>$size,'tp'=>$tp,'cp'=>  intval($page)],'code'=>$code,'message'=>$message,'deals'=>$models];
     }
-    
+
     public function actionXieyi()
     {
         $this->layout = "@app/modules/order/views/layouts/buy";
         return $this->render('xieyi');
     }
-    
+
     public function actionCreatesmscode() {
         $uid = Yii::$app->request->post('uid');
         $type = Yii::$app->request->post('type');
         $phone = Yii::$app->request->post('phone');
 
         $result = SmsService::createSmscode($type,$phone,$uid);
-       
+
         return $result;
     }
-    
+
     public function actionT(){
         $payment = new \common\lib\cfca\Payment();
         $InstitutionID = 1;
         $xmltx1810 = <<<XML
 <?xml version="1.0" encoding="UTF-8"?>
-<Request version="2.1"> 
-  <Head>        
+<Request version="2.1">
+  <Head>
     <TxCode>1810</TxCode>
-  </Head>  
-  <Body> 
-        <InstitutionID/>  
-	<Date/>  
-  </Body> 
+  </Head>
+  <Body>
+        <InstitutionID/>
+	<Date/>
+  </Body>
 </Request>
 XML;
         $simpleXML = new \SimpleXMLElement($xmltx1810);
@@ -335,22 +335,22 @@ XML;
         $ok = $payment->cfcaverify($plainText, $response[1]);
         var_dump($plainText,$ok);
     }
-    
+
     public function actionTrc(){
         $xmltx1375 = <<<XML
 <?xml version="1.0" encoding="UTF-8"?>
-<Request version="2.1"> 
-  <Head> 
-    <InstitutionID/>          
+<Request version="2.1">
+  <Head>
+    <InstitutionID/>
     <TxCode>1375</TxCode>
-  </Head>  
-  <Body> 
-        <OrderNo/>  
-	<PaymentNo/>  
+  </Head>
+  <Body>
+        <OrderNo/>
+	<PaymentNo/>
 	<TxSNBinding/>
         <Amount/>
         <Remark/>
-  </Body> 
+  </Body>
 </Request>
 XML;
         $InstitutionID = 1;
@@ -360,16 +360,16 @@ XML;
         $simpleXML->Body->PaymentNo = time();
         $simpleXML->Body->TxSNBinding = time();
         $simpleXML->Body->Amount = 1000;
-        
+
         $payment = new \common\lib\cfca\Payment();
         $xmlStr = $simpleXML->asXML();
         $message = base64_encode(trim($xmlStr));
         $signature = $payment->cfcasign_pkcs12(trim($xmlStr));
         $response = $payment->cfcatx_transfer($message, $signature);
         $plainText = (base64_decode($response[0]));//去掉了前边的trim
-        $ok = $payment->cfcaverify($plainText, $response[1]); 
+        $ok = $payment->cfcaverify($plainText, $response[1]);
         var_dump($plainText,$ok);
     }
-    
-    
+
+
 }
