@@ -14,6 +14,7 @@ abstract class Response implements JsonSerializable
     protected $message;
 
     abstract protected function populate();
+    abstract public function jsonSerialize();
 
     public function __construct($xml)
     {
@@ -22,17 +23,7 @@ abstract class Response implements JsonSerializable
 
         $this->institutionId = (string) $this->xmlObj->Body->InstitutionID;
         $this->message = (string) $this->xmlObj->Head->Message;
-
         $this->populate();
-    }
-
-    public function jsonSerialize()
-    {
-        return array_merge([
-            'institutionId' => $this->institutionId,
-            'code' => $this->code,
-            'message' => $this->message,
-        ], $this->getSerializationData());
     }
 
     public function getXml()

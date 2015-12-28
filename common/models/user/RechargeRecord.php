@@ -66,7 +66,8 @@ class RechargeRecord extends \yii\db\ActiveRecord {
 			[['fund'], 'number', 'min' => 0.01, 'max' => 999999999],
 			[['sn'], 'string', 'max' => 30],
 			[['bank_id'], 'string', 'max' => 20],
-			[['remark'], 'string', 'max' => 100]
+			[['remark'], 'string', 'max' => 100],
+                        ['status', 'default', 'value' => self::STATUS_NO],
 		];
 	}
 

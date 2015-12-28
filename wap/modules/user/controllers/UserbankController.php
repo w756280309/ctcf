@@ -190,7 +190,7 @@ class UserbankController extends BaseController {
      * 快捷支付
      */
     public function actionRecharge(){
-        //\Yii::$app->session->remove('cfca_qpay_recharge');
+        \Yii::$app->session->remove('cfca_qpay_recharge');
         $this->layout = "@app/modules/order/views/layouts/buy";
         $uid = $this->uid;
         $user = User::findOne($uid);

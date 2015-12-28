@@ -34,7 +34,7 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
             <div class="hidden-xs col-sm-1"></div>
         </div>
         <!--充值金额-->
-        <form method="post" class="cmxform" id="form" action="/user/userbank/recharge" data-to="1">
+        <form method="post" class="cmxform" id="form" action="/user/qpay/qrecharge/verify" data-to="1">
             <input name="_csrf" type="hidden" id="_csrf" value="<?= Yii::$app->request->csrfToken ?>">
             <input name="from" type="hidden" value="<?= Yii::$app->request->get('from'); ?>">
             <input id="qpay-recharge-sn" name="RechargeRecord[sn]" id="" type="hidden" />
