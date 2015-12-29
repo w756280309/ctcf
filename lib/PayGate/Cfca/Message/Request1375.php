@@ -29,6 +29,14 @@ class Request1375 extends AbstractRequest
     {
         return $this->rechargeSn;
     }
+    
+    /**
+     * 用作日志记录时候通用的方法
+     * @return type
+     */
+    public function getTxSn(){
+        return $this->rechargeSn;
+    }
 
     public function getXml()
     {

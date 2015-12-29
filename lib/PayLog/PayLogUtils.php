@@ -24,7 +24,7 @@ class PayLogUtils
         //记录日志
         $tradeLog = new TradeLog([
             'tx_code' => $this->rq->getTxCode(),
-            'tx_sn' => $this->rq->getRechargeSn(),
+            'tx_sn' => $this->rq->getTxSn(),
             'pay_id' => 0,//默认
             'uid' => $this->user->id,
             'account_id' => $this->user->accountInfo->id,

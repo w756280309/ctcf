@@ -8,10 +8,10 @@
 namespace console\controllers;
 
 use Yii;
-use yii\console\Controller;  
+use yii\console\Controller;
 use common\models\product\OnlineProduct;
 use common\models\order\OnlineOrder;
-use common\models\order\OnlineRepaymentPlan;
+use \common\models\user\User;
 use common\models\user\UserAccount;
 use common\lib\bchelp\BcRound;
 use common\models\user\MoneyRecord;
@@ -21,10 +21,14 @@ use common\models\checkaccount\CheckaccountHz;
 use common\models\user\RechargeRecord;
 use common\models\user\Jiesuan;
 use common\lib\cfca\Payment;
+use PayGate\Cfca\Settlement\AccountSettlement;
+use PayGate\Cfca\Message\Request1341;
+use PayLog\PayLogUtils;
+use common\lib\cfca\Cfca;
 
 class CrontabController extends Controller
 {
-    
+
     /**
      * 定时 刷新满标 满标生成还款计划
      */
@@ -36,7 +40,7 @@ class CrontabController extends Controller
             //$orders = OnlineOrder::find()->where(['online_pid'=>$pid,'status'=>  OnlineOrder::STATUS_SUCCESS])->asArray()->select('id,order_money,refund_method,yield_rate,expires,uid,order_time')->all();
             //OnlineRepaymentPlan::createPlan($pid,$orders);//转移到开始计息部分
         }
-        
+
     }
     /**
      * 定时 修改预告期为募集期
@@ -44,7 +48,7 @@ class CrontabController extends Controller
     public function actionUpdatenow(){
         OnlineProduct::updateAll(['status'=>2,'sort'=>OnlineProduct::SORT_NOW],' online_status=1 and status=1 and start_date<='.  time());
     }
-    
+
     /**
      * 定时 修改募集期状态为流标状态
      */
@@ -52,7 +56,7 @@ class CrontabController extends Controller
         $product = OnlineProduct::find()->where(['del_status' => OnlineProduct::STATUS_USE, 'online_status' => OnlineProduct::STATUS_ONLINE, 'status' => OnlineProduct::STATUS_NOW]);
         $product = $product->andFilterWhere(['<', 'end_date', time()])->all();
         //var_dump($product);exit;
-        
+
         $bc = new BcRound();
         bcscale(14);
         $transaction = Yii::$app->db->beginTransaction();
@@ -60,22 +64,22 @@ class CrontabController extends Controller
              $order = OnlineOrder::find()->where(['online_pid' => $val['id'], 'status' => OnlineOrder::STATUS_SUCCESS])->all();
              foreach($order as $v) {
                  $ua = UserAccount::findOne(['uid' => $v['uid']]);
-                 
+
                  $ua->freeze_balance = $bc->bcround(bcsub($ua->freeze_balance, $v['order_money']),2);
                  $ua->available_balance = $bc->bcround(bcadd($ua->available_balance, $v['order_money']),2);
                  $ua->out_sum = $bc->bcround(bcsub($ua->out_sum, $v['order_money']),2);
-                 
+
                  if(!$ua->save()) {
                      $transaction->rollBack();
                      return false;
                  }
-                 
+
                  $v->status = OnlineOrder::STATUS_CANCEL;
                  if(!$v->save()) {
                      $transaction->rollBack();
                      return false;
                  }
-                 
+
                  $money_record = new MoneyRecord();
                  $money_record->sn = MoneyRecord::createSN();
                  $money_record->type = MoneyRecord::TYPE_ORDER;
@@ -85,13 +89,13 @@ class CrontabController extends Controller
                  $money_record->balance = $ua->available_balance;
                  $money_record->in_money = $v['order_money'];
                  $money_record->status = MoneyRecord::STATUS_REFUND;
-                 
+
                  if(!$money_record->save()) {
                      $transaction->rollBack();
                      return false;
                  }
              }
-             
+
              $val->scenario = 'status';
              $val->status = OnlineProduct::STATUS_LIU;
              if(!$val->save()) {
@@ -99,7 +103,7 @@ class CrontabController extends Controller
                  return false;
              }
         }
-        
+
         if($product) {
             $transaction->commit();
             return true;
@@ -107,74 +111,46 @@ class CrontabController extends Controller
         echo 1;
         return false;
     }
-    
+
     /**
      * 发起今日结算请求【建议频率高些】
      */
     public function actionLaunchsettlement(){
-        $payment = new \common\lib\cfca\Payment();
-        $data = RechargeRecord::find()->where(['status'=>1,'settlement'=>0])->all();//找到所有未结算的
-        $bank_id = Yii::$app->params['settlement']['bank_id'];
-        $accountname =  Yii::$app->params['settlement']['accountname'];
-        $accountnumber =  Yii::$app->params['settlement']['accountnumber'];
-        $branchname =  Yii::$app->params['settlement']['branchname'];
-        $province =  Yii::$app->params['settlement']['province'];
-        $city =  Yii::$app->params['settlement']['city'];
-        $institutionId = \Yii::$app->params['cfca']['institutionId'];
-        $xml_path = Yii::getAlias('@common')."/config/xml/cfca_1341.xml";
-        $xmltx1341 = file_get_contents($xml_path);
+        $data = RechargeRecord::find()->where(['status'=>1,'settlement'=>0])->limit(1)->all();//找到所有未结算的
         foreach($data as $dat){
+            $asettlement = new AccountSettlement($dat);
+            $rq1341 = new Request1341(Yii::$app->params['cfca']['institutionId'] , $asettlement);
+
             $jiesuan = new Jiesuan([
-                'sn'=>Jiesuan::createSN('S'),
-                'osn'=>$dat->sn,
-                'pay_id'=>0,//0代表中金
-                'type'=>1,
-                'amount'=>$dat->fund,
-                'bank_id'=>$bank_id,//本平台赋予的银行的id
-                'pay_bank_id'=>$bank_id,//支付公司银行id，
-                'accountname'=>$accountname,
-                'accountnumber'=>$accountnumber,
-                'branchname'=>$branchname,
-                'province'=>$province,
-                'city'=>$city               
+                'sn' => $rq1341->getSettlementSn(),
+                'osn' => $dat->sn,
+                'pay_id' => 0,//0代表中金
+                'type' => 1,
+                'amount' => $dat->fund,
+                'bank_id' => Request1341::BANK_ID,//本平台赋予的银行的id
+                'pay_bank_id' => Request1341::BANK_ID,//支付公司银行id，
+                'accountname' => Request1341::ACCOUNT_NAME,
+                'accountnumber' => Request1341::ACCOUNT_NUMBER,
+                'branchname' => Request1341::BRANCH_NAME,
+                'province' => Request1341::PROVINCE,
+                'city' => Request1341::CITY
             ]);
-            if($jiesuan->validate()&&$jiesuan->save()){//&&$jiesuan->save()//成功之后发起结算
-                $simpleXML= new \SimpleXMLElement($xmltx1341);
-                $simpleXML->Body->InstitutionID=$institutionId;//'000020'
-                $simpleXML->Body->SerialNumber=$jiesuan->sn;
-                $simpleXML->Body->OrderNo=$jiesuan->osn;
-                $simpleXML->Body->Amount=$jiesuan->amount*100;
-                $simpleXML->Body->Remark='';
-                $simpleXML->Body->AccountType=12;
-                $simpleXML->Body->PaymentAccountName='';
-                $simpleXML->Body->PaymentAccountNumber='';
-                $simpleXML->Body->BankAccount->BankID=$bank_id;//测试只能用700 $model->bank_id;
-                $simpleXML->Body->BankAccount->AccountName=$jiesuan->accountname;
-                $simpleXML->Body->BankAccount->AccountNumber=$jiesuan->accountnumber;
-                $simpleXML->Body->BankAccount->BranchName=$jiesuan->branchname;
-                $simpleXML->Body->BankAccount->Province=$jiesuan->province;
-                $simpleXML->Body->BankAccount->City=$jiesuan->city;
-                $simpleXML->Body->PaymentNoList="";
-                $xmlStr = $simpleXML->asXML();//echo $xmlStr;exit;
-                $message=base64_encode(trim($xmlStr));
-                $signature=$payment->cfcasign_pkcs12(trim($xmlStr));
-                $response=$payment->cfcatx_transfer($message,$signature);	
-                $plainText=(base64_decode($response[0]));
-                $ok=$payment->cfcaverify($plainText,$response[1]);
-                if($ok!=1){//异常情况的处理
-                }else{
-                    $responseXML= new \SimpleXMLElement($plainText);
-                    if($responseXML->Head->Code == "2000"){
-                         RechargeRecord::updateAll(['settlement'=>10], ['id'=>$dat->id]);//修改为已经受理
-                    }else{//异常情况的处理
-                        
-                    }
+            if ($jiesuan->validate()&&$jiesuan->save()) {//成功之后发起结算
+                $cfca = new Cfca();
+                $resp = $cfca->request($rq1341);
+
+                $cpuser = User::findOne($dat->uid);
+                //记录日志
+                $log = new PayLogUtils($cpuser,$rq1341,$resp);
+                $log->buildLog();
+
+                if ($resp->isSuccess()) {
+                    RechargeRecord::updateAll(['settlement' => RechargeRecord::SETTLE_ACCEPT], ['id' => $dat->id]);//修改为已经受理
                 }
             }
-            
         }
     }
-    
+
     /**
      * 批处理结算订单的状态修改【建议频率高些】
      */
@@ -192,7 +168,7 @@ class CrontabController extends Controller
                 $simpleXML->Body->SerialNumber = $dat->sn;
                 $xmlStr = $simpleXML->asXML();
                 $message = base64_encode(trim($xmlStr));
-                
+
                 $signature = $payment->cfcasign_pkcs12(trim($xmlStr));
                 $response = $payment->cfcatx_transfer($message, $signature);
 
@@ -216,24 +192,9 @@ class CrontabController extends Controller
                 }
             }
         }else{
-            
+
         }
-        
-    }
-    
-    //////////测试无用
-    public function actionT(){
-//        $settlement = new \PayGate\Cfca\Settlement\AccountSettlement(2, 0, 1, 1000, 1, 1);
-//        $request1341 = new \PayGate\Cfca\Message\Request1341(5, $settlement);
-//        echo ($request1341->getXml());
-//        $log = new \common\models\TradeLog();
-//        $this->on('SayHello', ['common\models\TradeLog','eventTest'],'a');
-//        $this->trigger('SayHello');
-        
-        $pp = new \common\lib\product\ProductProcessor();
-        $e = strtotime('2015-12-18 13:00:00');
-        $r = $pp->LoanTimes(date('Y-m-d'), null, $e, 'd', true);
-        print_r($r);
+
     }
 
     /**
@@ -255,11 +216,11 @@ class CrontabController extends Controller
         $payment = new \common\lib\cfca\Payment();
         $signature = $payment->cfcasign_pkcs12(trim($xmlStr));
         $response = $payment->cfcatx_transfer($message, $signature);
-        
+
         $plainText = (base64_decode($response[0]));
         $ok = $payment->cfcaverify($plainText, $response[1]);
 //        print_r($ok);
-//        print_r($plainText);exit;        
+//        print_r($plainText);exit;
         if($ok==1){//中金验签返回成功
             $is_write = CheckaccountCfca::find()->where(['tx_date'=>$date])->count('id');
             if($is_write){
@@ -290,7 +251,7 @@ class CrontabController extends Controller
                         $data[]=[$date,$tx->TxType,$txsn,bcdiv($tx->TxAmount,100),$tx->PaymentAmount,$tx->InstitutionAmount,$banknotificationtime,$time,$time];
                     }
                     if(!empty($data)){
-                        $res = $connection->createCommand()->batchInsert(CheckaccountCfca::tableName(), ['tx_date', 'tx_type','tx_sn','tx_amount','payment_amount','institution_fee','bank_notification_time','created_at','updated_at'], 
+                        $res = $connection->createCommand()->batchInsert(CheckaccountCfca::tableName(), ['tx_date', 'tx_type','tx_sn','tx_amount','payment_amount','institution_fee','bank_notification_time','created_at','updated_at'],
                                 $data)->execute();
                         if($res){
 
@@ -305,9 +266,9 @@ class CrontabController extends Controller
         }else{
             /////验签失败代码处理
         }
-        
+
     }
-    
+
     /**
      * 获取温都金服充值订单前一日【结算在结算定时任务中完成】
      * 建议在凌晨0点至5点之间运行。要保证5点之前执行完毕
@@ -321,7 +282,7 @@ class CrontabController extends Controller
         if($is_write){
             return FALSE;
         }
-        
+
         $dataobj = RechargeRecord::find()->where(['status'=>RechargeRecord::STATUS_YES])->andFilterWhere(['between','bankNotificationTime',date('Y-m-d H:i:s',$beginYesterday),date('Y-m-d H:i:s',$endYesterday)])->all();
         //var_dump($dataobj);exit;
         $insert_arr = array();
@@ -331,7 +292,7 @@ class CrontabController extends Controller
         }
         if(!empty($insert_arr)){
             $connection = \Yii::$app->db;
-            $res = $connection->createCommand()->batchInsert(CheckaccountWdjf::tableName(), ['order_no','tx_date', 'tx_type','tx_sn','tx_amount','payment_amount','institution_fee','bank_notification_time','created_at','updated_at'], 
+            $res = $connection->createCommand()->batchInsert(CheckaccountWdjf::tableName(), ['order_no','tx_date', 'tx_type','tx_sn','tx_amount','payment_amount','institution_fee','bank_notification_time','created_at','updated_at'],
                     $insert_arr)->execute();
             if($res){
 
@@ -342,7 +303,7 @@ class CrontabController extends Controller
         }
         return true;
     }
-    
+
     /**
      * 温度金服的对账单与中金对账单做比对【建议在凌晨5点之后进行】
      */
@@ -368,7 +329,7 @@ class CrontabController extends Controller
                 $false_ids[]=$data['id'];
             }
         }
-        
+
         if(!empty($false_ids)){
             CheckaccountWdjf::updateAll(['is_checked'=>1,'is_auto_okay'=>2], ['id'=>$false_ids]);
         }
@@ -377,7 +338,7 @@ class CrontabController extends Controller
         }
         echo 'finished';
     }
-    
+
     /**
      * 每日汇总对账单【建议在执行完对账之后执行Comparebill】
      */
@@ -394,7 +355,7 @@ class CrontabController extends Controller
             echo 'has been implemented';
             exit;
         }
-        
+
         $wdjfobj = CheckaccountWdjf::find()->where('is_checked=1 and (is_auto_okay=1 or (is_auto_okay=2 and is_okay=1))')->andFilterWhere(['between','tx_date',$beginYesterday,$endYesterday])->all();
         //var_dump($wdjfobj);exit;
         $recharge_count = $recharge_sum = $jiesuan_count = $jiesuan_sum = 0;
@@ -421,6 +382,6 @@ class CrontabController extends Controller
             print_r($hzmodel->getErrors());
         }
     }
-        
-    
+
+
 }
