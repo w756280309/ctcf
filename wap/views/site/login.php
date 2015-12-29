@@ -1,6 +1,7 @@
 <?php
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
+use yii\captcha\Captcha;
 
 frontend\assets\WapAsset::register($this);
 $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','position' => 1]);
@@ -29,8 +30,6 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
         <div class="row">
             <?php $form = ActiveForm::begin(['id' => 'login', 'action' => "/site/login", 'options' => ['data-to'=>'1']]); ?>
             <input name="from" type="hidden" value="<?=$from ?>">
-<!--            <form action="/site/login" method="post" id="login">
-                <input name="_csrf" type="hidden" id="_csrf" value=" //Yii::$app->request->csrfToken ">-->
                 <input id="iphone" class="login-info" name="LoginForm[phone]" maxlength="11" type="tel" placeholder="请输入手机号" AUTOCOMPLETE="off" >
 
                <div class="row sm-height">
@@ -41,6 +40,21 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
                            <img src="/images/eye-close.png" width="26" height="20" alt="闭眼">
                     </div>
                 </div>
+                
+                <?php if($is_flag) { ?>
+                <div class="row sm-height border-bottom">
+                    <div class="col-xs-9 col">
+                        <input name="is_flag" type="hidden" value="<?= $is_flag ?>">
+                        <input class="login-info" type="text" id="verifycode" placeholder="请输入验证码" name="LoginForm[verifyCode]" maxlength="6" >
+                    </div>
+                    <div class="col-xs-3 yz-code text-align-rg col" style="height:52px;background: #fff;" >
+                        <?= $form->field($model, 'verifyCode')->widget(Captcha::className(), [
+                                                        'template' => '{image}','captchaAction'=>'/site/captcha'
+                                                        ]) ?>
+                    </div>
+                </div>
+                <?php } ?>
+                
                 <a href="/site/resetpass" class="forget-mima">忘记密码？</a>
                 <div class="col-xs-3"></div>
                 <div class="col-xs-6 login-sign-btn">
@@ -60,6 +74,7 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
 <!--    <script src="/js/is.js"></script>-->
     <script>
         var csrf;
+        var is_flag = '<?= $is_flag?1:0 ?>';
         $(function(){
             csrf = $("meta[name=csrf-token]").attr('content');
             $('#login-btn').bind('click',function(){
@@ -85,6 +100,18 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
                     toast(this,'密码长度最少6位');
                     $(this).removeClass("btn-press").addClass("btn-normal");
                     return false;
+                }
+                if (is_flag == 1) {
+                    if ($('#verifycode').val()=='') {
+                        toast(this,'验证码不能为空');
+                        $(this).removeClass("btn-press").addClass("btn-normal");
+                        return false;
+                    }
+                    if ($('#verifycode').val().length!=6) {
+                        toast(this,'验证码长度必须为6位');
+                        $(this).removeClass("btn-press").addClass("btn-normal");
+                        return false;
+                    }
                 }
                 subForm("#login",'#login-btn');
 

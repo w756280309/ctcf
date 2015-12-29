@@ -15,6 +15,8 @@ use common\models\product\OnlineProduct;
 use common\models\user\SignupForm;
 use common\models\user\LoginForm;
 use common\models\user\EditpassForm;
+use common\service\LoginService;
+use common\models\log\LoginLog;
 use yii\data\Pagination;
 
 /**
@@ -113,8 +115,7 @@ class SiteController extends Controller
         return $this->render('index', ['adv' => $adv, 'deals' => $deals]);
     }
 
-    public function actionLogin()
-    {
+    public function actionLogin() {
         $this->layout = false;
         if (!\Yii::$app->user->isGuest) {
             return $this->goHome();
@@ -127,6 +128,18 @@ class SiteController extends Controller
         $model = new LoginForm();
         $from = Yii::$app->request->referrer;
         $from = Yii::$app->functions->dealurl($from);
+
+        $is_flag = Yii::$app->request->post('is_flag');    //是否需要校验图形验证码标志位
+        if($is_flag && !is_bool($is_flag)) {
+            exit("变量is_flag的类型错误");
+        }
+
+        if ($is_flag) {
+            $model->scenario = 'verifycode';
+        } else {
+            $model->scenario = 'login';
+        }
+
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             if ($model->login()) {
                 $post_from = Yii::$app->request->post('from');
@@ -140,16 +153,27 @@ class SiteController extends Controller
             }
         }
 
+        $login = new LoginService();
+
+        if ($model->getErrors('password')) {
+            $login->logFailure(Yii::$app->request, $model->phone, LoginLog::TYPE_WAP);
+        }
+
+        $is_flag = $is_flag? $is_flag : $login->isCaptchaRequired(Yii::$app->request, $model->phone);
+
         if ($model->getErrors()) {
             $message = $model->firstErrors;
-            Yii::$app->response->format = Response::FORMAT_JSON;
+            if ($is_flag) {
+                return ['tourl' => '/site/login', 'code' => 1, 'message' => current($message)];
+            }
 
             return ['code' => 1, 'message' => current($message)];
         }
 
         return $this->render('login', [
-            'model' => $model,
-            'from' => $from,
+                    'model' => $model,
+                    'from' => $from,
+                    'is_flag' => $is_flag
         ]);
     }
 

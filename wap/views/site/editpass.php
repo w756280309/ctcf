@@ -8,7 +8,6 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
 <link rel="stylesheet" href="/css/base.css">
 <link rel="stylesheet" href="/css/setting.css">
 
-<!--    <form method="post" class="cmxform" id="editpassform" action="/site/editpass">-->
 <?php $form = ActiveForm::begin(['id'=>'editpassform', 'action' =>"/site/editpass" , 'options' => ['class' => 'cmxform']]); ?>
     <input name="_csrf" type="hidden" id="_csrf" value="<?= Yii::$app->request->csrfToken ?>">
     <div class="row sm-height border-bottom">
@@ -32,7 +31,6 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
                 <input type="text" id="sms" placeholder="请输入验证码" name="EditpassForm[verifyCode]" maxlength="6" >
             </div>
             <div class="col-xs-4 yz-code text-align-rg col">
-<!--                <input  class="" type="image" src="/images/yz-code.png" name=""  placeholder="图形验证码" AUTOCOMPLETE="off" align="absmiddle">-->
                 <?= $form->field($model, 'verifyCode',['inputOptions' => [ 'style' => 'height: 40px']])->widget(Captcha::className(), [
                                                     'template' => '{image}','captchaAction'=>'/site/captcha'
                                                     ]) ?>
@@ -84,10 +82,6 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
                toast(this,'验证码不能为空');
                return false;
            }
-//           if($('#sms').val().length!=6){
-//               toast(this,'验证码必须是6位数字');
-//               return false;
-//           }
            subForm("#editpassform");
        });
 
