@@ -24,4 +24,5 @@ abstract class AbstractRequest implements RequestInterface
     }
 
     abstract public function getXml();
+    abstract public function getTxSn();
 }

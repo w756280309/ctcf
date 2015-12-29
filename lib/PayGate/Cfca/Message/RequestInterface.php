@@ -7,4 +7,5 @@ interface RequestInterface
     public function getInstitutionId();
     public function getTxCode();
     public function getXml();
+    public function getTxSn();
 }

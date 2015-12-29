@@ -6,17 +6,22 @@ use Yii;
 use PayGate\Cfca\CfcaUtils;
 use PayGate\Cfca\Settlement\AccountSettlement;
 
+/**
+ * 结算
+ * 向中金发起结算请求【定时任务，筛选成功支付的尚未发起结算的充值记录】
+ * 构造函数需要传入机构ID【中金分配给机构的ID】，以及封装过的充值类
+ */
 class Request1341 extends AbstractRequest {
 
-    const BANK_ID = '424';
-    const ACCOUNT_NAME = '温都金服';
-    const BRANCH_NAME = '南京银行鸿信大厦支行';
-    const ACCOUNT_NUMBER = '017601205400022';
-    const PROVINCE = '江苏省';
-    const CITY = '南京市';
+    const BANK_ID = '424';//银行id，对照中金提供的银行编码
+    const ACCOUNT_NAME = '温都金服';//账户名
+    const BRANCH_NAME = '南京银行鸿信大厦支行';//分支行信息
+    const ACCOUNT_NUMBER = '017601205400022';//卡号
+    const PROVINCE = '江苏省';//分支行所属省份
+    const CITY = '南京市';//分支行所属市
 
-    private $settlementSn;
-    private $settlement;
+    private $settlementSn;//结算号
+    private $settlement;//结算类【封装过的充值对象】
 
     public function __construct(
     $institutionId, AccountSettlement $settlement
@@ -26,6 +31,10 @@ class Request1341 extends AbstractRequest {
         parent::__construct($institutionId, 1341);
     }
 
+    /**
+     * 结算号
+     * @return type
+     */
     public function getSettlementSn() {
         return $this->settlementSn;
     }
@@ -38,6 +47,10 @@ class Request1341 extends AbstractRequest {
         return $this->settlementSn;
     }
 
+    /**
+     * 获取结算对象
+     * @return type
+     */
     public function getSettlement() {
         return $this->settlement;
     }
@@ -75,7 +88,7 @@ TPL;
                     'txCode' => $this->getTxCode(),
                     'sn' => $this->settlementSn,
                     'orderNo' => $recharge->sn,
-                    'amount' => $recharge->fund * 100,
+                    'amount' => $recharge->fund * 100,//中金以分计算
                     'remark' => '',
                     'accountType' => $this->settlement->getAccountType(),
                     'bankID' => self::BANK_ID,

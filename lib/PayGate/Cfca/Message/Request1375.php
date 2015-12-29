@@ -4,12 +4,17 @@ namespace PayGate\Cfca\Message;
 
 use PayGate\Cfca\CfcaUtils;
 
+/**
+ * 快捷支付
+ * 向中金发起支付确认，发短信
+ * 构造函数需要传入机构ID【中金分配给机构的ID】，绑定流水号，金额
+ */
 class Request1375 extends AbstractRequest
 {
-    private $rechargeSn;
-    private $remark;
-    private $bindingSn;
-    private $amount;
+    private $rechargeSn;//快捷充值单号
+    private $remark;//描述
+    private $bindingSn;//绑定流水号【绑卡时候的流水号】
+    private $amount;//充值金额
 
     public function __construct(
         $institutionId,
