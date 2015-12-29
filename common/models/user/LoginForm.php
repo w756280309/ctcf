@@ -11,6 +11,7 @@ class LoginForm extends Model
 {
     public $phone;
     public $password;
+    public $verifyCode;
     public $rememberMe = true;
 
     private $_user = false;
@@ -19,11 +20,24 @@ class LoginForm extends Model
     /**
      * @inheritdoc
      */
+    public function scenarios()
+    {
+        return [
+            'login' => ['phone','password','rememberMe'],
+            'verifycode' => ['phone','password','verifyCode','rememberMe'],   //需要校验图形验证码
+        ];        
+    }  
+    
+    /**
+     * @inheritdoc
+     */
     public function rules()
     {
         return [
             ['phone', 'required', 'message' => '手机号码不能为空'],
             ['password', 'required', 'message' => '密码不能为空'],
+            ['verifyCode', 'required', 'message' => '图形验证码不能为空', 'on' => 'verifycode'],
+            ['verifyCode', 'captcha', 'on' => 'verifycode'],
             [['phone'],'match','pattern'=>'/^(13[0-9]|14[0-9]|15[0-9]|17[0-9]|18[0-9])\d{8}$/','message'=>'您输入的手机号不正确'],
             [['phone'],'checkPhone'],
             [
@@ -47,6 +61,7 @@ class LoginForm extends Model
         return [
             'phone' => '手机号码',
             'password' => '密码',
+            'verifyCode' => ''
         ];
     }
     

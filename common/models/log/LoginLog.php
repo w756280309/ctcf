@@ -17,6 +17,23 @@ use yii\behaviors\TimestampBehavior;
  */
 class LoginLog extends \yii\db\ActiveRecord
 {
+    const TYPE_WAP = 1;
+    const TYPE_PC = 2;
+    const TYPE_BACKEND = 3;
+    
+    /**
+     * 构造函数
+     */
+    public function __construct($config = [])
+    {
+        if (empty($config) || empty($config['ip']) || empty($config['type'])) {
+            exit("LoginLog参数错误");
+        }
+        
+        Yii::configure($this, $config);        
+        $this->init();
+    }
+    
     /**
      * @inheritdoc
      */
