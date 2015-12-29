@@ -9,6 +9,7 @@ use common\models\user\UserAccount;
 use common\service\BankService;
 use common\models\user\UserBanks;
 use common\models\user\DrawRecord;
+use common\models\city\Region;
 use common\lib\bchelp\BcRound;
 
 class UseraccountController extends BaseController {
@@ -39,6 +40,7 @@ class UseraccountController extends BaseController {
         $uid = $this->uid;
         $user_bank = UserBanks::findOne(['uid' => $uid, 'status' => UserBanks::STATUS_YES]);
         $user_acount = UserAccount::findOne(['type' => UserAccount::TYPE_BUY, 'uid' => $uid]);
+        $province = Region::find()->where(['province_id' => 0])->select('id,name')->asArray()->all();
 
         if ($user_acount->out_sum == 0) {
             $check_arr = $this->check_helper();
@@ -47,13 +49,11 @@ class UseraccountController extends BaseController {
             }
         }
 
-        $money = Yii::$app->request->post('money');
         $model = new EditpassForm();
         $draw = new DrawRecord();
         $model->scenario = 'checktradepwd';
         $draw->uid = $uid;
-        $draw->money = $money;
-        if ($model->load(Yii::$app->request->post()) && $draw->validate() && $model->validate()) {
+        if ($draw->load(Yii::$app->request->post()) && $draw->validate() && $model->load(Yii::$app->request->post()) && $model->validate()) {
             $us = new UserService();
             $re = $us->checkDraw($uid, $draw->money);
             if ($re['code']) {
@@ -61,11 +61,9 @@ class UseraccountController extends BaseController {
             } else {
                 $transaction = Yii::$app->db->beginTransaction();
                 //录入draw_record记录
-                $draw->money = $money;
                 $draw->sn = DrawRecord::createSN();
                 $draw->pay_id = 0;
                 $draw->account_id = $user_acount->id;
-                $draw->uid = $uid;
                 $draw->pay_bank_id = '0';
                 $draw->bank_id = $user_bank->bank_id;
                 $draw->bank_username = $user_bank->bank_name;
@@ -110,14 +108,31 @@ class UseraccountController extends BaseController {
             }
         }
 
-        return $this->render('tixian', ['model' => $model, 'bank' => $user_bank, 'draw' => $draw]);
+        return $this->render('tixian', ['model' => $model, 'bank' => $user_bank, 'draw' => $draw, 'province' => $province]);
     }
 
     /**
      * 补充银行信息
      */
     public function actionEditbank() {
+        $res = false;
+        $message = '操作失败';
+        $check_arr = $this->check_helper();
+        if ($check_arr['code'] == 1) {
+            $this->goHome();
+        }
 
+        $bank = $check_arr['user_bank'];
+        $bank->scenario = 'step_second';
+        if ($bank->load(Yii::$app->request->post()) && $bank->validate()) {
+            $res = $bank->save();
+            if ($res) {
+                $message = '操作成功';
+            }
+        }
+
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        return ['res' => $res, 'message' => $message];
     }
 
     /**
