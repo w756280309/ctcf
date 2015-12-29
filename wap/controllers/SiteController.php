@@ -154,7 +154,7 @@ class SiteController extends Controller
             $login->logFailure(Yii::$app->request, $model->phone, LoginLog::TYPE_WAP);
         }
 
-        $is_flag = $is_flag? $is_flag : $login->isCaptchaRequired(Yii::$app->request, $model->phone);
+        $is_flag = $is_flag? $is_flag : $login->isCaptchaRequired(Yii::$app->request, $model->phone, 10 * 60, 3);
 
         if ($model->getErrors()) {
             $message = $model->firstErrors;
