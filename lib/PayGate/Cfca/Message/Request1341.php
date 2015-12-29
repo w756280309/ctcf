@@ -33,7 +33,7 @@ class Request1341 extends AbstractRequest {
 
     /**
      * 结算号
-     * @return type
+     * @return string【格式：时间精度毫秒级+4位随机数】
      */
     public function getSettlementSn() {
         return $this->settlementSn;
@@ -41,7 +41,7 @@ class Request1341 extends AbstractRequest {
 
     /**
      * 用作日志记录时候通用的方法
-     * @return type
+     * @return string
      */
     public function getTxSn() {
         return $this->settlementSn;

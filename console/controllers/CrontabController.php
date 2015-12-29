@@ -23,7 +23,8 @@ use common\models\user\Jiesuan;
 use common\lib\cfca\Payment;
 use PayGate\Cfca\Settlement\AccountSettlement;
 use PayGate\Cfca\Message\Request1341;
-use PayLog\PayLogUtils;
+use PayGate\Cfca\Message\Request1350;
+use common\models\TradeLog;
 use common\lib\cfca\Cfca;
 
 class CrontabController extends Controller
@@ -117,6 +118,7 @@ class CrontabController extends Controller
      */
     public function actionLaunchsettlement(){
         $data = RechargeRecord::find()->where(['status'=>1,'settlement'=>0])->limit(1)->all();//找到所有未结算的
+        $cfca = new Cfca();
         foreach($data as $dat){
             $asettlement = new AccountSettlement($dat);
             $rq1341 = new Request1341(Yii::$app->params['cfca']['institutionId'] , $asettlement);
@@ -136,13 +138,12 @@ class CrontabController extends Controller
                 'city' => Request1341::CITY
             ]);
             if ($jiesuan->validate()&&$jiesuan->save()) {//成功之后发起结算
-                $cfca = new Cfca();
                 $resp = $cfca->request($rq1341);
 
                 $cpuser = User::findOne($dat->uid);
                 //记录日志
-                $log = new PayLogUtils($cpuser,$rq1341,$resp);
-                $log->buildLog();
+                $log = new TradeLog($cpuser,$rq1341,$resp);
+                $log->save();
 
                 if ($resp->isSuccess()) {
                     RechargeRecord::updateAll(['settlement' => RechargeRecord::SETTLE_ACCEPT], ['id' => $dat->id]);//修改为已经受理
@@ -360,10 +361,10 @@ class CrontabController extends Controller
         //var_dump($wdjfobj);exit;
         $recharge_count = $recharge_sum = $jiesuan_count = $jiesuan_sum = 0;
         foreach ($wdjfobj as $obj){
-            if($obj->tx_type=1311){//充值
+            if ($obj->tx_type == 1311) {//充值
                 $recharge_count++;
                 $recharge_sum=  bcadd($recharge_sum, $obj->tx_amount);
-            }else if($obj->tx_type=1341){//结算
+            } else if ($obj->tx_type == 1341) {//结算
                 $jiesuan_count++;
                 $jiesuan_sum=  bcadd($jiesuan_sum, $obj->tx_amount);
             }

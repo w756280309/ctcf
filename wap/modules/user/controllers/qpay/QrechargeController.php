@@ -10,7 +10,7 @@ use common\models\user\RechargeRecord;
 use PayGate\Cfca\Response\Response1376;
 use common\models\user\MoneyRecord;
 use common\lib\bchelp\BcRound;
-use PayLog\PayLogUtils;
+use common\models\TradeLog;
 use Yii;
 use yii\base\Model;
 use yii\web\Response;
@@ -57,8 +57,8 @@ class QrechargeController extends BaseController
             $resp = $cfca->request($req);
 
             //记录日志
-            $log = new PayLogUtils($cpuser,$req,$resp);
-            $log->buildLog();
+            $log = new TradeLog($cpuser,$req,$resp);
+            $log->save();
 
             if (false === $resp) {
                 return $this->createErrorResponse('服务器异常');
@@ -140,8 +140,8 @@ class QrechargeController extends BaseController
         $resp1376 = new Response1376($resp->getText());
 
         //记录日志
-        $log = new PayLogUtils($this->user,$rq1376,$resp);
-        $log->buildLog();
+        $log = new TradeLog($this->user,$rq1376,$resp);
+        $log->save();
 
         if ($resp1376->isSuccess()) {
             $bankTxTime = $resp1376->getBankTxTime();
