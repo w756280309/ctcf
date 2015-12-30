@@ -44,7 +44,7 @@ class Batchpay extends \yii\db\ActiveRecord
      * 返回 BatchItem
      */
     public function getItems(){
-        return $this->hasOne(BatchpayItem::className(), ['batchpay_id' => 'id']);
+        return $this->hasMany(BatchpayItem::className(), ['batchpay_id' => 'id']);
     }
     
 }

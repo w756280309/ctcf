@@ -7,30 +7,17 @@ use Yii;
 /**
  * 批量代付
  * 将批量代付的明细通过接口传给支付平台【后台放款时触发】
- * 构造函数需要传入机构ID【中金分配给机构的ID】，
+ * 构造函数需要传入机构ID【中金分配给机构的ID】，批次对象
  */
 class Request1510 extends AbstractRequest {
 
-    private $batch;//批量代付的对象
     private $batchSn;//批量代付代码
-    private $batchItem;//批量代付包含批次数据
-
 
     public function __construct(
     $institutionId, $batch
     ) {
-        $this->batch = $batch;
         $this->batchSn = $batch->sn;
-        $this->batchItem = $batch->items;
         parent::__construct($institutionId, 1510);
-    }
-
-    /**
-     * 返回批次数据
-     * @return array
-     */
-    public function getBatchItem(){
-        return $this->batchItem;
     }
 
     /**
