@@ -64,13 +64,19 @@ class UserAccount extends \yii\db\ActiveRecord {
             TimestampBehavior::className(),
         ];
     }
-    
+
+    /**
+     * 获取用户账户信息
+     * @param $uid 用户id
+     * @param $type 用户类型
+     * @return object
+     */
     public static function getUserAccount($uid=null,$type=1){
         return static::findOne(['uid'=>$uid,'type'=>$type]);
     }
-    
+
     /**
-     * 
+     *
      * @param type $user
      * @return int  返回账户类型，3全部，2融资账户，1投资账户
      */
