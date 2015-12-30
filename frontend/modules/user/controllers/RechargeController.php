@@ -8,8 +8,8 @@ use frontend\controllers\BaseController;
 use common\models\user\RechargeRecord;
 use common\models\user\MoneyRecord;
 use common\models\user\UserAccount;
+use common\models\TradeLog;
 use common\lib\cfca\Payment;
-use common\models\user\CfcaLog;
 
 class RechargeController extends BaseController {
 
@@ -25,7 +25,7 @@ class RechargeController extends BaseController {
         $bank_id = Yii::$app->request->post('bankid');
         $account_type = Yii::$app->request->post('account_type');
 
-        $user_account = UserAccount::getUserAccount($uid);
+        $user_account = UserAccount::findOne(['uid' => $uid, 'type' => UserAccount::TYPE_BUY]);
         $recharge = new RechargeRecord();
         $recharge->uid = $uid;
         $recharge->bank_id = $bank_id;
@@ -35,7 +35,7 @@ class RechargeController extends BaseController {
                 exit('无效的参数');
             }
 
-            if (!in_array($account_type, ['11','12'])) {
+            if (!in_array($account_type, ['11', '12'])) {
                 exit('无效的账户类型');
             }
 
@@ -49,7 +49,7 @@ class RechargeController extends BaseController {
 
             if (!$recharge->save()) {
                 $transaction->rollBack();
-                return $this->redirect('/user/recharge/rechstatus?flag=err');
+                return $this->redirect('/user/recharge/recharge-err');
             }
 
             $xml_path = Yii::getAlias('@common') . "/config/xml/cfca_1311.xml";
@@ -63,7 +63,7 @@ class RechargeController extends BaseController {
             $simpleXML->Body->Fee = 0;
             $simpleXML->Body->Usage = '大额充值';
             $simpleXML->Body->Remark = '大额充值';
-            $simpleXML->Body->NotificationURL = \Yii::$app->params['main_url'] . '/user/recharge/rechargecallback';
+            $simpleXML->Body->NotificationURL = \Yii::$app->params['main_url'] . '/user/recharge/rechargecallback';   //？？？？
             $simpleXML->Body->BankID = $recharge->bank_id;
             $simpleXML->Body->AccountType = $account_type;    //个人网银
 
@@ -91,152 +91,135 @@ class RechargeController extends BaseController {
     }
 
     /*
-     *  充值回调函数
+     *  充值回调函数 1318 1348
      */
     public function actionRechargecallback() {
         $message = \Yii::$app->request->post('message');
         $signature = Yii::$app->request->post("signature");
         $payment = new Payment();
         $plainText = trim(base64_decode($message));
+        $simpleXML = new \SimpleXMLElement($plainText);
 
-        //记录中金返回响应
-        $cfcalog = new CfcaLog();
-        $cfcalog->type = 2;
-        $cfcalog->account_id = 0;
-        $cfcalog->uid = $this->uid;
-        $cfcalog->log_type = 2;
-        $cfcalog->response_code="前台通知1";
-        $cfcalog->response = $plainText;
-        $cfcalog->save();
+        //录入日志信息
+        $trade_log = new TradeLog([
+            'tx_code' => $simpleXML->Head->TxCode,
+            'tx_sn' => $simpleXML->Body->PaymentNo,
+            'pay_id' => 0,
+            'uid' => $this->uid,
+            'account_id' => Yii::$app->user->accountInfo->id,
+            'request' => $plainText
+        ]);
 
+        $xml_path = Yii::getAlias('@common') . "/config/xml/cfca_response.xml";
+        $xmlresponse = file_get_contents($xml_path);
+        $responseXML = new \SimpleXMLElement($xmlresponse);
+        $code = "2000";
+        $errInfo = 'OK';
+
+        //验证签名
         $ok = $payment->cfcaverify($plainText, $signature);
         if ($ok != 1) {
-//            $errInfo = "验签失败";//
-            return $this->redirect('/user/recharge/rechstatus?status=defeat');
+            //签名失败，返回错误信息
+            $code = "2002";
+            $errInfo = "验签失败";
         } else {
-            $simpleXML = new \SimpleXMLElement($plainText);
-
-            //记录中金返回响应
-            $cfcalog = new CfcaLog();
-            $cfcalog->type = 2;
-            $cfcalog->account_id = 0;
-            $cfcalog->uid = $this->uid;
-            $cfcalog->log_type = 2;
-            $cfcalog->response_code="前台通知2";
-            $cfcalog->response = $plainText;
-            $cfcalog->save();
-
+            //签名成功
             $txCode = $simpleXML->Head->TxCode;
-            $InstitutionID = $simpleXML->Body->InstitutionID; //获取返回的机构编号
-            if ($InstitutionID != \Yii::$app->params['cfca']['InstitutionID']) {
-                //exit('错误的机构编码');
-                return $this->redirect('/user/recharge/rechstatus?status=defeat');
+            if (!in_array($txCode, ['1318', '1348'])) {
+                $code = "2001";
+                $errInfo = "调用接口错误";
             }
-            $Status = intval($simpleXML->Body->Status); //获取返回结果 状态： 10=未支付 20=已支付
-            $BankNotificationTime = $simpleXML->Body->BankNotificationTime; //获取返回支付平台收到银行通知时间
-            $Amount = $simpleXML->Body->Amount; //支付金额，单位：分
-            $PaymentNo = $simpleXML->Body->PaymentNo; //支付交易流水号
-            if ($txCode == "1318") {//1318-市场订单支付状态变更通知
-                $rechareg = RechargeRecord::findOne(['sn' => $PaymentNo]);
-                if (empty($rechareg)) {
-                    //exit('不正确的充值单据');
-                    return $this->redirect('/user/recharge/rechstatus?status=defeat');
-                } else if ($rechareg->status == RechargeRecord::STATUS_YES) {//已经充值成功的
-                    return $this->redirect('/user/recharge/rechstatus?status=success');
-                } else if ($Status == 20) {
-                    $ua = UserAccount::findOne($rechareg->account_id);
-                    $bcround = new BcRound();
+        }
+
+        $responseXML->Head->Code = $code;
+        $responseXML->Head->Message = $errInfo;
+        $responseXMLStr = $responseXML->asXML();
+        $base64Str = base64_encode(trim($responseXMLStr));
+
+        //记录日志信息
+        $trade_log->response_code = $code;
+        $trade_log->response = $responseXMLStr;
+        $trade_log->save();
+
+        print $base64Str;
+    }
+
+    /**
+     * 查询充值状态 1320
+     */
+    public function actionCheckarchstatus($recharge) {
+        $payment = new Payment();
+        $xml = Yii::getAlias('@common') . "/config/xml/cfca_1320.xml";
+        $content = file_get_contents($xml);
+        $simpleXML = new \SimpleXMLElement($content);
+        $simpleXML->Head->InstitutionID = \Yii::$app->params['cfca']['institutionId'];
+        $simpleXML->Body->PaymentNo = $recharge->sn;
+        $xmlStr = $simpleXML->asXML();
+
+        $message = base64_encode(trim($xmlStr));
+        $signature = $payment->cfcasign_pkcs12(trim($xmlStr));
+        $response = $payment->cfcatx_transfer($message, $signature);
+        $plainText = (base64_decode($response[0]));
+        $ok = $payment->cfcaverify($plainText, $response[1]);
+
+        if ($ok != 1) {
+            return $this->redirect('/user/recharge/recharge-err');
+        } else {
+            $response_XML = new \SimpleXMLElement($plainText);
+            if ($response_XML->Head->Code == "2000") {
+                if ($response_XML->Body->Status == 20) {
+                    $uid = $this->uid;
+                    $bankTxTime = $response_XML->Body->BankNotificationTime;
+                    $user_acount = UserAccount::findOne(['type' => UserAccount::TYPE_BUY, 'uid' => $uid]);
+
+                    $bc = new BcRound();
                     bcscale(14);
                     $transaction = Yii::$app->db->beginTransaction();
+                    //修改充值状态
+                    RechargeRecord::updateAll(['status' => 1, 'bankNotificationTime' => $bankTxTime], ['id' => $recharge->id]);
+                    //添加交易流水
+                    $money_record = new MoneyRecord();
+                    $money_record->sn = MoneyRecord::createSN();
+                    $money_record->type = MoneyRecord::TYPE_RECHARGE;
+                    $money_record->osn = $recharge->sn;
+                    $money_record->account_id = $user_acount->id;
+                    $money_record->uid = $uid;
+                    $money_record->balance = $bc->bcround(bcadd($user_acount->available_balance, $recharge->fund), 2);
+                    $money_record->in_money = $recharge->fund;
+                    $money_record->status = MoneyRecord::STATUS_SUCCESS;
 
-                    //记录中金返回响应
-                    $cfcalog = new CfcaLog();
-                    $cfcalog->type = 2;
-                    $cfcalog->account_id = $ua->id;
-                    $cfcalog->uid = $this->uid;
-                    $cfcalog->log_type = 2;
-                    $cfcalog->response = $plainText;
-                    if (!$cfcalog->save()) {
+                    if (!$money_record->save()) {
                         $transaction->rollBack();
-                        return $this->redirect('/user/recharge/rechstatus?status=defeat');
+                        return $this->redirect('/user/recharge/recharge-err');
                     }
 
-                    //结算部分。
-                    $jiesuan = new \common\models\user\Jiesuan();
-                    $jiesuan->amount = bcdiv($Amount, 100, 2) * 1;
-                    $jiesuan->osn = $rechareg->sn;
-                    $jiesuan->type = 1;
-                    $res = $jiesuan->settlement();
-                    if ($res === false) {
-                        $transaction->rollBack();
-                        return $this->redirect('/user/recharge/rechstatus?status=defeat');
-                    }
+                    //录入user_acount记录
+                    $user_acount->uid = $user_acount->uid;
+                    $user_acount->account_balance = $bc->bcround(bcadd($user_acount->account_balance, $recharge->fund), 2);
+                    $user_acount->available_balance = $bc->bcround(bcadd($user_acount->available_balance, $recharge->fund), 2);
+                    $user_acount->in_sum = $bc->bcround(bcadd($user_acount->in_sum, $recharge->fund), 2);
 
-                    $rechareg->status = RechargeRecord::STATUS_YES;
-                    $rechareg->bankNotificationTime = $BankNotificationTime;
-                    if (!$rechareg->save()) {
+                    if (!$user_acount->save()) {
                         $transaction->rollBack();
-                        //exit('修改充值状态异常');
-                        return $this->redirect('/user/recharge/rechstatus?status=defeat');
-                    }
-
-                    $ua->account_balance = $bcround->bcround(bcadd($ua->account_balance, bcdiv($Amount, 100)), 2); //因为amount以分为单位。所以除以100
-                    $ua->available_balance = $bcround->bcround(bcadd($ua->available_balance, bcdiv($Amount, 100)), 2); //因为amount以分为单位。所以除以100
-                    $ua->in_sum = $bcround->bcround(bcadd($ua->in_sum, bcdiv($Amount, 100)), 2); //因为amount以分为单位。所以除以100
-                    if (!$ua->save()) {
-                        $transaction->rollBack();
-                        //exit('资金记录异常');
-                        return $this->redirect('/user/recharge/rechstatus?status=defeat');
-                    }
-
-                    $mr_model = new MoneyRecord();
-                    $mr_model->sn = MoneyRecord::createSN();
-                    $mr_model->osn = $PaymentNo;
-                    $mr_model->type = MoneyRecord::TYPE_RECHARGE;
-                    $mr_model->account_id = $ua->id;
-                    $mr_model->uid = $this->uid;
-                    $mr_model->balance = $ua->available_balance;
-                    $mr_model->remark = "资金流水号:" . $mr_model->sn . ',充值流水号:' . $PaymentNo . ',账户余额:' . ($ua->account_balance) . '元，可用余额:' . ($ua->available_balance) . '元，冻结金额:' . $ua->freeze_balance . '元。';
-                    $mr_model->status = MoneyRecord::STATUS_SUCCESS;
-                    $mr_model->in_money = bcdiv($Amount, 100, 2) * 1;
-                    $mrre = $mr_model->save();
-                    //var_dump($mr_model->getErrors());
-                    if (!$mrre) {
-                        $transaction->rollBack();
-                        //exit('资金记录异常');
-                        return $this->redirect('/user/recharge/rechstatus?status=defeat');
+                        return $this->redirect('/user/recharge/recharge-err');
                     }
 
                     $transaction->commit();
-                    return $this->redirect('/user/recharge/rechstatus?status=success');
+                    return $this->redirect('/user/useraccount/accountcenter');
                 } else {
-                    //exit('充值不成功');
-                    return $this->redirect('/user/recharge/rechstatus?status=defeat');
+                    return $this->redirect('/user/recharge/recharge-err');
                 }
             } else {
-                //exit('错误返回来源');
-                return $this->redirect('/user/recharge/rechstatus?status=defeat');
+                return $this->redirect('/user/recharge/recharge-err');
             }
         }
     }
 
     /**
-     * 充值——是否成功
+     * 充值失败页面
      */
-    public function actionRechstatus($status = null) {
-        $this->layout = 'login';
-        return $this->render('rechstatus', ['status' => $status]);
-    }
-
-    public function actionSec(){
-
-        $rsapath = Yii::getAlias('@common');
-//        //$res = Yii::$app->functions->rsaCreateSign($rsapath.'/components/rsa/settlement/rsa_private_key.pem','01760120540001335');
-        $res = file_get_contents($rsapath.'/api-rsa/content');
-//        //echo $res;exit;
-        $unsec = Yii::$app->functions->rsaVerifySign($rsapath.'/components/rsa/settlement/rsa_public_key.pem',  (Yii::$app->params['accountnumber']),$res);
-        //$response = \Yii::$app->functions->createXmlResponse('2003',"非法的账号".(Yii::$app->params['accountnumber']));
-        var_dump($unsec);exit;
+    public function actionRechargeErr() {
+        return $this->render('recharge_err');
     }
 
 }

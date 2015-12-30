@@ -131,8 +131,9 @@ class UseraccountController extends BaseController {
             }
         }
 
-        Yii::$app->response->format = Response::FORMAT_JSON;
-        return ['res' => $res, 'message' => $message];
+        //Yii::$app->response->format = Response::FORMAT_JSON;
+        //return ['res' => $res, 'message' => $message];
+        return $this->render('editbank', ['model' => $bank]);   //测试用
     }
 
     /**

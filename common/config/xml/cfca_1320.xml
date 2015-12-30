@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Request version="2.0">
+  <Head>
+    <TxCode>1320</TxCode>
+  </Head>
+  <Body>
+	<InstitutionID/>
+        <PaymentNo/>
+  </Body>
+</Request>
