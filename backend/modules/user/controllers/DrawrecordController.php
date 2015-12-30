@@ -22,15 +22,9 @@ class DrawrecordController extends BaseController {
         $time = Yii::$app->request->get('time');
         $query = DrawRecordTime::find()->where(['uid' => $id]);
         if ($type == User::USER_TYPE_PERSONAL && !empty($status)) {
-            //投资会员提现详情
-//            if (isset($status) && $status !== '') {
-//                $query .= " and status='$status'";
-//            }
             $query->andWhere(['status' => $status]);
         } 
         
-        //var_dump($query);exit;
-        //$query = DrawRecordTime::find()->where($query);
         if (!empty($time)) {
             $query->andFilterWhere(['<', 'created_at', strtotime($time . " 23:59:59")]);
             $query->andFilterWhere(['>=', 'created_at', strtotime($time . " 0:00:00")]);
@@ -40,20 +34,8 @@ class DrawrecordController extends BaseController {
         $pages = new Pagination(['totalCount' => $query->count(), 'pageSize' => '10']);
         $model = $query->offset($pages->offset)->limit($pages->limit)->orderBy('id desc')->asArray()->all();
 
-        //取出用户名
-//        $username = User::find()->where(['id' => $id])->select('username')->asArray()->one();
-        //取出企业名
-//        $orgname = User::find()->where(['id' => $id])->select('org_name')->asArray()->one();
-        //取出提现金额总计,提现总额应该包括：提现失败的和提现成功的
-        
         $user = User::find()->where(['id' => $id])->select('username,org_name')->one();
-//        $moneyTotal = DrawRecordTime::find()->where(['uid' => $id])->sum('money');
-//        //提现成功的次数
-//        $successNum = DrawRecordTime::find()->where(['uid' => $id, 'status' => 2])->count();
-//        //提现失败的次数
-//        $failureNum = DrawRecordTime::find()->where(['uid' => $id, 'status' => 21])->count();
 
-        //$banks = Yii::$app->params['bank'];
         $moneyTotal = 0;  //提现总额
         $successNum = 0;  //成功笔数
         $failureNum = 0;  //失败笔数
@@ -76,13 +58,10 @@ class DrawrecordController extends BaseController {
                     'id' => $id,
                     'model' => $model,
                     'pages' => $pages,
-//                    'username' => $username['username'],
-//                    'orgname' => $orgname['org_name'],
                     'user' => $user,
                     'moneyTotal' => $moneyTotal,
                     'successNum' => $successNum,
                     'failureNum' => $failureNum,
-                //    'banks' => $banks,
         ]);
     }
 
@@ -106,8 +85,6 @@ class DrawrecordController extends BaseController {
             $YuE = $userAccountInfo->account_balance = $bc->bcround(bcsub($userAccountInfo->account_balance, $money), 2);
             //可用余额减去提现的钱
             $userAccountInfo->available_balance = $bc->bcround(bcsub($userAccountInfo->available_balance, $money), 2);
-            //            //冻结余额加上提现的钱，冻结是为了审核，当审核通过后就会把这个钱从冻结余额中减去
-            //            $userAccountInfo ->freeze_balance = $bc->bcround(bcadd($userAccountInfo ->freeze_balance, $money),2);
             $userAccountInfo->out_sum = $bc->bcround(bcadd($userAccountInfo->out_sum, $money), 2);
 
             $moneyInfo = new MoneyRecord();

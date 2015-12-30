@@ -24,12 +24,13 @@ use common\lib\cfca\Payment;
 use PayGate\Cfca\Settlement\AccountSettlement;
 use PayGate\Cfca\Message\Request1341;
 use PayGate\Cfca\Message\Request1350;
+use PayGate\Cfca\Message\Request1810;
 use common\models\TradeLog;
 use common\lib\cfca\Cfca;
+use PayGate\Cfca\Response\Response1350;
 
 class CrontabController extends Controller
 {
-
     /**
      * 定时 刷新满标 满标生成还款计划
      */
@@ -117,7 +118,7 @@ class CrontabController extends Controller
      * 发起今日结算请求【建议频率高些】
      */
     public function actionLaunchsettlement(){
-        $data = RechargeRecord::find()->where(['status'=>1,'settlement'=>0])->limit(1)->all();//找到所有未结算的
+        $data = RechargeRecord::find()->where(['status'=>1,'settlement'=>0])->all();//找到所有未结算的
         $cfca = new Cfca();
         foreach($data as $dat){
             $asettlement = new AccountSettlement($dat);
@@ -158,42 +159,20 @@ class CrontabController extends Controller
     public function actionBatchsettlement(){
         $data = Jiesuan::find()->where(['status'=>  [Jiesuan::STATUS_NO,Jiesuan::STATUS_ACCEPT,Jiesuan::STATUS_IN]])->select('id,sn,osn,amount')->all();//
         if(!empty($data)){
-            $xml_path = Yii::getAlias('@common')."/config/xml/cfca_1350.xml";
-            $xmltx1350 = file_get_contents($xml_path);
-            $InstitutionID = \Yii::$app->params['cfca']['institutionId'];//获取机构ID
-            $payment = new Payment();
+            $cfca = new Cfca();
             $date = date("Y-m-d",strtotime("-1 day"));//获取前日
             foreach ($data as $dat){
-                $simpleXML = new \SimpleXMLElement($xmltx1350);
-                $simpleXML->Body->InstitutionID = $InstitutionID;
-                $simpleXML->Body->SerialNumber = $dat->sn;
-                $xmlStr = $simpleXML->asXML();
-                $message = base64_encode(trim($xmlStr));
-
-                $signature = $payment->cfcasign_pkcs12(trim($xmlStr));
-                $response = $payment->cfcatx_transfer($message, $signature);
-
-                $plainText = (base64_decode($response[0]));
-                $ok = $payment->cfcaverify($plainText, $response[1]);
-                if($ok==1){//中金验签返回成功
-                    $responseXML = new \SimpleXMLElement($plainText);
-                    $response_code = $responseXML->Head->Code;
-                    if($response_code=="2000"){//数据成功返回
-                        $status = $responseXML->Body->Status;
-                        if($status==40||$status==50){//40 已经提交成功 50 转账退款
-                            Jiesuan::updateAll(['status'=>$status],['id'=>$dat->id]);
-                            RechargeRecord::updateAll(['settlement'=>$status],['sn'=>$dat->osn]);
-                            $wdjf_model = new CheckaccountWdjf(['order_no'=>$dat->osn,'tx_date'=>$date,'tx_type'=>1341,'tx_sn'=>$dat->sn,'tx_amount'=>($dat->amount),'payment_amount'=>0,'institution_fee'=>0,'bank_notification_time'=>'0']);
-                            $wdjf_model->save();
-                            //var_dump($wdjf_model->validate(),$wdjf_model->getErrors());
-                        }
-                    }
-                }else{
-                    //验签失败处理
+                $rq1350 = new Request1350(\Yii::$app->params['cfca']['institutionId'], $dat->sn);
+                $resp = $cfca->request($rq1350);
+                $resp1350 = new Response1350($resp->getText());
+                if ($resp1350->isDone()) {
+                    Jiesuan::updateAll(['status' => $resp1350->getStatus()],['id' => $dat->id]);
+                    RechargeRecord::updateAll(['settlement' => $resp1350->getStatus()],['sn' => $dat->osn]);
+                    $wdjf_model = new CheckaccountWdjf(['order_no' => $dat->osn,'tx_date' => $date,'tx_type' => 1341,'tx_sn' => $dat->sn,'tx_amount' => ($dat->amount),'payment_amount' => 0,'institution_fee' => 0,'bank_notification_time' => '0']);
+                    $wdjf_model->save();
                 }
             }
         }else{
-
         }
 
     }
@@ -204,7 +183,8 @@ class CrontabController extends Controller
      */
     public function actionGetcfcacheckaccount(){
         $date = date("Y-m-d",strtotime("-1 day"));//获取前日
-        //$date = date("Y-m-d");//获取今日
+//        $rq1810 = new Request1810(Yii::$app->params['cfca']['institutionId'], $date);
+//        print_r($rq1810->getXml());exit;
         $xml_path = Yii::getAlias('@common')."/config/xml/cfca_1810.xml";
         $xmltx1810 = file_get_contents($xml_path);
         $InstitutionID = \Yii::$app->params['cfca']['institutionId'];//获取机构ID
