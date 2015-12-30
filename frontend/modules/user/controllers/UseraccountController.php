@@ -5,7 +5,10 @@ namespace app\modules\user\controllers;
 use Yii;
 use yii\web\Response;
 use frontend\controllers\BaseController;
+use common\models\user\EditpassForm;
+use common\service\UserService;
 use common\models\user\UserAccount;
+use common\models\user\MoneyRecord;
 use common\service\BankService;
 use common\models\user\UserBanks;
 use common\models\user\DrawRecord;
@@ -29,7 +32,7 @@ class UseraccountController extends BaseController {
         }
 
         $account = UserAccount::findOne(['type' => UserAccount::TYPE_BUY, 'uid' => $uid]);
-        //var_dump($account);exit;
+        var_dump($account);
         return $this->render('accountcenter', ['model' => $account]);
     }
 
@@ -108,7 +111,11 @@ class UseraccountController extends BaseController {
             }
         }
 
-        return $this->render('tixian', ['model' => $model, 'bank' => $user_bank, 'draw' => $draw, 'province' => $province]);
+        var_dump($user_bank);
+        var_dump($province);
+        var_dump($user_acount);
+
+        return $this->render('tixian', ['model' => $model, 'bank' => $user_bank, 'user_account' => $user_acount, 'draw' => $draw, 'province' => $province]);
     }
 
     /**
