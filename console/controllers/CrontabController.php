@@ -28,6 +28,7 @@ use PayGate\Cfca\Message\Request1810;
 use common\models\TradeLog;
 use common\lib\cfca\Cfca;
 use PayGate\Cfca\Response\Response1350;
+use PayGate\Cfca\Response\Response1810;
 
 class CrontabController extends Controller
 {
@@ -183,71 +184,30 @@ class CrontabController extends Controller
      */
     public function actionGetcfcacheckaccount(){
         $date = date("Y-m-d",strtotime("-1 day"));//获取前日
-//        $rq1810 = new Request1810(Yii::$app->params['cfca']['institutionId'], $date);
-//        print_r($rq1810->getXml());exit;
-        $xml_path = Yii::getAlias('@common')."/config/xml/cfca_1810.xml";
-        $xmltx1810 = file_get_contents($xml_path);
-        $InstitutionID = \Yii::$app->params['cfca']['institutionId'];//获取机构ID
-        $simpleXML = new \SimpleXMLElement($xmltx1810);
-        $simpleXML->Body->InstitutionID = $InstitutionID;
-        $simpleXML->Body->Date = $date;
-
-        $xmlStr = $simpleXML->asXML();
-        $message = base64_encode(trim($xmlStr));
-        $payment = new \common\lib\cfca\Payment();
-        $signature = $payment->cfcasign_pkcs12(trim($xmlStr));
-        $response = $payment->cfcatx_transfer($message, $signature);
-
-        $plainText = (base64_decode($response[0]));
-        $ok = $payment->cfcaverify($plainText, $response[1]);
-//        print_r($ok);
-//        print_r($plainText);exit;
-        if($ok==1){//中金验签返回成功
-            $is_write = CheckaccountCfca::find()->where(['tx_date'=>$date])->count('id');
-            if($is_write){
-                return FALSE;
-            }else{
-                $responseXML = new \SimpleXMLElement($plainText);
-                $response_code = $responseXML->Head->Code;
-                if($response_code=="2000"){//数据成功返回
-                    $connection = \Yii::$app->db;
-                    $ar = $responseXML->children();
-                    $data = array();
-                    $time = time();
-                    foreach ($ar->Body->Tx as $tx){
-                        $txsn = strval($tx->TxSn);
-                        $str = empty($tx->BankNotificationTime)?0:$tx->BankNotificationTime;
-                        if($str){
-                            $year = substr($str, 0, 4);
-                            $month = substr($str, 4, 2);
-                            $day = substr($str, 6, 2);
-                            $h = substr($str, 8, 2);
-                            $i = substr($str, 10, 2);
-                            $s = substr($str, 12, 2);
-                            $banknotificationtime = $year.'-'.$month.'-'.$day.' '.$h.':'.$i.':'.$s;
-                        }else{
-                            $banknotificationtime = 0;
-                        }
-                        //echo $banknotificationtime;
-                        $data[]=[$date,$tx->TxType,$txsn,bcdiv($tx->TxAmount,100),$tx->PaymentAmount,$tx->InstitutionAmount,$banknotificationtime,$time,$time];
-                    }
-                    if(!empty($data)){
-                        $res = $connection->createCommand()->batchInsert(CheckaccountCfca::tableName(), ['tx_date', 'tx_type','tx_sn','tx_amount','payment_amount','institution_fee','bank_notification_time','created_at','updated_at'],
-                                $data)->execute();
-                        if($res){
-
-                        }else{
-                            /////失败代码处理
-                        }
-                    }
-                }else{//中金返回失败
-                    /////失败代码处理
-                }
-            }
-        }else{
-            /////验签失败代码处理
+        $rq1810 = new Request1810(Yii::$app->params['cfca']['institutionId'], $date);
+        $cfca = new Cfca();
+        $resp = $cfca->request($rq1810);
+        $rp1810 = new Response1810($resp->getText());
+        //echo date('Y-m-d H:i:s',strtotime('20150118090808'));exit;
+        $connection = \Yii::$app->db;
+        $data = array();
+        $time = time();
+        $notes = $rp1810->getTxs();
+        while (list( , $tx) = each($notes)) {
+            $banknotificationtime = empty($tx['BankNotificationTime']) ? '0' : date('Y-m-d H:i:s',strtotime($tx['BankNotificationTime']));
+            $data[]=[$date,$tx['TxType'],$tx['TxSn'],bcdiv($tx['TxAmount'],100),$tx['PaymentAmount'],$tx['InstitutionAmount'],$banknotificationtime,$time,$time];
         }
-
+        //var_dump($data);exit;
+        if(!empty($data)){
+            $res = $connection->createCommand()->batchInsert(CheckaccountCfca::tableName(), ['tx_date', 'tx_type','tx_sn','tx_amount','payment_amount','institution_fee','bank_notification_time','created_at','updated_at'],
+                    $data)->execute();
+            if($res){
+                echo 'success';
+            }else{
+                /////失败代码处理
+            }
+        }
+        exit;
     }
 
     /**
