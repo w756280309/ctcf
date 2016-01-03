@@ -264,8 +264,8 @@ class UserbankController extends BaseController {
             Yii::$app->response->format = Response::FORMAT_JSON;
         }
 
+        $user = $this->user;
         $uid = $this->uid;
-        $user = User::findOne($uid);
         if($user && $user->status == User::STATUS_DELETED) {
             $this->redirect('/site/usererror');
         }
@@ -293,9 +293,8 @@ class UserbankController extends BaseController {
             }
         }
 
-        $user_bank = UserBanks::find()->where(['uid' => $uid])->one();
-        $user_acount = UserAccount::find()->where(['type' => UserAccount::TYPE_BUY, 'uid' => $uid])->one();
-
+        $user_bank = $this->user->bank;
+        $user_acount = $this->user->accountInfo;
         $model = new EditpassForm();
         $model->scenario = 'checktradepwd';
         if($model->load(Yii::$app->request->post()) && $model->validate()) {
@@ -315,7 +314,14 @@ class UserbankController extends BaseController {
             $draw->pay_bank_id = '0';
             $draw->bank_id = $user_bank->bank_id;
             $draw->bank_username = $user_bank->bank_name;
-            $draw->bank_account = '0';
+            $draw->bank_account = $user_bank->card_number;
+            $draw->identification_type = $user_bank->account_type;
+            $draw->identification_number = $user->idcard;
+            $draw->user_bank_id = $user_bank->id;
+            $draw->sub_bank_name = $user_bank->sub_bank_name;
+            $draw->province = $user_bank->province;
+            $draw->city = $user_bank->city;
+            $draw->mobile = $user->mobile;
             $draw->status = DrawRecord::STATUS_ZERO;
 
             if(!$draw->save()) {

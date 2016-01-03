@@ -3,6 +3,7 @@
 namespace PayGate\Cfca\Message;
 
 use Yii;
+use PayGate\Cfca\CfcaUtils;
 
 /**
  * 批量代付查询
@@ -37,6 +38,24 @@ class Request1520 extends AbstractRequest {
     }
 
     public function getXml() {
+        $tpl = <<<TPL
+<?xml version="1.0" encoding="UTF-8"?>
+<Request version="2.0">
+    <Head>
+        <InstitutionID>{{ institutionId }}</InstitutionID>
+        <TxCode>{{ txCode }}</TxCode>
+    </Head>
+    <Body>
+        <InstitutionID>{{ institutionId }}</InstitutionID>
+	<BatchNo>{{ batchNo }}</BatchNo>
+    </Body>
+</Request>
+TPL;
+        return CfcaUtils::renderXml($tpl, [
+                    'institutionId' => $this->getInstitutionId(),
+                    'txCode' => $this->getTxCode(),
+                    'batchNo' => $this->batchSn
+        ]);
     }
 
 }

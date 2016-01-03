@@ -12,6 +12,7 @@ use common\models\user\UserAccount;
 use common\models\user\User;
 use common\lib\bchelp\BcRound;
 use common\models\user\UserBank;
+use common\models\user\Batchpay;
 
 class DrawrecordController extends BaseController {
 
@@ -187,18 +188,22 @@ class DrawrecordController extends BaseController {
         return false;
     }
 
-    // 点击放款后开始放款
+    /**
+     * 点击放款后开始放款
+     * @return boolean
+     */
     public function actionChecksqfangkuan() {
         $id = Yii::$app->request->post("id");
         $uid = Yii::$app->request->post("uid");
         $model = DrawRecord::findOne($id);
-        if($model->status==DrawRecord::STATUS_ZERO||$model->status==DrawRecord::STATUS_SUCCESS){
+        if ($model->status == DrawRecord::STATUS_ZERO || $model->status == DrawRecord::STATUS_SUCCESS) {
             return false;
         }
         if ($id) {
             $bc = new BcRound();
-            bcscale(14); //设置小数位数
             $drawRord = DrawRecord::findOne($id);
+            $batchPay = new Batchpay();
+            $batchPay->singleInsert($this->admin_id,$id);
             $money = $drawRord->money;
             $userAccount = UserAccount::find()->where("uid = " . $uid)->one();
             //放款后，账户余额要减去money
@@ -209,25 +214,24 @@ class DrawrecordController extends BaseController {
             $userAccount->out_sum = $bc->bcround(bcadd($userAccount->available_balance, $money), 2);
 
             $momeyRecord = new MoneyRecord();
-            // 生成一个SN流水号
+            //生成一个SN流水号
             $sn = $momeyRecord::createSN();
             $momeyRecord->uid = $id;
             $momeyRecord->sn = $sn;
             $momeyRecord->type = 1;
             $momeyRecord->balance = $YuE;
             $momeyRecord->out_money = $money;
-            $res = UserAccount::find()->select("id")->where("uid=" . $uid)->asArray()->one();
-            $momeyRecord->account_id = $res['id'];
+            $momeyRecord->account_id = $userAccount->id;
             //开启事务
             $transaction = Yii::$app->db->beginTransaction();
             if ($momeyRecord->save() && $userAccount->save()) {
-                $drawRord->status = 2;
+                $drawRord->status = DrawRecord::STATUS_SUCCESS;
                 $drawRord->save();
                 $transaction->commit();
                 return true;
             } else {
                 $transaction->rollBack();
-                exit("failure");
+                return false;
             }
         }
         return false;

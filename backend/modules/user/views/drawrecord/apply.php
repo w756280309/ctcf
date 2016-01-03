@@ -120,14 +120,7 @@ use common\models\user\User;
 
 
 <script type="text/javascript">
-    $(function() {
-        $(".chooseall").click(function() {
-            var isChecked = $(this).prop("checked");
-            alert("aaaaaaaaaaa");
-            $("input[name='choose[]']").prop("checked", isChecked);
-            alert("bbbbbbbbb");
-        });
-    })
+   
 </script> 
 <?php $this->endBlock(); ?>
 

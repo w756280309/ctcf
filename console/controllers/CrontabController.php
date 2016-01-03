@@ -20,7 +20,8 @@ use common\models\checkaccount\CheckaccountWdjf;
 use common\models\checkaccount\CheckaccountHz;
 use common\models\user\RechargeRecord;
 use common\models\user\Jiesuan;
-use common\lib\cfca\Payment;
+use PayGate\Cfca\Message\Request1510;
+use PayGate\Cfca\Message\Request1520;
 use PayGate\Cfca\Settlement\AccountSettlement;
 use PayGate\Cfca\Message\Request1341;
 use PayGate\Cfca\Message\Request1350;
@@ -29,6 +30,8 @@ use common\models\TradeLog;
 use common\lib\cfca\Cfca;
 use PayGate\Cfca\Response\Response1350;
 use PayGate\Cfca\Response\Response1810;
+use PayGate\Cfca\Response\Response1520;
+use common\models\user\Batchpay;
 
 class CrontabController extends Controller
 {
@@ -324,5 +327,45 @@ class CrontabController extends Controller
         }
     }
 
+    /**
+     * 发起批量代付请求
+     */
+    public function actionLaunchbatchpay() {
+        $batchpays = Batchpay::find()->where(['is_launch' => Batchpay::IS_LAUNCH_NO])->all();
+        $cfca = new Cfca();
+        foreach ($batchpays as $batchpay) {
+            $request1510 = new Request1510(Yii::$app->params['cfca']['institutionId'], $batchpay);
+            $resp = $cfca->request($request1510);
+            if ($resp->isSuccess()) {
+                $batchpay->is_launch = Batchpay::IS_LAUNCH_YES;
+                $batchpay->save(FALSE);
+            }
+        }
+    }
+
+    /**
+     * 次日查询前一日的结果
+     */
+    public function actionBatchpayupdate() {
+        $beginYesterday=mktime(0,0,0,date('m'),date('d')-1,date('Y'));
+        $endYesterday=mktime(0,0,0,date('m'),date('d'),date('Y'))-1;
+        $cfca = new Cfca();
+        $yesbatchpay = Batchpay::find()->where(['is_launch' => Batchpay::IS_LAUNCH_YES])->andFilterWhere(['between','created_at',$beginYesterday,$endYesterday])->all();
+        foreach ($yesbatchpay as $batchpay) {
+            $request1520 = new Request1520(Yii::$app->params['cfca']['institutionId'], $batchpay->sn);
+            $resp = $cfca->request($request1520);
+            $rp1520 = new Response1520($resp->getText());
+            $items = $rp1520->getItems();
+            foreach ($items as $item) {
+                if ($rp1520->isDone($item)) {
+                    $batchpayItems = $batchpay->items;
+                    $batchpayItem = $batchpayItems[0];
+                    $batchpayItem->status = $item['Status'];
+                    $batchpayItem->banktxtime = $item['BankTxTime'];
+                    $batchpayItem->save(false);
+                }
+            }
+        }
+    }
 
 }

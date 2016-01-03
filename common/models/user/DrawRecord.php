@@ -123,18 +123,5 @@ class DrawRecord extends \yii\db\ActiveRecord {
             TimestampBehavior::className(),
         ];
     }
-    
-//    钩子函数怎么使用？？？
-//    public function afterSave($insert)
-//    {
-//        if (parent::afterSave($insert)) {
-//            if($insert) {
-//                $this->user_id = Yii::$app->user->id;
-//            }
-//            return true;
-//        } else {
-//            return false;
-//        }
-//    }
 
 }
