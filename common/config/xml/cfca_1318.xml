@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Request version="2.0">
+    <Head>
+        <TxCode>1318</TxCode>
+    </Head>
+    <Body>
+        <InstitutionID/>
+        <PaymentNo/>
+        <Amount/>
+        <Status/>
+        <BankNotificationTime/>
+    </Body>
+</Request>

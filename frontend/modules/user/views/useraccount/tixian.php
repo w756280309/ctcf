@@ -13,7 +13,7 @@ use yii\bootstrap\ActiveForm;
         <?=
         $form->field($model, 'password', ['template' => '{input}{error}'])->textInput();
         ?>
-        <input type="submit" value="登录" >
+        <input type="submit" value="提现申请" >
         <?php ActiveForm::end(); ?>
 
         <?php $this->endBody() ?>

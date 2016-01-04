@@ -11,9 +11,7 @@
         <Fee/>
         <PayerID/>
         <PayerName/>
-        <PaymentAccountNumber/>
         <Usage/>
-        <BankID/>
         <Remark/>
         <NotificationURL/>
         <PayeeList/>

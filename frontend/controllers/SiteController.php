@@ -1,4 +1,5 @@
 <?php
+
 namespace frontend\controllers;
 
 use Yii;
@@ -12,13 +13,12 @@ use common\models\log\LoginLog;
 /**
  * Site controller
  */
-class SiteController extends Controller
-{
+class SiteController extends Controller {
+
     /**
      * @inheritdoc
      */
-    public function behaviors()
-    {
+    public function behaviors() {
         return [
             'access' => [
                 'class' => AccessControl::className(),
@@ -48,8 +48,7 @@ class SiteController extends Controller
     /**
      * @inheritdoc
      */
-    public function actions()
-    {
+    public function actions() {
         return [
             'error' => [
                 'class' => 'yii\web\ErrorAction',
@@ -59,7 +58,7 @@ class SiteController extends Controller
                 //'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
                 //'backColor'=>"black",
                 //'foreColor' => ''
-                'minLength'=>6,'maxLength'=>6
+                'minLength' => 6, 'maxLength' => 6
             ],
         ];
     }
@@ -67,8 +66,7 @@ class SiteController extends Controller
     /**
      * 首页展示
      */
-    public function actionIndex()
-    {
+    public function actionIndex() {
         $this->layout = false;
         return $this->render('index');
     }
@@ -85,7 +83,7 @@ class SiteController extends Controller
         $model = new LoginForm();
 
         $is_flag = Yii::$app->request->post('is_flag');    //是否需要校验图形验证码标志位
-        if($is_flag && !is_bool($is_flag)) {
+        if ($is_flag && !is_bool($is_flag)) {
             $is_flag = true;
         }
 
@@ -105,19 +103,21 @@ class SiteController extends Controller
             $login->logFailure(Yii::$app->request, $model->phone, LoginLog::TYPE_PC);
         }
 
-        $is_flag = $is_flag? $is_flag : $login->isCaptchaRequired(Yii::$app->request, $model->phone, 30 * 60, 5);
+        $is_flag = $is_flag ? $is_flag : $login->isCaptchaRequired(Yii::$app->request, $model->phone, 30 * 60, 5);
 
         return $this->render('login', [
                     'model' => $model,
                     'is_flag' => $is_flag
         ]);
-
     }
 
-    public function actionLogout()
-    {
+    public function actionLogout() {
         Yii::$app->user->logout();
         return $this->goHome();
+    }
+
+    public function actionUsererr() {
+        return $this->render('usererr');
     }
 
 }
