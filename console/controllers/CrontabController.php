@@ -34,6 +34,7 @@ use PayGate\Cfca\Response\Response1350;
 use PayGate\Cfca\Response\Response1810;
 use PayGate\Cfca\Response\Response1520;
 use common\models\user\Batchpay;
+use common\models\user\DrawRecord;
 
 class CrontabController extends Controller
 {
@@ -352,6 +353,7 @@ class CrontabController extends Controller
         $beginYesterday = mktime(0, 0, 0, date('m'), date('d') - 1, date('Y'));
         $endYesterday = mktime(0, 0, 0, date('m'), date('d'), date('Y')) - 1;
         $cfca = new Cfca();
+        $bc = new BcRound();
         $yesbatchpay = Batchpay::find()->where(['is_launch' => Batchpay::IS_LAUNCH_YES])->andFilterWhere(['between', 'created_at', $beginYesterday, $endYesterday])->all();
         foreach ($yesbatchpay as $batchpay) {
             $request1520 = new Request1520(Yii::$app->params['cfca']['institutionId'], $batchpay->sn);
@@ -365,6 +367,35 @@ class CrontabController extends Controller
                     $batchpayItem->status = $item['Status'];
                     $batchpayItem->banktxtime = $item['BankTxTime'];
                     $batchpayItem->save(false);
+                    
+                    $drawRord = DrawRecord::findOne(['sn' => $item['ItemNo']]);
+                    if ($rp1520->isSuccess($item)) {
+                        $money = bcdiv($item['Amount'], 100 ,2);//返回分制转为元制
+                        $userAccount = UserAccount::find()->where("uid = " . $drawRord->uid)->one();
+                        //放款后，账户余额要减去money
+                        $YuE = $userAccount->account_balance = $bc->bcround(bcsub($userAccount->account_balance, $money), 2);
+                        //冻结金额减去money
+                        $userAccount->freeze_balance = $bc->bcround(bcsub($userAccount->freeze_balance, $money), 2);
+                        //账户出金总额
+                        $userAccount->out_sum = $bc->bcround(bcadd($userAccount->available_balance, $money), 2);
+
+                        $momeyRecord = new MoneyRecord();
+                        //生成一个SN流水号
+                        $sn = $momeyRecord::createSN();
+                        $momeyRecord->uid = $drawRord->uid;
+                        $momeyRecord->sn = $sn;
+                        $momeyRecord->type = 1;
+                        $momeyRecord->balance = $YuE;
+                        $momeyRecord->out_money = $money;
+                        $momeyRecord->account_id = $userAccount->id;
+                        if ($momeyRecord->save() && $userAccount->save()) {
+                            $drawRord->status = DrawRecord::STATUS_SUCCESS;
+                            $drawRord->save();
+                        }
+                    } else {
+                        $drawRord->status = DrawRecord::STATUS_FAIL;//提现不成功
+                        $drawRord->save();
+                    }
                 }
             }
         }

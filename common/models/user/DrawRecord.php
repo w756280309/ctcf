@@ -20,6 +20,9 @@ class DrawRecord extends \yii\db\ActiveRecord {
     const STATUS_ZERO = 0; //未处理
     const STATUS_EXAMINED = 1; //已审核
     const STATUS_SUCCESS = 2; //提现成功
+    const STATUS_FAIL = 3; //提现不成功
+    const STATUS_LAUNCH_BATCHPAY = 4; //已放款,此时生成批量代付批次
+    const STATUS_DEAL_FINISH = 5; //已经处理
     const STATUS_DENY = 11; //提现驳回
 
     public static function createSN($pre = '') {

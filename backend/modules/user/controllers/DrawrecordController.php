@@ -203,36 +203,11 @@ class DrawrecordController extends BaseController {
             return false;
         }
         if ($id) {
-            $bc = new BcRound();
             $batchPay = new Batchpay();
-            $money = $drawRord->money;
-            $userAccount = UserAccount::find()->where("uid = " . $uid)->one();
-            //放款后，账户余额要减去money
-            $YuE = $userAccount->account_balance = $bc->bcround(bcsub($userAccount->account_balance, $money), 2);
-            //冻结金额减去money
-            $userAccount->freeze_balance = $bc->bcround(bcsub($userAccount->freeze_balance, $money), 2);
-            //账户出金总额
-            $userAccount->out_sum = $bc->bcround(bcadd($userAccount->available_balance, $money), 2);
-
-            $momeyRecord = new MoneyRecord();
-            //生成一个SN流水号
-            $sn = $momeyRecord::createSN();
-            $momeyRecord->uid = $id;
-            $momeyRecord->sn = $sn;
-            $momeyRecord->type = 1;
-            $momeyRecord->balance = $YuE;
-            $momeyRecord->out_money = $money;
-            $momeyRecord->account_id = $userAccount->id;
-            //开启事务
-            $transaction = Yii::$app->db->beginTransaction();
-            if ($momeyRecord->save() && $userAccount->save() && $batchPay->singleInsert($this->admin_id, $id)) {
-                $drawRord->status = DrawRecord::STATUS_SUCCESS;
-                $drawRord->save();
-                $transaction->commit();
-                return true;
-            } else {
-                $transaction->rollBack();
-                return false;
+            $res_bat = $batchPay->singleInsert($this->admin_id, $id);
+            if ($res_bat) {
+                $drawRord->status = DrawRecord::STATUS_DEAL_FINISH;
+                return $drawRord->save();
             }
         }
         return false;
