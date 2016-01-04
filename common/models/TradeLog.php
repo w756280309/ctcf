@@ -7,22 +7,24 @@ use yii\behaviors\TimestampBehavior;
 
 class TradeLog extends \yii\db\ActiveRecord
 {
-    
+
     public function __construct(
         $user,
         $rq,
         $rp
     ) {
         parent::__construct();
-        
+
         $this->tx_code = $rq->getTxCode();
         $this->tx_sn = $rq->getTxSn();
         $this->pay_id = 0;//默认
         $this->uid = $user->id;
         $this->account_id = $user->accountInfo->id;
         $this->request = $rq->getXml();
-        $this->response_code = $rp->getCode();
-        $this->response = $rp->getText();
+        if (null !== $rp) {
+            $this->response_code = $rp->getCode();
+            $this->response = $rp->getText();
+        }
     }
 
     /**
@@ -41,13 +43,13 @@ class TradeLog extends \yii\db\ActiveRecord
         return [
         ];
     }
-    
+
     public function behaviors() {
         return [
              TimestampBehavior::className(),
         ];
     }
-    
+
     /**
      * @inheritdoc
      */
