@@ -3,8 +3,6 @@
 namespace app\controllers;
 
 use Yii;
-use yii\base\InvalidParamException;
-use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use common\service\SmsService;
 use yii\filters\VerbFilter;
@@ -17,7 +15,6 @@ use common\models\user\LoginForm;
 use common\models\user\EditpassForm;
 use common\service\LoginService;
 use common\models\log\LoginLog;
-use yii\data\Pagination;
 
 /**
  * Site controller.
@@ -115,7 +112,8 @@ class SiteController extends Controller
         return $this->render('index', ['adv' => $adv, 'deals' => $deals]);
     }
 
-    public function actionLogin() {
+    public function actionLogin()
+    {
         $this->layout = false;
         if (!\Yii::$app->user->isGuest) {
             return $this->goHome();
@@ -130,7 +128,7 @@ class SiteController extends Controller
         $from = Yii::$app->functions->dealurl($from);
 
         $is_flag = Yii::$app->request->post('is_flag');    //是否需要校验图形验证码标志位
-        if($is_flag && !is_bool($is_flag)) {
+        if ($is_flag && !is_bool($is_flag)) {
             $is_flag = true;
         }
 
@@ -159,7 +157,7 @@ class SiteController extends Controller
             $login->logFailure(Yii::$app->request, $model->phone, LoginLog::TYPE_WAP);
         }
 
-        $is_flag = $is_flag? $is_flag : $login->isCaptchaRequired(Yii::$app->request, $model->phone, 10 * 60, 3);
+        $is_flag = $is_flag ? $is_flag : $login->isCaptchaRequired(Yii::$app->request, $model->phone, 10 * 60, 3);
 
         if ($model->getErrors()) {
             $message = $model->firstErrors;
@@ -173,7 +171,7 @@ class SiteController extends Controller
         return $this->render('login', [
                     'model' => $model,
                     'from' => $from,
-                    'is_flag' => $is_flag
+                    'is_flag' => $is_flag,
         ]);
     }
 
@@ -184,8 +182,9 @@ class SiteController extends Controller
         return $this->goHome();
     }
 
-    public function actionEditpass() {
-        $this->layout = "@app/modules/order/views/layouts/buy";
+    public function actionEditpass()
+    {
+        $this->layout = '@app/modules/order/views/layouts/buy';
         if (Yii::$app->user->isGuest) {
             return $this->redirect('/site/login');
         }
@@ -209,10 +208,11 @@ class SiteController extends Controller
             return ['code' => 1, 'message' => current($message)];
         }
 
-        return $this->render('editpass',['model' => $model]);
+        return $this->render('editpass', ['model' => $model]);
     }
 
-    public function actionResetpass() {
+    public function actionResetpass()
+    {
         $this->layout = false;
         if (!\Yii::$app->user->isGuest) {
             return $this->goHome();
@@ -298,7 +298,8 @@ class SiteController extends Controller
         return $this->render('xieyi');
     }
 
-    public function actionCreatesmscode() {
+    public function actionCreatesmscode()
+    {
         $uid = Yii::$app->request->post('uid');
         $type = Yii::$app->request->post('type');
         $phone = Yii::$app->request->post('phone');

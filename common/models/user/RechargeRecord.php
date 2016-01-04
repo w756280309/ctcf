@@ -29,6 +29,9 @@ class RechargeRecord extends \yii\db\ActiveRecord {
     const SETTLE_YES = 40; //结算已经执行（已发送转账指令）
     const SETTLE_FAULT = 50; //转账退回
 
+    const PAY_TYPE_QUICK = 1;//快捷充值
+    const PAY_TYPE_NET = 2;//网银充值
+    
     /**
      * @inheritdoc
      */
@@ -59,14 +62,14 @@ class RechargeRecord extends \yii\db\ActiveRecord {
     public function rules() {
         return [
             //[['fund','uid', 'sn','bank_id'], 'required'],
-            [['fund', 'uid', 'bank_id'], 'required'],
+            [['fund', 'uid', 'bank_id', 'pay_type'], 'required'],
             [['account_id', 'uid', 'status'], 'integer'],
             [['fund'], 'match', 'pattern' => '/^[0-9]+([.]{1}[0-9]{1,2})?$/', 'message' => '充值金额格式错误'],
             [['fund'], 'number', 'min' => 0.01, 'max' => 999999999],
             [['sn'], 'string', 'max' => 30],
             [['bank_id'], 'string', 'max' => 20],
             [['remark'], 'string', 'max' => 100],
-            ['status', 'default', 'value' => self::STATUS_NO],
+            ['pay_type', 'default', 'value' => self::PAY_TYPE_QUICK],
         ];
     }
 
