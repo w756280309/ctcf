@@ -205,7 +205,6 @@ class DrawrecordController extends BaseController {
         if ($id) {
             $bc = new BcRound();
             $batchPay = new Batchpay();
-            $batchPay->singleInsert($this->admin_id, $id);
             $money = $drawRord->money;
             $userAccount = UserAccount::find()->where("uid = " . $uid)->one();
             //放款后，账户余额要减去money
@@ -226,7 +225,7 @@ class DrawrecordController extends BaseController {
             $momeyRecord->account_id = $userAccount->id;
             //开启事务
             $transaction = Yii::$app->db->beginTransaction();
-            if ($momeyRecord->save() && $userAccount->save()) {
+            if ($momeyRecord->save() && $userAccount->save() && $batchPay->singleInsert($this->admin_id, $id)) {
                 $drawRord->status = DrawRecord::STATUS_SUCCESS;
                 $drawRord->save();
                 $transaction->commit();
