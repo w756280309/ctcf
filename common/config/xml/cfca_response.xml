@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Request version="2.0"> 
-  <Head> 
-    <Code/>       
+<Response version="2.0">
+  <Head>
+    <Code/>
     <Message/>
   </Head>
-</Request>
+</Response>

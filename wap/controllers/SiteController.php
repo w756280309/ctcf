@@ -131,7 +131,7 @@ class SiteController extends Controller
 
         $is_flag = Yii::$app->request->post('is_flag');    //是否需要校验图形验证码标志位
         if($is_flag && !is_bool($is_flag)) {
-            exit("变量is_flag的类型错误");
+            $is_flag = true;
         }
 
         if ($is_flag) {
@@ -184,9 +184,8 @@ class SiteController extends Controller
         return $this->goHome();
     }
 
-    public function actionEditpass()
-    {
-        $this->layout = '@app/modules/order/views/layouts/buy';
+    public function actionEditpass() {
+        $this->layout = "@app/modules/order/views/layouts/buy";
         if (Yii::$app->user->isGuest) {
             return $this->redirect('/site/login');
         }
@@ -210,11 +209,10 @@ class SiteController extends Controller
             return ['code' => 1, 'message' => current($message)];
         }
 
-        return $this->render('editpass', ['model' => $model]);
+        return $this->render('editpass',['model' => $model]);
     }
 
-    public function actionResetpass()
-    {
+    public function actionResetpass() {
         $this->layout = false;
         if (!\Yii::$app->user->isGuest) {
             return $this->goHome();
@@ -300,8 +298,7 @@ class SiteController extends Controller
         return $this->render('xieyi');
     }
 
-    public function actionCreatesmscode()
-    {
+    public function actionCreatesmscode() {
         $uid = Yii::$app->request->post('uid');
         $type = Yii::$app->request->post('type');
         $phone = Yii::$app->request->post('phone');
