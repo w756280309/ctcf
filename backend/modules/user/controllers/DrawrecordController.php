@@ -206,7 +206,7 @@ class DrawrecordController extends BaseController {
             $batchPay = new Batchpay();
             $res_bat = $batchPay->singleInsert($this->admin_id, $id);
             if ($res_bat) {
-                $drawRord->status = DrawRecord::STATUS_DEAL_FINISH;
+                $drawRord->status = DrawRecord::STATUS_LAUNCH_BATCHPAY;//发起批量代付
                 return $drawRord->save();
             }
         }

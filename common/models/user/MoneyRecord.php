@@ -33,6 +33,7 @@ class MoneyRecord extends \yii\db\ActiveRecord {
 	const TYPE_HUANKUAN = 4; //还款
         const TYPE_CHEBIAO = 5; //撤标
         const TYPE_FEE = 6; //放款扣去手续费
+        const TYPE_DRAW_RETURN = 7; //提现退款
 
 //状态。 0-默认未处理的，1-成功，2失败
 	const STATUS_ZERO = 0; //未处理

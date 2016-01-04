@@ -366,36 +366,38 @@ class CrontabController extends Controller
                     $batchpayItem = $batchpayItems[0];
                     $batchpayItem->status = $item['Status'];
                     $batchpayItem->banktxtime = $item['BankTxTime'];
-                    $batchpayItem->save(false);
-                    
+                    $batchpayItem->save(false);                    
                     $drawRord = DrawRecord::findOne(['sn' => $item['ItemNo']]);
-                    if ($rp1520->isSuccess($item)) {
-                        $money = bcdiv($item['Amount'], 100 ,2);//返回分制转为元制
-                        $userAccount = UserAccount::find()->where("uid = " . $drawRord->uid)->one();
-                        //放款后，账户余额要减去money
-                        $YuE = $userAccount->account_balance = $bc->bcround(bcsub($userAccount->account_balance, $money), 2);
-                        //冻结金额减去money
-                        $userAccount->freeze_balance = $bc->bcround(bcsub($userAccount->freeze_balance, $money), 2);
-                        //账户出金总额
-                        $userAccount->out_sum = $bc->bcround(bcadd($userAccount->available_balance, $money), 2);
-
-                        $momeyRecord = new MoneyRecord();
-                        //生成一个SN流水号
-                        $sn = $momeyRecord::createSN();
-                        $momeyRecord->uid = $drawRord->uid;
-                        $momeyRecord->sn = $sn;
-                        $momeyRecord->type = 1;
+                    $money = bcdiv($item['Amount'], 100 ,2);//返回分制转为元制
+                    $userAccount = UserAccount::find()->where("uid = " . $drawRord->uid)->one();
+                    $userAccount->freeze_balance = $bc->bcround(bcsub($userAccount->freeze_balance, $money), 2);//冻结减少
+                    $draw_status = 0;
+                    $momeyRecord = new MoneyRecord();
+                    //生成一个SN流水号
+                    $sn = $momeyRecord::createSN();
+                    $momeyRecord->uid = $drawRord->uid;
+                    $momeyRecord->sn = $sn;
+                    $momeyRecord->account_id = $userAccount->id;
+                    if ($rp1520->isSuccess($item)) {//成功的
+                        $draw_status = DrawRecord::STATUS_SUCCESS;
+                        $YuE = $userAccount->account_balance = $bc->bcround(bcsub($userAccount->account_balance, $money), 2);//账户总额减少
+                        $userAccount->out_sum = $bc->bcround(bcadd($userAccount->available_balance, $money), 2);//更新出账
+                        $momeyRecord->type = MoneyRecord::TYPE_DRAW;
                         $momeyRecord->balance = $YuE;
                         $momeyRecord->out_money = $money;
-                        $momeyRecord->account_id = $userAccount->id;
-                        if ($momeyRecord->save() && $userAccount->save()) {
-                            $drawRord->status = DrawRecord::STATUS_SUCCESS;
-                            $drawRord->save();
-                        }
-                    } else {
-                        $drawRord->status = DrawRecord::STATUS_FAIL;//提现不成功
-                        $drawRord->save();
-                    }
+                    } else {//失败
+                        $draw_status = DrawRecord::STATUS_FAIL;//提现不成功        
+                        $YuE = $userAccount->account_balance = $bc->bcround(bcadd($userAccount->account_balance, $money), 2);//账户总额增加
+                        $userAccount->available_balance = $bc->bcround(bcadd($userAccount->available_balance, $money), 2);//更新可用余额
+                        $userAccount->in_sum = $bc->bcround(bcadd($userAccount->available_balance, $money), 2);//更新入账
+                        $momeyRecord->type = MoneyRecord::TYPE_DRAW_RETURN;
+                        $momeyRecord->balance = $YuE;
+                        $momeyRecord->in_money = $money;                        
+                    }                    
+                    $momeyRecord->save();
+                    $userAccount->save();
+                    $drawRord->status = DrawRecord::STATUS_SUCCESS;
+                    $drawRord->save();                    
                 }
             }
         }
