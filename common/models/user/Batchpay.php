@@ -112,7 +112,7 @@ class Batchpay extends \yii\db\ActiveRecord {
                 return false;
             }
         } else {
-            return FALSE;
+            return false;
         }
         return true;
     }

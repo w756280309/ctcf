@@ -24,10 +24,12 @@ use PayGate\Cfca\Message\Request1510;
 use PayGate\Cfca\Message\Request1520;
 use PayGate\Cfca\Settlement\AccountSettlement;
 use PayGate\Cfca\Message\Request1341;
+use PayGate\Cfca\Message\Request1320;
 use PayGate\Cfca\Message\Request1350;
 use PayGate\Cfca\Message\Request1810;
 use common\models\TradeLog;
 use common\lib\cfca\Cfca;
+use PayGate\Cfca\Response\Response1320;
 use PayGate\Cfca\Response\Response1350;
 use PayGate\Cfca\Response\Response1810;
 use PayGate\Cfca\Response\Response1520;
@@ -338,7 +340,7 @@ class CrontabController extends Controller
             $resp = $cfca->request($request1510);
             if ($resp->isSuccess()) {
                 $batchpay->is_launch = Batchpay::IS_LAUNCH_YES;
-                $batchpay->save(FALSE);
+                $batchpay->save(false);
             }
         }
     }
@@ -347,10 +349,10 @@ class CrontabController extends Controller
      * 次日查询前一日的结果
      */
     public function actionBatchpayupdate() {
-        $beginYesterday=mktime(0,0,0,date('m'),date('d')-1,date('Y'));
-        $endYesterday=mktime(0,0,0,date('m'),date('d'),date('Y'))-1;
+        $beginYesterday = mktime(0, 0, 0, date('m'), date('d') - 1, date('Y'));
+        $endYesterday = mktime(0, 0, 0, date('m'), date('d'), date('Y')) - 1;
         $cfca = new Cfca();
-        $yesbatchpay = Batchpay::find()->where(['is_launch' => Batchpay::IS_LAUNCH_YES])->andFilterWhere(['between','created_at',$beginYesterday,$endYesterday])->all();
+        $yesbatchpay = Batchpay::find()->where(['is_launch' => Batchpay::IS_LAUNCH_YES])->andFilterWhere(['between', 'created_at', $beginYesterday, $endYesterday])->all();
         foreach ($yesbatchpay as $batchpay) {
             $request1520 = new Request1520(Yii::$app->params['cfca']['institutionId'], $batchpay->sn);
             $resp = $cfca->request($request1520);
@@ -364,6 +366,22 @@ class CrontabController extends Controller
                     $batchpayItem->banktxtime = $item['BankTxTime'];
                     $batchpayItem->save(false);
                 }
+            }
+        }
+    }
+
+    /**
+     * 发起未充值成功的充值查询
+     */
+    public function actionLaunchrecharge() {
+        $recharges = RechargeRecord::find()->where(['status' => RechargeRecord::STATUS_NO])->orderBy('id desc')->all();
+        $cfca = new Cfca();
+        foreach ($recharges as $rc) {
+            $rq1320 = new Request1320(Yii::$app->params['cfca']['institutionId'], $rc->sn);
+            $resp = $cfca->request($rq1320);
+            $rp1320 = new Response1320($resp->getText());
+            if ($rp1320->isSuccess()) {
+                
             }
         }
     }

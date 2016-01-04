@@ -195,15 +195,17 @@ class DrawrecordController extends BaseController {
     public function actionChecksqfangkuan() {
         $id = Yii::$app->request->post("id");
         $uid = Yii::$app->request->post("uid");
-        $model = DrawRecord::findOne($id);
-        if ($model->status == DrawRecord::STATUS_ZERO || $model->status == DrawRecord::STATUS_SUCCESS) {
+        if (empty($id) || empty($uid)) {
+            return false;
+        }
+        $drawRord = DrawRecord::findOne($id);
+        if ($drawRord === null || $drawRord->status == DrawRecord::STATUS_ZERO || $drawRord->status == DrawRecord::STATUS_SUCCESS) {
             return false;
         }
         if ($id) {
             $bc = new BcRound();
-            $drawRord = DrawRecord::findOne($id);
             $batchPay = new Batchpay();
-            $batchPay->singleInsert($this->admin_id,$id);
+            $batchPay->singleInsert($this->admin_id, $id);
             $money = $drawRord->money;
             $userAccount = UserAccount::find()->where("uid = " . $uid)->one();
             //放款后，账户余额要减去money
