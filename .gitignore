@@ -23,4 +23,5 @@
 /*/web/assets/
 
 .htaccess
+php-cs-fixer.phar
 /nbproject/
