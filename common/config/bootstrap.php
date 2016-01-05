@@ -6,3 +6,5 @@ Yii::setAlias('backend', dirname(dirname(__DIR__)).'/backend');
 Yii::setAlias('console', dirname(dirname(__DIR__)).'/console');
 Yii::setAlias('api', dirname(dirname(__DIR__)).'/api');
 Yii::setAlias('channel', dirname(dirname(__DIR__)).'/channel');
+
+\Yii::$container->set('account_service', 'common\\service\\AccountService');
