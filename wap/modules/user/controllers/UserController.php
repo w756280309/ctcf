@@ -20,12 +20,12 @@ class UserController extends BaseController {
         $leijishouyi = $uacore->getTotalProfit($this->uid);//累计收益
         $dhsbj = $uacore->getTotalWaitMoney($this->uid);//带回收本金
         $zcze = $uacore->getTotalFund($this->uid);//资产总额=理财资产+可用余额+冻结金额
-        
+
         $data = BankService::checkKuaijie($this->uid);
-        
+
         return $this->render('index',['ua'=>$ua,'user'=>$this->user,'ljsy'=>$leijishouyi,'dhsbj'=>$dhsbj,'zcze'=>$zcze, 'data' => $data]);
     }
-    
+
     /**
      * 输出个人交易明细记录
      * 输出信息均为成功记录，仅包括四类：充值、提现、投资、还款
@@ -33,10 +33,11 @@ class UserController extends BaseController {
     public function actionMingxi($page = 1, $size = 10) {
         $this->layout = "@app/modules/order/views/layouts/buy";
         $type = [MoneyRecord::TYPE_RECHARGE, MoneyRecord::TYPE_DRAW, MoneyRecord::TYPE_ORDER, MoneyRecord::TYPE_HUANKUAN];
-        $data = MoneyRecord::find()->where(['uid' => $this->uid, 'type' => $type, 'status' => MoneyRecord::STATUS_SUCCESS])->select('created_at,type,in_money,out_money,balance,status');
-        $count = $data->count();
-        $pages = new Pagination(['totalCount' => $count, 'pageSize' => $size]);
-        $model = $data->offset(($page - 1) * $size)->limit($pages->limit)->orderBy('id desc')->asArray()->all();
+        $data = MoneyRecord::find()->where(['uid' => $this->uid, 'type' => $type, 'status' => MoneyRecord::STATUS_SUCCESS])
+            ->select('created_at,type,in_money,out_money,balance,status')
+            ->orderBy('id desc');
+        $pg = \Yii::$container->get('paginator')->paginate($data, $page, $size);
+        $model = $pg->getItems();
 
         foreach ($model as $key => $val) {
             $model[$key]['created_at_date'] = date('Y-m-d',$val['created_at']);
@@ -48,23 +49,16 @@ class UserController extends BaseController {
                 $model[$key]['out_money'] = "-".$val['out_money'];
             }
         }
-        $tp = ceil($count / $size);
+        $tp = $pg->getPageCount();
         $code = ($page > $tp) ? 1 : 0;
-
-        $header = [
-            'count' => intval($count),
-            'size' => $size,
-            'tp' => $tp,
-            'cp' => intval($page)
-        ];
 
         if (Yii::$app->request->isAjax) {
             Yii::$app->response->format = Response::FORMAT_JSON;
             $message = ($page > $tp) ? '数据错误' : '消息返回';
-            return ['header' => $header, 'data' => $model, 'code' => $code, 'message' => $message];
+            return ['header' => $pg, 'data' => $model, 'code' => $code, 'message' => $message];
         }
 
-        return $this->render('mingxi', ['model' => $model, 'header' => $header]);
+        return $this->render('mingxi', ['model' => $model, 'header' => $pg->jsonSerialize()]);
     }
 
     public function actionMyorder($type = null, $page = 1) {

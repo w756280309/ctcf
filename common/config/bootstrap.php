@@ -8,3 +8,4 @@ Yii::setAlias('api', dirname(dirname(__DIR__)).'/api');
 Yii::setAlias('channel', dirname(dirname(__DIR__)).'/channel');
 
 \Yii::$container->set('account_service', 'common\\service\\AccountService');
+\Yii::$container->set('paginator', 'YiiPlus\\Paginator\\Paginator');
