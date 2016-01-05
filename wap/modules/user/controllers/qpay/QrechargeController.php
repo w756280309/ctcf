@@ -34,14 +34,16 @@ class QrechargeController extends BaseController
             'uid' => $this->uid,
             'account_id' => $cpuser->accountInfo->id,
             'bindingSn' => $ubank->binding_sn,
-            'bank_id' => strval($ubank->id)
+            'bank_id' => strval($ubank->id),
+            'pay_type' => RechargeRecord::PAY_TYPE_QUICK
         ];
 
         $rec_model = new RechargeRecord([
-            'uid'=>$safe['uid'],
-            'account_id'=>$safe['account_id'],
-            'bank_id'=>$safe['bank_id'],
-            'pay_bank_id'=>$safe['bank_id']
+            'uid' => $safe['uid'],
+            'account_id' => $safe['account_id'],
+            'bank_id' => $safe['bank_id'],
+            'pay_bank_id' => $safe['bank_id'],
+            'pay_type' => $safe['pay_type'],
         ]);
         if (
             $rec_model->load(Yii::$app->request->post())
@@ -76,9 +78,7 @@ class QrechargeController extends BaseController
                 $rec_model->save();
                 return ['rechargeSn' => $req->getRechargeSn()];
             }
-
         }
-
         return $this->createErrorResponse($rec_model);
     }
 
@@ -86,38 +86,38 @@ class QrechargeController extends BaseController
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
         $ubank = $this->ubank;
-        if($this->isDenyVisit) {
+        if ($this->isDenyVisit) {
             return $this->createErrorResponse('用户被禁止访问');
         }
-        if(empty($ubank)){
+        if (empty($ubank)) {
             return $this->createErrorResponse('请先绑卡');
         }
         $pending = Yii::$app->session->get('cfca_qpay_recharge');
-        if($pending===null){
+        if ($pending === null) {
             return $this->createErrorResponse('请先发送短信码');
         }
-
+        $rc_post = Yii::$app->request->post('RechargeRecord');
         $sms = \Yii::$app->request->post('yzm');
         $from = \Yii::$app->request->post('from');
-        $recharge = RechargeRecord::find()->where(['sn'=>$pending['recharge_sn']])->one();
-        if(empty($recharge)||$recharge->status!=0){
+        $recharge = RechargeRecord::find()->where(['sn' => $pending['recharge_sn']])->one();
+        
+        if (empty($recharge) || $recharge->status != 0) {
             return $this->createErrorResponse('支付异常');
         }
         if (
-                bccomp($recharge->fund , $pending['recharge_fund'])!=0
+                bccomp($rc_post['fund'], $pending['recharge_fund']) != 0
         ) {
             return $this->createErrorResponse('支付金额已经修改，请重新请求短信验证码');
         }
-        $ret = $this->rechargecheckpay($recharge,$sms);
+        $ret = $this->rechargecheckpay($recharge, $sms);
         if ($ret === TRUE) {
             \Yii::$app->session->remove('cfca_qpay_recharge');
             return [
                 'next' => empty($from) ? '/user/user' : $from,
             ];
-        }else{
+        } else {
             return $this->createErrorResponse($ret['message']);
         }
-
     }
 
     /**
