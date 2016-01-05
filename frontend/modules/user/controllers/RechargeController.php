@@ -11,7 +11,7 @@ use PayGate\Cfca\Message\Request1311;
 use PayGate\Cfca\Message\Request1320;
 use PayGate\Cfca\Response\Response1320;
 use common\lib\cfca\Cfca;
-use app\modules\user\controllers\qpay\QrechargeController;
+use app\modules\user\controllers\bpay\BrechargeController;
 
 class RechargeController extends BaseController {
 
@@ -121,7 +121,7 @@ class RechargeController extends BaseController {
                     return $this->redirect('/user/recharge/recharge-err');
                 }
 
-                if (QrechargeController::is_updateAccount($recharge, $this->user)) {
+                if (BrechargeController::is_updateAccount($recharge, $this->user)) {
                     \Yii::$app->session->remove('cfca_recharge');
                     return $this->redirect('/user/useraccount/accountcenter');
                 } else {

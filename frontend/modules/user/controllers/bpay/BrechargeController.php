@@ -1,6 +1,6 @@
 <?php
 
-namespace app\modules\user\controllers\qpay;
+namespace app\modules\user\controllers\bpay;
 
 use Yii;
 use common\lib\bchelp\BcRound;
@@ -15,7 +15,7 @@ use common\models\user\Jiesuan;
 use PayGate\Cfca\Message\Request1318;
 use PayGate\Cfca\Message\Request1348;
 
-class QrechargeController extends Controller {
+class BrechargeController extends Controller {
 
     public $enableCsrfValidation = false; //因为中金post的提交。所以要关闭csrf验证
 
