@@ -95,7 +95,7 @@ class RechargeController extends BaseController {
     public function actionCheckarchstatus() {
         $record = Yii::$app->session->get('cfca_recharge');
 
-        if ($record === null) {
+        if (null === $record) {
             return $this->redirect('/user/recharge/recharge-err');
         }
 

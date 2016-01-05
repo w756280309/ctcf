@@ -59,7 +59,7 @@ class QrechargeController extends Controller {
             $errInfo = "验签失败";
         } else {
             //签名成功
-            $txCode = $req->getTxCode();
+            $txCode = strval($req->getTxCode());
             $InstitutionID = $req->getInstitutionId(); //获取返回的机构编号
 
             if ($InstitutionID != \Yii::$app->params['cfca']['institutionId']) {
@@ -192,7 +192,7 @@ class QrechargeController extends Controller {
             $errInfo = "验签失败";
         } else {
             //签名成功
-            $txCode = $req->getTxCode();
+            $txCode = strval($req->getTxCode());
             $InstitutionID = $req->getInstitutionId(); //获取返回的机构编号
 
             if ($InstitutionID != \Yii::$app->params['cfca']['institutionId']) {
