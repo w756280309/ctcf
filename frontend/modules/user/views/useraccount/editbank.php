@@ -16,7 +16,7 @@ use yii\bootstrap\ActiveForm;
         <?=
         $form->field($model, 'city', ['template' => '{input}{error}'])->textInput();
         ?>
-        <input type="submit" value="登录" >
+        <input type="submit" value="修改" >
         <?php ActiveForm::end(); ?>
 
         <?php $this->endBody() ?>

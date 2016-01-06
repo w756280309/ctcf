@@ -42,8 +42,9 @@ class Response1320 extends Response
     {
         return $this->amount;
     }
-    
-    public function getBankNotifyTime(){
+
+    public function getBankNotificationTime()
+    {
         return $this->bankNotificationTime;
     }
 

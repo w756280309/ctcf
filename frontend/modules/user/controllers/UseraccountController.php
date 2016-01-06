@@ -32,7 +32,6 @@ class UseraccountController extends BaseController {
         }
 
         $account = UserAccount::findOne(['type' => UserAccount::TYPE_BUY, 'uid' => $uid]);
-        var_dump($account);
         return $this->render('accountcenter', ['model' => $account]);
     }
 
@@ -110,10 +109,6 @@ class UseraccountController extends BaseController {
                 return $this->redirect('/user/useraccount/tixianback?flag=succ');
             }
         }
-
-        var_dump($user_bank);
-        var_dump($province);
-        var_dump($user_acount);
 
         return $this->render('tixian', ['model' => $model, 'bank' => $user_bank, 'user_account' => $user_acount, 'draw' => $draw, 'province' => $province]);
     }

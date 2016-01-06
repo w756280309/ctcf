@@ -10,13 +10,14 @@ use yii\bootstrap\ActiveForm;
         <?php $form = ActiveForm::begin(['action' => "/user/recharge/recharge"]); ?>
         <input name="_csrf" type="hidden" id="_csrf" value="<?=Yii::$app->request->csrfToken ?>">
         <input type="text" name="bankid" value="404" readonly="true"/><br>
-        <input type="text" name="account_type" value="11" readonly="true"/>
+        <input type="text" name="account_type" value="11" readonly="true"/><br>
+        <input type="text" name="pay_type" value="2" readonly="true"/>
         <?=
         $form->field($recharge, 'fund', ['template' => '{input}{error}'])->textInput();
         ?>
         <input type="submit" value="充值" >
         <?php ActiveForm::end(); ?>
-
+        <a href="/user/recharge/checkarchstatus">充值完成</a>
         <?php $this->endBody() ?>
 
     </body>

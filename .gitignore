@@ -16,10 +16,7 @@
 /backend/web/upload/product/*
 !/backend/web/upload/product/.gitkeep
 
-/*/runtime/*
-!/backend/runtime/.gitkeep
-!/wap/runtime/.gitkeep
-
+/*/runtime/
 /*/web/assets/
 
 .htaccess
