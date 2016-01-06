@@ -116,12 +116,12 @@ class DrawrecordController extends BaseController {
 
     public function actionDrawexamin() {
         $id = Yii::$app->request->post('id');
-        $status = (int)Yii::$app->request->post('status');
+        $status = (int) Yii::$app->request->post('status');
         $res = 0;
         $msg = "操作失败";
         $draw = DrawRecord::findOne($id);
         if (null !== $draw) {
-            $userAccountInfo = UserAccount::findOne(['uid'=>$draw->uid,'type'=>  UserAccount::TYPE_RAISE]);//融资账户;
+            $userAccountInfo = UserAccount::findOne(['uid' => $draw->uid, 'type' => UserAccount::TYPE_RAISE]); //融资账户;
             $bc = new BcRound();
             $money = $draw->money;
             bcscale(14); //设置小数位数
@@ -139,7 +139,7 @@ class DrawrecordController extends BaseController {
                 $moneyInfo->out_money = $money;
                 $moneyInfo->status = MoneyRecord::STATUS_SUCCESS;
                 $moneyInfo->account_id = $userAccountInfo->id;
-                
+
                 //开启事务
                 $transaction = Yii::$app->db->beginTransaction();
                 $draw->status = DrawRecord::STATUS_SUCCESS;
@@ -155,7 +155,7 @@ class DrawrecordController extends BaseController {
                 $userAccountInfo->in_sum = $bc->bcround(bcadd($userAccountInfo->in_sum, $money), 2);
                 $userAccountInfo->freeze_balance = $bc->bcround(bcsub($userAccountInfo->freeze_balance, $money), 2);
                 $userAccountInfo->drawable_balance = $bc->bcround(bcadd($userAccountInfo->drawable_balance, $money), 2);
-                $draw->status = DrawRecord::STATUS_FAIL ;//驳回
+                $draw->status = DrawRecord::STATUS_FAIL; //驳回
                 $transaction = Yii::$app->db->beginTransaction();
                 if (($draw->save()) && ($userAccountInfo->save())) {
                     $transaction->commit();
@@ -169,7 +169,7 @@ class DrawrecordController extends BaseController {
             $msg = '无法找到';
         }
         Yii::$app->response->format = Response::FORMAT_JSON;
-        return ['res'=>$res,'msg'=>$msg,'data'=>''];
+        return ['res' => $res, 'msg' => $msg, 'data' => ''];
     }
 
 
