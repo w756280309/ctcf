@@ -1,6 +1,6 @@
 CREATE TABLE `sms_message` (
-  `id` INT(4) NOT NULL AUTO_INCREMENT,
-  `uid` INT(4) NOT NULL COMMENT 'uid',
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `uid` INT(11) NOT NULL COMMENT 'uid',
   `template_id` INT(1) NOT NULL COMMENT '短信模板id',
   `mobile` VARCHAR(11) NOT NULL COMMENT '手机号',
   `message` VARCHAR(300) NOT NULL COMMENT '短信内容,json',
