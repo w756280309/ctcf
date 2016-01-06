@@ -2,19 +2,17 @@
 
 namespace common\models\user;
 
-use Yii;
+use common\utils\TxUtils;
 use yii\behaviors\TimestampBehavior;
-use common\models\user\User;
 
 /**
  * This is the model class for table "draw_record" 提现记录表.
- *
  */
-class DrawRecord extends \yii\db\ActiveRecord {
-    
-    public $drawpwd ;
+class DrawRecord extends \yii\db\ActiveRecord
+{
+    public $drawpwd;
     private $_user = false;
-    
+
     /* 提现状态 */
 
     const STATUS_ZERO = 0; //未处理
@@ -25,71 +23,97 @@ class DrawRecord extends \yii\db\ActiveRecord {
     const STATUS_DEAL_FINISH = 5; //已经处理
     const STATUS_DENY = 11; //提现驳回
 
-    public static function createSN($pre = '') {
-        $pre_val = 'WD';
-        list($usec, $sec) = explode(" ", microtime());
-        $v = ((float) $usec + (float) $sec);
+    /**
+     * 发起提现，TODO：去掉user和ubank
+     */
+    public static function init($account, $money, $user, $ubank)
+    {
+        $draw = new self();
+        $draw->money = $money;
+        $draw->sn = self::createSN();
+        $draw->pay_id = 0; // 支付公司ID
+        $draw->account_id = $account->id;
+        $draw->uid = $account->uid;
+        $draw->pay_bank_id = '0'; // TODO
+        $draw->bank_id = $ubank->bank_id;
+        $draw->bank_username = $ubank->bank_name;
+        $draw->bank_account = $ubank->card_number;
+        $draw->identification_type= $ubank->account_type;
+        $draw->identification_number = $user->idcard;
+        $draw->user_bank_id = $ubank->id;
+        $draw->sub_bank_name = $ubank->sub_bank_name;
+        $draw->province = $ubank->province;
+        $draw->city = $ubank->city;
+        $draw->mobile = $user->mobile;
+        $draw->status = DrawRecord::STATUS_ZERO;
 
-        list($usec, $sec) = explode(".", $v);
-        $date = date('ymdHisx' . rand(1000, 9999), $usec);
-        return $pre_val . str_replace('x', $sec, $date);
+        return $draw;
     }
 
-    public static function getStatus($key = null) {
+    public static function createSN()
+    {
+        return TxUtils::generateSn('DR');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function tableName()
+    {
+        return 'draw_record';
+    }
+
+    public static function getStatus($key = null)
+    {
         $data = [
-            self::STATUS_ZERO => "未处理",
-            self::STATUS_EXAMINED => "已审核",
-            self::STATUS_SUCCESS => "提现成功",
-            self::STATUS_DENY => "驳回",
+            self::STATUS_ZERO => '未处理',
+            self::STATUS_EXAMINED => '已审核',
+            self::STATUS_SUCCESS => '提现成功',
+            self::STATUS_DENY => '驳回',
         ];
         if (!empty($key)) {
             return $data[$key];
         }
+
         return $data;
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
-    public static function tableName() {
-        return 'draw_record';
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function rules() {
+    public function rules()
+    {
         return [
 //            ['drawpwd', 'trim'],
-            [[ 'money','uid'], 'required'],//, 'bank_username', 'bank_account'      'account_id',,'drawpwd'
+            [['money', 'uid'], 'required'], //, 'bank_username', 'bank_account'      'account_id',,'drawpwd'
 //            [['bank_id'], 'required', 'message' => '未选择提现银行卡'],
 //            ['drawpwd', 'validatePassword'], wyf 注释的，因为写录入数据逻辑，该字段以后在考虑
             [['money'], 'match', 'pattern' => '/^[0-9]+([.]{1}[0-9]{1,2})?$/', 'message' => '提现金额格式错误'],
             [['account_id', 'uid', 'status', 'created_at', 'updated_at'], 'integer'],
             [['money'], 'number', 'min' => 1, 'max' => 10000000],
-            [['sn', 'bank_id', 'bank_username', 'bank_account'], 'string', 'max' => 30]
+            [['sn', 'bank_id', 'bank_username', 'bank_account'], 'string', 'max' => 30],
         ];
     }
-    
-   /**
+
+    /**
      * Validates the password.
      * This method serves as the inline validation for password.
      *
      * @param string $attribute the attribute currently being validated
-     * @param array $params the additional name-value pairs given in the rule
+     * @param array  $params    the additional name-value pairs given in the rule
      */
     public function validatePassword($attribute, $params)
     {
         if (!$this->hasErrors()) {
             $user = $this->getUser();
-            if (!$user || !$user->validateTradePwd($this->drawpwd,$user->trade_pwd)) {
+            if (!$user || !$user->validateTradePwd($this->drawpwd, $user->trade_pwd)) {
                 $this->addError($attribute, '密码错误.');
             }
         }
     }
-    
+
     /**
-     * Finds user by [[username]]
+     * Finds user by [[username]].
      *
      * @return User|null
      */
@@ -98,13 +122,15 @@ class DrawRecord extends \yii\db\ActiveRecord {
         if ($this->_user === false) {
             $this->_user = User::findOne($this->uid);
         }
+
         return $this->_user;
     }
-    
+
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
-    public function attributeLabels() {
+    public function attributeLabels()
+    {
         return [
             'id' => 'ID',
             'account_id' => '对应资金账户id',
@@ -115,16 +141,16 @@ class DrawRecord extends \yii\db\ActiveRecord {
             'bank_username' => '银行账户',
             'bank_account' => '银行账号',
             'status' => '状态',
-            'drawpwd'=>'交易密码',
+            'drawpwd' => '交易密码',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];
     }
 
-    public function behaviors() {
+    public function behaviors()
+    {
         return [
             TimestampBehavior::className(),
         ];
     }
-
 }

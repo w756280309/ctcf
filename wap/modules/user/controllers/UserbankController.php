@@ -305,24 +305,7 @@ class UserbankController extends BaseController {
 
             $transaction = Yii::$app->db->beginTransaction();
             //录入draw_record记录
-            $draw = new DrawRecord;
-            $draw->money = $money;
-            $draw->sn = DrawRecord::createSN();
-            $draw->pay_id = 0;
-            $draw->account_id = $user_acount->id;
-            $draw->uid = $uid;
-            $draw->pay_bank_id = '0';
-            $draw->bank_id = $user_bank->bank_id;
-            $draw->bank_username = $user_bank->bank_name;
-            $draw->bank_account = $user_bank->card_number;
-            $draw->identification_type = $user_bank->account_type;
-            $draw->identification_number = $user->idcard;
-            $draw->user_bank_id = $user_bank->id;
-            $draw->sub_bank_name = $user_bank->sub_bank_name;
-            $draw->province = $user_bank->province;
-            $draw->city = $user_bank->city;
-            $draw->mobile = $user->mobile;
-            $draw->status = DrawRecord::STATUS_ZERO;
+            $draw = DrawRecord::init($user_acount, $money, $user, $user_bank);
 
             if(!$draw->save()) {
                 $transaction->rollBack();
