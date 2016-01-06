@@ -37,7 +37,8 @@ class UserAccount extends \yii\db\ActiveRecord {
         return [
             [['type', 'uid'], 'integer'],
             [['uid'], 'required'],
-            [['account_balance', 'available_balance', 'freeze_balance', 'in_sum', 'out_sum'], 'number']
+            [['account_balance', 'available_balance', 'freeze_balance', 'in_sum', 'out_sum'], 'number'],
+            ['drawable_balance', 'default', 'value' => 0],
         ];
     }
 

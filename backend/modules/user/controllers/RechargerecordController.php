@@ -12,6 +12,7 @@ use common\models\user\UserAccount;
 use common\models\user\User;
 use common\lib\bchelp\BcRound;
 use yii\log\FileTarget;
+use common\models\user\RechargeRecord;
 
 class RechargerecordController extends BaseController {
 
@@ -80,6 +81,7 @@ class RechargerecordController extends BaseController {
         }
         $model = new RechargeRecordTime();
         $model->uid = $id;
+        $model->pay_type = RechargeRecord::PAY_TYPE_OFFLINE;
         $model->created_at = strtotime(Yii::$app->request->post("created_at"));
         $request = Yii::$app->request->post();
         if($request && empty($model->created_at)) {
@@ -94,43 +96,19 @@ class RechargerecordController extends BaseController {
         }
         
         if ($model->load($request) && $model->validate()) {
-            $money = $model->fund;
-            //先是在recharge_record表上填写流水记录，若添加成功同时往money_record表中更新数据也成功，就准备向user_account表中更新数据，
-            $userAccountInfo = $id ? UserAccount::find()->where("uid = $id and type=$type")->one() : (new UserAccount());
-            $bc = new BcRound();
-            bcscale(14); //设置小数位数
-            //充值时不会冻结资金,账户余额加上充值的钱
-            $YuE = $userAccountInfo->account_balance = $bc->bcround(bcadd($userAccountInfo->account_balance, $money), 2);
-            //可用余额加上充值的钱
-            $userAccountInfo->available_balance = $bc->bcround(bcadd($userAccountInfo->available_balance, $money), 2);
-            //账户入户总金额也要加上充值的钱
-            $userAccountInfo->in_sum = $bc->bcround(bcadd($userAccountInfo->in_sum, $money), 2);
-
-            $moneyInfo = new MoneyRecord();
-            // 生成一个SN流水号
-            $sn = $model::createSN();
-            $moneyInfo->uid = $id;
-            $moneyInfo->sn = $sn;
-            $moneyInfo->type = 0;
-            $moneyInfo->balance = $YuE;
-            $moneyInfo->in_money = $money;
-
-            $res = UserAccount::find()->select("id")->where("uid=$id and type=$type")->asArray()->one();
-            $model->account_id = $moneyInfo->account_id = $res['id'];
-            $model->validate(); //给recharge_record加上account_id字段后，再验证
-            //$c = $userAccountInfo->save();
-            //开启事务
-            $transaction = Yii::$app->db->beginTransaction();
-            if (($model->save()) && ($moneyInfo->save()) && ($userAccountInfo->save())) {
-                $transaction->commit();
+            $userAccountInfo = UserAccount::findOne(['uid'=>$id,'type'=>  UserAccount::TYPE_RAISE]);
+            if (null === $userAccountInfo) {//无融资账户时候需要创建融资账户
+                $userAccountInfo = new UserAccount(['uid' => $id, 'type' => UserAccount::TYPE_RAISE]);
+                $userAccountInfo->save();
+            }
+            $model->account_id = $userAccountInfo->id;
+            if ($model->save()) {
                 $this->alert = 1;
                 $this->msg = "操作成功";
                 $this->toUrl = "detail?id=$id&type=$type";
             } else {
-                $transaction->rollBack();
-                //exit("failure");
-                $this->alert=2;
-                $this->msg="操作失败";
+                $this->alert = 2;
+                $this->msg = "操作失败";
             }
         }
         return $this->render('edit', [
@@ -179,13 +157,48 @@ class RechargerecordController extends BaseController {
         $type = Yii::$app->request->post('type');
         
         if ($op == 'status') {//项目状态
-            $recharge = RechargeRecordTime::findOne($id);
+            $recharge = RechargeRecord::findOne($id);
             if($type == 1) {
-                $recharge->status = RechargeRecordTime::STATUS_YES;
+                //开启事务
+                $transaction = Yii::$app->db->beginTransaction();
+                $money = $recharge->fund;
+                //先是在recharge_record表上填写流水记录，若添加成功同时往money_record表中更新数据也成功，就准备向user_account表中更新数据，
+                $userAccountInfo = UserAccount::findOne(['uid'=>$recharge->uid,'type'=>  UserAccount::TYPE_RAISE]);//融资账户
+                
+                $bc = new BcRound();
+                bcscale(14); //设置小数位数
+                //充值时不会冻结资金,账户余额加上充值的钱
+                $YuE = $userAccountInfo->account_balance = $bc->bcround(bcadd($userAccountInfo->account_balance, $money), 2);
+                //可用余额加上充值的钱
+                $userAccountInfo->available_balance = $bc->bcround(bcadd($userAccountInfo->available_balance, $money), 2);
+                //账户入户总金额也要加上充值的钱
+                $userAccountInfo->in_sum = $bc->bcround(bcadd($userAccountInfo->in_sum, $money), 2);
+                //融资人的审核之后可提现金额增加
+                $userAccountInfo->drawable_balance = $bc->bcround(bcadd($userAccountInfo->drawable_balance, $money), 2);
+                $moneyInfo = new MoneyRecord();
+                // 生成一个SN流水号
+                $sn = MoneyRecord::createSN();
+                $moneyInfo->uid = $id;
+                $moneyInfo->sn = $sn;
+                $moneyInfo->type = 0;
+                $moneyInfo->balance = $YuE;
+                $moneyInfo->in_money = $money;
+                $moneyInfo->account_id = $userAccountInfo->id;
+                $recharge->status = RechargeRecord::STATUS_YES;
+                if (($moneyInfo->save()) && ($userAccountInfo->save()) && $recharge->save()) {
+                    $transaction->commit();
+                    $res = $this->alert = 1;
+                    $this->msg = "操作成功";
+                    $this->toUrl = "detail?id=$id&type=$type";
+                } else {
+                    $transaction->rollBack();
+                    $this->alert=2;
+                    $this->msg="操作失败";
+                }
             } else {
-                $recharge->status = RechargeRecordTime::STATUS_FAULT;
+                $recharge->status = RechargeRecord::STATUS_FAULT;
+                $recharge->save();
             }
-            $res = $recharge->save();
         }
         
         Yii::$app->response->format = Response::FORMAT_JSON;

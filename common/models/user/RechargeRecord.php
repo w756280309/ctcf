@@ -31,6 +31,7 @@ class RechargeRecord extends \yii\db\ActiveRecord {
 
     const PAY_TYPE_QUICK = 1;//快捷充值
     const PAY_TYPE_NET = 2;//网银充值
+    const PAY_TYPE_OFFLINE = 3;//线下充值
     
     /**
      * @inheritdoc
@@ -125,4 +126,11 @@ class RechargeRecord extends \yii\db\ActiveRecord {
         return $data;
     }
 
+    /**
+     * 获取支付人信息
+     */
+    public function getUser(){
+        return $this->hasOne(User::className(), ['id' => 'uid']);
+    }
+    
 }
