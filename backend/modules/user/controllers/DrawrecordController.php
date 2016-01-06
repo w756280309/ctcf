@@ -13,6 +13,7 @@ use common\models\user\User;
 use common\lib\bchelp\BcRound;
 use common\models\user\UserBank;
 use common\models\user\Batchpay;
+use yii\web\Response;
 
 class DrawrecordController extends BaseController {
 
@@ -66,6 +67,14 @@ class DrawrecordController extends BaseController {
         ]);
     }
 
+    private function alert($res, $msg, $tourl = null) {
+        $this->alert = $res;
+        $this->msg = $msg;
+        if (null !== $tourl) {
+            $this->toUrl = $tourl;
+        }
+    }
+
     //录入提现数据
     public function actionEdit($id = null, $type = null) {
         $banks = Yii::$app->params['bank'];
@@ -77,41 +86,23 @@ class DrawrecordController extends BaseController {
         $model->uid = $id;
         $model->created_at = strtotime(Yii::$app->request->post("created_at"));
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            $money = $model->money;
-            //先是在draw_record表上填写流水记录，若添加成功同时往money_record表中更新数据也成功，就准备向user_account表中更新数据，
-            $userAccountInfo = $id ? UserAccount::find()->where("uid = $id and type=$type")->one() : (new UserAccount());
-            $bc = new BcRound();
-            bcscale(14); //设置小数位数
-            //账户余额减去提现的钱
-            $YuE = $userAccountInfo->account_balance = $bc->bcround(bcsub($userAccountInfo->account_balance, $money), 2);
-            //可用余额减去提现的钱
-            $userAccountInfo->available_balance = $bc->bcround(bcsub($userAccountInfo->available_balance, $money), 2);
-            $userAccountInfo->out_sum = $bc->bcround(bcadd($userAccountInfo->out_sum, $money), 2);
-
-            $moneyInfo = new MoneyRecord();
-            // 生成一个SN流水号
-            $sn = $model::createSN();
-            $moneyInfo->uid = $id;
-            $moneyInfo->sn = $sn;
-            $moneyInfo->type = 1;
-            $moneyInfo->balance = $YuE;
-            $moneyInfo->out_money = $money;
-            $res = UserAccount::find()->select("id")->where("uid=$id and type=$type")->asArray()->one();
-            $model->account_id = $moneyInfo->account_id = $res['id'];
-            if ($model->validate() === false) {
-                exit();
-            }
-            //开启事务
-            $transaction = Yii::$app->db->beginTransaction();
-            $model->status = 2;
-            if (($model->save()) && ($moneyInfo->save()) && ($userAccountInfo->save())) {
-                $transaction->commit();
-                $this->alert = 1;
-                $this->msg = "操作成功";
-                $this->toUrl = "detail?id=$id&type=$type";
-            } else {
-                $transaction->rollBack();
-                exit("failure");
+            $userAccountInfo = UserAccount::findOne(['uid'=>$id,'type'=>  UserAccount::TYPE_RAISE]);//融资账户;
+            if (bccomp($userAccountInfo->available_balance, money) < 0) {
+                $this->alert(2, "可用余额不足");
+            }else{
+                $money = $model->money;
+                $model->status = DrawRecord::STATUS_ZERO;
+                $bc = new BcRound();
+                bcscale(14); //设置小数位数
+                $userAccountInfo->available_balance = $bc->bcround(bcsub($userAccountInfo->available_balance, $money), 2);
+                $userAccountInfo->out_sum = $bc->bcround(bcadd($userAccountInfo->out_sum, $money), 2);
+                $userAccountInfo->freeze_balance = $bc->bcround(bcadd($userAccountInfo->freeze_balance, $money), 2);
+                $userAccountInfo->drawable_balance = $bc->bcround(bcadd($userAccountInfo->drawable_balance, $money), 2);
+                if ($model->save() && $userAccountInfo->save()) {
+                    $this->alert(1, "操作成功", "detail?id=$id&type=$type");
+                } else {
+                    $this->alert(2, "操作失败");
+                }    
             }
         }
 
@@ -122,6 +113,65 @@ class DrawrecordController extends BaseController {
                     'model' => $model,
         ]);
     }
+
+    public function actionDrawexamin() {
+        $id = Yii::$app->request->post('id');
+        $status = (int) Yii::$app->request->post('status');
+        $res = 0;
+        $msg = "操作失败";
+        $draw = DrawRecord::findOne($id);
+        if (null !== $draw) {
+            $userAccountInfo = UserAccount::findOne(['uid' => $draw->uid, 'type' => UserAccount::TYPE_RAISE]); //融资账户;
+            $bc = new BcRound();
+            $money = $draw->money;
+            bcscale(14); //设置小数位数
+            if ($status === DrawRecord::STATUS_SUCCESS) {//若审核通过状态变更为提现成功
+                $YuE = $userAccountInfo->account_balance = $bc->bcround(bcsub($userAccountInfo->account_balance, $money), 2);
+                $userAccountInfo->freeze_balance = $bc->bcround(bcsub($userAccountInfo->freeze_balance, $money), 2);
+
+                $moneyInfo = new MoneyRecord();
+                // 生成一个SN流水号
+                $sn = MoneyRecord::createSN();
+                $moneyInfo->uid = $id;
+                $moneyInfo->sn = $sn;
+                $moneyInfo->type = 1;
+                $moneyInfo->balance = $YuE;
+                $moneyInfo->out_money = $money;
+                $moneyInfo->status = MoneyRecord::STATUS_SUCCESS;
+                $moneyInfo->account_id = $userAccountInfo->id;
+
+                //开启事务
+                $transaction = Yii::$app->db->beginTransaction();
+                $draw->status = DrawRecord::STATUS_SUCCESS;
+                if (($draw->save()) && ($moneyInfo->save()) && ($userAccountInfo->save())) {
+                    $transaction->commit();
+                    $msg = '操作成功';
+                    $res = 1;
+                } else {
+                    $transaction->rollBack();
+                }
+            } elseif ($status === DrawRecord::STATUS_FAIL) {
+                $userAccountInfo->available_balance = $bc->bcround(bcadd($userAccountInfo->available_balance, $money), 2);
+                $userAccountInfo->in_sum = $bc->bcround(bcadd($userAccountInfo->in_sum, $money), 2);
+                $userAccountInfo->freeze_balance = $bc->bcround(bcsub($userAccountInfo->freeze_balance, $money), 2);
+                $userAccountInfo->drawable_balance = $bc->bcround(bcadd($userAccountInfo->drawable_balance, $money), 2);
+                $draw->status = DrawRecord::STATUS_FAIL; //驳回
+                $transaction = Yii::$app->db->beginTransaction();
+                if (($draw->save()) && ($userAccountInfo->save())) {
+                    $transaction->commit();
+                    $msg = '操作成功';
+                    $res = 1;
+                } else {
+                    $transaction->rollBack();
+                }
+            }
+        } else {
+            $msg = '无法找到';
+        }
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        return ['res' => $res, 'msg' => $msg, 'data' => ''];
+    }
+
 
     /*
      * 会员管理 提现申请页面

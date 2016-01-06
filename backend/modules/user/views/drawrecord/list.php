@@ -161,16 +161,18 @@ $status = Yii::$app->request->get('status');
                         <td><?= date('Y-m-d H:i:s',$val['created_at'])?></td>
                         <td><?php 
                                     if($val['status']==0){
-                                        echo "未处理";
-                                    }elseif($val['status']==1){
-                                        echo "已审核";
-                                    }elseif($val['status']==21){
-                                        echo "提现不成功";
-                                    }elseif($val['status']==2){
-                                        echo "提现成功";
-                                    }  else {
-                                        echo "提现驳回'";
-                                    }
+                             ?>
+                            <a class="btn mini green ajax_op" index="<?= $val['id'] ?>"><i class="icon-edit"></i>审核</a>
+                             <?php
+                                }elseif($val['status']==1){
+                                    echo "已审核";
+                                }elseif($val['status']==3){
+                                    echo "提现不成功";
+                                }elseif($val['status']==2){
+                                    echo "提现成功";
+                                }  else {
+                                    echo "提现驳回'";
+                                }
                                 ?></td>
                     </tr>
                     <?php endforeach; ?>   
@@ -182,5 +184,31 @@ $status = Yii::$app->request->get('status');
     </div>
                                     
 </div>
+<script type="text/javascript">
+    function doop(id,status){
+        csrf = '<?= Yii::$app->request->getCsrfToken(); ?>';
+        openLoading();//打开loading
+        $.post("/user/drawrecord/drawexamin", {id: id, status:status, _csrf:csrf}, function (result) {
+            cloaseLoading();//关闭loading
+            newalert(result['res'],'');
+            location.reload();
+        });
+    }
+    $(function () {
+         
+        $('.ajax_op').bind('click', function () {
+            index = $(this).attr('index');
+            csrf = '<?= Yii::$app->request->getCsrfToken(); ?>';
+            layer.confirm('确定审核通过吗？',{title:'充值审核',btn:['提现完成','撤销','关闭']},function(){ 
+                    doop(index,2);
+            },function(){
+                doop(index,3);  
+            })
+        
+        });
+            
+            
+    })
+</script>
 <?php $this->endBlock(); ?>
 

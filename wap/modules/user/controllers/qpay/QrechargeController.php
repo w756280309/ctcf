@@ -143,7 +143,7 @@ class QrechargeController extends BaseController
         $log = new TradeLog($this->user,$rq1376,$resp);
         $log->save();
 
-        if ($resp1376->isSuccess()) {
+        if ($resp1376->isSuccess()) {//测试短信末尾奇数是失败的，金额是30失败
             $bankTxTime = $resp1376->getBankTxTime();
             $user_acount = $this->user->accountInfo;
             //录入money_record记录
