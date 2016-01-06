@@ -59,7 +59,7 @@ class BrechargeController extends Controller {
             $errInfo = "验签失败";
         } else {
             //签名成功
-            $txCode = strval($req->getTxCode());
+            $txCode = $req->getTxCode();
             $InstitutionID = $req->getInstitutionId(); //获取返回的机构编号
 
             if ($InstitutionID != \Yii::$app->params['cfca']['institutionId']) {
@@ -69,7 +69,7 @@ class BrechargeController extends Controller {
                 $Status = intval($req->getStatus()); //获取返回结果 状态： 10=未支付 20=已支付
                 $BankNotificationTime = $req->getBankNotificationTime(); //获取返回支付平台收到银行通知时间
 
-                if ($txCode === '1318') {
+                if ($txCode === 1318) {
                     if (empty($recharge)) {
                         $txCode = "2001";
                         $errInfo = "不正确的充值单据";
@@ -192,14 +192,14 @@ class BrechargeController extends Controller {
             $errInfo = "验签失败";
         } else {
             //签名成功
-            $txCode = strval($req->getTxCode());
+            $txCode = $req->getTxCode();
             $InstitutionID = $req->getInstitutionId(); //获取返回的机构编号
 
             if ($InstitutionID != \Yii::$app->params['cfca']['institutionId']) {
                 $code = "2001";
                 $errInfo = "错误的机构编码";
             } else {
-                if ($txCode === '1348') {
+                if ($txCode === 1348) {
                     $serialNumber = $req->getSerialNumber();
                     $status = intval($req->getStatus());
                     $jiesuan = Jiesuan::findOne(['sn' => $serialNumber]);
