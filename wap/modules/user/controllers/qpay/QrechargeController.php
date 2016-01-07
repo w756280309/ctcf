@@ -21,11 +21,7 @@ class QrechargeController extends BaseController
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
         $cpuser = $this->user;
-        $ubank = $this->ubank;
-        if ($this->isDenyVisit) {
-            return $this->createErrorResponse('用户被禁止访问');
-        }
-
+        $ubank = $cpuser->bank;
         if (empty($ubank)) {
             return $this->createErrorResponse('请先绑卡');
         }
@@ -86,10 +82,7 @@ class QrechargeController extends BaseController
     public function actionVerify()
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
-        $ubank = $this->ubank;
-        if ($this->isDenyVisit) {
-            return $this->createErrorResponse('用户被禁止访问');
-        }
+        $ubank = $this->user->bank;
         if (empty($ubank)) {
             return $this->createErrorResponse('请先绑卡');
         }
