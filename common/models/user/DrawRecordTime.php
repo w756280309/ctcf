@@ -16,12 +16,13 @@ class DrawRecordTime extends \yii\db\ActiveRecord {
     private $_user = false;
     
     /* 提现状态 */
-
     const STATUS_ZERO = 0; //未处理
     const STATUS_EXAMINED = 1; //已审核
     const STATUS_SUCCESS = 2; //提现成功
+    const STATUS_FAIL = 3; //提现不成功
+    const STATUS_LAUNCH_BATCHPAY = 4; //已放款,此时生成批量代付批次
+    const STATUS_DEAL_FINISH = 5; //已经处理
     const STATUS_DENY = 11; //提现驳回
-    const STATUS_FAIL = 21; //提现失败
 
     public static function createSN($pre = 'draw') {
         $pre_val = Yii::$app->params['bill_prefix'][$pre];

@@ -14,7 +14,6 @@ class DrawRecord extends \yii\db\ActiveRecord
     private $_user = false;
 
     /* 提现状态 */
-
     const STATUS_ZERO = 0; //未处理
     const STATUS_EXAMINED = 1; //已审核
     const STATUS_SUCCESS = 2; //提现成功

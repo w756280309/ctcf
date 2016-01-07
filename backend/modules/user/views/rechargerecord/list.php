@@ -208,7 +208,6 @@
                     newalert(result['res'],'');
                     location.reload();
                 });    
-                 
             },function(){
                 openLoading();//打开loading
                 $.post("/user/rechargerecord/recharge-sh", {op: op, id: index,type:0, _csrf:csrf}, function (result) {

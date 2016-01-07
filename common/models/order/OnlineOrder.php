@@ -1,67 +1,71 @@
 <?php
 
 namespace common\models\order;
+
 use yii\behaviors\TimestampBehavior;
 use Yii;
 use common\models\product\OnlineProduct;
 use common\models\user\MoneyRecord;
 use common\models\user\UserAccount;
 use common\models\user\User;
+
 /**
  * This is the model class for table "online_order".
  *
- * @property integer $id
+ * @property int $id
  * @property string $sn
  * @property string $online_pid
  * @property string $order_money
- * @property integer $order_time
- * @property integer $uid
- * @property integer $status
+ * @property int $order_time
+ * @property int $uid
+ * @property int $status
  * @property string $created_at
  * @property string $updated_at
  */
 class OnlineOrder extends \yii\db\ActiveRecord
 {
     //0--投标失败---1-投标成功 2.撤标 3，无效
-    const STATUS_FALSE=0;
-    const STATUS_SUCCESS=1;
-    const STATUS_CANCEL=2;
-    const STATUS_WUXIAO=3;
+    const STATUS_FALSE = 0;
+    const STATUS_SUCCESS = 1;
+    const STATUS_CANCEL = 2;
+    const STATUS_WUXIAO = 3;
 
-    public $agree = "";
+    public $agree = '';
     public $order_return;
-    public $drawpwd ;
+    public $drawpwd;
     private $_user = false;
 
-
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public static function tableName()
     {
         return 'online_order';
     }
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
-    public function behaviors() {
+    public function behaviors()
+    {
         return [
             TimestampBehavior::className(),
         ];
     }
 
-    public static function createSN($pre = 'o_online'){
+    public static function createSN($pre = 'o_online')
+    {
         //$pre_val = Yii::$app->params['bill_prefix'][$pre];
-        $pre_val = "00";//由于合同里未知的原因导致的错位，换00替换
-        list($usec, $sec) = explode(" ", microtime());
-        $v = ((float)$usec + (float)$sec);
+        $pre_val = '00';//由于合同里未知的原因导致的错位，换00替换
+        list($usec, $sec) = explode(' ', microtime());
+        $v = ((float) $usec + (float) $sec);
 
-        list($usec, $sec) = explode(".", $v);
-        $date = date('ymdHisx' . rand(1000, 9999),$usec);
+        list($usec, $sec) = explode('.', $v);
+        $date = date('ymdHisx'.rand(1000, 9999), $usec);
+
         return $pre_val.str_replace('x', $sec, $date);
     }
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function rules()
     {
@@ -82,21 +86,20 @@ class OnlineOrder extends \yii\db\ActiveRecord
      * This method serves as the inline validation for password.
      *
      * @param string $attribute the attribute currently being validated
-     * @param array $params the additional name-value pairs given in the rule
+     * @param array  $params    the additional name-value pairs given in the rule
      */
     public function validatePassword($attribute, $params)
     {
         if (!$this->hasErrors()) {
             $user = $this->getUser();
-            if (!$user || !$user->validateTradePwd($this->drawpwd,$user->trade_pwd)) {
+            if (!$user || !$user->validateTradePwd($this->drawpwd, $user->trade_pwd)) {
                 $this->addError($attribute, '密码错误.');
             }
-
         }
     }
 
     /**
-     * Finds user by [[username]]
+     * Finds user by [[username]].
      *
      * @return User|null
      */
@@ -105,11 +108,12 @@ class OnlineOrder extends \yii\db\ActiveRecord
         if ($this->_user === false) {
             $this->_user = User::findOne($this->uid);
         }
+
         return $this->_user;
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function attributeLabels()
     {
@@ -121,108 +125,121 @@ class OnlineOrder extends \yii\db\ActiveRecord
             'order_time' => 'Order Time',
             'uid' => 'Uid',
             'status' => 'Status',
-            'drawpwd'=>'交易密码',
+            'drawpwd' => '交易密码',
             'agree' => '同意以上合同事项',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];
     }
 
-
     /**
-     * 计算项目余额
+     * 计算项目余额.
+     *
      * @param type $pro_id
+     *
      * @return type
      */
-    public static function getOrderBalance($pro_id=0){
+    public static function getOrderBalance($pro_id = 0)
+    {
         bcscale(14);
-        $all_money = static::find()->where(['status'=>1,'online_pid'=>$pro_id])->sum('order_money');
-        if(empty($all_money)){
-            $all_money=0;
+        $all_money = static::find()->where(['status' => 1, 'online_pid' => $pro_id])->sum('order_money');
+        if (empty($all_money)) {
+            $all_money = 0;
         }
         $product = OnlineProduct::findOne($pro_id);
+
         return bcsub($product->money, $all_money);
     }
 
     /**
-     * 计算融资百分比
+     * 计算融资百分比.
+     *
      * @param type $pro_id
+     *
      * @return type
      */
-    public static function getRongziPercert($pro_id=0){
-        $all_money = static::find()->where(['status'=>1,'online_pid'=>$pro_id])->sum('order_money');
+    public static function getRongziPercert($pro_id = 0)
+    {
+        $all_money = static::find()->where(['status' => 1, 'online_pid' => $pro_id])->sum('order_money');
         $product = OnlineProduct::findOne($pro_id);
-        return bcdiv($all_money,$product->money,2);
+
+        return bcdiv($all_money, $product->money, 2);
     }
 
     /*撤标*/
-    public function cancelOnlinePro($pid=null){
-        $list = static::find()->where(['status'=>  self::STATUS_SUCCESS,'online_pid'=>$pid])->all();
-        $transaction  = Yii::$app->db->beginTransaction();
+    public function cancelOnlinePro($pid = null)
+    {
+        $list = static::find()->where(['status' => self::STATUS_SUCCESS, 'online_pid' => $pid])->all();
+        $transaction = Yii::$app->db->beginTransaction();
         $bcround = new \common\lib\bchelp\BcRound();
         bcscale(14);
         //$order = new OnlineOrder();
-        foreach($list as $val){
+        foreach ($list as $val) {
             /*标的更改状态*/
             $order_model = clone $val;
-            $order_model->status=self::STATUS_CANCEL;
+            $order_model->status = self::STATUS_CANCEL;
             //$order_model->agree=1;
-            $ore = self::updateAll($order_model,' id = '.$order_model->id);
-            if(!$ore){
+            $ore = self::updateAll($order_model, ' id = '.$order_model->id);
+            if (!$ore) {
                 $transaction->rollBack();
+
                 return 0;
             }
             $ua = UserAccount::getUserAccount($order_model->uid);
 
-            $ua->freeze_balance= $bcround->bcround(bcsub($ua->freeze_balance, $order_model->order_money), 2) ;
-            if($ua->freeze_balance*1<0){
+            $ua->freeze_balance = $bcround->bcround(bcsub($ua->freeze_balance, $order_model->order_money), 2);
+            if ($ua->freeze_balance * 1 < 0) {
                 $transaction->rollBack();
+
                 return 0;
             }
-            $ua->available_balance=  $bcround->bcround(bcadd($ua->available_balance, $order_model->order_money),2);
+            $ua->available_balance = $bcround->bcround(bcadd($ua->available_balance, $order_model->order_money), 2);
             $uare = $ua->save();
-            if(!$uare){
+            if (!$uare) {
                 $transaction->rollBack();
+
                 return 0;
             }
             //资金记录表
             $mrmodel = new MoneyRecord();
-            $mrmodel->account_id=$ua->id;
-            $mrmodel->sn=MoneyRecord::createSN();
-            $mrmodel->type=MoneyRecord::TYPE_CHEBIAO;
-            $mrmodel->osn=$order_model->sn;
-            $mrmodel->uid=$order_model->uid;
-            $mrmodel->out_money=$order_model->order_money;
-            $mrmodel->status=1;
+            $mrmodel->account_id = $ua->id;
+            $mrmodel->sn = MoneyRecord::createSN();
+            $mrmodel->type = MoneyRecord::TYPE_CHEBIAO;
+            $mrmodel->osn = $order_model->sn;
+            $mrmodel->uid = $order_model->uid;
+            $mrmodel->out_money = $order_model->order_money;
             $mrmodel->balance = $ua->available_balance;
-            $mrmodel->in_money=$order_model->order_money;
+            $mrmodel->in_money = $order_model->order_money;
             $mrres = $mrmodel->save();
-            if(!$mrres){
+            if (!$mrres) {
                 $transaction->rollBack();
+
                 return 0;
             }
             //修改产品为流标
             $online = OnlineProduct::findOne($order_model->online_pid);
             $online->scenario = 'status';
-            $online->status=  OnlineProduct::STATUS_LIU;
+            $online->status = OnlineProduct::STATUS_LIU;
             $opre = $online->save();
-            if(!$opre){
+            if (!$opre) {
                 $transaction->rollBack();
+
                 return 0;
             }
         }
         $transaction->commit();
+
         return 1;
     }
 
     /**
      * 获取订单列表
-     * $cond 条件
+     * $cond 条件.
      */
-    public static function getOrderListByCond($cond = array(),$field='*'){
+    public static function getOrderListByCond($cond = array(), $field = '*')
+    {
         $data = static::find()->where($cond)->select($field)->asArray()->all();
 
         return $data;
     }
-
 }

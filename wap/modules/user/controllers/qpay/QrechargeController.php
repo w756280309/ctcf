@@ -22,11 +22,11 @@ class QrechargeController extends BaseController
         Yii::$app->response->format = Response::FORMAT_JSON;
         $cpuser = $this->user;
         $ubank = $this->ubank;
-        if($this->isDenyVisit) {
+        if ($this->isDenyVisit) {
             return $this->createErrorResponse('用户被禁止访问');
         }
 
-        if(empty($ubank)){
+        if (empty($ubank)) {
             return $this->createErrorResponse('请先绑卡');
         }
         // 已验证的数据:无需验证
@@ -35,7 +35,7 @@ class QrechargeController extends BaseController
             'account_id' => $cpuser->accountInfo->id,
             'bindingSn' => $ubank->binding_sn,
             'bank_id' => strval($ubank->id),
-            'pay_type' => RechargeRecord::PAY_TYPE_QUICK
+            'pay_type' => RechargeRecord::PAY_TYPE_QUICK,
         ];
 
         $rec_model = new RechargeRecord([
@@ -49,7 +49,6 @@ class QrechargeController extends BaseController
             $rec_model->load(Yii::$app->request->post())
             && $rec_model->validate()
         ) {
-
             $req = new Request1375(
                 Yii::$app->params['cfca']['institutionId'],
                 $safe['bindingSn'],
@@ -59,7 +58,7 @@ class QrechargeController extends BaseController
             $resp = $cfca->request($req);
 
             //记录日志
-            $log = new TradeLog($cpuser,$req,$resp);
+            $log = new TradeLog($cpuser, $req, $resp);
             $log->save();
 
             if (false === $resp) {
@@ -76,9 +75,11 @@ class QrechargeController extends BaseController
                 $rec_model->status = RechargeRecord::STATUS_NO;
                 $rec_model->sn = $req->getRechargeSn();
                 $rec_model->save();
+
                 return ['rechargeSn' => $req->getRechargeSn()];
             }
         }
+
         return $this->createErrorResponse($rec_model);
     }
 
@@ -100,7 +101,7 @@ class QrechargeController extends BaseController
         $sms = \Yii::$app->request->post('yzm');
         $from = \Yii::$app->request->post('from');
         $recharge = RechargeRecord::find()->where(['sn' => $pending['recharge_sn']])->one();
-        
+
         if (empty($recharge) || $recharge->status != 0) {
             return $this->createErrorResponse('支付异常');
         }
@@ -110,8 +111,9 @@ class QrechargeController extends BaseController
             return $this->createErrorResponse('支付金额已经修改，请重新请求短信验证码');
         }
         $ret = $this->rechargecheckpay($recharge, $sms);
-        if ($ret === TRUE) {
+        if ($ret === true) {
             \Yii::$app->session->remove('cfca_qpay_recharge');
+
             return [
                 'next' => empty($from) ? '/user/user' : $from,
             ];
@@ -125,7 +127,8 @@ class QrechargeController extends BaseController
      * $yzm 中金短信
      * 快捷支付输入验证码验证支付短信码
      */
-    public function rechargecheckpay($recharge,$yzm){
+    public function rechargecheckpay($recharge, $yzm)
+    {
         $rq1376 = new Request1376(
                 Yii::$app->params['cfca']['institutionId'],
                 $recharge->sn,
@@ -140,15 +143,16 @@ class QrechargeController extends BaseController
         $resp1376 = new Response1376($resp->getText());
 
         //记录日志
-        $log = new TradeLog($this->user,$rq1376,$resp);
+        $log = new TradeLog($this->user, $rq1376, $resp);
         $log->save();
 
         if ($resp1376->isSuccess()) {
+            //测试短信末尾奇数是失败的，金额是30失败
             $bankTxTime = $resp1376->getBankTxTime();
             $user_acount = $this->user->accountInfo;
             //录入money_record记录
             $transaction = Yii::$app->db->beginTransaction();
-            RechargeRecord::updateAll(['status'=>  RechargeRecord::STATUS_YES,'bankNotificationTime'=>$bankTxTime],['id'=>$recharge->id]);
+            RechargeRecord::updateAll(['status' => RechargeRecord::STATUS_YES, 'bankNotificationTime' => $bankTxTime], ['id' => $recharge->id]);
             $bc = new BcRound();
             bcscale(14);
             $money_record = new MoneyRecord([
@@ -156,33 +160,34 @@ class QrechargeController extends BaseController
                 'type' => MoneyRecord::TYPE_RECHARGE,
                 'osn' => $recharge->sn,
                 'account_id' => $this->user->accountInfo->id,
-                'uid' =>  $this->uid,
-                'balance' => $bc->bcround(bcadd($user_acount->available_balance, $recharge->fund),2),
+                'uid' => $this->uid,
+                'balance' => $bc->bcround(bcadd($user_acount->available_balance, $recharge->fund), 2),
                 'in_money' => $recharge->fund,
-                'status' => MoneyRecord::STATUS_SUCCESS
             ]);
-            if(!$money_record->save()) {
+            if (!$money_record->save()) {
                 $transaction->rollBack();
+
                 return $this->createErrorResponse('充值失败');
             }
 
             //录入user_acount记录
             $user_acount->uid = $user_acount->uid;
-            $user_acount->account_balance = $bc->bcround(bcadd($user_acount->account_balance, $recharge->fund),2);
-            $user_acount->available_balance = $bc->bcround(bcadd($user_acount->available_balance, $recharge->fund),2);
-            $user_acount->in_sum = $bc->bcround(bcadd($user_acount->in_sum, $recharge->fund),2);
+            $user_acount->account_balance = $bc->bcround(bcadd($user_acount->account_balance, $recharge->fund), 2);
+            $user_acount->available_balance = $bc->bcround(bcadd($user_acount->available_balance, $recharge->fund), 2);
+            $user_acount->in_sum = $bc->bcround(bcadd($user_acount->in_sum, $recharge->fund), 2);
 
-            if(!$user_acount->save()) {
+            if (!$user_acount->save()) {
                 $transaction->rollBack();
+
                 return $this->createErrorResponse('充值失败');
             }
             $transaction->commit();
+
             return true;
         } else {
             return $this->createErrorResponse('支付失败');
         }
     }
-
 
     private function createErrorResponse($modelOrMessage = null)
     {
