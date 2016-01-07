@@ -3,13 +3,12 @@
 namespace common\models\user;
 
 use yii\behaviors\TimestampBehavior;
-use Yii;
 
 /**
  * This is the model class for table "user_account".
  *
  * @property string $id
- * @property integer $type
+ * @property int $type
  * @property string $uid
  * @property string $account_balance
  * @property string $available_balance
@@ -19,21 +18,23 @@ use Yii;
  * @property string $create_at
  * @property string $updated_at
  */
-class UserAccount extends \yii\db\ActiveRecord {
-
+class UserAccount extends \yii\db\ActiveRecord
+{
     const TYPE_BUY = '1';//投资者
     const TYPE_RAISE = '2';//融资者
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
-    public static function tableName() {
+    public static function tableName()
+    {
         return 'user_account';
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
-    public function rules() {
+    public function rules()
+    {
         return [
             [['type', 'uid'], 'integer'],
             [['uid'], 'required'],
@@ -43,9 +44,10 @@ class UserAccount extends \yii\db\ActiveRecord {
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
-    public function attributeLabels() {
+    public function attributeLabels()
+    {
         return [
             'id' => 'ID',
             'type' => '类型',
@@ -60,45 +62,51 @@ class UserAccount extends \yii\db\ActiveRecord {
         ];
     }
 
-    public function behaviors() {
+    public function behaviors()
+    {
         return [
             TimestampBehavior::className(),
         ];
     }
 
     /**
-     * 获取用户账户信息
+     * 获取用户账户信息.
+     *
      * @param $uid 用户id
      * @param $type 用户类型
+     *
      * @return object
      */
-    public static function getUserAccount($uid=null,$type=1){
-        return static::findOne(['uid'=>$uid,'type'=>$type]);
+    public static function getUserAccount($uid = null, $type = 1)
+    {
+        return static::findOne(['uid' => $uid, 'type' => $type]);
     }
 
     /**
-     *
      * @param type $user
-     * @return int  返回账户类型，3全部，2融资账户，1投资账户
+     *
+     * @return int 返回账户类型，3全部，2融资账户，1投资账户
      */
-    public static function selectAccount($user=null){
+    public static function selectAccount($user = null)
+    {
         $uatype = 0;
         $uid = $user->id;
-        $uabuy = static::findOne(['type'=> self::TYPE_BUY,'uid'=>$uid]);//投资用户
-        $uasale = static::findOne(['type'=> self::TYPE_RAISE,'uid'=>$uid]);//
-        if(!empty($uabuy)&&!empty($uasale)){
+        $uabuy = static::findOne(['type' => self::TYPE_BUY, 'uid' => $uid]);//投资用户
+        $uasale = static::findOne(['type' => self::TYPE_RAISE, 'uid' => $uid]);//
+        if (!empty($uabuy) && !empty($uasale)) {
             $uatype = 3;
-        }else if(!empty($uabuy)||!empty($uasale)){
-            $uac = !empty($uabuy)?$uabuy:$uasale;
+        } elseif (!empty($uabuy) || !empty($uasale)) {
+            $uac = !empty($uabuy) ? $uabuy : $uasale;
             $uatype = $uac->type;
-        }else{//都没有的需要创建投资账户
-            $ua = new UserAccount();
-            $ua->uid=$uid;
-            $ua->type= UserAccount::TYPE_BUY;
+        } else {
+            //都没有的需要创建投资账户
+            $ua = new self();
+            $ua->uid = $uid;
+            $ua->type = self::TYPE_BUY;
             $ua->save();
             $uatype = 1;
         }
-        return $uatype ;
-    }
 
+        return $uatype;
+    }
 }

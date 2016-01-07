@@ -14,9 +14,10 @@ use common\lib\bchelp\BcRound;
 use yii\log\FileTarget;
 use common\models\user\RechargeRecord;
 
-class RechargerecordController extends BaseController {
-
-    public function actionDetail($id = null, $type = null) {
+class RechargerecordController extends BaseController
+{
+    public function actionDetail($id = null, $type = null)
+    {
         //\Yii::beginProfile('myBenchmark');
         $status = Yii::$app->request->get('status');
         $time = Yii::$app->request->get('time');
@@ -29,8 +30,8 @@ class RechargerecordController extends BaseController {
 
         // 时间
         if (!empty($time)) {
-            $query->andFilterWhere(['<', 'created_at', strtotime($time . " 23:59:59")]);
-            $query->andFilterWhere(['>=', 'created_at', strtotime($time . " 0:00:00")]);
+            $query->andFilterWhere(['<', 'created_at', strtotime($time.' 23:59:59')]);
+            $query->andFilterWhere(['>=', 'created_at', strtotime($time.' 0:00:00')]);
         }
 
         //正常显示详情页
@@ -39,22 +40,22 @@ class RechargerecordController extends BaseController {
 
         //取出用户
         $user = User::find()->where(['id' => $id])->select('username,org_name')->one();
-        
+
         $moneyTotal = 0;  //取出充值金额总计，应该包括充值成功的和充值失败的
         $successNum = 0;  //充值成功笔数
         $failureNum = 0;  //充值失败笔数
-        $numdata = RechargeRecordTime::find()->where(['uid' => $id, 'status' => [1,2]])->select('fund,status')->asArray()->all();
+        $numdata = RechargeRecordTime::find()->where(['uid' => $id, 'status' => [1, 2]])->select('fund,status')->asArray()->all();
         $bc = new BcRound();
         bcscale(14);
-        foreach ($numdata as $data){
-            $moneyTotal = bcadd($moneyTotal,$data['fund']);
-            if($data['status']==1){
-                $successNum++;
-            }else{
-                $failureNum++;
+        foreach ($numdata as $data) {
+            $moneyTotal = bcadd($moneyTotal, $data['fund']);
+            if ($data['status'] == 1) {
+                ++$successNum;
+            } else {
+                ++$failureNum;
             }
         }
-        $moneyTotal = $bc->bcround($moneyTotal,2);
+        $moneyTotal = $bc->bcround($moneyTotal, 2);
 //        //充值成功的次数
 //        $successNum = RechargeRecordTime::find()->where(['uid' => $id, 'status' => 1])->count('id');
 //        //充值失败的次数
@@ -73,7 +74,8 @@ class RechargerecordController extends BaseController {
     }
 
     //录入充值数据
-    public function actionEdit($id = null, $type = null) {
+    public function actionEdit($id = null, $type = null)
+    {
         $banks = Yii::$app->params['bank'];
         $bankInfo = ['' => '--请选择--'];
         foreach ($banks as $k => $v) {
@@ -82,11 +84,12 @@ class RechargerecordController extends BaseController {
         $model = new RechargeRecordTime();
         $model->uid = $id;
         $model->pay_type = RechargeRecord::PAY_TYPE_OFFLINE;
-        $model->created_at = strtotime(Yii::$app->request->post("created_at"));
+        $model->created_at = strtotime(Yii::$app->request->post('created_at'));
         $request = Yii::$app->request->post();
-        if($request && empty($model->created_at)) {
+        if ($request && empty($model->created_at)) {
             $this->alert = 1;
             $this->msg = '充值时间不能为空';
+
             return $this->render('edit', [
                    'banks' => $bankInfo,
                    'type' => $type,
@@ -94,23 +97,25 @@ class RechargerecordController extends BaseController {
                    'model' => $model,
             ]);
         }
-        
+
         if ($model->load($request) && $model->validate()) {
-            $userAccountInfo = UserAccount::findOne(['uid'=>$id,'type'=>  UserAccount::TYPE_RAISE]);
-            if (null === $userAccountInfo) {//无融资账户时候需要创建融资账户
+            $userAccountInfo = UserAccount::findOne(['uid' => $id, 'type' => UserAccount::TYPE_RAISE]);
+            if (null === $userAccountInfo) {
+                //无融资账户时候需要创建融资账户
                 $userAccountInfo = new UserAccount(['uid' => $id, 'type' => UserAccount::TYPE_RAISE]);
                 $userAccountInfo->save();
             }
             $model->account_id = $userAccountInfo->id;
             if ($model->save()) {
                 $this->alert = 1;
-                $this->msg = "操作成功";
+                $this->msg = '操作成功';
                 $this->toUrl = "detail?id=$id&type=$type";
             } else {
                 $this->alert = 2;
-                $this->msg = "操作失败";
+                $this->msg = '操作失败';
             }
         }
+
         return $this->render('edit', [
                     'banks' => $bankInfo,
                     'type' => $type,
@@ -119,52 +124,51 @@ class RechargerecordController extends BaseController {
         ]);
     }
 
-    public function actionLog() {
-        $ar=array
-        ( 
-            "auth"=> array 
-            (
-                "user"=>  "customer" ,
-                "password"=>  "password" ,
-                "context"=>  "4" 
-            ) ,
-            "owner"=> array 
-            ( 
-                "user"=>  "customer2" ,
-                "context"=>  "4" 
-            ) ,
-            "language"=>  "en" ,
-            "task"=> array
-            ( 
-                "code"=>  "0130" 
-            ) 
+    public function actionLog()
+    {
+        $ar = array(
+            'auth' => array(
+                'user' => 'customer',
+                'password' => 'password',
+                'context' => '4',
+            ),
+            'owner' => array(
+                'user' => 'customer2',
+                'context' => '4',
+            ),
+            'language' => 'en',
+            'task' => array(
+                'code' => '0130',
+            ),
         );
         $logs = new \common\lib\log\Logs();
-        echo $logs->createXml($ar,1);
+        echo $logs->createXml($ar, 1);
         exit;
         $time = microtime(true);
         $log = new FileTarget();
-        $log->logFile = Yii::$app->getRuntimePath() . '/logs/zhy.log';
+        $log->logFile = Yii::$app->getRuntimePath().'/logs/zhy.log';
         $log->messages[] = ['test', 2, 'application', $time]; //第二个值 1 error 2 warning
-        
+
         $log->export();
     }
-    
-    public function actionRechargeSh() {
+
+    public function actionRechargeSh()
+    {
         $res = 0;
         $op = Yii::$app->request->post('op');
         $id = Yii::$app->request->post('id');
         $type = Yii::$app->request->post('type');
-        
-        if ($op == 'status') {//项目状态
+
+        if ($op == 'status') {
+            //项目状态
             $recharge = RechargeRecord::findOne($id);
-            if($type == 1) {
+            if ($type == 1) {
                 //开启事务
                 $transaction = Yii::$app->db->beginTransaction();
                 $money = $recharge->fund;
                 //先是在recharge_record表上填写流水记录，若添加成功同时往money_record表中更新数据也成功，就准备向user_account表中更新数据，
-                $userAccountInfo = UserAccount::findOne(['uid'=>$recharge->uid,'type'=>  UserAccount::TYPE_RAISE]);//融资账户
-                
+                $userAccountInfo = UserAccount::findOne(['uid' => $recharge->uid, 'type' => UserAccount::TYPE_RAISE]);//融资账户
+
                 $bc = new BcRound();
                 bcscale(14); //设置小数位数
                 //充值时不会冻结资金,账户余额加上充值的钱
@@ -184,25 +188,24 @@ class RechargerecordController extends BaseController {
                 $moneyInfo->balance = $YuE;
                 $moneyInfo->in_money = $money;
                 $moneyInfo->account_id = $userAccountInfo->id;
-                $recharge->status = RechargeRecord::STATUS_YES;
                 if (($moneyInfo->save()) && ($userAccountInfo->save()) && $recharge->save()) {
                     $transaction->commit();
                     $res = $this->alert = 1;
-                    $this->msg = "操作成功";
+                    $this->msg = '操作成功';
                     $this->toUrl = "detail?id=$id&type=$type";
                 } else {
                     $transaction->rollBack();
-                    $this->alert=2;
-                    $this->msg="操作失败";
+                    $this->alert = 2;
+                    $this->msg = '操作失败';
                 }
             } else {
                 $recharge->status = RechargeRecord::STATUS_FAULT;
                 $recharge->save();
             }
         }
-        
-        Yii::$app->response->format = Response::FORMAT_JSON;
-        return ['res'=>$res,'msg'=>"",'data'=>''];
-    }
 
+        Yii::$app->response->format = Response::FORMAT_JSON;
+
+        return ['res' => $res, 'msg' => '', 'data' => ''];
+    }
 }

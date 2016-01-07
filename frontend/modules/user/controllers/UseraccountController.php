@@ -15,30 +15,34 @@ use common\models\user\DrawRecord;
 use common\models\city\Region;
 use common\lib\bchelp\BcRound;
 
-class UseraccountController extends BaseController {
-
+class UseraccountController extends BaseController
+{
     public $layout = false;
 
     /**
-     * 账户中心展示页
+     * 账户中心展示页.
      */
-    public function actionAccountcenter() {
+    public function actionAccountcenter()
+    {
         $uid = $this->uid;
         $check_arr = $this->check_helper();
 
         if ($check_arr[code] == 1) {
             Yii::$app->response->format = Response::FORMAT_JSON;
+
             return $check_arr;
         }
 
         $account = UserAccount::findOne(['type' => UserAccount::TYPE_BUY, 'uid' => $uid]);
+
         return $this->render('accountcenter', ['model' => $account]);
     }
 
     /**
-     * 提现页
+     * 提现页.
      */
-    public function actionTixian() {
+    public function actionTixian()
+    {
         $uid = $this->uid;
         $user_bank = UserBanks::findOne(['uid' => $uid, 'status' => UserBanks::STATUS_YES]);
         $user_acount = UserAccount::findOne(['type' => UserAccount::TYPE_BUY, 'uid' => $uid]);
@@ -74,6 +78,7 @@ class UseraccountController extends BaseController {
 
                 if (!$draw->save()) {
                     $transaction->rollBack();
+
                     return $this->redirect('/user/useraccount/tixianback?flag=err');
                 }
 
@@ -86,26 +91,28 @@ class UseraccountController extends BaseController {
                 $money_record->osn = $draw->sn;
                 $money_record->account_id = $user_acount->id;
                 $money_record->uid = $uid;
-                $money_record->balance = $bc->bcround(bcsub($user_acount->available_balance, $draw->money),2);
+                $money_record->balance = $bc->bcround(bcsub($user_acount->available_balance, $draw->money), 2);
                 $money_record->out_money = $draw->money;
-                $money_record->status = MoneyRecord::STATUS_ZERO;
 
                 if (!$money_record->save()) {
                     $transaction->rollBack();
+
                     return $this->redirect('/user/useraccount/tixianback?flag=err');
                 }
 
                 //录入user_acount记录
                 $user_acount->uid = $user_acount->uid;
-                $user_acount->available_balance = $bc->bcround(bcsub($user_acount->available_balance, $draw->money),2);
-                $user_acount->freeze_balance = $bc->bcround(bcadd($user_acount->freeze_balance, $draw->money),2);
+                $user_acount->available_balance = $bc->bcround(bcsub($user_acount->available_balance, $draw->money), 2);
+                $user_acount->freeze_balance = $bc->bcround(bcadd($user_acount->freeze_balance, $draw->money), 2);
 
                 if (!$user_acount->save()) {
                     $transaction->rollBack();
+
                     return $this->redirect('/user/useraccount/tixianback?flag=err');
                 }
 
                 $transaction->commit();
+
                 return $this->redirect('/user/useraccount/tixianback?flag=succ');
             }
         }
@@ -114,9 +121,10 @@ class UseraccountController extends BaseController {
     }
 
     /**
-     * 补充银行信息
+     * 补充银行信息.
      */
-    public function actionEditbank() {
+    public function actionEditbank()
+    {
         $res = false;
         $message = '操作失败';
         $check_arr = $this->check_helper();
@@ -139,10 +147,11 @@ class UseraccountController extends BaseController {
     }
 
     /**
-     * 提现返回页面
+     * 提现返回页面.
      */
-    public function actionTixianback($flag) {
-        if (!in_array($flag, ['err','succ'])) {
+    public function actionTixianback($flag)
+    {
+        if (!in_array($flag, ['err', 'succ'])) {
             exit('参数错误');
         }
 
@@ -150,10 +159,12 @@ class UseraccountController extends BaseController {
     }
 
     /**
-     * 检查实名认证过程是否完成
+     * 检查实名认证过程是否完成.
      */
-    public function check_helper() {
+    public function check_helper()
+    {
         $cond = 0 | BankService::IDCARDRZ_VALIDATE_N | BankService::BINDBANK_VALIDATE_N | BankService::CHARGEPWD_VALIDATE_N;
-        return BankService::check($this->uid,$cond);
+
+        return BankService::check($this->uid, $cond);
     }
 }
