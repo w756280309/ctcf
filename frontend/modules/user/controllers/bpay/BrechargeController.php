@@ -112,7 +112,7 @@ class BrechargeController extends Controller
             return true;
         } else {
             $uid = $user->id;
-            $user_acount = UserAccount::findOne(['type' => UserAccount::TYPE_BUY, 'uid' => $uid]);
+            $user_acount = UserAccount::findOne(['type' => UserAccount::TYPE_LEND, 'uid' => $uid]);
 
             $bc = new BcRound();
             bcscale(14);

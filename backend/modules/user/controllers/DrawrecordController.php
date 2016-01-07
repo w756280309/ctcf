@@ -89,7 +89,7 @@ class DrawrecordController extends BaseController
         $model->uid = $id;
         $model->created_at = strtotime(Yii::$app->request->post('created_at'));
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            $userAccountInfo = UserAccount::findOne(['uid' => $id, 'type' => UserAccount::TYPE_RAISE]);//融资账户;
+            $userAccountInfo = UserAccount::findOne(['uid' => $id, 'type' => UserAccount::TYPE_BORROW]);//融资账户;
             if (bccomp($userAccountInfo->available_balance, money) < 0) {
                 $this->alert(2, '可用余额不足');
             } else {
@@ -125,7 +125,7 @@ class DrawrecordController extends BaseController
         $msg = '操作失败';
         $draw = DrawRecord::findOne($id);
         if (null !== $draw) {
-            $userAccountInfo = UserAccount::findOne(['uid' => $draw->uid, 'type' => UserAccount::TYPE_RAISE]); //融资账户;
+            $userAccountInfo = UserAccount::findOne(['uid' => $draw->uid, 'type' => UserAccount::TYPE_BORROW]); //融资账户;
             $bc = new BcRound();
             $money = $draw->money;
             bcscale(14); //设置小数位数

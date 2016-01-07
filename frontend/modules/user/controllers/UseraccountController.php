@@ -33,7 +33,7 @@ class UseraccountController extends BaseController
             return $check_arr;
         }
 
-        $account = UserAccount::findOne(['type' => UserAccount::TYPE_BUY, 'uid' => $uid]);
+        $account = UserAccount::findOne(['type' => UserAccount::TYPE_LEND, 'uid' => $uid]);
 
         return $this->render('accountcenter', ['model' => $account]);
     }
@@ -45,7 +45,7 @@ class UseraccountController extends BaseController
     {
         $uid = $this->uid;
         $user_bank = UserBanks::findOne(['uid' => $uid, 'status' => UserBanks::STATUS_YES]);
-        $user_acount = UserAccount::findOne(['type' => UserAccount::TYPE_BUY, 'uid' => $uid]);
+        $user_acount = UserAccount::findOne(['type' => UserAccount::TYPE_LEND, 'uid' => $uid]);
         $province = Region::find()->where(['province_id' => 0])->select('id,name')->asArray()->all();
 
         if ($user_acount->out_sum == 0) {

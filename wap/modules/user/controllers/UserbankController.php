@@ -210,7 +210,7 @@ class UserbankController extends BaseController
             $this->redirect('/site/usererror');
         }
         $user_bank = UserBanks::find()->where(['uid' => $uid])->select('id,binding_sn,bank_id,bank_name,card_number,status')->one();
-        $user_acount = UserAccount::find()->where(['type' => UserAccount::TYPE_BUY, 'uid' => $uid])->select('id,uid,in_sum,available_balance')->one();
+        $user_acount = UserAccount::find()->where(['type' => UserAccount::TYPE_LEND, 'uid' => $uid])->select('id,uid,in_sum,available_balance')->one();
 
         //检查用户是否绑卡
         $cond = 0 | BankService::IDCARDRZ_VALIDATE_N | BankService::BINDBANK_VALIDATE_N | BankService::CHARGEPWD_VALIDATE_N;
@@ -236,7 +236,7 @@ class UserbankController extends BaseController
         }
 
         $user_bank = UserBanks::find()->where(['uid' => $uid, 'status' => UserBanks::STATUS_YES])->select('bank_id,bank_name,account,card_number')->one();
-        $user_acount = UserAccount::find()->where(['type' => UserAccount::TYPE_BUY, 'uid' => $uid])->select('available_balance')->one();
+        $user_acount = UserAccount::find()->where(['type' => UserAccount::TYPE_LEND, 'uid' => $uid])->select('available_balance')->one();
 
         if ($user_acount->out_sum == 0) {
             $cond = 0 | BankService::IDCARDRZ_VALIDATE_N | BankService::BINDBANK_VALIDATE_N | BankService::CHARGEPWD_VALIDATE_N | BankService::EDITBANK_VALIDATE;
@@ -308,7 +308,7 @@ class UserbankController extends BaseController
         }
 
         $user_bank = $this->user->bank;
-        $user_acount = $this->user->accountInfo;
+        $user_acount = $this->user->lendAccount;
         $model = new EditpassForm();
         $model->scenario = 'checktradepwd';
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {

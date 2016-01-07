@@ -52,16 +52,16 @@ class UserController extends BaseController {
         if($type == User::USER_TYPE_PERSONAL){
            if (!empty($name)) {
                 $query->andFilterWhere(['like','real_name',$name]);
-           } 
+           }
            if (!empty($mobile)) {
                 $query->andFilterWhere(['like','mobile',$mobile]);
-           } 
+           }
         }else{
             if (!empty($name)) {
                 $query->andFilterWhere(['like','org_name',$name]);
             }
         }
-        
+
         $pages = new Pagination(['totalCount' => $query->count(), 'pageSize' => '15']);
         $model = $query->offset($pages->offset)->limit($pages->limit)->orderBy('created_at desc')->all();
         return $this->render('list', [
@@ -116,7 +116,7 @@ class UserController extends BaseController {
             $rcMax = RechargeRecord::find()->where(['status'=>  RechargeRecord::STATUS_YES,'uid'=>$id])->max('updated_at');
         }else{
             $rcMax = OnlineProduct::find()->where(['del_status'=> OnlineProduct::STATUS_USE,'borrow_uid'=>$id])->min('start_date');
-        }            
+        }
         $tztimeMax = OnlineOrder::find()->where(['status'=>  OnlineOrder::STATUS_SUCCESS,'uid'=>$id])->max('updated_at');
 
         return $this->render('detail',[
@@ -137,26 +137,26 @@ class UserController extends BaseController {
             "id"=>$id,
         ]);
     }
-        
+
     //添加新融资客户
     public function actionEdit($id=null,$type=2){
         $model = $id ? User::findOne($id):(new User());
-        if($type!=1){ 
+        if($type!=1){
             //添加
-            $model->scenario = 'add'; 
+            $model->scenario = 'add';
             $model->type = $type;
             if(empty($id)){
                 $model->usercode = User::create_code("usercode","WDJFQY",6,4);
             }
             if ($model->load(Yii::$app->request->post()) && $model->validate())
-            { 
-                if($model->save()) { 
+            {
+                if($model->save()) {
                     if(empty($id)) {
-                        //添加一个融资会员的时候，同时生成对应的一条user_account记录                        
+                        //添加一个融资会员的时候，同时生成对应的一条user_account记录
                         $userAccount = new UserAccount;
                         //$userAccount->uid = Yii::$app->db->getLastInsertID();
                         $userAccount->uid = $model->id;
-                        $userAccount->type = UserAccount::TYPE_RAISE;
+                        $userAccount->type = UserAccount::TYPE_BORROW;
                         $userAccount->save();
                     }
                     //$this->alert = 1;
@@ -164,13 +164,13 @@ class UserController extends BaseController {
                 } else {
                     $this->alert = 1;
                     $this->toUrl = "edit";
-                }                
+                }
             }
         }else{
             $model->scenario = 'edit';
             //$createUsercode = $model->usercode;
             if ($model->load(Yii::$app->request->post()) && $model->validate())
-                { 
+                {
                     if($model->save()){
                         //$this->alert = 1;
                         $this->redirect(array("/user/user/".($type?'listt':'listr'),"type"=>$type));
@@ -178,10 +178,10 @@ class UserController extends BaseController {
                     $this->alert = 1;
                     //$this->msg = "failure";
                     $this->toUrl = "edit";
-                }         
-        }        
-        
-        
+                }
+        }
+
+
 //        $model->scenario = 'edit';
 //        $query = User::find();
 //        $pages = new Pagination(['totalCount' => $query->count(), 'pageSize' => '10']);
@@ -193,7 +193,7 @@ class UserController extends BaseController {
                 'model'=>$model,
         ]);
     }
-    
+
     public function actionT(){
         $uid = 4;
         $uabc = new \backend\modules\user\core\v1_0\UserAccountBackendCore();
@@ -202,5 +202,5 @@ class UserController extends BaseController {
         $resret = $uabc->getReturnInfo($uid);
         var_dump($resret);
     }
-    
+
 }

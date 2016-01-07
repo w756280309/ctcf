@@ -250,7 +250,7 @@ class OrderController extends BaseController
      */
     public function actionFkdeny()
     {
-        //return $this->fkExamin(OnlineFangkuan::STATUS_DENY); 
+        //return $this->fkExamin(OnlineFangkuan::STATUS_DENY);
         $status = OnlineFangkuan::STATUS_DENY;
         Yii::$app->response->format = Response::FORMAT_JSON;
         $oids = Yii::$app->request->post('oids');
@@ -479,7 +479,7 @@ class OrderController extends BaseController
         $mrecord = new MoneyRecord();
         $fee_rate = $product->fee;
         $total_in_money = 0;
-        $ua = UserAccount::getUserAccount($product->borrow_uid, UserAccount::TYPE_RAISE);
+        $ua = UserAccount::getUserAccount($product->borrow_uid, UserAccount::TYPE_BORROW);
         if (empty($ua)) {
             $transaction->rollBack();
 
