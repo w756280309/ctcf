@@ -7,7 +7,6 @@
  */
 namespace app\controllers;
 
-use common\models\user\User;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 
