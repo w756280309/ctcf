@@ -66,8 +66,7 @@ class UserAccountAcesssControl extends ActionFilter
      */
     public function beforeAction($action)
     {
-        $user = $this->user;
-        if ($user->identity->status == 0) {
+        if (null !== $this->user && 0 === $this->user->identity->status) {
             return Yii::$app->getResponse()->redirect('/site/usererror');
         }
 

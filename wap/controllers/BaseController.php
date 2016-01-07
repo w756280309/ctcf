@@ -7,24 +7,22 @@
  */
 namespace app\controllers;
 
-use yii\web\Controller;
-use yii\filters\AccessControl;
 use common\models\user\User;
+use yii\filters\AccessControl;
+use yii\web\Controller;
 
 class BaseController extends Controller
 {
-    protected $uid;
     protected $user;
 
     public function init()
     {
         error_reporting(E_ALL ^ E_NOTICE);
-        if (\Yii::$app->user->isGuest) {
-            $this->uid = 0;
-        } else {
-            $this->uid = \Yii::$app->user->id;
+
+        if (!\Yii::$app->user->isGuest) {
             $this->user = \Yii::$app->user->getIdentity();
         }
+
         parent::init();
     }
 
