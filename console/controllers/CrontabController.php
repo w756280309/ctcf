@@ -35,6 +35,7 @@ use PayGate\Cfca\Response\Response1810;
 use PayGate\Cfca\Response\Response1520;
 use common\models\user\Batchpay;
 use common\models\user\DrawRecord;
+use common\models\sms\SmsMessage;
 
 class CrontabController extends Controller
 {
@@ -44,11 +45,29 @@ class CrontabController extends Controller
     public function actionUpdatefull()
     {
         $data = OnlineProduct::find()->where(['finish_rate' => 1, 'status' => 2])->all();
+        $sms = new SmsMessage([
+            'template_id' => Yii::$app->params['sms']['manbiao']
+        ]);
         foreach ($data as $dat) {
             $pid = $dat['id'];
             OnlineProduct::updateAll(['status' => 3, 'sort' => OnlineProduct::SORT_FULL], ['id' => $pid]);
             //$orders = OnlineOrder::find()->where(['online_pid'=>$pid,'status'=>  OnlineOrder::STATUS_SUCCESS])->asArray()->select('id,order_money,refund_method,yield_rate,expires,uid,order_time')->all();
             //OnlineRepaymentPlan::createPlan($pid,$orders);//转移到开始计息部分
+            
+            $online_order = OnlineOrder::find()->where(['online_pid' => $dat['id'], 'status' => OnlineOrder::STATUS_SUCCESS])->groupBy('uid')->all();
+            foreach ($online_order as $order) {
+                $message = [
+                    $order['real_name'],
+                    $dat['title']
+                ];
+
+                $_sms = clone $sms;
+                $_sms->uid = $order['uid'];        
+                $_sms->mobile = $order['mobile'];
+                $_sms->message = json_encode($message);
+
+                $_sms->save();
+            }
         }
     }
     /**
@@ -470,6 +489,19 @@ class CrontabController extends Controller
                     $user_acount->save();
                     $money_record->save();
                     RechargeRecord::updateAll(['status' => 1, 'bankNotificationTime' => $rp1320->getBankNotifyTime()], ['id' => $rc->id]);
+                    
+                    $user = User::findOne($rc->uid);
+                    $message = [
+                        $user->real_name,
+                        $rc->fund
+                    ];
+                    $sms = new SmsMessage([
+                        'uid' => $user->id,
+                        'template_id' => Yii::$app->params['sms']['recharge'],
+                        'mobile' => $user->mobile,
+                        'message' => json_encode($message)
+                    ]);
+                    $sms->save();
                 }
             }
         }

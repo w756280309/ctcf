@@ -12,6 +12,7 @@ use common\models\TradeLog;
 use common\lib\cfca\Payment;
 use common\models\user\User;
 use common\models\user\Jiesuan;
+use common\models\sms\SmsMessage;
 use PayGate\Cfca\Message\Request1318;
 use PayGate\Cfca\Message\Request1348;
 
@@ -151,6 +152,18 @@ class BrechargeController extends Controller
 
                 return false;
             }
+            
+            $message = [
+                $user->real_name,
+                $recharge->fund
+            ];
+            $sms = new SmsMessage([
+                'uid' => $user->id,
+                'template_id' => Yii::$app->params['sms']['recharge'],
+                'mobile' => $user->mobile,
+                'message' => json_encode($message)
+            ]);
+            $sms->save();
 
             $transaction->commit();
 

@@ -33,4 +33,12 @@ return [
         /*结算账号设置 end*/
     ],
     'bank' => require(__DIR__.'/banks.php'),
+    'sms' => [
+        'manbiao' => 1,
+        'tixian' => 2,
+        'toubiao' => 3,
+        'recharge' => 4,
+        'huikuan' => 5,
+        'yzm' => 6
+    ],
 ];

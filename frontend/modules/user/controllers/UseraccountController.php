@@ -14,6 +14,7 @@ use common\models\user\UserBanks;
 use common\models\user\DrawRecord;
 use common\models\city\Region;
 use common\lib\bchelp\BcRound;
+use common\models\sms\SmsMessage;
 
 class UseraccountController extends BaseController
 {
@@ -110,6 +111,19 @@ class UseraccountController extends BaseController
 
                     return $this->redirect('/user/useraccount/tixianback?flag=err');
                 }
+                
+                $message = [
+                    $this->user->real_name,
+                    date('Y-m-d H:i:s', $draw->created_at),
+                    $draw->money
+                ];
+                $sms = new SmsMessage([
+                    'uid' => $uid,
+                    'template_id' => Yii::$app->params['sms']['tixian'],
+                    'mobile' => $this->user->mobile,
+                    'message' => json_encode($message)
+                ]);
+                $sms->save();
 
                 $transaction->commit();
 

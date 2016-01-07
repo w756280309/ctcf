@@ -9,6 +9,9 @@ use backend\controllers\BaseController;
 use common\models\contract\ContractTemplate;
 use common\models\user\User;
 use common\models\order\OnlineRepaymentPlan;
+use common\models\sms\SmsMessage;
+use common\models\order\OnlineOrder;
+
 /**
  * Description of OnlineProduct
  *
@@ -29,11 +32,11 @@ class ProductonlineController extends BaseController {
         $rongziInfo =[];
         foreach ($rongziUser as $k=>$v){
             $rongziInfo[$v['id']] = $v['org_name'];
-        }     
+        }
         $model = $id ? OnlineProduct::findOne($id) : new OnlineProduct();
         $ctmodel = array();
         $model->scenario = 'create';
-         
+
         if ($id) {
             $model->start_date = date('Y-m-d H:i', $model->start_date);
             $model->end_date = date('Y-m-d  H:i', $model->end_date);
@@ -42,10 +45,10 @@ class ProductonlineController extends BaseController {
             $model->yield_rate = bcmul($model->yield_rate, 100, 2);
             $model->fazhi = round($model->fazhi);
             $model->fazhi_up = round($model->fazhi_up);
-            
+
             $ctmodel = ContractTemplate::find()->where(['pid'=>$id])->asArray()->all();
         }
-        
+
         if ($model->load(Yii::$app->request->post())&&$model->validate()) {
             if(empty($id)){
                 $model->sn = OnlineProduct::createSN();
@@ -63,7 +66,7 @@ class ProductonlineController extends BaseController {
             if($start>$end||$start>$finish||$end>$finish){
                 $bool=false;
             }
-            
+
             $err="";
             if(!$model->is_jixi && !empty($model->jixi_time)) {
                 if($jixi_time < $start) {
@@ -82,10 +85,10 @@ class ProductonlineController extends BaseController {
                     }
                 }
             }
-            
+
             $con_name_arr = Yii::$app->request->post('name');
             $con_content_arr = Yii::$app->request->post('content');
-            
+
             if($model->expires>$diff['day']){
                 $model->addError('expires',"项目天数 应该小于等于 项目截止日 - 募集开始时间;当前天数：".$diff['day'].'天');
             }else if(!$bool){
@@ -98,7 +101,7 @@ class ProductonlineController extends BaseController {
                 $model->addError('contract_type','合同协议至少要输入一份');
             }else{
                 $transaction = Yii::$app->db->beginTransaction();
-                
+
                 $model->start_date = strtotime($model->start_date);
                 $model->end_date = strtotime($model->end_date);
                 $model->finish_date = strtotime($model->finish_date);
@@ -111,11 +114,11 @@ class ProductonlineController extends BaseController {
                     var_dump($model->getErrors());
                     $transaction->rollBack();
                     exit('录入ProductOnline异常');
-                } else {                    
+                } else {
                     if ($id) {
                         ContractTemplate::deleteAll(['pid'=>$id]);
                     }
-                    
+
                     $record = new ContractTemplate();
                     foreach ($con_name_arr as $key => $val) {
                         $record_model = clone $record;
@@ -136,7 +139,7 @@ class ProductonlineController extends BaseController {
         return $this->render('edit', ['pid' => $id, 'model' => $model,'ctmodel'=>$ctmodel, 'product_status' => $product_status,'rongziInfo'=>$rongziInfo]);
     }
 
-    
+
     /**
      * 上线操作
      */
@@ -230,7 +233,7 @@ class ProductonlineController extends BaseController {
         $msg = $res ? "撤标成功" : "撤标失败";
         return ['res' => $res, 'msg' => $msg];
     }
-    
+
     public function actionList()
     {
         $status = Yii::$app->params['deal_status'];
@@ -262,7 +265,7 @@ class ProductonlineController extends BaseController {
                 ->from('online_order')
                 ->groupBy('online_pid')
                 ->all();
-        
+
         //联表查询出表格内容，联的是online_order 和user 共计两张表
         $query = (new \yii\db\Query())
                 ->select('o.id,real_name,mobile,order_money,order_time,o.status')
@@ -277,21 +280,21 @@ class ProductonlineController extends BaseController {
         $result = Yii::$app->request->get();
         var_dump($result);
     }
-    
+
     //ajax请求删除
     public function actionDel(){
         $id = Yii::$app->request->post("id");
         if($id){
             $model = OnlineProduct::findOne($id);
             $model->scenario = "del";
-            $model->del_status = 1;        
+            $model->del_status = 1;
             if($model->save()){
-                echo json_encode("success") ;             
+                echo json_encode("success") ;
             }
-        }        
+        }
     }
 
-    
+
     /**
      * 项目提前成立
      */
@@ -314,7 +317,7 @@ class ProductonlineController extends BaseController {
             return ['result' => '0', 'message' => 'ID不能为空'];
         }
     }
-    
+
     /**
      * 确认起息
      * @param type $id
@@ -327,12 +330,12 @@ class ProductonlineController extends BaseController {
             $model = OnlineProduct::findOne($id);
             if(empty($model)||
               !in_array($model->status,[OnlineProduct::STATUS_NOW,OnlineProduct::STATUS_FULL,OnlineProduct::STATUS_FOUND,OnlineProduct::STATUS_HUAN])||
-               empty($model->jixi_time)     
+               empty($model->jixi_time)
              ){
                 return ['result' => '0', 'message' => '无法找到该项目,或者项目现阶段不允许开始计息'];
             }else{
                 $res = OnlineRepaymentPlan::createPlan($id);//转移到开始计息部分
-                
+
                 if($res){
                     return ['result' => '1', 'message' => '操作成功'];
                 }else{
@@ -343,7 +346,7 @@ class ProductonlineController extends BaseController {
             return ['result' => '0', 'message' => 'ID不能为空'];
         }
     }
-    
+
 
     /**
      * 设置计息时间
@@ -351,7 +354,7 @@ class ProductonlineController extends BaseController {
     public function actionJixi($product_id=null) {
         $this->layout=false;
         $c_flag = 0;
-        $model = OnlineProduct::findOne($product_id);        
+        $model = OnlineProduct::findOne($product_id);
         $model->scenario = 'jixi';
         if($model->is_jixi == 1) {
             $this->alert = 2;
@@ -366,7 +369,7 @@ class ProductonlineController extends BaseController {
             }else if($model->jixi_time > $model->finish_date) {
                 $err = '计息开始时间必须小于项目的截止时间 '.date("Y-m-d",$model->finish_date);
             }
-            
+
             if(!empty($err)) {
                 $model->addError('jixi_time', $err);
             } else {
@@ -375,14 +378,14 @@ class ProductonlineController extends BaseController {
                 $c_flag = 'close';
             }
         }
-        
+
         if(!empty($model->jixi_time)) {
             $model->jixi_time = date('Y-m-d',$model->jixi_time);
         }
-        
+
         return $this->render('jixi',['model' => $model, 'c_flag' => $c_flag]);
     }
-    
+
     /**
      * 提前结束募集时间
      */
@@ -390,19 +393,40 @@ class ProductonlineController extends BaseController {
         $res = 0;
         $id = Yii::$app->request->post("pid");
         Yii::$app->response->format = Response::FORMAT_JSON;
-        
+
         if($id){
             $model = OnlineProduct::findOne($id);
             $model->scenario = "status";
-            
+
             if($model->online_status == OnlineProduct::STATUS_ONLINE && $model->status == OnlineProduct::STATUS_NOW) {
                 $model->status = OnlineProduct::STATUS_FOUND;
                 $model->full_time = time();
                 $res = $model->save();
+
+                if ($res) {
+                    $online_order = OnlineOrder::find()->where(['online_pid' => $model->id, 'status' => OnlineOrder::STATUS_SUCCESS])->groupBy('uid')->all();
+                    $sms = new SmsMessage([
+                        'template_id' => Yii::$app->params['sms']['manbiao']
+                    ]);
+
+                    foreach ($online_order as $order) {
+                        $message = [
+                            $order['username'],
+                            $model->title
+                        ];
+
+                        $_sms = clone $sms;
+                        $_sms->uid = $order['uid'];
+                        $_sms->mobile = $order['mobile'];
+                        $_sms->message = json_encode($message);
+
+                        $_sms->save();
+                    }
+                }
             }
         }
-        
+
         return ['res'=>$res,'msg'=>"",'data'=>''];
     }
-    
+
 }

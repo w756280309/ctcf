@@ -47,7 +47,7 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
             <div class="row kahao">
                 <div class="hidden-xs col-sm-1"></div>
                 <div class="col-xs-3 col-sm-1">短信验证码</div>
-                <div class="col-xs-9 col-sm-8 safe-lf"><input type="text" id="yzm"  name='yzm' placeholder="输入验证码"/></div>
+                <div class="col-xs-9 col-sm-8 safe-lf"><input type="text" id="yzm"  name='yzm' placeholder="输入验证码" maxlength="6"/></div>
                 <div class="hidden-xs col-sm-1"><input class="yzm yzm-normal" name="createsms" id="createsms" value="获取验证码" type="button" style="margin-top:-4px;font-size:12px;height:28px;line-height:27px;color: white !important"></div>
             </div>
            

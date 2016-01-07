@@ -11,6 +11,7 @@ use common\models\user\MoneyRecord;
 use common\models\user\User;
 use common\models\user\UserAccount;
 use common\models\user\UserBanks;
+use common\models\sms\SmsMessage;
 use common\service\BankService;
 use common\service\SmsService;
 use common\service\UserService;
@@ -373,6 +374,19 @@ class UserbankController extends BaseController
 
                 return ['code' => 1, 'message' => '提现失败'];
             }
+            
+            $message = [
+                $user->real_name,
+                date('Y-m-d H:i:s', $draw->created_at),
+                $draw->money
+            ];
+            $sms = new SmsMessage([
+                'uid' => $uid,
+                'template_id' => Yii::$app->params['sms']['tixian'],
+                'mobile' => $user->mobile,
+                'message' => json_encode($message)
+            ]);
+            $sms->save();
 
             $transaction->commit();
 

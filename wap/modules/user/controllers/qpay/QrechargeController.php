@@ -11,6 +11,7 @@ use PayGate\Cfca\Response\Response1376;
 use common\models\user\MoneyRecord;
 use common\lib\bchelp\BcRound;
 use common\models\TradeLog;
+use common\models\sms\SmsMessage;
 use Yii;
 use yii\base\Model;
 use yii\web\Response;
@@ -174,6 +175,19 @@ class QrechargeController extends BaseController
 
                 return $this->createErrorResponse('充值失败');
             }
+            
+            $message = [
+                $this->user->real_name,
+                $recharge->fund
+            ];
+            $sms = new SmsMessage([
+                'uid' => $this->user->id,
+                'template_id' => Yii::$app->params['sms']['recharge'],
+                'mobile' => $this->user->mobile,
+                'message' => json_encode($message)
+            ]);
+            $sms->save();
+            
             $transaction->commit();
 
             return true;

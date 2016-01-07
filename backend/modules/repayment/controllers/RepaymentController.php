@@ -12,6 +12,8 @@ use common\models\user\MoneyRecord;
 use common\models\user\UserAccount;
 use common\lib\product\ProductProcessor;
 use common\lib\bchelp\BcRound;
+use common\models\user\User;
+use common\models\sms\SmsMessage;
 
 /**
  * OrderController implements the CRUD actions for OfflineOrder model.
@@ -77,7 +79,7 @@ class RepaymentController extends BaseController
         }
         $pid = Yii::$app->request->post('pid');
         $deal = OnlineProduct::findOne(['id' => $pid]);
-        $saleac = UserAccount::getUserAccount($deal->borrow_uid, 2);
+        $saleac = UserAccount::findOne(['uid' => $deal->borrow_uid, 'type' => UserAccount::TYPE_BORROW]);
         $pp = new ProductProcessor();
         $bcround = new BcRound();
         bcscale(14);
@@ -155,7 +157,7 @@ class RepaymentController extends BaseController
 
                 return ['result' => 0, 'message' => '还款失败，状态修改失败'];
             }
-            $ua = UserAccount::getUserAccount($order['uid']);
+            $ua = UserAccount::findOne(['uid' => $order['uid']]);
             //var_dump($ua);exit;
             //投资人账户调整
             $ua->freeze_balance = $bcround->bcround(bcsub($ua->freeze_balance, $order['benjin']), 2); //将投标的钱从冻结金额中减去
@@ -226,6 +228,30 @@ class RepaymentController extends BaseController
 
             return ['result' => 0, 'message' => '还款失败，修改标的状态错误'];
         }
+        
+        $_repaymentrecord = OnlineRepaymentRecord::find()->where(['online_pid' => $pid, 'status' => OnlineRepaymentRecord::STATUS_DID])->groupBy('uid');
+        $data = $_repaymentrecord->all();
+        $sms = new SmsMessage([
+            'template_id' => Yii::$app->params['sms']['huikuan']
+        ]);
+
+        foreach ($data as $val) {
+            $user = User::findOne($val->uid);
+            $data_arr = $_repaymentrecord->having(['uid' => $val['uid']])->select("sum(benjin) as benjin, sum(lixi) as lixi")->createCommand()->queryAll();
+            $message = [
+                $user->real_name,
+                $data_arr[0]['benjin'],
+                $data_arr[0]['lixi']
+            ];
+
+            $_sms = clone $sms;
+            $_sms->uid = $user->id;
+            $_sms->mobile = $user->mobile;
+            $_sms->message = json_encode($message);
+
+            $_sms->save();
+        }
+        
         $transaction->commit();
 
         return [
@@ -258,7 +284,7 @@ class RepaymentController extends BaseController
 
             return ['result' => 0, 'message' => '标的状态更新失败'];
         }
-        $ua = UserAccount::getUserAccount($product->borrow_uid, UserAccount::TYPE_BORROW);
+        $ua = UserAccount::findOne(['uid' => $product->borrow_uid, 'type' => UserAccount::TYPE_BORROW]);
        // var_dump($product->borrow_uid);exit;
         $ua->account_balance = $bcround->bcround(bcadd($ua->account_balance, $product->money), 2);
         $ua->available_balance = $bcround->bcround(bcadd($ua->available_balance, $product->money), 2);

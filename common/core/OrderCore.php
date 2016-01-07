@@ -8,6 +8,7 @@ use common\service\PayService;
 use common\models\order\OnlineOrder;
 use common\models\product\OnlineProduct;
 use common\models\user\MoneyRecord;
+use common\models\sms\SmsMessage;
 
 /**
  * Desc 主要用于实时读取用户资金信息
@@ -103,6 +104,21 @@ class OrderCore
             OnlineOrder::updateAll(['expires' => $diff['day'] - 1], ['online_pid' => $model->id]);
         }
         $res = OnlineProduct::updateAll($update, ['id' => $model->id]);
+        
+        //投标成功，向用户发送短信
+        $message = [
+            $user->real_name,
+            $model->title,
+            $price
+        ];
+        $sms = new SmsMessage([
+            'uid' => $user->id,
+            'template_id' => Yii::$app->params['sms']['toubiao'],
+            'mobile' => $user->mobile,
+            'message' => json_encode($message)
+        ]);
+        $sms->save();
+        
         $transaction->commit();
 
         return ['code' => PayService::ERROR_SUCCESS,  'message' => ''];
