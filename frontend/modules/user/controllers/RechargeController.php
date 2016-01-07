@@ -115,7 +115,7 @@ class RechargeController extends BaseController {
         if ($resp->isSuccess()) {
             if ($rp1320->isSuccess()) {
                 $recharge = RechargeRecord::findOne(['sn' => $req->getPaymentNo()]);
-                $recharge->bankNotificationTime = $rp1320->getBankNotificationTime();
+                $recharge->bankNotificationTime = $rp1320->getBanknotificationtime();
 
                 if (empty($recharge)) {
                     return $this->redirect('/user/recharge/recharge-err');

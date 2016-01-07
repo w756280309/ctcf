@@ -35,6 +35,7 @@ use PayGate\Cfca\Response\Response1810;
 use PayGate\Cfca\Response\Response1520;
 use common\models\user\Batchpay;
 use common\models\user\DrawRecord;
+use common\models\sms\SmsMessage;
 
 class CrontabController extends Controller
 {
@@ -445,7 +446,7 @@ class CrontabController extends Controller
             $resp = $cfca->request($rq1320);
             $rp1320 = new Response1320($resp->getText());
             if ($rp1320->isSuccess()) {
-                $mr = MoneyRecord::findOne(['type' => MoneyRecord::TYPE_RECHARGE, 'osn' => $rc->sn, 'status' => MoneyRecord::STATUS_SUCCESS]);
+                $mr = MoneyRecord::findOne(['type' => MoneyRecord::TYPE_RECHARGE, 'osn' => $rc->sn]);
                 if ($mr === null) {
                     $user_acount = UserAccount::findOne(['type' => UserAccount::TYPE_LEND, 'uid' => $rc->uid]);
 
@@ -467,17 +468,28 @@ class CrontabController extends Controller
 
                     $user_acount->save();
                     $money_record->save();
-                    RechargeRecord::updateAll(['status' => 1, 'bankNotificationTime' => $rp1320->getBankNotifyTime()], ['id' => $rc->id]);
+                    $rc->status = RechargeRecord::STATUS_YES;
+                    $rc->save();
+                    RechargeRecord::updateAll(['status' => 1, 'bankNotificationTime' => $rp1320->getBanknotificationtime()], ['id' => $rc->id]);
                 }
             }
         }
     }
     
     /**
-     * 短信发送任务
+     * 短信发送任务[文件锁]
      */
     public function actionSms()
     {
-        
+        $messages = SmsMessage::find()->where(['status' => SmsMessage::STATUS_WAIT])->orderBy('id desc')->all();
+        foreach ($messages as $msg) {
+            $result = \Yii::$container->get('sms_lib')->send($msg);
+            if ($result) {
+                $msg->status = SmsMessage::STATUS_SENT;
+            } else {
+                $msg->status = SmsMessage::STATUS_FAIL;
+            }
+            $msg->save(false);
+        }
     }
 }

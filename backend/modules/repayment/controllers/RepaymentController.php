@@ -171,7 +171,7 @@ class RepaymentController extends BaseController
             //增加资金记录
             $money_record->account_id = $ua->id;
             $money_record->sn = MoneyRecord::createSN();
-            $money_record->type = MoneyRecord::TYPE_HUANKUAN;
+            $money_record->type = MoneyRecord::TYPE_HUIKUAN;
             $money_record->osn = $order->sn;
             $money_record->uid = $order['uid'];
             $benxiyuqi = $bcround->bcround(bcadd($record->benxi, $order['overdue']), 2);

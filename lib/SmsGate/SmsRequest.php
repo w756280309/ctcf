@@ -20,7 +20,7 @@ class SmsRequest {
         $sms = new Sms();
         $msg_arr = json_decode($message->message, false);
         $data = $sms->sendTemplateSMS($message->mobile, $msg_arr, $message->template_id);
-        return 2000 === (int)$data->statusCode;
+        return '000000' === (string)$data->statusCode;
     }
 
 }

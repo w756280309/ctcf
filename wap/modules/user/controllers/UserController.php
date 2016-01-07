@@ -28,13 +28,12 @@ class UserController extends BaseController
 
     /**
      * 输出个人交易明细记录
-     * 输出信息均为成功记录，仅包括四类：充值、提现、投资、还款.
+     * 输出信息均为成功记录
      */
     public function actionMingxi($page = 1, $size = 10)
     {
         $this->layout = '@app/modules/order/views/layouts/buy';
-        $type = [MoneyRecord::TYPE_RECHARGE, MoneyRecord::TYPE_DRAW, MoneyRecord::TYPE_ORDER, MoneyRecord::TYPE_HUANKUAN];
-        $data = MoneyRecord::find()->where(['uid' => $this->uid, 'type' => $type])
+        $data = MoneyRecord::find()->where(['uid' => $this->uid])
             ->select('created_at,type,in_money,out_money,balance')
             ->orderBy('id desc');
         $pg = \Yii::$container->get('paginator')->paginate($data, $page, $size);
