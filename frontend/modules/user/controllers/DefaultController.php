@@ -115,7 +115,7 @@ class DefaultController extends BaseController {
         }
     }
 
-    //线下我的资产	
+    //线下我的资产
 //	public function actionMeans($tab = 0) {
 //		if (Yii::$app->user->getIdentity()->channel_id) {
 //			$condition = ['channel_user_sn' => Yii::$app->user->getIdentity()->channel_user_sn];
@@ -331,7 +331,7 @@ class DefaultController extends BaseController {
      * $method 1短信 2电话
      */
     public function actionCheckmobile($mobile = null, $uid = null, $method = null, $temp = null) {
-        
+
         if (empty($uid)) {
             echo json_encode(array('code' => 0, 'msg' => '参数错误'));
             exit;
@@ -417,7 +417,7 @@ class DefaultController extends BaseController {
             $mail->setFrom('service@njfae.cn');
             $mail->setTo($param['rev_mail']);
             $mail->setSubject($param['subject']);
-            //$mail->setTextBody($param['text_body']);  
+            //$mail->setTextBody($param['text_body']);
             //$mail->setHtmlBody($param['html_body']);    //普通邮件发送
             $mail->send();
         }
@@ -436,9 +436,9 @@ class DefaultController extends BaseController {
         $uatype = $session->get('useraccount');
         $account_id = UserAccount::find()->where(['uid' => $id, 'type' => $uatype])->one()->id;
         $selectquery = array('uid' => $id, 'account_id' => $account_id);
-        $remaining = UserAccount::getUserAccount($this->uid, $uatype)->available_balance;
+        $remaining = UserAccount::getUserAccount($this->user->id, $uatype)->available_balance;
 
-        //若$investtype = investtype 为融资人的资金管理，否则为投资人的资金管理	
+        //若$investtype = investtype 为融资人的资金管理，否则为投资人的资金管理
         $investtype = investtype;
         if (is_numeric($type)) {
             $selectquery['type'] = $type;

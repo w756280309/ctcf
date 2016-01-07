@@ -28,7 +28,7 @@ class OrderController extends BaseController {
         //判断是否合规
         if ($buystatus == OnlineProduct::ERROR_SUCCESS) {
             $uacore = new UserAccountCore();
-            $ua = $uacore->getUserAccount($this->uid);
+            $ua = $uacore->getUserAccount($this->user->id);
             $deal = OnlineProduct::findOne(['sn' => $sn]);
             //var_dump($deal->contract);
             $param['order_balance'] = OnlineOrder::getOrderBalance($deal->id); //计算标的可投余额;
@@ -72,19 +72,19 @@ class OrderController extends BaseController {
             return $ret;
         }
         $ordercore = new OrderCore();
-        return $ordercore->createOrder($sn, $money,  $this->uid);
+        return $ordercore->createOrder($sn, $money,  $this->user->id);
     }
-    
+
     public function actionOrdererror(){
         $this->layout = "@app/modules/order/views/layouts/buy";
         return $this->render('error');
     }
-    
+
     public function actionAgreement($id=null,$key=0) {
         $this->layout = "@app/modules/order/views/layouts/buy";
-        
+
         $model = ContractTemplate::find()->where(['pid' => $id])->select('pid,name,content')->asArray()->all();
-        
+
         return $this->render('agreement',['model' => $model, 'key_f' => $key, 'content' => $model[$key]['content']]);
     }
 

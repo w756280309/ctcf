@@ -25,14 +25,17 @@ class DrawRecord extends \yii\db\ActiveRecord
     /**
      * 发起提现，TODO：去掉user和ubank
      */
-    public static function init($account, $money, $user, $ubank)
+    public static function initForAccount($account, $money)
     {
+        $user = $account->user;
+        $ubank = $user->bank;
+
         $draw = new self();
         $draw->money = $money;
         $draw->sn = self::createSN();
         $draw->pay_id = 0; // 支付公司ID
         $draw->account_id = $account->id;
-        $draw->uid = $account->uid;
+        $draw->uid = $user->id;
         $draw->pay_bank_id = '0'; // TODO
         $draw->bank_id = $ubank->bank_id;
         $draw->bank_username = $ubank->bank_name;

@@ -14,14 +14,16 @@ class UserController extends BaseController
 {
     public function actionIndex()
     {
+        $uid = $this->user->id;
+
         $this->layout = 'account';
         $uacore = new UserAccountCore();
-        $ua = $uacore->getUserAccount($this->uid);
-        $leijishouyi = $uacore->getTotalProfit($this->uid);//累计收益
-        $dhsbj = $uacore->getTotalWaitMoney($this->uid);//带回收本金
-        $zcze = $uacore->getTotalFund($this->uid);//资产总额=理财资产+可用余额+冻结金额
+        $ua = $uacore->getUserAccount($uid);
+        $leijishouyi = $uacore->getTotalProfit($uid);//累计收益
+        $dhsbj = $uacore->getTotalWaitMoney($uid);//带回收本金
+        $zcze = $uacore->getTotalFund($uid);//资产总额=理财资产+可用余额+冻结金额
 
-        $data = BankService::checkKuaijie($this->uid);
+        $data = BankService::checkKuaijie($uid);
 
         return $this->render('index', ['ua' => $ua, 'user' => $this->user, 'ljsy' => $leijishouyi, 'dhsbj' => $dhsbj, 'zcze' => $zcze, 'data' => $data]);
     }
@@ -34,7 +36,7 @@ class UserController extends BaseController
     {
         $this->layout = '@app/modules/order/views/layouts/buy';
         $type = [MoneyRecord::TYPE_RECHARGE, MoneyRecord::TYPE_DRAW, MoneyRecord::TYPE_ORDER, MoneyRecord::TYPE_HUANKUAN];
-        $data = MoneyRecord::find()->where(['uid' => $this->uid, 'type' => $type])
+        $data = MoneyRecord::find()->where(['uid' => $this->user->id, 'type' => $type])
             ->select('created_at,type,in_money,out_money,balance')
             ->orderBy('id desc');
         $pg = \Yii::$container->get('paginator')->paginate($data, $page, $size);
@@ -67,7 +69,7 @@ class UserController extends BaseController
     {
         $this->layout = '@app/modules/user/views/layouts/myorder';
         $os = new OrderService();
-        $list = $os->getUserOrderList($this->uid, $type, $page);
+        $list = $os->getUserOrderList($this->user->id, $type, $page);
         if (Yii::$app->request->isAjax) {
             Yii::$app->response->format = Response::FORMAT_JSON;
 
