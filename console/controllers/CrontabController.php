@@ -101,7 +101,6 @@ class CrontabController extends Controller
                 $money_record->uid = $v['uid'];
                 $money_record->balance = $ua->available_balance;
                 $money_record->in_money = $v['order_money'];
-                $money_record->status = MoneyRecord::STATUS_REFUND;
 
                 if (!$money_record->save()) {
                     $transaction->rollBack();
@@ -459,7 +458,6 @@ class CrontabController extends Controller
                     $money_record->uid = $rc->uid;
                     $money_record->balance = $bc->bcround(bcadd($user_acount->available_balance, $rc->fund), 2);
                     $money_record->in_money = $rc->fund;
-                    $money_record->status = MoneyRecord::STATUS_SUCCESS;
 
                     //录入user_acount记录
                     $user_acount->uid = $user_acount->uid;
@@ -473,5 +471,13 @@ class CrontabController extends Controller
                 }
             }
         }
+    }
+    
+    /**
+     * 短信发送任务
+     */
+    public function actionSms()
+    {
+        
     }
 }
