@@ -34,7 +34,7 @@ class SignupForm extends Model
 
             ],
             //验证密码格式 不能是纯数字，或是纯字母
-            ['password', 'match', 'pattern' => '/(?!^\d+$)(?!^[a-zA-Z]+$)^[0-9a-zA-Z]{6,20}$/','message' => '密码必须为数字和字母的组合'],  
+            ['password', 'match', 'pattern' => '/(?!^\d+$)(?!^[a-zA-Z]+$)^[0-9a-zA-Z]{6,20}$/','message' => '密码必须为数字和字母的组合'],
         ];
     }
 
@@ -47,22 +47,22 @@ class SignupForm extends Model
     public function checkPhoneUnique($attribute,$params){
         $num = $this->$attribute;
         $re = User::findOne(['mobile'=>$num]);
-        
+
         if($this->reset_flag) {
             if(empty($re)){
-                $this->addError($attribute, "该手机号未注册过"); 
+                $this->addError($attribute, "该手机号未注册过");
             }else{
-                return true;  
+                return true;
             }
         } else {
             if(empty($re)){
                 return true;
             }else{
-                $this->addError($attribute, "该手机号已经注册过");  
+                $this->addError($attribute, "该手机号已经注册过");
             }
         }
     }
-    
+
     /**
      * 验证手机验证码
      */
@@ -76,7 +76,7 @@ class SignupForm extends Model
                 return TRUE;
             }
     }
-    
+
     /**
      * @inheritdoc
      */
@@ -106,10 +106,10 @@ class SignupForm extends Model
                 $transaction->rollBack();
                 return false;
             }
-            
+
             $user_acount = new UserAccount();
             $user_acount->uid = $user->id;
-            $user_acount->type = UserAccount::TYPE_BUY;
+            $user_acount->type = UserAccount::TYPE_LEND;
             if(!$user_acount->save()) {
                 $transaction->rollBack();
                 return false;
@@ -121,7 +121,7 @@ class SignupForm extends Model
             return false;
         }
     }
-    
+
     /**
      * 找回密码主函数
      */

@@ -25,7 +25,7 @@ class RechargeController extends BaseController {
         $uid = $this->uid;
         $bank = Yii::$app->params['bank'];
 
-        $user_account = UserAccount::findOne(['uid' => $uid, 'type' => UserAccount::TYPE_BUY]);
+        $user_account = UserAccount::findOne(['uid' => $uid, 'type' => UserAccount::TYPE_LEND]);
         $recharge = new RechargeRecord([
             'uid' => $uid,
             'account_id' => $user_account->id
@@ -55,8 +55,8 @@ class RechargeController extends BaseController {
 
             if ($recharge->validate()) {
                 $req = new Request1311(
-                        Yii::$app->params['cfca']['institutionId'], 
-                        $recharge, 
+                        Yii::$app->params['cfca']['institutionId'],
+                        $recharge,
                         $account_type
                 );
 
@@ -100,7 +100,7 @@ class RechargeController extends BaseController {
         }
 
         $req = new Request1320(
-                Yii::$app->params['cfca']['institutionId'], 
+                Yii::$app->params['cfca']['institutionId'],
                 $record['recharge_sn']
         );
 

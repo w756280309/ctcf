@@ -1,0 +1,4 @@
+2016-01-07
+
+UserAccount的TYPE_BUY常量改为TYPE_LEND
+UserAccount的TYPE_RAISE常量改为TYPE_BORROW

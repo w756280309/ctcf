@@ -22,7 +22,7 @@ use common\models\user\User;
             <ul class="breadcrumb">
                     <li>
                         <i class="icon-home"></i>
-                        <a href="/user/user/<?=$category==1?"listt":"listr"?>">会员管理</a> 
+                        <a href="/user/user/<?=$category==1?"listt":"listr"?>">会员管理</a>
                         <i class="icon-angle-right"></i>
                     </li>
                     <?php if($category==User::USER_TYPE_PERSONAL){?>
@@ -41,11 +41,11 @@ use common\models\user\User;
                         </li>
             </ul>
         </div>
-        
+
         <!--search start-->
         <div class="portlet-body">
             <form action="/user/user/<?=$category==1?"listt":"listr"?>" method="get" target="_self">
-                
+
                 <table class="table">
                     <tbody>
                         <tr>
@@ -64,30 +64,30 @@ use common\models\user\User;
                                 </td>
                                 <td><input type="text" class="m-wrap span6" style="margin-bottom: 0px;width:300px" name='name' value="<?= Yii::$app->request->get('name') ?>"  placeholder="企业名称"/></td>
                             <?php }?>
-                            
-                            
+
+
                             <td><div align="right" style="margin-right: 20px">
                                 <button type='submit' class="btn blue btn-block" style="width: 100px;">搜索 <i class="m-icon-swapright m-icon-white"></i></button>
                             </div></td>
-                            
+
                         </tr>
                     </tbody>
                 </table>
             </form>
         </div>
-        
+
         <!--search end -->
-        
-        
+
+
         <div class="portlet-body">
             <table class="table table-striped table-bordered table-advance table-hover">
                 <thead>
                     <tr>
                         <th>会员ID</th>
-                <?php if($category==User::USER_TYPE_PERSONAL){?>        
+                <?php if($category==User::USER_TYPE_PERSONAL){?>
                         <th>手机号</th>
                         <th>真实姓名</th>
-                <?php }else{?> 
+                <?php }else{?>
                         <th>企业名称</th>
                  <?php }?>
                         <th>注册时间</th>
@@ -99,33 +99,33 @@ use common\models\user\User;
                 <?php foreach ($model as $key => $val) : ?>
                     <tr>
                         <td><?= $val['usercode'] ?></td>
-                <?php if($category==User::USER_TYPE_PERSONAL){?>        
+                <?php if($category==User::USER_TYPE_PERSONAL){?>
                         <td><?= $val['mobile'] ?></td>
                         <td><?= $val['real_name']?'<a href="">'.$val['real_name'].'</a>':"---" ?></td>
-                <?php }else{?> 
+                <?php }else{?>
                         <td><?= $val['org_name'] ?></td>
                  <?php }?>
                         <td><?= date('Y-m-d H:i:s',$val['created_at'])?></td>
-                        <td><?= number_format($val->accountInfo['available_balance'],2) ?></td>
+                        <td><?= number_format($val->lendAccount['available_balance'],2) ?></td>
                         <td>
                         <center>
-                             <?php if($category==User::USER_TYPE_PERSONAL){?>       
+                             <?php if($category==User::USER_TYPE_PERSONAL){?>
                                 <a href="/user/user/detail?id=<?= $val['id'] ?>&type=<?=$category;?>" class="btn mini green"><i class="icon-edit"></i> 查看用户详情</a>
-                             <?php }else{?> 
+                             <?php }else{?>
                                 <a href="/user/user/edit?id=<?= $val['id'] ?>&type=<?=$category;?>" class="btn mini green"><i class="icon-edit"></i> 编辑</a>
                                 <a href="/user/user/detail?id=<?= $val['id'] ?>&type=<?=$category;?>" class="btn mini green"><i class="icon-edit"></i> 查看用户详情</a>
                             <?php }?>
                         </center>
                         </td>
                     </tr>
-                    <?php endforeach; ?>   
+                    <?php endforeach; ?>
                 </tbody>
             </table>
         </div>
         <!--分页-->
-        <div class="pagination" style="text-align:center"><?= LinkPager::widget(['pagination' => $pages]); ?></div> 
+        <div class="pagination" style="text-align:center"><?= LinkPager::widget(['pagination' => $pages]); ?></div>
     </div>
-                                    
+
 </div>
 
 <?php $this->endBlock(); ?>

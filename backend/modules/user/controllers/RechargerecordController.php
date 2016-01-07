@@ -99,10 +99,10 @@ class RechargerecordController extends BaseController
         }
 
         if ($model->load($request) && $model->validate()) {
-            $userAccountInfo = UserAccount::findOne(['uid' => $id, 'type' => UserAccount::TYPE_RAISE]);
+            $userAccountInfo = UserAccount::findOne(['uid' => $id, 'type' => UserAccount::TYPE_BORROW]);
             if (null === $userAccountInfo) {
                 //无融资账户时候需要创建融资账户
-                $userAccountInfo = new UserAccount(['uid' => $id, 'type' => UserAccount::TYPE_RAISE]);
+                $userAccountInfo = new UserAccount(['uid' => $id, 'type' => UserAccount::TYPE_BORROW]);
                 $userAccountInfo->save();
             }
             $model->account_id = $userAccountInfo->id;
@@ -167,7 +167,7 @@ class RechargerecordController extends BaseController
                 $transaction = Yii::$app->db->beginTransaction();
                 $money = $recharge->fund;
                 //先是在recharge_record表上填写流水记录，若添加成功同时往money_record表中更新数据也成功，就准备向user_account表中更新数据，
-                $userAccountInfo = UserAccount::findOne(['uid' => $recharge->uid, 'type' => UserAccount::TYPE_RAISE]);//融资账户
+                $userAccountInfo = UserAccount::findOne(['uid' => $recharge->uid, 'type' => UserAccount::TYPE_BORROW]);//融资账户
 
                 $bc = new BcRound();
                 bcscale(14); //设置小数位数
