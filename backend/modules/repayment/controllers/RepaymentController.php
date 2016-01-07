@@ -28,7 +28,7 @@ class RepaymentController extends BaseController
         }
     }
     /**
-     * Lists all OfflineOrder models. 
+     * Lists all OfflineOrder models.
      *
      * @return mixed
      */
@@ -132,7 +132,7 @@ class RepaymentController extends BaseController
             $record->online_pid = $pid;
             $record->order_id = $order['order_id'];
             $record->order_sn = OnlineRepaymentRecord::createSN();
-            $record->qishu = 1; //默认期数1，到期本息 
+            $record->qishu = 1; //默认期数1，到期本息
             $record->uid = $order['uid'];
             $record->benxi = $bcround->bcround(bcadd($lixi, $order['benjin']), 2);
             $record->benjin = $order['benjin'];
@@ -258,7 +258,7 @@ class RepaymentController extends BaseController
 
             return ['result' => 0, 'message' => '标的状态更新失败'];
         }
-        $ua = UserAccount::getUserAccount($product->borrow_uid, UserAccount::TYPE_RAISE);
+        $ua = UserAccount::getUserAccount($product->borrow_uid, UserAccount::TYPE_BORROW);
        // var_dump($product->borrow_uid);exit;
         $ua->account_balance = $bcround->bcround(bcadd($ua->account_balance, $product->money), 2);
         $ua->available_balance = $bcround->bcround(bcadd($ua->available_balance, $product->money), 2);

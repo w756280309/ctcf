@@ -32,7 +32,7 @@ class QrechargeController extends BaseController
         // 已验证的数据:无需验证
         $safe = [
             'uid' => $this->uid,
-            'account_id' => $cpuser->accountInfo->id,
+            'account_id' => $cpuser->lendAccount->id,
             'bindingSn' => $ubank->binding_sn,
             'bank_id' => strval($ubank->id),
             'pay_type' => RechargeRecord::PAY_TYPE_QUICK,
@@ -149,7 +149,7 @@ class QrechargeController extends BaseController
         if ($resp1376->isSuccess()) {
             //测试短信末尾奇数是失败的，金额是30失败
             $bankTxTime = $resp1376->getBankTxTime();
-            $user_acount = $this->user->accountInfo;
+            $user_acount = $this->user->lendAccount;
             //录入money_record记录
             $transaction = Yii::$app->db->beginTransaction();
             RechargeRecord::updateAll(['status' => RechargeRecord::STATUS_YES, 'bankNotificationTime' => $bankTxTime], ['id' => $recharge->id]);
@@ -159,7 +159,7 @@ class QrechargeController extends BaseController
                 'sn' => MoneyRecord::createSN(),
                 'type' => MoneyRecord::TYPE_RECHARGE,
                 'osn' => $recharge->sn,
-                'account_id' => $this->user->accountInfo->id,
+                'account_id' => $this->user->lendAccount->id,
                 'uid' => $this->uid,
                 'balance' => $bc->bcround(bcadd($user_acount->available_balance, $recharge->fund), 2),
                 'in_money' => $recharge->fund,

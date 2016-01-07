@@ -137,7 +137,7 @@ class CrontabController extends Controller
         $cfca = new Cfca();
         foreach ($data as $dat) {
             $cpuser = User::findOne($dat->uid); //目前只针对投资用户发起结算
-            if (null !== $cpuser->accountInfo) {
+            if (null !== $cpuser->lendAccount) {
                 $asettlement = new AccountSettlement($dat);
                 $rq1341 = new Request1341(Yii::$app->params['cfca']['institutionId'], $asettlement);
                 $jiesuan = new Jiesuan([
@@ -191,9 +191,9 @@ class CrontabController extends Controller
                     $wdjf_model->save();
                     if ($resp1350->isSuccess()) {
                         $recharge = RechargeRecord::findOne(['sn' => $dat->osn]);
-                        $accountInfo = $recharge->user->accountInfo;
-                        $accountInfo->drawable_balance = $bcround->bcround(bcadd($accountInfo->drawable_balance, $dat->amount), 2);//结算成功之后方可更新可提现金额
-                        $accountInfo->save();
+                        $lendAccount = $recharge->user->lendAccount;
+                        $lendAccount->drawable_balance = $bcround->bcround(bcadd($lendAccount->drawable_balance, $dat->amount), 2);//结算成功之后方可更新可提现金额
+                        $lendAccount->save();
                     }
                 }
             }
@@ -414,7 +414,7 @@ class CrontabController extends Controller
                         $momeyRecord->out_money = $money;
                     } else {
                         //失败
-                        $draw_status = DrawRecord::STATUS_FAIL;//提现不成功        
+                        $draw_status = DrawRecord::STATUS_FAIL;//提现不成功
                         $YuE = $userAccount->account_balance = $bc->bcround(bcadd($userAccount->account_balance, $money), 2);//账户总额增加
                         $userAccount->available_balance = $bc->bcround(bcadd($userAccount->available_balance, $money), 2);//更新可用余额
                         $userAccount->in_sum = $bc->bcround(bcadd($userAccount->available_balance, $money), 2);//更新入账
@@ -447,7 +447,7 @@ class CrontabController extends Controller
             if ($rp1320->isSuccess()) {
                 $mr = MoneyRecord::findOne(['type' => MoneyRecord::TYPE_RECHARGE, 'osn' => $rc->sn, 'status' => MoneyRecord::STATUS_SUCCESS]);
                 if ($mr === null) {
-                    $user_acount = UserAccount::findOne(['type' => UserAccount::TYPE_BUY, 'uid' => $rc->uid]);
+                    $user_acount = UserAccount::findOne(['type' => UserAccount::TYPE_LEND, 'uid' => $rc->uid]);
 
                     //添加交易流水
                     $money_record = new MoneyRecord();

@@ -19,7 +19,7 @@ class TradeLog extends \yii\db\ActiveRecord
         $this->tx_sn = $rq->getTxSn();
         $this->pay_id = 0;//默认
         $this->uid = $user->id;
-        $this->account_id = $user->accountInfo->id;
+        $this->account_id = $user->lendAccount->id;
         $this->request = $rq->getXml();
         if (null !== $rp) {
             $this->response_code = $rp->getCode();

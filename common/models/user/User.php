@@ -36,55 +36,55 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     //会员类型 1：普通会员 ， 2：融资会员
     const USER_TYPE_PERSONAL = 1;
     const USER_TYPE_ORG = 2;
-    
+
     const STATUS_DELETED = 0;
     const STATUS_ACTIVE = 1;
-    
+
     const EXAMIN_STATUS_UNPASS = -1;
     const EXAMIN_STATUS_WAIT = 0;
     const EXAMIN_STATUS_PASS = 1;
-    
+
     const EMAIL_STATUS_UNPASS = -1;
     const EMAIL_STATUS_WAIT = 0;
     const EMAIL_STATUS_PASS = 1;
-    
+
     const MOBILE_STATUS_UNPASS = -1;
     const MOBILE_STATUS_WAIT = 0;
     const MOBILE_STATUS_PASS = 1;
-    
+
     const IDCARD_STATUS_UNPASS = -1;
     const IDCARD_STATUS_WAIT = 0;
     const IDCARD_STATUS_PASS = 1;
-    
+
     const KUAIJIE_STATUS_Y = 1;
     const KUAIJIE_STATUS_N = 0;
 
 
     const IDCARD_EXAMIN_COUNT = 3;
-    
+
 //    public $user_pass='';
 //    public $password='';
 //    public $password_confirm='';
 //    public $sms_code = "";
 //    public $agree = "";
-//    public $verifyCode='';        
+//    public $verifyCode='';
 //    public $new_email ="";
 //    public $new_mobile="";
-//    
+//
 //    public $old_password = "";
 //    public $new_password = "";
 //    public $new_confirm_password = "";
-    
+
    // public $uatype = 1;
 //    private $uatype = 1;
 //    private $trade_pwd = "";
 //    public $f_trade_pwd = "";
 //    public $confirm_trade_pwd = "";
-//    
+//
 //    public $old_trade = "";
 //    public $new_trade = "";
 //    public $new_trade_confirm = "";
-//    
+//
 //    public $f_pwd="";
 //    public $c_f_pwd="";
 
@@ -96,7 +96,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
 //            return self::find()->where('type='.self::USER_TYPE_ORG);
 //        }
 //    }
-    
+
     public static function examinStatus($key = null){
         $arr = array(
             self::EXAMIN_STATUS_UNPASS => "未通过",
@@ -127,7 +127,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
         }
         return $code.$count;
     }
-    
+
     /**
      * 渠道用户编号
      * @param type $channel_id
@@ -151,7 +151,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     }
 
         /**
-     * 
+     *
      * @param type $len 长度
      * @param type $simple 1 简单 2 复杂
      * @return type
@@ -163,10 +163,10 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
         $str = '';
         $chars = "";
         if($simple==1){
-            $chars = '0123456789';    
+            $chars = '0123456789';
         }else{
-            $chars = 'abcdefghijkmnpqrstuvwxyz23456789ABCDEFGHIJKMNPQRSTUVWXYZ'; //去掉1跟字母l防混淆      
-        }   
+            $chars = 'abcdefghijkmnpqrstuvwxyz23456789ABCDEFGHIJKMNPQRSTUVWXYZ'; //去掉1跟字母l防混淆
+        }
         if ($len > strlen($chars)) {//位数过长重复字符串一定次数
             $chars = str_repeat($chars, ceil($len / strlen($chars)));
         }
@@ -222,18 +222,18 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
 //            'ucenter_2'=>['cat_id','org_name','real_name','business_licence','org_code','shui_code','tel','law_master','email','law_master_idcard','org_url','in_time'],//机构注册第二步
 //            'bind_mobile'=>['sms_code','password'],
 //            'edit_mobile'=>['sms_code','new_mobile'],
-//            
+//
 //            'edit_pwd'=>['old_password','new_password','new_confirm_password'],
-//            
+//
 //            'examin_email' => ['email_status'],
 //            'mobile_verify' => ['mobile_status','sms_code'],
-//            
+//
 //            'find_pwd' => ['mobile','verifyCode'],
 //            'find_pwd_1' => ['mobile','f_pwd','c_f_pwd','sms_code'],
-//            
+//
 //            'channel_user' => ['channel_user_sn','type','cat_id','channel_id','username','usercode','mobile','org_name','real_name','idcard',
 //                'business_licence','org_code','shui_code','tel','law_master','law_master_idcard','org_url','init_pwd','init_pwd_status','status'],
-//            
+//
 //            "settrade" => ['id','f_trade_pwd','confirm_trade_pwd'],
 //            "uptrade" => ['old_trade','new_trade_confirm','new_trade'],
 
@@ -248,7 +248,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             'kuaijie' => ['kuaijie_status'],
         ];
     }
-   
+
     public function rules()
 {
     return [
@@ -269,7 +269,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
 //            'tooShort' => "会员编号太短了,会员账号要大于等于5个字符！",
 //            'tooLong' => "会员编号超长了,会员账号要小于等于16个字符！"
         ],
-        
+
         [['mobile'], 'required'],
         //[['idcard'], 'required'],
         [['mobile'],'unique','message'=>'该手机号码已被占用，请重试', 'on' => 'add'],
@@ -289,7 +289,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
         [['password_hash','trade_pwd','auth_key'], 'string', 'max' => 128],
 //        [['org_name','org_code','in_time','tel','business_licence' ,'shui_code','law_master','law_master_idcard'], 'required', 'on' => ['orgedit']],
 //        ['examin_status', 'required', 'on' => ['examin']],
-//        
+//
 //        ['usercode', 'required', 'on' => ['examin_email']],
 //        [['username','mobile','password','password_confirm','sms_code'], 'required', 'on' => ['front_reg_1']],
 //        [['mobile','law_mobile'],'match','pattern'=>'/^(13[0-9]|14[0-9]|15[0-9]|17[0-9]|18[0-9])\d{8}$/','message'=>'手机号格式错误', 'on' => ['front_reg_1','add','edit']],
@@ -307,31 +307,31 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
 //       // ['cat_id', 'in', 'range' => array(1,4),'message'=>"请选择分类", 'on' => ['front_reg_2_2']],
 //        [['real_name','email','idcard'], 'required', 'on' => ['front_reg_2_1']],
 //        ['email','unique','message'=>'Email已占用', 'on' => ['front_reg_2_1']],
-//        
+//
 //        [['verifyCode','mobile'], 'required', 'on' => ['find_pwd']],
 //        ['verifyCode', 'captcha', 'on' => ['find_pwd']],
 //        [['password','sms_code'], 'required', 'on' => ['bind_mobile']],
 //        [['new_mobile','sms_code'], 'required', 'on' => ['edit_mobile']],//
-//        
+//
 //        [['old_password','new_password','new_confirm_password'], 'required', 'on' => ['edit_pwd']],//
 //        [['new_password','new_confirm_password'],'match','pattern'=>'/^[\@A-Za-z0-9\!\#\$\%\^\&\*\.\~]{6,16}$/','message'=>'6-16位字母/数字和符号', 'on' => ['edit_pwd']],
 //        [['new_confirm_password'], 'compare','compareAttribute'=>'new_password','message'=>'确认密码必须与密码一致', 'on' => ['edit_pwd']],
-//       
+//
 //        [['mobile','f_pwd','c_f_pwd','sms_code'], 'required', 'on' => ['find_pwd_1']],
 //        [['sms_code'], 'required', 'on' => ['mobile_verify']],
-//        
+//
 //        [['f_pwd','c_f_pwd'],'match','pattern'=>'/^[\@A-Za-z0-9\!\#\$\%\^\&\*\.\~]{6,16}$/','message'=>'6-16位字母/数字和符号', 'on' => ['find_pwd_1']],
 //        [['c_f_pwd'], 'compare','compareAttribute'=>'f_pwd','message'=>'确认密码必须与重置密码一致', 'on' => ['find_pwd_1']],
-//        
+//
 //        [['usercode','channel_user_sn'],'unique','message'=>'会员编号已占用', 'on' => ['channel_user']],
 //        [['f_trade_pwd','confirm_trade_pwd'], 'required','on'=>['settrade']],
 //        [['f_trade_pwd','confirm_trade_pwd'], 'string','min'=>8, 'max' => 16,'on'=>['settrade']],
 //        [['confirm_trade_pwd'], 'compare','compareAttribute'=>'f_trade_pwd','message'=>'两次交易密码不一致', 'on' => ['settrade']],
-//        
+//
 //        [['new_trade','new_trade_confirm','old_trade'], 'required','on'=>['uptrade']],
 //        [['new_trade','new_trade_confirm','old_trade'], 'string','min'=>8, 'max' => 16,'on'=>['uptrade']],
 //        [['new_trade_confirm'], 'compare','compareAttribute'=>'new_trade','message'=>'两次交易密码不一致', 'on' => ['uptrade']],
-        
+
         [['real_name','idcard'], 'required', 'on' => 'idcardrz'],
         [['idcard'],'checkIdNumberUnique','on' => 'idcardrz'],
         //[['real_name'],'match','pattern'=>'^[\u4E00-\u9FA5A-Za-z_]+$','message'=>'{attribute}只能是中文或字母', 'on' => 'idcardrz'],
@@ -343,7 +343,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     ];
 }
 
-    
+
     /**
      * 验证身份证号生日
      * @param type $attribute
@@ -353,24 +353,24 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     public function checkIdNumber($attribute,$params){
         $num = $this->$attribute;
         $tmpStr="";
-        if (strlen($num) == 15) {  
-            $tmpStr = substr($num, 6, 6);  
-            $tmpStr = "19" . $tmpStr;  
-            $tmpStr = substr($tmpStr, 0, 4) . "-" . substr($tmpStr, 4, 2) . "-" . substr($tmpStr, 6);  
-        } else {  
-            $tmpStr = substr($num, 6, 8);  
-            $tmpStr = substr($tmpStr, 0, 4) . "-" . substr($tmpStr, 4, 2) . "-" . substr($tmpStr, 6);  
-        }  
-        
-        $reDate = '/(([0-9][9][2-9][0-9])-(((0[13578]|1[02])-(0[1-9]|[12][0-9]|3[01]))|((0[469]|11)-(0[1-9]|[12][0-9]|30))|(02-(0[1-9]|[1][0-9]|2[0-8]))))|((([0-9]{2})(0[48]|[2468][048]|[13579][26])|((0[48]|[2468][048]|[3579][26])00))-02-29)/'; 
+        if (strlen($num) == 15) {
+            $tmpStr = substr($num, 6, 6);
+            $tmpStr = "19" . $tmpStr;
+            $tmpStr = substr($tmpStr, 0, 4) . "-" . substr($tmpStr, 4, 2) . "-" . substr($tmpStr, 6);
+        } else {
+            $tmpStr = substr($num, 6, 8);
+            $tmpStr = substr($tmpStr, 0, 4) . "-" . substr($tmpStr, 4, 2) . "-" . substr($tmpStr, 6);
+        }
+
+        $reDate = '/(([0-9][9][2-9][0-9])-(((0[13578]|1[02])-(0[1-9]|[12][0-9]|3[01]))|((0[469]|11)-(0[1-9]|[12][0-9]|30))|(02-(0[1-9]|[1][0-9]|2[0-8]))))|((([0-9]{2})(0[48]|[2468][048]|[13579][26])|((0[48]|[2468][048]|[3579][26])00))-02-29)/';
         $re = preg_match($reDate, $tmpStr);
         if($re){
             return true;
         }else{
-            $this->addError($attribute, "身份证号错误");  
+            $this->addError($attribute, "身份证号错误");
         }
     }
-    
+
     /**
      * 验证身份证号唯一性
      * @param type $attribute
@@ -403,7 +403,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             'real_name' => '姓名',
             'idcard' => '身份证号',
             'law_master'=>"企业法人姓名",
-            'law_master_idcard'=>"企业法人身份证",            
+            'law_master_idcard'=>"企业法人身份证",
             'org_name' => '机构名称',
             'org_code' => '组织机构代码证号',
             'in_time'=>"入会时间",
@@ -479,12 +479,12 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     {
         return static::findOne($cond);
     }
-    
+
     public static function findByUsercode($usercode)
     {
         return static::findOne(['username' => $usercode, 'status' => self::STATUS_ACTIVE]);
     }
-    
+
     /**
      * Finds user by password reset token
      *
@@ -555,7 +555,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
         return Yii::$app->security->validatePassword($password, $this->password_hash);
     }
 
-       
+
     /**
      * Validates trade_pwd
      *
@@ -566,8 +566,8 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     {
         return Yii::$app->security->validatePassword($password, $oldtradepwd);
     }
-    
-    
+
+
     /**
      * Generates password hash from password and sets it to the model
      *
@@ -588,7 +588,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
         return Yii::$app->security->generatePasswordHash($password);
         //$this->setAttribute('trade_pwd', Yii::$app->security->generatePasswordHash($password));
     }
-    
+
     /**
      * Generates "remember me" authentication key
      */
@@ -637,21 +637,39 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
         //选出编号中的字符
         $code = substr($usercode, 0,$length);
         //取出的数字，加一后，在左边填充成4为，然后与字符相加
-        return $code.str_pad($num, $pad_length,0,STR_PAD_LEFT );  
+        return $code.str_pad($num, $pad_length,0,STR_PAD_LEFT );
     }
-    
+
     /**
-     * 获取用户投资账户
-     * @return account
+     * 获取投资账户
+     *
+     * @return UserAccount
      */
-    public function getAccountInfo() {
-        return $this->hasOne(UserAccount::className(), ['uid' => 'id'])->where(['type' => self::USER_TYPE_PERSONAL]);
+    public function getLendAccount()
+    {
+        return $this->hasOne(UserAccount::className(), ['uid' => 'id'])
+            ->where(['type' => UserAccount::TYPE_LEND]);
+    }
+
+    /**
+     * 获取融资账户
+     *
+     * @return UserAccount
+     */
+    public function getBorrowAccount()
+    {
+        return $this->hasOne(UserAccount::className(), ['uid' => 'id'])
+            ->where(['type' => UserAccount::TYPE_BORROW]);
     }
 
     /**
      * 获取绑卡相关信息
+     *
+     * @return UserBanks
      */
-    public function getBank(){
-        return $this->hasOne(UserBanks::className(), ['uid' => 'id'])->where(['status' => UserBanks::STATUS_YES]);
+    public function getBank()
+    {
+        return $this->hasOne(UserBanks::className(), ['uid' => 'id'])
+            ->where(['status' => UserBanks::STATUS_YES]);
     }
 }
