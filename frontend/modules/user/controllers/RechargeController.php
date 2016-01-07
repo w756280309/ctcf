@@ -22,7 +22,7 @@ class RechargeController extends BaseController {
      * 充值
      */
     public function actionRecharge() {
-        $uid = $this->uid;
+        $uid = $this->user->id;
         $bank = Yii::$app->params['bank'];
 
         $user_account = UserAccount::findOne(['uid' => $uid, 'type' => UserAccount::TYPE_LEND]);

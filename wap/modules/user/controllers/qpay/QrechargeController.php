@@ -27,7 +27,7 @@ class QrechargeController extends BaseController
         }
         // 已验证的数据:无需验证
         $safe = [
-            'uid' => $this->uid,
+            'uid' => $this->user->id,
             'account_id' => $cpuser->lendAccount->id,
             'bindingSn' => $ubank->binding_sn,
             'bank_id' => strval($ubank->id),
@@ -153,7 +153,7 @@ class QrechargeController extends BaseController
                 'type' => MoneyRecord::TYPE_RECHARGE,
                 'osn' => $recharge->sn,
                 'account_id' => $this->user->lendAccount->id,
-                'uid' => $this->uid,
+                'uid' => $this->user->id,
                 'balance' => $bc->bcround(bcadd($user_acount->available_balance, $recharge->fund), 2),
                 'in_money' => $recharge->fund,
             ]);

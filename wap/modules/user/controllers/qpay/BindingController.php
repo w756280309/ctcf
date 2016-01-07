@@ -30,7 +30,7 @@ class BindingController extends BaseController
 
         $acct_model = new QpayAcct();
         $acct_model->scenario = 'step_first';
-        $acct_model->uid = $this->uid;
+        $acct_model->uid = $this->user->id;
         $acct_model->card_number = $safe['idNo'];
         $acct_model->account = $safe['realName'];
         $acct_model->account_type = QpayAcct::PERSONAL_ACCOUNT;
@@ -94,7 +94,7 @@ class BindingController extends BaseController
 
         $acct_model = new QpayAcct();
         $acct_model->scenario = 'step_first';
-        $acct_model->uid = $this->uid;
+        $acct_model->uid = $this->user->id;
         $acct_model->card_number = $safe['idNo'];
         $acct_model->account = $safe['realName'];
         $acct_model->account_type = QpayAcct::PERSONAL_ACCOUNT;
