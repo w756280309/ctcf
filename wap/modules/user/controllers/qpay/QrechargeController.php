@@ -21,17 +21,13 @@ class QrechargeController extends BaseController
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
         $cpuser = $this->user;
-        $ubank = $this->ubank;
-        if ($this->isDenyVisit) {
-            return $this->createErrorResponse('用户被禁止访问');
-        }
-
+        $ubank = $cpuser->bank;
         if (empty($ubank)) {
             return $this->createErrorResponse('请先绑卡');
         }
         // 已验证的数据:无需验证
         $safe = [
-            'uid' => $this->uid,
+            'uid' => $this->user->id,
             'account_id' => $cpuser->lendAccount->id,
             'bindingSn' => $ubank->binding_sn,
             'bank_id' => strval($ubank->id),
@@ -86,10 +82,7 @@ class QrechargeController extends BaseController
     public function actionVerify()
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
-        $ubank = $this->ubank;
-        if ($this->isDenyVisit) {
-            return $this->createErrorResponse('用户被禁止访问');
-        }
+        $ubank = $this->user->bank;
         if (empty($ubank)) {
             return $this->createErrorResponse('请先绑卡');
         }
@@ -160,7 +153,7 @@ class QrechargeController extends BaseController
                 'type' => MoneyRecord::TYPE_RECHARGE,
                 'osn' => $recharge->sn,
                 'account_id' => $this->user->lendAccount->id,
-                'uid' => $this->uid,
+                'uid' => $this->user->id,
                 'balance' => $bc->bcround(bcadd($user_acount->available_balance, $recharge->fund), 2),
                 'in_money' => $recharge->fund,
             ]);

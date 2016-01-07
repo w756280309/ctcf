@@ -11,19 +11,17 @@ use yii\web\ForbiddenHttpException;
 
 /**
  * AccessControl provides simple access control based on a set of rules.
- *
-
  */
 class UserAccountAcesssControl extends ActionFilter
 {
     /**
      * @var User|array|string the user object representing the authentication status or the ID of the user application component.
-     * Starting from version 2.0.2, this can also be a configuration array for creating the object.
+     *                        Starting from version 2.0.2, this can also be a configuration array for creating the object.
      */
     public $user = 'user';
     /**
      * @var callable a callback that will be called if the access should be denied
-     * to the current user. If not set, [[denyAccess()]] will be called.
+     *               to the current user. If not set, [[denyAccess()]] will be called.
      *
      * The signature of the callback should be as follows:
      *
@@ -37,17 +35,16 @@ class UserAccountAcesssControl extends ActionFilter
     public $denyCallback;
     /**
      * @var array the default configuration of access rules. Individual rule configurations
-     * specified via [[rules]] will take precedence when the same property of the rule is configured.
+     *            specified via [[rules]] will take precedence when the same property of the rule is configured.
      */
 //    public $ruleConfig = ['class' => 'yii\filters\AccessRule'];
     /**
      * @var array a list of access rule objects or configuration arrays for creating the rule objects.
-     * If a rule is specified via a configuration array, it will be merged with [[ruleConfig]] first
-     * before it is used for creating the rule object.
+     *            If a rule is specified via a configuration array, it will be merged with [[ruleConfig]] first
+     *            before it is used for creating the rule object.
+     *
      * @see ruleConfig
      */
-
-
 
     /**
      * Initializes the [[rules]] array by instantiating rule objects from configurations.
@@ -55,30 +52,34 @@ class UserAccountAcesssControl extends ActionFilter
     public function init()
     {
         parent::init();
-        $this->user = Instance::ensure($this->user, User::className());
 
+        $this->user = Instance::ensure($this->user, User::className());
     }
 
     /**
      * This method is invoked right before an action is to be executed (after all possible filters.)
      * You may override this method to do last-minute preparation for the action.
+     *
      * @param Action $action the action to be executed.
-     * @return boolean whether the action should continue to be executed.
+     *
+     * @return bool whether the action should continue to be executed.
      */
     public function beforeAction($action)
     {
-            $user = $this->user;
-            if($user->identity->status==0){
-                return Yii::$app->getResponse()->redirect("/site/usererror");
-            }
-            return true;
+        if (null !== $this->user && 0 === $this->user->identity->status) {
+            return Yii::$app->getResponse()->redirect('/site/usererror');
+        }
+
+        return true;
     }
 
     /**
      * Denies the access of the user.
      * The default implementation will redirect the user to the login page if he is a guest;
      * if the user is already logged, a 403 HTTP exception will be thrown.
+     *
      * @param User $user the current user
+     *
      * @throws ForbiddenHttpException if the user is already logged in.
      */
     protected function denyAccess($user)

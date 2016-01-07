@@ -25,6 +25,36 @@ class UserAccount extends \yii\db\ActiveRecord
     const TYPE_BORROW = 2; //融资者
 
     /**
+     * 是投资账户？
+     *
+     * @return bool
+     */
+    public function isLender()
+    {
+        return self::TYPE_LEND === $this->type;
+    }
+
+    /**
+     * 是融资账户？
+     *
+     * @return bool
+     */
+    public function isBorrower()
+    {
+        return self::TYPE_BORROW === $this->type;
+    }
+
+    /**
+     * 获取关联的用户
+     *
+     * @return User
+     */
+    public function getUser()
+    {
+        return $this->hasOne(User::className(), ['id' => 'uid']);
+    }
+
+    /**
      * {@inheritdoc}
      */
     public static function tableName()

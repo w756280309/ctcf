@@ -24,7 +24,7 @@ class UseraccountController extends BaseController
      */
     public function actionAccountcenter()
     {
-        $uid = $this->uid;
+        $uid = $this->user->id;
         $check_arr = $this->check_helper();
 
         if ($check_arr[code] == 1) {
@@ -43,7 +43,7 @@ class UseraccountController extends BaseController
      */
     public function actionTixian()
     {
-        $uid = $this->uid;
+        $uid = $this->user->id;
         $user_bank = UserBanks::findOne(['uid' => $uid, 'status' => UserBanks::STATUS_YES]);
         $user_acount = UserAccount::findOne(['type' => UserAccount::TYPE_LEND, 'uid' => $uid]);
         $province = Region::find()->where(['province_id' => 0])->select('id,name')->asArray()->all();
@@ -165,6 +165,6 @@ class UseraccountController extends BaseController
     {
         $cond = 0 | BankService::IDCARDRZ_VALIDATE_N | BankService::BINDBANK_VALIDATE_N | BankService::CHARGEPWD_VALIDATE_N;
 
-        return BankService::check($this->uid, $cond);
+        return BankService::check($this->user->id, $cond);
     }
 }

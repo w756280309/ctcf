@@ -32,7 +32,7 @@ class UserbankController extends BaseController
         }
 
         $cond = 0 | BankService::IDCARDRZ_VALIDATE_Y;
-        $data = BankService::check($this->uid, $cond);
+        $data = BankService::check($this->user->id, $cond);
         if ($data[code] == 1) {
             if (Yii::$app->request->isAjax) {
                 return $data;
@@ -67,14 +67,13 @@ class UserbankController extends BaseController
      */
     public function actionBindbank()
     {
-        $uid = $this->uid;
         $this->layout = '@app/modules/order/views/layouts/buy';
         if (Yii::$app->request->isAjax) {
             Yii::$app->response->format = Response::FORMAT_JSON;
         }
 
         $cond = 0 | BankService::IDCARDRZ_VALIDATE_N | BankService::BINDBANK_VALIDATE_Y;
-        $data = BankService::check($uid, $cond);
+        $data = BankService::check($this->user->id, $cond);
         if ($data['code'] == 1) {
             if (Yii::$app->request->isAjax) {
                 return $data;
@@ -88,14 +87,14 @@ class UserbankController extends BaseController
         $user = $data['user'];
         $model = new UserBanks();
         $model->scenario = 'step_first';
-        $model->uid = $uid;
+        $model->uid = $this->user->id;
         $model->account = $user->real_name;
         $model->account_type = UserBanks::PERSONAL_ACCOUNT;
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             $model->status = UserBanks::STATUS_YES;
             if ($model->save()) {
                 //绑卡成功
-                $res = SmsService::editSms($uid);
+                $res = SmsService::editSms($this->user->id);
 
                 return ['tourl' => '/user/userbank/addbuspass', 'code' => 1, 'message' => '绑卡成功'];
             }
@@ -131,7 +130,7 @@ class UserbankController extends BaseController
         }
 
         $cond = 0 | BankService::IDCARDRZ_VALIDATE_N | BankService::BINDBANK_VALIDATE_N | BankService::CHARGEPWD_VALIDATE_Y;
-        $data = BankService::check($this->uid, $cond);
+        $data = BankService::check($this->user->id, $cond);
         if ($data[code] == 1) {
             if (Yii::$app->request->isAjax) {
                 return $data;
@@ -172,7 +171,7 @@ class UserbankController extends BaseController
         $model = new EditpassForm();
 
         $cond = 0 | BankService::IDCARDRZ_VALIDATE_N | BankService::BINDBANK_VALIDATE_N | BankService::CHARGEPWD_VALIDATE_N;
-        $data = BankService::check($this->uid, $cond);
+        $data = BankService::check($this->user->id, $cond);
         if ($data[code] == 1) {
             if (Yii::$app->request->isAjax) {
                 return $data;
@@ -204,7 +203,7 @@ class UserbankController extends BaseController
     {
         \Yii::$app->session->remove('cfca_qpay_recharge');
         $this->layout = '@app/modules/order/views/layouts/buy';
-        $uid = $this->uid;
+        $uid = $this->user->id;
         $user = User::findOne($uid);
         if ($user && $user->status == User::STATUS_DELETED) {
             $this->redirect('/site/usererror');
@@ -229,7 +228,7 @@ class UserbankController extends BaseController
             Yii::$app->response->format = Response::FORMAT_JSON;
         }
 
-        $uid = $this->uid;
+        $uid = $this->user->id;
         $user = User::findOne($uid);
         if ($user && $user->status == User::STATUS_DELETED) {
             $this->redirect('/site/usererror');
@@ -279,7 +278,7 @@ class UserbankController extends BaseController
         }
 
         $user = $this->user;
-        $uid = $this->uid;
+        $uid = $this->user->id;
         if ($user && $user->status == User::STATUS_DELETED) {
             $this->redirect('/site/usererror');
         }
@@ -397,7 +396,7 @@ class UserbankController extends BaseController
         }
 
         $cond = 0 | BankService::IDCARDRZ_VALIDATE_N | BankService::BINDBANK_VALIDATE_N;
-        $data = BankService::check($this->uid, $cond);
+        $data = BankService::check($this->user->id, $cond);
         $model = $data['user_bank'];
         if ($data['code'] == 1) {
             if (Yii::$app->request->isAjax) {

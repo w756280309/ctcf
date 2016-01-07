@@ -7,29 +7,21 @@
  */
 namespace app\controllers;
 
-use yii\web\Controller;
 use yii\filters\AccessControl;
-use yii\filters\VerbFilter;
-use common\models\user\User;
+use yii\web\Controller;
 
 class BaseController extends Controller
 {
-    protected $uid;
     protected $user;
-    protected $ubank;//用户绑卡信息
-    protected $isDenyVisit = false; //是否拒绝访问 true 拒绝 false为允许访问
 
     public function init()
     {
         error_reporting(E_ALL ^ E_NOTICE);
-        if (\Yii::$app->user->isGuest) {
-            $this->uid = 0;
-        }else{
-            $this->uid=\Yii::$app->user->id;
-            $this->user= \Yii::$app->user->getIdentity();
-            $this->ubank = $this->user->bank;
-            $this->isDenyVisit = ($this->user->status == User::STATUS_DELETED) ? true : false;
+
+        if (!\Yii::$app->user->isGuest) {
+            $this->user = \Yii::$app->user->getIdentity();
         }
+
         parent::init();
     }
 
