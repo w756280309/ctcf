@@ -71,7 +71,7 @@ class UserAccount extends \yii\db\ActiveRecord
             [['type', 'uid'], 'integer'],
             [['uid'], 'required'],
             [['account_balance', 'available_balance', 'freeze_balance', 'in_sum', 'out_sum'], 'number'],
-            ['drawable_balance', 'default', 'value' => 0],
+            [['drawable_balance','investment_balance'], 'default', 'value' => 0],
         ];
     }
 
@@ -88,6 +88,7 @@ class UserAccount extends \yii\db\ActiveRecord
             'available_balance' => '可用余额',
             'freeze_balance' => '冻结余额',
             'drawable_balance' => '可提现余额',
+            'investment_balance' => '理财金额',
             'in_sum' => '账户入金总额',
             'out_sum' => '账户出金总额',
             'created_at' => '创建时间',

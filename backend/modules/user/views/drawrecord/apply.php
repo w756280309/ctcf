@@ -1,6 +1,7 @@
 <?php
 use yii\widgets\LinkPager;
 use common\models\user\User;
+use common\models\user\DrawRecord;
 ?>
 <?php $this->beginBlock('blockmain'); ?>
 
@@ -83,28 +84,28 @@ use common\models\user\User;
                             <td><?= date('Y-m-d H:i:s', $val['created_at']) ?></td>
                             <td>
                                 <?php
-                                if ($val['status'] == 0) {
+                                if ($val['status'] == DrawRecord::STATUS_ZERO) {
                                     echo "------";
-                                } elseif ($val['status'] == 1) {
+                                } elseif ($val['status'] == DrawRecord::STATUS_EXAMINED) {
                                     echo "审核通过";
-                                } elseif ($val['status'] == 2) {
+                                } elseif ($val['status'] == DrawRecord::STATUS_SUCCESS) {
+                                    echo "提现成功";
+                                } elseif ($val['status'] == DrawRecord::STATUS_LAUNCH_BATCHPAY) {
                                     echo "已放款";
-                                } elseif($val['status'] == 11) {
+                                } elseif($val['status'] == DrawRecord::STATUS_DENY) {
                                     echo "审核未通过";
-                                } elseif($val['status'] == 21) {
+                                } elseif($val['status'] == DrawRecord::STATUS_FAIL) {
                                     echo "提现不成功";
                                 }
                                 ?>
                             </td>
                             <td style="text-align:left">
-                                <?php if ($val['status'] == 0) { ?>
+                                <?php if ($val['status'] == DrawRecord::STATUS_ZERO) { ?>
                                     <a href="javascript:openwin('/user/drawrecord/examinfk?pid=<?= $val['uid'] ?>&id=<?= $val['id'] ?>',500,500)" class="btn mini green"><i class="icon-edit"></i> 审核</a>
-                                <?php } elseif ($val['status'] == 1) { ?>
+                                <?php } elseif ($val['status'] == DrawRecord::STATUS_EXAMINED) { ?>
                                     <a href="javascript:openwin('/user/drawrecord/examinfk?pid=<?= $val['uid'] ?>&id=<?= $val['id'] ?>',500,500)" class="btn mini green"><i class="icon-edit"></i> 放款</a>
-                                <?php } elseif ($val['status'] == 2) { ?>
+                                <?php } elseif (in_array ($val['status'], [DrawRecord::STATUS_SUCCESS,DrawRecord::STATUS_LAUNCH_BATCHPAY,DrawRecord::STATUS_DENY])) { ?>
                                     <a href="javascript:openwin('/user/drawrecord/examinfk?pid=<?= $val['uid'] ?>&id=<?= $val['id'] ?>',500,500)" class="btn mini green"><i class="icon-edit"></i> 查看</a>
-                                <?php } elseif ($val['status'] == 11) { ?>
-                                    <a href="javascript:openwin('/user/drawrecord/examinfk?pid=<?= $val['uid'] ?>&id=<?= $val['id'] ?>',500,500)" class="btn mini green"><i class="icon-edit"></i> 重新审核</a>
                                 <?php } ?>
                             </td>
                     </tr>
