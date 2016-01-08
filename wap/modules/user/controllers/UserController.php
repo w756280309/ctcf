@@ -45,11 +45,6 @@ class UserController extends BaseController
             $model[$key]['created_at_date'] = date('Y-m-d', $val['created_at']);
             $model[$key]['created_at_time'] = date('H:i:s', $val['created_at']);
             $model[$key]['type'] = Yii::$app->params['mingxi'][$val['type']];
-            if ($val['type'] == 0 || $val['type'] == 4) {
-                $model[$key]['in_money'] = '+'.$val['in_money'];
-            } elseif ($val['type'] == 1 || $val['type'] == 2) {
-                $model[$key]['out_money'] = '-'.$val['out_money'];
-            }
         }
         $tp = $pg->getPageCount();
         $code = ($page > $tp) ? 1 : 0;

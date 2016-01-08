@@ -202,7 +202,7 @@ class ProductProcessor {
                                 if ($i == 1)
                                     $lastDT = $tenderCompletedDate;
                                 $lastU = $lastDT->format('U');
-                                $lastDT->add(new DateInterval('P1M'));
+                                $lastDT->add(new \DateInterval('P1M'));
                                 $nextU = $lastDT->format('U');
                                 $last = new \DateTime();
                                 $last->setTimestamp($lastU);
