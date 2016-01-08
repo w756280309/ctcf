@@ -473,7 +473,7 @@ class CrontabController extends Controller
             }
         }
     }
-    
+
     /**
      * 短信发送任务[文件锁]
      */
@@ -481,7 +481,7 @@ class CrontabController extends Controller
     {
         $messages = SmsMessage::find()->where(['status' => SmsMessage::STATUS_WAIT])->orderBy('id desc')->all();
         foreach ($messages as $msg) {
-            $result = \Yii::$container->get('sms_lib')->send($msg);
+            $result = \Yii::$container->get('sms')->send($msg);
             if ($result) {
                 $msg->status = SmsMessage::STATUS_SENT;
             } else {
