@@ -9,8 +9,10 @@ use backend\controllers\BaseController;
 use common\models\contract\ContractTemplate;
 use common\models\user\User;
 use common\models\order\OnlineRepaymentPlan;
-use common\models\sms\SmsMessage;
 use common\models\order\OnlineOrder;
+use common\models\user\UserAccount;
+use common\lib\bchelp\BcRound;
+use common\models\sms\SmsMessage;
 
 /**
  * Description of OnlineProduct
@@ -299,19 +301,31 @@ class ProductonlineController extends BaseController {
      * 项目提前成立
      */
     public function actionFound($id=null){
-        //$id = Yii::$app->request->post("id");
         Yii::$app->response->format = Response::FORMAT_JSON;
         if($id){
             $model = OnlineProduct::findOne($id);
             if(empty($model)||$model->status!=OnlineProduct::STATUS_NOW){
                 return ['result' => '0', 'message' => '无法找到该项目,或者项目状态不是募集中'];
             }else{
-                $res = OnlineProduct::updateAll(['status'=>OnlineProduct::STATUS_FOUND,'sort'=>OnlineProduct::SORT_FOUND],['id'=>$id]);
-                if($res){
-                    return ['result' => '1', 'message' => '操作成功'];
-                }else{
-                    return ['result' => '0', 'message' => '操作失败，请联系技术'];
+                $bc = new BcRound();
+                $transaction = Yii::$app->db->beginTransaction();
+                $up_srs = OnlineProduct::updateAll(['status'=>OnlineProduct::STATUS_FOUND,'sort'=>OnlineProduct::SORT_FOUND],['id'=>$id]);
+                if(!$up_srs){
+                    $transaction->rollBack();
+                    return ['result' => '0', 'message' => '操作失败,状态更新失败,请联系技术'];
                 }
+                $orders = OnlineOrder::getOrderListByCond(['online_pid'=>$id,'status'=>  OnlineOrder::STATUS_SUCCESS]);
+                foreach ($orders as $ord) {
+                    $ua = UserAccount::findOne(['type'=>  UserAccount::TYPE_LEND,'uid'=>$ord['uid']]);
+                    $ua->investment_balance = $bc->bcround(bcadd($ua->investment_balance, $ord['order_money']),2);
+                    $ua->freeze_balance = $bc->bcround(bcsub($ua->freeze_balance, $ord['order_money']),2);
+                    if(!$ua->save()){
+                        $transaction->rollBack();
+                        return ['result' => '0', 'message' => '操作失败,账户更新失败,请联系技术'];
+                    }
+                }
+                $transaction->commit();
+                return ['result' => '1', 'message' => '操作成功'];
             }
         }else{
             return ['result' => '0', 'message' => 'ID不能为空'];

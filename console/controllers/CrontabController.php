@@ -36,6 +36,7 @@ use PayGate\Cfca\Response\Response1520;
 use common\models\user\Batchpay;
 use common\models\user\DrawRecord;
 use common\models\sms\SmsMessage;
+use common\utils\TxUtils;
 
 class CrontabController extends Controller
 {
@@ -45,6 +46,7 @@ class CrontabController extends Controller
     public function actionUpdatefull()
     {
         $data = OnlineProduct::find()->where(['finish_rate' => 1, 'status' => 2])->all();
+        $bc = new BcRound();
         $sms = new SmsMessage([
             'template_id' => Yii::$app->params['sms']['manbiao']
         ]);
@@ -53,17 +55,22 @@ class CrontabController extends Controller
             OnlineProduct::updateAll(['status' => 3, 'sort' => OnlineProduct::SORT_FULL], ['id' => $pid]);
             //$orders = OnlineOrder::find()->where(['online_pid'=>$pid,'status'=>  OnlineOrder::STATUS_SUCCESS])->asArray()->select('id,order_money,refund_method,yield_rate,expires,uid,order_time')->all();
             //OnlineRepaymentPlan::createPlan($pid,$orders);//转移到开始计息部分
-            
-            $online_order = OnlineOrder::find()->where(['online_pid' => $dat['id'], 'status' => OnlineOrder::STATUS_SUCCESS])->groupBy('uid')->all();
-            foreach ($online_order as $order) {
+
+            $orders = OnlineOrder::getOrderListByCond(['online_pid'=>$pid,'status'=>  OnlineOrder::STATUS_SUCCESS]);
+             foreach ($orders as $ord) {
+                $ua = UserAccount::findOne(['type'=>  UserAccount::TYPE_LEND,'uid'=>$ord['uid']]);
+                $ua->investment_balance = $bc->bcround(bcadd($ua->investment_balance, $ord['order_money']),2);
+                $ua->freeze_balance = $bc->bcround(bcsub($ua->freeze_balance, $ord['order_money']),2);
+                $ua->save();
+
                 $message = [
-                    $order['username'],
+                    $ord['username'],
                     $dat['title']
                 ];
 
                 $_sms = clone $sms;
-                $_sms->uid = $order['uid'];        
-                $_sms->mobile = $order['mobile'];
+                $_sms->uid = $ord['uid'];
+                $_sms->mobile = $ord['mobile'];
                 $_sms->message = json_encode($message);
 
                 $_sms->save();
@@ -85,8 +92,6 @@ class CrontabController extends Controller
     {
         $product = OnlineProduct::find()->where(['del_status' => OnlineProduct::STATUS_USE, 'online_status' => OnlineProduct::STATUS_ONLINE, 'status' => OnlineProduct::STATUS_NOW]);
         $product = $product->andFilterWhere(['<', 'end_date', time()])->all();
-        //var_dump($product);exit;
-
         $bc = new BcRound();
         bcscale(14);
         $transaction = Yii::$app->db->beginTransaction();
@@ -94,21 +99,18 @@ class CrontabController extends Controller
             $order = OnlineOrder::find()->where(['online_pid' => $val['id'], 'status' => OnlineOrder::STATUS_SUCCESS])->all();
             foreach ($order as $v) {
                 $ua = UserAccount::findOne(['uid' => $v['uid']]);
-
                 $ua->freeze_balance = $bc->bcround(bcsub($ua->freeze_balance, $v['order_money']), 2);
                 $ua->available_balance = $bc->bcround(bcadd($ua->available_balance, $v['order_money']), 2);
-                $ua->out_sum = $bc->bcround(bcsub($ua->out_sum, $v['order_money']), 2);
-
+                $ua->drawable_balance = $bc->bcround(bcadd($ua->drawable_balance, $v['order_money']), 2);
+                $ua->in_sum = $bc->bcround(bcadd($ua->in_sum, $v['order_money']), 2);
                 if (!$ua->save()) {
                     $transaction->rollBack();
-
                     return false;
                 }
 
                 $v->status = OnlineOrder::STATUS_CANCEL;
                 if (!$v->save()) {
                     $transaction->rollBack();
-
                     return false;
                 }
 
@@ -120,11 +122,9 @@ class CrontabController extends Controller
                 $money_record->uid = $v['uid'];
                 $money_record->balance = $ua->available_balance;
                 $money_record->in_money = $v['order_money'];
-                $money_record->status = MoneyRecord::STATUS_REFUND;
 
                 if (!$money_record->save()) {
                     $transaction->rollBack();
-
                     return false;
                 }
             }
@@ -133,18 +133,15 @@ class CrontabController extends Controller
             $val->status = OnlineProduct::STATUS_LIU;
             if (!$val->save()) {
                 $transaction->rollBack();
-
                 return false;
             }
         }
 
         if ($product) {
             $transaction->commit();
-
             return true;
         }
         echo 1;
-
         return false;
     }
 
@@ -400,7 +397,7 @@ class CrontabController extends Controller
         $endYesterday = mktime(0, 0, 0, date('m'), date('d'), date('Y')) - 1;
         $cfca = new Cfca();
         $bc = new BcRound();
-        $yesbatchpay = Batchpay::find()->where(['is_launch' => Batchpay::IS_LAUNCH_YES])->andFilterWhere(['between', 'created_at', $beginYesterday, $endYesterday])->all();
+        $yesbatchpay = Batchpay::find()->where(['is_launch' => Batchpay::IS_LAUNCH_YES])->andFilterWhere(['between', 'created_at', $beginYesterday, $endYesterday])->all();//
         foreach ($yesbatchpay as $batchpay) {
             $request1520 = new Request1520(Yii::$app->params['cfca']['institutionId'], $batchpay->sn);
             $resp = $cfca->request($request1520);
@@ -428,7 +425,6 @@ class CrontabController extends Controller
                         //成功的
                         $draw_status = DrawRecord::STATUS_SUCCESS;
                         $YuE = $userAccount->account_balance = $bc->bcround(bcsub($userAccount->account_balance, $money), 2);//账户总额减少
-                        $userAccount->out_sum = $bc->bcround(bcadd($userAccount->available_balance, $money), 2);//更新出账
                         $momeyRecord->type = MoneyRecord::TYPE_DRAW;
                         $momeyRecord->balance = $YuE;
                         $momeyRecord->out_money = $money;
@@ -437,6 +433,7 @@ class CrontabController extends Controller
                         $draw_status = DrawRecord::STATUS_FAIL;//提现不成功
                         $YuE = $userAccount->account_balance = $bc->bcround(bcadd($userAccount->account_balance, $money), 2);//账户总额增加
                         $userAccount->available_balance = $bc->bcround(bcadd($userAccount->available_balance, $money), 2);//更新可用余额
+                        $userAccount->drawable_balance = $bc->bcround(bcadd($userAccount->drawable_balance, $money), 2);//更新提现金额
                         $userAccount->in_sum = $bc->bcround(bcadd($userAccount->available_balance, $money), 2);//更新入账
                         $momeyRecord->type = MoneyRecord::TYPE_DRAW_RETURN;
                         $momeyRecord->balance = $YuE;
@@ -465,7 +462,7 @@ class CrontabController extends Controller
             $resp = $cfca->request($rq1320);
             $rp1320 = new Response1320($resp->getText());
             if ($rp1320->isSuccess()) {
-                $mr = MoneyRecord::findOne(['type' => MoneyRecord::TYPE_RECHARGE, 'osn' => $rc->sn, 'status' => MoneyRecord::STATUS_SUCCESS]);
+                $mr = MoneyRecord::findOne(['type' => MoneyRecord::TYPE_RECHARGE, 'osn' => $rc->sn]);
                 if ($mr === null) {
                     $user_acount = UserAccount::findOne(['type' => UserAccount::TYPE_LEND, 'uid' => $rc->uid]);
 
@@ -486,10 +483,12 @@ class CrontabController extends Controller
                     $user_acount->in_sum = $bc->bcround(bcadd($user_acount->in_sum, $rc->fund), 2);
 
                     $user_acount->save();
-                    $money_record->save();
-                    RechargeRecord::updateAll(['status' => 1, 'bankNotificationTime' => $rp1320->getBankNotifyTime()], ['id' => $rc->id]);
-                    
-                    $user = User::findOne($rc->uid);
+                    $money_record->save();                    
+                    $rc->status = RechargeRecord::STATUS_YES;
+                    $rc->save();
+                    RechargeRecord::updateAll(['status' => 1, 'bankNotificationTime' => $rp1320->getBanknotificationtime()], ['id' => $rc->id]);
+
+                    $user = $user_acount->user;
                     $message = [
                         $user->real_name,
                         $rc->fund
@@ -503,6 +502,23 @@ class CrontabController extends Controller
                     $sms->save();
                 }
             }
+        }
+    }
+
+    /**
+     * 短信发送任务[文件锁]
+     */
+    public function actionSms()
+    {
+        $messages = SmsMessage::find()->where(['status' => SmsMessage::STATUS_WAIT])->orderBy('id desc')->all();
+        foreach ($messages as $msg) {
+            $result = \Yii::$container->get('sms')->send($msg);
+            if ($result) {
+                $msg->status = SmsMessage::STATUS_SENT;
+            } else {
+                $msg->status = SmsMessage::STATUS_FAIL;
+            }
+            $msg->save(false);
         }
     }
 }

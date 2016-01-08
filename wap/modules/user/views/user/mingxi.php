@@ -25,11 +25,7 @@ $this->registerJs('var cp=' . $header['cp'] . ';', 1);
                     <span class="data2"><?= $val['created_at_time'] ?></span>
                 </div>
                 <div class="col-xs-3 revenue"><?= $val['type'] ?></div>
-                <?php if ($val['in_money'] != 0) { ?>
-                <div class="col-xs-3 money"><?= $val['in_money'] ?></div>
-                <?php } elseif ($val['out_money'] != 0) { ?>
-                    <div class="col-xs-3 money"><?= $val['out_money'] ?></div>
-        <?php } ?>
+                <div class="col-xs-3 money"><?= ($val['in_money']>$val['out_money'])?('+'.$val['in_money']):('-'.$val['out_money']) ?></div>
                 <div class="col-xs-3 revenue"><?= $val['balance'] ?></div>
             </div>
         <?php endforeach; ?>

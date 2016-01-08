@@ -26,10 +26,13 @@ class MoneyRecord extends \yii\db\ActiveRecord
     const TYPE_DRAW = 1; //提现
     const TYPE_ORDER = 2; //投标
     const TYPE_FANGKUAN = 3; //放款
-    const TYPE_HUANKUAN = 4; //还款
-    const TYPE_CHEBIAO = 5; //撤标
+    const TYPE_HUANKUAN = 400; //还款
+    const TYPE_HUIKUAN = 4; //回款
+    const TYPE_CHEBIAO = 5; //流标
     const TYPE_FEE = 6; //放款扣去手续费
-    const TYPE_DRAW_RETURN = 7; //提现退款
+    const TYPE_DRAW_CANCEL = 100; //提现撤销
+    const TYPE_DRAW_SUCCESS = 101; //批量代付成功
+    const TYPE_DRAW_RETURN = 102; //批量代付失败退款
 
     public static function createSN()
     {

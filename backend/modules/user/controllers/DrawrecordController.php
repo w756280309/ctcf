@@ -14,6 +14,7 @@ use common\lib\bchelp\BcRound;
 use common\models\user\UserBank;
 use common\models\user\Batchpay;
 use yii\web\Response;
+use common\utils\TxUtils;
 
 class DrawrecordController extends BaseController
 {
@@ -100,8 +101,18 @@ class DrawrecordController extends BaseController
                 $userAccountInfo->available_balance = $bc->bcround(bcsub($userAccountInfo->available_balance, $money), 2);
                 $userAccountInfo->out_sum = $bc->bcround(bcadd($userAccountInfo->out_sum, $money), 2);
                 $userAccountInfo->freeze_balance = $bc->bcround(bcadd($userAccountInfo->freeze_balance, $money), 2);
-                $userAccountInfo->drawable_balance = $bc->bcround(bcadd($userAccountInfo->drawable_balance, $money), 2);
-                if ($model->save() && $userAccountInfo->save()) {
+                $userAccountInfo->drawable_balance = $bc->bcround(bcsub($userAccountInfo->drawable_balance, $money), 2);
+                
+                $money_record = new MoneyRecord();
+                $money_record->sn = TxUtils::generateSn("MR");
+                $money_record->type = MoneyRecord::TYPE_DRAW;
+                $money_record->osn = $model->sn;
+                $money_record->account_id = $userAccountInfo->id;
+                $money_record->uid = $id;
+                $money_record->balance = $bc->bcround(bcsub($userAccountInfo->available_balance, $money), 2);
+                $money_record->out_money = $money;
+                
+                if ($model->save() && $userAccountInfo->save() && $money_record->save()) {
                     $this->alert(1, '操作成功', "detail?id=$id&type=$type");
                 } else {
                     $this->alert(2, '操作失败');
@@ -124,56 +135,54 @@ class DrawrecordController extends BaseController
         $res = 0;
         $msg = '操作失败';
         $draw = DrawRecord::findOne($id);
-        if (null !== $draw) {
+        if (null !== $draw && in_array($status, [DrawRecord::STATUS_SUCCESS,DrawRecord::STATUS_FAIL])) {
             $userAccountInfo = UserAccount::findOne(['uid' => $draw->uid, 'type' => UserAccount::TYPE_BORROW]); //融资账户;
             $bc = new BcRound();
             $money = $draw->money;
+            $YuE = $userAccountInfo->available_balance;
+            $money_type = 0;
             bcscale(14); //设置小数位数
             if ($status === DrawRecord::STATUS_SUCCESS) {
-                //若审核通过状态变更为提现成功
-                $YuE = $userAccountInfo->account_balance = $bc->bcround(bcsub($userAccountInfo->account_balance, $money), 2);
+                $userAccountInfo->account_balance = $bc->bcround(bcsub($userAccountInfo->account_balance, $money), 2);
                 $userAccountInfo->freeze_balance = $bc->bcround(bcsub($userAccountInfo->freeze_balance, $money), 2);
-
-                $moneyInfo = new MoneyRecord();
-                // 生成一个SN流水号
-                $sn = MoneyRecord::createSN();
-                $moneyInfo->uid = $id;
-                $moneyInfo->sn = $sn;
-                $moneyInfo->type = 1;
-                $moneyInfo->balance = $YuE;
-                $moneyInfo->out_money = $money;
-                $moneyInfo->account_id = $userAccountInfo->id;
-
-                //开启事务
-                $transaction = Yii::$app->db->beginTransaction();
-                $draw->status = DrawRecord::STATUS_SUCCESS;
-                if (($draw->save()) && ($moneyInfo->save()) && ($userAccountInfo->save())) {
-                    $transaction->commit();
-                    $msg = '操作成功';
-                    $res = 1;
-                } else {
-                    $transaction->rollBack();
-                }
+                $money_type = MoneyRecord::TYPE_DRAW_SUCCESS;
             } elseif ($status === DrawRecord::STATUS_FAIL) {
                 $userAccountInfo->available_balance = $bc->bcround(bcadd($userAccountInfo->available_balance, $money), 2);
                 $userAccountInfo->in_sum = $bc->bcround(bcadd($userAccountInfo->in_sum, $money), 2);
                 $userAccountInfo->freeze_balance = $bc->bcround(bcsub($userAccountInfo->freeze_balance, $money), 2);
                 $userAccountInfo->drawable_balance = $bc->bcround(bcadd($userAccountInfo->drawable_balance, $money), 2);
+                $money_type = MoneyRecord::TYPE_DRAW_RETURN;
+            }
+            
+            $moneyInfo = new MoneyRecord();
+            // 生成一个SN流水号
+            $sn = TxUtils::generateSn("MR");
+            $moneyInfo->uid = $id;
+            $moneyInfo->sn = $sn;
+            $moneyInfo->type = $money_type;
+            $moneyInfo->balance = $YuE;
+            if($money_type == DrawRecord::STATUS_SUCCESS){
+                $moneyInfo->out_money = $money;
+                $draw->status = DrawRecord::STATUS_SUCCESS;
+            }else{
+                $moneyInfo->in_money = $money;
                 $draw->status = DrawRecord::STATUS_FAIL; //驳回
-                $transaction = Yii::$app->db->beginTransaction();
-                if (($draw->save()) && ($userAccountInfo->save())) {
-                    $transaction->commit();
-                    $msg = '操作成功';
-                    $res = 1;
-                } else {
-                    $transaction->rollBack();
-                }
+            }
+            $moneyInfo->account_id = $userAccountInfo->id;
+
+            //开启事务
+            $transaction = Yii::$app->db->beginTransaction();            
+            if (($draw->save()) && ($moneyInfo->save()) && ($userAccountInfo->save())) {
+                $transaction->commit();
+                $msg = '操作成功';
+                $res = 1;
+            } else {
+                $transaction->rollBack();
             }
         } else {
             $msg = '无法找到';
         }
         Yii::$app->response->format = Response::FORMAT_JSON;
-
         return ['res' => $res, 'msg' => $msg, 'data' => ''];
     }
 
@@ -237,14 +246,40 @@ class DrawrecordController extends BaseController
         if (empty($id) || empty($type)) {
             return false;
         }
-
         $model = DrawRecord::findOne($id);
-        $model->status = $type;
-        if ($model->save()) {
-            return true;
+        $lenderAccount = UserAccount::findOne(['uid' => $model->uid, 'type' => UserAccount::TYPE_LEND]);
+        if (null === $lenderAccount) {
+            return false;
         }
-
-        return false;
+        $transaction = Yii::$app->db->beginTransaction();
+        $model->status = $type;
+        if (!$model->save()) {
+            $transaction->rollBack();
+            return false;
+        }
+        if (11 === (int) $type) { //处理如果不通过的情况
+            $bc = new BcRound();
+            bcscale(14);
+            $money_record = new MoneyRecord([
+                'sn' => MoneyRecord::createSN(),
+                'type' => MoneyRecord::TYPE_DRAW_CANCEL,
+                'osn' => $model->sn,
+                'account_id' => $lenderAccount->id,
+                'uid' => $lenderAccount->uid,
+                'balance' => $bc->bcround(bcadd($lenderAccount->available_balance, $model->money), 2),
+                'in_money' => $model->money,
+            ]);
+            $lenderAccount->available_balance = $bc->bcround(bcadd($lenderAccount->available_balance, $model->money), 2);
+            $lenderAccount->drawable_balance = $bc->bcround(bcadd($lenderAccount->drawable_balance, $model->money), 2);
+            $lenderAccount->in_sum = $bc->bcround(bcadd($lenderAccount->in_sum, $model->money), 2);
+            $lenderAccount->freeze_balance = $bc->bcround(bcsub($lenderAccount->freeze_balance, $model->money), 2);
+            if (!$money_record->save() || !$lenderAccount->save()) {
+                $transaction->rollBack();
+                return false;
+            }
+        }
+        $transaction->commit();
+        return true;
     }
 
     /**

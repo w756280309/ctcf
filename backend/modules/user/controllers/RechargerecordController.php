@@ -188,6 +188,7 @@ class RechargerecordController extends BaseController
                 $moneyInfo->balance = $YuE;
                 $moneyInfo->in_money = $money;
                 $moneyInfo->account_id = $userAccountInfo->id;
+                $recharge->status = RechargeRecord::STATUS_YES;
                 if (($moneyInfo->save()) && ($userAccountInfo->save()) && $recharge->save()) {
                     $transaction->commit();
                     $res = $this->alert = 1;

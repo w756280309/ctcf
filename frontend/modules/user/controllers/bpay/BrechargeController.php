@@ -122,7 +122,6 @@ class BrechargeController extends Controller
             $res = RechargeRecord::updateAll(['status' => 1, 'bankNotificationTime' => $recharge->bankNotificationTime], ['id' => $recharge->id]);
             if (!$res) {
                 $transaction->rollBack();
-
                 return false;
             }
             //添加交易流水
@@ -134,10 +133,8 @@ class BrechargeController extends Controller
             $money_record->uid = $uid;
             $money_record->balance = $bc->bcround(bcadd($user_acount->available_balance, $recharge->fund), 2);
             $money_record->in_money = $recharge->fund;
-
             if (!$money_record->save()) {
                 $transaction->rollBack();
-
                 return false;
             }
 
@@ -145,11 +142,9 @@ class BrechargeController extends Controller
             $user_acount->uid = $user_acount->uid;
             $user_acount->account_balance = $bc->bcround(bcadd($user_acount->account_balance, $recharge->fund), 2);
             $user_acount->available_balance = $bc->bcround(bcadd($user_acount->available_balance, $recharge->fund), 2);
-            $user_acount->in_sum = $bc->bcround(bcadd($user_acount->in_sum, $recharge->fund), 2);
-
+            $user_acount->in_sum = $bc->bcround(bcadd($user_acount->in_sum, $recharge->fund), 2);            
             if (!$user_acount->save()) {
                 $transaction->rollBack();
-
                 return false;
             }
             
@@ -166,10 +161,8 @@ class BrechargeController extends Controller
             $sms->save();
 
             $transaction->commit();
-
             return true;
         }
-
         return false;
     }
 

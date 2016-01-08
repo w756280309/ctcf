@@ -67,6 +67,7 @@ class OrderCore
 
             return ['code' => PayService::ERROR_MONEY_LESS,  'message' => PayService::getErrorByCode(PayService::ERROR_MONEY_LESS)];
         }
+        $ua->drawable_balance = $bcrond->bcround(bcsub($ua->drawable_balance, $price), 2);
         $ua->freeze_balance = $bcrond->bcround(bcadd($ua->freeze_balance, $price), 2);
         $ua->out_sum = $bcrond->bcround(bcadd($ua->out_sum, $price), 2);
         $uare = $ua->save();
@@ -89,21 +90,27 @@ class OrderCore
         $mrres = $mrmodel->save();
         if (!$mrres) {
             $transaction->rollBack();
-
             return ['code' => PayService::ERROR_MR,  'message' => PayService::getErrorByCode(PayService::ERROR_MR), 'tourl' => '/order/order/ordererror'];
         }
 
         /*修改标的完成比例  后期是否需要定时更新*/
         $summoney = OnlineOrder::find()->where(['status' => 1, 'online_pid' => $model->id])->sum('order_money');
-        $finish_rate = bcdiv($summoney, $model->money);
-        $update['finish_rate'] = $bcrond->bcround($finish_rate, 2);
-        if (bccomp($finish_rate, 1) == 0) {
-            $update['full_time'] = time();
-            //$update['status']=  OnlineProduct::STATUS_FULL;//由于定时任务去修改满标状态以及生成还款计划。所以此处不设置修改满标状态
+        $update = array();
+        if (0 === bccomp($summoney, $model->money)) {
+            $update['finish_rate'] = 1;
+            $update['full_time'] = time();//由于定时任务去修改满标状态以及生成还款计划。所以此处不设置修改满标状态
             $diff = \Yii::$app->functions->timediff(strtotime(date('Y-m-d', $model->start_date)), strtotime(date('Y-m-d', $model->finish_date)));
             OnlineOrder::updateAll(['expires' => $diff['day'] - 1], ['online_pid' => $model->id]);
+        } else {
+            $finish_rate = $bcrond->bcround(bcdiv($summoney, $model->money), 2);
+            $update['finish_rate'] = $finish_rate;
         }
+
         $res = OnlineProduct::updateAll($update, ['id' => $model->id]);
+        if (!$res) {
+            $transaction->rollBack();
+            return ['code' => PayService::ERROR_SYSTEM, 'message' => PayService::getErrorByCode(PayService::ERROR_SYSTEM), 'tourl' => '/order/order/ordererror'];
+        }
         
         //投标成功，向用户发送短信
         $message = [
