@@ -44,7 +44,8 @@ class UseraccountController extends BaseController
      */
     public function actionTixian()
     {
-        $uid = $this->user->id;
+        $user = $this->user;
+        $uid = $user->id;
         $user_bank = UserBanks::findOne(['uid' => $uid, 'status' => UserBanks::STATUS_YES]);
         $user_acount = UserAccount::findOne(['type' => UserAccount::TYPE_LEND, 'uid' => $uid]);
         $province = Region::find()->where(['province_id' => 0])->select('id,name')->asArray()->all();
@@ -67,6 +68,17 @@ class UseraccountController extends BaseController
                 $draw->addError('money', $re['message']);
             } else {
                 $transaction = Yii::$app->db->beginTransaction();
+                $mess = [
+                    $user->real_name,
+                    date('Y-m-d H:i:s', time()),
+                    $draw->money
+                ];
+                $sms = new SmsMessage([
+                    'uid' => $uid,
+                    'mobile' => $user->mobile,
+                    'message' => json_encode($mess)
+                ]);
+                
                 //录入draw_record记录
                 $draw->sn = DrawRecord::createSN();
                 $draw->pay_id = 0;
@@ -79,7 +91,8 @@ class UseraccountController extends BaseController
 
                 if (!$draw->save()) {
                     $transaction->rollBack();
-
+                    $sms->template_id = Yii::$app->params['sms']['tixian_err'];
+                    $sms->save();
                     return $this->redirect('/user/useraccount/tixianback?flag=err');
                 }
 
@@ -97,7 +110,8 @@ class UseraccountController extends BaseController
 
                 if (!$money_record->save()) {
                     $transaction->rollBack();
-
+                    $sms->template_id = Yii::$app->params['sms']['tixian_err'];
+                    $sms->save();
                     return $this->redirect('/user/useraccount/tixianback?flag=err');
                 }
 
@@ -108,21 +122,12 @@ class UseraccountController extends BaseController
 
                 if (!$user_acount->save()) {
                     $transaction->rollBack();
-
+                    $sms->template_id = Yii::$app->params['sms']['tixian_err'];
+                    $sms->save();
                     return $this->redirect('/user/useraccount/tixianback?flag=err');
                 }
                 
-                $message = [
-                    $this->user->real_name,
-                    date('Y-m-d H:i:s', $draw->created_at),
-                    $draw->money
-                ];
-                $sms = new SmsMessage([
-                    'uid' => $uid,
-                    'template_id' => Yii::$app->params['sms']['tixian'],
-                    'mobile' => $this->user->mobile,
-                    'message' => json_encode($message)
-                ]);
+                $sms->template_id = Yii::$app->params['sms']['tixian_succ'];
                 $sms->save();
 
                 $transaction->commit();

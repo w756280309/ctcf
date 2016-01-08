@@ -35,10 +35,11 @@ return [
     'bank' => require(__DIR__.'/banks.php'),
     'sms' => [
         'manbiao' => 1,
-        'tixian' => 2,
-        'toubiao' => 3,
-        'recharge' => 4,
-        'huikuan' => 5,
-        'yzm' => 6
+        'tixian_succ' => 2,
+        'tixian_err' => 3,
+        'toubiao' => 4,
+        'recharge' => 5,
+        'huikuan' => 6,
+        'yzm' => 7
     ],
 ];

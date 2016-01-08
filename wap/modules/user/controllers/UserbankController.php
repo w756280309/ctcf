@@ -318,6 +318,17 @@ class UserbankController extends BaseController
             }
 
             $transaction = Yii::$app->db->beginTransaction();
+            $mess = [
+                $user->real_name,
+                date('Y-m-d H:i:s', time()),
+                $draw->money
+            ];
+            $sms = new SmsMessage([
+                'uid' => $uid,
+                'mobile' => $user->mobile,
+                'message' => json_encode($mess)
+            ]);
+            
             //录入draw_record记录
             $draw = new DrawRecord();
             $draw->money = $money;
@@ -340,7 +351,8 @@ class UserbankController extends BaseController
 
             if (!$draw->save()) {
                 $transaction->rollBack();
-
+                $sms->template_id = Yii::$app->params['sms']['tixian_err'];
+                $sms->save();
                 return ['code' => 1, 'message' => '提现失败'];
             }
 
@@ -358,7 +370,8 @@ class UserbankController extends BaseController
 
             if (!$money_record->save()) {
                 $transaction->rollBack();
-
+                $sms->template_id = Yii::$app->params['sms']['tixian_err'];
+                $sms->save();
                 return ['code' => 1, 'message' => '提现失败'];
             }
 
@@ -371,21 +384,12 @@ class UserbankController extends BaseController
 
             if (!$user_acount->save()) {
                 $transaction->rollBack();
-
+                $sms->template_id = Yii::$app->params['sms']['tixian_err'];
+                $sms->save();
                 return ['code' => 1, 'message' => '提现失败'];
             }
             
-            $message = [
-                $user->real_name,
-                date('Y-m-d H:i:s', $draw->created_at),
-                $draw->money
-            ];
-            $sms = new SmsMessage([
-                'uid' => $uid,
-                'template_id' => Yii::$app->params['sms']['tixian'],
-                'mobile' => $user->mobile,
-                'message' => json_encode($message)
-            ]);
+            $sms->template_id = Yii::$app->params['sms']['tixian_succ'];
             $sms->save();
 
             $transaction->commit();
