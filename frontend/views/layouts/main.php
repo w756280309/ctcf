@@ -18,14 +18,36 @@ AppAsset::register($this);
 
     <body>
         <?php $this->beginBody() ?>
-        <?php if (Yii::$app->user->isGuest) { ?>
-        <a href="/site/login">登录</a>
-        <?php } else { ?>
-        <a href="/user/useraccount/accountcenter"><?php echo "ID:".Yii::$app->user->id ?></a>
-        <a href="/site/logout">注销</a>
-        <?php } ?>
 
-        <?= $content ?>
+<div class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">
+                温都金服
+            </a>
+        </div>
+
+        <p class="brand-sub">大额充值通道</p>
+
+        <div class="navbar-text navbar-right">
+            <?php if (Yii::$app->user->isGuest) { ?>
+                <a class="navbar-link" href="/site/login">登录</a>
+                <a class="navbar-link" href="/site/login">注册</a>
+            <?php } else { ?>
+                <a class="navbar-link" href="/user/useraccount/accountcenter"><?php echo "ID:".Yii::$app->user->id ?></a>
+                <a class="navbar-link" href="/site/logout">注销</a>
+            <?php } ?>
+        </div>
+    </div>
+</div>
+
+<div class="main container">
+    <?= $content ?>
+</div>
+
+<div class="footer">
+    页尾文字
+</div>
 
         <?php $this->endBody() ?>
     </body>

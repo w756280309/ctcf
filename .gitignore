@@ -1,6 +1,5 @@
 /vendor/
 /*/assets/vendor/
-/*/web/dist/
 
 /data/log/*
 !/data/log/.gitkeep
