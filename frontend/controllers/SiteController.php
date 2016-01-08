@@ -67,7 +67,8 @@ class SiteController extends Controller {
      * 首页展示
      */
     public function actionIndex() {
-        $this->layout = false;
+        $this->layout = 'main';
+
         return $this->render('index');
     }
 

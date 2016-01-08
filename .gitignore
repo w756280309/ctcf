@@ -1,4 +1,6 @@
 /vendor/
+/*/assets/vendor/
+/*/web/dist/
 
 /data/log/*
 !/data/log/.gitkeep
@@ -22,3 +24,6 @@
 .htaccess
 php-cs-fixer.phar
 /nbproject/
+
+params-local.php
+main-local.php
