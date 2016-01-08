@@ -57,7 +57,7 @@ class CrontabController extends Controller
             $online_order = OnlineOrder::find()->where(['online_pid' => $dat['id'], 'status' => OnlineOrder::STATUS_SUCCESS])->groupBy('uid')->all();
             foreach ($online_order as $order) {
                 $message = [
-                    $order['real_name'],
+                    $order['username'],
                     $dat['title']
                 ];
 
