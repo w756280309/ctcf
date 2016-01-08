@@ -456,7 +456,7 @@ class CrontabController extends Controller
      */
     public function actionLaunchrecharge()
     {
-        $recharges = RechargeRecord::find()->where(['status' => RechargeRecord::STATUS_NO, 'pay_type' => RechargeRecord::PAY_TYPE_NET])->orderBy('id desc')->limit(1)->all();
+        $recharges = RechargeRecord::find()->where(['status' => RechargeRecord::STATUS_NO, 'pay_type' => RechargeRecord::PAY_TYPE_NET])->orderBy('id desc')->all();
         $cfca = new Cfca();
         $bc = new BcRound();
         bcscale(14);
@@ -478,7 +478,6 @@ class CrontabController extends Controller
                     $money_record->uid = $rc->uid;
                     $money_record->balance = $bc->bcround(bcadd($user_acount->available_balance, $rc->fund), 2);
                     $money_record->in_money = $rc->fund;
-                    $money_record->status = MoneyRecord::STATUS_SUCCESS;
 
                     //录入user_acount记录
                     $user_acount->uid = $user_acount->uid;
