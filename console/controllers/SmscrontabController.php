@@ -37,7 +37,7 @@ class SmscrontabController extends Controller
                 }
                 $ures = $msg->save(false);
                 $msg_str = 'ID:' . $msg->id . "; 手机号:" . $msg->mobile . "; message:" . $msg->message . '; 响应码:' . $result . '; 操作结果:' . $ures;
-                \Yii::error($msg_str, 'sms');
+                \Yii::trace($msg_str, 'sms');//消息格式Timestamp [IP address][User ID][Session ID][Severity Level][Category] Message Text
             }
             flock($handle,LOCK_UN);
             fclose($handle);  
