@@ -1,6 +1,7 @@
 <?php
 
 namespace common\models\order;
+
 use yii\behaviors\TimestampBehavior;
 use common\models\product\OnlineProduct;
 use common\lib\product\ProductProcessor;
@@ -9,46 +10,49 @@ use Yii;
 
 /**
  * This is the model class for table "online_repayment_plan".
- *
  */
-class OnlineRepaymentPlan extends \yii\db\ActiveRecord {
+class OnlineRepaymentPlan extends \yii\db\ActiveRecord
+{
+    const STATUS_WEIHUAN = 0;//0、未还 
+    const STATUS_YIHUAN = 1;// 1、已还 
+    const STATUS_TIQIAM = 2;// 2、提前还款 
+    const STATUS_WUXIAO = 3;// 3，无效;
 
-    
-    const STATUS_WEIHUAN=0;//0、未还 
-    const STATUS_YIHUAN=1;// 1、已还 
-    const STATUS_TIQIAM=2;// 2、提前还款 
-    const STATUS_WUXIAO=3;// 3，无效;
-    
-    public static function createSN($pre = 'hkjh') {
-        $pre_val = "HP";
-        list($usec, $sec) = explode(" ", microtime());
+    public static function createSN($pre = 'hkjh')
+    {
+        $pre_val = 'HP';
+        list($usec, $sec) = explode(' ', microtime());
         $v = ((float) $usec + (float) $sec);
 
-        list($usec, $sec) = explode(".", $v);
-        $date = date('ymdHisx' . rand(1000, 9999), $usec);
-        return $pre_val . str_replace('x', $sec, $date);
+        list($usec, $sec) = explode('.', $v);
+        $date = date('ymdHisx'.rand(1000, 9999), $usec);
+
+        return $pre_val.str_replace('x', $sec, $date);
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
-    public static function tableName() {
+    public static function tableName()
+    {
         return 'online_repayment_plan';
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
-    public function behaviors() {
+    public function behaviors()
+    {
         return [
             TimestampBehavior::className(),
         ];
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
-    public function rules() {
+    public function rules()
+    {
         return [
             [['online_pid', 'sn', 'order_id', 'qishu', 'benxi', 'benjin', 'lixi', 'yuqi_day', 'benxi_yue'], 'required'],
             [['online_pid', 'order_id', 'qishu', 'uid', 'refund_time', 'status'], 'integer'],
@@ -58,9 +62,10 @@ class OnlineRepaymentPlan extends \yii\db\ActiveRecord {
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
-    public function attributeLabels() {
+    public function attributeLabels()
+    {
         return [
             'id' => 'ID',
             'online_pid' => 'Online Pid',
@@ -80,56 +85,57 @@ class OnlineRepaymentPlan extends \yii\db\ActiveRecord {
             'updated_at' => 'Updated At',
         ];
     }
-    
-    public static function createPlan($pid=null){
-        if(empty($pid)){
-            return FALSE;
+
+    public static function createPlan($pid = null)
+    {
+        if (empty($pid)) {
+            return false;
         }
         $product = OnlineProduct::findOne($pid);
-        if(empty($product)){
-            return FALSE;
+        if (empty($product)) {
+            return false;
         }
-        
-        $plan = new OnlineRepaymentPlan();
+
+        $plan = new self();
         $pp = new ProductProcessor();
-        $start_jixi = date('Y-m-d',$product->jixi_time+24*3600);
+        $start_jixi = date('Y-m-d', $product->jixi_time + 24 * 3600);
         $days = $pp->LoanTimes($start_jixi, null, $product->finish_date, 'd', true);
         $expires = $days['days'][1]['period']['days'];
-        $orders = OnlineOrder::find()->where(['online_pid'=>$pid,'status'=>  OnlineOrder::STATUS_SUCCESS])->asArray()->select('id,order_money,refund_method,yield_rate,expires,uid,order_time,username,mobile')->all();
-        OnlineProduct::updateAll(['is_jixi'=>1],['id'=>$pid]);//修改已经计息
-        OnlineOrder::updateAll(['expires'=>$expires],['online_pid'=>$pid]);//修改计息天数
-        
+        $orders = OnlineOrder::find()->where(['online_pid' => $pid, 'status' => OnlineOrder::STATUS_SUCCESS])->asArray()->select('id,order_money,refund_method,yield_rate,expires,uid,order_time,username,mobile')->all();
+        OnlineProduct::updateAll(['is_jixi' => 1], ['id' => $pid]);//修改已经计息
+        OnlineOrder::updateAll(['expires' => $expires], ['online_pid' => $pid]);//修改计息天数
+
         $username = '';
         $sms = new SmsMessage([
-            'template_id' => Yii::$app->params['sms']['manbiao']
+            'template_id' => Yii::$app->params['sms']['manbiao'],
         ]);
-        
-        foreach ($orders as $order){
+
+        foreach ($orders as $order) {
             $plan_model = clone $plan;
             $order['expires'] = $expires;
             $processor = $pp->getProductReturn($order);
-            $plan_model->sn=  self::createSN();
-            $plan_model->online_pid= $pid;
-            $plan_model->order_id= $order['id'];
-            $plan_model->qishu= 1;//默认先是1
-            $plan_model->benxi= bcadd($order['order_money'], $processor['order_return'],2);//
-            $plan_model->benjin= $order['order_money'];
-            $plan_model->lixi=$processor['order_return'];
-            $plan_model->uid=$order['uid'];
-            $plan_model->status = OnlineRepaymentPlan::STATUS_WEIHUAN;
-            $plan_model->yuqi_day='0';
-            $plan_model->overdue=0;
-            $plan_model->benxi_yue=0;//付息还本时候用到的字段
-            $plan_model->refund_time=  strtotime($pp->LoanTerms('d1', date('Y-m-d',$order['order_time']), $order['expires']));
-            if(!$plan_model->save()||!$plan_model->validate()){
+            $plan_model->sn = self::createSN();
+            $plan_model->online_pid = $pid;
+            $plan_model->order_id = $order['id'];
+            $plan_model->qishu = 1;//默认先是1
+            $plan_model->benxi = bcadd($order['order_money'], $processor['order_return'], 2);//
+            $plan_model->benjin = $order['order_money'];
+            $plan_model->lixi = $processor['order_return'];
+            $plan_model->uid = $order['uid'];
+            $plan_model->status = self::STATUS_WEIHUAN;
+            $plan_model->yuqi_day = '0';
+            $plan_model->overdue = 0;
+            $plan_model->benxi_yue = 0;//付息还本时候用到的字段
+            $plan_model->refund_time = strtotime($pp->LoanTerms('d1', date('Y-m-d', $order['order_time']), $order['expires']));
+            if (!$plan_model->save() || !$plan_model->validate()) {
                 return false;
             }
-            
+
             if ($username != $order['username']) {
                 $message = [
                     $order['username'],
                     $product->title,
-                    date('Y-m-d', $product->jixi_time)
+                    date('Y-m-d', $product->jixi_time),
                 ];
 
                 $_sms = clone $sms;
@@ -142,7 +148,7 @@ class OnlineRepaymentPlan extends \yii\db\ActiveRecord {
 
             $username = $order['username'];
         }
+
         return true;
     }
-
 }
