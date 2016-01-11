@@ -17,7 +17,13 @@ class SmscrontabController extends Controller
      */
     public function actionSend()
     {
-        $handle = fopen(__FILE__,"r+");
+        $runtimePath = \Yii::getAlias('@runtime');
+        $lock_file = $runtimePath.'/sms.lock';
+        $handle = fopen($lock_file,"w+");
+        if (!file_exists($lock_file)) {
+            fwrite($handle,'');
+        }
+        
         if($handle!==false){ //打开成功
             flock($handle, LOCK_EX);
             $limit = 100;//限制每次运行发送的短信数量
