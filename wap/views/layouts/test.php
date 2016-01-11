@@ -1,6 +1,7 @@
 <?php
 use yii\helpers\Html;
 use wap\assets\AppAsset;
+
 //AppAsset::register($this);
 $this->registerJsFile('js/jquery-1.11.1.min.js', ['depends' => 'yii\web\YiiAsset', 'position' => 1]);
 
