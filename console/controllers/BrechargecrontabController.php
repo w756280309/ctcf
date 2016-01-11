@@ -25,7 +25,7 @@ class BrechargecrontabController extends Controller
      */
     public function actionLaunch()
     {
-        $recharges = RechargeRecord::find()->where(['status' => RechargeRecord::STATUS_NO, 'pay_type' => RechargeRecord::PAY_TYPE_NET])->orderBy('id desc')->limit(1)->all();
+        $recharges = RechargeRecord::find()->where(['status' => RechargeRecord::STATUS_NO, 'pay_type' => RechargeRecord::PAY_TYPE_NET])->orderBy('id desc')->all();
         $cfca = new Cfca();
         $bc = new BcRound();
         bcscale(14);
@@ -64,6 +64,7 @@ class BrechargecrontabController extends Controller
                     $message = [
                         $user->real_name,
                         $rc->fund,
+                        Yii::$app->params['contact_tel']
                     ];
                     $sms = new SmsMessage([
                         'uid' => $user->id,

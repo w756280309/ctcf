@@ -17,6 +17,7 @@ use common\models\user\Jiesuan;
 use PayGate\Cfca\Settlement\AccountSettlement;
 use PayGate\Cfca\Message\Request1341;
 use PayGate\Cfca\Message\Request1350;
+use PayGate\Cfca\Response\Response1350;
 use common\models\TradeLog;
 use common\lib\cfca\Cfca;
 
@@ -91,7 +92,6 @@ class SettlementcrontabController extends Controller
                     }
                 }
             }
-        } else {
         }
     }
 }

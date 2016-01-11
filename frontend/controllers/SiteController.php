@@ -15,6 +15,8 @@ use common\models\log\LoginLog;
  */
 class SiteController extends Controller {
 
+    public $layout = 'main';
+
     /**
      * @inheritdoc
      */
@@ -67,8 +69,6 @@ class SiteController extends Controller {
      * 首页展示
      */
     public function actionIndex() {
-        $this->layout = 'main';
-
         return $this->render('index');
     }
 
@@ -76,7 +76,6 @@ class SiteController extends Controller {
      * PC端登陆页面
      */
     public function actionLogin() {
-        $this->layout = false;
         if (!\Yii::$app->user->isGuest) {
             return $this->goHome();
         }

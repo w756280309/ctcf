@@ -178,7 +178,8 @@ class QrechargeController extends BaseController
             
             $message = [
                 $this->user->real_name,
-                $recharge->fund
+                $recharge->fund,
+                Yii::$app->params['contact_tel']
             ];
             $sms = new SmsMessage([
                 'uid' => $this->user->id,
