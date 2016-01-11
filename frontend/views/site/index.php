@@ -4,13 +4,13 @@ use yii\web\View;
 
 $this->title = '@';
 
-$js = <<<'JS'
+$_js = <<<'JS'
 $(function() {
     var $modal = $('#reg-first-modal').modal();
     $modal.modal('show');
 })
 JS;
-$this->registerJs($js, View::POS_END, 'body_close');
+$this->registerJs($_js, View::POS_END, 'body_close');
 
 ?>
 <div style="height: 300px; background-color: #eee"></div>
