@@ -22,7 +22,7 @@ AppAsset::register($this);
         <div class="navbar navbar-default navbar-fixed-top">
             <div class="container">
                 <div class="navbar-header">
-                    <a class="navbar-brand" href="#">
+                    <a class="navbar-brand" href="/">
                         温都金服
                     </a>
                 </div>
@@ -34,7 +34,7 @@ AppAsset::register($this);
                         <a class="navbar-link" href="/site/login">登录</a>
                         <a class="navbar-link" href="/site/login">注册</a>
                     <?php } else { ?>
-                        <a class="navbar-link" href="/user/useraccount/accountcenter"><?php echo "ID:".Yii::$app->user->id ?></a>
+                        <a class="navbar-link" href="/user/useraccount/accountcenter"><?php echo Yii::$app->user->id ?></a>
                         <a class="navbar-link" href="/site/logout">注销</a>
                     <?php } ?>
                 </div>

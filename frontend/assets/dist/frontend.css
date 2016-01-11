@@ -1254,27 +1254,27 @@ h6 .small,
 }
 h1,
 .h1 {
-  font-size: 41px;
+  font-size: 22px;
 }
 h2,
 .h2 {
-  font-size: 34px;
+  font-size: 20px;
 }
 h3,
 .h3 {
-  font-size: 28px;
+  font-size: 18px;
 }
 h4,
 .h4 {
-  font-size: 20px;
+  font-size: 16px;
 }
 h5,
 .h5 {
-  font-size: 16px;
+  font-size: 14px;
 }
 h6,
 .h6 {
-  font-size: 14px;
+  font-size: 12px;
 }
 p {
   margin: 0 0 11px;
@@ -3022,7 +3022,7 @@ select[multiple].input-lg {
 .btn:hover,
 .btn:focus,
 .btn.focus {
-  color: #333333;
+  color: #f44336;
   text-decoration: none;
 }
 .btn:active,
@@ -3046,27 +3046,27 @@ fieldset[disabled] a.btn {
   pointer-events: none;
 }
 .btn-default {
-  color: #333333;
+  color: #f44336;
   background-color: #ffffff;
-  border-color: #cccccc;
+  border-color: #f44336;
 }
 .btn-default:focus,
 .btn-default.focus {
-  color: #333333;
+  color: #f44336;
   background-color: #e6e6e6;
-  border-color: #8c8c8c;
+  border-color: #a21309;
 }
 .btn-default:hover {
-  color: #333333;
+  color: #f44336;
   background-color: #e6e6e6;
-  border-color: #adadad;
+  border-color: #e11b0c;
 }
 .btn-default:active,
 .btn-default.active,
 .open > .dropdown-toggle.btn-default {
-  color: #333333;
+  color: #f44336;
   background-color: #e6e6e6;
-  border-color: #adadad;
+  border-color: #e11b0c;
 }
 .btn-default:active:hover,
 .btn-default.active:hover,
@@ -3077,9 +3077,9 @@ fieldset[disabled] a.btn {
 .btn-default:active.focus,
 .btn-default.active.focus,
 .open > .dropdown-toggle.btn-default.focus {
-  color: #333333;
+  color: #f44336;
   background-color: #d4d4d4;
-  border-color: #8c8c8c;
+  border-color: #a21309;
 }
 .btn-default:active,
 .btn-default.active,
@@ -3096,11 +3096,11 @@ fieldset[disabled] .btn-default:focus,
 .btn-default[disabled].focus,
 fieldset[disabled] .btn-default.focus {
   background-color: #ffffff;
-  border-color: #cccccc;
+  border-color: #f44336;
 }
 .btn-default .badge {
   color: #ffffff;
-  background-color: #333333;
+  background-color: #f44336;
 }
 .btn-primary {
   color: #ffffff;
@@ -6769,7 +6769,7 @@ body {
   font-size: 12px;
   color: #adadad;
 }
-#login {
+#login-box {
   margin-top: 40px;
   padding: 40px;
   border: 1px solid #e6e6e6;
@@ -6787,13 +6787,58 @@ body {
   height: 40px;
   font-size: 22px;
   color: #ccc;
+  text-decoration: none;
 }
-.login-tabs .login {
+.login-tabs a.login {
   left: 10%;
 }
-.login-tabs .reg {
+.login-tabs a.reg {
   right: 10%;
 }
-.login-tabs .current {
+.login-tabs a.current {
+  color: #f44336;
   border-bottom: 1px solid #f44336;
+}
+.login-reg p {
+  text-align: center;
+  color: #adadad;
+}
+.main {
+  margin-top: 40px;
+  padding: 40px;
+  border: 1px solid #e6e6e6;
+}
+.main .section-header {
+  position: relative;
+  margin: 0;
+  padding: 0;
+  height: 48px;
+  border-bottom: 1px solid #e6e6e6;
+}
+.main .section-header h2 {
+  position: absolute;
+  left: 0;
+  top: 0;
+  margin: 0;
+  padding: 0 10px;
+  height: 48px;
+  border-bottom: 3px solid #f44336;
+  line-height: 48px;
+}
+.main .stats {
+  margin: 80px 0;
+}
+.main .stats .item {
+  margin-right: 40px;
+}
+.main .stats .balance {
+  padding-left: 20px;
+  font-size: 18px;
+}
+.main .stats .profit {
+  font-size: 22px;
+  color: #f44336;
+}
+.main .actions {
+  text-align: right;
 }

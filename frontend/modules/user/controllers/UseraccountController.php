@@ -18,7 +18,7 @@ use common\models\sms\SmsMessage;
 
 class UseraccountController extends BaseController
 {
-    public $layout = false;
+    public $layout = '@app/views/layouts/main';
 
     /**
      * 账户中心展示页.
@@ -79,7 +79,7 @@ class UseraccountController extends BaseController
                     'mobile' => $user->mobile,
                     'message' => json_encode($mess)
                 ]);
-                
+
                 //录入draw_record记录
                 $draw->sn = DrawRecord::createSN();
                 $draw->pay_id = 0;
@@ -127,7 +127,7 @@ class UseraccountController extends BaseController
                     $sms->save();
                     return $this->redirect('/user/useraccount/tixianback?flag=err');
                 }
-                
+
                 $sms->template_id = Yii::$app->params['sms']['tixian_succ'];
                 $sms->save();
 
