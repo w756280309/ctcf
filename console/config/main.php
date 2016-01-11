@@ -21,6 +21,15 @@ return [
                     'class' => 'yii\log\FileTarget',
                     'levels' => ['error', 'warning'],
                 ],
+                [
+                    'class' => 'yii\log\FileTarget',
+                    'levels' => ['error'],
+                    'categories' => ['sms'],
+                    'logFile' => '@app/runtime/logs/sms/sms.log',
+                    'maxFileSize' => 1024 * 2,
+                    'maxLogFiles' => 20,
+                    'logVars' => ['error']
+               ],
             ],
         ],
         'beanstalk'=>[

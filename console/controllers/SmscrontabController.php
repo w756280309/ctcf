@@ -35,7 +35,9 @@ class SmscrontabController extends Controller
                 } else {
                     $msg->status = SmsMessage::STATUS_FAIL;
                 }
-                $msg->save(false);
+                $ures = $msg->save(false);
+                $msg_str = 'ID:' . $msg->id . "; 手机号:" . $msg->mobile . "; message:" . $msg->message . '; 响应码:' . $result . '; 操作结果:' . $ures;
+                \Yii::error($msg_str, 'sms');
             }
             flock($handle,LOCK_UN);
             fclose($handle);  
