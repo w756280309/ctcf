@@ -136,6 +136,7 @@ class OnlineRepaymentPlan extends \yii\db\ActiveRecord
                     $order['username'],
                     $product->title,
                     date('Y-m-d', $product->jixi_time),
+                    Yii::$app->params['contact_tel']
                 ];
 
                 $_sms = clone $sms;

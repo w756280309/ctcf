@@ -71,7 +71,8 @@ class UseraccountController extends BaseController
                 $mess = [
                     $user->real_name,
                     date('Y-m-d H:i:s', time()),
-                    $draw->money
+                    $draw->money,
+                    Yii::$app->params['contact_tel']
                 ];
                 $sms = new SmsMessage([
                     'uid' => $uid,

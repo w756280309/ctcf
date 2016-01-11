@@ -64,7 +64,7 @@ class BrechargecrontabController extends Controller
                     $message = [
                         $user->real_name,
                         $rc->fund,
-                        Yii::$app->params['sms_mobile']
+                        Yii::$app->params['contact_tel']
                     ];
                     $sms = new SmsMessage([
                         'uid' => $user->id,

@@ -116,7 +116,8 @@ class OrderCore
         $message = [
             $user->real_name,
             $model->title,
-            $price
+            $price,
+            Yii::$app->params['contact_tel']
         ];
         $sms = new SmsMessage([
             'uid' => $user->id,
