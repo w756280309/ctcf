@@ -24,5 +24,5 @@
 php-cs-fixer.phar
 /nbproject/
 
-params-local.php
-main-local.php
+common/config/params-local.php
+common/config/main-local.php

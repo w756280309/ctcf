@@ -17,15 +17,22 @@ class SmscrontabController extends Controller
      */
     public function actionSend()
     {
-        $messages = SmsMessage::find()->where(['status' => SmsMessage::STATUS_WAIT])->orderBy('id desc')->all();
-        foreach ($messages as $msg) {
-            $result = \Yii::$container->get('sms')->send($msg);
-            if ($result) {
-                $msg->status = SmsMessage::STATUS_SENT;
-            } else {
-                $msg->status = SmsMessage::STATUS_FAIL;
+        $handle = fopen(__FILE__,"r+");
+        if($handle!==false){ //打开成功
+            flock($handle, LOCK_EX);
+            $limit = 100;//限制每次运行发送的短信数量
+            $messages = SmsMessage::find()->where(['status' => SmsMessage::STATUS_WAIT])->limit($limit)->orderBy('id desc')->all();
+            foreach ($messages as $msg) {
+                $result = \Yii::$container->get('sms')->send($msg);
+                if ($result) {
+                    $msg->status = SmsMessage::STATUS_SENT;
+                } else {
+                    $msg->status = SmsMessage::STATUS_FAIL;
+                }
+                $msg->save(false);
             }
-            $msg->save(false);
+            flock($handle,LOCK_UN);
+            fclose($handle);  
         }
     }
 }
