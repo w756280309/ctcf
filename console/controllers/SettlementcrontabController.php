@@ -25,7 +25,7 @@ class SettlementcrontabController extends Controller
     /**
      * 发起今日结算请求【建议频率高些】.
      */
-    public function actionLaunchsettlement()
+    public function actionLaunch()
     {
         $data = RechargeRecord::find()->where(['status' => 1, 'settlement' => 0])->all(); //找到所有未结算的
         $cfca = new Cfca();
@@ -67,7 +67,7 @@ class SettlementcrontabController extends Controller
     /**
      * 批处理结算订单的状态修改【建议频率高些】.
      */
-    public function actionBatchsettlement()
+    public function actionUpdate()
     {
         $data = Jiesuan::find()->where(['status' => [Jiesuan::STATUS_NO, Jiesuan::STATUS_ACCEPT, Jiesuan::STATUS_IN]])->select('id,sn,osn,amount')->orderBy('id desc')->all();//
         if (!empty($data)) {

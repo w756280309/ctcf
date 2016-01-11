@@ -23,7 +23,7 @@ class BrechargecrontabController extends Controller
     /**
      * 发起未充值成功的充值查询.
      */
-    public function actionLaunchrecharge()
+    public function actionLaunch()
     {
         $recharges = RechargeRecord::find()->where(['status' => RechargeRecord::STATUS_NO, 'pay_type' => RechargeRecord::PAY_TYPE_NET])->orderBy('id desc')->limit(1)->all();
         $cfca = new Cfca();

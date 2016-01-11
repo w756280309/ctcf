@@ -9,7 +9,6 @@ namespace console\controllers;
 
 use Yii;
 use yii\console\Controller;
-use common\models\user\User;
 use common\lib\bchelp\BcRound;
 use common\models\checkaccount\CheckaccountCfca;
 use common\models\checkaccount\CheckaccountWdjf;
@@ -25,7 +24,7 @@ class CheckaccrontabController extends Controller
      * 获取中金对账单【中金每日凌晨5时生成上一日对账单】
      * 建议在凌晨5时之后执行上一日的对账单.
      */
-    public function actionGetcfcacheckaccount()
+    public function actionCfca()
     {
         $date = date('Y-m-d', strtotime('-1 day'));//获取前日
         $rq1810 = new Request1810(Yii::$app->params['cfca']['institutionId'], $date);
@@ -58,7 +57,7 @@ class CheckaccrontabController extends Controller
      * 获取温都金服充值订单前一日【结算在结算定时任务中完成】
      * 建议在凌晨0点至5点之间运行。要保证5点之前执行完毕.
      */
-    public function actionGetwdjfcheckaccount()
+    public function actionWdjf()
     {
         $date = date('Y-m-d', strtotime('-1 day'));//获取前日
         echo $date;
@@ -93,7 +92,7 @@ class CheckaccrontabController extends Controller
     /**
      * 温度金服的对账单与中金对账单做比对【建议在凌晨5点之后进行】.
      */
-    public function actionComparebill()
+    public function actionCompare()
     {
         $date = date('Y-m-d', strtotime('-1 day'));//获取前日
         //echo $date;
@@ -130,7 +129,7 @@ class CheckaccrontabController extends Controller
     /**
      * 每日汇总对账单【建议在执行完对账之后执行Comparebill】.
      */
-    public function actionCheckaccounthz()
+    public function actionHz()
     {
         bcscale(14);
         $date = date('Y-m-d', strtotime('-1 day'));//获取前日

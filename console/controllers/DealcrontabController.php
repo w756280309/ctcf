@@ -21,7 +21,7 @@ class DealcrontabController extends Controller
     /**
      * 定时 刷新满标 满标生成还款计划.
      */
-    public function actionUpdatefull()
+    public function actionFull()
     {
         $data = OnlineProduct::find()->where(['finish_rate' => 1, 'status' => 2])->all();
         $bc = new BcRound();
@@ -56,7 +56,7 @@ class DealcrontabController extends Controller
     /**
      * 定时 修改预告期为募集期
      */
-    public function actionUpdatenow()
+    public function actionNow()
     {
         OnlineProduct::updateAll(['status' => 2, 'sort' => OnlineProduct::SORT_NOW], ' online_status=1 and status=1 and start_date<='.time());
     }
@@ -64,7 +64,7 @@ class DealcrontabController extends Controller
     /**
      * 定时 修改募集期状态为流标状态
      */
-    public function actionUpdateliu()
+    public function actionLiu()
     {
         $product = OnlineProduct::find()->where(['del_status' => OnlineProduct::STATUS_USE, 'online_status' => OnlineProduct::STATUS_ONLINE, 'status' => OnlineProduct::STATUS_NOW]);
         $product = $product->andFilterWhere(['<', 'end_date', time()])->all();

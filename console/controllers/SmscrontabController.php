@@ -15,7 +15,7 @@ class SmscrontabController extends Controller
     /**
      * 短信发送任务[文件锁].
      */
-    public function actionSms()
+    public function actionSend()
     {
         $messages = SmsMessage::find()->where(['status' => SmsMessage::STATUS_WAIT])->orderBy('id desc')->all();
         foreach ($messages as $msg) {

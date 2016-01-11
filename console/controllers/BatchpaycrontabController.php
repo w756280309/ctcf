@@ -24,7 +24,7 @@ class BatchpaycrontabController extends Controller
     /**
      * 发起批量代付请求
      */
-    public function actionLaunchbatchpay()
+    public function actionLaunch()
     {
         $batchpays = Batchpay::find()->where(['is_launch' => Batchpay::IS_LAUNCH_NO])->all();
         $cfca = new Cfca();
@@ -41,7 +41,7 @@ class BatchpaycrontabController extends Controller
     /**
      * 次日查询前一日的结果.
      */
-    public function actionBatchpayupdate()
+    public function actionUpdate()
     {
         $beginYesterday = mktime(0, 0, 0, date('m'), date('d') - 1, date('Y'));
         $endYesterday = mktime(0, 0, 0, date('m'), date('d'), date('Y')) - 1;
