@@ -229,7 +229,8 @@ class RepaymentController extends BaseController
             $message = [
                 $user->real_name,
                 $data_arr[0]['benjin'],
-                $data_arr[0]['lixi']
+                $data_arr[0]['lixi'],
+                Yii::$app->params['sms_mobile']
             ];
 
             $_sms = clone $sms;

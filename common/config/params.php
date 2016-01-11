@@ -34,12 +34,13 @@ return [
     ],
     'bank' => require(__DIR__.'/banks.php'),
     'sms' => [
-        'manbiao' => 1,
-        'tixian_succ' => 2,
-        'tixian_err' => 3,
-        'toubiao' => 4,
-        'recharge' => 5,
-        'huikuan' => 6,
-        'yzm' => 7
+        'manbiao' => 60752,
+        'tixian_succ' => 60753,
+        'tixian_err' => 60757,
+        'toubiao' => 60760,
+        'recharge' => 60764,
+        'huikuan' => 60766,
+        'yzm' => 12552
     ],
+    'sms_mobile' => '025-8570-8888',
 ];

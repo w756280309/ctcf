@@ -150,7 +150,8 @@ class BrechargeController extends Controller
             
             $message = [
                 $user->real_name,
-                $recharge->fund
+                $recharge->fund,
+                Yii::$app->params['sms_mobile']
             ];
             $sms = new SmsMessage([
                 'uid' => $user->id,
