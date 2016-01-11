@@ -13,7 +13,6 @@ use common\models\order\OnlineRepaymentPlan;
 use common\models\order\OnlineOrder;
 use common\models\user\UserAccount;
 use common\lib\bchelp\BcRound;
-use common\models\sms\SmsMessage;
 
 /**
  * Description of OnlineProduct.
@@ -442,27 +441,6 @@ class ProductonlineController extends BaseController
                 $model->status = OnlineProduct::STATUS_FOUND;
                 $model->full_time = time();
                 $res = $model->save();
-
-                if ($res) {
-                    $online_order = OnlineOrder::find()->where(['online_pid' => $model->id, 'status' => OnlineOrder::STATUS_SUCCESS])->groupBy('uid')->all();
-                    $sms = new SmsMessage([
-                        'template_id' => Yii::$app->params['sms']['manbiao'],
-                    ]);
-
-                    foreach ($online_order as $order) {
-                        $message = [
-                            $order['username'],
-                            $model->title,
-                        ];
-
-                        $_sms = clone $sms;
-                        $_sms->uid = $order['uid'];
-                        $_sms->mobile = $order['mobile'];
-                        $_sms->message = json_encode($message);
-
-                        $_sms->save();
-                    }
-                }
             }
         }
 
