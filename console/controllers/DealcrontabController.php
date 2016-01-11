@@ -25,9 +25,6 @@ class DealcrontabController extends Controller
     {
         $data = OnlineProduct::find()->where(['finish_rate' => 1, 'status' => 2])->all();
         $bc = new BcRound();
-        $sms = new SmsMessage([
-            'template_id' => Yii::$app->params['sms']['manbiao'],
-        ]);
         foreach ($data as $dat) {
             $pid = $dat['id'];
             OnlineProduct::updateAll(['status' => 3, 'sort' => OnlineProduct::SORT_FULL], ['id' => $pid]);
@@ -38,18 +35,6 @@ class DealcrontabController extends Controller
                 $ua->investment_balance = $bc->bcround(bcadd($ua->investment_balance, $ord['order_money']), 2);
                 $ua->freeze_balance = $bc->bcround(bcsub($ua->freeze_balance, $ord['order_money']), 2);
                 $ua->save();
-
-                $message = [
-                    $ord['username'],
-                    $dat['title'],
-                ];
-
-                $_sms = clone $sms;
-                $_sms->uid = $ord['uid'];
-                $_sms->mobile = $ord['mobile'];
-                $_sms->message = json_encode($message);
-
-                $_sms->save();
             }
         }
     }

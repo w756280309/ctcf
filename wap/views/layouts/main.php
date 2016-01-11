@@ -1,7 +1,8 @@
 <?php
 use yii\helpers\Html;
+use frontend\assets\WapAsset;
 
-frontend\assets\WapAsset::register($this);
+WapAsset::register($this);
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
@@ -15,7 +16,7 @@ frontend\assets\WapAsset::register($this);
 	<title><?= Html::encode($this->title) ?></title>
         <?= Html::csrfMetaTags() ?>
 	<?php $this->head() ?>
-   
+
 </head>
 <body>
     <?php $this->beginBody() ?>
@@ -24,9 +25,9 @@ frontend\assets\WapAsset::register($this);
 	<header>
              <div class="title">温都金服</div>
         </header>
-	    
+
 		<?= $content ?>
-	    
+
 
 		<!--footer-->
         <div class="row navbar-fixed-bottom footer">
@@ -42,17 +43,21 @@ frontend\assets\WapAsset::register($this);
             </div>
             <div class="col-xs-4 footer-title">
                 <div class="footer-inner2">
-                    <?php if(!\Yii::$app->user->isGuest) { ?>
+                    <?php if (!\Yii::$app->user->isGuest) {
+    ?>
                     <a href="/user/user"><span class="zhanghu"></span>账户</a>
-                    <?php } else { ?>
+                    <?php
+} else {
+    ?>
                     <a href="/site/login"><span class="zhanghu"></span>账户</a>
-                    <?php } ?>
+                    <?php
+} ?>
                 </div>
             </div>
         </div>
 	</div>
     <?php $this->endBody() ?>
-		
+
 </body>
 </html>
 <?php $this->endPage() ?>

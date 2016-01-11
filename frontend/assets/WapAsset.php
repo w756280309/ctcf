@@ -10,9 +10,8 @@ namespace frontend\assets;
 
 use yii\web\AssetBundle;
 
-
-class WapAsset extends AssetBundle{
-
+class WapAsset extends AssetBundle
+{
     public $basePath = '@webroot';
     public $baseUrl = '@web';
     public $css = [
@@ -25,5 +24,4 @@ class WapAsset extends AssetBundle{
     public $depends = [
        // 'backend\assets\AppAsset.php',
     ];
-
 }

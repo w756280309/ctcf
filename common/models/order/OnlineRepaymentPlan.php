@@ -3,8 +3,9 @@
 namespace common\models\order;
 use yii\behaviors\TimestampBehavior;
 use common\models\product\OnlineProduct;
-use Yii;
 use common\lib\product\ProductProcessor;
+use common\models\sms\SmsMessage;
+use Yii;
 
 /**
  * This is the model class for table "online_repayment_plan".
@@ -94,9 +95,14 @@ class OnlineRepaymentPlan extends \yii\db\ActiveRecord {
         $start_jixi = date('Y-m-d',$product->jixi_time+24*3600);
         $days = $pp->LoanTimes($start_jixi, null, $product->finish_date, 'd', true);
         $expires = $days['days'][1]['period']['days'];
-        $orders = OnlineOrder::find()->where(['online_pid'=>$pid,'status'=>  OnlineOrder::STATUS_SUCCESS])->asArray()->select('id,order_money,refund_method,yield_rate,expires,uid,order_time')->all();
+        $orders = OnlineOrder::find()->where(['online_pid'=>$pid,'status'=>  OnlineOrder::STATUS_SUCCESS])->asArray()->select('id,order_money,refund_method,yield_rate,expires,uid,order_time,username,mobile')->all();
         OnlineProduct::updateAll(['is_jixi'=>1],['id'=>$pid]);//修改已经计息
         OnlineOrder::updateAll(['expires'=>$expires],['online_pid'=>$pid]);//修改计息天数
+        
+        $username = '';
+        $sms = new SmsMessage([
+            'template_id' => Yii::$app->params['sms']['manbiao']
+        ]);
         
         foreach ($orders as $order){
             $plan_model = clone $plan;
@@ -118,6 +124,23 @@ class OnlineRepaymentPlan extends \yii\db\ActiveRecord {
             if(!$plan_model->save()||!$plan_model->validate()){
                 return false;
             }
+            
+            if ($username != $order['username']) {
+                $message = [
+                    $order['username'],
+                    $product->title,
+                    date('Y-m-d', $product->jixi_time)
+                ];
+
+                $_sms = clone $sms;
+                $_sms->uid = $order['uid'];
+                $_sms->mobile = $order['mobile'];
+                $_sms->message = json_encode($message);
+
+                $_sms->save();
+            }
+
+            $username = $order['username'];
         }
         return true;
     }
