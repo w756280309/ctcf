@@ -103,6 +103,9 @@ class OrderCore
             OnlineOrder::updateAll(['expires' => $diff['day'] - 1], ['online_pid' => $model->id]);
         } else {
             $finish_rate = $bcrond->bcround(bcdiv($summoney, $model->money), 2);
+            if (0 === bccomp($finish_rate, 1)) {//主要处理由于四舍五入造成的不应该募集完成的募集完成了
+                $finish_rate = 0.99;
+            }
             $update['finish_rate'] = $finish_rate;
         }
 
