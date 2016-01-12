@@ -12,7 +12,7 @@ $this->registerJs($_js, View::POS_END, 'body_close');
 
 ?>
 <div class="container">
-    <div class="main">
+    <div class="main dash">
         <div class="section">
             <div class="section-header">
                 <h2>账户资金</h2>

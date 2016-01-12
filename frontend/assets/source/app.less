@@ -90,7 +90,7 @@ body {
     padding: 40px;
     border: 1px solid #e6e6e6;
 
-    .section-header {
+    .page-heading {
         position: relative;
         margin: 0;
         padding: 0;
@@ -109,6 +109,22 @@ body {
         }
     }
 
+    h3, .section {
+        padding: 0 10px;    
+    }
+
+    h3 {
+        margin-top: 60px;
+        margin-bottom: 20px;
+        font-size: 14px;
+        font-weight: bold;
+    }
+
+    .section {
+    }
+}
+
+.dash {
     .stats {
         margin: 80px 0;
 
@@ -129,5 +145,45 @@ body {
 
     .actions {
         .text-right;
+    }
+}
+
+.picker {
+    .picker-item {
+        height: 36px;
+        border: 1px solid #e6e6e6;
+        line-height: 36px;
+        text-align: center;
+        cursor: pointer;
+        cursor: hand;
+    }
+
+    .row {
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+
+    .picked {
+        color: @brand-primary;
+        border-color: @brand-primary;
+    }
+}
+
+.quota-info {
+    width: 70%;
+    font-size: 12px;
+
+    th {
+        padding: 5px 10px;
+        background-color: #d9dce4;
+        font-weight: normal;
+    }
+
+    th, td {
+        border: 1px solid #d9dce4;
+    }
+
+    td {
+        padding: 5px 5px 5px 10px;
     }
 }

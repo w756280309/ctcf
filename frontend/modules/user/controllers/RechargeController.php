@@ -15,7 +15,7 @@ use app\modules\user\controllers\bpay\BrechargeController;
 
 class RechargeController extends BaseController {
 
-    public $layout = false;
+    public $layout = '@app/views/layouts/main';
     public $enableCsrfValidation = false; //因为中金post的提交。所以要关闭csrf验证
 
     /**
