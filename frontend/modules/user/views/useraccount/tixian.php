@@ -1,4 +1,28 @@
 <?php
+
+?>
+<div class="container">
+    <div class="main">
+        <div class="section">
+            <div class="section-header">
+                <h2>账户资金</h2>
+            </div>
+
+            <div class="stats row">
+                <div class="col-sm-4">累计收益 <span class="balance profit"><?= $model->profit_balance ?></span> 元</div>
+                <div class="col-sm-4">账户总额 <span class="balance"><?= $model->account_balance ?></span> 元</div>
+                <div class="col-sm-4">可用余额 <span class="balance"><?= $model->available_balance ?></span> 元</div>
+            </div>
+
+            <div class="actions">
+                <a class="btn btn-primary" href="/user/recharge/recharge">充值</a>
+                <a class="btn btn-default" href="/user/useraccount/tixian">提现</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<?php
 use yii\bootstrap\ActiveForm;
 ?>
 <?php $this->beginPage() ?>

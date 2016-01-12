@@ -44,7 +44,7 @@ body {
     color: #adadad;
 }
 
-#login {
+#login-box {
     margin-top: 40px;
     padding: 40px;
     border: 1px solid #e6e6e6;
@@ -64,17 +64,70 @@ body {
     height: 40px;
     font-size: 22px;
     color: #ccc;
+    text-decoration: none;
 }
 
-.login-tabs .login {
+.login-tabs a.login {
     left: 10%;
 }
 
-.login-tabs .reg {
+.login-tabs a.reg {
     right: 10%;
 }
 
-.login-tabs .current {
+.login-tabs a.current {
+    color: @brand-primary;
     border-bottom: 1px solid @brand-primary;
 }
 
+.login-reg p {
+    text-align: center;
+    color: #adadad;
+}
+
+.main {
+    margin-top: 40px;
+    padding: 40px;
+    border: 1px solid #e6e6e6;
+
+    .section-header {
+        position: relative;
+        margin: 0;
+        padding: 0;
+        height: 48px;
+        border-bottom: 1px solid #e6e6e6;
+
+        h2 {
+            position: absolute;
+            left: 0;
+            top: 0;
+            margin: 0;
+            padding: 0 10px;
+            height: 48px;
+            border-bottom: 3px solid @brand-primary;
+            line-height: 48px;
+        }
+    }
+
+    .stats {
+        margin: 80px 0;
+
+        .item {
+            margin-right: 40px;
+        }
+
+        .balance {
+            padding-left: 20px;
+            font-size: 18px;
+        }
+
+        .profit {
+            font-size: 22px;
+            color: @brand-primary;
+        }
+    }
+
+    .actions {
+        .text-right;
+    }
+}
