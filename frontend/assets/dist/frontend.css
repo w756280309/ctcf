@@ -5152,8 +5152,9 @@ body {
   color: #adadad;
 }
 #login-box {
-  margin-top: 40px;
+  margin: 40px auto;
   padding: 40px;
+  width: 40%;
   border: 1px solid #e6e6e6;
 }
 .login-tabs {
