@@ -23,11 +23,11 @@ class SmscrontabController extends Controller
         if (!file_exists($lock_file)) {
             fwrite($handle,'');
         }
-        
+
         if($handle!==false){ //打开成功
             flock($handle, LOCK_EX);
             $limit = 1;//限制每次运行发送的短信数量
-            $messages = SmsMessage::find()->where(['status' => SmsMessage::STATUS_WAIT])->limit($limit)->orderBy('id desc')->all();            
+            $messages = SmsMessage::find()->where(['status' => SmsMessage::STATUS_WAIT])->limit($limit)->orderBy('id desc')->all();
             foreach ($messages as $msg) {
                 $notice = '';
                 $result = $ures = 0;
@@ -46,7 +46,7 @@ class SmscrontabController extends Controller
                 \Yii::trace($msg_str, 'sms');//消息格式Timestamp [IP address][User ID][Session ID][Severity Level][Category] Message Text
             }
             flock($handle,LOCK_UN);
-            fclose($handle);  
+            fclose($handle);
         }
     }
 }

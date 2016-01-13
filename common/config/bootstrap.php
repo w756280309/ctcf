@@ -10,4 +10,4 @@ Yii::setAlias('channel', dirname(dirname(__DIR__)).'/channel');
 
 \Yii::$container->set('account_service', 'common\\service\\AccountService');
 \Yii::$container->set('paginator', 'YiiPlus\\Paginator\\Paginator');
-\Yii::$container->set('sms', 'SmsGate\\SmsRequest');
+\Yii::$container->set('sms', 'SmsGate\\SmsRequest', [true, ['15810036547', '18518154492']]);
