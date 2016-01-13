@@ -26,17 +26,23 @@ class SmscrontabController extends Controller
         
         if($handle!==false){ //打开成功
             flock($handle, LOCK_EX);
-            $limit = 100;//限制每次运行发送的短信数量
-            $messages = SmsMessage::find()->where(['status' => SmsMessage::STATUS_WAIT])->limit($limit)->orderBy('id desc')->all();
+            $limit = 1;//限制每次运行发送的短信数量
+            $messages = SmsMessage::find()->where(['status' => SmsMessage::STATUS_WAIT])->limit($limit)->orderBy('id desc')->all();            
             foreach ($messages as $msg) {
-                $result = \Yii::$container->get('sms')->send($msg);
-                if ($result) {
-                    $msg->status = SmsMessage::STATUS_SENT;
-                } else {
-                    $msg->status = SmsMessage::STATUS_FAIL;
+                $notice = '';
+                $result = $ures = 0;
+                try {
+                    $result = \Yii::$container->get('sms')->send($msg);
+                    if ($result) {
+                        $msg->status = SmsMessage::STATUS_SENT;
+                    } else {
+                        $msg->status = SmsMessage::STATUS_FAIL;
+                    }
+                    $ures = $msg->save(false);
+                } catch (\Exception $ex) {
+                    $notice = $ex->getMessage();
                 }
-                $ures = $msg->save(false);
-                $msg_str = 'ID:' . $msg->id . "; 手机号:" . $msg->mobile . "; message:" . $msg->message . '; 响应码:' . $result . '; 操作结果:' . $ures;
+                $msg_str = 'ID:' . $msg->id . "; 手机号:" . $msg->mobile . "; message:" . $msg->message . '; 响应码:' . $result . '; 操作结果:' . $ures . '; 消息返回:' . $notice;
                 \Yii::trace($msg_str, 'sms');//消息格式Timestamp [IP address][User ID][Session ID][Severity Level][Category] Message Text
             }
             flock($handle,LOCK_UN);

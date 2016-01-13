@@ -7,20 +7,18 @@ use common\models\sms\SmsMessage;
 
 /**
  * 短信接口类 
- *
+ * 使用说明：
+ *     如果想自定义白名单，可使用依赖注入方式\Yii::$container->set('SmsGate\\SmsRequest',['isWhitelistEnabled'=>true,'whiteList'=> $whiteList ]);
+ *     isWhitelistEnabled，whiteList可填可不填。不填即使用默认方式；参数$whiteList为数组格式
  * @author zhanghongyu <zhanghongyu@wangcaigu.com>
  */
 class SmsRequest {
 
-    private $isTest = true;//true开启,false关闭
-    private $testMobile = ['15810036547','18518154492'];//白名单数组
-    
-    public function getIsTest() {
-        return $this->isTest;
-    }
-
-    public function getTestMobile() {
-        return $this->testMobile;
+    public $isWhitelistEnabled = true;//true开启,false关闭
+    public $whiteList;//白名单数组
+  
+    public function __construct() {
+        $this->whiteList = \Yii::$app->params['white_list'];
     }
 
     /**
@@ -29,8 +27,8 @@ class SmsRequest {
      */
     public function send(SmsMessage $message) {
         $mobile = $message->mobile;
-        if ($this->isTest && !empty($this->testMobile)) {
-            $mobile = current($this->testMobile);
+        if ($this->isWhitelistEnabled && !in_array($mobile, $this->whiteList)) {
+            throw new \Exception('白名单任务开启，手机号不在白名单');
         }
         $sms = new Sms();
         $msg_arr = json_decode($message->message, false);
