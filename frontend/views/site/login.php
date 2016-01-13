@@ -41,9 +41,9 @@ $this->registerJs($_js, View::POS_END, 'body_close');
                 </div>
 
                 <?php $form = ActiveForm::begin(['id' => 'login', 'action' => "/site/login",]); ?>
-                    <?= $form->field($model, 'phone', ['template' => '{input}{error}'])->textInput(); ?>
+                    <?= $form->field($model, 'phone', ['template' => '{input}{error}'])->textInput(['class' => 'form-control input-lg', 'placeholder' => '请输入手机号']); ?>
 
-                    <?= $form->field($model, 'password', ['template' => '{input}{error}'])->passwordInput(); ?>
+                    <?= $form->field($model, 'password', ['template' => '{input}{error}'])->passwordInput(['class' => 'form-control input-lg', 'placeholder' => '请输入密码']); ?>
 
                     <?php if ($is_flag) { ?>
                         <input name="is_flag" type="hidden" value="<?= $is_flag ?>">

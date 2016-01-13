@@ -87,7 +87,7 @@ body {
 
 .main {
     margin-top: 40px;
-    padding: 40px;
+    padding: 20px 40px;
     border: 1px solid #e6e6e6;
 
     .page-heading {
@@ -134,6 +134,7 @@ body {
 
         .balance {
             padding-left: 20px;
+            line-height: 22px;
             font-size: 18px;
         }
 
@@ -149,18 +150,21 @@ body {
 }
 
 .picker {
+    .clearfix;
+    padding: 0;
+    list-style: none;
+
     .picker-item {
+        float: left;
+        margin-right: 15px;
+        margin-bottom: 15px;
+        width: 140px;
         height: 36px;
         border: 1px solid #e6e6e6;
         line-height: 36px;
         text-align: center;
         cursor: pointer;
         cursor: hand;
-    }
-
-    .row {
-        margin-top: 10px;
-        margin-bottom: 10px;
     }
 
     .picked {
@@ -185,5 +189,42 @@ body {
 
     td {
         padding: 5px 5px 5px 10px;
+    }
+}
+
+.wdjf-form {
+    list-style: none;
+    padding: 0;
+
+    li {
+        .clearfix;
+    }
+
+    .wdjf-label, .wdjf-field {
+        float: left;
+        line-height: 34px;
+    }
+
+    .wdjf-label {
+        margin-right: 15px;
+        width: 120px;
+        .text-right;
+    }
+
+    .balance {
+        line-height: 34px;
+        font-size: 20px;
+        font-weight: bold;
+        color: @brand-primary;
+    }
+
+    .wdjf-action {
+        margin-top: 15px;
+        margin-left: 135px;
+    }
+
+    .fee-info {
+        margin-top: 15px;
+        color: @brand-primary;
     }
 }
