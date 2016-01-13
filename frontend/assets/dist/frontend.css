@@ -1254,23 +1254,23 @@ h6 .small,
 }
 h1,
 .h1 {
-  font-size: 22px;
+  font-size: 20px;
 }
 h2,
 .h2 {
-  font-size: 20px;
+  font-size: 18px;
 }
 h3,
 .h3 {
-  font-size: 18px;
+  font-size: 16px;
 }
 h4,
 .h4 {
-  font-size: 16px;
+  font-size: 14px;
 }
 h5,
 .h5 {
-  font-size: 14px;
+  font-size: 12px;
 }
 h6,
 .h6 {
@@ -6808,14 +6808,14 @@ body {
   padding: 40px;
   border: 1px solid #e6e6e6;
 }
-.main .section-header {
+.main .page-heading {
   position: relative;
   margin: 0;
   padding: 0;
   height: 48px;
   border-bottom: 1px solid #e6e6e6;
 }
-.main .section-header h2 {
+.main .page-heading h2 {
   position: absolute;
   left: 0;
   top: 0;
@@ -6825,20 +6825,62 @@ body {
   border-bottom: 3px solid #f44336;
   line-height: 48px;
 }
-.main .stats {
+.main h3,
+.main .section {
+  padding: 0 10px;
+}
+.main h3 {
+  margin-top: 60px;
+  margin-bottom: 20px;
+  font-size: 14px;
+  font-weight: bold;
+}
+.dash .stats {
   margin: 80px 0;
 }
-.main .stats .item {
+.dash .stats .item {
   margin-right: 40px;
 }
-.main .stats .balance {
+.dash .stats .balance {
   padding-left: 20px;
   font-size: 18px;
 }
-.main .stats .profit {
+.dash .stats .profit {
   font-size: 22px;
   color: #f44336;
 }
-.main .actions {
+.dash .actions {
   text-align: right;
+}
+.picker .picker-item {
+  height: 36px;
+  border: 1px solid #e6e6e6;
+  line-height: 36px;
+  text-align: center;
+  cursor: pointer;
+  cursor: hand;
+}
+.picker .row {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+.picker .picked {
+  color: #f44336;
+  border-color: #f44336;
+}
+.quota-info {
+  width: 70%;
+  font-size: 12px;
+}
+.quota-info th {
+  padding: 5px 10px;
+  background-color: #d9dce4;
+  font-weight: normal;
+}
+.quota-info th,
+.quota-info td {
+  border: 1px solid #d9dce4;
+}
+.quota-info td {
+  padding: 5px 5px 5px 10px;
 }
