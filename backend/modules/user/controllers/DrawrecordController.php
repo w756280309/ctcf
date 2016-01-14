@@ -161,7 +161,7 @@ class DrawrecordController extends BaseController
             $moneyInfo->sn = $sn;
             $moneyInfo->type = $money_type;
             $moneyInfo->balance = $YuE;
-            if($money_type == DrawRecord::STATUS_SUCCESS){
+            if($status == DrawRecord::STATUS_SUCCESS){
                 $moneyInfo->out_money = $money;
                 $draw->status = DrawRecord::STATUS_SUCCESS;
             }else{
