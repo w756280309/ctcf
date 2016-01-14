@@ -9,11 +9,8 @@ $params = array_merge(
 return [
     'id' => 'app-console',
     'basePath' => dirname(__DIR__),
-    'bootstrap' => ['log', 'gii'],
+    'bootstrap' => ['log'],
     'controllerNamespace' => 'console\controllers',
-    'modules' => [
-        'gii' => 'yii\gii\Module',
-    ],
     'components' => [
         'log' => [
             'targets' => [
@@ -21,6 +18,17 @@ return [
                     'class' => 'yii\log\FileTarget',
                     'levels' => ['error', 'warning'],
                 ],
+                [
+                    'class' => 'yii\log\FileTarget',
+                    'levels' => ['trace'],
+                    'categories' => ['sms'],
+                    'logFile' => '@app/runtime/logs/sms/sms'. date('Ymd').'.log',
+                    'maxFileSize' => 1024*2,
+                    'logVars' => ['trace'],
+                    'prefix' => function ($message) {
+                        return "";//去掉消息返回的[IP address][User ID][Session ID][Severity Level]
+                    }
+               ],
             ],
         ],
         'beanstalk'=>[
