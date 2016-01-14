@@ -26,7 +26,7 @@ class SmscrontabController extends Controller
 
         if($handle!==false){ //打开成功
             flock($handle, LOCK_EX);
-            $limit = 1;//限制每次运行发送的短信数量
+            $limit = 100;//限制每次运行发送的短信数量
             $messages = SmsMessage::find()->where(['status' => SmsMessage::STATUS_WAIT])->limit($limit)->orderBy('id desc')->all();
             foreach ($messages as $msg) {
                 $notice = '';

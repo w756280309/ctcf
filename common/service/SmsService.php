@@ -75,7 +75,7 @@ class SmsService {
             ]);
             $sms->save();
 
-            return ['code' => 0, 'message' => '短信验证码：'.$model->code];
+            return ['code' => 0, 'message' => ''];
         } else {
             return ['code' => 1, 'message' => '验证码生成超时'];
         }

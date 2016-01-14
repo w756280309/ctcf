@@ -265,7 +265,6 @@ function createSms(form,uid,fun){
 
         if(result.code==0) {
             fun();
-            alert(result.message);
         }else{
             alert(result.message);
         }
