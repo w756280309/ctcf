@@ -95,15 +95,16 @@ class OrderCore
 
         /*修改标的完成比例  后期是否需要定时更新*/
         $summoney = OnlineOrder::find()->where(['status' => 1, 'online_pid' => $model->id])->sum('order_money');
+        $insert_sum = bcadd($summoney, $price); //包含此笔募集的总金额
         $update = array();
-        if (0 === bccomp($summoney, $model->money)) {
+        if (0 === bccomp($insert_sum, $model->money)) {
             $update['finish_rate'] = 1;
             $update['full_time'] = time();//由于定时任务去修改满标状态以及生成还款计划。所以此处不设置修改满标状态
             $diff = \Yii::$app->functions->timediff(strtotime(date('Y-m-d', $model->start_date)), strtotime(date('Y-m-d', $model->finish_date)));
             OnlineOrder::updateAll(['expires' => $diff['day'] - 1], ['online_pid' => $model->id]);
-        } else {
-            $finish_rate = $bcrond->bcround(bcdiv($summoney, $model->money), 2);
-            if (0 === bccomp($finish_rate, 1)) {//主要处理由于四舍五入造成的不应该募集完成的募集完成了
+        } else {            
+            $finish_rate = $bcrond->bcround(bcdiv($insert_sum, $model->money), 2);
+            if (0 === bccomp($finish_rate, 1) && 0 !== bccomp($insert_sum, $model->money)) {//主要处理由于四舍五入造成的不应该募集完成的募集完成了：完成比例等于1了，并且包含此次交易成功所有金额不等于募集金额
                 $finish_rate = 0.99;
             }
             $update['finish_rate'] = $finish_rate;
