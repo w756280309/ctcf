@@ -93,6 +93,7 @@ class BatchpaycrontabController extends Controller
                     $userAccount->save();
                     $drawRord->status = DrawRecord::STATUS_SUCCESS;
                     $drawRord->save();
+                    $batchpay->is_launch = Batchpay::IS_LAUNCH_FINISH;
                 }
             }
         }

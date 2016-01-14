@@ -8,6 +8,7 @@ use common\lib\bchelp\BcRound;
 
 class Batchpay extends \yii\db\ActiveRecord {
 
+    const IS_LAUNCH_FINISH = 2;//发起结束不允许发起
     const IS_LAUNCH_YES = 1;//已发起
     const IS_LAUNCH_NO = 0;//未发起
     
