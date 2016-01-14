@@ -89,7 +89,7 @@ class Batchpay extends \yii\db\ActiveRecord {
                     $draw->bank_id,
                     $draw->pay_bank_id,
                     BatchpayItem::ACCOUNT_TYPE_PERSONAL,
-                    $draw->bank_username,
+                    $draw->bank_name,
                     $draw->bank_account,
                     $draw->sub_bank_name,
                     $draw->province,

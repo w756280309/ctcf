@@ -339,7 +339,7 @@ class UserbankController extends BaseController
             $draw->uid = $uid;
             $draw->pay_bank_id = '0';
             $draw->bank_id = $user_bank->bank_id;
-            $draw->bank_username = $user_bank->bank_name;
+            $draw->bank_name = $user_bank->bank_name;
             $draw->bank_account = $user_bank->card_number;
             $draw->identification_type = $user_bank->account_type;
             $draw->identification_number = $user->idcard;

@@ -86,7 +86,7 @@ class UseraccountController extends BaseController
                 $draw->account_id = $user_acount->id;
                 $draw->pay_bank_id = '0';
                 $draw->bank_id = $user_bank->bank_id;
-                $draw->bank_username = $user_bank->bank_name;
+                $draw->bank_name = $user_bank->bank_name;
                 $draw->bank_account = '0';
                 $draw->status = DrawRecord::STATUS_ZERO;
 

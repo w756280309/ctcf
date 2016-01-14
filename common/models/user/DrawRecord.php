@@ -38,7 +38,7 @@ class DrawRecord extends \yii\db\ActiveRecord
         $draw->uid = $user->id;
         $draw->pay_bank_id = '0'; // TODO
         $draw->bank_id = $ubank->bank_id;
-        $draw->bank_username = $ubank->bank_name;
+        $draw->bank_name = $ubank->bank_name;
         $draw->bank_account = $ubank->card_number;
         $draw->identification_type= $ubank->account_type;
         $draw->identification_number = $user->idcard;
@@ -87,13 +87,13 @@ class DrawRecord extends \yii\db\ActiveRecord
     {
         return [
 //            ['drawpwd', 'trim'],
-            [['money', 'uid'], 'required'], //, 'bank_username', 'bank_account'      'account_id',,'drawpwd'
+            [['money', 'uid'], 'required'], //, 'bank_name', 'bank_account'      'account_id',,'drawpwd'
 //            [['bank_id'], 'required', 'message' => '未选择提现银行卡'],
 //            ['drawpwd', 'validatePassword'], wyf 注释的，因为写录入数据逻辑，该字段以后在考虑
             [['money'], 'match', 'pattern' => '/^[0-9]+([.]{1}[0-9]{1,2})?$/', 'message' => '提现金额格式错误'],
             [['account_id', 'uid', 'status', 'created_at', 'updated_at'], 'integer'],
             [['money'], 'number', 'min' => 1, 'max' => 10000000],
-            [['sn', 'bank_id', 'bank_username', 'bank_account'], 'string', 'max' => 30],
+            [['sn', 'bank_id', 'bank_name', 'bank_account'], 'string', 'max' => 30],
         ];
     }
 
@@ -140,7 +140,7 @@ class DrawRecord extends \yii\db\ActiveRecord
             'uid' => 'Uid',
             'money' => '提现金额',
             'bank_id' => '银行代号',
-            'bank_username' => '银行账户',
+            'bank_name' => '银行账户',
             'bank_account' => '银行账号',
             'status' => '状态',
             'drawpwd' => '交易密码',
