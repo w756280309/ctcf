@@ -158,14 +158,12 @@ use yii\helpers\Html;
                             <button type="button" class="btn green fkbutton" data-index="fk">确定</button>
                             <button type="button" class="btn red fkbutton" data-index="close">取消</button>
                         </div>          
-                    <?php } ?>
-
-                    <?php if (isset($model->status) && $model->status == 0 || $model->status == 11) { ?>
+                    <?php }else if($model->status == 0){ ?>
                         <div class="form-actions">
                             <button type="button" class="btn green fkbutton" data-index="sh" data-type="1">通过</button>
                             <button type="button" class="btn red fkbutton" data-index="sh" data-type="11">不通过</button>
                         </div>           
-                    <?php } elseif ($model->status == 2) { ?>
+                    <?php } else { ?>
                         <div class="form-actions">
                             <button type="button" class="btn green fkbutton" data-index="close">确定</button>                     
                         </div>           

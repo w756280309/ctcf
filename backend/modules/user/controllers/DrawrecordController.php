@@ -247,6 +247,9 @@ class DrawrecordController extends BaseController
             return false;
         }
         $model = DrawRecord::findOne($id);
+        if ($model->status != DrawRecord::STATUS_ZERO) {
+            return false;
+        }
         $lenderAccount = UserAccount::findOne(['uid' => $model->uid, 'type' => UserAccount::TYPE_LEND]);
         if (null === $lenderAccount) {
             return false;
@@ -295,7 +298,7 @@ class DrawrecordController extends BaseController
             return false;
         }
         $drawRord = DrawRecord::findOne($id);
-        if ($drawRord === null || $drawRord->status == DrawRecord::STATUS_ZERO || $drawRord->status == DrawRecord::STATUS_SUCCESS) {
+        if ($drawRord === null || $drawRord->status != DrawRecord::STATUS_EXAMINED) {
             return false;
         }
         if ($id) {
