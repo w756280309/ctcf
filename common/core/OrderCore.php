@@ -95,7 +95,7 @@ class OrderCore
 
         /*修改标的完成比例  后期是否需要定时更新*/
         $summoney = OnlineOrder::find()->where(['status' => 1, 'online_pid' => $model->id])->sum('order_money');
-        $insert_sum = bcadd($summoney, $price); //包含此笔募集的总金额
+        $insert_sum = $summoney; //包含此笔募集的总金额
         $update = array();
         if (0 === bccomp($insert_sum, $model->money)) {
             $update['finish_rate'] = 1;
