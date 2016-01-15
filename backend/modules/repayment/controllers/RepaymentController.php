@@ -107,15 +107,6 @@ class RepaymentController extends BaseController
         $mrmodel = new MoneyRecord();
         $transaction = Yii::$app->db->beginTransaction();
         foreach ($orderarr as $order) {
-            $plan = new OnlineRepaymentPlan();
-            $order['status'] = OnlineRepaymentPlan::STATUS_YIHUAN;
-            $pre = $plan->updateAll($order, 'id=:id', array(':id' => $order['id']));
-
-            if (!$pre) {
-                $transaction->rollBack();
-
-                return ['result' => 0, 'message' => '还款失败，记录失败'];
-            }
             $jixidays = $diff['day'] - 1;
             $lixi = bcmul(bcmul($order['benjin'], bcdiv($deal->yield_rate, 360)), $jixidays);
             //var_dump($plan);
@@ -140,10 +131,8 @@ class RepaymentController extends BaseController
                 return ['result' => 0, 'message' => '还款失败，记录失败']; //
             }
             $order->status = OnlineRepaymentPlan::STATUS_YIHUAN;
-            $order->lixi = $lixi;
             if (!$order->save()) {
                 $transaction->rollBack();
-
                 return ['result' => 0, 'message' => '还款失败，状态修改失败'];
             }
             $ua = UserAccount::findOne(['uid' => $order['uid'], 'type' => UserAccount::TYPE_LEND]);
