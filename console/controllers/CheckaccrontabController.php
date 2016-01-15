@@ -63,17 +63,19 @@ class CheckaccrontabController extends Controller
         echo $date;
         $beginYesterday = mktime(0, 0, 0, date('m'), date('d') - 1, date('Y'));
         $endYesterday = mktime(0, 0, 0, date('m'), date('d'), date('Y')) - 1;
-        $is_write = CheckaccountWdjf::find()->where(['tx_date' => $date])->count('id');
+        $is_write = CheckaccountWdjf::find()->where(['tx_date' => $date, 'tx_type' => [1375, 1311]])->count('id');
         if ($is_write) {
             return false;
         }
-
-        $dataobj = RechargeRecord::find()->where(['status' => RechargeRecord::STATUS_YES])->andFilterWhere(['between', 'bankNotificationTime', date('Y-m-d H:i:s', $beginYesterday), date('Y-m-d H:i:s', $endYesterday)])->all();
+        
+        //筛选快充和pc充值的充值记录
+        $dataobj = RechargeRecord::find()->where(['status' => RechargeRecord::STATUS_YES, 'pay_type' => [RechargeRecord::PAY_TYPE_QUICK, RechargeRecord::PAY_TYPE_NET]])->andFilterWhere(['between', 'bankNotificationTime', date('Y-m-d H:i:s', $beginYesterday), date('Y-m-d H:i:s', $endYesterday)])->all();
         //var_dump($dataobj);exit;
         $insert_arr = array();
         $time = time();
         foreach ($dataobj as $dat) {
-            $insert_arr[] = [$dat->sn, $date, 1341, $dat->sn, $dat->fund, 0, 0, $dat->bankNotificationTime,  $time, $time];
+            $tx_type = (RechargeRecord::PAY_TYPE_QUICK === (int) $dat->pay_type) ? 1375 : 1311;
+            $insert_arr[] = [$dat->sn, $date, $tx_type, $dat->sn, $dat->fund, 0, 0, $dat->bankNotificationTime,  $time, $time];
         }
         if (!empty($insert_arr)) {
             $connection = \Yii::$app->db;

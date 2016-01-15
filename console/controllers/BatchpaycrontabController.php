@@ -43,6 +43,7 @@ class BatchpaycrontabController extends Controller
      */
     public function actionUpdate()
     {
+        $date = date('Y-m-d', strtotime('-1 day'));//获取前日
         $beginYesterday = mktime(0, 0, 0, date('m'), date('d') - 1, date('Y'));
         $endYesterday = mktime(0, 0, 0, date('m'), date('d'), date('Y')) - 1;
         $cfca = new Cfca();
@@ -94,9 +95,12 @@ class BatchpaycrontabController extends Controller
                     $drawRord->status = DrawRecord::STATUS_SUCCESS;
                     $drawRord->save();
                     $batchpay->is_launch = Batchpay::IS_LAUNCH_FINISH;
-                    $batchpay->save();
+                    $batchpay->save();                    
                 }
             }
+            //1510温都对账单写入
+            $wdjf_model = new CheckaccountWdjf(['order_no' => $batchpay->sn, 'tx_date' => $date, 'tx_type' => 1510, 'tx_sn' => $batchpay->sn, 'tx_amount' => ($batchpay->total_amount), 'payment_amount' => 0, 'institution_fee' => 0, 'bank_notification_time' => '0']);
+            $wdjf_model->save();
         }
     }
 }

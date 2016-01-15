@@ -70,8 +70,12 @@ class SettlementcrontabController extends Controller
      */
     public function actionUpdate()
     {
-        $data = Jiesuan::find()->where(['status' => [Jiesuan::STATUS_NO, Jiesuan::STATUS_ACCEPT, Jiesuan::STATUS_IN]])->select('id,sn,osn,amount')->orderBy('id desc')->all();//
-        if (!empty($data)) {
+        $beginYesterday = mktime(0, 0, 0, date('m'), date('d') - 1, date('Y'));
+        $endYesterday = mktime(0, 0, 0, date('m'), date('d'), date('Y')) - 1;
+        $data = Jiesuan::find()->where(['status' => [Jiesuan::STATUS_NO, Jiesuan::STATUS_ACCEPT, Jiesuan::STATUS_IN]])->select('id,sn,osn,amount')
+                ->andFilterWhere(['between', 'created_at', $beginYesterday, $endYesterday])
+                ->orderBy('id desc')->all();//
+        if (null !== $data) {
             $bcround = new BcRound();
             $cfca = new Cfca();
             $date = date('Y-m-d', strtotime('-1 day'));//获取前日
