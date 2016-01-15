@@ -230,14 +230,14 @@ class UserbankController extends BaseController
         }
 
         $uid = $this->user->id;
-        $user = User::findOne($uid);
+        $user = $this->user;
         if ($user && $user->status == User::STATUS_DELETED) {
             $this->redirect('/site/usererror');
         }
 
-        $user_bank = UserBanks::find()->where(['uid' => $uid, 'status' => UserBanks::STATUS_YES])->select('bank_id,bank_name,account,card_number')->one();
-        $user_acount = UserAccount::find()->where(['type' => UserAccount::TYPE_LEND, 'uid' => $uid])->select('available_balance')->one();
-
+        $user_acount = $user->lendAccount;
+        $user_bank = $user->bank;
+        
         if ($user_acount->out_sum == 0) {
             $cond = 0 | BankService::IDCARDRZ_VALIDATE_N | BankService::BINDBANK_VALIDATE_N | BankService::CHARGEPWD_VALIDATE_N | BankService::EDITBANK_VALIDATE;
             $data = BankService::check($uid, $cond);

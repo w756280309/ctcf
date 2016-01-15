@@ -48,7 +48,7 @@ class UserController extends BaseController {
             return ['TYPE参数错误'];
         }
 
-        $query = User::find()->where(['type' => $type]);
+        $query = User::find()->where(['type' => $type])->with('lendAccount');
         if($type == User::USER_TYPE_PERSONAL){
            if (!empty($name)) {
                 $query->andFilterWhere(['like','real_name',$name]);
@@ -100,22 +100,23 @@ class UserController extends BaseController {
         }  else {
             $select = 'usercode,org_name,tel,created_at,real_name,idcard,law_mobile,mobile,law_master,law_master_idcard,business_licence,org_code,shui_code,updated_at';
         }
-        $userInfo = User::find()->where(['id'=>$id])->select($select)->asArray()->one();
+        $userInfo = User::find()->where(['id'=>$id])->select($select)->one();
 
         $uabc = new UserAccountBackendCore();
         $recharge = $uabc->getRechargeSuccess($id);
         $draw = $uabc->getDrawSuccess($id);
-        //var_dump($draw);exit;
-        $ret = $uabc->getReturnInfo($id);
-        $order = $uabc->getOrderSuccess($id);
-        $product = $uabc->getProduct($id);
+        
         $ua = $uabc->getUserAccount($id);
-        //$bcround = new \common\lib\bchelp\BcRound();
         $userLiCai = $ua->freeze_balance;
         if(Yii::$app->request->get('type')==User::USER_TYPE_PERSONAL){
             $rcMax = RechargeRecord::find()->where(['status'=>  RechargeRecord::STATUS_YES,'uid'=>$id])->max('updated_at');
+            $order = $uabc->getOrderSuccess($id);
+            $product = $ret = ['count' => 0, 'sum' => 0];
         }else{
             $rcMax = OnlineProduct::find()->where(['del_status'=> OnlineProduct::STATUS_USE,'borrow_uid'=>$id])->min('start_date');
+            $ret = $uabc->getReturnInfo($id);
+            $product = $uabc->getProduct($id);
+            $order = ['count' => 0, 'sum' => 0];
         }
         $tztimeMax = OnlineOrder::find()->where(['status'=>  OnlineOrder::STATUS_SUCCESS,'uid'=>$id])->max('updated_at');
 
@@ -192,15 +193,6 @@ class UserController extends BaseController {
                 'category'=>$type,
                 'model'=>$model,
         ]);
-    }
-
-    public function actionT(){
-        $uid = 4;
-        $uabc = new \backend\modules\user\core\v1_0\UserAccountBackendCore();
-        $res = $uabc->getRechargeSuccess($uid);
-        $resdraw = $uabc->getDrawSuccess($uid);
-        $resret = $uabc->getReturnInfo($uid);
-        var_dump($resret);
     }
 
 }
