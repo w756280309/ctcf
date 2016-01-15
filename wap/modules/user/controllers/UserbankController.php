@@ -238,15 +238,13 @@ class UserbankController extends BaseController
         $user_acount = $user->lendAccount;
         $user_bank = $user->bank;
         
-        if ($user_acount->out_sum == 0) {
-            $cond = 0 | BankService::IDCARDRZ_VALIDATE_N | BankService::BINDBANK_VALIDATE_N | BankService::CHARGEPWD_VALIDATE_N | BankService::EDITBANK_VALIDATE;
-            $data = BankService::check($uid, $cond);
-            if ($data[code] == 1) {
-                if (Yii::$app->request->isAjax) {
-                    return $data;
-                } else {
-                    return $this->render('tixian', ['user_bank' => $user_bank, 'user_acount' => $user_acount, 'data' => $data]);
-                }
+        $cond = 0 | BankService::IDCARDRZ_VALIDATE_N | BankService::BINDBANK_VALIDATE_N | BankService::CHARGEPWD_VALIDATE_N | BankService::EDITBANK_VALIDATE;
+        $data = BankService::check($uid, $cond);
+        if ($data[code] == 1) {
+            if (Yii::$app->request->isAjax) {
+                return $data;
+            } else {
+                return $this->render('tixian', ['user_bank' => $user_bank, 'user_acount' => $user_acount, 'data' => $data]);
             }
         }
 
@@ -271,7 +269,7 @@ class UserbankController extends BaseController
         return $this->render('tixian', ['user_bank' => $user_bank, 'user_acount' => $user_acount]);
     }
 
-    public function actionChecktradepwd($money = null)
+    public function actionChecktradepwd($money)
     {
         $this->layout = '@app/modules/order/views/layouts/buy';
         if (Yii::$app->request->isAjax) {
