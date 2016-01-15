@@ -98,7 +98,7 @@ class OnlineRepaymentPlan extends \yii\db\ActiveRecord
 
         $plan = new self();
         $pp = new ProductProcessor();
-        $start_jixi = date('Y-m-d', $product->jixi_time + 24 * 3600);
+        $start_jixi = date('Y-m-d', $product->jixi_time);
         $days = $pp->LoanTimes($start_jixi, null, $product->finish_date, 'd', true);
         $expires = $days['days'][1]['period']['days'];
         $orders = OnlineOrder::find()->where(['online_pid' => $pid, 'status' => OnlineOrder::STATUS_SUCCESS])->asArray()->select('id,order_money,refund_method,yield_rate,expires,uid,order_time,username,mobile')->all();

@@ -96,7 +96,7 @@ class DatatjController extends BaseController {
         $r = RechargeRecord::tableName();
         $u = User::tableName();
         $recharge = RechargeRecord::find()->leftJoin($u, "$r.uid=$u.id")->select("$r.*,$u.real_name");
-        
+        $recharge->where(['pay_type'=>[RechargeRecord::PAY_TYPE_QUICK,  RechargeRecord::PAY_TYPE_NET]]);
         $data = clone $recharge;
         if(!empty($start)) {
             $data->andFilterWhere(['>=', "$r.created_at", strtotime($start. " 0:00:00")]);
