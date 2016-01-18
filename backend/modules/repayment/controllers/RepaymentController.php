@@ -278,7 +278,7 @@ class RepaymentController extends BaseController
         $mre_model->uid = $product->borrow_uid;
         $mre_model->in_money = $fk->order_money;
         $mre_model->remark = '已放款';
-        $mre_model->balance = $bcround->bcround(bcadd($ua->available_balance, $fk->order_money), 2);
+        $mre_model->balance = $ua->available_balance;
         if (!$mre_model->save()) {
             $transaction->rollBack();
 

@@ -48,8 +48,9 @@ class UserController extends BaseController {
             return ['TYPE参数错误'];
         }
 
-        $query = User::find()->where(['type' => $type])->with('lendAccount');
+        $query = User::find()->where(['type' => $type]);
         if($type == User::USER_TYPE_PERSONAL){
+           $query->with('lendAccount');
            if (!empty($name)) {
                 $query->andFilterWhere(['like','real_name',$name]);
            }
@@ -57,6 +58,7 @@ class UserController extends BaseController {
                 $query->andFilterWhere(['like','mobile',$mobile]);
            }
         }else{
+            $query->with('borrowAccount');
             if (!empty($name)) {
                 $query->andFilterWhere(['like','org_name',$name]);
             }

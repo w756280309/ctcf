@@ -115,7 +115,8 @@ class OrderCore
             $transaction->rollBack();
             return ['code' => PayService::ERROR_SYSTEM, 'message' => PayService::getErrorByCode(PayService::ERROR_SYSTEM), 'tourl' => '/order/order/ordererror'];
         }
-        
+        $command = Yii::$app->db->createCommand('UPDATE '.OnlineProduct::tableName().' SET funded_money=funded_money+'.$model->money.' WHERE id='.$model->id);
+        $command->execute();//更新实际募集金额
         //投标成功，向用户发送短信
         $message = [
             $user->real_name,

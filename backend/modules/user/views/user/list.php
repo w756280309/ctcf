@@ -106,7 +106,7 @@ use common\models\user\User;
                         <td><?= $val['org_name'] ?></td>
                  <?php }?>
                         <td><?= date('Y-m-d H:i:s',$val['created_at'])?></td>
-                        <td><?= number_format($val->lendAccount['available_balance'],2) ?></td>
+                        <td><?= number_format(($category==User::USER_TYPE_PERSONAL)?($val->lendAccount['available_balance']):($val->borrowAccount['available_balance']),2) ?></td>
                         <td>
                         <center>
                              <?php if($category==User::USER_TYPE_PERSONAL){?>

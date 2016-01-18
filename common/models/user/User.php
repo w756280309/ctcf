@@ -629,15 +629,19 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     //如 WDJFQY0001 --> WDJFQY0002,
     public static function create_code($field="usercode",$code="WDJF",$length=4,$pad_length=9){
         //取到所找字段的最大值，如WDJFQY001 WDJFQY003 筛选出的结果应是WDJFQY003
-        $maxValue = self::find()->where(['type' => self::USER_TYPE_PERSONAL])->max($field);
+        if ($code == "WDJF") {
+            $maxValue = self::find()->where(['type' => self::USER_TYPE_PERSONAL])->max($field);
+        } else {
+            $maxValue = self::find()->where(['type' => self::USER_TYPE_ORG])->max($field);
+        }
         //若数据库中该字段没有值，就使用默认字符WDJFQY
-        $usercode = $maxValue?$maxValue:$code;
+        $usercode = $maxValue ? $maxValue : $code;
         //选出编号中的数字
-        $num = (substr($usercode,$length))+1;
+        $num = (substr($usercode, $length)) + 1;
         //选出编号中的字符
-        $code = substr($usercode, 0,$length);
+        $code = substr($usercode, 0, $length);
         //取出的数字，加一后，在左边填充成4为，然后与字符相加
-        return $code.str_pad($num, $pad_length,0,STR_PAD_LEFT );
+        return $code . str_pad($num, $pad_length, 0, STR_PAD_LEFT);
     }
 
     /**
