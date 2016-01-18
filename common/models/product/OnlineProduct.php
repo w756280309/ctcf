@@ -189,7 +189,7 @@ class OnlineProduct extends \yii\db\ActiveRecord
             [['sn'], 'string', 'max' => 32],
             ['sn','unique','message'=>'编号已占用'],
             [['expires_show'], 'string', 'max' => 50],
-            ['del_status','default',"value"=>0],
+            [['del_status','funded_money'],'default',"value"=>0],
             [['fazhi','money','start_money','dizeng_money','fazhi_up','yuqi_faxi','fee'],'double'],
             [['money','start_money','yuqi_faxi','fee'], 'compare', 'compareValue' => 0, 'operator' => '>='],
             [['dizeng_money'], 'compare', 'compareValue' => 1, 'operator' => '>='],

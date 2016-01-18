@@ -88,6 +88,7 @@ use yii\widgets\LinkPager;
                                         <th>期限（天）</th>
                                         <th>利率（%）</th>
                                         <th>募集金额（元）</th>
+                                        <th>实际募集金额（元）</th>
                                         <th>满标时间</th>
                                         <th>起息时间</th>
                                         <th>状态</th>
@@ -105,6 +106,7 @@ use yii\widgets\LinkPager;
                                         <td><?= $val['expires'] ?></td>
                                         <td><?= doubleval(100*$val['yield_rate']) ?></td>
                                         <td><?= number_format($val['money'],2) ?></td>
+                                        <td><?= number_format($val['funded_money'],2) ?></td>
                                         <td>
                                             <?= ($val['status'] > 2 && $val['status'] != 4)?date('Y-m-d H:i:s',$val['full_time']):'--'?>
                                         </td>
@@ -233,14 +235,14 @@ use yii\widgets\LinkPager;
     
     function endproduct(pid){
          var csrf = '<?= Yii::$app->request->getCsrfToken(); ?>';
-            layer.confirm('是否要提前结束此项目的募集？',{title:'结束项目',btn:['取消','确定']},function(){
-                layer.closeAll();
-            },function(){
+            layer.confirm('是否要提前结束此项目的募集？',{title:'结束项目',btn:['确定','取消']},function(){
                 openLoading();//打开loading
                 $.post("/product/productonline/end-product", {pid: pid, _csrf:csrf}, function (result) {
                     cloaseLoading();//关闭loading
                     newalert(result['res'],'',1);
                 });   
+            },function(){
+                layer.closeAll();
             })
     }
 </script> 

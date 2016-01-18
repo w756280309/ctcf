@@ -119,6 +119,7 @@ $status = Yii::$app->request->get('status');
                         <th>项目编号</th>
                         <th>项目名称</th>
                         <th>融资金额（元）</th>
+                        <th>实际融资金额（元）</th>
                         <th>融资期限（天）</th>
                         <th>利率（%）</th>
                         <th>融资时间</th>
@@ -131,6 +132,7 @@ $status = Yii::$app->request->get('status');
                         <td><?= $val['sn'] ?></td>
                         <td><?= $val['title'] ?></td>
                         <td><?= number_format($val['money'],2) ?></td>    
+                        <td><?= number_format($val['funded_money'],2) ?></td>
                         <td><?= $val['expires']?></td>           
                         <td><?= doubleval(100*$val['yield_rate'])?></td>               
                         <td><?= date('Y-m-d H:i:s',$val['created_at'])?></td>

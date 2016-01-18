@@ -629,7 +629,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     //如 WDJFQY0001 --> WDJFQY0002,
     public static function create_code($field="usercode",$code="WDJF",$length=4,$pad_length=9){
         //取到所找字段的最大值，如WDJFQY001 WDJFQY003 筛选出的结果应是WDJFQY003
-        if ($code == "WDJF") {
+        if ("WDJF" === $code) {
             $maxValue = self::find()->where(['type' => self::USER_TYPE_PERSONAL])->max($field);
         } else {
             $maxValue = self::find()->where(['type' => self::USER_TYPE_ORG])->max($field);

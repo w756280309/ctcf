@@ -419,6 +419,8 @@ class ProductonlineController extends BaseController
 
         if (!empty($model->jixi_time)) {
             $model->jixi_time = date('Y-m-d', $model->jixi_time);
+        }else{
+            $model->jixi_time = "";
         }
 
         return $this->render('jixi', ['model' => $model, 'c_flag' => $c_flag]);

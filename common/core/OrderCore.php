@@ -106,16 +106,18 @@ class OrderCore
             $finish_rate = $bcrond->bcround(bcdiv($insert_sum, $model->money), 2);
             if (0 === bccomp($finish_rate, 1) && 0 !== bccomp($insert_sum, $model->money)) {//主要处理由于四舍五入造成的不应该募集完成的募集完成了：完成比例等于1了，并且包含此次交易成功所有金额不等于募集金额
                 $finish_rate = 0.99;
+            } else if(0 === bccomp($finish_rate, 0)) {
+                $finish_rate = 0.01;
             }
             $update['finish_rate'] = $finish_rate;
         }
 
         $res = OnlineProduct::updateAll($update, ['id' => $model->id]);
-        if (!$res) {
+        if (false === $res) {
             $transaction->rollBack();
-            return ['code' => PayService::ERROR_SYSTEM, 'message' => PayService::getErrorByCode(PayService::ERROR_SYSTEM), 'tourl' => '/order/order/ordererror'];
+            return ['code' => PayService::ERROR_SYSTEM, 'message' => PayService::getErrorByCode(PayService::ERROR_SYSTEM)];
         }
-        $command = Yii::$app->db->createCommand('UPDATE '.OnlineProduct::tableName().' SET funded_money=funded_money+'.$model->money.' WHERE id='.$model->id);
+        $command = Yii::$app->db->createCommand('UPDATE '.OnlineProduct::tableName().' SET funded_money=funded_money+'.$price.' WHERE id='.$model->id);
         $command->execute();//更新实际募集金额
         //投标成功，向用户发送短信
         $message = [
