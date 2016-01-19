@@ -1,6 +1,4 @@
 <?php
-use yii\helpers\Html;
-use yii\bootstrap\ActiveForm;
 $this->title="合同协议";
 ?>
  <link rel="stylesheet" href="/css/bind.css"/>
@@ -9,6 +7,20 @@ $this->title="合同协议";
  <script src="/js/jquery.js"></script>
  <script src="/js/swiper.min.js"></script>
  <script src="/js/licai.js"></script>
+  <style>
+     .column {
+        position: relative;
+        height: auto;
+        background: #fff;
+        margin-top: 10px;
+        margin-bottom: 10px;
+        cursor: pointer;
+        overflow: hidden;
+    }
+    .content {
+        margin: 30px;
+    }
+ </style>
     
     <!-- Swiper -->
     <div class="swiper-container">
@@ -18,6 +30,8 @@ $this->title="合同协议";
             <?php endforeach; ?>
         </div>
     </div>
+    <div class="column">
+        <div><?= $model->name."aaaaaaaaa" ?></div>
+        <div class="content"><?= html_entity_decode($content) ?></div>
+    </div>
 
- <div><center><?= $content ?></center></div>
- 
