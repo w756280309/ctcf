@@ -31,7 +31,7 @@ $this->title="合同协议";
         </div>
     </div>
     <div class="column">
-        <div><?= $model->name."aaaaaaaaa" ?></div>
+        <div><?= $agreement_name ?></div>
         <div class="content"><?= html_entity_decode($content) ?></div>
     </div>
 
