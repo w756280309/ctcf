@@ -2,3 +2,7 @@
 
 UserAccount的TYPE_BUY常量改为TYPE_LEND
 UserAccount的TYPE_RAISE常量改为TYPE_BORROW
+
+2016-01-19
+
+修改UserBanks对应的user_bank表，使表里仅存在有效的记录
