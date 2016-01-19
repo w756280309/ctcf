@@ -402,11 +402,13 @@ class ProductonlineController extends BaseController
         } elseif ($model->load(Yii::$app->request->post())) {
             $err = '';
             $model->jixi_time = strtotime($model->jixi_time);
-            if ($model->status == OnlineProduct::STATUS_FULL && $model->jixi_time < $model->full_time) {
+            $full_time = strtotime(date('Y-m-d', $model->full_time));
+            $finish_date = strtotime(date('Y-m-d', $model->finish_date));
+            if ($model->status == OnlineProduct::STATUS_FULL && $model->jixi_time <= $full_time) {
                 $err = '计息开始时间必须大于项目满标时间 '.date('Y-m-d', $model->full_time);
-            } elseif ($model->status == OnlineProduct::STATUS_FOUND && $model->jixi_time < $model->full_time) {
+            } elseif ($model->status == OnlineProduct::STATUS_FOUND && $model->jixi_time <= $full_time) {
                 $err = '计息开始时间必须大于项目提前募集结束时间 '.date('Y-m-d', $model->full_time);
-            } elseif ($model->jixi_time > $model->finish_date) {
+            } elseif ($model->jixi_time >= $finish_date) {
                 $err = '计息开始时间必须小于项目的截止时间 '.date('Y-m-d', $model->finish_date);
             }
 
