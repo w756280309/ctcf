@@ -19,21 +19,23 @@ use Yii;
 use yii\web\Response;
 
 class UserbankController extends BaseController
-{
-    /**
-     * 实名认证表单页.
-     *
-     * @return type
-     */
-    public function actionIdcardrz()
+{   
+    public function init()
     {
+        parent::init();
         $this->layout = '@app/modules/order/views/layouts/buy';
         if (Yii::$app->request->isAjax) {
             Yii::$app->response->format = Response::FORMAT_JSON;
         }
-
+    }
+    
+    /**
+     * 实名认证表单页.
+     */
+    public function actionIdcardrz()
+    {
         $cond = 0 | BankService::IDCARDRZ_VALIDATE_Y;
-        $data = BankService::check($this->user->id, $cond);
+        $data = BankService::check($this->user, $cond);
         if ($data[code] == 1) {
             if (Yii::$app->request->isAjax) {
                 return $data;
@@ -42,7 +44,7 @@ class UserbankController extends BaseController
             }
         }
 
-        $model = $data['user'];
+        $model = $this->user;
         $model->scenario = 'idcardrz';
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             $model->idcard_status = User::IDCARD_STATUS_PASS;
@@ -63,18 +65,11 @@ class UserbankController extends BaseController
 
     /**
      * 绑定银行卡表单页.
-     *
-     * @return type
      */
     public function actionBindbank()
     {
-        $this->layout = '@app/modules/order/views/layouts/buy';
-        if (Yii::$app->request->isAjax) {
-            Yii::$app->response->format = Response::FORMAT_JSON;
-        }
-
         $cond = 0 | BankService::IDCARDRZ_VALIDATE_N | BankService::BINDBANK_VALIDATE_Y;
-        $data = BankService::check($this->user->id, $cond);
+        $data = BankService::check($this->user, $cond);
         if ($data['code'] == 1) {
             if (Yii::$app->request->isAjax) {
                 return $data;
@@ -85,17 +80,17 @@ class UserbankController extends BaseController
             }
         }
 
-        $user = $data['user'];
+        $user = $this->user;
         $model = new UserBanks();
         $model->scenario = 'step_first';
-        $model->uid = $this->user->id;
+        $model->uid = $user->id;
         $model->account = $user->real_name;
         $model->account_type = UserBanks::PERSONAL_ACCOUNT;
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             $model->status = UserBanks::STATUS_YES;
             if ($model->save()) {
                 //绑卡成功
-                $res = SmsService::editSms($this->user->id);
+                $res = SmsService::editSms($user->id);
 
                 return ['tourl' => '/user/userbank/addbuspass', 'code' => 1, 'message' => '绑卡成功'];
             }
@@ -120,18 +115,11 @@ class UserbankController extends BaseController
 
     /**
      * 设置交易密码表单页.
-     *
-     * @return type
      */
     public function actionAddbuspass()
     {
-        $this->layout = '@app/modules/order/views/layouts/buy';
-        if (Yii::$app->request->isAjax) {
-            Yii::$app->response->format = Response::FORMAT_JSON;
-        }
-
         $cond = 0 | BankService::IDCARDRZ_VALIDATE_N | BankService::BINDBANK_VALIDATE_N | BankService::CHARGEPWD_VALIDATE_Y;
-        $data = BankService::check($this->user->id, $cond);
+        $data = BankService::check($this->user, $cond);
         if ($data[code] == 1) {
             if (Yii::$app->request->isAjax) {
                 return $data;
@@ -159,20 +147,13 @@ class UserbankController extends BaseController
 
     /**
      * 修改交易密码表单页.
-     *
-     * @return type
      */
     public function actionEditbuspass()
     {
-        $this->layout = '@app/modules/order/views/layouts/buy';
-        if (Yii::$app->request->isAjax) {
-            Yii::$app->response->format = Response::FORMAT_JSON;
-        }
-
         $model = new EditpassForm();
 
         $cond = 0 | BankService::IDCARDRZ_VALIDATE_N | BankService::BINDBANK_VALIDATE_N | BankService::CHARGEPWD_VALIDATE_N;
-        $data = BankService::check($this->user->id, $cond);
+        $data = BankService::check($this->user, $cond);
         if ($data[code] == 1) {
             if (Yii::$app->request->isAjax) {
                 return $data;
@@ -203,18 +184,13 @@ class UserbankController extends BaseController
     public function actionRecharge()
     {
         \Yii::$app->session->remove('cfca_qpay_recharge');
-        $this->layout = '@app/modules/order/views/layouts/buy';
-        $uid = $this->user->id;
-        $user = User::findOne($uid);
-        if ($user && $user->status == User::STATUS_DELETED) {
-            $this->redirect('/site/usererror');
-        }
+        $user = $this->user;
+        $uid = $user->id;
         $user_bank = UserBanks::find()->where(['uid' => $uid])->select('id,binding_sn,bank_id,bank_name,card_number,status')->one();
         $user_acount = UserAccount::find()->where(['type' => UserAccount::TYPE_LEND, 'uid' => $uid])->select('id,uid,in_sum,available_balance')->one();
 
-        //检查用户是否绑卡
-        $cond = 0 | BankService::IDCARDRZ_VALIDATE_N | BankService::BINDBANK_VALIDATE_N | BankService::CHARGEPWD_VALIDATE_N;
-        $data = BankService::check($uid, $cond);
+        //检查用户是否完成快捷支付
+        $data = BankService::checkKuaijie($user);
         if ($data[code] == 1 && \Yii::$app->request->isAjax) {
             return ['next' => $data['tourl']];
         }
@@ -224,22 +200,14 @@ class UserbankController extends BaseController
 
     public function actionTixian()
     {
-        $this->layout = '@app/modules/order/views/layouts/buy';
-        if (Yii::$app->request->isAjax) {
-            Yii::$app->response->format = Response::FORMAT_JSON;
-        }
-
-        $uid = $this->user->id;
         $user = $this->user;
-        if ($user && $user->status == User::STATUS_DELETED) {
-            $this->redirect('/site/usererror');
-        }
+        $uid = $user->id;
 
         $user_acount = $user->lendAccount;
         $user_bank = $user->bank;
         
         $cond = 0 | BankService::IDCARDRZ_VALIDATE_N | BankService::BINDBANK_VALIDATE_N | BankService::CHARGEPWD_VALIDATE_N | BankService::EDITBANK_VALIDATE;
-        $data = BankService::check($uid, $cond);
+        $data = BankService::check($user, $cond);
         if ($data[code] == 1) {
             if (Yii::$app->request->isAjax) {
                 return $data;
@@ -271,21 +239,22 @@ class UserbankController extends BaseController
 
     public function actionChecktradepwd($money)
     {
-        $this->layout = '@app/modules/order/views/layouts/buy';
-        if (Yii::$app->request->isAjax) {
-            Yii::$app->response->format = Response::FORMAT_JSON;
-        }
-
         $user = $this->user;
-        $uid = $this->user->id;
-        if ($user && $user->status == User::STATUS_DELETED) {
-            $this->redirect('/site/usererror');
-        }
+        $uid = $user->id;
 
+        $cond = 0 | BankService::IDCARDRZ_VALIDATE_N | BankService::BINDBANK_VALIDATE_N | BankService::CHARGEPWD_VALIDATE_N | BankService::EDITBANK_VALIDATE;
+        $data = BankService::check($user, $cond);
+        if ($data[code] == 1) {
+            if (Yii::$app->request->isAjax) {
+                return $data;
+            } else {
+                return $this->render('checktradepwd', ['status' => 0, 'data' => $data]);
+            }
+        }        
+        
         $draw = new DrawRecord();
         $draw->uid = $uid;
         $draw->money = $money;
-        $data = '';
         if ($draw->validate()) {
             $us = new UserService();
             $re = $us->checkDraw($uid, $draw->money);
@@ -295,14 +264,6 @@ class UserbankController extends BaseController
         } else {
             $message = $draw->firstErrors;
             $data = ['tourl' => '/user/userbank/tixian', 'code' => 1, 'message' => current($message)];
-        }
-
-        if (!empty($data)) {
-            if (Yii::$app->request->isAjax) {
-                return $data;
-            } else {
-                return $this->render('checktradepwd', ['status' => 0, 'data' => $data]);
-            }
         }
 
         $user_bank = $this->user->bank;
@@ -407,14 +368,9 @@ class UserbankController extends BaseController
 
     public function actionEditbank()
     {
-        $this->layout = '@app/modules/order/views/layouts/buy';
-        if (Yii::$app->request->isAjax) {
-            Yii::$app->response->format = Response::FORMAT_JSON;
-        }
-
         $cond = 0 | BankService::IDCARDRZ_VALIDATE_N | BankService::BINDBANK_VALIDATE_N;
-        $data = BankService::check($this->user->id, $cond);
-        $model = $data['user_bank'];
+        $data = BankService::check($this->user, $cond);
+        $model = $this->user->bank;
         if ($data['code'] == 1) {
             if (Yii::$app->request->isAjax) {
                 return $data;
@@ -439,30 +395,22 @@ class UserbankController extends BaseController
         }
 
         $province = Region::find()->where(['province_id' => 0])->select('id,name')->asArray()->all();
-        $data = ['tourl' => '', 'code' => 0, 'message' => '修改成功'];
 
         return $this->render('editbank', ['model' => $model, 'province' => $province, 'data' => $data]);
     }
 
     public function actionCheckbank()
     {
-        $card = Yii::$app->request->post('card');
-        $result = BankService::checkBankcard($card);
-
-        return $result;
+        return BankService::checkBankcard(Yii::$app->request->post('card'));
     }
 
     public function actionBankxiane()
     {
-        $this->layout = '@app/modules/order/views/layouts/buy';
-
         return $this->render('bankxiane');
     }
 
     public function actionKuaijie()
     {
-        $this->layout = '@app/modules/order/views/layouts/buy';
-
         return $this->render('kuaijie');
     }
 }

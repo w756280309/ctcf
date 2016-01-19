@@ -5,7 +5,6 @@ namespace common\service;
 use Yii;
 use yii\web\Response;
 use common\models\user\User;
-use common\models\user\UserBanks;
 
 /**
  * Desc 主要用于充值提现流程规则的校验
@@ -23,7 +22,6 @@ class BankService
     const CHARGEPWD_VALIDATE_N = 16;  //pow(2,4)   验证交易密码未设定的情况
     const CHARGEPWD_VALIDATE_Y = 32;  //pow(2,5)   验证交易密码已设定的情况
     const EDITBANK_VALIDATE = 64;     //pow(2,6)   验证是否需要完善银行信息
-   // const KUAIJIE_VALIDATE_N = 128;   //pow(2,7)   验证没有开通快捷支付功能的情况
 
     /*调用实例
      *     $cond = 0 | BankService::IDCARDRZ_VALIDATE_N | BankService::BINDBANK_VALIDATE_N | BankService::CHARGEPWD_VALIDATE;
@@ -38,19 +36,12 @@ class BankService
     }
 
     /**
-     * 验证流程.
-     *
-     * @param $cond
-     *
-     * @return bool
+     * 验证快捷支付流程.
+     * @param object $user 用户对象
+     * @param $cond 查询条件
      */
-    public static function check($uid = null, $cond = null)
+    public static function check($user, $cond)
     {
-        $user = User::find()->where(['id' => $uid, 'type' => User::USER_TYPE_PERSONAL, 'status' => User::STATUS_ACTIVE])->one();
-//        if(($cond & BankService::KUAIJIE_VALIDATE_N) && $user->kuaijie_status == User::KUAIJIE_STATUS_N) {
-//            return ['tourl' => '/user/userbank/kuaijie','code' => 1, 'message' => '您尚未开通快捷支付功能'];
-//        }
-
         if (($cond & self::IDCARDRZ_VALIDATE_Y) && $user->idcard_status == User::IDCARD_STATUS_PASS) {
             return ['tourl' => '/user/user', 'code' => 1, 'message' => '您已经实名认证'];
         }
@@ -59,28 +50,28 @@ class BankService
             return ['tourl' => '/user/userbank/kuaijie', 'code' => 1, 'message' => '您未进行实名认证'];
         }
 
-        $user_bank = UserBanks::find()->where(['uid' => $uid])->one();
-        if (($cond & self::BINDBANK_VALIDATE_Y) && $user_bank && $user_bank->status == UserBanks::STATUS_YES) {
+        $user_bank = $user->bank;
+        if (($cond & self::BINDBANK_VALIDATE_Y) && !empty($user_bank)) {
             return ['tourl' => '/user/user', 'code' => 1, 'message' => '您已经成功绑定过银行卡'];
         }
 
-        if (($cond & self::BINDBANK_VALIDATE_N) && (!$user_bank || $user_bank->status != UserBanks::STATUS_YES)) {
+        if (($cond & self::BINDBANK_VALIDATE_N) && empty($user_bank)) {
             return ['tourl' => '/user/userbank/bindbank', 'code' => 1, 'message' => '您未绑定银行卡'];
         }
 
-        if (($cond & self::CHARGEPWD_VALIDATE_N) && !$user->trade_pwd) {
+        if (($cond & self::CHARGEPWD_VALIDATE_N) && empty($user->trade_pwd)) {
             return ['tourl' => '/user/userbank/addbuspass', 'code' => 1, 'message' => '您未设定交易密码'];
         }
 
-        if (($cond & self::CHARGEPWD_VALIDATE_Y) && $user->trade_pwd) {
+        if (($cond & self::CHARGEPWD_VALIDATE_Y) && !empty($user->trade_pwd)) {
             return ['tourl' => '/user/user', 'code' => 1, 'message' => '您已设定交易密码'];
         }
 
-        if (($cond & self::EDITBANK_VALIDATE) && (!$user_bank->sub_bank_name || !$user_bank->province || !$user_bank->city)) {
+        if (($cond & self::EDITBANK_VALIDATE) && (empty($user_bank->sub_bank_name) || empty($user_bank->province) || empty($user_bank->city))) {
             return ['tourl' => '/user/userbank/editbank', 'code' => 1, 'message' => '您需要先完善银行卡信息'];
         }
 
-        return ['code' => 0, 'user' => $user, 'user_bank' => $user_bank];
+        return ['code' => 0];
     }
 
     /**
@@ -92,7 +83,7 @@ class BankService
      */
     public static function checkBankcard($card = null)
     {
-        if (!$card) {
+        if (empty($card)) {
             return ['code' => 1, 'message' => 'card参数错误'];
         }
 
@@ -105,7 +96,7 @@ class BankService
                 if ($data[1] == '借记卡') {
                     return ['code' => 0, 'bank_id' => $key, 'bank_name' => $val['bankname']];
                 } else {
-                    return ['code' => 1, 'message' => '该操作目前只支持借记卡'];
+                    return ['code' => 1, 'message' => '该操作只支持借记卡'];
                 }
             }
 
@@ -141,24 +132,14 @@ class BankService
         return ['code' => 0, 'bank_id' => '', 'bank_name' => ''];
     }
 
-    public static function checkKuaijie($uid = null)
+    /**
+     * 验证快捷支付全流程是否完成
+     * @param object $user 用户对象
+     * @return array
+     */
+    public static function checkKuaijie($user)
     {
-        if (empty($uid)) {
-            return ['code' => 1, 'message' => 'uid参数错误'];
-        }
-
         $cond = 0 | self::IDCARDRZ_VALIDATE_N | self::BINDBANK_VALIDATE_N | self::CHARGEPWD_VALIDATE_N;
-
-        $data = self::check($uid, $cond);
-        if ($data[code] == 1) {
-            return $data;
-        }
-//        else {
-//            $user = $data['user'];
-//            $user->scenario = 'kuaijie';
-//            $user->kuaijie_status = User::KUAIJIE_STATUS_Y;
-//            $user->save();
-            return ['code' => 0, 'message' => '您已经成功开通快捷支付功能'];
-//        }
+        return self::check($user, $cond);
     }
 }
