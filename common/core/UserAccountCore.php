@@ -43,30 +43,23 @@ class UserAccountCore {
     }
     
      /**
-     * 累计待回收资金【本金】满标状态
+     * 累计待回收资金【本金】满标或提前募集结束后待还款本金
      * @param type $uid
      */   
-    public function getTotalWaitMoney($uid=null){
-        $query = (new \yii\db\Query())
-                ->select('order.order_money')
-                ->from(['online_order order'])
-                ->innerJoin('online_product p','order.online_pid=p.id')
-                ->where(['order.uid'=>$uid,'order.status'=>1,'p.status'=> [2,3]])->sum('order_money');
-        return empty($query)?'0.00':$query;
+    public function getTotalWaitMoney($ua){
+        return $ua->investment_balance;
     }
     
     /**
-     * 资产总额=理财资产+可用余额+冻结金额
+     * 资产总额=账户余额+理财资产
      * @param type $uid
      */
     public function getTotalFund($uid = null){
-        //$licaizichan = $this->getTotalWaitMoney($uid);//理财资产
         $ua = $this->getUserAccount($uid);
-        $available_balance = $ua->available_balance;//可用余额
-        $freeze_balance = $ua->freeze_balance;//冻结金额
-        //var_dump($licaizichan, $available_balance,$freeze_balance);
+        $account_balance = $ua->account_balance;//账户余额
+        $investment_balance = $ua->investment_balance;
         $bcRound = new BcRound();
         bcscale(14);
-        return $bcRound->bcround(bcadd($available_balance, $freeze_balance), 2);
+        return $bcRound->bcround(bcadd($investment_balance, $account_balance), 2);
     }
 }

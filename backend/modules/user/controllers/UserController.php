@@ -109,12 +109,12 @@ class UserController extends BaseController {
         $draw = $uabc->getDrawSuccess($id);
         
         $ua = $uabc->getUserAccount($id);
-        $userLiCai = $ua->freeze_balance;
-        if(Yii::$app->request->get('type')==User::USER_TYPE_PERSONAL){
+        $userLiCai = $ua->investment_balance;//理财金额 
+        if (Yii::$app->request->get('type') == User::USER_TYPE_PERSONAL) {
             $rcMax = RechargeRecord::find()->where(['status'=>  RechargeRecord::STATUS_YES,'uid'=>$id])->max('updated_at');
             $order = $uabc->getOrderSuccess($id);
             $product = $ret = ['count' => 0, 'sum' => 0];
-        }else{
+        } else {
             $rcMax = OnlineProduct::find()->where(['del_status'=> OnlineProduct::STATUS_USE,'borrow_uid'=>$id])->min('start_date');
             $ret = $uabc->getReturnInfo($id);
             $product = $uabc->getProduct($id);

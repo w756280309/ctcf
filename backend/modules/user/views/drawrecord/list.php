@@ -164,16 +164,20 @@ $status = Yii::$app->request->get('status');
                              ?>
                             <a class="btn mini green ajax_op" index="<?= $val['id'] ?>"><i class="icon-edit"></i>审核</a>
                              <?php
-                                }elseif($val['status']==1){
-                                    echo "已审核";
-                                }elseif($val['status']==3){
-                                    echo "提现不成功";
-                                }elseif($val['status']==2){
-                                    echo "提现成功";
-                                }  else {
-                                    echo "提现驳回'";
-                                }
-                                ?></td>
+                                } elseif ($val['status'] == 1) {
+                                     echo "已审核";
+                                 } elseif ($val['status'] == 3) {
+                                     echo "提现不成功";
+                                 } elseif ($val['status'] == 2) {
+                                     echo "提现成功";
+                                 } elseif ($val['status'] == 4) {
+                                     echo "已放款";
+                                 } elseif ($val['status'] == 5) {
+                                     echo "已经处理";
+                                 } else {
+                                     echo "提现驳回'";
+                                 }
+                                 ?></td>
                     </tr>
                     <?php endforeach; ?>   
                 </tbody>

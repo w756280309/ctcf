@@ -18,10 +18,10 @@ class UserController extends BaseController
 
         $this->layout = 'account';
         $uacore = new UserAccountCore();
-        $ua = $uacore->getUserAccount($uid);
+        $ua = $this->user->lendAccount;
         $leijishouyi = $uacore->getTotalProfit($uid);//累计收益
-        $dhsbj = $uacore->getTotalWaitMoney($uid);//带回收本金
-        $zcze = $uacore->getTotalFund($uid);//资产总额=理财资产+可用余额+冻结金额
+        $dhsbj = $ua->investment_balance;//带回收本金
+        $zcze = $uacore->getTotalFund($uid);//账户余额+理财资产
 
         $data = BankService::checkKuaijie($uid);
 
