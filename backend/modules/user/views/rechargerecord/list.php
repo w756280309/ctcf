@@ -209,7 +209,7 @@
                     newalert(result['res'],'');
                     location.reload();
                 });    
-            },function(){alert(2);
+            },function(){
                 openLoading();//打开loading
                 $.post("/user/rechargerecord/recharge-sh", {op: op, id: index,type:0, uid:uid, _csrf:csrf}, function (result) {
                     cloaseLoading();//关闭loading
