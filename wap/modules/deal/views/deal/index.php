@@ -8,6 +8,14 @@ $this->registerJs('var cp=' . $header['cp'] . ';', 1);
 
 ?>
 <script src="/js/jquery.classyloader.js"></script>
+<div class="container">
+    <div class="row tit-box">
+        <div class="col-xs-3"><a class="active" href="">短期产品</a></div>
+        <div class="col-xs-3"><a href="">政府平台</a></div>
+        <div class="col-xs-3"><a href="">国企央企</a></div>
+        <div class="col-xs-3"><a href="">新手标</a></div>
+    </div>
+</div>
 <div id="item-list">
     <?php foreach ($deals as $val): ?>
         <a class="row column dealdata" href="/deal/deal/detail?sn=<?= $val['num'] ?>">
