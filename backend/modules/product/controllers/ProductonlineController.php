@@ -130,7 +130,7 @@ class ProductonlineController extends BaseController
                 $record = new ContractTemplate();
                 foreach ($con_name_arr as $key => $val) {
                     $record_model = clone $record;
-                    $record_model->pid = $pre->id;
+                    $record_model->pid = $model->id;
                     $record_model->name = $val;
                     $record_model->content = $con_content_arr[$key];
                     if (!$record_model->save()) {
@@ -405,7 +405,6 @@ class ProductonlineController extends BaseController
             if ($model->status == OnlineProduct::STATUS_FULL && $model->jixi_time < $model->full_time) {
                 $err = '计息开始时间必须大于项目满标时间 '.date('Y-m-d', $model->full_time);
             } elseif ($model->status == OnlineProduct::STATUS_FOUND && $model->jixi_time < $model->full_time) {
-                //?????
                 $err = '计息开始时间必须大于项目提前募集结束时间 '.date('Y-m-d', $model->full_time);
             } elseif ($model->jixi_time > $model->finish_date) {
                 $err = '计息开始时间必须小于项目的截止时间 '.date('Y-m-d', $model->finish_date);

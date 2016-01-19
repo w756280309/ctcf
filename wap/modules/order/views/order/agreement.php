@@ -17,8 +17,17 @@ $this->title="合同协议";
         cursor: pointer;
         overflow: hidden;
     }
+    .agrname {
+        margin-top: 24px;
+        margin-left: 135px;
+        margin-bottom: 18px;
+        margin-right: 135px;
+    }
     .content {
-        margin: 30px;
+        margin-left: 30px;
+        margin-right: 30px;
+        color: #3d3a3b;
+        font-size: 26px;
     }
  </style>
     
@@ -31,7 +40,7 @@ $this->title="合同协议";
         </div>
     </div>
     <div class="column">
-        <div><?= $agreement_name ?></div>
+        <div class="agrname"><center><p style="font-size: 26px;color: #000000;"><?= $model[$key]['name'] ?></center></div>
         <div class="content"><?= html_entity_decode($content) ?></div>
     </div>
 
