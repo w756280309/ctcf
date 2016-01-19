@@ -29,12 +29,15 @@ class ProductonlineController extends BaseController
         }
     }
 
+    /**
+     * 新增、编辑标的项目
+     */
     public function actionEdit($id = null)
     {
         $product_status = OnlineProduct::getProductStatusAll();
-        $rongziUser = User::find()->where('type=2')->asArray()->all();
+        $rongziUser = User::find()->where(['type' => User::USER_TYPE_ORG])->asArray()->all();
         $rongziInfo = [];
-        foreach ($rongziUser as $k => $v) {
+        foreach ($rongziUser as $v) {
             $rongziInfo[$v['id']] = $v['org_name'];
         }
         $model = $id ? OnlineProduct::findOne($id) : new OnlineProduct();
@@ -58,8 +61,7 @@ class ProductonlineController extends BaseController
                 $model->sn = OnlineProduct::createSN();
                 $model->sort = OnlineProduct::SORT_PRE;
             }
-            $old = $model->oldAttributes;
-            $new = $model->attributes;
+
             $diff = \Yii::$app->functions->timediff(strtotime(date('Y-m-d',  strtotime($model->start_date))),  strtotime(date('Y-m-d', strtotime($model->finish_date))));
 
             $start = strtotime($model->start_date);
@@ -92,6 +94,8 @@ class ProductonlineController extends BaseController
 
             $con_name_arr = Yii::$app->request->post('name');
             $con_content_arr = Yii::$app->request->post('content');
+            $_namearr = empty($con_name_arr) ? $con_name_arr : array_filter($con_name_arr);
+            $_contentarr = empty($con_content_arr) ? $con_content_arr : array_filter($con_content_arr);
 
             if ($model->expires > $diff['day']) {
                 $model->addError('expires', '项目天数 应该小于等于 项目截止日 - 募集开始时间;当前天数：'.$diff['day'].'天');
@@ -101,7 +105,7 @@ class ProductonlineController extends BaseController
                 $model->addError('finish_date', '募集开始时间小于募集结束时间小于项目结束日');
             } elseif (!empty($err)) {
                 $model->addError('jixi_time', $err);
-            } elseif (empty($con_name_arr) || empty($con_content_arr)) {
+            } elseif (empty($_namearr) || empty($_contentarr)) {
                 $model->addError('contract_type', '合同协议至少要输入一份');
             } else {
                 $transaction = Yii::$app->db->beginTransaction();
@@ -115,24 +119,23 @@ class ProductonlineController extends BaseController
 
                 $pre = $model->save();
                 if (!$pre) {
-                    var_dump($model->getErrors());
                     $transaction->rollBack();
                     exit('录入ProductOnline异常');
-                } else {
-                    if ($id) {
-                        ContractTemplate::deleteAll(['pid' => $id]);
-                    }
+                }
 
-                    $record = new ContractTemplate();
-                    foreach ($con_name_arr as $key => $val) {
-                        $record_model = clone $record;
-                        $record_model->pid = $id;
-                        $record_model->name = $val;
-                        $record_model->content = $con_content_arr[$key];
-                        if (!$record_model->save()) {
-                            $transaction->rollBack();
-                            exit('录入ContractTemplate异常');
-                        }
+                if ($id) {
+                    ContractTemplate::deleteAll(['pid' => $id]);
+                }
+
+                $record = new ContractTemplate();
+                foreach ($con_name_arr as $key => $val) {
+                    $record_model = clone $record;
+                    $record_model->pid = $pre->id;
+                    $record_model->name = $val;
+                    $record_model->content = $con_content_arr[$key];
+                    if (!$record_model->save()) {
+                        $transaction->rollBack();
+                        exit('录入ContractTemplate异常');
                     }
                 }
 
@@ -419,8 +422,8 @@ class ProductonlineController extends BaseController
 
         if (!empty($model->jixi_time)) {
             $model->jixi_time = date('Y-m-d', $model->jixi_time);
-        }else{
-            $model->jixi_time = "";
+        } else {
+            $model->jixi_time = '';
         }
 
         return $this->render('jixi', ['model' => $model, 'c_flag' => $c_flag]);
