@@ -340,10 +340,18 @@ $form->field($model, 'borrow_uid', ['template' => '{input}{error}', 'inputOption
 </div>
 <script type="text/javascript">
     $(function() {
-        $('#product_product_form').submit(function() {
-            $(this).find('button[type=submit]').attr('disabled', true);
+        var $productForm = $('#product_product_form');
+        var $submit = $productForm.find('button[type=submit]');
+
+        $productForm.submit(function() {
+            $submit.attr('disabled', true);
+        }).on('afterValidate', function() {
+            if (!$(this).data('yiiActiveForm').validated) {
+                $submit.attr('disabled', false);
+            }
         });
-         kindEdit();
+
+        kindEdit();
     });
 
      function kindEdit() {
