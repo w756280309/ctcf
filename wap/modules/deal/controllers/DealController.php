@@ -88,11 +88,9 @@ class DealController extends Controller {
             $start = Yii::$app->functions->getDateDesc($deals['start_date']);
             $deals['start_date'] = $start['desc'] . date('H:i', $start['time']);
         }
-        $f = $deals['yield_rate'];
-        if (bccomp($f, 0.01) < 0) {
-            $f = 0.99;
+        if ($deals['status'] == OnlineProduct::STATUS_HUAN || $deals['status'] == OnlineProduct::STATUS_OVER || $deals['status'] == OnlineProduct::STATUS_FOUND) {
+            $deals['finish_rate'] = 1;
         }
-        $deals['yield_rate'] = $f;
         $this->layout = "@app/views/layouts/dealdeail";
         return $this->render('detail', ['deal' => $deals]);
     }

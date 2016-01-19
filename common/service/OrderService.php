@@ -56,18 +56,22 @@ class OrderService {
         $message = ($page>$tp)?'数据错误':'消息返回';
         foreach ($query as $key=>$dat){
             $query[$key]['statusval'] = Yii::$app->params['deal_status'][$dat['pstatus']];
-            $query[$key]['order_time'] = $dat['order_time']?date('Y-m-d',$dat['order_time']):"";
-            if(in_array($dat['pstatus'], [OnlineProduct::STATUS_NOW,  OnlineProduct::STATUS_FULL,  OnlineProduct::STATUS_FOUND])){
+            $query[$key]['order_time'] = $dat['order_time'] ? date('Y-m-d', $dat['order_time']) : "";
+            if (in_array($dat['pstatus'], [OnlineProduct::STATUS_NOW])) {
                 $query[$key]['profit'] = '--';
-                $query[$key]['returndate'] = date('Y-m-d',$dat['finish_date']);
-            }else if($dat['pstatus']==OnlineProduct::STATUS_HUAN){
-                $replayment = \common\models\order\OnlineRepaymentPlan::findOne(['order_id'=>$dat['id'],'online_pid'=>$dat['online_pid']]);
+                $query[$key]['returndate'] = date('Y-m-d', $dat['finish_date']);
+            } else if (in_array($dat['pstatus'], [OnlineProduct::STATUS_HUAN, OnlineProduct::STATUS_FULL, OnlineProduct::STATUS_FOUND])) {//
+                $replayment = \common\models\order\OnlineRepaymentPlan::findOne(['order_id' => $dat['id'], 'online_pid' => $dat['online_pid']]);
+                if (null === $replayment) {
+                    $query[$key]['profit'] = '--';
+                } else {
+                    $query[$key]['profit'] = $replayment->lixi;                    
+                }
+                $query[$key]['returndate'] = date('Y-m-d', $dat['finish_date']);
+            } else {
+                $replayment = \common\models\order\OnlineRepaymentRecord::findOne(['order_id' => $dat['id'], 'online_pid' => $dat['online_pid']]);
                 $query[$key]['profit'] = $replayment->lixi;
-                $query[$key]['returndate'] = date('Y-m-d',$dat['finish_date']);
-            }else{
-                $replayment = \common\models\order\OnlineRepaymentRecord::findOne(['order_id'=>$dat['id'],'online_pid'=>$dat['online_pid']]);
-                $query[$key]['profit'] = $replayment->lixi;
-                $query[$key]['returndate'] = date('Y-m-d',$replayment->refund_time);
+                $query[$key]['returndate'] = date('Y-m-d', $replayment->refund_time);
             }
         }
         return ['header'=>$header,'data'=>$query,'code'=>$code,'message'=>$message];

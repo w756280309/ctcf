@@ -158,7 +158,8 @@ class RechargerecordController extends BaseController
         $op = Yii::$app->request->post('op');
         $id = Yii::$app->request->post('id');
         $type = Yii::$app->request->post('type');
-
+        $uid = Yii::$app->request->post('uid');
+        
         if ($op == 'status') {
             //项目状态
             $recharge = RechargeRecord::findOne($id);
@@ -182,7 +183,7 @@ class RechargerecordController extends BaseController
                 $moneyInfo = new MoneyRecord();
                 // 生成一个SN流水号
                 $sn = MoneyRecord::createSN();
-                $moneyInfo->uid = $id;
+                $moneyInfo->uid = $uid;
                 $moneyInfo->sn = $sn;
                 $moneyInfo->type = 0;
                 $moneyInfo->balance = $YuE;

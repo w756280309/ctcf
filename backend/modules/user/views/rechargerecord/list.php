@@ -195,22 +195,23 @@
                                     
 </div>
 <script type="text/javascript">
+    var uid = '<?=Yii::$app->request->get('id')?>';
     $(function () {
          
         $('.ajax_op').bind('click', function () {
             op = $(this).attr('op');            
             index = $(this).attr('index');
             csrf = '<?= Yii::$app->request->getCsrfToken(); ?>';
-            layer.confirm('确定审核通过吗？',{title:'充值审核',btn:['通过','不通过','关闭']},function(){ 
+            layer.confirm('确定审核通过吗？',{title:'充值审核',btn:['通过','不通过','关闭'],closeBtn:false},function(){ 
                 openLoading();//打开loading
-                $.post("/user/rechargerecord/recharge-sh", {op: op, id: index, type:1, _csrf:csrf}, function (result) {
+                $.post("/user/rechargerecord/recharge-sh", {op: op, id: index, type:1, uid:uid, _csrf:csrf}, function (result) {
                     cloaseLoading();//关闭loading
                     newalert(result['res'],'');
                     location.reload();
                 });    
             },function(){
                 openLoading();//打开loading
-                $.post("/user/rechargerecord/recharge-sh", {op: op, id: index,type:0, _csrf:csrf}, function (result) {
+                $.post("/user/rechargerecord/recharge-sh", {op: op, id: index,type:0, uid:uid, _csrf:csrf}, function (result) {
                     cloaseLoading();//关闭loading
                     newalert(result['res'],'');
                     location.reload();
