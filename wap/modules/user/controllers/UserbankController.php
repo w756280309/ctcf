@@ -325,7 +325,8 @@ class UserbankController extends BaseController
             $sms = new SmsMessage([
                 'uid' => $uid,
                 'mobile' => $user->mobile,
-                'message' => json_encode($mess)
+                'message' => json_encode($mess),
+                'level' => SmsMessage::LEVEL_LOW
             ]);
             
             //录入draw_record记录

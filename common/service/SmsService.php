@@ -71,6 +71,7 @@ class SmsService {
                 'uid' => empty($user)?0:$user->id,
                 'template_id' => Yii::$app->params['sms']['yzm'],
                 'mobile' => $model->mobile,
+                'level' => SmsMessage::LEVEL_HIGH,
                 'message' => json_encode($message)
             ]);
             $sms->save();

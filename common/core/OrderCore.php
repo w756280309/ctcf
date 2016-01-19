@@ -130,6 +130,7 @@ class OrderCore
             'uid' => $user->id,
             'template_id' => Yii::$app->params['sms']['toubiao'],
             'mobile' => $user->mobile,
+            'level' => SmsMessage::LEVEL_LOW,
             'message' => json_encode($message)
         ]);
         $sms->save();

@@ -77,6 +77,7 @@ class UseraccountController extends BaseController
                 $sms = new SmsMessage([
                     'uid' => $uid,
                     'mobile' => $user->mobile,
+                    'level' => SmsMessage::LEVEL_LOW,
                     'message' => json_encode($mess)
                 ]);
 

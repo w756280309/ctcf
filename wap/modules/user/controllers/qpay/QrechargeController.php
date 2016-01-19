@@ -185,6 +185,7 @@ class QrechargeController extends BaseController
                 'uid' => $this->user->id,
                 'template_id' => Yii::$app->params['sms']['recharge'],
                 'mobile' => $this->user->mobile,
+                'level' => SmsMessage::LEVEL_LOW,
                 'message' => json_encode($message)
             ]);
             $sms->save();

@@ -11,6 +11,10 @@ class SmsMessage extends \yii\db\ActiveRecord {
     const STATUS_SENT = 1; //已发送
     const STATUS_FAIL = 2; //失败
 
+    const LEVEL_HIGH = 1;//等级高
+    const LEVEL_MIDDLE = 2;
+    const LEVEL_LOW = 3;
+    
     /**
      * @inheritdoc
      */
@@ -35,6 +39,7 @@ class SmsMessage extends \yii\db\ActiveRecord {
         return [
             [['uid', 'template_id', 'mobile', 'message'], 'required'],
             ['status', 'default', 'value' => 0],
+            ['level', 'default', 'value' => self::LEVEL_LOW]
         ];
     }
 

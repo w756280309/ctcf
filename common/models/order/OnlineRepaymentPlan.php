@@ -108,6 +108,7 @@ class OnlineRepaymentPlan extends \yii\db\ActiveRecord
         $username = '';
         $sms = new SmsMessage([
             'template_id' => Yii::$app->params['sms']['manbiao'],
+            'level' => SmsMessage::LEVEL_LOW,
         ]);
 
         foreach ($orders as $order) {

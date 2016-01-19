@@ -209,7 +209,8 @@ class RepaymentController extends BaseController
         $_repaymentrecord = OnlineRepaymentRecord::find()->where(['online_pid' => $pid, 'status' => OnlineRepaymentRecord::STATUS_DID])->groupBy('uid');
         $data = $_repaymentrecord->all();
         $sms = new SmsMessage([
-            'template_id' => Yii::$app->params['sms']['huikuan']
+            'template_id' => Yii::$app->params['sms']['huikuan'],
+            'level' => SmsMessage::LEVEL_LOW
         ]);
 
         foreach ($data as $val) {
