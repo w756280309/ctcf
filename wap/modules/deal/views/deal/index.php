@@ -5,15 +5,18 @@ $this->registerJs('var total=' . $header['count'] . ';', 1);
 $this->registerJs('var size=' . $header['size'] . ';', 1);
 $this->registerJs('var tp=' . $header['tp'] . ';', 1);
 $this->registerJs('var cp=' . $header['cp'] . ';', 1);
-
+$pc_cat = Yii::$app->params['pc_cat'];
+$curent_cid = $header['cat'];
+$curent_xs = $header['xs'];
 ?>
 <script src="/js/jquery.classyloader.js"></script>
 <div class="container">
     <div class="row tit-box">
-        <div class="col-xs-3"><a class="active" href="">短期产品</a></div>
-        <div class="col-xs-3"><a href="">政府平台</a></div>
-        <div class="col-xs-3"><a href="">国企央企</a></div>
-        <div class="col-xs-3"><a href="">新手标</a></div>
+        <div class="col-xs-3" style="width:11.5%"><a <?php if (null === $curent_cid && null === $curent_xs){ ?> class="active" <?php } ?> href="/deal/deal/index">全部</a></div>
+        <?php foreach ($pc_cat as $key=>$cat){ ?>
+            <div class="col-xs-3"><a <?php if ($key === (int)$curent_cid){ ?> class="active" <?php } ?> href="/deal/deal/index?cat=<?= $key ?>"><?= $cat ?></a></div>
+        <?php } ?>
+        <div class="col-xs-1"><a <?php if ((int)$curent_xs === 1){ ?> class="active" <?php } ?> href="/deal/deal/index?xs=1">新手标</a></div>
     </div>
 </div>
 <div id="item-list">

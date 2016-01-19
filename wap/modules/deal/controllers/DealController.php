@@ -30,9 +30,20 @@ class DealController extends Controller {
      * @param type $page
      * @return type
      */
-    public function actionIndex($page = 1) {
+    public function actionIndex($page = 1, $cat = null, $xs = null) {
+        $cat_ids = array_keys(Yii::$app->params['pc_cat']);
+        if ((null !== $cat && !in_array($cat, $cat_ids)) || (null !== $xs && !in_array($xs, [0, 1]))) {
+            throw new \yii\web\NotFoundHttpException('参数无效',404);
+        }
         $this->layout = 'test';
-        $data = OnlineProduct::find()->where(['del_status' => OnlineProduct::STATUS_USE, 'online_status' => OnlineProduct::STATUS_ONLINE])->select('id k,sn as num,title,yield_rate as yr,status,expires as qixian,money,start_date as start,finish_rate');
+        $cond = ['del_status' => OnlineProduct::STATUS_USE, 'online_status' => OnlineProduct::STATUS_ONLINE];
+        if (null !== $cat) {
+            $cond['cid'] = $cat;
+        }
+        if (null !== $xs) {
+            $cond['is_xs'] = $xs;
+        }
+        $data = OnlineProduct::find()->where($cond)->select('id k,sn as num,title,yield_rate as yr,status,expires as qixian,money,start_date as start,finish_rate');
         $count = $data->count();
         $size = 5;
         $pages = new Pagination(['totalCount' => $count, 'pageSize' => $size]);
@@ -49,6 +60,8 @@ class DealController extends Controller {
         $code = ($page > $tp) ? 1 : 0;
 
         $header = [
+            'cat' => $cat,
+            'xs' => $xs,
             'count' => intval($count),
             'size' => $size,
             'tp' => $tp,

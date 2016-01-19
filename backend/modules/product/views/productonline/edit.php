@@ -67,6 +67,21 @@ $this->registerJsFile('/js/product.js', ['depends' => 'yii\web\YiiAsset']);
                                 </div>
                         </div>
                 </div>
+            <div class="row-fluid">
+                        <div class="span12 ">
+                                <div class="control-group">
+                                        <label class="control-label">项目类型</label>
+                                        <div class="controls">
+                                                <?=
+                                                $form->field($model, 'cid', ['template' => '{input}{error}', 'inputOptions'=>['autocomplete'=>"off",'class'=>'chosen-with-diselect span6']])->dropDownList([''=>"--选择--"]+Yii::$app->params['pc_cat'])
+                                                ?>
+                                                <?=
+                                                $form->field($model, 'is_xs', ['template' => '{input}'])->checkbox();
+                                                ?>
+                                        </div>
+                                </div>
+                        </div>
+                </div>
             <?php if($model->id){ ?>
                 <div class="row-fluid">
                         <div class="span12 ">
