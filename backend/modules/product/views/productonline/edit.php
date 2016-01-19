@@ -343,75 +343,71 @@ $form->field($model, 'borrow_uid', ['template' => '{input}{error}', 'inputOption
         $('#product_product_form').submit(function() {
             $(this).find('button[type=submit]').attr('disabled', true);
         });
+         kindEdit();
     });
 
-        $(function(){
-             kindEdit();
-        });
-        //   KindEditor.ready(function(K) {
-         function kindEdit() {
-            var editor = KindEditor.create('.new_template', {
-                    cssPath: '/kindeditor/plugins/code/prettify.css',
-                    fileManagerJson: '',
-                    uploadJson: '/kindeditor/editor.php',
-                    allowFileManager: true,
-                    filterMode: false,
-                    items: ["source", "|", "preview", "print", "cut", "copy", "paste", "plainpaste", "wordpaste",
-                            "|", "justifyleft", "justifycenter", "justifyright", "justifyfull", "insertorderedlist",
-                            "insertunorderedlist", "indent", "outdent", "clearhtml", "quickformat", "selectall", "|",
-                            "fullscreen", "/", "formatblock", "fontname", "fontsize", "|", "forecolor", "hilitecolor",
-                            "bold", "italic", "underline", "strikethrough", "lineheight", "removeformat", "|", "table"],
-                    afterUpload: function(url, data) {
-                        $('#file_id').val($('#file_id').val() + data.id + ',');
-                    }
-                });
-        }
-//        });
-
-        var flag = 0;
-        function inscontract() {
-            var html = "";
-            flag++;
-            html =  '<div id=\'ins_con'+flag+'\'>' +
-                    '<div class="row-fluid">' +
-                        '<div class="span12 ">' +
-                                '<div class="control-group">' +
-                                        '<label class="control-label">合同标题</label>' +
-                                        '<div class="controls">' +
-                                             '<input type="text" id="contracttemplate-name" class="m-wrap span12" name="name[]" autocomplete="off" placeholder="合同标题">' +
-                                        '</div>' +
-                                '</div>' +
-                        '</div>' +
-                '</div>' +
-                '<div class="row-fluid ctemp">' +
-                        '<div class="span12 ">' +
-                                '<div class="control-group">' +
-                                        '<label class="control-label">合同内容</label>' +
-                                        '<div class="controls">' +
-                                            '<textarea class="m-wrap span12 new_template" name="content[]"></textarea>' +
-                                        '</div>' +
-                                '</div>' +
-                        '</div>' +
-                '</div>' +
-                '<div class="row-fluid">' +
-                        '<div class="span12 ">' +
-                                '<div class="control-group">' +
-                                    '<label class="control-label" style="text-align: right;"><a href="javascript:void(0);" onclick="delcontract(this)" data-con=\'ins_con'+flag+'\' style="color:red">删除该条合同信息</a></label>' +
-                                '</div>' +
-                        '</div>' +
-                '</div>' +
-                '</div>';
-            $('#insert_con').before(html);
-            kindEdit();
-        }
-
-        function delcontract(obj)
-        {
-            var id = $(obj).attr("data-con");
-            layer.confirm('确定此操作吗？', function (index) {
-                $("#"+id).detach();
-                layer.close(index);
+     function kindEdit() {
+        var editor = KindEditor.create('.new_template', {
+                cssPath: '/kindeditor/plugins/code/prettify.css',
+                fileManagerJson: '',
+                uploadJson: '/kindeditor/editor.php',
+                allowFileManager: true,
+                filterMode: false,
+                items: ["source", "|", "preview", "print", "cut", "copy", "paste", "plainpaste", "wordpaste",
+                        "|", "justifyleft", "justifycenter", "justifyright", "justifyfull", "insertorderedlist",
+                        "insertunorderedlist", "indent", "outdent", "clearhtml", "quickformat", "selectall", "|",
+                        "fullscreen", "/", "formatblock", "fontname", "fontsize", "|", "forecolor", "hilitecolor",
+                        "bold", "italic", "underline", "strikethrough", "lineheight", "removeformat", "|", "table"],
+                afterUpload: function(url, data) {
+                    $('#file_id').val($('#file_id').val() + data.id + ',');
+                }
             });
-        };
+    }
+
+    var flag = 0;
+    function inscontract() {
+        var html = "";
+        flag++;
+        html =  '<div id=\'ins_con'+flag+'\'>' +
+                '<div class="row-fluid">' +
+                    '<div class="span12 ">' +
+                            '<div class="control-group">' +
+                                    '<label class="control-label">合同标题</label>' +
+                                    '<div class="controls">' +
+                                         '<input type="text" id="contracttemplate-name" class="m-wrap span12" name="name[]" autocomplete="off" placeholder="合同标题">' +
+                                    '</div>' +
+                            '</div>' +
+                    '</div>' +
+            '</div>' +
+            '<div class="row-fluid ctemp">' +
+                    '<div class="span12 ">' +
+                            '<div class="control-group">' +
+                                    '<label class="control-label">合同内容</label>' +
+                                    '<div class="controls">' +
+                                        '<textarea class="m-wrap span12 new_template" name="content[]"></textarea>' +
+                                    '</div>' +
+                            '</div>' +
+                    '</div>' +
+            '</div>' +
+            '<div class="row-fluid">' +
+                    '<div class="span12 ">' +
+                            '<div class="control-group">' +
+                                '<label class="control-label" style="text-align: right;"><a href="javascript:void(0);" onclick="delcontract(this)" data-con=\'ins_con'+flag+'\' style="color:red">删除该条合同信息</a></label>' +
+                            '</div>' +
+                    '</div>' +
+            '</div>' +
+            '</div>';
+        $('#insert_con').before(html);
+        kindEdit();
+    }
+
+    function delcontract(obj)
+    {
+        var id = $(obj).attr("data-con");
+        layer.confirm('确定此操作吗？', function (index) {
+            $("#"+id).detach();
+            layer.close(index);
+        });
+    }
 </script>
 <?php $this->endBlock(); ?>
