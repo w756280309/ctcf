@@ -185,10 +185,11 @@ $status = Yii::$app->request->get('status');
                                     
 </div>
 <script type="text/javascript">
+    var uid = "<?= $id ?>";
     function doop(id,status){
         csrf = '<?= Yii::$app->request->getCsrfToken(); ?>';
         openLoading();//打开loading
-        $.post("/user/drawrecord/drawexamin", {id: id, status:status, _csrf:csrf}, function (result) {
+        $.post("/user/drawrecord/drawexamin", {id: id, status:status,uid:uid, _csrf:csrf}, function (result) {
             cloaseLoading();//关闭loading
             newalert(result['res'],'');
             location.reload();
@@ -199,7 +200,7 @@ $status = Yii::$app->request->get('status');
         $('.ajax_op').bind('click', function () {
             index = $(this).attr('index');
             csrf = '<?= Yii::$app->request->getCsrfToken(); ?>';
-            layer.confirm('确定审核通过吗？',{title:'充值审核',btn:['提现完成','撤销','关闭']},function(){ 
+            layer.confirm('确定审核通过吗？',{title:'充值审核',btn:['提现完成','撤销','关闭'],closeBtn:false},function(){ 
                     doop(index,2);
             },function(){
                 doop(index,3);  

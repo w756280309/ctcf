@@ -131,6 +131,7 @@ class DrawrecordController extends BaseController
     public function actionDrawexamin()
     {
         $id = Yii::$app->request->post('id');
+        $uid = Yii::$app->request->post('uid');
         $status = (int) Yii::$app->request->post('status');
         $res = 0;
         $msg = '操作失败';
@@ -157,7 +158,7 @@ class DrawrecordController extends BaseController
             $moneyInfo = new MoneyRecord();
             // 生成一个SN流水号
             $sn = TxUtils::generateSn("MR");
-            $moneyInfo->uid = $id;
+            $moneyInfo->uid = $uid;
             $moneyInfo->sn = $sn;
             $moneyInfo->type = $money_type;
             $moneyInfo->balance = $YuE;
