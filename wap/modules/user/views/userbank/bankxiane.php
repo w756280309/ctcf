@@ -1,5 +1,5 @@
 <?php
-$this->title="限额说明";
+    $this->title="限额说明";
 ?>
  <style>
     body {
@@ -25,6 +25,10 @@ $this->title="限额说明";
         line-height: 2em;
         text-align: center;
         border: 2px solid #9fa0a0;
+    }
+    .desc {
+        list-style: decimal;
+        margin: 0px 57px;
     }
  </style>
  <div class="qpay-quota">
@@ -133,8 +137,8 @@ $this->title="限额说明";
     </table>
     <h1>提示：</h1>
     <ol style="font-size: 28px; color: #737373;">
-        <li style="list-style: decimal; margin: 0px 57px;">根据同卡进出原则，用户只能使用唯一一张绑定的银行卡进行充值和提现</li>
-        <li style="list-style: decimal; margin: 0px 57px;">暂不支持变更绑定银行卡，如需帮助，请联系客服</li>
+        <li class="desc">根据同卡进出原则，用户只能使用唯一一张绑定的银行卡进行充值和提现</li>
+        <li class="desc">暂不支持变更绑定银行卡，如需帮助，请联系客服</li>
         <li style="text-align: right; color: #f44639"><img src="" alt=""><?= Yii::$app->params['contact_tel'] ?></li>
     </ol>
  </div>

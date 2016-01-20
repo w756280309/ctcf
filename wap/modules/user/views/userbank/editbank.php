@@ -1,6 +1,4 @@
 <?php
-use yii\helpers\Html;
-use yii\bootstrap\ActiveForm;
 $this->title="完善银行卡信息";
 $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','position' => 1]);
 ?>
@@ -32,8 +30,6 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
                         </div>
                         <?php endforeach; ?>
                     </div>
-                    <!-- Add Pagination -->
-                    <!--<div class="swiper-pagination"></div>-->
                 </div>
             </div>
         </div>
@@ -90,7 +86,7 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
         <div class="row">
             <div class="col-xs-3"></div>
             <div class="col-xs-6 login-sign-btn">
-                <input id="editbankbtn" class="btn-common btn-normal" name="signUp" type="button" value="下一步">
+                <input id="editbankbtn" class="btn-common btn-normal" name="signUp" type="button" value="确认提交">
             </div>
             <div class="col-xs-3"></div>
         </div>

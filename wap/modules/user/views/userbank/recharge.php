@@ -51,7 +51,7 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
            
             <input type="text" name="" style="display:none"/>
             <!--限额提醒-->
-            <div class="row dan">
+            <div class="row dan" hidden="hidden">
                 <div class="col-xs-10">
                     <span>单笔5万元，单日5万</span>
                 </div>
