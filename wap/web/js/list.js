@@ -86,11 +86,13 @@ $(function () {
                                     var itemyr = changeTwoDecimal(item.yr);
                                     var className = (item.status==1 || item.status==2)?"column-title-rg":"column-title-rg1";
                                     var finishHtml = "";
-                                    if(item.status==1){
-                                        finishHtml = '<div class="column-clock"><span>'+item.start_desc+'</span>'+item.start+'</div>';
-                                    }else if(item.status==2||item.status==7){
-                                        finishHtml = '<div class="column-clock column-clock_per">'+item.finish_rate+'%</div>';
-                                    }else{
+                                    if (item.status == 1) {
+                                        finishHtml = '<div class="column-clock"><span>' + item.start_desc + '</span>' + item.start + '</div>';
+                                    } else if (item.status == 2) {
+                                        finishHtml = '<div class="column-clock column-clock_per">' + item.finish_rate + '%</div>';
+                                    } else if (item.status == 7) {
+                                        finishHtml = '<div class="column-clock column-clock_per">成立</div>';
+                                    }  else {
                                         finishHtml = '<div class="column-clock column-clock_per">100%</div>'
                                     }
 
@@ -110,7 +112,7 @@ $(function () {
                                                     '</li>'+
                                                     '<li class="col-xs-4 nock1">'+
                                                     '<div class="nock">'+
-                                                    '<canvas data-status="'+item.status+'" data-per="'+item.finish_rate+'"></canvas>'+finishHtml+
+                                                    '<canvas data-status="'+item.status+'" data-per="'+((7 === parseInt(item.status)) ? 100 : (item.finish_rate))+'"></canvas>'+finishHtml+
                                                     '</div>'+
                                                     '</li>'+
                                                 '</ul>'+

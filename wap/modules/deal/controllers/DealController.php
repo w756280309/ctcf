@@ -90,7 +90,9 @@ class DealController extends Controller
             throw new \yii\web\NotFoundHttpException('您访问的页面找不到');
         }
         $orderbalance = 0;
-        if ($deals['status'] >= OnlineProduct::STATUS_NOW) {
+        if (OnlineProduct::STATUS_FOUND === (int) $deals['status']) {
+            $orderbalance = 0;
+        } else if ($deals['status'] >= OnlineProduct::STATUS_NOW) {
             //募集期的取剩余
             $oac = new OrderAccountCore();
             $orderbalance = $oac->getOrderBalance($deals['id']); //项目可投余额

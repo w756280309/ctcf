@@ -39,13 +39,17 @@ $pc_cat = Yii::$app->params['pc_cat'];
                     </li>
                     <li class="col-xs-4 nock1">
                         <div class="nock">
-                        <canvas data-status="<?= $val['status'] ?>" data-per="<?= $val['finish_rate'] ?>"></canvas>
+                            <canvas data-status="<?= $val['status'] ?>" data-per="<?= (7 === (int) $val['status']) ? 100 : ($val['finish_rate']) ?>"></canvas>
                         <?php if ($val['status'] == 1) { ?>
                             <div class="column-clock"><span><?= $val['start_desc'] ?></span><?= $val['start'] ?></div>
-                        <?php } else if ($val['status'] == 2||$val['status'] == 7) { ?>
+                        <?php } else if ($val['status'] == 2) { ?>
                             <div
                                 class="column-clock column-clock_per"><?= $val['finish_rate'] ?>
                                 %
+                            </div>
+                        <?php } else if ($val['status'] == 7) { ?>
+                            <div
+                                class="column-clock column-clock_per">成立
                             </div>
                         <?php }else{ ?>
                             <div

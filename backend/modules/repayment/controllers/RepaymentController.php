@@ -140,7 +140,7 @@ class RepaymentController extends BaseController
             $lixiyuqi = $bcround->bcround(bcadd($lixi, $order['overdue']), 2);
             $draw_in_sum = $bcround->bcround(bcadd($order['benjin'], $lixiyuqi), 2);//计算本金利息逾期
             $ua->available_balance = $bcround->bcround(bcadd($ua->available_balance, $draw_in_sum), 2); //将投标的钱再加入到可用余额中
-            $ua->drawable_balance = $bcround->bcround(bcadd($ua->drawable_balance, $draw_in_sum), 2);
+            $ua->drawable_balance = $bcround->bcround(bcadd($ua->drawable_balance, $lixiyuqi), 2);//考虑到充值未结算的。只加入利息
             $ua->in_sum = $bcround->bcround(bcadd($ua->in_sum, $draw_in_sum), 2);
             $ua->investment_balance = $bcround->bcround(bcsub($ua->investment_balance, $order['benjin']), 2);//理财
             $ua->profit_balance = $bcround->bcround(bcadd($ua->profit_balance, $lixiyuqi), 2);//收益
