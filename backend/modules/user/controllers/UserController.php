@@ -107,9 +107,9 @@ class UserController extends BaseController {
         $uabc = new UserAccountBackendCore();
         $recharge = $uabc->getRechargeSuccess($id);
         $draw = $uabc->getDrawSuccess($id);
-        
+
         $ua = $uabc->getUserAccount($id);
-        $userLiCai = $ua->investment_balance;//理财金额 
+        $userLiCai = $ua->investment_balance;//理财金额
         if (Yii::$app->request->get('type') == User::USER_TYPE_PERSONAL) {
             $rcMax = RechargeRecord::find()->where(['status'=>  RechargeRecord::STATUS_YES,'uid'=>$id])->max('updated_at');
             $order = $uabc->getOrderSuccess($id);
@@ -121,23 +121,24 @@ class UserController extends BaseController {
             $order = ['count' => 0, 'sum' => 0];
         }
         $tztimeMax = OnlineOrder::find()->where(['status'=>  OnlineOrder::STATUS_SUCCESS,'uid'=>$id])->max('updated_at');
-
-        return $this->render('detail',[
-            'czTime'=>$rcMax,
-            'czNum'=>$recharge['count'],
-            'czMoneyTotal'=>$recharge['sum'],
-            'txNum'=>$draw['count'],
-            'txMoneyTotal'=>$draw['sum'],
-            'userYuE'=>$ua['available_balance'],
-            'userLiCai'=>$userLiCai,
-            'tzTime'=>$tztimeMax,
-            'tzNum'=>$order['count'],
-            'tzMoneyTotal'=>$order['sum'],
-            'rzNum'=>$product['count'],
-            'rzMoneyTotal'=>$product['sum'],
-            'ret'=>$ret,
-            'userinfo'=>$userInfo,
-            "id"=>$id,
+        $bc = new \common\lib\bchelp\BcRound();
+        $userYuE = $bc->bcround(bcadd($ua['available_balance'], $ua['freeze_balance']), 2);
+        return $this->render('detail', [
+                    'czTime' => $rcMax,
+                    'czNum' => $recharge['count'],
+                    'czMoneyTotal' => $recharge['sum'],
+                    'txNum' => $draw['count'],
+                    'txMoneyTotal' => $draw['sum'],
+                    'userYuE' => $userYuE,
+                    'userLiCai' => $userLiCai,
+                    'tzTime' => $tztimeMax,
+                    'tzNum' => $order['count'],
+                    'tzMoneyTotal' => $order['sum'],
+                    'rzNum' => $product['count'],
+                    'rzMoneyTotal' => $product['sum'],
+                    'ret' => $ret,
+                    'userinfo' => $userInfo,
+                    "id" => $id,
         ]);
     }
 

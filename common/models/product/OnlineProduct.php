@@ -54,6 +54,9 @@ class OnlineProduct extends \yii\db\ActiveRecord
     const STATUS_ONLINE = 1;
     const STATUS_PREPARE = 0;
     
+    const IS_XS_YES = 1;
+    const IS_XS_NO = 0;
+    
     const REFUND_METHOD_DAOQIBENXI=1;
     const REFUND_METHOD_FUXIHUANBEN=2;
     
@@ -179,10 +182,11 @@ class OnlineProduct extends \yii\db\ActiveRecord
     {
         return [
             [['title', 'borrow_uid', 'yield_rate', 'money', 'start_money', 'dizeng_money', 'start_date', 'end_date','expires','cid', 'description','finish_date'], 'required'],
-            [['cid', 'pcid', 'borrow_uid', 'refund_method', 'expires', 'full_time', 'del_status', 'status', 'order_limit', 'creator_id'], 'integer'],
+            [['cid', 'pcid', 'is_xs', 'borrow_uid', 'refund_method', 'expires', 'full_time', 'del_status', 'status', 'order_limit', 'creator_id'], 'integer'],
             [['yield_rate', 'fee', 'money', 'start_money', 'dizeng_money', 'fazhi', 'fazhi_up', 'yuqi_faxi'], 'number'],
             [['fazhi', 'fazhi_up','target'], 'integer'],
             ['target','default','value'=>0],
+            ['is_xs','default','value'=>0],
             [['description'], 'string'],
             [['title','target_uid'], 'string', 'max' => 128],
             [['target_uid'],'match','pattern'=>'/^\d+((,)\d+)*$/' ,'message'=>'{attribute}格式不正确必须以英文逗号分隔'],
