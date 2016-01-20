@@ -50,8 +50,9 @@ class DealcrontabController extends Controller
      */
     public function actionLiu()
     {
-        $product = OnlineProduct::find()->where(['del_status' => OnlineProduct::STATUS_USE, 'online_status' => OnlineProduct::STATUS_ONLINE, 'status' => OnlineProduct::STATUS_NOW]);
-        $product = $product->andFilterWhere(['<', 'end_date', time()])->all();
+        $product = OnlineProduct::find();
+        $product->where(['del_status' => OnlineProduct::STATUS_USE, 'online_status' => OnlineProduct::STATUS_ONLINE, 'status' => OnlineProduct::STATUS_NOW]);
+        $product->andFilterWhere(['<', 'end_date', time()])->all();
         $bc = new BcRound();
         bcscale(14);
         $transaction = Yii::$app->db->beginTransaction();
@@ -94,6 +95,7 @@ class DealcrontabController extends Controller
 
             $val->scenario = 'status';
             $val->status = OnlineProduct::STATUS_LIU;
+            $val->sort = OnlineProduct::SORT_LIU;
             if (!$val->save()) {
                 $transaction->rollBack();
 
@@ -106,7 +108,6 @@ class DealcrontabController extends Controller
 
             return true;
         }
-        echo 1;
 
         return false;
     }
