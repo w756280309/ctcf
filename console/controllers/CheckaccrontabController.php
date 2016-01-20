@@ -32,6 +32,11 @@ class CheckaccrontabController extends Controller
         } else {
             $date = date('Y-m-d', strtotime('-1 day')); //获取前日
         }
+        $is_write = CheckaccountCfca::find()->where(['tx_date' => $date])->count('id');
+        if ($is_write) {
+            return 1;
+        }
+        
         $rq1810 = new Request1810(Yii::$app->params['cfca']['institutionId'], $date);
         $cfca = new Cfca();
         $resp = $cfca->request($rq1810);

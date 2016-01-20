@@ -97,7 +97,7 @@ class SiteController extends Controller
     {
         $this->layout = 'main';
         $ac = 5;
-        $dc = 5;
+        $dc = 25;
         $adv = Adv::find()->where(['status' => 0, 'del_status' => 0])->select('image,link,description')->limit($ac)->orderBy('id desc')->asArray()->all();
 
         $deals = OnlineProduct::find()->where(['del_status' => OnlineProduct::STATUS_USE, 'online_status' => OnlineProduct::STATUS_ONLINE])->select('id k,sn as num,title,yield_rate as yr,status,expires as qixian,money,start_date start,finish_rate')->limit($dc)->orderBy('sort asc,id desc')->asArray()->all();

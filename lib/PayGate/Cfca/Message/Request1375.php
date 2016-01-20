@@ -68,7 +68,7 @@ TPL;
             'ordNo' => $this->rechargeSn,
             'paymentNo' => $this->rechargeSn,
             'bingdingSn' => $this->bindingSn,
-            'amount' => $this->amount,
+            'amount' => $this->amount * 100,//中金已分为单位制
             'remark' => $this->remark
         ]);
     }
