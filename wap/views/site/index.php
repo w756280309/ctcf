@@ -1,7 +1,4 @@
 <?php
-use yii\helpers\Html;
-use yii\widgets\ActiveForm;
-
 $this->title = '温都金服 - 首页';
 $this->params['breadcrumbs'][] = $this->title;
 $this->registerJsFile('/js/jquery.js', ['depends' => 'yii\web\YiiAsset','position' => 1]);

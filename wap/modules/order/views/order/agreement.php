@@ -1,5 +1,5 @@
 <?php
-$this->title="合同协议";
+$this->title="合同说明";
 ?>
  <link rel="stylesheet" href="/css/bind.css"/>
  <link rel="stylesheet" href="/css/licai.css"/>
@@ -42,5 +42,28 @@ $this->title="合同协议";
     <div class="column">
         <div class="agrname"><center><p style="font-size: 26px;color: #000000;"><?= $model[$key]['name'] ?></center></div>
         <div class="content"><?= html_entity_decode($content) ?></div>
+    </div>
+    
+    <!--footer-->
+    <div class="row navbar-fixed-bottom footer">
+        <div class="col-xs-4 footer-title">
+            <div class="footer-inner">
+                <a href="/" class="shouye1"><span class="shouye"></span>首页</a>
+            </div>
+        </div>
+        <div class="col-xs-4 footer-title">
+            <div class="footer-inner1">
+                <a href="/deal/deal/index"><span class="licai"></span>理财</a>
+            </div>
+        </div>
+        <div class="col-xs-4 footer-title">
+            <div class="footer-inner2">
+                <?php if (!\Yii::$app->user->isGuest) { ?>
+                <a href="/user/user"><span class="zhanghu"></span>账户</a>
+                <?php } else { ?>
+                <a href="/site/login"><span class="zhanghu"></span>账户</a>
+                <?php } ?>
+            </div>
+        </div>
     </div>
 
