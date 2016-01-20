@@ -176,7 +176,7 @@ class PayService
         $oac = new OrderAccountCore();
         $orderbalance = $oac->getOrderBalance($this->cdeal->id);
         if (bccomp($orderbalance, 0) == 0) {
-            return ['code' => 0,  'message' => '当前项目不可投,可投余额为0'];
+            return ['code' => 1,  'message' => '当前项目不可投,可投余额为0'];
         }
         if (bcdiv($orderbalance, $this->cdeal->start_money) * 1 >= 1) {
             //若可投金额大于起投金额
@@ -191,7 +191,6 @@ class PayService
                 if ((bccomp($varr[1], 0)) > 0 &&  bcsub($orderbalance, $money) * 1 != 0) {
                     return ['code' => self::ERROR_DIZENG,  'message' => self::getErrorByCode(self::ERROR_DIZENG)];
                 }
-                //return ['code'=>self::ERROR_DIZENG,  'message'=>bcdiv($money,$this->cdeal->dizeng_money)];
             }
         } else {
             //否则必须投满
@@ -199,7 +198,6 @@ class PayService
                 return ['code' => self::ERROR_MONEY_BALANCE,  'message' => self::getErrorByCode(self::ERROR_MONEY_BALANCE)];
             }
         }
-        //return ['code'=>self::ERROR_MONEY_BALANCE,  'message'=>'不应该进来'];  
     }
 
     /**
