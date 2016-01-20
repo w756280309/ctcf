@@ -1,6 +1,4 @@
 <?php
-use yii\helpers\Html;
-use yii\bootstrap\ActiveForm;
 $this->title="充值";
 $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','position' => 1]);
 ?>
@@ -62,7 +60,7 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
             <div class="row">
                 <div class="col-xs-3"></div>
                 <div class="col-xs-6 login-sign-btn">
-                    <input id="rechargebtn" class="btn-common btn-normal" name="signUp" type="button" value="立即充值" >
+                    <input id="rechargebtn" class="btn-common btn-normal" type="button" value="立即充值" >
                 </div>
                 <div class="col-xs-3"></div>
             </div>
@@ -86,7 +84,7 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
            var err = '<?= $data['code'] ?>';
            var mess = '<?= $data['message'] ?>';
            var tourl = '<?= $data['tourl'] ?>';
-           if(err == '1') {
+           if(err === '1') {
                toasturl(tourl,mess);
            }
             

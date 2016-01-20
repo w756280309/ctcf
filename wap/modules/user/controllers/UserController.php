@@ -14,16 +14,16 @@ class UserController extends BaseController
 {
     public function actionIndex()
     {
-        $uid = $this->user->id;
+        $user = $this->user;
 
         $this->layout = 'account';
         $uacore = new UserAccountCore();
         $ua = $this->user->lendAccount;
-        $leijishouyi = $uacore->getTotalProfit($uid);//累计收益
+        $leijishouyi = $uacore->getTotalProfit($user->id);//累计收益
         $dhsbj = $ua->investment_balance;//带回收本金
-        $zcze = $uacore->getTotalFund($uid);//账户余额+理财资产
+        $zcze = $uacore->getTotalFund($user->id);//账户余额+理财资产
 
-        $data = BankService::checkKuaijie($uid);
+        $data = BankService::checkKuaijie($user);
 
         return $this->render('index', ['ua' => $ua, 'user' => $this->user, 'ljsy' => $leijishouyi, 'dhsbj' => $dhsbj, 'zcze' => $zcze, 'data' => $data]);
     }
