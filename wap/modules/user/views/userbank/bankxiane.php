@@ -132,9 +132,9 @@ $this->title="限额说明";
         </tr>
     </table>
     <h1>提示：</h1>
-    <ol style="font-size: 28px; color: #737373">
-        <li>根据同卡进出原则，用户只能使用唯一一张绑定的银行卡进行充值和提现</li>
-        <li>暂不支持变更绑定银行卡，如需帮助，请联系客服</li>
+    <ol style="font-size: 28px; color: #737373;">
+        <li style="list-style: decimal; margin: 0px 57px;">根据同卡进出原则，用户只能使用唯一一张绑定的银行卡进行充值和提现</li>
+        <li style="list-style: decimal; margin: 0px 57px;">暂不支持变更绑定银行卡，如需帮助，请联系客服</li>
         <li style="text-align: right; color: #f44639"><img src="" alt=""><?= Yii::$app->params['contact_tel'] ?></li>
     </ol>
  </div>
