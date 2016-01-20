@@ -82,6 +82,7 @@ class OnlineProduct extends \yii\db\ActiveRecord
     const SORT_LIU = 40;
     const SORT_HKZ = 50;
     const SORT_YHK = 60;
+
     public static function getErrorByCode($code = 100)
     {
         $data = [
@@ -155,7 +156,6 @@ class OnlineProduct extends \yii\db\ActiveRecord
     {
         $data = array(
             self::REFUND_METHOD_DAOQIBENXI => '到期本息',
-            //self::REFUND_METHOD_FUXIHUANBEN => '付息还本'
         );
         if (!empty($key)) {
             return $data[$key];
@@ -206,14 +206,12 @@ class OnlineProduct extends \yii\db\ActiveRecord
             [['dizeng_money'], 'compare', 'compareValue' => 1, 'operator' => '>='],
             [['start_money', 'fazhi', 'fazhi_up'], 'compare', 'compareAttribute' => 'money', 'operator' => '<'],
             [['fazhi_up'], 'compare', 'compareAttribute' => 'fazhi', 'operator' => '<='],
-             [['yield_rate'], 'compare', 'compareValue' => 100, 'operator' => '<='],
-             [['yield_rate'], 'compare', 'compareValue' => 0, 'operator' => '>='],
+            [['yield_rate'], 'compare', 'compareValue' => 100, 'operator' => '<='],
+            [['yield_rate'], 'compare', 'compareValue' => 0, 'operator' => '>='],
             [['start_money', 'dizeng_money'], 'integer'],
 
             ['status', 'checkDealStatus'],
             ['expires', 'checkExpires'],
-            //[['create_at','updated_at'],'default','value'=>0]
-            //[['start_date','end_time'],'date',"message"=>'日期格式错误']
         ];
     }
 
@@ -247,10 +245,7 @@ class OnlineProduct extends \yii\db\ActiveRecord
     {
         $expires = $this->$attribute;
         $diff = \Yii::$app->functions->timediff(strtotime($this->start_date),  strtotime($this->finish_date));
-        //var_dump($expires,$diff);exit;
         if ($expires > $diff['day']) {
-            //$this->addError($attribute, "项目天数 应该小于等于 项目截止日 - 募集开始时间;当前天数：".$diff['day'].'天');
-            //return TRUE;
         } else {
             return true;
         }
@@ -309,13 +304,12 @@ class OnlineProduct extends \yii\db\ActiveRecord
      *
      * @return type
      */
-    public static function checkOnlinePro($sn = null, $uid = '', $money = '0')
+    public static function checkOnlinePro($sn, $uid = '', $money = '0')
     {
         $pro = static::findOne(['sn' => $sn]);
         $id = $pro->id;
         $time = time();
 
-        return self::ERROR_SUCCESS;///////测试之后需要注销掉
         if (empty($pro)) {
             return self::ERROR_NO_EXIST;
         } elseif ($pro->status != self::STATUS_NOW && $pro->status != self::STATUS_FOUND) {
@@ -347,7 +341,7 @@ class OnlineProduct extends \yii\db\ActiveRecord
         }
         if ($uid) {
             $ua = UserAccount::getUserAccount($uid);
-            //var_dump($money, $ua->account_balance);
+
             if (bcdiv($ua->available_balance, $money) < 1) {
                 return self::ERROR_MONEY_LESS;
             }
