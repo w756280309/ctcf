@@ -54,9 +54,6 @@ class OnlineProduct extends \yii\db\ActiveRecord
     const STATUS_ONLINE = 1;
     const STATUS_PREPARE = 0;
     
-    const IS_XS_YES = 1;
-    const IS_XS_NO = 0;
-    
     const REFUND_METHOD_DAOQIBENXI=1;
     const REFUND_METHOD_FUXIHUANBEN=2;
     

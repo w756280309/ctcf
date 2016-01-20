@@ -33,7 +33,7 @@ class DealController extends Controller {
     public function actionIndex($page = 1, $cat = 1, $xs = null) {
         $cat_ids = array_keys(Yii::$app->params['pc_cat']);
         if ((null !== $cat && !in_array($cat, $cat_ids)) || (null !== $xs && !in_array($xs, [0, 1]))) {
-            throw new \yii\web\NotFoundHttpException('参数无效',404);
+            throw new \yii\web\BadRequestHttpException('参数无效');
         }
         $this->layout = 'test';
         $cond = ['del_status' => OnlineProduct::STATUS_USE, 'online_status' => OnlineProduct::STATUS_ONLINE];
@@ -42,7 +42,7 @@ class DealController extends Controller {
             $cond['is_xs'] = $xs;
         } else {
             $cond['cid'] = $cat;
-            $cond['is_xs'] = OnlineProduct::IS_XS_NO;
+            $cond['is_xs'] = 0;
         }
         $data = OnlineProduct::find()->where($cond)->select('id k,sn as num,title,yield_rate as yr,status,expires as qixian,money,start_date as start,finish_rate');
         $count = $data->count();
