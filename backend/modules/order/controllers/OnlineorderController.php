@@ -74,7 +74,7 @@ class OnlineorderController extends BaseController
 
         if (!empty($status)) {
             if ($status === '-1') {
-                $query->andWhere(['online_status' => $status]);
+                $query->andWhere(['online_status' => OnlineProduct::STATUS_PREPARE]);
             } else {
                 $query->andWhere(['status' => $status]);
             }
@@ -103,13 +103,16 @@ class OnlineorderController extends BaseController
         $Num = $product['count'];
         //渲染到静态页面
         return $this->render('listr', [
-                    'id' => $id,
-                    'type' => $type,
-                    'model' => $model,
-                    'pages' => $pages,
-                    'org_name' => $org_name['org_name'],
-                    'moneyTotal' => $moneyTotal,
-                    'Num' => $Num,
+            'id' => $id,
+            'type' => $type,
+            'model' => $model,
+            'pages' => $pages,
+            'org_name' => $org_name['org_name'],
+            'moneyTotal' => $moneyTotal,
+            'Num' => $Num,
+            'status' => $status,
+            'title' => $title,
+            'time' => $time,
         ]);
     }
 

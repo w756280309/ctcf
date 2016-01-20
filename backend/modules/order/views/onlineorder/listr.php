@@ -2,7 +2,6 @@
 use yii\widgets\LinkPager;
 
 $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\web\YiiAsset']);
-$status = Yii::$app->request->get('status');
 ?>
 <?php $this->beginBlock('blockmain'); ?>
 
@@ -19,7 +18,7 @@ $status = Yii::$app->request->get('status');
             <ul class="breadcrumb">
                    <li>
                         <i class="icon-home"></i>
-                        <a href="/user/user/<?=Yii::$app->request->get('type')==2?'listr':'listt'?>">会员管理</a> 
+                        <a href="/user/user/<?= $type==='2'?'listr':'listt'?>">会员管理</a> 
                         <i class="icon-angle-right"></i>
                     </li>
                      
@@ -28,7 +27,7 @@ $status = Yii::$app->request->get('status');
                             <i class="icon-angle-right"></i>
                         </li>                    
                     <li>
-                        <a href="/user/user/<?= $type==2?'listr':'listt'?>">会员列表</a>
+                        <a href="/user/user/<?= $type==='2'?'listr':'listt'?>">会员列表</a>
                         <i class="icon-angle-right"></i>
                     </li>
                     <li>
@@ -68,7 +67,7 @@ $status = Yii::$app->request->get('status');
                         <tr>
                             <td>
                                 <span class="title">项目名称</span>
-                                <input type="input" name ='title' value = '<?=Yii::$app->request->get('title')?>'
+                                <input type="input" name ='title' value = '<?= $title ?>'/>
                             </td>
                             <td>
                                 <span class="title">状态</span>
@@ -87,7 +86,7 @@ $status = Yii::$app->request->get('status');
                             </td>
                             <td><span class="title">融资时间</span></td>
                             <td>
-                                <input type="text" value="<?=Yii::$app->request->get('time')?>" name = "time" onclick='WdatePicker({dateFmt:"yyyy-MM-dd",maxDate:"<?=  date('Y-m-d')?>"});'/>  
+                                <input type="text" value="<?= $time ?>" name = "time" onclick='WdatePicker({dateFmt:"yyyy-MM-dd",maxDate:"<?=  date('Y-m-d')?>"});'/>  
                             </td>
                             <td colspan="6" align="right" style=" text-align: right">
                                 <button type='submit' class="btn blue btn-block" style="width: 100px;">搜索 <i class="m-icon-swapright m-icon-white"></i></button>
