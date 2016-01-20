@@ -40,15 +40,23 @@ class BatchpaycrontabController extends Controller
 
     /**
      * 次日查询前一日的结果.
+     * $key 传入参数等于debug打开测试开关.
      */
-    public function actionUpdate()
+    public function actionUpdate($key = '')
     {
-        $date = date('Y-m-d', strtotime('-1 day'));//获取前日
-        $beginYesterday = mktime(0, 0, 0, date('m'), date('d') - 1, date('Y'));
-        $endYesterday = mktime(0, 0, 0, date('m'), date('d'), date('Y')) - 1;
+        if ($key == 'debug') {
+            $time = time();
+            $date = date('Y-m-d', strtotime('-1 day')); //获取今日
+            $beginDay = mktime(0, 0, 0, date('m', $time), date('d', $time), date('Y', $time));
+            $endDay = mktime(0, 0, 0, date('m', $time), date('d', $time) + 1, date('Y', $time));
+        } else {
+            $date = date('Y-m-d', strtotime('-1 day')); //获取前日
+            $beginDay = mktime(0, 0, 0, date('m'), date('d') - 1, date('Y'));
+            $endDay = mktime(0, 0, 0, date('m'), date('d'), date('Y')) - 1;
+        }
         $cfca = new Cfca();
         $bc = new BcRound();
-        $yesbatchpay = Batchpay::find()->where(['is_launch' => Batchpay::IS_LAUNCH_YES])->andFilterWhere(['between', 'created_at', $beginYesterday, $endYesterday])->all();//
+        $yesbatchpay = Batchpay::find()->where(['is_launch' => Batchpay::IS_LAUNCH_YES])->andFilterWhere(['between', 'created_at', $beginDay, $endDay])->all();//
         foreach ($yesbatchpay as $batchpay) {
             $request1520 = new Request1520(Yii::$app->params['cfca']['institutionId'], $batchpay->sn);
             $resp = $cfca->request($request1520);
@@ -95,7 +103,7 @@ class BatchpaycrontabController extends Controller
                     $drawRord->status = DrawRecord::STATUS_SUCCESS;
                     $drawRord->save();
                     $batchpay->is_launch = Batchpay::IS_LAUNCH_FINISH;
-                    $batchpay->save();                    
+                    $batchpay->save();
                 }
             }
             //1510温都对账单写入

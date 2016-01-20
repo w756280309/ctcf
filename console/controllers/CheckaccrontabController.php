@@ -23,15 +23,19 @@ class CheckaccrontabController extends Controller
     /**
      * 获取中金对账单【中金每日凌晨5时生成上一日对账单】
      * 建议在凌晨5时之后执行上一日的对账单.
+     * $key 传入参数等于debug打开测试开关.
      */
-    public function actionCfca()
+    public function actionCfca($key = '')
     {
-        $date = date('Y-m-d', strtotime('-1 day'));//获取前日
+        if ($key == 'debug') {
+            $date = date('Y-m-d'); //获取今日
+        } else {
+            $date = date('Y-m-d', strtotime('-1 day')); //获取前日
+        }
         $rq1810 = new Request1810(Yii::$app->params['cfca']['institutionId'], $date);
         $cfca = new Cfca();
         $resp = $cfca->request($rq1810);
         $rp1810 = new Response1810($resp->getText());
-        //echo date('Y-m-d H:i:s',strtotime('20150118090808'));exit;
         $connection = \Yii::$app->db;
         $data = array();
         $time = time();
@@ -56,20 +60,28 @@ class CheckaccrontabController extends Controller
     /**
      * 获取温都金服充值订单前一日【结算在结算定时任务中完成】
      * 建议在凌晨0点至5点之间运行。要保证5点之前执行完毕.
+     * $key 传入参数等于debug打开测试开关.
      */
-    public function actionWdjf()
+    public function actionWdjf($key = '')
     {
-        $date = date('Y-m-d', strtotime('-1 day'));//获取前日
-        echo $date;
-        $beginYesterday = mktime(0, 0, 0, date('m'), date('d') - 1, date('Y'));
-        $endYesterday = mktime(0, 0, 0, date('m'), date('d'), date('Y')) - 1;
+        if ($key == 'debug') {
+            $date = date('Y-m-d'); //获取今日
+            $time = time();
+            $beginDay = mktime(0, 0, 0, date('m', $time), date('d', $time), date('Y', $time));
+            $endDay = mktime(0, 0, 0, date('m', $time), date('d', $time) + 1, date('Y', $time));
+        } else {
+            $date = date('Y-m-d', strtotime('-1 day')); //获取前日
+            $beginDay = mktime(0, 0, 0, date('m'), date('d') - 1, date('Y'));
+            $endDay = mktime(0, 0, 0, date('m'), date('d'), date('Y')) - 1;
+        }
+
         $is_write = CheckaccountWdjf::find()->where(['tx_date' => $date, 'tx_type' => [1375, 1311]])->count('id');
         if ($is_write) {
             return false;
         }
-        
+
         //筛选快充和pc充值的充值记录
-        $dataobj = RechargeRecord::find()->where(['status' => RechargeRecord::STATUS_YES, 'pay_type' => [RechargeRecord::PAY_TYPE_QUICK, RechargeRecord::PAY_TYPE_NET]])->andFilterWhere(['between', 'bankNotificationTime', date('Y-m-d H:i:s', $beginYesterday), date('Y-m-d H:i:s', $endYesterday)])->all();
+        $dataobj = RechargeRecord::find()->where(['status' => RechargeRecord::STATUS_YES, 'pay_type' => [RechargeRecord::PAY_TYPE_QUICK, RechargeRecord::PAY_TYPE_NET]])->andFilterWhere(['between', 'bankNotificationTime', date('Y-m-d H:i:s', $beginDay), date('Y-m-d H:i:s', $endDay)])->all();
         //var_dump($dataobj);exit;
         $insert_arr = array();
         $time = time();
@@ -93,17 +105,20 @@ class CheckaccrontabController extends Controller
 
     /**
      * 温度金服的对账单与中金对账单做比对【建议在凌晨5点之后进行】.
+     * $key 传入参数等于debug打开测试开关.
      */
-    public function actionCompare()
+    public function actionCompare($key = '')
     {
-        $date = date('Y-m-d', strtotime('-1 day'));//获取前日
-        //echo $date;
+        if ($key == 'debug') {
+            $date = date('Y-m-d'); //获取今日
+        } else {
+            $date = date('Y-m-d', strtotime('-1 day')); //获取前日
+        }
         $list = (new \yii\db\Query())
                 ->select('w.*,c.tx_amount c_tx_amount')
                 ->from([CheckaccountWdjf::tableName().' as w'])
                 ->innerJoin(CheckaccountCfca::tableName().' as c', 'c.tx_sn=w.tx_sn')
                 ->where(['w.tx_date' => $date, 'c.tx_date' => $date])->all();//只校正交易金额tx_amount
-        //var_dump($list);exit;
         $false_ids = array();
         $success_ids = array();
         foreach ($list as $data) {
@@ -130,17 +145,22 @@ class CheckaccrontabController extends Controller
 
     /**
      * 每日汇总对账单【建议在执行完对账之后执行Comparebill】.
+     * $key 传入参数等于debug打开测试开关.
      */
-    public function actionHz()
+    public function actionHz($key = '')
     {
         bcscale(14);
-        $date = date('Y-m-d', strtotime('-1 day'));//获取前日
-        //先判断有没有录入过
-        $beginYesterday = date('Y-m-d', mktime(0, 0, 0, date('m'), date('d') - 1, date('Y')));
-        $endYesterday = date('Y-m-d', mktime(0, 0, 0, date('m'), date('d'), date('Y')) - 1);
-//        $beginThisMonth=date('Y-m-d', mktime(0,0,0,date('m'),1,date('Y')));//本月的开始日期
-//        $endThisMonth=date('Y-m-d', mktime(0,0,0,date('m'),date('t'),date('Y')));//本月的结束日期
-        $count = CheckaccountHz::find()->filterWhere(['between', 'tx_date', $beginYesterday, $endYesterday])->count();
+        if ($key == 'debug') {
+            $date = date('Y-m-d'); //获取今日
+            $time = time();
+            $beginDay = mktime(0, 0, 0, date('m', $time), date('d', $time), date('Y', $time));
+            $endDay = mktime(0, 0, 0, date('m', $time), date('d', $time) + 1, date('Y', $time));
+        } else {
+            $date = date('Y-m-d', strtotime('-1 day')); //获取前日
+            $beginDay = mktime(0, 0, 0, date('m'), date('d') - 1, date('Y'));
+            $endDay = mktime(0, 0, 0, date('m'), date('d'), date('Y')) - 1;
+        }
+        $count = CheckaccountHz::find()->filterWhere(['between', 'tx_date', date('Y-m-d', $beginDay), date('Y-m-d', $endDay)])->count();
         if ($count) {
             echo 'has been implemented';
             exit;

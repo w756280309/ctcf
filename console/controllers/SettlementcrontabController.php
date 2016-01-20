@@ -67,13 +67,20 @@ class SettlementcrontabController extends Controller
 
     /**
      * 批处理结算订单的状态修改【建议频率高些】.
+     * $key 传入参数等于debug打开测试开关.
      */
-    public function actionUpdate()
+    public function actionUpdate($key = '')
     {
-        $beginYesterday = mktime(0, 0, 0, date('m'), date('d') - 1, date('Y'));
-        $endYesterday = mktime(0, 0, 0, date('m'), date('d'), date('Y')) - 1;
+        if ($key == 'debug') {
+            $time = time();
+            $beginDay = mktime(0, 0, 0, date('m', $time), date('d', $time), date('Y', $time));
+            $endDay = mktime(0, 0, 0, date('m', $time), date('d', $time) + 1, date('Y', $time));
+        } else {
+            $beginDay = mktime(0, 0, 0, date('m'), date('d') - 1, date('Y'));
+            $endDay = mktime(0, 0, 0, date('m'), date('d'), date('Y')) - 1;
+        }
         $data = Jiesuan::find()->where(['status' => [Jiesuan::STATUS_NO, Jiesuan::STATUS_ACCEPT, Jiesuan::STATUS_IN]])->select('id,sn,osn,amount')
-                ->andFilterWhere(['between', 'created_at', $beginYesterday, $endYesterday])
+                ->andFilterWhere(['between', 'created_at', $beginDay, $endDay])
                 ->orderBy('id desc')->all();//
         if (null !== $data) {
             $bcround = new BcRound();

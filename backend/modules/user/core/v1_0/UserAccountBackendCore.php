@@ -1,10 +1,8 @@
 <?php
+
 namespace backend\modules\user\core\v1_0;
 
-use Yii;
 use common\core\UserAccountCore;
-use common\models\user\UserAccount;
-use common\models\order\OnlineRepaymentRecord;
 use common\lib\bchelp\BcRound;
 use common\models\user\RechargeRecord;
 use common\models\user\DrawRecord;
@@ -16,79 +14,86 @@ use common\models\product\OnlineProduct;
  * Created by zhy.
  * User: zhy
  * Date: 15-11-19
- * Time: 下午4:02
+ * Time: 下午4:02.
  */
-class UserAccountBackendCore extends UserAccountCore {
-    
+class UserAccountBackendCore extends UserAccountCore
+{
     /**
      * 获取充值成功
      * return [
      *      count  次数
      *      sum    充值总额
-     * ];
+     * ];.
      */
-    public function getRechargeSuccess($uid){
+    public function getRechargeSuccess($uid)
+    {
         bcscale(14);
-        $data = RechargeRecord::find()->where(['status'=>  RechargeRecord::STATUS_YES,'uid'=>$uid])->asArray()->all();
+        $data = RechargeRecord::find()->where(['status' => RechargeRecord::STATUS_YES, 'uid' => $uid])->asArray()->all();
         $count = count($data);
         $sum_recharge = 0;
-        foreach ($data as $dat){
-            $sum_recharge=  bcadd($sum_recharge, $dat['fund']);
+        foreach ($data as $dat) {
+            $sum_recharge = bcadd($sum_recharge, $dat['fund']);
         }
         $bcround = new BcRound();
         $sum_recharge = $bcround->bcround($sum_recharge, 2);
-        return ['count'=>$count,'sum'=>$sum_recharge];
+
+        return ['count' => $count, 'sum' => $sum_recharge];
     }
-    
+
     /**
      * 获取提现成功
      * return [
      *      count  次数
      *      sum    总额
-     * ];
-     */    
-    public function getDrawSuccess($uid){
+     * ];.
+     */
+    public function getDrawSuccess($uid)
+    {
         bcscale(14);
-        $data = DrawRecord::find()->where(['status'=>  DrawRecord::STATUS_SUCCESS,'uid'=>$uid])->select('money')->asArray()->all();
+        $data = DrawRecord::find()->where(['status' => DrawRecord::STATUS_SUCCESS, 'uid' => $uid])->select('money')->asArray()->all();
         $count = count($data);
         $sum_draw = 0;
-        foreach ($data as $dat){
-            $sum_draw=  bcadd($sum_draw, $dat['money']);
+        foreach ($data as $dat) {
+            $sum_draw = bcadd($sum_draw, $dat['money']);
         }
         $bcround = new BcRound();
         $sum_draw = $bcround->bcround($sum_draw, 2);
-        return ['count'=>$count,'sum'=>$sum_draw];
+
+        return ['count' => $count, 'sum' => $sum_draw];
     }
-    
+
     /**
      * 获取订单成功
      * return [
      *      count  次数
      *      sum    总额
-     * ];
-     */    
-    public function getOrderSuccess($uid){
+     * ];.
+     */
+    public function getOrderSuccess($uid)
+    {
         bcscale(14);
-        $data = OnlineOrder::find()->where(['status'=>  OnlineOrder::STATUS_SUCCESS,'uid'=>$uid])->select('order_money')->asArray()->all();
+        $data = OnlineOrder::find()->where(['status' => OnlineOrder::STATUS_SUCCESS, 'uid' => $uid])->select('order_money')->asArray()->all();
         $count = count($data);
         $sum_pay = 0;
-        foreach ($data as $dat){
-            $sum_pay=  bcadd($sum_pay, $dat['order_money']);
+        foreach ($data as $dat) {
+            $sum_pay = bcadd($sum_pay, $dat['order_money']);
         }
         $bcround = new BcRound();
         $sum_pay = $bcround->bcround($sum_pay, 2);
-        return ['count'=>$count,'sum'=>$sum_pay];
+
+        return ['count' => $count, 'sum' => $sum_pay];
     }
-    
+
     /**
-     * 融资方项目信息 只统计满标还款中已还款的
+     * 融资方项目信息 只统计满标成立还款中已还款的
      * return [
      *      count  次数
      *      sum    总额
-     * ];
-     */     
-    public function getProduct($uid){
-        $data = OnlineProduct::find()->where(['del_status' => OnlineProduct::STATUS_USE, 'borrow_uid' => $uid, 'status' => [3, 5, 6]])->asArray()->all();
+     * ];.
+     */
+    public function getProduct($uid)
+    {
+        $data = OnlineProduct::find()->where(['del_status' => OnlineProduct::STATUS_USE, 'borrow_uid' => $uid, 'status' => [3, 5, 6, 7]])->asArray()->all();
         bcscale(14);
         $count = count($data);
         $sum_pay = 0;
@@ -97,31 +102,31 @@ class UserAccountBackendCore extends UserAccountCore {
         }
         $bcround = new BcRound();
         $sum_pay = $bcround->bcround($sum_pay, 2);
+
         return ['count' => $count, 'sum' => $sum_pay];
     }
-    
+
     /**
      * 还款金额信息
      * return [
      *      count  次数
      *      sum    总额
-     * ];
-     */       
-    public function getReturnInfo($uid){
+     * ];.
+     */
+    public function getReturnInfo($uid)
+    {
         $sum_huan = (new \yii\db\Query())
                 ->select('repayment.benxi')
                 ->from(['online_repayment_record repayment'])
-                ->innerJoin('online_product p','repayment.online_pid=p.id')
-                ->where(['repayment.status'=>[1,2],'p.borrow_uid'=> $uid])->sum('benxi');
-        
+                ->innerJoin('online_product p', 'repayment.online_pid=p.id')
+                ->where(['repayment.status' => [1, 2], 'p.borrow_uid' => $uid])->sum('benxi');
+
         $sum_wei = (new \yii\db\Query())
                 ->select('plan.benxi')
                 ->from(['online_repayment_plan plan'])
-                ->innerJoin('online_product p','plan.online_pid=p.id')
-                ->where(['plan.status'=>0,'p.borrow_uid'=> $uid])->sum('benxi');
-        return ['yihuan'=>  (empty($sum_huan)?'0.00':$sum_huan),'wait'=>(empty($sum_wei)?'0.00':$sum_wei)];
+                ->innerJoin('online_product p', 'plan.online_pid=p.id')
+                ->where(['plan.status' => 0, 'p.borrow_uid' => $uid])->sum('benxi');
+
+        return ['yihuan' => (empty($sum_huan) ? '0.00' : $sum_huan), 'wait' => (empty($sum_wei) ? '0.00' : $sum_wei)];
     }
-    
-    
-    
 }
