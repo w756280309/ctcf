@@ -105,7 +105,7 @@ class OnlineProduct extends \yii\db\ActiveRecord
     public function scenarios() {
         return [
             'del' => ['del_status'],
-            'status' => ['status', 'sort'],
+            'status' => ['status', 'sort', 'full_time'],
             'jixi' => ['jixi_time'],
             'create' => ['title', 'sn', 'cid','pcid', 'money','borrow_uid', 'expires','expires_show','yield_rate', 'start_money', 'borrow_uid','fee','status',
                 'description','refund_method','account_name','account','bank','dizeng_money','fazhi','fazhi_up','start_date','end_date','full_time','is_xs'

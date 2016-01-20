@@ -1,5 +1,4 @@
 <?php
-use yii\widgets\LinkPager;
 frontend\assets\WapAsset::register($this);
 $curent_cid = $header['cat'];
 $curent_xs = $header['xs'];

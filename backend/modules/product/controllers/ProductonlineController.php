@@ -87,7 +87,7 @@ class ProductonlineController extends BaseController
                 if (!empty($id) && $model->online_status === OnlineProduct::STATUS_ONLINE) {
                     if ($model->status === OnlineProduct::STATUS_FULL && $jixi_time <= $_fulltime) {
                         $err = '计息开始时间必须大于项目满标时间';
-                    } 
+                    }
                     if ($model->status === OnlineProduct::STATUS_FOUND && $jixi_time <= $_fulltime) {
                         $err = '计息开始时间必须大于项目提前募集结束时间';
                     }
@@ -446,6 +446,7 @@ class ProductonlineController extends BaseController
 
             if ($model->online_status == OnlineProduct::STATUS_ONLINE && $model->status == OnlineProduct::STATUS_NOW) {
                 $model->status = OnlineProduct::STATUS_FOUND;
+                $model->sort = OnlineProduct::SORT_FOUND;
                 $model->full_time = time();
                 $res = $model->save();
             }
