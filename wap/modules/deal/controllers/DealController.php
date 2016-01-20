@@ -1,5 +1,4 @@
 <?php
-
 namespace app\modules\deal\controllers;
 
 use Yii;
@@ -68,7 +67,6 @@ class DealController extends Controller
         ];
 
         if (Yii::$app->request->isAjax) {
-            //Yii::$app->response->format = Response::FORMAT_JSON;
             $message = ($page > $tp) ? '数据错误' : '消息返回';
 
             return ['header' => $header, 'deals' => $deals, 'code' => $code, 'message' => $message];
