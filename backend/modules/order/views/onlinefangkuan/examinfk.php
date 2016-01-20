@@ -84,7 +84,7 @@ use yii\helpers\Html;
                             <div class="control-group">
                                     <label class="control-label" for="">放款金额:</label>
                                     <div class="controls">
-                                            <span class="text"><?=$deal->money?></span>
+                                        <span class="text"><?= $deal->funded_money ?></span>
                                     </div>
                             </div>
                     </div>

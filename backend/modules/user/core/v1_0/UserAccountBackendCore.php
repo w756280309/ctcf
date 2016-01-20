@@ -88,16 +88,16 @@ class UserAccountBackendCore extends UserAccountCore {
      * ];
      */     
     public function getProduct($uid){
-        $data = OnlineProduct::find()->where(['del_status'=>  OnlineProduct::STATUS_USE,'borrow_uid'=>$uid,'status'=>[3,5,6]])->select('money')->asArray()->all();
+        $data = OnlineProduct::find()->where(['del_status' => OnlineProduct::STATUS_USE, 'borrow_uid' => $uid, 'status' => [3, 5, 6]])->asArray()->all();
         bcscale(14);
         $count = count($data);
         $sum_pay = 0;
-        foreach ($data as $dat){
-            $sum_pay=  bcadd($sum_pay, $dat['money']);
+        foreach ($data as $dat) {
+            $sum_pay = bcadd($sum_pay, $dat['funded_money']);
         }
         $bcround = new BcRound();
         $sum_pay = $bcround->bcround($sum_pay, 2);
-        return ['count'=>$count,'sum'=>$sum_pay];
+        return ['count' => $count, 'sum' => $sum_pay];
     }
     
     /**
