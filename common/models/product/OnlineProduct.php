@@ -108,7 +108,7 @@ class OnlineProduct extends \yii\db\ActiveRecord
             'status' => ['status'],
             'jixi' => ['jixi_time'],
             'create' => ['title', 'sn', 'cid','pcid', 'money','borrow_uid', 'expires','expires_show','yield_rate', 'start_money', 'borrow_uid','fee','status',
-                'description','refund_method','account_name','account','bank','dizeng_money','fazhi','fazhi_up','start_date','end_date','full_time'
+                'description','refund_method','account_name','account','bank','dizeng_money','fazhi','fazhi_up','start_date','end_date','full_time','is_xs'
                 ,'yuqi_faxi','order_limit','creator_id','del_status','status','target','target_uid','finish_date','channel','jixi_time','sort'],
         ];
     }
@@ -178,11 +178,12 @@ class OnlineProduct extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['title', 'borrow_uid', 'yield_rate', 'money', 'start_money', 'dizeng_money', 'start_date', 'end_date','expires', 'description','finish_date'], 'required'],
-            [['cid', 'pcid', 'borrow_uid', 'refund_method', 'expires', 'full_time', 'del_status', 'status', 'order_limit', 'creator_id'], 'integer'],
+            [['title', 'borrow_uid', 'yield_rate', 'money', 'start_money', 'dizeng_money', 'start_date', 'end_date','expires','cid', 'description','finish_date'], 'required'],
+            [['cid', 'pcid', 'is_xs', 'borrow_uid', 'refund_method', 'expires', 'full_time', 'del_status', 'status', 'order_limit', 'creator_id'], 'integer'],
             [['yield_rate', 'fee', 'money', 'start_money', 'dizeng_money', 'fazhi', 'fazhi_up', 'yuqi_faxi'], 'number'],
             [['fazhi', 'fazhi_up','target'], 'integer'],
             ['target','default','value'=>0],
+            ['is_xs','default','value'=>0],
             [['description'], 'string'],
             [['title','target_uid'], 'string', 'max' => 128],
             [['target_uid'],'match','pattern'=>'/^\d+((,)\d+)*$/' ,'message'=>'{attribute}格式不正确必须以英文逗号分隔'],
@@ -275,6 +276,7 @@ class OnlineProduct extends \yii\db\ActiveRecord
             'yuqi_faxi' => '逾期罚息',
             'order_limit' => '限制投标人次',
             'target' => '是否定向标',
+            'is_xs' => '是否新手标',
             'target_uid' => '定向标用户uid',
             'creator_id' => '创建者',
             'updated_at' => '创建时间',

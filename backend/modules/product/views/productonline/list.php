@@ -2,7 +2,7 @@
 
 use yii\widgets\ActiveForm;
 use yii\widgets\LinkPager;
-
+$pc_cat = Yii::$app->params['pc_cat'];
 ?>
 <?php $this->beginBlock('blockmain'); ?>
 
@@ -85,6 +85,7 @@ use yii\widgets\LinkPager;
                                         <th><input class="chooseall" type='checkbox'></th>
                                         <th>序号</th>
                                         <th>项目名称</th>
+                                        <th>项目类型</th>
                                         <th>期限（天）</th>
                                         <th>利率（%）</th>
                                         <th>募集金额（元）</th>
@@ -103,6 +104,7 @@ use yii\widgets\LinkPager;
                                         </td>
                                         <td><?= $val['sn'] ?></td>
                                         <td><?= $val['title'] ?></td>
+                                        <td><?= $val['is_xs'] ? "新手标" : $pc_cat[$val['cid']] ?></td>
                                         <td><?= $val['expires'] ?></td>
                                         <td><?= doubleval(100*$val['yield_rate']) ?></td>
                                         <td><?= number_format($val['money'],2) ?></td>
@@ -237,9 +239,9 @@ use yii\widgets\LinkPager;
          var csrf = '<?= Yii::$app->request->getCsrfToken(); ?>';
             layer.confirm('是否要提前结束此项目的募集？',{title:'结束项目',btn:['确定','取消']},function(){
                 openLoading();//打开loading
-                $.post("/product/productonline/end-product", {pid: pid, _csrf:csrf}, function (result) {
+                $.post("/product/productonline/found", {id: pid, _csrf:csrf}, function (result) {
                     cloaseLoading();//关闭loading
-                    newalert(result['res'],'',1);
+                    newalert(parseInt(result['result']),result['message'],1);
                 });   
             },function(){
                 layer.closeAll();

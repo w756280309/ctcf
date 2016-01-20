@@ -319,9 +319,10 @@ class ProductonlineController extends BaseController
     /**
      * 项目提前成立.
      */
-    public function actionFound($id = null)
+    public function actionFound()
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
+        $id = Yii::$app->request->post('id');
         if ($id) {
             $model = OnlineProduct::findOne($id);
             if (empty($model) || $model->status != OnlineProduct::STATUS_NOW) {
@@ -329,10 +330,9 @@ class ProductonlineController extends BaseController
             } else {
                 $bc = new BcRound();
                 $transaction = Yii::$app->db->beginTransaction();
-                $up_srs = OnlineProduct::updateAll(['status' => OnlineProduct::STATUS_FOUND, 'sort' => OnlineProduct::SORT_FOUND], ['id' => $id]);
+                $up_srs = OnlineProduct::updateAll(['status' => OnlineProduct::STATUS_FOUND, 'sort' => OnlineProduct::SORT_FOUND ,'full_time' => time()], ['id' => $id]);
                 if (!$up_srs) {
                     $transaction->rollBack();
-
                     return ['result' => '0', 'message' => '操作失败,状态更新失败,请联系技术'];
                 }
                 $orders = OnlineOrder::getOrderListByCond(['online_pid' => $id, 'status' => OnlineOrder::STATUS_SUCCESS]);
@@ -342,7 +342,6 @@ class ProductonlineController extends BaseController
                     $ua->freeze_balance = $bc->bcround(bcsub($ua->freeze_balance, $ord['order_money']), 2);
                     if (!$ua->save()) {
                         $transaction->rollBack();
-
                         return ['result' => '0', 'message' => '操作失败,账户更新失败,请联系技术'];
                     }
                 }

@@ -64,6 +64,11 @@ $(function () {
         if (stop === true && currentPage <= totalPage) {
             stop = false;
             $(".load").html("正在加载...");
+            if(xs===undefined){
+                param = {page: currentPage,cat:cid};
+            }else{
+                param = {page: currentPage,xs:1};
+            }
             $.ajax({
                 type: 'GET',
                 url: "/deal/deal/",

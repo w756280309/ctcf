@@ -56,10 +56,12 @@ class UserAccountCore {
      */
     public function getTotalFund($uid = null){
         $ua = $this->getUserAccount($uid);
-        $account_balance = $ua->account_balance;//账户余额
+        $available_balance = $ua->available_balance;//可用余额
+        $freeze_balance = $ua->freeze_balance;//可用余额
         $investment_balance = $ua->investment_balance;
-        $bcRound = new BcRound();
         bcscale(14);
-        return $bcRound->bcround(bcadd($investment_balance, $account_balance), 2);
+        $total = bcadd(bcadd($available_balance, $freeze_balance),$investment_balance);
+        $bcRound = new BcRound();        
+        return $bcRound->bcround($total, 2);
     }
 }

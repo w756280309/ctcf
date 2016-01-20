@@ -18,18 +18,17 @@ function newalert(res,msg,reload){
         try{
             if(reload==1){
                 location.reload()
-            }    
+            }
         }catch(err){
             location.reload()
         }
-        
     }else{
         if(msg==''){
             msg='操作失败';
         }
         layer.msg(msg, {icon: 2});
     }
-   
+
 }
 
 var playSum;
@@ -56,6 +55,6 @@ function closewin(){
 }
 
 isJson = function(obj){
-    var isjson = typeof(obj) == "object" && Object.prototype.toString.call(obj).toLowerCase() == "[object object]" && !obj.length; 
+    var isjson = typeof(obj) == "object" && Object.prototype.toString.call(obj).toLowerCase() == "[object object]" && !obj.length;
     return isjson;
 }
