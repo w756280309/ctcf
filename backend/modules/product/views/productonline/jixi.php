@@ -42,7 +42,7 @@ use yii\bootstrap\ActiveForm;
                                     <div class="controls">
                                         <span class="text">
                                             <?=                                                       
-                                                 $form->field($model, 'jixi_time', ['template' => '<div class="input-append date form_datetime">{input}<span class="add-on"><i class="icon-calendar"></i></span></div>{error}', 'inputOptions'=>['autocomplete'=>"off",'placeholder'=>'计息开始日']])->textInput(['readonly' => 'readonly','class' => "m-wrap span12", 'onclick' => 'WdatePicker({dateFmt:"yyyy-MM-dd",minDate:\''.date("Y-m-d",$model->start_date).'\',maxDate:\''.date("Y-m-d",$model->finish_date).'\'});'])
+                                                 $form->field($model, 'jixi_time', ['template' => '<div class="input-append date form_datetime">{input}<span class="add-on"><i class="icon-calendar"></i></span></div>{error}', 'inputOptions'=>['autocomplete'=>"off",'placeholder'=>'计息开始日']])->textInput(['readonly' => 'readonly','class' => "m-wrap span12", 'onclick' => 'WdatePicker({dateFmt:"yyyy-MM-dd",minDate:\''.date('Y-m-d', strtotime('+1 day', $model->start_date)).'\',maxDate:\''.date("Y-m-d", strtotime('-1 day', $model->finish_date)).'\'});'])
                                             ?>
                                         </span>
                                     </div>
@@ -63,7 +63,7 @@ use yii\bootstrap\ActiveForm;
 <script type="text/javascript">
     $(function(){
         var c_flag = '<?= $c_flag ?>';
-        if(c_flag == 'close') {
+        if(c_flag === 'close') {
             window.parent.location.href = '/product/productonline/list';
         }
     })

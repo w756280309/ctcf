@@ -154,7 +154,7 @@ $this->registerJsFile('/js/product.js', ['depends' => 'yii\web\YiiAsset']);
                                     <label class="control-label">计息开始日</label>
                                     <div class="controls">
                                         <?=
-                                        $form->field($model, 'jixi_time', ['template' => '<div class="input-append date form_datetime">{input}<span class="add-on"><i class="icon-calendar"></i></span></div>{error}', 'inputOptions' => ['autocomplete' => 'off', 'placeholder' => '计息开始日']])->textInput(['readonly' => 'readonly', 'class' => 'm-wrap span12', 'onclick' => 'WdatePicker({dateFmt:"yyyy-MM-dd",minDate:"#F{$dp.$D(\'onlineproduct-start_date\')}",maxDate:"#F{$dp.$D(\'onlineproduct-finish_date\')}"});'])
+                                        $form->field($model, 'jixi_time', ['template' => '<div class="input-append date form_datetime">{input}<span class="add-on"><i class="icon-calendar"></i></span></div>{error}', 'inputOptions' => ['autocomplete' => 'off', 'placeholder' => '计息开始日']])->textInput(['readonly' => 'readonly', 'class' => 'm-wrap span12', 'onclick' => 'WdatePicker({dateFmt:"yyyy-MM-dd",minDate:"#F{$dp.$D(\'onlineproduct-start_date\',{d:1})}",maxDate:"#F{$dp.$D(\'onlineproduct-finish_date\',{d:-1})}"});'])
                                         ?>
                                     </div>
                             </div>
