@@ -45,10 +45,10 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
             <div class="row kahao">
                 <div class="hidden-xs col-sm-1"></div>
                 <div class="col-xs-3 col-sm-1">短信验证码</div>
-                <div class="col-xs-9 col-sm-8 safe-lf"><input type="text" id="yzm"  name='yzm' placeholder="输入验证码" maxlength="6"/></div>
-                <div class="hidden-xs col-sm-1"><input class="yzm yzm-normal" name="createsms" id="createsms" value="获取验证码" type="button" style="margin-top:-4px;font-size:12px;height:28px;line-height:27px;color: white !important"></div>
+                <div class="col-xs-9 col-sm-8 safe-lf" style="position: relative;"><input type="text" id="yzm"  name='yzm' placeholder="输入验证码" maxlength="6"/>
+                <input class="yzm yzm-normal" name="createsms" id="createsms" value="获取验证码" type="button" style="width: 100px;margin-top:-4px;font-size:12px;height:28px;line-height:27px;color: white !important"></div>
             </div>
-           
+
             <input type="text" name="" style="display:none"/>
             <!--限额提醒-->
             <div class="row dan" hidden="hidden">
@@ -87,7 +87,7 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
            if(err === '1') {
                toasturl(tourl,mess);
            }
-            
+
            csrf = $("meta[name=csrf-token]").attr('content');
            $('#rechargebtn').bind('click',function(){
                $(this).addClass("btn-press").removeClass("btn-normal");
@@ -122,10 +122,10 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
 
                     toast(null, errMsg);
                 });
-                
+
             });
-        })    
-        
+        })
+
         function subRecharge(){
                 if(!validateform()){
                    return false;
@@ -148,7 +148,7 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
                     toast(null, errMsg);
                 });
         }
-        
+
         //60秒倒计时
         var InterValObj; //timer变量，控制时间
         var curCount;//当前剩余秒数
@@ -174,4 +174,4 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
         };
         </script>
 
-    
+
