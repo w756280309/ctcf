@@ -61,31 +61,33 @@ class OnlineorderController extends BaseController
         ]);
     }
 
-    public function actionDetailr($id = null, $type = null)
+    /**
+     * 融资明细页面展示
+     */
+    public function actionDetailr($id, $type)
     {
         $status = Yii::$app->request->get('status');
         $time = Yii::$app->request->get('time');
         $title = Yii::$app->request->get('title');
 
         $query = OnlineProduct::find()->where(['del_status' => OnlineProduct::STATUS_USE, 'borrow_uid' => $id]);
+
         if (!empty($status)) {
-            $query->andWhere(['status' => $status]);
+            if ($status === '-1') {
+                $query->andWhere(['online_status' => $status]);
+            } else {
+                $query->andWhere(['status' => $status]);
+            }
         }
         if (!empty($title)) {
             $query->andFilterWhere(['like', 'title', $title]);
         }
-//        if (isset($status) && $status !== '' && !empty($title)) {
-//            $query = "del_status=0 and status='$status' and borrow_uid=$id and title like '%$title%'";
-//        } elseif (isset($status) && $status !== '' && empty($title)) {
-//            $query = "del_status=0 and status='$status' and borrow_uid=$id";
-//        } else {
-//            $query = "del_status=0 and borrow_uid=$id";
-//        }
-//        $query = OnlineProduct::find()->where($query);
+
         if (!empty($time)) {
             $query->andFilterWhere(['<', 'created_at', strtotime($time.' 23:59:59')]);
             $query->andFilterWhere(['>=', 'created_at', strtotime($time.' 0:00:00')]);
         }
+
         //正常显示详情页
         $pages = new Pagination(['totalCount' => $query->count(), 'pageSize' => '10']);
         $model = $query->offset($pages->offset)->limit($pages->limit)->orderBy('id desc')->asArray()->all();
@@ -120,31 +122,20 @@ class OnlineorderController extends BaseController
         if ($status != null) {
             $query->andWhere(['status' => $status]);
         }
-//        if (isset($status) && $status !== '') {
-//            $query = "status='$status' and uid=$id";
-//        } else {
-//            $query = "uid=$id";
-//        }
-       // $query = OnlineOrder::find()->where($query);
+
         if (!empty($time)) {
             $query->andFilterWhere(['<', 'created_at', strtotime($time.' 23:59:59')]);
             $query->andFilterWhere(['>=', 'created_at', strtotime($time.' 0:00:00')]);
         }
+
         //正常显示详情页
         $pages = new Pagination(['totalCount' => $query->count(), 'pageSize' => '10']);
         $model = $query->offset($pages->offset)->limit($pages->limit)->orderBy('id desc')->all();
 
         //取出用户名
         $username = User::find()->where(['id' => $id])->select('username')->one();
-        //取出投资金额总计，应该包括充值成功的和充值失败的
-//        $moneyTotal = OnlineOrder::find()->where(['uid' => $id])->sum('order_money');
-//        //充值成功的次数
-//        $successNum = OnlineOrder::find()->where(['uid' => $id, 'status' => 1])->count();
-//        //投资失败的次数
-//        $failureNum = OnlineOrder::find()->where(['uid' => $id, 'status' => 2])->count();
-//        //项目名称
-//        $online_ids = OnlineOrder::find()->where(['uid' => $id])->select("id,online_pid")->asArray()->all();
 
+        //取出投资金额总计，应该包括充值成功的和充值失败的
         $moneyTotal = 0;  //提现总额
         $successNum = 0;  //成功笔数
         $failureNum = 0;  //失败笔数
@@ -161,7 +152,7 @@ class OnlineorderController extends BaseController
         }
         $moneyTotal = $bc->bcround($moneyTotal, 2);
 
-        //以online_order表中的id为下标online_id为单元值，组成一维数组        
+        //以online_order表中的id为下标online_id为单元值，组成一维数组
         $result = OnlineProduct::findBySql("select oo.id,title from online_product op  left join online_order oo  on op.id=oo.online_pid where  oo.uid=$id")->asArray()->all();
         $res = [];
         foreach ($result as $v) {

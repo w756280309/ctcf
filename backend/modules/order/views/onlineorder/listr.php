@@ -1,10 +1,7 @@
 <?php
-
 use yii\widgets\LinkPager;
-use common\models\product\OnlineProduct;
-    
-$this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\web\YiiAsset']);
 
+$this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\web\YiiAsset']);
 $status = Yii::$app->request->get('status');
 ?>
 <?php $this->beginBlock('blockmain'); ?>
@@ -79,22 +76,13 @@ $status = Yii::$app->request->get('status');
                             <td>
                                 <select name="status">
                                     <option value="">---未选择---</option>
-                                    <option value=<?=OnlineProduct::STATUS_NOW?> 
-                                        <?php if($status==OnlineProduct::STATUS_NOW){
+                                    <option value="-1" <?= $status === '-1'?"selected='selected'":"" ?>>未上线</option>
+                                    <?php foreach (Yii::$app->params['deal_status'] as $key => $val): ?>
+                                    <option value=<?= $key ?> 
+                                        <?php if ($status === strval($key)) {
                                             echo "selected='selected'";
-                                        }?>>募集期</option>
-                                    <option value=<?=OnlineProduct::STATUS_HUAN?> 
-                                        <?php if($status==OnlineProduct::STATUS_HUAN){
-                                            echo "selected='selected'";
-                                        }?>>还款中</option>
-                                    <option value=<?=OnlineProduct::STATUS_OVER?> 
-                                        <?php if($status==OnlineProduct::STATUS_OVER){
-                                            echo "selected='selected'";
-                                        }?>>已还清</option>
-                                    <option value=<?=OnlineProduct::STATUS_LIU?> 
-                                        <?php if($status==OnlineProduct::STATUS_LIU){
-                                            echo "selected='selected'";
-                                        }?>>流标</option>
+                                        }?>><?= $val ?></option>
+                                    <?php endforeach; ?>
                                 </select>
                             </td>
                             <td><span class="title">融资时间</span></td>
@@ -118,10 +106,10 @@ $status = Yii::$app->request->get('status');
                     <tr>
                         <th>项目编号</th>
                         <th>项目名称</th>
-                        <th>融资金额（元）</th>
-                        <th>实际融资金额（元）</th>
-                        <th>融资期限（天）</th>
-                        <th>利率（%）</th>
+                        <th style="text-align: right;">融资金额（元）</th>
+                        <th style="text-align: right;">实际融资金额（元）</th>
+                        <th style="text-align: right;">融资期限（天）</th>
+                        <th style="text-align: right;">利率（%）</th>
                         <th>融资时间</th>
                         <th>状态</th>
                     </tr>
@@ -131,28 +119,16 @@ $status = Yii::$app->request->get('status');
                     <tr>
                         <td><?= $val['sn'] ?></td>
                         <td><?= $val['title'] ?></td>
-                        <td><?= number_format($val['money'],2) ?></td>    
-                        <td><?= number_format($val['funded_money'],2) ?></td>
-                        <td><?= $val['expires']?></td>           
-                        <td><?= doubleval(100*$val['yield_rate'])?></td>               
+                        <td style="text-align: right;"><?= number_format($val['money'],2) ?></td>    
+                        <td style="text-align: right;"><?= number_format($val['funded_money'],2) ?></td>
+                        <td style="text-align: right;"><?= $val['expires']?></td>           
+                        <td style="text-align: right;"><?= doubleval(100*$val['yield_rate'])?></td>               
                         <td><?= date('Y-m-d H:i:s',$val['created_at'])?></td>
                         <td><?php 
-                                if($val['online_status']==0){
-                                    echo "未上线";
-                                }else{
-                                    if($val['status']==OnlineProduct::STATUS_PRE){
-                                        echo "预告期";
-                                    }elseif($val['status']==OnlineProduct::STATUS_NOW){
-                                        echo "募集期";
-                                    }elseif($val['status']==OnlineProduct::STATUS_FULL){
-                                        echo "满标";
-                                    }elseif($val['status']==OnlineProduct::STATUS_LIU){
-                                        echo "流标";
-                                    }elseif($val['status']==OnlineProduct::STATUS_HUAN){
-                                        echo "还款中";
-                                    }elseif($val['status']==OnlineProduct::STATUS_OVER){
-                                        echo "已还清";
-                                    }
+                                if ($val['online_status'] === 0) {
+                                   echo "未上线";
+                                } else {
+                                   echo Yii::$app->params['deal_status'][$val['status']];  
                                 }
                                 ?></td>
                     </tr>
