@@ -9,7 +9,7 @@
         </script>
     </head>
     <body onload="doSubmit()">
-        <form action="<?= Yii::$app->params['cfca']['PAYURL'] ?>" name="recharge" method="post">
+        <form action="<?= Yii::$app->params['cfca']['payUrl'] ?>" name="recharge" method="post">
             <input type="hidden" name="message" value="<?= $message ?>" />
             <input type="hidden" name="signature" value="<?= $signature ?>" />
         </form>

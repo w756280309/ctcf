@@ -12,6 +12,7 @@ use PayGate\Cfca\Message\Request1320;
 use PayGate\Cfca\Response\Response1320;
 use common\lib\cfca\Cfca;
 use app\modules\user\controllers\bpay\BrechargeController;
+use common\lib\cfca\Payment;
 
 class RechargeController extends BaseController
 {
@@ -55,23 +56,21 @@ class RechargeController extends BaseController
             $recharge->pay_type = $pay_type;
 
             if ($recharge->validate()) {
+                //录入recharge_record记录
+                if (!$recharge->save()) {
+                    return $this->redirect('/user/recharge/recharge-err');
+                }
+
                 $req = new Request1311(
                     Yii::$app->params['cfca']['institutionId'],
                     $recharge,
                     $account_type
                 );
 
-                $cfca = new Cfca();
-                $resp = $cfca->request($req);
-
-                if (null === $resp) {
-                    return $this->redirect('/user/recharge/recharge-err');
-                }
-
-                //录入recharge_record记录
-                if (!$recharge->save()) {
-                    return $this->redirect('/user/recharge/recharge-err');
-                }
+                $payment = new Payment();
+                $xml = $req->getXml();
+                $message = base64_encode($xml);   //中金报文正文
+                $signature = $payment->cfcasign_pkcs12($xml);  //签名
 
                 // 设置session。用来验证数据的不可修改
                 Yii::$app->session->set('cfca_recharge', [
@@ -82,19 +81,20 @@ class RechargeController extends BaseController
                 $trade_log = new TradeLog($this->user, $req, null);
                 $trade_log->save();
 
-                exit($resp);
+                return $this->render('dorecharge', ['message' => $message, 'signature' => $signature]);
             }
         }
 
         return $this->render('recharge', ['recharge' => $recharge, 'user_account' => $user_account, 'bank' => $bank]);
     }
 
-    /**
-     * 充值页面-中金跳转.
-     */
-    public function actionDorecharge()
-    {
-    }
+//    /**
+//     * 充值页面-中金跳转.
+//     */
+//    public function actionDorecharge()
+//    {
+//        $request = 
+//    }
 
     /**
      * 查询充值状态 1320.
