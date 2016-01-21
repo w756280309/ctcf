@@ -309,6 +309,8 @@ class OnlineProduct extends \yii\db\ActiveRecord
         $pro = static::findOne(['sn' => $sn]);
         $id = $pro->id;
         $time = time();
+        
+        return self::ERROR_SUCCESS;///////测试之后需要注销掉
 
         if (empty($pro)) {
             return self::ERROR_NO_EXIST;
