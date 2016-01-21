@@ -36,7 +36,7 @@ class CheckaccrontabController extends Controller
         if ($is_write) {
             return 1;
         }
-        
+
         $rq1810 = new Request1810(Yii::$app->params['cfca']['institutionId'], $date);
         $cfca = new Cfca();
         $resp = $cfca->request($rq1810);
@@ -171,8 +171,7 @@ class CheckaccrontabController extends Controller
             exit;
         }
 
-        $wdjfobj = CheckaccountWdjf::find()->where('is_checked=1 and (is_auto_okay=1 or (is_auto_okay=2 and is_okay=1))')->andFilterWhere(['between', 'tx_date', $beginYesterday, $endYesterday])->all();
-        //var_dump($wdjfobj);exit;
+        $wdjfobj = CheckaccountWdjf::find()->where('is_checked=1 and (is_auto_okay=1 or (is_auto_okay=2 and is_okay=1))')->andFilterWhere(['between', 'tx_date', date('Y-m-d', $beginDay), date('Y-m-d', $endDay)])->all();
         $recharge_count = $recharge_sum = $jiesuan_count = $jiesuan_sum = 0;
         foreach ($wdjfobj as $obj) {
             if ($obj->tx_type == 1311) {
