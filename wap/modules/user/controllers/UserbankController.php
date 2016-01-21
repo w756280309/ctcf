@@ -198,6 +198,9 @@ class UserbankController extends BaseController
         return $this->render('recharge', ['user_bank' => $user_bank, 'user_acount' => $user_acount, 'data' => $data]);
     }
 
+    /**
+     * 提现申请表单页.
+     */
     public function actionTixian()
     {
         $user = $this->user;
@@ -237,6 +240,9 @@ class UserbankController extends BaseController
         return $this->render('tixian', ['user_bank' => $user_bank, 'user_acount' => $user_acount]);
     }
 
+    /**
+     * 提现申请-验证交易密码表单页.
+     */
     public function actionChecktradepwd($money)
     {
         $user = $this->user;
@@ -314,7 +320,7 @@ class UserbankController extends BaseController
                 $transaction->rollBack();
                 $sms->template_id = Yii::$app->params['sms']['tixian_err'];
                 $sms->save();
-                return ['code' => 1, 'message' => '提现失败'];
+                return ['code' => 1, 'message' => '提现申请失败'];
             }
 
             //录入money_record记录
@@ -333,7 +339,7 @@ class UserbankController extends BaseController
                 $transaction->rollBack();
                 $sms->template_id = Yii::$app->params['sms']['tixian_err'];
                 $sms->save();
-                return ['code' => 1, 'message' => '提现失败'];
+                return ['code' => 1, 'message' => '提现申请失败'];
             }
 
             //录入user_acount记录
@@ -347,7 +353,7 @@ class UserbankController extends BaseController
                 $transaction->rollBack();
                 $sms->template_id = Yii::$app->params['sms']['tixian_err'];
                 $sms->save();
-                return ['code' => 1, 'message' => '提现失败'];
+                return ['code' => 1, 'message' => '提现申请失败'];
             }
             
             $sms->template_id = Yii::$app->params['sms']['tixian_succ'];
@@ -355,7 +361,7 @@ class UserbankController extends BaseController
 
             $transaction->commit();
 
-            return ['tourl' => '/user/user', 'code' => 1, 'message' => '提现成功'];
+            return ['tourl' => '/user/user', 'code' => 1, 'message' => '提现申请成功'];
         }
 
         if ($model->getErrors()) {
@@ -367,6 +373,9 @@ class UserbankController extends BaseController
         return $this->render('checktradepwd', ['money' => $money]);
     }
 
+    /**
+     * 修改银行卡信息表单页.
+     */
     public function actionEditbank()
     {
         $cond = 0 | BankService::IDCARDRZ_VALIDATE_N | BankService::BINDBANK_VALIDATE_N;
@@ -400,16 +409,25 @@ class UserbankController extends BaseController
         return $this->render('editbank', ['model' => $model, 'province' => $province, 'data' => $data]);
     }
 
+    /**
+     * 检查银行卡号，返回开户行名称.
+     */
     public function actionCheckbank()
     {
         return BankService::checkBankcard(Yii::$app->request->post('card'));
     }
 
+    /**
+     * 银行限额显示.
+     */
     public function actionBankxiane()
     {
         return $this->render('bankxiane');
     }
 
+    /**
+     * 快捷支付开通说明页.
+     */
     public function actionKuaijie()
     {
         return $this->render('kuaijie');
