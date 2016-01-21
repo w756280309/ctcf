@@ -24,7 +24,7 @@ $this->registerCssFile('/css/index.css', ['depends' => 'yii\web\YiiAsset']);
 <a class="row column dealdata <?= in_array($val['status'], [2])?"nowing":"";?>" href="/deal/deal/detail?sn=<?= $val['num'] ?>" data-bind="<?= $val['k'] ?>" data-status="<?= $val['status'] ?>" data-per="<?= number_format($val['finish_rate']*100,0) ?>">
     <div class="hidden-xs col-sm-1"></div>
     <div class="col-xs-12 col-sm-10 column-title"><span><?= $val['title'] ?></span></div>
-    <div class="<?= in_array($val['status'], [1,2])?"column-title-rg":"column-title-rg1";?>"><?= $val['statusval'] ?></div>
+    <div class="<?= in_array($val['status'], [1,2,7])?"column-title-rg":"column-title-rg1";?>"><?= $val['statusval'] ?></div>
     <div class="container">
         <ul class="row column-content">
             <li class="col-xs-4">

@@ -26,7 +26,7 @@ $pc_cat = Yii::$app->params['pc_cat'];
             <div class="hidden-xs col-sm-1"></div>
             <div class="col-xs-12 col-sm-10 column-title"><span><?= $val['title'] ?></span></div>
             <div
-                class="<?= in_array($val['status'], [1, 2]) ? "column-title-rg" : "column-title-rg1"; ?>"><?= $val['statusval'] ?></div>
+                class="<?= in_array($val['status'], [1, 2, 7]) ? "column-title-rg" : "column-title-rg1"; ?>"><?= $val['statusval'] ?></div>
             <div class="container">
                 <ul class="row column-content">
                     <li class="col-xs-4">
