@@ -7,13 +7,12 @@ $this->title = '充值 - 温都金服';
 
 $_js = <<<'JS'
 $(function() {
-    $('#payment-method, #payment-bank').each(function() {
-        var $this = $(this);
-        $this.on('click', '.picker-item', function() {
-            $(this).closest('.picker').find('.picker-item').removeClass('picked');
-            $(this).addClass('picked');
-            var bank_id = $(this).attr('data-bankid');
-            $('#bankid').val(bank_id);
+    $('#payment-bank').each(function() {
+        $(this).on('click', '.picker-item', function() {
+            var $this = $(this);
+            $this.closest('.picker').find('.picker-item').removeClass('picked');
+            $this.addClass('picked');
+            $('#bankid').val($this.data('bankid'));
         });
     });
     $('.btn-primary').bind('click',function() {
@@ -49,7 +48,7 @@ $this->registerJs($_js, View::POS_END, 'body_close');
         <div id="payment-bank" class="section">
             <ul class="picker">
                 <?php foreach($bank as $key => $val): ?>
-                <li class="picker-item <?= (strval($key) === $recharge->bank_id)?"picked":"" ?>" data-bankid="<?= $key ?>" style="width:138px;height:33px"><img style="width: 140px; height: 36px" src="/images/banks/<?= $key ?>.jpg" alt="<?= $val['bankname'] ?>"></li>
+                <li class="picker-item <?= (strval($key) === $recharge->bank_id)?"picked":"" ?>" data-bankid="<?= $key ?>"><img src="/images/banks/<?= $key ?>.jpg" alt="<?= $val['bankname'] ?>"></li>
                 <?php endforeach; ?>
             </ul>
         </div>
@@ -61,7 +60,7 @@ $this->registerJs($_js, View::POS_END, 'body_close');
 
         <h3>请填写充值金额</h3>
         <div class="section">
-            <?php $form = ActiveForm::begin(['id' => 'recharge_form', 'action' => '/user/recharge/recharge', 'options' => ['target' => '_blank', 'format' => 'raw']]); ?>
+            <?php $form = ActiveForm::begin(['id' => 'recharge_form', 'action' => '/user/recharge/recharge', 'options' => ['target' => '_blank']]); ?>
             <ul class="wdjf-form">
                 <li><div class="wdjf-label">账户余额</div> <div class="wdjf-field"><span class="balance"><?= $user_account->available_balance ?></span> 元</div></li>
                 <li><div class="wdjf-label"><span class="fee-info">*</span>充值金额</div> <div class="wdjf-field"><?= $form->field($recharge, 'fund', ['template' => '{input}{error}'])->textInput(); ?></div><span style='margin-left: 5px;'>元</span></li>
