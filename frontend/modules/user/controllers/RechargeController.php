@@ -13,22 +13,23 @@ use PayGate\Cfca\Response\Response1320;
 use common\lib\cfca\Cfca;
 use app\modules\user\controllers\bpay\BrechargeController;
 
-class RechargeController extends BaseController {
-
+class RechargeController extends BaseController
+{
     public $layout = '@app/views/layouts/main';
     public $enableCsrfValidation = false; //因为中金post的提交。所以要关闭csrf验证
 
     /**
      * 充值
      */
-    public function actionRecharge() {
+    public function actionRecharge()
+    {
         $uid = $this->user->id;
         $bank = Yii::$app->params['bank'];
 
         $user_account = UserAccount::findOne(['uid' => $uid, 'type' => UserAccount::TYPE_LEND]);
         $recharge = new RechargeRecord([
             'uid' => $uid,
-            'account_id' => $user_account->id
+            'account_id' => $user_account->id,
         ]);
 
         if ($recharge->load(Yii::$app->request->post())) {
@@ -74,7 +75,7 @@ class RechargeController extends BaseController {
 
                 // 设置session。用来验证数据的不可修改
                 Yii::$app->session->set('cfca_recharge', [
-                    'recharge_sn' => $req->getRechargeSn()
+                    'recharge_sn' => $req->getRechargeSn(),
                 ]);
 
                 //录入日志信息
@@ -89,9 +90,17 @@ class RechargeController extends BaseController {
     }
 
     /**
-     * 查询充值状态 1320
+     * 充值页面-中金跳转.
      */
-    public function actionCheckarchstatus() {
+    public function actionDorecharge()
+    {
+    }
+
+    /**
+     * 查询充值状态 1320.
+     */
+    public function actionCheckarchstatus()
+    {
         $record = Yii::$app->session->get('cfca_recharge');
 
         if (null === $record) {
@@ -122,6 +131,7 @@ class RechargeController extends BaseController {
 
                 if (BrechargeController::is_updateAccount($recharge, $this->user)) {
                     \Yii::$app->session->remove('cfca_recharge');
+
                     return $this->redirect('/user/useraccount/accountcenter');
                 } else {
                     return $this->redirect('/user/recharge/recharge-err');
@@ -135,10 +145,10 @@ class RechargeController extends BaseController {
     }
 
     /**
-     * 充值失败页面
+     * 充值失败页面.
      */
-    public function actionRechargeErr() {
+    public function actionRechargeErr()
+    {
         return $this->render('recharge_err');
     }
-
 }
