@@ -60,7 +60,7 @@ $this->registerJs($_js, View::POS_END, 'body_close');
 
         <h3>请填写充值金额</h3>
         <div class="section">
-            <?php $form = ActiveForm::begin(['id' => 'recharge_form', 'action' => '/user/recharge/recharge', 'options' => ['target' => '_blank']]); ?>
+            <?php $form = ActiveForm::begin(['id' => 'recharge_form', 'action' => '/user/recharge/recharge']); ?>
             <ul class="wdjf-form">
                 <li><div class="wdjf-label">账户余额</div> <div class="wdjf-field"><span class="balance"><?= $user_account->available_balance ?></span> 元</div></li>
                 <li><div class="wdjf-label"><span class="fee-info">*</span>充值金额</div> <div class="wdjf-field"><?= $form->field($recharge, 'fund', ['template' => '{input}{error}'])->textInput(); ?></div><span style='margin-left: 5px;'>元</span></li>
