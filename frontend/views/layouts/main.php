@@ -34,7 +34,7 @@ AppAsset::register($this);
                         <a class="navbar-link" href="/site/login">登录</a>
                         <a class="navbar-link" href="/site/login">注册</a>
                     <?php } else { ?>
-                        <a class="navbar-link" href="/user/useraccount/accountcenter"><?php echo Yii::$app->user->id ?></a>
+                        <a class="navbar-link" href="/user/useraccount/accountcenter">我的账户</a>
                         <a class="navbar-link" href="/site/logout">注销</a>
                     <?php } ?>
                 </div>
@@ -44,7 +44,7 @@ AppAsset::register($this);
         <?= $content ?>
 
         <div class="footer">
-            页尾文字
+            <?= Yii::$app->params['page_info']['beian'] ?>
         </div>
 
         <?php $this->endBody() ?>

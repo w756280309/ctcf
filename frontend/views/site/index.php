@@ -1,55 +1,33 @@
 <?php
-
-use yii\web\View;
-
-$this->title = '@';
-
-$_js = <<<'JS'
-$(function() {
-    var $modal = $('#reg-first-modal').modal();
-    $modal.modal('show');
-})
-JS;
-$this->registerJs($_js, View::POS_END, 'body_close');
-
+$this->title = '温都金服首页';
 ?>
-<div style="height: 300px; background-color: #eee"></div>
+<div style="height: 300px; background: url('/images/banner.png');"></div>
 
 <div class="container">
     <div class="intro row">
-        <div class="col-sm-3">
+        <div class="col-sm-3" style="position:relative;">
             <div class="intro-step-no">1</div>
             <div class="intro-step-title">3分钟完成注册</div>
-            <div class="intro-step-desc">WAP端点击注册 填写个人信息<br>开通第三方托管 成功注册</div>
+            <div class="intro-step-desc">手机号快速注册</div>
+            <div class="index_pic" style="background: url('/images/index_1.png');"></div>
         </div>
         <div class="col-sm-3">
             <div class="intro-step-no">2</div>
             <div class="intro-step-title">1分钟开通快捷支付</div>
-            <div class="intro-step-desc">分分钟充值提现成功</div>
+            <div class="intro-step-desc">完成实名验证，绑定你的银行卡</div>
+            <div class="index_pic" style="background: url('/images/index_2.png');"></div>
         </div>
         <div class="col-sm-3">
             <div class="intro-step-no">3</div>
             <div class="intro-step-title">闪电快速充值</div>
-            <div class="intro-step-desc">WAP端点击注册 填写个人信息<br>开通第三方托管 成功注册</div>
+            <div class="intro-step-desc">快速充值，安全保障您的资金</div>
+            <div class="index_pic" style="background: url('/images/index_3.png');"></div>
         </div>
         <div class="col-sm-3">
             <div class="intro-step-no">4</div>
             <div class="intro-step-title">投资安享收益</div>
-            <div class="intro-step-desc">项目高收益 期限灵活<br>什么投资 安享好收益</div>
-        </div>
-    </div>
-</div>
-
-<div class="modal fade" id="reg-first-modal" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-body text-center">
-                <p>您当前的账户未绑定银行卡<br>请先访问移动端网站完成绑卡操作</p>
-
-                <div style="margin: 20px auto; width: 160px; height: 160px; background-color: #eee;"></div>
-
-                <p><button type="button" class="btn btn-primary" data-dismiss="modal">我知道了</button></p>
-            </div>
+            <div class="intro-step-desc">项目高收益，期限灵活</div>
+            <div class="index_pic" style="background: url('/images/index_4.png');"></div>
         </div>
     </div>
 </div>

@@ -34,8 +34,8 @@ $this->registerJs($_js, View::POS_END, 'body_close');
 <div class="container">
     <div id="login-box">
         <div class="login-tabs">
-            <a class="login current" href="#">登录</a>
-            <a class="reg" href="#">注册</a>
+            <a class="login current" href="#"><b>登录</b></a>
+            <a class="reg" href="#"><b>注册</b></a>
         </div>
 
         <?php $form = ActiveForm::begin(['id' => 'login', 'action' => "/site/login",]); ?>
@@ -44,13 +44,17 @@ $this->registerJs($_js, View::POS_END, 'body_close');
             <?= $form->field($model, 'password', ['template' => '{input}{error}'])->passwordInput(['class' => 'form-control input-lg', 'placeholder' => '请输入密码']); ?>
 
             <?php if ($is_flag) { ?>
-                <input name="is_flag" type="hidden" value="<?= $is_flag ?>">
-                <input class="login-info" type="text" id="verifycode" placeholder="请输入验证码" name="LoginForm[verifyCode]" maxlength="6" >
-                <?=
-                $form->field($model, 'verifyCode')->widget(Captcha::className(), [
-                    'template' => '{image}', 'captchaAction' => '/site/captcha'
-                ])
-                ?>
+                <div style="float: left">
+                    <input name="is_flag" type="hidden" value="<?= $is_flag ?>">
+                    <input class="form-control input-lg" style="width: 240px;" type="text" id="verifycode" placeholder="请输入验证码" name="LoginForm[verifyCode]" maxlength="6" >
+                </div>
+                <div style="float: right">
+                    <?=
+                    $form->field($model, 'verifyCode')->widget(Captcha::className(), [
+                        'template' => '{image}', 'captchaAction' => '/site/captcha'
+                    ])
+                    ?>
+               </div>
             <?php } ?>
 
             <input id="login-btn" class="btn btn-primary btn-lg btn-block" name="start" type="submit" value="登录">

@@ -65,24 +65,23 @@ class RechargeController extends BaseController {
 
                 if (null === $resp) {
                     return $this->redirect('/user/recharge/recharge-err');
-                } else {
-                    //录入recharge_record记录
-                    if (!$recharge->save()) {
-                        return $this->redirect('/user/recharge/recharge-err');
-                    }
-
-                    // 设置session。用来验证数据的不可修改
-                    Yii::$app->session->set('cfca_recharge', [
-                        'recharge_sn' => $req->getRechargeSn()
-                    ]);
-
-                    //录入日志信息
-                    $trade_log = new TradeLog($this->user, $req, null);
-                    $trade_log->save();
                 }
 
-                echo $resp;
-                exit;
+                //录入recharge_record记录
+                if (!$recharge->save()) {
+                    return $this->redirect('/user/recharge/recharge-err');
+                }
+
+                // 设置session。用来验证数据的不可修改
+                Yii::$app->session->set('cfca_recharge', [
+                    'recharge_sn' => $req->getRechargeSn()
+                ]);
+
+                //录入日志信息
+                $trade_log = new TradeLog($this->user, $req, null);
+                $trade_log->save();
+
+                exit($resp);
             }
         }
 

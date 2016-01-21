@@ -11,6 +11,7 @@ class AppAsset extends AssetBundle
     //public $baseUrl = '@web';
     public $css = [
         'dist/frontend.css',
+        'dist/frontend_kc.css'
     ];
     public $js = [
         'vendor/jquery/dist/jquery.min.js',

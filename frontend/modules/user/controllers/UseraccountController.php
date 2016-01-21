@@ -28,15 +28,14 @@ class UseraccountController extends BaseController
         $uid = $this->user->id;
         $check_arr = $this->check_helper();
 
-        if ($check_arr[code] == 1) {
-            Yii::$app->response->format = Response::FORMAT_JSON;
-
-            return $check_arr;
+        if ($check_arr['code'] === 1) {
+            $errflag = 1;
+            $errmess = $check_arr[message];
         }
 
         $account = UserAccount::findOne(['type' => UserAccount::TYPE_LEND, 'uid' => $uid]);
 
-        return $this->render('accountcenter', ['model' => $account]);
+        return $this->render('accountcenter', ['model' => $account, 'username' => $this->user->real_name, 'errflag' => $errflag, 'errmess' => $errmess]);
     }
 
     /**
@@ -53,7 +52,7 @@ class UseraccountController extends BaseController
         if ($user_acount->out_sum == 0) {
             $check_arr = $this->check_helper();
             if ($check_arr[code] == 1) {
-                $this->goHome();
+                return $this->goHome();
             }
         }
 
@@ -161,10 +160,13 @@ class UseraccountController extends BaseController
                 $message = '操作成功';
             }
         }
+        
+        if ($bank->hasErrors()) {
+            $message = current($bank->firstErrors);
+        }
 
-        //Yii::$app->response->format = Response::FORMAT_JSON;
-        //return ['res' => $res, 'message' => $message];
-        return $this->render('editbank', ['model' => $bank]);   //测试用
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        return ['res' => $res, 'message' => $message];
     }
 
     /**
@@ -187,5 +189,16 @@ class UseraccountController extends BaseController
         $cond = 0 | BankService::IDCARDRZ_VALIDATE_N | BankService::BINDBANK_VALIDATE_N | BankService::CHARGEPWD_VALIDATE_N;
 
         return BankService::check($this->user->id, $cond);
+    }
+    
+    /**
+     * 查询省份对应的城市
+     */
+    public function actionCity($pid)
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $city = Region::find()->where(['province_id'=>$pid])->select('name')->asArray()->all();
+
+        return ['name' => $city];
     }
 }
