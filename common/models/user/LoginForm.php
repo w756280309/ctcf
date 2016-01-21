@@ -64,7 +64,7 @@ class LoginForm extends Model
         return [
             'phone' => '手机号码',
             'password' => '密码',
-            'verifyCode' => ''
+            'verifyCode' => '',
         ];
     }
 
@@ -111,7 +111,7 @@ class LoginForm extends Model
     public function login()
     {
         $user = $this->getUser();
-        if (Yii::$app->user->login($user, $this->rememberMe ? 3600 * 24 * 30 : 0)) {
+        if (Yii::$app->user->login($user, $this->rememberMe ? 3600 : 0)) {
             $user->scenario = 'login';
             $user->last_login = time();
             return $user->save();

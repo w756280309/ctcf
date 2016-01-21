@@ -1,5 +1,4 @@
 <?php
-
 namespace app\modules\order\controllers;
 
 use Yii;
@@ -19,43 +18,20 @@ class OrderController extends BaseController
      * @param type $sn 标的编号
      * @return page
      */
-    public function actionIndex($sn = null)
+    public function actionIndex($sn)
     {
         $this->layout = 'buy';
-        $buystatus = OnlineProduct::checkOnlinePro($sn); //不等于100时候不能投资
 
-        //判断是否合规
-        if ($buystatus == OnlineProduct::ERROR_SUCCESS) {
-            $uacore = new UserAccountCore();
-            $ua = $uacore->getUserAccount($this->user->id);
-            $deal = OnlineProduct::findOne(['sn' => $sn]);
-            $param['order_balance'] = OnlineOrder::getOrderBalance($deal->id); //计算标的可投余额;
-            $param['my_balance'] = $ua->available_balance; //用户账户余额;
-            return $this->render('index', ['deal' => $deal, 'param' => $param]);
-        } else {
-            $msg = OnlineProduct::getErrorByCode($buystatus);
-            exit($msg);
+        $deal = OnlineProduct::findOne(['sn' => $sn]);
+        if (empty($deal)) {
+            throw new \yii\web\NotFoundHttpException('This production is not existed.');
         }
-    }
+        $uacore = new UserAccountCore();
+        $ua = $uacore->getUserAccount($this->user->id);
+        $param['order_balance'] = OnlineOrder::getOrderBalance($deal->id); //计算标的可投余额;
+        $param['my_balance'] = $ua->available_balance; //用户账户余额;
 
-    /**
-     * ajax 验证标的是否可投.
-     * @param type $sn标的编号
-     * @return type
-     */
-    public function actionCheckorder($sn = null)
-    {
-        Yii::$app->response->format = Response::FORMAT_JSON;
-        $buystatus = OnlineProduct::checkOnlinePro($sn); //不等于100时候不能投资
-
-        //判断是否可投资
-        if ($buystatus != OnlineProduct::ERROR_SUCCESS) {
-            $msg = OnlineProduct::getErrorByCode($buystatus);
-
-            return ['code' => 1, 'message' => $msg];
-        }
-
-        return ['code' => 0, 'message' => '验证通过'];
+        return $this->render('index', ['deal' => $deal, 'param' => $param]);
     }
 
     /**
@@ -85,7 +61,7 @@ class OrderController extends BaseController
         return $this->render('error');
     }
 
-    public function actionAgreement($id = null, $key = 0)
+    public function actionAgreement($id, $key = 0)
     {
         $this->layout = '@app/modules/order/views/layouts/buy';
 
