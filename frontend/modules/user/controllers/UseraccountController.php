@@ -160,7 +160,7 @@ class UseraccountController extends BaseController
                 $message = '操作成功';
             }
         }
-        
+
         if ($bank->hasErrors()) {
             $message = current($bank->firstErrors);
         }
@@ -188,9 +188,9 @@ class UseraccountController extends BaseController
     {
         $cond = 0 | BankService::IDCARDRZ_VALIDATE_N | BankService::BINDBANK_VALIDATE_N | BankService::CHARGEPWD_VALIDATE_N;
 
-        return BankService::check($this->user->id, $cond);
+        return BankService::check($this->user, $cond);
     }
-    
+
     /**
      * 查询省份对应的城市
      */
