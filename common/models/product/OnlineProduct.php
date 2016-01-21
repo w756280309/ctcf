@@ -210,6 +210,8 @@ class OnlineProduct extends \yii\db\ActiveRecord
             [['yield_rate'], 'compare', 'compareValue' => 100, 'operator' => '<='],
             [['yield_rate'], 'compare', 'compareValue' => 0, 'operator' => '>='],
             [['start_money', 'dizeng_money'], 'integer'],
+            [['money'], 'compare', 'compareValue' => 1000000000, 'operator' => '<='],
+            [['money'], 'compare', 'compareValue' => 1, 'operator' => '>='],
 
             ['status', 'checkDealStatus'],
             ['expires', 'checkExpires'],
