@@ -36,10 +36,6 @@ class Cfca
             'signature' => bin2hex($bSign),
         ]);
 
-        if ($message->getTxCode() == "1311") {
-            return $resp;
-        }
-
         return $this->verifyResponse($resp);
     }
 
