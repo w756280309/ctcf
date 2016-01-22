@@ -15,6 +15,7 @@ use common\models\user\UserBank;
 use common\models\user\Batchpay;
 use yii\web\Response;
 use common\utils\TxUtils;
+use common\models\sms\SmsMessage;
 
 class DrawrecordController extends BaseController
 {
@@ -227,10 +228,8 @@ class DrawrecordController extends BaseController
 
     /**
      * 审核界面，弹框.
-     *
-     * @param type $pid
      */
-    public function actionExaminfk($pid = null, $id = null)
+    public function actionExaminfk($pid, $id)
     {
         $this->layout = false;
 
@@ -264,7 +263,7 @@ class DrawrecordController extends BaseController
             $transaction->rollBack();
             return false;
         }
-        if (11 === (int) $type) { //处理如果不通过的情况
+        if (DrawRecord::STATUS_DENY === (int) $type) { //处理如果不通过的情况
             $bc = new BcRound();
             bcscale(14);
             $money_record = new MoneyRecord([
@@ -285,6 +284,23 @@ class DrawrecordController extends BaseController
                 return false;
             }
         }
+        
+        $user = User::findOne($model->uid);
+        $mess = [
+            $user->real_name,
+            date('Y-m-d H:i:s', $model->created_at),
+            $model->money,
+            Yii::$app->params['contact_tel'],
+        ];
+        $sms = new SmsMessage([
+            'uid' => $model->uid,
+            'mobile' => $user->mobile,
+            'message' => json_encode($mess),
+            'level' => SmsMessage::LEVEL_LOW,
+            'template_id' => Yii::$app->params['sms']['tixian_err'],
+        ]);
+        $sms->save();
+        
         $transaction->commit();
         return true;
     }
