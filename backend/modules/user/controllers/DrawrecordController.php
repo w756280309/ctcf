@@ -28,8 +28,12 @@ class DrawrecordController extends BaseController
         $status = Yii::$app->request->get('status');
         $time = Yii::$app->request->get('time');
         $query = DrawRecordTime::find()->where(['uid' => $id]);
-        if ($type == User::USER_TYPE_PERSONAL && !empty($status)) {
-            $query->andWhere(['status' => $status]);
+        if ($type == User::USER_TYPE_PERSONAL) {
+            if ($status === '-1') {
+                $query->andWhere(['status' => 0]);
+            } elseif (!empty($status)) {
+                $query->andWhere(['status' => $status]);
+            }
         }
 
         if (!empty($time)) {

@@ -97,8 +97,8 @@ $status = Yii::$app->request->get('status');
                                 <select name="status" >
                                     <option value=""
                                         >---未选择---</option>
-                                    <option value="0" 
-                                        <?php if($status==='0'){
+                                    <option value="-1" 
+                                        <?php if ($status === '-1') {
                                             echo "selected='selected'";
                                         }?>
                                             >未处理</option>
@@ -159,25 +159,25 @@ $status = Yii::$app->request->get('status');
                         <td><?= number_format($val['money'], 2) ?></td>                        
                         <td><?= Yii::$app->params['bank'][$val['bank_id']]['bankname'] ?></td>                        
                         <td><?= date('Y-m-d H:i:s',$val['created_at'])?></td>
-                        <td><?php 
-                                    if($val['status']==0){
-                             ?>
-                            <a class="btn mini green ajax_op" index="<?= $val['id'] ?>"><i class="icon-edit"></i>审核</a>
-                             <?php
-                                } elseif ($val['status'] == 1) {
-                                     echo "已审核";
-                                 } elseif ($val['status'] == 3) {
-                                     echo "提现不成功";
-                                 } elseif ($val['status'] == 2) {
-                                     echo "提现成功";
-                                 } elseif ($val['status'] == 4) {
-                                     echo "已放款";
-                                 } elseif ($val['status'] == 5) {
-                                     echo "已经处理";
-                                 } else {
-                                     echo "提现驳回";
-                                 }
-                                 ?></td>
+                        <td>
+                            <?php
+                                if ($val['status'] === '0') {
+                                    echo "未处理";
+                                } elseif ($val['status'] === '1') {
+                                    echo "已审核";
+                                } elseif ($val['status'] === '3') {
+                                    echo "提现不成功";
+                                } elseif ($val['status'] === '2') {
+                                    echo "提现成功";
+                                } elseif ($val['status'] === '4') {
+                                    echo "已放款";
+                                } elseif ($val['status'] === '5') {
+                                    echo "已经处理";
+                                } else {
+                                    echo "提现驳回";
+                                }
+                            ?>
+                            </td>
                     </tr>
                     <?php endforeach; ?>   
                 </tbody>
