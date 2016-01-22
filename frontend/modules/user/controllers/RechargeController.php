@@ -88,14 +88,6 @@ class RechargeController extends BaseController
         return $this->render('recharge', ['recharge' => $recharge, 'user_account' => $user_account, 'bank' => $bank]);
     }
 
-//    /**
-//     * 充值页面-中金跳转.
-//     */
-//    public function actionDorecharge()
-//    {
-//        $request = 
-//    }
-
     /**
      * 查询充值状态 1320.
      */
