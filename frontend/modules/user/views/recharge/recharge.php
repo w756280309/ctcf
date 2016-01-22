@@ -27,7 +27,7 @@ $(function() {
         return true;
     });
     $form.on('beforeSubmit', function() {
-        var $modal = $('#bind-card-modal').modal();
+        var $modal = $('#bind-card-modal').modal({backdrop: 'static'});
         $modal.modal('show');
     });
 })
