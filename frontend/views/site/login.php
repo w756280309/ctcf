@@ -29,13 +29,23 @@ $(function() {
 JS;
 $this->registerJs($_js, View::POS_END, 'body_close');
 
+if ('reg' === $flag) {
+    $_regJs = <<<'JS'
+$(function() {
+    $('#login-box .reg').trigger('click');
+});
+JS;
+
+    $this->registerJs($_regJs, View::POS_END, 'reg_js');
+}
+
 ?>
 
 <div class="container">
     <div id="login-box">
         <div class="login-tabs">
-            <a class="login <?= $flag === 'login' ? 'current' : '' ?>" href="#"><b>登录</b></a>
-            <a class="reg <?= $flag === 'reg' ? 'current' : '' ?>" href="#"><b>注册</b></a>
+            <a class="login current" href="#"><b>登录</b></a>
+            <a class="reg" href="#"><b>注册</b></a>
         </div>
 
         <?php $form = ActiveForm::begin(['id' => 'login', 'action' => "/site/login",]); ?>

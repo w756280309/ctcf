@@ -81,6 +81,10 @@ class SiteController extends Controller
             return $this->goHome();
         }
 
+        if ('reg' !== $flag) {
+            $flag = 'login';
+        }
+
         $model = new LoginForm();
 
         $is_flag = Yii::$app->request->post('is_flag');    //是否需要校验图形验证码标志位
