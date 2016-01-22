@@ -5,8 +5,8 @@ namespace common\models\user;
 use Yii;
 use yii\behaviors\TimestampBehavior;
 
-class RechargeRecord extends \yii\db\ActiveRecord {
-
+class RechargeRecord extends \yii\db\ActiveRecord
+{
     public $InstitutionID; //机构号码
     public $OrderNo; //订单号
     public $PaymentNo; //支付流水号
@@ -34,33 +34,37 @@ class RechargeRecord extends \yii\db\ActiveRecord {
     const PAY_TYPE_OFFLINE = 3;//线下充值
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
-
-    public static function tableName() {
+    public static function tableName()
+    {
         return 'recharge_record';
     }
 
-    public static function createSN($pre = '') {
-        $pre_val = "RC";
-        list($usec, $sec) = explode(" ", microtime());
+    public static function createSN($pre = '')
+    {
+        $pre_val = 'RC';
+        list($usec, $sec) = explode(' ', microtime());
         $v = ((float) $usec + (float) $sec);
 
-        list($usec, $sec) = explode(".", $v);
-        $date = date('ymdHisx' . rand(1000, 9999), $usec);
-        return $pre_val . str_replace('x', $sec, $date);
+        list($usec, $sec) = explode('.', $v);
+        $date = date('ymdHisx'.rand(1000, 9999), $usec);
+
+        return $pre_val.str_replace('x', $sec, $date);
     }
 
-    public function behaviors() {
+    public function behaviors()
+    {
         return [
             TimestampBehavior::className(),
         ];
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
-    public function rules() {
+    public function rules()
+    {
         return [
             //[['fund','uid', 'sn','bank_id'], 'required'],
             [['fund', 'uid', 'bank_id', 'pay_type'], 'required'],
@@ -75,9 +79,10 @@ class RechargeRecord extends \yii\db\ActiveRecord {
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
-    public function attributeLabels() {
+    public function attributeLabels()
+    {
         return [
             'id' => 'ID',
             'sn' => '充值流水',
@@ -92,45 +97,51 @@ class RechargeRecord extends \yii\db\ActiveRecord {
         ];
     }
 
-    public static function getBankname($key = null) {
+    public static function getBankname($key = null)
+    {
         $bank_show = Yii::$app->params['bank'];
         foreach ($bank_show as $val) {
             if ($val['number'] == $key) {
                 return $val;
             }
         }
+
         return $bank_show;
     }
 
-    public static function getSettlement($key = null) {
+    public static function getSettlement($key = null)
+    {
         $data = [
-            self::STATUS_NO => "未结算",
-            self::STATUS_YES => "已结算",
-            self::STATUS_FAULT => "结算失败",
+            self::STATUS_NO => '未结算',
+            self::STATUS_YES => '已结算',
+            self::STATUS_FAULT => '结算失败',
         ];
         if (!empty($key)) {
             return $data[$key];
         }
+
         return $data;
     }
 
-    public static function getStatus($key = null) {
+    public static function getStatus($key = null)
+    {
         $data = [
-            self::STATUS_NO => "充值未处理",
-            self::STATUS_YES => "充值成功",
-            self::STATUS_FAULT => "充值失败",
+            self::STATUS_NO => '充值未处理',
+            self::STATUS_YES => '充值成功',
+            self::STATUS_FAULT => '充值失败',
         ];
         if (!empty($key)) {
             return $data[$key];
         }
+
         return $data;
     }
 
     /**
-     * 获取支付人信息
+     * 获取支付人信息.
      */
-    public function getUser(){
+    public function getUser()
+    {
         return $this->hasOne(User::className(), ['id' => 'uid']);
     }
-
 }
