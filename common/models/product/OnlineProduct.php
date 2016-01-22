@@ -299,63 +299,6 @@ class OnlineProduct extends \yii\db\ActiveRecord
     }
 
     /**
-     * 判断当前用户是否可投.
-     *
-     * @param type $sn    标的编号
-     * @param type $uid   用户uid
-     * @param type $money 投资金额
-     *
-     * @return type
-     */
-    public static function checkOnlinePro($sn, $uid = '', $money = '0')
-    {
-        $pro = static::findOne(['sn' => $sn]);
-        $id = $pro->id;
-        $time = time();
-        
-        return self::ERROR_SUCCESS;///////测试之后需要注销掉
-
-        if (empty($pro)) {
-            return self::ERROR_NO_EXIST;
-        } elseif ($pro->status != self::STATUS_NOW && $pro->status != self::STATUS_FOUND) {
-            return self::ERROR_STATUS_DENY;
-        } elseif ($pro->start_date > $time) {
-            return self::ERROR_NO_BEGIN;
-        } elseif ($pro->end_date < $time) {
-            return self::ERROR_OVER;
-        } elseif (!preg_match('/^[0-9]+(\.[0-9]+)?$/', $money)) {
-            return self::ERROR_MONEY_FORMAT;
-        }
-        $balance = OnlineOrder::getOrderBalance($id);//计算商品可投余额;
-
-        if (bcdiv($balance, $pro->start_money) >= 1) {
-            //若可投金额大于起投金额
-            if (bcdiv($money, $pro->start_money) < 1) {
-                return self::ERROR_LESS_START_MONEY;
-            } elseif (bcdiv($balance, $money) < 1) { //可投金额除以投标金额，如果是小于1的数字，代表超额投资
-                return self::ERROR_MONEY_MUCH;
-            } elseif ($pro->dizeng_money / 1) {
-                if (($money % $pro->dizeng_money) &&  bcsub($balance, $money) * 1 != 0) {
-                    return self::ERROR_DIZENG;
-                }
-            }
-        } else {
-            if (bcdiv($balance, $money) != 1) {
-                return self::ERROR_MONEY_BALANCE;
-            }
-        }
-        if ($uid) {
-            $ua = UserAccount::getUserAccount($uid);
-
-            if (bcdiv($ua->available_balance, $money) < 1) {
-                return self::ERROR_MONEY_LESS;
-            }
-        }
-
-        return self::ERROR_SUCCESS;
-    }
-
-    /**
      * 状态检测.
      *
      * @param type $id
