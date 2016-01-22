@@ -2,8 +2,8 @@
     margin-top: 15px;
     margin-bottom: 5px;
     padding: 0 15px;
-    border-top: 1px solid #9fa0a0;
-    border-bottom: 1px solid #9fa0a0;
+    border-top: 1px solid #e4e4e4;
+    border-bottom: 1px solid #e4e4e4;
     background: #fff;
 }
 
@@ -15,7 +15,7 @@
 .new-head {
     margin-left: 5px;
     height: 54px;
-    border-bottom: 1px solid #9fa0a0;
+    border-bottom: 1px solid #e4e4e4;
     background: #fff;
 }
 
@@ -80,7 +80,7 @@ ul.new-bottom li div {
     padding-bottom: 20px;
     font-size: 38px;
     color: #fe9a00;
-    border-right: 1px solid #9fa0a0;
+    border-right: 1px solid #c9caca;
 }
 
 .new-bottom-rg p {
@@ -113,7 +113,7 @@ a.manbiao {
 a.a-progress-bg {
     height: 34px;
     display: block;
-    background: #f44336;
+    background: #fe9a00;
 }
 
 a.a-progress {
@@ -122,7 +122,7 @@ a.a-progress {
     left: 50%;
     margin-left: -16px;
     text-align: center;
-    color: #fff;
+    color: #f54437;
 }
 
 a.huanqing, .liubiao, .huankuan {
@@ -138,8 +138,8 @@ a.weikaibiao {
 .licai-box {
     margin-bottom: 45px;
     padding-bottom: 20px;
-    border-top: 1px solid #9fa0a0;
-    border-bottom: 1px solid #9fa0a0;
+    border-top: 1px solid #e4e4e4;
+    border-bottom: 1px solid #e4e4e4;
     height: auto;
     background: #fff;
 }

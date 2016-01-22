@@ -286,7 +286,6 @@ class DrawrecordController extends BaseController
                 $fee_record->balance = $lenderAccount->available_balance;
                 $fee_record->save(false);
             }
-            $lenderAccount->available_balance = $lenderAccount->available_balance;
             $lenderAccount->drawable_balance = $bc->bcround(bcadd($lenderAccount->drawable_balance, $model->money), 2);
             $lenderAccount->in_sum = $bc->bcround(bcadd($lenderAccount->in_sum, $model->money), 2);
             $lenderAccount->freeze_balance = $bc->bcround(bcsub($lenderAccount->freeze_balance, $model->money), 2);

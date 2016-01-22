@@ -30,10 +30,7 @@ class DrawRecord extends \yii\db\ActiveRecord
     {
         $ubank = $user->bank;
         $account = $user->lendAccount;
-        $money = self::getRealDrawFound($account, $money); //计算用户实际提现金额以及写入扣除手续费记录
-        if (false === $money) {
-            return null;
-        }
+        $money = self::getRealDrawFound($account, $money); //计算用户实际提现金额以及写入扣除手续费记录      
         $draw = new self();
         $draw->sn = self::createSN();        
         $draw->money = $money;
@@ -89,17 +86,29 @@ class DrawRecord extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-//            ['drawpwd', 'trim'],
-            [['money', 'uid'], 'required'], //, 'bank_name', 'bank_account'      'account_id',,'drawpwd'
-//            [['bank_id'], 'required', 'message' => '未选择提现银行卡'],
-//            ['drawpwd', 'validatePassword'], wyf 注释的，因为写录入数据逻辑，该字段以后在考虑
+            [['money', 'uid'], 'required'], 
             [['money'], 'match', 'pattern' => '/^[0-9]+([.]{1}[0-9]{1,2})?$/', 'message' => '提现金额格式错误'],
             [['account_id', 'uid', 'status', 'created_at', 'updated_at'], 'integer'],
             [['money'], 'number', 'min' => 1, 'max' => 10000000],
             [['sn', 'bank_id', 'bank_name', 'bank_account'], 'string', 'max' => 30],
+            ['money','checkMoney'],
         ];
     }
 
+    public function checkMoney($attribute, $params) {
+        if (User::USER_TYPE_PERSONAL === $this->user->type) {
+            if (bccomp($this->user->lendAccount->available_balance, $this->$attribute) < 0) {
+                $this->addError($attribute, "超出可提现金额");
+            }
+            if (bccomp(\Yii::$app->params['drawFee'], 0) > 0) {
+                if (0 === bccomp($this->$attribute, \Yii::$app->params['drawFee']) && 0 === bccomp($this->$attribute, $this->user->lendAccount->available_balance)) {
+                    $this->addError($attribute, "不足提现手续费");
+                }
+            }
+        }
+        return true;
+    }
+    
     /**
      * Validates the password.
      * This method serves as the inline validation for password.
@@ -172,11 +181,6 @@ class DrawRecord extends \yii\db\ActiveRecord
         $bc = new BcRound();
         if (0 > bccomp($ua->available_balance, bcadd($money, \Yii::$app->params['drawFee']))) {
             $money = $bc->bcround(bcsub($money, \Yii::$app->params['drawFee']), 2);
-        }
-        if (bccomp(\Yii::$app->params['drawFee'], 0) > 0) {//如果设置了手续费为大于0的数字写入资金流转
-            if (0 === bccomp($money, \Yii::$app->params['drawFee']) && 0 === bccomp($money, $ua->available_balance)) {//如果提现金额==手续费==账户余额不允许提现
-                return false;
-            }
         }
         return $money;
     }

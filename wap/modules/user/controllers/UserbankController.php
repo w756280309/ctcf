@@ -221,12 +221,6 @@ class UserbankController extends BaseController
         $draw = new DrawRecord();
         $draw->uid = $uid;
         if ($draw->load(Yii::$app->request->post()) && $draw->validate()) {
-            $us = new UserService();
-            $re = $us->checkDraw($uid, $draw->money);
-            if ($re['code']) {
-                return $re;
-            }
-
             return ['tourl' => '/user/userbank/checktradepwd?money='.$draw->money, 'code' => 0, 'message' => ''];
         }
 
@@ -257,20 +251,6 @@ class UserbankController extends BaseController
             }
         }
 
-        $draw = new DrawRecord();
-        $draw->uid = $uid;
-        $draw->money = $money;
-        if ($draw->validate()) {
-            $us = new UserService();
-            $re = $us->checkDraw($uid, $draw->money);
-            if ($re['code']) {
-                $data = ['tourl' => '/user/userbank/tixian', 'code' => $re['code'], 'message' => $re['message']];
-            }
-        } else {
-            $message = $draw->firstErrors;
-            $data = ['tourl' => '/user/userbank/tixian', 'code' => 1, 'message' => current($message)];
-        }
-
         $user_acount = $this->user->lendAccount;
         $model = new EditpassForm();
         $model->scenario = 'checktradepwd';
@@ -285,7 +265,7 @@ class UserbankController extends BaseController
             $mess = [
                 $user->real_name,
                 date('Y-m-d H:i:s', time()),
-                $draw->money,
+                $money,
                 Yii::$app->params['contact_tel']
             ];
             $sms = new SmsMessage([
@@ -296,9 +276,13 @@ class UserbankController extends BaseController
             ]);
 
             $draw = DrawRecord::initForAccount($this->user, $money);//生成draw_record对象
-            if(null === $draw){
+            if (null === $draw) {
                 $transaction->rollBack();
                 return ['code' => 1, 'message' => '提现失败'];
+            }
+            if (!$draw->validate()) {
+                $transaction->rollBack();
+                return ['code' => 1, 'message' => current($draw->getErrors())];
             }
             if (!$draw->save()) {
                 $transaction->rollBack();
@@ -334,7 +318,6 @@ class UserbankController extends BaseController
             //录入user_acount记录
             $user_acount->uid = $user_acount->uid;
             $draw->money = bcadd($draw->money, \Yii::$app->params['drawFee']);
-            $user_acount->available_balance = $user_acount->available_balance;
             $user_acount->freeze_balance = $bc->bcround(bcadd($user_acount->freeze_balance, $draw->money), 2);
             $user_acount->out_sum = $bc->bcround(bcadd($user_acount->out_sum, $draw->money), 2);
             $user_acount->drawable_balance = $bc->bcround(bcsub($user_acount->drawable_balance, $draw->money), 2);
