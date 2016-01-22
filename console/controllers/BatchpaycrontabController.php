@@ -84,7 +84,7 @@ class BatchpaycrontabController extends Controller
                         //成功的
                         $draw_status = DrawRecord::STATUS_SUCCESS;
                         $YuE = $userAccount->account_balance = $bc->bcround(bcsub($userAccount->account_balance, $money), 2);//账户总额减少
-                        $momeyRecord->type = MoneyRecord::TYPE_DRAW;
+                        $momeyRecord->type = MoneyRecord::TYPE_DRAW_SUCCESS;
                         $momeyRecord->balance = $YuE;
                         $momeyRecord->out_money = $money;
                     } else {

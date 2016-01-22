@@ -160,6 +160,7 @@ class DrawrecordController extends BaseController
             $sn = TxUtils::generateSn("MR");
             $moneyInfo->uid = $uid;
             $moneyInfo->sn = $sn;
+            $moneyInfo->osn = $draw->sn;
             $moneyInfo->type = $money_type;
             $moneyInfo->balance = $YuE;
             if($status == DrawRecord::STATUS_SUCCESS){

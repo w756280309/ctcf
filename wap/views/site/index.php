@@ -34,7 +34,7 @@ $this->registerCssFile('/css/index.css', ['depends' => 'yii\web\YiiAsset']);
                 <div><?= $val['qixian'] ?><span class="column-lu">天</span></div> <span>期限</span>
             </li> <li class="col-xs-4 nock1">
             <div class="nock">
-                <canvas data-status="<?= $val['status'] ?>" data-per="<?= (7 === (int) $val['status']) ? 100 : ($val['finish_rate']) ?>"></canvas>
+                <canvas data-status="<?= $val['status'] ?>" data-per="<?= (7 === (int) $val['status']) ? 100 : ($val['finish_rate']) * 100 ?>"></canvas>
                 <?php if ($val['status'] == 1) { ?>
                     <div class="column-clock"><span><?= $val['start_desc'] ?></span><?= $val['start'] ?></div>
                 <?php } else if ($val['status'] == 2) { ?>
