@@ -108,7 +108,6 @@ class DrawRecord extends \yii\db\ActiveRecord
         }
         return true;
     }
-
     /**
      * Validates the password.
      * This method serves as the inline validation for password.
