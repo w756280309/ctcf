@@ -31,8 +31,8 @@ AppAsset::register($this);
 
                 <div class="navbar-text navbar-right">
                     <?php if (Yii::$app->user->isGuest) { ?>
-                        <a class="navbar-link" href="/site/login">登录</a>
-                        <a class="navbar-link" href="/site/login">注册</a>
+                        <a class="navbar-link" href="/site/login?flag=login">登录</a>
+                        <a class="navbar-link" href="/site/login?flag=reg">注册</a>
                     <?php } else { ?>
                         <a class="navbar-link" href="/user/useraccount/accountcenter">我的账户</a>
                         <a class="navbar-link" href="/site/logout">注销</a>

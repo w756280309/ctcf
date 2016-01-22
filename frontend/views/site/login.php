@@ -34,8 +34,8 @@ $this->registerJs($_js, View::POS_END, 'body_close');
 <div class="container">
     <div id="login-box">
         <div class="login-tabs">
-            <a class="login current" href="#"><b>登录</b></a>
-            <a class="reg" href="#"><b>注册</b></a>
+            <a class="login <?= $flag === 'login' ? 'current' : '' ?>" href="#"><b>登录</b></a>
+            <a class="reg <?= $flag === 'reg' ? 'current' : '' ?>" href="#"><b>注册</b></a>
         </div>
 
         <?php $form = ActiveForm::begin(['id' => 'login', 'action' => "/site/login",]); ?>

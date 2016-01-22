@@ -39,12 +39,12 @@ class SiteController extends Controller
                     ],
                 ],
             ],
-//            'verbs' => [
-//                'class' => VerbFilter::className(),
-//                'actions' => [
-//                    'logout' => ['post'],
-//                ],
-//            ],
+            'verbs' => [
+                'class' => VerbFilter::className(),
+                'actions' => [
+                    'logout' => ['post'],
+                ],
+            ],
         ];
     }
 
@@ -59,9 +59,6 @@ class SiteController extends Controller
             ],
             'captcha' => [
                 'class' => 'yii\captcha\CaptchaAction',
-                //'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
-                //'backColor'=>"black",
-                //'foreColor' => ''
                 'minLength' => 6, 'maxLength' => 6,
             ],
         ];
@@ -78,7 +75,7 @@ class SiteController extends Controller
     /**
      * PC端登陆页面.
      */
-    public function actionLogin()
+    public function actionLogin($flag = null)
     {
         if (!\Yii::$app->user->isGuest) {
             return $this->goHome();
@@ -110,11 +107,15 @@ class SiteController extends Controller
         $is_flag = $is_flag ? $is_flag : $login->isCaptchaRequired(Yii::$app->request, $model->phone, 30 * 60, 5);
 
         return $this->render('login', [
-                    'model' => $model,
-                    'is_flag' => $is_flag,
+            'model' => $model,
+            'is_flag' => $is_flag,
+            'flag' => $flag,
         ]);
     }
 
+    /**
+     * 登陆注销
+     */
     public function actionLogout()
     {
         Yii::$app->user->logout();
@@ -122,6 +123,9 @@ class SiteController extends Controller
         return $this->goHome();
     }
 
+    /**
+     * 用户被锁定提示页面
+     */
     public function actionUsererr()
     {
         return $this->render('usererr');
