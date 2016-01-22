@@ -1,13 +1,14 @@
 <?php
 use yii\bootstrap\ActiveForm;
 use yii\captcha\Captcha;
-$this->title="修改登录密码";
-$this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','position' => 1]);
+
+$this->title = '修改登录密码';
+$this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset', 'position' => 1]);
 ?>
 <link rel="stylesheet" href="/css/base.css">
 <link rel="stylesheet" href="/css/setting.css">
 
-<?php $form = ActiveForm::begin(['id'=>'editpassform', 'action' =>"/site/editpass" , 'options' => ['class' => 'cmxform']]); ?>
+<?php $form = ActiveForm::begin(['id' => 'editpassform', 'action' => '/site/editpass', 'options' => ['class' => 'cmxform']]); ?>
     <input name="_csrf" type="hidden" id="_csrf" value="<?= Yii::$app->request->csrfToken ?>">
     <div class="row sm-height border-bottom">
             <div class="col-xs-3 safe-txt text-align-ct">原密码</div>
@@ -30,8 +31,8 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
                 <input type="text" id="sms" placeholder="请输入验证码" name="EditpassForm[verifyCode]" maxlength="6" >
             </div>
             <div class="col-xs-4 yz-code text-align-rg col">
-                <?= $form->field($model, 'verifyCode',['inputOptions' => [ 'style' => 'height: 40px']])->widget(Captcha::className(), [
-                                                    'template' => '{image}','captchaAction'=>'/site/captcha'
+                <?= $form->field($model, 'verifyCode', ['inputOptions' => ['style' => 'height: 40px']])->widget(Captcha::className(), [
+                                                    'template' => '{image}', 'captchaAction' => '/site/captcha',
                                                     ]) ?>
             </div>
         </div>
@@ -77,7 +78,7 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
                toast(this, '原密码必须是6-20个字母与数字');
                return false;
            }
-           if ($('#new_pass').val()==='') {
+           if ($('#new_pass').val() === '') {
                toast(this,'新密码不能为空');
                return false;
            }
@@ -87,25 +88,25 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
                 return false;
            }
            if($('#new_pass').val().length<6 || $('#new_pass').val().length>20){
-               toast(this,'新密码必须是6-20个字母与数字');
+               toast(this, '新密码必须是6-20个字母与数字');
                return false;
            }
-           if($('#sms').val()===''){
-               toast(this,'验证码不能为空');
+           if($('#sms').val() === ''){
+               toast(this, '验证码不能为空');
                return false;
            }
            subForm("#editpassform");
        });
 
     });
-    $(".eye img").on("click",function (){
-        if( $("#new_pass").attr("type") == "password"){
-            $("#new_pass").attr("type","text");
-            $(this).removeAttr("src","/images/eye-close.png");
+    $(".eye img").on("click",function () {
+        if ( $("#new_pass").attr("type") == "password") {
+            $("#new_pass").attr("type", "text");
+            $(this).removeAttr("src", "/images/eye-close.png");
             $(this).attr({ src: "/images/eye-open.png", alt: "eye-open" });
         } else {
-            $("#new_pass").attr("type","password");
-            $(this).removeAttr("src","/images/eye-open.png");
+            $("#new_pass").attr("type", "password");
+            $(this).removeAttr("src", "/images/eye-open.png");
             $(this).attr({ src: "/images/eye-close.png", alt: "eye-close" });
         }
     });
