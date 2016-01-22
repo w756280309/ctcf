@@ -105,7 +105,7 @@ class DrawrecordController extends BaseController
                 $userAccountInfo->out_sum = $bc->bcround(bcadd($userAccountInfo->out_sum, $money), 2);
                 $userAccountInfo->freeze_balance = $bc->bcround(bcadd($userAccountInfo->freeze_balance, $money), 2);
                 $userAccountInfo->drawable_balance = $bc->bcround(bcsub($userAccountInfo->drawable_balance, $money), 2);
-                
+
                 $money_record = new MoneyRecord();
                 $money_record->sn = TxUtils::generateSn("MR");
                 $money_record->type = MoneyRecord::TYPE_DRAW;
@@ -114,7 +114,7 @@ class DrawrecordController extends BaseController
                 $money_record->uid = $id;
                 $money_record->balance = $userAccountInfo->available_balance;
                 $money_record->out_money = $money;
-                
+
                 if ($model->save() && $userAccountInfo->save() && $money_record->save()) {
                     $this->alert(1, '操作成功', "detail?id=$id&type=$type");
                 } else {
@@ -157,7 +157,7 @@ class DrawrecordController extends BaseController
                 $userAccountInfo->drawable_balance = $bc->bcround(bcadd($userAccountInfo->drawable_balance, $money), 2);
                 $money_type = MoneyRecord::TYPE_DRAW_RETURN;
             }
-            
+
             $moneyInfo = new MoneyRecord();
             // 生成一个SN流水号
             $sn = TxUtils::generateSn("MR");
@@ -176,7 +176,7 @@ class DrawrecordController extends BaseController
             $moneyInfo->account_id = $userAccountInfo->id;
 
             //开启事务
-            $transaction = Yii::$app->db->beginTransaction();            
+            $transaction = Yii::$app->db->beginTransaction();
             if (($draw->save()) && ($moneyInfo->save()) && ($userAccountInfo->save())) {
                 $transaction->commit();
                 $msg = '操作成功';
@@ -284,7 +284,7 @@ class DrawrecordController extends BaseController
                 return false;
             }
         }
-        
+
         $user = User::findOne($model->uid);
         $mess = [
             $user->real_name,
@@ -297,10 +297,16 @@ class DrawrecordController extends BaseController
             'mobile' => $user->mobile,
             'message' => json_encode($mess),
             'level' => SmsMessage::LEVEL_LOW,
-            'template_id' => Yii::$app->params['sms']['tixian_err'],
         ]);
-        $sms->save();
-        
+
+        if (DrawRecord::STATUS_DENY === (int) $type) {
+            $sms->template_id = Yii::$app->params['sms']['tixian_err'];
+            $sms->save();
+        } elseif (DrawRecord::STATUS_EXAMINED === (int) $type) {
+            $sms->template_id = Yii::$app->params['sms']['tixian_succ'];
+            $sms->save();
+        }
+
         $transaction->commit();
         return true;
     }
