@@ -81,6 +81,8 @@ class RechargeController extends BaseController
                 $trade_log = new TradeLog($this->user, $req, null);
                 $trade_log->save();
 
+                $this->layout = false;
+
                 return $this->render('dorecharge', ['message' => $message, 'signature' => $signature]);
             }
         }

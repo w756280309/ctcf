@@ -15,16 +15,21 @@ $(function() {
             $('#bankid').val($this.data('bankid'));
         });
     });
-    $('.btn-primary').bind('click',function() {
+
+    var $form = $('#recharge_form');
+    $form.on('beforeValidate', function() {
         var bank_id = $('#bankid').val();
         if (bank_id === '') {
             alert("请选择银行信息");
             return false;
         }
-        $("#recharge_form").submit();
+
+        return true;
+    });
+    $form.on('beforeSubmit', function() {
         var $modal = $('#bind-card-modal').modal();
         $modal.modal('show');
-    })
+    });
 })
 JS;
 
@@ -65,7 +70,7 @@ $this->registerJs($_js, View::POS_END, 'body_close');
                 <li><div class="wdjf-label">账户余额</div> <div class="wdjf-field"><span class="balance"><?= $user_account->available_balance ?></span> 元</div></li>
                 <li><div class="wdjf-label"><span class="fee-info">*</span>充值金额</div> <div class="wdjf-field"><?= $form->field($recharge, 'fund', ['template' => '{input}{error}'])->textInput(); ?></div><span style='margin-left: 5px;'>元</span></li>
                 <li class="wdjf-action">
-                    <input class="btn btn-primary" type="button" value="充值">
+                    <input class="btn btn-primary" type="submit" value="充值">
                     <p class="fee-info">* 充值所需费用由温都垫付</p>
                 </li>
             </ul>
