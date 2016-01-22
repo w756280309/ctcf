@@ -26,11 +26,11 @@ class UseraccountController extends BaseController
     public function actionAccountcenter()
     {
         $uid = $this->user->id;
-        $check_arr = $this->check_helper();
+        $check_arr = BankService::checkKuaijie($this->user);
 
         if ($check_arr['code'] === 1) {
             $errflag = 1;
-            $errmess = $check_arr[message];
+            $errmess = $check_arr['message'];
         }
 
         $account = UserAccount::findOne(['type' => UserAccount::TYPE_LEND, 'uid' => $uid]);
@@ -49,11 +49,9 @@ class UseraccountController extends BaseController
         $user_acount = UserAccount::findOne(['type' => UserAccount::TYPE_LEND, 'uid' => $uid]);
         $province = Region::find()->where(['province_id' => 0])->select('id,name')->asArray()->all();
 
-        if ($user_acount->out_sum == 0) {
-            $check_arr = $this->check_helper();
-            if ($check_arr[code] == 1) {
-                return $this->goHome();
-            }
+        $check_arr = BankService::checkKuaijie($user);
+        if ($check_arr[code] === 1) {
+            return $this->goHome();
         }
 
         $model = new EditpassForm();
@@ -147,12 +145,12 @@ class UseraccountController extends BaseController
     {
         $res = false;
         $message = '操作失败';
-        $check_arr = $this->check_helper();
-        if ($check_arr['code'] == 1) {
+        $check_arr = BankService::checkKuaijie($this->user);
+        if ($check_arr['code'] === 1) {
             $this->goHome();
         }
 
-        $bank = $check_arr['user_bank'];
+        $bank = $this->user->bank;
         $bank->scenario = 'step_second';
         if ($bank->load(Yii::$app->request->post()) && $bank->validate()) {
             $res = $bank->save();
@@ -179,16 +177,6 @@ class UseraccountController extends BaseController
         }
 
         return $this->render('tixianback', ['flag' => $flag]);
-    }
-
-    /**
-     * 检查实名认证过程是否完成.
-     */
-    public function check_helper()
-    {
-        $cond = 0 | BankService::IDCARDRZ_VALIDATE_N | BankService::BINDBANK_VALIDATE_N | BankService::CHARGEPWD_VALIDATE_N;
-
-        return BankService::check($this->user, $cond);
     }
 
     /**
