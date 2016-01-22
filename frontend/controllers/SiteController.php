@@ -11,16 +11,17 @@ use common\service\LoginService;
 use common\models\log\LoginLog;
 
 /**
- * Site controller
+ * Site controller.
  */
-class SiteController extends Controller {
-
+class SiteController extends Controller
+{
     public $layout = 'main';
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
-    public function behaviors() {
+    public function behaviors()
+    {
         return [
             'access' => [
                 'class' => AccessControl::className(),
@@ -48,9 +49,10 @@ class SiteController extends Controller {
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
-    public function actions() {
+    public function actions()
+    {
         return [
             'error' => [
                 'class' => 'yii\web\ErrorAction',
@@ -60,22 +62,24 @@ class SiteController extends Controller {
                 //'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
                 //'backColor'=>"black",
                 //'foreColor' => ''
-                'minLength' => 6, 'maxLength' => 6
+                'minLength' => 6, 'maxLength' => 6,
             ],
         ];
     }
 
     /**
-     * 首页展示
+     * 首页展示.
      */
-    public function actionIndex() {
+    public function actionIndex()
+    {
         return $this->render('index');
     }
 
     /**
-     * PC端登陆页面
+     * PC端登陆页面.
      */
-    public function actionLogin() {
+    public function actionLogin()
+    {
         if (!\Yii::$app->user->isGuest) {
             return $this->goHome();
         }
@@ -107,17 +111,19 @@ class SiteController extends Controller {
 
         return $this->render('login', [
                     'model' => $model,
-                    'is_flag' => $is_flag
+                    'is_flag' => $is_flag,
         ]);
     }
 
-    public function actionLogout() {
+    public function actionLogout()
+    {
         Yii::$app->user->logout();
+
         return $this->goHome();
     }
 
-    public function actionUsererr() {
+    public function actionUsererr()
+    {
         return $this->render('usererr');
     }
-
 }
