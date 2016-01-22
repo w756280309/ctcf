@@ -257,6 +257,7 @@ class DrawrecordController extends BaseController
         if (null === $lenderAccount) {
             return false;
         }
+        $mrfee = MoneyRecord::findOne(['osn' => $model->sn, 'type' => MoneyRecord::TYPE_DRAW_FEE]); //获取提现手续费的记录
         $transaction = Yii::$app->db->beginTransaction();
         $model->status = $type;
         if (!$model->save()) {
@@ -266,16 +267,26 @@ class DrawrecordController extends BaseController
         if (DrawRecord::STATUS_DENY === (int) $type) { //处理如果不通过的情况
             $bc = new BcRound();
             bcscale(14);
+            $lenderAccount->available_balance = $bc->bcround(bcadd($lenderAccount->available_balance, $model->money), 2);
             $money_record = new MoneyRecord([
                 'sn' => MoneyRecord::createSN(),
                 'type' => MoneyRecord::TYPE_DRAW_CANCEL,
                 'osn' => $model->sn,
                 'account_id' => $lenderAccount->id,
                 'uid' => $lenderAccount->uid,
-                'balance' => $bc->bcround(bcadd($lenderAccount->available_balance, $model->money), 2),
+                'balance' => $lenderAccount->available_balance,
                 'in_money' => $model->money,
             ]);
-            $lenderAccount->available_balance = $bc->bcround(bcadd($lenderAccount->available_balance, $model->money), 2);
+            if (null !== $mrfee) { //如果存在提现手续费,将冻结提现手续费的金额解冻
+                $model->money = bcadd($mrfee->out_money, $model->money);//将手续费也加入到解冻金额中
+                $lenderAccount->available_balance = $bc->bcround(bcadd($lenderAccount->available_balance, $mrfee->out_money), 2);
+                $fee_record = clone $money_record;
+                $fee_record->type = MoneyRecord::TYPE_DRAW_FEE_RETURN;
+                $fee_record->in_money = $mrfee->out_money;
+                $fee_record->balance = $lenderAccount->available_balance;
+                $fee_record->save(false);
+            }
+            $lenderAccount->available_balance = $lenderAccount->available_balance;
             $lenderAccount->drawable_balance = $bc->bcround(bcadd($lenderAccount->drawable_balance, $model->money), 2);
             $lenderAccount->in_sum = $bc->bcround(bcadd($lenderAccount->in_sum, $model->money), 2);
             $lenderAccount->freeze_balance = $bc->bcround(bcsub($lenderAccount->freeze_balance, $model->money), 2);

@@ -18,7 +18,7 @@ use Yii;
 use yii\web\Response;
 
 class UserbankController extends BaseController
-{   
+{
     public function init()
     {
         parent::init();
@@ -27,7 +27,7 @@ class UserbankController extends BaseController
             Yii::$app->response->format = Response::FORMAT_JSON;
         }
     }
-    
+
     /**
      * 实名认证表单页.
      */
@@ -207,7 +207,7 @@ class UserbankController extends BaseController
 
         $user_acount = $user->lendAccount;
         $user_bank = $user->bank;
-        
+
         $cond = 0 | BankService::IDCARDRZ_VALIDATE_N | BankService::BINDBANK_VALIDATE_N | BankService::CHARGEPWD_VALIDATE_N | BankService::EDITBANK_VALIDATE;
         $data = BankService::check($user, $cond);
         if ($data[code] == 1) {
@@ -255,8 +255,8 @@ class UserbankController extends BaseController
             } else {
                 return $this->render('checktradepwd', ['status' => 0, 'data' => $data]);
             }
-        }        
-        
+        }
+
         $draw = new DrawRecord();
         $draw->uid = $uid;
         $draw->money = $money;
@@ -271,7 +271,6 @@ class UserbankController extends BaseController
             $data = ['tourl' => '/user/userbank/tixian', 'code' => 1, 'message' => current($message)];
         }
 
-        $user_bank = $this->user->bank;
         $user_acount = $this->user->lendAccount;
         $model = new EditpassForm();
         $model->scenario = 'checktradepwd';
@@ -282,61 +281,70 @@ class UserbankController extends BaseController
             }
 
             $transaction = Yii::$app->db->beginTransaction();
-            
-            //录入draw_record记录
-            $draw = new DrawRecord();
-            $draw->money = $money;
-            $draw->sn = DrawRecord::createSN();
-            $draw->pay_id = 0;
-            $draw->account_id = $user_acount->id;
-            $draw->uid = $uid;
-            $draw->pay_bank_id = '0';
-            $draw->bank_id = $user_bank->bank_id;
-            $draw->bank_name = $user_bank->bank_name;
-            $draw->bank_account = $user_bank->card_number;
-            $draw->identification_type = $user_bank->account_type;
-            $draw->identification_number = $user->idcard;
-            $draw->user_bank_id = $user_bank->id;
-            $draw->sub_bank_name = $user_bank->sub_bank_name;
-            $draw->province = $user_bank->province;
-            $draw->city = $user_bank->city;
-            $draw->mobile = $user->mobile;
-            $draw->status = DrawRecord::STATUS_ZERO;
 
+            $mess = [
+                $user->real_name,
+                date('Y-m-d H:i:s', time()),
+                $draw->money,
+                Yii::$app->params['contact_tel']
+            ];
+            $sms = new SmsMessage([
+                'uid' => $uid,
+                'mobile' => $user->mobile,
+                'message' => json_encode($mess),
+                'level' => SmsMessage::LEVEL_LOW
+            ]);
+
+            $draw = DrawRecord::initForAccount($this->user, $money);//生成draw_record对象
+            if(null === $draw){
+                $transaction->rollBack();
+                return ['code' => 1, 'message' => '提现失败'];
+            }
             if (!$draw->save()) {
                 $transaction->rollBack();
                 return ['code' => 1, 'message' => '提现申请失败'];
             }
-
             //录入money_record记录
             $bc = new BcRound();
             bcscale(14);
+
+            //提现记录
+            $user_acount->available_balance = $bc->bcround(bcsub($user_acount->available_balance, $draw->money), 2);
             $money_record = new MoneyRecord();
             $money_record->sn = MoneyRecord::createSN();
             $money_record->type = MoneyRecord::TYPE_DRAW;
             $money_record->osn = $draw->sn;
             $money_record->account_id = $user_acount->id;
             $money_record->uid = $uid;
-            $money_record->balance = $bc->bcround(bcsub($user_acount->available_balance, $draw->money), 2);
+            $money_record->balance = $user_acount->available_balance;
             $money_record->out_money = $draw->money;
 
-            if (!$money_record->save()) {
+            //手续费记录
+            $user_acount->available_balance = $bc->bcround(bcsub($user_acount->available_balance, \Yii::$app->params['drawFee']), 2);
+            $mrecord = clone $money_record;
+            $mrecord->sn = MoneyRecord::createSN();
+            $mrecord->type = MoneyRecord::TYPE_DRAW_FEE;
+            $mrecord->balance = $user_acount->available_balance;
+            $mrecord->out_money = \Yii::$app->params['drawFee'];
+            if (!$money_record->save() || !$mrecord->save()) {
                 $transaction->rollBack();
                 return ['code' => 1, 'message' => '提现申请失败'];
             }
 
             //录入user_acount记录
             $user_acount->uid = $user_acount->uid;
-            $user_acount->available_balance = $bc->bcround(bcsub($user_acount->available_balance, $draw->money), 2);
+            $draw->money = bcadd($draw->money, \Yii::$app->params['drawFee']);
+            $user_acount->available_balance = $user_acount->available_balance;
             $user_acount->freeze_balance = $bc->bcround(bcadd($user_acount->freeze_balance, $draw->money), 2);
             $user_acount->out_sum = $bc->bcround(bcadd($user_acount->out_sum, $draw->money), 2);
             $user_acount->drawable_balance = $bc->bcround(bcsub($user_acount->drawable_balance, $draw->money), 2);
-
             if (!$user_acount->save()) {
                 $transaction->rollBack();
                 return ['code' => 1, 'message' => '提现申请失败'];
             }
 
+            $sms->template_id = Yii::$app->params['sms']['tixian_succ'];
+            $sms->save();
             $transaction->commit();
 
             return ['tourl' => '/user/user', 'code' => 1, 'message' => '提现申请成功'];
@@ -344,10 +352,8 @@ class UserbankController extends BaseController
 
         if ($model->getErrors()) {
             $message = $model->firstErrors;
-
             return ['code' => 1, 'message' => current($message)];
         }
-
         return $this->render('checktradepwd', ['money' => $money]);
     }
 

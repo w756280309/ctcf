@@ -33,7 +33,9 @@ class MoneyRecord extends \yii\db\ActiveRecord
     const TYPE_DRAW_CANCEL = 100; //提现撤销
     const TYPE_DRAW_SUCCESS = 101; //批量代付成功
     const TYPE_DRAW_RETURN = 102; //批量代付失败退款
-
+    const TYPE_DRAW_FEE = 103; //提现手续费
+    const TYPE_DRAW_FEE_RETURN = 104; //提现退回手续费
+    
     public static function createSN()
     {
         return TxUtils::generateSn('MR');

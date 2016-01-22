@@ -4,6 +4,7 @@ namespace common\models\user;
 
 use common\utils\TxUtils;
 use yii\behaviors\TimestampBehavior;
+use common\lib\bchelp\BcRound;
 
 /**
  * This is the model class for table "draw_record" 提现记录表.
@@ -25,14 +26,17 @@ class DrawRecord extends \yii\db\ActiveRecord
     /**
      * 发起提现，TODO：去掉user和ubank
      */
-    public static function initForAccount($account, $money)
+    public static function initForAccount($user, $money)
     {
-        $user = $account->user;
         $ubank = $user->bank;
-
+        $account = $user->lendAccount;
+        $money = self::getRealDrawFound($account, $money); //计算用户实际提现金额以及写入扣除手续费记录
+        if (false === $money) {
+            return null;
+        }
         $draw = new self();
+        $draw->sn = self::createSN();        
         $draw->money = $money;
-        $draw->sn = self::createSN();
         $draw->pay_id = 0; // 支付公司ID
         $draw->account_id = $account->id;
         $draw->uid = $user->id;
@@ -48,7 +52,6 @@ class DrawRecord extends \yii\db\ActiveRecord
         $draw->city = $ubank->city;
         $draw->mobile = $user->mobile;
         $draw->status = DrawRecord::STATUS_ZERO;
-
         return $draw;
     }
 
@@ -154,5 +157,27 @@ class DrawRecord extends \yii\db\ActiveRecord
         return [
             TimestampBehavior::className(),
         ];
+    }
+
+    /**
+     * 计算用户实际提现金额以及生成冻结手续费记录
+     * @param UserAccount $ua 用户资金对象
+     * @param decimal $money 提现金额
+     * @param varchar $osn 提现编号
+     * 提现金额+手续费>=可用余额 提现金额为实际到账金额
+     * 提现金额+手续费<可用余额 提现金额-手续费为实际到账金额
+     */
+    public static function getRealDrawFound($ua,$money){
+        bcscale(14);
+        $bc = new BcRound();
+        if (0 > bccomp($ua->available_balance, bcadd($money, \Yii::$app->params['drawFee']))) {
+            $money = $bc->bcround(bcsub($money, \Yii::$app->params['drawFee']), 2);
+        }
+        if (bccomp(\Yii::$app->params['drawFee'], 0) > 0) {//如果设置了手续费为大于0的数字写入资金流转
+            if (0 === bccomp($money, \Yii::$app->params['drawFee']) && 0 === bccomp($money, $ua->available_balance)) {//如果提现金额==手续费==账户余额不允许提现
+                return false;
+            }
+        }
+        return $money;
     }
 }
