@@ -84,6 +84,8 @@ class RechargeController extends BaseController
                 $this->layout = false;
 
                 return $this->render('dorecharge', ['message' => $message, 'signature' => $signature]);
+            } else {
+                return $this->redirect('/user/recharge/recharge-err');
             }
         }
 
