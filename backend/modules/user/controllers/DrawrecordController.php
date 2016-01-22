@@ -18,10 +18,12 @@ use common\utils\TxUtils;
 
 class DrawrecordController extends BaseController
 {
+    /**
+     * 提现流水明细
+     */
     public function actionDetail($id = null, $type = null)
     {
         //提现明细页面的搜索功能
-        //$query = "uid=$id";
         $status = Yii::$app->request->get('status');
         $time = Yii::$app->request->get('time');
         $query = DrawRecordTime::find()->where(['uid' => $id]);
@@ -47,8 +49,8 @@ class DrawrecordController extends BaseController
         $bc = new BcRound();
         bcscale(14);
         foreach ($numdata as $data) {
-            $moneyTotal = bcadd($moneyTotal, $data['money']);
             if ($data['status'] == DrawRecordTime::STATUS_SUCCESS) {
+                $moneyTotal = bcadd($moneyTotal, $data['money']);
                 ++$successNum;
             } elseif ($data['status'] == DrawRecordTime::STATUS_FAIL) {
                 ++$failureNum;

@@ -58,7 +58,7 @@ $status = Yii::$app->request->get('status');
                             <span class="title">用户名：<?=$user['username']?></span>
                         </td>
                         <td>
-                            <span class="title">提现金额总计（元）：<?= number_format($moneyTotal,2) ?></span>
+                            <span class="title">成功提现金额总计（元）：<?= number_format($moneyTotal, 2) ?></span>
                         </td>
                         <td>
                             <span class="title">成功（次）：<?=$successNum?></span></td>
@@ -70,7 +70,7 @@ $status = Yii::$app->request->get('status');
                             <span class="title">企业名：<?= $user['org_name'] ?></span>
                         </td>
                         <td>
-                            <span class="title">提现金额总计（元）：<?= number_format($moneyTotal,2) ?></span>
+                            <span class="title">成功提现金额总计（元）：<?= number_format($moneyTotal, 2) ?></span>
                         </td>
 		<?php }?>
                     </tr>
@@ -156,8 +156,8 @@ $status = Yii::$app->request->get('status');
                 <?php foreach ($model as $key => $val) : ?>
                     <tr>
                         <td><?= $val['sn'] ?></td>
-                        <td><?= number_format($val['money'],2) ?></td>                        
-                        <td><?= $banks[$val['bank_id']]['bankname'] ?></td>                        
+                        <td><?= number_format($val['money'], 2) ?></td>                        
+                        <td><?= Yii::$app->params['bank'][$val['bank_id']]['bankname'] ?></td>                        
                         <td><?= date('Y-m-d H:i:s',$val['created_at'])?></td>
                         <td><?php 
                                     if($val['status']==0){
@@ -175,7 +175,7 @@ $status = Yii::$app->request->get('status');
                                  } elseif ($val['status'] == 5) {
                                      echo "已经处理";
                                  } else {
-                                     echo "提现驳回'";
+                                     echo "提现驳回";
                                  }
                                  ?></td>
                     </tr>
