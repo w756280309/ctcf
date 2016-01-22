@@ -30,9 +30,9 @@ class DrawRecord extends \yii\db\ActiveRecord
     {
         $ubank = $user->bank;
         $account = $user->lendAccount;
-        $money = self::getRealDrawFound($account, $money); //计算用户实际提现金额以及写入扣除手续费记录      
+        $money = self::getRealDrawFound($account, $money); //计算用户实际提现金额以及写入扣除手续费记录
         $draw = new self();
-        $draw->sn = self::createSN();        
+        $draw->sn = self::createSN();
         $draw->money = $money;
         $draw->pay_id = 0; // 支付公司ID
         $draw->account_id = $account->id;
@@ -86,7 +86,7 @@ class DrawRecord extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['money', 'uid'], 'required'], 
+            [['money', 'uid'], 'required'],
             [['money'], 'match', 'pattern' => '/^[0-9]+([.]{1}[0-9]{1,2})?$/', 'message' => '提现金额格式错误'],
             [['account_id', 'uid', 'status', 'created_at', 'updated_at'], 'integer'],
             [['money'], 'number', 'min' => 1, 'max' => 10000000],
@@ -108,7 +108,7 @@ class DrawRecord extends \yii\db\ActiveRecord
         }
         return true;
     }
-    
+
     /**
      * Validates the password.
      * This method serves as the inline validation for password.
