@@ -14,9 +14,9 @@ class AppAsset extends AssetBundle
         'dist/frontend_kc.css'
     ];
     public $js = [
-        'vendor/jquery/dist/jquery.min.js',
         'vendor/bootstrap/dist/js/bootstrap.min.js',
     ];
     public $depends = [
+        'yii\web\JqueryAsset',
     ];
 }
