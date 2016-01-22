@@ -66,9 +66,6 @@ class SiteController extends Controller
             ],
             'captcha' => [
                 'class' => 'yii\captcha\CaptchaAction',
-                //'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
-                //'backColor'=>"black",
-                //'foreColor' => ''
                 'minLength' => 6, 'maxLength' => 6,
             ],
         ];
@@ -93,6 +90,9 @@ class SiteController extends Controller
         return $this->render('usererror');
     }
 
+    /**
+     * WAP端首页展示
+     */
     public function actionIndex()
     {
         $this->layout = 'main';
@@ -112,6 +112,9 @@ class SiteController extends Controller
         return $this->render('index', ['adv' => $adv, 'deals' => $deals]);
     }
 
+    /**
+     * 用户登陆表单页
+     */
     public function actionLogin()
     {
         $this->layout = false;
@@ -175,6 +178,9 @@ class SiteController extends Controller
         ]);
     }
 
+    /**
+     * 注销登陆状态
+     */
     public function actionLogout()
     {
         \Yii::$app->user->logout();
@@ -182,6 +188,9 @@ class SiteController extends Controller
         return $this->goHome();
     }
 
+    /**
+     * 修改登陆密码表单页
+     */
     public function actionEditpass()
     {
         $this->layout = '@app/modules/order/views/layouts/buy';
@@ -211,6 +220,9 @@ class SiteController extends Controller
         return $this->render('editpass', ['model' => $model]);
     }
 
+    /**
+     * 找回密码表单页
+     */
     public function actionResetpass()
     {
         $this->layout = false;
@@ -263,6 +275,9 @@ class SiteController extends Controller
         return $this->render('about');
     }
 
+    /**
+     * 注册表单页
+     */
     public function actionSignup()
     {
         $this->layout = false;
@@ -291,6 +306,9 @@ class SiteController extends Controller
         return $this->render('signup');
     }
 
+    /**
+     * 用户协议展示
+     */
     public function actionXieyi()
     {
         $this->layout = '@app/modules/order/views/layouts/buy';
