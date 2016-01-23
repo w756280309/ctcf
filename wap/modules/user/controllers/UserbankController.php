@@ -5,7 +5,6 @@ namespace app\modules\user\controllers;
 use app\controllers\BaseController;
 use common\lib\bchelp\BcRound;
 use common\models\city\Region;
-use common\models\sms\SmsMessage;
 use common\models\user\DrawRecord;
 use common\models\user\EditpassForm;
 use common\models\user\MoneyRecord;
@@ -262,19 +261,6 @@ class UserbankController extends BaseController
             }
 
             $transaction = Yii::$app->db->beginTransaction();
-
-            $mess = [
-                $user->real_name,
-                date('Y-m-d H:i:s', time()),
-                $money,
-                Yii::$app->params['contact_tel']
-            ];
-            $sms = new SmsMessage([
-                'uid' => $uid,
-                'mobile' => $user->mobile,
-                'message' => json_encode($mess),
-                'level' => SmsMessage::LEVEL_LOW
-            ]);
 
             $draw = DrawRecord::initForAccount($this->user, $money);//生成draw_record对象
             if (null === $draw) {
