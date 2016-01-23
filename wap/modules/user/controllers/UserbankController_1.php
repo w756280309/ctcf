@@ -255,9 +255,9 @@ class UserbankController extends BaseController
         $model = new EditpassForm();
         $model->scenario = 'checktradepwd';
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            $money_r = Yii::$app->request->post('money');
+            $money = Yii::$app->request->post('money');
             $draw = new Draw();
-            $draw->money = $money;            
+            $draw->money = $money;
             if (!$draw->validate()) {
                 return ['code' => 1, 'message' => '提现申请失败'];
             } else {
@@ -277,10 +277,10 @@ class UserbankController extends BaseController
                     ]);
                     $sms->template_id = Yii::$app->params['sms']['tixian_succ'];
                     $sms->save();
-                    return ['tourl' => '/user/user', 'code' => 1, 'message' => '提现申请成功'];
+                    return ['tourl' => '/user/user', 'code' => 1, 'message' => '提现申请成功'];    
                 } catch (DrawException $ex) {
                     return ['code' => 1, 'message' => $ex->getMessage()];
-                }
+                }                
             }
         }
 
