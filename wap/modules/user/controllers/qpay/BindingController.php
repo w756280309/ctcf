@@ -139,7 +139,6 @@ class BindingController extends BaseController
                 return $this->createErrorResponse($resp->getMessage());
             }
 
-            $acct_model->status = QpayAcct::STATUS_YES;
             if ($acct_model->save()) {
                 \Yii::$app->session->remove('cfca_qpay_binding');//增加销毁
                 return [

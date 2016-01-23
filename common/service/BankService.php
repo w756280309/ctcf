@@ -50,7 +50,7 @@ class BankService
             return ['tourl' => '/user/userbank/kuaijie', 'code' => 1, 'message' => '您未进行实名认证'];
         }
 
-        $user_bank = $user->bank;
+        $user_bank = $user->qpay;
         if (($cond & self::BINDBANK_VALIDATE_Y) && !empty($user_bank)) {
             return ['tourl' => '/user/user', 'code' => 1, 'message' => '您已经成功绑定过银行卡'];
         }

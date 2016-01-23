@@ -16,6 +16,9 @@ use common\models\user\Batchpay;
 use yii\web\Response;
 use common\utils\TxUtils;
 use common\models\sms\SmsMessage;
+use common\models\draw\Draw;
+use common\models\draw\DrawManager;
+use common\models\draw\DrawException;
 
 class DrawrecordController extends BaseController
 {
@@ -254,75 +257,34 @@ class DrawrecordController extends BaseController
             return false;
         }
         $model = DrawRecord::findOne($id);
-        if ($model->status != DrawRecord::STATUS_ZERO) {
-            return false;
-        }
-        $lenderAccount = UserAccount::findOne(['uid' => $model->uid, 'type' => UserAccount::TYPE_LEND]);
-        if (null === $lenderAccount) {
-            return false;
-        }
-        $mrfee = MoneyRecord::findOne(['osn' => $model->sn, 'type' => MoneyRecord::TYPE_DRAW_FEE]); //获取提现手续费的记录
-        $transaction = Yii::$app->db->beginTransaction();
-        $model->status = $type;
-        if (!$model->save()) {
-            $transaction->rollBack();
-            return false;
-        }
-        if (DrawRecord::STATUS_DENY === (int) $type) { //处理如果不通过的情况
-            $bc = new BcRound();
-            bcscale(14);
-            $lenderAccount->available_balance = $bc->bcround(bcadd($lenderAccount->available_balance, $model->money), 2);
-            $money_record = new MoneyRecord([
-                'sn' => MoneyRecord::createSN(),
-                'type' => MoneyRecord::TYPE_DRAW_CANCEL,
-                'osn' => $model->sn,
-                'account_id' => $lenderAccount->id,
-                'uid' => $lenderAccount->uid,
-                'balance' => $lenderAccount->available_balance,
-                'in_money' => $model->money,
+        try {
+            $draw = DrawManager::audit($model, $type);
+            $user = $draw->user;
+            $mess = [
+                $user->real_name,
+                date('Y-m-d H:i:s', $model->created_at),
+                $model->money,
+                Yii::$app->params['contact_tel'],
+            ];
+            $sms = new SmsMessage([
+                'uid' => $model->uid,
+                'mobile' => $user->mobile,
+                'message' => json_encode($mess),
+                'level' => SmsMessage::LEVEL_LOW,
             ]);
-            if (null !== $mrfee) { //如果存在提现手续费,将冻结提现手续费的金额解冻
-                $model->money = bcadd($mrfee->out_money, $model->money);//将手续费也加入到解冻金额中
-                $lenderAccount->available_balance = $bc->bcround(bcadd($lenderAccount->available_balance, $mrfee->out_money), 2);
-                $fee_record = clone $money_record;
-                $fee_record->type = MoneyRecord::TYPE_DRAW_FEE_RETURN;
-                $fee_record->in_money = $mrfee->out_money;
-                $fee_record->balance = $lenderAccount->available_balance;
-                $fee_record->save(false);
+
+            if (DrawRecord::STATUS_DENY === (int) $type) {
+                $sms->template_id = Yii::$app->params['sms']['tixian_err'];
+                $sms->save();
+            } elseif (DrawRecord::STATUS_EXAMINED === (int) $type) {
+                $sms->template_id = Yii::$app->params['sms']['tixian_succ'];
+                $sms->save();
             }
-            $lenderAccount->drawable_balance = $bc->bcround(bcadd($lenderAccount->drawable_balance, $model->money), 2);
-            $lenderAccount->in_sum = $bc->bcround(bcadd($lenderAccount->in_sum, $model->money), 2);
-            $lenderAccount->freeze_balance = $bc->bcround(bcsub($lenderAccount->freeze_balance, $model->money), 2);
-            if (!$money_record->save() || !$lenderAccount->save()) {
-                $transaction->rollBack();
-                return false;
-            }
+            return true;
+        } catch (DrawException $ex) {
+            return false;
         }
 
-        $user = User::findOne($model->uid);
-        $mess = [
-            $user->real_name,
-            date('Y-m-d H:i:s', $model->created_at),
-            $model->money,
-            Yii::$app->params['contact_tel'],
-        ];
-        $sms = new SmsMessage([
-            'uid' => $model->uid,
-            'mobile' => $user->mobile,
-            'message' => json_encode($mess),
-            'level' => SmsMessage::LEVEL_LOW,
-        ]);
-
-        if (DrawRecord::STATUS_DENY === (int) $type) {
-            $sms->template_id = Yii::$app->params['sms']['tixian_err'];
-            $sms->save();
-        } elseif (DrawRecord::STATUS_EXAMINED === (int) $type) {
-            $sms->template_id = Yii::$app->params['sms']['tixian_succ'];
-            $sms->save();
-        }
-
-        $transaction->commit();
-        return true;
     }
 
     /**

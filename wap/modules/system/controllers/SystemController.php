@@ -24,8 +24,8 @@ class SystemController extends BaseController {
         $this->layout = "@app/modules/order/views/layouts/buy";
         $uid = $this->user->id;
 
-        $user = User::find()->where(['id' => $uid, 'type' => User::USER_TYPE_PERSONAL, 'status' => User::STATUS_ACTIVE, 'idcard_status' => User::IDCARD_STATUS_PASS])->select('idcard')->one();
-        $user_bank = UserBanks::find()->where(['uid' => $uid, 'status' => UserBanks::STATUS_YES])->select('bank_name,card_number')->one();
+        $user = User::find()->where(['id' => $uid, 'type' => User::USER_TYPE_PERSONAL, 'idcard_status' => User::IDCARD_STATUS_PASS])->select('idcard')->one();
+        $user_bank = UserBanks::find()->where(['uid' => $uid])->select('bank_name,card_number')->one();
 
         return $this->render('safecenter', ['user' => $user, 'user_bank' => $user_bank]);
     }

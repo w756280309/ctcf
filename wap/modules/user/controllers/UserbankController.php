@@ -3,19 +3,20 @@
 namespace app\modules\user\controllers;
 
 use app\controllers\BaseController;
-use common\lib\bchelp\BcRound;
 use common\models\city\Region;
 use common\models\user\DrawRecord;
 use common\models\user\EditpassForm;
-use common\models\user\MoneyRecord;
 use common\models\user\User;
 use common\models\user\UserAccount;
 use common\models\user\UserBanks;
 use common\service\BankService;
 use common\service\SmsService;
-use common\service\UserService;
 use Yii;
 use yii\web\Response;
+use common\models\draw\Draw;
+use common\models\draw\DrawManager;
+use common\models\draw\DrawException;
+use common\models\sms\SmsMessage;
 
 class UserbankController extends BaseController
 {
@@ -185,7 +186,7 @@ class UserbankController extends BaseController
         \Yii::$app->session->remove('cfca_qpay_recharge');
         $user = $this->user;
         $uid = $user->id;
-        $user_bank = UserBanks::find()->where(['uid' => $uid])->select('id,binding_sn,bank_id,bank_name,card_number,status')->one();
+        $user_bank = UserBanks::find()->where(['uid' => $uid])->select('id,binding_sn,bank_id,bank_name,card_number')->one();
         $user_acount = UserAccount::find()->where(['type' => UserAccount::TYPE_LEND, 'uid' => $uid])->select('id,uid,in_sum,available_balance')->one();
 
         //检查用户是否完成快捷支付
@@ -206,7 +207,7 @@ class UserbankController extends BaseController
         $uid = $user->id;
 
         $user_acount = $user->lendAccount;
-        $user_bank = $user->bank;
+        $user_bank = $user->qpay;
 
         $cond = 0 | BankService::IDCARDRZ_VALIDATE_N | BankService::BINDBANK_VALIDATE_N | BankService::CHARGEPWD_VALIDATE_N | BankService::EDITBANK_VALIDATE;
         $data = BankService::check($user, $cond);
@@ -251,7 +252,6 @@ class UserbankController extends BaseController
             }
         }
 
-        $user_acount = $this->user->lendAccount;
         $model = new EditpassForm();
         $model->scenario = 'checktradepwd';
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
@@ -268,56 +268,29 @@ class UserbankController extends BaseController
                 return ['code' => 1, 'message' => '提现失败'];
             }
             if (!$draw->validate()) {
-                $transaction->rollBack();
-                return ['code' => 1, 'message' => current($draw->getErrors())];
-            }
-            if (!$draw->save()) {
-                $transaction->rollBack();
                 return ['code' => 1, 'message' => '提现申请失败'];
+            } else {
+                try {
+                    DrawManager::init($user, $draw->money, \Yii::$app->params['drawFee']);
+                    $mess = [
+                        $user->real_name,
+                        date('Y-m-d H:i:s', time()),
+                        $money,
+                        Yii::$app->params['contact_tel']
+                    ];
+                    $sms = new SmsMessage([
+                        'uid' => $uid,
+                        'mobile' => $user->mobile,
+                        'message' => json_encode($mess),
+                        'level' => SmsMessage::LEVEL_LOW
+                    ]);
+                    $sms->template_id = Yii::$app->params['sms']['tixian_succ'];
+                    $sms->save();
+                    return ['tourl' => '/user/user', 'code' => 1, 'message' => '提现申请成功'];
+                } catch (DrawException $ex) {
+                    return ['code' => 1, 'message' => $ex->getMessage()];
+                }
             }
-            //录入money_record记录
-            $bc = new BcRound();
-            bcscale(14);
-
-            //提现记录
-            $user_acount->available_balance = $bc->bcround(bcsub($user_acount->available_balance, $draw->money), 2);
-            $money_record = new MoneyRecord();
-            $money_record->sn = MoneyRecord::createSN();
-            $money_record->type = MoneyRecord::TYPE_DRAW;
-            $money_record->osn = $draw->sn;
-            $money_record->account_id = $user_acount->id;
-            $money_record->uid = $uid;
-            $money_record->balance = $user_acount->available_balance;
-            $money_record->out_money = $draw->money;
-
-            //手续费记录
-            $user_acount->available_balance = $bc->bcround(bcsub($user_acount->available_balance, \Yii::$app->params['drawFee']), 2);
-            $mrecord = clone $money_record;
-            $mrecord->sn = MoneyRecord::createSN();
-            $mrecord->type = MoneyRecord::TYPE_DRAW_FEE;
-            $mrecord->balance = $user_acount->available_balance;
-            $mrecord->out_money = \Yii::$app->params['drawFee'];
-            if (!$money_record->save() || !$mrecord->save()) {
-                $transaction->rollBack();
-                return ['code' => 1, 'message' => '提现申请失败'];
-            }
-
-            //录入user_acount记录
-            $user_acount->uid = $user_acount->uid;
-            $draw->money = bcadd($draw->money, \Yii::$app->params['drawFee']);
-            $user_acount->freeze_balance = $bc->bcround(bcadd($user_acount->freeze_balance, $draw->money), 2);
-            $user_acount->out_sum = $bc->bcround(bcadd($user_acount->out_sum, $draw->money), 2);
-            $user_acount->drawable_balance = $bc->bcround(bcsub($user_acount->drawable_balance, $draw->money), 2);
-            if (!$user_acount->save()) {
-                $transaction->rollBack();
-                return ['code' => 1, 'message' => '提现申请失败'];
-            }
-
-            $sms->template_id = Yii::$app->params['sms']['tixian_succ'];
-            $sms->save();
-            $transaction->commit();
-
-            return ['tourl' => '/user/user', 'code' => 1, 'message' => '提现申请成功'];
         }
 
         if ($model->getErrors()) {
@@ -334,7 +307,7 @@ class UserbankController extends BaseController
     {
         $cond = 0 | BankService::IDCARDRZ_VALIDATE_N | BankService::BINDBANK_VALIDATE_N;
         $data = BankService::check($this->user, $cond);
-        $model = $this->user->bank;
+        $model = $this->user->qpay;
         if ($data['code'] == 1) {
             if (Yii::$app->request->isAjax) {
                 return $data;

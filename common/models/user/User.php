@@ -671,9 +671,51 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
      *
      * @return UserBanks
      */
-    public function getBank()
+    public function getQpay()
     {
-        return $this->hasOne(UserBanks::className(), ['uid' => 'id'])
-            ->where(['status' => UserBanks::STATUS_YES]);
+        return $this->hasOne(UserBanks::className(), ['uid' => 'id']);
     }
+
+    /**
+     * 获取是否是实名认证
+     */
+    public function ensureIdVerified() {
+        return (self::IDCARD_STATUS_PASS === $this->idcard_status) ? true : false;
+    }
+
+    /**
+     * 获取是否设置交易密码
+     */
+    public function ensureTxPassSet() {
+        return ('' === $this->trade_pwd) ? false : true;
+    }
+
+    /**
+     * 获取是否设置快捷卡
+     */
+    public function ensureQpayEnabled() {
+        return (null === $this->qpay) ? false : true;
+    }
+
+    /**
+     * 获取银行卡分支行信息
+     */
+    public function ensureQpayInfoEnabled() {
+        if(null === $this->qpay){
+            return false;
+        }
+        if(empty($this->qpay->sub_bank_name) || empty($this->qpay->province) || empty($this->qpay->city)){
+            return false;
+        }
+        return true;
+    }
+    
+    /**
+     * 返回总的
+     * @return boolean
+     */
+    public function ensure() {
+        return ($this->ensureIdVerified() && $this->ensureQpayEnabled() && $this->ensureTxPassSet()) ? true : false;
+    }
+
 }

@@ -22,7 +22,7 @@ class QrechargeController extends BaseController
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
         $cpuser = $this->user;
-        $ubank = $cpuser->bank;
+        $ubank = $cpuser->qpay;
         if (empty($ubank)) {
             return $this->createErrorResponse('请先绑卡');
         }
@@ -83,7 +83,7 @@ class QrechargeController extends BaseController
     public function actionVerify()
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
-        $ubank = $this->user->bank;
+        $ubank = $this->user->qpay;
         if (empty($ubank)) {
             return $this->createErrorResponse('请先绑卡');
         }

@@ -15,7 +15,6 @@ class UserController extends BaseController
     public function actionIndex()
     {
         $user = $this->user;
-
         $this->layout = 'account';
         $uacore = new UserAccountCore();
         $ua = $this->user->lendAccount;

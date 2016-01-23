@@ -28,7 +28,7 @@ class DrawRecord extends \yii\db\ActiveRecord
      */
     public static function initForAccount($user, $money)
     {
-        $ubank = $user->bank;
+        $ubank = $user->qpay;
         $account = $user->lendAccount;
         $money = self::getRealDrawFound($account, $money); //计算用户实际提现金额以及写入扣除手续费记录
         $draw = new self();
