@@ -255,7 +255,7 @@ class UserbankController extends BaseController
         $model = new EditpassForm();
         $model->scenario = 'checktradepwd';
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            $money_r = Yii::$app->request->post('money');
+            $money = Yii::$app->request->post('money');
             $draw = new Draw();
             $draw->money = $money;            
             if (!$draw->validate()) {
