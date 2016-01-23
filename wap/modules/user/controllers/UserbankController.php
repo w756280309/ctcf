@@ -5,6 +5,7 @@ namespace app\modules\user\controllers;
 use app\controllers\BaseController;
 use common\lib\bchelp\BcRound;
 use common\models\city\Region;
+use common\models\sms\SmsMessage;
 use common\models\user\DrawRecord;
 use common\models\user\EditpassForm;
 use common\models\user\MoneyRecord;
