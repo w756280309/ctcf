@@ -4,8 +4,6 @@ namespace common\models\product;
 
 use Yii;
 use yii\behaviors\TimestampBehavior;
-use common\models\user\UserAccount;
-use common\models\order\OnlineOrder;
 
 /**
  * This is the model class for table "online_product".

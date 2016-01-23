@@ -9,10 +9,13 @@ use common\models\user\User;
 use common\models\user\UserBanks;
 use common\models\city\Region;
 
-class SystemController extends BaseController {
-   //系统设置页面
-    public function actionSetting() {
-        $this->layout = "@app/modules/order/views/layouts/buy";
+class SystemController extends BaseController
+{
+    public $layout = '@app/modules/order/views/layouts/buy';
+    
+    //系统设置页面
+    public function actionSetting()
+    {
         $uid = $this->user->id;
 
         $user = User::find()->where(['id' => $uid, 'type' => User::USER_TYPE_PERSONAL, 'status' => User::STATUS_ACTIVE])->select('usercode,mobile')->one();
@@ -20,11 +23,11 @@ class SystemController extends BaseController {
         return $this->render('setting', ['model' => $user]);
     }
 
-    public function actionSafecenter() {
-        $this->layout = "@app/modules/order/views/layouts/buy";
+    public function actionSafecenter()
+    {
         $uid = $this->user->id;
 
-        $user = User::find()->where(['id' => $uid, 'type' => User::USER_TYPE_PERSONAL, 'idcard_status' => User::IDCARD_STATUS_PASS])->select('idcard')->one();
+        $user = User::find()->where(['id' => $uid, 'type' => User::USER_TYPE_PERSONAL, 'status' => User::STATUS_ACTIVE, 'idcard_status' => User::IDCARD_STATUS_PASS])->select('idcard')->one();
         $user_bank = UserBanks::find()->where(['uid' => $uid])->select('bank_name,card_number')->one();
 
         return $this->render('safecenter', ['user' => $user, 'user_bank' => $user_bank]);
@@ -32,26 +35,23 @@ class SystemController extends BaseController {
 
     public function actionHelp()
     {
-        $this->layout = "@app/modules/order/views/layouts/buy";
         return $this->render('help');
     }
 
     public function actionProblem()
     {
-        $this->layout = "@app/modules/order/views/layouts/buy";
         return $this->render('problem');
     }
 
     public function actionAbout()
     {
-        $this->layout = "@app/modules/order/views/layouts/buy";
         return $this->render('about');
     }
 
-    public function actionCity($pid=null)
+    public function actionCity($pid = null)
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
-        $city = Region::find()->where(['province_id'=>$pid])->select('name')->asArray()->all();
+        $city = Region::find()->where(['province_id' => $pid])->select('name')->asArray()->all();
 
         return ['code' => 0, 'city' => $city, 'message' => '成功'];
     }

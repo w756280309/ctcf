@@ -13,6 +13,7 @@ use common\models\order\OnlineRepaymentPlan;
 use common\models\order\OnlineOrder;
 use common\models\user\UserAccount;
 use common\lib\bchelp\BcRound;
+use common\models\booking\BookingLog;
 
 /**
  * Description of OnlineProduct.
@@ -453,5 +454,28 @@ class ProductonlineController extends BaseController
         }
 
         return ['res' => $res, 'msg' => '', 'data' => ''];
+    }
+
+    /**
+     * 股权投资列表页
+     */
+    public function actionBookinglist()
+    {
+        $name = Yii::$app->request->get('name');
+        $data = BookingLog::find();
+
+        if (!empty($name)) {
+            $data->andFilterWhere(['like', 'name', $name]);
+        }
+        //$data->orderBy('id desc');
+        
+        $pages = new Pagination(['totalCount' => $data->count(), 'pageSize' => '20']);
+        $model = $data->offset($pages->offset)->limit($pages->limit)->all();
+
+        return $this->render('bookinglist', [
+            'model' => $model,
+            'pages' => $pages,
+            'name' => $name,
+        ]);
     }
 }

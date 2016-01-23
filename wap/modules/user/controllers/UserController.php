@@ -12,6 +12,9 @@ use common\service\BankService;
 
 class UserController extends BaseController
 {
+    /**
+     * 账户中心页
+     */
     public function actionIndex()
     {
         $user = $this->user;
