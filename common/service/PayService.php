@@ -118,10 +118,7 @@ class PayService
         if ($user->status == 0) {
             return ['code' => self::ERROR_ID_SET,  'message' => '账户已被冻结', 'tourl' => '/site/usererror'];
         }
-        $user_bank = UserBanks::find()->where(['uid' => $user->id])->one();
-        if (!$user_bank || $user_bank->status == UserBanks::STATUS_NO) {
-            return ['code' => self::ERROR_BANK_BIND, 'message' => self::getErrorByCode(self::ERROR_BANK_BIND), 'tourl' => '/user/userbank/bindbank'];
-        }
+        
         if (empty($user->trade_pwd)) {
             return ['code' => self::ERROR_TRADE_PWD_SET,  'message' => self::getErrorByCode(self::ERROR_TRADE_PWD_SET), 'tourl' => '/user/userbank/addbuspass'];
         }

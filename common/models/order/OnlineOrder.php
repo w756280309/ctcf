@@ -242,4 +242,16 @@ class OnlineOrder extends \yii\db\ActiveRecord
 
         return $data;
     }
+
+    /**
+     * 获取新手标总数
+     */
+    public static function xsCount($uid) {
+        return (int)(new \yii\db\Query())
+                ->select('count(id)')
+                ->from(self::tableName() . ' o')
+                ->innerJoin('online_product p', 'o.online_pid=p.id')
+                ->where(['o.uid' => $uid, 'p.is_xs' => 1])->count();
+    }
+
 }

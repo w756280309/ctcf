@@ -72,7 +72,7 @@ $(function () {
             $.ajax({
                 type: 'GET',
                 url: "/deal/deal/",
-                data: {page: currentPage},
+                data: param,
                 dataType: 'json',
                 success: function (data) {
 
