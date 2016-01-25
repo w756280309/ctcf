@@ -21,10 +21,10 @@ $this->registerJs('var cp=' . $header['cp'] . ';', 1);
             <div class="clear"></div>
             <div class="row md-height border-bottom">
                 <div class="col-xs-3 data">
-                    <span class="data1"><?= $val['created_at_date'] ?></span>
-                    <span class="data2"><?= $val['created_at_time'] ?></span>
+                    <span class="data1"><?= date('Y-m-d', $val['created_at']) ?></span>
+                    <span class="data2"><?= date('H:i:s', $val['created_at']) ?></span>
                 </div>
-                <div class="col-xs-3 revenue"><?= $val['type'] ?></div>
+                <div class="col-xs-3 revenue"><?= Yii::$app->params['mingxi'][$val['type']] ?></div>
                 <div class="col-xs-3 money"><?= ($val['in_money']>$val['out_money'])?('+'.$val['in_money']):('-'.$val['out_money']) ?></div>
                 <div class="col-xs-3 revenue"><?= $val['balance'] ?></div>
             </div>

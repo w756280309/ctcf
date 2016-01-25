@@ -43,11 +43,6 @@ class UserController extends BaseController
         $pg = \Yii::$container->get('paginator')->paginate($data, $page, $size);
         $model = $pg->getItems();
 
-        foreach ($model as $key => $val) {
-            $model[$key]['created_at_date'] = date('Y-m-d', $val['created_at']);
-            $model[$key]['created_at_time'] = date('H:i:s', $val['created_at']);
-            $model[$key]['type'] = Yii::$app->params['mingxi'][$val['type']];
-        }
         $tp = $pg->getPageCount();
         $code = ($page > $tp) ? 1 : 0;
 
