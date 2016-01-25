@@ -8,6 +8,8 @@ $this->registerJs('var t=1;', 1); //在头部加载
 
 $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\web\YiiAsset']);
 $this->registerJsFile('/js/product.js', ['depends' => 'yii\web\YiiAsset']);
+
+$readonly = $model->online_status ? ['readonly' => 'readonly'] : [];
 ?>
 <?php $this->beginBlock('blockmain'); ?>
 
@@ -111,7 +113,7 @@ $this->registerJsFile('/js/product.js', ['depends' => 'yii\web\YiiAsset']);
                     <label class="control-label">加息</label>
                     <div class="controls">
                         <?=
-                        $form->field($model, 'jiaxi', ['template' => '<div class="input-append">{input}<span class="add-on">%</span> </div>{error}', 'inputOptions' => ['autocomplete' => 'off', 'placeholder' => '加息']])->textInput(['class' => 'm-wrap span12'])
+                        $form->field($model, 'jiaxi', ['template' => '<div class="input-append">{input}<span class="add-on">%</span> </div>{error}', 'inputOptions' => ['autocomplete' => 'off', 'placeholder' => '加息', 'class' => 'm-wrap span12']])->textInput($readonly)
                         ?>
                     </div>
                 </div>
