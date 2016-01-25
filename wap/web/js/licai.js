@@ -79,6 +79,7 @@ $(function(){
                                     var title = item.title;
                                     var order_time = item.order_time;
                                     var yield_rate = changeTwoDecimal(item.yield_rate*100)+'%';
+                                    var jiaxi = item.jiaxi === '' ? '' : changeTwoDecimal(item.jiaxi*100)+'%';
                                     var order_money = item.order_money; //投资金额
                                     var statusval = item.statusval; //已还清
                                     var profit = (item.profit==null)?'':item.profit; //预期收益
@@ -110,8 +111,11 @@ $(function(){
                                             '<ul class="row column-content">'+
                                             '<li class="hidden-xs col-sm-1"></li>'+
                                             '<li class="col-xs-6 col-sm-5">'+
-                                            '<div>年化收益<span>'+yield_rate+'</span></div>'+
-                                            '</li>'+
+                                            '<div>年化收益<span>'+yield_rate;
+                                    if (jiaxi !== '') {
+                                        html += ' + '+jiaxi;
+                                    }      
+                                    html += '</span></div></li>'+
                                             '<li class="col-xs-6 col-sm-5">'+
                                             '<div>结清时间<span>'+returndate+'</span></div>'+
                                             '</li>'+
