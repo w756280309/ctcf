@@ -9,7 +9,6 @@ use common\models\user\EditpassForm;
 use common\models\user\UserAccount;
 use common\service\BankService;
 use common\models\city\Region;
-use common\models\sms\SmsMessage;
 use common\models\draw\Draw;
 use common\models\draw\DrawManager;
 use common\models\draw\DrawException;
@@ -54,23 +53,10 @@ class UseraccountController extends BaseController
         $model = new EditpassForm();
         $draw = new Draw();
         $model->scenario = 'checktradepwd';
-        if ($draw->load(Yii::$app->request->post()) && $draw->validate() && $model->load(Yii::$app->request->post()) && $model->validate()) {            
+        if ($draw->load(Yii::$app->request->post()) && $draw->validate() && $model->load(Yii::$app->request->post()) && $model->validate()) {
             try {
                 DrawManager::init($user, $draw->money, \Yii::$app->params['drawFee']);
-                $mess = [
-                    $user->real_name,
-                    date('Y-m-d H:i:s'),
-                    $draw->money,
-                    Yii::$app->params['contact_tel']
-                ];
-                $sms = new SmsMessage([
-                    'uid' => $user->id,
-                    'mobile' => $user->mobile,
-                    'level' => SmsMessage::LEVEL_LOW,
-                    'message' => json_encode($mess)
-                ]);
-                $sms->template_id = Yii::$app->params['sms']['tixian_succ'];
-                $sms->save();
+
                 return $this->redirect('/user/useraccount/tixianback?flag=succ');
             } catch (DrawException $ex) {
                 $draw->addError('money', $ex->getMessage());

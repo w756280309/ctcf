@@ -16,7 +16,6 @@ use yii\web\Response;
 use common\models\draw\Draw;
 use common\models\draw\DrawManager;
 use common\models\draw\DrawException;
-use common\models\sms\SmsMessage;
 
 class UserbankController extends BaseController
 {
@@ -257,26 +256,13 @@ class UserbankController extends BaseController
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             $money = Yii::$app->request->post('money');
             $draw = new Draw();
-            $draw->money = $money;            
+            $draw->money = $money;
             if (!$draw->validate()) {
                 return ['code' => 1, 'message' => '提现申请失败'];
             } else {
                 try {
                     DrawManager::init($user, $draw->money, \Yii::$app->params['drawFee']);
-                    $mess = [
-                        $user->real_name,
-                        date('Y-m-d H:i:s', time()),
-                        $money,
-                        Yii::$app->params['contact_tel']
-                    ];
-                    $sms = new SmsMessage([
-                        'uid' => $uid,
-                        'mobile' => $user->mobile,
-                        'message' => json_encode($mess),
-                        'level' => SmsMessage::LEVEL_LOW
-                    ]);
-                    $sms->template_id = Yii::$app->params['sms']['tixian_succ'];
-                    $sms->save();
+
                     return ['tourl' => '/user/user', 'code' => 1, 'message' => '提现申请成功'];
                 } catch (DrawException $ex) {
                     return ['code' => 1, 'message' => $ex->getMessage()];
