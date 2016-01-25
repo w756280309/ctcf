@@ -31,11 +31,12 @@ $(function(){
                             if (data.data.length > 0) {
                                 var html = "";
                                 $.each(data.data, function (i, item) {
-                                    var money = item.in_money!=0?item.in_money:item.out_money
+                                    var money = item.in_money!=0?item.in_money:item.out_money;
+                                    var createdAt = new Date(item.created_at*1000);
                                     html += '<div style="background: #fff">'+
                                         '<div class="clear"></div><div class="row md-height border-bottom"><div class="col-xs-3 data">'+
-                                        '<span class="data1">'+item.created_at_date+'</span>'+
-                                        '<span class="data2">'+item.created_at_time+'</span>'+
+                                        '<span class="data1">'+createdAt.getFullYear()+'-'+createdAt.getMonth()+'-'+createdAt.getDay()+'</span>'+
+                                        '<span class="data2">'+createdAt.getHours()+':'+createdAt.getMinutes()+':'+createdAt.getSeconds()+'</span>'+
                                         '</div>'+
                                         '<div class="col-xs-3 revenue">'+item.type+'</div>'+
                                         '<div class="col-xs-3 money">'+money+'</div>'+
