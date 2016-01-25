@@ -54,10 +54,10 @@ class DealcrontabController extends Controller
         $product->where(['del_status' => OnlineProduct::STATUS_USE, 'online_status' => OnlineProduct::STATUS_ONLINE, 'status' => OnlineProduct::STATUS_NOW]);
         $product->andFilterWhere(['<', 'end_date', time()])->all();
         $bc = new BcRound();
-        bcscale(14);
-        $transaction = Yii::$app->db->beginTransaction();
+        bcscale(14);        
         foreach ($product as $val) {
             $order = OnlineOrder::find()->where(['online_pid' => $val['id'], 'status' => OnlineOrder::STATUS_SUCCESS])->all();
+            $transaction = Yii::$app->db->beginTransaction();
             foreach ($order as $v) {
                 $ua = UserAccount::findOne(['uid' => $v['uid']]);
                 $ua->freeze_balance = $bc->bcround(bcsub($ua->freeze_balance, $v['order_money']), 2);
@@ -66,14 +66,12 @@ class DealcrontabController extends Controller
                 $ua->in_sum = $bc->bcround(bcadd($ua->in_sum, $v['order_money']), 2);
                 if (!$ua->save()) {
                     $transaction->rollBack();
-
                     return false;
                 }
 
                 $v->status = OnlineOrder::STATUS_CANCEL;
                 if (!$v->save()) {
                     $transaction->rollBack();
-
                     return false;
                 }
 
@@ -88,7 +86,6 @@ class DealcrontabController extends Controller
 
                 if (!$money_record->save()) {
                     $transaction->rollBack();
-
                     return false;
                 }
             }
@@ -98,17 +95,10 @@ class DealcrontabController extends Controller
             $val->sort = OnlineProduct::SORT_LIU;
             if (!$val->save()) {
                 $transaction->rollBack();
-
                 return false;
             }
-        }
-
-        if ($product) {
             $transaction->commit();
-
-            return true;
         }
-
-        return false;
+        return true; 
     }
 }
