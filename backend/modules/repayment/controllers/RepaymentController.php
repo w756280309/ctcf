@@ -262,7 +262,7 @@ class RepaymentController extends BaseController
         $ua = UserAccount::findOne(['uid' => $product->borrow_uid, 'type' => UserAccount::TYPE_BORROW]);
        // var_dump($product->borrow_uid);exit;
         $ua->account_balance = $bcround->bcround(bcadd($ua->account_balance, $product->money), 2);
-        $ua->available_balance = $bcround->bcround(bcadd($ua->available_balance, $product->money), 2);
+        $ua->available_balance = $bcround->bcround(bcadd($ua->available_balance, $product->funded_money), 2);
         $ua->drawable_balance = $bcround->bcround(bcadd($ua->drawable_balance, $product->money), 2);
         $ua->in_sum = $bcround->bcround(bcadd($ua->in_sum, $product->money), 2);
         if (!$ua->save()) {
