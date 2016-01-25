@@ -28,7 +28,8 @@ class BookingController extends BaseController
             throw new \yii\web\NotFoundHttpException('booking production is not existed.');
         }
         $now = time();
-        if ($product->is_disabled || $now < $product->start_time || $now > $product->end_time) {
+        $count = BookingLog::find()->where(['pid' => $pid, 'uid' => $this->user->id])->count();
+        if ($product->is_disabled || $now < $product->start_time || $now > $product->end_time || $count) {
             return $this->redirect('detail?pid='.$pid);
         }
 
