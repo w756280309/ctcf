@@ -41,7 +41,7 @@ class DealController extends Controller
             $cond['cid'] = $cat;
             $cond['is_xs'] = 0;
         }
-        $data = OnlineProduct::find()->where($cond)->select('id k,sn as num,title,yield_rate as yr,status,expires as qixian,money,start_date as start,finish_rate');
+        $data = OnlineProduct::find()->where($cond)->select('id k,sn as num,title,yield_rate as yr,status,expires as qixian,money,start_date as start,finish_rate,jiaxi');
         $count = $data->count();
         $size = 5;
         $pages = new Pagination(['totalCount' => $count, 'pageSize' => $size]);
@@ -53,6 +53,7 @@ class DealController extends Controller
             $deals[$key]['finish_rate'] = number_format($val['finish_rate'] * 100, 0);
             $deals[$key]['yr'] = $val['yr'] ? number_format($val['yr'] * 100, 2) : '0.00';
             $deals[$key]['statusval'] = Yii::$app->params['productonline'][$val['status']];
+            $deals[$key]['jiaxi'] = $val['jiaxi'] ? number_format($val['jiaxi'] * 100, 2) : '';
         }
         $tp = ceil($count / $size);
         $code = ($page > $tp) ? 1 : 0;

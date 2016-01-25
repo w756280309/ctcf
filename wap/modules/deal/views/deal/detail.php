@@ -1,7 +1,4 @@
 <?php
-
-use yii\widgets\ActiveForm;
-
 $this->title = '项目详情';
 frontend\assets\WapAsset::register($this);
 $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','position' => 1]);
@@ -14,7 +11,10 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
             <div class="container">
                 <ul class="row column-content">
                     <li class="col-xs-6">
-                        <div class="xian"><?=  doubleval(number_format($deal['yield_rate']*100,2)) ?><span class="column-lu">%</span></div>
+                        <div class="xian">
+                            <?=  doubleval(number_format($deal['yield_rate']*100, 2)) ?><span class="column-lu">%</span>
+                            <?php if (!empty($deal['jiaxi'])) { ?>+ <?=  doubleval(number_format($deal['jiaxi']*100, 2)) ?><span class="column-lu">%</span><?php } ?>
+                        </div>
                         <span class="qing">年化收益率</span>
                     </li>
                     <li class="col-xs-6">

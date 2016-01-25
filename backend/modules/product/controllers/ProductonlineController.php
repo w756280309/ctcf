@@ -53,6 +53,7 @@ class ProductonlineController extends BaseController
             $model->yield_rate = bcmul($model->yield_rate, 100, 2);
             $model->fazhi = round($model->fazhi);
             $model->fazhi_up = round($model->fazhi_up);
+            $model->jiaxi = bcmul($model->jiaxi, 100, 2);
 
             $ctmodel = ContractTemplate::find()->where(['pid' => $id])->asArray()->all();
         }
@@ -119,6 +120,7 @@ class ProductonlineController extends BaseController
                 $model->creator_id = Yii::$app->user->id;
                 $model->yield_rate = bcdiv($model->yield_rate, 100, 14);
                 $model->jixi_time = strtotime($model->jixi_time);
+                $model->jiaxi = bcdiv($model->jiaxi, 100, 14);
 
                 $pre = $model->save();
                 if (!$pre) {

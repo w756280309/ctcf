@@ -24,7 +24,6 @@ $this->title="我的理财";
                     <div class="swiper-slide <?= $type==7?"dian":"" ?>" onclick="window.location.href='/user/user/myorder?type=7'">提前结束</div>
                     <div class="swiper-slide <?= $type==5?"dian":"" ?>" onclick="window.location.href='/user/user/myorder?type=5'">还款中</div>
                     <div class="swiper-slide <?= $type==6?"dian":"" ?>" onclick="window.location.href='/user/user/myorder?type=6'">已还清</div>
-<!--                    <div class="swiper-slide <?= $type==4?"dian":"" ?>" onclick="window.location.href='/user/user/myorder?type=4'">流标</div>-->
                 </div>
                 <!-- Add Pagination -->
                 <!--<div class="swiper-pagination"></div>-->
@@ -54,7 +53,7 @@ $this->title="我的理财";
             <ul class="row column-content">
                 <li class="hidden-xs col-sm-1"></li>
                 <li class="col-xs-6 col-sm-5">
-                    <div>年化收益<span><?= doubleval(number_format($o['yield_rate']*100,2)) ?>%</span></div>
+                    <div>年化收益<span><?= doubleval(number_format($o['yield_rate']*100, 2)) ?>% + <?= number_format($o['jiaxi']*100, 2) ?>%</span></div>
                 </li>
                 <li class="col-xs-6 col-sm-5">
                     <div>结清时间<span><?=$o['returndate']?></span></div>

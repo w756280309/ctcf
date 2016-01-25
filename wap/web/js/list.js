@@ -26,7 +26,7 @@ $(function () {
             });
         }
     }
-    
+
     //footer
     $('.footer-inner a').css({color: '#8c8c8c'});
     $('.footer-inner2 a').css({color: '#8c8c8c'});
@@ -84,6 +84,7 @@ $(function () {
                                 $.each(data.deals, function (i, item) {
 
                                     var itemyr = changeTwoDecimal(item.yr);
+                                    var itemjx = item.jiaxi === '' ? '' : changeTwoDecimal(item.jiaxi);
                                     var className = (item.status==1 || item.status==2)?"column-title-rg":"column-title-rg1";
                                     var finishHtml = "";
                                     if (item.status == 1) {
@@ -103,8 +104,11 @@ $(function () {
                                                 '<div class="container">'+
                                                     '<ul class="row column-content">'+
                                                     '<li class="col-xs-4">'+
-                                                '<div>'+itemyr+'<span class="column-lu">%</span></div>'+
-                                                    '<span>年化收益率</span>'+
+                                                '<div>'+itemyr+'<span class="column-lu">%</span>';
+                                    if (itemjx !== '') {
+                                        html += ' + ' + itemjx + '<span class="column-lu">%</span></div>';
+                                    }
+                                    html += '<span>年化收益率</span>'+
                                                     '</li>'+
                                                     '<li class="col-xs-4">'+
                                                         '<div>'+item.qixian+'<span class="column-lu">天</span></div>'+

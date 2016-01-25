@@ -111,7 +111,7 @@ class OnlineProduct extends \yii\db\ActiveRecord
             'status' => ['status', 'sort', 'full_time'],
             'jixi' => ['jixi_time'],
             'create' => ['title', 'sn', 'cid', 'pcid', 'money', 'borrow_uid', 'expires', 'expires_show', 'yield_rate', 'start_money', 'borrow_uid', 'fee', 'status',
-                'description', 'refund_method', 'account_name', 'account', 'bank', 'dizeng_money', 'fazhi', 'fazhi_up', 'start_date', 'end_date', 'full_time', 'is_xs', 'yuqi_faxi', 'order_limit', 'creator_id', 'del_status', 'status', 'target', 'target_uid', 'finish_date', 'channel', 'jixi_time', 'sort', ],
+                'description', 'refund_method', 'account_name', 'account', 'bank', 'dizeng_money', 'fazhi', 'fazhi_up', 'start_date', 'end_date', 'full_time', 'is_xs', 'yuqi_faxi', 'order_limit', 'creator_id', 'del_status', 'status', 'target', 'target_uid', 'finish_date', 'channel', 'jixi_time', 'sort', 'jiaxi',],
         ];
     }
 
@@ -188,7 +188,7 @@ class OnlineProduct extends \yii\db\ActiveRecord
         return [
             [['title', 'borrow_uid', 'yield_rate', 'money', 'start_money', 'dizeng_money', 'start_date', 'end_date', 'expires', 'cid', 'description', 'finish_date'], 'required'],
             [['cid', 'pcid', 'is_xs', 'borrow_uid', 'refund_method', 'expires', 'full_time', 'del_status', 'status', 'order_limit', 'creator_id'], 'integer'],
-            [['yield_rate', 'fee', 'money', 'start_money', 'dizeng_money', 'fazhi', 'fazhi_up', 'yuqi_faxi'], 'number'],
+            [['yield_rate', 'fee', 'money', 'start_money', 'dizeng_money', 'fazhi', 'fazhi_up', 'yuqi_faxi', 'jiaxi',], 'number'],
             [['fazhi', 'fazhi_up', 'target'], 'integer'],
             ['target', 'default', 'value' => 0],
             ['is_xs', 'default', 'value' => 0],
@@ -205,8 +205,8 @@ class OnlineProduct extends \yii\db\ActiveRecord
             [['dizeng_money'], 'compare', 'compareValue' => 1, 'operator' => '>='],
             [['start_money', 'fazhi', 'fazhi_up'], 'compare', 'compareAttribute' => 'money', 'operator' => '<'],
             [['fazhi_up'], 'compare', 'compareAttribute' => 'fazhi', 'operator' => '<='],
-            [['yield_rate'], 'compare', 'compareValue' => 100, 'operator' => '<='],
-            [['yield_rate'], 'compare', 'compareValue' => 0, 'operator' => '>='],
+            [['yield_rate', 'jiaxi',], 'compare', 'compareValue' => 100, 'operator' => '<='],
+            [['yield_rate', 'jiaxi',], 'compare', 'compareValue' => 0, 'operator' => '>='],
             [['start_money', 'dizeng_money'], 'integer'],
             [['money'], 'compare', 'compareValue' => 1000000000, 'operator' => '<='],
             [['money'], 'compare', 'compareValue' => 1, 'operator' => '>='],
@@ -265,6 +265,7 @@ class OnlineProduct extends \yii\db\ActiveRecord
             'pcid' => '父级分类',
             'borrow_uid' => '融资用户ID',
             'yield_rate' => '年利率',
+            'jiaxi' => '加息利率',
             'fee' => '手续费',
             'expires_show' => '项目期限文字显示',
             'refund_method' => '还款方式',

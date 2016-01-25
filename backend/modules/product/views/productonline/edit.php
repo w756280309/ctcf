@@ -108,10 +108,10 @@ $this->registerJsFile('/js/product.js', ['depends' => 'yii\web\YiiAsset']);
         <div class="row-fluid">
             <div class="span6 ">
                 <div class="control-group">
-                    <label class="control-label">项目截止日</label>
+                    <label class="control-label">加息</label>
                     <div class="controls">
                         <?=
-                        $form->field($model, 'finish_date', ['template' => '<div class="input-append date form_datetime">{input}<span class="add-on" onclick="WdatePicker({el:\'onlineproduct-finish_date\',dateFmt:\'yyyy-MM-dd HH:mm\',minDate:\''.date('Y-m-d').'\'});"><i class="icon-calendar"></i></span></div>{error}', 'inputOptions' => ['autocomplete' => 'off', 'placeholder' => '项目截止日']])->textInput(['readonly' => 'readonly', 'class' => 'm-wrap span12', 'onclick' => 'WdatePicker({dateFmt:"yyyy-MM-dd HH:mm",minDate:\''.date('Y-m-d').'\'});'])
+                        $form->field($model, 'jiaxi', ['template' => '<div class="input-append">{input}<span class="add-on">%</span> </div>{error}', 'inputOptions' => ['autocomplete' => 'off', 'placeholder' => '加息']])->textInput(['class' => 'm-wrap span12'])
                         ?>
                     </div>
                 </div>
@@ -154,8 +154,9 @@ $this->registerJsFile('/js/product.js', ['depends' => 'yii\web\YiiAsset']);
             </div>
             <!--/span-->
         </div>
-        <?php if (!$model->is_jixi) { ?>
+
         <div class="row-fluid">
+            <?php if (!$model->is_jixi) { ?>
             <div class="span6 ">
                 <div class="control-group">
                     <label class="control-label">计息开始日</label>
@@ -166,8 +167,18 @@ $this->registerJsFile('/js/product.js', ['depends' => 'yii\web\YiiAsset']);
                     </div>
                 </div>
             </div>
+            <?php } ?>
+            <div class="span6 ">
+                <div class="control-group">
+                    <label class="control-label">项目截止日</label>
+                    <div class="controls">
+                        <?=
+                        $form->field($model, 'finish_date', ['template' => '<div class="input-append date form_datetime">{input}<span class="add-on" onclick="WdatePicker({el:\'onlineproduct-finish_date\',dateFmt:\'yyyy-MM-dd HH:mm\',minDate:\''.date('Y-m-d').'\'});"><i class="icon-calendar"></i></span></div>{error}', 'inputOptions' => ['autocomplete' => 'off', 'placeholder' => '项目截止日']])->textInput(['readonly' => 'readonly', 'class' => 'm-wrap span12', 'onclick' => 'WdatePicker({dateFmt:"yyyy-MM-dd HH:mm",minDate:\''.date('Y-m-d').'\'});'])
+                        ?>
+                    </div>
+                </div>
+            </div>
         </div>
-        <?php } ?>
 
         <div class="row-fluid">
             <div class="span6 ">

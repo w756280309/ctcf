@@ -30,7 +30,10 @@ $pc_cat = Yii::$app->params['pc_cat'];
             <div class="container">
                 <ul class="row column-content">
                     <li class="col-xs-4">
-                        <div><?= doubleval($val['yr']) ?><span class="column-lu">%</span></div>
+                        <div>
+                        <?= doubleval($val['yr']) ?><span class="column-lu">%</span> 
+                        <?php if (!empty($val['jiaxi'])) { ?> + <?= doubleval($val['jiaxi']) ?><span class="column-lu">%</span><?php } ?>
+                        </div>
                         <span>年化收益率</span>
                     </li>
                     <li class="col-xs-4">
