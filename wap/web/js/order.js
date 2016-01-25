@@ -14,30 +14,31 @@ $(function(){
                     return false;
        }
        vals = $("#orderform").serialize();
-       //console.log(vals);
-       $.post($("#orderform").attr("action"), vals, function (data) { 
+       $(this).attr('disabled', true);
+       $.post($("#orderform").attr("action"), vals, function (data) {
+           $(this).attr('disabled', false);
            if(data.code==0){
                toastWithMastUrl('/user/user/myorder','购买成功')
            }else{
                toast(this,data.message);
            }
-          
+
            if(data.tourl!=undefined){
                location.href=data.tourl;
             }
-        }); 
+        });
    });
    $('#money').blur(function(){
        money = $(this).val();
-       if (isNaN(money)) { 
+       if (isNaN(money)) {
             toast(this,'交易密码不能为空');
             money = 0;
             $(this).focus();
             return false;
-        } 
-        
+        }
+
         $('.yuqishouyi').html(accDiv(accMul(accMul(money,yr),qixian),360).toFixed(2)+"元");
-   }); 
+   });
 })
 
 
