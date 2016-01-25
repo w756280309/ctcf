@@ -56,7 +56,7 @@ $this->title="我的理财";
                     <div>年化收益
                         <span>
                          <?= doubleval(number_format($o['yield_rate']*100, 2)) ?>% 
-                         <?php if (!empty($o['jiaxi'])) { ?> + <?= doubleval(number_format($o['jiaxi']*100, 2)) ?>% <?php } ?>
+                         <?php if (!empty($o['jiaxi'])) { ?> + <?= doubleval($o['jiaxi']) ?>% <?php } ?>
                         </span>
                     </div>
                 </li>

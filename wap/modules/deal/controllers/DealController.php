@@ -53,7 +53,7 @@ class DealController extends Controller
             $deals[$key]['finish_rate'] = number_format($val['finish_rate'] * 100, 0);
             $deals[$key]['yr'] = $val['yr'] ? number_format($val['yr'] * 100, 2) : '0.00';
             $deals[$key]['statusval'] = Yii::$app->params['productonline'][$val['status']];
-            $deals[$key]['jiaxi'] = $val['jiaxi'] ? number_format($val['jiaxi'] * 100, 2) : '';
+            $deals[$key]['jiaxi'] = $val['jiaxi'];
         }
         $tp = ceil($count / $size);
         $code = ($page > $tp) ? 1 : 0;

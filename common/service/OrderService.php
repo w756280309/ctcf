@@ -62,7 +62,7 @@ class OrderService
         foreach ($query as $key => $dat) {
             $query[$key]['statusval'] = Yii::$app->params['deal_status'][$dat['pstatus']];
             $query[$key]['order_time'] = $dat['order_time'] ? date('Y-m-d', $dat['order_time']) : '';
-            $query[$key]['jiaxi'] = empty($dat['jiaxi']) ? '' : $dat['jiaxi'];
+            $query[$key]['jiaxi'] = $dat['jiaxi'];
             if (in_array($dat['pstatus'], [OnlineProduct::STATUS_NOW])) {
                 $query[$key]['profit'] = '--';
                 $query[$key]['returndate'] = date('Y-m-d', $dat['finish_date']);

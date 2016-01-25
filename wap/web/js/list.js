@@ -84,7 +84,7 @@ $(function () {
                                 $.each(data.deals, function (i, item) {
 
                                     var itemyr = changeTwoDecimal(item.yr);
-                                    var itemjx = item.jiaxi === '' ? '' : changeTwoDecimal(item.jiaxi);
+                                    var itemjx = item.jiaxi === null ? '' : item.jiaxi;
                                     var className = (item.status==1 || item.status==2)?"column-title-rg":"column-title-rg1";
                                     var finishHtml = "";
                                     if (item.status == 1) {

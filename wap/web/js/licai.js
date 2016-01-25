@@ -79,7 +79,7 @@ $(function(){
                                     var title = item.title;
                                     var order_time = item.order_time;
                                     var yield_rate = changeTwoDecimal(item.yield_rate*100)+'%';
-                                    var jiaxi = item.jiaxi === '' ? '' : changeTwoDecimal(item.jiaxi*100)+'%';
+                                    var jiaxi = item.jiaxi === null ? '' : item.jiaxi+'%';
                                     var order_money = item.order_money; //投资金额
                                     var statusval = item.statusval; //已还清
                                     var profit = (item.profit==null)?'':item.profit; //预期收益
