@@ -125,7 +125,6 @@ $(function () {
                                         '</a>';
                                 });
 
-                                console.log(html);
                                 $('#item-list').html($('#item-list').html() + html);
                                 //页码＋1
                                 currentPage = parseInt(data.header.cp) + 1;
