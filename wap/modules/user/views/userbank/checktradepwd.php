@@ -69,7 +69,7 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
                $(this).removeClass("btn-press").addClass("btn-normal");
                return false;
            }
-           subForm("#form");
+           subForm("#form", "#checktrade");
            $(this).removeClass("btn-press").addClass("btn-normal");
        });
 

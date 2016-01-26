@@ -113,7 +113,7 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
                         return false;
                     }
                 }
-                subForm("#login",'#login-btn');
+                subForm("#login", "#login-btn");
 
                 $(this).removeClass("btn-press").addClass("btn-normal");
             });

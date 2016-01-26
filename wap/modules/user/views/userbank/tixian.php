@@ -1,6 +1,4 @@
 <?php
-use yii\helpers\Html;
-use yii\bootstrap\ActiveForm;
 $this->title="提现";
 $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','position' => 1]);
 ?>
@@ -81,7 +79,7 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
                    $(this).removeClass("btn-press").addClass("btn-normal");
                    return false;
                }
-               subForm("#form");
+               subForm("#form", "#tixianbtn");
                $(this).removeClass("btn-press").addClass("btn-normal");
            });
 
