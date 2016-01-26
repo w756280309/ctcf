@@ -1,6 +1,4 @@
 <?php
-use yii\helpers\Html;
-use yii\bootstrap\ActiveForm;
 $this->title="设置交易密码";
 $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','position' => 1]);
 ?>
@@ -42,7 +40,7 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
        if(err == '1') {
            toasturl(tourl,mess);
        }
-       
+
        csrf = $("meta[name=csrf-token]").attr('content');
        $('#editpassbtn').bind('click',function(){
            var reg = /^[0-9]{6,6}$/;
@@ -71,7 +69,6 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
            $(this).removeClass("btn-press").addClass("btn-normal");
        });
 
-    })    
+    })
     </script>
 
-    

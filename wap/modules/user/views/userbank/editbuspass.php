@@ -1,5 +1,4 @@
 <?php
-use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 use yii\captcha\Captcha;
 $this->title="修改交易密码";
@@ -32,12 +31,9 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
                 <input type="text" id="sms" placeholder="请输入验证码" name="EditpassForm[verifyCode]" maxlength="6" >
             </div>
             <div class="col-xs-4 yz-code text-align-rg col">
-                
                 <?= $form->field($model, 'verifyCode')->widget(Captcha::className(), [
                                                     'template' => '{image}','captchaAction'=>'/site/captcha'
                                                     ]) ?>
-                
-<!--                <input  class="" type="image" src="/images/yz-code.png" name=""  placeholder="图形验证码" AUTOCOMPLETE="off" align="absmiddle">-->
             </div>
         </div>
         <div class="row login-sign-btn">
@@ -72,7 +68,7 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
         if(err == '1') {
             toasturl(tourl,mess);
         }
-        
+
         csrf = $("meta[name=csrf-token]").attr('content');
         $('#editpassbtn').bind('click',function(){
            $(this).addClass("btn-press").removeClass("btn-normal");
@@ -98,6 +94,7 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
                return false;
            }
            subForm("#editpassform", "#editpassbtn");
+           $('#editpassform-verifycode-image').click();
            $(this).removeClass("btn-press").addClass("btn-normal");
         });
         $(".eye img").on("click",function (){
@@ -116,4 +113,3 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
 
     </script>
 
-    

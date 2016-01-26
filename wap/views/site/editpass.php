@@ -96,6 +96,7 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset', 'positi
                return false;
            }
            subForm("#editpassform", "#editpassbtn");
+           $('#editpassform-verifycode-image').click();
        });
 
     });
