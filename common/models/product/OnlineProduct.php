@@ -54,7 +54,9 @@ class OnlineProduct extends \yii\db\ActiveRecord
     const STATUS_PREPARE = 0;
 
     const REFUND_METHOD_DAOQIBENXI = 1;
-    const REFUND_METHOD_FUXIHUANBEN = 2;
+    const REFUND_METHOD_MONTH = 2;
+    const REFUND_METHOD_QUARTER = 3;
+    const REFUND_METHOD_YEAR = 4;
 
     /*定义错误级别*/
     const ERROR_SUCCESS = 100;

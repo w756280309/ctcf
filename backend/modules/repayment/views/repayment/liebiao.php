@@ -1,5 +1,6 @@
 <?php
-use yii\widgets\ActiveForm;
+use common\lib\bchelp\BcRound;
+$bc = new BcRound();
 ?>
 <?php $this->beginBlock('blockmain'); ?>
 
@@ -56,12 +57,13 @@ use yii\widgets\ActiveForm;
             </table>
         </div>
        
-        
+        <?php foreach ($model as $qk=>$qi) : ?>
         <div class="portlet-body">
             <table class="table table-striped table-bordered table-advance table-hover">
                 <thead>
                     <tr>
                         <th>序号</th>
+                        <th>期数</th>
                         <th>真实姓名</th>
                         <th>手机号</th>
                         <th>应还款本金（元）</th>
@@ -70,25 +72,32 @@ use yii\widgets\ActiveForm;
                     </tr>
                 </thead>
                 <tbody>
-                <?php foreach ($model as $key => $val) : ?>
+                <?php
+                    $cur_return = 0;
+                    foreach ($qi as $key => $val) : 
+                        $cur_return = bcadd($cur_return, $val['benxi']);
+                ?>
                     <tr>
-                        <td><?=$key+1 ?></td>
+                        <td><?= $key + 1 ?></td>
+                        <td><?= $val['qishu'] ?></td>
                         <td><?= $val['real_name'] ?></td>
                         <td><?= $val['mobile'] ?></td>                   
                         <td><?= $val['benjin'] ?></td>                   
                         <td><?= $val['lixi'] ?></td>                   
-                        <td><?= bcadd($val['benjin'], $val['lixi'],2)?></td>
+                        <td><?= $val['benxi'] ?></td>
                     </tr>
                     <?php endforeach; ?>   
                 </tbody>
             </table>
         </div>
+            <div class="form-actions" style="text-align:right">
+                本期应还时间：<?= date('Y-m-d', $qi[count($qi) - 1]['refund_time']) ?> &emsp;本期应还：<?= $bc->bcround($cur_return , 2)  ?>（元） &emsp;&emsp;
+                <?php if($deal->status==5 && $qi[0][status]==0){ ?>
+                <button type="button" class="btn blue button-repayment" qishu="<?= $qk ?>"><i class="icon-ok"></i> 确认还款</button>
+                <?php } ?>
+            </div>            
+        <?php endforeach; ?>   
         
-        <?php if($deal->status==5){ ?>
-        <div class="form-actions" style="text-align:right">
-                <button type="button" class="btn blue button-repayment"><i class="icon-ok"></i> 确认还款</button>
-        </div>
-        <?php } ?>
     </div>                            
 </div>
 <script type="text/javascript">
@@ -97,28 +106,24 @@ use yii\widgets\ActiveForm;
         $('.button-repayment').click(function(){
             var csrftoken= '<?= Yii::$app->request->getCsrfToken(); ?>';
             var pid = '<?= Yii::$app->request->get('pid');?>';
-            if(confirm('确认还款吗？')){
-                $(this).attr('disabled','disabled');
-                $(this).html('正在处理……');
+            var qishu = $(this).attr('qishu');
+            $repbtn = $(this);
+            layer.confirm('是否确认还款？',{title:'确认还款',btn:['确定','取消']},function(){
+                layer.closeAll();
+                $repbtn.attr('disabled','disabled');
+                $repbtn.html('正在处理……');
                 openLoading();
-                   $.post('/repayment/repayment/dorepayment',{pid:pid,_csrf:csrftoken},function(data)
-                   {
-                       var dat;
-                       if(!isJson(data)){
-                           dat = eval("(" + data + ")");
-                       }else{
-                            dat = data;
-                            if(data.result){
-                                location.reload();
-                            }
-                        }
-                        alert(dat.message);
-                       cloaseLoading();
-                       $('.button-repayment').removeAttr('disabled');
-                        $('.button-repayment').html('<i class="icon-ok"></i> 确认还款');
-                   }); 
-                   
-               }
+                $.post('/repayment/repayment/dorepayment',{pid:pid,qishu:qishu,_csrf:csrftoken},function(data)
+                {
+                     newalert(data.result,data.message,1);
+                     cloaseLoading();
+                     $repbtn.removeAttr('disabled');
+                     $repbtn.html('<i class="icon-ok"></i> 确认还款');                     
+                });                 
+            },function(){
+                layer.closeAll();
+            })    
+
         });
     })
 </script>

@@ -14,7 +14,7 @@ use common\lib\bchelp\BcRound;
 use common\models\order\OnlineFangkuan;
 use common\models\user\User;
 use common\models\sms\SmsMessage;
-
+use common\lib\product\ProductProcessor;
 /**
  * OrderController implements the CRUD actions for OfflineOrder model.
  */
@@ -46,10 +46,13 @@ class RepaymentController extends BaseController
         $total_lixi = 0;
         $total_bx = 0;
         bcscale(14);
+
+        $qimodel = null;
         foreach ($model as $val) {
             $total_bj = bcadd($total_bj, $val['benjin']);
             $total_lixi = bcadd($total_lixi, $val['lixi']);
             $total_bx = bcadd($total_bj, $total_lixi);
+            $qimodel[$val['qishu']][] = $val;
         }
         //应还款人数
         $count = OnlineRepaymentPlan::find()->where(['online_pid' => $pid])->groupBy('uid')->count();
@@ -62,7 +65,7 @@ class RepaymentController extends BaseController
                     'yhlixi' => $bcround->bcround($total_lixi, 2),
                     'total_bx' => $bcround->bcround($total_bx, 2),
                     'deal' => $deal,
-                    'model' => $model,
+                    'model' => $qimodel,
         ]);
     }
 
@@ -76,58 +79,43 @@ class RepaymentController extends BaseController
                 'result' => 0,
                 'message' => '非法请求',
             ];
-        }
+        }        
         $pid = Yii::$app->request->post('pid');
+        $qishu = Yii::$app->request->post('qishu');
         $deal = OnlineProduct::findOne(['id' => $pid]);
         $saleac = UserAccount::findOne(['uid' => $deal->borrow_uid, 'type' => UserAccount::TYPE_BORROW]);
         $bcround = new BcRound();
         bcscale(14);
-        $time = strtotime(date('Y-m-d'));
-        $orders = OnlineRepaymentPlan::find();
-        $weihuancount = $orders->where(['online_pid' => $pid, 'status' => OnlineRepaymentPlan::STATUS_WEIHUAN])->count();
-        if ($weihuancount == 0) {
-            return ['result' => 0, 'message' => '没有需要还款的项目']; //
+        $orders = OnlineRepaymentPlan::find()->where(['online_pid' => $pid, 'status' => OnlineRepaymentPlan::STATUS_WEIHUAN, 'qishu' => $qishu])->all();
+        if (0 === count($orders)) {
+            return ['result' => 0, 'message' => '没有需要还款的项目'];
         }
-        $orderarr = $orders->where(['online_pid' => $pid, 'status' => OnlineRepaymentPlan::STATUS_WEIHUAN])->all();
-        $total_faxi = 0;
-        $total_benjin = 0;
-        $total_lixi = 0;
-        $diff = \Yii::$app->functions->timediff(strtotime(date('Y-m-d', $deal->start_date)), strtotime(date('Y-m-d', $deal->finish_date)));
-        foreach ($orderarr as $key => $val) {
-            $jixidays = $diff['day'] - 1;
-            $orderarr[$key]['yuqi_day'] = 0;
-            $orderarr[$key]['overdue'] = 0;
-            $total_faxi = $bcround->bcround(bcadd($total_faxi, $orderarr[$key]['overdue']), 2);
-            $total_benjin = $bcround->bcround(bcadd($total_benjin, $val['benjin']), 2);
-            $lixi = bcmul(bcmul($val['benjin'], bcdiv($deal->yield_rate, 360)), $jixidays);
-            $total_lixi = $bcround->bcround(bcadd($total_lixi, $lixi), 2);
+        if ($qishu !== OnlineRepaymentPlan::find()->where(['online_pid' => $pid, 'status' => OnlineRepaymentPlan::STATUS_WEIHUAN])->min('qishu')) {
+            return ['result' => 0, 'message' => '不允许跨期还款'];
         }
-
+        $total_return = 0;
+        $sum_benxi_yue = OnlineRepaymentPlan::find()->where(['online_pid' => $pid, 'status' => OnlineRepaymentPlan::STATUS_WEIHUAN])->andWhere("qishu not in ($qishu)")->sum('benxi');//未还其它期数的总和
+        $sum_benxi_yue = null === $sum_benxi_yue? 0 : $sum_benxi_yue;
         $repaymentrecord = new OnlineRepaymentRecord();
         $mrmodel = new MoneyRecord();
         $transaction = Yii::$app->db->beginTransaction();
-        foreach ($orderarr as $order) {
-            $jixidays = $diff['day'] - 1;
-            $lixi = bcmul(bcmul($order['benjin'], bcdiv($deal->yield_rate, 360)), $jixidays);
-            //var_dump($plan);
+        foreach ($orders as $order) {
+            $total_return = bcadd($total_return, $order->benxi);
             $record = clone $repaymentrecord;
             $money_record = clone $mrmodel;
             $record->online_pid = $pid;
             $record->order_id = $order['order_id'];
             $record->order_sn = OnlineRepaymentRecord::createSN();
-            $record->qishu = 1; //默认期数1，到期本息
+            $record->qishu = $qishu;
             $record->uid = $order['uid'];
-            $record->benxi = $bcround->bcround(bcadd($lixi, $order['benjin']), 2);
+            $record->benxi = $order['benxi'];
             $record->benjin = $order['benjin'];
-            $record->lixi = $lixi;
-            $record->overdue = $order['overdue'];
-            $record->yuqi_day = $order['yuqi_day'];
-            $record->benxi_yue = 0;
+            $record->lixi = $order['lixi'];
+            $record->benxi_yue = $sum_benxi_yue;
             $record->status = 1;
-            $record->refund_time = $time;
+            $record->refund_time = time();
             if (!$record->save()) {
                 $transaction->rollBack();
-
                 return ['result' => 0, 'message' => '还款失败，记录失败']; //
             }
             $order->status = OnlineRepaymentPlan::STATUS_YIHUAN;
@@ -137,16 +125,13 @@ class RepaymentController extends BaseController
             }
             $ua = UserAccount::findOne(['uid' => $order['uid'], 'type' => UserAccount::TYPE_LEND]);
             //投资人账户调整
-            $lixiyuqi = $bcround->bcround(bcadd($lixi, $order['overdue']), 2);
-            $draw_in_sum = $bcround->bcround(bcadd($order['benjin'], $lixiyuqi), 2);//计算本金利息逾期
-            $ua->available_balance = $bcround->bcround(bcadd($ua->available_balance, $draw_in_sum), 2); //将投标的钱再加入到可用余额中
-            $ua->drawable_balance = $bcround->bcround(bcadd($ua->drawable_balance, $draw_in_sum), 2);
-            $ua->in_sum = $bcround->bcround(bcadd($ua->in_sum, $draw_in_sum), 2);
+            $ua->available_balance = $bcround->bcround(bcadd($ua->available_balance, $order['benxi']), 2); //将投标的钱再加入到可用余额中
+            $ua->drawable_balance = $bcround->bcround(bcadd($ua->drawable_balance, $order['benxi']), 2);
+            $ua->in_sum = $bcround->bcround(bcadd($ua->in_sum, $order['benxi']), 2);
             $ua->investment_balance = $bcround->bcround(bcsub($ua->investment_balance, $order['benjin']), 2);//理财
-            $ua->profit_balance = $bcround->bcround(bcadd($ua->profit_balance, $lixiyuqi), 2);//收益
+            $ua->profit_balance = $bcround->bcround(bcadd($ua->profit_balance, $order['lixi']), 2);//收益
             if (!$ua->save()) {
                 $transaction->rollBack();
-
                 return ['result' => 0, 'message' => '还款失败，投资人账户调整失败'];
             }
             //增加资金记录
@@ -155,23 +140,20 @@ class RepaymentController extends BaseController
             $money_record->type = MoneyRecord::TYPE_HUIKUAN;
             $money_record->osn = $order->sn;
             $money_record->uid = $order['uid'];
-            $money_record->in_money = $draw_in_sum;
+            $money_record->in_money = $order['benxi'];
             $money_record->balance = $ua->available_balance;
-            $money_record->remark = '本金:'.$order['benjin'].'元;利息:'.$lixi.'元;逾期天数:'.$order['yuqi_day'].'天;罚息:'.$order['overdue'].'元';
+            $money_record->remark = "第$qishu期".'本金:'.$order['benjin'].'元;利息:'.$order['lixi'].'元;';
             $mrres = $money_record->save();
             if (!$mrres) {
                 $transaction->rollBack();
-
                 return ['result' => 0, 'message' => '还款失败，资金记录失败'];
             }
         }
         //融资人需要扣除的金额计算
-        $total_repayment = $bcround->bcround(bcadd(bcadd($total_benjin, $total_lixi), $total_faxi), 2);
+        $total_repayment = $bcround->bcround($total_return, 2);
         $balance = $bcround->bcround(bcsub($saleac->available_balance, $total_repayment), 2);
-
-        if ($balance * 1 < 0) {
+        if (0 >= bccomp($balance, 0)) {
             $transaction->rollBack();
-
             return ['result' => 0, 'message' => '账户余额不足'];
         }
         $saleac->account_balance = $bcround->bcround(bcsub($saleac->account_balance, $total_repayment), 2);
@@ -180,7 +162,6 @@ class RepaymentController extends BaseController
         $saleac->out_sum = $bcround->bcround(bcadd($saleac->out_sum, $total_repayment), 2);
         if (!$saleac->save()) {
             $transaction->rollBack();
-
             return ['result' => 0, 'message' => '账户余额扣款异常'];
         }
 
@@ -192,20 +173,13 @@ class RepaymentController extends BaseController
         $smrecord->uid = $saleac->uid;
         $smrecord->out_money = $total_repayment;
         $smrecord->balance = $saleac->available_balance;
-        $smrecord->remark = '还款总计:'.$total_repayment.'元；应还本金:'.$total_benjin.'元；应还利息:'.$total_lixi.'元；应还罚息'.$total_faxi.'元；';
+        $smrecord->remark = "第$qishu期".'还款总计:'.$total_repayment.'元';
         $smrres = $smrecord->save();
         if (!$smrres) {
             $transaction->rollBack();
-
             return ['result' => 0, 'message' => '还款失败，资金记录失败'];
         }
-        $opres = OnlineProduct::updateAll(['status' => OnlineProduct::STATUS_OVER, 'sort' => 60], ['id' => $pid]);
-        if (!$opres) {
-            $transaction->rollBack();
 
-            return ['result' => 0, 'message' => '还款失败，修改标的状态错误'];
-        }
-        
         $_repaymentrecord = OnlineRepaymentRecord::find()->where(['online_pid' => $pid, 'status' => OnlineRepaymentRecord::STATUS_DID])->groupBy('uid');
         $data = $_repaymentrecord->all();
         $sms = new SmsMessage([
@@ -227,10 +201,17 @@ class RepaymentController extends BaseController
             $_sms->uid = $user->id;
             $_sms->mobile = $user->mobile;
             $_sms->message = json_encode($message);
-
             $_sms->save();
         }
-        
+
+        if (0 === bccomp($sum_benxi_yue, 0)) {
+            $opres = OnlineProduct::updateAll(['status' => OnlineProduct::STATUS_OVER, 'sort' => 60], ['id' => $pid]);
+            if (!$opres) {
+                $transaction->rollBack();
+                return ['result' => 0, 'message' => '还款失败，修改标的状态错误'];
+            }
+        }
+
         $transaction->commit();
 
         return [

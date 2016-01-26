@@ -65,9 +65,9 @@ class OnlineRepaymentRecord extends \yii\db\ActiveRecord
     {
         return [
             [['online_pid', 'order_id', 'qishu', 'uid', 'refund_time', 'status'], 'integer'],
-            //[['order_id', 'order_sn', 'qishu', 'benxi', 'benjin', 'lixi', 'yuqi_day', 'benxi_yue'], 'required'],
             ['online_pid', 'required'],
             [['benxi', 'benjin', 'lixi', 'overdue', 'benxi_yue'], 'number'],
+            [['overdue', 'yuqi_day'], 'default', 'value' => 0],
             [['order_sn'], 'string', 'max' => 30],
         ];
     }

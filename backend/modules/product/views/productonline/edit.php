@@ -69,8 +69,19 @@ $readonly = $model->online_status ? ['readonly' => 'readonly'] : [];
                         ?>
                     </div>
                 </div>
-            </div>
-        </div>
+            <div class="row-fluid">
+                        <div class="span12 ">
+                                <div class="control-group">
+                                        <label class="control-label">还款方式</label>
+                                        <div class="controls">
+                                                <?=
+                                                $form->field($model, 'refund_method', ['template' => '{input}{error}', 'inputOptions'=>['autocomplete'=>"off",'class'=>'chosen-with-diselect span6']])->dropDownList([''=>"--选择--"]+Yii::$app->params['refund_method'])
+                                                ?>
+                                        </div>
+                                </div>
+                        </div>
+                </div>
+
         <?php if ($model->id) {  ?>
         <div class="row-fluid">
             <div class="span12 ">

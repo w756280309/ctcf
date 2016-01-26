@@ -25,7 +25,7 @@ class OrderCore
     public function createOrder($sn = null, $price = null, $uid = null)
     {
         $model = OnlineProduct::findOne(['sn' => $sn]);
-        if (OnlineOrder::xsCount($uid) >= 3) {
+        if (OnlineOrder::xsCount($uid) >= 3 && 1 === $model->is_xs) {
             return ['code' => PayService::ERROR_SYSTEM, 'message' => '新手标只允许投3次'];
         }
         $user = \common\models\user\User::findOne($uid);

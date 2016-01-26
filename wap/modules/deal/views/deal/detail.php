@@ -51,7 +51,7 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
                 <div class="m1">起投金额：<span><?=$deal['start_money']?>元</span></div>
                 <div class="m2">项目起息：<span><?= $deal['jixi_time']>0 ? date('Y-m-d',$deal['jixi_time']) : '项目成立日次日';?></span></div>
                 <div class="m3">项目结束：<span><?= date('Y-m-d',$deal['finish_date'])?></span></div>
-                <div class="m4">还款方式：<span>按天计息，到期本息</span></div>
+                <div class="m4">还款方式：<span><?= Yii::$app->params['refund_method'][$deal['refund_method']]?></span></div>
             </div>
             <div class="col-xs-1"></div>
         </div>

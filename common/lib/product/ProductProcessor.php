@@ -98,8 +98,8 @@ class ProductProcessor {
             if (!$period)
                 throw new \Exception('Error: The period type not defined or is 0.');
 
-            if ($product_type != 'd1' && $product_type != 'm1')
-                throw new \Exception('Error: The $product_type type must be \'d1\' for day, or \'m1\' for month.');
+            if ($product_type != 'd1' && $product_type != 'm1' && $product_type != 'q1' && $product_type != 'y1')
+                throw new \Exception('Error: The $product_type type must be \'d1\' for day, or \'m1\' for month., or \'q1\' for quarter., or \'y1\' for year.');
             //将起息日转换为北京时区 
             if (!($this->checkDateIsValid($order_date))) {
                 throw new \Exception('Error: The $order_date format is  not Y-m-d or Ymd.');
@@ -115,6 +115,12 @@ class ProductProcessor {
                 $order_datetime->add($data_interval);
             } else if ($product_type == 'm1') {
                 $data_interval = new \DateInterval(sprintf("P%s%s", $period, 'M'));
+                $order_datetime->add($data_interval);
+            } else if ($product_type == 'q1') {
+                $data_interval = new \DateInterval(sprintf("P%s%s", $period, 'M'));
+                $order_datetime->add($data_interval);
+            } else if ($product_type == 'y1') {
+                $data_interval = new \DateInterval(sprintf("P%s%s", $period, 'Y'));
                 $order_datetime->add($data_interval);
             }
 
