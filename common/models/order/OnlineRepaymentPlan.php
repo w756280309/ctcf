@@ -140,7 +140,7 @@ class OnlineRepaymentPlan extends \yii\db\ActiveRecord
         return true;
     }
 
-    public static function getPlansdata($product, $order) {
+    public static function getPlansdata($product, $order) {        
         bcscale(14);
         $pp = new ProductProcessor();
         $bc = new BcRound();
@@ -158,15 +158,15 @@ class OnlineRepaymentPlan extends \yii\db\ActiveRecord
                 ]
             ];
         } else if (OnlineProduct::REFUND_METHOD_MONTH === (int)$product->refund_method) {//按月还息
-            $each_lixi = $bc->bcround(bcdiv($total_lixi, $days['count']), 2);
+            $each_lixi = bcdiv($total_lixi, $days['count']);//$bc->bcround(bcdiv($total_lixi, $days['count']), 2);
             $lixi_arr = array();
             for ($i = 0; $i < $days['count']; $i++) {
                 $lixi_arr[] = [
                     'qishu' => ($i + 1),
-                    'benxi' => ($i === $days['count'] - 1) ? $bc->bcround(bcadd($order['order_money'], bcsub($total_lixi, bcmul($each_lixi, ($days['count'] - 1)))), 2) : $each_lixi,
+                    'benxi' => ($i === $days['count'] - 1) ? $bc->bcround(bcadd($order['order_money'], bcsub($total_lixi, bcmul($each_lixi, ($days['count'] - 1)))), 2) : $bc->bcround($each_lixi, 2),
                     'benjin' => ($i === $days['count'] - 1) ? $order['order_money'] : 0,
-                    'lixi' => $each_lixi,
-                    'refund_time' => (int)$days['days'][$i + 1]['date'],
+                    'lixi' => $bc->bcround($each_lixi, 2),
+                    'refund_time' => (int) $days['days'][$i + 1]['date'],
                 ];
             }
             return $lixi_arr;
