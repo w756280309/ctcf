@@ -57,21 +57,21 @@ class BookingController extends BaseController
 
         return $this->render('booking', ['model' => $model, 'product' => $product]);
     }
-    
+
     public function actionDetail($pid)
     {
         $model = BookingProduct::findOne($pid);
         if (empty($model)) {
             throw new \yii\web\NotFoundHttpException('booking production is not existed.');
         }
-        
+
         $now = time();
         $end_flag = false;
         $count = BookingLog::find()->where(['pid' => $pid, 'uid' => $this->user->id])->count();
         if ($model->is_disabled || (!empty($model->start_time) && $now < $model->start_time) || (!empty($model->end_time) && $now > $model->end_time)) {
             $end_flag = true;
         }
-        
+
         return $this->render('detail', ['model' => $model, 'exist_flag' => $count, 'end_flag' => $end_flag]);
     }
 
