@@ -263,7 +263,7 @@ class DrawrecordController extends BaseController
             $mess = [
                 $user->real_name,
                 date('Y-m-d H:i:s', $model->created_at),
-                $model->money,
+                number_format($model->money, 2),
                 Yii::$app->params['contact_tel'],
             ];
             $sms = new SmsMessage([
