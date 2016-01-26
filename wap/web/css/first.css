@@ -24,7 +24,6 @@
     color: #ea5514;
     font-size: 16px;
 }
-
 .arrow-rg {
     float: left;
     margin-top: 1px;
@@ -59,7 +58,11 @@
     font-size: 14px;
     display: block;
 }
-.more a:hover {text-decoration:none;}
+
+.more a:hover {
+    text-decoration: none;
+}
+
 ul.new-bottom {
     padding-top: 15px;
     padding-bottom: 15px;
@@ -163,4 +166,91 @@ a.weikaibiao {
 .licai-bottom div a img {
     width: 94%;
     border: 3px solid #c9caca;
+}
+/* 股权投资 */
+.color1 {
+    color: #3e3a39;
+}
+
+.color2 {
+    color: #727171;
+}
+
+.title-div {
+    height: 48px;
+    line-height: 42px;
+    font-weight: 500;
+    font-size: 18px;
+    text-align: center;
+}
+
+a.a1 {
+    float: left;
+    margin-top: 4px;
+    margin-right: 1px;
+    width: 3px;
+    height: 13px;
+    display: inline-block;
+}
+
+.img-jijin {
+    margin: 0 auto 10px;
+    padding-left: 3px;
+    padding-right: 3px;
+}
+
+img {
+    border: 0
+}
+
+.bg1 {
+    background: #d3a284;
+}
+
+.bg2 {
+    background: #54567a;
+}
+
+.bg3 {
+    background: #58727f;
+}
+
+.bg4 {
+    background: #83afa6;
+}
+
+.bg5 {
+    background: #f7958e;
+}
+
+.p1 {
+    margin-bottom: 24px;
+    font-size: 15px;
+    line-height: 20px;
+}
+
+.p1 p {
+    margin-left: 6px;
+}
+
+.div1 {
+    margin: 10px 0 0;
+    padding: 0;
+    width: 100%;
+    height: 15px;
+    background: #e7eaf0;
+}
+
+.yuyue {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    z-index: 100;
+    width: 100%;
+    height: 56px;
+    line-height: 56px;
+    font-size: 20px;
+    text-align: center;
+    background: #f7958e;
+    color: #fff;
 }
