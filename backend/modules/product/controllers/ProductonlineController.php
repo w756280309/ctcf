@@ -468,7 +468,7 @@ class ProductonlineController extends BaseController
             $data->andFilterWhere(['like', 'name', $name]);
         }
         //$data->orderBy('id desc');
-        
+
         $pages = new Pagination(['totalCount' => $data->count(), 'pageSize' => '20']);
         $model = $data->offset($pages->offset)->limit($pages->limit)->all();
 
