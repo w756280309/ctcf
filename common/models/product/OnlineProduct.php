@@ -218,7 +218,23 @@ class OnlineProduct extends \yii\db\ActiveRecord
 
             ['status', 'checkDealStatus'],
             ['expires', 'checkExpires'],
+
+            [['start_date', 'end_date', 'finish_date'], 'checkDate'],
         ];
+    }
+
+    public function checkDate()
+    {
+        $start = strtotime($this->start_date);
+        $end = strtotime($this->end_date);
+        $finish = strtotime($this->finish_date);
+
+        if ($start > $end || $start > $finish || $end > $finish) {
+            $this->addError('start_date', '募集开始时间小于募集结束时间小于项目结束日');
+            $this->addError('end_date', '募集开始时间小于募集结束时间小于项目结束日');
+            $this->addError('finish_date', '募集开始时间小于募集结束时间小于项目结束日');
+        }
+        return true;
     }
 
     /**

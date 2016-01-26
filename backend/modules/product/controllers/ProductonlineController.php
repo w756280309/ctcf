@@ -57,23 +57,21 @@ class ProductonlineController extends BaseController
             $ctmodel = ContractTemplate::find()->where(['pid' => $id])->asArray()->all();
         }
 
+        $con_name_arr = Yii::$app->request->post('name');
+        $con_content_arr = Yii::$app->request->post('content');
+
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             if (empty($id)) {
                 $model->sn = OnlineProduct::createSN();
                 $model->sort = OnlineProduct::SORT_PRE;
             }
 
-            $diff = \Yii::$app->functions->timediff(strtotime(date('Y-m-d',  strtotime($model->start_date))),  strtotime(date('Y-m-d', strtotime($model->finish_date))));
-
             $start = strtotime($model->start_date);
             $end = strtotime($model->end_date);
             $finish = strtotime($model->finish_date);
-            $jixi_time = !empty($model->jixi_time) ? strtotime($model->jixi_time) : '';
-            $bool = true;
-            if ($start > $end || $start > $finish || $end > $finish) {
-                $bool = false;
-            }
 
+            $diff = \Yii::$app->functions->timediff(strtotime(date('Y-m-d', $start)), strtotime(date('Y-m-d', $end)));
+            $jixi_time = !empty($model->jixi_time) ? strtotime($model->jixi_time) : '';
             $err = '';
             if (!$model->is_jixi && !empty($model->jixi_time)) {
                 $_start = strtotime(date('Y-m-d', $start));
@@ -95,17 +93,11 @@ class ProductonlineController extends BaseController
                 }
             }
 
-            $con_name_arr = Yii::$app->request->post('name');
-            $con_content_arr = Yii::$app->request->post('content');
             $_namearr = empty($con_name_arr) ? $con_name_arr : array_filter($con_name_arr);
             $_contentarr = empty($con_content_arr) ? $con_content_arr : array_filter($con_content_arr);
 
             if ($model->expires > $diff['day']) {
                 $model->addError('expires', '项目天数 应该小于等于 项目截止日 - 募集开始时间;当前天数：'.$diff['day'].'天');
-            } elseif (!$bool) {
-                $model->addError('start_date', '募集开始时间小于募集结束时间小于项目结束日');
-                $model->addError('end_date', '募集开始时间小于募集结束时间小于项目结束日');
-                $model->addError('finish_date', '募集开始时间小于募集结束时间小于项目结束日');
             } elseif (!empty($err)) {
                 $model->addError('jixi_time', $err);
             } elseif (empty($_namearr) || empty($_contentarr)) {
@@ -148,7 +140,15 @@ class ProductonlineController extends BaseController
             }
         }
 
-        return $this->render('edit', ['pid' => $id, 'model' => $model, 'ctmodel' => $ctmodel, 'product_status' => $product_status, 'rongziInfo' => $rongziInfo]);
+        return $this->render('edit', [
+            'pid' => $id,
+            'model' => $model,
+            'ctmodel' => $ctmodel,
+            'product_status' => $product_status,
+            'rongziInfo' => $rongziInfo,
+            'con_name_arr' => $con_name_arr,
+            'con_content_arr' => $con_content_arr,
+        ]);
     }
 
     /**

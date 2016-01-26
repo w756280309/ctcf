@@ -1,5 +1,6 @@
 <?php
 use yii\widgets\ActiveForm;
+use PayGate\Cfca\CfcaUtils;
 
 $this->registerCssFile('/kindeditor/themes/default/default.css', ['depends' => 'yii\web\YiiAsset', 'position' => 1]);
 $this->registerJsFile('/kindeditor/kindeditor-min.js', ['depends' => 'yii\web\YiiAsset', 'position' => 1]);
@@ -10,6 +11,64 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\we
 $this->registerJsFile('/js/product.js', ['depends' => 'yii\web\YiiAsset']);
 
 $readonly = $model->online_status ? ['readonly' => 'readonly'] : [];
+
+$tpl = <<<TPL
+<div class="row-fluid">
+    <div class="span12 ">
+        <div class="control-group">
+            <label class="control-label">合同标题</label>
+            <div class="controls">
+                <input type="text" id="contracttemplate-name" class="m-wrap span12" name="name[]" autocomplete="off" placeholder="合同标题" value='{{ name }}'>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row-fluid ctemp">
+    <div class="span12 ">
+        <div class="control-group">
+            <label class="control-label">合同内容</label>
+            <div class="controls">
+                <textarea class="m-wrap span12 new_template" name="content[]">{{ content }}</textarea>
+            </div>
+        </div>
+    </div>
+</div>
+TPL;
+
+$tpl2 = <<<TPL
+<div id='con_{{ key }}'>
+    <div class="row-fluid">
+        <div class="span12 ">
+            <div class="control-group">
+                <label class="control-label">合同标题</label>
+                <div class="controls">
+                    <input type="text" id="contracttemplate-name" class="m-wrap span12" name="name[]" autocomplete="off" placeholder="合同标题" value="{{ name }}">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row-fluid ctemp">
+        <div class="span12 ">
+            <div class="control-group">
+                <label class="control-label">合同内容</label>
+                <div class="controls">
+                    <textarea class="m-wrap span12 new_template" name="content[]">{{ content }}</textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row-fluid">
+        <div class="span12 ">
+            <div class="control-group">
+                <label class="control-label" style="text-align: right;"><a href="javascript:void(0);" onclick="delcontract(this);" style='color:red' data-con='con_{{ key }}'>删除该条合同信息</a></label>
+            </div>
+        </div>
+    </div>
+</div>
+TPL;
 ?>
 <?php $this->beginBlock('blockmain'); ?>
 
@@ -248,62 +307,35 @@ $readonly = $model->online_status ? ['readonly' => 'readonly'] : [];
         <?=
         $form->field($model, 'contract_type', ['template' => '{error}']);
         ?>
-        <?php if (empty($pid)) { ?>
-        <div class="row-fluid">
-            <div class="span12 ">
-                <div class="control-group">
-                    <label class="control-label">合同标题</label>
-                    <div class="controls">
-                        <input type="text" id="contracttemplate-name" class="m-wrap span12" name="name[]" autocomplete="off" placeholder="合同标题">
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="row-fluid ctemp">
-            <div class="span12 ">
-                <div class="control-group">
-                    <label class="control-label">合同内容</label>
-                    <div class="controls">
-                        <textarea class="m-wrap span12 new_template" name="content[]"></textarea>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <?php } else { foreach ($ctmodel as $key => $val) { ?>
-        <div id='con_<?= $key ?>'>
-            <div class="row-fluid">
-                <div class="span12 ">
-                    <div class="control-group">
-                        <label class="control-label">合同标题</label>
-                        <div class="controls">
-                            <input type="text" id="contracttemplate-name" class="m-wrap span12" name="name[]" autocomplete="off" placeholder="合同标题" value="<?= $val['name'] ?>">
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row-fluid ctemp">
-                <div class="span12 ">
-                    <div class="control-group">
-                        <label class="control-label">合同内容</label>
-                        <div class="controls">
-                            <textarea class="m-wrap span12 new_template" name="content[]"><?= $val['content'] ?></textarea>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row-fluid">
-                <div class="span12 ">
-                    <div class="control-group">
-                        <label class="control-label" style="text-align: right;"><a href="javascript:void(0);" onclick="delcontract(this);" style='color:red' data-con='con_<?= $key ?>'>删除该条合同信息</a></label>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <?php } } ?>
+        <?php
+            if (empty($pid)) {
+                echo CfcaUtils::renderXml($tpl, [
+                    'name' => $con_name_arr[0],
+                    'content' => $con_content_arr[0],
+                ]);
+            }
+            if (!empty($ctmodel) && !$model->hasErrors()) {
+                foreach ($ctmodel as $key => $val) {
+                   echo CfcaUtils::renderXml($tpl2, [
+                       'key' => $key,
+                       'name' => $val['name'],
+                       'content' => $val['content'],
+                   ]);
+                }
+            }
+            if (!empty($con_name_arr)) {
+                foreach ($con_name_arr as $key => $val) {
+                    if (empty($pid) && $key === 0) {
+                        continue;
+                    }
+                    echo CfcaUtils::renderXml($tpl2, [
+                        'key' => $key,
+                        'name' => $val,
+                        'content' => $con_content_arr[$key],
+                    ]);
+                }
+            }
+        ?>
         <div class="row-fluid" id="insert_con">
             <div class="span12 ">
                 <div class="control-group">
