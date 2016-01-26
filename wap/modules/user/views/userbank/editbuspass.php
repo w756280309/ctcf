@@ -97,12 +97,7 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
                $(this).removeClass("btn-press").addClass("btn-normal");
                return false;
            }
-//           if($('#sms').val().length!=6){
-//               toast(this,'验证码必须是6位数字');
-//               $(this).removeClass("btn-press").addClass("btn-normal");
-//               return false;
-//           }
-           subForm("#editpassform");
+           subForm("#editpassform", "#editpassbtn");
            $(this).removeClass("btn-press").addClass("btn-normal");
         });
         $(".eye img").on("click",function (){

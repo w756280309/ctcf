@@ -61,7 +61,7 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset', 'positi
     <!-- 修改登录密码页 end  -->
     <script type="text/javascript">
     var csrf;
-    $(function() {       
+    $(function() {
        csrf = $("meta[name=csrf-token]").attr('content');
        $('#editpassbtn').bind('click', function() {
             if ($('#password').val() === '') {
@@ -95,7 +95,7 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset', 'positi
                toast(this, '验证码不能为空');
                return false;
            }
-           subForm("#editpassform");
+           subForm("#editpassform", "#editpassbtn");
        });
 
     });
@@ -115,4 +115,3 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset', 'positi
 
     </script>
 
-    

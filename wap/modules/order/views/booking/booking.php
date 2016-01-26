@@ -59,7 +59,7 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset', 'positi
        csrf = $("meta[name=csrf-token]").attr('content');
        $('#booking_btn').bind('click',function() {
            $(this).addClass("btn-press").removeClass("btn-normal");
-           subForm("#form");
+           subForm("#form", "#booking_btn");
            $(this).removeClass("btn-press").addClass("btn-normal");
        });
     })

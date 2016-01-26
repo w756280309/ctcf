@@ -48,24 +48,19 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
        
        csrf = $("meta[name=csrf-token]").attr('content');
        $('#idcardbtn').bind('click',function(){
-           $(this).addClass("btn-press").removeClass("btn-normal");
-           if($('#real_name').val()==''){
-                    toast(this,'姓名不能为空');
-                    $(this).removeClass("btn-press").addClass("btn-normal");
-                    return false;
-                }
-                if($('#idcard').val()==''){
-                    toast(this,'身份证不能为空');
-                    $(this).removeClass("btn-press").addClass("btn-normal");
-                    return false;
-                }
-                
-//                if(!validateIdCard($('#idcard').val())){
-//                    toast(this,'身份证号码错误');
-//                    return false;
-//                }
-           subForm("#form");
-           $(this).removeClass("btn-press").addClass("btn-normal");
+            $(this).addClass("btn-press").removeClass("btn-normal");
+            if($('#real_name').val()==''){
+                toast(this,'姓名不能为空');
+                $(this).removeClass("btn-press").addClass("btn-normal");
+                return false;
+            }
+            if($('#idcard').val()==''){
+                toast(this,'身份证不能为空');
+                $(this).removeClass("btn-press").addClass("btn-normal");
+                return false;
+            }
+            subForm("#form", "#idcardbtn");
+            $(this).removeClass("btn-press").addClass("btn-normal");
        });
 
     })    

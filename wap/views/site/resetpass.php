@@ -103,7 +103,7 @@ frontend\assets\WapAsset::register($this);
                 $("#signup-btn").removeClass("btn-press").addClass("btn-normal");
                 return false;
             }
-            subForm('#resetpass_form');
+            subForm("#resetpass_form", "#signup-btn");
             $("#signup-btn").removeClass("btn-press").addClass("btn-normal");
         }
         $(function () {
