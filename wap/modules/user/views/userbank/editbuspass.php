@@ -93,8 +93,9 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
                $(this).removeClass("btn-press").addClass("btn-normal");
                return false;
            }
-           subForm("#editpassform", "#editpassbtn");
-           $('#editpassform-verifycode-image').click();
+           subForm("#editpassform", "#editpassbtn", function() {
+               $('#editpassform-verifycode-image').click();
+           });           
            $(this).removeClass("btn-press").addClass("btn-normal");
         });
         $(".eye img").on("click",function (){

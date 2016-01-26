@@ -1,6 +1,6 @@
-//除法函数，用来得到精确的除法结果 
-//说明：javascript的除法结果会有误差，在两个浮点数相除的时候会比较明显。这个函数返回较为精确的除法结果。 
-//调用：accDiv(arg1,arg2) 
+//除法函数，用来得到精确的除法结果
+//说明：javascript的除法结果会有误差，在两个浮点数相除的时候会比较明显。这个函数返回较为精确的除法结果。
+//调用：accDiv(arg1,arg2)
 //返回值：arg1除以arg2的精确结果
 
 function accDiv(arg1, arg2) {
@@ -19,16 +19,16 @@ function accDiv(arg1, arg2) {
         return (r1 / r2) * pow(10, t2 - t1);
     }
 }
-//给Number类型增加一个div方法，调用起来更加方便。 
+//给Number类型增加一个div方法，调用起来更加方便。
 Number.prototype.div = function(arg) {
     return accDiv(this, arg);
 }
 
 
-//乘法函数，用来得到精确的乘法结果 
-//说明：javascript的乘法结果会有误差，在两个浮点数相乘的时候会比较明显。这个函数返回较为精确的乘法结果。 
-//调用：accMul(arg1,arg2) 
-//返回值：arg1乘以arg2的精确结果 
+//乘法函数，用来得到精确的乘法结果
+//说明：javascript的乘法结果会有误差，在两个浮点数相乘的时候会比较明显。这个函数返回较为精确的乘法结果。
+//调用：accMul(arg1,arg2)
+//返回值：arg1乘以arg2的精确结果
 
 function accMul(arg1, arg2)
 {
@@ -43,16 +43,16 @@ function accMul(arg1, arg2)
     }
     return Number(s1.replace(".", "")) * Number(s2.replace(".", "")) / Math.pow(10, m)
 }
-//给Number类型增加一个mul方法，调用起来更加方便。 
+//给Number类型增加一个mul方法，调用起来更加方便。
 Number.prototype.mul = function(arg) {
     return accMul(arg, this);
 }
 
 
-//加法函数，用来得到精确的加法结果 
-//说明：javascript的加法结果会有误差，在两个浮点数相加的时候会比较明显。这个函数返回较为精确的加法结果。 
-//调用：accAdd(arg1,arg2) 
-//返回值：arg1加上arg2的精确结果 
+//加法函数，用来得到精确的加法结果
+//说明：javascript的加法结果会有误差，在两个浮点数相加的时候会比较明显。这个函数返回较为精确的加法结果。
+//调用：accAdd(arg1,arg2)
+//返回值：arg1加上arg2的精确结果
 
 function accAdd(arg1, arg2) {
     var r1, r2, m;
@@ -69,13 +69,13 @@ function accAdd(arg1, arg2) {
     m = Math.pow(10, Math.max(r1, r2))
     return (arg1 * m + arg2 * m) / m
 }
-//给Number类型增加一个add方法，调用起来更加方便。 
+//给Number类型增加一个add方法，调用起来更加方便。
 Number.prototype.add = function(arg) {
     return accAdd(arg, this);
 }
 
-//在你要用的地方包含这些函数，然后调用它来计算就可以了。 
-//比如你要计算：7*0.8 ，则改成 (7).mul(8) 
+//在你要用的地方包含这些函数，然后调用它来计算就可以了。
+//比如你要计算：7*0.8 ，则改成 (7).mul(8)
 //其它运算类似，就可以得到比较精确的结果。
 
 
@@ -100,39 +100,26 @@ function Subtr(arg1, arg2) {
     return ((arg1 * m - arg2 * m) / m).toFixed(n);
 }
 
-//function checkLogin(){
-//    csrf=$("meta[name=csrf-token]").attr('content');
-//    var user = 0;
-//    $.ajax({
-//        type: "post",
-//        url: "/user/default/checklogin",
-//        data: {_csrf:csrf},
-//        dataType: "json",
-//        success: function(data) {
-//            
-//        }
-//    });
-//    return user;
-//}
+function subForm(form, button, falsed)
+{
+    var $btn = $(button);
+    var vals = $(form).serialize();
+    var to = $(form).attr("data-to");//设置如果返回错误，是否需要跳转界面
 
-function subForm(form,button){
-    if(button!=undefined) {
-        $(button).attr('disabled',true);
-        $(button).removeClass("btn-normal").addClass("btn-press");
-    }
-    vals = $(form).serialize();
-    to = $(form).attr("data-to");//设置如果返回错误，是否需要跳转界面
-
-    $.post($(form).attr("action"), vals, function (data) {
+    $btn.attr('disabled', true);
+    $btn.removeClass("btn-normal").addClass("btn-press");
+    var xhr = $.post($(form).attr("action"), vals, function (data) {
         if(data.code=='-1'){
             alertTrue(function(){
                 location.href='/user/user';
             })
         }else if(data.code!=0&&to==1&&data.tourl!=undefined){
-            toasturl(data.tourl,data.message);
+            toasturl(data.tourl, data.message);
         }else{
             if(data.code!=0){
-                toast(form,data.message);
+                toast(form, data.message, function() {
+                    falsed();
+                });
             }
 
              if(to==1&&data.tourl!=undefined){
@@ -141,19 +128,18 @@ function subForm(form,button){
         }
 
     });
-    if(button!=undefined) {
-        $(button).removeAttr('disabled');
-        $(button).removeClass("btn-press").addClass("btn-normal");
-    }
-
-
+    xhr.always(function() {
+            $btn.removeClass("btn-press").addClass("btn-normal");
+            $btn.attr('disabled', false);
+        });
 }
 
 //*********************************************************************************
 
 //没有遮罩的弹窗
 //toast('.notice','您输入的卡号有误');
-function toast(btn,val){
+function toast(btn, val, active)
+{
     var kahao=$('<div class="error-info" style="display: block"><div>'+val+'</div></div>');
         $(kahao).insertAfter($('form'));
         setTimeout(function(){
@@ -161,12 +147,13 @@ function toast(btn,val){
             setTimeout(function(){
                 $(kahao).remove();
             },200);
+            active();
         },2000);
 }
 
 //没有遮罩的弹窗有页面跳转
 //toast('.notice','您输入的卡号有误');
-function toasturl(url,val){
+function toasturl(url, val, active){
     var kahao=$('<div class="error-info" style="display: block"><div>'+val+'</div></div>');
         $(kahao).insertAfter($('form'));
         setTimeout(function(){
@@ -279,13 +266,13 @@ function createSms(form,uid,fun){
  * yymmdd: 出生年(两位年)月日，如：910215
  * xx: 顺序编码，系统产生，无法确定
  * p: 性别，奇数为男，偶数为女
- * 
+ *
  * 身份证18位编码规则：dddddd yyyymmdd xxx y
  * dddddd：6位地区编码
  * yyyymmdd: 出生年(四位年)月日，如：19910215
  * xxx：顺序编码，系统产生，无法确定，奇数为男，偶数为女
  * y: 校验码，该位数值可通过前17位计算获得
- * 
+ *
  * 前17位号码加权因子为 Wi = [ 7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2 ]
  * 验证位 Y = [ 1, 0, 10, 9, 8, 7, 6, 5, 4, 3, 2 ]
  * 如果验证码恰好是10，为了保证身份证是十八位，那么第十八位将用X来代替
@@ -324,7 +311,7 @@ function validateIdCard(idCard){
      return false;
     }
    }
-  } 
+  }
  }else{
   return false;
  }

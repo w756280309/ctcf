@@ -95,8 +95,9 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset', 'positi
                toast(this, '验证码不能为空');
                return false;
            }
-           subForm("#editpassform", "#editpassbtn");
-           $('#editpassform-verifycode-image').click();
+           subForm("#editpassform", "#editpassbtn", function() {
+               $('#editpassform-verifycode-image').click();
+           });           
        });
 
     });
