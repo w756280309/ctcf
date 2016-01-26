@@ -50,11 +50,9 @@ class DealcrontabController extends Controller
      */
     public function actionLiu()
     {
-        $product = OnlineProduct::find();
-        $product->where(['del_status' => OnlineProduct::STATUS_USE, 'online_status' => OnlineProduct::STATUS_ONLINE, 'status' => OnlineProduct::STATUS_NOW]);
-        $product->andFilterWhere(['<', 'end_date', time()])->all();
+        $product = OnlineProduct::find()->where(['del_status' => OnlineProduct::STATUS_USE, 'online_status' => OnlineProduct::STATUS_ONLINE, 'status' => OnlineProduct::STATUS_NOW])->andFilterWhere(['<', 'end_date', time()])->all();
         $bc = new BcRound();
-        bcscale(14);        
+        bcscale(14);
         foreach ($product as $val) {
             $order = OnlineOrder::find()->where(['online_pid' => $val['id'], 'status' => OnlineOrder::STATUS_SUCCESS])->all();
             $transaction = Yii::$app->db->beginTransaction();
@@ -99,6 +97,6 @@ class DealcrontabController extends Controller
             }
             $transaction->commit();
         }
-        return true; 
+        return true;
     }
 }
