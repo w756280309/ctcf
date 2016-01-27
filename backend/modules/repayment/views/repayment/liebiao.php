@@ -82,9 +82,9 @@ $bc = new BcRound();
                         <td><?= $val['qishu'] ?></td>
                         <td><?= $val['real_name'] ?></td>
                         <td><?= $val['mobile'] ?></td>                   
-                        <td><?= $val['benjin'] ?></td>                   
-                        <td><?= $val['lixi'] ?></td>                   
-                        <td><?= $val['benxi'] ?></td>
+                        <td style="text-align: right; padding-right: 70px"><?= $val['benjin'] ?></td>                   
+                        <td style="text-align: right; padding-right: 70px"><?= $val['lixi'] ?></td>                   
+                        <td style="text-align: right; padding-right: 70px"><?= $val['benxi'] ?></td>
                     </tr>
                     <?php endforeach; ?>   
                 </tbody>

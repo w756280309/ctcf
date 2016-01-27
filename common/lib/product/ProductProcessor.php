@@ -10,6 +10,7 @@
 namespace common\lib\product;
 
 use common\lib\bchelp\BcRound;
+use Exception;
 
 class ProductProcessor {
 
@@ -252,5 +253,44 @@ class ProductProcessor {
             exit($e->getMessage());
         }
     }
+    
+    /**
+     * $periodType d:day m:month q:quarter y:year
+     */
+    public function getDays($periodType){
+        if (!$days && !$periodType) {
+            throw new Exception('Error: day/periodType不能为空');
+        }
+        $periodType = $periodType ? strtoupper($periodType) : null;
+        if (!$periodType) {
+            throw new Exception('Error: The period type not defined.');
+        }
+        if ($periodType != 'D' && $periodType != 'M'  && $periodType != 'Q'  && $periodType != 'Y' ) {
+            throw new Exception('Error: The period type must be \'d\' for day, or \'m\' for month., or \'q\' for quarter., or \'y\' for year.');
+        }
+        if ('D' === $periodType) {
+            return 1;
+        } else if ('M' === $periodType) {
+            return 30;
+        } else if ('Q' === $periodType) {
+            return 90;
+        } else if ('Y' === $periodType) {
+            return 360;
+        } else {
+            throw new Exception('异常期数');
+        }
+    }
+
+
+    /**
+     * 计算项目期数
+     * @param type $days 项目天数
+     * @param type $periodType d:day m:month q:quarter y:year
+     */
+    public function getQishu($days,$periodType){
+        $qiday = $this->getDays($periodType);
+        return (int) ceil($days / $qiday);
+    }
+    
 
 }
