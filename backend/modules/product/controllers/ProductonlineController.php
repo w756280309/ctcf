@@ -70,7 +70,7 @@ class ProductonlineController extends BaseController
             $end = strtotime($model->end_date);
             $finish = strtotime($model->finish_date);
 
-            $diff = \Yii::$app->functions->timediff(strtotime(date('Y-m-d', $start)), strtotime(date('Y-m-d', $end)));
+            $diff = \Yii::$app->functions->timediff(strtotime(date('Y-m-d', $start)), strtotime(date('Y-m-d', $finish)));
             $jixi_time = !empty($model->jixi_time) ? strtotime($model->jixi_time) : '';
             $err = '';
             if (!$model->is_jixi && !empty($model->jixi_time)) {
