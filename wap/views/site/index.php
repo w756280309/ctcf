@@ -1,4 +1,6 @@
 <?php
+use common\models\product\OnlineProduct;
+
 $this->title = '温都金服 - 首页';
 $this->params['breadcrumbs'][] = $this->title;
 $this->registerJsFile('/js/jquery.js', ['depends' => 'yii\web\YiiAsset','position' => 1]);
@@ -7,6 +9,10 @@ $this->registerJsFile('/js/jquery.classyloader.js', ['depends' => 'yii\web\YiiAs
 $this->registerJsFile('/js/index.js', ['depends' => 'yii\web\YiiAsset','position' => 1]);
 $this->registerCssFile('/css/index.css', ['depends' => 'yii\web\YiiAsset']);
 $this->registerCssFile('/css/first.css', ['depends' => 'yii\web\YiiAsset']);
+
+$dates = Yii::$app->functions->getDateDesc($deals->start_date);
+$rate = number_format($deals->finish_rate * 100, 0);
+
 ?>
 
 <div class="container">
@@ -35,10 +41,10 @@ $this->registerCssFile('/css/first.css', ['depends' => 'yii\web\YiiAsset']);
                 <div class="col-xs-3 col-sm-2 more"><a href="/deal/deal/index?xs=1">更多》</a></div>
             </div>
 
-            <ul class="row new-bottom" >
+            <ul class="row new-bottom" onclick="window.location.href='/deal/deal/detail?sn=<?= $deals->sn ?>'">
                 <li class="col-xs-6 padding-5">
                     <div class="xian">
-                        <?= $deals->yield_rate ?><span >%</span>
+                        <?= doubleval(number_format($deals->yield_rate, 2)) ?><span >%</span>
                         <?php if (!empty($deals->jiaxi)) { ?>
                             + <?= $deals->jiaxi ?><span >%</span>
                         <?php } ?>
@@ -46,22 +52,21 @@ $this->registerCssFile('/css/first.css', ['depends' => 'yii\web\YiiAsset']);
                 </li>
                 <li class="col-xs-6 padding-5">
                     <div class="new-bottom-rg">
-                        <p ><span class="tishi"><?= $deals->start_money ?>起投，<?= \Yii::$app->functions->timediff(strtotime(date('Y-m-d', $deals->start_date)), strtotime(date('Y-m-d', $deals->finish_date))); ?>天</span></p>
-                        <!-- 满标 -->
-                        <a class="zhuangtai manbiao" style="display: none;" href="/">满标</a>
+                        <p ><span class="tishi"><?= $deals->start_money ?>起投，<?= $deals->getSpanDays() ?>天</span></p>
+                        <?php if (OnlineProduct::STATUS_PRE === $deals->status) { ?>
+                        <!-- 未开标 -->
+                        <a class="zhuangtai weikaibiao" href="/deal/deal/detail?sn=<?= $deals->sn ?>"><?= $dates['desc'] ?> <?= date('H:i', $deals->start_date) ?></a>
+                        <?php } elseif (OnlineProduct::STATUS_NOW === $deals->status) { ?>
                         <!-- 进度 % -->
                         <div style="margin:10px 3px; border:1px solid #fe9b00; ">
-                            <a class="a-progress-bg"  style="width:30%;"></a>
-                            <a class="zhuangtai a-progress" href="/">75%</a>
+                            <a class="a-progress-bg"  style="width:<?= $rate ?>%;"></a>
+                            <a class="zhuangtai a-progress" href="/deal/deal/detail?sn=<?= $deals->sn ?>"><?= $rate ?>%</a>
                         </div>
-                        <!-- 已还清 -->
-                        <a class="zhuangtai huanqing" style="display: none;" href="/">已还清</a>
-                        <!-- 流标 -->
-                        <a class="zhuangtai liubiao" style="display: none;" href="/">流标</a>
-                        <!-- 还款中 -->
-                        <a class="zhuangtai huankuan" style="display: none;" href="/">还款中</a>
-                        <!-- 未开标 -->
-                        <a class="zhuangtai weikaibiao" style="display: none;" href="/">明天4：30</a>
+                        <?php } else { ?>
+                        <div class="zhuangtai" style="margin:10px 3px; background-color: #9fa0a0;">
+                            <font style="color: #fff; line-height: 40px;"><?= Yii::$app->params['productonline'][$deals->status] ?></font>
+                        </div>
+                        <?php } ?>
                     </div>
                 </li>
             </ul>
@@ -76,10 +81,10 @@ $this->registerCssFile('/css/first.css', ['depends' => 'yii\web\YiiAsset']);
                 </div>
                 <div class="col-xs-4 col-sm-5"></div>
             </div>
-            <div class="licai-bottom row">
-                <div class="col-xs-4"><a href="" style="text-align:left;"><img src="../images/type1.png" alt="短期产品" /></a> </div>
-                <div class="col-xs-4"><a href="" style="text-align: center;"><img src="../images/type2.png" alt="政府平台" /></a> </div>
-                <div class="col-xs-4"><a href="" style="text-align: right;"><img src="../images/type3.png" alt="股权投资" /></a> </div>
+            <div class="row">
+                <div class="col-xs-4"><a href="/deal/deal/index?cat=1" style="text-align:left;"><img src="../images/type1.png" alt="短期产品" /></a> </div>
+                <div class="col-xs-4"><a href="/deal/deal/index?cat=2" style="text-align: center;"><img src="../images/type2.png" alt="政府平台" /></a> </div>
+                <div class="col-xs-4"><a href="/order/booking/detail?pid=1" style="text-align: right;"><img src="../images/type3.png" alt="股权投资" /></a> </div>
             </div>
 
         </div>
