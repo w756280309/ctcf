@@ -190,7 +190,7 @@ class RechargerecordController extends BaseController
                 $moneyInfo->in_money = $money;
                 $moneyInfo->account_id = $userAccountInfo->id;
                 $recharge->status = RechargeRecord::STATUS_YES;
-                if (($moneyInfo->save()) && ($userAccountInfo->save()) && $recharge->save()) {
+                if (($moneyInfo->save()) && ($userAccountInfo->save()) && $recharge->save(false)) {
                     $transaction->commit();
                     $res = $this->alert = 1;
                     $this->msg = '操作成功';
@@ -202,7 +202,7 @@ class RechargerecordController extends BaseController
                 }
             } else {
                 $recharge->status = RechargeRecord::STATUS_FAULT;
-                $recharge->save();
+                $recharge->save(false);
             }
         }
 
