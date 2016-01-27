@@ -97,16 +97,18 @@ class SiteController extends Controller
     {
         $this->layout = 'main';
         $ac = 5;
-        $dc = 5;
-        $adv = Adv::find()->where(['status' => 0, 'del_status' => 0])->select('image,link,description')->limit($ac)->orderBy('id desc')->asArray()->all();
+        $adv = Adv::find()->where(['status' => 0, 'del_status' => 0])->limit($ac)->orderBy('id desc')->asArray()->all();
 
-        $deals = OnlineProduct::find()->where(['del_status' => OnlineProduct::STATUS_USE, 'online_status' => OnlineProduct::STATUS_ONLINE])->select('id k,sn as num,title,yield_rate as yr,status,expires as qixian,money,start_date start,finish_rate')->limit($dc)->orderBy('sort asc,id desc')->asArray()->all();
-        foreach ($deals as $key => $val) {
-            $dates = Yii::$app->functions->getDateDesc($val['start']);
-            $deals[$key]['start'] = date('H:i', $val['start']);
-            $deals[$key]['start_desc'] = $dates['desc'];
-            $deals[$key]['yr'] = $val['yr'] ? number_format($val['yr'] * 100, 2) : '0.00';
-            $deals[$key]['statusval'] = Yii::$app->params['productonline'][$val['status']];
+        $model = OnlineProduct::find()->where(['del_status' => OnlineProduct::STATUS_USE, 'online_status' => OnlineProduct::STATUS_ONLINE]);
+        $deals = $model->andWhere(['is_xs' => 1])->orderBy('id desc')->one();
+        if (empty($deals) || $deals->status >= OnlineProduct::STATUS_FULL) {
+            $_deals = $model->andWhere(['status' => [OnlineProduct::STATUS_PRE, OnlineProduct::STATUS_NOW]])->orderBy('id desc')->one();
+            if (!empty($_deals)) {
+                $deals = $_deals;
+            }
+        }
+        if (empty($deals)) {
+            throw new \yii\web\NotFoundHttpException('The production is not existed.');
         }
 
         return $this->render('index', ['adv' => $adv, 'deals' => $deals]);
