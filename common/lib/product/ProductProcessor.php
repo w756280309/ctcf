@@ -56,9 +56,10 @@ class ProductProcessor {
      * @param string $yield_rate 年利率
      * @param string $order_money 投资金额
      * @param string $expires 项目期限
+     * @param string $isbc 是否保留2位 
      * @return string 项目截止日
      */
-    public function getProductDayReturn($yield_rate, $order_money, $expires) {
+    public function getProductDayReturn($yield_rate, $order_money, $expires, $isbc = true) {
 
         if (empty($yield_rate)) {
             throw new \Exception('Error: The $yield_rate  isEmpty.');
@@ -74,7 +75,7 @@ class ProductProcessor {
         $day_lv = bcdiv($yield_rate, 360);
         $lixi = bcmul(bcmul($order_money, $day_lv), $expires);
         $bcround = new BcRound();
-        return $bcround->bcround($lixi, 2);
+        return $isbc ? $bcround->bcround($lixi, 2) : $lixi;
     }
 
     /**
