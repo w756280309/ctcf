@@ -18,6 +18,7 @@ use common\lib\cfca\Cfca;
 use PayGate\Cfca\Response\Response1520;
 use common\models\user\Batchpay;
 use common\models\user\DrawRecord;
+use common\models\checkaccount\CheckaccountWdjf;
 
 class BatchpaycrontabController extends Controller
 {
@@ -101,7 +102,7 @@ class BatchpaycrontabController extends Controller
                     $momeyRecord->save();
                     $userAccount->save();
                     $drawRord->status = DrawRecord::STATUS_SUCCESS;
-                    $drawRord->save();
+                    $drawRord->save(false);
                     $batchpay->is_launch = Batchpay::IS_LAUNCH_FINISH;
                     $batchpay->save();
                 }

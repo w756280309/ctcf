@@ -90,6 +90,7 @@ class DrawManager
                 'balance' => $draw->user->lendAccount->available_balance,
                 'in_money' => $draw->money,
             ]);
+            $fee_record = null;//返还手续费对象
             if (null !== $mrfee) { //如果存在提现手续费,将冻结提现手续费的金额解冻
                 $draw->money = bcadd($mrfee->out_money, $draw->money); //将手续费也加入到解冻金额中
                 $draw->user->lendAccount->available_balance = $bc->bcround(bcadd($draw->user->lendAccount->available_balance, $mrfee->out_money), 2);
@@ -97,12 +98,11 @@ class DrawManager
                 $fee_record->type = MoneyRecord::TYPE_DRAW_FEE_RETURN;
                 $fee_record->in_money = $mrfee->out_money;
                 $fee_record->balance = $draw->user->lendAccount->available_balance;
-                $fee_record->save(false);
             }
             $draw->user->lendAccount->drawable_balance = $bc->bcround(bcadd($draw->user->lendAccount->drawable_balance, $draw->money), 2);
             $draw->user->lendAccount->in_sum = $bc->bcround(bcadd($draw->user->lendAccount->in_sum, $draw->money), 2);
             $draw->user->lendAccount->freeze_balance = $bc->bcround(bcsub($draw->user->lendAccount->freeze_balance, $draw->money), 2);
-            if (!$money_record->save() || !$draw->user->lendAccount->save()) {
+            if (!$money_record->save() || !$draw->user->lendAccount->save() || (null !== $fee_record && !$fee_record->save(false))) {
                 $transaction->rollBack();
                 throw new DrawException("审核失败");
             }
