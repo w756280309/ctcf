@@ -75,7 +75,7 @@ class DrawManager
         bcscale(14);
         $transaction = Yii::$app->db->beginTransaction();
         $draw->status = $status;
-        if (!$draw->save()) {
+        if (!$draw->save(false)) {
             $transaction->rollBack();
             throw new DrawException("审核失败");
         }

@@ -162,7 +162,9 @@ $status = Yii::$app->request->get('status');
                         <td>
                             <?php
                                 if ($val['status'] === '0') {
-                                    echo "未处理";
+                            ?>
+                                    <a class="btn mini green ajax_op" index="<?= $val['id'] ?>"><i class="icon-edit"></i>审核</a>
+                            <?php
                                 } elseif ($val['status'] === '1') {
                                     echo "已审核";
                                 } elseif ($val['status'] === '3') {
