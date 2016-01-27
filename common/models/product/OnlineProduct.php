@@ -12,7 +12,6 @@ use yii\behaviors\TimestampBehavior;
  * @property string $title
  * @property string $sn
  * @property string $cid
- * @property int $pcid
  * @property int $borrow_uid
  * @property string $yield_rate
  * @property string $fee
@@ -112,7 +111,7 @@ class OnlineProduct extends \yii\db\ActiveRecord
             'del' => ['del_status'],
             'status' => ['status', 'sort', 'full_time'],
             'jixi' => ['jixi_time'],
-            'create' => ['title', 'sn', 'cid', 'pcid', 'money', 'borrow_uid', 'expires', 'expires_show', 'yield_rate', 'start_money', 'borrow_uid', 'fee', 'status',
+            'create' => ['title', 'sn', 'cid', 'money', 'borrow_uid', 'expires', 'expires_show', 'yield_rate', 'start_money', 'borrow_uid', 'fee', 'status',
                 'description', 'refund_method', 'account_name', 'account', 'bank', 'dizeng_money', 'fazhi', 'fazhi_up', 'start_date', 'end_date', 'full_time', 'is_xs', 'yuqi_faxi', 'order_limit', 'creator_id', 'del_status', 'status', 'target', 'target_uid', 'finish_date', 'channel', 'jixi_time', 'sort', 'jiaxi',],
         ];
     }
@@ -189,7 +188,7 @@ class OnlineProduct extends \yii\db\ActiveRecord
     {
         return [
             [['title', 'borrow_uid', 'yield_rate', 'money', 'start_money', 'dizeng_money', 'start_date', 'end_date', 'expires', 'cid', 'description', 'finish_date'], 'required'],
-            [['cid', 'pcid', 'is_xs', 'borrow_uid', 'refund_method', 'expires', 'full_time', 'del_status', 'status', 'order_limit', 'creator_id'], 'integer'],
+            [['cid', 'is_xs', 'borrow_uid', 'refund_method', 'expires', 'full_time', 'del_status', 'status', 'order_limit', 'creator_id'], 'integer'],
             [['yield_rate', 'fee', 'money', 'start_money', 'dizeng_money', 'fazhi', 'fazhi_up', 'yuqi_faxi', 'jiaxi',], 'number'],
             [['fazhi', 'fazhi_up', 'target'], 'integer'],
             ['target', 'default', 'value' => 0],
@@ -283,7 +282,6 @@ class OnlineProduct extends \yii\db\ActiveRecord
             'title' => '名称',
             'sn' => '项目编号',
             'cid' => '分类',
-            'pcid' => '父级分类',
             'borrow_uid' => '融资用户ID',
             'yield_rate' => '年利率',
             'jiaxi' => '加息利率',
