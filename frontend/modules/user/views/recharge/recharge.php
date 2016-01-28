@@ -100,7 +100,7 @@ $this->registerJs($_js, View::POS_END, 'body_close');
 
                 <p>
                     <a class="btn btn-primary" href="/user/recharge/checkarchstatus">充值成功</a>
-                    <a class="btn btn-default" href="/user/recharge/recharge-err">充值失败</a>
+                    <a class="btn btn-default" href="/user/recharge/checkarchstatus">充值失败</a>
                 </p>
             </div>
         </div>

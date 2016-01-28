@@ -51,7 +51,6 @@ class RechargeController extends BaseController
             $recharge->account_id = $user_account->id;
             $recharge->bank_id = $bank_id;
             $recharge->pay_bank_id = $bank_id;
-            $recharge->bankNotificationTime = '0';
             $recharge->status = RechargeRecord::STATUS_NO;
             $recharge->pay_type = $pay_type;
 
