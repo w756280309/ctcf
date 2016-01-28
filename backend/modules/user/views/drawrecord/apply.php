@@ -2,6 +2,8 @@
 use yii\widgets\LinkPager;
 use common\models\user\User;
 use common\models\user\DrawRecord;
+
+$this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\web\YiiAsset']);
 ?>
 <?php $this->beginBlock('blockmain'); ?>
 
@@ -22,7 +24,7 @@ use common\models\user\DrawRecord;
             <ul class="breadcrumb">
                 <li>
                     <i class="icon-home"></i>
-                    <a href="/user/user/<?= $category == 1 ? "listt" : "listr" ?>">会员管理</a> 
+                    <a href="/user/user/<?= $category == 1 ? "listt" : "listr" ?>">会员管理</a>
                     <i class="icon-angle-right"></i>
                 </li>
                 <li>
@@ -45,10 +47,21 @@ use common\models\user\DrawRecord;
                             <td>
                                 <span class="title">真实姓名</span>
                             </td>
-                            <td><input type="text" class="m-wrap span6" style="margin-bottom: 0px;width:300px" name='name' value="<?= $_GET['name'] ?>"  placeholder="真实姓名"/></td>
+                            <td><input type="text" class="m-wrap span6" style="margin-bottom: 0px;width:300px" name='name' value="<?= $request['name'] ?>"  placeholder="真实姓名"/></td>
                             <td><span class="title">手机号</span></td>
                             <td>
-                                <input type="text" class="m-wrap span6" style="margin-bottom: 0px;width:300px" name='mobile' value="<?= $_GET['mobile'] ?>"  placeholder="手机号"/>
+                                <input type="text" class="m-wrap span6" style="margin-bottom: 0px;width:300px" name='mobile' value="<?= $request['mobile'] ?>"  placeholder="手机号"/>
+                            </td>
+                            <td colspan="6"></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span class="title">用户注册时间</span>
+                            </td>
+                            <td colspan="3">
+                                <input type="text" placeholder="开始时间" value="<?=$request['starttime']?>" name="starttime" class="m-wrap span4" style="width: 300px;" onclick='WdatePicker({dateFmt:"yyyy-MM-dd",maxDate:"<?=  date("Y-m-d")?>"});'/>
+                                ---
+                                <input type="text" placeholder="结束时间" value="<?=$request['endtime']?>" name="endtime" class="m-wrap span4" style="width: 300px;" onclick='WdatePicker({dateFmt:"yyyy-MM-dd",maxDate:"<?=  date("Y-m-d")?>"});'/>
                             </td>
                             <td colspan="6" align="right" style=" text-align: right">
                                 <button type='submit' class="btn blue btn-block" style="width: 100px;">搜索 <i class="m-icon-swapright m-icon-white"></i></button>
@@ -109,19 +122,19 @@ use common\models\user\DrawRecord;
                                 <?php } ?>
                             </td>
                     </tr>
-                <?php endforeach; ?>   
+                <?php endforeach; ?>
                 </tbody>
             </table>
         </div>
         <!--分页-->
-        <div class="pagination" style="text-align:center"><?= LinkPager::widget(['pagination' => $pages]); ?></div> 
+        <div class="pagination" style="text-align:center"><?= LinkPager::widget(['pagination' => $pages]); ?></div>
     </div>
 
 </div>
 
 
 <script type="text/javascript">
-   
-</script> 
+
+</script>
 <?php $this->endBlock(); ?>
 

@@ -16,7 +16,6 @@ use common\models\user\Batchpay;
 use yii\web\Response;
 use common\utils\TxUtils;
 use common\models\sms\SmsMessage;
-use common\models\draw\Draw;
 use common\models\draw\DrawManager;
 use common\models\draw\DrawException;
 
@@ -201,18 +200,25 @@ class DrawrecordController extends BaseController
     /*
      * 会员管理 提现申请页面
      */
-    public function actionApply($name = null, $mobile = null)
+    public function actionApply()
     {
         $query = User::find();
+        $request = Yii::$app->request->get();
 
-        if (!empty($name)) {
-            $query->andFilterWhere(['like', 'real_name', $name]);
+        if (!empty($request['name'])) {
+            $query->andFilterWhere(['like', 'real_name', $request['name']]);
         }
-        if (!empty($mobile)) {
-            $query->andFilterWhere(['like', 'mobile', $mobile]);
+        if (!empty($request['mobile'])) {
+            $query->andFilterWhere(['like', 'mobile', $request['mobile']]);
+        }
+        if (!empty($request['starttime'])) {
+            $query->andFilterWhere(['>=', 'created_at', strtotime($request['starttime'])]);
+        }
+        if (!empty($request['endtime'])) {
+            $query->andFilterWhere(['<=', 'created_at', strtotime($request['endtime']) + 24 * 60 * 60]);
         }
 
-        $tzUser = $query->andWhere('type=1')->select('id,usercode,mobile,real_name')->asArray()->all();
+        $tzUser = $query->andWhere('type=1')->asArray()->all();
         $res = [];
         foreach ($tzUser as $k => $v) {
             $res[$v['id']] = $v;
@@ -226,10 +232,11 @@ class DrawrecordController extends BaseController
         $model = $model->offset($pages->offset)->limit($pages->limit)->orderBy('created_at DESC')->all();
 
         return $this->render('apply', [
-                    'res' => $res,
-                    'model' => $model,
-                    'category' => 1,
-                    'pages' => $pages,
+            'res' => $res,
+            'model' => $model,
+            'category' => 1,
+            'pages' => $pages,
+            'request' => $request,
         ]);
     }
 
