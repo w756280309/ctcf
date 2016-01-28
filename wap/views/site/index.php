@@ -44,7 +44,7 @@ $rate = number_format($deals->finish_rate * 100, 0);
             <ul class="row new-bottom" onclick="window.location.href='/deal/deal/detail?sn=<?= $deals->sn ?>'">
                 <li class="col-xs-6 padding-5">
                     <div class="xian">
-                        <?= doubleval(number_format($deals->yield_rate, 2)) ?><span >%</span>
+                        <?= doubleval(number_format($deals->yield_rate*100, 2)) ?><span >%</span>
                         <?php if (!empty($deals->jiaxi)) { ?>
                             + <?= $deals->jiaxi ?><span >%</span>
                         <?php } ?>
