@@ -235,6 +235,14 @@ class OnlineProduct extends \yii\db\ActiveRecord
         }
         return true;
     }
+    
+    /**
+     * 获取项目天数
+     */
+    public function getSpanDays()
+    {
+        return \Yii::$app->functions->timediff(strtotime(date('Y-m-d', $this->start_date)), strtotime(date('Y-m-d', $this->finish_date)))['day'];
+    }
 
     /**
      * 验证如果是满标、还款中、已还款不能编辑.
