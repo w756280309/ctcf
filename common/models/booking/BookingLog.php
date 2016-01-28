@@ -2,6 +2,7 @@
 
 namespace common\models\booking;
 
+use YiiPlus\Validator\CnMobileValidator;
 use Yii;
 use yii\behaviors\TimestampBehavior;
 
@@ -46,8 +47,7 @@ class BookingLog extends \yii\db\ActiveRecord
             [['uid', 'pid', 'name', 'mobile', 'fund'], 'required'],
             [['uid', 'pid', 'fund', 'created_at', 'updated_at'], 'integer'],
             [['name'], 'string', 'max' => 50],
-            [['mobile'], 'string', 'length' => 11],
-            [['mobile'], 'match', 'pattern' => '/^(13[0-9]|14[0-9]|15[0-9]|17[0-9]|18[0-9])\d{8}$/', 'message' => '手机号格式错误'],
+            ['mobile', CnMobileValidator::className(), 'skipOnEmpty' => false],
         ];
     }
 
