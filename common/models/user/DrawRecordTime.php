@@ -69,6 +69,7 @@ class DrawRecordTime extends \yii\db\ActiveRecord
             [['money'], 'number', 'min' => 0.01, 'max' => 10000000],
             [['sn', 'bank_id', 'bank_name', 'bank_account'], 'string', 'max' => 30],
             [['sn'], 'unique', 'message' => '流水号已被占用，请重试'],
+            [['sn'], 'match', 'pattern' => '/^[A-Za-z0-9]+$/', 'message' => '提现流水号不允许有特殊字符及汉字'],
         ];
     }
 

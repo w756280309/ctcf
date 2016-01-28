@@ -3,6 +3,7 @@
 namespace common\models\user;
 
 use Yii;
+use yii\behaviors\TimestampBehavior;
 
 class RechargeRecordTime extends \yii\db\ActiveRecord
 {
@@ -52,11 +53,19 @@ class RechargeRecordTime extends \yii\db\ActiveRecord
             ['sn', 'unique', 'message' => '流水号重复'],
             [['fund', 'uid', 'sn', 'bank_id'], 'required'],
             [['account_id', 'uid', 'status'], 'integer'],
+            [['sn'], 'match', 'pattern' => '/^[A-Za-z0-9]+$/', 'message' => '提现流水号不允许有特殊字符及汉字'],
             [['fund'], 'match', 'pattern' => '/^[0-9]+([.]{1}[0-9]{1,2})?$/', 'message' => '充值金额格式错误'],
             [['fund'], 'number', 'min' => 0.01, 'max' => 999999999],
             [['sn'], 'string', 'max' => 30],
             [['bank_id'], 'string', 'max' => 20],
             [['remark'], 'string', 'max' => 100],
+        ];
+    }
+    
+    public function behaviors()
+    {
+        return [
+            TimestampBehavior::className(),
         ];
     }
 
