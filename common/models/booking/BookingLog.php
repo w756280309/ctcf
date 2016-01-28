@@ -3,25 +3,24 @@
 namespace common\models\booking;
 
 use YiiPlus\Validator\CnMobileValidator;
-use Yii;
 use yii\behaviors\TimestampBehavior;
 
 /**
- * This is the model class for table "booking_log".
+ * 预约记录
  *
- * @property integer $id
- * @property integer $uid
- * @property integer $pid
+ * @property int $id
+ * @property int $uid
+ * @property int $pid
  * @property string $name
  * @property string $mobile
- * @property integer $fund
- * @property integer $created_at
- * @property integer $updated_at
+ * @property int $fund
+ * @property int $created_at
+ * @property int $updated_at
  */
 class BookingLog extends \yii\db\ActiveRecord
 {
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public static function tableName()
     {
@@ -39,7 +38,7 @@ class BookingLog extends \yii\db\ActiveRecord
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function rules()
     {
@@ -52,7 +51,7 @@ class BookingLog extends \yii\db\ActiveRecord
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function attributeLabels()
     {

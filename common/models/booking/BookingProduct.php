@@ -2,25 +2,23 @@
 
 namespace common\models\booking;
 
-use Yii;
-
 /**
- * This is the model class for table "booking_product".
+ * 预约产品
  *
- * @property integer $id
+ * @property int $id
  * @property string $name
- * @property integer $is_disabled
- * @property integer $start_time
- * @property integer $end_time
- * @property integer $min_fund
- * @property integer $total_fund
- * @property integer $created_at
- * @property integer $updated_at
+ * @property int $is_disabled
+ * @property int $start_time
+ * @property int $end_time
+ * @property int $min_fund
+ * @property int $total_fund
+ * @property int $created_at
+ * @property int $updated_at
  */
 class BookingProduct extends \yii\db\ActiveRecord
-{    
+{
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public static function tableName()
     {
@@ -28,19 +26,19 @@ class BookingProduct extends \yii\db\ActiveRecord
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function rules()
     {
         return [
             [['id', 'name', 'start_time', 'end_time', 'created_at', 'updated_at'], 'required'],
             [['id', 'is_disabled', 'start_time', 'end_time', 'min_fund', 'total_fund', 'created_at', 'updated_at'], 'integer'],
-            [['name'], 'string', 'max' => 128]
+            [['name'], 'string', 'max' => 128],
         ];
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function attributeLabels()
     {
