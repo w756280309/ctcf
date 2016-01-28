@@ -99,15 +99,8 @@ class SiteController extends Controller
         $ac = 5;
         $adv = Adv::find()->where(['status' => 0, 'del_status' => 0])->limit($ac)->orderBy('id desc')->asArray()->all();
 
-        $model = OnlineProduct::find()->where(['del_status' => OnlineProduct::STATUS_USE, 'online_status' => OnlineProduct::STATUS_ONLINE]);
-        $deals = $model->andWhere(['is_xs' => 1])->orderBy('id desc')->one();
-        if (empty($deals) || $deals->status >= OnlineProduct::STATUS_FULL) {
-            $_deals = $model->andWhere(['status' => [OnlineProduct::STATUS_PRE, OnlineProduct::STATUS_NOW]])->orderBy('id desc')->one();
-            if (!empty($_deals)) {
-                $deals = $_deals;
-            }
-        }
-        if (empty($deals)) {
+        $deals = OnlineProduct::find()->where(['del_status' => OnlineProduct::STATUS_USE, 'online_status' => OnlineProduct::STATUS_ONLINE, 'is_xs' => 1])->orderBy('sort asc, id desc')->one();
+        if (!$deals) {
             throw new \yii\web\NotFoundHttpException('The production is not existed.');
         }
 
