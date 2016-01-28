@@ -256,7 +256,7 @@ class ProductProcessor {
     }
     
     /**
-     * $periodType d:day m:month q:quarter y:year
+     * $periodType d:day m:month q:quarter  hy:half a year y:year
      */
     public function getDays($periodType){
         if (!$days && !$periodType) {
@@ -266,8 +266,8 @@ class ProductProcessor {
         if (!$periodType) {
             throw new Exception('Error: The period type not defined.');
         }
-        if ($periodType != 'D' && $periodType != 'M'  && $periodType != 'Q'  && $periodType != 'Y' ) {
-            throw new Exception('Error: The period type must be \'d\' for day, or \'m\' for month., or \'q\' for quarter., or \'y\' for year.');
+        if ($periodType != 'D' && $periodType != 'M'  && $periodType != 'Q'  && $periodType != 'HY'  && $periodType != 'Y' ) {
+            throw new Exception('Error: The period type must be \'d\' for day, or \'m\' for month., or \'q\' for quarter., or \'hy\' for half a year., or \'y\' for year.');
         }
         if ('D' === $periodType) {
             return 1;
@@ -275,6 +275,8 @@ class ProductProcessor {
             return 30;
         } else if ('Q' === $periodType) {
             return 90;
+        } else if ('HY' === $periodType) {
+            return 180;
         } else if ('Y' === $periodType) {
             return 360;
         } else {

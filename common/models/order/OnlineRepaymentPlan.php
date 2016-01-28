@@ -147,8 +147,8 @@ class OnlineRepaymentPlan extends \yii\db\ActiveRecord
             return self::calcRepayment($order, 'm', $product->jixi_time);
         } else if (OnlineProduct::REFUND_METHOD_QUARTER === (int)$product->refund_method) {//按季度还息
             return self::calcRepayment($order, 'q', $product->jixi_time);
-        } else if (OnlineProduct::REFUND_METHOD_YEAR === (int)$product->refund_method) {//按年还息
-            return self::calcRepayment($order, 'y', $product->jixi_time);
+        } else if (OnlineProduct::REFUND_METHOD_HALF_YEAR === (int)$product->refund_method) {//按年还息
+            return self::calcRepayment($order, 'hy', $product->jixi_time);
         }
         return false;
     }

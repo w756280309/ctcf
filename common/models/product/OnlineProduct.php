@@ -55,7 +55,8 @@ class OnlineProduct extends \yii\db\ActiveRecord
     const REFUND_METHOD_DAOQIBENXI = 1;
     const REFUND_METHOD_MONTH = 2;
     const REFUND_METHOD_QUARTER = 3;
-    const REFUND_METHOD_YEAR = 4;
+    const REFUND_METHOD_HALF_YEAR = 4;
+    const REFUND_METHOD_YEAR = 5;
 
     /*定义错误级别*/
     const ERROR_SUCCESS = 100;
@@ -89,7 +90,9 @@ class OnlineProduct extends \yii\db\ActiveRecord
             'status' => ['status', 'sort', 'full_time'],
             'jixi' => ['jixi_time'],
             'create' => ['title', 'sn', 'cid', 'money', 'borrow_uid', 'expires', 'expires_show', 'yield_rate', 'start_money', 'borrow_uid', 'fee', 'status',
-                'description', 'refund_method', 'account_name', 'account', 'bank', 'dizeng_money', 'fazhi', 'fazhi_up', 'start_date', 'end_date', 'full_time', 'is_xs', 'yuqi_faxi', 'order_limit', 'creator_id', 'del_status', 'status', 'target', 'target_uid', 'finish_date', 'channel', 'jixi_time', 'sort', 'jiaxi', ],
+                'description', 'refund_method', 'account_name', 'account', 'bank', 'dizeng_money', 'fazhi', 'fazhi_up', 'start_date', 'end_date', 'full_time',
+                'is_xs', 'yuqi_faxi', 'order_limit', 'creator_id', 'del_status', 'status', 'target', 'target_uid', 'finish_date', 'channel', 'jixi_time', 'sort',
+                'jiaxi', 'kuanxianqi',],
         ];
     }
 
@@ -164,12 +167,15 @@ class OnlineProduct extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['title', 'borrow_uid', 'yield_rate', 'money', 'start_money', 'dizeng_money', 'start_date', 'end_date', 'expires', 'cid', 'description', 'finish_date'], 'required'],
+            [['title', 'borrow_uid', 'yield_rate', 'money', 'start_money', 'dizeng_money', 'start_date', 'end_date', 'expires', 'cid', 'description'], 'required'],
+            ['finish_date', 'required', 'whenClient' => "function (attribute, value) {
+                return $('#is_fdate').parent().hasClass('checked');
+            }"],
             [['cid', 'is_xs', 'borrow_uid', 'refund_method', 'expires', 'full_time', 'del_status', 'status', 'order_limit', 'creator_id'], 'integer'],
-            [['yield_rate', 'fee', 'money', 'start_money', 'dizeng_money', 'fazhi', 'fazhi_up', 'yuqi_faxi', 'jiaxi'], 'number'],
-            [['fazhi', 'fazhi_up', 'target'], 'integer'],
+            [['yield_rate', 'fee', 'money', 'start_money', 'dizeng_money', 'fazhi', 'fazhi_up', 'yuqi_faxi', 'jiaxi',], 'number'],
+            [['fazhi', 'fazhi_up', 'target', 'kuanxianqi'], 'integer'],
             ['target', 'default', 'value' => 0],
-            ['is_xs', 'default', 'value' => 0],
+            [['is_xs', 'kuanxianqi'], 'default', 'value' => 0],
             [['description'], 'string'],
             [['title', 'target_uid'], 'string', 'max' => 128],
             [['target_uid'], 'match', 'pattern' => '/^\d+((,)\d+)*$/', 'message' => '{attribute}格式不正确必须以英文逗号分隔'],
@@ -183,8 +189,8 @@ class OnlineProduct extends \yii\db\ActiveRecord
             [['dizeng_money'], 'compare', 'compareValue' => 1, 'operator' => '>='],
             [['start_money', 'fazhi', 'fazhi_up'], 'compare', 'compareAttribute' => 'money', 'operator' => '<'],
             [['fazhi_up'], 'compare', 'compareAttribute' => 'fazhi', 'operator' => '<='],
-            [['yield_rate', 'jiaxi'], 'compare', 'compareValue' => 100, 'operator' => '<='],
-            [['yield_rate', 'jiaxi'], 'compare', 'compareValue' => 0, 'operator' => '>='],
+            [['yield_rate', 'jiaxi',], 'compare', 'compareValue' => 100, 'operator' => '<='],
+            [['yield_rate', 'jiaxi', 'kuanxianqi'], 'compare', 'compareValue' => 0, 'operator' => '>='],
             [['jiaxi'], 'match', 'pattern' => '/^[0-9]+([.]{1}[0-9])?$/', 'message' => '加息利率只允许有一位小数'],
             [['jiaxi'], 'compare', 'compareValue' => 10, 'operator' => '<='],
             [['jiaxi'], 'compare', 'compareValue' => 0, 'operator' => '>='],
@@ -275,6 +281,7 @@ class OnlineProduct extends \yii\db\ActiveRecord
             'expires_show' => '项目期限文字显示',
             'refund_method' => '还款方式',
             'expires' => '借款期限',
+            'kuanxianqi' => '宽限期',
             'money' => '融资总额',
             'start_money' => '起投金额',
             'dizeng_money' => '递增金额',

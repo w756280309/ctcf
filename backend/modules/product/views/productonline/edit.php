@@ -128,19 +128,7 @@ TPL;
                         ?>
                     </div>
                 </div>
-            <div class="row-fluid">
-                        <div class="span12 ">
-                                <div class="control-group">
-                                        <label class="control-label">还款方式</label>
-                                        <div class="controls">
-                                                <?=
-                                                $form->field($model, 'refund_method', ['template' => '{input}{error}', 'inputOptions'=>['autocomplete'=>"off",'class'=>'chosen-with-diselect span6']])->dropDownList([''=>"--选择--"]+Yii::$app->params['refund_method'])
-                                                ?>
-                                        </div>
-                                </div>
-                        </div>
-                </div>
-
+         
         <?php if ($model->id) {  ?>
         <div class="row-fluid">
             <div class="span12 ">
@@ -177,6 +165,7 @@ TPL;
             </div>
             <!--/span-->
         </div>
+        
         <div class="row-fluid">
             <div class="span6 ">
                 <div class="control-group">
@@ -245,13 +234,34 @@ TPL;
                     <label class="control-label">项目截止日</label>
                     <div class="controls">
                         <?=
-                        $form->field($model, 'finish_date', ['template' => '<div class="input-append date form_datetime">{input}<span class="add-on" onclick="WdatePicker({el:\'onlineproduct-finish_date\',dateFmt:\'yyyy-MM-dd HH:mm\',minDate:\''.date('Y-m-d').'\'});"><i class="icon-calendar"></i></span></div>{error}', 'inputOptions' => ['autocomplete' => 'off', 'placeholder' => '项目截止日']])->textInput(['readonly' => 'readonly', 'class' => 'm-wrap span12', 'onclick' => 'WdatePicker({dateFmt:"yyyy-MM-dd HH:mm",minDate:\''.date('Y-m-d').'\'});'])
+                        $form->field($model, 'finish_date', ['template' => '<div class="input-append date form_datetime">{input}<span class="add-on" onclick="WdatePicker({el:\'onlineproduct-finish_date\',dateFmt:\'yyyy-MM-dd HH:mm\',minDate:\''.date('Y-m-d').'\'});"><i class="icon-calendar"></i></span><input type="checkbox" id="is_fdate" title="是否有截止日" /></div>{error}', 'inputOptions' => ['autocomplete' => 'off', 'placeholder' => '项目截止日', 'disabled' => 'disabled']])->textInput(['readonly' => 'readonly', 'class' => 'm-wrap span12', 'onclick' => 'WdatePicker({dateFmt:"yyyy-MM-dd HH:mm",minDate:\''.date('Y-m-d').'\'});'])
                         ?>
                     </div>
                 </div>
             </div>
         </div>
-
+        <div class="row-fluid">
+                <div class="span6 ">
+                        <div class="control-group">
+                                <label class="control-label">还款方式</label>
+                                <div class="controls">
+                                        <?=
+                                        $form->field($model, 'refund_method', ['template' => '{input}{error}', 'inputOptions'=>['autocomplete'=>"off",'class'=>'chosen-with-diselect span6']])->dropDownList([''=>"--选择--"]+Yii::$app->params['refund_method'])
+                                        ?>
+                                </div>
+                        </div>
+                </div>
+              <div class="span6 ">
+                <div class="control-group">
+                    <label class="control-label">项目宽限期</label>
+                    <div class="controls">
+                        <?=
+                        $form->field($model, 'kuanxianqi', ['template' => '<div class="input-append">{input}<span class="add-on">(天)</span></div>{error}', 'inputOptions' => ['autocomplete' => 'off', 'placeholder' => '默认0天']])->textInput(['class' => 'm-wrap span6'])
+                        ?>
+                    </div>
+                </div>
+            </div>
+        </div>        
         <div class="row-fluid">
             <div class="span6 ">
                 <div class="control-group">
@@ -385,6 +395,10 @@ TPL;
             }
         });
 
+        $('#is_fdate').bind('click', function() {
+            true === $(this).parent().hasClass('checked') ? $('#onlineproduct-finish_date').attr('disabled', 'disabled') : $('#onlineproduct-finish_date').removeAttr('disabled')
+            
+        });
         kindEdit();
     });
 

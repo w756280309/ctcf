@@ -17,7 +17,7 @@ $this->registerJsFile('/js/order.js', ['depends' => 'yii\web\YiiAsset','position
         <div class="col-xs-4 text-align-ct">年化收益</div>
         <div class="col-xs-8 text-align-lf col"><?=  number_format($deal->yield_rate*100)?>%</div>
         <div class="col-xs-4 text-align-ct">项目期限</div>
-        <div class="col-xs-8 text-align-lf col"><?=$deal->expires?>天</div>
+        <div class="col-xs-8 text-align-lf col"><?=$deal->expires?>天+<?=$deal['kuanxianqi']?>天(宽限期)</div>
         <div class="col-xs-4 text-align-ct">可投余额</div>
         <div class="col-xs-8 text-align-lf col"><?=  number_format($param['order_balance'], 2)?>元</div>
     </div>
@@ -30,13 +30,11 @@ $this->registerJsFile('/js/order.js', ['depends' => 'yii\web\YiiAsset','position
         <input name="_csrf" type="hidden" id="_csrf" value="<?=Yii::$app->request->csrfToken ?>">
         <div class="row sm-height border-bottom">
             <div class="col-xs-4 safe-txt text-align-ct">投资金额</div>
-<!--            <div class="col-xs-6 safe-lf text-align-lf">请输入投资金额</div>-->
         <input name="money" type="text" id="money" value="" placeholder="请输入投资金额"  class="col-xs-6 safe-lf text-align-lf">
             <div class="col-xs-2 safe-txt">元</div>
         </div>
         <div class="row sm-height border-bottom">
             <div class="col-xs-4 safe-txt text-align-ct">交易密码</div>
-<!--            <div class="col-xs-6 safe-lf">请输入交易密码</div>-->
                 <input name="trade_pwd" type="password"  value="" placeholder="请输入交易密码"  class="col-xs-6 safe-lf" maxlength="6">
             <div class="col-xs-2"></div>
         </div>

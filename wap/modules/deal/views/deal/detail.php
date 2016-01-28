@@ -18,7 +18,7 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
                         <span class="qing">年化收益率</span>
                     </li>
                     <li class="col-xs-6">
-                        <div><?=$deal['expires']?><span class="column-lu">天</span></div>
+                        <div><?=$deal['expires']?><span class="column-lu">天+宽限期<?=$deal['kuanxianqi']?>天 </span></div>
                         <span class="qing">期限</span>
                     </li>
                 </ul>
