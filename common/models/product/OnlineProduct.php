@@ -6,7 +6,7 @@ use Yii;
 use yii\behaviors\TimestampBehavior;
 
 /**
- * This is the model class for table "online_product".
+ * 标的（项目）.
  *
  * @property string $id
  * @property string $title
@@ -82,29 +82,6 @@ class OnlineProduct extends \yii\db\ActiveRecord
     const SORT_HKZ = 50;
     const SORT_YHK = 60;
 
-    public static function getErrorByCode($code = 100)
-    {
-        $data = [
-            self::ERROR_SUCCESS => '',
-            self::ERROR_NO_EXIST => '无法找到此标的',
-            self::ERROR_STATUS_DENY => '此标的现在不可投',
-            self::ERROR_NO_BEGIN => '项目尚未开始或者已经结束',
-            self::ERROR_OVER => '项目已经结束',
-            self::ERROR_MONEY_FORMAT => '金额格式错误',
-            self::ERROR_LESS_START_MONEY => '投资金额小于起投金额',
-            self::ERROR_MONEY_LESS => '余额不足',
-            self::ERROR_MONEY_MUCH => '投资金额大于可投余额',
-            self::ERROR_DIZENG => '不满足递增要求',
-            self::ERROR_MONEY_BALANCE => '最后一笔需要投满标的',
-            self::ERROR_PRO_STATUS => '更新满标状态错误',
-            self::ERROR_CONTRACT => '合同错误',
-            self::ERROR_TARGET => '定向标只针对目标用户投标',
-            self::ERROR_SYSTEM => '系统异常，请稍后重试',
-        ];
-
-        return $data[$code];
-    }
-
     public function scenarios()
     {
         return [
@@ -112,7 +89,7 @@ class OnlineProduct extends \yii\db\ActiveRecord
             'status' => ['status', 'sort', 'full_time'],
             'jixi' => ['jixi_time'],
             'create' => ['title', 'sn', 'cid', 'money', 'borrow_uid', 'expires', 'expires_show', 'yield_rate', 'start_money', 'borrow_uid', 'fee', 'status',
-                'description', 'refund_method', 'account_name', 'account', 'bank', 'dizeng_money', 'fazhi', 'fazhi_up', 'start_date', 'end_date', 'full_time', 'is_xs', 'yuqi_faxi', 'order_limit', 'creator_id', 'del_status', 'status', 'target', 'target_uid', 'finish_date', 'channel', 'jixi_time', 'sort', 'jiaxi',],
+                'description', 'refund_method', 'account_name', 'account', 'bank', 'dizeng_money', 'fazhi', 'fazhi_up', 'start_date', 'end_date', 'full_time', 'is_xs', 'yuqi_faxi', 'order_limit', 'creator_id', 'del_status', 'status', 'target', 'target_uid', 'finish_date', 'channel', 'jixi_time', 'sort', 'jiaxi', ],
         ];
     }
 
@@ -189,7 +166,7 @@ class OnlineProduct extends \yii\db\ActiveRecord
         return [
             [['title', 'borrow_uid', 'yield_rate', 'money', 'start_money', 'dizeng_money', 'start_date', 'end_date', 'expires', 'cid', 'description', 'finish_date'], 'required'],
             [['cid', 'is_xs', 'borrow_uid', 'refund_method', 'expires', 'full_time', 'del_status', 'status', 'order_limit', 'creator_id'], 'integer'],
-            [['yield_rate', 'fee', 'money', 'start_money', 'dizeng_money', 'fazhi', 'fazhi_up', 'yuqi_faxi', 'jiaxi',], 'number'],
+            [['yield_rate', 'fee', 'money', 'start_money', 'dizeng_money', 'fazhi', 'fazhi_up', 'yuqi_faxi', 'jiaxi'], 'number'],
             [['fazhi', 'fazhi_up', 'target'], 'integer'],
             ['target', 'default', 'value' => 0],
             ['is_xs', 'default', 'value' => 0],
@@ -206,8 +183,8 @@ class OnlineProduct extends \yii\db\ActiveRecord
             [['dizeng_money'], 'compare', 'compareValue' => 1, 'operator' => '>='],
             [['start_money', 'fazhi', 'fazhi_up'], 'compare', 'compareAttribute' => 'money', 'operator' => '<'],
             [['fazhi_up'], 'compare', 'compareAttribute' => 'fazhi', 'operator' => '<='],
-            [['yield_rate', 'jiaxi',], 'compare', 'compareValue' => 100, 'operator' => '<='],
-            [['yield_rate', 'jiaxi',], 'compare', 'compareValue' => 0, 'operator' => '>='],
+            [['yield_rate', 'jiaxi'], 'compare', 'compareValue' => 100, 'operator' => '<='],
+            [['yield_rate', 'jiaxi'], 'compare', 'compareValue' => 0, 'operator' => '>='],
             [['jiaxi'], 'match', 'pattern' => '/^[0-9]+([.]{1}[0-9])?$/', 'message' => '加息利率只允许有一位小数'],
             [['jiaxi'], 'compare', 'compareValue' => 10, 'operator' => '<='],
             [['jiaxi'], 'compare', 'compareValue' => 0, 'operator' => '>='],
@@ -233,11 +210,12 @@ class OnlineProduct extends \yii\db\ActiveRecord
             $this->addError('end_date', '募集开始时间小于募集结束时间小于项目结束日');
             $this->addError('finish_date', '募集开始时间小于募集结束时间小于项目结束日');
         }
+
         return true;
     }
-    
+
     /**
-     * 获取项目天数
+     * 获取项目天数.
      */
     public function getSpanDays()
     {
