@@ -8,12 +8,12 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset', 'positi
 <link rel="stylesheet" href="/css/tixian.css"/>
 
 <!--可提现金额-->
-<div class="row tixian">
+<div class="row kahao">
     <div class="hidden-xs col-sm-1"></div>
     <div class="col-xs-4 col-sm-2">项目总额：</div>
     <div class="col-xs-8 col-sm-6"><?= $product->total_fund ?>万</div>
 </div>
-<div class="row tixian">
+<div class="row kahao" style="margin-bottom: 10px;">
     <div class="hidden-xs col-sm-1"></div>
     <div class="col-xs-4 col-sm-2">起购金额：</div>
     <div class="col-xs-8 col-sm-6"><?= $product->min_fund ?>万</div>
@@ -24,23 +24,23 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset', 'positi
     <input name="_csrf" type="hidden" id="_csrf" value="<?= Yii::$app->request->csrfToken ?>">
     <div class="row kahao">
         <div class="hidden-xs col-sm-1"></div>
-        <div class="col-xs-3 col-sm-1">姓名</div>
-        <div class="col-xs-7 col-sm-8"><input id="" type="text" name="BookingLog[name]" placeholder="输入姓名"/></div>
+        <div class="col-xs-7 col-sm-8"><input id="" type="text" name="BookingLog[name]" placeholder="请输入您的姓名"/></div>
+        <div class="hidden-xs col-sm-1"></div>
         <div class="col-xs-1 col-sm-1"></div>
         <div class="hidden-xs col-sm-1"></div>
     </div>
     <div class="row kahao">
         <div class="hidden-xs col-sm-1"></div>
-        <div class="col-xs-3 col-sm-1">手机号</div>
-        <div class="col-xs-7 col-sm-8"><input id="" type="text" name="BookingLog[mobile]" placeholder="输入手机号"/></div>
+        <div class="col-xs-7 col-sm-8"><input id="" type="text" name="BookingLog[mobile]" placeholder="请输入您的手机号"/></div>
+        <div class="col-xs-3 col-sm-1"></div>
         <div class="col-xs-1 col-sm-1"></div>
         <div class="hidden-xs col-sm-1"></div>
     </div>
     <div class="row kahao">
         <div class="hidden-xs col-sm-1"></div>
-        <div class="col-xs-3 col-sm-1">预约金额</div>
-        <div class="col-xs-7 col-sm-8"><input id="" type="text" name="BookingLog[fund]" placeholder="输入预约金额"></div>
+        <div class="col-xs-7 col-sm-8"><input id="" type="text" name="BookingLog[fund]" placeholder="请输入预约的金额"></div>
         <div class="col-xs-1 col-sm-1">万</div>
+        <div class="col-xs-3 col-sm-1"></div>
         <div class="hidden-xs col-sm-1"></div>
     </div>
     <!--提交按钮-->

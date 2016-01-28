@@ -78,11 +78,11 @@ $this->title = '股权投资';
         </div>
 
     <?php if ($end_flag) { ?>
-    <div class="yuyue">预约结束</div>
+        <div class="yuyue">预约结束</div>
     <?php } elseif($exist_flag) { ?>
-    <div class="yuyue">已预约</div>
+        <div class="yuyue">已预约</div>
     <?php } else { ?>
-    <div class="yuyue" onclick="window.location.href='/order/booking/booking?pid=<?= $model->id ?>'">预约</div>
+        <div class="yuyue" style="background-color: #f44336;" onclick="window.location.href='/order/booking/booking?pid=<?= $model->id ?>'">预约</div>
     <?php } ?>
 
 <div>
