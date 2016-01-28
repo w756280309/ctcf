@@ -56,7 +56,7 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\we
                         </tr>
                         <tr>
                             <td>
-                                <span class="title">用户注册时间</span>
+                                <span class="title">提现申请时间</span>
                             </td>
                             <td colspan="3">
                                 <input type="text" placeholder="开始时间" value="<?=$request['starttime']?>" name="starttime" class="m-wrap span4" style="width: 300px;" onclick='WdatePicker({dateFmt:"yyyy-MM-dd",maxDate:"<?=  date("Y-m-d")?>"});'/>

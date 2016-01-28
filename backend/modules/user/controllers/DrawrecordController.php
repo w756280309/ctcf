@@ -211,12 +211,6 @@ class DrawrecordController extends BaseController
         if (!empty($request['mobile'])) {
             $query->andFilterWhere(['like', 'mobile', $request['mobile']]);
         }
-        if (!empty($request['starttime'])) {
-            $query->andFilterWhere(['>=', 'created_at', strtotime($request['starttime'])]);
-        }
-        if (!empty($request['endtime'])) {
-            $query->andFilterWhere(['<=', 'created_at', strtotime($request['endtime']) + 24 * 60 * 60]);
-        }
 
         $tzUser = $query->andWhere('type=1')->asArray()->all();
         $res = [];
@@ -227,9 +221,17 @@ class DrawrecordController extends BaseController
         foreach ($tzUser as $k => $v) {
             $arr[] = $v['id'];
         }
-        $model = DrawRecord::find()->where(['in', 'uid', $arr]);
-        $pages = new Pagination(['totalCount' => $model->count(), 'pageSize' => '10']);
-        $model = $model->offset($pages->offset)->limit($pages->limit)->orderBy('created_at DESC')->all();
+
+        $draw = DrawRecord::find()->where(['in', 'uid', $arr]);
+        if (!empty($request['starttime'])) {
+            $draw->andFilterWhere(['>=', 'created_at', strtotime($request['starttime'])]);
+        }
+        if (!empty($request['endtime'])) {
+            $draw->andFilterWhere(['<=', 'created_at', strtotime($request['endtime']) + 24 * 60 * 60]);
+        }
+
+        $pages = new Pagination(['totalCount' => $draw->count(), 'pageSize' => '10']);
+        $model = $draw->offset($pages->offset)->limit($pages->limit)->orderBy('created_at DESC')->all();
 
         return $this->render('apply', [
             'res' => $res,
