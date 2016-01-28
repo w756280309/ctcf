@@ -56,11 +56,7 @@ class RechargerecordController extends BaseController
             }
         }
         $moneyTotal = $bc->bcround($moneyTotal, 2);
-//        //充值成功的次数
-//        $successNum = RechargeRecordTime::find()->where(['uid' => $id, 'status' => 1])->count('id');
-//        //充值失败的次数
-//        $failureNum = RechargeRecordTime::find()->where(['uid' => $id, 'status' => 2])->count('id');
-       // \Yii::endProfile('myBenchmark');
+
         //渲染到静态页面
         return $this->render('list', [
                     'type' => $type,
@@ -73,7 +69,9 @@ class RechargerecordController extends BaseController
         ]);
     }
 
-    //录入充值数据
+    /**
+     * 录入充值数据.
+     */
     public function actionEdit($id = null, $type = null)
     {
         $banks = Yii::$app->params['bank'];
@@ -159,7 +157,7 @@ class RechargerecordController extends BaseController
         $id = Yii::$app->request->post('id');
         $type = Yii::$app->request->post('type');
         $uid = Yii::$app->request->post('uid');
-        
+
         if ($op == 'status') {
             //项目状态
             $recharge = RechargeRecord::findOne($id);
