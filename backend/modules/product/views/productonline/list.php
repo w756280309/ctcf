@@ -1,6 +1,4 @@
 <?php
-
-use yii\widgets\ActiveForm;
 use yii\widgets\LinkPager;
 $pc_cat = Yii::$app->params['pc_cat'];
 ?>

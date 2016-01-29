@@ -392,17 +392,20 @@ class ProductonlineController extends BaseController
     /**
      * 设置计息时间.
      */
-    public function actionJixi($product_id = null)
+    public function actionJixi($product_id)
     {
         $this->layout = false;
         $c_flag = 0;
         $model = OnlineProduct::findOne($product_id);
+        if (!$model) {
+            throw new \yii\web\NotFoundHttpException('The production is not existed.');
+        }
+
+        $err = '';
         $model->scenario = 'jixi';
-        if ($model->is_jixi == 1) {
-            $this->alert = 2;
-            $this->msg = '已经开始计息，不允许修改计息开始时间';
+        if ($model->is_jixi === 1) {
+            $err = '已经开始计息，不允许修改计息开始时间';
         } elseif ($model->load(Yii::$app->request->post())) {
-            $err = '';
             $model->jixi_time = strtotime($model->jixi_time);
             $full_time = strtotime(date('Y-m-d', $model->full_time));
             $finish_date = strtotime(date('Y-m-d', $model->finish_date));
@@ -418,7 +421,6 @@ class ProductonlineController extends BaseController
                 $model->addError('jixi_time', $err);
             } else {
                 $model->save();
-                $this->alert = 1;
                 $c_flag = 'close';
             }
         }
