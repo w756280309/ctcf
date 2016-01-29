@@ -104,11 +104,11 @@ $(function () {
                                                 '<div class="container">'+
                                                     '<ul class="row column-content">'+
                                                     '<li class="col-xs-4">'+
-                                                '<div>'+itemyr+'<span class="column-lu">%</span>';
+                                                '<div><span class="interest-rate">'+itemyr+'<span class="column-lu">%</span>';
                                     if (itemjx !== '') {
-                                        html += ' + ' + itemjx + '<span class="column-lu">%</span></div>';
+                                        html += '<span class="bonus-badge">+' + itemjx + '%</span>';
                                     }
-                                    html += '<span>年化收益率</span>'+
+                                    html += '</span></div><span class="desc-text">年化收益率</span>'+
                                                     '</li>'+
                                                     '<li class="col-xs-4">'+
                                                         '<div>'+item.qixian+'<span class="column-lu">天</span></div>'+
