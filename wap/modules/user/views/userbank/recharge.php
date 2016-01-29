@@ -6,11 +6,17 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
 <link rel="stylesheet" href="/css/chongzhi.css"/>
 <link rel="stylesheet" href="/css/base.css"/>
 <style type="text/css">
+    .yzm-show {
+        width: 100px !important;
+        margin-top:-4px !important;
+        font-size:12px !important;
+        height:28px !important;
+        line-height:27px !important;
+    }
     .ryzm-disabled {
-    color: #fff !important;
-    background:#f44336 ;
-    border: 1px solid #f44336;
-}
+        background:#fff !important;
+        border: 1px solid #f44336 !important;
+    }
 </style>
     <!--银行卡-->
         <div class="row bank-card">
@@ -46,7 +52,7 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
                 <div class="hidden-xs col-sm-1"></div>
                 <div class="col-xs-3 col-sm-1">短信验证码</div>
                 <div class="col-xs-9 col-sm-8 safe-lf" style="position: relative;"><input type="text" id="yzm"  name='yzm' placeholder="输入验证码" maxlength="6"/>
-                <input class="yzm yzm-normal" name="createsms" id="createsms" value="获取验证码" type="button" style="width: 100px;margin-top:-4px;font-size:12px;height:28px;line-height:27px;color: white !important"></div>
+                <input class="yzm yzm-normal yzm-show" name="createsms" id="createsms" value="获取验证码" type="button" style="color: white !important"></div>
             </div>
 
             <input type="text" name="" style="display:none"/>
@@ -95,7 +101,6 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
                    return false;
                }
                subRecharge();
-               //subForm("#form");
                $(this).removeClass("btn-press").addClass("btn-normal");
            });
 
@@ -129,8 +134,9 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
         function subRecharge(){
                 if(!validateform()){
                    return false;
-               }
+                }
                 var $form = $('#form');
+                $('#rechargebtn').attr('disabled', true);
                 var xhr = $.post(
                     $form.attr('action'),
                     $form.serialize()
@@ -146,6 +152,7 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
                         : '未知错误，请刷新重试或联系客服';
 
                     toast(null, errMsg);
+                    $('#rechargebtn').attr('disabled', false);
                 });
         }
 
@@ -155,9 +162,10 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
         var count = 60; //间隔函数，1秒执行
         function qpay_timedown() {
             curCount = count;
+            $('#createsms').css({"cssText": "color: #f44336 !important"});
             $('#createsms').addClass("ryzm-disabled");
-            $("#createsms").attr("disabled", "true");
-            $("#createsms").val(curCount + "s后重发");
+            $('#createsms').attr("disabled", "true");
+            $('#createsms').val(curCount + "s后重发");
             InterValObj = window.setInterval(qpay_SetRemainTime, 1000); //启动计时器，1秒执行一次
         }
 
@@ -166,7 +174,7 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
                 window.clearInterval(InterValObj);//停止计时器
                 $('#createsms').removeAttr("disabled");//启用按钮
                 $('#createsms').removeClass("ryzm-disabled");
-                $("#createsms").val("重新发送");
+                $('#createsms').val("重新发送");
             } else {
                 curCount--;
                 $("#createsms").val(curCount + "s后重发");
