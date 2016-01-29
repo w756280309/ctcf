@@ -79,11 +79,30 @@ ul.new-bottom li div {
 }
 
 .xian {
+    position: relative;
     padding-top: 20px;
     padding-bottom: 20px;
+    border-right: 1px solid #c9caca;
     font-size: 38px;
     color: #fe9a00;
-    border-right: 1px solid #c9caca;
+}
+
+.xian .newcomer-badge {
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 2px 5px;
+    border: 1px solid #ea5514;
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    border-radius: 8px;
+    font-size: 12px;
+    line-height: 100%;
+}
+
+.xian .bonus-rate {
+    font-size: 20px;
+    color: #ea5514;
 }
 
 .new-bottom-rg p {

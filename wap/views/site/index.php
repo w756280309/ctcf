@@ -44,10 +44,13 @@ $rate = number_format($deals->finish_rate * 100, 0);
             <ul class="row new-bottom" onclick="window.location.href='/deal/deal/detail?sn=<?= $deals->sn ?>'">
                 <li class="col-xs-6 padding-5">
                     <div class="xian">
-                        <?= doubleval(number_format($deals->yield_rate*100, 2)) ?><span >%</span>
-                        <?php if (!empty($deals->jiaxi)) { ?>
-                            + <?= $deals->jiaxi ?><span >%</span>
-                        <?php } ?>
+                        <span class="newcomer-badge">加息</span>
+                        <span class="interest-rate">
+                            <?= doubleval(number_format($deals->yield_rate*100, 2)) ?>%
+                            <?php if (!empty($deals->jiaxi)) { ?>
+                                <sup class="bonus-rate">+ <?= $deals->jiaxi ?>%</sup>
+                            <?php } ?>
+                        </span>
                     </div>
                 </li>
                 <li class="col-xs-6 padding-5">
