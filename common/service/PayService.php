@@ -186,7 +186,7 @@ class PayService
                 $v = bcdiv($money, $this->cdeal->dizeng_money);
                 $varr = explode('.', $v);
                 if ((bccomp($varr[1], 0)) > 0 &&  bcsub($orderbalance, $money) * 1 != 0) {
-                    return ['code' => self::ERROR_DIZENG,  'message' => self::getErrorByCode(self::ERROR_DIZENG)];
+                    return ['code' => self::ERROR_DIZENG,  'message' => $this->cdeal->start_money.'元起投,'.$this->cdeal->dizeng_money.'元递增'];
                 }
             }
         } else {
