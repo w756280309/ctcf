@@ -89,6 +89,18 @@ body{
 }
 .xian {
     border-right: 1px solid #ebebed;
+    position: relative;
+}
+.xian .bonus-badge {
+    position: absolute;
+    padding: 2px 4px;
+    font-size: 12px;
+    line-height: 100%;
+    color: #ea5514;
+    border: 1px solid #ea5514;
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    border-radius: 8px;
 }
 .qing {
     display: block;

@@ -13,7 +13,7 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
                     <li class="col-xs-6">
                         <div class="xian">
                             <?=  doubleval(number_format($deal['yield_rate']*100, 2)) ?><span class="column-lu">%</span>
-                            <?php if (!empty($deal['jiaxi'])) { ?>+ <?=  doubleval($deal['jiaxi']) ?><span class="column-lu">%</span><?php } ?>
+                            <?php if (!empty($deal['jiaxi'])) { ?><span class="bonus-badge">+ <?=  doubleval($deal['jiaxi']) ?>%</span><?php } ?>
                         </div>
                         <span class="qing">年化收益率</span>
                     </li>
@@ -80,7 +80,7 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
                         <div class="col-xs-5">投资时间</div>
                         <div class="col-xs-4">投资金额</div>
                     </div>
-                    
+
                 </div>
             <div class="col-xs-1"></div>
         </div>
@@ -127,9 +127,9 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
                     }
                     $('.datafirst').after(html)
                 })
-                
+
             });
-            
+
             <?php if($deal['status']==2){?>
             function subForm(form){
                 vals = $(form).serialize();
