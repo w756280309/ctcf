@@ -31,10 +31,12 @@ $pc_cat = Yii::$app->params['pc_cat'];
                 <ul class="row column-content">
                     <li class="col-xs-4">
                         <div>
-                        <?= doubleval($val['yr']) ?><span class="column-lu">%</span> 
-                        <?php if (!empty($val['jiaxi'])) { ?> + <?= doubleval($val['jiaxi']) ?><span class="column-lu">%</span><?php } ?>
+                        <span class="interest-rate">
+                            <?= doubleval($val['yr']) ?><span class="column-lu">%</span>
+                            <?php if (!empty($val['jiaxi'])) { ?><span class="bonus-badge">+<?= doubleval($val['jiaxi']) ?>%</span><?php } ?>
+                        </span>
                         </div>
-                        <span>年化收益率</span>
+                        <span class="desc-text">年化收益率</span>
                     </li>
                     <li class="col-xs-4">
                         <div><?= $val['qixian'] ?><span class="column-lu">天</span></div>
@@ -67,10 +69,10 @@ $pc_cat = Yii::$app->params['pc_cat'];
             <div class="hidden-xs col-sm-1"></div>
         </a>
     <?php endforeach; ?>
-    
-    
+
+
 </div>
 <!--加载跟多-->
 <div class="load">加载更多</div>
 <div class="nodata">暂无数据</div>
-	
+
