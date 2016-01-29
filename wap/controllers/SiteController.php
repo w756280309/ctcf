@@ -203,7 +203,7 @@ class SiteController extends Controller
             if ($model->edituserpass()) {
                 \Yii::$app->user->logout();
 
-                return $this->goHome();
+                return ['code' => 0, 'message' => '修改登陆密码成功,如有其他操作需重新登陆'];
             }
         }
         if ($model->getErrors()) {

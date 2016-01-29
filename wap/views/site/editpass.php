@@ -73,32 +73,51 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset', 'positi
                 toast(this, '原密码必须为数字和字母的组合');
                 $("#signup-btn").removeClass("btn-press").addClass("btn-normal");
                 return false;
-           }
-           if ($('#password').val().length < 6 || $('#password').val().length > 20) {
-               toast(this, '原密码必须是6-20个字母与数字');
-               return false;
-           }
-           if ($('#new_pass').val() === '') {
-               toast(this,'新密码不能为空');
-               return false;
-           }
-           if (!reg.test($('#new_pass').val())) {
+            }
+            if ($('#password').val().length < 6 || $('#password').val().length > 20) {
+                toast(this, '原密码必须是6-20个字母与数字');
+                return false;
+            }
+            if ($('#new_pass').val() === '') {
+                toast(this,'新密码不能为空');
+                return false;
+            }
+            if (!reg.test($('#new_pass').val())) {
                 toast(this, '新密码必须为数字和字母的组合');
                 $("#signup-btn").removeClass("btn-press").addClass("btn-normal");
                 return false;
-           }
-           if($('#new_pass').val().length<6 || $('#new_pass').val().length>20){
-               toast(this, '新密码必须是6-20个字母与数字');
-               return false;
-           }
-           if($('#sms').val() === ''){
-               toast(this, '验证码不能为空');
-               return false;
-           }
-           subForm("#editpassform", "#editpassbtn", function() {
-               $('#editpassform-verifycode-image').click();
-           });           
-       });
+            }
+            if($('#new_pass').val().length<6 || $('#new_pass').val().length>20){
+                toast(this, '新密码必须是6-20个字母与数字');
+                return false;
+            }
+            if($('#sms').val() === ''){
+                toast(this, '验证码不能为空');
+                return false;
+            }
+
+            var vals = $('#editpassform').serialize();
+
+            $(this).attr('disabled', true);
+            $(this).removeClass("btn-normal").addClass("btn-press");
+            var xhr = $.post($('#editpassform').attr("action"), vals, function (data) {
+                console.log(data);
+                if (data.code !== 0) {
+                    toast('', data.message, function() {
+                        $('#editpassform-verifycode-image').click();
+                    });
+                } else {
+                    alertTrueVal(data.message, function() {
+                        location.href = '/';
+                    });
+                }
+            });
+
+            xhr.always(function() {
+                $('#editpassbtn').removeClass("btn-press").addClass("btn-normal");
+                $('#editpassbtn').attr('disabled', false);
+            });
+        });
 
     });
     $(".eye img").on("click",function () {
@@ -114,6 +133,17 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset', 'positi
     });
 
     $("#editpassform-verifycode-image").attr("height","40px");
+
+    //只有确定按钮的弹窗
+    function alertTrueVal(val,trued)
+    {
+        var chongzhi = $('<div class="mask" style="display:block;"></div><div class="bing-info show"> <div class="bing-tishi">温馨提示</div> <p class="tishi-p">'+val+'</p > <div class="bind-btn"> <span class="true">我知道了</span> </div> </div>');
+        $(chongzhi).insertAfter($('form'));
+        $('.bing-info').on('click',function() {
+            $(chongzhi).remove();
+            trued();
+        });
+    }
 
     </script>
 
