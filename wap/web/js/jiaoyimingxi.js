@@ -26,10 +26,9 @@ $(function(){
                 dataType: 'json',
                 success: function (data) {
                     if (data.code === 0) {
-                        console.log(data);
                         //如果当前页和返回页码相同，则改变页面html,否则视为异常
                         if (currentPage === data.header.cp) {
-                            if (data.data.length > 0 && data.type) {
+                            if (data.data.length > 0) {
                                 var html = "";
                                 $.each(data.data, function (i, item) {
                                     var money = item.in_money!=0?item.in_money:item.out_money;
@@ -39,7 +38,7 @@ $(function(){
                                         '<span class="data1">'+createdAt.getFullYear()+'-'+createdAt.getMonth()+'-'+createdAt.getDay()+'</span>'+
                                         '<span class="data2">'+createdAt.getHours()+':'+createdAt.getMinutes()+':'+createdAt.getSeconds()+'</span>'+
                                         '</div>'+
-                                        '<div class="col-xs-3 revenue">'+data.type[item.type]+'</div>'+
+                                        '<div class="col-xs-3 revenue">'+mingxitype[item.type]+'</div>'+
                                         '<div class="col-xs-3 money">'+money+'</div>'+
                                         '<div class="col-xs-3 revenue">'+item.balance+'</div></div></div>';
                                 });

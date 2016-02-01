@@ -50,7 +50,7 @@ class UserController extends BaseController
             Yii::$app->response->format = Response::FORMAT_JSON;
             $message = ($page > $tp) ? '数据错误' : '消息返回';
 
-            return ['header' => $pg, 'data' => $model, 'code' => $code, 'message' => $message, 'type' => Yii::$app->params['mingxi']];
+            return ['header' => $pg, 'data' => $model, 'code' => $code, 'message' => $message];
         }
 
         return $this->render('mingxi', ['model' => $model, 'header' => $pg->jsonSerialize()]);
