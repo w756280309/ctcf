@@ -5,6 +5,7 @@ $this->registerJs('var mingxitype = new Array();', 1);
 foreach (Yii::$app->params['mingxi'] as $key => $val) {
     $this->registerJs('mingxitype['.$key.'] = \''.$val.'\';', 1);
 }
+$this->registerJsFile('/js/moment.min.js', ['depends' => 'yii\web\YiiAsset','position' => 1]);
 $this->registerJsFile('/js/jiaoyimingxi.js', ['depends' => 'yii\web\YiiAsset','position' => 1]);
 frontend\assets\WapAsset::register($this);
 $this->registerJs('var total=' . $header['count'] . ';', 1);
