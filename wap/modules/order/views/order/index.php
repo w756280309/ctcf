@@ -17,7 +17,7 @@ $this->registerJsFile('/js/order.js', ['depends' => 'yii\web\YiiAsset','position
         <div class="col-xs-4 text-align-ct">年化收益</div>
         <div class="col-xs-8 text-align-lf col"><?=  number_format($deal->yield_rate*100)?>%</div>
         <div class="col-xs-4 text-align-ct">项目期限</div>
-        <div class="col-xs-8 text-align-lf col"><?=$deal->expires?>天+<?=$deal['kuanxianqi']?>天(宽限期)</div>
+        <div class="col-xs-8 text-align-lf col"><?= $deal->expires ?>天(含宽限期<?=$deal['kuanxianqi']?>天)</div>
         <div class="col-xs-4 text-align-ct">可投余额</div>
         <div class="col-xs-8 text-align-lf col"><?=  number_format($param['order_balance'], 2)?>元</div>
     </div>

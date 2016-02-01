@@ -42,86 +42,41 @@ class ProductonlineController extends BaseController
             $rongziInfo[$v['id']] = $v['org_name'];
         }
         $model = $id ? OnlineProduct::findOne($id) : new OnlineProduct();
-        $ctmodel = array();
+        $ctmodel = null;
         $model->scenario = 'create';
-
         if ($id) {
-            $model->start_date = date('Y-m-d H:i', $model->start_date);
-            $model->end_date = date('Y-m-d  H:i', $model->end_date);
-            $model->finish_date = date('Y-m-d  H:i', $model->finish_date);
-            $model->jixi_time = $model->jixi_time ? date('Y-m-d', $model->jixi_time) : '';
+            $model->is_fdate = (0 === $model->finish_date) ? 0 : 1;
             $model->yield_rate = bcmul($model->yield_rate, 100, 2);
-            $model->fazhi = round($model->fazhi);
-            $model->fazhi_up = round($model->fazhi_up);
-
-            $ctmodel = ContractTemplate::find()->where(['pid' => $id])->asArray()->all();
+            $ctmodel = ContractTemplate::find()->where(['pid' => $id])->all();
         }
 
         $con_name_arr = Yii::$app->request->post('name');
         $con_content_arr = Yii::$app->request->post('content');
-
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            if (empty($id)) {
+            if (null === $model->id) {
                 $model->sn = OnlineProduct::createSN();
                 $model->sort = OnlineProduct::SORT_PRE;
             }
-
-            $start = strtotime($model->start_date);
-            $end = strtotime($model->end_date);
-            $finish = strtotime($model->finish_date);
-
-            $diff = \Yii::$app->functions->timediff(strtotime(date('Y-m-d', $start)), strtotime(date('Y-m-d', $finish)));
-            $jixi_time = !empty($model->jixi_time) ? strtotime($model->jixi_time) : '';
-            $err = '';
-            if (!$model->is_jixi && !empty($model->jixi_time)) {
-                $_start = strtotime(date('Y-m-d', $start));
-                $_finish = strtotime(date('Y-m-d', $finish));
-                $_fulltime = strtotime(date('Y-m-d', $model->full_time));
-                if ($jixi_time <= $_start) {
-                    $err = '计息开始时间必须大于项目的募集开始时间';
-                } elseif ($jixi_time >= $_finish) {
-                    $err = '计息开始时间必须小于项目的截止时间';
-                }
-
-                if (!empty($id) && $model->online_status === OnlineProduct::STATUS_ONLINE) {
-                    if ($model->status === OnlineProduct::STATUS_FULL && $jixi_time <= $_fulltime) {
-                        $err = '计息开始时间必须大于项目满标时间';
-                    }
-                    if ($model->status === OnlineProduct::STATUS_FOUND && $jixi_time <= $_fulltime) {
-                        $err = '计息开始时间必须大于项目提前募集结束时间';
-                    }
-                }
-            }
-
             $_namearr = empty($con_name_arr) ? $con_name_arr : array_filter($con_name_arr);
             $_contentarr = empty($con_content_arr) ? $con_content_arr : array_filter($con_content_arr);
-
-            if ($model->expires > $diff['day']) {
-                $model->addError('expires', '项目天数 应该小于等于 项目截止日 - 募集开始时间;当前天数：'.$diff['day'].'天');
-            } elseif (!empty($err)) {
-                $model->addError('jixi_time', $err);
-            } elseif (empty($_namearr) || empty($_contentarr)) {
+            if (empty($_namearr) || empty($_contentarr)) {
                 $model->addError('contract_type', '合同协议至少要输入一份');
             } else {
                 $transaction = Yii::$app->db->beginTransaction();
-
                 $model->start_date = strtotime($model->start_date);
                 $model->end_date = strtotime($model->end_date);
-                $model->finish_date = strtotime($model->finish_date);
+                $model->finish_date = $model->finish_date !== null ? strtotime($model->finish_date) : 0;
                 $model->creator_id = Yii::$app->user->id;
                 $model->yield_rate = bcdiv($model->yield_rate, 100, 14);
-                $model->jixi_time = strtotime($model->jixi_time);
-
+                $model->jixi_time = $model->jixi_time !== '' ? strtotime($model->jixi_time) : 0;
                 $pre = $model->save();
                 if (!$pre) {
                     $transaction->rollBack();
-                    exit('录入ProductOnline异常');
+                    $model->addError('title', '标的添加异常');
                 }
-
                 if ($id) {
                     ContractTemplate::deleteAll(['pid' => $id]);
                 }
-
                 $record = new ContractTemplate();
                 foreach ($con_name_arr as $key => $val) {
                     $record_model = clone $record;
@@ -130,13 +85,13 @@ class ProductonlineController extends BaseController
                     $record_model->content = $con_content_arr[$key];
                     if (!$record_model->save()) {
                         $transaction->rollBack();
-                        exit('录入ContractTemplate异常');
+                        $model->addError('title', '录入ContractTemplate异常');
                     }
                 }
-
-                $transaction->commit();
-
-                return $this->redirect(['list']);
+                if (!$model->hasErrors()) {
+                    $transaction->commit();
+                    return $this->redirect(['list']);
+                }
             }
         }
 

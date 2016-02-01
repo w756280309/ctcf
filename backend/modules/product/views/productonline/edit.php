@@ -147,7 +147,13 @@ TPL;
                     <label class="control-label">项目利率</label>
                     <div class="controls">
                         <?=
-                        $form->field($model, 'yield_rate', ['template' => '<div class="input-append">{input}<span class="add-on">%</span> </div>{error}', 'inputOptions' => ['autocomplete' => 'off', 'placeholder' => '项目利率']])->textInput(['class' => 'm-wrap span12'])
+                        $form->field($model, 'yield_rate', [
+                            'template' => '<div class="input-append">{input}<span class="add-on">%</span> </div>{error}',
+                            'inputOptions' => [
+                                'autocomplete' => 'off',
+                                'placeholder' => '项目利率',
+                            ]
+                        ])->textInput(['class' => 'm-wrap span12'])
                         ?>
                     </div>
                 </div>
@@ -197,7 +203,15 @@ TPL;
                     <label class="control-label">募集开始时间</label>
                     <div class="controls">
                         <?=
-                        $form->field($model, 'start_date', ['template' => '<div class="input-append date form_datetime">{input}<span class="add-on" onclick="WdatePicker({el:\'onlineproduct-start_date\',dateFmt:\'yyyy-MM-dd HH:mm\',minDate:\''.date('Y-m-d').'\'});"><i class="icon-calendar"></i></span></div>{error}', 'inputOptions' => ['autocomplete' => 'off', 'placeholder' => '募集开始时间']])->textInput(['readonly' => 'readonly', 'class' => 'm-wrap span12', 'onclick' => 'WdatePicker({dateFmt:"yyyy-MM-dd HH:mm",minDate:\''.date('Y-m-d').'\'});'])
+                        $form->field($model, 'start_date', [
+                            'template' => '<div class="input-append date form_datetime">{input}<span class="add-on" onclick="WdatePicker({el:\'onlineproduct-start_date\',dateFmt:\'yyyy-MM-dd HH:mm\',minDate:\''.date('Y-m-d').'\'});"><i class="icon-calendar"></i></span></div>{error}',
+                            'inputOptions' => ['autocomplete' => 'off', 'placeholder' => '募集开始时间']
+                            ])->textInput([
+                                'readonly' => 'readonly',
+                                'class' => 'm-wrap span12',
+                                'value' => $model->start_date ? Yii::$app->formatter->asDatetime($model->start_date, 'Y-M-d H:i') : '',
+                                'onclick' => 'WdatePicker({dateFmt:"yyyy-MM-dd HH:mm",minDate:\''.date('Y-m-d').'\'});'
+                                ])
                         ?>
                     </div>
                 </div>
@@ -208,7 +222,15 @@ TPL;
                     <label class="control-label">募集结束时间</label>
                     <div class="controls">
                         <?=
-                        $form->field($model, 'end_date', ['template' => '<div class="input-append date form_datetime">{input}<span class="add-on" onclick="WdatePicker({el:\'onlineproduct-end_date\',dateFmt:\'yyyy-MM-dd HH:mm\',minDate:\''.date('Y-m-d').'\'});"><i class="icon-calendar"></i></span></div>{error}', 'inputOptions' => ['autocomplete' => 'off', 'placeholder' => '募集结束时间']])->textInput(['readonly' => 'readonly', 'class' => 'm-wrap span12', 'onclick' => 'WdatePicker({dateFmt:"yyyy-MM-dd HH:mm",minDate:\''.date('Y-m-d').'\'});'])
+                        $form->field($model, 'end_date', [
+                            'template' => '<div class="input-append date form_datetime">{input}<span class="add-on" onclick="WdatePicker({el:\'onlineproduct-end_date\',dateFmt:\'yyyy-MM-dd HH:mm\',minDate:\''.date('Y-m-d').'\'});"><i class="icon-calendar"></i></span></div>{error}',
+                            'inputOptions' => ['autocomplete' => 'off', 'placeholder' => '募集结束时间']
+                            ])->textInput([
+                                'readonly' => 'readonly', 
+                                'class' => 'm-wrap span12',
+                                'value' =>  $model->end_date ? Yii::$app->formatter->asDatetime($model->end_date, 'Y-M-d H:i') : '',
+                                'onclick' => 'WdatePicker({dateFmt:"yyyy-MM-dd HH:mm",minDate:\''.date('Y-m-d').'\'});'
+                                ])
                         ?>
                     </div>
                 </div>
@@ -223,7 +245,15 @@ TPL;
                     <label class="control-label">计息开始日</label>
                     <div class="controls">
                         <?=
-                        $form->field($model, 'jixi_time', ['template' => '<div class="input-append date form_datetime">{input}<span class="add-on"><i class="icon-calendar"></i></span></div>{error}', 'inputOptions' => ['autocomplete' => 'off', 'placeholder' => '计息开始日']])->textInput(['readonly' => 'readonly', 'class' => 'm-wrap span12', 'onclick' => 'WdatePicker({dateFmt:"yyyy-MM-dd",minDate:"#F{$dp.$D(\'onlineproduct-start_date\',{d:1})}",maxDate:"#F{$dp.$D(\'onlineproduct-finish_date\',{d:-1})}"});'])
+                        $form->field($model, 'jixi_time', [
+                            'template' => '<div class="input-append date form_datetime">{input}<span class="add-on"><i class="icon-calendar"></i></span></div>{error}', 
+                            'inputOptions' => ['autocomplete' => 'off', 'placeholder' => '计息开始日']
+                            ])->textInput([
+                                'readonly' => 'readonly',
+                                'class' => 'm-wrap span12',
+                                'value' =>  $model->jixi_time ? Yii::$app->formatter->asDatetime($model->jixi_time, 'Y-M-d') : '',
+                                'onclick' => 'WdatePicker({dateFmt:"yyyy-MM-dd",minDate:"#F{$dp.$D(\'onlineproduct-start_date\',{d:1})}",maxDate:"#F{$dp.$D(\'onlineproduct-finish_date\',{d:-1})}"});'
+                                ])
                         ?>
                     </div>
                 </div>
@@ -234,7 +264,18 @@ TPL;
                     <label class="control-label">项目截止日</label>
                     <div class="controls">
                         <?=
-                        $form->field($model, 'finish_date', ['template' => '<div class="input-append date form_datetime">{input}<span class="add-on" onclick="WdatePicker({el:\'onlineproduct-finish_date\',dateFmt:\'yyyy-MM-dd HH:mm\',minDate:\''.date('Y-m-d').'\'});"><i class="icon-calendar"></i></span><input type="checkbox" id="is_fdate" title="是否有截止日" /></div>{error}', 'inputOptions' => ['autocomplete' => 'off', 'placeholder' => '项目截止日', 'disabled' => 'disabled']])->textInput(['readonly' => 'readonly', 'class' => 'm-wrap span12', 'onclick' => 'WdatePicker({dateFmt:"yyyy-MM-dd HH:mm",minDate:\''.date('Y-m-d').'\'});'])
+                        $form->field($model, 'finish_date', [
+                            'template' => '<div class="input-append date form_datetime">{input}<span class="add-on" onclick="WdatePicker({el:\'onlineproduct-finish_date\',dateFmt:\'yyyy-MM-dd HH:mm\',minDate:\''.date('Y-m-d').'\'});"><i class="icon-calendar"></i></span></div>{error}',
+                            'inputOptions' => ['autocomplete' => 'off', 'placeholder' => '项目截止日', 'disabled' => 'disabled']
+                            ])->textInput([
+                                'readonly' => 'readonly',
+                                'class' => 'm-wrap span12',
+                                'value' =>  $model->finish_date ? Yii::$app->formatter->asDatetime($model->finish_date, 'Y-M-d H:i') : '',
+                                'onclick' => 'WdatePicker({dateFmt:"yyyy-MM-dd HH:mm",minDate:\''.date('Y-m-d').'\'});'
+                                ])
+                        ?>
+                        <?=
+                        $form->field($model, 'is_fdate', ['template' => '{input}'])->checkbox();
                         ?>
                     </div>
                 </div>
@@ -395,9 +436,8 @@ TPL;
             }
         });
 
-        $('#is_fdate').bind('click', function() {
+        $('#onlineproduct-is_fdate').bind('click', function() {
             true === $(this).parent().hasClass('checked') ? $('#onlineproduct-finish_date').attr('disabled', 'disabled') : $('#onlineproduct-finish_date').removeAttr('disabled')
-            
         });
         kindEdit();
     });

@@ -21,8 +21,6 @@ use yii\behaviors\TimestampBehavior;
  * @property string $money
  * @property string $start_money
  * @property string $dizeng_money
- * @property string $fazhi
- * @property string $fazhi_up
  * @property int $start_date
  * @property int $end_date
  * @property string $description
@@ -37,6 +35,8 @@ use yii\behaviors\TimestampBehavior;
  */
 class OnlineProduct extends \yii\db\ActiveRecord
 {
+    public $is_fdate = 0;//是否启用截止日期
+    
     //1预告期、 2募集中,3满标,4流标,5还款中,6已还清7募集提前结束  特对设立阀值得标的进行的设置。
     const STATUS_PRE = 1;
     const STATUS_NOW = 2;
@@ -90,7 +90,7 @@ class OnlineProduct extends \yii\db\ActiveRecord
             'status' => ['status', 'sort', 'full_time'],
             'jixi' => ['jixi_time'],
             'create' => ['title', 'sn', 'cid', 'money', 'borrow_uid', 'expires', 'expires_show', 'yield_rate', 'start_money', 'borrow_uid', 'fee', 'status',
-                'description', 'refund_method', 'account_name', 'account', 'bank', 'dizeng_money', 'fazhi', 'fazhi_up', 'start_date', 'end_date', 'full_time',
+                'description', 'refund_method', 'account_name', 'account', 'bank', 'dizeng_money', 'start_date', 'end_date', 'full_time',
                 'is_xs', 'yuqi_faxi', 'order_limit', 'creator_id', 'del_status', 'status', 'target', 'target_uid', 'finish_date', 'channel', 'jixi_time', 'sort',
                 'jiaxi', 'kuanxianqi',],
         ];
@@ -168,14 +168,16 @@ class OnlineProduct extends \yii\db\ActiveRecord
     {
         return [
             [['title', 'borrow_uid', 'yield_rate', 'money', 'start_money', 'dizeng_money', 'start_date', 'end_date', 'expires', 'cid', 'description'], 'required'],
-            ['finish_date', 'required', 'whenClient' => "function (attribute, value) {
-                return $('#is_fdate').parent().hasClass('checked');
+            ['finish_date', 'required', 'when' => function ($model) {
+                return $model->is_fdate == 1;
+            },  'whenClient' => "function (attribute, value) {
+                return $('#onlineproduct-is_fdate').parent().hasClass('checked');
             }"],
             [['cid', 'is_xs', 'borrow_uid', 'refund_method', 'expires', 'full_time', 'del_status', 'status', 'order_limit', 'creator_id'], 'integer'],
-            [['yield_rate', 'fee', 'money', 'start_money', 'dizeng_money', 'fazhi', 'fazhi_up', 'yuqi_faxi', 'jiaxi',], 'number'],
-            [['fazhi', 'fazhi_up', 'target', 'kuanxianqi'], 'integer'],
+            [['yield_rate', 'fee', 'money', 'start_money', 'dizeng_money', 'yuqi_faxi', 'jiaxi',], 'number'],
+            [['target', 'kuanxianqi'], 'integer'],
             ['target', 'default', 'value' => 0],
-            [['is_xs', 'kuanxianqi'], 'default', 'value' => 0],
+            [['is_xs', 'kuanxianqi', 'is_fdate'], 'default', 'value' => 0],
             [['description'], 'string'],
             [['title', 'target_uid'], 'string', 'max' => 128],
             [['target_uid'], 'match', 'pattern' => '/^\d+((,)\d+)*$/', 'message' => '{attribute}格式不正确必须以英文逗号分隔'],
@@ -183,18 +185,16 @@ class OnlineProduct extends \yii\db\ActiveRecord
             ['sn', 'unique', 'message' => '编号已占用'],
             [['expires_show'], 'string', 'max' => 50],
             [['del_status', 'funded_money'], 'default', 'value' => 0],
-            [['fazhi', 'money', 'start_money', 'dizeng_money', 'fazhi_up', 'yuqi_faxi', 'fee'], 'double'],
+            [['money', 'start_money', 'dizeng_money', 'yuqi_faxi', 'fee'], 'double'],
             [['yuqi_faxi', 'fee'], 'compare', 'compareValue' => 0, 'operator' => '>='],
             [['money', 'start_money'], 'compare', 'compareValue' => 0, 'operator' => '>'],
             [['dizeng_money'], 'compare', 'compareValue' => 1, 'operator' => '>='],
-            [['start_money', 'fazhi', 'fazhi_up'], 'compare', 'compareAttribute' => 'money', 'operator' => '<'],
-            [['fazhi_up'], 'compare', 'compareAttribute' => 'fazhi', 'operator' => '<='],
+            [['start_money'], 'compare', 'compareAttribute' => 'money', 'operator' => '<'],
             [['yield_rate', 'jiaxi',], 'compare', 'compareValue' => 100, 'operator' => '<='],
             [['yield_rate', 'jiaxi', 'kuanxianqi'], 'compare', 'compareValue' => 0, 'operator' => '>='],
             [['jiaxi'], 'match', 'pattern' => '/^[0-9]+([.]{1}[0-9])?$/', 'message' => '加息利率只允许有一位小数'],
             [['jiaxi'], 'compare', 'compareValue' => 10, 'operator' => '<='],
             [['jiaxi'], 'compare', 'compareValue' => 0, 'operator' => '>='],
-            [['start_money', 'dizeng_money'], 'integer'],
             [['money'], 'compare', 'compareValue' => 1000000000, 'operator' => '<='],
             [['money'], 'compare', 'compareValue' => 1, 'operator' => '>='],
 
@@ -209,14 +209,22 @@ class OnlineProduct extends \yii\db\ActiveRecord
     {
         $start = strtotime($this->start_date);
         $end = strtotime($this->end_date);
-        $finish = strtotime($this->finish_date);
-
-        if ($start > $end || $start > $finish || $end > $finish) {
+        if($start > $end){
             $this->addError('start_date', '募集开始时间小于募集结束时间小于项目结束日');
             $this->addError('end_date', '募集开始时间小于募集结束时间小于项目结束日');
-            $this->addError('finish_date', '募集开始时间小于募集结束时间小于项目结束日');
         }
-
+        if(null !== $this->finish_date && '' !== $this->finish_date && 0 !== $this->finish_date){
+            $finish = strtotime($this->finish_date);
+            if ($start > $finish) {
+                $this->addError('start_date', '募集开始时间小于募集结束时间小于项目结束日');
+                $this->addError('finish_date', '募集开始时间小于募集结束时间小于项目结束日');
+            }
+            if ($end > $finish) {
+                $this->addError('end_date', '募集开始时间小于募集结束时间小于项目结束日');
+                $this->addError('finish_date', '募集开始时间小于募集结束时间小于项目结束日');
+            }
+        }
+        
         return true;
     }
 
@@ -225,7 +233,7 @@ class OnlineProduct extends \yii\db\ActiveRecord
      */
     public function getSpanDays()
     {
-        return \Yii::$app->functions->timediff(strtotime(date('Y-m-d', $this->start_date)), strtotime(date('Y-m-d', $this->finish_date)))['day'];
+        return 0 === $this->finish_date ? $this->expires : \Yii::$app->functions->timediff(strtotime(date('Y-m-d', $this->start_date)), strtotime(date('Y-m-d', $this->finish_date)))['day'];
     }
 
     /**
@@ -285,8 +293,6 @@ class OnlineProduct extends \yii\db\ActiveRecord
             'money' => '融资总额',
             'start_money' => '起投金额',
             'dizeng_money' => '递增金额',
-            'fazhi' => '阀值',
-            'fazhi_up' => '递增放款金额阀值',
             'start_date' => '融资开始日期',
             'end_date' => '融资结束日期',
             'description' => '项目介绍',
@@ -302,6 +308,7 @@ class OnlineProduct extends \yii\db\ActiveRecord
             'order_limit' => '限制投标人次',
             'target' => '是否定向标',
             'is_xs' => '是否新手标',
+            'is_fdate' => '是否使用截止日期',
             'target_uid' => '定向标用户uid',
             'creator_id' => '创建者',
             'updated_at' => '创建时间',
