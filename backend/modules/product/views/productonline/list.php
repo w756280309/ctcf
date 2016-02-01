@@ -224,10 +224,10 @@ $pc_cat = Yii::$app->params['pc_cat'];
                     {
                         cloaseLoading()
                         alert(data.message);
-                        if(data.result==1){
-                           location.reload();
-                        }
-                        
+//                        if(data.result==1){
+//                           location.reload();
+//                        }
+//                        
                     });  
              }
     }

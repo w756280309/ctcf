@@ -287,7 +287,14 @@ TPL;
                                 <label class="control-label">还款方式</label>
                                 <div class="controls">
                                         <?=
-                                        $form->field($model, 'refund_method', ['template' => '{input}{error}', 'inputOptions'=>['autocomplete'=>"off",'class'=>'chosen-with-diselect span6']])->dropDownList([''=>"--选择--"]+Yii::$app->params['refund_method'])
+                                        $form->field($model, 'refund_method', [
+                                            'template' => '{input}{error}',
+                                            'inputOptions'=>[
+                                                'autocomplete' => "off",
+                                                'class' => 'chosen-with-diselect span6',
+                                                'onchange' => 'changeRefmet(this)'
+                                                ]
+                                            ])->dropDownList([''=>"--选择--"]+Yii::$app->params['refund_method'])
                                         ?>
                                 </div>
                         </div>
@@ -439,8 +446,18 @@ TPL;
         $('#onlineproduct-is_fdate').bind('click', function() {
             true === $(this).parent().hasClass('checked') ? $('#onlineproduct-finish_date').attr('disabled', 'disabled') : $('#onlineproduct-finish_date').removeAttr('disabled')
         });
+
         kindEdit();
     });
+    
+    function changeRefmet(obj){
+        if (1 === parseInt($(obj).val())) {
+            $('#onlineproduct-kuanxianqi').removeAttr('disabled');
+        } else {
+            $('#onlineproduct-kuanxianqi').val('');
+            $('#onlineproduct-kuanxianqi').attr('disabled','disabled')
+        }       
+    }
 
      function kindEdit() {
         var editor = KindEditor.create('.new_template', {

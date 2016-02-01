@@ -79,10 +79,14 @@ class RepaymentController extends BaseController
                 'result' => 0,
                 'message' => '非法请求',
             ];
-        }        
+        }      
+        $pp = new ProductProcessor();
+        
         $pid = Yii::$app->request->post('pid');
         $qishu = Yii::$app->request->post('qishu');
         $deal = OnlineProduct::findOne(['id' => $pid]);
+        $days = $pp->LoanTimes(date('Y-m-d',$deal->jixi_time), null, time(), 'd', true);//计息天数  $deal->getSpanDays()项目天数
+        $expires = $days['days'][1]['period']['days'];
         $saleac = UserAccount::findOne(['uid' => $deal->borrow_uid, 'type' => UserAccount::TYPE_BORROW]);
         $bcround = new BcRound();
         bcscale(14);
@@ -94,12 +98,13 @@ class RepaymentController extends BaseController
             return ['result' => 0, 'message' => '不允许跨期还款'];
         }
         $total_return = 0;
-        $sum_benxi_yue = OnlineRepaymentPlan::find()->where(['online_pid' => $pid, 'status' => OnlineRepaymentPlan::STATUS_WEIHUAN])->andWhere("qishu not in ($qishu)")->sum('benxi');//未还其它期数的总和
-        $sum_benxi_yue = null === $sum_benxi_yue? 0 : $sum_benxi_yue;
+        $sum_benxi_yue = OnlineRepaymentPlan::find()->where(['online_pid' => $pid, 'status' => OnlineRepaymentPlan::STATUS_WEIHUAN])->andWhere("qishu not in ($qishu)")->sum('benxi'); //未还其它期数的总和
+        $sum_benxi_yue = null === $sum_benxi_yue ? 0 : $sum_benxi_yue;
         $repaymentrecord = new OnlineRepaymentRecord();
         $mrmodel = new MoneyRecord();
         $transaction = Yii::$app->db->beginTransaction();
         foreach ($orders as $order) {
+            $each_lixi = bcdiv(bcsub($order['benjin'], $deal->yield_rate), 360);
             $total_return = bcadd($total_return, $order->benxi);
             $record = clone $repaymentrecord;
             $money_record = clone $mrmodel;
@@ -108,9 +113,9 @@ class RepaymentController extends BaseController
             $record->order_sn = OnlineRepaymentRecord::createSN();
             $record->qishu = $qishu;
             $record->uid = $order['uid'];
-            $record->benxi = $order['benxi'];
+            $record->lixi = $bcround->bcround(bcmul($each_lixi, $expires), 2);
+            $record->benxi = $bcround->bcround(bcadd($order['benjin'], bcmul($each_lixi, $expires)), 2);
             $record->benjin = $order['benjin'];
-            $record->lixi = $order['lixi'];
             $record->benxi_yue = $sum_benxi_yue;
             $record->status = 1;
             $record->refund_time = time();
@@ -125,11 +130,11 @@ class RepaymentController extends BaseController
             }
             $ua = UserAccount::findOne(['uid' => $order['uid'], 'type' => UserAccount::TYPE_LEND]);
             //投资人账户调整
-            $ua->available_balance = $bcround->bcround(bcadd($ua->available_balance, $order['benxi']), 2); //将投标的钱再加入到可用余额中
-            $ua->drawable_balance = $bcround->bcround(bcadd($ua->drawable_balance, $order['benxi']), 2);
-            $ua->in_sum = $bcround->bcround(bcadd($ua->in_sum, $order['benxi']), 2);
-            $ua->investment_balance = $bcround->bcround(bcsub($ua->investment_balance, $order['benjin']), 2);//理财
-            $ua->profit_balance = $bcround->bcround(bcadd($ua->profit_balance, $order['lixi']), 2);//收益
+            $ua->available_balance = $bcround->bcround(bcadd($ua->available_balance, $record->benxi), 2); //将投标的钱再加入到可用余额中
+            $ua->drawable_balance = $bcround->bcround(bcadd($ua->drawable_balance, $record->benxi), 2);
+            $ua->in_sum = $bcround->bcround(bcadd($ua->in_sum, $record->benxi), 2);
+            $ua->investment_balance = $bcround->bcround(bcsub($ua->investment_balance, $record->benjin), 2); //理财
+            $ua->profit_balance = $bcround->bcround(bcadd($ua->profit_balance, $record->lixi), 2); //收益
             if (!$ua->save()) {
                 $transaction->rollBack();
                 return ['result' => 0, 'message' => '还款失败，投资人账户调整失败'];
@@ -140,9 +145,9 @@ class RepaymentController extends BaseController
             $money_record->type = MoneyRecord::TYPE_HUIKUAN;
             $money_record->osn = $order->sn;
             $money_record->uid = $order['uid'];
-            $money_record->in_money = $order['benxi'];
+            $money_record->in_money = $record->benxi;
             $money_record->balance = $ua->available_balance;
-            $money_record->remark = "第$qishu期".'本金:'.$order['benjin'].'元;利息:'.$order['lixi'].'元;';
+            $money_record->remark = "第" . $qishu . "期" . '本金:' . $order['benjin'] . '元;利息:' . $record->lixi . '元;';
             $mrres = $money_record->save();
             if (!$mrres) {
                 $transaction->rollBack();
