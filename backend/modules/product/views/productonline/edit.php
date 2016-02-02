@@ -261,6 +261,25 @@ TPL;
             <?php } ?>
             <div class="span6 ">
                 <div class="control-group">
+                        <label class="control-label">还款方式</label>
+                        <div class="controls">
+                            <?=
+                            $form->field($model, 'refund_method', [
+                                'template' => '{input}{error}',
+                                'inputOptions'=>[
+                                    'autocomplete' => "off",
+                                    'class' => 'chosen-with-diselect span6',
+                                    'onchange' => 'changeRefmet(this)'
+                                    ]
+                                ])->dropDownList(['' => "--选择--"] + Yii::$app->params['refund_method'])
+                            ?>
+                        </div>
+                </div>
+            </div>
+        </div>
+        <div class="row-fluid sourceRfmet" style="display:<?php if (1 === $model->refund_method) { ?>none<?php } else { ?>inline<?php }?>">
+            <div class="span6 ">
+                <div class="control-group">
                     <label class="control-label">项目截止日</label>
                     <div class="controls">
                         <?=
@@ -268,7 +287,7 @@ TPL;
                             'template' => '<div class="input-append date form_datetime">{input}<span class="add-on" onclick="WdatePicker({el:\'onlineproduct-finish_date\',dateFmt:\'yyyy-MM-dd HH:mm\',minDate:\''.date('Y-m-d').'\'});"><i class="icon-calendar"></i></span></div>{error}',
                             'inputOptions' => ['autocomplete' => 'off', 'placeholder' => '项目截止日', 'disabled' => 'disabled']
                             ])->textInput([
-                                'readonly' => 'readonly',
+                                //'readonly' => 'readonly',
                                 'class' => 'm-wrap span12',
                                 'value' =>  $model->finish_date ? Yii::$app->formatter->asDatetime($model->finish_date, 'Y-M-d H:i') : '',
                                 'onclick' => 'WdatePicker({dateFmt:"yyyy-MM-dd HH:mm",minDate:\''.date('Y-m-d').'\'});'
@@ -280,31 +299,13 @@ TPL;
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="row-fluid">
-                <div class="span6 ">
-                        <div class="control-group">
-                                <label class="control-label">还款方式</label>
-                                <div class="controls">
-                                        <?=
-                                        $form->field($model, 'refund_method', [
-                                            'template' => '{input}{error}',
-                                            'inputOptions'=>[
-                                                'autocomplete' => "off",
-                                                'class' => 'chosen-with-diselect span6',
-                                                'onchange' => 'changeRefmet(this)'
-                                                ]
-                                            ])->dropDownList([''=>"--选择--"]+Yii::$app->params['refund_method'])
-                                        ?>
-                                </div>
-                        </div>
-                </div>
+                
               <div class="span6 ">
                 <div class="control-group">
                     <label class="control-label">项目宽限期</label>
                     <div class="controls">
                         <?=
-                        $form->field($model, 'kuanxianqi', ['template' => '<div class="input-append">{input}<span class="add-on">(天)</span></div>{error}', 'inputOptions' => ['autocomplete' => 'off', 'placeholder' => '默认0天']])->textInput(['class' => 'm-wrap span6'])
+                        $form->field($model, 'kuanxianqi', ['template' => '<div class="input-append">{input}<span class="add-on">(天)</span></div>{error}', 'inputOptions' => ['autocomplete' => 'off', 'placeholder' => '默认0天', 'disabled' => 'disabled']])->textInput(['class' => 'm-wrap span6'])
                         ?>
                     </div>
                 </div>
@@ -443,20 +444,35 @@ TPL;
             }
         });
 
+        //是否使用截止日期关系着项目截止日和宽限期天数的设置。如果勾选，可以填写截止日和宽限期，否则不可以填写
         $('#onlineproduct-is_fdate').bind('click', function() {
-            true === $(this).parent().hasClass('checked') ? $('#onlineproduct-finish_date').attr('disabled', 'disabled') : $('#onlineproduct-finish_date').removeAttr('disabled')
+            if (true === $(this).parent().hasClass('checked')) {
+                $('#onlineproduct-kuanxianqi').val('');
+                $('#onlineproduct-finish_date').val('');
+                $('#onlineproduct-finish_date').attr('disabled', 'disabled');
+                $('#onlineproduct-kuanxianqi').attr('disabled', 'disabled');
+            } else {
+                $('#onlineproduct-finish_date').removeAttr('disabled');
+                $('#onlineproduct-kuanxianqi').removeAttr('disabled');
+            }
         });
 
+        <?php if (1 == (int)$model->refund_method) { ?>
+            $('#onlineproduct-is_fdate').click();
+        <?php } ?>
+        
         kindEdit();
     });
     
+    //选择还款方式是到期本息的可以设置项目截止日以及宽限期。否则不可以设置
     function changeRefmet(obj){
         if (1 === parseInt($(obj).val())) {
-            $('#onlineproduct-kuanxianqi').removeAttr('disabled');
+            $('.sourceRfmet').show();
         } else {
             $('#onlineproduct-kuanxianqi').val('');
-            $('#onlineproduct-kuanxianqi').attr('disabled','disabled')
-        }       
+            $('#onlineproduct-finish_date').val('');
+            $('.sourceRfmet').hide();
+        }
     }
 
      function kindEdit() {

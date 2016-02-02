@@ -85,7 +85,7 @@ class RepaymentController extends BaseController
         $pid = Yii::$app->request->post('pid');
         $qishu = Yii::$app->request->post('qishu');
         $deal = OnlineProduct::findOne(['id' => $pid]);
-        $days = $pp->LoanTimes(date('Y-m-d',$deal->jixi_time), null, strtotime('2016-02-29'), 'd', true);//计息天数  $deal->getSpanDays()项目天数
+        $days = $pp->LoanTimes(date('Y-m-d',$deal->jixi_time), null, time(), 'd', true);//计息天数  $deal->getSpanDays()项目天数
         $expires = $days['days'][1]['period']['days'];
         $saleac = UserAccount::findOne(['uid' => $deal->borrow_uid, 'type' => UserAccount::TYPE_BORROW]);
         $bcround = new BcRound();
