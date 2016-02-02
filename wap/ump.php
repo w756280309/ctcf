@@ -18,5 +18,12 @@ $ump = new UmpClient(
     '13900000009'
 );*/
 
-$response = $ump->getUserInfo('UB201602011824050000000000043469');
-var_dump($response->isSuccessful());
+$response = \Yii::$container->get('ump')->getUserInfo('UB201602011824050000000000043469');
+if ($response->isSuccessful()) {
+
+} else {
+    $err = $response->getError();
+    if ('?' === $err->getCode()) {
+        $model->addError($name, $error->getMessage());
+    }
+}
