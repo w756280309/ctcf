@@ -4,12 +4,15 @@ namespace PayGate\Ump;
 
 use Crypto\CryptoUtils;
 use GuzzleHttp\Client as HttpClient;
+use Psr\Http\Message\ResponseInterface as Psr7ResponseInterface;
 
 /**
- * 联动优势API调用
+ * 联动优势API调用.
  */
 class Client
 {
+    const ENCRYPT_ENCODING = 'GB18030';
+
     /**
      * @var string 商户ID
      */
@@ -53,15 +56,15 @@ class Client
     }
 
     /**
-     * 4.2.1
-     *
-     * 根据在平台的用户标识及身份三要素在联动开户
+     * 4.2.1 以平台的用户标识及身份三要素在联动开户.
      *
      * @param string $appUserId
      * @param string $idName
-     * @param int $idType
+     * @param int    $idType
      * @param string $idNo
      * @param string $mobile
+     *
+     * @return Response
      */
     public function register($appUserId, $idName, $idType, $idNo, $mobile)
     {
@@ -77,11 +80,16 @@ class Client
             'mobile_id' => $mobile,
         ];
 
-        $this->doRequest($data);
-
-        return $orderId;
+        return $this->doRequest($data);
     }
 
+    /**
+     * 4.5.2 查询用户的账号和协议签署情况
+     *
+     * @param string $epayUserId 在联动一侧的用户ID
+     *
+     * @return Response
+     */
     public function getUserInfo($epayUserId)
     {
         $data = [
@@ -91,9 +99,14 @@ class Client
             'is_select_agreement' => '1',
         ];
 
-        $this->doRequest($data);
+        return $this->doRequest($data);
     }
 
+    /**
+     * 获得一个HTTP客户端实例
+     *
+     * @return \GuzzleHttp\Client
+     */
     protected function getHttpClient()
     {
         if (null === $this->httpClient) {
@@ -108,63 +121,154 @@ class Client
         return $this->httpClient;
     }
 
+    /**
+     * 以POST方式提交请求数据
+     *
+     * @return Response
+     */
     protected function doRequest(array $data)
     {
-        // unset sign_type & sign?
+        // 添加协议参数
         $data = array_merge($data, [
             'charset' => $this->charset,
             'mer_id' => $this->merchantId,
             'version' => $this->version,
         ]);
 
+        // 签名
+        $data['sign'] = $this->sign($data);
+        $data['sign_type'] = $this->signType;
+
+        $httpResponse = $this->getHttpClient()->request('POST', null, [
+            'form_params' => $data,
+        ]);
+
+        return $this->processHttpResponse($httpResponse);
+    }
+
+    /**
+     * 处理联动接口的返回
+     *
+     * @param \Psr\Http\Message\ResponseInterface $response PSR-7 HTTP响应对象
+     *
+     * @return Response
+     */
+    protected function processHttpResponse(Psr7ResponseInterface $response)
+    {
+        $html = trim($response->getBody()->getContents());
+
+        $doc = new \DOMDocument();
+        $doc->validateOnParse = true;
+
+        // 避免乱码
+        $html = mb_convert_encoding($html, 'HTML-ENTITIES', $this->charset);
+
+        // 因联动构造HTML不符合规范，关闭错误提醒
+        libxml_use_internal_errors(true);
+        $doc->loadHTML($html);
+        libxml_use_internal_errors(false);
+
+        $xpath = new \DOMXpath($doc);
+        $nodes = $xpath->query('//meta');
+        if (0 === $nodes->length) {
+            throw new \Exception('Meta element not found.');
+        } elseif ($nodes->length > 1) {
+            // 因行为未定义，遇到返回多个meta标签的情况直接报错
+            throw new \Exception('Handling of multiple meta elements not implemented.');
+        }
+
+        $content = $nodes->item(0)->getAttribute('content');
+        $segs = explode('&', $content);
+        $pairs = [];
+        foreach ($segs as $seg) {
+            list($key, $val) = explode('=', $seg, 2);
+            $pairs[$key] = $val;
+        }
+
+        if (!$this->verifySign($pairs)) {
+            throw new \Exception('Sign invalid.');
+        }
+
+        return new Response($pairs);
+    }
+
+    /**
+     * 为签名把数组连接为k1=v1&k2=v2...形式的字符串
+     *
+     * @param array $data
+     *
+     * @return string
+     */
+    protected function concatForSigning(array $data)
+    {
         ksort($data);
 
         $concated = '';
-        for ($i = 0, $l = count($data); $i < $l; $i++) {
+        for ($i = 1, $l = count($data); $i <= $l; ++$i) {
             $concated .= sprintf('%s=%s', key($data), current($data));
-            if ($i < ($l - 1)) {
+            if ($i < $l) {
                 $concated .= '&';
             }
 
             next($data);
         }
 
-        $data['sign_type'] = $this->signType;
-        $data['sign'] = base64_encode(CryptoUtils::sign($concated, $this->clientKeyPath));
-
-        $response = $this->getHttpClient()->request('POST', null, [
-            'form_params' => $data,
-        ]);
-
-        $respHtml = trim($response->getBody()->getContents());
-        echo $respHtml;
-
-        $charset = 'UTF-8';
-        $doc = new \DOMDocument('1.0', $charset);
-        $doc->validateOnParse = true;
-
-        $respHtml = mb_convert_encoding($respHtml, 'HTML-ENTITIES', $charset);
-        libxml_use_internal_errors(true);
-        $doc->loadHTML($respHtml);
-        libxml_use_internal_errors(false);
-
-        $xpath = new \DOMXpath($doc);
-        $nodes = $xpath->query('//meta');
-        if (1 !== $nodes->length) {
-            throw new \Exception();
-        }
-        echo $nodes->item(0)->getAttribute('content');
-
-        return $response;
+        return $concated;
     }
 
-    protected function encrypt($content)
+    /**
+     * 校验包含签名的数组
+     *
+     * @param array $data 待校验的数组
+     *
+     * @return bool
+     */
+    protected function verifySign(array $data)
     {
-        $encoding = mb_detect_encoding($content);
-        if ('GB18030' !== $encoding) {
-            $content = mb_convert_encoding($content, 'GB18030', $encoding);
+        if (!isset($data['sign'])) {
+            throw new \Exception('Sign missing.');
         }
 
-        return base64_encode(CryptoUtils::encrypt($content, $this->umpCertPath));
+        $sign = base64_decode($data['sign']);
+        foreach (['sign', 'sign_type'] as $ignore) {
+            unset($data[$ignore]);
+        }
+
+        $content = mb_convert_encoding(
+            $this->concatForSigning($data),
+            self::ENCRYPT_ENCODING,
+            $this->charset
+        );
+
+        return CryptoUtils::verifySign($content, $sign, $this->umpCertPath);
+    }
+
+    /**
+     * 签名
+     *
+     * @param array $data 待签名的数组
+     *
+     * @return string
+     */
+    protected function sign(array $data)
+    {
+        return base64_encode(CryptoUtils::sign($this->concatForSigning($data), $this->clientKeyPath));
+    }
+
+    /**
+     * 加密
+     *
+     * @param string $data 待加密的字符串
+     *
+     * @return string
+     */
+    protected function encrypt($data)
+    {
+        $encoding = mb_detect_encoding($data);
+        if (self::ENCRYPT_ENCODING !== $encoding) {
+            $data = mb_convert_encoding($data, self::ENCRYPT_ENCODING, $encoding);
+        }
+
+        return base64_encode(CryptoUtils::encrypt($data, $this->umpCertPath));
     }
 }

@@ -18,4 +18,5 @@ $ump = new UmpClient(
     '13900000009'
 );*/
 
-$ump->getUserInfo('UB201602011824050000000000043469');
+$response = $ump->getUserInfo('UB201602011824050000000000043469');
+var_dump($response->isSuccessful());

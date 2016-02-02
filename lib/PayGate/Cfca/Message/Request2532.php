@@ -30,10 +30,11 @@ class Request2532 extends AbstractRequest
         return $this->bindingSn;
     }
 
-    public function getTxSn() {
+    public function getTxSn()
+    {
         return $this->bindingSn;
     }
-    
+
     public function getXml()
     {
         $tpl = <<<TPL

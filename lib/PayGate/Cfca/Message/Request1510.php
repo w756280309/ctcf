@@ -2,16 +2,15 @@
 
 namespace PayGate\Cfca\Message;
 
-use Yii;
 use PayGate\Cfca\CfcaUtils;
 
 /**
  * 批量代付
  * 将批量代付的明细通过接口传给支付平台【后台放款时触发】
- * 构造函数需要传入机构ID【中金分配给机构的ID】，
+ * 构造函数需要传入机构ID【中金分配给机构的ID】，.
  */
-class Request1510 extends AbstractRequest {
-
+class Request1510 extends AbstractRequest
+{
     private $batch; //批量代付的对象
     private $batchSn; //批量代付代码
     private $batchItem; //批量代付包含批次数据
@@ -27,30 +26,37 @@ class Request1510 extends AbstractRequest {
     }
 
     /**
-     * 返回批次数据
+     * 返回批次数据.
+     *
      * @return array
      */
-    public function getBatchItem() {
+    public function getBatchItem()
+    {
         return $this->batchItem;
     }
 
     /**
-     * 批量代付批次号
+     * 批量代付批次号.
+     *
      * @return string
      */
-    public function getBatchSn() {
+    public function getBatchSn()
+    {
         return $this->batchSn;
     }
 
     /**
-     * 用作日志记录时候通用的方法，批量代付批次号
+     * 用作日志记录时候通用的方法，批量代付批次号.
+     *
      * @return string
      */
-    public function getTxSn() {
+    public function getTxSn()
+    {
         return $this->batchSn;
     }
 
-    public function getXml() {
+    public function getXml()
+    {
         $tpl = <<<TPL
 <?xml version="1.0" encoding="UTF-8"?>
 <Request version="2.0">
@@ -83,16 +89,17 @@ class Request1510 extends AbstractRequest {
     </Body>
 </Request>
 TPL;
+
         return CfcaUtils::renderXml($tpl, [
                     'institutionId' => $this->getInstitutionId(),
                     'txCode' => $this->getTxCode(),
                     'batchNo' => $this->batch->sn,
                     'totalAmount' => $this->batch->total_amount,
-                    "totalCount" => $this->batch->total_count,
+                    'totalCount' => $this->batch->total_count,
                     'remark' => $this->batch->remark,
                     'payment_flag' => $this->batch->payment_flag,
                     'itemNo' => $this->batchItem->draw->sn,
-                    'amount' => $this->batchItem->amount*100,
+                    'amount' => $this->batchItem->amount * 100,
                     'bankID' => $this->batchItem->bank_id,
                     'accountType' => $this->batchItem->account_type,
                     'accountName' => $this->batchItem->account_name,
@@ -103,8 +110,7 @@ TPL;
                     'phoneNumber' => $this->batchItem->phone_number,
                     'email' => '',
                     'identificationType' => $this->batchItem->identification_type,
-                    'identificationNumber' => $this->batchItem->identification_number
+                    'identificationNumber' => $this->batchItem->identification_number,
         ]);
     }
-
 }

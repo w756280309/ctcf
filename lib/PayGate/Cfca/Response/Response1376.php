@@ -15,7 +15,7 @@ class Response1376 extends Response
         return 40 === $this->verifyStatus
             && 20 === $this->paymentStatus;
     }
-    
+
     public function getSerializationData()
     {
         return [

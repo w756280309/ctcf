@@ -9,7 +9,7 @@ use PayGate\Cfca\Identity\IndividualIdentity;
 /**
  * 绑卡
  * 向中金发起绑卡请求
- * 构造函数需要传入机构ID【中金分配给机构的ID】，以及封装过的用户身份类以及卡类
+ * 构造函数需要传入机构ID【中金分配给机构的ID】，以及封装过的用户身份类以及卡类.
  */
 class Request2531 extends AbstractRequest
 {
@@ -34,7 +34,8 @@ class Request2531 extends AbstractRequest
         return $this->bindingSn;
     }
 
-    public function getTxSn() {
+    public function getTxSn()
+    {
         return $this->bindingSn;
     }
 

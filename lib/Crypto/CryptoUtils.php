@@ -35,4 +35,15 @@ final class CryptoUtils
 
         return $sign;
     }
+
+    public static function verifySign($data, $sign, $pemCertPath, $algo = OPENSSL_ALGO_SHA1)
+    {
+        if (!file_exists($pemCertPath)) {
+            throw new \Exception('PEM cert file not found.');
+        }
+
+        $certContent = file_get_contents($pemCertPath);
+
+        return 1 === openssl_verify($data, $sign, $certContent);
+    }
 }
