@@ -1,0 +1,230 @@
+body {
+    padding-top: 70px;
+}
+
+.navbar-brand {
+    font-weight: bold;
+}
+
+.brand-sub {
+    .navbar-text;
+    color: #f5655c;
+}
+
+.navbar-link {
+    margin-left: 1em;
+}
+
+.footer {
+    margin-top: 100px;
+    padding: 40px 0;
+    border-top: 1px solid #e6e6e6;
+    background-color: #313131;
+    text-align: center;
+    font-size: 14px;
+    color: #7e7e7e;
+}
+
+.intro {
+    margin: 40px 0 40px;
+    text-align: right;
+}
+
+.intro-step-no {
+    font-size: 72px;
+    color: #fbcecb;
+}
+
+.intro-step-title {
+    color: #f44336;
+}
+
+.intro-step-desc {
+    font-size: 12px;
+    color: #adadad;
+}
+
+#login-box {
+    margin: 40px auto;
+    padding: 40px;
+    width: 40%;
+    border: 1px solid #e6e6e6;
+}
+
+.login-tabs {
+    position: relative;
+    margin-bottom: 20px;
+    height: 40px;
+    border-bottom: 1px solid #e6e6e6;
+}
+
+.login-tabs a {
+    position: absolute;
+    top: 0;
+    padding: 0 10px;
+    height: 40px;
+    font-size: 22px;
+    color: #ccc;
+    text-decoration: none;
+}
+
+.login-tabs a.login {
+    left: 10%;
+}
+
+.login-tabs a.reg {
+    right: 10%;
+}
+
+.login-tabs a.current {
+    color: @brand-primary;
+    border-bottom: 1px solid @brand-primary;
+}
+
+.login-reg p {
+    text-align: center;
+    color: #adadad;
+}
+
+.main {
+    margin-top: 40px;
+    padding: 20px 40px;
+    border: 1px solid #e6e6e6;
+
+    .page-heading {
+        position: relative;
+        margin: 0;
+        padding: 0;
+        height: 48px;
+        border-bottom: 1px solid #e6e6e6;
+
+        h2 {
+            position: absolute;
+            left: 0;
+            top: 0;
+            margin: 0;
+            padding: 0 10px;
+            height: 48px;
+            border-bottom: 3px solid @brand-primary;
+            line-height: 48px;
+        }
+    }
+
+    h3, .section {
+        padding: 0 10px;    
+    }
+
+    h3 {
+        margin-top: 60px;
+        margin-bottom: 20px;
+        font-size: 14px;
+        font-weight: bold;
+    }
+
+    .section {
+    }
+}
+
+.dash {
+    .stats {
+        margin: 80px 0;
+
+        .item {
+            margin-right: 40px;
+        }
+
+        .balance {
+            padding-left: 20px;
+            line-height: 22px;
+            font-size: 18px;
+        }
+
+        .profit {
+            font-size: 22px;
+            color: @brand-primary;
+        }
+    }
+
+    .actions {
+        .text-right;
+    }
+}
+
+.picker {
+    .clearfix;
+    padding: 0;
+    list-style: none;
+
+    .picker-item {
+        float: left;
+        margin-right: 15px;
+        margin-bottom: 15px;
+        width: 140px;
+        border: 1px solid #e6e6e6;
+        line-height: 33px;
+        text-align: center;
+        cursor: pointer;
+        cursor: hand;
+    }
+
+    .picked {
+        color: @brand-primary;
+        border-color: @brand-primary;
+    }
+}
+
+.quota-info {
+    width: 70%;
+    font-size: 12px;
+
+    th {
+        padding: 5px 10px;
+        background-color: #d9dce4;
+        font-weight: normal;
+    }
+
+    th, td {
+        border: 1px solid #d9dce4;
+    }
+
+    td {
+        padding: 5px 5px 5px 10px;
+    }
+}
+
+.wdjf-form {
+    list-style: none;
+    padding: 0;
+
+    li {
+        .clearfix;
+    }
+
+    .wdjf-label, .wdjf-field {
+        float: left;
+        line-height: 34px;
+    }
+
+    .wdjf-label {
+        margin-right: 15px;
+        width: 120px;
+        .text-right;
+    }
+
+    .balance {
+        line-height: 34px;
+        font-size: 20px;
+        font-weight: bold;
+        color: @brand-primary;
+    }
+
+    .wdjf-action {
+        margin-top: 15px;
+        margin-left: 135px;
+    }
+
+    .fee-info {
+        margin-top: 15px;
+        color: @brand-primary;
+    }
+}
