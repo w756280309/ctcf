@@ -193,14 +193,17 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             [
                 'username',
                 'string',
-                'length' => [5, 16],
+                'length' => [6, 20],
             ],
+            //企业账号格式 不能是纯数字，或是纯字母
+            ['username', 'match', 'pattern' => '/(?!^\d+$)(?!^[a-zA-Z]+$)^[0-9a-zA-Z]{6,20}$/', 'message' => '企业账号必须为数字和字母的组合'],
+            [['username'], 'unique', 'message' => '该企业账户号已被占用'],
             [
                 'usercode',
                 'string',
                 'length' => [5, 16],
             ],
-            [['mobile'], 'required'],
+            [['mobile', 'username'], 'required'],
             [['mobile'], 'unique', 'message' => '该手机号码已被占用，请重试', 'on' => 'add'],
             //身份证号码为15位或者18位，15位时全为数字，18位前17位为数字，最后一位是校验位，可能为数字或字符X
             [['idcard', 'law_master_idcard'], 'match', 'pattern' => '/(^\d{15}$)|(^\d{17}(\d|X)$)/', 'message' => '{attribute}身份证号码不正确,必须为15位或者18位'],
@@ -208,7 +211,6 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             [['idcard_status', 'email_status', 'mobile_status'], 'default', 'value' => 0],
             [['mobile', 'new_mobile'], 'match', 'pattern' => '/^(13[0-9]|14[0-9]|15[0-9]|17[0-9]|18[0-9])\d{8}$/', 'message' => '手机号格式错误'],
             [['mobile'], 'string', 'max' => 11],
-            ['username', 'unique', 'message' => '用户名已占用'],
             ['usercode', 'unique', 'message' => '会员编号已占用'],
             ['email', 'unique', 'message' => 'Email已占用'],
             [['email', 'real_name'], 'string', 'max' => 50],
@@ -283,7 +285,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
         return [
             'id' => 'ID',
             'type' => '会员类别 ', //1-普通用户 2-机构用户
-            'username' => '用户名',
+            'username' => '企业账号',
             'usercode' => '会员编号',
             'mobile' => '联系手机号',
             'email' => 'Email',
@@ -569,43 +571,49 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     /**
      * 获取是否是实名认证
      */
-    public function ensureIdVerified() {
+    public function ensureIdVerified()
+    {
         return (self::IDCARD_STATUS_PASS === $this->idcard_status) ? true : false;
     }
 
     /**
      * 获取是否设置交易密码
      */
-    public function ensureTxPassSet() {
+    public function ensureTxPassSet()
+    {
         return ('' === $this->trade_pwd) ? false : true;
     }
 
     /**
      * 获取是否设置快捷卡
      */
-    public function ensureQpayEnabled() {
+    public function ensureQpayEnabled()
+    {
         return (null === $this->qpay) ? false : true;
     }
 
     /**
-     * 获取银行卡分支行信息
+     * 获取银行卡分支行信息.
      */
-    public function ensureQpayInfoEnabled() {
-        if(null === $this->qpay){
+    public function ensureQpayInfoEnabled()
+    {
+        if (null === $this->qpay) {
             return false;
         }
-        if(empty($this->qpay->sub_bank_name) || empty($this->qpay->province) || empty($this->qpay->city)){
+        if (empty($this->qpay->sub_bank_name) || empty($this->qpay->province) || empty($this->qpay->city)) {
             return false;
         }
+
         return true;
     }
-    
+
     /**
-     * 返回总的
-     * @return boolean
+     * 返回总的.
+     *
+     * @return bool
      */
-    public function ensure() {
+    public function ensure()
+    {
         return ($this->ensureIdVerified() && $this->ensureQpayEnabled() && $this->ensureTxPassSet()) ? true : false;
     }
-
 }

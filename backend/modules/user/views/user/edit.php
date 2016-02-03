@@ -70,12 +70,14 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\we
                    <?= $model->usercode; ?>
                 </div>
                 <?php } ?>
-               <div class="controls"><label >企业名称：</label>
+                <div class="controls"><label >企业名称：</label>
                     <?= $form->field($model, 'org_name', ['template' => '{input}', 'inputOptions'=>['autocomplete'=>"off",'class'=>'m-wrap span12','placeholder'=>'企业名称']])->textInput() ?>
                     <?= $form->field($model, 'org_name', ['template' => '{error}']); ?>
                 </div>
-                
-                
+                <div class="controls"><label >企业账号：</label>
+                    <?= $form->field($model, 'username', ['template' => '{input}', 'inputOptions'=>['autocomplete'=>"off",'class'=>'m-wrap span12','placeholder'=>'6-20位字母与数字组合']])->textInput(empty($id) ? [] : ['readonly' => true]) ?>
+                    <?= $form->field($model, 'username', ['template' => '{error}']); ?>
+                </div>                
             </div>
             <div class="control-group">
                 <label class="control-label">企业法人</label>
