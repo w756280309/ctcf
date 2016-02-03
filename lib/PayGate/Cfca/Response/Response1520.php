@@ -3,7 +3,7 @@
 namespace PayGate\Cfca\Response;
 
 /**
- * 批量代付查询响应
+ * 批量代付查询响应.
  */
 class Response1520 extends Response
 {
@@ -13,17 +13,19 @@ class Response1520 extends Response
     protected $remark;
     protected $items;
 
-
     /**
-     * 获取相应返回的所有项目
+     * 获取相应返回的所有项目.
      */
-    public function getItems(){
+    public function getItems()
+    {
         return $this->items;
     }
-    
+
     /**
-     * 通过某一项来判断处理是否完结
+     * 通过某一项来判断处理是否完结.
+     *
      * @param type $item
+     *
      * @return bool
      */
     public function isDone($item)
@@ -31,24 +33,25 @@ class Response1520 extends Response
         return 30 === $item['Status']
             || 40 === $item['Status'];
     }
-    
+
     /**
      * 通过某一项来判断处理是否成功
+     *
      * @param type $item
+     *
      * @return bool
      */
     public function isSuccess($item)
     {
         return 30 === $item['Status'];
     }
-    
+
     public function getSerializationData()
     {
         return [
-            'items' => $this->items
+            'items' => $this->items,
         ];
     }
-
 
     protected function populate()
     {
@@ -65,10 +68,9 @@ class Response1520 extends Response
                 'Status' => (int) $node->Status,
                 'BankTxTime' => (string) $node->BankTxTime,
                 'ResponseCode' => (string) $node->ResponseCode,
-                'ResponseMessage' => (string) $node->ResponseMessage
+                'ResponseMessage' => (string) $node->ResponseMessage,
             ];
         }
         $this->items = $nodes;
     }
-    
 }

@@ -7,14 +7,15 @@ use PayGate\Cfca\CfcaUtils;
 /**
  * 中金接口 用于发起PC端大额充值
  */
-class Request1311 extends AbstractRequest {
-
+class Request1311 extends AbstractRequest
+{
     const TRADEDESC = '大额充值';  //交易描述信息
 
     private $recharge, $account_type;
 
     /**
-     * 构造函数
+     * 构造函数.
+     *
      * @param $institutionId 机构编号
      * @param $recharge 充值类对象
      * @param $account_type 付款方账户类型 11个人 12企业
@@ -27,15 +28,18 @@ class Request1311 extends AbstractRequest {
         parent::__construct($institutionId, 1311);
     }
 
-    public function getRechargeSn() {
+    public function getRechargeSn()
+    {
         return $this->recharge->sn;
     }
 
-    public function getTxSn() {
+    public function getTxSn()
+    {
         return $this->recharge->sn;
     }
 
-    public function getXml() {
+    public function getXml()
+    {
         $tpl = <<<TPL
 <?xml version="1.0" encoding="UTF-8"?>
 <Request version="2.0">
@@ -61,6 +65,7 @@ class Request1311 extends AbstractRequest {
     </Body>
 </Request>
 TPL;
+
         return CfcaUtils::renderXml($tpl, [
                     'TxCode' => $this->getTxCode(),
                     'InstitutionID' => $this->getInstitutionId(),
@@ -70,10 +75,9 @@ TPL;
                     'Fee' => 0,
                     'Usage' => self::TRADEDESC,
                     'Remark' => self::TRADEDESC,
-                    'NotificationURL' => \Yii::$app->params['main_url'] . '/user/recharge/rechargecallback',
+                    'NotificationURL' => \Yii::$app->params['main_url'].'/user/recharge/rechargecallback',
                     'BankID' => $this->recharge->pay_bank_id,
-                    'AccountType' => $this->account_type
+                    'AccountType' => $this->account_type,
         ]);
     }
-
 }

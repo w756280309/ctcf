@@ -26,13 +26,15 @@ class Request1376 extends AbstractRequest
     }
 
     /**
-     * 用作日志记录时候通用的方法
+     * 用作日志记录时候通用的方法.
+     *
      * @return type
      */
-    public function getTxSn(){
+    public function getTxSn()
+    {
         return $this->rechargeSn;
     }
-    
+
     public function getRechargeSn()
     {
         return $this->rechargeSn;
@@ -60,7 +62,7 @@ TPL;
             'txCode' => $this->getTxCode(),
             'ordNo' => $this->rechargeSn,
             'paymentNo' => $this->rechargeSn,
-            'smsCode' => $this->smsCode
+            'smsCode' => $this->smsCode,
         ]);
     }
 }

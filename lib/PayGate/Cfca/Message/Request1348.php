@@ -4,8 +4,8 @@ namespace PayGate\Cfca\Message;
 
 use PayGate\Cfca\CfcaUtils;
 
-class Request1348 extends AbstractRequest {
-
+class Request1348 extends AbstractRequest
+{
     private $xml;
     private $serialNumber;
     private $orderNo;
@@ -14,27 +14,28 @@ class Request1348 extends AbstractRequest {
     private $transferTime;
     private $successTime;
 
-    public static function createFromXml($xml) {
+    public static function createFromXml($xml)
+    {
         $xmlObj = simplexml_load_string($xml);
 
         return new self(
-                $xmlObj->Body->InstitutionID, 
+                $xmlObj->Body->InstitutionID,
                 $xmlObj->Body->SerialNumber,
                 $xmlObj->Body->OrderNo,
-                $xmlObj->Body->Amount, 
-                $xmlObj->Body->Status, 
+                $xmlObj->Body->Amount,
+                $xmlObj->Body->Status,
                 $xmlObj->Body->TransferTime,
                 $xmlObj->Body->SuccessTime
         );
     }
 
     public function __construct(
-        $institutionId, 
-        $serialNumber, 
-        $orderNo, 
-        $amount, 
-        $status, 
-        $transferTime, 
+        $institutionId,
+        $serialNumber,
+        $orderNo,
+        $amount,
+        $status,
+        $transferTime,
         $successTime
     ) {
         parent::__construct($institutionId, 1348);
@@ -47,35 +48,43 @@ class Request1348 extends AbstractRequest {
         $this->successTime = $successTime;
     }
 
-    public function getSerialNumber() {
+    public function getSerialNumber()
+    {
         return $this->serialNumber;
     }
 
-    public function getOrderNo() {
+    public function getOrderNo()
+    {
         return $this->orderNo;
     }
 
-    public function getAmount() {
+    public function getAmount()
+    {
         return $this->amount;
     }
 
-    public function getStatus() {
+    public function getStatus()
+    {
         return $this->status;
     }
 
-    public function getTransferTime() {
+    public function getTransferTime()
+    {
         return $this->transferTime;
     }
 
-    public function getSuccessTime() {
+    public function getSuccessTime()
+    {
         return $this->successTime;
     }
 
-    public function getTxSn() {
+    public function getTxSn()
+    {
         return $this->paymentNo;
     }
 
-    public function getXml() {
+    public function getXml()
+    {
         if (null === $this->xml) {
             $tpl = <<<TPL
 <?xml version="1.0" encoding="UTF-8"?>
@@ -104,11 +113,10 @@ TPL;
                         'amount' => $this->getAmount(),
                         'status' => $this->getStatus(),
                         'transferTime' => $this->getTransferTime(),
-                        'successTime' => $this->getSuccessTime()
+                        'successTime' => $this->getSuccessTime(),
             ]);
         }
 
         return $this->xml;
     }
-
 }

@@ -4,7 +4,7 @@ namespace PayGate\Cfca\Response;
 
 /**
  * 结算
- * 结算查询1350响应
+ * 结算查询1350响应.
  */
 class Response1350 extends Response
 {
@@ -16,7 +16,8 @@ class Response1350 extends Response
     protected $status;//结算状态10=已经受理30=正在结算40=已经执行(已发送转账指令)50=转账退回
 
     /**
-     * 是否处理结束40是已经发送转账，50是转账退回
+     * 是否处理结束40是已经发送转账，50是转账退回.
+     *
      * @return bool
      */
     public function isDone()
@@ -27,9 +28,11 @@ class Response1350 extends Response
 
     /**
      * 如果是状态为40代表结算成功
+     *
      * @return bool
      */
-    public function isSuccess(){
+    public function isSuccess()
+    {
         return 40 === $this->status;
     }
 
@@ -41,7 +44,7 @@ class Response1350 extends Response
             'amount' => $this->amount,
             'remark' => $this->remark,
             'accountType' => $this->accountType,
-            'status' => $this->status
+            'status' => $this->status,
         ];
     }
 

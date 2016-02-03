@@ -3,25 +3,26 @@
 namespace PayGate\Cfca\Response;
 
 /**
- * 批量代付查询响应
+ * 批量代付查询响应.
  */
 class Response1810 extends Response
-{      
+{
     protected $txs;
     /**
-     * 获取相应返回的所有项目
+     * 获取相应返回的所有项目.
      */
-    public function getTxs(){
+    public function getTxs()
+    {
         return $this->txs;
     }
-    
+
     public function getSerializationData()
     {
         return [
-            'txs' => $this->txs
+            'txs' => $this->txs,
         ];
     }
- 
+
     /**
      * 通过while(list( , $node) = each($nodes)){}获取所有对象
      */
@@ -38,11 +39,9 @@ class Response1810 extends Response
                 'PaymentAmount' => (int) $node->PaymentAmount,
                 'InstitutionFee' => (int) $node->InstitutionFee,
                 'Remark' => (string) $node->Remark,
-                'BankNotificationTime' => (string) $node->BankNotificationTime
+                'BankNotificationTime' => (string) $node->BankNotificationTime,
             ];
-            
         }
         $this->txs = $nodes;
     }
-    
 }

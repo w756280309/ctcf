@@ -31,8 +31,7 @@ class Request1318 extends AbstractRequest
         $amount,
         $status,
         $bankNotificationTime
-    )
-    {
+    ) {
         parent::__construct($institutionId, 1318);
 
         $this->paymentNo = $paymentNo;

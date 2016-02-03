@@ -7,7 +7,7 @@ use PayGate\Cfca\CfcaUtils;
 /**
  * 快捷支付
  * 向中金发起支付确认，发短信
- * 构造函数需要传入机构ID【中金分配给机构的ID】，绑定流水号，金额
+ * 构造函数需要传入机构ID【中金分配给机构的ID】，绑定流水号，金额.
  */
 class Request1375 extends AbstractRequest
 {
@@ -20,7 +20,7 @@ class Request1375 extends AbstractRequest
         $institutionId,
         $bindingSn,
         $amount,
-        $remark=""
+        $remark = ''
     ) {
         $this->rechargeSn = CfcaUtils::generateSn('RC');
         $this->bindingSn = $bindingSn;
@@ -34,12 +34,14 @@ class Request1375 extends AbstractRequest
     {
         return $this->rechargeSn;
     }
-    
+
     /**
-     * 用作日志记录时候通用的方法
+     * 用作日志记录时候通用的方法.
+     *
      * @return type
      */
-    public function getTxSn(){
+    public function getTxSn()
+    {
         return $this->rechargeSn;
     }
 
@@ -68,8 +70,8 @@ TPL;
             'ordNo' => $this->rechargeSn,
             'paymentNo' => $this->rechargeSn,
             'bingdingSn' => $this->bindingSn,
-            'amount' => $this->amount * 100,//中金已分为单位制
-            'remark' => $this->remark
+            'amount' => $this->amount * 100, //中金已分为单位制
+            'remark' => $this->remark,
         ]);
     }
 }

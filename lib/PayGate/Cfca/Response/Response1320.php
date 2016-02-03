@@ -4,7 +4,7 @@ namespace PayGate\Cfca\Response;
 
 /**
  * 支付查询
- * 支付查询1320响应
+ * 支付查询1320响应.
  */
 class Response1320 extends Response
 {
@@ -16,9 +16,11 @@ class Response1320 extends Response
 
     /**
      * 如果是状态为20代表充值成功
+     *
      * @return bool
      */
-    public function isSuccess(){
+    public function isSuccess()
+    {
         return 20 === $this->status;
     }
 
@@ -29,7 +31,7 @@ class Response1320 extends Response
             'amount' => $this->amount,
             'remark' => $this->remark,
             'bankNotificationTime' => $this->bankNotificationTime,
-            'status' => $this->status
+            'status' => $this->status,
         ];
     }
 
