@@ -9,6 +9,7 @@ use yii\filters\AccessControl;
 use common\models\user\LoginForm;
 use common\service\LoginService;
 use common\models\log\LoginLog;
+use common\models\user\User;
 
 /**
  * Site controller.
@@ -68,16 +69,12 @@ class SiteController extends Controller
     }
 
     /**
-     * PC端登陆页面.
+     * 融资用户端登陆页面.
      */
-    public function actionLogin($flag = null)
+    public function actionLogin()
     {
         if (!\Yii::$app->user->isGuest) {
             return $this->goHome();
-        }
-
-        if ('reg' !== $flag) {
-            $flag = 'login';
         }
 
         $model = new LoginForm();
@@ -88,19 +85,19 @@ class SiteController extends Controller
         }
 
         if ($is_flag) {
-            $model->scenario = 'verifycode';
+            $model->scenario = 'org_verifycode';
         } else {
-            $model->scenario = 'login';
+            $model->scenario = 'org_login';
         }
 
-        if ($model->load(Yii::$app->request->post()) && $model->validate() && $model->login()) {
-            return $this->goHome();
+        if ($model->load(Yii::$app->request->post()) && $model->validate() && $model->login(User::USER_TYPE_ORG)) {
+            return $this->redirect('/user/useraccount/accountcenter');
         }
 
         $login = new LoginService();
 
         if ($model->getErrors('password')) {
-            $login->logFailure(Yii::$app->request, $model->phone, LoginLog::TYPE_PC);
+            $login->logFailure(Yii::$app->request, $model->username, LoginLog::TYPE_PC);
         }
 
         $is_flag = $is_flag ? $is_flag : $login->isCaptchaRequired(Yii::$app->request, $model->phone, 30 * 60, 5);
@@ -108,7 +105,6 @@ class SiteController extends Controller
         return $this->render('login', [
             'model' => $model,
             'is_flag' => $is_flag,
-            'flag' => $flag,
         ]);
     }
 

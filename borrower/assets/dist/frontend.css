@@ -5173,10 +5173,7 @@ body {
   text-decoration: none;
 }
 .login-tabs a.login {
-  left: 10%;
-}
-.login-tabs a.reg {
-  right: 10%;
+  left: 50%;
 }
 .login-tabs a.current {
   color: #f44336;

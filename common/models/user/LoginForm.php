@@ -12,6 +12,7 @@ class LoginForm extends Model
 {
     public $phone;
     public $password;
+    public $username;
     public $verifyCode;
     public $rememberMe = true;
 
@@ -23,8 +24,10 @@ class LoginForm extends Model
     public function scenarios()
     {
         return [
-            'login' => ['phone', 'password', 'rememberMe'],
-            'verifycode' => ['phone', 'password', 'verifyCode', 'rememberMe'],   //需要校验图形验证码
+            'login' => ['phone', 'password', 'rememberMe'],   //投资会员登陆
+            'org_login' => ['username', 'password', 'rememberMe'],  //融资会员登陆
+            'verifycode' => ['phone', 'password', 'verifyCode', 'rememberMe'],   //需要校验图形验证码 投资用户登陆
+            'org_verifycode' => ['username', 'password', 'verifyCode', 'rememberMe'],   //需要校验图形验证码 融资用户登陆
         ];
     }
 
@@ -34,18 +37,21 @@ class LoginForm extends Model
     public function rules()
     {
         return [
-            ['phone', 'required', 'message' => '手机号码不能为空'],
+            ['phone', 'required', 'message' => '手机号码不能为空', 'on' => ['login', 'verifycode']],
+            ['username', 'required', 'message' => '企业账号不能为空', 'on' => ['org_login', 'org_verifycode']],
             ['password', 'required', 'message' => '密码不能为空'],
-            ['verifyCode', 'required', 'message' => '图形验证码不能为空', 'on' => 'verifycode'],
-            ['verifyCode', 'string', 'length' => 6, 'message' => '验证码长度必须为6位', 'on' => 'verifycode'],
-            ['verifyCode', 'captcha', 'on' => 'verifycode'],
+            ['verifyCode', 'required', 'message' => '图形验证码不能为空', 'on' => ['org_login', 'org_verifycode']],
+            ['verifyCode', 'string', 'length' => 6, 'message' => '验证码长度必须为6位', 'on' => ['org_login', 'org_verifycode']],
+            ['verifyCode', 'captcha', 'on' => ['org_login', 'org_verifycode']],
             ['phone', 'match', 'pattern' => '/^(13[0-9]|14[0-9]|15[0-9]|17[0-9]|18[0-9])\d{8}$/', 'message' => '您输入的手机号格式不正确'],
             ['phone', 'string', 'length' => 11, 'message' => '手机号长度必须为11位数字'],
             [
-                'password',
+                ['username', 'password'],
                 'string',
                 'length' => [6, 20],
             ],
+            //企业账号格式 不能是纯数字，或是纯字母
+            ['username', 'match', 'pattern' => '/(?!^\d+$)(?!^[a-zA-Z]+$)^[0-9a-zA-Z]{6,20}$/', 'message' => '企业账号必须为数字和字母的组合'],
             //验证密码格式 不能是纯数字，或是纯字母
             ['password', 'match', 'pattern' => '/(?!^\d+$)(?!^[a-zA-Z]+$)^[0-9a-zA-Z]{6,20}$/', 'message' => '密码必须为数字和字母的组合'],
             // rememberMe must be a boolean value
@@ -59,55 +65,11 @@ class LoginForm extends Model
     public function attributeLabels()
     {
         return [
+            'username' => '企业账号',
             'phone' => '手机号码',
             'password' => '密码',
             'verifyCode' => '',
         ];
-    }
-
-    /**
-     * 检查手机号对应的账户是否符合规范.
-     *
-     * @param type $attribute
-     * @param type $params
-     *
-     * @return bool
-     */
-    public function checkPhone()
-    {
-        if (empty($this->_user)) {
-            $this->addError('phone', '该手机号还没有注册');
-
-            return false;
-        } elseif (User::STATUS_DELETED === $this->_user->status) {
-            $this->addError('phone', '该用户已被锁定');
-
-            return false;
-        } else {
-            return true;
-        }
-    }
-
-    /**
-     * Validates the password.
-     * This method serves as the inline validation for password.
-     *
-     * @param string $attribute the attribute currently being validated
-     * @param array  $params    the additional name-value pairs given in the rule
-     */
-    public function validatePassword()
-    {
-        if (!$this->_user || empty($this->password)) {
-            return false;
-        }
-
-        if (!$this->_user->validatePassword($this->password)) {
-            $this->addError('password', '密码不正确');
-
-            return false;
-        }
-
-        return true;
     }
 
     /**
@@ -120,10 +82,42 @@ class LoginForm extends Model
     public function login($userType)
     {
         if (false === $this->_user) {
-            $this->_user = User::findOne(['mobile' => $this->phone, 'type' => $userType]);
+            if (User::USER_TYPE_PERSONAL === $userType) {
+                $this->_user = User::findOne(['mobile' => $this->phone, 'type' => $userType]);
+            } elseif (User::USER_TYPE_ORG === $userType) {
+                $this->_user = User::findOne(['username' => $this->username, 'type' => $userType]);
+            }
         }
 
-        if ($this->checkPhone() && $this->validatePassword() && Yii::$app->user->login($this->_user, $this->rememberMe ? 3600 : 0)) {
+        if (empty($this->_user)) {
+            if (User::USER_TYPE_PERSONAL === $userType) {
+                $this->addError('phone', '该手机号还没有注册');
+
+                return false;
+            } elseif (User::USER_TYPE_ORG === $userType) {
+                $this->addError('username', '该企业账号还没有注册');
+
+                return false;
+            }
+        } elseif (User::STATUS_DELETED === $this->_user->status) {
+            if (User::USER_TYPE_PERSONAL === $userType) {
+                $this->addError('phone', '该用户已被锁定');
+
+                return false;
+            } elseif (User::USER_TYPE_ORG === $userType) {
+                $this->addError('username', '该用户已被锁定');
+
+                return false;
+            }
+        }
+
+        if (!$this->_user->validatePassword($this->password)) {
+            $this->addError('password', '密码不正确');
+
+            return false;
+        }
+
+        if (Yii::$app->user->login($this->_user, $this->rememberMe ? 3600 : 0)) {
             $this->_user->scenario = 'login';
             $this->_user->last_login = time();
 
