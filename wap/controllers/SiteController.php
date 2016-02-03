@@ -15,6 +15,7 @@ use common\models\user\LoginForm;
 use common\models\user\EditpassForm;
 use common\service\LoginService;
 use common\models\log\LoginLog;
+use common\models\user\User;
 
 /**
  * Site controller.
@@ -137,7 +138,7 @@ class SiteController extends Controller
         }
 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            if ($model->login()) {
+            if ($model->login(User::USER_TYPE_PERSONAL)) {
                 $post_from = Yii::$app->request->post('from');
                 if (!empty($post_from)) {
                     return ['code' => 0, 'message' => '登录成功', 'tourl' => $post_from];

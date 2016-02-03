@@ -16,7 +16,6 @@ class LoginForm extends Model
 
     private $_user = false;
 
-
     /**
      * @inheritdoc
      */
@@ -41,7 +40,6 @@ class LoginForm extends Model
             ['verifyCode', 'captcha', 'on' => 'verifycode'],
             ['phone', 'match', 'pattern' => '/^(13[0-9]|14[0-9]|15[0-9]|17[0-9]|18[0-9])\d{8}$/', 'message' => '您输入的手机号格式不正确'],
             ['phone', 'string', 'length' => 11, 'message' => '手机号长度必须为11位数字'],
-            ['phone','checkPhone'],
             [
                 'password',
                 'string',
@@ -51,8 +49,6 @@ class LoginForm extends Model
             ['password', 'match', 'pattern' => '/(?!^\d+$)(?!^[a-zA-Z]+$)^[0-9a-zA-Z]{6,20}$/', 'message' => '密码必须为数字和字母的组合'],
             // rememberMe must be a boolean value
             ['rememberMe', 'boolean'],
-            // password is validated by validatePassword()
-            ['password', 'validatePassword'],
         ];
     }
 
@@ -69,18 +65,18 @@ class LoginForm extends Model
     }
 
     /**
-     * 检查手机号是否已经注册过
+     * 检查手机号对应的账户是否符合规范
      * @param type $attribute
      * @param type $params
      * @return boolean
      */
-    public function checkPhone($attribute,$params){
-        $num = $this->$attribute;
-        $re = User::findOne(['mobile'=>$num]);
-        if(empty($re) || $re->type != User::USER_TYPE_PERSONAL) {
-            $this->addError($attribute, "该手机号还没有注册");
-        } else if($re->status == User::STATUS_DELETED) {
-            $this->addError($attribute, "该用户已被锁定");
+    public function checkPhone(){
+        if(empty($this->_user)) {
+            $this->addError('mobile', "该手机号还没有注册");
+            return false;
+        } else if(User::STATUS_DELETED === $this->_user->status) {
+            $this->addError('mobile', "该用户已被锁定");
+            return false;
         } else {
             return true;
         }
@@ -93,46 +89,39 @@ class LoginForm extends Model
      * @param string $attribute the attribute currently being validated
      * @param array $params the additional name-value pairs given in the rule
      */
-    public function validatePassword($attribute, $params)
+    public function validatePassword()
     {
-        if (!$this->hasErrors()) {
-            $user = $this->getUser();
-            if (!$user || !$user->validatePassword($this->password)) {
-                $this->addError($attribute, '密码不正确');
-            }
+        if (!$this->_user || empty($this->password)) {
+            return false;
         }
+
+        if (!$this->_user->validatePassword($this->password)) {
+            $this->addError('password', '密码不正确');
+            return false;
+        }
+
+        return true;
     }
 
     /**
      * Logs in a user using the provided username and password.
      *
+     * @param int $userType 用户类型 1 投资用户 2 融资用户
+     *
      * @return boolean whether the user is logged in successfully
      */
-    public function login()
+    public function login($userType)
     {
-        $user = $this->getUser();
-        if (Yii::$app->user->login($user, $this->rememberMe ? 3600 : 0)) {
-            $user->scenario = 'login';
-            $user->last_login = time();
-            return $user->save();
+        if (false === $this->_user) {
+            $this->_user = User::findOne(['mobile' => $this->phone, 'type' => $userType]);
+        }
+
+        if ($this->checkPhone() && $this->validatePassword() && Yii::$app->user->login($this->_user, $this->rememberMe ? 3600 : 0)) {
+            $this->_user->scenario = 'login';
+            $this->_user->last_login = time();
+            return $this->_user->save();
         } else {
             return false;
         }
     }
-
-    /**
-     * Finds user by [[username]]
-     *
-     * @return User|null
-     */
-    public function getUser()
-    {
-        if ($this->_user === false) {
-            $this->_user = User::findByUsername('',$this->phone);
-        }
-
-        return $this->_user;
-    }
-
-
 }
