@@ -17,17 +17,18 @@ use backend\modules\user\core\v1_0\UserAccountBackendCore;
 /**
  * UserController implements the CRUD actions for User model.
  */
-class UserController extends BaseController {
-
-    public function init() {
+class UserController extends BaseController
+{
+    public function init()
+    {
         parent::init();
         if (Yii::$app->request->isAjax) {
             Yii::$app->response->format = Response::FORMAT_JSON;
         }
     }
 
-    public function behaviors() {
-
+    public function behaviors()
+    {
         $params = array_merge(
                 [
             'verbs' => [
@@ -38,34 +39,36 @@ class UserController extends BaseController {
             ],
                 ], parent::behaviors());
 
-
         return $params;
     }
 
-    public function userList($name = null, $mobile = null, $type = null) {
-        if(empty($type)) {
+    public function userList($name = null, $mobile = null, $type = null)
+    {
+        if (empty($type)) {
             Yii::$app->response->format = Response::FORMAT_JSON;
+
             return ['TYPE参数错误'];
         }
 
         $query = User::find()->where(['type' => $type]);
-        if($type == User::USER_TYPE_PERSONAL){
-           $query->with('lendAccount');
-           if (!empty($name)) {
-                $query->andFilterWhere(['like','real_name',$name]);
-           }
-           if (!empty($mobile)) {
-                $query->andFilterWhere(['like','mobile',$mobile]);
-           }
-        }else{
+        if ($type == User::USER_TYPE_PERSONAL) {
+            $query->with('lendAccount');
+            if (!empty($name)) {
+                $query->andFilterWhere(['like', 'real_name', $name]);
+            }
+            if (!empty($mobile)) {
+                $query->andFilterWhere(['like', 'mobile', $mobile]);
+            }
+        } else {
             $query->with('borrowAccount');
             if (!empty($name)) {
-                $query->andFilterWhere(['like','org_name',$name]);
+                $query->andFilterWhere(['like', 'org_name', $name]);
             }
         }
 
         $pages = new Pagination(['totalCount' => $query->count(), 'pageSize' => '15']);
         $model = $query->offset($pages->offset)->limit($pages->limit)->orderBy('created_at desc')->all();
+
         return $this->render('list', [
                     'model' => $model,
                     'category' => $type,
@@ -74,35 +77,42 @@ class UserController extends BaseController {
     }
 
     /**
-     * 投资人
+     * 投资人.
+     *
      * @param type $name
      * @param type $mobile
      * @param type $type
+     *
      * @return type
      */
-    public function actionListt($name = null, $mobile = null,$type = 1) {
+    public function actionListt($name = null, $mobile = null, $type = 1)
+    {
         return $this->userList($name, $mobile, $type);
     }
 
     /**
-     * 融资人
+     * 融资人.
+     *
      * @param type $name
      * @param type $mobile
      * @param type $type
+     *
      * @return type
      */
-    public function actionListr($name = null, $mobile = null,$type = 2) {
+    public function actionListr($name = null, $mobile = null, $type = 2)
+    {
         return $this->userList($name, $mobile, $type);
     }
 
    //查看用户详情
-    public function actionDetail($id=null,$type=null){
-        if($type == User::USER_TYPE_PERSONAL) {
+    public function actionDetail($id = null, $type = null)
+    {
+        if ($type == User::USER_TYPE_PERSONAL) {
             $select = 'usercode,real_name,mobile,created_at,idcard,updated_at,last_login,login_from,idcard_status';
-        }  else {
+        } else {
             $select = 'usercode,org_name,tel,created_at,real_name,idcard,law_mobile,mobile,law_master,law_master_idcard,business_licence,org_code,shui_code,updated_at';
         }
-        $userInfo = User::find()->where(['id'=>$id])->select($select)->one();
+        $userInfo = User::find()->where(['id' => $id])->select($select)->one();
 
         $uabc = new UserAccountBackendCore();
         $recharge = $uabc->getRechargeSuccess($id);
@@ -111,18 +121,19 @@ class UserController extends BaseController {
         $ua = $uabc->getUserAccount($id);
         $userLiCai = $ua->investment_balance;//理财金额
         if (Yii::$app->request->get('type') == User::USER_TYPE_PERSONAL) {
-            $rcMax = RechargeRecord::find()->where(['status'=>  RechargeRecord::STATUS_YES,'uid'=>$id])->max('updated_at');
+            $rcMax = RechargeRecord::find()->where(['status' => RechargeRecord::STATUS_YES, 'uid' => $id])->max('updated_at');
             $order = $uabc->getOrderSuccess($id);
             $product = $ret = ['count' => 0, 'sum' => 0];
         } else {
-            $rcMax = OnlineProduct::find()->where(['del_status'=> OnlineProduct::STATUS_USE,'borrow_uid'=>$id])->min('start_date');
+            $rcMax = OnlineProduct::find()->where(['del_status' => OnlineProduct::STATUS_USE, 'borrow_uid' => $id])->min('start_date');
             $ret = $uabc->getReturnInfo($id);
             $product = $uabc->getProduct($id);
             $order = ['count' => 0, 'sum' => 0];
         }
-        $tztimeMax = OnlineOrder::find()->where(['status'=>  OnlineOrder::STATUS_SUCCESS,'uid'=>$id])->max('updated_at');
+        $tztimeMax = OnlineOrder::find()->where(['status' => OnlineOrder::STATUS_SUCCESS, 'uid' => $id])->max('updated_at');
         $bc = new \common\lib\bchelp\BcRound();
         $userYuE = $bc->bcround(bcadd($ua['available_balance'], $ua['freeze_balance']), 2);
+
         return $this->render('detail', [
                     'czTime' => $rcMax,
                     'czNum' => $recharge['count'],
@@ -138,64 +149,61 @@ class UserController extends BaseController {
                     'rzMoneyTotal' => $product['sum'],
                     'ret' => $ret,
                     'userinfo' => $userInfo,
-                    "id" => $id,
+                    'id' => $id,
         ]);
     }
 
     //添加新融资客户
-    public function actionEdit($id=null,$type=2){
-        $model = $id ? User::findOne($id):(new User());
-        if($type!=1){
+    public function actionEdit($id = null, $type = 2)
+    {
+        $model = $id ? User::findOne($id) : (new User());
+        if ($type != 1) {
             //添加
             $model->scenario = 'add';
             $model->type = $type;
-            if(empty($id)){
-                $model->usercode = User::create_code("usercode","WDJFQY",6,4);
+            if (empty($id)) {
+                $model->usercode = User::create_code('usercode', 'WDJFQY', 6, 4);
             }
-            if ($model->load(Yii::$app->request->post()) && $model->validate())
-            {
-                if($model->save()) {
-                    if(empty($id)) {
+            if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+                if ($model->save()) {
+                    if (empty($id)) {
                         //添加一个融资会员的时候，同时生成对应的一条user_account记录
-                        $userAccount = new UserAccount;
+                        $userAccount = new UserAccount();
                         //$userAccount->uid = Yii::$app->db->getLastInsertID();
                         $userAccount->uid = $model->id;
                         $userAccount->type = UserAccount::TYPE_BORROW;
                         $userAccount->save();
                     }
                     //$this->alert = 1;
-                    $this->redirect(array('/user/user/listr','type'=>2));
+                    $this->redirect(array('/user/user/listr', 'type' => 2));
                 } else {
                     $this->alert = 1;
-                    $this->toUrl = "edit";
+                    $this->toUrl = 'edit';
                 }
             }
-        }else{
+        } else {
             $model->scenario = 'edit';
             //$createUsercode = $model->usercode;
-            if ($model->load(Yii::$app->request->post()) && $model->validate())
-                {
-                    if($model->save()){
-                        //$this->alert = 1;
-                        $this->redirect(array("/user/user/".($type?'listt':'listr'),"type"=>$type));
-                    }
-                    $this->alert = 1;
-                    //$this->msg = "failure";
-                    $this->toUrl = "edit";
+            if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+                if ($model->save()) {
+                    //$this->alert = 1;
+                        $this->redirect(array('/user/user/'.($type ? 'listt' : 'listr'), 'type' => $type));
                 }
+                $this->alert = 1;
+                    //$this->msg = "failure";
+                    $this->toUrl = 'edit';
+            }
         }
-
 
 //        $model->scenario = 'edit';
 //        $query = User::find();
 //        $pages = new Pagination(['totalCount' => $query->count(), 'pageSize' => '10']);
 //        $model = $query->offset($pages->offset)->limit($pages->limit)->orderBy('id asc')->all();
 //        $model = User::find()->where('id=$id');
-        return $this->render('edit',[
-                'create_usercode'=>$model->usercode,
-                'category'=>$type,
-                'model'=>$model,
+        return $this->render('edit', [
+                'create_usercode' => $model->usercode,
+                'category' => $type,
+                'model' => $model,
         ]);
     }
-
 }
