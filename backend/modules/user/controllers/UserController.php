@@ -163,18 +163,21 @@ class UserController extends BaseController
             $model->type = $type;
             if (empty($id)) {
                 $model->usercode = User::create_code('usercode', 'WDJFQY', 6, 4);
+                if (!empty(Yii::$app->params[org_pass])) {
+                    $model->setPassword(Yii::$app->params[org_pass]);
+                } else {
+                    throw new Exception('The org_pass is null.');
+                }
             }
             if ($model->load(Yii::$app->request->post()) && $model->validate()) {
                 if ($model->save()) {
                     if (empty($id)) {
                         //添加一个融资会员的时候，同时生成对应的一条user_account记录
                         $userAccount = new UserAccount();
-                        //$userAccount->uid = Yii::$app->db->getLastInsertID();
                         $userAccount->uid = $model->id;
                         $userAccount->type = UserAccount::TYPE_BORROW;
                         $userAccount->save();
                     }
-                    //$this->alert = 1;
                     $this->redirect(array('/user/user/listr', 'type' => 2));
                 } else {
                     $this->alert = 1;
@@ -183,23 +186,15 @@ class UserController extends BaseController
             }
         } else {
             $model->scenario = 'edit';
-            //$createUsercode = $model->usercode;
             if ($model->load(Yii::$app->request->post()) && $model->validate()) {
                 if ($model->save()) {
-                    //$this->alert = 1;
-                        $this->redirect(array('/user/user/'.($type ? 'listt' : 'listr'), 'type' => $type));
+                    $this->redirect(array('/user/user/'.($type ? 'listt' : 'listr'), 'type' => $type));
                 }
                 $this->alert = 1;
-                    //$this->msg = "failure";
-                    $this->toUrl = 'edit';
+                $this->toUrl = 'edit';
             }
         }
 
-//        $model->scenario = 'edit';
-//        $query = User::find();
-//        $pages = new Pagination(['totalCount' => $query->count(), 'pageSize' => '10']);
-//        $model = $query->offset($pages->offset)->limit($pages->limit)->orderBy('id asc')->all();
-//        $model = User::find()->where('id=$id');
         return $this->render('edit', [
                 'create_usercode' => $model->usercode,
                 'category' => $type,
