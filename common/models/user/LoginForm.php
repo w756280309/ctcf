@@ -1,11 +1,12 @@
 <?php
+
 namespace common\models\user;
 
 use Yii;
 use yii\base\Model;
 
 /**
- * Login form
+ * Login form.
  */
 class LoginForm extends Model
 {
@@ -17,18 +18,18 @@ class LoginForm extends Model
     private $_user = false;
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function scenarios()
     {
         return [
-            'login' => ['phone','password','rememberMe'],
-            'verifycode' => ['phone','password','verifyCode','rememberMe'],   //需要校验图形验证码
+            'login' => ['phone', 'password', 'rememberMe'],
+            'verifycode' => ['phone', 'password', 'verifyCode', 'rememberMe'],   //需要校验图形验证码
         ];
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function rules()
     {
@@ -43,7 +44,7 @@ class LoginForm extends Model
             [
                 'password',
                 'string',
-                'length' => [6, 20]
+                'length' => [6, 20],
             ],
             //验证密码格式 不能是纯数字，或是纯字母
             ['password', 'match', 'pattern' => '/(?!^\d+$)(?!^[a-zA-Z]+$)^[0-9a-zA-Z]{6,20}$/', 'message' => '密码必须为数字和字母的组合'],
@@ -53,7 +54,7 @@ class LoginForm extends Model
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function attributeLabels()
     {
@@ -65,17 +66,22 @@ class LoginForm extends Model
     }
 
     /**
-     * 检查手机号对应的账户是否符合规范
+     * 检查手机号对应的账户是否符合规范.
+     *
      * @param type $attribute
      * @param type $params
-     * @return boolean
+     *
+     * @return bool
      */
-    public function checkPhone(){
-        if(empty($this->_user)) {
-            $this->addError('mobile', "该手机号还没有注册");
+    public function checkPhone()
+    {
+        if (empty($this->_user)) {
+            $this->addError('mobile', '该手机号还没有注册');
+
             return false;
-        } else if(User::STATUS_DELETED === $this->_user->status) {
-            $this->addError('mobile', "该用户已被锁定");
+        } elseif (User::STATUS_DELETED === $this->_user->status) {
+            $this->addError('mobile', '该用户已被锁定');
+
             return false;
         } else {
             return true;
@@ -87,7 +93,7 @@ class LoginForm extends Model
      * This method serves as the inline validation for password.
      *
      * @param string $attribute the attribute currently being validated
-     * @param array $params the additional name-value pairs given in the rule
+     * @param array  $params    the additional name-value pairs given in the rule
      */
     public function validatePassword()
     {
@@ -97,6 +103,7 @@ class LoginForm extends Model
 
         if (!$this->_user->validatePassword($this->password)) {
             $this->addError('password', '密码不正确');
+
             return false;
         }
 
@@ -108,7 +115,7 @@ class LoginForm extends Model
      *
      * @param int $userType 用户类型 1 投资用户 2 融资用户
      *
-     * @return boolean whether the user is logged in successfully
+     * @return bool whether the user is logged in successfully
      */
     public function login($userType)
     {
@@ -119,6 +126,7 @@ class LoginForm extends Model
         if ($this->checkPhone() && $this->validatePassword() && Yii::$app->user->login($this->_user, $this->rememberMe ? 3600 : 0)) {
             $this->_user->scenario = 'login';
             $this->_user->last_login = time();
+
             return $this->_user->save();
         } else {
             return false;

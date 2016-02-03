@@ -92,7 +92,7 @@ class SiteController extends Controller
     }
 
     /**
-     * WAP端首页展示
+     * WAP端首页展示.
      */
     public function actionIndex()
     {
@@ -109,7 +109,7 @@ class SiteController extends Controller
     }
 
     /**
-     * 用户登陆表单页
+     * 用户登陆表单页.
      */
     public function actionLogin()
     {
@@ -185,7 +185,7 @@ class SiteController extends Controller
     }
 
     /**
-     * 修改登陆密码表单页
+     * 修改登陆密码表单页.
      */
     public function actionEditpass()
     {
@@ -217,7 +217,7 @@ class SiteController extends Controller
     }
 
     /**
-     * 找回密码表单页
+     * 找回密码表单页.
      */
     public function actionResetpass()
     {
@@ -272,7 +272,7 @@ class SiteController extends Controller
     }
 
     /**
-     * 注册表单页
+     * 注册表单页.
      */
     public function actionSignup()
     {
@@ -303,7 +303,7 @@ class SiteController extends Controller
     }
 
     /**
-     * 用户协议展示
+     * 用户协议展示.
      */
     public function actionXieyi()
     {

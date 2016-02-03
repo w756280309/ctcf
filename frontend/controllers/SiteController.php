@@ -128,7 +128,7 @@ class SiteController extends Controller
     }
 
     /**
-     * 用户被锁定提示页面
+     * 用户被锁定提示页面.
      */
     public function actionUsererr()
     {
