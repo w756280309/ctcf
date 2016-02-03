@@ -9,6 +9,7 @@ use yii\filters\AccessControl;
 use common\models\user\LoginForm;
 use common\service\LoginService;
 use common\models\log\LoginLog;
+use common\models\user\User;
 
 /**
  * Site controller.
@@ -98,7 +99,7 @@ class SiteController extends Controller
             $model->scenario = 'login';
         }
 
-        if ($model->load(Yii::$app->request->post()) && $model->validate() && $model->login()) {
+        if ($model->load(Yii::$app->request->post()) && $model->validate() && $model->login(User::USER_TYPE_PERSONAL)) {
             return $this->goHome();
         }
 

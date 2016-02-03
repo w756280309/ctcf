@@ -76,11 +76,11 @@ class LoginForm extends Model
     public function checkPhone()
     {
         if (empty($this->_user)) {
-            $this->addError('mobile', '该手机号还没有注册');
+            $this->addError('phone', '该手机号还没有注册');
 
             return false;
         } elseif (User::STATUS_DELETED === $this->_user->status) {
-            $this->addError('mobile', '该用户已被锁定');
+            $this->addError('phone', '该用户已被锁定');
 
             return false;
         } else {
