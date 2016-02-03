@@ -163,8 +163,8 @@ class UserController extends BaseController
             $model->type = $type;
             if (empty($id)) {
                 $model->usercode = User::create_code('usercode', 'WDJFQY', 6, 4);
-                if (!empty(Yii::$app->params[org_pass])) {
-                    $model->setPassword(Yii::$app->params[org_pass]);
+                if (!empty(Yii::$app->params['org_pass'])) {
+                    $model->setPassword(Yii::$app->params['org_pass']);
                 } else {
                     throw new Exception('The org_pass is null.');
                 }
