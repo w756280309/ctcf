@@ -129,17 +129,16 @@ class Client
      * @return Response
      */
     public function registerLoan(
-        $project_id, $project_name, $project_amount, $loan_user_id,
-        $project_expire_date
+        $loan, $borrower
     )
     {
         $data = [
             'service' => 'mer_bind_project',
-            'project_id' => $project_id,
-            'project_name' => $project_name,
-            'project_amount' => $project_amount,
-            'project_expire_date' => $project_expire_date,
-            'loan_user_id' => $loan_user_id,
+            'project_id' => $loan->getLoanId(),
+            'project_name' => $loan->getLoanName(),
+            'project_amount' => $loan->getLoanAmount(),
+            'project_expire_date' => $loan->getLoanExpiresDate(),
+            'loan_user_id' => $borrower->getLoanUserId(),
         ];
 
         return $this->doRequest($data);
@@ -147,13 +146,14 @@ class Client
 
     /**
      * 4.5.3 标的查询接口 查询标的账户状态及余额
-     * @param type $project_id 商户端标的号
+     * @param type $loanId 商户端标的号
      * @return type
      */
-    public function getLoan($project_id) {
+    public function getLoanInfo($loanId)
+    {
         $data = [
             'service' => 'project_account_search',
-            'project_id' => $project_id,
+            'project_id' => $loanId,
         ];
         return $this->doRequest($data);
     }

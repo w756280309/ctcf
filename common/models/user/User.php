@@ -626,7 +626,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
      */
     public static function ensureBorrower($user) {
         if (self::USER_TYPE_ORG !== (int)$user->type) {
-            throw new Exception('不是融资融');
+            throw new Exception('不是融资人');
         }
         return new Borrower($user->id);
     }

@@ -24,10 +24,6 @@ class Response
     {
         return '0000' === $this->get('ret_code');
     }
-    
-    public function isCreateLoanSuccessfull(){
-        return $this->isSuccessful() && '92' === $this->get('project_state');
-    }
 
     public function getError()
     {

@@ -406,13 +406,13 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
         return $this->money * 100;
     }
 
-    public function getLoanExpiresDate() {
+    public function getLoanExpireDate() {
         return date('Ymd', $this->end_date);
     }
     
     public static function createLoan($deal, $borrower) {
-        $resp = \Yii::$container->get('ump')->registerLoan($deal->getLoanId(), $deal->getLoanName(), $deal->getLoanAmount(), $deal->getLoanAmount(), $borrower->getLoanUserId, $deal->getLoanExpiresDate());
-        return $resp->isCreateLoanSuccessfull();
+        $resp = \Yii::$container->get('ump')->registerLoan($deal, $borrower);
+        return $resp->isSuccessful() && '92' === $resp->get('project_state');
     }
     
     /**
@@ -422,7 +422,7 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
      * @throws Exception
      */
     public static function getUmpLoan($id) {
-        $resp = \Yii::$container->get('ump')->getLoan($id);
+        $resp = \Yii::$container->get('ump')->getLoanInfo($id);
         if ($resp->isSuccessful()) {
             return $resp;
         }
