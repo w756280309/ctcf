@@ -17,7 +17,23 @@ $ump = new UmpClient(
     '110228190001012074',
     '13900000009'
 );*/
-
+//1454555878
+$loan = $ump->getLoan(22);
+if($loan->isSuccessful()){
+    
+}
+var_dump($loan);
+//echo time();
+//$pro = $ump->registerLoan(
+//        time(),
+//        '标的测试1',
+//        '100000000',
+//        'UB201602011824050000000000043469',        
+//        '20160229'
+//    );
+//    var_dump($pro,$pro->isCreateLoanSuccessfull());
+//echo '<pre>';print_r($ump->getUserInfo('UB201602011824050000000000043469'));
+exit;
 $response = \Yii::$container->get('ump')->getUserInfo('UB201602011824050000000000043469');
 if ($response->isSuccessful()) {
 

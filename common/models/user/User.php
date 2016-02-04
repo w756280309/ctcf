@@ -6,6 +6,7 @@ use Yii;
 use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
 use yii\web\IdentityInterface;
+use P2pl\Borrower;
 
 /**
  * This is the model class for table "user".
@@ -615,5 +616,18 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     public function ensure()
     {
         return ($this->ensureIdVerified() && $this->ensureQpayEnabled() && $this->ensureTxPassSet()) ? true : false;
+    }
+
+    /**
+     * 返回联动借款人对象
+     * @param type $user
+     * @return Borrower
+     * @throws Exception
+     */
+    public static function ensureBorrower($user) {
+        if (self::USER_TYPE_ORG !== (int)$user->type) {
+            throw new Exception('不是融资融');
+        }
+        return new Borrower($user->id);
     }
 }

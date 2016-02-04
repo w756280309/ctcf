@@ -4,7 +4,7 @@ namespace common\models\product;
 
 use Yii;
 use yii\behaviors\TimestampBehavior;
-
+use P2pl\LoanInterface;
 /**
  * 标的（项目）.
  *
@@ -33,7 +33,7 @@ use yii\behaviors\TimestampBehavior;
  * @property string $create_at
  * @property string $updated_at
  */
-class OnlineProduct extends \yii\db\ActiveRecord
+class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
 {
     public $is_fdate = 0;//是否启用截止日期
     
@@ -393,4 +393,40 @@ class OnlineProduct extends \yii\db\ActiveRecord
 
         return \common\models\contract\ContractTemplate::find()->where($cond)->asArray()->one();
     }
+    
+    public function getLoanId() {
+        return $this->id;
+    }
+
+    public function getLoanName() {
+        return $this->title;
+    }
+
+    public function getLoanAmount() {
+        return $this->money * 100;
+    }
+
+    public function getLoanExpiresDate() {
+        return date('Ymd', $this->end_date);
+    }
+    
+    public static function createLoan($deal, $borrower) {
+        $resp = \Yii::$container->get('ump')->registerLoan($deal->getLoanId(), $deal->getLoanName(), $deal->getLoanAmount(), $deal->getLoanAmount(), $borrower->getLoanUserId, $deal->getLoanExpiresDate());
+        return $resp->isCreateLoanSuccessfull();
+    }
+    
+    /**
+     * 获取联动一侧标的详情
+     * @param type $id
+     * @return type
+     * @throws Exception
+     */
+    public static function getUmpLoan($id) {
+        $resp = \Yii::$container->get('ump')->getLoan($id);
+        if ($resp->isSuccessful()) {
+            return $resp;
+        }
+        throw new Exception('标的不存在');
+    }
+
 }

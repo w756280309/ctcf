@@ -121,6 +121,44 @@ class Client
     }
 
     /**
+     * 4.3.1 标的类接口
+     * 发标(商户->平台)
+     * @param string $project_amount 单位分,最小1,最大9999999999999
+     * @param string $loan_user_id 会去联动一侧判断用户是否存在[测试上投资用户可以用来融资]
+     * @param string $project_expire_date 只做格式校验。没有对时间做其他限制
+     * @return Response
+     */
+    public function registerLoan(
+        $project_id, $project_name, $project_amount, $loan_user_id,
+        $project_expire_date
+    )
+    {
+        $data = [
+            'service' => 'mer_bind_project',
+            'project_id' => $project_id,
+            'project_name' => $project_name,
+            'project_amount' => $project_amount,
+            'project_expire_date' => $project_expire_date,
+            'loan_user_id' => $loan_user_id,
+        ];
+
+        return $this->doRequest($data);
+    }
+
+    /**
+     * 4.5.3 标的查询接口 查询标的账户状态及余额
+     * @param type $project_id 商户端标的号
+     * @return type
+     */
+    public function getLoan($project_id) {
+        $data = [
+            'service' => 'project_account_search',
+            'project_id' => $project_id,
+        ];
+        return $this->doRequest($data);
+    }
+
+    /**
      * 获得一个HTTP客户端实例
      *
      * @return \GuzzleHttp\Client
