@@ -412,7 +412,7 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
     }
 
     /**
-     * 创建是否成功
+     * 创建是否成功?
      *
      * @param OnlineProduct $loan
      * @param Borrower $borrower
