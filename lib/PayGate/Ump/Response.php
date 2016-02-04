@@ -29,4 +29,9 @@ class Response
     {
         throw new \Exception('Not implmented!');
     }
+
+    public function toArray()
+    {
+        return $this->data;
+    }
 }

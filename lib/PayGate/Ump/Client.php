@@ -103,6 +103,24 @@ class Client
     }
 
     /**
+     * 4.5.5 商户信息查询
+     *
+     * @param string $managedMerchantId 在联动一侧的商户号
+     *
+     * @return Response
+     */
+    public function getMerchantInfo($managedMerchantId)
+    {
+        $data = [
+            'service' => 'ptp_mer_query',
+            'query_mer_id' => $managedMerchantId,
+            'account_type' => '01',
+        ];
+
+        return $this->doRequest($data);
+    }
+
+    /**
      * 获得一个HTTP客户端实例
      *
      * @return \GuzzleHttp\Client
