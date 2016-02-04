@@ -37,7 +37,7 @@ use P2pl\Borrower;
 class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
 {
     public $is_fdate = 0;//是否启用截止日期
-    
+
     //1预告期、 2募集中,3满标,4流标,5还款中,6已还清7募集提前结束  特对设立阀值得标的进行的设置。
     const STATUS_PRE = 1;
     const STATUS_NOW = 2;
@@ -225,7 +225,7 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
                 $this->addError('finish_date', '募集开始时间小于募集结束时间小于项目结束日');
             }
         }
-        
+
         return true;
     }
 
@@ -394,7 +394,7 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
 
         return \common\models\contract\ContractTemplate::find()->where($cond)->asArray()->one();
     }
-    
+
     public function getLoanId() {
         return $this->id;
     }
@@ -410,20 +410,21 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
     public function getLoanExpireDate() {
         return date('Ymd', $this->end_date);
     }
-    
+
     /**
      * 创建是否成功
+     *
      * @param OnlineProduct $loan
      * @param Borrower $borrower
      *
      * @return boolean
-     */   
+     */
     public static function createLoan(OnlineProduct $deal, Borrower $borrower) {
         //如果已经在联动一侧生成。则无法在创立。错误代码将会显示00240213【当前标的状态不可投资，请更新标的状态为开标】,如果商户不存在00060711提示商户[2]未开通
         $resp = \Yii::$container->get('ump')->registerLoan($deal, $borrower);
         return $resp->isSuccessful() && '92' === $resp->get('project_state');
     }
-    
+
     /**
      * 获取联动一侧标的详情
      * @param type $id

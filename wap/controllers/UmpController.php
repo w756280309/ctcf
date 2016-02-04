@@ -13,7 +13,7 @@ use P2pl\Borrower;
 
 class UmpController extends Controller
 {
-    
+
     public function actionGetuser($epayUserId)
     {
         var_dump(\Yii::$container->get('ump')->getUserInfo($epayUserId));
