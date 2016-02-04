@@ -5,6 +5,7 @@ namespace common\models\product;
 use Yii;
 use yii\behaviors\TimestampBehavior;
 use P2pl\LoanInterface;
+use P2pl\Borrower;
 /**
  * 标的（项目）.
  *
@@ -410,7 +411,15 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
         return date('Ymd', $this->end_date);
     }
     
-    public static function createLoan($deal, $borrower) {
+    /**
+     *
+     * @param OnlineProduct $loan
+     * @param Borrower $borrower
+     *
+     * @return boolean
+     */   
+    public static function createLoan(OnlineProduct $deal, Borrower $borrower) {
+        //如果已经在联动一侧生成。则无法在创立。错误代码将会显示00240213【当前标的状态不可投资，请更新标的状态为开标】
         $resp = \Yii::$container->get('ump')->registerLoan($deal, $borrower);
         return $resp->isSuccessful() && '92' === $resp->get('project_state');
     }
