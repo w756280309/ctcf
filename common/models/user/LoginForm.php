@@ -52,8 +52,6 @@ class LoginForm extends Model
             ],
             //企业账号格式 不能是纯数字，或是纯字母
             ['username', 'match', 'pattern' => '/(?!^\d+$)(?!^[a-zA-Z]+$)^[0-9a-zA-Z]{6,20}$/', 'message' => '企业账号必须为数字和字母的组合'],
-            //验证密码格式 不能是纯数字，或是纯字母
-            ['password', 'match', 'pattern' => '/(?!^\d+$)(?!^[a-zA-Z]+$)^[0-9a-zA-Z]{6,20}$/', 'message' => '密码必须为数字和字母的组合'],
             // rememberMe must be a boolean value
             ['rememberMe', 'boolean'],
         ];
