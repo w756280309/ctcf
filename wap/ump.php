@@ -18,9 +18,9 @@ $ump = new UmpClient(
     '13900000009'
 );*/
 //1454555878
-$loan = $ump->getLoan(22);
+$loan = $ump->getLoanInfo(1454555878);
 if($loan->isSuccessful()){
-    
+
 }
 var_dump($loan);
 //echo time();
@@ -28,7 +28,7 @@ var_dump($loan);
 //        time(),
 //        '标的测试1',
 //        '100000000',
-//        'UB201602011824050000000000043469',        
+//        'UB201602011824050000000000043469',
 //        '20160229'
 //    );
 //    var_dump($pro,$pro->isCreateLoanSuccessfull());

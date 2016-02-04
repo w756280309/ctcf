@@ -4,6 +4,8 @@ namespace PayGate\Ump;
 
 use Crypto\CryptoUtils;
 use GuzzleHttp\Client as HttpClient;
+use P2pl\BorrowerInterface;
+use P2pl\LoanInterface;
 use Psr\Http\Message\ResponseInterface as Psr7ResponseInterface;
 
 /**
@@ -84,7 +86,7 @@ class Client
     }
 
     /**
-     * 4.5.2 查询用户的账号和协议签署情况
+     * 4.5.2 查询用户的账号和协议签署情况.
      *
      * @param string $epayUserId 在联动一侧的用户ID
      *
@@ -103,7 +105,7 @@ class Client
     }
 
     /**
-     * 4.5.5 商户信息查询
+     * 4.5.5 商户信息查询.
      *
      * @param string $managedMerchantId 在联动一侧的商户号
      *
@@ -121,32 +123,32 @@ class Client
     }
 
     /**
-     * 4.3.1 标的类接口
-     * 发标(商户->平台)
-     * @param string $project_amount 单位分,最小1,最大9999999999999
-     * @param string $loan_user_id 会去联动一侧判断用户是否存在[测试上投资用户可以用来融资]
-     * @param string $project_expire_date 只做格式校验。没有对时间做其他限制
+     * 4.3.1 发标(商户->平台).
+     *
+     * @param LoanInterface     $loan
+     * @param BorrowerInterface $borrower
+     *
      * @return Response
      */
-    public function registerLoan(
-        $loan, $borrower
-    )
+    public function registerLoan(LoanInterface $loan, BorrowerInterface $borrower)
     {
         $data = [
             'service' => 'mer_bind_project',
             'project_id' => $loan->getLoanId(),
             'project_name' => $loan->getLoanName(),
-            'project_amount' => $loan->getLoanAmount(),
-            'project_expire_date' => $loan->getLoanExpiresDate(),
-            'loan_user_id' => $borrower->getLoanUserId(),
+            'project_amount' => $loan->getLoanAmount(),  // 单位分,最小1,最大9999999999999
+            'project_expire_date' => $loan->getLoanExpireDate(), // 只做格式校验。没有对时间做其他限制
+            'loan_user_id' => $borrower->getLoanUserId(), // 会去联动一侧判断用户是否存在[测试上投资用户可以用来融资]
         ];
 
         return $this->doRequest($data);
     }
 
     /**
-     * 4.5.3 标的查询接口 查询标的账户状态及余额
+     * 4.5.3 标的查询接口 查询标的账户状态及余额.
+     *
      * @param type $loanId 商户端标的号
+     *
      * @return type
      */
     public function getLoanInfo($loanId)
@@ -155,11 +157,12 @@ class Client
             'service' => 'project_account_search',
             'project_id' => $loanId,
         ];
+
         return $this->doRequest($data);
     }
 
     /**
-     * 获得一个HTTP客户端实例
+     * 获得一个HTTP客户端实例.
      *
      * @return \GuzzleHttp\Client
      */
@@ -178,7 +181,7 @@ class Client
     }
 
     /**
-     * 以POST方式提交请求数据
+     * 以POST方式提交请求数据.
      *
      * @return Response
      */
@@ -203,7 +206,7 @@ class Client
     }
 
     /**
-     * 处理联动接口的返回
+     * 处理联动接口的返回.
      *
      * @param \Psr\Http\Message\ResponseInterface $response PSR-7 HTTP响应对象
      *
@@ -249,7 +252,7 @@ class Client
     }
 
     /**
-     * 为签名把数组连接为k1=v1&k2=v2...形式的字符串
+     * 为签名把数组连接为k1=v1&k2=v2...形式的字符串.
      *
      * @param array $data
      *
@@ -273,7 +276,7 @@ class Client
     }
 
     /**
-     * 校验包含签名的数组
+     * 校验包含签名的数组.
      *
      * @param array $data 待校验的数组
      *
@@ -300,7 +303,7 @@ class Client
     }
 
     /**
-     * 签名
+     * 签名.
      *
      * @param array $data 待签名的数组
      *
@@ -312,7 +315,7 @@ class Client
     }
 
     /**
-     * 加密
+     * 加密.
      *
      * @param string $data 待加密的字符串
      *
