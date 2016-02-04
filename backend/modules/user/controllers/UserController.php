@@ -168,22 +168,17 @@ class UserController extends BaseController
             }
             $model->scenario = 'add';
             $model->type = $type;
-            if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            if ($model->load(Yii::$app->request->post())) {
                 if ($model->save()) {
                     $this->redirect(['/user/user/listr', 'type' => 2]);
-                } else {
-                    $this->alert = 1;
-                    $this->toUrl = 'edit';
                 }
             }
         } else {
             $model->scenario = 'edit';
-            if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            if ($model->load(Yii::$app->request->post())) {
                 if ($model->save()) {
                     $this->redirect(array('/user/user/'.($type ? 'listt' : 'listr'), 'type' => $type));
                 }
-                $this->alert = 1;
-                $this->toUrl = 'edit';
             }
         }
 
@@ -219,49 +214,45 @@ class UserController extends BaseController
             throw new Exception('The org_pass is null.');
         }
 
-        if ($model->load(Yii::$app->request->post()) && $epayuser->load(Yii::$app->request->post()) && $model->validate()) {
-            if (empty($epayuser->epayUserId)) {
-                $epayuser->addErrors(['epayUserId' => '联动商户ID号不能为空']);
-            } else {
-                $ump = Yii::$container->get('ump');
-                $resp = $ump->getMerchantInfo($epayuser->epayUserId);
-                if ($resp->isSuccessful()) {
-                    if ('1' === $resp->get('account_state')) {
-                        $epayuser->addErrors(['epayUserId' => '联动商户账号状态不正确']);
-                    }
-
-                    $transaction = Yii::$app->db->beginTransaction();
-                    $model->setPassword($model->password_hash);
-                    if (!$model->save()) {
-                        $transaction->rollBack();
-                        throw new Exception('Create table user err.');
-                    }
-
-                    $epayuser->appUserId = strval($model->id);
-                    $epayuser->regDate = date('Y-m-d');
-                    $epayuser->createTime = date('Y-m-d H:i:s');
-
-                    if (!$epayuser->save()) {
-                        $transaction->rollBack();
-                        throw new Exception('Create table epayuser err.');
-                    }
-
-                    //添加一个融资会员的时候，同时生成对应的一条user_account记录
-                    $userAccount = new UserAccount();
-                    $userAccount->uid = $model->id;
-                    $userAccount->type = UserAccount::TYPE_BORROW;
-
-                    if (!$userAccount->save()) {
-                        $transaction->rollBack();
-                        throw new Exception('Create table useraccount err.');
-                    }
-
-                    $transaction->commit();
-                    $this->redirect(['/user/user/listr', 'type' => 2]);
-
-                } else {
-                    $epayuser->addErrors(['epayUserId' => $resp->get('ret_msg')]);
+        if ($model->load(Yii::$app->request->post()) && $epayuser->load(Yii::$app->request->post())) {
+            $ump = Yii::$container->get('ump');
+            $resp = $ump->getMerchantInfo($epayuser->epayUserId);
+            if ($resp->isSuccessful()) {
+                if ('1' === $resp->get('account_state')) {
+                    $epayuser->addErrors(['epayUserId' => '联动商户账号状态不正确']);
                 }
+
+                $transaction = Yii::$app->db->beginTransaction();
+                $model->setPassword($model->password_hash);
+                if (!$model->save()) {
+                    $transaction->rollBack();
+                    throw new Exception('Create table user err.');
+                }
+
+                $epayuser->appUserId = strval($model->id);
+                $epayuser->regDate = date('Y-m-d');
+                $epayuser->createTime = date('Y-m-d H:i:s');
+
+                if (!$epayuser->save()) {
+                    $transaction->rollBack();
+                    throw new Exception('Create table epayuser err.');
+                }
+
+                //添加一个融资会员的时候，同时生成对应的一条user_account记录
+                $userAccount = new UserAccount();
+                $userAccount->uid = $model->id;
+                $userAccount->type = UserAccount::TYPE_BORROW;
+
+                if (!$userAccount->save()) {
+                    $transaction->rollBack();
+                    throw new Exception('Create table useraccount err.');
+                }
+
+                $transaction->commit();
+                $this->redirect(['/user/user/listr', 'type' => 2]);
+
+            } else {
+                $epayuser->addErrors(['epayUserId' => $resp->get('ret_msg')]);
             }
         }
 
