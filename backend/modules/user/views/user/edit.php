@@ -17,40 +17,47 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\we
             <ul class="breadcrumb">
                     <li>
                         <i class="icon-home"></i>
-                        <a href="/user/user/listr">会员管理</a> 
+                        <a href="/user/user/listr">会员管理</a>
                         <i class="icon-angle-right"></i>
                     </li>
                     <?php if($category!=User::USER_TYPE_PERSONAL){ ?>
                     <li>
-                        <a href="/user/user/listr">融资会员列表</a> 
+                        <a href="/user/user/listr">融资会员列表</a>
                         <i class="icon-angle-right"></i>
                     </li>
                                 <li>
                                     <?php if(empty($id)){ ?>
-                                        <a href="javascript:void(0);">添加新融资用户</a> 
+                                        <a href="javascript:void(0);">添加新融资用户</a>
                                     <?php }else{ ?>
-                                        <a href="javascript:void(0);">编辑融资用户</a> 
+                                        <a href="javascript:void(0);">编辑融资用户</a>
                                     <?php }?>
                                 </li>
-                    
+
                     <?php }else{?>
                     <li>
-                        <a href="/user/user/listr">投资会员列表</a> 
+                        <a href="/user/user/listr">投资会员列表</a>
                         <i class="icon-angle-right"></i>
                     </li>
                     <li>
-                        <a href="javascript:void(0);">编辑投资用户</a> 
+                        <a href="javascript:void(0);">编辑投资用户</a>
                     </li>
                     <?php }?>
-                   
+
         </div>
-        
+
         <div class="portlet-body form">
-             <?php $form = ActiveForm::begin(['id' => 'admin_form', 'action' => "/user/user/edit?id=".Yii::$app->request->get('id')."&type=$category",'options' => ['class'=>'form-horizontal form-bordered form-label-stripped']]); ?>  
-            
+             <?php
+                $is_add = empty(Yii::$app->request->get('id')) && '2' === $category;
+                $action = $is_add ? "/user/user/add?type=$category" : "/user/user/edit?id=".Yii::$app->request->get('id')."&type=$category";
+                $form = ActiveForm::begin(['id' => 'admin_form',
+                    'action' => $action,
+                    'options' => ['class'=>'form-horizontal form-bordered form-label-stripped']
+                ]);
+            ?>
+
             <?php if($category==User::USER_TYPE_PERSONAL){ ?>
             <!--投资用户-->
-            <div class="control-group">               
+            <div class="control-group">
                 <div class="controls"><label >会员ID：<?=$create_usercode?></label>
                 </div>
                 <div class="controls"><label >手机号：</label>
@@ -61,10 +68,10 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\we
                     <?= $form->field($model, 'real_name', ['template' => '{input}', 'inputOptions'=>['autocomplete'=>"off",'class'=>'m-wrap span12','placeholder'=>'真实姓名']])->textInput() ?>
                     <?= $form->field($model, 'real_name', ['template' => '{error}']); ?>
                 </div>
-                
+
             <?php }else{?>
             <!--融资用户-->
-            <div class="control-group">         
+            <div class="control-group">
                 <?php if($id){ ?>
                 <div class="controls"><label >会员ID：</label>
                    <?= $model->usercode; ?>
@@ -75,13 +82,25 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\we
                     <?= $form->field($model, 'org_name', ['template' => '{error}']); ?>
                 </div>
                 <div class="controls"><label >企业账号：</label>
-                    <?= $form->field($model, 'username', ['template' => '{input}', 'inputOptions'=>['autocomplete'=>"off",'class'=>'m-wrap span12','placeholder'=>'6-20位字母与数字组合']])->textInput(empty($id) ? [] : ['readonly' => true]) ?>
+                    <?= $form->field($model, 'username', ['template' => '{input}', 'inputOptions'=>['autocomplete'=>"off",'class'=>'m-wrap span12','placeholder'=>'6-20位字母与数字组合']])->textInput($is_add ? [] : ['readonly' => true]) ?>
                     <?= $form->field($model, 'username', ['template' => '{error}']); ?>
-                </div>                
+                </div>
+
+                <?php if ($is_add) { ?>
+                <div class="controls"><label >企业初始密码：</label>
+                    <?= $form->field($model, 'password_hash', ['template' => '{input}', 'inputOptions' => ['autocomplete' => "off", 'class' => 'm-wrap span12']])->textInput(['readonly' => true]) ?>
+                    <?= $form->field($model, 'password_hash', ['template' => '{error}']); ?>
+                </div>
+                <?php } ?>
+
+                <div class="controls"><label >联动用户ID号：</label>
+                    <?= $form->field($epayuser, 'epayUserId', ['template' => '{input}', 'inputOptions' => ['autocomplete' => "off", 'class' => 'm-wrap span12', 'placeholder' => '联动商户ID号']])->textInput($is_add ? [] : ['readonly' => true]) ?>
+                    <?= $form->field($epayuser, 'epayUserId', ['template' => '{error}']); ?>
+                </div>
             </div>
             <div class="control-group">
                 <label class="control-label">企业法人</label>
-                
+
                 <div class="controls"><label >姓名：</label>
                     <?= $form->field($model, 'law_master', ['template' => '{input}', 'inputOptions'=>['autocomplete'=>"off",'class'=>'m-wrap span12','placeholder'=>'姓名']])->textInput() ?>
                     <?= $form->field($model, 'law_master', ['template' => '{error}']); ?>
@@ -95,10 +114,10 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\we
                     <?= $form->field($model, 'law_mobile', ['template' => '{error}']); ?>
                 </div>
             </div>
-            
+
             <div class="control-group">
                 <label class="control-label">企业联系人</label>
-                
+
                 <div class="controls"><label >姓名：</label>
                     <?= $form->field($model, 'real_name', ['template' => '{input}', 'inputOptions'=>['autocomplete'=>"off",'class'=>'m-wrap span12','placeholder'=>'姓名']])->textInput() ?>
                     <?= $form->field($model, 'real_name', ['template' => '{error}']); ?>
@@ -112,7 +131,7 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\we
                     <?= $form->field($model, 'mobile', ['template' => '{error}']); ?>
                 </div>
             </div>
-            
+
             <div class="control-group">
                 <label class="control-label">营业执照号</label>
                 <div class="controls">
@@ -142,12 +161,12 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\we
                 </div>
             </div>
             <?php }?>
-            
-            
-                   
+
+
+
             <div class="form-actions">
                 <button type="submit" class="btn blue"><i class="icon-ok"></i> 提交</button>
-                <a href="/user/user/<?=$category==1?"listt":"listr"?>" class="btn">取消</a> 
+                <a href="/user/user/<?=$category==1?"listt":"listr"?>" class="btn">取消</a>
             </div>
 
         <?php $form->end(); ?>

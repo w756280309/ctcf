@@ -12,6 +12,7 @@ use common\models\user\UserAccount;
 use common\models\user\RechargeRecord;
 use common\models\order\OnlineOrder;
 use common\models\product\OnlineProduct;
+use common\models\epay\EpayUser;
 use backend\modules\user\core\v1_0\UserAccountBackendCore;
 
 /**
@@ -104,7 +105,9 @@ class UserController extends BaseController
         return $this->userList($name, $mobile, $type);
     }
 
-   //查看用户详情
+   /**
+    * 查看用户详情
+    */
     public function actionDetail($id = null, $type = null)
     {
         if ($type == User::USER_TYPE_PERSONAL) {
@@ -153,32 +156,21 @@ class UserController extends BaseController
         ]);
     }
 
-    //添加新融资客户
+    /**
+     * 编辑融资用户
+     */
     public function actionEdit($id = null, $type = 2)
     {
         $model = $id ? User::findOne($id) : (new User());
         if ($type != 1) {
-            //添加
+            if (!empty($id)) {
+                $epayuser = EpayUser::findOne(['appUserId' => $id]);
+            }
             $model->scenario = 'add';
             $model->type = $type;
-            if (empty($id)) {
-                $model->usercode = User::create_code('usercode', 'WDJFQY', 6, 4);
-                if (!empty(Yii::$app->params['org_pass'])) {
-                    $model->setPassword(Yii::$app->params['org_pass']);
-                } else {
-                    throw new Exception('The org_pass is null.');
-                }
-            }
             if ($model->load(Yii::$app->request->post()) && $model->validate()) {
                 if ($model->save()) {
-                    if (empty($id)) {
-                        //添加一个融资会员的时候，同时生成对应的一条user_account记录
-                        $userAccount = new UserAccount();
-                        $userAccount->uid = $model->id;
-                        $userAccount->type = UserAccount::TYPE_BORROW;
-                        $userAccount->save();
-                    }
-                    $this->redirect(array('/user/user/listr', 'type' => 2));
+                    $this->redirect(['/user/user/listr', 'type' => 2]);
                 } else {
                     $this->alert = 1;
                     $this->toUrl = 'edit';
@@ -199,6 +191,85 @@ class UserController extends BaseController
                 'create_usercode' => $model->usercode,
                 'category' => $type,
                 'model' => $model,
+                'epayuser' => $epayuser,
+        ]);
+    }
+
+    /**
+     * 添加融资用户
+     */
+    public function actionAdd($type)
+    {
+        if ('2' !== $type) {
+            throw new Exception('argument err.');
+        }
+
+        $model = new User();
+        $epayuser = new EpayUser([
+            'epayId' => 1,
+            'clientIp' => ip2long(\Yii::$app->functions->getIp()),
+        ]);
+
+        $model->scenario = 'add';
+        $model->type = $type;
+        $model->usercode = User::create_code('usercode', 'WDJFQY', 6, 4);
+
+        $model->password_hash = \Yii::$app->functions->createRandomStr(8,1);
+        if (empty($model->password_hash)) {
+            throw new Exception('The org_pass is null.');
+        }
+
+        if ($model->load(Yii::$app->request->post()) && $epayuser->load(Yii::$app->request->post()) && $model->validate()) {
+            if (empty($epayuser->epayUserId)) {
+                $epayuser->addErrors(['epayUserId' => '联动商户ID号不能为空']);
+            } else {
+                $ump = Yii::$container->get('ump');
+                $resp = $ump->getMerchantInfo($epayuser->epayUserId);
+                if ($resp->isSuccessful()) {
+                    if ('1' === $resp->get('account_state')) {
+                        $epayuser->addErrors(['epayUserId' => '联动商户账号状态不正确']);
+                    }
+
+                    $transaction = Yii::$app->db->beginTransaction();
+                    $model->setPassword($model->password_hash);
+                    if (!$model->save()) {
+                        $transaction->rollBack();
+                        throw new Exception('Create table user err.');
+                    }
+
+                    $epayuser->appUserId = strval($model->id);
+                    $epayuser->regDate = date('Y-m-d');
+                    $epayuser->createTime = date('Y-m-d H:i:s');
+
+                    if (!$epayuser->save()) {
+                        $transaction->rollBack();
+                        throw new Exception('Create table epayuser err.');
+                    }
+
+                    //添加一个融资会员的时候，同时生成对应的一条user_account记录
+                    $userAccount = new UserAccount();
+                    $userAccount->uid = $model->id;
+                    $userAccount->type = UserAccount::TYPE_BORROW;
+
+                    if (!$userAccount->save()) {
+                        $transaction->rollBack();
+                        throw new Exception('Create table useraccount err.');
+                    }
+
+                    $transaction->commit();
+                    $this->redirect(['/user/user/listr', 'type' => 2]);
+
+                } else {
+                    $epayuser->addErrors(['epayUserId' => $resp->get('ret_msg')]);
+                }
+            }
+        }
+
+        return $this->render('edit', [
+                'create_usercode' => $model->usercode,
+                'category' => $type,
+                'model' => $model,
+                'epayuser' => $epayuser,
         ]);
     }
 }
