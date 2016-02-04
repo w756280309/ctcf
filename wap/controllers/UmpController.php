@@ -27,8 +27,8 @@ class UmpController extends Controller
     public function actionRegloan($id)
     {
         $deal = Loan::findOne($id);
-        $borrow = new Borrower(7601209, null, '02');
-        $resp = $deal->createLoan($deal, $borrow);
+        $borrow = new Borrower(2, null, Borrower::MERCHAT);
+        $resp = Loan::createLoan($deal, $borrow);
         var_dump($resp);
     }
 

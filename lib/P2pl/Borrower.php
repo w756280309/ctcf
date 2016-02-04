@@ -10,6 +10,8 @@ namespace P2pl;
 class Borrower implements BorrowerInterface
 {
 
+    const PERSONAL = 1;//个人
+    const MERCHAT = 2;//商户
     private $loanUserId;
     private $loanAccountId;
     private $loanAccountType;
