@@ -16,6 +16,7 @@ use common\models\user\User;
  */
 class SiteController extends Controller
 {
+
     public $layout = 'main';
 
     /**
@@ -65,7 +66,11 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('index');
+        if (\Yii::$app->user->isGuest) {
+            return $this->redirect('/site/login');
+        } else {
+            return $this->redirect('/user/useraccount/accountcenter');
+        }
     }
 
     /**
@@ -103,8 +108,8 @@ class SiteController extends Controller
         $is_flag = $is_flag ? $is_flag : $login->isCaptchaRequired(Yii::$app->request, $model->phone, 30 * 60, 5);
 
         return $this->render('login', [
-            'model' => $model,
-            'is_flag' => $is_flag,
+                'model' => $model,
+                'is_flag' => $is_flag,
         ]);
     }
 
@@ -125,4 +130,5 @@ class SiteController extends Controller
     {
         return $this->render('usererr');
     }
+
 }

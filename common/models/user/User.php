@@ -32,32 +32,26 @@ use P2pl\Borrower;
  */
 class User extends \yii\db\ActiveRecord implements IdentityInterface
 {
+
     //会员类型 1：普通会员 ， 2：融资会员
     const USER_TYPE_PERSONAL = 1;
     const USER_TYPE_ORG = 2;
-
     const STATUS_DELETED = 0;
     const STATUS_ACTIVE = 1;
-
     const EXAMIN_STATUS_UNPASS = -1;
     const EXAMIN_STATUS_WAIT = 0;
     const EXAMIN_STATUS_PASS = 1;
-
     const EMAIL_STATUS_UNPASS = -1;
     const EMAIL_STATUS_WAIT = 0;
     const EMAIL_STATUS_PASS = 1;
-
     const MOBILE_STATUS_UNPASS = -1;
     const MOBILE_STATUS_WAIT = 0;
     const MOBILE_STATUS_PASS = 1;
-
     const IDCARD_STATUS_UNPASS = -1;
     const IDCARD_STATUS_WAIT = 0;
     const IDCARD_STATUS_PASS = 1;
-
     const KUAIJIE_STATUS_Y = 1;
     const KUAIJIE_STATUS_N = 0;
-
     const IDCARD_EXAMIN_COUNT = 3;
 
     public static function examinStatus($key = null)
@@ -89,11 +83,11 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
         }
         $count = static::find()->where($cond)->count() + 1;
         $code = $type;
-        for ($i = 0;$i < 6 - strlen($count);++$i) {
+        for ($i = 0; $i < 6 - strlen($count); ++$i) {
             $code .= '0';
         }
 
-        return $code.$count;
+        return $code . $count;
     }
 
     /**
@@ -115,11 +109,11 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
         }
         $count = static::find()->where($cond)->count() + 1;
         $code = $type;
-        for ($i = 0;$i < 6 - strlen($count);++$i) {
+        for ($i = 0; $i < 6 - strlen($count); ++$i) {
             $code .= '0';
         }
 
-        return $pre.$code.$count;
+        return $pre . $code . $count;
     }
 
     /**
@@ -174,7 +168,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     public function scenarios()
     {
         return [
-            'add' => ['type', 'username', 'usercode', 'mobile', 'email', 'real_name', 'idcard', 'org_name', 'org_code', 'status', 'auth_key', 'user_pass', 'in_time', 'cat_id', 'law_master', 'law_master_idcard', 'law_mobile', 'shui_code', 'business_licence', 'tel',
+            'add' => ['type', 'username', 'password_hash', 'usercode', 'mobile', 'email', 'real_name', 'idcard', 'org_name', 'org_code', 'status', 'auth_key', 'user_pass', 'in_time', 'cat_id', 'law_master', 'law_master_idcard', 'law_mobile', 'shui_code', 'business_licence', 'tel',
             ],
             'edit' => ['id', 'type', 'username', 'mobile', 'email', 'real_name', 'idcard', 'org_name', 'org_code', 'status', 'auth_key', 'user_pass', 'in_time', 'cat_id', 'law_master', 'law_master_idcard', 'law_mobile', 'shui_code', 'business_licence', 'tel',
             ],
@@ -190,7 +184,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     {
         return [
             [['username', 'usercode', 'email'], 'trim'],
-            [['type', 'status',  'updated_at', 'created_at', 'kuaijie_status'], 'integer'],
+            [['type', 'status', 'updated_at', 'created_at', 'kuaijie_status'], 'integer'],
             [
                 'username',
                 'string',
@@ -226,6 +220,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             [['tel'], 'match', 'pattern' => '/^[0-9\-]{6,16}$/', 'message' => '格式不正确，应为数字和中划线', 'on' => ['add', 'edit']],
             [['org_code'], 'match', 'pattern' => '/[a-zA-Z0-9-]/', 'message' => '格式不正确，应为字母数字中划线', 'on' => ['add', 'edit']],
             [['business_licence', 'shui_code'], 'match', 'pattern' => '/\d+/', 'message' => '格式不正确，应为纯数字格式', 'on' => ['add', 'edit']],
+            [['org_name'], 'required'],
         ];
     }
 
@@ -243,11 +238,11 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
         $tmpStr = '';
         if (strlen($num) == 15) {
             $tmpStr = substr($num, 6, 6);
-            $tmpStr = '19'.$tmpStr;
-            $tmpStr = substr($tmpStr, 0, 4).'-'.substr($tmpStr, 4, 2).'-'.substr($tmpStr, 6);
+            $tmpStr = '19' . $tmpStr;
+            $tmpStr = substr($tmpStr, 0, 4) . '-' . substr($tmpStr, 4, 2) . '-' . substr($tmpStr, 6);
         } else {
             $tmpStr = substr($num, 6, 8);
-            $tmpStr = substr($tmpStr, 0, 4).'-'.substr($tmpStr, 4, 2).'-'.substr($tmpStr, 6);
+            $tmpStr = substr($tmpStr, 0, 4) . '-' . substr($tmpStr, 4, 2) . '-' . substr($tmpStr, 6);
         }
 
         $reDate = '/(([0-9][9][2-9][0-9])-(((0[13578]|1[02])-(0[1-9]|[12][0-9]|3[01]))|((0[469]|11)-(0[1-9]|[12][0-9]|30))|(02-(0[1-9]|[1][0-9]|2[0-8]))))|((([0-9]{2})(0[48]|[2468][048]|[13579][26])|((0[48]|[2468][048]|[3579][26])00))-02-29)/';
@@ -306,7 +301,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             'f_trade_pwd' => '交易密码',
             'confirm_trade_pwd' => '确认交易密码',
             'auth_key' => 'cookie权限认证key',
-            'status' => '会员状态 ',  //0-锁定 1-正常
+            'status' => '会员状态 ', //0-锁定 1-正常
             'idcard_examin_count' => '身份证审核次数',
             'updated_at' => '注册时间',
             'created_at' => '更新时间',
@@ -387,8 +382,8 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
         }
 
         return static::findOne([
-            'password_reset_token' => $token,
-            'status' => self::STATUS_ACTIVE,
+                'password_reset_token' => $token,
+                'status' => self::STATUS_ACTIVE,
         ]);
     }
 
@@ -493,7 +488,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
      */
     public function generatePasswordResetToken()
     {
-        $this->password_reset_token = Yii::$app->security->generateRandomString().'_'.time();
+        $this->password_reset_token = Yii::$app->security->generateRandomString() . '_' . time();
     }
 
     /**
@@ -534,7 +529,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
         //选出编号中的字符
         $code = substr($usercode, 0, $length);
         //取出的数字，加一后，在左边填充成4为，然后与字符相加
-        return $code.str_pad($num, $pad_length, 0, STR_PAD_LEFT);
+        return $code . str_pad($num, $pad_length, 0, STR_PAD_LEFT);
     }
 
     /**
@@ -545,7 +540,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     public function getLendAccount()
     {
         return $this->hasOne(UserAccount::className(), ['uid' => 'id'])
-            ->where(['type' => UserAccount::TYPE_LEND]);
+                ->where(['type' => UserAccount::TYPE_LEND]);
     }
 
     /**
@@ -556,7 +551,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     public function getBorrowAccount()
     {
         return $this->hasOne(UserAccount::className(), ['uid' => 'id'])
-            ->where(['type' => UserAccount::TYPE_BORROW]);
+                ->where(['type' => UserAccount::TYPE_BORROW]);
     }
 
     /**
@@ -624,10 +619,12 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
      * @return Borrower
      * @throws Exception
      */
-    public static function ensureBorrower($user) {
-        if (self::USER_TYPE_ORG !== (int)$user->type) {
+    public static function ensureBorrower($user)
+    {
+        if (self::USER_TYPE_ORG !== (int) $user->type) {
             throw new Exception('不是融资人');
         }
         return new Borrower($user->id);
     }
+
 }

@@ -4,7 +4,6 @@ use yii\helpers\Html;
 use frontend\assets\AppAsset;
 
 AppAsset::register($this);
-
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
@@ -27,12 +26,11 @@ AppAsset::register($this);
                     </a>
                 </div>
 
-                <p class="brand-sub">大额充值通道</p>
+                <p class="brand-sub">企业入口</p>
 
                 <div class="navbar-text navbar-right">
                     <?php if (Yii::$app->user->isGuest) { ?>
                         <a class="navbar-link" href="/site/login">登录</a>
-                        <a class="navbar-link" href="/site/login?flag=reg">注册</a>
                     <?php } else { ?>
                         <a class="navbar-link" href="/user/useraccount/accountcenter">我的账户</a>
                         <a class="navbar-link" href="javascript:void(0)" onclick="$('#logout').submit();">注销</a>

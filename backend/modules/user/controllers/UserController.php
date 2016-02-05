@@ -20,6 +20,7 @@ use backend\modules\user\core\v1_0\UserAccountBackendCore;
  */
 class UserController extends BaseController
 {
+
     public function init()
     {
         parent::init();
@@ -30,14 +31,14 @@ class UserController extends BaseController
 
     public function behaviors()
     {
-        $params = array_merge (
+        $params = array_merge(
             [
-                'verbs' => [
-                    'class' => VerbFilter::className(),
-                    'actions' => [
-                        'delete' => ['post'],
-                    ],
+            'verbs' => [
+                'class' => VerbFilter::className(),
+                'actions' => [
+                    'delete' => ['post'],
                 ],
+            ],
             ], parent::behaviors()
         );
 
@@ -72,9 +73,9 @@ class UserController extends BaseController
         $model = $query->offset($pages->offset)->limit($pages->limit)->orderBy('created_at desc')->all();
 
         return $this->render('list', [
-            'model' => $model,
-            'category' => $type,
-            'pages' => $pages,
+                'model' => $model,
+                'category' => $type,
+                'pages' => $pages,
         ]);
     }
 
@@ -123,7 +124,7 @@ class UserController extends BaseController
         $draw = $uabc->getDrawSuccess($id);
 
         $ua = $uabc->getUserAccount($id);
-        $userLiCai = $ua->investment_balance;//理财金额
+        $userLiCai = $ua->investment_balance; //理财金额
         if (Yii::$app->request->get('type') == User::USER_TYPE_PERSONAL) {
             $rcMax = RechargeRecord::find()->where(['status' => RechargeRecord::STATUS_YES, 'uid' => $id])->max('updated_at');
             $order = $uabc->getOrderSuccess($id);
@@ -139,21 +140,21 @@ class UserController extends BaseController
         $userYuE = $bc->bcround(bcadd($ua['available_balance'], $ua['freeze_balance']), 2);
 
         return $this->render('detail', [
-            'czTime' => $rcMax,
-            'czNum' => $recharge['count'],
-            'czMoneyTotal' => $recharge['sum'],
-            'txNum' => $draw['count'],
-            'txMoneyTotal' => $draw['sum'],
-            'userYuE' => $userYuE,
-            'userLiCai' => $userLiCai,
-            'tzTime' => $tztimeMax,
-            'tzNum' => $order['count'],
-            'tzMoneyTotal' => $order['sum'],
-            'rzNum' => $product['count'],
-            'rzMoneyTotal' => $product['sum'],
-            'ret' => $ret,
-            'userinfo' => $userInfo,
-            'id' => $id,
+                'czTime' => $rcMax,
+                'czNum' => $recharge['count'],
+                'czMoneyTotal' => $recharge['sum'],
+                'txNum' => $draw['count'],
+                'txMoneyTotal' => $draw['sum'],
+                'userYuE' => $userYuE,
+                'userLiCai' => $userLiCai,
+                'tzTime' => $tztimeMax,
+                'tzNum' => $order['count'],
+                'tzMoneyTotal' => $order['sum'],
+                'rzNum' => $product['count'],
+                'rzMoneyTotal' => $product['sum'],
+                'ret' => $ret,
+                'userinfo' => $userInfo,
+                'id' => $id,
         ]);
     }
 
@@ -164,30 +165,38 @@ class UserController extends BaseController
     {
         $model = $id ? User::findOne($id) : (new User());
         if ($type != 1) {
-            if (!empty($id)) {
-                $epayuser = EpayUser::findOne(['appUserId' => $id]);
-            }
+            $epayuser = EpayUser::findOne(['appUserId' => $id]);
+            $password = $model->password_hash;
+
             $model->scenario = 'add';
             $model->type = $type;
+
             if ($model->load(Yii::$app->request->post())) {
+                if (!empty($model->password_hash)) {
+                    $model->setPassword($model->password_hash);
+                } else {
+                    $model->password_hash = $password;
+                }
                 if ($model->save()) {
                     $this->redirect(['/user/user/listr', 'type' => 2]);
                 }
             }
+
+            $model->password_hash = null;
         } else {
             $model->scenario = 'edit';
             if ($model->load(Yii::$app->request->post())) {
                 if ($model->save()) {
-                    $this->redirect(array('/user/user/'.($type ? 'listt' : 'listr'), 'type' => $type));
+                    $this->redirect(array('/user/user/' . ($type ? 'listt' : 'listr'), 'type' => $type));
                 }
             }
         }
 
         return $this->render('edit', [
-            'create_usercode' => $model->usercode,
-            'category' => $type,
-            'model' => $model,
-            'epayuser' => $epayuser,
+                'create_usercode' => $model->usercode,
+                'category' => $type,
+                'model' => $model,
+                'epayuser' => $epayuser,
         ]);
     }
 
@@ -206,11 +215,6 @@ class UserController extends BaseController
         $model->type = 2;
         $model->usercode = User::create_code('usercode', 'WDJFQY', 6, 4);
 
-        $model->password_hash = \Yii::$app->functions->createRandomStr(8, 1);
-        if (empty($model->password_hash)) {
-            throw new Exception('The org_pass is null.');
-        }
-
         if ($model->load(Yii::$app->request->post()) && $epayuser->load(Yii::$app->request->post())) {
             $ump = Yii::$container->get('ump');
             $resp = $ump->getMerchantInfo($epayuser->epayUserId);
@@ -220,10 +224,14 @@ class UserController extends BaseController
                 }
 
                 $transaction = Yii::$app->db->beginTransaction();
+                if (empty($model->password_hash)) {
+                    throw new \Exception('The org_pass is null.');
+                }
+
                 $model->setPassword($model->password_hash);
                 if (!$model->save()) {
                     $transaction->rollBack();
-                    throw new Exception('Create table user err.');
+                    throw new \Exception('Create table user err.');
                 }
 
                 $epayuser->appUserId = strval($model->id);
@@ -232,7 +240,7 @@ class UserController extends BaseController
 
                 if (!$epayuser->save()) {
                     $transaction->rollBack();
-                    throw new Exception('Create table epayuser err.');
+                    throw new \Exception('Create table epayuser err.');
                 }
 
                 //添加一个融资会员的时候，同时生成对应的一条user_account记录
@@ -242,7 +250,7 @@ class UserController extends BaseController
 
                 if (!$userAccount->save()) {
                     $transaction->rollBack();
-                    throw new Exception('Create table useraccount err.');
+                    throw new \Exception('Create table useraccount err.');
                 }
 
                 $transaction->commit();
@@ -252,11 +260,16 @@ class UserController extends BaseController
             }
         }
 
+        if (empty($model->password_hash)) {
+            $model->password_hash = \Yii::$app->functions->createRandomStr(8, 1);
+        }
+
         return $this->render('edit', [
-            'create_usercode' => $model->usercode,
-            'category' => 2,
-            'model' => $model,
-            'epayuser' => $epayuser,
+                'create_usercode' => $model->usercode,
+                'category' => 2,
+                'model' => $model,
+                'epayuser' => $epayuser,
         ]);
     }
+
 }

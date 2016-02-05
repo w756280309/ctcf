@@ -5,9 +5,11 @@ namespace app\modules\user\controllers;
 use Yii;
 use yii\web\Response;
 use frontend\controllers\BaseController;
+use common\models\user\UserAccount;
 
 class UseraccountController extends BaseController
 {
+
     public $layout = '@app/views/layouts/main';
 
     /**
@@ -15,6 +17,8 @@ class UseraccountController extends BaseController
      */
     public function actionAccountcenter()
     {
-        return $this->render('accountcenter');
+        $model = UserAccount::findOne(['uid' => $this->user->id]);
+        return $this->render('accountcenter', ['model' => $model]);
     }
+
 }
