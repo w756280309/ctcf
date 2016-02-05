@@ -49,7 +49,7 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\we
 
         <div class="portlet-body form">
              <?php
-                $is_add = empty($id) && '2' === $category;
+                $is_add = empty($id) && 2 === $category;
                 $action = $is_add ? "/user/user/add" : "/user/user/edit?id=".$id."&type=$category";
                 $form = ActiveForm::begin(['id' => 'admin_form',
                     'action' => $action,
