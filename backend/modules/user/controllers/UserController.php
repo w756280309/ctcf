@@ -193,12 +193,8 @@ class UserController extends BaseController
     /**
      * 添加融资用户
      */
-    public function actionAdd($type)
+    public function actionAdd()
     {
-        if ('2' !== $type) {
-            throw new Exception('argument err.');
-        }
-
         $model = new User();
         $epayuser = new EpayUser([
             'epayId' => 1,
@@ -206,7 +202,7 @@ class UserController extends BaseController
         ]);
 
         $model->scenario = 'add';
-        $model->type = $type;
+        $model->type = 2;
         $model->usercode = User::create_code('usercode', 'WDJFQY', 6, 4);
 
         $model->password_hash = \Yii::$app->functions->createRandomStr(8,1);
@@ -258,7 +254,7 @@ class UserController extends BaseController
 
         return $this->render('edit', [
                 'create_usercode' => $model->usercode,
-                'category' => $type,
+                'category' => 2,
                 'model' => $model,
                 'epayuser' => $epayuser,
         ]);

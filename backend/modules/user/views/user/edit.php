@@ -2,9 +2,11 @@
 
 use yii\bootstrap\ActiveForm;
 use common\models\user\User;
-$id = Yii::$app->request->get('id');
+
 $this->title = '添加/编辑会员';
 $this->params['breadcrumbs'][] = $this->title;
+
+$id = Yii::$app->request->get('id');
 
 $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\web\YiiAsset']);
 ?>
@@ -47,8 +49,8 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\we
 
         <div class="portlet-body form">
              <?php
-                $is_add = empty(Yii::$app->request->get('id')) && '2' === $category;
-                $action = $is_add ? "/user/user/add?type=$category" : "/user/user/edit?id=".Yii::$app->request->get('id')."&type=$category";
+                $is_add = empty($id) && '2' === $category;
+                $action = $is_add ? "/user/user/add" : "/user/user/edit?id=".$id."&type=$category";
                 $form = ActiveForm::begin(['id' => 'admin_form',
                     'action' => $action,
                     'options' => ['class'=>'form-horizontal form-bordered form-label-stripped']

@@ -14,7 +14,7 @@ use common\models\user\User;
             <h3 class="page-title">
                         会员管理 <small>会员管理模块【主要包含投资会员和融资会员的管理】</small>
                         <?php if($category==User::USER_TYPE_ORG){?>
-                        <a href="/user/user/add?type=2" id="sample_editable_1_new" class="btn green" style="float: right;">
+                        <a href="/user/user/add" id="sample_editable_1_new" class="btn green" style="float: right;">
                         <i class="icon-plus"></i> 添加新融资客户
                         </a>
                         <?php }?>
