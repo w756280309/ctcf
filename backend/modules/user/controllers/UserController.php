@@ -30,15 +30,16 @@ class UserController extends BaseController
 
     public function behaviors()
     {
-        $params = array_merge(
-                [
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'delete' => ['post'],
+        $params = array_merge (
+            [
+                'verbs' => [
+                    'class' => VerbFilter::className(),
+                    'actions' => [
+                        'delete' => ['post'],
+                    ],
                 ],
-            ],
-                ], parent::behaviors());
+            ], parent::behaviors()
+        );
 
         return $params;
     }
@@ -71,9 +72,9 @@ class UserController extends BaseController
         $model = $query->offset($pages->offset)->limit($pages->limit)->orderBy('created_at desc')->all();
 
         return $this->render('list', [
-                    'model' => $model,
-                    'category' => $type,
-                    'pages' => $pages,
+            'model' => $model,
+            'category' => $type,
+            'pages' => $pages,
         ]);
     }
 
@@ -105,9 +106,9 @@ class UserController extends BaseController
         return $this->userList($name, $mobile, $type);
     }
 
-   /**
-    * 查看用户详情
-    */
+    /**
+     * 查看用户详情.
+     */
     public function actionDetail($id = null, $type = null)
     {
         if ($type == User::USER_TYPE_PERSONAL) {
@@ -138,26 +139,26 @@ class UserController extends BaseController
         $userYuE = $bc->bcround(bcadd($ua['available_balance'], $ua['freeze_balance']), 2);
 
         return $this->render('detail', [
-                    'czTime' => $rcMax,
-                    'czNum' => $recharge['count'],
-                    'czMoneyTotal' => $recharge['sum'],
-                    'txNum' => $draw['count'],
-                    'txMoneyTotal' => $draw['sum'],
-                    'userYuE' => $userYuE,
-                    'userLiCai' => $userLiCai,
-                    'tzTime' => $tztimeMax,
-                    'tzNum' => $order['count'],
-                    'tzMoneyTotal' => $order['sum'],
-                    'rzNum' => $product['count'],
-                    'rzMoneyTotal' => $product['sum'],
-                    'ret' => $ret,
-                    'userinfo' => $userInfo,
-                    'id' => $id,
+            'czTime' => $rcMax,
+            'czNum' => $recharge['count'],
+            'czMoneyTotal' => $recharge['sum'],
+            'txNum' => $draw['count'],
+            'txMoneyTotal' => $draw['sum'],
+            'userYuE' => $userYuE,
+            'userLiCai' => $userLiCai,
+            'tzTime' => $tztimeMax,
+            'tzNum' => $order['count'],
+            'tzMoneyTotal' => $order['sum'],
+            'rzNum' => $product['count'],
+            'rzMoneyTotal' => $product['sum'],
+            'ret' => $ret,
+            'userinfo' => $userInfo,
+            'id' => $id,
         ]);
     }
 
     /**
-     * 编辑融资用户
+     * 编辑融资用户.
      */
     public function actionEdit($id = null, $type = 2)
     {
@@ -183,15 +184,15 @@ class UserController extends BaseController
         }
 
         return $this->render('edit', [
-                'create_usercode' => $model->usercode,
-                'category' => $type,
-                'model' => $model,
-                'epayuser' => $epayuser,
+            'create_usercode' => $model->usercode,
+            'category' => $type,
+            'model' => $model,
+            'epayuser' => $epayuser,
         ]);
     }
 
     /**
-     * 添加融资用户
+     * 添加融资用户.
      */
     public function actionAdd()
     {
@@ -205,7 +206,7 @@ class UserController extends BaseController
         $model->type = 2;
         $model->usercode = User::create_code('usercode', 'WDJFQY', 6, 4);
 
-        $model->password_hash = \Yii::$app->functions->createRandomStr(8,1);
+        $model->password_hash = \Yii::$app->functions->createRandomStr(8, 1);
         if (empty($model->password_hash)) {
             throw new Exception('The org_pass is null.');
         }
@@ -246,17 +247,16 @@ class UserController extends BaseController
 
                 $transaction->commit();
                 $this->redirect(['/user/user/listr', 'type' => 2]);
-
             } else {
                 $epayuser->addErrors(['epayUserId' => $resp->get('ret_msg')]);
             }
         }
 
         return $this->render('edit', [
-                'create_usercode' => $model->usercode,
-                'category' => 2,
-                'model' => $model,
-                'epayuser' => $epayuser,
+            'create_usercode' => $model->usercode,
+            'category' => 2,
+            'model' => $model,
+            'epayuser' => $epayuser,
         ]);
     }
 }
