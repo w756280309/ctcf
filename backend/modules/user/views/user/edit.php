@@ -22,20 +22,20 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\we
                         <a href="/user/user/listr">会员管理</a>
                         <i class="icon-angle-right"></i>
                     </li>
-                    <?php if($category!=User::USER_TYPE_PERSONAL){ ?>
+                    <?php if ($category != User::USER_TYPE_PERSONAL) { ?>
                     <li>
                         <a href="/user/user/listr">融资会员列表</a>
                         <i class="icon-angle-right"></i>
                     </li>
                                 <li>
-                                    <?php if(empty($id)){ ?>
-                                        <a href="javascript:void(0);">添加新融资用户</a>
-                                    <?php }else{ ?>
-                                        <a href="javascript:void(0);">编辑融资用户</a>
-                                    <?php }?>
+                                        <?php if (empty($id)) { ?>
+                                            <a href="javascript:void(0);">添加新融资用户</a>
+                                        <?php } else { ?>
+                                            <a href="javascript:void(0);">编辑融资用户</a>
+                                        <?php } ?>
                                 </li>
 
-                    <?php }else{?>
+                    <?php } else { ?>
                     <li>
                         <a href="/user/user/listr">投资会员列表</a>
                         <i class="icon-angle-right"></i>
@@ -43,21 +43,21 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\we
                     <li>
                         <a href="javascript:void(0);">编辑投资用户</a>
                     </li>
-                    <?php }?>
+                    <?php } ?>
 
         </div>
 
         <div class="portlet-body form">
-             <?php
+            <?php
                 $is_add = empty($id) && 2 === $category;
                 $action = $is_add ? "/user/user/add" : "/user/user/edit?id=".$id."&type=$category";
                 $form = ActiveForm::begin(['id' => 'admin_form',
                     'action' => $action,
-                    'options' => ['class'=>'form-horizontal form-bordered form-label-stripped']
+                    'options' => ['class' => 'form-horizontal form-bordered form-label-stripped'],
                 ]);
             ?>
 
-            <?php if($category==User::USER_TYPE_PERSONAL){ ?>
+            <?php if ($category == User::USER_TYPE_PERSONAL) { ?>
             <!--投资用户-->
             <div class="control-group">
                 <div class="controls"><label >会员ID：<?=$create_usercode?></label>
@@ -71,10 +71,10 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\we
                     <?= $form->field($model, 'real_name', ['template' => '{error}']); ?>
                 </div>
 
-            <?php }else{?>
+            <?php } else { ?>
             <!--融资用户-->
             <div class="control-group">
-                <?php if($id){ ?>
+                <?php if($id) { ?>
                 <div class="controls"><label >会员ID：</label>
                    <?= $model->usercode; ?>
                 </div>
@@ -168,7 +168,7 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\we
 
             <div class="form-actions">
                 <button type="submit" class="btn blue"><i class="icon-ok"></i> 提交</button>
-                <a href="/user/user/<?=$category==1?"listt":"listr"?>" class="btn">取消</a>
+                <a href="/user/user/<?= $category == 1 ? "listt" : "listr" ?>" class="btn">取消</a>
             </div>
 
         <?php $form->end(); ?>
