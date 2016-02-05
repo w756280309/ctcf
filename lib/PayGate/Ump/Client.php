@@ -187,7 +187,7 @@ class Client
     }
 
     /**
-     * 4.3.2 标的更新 更新状态
+     * 4.3.2 标的更新 更新借款人
      *
      * @param LoanInterface     $loan
      * @param BorrowerInterface $borrower
