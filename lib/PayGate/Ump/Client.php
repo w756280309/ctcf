@@ -162,6 +162,24 @@ class Client
     }
 
     /**
+     * 获取对账单（暂限定为标的交易）
+     *
+     * @param string $date YYYYMMDD
+     *
+     * @return string
+     */
+    public function getSettlement($date)
+    {
+        $data = [
+            'service' => 'download_settle_file_p',
+            'settle_date_p2p' => $date,
+            'settle_type_p2p' => '03',
+        ];
+
+        return $this->doRequest($data);
+    }
+
+    /**
      * 获得一个HTTP客户端实例.
      *
      * @return \GuzzleHttp\Client
@@ -214,41 +232,57 @@ class Client
      */
     protected function processHttpResponse(Psr7ResponseInterface $response)
     {
-        $html = trim($response->getBody()->getContents());
-
-        $doc = new \DOMDocument();
-        $doc->validateOnParse = true;
-
-        // 避免乱码
-        $html = mb_convert_encoding($html, 'HTML-ENTITIES', $this->charset);
-
-        // 因联动构造HTML不符合规范，关闭错误提醒
-        libxml_use_internal_errors(true);
-        $doc->loadHTML($html);
-        libxml_use_internal_errors(false);
-
-        $xpath = new \DOMXpath($doc);
-        $nodes = $xpath->query('//meta');
-        if (0 === $nodes->length) {
-            throw new \Exception('Meta element not found.');
-        } elseif ($nodes->length > 1) {
-            // 因行为未定义，遇到返回多个meta标签的情况直接报错
-            throw new \Exception('Handling of multiple meta elements not implemented.');
+        $content = trim($response->getBody()->getContents());
+        if (!$response->hasHeader('Content-Type')) {
+            throw new \Exception();
         }
 
-        $content = $nodes->item(0)->getAttribute('content');
-        $segs = explode('&', $content);
-        $pairs = [];
-        foreach ($segs as $seg) {
-            list($key, $val) = explode('=', $seg, 2);
-            $pairs[$key] = $val;
-        }
+        $contentType = $response->getHeader('Content-Type')[0];
+        list($mimeType, $charsetString) = explode(';', $contentType);
+        $mimeType = trim($mimeType);
 
-        if (!$this->verifySign($pairs)) {
-            throw new \Exception('Sign invalid.');
-        }
+        if ('text/html' === $mimeType) {
+            $doc = new \DOMDocument();
+            $doc->validateOnParse = true;
 
-        return new Response($pairs);
+            // 避免乱码
+            $content = mb_convert_encoding($content, 'HTML-ENTITIES', $this->charset);
+
+            // 因联动构造HTML不符合规范，关闭错误提醒
+            libxml_use_internal_errors(true);
+            $doc->loadHTML($content);
+            libxml_use_internal_errors(false);
+
+            $xpath = new \DOMXpath($doc);
+            $nodes = $xpath->query('//meta');
+            if (0 === $nodes->length) {
+                throw new \Exception('Meta element not found.');
+            } elseif ($nodes->length > 1) {
+                // 因行为未定义，遇到返回多个meta标签的情况直接报错
+                throw new \Exception('Handling of multiple meta elements not implemented.');
+            }
+
+            $content = $nodes->item(0)->getAttribute('content');
+            $segs = explode('&', $content);
+            $pairs = [];
+            foreach ($segs as $seg) {
+                list($key, $val) = explode('=', $seg, 2);
+                $pairs[$key] = $val;
+            }
+
+            if (!$this->verifySign($pairs)) {
+                throw new \Exception('Sign invalid.');
+            }
+
+            return new Response($pairs);
+        } elseif ('text/text' === $mimeType) {
+            $charsetString = trim($charsetString);
+            list(, $charset) = explode('=', $charsetString);
+
+            return mb_convert_encoding($content, 'UTF-8', $charset);
+        } else {
+            throw new \Exception('Unsupported MIME type!');
+        }
     }
 
     /**
