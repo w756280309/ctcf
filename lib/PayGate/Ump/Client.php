@@ -123,7 +123,7 @@ class Client
     }
 
     /**
-     * 4.3.1 发标(商户->平台).
+     * 4.3.1 发标(商户向平台).
      *
      * @param LoanInterface     $loan
      * @param BorrowerInterface $borrower
@@ -140,6 +140,59 @@ class Client
             'project_expire_date' => $loan->getLoanExpireDate(), // 只做格式校验。没有对时间做其他限制
             'loan_user_id' => $borrower->getLoanUserId(), // 会去联动一侧判断用户是否存在[测试上投资用户可以用来融资]
             'loan_acc_type' => (null === $borrower->getLoanAccountType() || 1 === $borrower->getLoanAccountType()) ? "01" : "02", //当为商户号时loan_acc_type 为必填字段，值02
+        ];
+        return $this->doRequest($data);
+    }
+    
+    /**
+     * 4.3.2 标的更新 更新状态
+     * @param string $loanId
+     * @param int $state
+     * @return Response
+     */
+    public function updateLoanState($loanId,$state){
+        $data = [
+            'service' => 'mer_update_project',
+            'project_id' => $loanId,
+            'project_state' => $state,//*** 92状态的不能跨状态修改，比如从92->1[建标成功到投标中]错误代码00240400；92->0->1可以。初步测试1->2不可以【需要验证：是因为没投标实际融资额为0导致，所以不能】
+            'change_type' => '01'
+        ];
+        return $this->doRequest($data);
+    }
+
+    /**
+     * 4.3.2 标的更新 更新状态
+     * @param LoanInterface  $loan
+     * 标的状态修改为1投标中的时候，不允许对标的进行change_type=01的更新
+     * @return Response
+     */
+    public function updateLoanInfo(LoanInterface $loan)
+    {
+        $data = [
+            'service' => 'mer_update_project',
+            'project_id' => $loan->getLoanId(),
+            'project_name' => $loan->getLoanName(),
+            'project_amount' => $loan->getLoanAmount(),  // 单位分,最小1,最大9999999999999
+            'change_type' => '01'
+        ];
+        return $this->doRequest($data);
+    }
+    
+    /**
+     * 4.3.2 标的更新 更新状态
+     * @param LoanInterface  $loan
+     * @param BorrowerInterface $borrower
+     * @return Response
+     */
+    public function updateLoanBorrower(LoanInterface $loan, BorrowerInterface $borrower)
+    {
+        $data = [
+            'service' => 'mer_update_project',
+            'project_id' => $loan->getLoanId(),
+            'loan_user_id' => $borrower->getLoanUserId(), // 会去联动一侧判断用户是否存在[测试上投资用户可以用来融资]
+            'loan_acc_type' => (null === $borrower->getLoanAccountType() || 1 === $borrower->getLoanAccountType()) ? "01" : "02", //当为商户号时loan_acc_type 为必填字段，值02
+            'option_type' => 0,//仅限建标状态【92】下可以替换借款人，从文档中来看，对借款人不可以注销，注销的只能是担保方和资金使用方
+            'change_type' => '02'
         ];
         return $this->doRequest($data);
     }
