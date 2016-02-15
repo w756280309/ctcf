@@ -2,8 +2,6 @@
 
 namespace app\modules\user\controllers;
 
-use Yii;
-use yii\web\Response;
 use frontend\controllers\BaseController;
 use common\models\user\UserAccount;
 

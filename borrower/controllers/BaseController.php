@@ -1,10 +1,12 @@
 <?php
+
 /**
  * Created by PhpStorm.
  * User: xmac
  * Date: 15-3-19
  * Time: 下午3:51.
  */
+
 namespace borrower\controllers;
 
 use yii\filters\AccessControl;
@@ -12,6 +14,7 @@ use yii\web\Controller;
 
 class BaseController extends Controller
 {
+
     protected $user;
 
     public function init()
@@ -48,4 +51,5 @@ class BaseController extends Controller
             \common\filters\UserAccountAcesssControl::className(),
         ];
     }
+
 }

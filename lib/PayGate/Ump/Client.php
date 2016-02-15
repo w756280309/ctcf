@@ -9,12 +9,14 @@ use P2pl\LoanInterface;
 use Psr\Http\Message\ResponseInterface as Psr7ResponseInterface;
 use P2pl\QpayTxInterface;
 use common\models\user\QpayBinding;
+use common\models\user\RechargeRecord;
 
 /**
  * 联动优势API调用.
  */
 class Client
 {
+
     const ENCRYPT_ENCODING = 'GB18030';
 
     private $apiUrl;
@@ -165,7 +167,7 @@ class Client
             'service' => 'mer_bind_project',
             'project_id' => $loan->getLoanId(),
             'project_name' => $loan->getLoanName(),
-            'project_amount' => $loan->getLoanAmount(),  // 单位分,最小1,最大9999999999999
+            'project_amount' => $loan->getLoanAmount(), // 单位分,最小1,最大9999999999999
             'project_expire_date' => $loan->getLoanExpireDate(), // 只做格式校验。没有对时间做其他限制
             'loan_user_id' => $borrower->getLoanUserId(), // 会去联动一侧判断用户是否存在[测试上投资用户可以用来融资]
             'loan_acc_type' => (null === $borrower->getLoanAccountType() || 1 === $borrower->getLoanAccountType()) ? '01' : '02', //当为商户号时loan_acc_type 为必填字段，值02
@@ -198,7 +200,7 @@ class Client
      * 4.3.2 标的更新 更新状态
      *
      * @param LoanInterface $loan
-     *                            标的状态修改为1投标中的时候，不允许对标的进行change_type=01的更新
+     * 标的状态修改为1投标中的时候，不允许对标的进行change_type=01的更新
      *
      * @return Response
      */
@@ -208,7 +210,7 @@ class Client
             'service' => 'mer_update_project',
             'project_id' => $loan->getLoanId(),
             'project_name' => $loan->getLoanName(),
-            'project_amount' => $loan->getLoanAmount(),  // 单位分,最小1,最大9999999999999
+            'project_amount' => $loan->getLoanAmount(), // 单位分,最小1,最大9999999999999
             'change_type' => '01',
         ];
 
@@ -267,6 +269,33 @@ class Client
             'user_id' => $qpay->getEpayUserId(),
             'amount' => $qpay->getAmount(),
             'user_ip' => $qpay->getClientIp(),
+            'com_amt_type' => 2,
+        ];
+
+        return $this->doRequest($data);
+    }
+
+    /**
+     * 4.4.2 融资方充值申请
+     * @param RechargeRecord $recharge 充值记录对象
+     * @param type $payType 支付方式 取值范围：B2BBANK（企业网银）,B2CDEBITBANK（个人借记卡网银）
+     * @param type $merId 被充值企业资金账户托管平台商户号
+     * @param type $gateId 发卡行编号
+     */
+    public function OrgRechargeApply(RechargeRecord $recharge, $payType, $merId, $gateId)
+    {
+        $data = [
+            'service' => 'mer_recharge',
+            'ret_url' => 'http://org.wdjf.com:8080/',
+            'notify_url' => 'http://org.wdjf.com:8080/',
+            'order_id' => $recharge->sn,
+            'mer_date' => date('Ymd', $recharge->created_at),
+            'pay_type' => $payType,
+            'recharge_mer_id' => $merId,
+            'account_type' => '01',
+            'amount' => $recharge->fund * 100,
+            'gate_id' => $gateId,
+            'user_ip' => \Yii::$app->functions->getIp(),
             'com_amt_type' => 2,
         ];
 
@@ -361,6 +390,7 @@ class Client
     protected function processHttpResponse(Psr7ResponseInterface $response)
     {
         $content = trim($response->getBody()->getContents());
+
         if (302 === $response->getStatusCode()) {
             return new Response([], $response->getHeader('Location')[0]);
         } elseif ($response->hasHeader('Content-Type')) {
@@ -459,9 +489,7 @@ class Client
         }
 
         $content = mb_convert_encoding(
-            $this->concatForSigning($data),
-            self::ENCRYPT_ENCODING,
-            $this->charset
+            $this->concatForSigning($data), self::ENCRYPT_ENCODING, $this->charset
         );
 
         return CryptoUtils::verifySign($content, $sign, $this->umpCertPath);
@@ -495,4 +523,5 @@ class Client
 
         return base64_encode(CryptoUtils::encrypt($data, $this->umpCertPath));
     }
+
 }

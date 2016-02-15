@@ -1,4 +1,5 @@
 <?php
+$this->title = '企业登录 - 温都金服';
 
 use yii\bootstrap\ActiveForm;
 use yii\captcha\Captcha;

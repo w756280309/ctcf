@@ -1,6 +1,21 @@
 <?php
 $this->title = '账户中心-温都金服';
 ?>
+<style>
+    .headpic {
+        width: 30px;
+        height: 30px;
+        margin: 10px;
+    }
+    .index_pic {
+        width: 50px;
+        height: 50px;
+        position: absolute;
+        top: 35px;
+        right:62px;
+        background-repeat: no-repeat;
+    }
+</style>
 <div class="container">
     <div style="margin-top: 30px">
         <img class="headpic" src="/images/headpic.png">欢迎您
@@ -16,7 +31,7 @@ $this->title = '账户中心-温都金服';
 
         <div class="actions">
             <a class="btn btn-primary" href="/user/recharge/recharge">充值</a>
-            <a class="btn btn-default" id='tixian' href="<?= $errflag ? 'javascript:void(0)' : '/user/useraccount/tixian' ?>">提现</a>
+            <a class="btn btn-default" id='tixian' href="">提现</a>
         </div>
     </div>
 </div>
