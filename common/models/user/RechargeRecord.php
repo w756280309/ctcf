@@ -5,7 +5,7 @@ namespace common\models\user;
 use Yii;
 use yii\behaviors\TimestampBehavior;
 
-class RechargeRecord extends \yii\db\ActiveRecord
+class RechargeRecord extends \yii\db\ActiveRecord implements \P2pl\QpayTxInterface
 {
     public $InstitutionID; //机构号码
     public $OrderNo; //订单号
@@ -74,6 +74,9 @@ class RechargeRecord extends \yii\db\ActiveRecord
             [['bank_id'], 'string', 'max' => 20],
             [['remark'], 'string', 'max' => 100],
             ['pay_type', 'default', 'value' => self::PAY_TYPE_QUICK],
+            
+            [['clientIp'], 'integer'],//存入时候ip2long 读取时候long2ip
+            [['epayUserId', 'clientIp'], 'default', 'value' => 0],
         ];
     }
 
@@ -136,6 +139,39 @@ class RechargeRecord extends \yii\db\ActiveRecord
         return $data;
     }
 
+    public function getTxSn()
+    {
+        return $this->sn;
+    }
+    
+    /**
+     * 商户生成订单的日期Ymd
+     */
+    public function getTxDate()
+    {
+        return date('Ymd', $this->created_at);
+    }
+    
+    /**
+     * 托管平台用户号
+     */
+    public function getEpayUserId()
+    {
+        return $this->epayUserId;
+    }
+    
+    /**
+     * 以分为单位
+     */
+    public function getAmount()
+    {
+        return $this->fund * 100;
+    }
+    
+    public function getClientIp(){
+        return long2ip($this->clientIp);
+    }
+    
     /**
      * 获取支付人信息.
      */

@@ -7,6 +7,8 @@ use GuzzleHttp\Client as HttpClient;
 use P2pl\BorrowerInterface;
 use P2pl\LoanInterface;
 use Psr\Http\Message\ResponseInterface as Psr7ResponseInterface;
+use P2pl\QpayTxInterface;
+use common\models\user\QpayBinding;
 
 /**
  * 联动优势API调用.
@@ -15,6 +17,7 @@ class Client
 {
     const ENCRYPT_ENCODING = 'GB18030';
 
+    private $apiUrl;
     /**
      * @var string 商户ID
      */
@@ -52,6 +55,7 @@ class Client
 
     public function __construct($merchantId, $clientKeyPath, $umpCertPath)
     {
+        $this->apiUrl = 'http://114.113.159.203:9200/spay/pay/payservice.do';
         $this->merchantId = $merchantId;
         $this->clientKeyPath = $clientKeyPath;
         $this->umpCertPath = $umpCertPath;
@@ -121,6 +125,30 @@ class Client
 
         return $this->doRequest($data);
     }
+    
+    /**
+     * 4.2.2 绑定银行卡
+     * @param QpayBinding $bind
+     */
+    public function enableQpay(QpayBinding $bind)
+    {
+        $data = [
+            'service' => 'ptp_mer_bind_card',
+            'ret_url' => 'http://g.wdjf.com/ump/qpayreturl',
+            'notify_url' => 'http://g.wdjf.com/ump/qpaynotifyurl',
+            'sourceV' => 'HTML5',
+            'order_id' => $bind->getTxSn(),
+            'mer_date' => $bind->getTxDate(),
+            'user_id' => $bind->getEpayUserId(),
+            'card_id' => $this->encrypt($bind->getCardNo()),
+            'account_name' => $this->encrypt($bind->getLegalName()),
+            'identity_type' => $bind->getIdType(),
+            'identity_code' => $this->encrypt($bind->getIdNo()),
+            'is_open_fastPayment' => '1',
+        ];
+        $params = $this->doRequest($data, true);
+        header("Location:".$this->apiUrl."?".$params);
+    }
 
     /**
      * 4.3.1 发标(商户向平台).
@@ -169,7 +197,7 @@ class Client
      * 4.3.2 标的更新 更新状态
      *
      * @param LoanInterface $loan
-     *                            标的状态修改为1投标中的时候，不允许对标的进行change_type=01的更新
+     * 标的状态修改为1投标中的时候，不允许对标的进行change_type=01的更新
      *
      * @return Response
      */
@@ -224,6 +252,24 @@ class Client
 
         return $this->doRequest($data);
     }
+    
+    public function rechargeViaQpay(QpayTxInterface $qpay)
+    {
+        $data = [
+            'service' => 'mer_recharge_person',
+            'ret_url' => 'http://g.wdjf.com/ump/qpayreturl',
+            'notify_url' => 'http://g.wdjf.com/ump/qpaynotifyurl',
+            'sourceV' => 'HTML5',
+            'order_id' => $qpay->getTxSn(),
+            'mer_date' => $qpay->getTxDate(),
+            'pay_type' => 'DEBITCARD',
+            'user_id' => $qpay->getEpayUserId(),
+            'amount' => $qpay->getAmount(),
+            'user_ip' => $qpay->getClientIp(),
+            'com_amt_type' => 2
+        ];
+        return $this->doRequest($data);
+    }
 
     /**
      * 获取对账单（暂限定为标的交易）.
@@ -252,7 +298,7 @@ class Client
     {
         if (null === $this->httpClient) {
             $this->httpClient = new HttpClient([
-                'base_uri' => 'http://114.113.159.203:9200/spay/pay/payservice.do',
+                'base_uri' => $this->apiUrl,
                 'allow_redirects' => false,
                 'connect_timeout' => 30,
                 'timeout' => 30,
@@ -267,7 +313,7 @@ class Client
      *
      * @return Response
      */
-    protected function doRequest(array $data)
+    protected function doRequest(array $data, $isRedirect = false)
     {
         // 添加协议参数
         $data = array_merge($data, [
@@ -279,14 +325,18 @@ class Client
         // 签名
         $data['sign'] = $this->sign($data);
         $data['sign_type'] = $this->signType;
-
+        
+        if($isRedirect){
+            $params = http_build_query($data);
+            return $params;
+        }
         $httpResponse = $this->getHttpClient()->request('POST', null, [
             'form_params' => $data,
+            'allow_redirects' => false,
         ]);
-
         return $this->processHttpResponse($httpResponse);
     }
-
+    
     /**
      * 处理联动接口的返回.
      *
@@ -295,58 +345,62 @@ class Client
      * @return Response
      */
     protected function processHttpResponse(Psr7ResponseInterface $response)
-    {
-        $content = trim($response->getBody()->getContents());
-        if (!$response->hasHeader('Content-Type')) {
+    { 
+       $content = trim($response->getBody()->getContents());
+        if (302 === $response->getStatusCode()) {
+            return new Response([], $response->getHeader('Location')[0]);
+        } else if ($response->hasHeader('Content-Type')) {
+            $contentType = $response->getHeader('Content-Type')[0];
+            list($mimeType, $charsetString) = explode(';', $contentType);
+            $mimeType = trim($mimeType);
+
+            if ('text/html' === $mimeType) {
+                $doc = new \DOMDocument();
+                $doc->validateOnParse = true;
+
+                // 避免乱码
+                $content = mb_convert_encoding($content, 'HTML-ENTITIES', $this->charset);
+
+                // 因联动构造HTML不符合规范，关闭错误提醒
+                libxml_use_internal_errors(true);
+                $doc->loadHTML($content);
+                libxml_use_internal_errors(false);
+
+                $xpath = new \DOMXpath($doc);
+                $nodes = $xpath->query('//meta[@name="MobilePayPlatform"]');
+
+                if (0 === $nodes->length) {
+                    throw new \Exception('Meta element not found.');
+                } elseif ($nodes->length > 1) {
+                    // 因行为未定义，遇到返回多个meta标签的情况直接报错
+                    throw new \Exception('Handling of multiple meta elements not implemented.');
+                }
+
+                $content = $nodes->item(0)->getAttribute('content');
+                $segs = explode('&', $content);
+                $pairs = [];
+                foreach ($segs as $seg) {
+                    list($key, $val) = explode('=', $seg, 2);
+                    $pairs[$key] = $val;
+                }
+
+                if (!$this->verifySign($pairs)) {
+                    throw new \Exception('Sign invalid.');
+                }
+
+                return new Response($pairs);
+            } elseif ('text/text' === $mimeType) {
+                $charsetString = trim($charsetString);
+                list(, $charset) = explode('=', $charsetString);
+
+                return mb_convert_encoding($content, 'UTF-8', $charset);
+            } else {
+                throw new \Exception('Unsupported MIME type!');
+            }    
+        } else {
             throw new \Exception();
         }
-
-        $contentType = $response->getHeader('Content-Type')[0];
-        list($mimeType, $charsetString) = explode(';', $contentType);
-        $mimeType = trim($mimeType);
-
-        if ('text/html' === $mimeType) {
-            $doc = new \DOMDocument();
-            $doc->validateOnParse = true;
-
-            // 避免乱码
-            $content = mb_convert_encoding($content, 'HTML-ENTITIES', $this->charset);
-
-            // 因联动构造HTML不符合规范，关闭错误提醒
-            libxml_use_internal_errors(true);
-            $doc->loadHTML($content);
-            libxml_use_internal_errors(false);
-
-            $xpath = new \DOMXpath($doc);
-            $nodes = $xpath->query('//meta');
-            if (0 === $nodes->length) {
-                throw new \Exception('Meta element not found.');
-            } elseif ($nodes->length > 1) {
-                // 因行为未定义，遇到返回多个meta标签的情况直接报错
-                throw new \Exception('Handling of multiple meta elements not implemented.');
-            }
-
-            $content = $nodes->item(0)->getAttribute('content');
-            $segs = explode('&', $content);
-            $pairs = [];
-            foreach ($segs as $seg) {
-                list($key, $val) = explode('=', $seg, 2);
-                $pairs[$key] = $val;
-            }
-
-            if (!$this->verifySign($pairs)) {
-                throw new \Exception('Sign invalid.');
-            }
-
-            return new Response($pairs);
-        } elseif ('text/text' === $mimeType) {
-            $charsetString = trim($charsetString);
-            list(, $charset) = explode('=', $charsetString);
-
-            return mb_convert_encoding($content, 'UTF-8', $charset);
-        } else {
-            throw new \Exception('Unsupported MIME type!');
-        }
+        
     }
 
     /**

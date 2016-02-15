@@ -5,10 +5,11 @@ namespace PayGate\Ump;
 class Response
 {
     private $data;
-
-    public function __construct(array $data)
+    private $location;
+    public function __construct(array $data, $location = null)
     {
         $this->data = $data;
+        $this->location  = $location;
     }
 
     public function get($name)
@@ -28,6 +29,16 @@ class Response
     public function getError()
     {
         throw new \Exception('Not implmented!');
+    }
+    
+    public function isRedirection()
+    {
+        return null !== $this->location;
+    }
+
+    public function getLocation()
+    {
+        return $this->location;
     }
 
     public function toArray()
