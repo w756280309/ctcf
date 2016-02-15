@@ -201,7 +201,7 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
 
             ['status', 'checkDealStatus'],
             ['expires', 'checkExpires'],
-
+            ['epayLoanAccountId', 'default', 'value' => ''],
             [['start_date', 'end_date', 'finish_date'], 'checkDate'],
         ];
     }

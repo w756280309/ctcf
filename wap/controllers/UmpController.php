@@ -12,6 +12,7 @@ namespace app\controllers;
 use yii\web\Controller;
 use common\models\product\OnlineProduct as Loan;
 use P2pl\Borrower;
+use common\models\order\OnlineOrder as OrdTx;
 
 class UmpController extends Controller
 {
@@ -61,11 +62,6 @@ class UmpController extends Controller
      */
     public function actionUploanstate($id, $state)
     {
-        //建标状态修改为1失败
-        //跨状态修改失败
-        //建标状态修改状态值非法【00060700】请求的参数[project_state(123)]格式或值不正确
-        //建标状态修改不存在的标的编号【00240200】标的不存在
-        //92-0-1-2-3-4,顺利进行的步骤
         $resp = \Yii::$container->get('ump')->updateLoanState($id, $state);
         var_dump($resp);
     }
@@ -105,7 +101,7 @@ class UmpController extends Controller
     {
         $rr = new \common\models\user\RechargeRecord([
             'sn' => time(),
-            'fund' => 2000,
+            'fund' => 20000000,
             'uid' => '1',
             'bank_id' => 'icbc',
             'pay_type' => 1,
@@ -121,6 +117,25 @@ class UmpController extends Controller
         }
     }
     
+    /**
+     * 投标
+     */
+    public function actionRegord()
+    {
+        $ord = new OrdTx([
+            'sn' => time().'',
+            'online_pid' => '56',
+            'uid' => 2,
+            'order_money' => 100,
+            'created_at' => time(),
+        ]);
+        $resp = \Yii::$container->get('ump')->registerOrder($ord);
+        return $this->redirect($resp);
+        //var_dump($resp);
+    }
+
+
+    //////////////////
     public $enableCsrfValidation = false; //因为中金post的提交。所以要关闭csrf验证
 
     public function actionQpayreturl(){

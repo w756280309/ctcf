@@ -8,6 +8,7 @@ use P2pl\BorrowerInterface;
 use P2pl\LoanInterface;
 use Psr\Http\Message\ResponseInterface as Psr7ResponseInterface;
 use P2pl\QpayTxInterface;
+use P2pl\OrderTxInterface;
 use common\models\user\QpayBinding;
 use common\models\user\RechargeRecord;
 
@@ -181,7 +182,11 @@ class Client
      *
      * @param string $loanId
      * @param int    $state
-     *
+     *  注：1建标状态修改为1失败
+     *      2跨状态修改失败
+     *      3建标状态修改状态值非法【00060700】请求的参数[project_state(123)]格式或值不正确
+     *      4建标状态修改不存在的标的编号【00240200】标的不存在
+     *      592-0-1-2-3-4,顺利进行的步骤
      * @return Response
      */
     public function updateLoanState($loanId, $state)
@@ -273,6 +278,32 @@ class Client
         ];
 
         return $this->doRequest($data);
+    }
+    
+    /**
+     * 4.3.3 标的转
+     * 用户投标
+     * @param OrderTxInterface $ord
+     */
+    public function registerOrder(OrderTxInterface $ord)
+    {
+        $data = [
+            'service' => 'project_transfer',
+            'ret_url' => 'http://g.wdjf.com/ump/qpayreturl',
+            'notify_url' => 'http://g.wdjf.com/ump/qpaynotifyurl',
+            'sourceV' => 'HTML5',
+            'order_id' => $ord->getTxSn(),
+            'mer_date' => date('Ymd', $ord->getTxDate()),
+            'project_id' => $ord->getLoanId(),
+            'serv_type' => '01',
+            'trans_action' => '01',
+            'partic_type' => '01',
+            'partic_acc_type' => '01',
+            'partic_user_id' => $ord->getEpayUserId(),
+            'amount' => $ord->getAmount() * 100,            
+        ];
+        $params = $this->buildQuery($data);
+        return $this->apiUrl.'?'.$params;
     }
 
     /**

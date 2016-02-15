@@ -8,6 +8,7 @@ use common\models\product\OnlineProduct;
 use common\models\user\MoneyRecord;
 use common\models\user\UserAccount;
 use common\models\user\User;
+use common\models\epay\EpayUser;
 
 /**
  * This is the model class for table "online_order".
@@ -22,7 +23,7 @@ use common\models\user\User;
  * @property string $created_at
  * @property string $updated_at
  */
-class OnlineOrder extends \yii\db\ActiveRecord
+class OnlineOrder extends \yii\db\ActiveRecord implements \P2pl\OrderTxInterface
 {
     //0--投标失败---1-投标成功 2.撤标 3，无效
     const STATUS_FALSE = 0;
@@ -253,5 +254,40 @@ class OnlineOrder extends \yii\db\ActiveRecord
                 ->innerJoin('online_product p', 'o.online_pid=p.id')
                 ->where(['o.uid' => $uid, 'p.is_xs' => 1])->count();
     }
+    
+    /**
+     * 获取用户托管方平台信息.
+     *
+     * @return UserBanks
+     */
+    public function getEpayuser()
+    {
+        return $this->hasOne(EpayUser::className(), ['appUserId' => 'uid']);
+    }
 
+    public function getLoanId()
+    {
+        return $this->online_pid;
+    }
+    
+    public function getTxSn()
+    {
+        return $this->sn;
+    }
+    
+    public function getTxDate()
+    {
+        return $this->created_at;
+    }
+    
+    public function getEpayUserId()
+    {
+        return $this->epayuser->epayUserId;
+    }
+    
+    public function getAmount()
+    {
+        return $this->order_money;
+    }
+    
 }
