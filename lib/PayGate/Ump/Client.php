@@ -125,9 +125,10 @@ class Client
 
         return $this->doRequest($data);
     }
-    
+
     /**
      * 4.2.2 绑定银行卡
+     *
      * @param QpayBinding $bind
      */
     public function enableQpay(QpayBinding $bind)
@@ -146,8 +147,8 @@ class Client
             'identity_code' => $this->encrypt($bind->getIdNo()),
             'is_open_fastPayment' => '1',
         ];
-        $params = $this->doRequest($data, true);
-        header("Location:".$this->apiUrl."?".$params);
+        $params = $this->buildQuery($data);
+        header('Location:'.$this->apiUrl.'?'.$params);
     }
 
     /**
@@ -197,7 +198,7 @@ class Client
      * 4.3.2 标的更新 更新状态
      *
      * @param LoanInterface $loan
-     * 标的状态修改为1投标中的时候，不允许对标的进行change_type=01的更新
+     *                            标的状态修改为1投标中的时候，不允许对标的进行change_type=01的更新
      *
      * @return Response
      */
@@ -215,7 +216,7 @@ class Client
     }
 
     /**
-     * 4.3.2 标的更新 更新借款人
+     * 4.3.2 标的更新 更新借款人.
      *
      * @param LoanInterface     $loan
      * @param BorrowerInterface $borrower
@@ -252,7 +253,7 @@ class Client
 
         return $this->doRequest($data);
     }
-    
+
     public function rechargeViaQpay(QpayTxInterface $qpay)
     {
         $data = [
@@ -266,8 +267,9 @@ class Client
             'user_id' => $qpay->getEpayUserId(),
             'amount' => $qpay->getAmount(),
             'user_ip' => $qpay->getClientIp(),
-            'com_amt_type' => 2
+            'com_amt_type' => 2,
         ];
+
         return $this->doRequest($data);
     }
 
@@ -313,7 +315,7 @@ class Client
      *
      * @return Response
      */
-    protected function doRequest(array $data, $isRedirect = false)
+    protected function doRequest(array $data)
     {
         // 添加协议参数
         $data = array_merge($data, [
@@ -325,18 +327,30 @@ class Client
         // 签名
         $data['sign'] = $this->sign($data);
         $data['sign_type'] = $this->signType;
-        
-        if($isRedirect){
-            $params = http_build_query($data);
-            return $params;
-        }
+
         $httpResponse = $this->getHttpClient()->request('POST', null, [
             'form_params' => $data,
-            'allow_redirects' => false,
         ]);
+
         return $this->processHttpResponse($httpResponse);
     }
-    
+
+    protected function buildQuery(array $data)
+    {
+        // 添加协议参数
+        $data = array_merge($data, [
+            'charset' => $this->charset,
+            'mer_id' => $this->merchantId,
+            'version' => $this->version,
+        ]);
+
+        // 签名
+        $data['sign'] = $this->sign($data);
+        $data['sign_type'] = $this->signType;
+
+        return http_build_query($data);
+    }
+
     /**
      * 处理联动接口的返回.
      *
@@ -345,11 +359,11 @@ class Client
      * @return Response
      */
     protected function processHttpResponse(Psr7ResponseInterface $response)
-    { 
-       $content = trim($response->getBody()->getContents());
+    {
+        $content = trim($response->getBody()->getContents());
         if (302 === $response->getStatusCode()) {
             return new Response([], $response->getHeader('Location')[0]);
-        } else if ($response->hasHeader('Content-Type')) {
+        } elseif ($response->hasHeader('Content-Type')) {
             $contentType = $response->getHeader('Content-Type')[0];
             list($mimeType, $charsetString) = explode(';', $contentType);
             $mimeType = trim($mimeType);
@@ -396,11 +410,10 @@ class Client
                 return mb_convert_encoding($content, 'UTF-8', $charset);
             } else {
                 throw new \Exception('Unsupported MIME type!');
-            }    
+            }
         } else {
             throw new \Exception();
         }
-        
     }
 
     /**
