@@ -16,10 +16,10 @@ use common\models\user\RechargeRecord;
  */
 class Client
 {
-
     const ENCRYPT_ENCODING = 'GB18030';
 
     private $apiUrl;
+
     /**
      * @var string 商户ID
      */
@@ -200,7 +200,7 @@ class Client
      * 4.3.2 标的更新 更新状态
      *
      * @param LoanInterface $loan
-     * 标的状态修改为1投标中的时候，不允许对标的进行change_type=01的更新
+     *                            标的状态修改为1投标中的时候，不允许对标的进行change_type=01的更新
      *
      * @return Response
      */
@@ -276,18 +276,19 @@ class Client
     }
 
     /**
-     * 4.4.2 融资方充值申请
+     * 4.4.2 融资方充值申请.
+     *
      * @param RechargeRecord $recharge 充值记录对象
-     * @param type $payType 支付方式 取值范围：B2BBANK（企业网银）,B2CDEBITBANK（个人借记卡网银）
-     * @param type $merId 被充值企业资金账户托管平台商户号
-     * @param type $gateId 发卡行编号
+     * @param type           $payType  支付方式 取值范围：B2BBANK（企业网银）,B2CDEBITBANK（个人借记卡网银）
+     * @param type           $merId    被充值企业资金账户托管平台商户号
+     * @param type           $gateId   发卡行编号
      */
     public function OrgRechargeApply(RechargeRecord $recharge, $payType, $merId, $gateId)
     {
         $data = [
             'service' => 'mer_recharge',
-            'ret_url' => 'http://org.wdjf.com:8080/',
-            'notify_url' => 'http://org.wdjf.com:8080/',
+            'ret_url' => 'http://org.wdjf.com:8080/user/bpay/brecharge/frontend-notify',
+            'notify_url' => 'http://org.wdjf.com:8080/user/bpay/brecharge/backend-notify',
             'order_id' => $recharge->sn,
             'mer_date' => date('Ymd', $recharge->created_at),
             'pay_type' => $payType,
@@ -297,6 +298,25 @@ class Client
             'gate_id' => $gateId,
             'user_ip' => \Yii::$app->functions->getIp(),
             'com_amt_type' => 2,
+        ];
+
+        $params = $this->buildQuery($data);
+        header('Location:'.$this->apiUrl.'?'.$params);
+    }
+
+    /**
+     * 4.5.1 充值交易查询接口.
+     *
+     * @param type $txSn   商户订单号
+     * @param type $txDate 商户订单日期
+     */
+    public function getRechargeInfo($txSn, $txDate)
+    {
+        $data = [
+            'service' => 'transfer_search',
+            'order_id' => $txSn,
+            'mer_date' => date('Ymd', $txDate),
+            'busi_type' => '01',
         ];
 
         return $this->doRequest($data);
@@ -364,7 +384,7 @@ class Client
         return $this->processHttpResponse($httpResponse);
     }
 
-    protected function buildQuery(array $data)
+    public function buildQuery(array $data)
     {
         // 添加协议参数
         $data = array_merge($data, [
@@ -477,7 +497,7 @@ class Client
      *
      * @return bool
      */
-    protected function verifySign(array $data)
+    public function verifySign(array $data)
     {
         if (!isset($data['sign'])) {
             throw new \Exception('Sign missing.');
@@ -523,5 +543,4 @@ class Client
 
         return base64_encode(CryptoUtils::encrypt($data, $this->umpCertPath));
     }
-
 }

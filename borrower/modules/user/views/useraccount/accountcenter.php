@@ -30,7 +30,7 @@ $this->title = '账户中心-温都金服';
         </div>
 
         <div class="actions">
-            <a class="btn btn-primary" href="/user/recharge/recharge">充值</a>
+            <a class="btn btn-primary" href="/user/recharge/init">充值</a>
             <a class="btn btn-default" id='tixian' href="">提现</a>
         </div>
     </div>
