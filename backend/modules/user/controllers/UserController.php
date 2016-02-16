@@ -170,7 +170,7 @@ class UserController extends BaseController
             $model->scenario = 'add';
             $model->type = $type;
 
-            if ($model->load(Yii::$app->request->post())) {
+            if ($model->load(Yii::$app->request->post()) && $model->validate()) {
                 if (!empty($model->password_hash)) {
                     $model->setPassword($model->password_hash);
                 } else {
@@ -184,7 +184,7 @@ class UserController extends BaseController
             $model->password_hash = null;
         } else {
             $model->scenario = 'edit';
-            if ($model->load(Yii::$app->request->post())) {
+            if ($model->load(Yii::$app->request->post()) && $model->validate()) {
                 if ($model->save()) {
                     $this->redirect(array('/user/user/'.($type ? 'listt' : 'listr'), 'type' => $type));
                 }
@@ -214,7 +214,7 @@ class UserController extends BaseController
         $model->type = 2;
         $model->usercode = User::create_code('usercode', 'WDJFQY', 6, 4);
 
-        if ($model->load(Yii::$app->request->post()) && $epayuser->load(Yii::$app->request->post())) {
+        if ($model->load(Yii::$app->request->post()) && $epayuser->load(Yii::$app->request->post()) && $model->validate() && $epayuser->validate()) {
             $ump = Yii::$container->get('ump');
             $resp = $ump->getMerchantInfo($epayuser->epayUserId);
             if ($resp->isSuccessful()) {
@@ -231,7 +231,7 @@ class UserController extends BaseController
                 if (!$model->save()) {
                     $transaction->rollBack();
                     $err = $model->getSingleError();
-                    throw new \Exception('Create table user err.');
+                    throw new \Exception($err['attribute'].': '.$err['message']);
                 }
 
                 $epayuser->appUserId = strval($model->id);
@@ -240,7 +240,8 @@ class UserController extends BaseController
 
                 if (!$epayuser->save()) {
                     $transaction->rollBack();
-                    throw new \Exception('Create table epayuser err.');
+                    $err = $epayuser->getSingleError();
+                    throw new \Exception($err['attribute'].': '.$err['message']);
                 }
 
                 //添加一个融资会员的时候，同时生成对应的一条user_account记录
@@ -250,7 +251,8 @@ class UserController extends BaseController
 
                 if (!$userAccount->save()) {
                     $transaction->rollBack();
-                    throw new \Exception('Create table useraccount err.');
+                    $err = $userAccount->getSingleError();
+                    throw new \Exception($err['attribute'].': '.$err['message']);
                 }
 
                 $transaction->commit();

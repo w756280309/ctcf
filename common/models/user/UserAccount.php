@@ -21,6 +21,8 @@ use yii\behaviors\TimestampBehavior;
  */
 class UserAccount extends \yii\db\ActiveRecord
 {
+    use \YiiPlus\Model\ErrorExTrait;
+
     const TYPE_LEND = 1; //投资者
     const TYPE_BORROW = 2; //融资者
 
@@ -45,7 +47,7 @@ class UserAccount extends \yii\db\ActiveRecord
     }
 
     /**
-     * 获取关联的用户
+     * 获取关联的用户.
      *
      * @return User
      */
@@ -71,7 +73,7 @@ class UserAccount extends \yii\db\ActiveRecord
             [['type', 'uid'], 'integer'],
             [['uid'], 'required'],
             [['account_balance', 'available_balance', 'freeze_balance', 'in_sum', 'out_sum'], 'number'],
-            [['drawable_balance','investment_balance'], 'default', 'value' => 0],
+            [['drawable_balance', 'investment_balance'], 'default', 'value' => 0],
         ];
     }
 

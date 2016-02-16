@@ -2,24 +2,24 @@
 
 namespace common\models\epay;
 
-use Yii;
-
 /**
  * This is the model class for table "EpayUser".
  *
- * @property integer $id
+ * @property int $id
  * @property string $appUserId
- * @property integer $epayId
+ * @property int $epayId
  * @property string $epayUserId
  * @property string $accountNo
  * @property string $regDate
- * @property integer $clientIp
+ * @property int $clientIp
  * @property string $createTime
  */
 class EpayUser extends \yii\db\ActiveRecord
 {
+    use \YiiPlus\Model\ErrorExTrait;
+
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public static function tableName()
     {
@@ -27,7 +27,7 @@ class EpayUser extends \yii\db\ActiveRecord
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function rules()
     {
@@ -35,12 +35,12 @@ class EpayUser extends \yii\db\ActiveRecord
             [['appUserId', 'epayId', 'epayUserId', 'regDate', 'clientIp', 'createTime'], 'required'],
             [['epayId', 'clientIp'], 'integer'],
             [['regDate', 'createTime'], 'safe'],
-            [['appUserId', 'epayUserId', 'accountNo'], 'string', 'max' => 60]
+            [['appUserId', 'epayUserId', 'accountNo'], 'string', 'max' => 60],
         ];
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function attributeLabels()
     {
