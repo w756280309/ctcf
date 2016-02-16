@@ -165,6 +165,11 @@ class UserController extends BaseController
         $model = $id ? User::findOne($id) : (new User());
         if ($type != 1) {
             $epayuser = EpayUser::findOne(['appUserId' => $id]);
+
+            if (!$epayuser) {
+                throw new \Exception('Epayuser info is null.');
+            }
+
             $password = $model->password_hash;
 
             $model->scenario = 'add';
@@ -176,7 +181,7 @@ class UserController extends BaseController
                 } else {
                     $model->password_hash = $password;
                 }
-                if ($model->save()) {
+                if ($model->save(false)) {
                     $this->redirect(['/user/user/listr', 'type' => 2]);
                 }
             }
@@ -185,7 +190,7 @@ class UserController extends BaseController
         } else {
             $model->scenario = 'edit';
             if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-                if ($model->save()) {
+                if ($model->save(false)) {
                     $this->redirect(array('/user/user/'.($type ? 'listt' : 'listr'), 'type' => $type));
                 }
             }
@@ -206,8 +211,11 @@ class UserController extends BaseController
     {
         $model = new User();
         $epayuser = new EpayUser([
+            'appUserId' => '0',
             'epayId' => 1,
             'clientIp' => ip2long(\Yii::$app->functions->getIp()),
+            'regDate' => date('Y-m-d'),
+            'createTime' => date('Y-m-d H:i:s'),
         ]);
 
         $model->scenario = 'add';
@@ -228,17 +236,15 @@ class UserController extends BaseController
                 }
 
                 $model->setPassword($model->password_hash);
-                if (!$model->save()) {
+                if (!$model->save(false)) {
                     $transaction->rollBack();
                     $err = $model->getSingleError();
                     throw new \Exception($err['attribute'].': '.$err['message']);
                 }
 
                 $epayuser->appUserId = strval($model->id);
-                $epayuser->regDate = date('Y-m-d');
-                $epayuser->createTime = date('Y-m-d H:i:s');
 
-                if (!$epayuser->save()) {
+                if (!$epayuser->save(false)) {
                     $transaction->rollBack();
                     $err = $epayuser->getSingleError();
                     throw new \Exception($err['attribute'].': '.$err['message']);
