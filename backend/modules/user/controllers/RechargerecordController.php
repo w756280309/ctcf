@@ -72,8 +72,10 @@ class RechargerecordController extends BaseController
     /**
      * 录入充值数据.
      */
-    public function actionEdit($id = null, $type = null)
+    public function actionEdit($id = null, $type = null)      // DEPRECATED
     {
+        throw new \yii\web\NotFoundHttpException();
+
         $banks = Yii::$app->params['bank'];
         $bankInfo = ['' => '--请选择--'];
         foreach ($banks as $k => $v) {

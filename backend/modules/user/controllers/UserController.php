@@ -20,7 +20,6 @@ use backend\modules\user\core\v1_0\UserAccountBackendCore;
  */
 class UserController extends BaseController
 {
-
     public function init()
     {
         parent::init();
@@ -187,7 +186,7 @@ class UserController extends BaseController
             $model->scenario = 'edit';
             if ($model->load(Yii::$app->request->post())) {
                 if ($model->save()) {
-                    $this->redirect(array('/user/user/' . ($type ? 'listt' : 'listr'), 'type' => $type));
+                    $this->redirect(array('/user/user/'.($type ? 'listt' : 'listr'), 'type' => $type));
                 }
             }
         }
@@ -231,6 +230,7 @@ class UserController extends BaseController
                 $model->setPassword($model->password_hash);
                 if (!$model->save()) {
                     $transaction->rollBack();
+                    $err = $model->getSingleError();
                     throw new \Exception('Create table user err.');
                 }
 
@@ -271,5 +271,4 @@ class UserController extends BaseController
                 'epayuser' => $epayuser,
         ]);
     }
-
 }

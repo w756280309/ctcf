@@ -1,9 +1,5 @@
 <?php
-
-    use yii\widgets\ActiveForm;
-    use yii\widgets\LinkPager;
-    use common\models\user\User;
- 
+use common\models\user\User;
 ?>
 <?php $this->beginBlock('blockmain'); ?>
 
@@ -19,7 +15,7 @@
             <ul class="breadcrumb">
                     <li>
                         <i class="icon-home"></i>
-                        <a href="/user/user/<?=Yii::$app->request->get('type')==2?'listr':'listt'?>">会员管理</a> 
+                        <a href="/user/user/<?=Yii::$app->request->get('type')==2?'listr':'listt'?>">会员管理</a>
                         <i class="icon-angle-right"></i>
                     </li>
                     <?php if($type=Yii::$app->request->get('type')==User::USER_TYPE_PERSONAL){?>
@@ -38,7 +34,7 @@
                         </li>
             </ul>
         </div>
-        
+
     <?php if(Yii::$app->request->get('type')==User::USER_TYPE_PERSONAL){?>
         <div class="portlet-body">
             <div class="detail_font">会员账户详情</div>
@@ -54,7 +50,7 @@
             </ul>
             <ul class="breadcrumb_detail">
                 <li><span>身份证号</span><?=$userinfo['idcard']?></li>
-                <li><span>实名认证</span><?php 
+                <li><span>实名认证</span><?php
 //                      echo $userinfo['idcard_status'];
                     if($userinfo['idcard_status']=='-1'){
                             echo "未通过";
@@ -80,13 +76,13 @@
                     <li><span>最后登录时间</span><?php echo empty($userinfo['last_login'])?"--":date("Y-m-d H:i:s",$userinfo['last_login']);?></li>
             </ul>
             <hr />
-            
+
             <div class="detail_font">会员资金详情</div>
             <ul class="breadcrumb_detail">
                 <li><span>理财资产（元）</span><?=$userLiCai?></li>
                 <li><span>账户余额（元）</span><?php echo empty($userYuE)?'0.00':$userYuE?></li>
             </ul>
-            <ul class="breadcrumb_detail">                
+            <ul class="breadcrumb_detail">
                 <li><span>充值次数（次）</span><?=$czNum?></li>
                 <li><span>充值总计（元）</span><?php echo empty($czMoneyTotal)?'0.00':$czMoneyTotal?></li>
                 <li><span>充值流水明细</span><a href="/user/rechargerecord/detail?id=<?=$_GET['id']?>&type=<?=Yii::$app->request->get('type');?>">查看</a>&nbsp;</li>
@@ -104,7 +100,7 @@
             <hr />
         </div>
     <?php }else{?>
-        
+
         <div class="portlet-body">
             <div class="detail_font">会员账户详情</div>
             <ul class="breadcrumb_detail">
@@ -117,7 +113,7 @@
                 <li><span>平台首次融资时间</span><?php echo empty($czTime)?"--":date("Y-m-d H:i:s",$czTime);?></li>
             </ul>
             <ul class="breadcrumb_detail">
-                <li><span class="huibai">企业法人</span></li>                
+                <li><span class="huibai">企业法人</span></li>
             </ul>
             <ul class="breadcrumb_detail">
                 <li><span>姓名</span><?=$userinfo['law_master']?></li>
@@ -125,7 +121,7 @@
                 <li><span>联系电话</span><?=$userinfo['law_mobile']?></li>
             </ul>
             <ul class="breadcrumb_detail">
-                <li><span class="huibai">企业联系人</span></li>                
+                <li><span class="huibai">企业联系人</span></li>
             </ul>
             <ul class="breadcrumb_detail">
                 <li><span>姓名</span><?=$userinfo['real_name']?></li>
@@ -133,7 +129,7 @@
                 <li><span>联系电话</span><?=$userinfo['mobile']?></li>
             </ul>
             <ul class="breadcrumb_detail">
-                <li><span class="huibai">企业证照</span></li>                
+                <li><span class="huibai">企业证照</span></li>
             </ul>
             <ul class="breadcrumb_detail">
                 <li><span>组织机构代码</span><?=$userinfo['org_code']?></li>
@@ -141,22 +137,22 @@
                 <li><span>税务登记号</span><?=$userinfo['shui_code']?></li>
             </ul>
             <hr />
-            
+
             <div class="detail_font">会员资金详情</div>
             <ul class="breadcrumb_detail">
                 <li><span>已还款金额（元）</span><?=$ret['yihuan']?></li>
                 <li><span>待还款金额（元）</span><?=$ret['wait']?></li>
                 <li><span>账户余额（元）</span><?=$userYuE?></li>
             </ul>
-            <ul class="breadcrumb_detail">                
+            <ul class="breadcrumb_detail">
                 <li><span>充值次数（次）</span><?=$czNum?></li>
                 <li><span>充值总计（元）</span><?=$czMoneyTotal ?></li>
-                <li><span>充值流水明细</span><a href="/user/rechargerecord/detail?id=<?=$_GET['id']?>&type=<?=Yii::$app->request->get('type');?>">查看</a>&nbsp;<a href="/user/rechargerecord/edit?id=<?=Yii::$app->request->get('id')?>&type=<?=Yii::$app->request->get('type')?>">数据录入</a></li>
+                <li><span>充值流水明细</span><a href="/user/rechargerecord/detail?id=<?=$_GET['id']?>&type=<?=Yii::$app->request->get('type');?>">查看</a>&nbsp;<a href="/user/rechargerecord/edit?id=<?=Yii::$app->request->get('id')?>&type=<?=Yii::$app->request->get('type')?>" hidden="true">数据录入</a></li>
             </ul>
             <ul class="breadcrumb_detail">
                 <li><span>提现次数（次）</span><?=$txNum?></li>
                 <li><span>提现总计（元）</span><?= $txMoneyTotal?></li>
-                <li><span>提现流水明细</span><a href="/user/drawrecord/detail?id=<?=$_GET['id']?>&type=<?=Yii::$app->request->get('type');?>">查看</a>&nbsp;<a href="/user/drawrecord/edit?id=<?=Yii::$app->request->get('id')?>&type=<?=Yii::$app->request->get('type')?>">数据录入</a></li>
+                <li><span>提现流水明细</span><a href="/user/drawrecord/detail?id=<?=$_GET['id']?>&type=<?=Yii::$app->request->get('type');?>">查看</a>&nbsp;<a href="/user/drawrecord/edit?id=<?=Yii::$app->request->get('id')?>&type=<?=Yii::$app->request->get('type')?>" hidden="true">数据录入</a></li>
             </ul>
             <ul class="breadcrumb_detail">
                 <li><span>融资成功次数（次）</span><?=$rzNum?></li>
@@ -165,10 +161,10 @@
             </ul>
             <hr />
         </div>
-        
+
     <?php }?>
     </div>
-                                    
+
 </div>
 <style type="text/css">
     .breadcrumb_detail{font-size:14px;padding:8px 15px;margin:0 5 20px;list-style:none;-webkit-border-radius:4px;-moz-border-radius:4px;border-radius:4px}
@@ -191,8 +187,8 @@
 
 <script type="text/javascript">
     $(function(){
-        
+
     })
-</script> 
+</script>
 <?php $this->endBlock(); ?>
 

@@ -88,8 +88,10 @@ class DrawrecordController extends BaseController
     }
 
     //录入提现数据
-    public function actionEdit($id = null, $type = null)
+    public function actionEdit($id = null, $type = null)       // DEPRECATED
     {
+        throw new \yii\web\NotFoundHttpException();
+
         $banks = Yii::$app->params['bank'];
         $bankInfo = [];
         foreach ($banks as $k => $v) {
