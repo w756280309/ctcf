@@ -2,6 +2,7 @@
 
 namespace PayGate\Ump;
 
+use Yii;
 use Crypto\CryptoUtils;
 use GuzzleHttp\Client as HttpClient;
 use P2pl\BorrowerInterface;
@@ -318,8 +319,8 @@ class Client
     {
         $data = [
             'service' => 'mer_recharge',
-            'ret_url' => 'http://b.wdjf.njfae.com.cn/user/bpay/brecharge/frontend-notify',
-            'notify_url' => 'http://b.wdjf.njfae.com.cn/user/bpay/brecharge/backend-notify',
+            'ret_url' => Yii::$app->params['ump_mer_recharge_ret_url'],
+            'notify_url' => Yii::$app->params['ump_mer_recharge_notify_url'],
             'order_id' => $recharge->sn,
             'mer_date' => date('Ymd', $recharge->created_at),
             'pay_type' => $payType,

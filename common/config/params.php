@@ -64,4 +64,6 @@ return [
     'page_info' => [
         'beian' => '@版权归温都金服开发团队所有',
     ],
+    'ump_mer_recharge_ret_url' => 'http://b.wdjf.njfae.com.cn/user/bpay/brecharge/frontend-notify',
+    'ump_mer_recharge_notify_url' => 'http://b.wdjf.njfae.com.cn/user/bpay/brecharge/backend-notify',
 ];
