@@ -32,6 +32,7 @@ use P2pl\Borrower;
  */
 class User extends \yii\db\ActiveRecord implements IdentityInterface
 {
+    use \YiiPlus\Model\ErrorExTrait;
 
     //会员类型 1：普通会员 ， 2：融资会员
     const USER_TYPE_PERSONAL = 1;
