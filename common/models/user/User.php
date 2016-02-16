@@ -629,6 +629,27 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface, UserInterf
         }
         return new Borrower($user->id);
     }
+    
+    public function getUserId()
+    {
+        return $this->id;
+    }
+    
+    public function getLegalName()
+    {
+        return $this->real_name;
+    }
+    
+    public function getIdNo()
+    {
+        return $this->idcard;
+    }
+    
+    public function getMobile()
+    {
+        return $this->mobile;
+    }
+
 
     public function getUserId()
     {
