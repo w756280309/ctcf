@@ -12,6 +12,7 @@ use P2pl\QpayTxInterface;
 use P2pl\OrderTxInterface;
 use common\models\user\QpayBinding;
 use common\models\user\RechargeRecord;
+use common\models\user\User;
 
 /**
  * 联动优势API调用.
@@ -76,18 +77,18 @@ class Client
      *
      * @return Response
      */
-    public function register($appUserId, $idName, $idType, $idNo, $mobile)
+    public function register(User $user)
     {
         $orderId = time();
 
         $data = [
             'service' => 'mer_register_person',
             'order_id' => $orderId,
-            'mer_cust_id' => $appUserId,
-            'mer_cust_name' => $this->encrypt($idName),
-            'identity_type' => $idType,
-            'identity_code' => $this->encrypt($idNo),
-            'mobile_id' => $mobile,
+            'mer_cust_id' => $user->getUserId(),
+            'mer_cust_name' => $this->encrypt($user->getLegalName()),
+            'identity_type' => 'IDENTITY_CARD',
+            'identity_code' => $this->encrypt($user->getIdNo()),
+            'mobile_id' => $user->getMobile(),
         ];
 
         return $this->doRequest($data);
@@ -152,7 +153,7 @@ class Client
             'is_open_fastPayment' => '1',
         ];
         $params = $this->buildQuery($data);
-        header('Location:'.$this->apiUrl.'?'.$params);
+        return $this->apiUrl.'?'.$params;
     }
 
     /**

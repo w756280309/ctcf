@@ -32,11 +32,11 @@ class EpayUser extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['appUserId', 'epayId', 'epayUserId', 'regDate', 'clientIp', 'createTime'], 'required'],
-            [['epayUserId'], 'unique'],
+            [['appUserId', 'epayUserId', 'regDate', 'clientIp', 'createTime'], 'required'],
             [['epayId', 'clientIp'], 'integer'],
             [['regDate', 'createTime'], 'safe'],
             [['appUserId', 'epayUserId', 'accountNo'], 'string', 'max' => 60],
+            ['epayId', 'default', 'value' => 1],
         ];
     }
 

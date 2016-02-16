@@ -6,7 +6,6 @@ use app\controllers\BaseController;
 use common\models\city\Region;
 use common\models\user\DrawRecord;
 use common\models\user\EditpassForm;
-use common\models\user\User;
 use common\models\user\UserAccount;
 use common\models\user\UserBanks;
 use common\service\BankService;
@@ -46,17 +45,18 @@ class UserbankController extends BaseController
         $model = $this->user;
         $model->scenario = 'idcardrz';
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            $model->idcard_status = User::IDCARD_STATUS_PASS;
-            if ($model->save()) {
-                //实名认证成功
+            $umpService = new \common\service\UmpService();
+            try {                
+                $umpService->register($model);
                 return ['tourl' => '/user/userbank/bindbank', 'code' => 0, 'message' => '实名认证成功'];
+            } catch (\Exception $ex) {
+                return ['code' => 1, 'message' => $ex->getMessage()];
             }
         }
 
         if ($model->getErrors()) {
-            $message = $model->firstErrors;
-
-            return ['code' => 1, 'message' => current($message)];
+            $err = $model->getSingleError();
+            return ['code' => 1, 'message' => $err['message']];
         }
 
         return $this->render('idcardrz');
