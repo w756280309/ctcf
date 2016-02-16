@@ -279,7 +279,7 @@ class Client
 
         return $this->doRequest($data);
     }
-    
+
     /**
      * 4.3.3 标的转
      * 用户投标
@@ -300,7 +300,7 @@ class Client
             'partic_type' => '01',
             'partic_acc_type' => '01',
             'partic_user_id' => $ord->getEpayUserId(),
-            'amount' => $ord->getAmount() * 100,            
+            'amount' => $ord->getAmount() * 100,
         ];
         $params = $this->buildQuery($data);
         return $this->apiUrl.'?'.$params;
@@ -318,8 +318,8 @@ class Client
     {
         $data = [
             'service' => 'mer_recharge',
-            'ret_url' => 'http://org.wdjf.com:8080/user/bpay/brecharge/frontend-notify',
-            'notify_url' => 'http://org.wdjf.com:8080/user/bpay/brecharge/backend-notify',
+            'ret_url' => 'http://b.wdjf.njfae.com.cn/user/bpay/brecharge/frontend-notify',
+            'notify_url' => 'http://b.wdjf.njfae.com.cn/user/bpay/brecharge/backend-notify',
             'order_id' => $recharge->sn,
             'mer_date' => date('Ymd', $recharge->created_at),
             'pay_type' => $payType,
