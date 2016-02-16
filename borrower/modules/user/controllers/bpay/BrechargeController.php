@@ -57,7 +57,7 @@ class BrechargeController extends Controller
         if (empty($data)) {
             $err = '00009999';
         } else {
-            if ($ump->verifySign($data) && '0000' === data['ret_code']) {
+            if ($ump->verifySign($data) && '0000' === $data['ret_code']) {
                 $recharge = RechargeRecord::findOne(['sn' => $data['order_id']]);
 
                 if (!recharge) {
