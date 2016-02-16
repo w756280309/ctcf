@@ -2,7 +2,7 @@
 
 namespace app\modules\user\controllers;
 
-use frontend\controllers\BaseController;
+use borrower\controllers\BaseController;
 use common\models\user\UserAccount;
 
 class UseraccountController extends BaseController

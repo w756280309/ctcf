@@ -3,7 +3,7 @@
 namespace app\modules\user\controllers;
 
 use Yii;
-use frontend\controllers\BaseController;
+use borrower\controllers\BaseController;
 use common\models\user\UserAccount;
 use common\models\user\RechargeRecord;
 use common\models\epay\EpayUser;

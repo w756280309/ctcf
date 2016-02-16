@@ -1,5 +1,5 @@
 {
-    "name": "wdjf/frontend",
+    "name": "wdjf/borrower",
     "dependencies": {
         "jquery": "1.11.3",
         "jquery-form": "3.46.0",

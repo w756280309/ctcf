@@ -1,7 +1,7 @@
 <?php
 
 use yii\helpers\Html;
-use frontend\assets\AppAsset;
+use borrower\assets\AppAsset;
 
 AppAsset::register($this);
 ?>

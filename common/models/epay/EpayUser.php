@@ -33,6 +33,7 @@ class EpayUser extends \yii\db\ActiveRecord
     {
         return [
             [['appUserId', 'epayId', 'epayUserId', 'regDate', 'clientIp', 'createTime'], 'required'],
+            [['epayUserId'], 'unique'],
             [['epayId', 'clientIp'], 'integer'],
             [['regDate', 'createTime'], 'safe'],
             [['appUserId', 'epayUserId', 'accountNo'], 'string', 'max' => 60],
