@@ -114,12 +114,11 @@ class EditpassForm extends Model
         if ($this->validate()) {
             $model->scenario = 'editpass';
             $model->trade_pwd = $model->setTradePassword($this->new_pass);
-            $res = $model->save();
 
-            return $model;
-        } else {
-            return false;
+            return $model->save();
         }
+
+        return false;
     }
 
     /**
@@ -133,12 +132,12 @@ class EditpassForm extends Model
         if ($this->validate()) {
             $model->scenario = 'editpass';
             $model->setPassword($this->new_pass);
-            $res = $model->save();
+            $model->passwordLastUpdatedTime = date('Y-m-d H:i:s');
 
-            return $model;
-        } else {
-            return false;
+            return $model->save();
         }
+
+        return false;
     }
 
     public function getId()

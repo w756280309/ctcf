@@ -171,7 +171,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
         return [
             'add' => ['type', 'username', 'password_hash', 'usercode', 'mobile', 'email', 'real_name', 'idcard', 'org_name', 'org_code', 'status', 'auth_key', 'user_pass', 'in_time', 'cat_id', 'law_master', 'law_master_idcard', 'law_mobile', 'shui_code', 'business_licence', 'tel',
             ],
-            'edit' => ['id', 'type', 'username', 'mobile', 'email', 'real_name', 'idcard', 'org_name', 'org_code', 'status', 'auth_key', 'user_pass', 'in_time', 'cat_id', 'law_master', 'law_master_idcard', 'law_mobile', 'shui_code', 'business_licence', 'tel',
+            'edit' => ['id', 'type', 'username', 'mobile', 'email', 'real_name', 'idcard', 'org_name', 'org_code', 'status', 'auth_key', 'user_pass', 'in_time', 'cat_id', 'law_master', 'law_master_idcard', 'law_mobile', 'shui_code', 'business_licence', 'tel', 'passwordLastUpdatedTime'
             ],
             'signup' => ['type', 'modile', 'password_hash', 'auth_key', 'usercode'],
             'idcardrz' => ['real_name', 'idcard', 'idcard_status'],
@@ -222,6 +222,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             [['org_code'], 'match', 'pattern' => '/[a-zA-Z0-9-]/', 'message' => '格式不正确，应为字母数字中划线', 'on' => ['add', 'edit']],
             [['business_licence', 'shui_code'], 'match', 'pattern' => '/\d+/', 'message' => '格式不正确，应为纯数字格式', 'on' => ['add', 'edit']],
             [['org_name'], 'required'],
+            [['passwordLastUpdatedTime'], 'safe'],
         ];
     }
 

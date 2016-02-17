@@ -3,6 +3,24 @@ $this->title = '修改登陆密码 - 温都金服';
 
 use yii\bootstrap\ActiveForm;
 use yii\captcha\Captcha;
+use yii\web\View;
+
+$_js = <<<'JS'
+$(function() {
+    var $form = $('#editpass');
+    $form.on('beforeValidate', function() {
+        var verifycode = $('#verifycode').val();
+        if (verifycode === '') {
+            alert("请填写图形验证码");
+            return false;
+        }
+
+        return true;
+    });
+})
+JS;
+
+$this->registerJs($_js, View::POS_END, 'body_close');
 ?>
 <style>
     .login {
@@ -23,7 +41,7 @@ use yii\captcha\Captcha;
             <div class="login"><center>首次登录,需重置登录密码</center></div>
         </div>
 
-        <?php $form = ActiveForm::begin(['id' => 'login', 'action' => "/site/editpass",]); ?>
+        <?php $form = ActiveForm::begin(['id' => 'editpass', 'action' => "/site/editpass",]); ?>
         <?= $form->field($model, 'password', ['template' => '{input}{error}'])->passwordInput(['class' => 'form-control input-lg', 'placeholder' => '请输入原密码']); ?>
 
         <?= $form->field($model, 'new_pass', ['template' => '{input}{error}'])->passwordInput(['class' => 'form-control input-lg', 'placeholder' => '请输入6-20个字母与数字']); ?>

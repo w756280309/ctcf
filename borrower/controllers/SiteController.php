@@ -98,8 +98,8 @@ class SiteController extends Controller
 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             $user = User::findOne(['username' => $model->username, 'type' => User::USER_TYPE_ORG]);
-            if ($model->login(User::USER_TYPE_ORG)) {   //用户第一次登录需首先重置登录密码
-                if (empty($user->last_login)) {
+            if ($model->login(User::USER_TYPE_ORG)) {
+                if (empty($user->passwordLastUpdatedTime)) {   //用户第一次登录需首先重置登录密码
                     return $this->redirect('/site/editpass');
                 }
 
@@ -146,7 +146,7 @@ class SiteController extends Controller
             if ($model->edituserpass()) {
                 \Yii::$app->user->logout();
 
-                return $this->goHome();
+                return $this->redirect('/site/login');
             }
         }
 
