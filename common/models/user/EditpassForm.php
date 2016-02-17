@@ -14,6 +14,7 @@ class EditpassForm extends Model
     public $new_pass;
     public $r_pass;
     public $verifyCode;
+
     private $_id = false;
 
     /**
@@ -22,10 +23,10 @@ class EditpassForm extends Model
     public function scenarios()
     {
         return [
-            'add' => ['new_pass', 'r_pass'], //新增交易密码
-            'edit' => ['password', 'new_pass', 'verifyCode'], //修改交易密码
-            'edituserpass' => ['password', 'new_pass', 'verifyCode'], //修改登陆密码
-            'checktradepwd' => ['password'], //检查交易密码
+            'add' => ['new_pass', 'r_pass'],   //新增交易密码
+            'edit' => ['password', 'new_pass', 'verifyCode'],  //修改交易密码
+            'edituserpass' => ['password', 'new_pass', 'verifyCode'],  //修改登陆密码
+            'checktradepwd' => ['password'],   //检查交易密码
         ];
     }
 
@@ -35,8 +36,7 @@ class EditpassForm extends Model
     public function rules()
     {
         return [
-            ['password', 'required', 'message' => '交易密码不能为空', 'on' => ['edit', 'checktradepwd']],
-            ['password', 'required', 'message' => '原登录密码不能为空', 'on' => 'edituserpass'],
+            ['password', 'required', 'message' => '交易密码不能为空', 'on' => ['edit', 'edituserpass', 'checktradepwd']],
             ['new_pass', 'required', 'message' => '新密码不能为空', 'on' => ['add', 'edit', 'edituserpass']],
             ['r_pass', 'required', 'message' => '新密码不能为空', 'on' => ['add']],
             ['new_pass', 'integer', 'message' => '交易密码必须为整数', 'on' => ['add']],
@@ -48,6 +48,7 @@ class EditpassForm extends Model
             ['r_pass', 'compare', 'compareAttribute' => 'new_pass', 'message' => '两次输入的密码不一致', 'on' => ['add']],
             ['password', 'validateTradePwd', 'on' => ['edit', 'checktradepwd']],
             [['password', 'new_pass', 'r_pass'], 'match', 'pattern' => '/^[0-9]{6,6}$/', 'message' => '交易密码必须为6位纯数字', 'on' => ['add', 'edit', 'checktradepwd']],
+
             [['password', 'new_pass'], 'string', 'length' => [6, 20], 'on' => 'edituserpass'],
             ['password', 'validatePassword', 'on' => 'edituserpass'],
             ['new_pass', 'match', 'pattern' => '/(?!^\d+$)(?!^[a-zA-Z]+$)^[0-9a-zA-Z]{6,20}$/', 'message' => '新密码必须为数字和字母的组合', 'on' => 'edituserpass'],
@@ -113,11 +114,12 @@ class EditpassForm extends Model
         if ($this->validate()) {
             $model->scenario = 'editpass';
             $model->trade_pwd = $model->setTradePassword($this->new_pass);
+            $res = $model->save();
 
-            return $model->save();
+            return $model;
+        } else {
+            return false;
         }
-
-        return false;
     }
 
     /**
@@ -131,21 +133,18 @@ class EditpassForm extends Model
         if ($this->validate()) {
             $model->scenario = 'editpass';
             $model->setPassword($this->new_pass);
+            $res = $model->save();
 
-            return $model->save();
+            return $model;
+        } else {
+            return false;
         }
-
-        return false;
     }
 
-    /**
-     * 获取用户对象
-     */
     public function getId()
     {
-        if ($this->_id === false) {
-            $id = Yii::$app->user->getIdentity()->id;
-            $this->_id = User::findOne($id);
+        if (false === $this->_id) {
+            $this->_id = Yii::$app->user->getIdentity();
         }
 
         return $this->_id;
