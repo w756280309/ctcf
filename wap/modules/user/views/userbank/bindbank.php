@@ -131,7 +131,6 @@ $this->registerJsFile('/js/qpay.js', ['position' => 1]);
             }
 
             $.post("/user/userbank/checkbank", {card: card_no, _csrf:csrf}, function (result) {
-                //console.log(result);
                 if(result.code!=0) {
                     alert(result.message);
                     return;

@@ -631,6 +631,15 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface, UserInterf
         return new Borrower($user->id);
     }
 
+    /**
+     * 获取用户托管方平台信息.
+     */
+    public function getEpayUser()
+    {
+        return $this->hasOne(EpayUser::className(), ['appUserId' => 'id']);
+    }
+
+
     public function getUserId()
     {
         return $this->id;
