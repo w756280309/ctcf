@@ -3,8 +3,8 @@
     <head>
         <META
             NAME="MobilePayPlatform"
-            CONTENT=<?= $content ?>
-            />
+            CONTENT="<?= $content ?>"
+        />
     </head>
     <body>
     </body>

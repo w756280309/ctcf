@@ -54,25 +54,21 @@ class BrechargeController extends Controller
         $ump = Yii::$container->get('ump');
         $err = '0000';
 
-        if (empty($data)) {
-            $err = '00009999';
-        } else {
-            if ($ump->verifySign($data) && '0000' === $data['ret_code']) {
-                $recharge = RechargeRecord::findOne(['sn' => $data['order_id']]);
+        if ($ump->verifySign($data)) {
+            $recharge = RechargeRecord::findOne(['sn' => $data['order_id']]);
 
-                if (!recharge) {
-                    $err = '00009999';
-                } else {
-                    $user = User::findOne($recharge->uid);
-                    $accService = Yii::$container->get('account_service');
-
-                    if (!$accService->confirmRecharge($recharge, $user)) {
-                        $err = '00009999';
-                    }
-                }
-            } else {
+            if (!recharge) {
                 $err = '00009999';
+            } else {
+                $user = User::findOne($recharge->uid);
+                $accService = Yii::$container->get('account_service');
+
+                if (!$accService->confirmRecharge($recharge, $user)) {
+                    $err = '00009999';
+                }
             }
+        } else {
+            $err = '00009999';
         }
 
         $content = $ump->buildQuery([
@@ -81,7 +77,8 @@ class BrechargeController extends Controller
             'reg_code' => $err,
         ]);
 
-        return $this->render('recharge_notify', ['content' => $content]);
+        $this->layout = false;
+        return $this->render('/recharge/recharge_notify', ['content' => $content]);
     }
 
 }
