@@ -139,7 +139,7 @@ class BankService
      */
     public static function checkKuaijie($user)
     {
-        $cond = 0 | self::IDCARDRZ_VALIDATE_N | self::BINDBANK_VALIDATE_N | self::CHARGEPWD_VALIDATE_N;
+        $cond = 0 | self::IDCARDRZ_VALIDATE_N | self::BINDBANK_VALIDATE_N;//删除| self::CHARGEPWD_VALIDATE_N验证交易密码判断
         return self::check($user, $cond);
     }
 }

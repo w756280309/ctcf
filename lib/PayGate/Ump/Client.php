@@ -263,12 +263,17 @@ class Client
         return $this->doRequest($data);
     }
 
+    /**
+     * 4.4.1 个人客户充值申请
+     * @param QpayTxInterface $qpay
+     * @return response
+     */
     public function rechargeViaQpay(QpayTxInterface $qpay)
     {
         $data = [
             'service' => 'mer_recharge_person',
-            'ret_url' => 'http://g.wdjf.com/ump/qpayreturl',
-            'notify_url' => 'http://g.wdjf.com/ump/qpaynotifyurl',
+            'ret_url' => 'http://1.202.51.139:8001/user/qpay/qpaynotify/frontend',
+            'notify_url' => 'http://1.202.51.139:8001/user/qpay/qpaynotify/backend',
             'sourceV' => 'HTML5',
             'order_id' => $qpay->getTxSn(),
             'mer_date' => $qpay->getTxDate(),
