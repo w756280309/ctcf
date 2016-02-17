@@ -7,7 +7,7 @@ namespace common\models\user;
  *
  * @author zhanghongyu <zhanghongyu@wangcaigu.com>
  */
-class QpayBinding extends UserBanks
+class QpayBinding extends UserBanks implements \P2pl\QpayBindInterface
 {
 
     public static function tableName()

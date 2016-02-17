@@ -10,9 +10,9 @@ use P2pl\LoanInterface;
 use Psr\Http\Message\ResponseInterface as Psr7ResponseInterface;
 use P2pl\QpayTxInterface;
 use P2pl\OrderTxInterface;
-use common\models\user\QpayBinding;
+use P2pl\QpayBindInterface;
 use common\models\user\RechargeRecord;
-use common\models\user\User;
+use P2pl\UserInterface;
 
 /**
  * 联动优势API调用.
@@ -77,7 +77,7 @@ class Client
      *
      * @return Response
      */
-    public function register(User $user)
+    public function register(UserInterface $user)
     {
         $orderId = time();
 
@@ -136,7 +136,7 @@ class Client
      *
      * @param QpayBinding $bind
      */
-    public function enableQpay(QpayBinding $bind)
+    public function enableQpay(QpayBindInterface $bind)
     {
         $data = [
             'service' => 'ptp_mer_bind_card',
