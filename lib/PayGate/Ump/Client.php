@@ -13,6 +13,7 @@ use P2pl\OrderTxInterface;
 use P2pl\QpayBindInterface;
 use common\models\user\RechargeRecord;
 use P2pl\UserInterface;
+use P2pl\ClientOption;
 
 /**
  * 联动优势API调用.
@@ -42,6 +43,12 @@ class Client
      * @var \GuzzleHttp\Client
      */
     private $httpClient;
+    
+    /**
+     *client配置
+     * @var type 
+     */
+    private $clientOption;
 
     /**
      * @var string 签名算法
@@ -140,8 +147,8 @@ class Client
     {
         $data = [
             'service' => 'ptp_mer_bind_card',
-            'ret_url' => 'http://g.wdjf.com/ump/qpayreturl',
-            'notify_url' => 'http://g.wdjf.com/ump/qpaynotifyurl',
+            'ret_url' => ClientOption::BIND_RET_URL,
+            'notify_url' => ClientOption::BIND_NOTIFY_URL,
             'sourceV' => 'HTML5',
             'order_id' => $bind->getTxSn(),
             'mer_date' => $bind->getTxDate(),
@@ -272,8 +279,8 @@ class Client
     {
         $data = [
             'service' => 'mer_recharge_person',
-            'ret_url' => 'http://1.202.51.139:8001/user/qpay/qpaynotify/frontend',
-            'notify_url' => 'http://1.202.51.139:8001/user/qpay/qpaynotify/backend',
+            'ret_url' => ClientOption::REC_NOTIFY_URL,
+            'notify_url' => ClientOption::REC_RET_URL,
             'sourceV' => 'HTML5',
             'order_id' => $qpay->getTxSn(),
             'mer_date' => $qpay->getTxDate(),
@@ -296,8 +303,8 @@ class Client
     {
         $data = [
             'service' => 'project_transfer',
-            'ret_url' => 'http://g.wdjf.com/ump/qpayreturl',
-            'notify_url' => 'http://g.wdjf.com/ump/qpaynotifyurl',
+            'ret_url' => ClientOption::ORDER_RET_URL,
+            'notify_url' => ClientOption::ORDER_NOTIFY_URL,
             'sourceV' => 'HTML5',
             'order_id' => $ord->getTxSn(),
             'mer_date' => date('Ymd', $ord->getTxDate()),
