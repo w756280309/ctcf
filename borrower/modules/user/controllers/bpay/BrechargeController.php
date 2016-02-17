@@ -30,14 +30,9 @@ class BrechargeController extends Controller
                 return $this->redirect('/user/recharge/recharge-err');
             }
 
-            $user = User::findOne($recharge->uid);
-            if (!$user) {
-                return $this->redirect('/user/recharge/recharge-err');
-            }
-
             $accService = Yii::$container->get('account_service');
 
-            if ($accService->confirmRecharge($recharge, $user)) {
+            if ($accService->confirmRecharge($recharge)) {
                 return $this->redirect('/user/useraccount/accountcenter');
             }
         }
@@ -60,10 +55,9 @@ class BrechargeController extends Controller
             if (!recharge) {
                 $err = '00009999';
             } else {
-                $user = User::findOne($recharge->uid);
                 $accService = Yii::$container->get('account_service');
 
-                if (!$accService->confirmRecharge($recharge, $user)) {
+                if (!$accService->confirmRecharge($recharge)) {
                     $err = '00009999';
                 }
             }

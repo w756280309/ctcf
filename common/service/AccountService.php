@@ -19,11 +19,13 @@ class AccountService
      * 2.记录充值流水
      * 3.更新充值记录状态为成功
      */
-    public function confirmRecharge(RechargeRecord $recharge, User $user)
+    public function confirmRecharge(RechargeRecord $recharge)
     {
         if (RechargeRecord::STATUS_NO !== $recharge->status) {
             return true;
         }
+
+        $user = $recharge->user;
 
         $user_acount = UserAccount::findOne(['uid' => $user->id]);
 

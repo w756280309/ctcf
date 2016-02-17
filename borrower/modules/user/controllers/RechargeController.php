@@ -103,7 +103,7 @@ class RechargeController extends BaseController
             $accService = Yii::$container->get('account_service');
 
             if ('2' === $resp->get('tran_state')) {
-                if ($accService->confirmRecharge($recharge, $this->user)) {
+                if ($accService->confirmRecharge($recharge)) {
                     \Yii::$app->session->remove('epayOrg_recharge');
 
                     return $this->redirect('/user/useraccount/accountcenter');
