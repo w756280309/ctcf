@@ -37,16 +37,17 @@ class UmpController extends Controller
     {
         $bind = new \common\models\user\QpayBinding([
             'binding_sn' => '1601141335024304205283',
-            'epayUserId' => 'UB201602011824050000000000043469',
-            'uid' => 1,
+            'epayUserId' => 'UB201602151131580000000000043823',
+            'uid' => 2,
             'bank_id' => '1',
-            'account' => '张宏雨',
+            'account' => '胡绍和',
             'card_number' => '6222020200000000000',
             'account_type' => 1,
             'mobile' => '15810036547',
             'created_at' => time(),
         ]);
         $resp = \Yii::$container->get('ump')->enableQpay($bind);
+        return $this->redirect($resp);
     }
 
     public function actionRegloan($id)

@@ -10,8 +10,9 @@ use P2pl\LoanInterface;
 use Psr\Http\Message\ResponseInterface as Psr7ResponseInterface;
 use P2pl\QpayTxInterface;
 use P2pl\OrderTxInterface;
-use common\models\user\QpayBinding;
+use P2pl\QpayBindInterface;
 use common\models\user\RechargeRecord;
+use P2pl\UserInterface;
 
 /**
  * 联动优势API调用.
@@ -76,18 +77,18 @@ class Client
      *
      * @return Response
      */
-    public function register($appUserId, $idName, $idType, $idNo, $mobile)
+    public function register(UserInterface $user)
     {
         $orderId = time();
 
         $data = [
             'service' => 'mer_register_person',
             'order_id' => $orderId,
-            'mer_cust_id' => $appUserId,
-            'mer_cust_name' => $this->encrypt($idName),
-            'identity_type' => $idType,
-            'identity_code' => $this->encrypt($idNo),
-            'mobile_id' => $mobile,
+            'mer_cust_id' => $user->getUserId(),
+            'mer_cust_name' => $this->encrypt($user->getLegalName()),
+            'identity_type' => 'IDENTITY_CARD',
+            'identity_code' => $this->encrypt($user->getIdNo()),
+            'mobile_id' => $user->getMobile(),
         ];
 
         return $this->doRequest($data);
@@ -135,7 +136,7 @@ class Client
      *
      * @param QpayBinding $bind
      */
-    public function enableQpay(QpayBinding $bind)
+    public function enableQpay(QpayBindInterface $bind)
     {
         $data = [
             'service' => 'ptp_mer_bind_card',
@@ -152,7 +153,7 @@ class Client
             'is_open_fastPayment' => '1',
         ];
         $params = $this->buildQuery($data);
-        header('Location:'.$this->apiUrl.'?'.$params);
+        return $this->apiUrl.'?'.$params;
     }
 
     /**

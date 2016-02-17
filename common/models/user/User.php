@@ -7,6 +7,8 @@ use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
 use yii\web\IdentityInterface;
 use P2pl\Borrower;
+use common\models\epay\EpayUser;
+use P2pl\UserInterface;
 
 /**
  * This is the model class for table "user".
@@ -30,7 +32,7 @@ use P2pl\Borrower;
  * @property int $updated_at
  * @property int $created_at
  */
-class User extends \yii\db\ActiveRecord implements IdentityInterface
+class User extends \yii\db\ActiveRecord implements IdentityInterface, UserInterface
 {
     use \YiiPlus\Model\ErrorExTrait;
 
@@ -628,5 +630,26 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
         }
         return new Borrower($user->id);
     }
+
+    public function getUserId()
+    {
+        return $this->id;
+    }
+
+    public function getLegalName()
+    {
+        return $this->real_name;
+    }
+
+    public function getIdNo()
+    {
+        return $this->idcard;
+    }
+
+    public function getMobile()
+    {
+        return $this->mobile;
+    }
+
 
 }
