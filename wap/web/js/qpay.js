@@ -27,10 +27,10 @@ function toasturl(url,val){
     }, 2000);
 }
 
-function validateBinding(isVerify) {
-    if ($('#card_no').val() == ''){
-       toast(null, '银行卡号不能为空');
-       return false;
+function validateBinding() {
+    if ($('#card_no').val() == '') {
+        toast(null, '银行卡号不能为空');
+        return false;
     }
     if ($('#bank_name').val() == ''){
        toast(null, '开户行不能为空');

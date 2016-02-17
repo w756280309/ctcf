@@ -102,51 +102,13 @@ class BindingController extends BaseController
             $acct_model->load(Yii::$app->request->post())
             && $acct_model->validate()
         ) {
-            $pending = Yii::$app->session->get('cfca_qpay_binding');
-            if (
-                null === $pending
-                || empty($acct_model->binding_sn)
-            ) {
-                return $this->createErrorResponse('请先请求短信验证码');
-            }
-
-            if (
-                $acct_model->binding_sn !== $pending['bindingSn']
-                || $acct_model->account !== $pending['realName']
-                || $acct_model->bank_id !== $pending['bankId']
-                || $acct_model->card_number !== $pending['acctNo']
-                || $acct_model->mobile !== $pending['mobile']
-            ) {
-                return $this->createErrorResponse('绑卡信息已修改，请重新请求短信验证码');
-            }
-
-            $cfca = new Cfca();
-            $resp = $cfca->request(new Request2532(
-                Yii::$app->params['cfca']['institutionId'],
-                $pending['bindingSn'],
-                $acct_model->sms
-            ));
-
-            // XXX
-            $xmlDoc = new \DOMDocument();
-            $xmlDoc->loadXML($resp->getText());
-
-            if (false === $resp) {
-                return $this->createErrorResponse('短信发送失败');
-            }
-
-            if ('30' !== XmlUtils::getSingleValue($xmlDoc, '/Response/Body/Status')) {
-                return $this->createErrorResponse($resp->getMessage());
-            }
-
-            if ($acct_model->save()) {
-                \Yii::$app->session->remove('cfca_qpay_binding');//增加销毁
-                return [
-                    'next' => '/user/userbank/addbuspass',
-                ];
-            } else {
-                return $this->createErrorResponse('绑卡失败');
-            }
+            $acct_model->binding_sn = CfcaUtils::generateSn('B');
+            $acct_model->epayUserId = $this->user->epayUser->epayUserId;
+            $acct_model->save();
+            $next = \Yii::$container->get('ump')->enableQpay($acct_model);//获取跳转页面
+            return [
+                'next' => $next,
+            ]; 
         }
 
         return $this->createErrorResponse($acct_model);

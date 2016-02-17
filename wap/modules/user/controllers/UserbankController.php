@@ -336,4 +336,13 @@ class UserbankController extends BaseController
     {
         return $this->render('kuaijie');
     }
+        
+    /**
+     * 绑卡受理结果页面
+     * @param $ret success/error
+     */
+    public function actionAccept($ret = 'error')
+    {
+        return $this->render('acceptres', ['ret' => $ret]);
+    }
 }
