@@ -87,7 +87,7 @@ class LoginForm extends Model
             }
         }
 
-        if (empty($this->_user)) {
+        if (!$this->_user) {
             if (User::USER_TYPE_PERSONAL === $userType) {
                 $this->addError('phone', '该手机号还没有注册');
 
@@ -120,8 +120,8 @@ class LoginForm extends Model
             $this->_user->last_login = time();
 
             return $this->_user->save();
-        } else {
-            return false;
         }
+
+        return false;
     }
 }
