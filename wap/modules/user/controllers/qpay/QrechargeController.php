@@ -45,8 +45,7 @@ class QrechargeController extends BaseController
             $rec_model->load(Yii::$app->request->post())
             && $rec_model->validate()
         ) {
-            //$rec_model->save();
-            $rec_model->created_at = time();
+            $rec_model->save();
             $next = Yii::$container->get('ump')->rechargeViaQpay($rec_model);
             if ($next->isRedirection()) {
                 return ['next' => $next->getLocation()];

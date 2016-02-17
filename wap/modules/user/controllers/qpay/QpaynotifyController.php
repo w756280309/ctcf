@@ -7,7 +7,6 @@ use Exception;
 use yii\web\NotFoundHttpException;
 use yii\web\Controller;
 use common\models\user\RechargeRecord;
-use yii\helpers\ArrayHelper;
 use common\service\AccountService;
 
 /**
@@ -19,19 +18,51 @@ class QpaynotifyController extends Controller
 {
     /**
      * 快捷充值前台通知地址
-     * 允许访问如下地址访问：
-     *   ?sign=oKvSXTpQXzRTA7a62ORXunGDrkl%2F5RTTMbwPz6LMiV6QgIBy1hxe2W%2BZTkSe4IpdhiQ8WGPbX7AYQ8fMaomp8qAzCy%2FGtAUi1YBSxTuBJpw%2FRLdnpJTtwFgqju%2FQstQ%2BZo54bgaVJUrmS2z7dXnVke%2Bg2yPARq7dBRGAZBJV1go%3D&ret_code=0000&mer_date=20160216&mer_id=7050209&sign_type=RSA&ret_msg=%E7%BB%91%E5%8D%A1%E5%8F%97%E7%90%86%E6%88%90%E5%8A%9F&service=mer_bind_card_apply_notify&charset=UTF-8&user_id=UB201602161353010000000000043914&order_id=B1602161649239508021864&version=4.0
      */
     public function actionFrontend()
     {
         $data = Yii::$app->request->get();
         try {
-            $this->processing($data);
+            $ret = $this->processing($data);
+            if ($ret instanceof RechargeRecord) {
+                return $this->redirect('/user/user');
+            } else {
+               Yii::trace('非recharge对象;'. $data['service'] . ":" . http_build_query($data), 'bindcardbackend'); 
+            }
         } catch (Exception $ex) {
             Yii::trace($ex->getMessage() .';'. $data['service'] . ":" . http_build_query($data), 'bindcardbackend');
         }
     }
-   
+
+    /**
+     * 快捷充值后台通知地址
+     */
+    public function actionBackend()
+    {
+        $this->layout = false;
+        $err = '00009999';
+        $errmsg = "no error";
+        $data = Yii::$app->request->get();
+        try {
+            $ret = $this->processing($data);
+            if ($ret instanceof RechargeRecord) {
+                $err = "0000";
+            } else {
+               $errmsg = '非recharge对象;';
+            }
+        } catch (Exception $ex) {
+            $errmsg = $ex->getMessage() .';';            
+        }
+        Yii::trace($errmsg . $data['service'] . ":" . http_build_query($data), 'bindcardbackend');
+        $content = Yii::$container->get('ump')->buildQuery([
+            'order_id' => $data['order_id'],
+            'mer_date' => $data['mer_date'],
+            'reg_code' => $err,
+        ]);
+        
+        return $this->render('@borrower/modules/user/views/recharge/recharge_notify.php', ['content' => $content]);
+    }
+    
     /**
      * 
      * @param array $data
@@ -49,8 +80,12 @@ class QpaynotifyController extends Controller
             $rc = RechargeRecord::findOne(['sn' => $data['order_id']]);
             if (null !== $rc) {
                 $acc_ser = new AccountService();
-                //$is_success = $acc_ser->confirmRecharge($rc, $user)
-                return $rc;
+                $is_success = $acc_ser->confirmRecharge($rc);                
+                if ($is_success) {
+                    return $rc;
+                } else {
+                    throw new Exception($data['order_id'] . '充值失败');
+                }
             } else {
                 throw new NotFoundHttpException($data['order_id'] . ':无法找到申请数据');
             }            
@@ -59,61 +94,5 @@ class QpaynotifyController extends Controller
         }
     }
 
-    /**
-     * 快捷充值后台通知地址
-     * 后台通知地址会接收到绑卡申请的后台通知以及绑卡结果的后台通知，需要判断返回结果的服务类型必须是mer_bind_card_notify【4.2.6】
-     * 允许访问如下地址访问：
-     *   ?charset=UTF-8&gate_id=ICBC&last_four_cardid=6783&mer_date=20160217&mer_id=7050209&order_id=B1602170904368901397519&ret_code=0000&service=mer_bind_card_notify&user_bind_agreement_list=ZKJP0700%2C0000&user_id=UB201602170902110000000000043969&version=4.0&sign=EebPL%2FbQNP8%2FRy8JXgXHQQ74BXAD4IWPx7A9gUDIRXuwtfVE6tYYBiNe1%2FphInWaF7GVoUUP6rk9GzyvuzHBaoaioFb2tnzJnCE7yJvVgHP74VXjg3bmuy%2FRa46qDiEYbuulm9F%2FqUh4WB%2BHpJ74j2fT%2F5hV4wkEKbxiX1Q%2BjXg%3D&sign_type=RSA
-     */
-    public function actionBackend()
-    {
-        $this->layout = false;
-        $err = '00009999';
-        $errmsg = "no error";
-        $data = Yii::$app->request->get();
-        \Yii::trace($data['service'] . ":" . http_build_query($data), 'bindcardbackend');
-        if (
-            Yii::$container->get('ump')->verifySign($data)
-            && '0000' === $data['ret_code']
-            && 'recharge_notify' === $data['service']
-        ) {
-            
-        }
-//        
-//        if (
-//            Yii::$container->get('ump')->verifySign($data)
-//            && '0000' === $data['ret_code']
-//            && 'mer_bind_card_notify' === $data['service']
-//        ) {
-//            $bind = QpayBinding::findOne(['binding_sn' => $data['order_id']]);
-//            if (null !== $bind) {
-//                if (null === UserBanks::findOne(['binding_sn' => $data['order_id']])) {
-//                    $bind->status = 1;
-//                    $userBanks = new UserBanks(ArrayHelper::toArray($bind));
-//                    $userBanks->setScenario('step_first');
-//                    $transaction = Yii::$app->db->beginTransaction();
-//                    if ($userBanks->save() && $bind->save()) {
-//                        $transaction->commit();
-//                        $err = '0000';
-//                    } else {
-//                        $transaction->rollBack();
-//                        $errmsg = "数据修改失败";
-//                    }
-//                }              
-//            } else {
-//                $errmsg = $data['order_id'] . ':无法找到申请数据';
-//            }            
-//        }
-//        
-//        //记录日志方便调试
-//        \Yii::trace("errormsg:【" . $err . $errmsg . "】;" . $data['service'] . ":" . http_build_query($data), 'bindcardbackend');
-//
-//        $content = Yii::$container->get('ump')->buildQuery([
-//            'order_id' => $data['order_id'],
-//            'mer_date' => $data['mer_date'],
-//            'reg_code' => $err,
-//        ]);
-//        
-//        return $this->render('@borrower/modules/user/views/recharge/recharge_notify.php', ['content' => $content]);
-    }
+
 }

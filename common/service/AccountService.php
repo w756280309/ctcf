@@ -3,12 +3,11 @@
 namespace common\service;
 
 use Yii;
-use common\models\user\UserAccount;
 use common\models\user\RechargeRecord;
 use common\lib\bchelp\BcRound;
 use common\models\sms\SmsMessage;
-use common\models\user\User;
 use common\models\user\MoneyRecord;
+use common\models\user\User;
 
 class AccountService
 {
@@ -26,9 +25,8 @@ class AccountService
         }
 
         $user = $recharge->user;
-
-        $user_acount = UserAccount::findOne(['uid' => $user->id]);
-
+        $user_acount = $user->type === User::USER_TYPE_PERSONAL ? $user->lendAccount : $user->borrowAccount;
+        
         $bc = new BcRound();
         bcscale(14);
         $transaction = Yii::$app->db->beginTransaction();
