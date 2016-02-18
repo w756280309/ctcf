@@ -78,6 +78,7 @@ class OnlineOrder extends \yii\db\ActiveRecord implements \P2pl\OrderTxInterface
             [['online_pid', 'order_time', 'uid', 'status', 'created_at', 'updated_at'], 'integer'],
             [['order_money'], 'number'],
             [['sn'], 'string', 'max' => 30],
+            [['status'], 'default', 'value' => 0],
             //['agree', 'required', 'requiredValue'=>true,'message'=>'请确认是否同意隐私权协议条款'],
         ];
     }

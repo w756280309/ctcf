@@ -118,11 +118,7 @@ class PayService
         if ($user->status == 0) {
             return ['code' => self::ERROR_ID_SET,  'message' => '账户已被冻结', 'tourl' => '/site/usererror'];
         }
-        
-        if (empty($user->trade_pwd)) {
-            return ['code' => self::ERROR_TRADE_PWD_SET,  'message' => self::getErrorByCode(self::ERROR_TRADE_PWD_SET), 'tourl' => '/user/userbank/addbuspass'];
-        }
-
+       
         $deal = OnlineProduct::find()->where(['sn' => $sn])->one();
         $this->cdeal = $deal;
         $time = time();
@@ -148,21 +144,14 @@ class PayService
      *
      * @return type
      */
-    public function checkAllowPay($sn = null, $money = null, $tradepwd = null)
+    public function checkAllowPay($sn = null, $money = null)
     {
         $commonret = $this->checkCommonCond($sn);
         if ($commonret !== true) {
             return $commonret;
         }
-        if (empty($tradepwd)) {
-            return ['code' => self::ERROR_TRADE_PWD_EMPTY,  'message' => self::getErrorByCode(self::ERROR_TRADE_PWD_EMPTY)];
-        }
         $user = Yii::$app->user->getIdentity();
-        $tradepwd_validate = Yii::$app->security->validatePassword($tradepwd, $user->trade_pwd);//交易密码
-        if (!$tradepwd_validate) {
-            return ['code' => self::ERROR_TRADE_PWD_FALSE,  'message' => self::getErrorByCode(self::ERROR_TRADE_PWD_FALSE)];
-        }
-
+        
         if (empty($money)) {
             return ['code' => self::ERROR_MONEY_FORMAT,  'message' => self::getErrorByCode(self::ERROR_MONEY_FORMAT)];
         }

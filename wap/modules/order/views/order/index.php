@@ -33,12 +33,7 @@ $this->registerJsFile('/js/order.js', ['depends' => 'yii\web\YiiAsset','position
         <input name="money" type="text" id="money" value="" placeholder="请输入投资金额"  class="col-xs-6 safe-lf text-align-lf">
             <div class="col-xs-2 safe-txt">元</div>
         </div>
-        <div class="row sm-height border-bottom">
-            <div class="col-xs-4 safe-txt text-align-ct">交易密码</div>
-                <input name="trade_pwd" type="password"  value="" placeholder="请输入交易密码"  class="col-xs-6 safe-lf" maxlength="6">
-            <div class="col-xs-2"></div>
-        </div>
-    
+            
         <div class="row shouyi">
             <div class="col-xs-4 safe-lf text-align-ct">预计收益</div>
             <div class="col-xs-3 safe-lf text-align-lf yuqishouyi" style="color:#f44336;padding: 0;line-height:35px;font-size:12px;">0.00元</div>
