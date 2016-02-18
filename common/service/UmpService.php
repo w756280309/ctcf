@@ -23,7 +23,7 @@ class UmpService
     public function register(User $user)
     {
         $resp = Yii::$container->get('ump')->register($user);
-        Yii::trace("开户响应内容:" . http_build_query($resp->toArray()), 'umplog');
+        Yii::trace("开户响应内容:".http_build_query($resp->toArray()), 'umplog');
         if (!$resp->isSuccessful()) {
             throw new Exception($resp->get('ret_code') . ':' . $resp->get('ret_msg'));
         }
