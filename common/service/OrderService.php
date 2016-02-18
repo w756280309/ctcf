@@ -91,19 +91,18 @@ class OrderService
 
         return ['header' => $header, 'data' => $query, 'code' => $code, 'message' => $message];
     }
-    
-    public static function confirmOrderPay($sn)
+
+    public static function confirmOrder($order)
     {
-        $order = OnlineOrder::findOne(['sn' => $sn]);
         if (OnlineOrder::STATUS_SUCCESS === $order->status) {
             return true;
         }
         $bcrond = new BcRound();
         $loan = OnlineProduct::findOne($order->online_pid);
-        
+
         $user = $order->user;
         $ua = $user->type === User::USER_TYPE_PERSONAL ? $user->lendAccount : false;//当前限制投资人进行投资
-        
+
         if ($ua === false) {
             throw new Exception(PayService::getErrorByCode(PayService::ERROR_UA));
         }
@@ -115,7 +114,7 @@ class OrderService
         $transaction = Yii::$app->db->beginTransaction();
         $order->status = OnlineOrder::STATUS_SUCCESS;
         $order->save();
-        
+
         $ua->drawable_balance = $bcrond->bcround(bcsub($ua->drawable_balance, $order->order_money), 2);
         $ua->freeze_balance = $bcrond->bcround(bcadd($ua->freeze_balance, $order->order_money), 2);
         $ua->out_sum = $bcrond->bcround(bcadd($ua->out_sum, $order->order_money), 2);
@@ -150,7 +149,7 @@ class OrderService
             $update['full_time'] = time();//由于定时任务去修改满标状态以及生成还款计划。所以此处不设置修改满标状态
             $diff = \Yii::$app->functions->timediff(strtotime(date('Y-m-d', $loan->start_date)), strtotime(date('Y-m-d', $loan->finish_date)));
             OnlineOrder::updateAll(['expires' => $diff['day'] - 1], ['online_pid' => $loan->id]);
-        } else {            
+        } else {
             $finish_rate = $bcrond->bcround(bcdiv($insert_sum, $loan->money), 2);
             if (0 === bccomp($finish_rate, 1) && 0 !== bccomp($insert_sum, $loan->money)) {//主要处理由于四舍五入造成的不应该募集完成的募集完成了：完成比例等于1了，并且包含此次交易成功所有金额不等于募集金额
                 $finish_rate = 0.99;
@@ -185,5 +184,5 @@ class OrderService
         $transaction->commit();
         return true;
     }
-    
+
 }
