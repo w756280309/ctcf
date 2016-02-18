@@ -13,7 +13,7 @@ use common\models\epay\EpayUser;
  */
 class UmpService
 {
-    
+
     /**
      * 联动开户
      * 注：联动方测试环境注册不判断重复，但是会判断60s内不能注册
@@ -23,7 +23,7 @@ class UmpService
     public function register(User $user)
     {
         $resp = Yii::$container->get('ump')->register($user);
-        Yii::trace("开户响应内容:" . $resp->toArray(), 'umplog');
+        Yii::trace("开户响应内容:" . http_build_query($resp->toArray()), 'umplog');
         if (!$resp->isSuccessful()) {
             throw new Exception($resp->get('ret_code') . ':' . $resp->get('ret_msg'));
         }
@@ -36,12 +36,12 @@ class UmpService
             'epayUserId' => $resp->get('user_id'),
             'accountNo' => $resp->get('account_id'),
         ]);
-        
+
         if (!$epayUser->save(false)) {
             $transaction->rollBack();
             throw new Exception('开户失败');
         }
-        
+
         $user->scenario = 'idcardrz';
         $user->idcard_status = User::IDCARD_STATUS_PASS;
         if (!$user->save(false)) {
@@ -51,5 +51,5 @@ class UmpService
         $transaction->commit();
         return $epayUser;
     }
-    
+
 }
