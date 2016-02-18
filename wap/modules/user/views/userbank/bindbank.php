@@ -44,19 +44,19 @@ $this->registerJsFile('/js/qpay.js', ['position' => 1]);
     <div class="col-xs-2"></div>
 </div>
 
-<form method="post" class="cmxform" id="form" action="/user/userbank/bindbank" data-to="1">
+<form method="post" class="cmxform" id="form" action="/user/qpay/binding/verify" data-to="1">
     <input name="_csrf" type="hidden" id="_csrf" value="<?= Yii::$app->request->csrfToken ?>">
     <div class="row kahao">
         <div class="col-xs-3 xian">卡号</div>
-        <div class="col-xs-9 xian"><input id="card_no" type="text" name='UserBanks[card_number]' placeholder="请输入银行卡号"/></div>
+        <div class="col-xs-9 xian"><input id="card_no" type="text" name='QpayBinding[card_number]' placeholder="请输入银行卡号"/></div>
 
     </div>
 
     <div class="row kahao">
         <div class="col-xs-3 xian">开户行</div>
         <div class="col-xs-7 xian">
-            <input id="bank_id" type="hidden" name='UserBanks[bank_id]'/>
-            <input id="bank_name" type="hidden" name='UserBanks[bank_name]' placeholder="请选择开户行"/>
+            <input id="bank_id" type="hidden" name='QpayBinding[bank_id]'/>
+            <input id="bank_name" type="hidden" name='QpayBinding[bank_name]' placeholder="请选择开户行"/>
             <div class="selecter kaihu">请选择开户行</div>
             <img class="selecter kaihu1"/>
             <span class="selecter kaihu1 kaihu2"></span>
@@ -66,15 +66,10 @@ $this->registerJsFile('/js/qpay.js', ['position' => 1]);
 
     <div class="row kahao">
         <div class="col-xs-3 xian">手机号</div>
-        <div class="col-xs-8 xian"><input id="phone" type="text" name="UserBanks[mobile]" placeholder="请输入银行预留的手机号码" maxlength="11"/></div>
+        <div class="col-xs-8 xian"><input id="phone" type="text" name="QpayBinding[mobile]" placeholder="请输入银行预留的手机号码" maxlength="11"/></div>
         <div class="col-xs-1 xian col"></div>
     </div>
 
-    <div class="row kahao1">
-        <div class="col-xs-3 xian">验证码</div>
-        <div class="col-xs-5 xian"><input type="text" id="sms" name='UserBanks[sms]' placeholder="请输入短信验证码"/></div>
-        <div class="col-xs-4 xian"><input class="yzm yzm-normal"  id="createsms" value="获取验证码" type="button" style="margin-top:-4px;font-size:12px;height:28px;line-height:27px; width:70%;"></div>
-    </div>
     <!--限额提醒-->
     <div class="row tixing">
         <div class="col-xs-10">
@@ -91,7 +86,7 @@ $this->registerJsFile('/js/qpay.js', ['position' => 1]);
         <div class="col-xs-3"></div>
     </div>
 
-    <input id="qpay-binding-sn" name="UserBanks[binding_sn]" type="hidden" />
+    <input id="qpay-binding-sn" name="QpayBinding[binding_sn]" type="hidden" />
 </form>
 <!-- 卡号弹出框 start  -->
 <div class="error-info">您输入的卡号有误</div>
@@ -119,7 +114,7 @@ $this->registerJsFile('/js/qpay.js', ['position' => 1]);
 
         csrf = $("meta[name=csrf-token]").attr('content');
         $('#bindbankbtn').on('click', function(e) {
-            if (validateBinding(true)) {
+            if (validateBinding()) {
                 qpay_showConfirmModal();
             }
         });
@@ -153,56 +148,6 @@ $this->registerJsFile('/js/qpay.js', ['position' => 1]);
 
             })
        });
-
-        //60秒倒计时
-        var InterValObj; //timer变量，控制时间
-        var curCount;//当前剩余秒数
-        var count = 60; //间隔函数，1秒执行
-
-        function qpay_timedown() {
-            curCount = count;
-            $('#createsms').addClass("yzm-disabled");
-            $("#createsms").attr("disabled", "true");
-            $("#createsms").val(curCount + "s后重发");
-            InterValObj = window.setInterval(qpay_SetRemainTime, 1000); //启动计时器，1秒执行一次
-        }
-
-        function qpay_SetRemainTime() {
-            if (curCount == 0) {
-                window.clearInterval(InterValObj);//停止计时器
-                $('#createsms').removeAttr("disabled");//启用按钮
-                $('#createsms').removeClass("yzm-disabled");
-                $("#createsms").val("重新发送");
-            } else {
-                curCount--;
-                $("#createsms").val(curCount + "s后重发");
-            }
-        };
-
-        $('#createsms').on('click', function(e) {
-            e.preventDefault();
-
-            if (validateBinding(false)) {
-                var $form = $('#form');
-                var xhr = $.post(
-                    '/user/qpay/binding/init',
-                    $form.serialize()
-                );
-
-                xhr.done(function(data) {
-                    $('#qpay-binding-sn').val(data['bindingSn']);
-                    qpay_timedown();
-                });
-
-                xhr.fail(function(jqXHR) {
-                    var errMsg = jqXHR.responseJSON && jqXHR.responseJSON.message
-                        ? jqXHR.responseJSON.message
-                        : '未知错误，请刷新重试或联系客服';
-
-                    toast(null, errMsg);
-                });
-            }
-        });
-
+       
     })
 </script>

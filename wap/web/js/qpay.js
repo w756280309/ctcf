@@ -1,26 +1,26 @@
 function toast(btn, val) {
     var $alert = $(
-        '<div class="error-info" style="display: block;">'
-            +'<div>'
-                +val
-            +'</div>'
-        +'</div>'
-    );
+            '<div class="error-info" style="display: block;">'
+            + '<div>'
+            + val
+            + '</div>'
+            + '</div>'
+            );
     $alert.appendTo('body');
-    setTimeout(function() {
-        $alert.fadeOut(500, function() {
+    setTimeout(function () {
+        $alert.fadeOut(500, function () {
             $alert.remove();
         });
     }, 2000);
 }
 
-function toasturl(url,val){
-    var $kahao = $('<div class="error-info" style="display: block"><div>'+val+'</div></div>')
-        .insertAfter($('form'));
+function toasturl(url, val) {
+    var $kahao = $('<div class="error-info" style="display: block"><div>' + val + '</div></div>')
+            .insertAfter($('form'));
 
-    setTimeout(function(){
+    setTimeout(function () {
         $kahao.fadeOut();
-        setTimeout(function(){
+        setTimeout(function () {
             $kahao.remove();
             window.location.href = url;
         }, 200);
@@ -32,29 +32,14 @@ function validateBinding() {
         toast(null, '银行卡号不能为空');
         return false;
     }
-    if ($('#bank_name').val() == ''){
-       toast(null, '开户行不能为空');
-       return false;
+    if ($('#bank_name').val() == '') {
+        toast(null, '开户行不能为空');
+        return false;
     }
-    if ($('#phone').val() == ''){
-       toast(null, '手机号码不能为空');
-       return false;
+    if ($('#phone').val() == '') {
+        toast(null, '手机号码不能为空');
+        return false;
     }
-    if (isVerify) {
-        if ('' === $.trim($('#qpay-binding-sn').val())) {
-            toast(null, '请先请求短信验证码');
-            return false;
-        }
-        if ($('#sms').val() == ''){
-           toast(null, '验证码不能为空');
-           return false;
-        }
-        if ($('#sms').val().length != 6){
-           toast(null, '验证码必须是6位数字');
-           return false;
-        }
-    }
-
     return true;
 }
 
@@ -72,32 +57,32 @@ function qpay_dismissConfirmModal() {
     $diag.hide();
 }
 
-$(function() {
-    $('#qpay-binding-confirm-diag').on('click', '.x-cancel', function() {
+$(function () {
+    $('#qpay-binding-confirm-diag').on('click', '.x-cancel', function () {
         qpay_dismissConfirmModal();
-    }).on('click', '.x-confirm', function() {
+    }).on('click', '.x-confirm', function () {
         var $form = $('#form');
         var xhr = $.post(
-            '/user/qpay/binding/verify',
-            $form.serialize()
-        );
+                '/user/qpay/binding/verify',
+                $form.serialize()
+                );
 
-        xhr.done(function(data) {
-            toast(null, '绑卡成功');
-            setTimeout(function() {
+        xhr.done(function (data) {
+            toast(null, '转入联动优势进行绑卡操作');
+            setTimeout(function () {
                 window.location.href = data.next;
             }, 1500);
         });
 
-        xhr.fail(function(jqXHR) {
+        xhr.fail(function (jqXHR) {
             var errMsg = jqXHR.responseJSON && jqXHR.responseJSON.message
-                ? jqXHR.responseJSON.message
-                : '未知错误，请刷新重试或联系客服';
+                    ? jqXHR.responseJSON.message
+                    : '未知错误，请刷新重试或联系客服';
 
             toast(null, errMsg);
         });
 
-        xhr.always(function() {
+        xhr.always(function () {
             qpay_dismissConfirmModal();
         });
     });
