@@ -1,8 +1,12 @@
 <?php
 namespace common\service;
 
+use Yii;
+use Exception;
 use common\lib\product\ProductProcessor;
 use common\lib\bchelp\BcRound;
+use common\models\product\OnlineProduct;
+
 /**
  * Desc 主要用于计算利息相关
  * Created by zhy.
@@ -44,4 +48,52 @@ class LoanService {
         return $processor->LoanTerms('d1',$date,$period);
     }
     
+    /**
+     * 修改标的状态
+     * @param OnlineProduct $deal
+     * @param int $state 
+     * 注：
+     *   1.联动一侧 4结束（前提条件：余额为0）
+     *   2.取消-1初始90建标中91建标成功92建标失败93标的锁定94开标0投资中1还款中2已还款3	
+     */
+    public static function updateLoanState(OnlineProduct $deal, $state)
+    {
+        if (!array_key_exists($state, Yii::$app->params['deal_status'])) {
+            throw new Exception('无法匹配的标的类型');
+        }
+        $umpLoanState = null;
+        switch ($state) {
+            case 1://预告期的标的要修改联动一侧标的为开标状态
+                $umpLoanState = 0;
+                break;
+            case 2://募集中的标的要修改联动一侧标的为投资中状态
+                $umpLoanState = 1;
+                break;
+            case 5://还款中的标的要修改联动一侧标的为还款中状态
+                $umpLoanState = 2;
+                break;
+            case 6://已还清的标的要修改联动一侧标的为已还款状态
+                $umpLoanState = 3;
+                break;
+        }
+        
+        if (null !== $umpLoanState) {
+            $resp = Yii::$container->get('ump')->updateLoanState($deal->id, $umpLoanState);
+            if (!$resp->isSuccessful()) {
+                throw new Exception('联动状态修改失败');
+            }
+        }
+        $loanval = [
+            'status' => $state, 
+            'sort' => OnlineProduct::STATUS_FOUND === (int)$state ? OnlineProduct::SORT_FOUND : $state * 10,
+        ];
+        if (OnlineProduct::STATUS_FOUND === (int)$state || OnlineProduct::STATUS_FULL === (int)$state) {
+            $loanval['full_time'] = time();
+        }
+        try {
+            OnlineProduct::updateAll($loanval, ['id' => $deal->id]);
+        } catch (Exception $ex) {
+            throw new Exception('标的状态修改失败');
+        }
+    }
 }

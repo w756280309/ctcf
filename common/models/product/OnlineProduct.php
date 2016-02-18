@@ -419,12 +419,22 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
      *
      * @return boolean
      */
-    public static function createLoan(OnlineProduct $deal, Borrower $borrower) {
+    public static function createLoan(OnlineProduct $deal, Borrower $borrower)
+    {
         //如果已经在联动一侧生成。则无法在创立。错误代码将会显示00240213【当前标的状态不可投资，请更新标的状态为开标】,如果商户不存在00060711提示商户[2]未开通
         $resp = \Yii::$container->get('ump')->registerLoan($deal, $borrower);
-        return $resp->isSuccessful() && '92' === $resp->get('project_state');
+        if ($resp->isSuccessful() && '92' === $resp->get('project_state')) {
+            return $resp->get('project_account_id');
+        } else {
+            try {
+                $umpLoan = self::getUmpLoan($deal->id);
+                return $umpLoan->get('project_account_id');
+            } catch (Exception $ex) {
+                return false;
+            }            
+        }
     }
-
+    
     /**
      * 获取联动一侧标的详情
      * @param type $id

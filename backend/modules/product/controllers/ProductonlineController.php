@@ -14,6 +14,8 @@ use common\models\order\OnlineOrder;
 use common\models\user\UserAccount;
 use common\lib\bchelp\BcRound;
 use common\models\booking\BookingLog;
+use P2pl\Borrower;
+use common\service\LoanService;
 
 /**
  * Description of OnlineProduct.
@@ -122,9 +124,22 @@ class ProductonlineController extends BaseController
             ];
         }
         $ids = Yii::$app->request->post('pids');
-        OnlineProduct::updateAll(['online_status' => 1, 'sort' => OnlineProduct::SORT_PRE], 'id in ('.$ids.')');
-
-        return ['result' => 1, 'message' => '上线操作成功'];
+        $loans = OnlineProduct::find()->where('id in ('.$ids.')')->all();
+        $error_loans = '';
+        foreach ($loans as $loan) {
+            $borrow = new Borrower(7601209, null, Borrower::MERCHAT);//借款人测试阶段只能用7601209
+            $resp = OnlineProduct::createLoan($loan, $borrow);
+            if ($resp !== false) {
+                OnlineProduct::updateAll(['epayLoanAccountId' => $resp], 'id='.$loan->id);
+                LoanService::updateLoanState($loan, OnlineProduct::STATUS_PRE);
+            } else {
+                $error_loans .= $loan->sn . ",";
+            }
+        }
+        if ("" !== $error_loans) {
+            $error_loans = ',如下标的联动一侧上线失败' . substr($error_loans, 0, -1);
+        }
+        return ['result' => 1, 'message' => '上线操作成功' . $error_loans];
     }
 
     public function actionProductinfo($sn = null)
