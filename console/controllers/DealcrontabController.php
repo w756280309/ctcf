@@ -14,6 +14,7 @@ use common\models\order\OnlineOrder;
 use common\models\user\UserAccount;
 use common\lib\bchelp\BcRound;
 use common\models\user\MoneyRecord;
+use common\service\LoanService;
 
 class DealcrontabController extends Controller
 {
@@ -42,7 +43,13 @@ class DealcrontabController extends Controller
      */
     public function actionNow()
     {
-        OnlineProduct::updateAll(['status' => 2, 'sort' => OnlineProduct::SORT_NOW], ' online_status=1 and status=1 and start_date<='.time());
+        $loans = OnlineProduct::find()->where(' online_status=1 and status=1 and start_date<=' . time())->all();
+        foreach ($loans as $loan) {
+            $resp = Yii::$container->get('ump')->getLoanInfo($loan->id);
+            if ($resp->isSuccessful() && '0' === $resp->get('project_state')) {
+                $upres = LoanService::updateLoanState($loan, 2);
+            }
+        }
     }
 
     /**
