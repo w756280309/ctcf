@@ -30,7 +30,7 @@ return [
                     'class' => 'yii\log\FileTarget',
                     'levels' => ['trace'],
                     'categories' => ['umplog'],
-                    'logFile' => '@app/runtime/logs/ump/bindcard'. date('Ymd').'.log',
+                    'logFile' => '@app/runtime/logs/ump/ump'. date('Ymd').'.log',
                     'maxFileSize' => 1024*2,
                     'logVars' => ['trace'],
                     'prefix' => function ($message) {
