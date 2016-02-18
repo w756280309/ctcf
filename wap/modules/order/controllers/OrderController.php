@@ -50,7 +50,6 @@ class OrderController extends BaseController
             return $ret;
         }
         $ordercore = new OrderCore();
-
         return $ordercore->createOrder($sn, $money,  $this->user->id);
     }
 

@@ -20,7 +20,9 @@ $(function () {
             } else {
                 toast(this, data.message);
             }
-            location.href = data.tourl;
+            if (data.tourl != undefined) {
+                location.href = data.tourl;
+            }
         });
         xhr.always(function () {
             $buy.attr('disabled', false);

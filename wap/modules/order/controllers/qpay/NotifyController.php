@@ -27,8 +27,7 @@ class NotifyController extends Controller
             return $this->redirect('/user/user/myorder');
         } catch (Exception $ex) {
             Yii::trace($ex->getMessage() .';'. $data['service'] . ":" . http_build_query($data), 'umplog');
-        }
-        
+        }        
     }
 
     /**
