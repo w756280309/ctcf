@@ -23,6 +23,7 @@ class UmpService
     public function register(User $user)
     {
         $resp = Yii::$container->get('ump')->register($user);
+        Yii::trace("开户响应内容:" . $resp->toArray(), 'umplog');
         if (!$resp->isSuccessful()) {
             throw new Exception($resp->get('ret_code') . ':' . $resp->get('ret_msg'));
         }
@@ -35,8 +36,8 @@ class UmpService
             'epayUserId' => $resp->get('user_id'),
             'accountNo' => $resp->get('account_id'),
         ]);
-
-        if (!$epayUser->save()) {
+        
+        if (!$epayUser->save(false)) {
             $transaction->rollBack();
             throw new Exception('开户失败');
         }

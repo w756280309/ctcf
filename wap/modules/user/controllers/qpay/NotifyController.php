@@ -24,7 +24,7 @@ class NotifyController extends Controller
     {
         $data = Yii::$app->request->get();
         //记录日志方便调试
-        \Yii::trace($data['service'] . ":" . http_build_query($data), 'bindcardbackend');
+        \Yii::trace($data['service'] . ":" . http_build_query($data), 'umplog');
         
         if (Yii::$container->get('ump')->verifySign($data) && '0000' === $data['ret_code']) {
             $bind = QpayBinding::findOne(['binding_sn' => $data['order_id']]);
@@ -77,7 +77,7 @@ class NotifyController extends Controller
         }
         
         //记录日志方便调试
-        \Yii::trace("errormsg:【" . $err . $errmsg . "】;" . $data['service'] . ":" . http_build_query($data), 'bindcardbackend');
+        \Yii::trace("errormsg:【" . $err . $errmsg . "】;" . $data['service'] . ":" . http_build_query($data), 'umplog');
 
         $content = Yii::$container->get('ump')->buildQuery([
             'order_id' => $data['order_id'],

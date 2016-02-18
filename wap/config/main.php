@@ -25,11 +25,11 @@ return [
                     'class' => 'yii\log\FileTarget',
                     'levels' => ['error', 'warning'],
                 ],
-                //绑卡日志记录
+                //联动日志记录
                 [
                     'class' => 'yii\log\FileTarget',
                     'levels' => ['trace'],
-                    'categories' => ['bindcardbackend'],
+                    'categories' => ['umplog'],
                     'logFile' => '@app/runtime/logs/ump/bindcard'. date('Ymd').'.log',
                     'maxFileSize' => 1024*2,
                     'logVars' => ['trace'],

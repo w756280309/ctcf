@@ -27,10 +27,10 @@ class QpaynotifyController extends Controller
             if ($ret instanceof RechargeRecord) {
                 return $this->redirect('/user/user');
             } else {
-               Yii::trace('非recharge对象;'. $data['service'] . ":" . http_build_query($data), 'bindcardbackend'); 
+               Yii::trace('非recharge对象;'. $data['service'] . ":" . http_build_query($data), 'umplog'); 
             }
         } catch (Exception $ex) {
-            Yii::trace($ex->getMessage() .';'. $data['service'] . ":" . http_build_query($data), 'bindcardbackend');
+            Yii::trace($ex->getMessage() .';'. $data['service'] . ":" . http_build_query($data), 'umplog');
         }
     }
 
@@ -53,7 +53,7 @@ class QpaynotifyController extends Controller
         } catch (Exception $ex) {
             $errmsg = $ex->getMessage() .';';            
         }
-        Yii::trace($errmsg . $data['service'] . ":" . http_build_query($data), 'bindcardbackend');
+        Yii::trace($errmsg . $data['service'] . ":" . http_build_query($data), 'umplog');
         $content = Yii::$container->get('ump')->buildQuery([
             'order_id' => $data['order_id'],
             'mer_date' => $data['mer_date'],
