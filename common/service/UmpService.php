@@ -22,17 +22,11 @@ class UmpService
      */
     public function register(User $user)
     {
-//        $epayUser = new EpayUser([
-//            'appUserId' => $user->getUserId(),
-//            'clientIp' => ip2long(Yii::$app->request->userIP),
-//        ]);
-//        
-        $transaction = Yii::$app->db->beginTransaction();
         $resp = Yii::$container->get('ump')->register($user);
         if (!$resp->isSuccessful()) {
-            $transaction->rollBack();
             throw new Exception($resp->get('ret_code') . ':' . $resp->get('ret_msg'));
         }
+        $transaction = Yii::$app->db->beginTransaction();
         $epayUser = new EpayUser([
             'appUserId' => $user->getUserId(),
             'clientIp' => ip2long(Yii::$app->request->userIP),

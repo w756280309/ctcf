@@ -16,4 +16,5 @@ $config = yii\helpers\ArrayHelper::merge(
 );
 
 $application = new yii\web\Application($config);
+require(__DIR__ . '/../../common/config/di.php');
 $application->run();

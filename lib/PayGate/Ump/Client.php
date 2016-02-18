@@ -13,7 +13,6 @@ use P2pl\OrderTxInterface;
 use P2pl\QpayBindInterface;
 use common\models\user\RechargeRecord;
 use P2pl\UserInterface;
-use P2pl\ClientOption;
 
 /**
  * 联动优势API调用.
@@ -65,12 +64,13 @@ class Client
      */
     private $version = '1.0';
 
-    public function __construct($merchantId, $clientKeyPath, $umpCertPath)
+    public function __construct($merchantId, $clientKeyPath, $umpCertPath, $options)
     {
         $this->apiUrl = 'http://114.113.159.203:9200/spay/pay/payservice.do';
         $this->merchantId = $merchantId;
         $this->clientKeyPath = $clientKeyPath;
         $this->umpCertPath = $umpCertPath;
+        $this->clientOption = $options;
     }
 
     /**
@@ -147,8 +147,8 @@ class Client
     {
         $data = [
             'service' => 'ptp_mer_bind_card',
-            'ret_url' => ClientOption::BIND_RET_URL,
-            'notify_url' => ClientOption::BIND_NOTIFY_URL,
+            'ret_url' => $this->clientOption['bind_ret_url'],
+            'notify_url' => $this->clientOption['bind_notify_url'],
             'sourceV' => 'HTML5',
             'order_id' => $bind->getTxSn(),
             'mer_date' => $bind->getTxDate(),
@@ -279,8 +279,8 @@ class Client
     {
         $data = [
             'service' => 'mer_recharge_person',
-            'ret_url' => ClientOption::REC_NOTIFY_URL,
-            'notify_url' => ClientOption::REC_RET_URL,
+            'ret_url' => $this->clientOption['rec_ret_url'],
+            'notify_url' => $this->clientOption['rec_notify_url'],
             'sourceV' => 'HTML5',
             'order_id' => $qpay->getTxSn(),
             'mer_date' => $qpay->getTxDate(),
@@ -303,8 +303,8 @@ class Client
     {
         $data = [
             'service' => 'project_transfer',
-            'ret_url' => ClientOption::ORDER_RET_URL,
-            'notify_url' => ClientOption::ORDER_NOTIFY_URL,
+            'ret_url' => $this->clientOption['order_ret_url'],
+            'notify_url' => $this->clientOption['order_notify_url'],
             'sourceV' => 'HTML5',
             'order_id' => $ord->getTxSn(),
             'mer_date' => date('Ymd', $ord->getTxDate()),

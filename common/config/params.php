@@ -66,4 +66,14 @@ return [
     ],
     'ump_mer_recharge_ret_url' => 'http://b.wdjf.njfae.com.cn/user/bpay/brecharge/frontend-notify',
     'ump_mer_recharge_notify_url' => 'http://b.wdjf.njfae.com.cn/user/bpay/brecharge/backend-notify',
+    'ump' => [
+        'notify' => [
+            'bind_notify_url' => "http://1.202.48.153:8001/user/qpay/notify/backend",
+            'bind_ret_url' => "http://1.202.48.153:8001/user/qpay/notify/frontend",
+            'rec_notify_url' => "http://1.202.48.153:8001/user/qpay/qpaynotify/backend",
+            'rec_ret_url' => "http://1.202.48.153:8001/user/qpay/qpaynotify/frontend",
+            'order_notify_url' => "http://1.202.48.153:8001/order/qpay/notify/backend",
+            'order_ret_url' => "http://1.202.48.153:8001/order/qpay/notify/frontend",
+        ],
+    ],
 ];
