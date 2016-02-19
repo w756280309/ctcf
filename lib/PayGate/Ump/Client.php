@@ -13,6 +13,7 @@ use P2pl\OrderTxInterface;
 use P2pl\QpayBindInterface;
 use common\models\user\RechargeRecord;
 use P2pl\UserInterface;
+use P2pl\LoanFkInterface;
 
 /**
  * 联动优势API调用.
@@ -177,8 +178,8 @@ class Client
             'service' => 'mer_bind_project',
             'project_id' => $loan->getLoanId(),
             'project_name' => $loan->getLoanName(),
-            'project_amount' => $loan->getLoanAmount(), // 单位分,最小1,最大9999999999999
-            'project_expire_date' => $loan->getLoanExpireDate(), // 只做格式校验。没有对时间做其他限制
+            'project_amount' => $loan->getLoanAmount() * 100, // 单位分,最小1,最大9999999999999
+            'project_expire_date' => date('Ymd', $loan->getLoanExpireDate()), // 只做格式校验。没有对时间做其他限制
             'loan_user_id' => $borrower->getLoanUserId(), // 会去联动一侧判断用户是否存在[测试上投资用户可以用来融资]
             'loan_acc_type' => (null === $borrower->getLoanAccountType() || 1 === $borrower->getLoanAccountType()) ? '01' : '02', //当为商户号时loan_acc_type 为必填字段，值02
         ];
@@ -318,6 +319,33 @@ class Client
         ];
         $params = $this->buildQuery($data);
         return $this->apiUrl.'?'.$params;
+    }
+    
+    /**
+     * 标的转账【由标的账户转到借款人】
+     * @param LoanFkInterface $fk
+     * @return string
+     */
+    public function loanTransferToMer(LoanFkInterface $fk)
+    {
+        $data = [
+            'service' => 'project_transfer',
+            'ret_url' => $this->clientOption['order_ret_url'],
+            'notify_url' => $this->clientOption['order_notify_url'],
+            'sourceV' => 'HTML5',
+            'order_id' => $fk->getTxSn(),
+            'mer_date' => date('Ymd', $fk->getTxDate()),
+            'project_id' => $fk->getLoanId(),
+            'serv_type' => '53',
+            'trans_action' => '02',
+            'partic_type' => '02',
+            'partic_acc_type' => '02',
+            'partic_user_id' => $fk->getBorrowerId(),
+            'amount' => $fk->getAmount() * 100,
+        ];
+        return $this->doRequest($data);
+//        $params = $this->buildQuery($data);
+//        return $this->apiUrl.'?'.$params;
     }
 
     /**

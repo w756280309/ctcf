@@ -134,7 +134,19 @@ class UmpController extends Controller
         return $this->redirect($resp);
         //var_dump($resp);
     }
+    
+    public function actionMerinfo()
+    {
+        $resp = \Yii::$container->get('ump')->getMerchantInfo(7601209);
+        var_dump($resp);
+    }
 
+    public function actionFk()
+    {
+        $fk = \common\models\order\OnlineFangkuan::findOne(1);
+        $resp = \Yii::$container->get('ump')->loanTransferToMer($fk);
+        var_dump($resp);
+    }
 
     //////////////////
     public $enableCsrfValidation = false; //因为中金post的提交。所以要关闭csrf验证

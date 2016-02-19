@@ -130,7 +130,7 @@ class ProductonlineController extends BaseController
             $borrow = new Borrower(7601209, null, Borrower::MERCHAT);//借款人测试阶段只能用7601209
             $resp = OnlineProduct::createLoan($loan, $borrow);
             if ($resp !== false) {
-                OnlineProduct::updateAll(['epayLoanAccountId' => $resp], 'id='.$loan->id);
+                OnlineProduct::updateAll(['epayLoanAccountId' => $resp, 'online_status' => 1], 'id='.$loan->id);
                 LoanService::updateLoanState($loan, OnlineProduct::STATUS_PRE);
             } else {
                 $error_loans .= $loan->sn . ",";

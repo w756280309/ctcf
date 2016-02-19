@@ -17,7 +17,7 @@ use yii\behaviors\TimestampBehavior;
  * @property string $create_at
  * @property string $updated_at
  */
-class OnlineFangkuan extends \yii\db\ActiveRecord
+class OnlineFangkuan extends \yii\db\ActiveRecord implements \P2pl\LoanFkInterface
 {
     const STATUS_EXAMINED = 1;//审核通过
     const STATUS_DENY = 2;//审核不通过
@@ -79,6 +79,30 @@ class OnlineFangkuan extends \yii\db\ActiveRecord
             'updated_at' => 'Updated At',
         ];
     }
+    public function getTxSn()
+    {
+        return $this->sn;
+    }
+    public function getTxDate()
+    {
+        return time();
+    }
     
+    public function getLoanId()
+    {
+        return $this->online_product_id;
+    }
+    public function getAmount()
+    {
+        return $this->order_money;
+    }
+    
+    public function getBorrowerId()
+    {
+//        $loan = \common\models\product\OnlineProduct::findOne($this->online_product_id);
+//        $borrower = \common\models\user\User::findOne($loan->borrow_uid);
+//        return $borrower->epayUser->epayUserId;
+        return 7601209;//测试阶段
+    }
 
 }

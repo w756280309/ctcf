@@ -395,20 +395,29 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
         return \common\models\contract\ContractTemplate::find()->where($cond)->asArray()->one();
     }
 
-    public function getLoanId() {
+    public function getLoanId()
+    {
         return $this->id;
     }
 
-    public function getLoanName() {
+    public function getLoanName()
+    {
         return $this->title;
     }
 
-    public function getLoanAmount() {
-        return $this->money * 100;
+    public function getLoanAmount()
+    {
+        return $this->money;
+    }
+    
+    public function getLegalAmount()
+    {
+        return $this->funded_money;
     }
 
-    public function getLoanExpireDate() {
-        return date('Ymd', $this->end_date);
+    public function getLoanExpireDate()
+    {
+        return $this->end_date;
     }
 
     /**
