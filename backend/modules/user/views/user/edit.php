@@ -133,6 +133,19 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\we
                 </div>
 
                 <div class="control-group">
+                    <label class="control-label">提现银行信息</label>
+
+                    <div class="controls"><label >开户行：</label>
+                        <?= $form->field($userBank, 'bank_id', ['template' => '{input}', 'inputOptions' => ['autocomplete' => "off", 'class' => 'm-wrap span12']])->dropDownList($bank) ?>
+                        <?= $form->field($userBank, 'bank_id', ['template' => '{error}']); ?>
+                    </div>
+                    <div class="controls"><label >银行卡号：</label>
+                        <?= $form->field($userBank, 'card_number', ['template' => '{input}', 'inputOptions' => ['autocomplete' => "off", 'class' => 'm-wrap span12', 'placeholder' => '银行卡号']])->textInput() ?>
+                        <?= $form->field($userBank, 'card_number', ['template' => '{error}']); ?>
+                    </div>
+                </div>
+
+                <div class="control-group">
                     <label class="control-label">营业执照号</label>
                     <div class="controls">
                         <?= $form->field($model, 'business_licence', ['template' => '{input}', 'inputOptions' => ['autocomplete' => "off", 'class' => 'm-wrap span12', 'placeholder' => '营业执照号']])->textInput() ?>

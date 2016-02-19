@@ -14,6 +14,7 @@ use common\models\order\OnlineOrder;
 use common\models\product\OnlineProduct;
 use common\models\epay\EpayUser;
 use backend\modules\user\core\v1_0\UserAccountBackendCore;
+use common\models\user\UserBanks;
 
 /**
  * UserController implements the CRUD actions for User model.
@@ -164,24 +165,46 @@ class UserController extends BaseController
     {
         $model = $id ? User::findOne($id) : (new User());
         if ($type != 1) {
+            if (empty($id)) {
+                throw new \Exception('The argument id is null.');
+            }
+
             $epayuser = EpayUser::findOne(['appUserId' => $id]);
+            $userBank = UserBanks::findOne(['uid' => $id]);
 
             if (!$epayuser) {
                 throw new \Exception('Epayuser info is null.');
             }
 
             $password = $model->password_hash;
+            $bankId = $userBank->bank_id;
 
             $model->scenario = 'add';
             $model->type = $type;
 
-            if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            $userBank->scenario = 'org_insert';
+
+            $banks = Yii::$app->params['bank'];
+            $bank = ['' => '--请选择--'];
+            foreach ($banks as $key => $val) {
+                $bank[$key] = $val['bankname'];
+            }
+
+            if ($model->load(Yii::$app->request->post())
+                && $userBank->load(Yii::$app->request->post())
+                && $model->validate()
+                && $userBank->validate()) {
                 if (!empty($model->password_hash)) {
                     $model->setPassword($model->password_hash);
                 } else {
                     $model->password_hash = $password;
                 }
-                if ($model->save(false)) {
+
+                if ($bankId !== $userBank->bank_id) {
+                    $userBank->bank_name = $bank[$userBank->bank_id];
+                }
+
+                if ($model->save(false) && $userBank->save(false)) {
                     $this->redirect(['/user/user/listr', 'type' => 2]);
                 }
             }
@@ -201,6 +224,8 @@ class UserController extends BaseController
                 'category' => $type,
                 'model' => $model,
                 'epayuser' => $epayuser,
+                'userBank' => $userBank,
+                'bank' => $bank,
         ]);
     }
 
@@ -209,7 +234,17 @@ class UserController extends BaseController
      */
     public function actionAdd()
     {
-        $model = new User();
+        $banks = Yii::$app->params['bank'];
+        $bank = ['' => '--请选择--'];
+        foreach ($banks as $key => $val) {
+            $bank[$key] = $val['bankname'];
+        }
+
+        $userBank = new UserBanks([
+            'binding_sn' => 'null',
+        ]);
+        $userBank->scenario = 'org_insert';
+
         $epayuser = new EpayUser([
             'appUserId' => '0',
             'epayId' => 1,
@@ -218,11 +253,17 @@ class UserController extends BaseController
             'createTime' => date('Y-m-d H:i:s'),
         ]);
 
+        $model = new User();
         $model->scenario = 'add';
         $model->type = 2;
         $model->usercode = User::create_code('usercode', 'WDJFQY', 6, 4);
 
-        if ($model->load(Yii::$app->request->post()) && $epayuser->load(Yii::$app->request->post()) && $model->validate() && $epayuser->validate()) {
+        if ($model->load(Yii::$app->request->post())
+            && $epayuser->load(Yii::$app->request->post())
+            && $userBank->load(Yii::$app->request->post())
+            && $model->validate()
+            && $epayuser->validate()
+            && $userBank->validate()) {
             $ump = Yii::$container->get('ump');
             $resp = $ump->getMerchantInfo($epayuser->epayUserId);
             if ($resp->isSuccessful()) {
@@ -261,6 +302,17 @@ class UserController extends BaseController
                     throw new \Exception($err['attribute'].': '.$err['message']);
                 }
 
+                //添加提现银行卡信息
+                $userBank->uid = $model->id;
+                $userBank->epayUserId = $epayuser->epayUserId;
+                $userBank->bank_name = $bank[$userBank->bank_id];
+
+                if (!$userBank->save(false)) {
+                    $transaction->rollBack();
+                    $err = $userBank->getSingleError();
+                    throw new \Exception($err['attribute'].': '.$err['message']);
+                }
+
                 $transaction->commit();
                 $this->redirect(['/user/user/listr', 'type' => 2]);
             } else {
@@ -277,6 +329,8 @@ class UserController extends BaseController
                 'category' => 2,
                 'model' => $model,
                 'epayuser' => $epayuser,
+                'userBank' => $userBank,
+                'bank' => $bank,
         ]);
     }
 }

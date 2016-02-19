@@ -2,9 +2,8 @@
 
 namespace common\models\user;
 
-use Yii;
 use yii\behaviors\TimestampBehavior;
-use common\service\SmsService;
+use YiiPlus\Validator\CnMobileValidator;
 
 /**
  * This is the model class for table "user_bank".
@@ -51,6 +50,7 @@ class UserBanks extends \yii\db\ActiveRecord
         return [
             'step_first' => ['uid', 'bank_id', 'account', 'card_number', 'account_type', 'sms', 'bank_name', 'mobile', 'binding_sn'],
             'step_second' => ['sub_bank_name', 'province', 'city'],
+            'org_insert' => ['uid', 'bank_id', 'epayUserId', 'card_number', 'account_type', 'bank_name', 'binding_sn'],
         ];
     }
 
@@ -61,9 +61,10 @@ class UserBanks extends \yii\db\ActiveRecord
     {
         return [
             [['uid', 'bank_id', 'account', 'card_number', 'account_type', 'mobile'], 'required', 'on' => 'step_first'],
-            [['card_number'], 'checkCardNumber', 'on' => 'step_first'],
-            [['card_number'], 'unique', 'message' => '该银行卡号已被占用', 'on' => 'step_first'],
-            ['mobile', 'match', 'pattern' => '/^(13[0-9]|14[0-9]|15[0-9]|17[0-9]|18[0-9])\d{8}$/', 'message' => '手机号格式错误', 'on' => 'step_first'],
+            [['bank_id', 'card_number'], 'required', 'on' => 'org_insert'],
+            [['card_number'], 'checkCardNumber', 'on' => ['step_first', 'org_insert']],
+            [['card_number'], 'unique', 'message' => '该银行卡号已被占用', 'on' => ['step_first', 'org_insert']],
+            [['mobile'], CnMobileValidator::className(), 'on' => 'step_first'],
             [['sub_bank_name', 'province', 'city'], 'required', 'on' => 'step_second'],
             [['uid', 'account_type'], 'integer'],
             [['bank_id', 'bank_name', 'sub_bank_name'], 'string', 'max' => 255],

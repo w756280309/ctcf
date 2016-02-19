@@ -9,6 +9,7 @@ use yii\web\IdentityInterface;
 use P2pl\Borrower;
 use common\models\epay\EpayUser;
 use P2pl\UserInterface;
+use YiiPlus\Validator\CnMobileValidator;
 
 /**
  * This is the model class for table "user".
@@ -90,7 +91,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface, UserInterf
             $code .= '0';
         }
 
-        return $code . $count;
+        return $code.$count;
     }
 
     /**
@@ -116,7 +117,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface, UserInterf
             $code .= '0';
         }
 
-        return $pre . $code . $count;
+        return $pre.$code.$count;
     }
 
     /**
@@ -173,7 +174,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface, UserInterf
         return [
             'add' => ['type', 'username', 'password_hash', 'usercode', 'mobile', 'email', 'real_name', 'idcard', 'org_name', 'org_code', 'status', 'auth_key', 'user_pass', 'in_time', 'cat_id', 'law_master', 'law_master_idcard', 'law_mobile', 'shui_code', 'business_licence', 'tel',
             ],
-            'edit' => ['id', 'type', 'username', 'mobile', 'email', 'real_name', 'idcard', 'org_name', 'org_code', 'status', 'auth_key', 'user_pass', 'in_time', 'cat_id', 'law_master', 'law_master_idcard', 'law_mobile', 'shui_code', 'business_licence', 'tel', 'passwordLastUpdatedTime'
+            'edit' => ['id', 'type', 'username', 'mobile', 'email', 'real_name', 'idcard', 'org_name', 'org_code', 'status', 'auth_key', 'user_pass', 'in_time', 'cat_id', 'law_master', 'law_master_idcard', 'law_mobile', 'shui_code', 'business_licence', 'tel', 'passwordLastUpdatedTime',
             ],
             'signup' => ['type', 'modile', 'password_hash', 'auth_key', 'usercode'],
             'idcardrz' => ['real_name', 'idcard', 'idcard_status'],
@@ -201,13 +202,13 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface, UserInterf
                 'string',
                 'length' => [5, 16],
             ],
-            [['mobile', 'username'], 'required'],
+            [['mobile', 'username', 'real_name', 'idcard'], 'required'],
             [['mobile'], 'unique', 'message' => '该手机号码已被占用，请重试', 'on' => 'add'],
             //身份证号码为15位或者18位，15位时全为数字，18位前17位为数字，最后一位是校验位，可能为数字或字符X
             [['idcard', 'law_master_idcard'], 'match', 'pattern' => '/(^\d{15}$)|(^\d{17}(\d|X)$)/', 'message' => '{attribute}身份证号码不正确,必须为15位或者18位'],
             [['idcard', 'law_master_idcard'], 'checkIdNumber'],
             [['idcard_status', 'email_status', 'mobile_status'], 'default', 'value' => 0],
-            [['mobile', 'new_mobile'], 'match', 'pattern' => '/^(13[0-9]|14[0-9]|15[0-9]|17[0-9]|18[0-9])\d{8}$/', 'message' => '手机号格式错误'],
+            [['mobile', 'new_mobile'], CnMobileValidator::className()],
             [['mobile'], 'string', 'max' => 11],
             ['usercode', 'unique', 'message' => '会员编号已占用'],
             ['email', 'unique', 'message' => 'Email已占用'],
@@ -242,11 +243,11 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface, UserInterf
         $tmpStr = '';
         if (strlen($num) == 15) {
             $tmpStr = substr($num, 6, 6);
-            $tmpStr = '19' . $tmpStr;
-            $tmpStr = substr($tmpStr, 0, 4) . '-' . substr($tmpStr, 4, 2) . '-' . substr($tmpStr, 6);
+            $tmpStr = '19'.$tmpStr;
+            $tmpStr = substr($tmpStr, 0, 4).'-'.substr($tmpStr, 4, 2).'-'.substr($tmpStr, 6);
         } else {
             $tmpStr = substr($num, 6, 8);
-            $tmpStr = substr($tmpStr, 0, 4) . '-' . substr($tmpStr, 4, 2) . '-' . substr($tmpStr, 6);
+            $tmpStr = substr($tmpStr, 0, 4).'-'.substr($tmpStr, 4, 2).'-'.substr($tmpStr, 6);
         }
 
         $reDate = '/(([0-9][9][2-9][0-9])-(((0[13578]|1[02])-(0[1-9]|[12][0-9]|3[01]))|((0[469]|11)-(0[1-9]|[12][0-9]|30))|(02-(0[1-9]|[1][0-9]|2[0-8]))))|((([0-9]{2})(0[48]|[2468][048]|[13579][26])|((0[48]|[2468][048]|[3579][26])00))-02-29)/';
@@ -492,7 +493,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface, UserInterf
      */
     public function generatePasswordResetToken()
     {
-        $this->password_reset_token = Yii::$app->security->generateRandomString() . '_' . time();
+        $this->password_reset_token = Yii::$app->security->generateRandomString().'_'.time();
     }
 
     /**
@@ -533,7 +534,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface, UserInterf
         //选出编号中的字符
         $code = substr($usercode, 0, $length);
         //取出的数字，加一后，在左边填充成4为，然后与字符相加
-        return $code . str_pad($num, $pad_length, 0, STR_PAD_LEFT);
+        return $code.str_pad($num, $pad_length, 0, STR_PAD_LEFT);
     }
 
     /**
@@ -619,8 +620,11 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface, UserInterf
 
     /**
      * 返回联动借款人对象
+     *
      * @param type $user
+     *
      * @return Borrower
+     *
      * @throws Exception
      */
     public static function ensureBorrower($user)
@@ -628,6 +632,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface, UserInterf
         if (self::USER_TYPE_ORG !== (int) $user->type) {
             throw new Exception('不是融资人');
         }
+
         return new Borrower($user->id);
     }
 
@@ -638,7 +643,6 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface, UserInterf
     {
         return $this->hasOne(EpayUser::className(), ['appUserId' => 'id']);
     }
-
 
     public function getUserId()
     {
@@ -659,6 +663,4 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface, UserInterf
     {
         return $this->mobile;
     }
-
-
 }

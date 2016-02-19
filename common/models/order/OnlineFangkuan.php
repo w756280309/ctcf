@@ -24,6 +24,8 @@ class OnlineFangkuan extends \yii\db\ActiveRecord implements \P2pl\LoanFkInterfa
     const STATUS_EXAMINED = 1;//审核通过
     const STATUS_DENY = 2;//审核不通过
     const STATUS_FANGKUAN = 3;//放款
+    const STATUS_TIXIAN_APPLY = 4;//提现申请发出
+    const STATUS_TIXIAN_SUCC = 5;//提现成功
 
     public static function createSN($pre = 'fk')
     {
@@ -65,7 +67,7 @@ class OnlineFangkuan extends \yii\db\ActiveRecord implements \P2pl\LoanFkInterfa
             [['order_money', 'fee'], 'number'],
             [['uid', 'status', 'admin_id', 'online_product_id'], 'integer'],
             [['sn'], 'string', 'max' => 30],
-             [['remark'], 'string', 'max' => 100],
+            [['remark'], 'string', 'max' => 100],
         ];
     }
 
