@@ -296,7 +296,7 @@ class Client
     }
 
     /**
-     * 4.3.3 标的转
+     * 4.3.3 标的转账
      * 用户投标
      * @param OrderTxInterface $ord
      */
@@ -322,7 +322,7 @@ class Client
     }
     
     /**
-     * 标的转账【由标的账户转到借款人】
+     * 4.3.3 标的转账【由标的账户转到借款人同步请求】
      * @param LoanFkInterface $fk
      * @return string
      */
@@ -330,8 +330,6 @@ class Client
     {
         $data = [
             'service' => 'project_transfer',
-            'ret_url' => $this->clientOption['order_ret_url'],
-            'notify_url' => $this->clientOption['order_notify_url'],
             'sourceV' => 'HTML5',
             'order_id' => $fk->getTxSn(),
             'mer_date' => date('Ymd', $fk->getTxDate()),
@@ -344,8 +342,29 @@ class Client
             'amount' => $fk->getAmount() * 100,
         ];
         return $this->doRequest($data);
-//        $params = $this->buildQuery($data);
-//        return $this->apiUrl.'?'.$params;
+    }
+    
+    /**
+     * 4.3.3 标的转账【用于流标同步请求】
+     * @param OrderTxInterface $ord
+     * @return response
+     */
+    public function loanTransferToLender(OrderTxInterface $ord)
+    {
+        $data = [
+            'service' => 'project_transfer',
+            'sourceV' => 'HTML5',
+            'order_id' => $ord->getTxSn(),
+            'mer_date' => date('Ymd', $ord->getTxDate()),
+            'project_id' => $ord->getLoanId(),
+            'serv_type' => '51',
+            'trans_action' => '02',
+            'partic_type' => '01',
+            'partic_acc_type' => '01',
+            'partic_user_id' => $ord->getEpayUserId(),
+            'amount' => $ord->getAmount() * 100,
+        ];
+        return $this->doRequest($data);
     }
 
     /**

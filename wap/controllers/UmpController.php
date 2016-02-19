@@ -147,6 +147,13 @@ class UmpController extends Controller
         $resp = \Yii::$container->get('ump')->loanTransferToMer($fk);
         var_dump($resp);
     }
+    
+    public function actionCancelorder()
+    {
+        $ord = OrdTx::findOne(7);
+        $resp = \Yii::$container->get('ump')->loanTransferToLender($ord);
+        var_dump($resp);
+    }
 
     //////////////////
     public $enableCsrfValidation = false; //因为中金post的提交。所以要关闭csrf验证

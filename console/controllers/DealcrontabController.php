@@ -53,10 +53,11 @@ class DealcrontabController extends Controller
     }
 
     /**
-     * 定时 修改募集期状态为流标状态
+     * 定时 修改募集期状态为流标状态【取消】
      */
     public function actionLiu()
     {
+        exit;
         $product = OnlineProduct::find()->where(['del_status' => OnlineProduct::STATUS_USE, 'online_status' => OnlineProduct::STATUS_ONLINE, 'status' => OnlineProduct::STATUS_NOW])->andFilterWhere(['<', 'end_date', time()])->all();
         $bc = new BcRound();
         bcscale(14);
