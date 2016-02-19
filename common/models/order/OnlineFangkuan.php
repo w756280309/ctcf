@@ -2,8 +2,8 @@
 
 namespace common\models\order;
 
-use Yii;
 use yii\behaviors\TimestampBehavior;
+
 /**
  * This is the model class for table "online_fangkuan".
  *
@@ -12,57 +12,65 @@ use yii\behaviors\TimestampBehavior;
  * @property string $order_money
  * @property string $fee
  * @property string $uid
- * @property integer $status
+ * @property int $status
  * @property string $admin_id
  * @property string $create_at
  * @property string $updated_at
  */
 class OnlineFangkuan extends \yii\db\ActiveRecord implements \P2pl\LoanFkInterface
 {
+    use \YiiPlus\Model\ErrorExTrait;
+
     const STATUS_EXAMINED = 1;//审核通过
     const STATUS_DENY = 2;//审核不通过
     const STATUS_FANGKUAN = 3;//放款
-    
-    public static function createSN($pre = 'fk'){
+
+    public static function createSN($pre = 'fk')
+    {
         $pre_val = 'FK';
-        list($usec, $sec) = explode(" ", microtime());
-        $v = ((float)$usec + (float)$sec);
-        
-        list($usec, $sec) = explode(".", $v);
-        $date = date('ymdHisx' . rand(1000, 9999),$usec);
+        list($usec, $sec) = explode(' ', microtime());
+        $v = ((float) $usec + (float) $sec);
+
+        list($usec, $sec) = explode('.', $v);
+        $date = date('ymdHisx'.rand(1000, 9999), $usec);
+
         return $pre_val.str_replace('x', $sec, $date);
-    }    
+    }
+
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public static function tableName()
     {
         return 'online_fangkuan';
     }
+
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
-    public function behaviors() {
+    public function behaviors()
+    {
         return [
             TimestampBehavior::className(),
         ];
     }
+
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function rules()
     {
         return [
             [['sn', 'admin_id'], 'required'],
             [['order_money', 'fee'], 'number'],
-            [['uid', 'status', 'admin_id','online_product_id'], 'integer'],
+            [['uid', 'status', 'admin_id', 'online_product_id'], 'integer'],
             [['sn'], 'string', 'max' => 30],
-             [['remark'], 'string', 'max' => 100]
+             [['remark'], 'string', 'max' => 100],
         ];
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function attributeLabels()
     {
@@ -79,6 +87,7 @@ class OnlineFangkuan extends \yii\db\ActiveRecord implements \P2pl\LoanFkInterfa
             'updated_at' => 'Updated At',
         ];
     }
+
     public function getTxSn()
     {
         return $this->sn;
@@ -87,7 +96,7 @@ class OnlineFangkuan extends \yii\db\ActiveRecord implements \P2pl\LoanFkInterfa
     {
         return time();
     }
-    
+
     public function getLoanId()
     {
         return $this->online_product_id;
@@ -96,7 +105,7 @@ class OnlineFangkuan extends \yii\db\ActiveRecord implements \P2pl\LoanFkInterfa
     {
         return $this->order_money;
     }
-    
+
     public function getBorrowerId()
     {
 //        $loan = \common\models\product\OnlineProduct::findOne($this->online_product_id);
@@ -104,5 +113,4 @@ class OnlineFangkuan extends \yii\db\ActiveRecord implements \P2pl\LoanFkInterfa
 //        return $borrower->epayUser->epayUserId;
         return 7601209;//测试阶段
     }
-
 }
