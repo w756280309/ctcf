@@ -5,6 +5,7 @@ namespace common\models\user;
 use common\utils\TxUtils;
 use yii\behaviors\TimestampBehavior;
 use common\lib\bchelp\BcRound;
+use common\models\user\UserAccount;
 
 /**
  * This is the model class for table "draw_record" 提现记录表.
@@ -92,23 +93,24 @@ class DrawRecord extends \yii\db\ActiveRecord implements \P2pl\WithdrawalInterfa
             [['money'], 'number', 'min' => 1, 'max' => 10000000],
             [['fee'], 'number'],
             [['sn', 'bank_id', 'bank_name', 'bank_account'], 'string', 'max' => 30],
-            ['money','checkMoney'],
         ];
     }
 
-    public function checkMoney($attribute, $params) {
-        if (User::USER_TYPE_PERSONAL === $this->user->type) {
-            if (bccomp($this->user->lendAccount->available_balance, $this->$attribute) < 0) {
-                $this->addError($attribute, "超出可提现金额");
-            }
-            if (bccomp(\Yii::$app->params['drawFee'], 0) > 0) {
-                if (0 === bccomp($this->$attribute, \Yii::$app->params['drawFee']) && 0 === bccomp($this->$attribute, $this->user->lendAccount->available_balance)) {
-                    $this->addError($attribute, "不足提现手续费");
-                }
-            }
+    /**
+     * 计算可提现金额是否充足
+     * @param UserAccount $account
+     * @param type $money
+     * @param type $fee
+     * @return type
+     * @throws \Exception
+     */
+    public static function checkMoney(UserAccount $account, $money, $fee = 0) {
+        if (bccomp($account->available_balance, bcadd($money, $fee)) < 0) {
+            throw new \Exception('超出可提现金额');
         }
-        return true;
+        return $money;
     }
+    
     /**
      * Validates the password.
      * This method serves as the inline validation for password.

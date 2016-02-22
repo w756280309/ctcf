@@ -21,6 +21,7 @@ class DrawManager
      */
     public static function initDraw(UserAccount $account, $money, $fee = 0)
     {
+        $money = DrawRecord::checkMoney($account, $money, $fee);
         $user = $account->user;
         $ubank = $user->qpay;
         $draw = new DrawRecord();
@@ -42,7 +43,7 @@ class DrawManager
         if ($draw->validate() && $draw->save(false)) {
             return $draw;
         } else {
-            return false;
+            throw new \Exception('提现申请失败');
         }        
     }
 
@@ -135,7 +136,7 @@ class DrawManager
                     $transaction->rollBack();
                 }
             } else if ((int)$resp->get('tran_state') === 3 || (int)$resp->get('tran_state') === 5 || (int)$resp->get('tran_state') === 15) {//失败的代码
-                self::audit($draw, DrawRecord::STATUS_DENY);
+                self::cancel($draw, DrawRecord::STATUS_DENY);
             }
         }
     }
@@ -147,7 +148,7 @@ class DrawManager
      * @return DrawRecord
      * @throws DrawException
      */
-    public static function audit(DrawRecord $draw, $status) {        
+    public static function cancel(DrawRecord $draw, $status) {        
         $user = $draw->user;
         $account = $user->type == 1 ? $user->lendAccount : $user->borrowAccount;
         

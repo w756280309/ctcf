@@ -221,12 +221,12 @@ class UserbankController extends BaseController
         $draw = new DrawRecord();
         $draw->uid = $uid;
         if ($draw->load(Yii::$app->request->post()) && $draw->validate()) {
-            $drawres = DrawManager::initDraw($user_acount, $draw->money, \Yii::$app->params['drawFee']);
-            if (false !== $drawres) {
-               $next = Yii::$container->get('ump')->initDraw($drawres);
-               return ['code' => 0, 'message' => '', 'tourl' => $next];
-            } else {
-                $draw->addError('money', '生成提现记录失败');
+            try {
+                $drawres = DrawManager::initDraw($user_acount, $draw->money, \Yii::$app->params['drawFee']);
+                $next = Yii::$container->get('ump')->initDraw($drawres);
+                return ['code' => 0, 'message' => '', 'tourl' => $next];
+            } catch (\Exception $ex) {
+                $draw->addError('money', $ex->getMessage());
             }
         }
 
