@@ -44,10 +44,10 @@ class Client
      * @var \GuzzleHttp\Client
      */
     private $httpClient;
-    
+
     /**
      *client配置
-     * @var type 
+     * @var type
      */
     private $clientOption;
 
@@ -164,7 +164,7 @@ class Client
         $params = $this->buildQuery($data);
         return $this->apiUrl.'?'.$params;
     }
-    
+
     /**
      * 申请提现
      * @param WithdrawalInterface $draw
@@ -184,7 +184,7 @@ class Client
             'amount' => $draw->getAmount() * 100,
             'com_amt_type' => 1//前向手续费：交易方承担
         ];
-        $params = $this->buildQuery($data);        
+        $params = $this->buildQuery($data);
         return $this->apiUrl.'?'.$params;
     }
 
@@ -344,7 +344,7 @@ class Client
         $params = $this->buildQuery($data);
         return $this->apiUrl.'?'.$params;
     }
-    
+
     /**
      * 4.3.3 标的转账【由标的账户转到借款人同步请求】
      * @param LoanFkInterface $fk
@@ -367,7 +367,7 @@ class Client
         ];
         return $this->doRequest($data);
     }
-    
+
     /**
      * 4.3.3 标的转账【用于流标同步请求】
      * @param OrderTxInterface $ord
@@ -453,7 +453,29 @@ class Client
 
         return $this->doRequest($data);
     }
-    
+
+    /**
+     * 4.4.6 融资用户提现申请(商户->平台)
+     * @param type $txSn 商户订单号
+     * @param type $txDate 商户订单日期
+     * @param type $merId 提现企业资金账户托管平台商户号
+     * @param type $amount 提现金额
+     */
+    public function orgDrawApply($txSn, $txDate, $merId, $amount)
+    {
+        $data = [
+            'service' => 'mer_withdrawals',
+            'notify_url' => 'http://b.wdjf.com:8080/order/onlinefangkuan/notify',
+            'order_id' => $txSn,
+            'mer_date' => date('Ymd', $txDate), //商户生成订单的日期，格式YYYYMMDD
+            'withdraw_mer_id' => $merId,
+            'amount' => $amount * 100, //单位为分
+            'com_amt_type' => '1',
+        ];
+
+        return $this->doRequest($data);
+    }
+
     /**
      * 获取对账单（暂限定为标的交易）.
      *

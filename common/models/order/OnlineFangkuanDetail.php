@@ -20,7 +20,10 @@ use yii\behaviors\TimestampBehavior;
  */
 class OnlineFangkuanDetail extends \yii\db\ActiveRecord
 {
-    public static function createSN($pre = 'fkd'){
+    use \YiiPlus\Model\ErrorExTrait;
+
+    public static function createSN($pre = 'fkd')
+    {
         $pre_val = Yii::$app->params['bill_prefix'][$pre];
         list($usec, $sec) = explode(" ", microtime());
         $v = ((float)$usec + (float)$sec);
@@ -28,7 +31,8 @@ class OnlineFangkuanDetail extends \yii\db\ActiveRecord
         list($usec, $sec) = explode(".", $v);
         $date = date('ymdHisx' . rand(1000, 9999),$usec);
         return $pre_val.str_replace('x', $sec, $date);
-    }    
+    }
+
     /**
      * @inheritdoc
      */
@@ -36,6 +40,7 @@ class OnlineFangkuanDetail extends \yii\db\ActiveRecord
     {
         return 'online_fangkuan_detail';
     }
+
     /**
      * @inheritdoc
      */
@@ -44,6 +49,7 @@ class OnlineFangkuanDetail extends \yii\db\ActiveRecord
             TimestampBehavior::className(),
         ];
     }
+
     /**
      * @inheritdoc
      */

@@ -11,6 +11,8 @@ use common\models\order\OnlineFangkuan;
 use common\models\adminuser\Admin;
 use backend\modules\order\service\FkService;
 use backend\modules\order\core\FkCore;
+use common\models\draw\DrawManager;
+use common\models\user\DrawRecord;
 use yii\web\Response;
 
 /**
@@ -81,5 +83,92 @@ class OnlinefangkuanController extends BaseController
         $ret = $fkcore->createFk(Yii::$app->user->id, $pid, $status);
 
         return $ret;
+    }
+
+    /**
+     * 融资会员提现
+     * @param type $pid
+     * @return type
+     */
+    public function actionInit($pid)
+    {
+        $onlineProduct = OnlineProduct::findOne($pid);
+
+        if (!$onlineProduct) {
+            return ['res' => 0, 'msg' => '标的信息不存在'];
+        }
+
+        if (OnlineProduct::STATUS_HUAN !== $onlineProduct->status) {
+            return ['res' => 0, 'msg' => '当前标的状态不允许提现操作'];
+        }
+
+        $onlineFangkuan = OnlineFangkuan::findOne(['online_product_id' => $pid]);
+
+        if (!$onlineFangkuan) {
+            return ['res' => 0, 'msg' => '放款记录不存在'];
+        }
+
+        if (OnlineFangkuan::STATUS_FANGKUAN !== $onlineFangkuan->status) {
+            return ['res' => 0, 'msg' => '当前放款状态不允许提现操作'];
+        }
+
+        $user = User::findOne($onlineFangkuan->uid);
+        if (!$user) {
+            throw new \Exception('The borrower info is not existed.');
+        }
+
+        $draw = DrawManager::init($user, $onlineFangkuan->order_money, $onlineFangkuan->fee);
+
+        if (!$draw) {
+            return ['res' => 0, 'msg' => '提现申请失败'];
+        }
+
+        $ump = Yii::$container->get('ump');
+
+        $resp = $ump->orgWithdrawApply($draw->sn, $draw->created_at, $user->epayuser->epayUserId, $draw->money);
+
+        if ($resp->isSuccessful()) {
+            DrawManager::ackDraw($draw);
+        } else {
+            return ['res' => 0, 'msg' => $resp->get('ret_code').$resp->get('ret_msg')];
+        }
+
+        return ['res' => 0, 'msg' => '提现申请成功'];
+    }
+
+    /**
+     * 融资会员提现后台通知
+     */
+    public function actionNotify()
+    {
+        echo "aaaaa";exit;
+        $data = Yii::$app->request->get();
+        $ump = Yii::$container->get('ump');
+        $err = '0000';
+        $errMsg = 'No err';
+
+        if ($ump->verifySign($data)
+            && '0000' === $data['ret_code']
+            && '4' === $data['trade_state']) {
+            $draw = DrawRecord::findOne(['sn' => $data['order_id']]);
+
+            if (!draw) {
+                $err = '9999';
+                $errMsg = '找不到对应的提现记录';
+            }
+
+            DrawManager::commitDraw($draw);//确定提现完成 最终态
+        } else {
+            $err = '9999';
+        }
+
+        $content = $ump->buildQuery([
+            'order_id' => $data['order_id'],
+            'mer_date' => $data['mer_date'],
+            'reg_code' => $err,
+        ]);
+
+        $this->layout = false;
+        return $this->render('@borrower/modules/user/views/recharge/recharge_notify.php', ['content' => $content]);
     }
 }
