@@ -64,12 +64,6 @@ $this->registerJsFile('/js/qpay.js', ['position' => 1]);
         <div class="col-xs-2 xian"><img class='you' src="/images/jiantou.png" alt=""/></div>
     </div>
 
-    <div class="row kahao">
-        <div class="col-xs-3 xian">手机号</div>
-        <div class="col-xs-8 xian"><input id="phone" type="text" name="QpayBinding[mobile]" placeholder="请输入银行预留的手机号码" maxlength="11"/></div>
-        <div class="col-xs-1 xian col"></div>
-    </div>
-
     <!--限额提醒-->
     <div class="row tixing">
         <div class="col-xs-10">

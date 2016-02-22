@@ -5,6 +5,9 @@ namespace common\service;
 use Yii;
 use yii\web\Response;
 use common\models\user\User;
+use common\models\user\QpayBinding;
+use common\models\user\UserBanks;
+use yii\helpers\ArrayHelper;
 
 /**
  * Desc 主要用于充值提现流程规则的校验
@@ -56,7 +59,28 @@ class BankService
         }
 
         if (($cond & self::BINDBANK_VALIDATE_N) && empty($user_bank)) {
-            return ['tourl' => '/user/userbank/bindbank', 'code' => 1, 'message' => '您未绑定银行卡'];
+            $umpresp = Yii::$container->get('ump')->getUserInfo($user->epayUser->epayUserId);
+            try {
+                if ('' !== $umpresp->get('card_id')) {//如果异常代表没有绑卡
+                    $bind = QpayBinding::findOne(['uid' => $user->id]);
+                    if (null === $bind) {
+                        throw new \Exception('没有申请绑卡');
+                    } else {
+                        $bind->status = 1;
+                        $userBanks = new UserBanks(ArrayHelper::toArray($bind));
+                        $userBanks->setScenario('step_first');
+                        $transaction = Yii::$app->db->beginTransaction();
+                        if ($userBanks->save() && $bind->save()) {
+                            $transaction->commit();
+                        } else {
+                            $transaction->rollBack();
+                            throw new \Exception();
+                        }
+                    }
+                }
+            } catch (\Exception $ex) {
+                return ['tourl' => '/user/userbank/bindbank', 'code' => 1, 'message' => '您未绑定银行卡'];
+            }           
         }
 
 //        if (($cond & self::CHARGEPWD_VALIDATE_N) && empty($user->trade_pwd)) {

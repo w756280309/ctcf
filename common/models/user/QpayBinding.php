@@ -25,7 +25,7 @@ class QpayBinding extends UserBanks implements \P2pl\QpayBindInterface
     public function rules()
     {
         return [
-            [['uid', 'bank_id', 'account', 'card_number', 'account_type', 'mobile'], 'required'],
+            [['uid', 'bank_id', 'account', 'card_number', 'account_type'], 'required'],
             [['card_number'], 'YiiPlus\Validator\CnCardNoValidator'],
             ['mobile', 'match', 'pattern' => '/^(13[0-9]|14[0-9]|15[0-9]|17[0-9]|18[0-9])\d{8}$/', 'message' => '手机号格式错误'],
             [['uid', 'account_type'], 'integer'],

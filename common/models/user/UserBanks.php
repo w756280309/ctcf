@@ -60,7 +60,7 @@ class UserBanks extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['uid', 'bank_id', 'account', 'card_number', 'account_type', 'mobile'], 'required', 'on' => 'step_first'],
+            [['uid', 'bank_id', 'account', 'card_number', 'account_type'], 'required', 'on' => 'step_first'],
             [['bank_id', 'card_number'], 'required', 'on' => 'org_insert'],
             [['card_number'], 'checkCardNumber', 'on' => ['step_first', 'org_insert']],
             [['card_number'], 'unique', 'message' => '该银行卡号已被占用', 'on' => ['step_first', 'org_insert']],

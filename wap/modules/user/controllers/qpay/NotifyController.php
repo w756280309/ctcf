@@ -29,7 +29,11 @@ class NotifyController extends Controller
         if (Yii::$container->get('ump')->verifySign($data) && '0000' === $data['ret_code']) {
             $bind = QpayBinding::findOne(['binding_sn' => $data['order_id']]);
             if (null !== $bind) {
-                return $this->redirect('/user/userbank/accept?ret=success');
+                if (true === self::processing($bind)) {
+                    return $this->redirect('/user/userbank/accept?ret=success');
+                } else {
+                    return $this->redirect('/user/userbank/accept');
+                }                
             } else {
                 throw new \yii\web\NotFoundHttpException($data['order_id'] . ':无法找到申请数据');
             }
@@ -59,15 +63,9 @@ class NotifyController extends Controller
             $bind = QpayBinding::findOne(['binding_sn' => $data['order_id']]);
             if (null !== $bind) {
                 if (null === UserBanks::findOne(['binding_sn' => $data['order_id']])) {
-                    $bind->status = 1;
-                    $userBanks = new UserBanks(ArrayHelper::toArray($bind));
-                    $userBanks->setScenario('step_first');
-                    $transaction = Yii::$app->db->beginTransaction();
-                    if ($userBanks->save() && $bind->save()) {
-                        $transaction->commit();
+                    if (true === self::processing($bind)) {
                         $err = '0000';
                     } else {
-                        $transaction->rollBack();
                         $errmsg = "数据修改失败";
                     }
                 }              
@@ -86,5 +84,25 @@ class NotifyController extends Controller
         ]);
         
         return $this->render('@borrower/modules/user/views/recharge/recharge_notify.php', ['content' => $content]);
+    }
+    
+    public static function processing(QpayBinding $bind)
+    {
+        if(1 === (int)$bind->status) {
+            return true;
+        }
+        if (null === UserBanks::findOne(['binding_sn' => $bind->binding_sn])) {
+            $bind->status = 1;
+            $userBanks = new UserBanks(ArrayHelper::toArray($bind));
+            $userBanks->setScenario('step_first');
+            $transaction = Yii::$app->db->beginTransaction();
+            if ($userBanks->save() && $bind->save()) {
+                $transaction->commit();
+                return true;
+            } else {
+                $transaction->rollBack();
+                return false;
+            }
+        }
     }
 }
