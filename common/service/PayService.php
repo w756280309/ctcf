@@ -5,7 +5,6 @@ namespace common\service;
 use Yii;
 use common\models\product\OnlineProduct;
 use common\core\OrderAccountCore;
-use common\models\user\UserBanks;
 
 /**
  * Desc 主要用于购买标的环节的验证
@@ -119,6 +118,11 @@ class PayService
             return ['code' => self::ERROR_ID_SET,  'message' => '账户已被冻结', 'tourl' => '/site/usererror'];
         }
        
+        $bankret = BankService::checkKuaijie($user);
+        if (0 !== $bankret['code']) {
+            return $bankret;
+        }
+        
         $deal = OnlineProduct::find()->where(['sn' => $sn])->one();
         $this->cdeal = $deal;
         $time = time();
@@ -149,14 +153,13 @@ class PayService
      *
      * @return type
      */
-    public function checkAllowPay($sn = null, $money = null)
+    public function checkAllowPay($user, $sn = null, $money = null)
     {
         $commonret = $this->checkCommonCond($sn);
         if ($commonret !== true) {
             return $commonret;
         }
-        $user = Yii::$app->user->getIdentity();
-        
+                
         if (empty($money)) {
             return ['code' => self::ERROR_MONEY_FORMAT,  'message' => self::getErrorByCode(self::ERROR_MONEY_FORMAT)];
         }
@@ -164,6 +167,9 @@ class PayService
             return ['code' => self::ERROR_MONEY_FORMAT,  'message' => self::getErrorByCode(self::ERROR_MONEY_FORMAT)];
         }
 
+        if (bccomp($user->lendAccount->available_balance, $money) < 0) {
+            return ['code' => 1,  'message' => '金额不足'];
+        }
         $oac = new OrderAccountCore();
         $orderbalance = $oac->getOrderBalance($this->cdeal->id);
         if (bccomp($orderbalance, 0) == 0) {

@@ -45,7 +45,7 @@ class OrderController extends BaseController
         $money = \Yii::$app->request->post('money');
         $trade_pwd = \Yii::$app->request->post('trade_pwd');
         $pay = new PayService(PayService::REQUEST_AJAX);
-        $ret = $pay->checkAllowPay($sn, $money);
+        $ret = $pay->checkAllowPay($this->user, $sn, $money);
         if ($ret['code'] != PayService::ERROR_SUCCESS) {
             return $ret;
         }
