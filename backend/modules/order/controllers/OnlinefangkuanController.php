@@ -82,6 +82,10 @@ class OnlinefangkuanController extends BaseController
         $fkcore = new FkCore();
         $ret = $fkcore->createFk(Yii::$app->user->id, $pid, $status);
 
+        if (1 === $ret['res']) {
+            return $this->actionInit($pid);
+        }
+
         return $ret;
     }
 
