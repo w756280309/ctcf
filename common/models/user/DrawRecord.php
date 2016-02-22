@@ -9,7 +9,7 @@ use common\lib\bchelp\BcRound;
 /**
  * This is the model class for table "draw_record" 提现记录表.
  */
-class DrawRecord extends \yii\db\ActiveRecord
+class DrawRecord extends \yii\db\ActiveRecord implements \P2pl\WithdrawalInterface
 {
     public $drawpwd;
     private $_user = false;
@@ -22,35 +22,35 @@ class DrawRecord extends \yii\db\ActiveRecord
     const STATUS_LAUNCH_BATCHPAY = 4; //已放款,此时生成批量代付批次
     const STATUS_DEAL_FINISH = 5; //已经处理
     const STATUS_DENY = 11; //提现驳回
-
-    /**
-     * 发起提现，TODO：去掉user和ubank
-     */
-    public static function initForAccount($user, $money)
-    {
-        $ubank = $user->qpay;
-        $account = $user->lendAccount;
-        $money = self::getRealDrawFound($account, $money); //计算用户实际提现金额以及写入扣除手续费记录
-        $draw = new self();
-        $draw->sn = self::createSN();
-        $draw->money = $money;
-        $draw->pay_id = 0; // 支付公司ID
-        $draw->account_id = $account->id;
-        $draw->uid = $user->id;
-        $draw->pay_bank_id = '0'; // TODO
-        $draw->bank_id = $ubank->bank_id;
-        $draw->bank_name = $ubank->bank_name;
-        $draw->bank_account = $ubank->card_number;
-        $draw->identification_type= $ubank->account_type;
-        $draw->identification_number = $user->idcard;
-        $draw->user_bank_id = $ubank->id;
-        $draw->sub_bank_name = $ubank->sub_bank_name;
-        $draw->province = $ubank->province;
-        $draw->city = $ubank->city;
-        $draw->mobile = $user->mobile;
-        $draw->status = DrawRecord::STATUS_ZERO;
-        return $draw;
-    }
+//
+//    /**
+//     * 发起提现，TODO：去掉user和ubank
+//     */
+//    public static function initForAccount($user, $money)
+//    {
+//        $ubank = $user->qpay;
+//        $account = $user->lendAccount;
+//        $money = self::getRealDrawFound($account, $money); //计算用户实际提现金额以及写入扣除手续费记录
+//        $draw = new self();
+//        $draw->sn = self::createSN();
+//        $draw->money = $money;
+//        $draw->pay_id = 0; // 支付公司ID
+//        $draw->account_id = $account->id;
+//        $draw->uid = $user->id;
+//        $draw->pay_bank_id = '0'; // TODO
+//        $draw->bank_id = $ubank->bank_id;
+//        $draw->bank_name = $ubank->bank_name;
+//        $draw->bank_account = $ubank->card_number;
+//        $draw->identification_type= $ubank->account_type;
+//        $draw->identification_number = $user->idcard;
+//        $draw->user_bank_id = $ubank->id;
+//        $draw->sub_bank_name = $ubank->sub_bank_name;
+//        $draw->province = $ubank->province;
+//        $draw->city = $ubank->city;
+//        $draw->mobile = $user->mobile;
+//        $draw->status = DrawRecord::STATUS_ZERO;
+//        return $draw;
+//    }
 
     public static function createSN()
     {
@@ -90,6 +90,7 @@ class DrawRecord extends \yii\db\ActiveRecord
             [['money'], 'match', 'pattern' => '/^[0-9]+([.]{1}[0-9]{1,2})?$/', 'message' => '提现金额格式错误'],
             [['account_id', 'uid', 'status', 'created_at', 'updated_at'], 'integer'],
             [['money'], 'number', 'min' => 1, 'max' => 10000000],
+            [['fee'], 'number'],
             [['sn', 'bank_id', 'bank_name', 'bank_account'], 'string', 'max' => 30],
             ['money','checkMoney'],
         ];
@@ -183,4 +184,22 @@ class DrawRecord extends \yii\db\ActiveRecord
         }
         return $money;
     }
+    
+    public function getTxSn()
+    {
+        return $this->sn;
+    }
+    public function getTxDate()
+    {
+        return $this->created_at;
+    }
+    public function getEpayUserId()
+    {
+        return $this->user->epayUser->epayUserId;
+    }
+    public function getAmount()
+    {
+        return $this->money;
+    }
+    
 }

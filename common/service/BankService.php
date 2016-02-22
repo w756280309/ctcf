@@ -59,17 +59,17 @@ class BankService
             return ['tourl' => '/user/userbank/bindbank', 'code' => 1, 'message' => '您未绑定银行卡'];
         }
 
-        if (($cond & self::CHARGEPWD_VALIDATE_N) && empty($user->trade_pwd)) {
-            return ['tourl' => '/user/userbank/addbuspass', 'code' => 1, 'message' => '您未设定交易密码'];
-        }
-
-        if (($cond & self::CHARGEPWD_VALIDATE_Y) && !empty($user->trade_pwd)) {
-            return ['tourl' => '/user/user', 'code' => 1, 'message' => '您已设定交易密码'];
-        }
-
-        if (($cond & self::EDITBANK_VALIDATE) && (empty($user_bank->sub_bank_name) || empty($user_bank->province) || empty($user_bank->city))) {
-            return ['tourl' => '/user/userbank/editbank', 'code' => 1, 'message' => '您需要先完善银行卡信息'];
-        }
+//        if (($cond & self::CHARGEPWD_VALIDATE_N) && empty($user->trade_pwd)) {
+//            return ['tourl' => '/user/userbank/addbuspass', 'code' => 1, 'message' => '您未设定交易密码'];
+//        }
+//
+//        if (($cond & self::CHARGEPWD_VALIDATE_Y) && !empty($user->trade_pwd)) {
+//            return ['tourl' => '/user/user', 'code' => 1, 'message' => '您已设定交易密码'];
+//        }
+//
+//        if (($cond & self::EDITBANK_VALIDATE) && (empty($user_bank->sub_bank_name) || empty($user_bank->province) || empty($user_bank->city))) {
+//            return ['tourl' => '/user/userbank/editbank', 'code' => 1, 'message' => '您需要先完善银行卡信息'];
+//        }
 
         return ['code' => 0];
     }

@@ -14,6 +14,7 @@ use P2pl\QpayBindInterface;
 use common\models\user\RechargeRecord;
 use P2pl\UserInterface;
 use P2pl\LoanFkInterface;
+use P2pl\WithdrawalInterface;
 
 /**
  * 联动优势API调用.
@@ -161,6 +162,29 @@ class Client
             'is_open_fastPayment' => '1',
         ];
         $params = $this->buildQuery($data);
+        return $this->apiUrl.'?'.$params;
+    }
+    
+    /**
+     * 申请提现
+     * @param WithdrawalInterface $draw
+     * @return type
+     */
+    public function initDraw(WithdrawalInterface $draw)
+    {
+        $data = [
+            'service' => 'cust_withdrawals',
+            'ret_url' => $this->clientOption['draw_ret_url'],
+            'notify_url' => $this->clientOption['draw_notify_url'],
+            'notify_url' => $this->clientOption['draw_apply_notify_url'],
+            'sourceV' => 'HTML5',
+            'order_id' => $draw->getTxSn(),
+            'mer_date' => date("Ymd", $draw->getTxDate()),
+            'user_id' => $draw->getEpayUserId(),
+            'amount' => $draw->getAmount() * 100,
+            'com_amt_type' => 1//前向手续费：交易方承担
+        ];
+        $params = $this->buildQuery($data);        
         return $this->apiUrl.'?'.$params;
     }
 
@@ -414,6 +438,22 @@ class Client
         return $this->doRequest($data);
     }
 
+    /**
+     * 4.5.1 提现交易查询接口(商户->平台)
+     * @param WithdrawalInterface $draw
+     */
+    public function getDrawInfo(WithdrawalInterface $draw)
+    {
+        $data = [
+            'service' => 'transfer_search',
+            'order_id' => $draw->getTxSn(), //商户订单号支持数字、英文字母，其他字符不建议使用
+            'mer_date' => date('Ymd', $draw->getTxDate()), //商户生成订单的日期，格式YYYYMMDD
+            'busi_type' => '02', //02提现
+        ];
+
+        return $this->doRequest($data);
+    }
+    
     /**
      * 获取对账单（暂限定为标的交易）.
      *

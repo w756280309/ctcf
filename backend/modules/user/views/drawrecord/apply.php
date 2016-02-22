@@ -113,6 +113,7 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\we
                                 ?>
                             </td>
                             <td style="text-align:left">
+                                <!--
                                 <?php if ($val['status'] == DrawRecord::STATUS_ZERO) { ?>
                                     <a href="javascript:openwin('/user/drawrecord/examinfk?pid=<?= $val['uid'] ?>&id=<?= $val['id'] ?>',500,500)" class="btn mini green"><i class="icon-edit"></i> 审核</a>
                                 <?php } elseif ($val['status'] == DrawRecord::STATUS_EXAMINED) { ?>
@@ -120,6 +121,7 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\we
                                 <?php } elseif (in_array ($val['status'], [DrawRecord::STATUS_SUCCESS,DrawRecord::STATUS_LAUNCH_BATCHPAY,DrawRecord::STATUS_DENY])) { ?>
                                     <a href="javascript:openwin('/user/drawrecord/examinfk?pid=<?= $val['uid'] ?>&id=<?= $val['id'] ?>',500,500)" class="btn mini green"><i class="icon-edit"></i> 查看</a>
                                 <?php } ?>
+                                -->
                             </td>
                     </tr>
                 <?php endforeach; ?>

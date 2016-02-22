@@ -36,7 +36,7 @@ return [
         'clientKeyExportPass' => 'fake',
         'cfcaCertPath' => dirname(__DIR__).'/cfca_test/cfca.crt',
     ],
-    'drawFee' => 1,//单位元，提现手续费
+    'drawFee' => 2,//单位元，提现手续费
     'settlement' => [
         /*结算账号设置 start */
         'bank_id' => '424', //南京银行编号

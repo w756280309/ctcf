@@ -154,6 +154,31 @@ class UmpController extends Controller
         $resp = \Yii::$container->get('ump')->loanTransferToLender($ord);
         var_dump($resp);
     }
+    
+    public function actionInitdraw()
+    {
+        $draw = new \common\models\user\DrawRecord([
+            'sn' => time(),
+            'uid' => 200,
+            'money' => 12,
+            'created_at' => time(),
+        ]);
+        //var_dump(\Yii::$container->get('ump')->initDraw($draw));exit;
+        return $this->redirect(\Yii::$container->get('ump')->initDraw($draw));
+    }
+    
+    public function actionDrawres()
+    {
+        $draw = \common\models\user\DrawRecord::findOne(7);
+        $resp = \Yii::$container->get('ump')->getDrawInfo($draw);
+        var_dump($resp);
+    }
+    
+    public function actionDrawconfirm($sn)
+    {
+        $draw = \common\models\user\DrawRecord::findOne(['sn' => $sn]);
+        \common\models\draw\DrawManager::commitDraw($draw);
+    }
 
     //////////////////
     public $enableCsrfValidation = false; //因为中金post的提交。所以要关闭csrf验证
