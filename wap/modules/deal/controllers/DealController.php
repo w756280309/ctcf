@@ -120,11 +120,10 @@ class DealController extends Controller
      */
     public function actionOrderlist($pid = null)
     {
-        //Yii::$app->response->format = Response::FORMAT_JSON;
         if (empty($pid)) {
             return ['orders' => [], 'code' => 1, 'message' => 'pid参数不能为空'];
         }
-        $data = OnlineOrder::getOrderListByCond(['online_pid' => $pid], 'mobile,order_time time,order_money money');
+        $data = OnlineOrder::getOrderListByCond(['online_pid' => $pid, 'status' => 1], 'mobile,order_time time,order_money money');
         foreach ($data as $key => $dat) {
             $data[$key]['mobile'] = substr_replace($dat['mobile'], '****', 3, 4);
             $data[$key]['time'] = date('Y-m-d', $dat['time']);

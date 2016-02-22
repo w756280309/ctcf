@@ -131,6 +131,11 @@ class PayService
         } elseif ($deal->end_date < $time) {
             return ['code' => self::ERROR_OVER,  'message' => self::getErrorByCode(self::ERROR_OVER)];
         }
+        
+        $resp = \Yii::$container->get('ump')->getLoanInfo($deal->id);
+        if (!$resp->isSuccessful() && '1' !== $resp->get('project_state')) {//查询失败，或者标的状态不为投资中
+            return ['code' => self::ERROR_SYSTEM,  'message' => '联动一侧标的状态异常'];
+        }
 
         return true;
     }
