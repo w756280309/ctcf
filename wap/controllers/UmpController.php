@@ -155,15 +155,16 @@ class UmpController extends Controller
         var_dump($resp);
     }
     
-    public function actionInitdraw()
+    public function actionInitdraw($did)
     {
-        $draw = new \common\models\user\DrawRecord([
-            'sn' => time(),
-            'uid' => 200,
-            'money' => 12,
-            'created_at' => time(),
-        ]);
+//        $draw = new \common\models\user\DrawRecord([
+//            'sn' => time(),
+//            'uid' => 200,
+//            'money' => 12,
+//            'created_at' => time(),
+//        ]);
         //var_dump(\Yii::$container->get('ump')->initDraw($draw));exit;
+        $draw = \common\models\user\DrawRecord::findOne($did);
         return $this->redirect(\Yii::$container->get('ump')->initDraw($draw));
     }
     
