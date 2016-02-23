@@ -21,7 +21,8 @@ class DrawnotifyController extends Controller
 
         if ($ump->verifySign($data)
             && '0000' === $data['ret_code']
-            && '4' === $data['trade_state']) {
+            && '4' === $data['trade_state']
+        ) {
             $draw = DrawRecord::findOne(['sn' => $data['order_id']]);
 
             if (!$draw) {

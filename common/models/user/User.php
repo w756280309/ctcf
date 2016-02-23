@@ -529,12 +529,14 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface, UserInterf
         }
         //若数据库中该字段没有值，就使用默认字符WDJFQY
         $usercode = $maxValue ? $maxValue : $code;
+        $num = 1;
+        if (preg_match('/0+(\d+)$/', $usercode, $matches)) {
+            $num = intval($matches[1]) + 1;
+        }
         //选出编号中的数字
-        $num = (substr($usercode, $length)) + 1;
         //选出编号中的字符
-        $code = substr($usercode, 0, $length);
         //取出的数字，加一后，在左边填充成4为，然后与字符相加
-        return $code.str_pad($num, $pad_length, 0, STR_PAD_LEFT);
+        return $code.str_pad($num, $pad_length, '0', STR_PAD_LEFT);
     }
 
     /**

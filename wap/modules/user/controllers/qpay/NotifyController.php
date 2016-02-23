@@ -94,6 +94,7 @@ class NotifyController extends Controller
         if (null === UserBanks::findOne(['binding_sn' => $bind->binding_sn])) {
             $bind->status = 1;
             $data = ArrayHelper::toArray($bind);
+            unset($data['id']);
             unset($data['status']);
             $userBanks = new UserBanks($data);
             $userBanks->setScenario('step_first');

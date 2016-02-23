@@ -257,7 +257,6 @@ class UserController extends BaseController
         $model->scenario = 'add';
         $model->type = 2;
         $model->usercode = User::create_code('usercode', 'WDJFQY', 6, 4);
-
         if ($model->load(Yii::$app->request->post())
             && $epayuser->load(Yii::$app->request->post())
             && $userBank->load(Yii::$app->request->post())

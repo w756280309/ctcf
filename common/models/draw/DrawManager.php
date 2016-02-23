@@ -44,7 +44,7 @@ class DrawManager
             return $draw;
         } else {
             throw new \Exception('提现申请失败');
-        }        
+        }
     }
 
     /**
@@ -62,7 +62,7 @@ class DrawManager
             $transaction->rollBack();
             throw new DrawException("审核受理失败");
         }
-        
+
         //录入money_record记录
         $bc = new BcRound();
         bcscale(14);
@@ -100,7 +100,7 @@ class DrawManager
         $transaction->commit();
         return $draw;
     }
-    
+
     /**
      * 确定提现完成
      * @param type $draw
@@ -110,26 +110,26 @@ class DrawManager
         if ((int) $draw->status !== DrawRecord::STATUS_EXAMINED) {
             throw new DrawException("必须是受理成功的");
         }
-        
+
         $resp = \Yii::$container->get('ump')->getDrawInfo($draw);
         if ($resp->isSuccessful()) {
             $bc = new BcRound();
-            if (2 === (int)$resp->get('tran_state')) {                
+            if (2 === (int)$resp->get('tran_state')) {
                 $transaction = Yii::$app->db->beginTransaction();
                 $money = bcadd($draw->money, $draw->fee);
                 $userAccount = UserAccount::find()->where('uid = '.$draw->uid)->one();
                 $userAccount->freeze_balance = $bc->bcround(bcsub($userAccount->freeze_balance, $money), 2);//冻结减少
                 $draw->status = DrawRecord::STATUS_SUCCESS;
-                
+
                 $momeyRecord = new MoneyRecord();
                 $momeyRecord->uid = $draw->uid;
                 $momeyRecord->sn = MoneyRecord::createSN();
-                $momeyRecord->account_id = $userAccount->id;                
+                $momeyRecord->account_id = $userAccount->id;
                 $YuE = $userAccount->account_balance = $bc->bcround(bcsub($userAccount->account_balance, $money), 2);//账户总额减少
                 $momeyRecord->type = MoneyRecord::TYPE_DRAW_SUCCESS;
                 $momeyRecord->balance = $YuE;
                 $momeyRecord->out_money = $bc->bcround($money, 2);
-                
+
                 if ($draw->save(false) !== false && $momeyRecord->save(false) !== false && $userAccount->save(false) !== false) {
                     $transaction->commit();
                 } else {
@@ -142,16 +142,16 @@ class DrawManager
     }
 
     /**
-     * 
+     *
      * @param DrawRecord $draw
      * @param type $status
      * @return DrawRecord
      * @throws DrawException
      */
-    public static function cancel(DrawRecord $draw, $status) {        
+    public static function cancel(DrawRecord $draw, $status) {
         $user = $draw->user;
         $account = $user->type == 1 ? $user->lendAccount : $user->borrowAccount;
-        
+
         $mrfee = MoneyRecord::findOne(['osn' => $draw->sn, 'type' => MoneyRecord::TYPE_DRAW_FEE]); //获取提现手续费的记录
         $bc = new BcRound();
         bcscale(14);
