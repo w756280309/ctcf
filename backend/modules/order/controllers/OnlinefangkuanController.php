@@ -11,8 +11,8 @@ use common\models\order\OnlineFangkuan;
 use common\models\adminuser\Admin;
 use backend\modules\order\service\FkService;
 use backend\modules\order\core\FkCore;
+use common\models\user\UserAccount;
 use common\models\draw\DrawManager;
-use common\models\user\DrawRecord;
 use yii\web\Response;
 
 /**
@@ -82,20 +82,19 @@ class OnlinefangkuanController extends BaseController
         $fkcore = new FkCore();
         $ret = $fkcore->createFk(Yii::$app->user->id, $pid, $status);
 
-        if (1 === $ret['res']) {
-            return $this->actionInit($pid);
-        }
-
         return $ret;
     }
 
     /**
-     * 融资会员提现
+     * 融资会员提现.
+     *
      * @param type $pid
+     *
      * @return type
      */
-    public function actionInit($pid)
+    public static function actionInit($pid)
     {
+        Yii::$app->response->format = Response::FORMAT_JSON;
         $onlineProduct = OnlineProduct::findOne($pid);
 
         if (!$onlineProduct) {
@@ -116,20 +115,19 @@ class OnlinefangkuanController extends BaseController
             return ['res' => 0, 'msg' => '当前放款状态不允许提现操作'];
         }
 
-        $user = User::findOne($onlineFangkuan->uid);
-        if (!$user) {
-            throw new \Exception('The borrower info is not existed.');
+        $account = UserAccount::findOne(['uid' => $onlineFangkuan->uid, 'type' => UserAccount::TYPE_BORROW]);
+        if (!$account) {
+            throw new \Exception('The borrower account info is not existed.');
         }
 
-        $draw = DrawManager::init($user, $onlineFangkuan->order_money, $onlineFangkuan->fee);
-
+        $draw = DrawManager::initDraw($account, $onlineFangkuan->order_money, $onlineFangkuan->fee);
         if (!$draw) {
             return ['res' => 0, 'msg' => '提现申请失败'];
         }
 
         $ump = Yii::$container->get('ump');
 
-        $resp = $ump->orgWithdrawApply($draw->sn, $draw->created_at, $user->epayuser->epayUserId, $draw->money);
+        $resp = $ump->orgDrawApply($draw);
 
         if ($resp->isSuccessful()) {
             DrawManager::ackDraw($draw);
@@ -137,42 +135,6 @@ class OnlinefangkuanController extends BaseController
             return ['res' => 0, 'msg' => $resp->get('ret_code').$resp->get('ret_msg')];
         }
 
-        return ['res' => 0, 'msg' => '提现申请成功'];
-    }
-
-    /**
-     * 融资会员提现后台通知
-     */
-    public function actionNotify()
-    {
-        echo "aaaaa";exit;
-        $data = Yii::$app->request->get();
-        $ump = Yii::$container->get('ump');
-        $err = '0000';
-        $errMsg = 'No err';
-
-        if ($ump->verifySign($data)
-            && '0000' === $data['ret_code']
-            && '4' === $data['trade_state']) {
-            $draw = DrawRecord::findOne(['sn' => $data['order_id']]);
-
-            if (!draw) {
-                $err = '9999';
-                $errMsg = '找不到对应的提现记录';
-            }
-
-            DrawManager::commitDraw($draw);//确定提现完成 最终态
-        } else {
-            $err = '9999';
-        }
-
-        $content = $ump->buildQuery([
-            'order_id' => $data['order_id'],
-            'mer_date' => $data['mer_date'],
-            'reg_code' => $err,
-        ]);
-
-        $this->layout = false;
-        return $this->render('@borrower/modules/user/views/recharge/recharge_notify.php', ['content' => $content]);
+        return ['res' => 1, 'msg' => '提现申请成功'];
     }
 }

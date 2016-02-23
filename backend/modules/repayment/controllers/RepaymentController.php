@@ -16,6 +16,7 @@ use common\models\user\User;
 use common\models\sms\SmsMessage;
 use common\lib\product\ProductProcessor;
 use common\service\LoanService;
+use backend\modules\order\controllers\OnlinefangkuanController;
 
 /**
  * OrderController implements the CRUD actions for OfflineOrder model.
@@ -81,9 +82,9 @@ class RepaymentController extends BaseController
                 'result' => 0,
                 'message' => '非法请求',
             ];
-        }      
+        }
         $pp = new ProductProcessor();
-        
+
         $pid = Yii::$app->request->post('pid');
         $qishu = Yii::$app->request->post('qishu');
         $deal = OnlineProduct::findOne(['id' => $pid]);
@@ -233,10 +234,10 @@ class RepaymentController extends BaseController
         $product = OnlineProduct::findOne($pid);
         $fk = OnlineFangkuan::findOne(['online_product_id' => $pid]);
         if (!in_array($product->status, [OnlineProduct::STATUS_FULL, OnlineProduct::STATUS_FOUND])) {
-            return ['result' => 0, 'message' => '标的状态异常，当前状态码：' . $product->status];
+            return ['res' => 0, 'msg' => '标的状态异常，当前状态码：' . $product->status];
         }
         if (OnlineFangkuan::STATUS_EXAMINED !== (int)$fk->status) {
-            return ['result' => 0, 'message' => '放款操作必须是审核通过的'];
+            return ['res' => 0, 'msg' => '放款操作必须是审核通过的'];
         }
         bcscale(14);
         $bcround = new BcRound();
@@ -245,9 +246,9 @@ class RepaymentController extends BaseController
             LoanService::updateLoanState($product, OnlineProduct::STATUS_HUAN);
         } catch (\Exception $ex) {
             $transaction->rollBack();
-            return ['result' => 0, 'message' => $ex->getMessage()];
+            return ['res' => 0, 'msg' => $ex->getMessage()];
         }
-        
+
         $ua = UserAccount::findOne(['uid' => $product->borrow_uid, 'type' => UserAccount::TYPE_BORROW]);
         $ua->account_balance = $bcround->bcround(bcadd($ua->account_balance, $product->money), 2);
         $ua->available_balance = $bcround->bcround(bcadd($ua->available_balance, $product->funded_money), 2);
@@ -255,7 +256,7 @@ class RepaymentController extends BaseController
         $ua->in_sum = $bcround->bcround(bcadd($ua->in_sum, $product->money), 2);
         if (!$ua->save()) {
             $transaction->rollBack();
-            return ['result' => 0, 'message' => '更新用户融资账户异常'];
+            return ['res' => 0, 'msg' => '更新用户融资账户异常'];
         }
         OnlineFangkuan::updateAll(['status' => OnlineFangkuan::STATUS_FANGKUAN], ['online_product_id' => $pid]); //将所有放款批次变为已经放款
         $mre_model = new MoneyRecord();
@@ -269,19 +270,25 @@ class RepaymentController extends BaseController
         $mre_model->balance = $ua->available_balance;
         if (!$mre_model->save()) {
             $transaction->rollBack();
-            return ['result' => 0, 'message' => '资金记录失败'];
+            return ['res' => 0, 'msg' => '资金记录失败'];
         }
 
         $resp = Yii::$container->get('ump')->loanTransferToMer($fk);
         if (!$resp->isSuccessful()) {
             $transaction->rollBack();
-            return ['result' => 0, 'message' => '联动一侧：'.$resp->get('ret_msg')];
+            return ['res' => 0, 'msg' => '联动一侧：'.$resp->get('ret_msg')];
         }
         $transaction->commit();
 
-        return [
-            'result' => 1,
-            'message' => '放款成功',
-        ];
+        $res = OnlinefangkuanController::actionInit($pid);
+
+        if (1 === $res['res']) {
+            return [
+                'res' => 1,
+                'msg' => '放款成功',
+            ];
+        }
+
+        return $res;
     }
 }

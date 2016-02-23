@@ -411,7 +411,7 @@ class ProductonlineController extends BaseController
     /**
      * 提前结束募集时间.
      */
-    public function actionEndProduct()
+    public function actionEndProduct()   //?????
     {
         $res = 0;
         $id = Yii::$app->request->post('pid');

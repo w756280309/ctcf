@@ -11,7 +11,7 @@ $pc_cat = Yii::$app->params['pc_cat'];
     <div class="row-fluid">
 
         <div class="span12">
-            
+
                 <h3 class="page-title">
 
                         贷款管理 <small>贷款管理模块【主要包含项目的管理以及项目分类管理】</small>
@@ -25,7 +25,7 @@ $pc_cat = Yii::$app->params['pc_cat'];
                         <li>
 
                                 <i class="icon-home"></i>
-                                <a href="/product/productonline/list">贷款管理</a> 
+                                <a href="/product/productonline/list">贷款管理</a>
                                 <i class="icon-angle-right"></i>
 
                         </li>
@@ -33,12 +33,12 @@ $pc_cat = Yii::$app->params['pc_cat'];
                         <li>
                                 <a href="javascript:void(0);">项目列表</a>
                         </li>
-                        
+
 
                 </ul>
         </div>
 
-        
+
         <!--search start-->
         <div class="portlet-body">
             <form action="/product/productonline/list" method="get" target="_self">
@@ -54,8 +54,8 @@ $pc_cat = Yii::$app->params['pc_cat'];
                         <select class="m-wrap" style="margin-bottom: 0px;width:300px" name = 'status'>
                             <option value="">--请选择--</option>
                             <option value="0" <?= Yii::$app->request->get('status')=='0'?'selected':"" ?>>未上线</option>
-                            <?php foreach ($status as $key => $val): ?>                            
-                                <option value="<?= $key ?>" 
+                            <?php foreach ($status as $key => $val): ?>
+                                <option value="<?= $key ?>"
                                 <?php
                                 if (Yii::$app->request->get('status') == $key) {
                                         echo 'selected';
@@ -72,10 +72,10 @@ $pc_cat = Yii::$app->params['pc_cat'];
             </table>
             </form>
         </div>
-        
+
         <!--search end -->
-        
-        
+
+
         <div class="portlet-body">
                 <table class="table table-striped table-bordered table-advance table-hover">
                         <thead>
@@ -140,16 +140,16 @@ $pc_cat = Yii::$app->params['pc_cat'];
                                             <?php } ?>
                                         </td>
                                 </tr>
-                                <?php endforeach; ?>   
+                                <?php endforeach; ?>
                         </tbody>
                 </table>
                 <button class="btn green btn-block btn-block-line-on" style="width: 100px;float:left;"><i class="icon-edit"></i>上线</button>
         </div>
-                
-         
-              
+
+
+
     <div class="pagination" style="text-align:center;clear: both"><?= LinkPager::widget(['pagination' => $pages]); ?>
-       
+
 </div>
 
 
@@ -163,7 +163,7 @@ $pc_cat = Yii::$app->params['pc_cat'];
                 $("input[name='choose[]']").parent().removeClass('checked');
             }
         });
-        
+
         $('.btn-block-line-on').click(function(){
             var objs = $("input[name='choose[]']").parent();
             var ids = new Array();
@@ -187,35 +187,35 @@ $pc_cat = Yii::$app->params['pc_cat'];
                             location.reload();
                         }
                         cloaseLoading()
-                    });     
+                    });
                 }
         })
     })
-    
+
     function fk(pid){
         var csrftoken= '<?= Yii::$app->request->getCsrfToken(); ?>';
              if(confirm('确认放款吗？')){
                  openLoading();
                     $.post('/repayment/repayment/fk',{pid:pid,_csrf:csrftoken},function(data)
                     {
-                        alert(data.message);
-                        if(data.result==1){
+                        alert(data.msg);
+                        if(1 === data.res){
                             location.reload();
                         }
-                        cloaseLoading()
-                    });     
+                        cloaseLoading();
+                    });
                 }
     }
-    
+
     function del(url,id){
         var csrftoken= '<?= Yii::$app->request->getCsrfToken(); ?>';
         //alert(1);return false;
         $.post(url,{id:id,_csrf:csrftoken},function(data)
-        {   
+        {
              newalert(data,'删除成功',1);
         });
     }
-    
+
     function corfirmJixi(pid){
         var csrftoken= '<?= Yii::$app->request->getCsrfToken(); ?>';
              if(confirm('确认计息吗？')){
@@ -227,11 +227,11 @@ $pc_cat = Yii::$app->params['pc_cat'];
 //                        if(data.result==1){
 //                           location.reload();
 //                        }
-//                        
-                    });  
+//
+                    });
              }
     }
-    
+
     function endproduct(pid){
          var csrf = '<?= Yii::$app->request->getCsrfToken(); ?>';
             layer.confirm('是否要提前结束此项目的募集？',{title:'结束项目',btn:['确定','取消']},function(){
@@ -239,12 +239,12 @@ $pc_cat = Yii::$app->params['pc_cat'];
                 $.post("/product/productonline/found", {id: pid, _csrf:csrf}, function (result) {
                     cloaseLoading();//关闭loading
                     newalert(parseInt(result['result']),result['message'],1);
-                });   
+                });
             },function(){
                 layer.closeAll();
             })
     }
-</script> 
+</script>
 <?php $this->endBlock(); ?>
 
 

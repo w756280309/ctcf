@@ -74,6 +74,7 @@ return [
             'rec_ret_url' => "http://1.202.48.153:8001/user/qpay/qpaynotify/frontend",
             'order_notify_url' => "http://1.202.48.153:8001/order/qpay/notify/backend",
             'order_ret_url' => "http://1.202.48.153:8001/order/qpay/notify/frontend",
+            'mer_draw_notify_url' => 'http://1.202.98.24:8002/order/drawnotify/notify',  //融资方提现回调地址
         ],
     ],
 ];

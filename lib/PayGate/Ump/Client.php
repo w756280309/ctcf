@@ -184,7 +184,7 @@ class Client
             'amount' => $draw->getAmount() * 100,
             'com_amt_type' => 1//前向手续费：交易方承担
         ];
-        $params = $this->buildQuery($data);
+
         return $this->apiUrl.'?'.$params;
     }
 
@@ -461,15 +461,15 @@ class Client
      * @param type $merId 提现企业资金账户托管平台商户号
      * @param type $amount 提现金额
      */
-    public function orgDrawApply($txSn, $txDate, $merId, $amount)
+    public function orgDrawApply(WithdrawalInterface $draw)
     {
         $data = [
             'service' => 'mer_withdrawals',
-            'notify_url' => 'http://b.wdjf.com:8080/order/onlinefangkuan/notify',
-            'order_id' => $txSn,
-            'mer_date' => date('Ymd', $txDate), //商户生成订单的日期，格式YYYYMMDD
-            'withdraw_mer_id' => $merId,
-            'amount' => $amount * 100, //单位为分
+            'notify_url' => $this->clientOption['mer_draw_notify_url'],
+            'order_id' => $draw->getTxSn(),
+            'mer_date' => date('Ymd', $draw->getTxDate()), //商户生成订单的日期，格式YYYYMMDD
+            'withdraw_mer_id' => $draw->getEpayUserId(),
+            'amount' => $draw->getAmount() * 100, //单位为分
             'com_amt_type' => '1',
         ];
 
