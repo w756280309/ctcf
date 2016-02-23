@@ -120,7 +120,7 @@ class OnlinefangkuanController extends BaseController
             throw new \Exception('The borrower account info is not existed.');
         }
 
-        $draw = DrawManager::initDraw($account, $onlineFangkuan->order_money, $onlineFangkuan->fee);
+        $draw = DrawManager::initDraw($account, $onlineFangkuan->order_money, \Yii::$app->params['drawFee']);
         if (!$draw) {
             return ['res' => 0, 'msg' => '提现申请失败'];
         }
