@@ -184,7 +184,7 @@ class Client
             'amount' => $draw->getAmount() * 100,
             'com_amt_type' => 1//前向手续费：交易方承担
         ];
-
+        $params = $this->buildQuery($data);
         return $this->apiUrl.'?'.$params;
     }
 
