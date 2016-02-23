@@ -53,7 +53,7 @@ class QrechargeController extends BaseController
                 return $this->createErrorResponse('充值申请跳转失败');
             }            
         } else {
-            return $this->createErrorResponse('充值申请失败');
+            return $this->createErrorResponse('充值申请失败:'.$rec_model->getSingleError()['message']);
         }
     }
 

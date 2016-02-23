@@ -20,7 +20,7 @@ class QpaynotifyController extends Controller
      * 快捷充值前台通知地址
      */
     public function actionFrontend()
-    {
+    {        
         $data = Yii::$app->request->get();
         try {
             $ret = $this->processing($data);
@@ -32,6 +32,7 @@ class QpaynotifyController extends Controller
         } catch (Exception $ex) {
             Yii::trace($ex->getMessage() .';'. $data['service'] . ":" . http_build_query($data), 'umplog');
         }
+        return $this->redirect('/user/userbank/qpayres');
     }
 
     /**

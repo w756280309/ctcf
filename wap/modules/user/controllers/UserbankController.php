@@ -350,4 +350,13 @@ class UserbankController extends BaseController
     {
         return $this->render('acceptres', ['ret' => $ret]);
     }
+    
+    /**
+     * 快捷充值结果页面
+     * @param type $ret
+     */
+    public function actionQpayres($ret = 'error')
+    {
+        return $this->render('qpayres', ['ret' => $ret]);
+    }
 }

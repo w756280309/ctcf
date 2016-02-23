@@ -67,13 +67,19 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
         <script type="text/javascript">
         var csrf;
         function validateform(){
-            if($('#fund').val()==''){
+            if($.trim($('#fund').val()) == '') {
                 toast(this,'充值金额不能为空');
                 $(this).removeClass("btn-press").addClass("btn-normal");
                 return false;
             }
-            if($('#fund').val()==0){
+            if ($('#fund').val() ==0) {
                 toast(this,'充值金额不能为零');
+                $(this).removeClass("btn-press").addClass("btn-normal");
+                return false;
+            }
+            var reg = /^((\d{1,3}(,\d{3})*)|(\d+))(\.\d{2})?$/;
+            if (!reg.test($('#fund').val())) {
+                toast(this,'充值金额格式不正确');
                 $(this).removeClass("btn-press").addClass("btn-normal");
                 return false;
             }

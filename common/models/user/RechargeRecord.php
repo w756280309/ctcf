@@ -7,6 +7,8 @@ use yii\behaviors\TimestampBehavior;
 
 class RechargeRecord extends \yii\db\ActiveRecord implements \P2pl\QpayTxInterface
 {
+    use \YiiPlus\Model\ErrorExTrait;
+    
     public $InstitutionID; //机构号码
     public $OrderNo; //订单号
     public $PaymentNo; //支付流水号
@@ -68,7 +70,8 @@ class RechargeRecord extends \yii\db\ActiveRecord implements \P2pl\QpayTxInterfa
         return [
             [['fund', 'uid', 'bank_id', 'pay_type'], 'required'],
             [['account_id', 'uid', 'status'], 'integer'],
-            [['fund'], 'match', 'pattern' => '/^[0-9]+([.]{1}[0-9]{1,2})?$/', 'message' => '充值金额格式错误'],
+            [['fund'], 'filter', 'filter' => 'trim'],
+            [['fund'], 'match', 'pattern' => '/^[0-9]+([.]{1}[0-9]{1,2})?$/', 'message' => '充值金额格式错误'],            
             [['fund'], 'number', 'min' => 1, 'max' => 1000000000],
             [['sn'], 'string', 'max' => 30],
             [['bank_id'], 'string', 'max' => 20],
