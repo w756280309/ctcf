@@ -25,7 +25,7 @@ class NotifyController extends Controller
         $data = Yii::$app->request->get();
         //记录日志方便调试
         \Yii::trace($data['service'] . ":" . http_build_query($data), 'umplog');
-        
+
         if (Yii::$container->get('ump')->verifySign($data) && '0000' === $data['ret_code']) {
             $bind = QpayBinding::findOne(['binding_sn' => $data['order_id']]);
             if (null !== $bind) {
@@ -33,7 +33,7 @@ class NotifyController extends Controller
                     return $this->redirect('/user/userbank/accept?ret=success');
                 } else {
                     return $this->redirect('/user/userbank/accept');
-                }                
+                }
             } else {
                 throw new \yii\web\NotFoundHttpException($data['order_id'] . ':无法找到申请数据');
             }
@@ -41,7 +41,7 @@ class NotifyController extends Controller
             return $this->redirect('/user/userbank/accept');
         }
     }
-    
+
     /**
      * 绑卡后台通知地址【绑卡结果通知地址】
      * 后台通知地址会接收到绑卡申请的后台通知以及绑卡结果的后台通知，需要判断返回结果的服务类型必须是mer_bind_card_notify【4.2.6】
@@ -53,8 +53,8 @@ class NotifyController extends Controller
         $this->layout = false;
         $err = '00009999';
         $errmsg = "no error";
-        $data = Yii::$app->request->get();        
-        
+        $data = Yii::$app->request->get();
+
         if (
             Yii::$container->get('ump')->verifySign($data)
             && '0000' === $data['ret_code']
@@ -68,12 +68,12 @@ class NotifyController extends Controller
                     } else {
                         $errmsg = "数据修改失败";
                     }
-                }              
+                }
             } else {
                 $errmsg = $data['order_id'] . ':无法找到申请数据';
-            }            
+            }
         }
-        
+
         //记录日志方便调试
         \Yii::trace("errormsg:【" . $err . $errmsg . "】;" . $data['service'] . ":" . http_build_query($data), 'umplog');
 
@@ -82,10 +82,10 @@ class NotifyController extends Controller
             'mer_date' => $data['mer_date'],
             'reg_code' => $err,
         ]);
-        
+
         return $this->render('@borrower/modules/user/views/recharge/recharge_notify.php', ['content' => $content]);
     }
-    
+
     public static function processing(QpayBinding $bind)
     {
         if(1 === (int)$bind->status) {
@@ -93,7 +93,9 @@ class NotifyController extends Controller
         }
         if (null === UserBanks::findOne(['binding_sn' => $bind->binding_sn])) {
             $bind->status = 1;
-            $userBanks = new UserBanks(ArrayHelper::toArray($bind));
+            $data = ArrayHelper::toArray($bind);
+            unset($data['status']);
+            $userBanks = new UserBanks($data);
             $userBanks->setScenario('step_first');
             $transaction = Yii::$app->db->beginTransaction();
             if ($userBanks->save() && $bind->save()) {
