@@ -46,11 +46,11 @@ class BankService
     public static function check($user, $cond)
     {
         if (($cond & self::IDCARDRZ_VALIDATE_Y) && $user->idcard_status == User::IDCARD_STATUS_PASS) {
-            return ['tourl' => '/user/user', 'code' => 1, 'message' => '您已经实名认证'];
+            return ['tourl' => '/user/user', 'code' => 1, 'message' => '您已经开通第三方资金托管账户'];
         }
 
         if (($cond & self::IDCARDRZ_VALIDATE_N) && $user->idcard_status == User::IDCARD_STATUS_WAIT) {
-            return ['tourl' => '/user/userbank/kuaijie', 'code' => 1, 'message' => '您未进行实名认证'];
+            return ['tourl' => '/user/userbank/kuaijie', 'code' => 1, 'message' => '您还没有开通第三方资金托管账户，请前往开通'];
         }
 
         $user_bank = $user->qpay;
@@ -79,8 +79,8 @@ class BankService
                     }
                 }
             } catch (\Exception $ex) {
-                return ['tourl' => '/user/userbank/bindbank', 'code' => 1, 'message' => '您未绑定银行卡'];
-            }           
+                return ['tourl' => '/user/userbank/bindbank', 'code' => 1, 'message' => '您还未绑定银行卡，请先去绑定'];
+            }
         }
 
 //        if (($cond & self::CHARGEPWD_VALIDATE_N) && empty($user->trade_pwd)) {
@@ -130,7 +130,7 @@ class BankService
                 if ($data[1] == '借记卡') {
                     return ['code' => 0, 'bank_id' => $key, 'bank_name' => $val['bankname']];
                 } else {
-                    return ['code' => 1, 'message' => '该操作目前只支持借记卡'];
+                    return ['code' => 1, 'message' => '该操作只支持借记卡'];
                 }
             }
             $card_5 = substr($card, 0, 5);
@@ -139,7 +139,7 @@ class BankService
                 if ($data[1] == '借记卡') {
                     return ['code' => 0, 'bank_id' => $key, 'bank_name' => $val['bankname']];
                 } else {
-                    return ['code' => 1, 'message' => '该操作目前只支持借记卡'];
+                    return ['code' => 1, 'message' => '该操作只支持借记卡'];
                 }
             }
             $card_4 = substr($card, 0, 4);
@@ -148,7 +148,7 @@ class BankService
                 if ($data[1] == '借记卡') {
                     return ['code' => 0, 'bank_id' => $key, 'bank_name' => $val['bankname']];
                 } else {
-                    return ['code' => 1, 'message' => '该操作目前只支持借记卡'];
+                    return ['code' => 1, 'message' => '该操作只支持借记卡'];
                 }
             }
         }
