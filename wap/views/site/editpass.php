@@ -68,12 +68,6 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset', 'positi
                 toast(this, '原密码不能为空');
                 return false;
             }
-            var reg = /(?!^\d+$)(?!^[a-zA-Z]+$)^[0-9a-zA-Z]{6,20}$/;
-            if (!reg.test($('#password').val())) {
-                toast(this, '原密码必须为数字和字母的组合');
-                $("#signup-btn").removeClass("btn-press").addClass("btn-normal");
-                return false;
-            }
             if ($('#password').val().length < 6 || $('#password').val().length > 20) {
                 toast(this, '原密码必须是6-20个字母与数字');
                 return false;

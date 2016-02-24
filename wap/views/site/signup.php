@@ -78,12 +78,6 @@ frontend\assets\WapAsset::register($this);
                 $("#signup-btn").removeClass("btn-press").addClass("btn-normal");
                 return false;
             }
-            var reg = /(?!^\d+$)(?!^[a-zA-Z]+$)^[0-9a-zA-Z]{6,20}$/;
-            if (!reg.test($('#pass').val())) {
-                toast(this, '新密码必须为数字和字母的组合');
-                $("#signup-btn").removeClass("btn-press").addClass("btn-normal");
-                return false;
-            }
             if ($('#pass').val() == '') {
                 toast(this, '密码不能为空');
                 $("#signup-btn").removeClass("btn-press").addClass("btn-normal");

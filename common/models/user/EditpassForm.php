@@ -4,6 +4,7 @@ namespace common\models\user;
 
 use Yii;
 use yii\base\Model;
+use common\lib\validator\LoginpassValidator;
 
 /**
  * Editpass form.
@@ -23,10 +24,10 @@ class EditpassForm extends Model
     public function scenarios()
     {
         return [
-            'add' => ['new_pass', 'r_pass'],   //新增交易密码
-            'edit' => ['password', 'new_pass', 'verifyCode'],  //修改交易密码
+//            'add' => ['new_pass', 'r_pass'],   //新增交易密码
+//            'edit' => ['password', 'new_pass', 'verifyCode'],  //修改交易密码
             'edituserpass' => ['password', 'new_pass', 'verifyCode'],  //修改登陆密码
-            'checktradepwd' => ['password'],   //检查交易密码
+//            'checktradepwd' => ['password'],   //检查交易密码
         ];
     }
 
@@ -51,7 +52,7 @@ class EditpassForm extends Model
 
             [['password', 'new_pass'], 'string', 'length' => [6, 20], 'on' => 'edituserpass'],
             ['password', 'validatePassword', 'on' => 'edituserpass'],
-            ['new_pass', 'match', 'pattern' => '/(?!^\d+$)(?!^[a-zA-Z]+$)^[0-9a-zA-Z]{6,20}$/', 'message' => '新密码必须为数字和字母的组合', 'on' => 'edituserpass'],
+            ['new_pass', LoginpassValidator::className(), 'skipOnEmpty' => false, 'on' => 'edituserpass'],
             ['verifyCode', 'captcha', 'on' => ['edit', 'edituserpass']],
         ];
     }

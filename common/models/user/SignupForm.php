@@ -4,6 +4,8 @@ namespace common\models\user;
 use Yii;
 use yii\base\Model;
 use common\service\SmsService;
+use YiiPlus\Validator\CnMobileValidator;
+use common\lib\validator\LoginpassValidator;
 
 /**
  * Signup form
@@ -26,15 +28,15 @@ class SignupForm extends Model
             ['sms', 'validateSms'],
             ['password', 'required', 'message' => '密码不能为空!'],
             [['phone'],'checkPhoneUnique'],
-            [['phone'],'match','pattern'=>'/^(13[0-9]|14[0-9]|15[0-9]|17[0-9]|18[0-9])\d{8}$/','message'=>'手机号码格式错误'],
+            [['phone'], CnMobileValidator::className(), 'skipOnEmpty' => false],
             [
                 'password',
                 'string',
-                'length' => [6, 12],
+                'length' => [6, 20],
 
             ],
             //验证密码格式 不能是纯数字，或是纯字母
-            ['password', 'match', 'pattern' => '/(?!^\d+$)(?!^[a-zA-Z]+$)^[0-9a-zA-Z]{6,20}$/','message' => '密码必须为数字和字母的组合'],
+            ['password', LoginpassValidator::className(), 'skipOnEmpty' => false],
         ];
     }
 
