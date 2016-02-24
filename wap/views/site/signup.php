@@ -48,7 +48,7 @@ frontend\assets\WapAsset::register($this);
                 </div>
                 <div class="col-xs-9 col">
                     <input id="pass" class="login-info" name="SignupForm[password]" maxlength="20" type="password"
-                           placeholder="密码请输入6-20位字母与数字组合" AUTOCOMPLETE="off">
+                           placeholder="6到20字母与数字组合或符号" AUTOCOMPLETE="off">
                 </div>
                 <div class="col-xs-3 col border-bottom login-eye">
                     <img src="/images/eye-close.png" width="26" height="20" alt=" 闭眼">
@@ -75,6 +75,13 @@ frontend\assets\WapAsset::register($this);
             $("#signup-btn").addClass("btn-press").removeClass("btn-normal");
             if ($('#iphone').val() == '') {
                 toast(this, '手机号不能为空');
+                $("#signup-btn").removeClass("btn-press").addClass("btn-normal");
+                return false;
+            }
+            var reg = /[a-zA-Z]/;
+            var reg2 = /[0-9]/;
+            if (!(-1 === $('#pass').val().indexOf(' ') && reg.test($('#pass').val()) && reg2.test($('#pass').val()))) {
+                toast(this, '请至少输入字母与数字组合');
                 $("#signup-btn").removeClass("btn-press").addClass("btn-normal");
                 return false;
             }
@@ -139,11 +146,12 @@ frontend\assets\WapAsset::register($this);
                     $(this).attr({src: "/images/eye-close.png", alt: "eye-close"});
                 }
             });
-            $('#xieyi').bind('click', function () {
-                if($(this).attr('checked') == 'checked') {
-                    $(this).attr('checked',false);
+            $('#xieyi').bind('click', function ()
+            {
+                if ($(this).attr('checked') == 'checked') {
+                    $(this).attr('checked', false);
                 } else {
-                    $(this).attr('checked',true);
+                    $(this).attr('checked', true);
                 }
             });
             //60秒倒计时
@@ -151,12 +159,15 @@ frontend\assets\WapAsset::register($this);
             var curCount;//当前剩余秒数
             var count = 60; //间隔函数，1秒执行
 
-            $('#yzm').bind('click', function () {
-                createSms("#iphone", false, function () {
+            $('#yzm').bind('click', function ()
+            {
+                createSms("#iphone", false, function ()
+                {
                     fun_timedown();
                 });
             });
-            function SetRemainTime() {
+            function SetRemainTime()
+            {
                 if (curCount == 0) {
                     window.clearInterval(InterValObj);//停止计时器
                     $('#yzm').removeAttr("disabled");//启用按钮
@@ -167,7 +178,8 @@ frontend\assets\WapAsset::register($this);
                     $("#yzm").val(curCount + "s后重发");
                 }
             }
-            function fun_timedown() {
+            function fun_timedown()
+            {
                 curCount = count;
                 $('#yzm').addClass("yzm-disabled");
                 $("#yzm").attr("disabled", "true");
