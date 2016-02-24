@@ -18,7 +18,14 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
                         <span class="qing">年化收益率</span>
                     </li>
                     <li class="col-xs-6">
-                        <div><?=$deal['expires']?><span class="column-lu">天(含宽限期<?=$deal['kuanxianqi']?>天) </span></div>
+                        <div>
+                            <?=$deal['expires']?>
+                            <span class="column-lu">天
+                            <?php if (!empty($deal['kuanxianqi'])) { ?>
+                                (含宽限期<?= $deal['kuanxianqi'] ?>天)
+                            <?php } ?>
+                            </span>
+                        </div>
                         <span class="qing">期限</span>
                     </li>
                 </ul>
@@ -55,7 +62,7 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
                 <?php } else { ?>
                     <div class="m3">项目结束：<span><?= date('Y-m-d',$deal['finish_date']) ?></span></div>
                 <?php } ?>
-                
+
                 <div class="m4">还款方式：<span><?= Yii::$app->params['refund_method'][$deal['refund_method']]?></span></div>
             </div>
             <div class="col-xs-1"></div>
