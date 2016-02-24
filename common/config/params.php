@@ -57,7 +57,7 @@ return [
         'huikuan' => 60766,
         'yzm' => 12552
     ],
-    'contact_tel' => '025-8570-8888',
+    'contact_tel' => '400-101-5151',
     'white_list' => ['15810036547','18518154492'],
     'pc_cat' => ['1'=>'短期产品','2'=>'政府平台',],
     'refund_method' => ['1' => '到期本息', '2' => '按月付息', '3' => '按季付息', '4' => '按半年付息'],
@@ -77,7 +77,7 @@ return [
             'mer_draw_notify_url' => 'http://1.202.98.24:8002/order/drawnotify/notify',  //融资方提现回调地址
             'draw_ret_url' => "http://1.202.102.12:8001/user/qpay/drawnotify/frontend",
             'draw_notify_url' => "http://1.202.102.12:8001/user/qpay/drawnotify/backend",
-            'draw_apply_notify_url' => "http://1.202.102.12:8001/user/qpay/drawnotify/apply", 
+            'draw_apply_notify_url' => "http://1.202.102.12:8001/user/qpay/drawnotify/apply",
         ],
     ],
 ];
