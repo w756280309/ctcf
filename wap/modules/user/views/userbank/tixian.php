@@ -43,7 +43,7 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
         <div class="row dan" style="padding-top: 1px;">
                     <div class="hidden-xs col-sm-1"></div>
                     <div class="col-xs-10 col-sm-10" style="padding: 0">
-                        <span>银行卡信息有误：无法提现？<a href="/user/userbank/editbank" style="color: #0f81fe;">去修改</a></span>
+                        <span>(每笔提现扣除2元手续费)</span>
                     </div>
                     <div class="hidden-xs col-sm-1"></div>
                 </div>
@@ -65,7 +65,7 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
            if(err === '1') {
                toasturl(tourl,mess);
            }
-           
+
            csrf = $("meta[name=csrf-token]").attr('content');
            $('#tixianbtn').bind('click',function(){
                $(this).addClass("btn-press").removeClass("btn-normal");
@@ -83,6 +83,5 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
                $(this).removeClass("btn-press").addClass("btn-normal");
            });
 
-        })    
+        })
      </script>
-    

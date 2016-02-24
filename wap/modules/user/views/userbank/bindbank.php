@@ -1,11 +1,6 @@
 <?php
 
-use yii\bootstrap\ActiveForm;
-use yii\helpers\Html;
-use yii\helpers\Url;
-
 $this->title="绑定银行卡";
-//$this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','position' => 1]);
 $this->registerJsFile('/js/jquery.js', ['position' => 1]);
 $this->registerJsFile('/js/qpay.js', ['position' => 1]);
 
@@ -142,6 +137,6 @@ $this->registerJsFile('/js/qpay.js', ['position' => 1]);
 
             })
        });
-       
+
     })
 </script>

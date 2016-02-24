@@ -46,7 +46,7 @@ class UserbankController extends BaseController
         $model->scenario = 'idcardrz';
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             $umpService = new \common\service\UmpService();
-            try {                
+            try {
                 $umpService->register($model);
                 return ['tourl' => '/user/userbank/bindbank', 'code' => 0, 'message' => '实名认证成功'];
             } catch (\Exception $ex) {
@@ -208,7 +208,7 @@ class UserbankController extends BaseController
         $user_acount = $user->lendAccount;
         $user_bank = $user->qpay;
 
-        $cond = 0 | BankService::IDCARDRZ_VALIDATE_N | BankService::BINDBANK_VALIDATE_N | BankService::CHARGEPWD_VALIDATE_N | BankService::EDITBANK_VALIDATE;
+        $cond = 0 | BankService::IDCARDRZ_VALIDATE_N | BankService::BINDBANK_VALIDATE_N;
         $data = BankService::check($user, $cond);
         if ($data[code] == 1) {
             if (Yii::$app->request->isAjax) {
@@ -241,7 +241,7 @@ class UserbankController extends BaseController
     /**
      * 提现申请-验证交易密码表单页.
      */
-    public function actionChecktradepwd($money)
+    public function actionChecktradepwd($money)  // DEPRECATED
     {
         $user = $this->user;
         $uid = $user->id;
@@ -285,7 +285,7 @@ class UserbankController extends BaseController
     /**
      * 修改银行卡信息表单页.
      */
-    public function actionEditbank()
+    public function actionEditbank()   // DEPRECATED
     {
         $cond = 0 | BankService::IDCARDRZ_VALIDATE_N | BankService::BINDBANK_VALIDATE_N;
         $data = BankService::check($this->user, $cond);
@@ -341,7 +341,7 @@ class UserbankController extends BaseController
     {
         return $this->render('kuaijie');
     }
-        
+
     /**
      * 绑卡受理结果页面
      * @param $ret success/error
@@ -350,7 +350,7 @@ class UserbankController extends BaseController
     {
         return $this->render('acceptres', ['ret' => $ret]);
     }
-    
+
     /**
      * 快捷充值结果页面
      * @param type $ret

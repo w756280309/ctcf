@@ -176,7 +176,6 @@ class Client
             'service' => 'cust_withdrawals',
             'ret_url' => $this->clientOption['draw_ret_url'],
             'notify_url' => $this->clientOption['draw_notify_url'],
-            'notify_url' => $this->clientOption['draw_apply_notify_url'],
             'sourceV' => 'HTML5',
             'order_id' => $draw->getTxSn(),
             'mer_date' => date("Ymd", $draw->getTxDate()),
