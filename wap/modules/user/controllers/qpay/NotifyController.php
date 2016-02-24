@@ -27,9 +27,10 @@ class NotifyController extends Controller
         \Yii::trace($data['service'] . ":" . http_build_query($data), 'umplog');
 
         if (Yii::$container->get('ump')->verifySign($data) && '0000' === $data['ret_code']) {
-            $bind = QpayBinding::findOne(['binding_sn' => $data['order_id']]);
+            $bind = QpayBinding::findOne(['binding_sn' => $data['order_id'], 'status' => QpayBinding::STATUS_INIT]);
             if (null !== $bind) {
-                if (true === self::processing($bind)) {
+                $bind->status = QpayBinding::STATUS_ACK;//处理中
+                if ($bind->save(false)) {
                     return $this->redirect('/user/userbank/accept?ret=success');
                 } else {
                     return $this->redirect('/user/userbank/accept');
@@ -57,23 +58,27 @@ class NotifyController extends Controller
 
         if (
             Yii::$container->get('ump')->verifySign($data)
-            && '0000' === $data['ret_code']
             && 'mer_bind_card_notify' === $data['service']
         ) {
-            $bind = QpayBinding::findOne(['binding_sn' => $data['order_id']]);
-            if (null !== $bind) {
-                if (null === UserBanks::findOne(['binding_sn' => $data['order_id']])) {
-                    if (true === self::processing($bind)) {
-                        $err = '0000';
-                    } else {
-                        $errmsg = "数据修改失败";
+            if ('0000' === $data['ret_code']) {
+                $bind = QpayBinding::findOne(['binding_sn' => $data['order_id']]);
+                if (null !== $bind) {
+                    if (null === UserBanks::findOne(['binding_sn' => $data['order_id']])) {
+                        if (true === self::processing($bind)) {
+                            $err = '0000';
+                        } else {
+                            $errmsg = "数据修改失败";
+                        }
                     }
-                }
+                } else {
+                    $errmsg = $data['order_id'] . ':无法找到申请数据';
+                }   
             } else {
-                $errmsg = $data['order_id'] . ':无法找到申请数据';
-            }
+                $bind->status = QpayBinding::STATUS_FAIL;
+                $bind->save(false);
+                $err = '0000';
+            }            
         }
-
         //记录日志方便调试
         \Yii::trace("errormsg:【" . $err . $errmsg . "】;" . $data['service'] . ":" . http_build_query($data), 'umplog');
 
@@ -88,11 +93,12 @@ class NotifyController extends Controller
 
     public static function processing(QpayBinding $bind)
     {
-        if(1 === (int)$bind->status) {
+        if(QpayBinding::STATUS_SUCCESS === (int)$bind->status || QpayBinding::STATUS_FAIL === (int)$bind->status) {
             return true;
         }
+        
         if (null === UserBanks::findOne(['binding_sn' => $bind->binding_sn])) {
-            $bind->status = 1;
+            $bind->status = QpayBinding::STATUS_SUCCESS;
             $data = ArrayHelper::toArray($bind);
             unset($data['id']);
             unset($data['status']);

@@ -10,6 +10,11 @@ namespace common\models\user;
 class QpayBinding extends UserBanks implements \P2pl\QpayBindInterface
 {
 
+    const STATUS_INIT = 0;//未申请
+    const STATUS_ACK = 3;//处理中，
+    const STATUS_SUCCESS = 1;//绑定成功
+    const STATUS_FAIL = 2;//绑定失败
+    
     public static function tableName()
     {
         return 'qpaybinding';
