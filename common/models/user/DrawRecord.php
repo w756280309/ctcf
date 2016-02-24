@@ -5,7 +5,6 @@ namespace common\models\user;
 use common\utils\TxUtils;
 use yii\behaviors\TimestampBehavior;
 use common\lib\bchelp\BcRound;
-use common\models\user\UserAccount;
 
 /**
  * This is the model class for table "draw_record" 提现记录表.
@@ -97,17 +96,22 @@ class DrawRecord extends \yii\db\ActiveRecord implements \P2pl\WithdrawalInterfa
     }
 
     /**
-     * 计算可提现金额是否充足
+     * 计算可提现金额是否充足.
+     *
      * @param UserAccount $account
-     * @param type $money
-     * @param type $fee
+     * @param type        $money
+     * @param type        $fee
+     *
      * @return type
+     *
      * @throws \Exception
      */
-    public static function checkMoney(UserAccount $account, $money, $fee = 0) {
+    public static function checkMoney(UserAccount $account, $money, $fee = 0)
+    {
         if (bccomp($account->available_balance, bcadd($money, $fee)) < 0) {
             throw new \Exception('超出可提现金额');
         }
+
         return $money;
     }
 
@@ -171,19 +175,22 @@ class DrawRecord extends \yii\db\ActiveRecord implements \P2pl\WithdrawalInterfa
     }
 
     /**
-     * 计算用户实际提现金额以及生成冻结手续费记录
-     * @param UserAccount $ua 用户资金对象
-     * @param decimal $money 提现金额
-     * @param varchar $osn 提现编号
-     * 提现金额+手续费>=可用余额 提现金额为实际到账金额
-     * 提现金额+手续费<可用余额 提现金额-手续费为实际到账金额
+     * 计算用户实际提现金额以及生成冻结手续费记录.
+     *
+     * @param UserAccount $ua    用户资金对象
+     * @param decimal     $money 提现金额
+     * @param varchar     $osn   提现编号
+     *                           提现金额+手续费>=可用余额 提现金额为实际到账金额
+     *                           提现金额+手续费<可用余额 提现金额-手续费为实际到账金额
      */
-    public static function getRealDrawFound($ua,$money){
+    public static function getRealDrawFound($ua, $money)
+    {
         bcscale(14);
         $bc = new BcRound();
         if (0 > bccomp($ua->available_balance, bcadd($money, \Yii::$app->params['drawFee']))) {
             $money = $bc->bcround(bcsub($money, \Yii::$app->params['drawFee']), 2);
         }
+
         return $money;
     }
 
@@ -191,17 +198,19 @@ class DrawRecord extends \yii\db\ActiveRecord implements \P2pl\WithdrawalInterfa
     {
         return $this->sn;
     }
+
     public function getTxDate()
     {
         return $this->created_at;
     }
+
     public function getEpayUserId()
     {
         return $this->user->epayUser->epayUserId;
     }
+
     public function getAmount()
     {
         return $this->money;
     }
-
 }
