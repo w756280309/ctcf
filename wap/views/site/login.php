@@ -32,15 +32,12 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
             <input name="from" type="hidden" value="<?=$from ?>">
                 <input id="iphone" class="login-info" name="LoginForm[phone]" maxlength="11" type="tel" placeholder="请输入手机号" AUTOCOMPLETE="off" >
 
-               <div class="row sm-height">
-                    <div class="col-xs-9 col">
+                <div class="row sm-height">
+                    <div class="col">
                         <input id="pass" class="login-info" name="LoginForm[password]" maxlength="20" type="password" placeholder="请输入密码" AUTOCOMPLETE="off" />
                     </div>
-                    <div class="col-xs-3 col login-eye border-bottom" style="height:52px" >
-                           <img src="/images/eye-close.png" width="26" height="20" alt="闭眼">
-                    </div>
                 </div>
-                
+
                 <?php if($is_flag) { ?>
                 <div class="row sm-height border-bottom">
                     <div class="col-xs-9 col">
@@ -54,7 +51,7 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
                     </div>
                 </div>
                 <?php } ?>
-                
+
                 <a href="/site/resetpass" class="forget-mima">忘记密码？</a>
                 <div class="col-xs-3"></div>
                 <div class="col-xs-6 login-sign-btn">
@@ -130,21 +127,9 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
                 }
             });
         });
-        $(".login-eye img").on("click",function (){
-            if( $("#pass").attr("type") == "password"){
-                $("#pass").attr("type","text");
-                $(this).removeAttr("src","/images/eye-close.png");
-                $(this).attr({ src: "/images/eye-open.png", alt: "eye-open" });
-            } else {
-                $("#pass").attr("type","password");
-                $(this).removeAttr("src","/images/eye-open.png");
-                $(this).attr({ src: "/images/eye-close.png", alt: "eye-close" });
-            }
-         });
-
     </script>
     <?php $this->endBody() ?>
-		
+
 </body>
 </html>
 <?php $this->endPage() ?>
