@@ -3,7 +3,6 @@
 namespace app\modules\user\controllers;
 
 use Yii;
-use yii\web\Response;
 use frontend\controllers\BaseController;
 use common\models\user\EditpassForm;
 use common\models\user\UserAccount;
@@ -66,35 +65,6 @@ class UseraccountController extends BaseController
     }
 
     /**
-     * 补充银行信息.
-     */
-    public function actionEditbank()
-    {
-        $res = false;
-        $message = '操作失败';
-        $check_arr = BankService::checkKuaijie($this->user);
-        if ($check_arr['code'] === 1) {
-            $this->goHome();
-        }
-
-        $bank = $this->user->bank;
-        $bank->scenario = 'step_second';
-        if ($bank->load(Yii::$app->request->post()) && $bank->validate()) {
-            $res = $bank->save();
-            if ($res) {
-                $message = '操作成功';
-            }
-        }
-
-        if ($bank->hasErrors()) {
-            $message = current($bank->firstErrors);
-        }
-
-        Yii::$app->response->format = Response::FORMAT_JSON;
-        return ['res' => $res, 'message' => $message];
-    }
-
-    /**
      * 提现返回页面.
      */
     public function actionTixianback($flag)
@@ -104,16 +74,5 @@ class UseraccountController extends BaseController
         }
 
         return $this->render('tixianback', ['flag' => $flag]);
-    }
-
-    /**
-     * 查询省份对应的城市
-     */
-    public function actionCity($pid)
-    {
-        Yii::$app->response->format = Response::FORMAT_JSON;
-        $city = Region::find()->where(['province_id'=>$pid])->select('name')->asArray()->all();
-
-        return ['name' => $city];
     }
 }

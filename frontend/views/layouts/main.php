@@ -35,7 +35,7 @@ AppAsset::register($this);
                         <a class="navbar-link" href="/site/login?flag=reg">注册</a>
                     <?php } else { ?>
                         <a class="navbar-link" href="/user/useraccount/accountcenter">我的账户</a>
-                        <a class="navbar-link" href="javascript:void(0)" onclick="$('#logout').submit();">注销</a>
+                        <a class="navbar-link" href="javascript:void(0)" onclick="$('#logout').submit();">安全退出</a>
                         <form method="post" id="logout" action="/site/logout">
                             <input name="_csrf" type="hidden" id="_csrf" value="<?= Yii::$app->request->csrfToken ?>">
                         </form>

@@ -90,7 +90,7 @@ class DrawRecord extends \yii\db\ActiveRecord implements \P2pl\WithdrawalInterfa
             [['money', 'uid'], 'required'],
             [['money'], 'match', 'pattern' => '/^[0-9]+([.]{1}[0-9]{1,2})?$/', 'message' => '提现金额格式错误'],
             [['account_id', 'uid', 'status', 'created_at', 'updated_at'], 'integer'],
-            [['money'], 'number', 'min' => 1, 'max' => 10000000],
+            [['money'], 'number', 'min' => 10, 'max' => 10000000],
             [['fee'], 'number'],
             [['sn', 'bank_id', 'bank_name', 'bank_account'], 'string', 'max' => 30],
         ];
@@ -110,7 +110,7 @@ class DrawRecord extends \yii\db\ActiveRecord implements \P2pl\WithdrawalInterfa
         }
         return $money;
     }
-    
+
     /**
      * Validates the password.
      * This method serves as the inline validation for password.
@@ -186,7 +186,7 @@ class DrawRecord extends \yii\db\ActiveRecord implements \P2pl\WithdrawalInterfa
         }
         return $money;
     }
-    
+
     public function getTxSn()
     {
         return $this->sn;
@@ -203,5 +203,5 @@ class DrawRecord extends \yii\db\ActiveRecord implements \P2pl\WithdrawalInterfa
     {
         return $this->money;
     }
-    
+
 }
