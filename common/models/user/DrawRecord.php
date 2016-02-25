@@ -112,7 +112,11 @@ class DrawRecord extends \yii\db\ActiveRecord implements \P2pl\WithdrawalInterfa
         $bc = new BcRound();
         bcscale(14);
         if (bccomp($account->available_balance, bcadd($money, $fee)) < 0) {
-            throw new DrawException($bc->bcround(bcsub($account->available_balance, $fee), 2), DrawException::ERROR_CODE_ENOUGH);
+            if (bccomp($account->available_balance, $fee) < 0) {
+                throw new \Exception('账户余额不足');
+            } else {
+                throw new DrawException($bc->bcround(bcsub($account->available_balance, $fee), 2), DrawException::ERROR_CODE_ENOUGH);
+            }
         }
         return $money;
     }

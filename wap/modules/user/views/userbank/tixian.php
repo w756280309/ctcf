@@ -86,7 +86,9 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
                    return false;
                }
                subForm("#form", "#tixianbtn", function(data) {
-                   $('#money').val(data.money)
+                   if (data.money != undefined) {
+                      $('#money').val(data.money)
+                   }
                });
                $(this).removeClass("btn-press").addClass("btn-normal");
            });

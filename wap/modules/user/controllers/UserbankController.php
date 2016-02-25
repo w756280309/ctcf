@@ -11,6 +11,7 @@ use common\models\user\UserBanks;
 use common\service\BankService;
 use common\service\SmsService;
 use common\models\draw\DrawManager;
+use common\models\draw\DrawException;
 
 class UserbankController extends BaseController
 {
