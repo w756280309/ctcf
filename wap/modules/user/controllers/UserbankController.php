@@ -63,38 +63,15 @@ class UserbankController extends BaseController
      */
     public function actionBindbank()
     {
-//        $cond = 0 | BankService::IDCARDRZ_VALIDATE_N | BankService::BINDBANK_VALIDATE_Y;
-//        $data = BankService::check($this->user, $cond);
-//        if ($data['code'] == 1) {
-//            if (Yii::$app->request->isAjax) {
-//                return $data;
-//            } else {
-//                $arr = array();
-//
-//                return $this->render('bindbank', ['banklist' => $arr, 'data' => $data]);
-//            }
-//        }
-
-        $user = $this->user;
-        $model = new UserBanks();
-        $model->scenario = 'step_first';
-        $model->uid = $user->id;
-        $model->account = $user->real_name;
-        $model->account_type = UserBanks::PERSONAL_ACCOUNT;
-        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            $model->status = UserBanks::STATUS_YES;
-            if ($model->save()) {
-                //绑卡成功
-                $res = SmsService::editSms($user->id);
-
-                return ['tourl' => '/user/userbank/addbuspass', 'code' => 1, 'message' => '绑卡成功'];
+        $cond = 0 | BankService::IDCARDRZ_VALIDATE_N | BankService::BINDBANK_VALIDATE_Y;
+        $data = BankService::check($this->user, $cond);
+        if ($data['code'] == 1) {
+            if (Yii::$app->request->isAjax) {
+                return $data;
+            } else {
+                $arr = array();
+                return $this->render('bindbank', ['banklist' => $arr, 'data' => $data]);
             }
-        }
-
-        if ($model->getErrors()) {
-            $message = $model->firstErrors;
-
-            return ['code' => 1, 'message' => current($message)];
         }
 
         $arr = array();

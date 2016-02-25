@@ -28,8 +28,13 @@ function toasturl(url, val) {
 }
 
 function validateBinding() {
-    if ($('#card_no').val() == '') {
+    if ($.trim($('#card_no').val()) == '') {
         toast(null, '银行卡号不能为空');
+        return false;
+    }
+    var reg = /^[0-9]{16,19}$/;
+    if (!reg.test($.trim($('#card_no').val()))) {
+        toast(null, '你输入的银行卡号有误');
         return false;
     }
     if ($('#bank_name').val() == '') {
