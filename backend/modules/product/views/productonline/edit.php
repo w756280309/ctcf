@@ -269,7 +269,7 @@ TPL;
                                 'inputOptions'=>[
                                     'autocomplete' => "off",
                                     'class' => 'chosen-with-diselect span6',
-                                    'onchange' => 'changeRefmet(this)'
+                                    //'onchange' => 'changeRefmet(this)'
                                     ]
                                 ])->dropDownList(['' => "--选择--"] + Yii::$app->params['refund_method'])
                             ?>
@@ -277,7 +277,7 @@ TPL;
                 </div>
             </div>
         </div>
-        <div class="row-fluid sourceRfmet" style="display:<?php if (1 === $model->refund_method) { ?>none<?php } else { ?>inline<?php }?>">
+        <div class="row-fluid sourceRfmet">
             <div class="span6 ">
                 <div class="control-group">
                     <label class="control-label">项目截止日</label>
@@ -458,7 +458,7 @@ TPL;
         });
 
         <?php if (1 == (int)$model->refund_method) { ?>
-            $('#onlineproduct-is_fdate').click();
+            //$('#onlineproduct-is_fdate').click();
         <?php } ?>
         
         kindEdit();

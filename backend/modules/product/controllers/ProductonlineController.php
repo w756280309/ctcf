@@ -16,6 +16,7 @@ use common\lib\bchelp\BcRound;
 use common\models\booking\BookingLog;
 use P2pl\Borrower;
 use common\service\LoanService;
+use common\lib\product\ProductProcessor;
 
 /**
  * Description of OnlineProduct.
@@ -56,7 +57,7 @@ class ProductonlineController extends BaseController
         $con_content_arr = Yii::$app->request->post('content');
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             if (null !== $model->finish_date) {//若截止日期不为空，重新计算项目天数
-                $pp = new \common\lib\product\ProductProcessor();
+                $pp = new ProductProcessor();
                 $model->expires = $pp->LoanTimes($model->start_date, null, strtotime($model->finish_date), 'd', true)['days'][1]['period']['days'];
             }
             if (null === $model->id) {
@@ -350,6 +351,11 @@ class ProductonlineController extends BaseController
              ) {
                 return ['result' => '0', 'message' => '无法找到该项目,或者项目现阶段不允许开始计息'];
             } else {
+                if (0 === $model->finish_date) {
+                    $pp = new ProductProcessor();
+                    $finish_date = $pp->LoanTerms('d1', date('Y-m-d', $model->jixi_time), $model->expires);
+                    OnlineProduct::updateAll(['finish_date' => $finish_date], "id=" . $id);
+                }
                 $res = OnlineRepaymentPlan::createPlan($id);//转移到开始计息部分
 
                 if ($res) {
