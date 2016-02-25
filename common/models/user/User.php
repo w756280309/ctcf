@@ -57,6 +57,10 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface, UserInterf
     const KUAIJIE_STATUS_Y = 1;
     const KUAIJIE_STATUS_N = 0;
     const IDCARD_EXAMIN_COUNT = 3;
+    
+    const QPAY_NONE = 0;//未绑卡
+    const QPAY_ENABLED = 1;//已经绑卡
+    const QPAY_PENDING = 2;//绑卡中
 
     public static function examinStatus($key = null)
     {

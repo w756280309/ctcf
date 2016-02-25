@@ -8,6 +8,7 @@ use yii\web\Response;
 use common\models\user\User;
 use common\models\user\QpayBinding;
 use common\models\city\Region;
+use common\service\BankService;
 
 class SystemController extends BaseController
 {
@@ -28,8 +29,13 @@ class SystemController extends BaseController
         $uid = $this->user->id;
 
         $user = User::find()->where(['id' => $uid, 'type' => User::USER_TYPE_PERSONAL, 'status' => User::STATUS_ACTIVE, 'idcard_status' => User::IDCARD_STATUS_PASS])->select('idcard')->one();
-        $user_bank = QpayBinding::find()->where(['uid' => $uid])->select('bank_name,card_number,status')->orderBy('id desc')->one();
-
+        $user_bank = null;
+        $qpaystatus = BankService::getQpayStatus($this->user);
+        if (User::QPAY_ENABLED === $qpaystatus) {
+            $user_bank = $this->user->qpay;
+        } else if (User::QPAY_PENDING === $qpaystatus) {
+            $user_bank = QpayBinding::findOne(['uid' => $uid, 'status' => QpayBinding::STATUS_ACK]);
+        }
         return $this->render('safecenter', ['user' => $user, 'user_bank' => $user_bank]);
     }
 

@@ -60,12 +60,10 @@ class BankService
 
         //此段路放置于最后
         if (($cond & self::BINDBANK_VALIDATE_N) && empty($user_bank)) {
-            $bind = QpayBinding::find()->where(['uid' => $user->id])->orderBy('id desc')->one();
-            if (null === $bind) {
+            $qpaystatus = self::getQpayStatus($user);
+            if (User::QPAY_NONE === $qpaystatus) {
                 return ['tourl' => '/user/userbank/bindbank', 'code' => 1, 'message' => '您还未绑定银行卡，请先去绑定'];
-            }
-            //如果没有显示card_id 并且绑卡申请是处理中的
-            if (QpayBinding::STATUS_ACK === (int)$bind->status) {
+            } else if (User::QPAY_PENDING === $qpaystatus) {
                 return ['code' => 1, 'message' => '您的绑卡请求正在处理中,请先去转转吧'];
             }
         }
@@ -83,6 +81,22 @@ class BankService
 //        }
 
         return ['code' => 0];
+    }
+
+    /**
+     * 获取绑卡状态
+     */
+    public static function getQpayStatus(User $user)
+    {
+        //已经绑卡
+        if(null !== $user->qpay) {
+            return User::QPAY_ENABLED;
+        }
+        $binding = QpayBinding::findOne(['uid' => $user->id, 'status' => QpayBinding::STATUS_ACK]);//处理中的绑卡请求
+        if (null !== $binding) {
+            return User::QPAY_PENDING;
+        }
+        return User::QPAY_NONE;//返回没有绑卡请求
     }
 
     /**
