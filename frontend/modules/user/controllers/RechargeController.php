@@ -21,7 +21,7 @@ class RechargeController extends BaseController
             return $this->redirect('/user/useraccount/accountcenter');
         }
 
-        parent::beforeAction($action);
+        return parent::beforeAction($action);
     }
 
     /**
