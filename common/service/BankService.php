@@ -6,8 +6,6 @@ use Yii;
 use yii\web\Response;
 use common\models\user\User;
 use common\models\user\QpayBinding;
-use common\models\user\UserBanks;
-use yii\helpers\ArrayHelper;
 
 /**
  * Desc 主要用于充值提现流程规则的校验
@@ -50,7 +48,7 @@ class BankService
         }
 
         if (($cond & self::IDCARDRZ_VALIDATE_N) && $user->idcard_status == User::IDCARD_STATUS_WAIT) {
-            return ['tourl' => '/user/userbank/kuaijie', 'code' => 1, 'message' => '您还没有开通第三方资金托管账户，请前往开通'];
+            return ['tourl' => '/user/userbank/idcardrz', 'code' => 1, 'message' => '您还没有开通第三方资金托管账户，请前往开通'];
         }
 
         $user_bank = $user->qpay;
@@ -67,18 +65,6 @@ class BankService
                 return ['code' => 1, 'message' => '您的绑卡请求正在处理中,请先去转转吧'];
             }
         }
-
-//        if (($cond & self::CHARGEPWD_VALIDATE_N) && empty($user->trade_pwd)) {
-//            return ['tourl' => '/user/userbank/addbuspass', 'code' => 1, 'message' => '您未设定交易密码'];
-//        }
-//
-//        if (($cond & self::CHARGEPWD_VALIDATE_Y) && !empty($user->trade_pwd)) {
-//            return ['tourl' => '/user/user', 'code' => 1, 'message' => '您已设定交易密码'];
-//        }
-//
-//        if (($cond & self::EDITBANK_VALIDATE) && (empty($user_bank->sub_bank_name) || empty($user_bank->province) || empty($user_bank->city))) {
-//            return ['tourl' => '/user/userbank/editbank', 'code' => 1, 'message' => '您需要先完善银行卡信息'];
-//        }
 
         return ['code' => 0];
     }

@@ -9,7 +9,6 @@ use common\models\user\DrawRecord;
 use common\models\user\UserAccount;
 use common\models\user\UserBanks;
 use common\service\BankService;
-use common\service\SmsService;
 use common\models\draw\DrawManager;
 use common\models\draw\DrawException;
 
@@ -177,7 +176,7 @@ class UserbankController extends BaseController
                     return ['code' => 1, 'message' => '您的账户余额不足,仅可提现' . $ex->getMessage() . '元', 'money' => $ex->getMessage()];
                 } else {
                     return ['code' => 1, 'message' => $ex->getMessage()];
-                }                
+                }
             } catch (\Exception $ex) {
                 $draw->addError('money', $ex->getMessage());
             }
@@ -205,14 +204,6 @@ class UserbankController extends BaseController
     public function actionBankxiane()
     {
         return $this->render('bankxiane');
-    }
-
-    /**
-     * 快捷支付开通说明页.
-     */
-    public function actionKuaijie()
-    {
-        return $this->render('kuaijie');
     }
 
     /**
