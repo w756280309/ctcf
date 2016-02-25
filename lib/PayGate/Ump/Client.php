@@ -476,6 +476,23 @@ class Client
     }
 
     /**
+     * 4.2.13 充值交易密码
+     * @param UserInterface $user
+     * @return type
+     */
+    public function resetTradePass(UserInterface $user)
+    {
+        $data = [
+            'service' => 'mer_send_sms_pwd',
+            'user_id' => $user->getEpayUserId(),
+            'order_id' => $this->generateSn('RP'),
+            'identity_code' => $this->encrypt($user->getIdNo()), //GBK编码后使用联动公钥进行RSA加密，最后使用BASE64编码
+        ];
+
+        return $this->doRequest($data);
+    }
+
+    /**
      * 获取对账单（暂限定为标的交易）.
      *
      * @param string $date YYYYMMDD
@@ -491,6 +508,21 @@ class Client
         ];
 
         return $this->doRequest($data);
+    }
+
+    /**
+     * 生成流水串号
+     * @param type $prefix
+     * @return type
+     */
+    private function generateSn($prefix = '')
+    {
+        list($sec, $usec) = explode('.', sprintf('%.6f', microtime(true)));
+
+        return $prefix
+            .date('ymdHis', $sec)
+            .$usec
+            .mt_rand(1000, 9999);
     }
 
     /**

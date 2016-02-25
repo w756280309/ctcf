@@ -27,7 +27,7 @@ class DrawnotifyController extends Controller
             if ($ret instanceof DrawRecord) {
                 return $this->redirect('/user/user');
             } else {
-               Yii::trace('非DrawRecord对象;'. $data['service'] . ":" . http_build_query($data), 'umplog'); 
+               Yii::trace('非DrawRecord对象;'. $data['service'] . ":" . http_build_query($data), 'umplog');
             }
         } catch (Exception $ex) {
             Yii::trace($ex->getMessage() .';'. $data['service'] . ":" . http_build_query($data), 'umplog');
@@ -51,7 +51,7 @@ class DrawnotifyController extends Controller
                $errmsg = '非DrawRecord对象;';
             }
         } catch (Exception $ex) {
-            $errmsg = $ex->getMessage() .';';            
+            $errmsg = $ex->getMessage() .';';
         }
         Yii::trace($errmsg . $data['service'] . ":" . http_build_query($data), 'umplog');
         $content = Yii::$container->get('ump')->buildQuery([
@@ -59,18 +59,18 @@ class DrawnotifyController extends Controller
             'mer_date' => $data['mer_date'],
             'reg_code' => $err,
         ]);
-        
+
         return $this->render('@borrower/modules/user/views/recharge/recharge_notify.php', ['content' => $content]);
     }
-    
+
     /**
-     * 
+     *
      * @param array $data
      * @return type
      * @throws NotFoundHttpException
      * @throws Exception
      */
-    private function processing(array $data = [])
+    private function processing(array $data = [])   //没有做防重复处理
     {
         Yii::trace('【提现申请返回通知】' . $data['service'] . ":" . http_build_query($data), 'umplog');
         if (
@@ -79,14 +79,14 @@ class DrawnotifyController extends Controller
             && 'withdraw_apply_notify' === $data['service']
         ) {
             $draw = DrawRecord::findOne(['sn' => $data['order_id']]);
-            return DrawManager::ackDraw($draw);           
+            return DrawManager::ackDraw($draw);
         } else {
             throw new Exception($data['order_id'] . '处理失败');
         }
     }
 
     /**
-     * 
+     *
      * @param array $data
      */
     public function apply()

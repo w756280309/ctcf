@@ -2,19 +2,15 @@
 
 namespace app\modules\user\controllers;
 
+use Yii;
+use yii\web\Response;
 use app\controllers\BaseController;
-use common\models\city\Region;
 use common\models\user\DrawRecord;
-use common\models\user\EditpassForm;
 use common\models\user\UserAccount;
 use common\models\user\UserBanks;
 use common\service\BankService;
 use common\service\SmsService;
-use Yii;
-use yii\web\Response;
-use common\models\draw\Draw;
 use common\models\draw\DrawManager;
-use common\models\draw\DrawException;
 
 class UserbankController extends BaseController
 {
@@ -113,68 +109,41 @@ class UserbankController extends BaseController
     }
 
     /**
-     * 设置交易密码表单页.
-     */
-    public function actionAddbuspass()
-    {
-        $cond = 0 | BankService::IDCARDRZ_VALIDATE_N | BankService::BINDBANK_VALIDATE_N | BankService::CHARGEPWD_VALIDATE_Y;
-        $data = BankService::check($this->user, $cond);
-        if ($data[code] == 1) {
-            if (Yii::$app->request->isAjax) {
-                return $data;
-            } else {
-                return $this->render('addbuspass', $data);
-            }
-        }
-
-        $model = new EditpassForm();
-        $model->scenario = 'add';
-        if ($model->load(Yii::$app->request->post())) {
-            if ($model->editpass()) {
-                return ['tourl' => '/user/user', 'code' => 1, 'message' => '添加交易密码成功'];
-            }
-        }
-
-        if ($model->getErrors()) {
-            $message = $model->firstErrors;
-
-            return ['code' => 1, 'message' => current($message)];
-        }
-
-        return $this->render('addbuspass');
-    }
-
-    /**
      * 修改交易密码表单页.
      */
     public function actionEditbuspass()
     {
-        $model = new EditpassForm();
-
-        $cond = 0 | BankService::IDCARDRZ_VALIDATE_N | BankService::BINDBANK_VALIDATE_N | BankService::CHARGEPWD_VALIDATE_N;
+        $cond = 0 | BankService::IDCARDRZ_VALIDATE_N;
         $data = BankService::check($this->user, $cond);
-        if ($data[code] == 1) {
+        if (1 === $data['code']) {
             if (Yii::$app->request->isAjax) {
                 return $data;
             } else {
-                return $this->render('editbuspass', ['model' => $model, 'data' => $data]);
+                return $this->render('editbuspass', ['data' => $data]);
             }
         }
 
-        $model->scenario = 'edit';
-        if ($model->load(Yii::$app->request->post())) {
-            if ($model->editpass()) {
-                return ['tourl' => '/user/user', 'code' => 1, 'message' => '交易密码修改成功'];
-            }
+        return $this->render('editbuspass');
+    }
+
+    public function actionResetTradePass()
+    {
+        $cond = 0 | BankService::IDCARDRZ_VALIDATE_N;
+        $data = BankService::check($this->user, $cond);
+        if (1 === $data['code']) {
+            return $data;
         }
 
-        if ($model->getErrors()) {
-            $message = $model->firstErrors;
+        $ump = Yii::$container->get('ump');
 
-            return ['code' => 1, 'message' => current($message)];
+        $resp = $ump->resetTradePass($this->user);
+
+        if ($resp->isSuccessful()) {
+            return ['code' => 0, 'message' => '重置后的密码已经发送到您的手机'];
+        } else {
+            \Yii::trace('【重置交易密码】'.$this->user->idcard.":".$resp->get('ret_code').":".$resp->get('ret_msg'), 'umplog');
+            return ['code' => 1, 'message' => '当前网络异常，请稍后重试'];
         }
-
-        return $this->render('editbuspass', ['model' => $model]);
     }
 
     /**

@@ -665,4 +665,9 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface, UserInterf
     {
         return $this->mobile;
     }
+
+    public function getEpayUserId()
+    {
+        return $this->epayUser->epayUserId;
+    }
 }

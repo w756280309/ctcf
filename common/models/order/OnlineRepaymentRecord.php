@@ -30,17 +30,17 @@ class OnlineRepaymentRecord extends \yii\db\ActiveRecord
     const STATUS_DID = 1;//已还
     const STATUS_BEFORE = 2;//提前
     const STATUS_FALSE = 3;//无效
-    
+
     public static function createSN($pre = 'hkjl'){
         $pre_val = 'HB';
         list($usec, $sec) = explode(" ", microtime());
         $v = ((float)$usec + (float)$sec);
-        
+
         list($usec, $sec) = explode(".", $v);
         $date = date('ymdHisx' . rand(1000, 9999),$usec);
         return $pre_val.str_replace('x', $sec, $date);
     }
-    
+
     /**
      * @inheritdoc
      */
@@ -49,7 +49,7 @@ class OnlineRepaymentRecord extends \yii\db\ActiveRecord
             TimestampBehavior::className(),
         ];
     }
-    
+
     /**
      * @inheritdoc
      */
