@@ -77,7 +77,7 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
                 $(this).removeClass("btn-press").addClass("btn-normal");
                 return false;
             }
-            var reg = /^((\d{1,3}(,\d{3})*)|(\d+))(\.\d{2})?$/;
+            var reg = /^[0-9]+([.]{1}[0-9]{1,2})?$/;
             if (!reg.test($('#fund').val())) {
                 toast(this,'充值金额格式不正确');
                 $(this).removeClass("btn-press").addClass("btn-normal");

@@ -63,17 +63,17 @@ class UserbankController extends BaseController
      */
     public function actionBindbank()
     {
-        $cond = 0 | BankService::IDCARDRZ_VALIDATE_N | BankService::BINDBANK_VALIDATE_Y;
-        $data = BankService::check($this->user, $cond);
-        if ($data['code'] == 1) {
-            if (Yii::$app->request->isAjax) {
-                return $data;
-            } else {
-                $arr = array();
-
-                return $this->render('bindbank', ['banklist' => $arr, 'data' => $data]);
-            }
-        }
+//        $cond = 0 | BankService::IDCARDRZ_VALIDATE_N | BankService::BINDBANK_VALIDATE_Y;
+//        $data = BankService::check($this->user, $cond);
+//        if ($data['code'] == 1) {
+//            if (Yii::$app->request->isAjax) {
+//                return $data;
+//            } else {
+//                $arr = array();
+//
+//                return $this->render('bindbank', ['banklist' => $arr, 'data' => $data]);
+//            }
+//        }
 
         $user = $this->user;
         $model = new UserBanks();
@@ -194,6 +194,12 @@ class UserbankController extends BaseController
                 $drawres = DrawManager::initDraw($user_acount, $draw->money, \Yii::$app->params['drawFee']);
                 $next = Yii::$container->get('ump')->initDraw($drawres);
                 return ['code' => 0, 'message' => '', 'tourl' => $next];
+            } catch (DrawException $ex) {
+                if (DrawException::ERROR_CODE_ENOUGH === $ex->getCode()) {
+                    return ['code' => 1, 'message' => '您的账户余额不足,仅可提现' . $ex->getMessage() . '元', 'money' => $ex->getMessage()];
+                } else {
+                    return ['code' => 1, 'message' => $ex->getMessage()];
+                }                
             } catch (\Exception $ex) {
                 $draw->addError('money', $ex->getMessage());
             }

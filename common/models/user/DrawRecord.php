@@ -5,6 +5,7 @@ namespace common\models\user;
 use common\utils\TxUtils;
 use yii\behaviors\TimestampBehavior;
 use common\lib\bchelp\BcRound;
+use common\models\draw\DrawException;
 
 /**
  * This is the model class for table "draw_record" 提现记录表.
@@ -89,7 +90,7 @@ class DrawRecord extends \yii\db\ActiveRecord implements \P2pl\WithdrawalInterfa
             [['money', 'uid'], 'required'],
             [['money'], 'match', 'pattern' => '/^[0-9]+([.]{1}[0-9]{1,2})?$/', 'message' => '提现金额格式错误'],
             [['account_id', 'uid', 'status', 'created_at', 'updated_at'], 'integer'],
-            [['money'], 'number', 'min' => 10, 'max' => 10000000],
+            [['money'], 'number', 'min' => \Yii::$app->params['ump']['draw']['min'], 'max' => \Yii::$app->params['ump']['draw']['max']],
             [['fee'], 'number'],
             [['sn', 'bank_id', 'bank_name', 'bank_account'], 'string', 'max' => 30],
         ];
@@ -108,10 +109,11 @@ class DrawRecord extends \yii\db\ActiveRecord implements \P2pl\WithdrawalInterfa
      */
     public static function checkMoney(UserAccount $account, $money, $fee = 0)
     {
+        $bc = new BcRound();
+        bcscale(14);
         if (bccomp($account->available_balance, bcadd($money, $fee)) < 0) {
-            throw new \Exception('超出可提现金额');
+            throw new DrawException($bc->bcround(bcsub($account->available_balance, $fee), 2), DrawException::ERROR_CODE_ENOUGH);
         }
-
         return $money;
     }
 
