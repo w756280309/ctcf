@@ -28,6 +28,9 @@ class DealController extends Controller
      */
     public function actionIndex($page = 1, $cat = 1, $xs = null)
     {
+        if (null !== $cat) {
+            $cat = (int) $cat;
+        }
         $cat_ids = array_keys(Yii::$app->params['pc_cat']);
         if ((null !== $cat && !in_array($cat, $cat_ids)) || (null !== $xs && !in_array($xs, [0, 1]))) {
             throw new \yii\web\BadRequestHttpException('参数无效');
