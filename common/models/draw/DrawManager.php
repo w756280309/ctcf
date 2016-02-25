@@ -53,11 +53,7 @@ class DrawManager
     public static function ackDraw(DrawRecord $draw)
     {
         if (DrawRecord::STATUS_ZERO !== (int)$draw->status) {
-            if (DrawRecord::STATUS_EXAMINED === (int)$draw->status) {
-                return $draw;
-            } else {
-                throw new DrawException("审核受理失败,提现申请状态异常");
-            }            
+            throw new DrawException("审核受理失败,提现申请状态异常");            
         }
         $user = $draw->user;
         $fee = $draw->fee;

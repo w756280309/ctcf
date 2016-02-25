@@ -79,7 +79,11 @@ class DrawnotifyController extends Controller
             && 'withdraw_apply_notify' === $data['service']
         ) {
             $draw = DrawRecord::findOne(['sn' => $data['order_id']]);
-            return DrawManager::ackDraw($draw);
+            if (DrawRecord::STATUS_ZERO === (int)$draw->status) {
+                return DrawManager::ackDraw($draw);
+            } else {
+                throw new Exception($data['order_id'] . '状态异常');
+            }
         } else {
             throw new Exception($data['order_id'] . '处理失败');
         }
