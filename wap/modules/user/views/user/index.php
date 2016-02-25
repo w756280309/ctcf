@@ -96,7 +96,9 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
                 setTimeout(function(){
                     $(kahao).remove();
                     $('.account div').eq(type).css("background","#fff");
-                    window.location.href = url;
+                    if (url!= '') {
+                        window.location.href = url;
+                    }
                 },200);
             },2000);
     }

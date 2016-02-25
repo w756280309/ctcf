@@ -34,8 +34,13 @@ $this->title="安全中心";
     <?php if($user_bank){ ?>
         <div class="row sm-height border-bottom">
             <div class="col-xs-4 safe-txt  text-align-lf">银行卡</div>
-            <div class="col-xs-4 safe-lf col"><?= $user_bank->bank_name ?></div>
-            <div class="col-xs-4 safe-lf"><?= $user_bank->card_number?substr_replace($user_bank->card_number,'*****',3,-2):"" ?></div>
+            <div class="col-xs-2 safe-lf col"><?= $user_bank->bank_name ?></div>
+            <div class="col-xs-2 safe-lf"><?= $user_bank->card_number ? substr_replace($user_bank->card_number,'*****',3,-2) : "" ?></div>
+            <?php if((int)$user_bank->status === 3) { ?>
+            <div class="col-xs-3 arrow">
+                    <a href="javascript:void(0);">正在审核中</a>
+            </div>
+            <?php } ?>
         </div>
     <?php }else{ ?>
         <div class="row sm-height border-bottom">

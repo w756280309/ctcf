@@ -60,9 +60,9 @@ class NotifyController extends Controller
             Yii::$container->get('ump')->verifySign($data)
             && 'mer_bind_card_notify' === $data['service']
         ) {
-            if ('0000' === $data['ret_code']) {
-                $bind = QpayBinding::findOne(['binding_sn' => $data['order_id']]);
-                if (null !== $bind) {
+            $bind = QpayBinding::findOne(['binding_sn' => $data['order_id']]);
+            if (null !== $bind) {
+                if ('0000' === $data['ret_code']) {
                     if (null === UserBanks::findOne(['binding_sn' => $data['order_id']])) {
                         if (true === self::processing($bind)) {
                             $err = '0000';
@@ -71,13 +71,13 @@ class NotifyController extends Controller
                         }
                     }
                 } else {
-                    $errmsg = $data['order_id'] . ':无法找到申请数据';
-                }   
+                    $bind->status = QpayBinding::STATUS_FAIL;
+                    $bind->save(false);
+                    $err = '0000';
+                }
             } else {
-                $bind->status = QpayBinding::STATUS_FAIL;
-                $bind->save(false);
-                $err = '0000';
-            }            
+                $errmsg = $data['order_id'] . ':无法找到申请数据';
+            }
         }
         //记录日志方便调试
         \Yii::trace("errormsg:【" . $err . $errmsg . "】;" . $data['service'] . ":" . http_build_query($data), 'umplog');

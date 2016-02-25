@@ -6,7 +6,7 @@ use Yii;
 use app\controllers\BaseController;
 use yii\web\Response;
 use common\models\user\User;
-use common\models\user\UserBanks;
+use common\models\user\QpayBinding;
 use common\models\city\Region;
 
 class SystemController extends BaseController
@@ -28,7 +28,7 @@ class SystemController extends BaseController
         $uid = $this->user->id;
 
         $user = User::find()->where(['id' => $uid, 'type' => User::USER_TYPE_PERSONAL, 'status' => User::STATUS_ACTIVE, 'idcard_status' => User::IDCARD_STATUS_PASS])->select('idcard')->one();
-        $user_bank = UserBanks::find()->where(['uid' => $uid])->select('bank_name,card_number')->one();
+        $user_bank = QpayBinding::find()->where(['uid' => $uid])->select('bank_name,card_number,status')->orderBy('id desc')->one();
 
         return $this->render('safecenter', ['user' => $user, 'user_bank' => $user_bank]);
     }

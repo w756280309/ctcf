@@ -58,28 +58,15 @@ class BankService
             return ['tourl' => '/user/user', 'code' => 1, 'message' => '您已经成功绑定过银行卡'];
         }
 
+        //此段路放置于最后
         if (($cond & self::BINDBANK_VALIDATE_N) && empty($user_bank)) {
-            $umpresp = Yii::$container->get('ump')->getUserInfo($user->epayUser->epayUserId);
-            try {
-                if ('' !== $umpresp->get('card_id')) {//如果异常代表没有绑卡
-                    $bind = QpayBinding::findOne(['uid' => $user->id]);
-                    if (null === $bind) {
-                        throw new \Exception('没有申请绑卡');
-                    } else {
-                        $bind->status = 1;
-                        $userBanks = new UserBanks(ArrayHelper::toArray($bind));
-                        $userBanks->setScenario('step_first');
-                        $transaction = Yii::$app->db->beginTransaction();
-                        if ($userBanks->save() && $bind->save()) {
-                            $transaction->commit();
-                        } else {
-                            $transaction->rollBack();
-                            throw new \Exception();
-                        }
-                    }
-                }
-            } catch (\Exception $ex) {
+            $bind = QpayBinding::find()->where(['uid' => $user->id])->orderBy('id desc')->one();
+            if (null === $bind) {
                 return ['tourl' => '/user/userbank/bindbank', 'code' => 1, 'message' => '您还未绑定银行卡，请先去绑定'];
+            }
+            //如果没有显示card_id 并且绑卡申请是处理中的
+            if (QpayBinding::STATUS_ACK === (int)$bind->status) {
+                return ['code' => 1, 'message' => '您的绑卡请求正在处理中,请先去转转吧'];
             }
         }
 
