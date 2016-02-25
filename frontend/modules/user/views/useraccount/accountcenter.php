@@ -8,11 +8,31 @@ $_js = <<<'JS'
 $(function() {
     var $modal = $('#bind-card-modal').modal();
     $modal.modal('show');
+})
+JS;
 
-    $("#tixian").bind('click', function() {
-        var $modal = $('#bind-card-modal').modal();
-        $modal.modal('show');
-    })
+$_js2 = <<<'JS'
+$(function() {
+    $('#rechargebtn').bind('click', function() {
+        $.post('/user/useraccount/recharge-validate', function(data) {
+            if (1 === data.code) {
+                var $modal = $('#bind-card-modal').modal();
+                $modal.modal('show');
+            } else {
+                location.href = '/user/recharge/init';
+            }
+        });
+    });
+    $('#drawbtn').bind('click', function() {
+        $.post('/user/useraccount/draw-validate', function(data) {
+            if (1 === data.code) {
+                var $modal = $('#bind-card-modal').modal();
+                $modal.modal('show');
+            } else {
+                location.href = '/user/useraccount/tixian';
+            }
+        });
+    });
 })
 JS;
 
@@ -20,6 +40,7 @@ if ($errflag) {
     $this->registerJs($_js, View::POS_END, 'body_close');
 }
 
+$this->registerJs($_js2, View::POS_END, 'body_close2');
 ?>
 <div class="container">
     <div style="margin-top: 30px">
@@ -37,8 +58,8 @@ if ($errflag) {
         </div>
 
         <div class="actions">
-            <a class="btn btn-primary" href="/user/recharge/recharge">充值</a>
-            <a class="btn btn-default" id='tixian' href="<?= $errflag?'javascript:void(0)':'/user/useraccount/tixian' ?>">提现</a>
+            <a class="btn btn-primary" id="rechargebtn" href="javascript:void(0)">充值</a>
+            <a class="btn btn-default" id='drawbtn' href="javascript:void(0)"s>提现</a>
         </div>
     </div>
 </div>

@@ -35,6 +35,26 @@ class UseraccountController extends BaseController
     }
 
     /**
+     * 充值前校验用户是否开通联动账户
+     */
+    public function actionRechargeValidate()
+    {
+        $cond = 0 | BankService::IDCARDRZ_VALIDATE_N;
+
+        return BankService::check($this->user, $cond);
+    }
+
+    /**
+     * 提现前校验用户是否开通联动账户并绑定快捷卡
+     */
+    public function actionDrawValidate()
+    {
+        $cond = 0 | BankService::IDCARDRZ_VALIDATE_N | BankService::BINDBANK_VALIDATE_N;
+
+        return BankService::check($this->user, $cond);
+    }
+
+    /**
      * 提现页.
      */
     public function actionTixian()

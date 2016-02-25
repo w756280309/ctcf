@@ -5,138 +5,122 @@ namespace app\modules\user\controllers;
 use Yii;
 use frontend\controllers\BaseController;
 use common\models\user\RechargeRecord;
-use common\models\user\UserAccount;
-use common\models\TradeLog;
-use PayGate\Cfca\Message\Request1311;
-use PayGate\Cfca\Message\Request1320;
-use PayGate\Cfca\Response\Response1320;
-use common\lib\cfca\Cfca;
-use app\modules\user\controllers\bpay\BrechargeController;
-use common\lib\cfca\Payment;
+use PayGate\Cfca\CfcaUtils;
+use common\service\BankService;
 
 class RechargeController extends BaseController
 {
     public $layout = '@app/views/layouts/main';
-    public $enableCsrfValidation = false; //因为中金post的提交。所以要关闭csrf验证
+
+    public function beforeAction($action)
+    {
+        $cond = 0 | BankService::IDCARDRZ_VALIDATE_N;
+
+        $data = BankService::check($this->user, $cond);
+        if (1 === $data['code']) {
+            return $this->redirect('/user/useraccount/accountcenter');
+        }
+
+        parent::beforeAction($action);
+    }
 
     /**
      * 充值
      */
-    public function actionRecharge()
+    public function actionInit()
     {
-        $uid = $this->user->id;
         $bank = Yii::$app->params['bank'];
 
-        $user_account = UserAccount::findOne(['uid' => $uid, 'type' => UserAccount::TYPE_LEND]);
-        $recharge = new RechargeRecord([
-            'uid' => $uid,
-            'account_id' => $user_account->id,
-        ]);
-
-        if ($recharge->load(Yii::$app->request->post())) {
-            $bank_id = Yii::$app->request->post('bankid');
-            $account_type = Yii::$app->request->post('account_type');
-            $pay_type = Yii::$app->request->post('pay_type');
-
-            if (empty($bank_id) || empty($account_type) || empty($pay_type)) {
-                return $this->redirect('/user/recharge/recharge-err');
-            }
-
-            if (!in_array($account_type, ['11', '12'])) {
-                return $this->redirect('/user/recharge/recharge-err');
-            }
-
-            $recharge->sn = RechargeRecord::createSN();
-            $recharge->pay_id = 0;
-            $recharge->account_id = $user_account->id;
-            $recharge->bank_id = $bank_id;
-            $recharge->pay_bank_id = $bank_id;
-            $recharge->status = RechargeRecord::STATUS_NO;
-            $recharge->pay_type = $pay_type;
-
-            if ($recharge->validate()) {
-                //录入recharge_record记录
-                if (!$recharge->save()) {
-                    return $this->redirect('/user/recharge/recharge-err');
-                }
-
-                $req = new Request1311(
-                    Yii::$app->params['cfca']['institutionId'],
-                    $recharge,
-                    $account_type
-                );
-
-                $payment = new Payment();
-                $xml = $req->getXml();
-                $message = base64_encode($xml);   //中金报文正文
-                $signature = $payment->cfcasign_pkcs12($xml);  //签名
-
-                // 设置session。用来验证数据的不可修改
-                Yii::$app->session->set('cfca_recharge', [
-                    'recharge_sn' => $req->getRechargeSn(),
-                ]);
-
-                //录入日志信息
-                $trade_log = new TradeLog($this->user, $req, null);
-                $trade_log->save();
-
-                $this->layout = false;
-
-                return $this->render('dorecharge', ['message' => $message, 'signature' => $signature]);
-            } else {
-                return $this->redirect('/user/recharge/recharge-err');
-            }
-        }
+        $recharge = new RechargeRecord();
+        $user_account = $this->user->lendAccount;
 
         return $this->render('recharge', ['recharge' => $recharge, 'user_account' => $user_account, 'bank' => $bank]);
     }
 
     /**
-     * 查询充值状态 1320.
+     * 充值申请.
      */
-    public function actionCheckarchstatus()
+    public function actionApply()
     {
-        $record = Yii::$app->session->get('cfca_recharge');
+        $bank_id = Yii::$app->request->post('bankid');
+        $pay_type = Yii::$app->request->post('pay_type');   //目前只支持网银充值 2
 
-        if (null === $record) {
-            return $this->redirect('/user/recharge/recharge-err');
+        if (empty($bank_id) || empty($pay_type)) {
+            throw new \Exception('The argument bank_id or pay_type is null.');
         }
 
-        $req = new Request1320(
-                Yii::$app->params['cfca']['institutionId'],
-                $record['recharge_sn']
-        );
+        $recharge = new RechargeRecord([
+            'sn' => CfcaUtils::generateSn("RC"),
+            'pay_type' => $pay_type,
+            'pay_id' => 0,
+            'account_id' => $this->user->lendAccount->id,
+            'uid' => $this->user->id,
+            'bank_id' => $bank_id, //网银充值,不要求绑卡,存储的是银行的统一ID
+            'pay_bank_id' => $bank_id, //网银充值,不要求绑卡,存储的是银行的统一ID
+            'status' => RechargeRecord::STATUS_NO,
+            'clientIp' => ip2long(Yii::$app->request->userIP),
+            'epayUserId' => $this->user->epayUser->epayUserId,
+        ]);
 
-        $cfca = new Cfca();
-        $resp = $cfca->request($req);
-        $rp1320 = new Response1320($resp->getText());
-
-        //录入日志信息
-        $trade_log = new TradeLog($this->user, $req, $resp);
-        $trade_log->save();
-
-        if ($resp->isSuccess()) {
-            if ($rp1320->isSuccess()) {
-                $recharge = RechargeRecord::findOne(['sn' => $req->getPaymentNo()]);
-                $recharge->bankNotificationTime = $rp1320->getBanknotificationtime();
-
-                if (empty($recharge)) {
-                    return $this->redirect('/user/recharge/recharge-err');
-                }
-
-                if (BrechargeController::is_updateAccount($recharge, $this->user)) {
-                    \Yii::$app->session->remove('cfca_recharge');
-
-                    return $this->redirect('/user/useraccount/accountcenter');
-                } else {
-                    return $this->redirect('/user/recharge/recharge-err');
-                }
-            } else {
+        if ($recharge->load(Yii::$app->request->post()) && $recharge->validate()) {
+            //录入recharge_record记录
+            if (!$recharge->save(false)) {
                 return $this->redirect('/user/recharge/recharge-err');
             }
+
+            // 设置session。用来验证数据的不可修改
+            Yii::$app->session->set('epayLend_brecharge', [
+                'recharge_sn' => $recharge->sn,
+            ]);
+
+            $ump = Yii::$container->get('ump');
+
+            $ump->rechargeViaBpay($recharge, Yii::$app->params['bank'][$bank_id]['nickname']);
         } else {
             return $this->redirect('/user/recharge/recharge-err');
         }
+    }
+
+    /**
+     * 充值结果查询.
+     */
+    public function actionQuery()
+    {
+        $record = Yii::$app->session->get('epayLend_brecharge');
+
+        if (empty($record['recharge_sn'])) {
+            return $this->redirect('/user/recharge/recharge-err');
+        }
+
+        $recharge = RechargeRecord::findOne(['sn' => $record['recharge_sn']]);
+
+        if (!$recharge) {
+            return $this->redirect('/user/recharge/recharge-err');
+        }
+
+        $ump = Yii::$container->get('ump');
+
+        $resp = $ump->getRechargeInfo(
+            $recharge->sn, $recharge->created_at
+        );
+
+        if ($resp->isSuccessful()) {
+            $accService = Yii::$container->get('account_service');
+
+            if ('2' === $resp->get('tran_state')) {
+                if ($accService->confirmRecharge($recharge)) {
+                    \Yii::$app->session->remove('epayLend_brecharge');
+
+                    return $this->redirect('/user/useraccount/accountcenter');
+                } elseif ('3' === $resp->get('tran_state') || '5' === $resp->get('tran_state')) {
+                    if ($accService->cancelRecharge($recharge)) {
+                        \Yii::$app->session->remove('epayLend_brecharge');
+                    }
+                }
+            }
+        }
+
+        return $this->redirect('/user/recharge/recharge-err');
     }
 
     /**

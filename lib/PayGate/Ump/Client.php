@@ -319,6 +319,33 @@ class Client
     }
 
     /**
+     * 4.4.1 个人客户网银充值申请
+     * @param QpayTxInterface $qpay
+     * @param string $gateId 银行简码
+     * @return response
+     */
+    public function rechargeViaBpay(QpayTxInterface $qpay, $gateId)
+    {
+        $data = [
+            'service' => 'mer_recharge_person',
+            'ret_url' => $this->clientOption['rec_pc_ret_url'],
+            'notify_url' => $this->clientOption['rec_pc_notify_url'],
+            'sourceV' => 'HTML5',
+            'order_id' => $qpay->getTxSn(),
+            'mer_date' => $qpay->getTxDate(),
+            'pay_type' => 'B2CDEBITBANK',
+            'user_id' => $qpay->getEpayUserId(),
+            'amount' => $qpay->getAmount(),   //以分为单位
+            'gate_id' => $gateId,
+            'user_ip' => $qpay->getClientIp(),
+            'com_amt_type' => 2,
+        ];
+
+        $params = $this->buildQuery($data);
+        header('Location:'.$this->apiUrl.'?'.$params);
+    }
+
+    /**
      * 4.3.3 标的转账
      * 用户投标
      * @param OrderTxInterface $ord
