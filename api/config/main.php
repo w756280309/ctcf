@@ -17,7 +17,7 @@ return [
         'urlManager' => [
             'enableStrictParsing' => true,
             'rules' => [
-                'v1/recharges' => 'v1/recharge/list'
+                'v1/Recharges' => 'v1/recharge/list',
             ],
         ],
     ],

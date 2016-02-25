@@ -6,9 +6,15 @@ use api\exceptions\InvalidParamException;
 use yii\data\Pagination;
 use yii\db\ActiveQuery;
 use yii\web\Controller as BaseController;
+use yii\web\Response;
 
 class Controller extends BaseController
 {
+    public function init()
+    {
+        \Yii::$app->response->format = Response::FORMAT_JSON;
+    }
+
     public function getQueryInt($name)
     {
         $safe = null;
