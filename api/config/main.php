@@ -15,23 +15,15 @@ return [
             'identityClass' => 'common\\models\\user\\User',
         ],
         'urlManager' => [
-            'enablePrettyUrl' => true,
-            'showScriptName' => false,
-            'enableStrictParsing' => false,
+            'enableStrictParsing' => true,
             'rules' => [
-                [
-                    'class' => 'yii\rest\UrlRule',
-                    'controller' => ['v1/loan'],
-                    'extraPatterns' => [
-                        'POST {id}/xxx' => 'xxx',
-                    ],
-                ],
+                'v1/recharges' => 'v1/recharge/list'
             ],
         ],
     ],
     'modules' => [
         'v1' => [
-            'class' => 'api\modules\v1\Module',
+            'class' => 'api\\modules\\v1\\Module',
         ],
     ],
     'params' => $params,

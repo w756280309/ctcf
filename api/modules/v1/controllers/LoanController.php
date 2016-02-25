@@ -2,10 +2,8 @@
 
 namespace api\modules\v1\controllers;
 
-use common\models\product\OnlineProduct;
-use yii\rest\ActiveController;
+use yii\web\Controller;
 
-class LoanController extends ActiveController
+class LoanController extends Controller
 {
-    public $modelClass = OnlineProduct::class;
 }

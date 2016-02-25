@@ -5,10 +5,10 @@ namespace common\models\user;
 use Yii;
 use yii\behaviors\TimestampBehavior;
 
-class RechargeRecord extends \yii\db\ActiveRecord implements \P2pl\QpayTxInterface
+class RechargeRecord extends \yii\db\ActiveRecord implements \P2pl\QpayTxInterface, \JsonSerializable
 {
     use \YiiPlus\Model\ErrorExTrait;
-    
+
     public $InstitutionID; //机构号码
     public $OrderNo; //订单号
     public $PaymentNo; //支付流水号
@@ -71,13 +71,13 @@ class RechargeRecord extends \yii\db\ActiveRecord implements \P2pl\QpayTxInterfa
             [['fund', 'uid', 'bank_id', 'pay_type'], 'required'],
             [['account_id', 'uid', 'status'], 'integer'],
             [['fund'], 'filter', 'filter' => 'trim'],
-            [['fund'], 'match', 'pattern' => '/^[0-9]+([.]{1}[0-9]{1,2})?$/', 'message' => '充值金额格式错误'],            
+            [['fund'], 'match', 'pattern' => '/^[0-9]+([.]{1}[0-9]{1,2})?$/', 'message' => '充值金额格式错误'],
             [['fund'], 'number', 'min' => 1, 'max' => 1000000000],
             [['sn'], 'string', 'max' => 30],
             [['bank_id'], 'string', 'max' => 20],
             [['remark'], 'string', 'max' => 100],
             ['pay_type', 'default', 'value' => self::PAY_TYPE_QUICK],
-            
+
             [['clientIp'], 'integer'],//存入时候ip2long 读取时候long2ip
             [['epayUserId', 'clientIp'], 'default', 'value' => 0],
         ];
@@ -146,7 +146,7 @@ class RechargeRecord extends \yii\db\ActiveRecord implements \P2pl\QpayTxInterfa
     {
         return $this->sn;
     }
-    
+
     /**
      * 商户生成订单的日期Ymd
      */
@@ -154,7 +154,7 @@ class RechargeRecord extends \yii\db\ActiveRecord implements \P2pl\QpayTxInterfa
     {
         return date('Ymd', $this->created_at);
     }
-    
+
     /**
      * 托管平台用户号
      */
@@ -162,7 +162,7 @@ class RechargeRecord extends \yii\db\ActiveRecord implements \P2pl\QpayTxInterfa
     {
         return $this->epayUserId;
     }
-    
+
     /**
      * 以分为单位
      */
@@ -170,16 +170,79 @@ class RechargeRecord extends \yii\db\ActiveRecord implements \P2pl\QpayTxInterfa
     {
         return $this->fund * 100;
     }
-    
+
     public function getClientIp(){
         return long2ip($this->clientIp);
     }
-    
+
     /**
      * 获取支付人信息.
      */
     public function getUser()
     {
         return $this->hasOne(User::className(), ['id' => 'uid']);
+    }
+
+    private static $rechargeStatuses = [
+        'init' => self::STATUS_NO,
+        'success' => self::STATUS_YES,
+        'fail' => self::STATUS_FAULT,
+    ];
+
+    public static function getStatusNames()
+    {
+        return array_keys(self::$rechargeStatuses);
+    }
+
+    public static function getStatusForName($name)
+    {
+        if (!isset(self::$rechargeStatuses[$name])) {
+            throw new \Exception();
+        }
+
+        return self::$rechargeStatuses[$name];
+    }
+
+    public static function getNameForStatus($status)
+    {
+        $name = array_search($status, self::$rechargeStatuses);
+        if (false === $name) {
+            throw new \Exception();
+        }
+
+        return $name;
+    }
+
+    public static function getPayTypeName($payType)
+    {
+        if (1 === $payType) {
+            return 'qpay/快捷';
+        } elseif (2 === $payType) {
+            return 'ebank/网银';
+        } else {
+            throw new \Exception();
+        }
+    }
+
+    public function jsonSerialize()
+    {
+        return [
+            'id' => $this->id,
+            'sn' => $this->sn,
+            'payType' => $this->pay_type,
+            'payTypeName' => self::getPayTypeName($this->pay_type),
+            'account' => [
+                'id' => $this->account_id,
+            ],
+            'user' => [
+                'id' => $this->uid,
+            ],
+            'amount' => $this->fund,
+            'clientIp' => $this->clientIp ? long2ip($this->clientIp) : null,
+            'status' => $this->status,
+            'statusName' => self::getNameForStatus($this->status),
+            'createdAt' => $this->created_at ? new \DateTime('@'.$this->created_at) : null,
+            'updatedAt' => $this->updated_at ? new \DateTime('@'.$this->updated_at) : null,
+        ];
     }
 }
