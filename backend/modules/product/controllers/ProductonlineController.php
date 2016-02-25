@@ -76,7 +76,7 @@ class ProductonlineController extends BaseController
                 $model->creator_id = Yii::$app->user->id;
                 $model->yield_rate = bcdiv($model->yield_rate, 100, 14);
                 $model->jixi_time = $model->jixi_time !== '' ? strtotime($model->jixi_time) : 0;
-                $pre = $model->save();
+                $pre = $model->save(false);
                 if (!$pre) {
                     $transaction->rollBack();
                     $model->addError('title', '标的添加异常');
