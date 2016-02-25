@@ -22,7 +22,12 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
         <div class="row bank-card">
             <div class="col-xs-2 bank-img"><img src="/images/bankicon/<?= $user_bank->bank_id ?>.png" alt=""/></div>
             <div class="col-xs-8 bank-content">
-                <div class="bank-content1"><?= $user_bank->bank_name ?></div>
+                <div class="bank-content1">
+                    <?= $user_bank->bank_name ?>
+                    <?php if ($param = Yii::$app->params['bank'][$user_bank->bank_id]['limit']) { ?>
+                    (限额<?= $param['single'] ?>万/笔，<?= $param['day'] ?>万/日)
+                    <?php } ?>
+                </div>
                 <div class="bank-content2">
                     尾号<?= $user_bank->card_number?substr($user_bank->card_number, -4):"" ?> 储蓄卡
                     &emsp;银行预留手机号 <?= substr_replace(Yii::$app->user->identity->mobile,'****',3,-4); ?>
@@ -46,14 +51,6 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
                 <div class="col-xs-3 col-sm-1">充值金额</div>
                 <div class="col-xs-9 col-sm-8 safe-lf"><input type="text" id="fund"  name='RechargeRecord[fund]' placeholder="输入充值金额"/></div>
                 <div class="hidden-xs col-sm-1"></div>
-            </div>
-            
-            <input type="text" name="" style="display:none"/>
-            <!--限额提醒-->
-            <div class="row dan" hidden="hidden">
-                <div class="col-xs-10">
-                    <span>单笔5万元，单日5万</span>
-                </div>
             </div>
             <!--提交按钮-->
             <div class="row">
@@ -80,6 +77,11 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
             var reg = /^[0-9]+([.]{1}[0-9]{1,2})?$/;
             if (!reg.test($('#fund').val())) {
                 toast(this,'充值金额格式不正确');
+                $(this).removeClass("btn-press").addClass("btn-normal");
+                return false;
+            }
+            if ($('#fund').val() > <?= $param['single'] * 10000 ?>) {
+                toast(this,'充值金额超过银行单笔限额');
                 $(this).removeClass("btn-press").addClass("btn-normal");
                 return false;
             }
