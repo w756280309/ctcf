@@ -14,22 +14,22 @@ JS;
 $_js2 = <<<'JS'
 $(function() {
     $('#rechargebtn').bind('click', function() {
-        $.post('/user/useraccount/recharge-validate', function(data) {
+        $.get('/user/useraccount/recharge-validate', function(data) {
             if (1 === data.code) {
                 var $modal = $('#bind-card-modal').modal();
                 $modal.modal('show');
             } else {
-                location.href = '/user/recharge/init';
+                window.location.href = '/user/recharge/init';
             }
         });
     });
     $('#drawbtn').bind('click', function() {
-        $.post('/user/useraccount/draw-validate', function(data) {
+        $.get('/user/useraccount/draw-validate', function(data) {
             if (1 === data.code) {
                 var $modal = $('#bind-card-modal').modal();
                 $modal.modal('show');
             } else {
-                location.href = '/user/useraccount/tixian';
+                window.location.href = '/user/useraccount/tixian';
             }
         });
     });
