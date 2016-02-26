@@ -99,16 +99,16 @@ class DrawRecord extends \yii\db\ActiveRecord implements \P2pl\WithdrawalInterfa
 
 
     /**
-     * 计算提现之后的余额
+     * 计算可以提现的金额
      * @param UserAccount $account
      * @param type $fee
      * @return number
      */
-    public static function getDrawableMoney(UserAccount $account, $money, $fee = 0)
+    public static function getDrawableMoney(UserAccount $account, $fee = 0)
     {
         $bc = new BcRound();
         bcscale(14);
-        $drawableMoney = bcsub(bcsub($account->available_balance, $fee), $money);
+        $drawableMoney = bcsub($account->available_balance, $fee);
         if (bccomp($drawableMoney, 0) < 0) {
             return false;
         }
@@ -128,18 +128,17 @@ class DrawRecord extends \yii\db\ActiveRecord implements \P2pl\WithdrawalInterfa
      */
     public static function checkMoney(UserAccount $account, $money, $fee = 0)
     {
-        if (bccomp($money, bcadd(\Yii::$app->params['ump']['draw']['min'], $fee)) < 0) {
-            throw new \Exception('可提现余额不足');
-        }
-        $drawableMoney = self::getDrawableMoney($account, $money, $fee);
-        if (0 === bccomp($account->available_balance, $money)) {
-            $bc = new BcRound();
-            bcscale(14);
-           throw new DrawException($bc->bcround(bcsub($account->available_balance, $fee), 2), DrawException::ERROR_CODE_ENOUGH);
-        } 
-        if (false === $drawableMoney) {
+        $drawableMoney = self::getDrawableMoney($account, $fee);
+        if (
+                false === $drawableMoney
+                || 0 > bccomp($account->available_balance, $money)
+                || 0 === bccomp($account->available_balance, \Yii::$app->params['ump']['draw']['min'])
+         ) {
             throw new \Exception('可提现金额不足');
-        }        
+        }
+        if (0 === bccomp($account->available_balance, $money)) {
+           throw new DrawException($drawableMoney, DrawException::ERROR_CODE_ENOUGH);
+        }
         return $money;
     }
 
