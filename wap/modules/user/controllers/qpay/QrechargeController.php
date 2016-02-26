@@ -4,7 +4,6 @@ namespace app\modules\user\controllers\qpay;
 
 use app\controllers\BaseController;
 use common\models\user\RechargeRecord;
-use common\models\TradeLog;
 use Yii;
 use yii\base\Model;
 use yii\web\Response;
@@ -12,11 +11,10 @@ use PayGate\Cfca\CfcaUtils;
 
 class QrechargeController extends BaseController
 {
-    
     public function actionVerify()
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
-        
+
         $cpuser = $this->user;
         $ubank = $cpuser->qpay;
         if (empty($ubank)) {
@@ -32,7 +30,7 @@ class QrechargeController extends BaseController
         ];
 
         $rec_model = new RechargeRecord([
-            'sn' => CfcaUtils::generateSn("RC"),
+            'sn' => CfcaUtils::generateSn('RC'),
             'uid' => $safe['uid'],
             'account_id' => $safe['account_id'],
             'bank_id' => $safe['bank_id'],
@@ -51,7 +49,7 @@ class QrechargeController extends BaseController
                 return ['next' => $next->getLocation()];
             } else {
                 return $this->createErrorResponse('充值申请跳转失败');
-            }            
+            }
         } else {
             return $this->createErrorResponse('充值申请失败:'.$rec_model->getSingleError()['message']);
         }
