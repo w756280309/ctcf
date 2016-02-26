@@ -128,7 +128,7 @@ TPL;
                         ?>
                     </div>
                 </div>
-         
+
         <?php if ($model->id) {  ?>
         <div class="row-fluid">
             <div class="span12 ">
@@ -171,7 +171,7 @@ TPL;
             </div>
             <!--/span-->
         </div>
-        
+
         <div class="row-fluid">
             <div class="span6 ">
                 <div class="control-group">
@@ -209,7 +209,7 @@ TPL;
                             ])->textInput([
                                 'readonly' => 'readonly',
                                 'class' => 'm-wrap span12',
-                                'value' => $model->start_date ? Yii::$app->formatter->asDatetime($model->start_date, 'Y-M-d H:i') : '',
+                                'value' => $model->start_date ? Yii::$app->formatter->asDatetime($model->start_date, 'php:Y-m-d H:i') : '',
                                 'onclick' => 'WdatePicker({dateFmt:"yyyy-MM-dd HH:mm",minDate:\''.date('Y-m-d').'\'});'
                                 ])
                         ?>
@@ -226,9 +226,9 @@ TPL;
                             'template' => '<div class="input-append date form_datetime">{input}<span class="add-on" onclick="WdatePicker({el:\'onlineproduct-end_date\',dateFmt:\'yyyy-MM-dd HH:mm\',minDate:\''.date('Y-m-d').'\'});"><i class="icon-calendar"></i></span></div>{error}',
                             'inputOptions' => ['autocomplete' => 'off', 'placeholder' => '募集结束时间']
                             ])->textInput([
-                                'readonly' => 'readonly', 
+                                'readonly' => 'readonly',
                                 'class' => 'm-wrap span12',
-                                'value' =>  $model->end_date ? Yii::$app->formatter->asDatetime($model->end_date, 'Y-M-d H:i') : '',
+                                'value' =>  $model->end_date ? Yii::$app->formatter->asDatetime($model->end_date, 'php:Y-m-d H:i') : '',
                                 'onclick' => 'WdatePicker({dateFmt:"yyyy-MM-dd HH:mm",minDate:\''.date('Y-m-d').'\'});'
                                 ])
                         ?>
@@ -246,7 +246,7 @@ TPL;
                     <div class="controls">
                         <?=
                         $form->field($model, 'jixi_time', [
-                            'template' => '<div class="input-append date form_datetime">{input}<span class="add-on"><i class="icon-calendar"></i></span></div>{error}', 
+                            'template' => '<div class="input-append date form_datetime">{input}<span class="add-on"><i class="icon-calendar"></i></span></div>{error}',
                             'inputOptions' => ['autocomplete' => 'off', 'placeholder' => '计息开始日']
                             ])->textInput([
                                 'readonly' => 'readonly',
@@ -299,7 +299,7 @@ TPL;
                     </div>
                 </div>
             </div>
-                
+
               <div class="span6 ">
                 <div class="control-group">
                     <label class="control-label">项目宽限期</label>
@@ -310,7 +310,7 @@ TPL;
                     </div>
                 </div>
             </div>
-        </div>        
+        </div>
         <div class="row-fluid">
             <div class="span6 ">
                 <div class="control-group">
@@ -460,10 +460,10 @@ TPL;
         <?php if (1 == (int)$model->refund_method) { ?>
             //$('#onlineproduct-is_fdate').click();
         <?php } ?>
-        
+
         kindEdit();
     });
-    
+
     //选择还款方式是到期本息的可以设置项目截止日以及宽限期。否则不可以设置
     function changeRefmet(obj){
         if (1 === parseInt($(obj).val())) {

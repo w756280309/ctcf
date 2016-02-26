@@ -56,7 +56,7 @@ class ProductonlineController extends BaseController
         $con_name_arr = Yii::$app->request->post('name');
         $con_content_arr = Yii::$app->request->post('content');
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            if (null !== $model->finish_date) {//若截止日期不为空，重新计算项目天数
+            if (!empty($model->finish_date)) {//若截止日期不为空，重新计算项目天数
                 $pp = new ProductProcessor();
                 $model->expires = $pp->LoanTimes($model->start_date, null, strtotime($model->finish_date), 'd', true)['days'][1]['period']['days'];
             }
