@@ -44,7 +44,7 @@ class UserbankController extends BaseController
             $umpService = new \common\service\UmpService();
             try {
                 $umpService->register($model);
-                return ['tourl' => '/user/userbank/bindbank', 'code' => 0, 'message' => '实名认证成功'];
+                return ['tourl' => '/user/userbank/bindbank', 'code' => 0, 'message' => '您已成功开户'];
             } catch (\Exception $ex) {
                 return ['code' => 1, 'message' => $ex->getMessage()];
             }

@@ -13,7 +13,7 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
                     <li class="col-xs-6">
                         <div class="xian">
                             <?=  doubleval(number_format($deal['yield_rate']*100, 2)) ?><span class="column-lu">%</span>
-                            <?php if (!empty($deal['jiaxi'])) { ?><span class="bonus-badge">+ <?=  doubleval($deal['jiaxi']) ?>%</span><?php } ?>
+                            <?php if (!empty($deal['jiaxi'])) { ?><span class="bonus-badge">+<?=  doubleval($deal['jiaxi']) ?>%</span><?php } ?>
                         </div>
                         <span class="qing">年化收益率</span>
                     </li>
@@ -26,8 +26,13 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
                             <?php } ?>
                             </span>
                         </div>
-                        <span class="qing">期限</span>
+                        <span class="qing">期限<i>(包含3天宽限期)</i> <img src="/images/dina.png" alt=""></span>
                     </li>
+                    <div class="row" id='chart-box'>
+                        <div class="col-xs-12">
+                            <div>宽限期：应收账款的付款方因内部财务审核,结算流程或结算日遇银行非工作日等因素，账款的实际结算日可能有几天的延</div>
+                        </div>
+                    </div>
                 </ul>
             </div>
             <div class="hidden-xs col-sm-1"></div>
@@ -168,6 +173,10 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
                 });
             }
             <?php } ?>
+            // 新的
+            $('.qing img').on('click',function(){
+                $('#chart-box').stop(true,false).fadeToggle();
+            })
         </script>
 </body>
 </html>

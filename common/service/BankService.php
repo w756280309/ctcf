@@ -44,7 +44,7 @@ class BankService
     public static function check($user, $cond)
     {
         if (($cond & self::IDCARDRZ_VALIDATE_Y) && $user->idcard_status == User::IDCARD_STATUS_PASS) {
-            return ['tourl' => '/user/user', 'code' => 1, 'message' => '您已经开通第三方资金托管账户'];
+            return ['tourl' => '/user/user', 'code' => 1, 'message' => '您已经在平台开户,请勿重复开户'];
         }
 
         if (($cond & self::IDCARDRZ_VALIDATE_N) && $user->idcard_status == User::IDCARD_STATUS_WAIT) {

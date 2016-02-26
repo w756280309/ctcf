@@ -1,13 +1,11 @@
 <?php
-use yii\helpers\Html;
-use yii\bootstrap\ActiveForm;
-$this->title="实名认证";
+$this->title="开通资金托管账户";
 $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','position' => 1]);
 ?>
 <link rel="stylesheet" href="/css/bind.css"/>
 <link rel="stylesheet" href="/css/chongzhi.css"/>
 <link rel="stylesheet" href="/css/base.css"/>
-    
+
     <div style="height: 10px"></div>
     <!--交易密码-->
     <form method="post" class="cmxform" id="form" action="/user/userbank/idcardrz" data-to="1">
@@ -28,7 +26,7 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
         <div class="row">
             <div class="col-xs-3"></div>
             <div class="col-xs-6 login-sign-btn">
-                <input id="idcardbtn" class="btn-common btn-normal" name="signUp" type="button" value="下一步">
+                <input id="idcardbtn" class="btn-common btn-normal" name="signUp" type="button" value="开 通">
             </div>
             <div class="col-xs-3"></div>
         </div>
@@ -38,6 +36,20 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
     <!-- 开好弹出框 end  -->
     <script type="text/javascript">
     var csrf;
+    function validateform() {
+        $(this).addClass("btn-press").removeClass("btn-normal");
+        if($('#real_name').val() == '') {
+            toast(this,'姓名不能为空');
+            $(this).removeClass("btn-press").addClass("btn-normal");
+            return false;
+        }
+        if($('#idcard').val() == '') {
+            toast(this,'身份证号不能为空');
+            $(this).removeClass("btn-press").addClass("btn-normal");
+            return false;
+        }
+        return true;
+    }
     $(function(){
        var err = '<?= $code ?>';
        var mess = '<?= $message ?>';
@@ -45,25 +57,57 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
        if(err == '1') {
            toasturl(tourl,mess);
        }
-       
+
        csrf = $("meta[name=csrf-token]").attr('content');
        $('#idcardbtn').bind('click',function(){
             $(this).addClass("btn-press").removeClass("btn-normal");
-            if($('#real_name').val()==''){
-                toast(this,'姓名不能为空');
-                $(this).removeClass("btn-press").addClass("btn-normal");
-                return false;
-            }
-            if($('#idcard').val()==''){
-                toast(this,'身份证不能为空');
-                $(this).removeClass("btn-press").addClass("btn-normal");
-                return false;
-            }
-            subForm("#form", "#idcardbtn");
+            subForm();
             $(this).removeClass("btn-press").addClass("btn-normal");
        });
 
-    })    
+    })
+
+    function subForm()
+    {
+        if(!validateform()){
+           return false;
+        }
+        var $form = $('#form');
+        $('#idcardbtn').attr('disabled', true);
+        var xhr = $.post(
+            $form.attr('action'),
+            $form.serialize()
+        );
+
+        xhr.done(function(data) {
+            $('#idcardbtn').attr('disabled', false);
+            if (0 === data.code) {
+                alertTrue(function() {
+                    location.href = data.tourl;
+                });
+            } else {
+                toast(form, data.message);
+            }
+
+        });
+
+        xhr.fail(function(jqXHR) {
+            var errMsg = jqXHR.responseJSON && jqXHR.responseJSON.message
+                ? jqXHR.responseJSON.message
+                : '未知错误，请刷新重试或联系客服';
+
+            toast(null, errMsg);
+            $('#idcardbtn').attr('disabled', false);
+        });
+    }
+
+    function alertTrue(trued) {
+        var chongzhi = $('<div class="mask" style="display: block"></div><div class="bing-info show"> <div class="bing-tishi">开通成功</div> <p class="tishi-p">支付密码将会以短信的形式发送到您的手机上,请注意查收并妥善保存。支付密码为6位随机数,可根据短信内容修改密码</p > <div class="bind-btn"> <span class="true">下一步</span> </div> </div>');
+        $(chongzhi).insertAfter($('form'));
+        $('.bing-info').on('click', function () {
+            $(chongzhi).remove();
+            trued();
+        })
+    }
     </script>
 
-    

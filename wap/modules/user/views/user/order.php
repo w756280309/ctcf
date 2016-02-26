@@ -16,18 +16,23 @@ $this->title="我的理财";
     <script src="/js/licai.js"></script>
     
     <!-- Swiper -->
-            <div class="swiper-container">
-                <div class="swiper-wrapper">
-                    <div class="swiper-slide <?= empty($type)?"dian":"" ?>" onclick="window.location.href='/user/user/myorder'">全部</div>
-                    <div class="swiper-slide <?= $type==2?"dian":"" ?>" onclick="window.location.href='/user/user/myorder?type=2'">募集期</div>
-                    <div class="swiper-slide <?= $type==3?"dian":"" ?>" onclick="window.location.href='/user/user/myorder?type=3'">满标</div>
-                    <div class="swiper-slide <?= $type==7?"dian":"" ?>" onclick="window.location.href='/user/user/myorder?type=7'">提前结束</div>
-                    <div class="swiper-slide <?= $type==5?"dian":"" ?>" onclick="window.location.href='/user/user/myorder?type=5'">还款中</div>
-                    <div class="swiper-slide <?= $type==6?"dian":"" ?>" onclick="window.location.href='/user/user/myorder?type=6'">已还清</div>
-                </div>
-                <!-- Add Pagination -->
-                <!--<div class="swiper-pagination"></div>-->
-            </div>
+    <div class="row" id='licai-title'>
+    	<div class="col-xs-4">
+    		<div class="licai-title1"><img src="/images/licaiGang.png" alt=""> 累计投资金额</div>
+    		<div class="licai-money">10.000<span>元</span></div>
+    	</div>
+    	<div class="col-xs-4">
+    		<div class="licai-title2"><img src="/images/licaiMoney.png" alt=""> 累计获得收益</div>
+    		<div class="licai-money">10.000<span>元</span></div>
+    	</div>
+    	<div class="col-xs-4">
+    		<div class="licai-title3"><img src="/images/licaiHead.png" alt=""> 待还清项目</div>
+    		<div class="licai-money">5<span>个</span></div>
+    	</div>
+    </div>
+    <div class="row" id='licai-xiangmu'>
+    	<div class="col-xs-12">我投资过的项目</div>
+    </div>
 <?php if($list['data']){ foreach ($list['data'] as $o){ ?>
     <!--时间-->
      <div class="row times">
@@ -38,33 +43,22 @@ $this->title="我的理财";
         <div class="hidden-xs col-sm-1" style="height:50px;"></div>
         <div class="col-xs-12 col-sm-10 column-title"><span><?=$o['title']?></span></div>
         <div class="<?= in_array($o['pstatus'], [1,2])?"column-title-rg":"column-title-rg1";?>"><?=$o['statusval']?></div>
-        <div class="hidden-xs col-sm-1" style="height:50px;"></div>
-        <div class="container" style="margin-top: 60px">
-            <ul class="row column-content">
-                <li class="hidden-xs col-sm-1"></li>
-                <li class="col-xs-6 col-sm-5">
-                    <div>投资金额<span><?=$o['order_money']?>元</span></div>
-                </li>
-                <li class="col-xs-6 col-sm-5">
-                    <div><?= ($o['pstatus']==6)?"实际收益":"预期收益" ?><span class="money" alt=""><?=$o['profit']?>元</span></div>
-                </li>
-                <li class="hidden-xs col-sm-1"></li>
-            </ul>
-            <ul class="row column-content">
-                <li class="hidden-xs col-sm-1"></li>
-                <li class="col-xs-6 col-sm-5">
-                    <div>年化收益
-                        <span>
-                         <?= doubleval(number_format($o['yield_rate']*100, 2)) ?>% 
-                         <?php if (!empty($o['jiaxi'])) { ?> + <?= doubleval($o['jiaxi']) ?>% <?php } ?>
-                        </span>
-                    </div>
-                </li>
-                <li class="col-xs-6 col-sm-5">
-                    <div>结清时间<span><?=$o['returndate']?></span></div>
-                </li>
-                <li class="hidden-xs col-sm-1"></li>
-            </ul>
+        <!-- 修改 -->
+        <div class="container" id='project-box'>
+        	<div class="row">
+        		<div class="col-xs-4">
+        			<div>11%</div>
+        			<p>年化收益</p>
+        		</div>
+        		<div class="col-xs-4">
+        			<div>60天</div>
+        			<p>期限</p>
+        		</div>
+        		<div class="col-xs-4">
+        			<div>5188.05元</div>
+        			<p>预期收益</p>
+        		</div>
+        	</div>
         </div>
     </div>
 <?php } ?>
