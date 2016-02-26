@@ -22,15 +22,11 @@ class DrawnotifyController extends Controller
     public function actionFrontend()
     {
         $data = Yii::$app->request->get();
-        try {
-            $ret = $this->processing($data);
-            if ($ret instanceof DrawRecord) {
-                return $this->redirect('/user/user');
-            } else {
-               Yii::trace('非DrawRecord对象;'. $data['service'] . ":" . http_build_query($data), 'umplog');
-            }
-        } catch (Exception $ex) {
-            Yii::trace($ex->getMessage() .';'. $data['service'] . ":" . http_build_query($data), 'umplog');
+        $ret = $this->processing($data);
+        if ($ret instanceof DrawRecord) {
+            return $this->redirect('/user/user');
+        } else {
+           Yii::trace('非DrawRecord对象;'. $data['service'] . ":" . http_build_query($data), 'umplog');
         }
     }
 
@@ -43,16 +39,14 @@ class DrawnotifyController extends Controller
         $err = '00009999';
         $errmsg = "no error";
         $data = Yii::$app->request->get();
-        try {
-            $ret = $this->processing($data);
-            if ($ret instanceof DrawRecord) {
-                $err = "0000";
-            } else {
-               $errmsg = '非DrawRecord对象;';
-            }
-        } catch (Exception $ex) {
-            $errmsg = $ex->getMessage() .';';
+        
+        $ret = $this->processing($data);
+        if ($ret instanceof DrawRecord) {
+            $err = "0000";
+        } else {
+           $errmsg = '非DrawRecord对象;';
         }
+            
         Yii::trace($errmsg . $data['service'] . ":" . http_build_query($data), 'umplog');
         $content = Yii::$container->get('ump')->buildQuery([
             'order_id' => $data['order_id'],

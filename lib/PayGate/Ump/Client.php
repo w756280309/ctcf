@@ -467,6 +467,7 @@ class Client
     /**
      * 4.5.1 提现交易查询接口(商户->平台)
      * @param WithdrawalInterface $draw
+     * return tran_state 成功状态2 失败状态3,5,15
      */
     public function getDrawInfo(WithdrawalInterface $draw)
     {

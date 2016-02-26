@@ -75,20 +75,22 @@ class NotifyController extends Controller
                     $bind->save(false);
                     $err = '0000';
                 }
+                
+                //记录日志方便调试
+                \Yii::trace("errormsg:【" . $err . $errmsg . "】;" . $data['service'] . ":" . http_build_query($data), 'umplog');
+
+                $content = Yii::$container->get('ump')->buildQuery([
+                    'order_id' => $data['order_id'],
+                    'mer_date' => $data['mer_date'],
+                    'reg_code' => $err,
+                ]);
+
+                return $this->render('@borrower/modules/user/views/recharge/recharge_notify.php', ['content' => $content]);
             } else {
-                $errmsg = $data['order_id'] . ':无法找到申请数据';
+                throw new \Exception('无法找到记录');
             }
         }
-        //记录日志方便调试
-        \Yii::trace("errormsg:【" . $err . $errmsg . "】;" . $data['service'] . ":" . http_build_query($data), 'umplog');
-
-        $content = Yii::$container->get('ump')->buildQuery([
-            'order_id' => $data['order_id'],
-            'mer_date' => $data['mer_date'],
-            'reg_code' => $err,
-        ]);
-
-        return $this->render('@borrower/modules/user/views/recharge/recharge_notify.php', ['content' => $content]);
+        
     }
 
     public static function processing(QpayBinding $bind)

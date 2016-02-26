@@ -94,7 +94,8 @@ class DrawManager
         //录入user_acount记录
         $account->available_balance = $account->available_balance;
         $account->freeze_balance = $bc->bcround(bcadd($account->freeze_balance, bcadd($draw->money, $fee)), 2);
-
+        $account->out_sum = $bc->bcround(bcadd($account->out_sum, bcadd($draw->money, $fee)), 2);
+        
         if (!$account->save()) {
             $transaction->rollBack();
             throw new DrawException("提现申请失败");
@@ -127,6 +128,7 @@ class DrawManager
                 $momeyRecord = new MoneyRecord();
                 $momeyRecord->uid = $draw->uid;
                 $momeyRecord->sn = MoneyRecord::createSN();
+                $momeyRecord->osn = $draw->sn;
                 $momeyRecord->account_id = $userAccount->id;
                 $YuE = $userAccount->account_balance = $bc->bcround(bcsub($userAccount->account_balance, $money), 2);//账户总额减少
                 $momeyRecord->type = MoneyRecord::TYPE_DRAW_SUCCESS;

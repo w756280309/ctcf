@@ -6,6 +6,7 @@ use common\utils\TxUtils;
 use yii\behaviors\TimestampBehavior;
 use common\lib\bchelp\BcRound;
 use common\models\draw\DrawException;
+use common\models\user\UserAccount ;
 
 /**
  * This is the model class for table "draw_record" 提现记录表.
@@ -96,6 +97,24 @@ class DrawRecord extends \yii\db\ActiveRecord implements \P2pl\WithdrawalInterfa
         ];
     }
 
+
+    /**
+     * 计算提现之后的余额
+     * @param UserAccount $account
+     * @param type $fee
+     * @return number
+     */
+    public static function getDrawableMoney(UserAccount $account, $money, $fee = 0)
+    {
+        $bc = new BcRound();
+        bcscale(14);
+        $drawableMoney = bcsub(bcsub($account->available_balance, $fee), $money);
+        if (bccomp($drawableMoney, 0) < 0) {
+            return false;
+        }
+        return $bc->bcround($drawableMoney, 2);
+    }
+
     /**
      * 计算可提现金额是否充足.
      *
@@ -109,15 +128,18 @@ class DrawRecord extends \yii\db\ActiveRecord implements \P2pl\WithdrawalInterfa
      */
     public static function checkMoney(UserAccount $account, $money, $fee = 0)
     {
-        $bc = new BcRound();
-        bcscale(14);
-        if (bccomp($account->available_balance, bcadd($money, $fee)) < 0) {
-            if (bccomp($account->available_balance, $fee) < 0) {
-                throw new \Exception('账户余额不足');
-            } else {
-                throw new DrawException($bc->bcround(bcsub($account->available_balance, $fee), 2), DrawException::ERROR_CODE_ENOUGH);
-            }
+        if (bccomp($money, bcadd(\Yii::$app->params['ump']['draw']['min'], $fee)) < 0) {
+            throw new \Exception('可提现余额不足');
         }
+        $drawableMoney = self::getDrawableMoney($account, $money, $fee);
+        if (0 === bccomp($account->available_balance, $money)) {
+            $bc = new BcRound();
+            bcscale(14);
+           throw new DrawException($bc->bcround(bcsub($account->available_balance, $fee), 2), DrawException::ERROR_CODE_ENOUGH);
+        } 
+        if (false === $drawableMoney) {
+            throw new \Exception('可提现金额不足');
+        }        
         return $money;
     }
 
