@@ -451,6 +451,7 @@ class Client
      *
      * @param type $txSn   商户订单号
      * @param type $txDate 商户订单日期
+     * @return ret_code===0000 查询成功 tran_state:0初始,2成功,3失败,4不明,5交易关闭[超过七个自然日的初始状态会关闭],6其他
      */
     public function getRechargeInfo($txSn, $txDate)
     {
