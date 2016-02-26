@@ -2,12 +2,12 @@
 
 namespace app\modules\user\controllers\qpay;
 
-use app\controllers\BaseController;
-use common\models\user\RechargeRecord;
 use Yii;
 use yii\base\Model;
 use yii\web\Response;
 use PayGate\Cfca\CfcaUtils;
+use app\controllers\BaseController;
+use common\models\user\RechargeRecord;
 
 class QrechargeController extends BaseController
 {
@@ -43,16 +43,23 @@ class QrechargeController extends BaseController
             $rec_model->load(Yii::$app->request->post())
             && $rec_model->validate()
         ) {
-            $rec_model->save();
-            $next = Yii::$container->get('ump')->rechargeViaQpay($rec_model);
-            if ($next->isRedirection()) {
-                return ['next' => $next->getLocation()];
-            } else {
-                return $this->createErrorResponse('充值申请跳转失败');
+            if ($rec_model->fund * 100 > Yii::$app->params['bank'][$rec_model->bank_id]['limit']['single'] * 1000000) {
+                $rec_model->addError('fund', '购买金额超过银行单笔限额');
             }
-        } else {
-            return $this->createErrorResponse('充值申请失败:'.$rec_model->getSingleError()['message']);
+            if (!$rec_model->hasErrors()) {
+                if (!$rec_model->save(false)) {
+                    throw new \Exception('Insert recharge record err.');
+                }
+                $next = Yii::$container->get('ump')->rechargeViaQpay($rec_model);
+                if ($next->isRedirection()) {
+                    return ['next' => $next->getLocation()];
+                } else {
+                    return $this->createErrorResponse('充值申请跳转失败');
+                }
+            }
         }
+
+        return $this->createErrorResponse('充值申请失败:'.$rec_model->getSingleError()['message']);
     }
 
     private function createErrorResponse($modelOrMessage = null)
