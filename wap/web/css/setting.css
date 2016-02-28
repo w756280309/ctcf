@@ -179,3 +179,72 @@ div.headpic {
     height:36px;
     line-height: 34px;
 }
+
+#bind-box .col-xs-12{
+    padding: 0;
+}
+#bind-box .col-xs-12 div {
+    width: 100%;
+    text-align: center;
+    font-size: 18px;
+    color: #382f30;
+    margin-top: 50px;
+}
+#bind-true .col-xs-12 {
+    padding: 0;
+    text-align: center;
+    margin-top: 20px;
+}
+#bind-true .col-xs-12 img {
+    width: 120px;
+}
+.container,body {
+    background: #f2f2f2;
+}
+.daojishi .col-xs-12 {
+    padding: 0;
+    margin-top: 20px;
+}
+.daojishi .col-xs-12 div {
+    width: 100%;
+    text-align: center;
+    color: #2d363d;
+}
+.daojishi .col-xs-12 div span {
+    color: #e08245;
+}
+#bind-close1 .col-xs-4 {
+    padding: 0;
+    margin-top: 20px;
+}
+.bind-close1 {
+    display: block;
+    width: 100%;
+    height: 40px;
+    text-align: center;
+    line-height: 40px;
+    background: #fff;
+    color: #61727a;
+    border-radius: 6px;
+}
+#bind-close2 .col-xs-4 {
+    padding: 0;
+    margin-top: 20px;
+}
+.bind-close1 {
+    display: block;
+    width: 100%;
+    height: 40px;
+    text-align: center;
+    line-height: 40px;
+    background: #fff;
+    color: #61727a;
+    border-radius: 6px;
+}
+
+a {
+    text-decoration: none;
+}
+a:hover {
+    text-decoration: none;
+}
