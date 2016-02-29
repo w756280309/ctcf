@@ -43,7 +43,7 @@ class QrechargeController extends BaseController
             $rec_model->load(Yii::$app->request->post())
             && $rec_model->validate()
         ) {
-            if ($rec_model->fund * 100 > Yii::$app->params['bank'][$rec_model->bank_id]['limit']['single'] * 1000000) {
+            if ($rec_model->fund * 100 > Yii::$app->params['bank'][$ubank->bank_id]['limit']['single'] * 1000000) {
                 $rec_model->addError('fund', '购买金额超过银行单笔限额');
             }
             if (!$rec_model->hasErrors()) {

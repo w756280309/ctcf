@@ -14,6 +14,11 @@ $dates = Yii::$app->functions->getDateDesc($deals->start_date);
 $rate = number_format($deals->finish_rate * 100, 0);
 
 ?>
+<style>
+    body {
+        padding-bottom: 30px;
+    }
+</style>
 
 <div class="container">
     <div class="slideBox" id="slideBox">
@@ -100,7 +105,7 @@ $rate = number_format($deals->finish_rate * 100, 0);
         <?php } ?>
     </div>
 <!--  新手区end  -->
-    <div style="width:100%;height:16px;background: #f7f8f8; border-bottom:1px solid #e6e7e7;"></div>
+    <div style="width:100%;height:16px; border-bottom:1px solid #e6e7e7;"></div>
 <!-- 理财区start -->
     <div class="licai-box">
         <div class="licai-head">
