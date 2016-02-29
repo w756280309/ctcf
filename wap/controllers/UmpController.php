@@ -191,4 +191,15 @@ class UmpController extends Controller
     public function actionQpaynotifyurl(){
         var_dump($_POST,$_GET);
     }
+
+    public function actionOrm($sn)
+    {
+        $ord = Loan::findOne(1002);
+        $ord->money = 1300;
+        $resp = \common\models\order\OrderManager::findInvalidOrders($ord);
+//        var_dump($resp);
+        //$r = \common\models\order\OrderTx::initForOrder($ord);
+        //var_dump($r);
+    }
+
 }

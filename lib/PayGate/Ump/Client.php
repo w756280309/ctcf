@@ -395,6 +395,24 @@ class Client
     }
 
     /**
+     * 4.5.1 订单交易查询接口.
+     *
+     * @param OrderTxInterface $order   商户订单
+     * @return ret_code===0000 查询成功 tran_state:0初始,2成功,3失败,4不明,5交易关闭[超过七个自然日的初始状态会关闭],6其他
+     */
+    public function getOrderInfo(OrderTxInterface $order)
+    {
+        $data = [
+            'service' => 'transfer_search',
+            'order_id' => $order->getTxSn(),
+            'mer_date' => date('Ymd', $order->getTxDate()),
+            'busi_type' => '03',
+        ];
+
+        return $this->doRequest($data);
+    }
+
+    /**
      * 4.3.3 标的转账【用于流标同步请求】
      * @param OrderTxInterface $ord
      * @return response
