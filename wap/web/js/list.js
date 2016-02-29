@@ -1,6 +1,5 @@
 $(function () {
 
-
     canvasToCircle();
 
     function canvasToCircle(){
@@ -82,10 +81,11 @@ $(function () {
                             if (data.deals.length > 0) {
                                 var html = "";
                                 $.each(data.deals, function (i, item) {
-
                                     var itemyr = changeTwoDecimal(item.yr);
+                                    var itemStartMoney = changeTwoDecimal(item.start_money);
                                     var itemjx = item.jiaxi === null ? '' : item.jiaxi;
-                                    var className = (item.status==1 || item.status==2)?"column-title-rg":"column-title-rg1";
+                                    var hui = ('4' === item.status || '5' === item.status || '6' === item.status) ? 'hui' : '';
+                                    var dataPer = (7 === item.status) ? 100 : ('hui' === hui ? 0 : item.finish_rate)
                                     var finishHtml = "";
                                     if (item.status == 1) {
                                         finishHtml = '<div class="column-clock"><span>' + item.start_desc + '</span>' + item.start + '</div>';
@@ -94,35 +94,37 @@ $(function () {
                                     } else if (item.status == 7) {
                                         finishHtml = '<div class="column-clock column-clock_per">成立</div>';
                                     }  else {
-                                        finishHtml = '<div class="column-clock column-clock_per">100%</div>'
+                                        finishHtml = '<div class="column-clock column-clock_per '+ hui +'">'+ item.statusval +'</div>'
                                     }
 
-                                    html+='<a class="row column dealdata" href="/deal/deal/detail?sn=' + item.num + '">'+
-                                                '<div class="hidden-xs col-sm-1"></div>'+
-                                                    '<div class="col-xs-12 col-sm-10 column-title"><span>'+item.title+'</span></div>'+
-                                                '<div class="'+className+'">'+item.statusval+'</div>'+
-                                                '<div class="container">'+
-                                                    '<ul class="row column-content">'+
-                                                    '<li class="col-xs-4">'+
-                                                '<div><span class="interest-rate">'+itemyr+'<span class="column-lu">%</span>';
-                                    if (itemjx !== '') {
-                                        html += '<span class="bonus-badge">+' + itemjx + '%</span>';
+                                    html += '<a class="row column dealdata" href="/deal/deal/detail?sn='+ item.num +'">' +
+                                            '<div class="col-xs-12 col-sm-10 column-title">';
+                                    if ('' === itemjx) {
+                                        html += '<img class="qian show" src="/images/qian.png" alt="">';
+                                    } else {
+                                        html += '<img class="badges show" src="/images/badge.png" alt="">';
                                     }
-                                    html += '</span></div><span class="desc-text">年化收益率</span>'+
-                                                    '</li>'+
-                                                    '<li class="col-xs-4">'+
-                                                        '<div>'+item.qixian+'<span class="column-lu">天</span></div>'+
-                                                        '<span>期限</span>'+
-                                                    '</li>'+
-                                                    '<li class="col-xs-4 nock1">'+
-                                                    '<div class="nock">'+
-                                                    '<canvas data-status="'+item.status+'" data-per="'+((7 === parseInt(item.status)) ? 100 : (item.finish_rate))+'"></canvas>'+finishHtml+
-                                                    '</div>'+
-                                                    '</li>'+
-                                                '</ul>'+
-                                                '</div>'+
-                                                '<div class="hidden-xs col-sm-1"></div>'+
-                                        '</a>';
+
+                                    html += '<span class="'+ hui +'">'+ item.title +'</span>' +
+                                            '</div><div class="container">' +
+                                            '<ul class="row column-content">' +
+                                            ' <li class="col-xs-3"><div>' +
+                                            '<span class="interest-rate '+ hui +'">' +
+                                            + itemyr +'<span class="column-lu">%</span>';
+                                    if ('' !== itemjx) {
+                                        html += '<span class="bonus-badge '+ hui +'">+'+ itemjx +'%</span>';
+                                    }
+                                    html += '</span></div>' +
+                                            '<span class="desc-text '+ hui +'">年化率</span></li>' +
+                                            '<li class="col-xs-3 '+ hui +'">' +
+                                            '<p class="'+ hui +'">'+ item.qixian +'<span class="column-lu">天</span></p>' +
+                                            '<span>期限</span></li>' +
+                                            '<li class="col-xs-3 '+ hui +'">' +
+                                            '<p class="'+ hui +'">'+ itemStartMoney +'<span class="column-lu">元</span></p>' +
+                                            '<span>起投</span></li>' +
+                                            '<li class="col-xs-3 nock1"><div class="nock">' +
+                                            '<canvas data-status="'+ item.status +'" data-per="'+ dataPer +'"></canvas>' + finishHtml +
+                                            '</div></li></ul></div><div class="hidden-xs col-sm-1"></div></a>';
                                 });
 
                                 $('#item-list').html($('#item-list').html() + html);
