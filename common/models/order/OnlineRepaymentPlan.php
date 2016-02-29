@@ -116,11 +116,12 @@ class OnlineRepaymentPlan extends \yii\db\ActiveRecord
 
         foreach ($orders as $order) {
             $order['expires'] = $expires;
-            $plans = self::getPlansdata($product,$order);//分期计算每一期的本金利息还款时间等
-            foreach ($plans as $plan){
-                $plan_model = self::initPlan($order,$plan);
+            $plans = self::getPlansdata($product, $order);//分期计算每一期的本金利息还款时间等
+            foreach ($plans as $plan) {
+                $plan_model = self::initPlan($order, $plan);
                 if (!$plan_model->save()) {
                     $transaction->rollBack();
+
                     return false;
                 }
             }
@@ -129,7 +130,7 @@ class OnlineRepaymentPlan extends \yii\db\ActiveRecord
                     $order['username'],
                     $product->title,
                     date('Y-m-d', $product->jixi_time),
-                    Yii::$app->params['contact_tel']
+                    Yii::$app->params['contact_tel'],
                 ];
                 $_sms = clone $sms;
                 $_sms->uid = $order['uid'];
@@ -140,23 +141,31 @@ class OnlineRepaymentPlan extends \yii\db\ActiveRecord
             $username = $order['username'];
         }
         $transaction->commit();
+
         return true;
     }
 
-    public static function getPlansdata($product, $order) {
-        if (OnlineProduct::REFUND_METHOD_DAOQIBENXI === (int)$product->refund_method) {//到期本息
+    public static function getPlansdata($product, $order)
+    {
+        if (OnlineProduct::REFUND_METHOD_DAOQIBENXI === (int) $product->refund_method) {
+            //到期本息
             return self::calcRepayment($order, 'd', $product);
-        } else if (OnlineProduct::REFUND_METHOD_MONTH === (int)$product->refund_method) {//按月还息            
+        } elseif (OnlineProduct::REFUND_METHOD_MONTH === (int) $product->refund_method) {
+            //按月还息            
             return self::calcRepayment($order, 'm', $product);
-        } else if (OnlineProduct::REFUND_METHOD_QUARTER === (int)$product->refund_method) {//按季度还息
+        } elseif (OnlineProduct::REFUND_METHOD_QUARTER === (int) $product->refund_method) {
+            //按季度还息
             return self::calcRepayment($order, 'q', $product);
-        } else if (OnlineProduct::REFUND_METHOD_HALF_YEAR === (int)$product->refund_method) {//按年还息
+        } elseif (OnlineProduct::REFUND_METHOD_HALF_YEAR === (int) $product->refund_method) {
+            //按年还息
             return self::calcRepayment($order, 'hy', $product);
         }
+
         return false;
     }
 
-    public static function initPlan($ord,$initplan){
+    public static function initPlan($ord, $initplan)
+    {
         $plan = new self($initplan);
         $plan->sn = self::createSN();
         $plan->online_pid = $ord['online_pid'];
@@ -168,24 +177,27 @@ class OnlineRepaymentPlan extends \yii\db\ActiveRecord
         $plan->benxi_yue = 0;//付息还本时候用到的字段
         return $plan;
     }
-    
+
     /**
-     * 返回计划应还信息
-     * @param type $order 订单信息
+     * 返回计划应还信息.
+     *
+     * @param type $order      订单信息
      * @param type $periodType d:day m:month q:quarter y:year
+     *
      * @return type
      */
-    public static function calcRepayment($order, $periodType, $product) {
+    public static function calcRepayment($order, $periodType, $product)
+    {
         $pp = new ProductProcessor();
         $bc = new BcRound();
         bcscale(14);
         $total_lixi = $pp->getProductDayReturn($order['yield_rate'], $order['order_money'], $order['expires']);
-        $each_day_lixi = $pp->getProductDayReturn($order['yield_rate'], $order['order_money'], 1 , FALSE);//每日利息       
+        $each_day_lixi = $pp->getProductDayReturn($order['yield_rate'], $order['order_money'], 1, false);//每日利息       
         $qiday = $pp->getDays($periodType);//对应$periodType的每期的天数
         $each_lixi = bcmul($qiday, $each_day_lixi); //每期利息
         $qishu = 'd' === $periodType ? 1 : $pp->getQishu($order['expires'], $periodType);
         $lixi_arr = array();
-        for ($i = 0; $i < $qishu; $i++) {
+        for ($i = 0; $i < $qishu; ++$i) {
             $cur_lixi = ($i === $qishu - 1) ? $bc->bcround(bcsub($total_lixi, bcmul($each_lixi, $i)), 2) : $bc->bcround($each_lixi, 2);
             $cur_bj = ($i === $qishu - 1) ? $order['order_money'] : 0;
             $lixi_arr[] = [
@@ -196,7 +208,7 @@ class OnlineRepaymentPlan extends \yii\db\ActiveRecord
                 'refund_time' => strtotime($pp->LoanTerms('d1', date('Y-m-d', $product->jixi_time), 1 + (($i === $qishu - 1) ? $order['expires'] : ($i + 1) * $qiday))),
             ];
         }
+
         return $lixi_arr;
     }
-
 }

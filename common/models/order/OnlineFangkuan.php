@@ -110,7 +110,7 @@ class OnlineFangkuan extends \yii\db\ActiveRecord implements \P2pl\LoanFkInterfa
 
     public function getBorrowerId()
     {
-//        $loan = \common\models\product\OnlineProduct::findOne($this->online_product_id);
+        //        $loan = \common\models\product\OnlineProduct::findOne($this->online_product_id);
 //        $borrower = \common\models\user\User::findOne($loan->borrow_uid);
 //        return $borrower->epayUser->epayUserId;
         return 7601209;//测试阶段

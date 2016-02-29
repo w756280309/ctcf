@@ -246,16 +246,17 @@ class OnlineOrder extends \yii\db\ActiveRecord implements \P2pl\OrderTxInterface
     }
 
     /**
-     * 获取新手标总数
+     * 获取新手标总数.
      */
-    public static function xsCount($uid) {
-        return (int)(new \yii\db\Query())
+    public static function xsCount($uid)
+    {
+        return (int) (new \yii\db\Query())
                 ->select('count(id)')
-                ->from(self::tableName() . ' o')
+                ->from(self::tableName().' o')
                 ->innerJoin('online_product p', 'o.online_pid=p.id')
                 ->where(['o.uid' => $uid, 'p.is_xs' => 1])->count();
     }
-    
+
     /**
      * 获取用户托管方平台信息.
      *
@@ -270,25 +271,24 @@ class OnlineOrder extends \yii\db\ActiveRecord implements \P2pl\OrderTxInterface
     {
         return $this->online_pid;
     }
-    
+
     public function getTxSn()
     {
         return $this->sn;
     }
-    
+
     public function getTxDate()
     {
         return $this->created_at;
     }
-    
+
     public function getEpayUserId()
     {
         return $this->epayuser->epayUserId;
     }
-    
+
     public function getAmount()
     {
         return $this->order_money;
     }
-    
 }

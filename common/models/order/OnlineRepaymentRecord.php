@@ -2,16 +2,16 @@
 
 namespace common\models\order;
 
-use Yii;
 use yii\behaviors\TimestampBehavior;
+
 /**
  * This is the model class for table "online_repayment_record".
  *
  * @property string $id
  * @property string $online_pid
- * @property integer $order_id
+ * @property int $order_id
  * @property string $order_sn
- * @property integer $qishu
+ * @property int $qishu
  * @property string $uid
  * @property string $benxi
  * @property string $benjin
@@ -20,7 +20,7 @@ use yii\behaviors\TimestampBehavior;
  * @property string $yuqi_day
  * @property string $benxi_yue
  * @property string $refund_time
- * @property integer $status
+ * @property int $status
  * @property string $created_at
  * @property string $updated_at
  */
@@ -31,27 +31,30 @@ class OnlineRepaymentRecord extends \yii\db\ActiveRecord
     const STATUS_BEFORE = 2;//提前
     const STATUS_FALSE = 3;//无效
 
-    public static function createSN($pre = 'hkjl'){
+    public static function createSN($pre = 'hkjl')
+    {
         $pre_val = 'HB';
-        list($usec, $sec) = explode(" ", microtime());
-        $v = ((float)$usec + (float)$sec);
+        list($usec, $sec) = explode(' ', microtime());
+        $v = ((float) $usec + (float) $sec);
 
-        list($usec, $sec) = explode(".", $v);
-        $date = date('ymdHisx' . rand(1000, 9999),$usec);
+        list($usec, $sec) = explode('.', $v);
+        $date = date('ymdHisx'.rand(1000, 9999), $usec);
+
         return $pre_val.str_replace('x', $sec, $date);
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
-    public function behaviors() {
+    public function behaviors()
+    {
         return [
             TimestampBehavior::className(),
         ];
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public static function tableName()
     {
@@ -59,7 +62,7 @@ class OnlineRepaymentRecord extends \yii\db\ActiveRecord
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function rules()
     {
@@ -73,7 +76,7 @@ class OnlineRepaymentRecord extends \yii\db\ActiveRecord
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function attributeLabels()
     {

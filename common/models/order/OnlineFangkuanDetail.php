@@ -4,16 +4,17 @@ namespace common\models\order;
 
 use Yii;
 use yii\behaviors\TimestampBehavior;
+
 /**
  * This is the model class for table "online_fangkuan_detail".
  *
  * @property string $id
- * @property integer $fangkuan_order_id
- * @property integer $product_order_id
+ * @property int $fangkuan_order_id
+ * @property int $product_order_id
  * @property string $order_money
- * @property integer $online_product_id
+ * @property int $online_product_id
  * @property string $order_time
- * @property integer $status
+ * @property int $status
  * @property string $admin_id
  * @property string $create_at
  * @property string $updated_at
@@ -25,16 +26,17 @@ class OnlineFangkuanDetail extends \yii\db\ActiveRecord
     public static function createSN($pre = 'fkd')
     {
         $pre_val = Yii::$app->params['bill_prefix'][$pre];
-        list($usec, $sec) = explode(" ", microtime());
-        $v = ((float)$usec + (float)$sec);
-        
-        list($usec, $sec) = explode(".", $v);
-        $date = date('ymdHisx' . rand(1000, 9999),$usec);
+        list($usec, $sec) = explode(' ', microtime());
+        $v = ((float) $usec + (float) $sec);
+
+        list($usec, $sec) = explode('.', $v);
+        $date = date('ymdHisx'.rand(1000, 9999), $usec);
+
         return $pre_val.str_replace('x', $sec, $date);
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public static function tableName()
     {
@@ -42,16 +44,17 @@ class OnlineFangkuanDetail extends \yii\db\ActiveRecord
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
-    public function behaviors() {
+    public function behaviors()
+    {
         return [
             TimestampBehavior::className(),
         ];
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function rules()
     {
@@ -59,12 +62,12 @@ class OnlineFangkuanDetail extends \yii\db\ActiveRecord
             [['fangkuan_order_id', 'product_order_id', 'online_product_id', 'order_time', 'admin_id'], 'required'],
             [['fangkuan_order_id', 'product_order_id', 'online_product_id', 'status', 'admin_id'], 'integer'],
             [['order_money'], 'number'],
-            [['order_time'], 'string', 'max' => 20]
+            [['order_time'], 'string', 'max' => 20],
         ];
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function attributeLabels()
     {
