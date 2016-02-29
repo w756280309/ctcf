@@ -18,9 +18,11 @@ $rate = number_format($deals->finish_rate * 100, 0);
 <div class="container">
     <div class="slideBox" id="slideBox">
         <div class="bd">
+            <ul>
              <?php foreach($adv as $val): ?>
-                <li> <a class="pic" href="<?= $val['link'] ?>"><img src="/upload/adv/<?= $val['image'] ?>" alt=""></a> </li>
+                <li> <a class="pic" href="//<?= $val['link'] ?>"><img src="/upload/adv/<?= $val['image'] ?>" alt=""></a> </li>
              <?php endforeach; ?>
+            </ul>
         </div>
         <div class="hd">
             <ul></ul>
