@@ -9,17 +9,17 @@ $(function () {
             obj = $(canvasArray[i]);
             var per = obj.attr('data-per');
             $(canvasArray[i]).ClassyLoader({
-                width: 100,
-                height: 100,
+                width: 80,
+                height: 80,
                 start: 'top',
                 animate:false,
                 percentage: per,//显示比例
                 showText: false,//是否显示进度比例
                 speed: 20,
-                fontSize: '20px',
-                diameter: 40,
-                fontColor: '#ff9836',
-                lineColor: '#f7403a',
+                fontSize: '12px',
+                diameter: 32,
+                fontColor: '#fe0000',
+                lineColor: '#fe0000',
                 remainingLineColor: 'rgba(55, 55, 55, 0.1)',
                 lineWidth: 4,
                 textStr:'' //显示文字

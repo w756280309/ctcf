@@ -20,19 +20,21 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
                     <li class="col-xs-6">
                         <div>
                             <?=$deal['expires']?>
-                            <span class="column-lu">天
-                            <?php if (!empty($deal['kuanxianqi'])) { ?>
-                                (含宽限期<?= $deal['kuanxianqi'] ?>天)
-                            <?php } ?>
-                            </span>
+                            <span class="column-lu">天</span>
                         </div>
-                        <span class="qing">期限<i>(包含3天宽限期)</i> <img src="/images/dina.png" alt=""></span>
+                        <span class="qing">期限
+                            <?php if (!empty($deal['kuanxianqi'])) { ?>
+                            <i>(包含<?= $deal['kuanxianqi'] ?>天宽限期)</i> <img src="/images/dina.png" alt="">
+                            <?php } ?>
+                        </span>
                     </li>
-                    <div class="row" id='chart-box'>
+                    <?php if (!empty($deal['kuanxianqi'])) { ?>
+                    <div class="row" id='chart-box' hidden="true">
                         <div class="col-xs-12">
                             <div>宽限期：应收账款的付款方因内部财务审核,结算流程或结算日遇银行非工作日等因素，账款的实际结算日可能有几天的延</div>
                         </div>
                     </div>
+                    <?php } ?>
                 </ul>
             </div>
             <div class="hidden-xs col-sm-1"></div>

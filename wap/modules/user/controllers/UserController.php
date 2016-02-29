@@ -67,6 +67,6 @@ class UserController extends BaseController
             return $list;
         }
 
-        return $this->render('order', ['list' => $list, 'type' => $type]);
+        return $this->render('order', ['list' => $list, 'type' => $type, 'profitFund' => $this->user->lendAccount->profit_balance]);
     }
 }

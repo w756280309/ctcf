@@ -181,7 +181,7 @@ body {
 }
 
 .column-clock_per {
-    line-height: 70px;
+    line-height: 65px!important;
 }
 .nock1{
     position: relative;
@@ -201,10 +201,11 @@ body {
     z-index: 10;
     width: 80px;
     height: 80px;
+    line-height: 20px;
     margin: 0 auto;
-    margin-top: 20px!important;
+    margin-top: 23px!important;
     border-radius: 50%;
-    font-size: 18px!important;
+    font-size: 14px!important;
     text-align: center;
     color: #d32f2f!important;
     /*background: yellow;*/

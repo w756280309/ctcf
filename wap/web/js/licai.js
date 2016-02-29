@@ -75,52 +75,41 @@ $(function(){
                         if (currentPage === data.header.cp) {
                             if (data.data.length > 0) {
                                 var html = "";
-                                $.each(data.data, function (i, item) {
+                                $.each(data.data, function(i, item) {
                                     var title = item.title;
                                     var order_time = item.order_time;
-                                    var yield_rate = changeTwoDecimal(item.yield_rate*100)+'%';
-                                    var jiaxi = item.jiaxi === null ? '' : item.jiaxi+'%';
-                                    var order_money = item.order_money; //投资金额
+                                    var yield_rate = changeTwoDecimal(item.yield_rate * 100) + '%';
                                     var statusval = item.statusval; //已还清
-                                    var profit = (item.profit==null)?'':item.profit; //预期收益
-                                    var returndate = item.returndate; //结清时间
-                                    var pstatus=item.pstatus;
-                                    var fq = item.fq;
-                                    var sn = item.num;
-                                    var className=(pstatus==1||pstatus==2)?"column-title-rg":"column-title-rg1";
-                                        html += '<div class="row times">'+
-                                            '<div class="col-xs-4">'+order_time+'</div>'+
-                                            '<div class="col-xs-8"></div>'+
-                                            '</div>'+
-                                            '<div class="row column">'+
-                                            '<div class="hidden-xs col-sm-1" style="height:50px;"></div>'+
-                                            '<div class="col-xs-12 col-sm-10 column-title"><span>'+title+'</span></div>'+
-                                            '<div class="'+className+'">'+statusval+'</div>'+
-                                            '<div class="hidden-xs col-sm-1" style="height:50px;"></div>'+
-                                            '<div class="container" style="margin-top: 60px">'+
-                                            '<ul class="row column-content">'+
-                                            '<li class="hidden-xs col-sm-1"></li>'+
-                                            '<li class="col-xs-6 col-sm-5">'+
-                                            '<div>投资金额<span>'+order_money+'元</span></div>'+
-                                            '</li>'+
-                                            '<li class="col-xs-6 col-sm-5">'+
-                                            '<div>预期收益<span class="money">'+profit+'元</span></div>'+
-                                            '</li>'+
-                                            '<li class="hidden-xs col-sm-1"></li>'+
-                                            '</ul>'+
-                                            '<ul class="row column-content">'+
-                                            '<li class="hidden-xs col-sm-1"></li>'+
-                                            '<li class="col-xs-6 col-sm-5">'+
-                                            '<div>年化收益<span>'+yield_rate;
-                                    if (jiaxi !== '') {
-                                        html += ' + '+jiaxi;
-                                    }      
-                                    html += '</span></div></li>'+
-                                            '<li class="col-xs-6 col-sm-5">'+
-                                            '<div>结清时间<span>'+returndate+'</span></div>'+
-                                            '</li>'+
-                                            '<li class="hidden-xs col-sm-1"></li>'+
-                                            '</ul> </div> </div>';
+                                    var profit = (item.profit == null) ? '--' : item.profit; //预期收益
+                                    var pstatus = item.pstatus;
+                                    var className = (pstatus == 1 || pstatus == 2) ? "column-title-rg" : "column-title-rg1";
+                                    var profitDes = (pstatus == 6) ? "实际收益" : "预期收益";
+                                    var expiress = item.expiress;
+                                    html += '<div class="row times">'+
+                                                    '<div class="col-xs-4">'+order_time+'</div>'+
+                                                    '<div class="col-xs-8"></div>'+
+                                                '</div>'+
+                                                '<div class="row column">'+
+                                                    '<div class="hidden-xs col-sm-1" style="height:50px;"></div>'+
+                                                    '<div class="col-xs-12 col-sm-10 column-title"><span>'+title+'</span></div>'+
+                                                    '<div class="'+className+'">'+statusval+'</div>'+
+                                                    '<div class="container" id=\'project-box\'>'+
+                                                        '<div class="row">'+
+                                                            '<div class="col-xs-4">'+
+                                                                '<div>'+yield_rate+'</div>'+
+                                                                '<p>年化收益</p>'+
+                                                            '</div>'+
+                                                            '<div class="col-xs-4">'+
+                                                                '<div>'+expiress+'天</div>'+
+                                                                '<p>期限</p>'+
+                                                            '</div>'+
+                                                            '<div class="col-xs-4">'+
+                                                                '<div>'+profit+'</div>'+
+                                                                '<p>'+profitDes+'</p>'+
+                                                            '</div>'+
+                                                        '</div>'+
+                                                    '</div>'+
+                                                '</div>';
                                 });
 
 

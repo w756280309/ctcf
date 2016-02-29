@@ -39,13 +39,13 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
     public $is_fdate = 0;//是否启用截止日期
 
     //1预告期、 2募集中,3满标,4流标,5还款中,6已还清7募集提前结束  特对设立阀值得标的进行的设置。
-    const STATUS_PRE = 1;
-    const STATUS_NOW = 2;
+    const STATUS_PRE = 1; //
+    const STATUS_NOW = 2; //
     const STATUS_FULL = 3;
     const STATUS_LIU = 4;
     const STATUS_HUAN = 5;
     const STATUS_OVER = 6;
-    const STATUS_FOUND = 7;
+    const STATUS_FOUND = 7; //
 
     const STATUS_DEL = 1;
     const STATUS_USE = 0;
@@ -409,7 +409,7 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
     {
         return $this->money;
     }
-    
+
     public function getLegalAmount()
     {
         return $this->funded_money;
@@ -440,10 +440,10 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
                 return $umpLoan->get('project_account_id');
             } catch (Exception $ex) {
                 return false;
-            }            
+            }
         }
     }
-    
+
     /**
      * 获取联动一侧标的详情
      * @param type $id

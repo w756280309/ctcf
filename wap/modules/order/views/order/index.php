@@ -11,13 +11,13 @@ $this->registerJsFile('/js/order.js', ['depends' => 'yii\web\YiiAsset','position
 <link rel="stylesheet" href="/css/setting.css">
 
 <!--   购买页 start-->
-    
+
     <div class="row produce">
         <div class="col-xs-12 text-align-lf first-hang" style="padding-right: 0;"><?=$deal->title?></div>
         <div class="col-xs-4 text-align-ct">年化收益</div>
         <div class="col-xs-8 text-align-lf col"><?=  number_format($deal->yield_rate*100)?>%</div>
         <div class="col-xs-4 text-align-ct">项目期限</div>
-        <div class="col-xs-8 text-align-lf col"><?= $deal->expires ?>天(含宽限期<?=$deal['kuanxianqi']?>天)</div>
+        <div class="col-xs-8 text-align-lf col"><?= $deal->expires ?>天<?php if (!empty($deal['kuanxianqi'])) { ?>(含宽限期<?=$deal['kuanxianqi']?>天)<?php } ?></div>
         <div class="col-xs-4 text-align-ct">可投余额</div>
         <div class="col-xs-8 text-align-lf col"><?=  number_format($param['order_balance'], 2)?>元</div>
     </div>
@@ -33,7 +33,7 @@ $this->registerJsFile('/js/order.js', ['depends' => 'yii\web\YiiAsset','position
         <input name="money" type="text" id="money" value="" placeholder="请输入投资金额"  class="col-xs-6 safe-lf text-align-lf">
             <div class="col-xs-2 safe-txt">元</div>
         </div>
-            
+
         <div class="row shouyi">
             <div class="col-xs-4 safe-lf text-align-ct">预计收益</div>
             <div class="col-xs-3 safe-lf text-align-lf yuqishouyi" style="color:#f44336;padding: 0;line-height:35px;font-size:12px;">0.00元</div>
@@ -58,4 +58,4 @@ $this->registerJsFile('/js/order.js', ['depends' => 'yii\web\YiiAsset','position
     </div>
     <!-- 输入弹出框 end  -->
     <!-- 购买页 end  -->
-	
+

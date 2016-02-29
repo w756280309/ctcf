@@ -54,6 +54,17 @@ class OrderService
         $query = (new \yii\db\Query())
                 ->select('*')
                 ->from(['('.$querysql.')T']);
+
+        $record = $query->all();
+        $totalFund = 0;
+        $daihuan = 0;
+        foreach ($record as $val) {
+            $totalFund = bcadd($totalFund, $val['order_money'], 2);
+            if (OnlineProduct::STATUS_OVER !== $val['pstatus']) {
+                $daihuan++;
+            }
+        }
+
         $count = $query->count();
         $pages = new Pagination(['totalCount' => $count, 'pageSize' => $this->pz]);
         $query = $query->offset(($page - 1) * ($this->pz))->limit($pages->limit)->all();
@@ -89,7 +100,7 @@ class OrderService
             }
         }
 
-        return ['header' => $header, 'data' => $query, 'code' => $code, 'message' => $message];
+        return ['header' => $header, 'data' => $query, 'code' => $code, 'message' => $message, 'totalFund' => $totalFund, 'daihuan' => $daihuan];
     }
 
     public static function confirmOrder($order)

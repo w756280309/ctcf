@@ -21,41 +21,46 @@ $pc_cat = Yii::$app->params['pc_cat'];
     </div>
 </div>
 <div id="item-list">
-    <?php foreach ($deals as $val): ?>
+    <?php foreach ($deals as $val): $is_hui = in_array($val['status'], [4, 5, 6]); ?>
         <a class="row column dealdata" href="/deal/deal/detail?sn=<?= $val['num'] ?>">
-            <!-- <div class="hidden-xs col-sm-1"></div> -->
-            <div class="col-xs-12 col-sm-10 column-title"><img class="qian" src="/images/qian.png" alt=""><span><?= $val['title'] ?></span><img class="badges show" src="/images/badge.png" alt=""></div>
-            <!-- <div class="<?= in_array($val['status'], [1, 2, 7]) ? "column-title-rg" : "column-title-rg1"; ?>"><?= $val['statusval'] ?></div> -->
+            <div class="col-xs-12 col-sm-10 column-title">
+                <?php if (empty($val['jiaxi'])) { ?>
+                <img class="qian show" src="/images/qian.png" alt="">
+                <?php } else { ?>
+                <img class="badges show" src="/images/badge.png" alt="">
+                <?php } ?>
+                <span class="<?= $is_hui?'hui':'' ?>"><?= $val['title'] ?></span>
+            </div>
             <div class="container">
                 <ul class="row column-content">
                     <li class="col-xs-3">
                         <div>
-                        <span class="interest-rate">
+                        <span class="interest-rate <?= $is_hui?'hui':'' ?>">
                             <?= doubleval($val['yr']) ?><span class="column-lu">%</span>
-                            <?php if (!empty($val['jiaxi'])) { ?><span class="bonus-badge">+<?= doubleval($val['jiaxi']) ?>%</span><?php } ?>
+                            <?php if (!empty($val['jiaxi'])) { ?><span class="bonus-badge <?= $is_hui?'hui':'' ?>">+<?= doubleval($val['jiaxi']) ?>%</span><?php } ?>
                         </span>
                         </div>
-                        <span class="desc-text">年化率</span>
+                        <span class="desc-text <?= $is_hui?'hui':'' ?>">年化率</span>
                     </li>
-                    <li class="col-xs-3">
-                        <p><?= $val['qixian'] ?><span class="column-lu">天</span></p>
+                    <li class="col-xs-3 <?= $is_hui?'hui':'' ?>">
+                        <p class="<?= $is_hui?'hui':'' ?>"><?= $val['qixian'] ?><span class="column-lu">天</span></p>
                         <span>期限</span>
                     </li>
-                    <li class="col-xs-3">
-                        <p class="">1000<span class="column-lu">元</span></p>
+                    <li class="col-xs-3 <?= $is_hui?'hui':'' ?>">
+                        <p class="<?= $is_hui?'hui':'' ?>"><?= doubleval($val['start_money']) ?><span class="column-lu">元</span></p>
                         <span>起投</span>
                     </li>
                     <li class="col-xs-3 nock1">
                         <div class="nock">
-                            <canvas data-status="<?= $val['status'] ?>" data-per="<?= (7 === (int) $val['status']) ? 100 : ($val['finish_rate']) ?>"></canvas>
+                            <canvas data-status="<?= $val['status'] ?>" data-per="<?= (7 === (int) $val['status']) ? 100 : ($is_hui ? 0 : $val['finish_rate']) ?>"></canvas>
                         <?php if ($val['status'] == 1) { ?>
                             <div class="column-clock"><span><?= $val['start_desc'] ?></span><?= $val['start'] ?></div>
                         <?php } else if ($val['status'] == 2) { ?>
                             <div class="column-clock column-clock_per"><?= $val['finish_rate'] ?>%</div>
                         <?php } else if ($val['status'] == 7) { ?>
                             <div class="column-clock column-clock_per">成立</div>
-                        <?php }else{ ?>
-                            <div class="column-clock column-clock_per">100%</div>
+                        <?php } else { ?>
+                            <div class="column-clock column-clock_per <?= $is_hui?'hui':'' ?>"><?= $val['statusval'] ?></div>
                          <?php } ?>
                         </div>
                     </li>
