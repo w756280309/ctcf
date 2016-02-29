@@ -10,7 +10,7 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
 <html>
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,inital-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" >
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" >
     <meta name="renderer" content="webkit">
 	<title><?= Html::encode($this->title) ?></title>
         <?= Html::csrfMetaTags() ?>

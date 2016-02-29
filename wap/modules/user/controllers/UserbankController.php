@@ -212,6 +212,7 @@ class UserbankController extends BaseController
      */
     public function actionAccept($ret = 'error')
     {
+        $this->layout = '@app/modules/user/views/layouts/notify';
         return $this->render('acceptres', ['ret' => $ret]);
     }
 
@@ -221,6 +222,17 @@ class UserbankController extends BaseController
      */
     public function actionQpayres($ret = 'error')
     {
+        $this->layout = '@app/modules/user/views/layouts/notify';
         return $this->render('qpayres', ['ret' => $ret]);
+    }
+
+    /**
+     * 提现结果页
+     * @param type $ret
+     */
+    public function actionDrawres($ret = 'error')
+    {
+        $this->layout = '@app/modules/user/views/layouts/notify';
+        return $this->render('drawres', ['ret' => $ret]);
     }
 }

@@ -20,11 +20,11 @@ class QpaynotifyController extends Controller
      * 快捷充值前台通知地址
      */
     public function actionFrontend()
-    {        
+    {
         $data = Yii::$app->request->get();
         $ret = $this->processing($data);
         if ($ret instanceof RechargeRecord) {
-            return $this->redirect('/user/user');
+            return $this->redirect('/user/userbank/qpayres?ret=success');
         }
         return $this->redirect('/user/userbank/qpayres');
     }
@@ -50,12 +50,12 @@ class QpaynotifyController extends Controller
             'mer_date' => $data['mer_date'],
             'reg_code' => $err,
         ]);
-        
+
         return $this->render('@borrower/modules/user/views/recharge/recharge_notify.php', ['content' => $content]);
     }
-    
+
     /**
-     * 
+     *
      * @param array $data
      * @return type
      * @throws NotFoundHttpException
@@ -71,7 +71,7 @@ class QpaynotifyController extends Controller
             $rc = RechargeRecord::findOne(['sn' => $data['order_id']]);
             if (null !== $rc) {
                 $acc_ser = new AccountService();
-                $is_success = $acc_ser->confirmRecharge($rc);                
+                $is_success = $acc_ser->confirmRecharge($rc);
                 if ($is_success) {
                     return $rc;
                 } else {
@@ -79,7 +79,7 @@ class QpaynotifyController extends Controller
                 }
             } else {
                 throw new NotFoundHttpException($data['order_id'] . ':无法找到申请数据');
-            }            
+            }
         } else {
             throw new Exception($data['order_id'] . '处理失败');
         }

@@ -9,7 +9,7 @@ frontend\assets\WapAsset::register($this);
 <head>
 	<meta charset="utf-8">
     <meta name="viewport"
-          content="width=device-width,inital-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+          content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
     <meta name="renderer" content="webkit">
     <meta name="format-detection" content="telephone=no"/>
     	<title><?= Html::encode($this->title) ?></title>
@@ -41,9 +41,9 @@ frontend\assets\WapAsset::register($this);
                     <div class="col-xs-1"></div>
                 </div>
 
-	    
+
 		<?= $content ?>
-	    
+
                <div class="row navbar-fixed-bottom footer">
                     <div class="col-xs-4 footer-title">
                         <div class="footer-inner">
@@ -65,12 +65,12 @@ frontend\assets\WapAsset::register($this);
                         </div>
                     </div>
                 </div>
-		
+
         </div>
 
 
     <?php $this->endBody() ?>
-		
+
 </body>
 </html>
 <?php $this->endPage() ?>

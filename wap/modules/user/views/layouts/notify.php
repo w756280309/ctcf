@@ -1,7 +1,5 @@
 <?php
-use yii\helpers\Html;
-use wap\assets\WapAsset;
-WapAsset::register($this);
+frontend\assets\WapAsset::register($this);
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
@@ -32,37 +30,24 @@ WapAsset::register($this);
     <script src="http://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
 
-<!--    <script src="/js/TouchSlide.1.1.js"></script>-->
     <script src="/js/jquery.js"></script>
     <script src="/js/common.js"></script>
-    <script>
-            $(function(){
-                 $('.back img').bind('click',function(){
-                      history.go(-1);
-                 })
-            })
-    </script>
 </head>
 <body>
-    <?php $this->beginBody() ?>
+<?php $this->beginBody() ?>
 
-    <!--标的详情页头部 start-->
-     <div class="container">
-            <div class="row title-box nav-height">
-                <div class="col-xs-2 back"><img src="/images/back.png" alt=""/></div>
-                <div class="col-xs-8 title"><?=$this->title ?></div>
-                <div class="col-xs-2 back"></div>
-            </div>
-    <!--标的详情页头部 end-->
-		<?= $content ?>
+<!--标的详情页头部 start-->
+ <div class="container">
+    <div class="row title-box nav-height">
+        <div class="col-xs-2 back"></div>
+        <div class="col-xs-8 title"><?=$this->title ?></div>
+        <div class="col-xs-2 back"></div>
+    </div>
+<!--标的详情页头部 end-->
+<?= $content ?>
 
-
-    <?php $this->endBody() ?>
-
+<?php $this->endBody() ?>
 
 </body>
 </html>
 <?php $this->endPage() ?>
-
-
-
