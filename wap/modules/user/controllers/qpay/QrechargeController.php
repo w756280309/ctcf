@@ -2,10 +2,10 @@
 
 namespace app\modules\user\controllers\qpay;
 
+use common\utils\TxUtils;
 use Yii;
 use yii\base\Model;
 use yii\web\Response;
-use PayGate\Cfca\CfcaUtils;
 use app\controllers\BaseController;
 use common\models\user\RechargeRecord;
 
@@ -30,7 +30,7 @@ class QrechargeController extends BaseController
         ];
 
         $rec_model = new RechargeRecord([
-            'sn' => CfcaUtils::generateSn('RC'),
+            'sn' => TxUtils::generateSn('RC'),
             'uid' => $safe['uid'],
             'account_id' => $safe['account_id'],
             'bank_id' => $safe['bank_id'],

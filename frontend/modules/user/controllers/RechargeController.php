@@ -5,7 +5,7 @@ namespace app\modules\user\controllers;
 use Yii;
 use frontend\controllers\BaseController;
 use common\models\user\RechargeRecord;
-use PayGate\Cfca\CfcaUtils;
+use common\utils\TxUtils;
 use common\service\BankService;
 
 class RechargeController extends BaseController
@@ -50,7 +50,7 @@ class RechargeController extends BaseController
         }
 
         $recharge = new RechargeRecord([
-            'sn' => CfcaUtils::generateSn("RC"),
+            'sn' => TxUtils::generateSn("RC"),
             'pay_type' => $pay_type,
             'pay_id' => 0,
             'account_id' => $this->user->lendAccount->id,
