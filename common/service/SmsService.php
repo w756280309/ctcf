@@ -75,7 +75,7 @@ class SmsService {
                 'message' => json_encode($message)
             ]);
             $sms->save();
-
+            \Yii::$container->get('sms')->send($sms);
             return ['code' => 0, 'message' => ''];
         } else {
             return ['code' => 1, 'message' => '验证码生成超时'];
