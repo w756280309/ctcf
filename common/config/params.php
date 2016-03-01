@@ -64,9 +64,6 @@ return [
     'page_info' => [
         'beian' => '@版权归温都金服开发团队所有',
     ],
-    'ump_mer_recharge_ret_url' => 'http://b.wdjf.njfae.com.cn/user/bpay/brecharge/frontend-notify',
-    'ump_mer_recharge_notify_url' => 'http://b.wdjf.njfae.com.cn/user/bpay/brecharge/backend-notify',
-    'ump_draw_pc_ret_url' => 'https://www.wenjf.com/user/draw/draw-notify',   //投资用户提现返回结果页
     'ump' => [
         'apiUrl' => 'http://pay.soopay.net/spay/pay/payservice.do',
         'merchant_id' => '7001209',
@@ -89,7 +86,9 @@ return [
             'draw_apply_notify_url' => "https://m.wenjf.com/user/qpay/drawnotify/apply",
             'rec_pc_ret_url' => 'http://www.wenjf.com/user/bpay/brecharge/frontend-notify',
             'rec_pc_notify_url' => 'http://www.wenjf.com/user/bpay/brecharge/backend-notify',
-            'draw_pc_ret_url' => 'http://www.wenjf.com/user/bpay/draw/frontend',
+            'draw_pc_ret_url' => 'https://www.wenjf.com/user/draw/draw-notify',   //投资用户提现返回结果页
+            'mer_recharge_ret_url' => 'https://mwjf.wenjf.com/user/bpay/brecharge/frontend-notify',  //融资用户充值回调接口地址
+            'mer_recharge_notify_url' => 'https://mwjf.wenjf.com/user/bpay/brecharge/backend-notify',
         ],
     ],
 ];

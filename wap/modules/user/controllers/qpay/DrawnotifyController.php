@@ -27,14 +27,14 @@ class DrawnotifyController extends Controller
         $ret = $this->processing($data);
         if ($ret instanceof DrawRecord) {
             if ('pc' === $channel) {
-                return $this->redirect(\Yii::$app->params['ump_draw_pc_ret_url'].'?flag=succ');
+                return $this->redirect(\Yii::$app->params['ump']['notify']['draw_pc_ret_url'].'?flag=succ');
             }
 
             return $this->redirect('/user/userbank/drawres?ret=success');
         } else {
             \Yii::trace('非DrawRecord对象;'.$data['service'].':'.http_build_query($data), 'umplog');
             if ('pc' === $channel) {
-                return $this->redirect(\Yii::$app->params['ump_draw_pc_ret_url'].'?flag=err');
+                return $this->redirect(\Yii::$app->params['ump']['notify']['draw_pc_ret_url'].'?flag=err');
             }
 
             return $this->redirect('/user/userbank/drawres');
