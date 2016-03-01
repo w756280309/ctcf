@@ -66,6 +66,7 @@ return [
     ],
     'ump_mer_recharge_ret_url' => 'http://b.wdjf.njfae.com.cn/user/bpay/brecharge/frontend-notify',
     'ump_mer_recharge_notify_url' => 'http://b.wdjf.njfae.com.cn/user/bpay/brecharge/backend-notify',
+    'ump_draw_pc_ret_url' => 'https://www.wenjf.com/user/draw/draw-notify',   //投资用户提现返回结果页
     'ump' => [
         'apiUrl' => 'http://pay.soopay.net/spay/pay/payservice.do',
         'merchant_id' => '7001209',

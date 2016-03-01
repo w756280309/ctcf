@@ -11,7 +11,6 @@ use Psr\Http\Message\ResponseInterface as Psr7ResponseInterface;
 use P2pl\QpayTxInterface;
 use P2pl\OrderTxInterface;
 use P2pl\QpayBindInterface;
-use common\models\user\RechargeRecord;
 use P2pl\UserInterface;
 use P2pl\LoanFkInterface;
 use P2pl\WithdrawalInterface;
@@ -439,25 +438,25 @@ class Client
     /**
      * 4.4.2 融资方充值申请.
      *
-     * @param RechargeRecord $recharge 充值记录对象
+     * @param QpayTxInterface $recharge 充值记录对象
      * @param type           $payType  支付方式 取值范围：B2BBANK（企业网银）,B2CDEBITBANK（个人借记卡网银）
      * @param type           $merId    被充值企业资金账户托管平台商户号
      * @param type           $gateId   发卡行编号
      */
-    public function OrgRechargeApply(RechargeRecord $recharge, $payType, $merId, $gateId)
+    public function OrgRechargeApply(QpayTxInterface $recharge, $payType, $merId, $gateId)
     {
         $data = [
             'service' => 'mer_recharge',
-            'ret_url' => Yii::$app->params['ump_mer_recharge_ret_url'],
-            'notify_url' => Yii::$app->params['ump_mer_recharge_notify_url'],
-            'order_id' => $recharge->sn,
-            'mer_date' => date('Ymd', $recharge->created_at),
+            'ret_url' => $this->clientOption['mer_recharge_ret_url'],
+            'notify_url' => $this->clientOption['mer_recharge_notify_url'],
+            'order_id' => $recharge->getTxSn(),
+            'mer_date' => $recharge->getTxDate(),
             'pay_type' => $payType,
             'recharge_mer_id' => $merId,
             'account_type' => '01',
-            'amount' => $recharge->fund * 100,
+            'amount' => $recharge->getAmount(),
             'gate_id' => $gateId,
-            'user_ip' => \Yii::$app->functions->getIp(),
+            'user_ip' => $recharge->getClientIp(),
             'com_amt_type' => 2,
         ];
 
