@@ -74,7 +74,7 @@ class SmsService {
                 'level' => SmsMessage::LEVEL_HIGH,
                 'message' => json_encode($message)
             ]);
-            $sms->save();
+            //$sms->save();
             \Yii::$container->get('sms')->send($sms);
             return ['code' => 0, 'message' => ''];
         } else {
