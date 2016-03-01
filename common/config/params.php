@@ -82,6 +82,9 @@ return [
             'draw_ret_url' => "https://m.wenjf.com/user/qpay/drawnotify/frontend",
             'draw_notify_url' => "https://m.wenjf.com/user/qpay/drawnotify/backend",
             'draw_apply_notify_url' => "https://m.wenjf.com/user/qpay/drawnotify/apply",
+            'rec_pc_ret_url' => 'http://www.wenjf.com/user/bpay/brecharge/frontend-notify',
+            'rec_pc_notify_url' => 'http://www.wenjf.com/user/bpay/brecharge/backend-notify',
+            'draw_pc_ret_url' => 'http://www.wenjf.com/user/bpay/draw/frontend',
         ],
     ],
 ];
