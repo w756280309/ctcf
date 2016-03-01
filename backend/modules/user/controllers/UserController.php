@@ -239,12 +239,8 @@ class UserController extends BaseController
         foreach ($banks as $key => $val) {
             $bank[$key] = $val['bankname'];
         }
-
-        $userBank = new UserBanks([
-            'binding_sn' => 'null',
-        ]);
+        $userBank = new UserBanks();
         $userBank->scenario = 'org_insert';
-
         $epayuser = new EpayUser([
             'appUserId' => '0',
             'epayId' => 1,

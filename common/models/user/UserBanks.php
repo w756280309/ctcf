@@ -50,7 +50,7 @@ class UserBanks extends \yii\db\ActiveRecord
         return [
             'step_first' => ['uid', 'bank_id', 'account', 'card_number', 'account_type', 'sms', 'bank_name', 'mobile', 'binding_sn'],
             'step_second' => ['sub_bank_name', 'province', 'city'],
-            'org_insert' => ['uid', 'bank_id', 'epayUserId', 'card_number', 'account_type', 'bank_name', 'binding_sn'],
+            'org_insert' => ['uid', 'bank_id', 'epayUserId', 'card_number', 'account_type', 'bank_name'],
         ];
     }
 
