@@ -8,4 +8,4 @@
     \Yii::$app->params['ump']['ump_cert'],
     \Yii::$app->params['ump']['notify'],
 ]);
-\Yii::$container->set('sms', 'SmsGate\\SmsRequest', [true, ['15810036547', '18518154492']]);
+\Yii::$container->set('sms', 'SmsGate\\SmsRequest', [false, []]);
