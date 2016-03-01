@@ -72,16 +72,16 @@ return [
             'max' => 1000000000
         ],
         'notify' => [
-            'bind_notify_url' => "http://1.202.48.153:8001/user/qpay/notify/backend",
-            'bind_ret_url' => "http://1.202.48.153:8001/user/qpay/notify/frontend",
-            'rec_notify_url' => "http://1.202.48.153:8001/user/qpay/qpaynotify/backend",
-            'rec_ret_url' => "http://1.202.48.153:8001/user/qpay/qpaynotify/frontend",
-            'order_notify_url' => "http://1.202.48.153:8001/order/qpay/notify/backend",
-            'order_ret_url' => "http://1.202.48.153:8001/order/qpay/notify/frontend",
-            'mer_draw_notify_url' => 'http://1.202.98.24:8002/order/drawnotify/notify',  //融资方提现回调地址
-            'draw_ret_url' => "http://1.202.102.12:8001/user/qpay/drawnotify/frontend",
-            'draw_notify_url' => "http://1.202.102.12:8001/user/qpay/drawnotify/backend",
-            'draw_apply_notify_url' => "http://1.202.102.12:8001/user/qpay/drawnotify/apply",
+            'bind_notify_url' => "https://m.wenjf.com/user/qpay/notify/backend",
+            'bind_ret_url' => "https://m.wenjf.com/user/qpay/notify/frontend",
+            'rec_notify_url' => "https://m.wenjf.com/user/qpay/qpaynotify/backend",
+            'rec_ret_url' => "https://m.wenjf.com/user/qpay/qpaynotify/frontend",
+            'order_notify_url' => "https://m.wenjf.com/order/qpay/notify/backend",
+            'order_ret_url' => "https://m.wenjf.com/order/qpay/notify/frontend",
+            'mer_draw_notify_url' => 'https://mwjf.wenjf.com/order/drawnotify/notify',  //融资方提现回调地址
+            'draw_ret_url' => "https://m.wenjf.com/user/qpay/drawnotify/frontend",
+            'draw_notify_url' => "https://m.wenjf.com/user/qpay/drawnotify/backend",
+            'draw_apply_notify_url' => "https://m.wenjf.com/user/qpay/drawnotify/apply",
         ],
     ],
 ];
