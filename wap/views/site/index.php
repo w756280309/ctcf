@@ -53,6 +53,7 @@ $rate = number_format($deals->finish_rate * 100, 0);
                     <div class="newcomer-badge"><img src="/images/badge.png" alt="猴年加息"></div>
                     <span class="interest-rate"><?= rtrim(rtrim(number_format($deals->yield_rate*100, 2), '0'), '.') ?>%</span>
                     <span class="interest-rate-add">+<?= $deals->jiaxi ?>%</span>
+                    <div class="col-xs-12 percentage-txt">年化率</div>
                 </div>
             </li>
             <li class="col-xs-6 padding-5">
@@ -80,6 +81,7 @@ $rate = number_format($deals->finish_rate * 100, 0);
             <li class="col-xs-6 padding-5">
                 <div class="xian">
                     <span class="interest-rate"><?= rtrim(rtrim(number_format($deals->yield_rate*100, 2), '0'), '.') ?>%</span>
+                    <div class="col-xs-12 percentage-txt">年化率</div>
                 </div>
             </li>
             <li class="col-xs-6 padding-5">
@@ -105,7 +107,7 @@ $rate = number_format($deals->finish_rate * 100, 0);
         <?php } ?>
     </div>
 <!--  新手区end  -->
-    <div style="width:100%;height:16px; border-bottom:1px solid #e6e7e7;"></div>
+    <div class="line-box" ></div>
 <!-- 理财区start -->
     <div class="licai-box">
         <div class="licai-head">
@@ -145,5 +147,3 @@ $rate = number_format($deals->finish_rate * 100, 0);
             </div>
         </div>
     </div>
-
-
