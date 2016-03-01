@@ -66,9 +66,9 @@ class Client
      */
     private $version = '1.0';
 
-    public function __construct($merchantId, $clientKeyPath, $umpCertPath, $options)
+    public function __construct($apiUrl, $merchantId, $clientKeyPath, $umpCertPath, $options)
     {
-        $this->apiUrl = 'http://114.113.159.203:9200/spay/pay/payservice.do';
+        $this->apiUrl = $apiUrl;
         $this->merchantId = $merchantId;
         $this->clientKeyPath = $clientKeyPath;
         $this->umpCertPath = $umpCertPath;

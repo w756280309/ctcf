@@ -67,6 +67,7 @@ return [
     'ump_mer_recharge_ret_url' => 'http://b.wdjf.njfae.com.cn/user/bpay/brecharge/frontend-notify',
     'ump_mer_recharge_notify_url' => 'http://b.wdjf.njfae.com.cn/user/bpay/brecharge/backend-notify',
     'ump' => [
+        'apiUrl' => 'http://pay.soopay.net/spay/pay/payservice.do',
         'merchant_id' => '7001209',
         'wdjf_key' => __DIR__.'/payment/ump/wdjf_prod.key',
         'ump_cert' => __DIR__.'/payment/ump/ump_prod.crt',
