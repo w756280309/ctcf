@@ -28,3 +28,6 @@ params-local.php
 main-local.php
 
 /*/web/log.php
+
+wdjf_prod.key
+ump_prod.crt
