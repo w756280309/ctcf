@@ -120,7 +120,7 @@ class OrderManager
 
         $money_record = new MoneyRecord();
         $money_record->sn = TxUtils::generateSn('MR');
-        $money_record->type = MoneyRecord::TYPE_ORDER;
+        $money_record->type = MoneyRecord::TYPE_CANCEL_ORDER;
         $money_record->osn = $order->sn;
         $money_record->account_id = $ua->id;
         $money_record->uid = $order->uid;
@@ -130,17 +130,13 @@ class OrderManager
             $transaction->rollBack();
             throw new \Exception('资金记录失败');
         }
-
         //联动标的转账
-        $trans_resp = Yii::$container->get('ump')->loanTransferToLender($order);
-
+        $trans_resp = Yii::$container->get('ump')->loanTransferToLender($cancelOrder);
         if (!$trans_resp->isSuccessful()) {
             $transaction->rollBack();
-            exit;
             throw new \Exception('联动标的转账失败');
         }
         $transaction->commit();
-
         return $order;
     }
 

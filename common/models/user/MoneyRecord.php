@@ -29,6 +29,7 @@ class MoneyRecord extends \yii\db\ActiveRecord
     const TYPE_HUANKUAN = 400; //还款
     const TYPE_HUIKUAN = 4; //回款
     const TYPE_CHEBIAO = 5; //流标
+    const TYPE_CANCEL_ORDER = 51; //撤标
     const TYPE_FEE = 6; //放款扣去手续费
     const TYPE_DRAW_CANCEL = 100; //提现撤销
     const TYPE_DRAW_SUCCESS = 101; //批量代付成功

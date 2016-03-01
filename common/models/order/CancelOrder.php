@@ -75,9 +75,20 @@ class CancelOrder extends \yii\db\ActiveRecord implements \P2pl\OrderTxInterface
         return $cancelOrder;
     }
 
+    /**
+     * 对应订单.
+     *
+     * @return UserBanks
+     */
+    public function getOrder()
+    {
+        return $this->hasOne(OnlineOrder::className(), ['sn' => 'orderSn']);
+    }
+    
+    
     public function getLoanId()
     {
-        return '';
+        return $this->order->online_pid;
     }
 
     public function getTxSn()
@@ -92,7 +103,7 @@ class CancelOrder extends \yii\db\ActiveRecord implements \P2pl\OrderTxInterface
 
     public function getEpayUserId()
     {
-        return '';
+        return $this->order->epayuser->epayUserId;
     }
 
     public function getAmount()

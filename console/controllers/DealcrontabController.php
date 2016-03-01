@@ -15,6 +15,7 @@ use common\models\user\UserAccount;
 use common\lib\bchelp\BcRound;
 use common\models\user\MoneyRecord;
 use common\service\LoanService;
+use common\models\order\OrderManager;
 
 class DealcrontabController extends Controller
 {
@@ -36,6 +37,8 @@ class DealcrontabController extends Controller
                 $ua->freeze_balance = $bc->bcround(bcsub($ua->freeze_balance, $ord['order_money']), 2);
                 $ua->save();
             }
+            
+            OrderManager::findInvalidOrders($dat);
         }
     }
     /**

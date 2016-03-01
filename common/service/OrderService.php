@@ -155,11 +155,11 @@ class OrderService
         $summoney = OnlineOrder::find()->where(['status' => 1, 'online_pid' => $loan->id])->sum('order_money');
         $insert_sum = $summoney; //包含此笔募集的总金额
         $update = array();
-        if (0 === bccomp($insert_sum, $loan->money)) {
+        if (0 <= bccomp($insert_sum, $loan->money)) {//投资总和与融资总额比较。如果投资总和大于等于融资总额。要完成满标状态值的修改
             $update['finish_rate'] = 1;
             $update['full_time'] = time();//由于定时任务去修改满标状态以及生成还款计划。所以此处不设置修改满标状态
             $diff = \Yii::$app->functions->timediff(strtotime(date('Y-m-d', $loan->start_date)), strtotime(date('Y-m-d', $loan->finish_date)));
-            OnlineOrder::updateAll(['expires' => $diff['day'] - 1], ['online_pid' => $loan->id]);
+            OnlineOrder::updateAll(['expires' => $diff['day'] - 1], "online_pid=" . $loan->id . " and finish_date>0"); //对于此时设置有结束日期的要校准项目天数
         } else {
             $finish_rate = $bcrond->bcround(bcdiv($insert_sum, $loan->money), 2);
             if (0 === bccomp($finish_rate, 1) && 0 !== bccomp($insert_sum, $loan->money)) {//主要处理由于四舍五入造成的不应该募集完成的募集完成了：完成比例等于1了，并且包含此次交易成功所有金额不等于募集金额
