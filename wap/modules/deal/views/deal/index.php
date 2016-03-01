@@ -31,26 +31,26 @@ $pc_cat = Yii::$app->params['pc_cat'];
                 <?php } ?>
                 <span class="<?= $is_hui?'hui':'' ?>"><?= $val['title'] ?></span>
             </div>
-            <div class="container">
+            <div class="container" style="clear:both;">
                 <ul class="row column-content">
-                    <li class="col-xs-3">
+                    <li class="col-xs-4">
                         <div>
                         <span class="interest-rate <?= $is_hui?'hui':'' ?>">
                             <?= doubleval($val['yr']) ?><span class="column-lu">%</span>
                             <?php if (!empty($val['jiaxi'])) { ?><span class="bonus-badge <?= $is_hui?'hui':'' ?>">+<?= doubleval($val['jiaxi']) ?>%</span><?php } ?>
                         </span>
                         </div>
-                        <span class="desc-text <?= $is_hui?'hui':'' ?>">年化率</span>
+                        <span class="desc-text nianRate <?= $is_hui?'hui':'' ?>">年化率</span>
                     </li>
-                    <li class="col-xs-3 <?= $is_hui?'hui':'' ?>">
+                    <li class="col-xs-2 <?= $is_hui?'hui':'' ?>">
                         <p class="<?= $is_hui?'hui':'' ?>"><?= $val['qixian'] ?><span class="column-lu">天</span></p>
-                        <span>期限</span>
+                        <span class='desc-text <?= $is_hui?'hui':'' ?>'>期限</span>
                     </li>
-                    <li class="col-xs-3 <?= $is_hui?'hui':'' ?>">
+                    <li class="col-xs-3 aa <?= $is_hui?'hui':'' ?>">
                         <p class="<?= $is_hui?'hui':'' ?>"><?= doubleval($val['start_money']) ?><span class="column-lu">元</span></p>
-                        <span>起投</span>
+                        <span class='desc-text <?= $is_hui?'hui':'' ?>'>起投</span>
                     </li>
-                    <li class="col-xs-3 nock1">
+                    <li class="col-xs-3 bb nock1">
                         <div class="nock">
                             <canvas data-status="<?= $val['status'] ?>" data-per="<?= (7 === (int) $val['status']) ? 100 : ($is_hui ? 0 : $val['finish_rate']) ?>"></canvas>
                         <?php if ($val['status'] == 1) { ?>
@@ -69,10 +69,8 @@ $pc_cat = Yii::$app->params['pc_cat'];
             <div class="hidden-xs col-sm-1"></div>
         </a>
     <?php endforeach; ?>
-
-
 </div>
 <!--加载跟多-->
-<div class="load">加载更多</div>
+<div class="load" style="display:block;"></div>
 <div class="nodata">暂无数据</div>
 

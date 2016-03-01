@@ -8,19 +8,19 @@ $(function () {
             obj = $(canvasArray[i]);
             var per = obj.attr('data-per');
             $(canvasArray[i]).ClassyLoader({
-                width: 80,
-                height: 80,
+                width: 60,
+                height: 60,
                 start: 'top',
                 animate:false,
                 percentage: per,//显示比例
                 showText: false,//是否显示进度比例
                 speed: 20,
                 fontSize: '12px',
-                diameter: 32,
+                diameter: 28,
                 fontColor: '#fe0000',
                 lineColor: '#fe0000',
                 remainingLineColor: 'rgba(55, 55, 55, 0.1)',
-                lineWidth: 4,
+                lineWidth: 3,
                 textStr:'' //显示文字
             });
         }
@@ -106,23 +106,23 @@ $(function () {
                                     }
 
                                     html += '<span class="'+ hui +'">'+ item.title +'</span>' +
-                                            '</div><div class="container">' +
+                                            '</div><div class="container" style="clear:both;">' +
                                             '<ul class="row column-content">' +
-                                            ' <li class="col-xs-3"><div>' +
+                                            ' <li class="col-xs-4"><div>' +
                                             '<span class="interest-rate '+ hui +'">' +
                                             + itemyr +'<span class="column-lu">%</span>';
                                     if ('' !== itemjx) {
                                         html += '<span class="bonus-badge '+ hui +'">+'+ itemjx +'%</span>';
                                     }
                                     html += '</span></div>' +
-                                            '<span class="desc-text '+ hui +'">年化率</span></li>' +
-                                            '<li class="col-xs-3 '+ hui +'">' +
+                                            '<span class="desc-text nianRate '+ hui +'">年化率</span></li>' +
+                                            '<li class="col-xs-2 '+ hui +'">' +
                                             '<p class="'+ hui +'">'+ item.qixian +'<span class="column-lu">天</span></p>' +
-                                            '<span>期限</span></li>' +
-                                            '<li class="col-xs-3 '+ hui +'">' +
+                                            '<span class="desc-text '+ hui +'">期限</span></li>' +
+                                            '<li class="col-xs-3 aa '+ hui +'">' +
                                             '<p class="'+ hui +'">'+ itemStartMoney +'<span class="column-lu">元</span></p>' +
-                                            '<span>起投</span></li>' +
-                                            '<li class="col-xs-3 nock1"><div class="nock">' +
+                                            '<span class="desc-text '+ hui +'">起投</span></li>' +
+                                            '<li class="col-xs-3 bb nock1"><div class="nock">' +
                                             '<canvas data-status="'+ item.status +'" data-per="'+ dataPer +'"></canvas>' + finishHtml +
                                             '</div></li></ul></div><div class="hidden-xs col-sm-1"></div></a>';
                                 });

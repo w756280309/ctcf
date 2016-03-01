@@ -248,3 +248,62 @@ a {
 a:hover {
     text-decoration: none;
 }
+ 
+#payment .col-xs-12{
+    padding:0;
+    color: #747474;
+    font-size: 14px;
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-top: 4px;
+}
+.paymentLock .col-xs-12{
+    padding: 0;
+    text-align: center;
+    margin-top: 5px;
+}
+.paymentLock .col-xs-12 img {
+    width: 100px;
+}
+#payment-content .col-xs-12 {
+    padding:0;
+    font-size: 12px;
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-top: 4px;
+    text-align: justify;
+}
+#payment-change .col-xs-12{
+    padding:0;
+    color: #747474;
+    font-size: 14px;
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-top: 4px;
+    border-top:1px solid #d6dad9;
+    margin-top: 20px; 
+}
+#payment-how .col-xs-12 {
+    padding: 0;
+    color: #2d2d2d;
+    font-size:14px;
+    background: #fff;
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+}
+#payment-how .col-xs-12 span {
+    color: #ea9755;
+}
+#payment-li .col-xs-12 {
+    padding: 0;
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-top: 4px;
+}
+#payment-li .col-xs-12 div {
+    font-size: 12px;
+    text-align: justify;
+    color: #636363;
+}

@@ -22,6 +22,7 @@ body {
     color: #8c8c8c;
     background: #e7eaf1;
     padding-bottom: 50px;
+    font-size: 62.5%;
 }
 /*hesder*/
 
@@ -89,36 +90,37 @@ body {
 .column {
     position: relative;
     display: block;
-    height: 130px;
     background: #fff;
     margin-top: 10px;
     cursor: pointer;
     overflow: hidden;
+    padding-bottom: 10px;
 }
 .column-title {
     position: relative;
-    height:40px;
+    height:32px;
     /*border-bottom: 1px dashed #e8e8e8;*/
-    line-height: 50px;
-    font-size: 16px;
+    line-height: 32px;
+    font-size: 14px;
     color: #131313;
     text-overflow:ellipsis;
     white-space:nowrap;
+    padding-left: 30px;
+    top: 4px;
     /*overflow:hidden;*/
-    padding-left: 40px;
 }
 .badges {
     display: none;
     position: absolute;
     left: 0;
-    top:0;
-    width: 58px;
+    top:-4px;
+    width: 40px;
 }
 .qian {
     display: none;
     position: absolute;
-    left: 12px;
-    top:13px;
+    left: 2px;
+    top: 3px;
     width: 26px;
 }
 .column-title span{
@@ -157,31 +159,98 @@ body {
 .column-content {
     height: 100%;
     margin: 0 auto;
+    margin-top: -10px;
 }
-.column-content .col-xs-3 {
+.column-content .col-xs-3,.column-content .col-xs-4,.column-content .col-xs-2{
     padding:0;
 }
-.column-content li {
+.column-content .aa {
+    padding:0;
     float: left;
     /*width: 33.33%;*/
     text-align: center;
 }
-.column-content li div {
+.column-content .aa div {
     margin-top: 10px;
-    font-size: 24px;
+    font-size: 16px;
+    height: 32px;
+    line-height: 32px;
     color: #fe0000;
 }
-.column-content li p {
+.column-content .aa p {
     margin-top: 10px;
-    font-size: 24px;
+    font-size: 16px;
+     height: 32px;
+    line-height: 32px;
     color: #595757;
 }
+
+.column-content .col-xs-4 {
+    padding:0;
+    float: left;
+    /*width: 33.33%;*/
+}
+.column-content .col-xs-4 div {
+    margin-top: 10px;
+     height: 32px;
+    line-height: 32px;
+    font-size: 20px;
+    color: #fe0000;
+    padding-left: 30px;
+}
+.nianRate {
+    padding-left: 30px;
+}
+.column-content .col-xs-4 p {
+    margin-top: 10px;
+     height: 32px;
+    line-height: 32px;
+    font-size: 20px;
+    color: #595757;
+}
+
+.column-content .col-xs-2 {
+    padding:0;
+    float: left;
+    /*width: 33.33%;*/
+    text-align: center;
+}
+.column-content .col-xs-2 div {
+    margin-top: 10px;
+    font-size: 16px;
+     height: 32px;
+    line-height: 32px;
+    color: #fe0000;
+}
+.column-content .col-xs-2 p {
+    margin-top: 10px;
+    font-size: 16px;
+     height: 32px;
+    line-height: 32px;
+    color: #595757;
+}
+
+.column-content .bb {
+    padding:0;
+    float: left;
+    /*width: 33.33%;*/
+    text-align: center;
+}
+.column-content .bb div {
+    margin-top: 10px;
+    color: #fe0000;
+}
+.column-content .bb p {
+    margin-top: 10px;
+    color: #595757;
+}
+
 .column-lu {
     font-size: 14px;
 }
 
 .column-clock_per {
-    line-height: 65px!important;
+    line-height: 62px!important;
 }
 .nock1{
     position: relative;
@@ -192,20 +261,19 @@ body {
     top: -25px;
     left: 0;
     right: 0;
-    width: 90px;
+    width: 60px;
 }
 .column-clock {
     position: absolute;
-    top:0;
-    left: 5px;
+    top:6px;
+    left: 0px;
     z-index: 10;
-    width: 80px;
-    height: 80px;
+    width: 60px;
+    height:40px;
     line-height: 20px;
     margin: 0 auto;
-    margin-top: 23px!important;
     border-radius: 50%;
-    font-size: 14px!important;
+    font-size: 0.2rem;
     text-align: center;
     color: #d32f2f!important;
     /*background: yellow;*/
@@ -214,7 +282,7 @@ body {
     display: block;
     margin-top: 20px;
     line-height: 10px;
-    color: #ff9836!important;
+    color: #d32f2f!important;
 }
 /*加载跟多*/
 .load{
@@ -247,7 +315,7 @@ a.active { border-bottom: 1px solid #f44336; /* 当前状态 */}
     color: #fe0000;
 }
 .desc-text {
-    font-size: 12px;
+    font-size: 14px;
     color: #737373;
 }
 .show {
