@@ -24,7 +24,7 @@ $this->title = '提现 - 温都金服';
 
             <h3>填写提现金额</h3>
             <div class="section">
-                <?php $form = ActiveForm::begin(['id' => 'tixian_form', 'action' => "/user/useraccount/tixian",]); ?>
+                <?php $form = ActiveForm::begin(['id' => 'tixian_form', 'action' => "/user/draw/tixian",]); ?>
                 <ul class="wdjf-form">
                     <li>
                         <div class="wdjf-label">可用余额</div>

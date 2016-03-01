@@ -168,13 +168,14 @@ class Client
     /**
      * 申请提现
      * @param WithdrawalInterface $draw
+     * @param $channel 渠道识别标志 pc代表pc端
      * @return type
      */
-    public function initDraw(WithdrawalInterface $draw)
+    public function initDraw(WithdrawalInterface $draw, $channel = null)
     {
         $data = [
             'service' => 'cust_withdrawals',
-            'ret_url' => $this->clientOption['draw_ret_url'],
+            'ret_url' => $this->clientOption['draw_ret_url'].('pc' === $channel ? '?channel=pc' : ''),
             'notify_url' => $this->clientOption['draw_notify_url'],
             'sourceV' => 'HTML5',
             'order_id' => $draw->getTxSn(),

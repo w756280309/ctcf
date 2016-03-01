@@ -29,7 +29,7 @@ $(function() {
                 var $modal = $('#bind-card-modal').modal();
                 $modal.modal('show');
             } else {
-                window.location.href = '/user/useraccount/tixian';
+                window.location.href = '/user/draw/tixian';
             }
         });
     });
