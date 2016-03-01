@@ -22,15 +22,15 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
         <div class="row bank-card">
             <div class="col-xs-2 bank-img"><img src="/images/bankicon/<?= $user_bank->bank_id ?>.png" alt=""/></div>
             <div class="col-xs-8 bank-content">
-                <div class="bank-content1">
+                <div class="bank-content1" style="font-size: 14px;">
                     <?= $user_bank->bank_name ?>
                     <?php if ($param = Yii::$app->params['bank'][$user_bank->bank_id]['limit']) { ?>
-                    (限额<?= $param['single'] ?>万/笔，<?= $param['day'] ?>万/日)
+                    <span style="font-size: 12px;">(限额<?= $param['single'] ?>万/笔，<?= $param['day'] ?>万/日)</span>
                     <?php } ?>
                 </div>
                 <div class="bank-content2">
                     尾号<?= $user_bank->card_number?substr($user_bank->card_number, -4):"" ?> 储蓄卡
-                    &emsp;银行预留手机号 <?= substr_replace(Yii::$app->user->identity->mobile,'****',3,-4); ?>
+                    </br>银行预留手机号 <?= substr_replace(Yii::$app->user->identity->mobile,'****',3,-4); ?>
                 </div>
             </div>
             <div class="col-xs-2"></div>

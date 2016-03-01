@@ -6,29 +6,31 @@
         padding-bottom: 50px;
     }
     h1 {
-        font-size: 32px;
+        font-size: 16px;
         color: #595757;
-        margin-top: 42px;
-        margin-bottom: 46px;
-        margin-right: 64px;
+        padding-top: 14px;
+        margin-bottom: 18px;
+        overflow: hidden;
     }
     .qpay-quota {
-        padding: 1px 64px;
+        padding-left: 26px;
+        padding-right: 26px;
         background-color: #ffffff;
     }
     .qpay-quota table {
         width: 100%;
-        font-size: 28px;
+        font-size: 14px;
         color: #595757;
     }
     .qpay-quota th, td {
         line-height: 2em;
         text-align: center;
-        border: 2px solid #9fa0a0;
+        border: 1px solid #9fa0a0;
     }
     .desc {
         list-style: decimal;
-        margin: 0px 57px;
+        width: 86%;
+        margin: 0 auto;
     }
  </style>
  <div class="qpay-quota">
@@ -136,7 +138,7 @@
         </tr>
     </table>
     <h1>提示：</h1>
-    <ol style="font-size: 28px; color: #737373;">
+    <ol style="font-size: 14px; color: #737373;padding-bottom:30px;">
         <li class="desc">根据同卡进出原则，用户只能使用唯一一张绑定的银行卡进行充值和提现</li>
         <li class="desc">暂不支持变更绑定银行卡，如需帮助，请联系客服</li>
         <li style="text-align: right; color: #f44639"><img src="" alt=""><?= Yii::$app->params['contact_tel'] ?></li>
