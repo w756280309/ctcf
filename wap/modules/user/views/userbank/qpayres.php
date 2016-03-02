@@ -1,5 +1,5 @@
 <?php
-$this->title = 'success' === $res ? "充值成功" : "充值失败";
+$this->title = ('success' === $ret) ? "充值成功" : "充值失败";
 
 $this->registerJsFile('', ['depends' => 'yii\web\YiiAsset','position' => 1]);
 ?>
