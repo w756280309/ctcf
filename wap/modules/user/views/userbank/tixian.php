@@ -15,8 +15,8 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
             <div class="bank-content2">尾号<?= $user_bank->card_number?substr($user_bank->card_number, -4):"" ?> 储蓄卡</div>
         </div>
         <div class="col-xs-3 bank-content">
-            <div class="bank-content1" style="text-align: right;padding-right: 15px"><?= $user_bank->account ?></div>
-            <div class="bank-content2" style="text-align: right;padding-right: 15px">户名</div>
+            <div class="bank-content1" style="text-align: right;padding-right: 15px">户名</div>
+            <div class="bank-content2" style="text-align: right;padding-right: 15px"><?= $user_bank->account ?></div>
         </div>
     </div>
     <!--可提现金额-->
