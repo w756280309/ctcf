@@ -63,7 +63,7 @@ $this->title="我的理财";
         </div>
     </div>
 <?php } ?>
-    <div class="load" style="display: block">加载更多</div>
+    <div class="load" style="display: block"></div>
 <?php } else{ ?>
     <div class="nodata" style="display: block">暂无数据</div>
 <?php } ?>

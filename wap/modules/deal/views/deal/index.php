@@ -72,7 +72,7 @@ $pc_cat = Yii::$app->params['pc_cat'];
         </a>
     <?php endforeach; ?>
         <!--加载跟多-->
-        <div class="load" style="display:block;">加载更多</div>
+        <div class="load" style="display:block;"></div>
     <?php } else { ?>
         <div class="nodata" style="display:block;">暂无数据</div>
     <?php } ?>

@@ -35,7 +35,7 @@ $this->registerJs('var cp=' . $header['cp'] . ';', 1);
                 <div class="col-xs-3 revenue"><?= $val['balance'] ?></div>
             </div>
         <?php endforeach; ?>
-        <div class="load" style="display:block;">加载更多</div>
+        <div class="load" style="display:block;"></div>
     <?php } else { ?>
         <div class="nodata" style="display:block;">暂无数据</div>
 <?php } ?>
