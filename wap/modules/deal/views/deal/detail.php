@@ -31,7 +31,7 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
                     <?php if (!empty($deal['kuanxianqi'])) { ?>
                     <div class="row" id='chart-box' hidden="true">
                         <div class="col-xs-12">
-                            <div>宽限期：应收账款的付款方因内部财务审核,结算流程或结算日遇银行非工作日等因素，账款的实际结算日可能有几天的延</div>
+                            <div>宽限期：应收账款的付款方因内部财务审核,结算流程或结算日遇银行非工作日等因素，账款的实际结算日可能有几天的延后</div>
                         </div>
                     </div>
                     <?php } ?>
