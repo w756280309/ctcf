@@ -34,7 +34,7 @@ $this->title="我的理财";
     	<div class="col-xs-12">我投资过的项目</div>
     </div>
 
-<?php if($list['data']){ foreach ($list['data'] as $o){ ?>
+<?php if($list['data']) { foreach ($list['data'] as $o) { ?>
     <!--时间-->
      <div class="row times">
           <div class="col-xs-4"><?= $o['order_time'] ?></div>
@@ -63,7 +63,7 @@ $this->title="我的理财";
         </div>
     </div>
 <?php } ?>
-    <div class="load">加载更多</div>
+    <div class="load" style="display: block">加载更多</div>
 <?php } else{ ?>
     <div class="nodata" style="display: block">暂无数据</div>
 <?php } ?>
