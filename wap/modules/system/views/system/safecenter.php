@@ -1,6 +1,4 @@
 <?php
-use yii\helpers\Html;
-use yii\bootstrap\ActiveForm;
 $this->title="安全中心";
 ?>
 <link rel="stylesheet" href="/css/base.css">
