@@ -28,7 +28,7 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
 	<?php $form = ActiveForm::begin(['id' => 'form', 'action' =>"/user/userbank/reset-trade-pass"]); ?>
 	<div class="row">
 	    <div class="col-xs-12">
-	        <input id="editpassbtn" class="btn-common btn-normal" style="margin-top:10px;" type="button" value="重置支付密码">
+	        <input id="editpassbtn" class="btn-common btn-normal" style="margin-top:10px; background-color: #F2F2F2;" type="button" value="重置支付密码">
 	    </div>
 	</div>
 	<?php ActiveForm::end(); ?>
