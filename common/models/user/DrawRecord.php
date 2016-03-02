@@ -130,15 +130,20 @@ class DrawRecord extends \yii\db\ActiveRecord implements \P2pl\WithdrawalInterfa
     {
         $drawableMoney = self::getDrawableMoney($account, $fee);
         if (
-                false === $drawableMoney
-                || 0 > bccomp($account->available_balance, $money)
-                || 0 === bccomp($account->available_balance, \Yii::$app->params['ump']['draw']['min'])
+            false === $drawableMoney
+            || 0 > bccomp($drawableMoney, $money)
          ) {
-            throw new \Exception('可提现金额不足');
+            if (0 === bccomp($account->available_balance, $money)) {
+                if (bccomp($drawableMoney, \Yii::$app->params['ump']['draw']['min']) >= 0) {
+                    throw new DrawException($drawableMoney, DrawException::ERROR_CODE_ENOUGH);
+                } else {
+                    throw new \Exception('可提现金额不足,提现金额不足以支付手续费');
+                }
+            } else {
+                throw new \Exception('可提现金额不足');
+            }
         }
-        if (0 === bccomp($account->available_balance, $money)) {
-           throw new DrawException($drawableMoney, DrawException::ERROR_CODE_ENOUGH);
-        }
+        
         return $money;
     }
 

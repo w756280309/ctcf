@@ -22,8 +22,11 @@ class DrawnotifyController extends Controller
     public function actionFrontend()
     {
         $data = Yii::$app->request->get();
-        $channel = $data['channel'];
-        unset($data['channel']);
+        $channel =  null;
+        if (array_key_exists('channel', $data)) {
+            $channel = $data['channel'];
+            unset($data['channel']);
+        }
         $ret = $this->processing($data);
         if ($ret instanceof DrawRecord) {
             if ('pc' === $channel) {
