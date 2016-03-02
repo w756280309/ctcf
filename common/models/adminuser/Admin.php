@@ -5,32 +5,30 @@ namespace common\models\adminuser;
 use Yii;
 use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
-use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
-
 
 /**
  * This is the model class for table "admin".
  *
- * @property integer $id
+ * @property int $id
  * @property string $username
  * @property string $real_name
  * @property string $email
  * @property string $password_hash
  * @property string $auth_key
- * @property integer $status
- * @property integer $updated_at
- * @property integer $created_at
+ * @property int $status
+ * @property int $updated_at
+ * @property int $created_at
  */
 class Admin extends \yii\db\ActiveRecord implements IdentityInterface
 {
     const STATUS_DELETED = 0;
     const STATUS_ACTIVE = 1;
-    public $user_pass='';
+    public $user_pass = '';
     public $auths;
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public static function tableName()
     {
@@ -40,15 +38,15 @@ class Admin extends \yii\db\ActiveRecord implements IdentityInterface
     public function scenarios()
     {
         return [
-            'register' => ['id','username', 'email','real_name','status','password_hash','user_pass','role_sn','auths'],
-            'active'=>['status'],
-            'log'=>['last_login_ip','last_login_time'],
-            'editpass' => ['password_hash']
+            'register' => ['id', 'username', 'email', 'real_name', 'status', 'password_hash', 'user_pass', 'role_sn', 'auths'],
+            'active' => ['status'],
+            'log' => ['last_login_ip', 'last_login_time'],
+            'editpass' => ['password_hash'],
         ];
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function behaviors()
     {
@@ -58,7 +56,7 @@ class Admin extends \yii\db\ActiveRecord implements IdentityInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function rules()
     {
@@ -69,9 +67,9 @@ class Admin extends \yii\db\ActiveRecord implements IdentityInterface
 //            ['username', 'required', 'message' => '用户名不能为空!'],
 //            ['email', 'required', 'message' => 'email不能为空!'],
 //            [['role_sn','auths'], 'required'],
-			[['username','email','role_sn','auths'], 'required','on' => 'register'],
-			[['role_sn'], 'compare', 'compareValue' => 0, 'operator' => '!=', 'message' => '请选择角色!'],
-            ['email', 'email','message' => ' 必须为email格式','on' => 'register'],
+            [['username', 'email', 'role_sn', 'auths'], 'required', 'on' => 'register'],
+            [['role_sn'], 'compare', 'compareValue' => 0, 'operator' => '!=', 'message' => '请选择角色!'],
+            ['email', 'email', 'message' => ' 必须为email格式', 'on' => 'register'],
             [['status'], 'integer', 'on' => 'register'],
             [
                 'username',
@@ -79,7 +77,7 @@ class Admin extends \yii\db\ActiveRecord implements IdentityInterface
                 'length' => [5, 16],
 //                'tooShort' => "用户名太短了,用户名要大于5位！",
 //                'tooLong' => "用户名超长了,用户名要小于等于16位！",
-                'on' => 'register'
+                'on' => 'register',
             ],
 //            [
 //                'password',
@@ -93,12 +91,12 @@ class Admin extends \yii\db\ActiveRecord implements IdentityInterface
             [['email'], 'string', 'max' => 50],
             [['password_hash', 'auth_key'], 'string', 'max' => 128],
 //            [[ 'password_hash'], 'required', 'on' => 'register'],
-            ['last_login_time', 'default', 'value' => time(), 'on' => 'log']
+            ['last_login_time', 'default', 'value' => time(), 'on' => 'log'],
         ];
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function attributeLabels()
     {
@@ -107,19 +105,19 @@ class Admin extends \yii\db\ActiveRecord implements IdentityInterface
             'username' => '管理员用户名',
             'real_name' => '管理员姓名',
             'auths' => '权限',
-            'role_sn'=>"角色",
+            'role_sn' => '角色',
             'email' => '管理员Email',
             'password_hash' => '用户密码hash',
             'auth_key' => 'cookie权限认证key',
             'status' => '状态', // 0-锁定 1-正常
             'updated_at' => '创建时间',
             'created_at' => '更新时间',
-            'user_pass'=> '密码',
+            'user_pass' => '密码',
         ];
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public static function findIdentity($id)
     {
@@ -127,7 +125,7 @@ class Admin extends \yii\db\ActiveRecord implements IdentityInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public static function findIdentityByAccessToken($token, $type = null)
     {
@@ -135,9 +133,10 @@ class Admin extends \yii\db\ActiveRecord implements IdentityInterface
     }
 
     /**
-     * Finds user by username
+     * Finds user by username.
      *
      * @param string $username
+     *
      * @return static|null
      */
     public static function findByUsername($username)
@@ -146,15 +145,16 @@ class Admin extends \yii\db\ActiveRecord implements IdentityInterface
     }
 
     /**
-     * Finds user by password reset token
+     * Finds user by password reset token.
      *
      * @param string $token password reset token
+     *
      * @return static|null
      */
     public static function findByPasswordResetToken($token)
     {
         if (!static::isPasswordResetTokenValid($token)) {
-            return null;
+            return;
         }
 
         return static::findOne([
@@ -164,10 +164,11 @@ class Admin extends \yii\db\ActiveRecord implements IdentityInterface
     }
 
     /**
-     * Finds out if password reset token is valid
+     * Finds out if password reset token is valid.
      *
      * @param string $token password reset token
-     * @return boolean
+     *
+     * @return bool
      */
     public static function isPasswordResetTokenValid($token)
     {
@@ -177,11 +178,12 @@ class Admin extends \yii\db\ActiveRecord implements IdentityInterface
         $expire = Yii::$app->params['user.passwordResetTokenExpire'];
         $parts = explode('_', $token);
         $timestamp = (int) end($parts);
+
         return $timestamp + $expire >= time();
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getId()
     {
@@ -189,7 +191,7 @@ class Admin extends \yii\db\ActiveRecord implements IdentityInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getAuthKey()
     {
@@ -197,7 +199,7 @@ class Admin extends \yii\db\ActiveRecord implements IdentityInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function validateAuthKey($authKey)
     {
@@ -205,10 +207,11 @@ class Admin extends \yii\db\ActiveRecord implements IdentityInterface
     }
 
     /**
-     * Validates password
+     * Validates password.
      *
      * @param string $password password to validate
-     * @return boolean if password provided is valid for current user
+     *
+     * @return bool if password provided is valid for current user
      */
     public function validatePassword($password)
     {
@@ -216,7 +219,7 @@ class Admin extends \yii\db\ActiveRecord implements IdentityInterface
     }
 
     /**
-     * Generates password hash from password and sets it to the model
+     * Generates password hash from password and sets it to the model.
      *
      * @param string $password
      */
@@ -226,7 +229,7 @@ class Admin extends \yii\db\ActiveRecord implements IdentityInterface
     }
 
     /**
-     * Generates "remember me" authentication key
+     * Generates "remember me" authentication key.
      */
     public function generateAuthKey()
     {
@@ -234,21 +237,20 @@ class Admin extends \yii\db\ActiveRecord implements IdentityInterface
     }
 
     /**
-     * Generates new password reset token
+     * Generates new password reset token.
      */
     public function generatePasswordResetToken()
     {
-        $this->password_reset_token = Yii::$app->security->generateRandomString() . '_' . time();
+        $this->password_reset_token = Yii::$app->security->generateRandomString().'_'.time();
     }
 
     /**
-     * Removes password reset token
+     * Removes password reset token.
      */
     public function removePasswordResetToken()
     {
         $this->password_reset_token = null;
     }
-
 
     public function beforeSave($insert)
     {
@@ -256,12 +258,10 @@ class Admin extends \yii\db\ActiveRecord implements IdentityInterface
             if ($this->isNewRecord) {
                 $this->auth_key = Yii::$app->getSecurity()->generateRandomString();
             }
+
             return true;
         }
+
         return false;
     }
-
-
-
-
 }

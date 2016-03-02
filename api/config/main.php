@@ -17,7 +17,10 @@ return [
         'urlManager' => [
             'enableStrictParsing' => true,
             'rules' => [
-                'v1/Recharges' => 'v1/recharge/list',
+                'recharges' => 'v1/recharge/list',
+                'loans' => 'v1/loan/list',
+                'loans/<id:\d+>' => 'v1/loan/get',
+                'accounts' => 'v1/account/list',
             ],
         ],
     ],

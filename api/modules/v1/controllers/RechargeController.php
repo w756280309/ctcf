@@ -13,7 +13,7 @@ class RechargeController extends Controller
     {
         $status = null;
 
-        $statusName = $this->getQueryEnum('statusName', Recharge::getStatusNames());
+        $statusName = $this->getQueryParamAsEnum('status_name', Recharge::getStatusNames());
         if (null !== $statusName) {
             $status = Recharge::getStatusForName($statusName);
         }

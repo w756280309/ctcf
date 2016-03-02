@@ -6,6 +6,7 @@ use api\exceptions\InvalidParamException;
 use yii\data\Pagination;
 use yii\db\ActiveQuery;
 use yii\web\Controller as BaseController;
+use yii\web\NotFoundHttpException;
 use yii\web\Response;
 
 class Controller extends BaseController
@@ -15,19 +16,24 @@ class Controller extends BaseController
         \Yii::$app->response->format = Response::FORMAT_JSON;
     }
 
-    public function getQueryInt($name)
+    public function getQueryParam($name)
+    {
+        return \Yii::$app->request->get($name);
+    }
+
+    public function getQueryParamAsInt($name)
     {
         $safe = null;
 
         $param = \Yii::$app->request->get($name);
-        if (null !== $param) {
+        if (null !== $param && is_numeric($param)) {
             $safe = (int) $param;
         }
 
         return $safe;
     }
 
-    public function getQueryEnum($name, array $enum)
+    public function getQueryParamAsEnum($name, array $enum)
     {
         $safe = null;
 
@@ -39,7 +45,7 @@ class Controller extends BaseController
         return $safe;
     }
 
-    public function getQueryBool($name)
+    public function getQueryParamAsBool($name)
     {
         $safe = null;
 
@@ -56,7 +62,7 @@ class Controller extends BaseController
         $count = $query->count();
         $pg = new Pagination(['totalCount' => $count]);
 
-        $page = $this->getQueryInt('page');
+        $page = $this->getQueryParamAsInt('page');
         if (
             null !== $page
             && ($page > $pg->getPageCount() || $page <= 0)
@@ -69,10 +75,15 @@ class Controller extends BaseController
             ->all();
     }
 
-    public function createInvalidParamException($endpoint, $paramName, $code = 0, \Exception $previous = null)
+    public function exBadParam($paramName, $code = 0, \Exception $previous = null)
     {
-        $message = sprintf('`%s`API的`%s`参数取值无效', $endpoint, $paramName);
+        $message = sprintf('参数`%s`取值无效', $paramName);
 
         return new InvalidParamException($message, $code, $previous);
+    }
+
+    public function ex404($message = null)
+    {
+        return new NotFoundHttpException($message);
     }
 }
