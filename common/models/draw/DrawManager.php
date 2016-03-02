@@ -21,7 +21,7 @@ class DrawManager
      */
     public static function initDraw(UserAccount $account, $money, $fee = 0)
     {
-        $money = DrawRecord::checkMoney($account, $money, $fee);
+        $money = DrawRecord::getDrawableMoney($account, $money, $fee);
         $user = $account->user;
         $ubank = $user->qpay;
         $draw = new DrawRecord();
