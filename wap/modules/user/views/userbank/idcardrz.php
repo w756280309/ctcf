@@ -48,6 +48,11 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
             $(this).removeClass("btn-press").addClass("btn-normal");
             return false;
         }
+        if($('#idcard').val().length !== 18) {
+            toast(this, '身份证暂只支持18位');
+            $(this).removeClass("btn-press").addClass("btn-normal");
+            return false;
+        }
         return true;
     }
     $(function(){

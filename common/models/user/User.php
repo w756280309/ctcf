@@ -57,7 +57,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface, UserInterf
     const KUAIJIE_STATUS_Y = 1;
     const KUAIJIE_STATUS_N = 0;
     const IDCARD_EXAMIN_COUNT = 3;
-    
+
     const QPAY_NONE = 0;//未绑卡
     const QPAY_ENABLED = 1;//已经绑卡
     const QPAY_PENDING = 2;//绑卡中
@@ -210,21 +210,22 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface, UserInterf
             [['mobile'], 'unique', 'message' => '该手机号码已被占用，请重试', 'on' => 'add'],
             //身份证号码为15位或者18位，15位时全为数字，18位前17位为数字，最后一位是校验位，可能为数字或字符X
             [['idcard', 'law_master_idcard'], 'match', 'pattern' => '/(^\d{15}$)|(^\d{17}(\d|X)$)/', 'message' => '{attribute}身份证号码不正确,必须为15位或者18位'],
+            [['real_name'], 'string', 'max' => 50, 'on' => 'idcardrz'],
+            [['idcard'], 'string', 'length' => 18, 'on' => 'idcardrz'],
             [['idcard', 'law_master_idcard'], 'checkIdNumber'],
             [['idcard_status', 'email_status', 'mobile_status'], 'default', 'value' => 0],
             [['mobile', 'new_mobile'], CnMobileValidator::className()],
             [['mobile'], 'string', 'max' => 11],
-            ['usercode', 'unique', 'message' => '会员编号已占用'],
-            ['email', 'unique', 'message' => 'Email已占用'],
+            [['usercode'], 'unique', 'message' => '会员编号已占用'],
+            [['email'], 'unique', 'message' => 'Email已占用'],
             [['email', 'real_name'], 'string', 'max' => 50],
             [['org_name'], 'string', 'max' => 150],
             [['org_code'], 'string', 'max' => 30],
-            ['status', 'default', 'value' => 1],
+            [['status'], 'default', 'value' => 1],
             [['password_hash', 'trade_pwd', 'auth_key'], 'string', 'max' => 128],
             [['real_name', 'idcard'], 'required', 'on' => 'idcardrz'],
             [['idcard'], 'checkIdNumberUnique', 'on' => 'idcardrz'],
             [['idcard'], 'match', 'pattern' => '/(^\d{15}$)|(^\d{17}(\d|X)$)/', 'message' => '{attribute}身份证号码不正确,必须为15位或者18位', 'on' => 'idcardrz'],
-            [['real_name', 'idcard'], 'string', 'max' => 50, 'on' => 'idcardrz'],
             [['tel'], 'match', 'pattern' => '/^[0-9\-]{6,16}$/', 'message' => '格式不正确，应为数字和中划线', 'on' => ['add', 'edit']],
             [['org_code'], 'match', 'pattern' => '/[a-zA-Z0-9-]/', 'message' => '格式不正确，应为字母数字中划线', 'on' => ['add', 'edit']],
             [['business_licence', 'shui_code'], 'match', 'pattern' => '/\d+/', 'message' => '格式不正确，应为纯数字格式', 'on' => ['add', 'edit']],
