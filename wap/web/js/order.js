@@ -15,7 +15,6 @@ $(function () {
         var vals = $("#orderform").serialize();
         var xhr = $.post($("#orderform").attr("action"), vals, function (data) {
             if (data.code == 0) {
-                //toastWithMastUrl('/user/user/myorder', '购买成功')
                 toast(this, '转入联动优势');
             } else {
                 toast(this, data.message);
@@ -31,7 +30,6 @@ $(function () {
     $('#money').on('blur', function () {
         money = $(this).val();
         if (isNaN(money)) {
-            toast(this, '交易密码不能为空');
             money = 0;
             $(this).focus();
             return false;
