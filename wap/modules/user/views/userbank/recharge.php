@@ -56,7 +56,7 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
             <div class="row">
                 <div class="col-xs-3"></div>
                 <div class="col-xs-6 login-sign-btn">
-                    <input id="rechargebtn" class="btn-common btn-normal" type="button" value="立即充值" >
+                    <input id="rechargebtn" class="btn-common btn-normal" type="submit" value="立即充值" >
                 </div>
                 <div class="col-xs-3"></div>
             </div>
@@ -69,7 +69,7 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
                 $(this).removeClass("btn-press").addClass("btn-normal");
                 return false;
             }
-            if ($('#fund').val() ==0) {
+            if ($('#fund').val() == 0) {
                 toast(this,'充值金额不能为零');
                 $(this).removeClass("btn-press").addClass("btn-normal");
                 return false;
@@ -87,7 +87,7 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
             }
             return true;
         }
-        $(function(){
+        $(function() {
            var err = '<?= $data['code'] ?>';
            var mess = '<?= $data['message'] ?>';
            var tourl = '<?= $data['tourl'] ?>';
@@ -96,41 +96,39 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
            }
 
            csrf = $("meta[name=csrf-token]").attr('content');
-           $('#rechargebtn').bind('click',function(){
-               $(this).addClass("btn-press").removeClass("btn-normal");
-               if(!validateform()){
+           $('#form').on('submit',function() {
+               var $btn = $('#rechargebtn');
+               $btn.addClass("btn-press").removeClass("btn-normal");
+               if (!validateform()) {
                    return false;
                }
                subRecharge();
-               $(this).removeClass("btn-press").addClass("btn-normal");
+               $btn.removeClass("btn-press").addClass("btn-normal");
            });
 
         })
 
         function subRecharge(){
-                if(!validateform()){
-                   return false;
-                }
-                var $form = $('#form');
-                $('#rechargebtn').attr('disabled', true);
-                var xhr = $.post(
-                    $form.attr('action'),
-                    $form.serialize()
-                );
+            var $form = $('#form');
+            $('#rechargebtn').attr('disabled', true);
+            var xhr = $.post(
+                $form.attr('action'),
+                $form.serialize()
+            );
 
-                xhr.done(function(data) {
-                    $('#rechargebtn').attr('disabled', false);
-                    location.href=data['next']
-                });
+            xhr.done(function(data) {
+                $('#rechargebtn').attr('disabled', false);
+                location.href=data['next']
+            });
 
-                xhr.fail(function(jqXHR) {
-                    var errMsg = jqXHR.responseJSON && jqXHR.responseJSON.message
-                        ? jqXHR.responseJSON.message
-                        : '未知错误，请刷新重试或联系客服';
+            xhr.fail(function(jqXHR) {
+                var errMsg = jqXHR.responseJSON && jqXHR.responseJSON.message
+                    ? jqXHR.responseJSON.message
+                    : '未知错误，请刷新重试或联系客服';
 
-                    toast(null, errMsg);
-                    $('#rechargebtn').attr('disabled', false);
-                });
+                toast(null, errMsg);
+                $('#rechargebtn').attr('disabled', false);
+            });
         }
 
         </script>
