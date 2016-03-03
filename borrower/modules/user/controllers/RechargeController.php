@@ -7,6 +7,8 @@ use borrower\controllers\BaseController;
 use common\models\user\UserAccount;
 use common\models\user\RechargeRecord;
 use common\models\epay\EpayUser;
+use common\models\bank\EbankConfig;
+use common\models\bank\BankManager;
 
 class RechargeController extends BaseController
 {
@@ -18,7 +20,7 @@ class RechargeController extends BaseController
      */
     public function actionInit()
     {
-        $bank = Yii::$app->params['bank'];
+        $bank = BankManager::getEbank('business');
 
         $user_account = UserAccount::findOne(['uid' => $this->user->id, 'type' => UserAccount::TYPE_BORROW]);
         $recharge = new RechargeRecord();
@@ -67,9 +69,10 @@ class RechargeController extends BaseController
             if (!$epayUser) {
                 throw new \Exception('EpayUser record is null.');
             }
+            $bank = EbankConfig::findOne(['bankId' => $bank_id]);
 
             $ump->OrgRechargeApply(
-                $recharge, 'B2BBANK', $epayUser->epayUserId, Yii::$app->params['bank'][$bank_id]['nickname']
+                $recharge, 'B2BBANK', $epayUser->epayUserId, $bank->bank->gateId
             );
         } else {
             return $this->redirect('/user/recharge/recharge-err');

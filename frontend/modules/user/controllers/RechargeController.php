@@ -8,6 +8,7 @@ use common\models\user\RechargeRecord;
 use common\utils\TxUtils;
 use common\service\BankService;
 use common\models\bank\BankManager;
+use common\models\bank\EbankConfig;
 
 class RechargeController extends BaseController
 {
@@ -75,8 +76,9 @@ class RechargeController extends BaseController
             ]);
 
             $ump = Yii::$container->get('ump');
+            $bank = EbankConfig::findOne(['bankId' => $bank_id]);
 
-            $ump->rechargeViaBpay($recharge, Yii::$app->params['bank'][$bank_id]['nickname']);
+            $ump->rechargeViaBpay($recharge, $bank->bank->gateId);
         } else {
             return $this->redirect('/user/recharge/recharge-err');
         }
