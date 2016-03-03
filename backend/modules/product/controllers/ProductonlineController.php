@@ -128,7 +128,7 @@ class ProductonlineController extends BaseController
         $loans = OnlineProduct::find()->where('id in ('.$ids.')')->all();
         $error_loans = '';
         foreach ($loans as $loan) {
-            $borrow = new Borrower(7601209, null, Borrower::MERCHAT);//借款人测试阶段只能用7601209
+            $borrow = new Borrower(7301209, null, Borrower::MERCHAT);//借款人测试阶段只能用7601209
             $resp = OnlineProduct::createLoan($loan, $borrow);
             if ($resp !== false) {
                 OnlineProduct::updateAll(['epayLoanAccountId' => $resp, 'online_status' => 1], 'id='.$loan->id);
