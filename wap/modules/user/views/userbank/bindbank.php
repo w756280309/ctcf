@@ -24,11 +24,11 @@ $this->registerJsFile('/js/qpay.js', ['position' => 1]);
             <div class="close"><img src="/images/close.png" alt=""/></div>
             <div class="swiper-container">
                 <div class="swiper-wrapper" id='bank'>
-                    <?php foreach($banklist as $val): ?>
-                    <div class="swiper-slide" data-id='<?= $val['id'] ?>'>
+                    <?php foreach($banklist as $bank): ?>
+                    <div class="swiper-slide" data-id='<?= $bank->bankId ?>'>
                         <div>
-                            <img src="/images/bankicon/<?= $val['id'] ?>.png" alt=""/>
-                            <span><?= $val['bankname'] ?></span>
+                            <img src="/images/bankicon/<?= $bank->bankId ?>.png" alt=""/>
+                            <span><?= $bank->bank->bankName ?></span>
                         </div>
                     </div>
                      <?php endforeach; ?>

@@ -41,101 +41,13 @@
             <th width="33%">单笔</th>
             <th>单日</th>
         </tr>
+        <?php foreach($banks as $bank): ?>
         <tr>
-            <td>邮储银行</td>
-            <td>1万</td>
-            <td>1万</td>
+            <td><?= $bank->bank->bankName ?><?php if ($bank->isDisabled) { echo "(暂停)";} ?></td>
+            <td><?= $bank->singleLimit ?></td>
+            <td><?= $bank->dailyLimit ?></td>
         </tr>
-        <tr>
-            <td>工商银行</td>
-            <td>5万</td>
-            <td>5万</td>
-        </tr>
-        <tr>
-            <td>农业银行</td>
-            <td>5万</td>
-            <td>10万</td>
-        </tr>
-        <tr>
-            <td>中国银行</td>
-            <td>20万</td>
-            <td>50万</td>
-        </tr>
-        <tr>
-            <td>建设银行</td>
-            <td>100万</td>
-             <td>500万</td>
-        </tr>
-        <tr>
-            <td>交通银行</td>
-            <td>2万</td>
-            <td>2万</td>
-        </tr>
-        <tr>
-            <td>中信银行</td>
-            <td>100万</td>
-            <td>500万</td>
-        </tr>
-        <tr>
-            <td>光大银行</td>
-            <td>100万</td>
-            <td>500万</td>
-        </tr>
-        <tr>
-            <td>民生银行</td>
-            <td>100万</td>
-            <td>500万</td>
-        </tr>
-        <tr>
-            <td>广发银行</td>
-            <td>100万</td>
-            <td>500万</td>
-        </tr>
-        <tr>
-            <td>平安银行（含深发）</td>
-            <td>100万</td>
-            <td>500万</td>
-        </tr>
-        <tr>
-            <td>兴业银行</td>
-            <td>5万</td>
-            <td>50万</td>
-        </tr>
-        <tr>
-            <td>浦发银行</td>
-            <td>100万</td>
-            <td>500万</td>
-        </tr>
-        <tr>
-            <td>上海银行</td>
-            <td>5000</td>
-            <td>5万</td>
-        </tr>
-        <tr>
-            <td>北京银行</td>
-            <td>5000</td>
-            <td>5万</td>
-        </tr>
-        <tr>
-            <td>宁波东海银行</td>
-            <td>10万</td>
-            <td>50万</td>
-        </tr>
-        <tr>
-            <td>南京银行</td>
-            <td>2000</td>
-            <td>5万</td>
-        </tr>
-        <tr>
-            <td>徽商银行</td>
-            <td>10万</td>
-            <td>50万</td>
-        </tr>
-        <tr>
-            <td>江苏银行</td>
-            <td>5000</td>
-            <td>2万</td>
-        </tr>
+        <?php endforeach; ?>
     </table>
     <h1>提示：</h1>
     <ol style="font-size: 14px; color: #737373;padding-bottom:30px;">

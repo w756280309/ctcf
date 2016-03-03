@@ -11,6 +11,8 @@ use common\models\user\UserBanks;
 use common\service\BankService;
 use common\models\draw\DrawManager;
 use common\models\draw\DrawException;
+use common\models\bank\BankManager;
+use common\models\bank\ConfigQpay;
 
 class UserbankController extends BaseController
 {
@@ -74,15 +76,8 @@ class UserbankController extends BaseController
             }
         }
 
-        $arr = array();
-        $bank = Yii::$app->params['bank'];
-        $i = 0;
-        foreach ($bank as $key => $val) {
-            $arr[$i] = array('id' => $key, 'bankname' => $val['bankname'], 'image' => $val['image']);
-            ++$i;
-        }
-
-        return $this->render('bindbank', ['banklist' => $arr]);
+        $banks = BankManager::getQpayBanks();
+        return $this->render('bindbank', ['banklist' => $banks]);
     }
 
     /**
@@ -203,7 +198,8 @@ class UserbankController extends BaseController
      */
     public function actionBankxiane()
     {
-        return $this->render('bankxiane');
+        $qpayBanks = ConfigQpay::find()->all();
+        return $this->render('bankxiane', ['banks' => $qpayBanks]);
     }
 
     /**

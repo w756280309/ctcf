@@ -8,6 +8,8 @@ use common\utils\TxUtils;
 use Yii;
 use yii\base\Model;
 use yii\web\Response;
+use common\models\bank\BankManager;
+use common\models\bank\ConfigQpay;
 
 class BindingController extends BaseController
 {
@@ -27,10 +29,24 @@ class BindingController extends BaseController
         $acct_model->card_number = $safe['idNo'];
         $acct_model->account = $safe['realName'];
         $acct_model->account_type = QpayAcct::PERSONAL_ACCOUNT;
+        
+        try {
+            //对于绑卡时候如果没有找到要过滤掉异常
+            $bin = BankManager::getBankFromCardNo($acct_model->card_number);
+            if (!BankManager::isDebitCard($bin)) {
+                return $this->createErrorResponse('该操作只支持借记卡');
+            }    
+        } catch (\Exception $ex) {            
+        }
+
         if (
             $acct_model->load(Yii::$app->request->post())
             && $acct_model->validate()
         ) {
+            $qpay = ConfigQpay::findOne($acct_model->bank_id);
+            if (null === $qpay || 1 === (int)$qpay->isDisabled) {
+                return $this->createErrorResponse('抱歉不支持当前选择的银行');
+            }
             $acct_model->binding_sn = TxUtils::generateSn('B');
             $acct_model->epayUserId = $this->user->epayUser->epayUserId;
             QpayAcct::deleteAll(['uid' => $acct_model->uid, 'status' => 0]); //将之前的绑卡未处理的删掉

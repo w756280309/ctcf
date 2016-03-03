@@ -6,6 +6,7 @@ use Yii;
 use yii\web\Response;
 use common\models\user\User;
 use common\models\user\QpayBinding;
+use common\models\bank\BankManager;
 
 /**
  * Desc 主要用于充值提现流程规则的校验
@@ -47,9 +48,9 @@ class BankService
             return ['tourl' => '/user/user', 'code' => 1, 'message' => '您已经在平台开户,请勿重复开户'];
         }
 
-        if (($cond & self::IDCARDRZ_VALIDATE_N) && $user->idcard_status == User::IDCARD_STATUS_WAIT) {
-            return ['tourl' => '/user/userbank/idcardrz', 'code' => 1, 'message' => '您还没有开通第三方资金托管账户，请前往开通'];
-        }
+//        if (($cond & self::IDCARDRZ_VALIDATE_N) && $user->idcard_status == User::IDCARD_STATUS_WAIT) {
+//            return ['tourl' => '/user/userbank/idcardrz', 'code' => 1, 'message' => '您还没有开通第三方资金托管账户，请前往开通'];
+//        }
 
         $user_bank = $user->qpay;
         if (($cond & self::BINDBANK_VALIDATE_Y) && !empty($user_bank)) {
@@ -97,50 +98,17 @@ class BankService
         if (empty($card)) {
             return ['code' => 1, 'message' => 'card参数错误'];
         }
-
-        $bankList = Yii::$app->params['bank'];
-        Yii::$app->response->format = Response::FORMAT_JSON;
-        foreach ($bankList as $key => $val) {
-            $card_8 = substr($card, 0, 8);
-            if (isset($val['bin'][$card_8])) {
-                $data = explode('-', $val['bin'][$card_8]);
-                if ($data[1] == '借记卡') {
-                    return ['code' => 0, 'bank_id' => $key, 'bank_name' => $val['bankname']];
-                } else {
-                    return ['code' => 1, 'message' => '该操作只支持借记卡'];
-                }
+        
+        try {
+            $bin = BankManager::getBankFromCardNo($card);
+            if (!BankManager::isDebitCard($bin)) {
+                return ['code' => 1, 'message' => '该操作只支持借记卡'];
             }
-
-            $card_6 = substr($card, 0, 6);
-            if (isset($val['bin'][$card_6])) {
-                $data = explode('-', $val['bin'][$card_6]);
-                if ($data[1] == '借记卡') {
-                    return ['code' => 0, 'bank_id' => $key, 'bank_name' => $val['bankname']];
-                } else {
-                    return ['code' => 1, 'message' => '该操作只支持借记卡'];
-                }
-            }
-            $card_5 = substr($card, 0, 5);
-            if (isset($val['bin'][$card_5])) {
-                $data = explode('-', $val['bin'][$card_5]);
-                if ($data[1] == '借记卡') {
-                    return ['code' => 0, 'bank_id' => $key, 'bank_name' => $val['bankname']];
-                } else {
-                    return ['code' => 1, 'message' => '该操作只支持借记卡'];
-                }
-            }
-            $card_4 = substr($card, 0, 4);
-            if (isset($val['bin'][$card_4])) {
-                $data = explode('-', $val['bin'][$card_4]);
-                if ($data[1] == '借记卡') {
-                    return ['code' => 0, 'bank_id' => $key, 'bank_name' => $val['bankname']];
-                } else {
-                    return ['code' => 1, 'message' => '该操作只支持借记卡'];
-                }
-            }
+            return ['code' => 0, 'bank_id' => $bin->bankId, 'bank_name' => $bin->bank->bankName];
+        } catch (\Exception $ex) {
+            return ['code' => 0, 'bank_id' => '', 'bank_name' => ''];
         }
-
-        return ['code' => 0, 'bank_id' => '', 'bank_name' => ''];
+        
     }
 
     /**
