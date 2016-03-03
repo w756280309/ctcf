@@ -7,6 +7,7 @@ use frontend\controllers\BaseController;
 use common\models\user\RechargeRecord;
 use common\utils\TxUtils;
 use common\service\BankService;
+use common\models\bank\BankManager;
 
 class RechargeController extends BaseController
 {
@@ -29,7 +30,7 @@ class RechargeController extends BaseController
      */
     public function actionInit()
     {
-        $bank = Yii::$app->params['bank'];
+        $bank = BankManager::getEbank('personal');
 
         $recharge = new RechargeRecord();
         $user_account = $this->user->lendAccount;

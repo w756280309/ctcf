@@ -3,16 +3,16 @@
 namespace common\models\bank;
 
 /**
- * This is the model class for table "config_qpay".
+ * This is the model class for table "config_ebank".
  */
-class ConfigQpay extends \yii\db\ActiveRecord
+class EbankConfig extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return 'ConfigQpay';
+        return 'EbankConfig';
     }
 
     /**

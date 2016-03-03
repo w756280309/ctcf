@@ -52,8 +52,8 @@ $this->registerJs($_js, View::POS_END, 'body_close');
         <h3>网银充值</h3>
         <div id="payment-bank" class="section">
             <ul class="picker">
-                <?php foreach($bank as $key => $val): ?>
-                <li class="picker-item <?= (strval($key) === $recharge->bank_id)?"picked":"" ?>" data-bankid="<?= $key ?>"><img src="/images/banks/<?= $key ?>.jpg" alt="<?= $val['bankname'] ?>"></li>
+                <?php foreach($bank as $val): ?>
+                <li class="picker-item <?= (strval($val->bankId) === $recharge->bank_id)?"picked":"" ?>" data-bankid="<?= $val->bankId ?>"><img src="/images/banks/<?= $val->bankId ?>.jpg" alt="<?= $val->bank->bankName ?>"></li>
                 <?php endforeach; ?>
             </ul>
         </div>

@@ -46,15 +46,17 @@ class BankManager
      */
     public static function getQpayBanks()
     {
-        $qpaybanks = ConfigQpay::find()->where(['isDisabled' => 0])->all();
+        $qpaybanks = QpayConfig::find()->where(['isDisabled' => 0])->all();
 
         return $qpaybanks;
     }
 
     /**
-     * @param type $type 'personal'  || 'personal'
+     * 获取网银卡信息列表
      *
-     * @return ConfigEbank
+     * @param type $type 'personal'  || 'business'
+     *
+     * @return EbankConfig
      *
      * @throws \Exception
      */
@@ -63,12 +65,12 @@ class BankManager
         $cond['isDisabled'] = 0;
         if ('personal' === $type) {
             $cond['typePersonal'] = 1;
-        } elseif ('personal' === $type) {
+        } elseif ('business' === $type) {
             $cond['typeBusiness'] = 1;
         } else {
             throw new \Exception('参数不合规');
         }
-        $ebanks = ConfigEbank::find()->where($cond)->all();
+        $ebanks = EbankConfig::find()->where($cond)->all();
 
         return $ebanks;
     }

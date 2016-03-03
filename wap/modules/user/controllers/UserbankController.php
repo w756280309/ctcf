@@ -12,7 +12,7 @@ use common\service\BankService;
 use common\models\draw\DrawManager;
 use common\models\draw\DrawException;
 use common\models\bank\BankManager;
-use common\models\bank\ConfigQpay;
+use common\models\bank\QpayConfig;
 
 class UserbankController extends BaseController
 {
@@ -198,7 +198,7 @@ class UserbankController extends BaseController
      */
     public function actionBankxiane()
     {
-        $qpayBanks = ConfigQpay::find()->all();
+        $qpayBanks = QpayConfig::find()->all();
         return $this->render('bankxiane', ['banks' => $qpayBanks]);
     }
 

@@ -9,7 +9,7 @@ use Yii;
 use yii\base\Model;
 use yii\web\Response;
 use common\models\bank\BankManager;
-use common\models\bank\ConfigQpay;
+use common\models\bank\QpayConfig;
 
 class BindingController extends BaseController
 {
@@ -44,7 +44,7 @@ class BindingController extends BaseController
             } catch (\Exception $ex) {
             }
 
-            $qpay = ConfigQpay::findOne($acct_model->bank_id);
+            $qpay = QpayConfig::findOne($acct_model->bank_id);
             if (null === $qpay || 1 === (int) $qpay->isDisabled) {
                 return $this->createErrorResponse('抱歉不支持当前选择的银行');
             }
