@@ -19,5 +19,5 @@
 
 应确保/common/config/payment/ump/目录下有对应的证书文件，生产环境为*_prod.crt/key，开发、测试环境为*_dev.crt/key
 应确保/common/config/params-local.php里配置了有效的参数，包括回调地址、商户号等（生产环境与开发、测试环境不同）
-项目根目录下需要添加第三方的PHP代码，可以用composer安装，或者手工上传
-frontend项目下assets下需要添加第三方的js/css文件，可以用bower安装，或者手工上传
+项目根目录下需要添加第三方的PHP代码，可以用composer安装，或者手工上传（症状：网站不能访问）
+frontend项目下assets下需要添加第三方的js/css文件，可以用bower安装，或者手工上传（症状：PC端缺js/css）
