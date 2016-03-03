@@ -40,7 +40,7 @@ frontend\assets\WapAsset::register($this);
             <?php $form = ActiveForm::begin(['id' => 'signup_form', 'action' => '/site/signup', 'options' => ['data-to' => '1']]); ?>
                 <input name="_csrf" type="hidden" id="_csrf" value="<?= Yii::$app->request->csrfToken ?>">
                 <input id="iphone" class="login-info" name="SignupForm[phone]" maxlength="11" type="tel"
-                       placeholder="请输入手机号" AUTOCOMPLETE="off">
+                       placeholder="请输入手机号">
                 <div class="row sm-height border-bottom">
                     <div class="col-xs-9 col">
                     <input id="verifycode" class="login-info" name="SignupForm[verifycode]" maxlength="6" type="tel"

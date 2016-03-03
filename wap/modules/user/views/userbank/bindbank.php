@@ -43,8 +43,7 @@ $this->registerJsFile('/js/qpay.js', ['position' => 1]);
     <input name="_csrf" type="hidden" id="_csrf" value="<?= Yii::$app->request->csrfToken ?>">
     <div class="row kahao">
         <div class="col-xs-3 xian">卡号</div>
-        <div class="col-xs-9 xian"><input id="card_no" type="text" name='QpayBinding[card_number]' placeholder="请输入银行卡号"/></div>
-
+        <div class="col-xs-9 xian"><input id="card_no" type="text" name='QpayBinding[card_number]' placeholder="请输入银行卡号" AUTOCOMPLETE="on"/></div>
     </div>
 
     <div class="row kahao">
