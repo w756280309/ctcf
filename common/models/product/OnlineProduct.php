@@ -437,7 +437,7 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
         } else {
             $umpLoan = self::getUmpLoan($deal->id);
             if (null === $umpLoan) {
-                throw \Exception($resp->get('ret_msg'));
+                throw new \Exception($resp->get('ret_msg'));
             }
 
             return $umpLoan->get('project_account_id');
