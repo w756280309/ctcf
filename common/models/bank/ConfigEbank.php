@@ -2,24 +2,21 @@
 
 namespace common\models\bank;
 
-use Yii;
-
 /**
  * This is the model class for table "config_ebank".
- *
  */
 class ConfigEbank extends \yii\db\ActiveRecord
 {
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public static function tableName()
     {
-        return 'config_ebank';
+        return 'ConfigEbank';
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function rules()
     {
@@ -28,17 +25,16 @@ class ConfigEbank extends \yii\db\ActiveRecord
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function attributeLabels()
     {
         return [
         ];
     }
-    
+
     public function getBank()
     {
         return $this->hasOne(Bank::className(), ['id' => 'bankId']);
     }
-    
 }

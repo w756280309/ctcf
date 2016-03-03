@@ -1269,7 +1269,7 @@ INSERT INTO `BankCardBin` (`id`, `cardBin`, `cardType`, `bankId`, `binDigits`, `
 (1449, '625652', '贷记卡', 440, 6, 16),
 (1450, '625700', '贷记卡', 440, 6, 16);
 
-CREATE TABLE IF NOT EXISTS `config_ebank` (
+CREATE TABLE IF NOT EXISTS `ConfigEbank` (
   `bankId` int(4) NOT NULL,
   `typePersonal` tinyint(1) NOT NULL DEFAULT '0' COMMENT '支持个人为1',
   `typeBusiness` tinyint(1) NOT NULL DEFAULT '0' COMMENT '支持企业为1',
@@ -1279,7 +1279,7 @@ CREATE TABLE IF NOT EXISTS `config_ebank` (
   PRIMARY KEY (`bankId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-INSERT INTO `config_ebank` (`bankId`, `typePersonal`, `typeBusiness`, `isDisabled`, `singleLimit`, `dailyLimit`) VALUES
+INSERT INTO `ConfigEbank` (`bankId`, `typePersonal`, `typeBusiness`, `isDisabled`, `singleLimit`, `dailyLimit`) VALUES
 (14, 0, 0, 0, 500000.00, 50000000.00),
 (17, 0, 0, 0, 500000.00, 50000000.00),
 (19, 0, 0, 0, 500000.00, 50000000.00),
@@ -1304,7 +1304,7 @@ INSERT INTO `config_ebank` (`bankId`, `typePersonal`, `typeBusiness`, `isDisable
 (403, 1, 1, 0, 500000.00, 50000000.00),
 (440, 0, 0, 0, 500000.00, 50000000.00);
 
-CREATE TABLE IF NOT EXISTS `config_qpay` (
+CREATE TABLE IF NOT EXISTS `ConfigQpay` (
   `bankId` int(4) NOT NULL,
   `isDisabled` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否禁用0否1是',
   `singleLimit` decimal(14,2) NOT NULL COMMENT '单次限额',
@@ -1312,7 +1312,7 @@ CREATE TABLE IF NOT EXISTS `config_qpay` (
   PRIMARY KEY (`bankId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-INSERT INTO `config_qpay` (`bankId`, `isDisabled`, `singleLimit`, `dailyLimit`) VALUES
+INSERT INTO `ConfigQpay` (`bankId`, `isDisabled`, `singleLimit`, `dailyLimit`) VALUES
 (14, 1, 500000.00, 50000000.00),
 (17, 1, 500000.00, 50000000.00),
 (19, 1, 500000.00, 50000000.00),
