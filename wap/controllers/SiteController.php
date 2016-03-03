@@ -299,7 +299,9 @@ class SiteController extends Controller
             }
         }
 
-        return $this->render('signup');
+        $verify = new EditpassForm();
+
+        return $this->render('signup', ['model' => $verify]);
     }
 
     /**
@@ -317,6 +319,19 @@ class SiteController extends Controller
         $uid = Yii::$app->request->post('uid');
         $type = Yii::$app->request->post('type');
         $phone = Yii::$app->request->post('phone');
+        $verifycode = Yii::$app->request->post('verifyCode');
+
+        if (empty($uid) || empty($type) || empty($phone) || empty($verifycode)) {
+            return ['code' => 1, 'message' => '发送短信参数错误'];
+        }
+
+        $model = new EditpassForm();
+        $model->verifyCode = $verifycode;
+        $model->scenario = 'checkVerifyCode';
+
+        if (!$model->validate()) {
+            return ['code' => 1, 'message' => '图形验证码输入错误'];
+        }
 
         $result = SmsService::createSmscode($type, $phone, $uid);
 

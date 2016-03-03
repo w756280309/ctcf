@@ -237,8 +237,9 @@ function alertTrueVal(val, trued) {
     })
 }
 
-function createSms(form, uid, fun) {
-    var phone = $(form).val();
+function createSms(phoneId, uid, verifyCodeId, fun) {
+    var phone = $(phoneId).val();
+    var verifyCode = $(verifyCodeId).val();
     var type = 3;
     if (!uid) {
         uid = phone;
@@ -248,12 +249,12 @@ function createSms(form, uid, fun) {
         type = 2;
     }
     var csrf = $("meta[name=csrf-token]").attr('content');
-    $.post("/site/createsmscode", {uid: uid, type: type, phone: phone, _csrf: csrf}, function (result) {
-
+    $.post("/site/createsmscode", {uid: uid, type: type, phone: phone, verifyCode: verifyCode, _csrf: csrf}, function (result) {
         if (result.code == 0) {
             fun();
         } else {
-            alert(result.message);
+            toast(phoneId, result.message);
+            $("#editpassform-verifycode-image").click();
         }
     })
 }

@@ -1,6 +1,7 @@
 ﻿<?php
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
+use yii\captcha\Captcha;
 
 /* @var $this yii\web\View */
 /* @var $form yii\bootstrap\ActiveForm */
@@ -36,10 +37,21 @@ frontend\assets\WapAsset::register($this);
             <div class="col-xs-2"></div>
         </div>
         <div class="row">
-            <form action="/site/signup" method="post" id="signup_form" data-to="1">
+            <?php $form = ActiveForm::begin(['id' => 'signup_form', 'action' => '/site/signup', 'options' => ['data-to' => '1']]); ?>
                 <input name="_csrf" type="hidden" id="_csrf" value="<?= Yii::$app->request->csrfToken ?>">
                 <input id="iphone" class="login-info" name="SignupForm[phone]" maxlength="11" type="tel"
                        placeholder="请输入手机号" AUTOCOMPLETE="off">
+                <div class="row sm-height border-bottom">
+                    <div class="col-xs-9 col">
+                    <input id="verifycode" class="login-info" name="SignupForm[verifycode]" maxlength="6" type="tel"
+                           placeholder="输入图形验证码" AUTOCOMPLETE="off">
+                    </div>
+                    <div class="col-xs-3 yz-code text-align-rg col" style="height:51px;background: #fff;" >
+                    <?= $form->field($model, 'verifyCode', ['inputOptions' => ['style' => 'height: 40px']])->widget(Captcha::className(), [
+                                                    'template' => '{image}', 'captchaAction' => '/site/captcha',
+                                                    ]) ?>
+                    </div>
+                </div>
 
                 <div class=" position">
                     <input id="yanzhengma" class="login-info" name="SignupForm[sms]" maxlength="6" type="tel"
@@ -54,8 +66,8 @@ frontend\assets\WapAsset::register($this);
                     <img src="/images/eye-close.png" width="26" height="20" alt=" 闭眼">
                 </div>
                 <div class="col-xs-12 div-xieyi">
-                    <input id="xieyi" class="xieyi lf" type="checkbox" checked="checked" /> 我已经阅读并同意 <a
-                        href="/site/xieyi" class="xieyi">《用户注册协议》</a>
+                    <input id="xieyi" class="xieyi lf" type="checkbox" checked="checked"/> 我已经阅读并同意
+                    <a href="/site/xieyi" class="xieyi">《用户注册协议》</a>
                 </div>
                 <div class="col-xs-3"></div>
                 <div class="col-xs-6 login-sign-btn">
@@ -63,7 +75,7 @@ frontend\assets\WapAsset::register($this);
                            onclick="subsignup()">
                 </div>
                 <div class="col-xs-3"></div>
-            </form>
+            <?php $form->end(); ?>
         </div>
         <!-- 注册页 end  -->
         <!-- 输入弹出框 start  -->
@@ -90,13 +102,23 @@ frontend\assets\WapAsset::register($this);
                 $("#signup-btn").removeClass("btn-press").addClass("btn-normal");
                 return false;
             }
+            if ($("#verifycode").val() == '') {
+                toast(this, '图形验证码不能为空');
+                $("#signup-btn").removeClass("btn-press").addClass("btn-normal");
+                return false;
+            }
+            if ($("#verifycode").val().length != 6) {
+                toast(this, '手机验证码为6位字符');
+                $("#signup-btn").removeClass("btn-press").addClass("btn-normal");
+                return false;
+            }
             if ($('#yanzhengma').val() == '') {
-                toast(this, '验证码不能为空');
+                toast(this, '手机验证码不能为空');
                 $("#signup-btn").removeClass("btn-press").addClass("btn-normal");
                 return false;
             }
             if ($('#yanzhengma').val().length != 6) {
-                toast(this, '验证码为6位字符');
+                toast(this, '手机验证码为6位字符');
                 $("#signup-btn").removeClass("btn-press").addClass("btn-normal");
                 return false;
             }
@@ -121,7 +143,6 @@ frontend\assets\WapAsset::register($this);
             $("#signup-btn").removeClass("btn-press").addClass("btn-normal");
         }
         $(function () {
-
             $('.back img').bind('click', function () {
                 history.go(-1);
             });
@@ -161,7 +182,12 @@ frontend\assets\WapAsset::register($this);
 
             $('#yzm').bind('click', function ()
             {
-                createSms("#iphone", false, function ()
+                if ($("#verifycode").val() == '') {
+                    toast(this, '图形验证码不能为空');
+                    $("#signup-btn").removeClass("btn-press").addClass("btn-normal");
+                    return false;
+                }
+                createSms("#iphone", false, "#verifycode", function ()
                 {
                     fun_timedown();
                 });
