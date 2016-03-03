@@ -15,7 +15,7 @@ class Bank extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'bank';
+        return 'Bank';
     }
 
     /**

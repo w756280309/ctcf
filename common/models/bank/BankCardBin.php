@@ -15,7 +15,7 @@ class BankCardBin extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'bank_card_bin';
+        return 'BankCardBin';
     }
 
     /**
@@ -35,7 +35,7 @@ class BankCardBin extends \yii\db\ActiveRecord
         return [
         ];
     }
-    
+
     public function getBank()
     {
         return $this->hasOne(Bank::className(), ['id' => 'bankId']);

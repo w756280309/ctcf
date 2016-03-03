@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS `bank` (
+CREATE TABLE IF NOT EXISTS `Bank` (
   `id` int(1) NOT NULL AUTO_INCREMENT,
   `bankName` varchar(100) NOT NULL,
   `gateId` varchar(50) NOT NULL COMMENT '银行英文简称',
@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS `bank` (
   UNIQUE KEY `gateId` (`gateId`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=441 ;
 
-INSERT INTO `bank` (`id`, `bankName`, `gateId`) VALUES
+INSERT INTO `Bank` (`id`, `bankName`, `gateId`) VALUES
 (14, '东亚银行', 'BEA'),
 (17, '深发展银行', 'SDB'),
 (19, '天津银行', 'TCCB'),
@@ -31,7 +31,7 @@ INSERT INTO `bank` (`id`, `bankName`, `gateId`) VALUES
 (403, '北京银行', 'BJB'),
 (440, '徽商银行', 'HSB');
 
-CREATE TABLE IF NOT EXISTS `bank_card_bin` (
+CREATE TABLE IF NOT EXISTS `BankCardBin` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `cardBin` varchar(50) DEFAULT NULL COMMENT '卡号唯一判断数字',
   `cardType` varchar(20) NOT NULL COMMENT '卡类型',
@@ -42,7 +42,7 @@ CREATE TABLE IF NOT EXISTS `bank_card_bin` (
   UNIQUE KEY `card_bin` (`cardBin`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1451 ;
 
-INSERT INTO `bank_card_bin` (`id`, `cardBin`, `cardType`, `bankId`, `binDigits`, `cardDigits`) VALUES
+INSERT INTO `BankCardBin` (`id`, `cardBin`, `cardType`, `bankId`, `binDigits`, `cardDigits`) VALUES
 (1, '621098', '借记卡', 100, 6, 19),
 (2, '622150', '借记卡', 100, 6, 19),
 (3, '622151', '借记卡', 100, 6, 19),
