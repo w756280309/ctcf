@@ -8,7 +8,7 @@
 *7.定时发起充值结果检测 ./yii brechargecrontab/launch
 *8.定时发起批量代付 ./yii batchpaycrontab/launch
 *9.定时更新批量代付 ./yii batchpaycrontab/update 【debug 开启调试模式】 可以在11时-15时执行
-10.定时获取中金对账单 ./yii checkaccrontab/cfca 【debug 开启调试模式】 凌晨五时出对账单一次 
+10.定时获取中金对账单 ./yii checkaccrontab/cfca 【debug 开启调试模式】 凌晨五时出对账单一次
 11.定时获取温都金服交易数据 ./yii checkaccrontab/wdjf 【debug 开启调试模式】 可以在凌晨获取一次
 12.定时获取比较中金温都数据 ./yii checkaccrontab/compare 【debug 开启调试模式】 依赖于中金对账单
 13.定时获取汇总 ./yii checkaccrontab/hz  【debug 开启调试模式】 依赖于比较
@@ -21,3 +21,5 @@
 应确保/common/config/params-local.php里配置了有效的参数，包括回调地址、商户号等（生产环境与开发、测试环境不同）
 项目根目录下需要添加第三方的PHP代码，可以用composer安装，或者手工上传（症状：网站不能访问）
 frontend项目下assets下需要添加第三方的js/css文件，可以用bower安装，或者手工上传（症状：PC端缺js/css）
+
+14.已有SQL不允许修改,db目录下存的都是新增的SQL语句
