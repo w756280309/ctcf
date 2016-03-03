@@ -42,11 +42,11 @@ frontend\assets\WapAsset::register($this);
                 <input id="iphone" class="login-info" name="SignupForm[phone]" maxlength="11" type="tel"
                        placeholder="请输入手机号">
                 <div class="row sm-height border-bottom">
-                    <div class="col-xs-9 col">
+                    <div class="col-xs-8 col">
                     <input id="captchaCode" class="login-info" name="SignupForm[captchaCode]" maxlength="4" type="tel"
                            placeholder="输入图形验证码" AUTOCOMPLETE="off">
                     </div>
-                    <div class="col-xs-3 yz-code text-align-rg col" style="height:51px;background: #fff;" >
+                    <div class="col-xs-4 yz-code text-align-rg col" style="height:51px;background: #fff; overflow: hidden;" >
                     <?= $form->field($model, 'captchaCode', ['inputOptions' => ['style' => 'height: 40px']])->label(false)->widget(Captcha::className(), [
                                                     'template' => '{image}', 'captchaAction' => '/site/captcha',
                                                     ]) ?>
