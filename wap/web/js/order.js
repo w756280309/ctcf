@@ -5,7 +5,9 @@ var csrf;
 $(function () {
     csrf = $("meta[name=csrf-token]").attr('content');
     var $buy = $('#buybtn');
-    $buy.on('click', function () {
+    $buy.on('click', function (e) {
+        e.preventDefault();
+
         if ($('#money').val() == '') {
             toast(this, '投资金额不能为空');
             return false;
@@ -20,7 +22,9 @@ $(function () {
                 toast(this, data.message);
             }
             if (data.tourl != undefined) {
-                location.href = data.tourl;
+                setTimeout(function() {
+                    location.href = data.tourl;
+                }, 1000);
             }
         });
         xhr.always(function () {
