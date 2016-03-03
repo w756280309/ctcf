@@ -125,22 +125,29 @@ class ProductonlineController extends BaseController
             ];
         }
         $ids = Yii::$app->request->post('pids');
-        $loans = OnlineProduct::find()->where('id in ('.$ids.')')->all();
+        $loans = (new \yii\db\Query())
+                ->select('loan.*,eu.epayUserId')
+                ->from(['online_product loan'])
+                ->innerJoin('EpayUser eu', 'loan.borrow_uid=eu.appUserId')
+                ->where('loan.id in ('.$ids.')')->all();
+        
         $error_loans = '';
         foreach ($loans as $loan) {
-            $borrow = new Borrower(7301209, null, Borrower::MERCHAT);//借款人测试阶段只能用7601209
-            $resp = OnlineProduct::createLoan($loan, $borrow);
-            if ($resp !== false) {
-                OnlineProduct::updateAll(['epayLoanAccountId' => $resp, 'online_status' => 1], 'id='.$loan->id);
-                LoanService::updateLoanState($loan, OnlineProduct::STATUS_PRE);
-            } else {
-                $error_loans .= $loan->sn . ",";
+            $borrow = new Borrower($loan['epayUserId'], null, Borrower::MERCHAT);//借款人测试阶段只能用7601209
+            unset($loan['epayUserId']);
+            $loanObj = new OnlineProduct($loan);
+            try {
+                $resp = OnlineProduct::createLoan($loanObj, $borrow);
+                OnlineProduct::updateAll(['epayLoanAccountId' => $resp, 'online_status' => 1], 'id='.$loan['id']);
+                LoanService::updateLoanState($loanObj, OnlineProduct::STATUS_PRE);
+            } catch (\Exception $ex) {
+                $error_loans .= $loanObj->sn. $ex->getMessage() . ",";
             }
         }
         if ("" !== $error_loans) {
-            $error_loans = ',如下标的联动一侧上线失败' . substr($error_loans, 0, -1);
+            $error_loans = ',请注意,如下标的联动一侧上线失败' . substr($error_loans, 0, -1);
         }
-        return ['result' => 1, 'message' => '上线操作成功' . $error_loans];
+        return ['result' => 1, 'message' => '操作已完成' . $error_loans];
     }
 
     public function actionProductinfo($sn = null)

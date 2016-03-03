@@ -90,10 +90,6 @@ class LoanService {
         if (OnlineProduct::STATUS_FOUND === (int)$state || OnlineProduct::STATUS_FULL === (int)$state) {
             $loanval['full_time'] = time();
         }
-        try {
-            OnlineProduct::updateAll($loanval, ['id' => $deal->id]);
-        } catch (Exception $ex) {
-            throw new Exception('标的状态修改失败');
-        }
+        OnlineProduct::updateAll($loanval, ['id' => $deal->id]);
     }
 }

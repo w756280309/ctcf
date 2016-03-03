@@ -3,6 +3,8 @@
 namespace common\models\order;
 
 use yii\behaviors\TimestampBehavior;
+use common\models\product\OnlineProduct;
+use common\models\user\User;
 
 /**
  * This is the model class for table "online_fangkuan".
@@ -110,9 +112,8 @@ class OnlineFangkuan extends \yii\db\ActiveRecord implements \P2pl\LoanFkInterfa
 
     public function getBorrowerId()
     {
-        //        $loan = \common\models\product\OnlineProduct::findOne($this->online_product_id);
-//        $borrower = \common\models\user\User::findOne($loan->borrow_uid);
-//        return $borrower->epayUser->epayUserId;
-        return 7601209;//测试阶段
+        $loan = OnlineProduct::findOne($this->online_product_id);
+        $borrower = User::findOne($loan->borrow_uid);
+        return $borrower->epayUser->epayUserId;
     }
 }
