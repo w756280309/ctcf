@@ -93,10 +93,14 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
            var tourl = '<?= $data['tourl'] ?>';
            if(err === '1') {
                toasturl(tourl,mess);
+               return;
            }
 
            csrf = $("meta[name=csrf-token]").attr('content');
-           $('#form').on('submit',function() {
+
+           $('#form').on('submit', function(e) {
+               e.preventDefault();
+
                var $btn = $('#rechargebtn');
                $btn.addClass("btn-press").removeClass("btn-normal");
                if (!validateform()) {

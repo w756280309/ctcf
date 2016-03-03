@@ -16,11 +16,6 @@ frontend\assets\WapAsset::register($this);
     <title><?= Html::encode($this->title) ?></title>
     <?= Html::csrfMetaTags() ?>
     <?php $this->head() ?>
-    <!--        <link href="/css/bootstrap.min.css" rel="stylesheet">-->
-    <script src="http://cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-    <script src="http://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
-    <!--        <link rel="stylesheet" href="/css/index.css">-->
-
 </head>
 <body>
 <?php $this->beginBody() ?>

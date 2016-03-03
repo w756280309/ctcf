@@ -22,16 +22,6 @@ WapAsset::register($this);
     <link href="/css/base.css" rel="stylesheet">
     <!-- 加载Bootstrap的样式文件-->
 
-    <!-- 使得IE8也适合HTML5的元素和媒体查询-->
-    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-
-    <!-- 如果是IE9以下的版本，就引入下面两个JS文件-->
-    <!--[if lt IE 9]>
-    <script src="http://cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-    <script src="http://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
-
 <!--    <script src="/js/TouchSlide.1.1.js"></script>-->
     <script src="/js/jquery.js"></script>
     <script src="/js/common.js"></script>
