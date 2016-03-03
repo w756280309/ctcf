@@ -16,6 +16,7 @@ use common\models\user\EditpassForm;
 use common\service\LoginService;
 use common\models\log\LoginLog;
 use common\models\user\User;
+use common\models\user\CaptchaForm;
 
 /**
  * Site controller.
@@ -67,7 +68,7 @@ class SiteController extends Controller
             ],
             'captcha' => [
                 'class' => 'yii\captcha\CaptchaAction',
-                'minLength' => 6, 'maxLength' => 6,
+                'minLength' => 4, 'maxLength' => 4,
             ],
         ];
     }
@@ -245,9 +246,9 @@ class SiteController extends Controller
             }
         }
 
-        $verify = new EditpassForm;
+        $captcha = new CaptchaForm();
 
-        return $this->render('resetpass', ['model' => $verify]);
+        return $this->render('resetpass', ['model' => $captcha]);
     }
 
     public function actionContact()
@@ -301,9 +302,9 @@ class SiteController extends Controller
             }
         }
 
-        $verify = new EditpassForm();
+        $captcha = new CaptchaForm();
 
-        return $this->render('signup', ['model' => $verify]);
+        return $this->render('signup', ['model' => $captcha]);
     }
 
     /**
@@ -321,15 +322,14 @@ class SiteController extends Controller
         $uid = Yii::$app->request->post('uid');
         $type = Yii::$app->request->post('type');
         $phone = Yii::$app->request->post('phone');
-        $verifycode = Yii::$app->request->post('verifyCode');
+        $captchaCode = Yii::$app->request->post('captchaCode');
 
-        if (empty($uid) || empty($type) || empty($phone) || empty($verifycode)) {
+        if (empty($uid) || empty($type) || empty($phone) || empty($captchaCode)) {
             return ['code' => 1, 'message' => '发送短信参数错误'];
         }
 
-        $model = new EditpassForm();
-        $model->verifyCode = $verifycode;
-        $model->scenario = 'checkVerifyCode';
+        $model = new CaptchaForm();
+        $model->captchaCode = $captchaCode;
 
         if (!$model->validate()) {
             return ['code' => 1, 'message' => '图形验证码输入错误'];

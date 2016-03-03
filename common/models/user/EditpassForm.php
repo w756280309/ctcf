@@ -28,7 +28,6 @@ class EditpassForm extends Model
 //            'edit' => ['password', 'new_pass', 'verifyCode'],  //修改交易密码
             'edituserpass' => ['password', 'new_pass', 'verifyCode'],  //修改登陆密码
 //            'checktradepwd' => ['password'],   //检查交易密码
-            'checkVerifyCode' => ['verifyCode'],
         ];
     }
 
@@ -54,8 +53,7 @@ class EditpassForm extends Model
             [['password', 'new_pass'], 'string', 'length' => [6, 20], 'on' => 'edituserpass'],
             ['password', 'validatePassword', 'on' => 'edituserpass'],
             ['new_pass', LoginpassValidator::className(), 'skipOnEmpty' => false, 'on' => 'edituserpass'],
-            ['verifyCode', 'required', 'on' => ['checkVerifyCode']],
-            ['verifyCode', 'captcha', 'on' => ['edit', 'edituserpass', 'checkVerifyCode']],
+            ['verifyCode', 'captcha', 'on' => ['edit', 'edituserpass']],
         ];
     }
 

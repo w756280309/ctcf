@@ -43,11 +43,11 @@ frontend\assets\WapAsset::register($this);
                        placeholder="请输入手机号">
                 <div class="row sm-height border-bottom">
                     <div class="col-xs-9 col">
-                    <input id="verifycode" class="login-info" name="SignupForm[verifycode]" maxlength="6" type="tel"
+                    <input id="captchaCode" class="login-info" name="SignupForm[captchaCode]" maxlength="4" type="tel"
                            placeholder="输入图形验证码" AUTOCOMPLETE="off">
                     </div>
                     <div class="col-xs-3 yz-code text-align-rg col" style="height:51px;background: #fff;" >
-                    <?= $form->field($model, 'verifyCode', ['inputOptions' => ['style' => 'height: 40px']])->widget(Captcha::className(), [
+                    <?= $form->field($model, 'captchaCode', ['inputOptions' => ['style' => 'height: 40px']])->widget(Captcha::className(), [
                                                     'template' => '{image}', 'captchaAction' => '/site/captcha',
                                                     ]) ?>
                     </div>
@@ -102,13 +102,13 @@ frontend\assets\WapAsset::register($this);
                 $("#signup-btn").removeClass("btn-press").addClass("btn-normal");
                 return false;
             }
-            if ($("#verifycode").val() == '') {
+            if ($("#captchaCode").val() === '') {
                 toast(this, '图形验证码不能为空');
                 $("#signup-btn").removeClass("btn-press").addClass("btn-normal");
                 return false;
             }
-            if ($("#verifycode").val().length != 6) {
-                toast(this, '图形验证码必须为6位字符');
+            if ($("#captchaCode").val().length !== 4) {
+                toast(this, '图形验证码必须为4位字符');
                 $("#signup-btn").removeClass("btn-press").addClass("btn-normal");
                 return false;
             }
@@ -182,12 +182,17 @@ frontend\assets\WapAsset::register($this);
 
             $('#yzm').bind('click', function ()
             {
-                if ($("#verifycode").val() == '') {
+                if ($("#captchaCode").val() === '') {
                     toast(this, '图形验证码不能为空');
                     $("#signup-btn").removeClass("btn-press").addClass("btn-normal");
                     return false;
                 }
-                createSms("#iphone", false, "#verifycode", function ()
+                if ($("#captchaCode").val().length !== 4) {
+                    toast(this, '图形验证码必须为4位字符');
+                    $("#signup-btn").removeClass("btn-press").addClass("btn-normal");
+                    return false;
+                }
+                createSms("#iphone", false, "#captchaCode", function ()
                 {
                     fun_timedown();
                 });
