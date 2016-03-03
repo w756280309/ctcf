@@ -119,9 +119,9 @@ $rate = number_format($deals->finish_rate * 100, 0);
         </div>
         <div style="clear: both;"></div>
         <div class="row margin-add">
-            <div class="col-xs-4 padding-clear"><a href="/deal/deal/index?cat=1"><img src="/images/type1.png" alt="短期产品" /></a> </div>
-            <div class="col-xs-4 padding-clear"><a href="/deal/deal/index?cat=2"><img src="/images/type2.png" alt="政府平台" /></a> </div>
-            <div class="col-xs-4 padding-clear"><a href="/order/booking/detail?pid=1"><img src="/images/type3.png" alt="股权投资" /></a> </div>
+            <div class="col-xs-4 padding-clear"><a href="/deal/deal/index?cat=1"><img src="/images/type1.png" alt="温银通" /></a> </div>
+            <div class="col-xs-4 padding-clear"><a href="/deal/deal/index?cat=2"><img src="/images/type2.png" alt="温政盈" /></a> </div>
+            <div class="col-xs-4 padding-clear"><a href="/order/booking/detail?pid=1"><img src="/images/type3.png" alt="温股投" /></a> </div>
         </div>
 
     </div>
