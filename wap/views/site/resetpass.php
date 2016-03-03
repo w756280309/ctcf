@@ -1,6 +1,7 @@
 ﻿<?php
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
+use yii\captcha\Captcha;
 
 $this->title = '密码找回';
 $this->params['breadcrumbs'][] = $this->title;
@@ -32,14 +33,24 @@ frontend\assets\WapAsset::register($this);
             <div class="col-xs-2"></div>
         </div>
         <div class="row">
-            <form action="/site/resetpass" method="post" id="resetpass_form" data-to="1">
+            <?php $form = ActiveForm::begin(['id' => 'resetpass_form', 'action' => '/site/resetpass', 'options' => ['data-to' => '1']]); ?>
                 <input name="_csrf" type="hidden" id="_csrf" value="<?= Yii::$app->request->csrfToken ?>">
                 <input id="iphone" class="login-info" name="SignupForm[phone]" maxlength="11" type="tel"
                        placeholder="请输入手机号" AUTOCOMPLETE="off">
-
+                <div class="row sm-height border-bottom">
+                    <div class="col-xs-9 col">
+                    <input id="verifycode" class="login-info" name="SignupForm[verifycode]" maxlength="6" type="tel"
+                           placeholder="输入图形验证码" AUTOCOMPLETE="off">
+                    </div>
+                    <div class="col-xs-3 yz-code text-align-rg col" style="height:51px;background: #fff;" >
+                    <?= $form->field($model, 'verifyCode', ['inputOptions' => ['style' => 'height: 40px']])->widget(Captcha::className(), [
+                                                    'template' => '{image}', 'captchaAction' => '/site/captcha',
+                                                    ]) ?>
+                    </div>
+                </div>
                 <div class=" position">
                     <input id="yanzhengma" class="login-info" name="SignupForm[sms]" maxlength="6" type="tel"
-                           placeholder="输入验证码" AUTOCOMPLETE="off">
+                           placeholder="输入短信验证码" AUTOCOMPLETE="off">
                     <input id="yzm" class="yzm yzm-normal" name="yzm" value="获取验证码" type="button">
                 </div>
                 <div class="col-xs-9 col">
@@ -55,7 +66,7 @@ frontend\assets\WapAsset::register($this);
                            onclick="subsignup()">
                 </div>
                 <div class="col-xs-3"></div>
-            </form>
+            <?php $form->end(); ?>
         </div>
         <!-- 注册页 end  -->
         <!-- 输入弹出框 start  -->
@@ -81,13 +92,23 @@ frontend\assets\WapAsset::register($this);
                 $("#signup-btn").removeClass("btn-press").addClass("btn-normal");
                 return false;
             }
-            if ($('#yanzhengma').val() == '') {
-                toast(this, '验证码不能为空');
+            if ($("#verifycode").val() === '') {
+                toast(this, '图形验证码不能为空');
                 $("#signup-btn").removeClass("btn-press").addClass("btn-normal");
                 return false;
             }
-            if ($('#yanzhengma').val().length != 6) {
-                toast(this, '验证码为6位字符');
+            if ($("#verifycode").val().length !== 6) {
+                toast(this, '图形验证码必须为6位字符');
+                $("#signup-btn").removeClass("btn-press").addClass("btn-normal");
+                return false;
+            }
+            if ($('#yanzhengma').val() === '') {
+                toast(this, '手机验证码不能为空');
+                $("#signup-btn").removeClass("btn-press").addClass("btn-normal");
+                return false;
+            }
+            if ($('#yanzhengma').val().length !== 6) {
+                toast(this, '手机验证码必须为6位字符');
                 $("#signup-btn").removeClass("btn-press").addClass("btn-normal");
                 return false;
             }
@@ -107,7 +128,6 @@ frontend\assets\WapAsset::register($this);
             $("#signup-btn").removeClass("btn-press").addClass("btn-normal");
         }
         $(function () {
-
             $('.back img').bind('click', function () {
                 history.go(-1);
             });
@@ -145,7 +165,12 @@ frontend\assets\WapAsset::register($this);
             var count = 60; //间隔函数，1秒执行
 
             $('#yzm').bind('click', function () {
-                createSms("#iphone", 'r', function () {
+                if ($("#verifycode").val() === '') {
+                    toast(this, '图形验证码不能为空');
+                    $("#signup-btn").removeClass("btn-press").addClass("btn-normal");
+                    return false;
+                }
+                createSms("#iphone", 'r', "#verifycode", function () {
                     fun_timedown();
                 });
             });

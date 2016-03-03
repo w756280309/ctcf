@@ -245,7 +245,9 @@ class SiteController extends Controller
             }
         }
 
-        return $this->render('resetpass');
+        $verify = new EditpassForm;
+
+        return $this->render('resetpass', ['model' => $verify]);
     }
 
     public function actionContact()

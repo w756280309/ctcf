@@ -55,7 +55,7 @@ frontend\assets\WapAsset::register($this);
 
                 <div class=" position">
                     <input id="yanzhengma" class="login-info" name="SignupForm[sms]" maxlength="6" type="tel"
-                           placeholder="输入验证码" AUTOCOMPLETE="off">
+                           placeholder="输入短信验证码" AUTOCOMPLETE="off">
                     <input id="yzm" class="yzm yzm-normal" name="yzm" value="获取验证码" type="button">
                 </div>
                 <div class="col-xs-9 col">
@@ -108,7 +108,7 @@ frontend\assets\WapAsset::register($this);
                 return false;
             }
             if ($("#verifycode").val().length != 6) {
-                toast(this, '手机验证码为6位字符');
+                toast(this, '图形验证码必须为6位字符');
                 $("#signup-btn").removeClass("btn-press").addClass("btn-normal");
                 return false;
             }
@@ -118,7 +118,7 @@ frontend\assets\WapAsset::register($this);
                 return false;
             }
             if ($('#yanzhengma').val().length != 6) {
-                toast(this, '手机验证码为6位字符');
+                toast(this, '手机验证码必须为6位字符');
                 $("#signup-btn").removeClass("btn-press").addClass("btn-normal");
                 return false;
             }
