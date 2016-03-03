@@ -43,7 +43,7 @@ frontend\assets\WapAsset::register($this);
                            placeholder="输入图形验证码" AUTOCOMPLETE="off">
                     </div>
                     <div class="col-xs-3 yz-code text-align-rg col" style="height:51px;background: #fff;" >
-                    <?= $form->field($model, 'captchaCode', ['inputOptions' => ['style' => 'height: 40px']])->widget(Captcha::className(), [
+                    <?= $form->field($model, 'captchaCode', ['inputOptions' => ['style' => 'height: 40px']])->label(false)->widget(Captcha::className(), [
                                                     'template' => '{image}', 'captchaAction' => '/site/captcha',
                                                     ]) ?>
                     </div>
