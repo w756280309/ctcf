@@ -102,7 +102,7 @@ class UserBanks extends \yii\db\ActiveRecord
     {
         $str_card = $this->$attribute;
         $str_card_len = strlen($str_card);
-        if ($str_card_len < 16 || $str_card_len > 19) {
+        if ($str_card_len < 8 || $str_card_len > 19) {
             $this->addError($attribute, "你输入的银行卡号有误");
         } else {
             return TRUE;
