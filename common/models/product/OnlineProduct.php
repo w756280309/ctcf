@@ -435,12 +435,12 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
         if ($resp->isSuccessful() && '92' === $resp->get('project_state')) {
             return $resp->get('project_account_id');
         } else {
-            try {
-                $umpLoan = self::getUmpLoan($deal->id);
-                return $umpLoan->get('project_account_id');
-            } catch (Exception $ex) {
-                return false;
+            $umpLoan = self::getUmpLoan($deal->id);
+            if (null === $umpLoan) {
+                throw \Exception($resp->get('ret_msg'));
             }
+
+            return $umpLoan->get('project_account_id');
         }
     }
 
@@ -452,10 +452,11 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
      */
     public static function getUmpLoan($id) {
         $resp = \Yii::$container->get('ump')->getLoanInfo($id);
-        if ($resp->isSuccessful()) {
-            return $resp;
+        if (!$resp->isSuccessful()) {
+            return null;
         }
-        throw new Exception('标的不存在');
+
+        return $resp;
     }
 
 }
