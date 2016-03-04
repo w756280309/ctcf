@@ -64,14 +64,17 @@ class Client
      * @var string 联动API版本号
      */
     private $version = '1.0';
+    
+    private $logAdapter;
 
-    public function __construct($apiUrl, $merchantId, $clientKeyPath, $umpCertPath, $options)
+    public function __construct($apiUrl, $merchantId, $clientKeyPath, $umpCertPath, $options, LoggerInterface $logAdapter)
     {
         $this->apiUrl = $apiUrl;
         $this->merchantId = $merchantId;
         $this->clientKeyPath = $clientKeyPath;
         $this->umpCertPath = $umpCertPath;
         $this->clientOption = $options;
+        $this->logAdapter = $logAdapter;
     }
 
     /**
@@ -117,7 +120,6 @@ class Client
             'is_find_account' => '01',
             'is_select_agreement' => '1',
         ];
-
         return $this->doRequest($data);
     }
 
@@ -598,22 +600,25 @@ class Client
      */
     protected function doRequest(array $data)
     {
+        $starttime = microtime(true);
         // 添加协议参数
-        $data = array_merge($data, [
+        $source_data = $data = array_merge($data, [
             'charset' => $this->charset,
             'mer_id' => $this->merchantId,
             'version' => $this->version,
         ]);
 
         // 签名
-        $data['sign'] = $this->sign($data);
+        $sign_data = $data['sign'] = $this->sign($data);
         $data['sign_type'] = $this->signType;
-
+        
         $httpResponse = $this->getHttpClient()->request('POST', null, [
             'form_params' => $data,
         ]);
-
-        return $this->processHttpResponse($httpResponse);
+        $prorp = $this->processHttpResponse($httpResponse);
+        $endtime = microtime(true);
+        $this->logAdapter->initLog(1, $source_data, $sign_data, $prorp, $endtime-$starttime)->save();
+        return $prorp;
     }
 
     public function buildQuery(array $data)
