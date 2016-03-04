@@ -171,7 +171,7 @@ frontend\assets\WapAsset::register($this);
                     return false;
                 }
                 if ($("#captchaCode").val().length !== 4) {
-                    toast(this, '图形验证码必须为6位字符');
+                    toast(this, '图形验证码必须为4位字符');
                     $("#signup-btn").removeClass("btn-press").addClass("btn-normal");
                     return false;
                 }

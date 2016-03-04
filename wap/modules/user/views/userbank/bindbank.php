@@ -69,7 +69,7 @@ $this->registerJsFile('/js/qpay.js', ['position' => 1]);
     <div class="row">
         <div class="col-xs-3"></div>
         <div class="col-xs-6 login-sign-btn">
-            <input id="bindbankbtn" class="btn-common btn-normal" name="signUp" type="button" value="下一步" >
+            <input id="bindbankbtn" class="btn-common btn-normal" name="signUp" type="submit" value="下一步" >
         </div>
         <div class="col-xs-3"></div>
     </div>
@@ -98,10 +98,12 @@ $this->registerJsFile('/js/qpay.js', ['position' => 1]);
         var tourl = '<?= $data['tourl'] ?>';
         if (err == '1') {
             toasturl(tourl,mess);
+            return;
         }
 
         csrf = $("meta[name=csrf-token]").attr('content');
-        $('#bindbankbtn').on('click', function(e) {
+        $('#form').on('submit', function(e) {
+            e.preventDefault();
             if (validateBinding()) {
                 qpay_showConfirmModal();
             }

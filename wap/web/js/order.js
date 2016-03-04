@@ -5,7 +5,8 @@ var csrf;
 $(function () {
     csrf = $("meta[name=csrf-token]").attr('content');
     var $buy = $('#buybtn');
-    $buy.on('click', function (e) {
+    var $form = $('#orderform');
+    $form.on('submit', function (e) {
         e.preventDefault();
 
         if ($('#money').val() == '') {
