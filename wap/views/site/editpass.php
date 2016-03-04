@@ -97,7 +97,6 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset', 'positi
             $(this).attr('disabled', true);
             $(this).removeClass("btn-normal").addClass("btn-press");
             var xhr = $.post($('#editpassform').attr("action"), vals, function (data) {
-                console.log(data);
                 if (data.code !== 0) {
                     toast('', data.message, function() {
                         $('#editpassform-verifycode-image').click();

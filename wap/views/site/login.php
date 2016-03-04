@@ -40,14 +40,16 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
 
                 <?php if($is_flag) { ?>
                 <div class="row sm-height border-bottom">
-                    <div class="col-xs-9 col">
+                    <div class="col-xs-8 col">
                         <input name="is_flag" type="hidden" value="<?= $is_flag ?>">
                         <input class="login-info" type="text" id="verifycode" placeholder="请输入验证码" name="LoginForm[verifyCode]" maxlength="6" >
                     </div>
-                    <div class="col-xs-3 yz-code text-align-rg col" style="height:52px;background: #fff;" >
-                        <?= $form->field($model, 'verifyCode')->widget(Captcha::className(), [
-                                                        'template' => '{image}','captchaAction'=>'/site/captcha'
-                                                        ]) ?>
+                    <div class="col-xs-4 yz-code text-align-rg col" style="height:51px;background: #fff; overflow: hidden;" >
+                        <?= $form->field($model, 'verifyCode', ['inputOptions' => ['style' => 'height: 40px']])
+                                 ->label(false)->widget(Captcha::className(), [
+                                     'template' => '{image}',
+                                     'captchaAction' => '/site/captcha'
+                        ]) ?>
                     </div>
                 </div>
                 <?php } ?>
