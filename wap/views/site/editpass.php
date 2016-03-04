@@ -19,7 +19,7 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset', 'positi
         <div class="row sm-height border-bottom">
             <div class="col-xs-3 safe-txt text-align-ct">新密码</div>
             <div class="col-xs-7 safe-lf text-align-lf">
-                <input type="password" id="new_pass" placeholder="6到20字母与数字组合或符号" name="EditpassForm[new_pass]" maxlength="20">
+                <input type="password" id="new_pass" placeholder="请输入6到20位的新密码" name="EditpassForm[new_pass]" maxlength="20">
             </div>
             <div class="col-xs-2 eye text-align-ct col">
                 <img src="/images/eye-close.png"  align="absmiddle" alt=" 闭眼" >

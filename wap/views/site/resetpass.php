@@ -55,7 +55,7 @@ frontend\assets\WapAsset::register($this);
                 </div>
                 <div class="col-xs-9 col">
                     <input id="pass" class="login-info" name="SignupForm[password]" maxlength="20" type="password"
-                           placeholder="密码请输入6-20位字母与数字组合" AUTOCOMPLETE="off">
+                           placeholder="请输入6到20位的密码" AUTOCOMPLETE="off">
                 </div>
                 <div class="col-xs-3 col border-bottom login-eye">
                     <img src="/images/eye-close.png" width="26" height="20" alt=" 闭眼">
