@@ -4,6 +4,7 @@ namespace common\models\user;
 
 use Yii;
 use yii\base\Model;
+use YiiPlus\Validator\CnMobileValidator;
 
 /**
  * Login form.
@@ -41,10 +42,10 @@ class LoginForm extends Model
             ['username', 'required', 'message' => '企业账号不能为空', 'on' => ['org_login', 'org_verifycode']],
             ['password', 'required', 'message' => '密码不能为空'],
             ['verifyCode', 'required', 'message' => '图形验证码不能为空', 'on' => ['org_login', 'org_verifycode']],
-            ['verifyCode', 'string', 'length' => 6, 'message' => '验证码长度必须为6位', 'on' => ['org_login', 'org_verifycode']],
+            ['verifyCode', 'string', 'length' => 4, 'message' => '验证码长度必须为4位', 'on' => ['org_login', 'org_verifycode']],
             ['verifyCode', 'captcha', 'on' => ['org_login', 'verifycode', 'org_verifycode']],
-            ['phone', 'match', 'pattern' => '/^(13[0-9]|14[0-9]|15[0-9]|17[0-9]|18[0-9])\d{8}$/', 'message' => '您输入的手机号格式不正确'],
             ['phone', 'string', 'length' => 11, 'message' => '手机号长度必须为11位数字'],
+            ['phone', CnMobileValidator::className()],
             [
                 ['username', 'password'],
                 'string',

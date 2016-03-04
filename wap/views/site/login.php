@@ -42,7 +42,7 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
                 <div class="row sm-height border-bottom">
                     <div class="col-xs-8 col">
                         <input name="is_flag" type="hidden" value="<?= $is_flag ?>">
-                        <input class="login-info" type="text" id="verifycode" placeholder="请输入验证码" name="LoginForm[verifyCode]" maxlength="6" >
+                        <input class="login-info" type="text" id="verifycode" placeholder="请输入验证码" name="LoginForm[verifyCode]" maxlength="4" >
                     </div>
                     <div class="col-xs-4 yz-code text-align-rg col" style="height:51px;background: #fff; overflow: hidden;" >
                         <?= $form->field($model, 'verifyCode', ['inputOptions' => ['style' => 'height: 40px']])
@@ -101,13 +101,13 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
                     return false;
                 }
                 if (is_flag == 1) {
-                    if ($('#verifycode').val()=='') {
+                    if ($('#verifycode').val() === '') {
                         toast(this,'验证码不能为空');
                         $(this).removeClass("btn-press").addClass("btn-normal");
                         return false;
                     }
-                    if ($('#verifycode').val().length!=6) {
-                        toast(this,'验证码长度必须为6位');
+                    if ($('#verifycode').val().length !== 4) {
+                        toast(this,'验证码长度必须为4位');
                         $(this).removeClass("btn-press").addClass("btn-normal");
                         return false;
                     }

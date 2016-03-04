@@ -28,7 +28,7 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset', 'positi
         <div class="row sm-height border-bottom">
             <div class="col-xs-3 safe-txt text-align-ct">验证码</div>
             <div class="col-xs-5 safe-lf" style="padding-right: 0;">
-                <input type="text" id="sms" placeholder="请输入验证码" name="EditpassForm[verifyCode]" maxlength="6" >
+                <input type="text" id="sms" placeholder="请输入验证码" name="EditpassForm[verifyCode]" maxlength="4" >
             </div>
             <div class="col-xs-4 yz-code text-align-rg col">
                 <?= $form->field($model, 'verifyCode', ['inputOptions' => ['style' => 'height: 40px']])->widget(Captcha::className(), [
@@ -39,7 +39,7 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset', 'positi
         <div class="row login-sign-btn">
             <div class="col-xs-3"></div>
             <div class="col-xs-6 text-align-ct">
-                <input id="editpassbtn" class="btn-common btn-normal" style="margin-top:40px;" type="button" value="确认重置">
+                <input id="editpassbtn" class="btn-common btn-normal" style="margin-top:40px; background: #F2F2F2" type="button" value="确认重置">
             </div>
             <div class="col-xs-3"></div>
         </div>
