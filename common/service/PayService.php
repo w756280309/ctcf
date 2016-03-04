@@ -117,12 +117,12 @@ class PayService
         if ($user->status == 0) {
             return ['code' => self::ERROR_ID_SET,  'message' => '账户已被冻结', 'tourl' => '/site/usererror'];
         }
-       
+
         $bankret = BankService::checkKuaijie($user);
         if (0 !== $bankret['code']) {
             return $bankret;
         }
-        
+
         $deal = OnlineProduct::find()->where(['sn' => $sn])->one();
         $this->cdeal = $deal;
         $time = time();
@@ -135,7 +135,7 @@ class PayService
         } elseif ($deal->end_date < $time) {
             return ['code' => self::ERROR_OVER,  'message' => self::getErrorByCode(self::ERROR_OVER)];
         }
-        
+
         $resp = \Yii::$container->get('ump')->getLoanInfo($deal->id);
         if (!$resp->isSuccessful() && '1' !== $resp->get('project_state')) {//查询失败，或者标的状态不为投资中
             return ['code' => self::ERROR_SYSTEM,  'message' => '联动一侧标的状态异常'];
@@ -159,7 +159,7 @@ class PayService
         if ($commonret !== true) {
             return $commonret;
         }
-                
+
         if (empty($money)) {
             return ['code' => self::ERROR_MONEY_FORMAT,  'message' => self::getErrorByCode(self::ERROR_MONEY_FORMAT)];
         }
@@ -178,7 +178,7 @@ class PayService
         if (bcdiv($orderbalance, $this->cdeal->start_money) * 1 >= 1) {
             //若可投金额大于起投金额
             if (bcdiv($money, $this->cdeal->start_money) * 1 < 1) {
-                return ['code' => self::ERROR_LESS_START_MONEY,  'message' => self::getErrorByCode(self::ERROR_LESS_START_MONEY)];
+                return ['code' => self::ERROR_LESS_START_MONEY,  'message' => self::getErrorByCode(self::ERROR_LESS_START_MONEY).'('.$this->cdeal->start_money.'元)'];
             } elseif (bcdiv($orderbalance, $money) * 1 < 1) { //可投金额除以投标金额，如果是小于1的数字，代表超额投资
                 return ['code' => self::ERROR_MONEY_MUCH,  'message' => self::getErrorByCode(self::ERROR_MONEY_MUCH)];
             } elseif ($this->cdeal->dizeng_money / 1) {
