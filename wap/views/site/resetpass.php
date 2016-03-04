@@ -39,8 +39,8 @@ frontend\assets\WapAsset::register($this);
                        placeholder="请输入手机号" AUTOCOMPLETE="off">
                 <div class="row sm-height border-bottom">
                     <div class="col-xs-8 col">
-                    <input id="captchaCode" class="login-info" name="SignupForm[captchaCode]" maxlength="4"
-                           placeholder="输入图形验证码" AUTOCOMPLETE="off">
+                    <input id="captchaCode" class="login-info" type="text" name="SignupForm[captchaCode]" maxlength="4"
+                           placeholder="请输入图形验证码" AUTOCOMPLETE="off">
                     </div>
                     <div class="col-xs-4 yz-code text-align-rg col" style="height:51px;background: #fff; overflow: hidden;">
                     <?= $form->field($model, 'captchaCode', ['inputOptions' => ['style' => 'height: 40px']])->label(false)->widget(Captcha::className(), [
@@ -50,7 +50,7 @@ frontend\assets\WapAsset::register($this);
                 </div>
                 <div class=" position">
                     <input id="yanzhengma" class="login-info" name="SignupForm[sms]" maxlength="6" type="tel"
-                           placeholder="输入短信验证码" AUTOCOMPLETE="off">
+                           placeholder="请输入短信验证码" AUTOCOMPLETE="off">
                     <input id="yzm" class="yzm yzm-normal" name="yzm" value="获取验证码" type="button">
                 </div>
                 <div class="col-xs-9 col">

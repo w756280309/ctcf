@@ -31,7 +31,7 @@ use yii\captcha\Captcha;
         <?php if ($is_flag) { ?>
             <div style="float: left">
                 <input name="is_flag" type="hidden" value="<?= $is_flag ?>">
-                <input class="form-control input-lg" style="width: 240px;" type="text" id="verifycode" placeholder="请输入验证码" name="LoginForm[verifyCode]" maxlength="6" >
+                <input class="form-control input-lg" style="width: 240px;" type="text" id="verifycode" placeholder="请输入验证码" name="LoginForm[verifyCode]" maxlength="4" >
             </div>
             <div style="float: right">
                 <?=
