@@ -44,8 +44,8 @@
         <?php foreach($banks as $bank): ?>
         <tr>
             <td><?= $bank->bank->bankName ?><?php if ($bank->isDisabled) { echo "(暂停)";} ?></td>
-            <td><?= $bank->singleLimit ?></td>
-            <td><?= $bank->dailyLimit ?></td>
+            <td><?= \Yii::$app->functions->toFormatMoney($bank->singleLimit) ?></td>
+            <td><?= \Yii::$app->functions->toFormatMoney($bank->dailyLimit) ?></td>
         </tr>
         <?php endforeach; ?>
     </table>
