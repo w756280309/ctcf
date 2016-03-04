@@ -51,7 +51,6 @@ class EditpassForm extends Model
             [['password', 'new_pass', 'r_pass'], 'match', 'pattern' => '/^[0-9]{6,6}$/', 'message' => '交易密码必须为6位纯数字', 'on' => ['add', 'edit', 'checktradepwd']],
             [['password', 'new_pass'], 'string', 'length' => [6, 20], 'on' => 'edituserpass'],
             ['new_pass', LoginpassValidator::className(), 'skipOnEmpty' => false, 'on' => 'edituserpass'],
-            ['verifyCode', 'string', 'length' => 4, 'on' => 'edituserpass'],
             ['verifyCode', 'captcha', 'on' => ['edit', 'edituserpass']],
             ['password', 'validatePassword', 'on' => 'edituserpass'],
         ];
