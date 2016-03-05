@@ -72,7 +72,7 @@ $this->registerJs($_js2, View::POS_END, 'body_close2');
 
                 <p style="font-size: 10px; color: #c0c0c0;">请先访问移动端网站完成相关操作</p>
 
-                <div style="margin: 20px auto; width: 160px; height: 160px; background-color: #eee;"></div>
+                <div style="margin: 20px auto; width: 160px; height: 160px; background-image: url('/images/orcode.jpg'); background-size: 160px;"></div>
 
                 <p><button type="button" class="btn btn-primary" data-dismiss="modal">我知道了</button></p>
             </div>
