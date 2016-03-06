@@ -132,7 +132,7 @@ class DrawManager
                 $momeyRecord->account_id = $userAccount->id;
                 $YuE = $userAccount->account_balance = $bc->bcround(bcsub($userAccount->account_balance, $money), 2);//账户总额减少
                 $momeyRecord->type = MoneyRecord::TYPE_DRAW_SUCCESS;
-                $momeyRecord->balance = $YuE;
+                $momeyRecord->balance = $userAccount->available_balance;
                 $momeyRecord->out_money = $bc->bcround($money, 2);
 
                 if ($draw->save(false) !== false && $momeyRecord->save(false) !== false && $userAccount->save(false) !== false) {
