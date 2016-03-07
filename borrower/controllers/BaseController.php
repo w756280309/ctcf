@@ -52,4 +52,12 @@ class BaseController extends Controller
         ];
     }
 
+    public function beforeAction($action)
+    {
+        if (empty($this->user->passwordLastUpdatedTime)) {
+            return $this->redirect('/site/editpass');
+        }
+
+        return parent::beforeAction($action);
+    }
 }
