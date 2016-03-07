@@ -59,7 +59,7 @@ class SiteController extends Controller
                 'class' => 'yii\web\ErrorAction',
             ],
             'captcha' => [
-                'class' => 'yii\captcha\CaptchaAction',
+                'class' => 'common\captcha\CaptchaAction',
                 'minLength' => 4, 'maxLength' => 4,
             ],
         ];
