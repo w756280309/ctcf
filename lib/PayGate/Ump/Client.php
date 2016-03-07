@@ -617,7 +617,7 @@ class Client
         ]);
         $prorp = $this->processHttpResponse($httpResponse);
         $endtime = microtime(true);
-        $this->logAdapter->initLog(1, $source_data, $sign_data, $prorp, $endtime-$starttime)->save();
+        $this->logAdapter->log(1, $source_data, $sign_data, $prorp, $endtime-$starttime);
         return $prorp;
     }
 
@@ -635,7 +635,7 @@ class Client
         $sign_data = $data['sign'] = $this->sign($data);
         $data['sign_type'] = $this->signType;
         $endtime = microtime(true);
-        $this->logAdapter->initLog(1, $source_data, $sign_data, null, $endtime-$starttime)->save();
+        $this->logAdapter->log(1, $source_data, $sign_data, null, $endtime-$starttime);
         return http_build_query($data);
     }
 

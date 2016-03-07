@@ -8,7 +8,7 @@ use yii\web\NotFoundHttpException;
 use yii\web\Controller;
 use common\models\user\RechargeRecord;
 use common\service\AccountService;
-use common\models\Logger;
+use common\models\TradeLog;
 
 /**
  * 绑卡回调控制器4.2
@@ -64,10 +64,7 @@ class QpaynotifyController extends Controller
      */
     private function processing(array $data = [])
     {
-        $logger = new Logger();
-        $loggerObj = $logger->initLog(2, $data, $data['sign']);
-        $loggerObj->save();
-        
+        TradeLog::initLog(2, $data, $data['sign']);
         if (
             Yii::$container->get('ump')->verifySign($data)
             && '0000' === $data['ret_code']

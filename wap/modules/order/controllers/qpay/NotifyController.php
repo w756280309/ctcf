@@ -7,6 +7,7 @@ use Yii;
 use Exception;
 use yii\web\Controller;
 use common\service\OrderService;
+use common\models\TradeLog;
 
 /**
  * 联动优势投标
@@ -36,7 +37,7 @@ class NotifyController extends Controller
      */
     private function processing(array $data = [])
     {
-        Yii::$container->get('PayGate\\Ump\\LoggerInterface')->initLog(2, $data, $data['sign']);
+        TradeLog::initLog(2, $data, $data['sign']);
         if (
             Yii::$container->get('ump')->verifySign($data)
             && '0000' === $data['ret_code']

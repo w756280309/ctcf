@@ -7,7 +7,7 @@ use yii\web\Controller;
 use common\models\user\QpayBinding;
 use common\models\user\UserBanks;
 use yii\helpers\ArrayHelper;
-use common\models\Logger;
+use common\models\TradeLog;
 
 /**
  * 绑卡回调控制器4.2
@@ -26,7 +26,7 @@ class NotifyController extends Controller
         $data = Yii::$app->request->get();
         //记录日志方便调试
         \Yii::trace($data['service'] . ":" . http_build_query($data), 'umplog');
-        Yii::$container->get('PayGate\\Ump\\LoggerInterface')->initLog(2, $data, $data['sign']);
+        Yii::$container->get('PayGate\\Ump\\LoggerInterface')->log(2, $data, $data['sign']);
         if (Yii::$container->get('ump')->verifySign($data) && '0000' === $data['ret_code']) {
             $bind = QpayBinding::findOne(['binding_sn' => $data['order_id'], 'status' => QpayBinding::STATUS_INIT]);
             if (null !== $bind) {
@@ -57,7 +57,7 @@ class NotifyController extends Controller
         $errmsg = "no error";
         $data = Yii::$app->request->get();
 
-        Yii::$container->get('PayGate\\Ump\\LoggerInterface')->initLog(2, $data, $data['sign']);
+        TradeLog::initLog(2, $data, $data['sign']);
         if (
             Yii::$container->get('ump')->verifySign($data)
             && 'mer_bind_card_notify' === $data['service']
