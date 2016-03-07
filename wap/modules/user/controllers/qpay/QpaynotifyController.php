@@ -45,7 +45,6 @@ class QpaynotifyController extends Controller
         } else {
             $errmsg = "异常";
         }
-        Yii::trace($errmsg . $data['service'] . ":" . http_build_query($data), 'umplog');
         $content = Yii::$container->get('ump')->buildQuery([
             'order_id' => $data['order_id'],
             'mer_date' => $data['mer_date'],

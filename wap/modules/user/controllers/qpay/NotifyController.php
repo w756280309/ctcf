@@ -24,9 +24,7 @@ class NotifyController extends Controller
     public function actionFrontend()
     {
         $data = Yii::$app->request->get();
-        //记录日志方便调试
-        \Yii::trace($data['service'] . ":" . http_build_query($data), 'umplog');
-        Yii::$container->get('PayGate\\Ump\\LoggerInterface')->log(2, $data, $data['sign']);
+        TradeLog::initLog(2, $data, $data['sign']);
         if (Yii::$container->get('ump')->verifySign($data) && '0000' === $data['ret_code']) {
             $bind = QpayBinding::findOne(['binding_sn' => $data['order_id'], 'status' => QpayBinding::STATUS_INIT]);
             if (null !== $bind) {
@@ -78,9 +76,6 @@ class NotifyController extends Controller
                     $err = '0000';
                 }
                 
-                //记录日志方便调试
-                \Yii::trace("errormsg:【" . $err . $errmsg . "】;" . $data['service'] . ":" . http_build_query($data), 'umplog');
-
                 $content = Yii::$container->get('ump')->buildQuery([
                     'order_id' => $data['order_id'],
                     'mer_date' => $data['mer_date'],

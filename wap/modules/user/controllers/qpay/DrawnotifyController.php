@@ -36,7 +36,6 @@ class DrawnotifyController extends Controller
 
             return $this->redirect('/user/userbank/drawres?ret=success');
         } else {
-            \Yii::trace('非DrawRecord对象;'.$data['service'].':'.http_build_query($data), 'umplog');
             if ('pc' === $channel) {
                 return $this->redirect(\Yii::$app->params['ump']['notify']['draw_pc_ret_url'].'?flag=err');
             }
@@ -62,7 +61,6 @@ class DrawnotifyController extends Controller
             $errmsg = '非DrawRecord对象;';
         }
 
-        Yii::trace($errmsg.$data['service'].':'.http_build_query($data), 'umplog');
         $content = Yii::$container->get('ump')->buildQuery([
             'order_id' => $data['order_id'],
             'mer_date' => $data['mer_date'],
@@ -83,7 +81,6 @@ class DrawnotifyController extends Controller
     private function processing(array $data = [])   //没有做防重复处理
     {
         TradeLog::initLog(2, $data, $data['sign']);
-        Yii::trace('【提现申请返回通知】'.$data['service'].':'.http_build_query($data), 'umplog');
         if (
             Yii::$container->get('ump')->verifySign($data)
             && '0000' === $data['ret_code']
@@ -106,6 +103,5 @@ class DrawnotifyController extends Controller
     public function apply()
     {
         $data = Yii::$app->request->get();
-        Yii::trace('【提现申请成功后】'.$data['service'].':'.http_build_query($data), 'umplog');
     }
 }

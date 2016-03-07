@@ -22,8 +22,6 @@ class NotifyController extends Controller
     public function actionFrontend()
     {
         $data = Yii::$app->request->get();
-        //记录日志方便调试
-        \Yii::trace("前台通知：" . $data['service'] . ":" . http_build_query($data), 'umplog');
         $this->processing($data);
          return $this->redirect('/user/user/myorder');
     }
@@ -59,7 +57,6 @@ class NotifyController extends Controller
         $err = '00009999';
         $errmsg = "no error";
         $data = Yii::$app->request->get();
-        \Yii::trace("后台通知：" . $data['service'] . ":" . http_build_query($data), 'umplog');
         $this->processing($data);
         $content = Yii::$container->get('ump')->buildQuery([
             'order_id' => $data['order_id'],
