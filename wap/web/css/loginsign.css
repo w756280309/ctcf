@@ -125,3 +125,15 @@ input.xieyi {
     border: 1px solid #ccc;
     background:#7c7c7c ;
 }
+
+.reg_forget_area
+{
+    width: 100%;text-align: center;margin-top: 40px
+}
+
+.reg_forget_area a
+{
+    font-size: 15px;
+    text-decoration: none;
+    color: #f44336
+}
