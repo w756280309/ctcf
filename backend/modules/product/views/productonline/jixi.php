@@ -29,11 +29,19 @@ use yii\bootstrap\ActiveForm;
                         <div class="control-group">
                             <label class="control-label">计息开始时间</label>
                             <div class="controls">
+                                <?php if (empty($model->finish_date)) { ?>
+                                <span class="text">
+                                    <?=
+                                         $form->field($model, 'jixi_time', ['template' => '<div class="input-append date form_datetime">{input}<span class="add-on"><i class="icon-calendar"></i></span></div><div style="color: red;">{error}</div>', 'inputOptions'=>['autocomplete'=>"off",'placeholder'=>'计息开始日']])->textInput(['readonly' => 'readonly','class' => "m-wrap span12", 'onclick' => 'WdatePicker({dateFmt:"yyyy-MM-dd",minDate:\''.date('Y-m-d', strtotime('+1 day', $model->start_date)).'\'});'])
+                                    ?>
+                                </span>
+                                <?php } else { ?>
                                 <span class="text">
                                     <?=
                                          $form->field($model, 'jixi_time', ['template' => '<div class="input-append date form_datetime">{input}<span class="add-on"><i class="icon-calendar"></i></span></div><div style="color: red;">{error}</div>', 'inputOptions'=>['autocomplete'=>"off",'placeholder'=>'计息开始日']])->textInput(['readonly' => 'readonly','class' => "m-wrap span12", 'onclick' => 'WdatePicker({dateFmt:"yyyy-MM-dd",minDate:\''.date('Y-m-d', strtotime('+1 day', $model->start_date)).'\',maxDate:\''.date("Y-m-d", strtotime('-1 day', $model->finish_date)).'\'});'])
                                     ?>
                                 </span>
+                                <?php } ?>
                             </div>
                         </div>
                     </div>

@@ -130,7 +130,7 @@ class ProductonlineController extends BaseController
                 ->from(['online_product loan'])
                 ->innerJoin('EpayUser eu', 'loan.borrow_uid=eu.appUserId')
                 ->where('loan.id in ('.$ids.')')->all();
-        
+
         $error_loans = '';
         foreach ($loans as $loan) {
             $borrow = new Borrower($loan['epayUserId'], null, Borrower::MERCHAT);//借款人测试阶段只能用7601209
@@ -381,7 +381,6 @@ class ProductonlineController extends BaseController
      */
     public function actionJixi($product_id)
     {
-        $this->layout = false;
         $c_flag = 0;
         $model = OnlineProduct::findOne($product_id);
         if (!$model) {
@@ -400,7 +399,7 @@ class ProductonlineController extends BaseController
                 $err = '计息开始时间必须大于项目满标时间 '.date('Y-m-d', $model->full_time);
             } elseif ($model->status == OnlineProduct::STATUS_FOUND && $model->jixi_time <= $full_time) {
                 $err = '计息开始时间必须大于项目提前募集结束时间 '.date('Y-m-d', $model->full_time);
-            } elseif ($model->jixi_time >= $finish_date) {
+            } elseif (!empty($finish_date) && $model->jixi_time >= $finish_date) {
                 $err = '计息开始时间必须小于项目的截止时间 '.date('Y-m-d', $model->finish_date);
             }
 
@@ -418,6 +417,7 @@ class ProductonlineController extends BaseController
             $model->jixi_time = '';
         }
 
+        $this->layout = false;
         return $this->render('jixi', ['model' => $model, 'c_flag' => $c_flag]);
     }
 
