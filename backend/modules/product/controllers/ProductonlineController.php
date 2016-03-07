@@ -399,7 +399,7 @@ class ProductonlineController extends BaseController
                 $err = '计息开始时间必须大于项目满标时间 '.date('Y-m-d', $model->full_time);
             } elseif ($model->status == OnlineProduct::STATUS_FOUND && $model->jixi_time <= $full_time) {
                 $err = '计息开始时间必须大于项目提前募集结束时间 '.date('Y-m-d', $model->full_time);
-            } elseif (!empty($finish_date) && $model->jixi_time >= $finish_date) {
+            } elseif (!empty($model->finish_date) && $model->jixi_time >= $finish_date) {
                 $err = '计息开始时间必须小于项目的截止时间 '.date('Y-m-d', $model->finish_date);
             }
 
