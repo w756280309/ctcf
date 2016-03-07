@@ -34,7 +34,7 @@ class ProductonlineController extends BaseController
     }
 
     /**
-     * 新增、编辑标的项目
+     * 新增、编辑标的项目.
      */
     public function actionEdit($id = null)
     {
@@ -56,7 +56,8 @@ class ProductonlineController extends BaseController
         $con_name_arr = Yii::$app->request->post('name');
         $con_content_arr = Yii::$app->request->post('content');
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            if (!empty($model->finish_date)) {//若截止日期不为空，重新计算项目天数
+            if (!empty($model->finish_date)) {
+                //若截止日期不为空，重新计算项目天数
                 $pp = new ProductProcessor();
                 $model->expires = $pp->LoanTimes($model->start_date, null, strtotime($model->finish_date), 'd', true)['days'][1]['period']['days'];
             }
@@ -97,6 +98,7 @@ class ProductonlineController extends BaseController
                 }
                 if (!$model->hasErrors()) {
                     $transaction->commit();
+
                     return $this->redirect(['list']);
                 }
             }
@@ -141,13 +143,14 @@ class ProductonlineController extends BaseController
                 OnlineProduct::updateAll(['epayLoanAccountId' => $resp, 'online_status' => 1], 'id='.$loan['id']);
                 LoanService::updateLoanState($loanObj, OnlineProduct::STATUS_PRE);
             } catch (\Exception $ex) {
-                $error_loans .= $loanObj->sn. $ex->getMessage() . ",";
+                $error_loans .= $loanObj->sn.$ex->getMessage().',';
             }
         }
-        if ("" !== $error_loans) {
-            $error_loans = ',请注意,如下标的联动一侧上线失败' . substr($error_loans, 0, -1);
+        if ('' !== $error_loans) {
+            $error_loans = ',请注意,如下标的联动一侧上线失败'.substr($error_loans, 0, -1);
         }
-        return ['result' => 1, 'message' => '操作已完成' . $error_loans];
+
+        return ['result' => 1, 'message' => '操作已完成'.$error_loans];
     }
 
     public function actionProductinfo($sn = null)
@@ -315,9 +318,10 @@ class ProductonlineController extends BaseController
             } else {
                 $bc = new BcRound();
                 $transaction = Yii::$app->db->beginTransaction();
-                $up_srs = OnlineProduct::updateAll(['status' => OnlineProduct::STATUS_FOUND, 'sort' => OnlineProduct::SORT_FOUND ,'full_time' => time()], ['id' => $id]);
+                $up_srs = OnlineProduct::updateAll(['status' => OnlineProduct::STATUS_FOUND, 'sort' => OnlineProduct::SORT_FOUND, 'full_time' => time()], ['id' => $id]);
                 if (!$up_srs) {
                     $transaction->rollBack();
+
                     return ['result' => '0', 'message' => '操作失败,状态更新失败,请联系技术'];
                 }
                 $orders = OnlineOrder::getOrderListByCond(['online_pid' => $id, 'status' => OnlineOrder::STATUS_SUCCESS]);
@@ -327,6 +331,7 @@ class ProductonlineController extends BaseController
                     $ua->freeze_balance = $bc->bcround(bcsub($ua->freeze_balance, $ord['order_money']), 2);
                     if (!$ua->save()) {
                         $transaction->rollBack();
+
                         return ['result' => '0', 'message' => '操作失败,账户更新失败,请联系技术'];
                     }
                 }
@@ -361,7 +366,7 @@ class ProductonlineController extends BaseController
                 if (0 === $model->finish_date) {
                     $pp = new ProductProcessor();
                     $finish_date = $pp->LoanTerms('d1', date('Y-m-d', $model->jixi_time), $model->expires);
-                    OnlineProduct::updateAll(['finish_date' => $finish_date], "id=" . $id);
+                    OnlineProduct::updateAll(['finish_date' => $finish_date], 'id='.$id);
                 }
                 $res = OnlineRepaymentPlan::createPlan($id);//转移到开始计息部分
 
@@ -418,6 +423,7 @@ class ProductonlineController extends BaseController
         }
 
         $this->layout = false;
+
         return $this->render('jixi', ['model' => $model, 'c_flag' => $c_flag]);
     }
 
@@ -446,7 +452,7 @@ class ProductonlineController extends BaseController
     }
 
     /**
-     * 股权投资列表页
+     * 股权投资列表页.
      */
     public function actionBookinglist()
     {
