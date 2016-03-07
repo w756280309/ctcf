@@ -22,7 +22,7 @@ use yii\helpers\Html;
         <link href="/css/default.css" rel="stylesheet" type="text/css" id="style_color"/>
         <link href="/css/uniform.default.css" rel="stylesheet" type="text/css"/>
         <script src="/js/jquery.js" type="text/javascript"></script>
-        
+
         <script type="text/javascript" src="/js/layer/layer.min.js"></script>
         <script type="text/javascript" src="/js/layer/extend/layer.ext.js"></script>
         <script type="text/javascript" src="/js/showres.js"></script>
@@ -35,7 +35,7 @@ use yii\helpers\Html;
     }
     .has-error .help-block{
         color: red;
-    } 
+    }
     .form-group div.radio label{
         width:400px;
     }
@@ -43,7 +43,7 @@ use yii\helpers\Html;
 
     </head>
     <body class="page-header-fixed page-full-width" style="background-color:white !important">
-<div class="page-container row-fluid" style="margin-top:0px">		
+<div class="page-container row-fluid" style="margin-top:0px">
     <div class="page-content">
         <div class="form-horizontal form-view">
             <div class="control-group">
@@ -65,12 +65,12 @@ use yii\helpers\Html;
                             <div class="control-group">
                                     <label class="control-label" for="">放款账户:</label>
                                     <div class="controls">
-                                            <span class="text">【待定】</span>
+                                            <span class="text"><?= substr_replace($borrow_user->qpay->card_number,'********',4,-4) ?></span>
                                     </div>
                             </div>
                     </div>
             </div>
-            
+
             <div class="row-fluid">
                     <div class="span6 ">
                             <div class="control-group">
@@ -89,7 +89,7 @@ use yii\helpers\Html;
                             </div>
                     </div>
             </div>
-            
+
             <div class="row-fluid">
                     <div class="span6 ">
                             <div class="control-group">
@@ -108,15 +108,15 @@ use yii\helpers\Html;
                             </div>
                     </div>
             </div>
-            <?php 
-            if(($deal->status==3||$deal->status==7)&&empty($deal->fk_examin_time)){ 
-            //if(1==1){ 
+            <?php
+            if(($deal->status==3||$deal->status==7)&&empty($deal->fk_examin_time)){
+            //if(1==1){
             ?>
             <div class="form-actions">
-                    <button type="button" class="btn green fkbutton" data-index="0">审核通过</button> 
+                    <button type="button" class="btn green fkbutton" data-index="0">审核通过</button>
                     &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
                     <button type="button" class="btn red fkbutton" data-index="1">审核不通过</button>
-            </div>           
+            </div>
           <?php } ?>
     </div>
     </div>
@@ -143,14 +143,14 @@ use yii\helpers\Html;
                         if(data.res==1){
                             window.parent.location.reload();
                         }
-                    });     
+                    });
                 }
             }else if(key==1){
                 if(confirm('确认审核不通过吗？')){
                     closewin();
                 }
             }
- 
+
         })
         })
         </script>

@@ -58,11 +58,11 @@ class OnlinefangkuanController extends BaseController
      *
      * @param type $pid
      */
-    public function actionExaminfk($pid = null)
+    public function actionExaminfk($pid)
     {
         $this->layout = false;
         $deal = OnlineProduct::findOne($pid);
-        $financing_user = User::findOne(['type' => 2, 'id' => $deal->borrow_uid]);
+        $financing_user = User::findOne(['type' => User::USER_TYPE_ORG, 'id' => $deal->borrow_uid]);
 
         return $this->render('examinfk', ['deal' => $deal, 'borrow_user' => $financing_user]);
     }

@@ -5,7 +5,6 @@ namespace app\modules\user\controllers\bpay;
 use Yii;
 use yii\web\Controller;
 use common\models\user\RechargeRecord;
-use common\models\user\User;
 
 class BrechargeController extends Controller
 {
