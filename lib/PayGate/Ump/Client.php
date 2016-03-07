@@ -623,17 +623,19 @@ class Client
 
     public function buildQuery(array $data)
     {
+        $starttime = microtime(true);
         // 添加协议参数
-        $data = array_merge($data, [
+        $source_data = $data = array_merge($data, [
             'charset' => $this->charset,
             'mer_id' => $this->merchantId,
             'version' => $this->version,
         ]);
 
         // 签名
-        $data['sign'] = $this->sign($data);
+        $sign_data = $data['sign'] = $this->sign($data);
         $data['sign_type'] = $this->signType;
-
+        $endtime = microtime(true);
+        $this->logAdapter->initLog(1, $source_data, $sign_data, null, $endtime-$starttime)->save();
         return http_build_query($data);
     }
 
