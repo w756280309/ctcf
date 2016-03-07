@@ -64,13 +64,13 @@ $rate = number_format($deals->finish_rate * 100, 0);
                         <a class="zhuangtai weikaibiao" href="/deal/deal/detail?sn=<?= $deals->sn ?>"><?= $dates['desc'] ?> <?= date('H:i', $deals->start_date) ?></a>
                         <?php } elseif (OnlineProduct::STATUS_NOW === $deals->status) { ?>
                         <!-- 进度 % -->
-                        <div style="margin:10px 3px; border:1px solid #fe9b00; ">
+                        <div style="margin:10px 8px; border:1px solid #fe9b00; ">
                             <a class="a-progress-bg"  style="width:<?= $rate ?>%;"></a>
                             <a class="zhuangtai a-progress" href="/deal/deal/detail?sn=<?= $deals->sn ?>"><?= $rate ?>%</a>
                         </div>
                         <?php } else { ?>
-                        <div class="zhuangtai" style="margin:10px 3px; background-color: #9fa0a0;">
-                            <font style="color: #fff; line-height: 40px;"><?= Yii::$app->params['productonline'][$deals->status] ?></font>
+                        <div class="zhuangtai" style="margin:10px 8px; background-color: #9fa0a0;">
+                            <font style="color: #fff; line-height: 34px;"><?= Yii::$app->params['productonline'][$deals->status] ?></font>
                         </div>
                     <?php } ?>
                 </div>

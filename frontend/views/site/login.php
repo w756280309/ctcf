@@ -71,7 +71,7 @@ JS;
         <?php ActiveForm::end(); ?>
 
         <div class="login-reg" style="display: none;">
-            <div style="margin: 20px auto; width: 160px; height: 160px; background-image: url('/images/orcode.jpg'); background-size: 160px;"></div>
+            <div style="margin: 20px auto; width: 160px; height: 160px; background-image: url('/images/orcode.png'); background-size: 160px;"></div>
             <p>PC端暂不提供注册<br>请扫描二维码访问手机网站进行注册</p>
         </div>
     </div>
