@@ -25,7 +25,7 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
         <div class="row nav-height">
             <div class="col-xs-2 back"><img src="/images/back.png" alt="" /></div>
             <div class="col-xs-8 title">登录</div>
-            <div class="col-xs-2 sign"><a href="/site/signup" class="sign">注册</a></div>
+<!--            <div class="col-xs-2 sign"><a href="/site/signup" class="sign">注册</a></div>-->
         </div>
         <div class="row">
             <?php $form = ActiveForm::begin(['id' => 'login', 'action' => "/site/login", 'options' => ['data-to'=>'1']]); ?>
@@ -54,10 +54,17 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
                 </div>
                 <?php } ?>
 
-                <a href="/site/resetpass" class="forget-mima">忘记密码？</a>
+<!--                <a href="/site/resetpass" class="forget-mima">忘记密码？</a>-->
                 <div class="col-xs-3"></div>
                 <div class="col-xs-6 login-sign-btn">
                     <input id="login-btn" class="btn-common btn-normal" name="start" type="button" value="登录" >
+                </div>
+                <div class="col-xs-6 login-sign-btn" style="width: 100%;text-align: center;margin-top: 40px">
+                    <a style="font-size: 15px; text-decoration: none; color: #f44336" align="center" >注册账号</a>
+                    &emsp;
+                    |
+                    &emsp;
+                    <a style="font-size: 15px; text-decoration: none; color: #f44336" align="center" >忘记密码</a>
                 </div>
                 <div class="col-xs-3"></div>
 
