@@ -82,7 +82,7 @@ class Logger extends \yii\db\ActiveRecord implements \PayGate\Ump\LoggerInterfac
         $log->requestData = json_encode($rqData);//存储没有进行签名的数据
         $log->rawRequest = $rq;
         $log->duration = $duration;
-        if (null !== $rp) {
+        if (null !== $rp && array_key_exists('ret_code', $rp)) {
             $log->responseCode = $rp->get('ret_code');
             $log->rawResponse = json_encode($rp->toArray());
             $log->responseMessage = $rp->get('ret_msg');

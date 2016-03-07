@@ -81,6 +81,7 @@ class DrawnotifyController extends Controller
      */
     private function processing(array $data = [])   //没有做防重复处理
     {
+        Yii::$container->get('PayGate\\Ump\\LoggerInterface')->initLog(2, $data, $data['sign']);
         Yii::trace('【提现申请返回通知】'.$data['service'].':'.http_build_query($data), 'umplog');
         if (
             Yii::$container->get('ump')->verifySign($data)
