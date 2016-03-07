@@ -5,6 +5,7 @@ namespace app\modules\user\controllers\bpay;
 use Yii;
 use yii\web\Controller;
 use common\models\user\RechargeRecord;
+use common\models\TradeLog;
 
 class BrechargeController extends Controller
 {
@@ -16,6 +17,7 @@ class BrechargeController extends Controller
     {
         $data = Yii::$app->request->get();
 
+        TradeLog::initLog(2, $data, $data['sign']);
         if (empty($data)) {
             return $this->redirect('/user/recharge/recharge-err');
         }
@@ -48,6 +50,7 @@ class BrechargeController extends Controller
         $ump = Yii::$container->get('ump');
         $err = '0000';
 
+        TradeLog::initLog(2, $data, $data['sign']);
         if ($ump->verifySign($data)) {
             $recharge = RechargeRecord::findOne(['sn' => $data['order_id']]);
 

@@ -5,7 +5,7 @@ namespace app\modules\user\controllers\bpay;
 use Yii;
 use yii\web\Controller;
 use common\models\user\RechargeRecord;
-
+use common\models\TradeLog;
 
 class BrechargeController extends Controller
 {
@@ -15,7 +15,7 @@ class BrechargeController extends Controller
     public function actionFrontendNotify()
     {
         $data = Yii::$app->request->get();
-
+        TradeLog::initLog(2, $data, $data['sign']);
         if (empty($data)) {
             throw new \Exception('The request info is null.');
         }
@@ -47,6 +47,7 @@ class BrechargeController extends Controller
     public function actionBackendNotify()
     {
         $data = Yii::$app->request->get();
+        TradeLog::initLog(2, $data, $data['sign']);
         $ump = Yii::$container->get('ump');
         $err = '0000';
         $errMess = 'No err';

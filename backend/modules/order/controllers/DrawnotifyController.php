@@ -6,6 +6,7 @@ use Yii;
 use yii\web\Controller;
 use common\models\draw\DrawManager;
 use common\models\user\DrawRecord;
+use common\models\TradeLog;
 
 class DrawnotifyController extends Controller
 {
@@ -15,6 +16,7 @@ class DrawnotifyController extends Controller
     public function actionNotify()
     {
         $data = Yii::$app->request->get();
+        TradeLog::initLog(2, $data, $data['sign']);
         $ump = Yii::$container->get('ump');
         $err = '0000';
         $errMsg = 'No err';
