@@ -132,7 +132,7 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset', 'positi
     //只有确定按钮的弹窗
     function alertTrueVal(val,trued)
         {
-            var chongzhi = $('<div class="mask" style="display:block;"></div><div class="bing-info show"> <div class="bing-tishi">温馨提示</div> <p class="tishi-p">' + val + '</p > <div class="bind-btn"> <span class="true">我知道了</span> </div> </div>');
+            var chongzhi = $('<div class="mask" style="display:block;"></div><div class="bing-info show"> <div class="bing-tishi">温馨提示</div> <p class="tishi-p" style="line-height: 20px;">' + val + '</p > <div class="bind-btn"> <span class="true">我知道了</span> </div> </div>');
             $(chongzhi).insertAfter($('form'));
             $('.bing-info').on('click', function ()
             {

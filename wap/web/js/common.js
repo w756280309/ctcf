@@ -151,7 +151,7 @@ function alertTrue(trued) {
 //    alert('true');
 //});
 function alertTrueVal(val, trued) {
-    var chongzhi = $('<div class="mask" style="display:block;"></div><div class="bing-info show"> <div class="bing-tishi">温馨提示</div> <p class="tishi-p"> ' + val + '，即将跳转到相应的页面完成相应的操作</p > <div class="bind-btn"> <span class="true">我知道了</span> </div> </div>');
+    var chongzhi = $('<div class="mask" style="display:block;"></div><div class="bing-info show"> <div class="bing-tishi">温馨提示</div> <p class="tishi-p" style="line-height: 20px;"> ' + val + '，即将跳转到相应的页面完成相应的操作</p > <div class="bind-btn"> <span class="true">我知道了</span> </div> </div>');
     $(chongzhi).insertAfter($('form'));
     $('.bing-info').on('click', function () {
         $(chongzhi).remove();

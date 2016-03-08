@@ -96,7 +96,7 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
                 });
             } else {
                 toast(data.message, function() {
-                    if (data.tourl !== 'undefined') {
+                    if (typeof data.tourl !== 'undefined') {
                         location.href = data.tourl;
                     }
                 });
@@ -115,7 +115,7 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
     }
 
     function alertTrue(trued) {
-        var chongzhi = $('<div class="mask" style="display: block"></div><div class="bing-info show"> <div class="bing-tishi">开通成功</div> <p class="tishi-p" style="line-height: 18px;">支付密码将会以短信的形式发送到您的手机上,请注意查收并妥善保存。支付密码为6位随机数,可根据短信内容修改密码</p > <div class="bind-btn"> <span class="true">下一步</span> </div> </div>');
+        var chongzhi = $('<div class="mask" style="display: block"></div><div class="bing-info show"> <div class="bing-tishi">开通成功</div> <p class="tishi-p" style="line-height: 20px;">支付密码将会以短信的形式发送到您的手机上,请注意查收并妥善保存。支付密码为6位随机数,可根据短信内容修改密码</p > <div class="bind-btn"> <span class="true">下一步</span> </div> </div>');
         $(chongzhi).insertAfter($('form'));
         $('.bing-info').on('click', function () {
             $(chongzhi).remove();
