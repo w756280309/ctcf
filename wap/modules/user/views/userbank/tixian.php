@@ -63,25 +63,29 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
            var mess = '<?= $data['message'] ?>';
            var tourl = '<?= $data['tourl'] ?>';
            if(err === '1') {
-               toasturl(tourl,mess);
+               toast(mess, function() {
+                   if (tourl !== '') {
+                       location.href = tourl;
+                   }
+               });
            }
 
            csrf = $("meta[name=csrf-token]").attr('content');
            $('#tixianbtn').bind('click', function() {
                $(this).addClass("btn-press").removeClass("btn-normal");
                if ($.trim($('#money').val()) == '') {
-                   toast(this,'提现金额不能为空');
+                   toast('提现金额不能为空');
                    $(this).removeClass("btn-press").addClass("btn-normal");
                    return false;
                }
                var reg = /^[0-9]+([.]{1}[0-9]{1,2})?$/;
                if (!reg.test($('#money').val())) {
-                   toast(this,'提现金额格式不正确');
+                   toast('提现金额格式不正确');
                    $(this).removeClass("btn-press").addClass("btn-normal");
                    return false;
                }
                if ($('#money').val() ==0 ) {
-                   toast(this,'提现金额不能为零');
+                   toast('提现金额不能为零');
                    $(this).removeClass("btn-press").addClass("btn-normal");
                    return false;
                }

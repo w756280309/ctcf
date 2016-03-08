@@ -39,17 +39,17 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
     function validateform() {
         $(this).addClass("btn-press").removeClass("btn-normal");
         if($('#real_name').val() == '') {
-            toast(this,'姓名不能为空');
+            toast('姓名不能为空');
             $(this).removeClass("btn-press").addClass("btn-normal");
             return false;
         }
         if($('#idcard').val() == '') {
-            toast(this,'身份证号不能为空');
+            toast('身份证号不能为空');
             $(this).removeClass("btn-press").addClass("btn-normal");
             return false;
         }
         if($('#idcard').val().length !== 18) {
-            toast(this, '身份证暂只支持18位');
+            toast('身份证暂只支持18位');
             $(this).removeClass("btn-press").addClass("btn-normal");
             return false;
         }
@@ -59,8 +59,12 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
        var err = '<?= $code ?>';
        var mess = '<?= $message ?>';
        var tourl = '<?= $tourl ?>';
-       if(err == '1') {
-           toasturl(tourl,mess);
+       if(err === '1') {
+           toast(mess, function() {
+                if (tourl !== '') {
+                    location.href = tourl;
+                }
+           });
        }
 
        csrf = $("meta[name=csrf-token]").attr('content');
@@ -91,7 +95,11 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
                     location.href = data.tourl;
                 });
             } else {
-                toast(form, data.message);
+                toast(data.message, function() {
+                    if (typeof data.tourl !== 'undefined') {
+                        location.href = data.tourl;
+                    }
+                });
             }
 
         });
@@ -101,13 +109,13 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
                 ? jqXHR.responseJSON.message
                 : '未知错误，请刷新重试或联系客服';
 
-            toast(null, errMsg);
+            toast(errMsg);
             $('#idcardbtn').attr('disabled', false);
         });
     }
 
     function alertTrue(trued) {
-        var chongzhi = $('<div class="mask" style="display: block"></div><div class="bing-info show"> <div class="bing-tishi">开通成功</div> <p class="tishi-p">支付密码将会以短信的形式发送到您的手机上,请注意查收并妥善保存。支付密码为6位随机数,可根据短信内容修改密码</p > <div class="bind-btn"> <span class="true">下一步</span> </div> </div>');
+        var chongzhi = $('<div class="mask" style="display: block"></div><div class="bing-info show"> <div class="bing-tishi">开通成功</div> <p class="tishi-p" style="line-height: 20px;">支付密码将会以短信的形式发送到您的手机上,请注意查收并妥善保存。支付密码为6位随机数,可根据短信内容修改密码</p > <div class="bind-btn"> <span class="true">下一步</span> </div> </div>');
         $(chongzhi).insertAfter($('form'));
         $('.bing-info').on('click', function () {
             $(chongzhi).remove();

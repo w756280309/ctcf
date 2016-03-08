@@ -65,30 +65,30 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset', 'positi
        csrf = $("meta[name=csrf-token]").attr('content');
        $('#editpassbtn').bind('click', function() {
             if ($('#password').val() === '') {
-                toast(this, '原密码不能为空');
+                toast('原密码不能为空');
                 return false;
             }
             if ($('#password').val().length < 6 || $('#password').val().length > 20) {
-                toast(this, '原密码输入长度错误');
+                toast('原密码输入长度错误');
                 return false;
             }
             if ($('#new_pass').val() === '') {
-                toast(this,'新密码不能为空');
+                toast('新密码不能为空');
                 return false;
             }
             if($('#new_pass').val().length<6 || $('#new_pass').val().length>20){
-                toast(this, '新密码输入长度错误');
+                toast('新密码输入长度错误');
                 return false;
             }
             var reg = /[a-zA-Z]/;
             var reg2 = /[0-9]/;
             if (!(-1 === $('#new_pass').val().indexOf(' ') && reg.test($('#new_pass').val()) && reg2.test($('#new_pass').val()))) {
-                toast(this, '新密码请至少输入字母与数字组合');
+                toast('新密码请至少输入字母与数字组合');
                 $("#signup-btn").removeClass("btn-press").addClass("btn-normal");
                 return false;
             }
             if($('#sms').val() === ''){
-                toast(this, '验证码不能为空');
+                toast('验证码不能为空');
                 return false;
             }
 
@@ -98,7 +98,7 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset', 'positi
             $(this).removeClass("btn-normal").addClass("btn-press");
             var xhr = $.post($('#editpassform').attr("action"), vals, function (data) {
                 if (data.code !== 0) {
-                    toast('', data.message, function() {
+                    toast(data.message, function() {
                         $('#editpassform-verifycode-image').click();
                     });
                 } else {
@@ -132,7 +132,7 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset', 'positi
     //只有确定按钮的弹窗
     function alertTrueVal(val,trued)
         {
-            var chongzhi = $('<div class="mask" style="display:block;"></div><div class="bing-info show"> <div class="bing-tishi">温馨提示</div> <p class="tishi-p">' + val + '</p > <div class="bind-btn"> <span class="true">我知道了</span> </div> </div>');
+            var chongzhi = $('<div class="mask" style="display:block;"></div><div class="bing-info show"> <div class="bing-tishi">温馨提示</div> <p class="tishi-p" style="line-height: 20px;">' + val + '</p > <div class="bind-btn"> <span class="true">我知道了</span> </div> </div>');
             $(chongzhi).insertAfter($('form'));
             $('.bing-info').on('click', function ()
             {

@@ -10,7 +10,7 @@ $(function () {
         e.preventDefault();
 
         if ($('#money').val() == '') {
-            toast(this, '投资金额不能为空');
+            toast('投资金额不能为空');
             return false;
         }
 
@@ -18,9 +18,9 @@ $(function () {
         var vals = $("#orderform").serialize();
         var xhr = $.post($("#orderform").attr("action"), vals, function (data) {
             if (data.code == 0) {
-                toast(this, '转入联动优势');
+                toast('转入联动优势');
             } else {
-                toast(this, data.message);
+                toast(data.message);
             }
             if (data.tourl != undefined) {
                 setTimeout(function() {

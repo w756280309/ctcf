@@ -2,6 +2,7 @@
 
 $this->title="绑定银行卡";
 $this->registerJsFile('/js/jquery.js', ['position' => 1]);
+$this->registerJsFile('/js/common.js', ['position' => 1]);
 $this->registerJsFile('/js/qpay.js', ['position' => 1]);
 
 ?>
@@ -43,7 +44,7 @@ $this->registerJsFile('/js/qpay.js', ['position' => 1]);
     <input name="_csrf" type="hidden" id="_csrf" value="<?= Yii::$app->request->csrfToken ?>">
     <div class="row kahao">
         <div class="col-xs-3 xian">卡号</div>
-        <div class="col-xs-9 xian"><input id="card_no" type="text" name='QpayBinding[card_number]' placeholder="请输入银行卡号" AUTOCOMPLETE="on"/></div>
+        <div class="col-xs-9 xian"><input id="card_no" type="tel" name='QpayBinding[card_number]' placeholder="请输入银行卡号" AUTOCOMPLETE="on"/></div>
     </div>
 
     <div class="row kahao">
@@ -96,8 +97,12 @@ $this->registerJsFile('/js/qpay.js', ['position' => 1]);
         var err = '<?= $data['code'] ?>';
         var mess = '<?= $data['message'] ?>';
         var tourl = '<?= $data['tourl'] ?>';
-        if (err == '1') {
-            toasturl(tourl,mess);
+        if (err === '1') {
+            toast(mess, function() {
+                if (tourl !== '') {
+                    location.href = tourl;
+                }
+            });
             return;
         }
 

@@ -65,23 +65,23 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
         var csrf;
         function validateform(){
             if($.trim($('#fund').val()) == '') {
-                toast(this,'充值金额不能为空');
+                toast('充值金额不能为空');
                 $(this).removeClass("btn-press").addClass("btn-normal");
                 return false;
             }
             if ($('#fund').val() == 0) {
-                toast(this,'充值金额不能为零');
+                toast('充值金额不能为零');
                 $(this).removeClass("btn-press").addClass("btn-normal");
                 return false;
             }
             var reg = /^[0-9]+([.]{1}[0-9]{1,2})?$/;
             if (!reg.test($('#fund').val())) {
-                toast(this,'充值金额格式不正确');
+                toast('充值金额格式不正确');
                 $(this).removeClass("btn-press").addClass("btn-normal");
                 return false;
             }
             if ($('#fund').val() > <?= $param['single'] * 10000 ?>) {
-                toast(this,'充值金额超过银行单笔限额');
+                toast('充值金额超过银行单笔限额');
                 $(this).removeClass("btn-press").addClass("btn-normal");
                 return false;
             }
@@ -92,7 +92,11 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
            var mess = '<?= $data['message'] ?>';
            var tourl = '<?= $data['tourl'] ?>';
            if(err === '1') {
-               toasturl(tourl,mess);
+               toast(mess, function() {
+                   if (tourl !== '') {
+                       location.href = tourl;
+                   }
+               });
                return;
            }
 
@@ -130,7 +134,7 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
                     ? jqXHR.responseJSON.message
                     : '未知错误，请刷新重试或联系客服';
 
-                toast(null, errMsg);
+                toast(errMsg);
                 $('#rechargebtn').attr('disabled', false);
             });
         }

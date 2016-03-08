@@ -86,56 +86,56 @@ frontend\assets\WapAsset::register($this);
         function subsignup() {
             $("#signup-btn").addClass("btn-press").removeClass("btn-normal");
             if ($('#iphone').val() == '') {
-                toast(this, '手机号不能为空');
+                toast('手机号不能为空');
                 $("#signup-btn").removeClass("btn-press").addClass("btn-normal");
                 return false;
             }
             var reg = /[a-zA-Z]/;
             var reg2 = /[0-9]/;
             if (!(-1 === $('#pass').val().indexOf(' ') && reg.test($('#pass').val()) && reg2.test($('#pass').val()))) {
-                toast(this, '请至少输入字母与数字组合');
+                toast('请至少输入字母与数字组合');
                 $("#signup-btn").removeClass("btn-press").addClass("btn-normal");
                 return false;
             }
             if ($('#pass').val() == '') {
-                toast(this, '密码不能为空');
+                toast('密码不能为空');
                 $("#signup-btn").removeClass("btn-press").addClass("btn-normal");
                 return false;
             }
             if ($("#captchaCode").val() === '') {
-                toast(this, '图形验证码不能为空');
+                toast('图形验证码不能为空');
                 $("#signup-btn").removeClass("btn-press").addClass("btn-normal");
                 return false;
             }
             if ($("#captchaCode").val().length !== 4) {
-                toast(this, '图形验证码必须为4位字符');
+                toast('图形验证码必须为4位字符');
                 $("#signup-btn").removeClass("btn-press").addClass("btn-normal");
                 return false;
             }
             if ($('#yanzhengma').val() == '') {
-                toast(this, '手机验证码不能为空');
+                toast('手机验证码不能为空');
                 $("#signup-btn").removeClass("btn-press").addClass("btn-normal");
                 return false;
             }
             if ($('#yanzhengma').val().length != 6) {
-                toast(this, '手机验证码必须为6位字符');
+                toast('手机验证码必须为6位字符');
                 $("#signup-btn").removeClass("btn-press").addClass("btn-normal");
                 return false;
             }
             var tel = $('#iphone').val();
             reg = /^0?1[3|4|5|6|8][0-9]\d{8}$/;
             if (!reg.test(tel)) {
-                toast(this, '手机号格式错误');
+                toast('手机号格式错误');
                 $("#signup-btn").removeClass("btn-press").addClass("btn-normal");
                 return false;
             }
             if ($('#pass').val().length < 6) {
-                toast(this, '密码长度最少6位');
+                toast('密码长度最少6位');
                 $("#signup-btn").removeClass("btn-press").addClass("btn-normal");
                 return false;
             }
             if ($('#xieyi').attr('checked') != 'checked') {
-                toast(this, '请查看用户注册协议');
+                toast('请查看用户注册协议');
                 $("#signup-btn").removeClass("btn-press").addClass("btn-normal");
                 return false;
             }
@@ -183,12 +183,12 @@ frontend\assets\WapAsset::register($this);
             $('#yzm').bind('click', function ()
             {
                 if ($("#captchaCode").val() === '') {
-                    toast(this, '图形验证码不能为空');
+                    toast('图形验证码不能为空');
                     $("#signup-btn").removeClass("btn-press").addClass("btn-normal");
                     return false;
                 }
                 if ($("#captchaCode").val().length !== 4) {
-                    toast(this, '图形验证码必须为4位字符');
+                    toast('图形验证码必须为4位字符');
                     $("#signup-btn").removeClass("btn-press").addClass("btn-normal");
                     return false;
                 }

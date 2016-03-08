@@ -53,7 +53,11 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
         var mess = '<?= $data['message'] ?>';
         var tourl = '<?= $data['tourl'] ?>';
         if ('1' === err) {
-            toasturl(tourl, mess);
+            toast(mess, function() {
+                if (tourl !== '') {
+                    location.href = tourl;
+                }
+            });
         }
 
         $('#editpassbtn').bind('click', function() {
@@ -66,7 +70,7 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
 
             xhr.done(function(data) {
                 if (data.message !== undefined) {
-                    toast(form, data.message, function() {
+                    toast(data.message, function() {
                         $('#editpassbtn').attr('disabled', false);
                     });
                 }
@@ -77,7 +81,7 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
                     ? jqXHR.responseJSON.message
                     : '未知错误，请刷新重试或联系客服';
 
-                toast(null, errMsg);
+                toast(errMsg);
                 $('#rechargebtn').attr('disabled', false);
             });
         });
