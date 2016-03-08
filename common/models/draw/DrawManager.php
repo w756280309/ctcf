@@ -105,7 +105,8 @@ class DrawManager
 
         SmsMessage::initSms(
              $user,
-             [$user->real_name,  date('Y-m-d H:i', $draw->created_at)], Yii::$app->params['sms']['tixian_apply'], 'T+1', Yii::$app->params['contact_tel']
+             [$user->real_name,  date('Y-m-d H:i', $draw->created_at), $draw->money, 'T+1', Yii::$app->params['contact_tel']],
+             Yii::$app->params['sms']['tixian_apply']
          )->save(false);
         $transaction->commit();
 
