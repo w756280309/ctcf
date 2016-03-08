@@ -2,11 +2,11 @@
 
 namespace common\models\sms;
 
-use Yii;
 use yii\behaviors\TimestampBehavior;
+use common\models\user\User;
 
-class SmsMessage extends \yii\db\ActiveRecord {
-
+class SmsMessage extends \yii\db\ActiveRecord
+{
     const STATUS_WAIT = 0;
     const STATUS_SENT = 1; //已发送
     const STATUS_FAIL = 2; //失败
@@ -14,9 +14,9 @@ class SmsMessage extends \yii\db\ActiveRecord {
     const LEVEL_HIGH = 1;//等级高
     const LEVEL_MIDDLE = 2;
     const LEVEL_LOW = 3;
-    
+
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function behaviors()
     {
@@ -24,31 +24,56 @@ class SmsMessage extends \yii\db\ActiveRecord {
             TimestampBehavior::className(),
         ];
     }
-    
+
     /**
      * @表名
      */
-    public static function tableName() {
+    public static function tableName()
+    {
         return 'sms_message';
     }
 
     /**
      * @验证规则
      */
-    public function rules() {
+    public function rules()
+    {
         return [
             [['uid', 'template_id', 'mobile', 'message'], 'required'],
             ['status', 'default', 'value' => 0],
-            ['level', 'default', 'value' => self::LEVEL_LOW]
+            ['level', 'default', 'value' => self::LEVEL_LOW],
         ];
     }
 
     /**
-     * labels
+     * labels.
      */
-    public function attributeLabels() {
+    public function attributeLabels()
+    {
         return [
         ];
     }
 
+    /**
+     * 初始化短信对象
+     *
+     * @param User  $user
+     * @param array $message
+     * @param type  $template_id
+     * @param type  $level
+     *
+     * @return smsMessage
+     */
+    public static function initSms(User $user, array $message, $template_id, $level = self::LEVEL_MIDDLE)
+    {
+        $smsmsg = new self([
+                'uid' => $user->id,
+                'template_id' => $template_id,
+                'mobile' => $user->mobile,
+                'level' => $level,
+                'message' => json_encode($message),
+            ]);
+
+        return $smsmsg;
+    }
 }

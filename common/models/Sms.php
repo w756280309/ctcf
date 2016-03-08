@@ -11,9 +11,9 @@ namespace common\models;
  */
 class Sms
 {
-	private $AccountSid = '8a48b5514ab8cc53014ab974defc00d3';             //主账户id
-	private $AccountToken ='0028f468217049b089e97f065b562de8';            //主账户授权令牌
-	private $AppId = 'aaf98f894abd623b014abd74336e0001';                  //应用id  
+	private $AccountSid = '8a48b551525cdd33015261e8d0d00b3f';             //主账户id
+	private $AccountToken ='e8d03fa22d77482280daadcfb90c5fc6';            //主账户授权令牌
+	private $AppId = '8a48b551525cdd3301526207479a0bcc';                  //应用id  
 	private $ServerIP= 'app.cloopen.com';                                 //服务器地址
 	private $ServerPort= '8883';                                          //服务器端口
 	private $SoftVersion= '2013-12-26';                                   //API版本

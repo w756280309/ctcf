@@ -1,4 +1,5 @@
 <?php
+
 namespace common\models\draw;
 
 use Yii;
@@ -6,15 +7,16 @@ use common\models\user\DrawRecord;
 use common\models\user\MoneyRecord;
 use common\lib\bchelp\BcRound;
 use common\models\user\UserAccount;
-use common\models\draw\DrawException;
+use common\models\sms\SmsMessage;
 
 /**
- * draw form
+ * draw form.
  */
 class DrawManager
 {
     /**
-     * 创建一个提现申请
+     * 创建一个提现申请.
+     *
      * @param type $account
      * @param type $money
      * @param type $fee
@@ -35,7 +37,7 @@ class DrawManager
         $draw->bank_id = $ubank->bank_id;
         $draw->bank_name = $ubank->bank_name;
         $draw->bank_account = $ubank->card_number;
-        $draw->identification_type= $ubank->account_type;
+        $draw->identification_type = $ubank->account_type;
         $draw->identification_number = $user->idcard;
         $draw->user_bank_id = $ubank->id;
         $draw->mobile = $user->mobile;
@@ -48,12 +50,12 @@ class DrawManager
     }
 
     /**
-     * 修改提现申请的状态为已受理
+     * 修改提现申请的状态为已受理.
      */
     public static function ackDraw(DrawRecord $draw)
     {
-        if (DrawRecord::STATUS_ZERO !== (int)$draw->status) {
-            throw new DrawException("审核受理失败,提现申请状态异常");            
+        if (DrawRecord::STATUS_ZERO !== (int) $draw->status) {
+            throw new DrawException('审核受理失败,提现申请状态异常');
         }
         $user = $draw->user;
         $fee = $draw->fee;
@@ -63,7 +65,7 @@ class DrawManager
         $draw->status = DrawRecord::STATUS_EXAMINED;
         if (!$draw->save(false)) {
             $transaction->rollBack();
-            throw new DrawException("审核受理失败");
+            throw new DrawException('审核受理失败');
         }
 
         //录入money_record记录
@@ -88,37 +90,43 @@ class DrawManager
 
         if (!$money_record->save() || !$mrecord->save()) {
             $transaction->rollBack();
-            throw new DrawException("提现申请失败");
+            throw new DrawException('提现申请失败');
         }
 
         //录入user_acount记录
         $account->available_balance = $account->available_balance;
         $account->freeze_balance = $bc->bcround(bcadd($account->freeze_balance, bcadd($draw->money, $fee)), 2);
         $account->out_sum = $bc->bcround(bcadd($account->out_sum, bcadd($draw->money, $fee)), 2);
-        
+
         if (!$account->save()) {
             $transaction->rollBack();
-            throw new DrawException("提现申请失败");
+            throw new DrawException('提现申请失败');
         }
 
+        SmsMessage::initSms(
+             $user,
+             [$user->real_name,  date('Y-m-d H:i', $draw->created_at)], Yii::$app->params['sms']['tixian_apply'], 'T+1', Yii::$app->params['contact_tel']
+         )->save(false);
         $transaction->commit();
+
         return $draw;
     }
 
     /**
-     * 确定提现完成
+     * 确定提现完成.
+     *
      * @param type $draw
      */
     public static function commitDraw(DrawRecord $draw)
     {
         if ((int) $draw->status !== DrawRecord::STATUS_EXAMINED) {
-            throw new DrawException("必须是受理成功的");
+            throw new DrawException('必须是受理成功的');
         }
 
         $resp = \Yii::$container->get('ump')->getDrawInfo($draw);
         if ($resp->isSuccessful()) {
             $bc = new BcRound();
-            if (2 === (int)$resp->get('tran_state')) {
+            if (2 === (int) $resp->get('tran_state')) {
                 $transaction = Yii::$app->db->beginTransaction();
                 $money = bcadd($draw->money, $draw->fee);
                 $userAccount = UserAccount::find()->where('uid = '.$draw->uid)->one();
@@ -140,20 +148,23 @@ class DrawManager
                 } else {
                     $transaction->rollBack();
                 }
-            } else if ((int)$resp->get('tran_state') === 3 || (int)$resp->get('tran_state') === 5 || (int)$resp->get('tran_state') === 15) {//失败的代码
+            } elseif ((int) $resp->get('tran_state') === 3 || (int) $resp->get('tran_state') === 5 || (int) $resp->get('tran_state') === 15) {
+                //失败的代码
                 self::cancel($draw, DrawRecord::STATUS_DENY);
             }
         }
     }
 
     /**
-     *
      * @param DrawRecord $draw
-     * @param type $status
+     * @param type       $status
+     *
      * @return DrawRecord
+     *
      * @throws DrawException
      */
-    public static function cancel(DrawRecord $draw, $status) {
+    public static function cancel(DrawRecord $draw, $status)
+    {
         $user = $draw->user;
         $account = $user->type == 1 ? $user->lendAccount : $user->borrowAccount;
 
@@ -164,7 +175,7 @@ class DrawManager
         $draw->status = $status;
         if (!$draw->save(false)) {
             $transaction->rollBack();
-            throw new DrawException("审核失败");
+            throw new DrawException('审核失败');
         }
         if (DrawRecord::STATUS_DENY === (int) $status) { //处理如果不通过的情况
             $account->available_balance = $bc->bcround(bcadd($account->available_balance, $draw->money), 2);
@@ -191,11 +202,11 @@ class DrawManager
             $account->freeze_balance = $bc->bcround(bcsub($account->freeze_balance, $draw->money), 2);
             if (!$money_record->save() || !$account->save() || (null !== $fee_record && !$fee_record->save(false))) {
                 $transaction->rollBack();
-                throw new DrawException("审核失败");
+                throw new DrawException('审核失败');
             }
         }
         $transaction->commit();
+
         return $draw;
     }
-
 }

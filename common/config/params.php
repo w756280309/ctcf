@@ -49,13 +49,15 @@ return [
     ],
     'bank' => require(__DIR__.'/banks.php'),
     'sms' => [
-        'manbiao' => 60752,
+        'manbiao' => 71622,
         'tixian_succ' => 60753,
         'tixian_err' => 60757,
-        'toubiao' => 60760,
+        'tixian_apply' => 71400,
+        'toubiao' => 70040,
         'recharge' => 60764,
         'huikuan' => 60766,
-        'yzm' => 12552
+        'yzm' => 70052,
+        'forget' => 70036
     ],
     'contact_tel' => '400-101-5151',
     'white_list' => ['15810036547','18518154492'],

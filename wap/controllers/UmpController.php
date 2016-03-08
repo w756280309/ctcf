@@ -201,5 +201,18 @@ class UmpController extends Controller
         //$r = \common\models\order\OrderTx::initForOrder($ord);
         //var_dump($r);
     }
+    
+    public function actionSms()
+    {
+        $sms = new \common\models\sms\SmsMessage([
+                    'uid' => 1,
+                    'template_id' => 70036,
+                    'mobile' => '15810036547',
+                    'level' => 1,
+                    'message' => json_encode([1234])
+                ]);
+                //$sms->save();            
+                \Yii::$container->get('sms')->send($sms);
+    }
 
 }

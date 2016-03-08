@@ -21,7 +21,7 @@ class SmsService {
 
     /**
      * 生成短信验证码
-     * @param $type,$uid
+     * @param $type,$uid $type=1注册$type=2找回密码
      * @return boolean
      */
     public static function createSmscode($type=3,$phone=null,$uid=null) {
@@ -63,19 +63,32 @@ class SmsService {
         $model->end_time = $time + $model->time_len * 60;
         $res = $model->save();
         if($res) {
-            $message = [
-                $model->code,
-                $model->time_len
-            ];
-            $sms = new SmsMessage([
-                'uid' => empty($user)?0:$user->id,
-                'template_id' => Yii::$app->params['sms']['yzm'],
-                'mobile' => $model->mobile,
-                'level' => SmsMessage::LEVEL_HIGH,
-                'message' => json_encode($message)
-            ]);
-            //$sms->save();
-            \Yii::$container->get('sms')->send($sms);
+            $message = [];
+            $template_id = null;
+            if (1 === (int)$type) {
+                $message = [
+                    $model->code,
+                    $model->time_len
+                ];    
+                $template_id = Yii::$app->params['sms']['yzm'];
+            } else if (2 === (int)$type) {
+                $message = [
+                    $model->code,
+                ];
+                $template_id = Yii::$app->params['sms']['forget'];
+            }
+            
+            if (!empty($message)) {
+                $sms = new SmsMessage([
+                    'uid' => empty($user)?0:$user->id,
+                    'template_id' => $template_id,
+                    'mobile' => $model->mobile,
+                    'level' => SmsMessage::LEVEL_HIGH,
+                    'message' => json_encode($message)
+                ]);
+                //$sms->save();            
+                \Yii::$container->get('sms')->send($sms);
+            }
             return ['code' => 0, 'message' => ''];
         } else {
             return ['code' => 1, 'message' => '验证码生成超时'];
