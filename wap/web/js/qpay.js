@@ -7,21 +7,22 @@ function toast(btn, val) {
             + '</div>'
             );
     $alert.appendTo('body');
+    $alert.find('div').width($alert.width());
     setTimeout(function () {
         $alert.fadeOut(500, function () {
             $alert.remove();
         });
-    }, 2000);
+    }, 2000000);
 }
 
 function toasturl(url, val) {
-    var $kahao = $('<div class="error-info" style="display: block"><div>' + val + '</div></div>')
+    var $alert = $('<div class="error-info" style="display: block;"><div>' + val + '</div></div>')
             .insertAfter($('form'));
-
+    $alert.find('div').width($alert.width());
     setTimeout(function () {
-        $kahao.fadeOut();
+        $alert.fadeOut();
         setTimeout(function () {
-            $kahao.remove();
+            $alert.remove();
             window.location.href = url;
         }, 200);
     }, 2000);

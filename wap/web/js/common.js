@@ -140,12 +140,13 @@ function subForm(form, button, falsed)
 //toast('.notice','您输入的卡号有误');
 function toast(btn, val, active)
 {
-    var kahao = $('<div class="error-info" style="display: block"><div>' + val + '</div></div>');
-    $(kahao).insertAfter($('form'));
+    var $alert = $('<div class="error-info"><div>' + val + '</div></div>');
+    $alert.insertAfter($('form'));
+    $alert.find('div').width($alert.width());
     setTimeout(function () {
-        $(kahao).fadeOut();
+        $alert.fadeOut();
         setTimeout(function () {
-            $(kahao).remove();
+            $alert.remove();
         }, 200);
         active();
     }, 2000);
@@ -154,12 +155,13 @@ function toast(btn, val, active)
 //没有遮罩的弹窗有页面跳转
 //toast('.notice','您输入的卡号有误');
 function toasturl(url, val, active) {
-    var kahao = $('<div class="error-info" style="display: block"><div>' + val + '</div></div>');
-    $(kahao).insertAfter($('form'));
+    var $alert = $('<div class="error-info"><div>' + val + '</div></div>');
+    $alert.insertAfter($('form'));
+    $alert.find('div').width($alert.width());
     setTimeout(function () {
-        $(kahao).fadeOut();
+        $alert.fadeOut();
         setTimeout(function () {
-            $(kahao).remove();
+            $alert.remove();
             window.location.href = url;
         }, 200);
     }, 2000);
