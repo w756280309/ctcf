@@ -16,7 +16,7 @@ class DrawnotifyController extends Controller
     public function actionNotify()
     {
         $data = Yii::$app->request->get();
-        TradeLog::initLog(2, $data, $data['sign']);
+        TradeLog::initLog(2, $data, $data['sign'])->save();
         $ump = Yii::$container->get('ump');
         $err = '0000';
         $errMsg = 'No err';
