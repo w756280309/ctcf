@@ -125,10 +125,10 @@ $pc_cat = Yii::$app->params['pc_cat'];
                                             <?php if ($val['online_status'] == 1 && $val['status'] > 1){ ?>
                                             | <a href="/order/onlineorder/list?id=<?= $val['id'] ?>" class="btn mini green"><i class="icon-edit"></i> 投标记录</a>
                                             <?php } ?>
-                                            <?php if ($val['status'] == 5||$val['status'] == 6){ ?>
+                                            <?php if (($val['status'] == 5 || $val['status'] == 6) && $val['fstatus'] !== '3') { ?>
                                             | <a href="/repayment/repayment?pid=<?= $val['id'] ?>" class="btn mini green"><i class="icon-edit"></i> 还款</a>
                                             <?php } ?>
-                                            <?php if (($val['fk_examin_time'])>0&&($val['status'] == 3||$val['status'] == 7)){ ?>
+                                            <?php if (($val['fk_examin_time']) > 0 && ($val['status'] == 3 || $val['status'] == 7 || $val['fstatus'] === '3')){ ?>
                                             | <a href="javascript:fk('<?= $val['id'] ?>');" class="btn mini green"><i class="icon-edit"></i> 放款</a>
                                             <?php } ?>
                                             <?php if ($val['online_status']==1&&(in_array($val['status'],[3,5,7]))&&$val['is_jixi']==0){ ?>
