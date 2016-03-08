@@ -1,49 +1,19 @@
-function toast(btn, val) {
-    var $alert = $(
-            '<div class="error-info" style="display: block;">'
-            + '<div>'
-            + val
-            + '</div>'
-            + '</div>'
-            );
-    $alert.appendTo('body');
-    $alert.find('div').width($alert.width());
-    setTimeout(function () {
-        $alert.fadeOut(500, function () {
-            $alert.remove();
-        });
-    }, 2000000);
-}
-
-function toasturl(url, val) {
-    var $alert = $('<div class="error-info" style="display: block;"><div>' + val + '</div></div>')
-            .insertAfter($('form'));
-    $alert.find('div').width($alert.width());
-    setTimeout(function () {
-        $alert.fadeOut();
-        setTimeout(function () {
-            $alert.remove();
-            window.location.href = url;
-        }, 200);
-    }, 2000);
-}
-
 function validateBinding() {
     if ($.trim($('#card_no').val()) == '') {
-        toast(null, '银行卡号不能为空');
+        toast('银行卡号不能为空');
         return false;
     }
     var reg = /^[0-9]{16,19}$/;
     if (!reg.test($.trim($('#card_no').val()))) {
-        toast(null, '你输入的银行卡号有误');
+        toast('你输入的银行卡号有误');
         return false;
     }
     if ($('#bank_name').val() == '') {
-        toast(null, '开户行不能为空');
+        toast('开户行不能为空');
         return false;
     }
     if ($('#phone').val() == '') {
-        toast(null, '手机号码不能为空');
+        toast('手机号码不能为空');
         return false;
     }
     return true;
@@ -74,7 +44,7 @@ $(function () {
                 );
 
         xhr.done(function (data) {
-            toast(null, '转入联动优势进行绑卡操作');
+            toast('转入联动优势进行绑卡操作');
             setTimeout(function () {
                 window.location.href = data.next;
             }, 1500);
@@ -85,7 +55,7 @@ $(function () {
                     ? jqXHR.responseJSON.message
                     : '未知错误，请刷新重试或联系客服';
 
-            toast(null, errMsg);
+            toast(errMsg);
         });
 
         xhr.always(function () {

@@ -1,49 +1,48 @@
 <?php
 $this->title="合同说明";
 ?>
- <link rel="stylesheet" href="/css/bind.css"/>
  <link rel="stylesheet" href="/css/licai.css"/>
  <link rel="stylesheet" href="/css/swiper.min.css">
  <script src="/js/jquery.js"></script>
  <script src="/js/swiper.min.js"></script>
  <script src="/js/licai.js"></script>
-  <style>
-     .column {
-        position: relative;
-        height: auto;
-        background: #fff;
-        margin-top: 10px;
-        margin-bottom: 10px;
-        cursor: pointer;
-        overflow: hidden;
-    }
-    .agrname {
-        margin-top: 24px;
-        margin-left: 135px;
-        margin-bottom: 18px;
-        margin-right: 135px;
-    }
-    .content {
-        margin-left: 30px;
-        margin-right: 30px;
-        color: #3d3a3b;
-        font-size: 26px;
-    }
+ <style>
+     .container-text {
+         padding:4px 10px 64px;
+         font-size: 12px;
+         background: #fff;
+         font-family:"微软雅黑", Arial
+     }
+     .list-txt{
+         margin:1px 0 3px;
+         font-size: 12px;
+         color:#3e3a39;
+         line-height: 18px;
+     }
  </style>
-    
     <!-- Swiper -->
-    <div class="swiper-container">
-        <div class="swiper-wrapper">
+    <div class="swiper-container" style="line-height: 18px;">
+        <div class="swiper-wrapper" >
             <?php foreach($model as $key => $val): ?>
             <div class="swiper-slide <?= $key_f == $key?"dian":"" ?>" onclick="window.location.href='/order/order/agreement?id=<?= $val['pid'] ?>&key=<?= $key ?>'"><?= Yii::$app->functions->cut_str($val['name'],5,0,'**') ?></div>
             <?php endforeach; ?>
         </div>
     </div>
-    <div class="column">
-        <div class="agrname"><center><p style="font-size: 26px;color: #000000;"><?= $model[$key]['name'] ?></center></div>
-        <div class="content"><?= html_entity_decode($content) ?></div>
+    <div class="container-text">
+        <div class="row">
+            <div class="col-xs-1"></div>
+            <div class="col-xs-10">
+                <h4 class="agree_title"><?= $model[$key]['name'] ?></h4>
+            </div>
+            <div class="col-xs-1"></div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="list-txt"><?= html_entity_decode($content) ?></div>
+            </div>
+        </div>
     </div>
-    
+
     <!--footer-->
     <div class="row navbar-fixed-bottom footer">
         <div class="col-xs-4 footer-title">
