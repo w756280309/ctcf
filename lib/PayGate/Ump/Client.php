@@ -2,7 +2,6 @@
 
 namespace PayGate\Ump;
 
-use Yii;
 use Crypto\CryptoUtils;
 use GuzzleHttp\Client as HttpClient;
 use P2pl\BorrowerInterface;
@@ -45,7 +44,8 @@ class Client
     private $httpClient;
 
     /**
-     *client配置
+     *client配置.
+     *
      * @var type
      */
     private $clientOption;
@@ -64,7 +64,7 @@ class Client
      * @var string 联动API版本号
      */
     private $version = '1.0';
-    
+
     private $logAdapter;
 
     public function __construct($apiUrl, $merchantId, $clientKeyPath, $umpCertPath, $options, LoggerInterface $logAdapter)
@@ -120,6 +120,7 @@ class Client
             'is_find_account' => '01',
             'is_select_agreement' => '1',
         ];
+
         return $this->doRequest($data);
     }
 
@@ -163,13 +164,16 @@ class Client
             'is_open_fastPayment' => '1',
         ];
         $params = $this->buildQuery($data);
+
         return $this->apiUrl.'?'.$params;
     }
 
     /**
-     * 申请提现
+     * 申请提现.
+     *
      * @param WithdrawalInterface $draw
      * @param $channel 渠道识别标志 pc代表pc端
+     *
      * @return type
      */
     public function initDraw(WithdrawalInterface $draw, $channel = null)
@@ -180,12 +184,13 @@ class Client
             'notify_url' => $this->clientOption['draw_notify_url'],
             'sourceV' => 'HTML5',
             'order_id' => $draw->getTxSn(),
-            'mer_date' => date("Ymd", $draw->getTxDate()),
+            'mer_date' => date('Ymd', $draw->getTxDate()),
             'user_id' => $draw->getEpayUserId(),
             'amount' => $draw->getAmount() * 100,
-            'com_amt_type' => 1//前向手续费：交易方承担
+            'com_amt_type' => 1, //前向手续费：交易方承担
         ];
         $params = $this->buildQuery($data);
+
         return $this->apiUrl.'?'.$params;
     }
 
@@ -217,11 +222,12 @@ class Client
      *
      * @param string $loanId
      * @param int    $state
-     *  注：1建标状态修改为1失败
-     *      2跨状态修改失败
-     *      3建标状态修改状态值非法【00060700】请求的参数[project_state(123)]格式或值不正确
-     *      4建标状态修改不存在的标的编号【00240200】标的不存在
-     *      592-0-1-2-3-4,顺利进行的步骤
+     *                       注：1建标状态修改为1失败
+     *                       2跨状态修改失败
+     *                       3建标状态修改状态值非法【00060700】请求的参数[project_state(123)]格式或值不正确
+     *                       4建标状态修改不存在的标的编号【00240200】标的不存在
+     *                       592-0-1-2-3-4,顺利进行的步骤
+     *
      * @return Response
      */
     public function updateLoanState($loanId, $state)
@@ -297,8 +303,10 @@ class Client
     }
 
     /**
-     * 4.4.1 个人客户充值申请
+     * 4.4.1 个人客户充值申请.
+     *
      * @param QpayTxInterface $qpay
+     *
      * @return response
      */
     public function rechargeViaQpay(QpayTxInterface $qpay)
@@ -321,9 +329,11 @@ class Client
     }
 
     /**
-     * 4.4.1 个人客户网银充值申请
+     * 4.4.1 个人客户网银充值申请.
+     *
      * @param QpayTxInterface $qpay
-     * @param string $gateId 银行简码
+     * @param string          $gateId 银行简码
+     *
      * @return response
      */
     public function rechargeViaBpay(QpayTxInterface $qpay, $gateId)
@@ -349,7 +359,8 @@ class Client
 
     /**
      * 4.3.3 标的转账
-     * 用户投标
+     * 用户投标.
+     *
      * @param OrderTxInterface $ord
      */
     public function registerOrder(OrderTxInterface $ord)
@@ -370,12 +381,15 @@ class Client
             'amount' => $ord->getAmount() * 100,
         ];
         $params = $this->buildQuery($data);
+
         return $this->apiUrl.'?'.$params;
     }
 
     /**
-     * 4.3.3 标的转账【由标的账户转到借款人同步请求】
+     * 4.3.3 标的转账【由标的账户转到借款人同步请求】.
+     *
      * @param LoanFkInterface $fk
+     *
      * @return string
      */
     public function loanTransferToMer(LoanFkInterface $fk)
@@ -393,13 +407,15 @@ class Client
             'partic_user_id' => $fk->getBorrowerId(),
             'amount' => $fk->getAmount() * 100,
         ];
+
         return $this->doRequest($data);
     }
 
     /**
      * 4.5.1 订单交易查询接口.
      *
-     * @param OrderTxInterface $order   商户订单
+     * @param OrderTxInterface $order 商户订单
+     *
      * @return ret_code===0000 查询成功 tran_state:0初始,2成功,3失败,4不明,5交易关闭[超过七个自然日的初始状态会关闭],6其他
      */
     public function getOrderInfo(OrderTxInterface $order)
@@ -415,8 +431,10 @@ class Client
     }
 
     /**
-     * 4.3.3 标的转账【用于流标同步请求】
+     * 4.3.3 标的转账【用于流标同步请求】.
+     *
      * @param OrderTxInterface $ord
+     *
      * @return response
      */
     public function loanTransferToLender(OrderTxInterface $ord)
@@ -434,6 +452,7 @@ class Client
             'partic_user_id' => $ord->getEpayUserId(),
             'amount' => $ord->getAmount() * 100,
         ];
+
         return $this->doRequest($data);
     }
 
@@ -441,9 +460,9 @@ class Client
      * 4.4.2 融资方充值申请.
      *
      * @param QpayTxInterface $recharge 充值记录对象
-     * @param type           $payType  支付方式 取值范围：B2BBANK（企业网银）,B2CDEBITBANK（个人借记卡网银）
-     * @param type           $merId    被充值企业资金账户托管平台商户号
-     * @param type           $gateId   发卡行编号
+     * @param type            $payType  支付方式 取值范围：B2BBANK（企业网银）,B2CDEBITBANK（个人借记卡网银）
+     * @param type            $merId    被充值企业资金账户托管平台商户号
+     * @param type            $gateId   发卡行编号
      */
     public function OrgRechargeApply(QpayTxInterface $recharge, $payType, $merId, $gateId)
     {
@@ -471,6 +490,7 @@ class Client
      *
      * @param type $txSn   商户订单号
      * @param type $txDate 商户订单日期
+     *
      * @return ret_code===0000 查询成功 tran_state:0初始,2成功,3失败,4不明,5交易关闭[超过七个自然日的初始状态会关闭],6其他
      */
     public function getRechargeInfo($txSn, $txDate)
@@ -486,9 +506,10 @@ class Client
     }
 
     /**
-     * 4.5.1 提现交易查询接口(商户->平台)
+     * 4.5.1 提现交易查询接口(商户->平台).
+     *
      * @param WithdrawalInterface $draw
-     * return tran_state 成功状态2 失败状态3,5,15
+     *                                  return tran_state 成功状态2 失败状态3,5,15
      */
     public function getDrawInfo(WithdrawalInterface $draw)
     {
@@ -503,10 +524,11 @@ class Client
     }
 
     /**
-     * 4.4.6 融资用户提现申请(商户->平台)
-     * @param type $txSn 商户订单号
+     * 4.4.6 融资用户提现申请(商户->平台).
+     *
+     * @param type $txSn   商户订单号
      * @param type $txDate 商户订单日期
-     * @param type $merId 提现企业资金账户托管平台商户号
+     * @param type $merId  提现企业资金账户托管平台商户号
      * @param type $amount 提现金额
      */
     public function orgDrawApply(WithdrawalInterface $draw)
@@ -526,7 +548,9 @@ class Client
 
     /**
      * 4.2.13 充值交易密码
+     *
      * @param UserInterface $user
+     *
      * @return type
      */
     public function resetTradePass(UserInterface $user)
@@ -560,8 +584,10 @@ class Client
     }
 
     /**
-     * 生成流水串号
+     * 生成流水串号.
+     *
      * @param type $prefix
+     *
      * @return type
      */
     private function generateSn($prefix = '')
@@ -611,13 +637,23 @@ class Client
         // 签名
         $sign_data = $data['sign'] = $this->sign($data);
         $data['sign_type'] = $this->signType;
-        
+
         $httpResponse = $this->getHttpClient()->request('POST', null, [
             'form_params' => $data,
         ]);
         $prorp = $this->processHttpResponse($httpResponse);
         $endtime = microtime(true);
-        $this->logAdapter->log(1, $source_data, $sign_data, $prorp, $endtime-$starttime);
+        if (
+                'mer_register_person' === $rqData['service']
+                || 'mer_bind_project' === $rqData['service']
+                || 'mer_update_project' === $rqData['service']
+                || 'project_transfer' === $rqData['service']
+                || 'mer_withdrawals' === $rqData['service']
+                || 'mer_send_sms_pwd' === $rqData['service']
+         ) {
+            $this->logAdapter->log(1, $source_data, $sign_data, $prorp, $endtime - $starttime);
+        }
+
         return $prorp;
     }
 
@@ -635,7 +671,8 @@ class Client
         $sign_data = $data['sign'] = $this->sign($data);
         $data['sign_type'] = $this->signType;
         $endtime = microtime(true);
-        $this->logAdapter->log(1, $source_data, $sign_data, null, $endtime-$starttime);
+        $this->logAdapter->log(1, $source_data, $sign_data, null, $endtime - $starttime);
+
         return http_build_query($data);
     }
 

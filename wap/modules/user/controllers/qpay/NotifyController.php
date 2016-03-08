@@ -24,7 +24,7 @@ class NotifyController extends Controller
     public function actionFrontend()
     {
         $data = Yii::$app->request->get();
-        TradeLog::initLog(2, $data, $data['sign']);
+        TradeLog::initLog(2, $data, $data['sign'])->save();
         if (Yii::$container->get('ump')->verifySign($data) && '0000' === $data['ret_code']) {
             $bind = QpayBinding::findOne(['binding_sn' => $data['order_id'], 'status' => QpayBinding::STATUS_INIT]);
             if (null !== $bind) {
@@ -55,7 +55,7 @@ class NotifyController extends Controller
         $errmsg = "no error";
         $data = Yii::$app->request->get();
 
-        TradeLog::initLog(2, $data, $data['sign']);
+        TradeLog::initLog(2, $data, $data['sign'])->save();
         if (
             Yii::$container->get('ump')->verifySign($data)
             && 'mer_bind_card_notify' === $data['service']

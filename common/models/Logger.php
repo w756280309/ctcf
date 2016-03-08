@@ -19,16 +19,7 @@ class Logger implements \PayGate\Ump\LoggerInterface
      */
     public function log($direction = 1, $rqData = null, $rq = null, $rp = null, $duration = 0)
     {
-        if (
-                'mer_register_person' === $rqData['service']
-                || 'mer_bind_project' === $rqData['service']
-                || 'mer_update_project' === $rqData['service']
-                || 'project_transfer' === $rqData['service']
-                || 'mer_withdrawals' === $rqData['service']
-                || 'mer_send_sms_pwd' === $rqData['service']
-         ) {
-            $log = TradeLog::initLog($direction, $rqData, $rq, $rp, $duration);
-            $log->save();
-        }
+        $log = TradeLog::initLog($direction, $rqData, $rq, $rp, $duration);
+        $log->save();
     }
 }

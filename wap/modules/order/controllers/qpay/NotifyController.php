@@ -35,7 +35,7 @@ class NotifyController extends Controller
      */
     private function processing(array $data = [])
     {
-        TradeLog::initLog(2, $data, $data['sign']);
+        TradeLog::initLog(2, $data, $data['sign'])->save();
         if (
             Yii::$container->get('ump')->verifySign($data)
             && '0000' === $data['ret_code']
