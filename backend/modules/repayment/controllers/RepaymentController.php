@@ -88,7 +88,7 @@ class RepaymentController extends BaseController
         $pid = Yii::$app->request->post('pid');
         $qishu = Yii::$app->request->post('qishu');
         $deal = OnlineProduct::findOne(['id' => $pid]);
-        $days = $pp->LoanTimes(date('Y-m-d',$deal->jixi_time), null, time(), 'd', true);//计息天数  $deal->getSpanDays()项目天数
+        $days = $pp->LoanTimes(date('Y-m-d', $deal->jixi_time), null, time(), 'd', true);//计息天数  $deal->getSpanDays()项目天数
         $expires = $days['days'][1]['period']['days'];
         $saleac = UserAccount::findOne(['uid' => $deal->borrow_uid, 'type' => UserAccount::TYPE_BORROW]);
         $bcround = new BcRound();
@@ -124,11 +124,13 @@ class RepaymentController extends BaseController
             $record->refund_time = time();
             if (!$record->save()) {
                 $transaction->rollBack();
+
                 return ['result' => 0, 'message' => '还款失败，记录失败']; //
             }
             $order->status = OnlineRepaymentPlan::STATUS_YIHUAN;
             if (!$order->save()) {
                 $transaction->rollBack();
+
                 return ['result' => 0, 'message' => '还款失败，状态修改失败'];
             }
             $ua = UserAccount::findOne(['uid' => $order['uid'], 'type' => UserAccount::TYPE_LEND]);
@@ -140,6 +142,7 @@ class RepaymentController extends BaseController
             $ua->profit_balance = $bcround->bcround(bcadd($ua->profit_balance, $record->lixi), 2); //收益
             if (!$ua->save()) {
                 $transaction->rollBack();
+
                 return ['result' => 0, 'message' => '还款失败，投资人账户调整失败'];
             }
             //增加资金记录
@@ -150,10 +153,11 @@ class RepaymentController extends BaseController
             $money_record->uid = $order['uid'];
             $money_record->in_money = $record->benxi;
             $money_record->balance = $ua->available_balance;
-            $money_record->remark = "第" . $qishu . "期" . '本金:' . $order['benjin'] . '元;利息:' . $record->lixi . '元;';
+            $money_record->remark = '第'.$qishu.'期'.'本金:'.$order['benjin'].'元;利息:'.$record->lixi.'元;';
             $mrres = $money_record->save();
             if (!$mrres) {
                 $transaction->rollBack();
+
                 return ['result' => 0, 'message' => '还款失败，资金记录失败'];
             }
         }
@@ -162,6 +166,7 @@ class RepaymentController extends BaseController
         $balance = $bcround->bcround(bcsub($saleac->available_balance, $total_repayment), 2);
         if (0 >= bccomp($balance, 0)) {
             $transaction->rollBack();
+
             return ['result' => 0, 'message' => '账户余额不足'];
         }
         $saleac->account_balance = $bcround->bcround(bcsub($saleac->account_balance, $total_repayment), 2);
@@ -170,6 +175,7 @@ class RepaymentController extends BaseController
         $saleac->out_sum = $bcround->bcround(bcadd($saleac->out_sum, $total_repayment), 2);
         if (!$saleac->save()) {
             $transaction->rollBack();
+
             return ['result' => 0, 'message' => '账户余额扣款异常'];
         }
 
@@ -185,6 +191,7 @@ class RepaymentController extends BaseController
         $smrres = $smrecord->save();
         if (!$smrres) {
             $transaction->rollBack();
+
             return ['result' => 0, 'message' => '还款失败，资金记录失败'];
         }
 
@@ -192,17 +199,17 @@ class RepaymentController extends BaseController
         $data = $_repaymentrecord->all();
         $sms = new SmsMessage([
             'template_id' => Yii::$app->params['sms']['huikuan'],
-            'level' => SmsMessage::LEVEL_LOW
+            'level' => SmsMessage::LEVEL_LOW,
         ]);
 
         foreach ($data as $val) {
             $user = User::findOne($val->uid);
-            $data_arr = $_repaymentrecord->having(['uid' => $val['uid']])->select("sum(benjin) as benjin, sum(lixi) as lixi")->createCommand()->queryAll();
+            $data_arr = $_repaymentrecord->having(['uid' => $val['uid']])->select('sum(benjin) as benjin, sum(lixi) as lixi')->createCommand()->queryAll();
             $message = [
                 $user->real_name,
                 $data_arr[0]['benjin'],
                 $data_arr[0]['lixi'],
-                Yii::$app->params['contact_tel']
+                Yii::$app->params['contact_tel'],
             ];
 
             $_sms = clone $sms;
@@ -216,6 +223,7 @@ class RepaymentController extends BaseController
             $opres = OnlineProduct::updateAll(['status' => OnlineProduct::STATUS_OVER, 'sort' => 60], ['id' => $pid]);
             if (!$opres) {
                 $transaction->rollBack();
+
                 return ['result' => 0, 'message' => '还款失败，修改标的状态错误'];
             }
         }
@@ -234,61 +242,71 @@ class RepaymentController extends BaseController
         $product = OnlineProduct::findOne($pid);
         $fk = OnlineFangkuan::findOne(['online_product_id' => $pid]);
         if (!in_array($product->status, [OnlineProduct::STATUS_FULL, OnlineProduct::STATUS_FOUND])) {
-            return ['res' => 0, 'msg' => '标的状态异常，当前状态码：' . $product->status];
-        }
-        if (OnlineFangkuan::STATUS_EXAMINED !== (int)$fk->status) {
-            return ['res' => 0, 'msg' => '放款操作必须是审核通过的'];
+            return ['res' => 0, 'msg' => '标的状态异常，当前状态码：'.$product->status];
         }
         bcscale(14);
         $bcround = new BcRound();
-        $transaction = Yii::$app->db->beginTransaction();
-        try {
-            LoanService::updateLoanState($product, OnlineProduct::STATUS_HUAN);
-        } catch (\Exception $ex) {
-            $transaction->rollBack();
-            return ['res' => 0, 'msg' => $ex->getMessage()];
-        }
+        if (OnlineFangkuan::STATUS_EXAMINED === (int) $fk->status) {
+            $transaction = Yii::$app->db->beginTransaction();
+            try {
+                LoanService::updateLoanState($product, OnlineProduct::STATUS_HUAN);
+            } catch (\Exception $ex) {
+                $transaction->rollBack();
 
-        $ua = UserAccount::findOne(['uid' => $product->borrow_uid, 'type' => UserAccount::TYPE_BORROW]);
-        $ua->account_balance = $bcround->bcround(bcadd($ua->account_balance, $product->money), 2);
-        $ua->available_balance = $bcround->bcround(bcadd($ua->available_balance, $product->funded_money), 2);
-        $ua->drawable_balance = $bcround->bcround(bcadd($ua->drawable_balance, $product->money), 2);
-        $ua->in_sum = $bcround->bcround(bcadd($ua->in_sum, $product->money), 2);
-        if (!$ua->save()) {
-            $transaction->rollBack();
-            return ['res' => 0, 'msg' => '更新用户融资账户异常'];
-        }
-        OnlineFangkuan::updateAll(['status' => OnlineFangkuan::STATUS_FANGKUAN], ['online_product_id' => $pid]); //将所有放款批次变为已经放款
-        $mre_model = new MoneyRecord();
-        $mre_model->type = MoneyRecord::TYPE_FANGKUAN;
-        $mre_model->sn = MoneyRecord::createSN();
-        $mre_model->osn = $fk->sn;
-        $mre_model->account_id = $ua->id;
-        $mre_model->uid = $product->borrow_uid;
-        $mre_model->in_money = $fk->order_money;
-        $mre_model->remark = '已放款';
-        $mre_model->balance = $ua->available_balance;
-        if (!$mre_model->save()) {
-            $transaction->rollBack();
-            return ['res' => 0, 'msg' => '资金记录失败'];
-        }
+                return ['res' => 0, 'msg' => $ex->getMessage()];
+            }
 
-        $resp = Yii::$container->get('ump')->loanTransferToMer($fk);
-        if (!$resp->isSuccessful()) {
-            $transaction->rollBack();
-            return ['res' => 0, 'msg' => '联动一侧：'.$resp->get('ret_msg')];
-        }
-        $transaction->commit();
+            $ua = UserAccount::findOne(['uid' => $product->borrow_uid, 'type' => UserAccount::TYPE_BORROW]);
+            $ua->account_balance = $bcround->bcround(bcadd($ua->account_balance, $product->money), 2);
+            $ua->available_balance = $bcround->bcround(bcadd($ua->available_balance, $product->funded_money), 2);
+            $ua->drawable_balance = $bcround->bcround(bcadd($ua->drawable_balance, $product->money), 2);
+            $ua->in_sum = $bcround->bcround(bcadd($ua->in_sum, $product->money), 2);
+            if (!$ua->save()) {
+                $transaction->rollBack();
 
+                return ['res' => 0, 'msg' => '更新用户融资账户异常'];
+            }
+            OnlineFangkuan::updateAll(['status' => OnlineFangkuan::STATUS_FANGKUAN], ['online_product_id' => $pid]); //将所有放款批次变为已经放款
+           $mre_model = new MoneyRecord();
+            $mre_model->type = MoneyRecord::TYPE_FANGKUAN;
+            $mre_model->sn = MoneyRecord::createSN();
+            $mre_model->osn = $fk->sn;
+            $mre_model->account_id = $ua->id;
+            $mre_model->uid = $product->borrow_uid;
+            $mre_model->in_money = $fk->order_money;
+            $mre_model->remark = '已放款';
+            $mre_model->balance = $ua->available_balance;
+            if (!$mre_model->save()) {
+                $transaction->rollBack();
+
+                return ['res' => 0, 'msg' => '资金记录失败'];
+            }
+
+            $resp = Yii::$container->get('ump')->loanTransferToMer($fk);
+            if (!$resp->isSuccessful()) {
+                $transaction->rollBack();
+
+                return ['res' => 0, 'msg' => '联动一侧：'.$resp->get('ret_msg')];
+            }
+            $transaction->commit();
+        } elseif (OnlineFangkuan::STATUS_FANGKUAN === (int) $fk->status) {
+            //放款未执行提现的
+            //如果执行此步骤，将会执行提现,提现申请成功会修改放款状态为受理中STATUS_TIXIAN_APPLY
+        } elseif (OnlineFangkuan::STATUS_TIXIAN_SUCC === (int) $fk->status) {
+            return ['res' => 0, 'msg' => '放款金额已汇入借款人账户'];
+        } elseif (OnlineFangkuan::STATUS_TIXIAN_APPLY === (int) $fk->status) {
+            return ['res' => 0, 'msg' => '放款金额正在汇款中'];
+        } else {
+            return ['res' => 0, 'msg' => '放款操作必须是审核通过的'];
+        }
         $res = OnlinefangkuanController::actionInit($pid);
-
         if (1 === $res['res']) {
             return [
-                'res' => 1,
-                'msg' => '放款成功',
-            ];
+                 'res' => 1,
+                 'msg' => '放款成功',
+             ];
+        } else {
+            return $res;
         }
-
-        return $res;
     }
 }
