@@ -2,6 +2,11 @@
 $this->title="常见问题";
 ?>
 <link href="/css/about.css" rel="stylesheet">
+<style>
+ body {
+     background-color: #fff !important;
+ }
+</style>
 <!-- 主体 -->
 <div class="about-content ">
     <p class="problem-title">充值不成功？</p>

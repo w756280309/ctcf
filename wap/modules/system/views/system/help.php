@@ -2,6 +2,11 @@
 $this->title="新手帮助";
 ?>
  <link rel="stylesheet" href="/css/about.css">
+ <style>
+     body {
+         background-color: #fff !important;
+     }
+ </style>
 <!-- 主体 -->
 <div class="about-content ">
     <p class="problem-title">如何充值？</p>

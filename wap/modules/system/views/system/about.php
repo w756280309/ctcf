@@ -2,6 +2,11 @@
 $this->title="关于我们";
 ?>
 <link href="/css/about.css" rel="stylesheet">
+<style>
+ body {
+     background-color: #fff !important;
+ }
+</style>
 <!-- 主体 -->
 <div class="about-content ">
     <p class="tuckunder">温州温都金融信息服务股份有限公</p>
@@ -17,4 +22,4 @@ $this->title="关于我们";
     <div style="clear: both"></div>
 </div>
 
-<div class="about-tel">客服电话：4001015151</div>
+<div class="about-tel">客服电话：<?= Yii::$app->params['contact_tel'] ?></div>
