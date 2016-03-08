@@ -84,35 +84,35 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
             $('#login-btn').bind('click',function(){
                 $(this).addClass("btn-press").removeClass("btn-normal");
                 if($('#iphone').val()==''){
-                    toast(this,'手机号不能为空');
+                    toast('手机号不能为空');
                     $(this).removeClass("btn-press").addClass("btn-normal");
                     return false;
                 }
                 if($('#pass').val()==''){
-                    toast(this,'密码不能为空');
+                    toast('密码不能为空');
                     $(this).removeClass("btn-press").addClass("btn-normal");
                     return false;
                 }
                 var tel = $('#iphone').val();
                 var reg = /^0?1[3|4|5|6|8][0-9]\d{8}$/;
                 if (!reg.test(tel)) {
-                    toast(this,'手机号格式错误');
+                    toast('手机号格式错误');
                     $(this).removeClass("btn-press").addClass("btn-normal");
                     return false;
                 }
                 if ($('#pass').val().length<6) {
-                    toast(this,'密码长度最少6位');
+                    toast('密码长度最少6位');
                     $(this).removeClass("btn-press").addClass("btn-normal");
                     return false;
                 }
                 if (is_flag == 1) {
                     if ($('#verifycode').val() === '') {
-                        toast(this,'验证码不能为空');
+                        toast('验证码不能为空');
                         $(this).removeClass("btn-press").addClass("btn-normal");
                         return false;
                     }
                     if ($('#verifycode').val().length !== 4) {
-                        toast(this,'验证码长度必须为4位');
+                        toast('验证码长度必须为4位');
                         $(this).removeClass("btn-press").addClass("btn-normal");
                         return false;
                     }
@@ -129,9 +129,6 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
             });
             $('input.login-info').blur(function () {
                 $(this).css("color", "");
-                var loginInfo = $(this).val();
-                if (loginInfo == '') {
-                }
             });
         });
     </script>

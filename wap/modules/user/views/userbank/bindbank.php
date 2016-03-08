@@ -96,8 +96,12 @@ $this->registerJsFile('/js/qpay.js', ['position' => 1]);
         var err = '<?= $data['code'] ?>';
         var mess = '<?= $data['message'] ?>';
         var tourl = '<?= $data['tourl'] ?>';
-        if (err == '1') {
-            toasturl(tourl,mess);
+        if (err === '1') {
+            toast(mess, function() {
+                if (tourl !== '') {
+                    location.href = tourl;
+                }
+            });
             return;
         }
 

@@ -157,7 +157,9 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
                 $.post($(form).attr("action"), vals, function (data) {
                     if(data.code!=0&&to==1&&data.tourl!=undefined){
                         if(data.message=='请登录'){
-                            toasturl(data.tourl,data.message);
+                            toast(data.message, function() {
+                                location.href = data.tourl;
+                            });
                         }else{
                             alertTrueVal(data.message,function(){
                                 location.href=data.tourl;
@@ -165,7 +167,7 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
                         }
                     }else{
                         if(data.code!=0){
-                            toast(form,data.message);
+                            toast(data.message);
                         }
 
                         if(to==1&&data.tourl!=undefined){

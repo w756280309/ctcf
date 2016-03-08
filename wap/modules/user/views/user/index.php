@@ -1,5 +1,4 @@
 <?php
-use yii\widgets\LinkPager;
 frontend\assets\WapAsset::register($this);
 $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','position' => 1]);
 ?>
@@ -61,46 +60,41 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
         </div>
     </div>
     <form></form>
-    <!-- 账户中心页 end  -->    
-    
+    <!-- 账户中心页 end  -->
+
     <script type="text/javascript" src="/js/jquery.js"></script>
     <script type="text/javascript">
     function tixian(){
         var err = '<?= $data['code'] ?>';
         var mess = '<?= $data['message'] ?>';
         var tourl = '<?= $data['tourl'] ?>';
-        if(err == '1') {
-            toasturl(tourl,mess,0);
+        if(err === '1') {
+            $('.account div').eq(0).css("background","#e8eaf0");
+            toast(mess, function() {
+                $('.account div').eq(0).css("background","#fff");
+                if (tourl !== '') {
+                    location.href = tourl;
+                }
+            });
         }else{
             location.href='/user/userbank/tixian';
         }
     }
-    
+
     function recharge(){
         var err = '<?= $data['code'] ?>';
         var mess = '<?= $data['message'] ?>';
         var tourl = '<?= $data['tourl'] ?>';
-        if(err == '1') {
-            toasturl(tourl,mess,1);
+        if(err === '1') {
+            $('.account div').eq(1).css("background","#e8eaf0");
+            toast(mess, function() {
+                $('.account div').eq(1).css("background","#fff");
+                if (tourl !== '') {
+                    location.href = tourl;
+                }
+            });
         }else{
             location.href='/user/userbank/recharge';
         }
     }
-    
-    function toasturl(url,val,type){
-        $('.account div').eq(type).css("background","#e8eaf0");
-        var kahao=$('<div class="error-info" style="display: block"><div>'+val+'</div></div>');
-            $(kahao).insertAfter($('form'));
-            setTimeout(function(){
-                $(kahao).fadeOut();
-                setTimeout(function(){
-                    $(kahao).remove();
-                    $('.account div').eq(type).css("background","#fff");
-                    if (url!= '') {
-                        window.location.href = url;
-                    }
-                },200);
-            },2000);
-    }
-        
     </script>

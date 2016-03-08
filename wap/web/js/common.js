@@ -95,7 +95,7 @@ function subForm(form, button, falsed)
         } else {
             if (data.code != 0) {
                 toast(data.message, function () {
-                    if (falsed !== undefined) {
+                    if (typeof falsed !== 'undefined') {
                         falsed(data);
                     }
                 });
@@ -127,7 +127,7 @@ function toast(val, active)
         setTimeout(function () {
             $alert.remove();
         }, 200);
-        if (active !== undefined) {
+        if (typeof active !== 'undefined') {
             active();
         }
     }, 2000);
@@ -155,7 +155,7 @@ function alertTrueVal(val, trued) {
     $(chongzhi).insertAfter($('form'));
     $('.bing-info').on('click', function () {
         $(chongzhi).remove();
-        if (trued !== undefined) {
+        if (typeof trued !== 'undefined') {
             trued();
         }
     });
@@ -175,9 +175,11 @@ function createSms(phoneId, uid, captchaCodeId, fun) {
     var csrf = $("meta[name=csrf-token]").attr('content');
     $.post("/site/createsmscode", {uid: uid, type: type, phone: phone, captchaCode: captchaCode, _csrf: csrf}, function (result) {
         if (result.code == 0) {
-            fun();
+            if (typeof fun !== 'undefined') {
+                fun();
+            }
         } else {
-            toast(phoneId, result.message);
+            toast(result.message);
             $("#captchaform-captchacode-image").click();
         }
     });
