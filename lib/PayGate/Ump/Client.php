@@ -644,12 +644,12 @@ class Client
         $prorp = $this->processHttpResponse($httpResponse);
         $endtime = microtime(true);
         if (
-                'mer_register_person' === $rqData['service']
-                || 'mer_bind_project' === $rqData['service']
-                || 'mer_update_project' === $rqData['service']
-                || 'project_transfer' === $rqData['service']
-                || 'mer_withdrawals' === $rqData['service']
-                || 'mer_send_sms_pwd' === $rqData['service']
+                'mer_register_person' === $data['service']
+                || 'mer_bind_project' === $data['service']
+                || 'mer_update_project' === $data['service']
+                || 'project_transfer' === $data['service']
+                || 'mer_withdrawals' === $data['service']
+                || 'mer_send_sms_pwd' === $data['service']
          ) {
             $this->logAdapter->log(1, $source_data, $sign_data, $prorp, $endtime - $starttime);
         }
