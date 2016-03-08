@@ -69,9 +69,11 @@ class TradeLog extends \yii\db\ActiveRecord
     public static function initLog($direction = 1, $rqData = null, $rq = null, $rp = null, $duration = 0)
     {
         $uid = 0;
-        if (array_key_exists('user_id', $rqData)) {
+        if (array_key_exists('user_id', $rqData)) {//联动用户标识
             $epayUser = epay\EpayUser::findOne(['epayUserId' => $rqData['user_id']]);
             $uid = $epayUser->appUserId;
+        } else if (array_key_exists('mer_cust_id', $rqData)) {//温都金服用户标识
+            $uid = $rqData['mer_cust_id'];
         }
         $log = new self();
         $log->txType = $rqData['service'];
@@ -82,7 +84,7 @@ class TradeLog extends \yii\db\ActiveRecord
         $log->requestData = json_encode($rqData);//存储没有进行签名的数据
         $log->rawRequest = $rq;
         $log->duration = $duration;
-        if (null !== $rp && array_key_exists('ret_code', $rp)) {
+        if (null !== $rp) {
             $log->responseCode = $rp->get('ret_code');
             $log->rawResponse = json_encode($rp->toArray());
             $log->responseMessage = $rp->get('ret_msg');
