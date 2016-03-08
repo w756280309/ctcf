@@ -241,7 +241,7 @@ class RepaymentController extends BaseController
         $pid = Yii::$app->request->post('pid');
         $product = OnlineProduct::findOne($pid);
         $fk = OnlineFangkuan::findOne(['online_product_id' => $pid]);
-        if (!in_array($product->status, [OnlineProduct::STATUS_FULL, OnlineProduct::STATUS_FOUND])) {
+        if (!in_array($product->status, [OnlineProduct::STATUS_FULL, OnlineProduct::STATUS_FOUND, OnlineProduct::STATUS_HUAN])) {
             return ['res' => 0, 'msg' => '标的状态异常，当前状态码：'.$product->status];
         }
         bcscale(14);
