@@ -182,13 +182,17 @@ class Client
             'service' => 'cust_withdrawals',
             'ret_url' => $this->clientOption['draw_ret_url'].('pc' === $channel ? '?channel=pc' : ''),
             'notify_url' => $this->clientOption['draw_notify_url'],
-            'sourceV' => 'HTML5',
             'order_id' => $draw->getTxSn(),
             'mer_date' => date('Ymd', $draw->getTxDate()),
             'user_id' => $draw->getEpayUserId(),
             'amount' => $draw->getAmount() * 100,
             'com_amt_type' => 1, //前向手续费：交易方承担
         ];
+
+        if ('pc' !== $channel) {
+            $data['sourceV'] = 'HTML5';
+        }
+
         $params = $this->buildQuery($data);
 
         return $this->apiUrl.'?'.$params;
