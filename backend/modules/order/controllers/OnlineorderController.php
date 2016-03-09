@@ -145,9 +145,9 @@ class OnlineorderController extends BaseController
         $numdata = OnlineOrder::find()->where(['uid' => $id])->select('id,order_money,online_pid,status')->asArray()->all();
         $bc = new BcRound();
         bcscale(14);
-        foreach ($numdata as $data) {
-            $moneyTotal = bcadd($moneyTotal, $data['order_money']);
+        foreach ($numdata as $data) {            
             if ($data['status'] == OnlineOrder::STATUS_SUCCESS) {
+                $moneyTotal = bcadd($moneyTotal, $data['order_money']);
                 ++$successNum;
             } elseif ($data['status'] == OnlineOrder::STATUS_CANCEL) {
                 ++$failureNum;

@@ -133,7 +133,7 @@ $status = Yii::$app->request->get('status');
                         <td><?= date('Y-m-d H:i:s',$val['created_at'])?></td>
                         <td><?php 
                                     if($val['status']==0){
-                                        echo "投标失败";
+                                        echo "未支付";
                                     }elseif($val['status']==1){
                                         echo "投标成功";
                                     }elseif($val['status']==2){
