@@ -69,24 +69,4 @@ class UserController extends BaseController
 
         return $this->render('order', ['list' => $list, 'type' => $type, 'profitFund' => $this->user->lendAccount->profit_balance]);
     }
-
-    public function actionTest()
-    {
-            $message = [
-                789056,
-                3
-            ];
-            $template_id = Yii::$app->params['sms']['forget'];
-
-                $sms = new \common\models\sms\SmsMessage([
-                    'template_id' => $template_id,
-                    'mobile' => 18518154492,
-                    'message' => json_encode($message)
-                ]);
-                $res = \Yii::$container->get('sms')->send($sms);
-                echo $res;
-
-                //160038 发送短信过于频繁
-                //160040 发送短信
-    }
 }
