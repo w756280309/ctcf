@@ -161,13 +161,13 @@ function alertTrueVal(val, trued) {
     });
 }
 
-function createSms(phoneId, type, captchaCodeId, fun) {
+function createSms(phoneId, type, captchaCodeId, fun)
+{
     var phone = $(phoneId).val();
     var captchaCode = $(captchaCodeId).val();
 
     var csrf = $("meta[name=csrf-token]").attr('content');
     $.post("/site/createsmscode", {type: type, phone: phone, captchaCode: captchaCode, _csrf: csrf}, function (result) {
-        console.log(result);
         if (result.code == 0) {
             if (typeof fun !== 'undefined') {
                 fun();
