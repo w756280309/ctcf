@@ -25,4 +25,19 @@ class LoanController extends Controller
 
         return $loan;
     }
+
+    public function actionUmp($id)
+    {
+        $loan = $this->actionGet($id);
+        $resp = \Yii::$container->get('ump')->getLoanInfo($loan->id);
+
+        return [
+            'mer_id' => $resp->get('mer_id'),
+            'project_account_id' => $resp->get('project_account_id'),
+            'project_account_state' => $resp->get('project_account_state'),
+            'project_id' => $resp->get('project_id'),
+            'project_state' => $resp->get('project_state'),
+            'balance' => $resp->get('balance'),
+        ];
+    }
 }
