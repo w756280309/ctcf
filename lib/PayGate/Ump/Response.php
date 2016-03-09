@@ -30,7 +30,7 @@ class Response
     {
         throw new \Exception('Not implmented!');
     }
-    
+
     public function isRedirection()
     {
         return null !== $this->location;

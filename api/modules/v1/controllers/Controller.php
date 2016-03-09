@@ -6,6 +6,7 @@ use api\exceptions\InvalidParamException;
 use yii\data\Pagination;
 use yii\db\ActiveQuery;
 use yii\web\Controller as BaseController;
+use yii\web\BadRequestHttpException;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
 
@@ -82,8 +83,13 @@ class Controller extends BaseController
         return new InvalidParamException($message, $code, $previous);
     }
 
-    public function ex404($message = null)
+    public function ex400($message = null, $code = 0, \Exception $prev = null)
     {
-        return new NotFoundHttpException($message);
+        return new BadRequestHttpException($message, $code, $prev);
+    }
+
+    public function ex404($message = null, $code = 0, \Exception $prev = null)
+    {
+        return new NotFoundHttpException($message, $code, $prev);
     }
 }
