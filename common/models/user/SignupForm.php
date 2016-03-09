@@ -1,4 +1,5 @@
 <?php
+
 namespace common\models\user;
 
 use Yii;
@@ -8,7 +9,7 @@ use YiiPlus\Validator\CnMobileValidator;
 use common\lib\validator\LoginpassValidator;
 
 /**
- * Signup form
+ * Signup form.
  */
 class SignupForm extends Model
 {
@@ -18,7 +19,7 @@ class SignupForm extends Model
     public $reset_flag = false;
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function rules()
     {
@@ -27,7 +28,7 @@ class SignupForm extends Model
             ['sms', 'required', 'message' => '短信验证码不能为空!'],
             ['sms', 'validateSms'],
             ['password', 'required', 'message' => '密码不能为空!'],
-            [['phone'],'checkPhoneUnique'],
+            [['phone'], 'checkPhoneUnique'],
             [['phone'], CnMobileValidator::className(), 'skipOnEmpty' => false],
             [
                 'password',
@@ -41,26 +42,29 @@ class SignupForm extends Model
     }
 
     /**
-     * 检查手机号是否已经注册过
+     * 检查手机号是否已经注册过.
+     *
      * @param type $attribute
      * @param type $params
-     * @return boolean
+     *
+     * @return bool
      */
-    public function checkPhoneUnique($attribute,$params){
+    public function checkPhoneUnique($attribute, $params)
+    {
         $num = $this->$attribute;
-        $re = User::findOne(['mobile'=>$num]);
+        $re = User::findOne(['mobile' => $num]);
 
-        if($this->reset_flag) {
-            if(empty($re)){
-                $this->addError($attribute, "该手机号未注册过");
-            }else{
+        if ($this->reset_flag) {
+            if (empty($re)) {
+                $this->addError($attribute, '该手机号未注册过');
+            } else {
                 return true;
             }
         } else {
-            if(empty($re)){
+            if (empty($re)) {
                 return true;
-            }else{
-                $this->addError($attribute, "该手机号已经注册过");
+            } else {
+                $this->addError($attribute, '该手机号已经注册过');
             }
         }
     }
@@ -68,10 +72,11 @@ class SignupForm extends Model
     /**
      * 验证手机验证码
      */
-    public function validateSms($attribute, $params) {
+    public function validateSms($attribute, $params)
+    {
         $code = $this->$attribute;
         $data = SmsService::validateSmscode($this->phone, $code);
-        if($data['code'] === 1) {
+        if ($data['code'] === 1) {
             $this->addError($attribute, $data['message']);
         } else {
             return true;
@@ -79,7 +84,7 @@ class SignupForm extends Model
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function attributeLabels()
     {
@@ -91,11 +96,11 @@ class SignupForm extends Model
     }
 
     /**
-     * 注册用户主函数
+     * 注册用户主函数.
      */
     public function signup()
     {
-        if($this->validate()) {
+        if ($this->validate()) {
             $transaction = Yii::$app->db->beginTransaction();
             $user = new User();
             $user->scenario = 'signup';
@@ -103,20 +108,23 @@ class SignupForm extends Model
             $user->type = User::USER_TYPE_PERSONAL;
             $user->mobile = $this->phone;
             $user->setPassword($this->password);
-            if(!$user->save()) {
+            if (!$user->save()) {
                 $transaction->rollBack();
+
                 return false;
             }
 
             $user_acount = new UserAccount();
             $user_acount->uid = $user->id;
             $user_acount->type = UserAccount::TYPE_LEND;
-            if(!$user_acount->save()) {
+            if (!$user_acount->save()) {
                 $transaction->rollBack();
+
                 return false;
             }
             $transaction->commit();
             SmsService::editSms($user->mobile);
+
             return $user;
         } else {
             return false;
@@ -124,20 +132,20 @@ class SignupForm extends Model
     }
 
     /**
-     * 找回密码主函数
+     * 找回密码主函数.
      */
     public function resetpass()
     {
-        if($this->validate()) {
+        if ($this->validate()) {
             $model = User::findByUsername(false, $this->phone);
             $model->scenario = 'editpass';
             $model->setPassword($this->password);
             $res = $model->save();
             SmsService::editSms($model->mobile);
+
             return $res;
         } else {
             return false;
         }
     }
-
 }
