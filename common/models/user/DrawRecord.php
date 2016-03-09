@@ -116,7 +116,7 @@ class DrawRecord extends \yii\db\ActiveRecord implements \P2pl\WithdrawalInterfa
         $max_draw = bcsub($account->available_balance, $fee);
         if (bccomp($diff, 0) < 0) {//余额不足
             throw new \Exception('可提现金额不足');
-        } else if (bccomp($diff, $fee) < 0 && 0 !== bccomp($diff, 0) || bccomp($max_draw, \Yii::$app->params['ump']['draw']['min']) < 0) { //不够手续费
+        } else if (bccomp($diff, $fee) < 0 && 0 !== bccomp($diff, 0)) { //不够手续费
             throw new \Exception('可提现金额不足,提现金额不足以支付手续费');
         } else if (0 === bccomp($diff, 0)) { //如果以上条件满足，提现金额与账户余额相等时候，取最大提现金额
             throw new DrawException($bc->bcround(bcsub($account->available_balance, $fee), 2), DrawException::ERROR_CODE_ENOUGH);
@@ -138,7 +138,7 @@ class DrawRecord extends \yii\db\ActiveRecord implements \P2pl\WithdrawalInterfa
 //                throw new \Exception('可提现金额不足');
 //            }
 //        }
-//        
+//
 //        return $money;
     }
 
