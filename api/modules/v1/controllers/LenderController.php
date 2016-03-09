@@ -5,24 +5,19 @@ namespace api\modules\v1\controllers;
 use common\models\user\User;
 
 /**
- * 充值交易API.
+ * 用户API.
  */
-class UserController extends Controller
+class LenderController extends Controller
 {
     public function actionGet($id)
     {
-        $user = User::findOne($id);
-        if (null === $user) {
-            throw $this->ex404();
-        }
-
-        return $user;
+        return $this->ensureLender($id);
     }
 
     public function actionUmp($id)
     {
-        $user = $this->actionGet($id);
-        $resp = \Yii::$container->get('ump')->getUserInfo($user->epayUser->epayUserId);
+        $lender = $this->ensureLender($id);
+        $resp = \Yii::$container->get('ump')->getUserInfo($lender->epayUser->epayUserId);
 
         return [
             'mer_id' => $resp->get('mer_id'),
@@ -36,5 +31,22 @@ class UserController extends Controller
             'user_bind_agreement_list' => $resp->get('user_bind_agreement_list'),
             'balance' => $resp->get('balance'),
         ];
+    }
+
+    private function ensureLender($id)
+    {
+        $lender = User::findOne($id);
+        if (null === $lender) {
+            throw $this->ex404();
+        }
+        if (User::USER_TYPE_PERSONAL !== $lender->type) {
+            throw $this->ex400('不是投资用户');
+        }
+        $epayUser = $lender->epayUser;
+        if (null === $epayUser) {
+            throw $this->ex400('无联动开户信息');
+        }
+
+        return $lender;
     }
 }
