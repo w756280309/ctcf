@@ -72,6 +72,7 @@ class DrawManager
         $bc = new BcRound();
         bcscale(14);
         $account->available_balance = $bc->bcround(bcsub($account->available_balance, $draw->money), 2);
+        $account->account_balance = $bc->bcround(bcsub($account->account_balance, $draw->money), 2);//提现受理成功之后账户余额要减去提现金额
         $money_record = new MoneyRecord();
         $money_record->sn = MoneyRecord::createSN();
         $money_record->type = MoneyRecord::TYPE_DRAW;
@@ -82,6 +83,7 @@ class DrawManager
         $money_record->out_money = $draw->money;
 
         $account->available_balance = $bc->bcround(bcsub($account->available_balance, $fee), 2);
+        $account->account_balance = $bc->bcround(bcsub($account->account_balance, $fee), 2);//160309提现受理成功之后账户余额要减去手续费
         $mrecord = clone $money_record;
         $mrecord->sn = MoneyRecord::createSN();
         $mrecord->type = MoneyRecord::TYPE_DRAW_FEE;
@@ -94,8 +96,8 @@ class DrawManager
         }
 
         //录入user_acount记录
-        $account->available_balance = $account->available_balance;
-        $account->freeze_balance = $bc->bcround(bcadd($account->freeze_balance, bcadd($draw->money, $fee)), 2);
+        //$account->available_balance = $account->available_balance;//多余的赋值，上边已经计算过了
+        //$account->freeze_balance = $bc->bcround(bcadd($account->freeze_balance, bcadd($draw->money, $fee)), 2);160309提现受理成功之后不冻结，
         $account->out_sum = $bc->bcround(bcadd($account->out_sum, bcadd($draw->money, $fee)), 2);
 
         if (!$account->save()) {
@@ -131,7 +133,7 @@ class DrawManager
                 $transaction = Yii::$app->db->beginTransaction();
                 $money = bcadd($draw->money, $draw->fee);
                 $userAccount = UserAccount::find()->where('uid = '.$draw->uid)->one();
-                $userAccount->freeze_balance = $bc->bcround(bcsub($userAccount->freeze_balance, $money), 2);//冻结减少
+                //$userAccount->freeze_balance = $bc->bcround(bcsub($userAccount->freeze_balance, $money), 2);//160309冻结不做改动
                 $draw->status = DrawRecord::STATUS_SUCCESS;
 
                 $momeyRecord = new MoneyRecord();
@@ -139,7 +141,7 @@ class DrawManager
                 $momeyRecord->sn = MoneyRecord::createSN();
                 $momeyRecord->osn = $draw->sn;
                 $momeyRecord->account_id = $userAccount->id;
-                $YuE = $userAccount->account_balance = $bc->bcround(bcsub($userAccount->account_balance, $money), 2);//账户总额减少
+                //$YuE = $userAccount->account_balance = $bc->bcround(bcsub($userAccount->account_balance, $money), 2);//160309账户总额由于在提现受理阶段已扣除，所以此处不做扣减
                 $momeyRecord->type = MoneyRecord::TYPE_DRAW_SUCCESS;
                 $momeyRecord->balance = $userAccount->available_balance;
                 $momeyRecord->out_money = $bc->bcround($money, 2);
@@ -180,6 +182,7 @@ class DrawManager
         }
         if (DrawRecord::STATUS_DENY === (int) $status) { //处理如果不通过的情况
             $account->available_balance = $bc->bcround(bcadd($account->available_balance, $draw->money), 2);
+            $account->account_balance = $bc->bcround(bcadd($account->account_balance, $draw->money), 2);//160309账户总额在提现结果失败之后增加
             $money_record = new MoneyRecord([
                 'sn' => MoneyRecord::createSN(),
                 'type' => MoneyRecord::TYPE_DRAW_CANCEL,
@@ -193,6 +196,7 @@ class DrawManager
             if (null !== $mrfee) { //如果存在提现手续费,将冻结提现手续费的金额解冻
                 $draw->money = bcadd($mrfee->out_money, $draw->money); //将手续费也加入到解冻金额中
                 $account->available_balance = $bc->bcround(bcadd($account->available_balance, $mrfee->out_money), 2);
+                $account->account_balance = $bc->bcround(bcadd($account->account_balance, $mrfee->out_money), 2);//160309账户总额在提现结果失败之后增加手续费
                 $fee_record = clone $money_record;
                 $fee_record->type = MoneyRecord::TYPE_DRAW_FEE_RETURN;
                 $fee_record->in_money = $mrfee->out_money;
@@ -200,7 +204,7 @@ class DrawManager
             }
             $account->drawable_balance = $bc->bcround(bcadd($account->drawable_balance, $draw->money), 2);
             $account->in_sum = $bc->bcround(bcadd($account->in_sum, $draw->money), 2);
-            $account->freeze_balance = $bc->bcround(bcsub($account->freeze_balance, $draw->money), 2);
+            //$account->freeze_balance = $bc->bcround(bcsub($account->freeze_balance, $draw->money), 2);//160309冻结金额没有扣除了
             if (!$money_record->save() || !$account->save() || (null !== $fee_record && !$fee_record->save(false))) {
                 $transaction->rollBack();
                 throw new DrawException('审核失败');
