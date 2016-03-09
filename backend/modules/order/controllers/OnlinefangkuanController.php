@@ -117,12 +117,22 @@ class OnlinefangkuanController extends BaseController
 
         $account = UserAccount::findOne(['uid' => $onlineFangkuan->uid, 'type' => UserAccount::TYPE_BORROW]);
         if (!$account) {
-            throw new \Exception('The borrower account info is not existed.');
+            return ['res' => 0, 'msg' => 'The borrower account info is not existed.'];
         }
 
-        $draw = DrawManager::initDraw($account, $onlineFangkuan->order_money, \Yii::$app->params['drawFee']);
+        $fee = \Yii::$app->params['drawFee'];
+        if (empty($fee)) {
+            return ['res' => 0, 'msg' => 'the fee info is not existed.'];
+        }
+
+        $draw = DrawManager::initDraw($account, bcsub($onlineFangkuan->order_money, $fee, 2), $fee);
         if (!$draw) {
             return ['res' => 0, 'msg' => '提现申请失败'];
+        }
+
+        $draw->orderSn = $onlineFangkuan->sn;
+        if (!$draw->save()) {
+            return ['res' => 0, 'msg' => '写入放款流水失败'];
         }
 
         $ump = Yii::$container->get('ump');
@@ -131,6 +141,11 @@ class OnlinefangkuanController extends BaseController
 
         if ($resp->isSuccessful()) {
             DrawManager::ackDraw($draw);
+
+            $onlineFangkuan->status = OnlineFangkuan::STATUS_TIXIAN_APPLY;
+            if (!$onlineFangkuan->save()) {
+                return ['res' => 0, 'msg' => '修改放款审核状态失败'];
+            }
         } else {
             return ['res' => 0, 'msg' => $resp->get('ret_code').$resp->get('ret_msg')];
         }

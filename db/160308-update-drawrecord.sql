@@ -1,0 +1,1 @@
+ALTER TABLE `draw_record` ADD COLUMN `orderSn` varchar(30) DEFAULT NULL AFTER `sn` COMMENT '订单流水号';

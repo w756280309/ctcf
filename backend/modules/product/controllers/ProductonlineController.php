@@ -17,6 +17,7 @@ use common\models\booking\BookingLog;
 use P2pl\Borrower;
 use common\service\LoanService;
 use common\lib\product\ProductProcessor;
+use common\models\order\OnlineFangkuan;
 
 /**
  * Description of OnlineProduct.
@@ -241,20 +242,30 @@ class ProductonlineController extends BaseController
         return ['res' => $res, 'msg' => $msg];
     }
 
+    /**
+     * 贷款管理->项目列表页
+     */
     public function actionList()
     {
         $status = Yii::$app->params['deal_status'];
         $request = Yii::$app->request->get();
-        $data = OnlineProduct::find()->where(array('del_status' => 0));
+
+        $op = OnlineProduct::tableName();
+        $of = \common\models\order\OnlineFangkuan::tableName();
+        $data = (new \yii\db\Query())
+            ->select("$op.*, $of.status as fstatus")
+            ->from($op)
+            ->leftJoin($of, "$op.id = $of.online_product_id")
+            ->where(array("$op.del_status" => 0));
         if ($request['name']) {
             $data->andFilterWhere(['like', 'title', $request['name']]);
         }
         if ($request['status'] == '0') {
             $data->andWhere(['online_status' => $request['status']]);
         } elseif ($request['status']) {
-            $data->andWhere(['online_status' => OnlineProduct::STATUS_ONLINE, 'status' => $request['status']]);
+            $data->andWhere(['online_status' => OnlineProduct::STATUS_ONLINE, "$op.status" => $request['status']]);
         }
-        $data->orderBy('id desc');
+        $data->orderBy("$op.id desc");
         $pages = new Pagination(['totalCount' => $data->count(), 'pageSize' => '20']);
         $model = $data->offset($pages->offset)->limit($pages->limit)->all();
 
@@ -264,7 +275,10 @@ class ProductonlineController extends BaseController
                     'status' => $status,
         ]);
     }
-    //贷款的详细信息
+
+    /**
+     * 贷款的详细信息
+     */
     public function actionDetail($id = null)
     {
         //        联表查出表前的记录。包括：已募集金额 **元 剩余可投金额：*元 已投资人数：**人 剩余时间：1天15小时6分
