@@ -41,15 +41,6 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
             <div class="col-xs-1"></div>
         </div>
         <div class="clear"></div>
-        <div class="row sm-height border-bottom" onclick="location.href='/system/system/safecenter'">
-            <div class="col-xs-3 left-txt">安全中心</div>
-            <div class="col-xs-7"></div>
-            <div class="col-xs-1 arrow">
-                <a href="/system/system/safecenter"><img src="/images/arrow.png" alt="右箭头"></a>
-            </div>
-            <div class="col-xs-1"></div>
-        </div>
-        <div class="clear"></div>
         <div class="row sm-height border-bottom" onclick="location.href='/user/user/mingxi'">
             <div class="col-xs-3 left-txt">交易明细</div>
             <div class="col-xs-7"></div>

@@ -1,6 +1,4 @@
 <?php
-use yii\helpers\Html;
-use yii\bootstrap\ActiveForm;
 $this->title="系统设置";
 ?>
 <link rel="stylesheet" href="/css/base.css">
@@ -22,10 +20,19 @@ $this->title="系统设置";
         <div class="col-xs-5 left-txt"><?= substr_replace($model->mobile,'****',3,-4) ?></div>
         <div class="hidden-xs col-sm-1 "></div>
     </div>
-    <div class="row sm-height border-bottom margin-top" onclick="window.location.href='/system/system/help'">
-        <div class="col-xs-3 col-sm-3 left-txt">新手帮助</div>
+    <div class="row sm-height border-bottom margin-top" onclick="window.location.href='/system/system/safecenter'">
+        <div class="col-xs-3 col-sm-3 left-txt">安全中心</div>
         <div class="col-xs-7 col-sm-7"></div>
         <div class="col-xs-1 col-sm-1 arrow">
+            <a href="/system/system/safecenter"><img src="/images/arrow.png" alt="右箭头"></a>
+        </div>
+        <div class="col-xs-1 col-sm-1 "></div>
+    </div>
+    <div class="clear"></div>
+    <div class="row sm-height border-bottom" onclick="window.location.href='/system/system/help'">
+        <div class="col-xs-3 left-txt">新手帮助</div>
+        <div class="col-xs-7"></div>
+        <div class="col-xs-1 arrow">
             <a href="/system/system/help"><img src="/images/arrow.png" alt="右箭头"></a>
         </div>
         <div class="col-xs-1 col-sm-1 "></div>
@@ -54,4 +61,3 @@ $this->title="系统设置";
     <!-- 输入弹出框 start  -->
     <div class="error-info">您输入的密码不正确</div>
     <!-- 输入弹出框 end  -->
-  
