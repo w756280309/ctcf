@@ -69,14 +69,13 @@ class SignupForm extends Model
      * 验证手机验证码
      */
     public function validateSms($attribute, $params) {
-            $code = $this->$attribute;
-            $uid = $this->phone;
-            $data = SmsService::validateSmscode($uid,$code);
-            if($data['code']==1) {
-                $this->addError($attribute, $data['message']);
-            } else {
-                return TRUE;
-            }
+        $code = $this->$attribute;
+        $data = SmsService::validateSmscode($this->phone, $code);
+        if($data['code'] === 1) {
+            $this->addError($attribute, $data['message']);
+        } else {
+            return true;
+        }
     }
 
     /**
@@ -117,7 +116,7 @@ class SignupForm extends Model
                 return false;
             }
             $transaction->commit();
-            $res = SmsService::editSms($user->id,$user->mobile);
+            SmsService::editSms($user->mobile);
             return $user;
         } else {
             return false;
@@ -134,6 +133,7 @@ class SignupForm extends Model
             $model->scenario = 'editpass';
             $model->setPassword($this->password);
             $res = $model->save();
+            SmsService::editSms($model->mobile);
             return $res;
         } else {
             return false;

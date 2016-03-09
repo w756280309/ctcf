@@ -1,0 +1,1 @@
+ALTER TABLE `sms` DROP COLUMN `uid`, DROP COLUMN `username`, DROP COLUMN `temp_uid`;

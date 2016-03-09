@@ -2,9 +2,7 @@
 namespace common\service;
 
 use Yii;
-use yii\web\Response;
 use common\models\sms\SmsTable;
-use common\models\user\User;
 use common\models\sms\SmsMessage;
 
 /**
@@ -14,8 +12,8 @@ use common\models\sms\SmsMessage;
  * Date: 15-11-19
  * Time: 下午4:02
  */
-class SmsService {
-
+class SmsService
+{
     public function __construct() {
     }
 
@@ -24,20 +22,21 @@ class SmsService {
      * @param $type,$uid $type=1注册$type=2找回密码
      * @return boolean
      */
-    public static function createSmscode($type=3,$phone=null,$uid=null) {
+    public static function createSmscode($type, $phone)
+    {
         if (!is_int($type)) {
             $type = (int) $type;
+        }
+
+        if (!in_array($type, [1, 2])) {
+            return ['code' => 1, 'message' => "发送短信验证码失败(errCode:$type)"];
         }
 
         if (!is_string($phone)) {
             $phone = (string) $phone;
         }
 
-        if (!is_string($uid)) {
-            $uid = (string) $uid;
-        }
-
-        if(!$phone) {
+        if(empty($phone)) {
             return ['code' => 1, 'message' => '请输入手机号'];
         }
 
@@ -47,52 +46,52 @@ class SmsService {
             return ['code' => 1, 'message' => '手机号码输入错误'];
         }
 
-        $user = User::findOne(['mobile'=>$phone]);
-        if($phone === $uid && $type === 1 && !empty($user)) {
-            return ['code' => 1, 'message' => '手机号已经注册过'];
-        }
-
         $time = time();
-        $sms = SmsTable::find()->where(['temp_uid' => $uid, 'status' => SmsTable::STATUS_UNUSE])->andFilterWhere(['>=','end_time',$time])->orderBy("id desc")->one();
-        $model = new SmsTable();
-        $model->code = $sms?($sms->code):(Yii::$app->functions->createRandomStr());
+        $sms = SmsTable::find()->where(['mobile' => $phone, 'status' => SmsTable::STATUS_UNUSE])->andFilterWhere(['>=', 'end_time', $time])->orderBy("id desc")->one();
+        $model = new SmsTable([
+            'code' => $sms ? ($sms->code) : (Yii::$app->functions->createRandomStr()),
+            'type' => $type,
+            'mobile' => $phone,
+        ]);
+
         $model->time_len = 5;
-        $model->type = $type;
-        $model->temp_uid = $uid;
-        $model->mobile = $phone;
         $model->end_time = $time + $model->time_len * 60;
-        $res = $model->save();
-        if($res) {
+
+        if($model->save()) {
             $message = [];
             $template_id = null;
-            if (1 === (int)$type) {
+            if (1 === $type) {
                 $message = [
                     $model->code,
                     $model->time_len
-                ];    
+                ];
                 $template_id = Yii::$app->params['sms']['yzm'];
-            } else if (2 === (int)$type) {
+            } else if (2 === $type) {
                 $message = [
                     $model->code,
                 ];
                 $template_id = Yii::$app->params['sms']['forget'];
             }
-            
+
             if (!empty($message)) {
                 $sms = new SmsMessage([
-                    'uid' => empty($user)?0:$user->id,
                     'template_id' => $template_id,
                     'mobile' => $model->mobile,
-                    'level' => SmsMessage::LEVEL_HIGH,
-                    'message' => json_encode($message)
+                    'message' => json_encode($message),
                 ]);
-                //$sms->save();            
-                \Yii::$container->get('sms')->send($sms);
+
+                try {
+                    $res = \Yii::$container->get('sms')->send($sms);
+                    if ($res) {
+                        return ['code' => 0, 'message' => ''];
+                    }
+                } catch (\Exception $ex) {
+                    return ['code' => 1, 'message' => '验证码生成失败(errCode:'.$ex->getMessage().')'];
+                }
             }
-            return ['code' => 0, 'message' => ''];
-        } else {
-            return ['code' => 1, 'message' => '验证码生成超时'];
         }
+
+        return ['code' => 1, 'message' => '验证码生成超时'];
     }
 
     /**
@@ -100,42 +99,27 @@ class SmsService {
      * @param $type,$uid
      * @return boolean
      */
-    public static function validateSmscode($uid=null,$smscode=null) {
-        if(!$uid || !$smscode) {
-            return ['code' => 1,'message' => '验证码输入错误'];
-        }
-
-        $model = SmsTable::find()->where(['temp_uid' => $uid, 'status' => SmsTable::STATUS_UNUSE])->orderBy('id desc')->one();
+    public static function validateSmscode($phone, $smscode) {
+        $model = SmsTable::find()->where(['mobile' => $phone, 'status' => SmsTable::STATUS_UNUSE])->orderBy('id desc')->one();
         if(empty($model)) {
-            return ['code' => 1,'message' => '验证码输入错误'];
+            return ['code' => 1,'message' => '短信验证码输入错误'];
         }
         if($model->code != $smscode) {
-            return ['code' => 1,'message' => '验证码输入错误'];
+            return ['code' => 1,'message' => '短信验证码输入错误'];
         }
-        if(time()>$model->end_time) {
-            return ['code' => 1,'message' => '验证码过期，请重新发送'];
+        if(time() > $model->end_time) {
+            return ['code' => 1,'message' => '短信验证码过期，请重新发送'];
         }
 
         return ['code' => 0];
     }
 
     /**
-     * 备注验证信息
-     * @param $type,$uid
-     * @return boolean
+     * 修改短信验证码状态
+     * @param $phone
      */
-    public static function editSms($uid=null,$phone=null) {
-        if(!$uid) {
-            return false;
-        }
-
-        if(empty($phone)) {
-            SmsTable::updateAll(['uid' => $uid,'status' => SmsTable::STATUS_USE],['temp_uid' => $uid, 'status' => SmsTable::STATUS_UNUSE]);
-        } else {
-            SmsTable::updateAll(['uid' => $uid,'status' => SmsTable::STATUS_USE],['temp_uid' => $phone, 'status' => SmsTable::STATUS_UNUSE]);
-        }
-
-        return true;
+    public static function editSms($phone)
+    {
+        SmsTable::updateAll(['status' => SmsTable::STATUS_USE], ['mobile' => $phone, 'status' => SmsTable::STATUS_UNUSE]);
     }
-
 }

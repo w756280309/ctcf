@@ -320,12 +320,11 @@ class SiteController extends Controller
 
     public function actionCreatesmscode()
     {
-        $uid = Yii::$app->request->post('uid');
         $type = Yii::$app->request->post('type');
         $phone = Yii::$app->request->post('phone');
         $captchaCode = Yii::$app->request->post('captchaCode');
 
-        if (empty($uid) || empty($type) || empty($phone) || empty($captchaCode)) {
+        if (empty($type) || empty($phone) || empty($captchaCode)) {
             return ['code' => 1, 'message' => '发送短信参数错误'];
         }
 
@@ -336,8 +335,6 @@ class SiteController extends Controller
             return ['code' => 1, 'message' => '图形验证码输入错误'];
         }
 
-        $result = SmsService::createSmscode($type, $phone, $uid);
-
-        return $result;
+        return SmsService::createSmscode($type, $phone);
     }
 }

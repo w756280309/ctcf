@@ -192,7 +192,7 @@ frontend\assets\WapAsset::register($this);
                     $("#signup-btn").removeClass("btn-press").addClass("btn-normal");
                     return false;
                 }
-                createSms("#iphone", false, "#captchaCode", function ()
+                createSms("#iphone", 1, "#captchaCode", function ()
                 {
                     fun_timedown();
                 });
