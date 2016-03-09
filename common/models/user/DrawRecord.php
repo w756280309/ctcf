@@ -91,7 +91,7 @@ class DrawRecord extends \yii\db\ActiveRecord implements \P2pl\WithdrawalInterfa
             [['money', 'uid'], 'required'],
             [['money'], 'match', 'pattern' => '/^[0-9]+([.]{1}[0-9]{1,2})?$/', 'message' => '提现金额格式错误'],
             [['account_id', 'uid', 'status', 'created_at', 'updated_at'], 'integer'],
-            [['money'], 'number', 'min' => \Yii::$app->params['ump']['draw']['min'], 'max' => \Yii::$app->params['ump']['draw']['max']],
+            [['money'], 'number', 'max' => \Yii::$app->params['ump']['draw']['max']],
             [['fee'], 'number'],
             [['sn', 'bank_id', 'bank_name', 'bank_account'], 'string', 'max' => 30],
         ];
