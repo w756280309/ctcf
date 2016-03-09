@@ -88,7 +88,13 @@ class SmsService
                         return ['code' => 0, 'message' => ''];
                     }
                 } catch (\Exception $ex) {
-                    return ['code' => 1, 'message' => '验证码生成失败(errCode:'.$ex->getMessage().')'];
+                    if ('160040' === $ex->getMessage()) {
+                        return ['code' => 1, 'message' => '手机号接收短信达到数量限制，请稍候重试'];
+                    } elseif ('160038' === $ex->getMessage()) {
+                        return ['code' => 1, 'message' => '短信发送请求过于频繁，请稍候重试'];
+                    } else {
+                        return ['code' => 1, 'message' => '短信发送失败'];
+                    }
                 }
             }
         }
