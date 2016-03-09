@@ -67,7 +67,7 @@ frontend\assets\WapAsset::register($this);
                 </div>
                 <div class="col-xs-12 div-xieyi">
                     <input id="xieyi" class="xieyi lf" type="checkbox" checked="checked"/> 我已经阅读并同意
-                    <a href="/site/xieyi" class="xieyi">《用户注册协议》</a>
+                    <a href="/site/xieyi" class="xieyi">《网站服务协议》</a>
                 </div>
                 <div class="col-xs-3"></div>
                 <div class="col-xs-6 login-sign-btn">
