@@ -380,7 +380,7 @@ class ProductonlineController extends BaseController
                 if (0 === $model->finish_date) {
                     $pp = new ProductProcessor();
                     $finish_date = $pp->LoanTerms('d1', date('Y-m-d', $model->jixi_time), $model->expires);
-                    OnlineProduct::updateAll(['finish_date' => $finish_date], 'id='.$id);
+                    OnlineProduct::updateAll(['finish_date' => strtotime($finish_date)], 'id='.$id);
                 }
                 $res = OnlineRepaymentPlan::createPlan($id);//转移到开始计息部分
 
