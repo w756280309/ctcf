@@ -7,6 +7,9 @@ $this->title="合同说明";
  <script src="/js/swiper.min.js"></script>
  <script src="/js/licai.js"></script>
  <style>
+     body {
+         background-color: #fff;
+     }
      .container-text {
          padding:4px 10px 64px;
          font-size: 12px;
