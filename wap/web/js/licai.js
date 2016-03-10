@@ -69,7 +69,6 @@ $(function(){
                 data: {page: currentPage},
                 dataType: 'json',
                 success: function (data) {
-                    console.log(data);
                     if (data.code === 0) {
                         //如果当前页和返回页码相同，则改变页面html,否则视为异常
                         if (currentPage === data.header.cp) {
