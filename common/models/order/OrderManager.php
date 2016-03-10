@@ -91,7 +91,7 @@ class OrderManager
             $new_ord->save();//创建一个订单
 
             $ua->available_balance = $bc->bcround(bcsub($ua->available_balance, $new_ord->order_money), 2);
-            $ua->freeze_balance = $bc->bcround(bcadd($ua->freeze_balance, $new_ord->order_money), 2);
+            //$ua->freeze_balance = $bc->bcround(bcadd($ua->freeze_balance, $new_ord->order_money), 2);
             $ua->out_sum = $bc->bcround(bcadd($ua->out_sum, $new_ord->order_money), 2);//ua有修改在判断外层save
 
             $mrmodel = new MoneyRecord();

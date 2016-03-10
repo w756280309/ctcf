@@ -17,6 +17,7 @@ use common\models\user\MoneyRecord;
 use common\service\LoanService;
 use common\models\order\OrderManager;
 use common\models\order\CancelOrder;
+use common\utils\TxUtils;
 
 class DealcrontabController extends Controller
 {
@@ -37,6 +38,16 @@ class DealcrontabController extends Controller
                 $ua->investment_balance = $bc->bcround(bcadd($ua->investment_balance, $ord['order_money']), 2);
                 $ua->freeze_balance = $bc->bcround(bcsub($ua->freeze_balance, $ord['order_money']), 2);
                 $ua->save();
+                $mrmodel = new MoneyRecord();
+                $mrmodel->account_id = $ua->id;
+                $mrmodel->sn = TxUtils::generateSn('MR');
+                $mrmodel->type = MoneyRecord::TYPE_FULL_TX;
+                $mrmodel->osn = $ord['sn'];
+                $mrmodel->uid = $ord['uid'];
+                $mrmodel->balance = $ua->available_balance;
+                $mrmodel->in_sum = $ord['order_money'];
+                $mrmodel->remark = '项目满标,冻结金额转入理财金额账户。交易金额'.$ord['order_money'];
+                $mrmodel->save();//创建一个资金记录
             }
 
             OrderManager::findInvalidOrders($dat);

@@ -17,7 +17,8 @@ use common\models\booking\BookingLog;
 use P2pl\Borrower;
 use common\service\LoanService;
 use common\lib\product\ProductProcessor;
-use common\models\order\OnlineFangkuan;
+use common\models\user\MoneyRecord;
+use common\utils\TxUtils;
 
 /**
  * Description of OnlineProduct.
@@ -335,7 +336,6 @@ class ProductonlineController extends BaseController
                 $up_srs = OnlineProduct::updateAll(['status' => OnlineProduct::STATUS_FOUND, 'sort' => OnlineProduct::SORT_FOUND, 'full_time' => time()], ['id' => $id]);
                 if (!$up_srs) {
                     $transaction->rollBack();
-
                     return ['result' => '0', 'message' => '操作失败,状态更新失败,请联系技术'];
                 }
                 $orders = OnlineOrder::getOrderListByCond(['online_pid' => $id, 'status' => OnlineOrder::STATUS_SUCCESS]);
@@ -343,9 +343,18 @@ class ProductonlineController extends BaseController
                     $ua = UserAccount::findOne(['type' => UserAccount::TYPE_LEND, 'uid' => $ord['uid']]);
                     $ua->investment_balance = $bc->bcround(bcadd($ua->investment_balance, $ord['order_money']), 2);
                     $ua->freeze_balance = $bc->bcround(bcsub($ua->freeze_balance, $ord['order_money']), 2);
-                    if (!$ua->save()) {
+                    
+                    $mrmodel = new MoneyRecord();
+                    $mrmodel->account_id = $ua->id;
+                    $mrmodel->sn = TxUtils::generateSn('MR');
+                    $mrmodel->type = MoneyRecord::TYPE_FULL_TX;
+                    $mrmodel->osn = $ord['sn'];
+                    $mrmodel->uid = $ord['uid'];
+                    $mrmodel->balance = $ua->available_balance;
+                    $mrmodel->in_sum = $ord['order_money'];
+                    $mrmodel->remark = '项目成立,冻结金额转入理财金额账户。交易金额'. $ord['order_money'];
+                    if (!$ua->save() || !$mrmodel->save()) {
                         $transaction->rollBack();
-
                         return ['result' => '0', 'message' => '操作失败,账户更新失败,请联系技术'];
                     }
                 }
