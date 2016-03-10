@@ -60,12 +60,16 @@ class OrderController extends BaseController
         return $this->render('error');
     }
 
-    public function actionAgreement($id, $key = 0)
+    public function actionAgreement($sn, $id, $key = 0)
     {
-        $this->layout = '@app/modules/order/views/layouts/buy';
+        $this->layout = false;
+
+        if (empty($sn) || empty($id)) {
+            throw new \yii\web\NotFoundHttpException('The argument err.');
+        }
 
         $model = ContractTemplate::find()->where(['pid' => $id])->select('pid,name,content')->asArray()->all();
 
-        return $this->render('agreement', ['model' => $model, 'key_f' => $key, 'content' => $model[$key]['content']]);
+        return $this->render('agreement', ['model' => $model, 'key_f' => $key, 'content' => $model[$key]['content'], 'sn' => $sn]);
     }
 }
