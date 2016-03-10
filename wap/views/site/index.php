@@ -58,7 +58,7 @@ $rate = number_format($deals->finish_rate * 100, 0);
             </li>
             <li class="col-xs-6 padding-5">
                 <div class="new-bottom-rg">
-                    <p ><span class="tishi"><?= rtrim(rtrim($deals->start_money, '0'), '.') ?>元起投，<?= $deals->getSpanDays() ?>天</span></p>
+                    <p ><span class="tishi"><?= rtrim(rtrim($deals->start_money, '0'), '.') ?>元起投，<?= $deals->expires ?>天</span></p>
                     <?php if (OnlineProduct::STATUS_PRE === $deals->status) { ?>
                         <!-- 未开标 -->
                         <a class="zhuangtai weikaibiao" href="/deal/deal/detail?sn=<?= $deals->sn ?>"><?= $dates['desc'] ?> <?= date('H:i', $deals->start_date) ?></a>
@@ -86,7 +86,7 @@ $rate = number_format($deals->finish_rate * 100, 0);
             </li>
             <li class="col-xs-6 padding-5">
                 <div class="new-bottom-rg">
-                    <p><span class="tishi"><?= rtrim(rtrim($deals->start_money, '0'), '.') ?>元起投，<?= $deals->getSpanDays() ?>天</span></p>
+                    <p><span class="tishi"><?= rtrim(rtrim($deals->start_money, '0'), '.') ?>元起投，<?= $deals->expires ?>天</span></p>
                     <?php if (OnlineProduct::STATUS_PRE === $deals->status) { ?>
                         <!-- 未开标 -->
                         <a class="zhuangtai weikaibiao" href="/deal/deal/detail?sn=<?= $deals->sn ?>"><?= $dates['desc'] ?> <?= date('H:i', $deals->start_date) ?></a>
