@@ -16,6 +16,7 @@ use common\lib\bchelp\BcRound;
 use common\models\user\MoneyRecord;
 use common\service\LoanService;
 use common\models\order\OrderManager;
+use common\models\order\CancelOrder;
 
 class DealcrontabController extends Controller
 {
@@ -37,7 +38,7 @@ class DealcrontabController extends Controller
                 $ua->freeze_balance = $bc->bcround(bcsub($ua->freeze_balance, $ord['order_money']), 2);
                 $ua->save();
             }
-            
+
             OrderManager::findInvalidOrders($dat);
         }
     }
@@ -46,7 +47,7 @@ class DealcrontabController extends Controller
      */
     public function actionNow()
     {
-        $loans = OnlineProduct::find()->where(' online_status=1 and status=1 and start_date<=' . time())->all();
+        $loans = OnlineProduct::find()->where(' online_status=1 and status=1 and start_date<='.time())->all();
         foreach ($loans as $loan) {
             $resp = Yii::$container->get('ump')->getLoanInfo($loan->id);
             if ($resp->isSuccessful() && '0' === $resp->get('project_state')) {
@@ -56,7 +57,7 @@ class DealcrontabController extends Controller
     }
 
     /**
-     * 定时 修改募集期状态为流标状态【取消】
+     * 定时 修改募集期状态为流标状态【取消】.
      */
     public function actionLiu()
     {
@@ -75,12 +76,14 @@ class DealcrontabController extends Controller
                 $ua->in_sum = $bc->bcround(bcadd($ua->in_sum, $v['order_money']), 2);
                 if (!$ua->save()) {
                     $transaction->rollBack();
+
                     return false;
                 }
 
                 $v->status = OnlineOrder::STATUS_CANCEL;
                 if (!$v->save()) {
                     $transaction->rollBack();
+
                     return false;
                 }
 
@@ -95,6 +98,7 @@ class DealcrontabController extends Controller
 
                 if (!$money_record->save()) {
                     $transaction->rollBack();
+
                     return false;
                 }
             }
@@ -104,10 +108,24 @@ class DealcrontabController extends Controller
             $val->sort = OnlineProduct::SORT_LIU;
             if (!$val->save()) {
                 $transaction->rollBack();
+
                 return false;
             }
             $transaction->commit();
         }
+
         return true;
+    }
+
+    public function actionAckcancelord()
+    {
+        $cancelOrd = CancelOrder::find()->where(['txStatus' => 1])->all();
+        foreach ($cancelOrd as $ord) {
+            try {
+                OrderManager::ackCancelOrder($ord);
+            } catch (\Exception $ex) {
+                //TODO
+            }
+        }
     }
 }

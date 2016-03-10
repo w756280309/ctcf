@@ -27,6 +27,7 @@ return [
                 'borrowers/<id:\d+>/ump' => 'v1/borrower/ump',
                 'lenders/<id:\d+>' => 'v1/lender/get',
                 'lenders/<id:\d+>/ump' => 'v1/lender/ump',
+                'ordtx/<type:\d+>/<id:\d+>/ump' => 'v1/ordertx/ump',
             ],
         ],
     ],
