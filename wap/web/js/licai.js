@@ -79,8 +79,9 @@ $(function(){
                                     var title = item.title;
                                     var order_time = item.order_time;
                                     var yield_rate = changeTwoDecimal(item.yield_rate * 100) + '%';
+                                    var finish_rate = changeTwoDecimal(item.finish_rate * 100) + '%';
                                     var statusval = item.statusval; //已还清
-                                    var profit = (item.profit == null) ? '--' : item.profit; //预期收益
+                                    var profit = item.profit; //预期收益
                                     var pstatus = item.pstatus;
                                     var className = (pstatus == 1 || pstatus == 2) ? "column-title-rg" : "column-title-rg1";
                                     var profitDes = (pstatus == 6) ? "实际收益" : "预期收益";
@@ -102,14 +103,20 @@ $(function(){
                                                             '<div class="col-xs-4">'+
                                                                 '<div>'+expiress+'天</div>'+
                                                                 '<p>期限</p>'+
-                                                            '</div>'+
-                                                            '<div class="col-xs-4">'+
-                                                                '<div>'+profit+'</div>'+
-                                                                '<p>'+profitDes+'</p>'+
-                                                            '</div>'+
-                                                        '</div>'+
-                                                    '</div>'+
+                                                            '</div>';
+                                    if ('--' === profit) {
+                                        html += '<div class="col-xs-4">'+
+                                                    '<div>'+finish_rate+'%</div>'+
+                                                    '<p>募集进度</p>'+
                                                 '</div>';
+                                    } else {
+                                        html += '<div class="col-xs-4">'+
+                                            '<div>'+profit+'元</div>'+
+                                            '<p>'+profitDes+'</p>'+
+                                        '</div>';
+                                    }
+
+                                    html += '</div></div></div>';
                                 });
 
 

@@ -46,20 +46,27 @@ $this->title="我的理财";
         <div class="<?= in_array($o['pstatus'], [1,2])?"column-title-rg":"column-title-rg1";?>"><?=$o['statusval']?></div>
         <!-- 修改 -->
         <div class="container" id='project-box'>
-        	<div class="row">
-        		<div class="col-xs-4">
-        			<div><?= doubleval(number_format($o['yield_rate']*100, 2)) ?>%</div>
-        			<p>年化收益</p>
-        		</div>
-        		<div class="col-xs-4">
-        			<div><?= $o['expiress'] ?>天</div>
-        			<p>期限</p>
-        		</div>
-        		<div class="col-xs-4">
-        			<div><?= $o['profit'] ?>元</div>
-        			<p><?= ($o['pstatus']==6)?"实际收益":"预期收益" ?></p>
-        		</div>
-        	</div>
+            <div class="row">
+                <div class="col-xs-4">
+                        <div><?= doubleval(number_format($o['yield_rate']*100, 2)) ?>%</div>
+                        <p>年化收益</p>
+                </div>
+                <div class="col-xs-4">
+                        <div><?= $o['expiress'] ?>天</div>
+                        <p>期限</p>
+                </div>
+                <?php if ('--' !== $o['profit']) { ?>
+                <div class="col-xs-4">
+                        <div><?= $o['profit'] ?>元</div>
+                        <p><?= ($o['pstatus']==6)?"实际收益":"预期收益" ?></p>
+                </div>
+                <?php } else { ?>
+                <div class="col-xs-4">
+                        <div><?= $o['finish_rate'] ?>%</div>
+                        <p>募集进度</p>
+                </div>
+                <?php } ?>
+            </div>
         </div>
     </div>
 <?php } ?>
