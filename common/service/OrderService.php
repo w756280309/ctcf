@@ -80,14 +80,12 @@ class OrderService
         foreach ($query as $key => $dat) {
             $query[$key]['statusval'] = Yii::$app->params['deal_status'][$dat['pstatus']];
             $query[$key]['order_time'] = $dat['order_time'] ? date('Y-m-d', $dat['order_time']) : '';
-            $query[$key]['jiaxi'] = $dat['jiaxi'];
-            $query[$key]['psn'] = $dat['psn'];
             $query[$key]['finish_rate'] = number_format($dat['finish_rate'] * 100, 0);
             if (in_array($dat['pstatus'], [OnlineProduct::STATUS_NOW])) {
                 $query[$key]['profit'] = '--';
                 $query[$key]['returndate'] = date('Y-m-d', $dat['finish_date']);
             } elseif (in_array($dat['pstatus'], [OnlineProduct::STATUS_HUAN, OnlineProduct::STATUS_FULL, OnlineProduct::STATUS_FOUND])) {
-                //
+                $query[$key]['finish_rate'] = (OnlineProduct::STATUS_FOUND === $dat['pstatus']) ? 100 : $dat['finish_rate'];
                 $replayment = \common\models\order\OnlineRepaymentPlan::findOne(['order_id' => $dat['id'], 'online_pid' => $dat['online_pid']]);
                 if (null === $replayment) {
                     $query[$key]['profit'] = '--';

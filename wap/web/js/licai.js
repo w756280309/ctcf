@@ -79,7 +79,6 @@ $(function(){
                                     var title = item.title;
                                     var order_time = item.order_time;
                                     var yield_rate = changeTwoDecimal(item.yield_rate * 100) + '%';
-                                    var finish_rate = changeTwoDecimal(item.finish_rate * 100) + '%';
                                     var statusval = item.statusval; //已还清
                                     var profit = item.profit; //预期收益
                                     var pstatus = item.pstatus;
@@ -106,7 +105,7 @@ $(function(){
                                                             '</div>';
                                     if ('--' === profit) {
                                         html += '<div class="col-xs-4">'+
-                                                    '<div>'+finish_rate+'%</div>'+
+                                                    '<div>'+item.finish_rate+'%</div>'+
                                                     '<p>募集进度</p>'+
                                                 '</div>';
                                     } else {
