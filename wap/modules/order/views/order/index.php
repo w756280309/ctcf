@@ -30,7 +30,7 @@ $this->registerJsFile('/js/order.js', ['depends' => 'yii\web\YiiAsset','position
         <input name="_csrf" type="hidden" id="_csrf" value="<?=Yii::$app->request->csrfToken ?>">
         <div class="row sm-height border-bottom">
             <div class="col-xs-4 safe-txt text-align-ct">投资金额</div>
-        <input name="money" type="text" id="money" value="" placeholder="请输入投资金额"  class="col-xs-6 safe-lf text-align-lf">
+        <input name="money" type="number" id="money" value="" placeholder="请输入投资金额"  class="col-xs-6 safe-lf text-align-lf">
             <div class="col-xs-2 safe-txt">元</div>
         </div>
 

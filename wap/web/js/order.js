@@ -32,12 +32,13 @@ $(function () {
             $buy.attr('disabled', false);
         })
     });
-    $('#money').on('blur', function () {
-        money = $(this).val();
-        if (isNaN(money)) {
+
+    $('#money').on('keyup', function () {
+        var $this = $(this);
+        var money = $this.val();
+        money = money.replace(/^[^1-9]+/, '');
+        if (!$.isNumeric(money)) {
             money = 0;
-            $(this).focus();
-            return false;
         }
 
         $('.yuqishouyi').html(accDiv(accMul(accMul(money, yr), qixian), 360).toFixed(2) + "元");
