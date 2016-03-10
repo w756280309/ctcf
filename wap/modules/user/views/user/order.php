@@ -40,7 +40,7 @@ $this->title="我的理财";
           <div class="col-xs-4"><?= $o['order_time'] ?></div>
           <div class="col-xs-8"></div>
      </div>
-    <div class="row column">
+    <div class="row column" onclick="location.href='/deal/deal/detail?sn=<?= $o['psn'] ?>'">
         <div class="hidden-xs col-sm-1" style="height:50px;"></div>
         <div class="col-xs-12 col-sm-10 column-title"><span><?=$o['title']?></span></div>
         <div class="<?= in_array($o['pstatus'], [1,2])?"column-title-rg":"column-title-rg1";?>"><?=$o['statusval']?></div>

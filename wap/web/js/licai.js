@@ -90,7 +90,7 @@ $(function(){
                                                     '<div class="col-xs-4">'+order_time+'</div>'+
                                                     '<div class="col-xs-8"></div>'+
                                                 '</div>'+
-                                                '<div class="row column">'+
+                                                '<div class="row column" onclick="location.href=\'/deal/deal/detail?sn='+item.psn+'\'">'+
                                                     '<div class="hidden-xs col-sm-1" style="height:50px;"></div>'+
                                                     '<div class="col-xs-12 col-sm-10 column-title"><span>'+title+'</span></div>'+
                                                     '<div class="'+className+'">'+statusval+'</div>'+

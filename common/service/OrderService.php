@@ -41,7 +41,7 @@ class OrderService
         }
         $loan = new LoanService();
         $query1 = (new \yii\db\Query())
-                ->select('order.*,p.title,p.status pstatus,p.end_date penddate,p.expires expiress,p.finish_date,p.jiaxi,p.finish_rate')
+                ->select('order.*,p.title,p.status pstatus,p.end_date penddate,p.expires expiress,p.finish_date,p.jiaxi,p.finish_rate,p.sn psn')
                 ->from(['online_order order'])
                 ->innerJoin('online_product p', 'order.online_pid=p.id')
                 ->where(['order.uid' => $uid, 'order.status' => 1]);
@@ -81,6 +81,7 @@ class OrderService
             $query[$key]['statusval'] = Yii::$app->params['deal_status'][$dat['pstatus']];
             $query[$key]['order_time'] = $dat['order_time'] ? date('Y-m-d', $dat['order_time']) : '';
             $query[$key]['jiaxi'] = $dat['jiaxi'];
+            $query[$key]['psn'] = $dat['psn'];
             $query[$key]['finish_rate'] = number_format($dat['finish_rate'] * 100, 0);
             if (in_array($dat['pstatus'], [OnlineProduct::STATUS_NOW])) {
                 $query[$key]['profit'] = '--';
