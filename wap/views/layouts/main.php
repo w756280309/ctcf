@@ -8,15 +8,13 @@ WapAsset::register($this);
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="utf-8">
-    <meta name="viewport"
-          content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+   <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
     <meta name="renderer" content="webkit">
     <meta name="format-detection" content="telephone=no"/>
-	<title><?= Html::encode($this->title) ?></title>
-        <?= Html::csrfMetaTags() ?>
-	<?php $this->head() ?>
-
+    <title>温都金服</title>
+    <?= Html::csrfMetaTags() ?>
+    <?php $this->head() ?>
 </head>
 <body>
     <?php $this->beginBody() ?>
@@ -25,11 +23,9 @@ WapAsset::register($this);
 	<header>
              <div class="title">温都金服</div>
         </header>
+        <?= $content ?>
 
-		<?= $content ?>
-
-
-		<!--footer-->
+        <!--footer-->
         <div class="row navbar-fixed-bottom footer">
             <div class="col-xs-4 footer-title">
                 <div class="footer-inner">
@@ -43,21 +39,16 @@ WapAsset::register($this);
             </div>
             <div class="col-xs-4 footer-title">
                 <div class="footer-inner2">
-                    <?php if (!\Yii::$app->user->isGuest) {
-    ?>
+                    <?php if (!\Yii::$app->user->isGuest) { ?>
                     <a href="/user/user"><span class="zhanghu"></span>账户</a>
-                    <?php
-} else {
-    ?>
+                    <?php } else { ?>
                     <a href="/site/login"><span class="zhanghu"></span>账户</a>
-                    <?php
-} ?>
+                    <?php } ?>
                 </div>
             </div>
         </div>
 	</div>
     <?php $this->endBody() ?>
-
 </body>
 </html>
 <?php $this->endPage() ?>

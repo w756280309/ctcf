@@ -12,7 +12,7 @@ frontend\assets\WapAsset::register($this);
     <meta name="renderer" content="webkit">
     <!--视窗设置 -->
     <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
-    <title></title>
+    <title>温都金服</title>
 
     <!-- Bootstrap -->
     <!--1、加载Bottstrap层叠样式表 -->

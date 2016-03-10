@@ -1,5 +1,4 @@
 <?php
-use yii\helpers\Html;
 frontend\assets\WapAsset::register($this);
 ?>
 <?php $this->beginPage() ?>
@@ -13,7 +12,7 @@ frontend\assets\WapAsset::register($this);
     <meta name="renderer" content="webkit">
     <!--视窗设置 -->
     <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
-    <title></title>
+    <title>温都金服</title>
 
     <!-- Bootstrap -->
     <!--1、加载Bottstrap层叠样式表 -->
@@ -35,11 +34,11 @@ frontend\assets\WapAsset::register($this);
     <script src="/js/jquery.js"></script>
     <script src="/js/common.js"></script>
     <script>
-            $(function(){
-                 $('.back img').bind('click',function(){
-                      window.location.href='/user/user';
-                 })
-            })
+        $(function(){
+             $('.back img').bind('click',function(){
+                  window.location.href='/user/user';
+             })
+        })
     </script>
 </head>
 <body>
@@ -47,18 +46,16 @@ frontend\assets\WapAsset::register($this);
 
     <!--标的详情页头部 start-->
      <div class="container">
-            <div class="row title-box nav-height">
-                <div class="col-xs-2 back"><img src="/images/back.png" alt=""/></div>
-                <div class="col-xs-8 title"><?=$this->title ?></div>
-                <div class="col-xs-2 back"></div>
-            </div>
-    <!--标的详情页头部 end-->
-		<?= $content ?>
-
+        <div class="row title-box nav-height">
+            <div class="col-xs-2 back"><img src="/images/back.png" alt=""/></div>
+            <div class="col-xs-8 title"><?=$this->title ?></div>
+            <div class="col-xs-2 back"></div>
+        </div>
+        <!--标的详情页头部 end-->
+	<?= $content ?>
+     </div>
 
     <?php $this->endBody() ?>
-
-
 </body>
 </html>
 <?php $this->endPage() ?>
