@@ -85,7 +85,7 @@ class OrderService
                 $query[$key]['profit'] = '--';
                 $query[$key]['returndate'] = date('Y-m-d', $dat['finish_date']);
             } elseif (in_array($dat['pstatus'], [OnlineProduct::STATUS_HUAN, OnlineProduct::STATUS_FULL, OnlineProduct::STATUS_FOUND])) {
-                $query[$key]['finish_rate'] = (OnlineProduct::STATUS_FOUND === $dat['pstatus']) ? 100 : $dat['finish_rate'];
+                $query[$key]['finish_rate'] = (OnlineProduct::STATUS_FOUND === (int)$dat['pstatus']) ? 100 : number_format($dat['finish_rate'] * 100, 0);
                 $replayment = \common\models\order\OnlineRepaymentPlan::findOne(['order_id' => $dat['id'], 'online_pid' => $dat['online_pid']]);
                 if (null === $replayment) {
                     $query[$key]['profit'] = '--';
