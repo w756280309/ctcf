@@ -28,8 +28,9 @@ class OrderManager
     public static function findInvalidOrders(Loan $loan)
     {
         bcscale(14);
+        $bc = new BcRound();
         $orders = OnlineOrder::find()->where(['online_pid' => $loan->id, 'status' => OnlineOrder::STATUS_SUCCESS])->orderBy('id asc')->all();//升序排列
-        //$overproof = array();
+        $excessMoney = 0;//超额总计
         $current_sum = 0;
         foreach ($orders as $ord) {
             $current_sum = bcadd($ord->order_money, $current_sum);
@@ -40,9 +41,11 @@ class OrderManager
                 } else {
                     $returnMoney = null;
                 }
+                $excessMoney = bcadd($excessMoney, (null === $returnMoney) ? $ord->order_money : $returnMoney);
                 self::cancelOrder($ord, $returnMoney);
             }
         }
+        Loan::updateAll(["funded_money" => $bc->bcround(bcsub($loan->funded_money, $excessMoney), 2)], "id=" . $loan->id);//更新标的实际募集金额
     }
 
     /**
@@ -104,7 +107,7 @@ class OrderManager
         }
 
         $changeMoney = null === $ret_money ? $order->order_money : $ret_money;//计算更改的金额
-        $ua->freeze_balance = $bc->bcround(bcsub($ua->freeze_balance, $changeMoney), 2);
+        //$ua->freeze_balance = $bc->bcround(bcsub($ua->freeze_balance, $changeMoney), 2);//由于满标时候冻结金额已经解冻。所以此处不应该再减了
         $ua->available_balance = $bc->bcround(bcadd($ua->available_balance, $changeMoney), 2);
         $ua->drawable_balance = $bc->bcround(bcadd($ua->drawable_balance, $changeMoney), 2);
         $ua->in_sum = $bc->bcround(bcadd($ua->in_sum, $changeMoney), 2);
