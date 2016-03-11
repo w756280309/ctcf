@@ -105,3 +105,15 @@
     .production .production-content p{line-height:26px;}
 }
 
+/*账户中心*/
+.accountcenter {padding: 16px 0;}
+.accountcenter .accountcenter-center-left{line-height: 25px;}
+.accountcenter .accountcenter-center-right{line-height: 25px;color:#f44336;font-size: 20px;}
+.accountcenter-other .accountcenter-bottom{line-height: 60px;background-color: #fff;}
+.accountcenter-other .accountcenter-bottom p{line-height: 32px;}
+.accountcenter-other .accountcenter-bottom .unmber_remain{color:#f44336;font-size: 20px;line-height:20px;}
+.accountcenter-other .accountcenter-bottom .drawcash{text-align: center;font-size: 20px;}
+.accountcenter-other .accountcenter-bottom .addcash{border-left:1px solid #e8eaf0;border-right:1px solid #e8eaf0;text-align: center;color:#f44336;font-size: 20px;}
+
+
+

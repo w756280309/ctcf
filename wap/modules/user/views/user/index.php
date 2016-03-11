@@ -2,9 +2,10 @@
 frontend\assets\WapAsset::register($this);
 $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','position' => 1]);
 ?>
+<link href="/css/informationAndHelp.css" rel="stylesheet">
 <!--  账户中心页 start-->
 
-    <div class="row  border-bottom  earning">
+    <div class="row  border-bottom  earning accountcenter">
         <div class="row earn-tit">
             <div class="col-xs-1"></div>
             <div class="col-xs-5 col">资产总额 （元）</div>
@@ -15,23 +16,26 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
             <div class="col-xs-7 col"><?=$zcze?></div>
             <div class="col-xs-3"></div>
         </div>
-        <div class="row earn-tit">
+        <div class="row accountcenter-center-left">
             <div class="col-xs-1"></div>
-            <div class="col-xs-3 col">累计收益（元）</div>
-            <div class="col-xs-3 col">理财金额（元）</div>
-            <div class="col-xs-3 col">可用余额（元）</div>            
+            <div class="col-xs-5">累计收益（元）</div>
+            <div class="col-xs-6">理财资产（元）</div>
         </div>
-        <div class="row earn-num2">
+        <div class="row accountcenter-center-right">
             <div class="col-xs-1"></div>
-            <div class="col-xs-3 col"><?=$ljsy?></div>
-            <div class="col-xs-3 col"><?=$dhsbj?></div>
-            <div class="col-xs-3 col"><?=$ua->available_balance?></div>
+            <div class="col-xs-5"><?=$ljsy?></div>
+            <div class="col-xs-6"><?= $dhsbj ?></div>
         </div>
     </div>
-    <div class="row">
-        <div class="row border-bottom account">
-            <div class="col-xs-6 rg-line" onclick="tixian()">提现</div>
-            <div class="col-xs-6 " onclick="recharge()">充值</div>
+    <div class="row accountcenter-other">
+        <div class="row border-bottom accountcenter-bottom">
+            <div class="col-xs-1"></div>
+            <div class="col-xs-5">
+                    <p>可用余额（元）</p>
+                    <p class="unmber_remain"><?=$ua->available_balance?></p>
+            </div>
+            <div class="col-xs-3 addcash" onclick="recharge()">充值</div>
+            <div class="col-xs-3 rg-line drawcash" onclick="tixian()">提现</div>
         </div>
         <div class="clear"></div>
         <div class="row sm-height border-bottom margin-top" onclick="location.href='/user/user/myorder'">

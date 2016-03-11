@@ -1,5 +1,4 @@
 .new-box {
-    margin-top: 8px;
     padding:0 5px 0;
     border-top: 1px solid #e4e4e4;
     border-bottom: 1px solid #e4e4e4;
@@ -13,19 +12,20 @@
 
 .new-head {
     margin-left: 5px;
-    height: 54px;
-    border-bottom: 1px solid #e4e4e4;
+    height: 48px;
     background: #fff;
 }
-
+.bot-line {
+    border-bottom: 1px solid #e4e4e4;
+}
 .new-head-title {
-    padding: 15px 0 15px 0;
+    padding: 9px 0 13px 0;
     color: #ea5514;
     font-size: 18px;
 }
 .arrow-rg {
     float: left;
-    margin-top: 1px;
+    margin-top: 3px;
     margin-right: 5px;
     width: 0;
     height: 0;
@@ -49,10 +49,11 @@
     padding-left: 0;
     padding-right: 0;
 }
-
+.news-more {
+    padding-right: 5px;
+}
 .more a {
-
-    padding-top: 17px;
+    padding-top: 12px;
     text-align: right;
     color: #9fa0a0;
     font-size: 14px;
@@ -179,6 +180,7 @@ a.a-progress-bg {
 }
 
 a.a-progress {
+    display: block;
     margin-left: -16px;
     position: absolute;
     top: 29px;
@@ -198,8 +200,7 @@ a.weikaibiao {
 }
 
 .licai-box {
-    /*margin-top: 16px;*/
-    margin-bottom: 20px;
+    margin-bottom: 15px;
     padding-bottom: 16px;
     border-top: 1px solid #e4e4e4;
     border-bottom: 1px solid #e4e4e4;
@@ -211,7 +212,7 @@ a.weikaibiao {
     margin-left: 10px;
     border: 0;
     padding-left: 1px;
-    height: 54px;
+    height: 48px;
     background: #fff;
 }
 
@@ -325,6 +326,191 @@ img {
 
 .line-box {
     width:100%;
-    height:8px;
+    height:10px;
     border-bottom:1px solid #e6e7e7;
+}
+
+/* 新添加修改 */
+
+.head-title {
+    height: 50px;
+    line-height: 50px;
+    background: #f44336 none repeat scroll 0 0;
+    color: #fff;
+    font-size: 13px;
+}
+.head-title .col-xs-8 {
+    padding: 0;
+    margin:0;
+    position: relative;
+}
+.logo {
+    float: left;
+    padding: 0 0 0 4px;
+    width:30%;
+    height: 100%;
+    line-height: 50px;
+}
+.logo img {
+    margin: 0;
+    width:100%;
+    border:none;
+}
+
+.logo_tit {
+    float: left;
+    padding-left: 2%;
+    width:68%;
+    text-align: left;
+    position: absolute;
+    top:0;
+    left:30%;
+}
+
+.btn {
+    width: 100%;
+    margin: .6rem 0;
+    padding: 0;
+}
+.btn .col-xs-6{
+    padding: 0;
+    margin: 0;
+}
+a.a-btn {
+    padding: 0;
+    margin: 0 15px;
+    width:70%;
+    min-width: 110px;
+    height:34px;
+    line-height:34px;
+    font-size: 1.5rem;
+    text-align:center;
+    border:1px solid #f44336;
+    display: inline-block;
+}
+.signup {
+    color:#fff;
+    background: #f44336;
+    float:right;
+}
+.login {
+    color:#f44336;
+    background: #fff;
+    float:left;
+}
+.notice-box {
+    padding:0;
+    margin-bottom: 12px;
+}
+.notice-bottom {
+    margin: 0;
+    padding-left: 10px;
+    padding-right: 10px;
+    border-bottom: 1px solid #e6e7e7;
+    background: #fff;
+}
+
+.notice {
+    font-size: 0.9rem;
+    height: 3rem;
+    line-height: 3rem;
+    padding: 0 18px;
+    border-bottom: 1px solid #e6e7e7;
+}
+.border-top {
+    border-top:none;
+}
+.border-bot {
+    border-bottom:none;
+}
+.notice span {
+    color:#444;
+}
+
+.news-tra {
+    margin-left: 12px;
+}
+.nav-box {
+    margin:0 auto 35px;
+    width:100%;
+    color:#595757;
+    border-top:1px solid #e6e7e7;
+    border-bottom:1px solid #e6e7e7;
+    background: #fff;
+    height:72px;
+}
+.nav-box p {
+    clear: both;
+    height:18px;
+    line-height:18px;
+    text-align: center;
+    font-size: 1.2rem;
+    color:#595757;
+}
+.nav-box p span {
+    color:#898989;
+}
+nav {
+    margin:10px auto 15px;
+    padding-bottom: 15px;
+    width:24rem;
+}
+nav li {
+    float: left;
+    padding:0 8px;
+    color:#595757;
+    font-size: 1.2rem;
+    border-left:1px solid #e6e7e7;
+}
+nav li.first {
+    border: none;
+}
+@media (min-width:768px) {
+    nav {
+        width:50rem;
+    }
+    nav li {
+        padding:3px 36px;
+        font-size: 1.3rem;
+    }
+    .nav-box p {
+        font-size: 1.3rem;
+    }
+}
+@media (min-width:490px) and (max-width: 640px) {
+    .logo img {
+        margin: 0;
+        width:72%;
+        border:none;
+    }
+    .logo_tit {
+        width:48%;
+        position: absolute;
+        top:0;
+        left:22%;
+    }
+}
+@media (min-width:641px) and (max-width: 768px) {
+    .logo img {
+        width:60%;
+        border:none;
+    }
+    .logo_tit {
+        width:48%;
+        position: absolute;
+        top:0;
+        left:18%;
+    }
+}
+@media (min-width:769px)  {
+    .logo img {
+        width:36%;
+        border:none;
+    }
+    .logo_tit {
+        width:48%;
+        position: absolute;
+        top:0;
+        left:17%;
+    }
 }

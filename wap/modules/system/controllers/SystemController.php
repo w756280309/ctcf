@@ -11,7 +11,9 @@ class SystemController extends BaseController
 {
     public $layout = '@app/modules/order/views/layouts/buy';
 
-    //系统设置页面
+    /**
+     * 系统设置页面
+     */
     public function actionSetting()
     {
         $uid = $this->user->id;
@@ -21,6 +23,9 @@ class SystemController extends BaseController
         return $this->render('setting', ['model' => $user]);
     }
 
+    /**
+     * 账户中心
+     */
     public function actionSafecenter()
     {
         $uid = $this->user->id;
@@ -38,7 +43,6 @@ class SystemController extends BaseController
 
     /**
      * 常见问题
-     * @return type
      */
     public function actionProblem()
     {
@@ -47,27 +51,9 @@ class SystemController extends BaseController
 
     /**
      * 关于我们
-     * @return type
      */
     public function actionAbout()
     {
         return $this->render('about');
-    }
-
-    /**
-     * 资讯列表
-     * @return type
-     */
-    public function actionMesslist()
-    {
-        return $this->render('messlist');
-    }
-
-    /**
-     *
-     */
-    public function actionMessdetail()
-    {
-        return $this->render('messdetail');
     }
 }

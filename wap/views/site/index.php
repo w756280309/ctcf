@@ -1,7 +1,11 @@
 <?php
+use yii\helpers\Html;
+use frontend\assets\WapAsset;
 use common\models\product\OnlineProduct;
 
-$this->title = '温都金服 - 首页';
+WapAsset::register($this);
+
+$this->title = '温都金服';
 $this->params['breadcrumbs'][] = $this->title;
 $this->registerJsFile('/js/jquery.js', ['depends' => 'yii\web\YiiAsset','position' => 1]);
 $this->registerJsFile('/js/TouchSlide.1.1.js', ['depends' => 'yii\web\YiiAsset','position' => 1]);
@@ -12,35 +16,64 @@ $this->registerCssFile('/css/first.css', ['depends' => 'frontend\assets\WapAsset
 
 $dates = Yii::$app->functions->getDateDesc($deals->start_date);
 $rate = number_format($deals->finish_rate * 100, 0);
-
 ?>
-<style>
-    body {
-        padding-bottom: 30px;
-    }
-</style>
 
+<?php $this->beginPage() ?>
+
+<!DOCTYPE html>
+<html>
+<head>
+   <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <meta name="renderer" content="webkit">
+    <meta name="format-detection" content="telephone=no"/>
+    <title>温都金服</title>
+    <?= Html::csrfMetaTags() ?>
+    <?php $this->head() ?>
+    <style>
+        body {
+            padding-bottom: 30px;
+            background: #f7f8f8;
+        }
+    </style>
+</head>
+<body>
+<?php $this->beginBody() ?>
 <div class="container">
+    <!--header-->
+    <header class="row head-title">
+        <div class="logo col-xs-12 col-sm-12"><img src="images/logo.png" alt="logo" ></div>
+        <div class="logo_tit">温州报业传媒旗下理财平台</div>
+    </header>
+
     <div class="slideBox" id="slideBox">
         <div class="bd">
             <ul>
-             <?php foreach($adv as $val): ?>
-                <li> <a class="pic" href="<?= $val['link'] ?>"><img src="/upload/adv/<?= $val['image'] ?>" alt=""></a> </li>
-             <?php endforeach; ?>
+                <?php foreach($adv as $val): ?>
+                    <li> <a class="pic" href="<?= $val['link'] ?>"><img src="/upload/adv/<?= $val['image'] ?>" alt=""></a> </li>
+                <?php endforeach; ?>
             </ul>
         </div>
         <div class="hd">
             <ul></ul>
         </div>
     </div>
- <!-- 添加修改部分 -->
-
- <!-- 新手区start  -->
+    <?php if (\Yii::$app->user->isGuest) { ?>
+    <!-- 登录 注册 start -->
+    <div class="row btn">
+        <div class="col-sm-2"></div>
+        <div class="col-xs-6 col-sm-4"><a class="signup a-btn" href="/site/signup" >注册</a></div>
+        <div class="col-xs-6 col-sm-4"><a class="login a-btn" href="/site/login" >登录</a></div>
+        <div class="col-sm-2"></div>
+    </div>
+    <!-- 登录 注册 end -->
+    <?php } ?>
+ <!-- 推荐区start  -->
     <div class="row new-box">
-        <div class="new-head" onclick="window.location.href='/deal/deal/index?xs=1'">
+        <div class="new-head bot-line" onclick="window.location.href='/deal/deal/index?xs=1'">
             <div class="col-xs-8 col-sm-7 new-head-title">
                 <div class="arrow-rg"></div>
-                <div class="new-head-tit"><span>新手区</span><span class="new-head-txt">更短周期，更高收益</span></div>
+                <div class="new-head-tit"><span>推荐区</span><span class="new-head-txt">优选资产，安全无忧</span></div>
             </div>
             <div class="col-xs-1 col-sm-3 "> </div>
             <div class="col-xs-3 col-sm-2 more"><a href="/deal/deal/index?xs=1">更多》</a></div>
@@ -50,7 +83,7 @@ $rate = number_format($deals->finish_rate * 100, 0);
         <ul class="row new-bottom" onclick="window.location.href='/deal/deal/detail?sn=<?= $deals->sn ?>'">
             <li class="col-xs-6 padding-5">
                 <div class="xian1">
-                    <div class="newcomer-badge"><img src="/images/badge.png" alt="猴年加息"></div>
+                    <div class="newcomer-badge"><img src="images/badge.png" alt="猴年加息"></div>
                     <span class="interest-rate"><?= rtrim(rtrim(number_format($deals->yield_rate*100, 2), '0'), '.') ?>%</span>
                     <span class="interest-rate-add">+<?= $deals->jiaxi ?>%</span>
                     <div class="col-xs-12 percentage-txt">年化率</div>
@@ -86,19 +119,19 @@ $rate = number_format($deals->finish_rate * 100, 0);
             </li>
             <li class="col-xs-6 padding-5">
                 <div class="new-bottom-rg">
-                    <p><span class="tishi"><?= rtrim(rtrim($deals->start_money, '0'), '.') ?>元起投，<?= $deals->expires ?>天</span></p>
+                    <p ><span class="tishi"><?= rtrim(rtrim($deals->start_money, '0'), '.') ?>元起投，<?= $deals->expires ?>天</span></p>
                     <?php if (OnlineProduct::STATUS_PRE === $deals->status) { ?>
                         <!-- 未开标 -->
                         <a class="zhuangtai weikaibiao" href="/deal/deal/detail?sn=<?= $deals->sn ?>"><?= $dates['desc'] ?> <?= date('H:i', $deals->start_date) ?></a>
                         <?php } elseif (OnlineProduct::STATUS_NOW === $deals->status) { ?>
                         <!-- 进度 % -->
-                        <div style="margin:10px 3px; border:1px solid #fe9b00; ">
+                        <div style="margin:10px 8px; border:1px solid #fe9b00; ">
                             <a class="a-progress-bg"  style="width:<?= $rate ?>%;"></a>
                             <a class="zhuangtai a-progress" href="/deal/deal/detail?sn=<?= $deals->sn ?>"><?= $rate ?>%</a>
                         </div>
                         <?php } else { ?>
-                        <div class="zhuangtai" style="margin:10px 3px; background-color: #9fa0a0;">
-                            <font style="color: #fff; line-height: 40px;"><?= Yii::$app->params['productonline'][$deals->status] ?></font>
+                        <div class="zhuangtai" style="margin:10px 8px; background-color: #9fa0a0;">
+                            <font style="color: #fff; line-height: 34px;"><?= Yii::$app->params['productonline'][$deals->status] ?></font>
                         </div>
                     <?php } ?>
                 </div>
@@ -106,7 +139,7 @@ $rate = number_format($deals->finish_rate * 100, 0);
         </ul>
         <?php } ?>
     </div>
-<!--  新手区end  -->
+<!--  推荐区 end  -->
     <div class="line-box" ></div>
 <!-- 理财区start -->
     <div class="licai-box">
@@ -119,31 +152,62 @@ $rate = number_format($deals->finish_rate * 100, 0);
         </div>
         <div style="clear: both;"></div>
         <div class="row margin-add">
-            <div class="col-xs-4 padding-clear"><a href="/deal/deal/index?cat=1"><img src="/images/type1.png" alt="温银通" /></a> </div>
-            <div class="col-xs-4 padding-clear"><a href="/deal/deal/index?cat=2"><img src="/images/type2.png" alt="温政盈" /></a> </div>
-            <div class="col-xs-4 padding-clear"><a href="/order/booking/detail?pid=1"><img src="/images/type3.png" alt="温股投" /></a> </div>
+            <div class="col-xs-4 padding-clear"><a href="/deal/deal/index?cat=1"><img src="images/type1.png" alt="温银通" /></a> </div>
+            <div class="col-xs-4 padding-clear"><a href="/deal/deal/index?cat=2"><img src="images/type2.png" alt="温政盈" /></a> </div>
+            <div class="col-xs-4 padding-clear"><a href="/order/booking/detail?pid=1"><img src="images/type3.png" alt="温股投" /></a> </div>
         </div>
-
     </div>
-    <!-- 理财区end -->
+    <!-- 理财区 end -->
+
+    <!-- 最新资讯 start-->
+    <div class="row notice-box new-box">
+        <div class="new-head news-tra" onclick="window.location.href='https://m.wenjf.com/news/index.html'">
+            <div class="col-xs-8 col-sm-7 new-head-title">
+                <div class="arrow-rg"></div>
+                <div class="new-head-tit"><span>最新资讯</span></div>
+            </div>
+            <div class="col-xs-1 col-sm-3 "> </div>
+            <div class="col-xs-3 col-sm-2 more news-more"><a href="https://m.wenjf.com/news/index.html">更多》</a></div>
+        </div>
+        <div class="notice-bottom">
+            <div class="col-xs-12 notice border-top" onclick="location.href='https://m.wenjf.com/news/1.html'"><span>【</span>资讯信息<span>】</span>温州报业传媒旗下理财平台-温都金服即将上线</div>
+            <div class="col-xs-12 notice border-bot" onclick="location.href='https://m.wenjf.com/news/2.html'"><span>【</span>资讯信息<span>】</span>温都金服引入国内领先的第三方资金托管平台</div>
+        </div>
+    </div>
+    <!-- 最新资讯 end -->
+    <!-- nav start -->
+    <div class="nav-box">
+        <nav>
+            <li class="first"><a href="/">首页</a></li>
+            <li><a href="/site/compdesc">公司</a></li>
+            <li><a href="/site/advantage">平台优势</a></li>
+            <li><a href="/site/help">帮助中心</a></li>
+            <li><a href="">联系我们</a></li>
+        </nav>
+        <p>客服热线：<?= Yii::$app->params['contact_tel'] ?>（09:00-20:00）</p>
+    </div>
 </div>
 
 <!--   end  -->
 <!--footer-->
-    <div class="row navbar-fixed-bottom footer">
-        <div class="col-xs-4 footer-title">
-            <div class="footer-inner">
-                <a href="/" class="shouye1"><span class="shouye"></span>首页</a>
-            </div>
-        </div>
-        <div class="col-xs-4 footer-title">
-            <div class="footer-inner1">
-                <a href="/deal/deal/index"><span class="licai"></span>理财</a>
-            </div>
-        </div>
-        <div class="col-xs-4 footer-title">
-            <div class="footer-inner2">
-                <a href="/user/user"><span class="zhanghu"></span>账户</a>
-            </div>
+<div class="row navbar-fixed-bottom footer">
+    <div class="col-xs-4 footer-title">
+        <div class="footer-inner">
+            <a href="/" class="shouye1"><span class="shouye"></span>首页</a>
         </div>
     </div>
+    <div class="col-xs-4 footer-title">
+        <div class="footer-inner1">
+            <a href="/deal/deal/index"><span class="licai"></span>理财</a>
+        </div>
+    </div>
+    <div class="col-xs-4 footer-title">
+        <div class="footer-inner2">
+            <a href="/user/user"><span class="zhanghu"></span>账户</a>
+        </div>
+    </div>
+</div>
+<?php $this->endBody() ?>
+</body>
+</html>
+<?php $this->endPage() ?>
