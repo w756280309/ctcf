@@ -9,6 +9,7 @@ use common\core\UserAccountCore;
 use common\models\user\MoneyRecord;
 use common\service\OrderService;
 use common\service\BankService;
+use common\lib\bchelp\BcRound;
 
 class UserController extends BaseController
 {
@@ -17,12 +18,14 @@ class UserController extends BaseController
      */
     public function actionIndex()
     {
+        $bc = new BcRound();
+        bcscale(14);
         $user = $this->user;
         $this->layout = 'account';
         $uacore = new UserAccountCore();
         $ua = $this->user->lendAccount;
         $leijishouyi = $uacore->getTotalProfit($user->id);//累计收益
-        $dhsbj = $ua->investment_balance;//带回收本金
+        $dhsbj = $bc->bcround(bcadd($ua->investment_balance, $ua->freeze_balance), 2);//在wap端理财资产等于实际理财资产+用户投资冻结金额freeze_balance
         $zcze = $uacore->getTotalFund($user->id);//账户余额+理财资产
 
         $data = BankService::checkKuaijie($user);

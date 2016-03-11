@@ -17,13 +17,15 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
         </div>
         <div class="row earn-tit">
             <div class="col-xs-1"></div>
-            <div class="col-xs-4 col">累计收益 （元）</div>
-            <div class="col-xs-5 col">可用余额 （元）</div>
+            <div class="col-xs-3 col">累计收益（元）</div>
+            <div class="col-xs-3 col">理财金额（元）</div>
+            <div class="col-xs-3 col">可用余额（元）</div>            
         </div>
         <div class="row earn-num2">
             <div class="col-xs-1"></div>
-            <div class="col-xs-4 col"><?=$ljsy?></div>
-            <div class="col-xs-5 col"><?=$ua->available_balance?></div>
+            <div class="col-xs-3 col"><?=$ljsy?></div>
+            <div class="col-xs-3 col"><?=$dhsbj?></div>
+            <div class="col-xs-3 col"><?=$ua->available_balance?></div>
         </div>
     </div>
     <div class="row">

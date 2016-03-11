@@ -1,7 +1,7 @@
 <?php
 $this->title="购买";
 
-$this->registerJs('var yr='.number_format($deal->yield_rate, 2), 1);
+$this->registerJs('var yr='.$deal->yield_rate, 1);
 $this->registerJs('var qixian='.$deal->expires, 1);
 
 $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','position' => 1]);
@@ -15,7 +15,7 @@ $this->registerJsFile('/js/order.js', ['depends' => 'yii\web\YiiAsset','position
     <div class="row produce">
         <div class="col-xs-12 text-align-lf first-hang" style="padding-right: 0;"><?=$deal->title?></div>
         <div class="col-xs-4 text-align-ct">年化收益</div>
-        <div class="col-xs-8 text-align-lf col"><?=  number_format($deal->yield_rate*100)?>%</div>
+        <div class="col-xs-8 text-align-lf col"><?=  ($deal->yield_rate*100)?>%</div>
         <div class="col-xs-4 text-align-ct">项目期限</div>
         <div class="col-xs-8 text-align-lf col"><?= $deal->expires ?>天<?php if (!empty($deal['kuanxianqi'])) { ?>(含宽限期<?=$deal['kuanxianqi']?>天)<?php } ?></div>
         <div class="col-xs-4 text-align-ct">可投余额</div>
