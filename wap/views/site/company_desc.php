@@ -1,6 +1,5 @@
 <?php
 $this->title="公司介绍";
-$this->registerJsFile('/js/helpcenter.js', ['depends' => 'yii\web\YiiAsset','position' => 1]);
 ?>
 <link href="/css/informationAndHelp.css" rel="stylesheet">
 <style>

@@ -362,4 +362,13 @@ class SiteController extends Controller
             default: return $this->render('help');
         }
     }
+
+    /**
+     * 平台优势页面
+     */
+    public function actionAdvantage()
+    {
+        $this->layout = '@app/modules/order/views/layouts/buy';
+        return $this->render('advantage');
+    }
 }
