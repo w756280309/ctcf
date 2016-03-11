@@ -26,9 +26,18 @@ class DealcrontabController extends Controller
      */
     public function actionFull()
     {
-        $data = OnlineProduct::find()->where(['finish_rate' => 1, 'status' => 2])->all();
+        $data = OnlineProduct::find()->where(['finish_rate' => 1, 'status' => 2])->orderBy('recommendTime asc')->all();
         $bc = new BcRound();
         foreach ($data as $dat) {
+            if (!empty(dat['recommendTime'])) {
+                $count = OnlineProduct::find()->where("recommendTime != null or recommendTime != 0")->count();
+
+                if ($count > 1) {
+                    $dat->recommendTime = 0;
+                    $dat->save(false);
+                }
+            }
+
             $pid = $dat['id'];
             OnlineProduct::updateAll(['status' => 3, 'sort' => OnlineProduct::SORT_FULL], ['id' => $pid]);
 

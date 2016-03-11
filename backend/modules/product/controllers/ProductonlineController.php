@@ -358,6 +358,19 @@ class ProductonlineController extends BaseController
                         return ['result' => '0', 'message' => '操作失败,账户更新失败,请联系技术'];
                     }
                 }
+
+                if (!empty($model->recommendTime)) {
+                    $count = OnlineProduct::find()->where("recommendTime != null or recommendTime != 0")->count();
+
+                    if ($count > 1) {
+                        $deal->recommendTime = 0;
+                        if (!$deal->save(false)) {
+                            $transaction->rollBack();
+                            return ['code' => 0, 'message' => '操作失败'];
+                        }
+                    }
+                }
+
                 $transaction->commit();
 
                 return ['result' => '1', 'message' => '操作成功'];
