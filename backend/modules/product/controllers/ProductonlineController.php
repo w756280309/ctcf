@@ -351,7 +351,7 @@ class ProductonlineController extends BaseController
                     $mrmodel->osn = $ord['sn'];
                     $mrmodel->uid = $ord['uid'];
                     $mrmodel->balance = $ua->available_balance;
-                    $mrmodel->in_sum = $ord['order_money'];
+                    $mrmodel->in_money = $ord['order_money'];
                     $mrmodel->remark = '项目成立,冻结金额转入理财金额账户。交易金额'. $ord['order_money'];
                     if (!$ua->save() || !$mrmodel->save()) {
                         $transaction->rollBack();
