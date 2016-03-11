@@ -32,7 +32,7 @@ $this->title = '提现 - 温都金服';
                     </li>
                     <li>
                         <div class="wdjf-label">提现金额</div>
-                        <div class="wdjf-field"><?= $form->field($draw, 'money', ['template' => '{input}{error}'])->textInput(['placeholder' => '最低提现金额10元']); ?></div><span style='margin-left: 5px;'>元</span>
+                        <div class="wdjf-field"><?= $form->field($draw, 'money', ['template' => '{input}{error}'])->textInput(); ?></div><span style='margin-left: 5px;'>元</span>
                     </li>
                     <li class="wdjf-action">
                         <input class="btn btn-primary" type="submit" value="提现申请">
