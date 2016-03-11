@@ -97,12 +97,34 @@ class SiteController extends Controller
         $ac = 5;
         $adv = Adv::find()->where(['status' => 0, 'del_status' => 0])->limit($ac)->orderBy('id desc')->asArray()->all();
 
-        $deals = OnlineProduct::find()->where(['del_status' => OnlineProduct::STATUS_USE, 'online_status' => OnlineProduct::STATUS_ONLINE, 'is_xs' => 1])->orderBy('sort asc, id desc')->one();
+        $deals = OnlineProduct::find()->where(['del_status' => OnlineProduct::STATUS_USE, 'online_status' => OnlineProduct::STATUS_ONLINE])
+            ->andWhere("recommendTime != null or recommendTime != 0")
+            ->orderBy('recommendTime asc,sort asc, id desc')->all();
         if (!$deals) {
             throw new \yii\web\NotFoundHttpException('The production is not existed.');
         }
 
-        return $this->render('index', ['adv' => $adv, 'deals' => $deals]);
+        $num = 0;
+        $key = 0;
+        $deal = null;
+        foreach($deals as $k => $val) {
+            $num++;
+            if ($val['status'] < 3) {
+                $deal = $val;
+            } else {
+                $key = $k;
+            }
+        }
+
+        if (1 === $num) {
+            $deal = $deals;
+        }
+
+        if (empty($deal)) {
+            $deal = $deals[$key];
+        }
+
+        return $this->render('index', ['adv' => $adv, 'deals' => $deal]);
     }
 
     /**
