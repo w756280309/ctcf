@@ -30,7 +30,7 @@ $this->title="系统设置";
     </div>
     <div class="clear"></div>
     <div class="row sm-height border-bottom" onclick="window.location.href='/system/system/help'">
-        <div class="col-xs-3 left-txt">新手帮助</div>
+        <div class="col-xs-3 left-txt">帮助中心</div>
         <div class="col-xs-7"></div>
         <div class="col-xs-1 arrow">
             <a href="/system/system/help"><img src="/images/arrow.png" alt="右箭头"></a>

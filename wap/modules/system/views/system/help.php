@@ -1,25 +1,91 @@
 <?php
-$this->title="新手帮助";
+$this->title="帮助中心";
+$this->registerJsFile('/js/helpcenter.js', ['depends' => 'yii\web\YiiAsset','position' => 1]);
 ?>
- <link rel="stylesheet" href="/css/about.css">
- <style>
-     body {
-         background-color: #fff !important;
-     }
- </style>
-<!-- 主体 -->
-<div class="about-content ">
-    <p class="problem-title">如何充值？</p>
-    <p class="xiang">实名认证</p>
-    <p class="xiang">绑定快捷支付</p>
-    <p class="xiang">充值（不同银行限额不同）</p>
+<link href="/css/informationAndHelp.css" rel="stylesheet">
 
-    <p class="problem-title">如何提现？</p>
-    <p class="xiang">银行卡信息完善</p>
-    <p class="xiang"> 发出提现申请</p>
-    <p class="xiang">T+1个工作到账（节假日顺延）</p>
-
-    <p class="problem-title">如何投资？</p>
-    <p class="xiang">募集中的项目可进行投资，注意起投金额</p>
+<div class="container bootstrap-common helpcenter">
+        <!-- 主体 -->
+        <div class="row">
+                <div class="col-xs-12">
+                        <p class="header"><span>—————</span>&nbsp;常见问题&nbsp;<span>—————</span></p>
+                </div>
+        </div>
+        <div class="kong-width">
+                <!--注册登录-->
+                <a href="/system/system/help?type=1">
+                        <div class="row">
+                                <div class="col-xs-12">
+                                    <img src="/images/system/back_1.png" width="100%" alt="">
+                                </div>
+                        </div>
+                        <div class="row">
+                                <div class="col-xs-12">
+                                        <img id="img_height" src="/images/system/back_2.png" width="100%" alt="">
+                                </div>
+                                <div class="common_single">
+                                        <div class="mask-center">
+                                                注册登录篇
+                                                <img class="back_icon" src="/images/system/back_icon.png" height="100%"
+                                                     alt="">
+                                        </div>
+                                </div>
+                        </div>
+                        <div class="row">
+                                <div class="col-xs-12">
+                                        <img src="/images/system/back_3.png" width="100%" alt="">
+                                </div>
+                        </div>
+                </a>
+                <!--绑卡充值-->
+                <a href="/system/system/help?type=2">
+                        <div class="row">
+                                <div class="col-xs-12">
+                                        <img src="/images/system/back_4.png" width="100%" alt="">
+                                </div>
+                        </div>
+                        <div class="row">
+                                <div class="col-xs-12">
+                                        <img id="img_height" src="/images/system/back_5.png" width="100%" alt="">
+                                </div>
+                                <div class="common_single">
+                                        <div class="mask-center">
+                                                绑卡充值篇
+                                                <img class="back_icon" src="/images/system/back_icon.png" height="100%"
+                                                     alt="">
+                                        </div>
+                                </div>
+                        </div>
+                        <div class="row">
+                                <div class="col-xs-12">
+                                        <img src="/images/system/back_6.png" width="100%" alt="">
+                                </div>
+                        </div>
+                </a>
+                <!--投资提现-->
+                <a href="/system/system/help?type=3">
+                        <div class="row">
+                                <div class="col-xs-12">
+                                        <img src="/images/system/back_7.png" width="100%" alt="">
+                                </div>
+                        </div>
+                        <div class="row">
+                                <div class="col-xs-12">
+                                        <img id="img_height" src="/images/system/back_8.png" width="100%" alt="">
+                                </div>
+                                <div class="common_single">
+                                        <div class="mask-center">
+                                                投资/提现篇
+                                                <img class="back_icon" src="/images/system/back_icon.png" height="100%"
+                                                     alt="">
+                                        </div>
+                                </div>
+                        </div>
+                        <div class="row">
+                                <div class="col-xs-12">
+                                        <img src="/images/system/back_9.png" width="100%" alt="">
+                                </div>
+                        </div>
+                </a>
+        </div>
 </div>
-

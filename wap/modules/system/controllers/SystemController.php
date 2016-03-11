@@ -2,18 +2,15 @@
 
 namespace app\modules\system\controllers;
 
-use Yii;
 use app\controllers\BaseController;
-use yii\web\Response;
 use common\models\user\User;
 use common\models\user\QpayBinding;
-use common\models\city\Region;
 use common\service\BankService;
 
 class SystemController extends BaseController
 {
     public $layout = '@app/modules/order/views/layouts/buy';
-    
+
     //系统设置页面
     public function actionSetting()
     {
@@ -39,26 +36,52 @@ class SystemController extends BaseController
         return $this->render('safecenter', ['user' => $user, 'user_bank' => $user_bank]);
     }
 
-    public function actionHelp()
+    /**
+     * 新手帮助
+     * @return type
+     */
+    public function actionHelp($type=null)
     {
-        return $this->render('help');
+        switch ($type) {
+            case 1: return $this->render('help_loginregister');
+            case 2: return $this->render('help_bindcard');
+            case 3: return $this->render('help_invest');
+            default: return $this->render('help');
+        }
     }
 
+    /**
+     * 常见问题
+     * @return type
+     */
     public function actionProblem()
     {
         return $this->render('problem');
     }
 
+    /**
+     * 关于我们
+     * @return type
+     */
     public function actionAbout()
     {
         return $this->render('about');
     }
 
-    public function actionCity($pid = null)
+    /**
+     * 资讯列表
+     * @return type
+     */
+    public function actionMesslist()
     {
-        Yii::$app->response->format = Response::FORMAT_JSON;
-        $city = Region::find()->where(['province_id' => $pid])->select('name')->asArray()->all();
+        return $this->render('messlist');
+    }
 
-        return ['code' => 0, 'city' => $city, 'message' => '成功'];
+    /**
+     *
+     */
+    public function actionMessdetail()
+    {
+        return $this->render('messdetail');
     }
 }
