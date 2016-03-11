@@ -12,7 +12,7 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
                 <ul class="row column-content">
                     <li class="col-xs-6">
                         <div class="xian">
-                            <?=  doubleval(number_format($deal['yield_rate']*100, 2)) ?><span class="column-lu">%</span>
+                            <?=  doubleval(number_format($deal->objBaseRate*100, 2)) ?><span class="column-lu">%</span>
                             <?php if (!empty($deal['jiaxi'])) { ?><span class="bonus-badge">+<?=  doubleval($deal['jiaxi']) ?>%</span><?php } ?>
                         </div>
                         <span class="qing">年化收益率</span>
@@ -51,7 +51,7 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
         <div class="row shuju">
             <div class="col-xs-1"></div>
             <div class="col-xs-8" style="padding: 0;padding-left: 15px">
-                <span><?= ($deal['status']==1)?(Yii::$app->functions->toFormatMoney($deal['money'])):number_format($deal['deal_balace'],2).'元'?></span><i>/<?= Yii::$app->functions->toFormatMoney($deal['money']); ?></i>
+                <span><?= ($deal['status']==1)?(Yii::$app->functions->toFormatMoney($deal['money'])):number_format($deal_balace,2).'元'?></span><i>/<?= Yii::$app->functions->toFormatMoney($deal['money']); ?></i>
                 <div>可投余额/项目总额</div>
             </div>
             <div class="col-xs-1" style="padding: 0;">

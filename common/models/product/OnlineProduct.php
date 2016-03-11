@@ -458,5 +458,23 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
 
         return $resp;
     }
+    
+    /**
+     * 用于加息时候，利率的显示
+     * @return decimal
+     */
+    public function getObjBaseRate()
+    {
+        return static::getBaseRate($this->yield_rate, $this->jiaxi);
+    }
 
+    /**
+     * 用于加息时候，利率的显示
+     * @return decimal
+     */
+    public static function getBaseRate($yr,$jiaxi)
+    {
+        return null === $jiaxi ? $yr : bcsub($yr, bcdiv($jiaxi, 100));
+    }
+    
 }

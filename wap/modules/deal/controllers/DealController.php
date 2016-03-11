@@ -54,7 +54,7 @@ class DealController extends Controller
             $deals[$key]['start'] = date('H:i', $val['start']);
             $deals[$key]['start_desc'] = $dates['desc'];
             $deals[$key]['finish_rate'] = number_format($val['finish_rate'] * 100, 0);
-            $deals[$key]['yr'] = $val['yr'] ? number_format($val['yr'] * 100, 2) : '0.00';
+            $deals[$key]['yr'] = $val['yr'] ? number_format(OnlineProduct::getBaseRate($val['yr'], $val['jiaxi']) * 100, 2) : '0.00';
             $deals[$key]['statusval'] = Yii::$app->params['productonline'][$val['status']];
             $deals[$key]['jiaxi'] = $val['jiaxi'];
             $deals[$key]['start_money'] = $val['start_money'];
@@ -90,7 +90,7 @@ class DealController extends Controller
         if (empty($sn)) {
             throw new \yii\web\ServerErrorHttpException('标的编号不能为空');
         }
-        $deals = OnlineProduct::find()->where(['online_status' => OnlineProduct::STATUS_ONLINE, 'del_status' => OnlineProduct::STATUS_USE, 'sn' => $sn])->asArray()->one();
+        $deals = OnlineProduct::find()->where(['online_status' => OnlineProduct::STATUS_ONLINE, 'del_status' => OnlineProduct::STATUS_USE, 'sn' => $sn])->one();
         if (empty($deals)) {
             throw new \yii\web\NotFoundHttpException('您访问的页面找不到');
         }
@@ -104,7 +104,7 @@ class DealController extends Controller
         } else {
             $orderbalance = $deals['money'];
         }
-        $deals['deal_balace'] = $orderbalance;
+        //$deals['deal_balace'] = $orderbalance;
         if ($deals['status'] == OnlineProduct::STATUS_PRE) {
             $start = Yii::$app->functions->getDateDesc($deals['start_date']);
             $deals['start_date'] = $start['desc'].date('H:i', $start['time']);
@@ -114,7 +114,7 @@ class DealController extends Controller
         }
         $this->layout = '@app/views/layouts/dealdeail';
 
-        return $this->render('detail', ['deal' => $deals]);
+        return $this->render('detail', ['deal' => $deals,'deal_balace' => $orderbalance]);
     }
 
     /**
