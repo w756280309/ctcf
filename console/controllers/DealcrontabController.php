@@ -29,7 +29,7 @@ class DealcrontabController extends Controller
         $data = OnlineProduct::find()->where(['finish_rate' => 1, 'status' => 2])->orderBy('recommendTime asc')->all();
         $bc = new BcRound();
         foreach ($data as $dat) {
-            if (!empty(dat['recommendTime'])) {
+            if (!empty($dat['recommendTime'])) {
                 $count = OnlineProduct::find()->where("recommendTime != 0")->count();
 
                 if ($count > 1) {

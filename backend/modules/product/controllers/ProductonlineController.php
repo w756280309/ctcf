@@ -364,8 +364,8 @@ class ProductonlineController extends BaseController
                     $count = OnlineProduct::find()->where("recommendTime != 0")->count();
 
                     if ($count > 1) {
-                        $deal->recommendTime = 0;
-                        if (!$deal->save(false)) {
+                        $model->recommendTime = 0;
+                        if (!$model->save(false)) {
                             $transaction->rollBack();
                             return ['code' => 0, 'message' => '操作失败'];
                         }
