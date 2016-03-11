@@ -98,7 +98,7 @@ class SiteController extends Controller
         $adv = Adv::find()->where(['status' => 0, 'del_status' => 0])->limit($ac)->orderBy('id desc')->asArray()->all();
 
         $deals = OnlineProduct::find()->where(['del_status' => OnlineProduct::STATUS_USE, 'online_status' => OnlineProduct::STATUS_ONLINE])
-            ->andWhere("recommendTime != null or recommendTime != 0")
+            ->andWhere("recommendTime != 0")
             ->orderBy('recommendTime asc,sort asc, id desc')->all();
         if (!$deals) {
             throw new \yii\web\NotFoundHttpException('The production is not existed.');

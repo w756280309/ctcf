@@ -79,6 +79,7 @@ class ProductonlineController extends BaseController
                 $model->creator_id = Yii::$app->user->id;
                 $model->yield_rate = bcdiv($model->yield_rate, 100, 14);
                 $model->jixi_time = $model->jixi_time !== '' ? strtotime($model->jixi_time) : 0;
+                $model->recommendTime = 0;
                 $pre = $model->save(false);
                 if (!$pre) {
                     $transaction->rollBack();
@@ -360,7 +361,7 @@ class ProductonlineController extends BaseController
                 }
 
                 if (!empty($model->recommendTime)) {
-                    $count = OnlineProduct::find()->where("recommendTime != null or recommendTime != 0")->count();
+                    $count = OnlineProduct::find()->where("recommendTime != 0")->count();
 
                     if ($count > 1) {
                         $deal->recommendTime = 0;
@@ -523,7 +524,7 @@ class ProductonlineController extends BaseController
         }
 
         if (!empty($deal->recommendTime)) {
-            $count = OnlineProduct::find()->where("recommendTime != null or recommendTime != 0")->count();
+            $count = OnlineProduct::find()->where("recommendTime != 0")->count();
 
             if ($count <= 1) {
                 return ['code' => 0, 'message' => '推荐标的至少要有一个'];
