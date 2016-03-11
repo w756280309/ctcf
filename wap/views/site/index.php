@@ -161,17 +161,17 @@ $rate = number_format($deals->finish_rate * 100, 0);
 
     <!-- 最新资讯 start-->
     <div class="row notice-box new-box">
-        <div class="new-head news-tra" onclick="window.location.href='https://m.wenjf.com/news/index.html'">
+        <div class="new-head news-tra" onclick="window.location.href='/news/index.html'">
             <div class="col-xs-8 col-sm-7 new-head-title">
                 <div class="arrow-rg"></div>
                 <div class="new-head-tit"><span>最新资讯</span></div>
             </div>
             <div class="col-xs-1 col-sm-3 "> </div>
-            <div class="col-xs-3 col-sm-2 more news-more"><a href="https://m.wenjf.com/news/index.html">更多》</a></div>
+            <div class="col-xs-3 col-sm-2 more news-more"><a href="/news/index.html">更多》</a></div>
         </div>
         <div class="notice-bottom">
-            <div class="col-xs-12 notice border-top" onclick="location.href='https://m.wenjf.com/news/1.html'"><span>【</span>资讯信息<span>】</span>温都金服定于3月17日上线</div>
-            <div class="col-xs-12 notice border-bot" onclick="location.href='https://m.wenjf.com/news/2.html'"><span>【</span>资讯信息<span>】</span>用户资金托管引入联动优势</div>
+            <div class="col-xs-12 notice border-top" onclick="location.href='/news/1.html'"><span>【</span>资讯信息<span>】</span>温都金服定于3月17日上线</div>
+            <div class="col-xs-12 notice border-bot" onclick="location.href='/news/2.html'"><span>【</span>资讯信息<span>】</span>用户资金托管引入联动优势</div>
         </div>
     </div>
     <!-- 最新资讯 end -->
