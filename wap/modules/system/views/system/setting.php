@@ -29,7 +29,7 @@ $this->title="系统设置";
         <div class="col-xs-1 col-sm-1 "></div>
     </div>
     <div class="clear"></div>
-    <div class="row sm-height border-bottom" onclick="window.location.href='/system/system/help'">
+    <div class="row sm-height border-bottom" onclick="window.location.href='/site/help'">
         <div class="col-xs-3 left-txt">帮助中心</div>
         <div class="col-xs-7"></div>
         <div class="col-xs-1 arrow">

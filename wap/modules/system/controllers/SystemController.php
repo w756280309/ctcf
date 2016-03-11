@@ -37,20 +37,6 @@ class SystemController extends BaseController
     }
 
     /**
-     * 新手帮助
-     * @return type
-     */
-    public function actionHelp($type=null)
-    {
-        switch ($type) {
-            case 1: return $this->render('help_loginregister');
-            case 2: return $this->render('help_bindcard');
-            case 3: return $this->render('help_invest');
-            default: return $this->render('help');
-        }
-    }
-
-    /**
      * 常见问题
      * @return type
      */

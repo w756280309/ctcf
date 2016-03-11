@@ -98,7 +98,7 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        $this->layout = 'main';
+        $this->layout = false;
         $ac = 5;
         $adv = Adv::find()->where(['status' => 0, 'del_status' => 0])->limit($ac)->orderBy('id desc')->asArray()->all();
 
@@ -336,5 +336,30 @@ class SiteController extends Controller
         }
 
         return SmsService::createSmscode($type, $phone);
+    }
+
+    /**
+     * 公司介绍
+     */
+    public function actionCompdesc()
+    {
+        $this->layout = '@app/modules/order/views/layouts/buy';
+        return $this->render('company_desc');
+    }
+
+    /**
+     * 新手帮助
+     * @return type
+     */
+    public function actionHelp($type=null)
+    {
+        $this->layout = '@app/modules/order/views/layouts/buy';
+
+        switch ($type) {
+            case 1: return $this->render('help_loginregister');
+            case 2: return $this->render('help_bindcard');
+            case 3: return $this->render('help_invest');
+            default: return $this->render('help');
+        }
     }
 }

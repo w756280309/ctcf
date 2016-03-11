@@ -13,7 +13,7 @@ $this->registerJsFile('/js/helpcenter.js', ['depends' => 'yii\web\YiiAsset','pos
         </div>
         <div class="kong-width">
                 <!--注册登录-->
-                <a href="/system/system/help?type=1">
+                <a href="/site/help?type=1">
                         <div class="row">
                                 <div class="col-xs-12">
                                     <img src="/images/system/back_1.png" width="100%" alt="">
@@ -38,7 +38,7 @@ $this->registerJsFile('/js/helpcenter.js', ['depends' => 'yii\web\YiiAsset','pos
                         </div>
                 </a>
                 <!--绑卡充值-->
-                <a href="/system/system/help?type=2">
+                <a href="/site/help?type=2">
                         <div class="row">
                                 <div class="col-xs-12">
                                         <img src="/images/system/back_4.png" width="100%" alt="">
@@ -63,7 +63,7 @@ $this->registerJsFile('/js/helpcenter.js', ['depends' => 'yii\web\YiiAsset','pos
                         </div>
                 </a>
                 <!--投资提现-->
-                <a href="/system/system/help?type=3">
+                <a href="/site/help?type=3">
                         <div class="row">
                                 <div class="col-xs-12">
                                         <img src="/images/system/back_7.png" width="100%" alt="">
