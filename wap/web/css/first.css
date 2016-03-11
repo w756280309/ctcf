@@ -411,10 +411,11 @@ a.a-btn {
 }
 
 .notice {
+    padding: 0 18px;
     font-size: 0.9rem;
     height: 3rem;
     line-height: 3rem;
-    padding: 0 18px;
+    color: #595757;
     border-bottom: 1px solid #e6e7e7;
 }
 .border-top {
@@ -432,14 +433,16 @@ a.a-btn {
 }
 .nav-box {
     margin:0 auto 35px;
+    padding-bottom: 15px;
     width:100%;
     color:#595757;
     border-top:1px solid #e6e7e7;
     border-bottom:1px solid #e6e7e7;
     background: #fff;
-    height:72px;
+    /*height:92px;*/
 }
 .nav-box p {
+    padding:6px 0;
     clear: both;
     height:18px;
     line-height:18px;
@@ -453,31 +456,48 @@ a.a-btn {
 nav {
     margin:10px auto 15px;
     padding-bottom: 15px;
-    width:24rem;
+    width:88%;
 }
 nav li {
     float: left;
     padding:0 8px;
-    color:#595757;
+    /*color:#898989;*/
+    color: #595757;
     font-size: 1.2rem;
     border-left:1px solid #e6e7e7;
 }
 nav li.first {
     border: none;
 }
-@media (min-width:768px) {
+@media (min-width:375px) and (max-width:413px) {
     nav {
-        width:50rem;
+        width:85%;
     }
-    nav li {
-        padding:3px 36px;
-        font-size: 1.3rem;
+    nav li,.nav-box p {
+        font-size: 1.4rem;
     }
-    .nav-box p {
-        font-size: 1.3rem;
+    .logo_tit {
+        font-size: 15px;
+    }
+}
+@media (min-width:414px) and (max-width:489px) {
+    nav {
+        width:79%;
+    }
+    nav li,.nav-box p {
+        font-size: 1.5rem;
+    }
+    .logo_tit {
+        font-size: 16px;
     }
 }
 @media (min-width:490px) and (max-width: 640px) {
+    nav {
+        width:60%;
+    }
+    nav li,.nav-box p {
+        font-size: 1.6rem;
+    }
     .logo img {
         margin: 0;
         width:72%;
@@ -488,9 +508,17 @@ nav li.first {
         position: absolute;
         top:0;
         left:22%;
+        font-size: 16px;
     }
 }
 @media (min-width:641px) and (max-width: 768px) {
+    nav {
+        width:69%;
+    }
+    nav li,.nav-box p {
+        padding:0 16px;
+        font-size: 1.8rem;
+    }
     .logo img {
         width:60%;
         border:none;
@@ -500,9 +528,17 @@ nav li.first {
         position: absolute;
         top:0;
         left:18%;
+        font-size: 18px;
     }
 }
-@media (min-width:769px)  {
+@media (min-width:769px) and (max-width:799px)  {
+    nav {
+        width:540px;
+    }
+    nav li,.nav-box p {
+        padding:0 18px;
+        font-size: 2rem;
+    }
     .logo img {
         width:36%;
         border:none;
@@ -511,6 +547,31 @@ nav li.first {
         width:48%;
         position: absolute;
         top:0;
-        left:17%;
+        left:12%;
+        font-size: 20px;
     }
 }
+@media (min-width:800px)  {
+    nav {
+        width:540px;
+    }
+    nav li,.nav-box p {
+        padding:0 18px;
+        font-size: 2rem;
+    }
+    .logo img {
+        width:36%;
+        border:none;
+    }
+    .logo_tit {
+        width:48%;
+        position: absolute;
+        top:0;
+        left:12%;
+        font-size: 20px;
+    }
+}
+
+
+
+

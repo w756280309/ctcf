@@ -266,7 +266,7 @@ class ProductonlineController extends BaseController
         } elseif ($request['status']) {
             $data->andWhere(['online_status' => OnlineProduct::STATUS_ONLINE, "$op.status" => $request['status']]);
         }
-        $data->orderBy("$op.id desc");
+        $data->orderBy("recommendTime desc, $op.id desc");
         $pages = new Pagination(['totalCount' => $data->count(), 'pageSize' => '20']);
         $model = $data->offset($pages->offset)->limit($pages->limit)->all();
 
@@ -343,7 +343,7 @@ class ProductonlineController extends BaseController
                     $ua = UserAccount::findOne(['type' => UserAccount::TYPE_LEND, 'uid' => $ord['uid']]);
                     $ua->investment_balance = $bc->bcround(bcadd($ua->investment_balance, $ord['order_money']), 2);
                     $ua->freeze_balance = $bc->bcround(bcsub($ua->freeze_balance, $ord['order_money']), 2);
-                    
+
                     $mrmodel = new MoneyRecord();
                     $mrmodel->account_id = $ua->id;
                     $mrmodel->sn = TxUtils::generateSn('MR');
@@ -495,5 +495,36 @@ class ProductonlineController extends BaseController
             'pages' => $pages,
             'name' => $name,
         ]);
+    }
+
+    /**
+     * 标的推荐功能
+     */
+    public function actionRecommend()
+    {
+        $dealId = Yii::$app->request->get('id');
+
+        $deal = OnlineProduct::findOne($dealId);
+        if (!$deal) {
+            throw new \yii\web\NotFoundHttpException('The deal info is not existed.');
+        }
+
+        if (!empty($deal->recommendTime)) {
+            $count = OnlineProduct::find()->where("recommendTime != null or recommendTime != 0")->count();
+
+            if ($count <= 1) {
+                return ['code' => 0, 'message' => '推荐标的至少要有一个'];
+            }
+
+            $deal->recommendTime = 0;
+        } else {
+            $deal->recommendTime = time();
+        }
+
+        if (!$deal->save(false)) {
+            return ['code' => 0, 'message' => '操作失败'];
+        }
+
+        return ['code' => 1, 'message' => '操作成功'];
     }
 }

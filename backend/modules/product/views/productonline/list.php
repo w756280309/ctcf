@@ -138,6 +138,11 @@ $pc_cat = Yii::$app->params['pc_cat'];
                                             <?php if ($val['online_status']==1&&$val['status']==2){ ?>
                                             | <a href="javascript:endproduct('<?= $val['id'] ?>')" class="btn mini green"><i class="icon-edit"></i> 结束项目</a>
                                             <?php } ?>
+                                            <?php if (empty($val['recommendTime'])) { ?>
+                                            <a href="javascript:recommend('<?= $val['id'] ?>')" class="btn mini green"><i class="icon-edit"></i> 推荐</a>
+                                            <?php } else { ?>
+                                            <a href="javascript:recommend('<?= $val['id'] ?>')" class="btn mini red"><i class="icon-minus-sign"></i> 取消推荐</a>
+                                            <?php } ?>
                                         </td>
                                 </tr>
                                 <?php endforeach; ?>
@@ -242,6 +247,19 @@ $pc_cat = Yii::$app->params['pc_cat'];
             },function(){
                 layer.closeAll();
             })
+    }
+
+    function recommend(pid)
+    {
+        $.get("/product/productonline/recommend", {id: pid}, function (data) {
+            //newalert(data.code , data.message, 1);
+            alert(data.message);
+            if (data.code === 1) {
+                location.reload();
+            }
+        });
+
+        return;
     }
 </script>
 <?php $this->endBlock(); ?>
