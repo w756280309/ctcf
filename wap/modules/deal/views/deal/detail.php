@@ -12,7 +12,7 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
                 <ul class="row column-content">
                     <li class="col-xs-6">
                         <div class="xian">
-                            <?=  doubleval(number_format($deal->objBaseRate*100, 2)) ?><span class="column-lu">%</span>
+                            <?=  doubleval(number_format($deal->baseRate*100, 2)) ?><span class="column-lu">%</span>
                             <?php if (!empty($deal['jiaxi'])) { ?><span class="bonus-badge">+<?=  doubleval($deal['jiaxi']) ?>%</span><?php } ?>
                         </div>
                         <span class="qing">年化收益率</span>

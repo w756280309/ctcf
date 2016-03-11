@@ -6,6 +6,7 @@ use Yii;
 use yii\behaviors\TimestampBehavior;
 use P2pl\LoanInterface;
 use P2pl\Borrower;
+
 /**
  * 标的（项目）.
  *
@@ -93,7 +94,7 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
             'create' => ['title', 'sn', 'cid', 'money', 'borrow_uid', 'expires', 'expires_show', 'yield_rate', 'start_money', 'borrow_uid', 'fee', 'status',
                 'description', 'refund_method', 'account_name', 'account', 'bank', 'dizeng_money', 'start_date', 'end_date', 'full_time',
                 'is_xs', 'yuqi_faxi', 'order_limit', 'creator_id', 'del_status', 'status', 'target', 'target_uid', 'finish_date', 'channel', 'jixi_time', 'sort',
-                'jiaxi', 'kuanxianqi',],
+                'jiaxi', 'kuanxianqi', ],
         ];
     }
 
@@ -175,7 +176,7 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
                 return $('#onlineproduct-is_fdate').parent().hasClass('checked');
             }"],
             [['cid', 'is_xs', 'borrow_uid', 'refund_method', 'expires', 'full_time', 'del_status', 'status', 'order_limit', 'creator_id'], 'integer'],
-            [['yield_rate', 'fee', 'money', 'start_money', 'dizeng_money', 'yuqi_faxi', 'jiaxi',], 'number'],
+            [['yield_rate', 'fee', 'money', 'start_money', 'dizeng_money', 'yuqi_faxi', 'jiaxi'], 'number'],
             [['target', 'kuanxianqi'], 'integer'],
             ['target', 'default', 'value' => 0],
             [['is_xs', 'kuanxianqi', 'is_fdate'], 'default', 'value' => 0],
@@ -191,7 +192,7 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
             [['money', 'start_money'], 'compare', 'compareValue' => 0, 'operator' => '>'],
             [['dizeng_money'], 'compare', 'compareValue' => 1, 'operator' => '>='],
             [['start_money'], 'compare', 'compareAttribute' => 'money', 'operator' => '<'],
-            [['yield_rate', 'jiaxi',], 'compare', 'compareValue' => 100, 'operator' => '<='],
+            [['yield_rate', 'jiaxi'], 'compare', 'compareValue' => 100, 'operator' => '<='],
             [['yield_rate', 'jiaxi', 'kuanxianqi'], 'compare', 'compareValue' => 0, 'operator' => '>='],
             [['jiaxi'], 'match', 'pattern' => '/^[0-9]+([.]{1}[0-9])?$/', 'message' => '加息利率只允许有一位小数'],
             [['jiaxi'], 'compare', 'compareValue' => 10, 'operator' => '<='],
@@ -210,11 +211,11 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
     {
         $start = strtotime($this->start_date);
         $end = strtotime($this->end_date);
-        if($start > $end){
+        if ($start > $end) {
             $this->addError('start_date', '募集开始时间小于募集结束时间小于项目结束日');
             $this->addError('end_date', '募集开始时间小于募集结束时间小于项目结束日');
         }
-        if(null !== $this->finish_date && '' !== $this->finish_date && 0 !== $this->finish_date){
+        if (null !== $this->finish_date && '' !== $this->finish_date && 0 !== $this->finish_date) {
             $finish = strtotime($this->finish_date);
             if ($start > $finish) {
                 $this->addError('start_date', '募集开始时间小于募集结束时间小于项目结束日');
@@ -424,9 +425,9 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
      * 创建是否成功?
      *
      * @param OnlineProduct $loan
-     * @param Borrower $borrower
+     * @param Borrower      $borrower
      *
-     * @return boolean
+     * @return bool
      */
     public static function createLoan(OnlineProduct $deal, Borrower $borrower)
     {
@@ -445,36 +446,41 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
     }
 
     /**
-     * 获取联动一侧标的详情
+     * 获取联动一侧标的详情.
+     *
      * @param type $id
+     *
      * @return type
+     *
      * @throws Exception
      */
-    public static function getUmpLoan($id) {
+    public static function getUmpLoan($id)
+    {
         $resp = \Yii::$container->get('ump')->getLoanInfo($id);
         if (!$resp->isSuccessful()) {
-            return null;
+            return;
         }
 
         return $resp;
     }
-    
+
     /**
-     * 用于加息时候，利率的显示
+     * 用于加息时候，利率的显示.
+     *
      * @return decimal
      */
-    public function getObjBaseRate()
+    public function getBaseRate()
     {
-        return static::getBaseRate($this->yield_rate, $this->jiaxi);
+        return static::calcBaseRate($this->yield_rate, $this->jiaxi);
     }
 
     /**
-     * 用于加息时候，利率的显示
+     * 用于加息时候，利率的显示.
+     *
      * @return decimal
      */
-    public static function getBaseRate($yr,$jiaxi)
+    public static function calcBaseRate($yr, $jiaxi)
     {
         return null === $jiaxi ? $yr : bcsub($yr, bcdiv($jiaxi, 100));
     }
-    
 }
