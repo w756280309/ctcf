@@ -43,7 +43,7 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
         <div class="row dan" style="padding-top: 1px;">
                     <div class="hidden-xs col-sm-1"></div>
                     <div class="col-xs-12 col-sm-10" style="padding: 0">
-                        <span>(每笔提现扣除2元手续费,最低提现金额10元)</span>
+                        <span>(每笔提现收取2元手续费)</span>
                     </div>
                     <div class="hidden-xs col-sm-1"></div>
                 </div>
