@@ -123,9 +123,6 @@ TPL;
                         <?=
                         $form->field($model, 'cid', ['template' => '{input}{error}', 'inputOptions' => ['autocomplete' => 'off', 'class' => 'chosen-with-diselect span6']])->dropDownList(['' => '--选择--'] + Yii::$app->params['pc_cat'])
                         ?>
-                        <?=
-                        $form->field($model, 'is_xs', ['template' => '{input}'])->checkbox();
-                        ?>
                     </div>
                 </div>
 

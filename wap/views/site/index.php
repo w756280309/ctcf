@@ -70,7 +70,7 @@ $rate = number_format($deals->finish_rate * 100, 0);
     <?php } ?>
  <!-- 推荐区start  -->
     <div class="row new-box">
-        <div class="new-head bot-line" onclick="window.location.href='/deal/deal/index?xs=1'">
+        <div class="new-head bot-line" onclick="window.location.href='/deal/deal/index?cat=<?= $deals->cid ?>'">
             <div class="col-xs-8 col-sm-7 new-head-title">
                 <div class="arrow-rg"></div>
                 <div class="new-head-tit"><span>推荐区</span><span class="new-head-txt">优选资产，安全无忧</span></div>

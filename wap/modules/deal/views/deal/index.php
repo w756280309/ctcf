@@ -15,9 +15,8 @@ $pc_cat = Yii::$app->params['pc_cat'];
 <div class="container">
     <div class="row tit-box">
         <?php foreach ($pc_cat as $key=>$cat){ ?>
-            <div class="col-xs-4"><a <?php if ($key === (int)$curent_cid && null === $curent_xs){ ?> class="active" <?php } ?> href="/deal/deal/index?cat=<?= $key ?>"><?= $cat ?></a></div>
+            <div class="col-xs-6"><a <?php if ($key === (int)$curent_cid && null === $curent_xs){ ?> class="active" <?php } ?> href="/deal/deal/index?cat=<?= $key ?>"><?= $cat ?></a></div>
         <?php } ?>
-        <div class="col-xs-4"><a <?php if ((int)$curent_xs === 1){ ?> class="active" <?php } ?> href="/deal/deal/index?xs=1">新手标</a></div>
     </div>
 </div>
 <div id="item-list">
