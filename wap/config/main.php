@@ -45,9 +45,6 @@ return [
     ],
 
     'modules' => [
-        'news' => [
-            'class' => 'app\modules\news\Module',
-        ],
         'deal' => [
             'class' => 'app\modules\deal\Module',
         ],

@@ -170,8 +170,8 @@ $rate = number_format($deals->finish_rate * 100, 0);
             <div class="col-xs-3 col-sm-2 more news-more"><a href="https://m.wenjf.com/news/index.html">更多》</a></div>
         </div>
         <div class="notice-bottom">
-            <div class="col-xs-12 notice border-top" onclick="location.href='https://m.wenjf.com/news/1.html'"><span>【</span>资讯信息<span>】</span>温州报业传媒旗下理财平台-温都金服即将上线</div>
-            <div class="col-xs-12 notice border-bot" onclick="location.href='https://m.wenjf.com/news/2.html'"><span>【</span>资讯信息<span>】</span>温都金服引入国内领先的第三方资金托管平台</div>
+            <div class="col-xs-12 notice border-top" onclick="location.href='https://m.wenjf.com/news/1.html'"><span>【</span>资讯信息<span>】</span>温都金服定于3月17日上线</div>
+            <div class="col-xs-12 notice border-bot" onclick="location.href='https://m.wenjf.com/news/2.html'"><span>【</span>资讯信息<span>】</span>用户资金托管引入联动优势</div>
         </div>
     </div>
     <!-- 最新资讯 end -->
