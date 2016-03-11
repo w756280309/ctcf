@@ -117,7 +117,7 @@ class SiteController extends Controller
         }
 
         if (1 === $num) {
-            $deal = $deals;
+            $deal = $deals[0];
         }
 
         if (empty($deal)) {
