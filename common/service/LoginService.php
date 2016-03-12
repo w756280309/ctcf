@@ -18,7 +18,7 @@ class LoginService {
      */
     public function logFailure($request, $loginId, $type) {
         $log = new LoginLog([
-            'ip' => $request->userIP,
+            'ip' => $this->getRealIp(),
             'type' => $type,
             'user_name' => $loginId
         ]);
@@ -33,8 +33,19 @@ class LoginService {
      */
     public function isCaptchaRequired($request, $loginId, $seconds, $count) {
         $start_time = time() - $seconds;
-        $data = LoginLog::find()->where(['ip' => $request->userIP])->orWhere(['user_name' => $loginId]);
+        $data = LoginLog::find()->where(['ip' => $this->getRealIp()])->orWhere(['user_name' => $loginId]);
         $num = $data->andFilterWhere(['>','created_at',$start_time])->count();
         return $num>=$count;
+    }
+
+    private function getRealIp()
+    {
+        foreach (['HTTP_X_FORWARDED_FOR', 'REMOTE_ADDR'] as $name) {
+            if (isset($_SERVER[$name])) {
+                return $_SERVER[$name];
+            }
+        }
+
+        return null;
     }
 }
