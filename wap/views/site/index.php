@@ -7,7 +7,6 @@ WapAsset::register($this);
 
 $this->title = '温都金服';
 $this->params['breadcrumbs'][] = $this->title;
-$this->registerJsFile('/js/jquery.js', ['depends' => 'yii\web\YiiAsset','position' => 1]);
 $this->registerJsFile('/js/TouchSlide.1.1.js', ['depends' => 'yii\web\YiiAsset','position' => 1]);
 $this->registerJsFile('/js/jquery.classyloader.js', ['depends' => 'yii\web\YiiAsset','position' => 1]);
 $this->registerJsFile('/js/index.js', ['depends' => 'yii\web\YiiAsset','position' => 1]);
