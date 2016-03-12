@@ -1,7 +1,6 @@
 <?php
 $this->title = '项目详情';
-frontend\assets\WapAsset::register($this);
-$this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','position' => 1]);
+$this->registerJsFile('/js/common.js', ['depends' => 'yii\web\JqueryAsset', 'position' => 1]);
 ?>
 <link rel="stylesheet" href="/css/xiangqing.css">
         <!--xiangqing-->

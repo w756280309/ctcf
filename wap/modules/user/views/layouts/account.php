@@ -13,10 +13,7 @@ frontend\assets\WapAsset::register($this);
     <title>温都金服</title>
     <?= Html::csrfMetaTags() ?>
     <?php $this->head() ?>
-    <script src="http://cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-    <script src="http://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
     <link rel="stylesheet" href="/css/setting.css">
-    <script src="/js/jquery.js"></script>
     <script>
         $(function(){
             $('.footer-inner a').css({color: '#8c8c8c'});

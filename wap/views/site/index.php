@@ -7,9 +7,9 @@ WapAsset::register($this);
 
 $this->title = '温都金服';
 $this->params['breadcrumbs'][] = $this->title;
-$this->registerJsFile('/js/TouchSlide.1.1.js', ['depends' => 'yii\web\YiiAsset','position' => 1]);
-$this->registerJsFile('/js/jquery.classyloader.js', ['depends' => 'yii\web\YiiAsset','position' => 1]);
-$this->registerJsFile('/js/index.js', ['depends' => 'yii\web\YiiAsset','position' => 1]);
+$this->registerJsFile('/js/TouchSlide.1.1.js', ['depends' => 'yii\web\JqueryAsset', 'position' => 1]);
+$this->registerJsFile('/js/jquery.classyloader.js', ['depends' => 'yii\web\JqueryAsset', 'position' => 1]);
+$this->registerJsFile('/js/index.js', ['depends' => 'yii\web\JqueryAsset', 'position' => 1]);
 $this->registerCssFile('/css/index.css', ['depends' => 'frontend\assets\WapAsset']);  //加载在depends之后
 $this->registerCssFile('/css/first.css', ['depends' => 'frontend\assets\WapAsset']);
 
