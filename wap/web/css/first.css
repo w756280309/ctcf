@@ -440,6 +440,7 @@ a.a-btn {
     font-size: 1.2rem;
     color: #595757;
     background-color: #fff;
+    overflow: hidden;
 }
 .nav-box .pos-rel {
     float: left;
