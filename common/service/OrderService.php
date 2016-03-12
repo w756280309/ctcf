@@ -60,7 +60,7 @@ class OrderService
         $daihuan = 0;
         foreach ($record as $val) {
             $totalFund = bcadd($totalFund, $val['order_money'], 2);
-            if (OnlineProduct::STATUS_OVER !== $val['pstatus']) {
+            if (OnlineProduct::STATUS_OVER !== (int)$val['pstatus']) {
                 $daihuan++;
             }
         }
