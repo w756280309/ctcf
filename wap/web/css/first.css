@@ -431,49 +431,52 @@ a.a-btn {
 .news-tra {
     margin-left: 12px;
 }
+
 .nav-box {
-    margin:0 auto 35px;
+    margin: 0 auto 35px;
     padding-bottom: 15px;
-    width:100%;
-    color:#595757;
-    border-top:1px solid #e6e7e7;
-    border-bottom:1px solid #e6e7e7;
-    background: #fff;
-    /*height:92px;*/
-}
-.nav-box p {
-    padding:6px 0;
-    clear: both;
-    height:18px;
-    line-height:18px;
-    text-align: center;
+    border-top: 1px solid #e6e7e7;
+    border-bottom: 1px solid #e6e7e7;
     font-size: 1.2rem;
-    color:#595757;
+    color: #595757;
+    background-color: #fff;
 }
-.nav-box p span {
-    color:#898989;
+.nav-box .pos-rel {
+    float: left;
+    position: relative;
+    left: 50%;
+}
+.nav-box .pos-fixer {
+    float: left;
+    position: relative;
+    left: -50%;
 }
 nav {
-    margin:10px auto 15px;
+    margin: 10px 0;
     padding-bottom: 15px;
-    width:88%;
 }
 nav li {
     float: left;
-    padding:0 8px;
-    /*color:#898989;*/
+    padding: 0 7px;
     color: #595757;
-    font-size: 1.2rem;
-    border-left:1px solid #e6e7e7;
+    border-left: 1px solid #e6e7e7;
 }
 nav li.first {
     border: none;
 }
+.nav-box p {
+    clear: both;
+    padding: 6px 0;
+    line-height: 18px;
+    text-align: center;
+    color:#595757;
+}
+.nav-box p span {
+    color: #898989;
+}
+
 @media (min-width:375px) and (max-width:413px) {
-    nav {
-        width:85%;
-    }
-    nav li,.nav-box p {
+    .nav-box {
         font-size: 1.4rem;
     }
     .logo_tit {
@@ -484,10 +487,7 @@ nav li.first {
     }
 }
 @media (min-width:414px) and (max-width:489px) {
-    nav {
-        width:79%;
-    }
-    nav li,.nav-box p {
+    .nav-box {
         font-size: 1.5rem;
     }
     .logo_tit {
@@ -498,10 +498,7 @@ nav li.first {
     }
 }
 @media (min-width:490px) and (max-width: 640px) {
-    nav {
-        width:60%;
-    }
-    nav li,.nav-box p {
+    .nav-box {
         font-size: 1.6rem;
     }
     .logo img {
@@ -521,11 +518,7 @@ nav li.first {
     }
 }
 @media (min-width:641px) and (max-width: 768px) {
-    nav {
-        width:69%;
-    }
-    nav li,.nav-box p {
-        padding:0 16px;
+    .nav-box {
         font-size: 1.8rem;
     }
     .logo img {
@@ -544,11 +537,7 @@ nav li.first {
     }
 }
 @media (min-width:769px) and (max-width:799px)  {
-    nav {
-        width:540px;
-    }
-    nav li,.nav-box p {
-        padding:0 18px;
+    .nav-box {
         font-size: 2rem;
     }
     .logo img {
@@ -567,11 +556,7 @@ nav li.first {
     }
 }
 @media (min-width:800px) and (max-width:1100px)  {
-    nav {
-        width:540px;
-    }
-    nav li,.nav-box p {
-        padding:0 18px;
+    .nav-box {
         font-size: 2rem;
     }
     .logo img {
@@ -590,11 +575,7 @@ nav li.first {
     }
 }
 @media (min-width:1101px)  {
-    nav {
-        width:540px;
-    }
-    nav li,.nav-box p {
-        padding:0 18px;
+    .nav-box {
         font-size: 2rem;
     }
     .logo img {

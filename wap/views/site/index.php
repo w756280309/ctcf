@@ -177,13 +177,17 @@ $rate = number_format($deals->finish_rate * 100, 0);
     <!-- 最新资讯 end -->
     <!-- nav start -->
     <div class="nav-box">
-        <nav>
-            <li class="first"><a href="/">首页</a></li>
-            <li><a href="/site/compdesc">关于我们</a></li>
-            <li><a href="/site/advantage">平台优势</a></li>
-            <li><a href="/site/help">帮助中心</a></li>
-            <li><a href="">联系我们</a></li>
-        </nav>
+        <div class="pos-rel">
+            <div class="pos-fixer">
+                <nav>
+                    <li class="first"><a href="/">首页</a></li>
+                    <li><a href="/site/about">关于我们</a></li>
+                    <li><a href="/site/advantage">平台优势</a></li>
+                    <li><a href="/site/help">帮助中心</a></li>
+                    <li><a href="/site/contact">联系我们</a></li>
+                </nav>
+            </div>
+        </div>
         <p>客服热线：<?= Yii::$app->params['contact_tel'] ?>（09:00-20:00）</p>
     </div>
 </div>

@@ -269,29 +269,6 @@ class SiteController extends Controller
         return $this->render('resetpass', ['model' => $captcha]);
     }
 
-    public function actionContact()
-    {
-        $model = new ContactForm();
-        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            if ($model->sendEmail(Yii::$app->params['adminEmail'])) {
-                Yii::$app->session->setFlash('success', 'Thank you for contacting us. We will respond to you as soon as possible.');
-            } else {
-                Yii::$app->session->setFlash('error', 'There was an error sending email.');
-            }
-
-            return $this->refresh();
-        } else {
-            return $this->render('contact', [
-                'model' => $model,
-            ]);
-        }
-    }
-
-    public function actionAbout()
-    {
-        return $this->render('about');
-    }
-
     /**
      * 注册表单页.
      */
@@ -358,7 +335,7 @@ class SiteController extends Controller
     /**
      * 公司介绍
      */
-    public function actionCompdesc()
+    public function actionAbout()
     {
         $this->layout = '@app/modules/order/views/layouts/buy';
         return $this->render('company_desc');
@@ -387,5 +364,11 @@ class SiteController extends Controller
     {
         $this->layout = '@app/modules/order/views/layouts/buy';
         return $this->render('advantage');
+    }
+
+    public function actionContact()
+    {
+        $this->layout = '@app/modules/order/views/layouts/buy';
+        return $this->render('contact');
     }
 }
