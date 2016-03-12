@@ -1,5 +1,5 @@
 <?php
-$this->title="安全中心";
+$this->title="安全设置";
 ?>
 <link rel="stylesheet" href="/css/base.css">
 <link rel="stylesheet" href="/css/setting.css">

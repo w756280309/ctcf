@@ -40,20 +40,4 @@ class SystemController extends BaseController
         }
         return $this->render('safecenter', ['user' => $user, 'user_bank' => $user_bank]);
     }
-
-    /**
-     * 常见问题
-     */
-    public function actionProblem()
-    {
-        return $this->render('problem');
-    }
-
-    /**
-     * 关于我们
-     */
-    public function actionAbout()
-    {
-        return $this->render('about');
-    }
 }

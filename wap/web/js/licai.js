@@ -2,27 +2,31 @@
  * Created by lcl on 2015/11/22.
  */
 $(function(){
+    var num = $('.container-text').attr('data-title');
+    if(num>=3){
+        num=3;
+    }
     var swiper = new Swiper('.swiper-container', {
         direction: "horizontal",
         pagination: '.swiper-pagination',
         paginationClickable: true,
-        slidesPerView: 3,
+        slidesPerView: num,
         spaceBetween: 50,
         breakpoints: {
             1024: {
-                slidesPerView: 3,
+                slidesPerView: num,
                 spaceBetween: 40
             },
             768: {
-                slidesPerView: 3,
+                slidesPerView: num,
                 spaceBetween: 30
             },
             640: {
-                slidesPerView: 3,
+                slidesPerView: num,
                 spaceBetween: 20
             },
             320: {
-                slidesPerView: 3,
+                slidesPerView: num,
                 spaceBetween: 10
             }
         }

@@ -31,7 +31,7 @@ class SmsService
         }
 
         if (!in_array($type, [1, 2])) {
-            return ['code' => 1, 'message' => "发送短信验证码失败(errCode:$type)"];
+            return ['code' => 1, 'message' => "短信发送失败"];
         }
 
         if (!is_string($phone)) {

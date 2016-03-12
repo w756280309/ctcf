@@ -1,5 +1,7 @@
 <?php
 $this->title="合同说明";
+
+$num = 0;
 ?>
 <link rel="stylesheet" href="/css/licai.css"/>
 <link rel="stylesheet" href="/css/swiper.min.css">
@@ -33,13 +35,13 @@ $this->title="合同说明";
 
 <!-- Swiper -->
 <div class="swiper-container" style="line-height: 18px;">
-    <div class="swiper-wrapper" >
-        <?php foreach($model as $key => $val): ?>
+    <div class="swiper-wrapper">
+        <?php foreach($model as $key => $val): $num++; ?>
         <div class="swiper-slide <?= $key_f == $key?"dian":"" ?>" onclick="location.replace('/order/order/agreement?id=<?= $val['pid'] ?>&key=<?= $key ?>')"><?= Yii::$app->functions->cut_str($val['name'],5,0,'**') ?></div>
         <?php endforeach; ?>
     </div>
 </div>
-<div class="container-text">
+<div class="container-text" data-title="<?= $num ?>">
     <div class="row">
         <div class="col-xs-1"></div>
         <div class="col-xs-10">
