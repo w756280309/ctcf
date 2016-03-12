@@ -51,13 +51,13 @@ i,em{
     float: left;
     text-align: left;
     /*width: 50px;*/
-    padding-right: 8px;
+    padding-right: 0.5em;
     height: 20px;
     line-height: 20px;
     font-size: 18px;
     color: #fff;
     margin-top: 20px;
-    border-right:1px solid #ff8080;
+    border-right: 1px solid #ff8080;
 }
 .top-resign a{
     color: #fff;
@@ -75,10 +75,11 @@ i,em{
     font-size: 18px;
     color: #fff;
     margin-top: 20px;
+    margin-left: 0.5em;
 }
 .top-login span{
+    padding-left: 0.5em;
     font-size: 18px;
-    padding-right: 1px;
     color: #ff9189;
 }
 .top-login a{
