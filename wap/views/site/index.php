@@ -75,7 +75,7 @@ $rate = number_format($deals->finish_rate * 100, 0);
                 <div class="new-head-tit"><span>推荐区</span><span class="new-head-txt">优选资产，安全无忧</span></div>
             </div>
             <div class="col-xs-1 col-sm-3 "> </div>
-            <div class="col-xs-3 col-sm-2 more"><a href="/deal/deal/index?xs=1">更多》</a></div>
+            <div class="col-xs-3 col-sm-2 more"><a href="/deal/deal/index?cat=<?= $deals->cid ?>'">更多》</a></div>
         </div>
 
         <?php if (!empty($deals->jiaxi)) { ?>
