@@ -5208,6 +5208,13 @@ body {
   border-bottom: 3px solid #f44336;
   line-height: 48px;
 }
+.main .page-heading .go-mobile {
+  position: absolute;
+  left: 100px;
+  top: 0;
+  line-height: 48px;
+  color: #aaa;
+}
 .main h3,
 .main .section {
   padding: 0 10px;

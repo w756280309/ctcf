@@ -37,7 +37,7 @@ AppAsset::register($this);
         <![endif]-->
     </head>
 
-    <body>
+    <body class="page-login">
         <?php $this->beginBody() ?>
         <div id="top-box">
             <div class="top-box">
@@ -58,7 +58,7 @@ AppAsset::register($this);
         </div>
         <?= $content ?>
         <div class="section section5 fp-auto-height fp-section fp-table">
-            <div class="five-box" style="height: 200px;">
+            <div class="five-box">
                 <div class="five-address">公司地址：温州市鹿城区飞霞南路657号保丰大楼四层</div>
                 <div class="five-tel">客服电话：<span><?= Yii::$app->params['contact_tel'] ?></span><span style="padding-left: 8px;margin-right: 8px;">客服QQ：1430843929</span>工作时间：9:00-17:00（周一至周六）</div>
                 <div class="five-partner">合作伙伴：温州日报<span style="margin-left: 8px">温州商报</span><span>温州都市报</span><span>温州晚报</span><span>科技金融时报</span><span>温州网</span><span>温州人杂志</span></div>

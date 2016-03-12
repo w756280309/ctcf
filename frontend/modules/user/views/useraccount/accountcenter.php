@@ -49,6 +49,7 @@ $this->registerJs($_js2, View::POS_END, 'body_close2');
     <div class="main dash" style="margin-top: 0px">
         <div class="page-heading">
             <h2>账户资金</h2>
+            <p class="go-mobile">资产认购等信息，请登录手机端查看</p>
         </div>
 
         <div class="stats row">
