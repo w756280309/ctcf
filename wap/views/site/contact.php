@@ -154,7 +154,7 @@ $this->title = '联系我们';
         <!--<p class="h-num"><a href="javascript:;" class="number">5</a>资金<span>安全</span></p>-->
         <div class="xinxi"><p class="p_float">公司地址&nbsp;:</p><p class="p_num">温州市鹿城区飞霞南路657号保丰大楼四层</p></div>
         <div class="xinxi"><p class="p_float">工作时间&nbsp;:</p><p class="p_num">9:00-17:00（周一至周六）</p></div>
-        <div class="xinxi"><p class="p_float">客服电话&nbsp;:</p><p class="p_num">4001015151</p></div>
+        <div class="xinxi"><p class="p_float">客服电话&nbsp;:</p><p class="p_num"><?= Yii::$app->params['contact_tel'] ?></p></div>
         <div class="xinxi"><p class="p_float">客服时间&nbsp;:</p><p class="p_num">9:00-20:00（周一至周日，假日例外）</p></div>
         <div class="xinxi"><p class="p_float">客服QQ&nbsp;&nbsp;:</p><p class="p_num">1430843929</p></div>
         <div class="mendian"><p class="p_float">门店地址:</p><p class="p_num">温州市鹿城区飞霞南路657号保丰大楼一层温州都市报（老党校对面）</p></div>
