@@ -15,5 +15,14 @@ return [
         'functions' => [
             'class' => 'common\components\Functions',
         ],
+        'assetManager' => [
+            'bundles' => [
+                'yii\web\JqueryAsset' => [
+                    'js' => [
+                        'jquery.min.js',
+                    ],
+                ],
+            ],
+        ],
     ],
 ];
