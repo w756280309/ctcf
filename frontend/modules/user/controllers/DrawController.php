@@ -11,7 +11,7 @@ use common\models\draw\DrawManager;
 
 class DrawController extends BaseController
 {
-    public $layout = '@app/views/layouts/main';
+    public $layout = '@app/views/layouts/footer';
 
     public function beforeAction($action)
     {

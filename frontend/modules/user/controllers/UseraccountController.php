@@ -2,19 +2,13 @@
 
 namespace app\modules\user\controllers;
 
-use Yii;
 use frontend\controllers\BaseController;
-use common\models\user\EditpassForm;
 use common\models\user\UserAccount;
 use common\service\BankService;
-use common\models\city\Region;
-use common\models\draw\Draw;
-use common\models\draw\DrawManager;
-use common\models\draw\DrawException;
 
 class UseraccountController extends BaseController
 {
-    public $layout = '@app/views/layouts/main';
+    public $layout = '@app/views/layouts/footer';
 
     /**
      * 账户中心展示页.

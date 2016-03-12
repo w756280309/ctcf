@@ -78,6 +78,8 @@ class SiteController extends Controller
      */
     public function actionLogin($flag = null)
     {
+        $this->layout = '@app/views/layouts/login';
+
         if (!\Yii::$app->user->isGuest) {
             return $this->goHome();
         }
@@ -133,6 +135,7 @@ class SiteController extends Controller
      */
     public function actionUsererr()
     {
+        $this->layout = '@app/views/layouts/footer';
         return $this->render('usererr');
     }
 }
