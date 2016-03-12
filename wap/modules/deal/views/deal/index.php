@@ -19,9 +19,9 @@ $pc_cat = Yii::$app->params['pc_cat'];
         <?php } ?>
     </div>
 </div>
-<div id="item-list">
-    <?php if ($deals) {
-        foreach ($deals as $val):
+    <?php if ($deals) { ?>
+        <div id="item-list">
+        <?php foreach ($deals as $val):
             $is_hui = in_array($val['status'], [4, 5, 6]); ?>
         <a class="row column dealdata" href="/deal/deal/detail?sn=<?= $val['num'] ?>">
             <div class="col-xs-12 col-sm-10 column-title">
@@ -70,11 +70,11 @@ $pc_cat = Yii::$app->params['pc_cat'];
             <div class="hidden-xs col-sm-1"></div>
         </a>
     <?php endforeach; ?>
+        </div>
         <!--加载跟多-->
         <div class="load" style="display:block;"></div>
     <?php } else { ?>
         <div class="nodata" style="display:block;">暂无数据</div>
     <?php } ?>
-</div>
 
 
