@@ -73,55 +73,40 @@ $(function(){
                 data: {page: currentPage},
                 dataType: 'json',
                 success: function (data) {
+                    //console.log(data);
                     if (data.code === 0) {
                         //如果当前页和返回页码相同，则改变页面html,否则视为异常
                         if (currentPage === data.header.cp) {
                             if (data.data.length > 0) {
                                 var html = "";
                                 $.each(data.data, function(i, item) {
-                                    var title = item.title;
-                                    var order_time = item.order_time;
-                                    var yield_rate = changeTwoDecimal(item.yield_rate * 100) + '%';
-                                    var statusval = item.statusval; //已还清
-                                    var profit = item.profit; //预期收益
                                     var pstatus = item.pstatus;
                                     var className = (pstatus == 1 || pstatus == 2) ? "column-title-rg" : "column-title-rg1";
                                     var profitDes = (pstatus == 6) ? "实际收益" : "预期收益";
-                                    var expiress = item.expiress;
-                                    html += '<div class="row times">'+
-                                                    '<div class="col-xs-4">'+order_time+'</div>'+
-                                                    '<div class="col-xs-8"></div>'+
-                                                '</div>'+
-                                                '<div class="row column" onclick="location.href=\'/deal/deal/detail?sn='+item.psn+'\'">'+
-                                                    '<div class="hidden-xs col-sm-1" style="height:50px;"></div>'+
-                                                    '<div class="col-xs-12 col-sm-10 column-title"><span>'+title+'</span></div>'+
-                                                    '<div class="'+className+'">'+statusval+'</div>'+
-                                                    '<div class="container" id=\'project-box\'>'+
-                                                        '<div class="row">'+
-                                                            '<div class="col-xs-4">'+
-                                                                '<div>'+yield_rate+'</div>'+
-                                                                '<p>年化收益</p>'+
-                                                            '</div>'+
-                                                            '<div class="col-xs-4">'+
-                                                                '<div>'+expiress+ item.method + '</div>'+
-                                                                '<p>期限</p>'+
-                                                            '</div>';
-                                    if ('--' === profit) {
-                                        html += '<div class="col-xs-4">'+
-                                                    '<div>'+item.finish_rate+'%</div>'+
-                                                    '<p>募集进度</p>'+
-                                                '</div>';
+                                    html += '<div class="loan-box">' +
+                                            '<div class="loan-title" onclick="location.href=\'/deal/deal/detail?sn='+ item.psn +'\'">' + item.title +
+                                            '<div class="loan-status '+ className +'">'+ item.statusval +'</div></div>' +
+                                            '<div class="row loan-info">' +
+                                            '<div class="col-xs-8 loan-info1">' +
+                                            '<p><span class="info-label">认购金额：</span><span class="info-val">'+ item.order_money +'元</span></p>';
+                                    if (0 === parseInt(item.finish_date)) {
+                                        html += '<p><span class="info-label">项目期限：</span><span class="info-val">'+ item.expiress +'天</span></p>';
                                     } else {
-                                        html += '<div class="col-xs-4">'+
-                                            '<div>'+profit+'元</div>'+
-                                            '<p>'+profitDes+'</p>'+
-                                        '</div>';
+                                        html += '<p><span class="info-label">到期时间：</span><span class="info-val">'+ item.returndate +'</span></p>';
                                     }
+                                    html += '</div>';
+                                    if ('--' !== item.profit) {
+                                        html += '<div class="col-xs-4 loan-info2">' +
+                                                '<p class="info-val">'+ item.profit +'元</p>' +
+                                                '<p class="info-label">'+ profitDes +'</p></div>';
+                                    } else {
+                                        html += '<div class="col-xs-4 loan-info2">' +
+                                                '<p class="info-val">'+ item.finish_rate +'%</p>' +
+                                                '<p class="info-label">募集进度</p></div>';
 
-                                    html += '</div></div></div>';
+                                    }
+                                    html += '</div></div>';
                                 });
-
-
                                 $('.load').before(html);
                                 //页码＋1
                                 currentPage = parseInt(data.header.cp) + 1;

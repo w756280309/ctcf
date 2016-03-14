@@ -41,7 +41,7 @@ class OrderService
         }
         $loan = new LoanService();
         $query1 = (new \yii\db\Query())
-                ->select('order.*,p.title,p.status pstatus,p.end_date penddate,p.expires expiress,p.finish_date,p.jiaxi,p.finish_rate,p.sn psn,p.refund_method pmethod')
+                ->select('order.*,p.title,p.status pstatus,p.end_date penddate,p.expires expiress,p.finish_date,p.jiaxi,p.finish_rate,p.sn psn,p.refund_method prm,p.yield_rate pyr')
                 ->from(['online_order order'])
                 ->innerJoin('online_product p', 'order.online_pid=p.id')
                 ->where(['order.uid' => $uid, 'order.status' => 1]);
@@ -83,19 +83,28 @@ class OrderService
             $query[$key]['finish_rate'] = number_format($dat['finish_rate'] * 100, 0);  //募集进度
             $query[$key]['returndate'] = date('Y-m-d', $dat['finish_date']); //到期时间
             $query[$key]['order_money'] = doubleval($dat['order_money']);
+            $query[$key]['finish_rate'] = (OnlineProduct::STATUS_FOUND === (int)$dat['pstatus']) ? 100 : number_format($dat['finish_rate'] * 100, 0);
             if (in_array($dat['pstatus'], [OnlineProduct::STATUS_NOW])) {
                 $query[$key]['profit'] = '--';   //收益金额
-            } elseif (in_array($dat['pstatus'], [OnlineProduct::STATUS_HUAN, OnlineProduct::STATUS_FULL, OnlineProduct::STATUS_FOUND])) {
-                $query[$key]['finish_rate'] = (OnlineProduct::STATUS_FOUND === (int)$dat['pstatus']) ? 100 : number_format($dat['finish_rate'] * 100, 0);
-                $replayment = \common\models\order\OnlineRepaymentPlan::findOne(['order_id' => $dat['id'], 'online_pid' => $dat['online_pid']]);
-                if (!$replayment) {
-                    $query[$key]['profit'] = '--';
-                } else {
-                    $query[$key]['profit'] = doubleval($replayment->lixi);
-                }
             } else {
-                $replayment = \common\models\order\OnlineRepaymentRecord::findOne(['order_id' => $dat['id'], 'online_pid' => $dat['online_pid']]);
-                $query[$key]['profit'] = doubleval($replayment->lixi);
+                bcscale(14);
+                $bc = new BcRound();
+                $profit = 0;
+                if (OnlineProduct::REFUND_METHOD_DAOQIBENXI === (int) $dat['prm']) {
+                    //到期本息
+                    $profit = $bc->bcround(bcmul($dat['order_money'], bcmul($dat['expiress'], bcdiv($dat['pyr'], 365))), 2);
+                } else {
+                    $loanExpires = $dat['expiress'];
+                    if (OnlineProduct::REFUND_METHOD_QUARTER === (int) $dat['prm']) {
+                        $loanExpires = $loanExpires * 3;
+                    } elseif (OnlineProduct::REFUND_METHOD_HALF_YEAR === (int) $dat['prm']) {
+                        $loanExpires = $loanExpires * 6;
+                    } elseif (OnlineProduct::REFUND_METHOD_YEAR === (int) $dat['prm']) {
+                        $loanExpires = $loanExpires * 12;
+                    }
+                    $profit = $bc->bcround(bcdiv(bcmul(bcmul($dat['order_money'], $dat['pyr']), $loanExpires), 12), 2);
+                }
+                $query[$key]['profit'] = doubleval($profit);
             }
         }
 
