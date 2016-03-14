@@ -75,12 +75,10 @@ frontend\assets\WapAsset::register($this);
                            onclick="subsignup()">
                 </div>
                 <div class="col-xs-3"></div>
+                <div class="col-xs-12" style="text-align: center;"><p>已有账号 <span style="color: #f44336;">登录</span></p></div>
             <?php $form->end(); ?>
         </div>
         <!-- 注册页 end  -->
-        <!-- 输入弹出框 start  -->
-        <div class="error-info hide">您输入的密码不正确</div>
-        <!-- 输入弹出框 end  -->
     </div>
     <script>
         function subsignup() {

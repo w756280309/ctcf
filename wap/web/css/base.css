@@ -105,7 +105,8 @@ body{
 
 /* 按钮 距离顶部距离 */
 .login-sign-btn {
-    margin-top: 50px;
+    margin-top: 20px;
+    margin-bottom: 10px;
     height:35px;
 }
 
