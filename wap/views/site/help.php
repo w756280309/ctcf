@@ -87,5 +87,30 @@ $this->registerJsFile('/js/helpcenter.js', ['depends' => 'yii\web\YiiAsset','pos
                                 </div>
                         </div>
                 </a>
+                <!--名词解释-->
+                <a href="/site/help?type=4">
+                        <div class="row">
+                                <div class="col-xs-12">
+                                        <img src="/images/system/back_10.png" width="100%" alt="">
+                                </div>
+                        </div>
+                        <div class="row">
+                                <div class="col-xs-12">
+                                        <img id="img_height" src="/images/system/back_11.png" width="100%" alt="">
+                                </div>
+                                <div class="common_single">
+                                        <div class="mask-center">
+                                                名词解释篇
+                                                <img class="back_icon" src="/images/system/back_icon.png" height="100%"
+                                                     alt="">
+                                        </div>
+                                </div>
+                        </div>
+                        <div class="row">
+                                <div class="col-xs-12">
+                                        <img src="/images/system/back_12.png" width="100%" alt="">
+                                </div>
+                        </div>
+                </a>
         </div>
 </div>

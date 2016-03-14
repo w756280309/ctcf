@@ -348,13 +348,17 @@ class SiteController extends Controller
     public function actionHelp($type=null)
     {
         $this->layout = '@app/modules/order/views/layouts/buy';
+        $page = 'help';
 
         switch ($type) {
-            case 1: return $this->render('help_loginregister');
-            case 2: return $this->render('help_bindcard');
-            case 3: return $this->render('help_invest');
-            default: return $this->render('help');
+            case 1: $page = 'help_loginregister'; break;
+            case 2: $page = 'help_bindcard'; break;
+            case 3: $page = 'help_invest'; break;
+            case 4: $page = 'help_assetdesc'; break;
+            default: $page = 'help';
         }
+
+        return $this->render($page);
     }
 
     /**
