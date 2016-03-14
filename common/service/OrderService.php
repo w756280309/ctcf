@@ -79,7 +79,6 @@ class OrderService
         $message = ($page > $tp) ? '数据错误' : '消息返回';
         foreach ($query as $key => $dat) {
             $query[$key]['statusval'] = Yii::$app->params['deal_status'][$dat['pstatus']]; //标的状态
-            $query[$key]['order_time'] = $dat['order_time'] ? date('Y-m-d', $dat['order_time']) : '';  //认购时间
             $query[$key]['finish_rate'] = number_format($dat['finish_rate'] * 100, 0);  //募集进度
             $query[$key]['returndate'] = date('Y-m-d', $dat['finish_date']); //到期时间
             $query[$key]['order_money'] = doubleval($dat['order_money']);
