@@ -251,9 +251,7 @@ class OnlineRepaymentPlan extends \yii\db\ActiveRecord
             //到期本息
             return $bc->bcround(bcmul($ord->order_money, bcmul($loan->loanExpires, bcdiv($loan->yield_rate, 365))), 2);
         } else {
-            $qishu = self::getQishu($loan);
-
-            return $bc->bcround(bcdiv(bcmul($ord->order_money, $loan->yield_rate), $qishu), 2);
+            return $bc->bcround(bcdiv(bcmul(bcmul($ord->order_money, $loan->yield_rate), $loan->loanExpires), 12), 2);
         }
     }
 
@@ -301,12 +299,14 @@ class OnlineRepaymentPlan extends \yii\db\ActiveRecord
                 } elseif (OnlineProduct::REFUND_METHOD_YEAR === (int) $loan->refund_method) {
                     $each = 12;
                 }
+                $total_paid = 0;
                 for ($i = 0; $i < $qishu; ++$i) {
                     $monlen = ($i == $qishu - 1) ? $loan->loanExpires : $each * ($i + 1);
-                    $cur_lixi = $bc->bcround(bcdiv($total, $qishu), 2);
+                    $cur_lixi = ($i == $qishu - 1) ? $bc->bcround(bcsub($total, $total_paid), 2) : $bc->bcround(bcdiv($total, $qishu), 2);
+                    $total_paid = bcadd($total_paid, $bc->bcround(bcdiv($total, $qishu), 2));//确保不会由于进位造成的少利息
                     $cur_bj = ($i == $qishu - 1) ? $ord->order_money : 0;
                     $initplan = [
-                        'qishu' => $total,
+                        'qishu' => ($i + 1),
                         'benxi' => $bc->bcround(bcadd($cur_lixi, $cur_bj), 2),
                         'benjin' => $cur_bj,
                         'lixi' => $cur_lixi,
@@ -319,7 +319,6 @@ class OnlineRepaymentPlan extends \yii\db\ActiveRecord
                     }
                 }
             }
-
             if ($username != $ord->username) {
                 $message = [
                     $ord->username,

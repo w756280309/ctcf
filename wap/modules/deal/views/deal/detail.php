@@ -18,8 +18,14 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\JqueryAsset', 'pos
                     </li>
                     <li class="col-xs-6">
                         <div>
-                            <?=$deal['expires']?>
-                            <span class="column-lu">天</span>
+                            <?=$deal->loanExpires?>
+                            <span class="column-lu">
+                                <?php if (1 === (int)$deal['refund_method']) { ?>
+                                天
+                                <?php } else { ?>
+                                个月
+                                <?php } ?>
+                            </span>
                         </div>
                         <span class="qing">期限
                             <?php if (!empty($deal['kuanxianqi'])) { ?>
@@ -64,7 +70,13 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\JqueryAsset', 'pos
                 <div class="m1">起投金额：<span><?=$deal['start_money']?>元</span></div>
                 <div class="m2">项目起息：<span><?= $deal['jixi_time']>0 ? date('Y-m-d',$deal['jixi_time']) : '项目成立日次日';?></span></div>
                 <?php if (0 === (int)$deal['finish_date']) { ?>
-                    <div class="m3">项目期限：<span><?= $deal['expires'] ?></span>天</div>
+                    <div class="m3">项目期限：<span><?=$deal->loanExpires?></span>
+                    <?php if (1 === (int)$deal['refund_method']) { ?>
+                    天
+                    <?php } else { ?>
+                    个月
+                    <?php } ?>
+                    </div>
                 <?php } else { ?>
                     <div class="m3">项目结束：<span><?= date('Y-m-d',$deal['finish_date']) ?></span></div>
                 <?php } ?>

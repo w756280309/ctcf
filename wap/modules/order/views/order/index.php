@@ -17,7 +17,13 @@ $this->registerJsFile('/js/order.js', ['depends' => 'yii\web\YiiAsset','position
         <div class="col-xs-4 text-align-ct">年化收益</div>
         <div class="col-xs-8 text-align-lf col"><?=  ($deal->yield_rate*100)?>%</div>
         <div class="col-xs-4 text-align-ct">项目期限</div>
-        <div class="col-xs-8 text-align-lf col"><?= $deal->expires ?>天<?php if (!empty($deal['kuanxianqi'])) { ?>(含宽限期<?=$deal['kuanxianqi']?>天)<?php } ?></div>
+        <div class="col-xs-8 text-align-lf col"><?= $deal->loanExpires ?>
+            <?php if (1 === (int)$deal['refund_method']) { ?>
+            天
+            <?php } else { ?>
+            个月
+            <?php } ?>
+            <?php if (!empty($deal['kuanxianqi'])) { ?>(含宽限期<?=$deal['kuanxianqi']?>天)<?php } ?></div>
         <div class="col-xs-4 text-align-ct">可投余额</div>
         <div class="col-xs-8 text-align-lf col"><?=  number_format($param['order_balance'], 2)?>元</div>
     </div>

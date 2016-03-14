@@ -22,7 +22,7 @@ class OnlineorderController extends BaseController
         $username = Yii::$app->request->get('username');
         $mobile = Yii::$app->request->get('mobile');
 
-        $query = OnlineOrder::find()->where(['online_pid' => $id]);
+        $query = OnlineOrder::find()->where(['online_pid' => $id, 'status' => OnlineOrder::STATUS_SUCCESS]);
         $data = clone $query;
 
         //已筹集金额
