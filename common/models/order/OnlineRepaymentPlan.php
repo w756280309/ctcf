@@ -211,4 +211,131 @@ class OnlineRepaymentPlan extends \yii\db\ActiveRecord
 
         return $lixi_arr;
     }
+
+    /**
+     * 获取期数.
+     *
+     * @param OnlineProduct $loan
+     *
+     * @return type
+     *
+     * @throws Exception
+     */
+    public static function getQishu(OnlineProduct $loan)
+    {
+        $qishu = 1;
+        if (OnlineProduct::REFUND_METHOD_DAOQIBENXI === (int) $loan->refund_method) {//到期本息
+        } elseif (OnlineProduct::REFUND_METHOD_MONTH === (int) $loan->refund_method) {
+            $qishu = $loan->expires;//$loan->expires 以月为单位
+        } elseif (OnlineProduct::REFUND_METHOD_QUARTER === (int) $loan->refund_method) {
+            $qishu = ceil($loan->loanExpires / 3);
+        } elseif (OnlineProduct::REFUND_METHOD_HALF_YEAR === (int) $loan->refund_method) {
+            $qishu = ceil($loan->loanExpires / 6);
+        } elseif (OnlineProduct::REFUND_METHOD_YEAR === (int) $loan->refund_method) {
+            $qishu = ceil($loan->loanExpires / 12);
+        } else {
+            throw new Exception('还款方式错误');
+        }
+
+        return $qishu;
+    }
+
+    /**
+     * 获取总的利息.
+     */
+    public static function getTotalLixi(OnlineProduct $loan, OnlineOrder $ord)
+    {
+        bcscale(14);
+        $bc = new BcRound();
+        if (OnlineProduct::REFUND_METHOD_DAOQIBENXI === (int) $loan->refund_method) {
+            //到期本息
+            return $bc->bcround(bcmul($ord->order_money, bcmul($loan->loanExpires, bcdiv($loan->yield_rate, 365))), 2);
+        } else {
+            $qishu = self::getQishu($loan);
+
+            return $bc->bcround(bcdiv(bcmul($ord->order_money, $loan->yield_rate), $qishu), 2);
+        }
+    }
+
+    public static function generatePlan(OnlineProduct $loan)
+    {
+        $pp = new ProductProcessor();
+        bcscale(14);
+        $bc = new BcRound();
+        $qishu = self::getQishu($loan);
+        //获取所有订单
+        $orders = OnlineOrder::find()->where(['online_pid' => $loan->id, 'status' => OnlineOrder::STATUS_SUCCESS])->all();
+
+        $transaction = Yii::$app->db->beginTransaction();
+        OnlineProduct::updateAll(['is_jixi' => 1], ['id' => $loan->id]);//修改已经计息
+        $username = '';
+        $sms = new SmsMessage([
+            'template_id' => Yii::$app->params['sms']['manbiao'],
+            'level' => SmsMessage::LEVEL_LOW,
+        ]);
+
+        foreach ($orders as $ord) {
+            $total = self::getTotalLixi($loan, $ord);
+            if (OnlineProduct::REFUND_METHOD_DAOQIBENXI === (int) $loan->refund_method) {
+                //到期本息
+                $initplan = [
+                        'qishu' => 1,
+                        'benxi' => $bc->bcround(bcadd($total, $ord->order_money), 2),
+                        'benjin' => $ord->order_money,
+                        'lixi' => $total,
+                        'refund_time' => $loan->finish_date,
+                    ];
+                $plan = self::initPlan($ord, $initplan);
+                if (!$plan->save()) {
+                    $transaction->rollBack();
+                    return false;
+                }
+            } else {
+                $each = 1;
+                if (OnlineProduct::REFUND_METHOD_MONTH === (int) $loan->refund_method) {
+                    $each = 1;
+                } elseif (OnlineProduct::REFUND_METHOD_QUARTER === (int) $loan->refund_method) {
+                    $each = 3;
+                } elseif (OnlineProduct::REFUND_METHOD_HALF_YEAR === (int) $loan->refund_method) {
+                    $each = 6;
+                } elseif (OnlineProduct::REFUND_METHOD_YEAR === (int) $loan->refund_method) {
+                    $each = 12;
+                }
+                for ($i = 0; $i < $qishu; ++$i) {
+                    $monlen = ($i == $qishu - 1) ? $loan->loanExpires : $each * ($i + 1);
+                    $cur_lixi = $bc->bcround(bcdiv($total, $qishu), 2);
+                    $cur_bj = ($i == $qishu - 1) ? $ord->order_money : 0;
+                    $initplan = [
+                        'qishu' => $total,
+                        'benxi' => $bc->bcround(bcadd($cur_lixi, $cur_bj), 2),
+                        'benjin' => $cur_bj,
+                        'lixi' => $cur_lixi,
+                        'refund_time' => $pp->calcRetDate($monlen, $loan->jixi_time, $pp->LoanTerms('m1', date('Y-m-d', $loan->jixi_time), $monlen)),
+                    ];
+                    $plan = self::initPlan($ord, $initplan);
+                    if (!$plan->save()) {
+                        $transaction->rollBack();
+                        return false;
+                    }
+                }
+            }
+
+            if ($username != $ord->username) {
+                $message = [
+                    $ord->username,
+                    $loan->title,
+                    date('Y-m-d', $loan->jixi_time),
+                    Yii::$app->params['contact_tel'],
+                ];
+                $_sms = clone $sms;
+                $_sms->uid = $order['uid'];
+                $_sms->mobile = $order['mobile'];
+                $_sms->message = json_encode($message);
+                $_sms->save();
+            }
+            $username = $order['username'];
+        }
+        $transaction->commit();
+        return true;
+    }
 }

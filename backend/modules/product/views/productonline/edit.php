@@ -163,6 +163,7 @@ TPL;
                         <?=
                         $form->field($model, 'expires', ['template' => '<div class="input-append">{input}<span class="add-on">(天)</span></div>{error}', 'inputOptions' => ['autocomplete' => 'off', 'placeholder' => '项目天数']])->textInput(['class' => 'm-wrap span12'])
                         ?>
+                        如果选择付息还本的话。按照实际单位存库。比如按季还款，填入3，代表项目是3期，也就是9个月
                     </div>
                 </div>
             </div>

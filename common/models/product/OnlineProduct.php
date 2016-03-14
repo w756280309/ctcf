@@ -483,4 +483,21 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
     {
         return null === $jiaxi ? $yr : bcsub($yr, bcdiv($jiaxi, 100));
     }
+    
+    public function getLoanExpires()
+    {
+        if (self::REFUND_METHOD_DAOQIBENXI === (int) $this->refund_method) {//到期本息
+            return $this->expires;
+        } elseif (self::REFUND_METHOD_MONTH === (int) $this->refund_method) {
+            return $this->expires;
+        } elseif (self::REFUND_METHOD_QUARTER === (int) $this->refund_method) {
+            return $this->expires * 3;
+        } elseif (self::REFUND_METHOD_HALF_YEAR === (int) $this->refund_method) {
+            return $this->expires * 6;
+        } elseif (self::REFUND_METHOD_YEAR === (int) $this->refund_method) {
+            return $this->expires * 12;
+        } else {
+            throw new Exception('还款方式错误');
+        }
+    }
 }

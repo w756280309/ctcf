@@ -125,7 +125,7 @@ class ProductProcessor {
                 $data_interval = new \DateInterval(sprintf("P%s%s", $period, 'Y'));
                 $order_datetime->add($data_interval);
             }
-
+            
             if (!$order_datetime) {
                 return null;
             } else {
@@ -195,7 +195,7 @@ class ProductProcessor {
                     $dueDate = new \DateTime();
                     $dueDate->setTimestamp($tenderCompletedDate->format('U'));
                     $dueDate->setTimezone($tz);
-                    $dueDate->add(new DateInterval(sprintf("P%s%s", $period, $periodType)));
+                    $dueDate->add(new \DateInterval(sprintf("P%s%s", $period, $periodType)));
                 }
                 $period = $tenderCompletedDate->diff($dueDate);
                 if (!$period->invert) {
@@ -295,5 +295,22 @@ class ProductProcessor {
         return (int) ceil($days / $qiday);
     }
     
+    /**
+     * @param $addm 增加月数  int
+     * @param $date1 基准日期 Y-m-d
+     * @return 时间戳
+     */
+    public function calcRetDate($addm, $date1)
+    {
+        $date = strtotime("+$addm month", $date1);
+        $date_tmp = strtotime("+$addm month", strtotime(date("Y-m",$date1)));
+        
+        if (date("m", $date) !== date("m",strtotime($date_tmp))) {
+            $lastday = new \DateTime('last day of '.  date("Y-m" , strtotime("-1 month", $date)));
+            return $lastday->getTimestamp();
+        } else {
+            return $date;
+        }
+    }
 
 }

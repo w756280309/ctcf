@@ -58,7 +58,7 @@ class ProductonlineController extends BaseController
         $con_name_arr = Yii::$app->request->post('name');
         $con_content_arr = Yii::$app->request->post('content');
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            if (!empty($model->finish_date)) {
+            if (!empty($model->finish_date) && OnlineProduct::REFUND_METHOD_DAOQIBENXI === (int)$model->refund_method) {
                 //若截止日期不为空，重新计算项目天数
                 $pp = new ProductProcessor();
                 $model->expires = $pp->LoanTimes($model->start_date, null, strtotime($model->finish_date), 'd', true)['days'][1]['period']['days'];
@@ -405,8 +405,8 @@ class ProductonlineController extends BaseController
                     $finish_date = $pp->LoanTerms('d1', date('Y-m-d', $model->jixi_time), $model->expires);
                     OnlineProduct::updateAll(['finish_date' => strtotime($finish_date)], 'id='.$id);
                 }
-                $res = OnlineRepaymentPlan::createPlan($id);//转移到开始计息部分
-
+                //$res = OnlineRepaymentPlan::createPlan($id);//转移到开始计息部分
+                $res = OnlineRepaymentPlan::generatePlan($model);
                 if ($res) {
                     return ['result' => '1', 'message' => '操作成功'];
                 } else {
