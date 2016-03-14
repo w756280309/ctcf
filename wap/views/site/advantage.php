@@ -115,7 +115,7 @@
         <p class="h-first"><a href="javascript:;" class="number">1</a><span>国资</span>背景</p>
         <p>温州报业传媒旗下理财平台</p>
         <p class="h-num"><a href="javascript:;" class="number">2</a><span>股东</span>强势</p>
-        <p>&nbsp;&nbsp;温州报业传媒集团&nbsp;&nbsp;南京金融资产交易中心</p>
+        <p>&nbsp;&nbsp;温州报业传媒有限公司&nbsp;&nbsp;南京金融资产交易中心</p>
         <p class="h-num"><a href="javascript:;" class="number">3</a>资产<span>优质</span></p>
         <p>各类金融机构产品、优质企业政信类产品、</p>
         <p> 国有平台挂牌金融资产项目</p>
