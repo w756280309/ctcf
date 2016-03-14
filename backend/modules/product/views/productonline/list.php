@@ -84,7 +84,7 @@ $pc_cat = Yii::$app->params['pc_cat'];
                                         <th>序号</th>
                                         <th>项目名称</th>
                                         <th>项目类型</th>
-                                        <th>期限（天）</th>
+                                        <th>期限</th>
                                         <th>利率（%）</th>
                                         <th>募集金额（元）</th>
                                         <th>实际募集金额（元）</th>
@@ -103,7 +103,10 @@ $pc_cat = Yii::$app->params['pc_cat'];
                                         <td><?= $val['sn'] ?></td>
                                         <td><?= $val['title'] ?></td>
                                         <td><?= $val['is_xs'] ? "新手标" : $pc_cat[$val['cid']] ?></td>
-                                        <td><?= $val['expires'] ?></td>
+                                        <td>
+                                            <?= $val['expires'] ?>
+                                            <?= (1 === (int)$val['refund_method']) ? "天" : "个月" ?>
+                                        </td>
                                         <td><?= doubleval(100*$val['yield_rate']) ?></td>
                                         <td><?= number_format($val['money'],2) ?></td>
                                         <td><?= number_format($val['funded_money'],2) ?></td>

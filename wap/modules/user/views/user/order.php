@@ -52,7 +52,7 @@ $this->title="我的理财";
                         <p>年化收益</p>
                 </div>
                 <div class="col-xs-4">
-                        <div><?= $o['expiress'] ?>天</div>
+                        <div><?= $o['expiress'].$o['method'] ?></div>
                         <p>期限</p>
                 </div>
                 <?php if ('--' !== $o['profit']) { ?>

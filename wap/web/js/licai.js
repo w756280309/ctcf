@@ -103,7 +103,7 @@ $(function(){
                                                                 '<p>年化收益</p>'+
                                                             '</div>'+
                                                             '<div class="col-xs-4">'+
-                                                                '<div>'+expiress+'天</div>'+
+                                                                '<div>'+expiress+ item.method + '</div>'+
                                                                 '<p>期限</p>'+
                                                             '</div>';
                                     if ('--' === profit) {

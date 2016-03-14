@@ -44,7 +44,7 @@ $pc_cat = Yii::$app->params['pc_cat'];
                         <span class="desc-text nianRate <?= $is_hui?'hui':'' ?>">年化率</span>
                     </li>
                     <li class="col-xs-2 <?= $is_hui?'hui':'' ?>">
-                        <p class="<?= $is_hui?'hui':'' ?>"><?= $val['qixian'] ?><span class="column-lu">天</span></p>
+                        <p class="<?= $is_hui?'hui':'' ?>"><?= $val['qixian'] ?><span class="column-lu"><?= $val['method'] ?></span></p>
                         <span class='desc-text <?= $is_hui?'hui':'' ?>'>期限</span>
                     </li>
                     <li class="col-xs-3 aa <?= $is_hui?'hui':'' ?>">

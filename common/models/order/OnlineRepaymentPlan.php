@@ -228,11 +228,11 @@ class OnlineRepaymentPlan extends \yii\db\ActiveRecord
         } elseif (OnlineProduct::REFUND_METHOD_MONTH === (int) $loan->refund_method) {
             $qishu = $loan->expires;//$loan->expires 以月为单位
         } elseif (OnlineProduct::REFUND_METHOD_QUARTER === (int) $loan->refund_method) {
-            $qishu = ceil($loan->loanExpires / 3);
+            $qishu = ceil($loan->expires / 3);
         } elseif (OnlineProduct::REFUND_METHOD_HALF_YEAR === (int) $loan->refund_method) {
-            $qishu = ceil($loan->loanExpires / 6);
+            $qishu = ceil($loan->expires / 6);
         } elseif (OnlineProduct::REFUND_METHOD_YEAR === (int) $loan->refund_method) {
-            $qishu = ceil($loan->loanExpires / 12);
+            $qishu = ceil($loan->expires / 12);
         } else {
             throw new Exception('还款方式错误');
         }
@@ -249,9 +249,10 @@ class OnlineRepaymentPlan extends \yii\db\ActiveRecord
         $bc = new BcRound();
         if (OnlineProduct::REFUND_METHOD_DAOQIBENXI === (int) $loan->refund_method) {
             //到期本息
-            return $bc->bcround(bcmul($ord->order_money, bcmul($loan->loanExpires, bcdiv($loan->yield_rate, 365))), 2);
+            return $bc->bcround(bcmul($ord->order_money, bcmul($loan->expires, bcdiv($loan->yield_rate, 365))), 2);
         } else {
-            return $bc->bcround(bcdiv(bcmul(bcmul($ord->order_money, $loan->yield_rate), $loan->loanExpires), 12), 2);
+            var_dump($ord->order_money,$loan->yield_rate,$loan->expires);exit;
+            return $bc->bcround(bcdiv(bcmul(bcmul($ord->order_money, $loan->yield_rate), $loan->expires), 12), 2);
         }
     }
 
@@ -301,7 +302,7 @@ class OnlineRepaymentPlan extends \yii\db\ActiveRecord
                 }
                 $total_paid = 0;
                 for ($i = 0; $i < $qishu; ++$i) {
-                    $monlen = ($i == $qishu - 1) ? $loan->loanExpires : $each * ($i + 1);
+                    $monlen = ($i == $qishu - 1) ? $loan->expires : $each * ($i + 1);
                     $cur_lixi = ($i == $qishu - 1) ? $bc->bcround(bcsub($total, $total_paid), 2) : $bc->bcround(bcdiv($total, $qishu), 2);
                     $total_paid = bcadd($total_paid, $bc->bcround(bcdiv($total, $qishu), 2));//确保不会由于进位造成的少利息
                     $cur_bj = ($i == $qishu - 1) ? $ord->order_money : 0;
@@ -313,6 +314,7 @@ class OnlineRepaymentPlan extends \yii\db\ActiveRecord
                         'refund_time' => $pp->calcRetDate($monlen, $loan->jixi_time),
                     ];
                     $plan = self::initPlan($ord, $initplan);
+                    var_dump(\yii\helpers\ArrayHelper::toArray($plan));
                     if (!$plan->save()) {
                         $transaction->rollBack();
                         return false;
@@ -327,14 +329,14 @@ class OnlineRepaymentPlan extends \yii\db\ActiveRecord
                     Yii::$app->params['contact_tel'],
                 ];
                 $_sms = clone $sms;
-                $_sms->uid = $order['uid'];
-                $_sms->mobile = $order['mobile'];
+                $_sms->uid = $ord->uid;
+                $_sms->mobile = $ord->mobile;
                 $_sms->message = json_encode($message);
                 $_sms->save();
             }
-            $username = $order['username'];
+            $username = $ord->username;
         }
-        $transaction->commit();
+        //$transaction->commit();
         return true;
     }
 }

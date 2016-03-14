@@ -1,0 +1,1 @@
+ALTER TABLE  `online_product` ADD  `graceDays` INT NOT NULL COMMENT  '宽限天数' AFTER  `expires` ;

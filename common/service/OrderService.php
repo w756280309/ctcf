@@ -41,7 +41,7 @@ class OrderService
         }
         $loan = new LoanService();
         $query1 = (new \yii\db\Query())
-                ->select('order.*,p.title,p.status pstatus,p.end_date penddate,p.expires expiress,p.finish_date,p.jiaxi,p.finish_rate,p.sn psn')
+                ->select('order.*,p.title,p.status pstatus,p.end_date penddate,p.expires expiress,p.finish_date,p.jiaxi,p.finish_rate,p.sn psn,p.refund_method pmethod')
                 ->from(['online_order order'])
                 ->innerJoin('online_product p', 'order.online_pid=p.id')
                 ->where(['order.uid' => $uid, 'order.status' => 1]);
@@ -82,6 +82,7 @@ class OrderService
             $query[$key]['order_time'] = $dat['order_time'] ? date('Y-m-d', $dat['order_time']) : '';
             $query[$key]['finish_rate'] = number_format($dat['finish_rate'] * 100, 0);
             $query[$key]['yield_rate'] = OnlineProduct::calcBaseRate($dat['yield_rate'], $dat['jiaxi']);
+            $query[$key]['method'] = (1 === (int)$dat['pmethod']) ? "天" : "个月";
             if (in_array($dat['pstatus'], [OnlineProduct::STATUS_NOW])) {
                 $query[$key]['profit'] = '--';
                 $query[$key]['returndate'] = date('Y-m-d', $dat['finish_date']);

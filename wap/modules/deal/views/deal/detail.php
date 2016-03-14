@@ -18,7 +18,7 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\JqueryAsset', 'pos
                     </li>
                     <li class="col-xs-6">
                         <div>
-                            <?=$deal->loanExpires?>
+                            <?=$deal->expires?>
                             <span class="column-lu">
                                 <?php if (1 === (int)$deal['refund_method']) { ?>
                                 天
@@ -70,7 +70,7 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\JqueryAsset', 'pos
                 <div class="m1">起投金额：<span><?=$deal['start_money']?>元</span></div>
                 <div class="m2">项目起息：<span><?= $deal['jixi_time']>0 ? date('Y-m-d',$deal['jixi_time']) : '项目成立日次日';?></span></div>
                 <?php if (0 === (int)$deal['finish_date']) { ?>
-                    <div class="m3">项目期限：<span><?=$deal->loanExpires?></span>
+                    <div class="m3">项目期限：<span><?=$deal->expires?></span>
                     <?php if (1 === (int)$deal['refund_method']) { ?>
                     天
                     <?php } else { ?>

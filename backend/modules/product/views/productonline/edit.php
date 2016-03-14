@@ -103,6 +103,18 @@ TPL;
             $form->field($model, 'refund_method', ['template' => '{input}', 'inputOptions' => ['value' => '1']])->hiddenInput()
         ?>
         <h3 class="form-section">项目基本信息</h3>
+        <?php if ($model->id) {  ?>
+        <div class="row-fluid">
+            <div class="span12 ">
+                <div class="control-group">
+                    <label class="control-label">项目编号</label>
+                    <div class="controls">
+                        <?= $model->sn ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <?php } ?>
         <div class="row-fluid">
             <div class="span12 ">
                 <div class="control-group">
@@ -116,7 +128,7 @@ TPL;
             </div>
         </div>
         <div class="row-fluid">
-            <div class="span12 ">
+            <div class="span6 ">
                 <div class="control-group">
                     <label class="control-label">项目类型</label>
                     <div class="controls">
@@ -125,19 +137,26 @@ TPL;
                         ?>
                     </div>
                 </div>
-
-        <?php if ($model->id) {  ?>
-        <div class="row-fluid">
-            <div class="span12 ">
+            </div>
+            <div class="span6 ">
                 <div class="control-group">
-                    <label class="control-label">项目编号</label>
-                    <div class="controls">
-                        <?= $model->sn ?>
-                    </div>
+                        <label class="control-label">还款方式</label>
+                        <div class="controls">
+                            <?=
+                            $form->field($model, 'refund_method', [
+                                'template' => '{input}{error}',
+                                'inputOptions'=>[
+                                    'autocomplete' => "off",
+                                    'class' => 'chosen-with-diselect span6',
+                                    'onchange' => 'changeRefmet(this)'
+                                    ]
+                                ])->dropDownList(['' => "--选择--"] + Yii::$app->params['refund_method'])
+                            ?>
+                        </div>
                 </div>
             </div>
         </div>
-        <?php } ?>
+        
         <div class="row-fluid">
             <div class="span6 ">
                 <div class="control-group">
@@ -158,12 +177,11 @@ TPL;
             <!--/span-->
             <div class="span6 ">
                 <div class="control-group">
-                    <label class="control-label">项目天数</label>
+                    <label class="control-label">项目期限</label>
                     <div class="controls">
                         <?=
-                        $form->field($model, 'expires', ['template' => '<div class="input-append">{input}<span class="add-on">(天)</span></div>{error}', 'inputOptions' => ['autocomplete' => 'off', 'placeholder' => '项目天数']])->textInput(['class' => 'm-wrap span12'])
+                        $form->field($model, 'expires', ['template' => '<div class="input-append">{input}<span class="add-on">(天)</span></div>{error}', 'inputOptions' => ['autocomplete' => 'off', 'placeholder' => '项目期限']])->textInput(['class' => 'm-wrap span12'])
                         ?>
-                        如果选择付息还本的话。按照实际单位存库。比如按季还款，填入3，代表项目是3期，也就是9个月
                     </div>
                 </div>
             </div>
@@ -259,19 +277,12 @@ TPL;
             <?php } ?>
             <div class="span6 ">
                 <div class="control-group">
-                        <label class="control-label">还款方式</label>
-                        <div class="controls">
-                            <?=
-                            $form->field($model, 'refund_method', [
-                                'template' => '{input}{error}',
-                                'inputOptions'=>[
-                                    'autocomplete' => "off",
-                                    'class' => 'chosen-with-diselect span6',
-                                    //'onchange' => 'changeRefmet(this)'
-                                    ]
-                                ])->dropDownList(['' => "--选择--"] + Yii::$app->params['refund_method'])
-                            ?>
-                        </div>
+                    <label class="control-label">兑付日</label>
+                    <div class="controls">
+                        <?=
+                        $form->field($model, 'graceDays', ['template' => '<div class="input-append">{input}<span class="add-on">(天)</span></div>{error}', 'inputOptions' => ['autocomplete' => 'off', 'placeholder' => '宽限天数']])->textInput(['class' => 'm-wrap span12'])
+                        ?>
+                    </div>
                 </div>
             </div>
         </div>
@@ -459,17 +470,22 @@ TPL;
             //$('#onlineproduct-is_fdate').click();
         <?php } ?>
 
+        <?php if ($model->refund_method) { ?>
+            $('#onlineproduct-expires').next().html('(个月)')
+        <?php } ?>
         kindEdit();
     });
 
     //选择还款方式是到期本息的可以设置项目截止日以及宽限期。否则不可以设置
     function changeRefmet(obj){
         if (1 === parseInt($(obj).val())) {
-            $('.sourceRfmet').show();
+            $('#onlineproduct-expires').next().html('(天)')
+            //$('.sourceRfmet').show();
         } else {
-            $('#onlineproduct-kuanxianqi').val('');
-            $('#onlineproduct-finish_date').val('');
-            $('.sourceRfmet').hide();
+            $('#onlineproduct-expires').next().html('(个月)')
+//            $('#onlineproduct-kuanxianqi').val('');
+//            $('#onlineproduct-finish_date').val('');
+//            $('.sourceRfmet').hide();
         }
     }
 
