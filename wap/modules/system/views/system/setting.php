@@ -8,7 +8,7 @@ $this->title="系统设置";
     <div class="row bg-height border-bottom">
         <div class="col-xs-3 left-txt">用户头像</div>
         <div class="col-xs-7 ">
-            ID:<?= $model->usercode ?>
+            ID:<?= $model->mobile ?>
         </div>
         <div class="col-xs-2 headpic">
             <img class="headpic-img-box" src="/images/headpic.png" width="40px" hieght="40px" alt="头像">
