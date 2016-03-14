@@ -3,6 +3,8 @@
 namespace common\models\contract;
 
 use Yii;
+use common\models\product\OnlineProduct;
+use common\models\order\OnlineOrder;
 
 /**
  * This is the model class for table "contract_template".
@@ -56,4 +58,25 @@ class ContractTemplate extends \yii\db\ActiveRecord
      public static function getContractTemplateData($pid=0,$type=1){
         return static::find()->where(['pid'=>$pid,'type'=>$type])->orWhere(['type'=>self::TYPE_TEMP_ALL])->all();
     }
+    
+    /**
+     * 根据合同替换合同
+     * @param ContractTemplate $temp
+     * @param OnlineProduct $loan
+     * @param OnlineOrder $ord
+     * @return ContractTemplate
+     */
+    public static function replaceTemplate(ContractTemplate $temp, OnlineOrder $ord = null, OnlineProduct $loan = null)
+    {
+        $temp->content = preg_replace("/{{投资人}}/is", (null === $ord) ? "" : $ord->user->real_name, $temp->content);
+        $temp->content = preg_replace("/{{身份证号}}/is", (null === $ord) ? "" : $ord->user->idcard, $temp->content);
+        $temp->content = preg_replace("/{{认购日期}}/is", (null === $ord && null !== $ord->order_time) ? "年月日" : date("Y年m月d日", $ord->order_time), $temp->content);
+        $temp->content = preg_replace("/{{认购金额}}/is",  (null === $ord && null !== $ord->order_money) ? "" : $ord->order_money, $temp->content);
+        $temp->content = preg_replace("/｛｛投资人｝｝/is", (null === $ord) ? "" : $ord->user->real_name, $temp->content);
+        $temp->content = preg_replace("/｛｛身份证号｝｝/is", (null === $ord) ? "" : $ord->user->idcard, $temp->content);
+        $temp->content = preg_replace("/｛｛认购日期｝｝/is", (null === $ord && null !== $ord->order_time) ? "年月日" : date("Y年m月d日", $ord->order_time), $temp->content);
+        $temp->content = preg_replace("/｛｛认购金额｝｝/is",  (null === $ord && null !== $ord->order_money) ? "" : $ord->order_money, $temp->content);
+        return $temp;
+    }
+    
 }

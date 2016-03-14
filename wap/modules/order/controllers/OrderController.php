@@ -76,8 +76,8 @@ class OrderController extends BaseController
             throw new \yii\web\NotFoundHttpException('The argument err.');
         }
 
-        $model = ContractTemplate::find()->where(['pid' => $id])->select('pid,name,content')->asArray()->all();
-
+        $model = ContractTemplate::find()->where(['pid' => $id])->select('pid,name,content')->all();
+        $model[$key] = ContractTemplate::replaceTemplate($model[$key], new OnlineOrder(['uid' => $this->user->id]));
         return $this->render('agreement', ['model' => $model, 'key_f' => $key, 'content' => $model[$key]['content']]);
     }
 }
