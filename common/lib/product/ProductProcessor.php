@@ -305,7 +305,7 @@ class ProductProcessor {
         $date = strtotime("+$addm month", $date1);
         $date_tmp = strtotime("+$addm month", strtotime(date("Y-m",$date1)));
         
-        if (date("m", $date) !== date("m",strtotime($date_tmp))) {
+        if (date("m", $date) !== date("m",($date_tmp))) {
             $lastday = new \DateTime('last day of '.  date("Y-m" , strtotime("-1 month", $date)));
             return $lastday->getTimestamp();
         } else {

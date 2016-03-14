@@ -310,7 +310,7 @@ class OnlineRepaymentPlan extends \yii\db\ActiveRecord
                         'benxi' => $bc->bcround(bcadd($cur_lixi, $cur_bj), 2),
                         'benjin' => $cur_bj,
                         'lixi' => $cur_lixi,
-                        'refund_time' => $pp->calcRetDate($monlen, $loan->jixi_time, $pp->LoanTerms('m1', date('Y-m-d', $loan->jixi_time), $monlen)),
+                        'refund_time' => $pp->calcRetDate($monlen, $loan->jixi_time),
                     ];
                     $plan = self::initPlan($ord, $initplan);
                     if (!$plan->save()) {
