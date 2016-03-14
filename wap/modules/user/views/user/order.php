@@ -48,13 +48,20 @@ $this->title="我的理财";
         <div class="container" id='project-box'>
             <div class="row">
                 <div class="col-xs-4">
-                        <div><?= doubleval(number_format($o['yield_rate']*100, 2)) ?>%</div>
-                        <p>年化收益</p>
+                        <div><?= $o['order_money'] ?>元</div>
+                        <p>认购金额</p>
                 </div>
+                <?php if (0 === (int)$o['finish_date']) { ?>
                 <div class="col-xs-4">
-                        <div><?= $o['expiress'].$o['method'] ?></div>
-                        <p>期限</p>
+                        <div><?= $o['expiress'] ?>天</div>
+                        <p>项目期限</p>
                 </div>
+                <?php } else { ?>
+                <div class="col-xs-4">
+                        <div><?= $o['returndate'] ?></div>
+                        <p>到期时间</p>
+                </div>
+                <?php } ?>
                 <?php if ('--' !== $o['profit']) { ?>
                 <div class="col-xs-4">
                         <div><?= $o['profit'] ?>元</div>

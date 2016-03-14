@@ -78,27 +78,24 @@ class OrderService
         $code = ($page > $tp) ? 1 : 0;
         $message = ($page > $tp) ? '数据错误' : '消息返回';
         foreach ($query as $key => $dat) {
-            $query[$key]['statusval'] = Yii::$app->params['deal_status'][$dat['pstatus']];
-            $query[$key]['order_time'] = $dat['order_time'] ? date('Y-m-d', $dat['order_time']) : '';
-            $query[$key]['finish_rate'] = number_format($dat['finish_rate'] * 100, 0);
-            $query[$key]['yield_rate'] = OnlineProduct::calcBaseRate($dat['yield_rate'], $dat['jiaxi']);
-            $query[$key]['method'] = (1 === (int)$dat['pmethod']) ? "天" : "个月";
+            $query[$key]['statusval'] = Yii::$app->params['deal_status'][$dat['pstatus']]; //标的状态
+            $query[$key]['order_time'] = $dat['order_time'] ? date('Y-m-d', $dat['order_time']) : '';  //认购时间
+            $query[$key]['finish_rate'] = number_format($dat['finish_rate'] * 100, 0);  //募集进度
+            $query[$key]['returndate'] = date('Y-m-d', $dat['finish_date']); //到期时间
+            $query[$key]['order_money'] = doubleval($dat['order_money']);
             if (in_array($dat['pstatus'], [OnlineProduct::STATUS_NOW])) {
-                $query[$key]['profit'] = '--';
-                $query[$key]['returndate'] = date('Y-m-d', $dat['finish_date']);
+                $query[$key]['profit'] = '--';   //收益金额
             } elseif (in_array($dat['pstatus'], [OnlineProduct::STATUS_HUAN, OnlineProduct::STATUS_FULL, OnlineProduct::STATUS_FOUND])) {
                 $query[$key]['finish_rate'] = (OnlineProduct::STATUS_FOUND === (int)$dat['pstatus']) ? 100 : number_format($dat['finish_rate'] * 100, 0);
                 $replayment = \common\models\order\OnlineRepaymentPlan::findOne(['order_id' => $dat['id'], 'online_pid' => $dat['online_pid']]);
-                if (null === $replayment) {
+                if (!$replayment) {
                     $query[$key]['profit'] = '--';
                 } else {
-                    $query[$key]['profit'] = $replayment->lixi;
+                    $query[$key]['profit'] = doubleval($replayment->lixi);
                 }
-                $query[$key]['returndate'] = date('Y-m-d', $dat['finish_date']);
             } else {
                 $replayment = \common\models\order\OnlineRepaymentRecord::findOne(['order_id' => $dat['id'], 'online_pid' => $dat['online_pid']]);
-                $query[$key]['profit'] = $replayment->lixi;
-                $query[$key]['returndate'] = date('Y-m-d', $replayment->refund_time);
+                $query[$key]['profit'] = doubleval($replayment->lixi);
             }
         }
 
