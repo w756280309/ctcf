@@ -31,7 +31,7 @@ frontend\assets\WapAsset::register($this);
         <!--header-->
         <div class="row account-title">
             <div class="col-xs-2 back"><img src="/images/headpic.png" alt=""/></div>
-            <div class="col-xs-8 ">ID:<?= Yii::$app->user->identity->usercode ?></div>
+            <div class="col-xs-8 ">ID:<?= Yii::$app->user->identity->mobile ?></div>
             <div class="col-xs-1 col"><a href="/system/system/setting" class="set">设置</a></div>
             <div class="col-xs-1"></div>
         </div>
