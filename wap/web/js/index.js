@@ -3,6 +3,8 @@
  */
 var csrf;
 $(function(){
+    session();
+
     csrf = $("meta[name=csrf-token]").attr('content');
 
     if($.trim($("#slideBox ul").html())!==""){
@@ -48,4 +50,15 @@ $(function(){
     }
 
 })
+
+function session()
+{
+    var xhr = $.get('/site/session');
+
+    xhr.done(function(data) {
+        if (!data.isLoggedin) {
+            $('#isLoggedin').css('display', 'block');
+        }
+    });
+}
 

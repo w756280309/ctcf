@@ -57,17 +57,17 @@ $rate = number_format($deals->finish_rate * 100, 0);
             <ul></ul>
         </div>
     </div>
-    <?php if (\Yii::$app->user->isGuest) { ?>
+
     <!-- 登录 注册 start -->
-    <div class="row btn">
+    <div class="row btn" id="isLoggedin" style="display: none;">
         <div class="col-sm-2"></div>
         <div class="col-xs-6 col-sm-4"><a class="signup a-btn" href="/site/signup" >注册</a></div>
         <div class="col-xs-6 col-sm-4"><a class="login a-btn" href="/site/login" >登录</a></div>
         <div class="col-sm-2"></div>
     </div>
     <!-- 登录 注册 end -->
-    <?php } ?>
- <!-- 推荐区start  -->
+
+    <!-- 推荐区start  -->
     <div class="row new-box">
         <div class="new-head bot-line" onclick="window.location.href='/deal/deal/index?cat=<?= $deals->cid ?>'">
             <div class="col-xs-8 col-sm-7 new-head-title">

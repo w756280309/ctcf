@@ -366,9 +366,20 @@ class SiteController extends Controller
         return $this->render('advantage');
     }
 
+    /**
+     * 联系我们页面
+     */
     public function actionContact()
     {
         $this->layout = '@app/modules/order/views/layouts/buy';
         return $this->render('contact');
+    }
+
+    public function actionSession()
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        return [
+            'isLoggedin' => !Yii::$app->user->isGuest,
+        ];
     }
 }
