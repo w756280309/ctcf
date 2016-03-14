@@ -15,7 +15,7 @@ frontend\assets\WapAsset::register($this);
         <meta name="viewport"
               content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
         <meta name="renderer" content="webkit">
-        <title><?= Html::encode($this->title) ?></title>
+        <title>温都金服</title>
         <?= Html::csrfMetaTags() ?>
         <?php $this->head() ?>
         <script type="text/javascript" src="/js/jquery.js"></script>
