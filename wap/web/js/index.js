@@ -3,7 +3,7 @@
  */
 var csrf;
 $(function(){
-    session();
+    checkLoginStatus();
 
     csrf = $("meta[name=csrf-token]").attr('content');
 
@@ -51,13 +51,13 @@ $(function(){
 
 })
 
-function session()
+function checkLoginStatus()
 {
     var xhr = $.get('/site/session');
 
     xhr.done(function(data) {
         if (!data.isLoggedin) {
-            $('#isLoggedin').css('display', 'block');
+            $('#isLoggedin').show();
         }
     });
 }
