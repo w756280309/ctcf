@@ -393,10 +393,13 @@ a.a-btn {
     background: #f44336;
     float:right;
 }
-.login {
+a.login {
     color:#f44336;
     background: #fff;
     float:left;
+}
+a.login:visited {
+    color:#f44336;
 }
 .notice-box {
     padding:0;
