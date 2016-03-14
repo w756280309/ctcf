@@ -414,10 +414,10 @@ a.login:visited {
 }
 
 .notice {
-    padding: 0 18px 0 10px;
-    font-size: 1.33rem;
-    height: 3.5rem;
-    line-height: 3.5rem;
+    padding: 0 18px;
+    font-size: 1.1rem;
+    height: 3.8rem;
+    line-height: 3.8rem;
     color: #595757;
     border-bottom: 1px solid #e6e7e7;
 }

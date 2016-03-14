@@ -35,47 +35,34 @@ $this->title="我的理财";
     </div>
 
 <?php if($list['data']) { foreach ($list['data'] as $o) { ?>
-    <!--时间-->
-     <div class="row times">
-          <div class="col-xs-4"><?= $o['order_time'] ?></div>
-          <div class="col-xs-8"></div>
-     </div>
-    <div class="row column" onclick="location.href='/deal/deal/detail?sn=<?= $o['psn'] ?>'">
-        <div class="hidden-xs col-sm-1" style="height:50px;"></div>
-        <div class="col-xs-12 col-sm-10 column-title"><span><?=$o['title']?></span></div>
-        <div class="<?= in_array($o['pstatus'], [1,2])?"column-title-rg":"column-title-rg1";?>"><?=$o['statusval']?></div>
-        <!-- 修改 -->
-        <div class="container" id='project-box'>
-            <div class="row">
-                <div class="col-xs-4">
-                        <div><?= $o['order_money'] ?>元</div>
-                        <p>认购金额</p>
-                </div>
-                <?php if (0 === (int)$o['finish_date']) { ?>
-                <div class="col-xs-4">
-                        <div><?= $o['expiress'] ?>天</div>
-                        <p>项目期限</p>
-                </div>
-                <?php } else { ?>
-                <div class="col-xs-4">
-                        <div><?= $o['returndate'] ?></div>
-                        <p>到期时间</p>
-                </div>
-                <?php } ?>
-                <?php if ('--' !== $o['profit']) { ?>
-                <div class="col-xs-4">
-                        <div><?= $o['profit'] ?>元</div>
-                        <p><?= ($o['pstatus']==6)?"实际收益":"预期收益" ?></p>
-                </div>
-                <?php } else { ?>
-                <div class="col-xs-4">
-                        <div><?= $o['finish_rate'] ?>%</div>
-                        <p>募集进度</p>
-                </div>
-                <?php } ?>
-            </div>
-        </div>
+<div class="loan-box">
+    <div class="loan-title" onclick="location.href='/deal/deal/detail?sn=<?= $o['psn'] ?>'">
+        <?=$o['title']?>
+        <div class="loan-status <?= in_array($o['pstatus'], [1,2])?"column-title-rg":"column-title-rg1";?>"><?=$o['statusval']?></div>
     </div>
+
+    <div class="row loan-info">
+        <div class="col-xs-8 loan-info1">
+            <p><span class="info-label">认购金额：</span><span class="info-val"><?= $o['order_money'] ?>元</span></p>
+            <?php if (0 === (int)$o['finish_date']) { ?>
+                <p><span class="info-label">项目期限：</span><span class="info-val"><?= $o['expiress'] ?>天</span></p>
+            <?php } else { ?>
+                <p><span class="info-label">到期时间：</span><span class="info-val"><?= $o['returndate'] ?></span></p>
+            <?php } ?>
+        </div>
+        <?php if ('--' !== $o['profit']) { ?>
+        <div class="col-xs-4 loan-info2">
+            <p class="info-val"><?= $o['profit'] ?>元</p>
+            <p class="info-label"><?= ($o['pstatus']==6)?"实际收益":"预期收益" ?></p>
+        </div>
+        <?php } else { ?>
+        <div class="col-xs-4 loan-info2">
+            <p class="info-val"><?= $o['finish_rate'] ?>%</p>
+            <p class="info-label">募集进度</p>
+        </div>
+        <?php } ?>
+    </div>
+</div>
 <?php } ?>
     <div class="load" style="display: block"></div>
 <?php } else{ ?>
