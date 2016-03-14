@@ -33,7 +33,7 @@ $this->title="帮助中心";
                                 <div class="clear"></div>
                                 <div class="beset">
                                         <p class="p_left">温股投：</p>
-                                        <p class="p_right">由券商背景基金提供全额本金和收益保障，约定年3-6倍回报，100万元起投，投资期限12-24个月。</p>
+                                        <p class="p_right">由券商背景基金提供优质项目，3-6倍回报，100万元起投，投资期限2-5年。</p>
                                 </div>
                         </div>
                 </div>
