@@ -332,7 +332,7 @@ TPL;
                 </div>
             </div>
             <!--/span-->
-            <div class="span6 ">
+<!--            <div class="span6 ">
                 <div class="control-group">
                     <label class="control-label">分销渠道</label>
                     <div class="controls">
@@ -341,7 +341,7 @@ TPL;
                         ?>
                     </div>
                 </div>
-            </div>
+            </div>-->
             <!--/span-->
         </div>
         <!--/row-->

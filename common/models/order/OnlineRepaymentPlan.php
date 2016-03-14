@@ -251,7 +251,6 @@ class OnlineRepaymentPlan extends \yii\db\ActiveRecord
             //到期本息
             return $bc->bcround(bcmul($ord->order_money, bcmul($loan->expires, bcdiv($loan->yield_rate, 365))), 2);
         } else {
-            var_dump($ord->order_money,$loan->yield_rate,$loan->expires);exit;
             return $bc->bcround(bcdiv(bcmul(bcmul($ord->order_money, $loan->yield_rate), $loan->expires), 12), 2);
         }
     }
@@ -266,7 +265,13 @@ class OnlineRepaymentPlan extends \yii\db\ActiveRecord
         $orders = OnlineOrder::find()->where(['online_pid' => $loan->id, 'status' => OnlineOrder::STATUS_SUCCESS])->all();
 
         $transaction = Yii::$app->db->beginTransaction();
-        OnlineProduct::updateAll(['is_jixi' => 1], ['id' => $loan->id]);//修改已经计息
+        $up['is_jixi'] = 1;
+        if (0 === $loan->finish_date) {
+            $finish_date = $pp->LoanTerms('d1', date('Y-m-d', $loan->jixi_time), $loan->expires);
+            $up['finish_date'] = strtotime($finish_date);
+            $loan->finish_date = $finish_date;
+        }
+        OnlineProduct::updateAll($up, ['id' => $loan->id]);//修改已经计息
         $username = '';
         $sms = new SmsMessage([
             'template_id' => Yii::$app->params['sms']['manbiao'],
@@ -314,7 +319,6 @@ class OnlineRepaymentPlan extends \yii\db\ActiveRecord
                         'refund_time' => $pp->calcRetDate($monlen, $loan->jixi_time),
                     ];
                     $plan = self::initPlan($ord, $initplan);
-                    var_dump(\yii\helpers\ArrayHelper::toArray($plan));
                     if (!$plan->save()) {
                         $transaction->rollBack();
                         return false;
@@ -336,7 +340,7 @@ class OnlineRepaymentPlan extends \yii\db\ActiveRecord
             }
             $username = $ord->username;
         }
-        //$transaction->commit();
+        $transaction->commit();
         return true;
     }
 }

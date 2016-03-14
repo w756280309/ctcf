@@ -23,7 +23,7 @@ $(function () {
                 toast(data.message);
             }
             if (data.tourl != undefined) {
-                setTimeout(function() {
+                setTimeout(function () {
                     location.href = data.tourl;
                 }, 1000);
             }
@@ -40,8 +40,11 @@ $(function () {
         if (!$.isNumeric(money)) {
             money = 0;
         }
-
-        $('.yuqishouyi').html(accDiv(accMul(accMul(money, yr), qixian), 360).toFixed(2) + "元");
+        if (1 == parseInt(retmet)) {
+            $('.yuqishouyi').html(accDiv(accMul(accMul(money, yr), qixian), 365).toFixed(2) + "元");
+        } else {
+            $('.yuqishouyi').html(accDiv(accMul(accMul(money, yr), qixian), 12).toFixed(2) + "元");
+        }
     });
 })
 

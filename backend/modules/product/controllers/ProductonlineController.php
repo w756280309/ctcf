@@ -400,11 +400,6 @@ class ProductonlineController extends BaseController
              ) {
                 return ['result' => '0', 'message' => '无法找到该项目,或者项目现阶段不允许开始计息'];
             } else {
-                if (0 === $model->finish_date) {
-                    $pp = new ProductProcessor();
-                    $finish_date = $pp->LoanTerms('d1', date('Y-m-d', $model->jixi_time), $model->expires);
-                    OnlineProduct::updateAll(['finish_date' => strtotime($finish_date)], 'id='.$id);
-                }
                 //$res = OnlineRepaymentPlan::createPlan($id);//转移到开始计息部分old
                 $res = OnlineRepaymentPlan::generatePlan($model);
                 if ($res) {

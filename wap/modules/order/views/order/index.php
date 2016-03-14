@@ -3,6 +3,7 @@ $this->title="购买";
 
 $this->registerJs('var yr='.$deal->yield_rate, 1);
 $this->registerJs('var qixian='.$deal->expires, 1);
+$this->registerJs('var retmet='.$deal->refund_method, 1);
 
 $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','position' => 1]);
 $this->registerJsFile('/js/order.js', ['depends' => 'yii\web\YiiAsset','position' => 1]);
