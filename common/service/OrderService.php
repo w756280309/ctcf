@@ -84,6 +84,7 @@ class OrderService
             $query[$key]['returndate'] = date('Y-m-d', $dat['finish_date']); //到期时间
             $query[$key]['order_money'] = doubleval($dat['order_money']);
             $query[$key]['finish_rate'] = (OnlineProduct::STATUS_FOUND === (int)$dat['pstatus']) ? 100 : number_format($dat['finish_rate'] * 100, 0);
+            $query[$key]['method'] = (1 === (int)$dat['prm']) ? "天" : "个月";
             if (in_array($dat['pstatus'], [OnlineProduct::STATUS_NOW])) {
                 $query[$key]['profit'] = '--';   //收益金额
             } else {

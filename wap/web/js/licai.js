@@ -90,7 +90,7 @@ $(function(){
                                             '<div class="col-xs-8 loan-info1">' +
                                             '<p><span class="info-label">认购金额：</span><span class="info-val">'+ item.order_money +'元</span></p>';
                                     if (0 === parseInt(item.finish_date)) {
-                                        html += '<p><span class="info-label">项目期限：</span><span class="info-val">'+ item.expiress +'天</span></p>';
+                                        html += '<p><span class="info-label">项目期限：</span><span class="info-val">'+ item.expiress + item.method +'</span></p>';
                                     } else {
                                         html += '<p><span class="info-label">到期时间：</span><span class="info-val">'+ item.returndate +'</span></p>';
                                     }

@@ -45,7 +45,7 @@ $this->title="我的理财";
         <div class="col-xs-8 loan-info1">
             <p><span class="info-label">认购金额：</span><span class="info-val"><?= $o['order_money'] ?>元</span></p>
             <?php if (0 === (int)$o['finish_date']) { ?>
-                <p><span class="info-label">项目期限：</span><span class="info-val"><?= $o['expiress'] ?>天</span></p>
+                <p><span class="info-label">项目期限：</span><span class="info-val"><?= $o['expiress'].$o['method'] ?></span></p>
             <?php } else { ?>
                 <p><span class="info-label">到期时间：</span><span class="info-val"><?= $o['returndate'] ?></span></p>
             <?php } ?>
