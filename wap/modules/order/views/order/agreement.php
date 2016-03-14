@@ -1,13 +1,24 @@
 <?php
 $this->title="合同说明";
 
+$this->registerCssFile('/css/licai.css', ['depends' => 'frontend\assets\WapAsset']);
+$this->registerCssFile('/css/swiper.min.css', ['depends' => 'frontend\assets\WapAsset']);
+$this->registerJsFile('/js/jquery.js');
+$this->registerJsFile('/js/swiper.min.js');
+$this->registerJsFile('/js/licai.js');
+
+$switcherJs = <<<'JS'
+var $switcher = $('#legal-docs-switcher');
+var activeIndex = $switcher.find('.dian').data('switcherIndex');
+if (activeIndex > 2) {
+var docSwiper = $switcher[0].swiper;
+docSwiper.slideTo(activeIndex);
+}
+JS;
+$this->registerJs($switcherJs);
+
 $num = 0;
 ?>
-<link rel="stylesheet" href="/css/licai.css"/>
-<link rel="stylesheet" href="/css/swiper.min.css">
-<script src="/js/jquery.js"></script>
-<script src="/js/swiper.min.js"></script>
-<script src="/js/licai.js"></script>
 <style>
     body {
         background-color: #fff;
@@ -34,10 +45,10 @@ $num = 0;
 </style>
 
 <!-- Swiper -->
-<div class="swiper-container" style="line-height: 18px;">
+<div id="legal-docs-switcher" class="swiper-container" style="line-height: 18px;">
     <div class="swiper-wrapper">
         <?php foreach($model as $key => $val): $num++; ?>
-        <div class="swiper-slide <?= $key_f == $key?"dian":"" ?>" onclick="location.replace('/order/order/agreement?id=<?= $val['pid'] ?>&key=<?= $key ?>')"><?= Yii::$app->functions->cut_str($val['name'],5,0,'**') ?></div>
+        <div data-switcher-index="<?= $num-1 ?>" class="swiper-slide <?= $key_f == $key?"dian":"" ?>" onclick="location.replace('/order/order/agreement?id=<?= $val['pid'] ?>&key=<?= $key ?>')"><?= Yii::$app->functions->cut_str($val['name'],5,0,'**') ?></div>
         <?php endforeach; ?>
     </div>
 </div>
