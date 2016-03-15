@@ -10,8 +10,8 @@ use common\models\order\OnlineOrder;
 use common\lib\bchelp\BcRound;
 use common\models\user\MoneyRecord;
 use common\models\sms\SmsMessage;
-use common\service\PayService;
 use common\models\user\User;
+use common\models\order\OnlineRepaymentPlan;
 
 /**
  * Desc 主要用于订单获取
@@ -39,7 +39,6 @@ class OrderService
         if (empty($uid)) {
             return false;
         }
-        $loan = new LoanService();
         $query1 = (new \yii\db\Query())
                 ->select('order.*,p.title,p.status pstatus,p.end_date penddate,p.expires expiress,p.finish_date,p.jiaxi,p.finish_rate,p.sn psn,p.refund_method prm,p.yield_rate pyr')
                 ->from(['online_order order'])
@@ -60,8 +59,8 @@ class OrderService
         $daihuan = 0;
         foreach ($record as $val) {
             $totalFund = bcadd($totalFund, $val['order_money'], 2);
-            if (OnlineProduct::STATUS_OVER !== (int)$val['pstatus']) {
-                $daihuan++;
+            if (OnlineProduct::STATUS_OVER !== (int) $val['pstatus']) {
+                ++$daihuan;
             }
         }
 
@@ -82,29 +81,12 @@ class OrderService
             $query[$key]['finish_rate'] = number_format($dat['finish_rate'] * 100, 0);  //募集进度
             $query[$key]['returndate'] = date('Y-m-d', $dat['finish_date']); //到期时间
             $query[$key]['order_money'] = doubleval($dat['order_money']);
-            $query[$key]['finish_rate'] = (OnlineProduct::STATUS_FOUND === (int)$dat['pstatus']) ? 100 : number_format($dat['finish_rate'] * 100, 0);
-            $query[$key]['method'] = (1 === (int)$dat['prm']) ? "天" : "个月";
+            $query[$key]['finish_rate'] = (OnlineProduct::STATUS_FOUND === (int) $dat['pstatus']) ? 100 : number_format($dat['finish_rate'] * 100, 0);
+            $query[$key]['method'] = (1 === (int) $dat['prm']) ? '天' : '个月';
             if (in_array($dat['pstatus'], [OnlineProduct::STATUS_NOW])) {
                 $query[$key]['profit'] = '--';   //收益金额
             } else {
-                bcscale(14);
-                $bc = new BcRound();
-                $profit = 0;
-                if (OnlineProduct::REFUND_METHOD_DAOQIBENXI === (int) $dat['prm']) {
-                    //到期本息
-                    $profit = $bc->bcround(bcmul($dat['order_money'], bcmul($dat['expiress'], bcdiv($dat['pyr'], 365))), 2);
-                } else {
-                    $loanExpires = $dat['expiress'];
-                    if (OnlineProduct::REFUND_METHOD_QUARTER === (int) $dat['prm']) {
-                        $loanExpires = $loanExpires * 3;
-                    } elseif (OnlineProduct::REFUND_METHOD_HALF_YEAR === (int) $dat['prm']) {
-                        $loanExpires = $loanExpires * 6;
-                    } elseif (OnlineProduct::REFUND_METHOD_YEAR === (int) $dat['prm']) {
-                        $loanExpires = $loanExpires * 12;
-                    }
-                    $profit = $bc->bcround(bcdiv(bcmul(bcmul($dat['order_money'], $dat['pyr']), $loanExpires), 12), 2);
-                }
-                $query[$key]['profit'] = doubleval($profit);
+                $query[$key]['profit'] = OnlineRepaymentPlan::getTotalLixi(new OnlineProduct(['refund_method' => $dat['prm'], 'expires' => $dat['expiress'], 'yield_rate' => $dat['pyr']]), new OnlineOrder(['order_money' => $dat['order_money']]));
             }
         }
 
@@ -163,18 +145,20 @@ class OrderService
         $summoney = OnlineOrder::find()->where(['status' => 1, 'online_pid' => $loan->id])->sum('order_money');
         $insert_sum = $summoney; //包含此笔募集的总金额
         $update = array();
-        if (0 <= bccomp($insert_sum, $loan->money)) {//投资总和与融资总额比较。如果投资总和大于等于融资总额。要完成满标状态值的修改
+        if (0 <= bccomp($insert_sum, $loan->money)) {
+            //投资总和与融资总额比较。如果投资总和大于等于融资总额。要完成满标状态值的修改
             $update['finish_rate'] = 1;
             $update['full_time'] = time();//由于定时任务去修改满标状态以及生成还款计划。所以此处不设置修改满标状态
             if (!$loan->finish_date) {
                 $diff = \Yii::$app->functions->timediff(strtotime(date('Y-m-d', $loan->start_date)), strtotime(date('Y-m-d', $loan->finish_date)));
-                OnlineProduct::updateAll(['expires' => $diff['day'] - 1], "id=" . $loan->id . " and finish_date>0"); //对于此时设置有结束日期的要校准项目天数
+                OnlineProduct::updateAll(['expires' => $diff['day'] - 1], 'id='.$loan->id.' and finish_date>0'); //对于此时设置有结束日期的要校准项目天数
             }
         } else {
             $finish_rate = $bcrond->bcround(bcdiv($insert_sum, $loan->money), 2);
-            if (0 === bccomp($finish_rate, 1) && 0 !== bccomp($insert_sum, $loan->money)) {//主要处理由于四舍五入造成的不应该募集完成的募集完成了：完成比例等于1了，并且包含此次交易成功所有金额不等于募集金额
+            if (0 === bccomp($finish_rate, 1) && 0 !== bccomp($insert_sum, $loan->money)) {
+                //主要处理由于四舍五入造成的不应该募集完成的募集完成了：完成比例等于1了，并且包含此次交易成功所有金额不等于募集金额
                 $finish_rate = 0.99;
-            } else if(0 === bccomp($finish_rate, 0)) {
+            } elseif (0 === bccomp($finish_rate, 0)) {
                 $finish_rate = 0.01;
             }
             $update['finish_rate'] = $finish_rate;
@@ -192,18 +176,18 @@ class OrderService
             $user->real_name,
             $loan->title,
             $order->order_money,
-            Yii::$app->params['contact_tel']
+            Yii::$app->params['contact_tel'],
         ];
         $sms = new SmsMessage([
             'uid' => $user->id,
             'template_id' => Yii::$app->params['sms']['toubiao'],
             'mobile' => $user->mobile,
             'level' => SmsMessage::LEVEL_LOW,
-            'message' => json_encode($message)
+            'message' => json_encode($message),
         ]);
         $sms->save();
         $transaction->commit();
+
         return true;
     }
-
 }
