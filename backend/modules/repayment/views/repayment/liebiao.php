@@ -14,10 +14,10 @@ $bc = new BcRound();
             <ul class="breadcrumb">
                     <li>
                         <i class="icon-home"></i>
-                        <a href="/product/productonline/list">贷款管理</a> 
+                        <a href="/product/productonline/list">贷款管理</a>
                         <i class="icon-angle-right"></i>
                     </li>
-                    
+
                     <li>
                         <a href="/product/productonline/list">项目列表</a>
                         <i class="icon-angle-right"></i>
@@ -27,7 +27,7 @@ $bc = new BcRound();
                     </li>
             </ul>
         </div>
-        
+
          <div class="portlet-body">
             <table class="table">
                     <tr>
@@ -47,16 +47,16 @@ $bc = new BcRound();
                         <td>
                             <span class="title">应还款本息：<?=$total_bx?>元</span>
                         </td>
-                        <td>                            
+                        <td>
                         </td>
                         <td>
                         </td>
-                        <td>                        
+                        <td>
                         </td>
                     </tr>
             </table>
         </div>
-       
+
         <?php foreach ($model as $qk=>$qi) : ?>
         <div class="portlet-body">
             <table class="table table-striped table-bordered table-advance table-hover">
@@ -74,19 +74,19 @@ $bc = new BcRound();
                 <tbody>
                 <?php
                     $cur_return = 0;
-                    foreach ($qi as $key => $val) : 
+                    foreach ($qi as $key => $val) :
                         $cur_return = bcadd($cur_return, $val['benxi']);
                 ?>
                     <tr>
                         <td><?= $key + 1 ?></td>
                         <td><?= $val['qishu'] ?></td>
                         <td><?= $val['real_name'] ?></td>
-                        <td><?= $val['mobile'] ?></td>                   
-                        <td style="text-align: right; padding-right: 70px"><?= $val['benjin'] ?></td>                   
-                        <td style="text-align: right; padding-right: 70px"><?= $val['lixi'] ?></td>                   
+                        <td><?= $val['mobile'] ?></td>
+                        <td style="text-align: right; padding-right: 70px"><?= $val['benjin'] ?></td>
+                        <td style="text-align: right; padding-right: 70px"><?= $val['lixi'] ?></td>
                         <td style="text-align: right; padding-right: 70px"><?= $val['benxi'] ?></td>
                     </tr>
-                    <?php endforeach; ?>   
+                    <?php endforeach; ?>
                 </tbody>
             </table>
         </div>
@@ -95,13 +95,13 @@ $bc = new BcRound();
                 <?php if($deal->status==5 && $qi[0][status]==0){ ?>
                 <button type="button" class="btn blue button-repayment" qishu="<?= $qk ?>"><i class="icon-ok"></i> 确认还款</button>
                 <?php } ?>
-            </div>            
-        <?php endforeach; ?>   
-        
-    </div>                            
+            </div>
+        <?php endforeach; ?>
+
+    </div>
 </div>
 <script type="text/javascript">
-    
+
     $(function(){
         $('.button-repayment').click(function(){
             var csrftoken= '<?= Yii::$app->request->getCsrfToken(); ?>';
@@ -118,11 +118,11 @@ $bc = new BcRound();
                      newalert(data.result,data.message,1);
                      cloaseLoading();
                      $repbtn.removeAttr('disabled');
-                     $repbtn.html('<i class="icon-ok"></i> 确认还款');                     
-                });                 
+                     $repbtn.html('<i class="icon-ok"></i> 确认还款');
+                });
             },function(){
                 layer.closeAll();
-            })    
+            })
 
         });
     })

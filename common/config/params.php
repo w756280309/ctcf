@@ -57,9 +57,11 @@ return [
         'tixian_apply' => 71400,
         'toubiao' => 70040,
         'recharge' => 60764,
-        'huikuan' => 60766,
         'yzm' => 70052,
-        'forget' => 70036
+        'forget' => 70036,
+        'daoqibenxi' => 70049,
+        'fenqihuikuan' => 70048,
+        'lfenqihuikuan' => 70046,
     ],
     'contact_tel' => '400-101-5151',
     'white_list' => ['15810036547','18518154492'],
