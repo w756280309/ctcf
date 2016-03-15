@@ -24,9 +24,7 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
             <div class="col-xs-8 bank-content">
                 <div class="bank-content1" style="font-size: 14px;">
                     <?= $user_bank->bank_name ?>
-                    <?php if ($param = Yii::$app->params['bank'][$user_bank->bank_id]['limit']) { ?>
-                    <span style="font-size: 12px;">(限额<?= $param['single'] ?>万/笔，<?= $param['day'] ?>万/日)</span>
-                    <?php } ?>
+                    <span style="font-size: 12px;">(限额<?= \Yii::$app->functions->toFormatMoney($bank['singleLimit']) ?>/笔，<?= \Yii::$app->functions->toFormatMoney($bank['dailyLimit']) ?>/日)</span>
                 </div>
                 <div class="bank-content2">
                     尾号<?= $user_bank->card_number?substr($user_bank->card_number, -4):"" ?> 储蓄卡

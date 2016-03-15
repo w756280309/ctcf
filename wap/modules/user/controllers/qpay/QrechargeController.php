@@ -8,6 +8,7 @@ use yii\base\Model;
 use yii\web\Response;
 use app\controllers\BaseController;
 use common\models\user\RechargeRecord;
+use common\models\bank\BankManager;
 
 class QrechargeController extends BaseController
 {
@@ -43,9 +44,12 @@ class QrechargeController extends BaseController
             $rec_model->load(Yii::$app->request->post())
             && $rec_model->validate()
         ) {
-//            if ($rec_model->fund * 100 > Yii::$app->params['bank'][$ubank->bank_id]['limit']['single'] * 1000000) {
-//                $rec_model->addError('fund', '购买金额超过银行单笔限额');
-//            }
+            try {
+                BankManager::getQpayLimit($ubank, $rec_model->fund);
+            } catch (\Exception $ex) {
+                throw new \Exception($ex->getMessage());
+            }
+            
             if (!$rec_model->hasErrors()) {
                 if (!$rec_model->save(false)) {
                     throw new \Exception('Insert recharge record err.');

@@ -128,14 +128,14 @@ class UserbankController extends BaseController
         $uid = $user->id;
         $user_bank = UserBanks::find()->where(['uid' => $uid])->select('id,binding_sn,bank_id,bank_name,card_number')->one();
         $user_acount = UserAccount::find()->where(['type' => UserAccount::TYPE_LEND, 'uid' => $uid])->select('id,uid,in_sum,available_balance')->one();
-
+        $bank = QpayConfig::findOne($user_bank->bank_id);
         //检查用户是否完成快捷支付
         $data = BankService::checkKuaijie($user);
         if ($data[code] == 1 && \Yii::$app->request->isAjax) {
             return ['next' => $data['tourl']];
         }
 
-        return $this->render('recharge', ['user_bank' => $user_bank, 'user_acount' => $user_acount, 'data' => $data]);
+        return $this->render('recharge', ['user_bank' => $user_bank, 'user_acount' => $user_acount, 'data' => $data, 'bank' => $bank]);
     }
 
     /**
