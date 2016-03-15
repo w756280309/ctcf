@@ -75,7 +75,7 @@ frontend\assets\WapAsset::register($this);
                            onclick="subsignup()">
                 </div>
                 <div class="col-xs-3"></div>
-                <div class="col-xs-12" style="text-align: center;"><p>已有账号 <span style="color: #f44336;">登录</span></p></div>
+                <div class="col-xs-12" style="text-align: center;"><p>已有账号 <a href="/site/login" style="color: #f44336;">登录</a></p></div>
             <?php $form->end(); ?>
         </div>
         <!-- 注册页 end  -->

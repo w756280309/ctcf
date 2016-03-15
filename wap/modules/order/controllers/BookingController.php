@@ -61,7 +61,7 @@ class BookingController extends BaseController
     public function actionDetail($pid)
     {
         $model = BookingProduct::findOne($pid);
-        if (empty($model)) {
+        if (!$model) {
             throw new \yii\web\NotFoundHttpException('booking production is not existed.');
         }
 
