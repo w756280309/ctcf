@@ -267,9 +267,16 @@ class OnlineRepaymentPlan extends \yii\db\ActiveRecord
         $transaction = Yii::$app->db->beginTransaction();
         $up['is_jixi'] = 1;
         if (0 === $loan->finish_date) {
-            $finish_date = $pp->LoanTerms('d1', date('Y-m-d', $loan->jixi_time), $loan->expires);
-            $up['finish_date'] = strtotime($finish_date);
-            $loan->finish_date = $finish_date;
+            $finish_date = null;
+            if (OnlineProduct::REFUND_METHOD_DAOQIBENXI === (int) $loan->refund_method) {
+                 $finish_date = $pp->LoanTerms('d1', date('Y-m-d', $loan->jixi_time), $loan->expires);
+            } else {
+                 $finish_date = $pp->LoanTerms('m1', date('Y-m-d', $loan->jixi_time), $loan->expires);
+            }      
+            if (null !== $finish_date) {
+                $up['finish_date'] = strtotime($finish_date);
+                $loan->finish_date = $finish_date;
+            }
         }
         OnlineProduct::updateAll($up, ['id' => $loan->id]);//修改已经计息
         $username = '';
