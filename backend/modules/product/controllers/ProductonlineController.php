@@ -79,7 +79,7 @@ class ProductonlineController extends BaseController
                 $model->creator_id = Yii::$app->user->id;
                 $model->yield_rate = bcdiv($model->yield_rate, 100, 14);
                 $model->jixi_time = $model->jixi_time !== '' ? strtotime($model->jixi_time) : 0;
-                $model->recommendTime = 0;
+                $model->recommendTime = empty($model->recommendTime) ? 0 : $model->recommendTime;
                 $pre = $model->save(false);
                 if (!$pre) {
                     $transaction->rollBack();
