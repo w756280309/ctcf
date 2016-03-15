@@ -96,4 +96,19 @@ class MoneyRecord extends \yii\db\ActiveRecord
             'updated_at' => 'Updated At',
         ];
     }
+    
+    public static function getLenderMrType()
+    {
+        return [
+            self::TYPE_RECHARGE,
+            self::TYPE_DRAW,
+            self::TYPE_DRAW_FEE,
+            self::TYPE_DRAW_CANCEL,
+            self::TYPE_DRAW_FEE_RETURN,
+            self::TYPE_HUIKUAN,
+            self::TYPE_DRAW_SUCCESS,
+            self::TYPE_ORDER,
+        ];
+    }
+    
 }

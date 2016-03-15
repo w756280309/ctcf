@@ -41,6 +41,7 @@ class UserController extends BaseController
     {
         $this->layout = '@app/modules/order/views/layouts/buy';
         $data = MoneyRecord::find()->where(['uid' => $this->user->id])
+            ->andWhere(['type' => MoneyRecord::getLenderMrType()])
             ->select('created_at,type,in_money,out_money,balance')
             ->orderBy('id desc');
         $pg = \Yii::$container->get('paginator')->paginate($data, $page, $size);
