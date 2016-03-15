@@ -11,14 +11,6 @@
     /*font-weight: 600;*/
     color:#161616;
 }
-/*.safe-txt {*/
-    /*padding-left: 8px;*/
-    /*font-size: 15px;*/
-    /*color:#161616;*/
-/*}*/
-/*.safe-lf {*/
-    /*padding:0;*/
-/*}*/
 input.safe-lf {
     margin-top:13px;
     line-height: 24px;
@@ -149,7 +141,11 @@ div.headpic {
     margin: auto 0;
     height:38px;
 }
-.set {
+a.set {
+    color:#fff;
+    font-size:13px;
+}
+a.set:visited {
     color:#fff;
     font-size:13px;
 }
@@ -248,7 +244,7 @@ a {
 a:hover {
     text-decoration: none;
 }
- 
+
 #payment .col-xs-12{
     padding:0;
     color: #747474;
@@ -281,7 +277,7 @@ a:hover {
     padding-right: 5px;
     padding-top: 4px;
     border-top:1px solid #d6dad9;
-    margin-top: 20px; 
+    margin-top: 20px;
 }
 #payment-how .col-xs-12 {
     padding: 0;
