@@ -271,7 +271,7 @@ class OnlineRepaymentPlan extends \yii\db\ActiveRecord
             if (OnlineProduct::REFUND_METHOD_DAOQIBENXI === (int) $loan->refund_method) {
                  $finish_date = $pp->LoanTerms('d1', date('Y-m-d', $loan->jixi_time), $loan->expires);
             } else {
-                 $finish_date = $pp->LoanTerms('m1', date('Y-m-d', $loan->jixi_time), $loan->expires);
+                $finish_date = $pp->calcRetDate($loan->expires, $loan->jixi_time);//如果由于29,30,31造成的跨月的要回归到上一个月最后一天
             }      
             if (null !== $finish_date) {
                 $up['finish_date'] = strtotime($finish_date);
