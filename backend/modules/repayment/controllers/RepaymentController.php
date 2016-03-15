@@ -90,14 +90,16 @@ class RepaymentController extends BaseController
         $eu = EpayUser::tableName();
 
         //查询还款计划信息
-        $orders = (new \yii\db\Query)
+        $orders = OnlineRepaymentPlan::findAll(["online_pid" => $pid, "status" => OnlineRepaymentPlan::STATUS_WEIHUAN, "qishu" => $qishu]);
+
+        $_orders = (new \yii\db\Query)
             ->select("$or.*, $eu.appUserId, $eu.epayUserId")
             ->from($or)
             ->leftJoin($eu, "$or.uid = $eu.appUserId")
             ->where(["$or.online_pid" => $pid, "$or.status" => OnlineRepaymentPlan::STATUS_WEIHUAN, "$or.qishu" => $qishu])
             ->all();
 
-        var_dump($orders);exit;
+        //var_dump($orders);exit;
 
         if (0 === count($orders)) {
             return ['result' => 0, 'message' => '没有需要还款的项目'];
@@ -284,7 +286,7 @@ class RepaymentController extends BaseController
             }
 
             //调用联动返款接口,返款给投资用户
-            $fkResp = $ump->fankuan($order->sn, $record->refund_time, $order->online_pid, $order->epayUserId, $order->benxi);
+            $fkResp = $ump->fankuan($order->sn, $record->refund_time, $order->online_pid, $_orders[$key]['epayUserId'], $order->benxi);
 
             if ($fkResp->isSuccessful()) {
                 $transaction->commit();
@@ -296,7 +298,7 @@ class RepaymentController extends BaseController
         }
 
         $_repaymentrecord = OnlineRepaymentRecord::find()->where(['online_pid' => $pid, 'status' => OnlineRepaymentRecord::STATUS_DID])->groupBy('uid');
-        $data = $_repaymentrecord->all();
+        $data = $_repaymentrecord->select("uid")->all();
         $product = OnlineProduct::findOne($pid);
         $sms = new SmsMessage([
             'level' => SmsMessage::LEVEL_LOW,
