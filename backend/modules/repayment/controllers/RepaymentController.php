@@ -99,8 +99,6 @@ class RepaymentController extends BaseController
             ->where(["$or.online_pid" => $pid, "$or.status" => OnlineRepaymentPlan::STATUS_WEIHUAN, "$or.qishu" => $qishu])
             ->all();
 
-        //var_dump($orders);exit;
-
         if (0 === count($orders)) {
             return ['result' => 0, 'message' => '没有需要还款的项目'];
         }
