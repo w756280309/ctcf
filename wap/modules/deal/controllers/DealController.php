@@ -86,7 +86,7 @@ class DealController extends Controller
      * @param type $sn
      * @return type
      */
-    public function actionDetail($sn = null)
+    public function actionDetail($sn)
     {
         if (empty($sn)) {
             throw new \yii\web\ServerErrorHttpException('标的编号不能为空');
@@ -105,7 +105,7 @@ class DealController extends Controller
         } else {
             $orderbalance = $deals['money'];
         }
-        //$deals['deal_balace'] = $orderbalance;
+
         if ($deals['status'] == OnlineProduct::STATUS_PRE) {
             $start = Yii::$app->functions->getDateDesc($deals['start_date']);
             $deals['start_date'] = $start['desc'].date('H:i', $start['time']);
@@ -115,7 +115,7 @@ class DealController extends Controller
         }
         $this->layout = '@app/views/layouts/dealdeail';
 
-        return $this->render('detail', ['deal' => $deals,'deal_balace' => $orderbalance]);
+        return $this->render('detail', ['deal' => $deals, 'deal_balace' => $orderbalance]);
     }
 
     /**
@@ -133,6 +133,7 @@ class DealController extends Controller
             $data[$key]['mobile'] = substr_replace($dat['mobile'], '****', 3, 4);
             $data[$key]['time'] = date('Y-m-d', $dat['time']);
             $data[$key]['his'] = date('H:i:s', $dat['time']);
+            $data[$key]['money'] = doubleval($dat['money']);
         }
 
         return ['orders' => $data, 'code' => 0, 'message' => '消息返回'];
@@ -144,7 +145,6 @@ class DealController extends Controller
      */
     public function actionToorder($sn = null)
     {
-        //Yii::$app->response->format = Response::FORMAT_JSON;
         $pay = new PayService(PayService::REQUEST_AJAX);
         $ret = $pay->toCart($sn);
 

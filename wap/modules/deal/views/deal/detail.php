@@ -1,6 +1,8 @@
 <?php
 $this->title = '项目详情';
 $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\JqueryAsset', 'position' => 1]);
+
+$deal->money = ltrim(ltrim($deal->money, '0'), '.');
 ?>
 <link rel="stylesheet" href="/css/xiangqing.css">
         <!--xiangqing-->
@@ -56,7 +58,7 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\JqueryAsset', 'pos
         <div class="row shuju">
             <div class="col-xs-1"></div>
             <div class="col-xs-8" style="padding: 0;padding-left: 15px">
-                <span><?= ($deal['status']==1)?(Yii::$app->functions->toFormatMoney($deal['money'])):number_format($deal_balace,2).'元'?></span><i>/<?= Yii::$app->functions->toFormatMoney($deal['money']); ?></i>
+                <span><?= ($deal['status']==1)?(Yii::$app->functions->toFormatMoney($deal['money'])) : doubleval($deal_balace).'元'?></span><i>/<?= Yii::$app->functions->toFormatMoney($deal['money']); ?></i>
                 <div>可投余额/项目总额</div>
             </div>
             <div class="col-xs-1" style="padding: 0;">
@@ -67,7 +69,7 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\JqueryAsset', 'pos
         <div class="row message">
             <div class="col-xs-1"></div>
             <div class="col-xs-10 xian2">
-                <div class="m1">起投金额：<span><?=$deal['start_money']?>元</span></div>
+                <div class="m1">起投金额：<span><?= doubleval($deal['start_money']) ?>元</span></div>
                 <div class="m2">项目起息：<span><?= $deal['jixi_time']>0 ? date('Y-m-d',$deal['jixi_time']) : '项目成立日次日';?></span></div>
                 <?php if (0 === (int)$deal['finish_date']) { ?>
                     <div class="m3">项目期限：<span><?=$deal->expires?></span>
@@ -90,7 +92,7 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\JqueryAsset', 'pos
             <div class="col-xs-1"></div>
             <div class="col-xs-10 tabs">
                 <div class="tab1">项目详情</div>
-                <div class="tab2">投资记录</div>
+                <div class="tab2">投资记录(元)</div>
             </div>
             <div class="col-xs-1"></div>
         </div>
