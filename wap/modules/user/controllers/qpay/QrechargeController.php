@@ -44,8 +44,11 @@ class QrechargeController extends BaseController
             $rec_model->load(Yii::$app->request->post())
             && $rec_model->validate()
         ) {
-            BankManager::getQpayLimit($ubank, $rec_model->fund);
-            
+            try {
+                BankManager::verifyQpayLimit($ubank, $rec_model->fund);
+            } catch (\Exception $ex) {
+                return $this->createErrorResponse($ex->getMessage());
+            }
             if (!$rec_model->hasErrors()) {
                 if (!$rec_model->save(false)) {
                     throw new \Exception('Insert recharge record err.');

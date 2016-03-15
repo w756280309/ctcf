@@ -84,7 +84,7 @@ class BankManager
      * @return boolean
      * @throws \Exception
      */
-    public static function getQpayLimit(UserBanks $banks, $money)
+    public static function verifyQpayLimit(UserBanks $banks, $money)
     {
         $config = QpayConfig::findOne($banks->bank_id);
         if (bccomp($config->singleLimit, $money) < 0) {
