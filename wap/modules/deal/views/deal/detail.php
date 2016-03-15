@@ -2,7 +2,7 @@
 $this->title = '项目详情';
 $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\JqueryAsset', 'position' => 1]);
 
-$deal['money'] = doubleval($deal['money']);
+$deal['money'] = rtrim(rtrim($deal['money'], '0'), '.');
 ?>
 <link rel="stylesheet" href="/css/xiangqing.css">
         <!--xiangqing-->
