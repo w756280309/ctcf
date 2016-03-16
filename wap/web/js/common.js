@@ -127,7 +127,7 @@ function toast(val, active)
         setTimeout(function () {
             $alert.remove();
         }, 200);
-        if (typeof active !== 'undefined') {
+        if (active) {
             active();
         }
     }, 2000);
