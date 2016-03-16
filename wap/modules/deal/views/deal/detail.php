@@ -92,7 +92,7 @@ $deal['money'] = rtrim(rtrim($deal['money'], '0'), '.');
             <div class="col-xs-1"></div>
             <div class="col-xs-10 tabs">
                 <div class="tab1">项目详情</div>
-                <div class="tab2">投资记录(元)</div>
+                <div class="tab2">投资记录</div>
             </div>
             <div class="col-xs-1"></div>
         </div>
@@ -110,7 +110,7 @@ $deal['money'] = rtrim(rtrim($deal['money'], '0'), '.');
                     <div class="row touzi datafirst">
                         <div class="col-xs-3 col">投资人</div>
                         <div class="col-xs-5">投资时间</div>
-                        <div class="col-xs-4">投资金额</div>
+                        <div class="col-xs-4">投资金额(元)</div>
                     </div>
 
                 </div>
