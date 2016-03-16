@@ -33,7 +33,7 @@ class RechargeRecord extends \yii\db\ActiveRecord implements \P2pl\QpayTxInterfa
 
     const PAY_TYPE_QUICK = 1;//快捷充值
     const PAY_TYPE_NET = 2;//网银充值
-    const PAY_TYPE_OFFLINE = 3;//线下充值
+    const PAY_TYPE_POS = 3;//线下POS充值
 
     /**
      * {@inheritdoc}

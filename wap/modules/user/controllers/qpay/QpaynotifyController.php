@@ -97,7 +97,7 @@ class QpaynotifyController extends Controller
                     'account_id' => $ua->id, ///待定
                     'bank_id' => '0',
                     'pay_bank_id' => '0',
-                    'pay_type' => RechargeRecord::PAY_TYPE_OFFLINE,
+                    'pay_type' => RechargeRecord::PAY_TYPE_POS,
                     'clientIp' => ip2long(Yii::$app->request->userIP),
                     'epayUserId' => $epayUser->epayUserId,
                     'status' => 0,

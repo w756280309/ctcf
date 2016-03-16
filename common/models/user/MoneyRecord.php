@@ -23,7 +23,7 @@ use yii\behaviors\TimestampBehavior;
 class MoneyRecord extends \yii\db\ActiveRecord
 {
     const TYPE_RECHARGE = 0; //充值
-    const TYPE_RECHARGE_OFF = 8; //线下充值
+    const TYPE_RECHARGE_POS = 8; //线下充值
     const TYPE_DRAW = 1; //提现
     const TYPE_ORDER = 2; //投标
     const TYPE_FANGKUAN = 3; //放款
