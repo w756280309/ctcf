@@ -43,10 +43,15 @@ $this->registerJsFile('/js/order.js', ['depends' => 'yii\web\YiiAsset','position
 
         <div class="row shouyi">
             <div class="col-xs-4 safe-lf text-align-ct">预计收益</div>
-            <div class="col-xs-3 safe-lf text-align-lf yuqishouyi" style="color:#f44336;padding: 0;line-height:35px;font-size:12px;">0.00元</div>
-            <div class="col-xs-5" style="padding: 0;text-align: center"><p style="line-height:35px;font-size:12px;">查看<a href="/order/order/agreement?id=<?= $deal->id ?>" style="color:#8c8c8c">《合同协议》</a></p></div>
+            <div class="col-xs-8 safe-lf text-align-lf yuqishouyi">0.00元</div>
         </div>
-        <div class="row login-sign-btn">
+        <div class="row">
+            <div class="col-xs-12 surplus ht">查看
+                <a href="/order/order/agreement?id=<?= $deal->id ?>&key=0">《认购金额》</a>和
+                <a href="/order/order/agreement?id=<?= $deal->id ?>&key=1">《风险揭示书》</a>
+            </div>
+        </div>
+        <div class="row login-sign-btn nomargintop">
             <div class="col-xs-3"></div>
             <div class="col-xs-6 text-align-ct">
                 <input id="buybtn" class="btn-common btn-normal" type="submit" style="background: #F2F2F2;" value="购买">

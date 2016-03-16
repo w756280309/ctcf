@@ -303,3 +303,19 @@ a:hover {
     text-align: justify;
     color: #636363;
 }
+.ht {
+    text-align: center;
+    margin-top: 12px;
+    margin-bottom: 0px;
+}
+.ht a {
+    font-size: 13px;
+}
+.nomargintop {
+    margin-top: 0px;
+}
+.yuqishouyi {
+    color:#f44336;
+    line-height:35px;
+    font-size:12px;
+}
