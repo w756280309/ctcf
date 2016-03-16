@@ -76,6 +76,8 @@ class RepaymentController extends BaseController
      */
     public function actionDorepayment()
     {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+
         if (!Yii::$app->request->isPost) {
             return [
                 'result' => 0,
@@ -163,7 +165,7 @@ class RepaymentController extends BaseController
                 return ['result' => 0, 'message' => '当前联动端商户状态异常'];
             }
 
-            if ($orgResp->get('balance') < $total_repayment * 100) {
+            if (-1 === bccomp($orgResp->get('balance'), $total_repayment * 100)) {
                 return ['result' => 0, 'message' => '当前联动端商户余额不足'];
             }
         } else {
@@ -291,7 +293,7 @@ class RepaymentController extends BaseController
             } else {
                 $transaction->rollBack();
 
-                return ['result' => 0, 'message' => $hkResp->get('ret_msg')];
+                return ['result' => 0, 'message' => $fkResp->get('ret_msg')];
             }
         }
 
