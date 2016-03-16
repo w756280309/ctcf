@@ -76,10 +76,10 @@ class QpaynotifyController extends Controller
         ) {
             $rc = null;
             if (
-                null !== $data['amount']
-                && null !== $data['user_id']
-                && null !== $data['account_id']
-                && null !== $data['mobile_id']
+                array_key_exists('amount', $data) && null !== $data['amount']
+                && array_key_exists('user_id', $data) && null !== $data['user_id']
+                && array_key_exists('account_id', $data) && null !== $data['account_id']
+                && array_key_exists('mobile_id', $data) && null !== $data['mobile_id']
             ) {
                 $epayUser = EpayUser::findOne(['epayUserId' => $data['user_id']]);
                 if (null === $epayUser) {
