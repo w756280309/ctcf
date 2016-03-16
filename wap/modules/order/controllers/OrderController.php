@@ -62,10 +62,8 @@ class OrderController extends BaseController
 
     /**
      * 合同显示页面
-     * @param type $sn
      * @param type $id
      * @param type $key
-     * @return type
      * @throws \yii\web\NotFoundHttpException
      */
     public function actionAgreement($id, $key = 0)
@@ -77,7 +75,31 @@ class OrderController extends BaseController
         }
 
         $model = ContractTemplate::find()->where(['pid' => $id])->select('pid,name,content')->all();
+        $key = $this->checkAgreement($model, $key);
         $model[$key] = ContractTemplate::replaceTemplate($model[$key], new OnlineOrder(['uid' => $this->user->id]));
         return $this->render('agreement', ['model' => $model, 'key_f' => $key, 'content' => $model[$key]['content']]);
+    }
+
+    /**
+     * 查找符合要求的合同信息
+     * @param type $cont
+     * @param int $key
+     * @return int
+     */
+    private function checkAgreement($cont, $key)
+    {
+        if (in_array($key, ['r','f']) && $cont) {
+            foreach ($cont as $k => $val) {
+                if ('r' === $key && '认购协议' === $val['name']) {
+                    return $k;
+                }
+                if ('f' === $key && '风险揭示书' === $val['name']) {
+                    return $k;
+                }
+            }
+            $key = 0;
+        }
+
+        return $key;
     }
 }

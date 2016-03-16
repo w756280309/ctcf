@@ -47,8 +47,8 @@ $this->registerJsFile('/js/order.js', ['depends' => 'yii\web\YiiAsset','position
         </div>
         <div class="row">
             <div class="col-xs-12 surplus ht">查看
-                <a href="/order/order/agreement?id=<?= $deal->id ?>&key=0">《认购金额》</a>和
-                <a href="/order/order/agreement?id=<?= $deal->id ?>&key=1">《风险揭示书》</a>
+                <a href="/order/order/agreement?id=<?= $deal->id ?>&key=r">《认购协议》</a>和
+                <a href="/order/order/agreement?id=<?= $deal->id ?>&key=f">《风险揭示书》</a>
             </div>
         </div>
         <div class="row login-sign-btn nomargintop">
