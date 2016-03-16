@@ -17,6 +17,7 @@ use common\models\sms\SmsMessage;
 use common\service\LoanService;
 use backend\modules\order\controllers\OnlinefangkuanController;
 use common\models\epay\EpayUser;
+use common\utils\TxUtils;
 
 /**
  * OrderController implements the CRUD actions for OfflineOrder model.
@@ -172,6 +173,9 @@ class RepaymentController extends BaseController
             return ['result' => 0, 'message' => $orgResp->get('ret_msg')];
         }
 
+        $sum_benxi_yue = OnlineRepaymentPlan::find()->where(['online_pid' => $pid, 'status' => OnlineRepaymentPlan::STATUS_WEIHUAN])->andWhere("qishu not in ($qishu)")->sum('benxi'); //未还其它期数的总和
+        $sum_benxi_yue = !$sum_benxi_yue ? 0 : $sum_benxi_yue;
+
         if (OnlineProduct::STATUS_HUAN === $deal->status) {
             $transaction = Yii::$app->db->beginTransaction();
 
@@ -202,14 +206,16 @@ class RepaymentController extends BaseController
                 return ['result' => 0, 'message' => '还款失败，资金记录失败'];
             }
 
-            $opres = OnlineProduct::updateAll(['status' => OnlineProduct::STATUS_OVER, 'sort' => 60], ['id' => $pid]);
-            if (!$opres) {
-                $transaction->rollBack();
+            if (empty($sum_benxi_yue)) {
+                $opres = OnlineProduct::updateAll(['status' => OnlineProduct::STATUS_OVER, 'sort' => 60], ['id' => $pid]);
+                if (!$opres) {
+                    $transaction->rollBack();
 
-                return ['result' => 0, 'message' => '还款失败，修改标的状态错误'];
+                    return ['result' => 0, 'message' => '还款失败，修改标的状态错误'];
+                }
             }
 
-            $hkResp = $ump->huankuan($deal->sn, $deal->id, $epayUser->epayUserId, $total_repayment);  //还款的订单日期只允许订单当日或订单前一天
+            $hkResp = $ump->huankuan(TxUtils::generateSn('HK'), $deal->id, $epayUser->epayUserId, $total_repayment);  //还款的订单日期只允许订单当日或订单前一天
 
             if ($hkResp->isSuccessful()) {
                 $transaction->commit();
@@ -220,8 +226,6 @@ class RepaymentController extends BaseController
             }
         }
 
-        $sum_benxi_yue = OnlineRepaymentPlan::find()->where(['online_pid' => $pid, 'status' => OnlineRepaymentPlan::STATUS_WEIHUAN])->andWhere("qishu not in ($qishu)")->sum('benxi'); //未还其它期数的总和
-        $sum_benxi_yue = !$sum_benxi_yue ? 0 : $sum_benxi_yue;
         $repaymentrecord = new OnlineRepaymentRecord();
         $mrmodel = new MoneyRecord();
         foreach ($orders as $key => $order) {
@@ -306,7 +310,7 @@ class RepaymentController extends BaseController
 
         foreach ($data as $val) {
             $user = User::findOne($val->uid);
-            $data_arr = $_repaymentrecord->having(['uid' => $val['uid']])->select('sum(benjin) as benjin, sum(lixi) as lixi')->createCommand()->queryAll();
+            $data_arr = $_repaymentrecord->having(['uid' => $val['uid']])->select('sum(benjin) as benjin, sum(lixi) as lixi')->where(['qishu' => $qishu])->createCommand()->queryAll();
 
             $_sms = clone $sms;
             if (OnlineProduct::REFUND_METHOD_DAOQIBENXI === $product->refund_method) {
@@ -324,6 +328,7 @@ class RepaymentController extends BaseController
                     $user->real_name,
                     $product->title,
                     $qishu,
+                    $data_arr[0]['benjin'],
                     $data_arr[0]['lixi'],
                     Yii::$app->params['contact_tel'],
                 ];
@@ -333,7 +338,6 @@ class RepaymentController extends BaseController
                     $user->real_name,
                     $product->title,
                     $qishu,
-                    $data_arr[0]['benjin'],
                     $data_arr[0]['lixi'],
                     Yii::$app->params['contact_tel'],
                 ];

@@ -92,7 +92,7 @@ $bc = new BcRound();
         </div>
             <div class="form-actions" style="text-align:right">
                 本期应还时间：<?= date('Y-m-d', $qi[count($qi) - 1]['refund_time']) ?> &emsp;本期应还：<?= $bc->bcround($cur_return , 2)  ?>（元） &emsp;&emsp;
-                <?php if (5 === (int) $deal->status || 0 === (int) $qi[count($qi) - 1]['status']) { ?>
+                <?php if (5 === (int) $deal->status && 0 === (int) $qi[count($qi) - 1]['status']) { ?>
                 <button type="button" class="btn blue button-repayment" qishu="<?= $qk ?>"><i class="icon-ok"></i> 确认还款</button>
                 <?php } ?>
             </div>
