@@ -58,6 +58,7 @@ class ProductonlineController extends BaseController
         $con_name_arr = Yii::$app->request->post('name');
         $con_content_arr = Yii::$app->request->post('content');
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            $uids = LoanService::convertUid($model->allowedUids);
             if (!empty($model->finish_date) && OnlineProduct::REFUND_METHOD_DAOQIBENXI === (int)$model->refund_method) {
                 //若截止日期不为空，重新计算项目天数
                 $pp = new ProductProcessor();
@@ -73,6 +74,7 @@ class ProductonlineController extends BaseController
                 $model->addError('contract_type', '合同协议至少要输入一份');
             } else {
                 $transaction = Yii::$app->db->beginTransaction();
+                $model->allowedUids = $uids;
                 $model->start_date = strtotime($model->start_date);
                 $model->end_date = strtotime($model->end_date);
                 $model->finish_date = $model->finish_date !== null ? strtotime($model->finish_date) : 0;

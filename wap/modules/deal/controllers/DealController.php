@@ -36,7 +36,7 @@ class DealController extends Controller
             throw new \yii\web\BadRequestHttpException('参数无效');
         }
         $this->layout = 'test';
-        $cond = ['del_status' => OnlineProduct::STATUS_USE, 'online_status' => OnlineProduct::STATUS_ONLINE];
+        $cond = ['isPrivate' => 0, 'del_status' => OnlineProduct::STATUS_USE, 'online_status' => OnlineProduct::STATUS_ONLINE];
 
         if (null !== $xs) {
             $cond['is_xs'] = $xs;

@@ -135,6 +135,11 @@ class PayService
         } elseif ($deal->end_date < $time) {
             return ['code' => self::ERROR_OVER,  'message' => self::getErrorByCode(self::ERROR_OVER)];
         }
+        
+        //是否定向标
+        if (false === LoanService::isUserAllowed($deal, $user)) {
+            return ['code' => self::ERROR_SYSTEM,  'message' => '该项目为定向标投资项目，您未获得投资资格'];
+        }
 
         $resp = \Yii::$container->get('ump')->getLoanInfo($deal->id);
         if (!$resp->isSuccessful() && '1' !== $resp->get('project_state')) {//查询失败，或者标的状态不为投资中

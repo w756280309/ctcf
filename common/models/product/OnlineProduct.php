@@ -93,8 +93,8 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
             'jixi' => ['jixi_time'],
             'create' => ['title', 'sn', 'cid', 'money', 'borrow_uid', 'expires', 'expires_show', 'yield_rate', 'start_money', 'borrow_uid', 'fee', 'status',
                 'description', 'refund_method', 'account_name', 'account', 'bank', 'dizeng_money', 'start_date', 'end_date', 'full_time',
-                'is_xs', 'yuqi_faxi', 'order_limit', 'creator_id', 'del_status', 'status', 'target', 'target_uid', 'finish_date', 'channel', 'jixi_time', 'sort',
-                'jiaxi', 'kuanxianqi', 'graceDays',],
+                'is_xs', 'yuqi_faxi', 'order_limit', 'creator_id', 'del_status', 'status', 'isPrivate', 'allowedUids', 'finish_date', 'channel', 'jixi_time', 'sort',
+                'jiaxi', 'kuanxianqi', 'graceDays', ],
         ];
     }
 
@@ -177,12 +177,12 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
             }"],
             [['cid', 'is_xs', 'borrow_uid', 'refund_method', 'expires', 'full_time', 'del_status', 'status', 'order_limit', 'creator_id'], 'integer'],
             [['yield_rate', 'fee', 'money', 'start_money', 'dizeng_money', 'yuqi_faxi', 'jiaxi'], 'number'],
-            [['target', 'kuanxianqi'], 'integer'],
-            ['target', 'default', 'value' => 0],
+            [['isPrivate', 'kuanxianqi'], 'integer'],
+            ['isPrivate', 'default', 'value' => 0],
             [['is_xs', 'kuanxianqi', 'is_fdate', 'graceDays'], 'default', 'value' => 0],
             [['description'], 'string'],
-            [['title', 'target_uid'], 'string', 'max' => 128],
-            [['target_uid'], 'match', 'pattern' => '/^\d+((,)\d+)*$/', 'message' => '{attribute}格式不正确必须以英文逗号分隔'],
+            [['title', 'allowedUids'], 'string', 'max' => 128],
+            [['allowedUids'], 'match', 'pattern' => '/^1[34578]\d{9}((,)1[34578]\d{9})*$/', 'message' => '{attribute}必须是以英文逗号分隔的手机号,首尾不得加逗号'],
             [['sn'], 'string', 'max' => 32],
             ['sn', 'unique', 'message' => '编号已占用'],
             [['expires_show'], 'string', 'max' => 50],
@@ -308,10 +308,10 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
             'status' => '标的进展',
             'yuqi_faxi' => '逾期罚息',
             'order_limit' => '限制投标人次',
-            'target' => '是否定向标',
+            'isPrivate' => '是否定向标',
             'is_xs' => '是否新手标',
             'is_fdate' => '是否使用截止日期',
-            'target_uid' => '定向标用户uid',
+            'allowedUids' => '定向标用户',
             'creator_id' => '创建者',
             'updated_at' => '创建时间',
             'created_at' => '更新时间',
@@ -483,20 +483,36 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
     {
         return null === $jiaxi ? $yr : bcsub($yr, bcdiv($jiaxi, 100));
     }
-    
+
     public function getLoanExpires()
     {
-        if (self::REFUND_METHOD_DAOQIBENXI === (int) $this->refund_method) {//到期本息
-            return ['v' => $this->expires,'unit' => "天"];
+        if (self::REFUND_METHOD_DAOQIBENXI === (int) $this->refund_method) {
+            //到期本息
+            return ['v' => $this->expires, 'unit' => '天'];
         } elseif (
                 self::REFUND_METHOD_MONTH === (int) $this->refund_method
                 || self::REFUND_METHOD_QUARTER === (int) $this->refund_method
                 || self::REFUND_METHOD_HALF_YEAR === (int) $this->refund_method
                 || self::REFUND_METHOD_YEAR === (int) $this->refund_method
                 ) {
-            return ['v' => $this->expires,'unit' => "个月"];
+            return ['v' => $this->expires, 'unit' => '个月'];
         } else {
             throw new Exception('还款方式错误');
+        }
+    }
+
+    public function getMobiles()
+    {
+        if ('' !== $this->allowedUids && null !== $this->allowedUids) {
+            $users = \common\models\user\User::find()->where('id in ('.$this->allowedUids.')')->all();
+            $mobiles = '';
+            foreach ($users as $user) {
+                $mobiles .= $user->mobile.',';
+            }
+
+            return substr($mobiles, 0, strlen($mobiles) - 1);
+        } else {
+            return '';
         }
     }
 }

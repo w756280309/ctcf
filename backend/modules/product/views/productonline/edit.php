@@ -331,7 +331,21 @@ TPL;
                     </div>
                 </div>
             </div>
-            <!--/span-->
+            
+            <div class="span6 ">
+                <div class="control-group">
+                    <label class="control-label">定向标用户手机号</label>
+                    <div class="controls">
+                        <?=
+                        $form->field($model, 'allowedUids', ['template' => '{input}{error}', 'inputOptions' => ['autocomplete' => 'off', 'placeholder' => '定向标用户手机号', 'value' => $model->mobiles]])->textInput(['class' => 'm-wrap span12'])
+                        ?>
+                        <?=
+                        $form->field($model, 'isPrivate', ['template' => '<div class="input-append">{input}</div>{error}'])->checkbox()
+                        ?>
+                    </div>
+                </div>
+            </div>
+            
 <!--            <div class="span6 ">
                 <div class="control-group">
                     <label class="control-label">分销渠道</label>
@@ -342,7 +356,7 @@ TPL;
                     </div>
                 </div>
             </div>-->
-            <!--/span-->
+          
         </div>
         <!--/row-->
         <div class="row-fluid">
@@ -369,8 +383,7 @@ TPL;
             </div>
         <!--/span-->
         </div>
-
-
+        
         <h3 class="form-section">项目合同信息</h3>
         <?=
         $form->field($model, 'contract_type', ['template' => '{error}']);
