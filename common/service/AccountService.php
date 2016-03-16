@@ -39,7 +39,7 @@ class AccountService
         //添加交易流水
         $money_record = new MoneyRecord([
             'sn' => MoneyRecord::createSN(),
-            'type' => MoneyRecord::TYPE_RECHARGE,
+            'type' => (RechargeRecord::PAY_TYPE_OFFLINE === (int)$recharge->pay_type) ? MoneyRecord::TYPE_RECHARGE_OFF : MoneyRecord::TYPE_RECHARGE,
             'osn' => $recharge->sn,
             'account_id' => $user_acount->id,
             'uid' => $user->id,

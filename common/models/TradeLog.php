@@ -76,7 +76,7 @@ class TradeLog extends \yii\db\ActiveRecord
             $uid = $rqData['mer_cust_id'];
         }
         $log = new self();
-        $log->txType = $rqData['service'];
+        $log->txType = array_key_exists('service', $rqData) ? $rqData['service'] : '';
         $log->direction = $direction;
         $log->txSn = array_key_exists('order_id', $rqData) ? $rqData['order_id'] : TxUtils::generateSn('L');
         $log->uid = $uid;

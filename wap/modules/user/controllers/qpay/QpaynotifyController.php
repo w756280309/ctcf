@@ -9,9 +9,11 @@ use yii\web\Controller;
 use common\models\user\RechargeRecord;
 use common\service\AccountService;
 use common\models\TradeLog;
+use common\models\epay\EpayUser;
+use common\models\user\UserAccount;
 
 /**
- * 绑卡回调控制器4.2
+ * 绑卡回调控制器4.2.
  *
  * @author zhanghongyu <zhanghongyu@wangcaigu.com>
  */
@@ -27,6 +29,7 @@ class QpaynotifyController extends Controller
         if ($ret instanceof RechargeRecord) {
             return $this->redirect('/user/userbank/qpayres?ret=success');
         }
+
         return $this->redirect('/user/userbank/qpayres');
     }
 
@@ -37,13 +40,13 @@ class QpaynotifyController extends Controller
     {
         $this->layout = false;
         $err = '00009999';
-        $errmsg = "no error";
+        $errmsg = 'no error';
         $data = Yii::$app->request->get();
         $ret = $this->processing($data);
         if ($ret instanceof RechargeRecord) {
-            $err = "0000";
+            $err = '0000';
         } else {
-            $errmsg = "异常";
+            $errmsg = '异常';
         }
         $content = Yii::$container->get('ump')->buildQuery([
             'order_id' => $data['order_id'],
@@ -55,9 +58,11 @@ class QpaynotifyController extends Controller
     }
 
     /**
-     *
      * @param array $data
+     *                    说明 data 中 amount，user_id，account_id，mobile_id是判断pos充值的依据
+     *
      * @return type
+     *
      * @throws NotFoundHttpException
      * @throws Exception
      */
@@ -69,22 +74,54 @@ class QpaynotifyController extends Controller
             && '0000' === $data['ret_code']
             && 'recharge_notify' === $data['service']
         ) {
-            $rc = RechargeRecord::findOne(['sn' => $data['order_id']]);
+            $rc = null;
+            if (
+                null !== $data['amount']
+                && null !== $data['user_id']
+                && null !== $data['account_id']
+                && null !== $data['mobile_id']
+            ) {
+                $epayUser = EpayUser::findOne(['epayUserId' => $data['user_id']]);
+                if (null === $epayUser) {
+                    throw new Exception($data['user_id'].'此用户不存在');
+                }
+                $recharge = RechargeRecord::findOne(['sn' => $data['order_id']]);
+                if ($recharge) {
+                    throw new Exception($data['order_id'].'线下充值已成功');
+                }
+                $ua = UserAccount::findOne(['uid' => $epayUser->appUserId]);
+                $rc = new RechargeRecord([
+                    'sn' => $data['order_id'],
+                    'uid' => $epayUser->appUserId,
+                    'fund' => $data['amount'] / 100,
+                    'account_id' => $ua->id, ///待定
+                    'bank_id' => '0',
+                    'pay_bank_id' => '0',
+                    'pay_type' => RechargeRecord::PAY_TYPE_OFFLINE,
+                    'clientIp' => ip2long(Yii::$app->request->userIP),
+                    'epayUserId' => $epayUser->epayUserId,
+                    'status' => 0,
+                ]);
+                if (!$rc->validate()) {
+                    throw new Exception($data['order_id'].'充值失败:'.$rc->getSingleError()['message']);
+                }
+                $rc->save(false);
+            } else {
+                $rc = RechargeRecord::findOne(['sn' => $data['order_id']]);
+            }
             if (null !== $rc) {
                 $acc_ser = new AccountService();
                 $is_success = $acc_ser->confirmRecharge($rc);
                 if ($is_success) {
                     return $rc;
                 } else {
-                    throw new Exception($data['order_id'] . '充值失败');
+                    throw new Exception($data['order_id'].'充值失败');
                 }
             } else {
-                throw new NotFoundHttpException($data['order_id'] . ':无法找到申请数据');
+                throw new NotFoundHttpException($data['order_id'].':无法找到申请数据');
             }
         } else {
-            throw new Exception($data['order_id'] . '处理失败');
+            throw new Exception($data['order_id'].'处理失败');
         }
     }
-
-
 }
