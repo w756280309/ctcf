@@ -329,9 +329,11 @@ class SiteController extends Controller
             return ['code' => 1, 'message' => '图形验证码输入错误'];
         }
 
-        $user = User::findOne(['mobile' => $phone]);
-        if (null !== $user) {
-            return ['code' => 1, 'message' => '此手机号已经注册'];
+        if (1 === (int) $type) {
+            $user = User::findOne(['mobile' => $phone]);
+            if (null !== $user) {
+                return ['code' => 1, 'message' => '此手机号已经注册'];
+            }
         }
 
         return SmsService::createSmscode($type, $phone);
