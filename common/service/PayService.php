@@ -4,7 +4,6 @@ namespace common\service;
 
 use Yii;
 use common\models\product\OnlineProduct;
-use common\core\OrderAccountCore;
 
 /**
  * Desc 主要用于购买标的环节的验证
@@ -123,10 +122,9 @@ class PayService
             return $bankret;
         }
 
-        $deal = OnlineProduct::find()->where(['sn' => $sn])->one();
-        $this->cdeal = $deal;
+        $deal = OnlineProduct::findOne(['sn' => $sn]);
         $time = time();
-        if (empty($deal)) {
+        if (!$deal) {
             return ['code' => self::ERROR_NO_EXIST,  'message' => self::getErrorByCode(self::ERROR_NO_EXIST)];
         } elseif ($deal->status != OnlineProduct::STATUS_NOW) {
             return ['code' => self::ERROR_STATUS_DENY,  'message' => self::getErrorByCode(self::ERROR_STATUS_DENY)];
@@ -135,7 +133,9 @@ class PayService
         } elseif ($deal->end_date < $time) {
             return ['code' => self::ERROR_OVER,  'message' => self::getErrorByCode(self::ERROR_OVER)];
         }
-        
+
+        $this->cdeal = $deal;
+
         //是否定向标
         if (false === LoanService::isUserAllowed($deal, $user)) {
             return ['code' => self::ERROR_SYSTEM,  'message' => '该项目为定向标投资项目，您未获得投资资格'];
@@ -175,8 +175,7 @@ class PayService
         if (bccomp($user->lendAccount->available_balance, $money) < 0) {
             return ['code' => 1,  'message' => '金额不足'];
         }
-        $oac = new OrderAccountCore();
-        $orderbalance = $oac->getOrderBalance($this->cdeal->id);
+        $orderbalance = $this->cdeal->getLoanBalance();
         if (bccomp($orderbalance, 0) == 0) {
             return ['code' => 1,  'message' => '当前项目不可投,可投余额为0'];
         }

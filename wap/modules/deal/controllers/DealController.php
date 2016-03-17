@@ -7,7 +7,6 @@ use yii\data\Pagination;
 use common\models\product\OnlineProduct;
 use common\models\order\OnlineOrder;
 use common\service\PayService;
-use common\core\OrderAccountCore;
 
 class DealController extends Controller
 {
@@ -91,7 +90,7 @@ class DealController extends Controller
         if (empty($sn)) {
             throw new \yii\web\ServerErrorHttpException('标的编号不能为空');
         }
-        $deals = OnlineProduct::find()->where(['online_status' => OnlineProduct::STATUS_ONLINE, 'del_status' => OnlineProduct::STATUS_USE, 'sn' => $sn])->one();
+        $deals = OnlineProduct::findOne(['online_status' => OnlineProduct::STATUS_ONLINE, 'del_status' => OnlineProduct::STATUS_USE, 'sn' => $sn]);
         if (empty($deals)) {
             throw new \yii\web\NotFoundHttpException('您访问的页面找不到');
         }
@@ -100,8 +99,7 @@ class DealController extends Controller
             $orderbalance = 0;
         } else if ($deals['status'] >= OnlineProduct::STATUS_NOW) {
             //募集期的取剩余
-            $oac = new OrderAccountCore();
-            $orderbalance = $oac->getOrderBalance($deals['id']); //项目可投余额
+            $orderbalance = $deals->getLoanBalance(); //项目可投余额
         } else {
             $orderbalance = $deals['money'];
         }

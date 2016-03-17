@@ -28,7 +28,7 @@ class OrderController extends BaseController
         }
         $uacore = new UserAccountCore();
         $ua = $uacore->getUserAccount($this->user->id);
-        $param['order_balance'] = OnlineOrder::getOrderBalance($deal->id); //计算标的可投余额;
+        $param['order_balance'] = $deal->getLoanBalance(); //获取标的可投余额;
         $param['my_balance'] = $ua->available_balance; //用户账户余额;
 
         return $this->render('index', ['deal' => $deal, 'param' => $param]);
