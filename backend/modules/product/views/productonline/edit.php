@@ -12,6 +12,8 @@ $this->registerJsFile('/js/product.js', ['depends' => 'yii\web\YiiAsset']);
 
 $readonly = $model->online_status ? ['readonly' => 'readonly'] : [];
 
+$desc = '*项目上线后此内容不可修改';
+
 $tpl = <<<TPL
 <div class="row-fluid">
     <div class="span12 ">
@@ -118,7 +120,7 @@ TPL;
         <div class="row-fluid">
             <div class="span12 ">
                 <div class="control-group">
-                    <label class="control-label">项目名称</label>
+                    <label class="control-label">项目名称<span style="color: red;">(<?= $desc ?>)</span></label>
                     <div class="controls">
                         <?=
                         $form->field($model, 'title', ['template' => '{input}{error}', 'inputOptions' => ['autocomplete' => 'off', 'placeholder' => '项目名称']])->textInput(['class' => 'm-wrap span12'])
@@ -156,7 +158,7 @@ TPL;
                 </div>
             </div>
         </div>
-        
+
         <div class="row-fluid">
             <div class="span6 ">
                 <div class="control-group">
@@ -202,7 +204,7 @@ TPL;
             <!--/span-->
             <div class="span6 ">
                 <div class="control-group">
-                    <label class="control-label">募集金额</label>
+                    <label class="control-label">募集金额<span style="color: red;">(<?= $desc ?>)</span></label>
                     <div class="controls">
                         <?=
                         $form->field($model, 'money', ['template' => '<div class="input-prepend input-append"><span class="add-on">￥</span>{input}<span class="add-on">元</span> </div>{error}', 'inputOptions' => ['autocomplete' => 'off', 'placeholder' => '募集金额']])->textInput(['class' => 'm-wrap span12'])
@@ -216,7 +218,7 @@ TPL;
         <div class="row-fluid">
             <div class="span6 ">
                 <div class="control-group">
-                    <label class="control-label">募集开始时间</label>
+                    <label class="control-label">募集开始时间<span style="color: red;">(<?= $desc ?>)</span></label>
                     <div class="controls">
                         <?=
                         $form->field($model, 'start_date', [
@@ -289,7 +291,7 @@ TPL;
         <div class="row-fluid sourceRfmet">
             <div class="span6 ">
                 <div class="control-group">
-                    <label class="control-label">项目截止日</label>
+                    <label class="control-label">项目截止日<span style="color: red;">(<?= $desc ?>)</span></label>
                     <div class="controls">
                         <?=
                         $form->field($model, 'finish_date', [
@@ -323,7 +325,7 @@ TPL;
         <div class="row-fluid">
             <div class="span6 ">
                 <div class="control-group">
-                    <label class="control-label">融资用户</label>
+                    <label class="control-label">融资用户<span style="color: red;">(<?= $desc ?>)</span></label>
                     <div class="controls">
                         <?=
                         $form->field($model, 'borrow_uid', ['template' => '{input}{error}', 'inputOptions' => ['autocomplete' => 'off', 'class' => 'chosen-with-diselect span6']])->dropDownList($rongziInfo, [0 => '--请选择--'])
@@ -331,7 +333,7 @@ TPL;
                     </div>
                 </div>
             </div>
-            
+
             <div class="span6 ">
                 <div class="control-group">
                     <label class="control-label">定向标用户手机号</label>
@@ -345,7 +347,7 @@ TPL;
                     </div>
                 </div>
             </div>
-            
+
 <!--            <div class="span6 ">
                 <div class="control-group">
                     <label class="control-label">分销渠道</label>
@@ -356,7 +358,7 @@ TPL;
                     </div>
                 </div>
             </div>-->
-          
+
         </div>
         <!--/row-->
         <div class="row-fluid">
@@ -383,7 +385,7 @@ TPL;
             </div>
         <!--/span-->
         </div>
-        
+
         <h3 class="form-section">项目合同信息</h3>
         <?=
         $form->field($model, 'contract_type', ['template' => '{error}']);

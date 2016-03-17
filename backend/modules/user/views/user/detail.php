@@ -105,12 +105,14 @@ use common\models\user\User;
             <div class="detail_font">会员账户详情</div>
             <ul class="breadcrumb_detail">
                 <li><span>会员ID</span><?=$userinfo['usercode']?></li>
-                <li><span>企业名称</span><?=$userinfo['org_name']?></li>
-                <li><span>办公电话</span><?=$userinfo['tel']?></li>
+            </ul>
+            <ul class="breadcrumb_detail">
+                <li style="width: 100%;"><span>企业名称</span><?=$userinfo['org_name']?></li>
             </ul>
             <ul class="breadcrumb_detail">
                 <li><span>注册时间</span><?=date("Y-m-d H:i:s",$userinfo['created_at'])?></li>
                 <li><span>平台首次融资时间</span><?php echo empty($czTime)?"--":date("Y-m-d H:i:s",$czTime);?></li>
+                <li><span>办公电话</span><?=$userinfo['tel']?></li>
             </ul>
             <ul class="breadcrumb_detail">
                 <li><span class="huibai">企业法人</span></li>
