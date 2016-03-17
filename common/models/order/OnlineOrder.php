@@ -135,25 +135,6 @@ class OnlineOrder extends \yii\db\ActiveRecord implements \P2pl\OrderTxInterface
     }
 
     /**
-     * 计算项目余额.
-     *
-     * @param type $pro_id
-     *
-     * @return type
-     */
-    public static function getOrderBalance($pro_id = 0)
-    {
-        bcscale(14);
-        $all_money = static::find()->where(['status' => 1, 'online_pid' => $pro_id])->sum('order_money');
-        if (empty($all_money)) {
-            $all_money = 0;
-        }
-        $product = OnlineProduct::findOne($pro_id);
-
-        return bcsub($product->money, $all_money);
-    }
-
-    /**
      * 计算融资百分比.
      *
      * @param type $pro_id

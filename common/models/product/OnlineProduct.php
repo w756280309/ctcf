@@ -515,4 +515,12 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
             return '';
         }
     }
+
+    /**
+     * 计算项目余额.
+     */
+    public function getLoanBalance()
+    {
+        return bcsub($this->money, $this->funded_money);
+    }
 }
