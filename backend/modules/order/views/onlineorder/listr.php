@@ -9,7 +9,7 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\we
 
     <!-- BEGIN PAGE HEADER-->
 
-         
+
     <div class="row-fluid">
         <div class="span12">
             <h3 class="page-title">
@@ -18,14 +18,14 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\we
             <ul class="breadcrumb">
                    <li>
                         <i class="icon-home"></i>
-                        <a href="/user/user/<?= $type==='2'?'listr':'listt'?>">会员管理</a> 
+                        <a href="/user/user/<?= $type==='2'?'listr':'listt'?>">会员管理</a>
                         <i class="icon-angle-right"></i>
                     </li>
-                     
+
                    <li>
                             <a href="/user/user/listr">融资会员</a>
                             <i class="icon-angle-right"></i>
-                        </li>                    
+                        </li>
                     <li>
                         <a href="/user/user/<?= $type==='2'?'listr':'listt'?>">会员列表</a>
                         <i class="icon-angle-right"></i>
@@ -39,7 +39,7 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\we
                     </li>
             </ul>
         </div>
-        
+
          <div class="portlet-body">
             <table class="table">
                     <tr>
@@ -51,12 +51,12 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\we
                         </td>
                         <td>
                             <span class="title">融资次数（次）：<?=$Num?></span>
-                        </td>                        
+                        </td>
                     </tr>
             </table>
         </div>
-       
-        
+
+
         <!--search start-->
         <div class="portlet-body">
             <form action="/order/onlineorder/detailr" method="get" target="_self">
@@ -77,7 +77,7 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\we
                                     <option value="">---未选择---</option>
                                     <option value="-1" <?= $status === '-1'?"selected='selected'":"" ?>>未上线</option>
                                     <?php foreach (Yii::$app->params['deal_status'] as $key => $val): ?>
-                                    <option value=<?= $key ?> 
+                                    <option value=<?= $key ?>
                                         <?php if ($status === strval($key)) {
                                             echo "selected='selected'";
                                         }?>><?= $val ?></option>
@@ -86,7 +86,7 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\we
                             </td>
                             <td><span class="title">融资时间</span></td>
                             <td>
-                                <input type="text" value="<?= $time ?>" name = "time" onclick='WdatePicker({dateFmt:"yyyy-MM-dd",maxDate:"<?=  date('Y-m-d')?>"});'/>  
+                                <input type="text" value="<?= $time ?>" name = "time" onclick='WdatePicker({dateFmt:"yyyy-MM-dd",maxDate:"<?=  date('Y-m-d')?>"});'/>
                             </td>
                             <td colspan="6" align="right" style=" text-align: right">
                                 <button type='submit' class="btn blue btn-block" style="width: 100px;">搜索 <i class="m-icon-swapright m-icon-white"></i></button>
@@ -96,9 +96,9 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\we
                 </table>
             </form>
         </div>
-        
+
         <!--search end -->
-        
+
         <div class="portlet-body">
             <table class="table table-striped table-bordered table-advance table-hover">
                 <thead>
@@ -107,7 +107,7 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\we
                         <th>项目名称</th>
                         <th style="text-align: right;">融资金额（元）</th>
                         <th style="text-align: right;">实际融资金额（元）</th>
-                        <th style="text-align: right;">融资期限（天）</th>
+                        <th style="text-align: right;">融资期限</th>
                         <th style="text-align: right;">利率（%）</th>
                         <th>融资时间</th>
                         <th>状态</th>
@@ -118,25 +118,33 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\we
                     <tr>
                         <td><?= $val['sn'] ?></td>
                         <td><?= $val['title'] ?></td>
-                        <td style="text-align: right;"><?= number_format($val['money'],2) ?></td>    
+                        <td style="text-align: right;"><?= number_format($val['money'],2) ?></td>
                         <td style="text-align: right;"><?= number_format($val['funded_money'],2) ?></td>
-                        <td style="text-align: right;"><?= $val['expires']?></td>           
-                        <td style="text-align: right;"><?= doubleval(100*$val['yield_rate'])?></td>               
+                        <td style="text-align: right;">
+                        <?php
+                            if (1 === (int)$val['refund_method']) {
+                                echo $val['expires']."天";
+                            } else {
+                                echo $val['expires']."个月";
+                            }
+                        ?>
+                        </td>
+                        <td style="text-align: right;"><?= doubleval(100*$val['yield_rate'])?></td>
                         <td><?= date('Y-m-d H:i:s',$val['created_at'])?></td>
-                        <td><?php 
+                        <td><?php
                                 if ($val['online_status'] === 0) {
                                    echo "未上线";
                                 } else {
-                                   echo Yii::$app->params['deal_status'][$val['status']];  
+                                   echo Yii::$app->params['deal_status'][$val['status']];
                                 }
                                 ?></td>
                     </tr>
-                    <?php endforeach; ?>   
+                    <?php endforeach; ?>
                 </tbody>
             </table>
         </div>
         <!--分页-->
-        <div class="pagination" style="text-align:center"><?= LinkPager::widget(['pagination' => $pages]); ?></div> 
+        <div class="pagination" style="text-align:center"><?= LinkPager::widget(['pagination' => $pages]); ?></div>
     </div>
 </div>
 
