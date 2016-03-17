@@ -90,10 +90,10 @@ class OrderController extends BaseController
     {
         if (in_array($key, ['r','f']) && $cont) {
             foreach ($cont as $k => $val) {
-                if ('r' === $key && '认购协议' === $val['name']) {
+                if ('r' === $key && false !== strpos($val['name'], '认购协议')) {
                     return $k;
                 }
-                if ('f' === $key && '风险揭示书' === $val['name']) {
+                if ('f' === $key && false !== strpos($val['name'], '风险揭示书')) {
                     return $k;
                 }
             }
