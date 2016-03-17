@@ -310,7 +310,7 @@ class RepaymentController extends BaseController
 
         foreach ($data as $val) {
             $user = User::findOne($val->uid);
-            $data_arr = $_repaymentrecord->having(['uid' => $val['uid']])->select('sum(benjin) as benjin, sum(lixi) as lixi')->where(['qishu' => $qishu])->createCommand()->queryAll();
+            $data_arr = $_repaymentrecord->having(['uid' => $val['uid']])->select('sum(benjin) as benjin, sum(lixi) as lixi')->andWhere(['qishu' => $qishu])->createCommand()->queryAll();
 
             $_sms = clone $sms;
             if (OnlineProduct::REFUND_METHOD_DAOQIBENXI === $product->refund_method) {
