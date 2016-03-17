@@ -1,12 +1,8 @@
 <?php
+use yii\widgets\LinkPager;
+use common\models\user\User;
 
-    use yii\widgets\ActiveForm;
-    use yii\widgets\LinkPager;
-    use common\models\user\User;
-    
-    $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\web\YiiAsset']);
-    
-    $type = Yii::$app->request->get('type');
+$this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\web\YiiAsset']);
 ?>
 <?php $this->beginBlock('blockmain'); ?>
 
@@ -22,7 +18,7 @@
             <ul class="breadcrumb">
                     <li>
                         <i class="icon-home"></i>
-                        <a href="/user/user/<?= $type==2?'listr':'listt'?>">会员管理</a> 
+                        <a href="/user/user/<?= $type==2?'listr':'listt'?>">会员管理</a>
                         <i class="icon-angle-right"></i>
                     </li>
                     <?php if($type==User::USER_TYPE_PERSONAL){?>
@@ -41,7 +37,7 @@
                         <i class="icon-angle-right"></i>
                     </li>
                     <li>
-                        <a href="/user/user/detail?id=<?=$_GET['id']?>&type=<?= $type ?>">会员详情</a>
+                        <a href="/user/user/detail?id=<?= $uid ?>&type=<?= $type ?>">会员详情</a>
                         <i class="icon-angle-right"></i>
                     </li>
                     <li>
@@ -49,13 +45,13 @@
                     </li>
             </ul>
         </div>
-        
+
          <div class="portlet-body">
             <table class="table">
                     <tr>
                    <?php if($type==User::USER_TYPE_PERSONAL){?>
                         <td>
-                            <span class="title">用户名：<?= $user['username'] ?></span>
+                            <span class="title">用户名：<?= $user['real_name'] ?></span>
                         </td>
                         <td>
                             <span class="title">充值金额总计（元）：<?=  number_format($moneyTotal,2)?></span>
@@ -76,46 +72,37 @@
                     </tr>
             </table>
         </div>
-       
-        
+
+
         <!--search start-->
         <div class="portlet-body">
             <form action="/user/rechargerecord/detail" method="get" target="_self">
                 <table class="table">
-                    
+
                     <tbody>
                         <tr>
-                        <input type="hidden" name="id" value="<?=Yii::$app->request->get('id')?>">
-                         <input type="hidden" name ='type' value = '<?= $type ?>'>
-                        <?php if($type==User::USER_TYPE_PERSONAL){?>
+                        <input type="hidden" name="id" value="<?= $uid ?>">
+                        <input type="hidden" name ='type' value = '<?= $type ?>'>
+                        <?php if ($type==User::USER_TYPE_PERSONAL) {?>
                             <td>
                                 <span class="title">状态</span>
                             </td>
                             <td>
                                 <select name="status">
-                                    <option value=""
-                                        >---未选择---</option>
-                                    <option value="0" 
-                                        <?php if($_GET['status']=='0'){
+                                    <option value="">---未选择---</option>
+                                    <?php foreach(Yii::$app->params['rechargeMingxi'] as $key => $val): ?>
+                                    <option value="<?= $key ?>"
+                                        <?php if($key === (int) $status){
                                             echo "selected='selected'";
                                         }?>
-                                            >充值未处理</option>
-                                    <option value="1" 
-                                        <?php if($_GET['status']==1){
-                                            echo "selected='selected'";
-                                        }?>
-                                            >充值成功</option>
-                                    <option value="2" 
-                                        <?php if($_GET['status']==2){
-                                            echo "selected='selected'";
-                                        }?>
-                                            >充值失败</option>
+                                            ><?= $val ?></option>
+                                    <?php endforeach; ?>
                                 </select>
                             </td>
                             <?php }?>
                             <td><span class="title">充值时间</span></td>
                             <td>
-                                <input type="text" value="<?=$_GET['time']?>" name = 'time' onclick='WdatePicker({dateFmt:"yyyy-MM-dd",maxDate:"<?=  date('Y-m-d')?>"});'/> 
+                                <input type="text" value="<?= $time ?>" name = 'time' onclick='WdatePicker({dateFmt:"yyyy-MM-dd",maxDate:"<?=  date('Y-m-d')?>"});'/>
                             </td>
                             <td><div align="right" style="margin-right: 20px">
                                 <button type='submit' class="btn blue btn-block" style="width: 100px;">搜索 <i class="m-icon-swapright m-icon-white"></i></button>
@@ -125,10 +112,10 @@
                 </table>
             </form>
         </div>
-        
+
         <!--search end -->
-        
-        
+
+
         <div class="portlet-body">
             <table class="table table-striped table-bordered table-advance table-hover">
                 <thead>
@@ -147,22 +134,28 @@
                 <?php foreach ($model as $key => $val) : ?>
                     <tr>
                         <td><?= $val['sn'] ?></td>
-                        <td><?= number_format($val['fund'],2) ?></td>                        
-                        <td><?= Yii::$app->params['bank'][$val['bank_id']]['bankname'] ?></td>                        
+                        <td><?= number_format($val['fund'],2) ?></td>
+                        <td><?= $val['bankName'] ?></td>
                         <td><?= date('Y-m-d H:i',$val['created_at'])?></td>
                         <td>
                             <?php if($type==User::USER_TYPE_PERSONAL) { ?>
-                            <?php 
-                                    if($val['status']==0){
-                                        echo "充值未处理";
-                                    }elseif($val['status']==1){
-                                        echo "充值成功";
-                                    }else {
-                                        echo "充值失败";
+                            <?php
+                                    if (0 === (int) $val['status']) {
+                                        $desc = "充值未处理";
+                                    } elseif (1 === (int) $val['status']) {
+                                        $desc = "充值成功";
+                                    } else {
+                                        $desc = "充值失败";
+                                    }
+
+                                    if (3 === (int) $val['pay_type']) {
+                                        echo $desc."-线下pos";
+                                    } else {
+                                        echo $desc."-线上充值";
                                     }
                              ?>
                              <?php } else { ?>
-                             <?php 
+                             <?php
                                     if($val['status']==0){
                                         echo "待审核";
                                     }elseif($val['status']==1){
@@ -170,7 +163,7 @@
                                     }else {
                                         echo "审核失败";
                                     }
-                             ?> 
+                             ?>
                              <?php } ?>
                         </td>
                         <?php if($type==User::USER_TYPE_ORG) { ?>
@@ -185,43 +178,42 @@
                         </td>
                         <?php } ?>
                     </tr>
-                    <?php endforeach; ?>   
+                    <?php endforeach; ?>
                 </tbody>
             </table>
         </div>
         <!--分页-->
-        <div class="pagination" style="text-align:center"><?= LinkPager::widget(['pagination' => $pages]); ?></div> 
+        <div class="pagination" style="text-align:center"><?= LinkPager::widget(['pagination' => $pages]); ?></div>
     </div>
-                                    
+
 </div>
 <script type="text/javascript">
-    var uid = '<?=Yii::$app->request->get('id')?>';
+    var uid = '<?= $uid ?>';
     $(function () {
-         
+
         $('.ajax_op').bind('click', function () {
-            op = $(this).attr('op');            
+            op = $(this).attr('op');
             index = $(this).attr('index');
             csrf = '<?= Yii::$app->request->getCsrfToken(); ?>';
-            layer.confirm('确定审核通过吗？',{title:'充值审核',btn:['通过','不通过','关闭'],closeBtn:false},function(){ 
+            layer.confirm('确定审核通过吗？',{title:'充值审核',btn:['通过','不通过','关闭'],closeBtn:false},function(){
                 openLoading();//打开loading
                 $.post("/user/rechargerecord/recharge-sh", {op: op, id: index, type:1, uid:uid, _csrf:csrf}, function (result) {
                     cloaseLoading();//关闭loading
                     newalert(result['res'],'');
                     location.reload();
-                });    
+                });
             },function(){
                 openLoading();//打开loading
                 $.post("/user/rechargerecord/recharge-sh", {op: op, id: index,type:0, uid:uid, _csrf:csrf}, function (result) {
                     cloaseLoading();//关闭loading
                     newalert(result['res'],'');
                     location.reload();
-                });   
+                });
             })
-        
+
         });
-            
-            
+
+
     })
 </script>
 <?php $this->endBlock(); ?>
-

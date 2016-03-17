@@ -6,26 +6,42 @@ use Yii;
 use yii\data\Pagination;
 use yii\web\Response;
 use backend\controllers\BaseController;
-use common\models\user\RechargeRecordTime;
 use common\models\user\MoneyRecord;
 use common\models\user\UserAccount;
 use common\models\user\User;
 use common\lib\bchelp\BcRound;
 use yii\log\FileTarget;
 use common\models\user\RechargeRecord;
+use common\models\bank\Bank;
 
 class RechargerecordController extends BaseController
 {
-    public function actionDetail($id = null, $type = null)
+    /**
+     * 投资会员充值流水明细
+     * @param type $id
+     * @param type $type
+     * @return type
+     */
+    public function actionDetail($id, $type)
     {
-        //\Yii::beginProfile('myBenchmark');
         $status = Yii::$app->request->get('status');
         $time = Yii::$app->request->get('time');
-        $query = RechargeRecordTime::find()->where(['uid' => $id]);
+
+        $r = RechargeRecord::tableName();
+        $u = Bank::tableName();
+        $query = (new \yii\db\Query)
+            ->select("$r.*, $u.bankName")
+            ->from($r)
+            ->leftJoin($u, "$r.bank_id = $u.id")
+            ->where(['uid' => $id]);
 
         // 状态
         if (!empty($status)) {
-            $query->andWhere(['status' => $status]);
+            if ('3' === substr($status, 0, 1)) {
+                $query->andWhere(['status' => substr($status, 1, 1), 'pay_type' => RechargeRecord::PAY_TYPE_POS]);
+            } else {
+                $query->andWhere(['status' => substr($status, 1, 1), 'pay_type' => [RechargeRecord::PAY_TYPE_QUICK, RechargeRecord::PAY_TYPE_NET]]);
+            }
         }
 
         // 时间
@@ -39,12 +55,12 @@ class RechargerecordController extends BaseController
         $model = $query->offset($pages->offset)->limit($pages->limit)->orderBy('id desc')->all();
 
         //取出用户
-        $user = User::find()->where(['id' => $id])->select('username,org_name')->one();
+        $user = User::findOne(['id' => $id]);
 
         $moneyTotal = 0;  //取出充值金额总计，应该包括充值成功的和充值失败的
         $successNum = 0;  //充值成功笔数
         $failureNum = 0;  //充值失败笔数
-        $numdata = RechargeRecordTime::find()->where(['uid' => $id, 'status' => [1, 2]])->select('fund,status')->asArray()->all();
+        $numdata = RechargeRecord::find()->where(['uid' => $id, 'status' => [1, 2]])->select('fund,status')->asArray()->all();
         $bc = new BcRound();
         bcscale(14);
         foreach ($numdata as $data) {
@@ -59,13 +75,16 @@ class RechargerecordController extends BaseController
 
         //渲染到静态页面
         return $this->render('list', [
-                    'type' => $type,
-                    'model' => $model,
-                    'pages' => $pages,
-                    'user' => $user,
-                    'moneyTotal' => $moneyTotal,
-                    'successNum' => $successNum,
-                    'failureNum' => $failureNum,
+            'uid' => $id,
+            'type' => $type,
+            'status' => $status,
+            'time' => $time,
+            'model' => $model,
+            'pages' => $pages,
+            'user' => $user,
+            'moneyTotal' => $moneyTotal,
+            'successNum' => $successNum,
+            'failureNum' => $failureNum,
         ]);
     }
 
@@ -81,7 +100,7 @@ class RechargerecordController extends BaseController
         foreach ($banks as $k => $v) {
             $bankInfo[$k] = $v['bankname'];
         }
-        $model = new RechargeRecordTime();
+        $model = new RechargeRecord();
         $model->uid = $id;
         $model->pay_type = RechargeRecord::PAY_TYPE_OFFLINE;
         $model->created_at = strtotime(Yii::$app->request->post('created_at'));

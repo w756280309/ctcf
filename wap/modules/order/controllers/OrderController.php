@@ -62,8 +62,10 @@ class OrderController extends BaseController
 
     /**
      * 合同显示页面
+     * @param type $sn
      * @param type $id
      * @param type $key
+     * @return type
      * @throws \yii\web\NotFoundHttpException
      */
     public function actionAgreement($id, $key = 0)

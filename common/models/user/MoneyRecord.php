@@ -38,7 +38,7 @@ class MoneyRecord extends \yii\db\ActiveRecord
     const TYPE_DRAW_RETURN = 102; //批量代付失败退款
     const TYPE_DRAW_FEE = 103; //提现手续费
     const TYPE_DRAW_FEE_RETURN = 104; //提现退回手续费
-    
+
     public static function createSN()
     {
         return TxUtils::generateSn('MR');
@@ -97,7 +97,7 @@ class MoneyRecord extends \yii\db\ActiveRecord
             'updated_at' => 'Updated At',
         ];
     }
-    
+
     public static function getLenderMrType()
     {
         return [
@@ -109,7 +109,8 @@ class MoneyRecord extends \yii\db\ActiveRecord
             self::TYPE_HUIKUAN,
             self::TYPE_DRAW_SUCCESS,
             self::TYPE_ORDER,
+            self::TYPE_RECHARGE_POS,
         ];
     }
-    
+
 }
