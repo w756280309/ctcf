@@ -2,9 +2,9 @@
 $this->title = '股权投资';
 ?>
 
-<link href="/css/bootstrap.min.css" rel="stylesheet">
-<link href="/css/base.css" rel="stylesheet">
-<link href="/css/first.css" rel="stylesheet"/>
+<link href="<?= ASSETS_BASE_URI ?>css/bootstrap.min.css" rel="stylesheet">
+<link href="<?= ASSETS_BASE_URI ?>css/base.css" rel="stylesheet">
+<link href="<?= ASSETS_BASE_URI ?>css/first.css" rel="stylesheet"/>
 
 <div class="container" style="background: #fff;">
         <div class="title-div color1"><?= $model->name ?></div>
@@ -12,7 +12,7 @@ $this->title = '股权投资';
         <div class="row" style="margin:5px auto;">
             <div class="col-xs-2 col-sm-2" ></div>
             <div class="col-xs-8 col-sm-8 img-jijin">
-                <img src="/images/touzi-01.png" alt="" width="100%" height="100" />
+                <img src="<?= ASSETS_BASE_URI ?>images/touzi-01.png" alt="" width="100%" height="100" />
             </div>
             <div class="col-xs-2 col-sm-2" ></div>
         </div>

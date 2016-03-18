@@ -7,11 +7,11 @@ WapAsset::register($this);
 
 $this->title = '温都金服';
 $this->params['breadcrumbs'][] = $this->title;
-$this->registerJsFile(ASSETS_BASE_URI . '/js/TouchSlide.1.1.js', ['depends' => 'yii\web\JqueryAsset', 'position' => 1]);
-$this->registerJsFile(ASSETS_BASE_URI . '/js/jquery.classyloader.js', ['depends' => 'yii\web\JqueryAsset', 'position' => 1]);
-$this->registerJsFile(ASSETS_BASE_URI . '/js/index.js', ['depends' => 'yii\web\JqueryAsset', 'position' => 1]);
-$this->registerCssFile(ASSETS_BASE_URI . '/css/index.css', ['depends' => 'frontend\assets\WapAsset']);  //加载在depends之后
-$this->registerCssFile(ASSETS_BASE_URI . '/css/first.css', ['depends' => 'frontend\assets\WapAsset']);
+$this->registerJsFile(ASSETS_BASE_URI . 'js/TouchSlide.1.1.js', ['depends' => 'yii\web\JqueryAsset', 'position' => 1]);
+$this->registerJsFile(ASSETS_BASE_URI . 'js/jquery.classyloader.js', ['depends' => 'yii\web\JqueryAsset', 'position' => 1]);
+$this->registerJsFile(ASSETS_BASE_URI . 'js/index.js', ['depends' => 'yii\web\JqueryAsset', 'position' => 1]);
+$this->registerCssFile(ASSETS_BASE_URI . 'css/index.css', ['depends' => 'frontend\assets\WapAsset']);  //加载在depends之后
+$this->registerCssFile(ASSETS_BASE_URI . 'css/first.css', ['depends' => 'frontend\assets\WapAsset']);
 
 $dates = Yii::$app->functions->getDateDesc($deals->start_date);
 $rate = number_format($deals->finish_rate * 100, 0);

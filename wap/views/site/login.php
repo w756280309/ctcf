@@ -4,7 +4,7 @@ use yii\bootstrap\ActiveForm;
 use yii\captcha\Captcha;
 
 frontend\assets\WapAsset::register($this);
-$this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','position' => 1]);
+$this->registerJsFile(ASSETS_BASE_URI . 'js/common.js', ['depends' => 'yii\web\YiiAsset','position' => 1]);
 ?><?php $this->beginPage() ?>
 <!DOCTYPE html>
 <html>
@@ -15,15 +15,14 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
 	<title><?= Html::encode($this->title) ?></title>
         <?= Html::csrfMetaTags() ?>
 	<?php $this->head() ?>
-        </script><script src="/js/jquery.js"></script>
-    <link rel="stylesheet" href="/css/base.css">
-    <link rel="stylesheet" href="/css/loginsign.css">
+    <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/base.css">
+    <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/loginsign.css">
 </head>
 <body>
     <?php $this->beginBody() ?>
     <div class="container">
         <div class="row nav-height">
-            <div class="col-xs-2 back"><img src="/images/back.png" alt="" /></div>
+            <div class="col-xs-2 back"><img src="<?= ASSETS_BASE_URI ?>images/back.png" alt="" /></div>
             <div class="col-xs-8 title">登录</div>
         </div>
         <div class="row">

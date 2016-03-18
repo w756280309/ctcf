@@ -12,10 +12,10 @@ use yii\helpers\Html;
     <title>温都金服</title>
     <?= Html::csrfMetaTags() ?>
     <?php $this->head() ?>
-    <link rel="stylesheet" href="/css/index.css"/>
-    <script src="/js/TouchSlide.1.1.js"></script>
-    <script src="/js/jquery.js"></script>
-    <script src="/js/list.js"></script>
+    <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/index.css"/>
+    <script src="<?= ASSETS_BASE_URI ?>js/TouchSlide.1.1.js"></script>
+    <script src="<?= ASSETS_BASE_URI ?>js/jquery.js"></script>
+    <script src="<?= ASSETS_BASE_URI ?>js/list.js"></script>
 </head>
 <body>
     <?php $this->beginBody() ?>

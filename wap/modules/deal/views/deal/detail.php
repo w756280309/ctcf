@@ -1,10 +1,10 @@
 <?php
 $this->title = '项目详情';
-$this->registerJsFile('/js/common.js', ['depends' => 'yii\web\JqueryAsset', 'position' => 1]);
+$this->registerJsFile(ASSETS_BASE_URI.'js/common.js', ['depends' => 'yii\web\JqueryAsset', 'position' => 1]);
 
 $deal['money'] = rtrim(rtrim($deal['money'], '0'), '.');
 ?>
-<link rel="stylesheet" href="/css/xiangqing.css">
+<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/xiangqing.css">
         <!--xiangqing-->
         <div class="row column">
             <div class="hidden-xs col-sm-1"></div>

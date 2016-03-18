@@ -22,17 +22,17 @@ frontend\assets\WapAsset::register($this);
         <title>温都金服</title>
         <?= Html::csrfMetaTags() ?>
         <?php $this->head() ?>
-        <script type="text/javascript" src="/js/jquery.js"></script>
-        <script type="text/javascript" src="/js/common.js"></script>
-        <link rel="stylesheet" href="/css/base.css">
-        <link rel="stylesheet" href="/css/loginsign.css">
+        <script type="text/javascript" src="<?= ASSETS_BASE_URI ?>js/jquery.js"></script>
+        <script type="text/javascript" src="<?= ASSETS_BASE_URI ?>js/common.js"></script>
+        <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/base.css">
+        <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/loginsign.css">
     </head>
     <body>
     <?php $this->beginBody() ?>
     <!--  注册页  start-->
     <div class="container">
         <div class="row nav-height">
-            <div class="col-xs-2 back"><img src="/images/back.png" alt=""/></div>
+            <div class="col-xs-2 back"><img src="<?= ASSETS_BASE_URI ?>images/back.png" alt=""/></div>
             <div class="col-xs-8 title">注册</div>
             <div class="col-xs-2"></div>
         </div>
@@ -63,7 +63,7 @@ frontend\assets\WapAsset::register($this);
                            placeholder="请输入6到20位的密码" AUTOCOMPLETE="off">
                 </div>
                 <div class="col-xs-3 col border-bottom login-eye">
-                    <img src="/images/eye-close.png" width="26" height="20" alt=" 闭眼">
+                    <img src="<?= ASSETS_BASE_URI ?>images/eye-close.png" width="26" height="20" alt=" 闭眼">
                 </div>
                 <div class="col-xs-12 div-xieyi">
                     <input id="xieyi" class="xieyi lf" type="checkbox" checked="checked"/> 我已经阅读并同意
@@ -157,12 +157,12 @@ frontend\assets\WapAsset::register($this);
             $(".login-eye img").on("click", function () {
                 if ($("#pass").attr("type") == "password") {
                     $("#pass").attr("type", "text");
-                    $(this).removeAttr("src", "/images/eye-close.png");
-                    $(this).attr({src: "/images/eye-open.png", alt: "eye-open"});
+                    $(this).removeAttr("src", "<?= ASSETS_BASE_URI ?>images/eye-close.png");
+                    $(this).attr({src: "<?= ASSETS_BASE_URI ?>images/eye-open.png", alt: "eye-open"});
                 } else {
                     $("#pass").attr("type", "password");
-                    $(this).removeAttr("src", "/images/eye-open.png");
-                    $(this).attr({src: "/images/eye-close.png", alt: "eye-close"});
+                    $(this).removeAttr("src", "<?= ASSETS_BASE_URI ?>images/eye-open.png");
+                    $(this).attr({src: "<?= ASSETS_BASE_URI ?>images/eye-close.png", alt: "eye-close"});
                 }
             });
             $('#xieyi').bind('click', function ()

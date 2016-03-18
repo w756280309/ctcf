@@ -5,11 +5,11 @@ $this->registerJs('var yr='.$deal->yield_rate, 1);
 $this->registerJs('var qixian='.$deal->expires, 1);
 $this->registerJs('var retmet='.$deal->refund_method, 1);
 
-$this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','position' => 1]);
-$this->registerJsFile('/js/order.js', ['depends' => 'yii\web\YiiAsset','position' => 1]);
+$this->registerJsFile(ASSETS_BASE_URI.'js/common.js', ['depends' => 'yii\web\YiiAsset','position' => 1]);
+$this->registerJsFile(ASSETS_BASE_URI.'js/order.js', ['depends' => 'yii\web\YiiAsset','position' => 1]);
 ?>
-<link rel="stylesheet" href="/css/base.css">
-<link rel="stylesheet" href="/css/setting.css">
+<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/base.css">
+<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/setting.css">
 
 <!--   购买页 start-->
 
@@ -65,7 +65,7 @@ $this->registerJsFile('/js/order.js', ['depends' => 'yii\web\YiiAsset','position
     <!-- 遮罩层 end  -->
     <!-- 输入弹出框 start  -->
     <div class="succeed-info hidden">
-        <div class="col-xs-12"><img src="/images/succeed.png" alt="对钩"> </div>
+        <div class="col-xs-12"><img src="<?= ASSETS_BASE_URI ?>images/succeed.png" alt="对钩"> </div>
         <div class="col-xs-12">购买成功</div>
     </div>
     <!-- 输入弹出框 end  -->

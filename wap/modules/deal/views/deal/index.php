@@ -11,7 +11,7 @@ $this->registerJs('var xs=' . (empty($curent_xs)?'undefined':$curent_xs) . ';', 
 $pc_cat = Yii::$app->params['pc_cat'];
 
 ?>
-<script src="/js/jquery.classyloader.js"></script>
+<script src="<?= ASSETS_BASE_URI ?>js/jquery.classyloader.js"></script>
 <div class="container">
     <div class="row tit-box">
         <?php foreach ($pc_cat as $key=>$cat){ ?>
@@ -26,9 +26,9 @@ $pc_cat = Yii::$app->params['pc_cat'];
         <a class="row column dealdata" href="/deal/deal/detail?sn=<?= $val['num'] ?>">
             <div class="col-xs-12 col-sm-10 column-title">
                 <?php if (empty($val['jiaxi'])) { ?>
-                <img class="qian show" src="/images/qian.png" alt="">
+                <img class="qian show" src="<?= ASSETS_BASE_URI ?>images/qian.png" alt="">
                 <?php } else { ?>
-                <img class="badges show" src="/images/badge.png" alt="">
+                <img class="badges show" src="<?= ASSETS_BASE_URI ?>images/badge.png" alt="">
                 <?php } ?>
                 <span class="<?= $is_hui?'hui':'' ?>"><?= $val['title'] ?></span>
             </div>

@@ -1,11 +1,11 @@
 <?php
 $this->title = '预约申请单';
-$this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset', 'position' => 1]);
+$this->registerJsFile(ASSETS_BASE_URI . 'js/common.js', ['depends' => 'yii\web\YiiAsset', 'position' => 1]);
 ?>
-<link rel="stylesheet" href="/css/bind.css"/>
-<link rel="stylesheet" href="/css/chongzhi.css"/>
-<link rel="stylesheet" href="/css/base.css"/>
-<link rel="stylesheet" href="/css/tixian.css"/>
+<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/bind.css"/>
+<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/chongzhi.css"/>
+<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/base.css"/>
+<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/tixian.css"/>
 
 <!--可提现金额-->
 <div class="row kahao">
