@@ -1,8 +1,8 @@
 <?php
 frontend\assets\WapAsset::register($this);
-$this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','position' => 1]);
+$this->registerJsFile(ASSETS_BASE_URI . 'js/common.js', ['depends' => 'yii\web\YiiAsset','position' => 1]);
 ?>
-<link href="/css/informationAndHelp.css" rel="stylesheet">
+<link href="<?= ASSETS_BASE_URI ?>css/informationAndHelp.css" rel="stylesheet">
 <!--  账户中心页 start-->
 
     <div class="row  border-bottom  earning accountcenter">
@@ -42,7 +42,7 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
             <div class="col-xs-3 left-txt">我的理财</div>
             <div class="col-xs-7"></div>
             <div class="col-xs-1 arrow">
-                <a href="/user/user/myorder"><img src="/images/arrow.png" alt="右箭头"></a>
+                <a href="/user/user/myorder"><img src="<?= ASSETS_BASE_URI ?>images/arrow.png" alt="右箭头"></a>
             </div>
             <div class="col-xs-1"></div>
         </div>
@@ -51,7 +51,7 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
             <div class="col-xs-3 left-txt">交易明细</div>
             <div class="col-xs-7"></div>
             <div class="col-xs-1 arrow">
-                <a href="/user/user/mingxi"><img src="/images/arrow.png" alt="右箭头"></a>
+                <a href="/user/user/mingxi"><img src="<?= ASSETS_BASE_URI ?>images/arrow.png" alt="右箭头"></a>
             </div>
             <div class="col-xs-1"></div>
         </div>
@@ -59,7 +59,7 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
     <form></form>
     <!-- 账户中心页 end  -->
 
-    <script type="text/javascript" src="/js/jquery.js"></script>
+    <script type="text/javascript" src="<?= ASSETS_BASE_URI ?>js/jquery.js"></script>
     <script type="text/javascript">
     function tixian(){
         var err = '<?= $data['code'] ?>';

@@ -5,8 +5,8 @@ use yii\captcha\Captcha;
 $this->title = '修改登录密码';
 $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset', 'position' => 1]);
 ?>
-<link rel="stylesheet" href="/css/base.css">
-<link rel="stylesheet" href="/css/setting.css">
+<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/base.css">
+<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/setting.css">
 
 <?php $form = ActiveForm::begin(['id' => 'editpassform', 'action' => '/site/editpass', 'options' => ['class' => 'cmxform']]); ?>
     <input name="_csrf" type="hidden" id="_csrf" value="<?= Yii::$app->request->csrfToken ?>">
@@ -22,7 +22,7 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset', 'positi
                 <input type="password" id="new_pass" placeholder="请输入6到20位的新密码" name="EditpassForm[new_pass]" maxlength="20">
             </div>
             <div class="col-xs-2 eye text-align-ct col">
-                <img src="/images/eye-close.png"  align="absmiddle" alt=" 闭眼" >
+                <img src="<?= ASSETS_BASE_URI ?>images/eye-close.png"  align="absmiddle" alt=" 闭眼" >
             </div>
         </div>
         <div class="row sm-height border-bottom">
@@ -118,12 +118,12 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset', 'positi
     $(".eye img").on("click",function () {
         if ( $("#new_pass").attr("type") == "password") {
             $("#new_pass").attr("type", "text");
-            $(this).removeAttr("src", "/images/eye-close.png");
-            $(this).attr({ src: "/images/eye-open.png", alt: "eye-open" });
+            $(this).removeAttr("src", "<?= ASSETS_BASE_URI ?>images/eye-close.png");
+            $(this).attr({ src: "<?= ASSETS_BASE_URI ?>images/eye-open.png", alt: "eye-open" });
         } else {
             $("#new_pass").attr("type", "password");
-            $(this).removeAttr("src", "/images/eye-open.png");
-            $(this).attr({ src: "/images/eye-close.png", alt: "eye-close" });
+            $(this).removeAttr("src", "<?= ASSETS_BASE_URI ?>images/eye-open.png");
+            $(this).attr({ src: "<?= ASSETS_BASE_URI ?>images/eye-close.png", alt: "eye-close" });
         }
     });
 

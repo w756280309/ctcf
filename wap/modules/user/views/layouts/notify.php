@@ -16,8 +16,8 @@ frontend\assets\WapAsset::register($this);
 
     <!-- Bootstrap -->
     <!--1、加载Bottstrap层叠样式表 -->
-    <link href="/css/bootstrap.min.css" rel="stylesheet">
-    <link href="/css/base.css" rel="stylesheet">
+    <link href="<?= ASSETS_BASE_URI ?>css/bootstrap.min.css" rel="stylesheet">
+    <link href="<?= ASSETS_BASE_URI ?>css/base.css" rel="stylesheet">
     <!-- 加载Bootstrap的样式文件-->
 
     <!-- 使得IE8也适合HTML5的元素和媒体查询-->
@@ -30,8 +30,8 @@ frontend\assets\WapAsset::register($this);
     <script src="http://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
 
-    <script src="/js/jquery.js"></script>
-    <script src="/js/common.js"></script>
+    <script src="<?= ASSETS_BASE_URI ?>js/jquery.js"></script>
+    <script src="<?= ASSETS_BASE_URI ?>js/common.js"></script>
 </head>
 <body>
 <?php $this->beginBody() ?>

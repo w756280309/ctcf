@@ -7,7 +7,7 @@ $this->title="账户异常提醒";
 
 <div class="row flase-box">
     <div class="col-xs-12 text-align-ct">
-        <img src="/images/false.png" class="false-img" alt="失败">
+        <img src="<?= ASSETS_BASE_URI ?>images/false.png" class="false-img" alt="失败">
     </div>
     <div class="col-xs-12 text-align-ct false-txt">当前用户已被冻结</div>
     <div class="col-xs-12 text-align-ct bg-height">客服联系电话：400-888-6888</div>

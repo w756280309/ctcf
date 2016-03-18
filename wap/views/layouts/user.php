@@ -18,13 +18,13 @@ WapAsset::register($this);
 
     <!-- Bootstrap -->
     <!--1、加载Bottstrap层叠样式表 -->
-    <link href="/css/bootstrap.min.css" rel="stylesheet">
-    <link href="/css/base.css" rel="stylesheet">
+    <link href="<?= ASSETS_BASE_URI ?>css/bootstrap.min.css" rel="stylesheet">
+    <link href="<?= ASSETS_BASE_URI ?>css/base.css" rel="stylesheet">
     <!-- 加载Bootstrap的样式文件-->
 
 <!--    <script src="/js/TouchSlide.1.1.js"></script>-->
-    <script src="/js/jquery.js"></script>
-    <script src="/js/common.js"></script>
+    <script src="<?= ASSETS_BASE_URI ?>js/jquery.js"></script>
+    <script src="<?= ASSETS_BASE_URI ?>js/common.js"></script>
     <script>
             $(function(){
                  $('.back img').bind('click',function(){
@@ -39,7 +39,7 @@ WapAsset::register($this);
     <!--标的详情页头部 start-->
      <div class="container">
             <div class="row title-box nav-height">
-                <div class="col-xs-2 back"><img src="/images/back.png" alt=""/></div>
+                <div class="col-xs-2 back"><img src="<?= ASSETS_BASE_URI ?>images/back.png" alt=""/></div>
                 <div class="col-xs-8 title"><?=$this->title ?></div>
                 <div class="col-xs-2 back"></div>
             </div>

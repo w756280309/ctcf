@@ -1,7 +1,7 @@
 <?php
 $this->title = '提现申请';
 ?>
-<link rel="stylesheet" href="/css/setting.css">
+<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/setting.css">
 <div class="row" id='bind-box'>
     <div class="col-xs-12">
         <?php if ('success' === $ret) { ?>
@@ -14,9 +14,9 @@ $this->title = '提现申请';
 <div class="row" id='bind-true'>
     <div class="col-xs-12">
         <?php if ('success' === $ret) { ?>
-        <img src="/images/bind-true.png" alt="">
+        <img src="<?= ASSETS_BASE_URI ?>images/bind-true.png" alt="">
         <?php } else { ?>
-        <img src="/images/bind-false.png" alt="">
+        <img src="<?= ASSETS_BASE_URI ?>images/bind-false.png" alt="">
         <?php } ?>
     </div>
 </div>

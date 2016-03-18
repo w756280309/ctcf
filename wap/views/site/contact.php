@@ -146,7 +146,7 @@ $this->title = '联系我们';
     <!-- 主体 -->
     <!-- banner  -->
     <div class="ico">
-        <img src="/images/relation-ico.png" alt="温都金服地图" >
+        <img src="<?= ASSETS_BASE_URI ?>images/relation-ico.png" alt="温都金服地图" >
     </div>
     <!-- 主体 -->
     <div class="about-content row">

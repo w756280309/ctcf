@@ -13,15 +13,15 @@ frontend\assets\WapAsset::register($this);
     <title>温都金服</title>
     <?= Html::csrfMetaTags() ?>
     <?php $this->head() ?>
-    <link rel="stylesheet" href="/css/setting.css">
+    <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/setting.css">
     <script>
         $(function(){
             $('.footer-inner a').css({color: '#8c8c8c'});
             $('.footer-inner2 a').css({color: '#f44336'});
             $('.footer-inner1 a').css({color: '#8c8c8c'});
-            $('.footer-inner1 .licai').css({background: 'url("/images/footer2.png") no-repeat -113px -3px',backgroundSize: '200px'});
-            $('.footer-inner2 .zhanghu').css({background: 'url("/images/footer2.png") no-repeat -81px -57px',backgroundSize: '200px'});
-            $('.footer-inner .shouye').css({background: 'url("/images/footer2.png") no-repeat -145px -3px',backgroundSize: '200px'});
+            $('.footer-inner1 .licai').css({background: 'url("<?= ASSETS_BASE_URI ?>images/footer2.png") no-repeat -113px -3px',backgroundSize: '200px'});
+            $('.footer-inner2 .zhanghu').css({background: 'url("<?= ASSETS_BASE_URI ?>images/footer2.png") no-repeat -81px -57px',backgroundSize: '200px'});
+            $('.footer-inner .shouye').css({background: 'url("<?= ASSETS_BASE_URI ?>images/footer2.png") no-repeat -145px -3px',backgroundSize: '200px'});
         })
     </script>
 </head>
@@ -30,7 +30,7 @@ frontend\assets\WapAsset::register($this);
     <div class="container">
         <!--header-->
         <div class="row account-title">
-            <div class="col-xs-2 back"><img src="/images/headpic.png" alt=""/></div>
+            <div class="col-xs-2 back"><img src="<?= ASSETS_BASE_URI ?>images/headpic.png" alt=""/></div>
             <div class="col-xs-8 ">ID:<?= Yii::$app->user->identity->mobile ?></div>
             <div class="col-xs-1 col"><a href="/system/system/setting" class="set">设置</a></div>
             <div class="col-xs-1"></div>

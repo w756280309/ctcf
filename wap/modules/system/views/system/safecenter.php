@@ -1,13 +1,13 @@
 <?php
 $this->title="安全中心";
 ?>
-<link rel="stylesheet" href="/css/base.css">
-<link rel="stylesheet" href="/css/setting.css">
+<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/base.css">
+<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/setting.css">
     <div class="row sm-height border-bottom margin-top" onclick="location.href='/site/editpass'">
         <div class="col-xs-5 safe-txt text-align-lf">修改登录密码</div>
         <div class="col-xs-5"></div>
         <div class="col-xs-1 arrow">
-            <a href="/site/editpass"><img src="/images/arrow.png" alt="右箭头"></a>
+            <a href="/site/editpass"><img src="<?= ASSETS_BASE_URI ?>images/arrow.png" alt="右箭头"></a>
         </div>
         <div class="col-xs-1"></div>
     </div>
@@ -16,7 +16,7 @@ $this->title="安全中心";
         <div class="col-xs-5 safe-txt text-align-lf">修改交易密码</div>
         <div class="col-xs-5"></div>
         <div class="col-xs-1 arrow">
-            <a href="/user/userbank/editbuspass"><img src="/images/arrow.png" alt="右箭头"></a>
+            <a href="/user/userbank/editbuspass"><img src="<?= ASSETS_BASE_URI ?>images/arrow.png" alt="右箭头"></a>
         </div>
         <div class="col-xs-1"></div>
     </div>

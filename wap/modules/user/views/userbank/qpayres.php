@@ -1,9 +1,8 @@
 <?php
 $this->title = ('success' === $ret) ? "充值成功" : "充值失败";
 
-$this->registerJsFile('', ['depends' => 'yii\web\YiiAsset','position' => 1]);
 ?>
-<link rel="stylesheet" href="/css/setting.css">
+<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/setting.css">
 <div class="row" id='bind-box'>
     <div class="col-xs-12">
         <?php if ('success' === $ret) { ?>
@@ -16,9 +15,9 @@ $this->registerJsFile('', ['depends' => 'yii\web\YiiAsset','position' => 1]);
 <div class="row" id='bind-true'>
     <div class="col-xs-12">
         <?php if ('success' === $ret) { ?>
-        <img src="/images/bind-true.png" alt="">
+        <img src="<?= ASSETS_BASE_URI ?>images/bind-true.png" alt="">
         <?php } else { ?>
-        <img src="/images/bind-false.png" alt="">
+        <img src="<?= ASSETS_BASE_URI ?>images/bind-false.png" alt="">
         <?php } ?>
     </div>
 </div>

@@ -12,7 +12,7 @@ $this->title="关于我们";
         <!-- 主体 -->
         <div class="row logo_icon">
                 <div class="col-xs-12">
-                        <img src="/images/system/production _icon.png" width="100%" alt="">
+                        <img src="<?= ASSETS_BASE_URI ?>images/system/production _icon.png" width="100%" alt="">
                 </div>
         </div>
         <div class="row production-title">
@@ -45,7 +45,7 @@ $this->title="关于我们";
         </div>
         <div class="row book">
                 <div class="col-xs-12">
-                        <img src="/images/system/production_book.png" width="100%" alt="">
+                        <img src="<?= ASSETS_BASE_URI ?>images/system/production_book.png" width="100%" alt="">
                 </div>
         </div>
 </div>

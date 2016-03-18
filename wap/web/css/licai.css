@@ -44,11 +44,11 @@
     background-size: 80%;
 }
 .column-title-rg {
-    background: url('/images/licai-jian.png') no-repeat 0 center;
+    background: url('../images/licai-jian.png') no-repeat 0 center;
     color: #f85158;
 }
 .column-title-rg1 {
-    background: url('/images/licai-hui.png') no-repeat 0 center;
+    background: url('../images/licai-hui.png') no-repeat 0 center;
     color: #d4d4d4;
 }
 .loan-info {
@@ -182,7 +182,7 @@
     padding: 0;
     height: 30px;
     line-height: 30px;
-    background: url('/images/licai-line.png') no-repeat 0 center;
+    background: url('../images/licai-line.png') no-repeat 0 center;
     background-size: 100%;
     text-align: center;
     font-size: 14px;

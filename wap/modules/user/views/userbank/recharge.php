@@ -1,10 +1,10 @@
 <?php
 $this->title="充值";
-$this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','position' => 1]);
+$this->registerJsFile(ASSETS_BASE_URI . 'js/common.js', ['depends' => 'yii\web\YiiAsset','position' => 1]);
 ?>
-<link rel="stylesheet" href="/css/bind.css"/>
-<link rel="stylesheet" href="/css/chongzhi.css"/>
-<link rel="stylesheet" href="/css/base.css"/>
+<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/bind.css"/>
+<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/chongzhi.css"/>
+<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/base.css"/>
 <style type="text/css">
     .yzm-show {
         width: 100px !important;
@@ -20,7 +20,7 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
 </style>
     <!--银行卡-->
         <div class="row bank-card">
-            <div class="col-xs-2 bank-img"><img src="/images/bankicon/<?= $user_bank->bank_id ?>.png" alt=""/></div>
+            <div class="col-xs-2 bank-img"><img src="<?= ASSETS_BASE_URI ?>images/bankicon/<?= $user_bank->bank_id ?>.png" alt=""/></div>
             <div class="col-xs-8 bank-content">
                 <div class="bank-content1" style="font-size: 14px;">
                     <?= $user_bank->bank_name ?>

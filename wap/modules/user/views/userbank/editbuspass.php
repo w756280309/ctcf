@@ -2,10 +2,10 @@
 use yii\bootstrap\ActiveForm;
 $this->title="修改第三方交易密码";
 
-$this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','position' => 1]);
+$this->registerJsFile(ASSETS_BASE_URI . 'js/common.js', ['depends' => 'yii\web\YiiAsset','position' => 1]);
 ?>
-<link rel="stylesheet" href="/css/base.css">
-<link rel="stylesheet" href="/css/setting.css">
+<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/base.css">
+<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/setting.css">
 <style>
 	body{
 		background: #E8ECEB;
@@ -19,7 +19,7 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
 	</div>
 	<div class="row paymentLock">
 		<div class="col-xs-12">
-			<img src="/images/paymentLock.jpg" alt="">
+			<img src="<?= ASSETS_BASE_URI ?>images/paymentLock.jpg" alt="">
 		</div>
 	</div>
 	<div class="row" id='payment-content'>

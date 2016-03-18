@@ -5,16 +5,16 @@ $this->registerJs('var mingxitype = new Array();', 1);
 foreach (Yii::$app->params['mingxi'] as $key => $val) {
     $this->registerJs('mingxitype['.$key.'] = \''.$val.'\';', 1);
 }
-$this->registerJsFile('/js/moment.min.js', ['depends' => 'yii\web\YiiAsset','position' => 1]);
-$this->registerJsFile('/js/jiaoyimingxi.js', ['depends' => 'yii\web\YiiAsset','position' => 1]);
+$this->registerJsFile(ASSETS_BASE_URI . 'js/moment.min.js', ['depends' => 'yii\web\YiiAsset','position' => 1]);
+$this->registerJsFile(ASSETS_BASE_URI . 'js/jiaoyimingxi.js', ['depends' => 'yii\web\YiiAsset','position' => 1]);
 frontend\assets\WapAsset::register($this);
 $this->registerJs('var total=' . $header['count'] . ';', 1);
 $this->registerJs('var size=' . $header['size'] . ';', 1);
 $this->registerJs('var tp=' . $header['tp'] . ';', 1);
 $this->registerJs('var cp=' . $header['cp'] . ';', 1);
 ?>
-<link rel="stylesheet" href="/css/base.css"/>
-<link rel="stylesheet" href="/css/jiaoyimingxi.css"/>
+<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/base.css"/>
+<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/jiaoyimingxi.css"/>
 <div class="container" style="background: #fff;padding-top: 10px;padding-bottom:10px;">
     <div class="row jiaoyi">
         <div class="col-xs-3">时间</div>

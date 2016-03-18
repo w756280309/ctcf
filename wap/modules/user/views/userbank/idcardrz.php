@@ -2,9 +2,9 @@
 $this->title="开通资金托管账户";
 $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','position' => 1]);
 ?>
-<link rel="stylesheet" href="/css/bind.css"/>
-<link rel="stylesheet" href="/css/chongzhi.css"/>
-<link rel="stylesheet" href="/css/base.css"/>
+<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/bind.css"/>
+<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/chongzhi.css"/>
+<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/base.css"/>
 
     <div style="height: 10px"></div>
     <!--交易密码-->

@@ -1,15 +1,15 @@
 <?php
 $this->title="提现";
-$this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','position' => 1]);
+$this->registerJsFile(ASSETS_BASE_URI.'js/common.js', ['depends' => 'yii\web\YiiAsset','position' => 1]);
 ?>
-<link rel="stylesheet" href="/css/bind.css"/>
-<link rel="stylesheet" href="/css/chongzhi.css"/>
-<link rel="stylesheet" href="/css/base.css"/>
-<link rel="stylesheet" href="/css/tixian.css"/>
+<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/bind.css"/>
+<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/chongzhi.css"/>
+<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/base.css"/>
+<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/tixian.css"/>
 
     <!--银行卡-->
     <div class="row bank-card" style="margin-bottom: 0!important;">
-        <div class="col-xs-2 bank-img"><img src="/images/bankicon/<?= $user_bank->bank_id ?>.png" alt=""/></div>
+        <div class="col-xs-2 bank-img"><img src="<?= ASSETS_BASE_URI ?>images/bankicon/<?= $user_bank->bank_id ?>.png" alt=""/></div>
         <div class="col-xs-7 bank-content">
             <div class="bank-content1"><?= $user_bank->bank_name ?></div>
             <div class="bank-content2">尾号<?= $user_bank->card_number?substr($user_bank->card_number, -4):"" ?> 储蓄卡</div>

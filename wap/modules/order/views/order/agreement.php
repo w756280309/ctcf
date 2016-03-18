@@ -1,11 +1,11 @@
 <?php
 $this->title="合同说明";
 
-$this->registerCssFile('/css/licai.css', ['depends' => 'frontend\assets\WapAsset']);
-$this->registerCssFile('/css/swiper.min.css', ['depends' => 'frontend\assets\WapAsset']);
-$this->registerJsFile('/js/jquery.js');
-$this->registerJsFile('/js/swiper.min.js');
-$this->registerJsFile('/js/licai.js');
+$this->registerCssFile(ASSETS_BASE_URI.'css/licai.css', ['depends' => 'frontend\assets\WapAsset']);
+$this->registerCssFile(ASSETS_BASE_URI.'css/swiper.min.css', ['depends' => 'frontend\assets\WapAsset']);
+$this->registerJsFile(ASSETS_BASE_URI.'js/jquery.js');
+$this->registerJsFile(ASSETS_BASE_URI.'js/swiper.min.js');
+$this->registerJsFile(ASSETS_BASE_URI.'js/licai.js');
 
 $switcherJs = <<<'JS'
 var $switcher = $('#legal-docs-switcher');

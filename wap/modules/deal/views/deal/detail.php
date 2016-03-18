@@ -31,7 +31,7 @@ $deal['money'] = rtrim(rtrim($deal['money'], '0'), '.');
                         </div>
                         <span class="qing">期限
                             <?php if (!empty($deal['kuanxianqi'])) { ?>
-                            <i>(包含<?= $deal['kuanxianqi'] ?>天宽限期)</i> <img src="/images/dina.png" alt="">
+                            <i>(包含<?= $deal['kuanxianqi'] ?>天宽限期)</i> <img src="<?= ASSETS_BASE_URI ?>images/dina.png" alt="">
                             <?php } ?>
                         </span>
                     </li>

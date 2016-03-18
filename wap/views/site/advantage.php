@@ -104,7 +104,7 @@
     <!-- 主体 -->
     <!-- banner  -->
     <div class="ico">
-        <img src="/images/system/ico.png" alt="国资平台，值得信赖" >
+        <img src="<?= ASSETS_BASE_URI ?>images/system/ico.png" alt="国资平台，值得信赖" >
     </div>
     <!-- 主体 -->
     <div class="about-content row">
@@ -127,7 +127,7 @@
         <p>联动优势全程资金托管，用户资金与平台隔离</p>
         <p>  资金交易仅限本人操作，资金出入安全有保障</p>
 
-        <div class="about-icon"><img src="/images/system/pay.png" alt="合作伙伴"></div>
+        <div class="about-icon"><img src="<?= ASSETS_BASE_URI ?>images/system/pay.png" alt="合作伙伴"></div>
     </div>
 
 </div>

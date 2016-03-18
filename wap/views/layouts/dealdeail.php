@@ -47,7 +47,7 @@ frontend\assets\WapAsset::register($this);
     <!--标的详情页头部 start-->
      <div class="container">
         <div class="row title-box">
-            <div class="col-xs-2 back"><img src="/images/back.png" alt=""/></div>
+            <div class="col-xs-2 back"><img src="<?= ASSETS_BASE_URI ?>images/back.png" alt=""/></div>
             <div class="col-xs-8 title"><?= $this->title ?></div>
             <div class="col-xs-2 back"></div>
         </div>

@@ -1,16 +1,16 @@
 <?php
 
 $this->title="绑定银行卡";
-$this->registerJsFile('/js/jquery.js', ['position' => 1]);
-$this->registerJsFile('/js/common.js', ['position' => 1]);
-$this->registerJsFile('/js/qpay.js', ['position' => 1]);
+$this->registerJsFile(ASSETS_BASE_URI . 'js/jquery.js', ['position' => 1]);
+$this->registerJsFile(ASSETS_BASE_URI . '/js/common.js', ['position' => 1]);
+$this->registerJsFile(ASSETS_BASE_URI . '/js/qpay.js', ['position' => 1]);
 
 ?>
-<link rel="stylesheet" href="/css/bind.css"/>
-<link rel="stylesheet" href="/css/base.css"/>
-<link rel="stylesheet" href="/css/swiper.min.css"/>
-<script src="/js/swiper.min.js"></script>
-<script src="/js/bind.js"></script>
+<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/bind.css"/>
+<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/base.css"/>
+<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/swiper.min.css"/>
+<script src="<?= ASSETS_BASE_URI ?>js/swiper.min.js"></script>
+<script src="<?= ASSETS_BASE_URI ?>js/bind.js"></script>
 <div class="row tishi">
     <div class="col-xs-12">*绑定的银行卡必须为本人身份证办理</div>
 </div>
@@ -21,14 +21,14 @@ $this->registerJsFile('/js/qpay.js', ['position' => 1]);
     <div class="col-xs-8">
         <div class="banks"></div>
         <div class="banks1">
-            <img src="/images/mask.png" alt="" class="mask-bank"/>
-            <div class="close"><img src="/images/close.png" alt=""/></div>
+            <img src="<?= ASSETS_BASE_URI ?>images/mask.png" alt="" class="mask-bank"/>
+            <div class="close"><img src="<?= ASSETS_BASE_URI ?>images/close.png" alt=""/></div>
             <div class="swiper-container">
                 <div class="swiper-wrapper" id='bank'>
                     <?php foreach($banklist as $bank): ?>
                     <div class="swiper-slide" data-id='<?= $bank->bankId ?>'>
                         <div>
-                            <img src="/images/bankicon/<?= $bank->bankId ?>.png" alt=""/>
+                            <img src="<?= ASSETS_BASE_URI ?>images/bankicon/<?= $bank->bankId ?>.png" alt=""/>
                             <span><?= $bank->bank->bankName ?></span>
                         </div>
                     </div>
@@ -56,7 +56,7 @@ $this->registerJsFile('/js/qpay.js', ['position' => 1]);
             <img class="selecter kaihu1"/>
             <span class="selecter kaihu1 kaihu2"></span>
         </div>
-        <div class="col-xs-2 xian"><img class='you' src="/images/jiantou.png" alt=""/></div>
+        <div class="col-xs-2 xian"><img class='you' src="<?= ASSETS_BASE_URI ?>images/jiantou.png" alt=""/></div>
     </div>
 
     <!--限额提醒-->
@@ -138,7 +138,7 @@ $this->registerJsFile('/js/qpay.js', ['position' => 1]);
                     $('.kaihu1').show();
                     $('.kaihu').hide();
                     $('.xian span')[0].innerHTML=result['bank_name'];
-                    $('.xian img')[0].src='/images/bankicon/'+result['bank_id']+'.png';
+                    $('.xian img')[0].src='<?= ASSETS_BASE_URI ?>images/bankicon/'+result['bank_id']+'.png';
                 }
 
             })
