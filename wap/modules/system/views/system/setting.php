@@ -1,7 +1,7 @@
 <?php
 $this->title="系统设置";
 
-$muri = Yii::$app->params['m_assets_base_uri'];
+$muri = ASSETS_BASE_URI;
 ?>
 <link rel="stylesheet" href="<?=$muri ?>css/base.css">
 <link rel="stylesheet" href="<?=$muri ?>css/setting.css">

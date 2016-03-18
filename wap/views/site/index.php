@@ -7,11 +7,11 @@ WapAsset::register($this);
 
 $this->title = '温都金服';
 $this->params['breadcrumbs'][] = $this->title;
-$this->registerJsFile('/js/TouchSlide.1.1.js', ['depends' => 'yii\web\JqueryAsset', 'position' => 1]);
-$this->registerJsFile('/js/jquery.classyloader.js', ['depends' => 'yii\web\JqueryAsset', 'position' => 1]);
-$this->registerJsFile('/js/index.js', ['depends' => 'yii\web\JqueryAsset', 'position' => 1]);
-$this->registerCssFile('/css/index.css', ['depends' => 'frontend\assets\WapAsset']);  //加载在depends之后
-$this->registerCssFile('/css/first.css', ['depends' => 'frontend\assets\WapAsset']);
+$this->registerJsFile(ASSETS_BASE_URI . '/js/TouchSlide.1.1.js', ['depends' => 'yii\web\JqueryAsset', 'position' => 1]);
+$this->registerJsFile(ASSETS_BASE_URI . '/js/jquery.classyloader.js', ['depends' => 'yii\web\JqueryAsset', 'position' => 1]);
+$this->registerJsFile(ASSETS_BASE_URI . '/js/index.js', ['depends' => 'yii\web\JqueryAsset', 'position' => 1]);
+$this->registerCssFile(ASSETS_BASE_URI . '/css/index.css', ['depends' => 'frontend\assets\WapAsset']);  //加载在depends之后
+$this->registerCssFile(ASSETS_BASE_URI . '/css/first.css', ['depends' => 'frontend\assets\WapAsset']);
 
 $dates = Yii::$app->functions->getDateDesc($deals->start_date);
 $rate = number_format($deals->finish_rate * 100, 0);
@@ -41,7 +41,7 @@ $rate = number_format($deals->finish_rate * 100, 0);
 <div class="container">
     <!--header-->
     <header class="row head-title">
-        <div class="logo col-xs-12 col-sm-12"><img src="images/logo.png" alt="logo" ></div>
+        <div class="logo col-xs-12 col-sm-12"><img src="<?= ASSETS_BASE_URI ?>images/logo.png" alt="logo" ></div>
         <div class="logo_tit">温州报业传媒旗下理财平台</div>
     </header>
 
@@ -49,7 +49,7 @@ $rate = number_format($deals->finish_rate * 100, 0);
         <div class="bd">
             <ul>
                 <?php foreach($adv as $val): ?>
-                    <li> <a class="pic" href="<?= $val['link'] ?>"><img src="/upload/adv/<?= $val['image'] ?>" alt=""></a> </li>
+                    <li> <a class="pic" href="<?= $val['link'] ?>"><img src="<?= ASSETS_BASE_URI ?>upload/adv/<?= $val['image'] ?>" alt=""></a> </li>
                 <?php endforeach; ?>
             </ul>
         </div>
@@ -151,9 +151,9 @@ $rate = number_format($deals->finish_rate * 100, 0);
         </div>
         <div style="clear: both;"></div>
         <div class="row margin-add">
-            <div class="col-xs-4 padding-clear"><a href="/deal/deal/index?cat=1"><img src="images/type1.png" alt="温银通" /></a> </div>
-            <div class="col-xs-4 padding-clear"><a href="/deal/deal/index?cat=2"><img src="images/type2.png" alt="温政盈" /></a> </div>
-            <div class="col-xs-4 padding-clear"><a href="/order/booking/detail?pid=1"><img src="images/type3.png" alt="温股投" /></a> </div>
+            <div class="col-xs-4 padding-clear"><a href="/deal/deal/index?cat=1"><img src="<?= ASSETS_BASE_URI ?>images/type1.png" alt="温银通" /></a> </div>
+            <div class="col-xs-4 padding-clear"><a href="/deal/deal/index?cat=2"><img src="<?= ASSETS_BASE_URI ?>images/type2.png" alt="温政盈" /></a> </div>
+            <div class="col-xs-4 padding-clear"><a href="/order/booking/detail?pid=1"><img src="<?= ASSETS_BASE_URI ?>images/type3.png" alt="温股投" /></a> </div>
         </div>
     </div>
     <!-- 理财区 end -->

@@ -97,5 +97,5 @@ return [
             'mer_recharge_notify_url' => 'https://mwjf.wenjf.com/user/bpay/brecharge/backend-notify',
         ],
     ],
-    'm_assets_base_uri' => "http://static.wenjf.com/m/",
+    'm_assets_base_uri' => "https://static.wenjf.com/m/",
 ];

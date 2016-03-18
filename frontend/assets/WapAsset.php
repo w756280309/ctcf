@@ -13,7 +13,7 @@ use yii\web\AssetBundle;
 class WapAsset extends AssetBundle
 {
     public $basePath = '@webroot';
-    public $baseUrl = 'http://static.wenjf.com/m/';
+    public $baseUrl = ASSETS_BASE_URI;
     public $css = [
         'css/bootstrap.min.css',
         'css/base.css',

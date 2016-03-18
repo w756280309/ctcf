@@ -16,5 +16,8 @@ $config = yii\helpers\ArrayHelper::merge(
 );
 
 $application = new yii\web\Application($config);
+if (!defined('ASSETS_BASE_URI')) {
+    define('ASSETS_BASE_URI', Yii::$app->params['m_assets_base_uri']);
+}
 require(__DIR__ . '/../../common/config/di.php');
 $application->run();
