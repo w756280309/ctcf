@@ -7,21 +7,30 @@ use app\controllers\BaseController;
 use yii\web\Response;
 use common\core\UserAccountCore;
 use common\models\user\MoneyRecord;
+use common\models\order\OnlineOrder;
+use common\models\product\OnlineProduct;
+use common\models\order\OnlineRepaymentPlan;
 use common\service\OrderService;
 use common\service\BankService;
 use common\lib\bchelp\BcRound;
 
 class UserController extends BaseController
 {
+    public function init()
+    {
+        parent::init();
+        $this->layout = '@app/modules/order/views/layouts/buy';
+    }
+
     /**
      * 账户中心页
      */
     public function actionIndex()
     {
+        $this->layout = 'account';
         $bc = new BcRound();
         bcscale(14);
         $user = $this->user;
-        $this->layout = 'account';
         $uacore = new UserAccountCore();
         $ua = $this->user->lendAccount;
         $leijishouyi = $uacore->getTotalProfit($user->id);//累计收益
@@ -39,7 +48,6 @@ class UserController extends BaseController
      */
     public function actionMingxi($page = 1, $size = 10)
     {
-        $this->layout = '@app/modules/order/views/layouts/buy';
         $data = MoneyRecord::find()->where(['uid' => $this->user->id])
             ->andWhere(['type' => MoneyRecord::getLenderMrType()])
             ->select('created_at,type,in_money,out_money,balance')
@@ -60,9 +68,14 @@ class UserController extends BaseController
         return $this->render('mingxi', ['model' => $model, 'header' => $pg->jsonSerialize()]);
     }
 
+    /**
+     * 我的理财页面
+     * @param type $type
+     * @param type $page
+     * @return type
+     */
     public function actionMyorder($type = null, $page = 1)
     {
-        $this->layout = '@app/modules/user/views/layouts/myorder';
         $os = new OrderService();
         $list = $os->getUserOrderList($this->user->id, $type, $page);
         if (Yii::$app->request->isAjax) {
@@ -72,5 +85,39 @@ class UserController extends BaseController
         }
 
         return $this->render('order', ['list' => $list, 'type' => $type, 'profitFund' => $this->user->lendAccount->profit_balance]);
+    }
+
+    public function actionOrderdetail($id)
+    {
+        if (empty($id)) {
+            throw new \yii\web\NotFoundHttpException('The argument is not existed.');
+        }
+
+        $deal = OnlineOrder::findOne($id);
+        $product = OnlineProduct::findOne($deal->online_pid);
+
+        $profit = null;
+        if (!in_array($product->status, [2, 3, 7])) {
+            $profit = OnlineRepaymentPlan::getTotalLixi($product, $deal);
+        }
+
+        $plan = null;
+        $hkDate = null;
+        if (in_array($product->status, [OnlineProduct::STATUS_HUAN, OnlineProduct::STATUS_OVER])) {
+            $plan = OnlineRepaymentPlan::findAll(['online_pid' => $deal->online_pid, 'uid' => $this->user->id, 'order_id' => $deal->id]);
+
+            if ($plan) {
+                $hkDate = end($plan)['refund_time'];
+                $flag = 0;
+                foreach($plan as $val) {
+                    if (0 === $flag && OnlineRepaymentPlan::STATUS_WEIHUAN === $val['status']) {
+                        $hkDate = $val['refund_time'];
+                        $flag = 1;
+                    }
+                }
+            }
+        }
+
+        return $this->render('order_detail', ['deal' => $deal, 'product' => $product, 'plan' => $plan, 'profit' => $profit, 'hkDate' => $hkDate]);
     }
 }

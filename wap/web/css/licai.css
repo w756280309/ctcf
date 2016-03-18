@@ -51,6 +51,10 @@
     background: url('../images/licai-hui.png') no-repeat 0 center;
     color: #d4d4d4;
 }
+.column-title-rg2 {
+    background: url('../images/licai-jian.png') no-repeat 0 center;
+    color: #f85158;
+}
 .loan-info {
     font-size: 14px;
     padding-top: 1em;

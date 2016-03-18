@@ -88,6 +88,13 @@ class OrderService
             } else {
                 $query[$key]['profit'] = OnlineRepaymentPlan::getTotalLixi(new OnlineProduct(['refund_method' => $dat['prm'], 'expires' => $dat['expiress'], 'yield_rate' => $dat['pyr']]), new OnlineOrder(['order_money' => $dat['order_money']]));
             }
+            if (!in_array($dat['pstatus'], [OnlineProduct::STATUS_HUAN, OnlineProduct::STATUS_OVER])) {
+                $query[$key]['classname'] = 'column-title-rg';
+            } elseif (OnlineProduct::STATUS_HUAN === (int) $dat['pstatus']) {
+                $query[$key]['classname'] = 'column-title-rg2';
+            } else {
+                $query[$key]['classname'] = 'column-title-rg1';
+            }
         }
 
         return ['header' => $header, 'data' => $query, 'code' => $code, 'message' => $message, 'totalFund' => $totalFund, 'daihuan' => $daihuan];

@@ -1,9 +1,9 @@
 <?php
 $this->title="我的理财";
 ?>
-<link rel="stylesheet" href="/css/bind.css"/>
-<link rel="stylesheet" href="/css/licai.css"/>
-<link rel="stylesheet" href="/css/swiper.min.css">
+<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/bind.css"/>
+<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/licai.css"/>
+<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/swiper.min.css">
 <script type="text/javascript">
     var total='<?=$list['header']['count'] ?>';
     var size='<?=$list['header']['size'] ?>';
@@ -11,22 +11,22 @@ $this->title="我的理财";
     var cp='<?=$list['header']['cp'] ?>';
     var ctype='<?=(empty($type)?0:$type) ?>';
     </script>
-<script src="/js/jquery.js"></script>
-<script src="/js/swiper.min.js"></script>
-<script src="/js/licai.js"></script>
+<script src="<?= ASSETS_BASE_URI ?>js/jquery.js"></script>
+<script src="<?= ASSETS_BASE_URI ?>js/swiper.min.js"></script>
+<script src="<?= ASSETS_BASE_URI ?>js/licai.js"></script>
 
     <!-- Swiper -->
     <div class="row" id='licai-title'>
     	<div class="col-xs-4">
-    		<div class="licai-title1"><img src="/images/licaiGang.png" alt=""> 累计投资金额</div>
+    		<div class="licai-title1"><img src="<?= ASSETS_BASE_URI ?>images/licaiGang.png" alt=""> 累计投资金额</div>
                 <div class="licai-money"><?= doubleval($list['totalFund']) ?><span>元</span></div>
     	</div>
     	<div class="col-xs-4">
-    		<div class="licai-title2"><img src="/images/licaiMoney.png" alt=""> 累计获得收益</div>
+    		<div class="licai-title2"><img src="<?= ASSETS_BASE_URI ?>images/licaiMoney.png" alt=""> 累计获得收益</div>
                 <div class="licai-money"><?= doubleval($profitFund) ?><span>元</span></div>
     	</div>
     	<div class="col-xs-4">
-    		<div class="licai-title3"><img src="/images/licaiHead.png" alt=""> 待还清项目</div>
+    		<div class="licai-title3"><img src="<?= ASSETS_BASE_URI ?>images/licaiHead.png" alt=""> 待还清项目</div>
                 <div class="licai-money"><?= $list['daihuan'] ?><span>个</span></div>
     	</div>
     </div>
@@ -35,10 +35,10 @@ $this->title="我的理财";
     </div>
 
 <?php if($list['data']) { foreach ($list['data'] as $o) { ?>
-<div class="loan-box">
-    <div class="loan-title" onclick="location.href='/deal/deal/detail?sn=<?= $o['psn'] ?>'">
+<div class="loan-box" onclick="location.href='/user/user/orderdetail?id=<?= $o['id'] ?>'">
+    <div class="loan-title">
         <div class="title-overflow"><?=$o['title']?></div>
-        <div class="loan-status <?= in_array($o['pstatus'], [1,2])?"column-title-rg":"column-title-rg1";?>"><?=$o['statusval']?></div>
+        <div class="loan-status <?= $o['classname'] ?>"><?=$o['statusval']?></div>
     </div>
 
     <div class="row loan-info">

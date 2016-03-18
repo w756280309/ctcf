@@ -81,11 +81,10 @@ $(function(){
                                 var html = "";
                                 $.each(data.data, function(i, item) {
                                     var pstatus = item.pstatus;
-                                    var className = (pstatus == 1 || pstatus == 2) ? "column-title-rg" : "column-title-rg1";
                                     var profitDes = (pstatus == 6) ? "实际收益" : "预期收益";
-                                    html += '<div class="loan-box">' +
-                                            '<div class="loan-title" onclick="location.href=\'/deal/deal/detail?sn='+ item.psn +'\'">' + item.title +
-                                            '<div class="loan-status '+ className +'">'+ item.statusval +'</div></div>' +
+                                    html += '<div class="loan-box" onclick="location.href=\'/user/user/orderdetail?id='+ item.id +'\'">' +
+                                            '<div class="loan-title"><div class="title-overflow">' + item.title +
+                                            '</div><div class="loan-status '+ item.classname +'">'+ item.statusval +'</div></div>' +
                                             '<div class="row loan-info">' +
                                             '<div class="col-xs-8 loan-info1">' +
                                             '<p><span class="info-label">认购金额：</span><span class="info-val">'+ item.order_money +'元</span></p>';
