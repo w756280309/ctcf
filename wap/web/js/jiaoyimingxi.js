@@ -32,15 +32,16 @@ $(function(){
                                 var html = "";
                                 $.each(data.data, function (i, item) {
                                     var money = (item.in_money > item.out_money) ? ('+' + item.in_money) : ('-' +item.out_money);
+                                    var className = (item.in_money > item.out_money) ? 'red' : 'green';
                                     var createdAt = moment(item.created_at*1000);
-                                    html += '<div style="background: #fff">'+
-                                        '<div class="clear"></div><div class="row md-height border-bottom"><div class="col-xs-3 data">'+
-                                        '<span class="data1">'+createdAt.format('YYYY-MM-DD')+'</span>'+
-                                        '<span class="data2">'+createdAt.format('HH:mm:ss')+'</span>'+
-                                        '</div>'+
-                                        '<div class="col-xs-3 revenue">'+mingxitype[item.type]+'</div>'+
-                                        '<div class="col-xs-3 money">'+money+'</div>'+
-                                        '<div class="col-xs-3 revenue">'+item.balance+'</div></div></div>';
+                                    html += '<div class="clear"></div>'+
+                                        '<div  class="row jiaoyi"><div class="col-xs-1"></div><div class="col-xs-10"><div class="col-xs-6 lf">'+
+                                        '<p  class="way">'+mingxitype[item.type]+'</p>'+
+                                        '<p class="revenue">余额：<span>'+item.balance+'元</span></p></div>'+
+                                        '<div class="col-xs-6 rg"><p  class="money '+ className +'" >'+ money +'</p>'+
+                                        '<p  class="date" ><span class="data1">'+createdAt.format('YYYY-MM-DD')+'</span> '+
+                                        '<span class="data2">'+createdAt.format('HH:mm:ss')+'</span></p></div>'+
+                                        '</div><div class="col-xs-1"></div></div>';
                                 });
 
                                 $('.load').before(html);

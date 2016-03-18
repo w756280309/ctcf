@@ -15,25 +15,18 @@ $this->registerJs('var cp=' . $header['cp'] . ';', 1);
 ?>
 <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/base.css"/>
 <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/jiaoyimingxi.css"/>
-<div class="container" style="background: #fff;padding-top: 10px;padding-bottom:10px;">
-    <div class="row jiaoyi">
-        <div class="col-xs-3">时间</div>
-        <div class="col-xs-3">用途</div>
-        <div class="col-xs-3">金额(元)</div>
-        <div class="col-xs-3">账户余额(元)</div>
-    </div>
+<div class="container">
     <?php if ($model) {
-        foreach ($model as $val): ?>
-            <div class="clear"></div>
-            <div class="row md-height border-bottom">
-                <div class="col-xs-3 data">
-                    <span class="data1"><?= date('Y-m-d', $val['created_at']) ?></span>
-                    <span class="data2"><?= date('H:i:s', $val['created_at']) ?></span>
-                </div>
-                <div class="col-xs-3 revenue"><?= Yii::$app->params['mingxi'][$val['type']] ?></div>
-                <div class="col-xs-3 money"><?= ($val['in_money']>$val['out_money'])?('+'.$val['in_money']):('-'.$val['out_money']) ?></div>
-                <div class="col-xs-3 revenue"><?= $val['balance'] ?></div>
+    foreach ($model as $val): ?>
+        <div class="clear"></div>
+        <div  class="row jiaoyi">
+            <div class="col-xs-1"></div>
+            <div class="col-xs-10">
+                <div class="col-xs-6 lf"><p  class="way"><?= Yii::$app->params['mingxi'][$val['type']] ?></p><p class="revenue">余额：<span><?= $val['balance'] ?>元</span></p></div>
+                <div class="col-xs-6 rg"><p  class="money <?= ($val['in_money'] > $val['out_money']) ? 'red' : 'green' ?>" ><?= ($val['in_money']>$val['out_money'])?('+'.$val['in_money']):('-'.$val['out_money']) ?></p><p  class="date" ><span class="data1"><?= date('Y-m-d', $val['created_at']) ?></span>  <span class="data2"><?= date('H:i:s', $val['created_at']) ?></span></p></div>
             </div>
+            <div class="col-xs-1"></div>
+        </div>
         <?php endforeach; ?>
         <div class="load" style="display:block;"></div>
     <?php } else { ?>
