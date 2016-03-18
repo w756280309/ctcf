@@ -189,3 +189,9 @@
     color:#9fa0a0;
     margin-top: 10px;
 }
+.title-overflow {
+    width: 60%;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}

@@ -37,7 +37,7 @@ $this->title="我的理财";
 <?php if($list['data']) { foreach ($list['data'] as $o) { ?>
 <div class="loan-box">
     <div class="loan-title" onclick="location.href='/deal/deal/detail?sn=<?= $o['psn'] ?>'">
-        <?=$o['title']?>
+        <div class="title-overflow"><?=$o['title']?></div>
         <div class="loan-status <?= in_array($o['pstatus'], [1,2])?"column-title-rg":"column-title-rg1";?>"><?=$o['statusval']?></div>
     </div>
 
