@@ -231,4 +231,14 @@ class UserbankController extends BaseController
         $this->layout = '@app/modules/user/views/layouts/notify';
         return $this->render('drawres', ['ret' => $ret]);
     }
+    
+    /**
+     * 开户结果页
+     * @param type $ret
+     */
+    public function actionRzres($ret = 'error')
+    {
+        $this->layout = '@app/modules/user/views/layouts/notify';
+        return $this->render('rzres', ['ret' => $ret]);
+    }
 }

@@ -106,6 +106,26 @@ class Client
     }
 
     /**
+     * 4.2.7 签约免密协议
+     * 开户成功后签约免密投资协议.
+     *
+     * @param $epayUserId 用户uid
+     */
+    public function openmianmi($epayUserId)
+    {
+        $data = [
+            'service' => 'ptp_mer_bind_agreement',
+            'ret_url' => $this->clientOption['mianmi_ret_url'],
+            'notify_url' => $this->clientOption['mianmi_url'],
+            'sourceV' => 'HTML5',
+            'user_id' => $epayUserId,
+            'user_bind_agreement_list' => "ZTBB0G00",//无密投资
+        ];
+        $params = $this->buildQuery($data);
+
+        return $this->apiUrl.'?'.$params;
+    }
+    /**
      * 4.5.2 查询用户的账号和协议签署情况.
      *
      * @param string $epayUserId 在联动一侧的用户ID

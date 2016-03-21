@@ -61,6 +61,11 @@ class BindingController extends BaseController
         return $this->createErrorResponse($acct_model);
     }
 
+    public function actionUmpmianmi()
+    {
+        return $this->redirect(Yii::$container->get('ump')->openmianmi($this->user->epayUser->epayUserId));
+    }
+
     private function createErrorResponse($modelOrMessage = null)
     {
         Yii::$app->response->statusCode = 400;
