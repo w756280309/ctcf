@@ -554,8 +554,6 @@ class Functions extends Component
     public function removeWhitespace($str)
     {
         $whitespace = array(' ', '　', "\t", "\n", "\r");
-        $replacestr = array('', '', '', '', '');
-
-        return str_replace($whitespace, $replacestr, $str);
+        return str_replace($whitespace, "", $str);
     }
 }
