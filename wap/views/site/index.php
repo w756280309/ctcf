@@ -35,6 +35,15 @@ $rate = number_format($deals->finish_rate * 100, 0);
             background: #f7f8f8;
         }
     </style>
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+          var hm = document.createElement("script");
+          hm.src = "//hm.baidu.com/hm.js?d2417f8d221ffd4b883d5e257e21736c";
+          var s = document.getElementsByTagName("script")[0];
+          s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
 </head>
 <body>
 <?php $this->beginBody() ?>
