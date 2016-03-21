@@ -462,30 +462,6 @@ class ProductonlineController extends BaseController
     }
 
     /**
-     * 提前结束募集时间.
-     */
-    public function actionEndProduct()   //?????
-    {
-        $res = 0;
-        $id = Yii::$app->request->post('pid');
-        Yii::$app->response->format = Response::FORMAT_JSON;
-
-        if ($id) {
-            $model = OnlineProduct::findOne($id);
-            $model->scenario = 'status';
-
-            if ($model->online_status == OnlineProduct::STATUS_ONLINE && $model->status == OnlineProduct::STATUS_NOW) {
-                $model->status = OnlineProduct::STATUS_FOUND;
-                $model->sort = OnlineProduct::SORT_FOUND;
-                $model->full_time = time();
-                $res = $model->save();
-            }
-        }
-
-        return ['res' => $res, 'msg' => '', 'data' => ''];
-    }
-
-    /**
      * 股权投资列表页.
      */
     public function actionBookinglist()
@@ -518,6 +494,10 @@ class ProductonlineController extends BaseController
         $deal = OnlineProduct::findOne($dealId);
         if (!$deal) {
             throw new \yii\web\NotFoundHttpException('The deal info is not existed.');
+        }
+
+        if (0 === $deal->isPrivate) {
+            return ['code' => 0, 'message' => '不允许推荐定向标'];
         }
 
         if (!empty($deal->recommendTime)) {
