@@ -24,8 +24,7 @@ class PosController extends Controller
         $data = Yii::$app->request->get();
         TradeLog::initLog(2, $data, $data['sign'])->save();
         if (
-                1 == 1
-            //Yii::$container->get('ump')->verifySign($data)
+            Yii::$container->get('ump')->verifySign($data)
             && '0000' === $data['ret_code']
             && 'recharge_notify' === $data['service']
         ) {
