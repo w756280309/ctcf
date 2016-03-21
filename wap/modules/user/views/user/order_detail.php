@@ -14,10 +14,22 @@ $this->registerCssFile(ASSETS_BASE_URI .'css/touzixiangqing.css', ['depends' => 
                 <div class="invest-title">
                     <div class="invest-left"><?= $product->title ?></div>
                     <div class="invest-right">
+                        <?php if (5 === $product->status) { ?>
+                        <!--还款中-已还清-募集中-文字颜色-->
+                        <div class="invest-right-title invest-orange"><?= Yii::$app->params['deal_status'][$product->status] ?></div>
+                        <!--还款中-已还清-募集中-图片-->
+                        <img src="<?= ASSETS_BASE_URI ?>images/licai-huang.png" alt="">
+                        <?php } elseif (6 === $product->status) { ?>
+                        <!--还款中-已还清-募集中-文字颜色-->
+                        <div class="invest-right-title invest-gray"><?= Yii::$app->params['deal_status'][$product->status] ?></div>
+                        <!--还款中-已还清-募集中-图片-->
+                        <img src="<?= ASSETS_BASE_URI ?>images/licai-hui.png" alt="">
+                        <?php } else { ?>
                         <!--还款中-已还清-募集中-文字颜色-->
                         <div class="invest-right-title invest-red"><?= Yii::$app->params['deal_status'][$product->status] ?></div>
                         <!--还款中-已还清-募集中-图片-->
                         <img src="<?= ASSETS_BASE_URI ?>images/licai-jian.png" alt="">
+                        <?php } ?>
                     </div>
                 </div>
             </div>
