@@ -20,6 +20,7 @@ class LenderStatsController extends Controller
                 'UserID',
                 'SignupTime',
                 'isEpay',
+                'isMianmi',
                 'isBingCard',
                 'RechargeSuccFund(yuan)',
                 'RechargeSuccNum',
@@ -69,6 +70,7 @@ class LenderStatsController extends Controller
             $data[$key]['id'] = $val['id'];
             $data[$key]['created_at'] = date('Y-m-d H:i:s', $val['created_at']);
             $data[$key]['idcard_status'] = $val['idcard_status'];
+            $data[$key]['mianmiStatus'] = $val['mianmiStatus'];
 
             if (null === $val['bid']) {
                 $data[$key]['bid'] = 0;
@@ -89,7 +91,7 @@ class LenderStatsController extends Controller
 
             $data[$key]['dtotalFund'] = 0;
             $data[$key]['dtotalNum'] = 0;
-            if (1 === (int) $val['idcard_status'] && null !== $val['bid'] && $draw) {
+            if (null !== $val['bid'] && $draw) {
                 foreach ($draw as $v) {
                     if ($val['id'] === $v['uid']) {
                         $data[$key]['dtotalFund'] = $v['dtotalFund'];
@@ -100,7 +102,7 @@ class LenderStatsController extends Controller
 
             $data[$key]['ototalFund'] = 0;
             $data[$key]['ototalNum'] = 0;
-            if (1 === (int) $val['idcard_status'] && null !== $val['bid'] && $order) {
+            if (null !== $val['bid'] && $order) {
                 foreach ($order as $v) {
                     if ($val['id'] === $v['uid']) {
                         $data[$key]['ototalFund'] = $v['ototalFund'];
