@@ -110,22 +110,17 @@ class UserController extends BaseController
     /**
      * 查看用户详情.
      */
-    public function actionDetail($id = null, $type = null)
+    public function actionDetail($id, $type)
     {
-        if ($type == User::USER_TYPE_PERSONAL) {
-            $select = 'usercode,real_name,mobile,created_at,idcard,updated_at,last_login,login_from,idcard_status';
-        } else {
-            $select = 'usercode,org_name,tel,created_at,real_name,idcard,law_mobile,mobile,law_master,law_master_idcard,business_licence,org_code,shui_code,updated_at';
-        }
-        $userInfo = User::find()->where(['id' => $id])->select($select)->one();
+        $userInfo = User::findOne($id);
 
         $uabc = new UserAccountBackendCore();
         $recharge = $uabc->getRechargeSuccess($id);
         $draw = $uabc->getDrawSuccess($id);
-
         $ua = $uabc->getUserAccount($id);
         $userLiCai = $ua->investment_balance; //理财金额
-        if (Yii::$app->request->get('type') == User::USER_TYPE_PERSONAL) {
+
+        if (User::USER_TYPE_PERSONAL === (int) $type) {
             $rcMax = RechargeRecord::find()->where(['status' => RechargeRecord::STATUS_YES, 'uid' => $id])->max('updated_at');
             $order = $uabc->getOrderSuccess($id);
             $product = $ret = ['count' => 0, 'sum' => 0];
@@ -154,7 +149,6 @@ class UserController extends BaseController
                 'rzMoneyTotal' => $product['sum'],
                 'ret' => $ret,
                 'userinfo' => $userInfo,
-                'id' => $id,
         ]);
     }
 

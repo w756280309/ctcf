@@ -15,27 +15,27 @@ use common\models\user\User;
             <ul class="breadcrumb">
                     <li>
                         <i class="icon-home"></i>
-                        <a href="/user/user/<?=Yii::$app->request->get('type')==2?'listr':'listt'?>">会员管理</a>
+                        <a href="/user/user/<?= (User::USER_TYPE_ORG === (int) $userinfo->type) ? 'listr' : 'listt' ?>">会员管理</a>
                         <i class="icon-angle-right"></i>
                     </li>
-                    <?php if($type=Yii::$app->request->get('type')==User::USER_TYPE_PERSONAL){?>
+                    <?php if (User::USER_TYPE_PERSONAL === (int) $userinfo->type) {?>
                         <li>
                             <a href="/user/user/listt">投资会员</a>
                             <i class="icon-angle-right"></i>
                         </li>
-                    <?php }else{?>
+                    <?php } else { ?>
                         <li>
                             <a href="/user/user/listr">融资会员</a>
                             <i class="icon-angle-right"></i>
                         </li>
-                    <?php }?>
-                        <li>
-                            <a href="javascript:void(0)">会员列表</a>
-                        </li>
+                    <?php } ?>
+                    <li>
+                        <a href="javascript:void(0)">会员列表</a>
+                    </li>
             </ul>
         </div>
 
-    <?php if(Yii::$app->request->get('type')==User::USER_TYPE_PERSONAL){?>
+    <?php if (User::USER_TYPE_PERSONAL === (int) $userinfo->type) { ?>
         <div class="portlet-body">
             <div class="detail_font">会员账户详情</div>
             <ul class="breadcrumb_detail">
@@ -50,16 +50,21 @@ use common\models\user\User;
             </ul>
             <ul class="breadcrumb_detail">
                 <li><span>身份证号</span><?=$userinfo['idcard']?></li>
-                <li><span>实名认证</span><?php
-//                      echo $userinfo['idcard_status'];
-                    if($userinfo['idcard_status']=='-1'){
+                <li><span>实名认证</span>
+                    <?php
+                        if($userinfo['idcard_status']=='-1'){
                             echo "未通过";
                         }else if ($userinfo['idcard_status']=='1') {
                             echo "验证通过";
                         }else{
                             echo "未验证";
                         }
-                ?></li>
+                    ?>
+                </li>
+            </ul>
+            <ul class="breadcrumb_detail">
+                <li><span>免密支付</span><?= $userinfo['mianmiStatus'] ? "已开通" : "未开通" ?></li>
+                <li><span>绑定银行卡</span><?= $userinfo->qpay ? "已开通" : "未开通" ?></li>
             </ul>
             <ul class="breadcrumb_detail">
                 <li><span>注册渠道</span>
@@ -85,17 +90,17 @@ use common\models\user\User;
             <ul class="breadcrumb_detail">
                 <li><span>充值次数（次）</span><?=$czNum?></li>
                 <li><span>充值总计（元）</span><?php echo empty($czMoneyTotal)?'0.00':$czMoneyTotal?></li>
-                <li><span>充值流水明细</span><a href="/user/rechargerecord/detail?id=<?=$_GET['id']?>&type=<?=Yii::$app->request->get('type');?>">查看</a>&nbsp;</li>
+                <li><span>充值流水明细</span><a href="/user/rechargerecord/detail?id=<?= $userinfo->id ?>&type=<?= $userinfo->type ?>">查看</a>&nbsp;</li>
             </ul>
             <ul class="breadcrumb_detail">
                 <li><span>提现次数（次）</span><?=$txNum?></li>
                 <li><span>提现总计（元）</span><?php echo empty($txMoneyTotal)?'0.00':$txMoneyTotal?></li>
-                <li><span>提现流水明细</span><a href="/user/drawrecord/detail?id=<?=$_GET['id']?>&type=<?=Yii::$app->request->get('type');?>">查看</a>&nbsp;</li>
+                <li><span>提现流水明细</span><a href="/user/drawrecord/detail?id=<?= $userinfo->id ?>&type=<?= $userinfo->type ?>">查看</a>&nbsp;</li>
             </ul>
             <ul class="breadcrumb_detail">
                 <li><span>投资次数（次）</span><?=$tzNum?></li>
                 <li><span>投资总计（元）</span><?php echo empty($tzMoneyTotal)?'0.00':$tzMoneyTotal?></li>
-                <li><span>投资流水明细</span><a href="/order/onlineorder/detailt?id=<?=$_GET['id']?>&type=<?=Yii::$app->request->get('type')?>">查看</li>
+                <li><span>投资流水明细</span><a href="/order/onlineorder/detailt?id=<?= $userinfo->id ?>&type=<?= $userinfo->type ?>">查看</li>
             </ul>
             <hr />
         </div>
@@ -149,17 +154,17 @@ use common\models\user\User;
             <ul class="breadcrumb_detail">
                 <li><span>充值次数（次）</span><?=$czNum?></li>
                 <li><span>充值总计（元）</span><?=$czMoneyTotal ?></li>
-                <li><span>充值流水明细</span><a href="/user/rechargerecord/detail?id=<?=$_GET['id']?>&type=<?=Yii::$app->request->get('type');?>">查看</a>&nbsp;<a href="/user/rechargerecord/edit?id=<?=Yii::$app->request->get('id')?>&type=<?=Yii::$app->request->get('type')?>" hidden="true">数据录入</a></li>
+                <li><span>充值流水明细</span><a href="/user/rechargerecord/detail?id=<?= $userinfo->id ?>&type=<?= $userinfo->type ?>">查看</a></li>
             </ul>
             <ul class="breadcrumb_detail">
                 <li><span>提现次数（次）</span><?=$txNum?></li>
                 <li><span>提现总计（元）</span><?= $txMoneyTotal?></li>
-                <li><span>提现流水明细</span><a href="/user/drawrecord/detail?id=<?=$_GET['id']?>&type=<?=Yii::$app->request->get('type');?>">查看</a>&nbsp;<a href="/user/drawrecord/edit?id=<?=Yii::$app->request->get('id')?>&type=<?=Yii::$app->request->get('type')?>" hidden="true">数据录入</a></li>
+                <li><span>提现流水明细</span><a href="/user/drawrecord/detail?id=<?= $userinfo->id ?>&type=<?= $userinfo->type ?>">查看</a></li>
             </ul>
             <ul class="breadcrumb_detail">
                 <li><span>融资成功次数（次）</span><?=$rzNum?></li>
                 <li><span>融资成功总计（元）</span><?php echo $rzMoneyTotal ?></li>
-                <li><span>融资明细</span><a href="/order/onlineorder/detailr?id=<?=$_GET['id']?>&type=<?=Yii::$app->request->get('type')?>">查看</a></li>
+                <li><span>融资明细</span><a href="/order/onlineorder/detailr?id=<?= $userinfo->id ?>&type=<?= $userinfo->type ?>">查看</a></li>
             </ul>
             <hr />
         </div>
