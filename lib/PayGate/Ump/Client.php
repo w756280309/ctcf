@@ -410,6 +410,30 @@ class Client
     }
 
     /**
+     * 4.3.5 标的转账[无密]
+     * 用户投标.
+     *
+     * @param OrderTxInterface $ord
+     */
+    public function orderNopass(OrderTxInterface $ord)
+    {
+        $data = [
+            'service' => 'project_transfer_nopwd',
+            'notify_url' => $this->clientOption['order_notify_url'],
+            'order_id' => $ord->getTxSn(),
+            'mer_date' => date('Ymd', $ord->getTxDate()),
+            'project_id' => $ord->getLoanId(),
+            'serv_type' => '01',
+            'trans_action' => '01',
+            'partic_type' => '01',
+            'partic_acc_type' => '01',
+            'partic_user_id' => $ord->getEpayUserId(),
+            'amount' => $ord->getAmount() * 100,
+        ];
+        return $this->doRequest($data);
+    }    
+    
+    /**
      * 4.3.3 标的转账【由标的账户转到借款人同步请求】.
      *
      * @param LoanFkInterface $fk
