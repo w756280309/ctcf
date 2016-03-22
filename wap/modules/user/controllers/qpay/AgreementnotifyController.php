@@ -18,7 +18,6 @@ class AgreementnotifyController extends Controller
 {
     /**
      * 前台通知地址
-     * http://1.202.51.191:8001/user/qpay/agreementnotify/frontend?mer_id=7050209&ret_code=0000&ret_msg=%E6%88%90%E5%8A%9F&service=mer_bind_agreement_notify&sign_type=RSA&user_bind_agreement_list=ZTBB0G00%2C0000%2C%E6%88%90%E5%8A%9F&user_id=UB201603221116410000000000049168&version=1.0&sign=LkdqyitjSTUzq8IucALZO2%2BVGadykY3YTIqTtNiouMp%2FmmHjOlyLBQRTZB32tQ9u18jKuajsA8Itlk7R5woYX%2FwlM64MmXTjYW1oZalDl6GvteBj85%2B1uPzRjtqmy5ZirDn5yiw8Cq5TRpEA2cK%2BNgSY1agPdVGJnIonCE2B%2BiI%3D
      */
     public function actionFrontend()
     {
@@ -62,7 +61,7 @@ class AgreementnotifyController extends Controller
 
     public static function processing($data)
     {
-        //TradeLog::initLog(2, $data, $data['sign'])->save();
+        TradeLog::initLog(2, $data, $data['sign'])->save();
         if (
             Yii::$container->get('ump')->verifySign($data)
             && '0000' === $data['ret_code']
