@@ -29,6 +29,7 @@ return [
                 'lenders/<id:\d+>/ump' => 'v1/lender/ump',
                 'ordtx/<type:\d+>/<id:\d+>/ump' => 'v1/ordertx/ump',
                 'pos/notify' => 'v1/pos/notify',
+                'lenderstats' => 'v1/lender-stats/export',
             ],
         ],
     ],
