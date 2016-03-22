@@ -2,6 +2,7 @@
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 use yii\captcha\Captcha;
+use common\view\BaiduTongjiHelper;
 
 /* @var $this yii\web\View */
 /* @var $form yii\bootstrap\ActiveForm */
@@ -10,6 +11,9 @@ use yii\captcha\Captcha;
 $this->title = 'Signup';
 $this->params['breadcrumbs'][] = $this->title;
 frontend\assets\WapAsset::register($this);
+
+BaiduTongjiHelper::registerTo($this, BaiduTongjiHelper::WAP_KEY);
+
 ?>
 <?php $this->beginPage() ?>
     <!DOCTYPE html>
@@ -26,15 +30,6 @@ frontend\assets\WapAsset::register($this);
         <script type="text/javascript" src="<?= ASSETS_BASE_URI ?>js/common.js"></script>
         <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/base.css">
         <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/loginsign.css">
-        <script>
-            var _hmt = _hmt || [];
-            (function() {
-              var hm = document.createElement("script");
-              hm.src = "//hm.baidu.com/hm.js?d2417f8d221ffd4b883d5e257e21736c";
-              var s = document.getElementsByTagName("script")[0];
-              s.parentNode.insertBefore(hm, s);
-            })();
-        </script>
     </head>
     <body>
     <?php $this->beginBody() ?>

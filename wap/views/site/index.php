@@ -2,6 +2,7 @@
 use yii\helpers\Html;
 use frontend\assets\WapAsset;
 use common\models\product\OnlineProduct;
+use common\view\BaiduTongjiHelper;
 
 WapAsset::register($this);
 
@@ -12,6 +13,8 @@ $this->registerJsFile(ASSETS_BASE_URI . 'js/jquery.classyloader.js', ['depends' 
 $this->registerJsFile(ASSETS_BASE_URI . 'js/index.js', ['depends' => 'yii\web\JqueryAsset', 'position' => 1]);
 $this->registerCssFile(ASSETS_BASE_URI . 'css/index.css', ['depends' => 'frontend\assets\WapAsset']);  //加载在depends之后
 $this->registerCssFile(ASSETS_BASE_URI . 'css/first.css', ['depends' => 'frontend\assets\WapAsset']);
+
+BaiduTongjiHelper::registerTo($this, BaiduTongjiHelper::WAP_KEY);
 
 $dates = Yii::$app->functions->getDateDesc($deals->start_date);
 $rate = number_format($deals->finish_rate * 100, 0);
@@ -35,15 +38,6 @@ $rate = number_format($deals->finish_rate * 100, 0);
             background: #f7f8f8;
         }
     </style>
-    <script>
-        var _hmt = _hmt || [];
-        (function() {
-          var hm = document.createElement("script");
-          hm.src = "//hm.baidu.com/hm.js?d2417f8d221ffd4b883d5e257e21736c";
-          var s = document.getElementsByTagName("script")[0];
-          s.parentNode.insertBefore(hm, s);
-        })();
-    </script>
 </head>
 <body>
 <?php $this->beginBody() ?>

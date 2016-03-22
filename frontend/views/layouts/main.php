@@ -1,5 +1,8 @@
 <?php
 use yii\helpers\Html;
+use common\view\BaiduTongjiHelper;
+
+BaiduTongjiHelper::registerTo($this, BaiduTongjiHelper::PC_KEY);
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
@@ -7,6 +10,7 @@ use yii\helpers\Html;
     <head>
         <meta charset="<?= Yii::$app->charset ?>">
         <title><?= Html::encode($this->title) ?></title>
+        <?php $this->head() ?>
         <meta name="baidu-site-verification" content="7YkufMc2UW" />
         <link rel="stylesheet" href="/css/jquery.fullPage.css">
         <link rel="stylesheet" href="/css/jquery.fullPage.extend.css">

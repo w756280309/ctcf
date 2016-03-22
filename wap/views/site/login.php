@@ -2,10 +2,14 @@
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 use yii\captcha\Captcha;
+use common\view\BaiduTongjiHelper;
+
+BaiduTongjiHelper::registerTo($this, BaiduTongjiHelper::WAP_KEY);
 
 frontend\assets\WapAsset::register($this);
 $this->registerJsFile(ASSETS_BASE_URI . 'js/common.js', ['depends' => 'yii\web\YiiAsset','position' => 1]);
-?><?php $this->beginPage() ?>
+?>
+<?php $this->beginPage() ?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -17,15 +21,6 @@ $this->registerJsFile(ASSETS_BASE_URI . 'js/common.js', ['depends' => 'yii\web\Y
 	<?php $this->head() ?>
     <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/base.css">
     <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/loginsign.css">
-    <script>
-        var _hmt = _hmt || [];
-        (function() {
-          var hm = document.createElement("script");
-          hm.src = "//hm.baidu.com/hm.js?d2417f8d221ffd4b883d5e257e21736c";
-          var s = document.getElementsByTagName("script")[0];
-          s.parentNode.insertBefore(hm, s);
-        })();
-    </script>
 </head>
 <body>
     <?php $this->beginBody() ?>

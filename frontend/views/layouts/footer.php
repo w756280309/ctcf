@@ -2,8 +2,10 @@
 
 use yii\helpers\Html;
 use frontend\assets\AppAsset;
+use common\view\BaiduTongjiHelper;
 
 AppAsset::register($this);
+BaiduTongjiHelper::registerTo($this, BaiduTongjiHelper::PC_KEY);
 
 ?>
 <?php $this->beginPage() ?>
