@@ -176,7 +176,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface, UserInterf
     public function scenarios()
     {
         return [
-            'add' => ['type', 'username', 'password_hash', 'usercode', 'mobile', 'email', 'real_name', 'idcard', 'org_name', 'org_code', 'status', 'auth_key', 'user_pass', 'in_time', 'cat_id', 'law_master', 'law_master_idcard', 'law_mobile', 'shui_code', 'business_licence', 'tel',
+            'add' => ['type', 'username', 'password_hash', 'usercode', 'mobile', 'email', 'real_name', 'idcard', 'org_name', 'org_code', 'status', 'auth_key', 'user_pass', 'in_time', 'cat_id', 'law_master', 'law_master_idcard', 'law_mobile', 'shui_code', 'business_licence', 'tel', "mianmiStatus"
             ],
             'edit' => ['id', 'type', 'username', 'mobile', 'email', 'real_name', 'idcard', 'org_name', 'org_code', 'status', 'auth_key', 'user_pass', 'in_time', 'cat_id', 'law_master', 'law_master_idcard', 'law_mobile', 'shui_code', 'business_licence', 'tel', 'passwordLastUpdatedTime',
             ],
@@ -213,7 +213,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface, UserInterf
             [['real_name'], 'string', 'max' => 50, 'on' => 'idcardrz'],
             [['idcard'], 'string', 'length' => 18, 'on' => 'idcardrz'],
             [['idcard', 'law_master_idcard'], 'checkIdNumber'],
-            [['idcard_status', 'email_status', 'mobile_status'], 'default', 'value' => 0],
+            [['idcard_status', 'email_status', 'mobile_status', "mianmiStatus"], 'default', 'value' => 0],
             [['mobile', 'new_mobile'], CnMobileValidator::className()],
             [['mobile'], 'string', 'max' => 11],
             [['usercode'], 'unique', 'message' => '会员编号已占用'],

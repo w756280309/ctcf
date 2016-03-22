@@ -24,6 +24,7 @@ class BankService
     const CHARGEPWD_VALIDATE_N = 16;  //pow(2,4)   验证交易密码未设定的情况
     const CHARGEPWD_VALIDATE_Y = 32;  //pow(2,5)   验证交易密码已设定的情况
     const EDITBANK_VALIDATE = 64;     //pow(2,6)   验证是否需要完善银行信息
+    const MIANMI_VALIDATE = 128;     //pow(2,6)   验证是否开通免密协议
 
     /*调用实例
      *     $cond = 0 | BankService::IDCARDRZ_VALIDATE_N | BankService::BINDBANK_VALIDATE_N | BankService::CHARGEPWD_VALIDATE;
@@ -50,6 +51,10 @@ class BankService
 
         if (($cond & self::IDCARDRZ_VALIDATE_N) && $user->idcard_status == User::IDCARD_STATUS_WAIT) {
             return ['tourl' => '/user/userbank/idcardrz', 'code' => 1, 'message' => '您还没有开通第三方资金托管账户，请前往开通'];
+        }
+        
+        if (($cond & self::MIANMI_VALIDATE) && $user->mianmiStatus == 0) {
+            return ['tourl' => '/user/qpay/binding/umpmianmi', 'code' => 1, 'message' => '您还没有开通免密支付，请前往开通'];
         }
 
         $user_bank = $user->qpay;
@@ -118,7 +123,7 @@ class BankService
      */
     public static function checkKuaijie($user)
     {
-        $cond = 0 | self::IDCARDRZ_VALIDATE_N | self::BINDBANK_VALIDATE_N;//删除| self::CHARGEPWD_VALIDATE_N验证交易密码判断
+        $cond = 0 | self::IDCARDRZ_VALIDATE_N | self::MIANMI_VALIDATE | self::BINDBANK_VALIDATE_N;//删除| self::CHARGEPWD_VALIDATE_N验证交易密码判断
         return self::check($user, $cond);
     }
 }

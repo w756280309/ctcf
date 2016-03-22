@@ -65,7 +65,7 @@ class UserbankController extends BaseController
      */
     public function actionBindbank()
     {
-        $cond = 0 | BankService::IDCARDRZ_VALIDATE_N | BankService::BINDBANK_VALIDATE_Y;
+        $cond = 0 | BankService::IDCARDRZ_VALIDATE_N | BankService::MIANMI_VALIDATE | BankService::BINDBANK_VALIDATE_Y;
         $data = BankService::check($this->user, $cond);
         if ($data['code'] == 1) {
             if (Yii::$app->request->isAjax) {
