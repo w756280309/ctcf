@@ -496,7 +496,7 @@ class ProductonlineController extends BaseController
             throw new \yii\web\NotFoundHttpException('The deal info is not existed.');
         }
 
-        if (0 === $deal->isPrivate) {
+        if ($deal->isPrivate) {
             return ['code' => 0, 'message' => '不允许推荐定向标'];
         }
 
