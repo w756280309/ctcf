@@ -41,12 +41,13 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/common.js', ['depends' => 'yii\web\Yii
         <input type="text" name="" style="display:none"/>
         <!--限额提醒-->
         <div class="row dan" style="padding-top: 1px;">
-                    <div class="hidden-xs col-sm-1"></div>
-                    <div class="col-xs-12 col-sm-10" style="padding: 0">
-                        <span>(每笔提现收取2元手续费)</span>
-                    </div>
-                    <div class="hidden-xs col-sm-1"></div>
-                </div>
+            <div class="hidden-xs col-sm-1"></div>
+            <div class="col-xs-12 col-sm-10" style="padding: 0">
+                <span>(每笔提现收取2元手续费)</span>
+            </div>
+            <div class="hidden-xs col-sm-1"></div>
+        </div>
+        <div class="form-bottom">&nbsp;</div>
         <!--提交按钮-->
         <div class="row">
             <div class="col-xs-3"></div>

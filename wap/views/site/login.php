@@ -61,6 +61,7 @@ $this->registerJsFile(ASSETS_BASE_URI . 'js/common.js', ['depends' => 'yii\web\Y
                 </div>
                 <?php } ?>
 
+                <div class="form-bottom">&nbsp;</div>
                 <div class="col-xs-3"></div>
                 <div class="col-xs-6 login-sign-btn">
                     <input id="login-btn" class="btn-common btn-normal" name="start" type="button" value="登录" >

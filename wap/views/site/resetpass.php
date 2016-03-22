@@ -69,6 +69,7 @@ frontend\assets\WapAsset::register($this);
                 <div class="col-xs-3 col border-bottom login-eye">
                     <img src="<?= ASSETS_BASE_URI ?>images/eye-close.png" width="26" height="20" alt=" 闭眼">
                 </div>
+                <div class="form-bottom">&nbsp;</div>
                 <div class="col-xs-3"></div>
                 <div class="col-xs-6 login-sign-btn">
                     <input id="signup-btn" class="btn-common btn-normal" name="signUp" type="button" value="确认重置"

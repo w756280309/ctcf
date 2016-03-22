@@ -74,9 +74,9 @@ frontend\assets\WapAsset::register($this);
                 <div class="col-xs-3 col border-bottom login-eye">
                     <img src="<?= ASSETS_BASE_URI ?>images/eye-close.png" width="26" height="20" alt=" 闭眼">
                 </div>
-                <div class="col-xs-12 div-xieyi">
-                    <input id="xieyi" class="xieyi lf" type="checkbox" checked="checked"/> 我已经阅读并同意
-                    <a href="/site/xieyi" class="xieyi">《网站服务协议》</a>
+                <div class="col-xs-12 form-bottom">
+                    <input id="xieyi" class="xieyi lf" type="checkbox" checked="checked"/>
+                    <div class="div-xieyi"> 我已经阅读并同意<a href="/site/xieyi">《网站服务协议》</a></div>
                 </div>
                 <div class="col-xs-3"></div>
                 <div class="col-xs-6 login-sign-btn">

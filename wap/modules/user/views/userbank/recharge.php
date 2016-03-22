@@ -50,6 +50,7 @@ $this->registerJsFile(ASSETS_BASE_URI . 'js/common.js', ['depends' => 'yii\web\Y
                 <div class="col-xs-9 col-sm-8 safe-lf"><input type="text" id="fund"  name='RechargeRecord[fund]' placeholder="输入充值金额"/></div>
                 <div class="hidden-xs col-sm-1"></div>
             </div>
+            <div class="form-bottom">&nbsp;</div>
             <!--提交按钮-->
             <div class="row">
                 <div class="col-xs-3"></div>

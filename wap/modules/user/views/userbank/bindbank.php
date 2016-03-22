@@ -60,7 +60,7 @@ $this->registerJsFile(ASSETS_BASE_URI . '/js/qpay.js', ['position' => 1]);
     </div>
 
     <!--限额提醒-->
-    <div class="row tixing">
+    <div class="row tixing form-bottom">
         <div class="col-xs-10">
             <div class="notice">?</div>
             <span><a href="/user/userbank/bankxiane">限额提醒</a></span>

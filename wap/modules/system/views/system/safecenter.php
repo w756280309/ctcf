@@ -51,6 +51,7 @@ $this->title="安全中心";
     <?php } ?>
 
 
+    <div class="form-bottom">&nbsp;</div>
     <div class="row login-sign-btn">
         <div class="col-xs-3"></div>
         <div class="col-xs-6">

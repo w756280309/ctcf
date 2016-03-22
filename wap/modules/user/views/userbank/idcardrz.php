@@ -22,6 +22,7 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset','positio
             <div class="col-xs-9 col-sm-8"><input type="text" id="idcard" name='User[idcard]' placeholder="请输入您的身份证号"/></div>
             <div class="hidden-xs col-sm-1"></div>
         </div>
+        <div class="form-bottom">&nbsp;</div>
         <!--提交按钮-->
         <div class="row">
             <div class="col-xs-3"></div>
