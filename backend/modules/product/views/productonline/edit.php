@@ -18,7 +18,7 @@ $tpl = <<<TPL
 <div class="row-fluid">
     <div class="span12 ">
         <div class="control-group">
-            <label class="control-label">合同标题</label>
+            <label class="control-label">{{ contentName }}</label>
             <div class="controls">
                 <input type="text" id="contracttemplate-name" class="m-wrap span12" name="name[]" autocomplete="off" placeholder="合同标题" value='{{ name }}'>
             </div>
@@ -29,7 +29,7 @@ $tpl = <<<TPL
 <div class="row-fluid ctemp">
     <div class="span12 ">
         <div class="control-group">
-            <label class="control-label">合同内容</label>
+            <label class="control-label">{{ contentDetail }}</label>
             <div class="controls">
                 <textarea class="m-wrap span12 new_template" name="content[]">{{ content }}</textarea>
             </div>
@@ -305,7 +305,7 @@ TPL;
                                 ])
                         ?>
                         <?=
-                        $form->field($model, 'is_fdate', ['template' => '{input}'])->checkbox();
+                        $form->field($model, 'is_fdate', ['template' => '{input}'])->checkbox(['autocomplete' => 'on']);
                         ?>
                     </div>
                 </div>
@@ -380,31 +380,53 @@ TPL;
         $form->field($model, 'contract_type', ['template' => '{error}']);
         ?>
         <?php
-            if (empty($pid)) {
+            if ($ctmodel && !$model->hasErrors()) {
                 echo CfcaUtils::renderXml($tpl, [
-                    'name' => $con_name_arr[0],
-                    'content' => $con_content_arr[0],
+                    'contentName' => '认购协议标题',
+                    'contentDetail' => '认购协议内容',
+                    'name' => $ctmodel[0]['name'],
+                    'content' => $ctmodel[0]['content'],
                 ]);
-            }
-            if (!empty($ctmodel) && !$model->hasErrors()) {
+                echo CfcaUtils::renderXml($tpl, [
+                    'contentName' => '风险揭示书标题',
+                    'contentDetail' => '风险揭示书内容',
+                    'name' => $ctmodel[1]['name'],
+                    'content' => $ctmodel[1]['content'],
+                ]);
                 foreach ($ctmodel as $key => $val) {
+                   if (in_array($key, [0, 1])) {
+                       continue;
+                   }
                    echo CfcaUtils::renderXml($tpl2, [
                        'key' => $key,
                        'name' => $val['name'],
                        'content' => $val['content'],
                    ]);
                 }
-            }
-            if (!empty($con_name_arr)) {
-                foreach ($con_name_arr as $key => $val) {
-                    if (empty($pid) && $key === 0) {
-                        continue;
+            } else {
+                echo CfcaUtils::renderXml($tpl, [
+                    'contentName' => '认购协议标题',
+                    'contentDetail' => '认购协议内容',
+                    'name' => $con_name_arr[0],
+                    'content' => $con_name_arr[0],
+                ]);
+                echo CfcaUtils::renderXml($tpl, [
+                    'contentName' => '风险揭示书标题',
+                    'contentDetail' => '风险揭示书内容',
+                    'name' => $con_name_arr[1],
+                    'content' => $con_name_arr[1],
+                ]);
+                if (!empty($con_name_arr)) {
+                    foreach ($con_name_arr as $key => $val) {
+                        if (in_array($key, [0, 1])) {
+                            continue;
+                        }
+                        echo CfcaUtils::renderXml($tpl2, [
+                            'key' => $key,
+                            'name' => $val,
+                            'content' => $con_content_arr[$key],
+                        ]);
                     }
-                    echo CfcaUtils::renderXml($tpl2, [
-                        'key' => $key,
-                        'name' => $val,
-                        'content' => $con_content_arr[$key],
-                    ]);
                 }
             }
         ?>
