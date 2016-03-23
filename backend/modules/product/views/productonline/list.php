@@ -122,7 +122,7 @@ $pc_cat = Yii::$app->params['pc_cat'];
                                             <?php if ($val['status'] < 2){ ?>
                                             | <a href="javascript:del('/product/productonline/del','<?= $val['id'] ?>')" class="btn mini red ajax_op" op="status" data-index="<?= $val['status'] ?>" index="<?= $val['id'] ?>"><i class="icon-minus-sign"></i>删除</a>
                                             <?php } ?>
-                                            <?php if ($val['online_status'] == 1 && ($val['status']==3 || $val['status']==7) && empty($val['fk_examin_time'])){ ?>
+                                            <?php if ($val['online_status'] == 1 && ($val['status']==3 || $val['status']==7) && empty($val['fk_examin_time']) && 1 === (int)$val['is_jixi']){ ?>
                                             | <a href="javascript:openwin('/order/onlinefangkuan/examinfk?pid=<?= $val['id'] ?>',800,400)" class="btn mini green"><i class="icon-edit"></i> 放款审核</a>
                                             <?php } ?>
                                             <?php if ($val['online_status'] == 1 && $val['status'] > 1){ ?>
@@ -131,7 +131,7 @@ $pc_cat = Yii::$app->params['pc_cat'];
                                             <?php if (($val['status'] == 5 || $val['status'] == 6) && $val['fstatus'] !== '3') { ?>
                                             | <a href="/repayment/repayment?pid=<?= $val['id'] ?>" class="btn mini green"><i class="icon-edit"></i> 还款</a>
                                             <?php } ?>
-                                            <?php if (($val['fk_examin_time']) > 0 && ($val['status'] == 3 || $val['status'] == 7 || $val['fstatus'] === '3')){ ?>
+                                            <?php if (($val['fk_examin_time']) > 0 && ($val['status'] == 3 || $val['status'] == 7 || $val['fstatus'] === '3') && 1 === (int)$val['is_jixi']){ ?>
                                             | <a href="javascript:fk('<?= $val['id'] ?>');" class="btn mini green"><i class="icon-edit"></i> 放款</a>
                                             <?php } ?>
                                             <?php if ($val['online_status']==1&&(in_array($val['status'],[3,5,7]))&&$val['is_jixi']==0){ ?>

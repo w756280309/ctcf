@@ -21,6 +21,11 @@ class FkCore {
         bcscale(14);
         $bcround = new BcRound();
         
+        $plancount = OnlineRepaymentPlan::find()->where(['online_pid' => $pid])->count();
+        if (0 === (int)$plancount) {
+            return ['res'=>0,'msg'=>'标的需要先进行确认计息操作']; 
+        }
+        
         $orders = OnlineOrder::find()->where(['online_pid'=>$pid,'status'=>  OnlineOrder::STATUS_SUCCESS])->asArray()->select('id,order_money,refund_method,yield_rate,expires,uid,order_time')->all();
         $product = OnlineProduct::findOne($pid);
         $total = 0;
@@ -65,14 +70,6 @@ class FkCore {
             }
         }
         
-//        if($status==OnlineFangkuan::STATUS_EXAMINED){
-//            $planres = OnlineRepaymentPlan::createPlan($pid,$orders);
-//            if(!$planres){
-//                $transaction->rollBack(); 
-//                return ['res'=>0,'msg'=>'还款计划异常']; 
-//            }
-//        }
-//        
         //修改标的状态为还款中
         $opres = OnlineProduct::updateAll(['fk_examin_time'=>  time(),'sort'=>OnlineProduct::SORT_HKZ],['id'=>$pid]);//'status'=>OnlineProduct::STATUS_HUAN,
         if(!$opres){
