@@ -190,10 +190,10 @@ i,em {
 }
 .repayment-content li div{
     float: left;
-    padding-left: 6px;
-    padding-right: 6px;
+    padding-left: 3px;
+    padding-right: 3px;
     color: #7c7c7c;
-    font-size: 1.4rem;
+    font-size: 1.3rem;
     height: 40px;
     line-height: 40px;
 }
@@ -202,7 +202,7 @@ i,em {
 }
 .repayment-content li p{
     float: right;
-    font-size: 1.4rem;
+    font-size: 1.3rem;
     height: 40px;
     line-height: 40px;
     margin-right: 34px;
