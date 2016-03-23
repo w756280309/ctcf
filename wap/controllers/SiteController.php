@@ -132,7 +132,8 @@ class SiteController extends Controller
      */
     public function actionLogin()
     {
-        $this->layout = false;
+        $this->layout = '@app/modules/order/views/layouts/buy';
+
         if (!\Yii::$app->user->isGuest) {
             return $this->goHome();
         }
@@ -240,7 +241,7 @@ class SiteController extends Controller
      */
     public function actionResetpass()
     {
-        $this->layout = false;
+        $this->layout = '@app/modules/order/views/layouts/buy';
         if (!\Yii::$app->user->isGuest) {
             return $this->goHome();
         }
@@ -274,7 +275,8 @@ class SiteController extends Controller
      */
     public function actionSignup()
     {
-        $this->layout = false;
+        $this->layout = '@app/modules/order/views/layouts/buy';
+
         if (!\Yii::$app->user->isGuest) {
             return $this->goHome();
         }
@@ -340,19 +342,21 @@ class SiteController extends Controller
     }
 
     /**
-     * 公司介绍
+     * 公司介绍.
      */
     public function actionAbout()
     {
         $this->layout = '@app/modules/order/views/layouts/buy';
+
         return $this->render('company_desc');
     }
 
     /**
-     * 新手帮助
+     * 新手帮助.
+     *
      * @return type
      */
-    public function actionHelp($type=null)
+    public function actionHelp($type = null)
     {
         $this->layout = '@app/modules/order/views/layouts/buy';
         $page = 'help';
@@ -369,26 +373,29 @@ class SiteController extends Controller
     }
 
     /**
-     * 平台优势页面
+     * 平台优势页面.
      */
     public function actionAdvantage()
     {
         $this->layout = '@app/modules/order/views/layouts/buy';
+
         return $this->render('advantage');
     }
 
     /**
-     * 联系我们页面
+     * 联系我们页面.
      */
     public function actionContact()
     {
         $this->layout = '@app/modules/order/views/layouts/buy';
+
         return $this->render('contact');
     }
 
     public function actionSession()
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
+
         return [
             'isLoggedin' => !Yii::$app->user->isGuest,
         ];

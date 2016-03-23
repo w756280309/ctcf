@@ -13,7 +13,7 @@ BaiduTongjiHelper::registerTo($this, BaiduTongjiHelper::WAP_KEY);
     <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
     <meta name="renderer" content="webkit">
     <meta name="format-detection" content="telephone=no"/>
-    <title>温都金服</title>
+    <title><?= Html::encode($this->title) ?></title>
     <?= Html::csrfMetaTags() ?>
     <?php $this->head() ?>
     <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/setting.css">
@@ -31,6 +31,7 @@ BaiduTongjiHelper::registerTo($this, BaiduTongjiHelper::WAP_KEY);
 <body style='margin-bottom:90px'>
     <?php $this->beginBody() ?>
     <div class="container">
+        <?php if (!\Yii::$app->request->get('in_app')) { ?>
         <!--header-->
         <div class="row account-title">
             <div class="col-xs-2 back"><img src="<?= ASSETS_BASE_URI ?>images/headpic.png" alt=""/></div>
@@ -38,6 +39,7 @@ BaiduTongjiHelper::registerTo($this, BaiduTongjiHelper::WAP_KEY);
             <div class="col-xs-1 col"><a href="/system/system/setting" class="set">设置</a></div>
             <div class="col-xs-1"></div>
         </div>
+        <?php } ?>
 
         <?= $content ?>
 

@@ -42,11 +42,13 @@ $rate = number_format($deals->finish_rate * 100, 0);
 <body>
 <?php $this->beginBody() ?>
 <div class="container">
+    <?php if (!\Yii::$app->request->get('in_app')) { ?>
     <!--header-->
     <header class="row head-title">
         <div class="logo col-xs-12 col-sm-12"><img src="<?= ASSETS_BASE_URI ?>images/logo.png" alt="logo" ></div>
         <div class="logo_tit">温州报业传媒旗下理财平台</div>
     </header>
+    <?php } ?>
 
     <div class="slideBox" id="slideBox">
         <div class="bd">

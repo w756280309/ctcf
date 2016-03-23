@@ -79,11 +79,6 @@ $this->registerJsFile(ASSETS_BASE_URI . 'js/common.js', ['depends' => 'yii\web\Y
                 $(this).removeClass("btn-press").addClass("btn-normal");
                 return false;
             }
-//            if ($('#fund').val() > <?= $param['single'] * 10000 ?>) {
-//                toast('充值金额超过银行单笔限额');
-//                $(this).removeClass("btn-press").addClass("btn-normal");
-//                return false;
-//            }
             return true;
         }
         $(function() {

@@ -3,12 +3,13 @@ use yii\bootstrap\ActiveForm;
 use yii\captcha\Captcha;
 
 $this->title = '修改登录密码';
-$this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset', 'position' => 1]);
+$this->registerJsFile(ASSETS_BASE_URI . 'js/common.js', ['depends' => 'yii\web\YiiAsset', 'position' => 1]);
 ?>
 <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/base.css">
 <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/setting.css">
 
-<?php $form = ActiveForm::begin(['id' => 'editpassform', 'action' => '/site/editpass', 'options' => ['class' => 'cmxform']]); ?>
+<div class="row kongxi">
+    <?php $form = ActiveForm::begin(['id' => 'editpassform', 'action' => '/site/editpass', 'options' => ['class' => 'cmxform']]); ?>
     <input name="_csrf" type="hidden" id="_csrf" value="<?= Yii::$app->request->csrfToken ?>">
     <div class="row sm-height border-bottom">
             <div class="col-xs-3 safe-txt text-align-ct">原密码</div>
@@ -43,23 +44,10 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset', 'positi
             </div>
             <div class="col-xs-3"></div>
         </div>
-        </form>
+        <?php $form->end(); ?>
+</div>
 
-    </div>
-    <!-- 遮罩层 start  -->
-    <div class="mask"></div>
-    <!-- 遮罩层 end  -->
-    <!-- 绑定提示 start  -->
-    <div class="bing-info hidden">
-        <div class="bing-tishi">提示</div>
-        <p class="tishi-p"> 密码修改成功，请重新登录</p>
-        <div class="bind-btn">
-            <span class="true">确定</span>
-        </div>
-    </div>
-    <!-- 绑定提示 end  -->
-    <!-- 修改登录密码页 end  -->
-    <script type="text/javascript">
+<script type="text/javascript">
     var csrf;
     $(function() {
        csrf = $("meta[name=csrf-token]").attr('content');
@@ -131,15 +119,14 @@ $this->registerJsFile('/js/common.js', ['depends' => 'yii\web\YiiAsset', 'positi
 
     //只有确定按钮的弹窗
     function alertTrueVal(val,trued)
+    {
+        var chongzhi = $('<div class="mask" style="display:block;"></div><div class="bing-info show"> <div class="bing-tishi">温馨提示</div> <p class="tishi-p" style="line-height: 20px;">' + val + '</p > <div class="bind-btn"> <span class="true">我知道了</span> </div> </div>');
+        $(chongzhi).insertAfter($('form'));
+        $('.bing-info').on('click', function ()
         {
-            var chongzhi = $('<div class="mask" style="display:block;"></div><div class="bing-info show"> <div class="bing-tishi">温馨提示</div> <p class="tishi-p" style="line-height: 20px;">' + val + '</p > <div class="bind-btn"> <span class="true">我知道了</span> </div> </div>');
-            $(chongzhi).insertAfter($('form'));
-            $('.bing-info').on('click', function ()
-            {
-                $(chongzhi).remove();
-                trued();
-            });
-        }
-
-    </script>
+            $(chongzhi).remove();
+            trued();
+        });
+    }
+</script>
 

@@ -16,17 +16,20 @@ BaiduTongjiHelper::registerTo($this, BaiduTongjiHelper::WAP_KEY);
     <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
     <meta name="renderer" content="webkit">
     <meta name="format-detection" content="telephone=no"/>
-    <title>温都金服</title>
+    <title><?= Html::encode($this->title) ?></title>
     <?= Html::csrfMetaTags() ?>
     <?php $this->head() ?>
 </head>
 <body>
     <?php $this->beginBody() ?>
     <div class="container">
+        <?php if (!\Yii::$app->request->get('in_app')) { ?>
     	<!--header-->
 	<header>
              <div class="title">温都金服</div>
         </header>
+        <?php } ?>
+
         <?= $content ?>
 
         <!--footer-->

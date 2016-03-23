@@ -1,4 +1,5 @@
 <?php
+use yii\helpers\Html;
 use common\view\BaiduTongjiHelper;
 
 frontend\assets\WapAsset::register($this);
@@ -15,7 +16,8 @@ BaiduTongjiHelper::registerTo($this, BaiduTongjiHelper::WAP_KEY);
     <meta name="renderer" content="webkit">
     <!--视窗设置 -->
     <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
-    <title>温都金服</title>
+    <title><?= Html::encode($this->title) ?></title>
+    <?php $this->head() ?>
 
     <!-- Bootstrap -->
     <!--1、加载Bottstrap层叠样式表 -->
@@ -39,14 +41,15 @@ BaiduTongjiHelper::registerTo($this, BaiduTongjiHelper::WAP_KEY);
 <body>
 <?php $this->beginBody() ?>
 
-<!--标的详情页头部 start-->
  <div class="container">
+    <?php if (!\Yii::$app->request->get('in_app')) { ?>
     <div class="row title-box nav-height">
         <div class="col-xs-2 back"></div>
         <div class="col-xs-8 title"><?=$this->title ?></div>
         <div class="col-xs-2 back"></div>
     </div>
-<!--标的详情页头部 end-->
+    <?php } ?>
+
 <?= $content ?>
 
 <?php $this->endBody() ?>

@@ -12,7 +12,7 @@ BaiduTongjiHelper::registerTo($this, BaiduTongjiHelper::WAP_KEY);
     <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
     <meta name="renderer" content="webkit">
     <meta name="format-detection" content="telephone=no"/>
-    <title>温都金服</title>
+    <title><?= Html::encode($this->title) ?></title>
     <?= Html::csrfMetaTags() ?>
     <?php $this->head() ?>
     <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/index.css"/>
@@ -23,10 +23,13 @@ BaiduTongjiHelper::registerTo($this, BaiduTongjiHelper::WAP_KEY);
 <body>
     <?php $this->beginBody() ?>
     <div class="container">
+        <?php if (!\Yii::$app->request->get('in_app')) { ?>
         <!--header-->
         <div class="row licai-list">
             <div class="col-xs-12 title">理财列表</div>
         </div>
+        <?php } ?>
+
         <?= $content ?>
 
         <!--footer-->
