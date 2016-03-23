@@ -341,24 +341,13 @@ TPL;
                         <?=
                         $form->field($model, 'allowedUids', ['template' => '{input}{error}', 'inputOptions' => ['autocomplete' => 'off', 'placeholder' => '定向标用户手机号', 'value' => $model->mobiles]])->textInput(['class' => 'm-wrap span12'])
                         ?>
+                        <?php $disable = empty($pid) ? [] : ['disabled' => 'true'] ?>
                         <?=
-                        $form->field($model, 'isPrivate', ['template' => '<div class="input-append">{input}</div>{error}'])->checkbox()
+                        $form->field($model, 'isPrivate', ['template' => '<div class="input-append">{input}</div>{error}'])->checkbox($disable)
                         ?>
                     </div>
                 </div>
             </div>
-
-<!--            <div class="span6 ">
-                <div class="control-group">
-                    <label class="control-label">分销渠道</label>
-                    <div class="controls">
-                        <?=
-                        $form->field($model, 'channel', ['template' => '{input}{error}', 'inputOptions' => ['autocomplete' => 'off', 'class' => 'chosen-with-diselect span6']])->dropDownList(Yii::$app->params['deal']['channel'])
-                        ?>
-                    </div>
-                </div>
-            </div>-->
-
         </div>
         <!--/row-->
         <div class="row-fluid">
@@ -494,13 +483,9 @@ TPL;
     //选择还款方式是到期本息的可以设置项目截止日以及宽限期。否则不可以设置
     function changeRefmet(obj){
         if (1 === parseInt($(obj).val())) {
-            $('#onlineproduct-expires').next().html('(天)')
-            //$('.sourceRfmet').show();
+            $('#onlineproduct-expires').next().html('(天)');
         } else {
-            $('#onlineproduct-expires').next().html('(个月)')
-//            $('#onlineproduct-kuanxianqi').val('');
-//            $('#onlineproduct-finish_date').val('');
-//            $('.sourceRfmet').hide();
+            $('#onlineproduct-expires').next().html('(个月)');
         }
     }
 
