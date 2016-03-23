@@ -97,8 +97,8 @@ return [
             'mer_recharge_ret_url' => 'https://mwjf.wenjf.com/user/bpay/brecharge/frontend-notify',  //融资用户充值回调接口地址
             'mer_recharge_notify_url' => 'https://mwjf.wenjf.com/user/bpay/brecharge/backend-notify',
 
-            'mianmi_ret_url' => 'https://mwjf.wenjf.com/user/qpay/agreementnotify/frontend',  //免密支付前台通知地址
-            'mianmi_url' => 'https://mwjf.wenjf.com/user/qpay/agreementnotify/backend',//免密支付后台通知地址
+            'mianmi_ret_url' => 'https://m.wenjf.com/user/qpay/agreementnotify/frontend',  //免密支付前台通知地址
+            'mianmi_url' => 'https://m.wenjf.com/user/qpay/agreementnotify/backend',//免密支付后台通知地址
         ],
     ],
     'm_assets_base_uri' => "https://static.wenjf.com/m/",
