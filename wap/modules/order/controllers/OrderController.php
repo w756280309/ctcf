@@ -78,7 +78,15 @@ class OrderController extends BaseController
 
         $model = ContractTemplate::find()->where(['pid' => $id])->select('pid,name,content')->all();
         $key = $this->checkAgreement($model, $key);
-        $model[$key] = ContractTemplate::replaceTemplate($model[$key], new OnlineOrder(['uid' => $this->user->id]));
+
+        $deal_id = Yii::$app->request->get('deal_id');
+        if (!empty($deal_id)) {
+            $deal = OnlineOrder::findOne($deal_id);
+        } else {
+            $deal = new OnlineOrder(['uid' => $this->user->id]);
+        }
+
+        $model[$key] = ContractTemplate::replaceTemplate($model[$key], $deal);
         return $this->render('agreement', ['model' => $model, 'key_f' => $key, 'content' => $model[$key]['content']]);
     }
 

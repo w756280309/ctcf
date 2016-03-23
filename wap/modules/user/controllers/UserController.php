@@ -87,6 +87,12 @@ class UserController extends BaseController
         return $this->render('order', ['list' => $list, 'type' => $type, 'profitFund' => $this->user->lendAccount->profit_balance]);
     }
 
+    /**
+     * 投资详情页
+     * @param type $id
+     * @return type
+     * @throws \yii\web\NotFoundHttpException
+     */
     public function actionOrderdetail($id)
     {
         if (empty($id)) {
