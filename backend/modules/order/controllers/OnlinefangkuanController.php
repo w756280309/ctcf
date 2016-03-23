@@ -101,10 +101,6 @@ class OnlinefangkuanController extends BaseController
             return ['res' => 0, 'msg' => '标的信息不存在'];
         }
 
-        if (OnlineProduct::STATUS_HUAN !== $onlineProduct->status) {
-            return ['res' => 0, 'msg' => '当前标的状态不允许提现操作'];
-        }
-
         $onlineFangkuan = OnlineFangkuan::findOne(['online_product_id' => $pid]);
 
         if (!$onlineFangkuan) {
