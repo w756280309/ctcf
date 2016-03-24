@@ -85,9 +85,10 @@ $rate = number_format($deals->finish_rate * 100, 0);
 
         <?php if (!empty($deals->jiaxi)) { ?>
         <ul class="row new-bottom" onclick="window.location.href='/deal/deal/detail?sn=<?= $deals->sn ?>'">
+            <h3><a href="/deal/deal/detail?sn=<?= $deals->sn ?>"><?= $deals->title ?></a></h3>
             <li class="col-xs-6 padding-5">
                 <div class="xian1">
-                    <div class="newcomer-badge"><img src="images/badge.png" alt="猴年加息"></div>
+                    <div class="newcomer-badge"></div>
                     <span class="interest-rate"><?= rtrim(rtrim(number_format($deals->yield_rate*100, 2), '0'), '.') ?>%</span>
                     <span class="interest-rate-add">+<?= $deals->jiaxi ?>%</span>
                     <div class="col-xs-12 percentage-txt">年化率</div>
@@ -115,6 +116,7 @@ $rate = number_format($deals->finish_rate * 100, 0);
         </ul>
         <?php } else { ?>
         <ul class="row new-bottom" onclick="window.location.href='/deal/deal/detail?sn=<?= $deals->sn ?>'">
+            <h3><a href="/deal/deal/detail?sn=<?= $deals->sn ?>"><?= $deals->title ?></a></h3>
             <li class="col-xs-6 padding-5">
                 <div class="xian">
                     <span class="interest-rate"><?= rtrim(rtrim(number_format($deals->yield_rate*100, 2), '0'), '.') ?>%</span>
