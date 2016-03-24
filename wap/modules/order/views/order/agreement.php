@@ -48,7 +48,17 @@ $num = 0;
 <div id="legal-docs-switcher" class="swiper-container" style="line-height: 18px;">
     <div class="swiper-wrapper">
         <?php foreach($model as $key => $val): $num++; ?>
-        <div data-switcher-index="<?= $num-1 ?>" class="swiper-slide <?= $key_f == $key?"dian":"" ?>" onclick="location.replace('/order/order/agreement?id=<?= $val['pid'] ?>&key=<?= $key ?>')"><?= Yii::$app->functions->cut_str($val['name'],5,0,'**') ?></div>
+        <div data-switcher-index="<?= $num-1 ?>" class="swiper-slide <?= $key_f == $key?"dian":"" ?>" onclick="location.replace('/order/order/agreement?id=<?= $val['pid'] ?>&key=<?= $key ?>')">
+            <?php
+                if (0 === $key) {
+                    echo "认购协议";
+                } elseif (1 === $key) {
+                    echo "风险揭示书";
+                } else {
+                    echo Yii::$app->functions->cut_str($val['name'],5,0,'**');
+                }
+            ?>
+        </div>
         <?php endforeach; ?>
     </div>
 </div>
