@@ -16,7 +16,7 @@ BaiduTongjiHelper::registerTo($this, BaiduTongjiHelper::PC_KEY);
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title><?= Html::encode($this->title) ?></title>
         <?php $this->head() ?>
-        <link rel="stylesheet" href="/css/index.css">
+        <link rel="stylesheet" href="<?=ASSETS_BASE_URI ?>css/index.css">
     </head>
 
     <body>

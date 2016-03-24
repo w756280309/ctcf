@@ -6,7 +6,7 @@
         <div class="five-partner five-partners"><span style="border: 0">南京金融资产交易中心</span><span>同信证券</span></div>
         <div class="five-copyright">Copyright ©温州温都金融信息服务有限公司 浙ICP备16003187号-1</div>
         <div class="first-ma">
-            <img src="/images/ma.png" alt="">
+            <img src="<?=ASSETS_BASE_URI ?>images/ma.png" alt="">
             <div>访问手机wap版</div>
         </div>
     </div>

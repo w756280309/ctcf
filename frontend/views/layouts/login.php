@@ -16,7 +16,7 @@ BaiduTongjiHelper::registerTo($this, BaiduTongjiHelper::PC_KEY);
         <title><?= Html::encode($this->title) ?></title>
         <?php $this->head() ?>
         <meta name="baidu-site-verification" content="7YkufMc2UW" />
-        <link rel="stylesheet" href="/css/index.css">
+        <link rel="stylesheet" href="<?=ASSETS_BASE_URI ?>css/index.css">
         <!--[if lt IE 9]>
         <style>
             .section1 {

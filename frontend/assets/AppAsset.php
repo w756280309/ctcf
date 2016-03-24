@@ -8,7 +8,7 @@ class AppAsset extends AssetBundle
 {
     public $sourcePath = '@app/assets';
     //public $basePath = '@webroot';
-    //public $baseUrl = '@web';
+    public $baseUrl = ASSETS_BASE_URI;
     public $css = [
         'dist/frontend.css',
         'dist/frontend_kc.css'

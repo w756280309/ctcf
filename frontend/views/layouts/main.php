@@ -12,14 +12,14 @@ BaiduTongjiHelper::registerTo($this, BaiduTongjiHelper::PC_KEY);
         <title><?= Html::encode($this->title) ?></title>
         <?php $this->head() ?>
         <meta name="baidu-site-verification" content="7YkufMc2UW" />
-        <link rel="stylesheet" href="/css/jquery.fullPage.css">
-        <link rel="stylesheet" href="/css/jquery.fullPage.extend.css">
-        <link rel="stylesheet" href="/css/index.css">
-        <script src="/js/jquery-1.8.3.min.js"></script>
-        <script src="/js/jquery-ui.min.js"></script>
-        <script src="/js/jquery.fullPage.min.js"></script>
-        <script src="/js/jquery.fullPage.extend.js"></script>
-        <script src="/js/index.js"></script>
+        <link rel="stylesheet" href="<?=ASSETS_BASE_URI ?>css/jquery.fullPage.css">
+        <link rel="stylesheet" href="<?=ASSETS_BASE_URI ?>css/jquery.fullPage.extend.css">
+        <link rel="stylesheet" href="<?=ASSETS_BASE_URI ?>css/index.css">
+        <script src="<?=ASSETS_BASE_URI ?>js/jquery-1.8.3.min.js"></script>
+        <script src="<?=ASSETS_BASE_URI ?>js/jquery-ui.min.js"></script>
+        <script src="<?=ASSETS_BASE_URI ?>js/jquery.fullPage.min.js"></script>
+        <script src="<?=ASSETS_BASE_URI ?>js/jquery.fullPage.extend.js"></script>
+        <script src="<?=ASSETS_BASE_URI ?>js/index.js"></script>
         <!--[if lt IE 9]>
         <style>
             .section1 {

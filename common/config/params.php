@@ -102,5 +102,6 @@ return [
         ],
     ],
     'm_assets_base_uri' => "https://static.wenjf.com/m/",
+    'pc_assets_base_uri' => "https://static.wenjf.com/pc/",
     'enable_baidu_tongji' => false,
 ];

@@ -1,6 +1,6 @@
 <div id="top-box">
     <div class="top-box">
-        <a href="/"><img class="logo" src="/images/logo.png"/></a>
+        <a href="/"><img class="logo" src="<?=ASSETS_BASE_URI ?>images/logo.png"/></a>
         <div class="top-right">
             <?php if (Yii::$app->user->isGuest) { ?>
             <div class="top-resign"><a href="/site/login?flag=reg">注册</a></div>
