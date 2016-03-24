@@ -71,11 +71,29 @@ class ProductonlineController extends BaseController
             } else {
                 $model->isPrivate = $isPrivate;
             }
+
             $_namearr = empty($con_name_arr) ? $con_name_arr : array_filter($con_name_arr);
-            $_contentarr = empty($con_content_arr) ? $con_content_arr : array_filter($con_content_arr);
-            if (empty($_namearr) || empty($_contentarr)) {
+            if (empty($_namearr)) {
                 $model->addError('contract_type', '合同协议至少要输入一份');
-            } else {
+            }
+
+            if (false === strpos($con_name_arr[0], '认购协议')) {
+                $model->addError('contract_type', '合同名称错误,第一份合同应该录入认购协议');
+            }
+            if (false === strpos($con_name_arr[1], '风险揭示书')) {
+                $model->addError('contract_type', '合同名称错误,第二份合同应该录入风险揭示书');
+            }
+
+            foreach($con_name_arr as $key => $val) {
+                if (empty($val)) {
+                    $model->addError('contract_type', '合同名称不能为空');
+                }
+                if (empty($con_content_arr[$key])) {
+                    $model->addError('contract_type', '合同内容不能为空');
+                }
+            }
+
+            if (!$model->getErrors('contract_type')) {
                 $transaction = Yii::$app->db->beginTransaction();
                 $model->allowedUids = $uids;
                 $model->start_date = strtotime($model->start_date);
