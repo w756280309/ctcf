@@ -49,9 +49,10 @@ class ProductonlineController extends BaseController
         $model = $id ? OnlineProduct::findOne($id) : new OnlineProduct();
         $ctmodel = null;
         $model->scenario = 'create';
-        if ($id) {
+        if (!empty($id)) {
             $model->is_fdate = (0 === $model->finish_date) ? 0 : 1;
             $model->yield_rate = bcmul($model->yield_rate, 100, 2);
+            $isPrivate = $model->isPrivate;
             $ctmodel = ContractTemplate::find()->where(['pid' => $id])->all();
         }
 
@@ -67,6 +68,8 @@ class ProductonlineController extends BaseController
             if (null === $model->id) {
                 $model->sn = OnlineProduct::createSN();
                 $model->sort = OnlineProduct::SORT_PRE;
+            } else {
+                $model->isPrivate = $isPrivate;
             }
             $_namearr = empty($con_name_arr) ? $con_name_arr : array_filter($con_name_arr);
             $_contentarr = empty($con_content_arr) ? $con_content_arr : array_filter($con_content_arr);
@@ -87,7 +90,7 @@ class ProductonlineController extends BaseController
                     $transaction->rollBack();
                     $model->addError('title', '标的添加异常');
                 }
-                if ($id) {
+                if (!empty($id)) {
                     ContractTemplate::deleteAll(['pid' => $id]);
                 }
                 $record = new ContractTemplate();
