@@ -19,7 +19,7 @@
 
 /*bootstrap格式化结束*/
 /*白色背景*/
-.back-fff{background-color: #fff;}
+body {background-color: #fff;}
 /*资讯列表*/
 .information-list{width: 100%;background-color: #fff;}
 .information-list .single{display:block;padding:15px 5%;font-size:1.3rem;color: #595757;border-bottom: 1px solid #d9dce4;}
