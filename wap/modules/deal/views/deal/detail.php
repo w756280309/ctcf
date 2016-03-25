@@ -13,7 +13,7 @@ $deal['money'] = rtrim(rtrim($deal['money'], '0'), '.');
                 <ul class="row column-content">
                     <li class="col-xs-6">
                         <div class="xian">
-                            <?=  doubleval(number_format($deal->baseRate*100, 2)) ?><span class="column-lu">%</span>
+                            <?= rtrim(rtrim($deal->baseRate, '0'), '.') ?><span class="column-lu">%</span>
                             <?php if (!empty($deal['jiaxi'])) { ?><span class="bonus-badge">+<?=  doubleval($deal['jiaxi']) ?>%</span><?php } ?>
                         </div>
                         <span class="qing">年化收益率</span>

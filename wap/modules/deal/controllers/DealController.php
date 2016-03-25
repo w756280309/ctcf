@@ -53,7 +53,7 @@ class DealController extends Controller
             $deals[$key]['start'] = date('H:i', $val['start']);
             $deals[$key]['start_desc'] = $dates['desc'];
             $deals[$key]['finish_rate'] = number_format($val['finish_rate'] * 100, 0);
-            $deals[$key]['yr'] = $val['yr'] ? number_format(OnlineProduct::calcBaseRate($val['yr'], $val['jiaxi']) * 100, 2) : '0.00';
+            $deals[$key]['yr'] = $val['yr'] ? OnlineProduct::calcBaseRate($val['yr'], $val['jiaxi']) : '0.00';
             $deals[$key]['statusval'] = Yii::$app->params['productonline'][$val['status']];
             $deals[$key]['jiaxi'] = $val['jiaxi'];
             $deals[$key]['method'] = (1 === (int)$val['refund_method']) ? "天" : "个月";
