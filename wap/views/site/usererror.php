@@ -3,7 +3,7 @@ $this->title="账户异常提醒";
 
 ?>
 
-<link rel="stylesheet" href="/css/setting.css">
+<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/setting.css">
 
 <div class="row flase-box">
     <div class="col-xs-12 text-align-ct">

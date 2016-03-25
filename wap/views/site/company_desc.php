@@ -1,12 +1,7 @@
 <?php
 $this->title="关于我们";
 ?>
-<link href="/css/informationAndHelp.css" rel="stylesheet">
-<style>
-    body {
-        background-color: #fff;
-    }
-</style>
+<link href="<?= ASSETS_BASE_URI ?>css/informationAndHelp.css" rel="stylesheet">
 
 <div class="container production">
         <!-- 主体 -->

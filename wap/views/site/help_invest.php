@@ -1,12 +1,7 @@
 <?php
 $this->title="帮助中心";
 ?>
-<link href="/css/informationAndHelp.css" rel="stylesheet">
-<style>
-    body {
-        background-color: #fff;
-    }
-</style>
+<link href="<?= ASSETS_BASE_URI ?>css/informationAndHelp.css" rel="stylesheet">
 
 <div class="container bootstrap-common helpcenter_login_resister">
         <!-- 主体 -->
