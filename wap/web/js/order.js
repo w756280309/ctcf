@@ -15,6 +15,7 @@ $(function () {
         }
 
         $buy.attr('disabled', true);
+        $buy.val("购买中……");
         var vals = $("#orderform").serialize();
         var xhr = $.post($("#orderform").attr("action"), vals, function (data) {
             if (data.code == 0) {
@@ -30,6 +31,7 @@ $(function () {
         });
         xhr.always(function () {
             $buy.attr('disabled', false);
+            $buy.val("购买");
         })
     });
 

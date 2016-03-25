@@ -22,7 +22,7 @@ BaiduTongjiHelper::registerTo($this, BaiduTongjiHelper::WAP_KEY);
 <div class="container">
     <?php if (!\Yii::$app->request->get('in_app')) { ?>
     <div class="row title-box nav-height" style="margin-bottom:0;">
-        <div class="col-xs-2 back"><img src="<?= ASSETS_BASE_URI ?>images/back.png" alt="" onclick="history.go(-1)"/></div>
+        <div class="col-xs-2 back"><img src="<?= ASSETS_BASE_URI ?>images/back.png" alt="" onclick="history.go(-2)"/></div>
         <div class="col-xs-8 title"><?= Html::encode($this->title) ?></div>
         <div class="col-xs-2"></div>
     </div>

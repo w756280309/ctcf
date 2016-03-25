@@ -1,4 +1,5 @@
 <?php
+
 namespace app\modules\order\controllers;
 
 use Yii;
@@ -15,7 +16,9 @@ class OrderController extends BaseController
 {
     /**
      * 认购页面.
+     *
      * @param type $sn 标的编号
+     *
      * @return page
      */
     public function actionIndex($sn)
@@ -36,36 +39,45 @@ class OrderController extends BaseController
 
     /**
      * 购买标的.
+     *
      * @param type $sn
+     *
      * @return type
      */
     public function actionDoorder($sn = null)
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
         $money = \Yii::$app->request->post('money');
-        $trade_pwd = \Yii::$app->request->post('trade_pwd');
         $pay = new PayService(PayService::REQUEST_AJAX);
         $ret = $pay->checkAllowPay($this->user, $sn, $money);
         if ($ret['code'] != PayService::ERROR_SUCCESS) {
             return $ret;
         }
         $ordercore = new OrderCore();
+
         return $ordercore->createOrder($sn, $money,  $this->user->id);
     }
 
-    public function actionOrdererror()
+    public function actionOrdererror($osn = '')
     {
+        $order = '' !== $osn ? OnlineOrder::findOne(['sn' => $osn]) : null;
+        if ('' !== $osn && null === $order) {
+            throw new \yii\web\BadRequestHttpException('无法找到订单号为'.$osn.'的订单记录');
+        }
         $this->layout = '@app/modules/order/views/layouts/buy';
 
-        return $this->render('error');
+        return $this->render('error', ['order' => $order, 'ret' => (null  !== $order && 1 === $order->status) ? 'success' : 'fail']);
     }
 
     /**
-     * 合同显示页面
+     * 合同显示页面.
+     *
      * @param type $sn
      * @param type $id
      * @param type $key
+     *
      * @return type
+     *
      * @throws \yii\web\NotFoundHttpException
      */
     public function actionAgreement($id, $key = 0)
@@ -87,18 +99,21 @@ class OrderController extends BaseController
         }
 
         $model[$key] = ContractTemplate::replaceTemplate($model[$key], $deal);
+
         return $this->render('agreement', ['model' => $model, 'key_f' => $key, 'content' => $model[$key]['content']]);
     }
 
     /**
-     * 查找符合要求的合同信息
+     * 查找符合要求的合同信息.
+     *
      * @param type $cont
-     * @param int $key
+     * @param int  $key
+     *
      * @return int
      */
     private function checkAgreement($cont, $key)
     {
-        if (in_array($key, ['r','f']) && $cont) {
+        if (in_array($key, ['r', 'f']) && $cont) {
             foreach ($cont as $k => $val) {
                 if ('r' === $key && false !== strpos($val['name'], '认购协议')) {
                     return $k;
