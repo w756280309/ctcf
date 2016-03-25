@@ -481,7 +481,7 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
      */
     public static function calcBaseRate($yr, $jiaxi)
     {
-        return null === $jiaxi ? $yr : bcsub(bcmul($yr, 100), $jiaxi, 2);
+        return null === $jiaxi ? bcmul($yr, 100, 2) : bcsub(bcmul($yr, 100), $jiaxi, 2);
     }
 
     public function getLoanExpires()
