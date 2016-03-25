@@ -33,6 +33,7 @@ BaiduTongjiHelper::registerTo($this, BaiduTongjiHelper::WAP_KEY);
         <?= $content ?>
 
         <!--footer-->
+        <?php if (!\Yii::$app->request->get('in_app')) { ?>
         <div class="row navbar-fixed-bottom footer">
             <div class="col-xs-4 footer-title">
                 <div class="footer-inner">
@@ -50,6 +51,7 @@ BaiduTongjiHelper::registerTo($this, BaiduTongjiHelper::WAP_KEY);
                 </div>
             </div>
         </div>
+        <?php } ?>
     </div>
     <?php $this->endBody() ?>
 </body>

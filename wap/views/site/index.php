@@ -200,6 +200,7 @@ $rate = number_format($deals->finish_rate * 100, 0);
 
 <!--   end  -->
 <!--footer-->
+<?php if (!\Yii::$app->request->get('in_app')) { ?>
 <div class="row navbar-fixed-bottom footer">
     <div class="col-xs-4 footer-title">
         <div class="footer-inner">
@@ -217,6 +218,7 @@ $rate = number_format($deals->finish_rate * 100, 0);
         </div>
     </div>
 </div>
+<?php } ?>
 <?php $this->endBody() ?>
 </body>
 </html>
