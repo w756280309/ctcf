@@ -30,17 +30,16 @@ return [
                 'ordtx/<type:\d+>/<id:\d+>/ump' => 'v1/ordertx/ump',
                 'pos/notify' => 'v1/pos/notify',
                 'lenderstats' => 'v1/lender-stats/export',
-                'serverts' => 'app/server/timestamp',
-                'logout' => 'app/server/logout',
+                'serverts' => 'v1/app/server/timestamp',
+                'logout' => 'v1/app/auth/logout',
+                'user' => 'v1/app/user/info',
+                'appver' => 'v1/app/deploy/appver',
             ],
         ],
     ],
     'modules' => [
         'v1' => [
             'class' => 'api\\modules\\v1\\Module',
-        ],
-        'app' => [
-            'class' => 'api\\modules\\app\\Module',
         ],
     ],
     'params' => $params,
