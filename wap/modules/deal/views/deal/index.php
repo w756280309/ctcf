@@ -1,5 +1,8 @@
 <?php
 frontend\assets\WapAsset::register($this);
+
+$this->title = '理财列表';
+
 $curent_cid = $header['cat'];
 $curent_xs = $header['xs'];
 $this->registerJs('var total=' . $header['count'] . ';', 1);

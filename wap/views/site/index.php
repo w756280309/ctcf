@@ -158,8 +158,8 @@ $rate = number_format($deals->finish_rate * 100, 0);
         </div>
         <div style="clear: both;"></div>
         <div class="row margin-add">
-            <div class="col-xs-4 padding-clear"><a href="/deal/deal/index?cat=1"><img src="<?= ASSETS_BASE_URI ?>images/type1.png" alt="温银通" /></a> </div>
-            <div class="col-xs-4 padding-clear"><a href="/deal/deal/index?cat=2"><img src="<?= ASSETS_BASE_URI ?>images/type2.png" alt="温政盈" /></a> </div>
+            <div class="col-xs-4 padding-clear"><a href="/deal/deal/index?cat=1"><img src="<?= ASSETS_BASE_URI ?>images/type1.png" alt="温稳盈" /></a> </div>
+            <div class="col-xs-4 padding-clear"><a href="/deal/deal/index?cat=2"><img src="<?= ASSETS_BASE_URI ?>images/type2.png" alt="温稳赚" /></a> </div>
             <div class="col-xs-4 padding-clear"><a href="/order/booking/detail?pid=1"><img src="<?= ASSETS_BASE_URI ?>images/type3.png" alt="温股投" /></a> </div>
         </div>
     </div>
@@ -176,7 +176,7 @@ $rate = number_format($deals->finish_rate * 100, 0);
             <div class="col-xs-3 col-sm-2 more news-more"><a href="/news/index">更多》</a></div>
         </div>
         <div class="notice-bottom">
-            <div class="col-xs-12 notice border-top" onclick="location.href='/news/detail?id=1'"><span>【</span>资讯信息<span>】</span>温都金服定于3月17日上线</div>
+            <div class="col-xs-12 notice border-top" onclick="location.href='/news/detail?id=1'"><span>【</span>资讯信息<span>】</span>温都金服定于4月6日上线</div>
             <div class="col-xs-12 notice border-bot" onclick="location.href='/news/detail?id=2'"><span>【</span>资讯信息<span>】</span>用户资金托管引入联动优势</div>
         </div>
     </div>
