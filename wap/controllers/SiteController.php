@@ -17,6 +17,7 @@ use common\service\LoginService;
 use common\models\log\LoginLog;
 use common\models\user\User;
 use common\models\user\CaptchaForm;
+use common\models\app\AccessToken;
 
 /**
  * Site controller.
@@ -160,13 +161,18 @@ class SiteController extends Controller
 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             if ($model->login(User::USER_TYPE_PERSONAL)) {
-                $post_from = Yii::$app->request->post('from');
+                $app_token = "";
+                $headers = \Yii::$app->response->headers;
+                if (null !== $headers['clienttype']) {
+                    $tokens = AccessToken::find(['uid' => Yii::$app->user->id])->orderBy("create_time desc")->one();
+                    $app_token = "?token=" . $tokens->token;
+                }
                 if (!empty($post_from)) {
-                    return ['code' => 0, 'message' => '登录成功', 'tourl' => $post_from];
+                    return ['code' => 0, 'message' => '登录成功', 'tourl' => $post_from . $app_token];
                 } else {
                     $url = Yii::$app->getUser()->getReturnUrl();
 
-                    return ['code' => 0, 'message' => '登录成功', 'tourl' => $url];
+                    return ['code' => 0, 'message' => '登录成功', 'tourl' => $url . $app_token];
                 }
             }
         }
