@@ -134,7 +134,10 @@ class UserbankController extends BaseController
         if ($data[code] == 1 && \Yii::$app->request->isAjax) {
             return ['next' => $data['tourl']];
         }
-
+        //保存充值来源
+        if ($from = Yii::$app->request->get('from')) {
+            Yii::$app->session['recharge']['from'] = urldecode($from);
+        }
         return $this->render('recharge', ['user_bank' => $user_bank, 'user_acount' => $user_acount, 'data' => $data, 'bank' => $bank]);
     }
 
@@ -218,8 +221,13 @@ class UserbankController extends BaseController
      */
     public function actionQpayres($ret = 'error')
     {
+        $from_url = '';
+        if (!Yii::$app->user->isGuest && isset(Yii::$app->session['recharge']['from'])) {
+            $from_url = Yii::$app->session['recharge']['from'];
+            unset(Yii::$app->session['recharge']['from']);
+        }
         $this->layout = '@app/modules/user/views/layouts/notify';
-        return $this->render('qpayres', ['ret' => $ret]);
+        return $this->render('qpayres', ['ret' => $ret, 'from_url' => $from_url]);
     }
 
     /**
@@ -231,7 +239,7 @@ class UserbankController extends BaseController
         $this->layout = '@app/modules/user/views/layouts/notify';
         return $this->render('drawres', ['ret' => $ret]);
     }
-    
+
     /**
      * 开户结果页
      * @param type $ret

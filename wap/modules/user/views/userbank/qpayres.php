@@ -24,7 +24,11 @@ $this->title = ('success' === $ret) ? "充值成功" : "充值失败";
 <div class="row daojishi">
      <div class="col-xs-12">
         <?php if ('success' === $ret) { ?>
-        <div><span>5秒</span>后回到账户</div>
+            <?php if ($from_url !== '' ) { ?>
+                <div><span>5秒</span>后回到购买页/div>
+             <?php } else { ?>
+                 <div><span>5秒</span>后回到账户</div>
+             <?php } ?>
         <?php } else { ?>
         <div>请联系客服: <?= Yii::$app->params['contact_tel'] ?></div>
         <?php } ?>
@@ -34,19 +38,24 @@ $this->title = ('success' === $ret) ? "充值成功" : "充值失败";
 <div class="row" id='bind-close1'>
     <div class="col-xs-4"></div>
     <div class="col-xs-4">
-        <a href="/user/user/index" class="bind-close1">返回账户</a>
+        <?php if ($from_url !== '') { ?>
+            <a href="<?= urlencode($from_url) ?>" class="bind-close1">返回购买页</a>
+        <?php } else { ?>
+            <a href="/user/user/index" class="bind-close1">返回账户</a>
+        <?php } ?>
     </div>
     <div class="col-xs-4"></div>
 </div>
 <script>
     $(function(){
         var num=5;
+        var url = "<?= $from_url ? urlencode($from_url) : '/user/user/index' ?>";
         var t=setInterval(function(){
             num--;
             $('.daojishi .col-xs-12 span').html(num+'秒');
             if(num==0){
                 clearInterval(t);
-                location.href = '/user/user/index';
+                location.href = url;
             }
         },1000);
     })
@@ -55,14 +64,19 @@ $this->title = ('success' === $ret) ? "充值成功" : "充值失败";
 <div class="row" id='bind-close1'>
     <div class="col-xs-4"></div>
     <div class="col-xs-4">
-        <a href="/user/user/index" class="bind-close1">返回账户</a>
+        <?php if ($from_url !== '') { ?>
+            <a href="<?= urlencode($from_url) ?>" class="bind-close1">返回购买页</a>
+        <?php } else { ?>
+            <a href="/user/user/index" class="bind-close1">返回账户</a>
+        <?php }?>
+
     </div>
     <div class="col-xs-4"></div>
 </div>
 <div class="row" id='bind-close2'>
     <div class="col-xs-4"></div>
     <div class="col-xs-4">
-        <a href="/user/userbank/recharge" class="bind-close1">继续充值</a>
+        <a href="/user/userbank/recharge<?= $from_url ? '?from='.urlencode($from_url) : '' ?>" class="bind-close1">继续充值</a>
     </div>
     <div class="col-xs-4"></div>
 </div>

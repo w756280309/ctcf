@@ -8,9 +8,9 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/common.js', ['depends' => 'yii\web\Yii
 <div class="row" id='bind-box'>
     <div class="col-xs-12">
         <?php if ('success' === $ret) { ?>
-        <div>购买成功</div>
+        <div>您已成功认购项目，可以进入我的理财查看认购详情</div>
         <?php } else { ?>
-        <div>购买失败</div>
+        <div>遇到问题请联系客服，电话：<?= \Yii::$app->params['contact_tel'] ?></div>
         <?php } ?>
     </div>
 </div>

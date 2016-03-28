@@ -19,7 +19,7 @@ $(function () {
         var vals = $("#orderform").serialize();
         var xhr = $.post($("#orderform").attr("action"), vals, function (data) {
             if (data.code == 0) {
-                toast('投标成功');
+                //toast('投标成功');
             } else {
                 toast(data.message);
             }
