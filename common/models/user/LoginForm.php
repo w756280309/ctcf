@@ -5,6 +5,7 @@ namespace common\models\user;
 use Yii;
 use yii\base\Model;
 use YiiPlus\Validator\CnMobileValidator;
+use common\models\app\AccessToken;
 
 /**
  * Login form.
@@ -119,6 +120,13 @@ class LoginForm extends Model
         if (Yii::$app->user->login($this->_user, $this->rememberMe ? 3600 : 0)) {
             $this->_user->scenario = 'login';
             $this->_user->last_login = time();
+
+            //判断是否移动端登录。如果是，执行
+            $headers = \Yii::$app->response->headers;
+            if (null !== $headers['wjftoken']) {
+                \Yii::trace(http_build_query($headers), 'umplog');//测试代码，追踪错误
+                AccessToken::initToken($this->_user, $headers)->save();
+            }
 
             return $this->_user->save();
         }

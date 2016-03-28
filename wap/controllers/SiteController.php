@@ -40,6 +40,7 @@ class SiteController extends Controller
                     ],
                 ],
             ],
+            \common\filters\AppAcesssControl::className(),
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
