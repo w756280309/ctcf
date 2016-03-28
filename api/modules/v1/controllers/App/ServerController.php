@@ -29,7 +29,7 @@ class ServerController extends Controller
                 'result' => 'success',//业务级别成功失败
                 'msg' => '成功',
                 'content' => [
-                    'serverTs' => time(),
+                    'serverts' => time(),
                 ]
             ]
         ];
