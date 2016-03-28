@@ -6,6 +6,7 @@ use Yii;
 use yii\web\Response;
 use api\modules\v1\controllers\Controller;
 use common\models\app\AccessToken;
+use common\core\UserAccountCore;
 
 /**
  * App相关api接口
@@ -33,7 +34,7 @@ class UserController extends Controller
             ];
         }
 
-        $accessToken = AccessToken::isEffectiveToken($headers);
+        $accessToken = AccessToken::findOne(['token' => $headers['wjftoken']]);
 
         if (null === $accessToken) {
             return [
@@ -59,6 +60,16 @@ class UserController extends Controller
             $bankCard = null;
         }
 
+        $uacore = new UserAccountCore();
+        $ua = $user->lendAccount;
+        if (!$ua) {
+            return [
+                'status' => "fail",//程序级别成功失败
+                'message' => "找不到账户",
+                'data' => null,
+            ];
+        }
+
         return [
             'status' => 'success',//程序级别成功失败
             'message' => '成功',
@@ -66,15 +77,27 @@ class UserController extends Controller
                 'result' => 'success',//业务级别成功失败
                 'msg' => '成功',
                 'content' => [
-                    'userid' => '',
-                    'asset_total' => '',
-                    'profit_balance' => '',
-                    'investment_balance' => '',
-                    'available_balance' => '',
+                    'asset_total' => strval($uacore->getTotalFund($user->id)),
+                    'profit_balance' => strval($uacore->getTotalProfit($user->id)),
+                    'investment_balance' => strval(bcadd($ua->investment_balance, $ua->freeze_balance, 2)),
+                    'available_balance' => strval($ua->available_balance),
                     'mobile' => substr_replace($user->mobile,'***', 3, -4),
                     'idcard' => substr_replace($user->idcard,'***', 5, -2),
                     'bankcard' => $bankCard,
                 ]
+            ]
+        ];
+    }
+
+    public function back($type, array $content = null)
+    {
+        return [
+            'status' => 'success',//程序级别成功失败
+            'message' => '成功',
+            'data' => [
+                'result' => 'success',//业务级别成功失败
+                'msg' => '成功',
+                'content' => $content,
             ]
         ];
     }
