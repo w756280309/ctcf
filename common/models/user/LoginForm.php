@@ -122,9 +122,8 @@ class LoginForm extends Model
             $this->_user->last_login = time();
 
             //判断是否移动端登录。如果是，执行
-            $headers = \Yii::$app->response->headers;
-            if (null !== $headers['wjftoken']) {
-                \Yii::trace(http_build_query($headers), 'umplog');//测试代码，追踪错误
+            $headers = \Yii::$app->request->headers;
+            if (null !== $headers['clienttype']) {
                 AccessToken::initToken($this->_user, $headers)->save();
             }
 

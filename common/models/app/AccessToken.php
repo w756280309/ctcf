@@ -17,14 +17,14 @@ class AccessToken extends \yii\db\ActiveRecord
         return 'AccessToken';
     }
 
-    public static function initToken(User $user, array $headers)
+    public static function initToken(User $user, \yii\web\HeaderCollection $headers)
     {
         return new self([
             'uid' => $user->id,
             'expireTime' => strtotime('+30 day'), //30天
             'token' => \Yii::$app->getSecurity()->generateRandomString(),
             'clientType' => $headers['clienttype'],
-            'deviceName' => $headers['clienttype'],
+            'deviceName' => $headers['devicename'],
             'clientInfo' => $headers['clientinfo'],
             'create_time' => time(),
         ]);
