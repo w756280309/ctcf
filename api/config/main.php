@@ -31,6 +31,7 @@ return [
                 'pos/notify' => 'v1/pos/notify',
                 'lenderstats' => 'v1/lender-stats/export',
                 'serverts' => 'app/server/timestamp',
+                'logout' => 'app/server/logout',
             ],
         ],
     ],
