@@ -19,5 +19,9 @@ $application = new yii\web\Application($config);
 if (!defined('ASSETS_BASE_URI')) {
     define('ASSETS_BASE_URI', Yii::$app->params['m_assets_base_uri']);
 }
+if (!defined('IN_APP') && false !== strpos(Yii::$app->request->hostInfo,'//app.')) {
+    define('IN_APP', true);
+}
+
 require(__DIR__ . '/../../common/config/di.php');//增加di引入，必须放置于此方可调用Yii::$app等
 $application->run();
