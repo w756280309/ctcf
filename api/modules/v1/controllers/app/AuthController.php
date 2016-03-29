@@ -13,11 +13,9 @@ class AuthController extends Controller
     /**
      * 退出登录,销毁access token
      */
-    public function actionLogout()
+    public function actionLogout($token)
     {
-        $headers = \Yii::$app->request->headers;
-
-        if (null === $headers['wjftoken']) {
+        if (empty($token)) {
             return [
                 'status' => "fail",//程序级别成功失败
                 'message' => "需要登录",
@@ -25,7 +23,7 @@ class AuthController extends Controller
             ];
         }
 
-        $accessToken = AccessToken::findOne(['token' => $headers['wjftoken']]);
+        $accessToken = AccessToken::findOne(['token' => $token]);
 
         if (null === $accessToken) {
             return [

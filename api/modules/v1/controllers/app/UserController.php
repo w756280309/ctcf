@@ -14,11 +14,9 @@ class UserController extends Controller
     /**
      * 获取用户信息
      */
-    public function actionInfo()
+    public function actionInfo($token)
     {
-        $headers = \Yii::$app->request->headers;
-
-        if (null === $headers['wjftoken']) {
+        if (empty($token)) {
             return [
                 'status' => "fail",//程序级别成功失败
                 'message' => "需要登录",
@@ -26,7 +24,7 @@ class UserController extends Controller
             ];
         }
 
-        $accessToken = AccessToken::findOne(['token' => $headers['wjftoken']]);
+        $accessToken = AccessToken::findOne(['token' => $token]);
 
         if (null === $accessToken) {
             return [
@@ -77,19 +75,6 @@ class UserController extends Controller
                     'idcard' => substr_replace($user->idcard,'***', 5, -2),
                     'bankcard' => $bankCard,
                 ]
-            ]
-        ];
-    }
-
-    public function back($type, array $content = null)
-    {
-        return [
-            'status' => 'success',//程序级别成功失败
-            'message' => '成功',
-            'data' => [
-                'result' => 'success',//业务级别成功失败
-                'msg' => '成功',
-                'content' => $content,
             ]
         ];
     }
