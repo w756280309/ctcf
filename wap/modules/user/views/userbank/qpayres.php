@@ -39,7 +39,7 @@ $this->title = ('success' === $ret) ? "充值成功" : "充值失败";
     <div class="col-xs-4"></div>
     <div class="col-xs-4">
         <?php if ($from_url !== '') { ?>
-            <a href="<?= urlencode($from_url) ?>" class="bind-close1">返回购买页</a>
+            <a href="<?=\yii\helpers\Html::encode($from_url)?>" class="bind-close1">返回购买页</a>
         <?php } else { ?>
             <a href="/user/user/index" class="bind-close1">返回账户</a>
         <?php } ?>
@@ -49,7 +49,7 @@ $this->title = ('success' === $ret) ? "充值成功" : "充值失败";
 <script>
     $(function(){
         var num=5;
-        var url = "<?= $from_url ? urlencode($from_url) : '/user/user/index' ?>";
+        var url = "<?= $from_url ? \yii\helpers\Html::encode($from_url) : '/user/user/index' ?>";
         var t=setInterval(function(){
             num--;
             $('.daojishi .col-xs-12 span').html(num+'秒');
@@ -65,7 +65,7 @@ $this->title = ('success' === $ret) ? "充值成功" : "充值失败";
     <div class="col-xs-4"></div>
     <div class="col-xs-4">
         <?php if ($from_url !== '') { ?>
-            <a href="<?= urlencode($from_url) ?>" class="bind-close1">返回购买页</a>
+            <a href="<?= \yii\helpers\Html::encode($from_url) ?>" class="bind-close1">返回购买页</a>
         <?php } else { ?>
             <a href="/user/user/index" class="bind-close1">返回账户</a>
         <?php }?>
@@ -76,7 +76,7 @@ $this->title = ('success' === $ret) ? "充值成功" : "充值失败";
 <div class="row" id='bind-close2'>
     <div class="col-xs-4"></div>
     <div class="col-xs-4">
-        <a href="/user/userbank/recharge<?= $from_url ? '?from='.urlencode($from_url) : '' ?>" class="bind-close1">继续充值</a>
+        <a href="/user/userbank/recharge<?= $from_url ? '?from='.\yii\helpers\Html::encode($from_url) : '' ?>" class="bind-close1">继续充值</a>
     </div>
     <div class="col-xs-4"></div>
 </div>

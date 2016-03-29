@@ -31,3 +31,5 @@ main-local.php
 
 wdjf_prod.key
 ump_prod.crt
+
+.idea/
