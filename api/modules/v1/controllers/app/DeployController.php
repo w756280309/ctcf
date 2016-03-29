@@ -2,8 +2,6 @@
 
 namespace api\modules\v1\controllers\app;
 
-use Yii;
-use yii\web\Response;
 use api\modules\v1\controllers\Controller;
 
 /**
@@ -11,12 +9,6 @@ use api\modules\v1\controllers\Controller;
  */
 class DeployController extends Controller
 {
-    public function init()
-    {
-        parent::init();
-        Yii::$app->response->format = Response::FORMAT_JSON;
-    }
-
     /**
      * 版本更新信息
      */
@@ -29,7 +21,11 @@ class DeployController extends Controller
                 'result' => 'success',//业务级别成功失败
                 'msg' => '成功',
                 'content' => [
-
+                    'old_updatetype' => 1, //不更新
+                    'updateDesc' => null,
+                    'versionCode' => null,
+                    'versionName' => null,
+                    'downloadUrl' => null,
                 ]
             ]
         ];

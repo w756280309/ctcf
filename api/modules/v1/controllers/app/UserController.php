@@ -2,8 +2,6 @@
 
 namespace api\modules\v1\controllers\app;
 
-use Yii;
-use yii\web\Response;
 use api\modules\v1\controllers\Controller;
 use common\models\app\AccessToken;
 use common\core\UserAccountCore;
@@ -13,12 +11,6 @@ use common\core\UserAccountCore;
  */
 class UserController extends Controller
 {
-    public function init()
-    {
-        parent::init();
-        Yii::$app->response->format = Response::FORMAT_JSON;
-    }
-
     /**
      * 获取用户信息
      */

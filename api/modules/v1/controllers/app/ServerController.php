@@ -2,8 +2,6 @@
 
 namespace api\modules\v1\controllers\app;
 
-use Yii;
-use yii\web\Response;
 use api\modules\v1\controllers\Controller;
 
 /**
@@ -11,12 +9,6 @@ use api\modules\v1\controllers\Controller;
  */
 class ServerController extends Controller
 {
-    public function init()
-    {
-        parent::init();
-        Yii::$app->response->format = Response::FORMAT_JSON;
-    }
-
     /**
      * 获取服务器时间
      */
