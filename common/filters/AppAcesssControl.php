@@ -67,21 +67,18 @@ class AppAcesssControl extends ActionFilter
      */
     public function beforeAction($action)
     {
-        $headers = \Yii::$app->response->headers;
-        if (null === $headers['wjftoken']) {
-            return true;
-        }
-        //是带有token的。查询token 查到每天的第一次进行有效期延长
-       $accessToken = AccessToken::isEffectiveToken($headers);
-        if (false !== $accessToken) {
-            if (date('Ymd', strtotime('+30 day')) == date('Ymd', $accessToken->expireTime)) {
-                //同一天不用更新
-                $accessToken = strtotime('+30 day');//延长有效期30天
-                $accessToken->save(false);
+        if (defined('IN_APP') && Yii::$app->request->get("token")) {
+            //是带有token的。查询token 查到每天的第一次进行有效期延长
+           $accessToken = AccessToken::isEffectiveToken(Yii::$app->request->get("token"));
+            if (false !== $accessToken) {
+                if (date('Ymd', strtotime('+30 day')) == date('Ymd', $accessToken->expireTime)) {
+                    //同一天不用更新
+                    $accessToken->expireTime = strtotime('+30 day');//延长有效期30天
+                    $accessToken->save(false);
+                }
+                \Yii::$app->user->login($accessToken->user);
             }
-            \Yii::$app->user->login($accessToken->user);
         }
-
         return true;
     }
 

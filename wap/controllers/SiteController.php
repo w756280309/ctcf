@@ -162,8 +162,7 @@ class SiteController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             if ($model->login(User::USER_TYPE_PERSONAL)) {
                 $app_token = "";
-                $headers = \Yii::$app->request->headers;
-                if (null !== $headers['clienttype']) {
+                if (defined('IN_APP')) {
                     $tokens = AccessToken::find(['uid' => Yii::$app->user->id])->orderBy("create_time desc")->one();
                     $app_token = "?token=" . $tokens->token;
                 }

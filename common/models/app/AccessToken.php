@@ -43,12 +43,12 @@ class AccessToken extends \yii\db\ActiveRecord
     /**
      * 获取是否是有效的token.
      *
-     * @param array $headers
-     *                       return accesstoken
+     * @param string $token
+     * return accesstoken
      */
-    public static function isEffectiveToken(array $headers)
+    public static function isEffectiveToken($token)
     {
-        $accessToken = self::findOne(['token' => $headers['wjftoken']]);
+        $accessToken = self::findOne(['token' => $token]);
         if (null === $accessToken) {
             return false;//无效的token
         }
