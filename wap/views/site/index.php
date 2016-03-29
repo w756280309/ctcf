@@ -42,7 +42,7 @@ $rate = number_format($deals->finish_rate * 100, 0);
 <body>
 <?php $this->beginBody() ?>
 <div class="container">
-    <?php if (!\Yii::$app->request->get('in_app')) { ?>
+    <?php if (!defined('IN_APP')) { ?>
     <!--header-->
     <header class="row head-title">
         <div class="logo col-xs-12 col-sm-12"><img src="<?= ASSETS_BASE_URI ?>images/logo.png" alt="logo" ></div>
@@ -200,7 +200,7 @@ $rate = number_format($deals->finish_rate * 100, 0);
 
 <!--   end  -->
 <!--footer-->
-<?php if (!\Yii::$app->request->get('in_app')) { ?>
+<?php if (!defined('IN_APP')) { ?>
 <div class="row navbar-fixed-bottom footer">
     <div class="col-xs-4 footer-title">
         <div class="footer-inner">

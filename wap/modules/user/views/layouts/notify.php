@@ -42,7 +42,7 @@ BaiduTongjiHelper::registerTo($this, BaiduTongjiHelper::WAP_KEY);
 <?php $this->beginBody() ?>
 
  <div class="container">
-    <?php if (!\Yii::$app->request->get('in_app')) { ?>
+    <?php if (!defined('IN_APP')) { ?>
     <div class="row title-box nav-height">
         <div class="col-xs-2 back"></div>
         <div class="col-xs-8 title"><?=$this->title ?></div>

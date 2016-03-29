@@ -57,7 +57,7 @@
     </ol>
  </div>
  <!--footer-->
-<?php if (!\Yii::$app->request->get('in_app')) { ?>
+<?php if (!defined('IN_APP')) { ?>
 <div class="row navbar-fixed-bottom footer">
     <div class="col-xs-4 footer-title">
         <div class="footer-inner">

@@ -20,7 +20,7 @@ BaiduTongjiHelper::registerTo($this, BaiduTongjiHelper::WAP_KEY);
 <body>
 <?php $this->beginBody() ?>
 <div class="container">
-    <?php if (!\Yii::$app->request->get('in_app')) { ?>
+    <?php if (!defined('IN_APP')) { ?>
     <div class="row title-box nav-height" style="margin-bottom:0;">
         <div class="col-xs-2 back"><img src="<?= ASSETS_BASE_URI ?>images/back.png" alt="" onclick="history.go(-1)"/></div>
         <div class="col-xs-8 title"><?= Html::encode($this->title) ?></div>
@@ -34,6 +34,3 @@ BaiduTongjiHelper::registerTo($this, BaiduTongjiHelper::WAP_KEY);
 </body>
 </html>
 <?php $this->endPage() ?>
-
-
-

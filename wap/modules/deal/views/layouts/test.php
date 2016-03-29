@@ -23,7 +23,7 @@ BaiduTongjiHelper::registerTo($this, BaiduTongjiHelper::WAP_KEY);
 <body>
     <?php $this->beginBody() ?>
     <div class="container">
-        <?php if (!\Yii::$app->request->get('in_app')) { ?>
+        <?php if (!defined('IN_APP')) { ?>
         <!--header-->
         <div class="row licai-list">
             <div class="col-xs-12 title">理财列表</div>
@@ -33,7 +33,7 @@ BaiduTongjiHelper::registerTo($this, BaiduTongjiHelper::WAP_KEY);
         <?= $content ?>
 
         <!--footer-->
-        <?php if (!\Yii::$app->request->get('in_app')) { ?>
+        <?php if (!defined('IN_APP')) { ?>
         <div class="row navbar-fixed-bottom footer">
             <div class="col-xs-4 footer-title">
                 <div class="footer-inner">
@@ -57,6 +57,3 @@ BaiduTongjiHelper::registerTo($this, BaiduTongjiHelper::WAP_KEY);
 </body>
 </html>
 <?php $this->endPage() ?>
-
-
-
