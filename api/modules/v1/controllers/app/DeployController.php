@@ -22,10 +22,10 @@ class DeployController extends Controller
                 'msg' => '成功',
                 'content' => [
                     'old_updatetype' => 1, //不更新
-                    'updateDesc' => null,
-                    'versionCode' => null,
-                    'versionName' => null,
-                    'downloadUrl' => null,
+                    'updatedesc' => null,
+                    'versioncode' => null,
+                    'versionname' => null,
+                    'downloadurl' => null,
                 ]
             ]
         ];
