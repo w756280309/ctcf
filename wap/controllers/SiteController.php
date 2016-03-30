@@ -103,7 +103,7 @@ class SiteController extends Controller
         $adv = Adv::find()->where(['status' => 0, 'del_status' => 0])->limit($ac)->orderBy('id desc')->asArray()->all();
 
         $deals = OnlineProduct::find()->where(['isPrivate' => 0, 'del_status' => OnlineProduct::STATUS_USE, 'online_status' => OnlineProduct::STATUS_ONLINE])
-            ->andWhere("recommendTime != 0")
+            ->andWhere('recommendTime != 0')
             ->orderBy('recommendTime asc,sort asc, id desc')->all();
         if (!$deals) {
             throw new \yii\web\NotFoundHttpException('The production is not existed.');
@@ -112,8 +112,8 @@ class SiteController extends Controller
         $num = 0;
         $key = 0;
         $deal = null;
-        foreach($deals as $k => $val) {
-            $num++;
+        foreach ($deals as $k => $val) {
+            ++$num;
             if ($val['status'] < 3) {
                 $deal = $val;
             } else {
@@ -162,20 +162,26 @@ class SiteController extends Controller
             $model->scenario = 'login';
         }
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            $post_from = str_replace('?token=null', '', Yii::$app->request->post('from'));
+            $post_from = Yii::$app->request->post('from');
             if ($model->login(User::USER_TYPE_PERSONAL)) {
-                $app_token = "";
-                if (defined('IN_APP')) {
-                    $tokens = AccessToken::find(['uid' => Yii::$app->user->id])->orderBy("create_time desc")->one();
-                    $app_token = "?token=" . $tokens->token;
-                }
                 if (!empty($post_from)) {
-                    return ['code' => 0, 'message' => '登录成功', 'tourl' => $post_from . $app_token];
+                    $tourl = $post_from;
                 } else {
-                    $url = str_replace('?token=null', '', Yii::$app->getUser()->getReturnUrl());
-
-                    return ['code' => 0, 'message' => '登录成功', 'tourl' => $url . $app_token];
+                    $tourl = Yii::$app->getUser()->getReturnUrl();
                 }
+
+                $output = array();
+                $urls = parse_url($tourl);
+
+                if (isset($urls['query'])) {
+                    parse_str($urls['query'], $output);
+                }
+                if (!defined('IN_APP')) {
+                    $tokens = AccessToken::find(['uid' => Yii::$app->user->id])->orderBy('create_time desc')->one();
+                    $output['token'] = $tokens->token;
+                }
+
+                return ['code' => 0, 'message' => '登录成功', 'tourl' => $urls['path'].'?'.http_build_query($output)];
             }
         }
 

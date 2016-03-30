@@ -75,6 +75,13 @@ class UserAccountAcesssControl extends ActionFilter
             $accessToken = AccessToken::isEffectiveToken(Yii::$app->request->get('token'));
             if (false === $accessToken) {
                 \Yii::$app->user->logout();
+                echo json_encode([
+                        'status' => 'fail', //程序级别成功失败
+                        'message' => '需要登录',
+                        'data' => null,
+                    ]);
+
+                return false;
             } else {
                 \Yii::$app->user->login($accessToken->user);
             }

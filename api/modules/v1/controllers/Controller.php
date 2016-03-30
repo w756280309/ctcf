@@ -16,20 +16,6 @@ class Controller extends BaseController
     {
         return [
             \common\filters\UserAccountAcesssControl::className(),
-            'access' => [
-                'class' => \yii\filters\AccessControl::className(),
-                'rules' => [
-                    [
-                        'allow' => true,
-                        'actions' => ['login', 'appver'],
-                        'roles' => ['?'], //访客登录,版本信息
-                    ],
-                    [
-                        'allow' => true,
-                        'roles' => ['@'], //登录用户退出
-                    ],
-                ],
-            ],
         ];
     }
 
