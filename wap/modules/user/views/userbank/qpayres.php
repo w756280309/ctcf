@@ -25,7 +25,7 @@ $this->title = ('success' === $ret) ? "充值成功" : "充值失败";
      <div class="col-xs-12">
         <?php if ('success' === $ret) { ?>
             <?php if ($from_url !== '' ) { ?>
-                <div><span>5秒</span>后回到购买页/div>
+                <div><span>5秒</span>后回到购买页</div>
              <?php } else { ?>
                  <div><span>5秒</span>后回到账户</div>
              <?php } ?>

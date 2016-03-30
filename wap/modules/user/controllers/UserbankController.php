@@ -136,7 +136,7 @@ class UserbankController extends BaseController
         }
         //保存充值来源
         if ($from = Yii::$app->request->get('from')) {
-            Yii::$app->session['recharge']['from'] = urldecode($from);
+            Yii::$app->session['recharge_from_url'] = urldecode($from);
         }
         return $this->render('recharge', ['user_bank' => $user_bank, 'user_acount' => $user_acount, 'data' => $data, 'bank' => $bank]);
     }
@@ -222,9 +222,9 @@ class UserbankController extends BaseController
     public function actionQpayres($ret = 'error')
     {
         $from_url = '';
-        if (!Yii::$app->user->isGuest && isset(Yii::$app->session['recharge']['from'])) {
-            $from_url = Yii::$app->session['recharge']['from'];
-            unset(Yii::$app->session['recharge']['from']);
+        if (!Yii::$app->user->isGuest && isset(Yii::$app->session['recharge_from_url'])) {
+            $from_url = Yii::$app->session['recharge_from_url'];
+            unset(Yii::$app->session['recharge_from_url']);
         }
         $this->layout = '@app/modules/user/views/layouts/notify';
         return $this->render('qpayres', ['ret' => $ret, 'from_url' => $from_url]);
