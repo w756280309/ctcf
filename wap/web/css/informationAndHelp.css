@@ -43,7 +43,7 @@ body {background-color: #fff;}
 .helpcenter .kong-width{padding:0 15px 30px 15px;}
 .helpcenter .kong-width a{display:block;margin-bottom: 15px;}
 .helpcenter .mask-center{width: 100%;height:100%;font-size: 2rem;text-align: center;color:#fff;letter-spacing: 3px;}
-.helpcenter .back_icon{float: right;}
+.helpcenter .back_icon{float: right;position: absolute;right: 0;}
 .helpcenter .header{width: 100%;height: 50px;line-height: 50px;overflow-x: hidden;text-align: center;font-size: 1.5rem;color: #161616;}
 .helpcenter .header span{font-size:1.5rem;color: #dcdcdc;}
 /*iphone6*/
@@ -66,6 +66,13 @@ body {background-color: #fff;}
 .helpcenter_login_resister .single .single-title{color:#161616;}
 .helpcenter_login_resister .beset .p_left{float: left;}
 .helpcenter_login_resister .beset .p_right{float: left;width: 80%;}
+.single h1 {font-size: 1.5rem; padding-bottom: 10px;}
+.single-tuchu {color:#161616; font-size: 1.5rem;}
+.single p {margin: 1em 0;}
+
+.single table {border: 1px solid #161616; width: 100%;}
+.single tr td {border: 1px solid #161616; text-align: center;}
+
 /*iphone6*/
 @media screen and (min-width: 375px) {
     .helpcenter_login_resister .header{font-size: 1.8rem;}

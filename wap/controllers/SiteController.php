@@ -18,6 +18,9 @@ use common\models\log\LoginLog;
 use common\models\user\User;
 use common\models\user\CaptchaForm;
 use common\models\app\AccessToken;
+use common\models\bank\EbankConfig;
+use common\models\bank\QpayConfig;
+use common\models\bank\Bank;
 
 /**
  * Site controller.
@@ -367,11 +370,32 @@ class SiteController extends Controller
         $this->layout = '@app/modules/order/views/layouts/buy';
         $page = 'help';
 
+        if (1 === (int) $type) {
+            $e = EbankConfig::tableName();
+            $q = QpayConfig::tableName();
+            $b = Bank::tableName();
+
+            $ebank = (new \yii\db\Query())
+                   ->select("$e.*, $b.bankName")
+                   ->from($e)
+                   ->leftJoin($b, "$e.bankId = $b.id")
+                   ->where(["$e.typePersonal" => 1, 'isDisabled' => 0])
+                   ->all();
+
+            $qpay = (new \yii\db\Query())
+                   ->select("$q.*, $b.bankName")
+                   ->from($q)
+                   ->leftJoin($b, "$q.bankId = $b.id")
+                   ->where(['isDisabled' => 0])
+                   ->all();
+
+            return $this->render('help_operation', ['ebank' => $ebank, 'qpay' => $qpay]);
+        }
+
         switch ($type) {
-            case 1: $page = 'help_loginregister'; break;
-            case 2: $page = 'help_bindcard'; break;
-            case 3: $page = 'help_invest'; break;
-            case 4: $page = 'help_assetdesc'; break;
+            case 2: $page = 'help_security'; break;
+            case 3: $page = 'help_company'; break;
+            case 4: $page = 'help_product'; break;
             default: $page = 'help';
         }
 

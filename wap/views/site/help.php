@@ -5,112 +5,108 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/helpcenter.js', ['depends' => 'yii\web
 <link href="<?= ASSETS_BASE_URI ?>css/informationAndHelp.css" rel="stylesheet">
 
 <div class="container bootstrap-common helpcenter">
-        <!-- 主体 -->
-        <div class="row">
+    <!-- 主体 -->
+    <div class="row">
+        <p class="header"><span>—————</span>&nbsp;常见问题&nbsp;<span>—————</span></p>
+    </div>
+    <div class="kong-width">
+        <!--注册登录-->
+        <a href="/site/help?type=1">
+            <div class="row">
+                <img src="<?= ASSETS_BASE_URI ?>images/system/back_1.png?v=1.1" width="100%" alt="">
+            </div>
+            <div class="row">
                 <div class="col-xs-12">
-                        <p class="header"><span>—————</span>&nbsp;常见问题&nbsp;<span>—————</span></p>
+                    <img id="img_height" src="<?= ASSETS_BASE_URI ?>images/system/back_2.png?v=1.1" width="100%" alt="">
                 </div>
-        </div>
-        <div class="kong-width">
-                <!--注册登录-->
-                <a href="/site/help?type=1">
-                        <div class="row">
-                                <div class="col-xs-12">
-                                    <img src="<?= ASSETS_BASE_URI ?>images/system/back_1.png" width="100%" alt="">
-                                </div>
-                        </div>
-                        <div class="row">
-                                <div class="col-xs-12">
-                                        <img id="img_height" src="<?= ASSETS_BASE_URI ?>images/system/back_2.png" width="100%" alt="">
-                                </div>
-                                <div class="common_single">
-                                        <div class="mask-center">
-                                                注册登录篇
-                                                <img class="back_icon" src="<?= ASSETS_BASE_URI ?>images/system/back_icon.png" height="100%"
-                                                     alt="">
-                                        </div>
-                                </div>
-                        </div>
-                        <div class="row">
-                                <div class="col-xs-12">
-                                        <img src="<?= ASSETS_BASE_URI ?>images/system/back_3.png" width="100%" alt="">
-                                </div>
-                        </div>
-                </a>
-                <!--绑卡充值-->
-                <a href="/site/help?type=2">
-                        <div class="row">
-                                <div class="col-xs-12">
-                                        <img src="<?= ASSETS_BASE_URI ?>images/system/back_4.png" width="100%" alt="">
-                                </div>
-                        </div>
-                        <div class="row">
-                                <div class="col-xs-12">
-                                        <img id="img_height" src="<?= ASSETS_BASE_URI ?>images/system/back_5.png" width="100%" alt="">
-                                </div>
-                                <div class="common_single">
-                                        <div class="mask-center">
-                                                绑卡充值篇
-                                                <img class="back_icon" src="<?= ASSETS_BASE_URI ?>images/system/back_icon.png" height="100%"
-                                                     alt="">
-                                        </div>
-                                </div>
-                        </div>
-                        <div class="row">
-                                <div class="col-xs-12">
-                                        <img src="<?= ASSETS_BASE_URI ?>images/system/back_6.png" width="100%" alt="">
-                                </div>
-                        </div>
-                </a>
-                <!--投资提现-->
-                <a href="/site/help?type=3">
-                        <div class="row">
-                                <div class="col-xs-12">
-                                        <img src="<?= ASSETS_BASE_URI ?>images/system/back_7.png" width="100%" alt="">
-                                </div>
-                        </div>
-                        <div class="row">
-                                <div class="col-xs-12">
-                                        <img id="img_height" src="<?= ASSETS_BASE_URI ?>images/system/back_8.png" width="100%" alt="">
-                                </div>
-                                <div class="common_single">
-                                        <div class="mask-center">
-                                                投资/提现篇
-                                                <img class="back_icon" src="<?= ASSETS_BASE_URI ?>images/system/back_icon.png" height="100%"
-                                                     alt="">
-                                        </div>
-                                </div>
-                        </div>
-                        <div class="row">
-                                <div class="col-xs-12">
-                                        <img src="<?= ASSETS_BASE_URI ?>images/system/back_9.png" width="100%" alt="">
-                                </div>
-                        </div>
-                </a>
-                <!--名词解释-->
-                <a href="/site/help?type=4">
-                        <div class="row">
-                                <div class="col-xs-12">
-                                        <img src="<?= ASSETS_BASE_URI ?>images/system/back_10.png" width="100%" alt="">
-                                </div>
-                        </div>
-                        <div class="row">
-                                <div class="col-xs-12">
-                                        <img id="img_height" src="<?= ASSETS_BASE_URI ?>images/system/back_11.png" width="100%" alt="">
-                                </div>
-                                <div class="common_single">
-                                        <div class="mask-center">
-                                                名词解释篇
-                                                <img class="back_icon" src="<?= ASSETS_BASE_URI ?>images/system/back_icon.png" height="100%"
-                                                     alt="">
-                                        </div>
-                                </div>
-                        </div>
-                        <div class="row">
-                                <div class="col-xs-12">
-                                        <img src="<?= ASSETS_BASE_URI ?>images/system/back_12.png" width="100%" alt="">
-                                </div>
-                        </div>
-                </a>
-        </div>
+                <div class="common_single">
+                    <div class="mask-center">
+                        操作篇
+                        <img class="back_icon" src="<?= ASSETS_BASE_URI ?>images/system/back_icon.png" height="100%"
+                             alt="">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12">
+                    <img src="<?= ASSETS_BASE_URI ?>images/system/back_3.png?v=1.1" width="100%" alt="">
+                </div>
+            </div>
+        </a>
+        <!--绑卡充值-->
+        <a href="/site/help?type=2">
+            <div class="row">
+                <div class="col-xs-12">
+                    <img src="<?= ASSETS_BASE_URI ?>images/system/back_4.png?v=1.1" width="100%" alt="">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12">
+                    <img id="img_height" src="<?= ASSETS_BASE_URI ?>images/system/back_5.png?v=1.1" width="100%" alt="">
+                </div>
+                <div class="common_single">
+                    <div class="mask-center">
+                        安全篇
+                        <img class="back_icon" src="<?= ASSETS_BASE_URI ?>images/system/back_icon.png" height="100%"
+                             alt="">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12">
+                    <img src="<?= ASSETS_BASE_URI ?>images/system/back_6.png?v=1.1" width="100%" alt="">
+                </div>
+            </div>
+        </a>
+        <!--投资提现-->
+        <a href="/site/help?type=3">
+            <div class="row">
+                <div class="col-xs-12">
+                    <img src="<?= ASSETS_BASE_URI ?>images/system/back_7.png?v=1.1" width="100%" alt="">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12">
+                    <img id="img_height" src="<?= ASSETS_BASE_URI ?>images/system/back_8.png?v=1.1" width="100%" alt="">
+                </div>
+                <div class="common_single">
+                    <div class="mask-center">
+                        背景篇
+                        <img class="back_icon" src="<?= ASSETS_BASE_URI ?>images/system/back_icon.png" height="100%"
+                             alt="">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12">
+                    <img src="<?= ASSETS_BASE_URI ?>images/system/back_9.png?v=1.1" width="100%" alt="">
+                </div>
+            </div>
+        </a>
+        <!--名词解释-->
+        <a href="/site/help?type=4">
+            <div class="row">
+                <div class="col-xs-12">
+                    <img src="<?= ASSETS_BASE_URI ?>images/system/back_10.png?v=1.1" width="100%" alt="">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12">
+                    <img id="img_height" src="<?= ASSETS_BASE_URI ?>images/system/back_11.png?v=1.1" width="100%" alt="">
+                </div>
+                <div class="common_single">
+                    <div class="mask-center">
+                        产品篇
+                        <img class="back_icon" src="<?= ASSETS_BASE_URI ?>images/system/back_icon.png" height="100%"
+                             alt="">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12">
+                    <img src="<?= ASSETS_BASE_URI ?>images/system/back_12.png?v=1.1" width="100%" alt="">
+                </div>
+            </div>
+        </a>
+    </div>
 </div>
