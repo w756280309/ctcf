@@ -1,4 +1,7 @@
 <?php
+
+$this->title = '账户中心';
+
 frontend\assets\WapAsset::register($this);
 $this->registerJsFile(ASSETS_BASE_URI . 'js/common.js', ['depends' => 'yii\web\YiiAsset','position' => 1]);
 ?>
