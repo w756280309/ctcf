@@ -8,6 +8,7 @@ use yii\base\ActionFilter;
 use yii\di\Instance;
 use yii\web\User;
 use yii\web\ForbiddenHttpException;
+use common\models\app\AccessToken;
 
 /**
  * AccessControl provides simple access control based on a set of rules.
@@ -66,8 +67,17 @@ class UserAccountAcesssControl extends ActionFilter
      */
     public function beforeAction($action)
     {
-        if (null !== $this->user && 0 === $this->user->identity->status) {
+        if (!defined('IN_APP') && null !== $this->user && 0 === $this->user->identity->status) {
             return Yii::$app->getResponse()->redirect('/site/usererror');
+        }
+
+        if (defined('IN_APP') && Yii::$app->request->get('token')) {
+            $accessToken = AccessToken::isEffectiveToken(Yii::$app->request->get('token'));
+            if (false === $accessToken) {
+                \Yii::$app->user->logout();
+            } else {
+                \Yii::$app->user->login($accessToken->user);
+            }
         }
 
         return true;

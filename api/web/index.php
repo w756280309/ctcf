@@ -16,5 +16,8 @@ $config = yii\helpers\ArrayHelper::merge(
 );
 
 $application = new yii\web\Application($config);
+if (!defined('IN_APP')) {
+    define('IN_APP', true);
+}
 require __DIR__.'/../../common/config/di.php';
 $application->run();

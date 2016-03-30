@@ -13,6 +13,7 @@ return [
     'components' => [
         'user' => [
             'identityClass' => 'common\\models\\user\\User',
+            'loginUrl' => ['/login'],
         ],
         'urlManager' => [
             'enableStrictParsing' => true,
@@ -34,6 +35,7 @@ return [
                 'logout' => 'v1/app/auth/logout',
                 'user' => 'v1/app/user/info',
                 'appver' => 'v1/app/deploy/appver',
+                'login' => 'v1/app/user/login',
             ],
         ],
     ],

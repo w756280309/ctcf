@@ -161,8 +161,8 @@ class SiteController extends Controller
         } else {
             $model->scenario = 'login';
         }
-
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            $post_from = str_replace('?token=null', '', Yii::$app->request->post('from'));
             if ($model->login(User::USER_TYPE_PERSONAL)) {
                 $app_token = "";
                 if (defined('IN_APP')) {
@@ -172,7 +172,7 @@ class SiteController extends Controller
                 if (!empty($post_from)) {
                     return ['code' => 0, 'message' => '登录成功', 'tourl' => $post_from . $app_token];
                 } else {
-                    $url = Yii::$app->getUser()->getReturnUrl();
+                    $url = str_replace('?token=null', '', Yii::$app->getUser()->getReturnUrl());
 
                     return ['code' => 0, 'message' => '登录成功', 'tourl' => $url . $app_token];
                 }

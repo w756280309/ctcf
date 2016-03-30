@@ -77,6 +77,8 @@ class AppAcesssControl extends ActionFilter
                     $accessToken->save(false);
                 }
                 \Yii::$app->user->login($accessToken->user);
+            } else if (!Yii::$app->user->isGuest) {
+                \Yii::$app->user->logout();
             }
         }
         return true;

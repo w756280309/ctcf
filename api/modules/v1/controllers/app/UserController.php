@@ -11,6 +11,15 @@ use common\core\UserAccountCore;
  */
 class UserController extends Controller
 {
+    public function actionLogin()
+    {
+        return [
+            'status' => "fail",//程序级别成功失败
+            'message' => "需要登录",
+            'data' => null,
+        ];
+    }
+
     /**
      * 获取用户信息
      */
