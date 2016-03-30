@@ -20,7 +20,7 @@
         margin:30px auto;
         padding-left: 20px;
         padding-right: 20px;
-        font-size: 14px;
+        font-size: 1.4rem;
     }
     .advan .about-content .line {
         padding: 0;
@@ -40,9 +40,8 @@
         line-height: 22px;
     }
     .advan .about-content p {
-        margin:20px auto 5px;
-        width:280px;
-        text-align: center;
+        margin:20px 0px 5px 0px;
+        text-align: left;
         height: 18px;
         line-height: 18px;
     }
@@ -62,7 +61,7 @@
         text-align: center;
     }
     .advan .about-icon {
-        margin: 15px 0;
+        margin-top: 40px;
     }
     .advan .about-icon img {
         width:100%;
@@ -83,6 +82,11 @@
         font-size:1rem;
         color: #dcdcdc;
     }
+
+    p.suojin {
+        text-indent: 1.8em;
+    }
+
     /*iphone6*/
     @media screen and (min-width: 375px) {
         /*.advan .head-line{font-size: 1.3rem;}*/
@@ -108,24 +112,26 @@
     </div>
     <!-- 主体 -->
     <div class="about-content row">
-        <div class="col-xs-12 line">
-            <div class="head-line ico"><span>—————</span>温都金服五大优势<span>—————</span></div >
+        <div class="line">
+            <div class="head-line ico"><span>—————</span>温都金服五大优势<span>—————</span></div>
         </div>
 
         <p class="h-first"><a href="javascript:;" class="number">1</a><span>国资</span>背景</p>
-        <p>温州报业传媒旗下理财平台</p>
+        <p class="suojin">隶属温州日报报业集团旗下，国资平台，可信赖；</p>
         <p class="h-num"><a href="javascript:;" class="number">2</a><span>股东</span>强势</p>
-        <p>温州报业传媒有限公司</p>
-        <p>南京金融资产交易中心</p>
+        <p class="suojin">温州日报报业集团，实力雄厚的现代国有传媒集团</p>
+        <p class="suojin">南京金融资产交易中心，</p>
+        <p class="suojin">省级金融主管部门审批的合规平台；</p>
         <p class="h-num"><a href="javascript:;" class="number">3</a>资产<span>优质</span></p>
-        <p>各类金融机构产品、优质企业政信类产品、</p>
-        <p> 国有平台挂牌金融资产项目</p>
-        <p class="h-num"><a href="javascript:;" class="number">4</a>灵活<span>便捷</span></p>
-        <p>选择多样，网上有平台，线下有门店服务</p>
-        <p> 千元起步，低门槛高收益，预期年化收益高</p>
+        <p class="suojin">资金全程托管，与平台隔离不被挪用；</p>
+        <p class="suojin">绑定本人银行卡，提现只进本人账户很安全；</p>
+        <p class="suojin">层层风控，安全至上；专业稳健，合法合规；</p>
+        <p class="h-num"><a href="javascript:;" class="number">4</a><span>灵活</span>便捷</p>
+        <p class="suojin">主流金融机构产品、优质政府平台类产品、</p>
+        <p class="suojin">优质供应链金融产品，期限多样，收益可观；</p>
         <p class="h-num"><a href="javascript:;" class="number">5</a>资金<span>安全</span></p>
-        <p>联动优势全程资金托管，用户资金与平台隔离</p>
-        <p>  资金交易仅限本人操作，资金出入安全有保障</p>
+        <p class="suojin">网上有平台，线下有门店，温都金服在您身边</p>
+        <p class="suojin">千元起投，手机操作，随时随地实现财富增值。</p>
 
         <div class="about-icon"><img src="<?= ASSETS_BASE_URI ?>images/system/pay.png" alt="合作伙伴"></div>
     </div>
