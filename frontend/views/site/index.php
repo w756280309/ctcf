@@ -45,27 +45,27 @@ $this->title = '温都金服首页';
         <div class="three-content three-content1">
             <img src="images/one.png" alt="">
             <div class="three-content-title"><span>国资</span>背景</div>
-            <i>温州报业传媒旗下理财平台</i>
+            <i>隶属温州日报报业集团旗下，国资平台，可信赖；</i>
         </div>
         <div class="three-content three-content2">
             <img src="images/two.png" alt="">
             <div class="three-content-title"><span>股东</span>强势</div>
-            <i>温州报业传媒     南京金融资产交易中心</i>
+            <em><p>温州日报报业集团，实力雄厚的现代国有传媒集团；</p><p>南京金融资产交易中心，省级金融主管部门审批的合规平台；</p></em>
         </div>
         <div class="three-content three-content3">
             <img src="images/three.png" alt="">
             <div class="three-content-title">资产<span>优质</span></div>
-            <i>各类金融机构产品、优质企业政信类产品、国有平台挂牌金融资产项目</i>
+            <em><p>资金全程托管，与平台隔离不被挪用；绑定本人银行卡，提现只进本人账户很安全；</p><p>层层风控，安全至上；专业稳健，合法合规；</p></em>
         </div>
         <div class="three-content three-content4">
             <img src="images/four.png" alt="">
             <div class="three-content-title"><span>灵活</span>便捷</div>
-            <i>选择多样，网上有平台，线下有门店服务，千元起步，低门槛高收益，预期年化收益高</i>
+            <em><p>主流金融机构产品、优质政府平台类产品、</p><p>优质供应链金融产品，期限多样，收益可观；</p></em>
         </div>
         <div class="three-content three-content5">
             <img src="images/five.png" alt="">
             <div class="three-content-title">资金<span>安全</span></div>
-            <em><p>联动优势全程资金托管，用户资金与平台隔离</p><p>资金交易仅限本人操作，资金出入安全有保障</p></em>
+            <em><p>网上有平台，线下有门店，温都金服在您身边，</p><p>千元起投，手机操作，随时随地实现财富增值。</p></em>
         </div>
         <div class="three-hang">
             <img src="images/gongsi.png" alt="">
