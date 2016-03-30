@@ -1,0 +1,138 @@
+body {
+    background: #fff!important;
+    font-size: 62.5%;
+}
+.relation {
+    padding-bottom: 25px;
+}
+.relation .nav-height {
+    margin-bottom: 0!important;
+}
+.relation .ico {
+    padding: 0;
+    margin:13px 16px;
+}
+.relation .ico img {
+    width:100%;
+}
+.relation .about-content {
+    margin:0 auto;
+    padding-left: 17px;
+    padding-right: 17px;
+}
+.relation .about-content div.xinxi {
+    padding-top:10px;
+    clear: both;
+}
+.relation .about-content div.mendian {
+    padding-top:30px;
+    clear: both;
+}
+.relation .about-content div p {
+    font-size: 1rem;
+    line-height: 1.6rem;
+}
+.relation .about-content .p_float {
+    float: left;
+    width:21%;
+    height: 100%;
+}
+.relation .about-content .p_num {
+    float: left;
+    width:79%;
+    height: 100%;
+}
+
+/*iphone6*/
+@media screen and (min-width: 375px) and (max-width: 434px) {
+    .relation .about-content div p {
+        padding-left: 1%;
+        font-size: 1.5rem;
+        line-height: 2.6rem;
+    }
+    .relation .about-content .p_float {
+        width:21%;
+    }
+    .relation .about-content .p_num {
+        width:77%;
+    }
+}
+/*  媒体查询  */
+@media screen and (min-width: 435px)and (max-width: 480px) {
+    .relation .about-content div p {
+        padding-left: 1%;
+        font-size: 1.5rem;
+        line-height: 2.5rem;
+    }
+    .relation .about-content .p_float {
+        width:19%;
+    }
+    .relation .about-content .p_num {
+        width:79%;
+    }
+}
+@media screen and (min-width: 481px)and (max-width: 567px) {
+    .relation .about-content div p {
+        padding-left: 1%;
+        font-size: 1.6rem;
+        line-height: 2.8rem;
+    }
+    .relation .about-content .p_float {
+        width:16%;
+    }
+    .relation .about-content .p_num {
+        width:81%;
+    }
+}
+@media screen and (min-width: 568px) and (max-width: 666px) {
+    .relation .about-content div p {
+        padding-left: 1%;
+        font-size: 1.8rem;
+        line-height: 3.2rem;
+    }
+    .relation .about-content .p_float {
+        width:18%;
+    }
+    .relation .about-content .p_num {
+        width:80%;
+    }
+}
+@media screen and (min-width: 667px) and (max-width: 767px) {
+    .relation .about-content div p {
+        padding-left: 1%;
+        font-size: 1.9rem;
+        line-height: 3.4rem;
+    }
+    .relation .about-content .p_float {
+        width:16%;
+    }
+    .relation .about-content .p_num {
+        width:82%;
+    }
+}
+@media screen and (min-width: 768px) and (max-width: 800px){
+    .relation .about-content div p {
+        padding-left:1% ;
+        font-size: 2rem;
+        line-height: 3.8rem;
+    }
+    .relation .about-content .p_float {
+        width:14%;
+    }
+    .relation .about-content .p_num {
+        width:85%;
+    }
+}
+@media screen and (min-width: 800px) {
+    .relation .about-content div p {
+        padding-left:1% ;
+        font-size: 2rem;
+        line-height: 3.8rem;
+    }
+    .relation .about-content .p_float {
+        width:13%;
+    }
+    .relation .about-content .p_num {
+        width:85%;
+    }
+}
