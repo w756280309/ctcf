@@ -24,7 +24,7 @@ $this->title = ('success' === $ret) ? "充值成功" : "充值失败";
 <div class="row daojishi">
      <div class="col-xs-12">
         <?php if ('success' === $ret) { ?>
-            <?php if ($from_url !== '' ) { ?>
+            <?php if ('' !== $from_url) { ?>
                 <div><span>5秒</span>后回到购买页</div>
              <?php } else { ?>
                  <div><span>5秒</span>后回到账户</div>
@@ -38,7 +38,7 @@ $this->title = ('success' === $ret) ? "充值成功" : "充值失败";
 <div class="row" id='bind-close1'>
     <div class="col-xs-4"></div>
     <div class="col-xs-4">
-        <?php if ($from_url !== '') { ?>
+        <?php if ('' !== $from_url) { ?>
             <a href="<?=\yii\helpers\Html::encode($from_url)?>" class="bind-close1">返回购买页</a>
         <?php } else { ?>
             <a href="/user/user/index" class="bind-close1">返回账户</a>
@@ -64,7 +64,7 @@ $this->title = ('success' === $ret) ? "充值成功" : "充值失败";
 <div class="row" id='bind-close1'>
     <div class="col-xs-4"></div>
     <div class="col-xs-4">
-        <?php if ($from_url !== '') { ?>
+        <?php if ('' !== $from_url) { ?>
             <a href="<?= \yii\helpers\Html::encode($from_url) ?>" class="bind-close1">返回购买页</a>
         <?php } else { ?>
             <a href="/user/user/index" class="bind-close1">返回账户</a>
