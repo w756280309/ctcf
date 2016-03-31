@@ -7,12 +7,12 @@ $this->title = '最新资讯';
 <!-- 主体 -->
 <div class="information-details">
         <div class="header">
-                <p class="header-title">温都金服定于4月6日上线</p>
+                <p class="header-title">温都金服定于4月6日试上线</p>
                 <p class="header-time">2016-4-5</p>
         </div>
         <div class="header-content">
                 <p class="text-indent-no">亲爱的朋友：</p>
-                <p>经过长久的精心筹备，温州报业传媒旗下理财平台——温都金服（wenjf.com），定于4月6日正式上线。</p>
+                <p>经过长久的精心筹备，温州报业传媒旗下理财平台——温都金服（wenjf.com），定于4月6日试上线。</p>
                 <p>上线当日，温都金服将发布精选优质资产项目，数量有限、秒杀在即！如需快速抢标，请您提前注册、充值。</p>
                 <p>4月6日起至4月20日，平台将推出“全场加息、投资前8名送iPhone6S、iPad mini4等奖品，理财用户人人抽奖、注册绑卡用户凭注册信息可到门店领取精美礼品等系列活动”，欢迎关注！</p>
                 <p>活动请点击首页相应页面查看、参与！</p>
