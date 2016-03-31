@@ -7,11 +7,14 @@
  */
 namespace frontend\controllers;
 
+use common\controllers\HelpersTrait;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 
 class BaseController extends Controller
 {
+    use HelpersTrait;
+
     protected $user;
 
     public function init()

@@ -9,7 +9,7 @@ use yii\web\IdentityInterface;
 use P2pl\Borrower;
 use common\models\epay\EpayUser;
 use P2pl\UserInterface;
-use YiiPlus\Validator\CnMobileValidator;
+use Zii\Validator\CnMobileValidator;
 
 /**
  * This is the model class for table "user".
@@ -35,7 +35,7 @@ use YiiPlus\Validator\CnMobileValidator;
  */
 class User extends \yii\db\ActiveRecord implements IdentityInterface, UserInterface
 {
-    use \YiiPlus\Model\ErrorExTrait;
+    use \Zii\Model\ErrorExTrait;
 
     //会员类型 1：普通会员 ， 2：融资会员
     const USER_TYPE_PERSONAL = 1;

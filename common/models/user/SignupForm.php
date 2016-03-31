@@ -5,7 +5,7 @@ namespace common\models\user;
 use Yii;
 use yii\base\Model;
 use common\service\SmsService;
-use YiiPlus\Validator\CnMobileValidator;
+use Zii\Validator\CnMobileValidator;
 use common\lib\validator\LoginpassValidator;
 
 /**

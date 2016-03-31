@@ -4,7 +4,7 @@ namespace common\models\user;
 
 use Yii;
 use yii\base\Model;
-use YiiPlus\Validator\CnMobileValidator;
+use Zii\Validator\CnMobileValidator;
 use common\models\app\AccessToken;
 
 /**

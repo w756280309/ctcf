@@ -16,7 +16,7 @@ namespace common\models\epay;
  */
 class EpayUser extends \yii\db\ActiveRecord
 {
-    use \YiiPlus\Model\ErrorExTrait;
+    use \Zii\Model\ErrorExTrait;
 
     /**
      * {@inheritdoc}

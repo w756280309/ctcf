@@ -8,6 +8,7 @@ use common\service\SmsService;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use yii\web\Response;
+use common\controllers\HelpersTrait;
 use common\models\adv\Adv;
 use common\models\product\OnlineProduct;
 use common\models\user\SignupForm;
@@ -27,6 +28,8 @@ use common\models\bank\Bank;
  */
 class SiteController extends Controller
 {
+    use HelpersTrait;
+
     /**
      * {@inheritdoc}
      */

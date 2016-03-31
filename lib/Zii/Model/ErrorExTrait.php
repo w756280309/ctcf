@@ -1,6 +1,6 @@
 <?php
 
-namespace YiiPlus\Model;
+namespace Zii\Model;
 
 trait ErrorExTrait
 {

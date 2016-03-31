@@ -1,6 +1,6 @@
 <?php
 
-namespace YiiPlus\Validator;
+namespace Zii\Validator;
 
 use yii\validators\Validator;
 

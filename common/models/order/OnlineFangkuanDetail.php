@@ -21,7 +21,7 @@ use yii\behaviors\TimestampBehavior;
  */
 class OnlineFangkuanDetail extends \yii\db\ActiveRecord
 {
-    use \YiiPlus\Model\ErrorExTrait;
+    use \Zii\Model\ErrorExTrait;
 
     public static function createSN($pre = 'fkd')
     {

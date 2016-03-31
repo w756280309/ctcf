@@ -21,7 +21,7 @@ use common\models\user\User;
  */
 class OnlineFangkuan extends \yii\db\ActiveRecord implements \P2pl\LoanFkInterface
 {
-    use \YiiPlus\Model\ErrorExTrait;
+    use \Zii\Model\ErrorExTrait;
 
     const STATUS_EXAMINED = 1;//审核通过
     const STATUS_DENY = 2;//审核不通过

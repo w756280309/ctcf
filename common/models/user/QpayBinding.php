@@ -14,7 +14,7 @@ class QpayBinding extends UserBanks implements \P2pl\QpayBindInterface
     const STATUS_ACK = 3;//处理中，
     const STATUS_SUCCESS = 1;//绑定成功
     const STATUS_FAIL = 2;//绑定失败
-    
+
     public static function tableName()
     {
         return 'qpaybinding';
@@ -31,7 +31,7 @@ class QpayBinding extends UserBanks implements \P2pl\QpayBindInterface
     {
         return [
             [['uid', 'bank_id', 'account', 'card_number', 'account_type'], 'required'],
-            [['card_number'], 'YiiPlus\Validator\CnCardNoValidator'],
+            [['card_number'], 'Zii\Validator\CnCardNoValidator'],
             ['mobile', 'match', 'pattern' => '/^(13[0-9]|14[0-9]|15[0-9]|17[0-9]|18[0-9])\d{8}$/', 'message' => '手机号格式错误'],
             [['uid', 'account_type'], 'integer'],
             [['bank_id', 'bank_name', 'sub_bank_name'], 'string', 'max' => 255],
@@ -49,7 +49,7 @@ class QpayBinding extends UserBanks implements \P2pl\QpayBindInterface
     {
         return $this->hasOne(User::className(), ['id' => 'uid']);
     }
-    
+
     public function getTxSn()
     {
         return $this->binding_sn;

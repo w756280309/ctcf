@@ -2,7 +2,7 @@
 
 namespace common\models\booking;
 
-use YiiPlus\Validator\CnMobileValidator;
+use Zii\Validator\CnMobileValidator;
 use yii\behaviors\TimestampBehavior;
 
 /**

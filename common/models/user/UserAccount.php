@@ -21,7 +21,7 @@ use yii\behaviors\TimestampBehavior;
  */
 class UserAccount extends \yii\db\ActiveRecord
 {
-    use \YiiPlus\Model\ErrorExTrait;
+    use \Zii\Model\ErrorExTrait;
 
     const TYPE_LEND = 1; //投资者
     const TYPE_BORROW = 2; //融资者

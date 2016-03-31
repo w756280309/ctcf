@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use common\controllers\HelpersTrait;
 use yii\web\Controller;
 
 /**
@@ -9,6 +10,8 @@ use yii\web\Controller;
  */
 class NewsController extends Controller
 {
+    use HelpersTrait;
+
     public $layout = '@app/modules/order/views/layouts/buy';
 
     /**

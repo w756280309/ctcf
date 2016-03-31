@@ -1,6 +1,6 @@
 <?php
 
-namespace YiiPlus\Paginator\Pagination;
+namespace Zii\Paginator\Pagination;
 
 use yii\data\Pagination;
 use yii\db\ActiveQueryInterface;

@@ -7,7 +7,7 @@ use yii\behaviors\TimestampBehavior;
 
 class RechargeRecord extends \yii\db\ActiveRecord implements \P2pl\QpayTxInterface, \JsonSerializable
 {
-    use \YiiPlus\Model\ErrorExTrait;
+    use \Zii\Model\ErrorExTrait;
 
     public $InstitutionID; //机构号码
     public $OrderNo; //订单号

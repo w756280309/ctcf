@@ -6,6 +6,7 @@ use Yii;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
+use common\controllers\HelpersTrait;
 use common\models\user\LoginForm;
 use common\service\LoginService;
 use common\models\log\LoginLog;
@@ -16,6 +17,8 @@ use common\models\user\User;
  */
 class SiteController extends Controller
 {
+    use HelpersTrait;
+
     public $layout = 'main';
 
     /**

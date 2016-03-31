@@ -3,7 +3,7 @@
 namespace common\models\user;
 
 use yii\behaviors\TimestampBehavior;
-use YiiPlus\Validator\CnMobileValidator;
+use Zii\Validator\CnMobileValidator;
 
 /**
  * This is the model class for table "user_bank".
