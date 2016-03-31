@@ -64,9 +64,12 @@ class OrderController extends BaseController
         if ('' !== $osn && null === $order) {
             throw new \yii\web\BadRequestHttpException('无法找到订单号为'.$osn.'的订单记录');
         }
+        if (null  !== $order && 1 !== $order->status) {
+            $deal = OnlineProduct::findOne($order->online_pid);
+        }
         $this->layout = '@app/modules/order/views/layouts/buy';
 
-        return $this->render('error', ['order' => $order, 'ret' => (null  !== $order && 1 === $order->status) ? 'success' : 'fail']);
+        return $this->render('error', ['order' => $order, 'deal' => $deal, 'ret' => (null  !== $order && 1 === $order->status) ? 'success' : 'fail']);
     }
 
     /**
