@@ -31,6 +31,7 @@ class BaseController extends Controller
     public function behaviors()
     {
         return [
+            \common\filters\UserAccountAcesssControl::className(),//至于access之前是为了如果是app端登录先要拿token使用户登录
             'access' => [
                 'class' => AccessControl::className(),
                 'rules' => [
@@ -48,7 +49,7 @@ class BaseController extends Controller
             'requestbehavior' => [
                 'class' => 'common\components\RequestBehavior',
             ],
-            \common\filters\UserAccountAcesssControl::className(),
+            
         ];
     }
 }
