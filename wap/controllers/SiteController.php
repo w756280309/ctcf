@@ -182,6 +182,7 @@ class SiteController extends Controller
                 if (defined('IN_APP')) {
                     $tokens = AccessToken::find(['uid' => Yii::$app->user->id])->orderBy('create_time desc')->one();
                     $output['token'] = $tokens->token;
+                    $output['expire'] = $tokens->expireTime;
                 }
 
                 return ['code' => 0, 'message' => '登录成功', 'tourl' => $urls['path'].'?'.http_build_query($output)];
@@ -308,7 +309,18 @@ class SiteController extends Controller
                     $user->last_login = time();
                     $user->save();
 
-                    return ['code' => 1, 'message' => '注册成功', 'tourl' => '/'];
+                    $tourl = '/';
+                    $urls = parse_url($tourl);
+                    $output = array();
+                    if (defined('IN_APP')) {
+                        $tokens = AccessToken::initToken($user);
+                        $tokens->save();
+                        $output['token'] = $tokens->token;
+                        $output['expire'] = $tokens->expireTime;
+                        $tourl = $urls['path'].'?'.http_build_query($output);
+                    }
+
+                    return ['code' => 1, 'message' => '注册成功', 'tourl' => $tourl];
                 }
             } else {
                 $error = $model->firstErrors;
