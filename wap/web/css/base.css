@@ -58,7 +58,6 @@ body{
 
 /* 标题高度 */
 .nav-height {
-    margin-bottom:10px;
     height: 52px;
     line-height: 50px;
     background: #f44336;

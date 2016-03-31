@@ -84,7 +84,7 @@
     }
 
     p.suojin {
-        text-indent: 1.8em;
+        padding-left: 1.8em;
     }
 
     /*iphone6*/

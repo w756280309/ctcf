@@ -69,7 +69,7 @@ $this->title="帮助中心";
     </div>
 
     <div class="row">
-        <p class="header"><span>——————</span>&nbsp;开通资金托管&nbsp;<span>——————</span></p>
+        <p class="header"><span>——————</span>&nbsp;绑卡充值&nbsp;<span>——————</span></p>
     </div>
     <div class="kong-width">
         <div class="row single">
