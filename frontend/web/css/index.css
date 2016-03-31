@@ -1,6 +1,7 @@
 body, p, ul, ol, li, dl, dt, dd, form, h1, h2, h3, h4, h5, h6, input {
     margin: 0;
     padding: 0;
+    padding-left: 40px;
     list-style: none;
 }
 img {
@@ -317,7 +318,7 @@ i,em{
     height: 50px;
     line-height: 50px;
     color: #323232;
-    font-size: 38px;
+    font-size: 30px;
     text-align: center;
     transition: all 1s;
     -webkit-transition: all 1s;
@@ -332,7 +333,7 @@ i,em{
     height: 30px;
     line-height: 30px;
     color: #767676;
-    font-size: 20px;
+    font-size: 19px;
     text-align: center;
     margin-bottom: 40px;
     transition: all 1s;
@@ -344,7 +345,7 @@ i,em{
     transition-delay: 1s;
 }
 .three-content {
-    padding-left: 10%;
+    padding-left: 12%;
     height: 30px;
     line-height: 30px;
     margin-top: 30px;
@@ -370,7 +371,7 @@ i,em{
     color: #4a4a4a;
     height: 30px;
     line-height: 30px;
-    margin-left: 10px;
+    margin-left: 50px;
 }
 .three-content em{
     display: block;
