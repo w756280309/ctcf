@@ -67,6 +67,7 @@ class UserController extends Controller
                 'result' => 'success',//业务级别成功失败
                 'msg' => '成功',
                 'content' => [
+                    'user_id' => $user->id,
                     'asset_total' => strval($uacore->getTotalFund($user->id)),
                     'profit_balance' => strval($uacore->getTotalProfit($user->id)),
                     'investment_balance' => strval(bcadd($ua->investment_balance, $ua->freeze_balance, 2)),
