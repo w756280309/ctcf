@@ -8,7 +8,7 @@ trait HelpersTrait
 {
     public function render($view, $params = [])
     {
-        if ('dev' === YII_ENV) {
+        if (Yii::$app->params['enable_dev_helpers']) {
             if (strncmp($view, '@', 1) === 0) {
                 $file = Yii::getAlias($view);
             } elseif (strncmp($view, '//', 2) === 0) {
