@@ -179,7 +179,7 @@ class SiteController extends Controller
                 if (isset($urls['query'])) {
                     parse_str($urls['query'], $output);
                 }
-                if (!defined('IN_APP')) {
+                if (defined('IN_APP')) {
                     $tokens = AccessToken::find(['uid' => Yii::$app->user->id])->orderBy('create_time desc')->one();
                     $output['token'] = $tokens->token;
                 }
