@@ -4,7 +4,7 @@ $this->title= ("success" === $ret) ? "购买成功" : "购买失败";
 $this->registerJsFile(ASSETS_BASE_URI.'js/common.js', ['depends' => 'yii\web\YiiAsset','position' => 1]);
 ?>
 
-<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/setting.css">
+<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/setting.css?v=20160331">
 <div class="row" id='bind-box'>
     <div class="col-xs-12">
         <?php if ('success' === $ret) { ?>
@@ -24,9 +24,9 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/common.js', ['depends' => 'yii\web\Yii
     </div>
 </div>
 <div class="row daojishi" id='bind-close1'>
-    <div class="col-xs-12">
+    <div class="col-xs-12 page_padding">
         <?php if ('success' === $ret) { ?>
-        <div style="padding: 0px 30px;">您已成功认购项目，可以进入我的理财查看认购详情</div>
+            <div>您已成功认购项目，可以进入我的理财查看认购详情</div>
         <?php } else { ?>
             <div>遇到问题请联系客服，电话：<?= Yii::$app->params['contact_tel'] ?></div>
         <?php } ?>
