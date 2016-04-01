@@ -73,7 +73,7 @@ $pc_cat = Yii::$app->params['pc_cat'];
             <div class="row list-line">
                 <div class="col-xs-12">
                     <div class="listLine-content">
-                        <span><i>还款方式</i>  按半年付息,到期本息</span>
+                        <span><i>还款方式</i>  <?= $val['cid'] ?></span>
                         <div class="listLine-point"></div>
                     </div>
                 </div>

@@ -124,7 +124,16 @@ $(function () {
                                             '<span class="desc-text '+ hui +'">起投</span></li>' +
                                             '<li class="col-xs-3 bb nock1"><div class="nock">' +
                                             '<canvas data-status="'+ item.status +'" data-per="'+ dataPer +'"></canvas>' + finishHtml +
-                                            '</div></li></ul></div><div class="row list-line"><div class="col-xs-12"><div class="listLine-content"> <span><i>还款方式</i>  按半年付息,到期本息</span> <div class="listLine-point"></div> </div> </div> </div></a>';
+                                            '</div></li></ul></div>'+
+                                            '<div class="row list-line">'+
+                                            '<div class="col-xs-12">'+
+                                            '<div class="listLine-content">'+
+                                            '<span><i>还款方式</i>  '+ item.cid +'</span>'+
+                                            '<div class="listLine-point"></div>'+
+                                            '</div>'+
+                                            '</div>'+
+                                            '</div>'+
+                                            +'</a>';
                                 });
 
                                 $('#item-list').html($('#item-list').html() + html);

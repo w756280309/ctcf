@@ -43,7 +43,7 @@ class DealController extends Controller
             $cond['cid'] = $cat;
             $cond['is_xs'] = 0;
         }
-        $data = OnlineProduct::find()->where($cond)->select('id k,sn as num,title,yield_rate as yr,status,expires as qixian,money,start_date as start,finish_rate,jiaxi,start_money,refund_method');
+        $data = OnlineProduct::find()->where($cond)->select('id k,sn as num,title,yield_rate as yr,status,expires as qixian,money,start_date as start,finish_rate,jiaxi,start_money,refund_method, cid');
         $count = $data->count();
         $size = 5;
         $pages = new Pagination(['totalCount' => $count, 'pageSize' => $size]);
@@ -58,6 +58,7 @@ class DealController extends Controller
             $deals[$key]['jiaxi'] = $val['jiaxi'];
             $deals[$key]['method'] = (1 === (int)$val['refund_method']) ? "天" : "个月";
             $deals[$key]['start_money'] = $val['start_money'];
+            $deals[$key]['cid'] = \Yii::$app->params['refund_method'][$val['cid']];
         }
         $tp = ceil($count / $size);
         $code = ($page > $tp) ? 1 : 0;
