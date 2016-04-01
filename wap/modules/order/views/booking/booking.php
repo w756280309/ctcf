@@ -3,9 +3,9 @@ $this->title = '预约申请单';
 $this->registerJsFile(ASSETS_BASE_URI . 'js/common.js', ['depends' => 'yii\web\YiiAsset', 'position' => 1]);
 ?>
 <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/bind.css?v=20160401"/>
-<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/chongzhi.css"/>
-<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/base.css"/>
-<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/tixian.css"/>
+<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/chongzhi.css?v=20160401"/>
+<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/base.css?v=20160401"/>
+<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/tixian.css?v=20160401"/>
 
 
 <!--提现金额-->
