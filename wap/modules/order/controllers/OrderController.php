@@ -98,7 +98,7 @@ class OrderController extends BaseController
         if (!empty($deal_id)) {
             $deal = OnlineOrder::findOne($deal_id);
         } else {
-            $deal = new OnlineOrder(['uid' => $this->user->id]);
+            $deal = null;
         }
 
         $model[$key] = ContractTemplate::replaceTemplate($model[$key], $deal);
