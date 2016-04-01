@@ -12,6 +12,7 @@ BaiduTongjiHelper::registerTo($this, BaiduTongjiHelper::PC_KEY);
         <title><?= Html::encode($this->title) ?></title>
         <?php $this->head() ?>
         <meta name="baidu-site-verification" content="7YkufMc2UW" />
+        <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
         <link rel="stylesheet" href="<?=ASSETS_BASE_URI ?>css/jquery.fullPage.css">
         <link rel="stylesheet" href="<?=ASSETS_BASE_URI ?>css/jquery.fullPage.extend.css">
         <link rel="stylesheet" href="<?=ASSETS_BASE_URI ?>css/index.css?v=20160331">

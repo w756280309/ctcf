@@ -29,7 +29,6 @@ $rate = number_format($deals->finish_rate * 100, 0);
     <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
     <meta name="renderer" content="webkit">
     <meta name="format-detection" content="telephone=no"/>
-<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
     <title>温都金服</title>
     <?= Html::csrfMetaTags() ?>
     <?php $this->head() ?>
