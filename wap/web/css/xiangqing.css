@@ -235,6 +235,9 @@ i,em {
     background: #fff;
     font-size: 12px;
 }
+.tab-conten .col-xs-10 img{
+    width:100%;
+}
 .datas span {
     display: block;
     height: 30px;
