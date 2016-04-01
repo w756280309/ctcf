@@ -284,3 +284,12 @@ body{
 .kaihu1 {
     display: none;
 }
+.p-notice {
+    font-size: 1.2rem;
+    color:#f44336;
+    line-height: 18px;
+}
+
+.marg-top-btn {
+    margin-top:40px;
+}

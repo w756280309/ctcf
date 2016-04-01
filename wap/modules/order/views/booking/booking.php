@@ -7,17 +7,6 @@ $this->registerJsFile(ASSETS_BASE_URI . 'js/common.js', ['depends' => 'yii\web\Y
 <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/base.css"/>
 <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/tixian.css"/>
 
-<!--可提现金额-->
-<div class="row kahao">
-    <div class="hidden-xs col-sm-1"></div>
-    <div class="col-xs-4 col-sm-2">项目总额：</div>
-    <div class="col-xs-8 col-sm-6"><?= $product->total_fund ?>万</div>
-</div>
-<div class="row kahao" style="margin-bottom: 10px;">
-    <div class="hidden-xs col-sm-1"></div>
-    <div class="col-xs-4 col-sm-2">起购金额：</div>
-    <div class="col-xs-8 col-sm-6"><?= $product->min_fund ?>万</div>
-</div>
 
 <!--提现金额-->
 <form method="post" class="cmxform" id="form" action="/order/booking/booking?pid=<?= $product->id ?>" data-to="1">
@@ -43,10 +32,15 @@ $this->registerJsFile(ASSETS_BASE_URI . 'js/common.js', ['depends' => 'yii\web\Y
         <div class="col-xs-3 col-sm-1"></div>
         <div class="hidden-xs col-sm-1"></div>
     </div>
-    <!--提交按钮-->
     <div class="row">
+        <div class="hidden-xs col-sm-1"></div>
+        <div class="col-xs-7 col-sm-8"><p class="p-notice">*温股投起购金额100万</p></div>
+        <div class="hidden-xs col-sm-1"></div>
+    </div>
+    <!--提交按钮-->
+    <div class="row ">
         <div class="col-xs-3"></div>
-        <div class="col-xs-6 login-sign-btn">
+        <div class="col-xs-6 login-sign-btn marg-top-btn">
             <input id="booking_btn" class="btn-common btn-normal" type="button" value="提交">
         </div>
         <div class="col-xs-3"></div>

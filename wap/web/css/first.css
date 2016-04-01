@@ -236,7 +236,8 @@ a.weikaibiao {
 }
 
 .color1 {
-    color: #3e3a39;
+    color: #f44336;
+    font-size: 15px;
 }
 
 .color2 {
@@ -252,54 +253,57 @@ a.weikaibiao {
 }
 
 a.a1 {
-    float: left;
-    margin-top: 4px;
-    margin-right: 1px;
-    width: 3px;
-    height: 13px;
+    margin-top:4px;
+    margin-right: 2px;
+    width: 2px;
+    height: 12px;
+    background: #f44336;
     display: inline-block;
 }
 
 .img-jijin {
     margin: 0 auto 10px;
-    padding-left: 3px;
-    padding-right: 3px;
+    padding:10px 0;
+    background: url('../images/touzi-01.png?v=20160331') no-repeat center center;
+    background-size: 100% 100%;
 }
 
 img {
     border: 0
 }
 
-.bg1 {
-    background: #d3a284;
-}
-
-.bg2 {
-    background: #54567a;
-}
-
-.bg3 {
-    background: #58727f;
-}
-
-.bg4 {
-    background: #83afa6;
-}
-
-.bg5 {
-    background: #f7958e;
-}
-
 .p1 {
-    margin-bottom: 24px;
-    font-size: 15px;
+    margin-bottom: 18px;
+    padding-bottom: 12px;
+    font-size: 14px;
     line-height: 20px;
+    border-bottom: 1px solid #c9c9c9;
+}
+
+p.txt-align-ct {
+    height:20px;
+    line-height: 20px;
+    font-size:1.22rem;
+    text-align: center;
+    color:#fff;
+}
+
+p.marg-top {
+    margin-top:1.4rem;
+}
+
+.p2 {
+    border:0;
 }
 
 .p1 p {
-    margin-left: 6px;
+    margin-left: 0;
+    color:#444;
 }
 
+.p1 p.tit {
+    padding-bottom:3px;
+}
 .div1 {
     margin: 10px 0 0;
     padding: 0;
@@ -493,6 +497,9 @@ nav li.first {
     .notice {
         font-size: 1.42rem;
     }
+    p.txt-align-ct {
+        font-size: 1.28rem;
+    }
 }
 @media (min-width:414px) and (max-width:489px) {
     .nav-box {
@@ -503,6 +510,9 @@ nav li.first {
     }
     .notice {
         font-size: 1.53rem;
+    }
+    p.txt-align-ct {
+        font-size: 1.34rem;
     }
 }
 @media (min-width:490px) and (max-width: 640px) {
@@ -524,6 +534,9 @@ nav li.first {
     .notice {
         font-size: 1.64rem;
     }
+    p.txt-align-ct {
+        font-size: 1.4rem;
+    }
 }
 @media (min-width:641px) and (max-width: 768px) {
     .nav-box {
@@ -542,6 +555,9 @@ nav li.first {
     }
     .notice {
         font-size: 1.7rem;
+    }
+    p.txt-align-ct {
+        font-size: 1.46rem;
     }
 }
 @media (min-width:769px) and (max-width:799px)  {
@@ -562,6 +578,9 @@ nav li.first {
     .notice {
         font-size: 1.74rem;
     }
+    p.txt-align-ct {
+        font-size: 1.5rem;
+    }
 }
 @media (min-width:800px) and (max-width:1100px)  {
     .nav-box {
@@ -581,6 +600,9 @@ nav li.first {
     .notice {
         font-size: 1.84rem;
     }
+    p.txt-align-ct {
+        font-size: 1.6rem;
+    }
 }
 @media (min-width:1101px)  {
     .nav-box {
@@ -599,5 +621,8 @@ nav li.first {
     }
     .notice {
         font-size: 1.94rem;
+    }
+    p.txt-align-ct {
+        font-size: 1.68rem;
     }
 }
