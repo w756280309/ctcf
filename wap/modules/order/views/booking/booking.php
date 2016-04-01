@@ -2,7 +2,7 @@
 $this->title = '预约申请单';
 $this->registerJsFile(ASSETS_BASE_URI . 'js/common.js', ['depends' => 'yii\web\YiiAsset', 'position' => 1]);
 ?>
-<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/bind.css"/>
+<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/bind.css?v=20160401"/>
 <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/chongzhi.css"/>
 <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/base.css"/>
 <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/tixian.css"/>
@@ -28,13 +28,13 @@ $this->registerJsFile(ASSETS_BASE_URI . 'js/common.js', ['depends' => 'yii\web\Y
     <div class="row kahao">
         <div class="hidden-xs col-sm-1"></div>
         <div class="col-xs-7 col-sm-8"><input id="" type="text" name="BookingLog[fund]" placeholder="请输入预约的金额"></div>
-        <div class="col-xs-1 col-sm-1">万</div>
+        <div class="col-xs-1 col-sm-1"></div>
         <div class="col-xs-3 col-sm-1"></div>
-        <div class="hidden-xs col-sm-1"></div>
+        <div class="col-sm-1">万</div>
     </div>
     <div class="row">
         <div class="hidden-xs col-sm-1"></div>
-        <div class="col-xs-7 col-sm-8"><p class="p-notice">*温股投起购金额100万</p></div>
+        <div class="col-xs-7 col-sm-8"><p class="p-notice">*温股投起购金额<?= $product->min_fund ?>万元</p></div>
         <div class="hidden-xs col-sm-1"></div>
     </div>
     <!--提交按钮-->

@@ -2,13 +2,13 @@
 $this->title = '股权投资';
 ?>
 
-<link href="<?= ASSETS_BASE_URI ?>css/bootstrap.min.css" rel="stylesheet">
-<link href="<?= ASSETS_BASE_URI ?>css/base.css" rel="stylesheet">
-<link href="<?= ASSETS_BASE_URI ?>css/first.css" rel="stylesheet"/>
+<link href="<?= ASSETS_BASE_URI ?>css/bootstrap.min.css?v=20160401" rel="stylesheet">
+<link href="<?= ASSETS_BASE_URI ?>css/base.css?v=20160401" rel="stylesheet">
+<link href="<?= ASSETS_BASE_URI ?>css/first.css?v=20160401" rel="stylesheet"/>
 
-<div class="container" style="margin-top:-10px;background: #fff;">
+<div class="container" style="background: #fff;">
 
-    <div class="row" style="margin:0 auto;padding:-15px 0 0;">
+    <div class="row" style="margin:0 auto;">
         <div class="col-xs-12 img-jijin">
             <p class="txt-align-ct">过去十年，是不动产资产为王的时代。</p >
             <p class="txt-align-ct">把握不动产升值趋势的家庭，实现了财富梦想。</p >
@@ -18,7 +18,7 @@ $this->title = '股权投资';
         </div>
     </div>
 
-    <div class="row" style="padding:0; margin:15px 0 70px;" >
+    <div class="row" style="padding:0; margin:15px 0 50px;" >
         <ul class="col-xs-12" style="padding:0 25px; ">
             <li >
                 <div class="color2 p1">
@@ -47,7 +47,7 @@ $this->title = '股权投资';
             <li >
                 <div class="color2 p1">
                     <p class="tit"><a href="javascript:;" class="a1" ></a><span class="color1">起投金额</span></p>
-                    <p>100万元人民币</p>
+                    <p><?= $model->min_fund ?>万元人民币</p>
                 </div>
             </li>
             <li >
