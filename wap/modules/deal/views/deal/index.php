@@ -73,8 +73,9 @@ $pc_cat = Yii::$app->params['pc_cat'];
             <div class="row list-line">
                 <div class="col-xs-12">
                     <div class="listLine-content">
-                        <span><i>还款方式</i>  <?= $val['cid'] ?></span>
-                        <div class="listLine-point"></div>
+                        <span><i>还款方式</i></span><span class="refund-desc">
+                            <div class="listLine-point"></div><?= $val['cid'] ?>
+                        </span>
                     </div>
                 </div>
             </div>

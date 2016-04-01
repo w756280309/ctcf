@@ -340,7 +340,6 @@ a.active { border-bottom: 1px solid #f44336; /* 当前状态 */}
     line-height: 28px;
 }
 .listLine-content {
-    position: relative;
     width: 100%;
     height: 20px;
     border-top:1px solid #f6f6f6;
@@ -353,10 +352,14 @@ a.active { border-bottom: 1px solid #f44336; /* 当前状态 */}
     padding-right: 4px;
     margin-right: 9px;
 }
+.refund-desc {
+    position: relative;
+    padding-left: 0.5em;
+}
 .listLine-point {
     position: absolute;
-    right: 115px;
-    top:12px;
+    left: 0;
+    top: 50%;
     width: 4px;
     height: 4px;
     border-radius: 50%;

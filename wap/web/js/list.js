@@ -128,8 +128,7 @@ $(function () {
                                             '<div class="row list-line">'+
                                             '<div class="col-xs-12">'+
                                             '<div class="listLine-content">'+
-                                            '<span><i>还款方式</i>  '+ item.cid +'</span>'+
-                                            '<div class="listLine-point"></div>'+
+                                            '<span><i>还款方式</i></span><span class="refund-desc"><div class="listLine-point"></div>'+ item.cid +'</span>'+
                                             '</div>'+
                                             '</div>'+
                                             '</div>'+

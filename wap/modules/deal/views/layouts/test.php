@@ -15,10 +15,10 @@ BaiduTongjiHelper::registerTo($this, BaiduTongjiHelper::WAP_KEY);
     <title><?= Html::encode($this->title) ?></title>
     <?= Html::csrfMetaTags() ?>
     <?php $this->head() ?>
-    <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/index.css?v=20160401"/>
+    <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/index.css?v=20160401-b"/>
     <script src="<?= ASSETS_BASE_URI ?>js/TouchSlide.1.1.js"></script>
     <script src="<?= ASSETS_BASE_URI ?>js/jquery.js"></script>
-    <script src="<?= ASSETS_BASE_URI ?>js/list.js?v=20160401-a"></script>
+    <script src="<?= ASSETS_BASE_URI ?>js/list.js?v=20160401-f"></script>
 </head>
 <body>
     <?php $this->beginBody() ?>
