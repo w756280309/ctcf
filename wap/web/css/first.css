@@ -154,6 +154,20 @@ ul.new-bottom li div {
     height:16px;
     color:#9fa0a0;
 }
+.percentage-txt span {
+    position: relative;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+.percentage-point {
+    position: absolute;
+    left: 2px;
+    top: 7px;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: #f49f12;
+}
 
 .new-bottom-rg p {
     padding-top: 16px;

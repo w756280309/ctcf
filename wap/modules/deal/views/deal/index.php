@@ -70,7 +70,14 @@ $pc_cat = Yii::$app->params['pc_cat'];
                     </li>
                 </ul>
             </div>
-            <div class="hidden-xs col-sm-1"></div>
+            <div class="row list-line">
+                <div class="col-xs-12">
+                    <div class="listLine-content">
+                        <span><i>还款方式</i>  按半年付息,到期本息</span>
+                        <div class="listLine-point"></div>
+                    </div>
+                </div>
+            </div>
         </a>
     <?php endforeach; ?>
         </div>
