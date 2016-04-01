@@ -85,6 +85,7 @@ return [
             'bind_ret_url' => "https://m.wenjf.com/user/qpay/notify/frontend",
             'rec_notify_url' => "https://m.wenjf.com/user/qpay/qpaynotify/backend",
             'rec_ret_url' => "https://m.wenjf.com/user/qpay/qpaynotify/frontend",
+            'order_ret_url' => "https://m.wenjf.com/order/qpay/notify/frontend",
             'order_notify_url' => "https://m.wenjf.com/order/qpay/notify/backend",
             'mer_draw_notify_url' => 'https://mwjf.wenjf.com/order/drawnotify/notify',  //融资方提现回调地址
             'draw_ret_url' => "https://m.wenjf.com/user/qpay/drawnotify/frontend",

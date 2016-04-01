@@ -17,6 +17,16 @@ use common\models\order\OnlineOrder;
 class NotifyController extends Controller
 {
     /**
+     * 联动优势投标前台通知地址
+     */
+    public function actionFrontend()
+    {
+        $data = Yii::$app->request->get();
+        $this->processing($data);
+         return $this->redirect('/user/user/myorder');
+    }
+
+    /**
      *
      * @param array $data
      * @return type
