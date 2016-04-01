@@ -18,7 +18,7 @@ BaiduTongjiHelper::registerTo($this, BaiduTongjiHelper::WAP_KEY);
     <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/index.css"/>
     <script src="<?= ASSETS_BASE_URI ?>js/TouchSlide.1.1.js"></script>
     <script src="<?= ASSETS_BASE_URI ?>js/jquery.js"></script>
-    <script src="<?= ASSETS_BASE_URI ?>js/list.js"></script>
+    <script src="<?= ASSETS_BASE_URI ?>js/list.js?v=20160401"></script>
 </head>
 <body>
     <?php $this->beginBody() ?>

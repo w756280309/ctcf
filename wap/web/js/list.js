@@ -115,7 +115,7 @@ $(function () {
                                         html += '<span class="bonus-badge '+ hui +'">+'+ itemjx +'%</span>';
                                     }
                                     html += '</span></div>' +
-                                            '<span class="desc-text nianRate '+ hui +'">年化率</span></li>' +
+                                            '<span class="desc-text nianRate '+ hui +'">年化收益率</span></li>' +
                                             '<li class="col-xs-2 '+ hui +'">' +
                                             '<p class="'+ hui +'">'+ item.qixian +'<span class="column-lu">' + item.method +'</span></p>' +
                                             '<span class="desc-text '+ hui +'">期限</span></li>' +
