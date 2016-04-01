@@ -26,11 +26,8 @@ $this->registerJsFile(ASSETS_BASE_URI . 'js/common.js', ['depends' => 'yii\web\Y
         <div class="hidden-xs col-sm-1"></div>
     </div>
     <div class="row kahao">
-        <div class="hidden-xs col-sm-1"></div>
-        <div class="col-xs-7 col-sm-8"><input id="" type="text" name="BookingLog[fund]" placeholder="请输入预约的金额"></div>
-        <div class="col-xs-1 col-sm-1"></div>
-        <div class="col-xs-3 col-sm-1"></div>
-        <div class="col-sm-1">万</div>
+        <div class="col-xs-8 col-sm-8"><input id="" type="text" name="BookingLog[fund]" placeholder="请输入预约的金额"></div>
+        <div class="col-xs-4 col-sm-4" style="text-align: right;">万</div>
     </div>
     <div class="row">
         <div class="hidden-xs col-sm-1"></div>

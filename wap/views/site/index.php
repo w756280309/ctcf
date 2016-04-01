@@ -91,7 +91,7 @@ $rate = number_format($deals->finish_rate * 100, 0);
                     <div class="newcomer-badge"></div>
                     <span class="interest-rate"><?= rtrim(rtrim(OnlineProduct::calcBaseRate($deals->yield_rate, $deals->jiaxi), '0'), '.') ?>%</span>
                     <span class="interest-rate-add">+<?= $deals->jiaxi ?>%</span>
-                    <div class="col-xs-12 percentage-txt"><span><?= \Yii::$app->params['refund_method'][$deals->cid] ?></span></div>
+                    <div class="col-xs-12 percentage-txt"><span><?= \Yii::$app->params['refund_method'][$deals->refund_method] ?></span></div>
                 </div>
             </li>
             <li class="col-xs-6 padding-5">
@@ -120,7 +120,7 @@ $rate = number_format($deals->finish_rate * 100, 0);
             <li class="col-xs-6 padding-5">
                 <div class="xian">
                     <span class="interest-rate"><?= rtrim(rtrim(number_format($deals->yield_rate*100, 2), '0'), '.') ?>%</span>
-                    <div class="col-xs-12 percentage-txt"><span><i class="percentage-point"></i><?= \Yii::$app->params['refund_method'][$deals->cid] ?></span></div>
+                    <div class="col-xs-12 percentage-txt"><span><i class="percentage-point"></i><?= \Yii::$app->params['refund_method'][$deals->refund_method] ?></span></div>
                 </div>
             </li>
             <li class="col-xs-6 padding-5">
