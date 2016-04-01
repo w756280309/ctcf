@@ -17,17 +17,17 @@ class LenderStatsController extends Controller
     {
         $data = [ 'title' =>
             [
-                'UserID',
-                'SignupTime',
-                'isEpay',
-                'isMianmi',
-                'isBingCard',
-                'RechargeSuccFund(yuan)',
-                'RechargeSuccNum',
-                'DrawSuccFund(yuan)',
-                'DrawSuccNum',
-                'OrderSuccFund(yuan)',
-                'OrderSuccNum',
+                '用户ID',
+                '注册时间',
+                '是否开户(1 开户 0 未开户)',
+                '是否开通免密(1 开通 0 未开通)',
+                '是否绑卡(1 绑卡 0 未绑卡)',
+                '充值成功金额(元)',
+                '充值成功次数(次)',
+                '提现成功金额(元)',
+                '提现成功次数(次)',
+                '投资成功金额(元)',
+                '投资成功次数(次)',
             ],
         ];
 
@@ -127,8 +127,11 @@ class LenderStatsController extends Controller
         }
 
         if (null !== $record) {
+            $record = iconv('utf-8', 'gb2312', $record);//转换编码
+
             header('Content-Disposition: attachment; filename="statistics.csv"');
             header('Content-Length: ' .strlen($record)); // 内容的字节数
+
             echo $record;
         }
     }
