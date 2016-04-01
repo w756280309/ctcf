@@ -176,7 +176,7 @@ $rate = number_format($deals->finish_rate * 100, 0);
             <div class="col-xs-3 col-sm-2 more news-more"><a href="/news/index">更多》</a></div>
         </div>
         <div class="notice-bottom">
-            <div class="col-xs-12 notice border-top" onclick="location.href='/news/detail?id=1'"><span>【</span>资讯信息<span>】</span>温都金服定于4月6日上线</div>
+            <div class="col-xs-12 notice border-top" onclick="location.href='/news/detail?id=1'"><span>【</span>资讯信息<span>】</span>温都金服定于4月6日试上线</div>
             <div class="col-xs-12 notice border-bot" onclick="location.href='/news/detail?id=2'"><span>【</span>资讯信息<span>】</span>用户资金托管引入联动优势</div>
         </div>
     </div>
