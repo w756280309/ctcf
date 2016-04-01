@@ -133,7 +133,7 @@ $(function () {
                                             '</div>'+
                                             '</div>'+
                                             '</div>'+
-                                            +'</a>';
+                                            '</a>';
                                 });
 
                                 $('#item-list').html($('#item-list').html() + html);
