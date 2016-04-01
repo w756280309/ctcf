@@ -2,12 +2,12 @@
 
 namespace app\modules\order\controllers\qpay;
 
-use common\models\order\OnlineOrder;
 use Yii;
 use Exception;
 use yii\web\Controller;
 use common\service\OrderService;
 use common\models\TradeLog;
+use common\models\order\OnlineOrder;
 
 /**
  * 联动优势投标
@@ -16,16 +16,6 @@ use common\models\TradeLog;
  */
 class NotifyController extends Controller
 {
-    /**
-     * 联动优势投标前台通知地址
-     */
-    public function actionFrontend()
-    {
-        $data = Yii::$app->request->get();
-        $this->processing($data);
-         return $this->redirect('/user/user/myorder');
-    }
-
     /**
      *
      * @param array $data
