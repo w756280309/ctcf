@@ -54,17 +54,17 @@ $this->title = '温都金服首页';
         </div>
         <div class="three-content three-content3">
             <img src="images/three.png" alt="">
-            <div class="three-content-title">资产<span>优质</span></div>
+            <div class="three-content-title"><span>安全</span>合规</div>
             <em><p>资金全程托管，与平台隔离不被挪用；绑定本人银行卡，提现只进本人账户很安全；</p><p>层层风控，安全至上；专业稳健，合法合规；</p></em>
         </div>
         <div class="three-content three-content4">
             <img src="images/four.png" alt="">
-            <div class="three-content-title"><span>灵活</span>便捷</div>
+            <div class="three-content-title">产品<span>优质</span></div>
             <em><p>主流金融机构产品、优质政府平台类产品、</p><p>优质供应链金融产品，期限多样，收益可观；</p></em>
         </div>
         <div class="three-content three-content5">
             <img src="images/five.png" alt="">
-            <div class="three-content-title">资金<span>安全</span></div>
+            <div class="three-content-title"><span>灵活</span>便捷</div>
             <em><p>网上有平台，线下有门店，温都金服在您身边，</p><p>千元起投，手机操作，随时随地实现财富增值。</p></em>
         </div>
         <div class="three-hang">
