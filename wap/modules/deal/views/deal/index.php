@@ -44,7 +44,7 @@ $pc_cat = Yii::$app->params['pc_cat'];
                             <?php if (!empty($val['jiaxi'])) { ?><span class="bonus-badge <?= $is_hui?'hui':'' ?>">+<?= doubleval($val['jiaxi']) ?>%</span><?php } ?>
                         </span>
                         </div>
-                        <span class="desc-text nianRate <?= $is_hui?'hui':'' ?>">年化率</span>
+                        <span class="desc-text nianRate <?= $is_hui?'hui':'' ?>">年化收益率</span>
                     </li>
                     <li class="col-xs-2 <?= $is_hui?'hui':'' ?>">
                         <p class="<?= $is_hui?'hui':'' ?>"><?= $val['qixian'] ?><span class="column-lu"><?= $val['method'] ?></span></p>
