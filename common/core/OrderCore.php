@@ -7,6 +7,7 @@ use common\service\PayService;
 use common\models\order\OnlineOrder;
 use common\models\product\OnlineProduct;
 use common\service\OrderService;
+use common\models\order\OrderQueue;
 
 /**
  * Desc 主要用于实时读取用户资金信息
@@ -54,9 +55,12 @@ class OrderCore
         $res = Yii::$container->get('ump')->orderNopass($order);
         if ($res->isSuccessful()) {
             try {
-                OrderService::confirmOrder($order);
-
-                return ['code' => PayService::ERROR_SUCCESS, 'message' => '', 'tourl' => '/order/order/ordererror?osn='.$order->sn];
+                //OrderService::confirmOrder($order);
+                if (null === OrderQueue::findOne(['orderSn' => $order->sn])) {
+                    OrderQueue::initForQueue($order)->save();
+                }
+                return ['code' => PayService::ERROR_SUCCESS, 'message' => '', 'tourl' => '/order/order/orderwait?osn='.$order->sn];
+                //return ['code' => PayService::ERROR_SUCCESS, 'message' => '', 'tourl' => '/order/order/ordererror?osn='.$order->sn];
             } catch (\Exception $ex) {
                 return ['code' => PayService::ERROR_MONEY_FORMAT, 'message' => $ex->getMessage(), 'tourl' => '/order/order/ordererror?osn='.$order->sn];
             }
