@@ -21,7 +21,6 @@ class UserController extends BaseController
      */
     public function actionIndex()
     {
-        $this->layout = 'account';
         $bc = new BcRound();
         bcscale(14);
         $user = $this->user;

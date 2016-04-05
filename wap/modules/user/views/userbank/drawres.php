@@ -1,5 +1,6 @@
 <?php
 $this->title = '提现申请';
+$this->backUrl = false;
 ?>
 <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/setting.css">
 <div class="row" id='bind-box'>

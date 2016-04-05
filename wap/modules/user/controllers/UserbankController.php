@@ -210,7 +210,6 @@ class UserbankController extends BaseController
      */
     public function actionAccept($ret = 'error')
     {
-        $this->layout = '@app/modules/user/views/layouts/notify';
         return $this->render('acceptres', ['ret' => $ret]);
     }
 
@@ -225,7 +224,7 @@ class UserbankController extends BaseController
             $from_url = Yii::$app->session['recharge_from_url'];
             unset(Yii::$app->session['recharge_from_url']);
         }
-        $this->layout = '@app/modules/user/views/layouts/notify';
+
         return $this->render('qpayres', ['ret' => $ret, 'from_url' => $from_url]);
     }
 
@@ -235,7 +234,6 @@ class UserbankController extends BaseController
      */
     public function actionDrawres($ret = 'error')
     {
-        $this->layout = '@app/modules/user/views/layouts/notify';
         return $this->render('drawres', ['ret' => $ret]);
     }
 
@@ -245,7 +243,6 @@ class UserbankController extends BaseController
      */
     public function actionRzres($ret = 'error')
     {
-        $this->layout = '@app/modules/user/views/layouts/notify';
         return $this->render('rzres', ['ret' => $ret]);
     }
 }

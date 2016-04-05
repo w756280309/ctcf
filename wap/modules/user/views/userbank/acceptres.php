@@ -1,5 +1,6 @@
 <?php
 $this->title="绑卡受理结果";
+$this->backUrl = false;
 
 $this->registerJsFile('', ['depends' => 'yii\web\YiiAsset','position' => 1]);
 ?>

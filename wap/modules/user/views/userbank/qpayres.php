@@ -1,6 +1,6 @@
 <?php
 $this->title = ('success' === $ret) ? "充值成功" : "充值失败";
-
+$this->backUrl = false;
 ?>
 <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/setting.css">
 <div class="row" id='bind-box'>

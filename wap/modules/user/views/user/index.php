@@ -1,13 +1,26 @@
 <?php
 
 $this->title = '账户中心';
+$this->showBottomNav = true;
+$this->showAvatar = true;
 
 frontend\assets\WapAsset::register($this);
 $this->registerJsFile(ASSETS_BASE_URI . 'js/common.js', ['depends' => 'yii\web\YiiAsset','position' => 1]);
 ?>
 <link href="<?= ASSETS_BASE_URI ?>css/informationAndHelp.css" rel="stylesheet">
-<!--  账户中心页 start-->
+<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/setting.css">
+<script>
+    $(function(){
+        $('.footer-inner a').css({color: '#8c8c8c'});
+        $('.footer-inner2 a').css({color: '#f44336'});
+        $('.footer-inner1 a').css({color: '#8c8c8c'});
+        $('.footer-inner1 .licai').css({background: 'url("<?= ASSETS_BASE_URI ?>images/footer2.png") no-repeat -113px -3px',backgroundSize: '200px'});
+        $('.footer-inner2 .zhanghu').css({background: 'url("<?= ASSETS_BASE_URI ?>images/footer2.png") no-repeat -81px -57px',backgroundSize: '200px'});
+        $('.footer-inner .shouye').css({background: 'url("<?= ASSETS_BASE_URI ?>images/footer2.png") no-repeat -145px -3px',backgroundSize: '200px'});
+    })
+</script>
 
+    <!--  账户中心页 start-->
     <div class="row  border-bottom  earning accountcenter">
         <div class="row earn-tit">
             <div class="col-xs-1"></div>

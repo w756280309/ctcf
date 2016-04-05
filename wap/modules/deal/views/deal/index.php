@@ -2,6 +2,8 @@
 frontend\assets\WapAsset::register($this);
 
 $this->title = '理财列表';
+$this->showBottomNav = true;
+$this->backUrl = false;
 
 $curent_cid = $header['cat'];
 $curent_xs = $header['xs'];
@@ -14,7 +16,12 @@ $this->registerJs('var xs=' . (empty($curent_xs)?'undefined':$curent_xs) . ';', 
 $pc_cat = Yii::$app->params['pc_cat'];
 
 ?>
+<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/index.css?v=20160401-b"/>
+<script src="<?= ASSETS_BASE_URI ?>js/jquery.js"></script>
+<script src="<?= ASSETS_BASE_URI ?>js/TouchSlide.1.1.js"></script>
 <script src="<?= ASSETS_BASE_URI ?>js/jquery.classyloader.js"></script>
+<script src="<?= ASSETS_BASE_URI ?>js/list.js?v=20160401-f"></script>
+
 <div class="container">
     <div class="row tit-box">
         <?php foreach ($pc_cat as $key=>$cat){ ?>

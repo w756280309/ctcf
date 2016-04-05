@@ -34,7 +34,7 @@ class DealController extends Controller
         if ((null !== $cat && !in_array($cat, $cat_ids)) || (null !== $xs && !in_array($xs, [0, 1]))) {
             throw new \yii\web\BadRequestHttpException('参数无效');
         }
-        $this->layout = 'test';
+
         $cond = ['isPrivate' => 0, 'del_status' => OnlineProduct::STATUS_USE, 'online_status' => OnlineProduct::STATUS_ONLINE];
 
         if (null !== $xs) {
@@ -112,7 +112,6 @@ class DealController extends Controller
         if ($deals['status'] == OnlineProduct::STATUS_HUAN || $deals['status'] == OnlineProduct::STATUS_OVER || $deals['status'] == OnlineProduct::STATUS_FOUND) {
             $deals['finish_rate'] = 1;
         }
-        $this->layout = '@app/views/layouts/dealdeail';
 
         return $this->render('detail', ['deal' => $deals, 'deal_balace' => $orderbalance]);
     }
