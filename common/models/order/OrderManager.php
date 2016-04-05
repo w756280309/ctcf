@@ -10,10 +10,8 @@ use common\utils\TxUtils;
 use yii\helpers\ArrayHelper;
 use Exception;
 use yii\data\Pagination;
-use common\models\order\OnlineOrder;
 use common\models\sms\SmsMessage;
 use common\models\user\User;
-use common\models\order\OnlineRepaymentPlan;
 
 /**
  * 订单manager.
@@ -156,35 +154,43 @@ class OrderManager
      *
      * @param $ordOrSn 可以为订单对象或者订单号
      *
-     * @return bool 如果返回true代表当前是订单应该撤销。false则不是
+     * @return bool 如果返回true代表当前是订单撤销成功。false则不是超标订单
      *
      * @throws \Exception
      */
     public static function cancelNoPayOrder($ordOrSn)
     {
+        $ord = OnlineOrder::ensureOrder($ordOrSn);
+        if (OnlineOrder::STATUS_FALSE !== $ord->status) {
+            throw new \Exception('状态异常');
+        }
+        //查找截止当前订单是否超投
+        $loan = Loan::findOne($ord->online_pid);
+        if (bccomp(bcadd($loan->funded_money, $ord->order_money), $loan->money) <= 0) {
+            //队列中未支付成功的小于等于募集金额的
+            return false;
+        }
+        $transaction = Yii::$app->db->beginTransaction();
         try {
-            $ord = OnlineOrder::ensureOrder($ordOrSn);
-            $ord->status = OnlineOrder::STATUS_CANCEL;
-            if (!$ord->save()) {
-                throw new \Exception('状态修改失败');
-            }
-
-            $transaction = Yii::$app->db->beginTransaction();
             $cancelOrder = CancelOrder::initForOrder($ord, $ord->order_money);
             $cancelOrder->txStatus = CancelOrder::ORDER_CANCEL_SUCCESS;
             if (!$cancelOrder->save()) {
-                $transaction->rollBack();
                 throw new \Exception('撤销交易创建失败');
             }
-                //联动标的转账
-                $trans_resp = Yii::$container->get('ump')->loanTransferToLender($cancelOrder);
+            $ord->status = OnlineOrder::STATUS_CANCEL;
+            if (!$ord->save()) {
+                throw new \Exception('状态修改失败');//
+            }
+            //联动标的转账
+            $trans_resp = Yii::$container->get('ump')->loanTransferToLender($cancelOrder);
             if (!$trans_resp->isSuccessful()) {
-                $transaction->rollBack();
                 throw new \Exception('联动标的转账失败');
             }
-            OrderQueue::updateAll(['status' => 1], 'orderSn=' . $ord->sn);
             $transaction->commit();
+
+            return true;
         } catch (\Exception $ex) {
+            $transaction->rollBack();
             throw $ex;
         }
     }
@@ -366,7 +372,7 @@ class OrderManager
         }
         $command = Yii::$app->db->createCommand('UPDATE '.Loan::tableName().' SET funded_money=funded_money+'.$order->order_money.' WHERE id='.$loan->id);
         $command->execute();//更新实际募集金额
-        OrderQueue::updateAll(['status' => 1], 'orderSn=' . $order->sn);
+        OrderQueue::updateAll(['status' => 1], 'orderSn='.$order->sn);
         //投标成功，向用户发送短信
         $message = [
             $user->real_name,

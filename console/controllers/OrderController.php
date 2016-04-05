@@ -7,7 +7,6 @@
  */
 namespace console\controllers;
 
-use Yii;
 use yii\console\Controller;
 use common\models\order\OrderQueue;
 use common\models\order\OrderManager;
@@ -16,18 +15,22 @@ class OrderController extends Controller
 {
     public function actionQueue()
     {
-        bcscale(14);
-        $loans = OrderQueue::findQueue();
-        foreach ($loans as $loan) {
-            $ordmoney = 0;
-            foreach ($loan['data'] as $ord) {
-                if (bccomp($loan['money'], bcadd($ordmoney, $ord['order_money'])) < 0) {
-                    //超过的需要撤标
-                    OrderManager::cancelNoPayOrder($ord['orderSn']);
-                    continue;
+        for ($i = 0; $i < 10;++$i) {
+            $queues = OrderQueue::find()->where(['status' => 0])->orderBy('created_at asc')->limit(3)->all();
+            if (null !== $queues) {
+                //循环处理单个任务
+                foreach ($queues as $queue) {
+                    try {
+                        if (!OrderManager::cancelNoPayOrder($queue->order)) {
+                            //cancelNoPayOrder返回值false代表订单成立
+                            OrderManager::confirmOrder($queue->order);
+                        }
+                    } catch (\Exception $ex) {
+                        //TODO
+                    }
                 }
-                $ordmoney = bcadd($ordmoney, $ord['order_money']);
-                OrderManager::confirmOrder($ord['orderSn']);
+            } else {
+                sleep(0.1);
             }
         }
     }

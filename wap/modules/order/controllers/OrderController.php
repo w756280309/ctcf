@@ -82,8 +82,6 @@ class OrderController extends BaseController
         if (OnlineOrder::STATUS_FALSE  !== $order->status) {
             return $this->redirect("/order/order/ordererror?osn=" . $order->sn);
         }
-        $this->layout = '@app/modules/order/views/layouts/buy';
-
         return $this->render('wait', ['order' => $order]);
     }
 
