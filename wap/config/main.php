@@ -1,16 +1,17 @@
 <?php
+
 $params = array_merge(
-    require(__DIR__ . '/../../common/config/params.php'),
-    require(__DIR__ . '/../../common/config/params-local.php'),
-    require(__DIR__ . '/params.php'),
-    require(__DIR__ . '/params-local.php')
+    require(__DIR__.'/../../common/config/params.php'),
+    require(__DIR__.'/../../common/config/params-local.php'),
+    require(__DIR__.'/params.php'),
+    require(__DIR__.'/params-local.php')
 );
 
 return [
     'id' => 'app-wap',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
-    'language'=>'zh-CN',
+    'language' => 'zh-CN',
     'controllerNamespace' => 'app\controllers',
     'components' => [
         'user' => [
@@ -30,20 +31,22 @@ return [
                     'class' => 'yii\log\FileTarget',
                     'levels' => ['trace'],
                     'categories' => ['umplog'],
-                    'logFile' => '@app/runtime/logs/ump/ump'. date('Ymd').'.log',
-                    'maxFileSize' => 1024*2,
+                    'logFile' => '@app/runtime/logs/ump/ump'.date('Ymd').'.log',
+                    'maxFileSize' => 1024 * 2,
                     'logVars' => ['trace'],
                     'prefix' => function ($message) {
-                        return "";//去掉消息返回的[IP address][User ID][Session ID][Severity Level]
-                    }
+                        return '';//去掉消息返回的[IP address][User ID][Session ID][Severity Level]
+                    },
                ],
             ],
         ],
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
+        'view' => [
+            'class' => 'common\view\WapView',
+        ],
     ],
-
     'modules' => [
         'deal' => [
             'class' => 'app\modules\deal\Module',

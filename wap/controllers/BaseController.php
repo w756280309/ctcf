@@ -15,19 +15,6 @@ class BaseController extends Controller
 {
     use HelpersTrait;
 
-    protected $user;
-
-    public function init()
-    {
-        error_reporting(E_ALL ^ E_NOTICE);
-
-        if (!\Yii::$app->user->isGuest) {
-            $this->user = \Yii::$app->user->getIdentity();
-        }
-
-        parent::init();
-    }
-
     public function behaviors()
     {
         return [
@@ -49,7 +36,7 @@ class BaseController extends Controller
             'requestbehavior' => [
                 'class' => 'common\components\RequestBehavior',
             ],
-            
+
         ];
     }
 }

@@ -24,4 +24,9 @@ trait HelpersTrait
 
         return parent::render($view, $params);
     }
+
+    public function getAuthedUser()
+    {
+        return Yii::$app->user->getIdentity();
+    }
 }
