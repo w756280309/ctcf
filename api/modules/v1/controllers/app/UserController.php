@@ -73,7 +73,7 @@ class UserController extends Controller
                     'investment_balance' => strval(bcadd($ua->investment_balance, $ua->freeze_balance, 2)),
                     'available_balance' => strval($ua->available_balance),
                     'mobile' => substr_replace($user->mobile,'***', 3, -4),
-                    'idcard' => substr_replace($user->idcard,'***', 5, -2),
+                    'idcard' => empty($user->idcard) ? null : substr_replace($user->idcard,'***', 5, -2),
                     'bankcard' => $bankCard,
                 ]
             ]
