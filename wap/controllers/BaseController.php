@@ -1,10 +1,5 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: xmac
- * Date: 15-3-19
- * Time: 下午3:51.
- */
+
 namespace app\controllers;
 
 use common\controllers\HelpersTrait;
@@ -36,7 +31,6 @@ class BaseController extends Controller
             'requestbehavior' => [
                 'class' => 'common\components\RequestBehavior',
             ],
-
         ];
     }
 }

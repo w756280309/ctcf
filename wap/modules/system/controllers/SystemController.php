@@ -14,7 +14,7 @@ class SystemController extends BaseController
      */
     public function actionSetting()
     {
-        $uid = $this->user->id;
+        $uid = $this->getAuthedUser()->id;
 
         $user = User::find()->where(['id' => $uid, 'type' => User::USER_TYPE_PERSONAL, 'status' => User::STATUS_ACTIVE])->select('usercode,mobile')->one();
 
@@ -26,13 +26,13 @@ class SystemController extends BaseController
      */
     public function actionSafecenter()
     {
-        $uid = $this->user->id;
+        $uid = $this->getAuthedUser()->id;
 
         $user = User::find()->where(['id' => $uid, 'type' => User::USER_TYPE_PERSONAL, 'status' => User::STATUS_ACTIVE, 'idcard_status' => User::IDCARD_STATUS_PASS])->select('idcard')->one();
         $user_bank = null;
-        $qpaystatus = BankService::getQpayStatus($this->user);
+        $qpaystatus = BankService::getQpayStatus($this->getAuthedUser());
         if (User::QPAY_ENABLED === $qpaystatus) {
-            $user_bank = $this->user->qpay;
+            $user_bank = $this->getAuthedUser()->qpay;
         } else if (User::QPAY_PENDING === $qpaystatus) {
             $user_bank = QpayBinding::findOne(['uid' => $uid, 'status' => QpayBinding::STATUS_ACK]);
         }

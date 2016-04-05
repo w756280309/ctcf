@@ -27,13 +27,13 @@ class BookingController extends BaseController
             throw new \yii\web\NotFoundHttpException('booking production is not existed.');
         }
         $now = time();
-        $count = BookingLog::find()->where(['pid' => $pid, 'uid' => $this->user->id])->count();
+        $count = BookingLog::find()->where(['pid' => $pid, 'uid' => $this->getAuthedUser()->id])->count();
         if ($product->is_disabled || (!empty($model->start_time) && $now < $model->start_time) || (!empty($model->end_time) && $now > $model->end_time) || $count) {
             return $this->redirect('detail?pid='.$pid);
         }
 
         $model = new BookingLog([
-            'uid' => $this->user->id,
+            'uid' => $this->getAuthedUser()->id,
             'pid' => $pid,
         ]);
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
@@ -66,7 +66,7 @@ class BookingController extends BaseController
 
         $now = time();
         $end_flag = false;
-        $count = BookingLog::find()->where(['pid' => $pid, 'uid' => $this->user->id])->count();
+        $count = BookingLog::find()->where(['pid' => $pid, 'uid' => $this->getAuthedUser()->id])->count();
         if ($model->is_disabled || (!empty($model->start_time) && $now < $model->start_time) || (!empty($model->end_time) && $now > $model->end_time)) {
             $end_flag = true;
         }

@@ -19,12 +19,12 @@ class BindingController extends BaseController
 
         // 已验证的数据
         $safe = [
-            'realName' => $this->user->real_name,
-            'idNo' => $this->user->idcard,
+            'realName' => $this->getAuthedUser()->real_name,
+            'idNo' => $this->getAuthedUser()->idcard,
         ];
 
         $acct_model = new QpayAcct();
-        $acct_model->uid = $this->user->id;
+        $acct_model->uid = $this->getAuthedUser()->id;
         $acct_model->account = $safe['realName'];
         $acct_model->account_type = QpayAcct::PERSONAL_ACCOUNT;
 
@@ -49,7 +49,7 @@ class BindingController extends BaseController
                 return $this->createErrorResponse('抱歉不支持当前选择的银行');
             }
             $acct_model->binding_sn = TxUtils::generateSn('B');
-            $acct_model->epayUserId = $this->user->epayUser->epayUserId;
+            $acct_model->epayUserId = $this->getAuthedUser()->epayUser->epayUserId;
             QpayAcct::deleteAll(['uid' => $acct_model->uid, 'status' => 0]); //将之前的绑卡未处理的删掉
             $acct_model->save();
             $next = \Yii::$container->get('ump')->enableQpay($acct_model);//获取跳转页面
@@ -63,7 +63,7 @@ class BindingController extends BaseController
 
     public function actionUmpmianmi()
     {
-        return $this->redirect(Yii::$container->get('ump')->openmianmi($this->user->epayUser->epayUserId));
+        return $this->redirect(Yii::$container->get('ump')->openmianmi($this->getAuthedUser()->epayUser->epayUserId));
     }
 
     private function createErrorResponse($modelOrMessage = null)

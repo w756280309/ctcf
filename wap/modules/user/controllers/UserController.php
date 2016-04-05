@@ -23,16 +23,16 @@ class UserController extends BaseController
     {
         $bc = new BcRound();
         bcscale(14);
-        $user = $this->user;
+        $user = $this->getAuthedUser();
         $uacore = new UserAccountCore();
-        $ua = $this->user->lendAccount;
+        $ua = $this->getAuthedUser()->lendAccount;
         $leijishouyi = $uacore->getTotalProfit($user->id);//累计收益
         $dhsbj = $bc->bcround(bcadd($ua->investment_balance, $ua->freeze_balance), 2);//在wap端理财资产等于实际理财资产+用户投资冻结金额freeze_balance
         $zcze = $uacore->getTotalFund($user->id);//账户余额+理财资产
 
         $data = BankService::checkKuaijie($user);
 
-        return $this->render('index', ['ua' => $ua, 'user' => $this->user, 'ljsy' => $leijishouyi, 'dhsbj' => $dhsbj, 'zcze' => $zcze, 'data' => $data]);
+        return $this->render('index', ['ua' => $ua, 'user' => $this->getAuthedUser(), 'ljsy' => $leijishouyi, 'dhsbj' => $dhsbj, 'zcze' => $zcze, 'data' => $data]);
     }
 
     /**
@@ -41,7 +41,7 @@ class UserController extends BaseController
      */
     public function actionMingxi($page = 1, $size = 10)
     {
-        $data = MoneyRecord::find()->where(['uid' => $this->user->id])
+        $data = MoneyRecord::find()->where(['uid' => $this->getAuthedUser()->id])
             ->andWhere(['type' => MoneyRecord::getLenderMrType()])
             ->select('created_at,type,in_money,out_money,balance')
             ->orderBy('id desc');
@@ -70,14 +70,14 @@ class UserController extends BaseController
     public function actionMyorder($type = null, $page = 1)
     {
         $os = new OrderService();
-        $list = $os->getUserOrderList($this->user->id, $type, $page);
+        $list = $os->getUserOrderList($this->getAuthedUser()->id, $type, $page);
         if (Yii::$app->request->isAjax) {
             Yii::$app->response->format = Response::FORMAT_JSON;
 
             return $list;
         }
 
-        return $this->render('order', ['list' => $list, 'type' => $type, 'profitFund' => $this->user->lendAccount->profit_balance]);
+        return $this->render('order', ['list' => $list, 'type' => $type, 'profitFund' => $this->getAuthedUser()->lendAccount->profit_balance]);
     }
 
     /**
@@ -103,7 +103,7 @@ class UserController extends BaseController
         $plan = null;
         $hkDate = null;
         if (in_array($product->status, [OnlineProduct::STATUS_HUAN, OnlineProduct::STATUS_OVER])) {
-            $plan = OnlineRepaymentPlan::findAll(['online_pid' => $deal->online_pid, 'uid' => $this->user->id, 'order_id' => $deal->id]);
+            $plan = OnlineRepaymentPlan::findAll(['online_pid' => $deal->online_pid, 'uid' => $this->getAuthedUser()->id, 'order_id' => $deal->id]);
 
             if ($plan) {
                 $hkDate = end($plan)['refund_time'];

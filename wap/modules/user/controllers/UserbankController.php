@@ -30,7 +30,7 @@ class UserbankController extends BaseController
     public function actionIdcardrz()
     {
         $cond = 0 | BankService::IDCARDRZ_VALIDATE_Y;
-        $data = BankService::check($this->user, $cond);
+        $data = BankService::check($this->getAuthedUser(), $cond);
         if ($data['code'] == 1) {
             if (Yii::$app->request->isAjax) {
                 return $data;
@@ -39,7 +39,7 @@ class UserbankController extends BaseController
             }
         }
 
-        $model = $this->user;
+        $model = $this->getAuthedUser();
         $model->scenario = 'idcardrz';
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             $umpService = new \common\service\UmpService();
@@ -65,7 +65,7 @@ class UserbankController extends BaseController
     public function actionBindbank()
     {
         $cond = 0 | BankService::IDCARDRZ_VALIDATE_N | BankService::MIANMI_VALIDATE | BankService::BINDBANK_VALIDATE_Y;
-        $data = BankService::check($this->user, $cond);
+        $data = BankService::check($this->getAuthedUser(), $cond);
         if ($data['code'] == 1) {
             if (Yii::$app->request->isAjax) {
                 return $data;
@@ -85,7 +85,7 @@ class UserbankController extends BaseController
     public function actionEditbuspass()
     {
         $cond = 0 | BankService::IDCARDRZ_VALIDATE_N;
-        $data = BankService::check($this->user, $cond);
+        $data = BankService::check($this->getAuthedUser(), $cond);
         if (1 === $data['code']) {
             if (Yii::$app->request->isAjax) {
                 return $data;
@@ -100,19 +100,19 @@ class UserbankController extends BaseController
     public function actionResetTradePass()
     {
         $cond = 0 | BankService::IDCARDRZ_VALIDATE_N;
-        $data = BankService::check($this->user, $cond);
+        $data = BankService::check($this->getAuthedUser(), $cond);
         if (1 === $data['code']) {
             return $data;
         }
 
         $ump = Yii::$container->get('ump');
 
-        $resp = $ump->resetTradePass($this->user);
+        $resp = $ump->resetTradePass($this->getAuthedUser());
 
         if ($resp->isSuccessful()) {
             return ['code' => 0, 'message' => '重置后的密码已经发送到您的手机'];
         } else {
-            \Yii::trace('【重置交易密码】'.$this->user->idcard.":".$resp->get('ret_code').":".$resp->get('ret_msg'), 'umplog');
+            \Yii::trace('【重置交易密码】'.$this->getAuthedUser()->idcard.":".$resp->get('ret_code').":".$resp->get('ret_msg'), 'umplog');
             return ['code' => 1, 'message' => '当前网络异常，请稍后重试'];
         }
     }
@@ -123,7 +123,7 @@ class UserbankController extends BaseController
     public function actionRecharge()
     {
         \Yii::$app->session->remove('cfca_qpay_recharge');
-        $user = $this->user;
+        $user = $this->getAuthedUser();
         $uid = $user->id;
         $user_bank = UserBanks::find()->where(['uid' => $uid])->select('id,binding_sn,bank_id,bank_name,card_number')->one();
         $user_acount = UserAccount::find()->where(['type' => UserAccount::TYPE_LEND, 'uid' => $uid])->select('id,uid,in_sum,available_balance')->one();
@@ -145,7 +145,7 @@ class UserbankController extends BaseController
      */
     public function actionTixian()
     {
-        $user = $this->user;
+        $user = $this->getAuthedUser();
         $uid = $user->id;
 
         $user_acount = $user->lendAccount;

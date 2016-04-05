@@ -28,7 +28,7 @@ class OrderController extends BaseController
             throw new \yii\web\NotFoundHttpException('This production is not existed.');
         }
         $uacore = new UserAccountCore();
-        $ua = $uacore->getUserAccount($this->user->id);
+        $ua = $uacore->getUserAccount($this->getAuthedUser()->id);
         $param['order_balance'] = $deal->getLoanBalance(); //获取标的可投余额;
         $param['my_balance'] = $ua->available_balance; //用户账户余额;
 
@@ -47,13 +47,13 @@ class OrderController extends BaseController
         Yii::$app->response->format = Response::FORMAT_JSON;
         $money = \Yii::$app->request->post('money');
         $pay = new PayService(PayService::REQUEST_AJAX);
-        $ret = $pay->checkAllowPay($this->user, $sn, $money);
+        $ret = $pay->checkAllowPay($this->getAuthedUser(), $sn, $money);
         if ($ret['code'] != PayService::ERROR_SUCCESS) {
             return $ret;
         }
         $ordercore = new OrderCore();
 
-        return $ordercore->createOrder($sn, $money,  $this->user->id);
+        return $ordercore->createOrder($sn, $money,  $this->getAuthedUser()->id);
     }
 
     public function actionOrdererror($osn = '')

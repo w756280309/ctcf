@@ -16,14 +16,14 @@ class QrechargeController extends BaseController
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
 
-        $cpuser = $this->user;
+        $cpuser = $this->getAuthedUser();
         $ubank = $cpuser->qpay;
         if (empty($ubank)) {
             return $this->createErrorResponse('请先绑卡');
         }
         // 已验证的数据:无需验证
         $safe = [
-            'uid' => $this->user->id,
+            'uid' => $this->getAuthedUser()->id,
             'account_id' => $cpuser->lendAccount->id,
             'bindingSn' => $ubank->binding_sn,
             'bank_id' => strval($ubank->id),
@@ -38,7 +38,7 @@ class QrechargeController extends BaseController
             'pay_bank_id' => $safe['bank_id'],
             'pay_type' => $safe['pay_type'],
             'clientIp' => ip2long(Yii::$app->request->userIP),
-            'epayUserId' => $this->user->epayUser->epayUserId,
+            'epayUserId' => $this->getAuthedUser()->epayUser->epayUserId,
         ]);
         if (
             $rec_model->load(Yii::$app->request->post())
