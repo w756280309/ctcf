@@ -62,9 +62,6 @@ class CancelOrder extends \yii\db\ActiveRecord implements \P2pl\OrderTxInterface
      */
     public static function initForOrder(OnlineOrder $order, $money = null)
     {
-        if (OnlineOrder::STATUS_SUCCESS != $order->status) {
-            throw new \Exception('订单状态不正确');
-        }
         $cancelOrder = new self([
             'orderSn' => $order->sn,
             'txSn' => TxUtils::generateSn(),

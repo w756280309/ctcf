@@ -30,3 +30,20 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/common.js', ['depends' => 'yii\web\Yii
     </div>
     <div class="col-xs-4"></div>
 </div>
+<script type="text/javascript">
+function ret()
+{
+    $.ajax({url: "/order/order/ordererror?osn=<?= $order->sn?>", success: function(data){
+        if (0 !== data.status) {
+            location.href = "/order/order/ordererror?osn=<?= $order->sn?>";
+        }
+      }});
+}
+$(function(){
+    var int = setInterval(ret,1000);
+    setTimeout(function () {
+        clearInterval(int);
+            location.href = "/order/order/ordererror?osn=<?= $order->sn?>";
+        }, 3000);//3秒之后自动跳入结果页面
+})
+</script>

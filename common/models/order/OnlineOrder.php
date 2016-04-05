@@ -272,4 +272,26 @@ class OnlineOrder extends \yii\db\ActiveRecord implements \P2pl\OrderTxInterface
     {
         return $this->order_money;
     }
+
+    /**
+     * 根据订单号或者对象返回订单
+     * @param 订单号或者订单对象
+     * @return type
+     * @throws \Exception
+     */
+    public static function ensureOrder($ordOrSn)
+    {
+        $ord = null;
+        if ($ordOrSn instanceof OnlineOrder) {
+            $ord = $ordOrSn;
+        } elseif (is_string($ordOrSn)) {
+            $ord = OnlineOrder::findOne(['sn' => $ordOrSn]);
+            if (null === $ord) {
+                throw new \Exception('无此订单记录');
+            }
+        } else {
+            throw new \Exception('参数错误');
+        }
+        return $ord;
+    }
 }

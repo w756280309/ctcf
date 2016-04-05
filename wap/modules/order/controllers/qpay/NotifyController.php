@@ -42,7 +42,7 @@ class NotifyController extends Controller
             && 'project_tranfer_notify' === $data['service']
         ) {
             $order = OnlineOrder::findOne(['sn' => $data['order_id']]);
-            //OrderService::confirmOrder($order);加入了队列机制
+            //OrderManager::confirmOrder($order);加入了队列机制
             if (null === OrderQueue::findOne(['orderSn' => $order->sn])) {
                 OrderQueue::initForQueue($order)->save();
             }

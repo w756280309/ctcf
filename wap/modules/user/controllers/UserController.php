@@ -10,7 +10,7 @@ use common\models\user\MoneyRecord;
 use common\models\order\OnlineOrder;
 use common\models\product\OnlineProduct;
 use common\models\order\OnlineRepaymentPlan;
-use common\service\OrderService;
+use common\models\order\OrderManager;
 use common\service\BankService;
 use common\lib\bchelp\BcRound;
 

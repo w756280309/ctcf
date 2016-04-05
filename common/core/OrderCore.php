@@ -6,7 +6,7 @@ use Yii;
 use common\service\PayService;
 use common\models\order\OnlineOrder;
 use common\models\product\OnlineProduct;
-use common\service\OrderService;
+use common\models\order\OrderManager;
 use common\models\order\OrderQueue;
 
 /**
@@ -55,7 +55,7 @@ class OrderCore
         $res = Yii::$container->get('ump')->orderNopass($order);
         if ($res->isSuccessful()) {
             try {
-                //OrderService::confirmOrder($order);
+                //OrderManager::confirmOrder($order);
                 if (null === OrderQueue::findOne(['orderSn' => $order->sn])) {
                     OrderQueue::initForQueue($order)->save();
                 }
