@@ -149,6 +149,9 @@ class SiteController extends Controller
         $model = new LoginForm();
         $from = Yii::$app->request->referrer;
         $from = Yii::$app->functions->dealurl($from);
+        if (in_array($from, ['/site/signup', '/site/login'])) {
+            $from = '/';
+        }
 
         $is_flag = Yii::$app->request->post('is_flag');    //是否需要校验图形验证码标志位
         if ($is_flag && !is_bool($is_flag)) {
