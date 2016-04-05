@@ -130,7 +130,7 @@ class UserbankController extends BaseController
         $bank = QpayConfig::findOne($user_bank->bank_id);
         //检查用户是否完成快捷支付
         $data = BankService::checkKuaijie($user);
-        if ($data[code] == 1 && \Yii::$app->request->isAjax) {
+        if ($data['code'] == 1 && \Yii::$app->request->isAjax) {
             return ['next' => $data['tourl']];
         }
         //保存充值来源

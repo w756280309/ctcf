@@ -25,7 +25,7 @@ $(function () {
             }
             if (data.tourl != undefined) {
                 setTimeout(function () {
-                    location.href = data.tourl;
+                    location.replace(data.tourl);
                 }, 1000);
             }
         });

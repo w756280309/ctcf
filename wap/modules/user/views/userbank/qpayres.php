@@ -40,7 +40,7 @@ $this->backUrl = false;
     <div class="col-xs-4"></div>
     <div class="col-xs-4">
         <?php if ('' !== $from_url) { ?>
-            <a href="<?=\yii\helpers\Html::encode($from_url)?>" class="bind-close1">返回购买页</a>
+        <a href="javascript:void(0)" onclick="history.go(-4)" class="bind-close1">返回购买页</a>
         <?php } else { ?>
             <a href="/user/user/index" class="bind-close1">返回账户</a>
         <?php } ?>
@@ -56,7 +56,11 @@ $this->backUrl = false;
             $('.daojishi .col-xs-12 span').html(num+'秒');
             if(num==0){
                 clearInterval(t);
-                location.href = url;
+                if (url === '/user/user/index') {
+                    location.href = url;
+                } else {
+                    history.go(-4);
+                }
             }
         },1000);
     })

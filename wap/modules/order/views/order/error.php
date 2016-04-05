@@ -32,7 +32,7 @@ $this->title= ("success" === $ret) ? "购买成功" : "购买失败";
     <?php if ('success' === $ret) { ?>
     <div class="col-xs-4"></div>
     <div class="col-xs-4">
-        <a href="/user/user/orderdetail?id=<?= $order->id ?>" class="bind-close1">查看详情</a>
+        <a href="javascript:void(0)" onclick="location.replace('/user/user/orderdetail?id=<?= $order->id ?>')" class="bind-close1">查看详情</a>
     </div>
         <div class="col-xs-4"></div>
     <?php } else { ?>

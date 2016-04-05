@@ -5,7 +5,7 @@ $this->registerJs('var yr='.$deal->yield_rate, 1);
 $this->registerJs('var qixian='.$deal->expires, 1);
 $this->registerJs('var retmet='.$deal->refund_method, 1);
 
-$this->registerJsFile(ASSETS_BASE_URI.'js/order.js', ['depends' => 'yii\web\YiiAsset','position' => 1]);
+$this->registerJsFile(ASSETS_BASE_URI.'js/order.js?v=20160405', ['depends' => 'yii\web\YiiAsset','position' => 1]);
 ?>
 <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/setting.css">
 
