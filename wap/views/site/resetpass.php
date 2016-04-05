@@ -4,7 +4,6 @@ use yii\captcha\Captcha;
 
 $this->title = '密码找回';
 $this->params['breadcrumbs'][] = $this->title;
-$this->registerJsFile(ASSETS_BASE_URI . 'js/common.js', ['depends' => 'yii\web\YiiAsset', 'position' => 1]);
 ?>
 <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/loginsign.css">
 

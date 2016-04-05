@@ -3,6 +3,7 @@ $this->title = '提现申请';
 $this->backUrl = false;
 ?>
 <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/setting.css">
+
 <div class="row" id='bind-box'>
     <div class="col-xs-12">
         <?php if ('success' === $ret) { ?>

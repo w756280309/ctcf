@@ -1,11 +1,7 @@
 <?php
-
 $this->title = '账户中心';
 $this->showBottomNav = true;
 $this->showAvatar = true;
-
-frontend\assets\WapAsset::register($this);
-$this->registerJsFile(ASSETS_BASE_URI . 'js/common.js', ['depends' => 'yii\web\YiiAsset','position' => 1]);
 ?>
 <link href="<?= ASSETS_BASE_URI ?>css/informationAndHelp.css" rel="stylesheet">
 <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/setting.css">
@@ -75,7 +71,6 @@ $this->registerJsFile(ASSETS_BASE_URI . 'js/common.js', ['depends' => 'yii\web\Y
     <form></form>
     <!-- 账户中心页 end  -->
 
-    <script type="text/javascript" src="<?= ASSETS_BASE_URI ?>js/jquery.js"></script>
     <script type="text/javascript">
     function tixian(){
         var err = '<?= $data['code'] ?>';

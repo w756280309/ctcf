@@ -5,10 +5,8 @@ $this->registerJs('var yr='.$deal->yield_rate, 1);
 $this->registerJs('var qixian='.$deal->expires, 1);
 $this->registerJs('var retmet='.$deal->refund_method, 1);
 
-$this->registerJsFile(ASSETS_BASE_URI.'js/common.js', ['depends' => 'yii\web\YiiAsset','position' => 1]);
 $this->registerJsFile(ASSETS_BASE_URI.'js/order.js', ['depends' => 'yii\web\YiiAsset','position' => 1]);
 ?>
-<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/base.css">
 <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/setting.css">
 
 <!--   购买页 start-->
@@ -33,7 +31,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/order.js', ['depends' => 'yii\web\YiiA
         <div class="col-xs-5 safe-lf text-align-lf"><?=  number_format($param['my_balance'], 2)?>元</div>
         <div class="col-xs-3 safe-txt text-align-ct"><a href="/user/userbank/recharge?from=<?= urlencode('/order/order?sn='.$deal->sn)?>">去充值</a></div>
     </div>
-<form action="/order/order/doorder?sn=<?= $deal->sn ?>" method="post" id="orderform" data-to="1">
+    <form action="/order/order/doorder?sn=<?= $deal->sn ?>" method="post" id="orderform" data-to="1">
         <input name="_csrf" type="hidden" id="_csrf" value="<?=Yii::$app->request->csrfToken ?>">
         <div class="row sm-height border-bottom">
             <div class="col-xs-4 safe-txt text-align-ct">投资金额</div>

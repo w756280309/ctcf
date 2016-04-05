@@ -6,6 +6,7 @@ $this->registerJsFile('', ['depends' => 'yii\web\YiiAsset','position' => 1]);
 ?>
 
 <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/setting.css">
+
 <div class="row" id='bind-box'>
     <div class="col-xs-12">
         <?php if ('success' === $ret) { ?>

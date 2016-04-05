@@ -3,7 +3,6 @@ use yii\bootstrap\ActiveForm;
 use yii\captcha\Captcha;
 
 $this->title = '登录';
-$this->registerJsFile(ASSETS_BASE_URI . 'js/common.js', ['depends' => 'yii\web\YiiAsset', 'position' => 1]);
 ?>
 <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/loginsign.css">
 

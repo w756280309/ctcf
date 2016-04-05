@@ -3,7 +3,6 @@ $this->title="合同说明";
 
 $this->registerCssFile(ASSETS_BASE_URI.'css/licai.css', ['depends' => 'frontend\assets\WapAsset']);
 $this->registerCssFile(ASSETS_BASE_URI.'css/swiper.min.css', ['depends' => 'frontend\assets\WapAsset']);
-$this->registerJsFile(ASSETS_BASE_URI.'js/jquery.js');
 $this->registerJsFile(ASSETS_BASE_URI.'js/swiper.min.js');
 $this->registerJsFile(ASSETS_BASE_URI.'js/licai.js');
 

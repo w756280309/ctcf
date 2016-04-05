@@ -13,8 +13,8 @@ $this->registerJs('var size=' . $header['size'] . ';', 1);
 $this->registerJs('var tp=' . $header['tp'] . ';', 1);
 $this->registerJs('var cp=' . $header['cp'] . ';', 1);
 ?>
-<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/base.css"/>
 <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/jiaoyimingxi.css?v=20160321"/>
+
 <div class="container">
     <?php if ($model) {
     foreach ($model as $val): ?>

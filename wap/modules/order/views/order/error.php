@@ -1,7 +1,5 @@
 <?php
 $this->title= ("success" === $ret) ? "购买成功" : "购买失败";
-
-$this->registerJsFile(ASSETS_BASE_URI.'js/common.js', ['depends' => 'yii\web\YiiAsset','position' => 1]);
 ?>
 
 <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/setting.css?v=20160331">

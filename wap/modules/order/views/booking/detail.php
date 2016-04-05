@@ -1,9 +1,6 @@
 <?php
 $this->title = '股权投资';
 ?>
-
-<link href="<?= ASSETS_BASE_URI ?>css/bootstrap.min.css?v=20160401" rel="stylesheet">
-<link href="<?= ASSETS_BASE_URI ?>css/base.css?v=20160401" rel="stylesheet">
 <link href="<?= ASSETS_BASE_URI ?>css/first.css?v=20160401" rel="stylesheet"/>
 
 <div class="container" style="background: #fff;">

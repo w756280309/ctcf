@@ -1,13 +1,8 @@
 <?php
-
 $this->title="绑定银行卡";
-$this->registerJsFile(ASSETS_BASE_URI . 'js/jquery.js', ['position' => 1]);
-$this->registerJsFile(ASSETS_BASE_URI . 'js/common.js', ['position' => 1]);
 $this->registerJsFile(ASSETS_BASE_URI . 'js/qpay.js', ['position' => 1]);
-
 ?>
 <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/bind.css"/>
-<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/base.css"/>
 <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/swiper.min.css"/>
 <script src="<?= ASSETS_BASE_URI ?>js/swiper.min.js"></script>
 <script src="<?= ASSETS_BASE_URI ?>js/bind.js"></script>

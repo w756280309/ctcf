@@ -1,6 +1,5 @@
 <?php
 $this->title = '项目详情';
-$this->registerJsFile(ASSETS_BASE_URI.'js/common.js', ['depends' => 'yii\web\JqueryAsset', 'position' => 1]);
 
 $deal['money'] = rtrim(rtrim($deal['money'], '0'), '.');
 ?>

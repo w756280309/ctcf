@@ -1,10 +1,8 @@
 <?php
 $this->title="提现";
-$this->registerJsFile(ASSETS_BASE_URI.'js/common.js', ['depends' => 'yii\web\YiiAsset','position' => 1]);
 ?>
 <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/bind.css"/>
 <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/chongzhi.css"/>
-<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/base.css"/>
 <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/tixian.css"/>
 
     <!--银行卡-->

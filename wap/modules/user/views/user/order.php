@@ -10,8 +10,7 @@ $this->title="我的理财";
     var tp='<?=$list['header']['tp'] ?>';
     var cp='<?=$list['header']['cp'] ?>';
     var ctype='<?=(empty($type)?0:$type) ?>';
-    </script>
-<script src="<?= ASSETS_BASE_URI ?>js/jquery.js"></script>
+</script>
 <script src="<?= ASSETS_BASE_URI ?>js/swiper.min.js"></script>
 <script src="<?= ASSETS_BASE_URI ?>js/licai.js"></script>
 

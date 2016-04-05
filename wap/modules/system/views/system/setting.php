@@ -3,10 +3,9 @@ $this->title="系统设置";
 
 $muri = ASSETS_BASE_URI;
 ?>
-<link rel="stylesheet" href="<?=$muri ?>css/base.css">
 <link rel="stylesheet" href="<?=$muri ?>css/setting.css">
 
-    <div class="row">
+<div class="row">
     <div class="row bg-height border-bottom">
         <div class="col-xs-3 left-txt">用户头像</div>
         <div class="col-xs-7 ">
@@ -31,5 +30,5 @@ $muri = ASSETS_BASE_URI;
         <div class="col-xs-1 col-sm-1 "></div>
     </div>
     <div class="clear"></div>
-        </div>
-    <!-- 系统设置 end  -->
+</div>
+<!-- 系统设置 end  -->
