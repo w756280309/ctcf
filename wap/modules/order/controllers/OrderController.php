@@ -23,8 +23,6 @@ class OrderController extends BaseController
      */
     public function actionIndex($sn)
     {
-        $this->layout = 'buy';
-
         $deal = OnlineProduct::findOne(['sn' => $sn]);
         if (empty($deal)) {
             throw new \yii\web\NotFoundHttpException('This production is not existed.');
@@ -67,7 +65,6 @@ class OrderController extends BaseController
         if (null  !== $order && 1 !== $order->status) {
             $deal = OnlineProduct::findOne($order->online_pid);
         }
-        $this->layout = '@app/modules/order/views/layouts/buy';
 
         return $this->render('error', ['order' => $order, 'deal' => $deal, 'ret' => (null  !== $order && 1 === $order->status) ? 'success' : 'fail']);
     }
@@ -85,8 +82,6 @@ class OrderController extends BaseController
      */
     public function actionAgreement($id, $key = 0)
     {
-        $this->layout = 'buy';
-
         if (empty($id)) {
             throw new \yii\web\NotFoundHttpException('The argument err.');
         }

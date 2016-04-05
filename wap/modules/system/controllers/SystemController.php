@@ -9,8 +9,6 @@ use common\service\BankService;
 
 class SystemController extends BaseController
 {
-    public $layout = '@app/modules/order/views/layouts/buy';
-
     /**
      * 系统设置页面
      */

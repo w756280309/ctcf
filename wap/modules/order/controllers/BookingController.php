@@ -12,7 +12,6 @@ class BookingController extends BaseController
     public function init()
     {
         parent::init();
-        $this->layout = '@app/modules/order/views/layouts/buy';
         if (Yii::$app->request->isAjax) {
             Yii::$app->response->format = Response::FORMAT_JSON;
         }

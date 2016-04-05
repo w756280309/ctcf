@@ -16,12 +16,6 @@ use common\lib\bchelp\BcRound;
 
 class UserController extends BaseController
 {
-    public function init()
-    {
-        parent::init();
-        $this->layout = '@app/modules/order/views/layouts/buy';
-    }
-
     /**
      * 账户中心页
      */

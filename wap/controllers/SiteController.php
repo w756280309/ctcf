@@ -91,8 +91,6 @@ class SiteController extends Controller
 
     public function actionUsererror()
     {
-        $this->layout = '@app/modules/order/views/layouts/buy';
-
         return $this->render('usererror');
     }
 
@@ -140,8 +138,6 @@ class SiteController extends Controller
      */
     public function actionLogin()
     {
-        $this->layout = '@app/modules/order/views/layouts/buy';
-
         if (!\Yii::$app->user->isGuest) {
             return $this->goHome();
         }
@@ -228,7 +224,6 @@ class SiteController extends Controller
      */
     public function actionEditpass()
     {
-        $this->layout = '@app/modules/order/views/layouts/buy';
         if (Yii::$app->user->isGuest) {
             return $this->redirect('/site/login');
         }
@@ -260,7 +255,6 @@ class SiteController extends Controller
      */
     public function actionResetpass()
     {
-        $this->layout = '@app/modules/order/views/layouts/buy';
         if (!\Yii::$app->user->isGuest) {
             return $this->goHome();
         }
@@ -294,8 +288,6 @@ class SiteController extends Controller
      */
     public function actionSignup()
     {
-        $this->layout = '@app/modules/order/views/layouts/buy';
-
         if (!\Yii::$app->user->isGuest) {
             return $this->goHome();
         }
@@ -339,8 +331,6 @@ class SiteController extends Controller
      */
     public function actionXieyi()
     {
-        $this->layout = '@app/modules/order/views/layouts/buy';
-
         return $this->render('xieyi');
     }
 
@@ -376,8 +366,6 @@ class SiteController extends Controller
      */
     public function actionAbout()
     {
-        $this->layout = '@app/modules/order/views/layouts/buy';
-
         return $this->render('company_desc');
     }
 
@@ -388,7 +376,6 @@ class SiteController extends Controller
      */
     public function actionHelp($type = null)
     {
-        $this->layout = '@app/modules/order/views/layouts/buy';
         $page = 'help';
 
         if (1 === (int) $type) {
@@ -428,8 +415,6 @@ class SiteController extends Controller
      */
     public function actionAdvantage()
     {
-        $this->layout = '@app/modules/order/views/layouts/buy';
-
         return $this->render('advantage');
     }
 
@@ -438,8 +423,6 @@ class SiteController extends Controller
      */
     public function actionContact()
     {
-        $this->layout = '@app/modules/order/views/layouts/buy';
-
         return $this->render('contact');
     }
 

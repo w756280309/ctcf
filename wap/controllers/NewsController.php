@@ -12,8 +12,6 @@ class NewsController extends Controller
 {
     use HelpersTrait;
 
-    public $layout = '@app/modules/order/views/layouts/buy';
-
     /**
      * 资讯列表页
      */
