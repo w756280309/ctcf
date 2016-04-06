@@ -445,3 +445,6 @@ input::-webkit-inner-spin-button {
 .form-bottom {
     height: 50px;
 }
+a.block {
+    display: block;
+}

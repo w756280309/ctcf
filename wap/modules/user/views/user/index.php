@@ -50,23 +50,24 @@ $this->showAvatar = true;
             <div class="col-xs-3 rg-line drawcash" onclick="tixian()">提现</div>
         </div>
         <div class="clear"></div>
-        <div class="row sm-height border-bottom margin-top" onclick="location.href='/user/user/myorder'">
+        <a class="row sm-height border-bottom margin-top block" href="/user/user/myorder" >
             <div class="col-xs-3 left-txt">我的理财</div>
             <div class="col-xs-7"></div>
             <div class="col-xs-1 arrow">
-                <a href="/user/user/myorder"><img src="<?= ASSETS_BASE_URI ?>images/arrow.png" alt="右箭头"></a>
+                <img src="<?= ASSETS_BASE_URI ?>images/arrow.png" alt="右箭头">
             </div>
             <div class="col-xs-1"></div>
-        </div>
+        </a>
+
         <div class="clear"></div>
-        <div class="row sm-height border-bottom" onclick="location.href='/user/user/mingxi'">
+        <a class="row sm-height border-bottom block" href="/user/user/mingxi" >
             <div class="col-xs-3 left-txt">交易明细</div>
             <div class="col-xs-7"></div>
             <div class="col-xs-1 arrow">
-                <a href="/user/user/mingxi"><img src="<?= ASSETS_BASE_URI ?>images/arrow.png" alt="右箭头"></a>
+                <img src="<?= ASSETS_BASE_URI ?>images/arrow.png" alt="右箭头">
             </div>
             <div class="col-xs-1"></div>
-        </div>
+        </a>
     </div>
     <form></form>
     <!-- 账户中心页 end  -->

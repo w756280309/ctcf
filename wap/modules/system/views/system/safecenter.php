@@ -3,23 +3,23 @@ $this->title="安全中心";
 ?>
 <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/setting.css">
 
-<div class="row sm-height border-bottom margin-top" onclick="location.href='/site/editpass'">
+<a class="row sm-height border-bottom margin-top block" href="/site/editpass">
     <div class="col-xs-5 safe-txt text-align-lf">修改登录密码</div>
     <div class="col-xs-5"></div>
     <div class="col-xs-1 arrow">
-        <a href="/site/editpass"><img src="<?= ASSETS_BASE_URI ?>images/arrow.png" alt="右箭头"></a>
+         <img src="<?= ASSETS_BASE_URI ?>images/arrow.png" alt="右箭头">
     </div>
     <div class="col-xs-1"></div>
-</div>
+</a>
 <div class="clear"></div>
-<div class="row sm-height border-bottom" onclick="location.href='/user/userbank/editbuspass'">
+<a class="row sm-height border-bottom block" href="/user/userbank/editbuspass">
     <div class="col-xs-5 safe-txt text-align-lf">修改交易密码</div>
     <div class="col-xs-5"></div>
     <div class="col-xs-1 arrow">
-        <a href="/user/userbank/editbuspass"><img src="<?= ASSETS_BASE_URI ?>images/arrow.png" alt="右箭头"></a>
+         <img src="<?= ASSETS_BASE_URI ?>images/arrow.png" alt="右箭头">
     </div>
     <div class="col-xs-1"></div>
-</div>
+</a>
 <div class="row sm-height border-bottom margin-top">
     <div class="col-xs-4 safe-txt  text-align-lf">实名验证</div>
     <div class="col-xs-5 safe-lf"><?= $user->idcard?substr_replace($user->idcard,'***',5,-2):"" ?></div>

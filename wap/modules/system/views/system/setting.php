@@ -21,14 +21,14 @@ $muri = ASSETS_BASE_URI;
         <div class="col-xs-5 left-txt"><?= substr_replace($model->mobile,'****',3,-4) ?></div>
         <div class="hidden-xs col-sm-1 "></div>
     </div>
-    <div class="row sm-height border-bottom margin-top" onclick="window.location.href='/system/system/safecenter'">
+    <a class="row sm-height border-bottom margin-top block" href="/system/system/safecenter">
         <div class="col-xs-3 col-sm-3 left-txt">安全中心</div>
         <div class="col-xs-7 col-sm-7"></div>
         <div class="col-xs-1 col-sm-1 arrow">
-            <a href="/system/system/safecenter"><img src="<?=$muri ?>images/arrow.png" alt="右箭头"></a>
+           <img src="<?=$muri ?>images/arrow.png" alt="右箭头">
         </div>
         <div class="col-xs-1 col-sm-1 "></div>
-    </div>
+    </a>
     <div class="clear"></div>
 </div>
 <!-- 系统设置 end  -->
