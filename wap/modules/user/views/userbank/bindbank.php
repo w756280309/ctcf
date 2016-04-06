@@ -1,11 +1,12 @@
 <?php
 $this->title="绑定银行卡";
-$this->registerJsFile(ASSETS_BASE_URI . 'js/qpay.js', ['position' => 1]);
 ?>
-<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/bind.css"/>
+<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/bind.css?v=20160406"/>
 <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/swiper.min.css"/>
+<script src="<?= ASSETS_BASE_URI ?>js/qpay.js"></script>
 <script src="<?= ASSETS_BASE_URI ?>js/swiper.min.js"></script>
 <script src="<?= ASSETS_BASE_URI ?>js/bind.js"></script>
+
 <div class="row tishi">
     <div class="col-xs-12">*绑定的银行卡必须为本人身份证办理</div>
 </div>
@@ -116,6 +117,7 @@ $this->registerJsFile(ASSETS_BASE_URI . 'js/qpay.js', ['position' => 1]);
             }
 
             $.post("/user/userbank/checkbank", {card: card_no, _csrf:csrf}, function (result) {
+                console.log(result);
                 if(result.code!=0) {
                     alert(result.message);
                     return;
@@ -136,8 +138,7 @@ $this->registerJsFile(ASSETS_BASE_URI . 'js/qpay.js', ['position' => 1]);
                     $('.xian img')[0].src='<?= ASSETS_BASE_URI ?>images/bankicon/'+result['bank_id']+'.png';
                 }
 
-            })
+            });
        });
-
     })
 </script>
