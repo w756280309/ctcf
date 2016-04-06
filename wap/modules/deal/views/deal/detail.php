@@ -117,7 +117,7 @@ $deal['money'] = rtrim(rtrim($deal['money'], '0'), '.');
         </div>
     </div>
     <?php if($deal['status']==2){?>
-        <form action="/deal/deal/toorder?sn=<?=  Yii::$app->request->get('sn');?>" method="post" id="toorderform" data-to="1">
+    <form action="/deal/deal/toorder?sn=<?=$deal['sn'] . (defined('IN_APP') ? "&token=" . \yii\helpers\Html::encode(Yii::$app->request->get("token")): "") ?>" method="post" id="toorderform" data-to="1">
             <input name="_csrf" type="hidden" id="_csrf" value="<?=Yii::$app->request->csrfToken ?>">
         </form>
         <div class="row rengou" style="cursor: pointer" h="location.href='/order/order?sn=<?=$deal['sn']?>'" onclick="subForm('#toorderform')">

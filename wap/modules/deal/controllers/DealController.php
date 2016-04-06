@@ -7,9 +7,11 @@ use yii\data\Pagination;
 use common\models\product\OnlineProduct;
 use common\models\order\OnlineOrder;
 use common\service\PayService;
+use common\controllers\HelpersTrait;
 
 class DealController extends Controller
 {
+    use HelpersTrait;
     /**
      * 行为设置，对于请求如果是ajax请求返回json.
      */
@@ -19,6 +21,7 @@ class DealController extends Controller
             'requestbehavior' => [
                 'class' => 'common\components\RequestBehavior',
             ],
+            \common\filters\AppAcesssControl::className(),
         ];
     }
 
@@ -144,7 +147,7 @@ class DealController extends Controller
     public function actionToorder($sn = null)
     {
         $pay = new PayService(PayService::REQUEST_AJAX);
-        $ret = $pay->toCart($sn);
+        $ret = $pay->toCart($this->getAuthedUser(), $sn);
 
         return $ret;
     }

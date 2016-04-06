@@ -2,7 +2,6 @@
 
 namespace common\service;
 
-use Yii;
 use common\models\product\OnlineProduct;
 
 /**
@@ -94,9 +93,9 @@ class PayService
         return $data[$code];
     }
 
-    public function checkCommonCond($sn = null)
+    public function checkCommonCond($user = null, $sn = null)
     {
-        if (Yii::$app->user->isGuest) {
+        if (null === $user) {
             return ['code' => self::ERROR_LOGIN,  'message' => self::getErrorByCode(self::ERROR_LOGIN), 'tourl' => '/site/login'];
         }
         if (!in_array($this->postmethod, [1, 2])) {
@@ -109,7 +108,6 @@ class PayService
             return ['code' => self::ERROR_LAW,  'message' => self::getErrorByCode(self::ERROR_LAW)];
         }
 
-        $user = Yii::$app->user->getIdentity();
         if (empty($user->idcard_status)) {
             return ['code' => self::ERROR_ID_SET,  'message' => self::getErrorByCode(self::ERROR_ID_SET), 'tourl' => '/user/userbank/idcardrz'];
         }
@@ -142,7 +140,8 @@ class PayService
         }
 
         $resp = \Yii::$container->get('ump')->getLoanInfo($deal->id);
-        if (!$resp->isSuccessful() && '1' !== $resp->get('project_state')) {//查询失败，或者标的状态不为投资中
+        if (!$resp->isSuccessful() && '1' !== $resp->get('project_state')) {
+            //查询失败，或者标的状态不为投资中
             return ['code' => self::ERROR_SYSTEM,  'message' => '联动一侧标的状态异常'];
         }
 
@@ -160,7 +159,7 @@ class PayService
      */
     public function checkAllowPay($user, $sn = null, $money = null)
     {
-        $commonret = $this->checkCommonCond($sn);
+        $commonret = $this->checkCommonCond($user, $sn);
         if ($commonret !== true) {
             return $commonret;
         }
@@ -208,9 +207,9 @@ class PayService
      *
      * @return type
      */
-    public function toCart($sn = null)
+    public function toCart($user = null, $sn = null)
     {
-        $commonret = $this->checkCommonCond($sn);
+        $commonret = $this->checkCommonCond($user, $sn);
         if ($commonret !== true) {
             return $commonret;
         }
