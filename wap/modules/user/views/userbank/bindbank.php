@@ -117,7 +117,6 @@ $this->title="绑定银行卡";
             }
 
             $.post("/user/userbank/checkbank", {card: card_no, _csrf:csrf}, function (result) {
-                console.log(result);
                 if(result.code!=0) {
                     alert(result.message);
                     return;
