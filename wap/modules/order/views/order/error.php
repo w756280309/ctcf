@@ -1,8 +1,9 @@
 <?php
-$this->title= ("success" === $ret) ? "购买成功" : "购买失败";
+$this->title = ("success" === $ret) ? "购买成功" : "购买失败";
+$this->backUrl = false;
 ?>
-
 <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/setting.css?v=20160331">
+
 <div class="row" id='bind-box'>
     <div class="col-xs-12">
         <?php if ('success' === $ret) { ?>
