@@ -4,6 +4,8 @@ use yii\bootstrap\ActiveForm;
 use yii\captcha\Captcha;
 use yii\web\View;
 
+$this->title = '登陆注册 - 温都金服';
+
 $_js = <<<'JS'
 $(function() {
     $('#login-box>.login-tabs>a').on('click', function(e) {
@@ -71,7 +73,7 @@ JS;
         <?php ActiveForm::end(); ?>
 
         <div class="login-reg" style="display: none;">
-            <div style="margin: 20px auto; width: 160px; height: 160px; background-image: url('/images/orcode.png'); background-size: 160px;"></div>
+            <div style="margin: 20px auto; width: 160px; height: 160px; background-image: url('<?= ASSETS_BASE_URI ?>images/orcode.png'); background-size: 160px;"></div>
             <p>PC端暂不提供注册<br>请扫描二维码访问手机网站进行注册</p>
         </div>
     </div>

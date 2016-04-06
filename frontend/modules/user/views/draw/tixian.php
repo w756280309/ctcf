@@ -18,7 +18,7 @@ $this->title = '提现 - 温都金服';
                 </li>
                 <li>
                     <div class="wdjf-label">银行卡</div>
-                    <div class="wdjf-field" style="border: 1px solid #c0c0c0; width: 200px"><img src="/images/banks/<?= $bank->bank_id ?>.jpg"><?= substr_replace($bank->card_number, "**", 0, -4) ?></div>
+                    <div class="wdjf-field" style="border: 1px solid #c0c0c0; width: 200px"><img src="<?= ASSETS_BASE_URI ?>images/banks/<?= $bank->bank_id ?>.jpg"><?= substr_replace($bank->card_number, "**", 0, -4) ?></div>
                 </li>
             </ul>
 

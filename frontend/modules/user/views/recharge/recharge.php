@@ -53,7 +53,7 @@ $this->registerJs($_js, View::POS_END, 'body_close');
         <div id="payment-bank" class="section">
             <ul class="picker">
                 <?php foreach($bank as $val): ?>
-                <li class="picker-item <?= (strval($val->bankId) === $recharge->bank_id)?"picked":"" ?>" data-bankid="<?= $val->bankId ?>"><img src="<?=ASSETS_BASE_URI ?>images/banks/<?= $val->bankId ?>.jpg" alt="<?= $val->bank->bankName ?>"></li>
+                <li class="picker-item <?= (strval($val->bankId) === $recharge->bank_id)?"picked":"" ?>" data-bankid="<?= $val->bankId ?>"><img src="<?= ASSETS_BASE_URI ?>images/banks/<?= $val->bankId ?>.jpg" alt="<?= $val->bank->bankName ?>"></li>
                 <?php endforeach; ?>
             </ul>
         </div>

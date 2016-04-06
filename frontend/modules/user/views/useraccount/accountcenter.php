@@ -44,7 +44,7 @@ $this->registerJs($_js2, View::POS_END, 'body_close2');
 ?>
 <div class="container">
     <div style="margin-top: 30px">
-        <img class="headpic" src="<?=ASSETS_BASE_URI ?>images/headpic.png"><?= $username?"欢迎您，".$username:"" ?>
+        <img class="headpic" src="<?= ASSETS_BASE_URI ?>images/headpic.png"><?= $username?"欢迎您，".$username:"" ?>
     </div>
     <div class="main dash" style="margin-top: 0px">
         <div class="page-heading">
