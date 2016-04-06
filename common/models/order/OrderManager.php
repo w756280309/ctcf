@@ -186,6 +186,7 @@ class OrderManager
             if (!$trans_resp->isSuccessful()) {
                 throw new \Exception('联动标的转账失败');
             }
+            OrderQueue::updateAll(['status' => 1], 'orderSn='.$ord->sn);
             $transaction->commit();
 
             return true;
