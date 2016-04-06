@@ -69,7 +69,7 @@ class UserController extends BaseController
      */
     public function actionMyorder($type = null, $page = 1)
     {
-        $os = new OrderService();
+        $os = new OrderManager();
         $list = $os->getUserOrderList($this->getAuthedUser()->id, $type, $page);
         if (Yii::$app->request->isAjax) {
             Yii::$app->response->format = Response::FORMAT_JSON;
