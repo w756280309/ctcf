@@ -120,7 +120,7 @@ $deal['money'] = rtrim(rtrim($deal['money'], '0'), '.');
     <form action="/deal/deal/toorder?sn=<?=$deal['sn'] . (defined('IN_APP') ? "&token=" . \yii\helpers\Html::encode(Yii::$app->request->get("token")): "") ?>" method="post" id="toorderform" data-to="1">
             <input name="_csrf" type="hidden" id="_csrf" value="<?=Yii::$app->request->csrfToken ?>">
         </form>
-        <div class="row rengou" style="cursor: pointer" h="location.href='/order/order?sn=<?=$deal['sn']?>'" onclick="subForm('#toorderform')">
+        <div id="x-purchase" class="row rengou" style="cursor: pointer">
             <div class="col-xs-1"></div>
             <div class="col-xs-10">立即认购</div>
             <div class="col-xs-1"></div>
@@ -160,6 +160,15 @@ $deal['money'] = rtrim(rtrim($deal['money'], '0'), '.');
                 })
 
             });
+
+$('#x-purchase').on('click', function(e) {
+    var $this = $(this);
+    if ($this.data('x-purchase-clicked')) {
+        return;
+    }
+    $this.data('x-purchase-clicked', true);
+    subForm('#toorderform');
+});
 
             <?php if($deal['status']==2){?>
             function subForm(form){
