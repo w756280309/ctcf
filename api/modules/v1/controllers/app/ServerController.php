@@ -31,9 +31,9 @@ class ServerController extends Controller
     /**
      * 获取token相关信息
      */
-    public function actionTokeninfo($token)
+    public function actionTokeninfo($key)
     {
-        $accessToken = AccessToken::findOne(['token' => $token]);
+        $accessToken = AccessToken::findOne(['token' => $key]);
 
         if (!$accessToken) {
             return [
