@@ -19,6 +19,15 @@ BaiduTongjiHelper::registerTo($this, BaiduTongjiHelper::WAP_KEY);
 
     <script src="<?= ASSETS_BASE_URI ?>js/jquery.js"></script>
     <script src="<?= ASSETS_BASE_URI ?>js/common.js?v=160407"></script>
+    <script>
+$(document).ajaxSend(function(event, jqXHR, settings) {
+    var match = window.location.search.match(new RegExp('[?&]token=([^&]+)(&|$)'));
+    if (match) {
+        var val = decodeURIComponent(match[1].replace(/\+/g, " "));
+        settings.url = settings.url+(settings.url.indexOf('?') >= 0 ? '&' : '?')+'token='+encodeURIComponent(val);
+    }
+});
+</script>
 </head>
 <body>
 <?php $this->beginBody() ?>
