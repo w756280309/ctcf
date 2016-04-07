@@ -170,7 +170,7 @@ ul.new-bottom li div {
     color: #9fa0a0;
 }
 
-a.zhuangtai {
+a.zhuangtai,span.zhuangtai {
     margin: 10px 8px;
     height: 34px;
     line-height: 34px;
@@ -183,18 +183,18 @@ a.zhuangtai:hover {
     text-decoration: none;
 }
 
-a.manbiao {
+a.manbiao,span.manbiao {
     color: #fff;
     background: #fe9b00;
 }
 
-a.a-progress-bg {
+a.a-progress-bg,span.a-progress-bg {
     height: 34px;
     display: block;
     background: #fe9a00;
 }
 
-a.a-progress {
+a.a-progress,span.a-progress {
     display: block;
     margin-left: -16px;
     position: absolute;
@@ -204,12 +204,12 @@ a.a-progress {
     color: #f54437;
 }
 
-a.huanqing, .liubiao, .huankuan {
+a.huanqing,span.huanqing, .liubiao, .huankuan {
     color: #fff;
     background: #adadad;
 }
 
-a.weikaibiao {
+a.weikaibiao,span.weikaibiao {
     color: #fe9b00;
     border: 1px solid #fe9b00;
 }
