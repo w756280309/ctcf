@@ -20,7 +20,7 @@ class ContractTemplate extends \yii\db\ActiveRecord
     const TYPE_TEMP_OFFLINE = 0;
     const TYPE_TEMP_ONLINE = 2;
     const TYPE_TEMP_ALL = 3;
-    
+
     /**
      * @inheritdoc
      */
@@ -54,11 +54,11 @@ class ContractTemplate extends \yii\db\ActiveRecord
             'status' => 'Status',
         ];
     }
-    
+
      public static function getContractTemplateData($pid=0,$type=1){
         return static::find()->where(['pid'=>$pid,'type'=>$type])->orWhere(['type'=>self::TYPE_TEMP_ALL])->all();
     }
-    
+
     /**
      * 根据合同替换合同
      * @param ContractTemplate $temp
@@ -66,17 +66,28 @@ class ContractTemplate extends \yii\db\ActiveRecord
      * @param OnlineOrder $ord
      * @return ContractTemplate
      */
-    public static function replaceTemplate(ContractTemplate $temp, OnlineOrder $ord = null, OnlineProduct $loan = null)
+    public static function replaceTemplate(ContractTemplate $temp, OnlineOrder $ord = null)
     {
-        $temp->content = preg_replace("/{{投资人}}/is", (null === $ord) ? "" : $ord->user->real_name, $temp->content);
-        $temp->content = preg_replace("/{{身份证号}}/is", (null === $ord) ? "" : $ord->user->idcard, $temp->content);
-        $temp->content = preg_replace("/{{认购日期}}/is", (null === $ord || null === $ord->order_time) ? "年月日" : date("Y年m月d日", $ord->order_time), $temp->content);
-        $temp->content = preg_replace("/{{认购金额}}/is",  (null === $ord && null !== $ord->order_money) ? "" : $ord->order_money, $temp->content);
-        $temp->content = preg_replace("/｛｛投资人｝｝/is", (null === $ord) ? "" : $ord->user->real_name, $temp->content);
-        $temp->content = preg_replace("/｛｛身份证号｝｝/is", (null === $ord) ? "" : $ord->user->idcard, $temp->content);
-        $temp->content = preg_replace("/｛｛认购日期｝｝/is", (null === $ord || null === $ord->order_time) ? "年月日" : date("Y年m月d日", $ord->order_time), $temp->content);
-        $temp->content = preg_replace("/｛｛认购金额｝｝/is",  (null === $ord && null !== $ord->order_money) ? "" : $ord->order_money, $temp->content);
+        if (null === $ord) {
+            $temp->content = preg_replace("/{{投资人}}/is", "", $temp->content);
+            $temp->content = preg_replace("/{{身份证号}}/is", "", $temp->content);
+            $temp->content = preg_replace("/{{认购日期}}/is", "年月日", $temp->content);
+            $temp->content = preg_replace("/{{认购金额}}/is", "", $temp->content);
+            $temp->content = preg_replace("/｛｛投资人｝｝/is", "", $temp->content);
+            $temp->content = preg_replace("/｛｛身份证号｝｝/is", "", $temp->content);
+            $temp->content = preg_replace("/｛｛认购日期｝｝/is", "年月日", $temp->content);
+            $temp->content = preg_replace("/｛｛认购金额｝｝/is", "", $temp->content);
+        } else {
+            $temp->content = preg_replace("/{{投资人}}/is", $ord->user->real_name, $temp->content);
+            $temp->content = preg_replace("/{{身份证号}}/is", $ord->user->idcard, $temp->content);
+            $temp->content = preg_replace("/{{认购日期}}/is", date("Y年m月d日", $ord->order_time), $temp->content);
+            $temp->content = preg_replace("/{{认购金额}}/is", $ord->order_money, $temp->content);
+            $temp->content = preg_replace("/｛｛投资人｝｝/is", $ord->user->real_name, $temp->content);
+            $temp->content = preg_replace("/｛｛身份证号｝｝/is", $ord->user->idcard, $temp->content);
+            $temp->content = preg_replace("/｛｛认购日期｝｝/is", date("Y年m月d日", $ord->order_time), $temp->content);
+            $temp->content = preg_replace("/｛｛认购金额｝｝/is", $ord->order_money, $temp->content);
+        }
+
         return $temp;
     }
-    
 }
