@@ -448,3 +448,6 @@ input::-webkit-inner-spin-button {
 a.block {
     display: block;
 }
+a.block:hover {
+    text-decoration: none;
+}

@@ -83,74 +83,78 @@ $(document).ajaxSend(function(event, jqXHR, settings) {
 
     <!-- 推荐区start  -->
     <div class="row new-box">
-        <div class="new-head bot-line" onclick="window.location.href='/deal/deal/index?cat=<?= $deals->cid ?>'">
+        <a class="new-head bot-line block" href="/deal/deal/index?cat=<?= $deals->cid ?>'" >
             <div class="col-xs-8 col-sm-7 new-head-title">
                 <div class="arrow-rg"></div>
                 <div class="new-head-tit"><span>推荐区</span><span class="new-head-txt">优选资产，安全无忧</span></div>
             </div>
             <div class="col-xs-1 col-sm-3 "> </div>
-            <div class="col-xs-3 col-sm-2 more"><a href="/deal/deal/index?cat=<?= $deals->cid ?>'">更多》</a></div>
-        </div>
+            <div class="col-xs-3 col-sm-2 more">更多》</div>
+        </a>
 
         <?php if (!empty($deals->jiaxi)) { ?>
-        <ul class="row new-bottom" onclick="window.location.href='/deal/deal/detail?sn=<?= $deals->sn ?>'">
-            <h3><a href="/deal/deal/detail?sn=<?= $deals->sn ?>"><?= $deals->title ?></a></h3>
-            <li class="col-xs-6 padding-5">
-                <div class="xian1">
-                    <div class="newcomer-badge"></div>
-                    <span class="interest-rate"><?= rtrim(rtrim(OnlineProduct::calcBaseRate($deals->yield_rate, $deals->jiaxi), '0'), '.') ?>%</span>
-                    <span class="interest-rate-add">+<?= $deals->jiaxi ?>%</span>
-                    <div class="col-xs-12 percentage-txt"><span><?= \Yii::$app->params['refund_method'][$deals->refund_method] ?></span></div>
-                </div>
-            </li>
-            <li class="col-xs-6 padding-5">
-                <div class="new-bottom-rg">
-                    <p ><span class="tishi"><?= rtrim(rtrim($deals->start_money, '0'), '.') ?>元起投，<?= implode($deals->loanExpires, '') ?></span></p>
-                    <?php if (OnlineProduct::STATUS_PRE === $deals->status) { ?>
-                        <!-- 未开标 -->
-                        <a class="zhuangtai weikaibiao" href="/deal/deal/detail?sn=<?= $deals->sn ?>"><?= $dates['desc'] ?> <?= date('H:i', $deals->start_date) ?></a>
-                        <?php } elseif (OnlineProduct::STATUS_NOW === $deals->status) { ?>
-                        <!-- 进度 % -->
-                        <div style="margin:10px 8px; border:1px solid #fe9b00; ">
-                            <a class="a-progress-bg"  style="width:<?= $rate ?>%;"></a>
-                            <a class="zhuangtai a-progress" href="/deal/deal/detail?sn=<?= $deals->sn ?>"><?= $rate ?>%</a>
-                        </div>
-                        <?php } else { ?>
-                        <div class="zhuangtai" style="margin:10px 8px; background-color: #9fa0a0;">
-                            <font style="color: #fff; line-height: 34px;"><?= Yii::$app->params['productonline'][$deals->status] ?></font>
-                        </div>
-                    <?php } ?>
-                </div>
-            </li>
+        <ul class="row new-bottom" >
+            <a class="block" href="/deal/deal/detail?sn=<?= $deals->sn ?>">
+                <h3><?= $deals->title ?></h3>
+                <li class="col-xs-6 padding-5">
+                    <div class="xian1">
+                        <div class="newcomer-badge"></div>
+                        <span class="interest-rate"><?= rtrim(rtrim(OnlineProduct::calcBaseRate($deals->yield_rate, $deals->jiaxi), '0'), '.') ?>%</span>
+                        <span class="interest-rate-add">+<?= $deals->jiaxi ?>%</span>
+                        <div class="col-xs-12 percentage-txt"><span><?= \Yii::$app->params['refund_method'][$deals->refund_method] ?></span></div>
+                    </div>
+                </li>
+                <li class="col-xs-6 padding-5">
+                    <div class="new-bottom-rg">
+                        <p ><span class="tishi"><?= rtrim(rtrim($deals->start_money, '0'), '.') ?>元起投，<?= implode($deals->loanExpires, '') ?></span></p>
+                        <?php if (OnlineProduct::STATUS_PRE === $deals->status) { ?>
+                            <!-- 未开标 -->
+                            <span class="zhuangtai weikaibiao" ><?= $dates['desc'] ?> <?= date('H:i', $deals->start_date) ?></span>
+                            <?php } elseif (OnlineProduct::STATUS_NOW === $deals->status) { ?>
+                            <!-- 进度 % -->
+                            <div style="margin:10px 8px; border:1px solid #fe9b00; ">
+                                <span class="a-progress-bg"  style="width:<?= $rate ?>%;"></span>
+                                <span class="zhuangtai a-progress" ><?= $rate ?>%</span>
+                            </div>
+                            <?php } else { ?>
+                            <div class="zhuangtai" style="margin:10px 8px; background-color: #9fa0a0;">
+                                <font style="color: #fff; line-height: 34px;"><?= Yii::$app->params['productonline'][$deals->status] ?></font>
+                            </div>
+                        <?php } ?>
+                    </div>
+                </li>
+            </a>
         </ul>
         <?php } else { ?>
-        <ul class="row new-bottom" onclick="window.location.href='/deal/deal/detail?sn=<?= $deals->sn ?>'">
-            <h3><a href="/deal/deal/detail?sn=<?= $deals->sn ?>"><?= $deals->title ?></a></h3>
-            <li class="col-xs-6 padding-5">
-                <div class="xian">
-                    <span class="interest-rate"><?= rtrim(rtrim(number_format($deals->yield_rate*100, 2), '0'), '.') ?>%</span>
-                    <div class="col-xs-12 percentage-txt"><span><i class="percentage-point"></i><?= \Yii::$app->params['refund_method'][$deals->refund_method] ?></span></div>
-                </div>
-            </li>
-            <li class="col-xs-6 padding-5">
-                <div class="new-bottom-rg">
-                    <p ><span class="tishi"><?= rtrim(rtrim($deals->start_money, '0'), '.') ?>元起投，<?=  implode($deals->loanExpires, '') ?></span></p>
-                    <?php if (OnlineProduct::STATUS_PRE === $deals->status) { ?>
-                        <!-- 未开标 -->
-                        <a class="zhuangtai weikaibiao" href="/deal/deal/detail?sn=<?= $deals->sn ?>"><?= $dates['desc'] ?> <?= date('H:i', $deals->start_date) ?></a>
-                        <?php } elseif (OnlineProduct::STATUS_NOW === $deals->status) { ?>
-                        <!-- 进度 % -->
-                        <div style="margin:10px 8px; border:1px solid #fe9b00; ">
-                            <a class="a-progress-bg"  style="width:<?= $rate ?>%;"></a>
-                            <a class="zhuangtai a-progress" href="/deal/deal/detail?sn=<?= $deals->sn ?>"><?= $rate ?>%</a>
-                        </div>
-                        <?php } else { ?>
-                        <div class="zhuangtai" style="margin:10px 8px; background-color: #9fa0a0;">
-                            <font style="color: #fff; line-height: 34px;"><?= Yii::$app->params['productonline'][$deals->status] ?></font>
-                        </div>
-                    <?php } ?>
-                </div>
-            </li>
+        <ul class="row new-bottom" >
+            <a class="block" href="/deal/deal/detail?sn=<?= $deals->sn ?>">
+                <h3><?= $deals->title ?></h3>
+                <li class="col-xs-6 padding-5">
+                    <div class="xian">
+                        <span class="interest-rate"><?= rtrim(rtrim(number_format($deals->yield_rate*100, 2), '0'), '.') ?>%</span>
+                        <div class="col-xs-12 percentage-txt"><span><i class="percentage-point"></i><?= \Yii::$app->params['refund_method'][$deals->refund_method] ?></span></div>
+                    </div>
+                </li>
+                <li class="col-xs-6 padding-5">
+                    <div class="new-bottom-rg">
+                        <p ><span class="tishi"><?= rtrim(rtrim($deals->start_money, '0'), '.') ?>元起投，<?=  implode($deals->loanExpires, '') ?></span></p>
+                        <?php if (OnlineProduct::STATUS_PRE === $deals->status) { ?>
+                            <!-- 未开标 -->
+                            <span class="zhuangtai weikaibiao"><?= $dates['desc'] ?> <?= date('H:i', $deals->start_date) ?></span>
+                            <?php } elseif (OnlineProduct::STATUS_NOW === $deals->status) { ?>
+                            <!-- 进度 % -->
+                            <div style="margin:10px 8px; border:1px solid #fe9b00; ">
+                                <span class="a-progress-bg"  style="width:<?= $rate ?>%;"></span>
+                                <span class="zhuangtai a-progress"><?= $rate ?>%</span>
+                            </div>
+                            <?php } else { ?>
+                            <div class="zhuangtai" style="margin:10px 8px; background-color: #9fa0a0;">
+                                <font style="color: #fff; line-height: 34px;"><?= Yii::$app->params['productonline'][$deals->status] ?></font>
+                            </div>
+                        <?php } ?>
+                    </div>
+                </li>
+            </a>
         </ul>
         <?php } ?>
     </div>
@@ -176,14 +180,14 @@ $(document).ajaxSend(function(event, jqXHR, settings) {
 
     <!-- 最新资讯 start-->
     <div class="row notice-box new-box">
-        <div class="new-head news-tra" onclick="window.location.href='/news/index'">
+        <a class="new-head news-tra block" href="/news/index">
             <div class="col-xs-8 col-sm-7 new-head-title">
                 <div class="arrow-rg"></div>
                 <div class="new-head-tit"><span>最新资讯</span></div>
             </div>
             <div class="col-xs-1 col-sm-3 "> </div>
-            <div class="col-xs-3 col-sm-2 more news-more"><a href="/news/index">更多》</a></div>
-        </div>
+            <div class="col-xs-3 col-sm-2 more news-more">更多》</div>
+        </a>
         <div class="notice-bottom">
             <a class="col-xs-12 notice border-top" href="/news/detail?id=1"><span>【</span>资讯信息<span>】</span>温都金服定于4月6日试上线</a>
             <a class="col-xs-12 notice border-bot" href="/news/detail?id=2"><span>【</span>资讯信息<span>】</span>用户资金托管引入联动优势</a>
