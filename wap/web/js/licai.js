@@ -82,7 +82,8 @@ $(function(){
                                 $.each(data.data, function(i, item) {
                                     var pstatus = item.pstatus;
                                     var profitDes = (pstatus == 6) ? "实际收益" : "预期收益";
-                                    html += '<div class="loan-box" onclick="location.href=\'/user/user/orderdetail?id='+ item.id +'\'">' +
+                                    
+                                    html += '<a class="loan-box block" href="/user/user/orderdetail?id='+ item.id +'">' +
                                             '<div class="loan-title"><div class="title-overflow">' + item.title +
                                             '</div><div class="loan-status '+ item.classname +'">'+ item.statusval +'</div></div>' +
                                             '<div class="row loan-info">' +
@@ -104,7 +105,7 @@ $(function(){
                                                 '<p class="info-label">募集进度</p></div>';
 
                                     }
-                                    html += '</div></div>';
+                                    html += '</div></a>';
                                 });
                                 $('.load').before(html);
                                 //页码＋1
