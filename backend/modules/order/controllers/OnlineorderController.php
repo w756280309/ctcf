@@ -58,7 +58,7 @@ class OnlineorderController extends BaseController
                     'shengyuKetou' => $shengyuKetou,
                     'renshu' => $count,
                     'mujuanTime' => $mujuanTime,
-                    'id'=>$id
+                    'id' => $id,
         ]);
     }
 
@@ -73,9 +73,9 @@ class OnlineorderController extends BaseController
         header("Pragma: no-cache");
         header("Expires: 0");
 
-        $lists = OnlineOrder::find()->where(['online_pid' => $id, 'status' => OnlineOrder::STATUS_SUCCESS])->limit(10000)->asArray()->all();
+        $lists = OnlineOrder::find()->where(['online_pid' => $id, 'status' => OnlineOrder::STATUS_SUCCESS])->asArray()->all();
         $str = "<table border='1'><tr><th style='width: 200px;'>编号</th><th>真实姓名</th><th>手机号</th><th>投资金额（元）</th><th>投资时间</th><th>状态</th>";
-        if ($lists) {
+        if (0 !== count($lists)) {
             foreach ($lists as $list) {
                 if ($list['status'] == 0) {
                     $status = "投标失败";
