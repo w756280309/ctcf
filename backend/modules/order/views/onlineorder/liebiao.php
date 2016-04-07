@@ -75,7 +75,7 @@
                         </tr>
                         <tr>
                             <td colspan="5" align="right">
-                                <a href="/order/onlineorder/export?id=<?=$id?>" class="btn btn-primary" style="display: block;float: right;">导出投标记录</a>
+                                <a href="/order/onlineorder/export?id=<?=$id?>" class="btn btn-primary" style="display: block;float: right;margin-right: 17px;">导出投标记录</a>
                             </td>
                         </tr>
                     </tbody>
