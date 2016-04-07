@@ -1,4 +1,4 @@
-<?php
+ <?php
 $this->title="我的理财";
 ?>
 <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/bind.css"/>
@@ -34,7 +34,7 @@ $this->title="我的理财";
     </div>
 
 <?php if($list['data']) { foreach ($list['data'] as $o) { ?>
-<div class="loan-box" onclick="location.href='/user/user/orderdetail?id=<?= $o['id'] ?>'">
+<a class="loan-box block" href="/user/user/orderdetail?id=<?= $o['id'] ?>">
     <div class="loan-title">
         <div class="title-overflow"><?=$o['title']?></div>
         <div class="loan-status <?= $o['classname'] ?>"><?=$o['statusval']?></div>
@@ -61,7 +61,7 @@ $this->title="我的理财";
         </div>
         <?php } ?>
     </div>
-</div>
+</a>
 <?php } ?>
     <div class="load" style="display: block"></div>
 <?php } else{ ?>
