@@ -34,6 +34,7 @@ return [
                 'logout' => 'v1/app/auth/logout',
                 'user' => 'v1/app/user/info',
                 'appver' => 'v1/app/deploy/appver',
+                'token' => 'v1/app/server/tokeninfo',
             ],
         ],
     ],
