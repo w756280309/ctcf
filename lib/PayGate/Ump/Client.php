@@ -48,7 +48,7 @@ class Client
      *
      * @var type
      */
-    private $clientOption;
+    private $hostInfo;
 
     /**
      * @var string 签名算法
@@ -67,13 +67,13 @@ class Client
 
     private $logAdapter;
 
-    public function __construct($apiUrl, $merchantId, $clientKeyPath, $umpCertPath, $options, LoggerInterface $logAdapter)
+    public function __construct($apiUrl, $merchantId, $clientKeyPath, $umpCertPath, $hostInfo, LoggerInterface $logAdapter)
     {
         $this->apiUrl = $apiUrl;
         $this->merchantId = $merchantId;
         $this->clientKeyPath = $clientKeyPath;
         $this->umpCertPath = $umpCertPath;
-        $this->clientOption = $options;
+        $this->hostInfo = $hostInfo;
         $this->logAdapter = $logAdapter;
     }
 
@@ -115,8 +115,8 @@ class Client
     {
         $data = [
             'service' => 'ptp_mer_bind_agreement',
-            'ret_url' => $this->clientOption['mianmi_ret_url'],
-            'notify_url' => $this->clientOption['mianmi_url'],
+            'ret_url' => $this->hostInfo . "/user/qpay/agreementnotify/frontend",
+            'notify_url' => $this->hostInfo . "/user/qpay/agreementnotify/backend",
             'sourceV' => 'HTML5',
             'user_id' => $epayUserId,
             'user_bind_agreement_list' => "ZTBB0G00",//无密投资
@@ -171,8 +171,8 @@ class Client
     {
         $data = [
             'service' => 'ptp_mer_bind_card',
-            'ret_url' => $this->clientOption['bind_ret_url'],
-            'notify_url' => $this->clientOption['bind_notify_url'],
+            'ret_url' => $this->hostInfo . "/user/qpay/notify/frontend",
+            'notify_url' => $this->hostInfo . "/user/qpay/notify/backend",
             'sourceV' => 'HTML5',
             'order_id' => $bind->getTxSn(),
             'mer_date' => $bind->getTxDate(),
@@ -200,8 +200,8 @@ class Client
     {
         $data = [
             'service' => 'cust_withdrawals',
-            'ret_url' => $this->clientOption['draw_ret_url'].('pc' === $channel ? '?channel=pc' : ''),
-            'notify_url' => $this->clientOption['draw_notify_url'],
+            'ret_url' => $this->hostInfo . "/user/qpay/drawnotify/frontend" .('pc' === $channel ? '?channel=pc' : ''),
+            'notify_url' => $this->hostInfo . "/user/qpay/drawnotify/backend",
             'order_id' => $draw->getTxSn(),
             'mer_date' => date('Ymd', $draw->getTxDate()),
             'user_id' => $draw->getEpayUserId(),
@@ -337,8 +337,8 @@ class Client
     {
         $data = [
             'service' => 'mer_recharge_person',
-            'ret_url' => $this->clientOption['rec_ret_url'],
-            'notify_url' => $this->clientOption['rec_notify_url'],
+            'ret_url' => $this->hostInfo . "/user/qpay/qpaynotify/frontend",
+            'notify_url' => $this->hostInfo . "/user/qpay/qpaynotify/backend",
             'sourceV' => 'HTML5',
             'order_id' => $qpay->getTxSn(),
             'mer_date' => $qpay->getTxDate(),
@@ -364,8 +364,8 @@ class Client
     {
         $data = [
             'service' => 'mer_recharge_person',
-            'ret_url' => $this->clientOption['rec_pc_ret_url'],
-            'notify_url' => $this->clientOption['rec_pc_notify_url'],
+            'ret_url' => $this->hostInfo . "/user/bpay/brecharge/frontend-notify",
+            'notify_url' => $this->hostInfo . "/user/bpay/brecharge/backend-notify",
             'sourceV' => 'HTML5',
             'order_id' => $qpay->getTxSn(),
             'mer_date' => $qpay->getTxDate(),
@@ -391,8 +391,8 @@ class Client
     {
         $data = [
             'service' => 'project_transfer',
-            'ret_url' => $this->clientOption['order_ret_url'],
-            'notify_url' => $this->clientOption['order_notify_url'],
+            'ret_url' => $this->hostInfo . "/order/qpay/notify/frontend",
+            'notify_url' => $this->hostInfo . "/order/qpay/notify/backend",
             'sourceV' => 'HTML5',
             'order_id' => $ord->getTxSn(),
             'mer_date' => date('Ymd', $ord->getTxDate()),
@@ -419,7 +419,7 @@ class Client
     {
         $data = [
             'service' => 'project_transfer_nopwd',
-            'notify_url' => $this->clientOption['order_notify_url'],
+            'notify_url' => $this->hostInfo . "/order/qpay/notify/backend",
             'order_id' => $ord->getTxSn(),
             'mer_date' => date('Ymd', $ord->getTxDate()),
             'project_id' => $ord->getLoanId(),
@@ -516,8 +516,8 @@ class Client
     {
         $data = [
             'service' => 'mer_recharge',
-            'ret_url' => $this->clientOption['mer_recharge_ret_url'],
-            'notify_url' => $this->clientOption['mer_recharge_notify_url'],
+            'ret_url' => $this->hostInfo . "/user/bpay/brecharge/frontend-notify",
+            'notify_url' => $this->hostInfo . "/user/bpay/brecharge/backend-notify",
             'order_id' => $recharge->getTxSn(),
             'mer_date' => $recharge->getTxDate(),
             'pay_type' => $payType,
@@ -583,7 +583,7 @@ class Client
     {
         $data = [
             'service' => 'mer_withdrawals',
-            'notify_url' => $this->clientOption['mer_draw_notify_url'],
+            'notify_url' => $this->hostInfo . "/order/drawnotify/notify",
             'order_id' => $draw->getTxSn(),
             'mer_date' => date('Ymd', $draw->getTxDate()), //商户生成订单的日期，格式YYYYMMDD
             'withdraw_mer_id' => $draw->getEpayUserId(),
