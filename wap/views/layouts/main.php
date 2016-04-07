@@ -18,7 +18,7 @@ BaiduTongjiHelper::registerTo($this, BaiduTongjiHelper::WAP_KEY);
     <?php $this->head() ?>
 
     <script src="<?= ASSETS_BASE_URI ?>js/jquery.js"></script>
-    <script src="<?= ASSETS_BASE_URI ?>js/common.js"></script>
+    <script src="<?= ASSETS_BASE_URI ?>js/common.js?v=160407"></script>
 </head>
 <body>
 <?php $this->beginBody() ?>
