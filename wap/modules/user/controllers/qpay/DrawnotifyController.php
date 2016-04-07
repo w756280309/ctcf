@@ -81,6 +81,9 @@ class DrawnotifyController extends Controller
     private function processing(array $data = [])   //没有做防重复处理
     {
         TradeLog::initLog(2, $data, $data['sign'])->save();
+        if (array_key_exists('token', $data)) {
+            unset($data['token']);
+        }
         if (
             Yii::$container->get('ump')->verifySign($data)
             && '0000' === $data['ret_code']

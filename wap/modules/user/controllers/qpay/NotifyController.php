@@ -24,6 +24,9 @@ class NotifyController extends Controller
     public function actionFrontend()
     {
         $data = Yii::$app->request->get();
+        if (array_key_exists('token', $data)) {
+            unset($data['token']);
+        }
         TradeLog::initLog(2, $data, $data['sign'])->save();
         if (Yii::$container->get('ump')->verifySign($data) && '0000' === $data['ret_code']) {
             $bind = QpayBinding::findOne(['binding_sn' => $data['order_id'], 'status' => QpayBinding::STATUS_INIT]);
@@ -54,7 +57,9 @@ class NotifyController extends Controller
         $err = '00009999';
         $errmsg = "no error";
         $data = Yii::$app->request->get();
-
+        if (array_key_exists('token', $data)) {
+            unset($data['token']);
+        }
         TradeLog::initLog(2, $data, $data['sign'])->save();
         if (
             Yii::$container->get('ump')->verifySign($data)
