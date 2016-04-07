@@ -11,7 +11,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/common.js', ['depends' => 'yii\web\Yii
     </div>
 </div>
 <div class="row" id='bind-true'>
-    
+
 </div>
 <div class="row daojishi" id='bind-close1'>
     <div class="col-xs-12 page_padding">
@@ -19,7 +19,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/common.js', ['depends' => 'yii\web\Yii
     </div>
     <div class="col-xs-4"></div>
     <div class="col-xs-4">
-        <a href="/user/user/myorder" class="bind-close1">查看订单</a>
+        <a href="javascript:void(0)" onclick="location.replace('/user/user/myorder')" class="bind-close1">查看订单</a>
     </div>
      <div class="col-xs-4"></div>
 </div>
@@ -35,7 +35,7 @@ function ret()
 {
     $.ajax({url: "/order/order/ordererror?osn=<?= $order->sn?>", success: function(data){
         if (0 !== data.status) {
-            location.href = "/order/order/ordererror?osn=<?= $order->sn?>";
+            location.replace("/order/order/ordererror?osn=<?= $order->sn?>");
         }
       }});
 }
@@ -43,7 +43,7 @@ $(function(){
     var int = setInterval(ret,1000);
     setTimeout(function () {
         clearInterval(int);
-            location.href = "/order/order/ordererror?osn=<?= $order->sn?>";
+            location.replace("/order/order/ordererror?osn=<?= $order->sn?>");
         }, 3000);//3秒之后自动跳入结果页面
 })
 </script>
