@@ -73,13 +73,17 @@
                                 <button type='submit' class="btn blue btn-block" style="width: 100px;">搜索 </button>
                             </td>
                         </tr>
+                        <tr>
+                            <td colspan="5" align="right">
+                                <a href="/order/onlineorder/export?id=<?=$id?>" class="btn btn-primary" style="display: block;float: right;">导出投标记录</a>
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
             </form>
         </div>
         
         <!--search end -->
-        
         
         <div class="portlet-body">
             <table class="table table-striped table-bordered table-advance table-hover">

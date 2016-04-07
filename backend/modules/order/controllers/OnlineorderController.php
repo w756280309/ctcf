@@ -58,7 +58,47 @@ class OnlineorderController extends BaseController
                     'shengyuKetou' => $shengyuKetou,
                     'renshu' => $count,
                     'mujuanTime' => $mujuanTime,
+                    'id'=>$id
         ]);
+    }
+
+    /**
+     * 导出指定标的投记录
+     * @param $id
+     */
+    public function actionExport($id)
+    {
+        header("Content-Type: application/vnd.ms-excel");
+        header("Content-Disposition: attachment; filename=投标记录（" . $id . "）-" . date('Ymd') . ".xls");
+        header("Pragma: no-cache");
+        header("Expires: 0");
+
+        $lists = OnlineOrder::find()->where(['online_pid' => $id, 'status' => OnlineOrder::STATUS_SUCCESS])->limit(10000)->asArray()->all();
+        $str = "<table border='1'><tr><th style='width: 200px;'>编号</th><th>真实姓名</th><th>手机号</th><th>投资金额（元）</th><th>投资时间</th><th>状态</th>";
+        if ($lists) {
+            foreach ($lists as $list) {
+                if ($list['status'] == 0) {
+                    $status = "投标失败";
+                } elseif ($list['status'] == 1) {
+                    $status = "投标成功";
+                } elseif ($list['status'] == 2) {
+                    $status = "撤标";
+                } else {
+                    $status = "无效";
+                }
+                $str .= "<tr>
+                <td style=\"vnd.ms-excel.numberformat:@\">" . strval($list['sn']) . "</td>
+                <td>" . $list['username'] . "</td>
+                <td>" . $list['mobile'] . "</td>
+                <td>" . $list['order_money'] . "</td>
+                <td>" . date('Y-m-d H:i:s', $list['created_at']) . "</td>
+                <td>" . $status . "</td>
+                </tr>";
+            }
+        }
+        $str .= "</table>";
+        $str = mb_convert_encoding($str, "GB2312", "UTF-8");
+        echo $str;
     }
 
     /**
