@@ -55,7 +55,7 @@ class ServerController extends Controller
                     'expires_at' => date('Y-m-d H:i:s', $accessToken->expireTime),    //过期时间
                     'created_at' => date('Y-m-d H:i:s', $accessToken->create_time),   //创建时间
                     'queried_at' => date('Y-m-d H:i:s'),  //查询时间
-                    'is_valid' => ($accessToken->expireTime >= time()) ? "是" : "否",
+                    'is_valid' => $accessToken->expireTime >= time(),
                 ]
             ]
         ];
