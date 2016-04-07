@@ -80,26 +80,6 @@ return [
             'min' => 10,
             'max' => 1000000000
         ],
-        'notify' => [
-            'bind_notify_url' => "https://m.wenjf.com/user/qpay/notify/backend",
-            'bind_ret_url' => "https://m.wenjf.com/user/qpay/notify/frontend",
-            'rec_notify_url' => "https://m.wenjf.com/user/qpay/qpaynotify/backend",
-            'rec_ret_url' => "https://m.wenjf.com/user/qpay/qpaynotify/frontend",
-            'order_ret_url' => "https://m.wenjf.com/order/qpay/notify/frontend",
-            'order_notify_url' => "https://m.wenjf.com/order/qpay/notify/backend",
-            'mer_draw_notify_url' => 'https://mwjf.wenjf.com/order/drawnotify/notify',  //融资方提现回调地址
-            'draw_ret_url' => "https://m.wenjf.com/user/qpay/drawnotify/frontend",
-            'draw_notify_url' => "https://m.wenjf.com/user/qpay/drawnotify/backend",
-            'draw_apply_notify_url' => "https://m.wenjf.com/user/qpay/drawnotify/apply",
-            'rec_pc_ret_url' => 'http://www.wenjf.com/user/bpay/brecharge/frontend-notify',
-            'rec_pc_notify_url' => 'http://www.wenjf.com/user/bpay/brecharge/backend-notify',
-            'draw_pc_ret_url' => 'https://www.wenjf.com/user/draw/draw-notify',   //投资用户提现返回结果页
-            'mer_recharge_ret_url' => 'https://mwjf.wenjf.com/user/bpay/brecharge/frontend-notify',  //融资用户充值回调接口地址
-            'mer_recharge_notify_url' => 'https://mwjf.wenjf.com/user/bpay/brecharge/backend-notify',
-
-            'mianmi_ret_url' => 'https://m.wenjf.com/user/qpay/agreementnotify/frontend',  //免密支付前台通知地址
-            'mianmi_url' => 'https://m.wenjf.com/user/qpay/agreementnotify/backend',//免密支付后台通知地址
-        ],
     ],
     'm_assets_base_uri' => "https://static.wenjf.com/m/",
     'pc_assets_base_uri' => "https://static.wenjf.com/pc/",
