@@ -15,8 +15,8 @@ class WapAsset extends AssetBundle
     public $basePath = '@webroot';
     public $baseUrl = ASSETS_BASE_URI;
     public $css = [
-        'css/bootstrap.min.css',
-        'css/base.css',
+        ASSETS_BASE_URI.'css/bootstrap.min.css?v=20160407',
+        ASSETS_BASE_URI.'css/base.css?v=20160407',
     ];
     public $js = [
         //'js/jquery.js'
