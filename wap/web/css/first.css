@@ -196,7 +196,7 @@ a.a-progress-bg,span.a-progress-bg {
 
 a.a-progress,span.a-progress {
     display: block;
-    margin-left: -16px;
+    margin-left: -10px;
     position: absolute;
     top: 47px;
     left: 50%;
