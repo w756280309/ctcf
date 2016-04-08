@@ -46,7 +46,7 @@ $this->backUrl = false;
 <div class="row" id='bind-close1'>
     <div class="col-xs-4"></div>
     <div class="col-xs-4">
-        <a href="/user/user/index" class="bind-close1">返回账户</a>
+        <a href="/user/user" class="bind-close1">返回账户</a>
     </div>
     <div class="col-xs-4"></div>
 </div>

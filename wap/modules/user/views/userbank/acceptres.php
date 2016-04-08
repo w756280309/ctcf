@@ -38,7 +38,7 @@ $this->registerJsFile('', ['depends' => 'yii\web\YiiAsset','position' => 1]);
 <div class="row" id='bind-close1'>
     <div class="col-xs-4"></div>
     <div class="col-xs-4">
-        <a href="/user/user/index" class="bind-close1">立即关闭</a>
+        <a href="/user/user" class="bind-close1">立即关闭</a>
     </div>
     <div class="col-xs-4"></div>
 </div>
@@ -57,7 +57,7 @@ $this->registerJsFile('', ['depends' => 'yii\web\YiiAsset','position' => 1]);
             $('.daojishi .col-xs-12 span').html(num+'秒');
             if(num==0){
                 clearInterval(t);
-                location.href = '/user/user/index';
+                location.href = '/user/user';
             }
         },1000);
     })
@@ -66,7 +66,7 @@ $this->registerJsFile('', ['depends' => 'yii\web\YiiAsset','position' => 1]);
 <div class="row" id='bind-close1'>
     <div class="col-xs-4"></div>
     <div class="col-xs-4">
-        <a href="/user/user/index" class="bind-close1">返回账户</a>
+        <a href="/user/user" class="bind-close1">返回账户</a>
     </div>
     <div class="col-xs-4"></div>
 </div>
