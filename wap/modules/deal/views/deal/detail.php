@@ -161,21 +161,14 @@ $deal['money'] = rtrim(rtrim($deal['money'], '0'), '.');
 
             });
 
-$('#x-purchase').on('click', function(e) {
-    var $this = $(this);
-    if ($this.data('x-purchase-clicked')) {
-        return;
-    }
-    $this.data('x-purchase-clicked', true);
-    subForm('#toorderform');
-});
 
             <?php if($deal['status']==2){?>
-            function subForm(form){
+            function subForm(form, callback){
                 vals = $(form).serialize();
                 to = $(form).attr("data-to");//设置如果返回错误，是否需要跳转界面
 
                 $.post($(form).attr("action"), vals, function (data) {
+                    callback();
                     if(data.code!=0&&to==1&&data.tourl!=undefined){
                         if(data.message=='请登录'){
                             toast(data.message, function() {
@@ -198,6 +191,18 @@ $('#x-purchase').on('click', function(e) {
                 });
             }
             <?php } ?>
+
+$('#x-purchase').on('click', function(e) {
+    var $this = $(this);
+    if ($this.data('x-purchase-clicked')) {
+        return;
+    }
+    $this.data('x-purchase-clicked', true);
+    subForm('#toorderform', function() {
+        $this.data('x-purchase-clicked', false);
+    });
+});
+
             // 新的
             $('.qing img').on('click',function(){
                 $('#chart-box').stop(true,false).fadeToggle();

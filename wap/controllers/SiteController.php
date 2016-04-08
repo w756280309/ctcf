@@ -165,7 +165,7 @@ class SiteController extends Controller
         }
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             $post_from = Yii::$app->request->post('from');
-            if ($model->login(User::USER_TYPE_PERSONAL)) {
+            if ($model->login(User::USER_TYPE_PERSONAL, defined('IN_APP'))) {
                 if (!empty($post_from)) {
                     $tourl = $post_from;
                 } else {
@@ -179,9 +179,10 @@ class SiteController extends Controller
                     parse_str($urls['query'], $output);
                 }
                 if (defined('IN_APP')) {
-                    $tokens = AccessToken::find(['uid' => Yii::$app->user->id])->orderBy('create_time desc')->one();
-                    $output['token'] = $tokens->token;
-                    $output['expire'] = $tokens->expireTime;
+                    $accessToken = AccessToken::initToken($this->getAuthedUser());
+                    $accessToken->save();
+                    $output['token'] = $accessToken->token;
+                    $output['expire'] = $accessToken->expireTime;
                 }
 
                 return ['code' => 0, 'message' => '登录成功', 'tourl' => $urls['path'].'?'.http_build_query($output)];
@@ -299,7 +300,11 @@ class SiteController extends Controller
         if ($model->load(Yii::$app->request->post()) && Yii::$app->request->isAjax) {
             Yii::$app->response->format = Response::FORMAT_JSON;
             if ($user = $model->signup()) {
-                if (Yii::$app->getUser()->login($user)) {
+                $isLoggedin = defined('IN_APP')
+                    ? Yii::$app->user->setIdentity($user) || true
+                    : Yii::$app->user->login($user);
+
+                if ($isLoggedin) {
                     $user->scenario = 'login';
                     $user->last_login = time();
                     $user->save();

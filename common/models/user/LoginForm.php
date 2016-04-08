@@ -79,7 +79,7 @@ class LoginForm extends Model
      *
      * @return bool whether the user is logged in successfully
      */
-    public function login($userType)
+    public function login($userType, $isInApp = false)
     {
         if (false === $this->_user) {
             if (User::USER_TYPE_PERSONAL === $userType) {
@@ -117,13 +117,13 @@ class LoginForm extends Model
             return false;
         }
 
-        if (Yii::$app->user->login($this->_user, $this->rememberMe ? 3600 : 0)) {
+        $isLoggedIn = $isInApp
+            ? Yii::$app->user->setIdentity($this->_user) || true
+            : Yii::$app->user->login($this->_user, $this->rememberMe ? 3600 : 0);
+
+        if ($isLoggedIn) {
             $this->_user->scenario = 'login';
             $this->_user->last_login = time();
-
-            if (defined('IN_APP')) {
-                AccessToken::initToken($this->_user)->save();
-            }
 
             return $this->_user->save();
         }
