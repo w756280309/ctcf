@@ -43,18 +43,15 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/order.js?v=20160405', ['depends' => 'y
             <div class="col-xs-4 safe-lf text-align-ct">预计收益</div>
             <div class="col-xs-8 safe-lf text-align-lf yuqishouyi">0.00元</div>
         </div>
-        <div class="row">
-            <div class="col-xs-12 surplus ht">查看
-                <a href="/order/order/agreement?id=<?= $deal->id ?>&key=r">《认购协议》</a>和
-                <a href="/order/order/agreement?id=<?= $deal->id ?>&key=f">《风险揭示书》</a>
-            </div>
-        </div>
-        <div class="row login-sign-btn nomargintop">
+        <div class="row login-sign-btn ht">
             <div class="col-xs-3"></div>
             <div class="col-xs-6 text-align-ct">
                 <input id="buybtn" class="btn-common btn-normal" type="submit" style="background: #F2F2F2;" value="购买">
             </div>
             <div class="col-xs-3"></div>
+        </div>
+        <div class="row surplus">
+            <center><a class="col-xs-12" href="/order/order/agreement?id=<?= $deal->id ?>">查看“产品合同”</a></center>
         </div>
     </form>
 
