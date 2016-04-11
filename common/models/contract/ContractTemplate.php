@@ -66,10 +66,10 @@ class ContractTemplate extends \yii\db\ActiveRecord
      * @param OnlineOrder $ord
      * @return ContractTemplate
      */
-    public static function replaceTemplate(ContractTemplate $temp, OnlineOrder $ord = null, OnlineProduct $loan = null)
+    public static function replaceTemplate(ContractTemplate $temp, OnlineOrder $ord = null)
     {
         if (null === $ord) {
-            $temp->content = preg_replace("/{{投资人}}/is ", "", $temp->content);
+            $temp->content = preg_replace("/{{投资人}}/is", "", $temp->content);
             $temp->content = preg_replace("/{{身份证号}}/is", "", $temp->content);
             $temp->content = preg_replace("/{{认购日期}}/is", "年月日", $temp->content);
             $temp->content = preg_replace("/{{认购金额}}/is", "", $temp->content);
