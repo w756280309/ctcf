@@ -33,12 +33,14 @@ $rate = number_format($deals->finish_rate * 100, 0);
     <?= Html::csrfMetaTags() ?>
     <?php $this->head() ?>
 <script>
-$(document).ajaxSend(function(event, jqXHR, settings) {
-    var match = window.location.search.match(new RegExp('[?&]token=([^&]+)(&|$)'));
-    if (match) {
-        var val = decodeURIComponent(match[1].replace(/\+/g, " "));
-        settings.url = settings.url+(settings.url.indexOf('?') >= 0 ? '&' : '?')+'token='+encodeURIComponent(val);
-    }
+$(function() {
+    $(document).ajaxSend(function(event, jqXHR, settings) {
+        var match = window.location.search.match(new RegExp('[?&]token=([^&]+)(&|$)'));
+        if (match) {
+            var val = decodeURIComponent(match[1].replace(/\+/g, " "));
+            settings.url = settings.url+(settings.url.indexOf('?') >= 0 ? '&' : '?')+'token='+encodeURIComponent(val);
+        }
+    });
 });
 </script>
     <style>
