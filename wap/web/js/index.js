@@ -3,8 +3,6 @@
  */
 var csrf;
 $(function(){
-    checkLoginStatus();
-
     csrf = $("meta[name=csrf-token]").attr('content');
 
     if($.trim($("#slideBox ul").html())!==""){

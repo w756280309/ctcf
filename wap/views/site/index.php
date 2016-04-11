@@ -10,7 +10,7 @@ $this->title = '温都金服';
 $this->params['breadcrumbs'][] = $this->title;
 $this->registerJsFile(ASSETS_BASE_URI . 'js/TouchSlide.1.1.js', ['depends' => 'yii\web\JqueryAsset', 'position' => 1]);
 $this->registerJsFile(ASSETS_BASE_URI . 'js/jquery.classyloader.js', ['depends' => 'yii\web\JqueryAsset', 'position' => 1]);
-$this->registerJsFile(ASSETS_BASE_URI . 'js/index.js', ['depends' => 'yii\web\JqueryAsset', 'position' => 1]);
+$this->registerJsFile(ASSETS_BASE_URI . 'js/index.js?v=20160411', ['depends' => 'yii\web\JqueryAsset', 'position' => 1]);
 $this->registerCssFile(ASSETS_BASE_URI . 'css/index.css', ['depends' => 'frontend\assets\WapAsset']);  //加载在depends之后
 $this->registerCssFile(ASSETS_BASE_URI . 'css/first.css', ['depends' => 'frontend\assets\WapAsset']);
 
@@ -41,6 +41,8 @@ $(function() {
             settings.url = settings.url+(settings.url.indexOf('?') >= 0 ? '&' : '?')+'token='+encodeURIComponent(val);
         }
     });
+
+    checkLoginStatus();
 });
 </script>
     <style>
