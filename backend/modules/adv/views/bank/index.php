@@ -12,9 +12,9 @@ $menus = AuthSys::getMenus('A100000');
             <h3 class="page-title">
                 运营管理
                 <small>运营管理模块【主要包含广告管理和银行管理】</small>
-                <a href="/adv/bank/edit" id="sample_editable_1_new" class="btn green" style="float: right;">
+                <!--<a href="/adv/bank/add" id="sample_editable_1_new" class="btn green" style="float: right;">
                     新增银行 <i class="icon-plus"></i>
-                </a>
+                </a>-->
             </h3>
             <ul class="breadcrumb">
                 <li>
