@@ -132,42 +132,4 @@ class Bank extends \yii\db\ActiveRecord
         }
     }
 
-    /**
-     * 保存银行信息
-     * @param array $post
-     * @return bool
-     */
-    public function saveBank(array $post)
-    {
-        $isPersonal = isset($post['isPersonal']) ? intval($post['isPersonal']) : 0;
-        $isBusiness = isset($post['isBusiness']) ? intval($post['isBusiness']) : 0;
-        $isQuick = isset($post['isQuick']) ? intval($post['isQuick']) : 1;
-        $singleLimit = isset($post['singleLimit']) ? floatval($post['singleLimit']) : 0;
-        $dailyLimit = isset($post['dailyLimit']) ? floatval($post['dailyLimit']) : 0;
-        $qPayConfig = QpayConfig::find()->where(['bankId' => $this->id])->one();
-        $eBankConfig = EbankConfig::find()->where(['bankId' => $this->id])->one();
-        if (!$qPayConfig || !$eBankConfig) {
-            return false;
-        }
-        $transaction = \Yii::$app->db->beginTransaction();
-        try {
-            $eBankConfig->typePersonal = $isPersonal;
-            $eBankConfig->typeBusiness = $isBusiness;
-            if (!$eBankConfig->save(false)) {
-                $transaction->rollBack();
-                return false;
-            }
-            $qPayConfig->singleLimit = $singleLimit;
-            $qPayConfig->dailyLimit = $dailyLimit;
-            $qPayConfig->isDisabled = $isQuick;
-            if (!$qPayConfig->save(false)) {
-                $transaction->rollBack();
-                return false;
-            }
-            $transaction->commit();
-        } catch (Exception $e) {
-            return false;
-        }
-        return true;
-    }
 }

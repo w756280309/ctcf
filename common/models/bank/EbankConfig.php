@@ -21,6 +21,7 @@ class EbankConfig extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+            [['typeBusiness','typePersonal'],'integer']
         ];
     }
 
@@ -30,6 +31,8 @@ class EbankConfig extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
+            'typePersonal'=>'个人网银充值',
+            'typeBusiness'=>'企业网银充值'
         ];
     }
 

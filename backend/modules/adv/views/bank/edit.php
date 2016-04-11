@@ -1,5 +1,6 @@
 <?php
 use yii\helpers\Html;
+use yii\widgets\ActiveForm;
 
 ?>
 <!DOCTYPE html>
@@ -29,41 +30,46 @@ use yii\helpers\Html;
     </style>
 </head>
 <body>
-<?= Html::beginForm('/adv/bank/edit?id=' . $id, 'post') ?>
-<div>
-    <?= Html::checkbox('isPersonal', $model->isPersonal ? 'checked' : false, ['value' => 1]) ?>个人网银充值
-</div>
-<div>
-    <?= Html::checkbox('isBusiness', $model->isBusiness ? 'checked' : false, ['value' => 1]) ?>企业网银充值
-</div>
-<div>
-    <?= Html::checkbox('isQuick', $model->isQuick ? 'checked' : false, ['value' => 0]) ?>快捷充值（wap端绑卡）
-</div>
-<div>
-    快捷充值限额
-    <?= Html::textInput('singleLimit', $model->singleLimit, ['style' => 'width:80px;']) ?> 万/次
-    <?= Html::textInput('dailyLimit', $model->dailyLimit, ['style' => 'width:80px;']) ?> 万/日
-</div>
+<?php $form = ActiveForm::begin() ?>
+<?= $form->field($eBank, 'typePersonal')->checkbox() ?>
+<?= $form->field($eBank, 'typeBusiness')->checkbox() ?>
+<?= $form->field($qPay, 'isDisabled')->checkbox(['id' => 'qpay_disabled']) ?>
+<?= $form->field($qPay, 'singleLimit', ['template' => '{input}{label}'])->textInput(['style' => 'width:80px;']) ?>
+<?= $form->field($qPay, 'dailyLimit', ['template' => '{input}{label}'])->textInput(['style' => 'width:80px']) ?>
 <div class="button_div">
     <span class="btn blue" id="submit_bank">确认修改</span>
     <span class="btn" id="cancel_bank">取消</span>
 </div>
-<?= Html::endForm() ?>
+<?php ActiveForm::end() ?>
 <script type="text/javascript">
     $(function () {
+        var dis = $('#qpay_disabled');
+        if (dis.is(':checked')) {
+            dis.prop('checked', false);
+        } else {
+            dis.prop('checked', true);
+        }
         $('#submit_bank').click(function () {
-            $.post('/adv/bank/edit?id=<?= $id ?>', $('form').serialize(), function (data) {
-                if (true === data.code) {
-                    layer.msg(data.msg);
-                    parent.location.reload();
-                } else {
-                    layer.msg(data.msg);
-                }
-            });
+            if (dis.is(':checked')) {
+                isDisabled = 0;
+            } else {
+                isDisabled = 1;
+            }
+            $.post('/adv/bank/edit?id=<?= $id ?>',
+                $('form').serialize() + '&QpayConfig[isDisabled]=' + isDisabled,
+                function (data) {
+                    if (true === data.code) {
+                        layer.msg(data.msg);
+                        parent.location.reload();
+                    } else {
+                        layer.msg(data.msg);
+                    }
+                });
         });
         $('#cancel_bank').click(function () {
             parent.layer.closeAll();
         });
+
     });
 </script>
 </body>

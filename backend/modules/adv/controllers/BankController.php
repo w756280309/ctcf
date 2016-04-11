@@ -11,8 +11,11 @@ namespace backend\modules\adv\controllers;
 
 use backend\controllers\BaseController;
 use common\models\bank\Bank;
+use common\models\bank\EbankConfig;
+use common\models\bank\QpayConfig;
 use Yii;
 use yii\data\Pagination;
+use yii\web\NotFoundHttpException;
 use yii\web\Response;
 
 class BankController extends BaseController
@@ -41,20 +44,24 @@ class BankController extends BaseController
     public function actionEdit($id)
     {
         $this->layout = false;
-        $model = Bank::find()->where(['id' => htmlspecialchars($id)])->one();
-        if (Yii::$app->request->isPost) {
+        $id = htmlspecialchars($id);
+        $eBank = EbankConfig::find()->where(['bankId' => $id])->one();
+        $qPay = QpayConfig::find()->where(['bankId' => $id])->one();
+        if (!$eBank || !$qPay) {
+            throw new NotFoundHttpException('信息未找到');
+        }
+        if ($eBank->load(Yii::$app->request->post()) && $qPay->load(Yii::$app->request->post())) {
             Yii::$app->response->format = Response::FORMAT_JSON;
-            $data = Yii::$app->request->post();
-            $res = $model->saveBank($data);
-            if (true === $res) {
+            if ($eBank->save(false) && $qPay->save(false)) {
                 return ['code' => true, 'msg' => '更新成功'];
             } else {
                 return ['code' => false, 'msg' => '更新失败'];
             }
         }
         return $this->render('edit', [
-            'model' => $model,
-            'id' => $id
+            'eBank' => $eBank,
+            'qPay' => $qPay,
+            'id' => $id,
         ]);
     }
 }
