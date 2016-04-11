@@ -15,6 +15,7 @@ use common\models\product\OnlineProduct;
 use common\models\epay\EpayUser;
 use backend\modules\user\core\v1_0\UserAccountBackendCore;
 use common\models\user\UserBanks;
+use common\lib\user\UserStats;
 
 /**
  * UserController implements the CRUD actions for User model.
@@ -321,5 +322,14 @@ class UserController extends BaseController
                 'userBank' => $userBank,
                 'bank' => $bank,
         ]);
+    }
+
+    /**
+     * 导出投资人会员信息
+     */
+    public function actionLenderstats()
+    {
+        $data = UserStats::collectLenderData();
+        UserStats::createCsvFile($data);
     }
 }
