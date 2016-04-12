@@ -57,7 +57,7 @@ $deal['money'] = rtrim(rtrim($deal['money'], '0'), '.');
         <div class="row shuju">
             <div class="col-xs-1"></div>
             <div class="col-xs-8" style="padding: 0;padding-left: 15px">
-                <span><?= ($deal['status']==1)?(Yii::$app->functions->toFormatMoney($deal['money'])) : doubleval($deal_balace).'元'?></span><i>/<?= Yii::$app->functions->toFormatMoney($deal['money']); ?></i>
+                <span><?= ($deal['status']==1)?(Yii::$app->functions->toFormatMoney($deal['money'])) : rtrim(rtrim(number_format($deal_balace, 2), '0'), '.').'元'?></span><i>/<?= Yii::$app->functions->toFormatMoney($deal['money']); ?></i>
                 <div>可投余额/项目总额</div>
             </div>
             <div class="col-xs-1" style="padding: 0;">
@@ -68,7 +68,7 @@ $deal['money'] = rtrim(rtrim($deal['money'], '0'), '.');
         <div class="row message">
             <div class="col-xs-1"></div>
             <div class="col-xs-10 xian2">
-                <div class="m1">起投金额：<span><?= doubleval($deal['start_money']) ?>元</span></div>
+                <div class="m1">起投金额：<span><?= rtrim(rtrim(number_format($deal['start_money'], 2), '0'), '.') ?>元</span></div>
                 <div class="m2">项目起息：<span><?= $deal['jixi_time']>0 ? date('Y-m-d',$deal['jixi_time']) : '项目成立日次日';?></span></div>
                 <?php if (0 === (int)$deal['finish_date']) { ?>
                     <div class="m3">项目期限：<span><?=$deal->expires?></span>

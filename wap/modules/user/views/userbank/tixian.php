@@ -21,7 +21,7 @@ $this->title="提现";
     <div class="row tixian">
         <div class="hidden-xs col-sm-1"></div>
         <div class="col-xs-4 col-sm-2">可提现金额：</div>
-        <div class="col-xs-8 col-sm-6"><?= $user_acount->available_balance?$user_acount->available_balance:0 ?>元</div>
+        <div class="col-xs-8 col-sm-6"><?= rtrim(rtrim(number_format($user_acount->available_balance, 2), '0'), '.') ?>元</div>
         <div class="hidden-xs col-sm-3"></div>
     </div>
 

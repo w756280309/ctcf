@@ -25,7 +25,7 @@ $this->showAvatar = true;
         </div>
         <div class="row earn-num1">
             <div class="col-xs-1"></div>
-            <div class="col-xs-7 col"><?=$zcze?></div>
+            <div class="col-xs-7 col"><?= number_format($zcze, 2) ?></div>
             <div class="col-xs-3"></div>
         </div>
         <div class="row accountcenter-center-left">
@@ -35,8 +35,8 @@ $this->showAvatar = true;
         </div>
         <div class="row accountcenter-center-right">
             <div class="col-xs-1"></div>
-            <div class="col-xs-5"><?=$ljsy?></div>
-            <div class="col-xs-6"><?= $dhsbj ?></div>
+            <div class="col-xs-5"><?= number_format($ljsy, 2) ?></div>
+            <div class="col-xs-6"><?= number_format($dhsbj, 2) ?></div>
         </div>
     </div>
     <div class="row accountcenter-other">
@@ -44,7 +44,7 @@ $this->showAvatar = true;
             <div class="col-xs-1"></div>
             <div class="col-xs-5">
                     <p>可用余额（元）</p>
-                    <p class="unmber_remain"><?=$ua->available_balance?></p>
+                    <p class="unmber_remain"><?= number_format($ua->available_balance, 2) ?></p>
             </div>
             <div class="col-xs-3 addcash" onclick="recharge()">充值</div>
             <div class="col-xs-3 rg-line drawcash" onclick="tixian()">提现</div>

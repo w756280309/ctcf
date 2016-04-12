@@ -41,7 +41,7 @@ class OrderManager
             $current_sum = bcadd($ord->order_money, $current_sum);
             if (bccomp($current_sum, $loan->money) > 0) {
                 $returnMoney = null;
-                if (bccomp(bcsub($current_sum, $loan->money), $ord->order_money) < 0) { //计算超标的第一个订单超标金额                    
+                if (bccomp(bcsub($current_sum, $loan->money), $ord->order_money) < 0) { //计算超标的第一个订单超标金额
                     $returnMoney = bcsub($current_sum, $loan->money);
                 } else {
                     $returnMoney = null;
@@ -274,7 +274,7 @@ class OrderManager
             $query[$key]['statusval'] = Yii::$app->params['deal_status'][$dat['pstatus']]; //标的状态
             $query[$key]['finish_rate'] = number_format($dat['finish_rate'] * 100, 0);  //募集进度
             $query[$key]['returndate'] = date('Y-m-d', $dat['finish_date']); //到期时间
-            $query[$key]['order_money'] = doubleval($dat['order_money']);
+            $query[$key]['order_money'] = rtrim(rtrim(number_format($dat['order_money'], 2), '0'), '.');
             $query[$key]['finish_rate'] = (Loan::STATUS_FOUND === (int) $dat['pstatus']) ? 100 : number_format($dat['finish_rate'] * 100, 0);
             $query[$key]['method'] = (1 === (int) $dat['prm']) ? '天' : '个月';
             if (in_array($dat['pstatus'], [Loan::STATUS_NOW])) {

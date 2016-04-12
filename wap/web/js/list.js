@@ -82,7 +82,6 @@ $(function () {
                                 var html = "";
                                 $.each(data.deals, function (i, item) {
                                     var itemyr = changeTwoDecimal(item.yr);
-                                    var itemStartMoney = changeTwoDecimal(item.start_money);
                                     var itemjx = item.jiaxi === null ? '' : item.jiaxi;
                                     var hui = ('4' === item.status || '5' === item.status || '6' === item.status) ? 'hui' : '';
                                     var dataPer = (7 === item.status) ? 100 : ('hui' === hui ? 0 : item.finish_rate)
@@ -120,7 +119,7 @@ $(function () {
                                             '<p class="'+ hui +'">'+ item.qixian +'<span class="column-lu">' + item.method +'</span></p>' +
                                             '<span class="desc-text '+ hui +'">期限</span></li>' +
                                             '<li class="col-xs-3 aa '+ hui +'">' +
-                                            '<p class="'+ hui +'">'+ itemStartMoney +'<span class="column-lu">元</span></p>' +
+                                            '<p class="'+ hui +'">'+ item.start_money +'<span class="column-lu">元</span></p>' +
                                             '<span class="desc-text '+ hui +'">起投</span></li>' +
                                             '<li class="col-xs-3 bb nock1"><div class="nock">' +
                                             '<canvas data-status="'+ item.status +'" data-per="'+ dataPer +'"></canvas>' + finishHtml +
@@ -188,4 +187,3 @@ $(function () {
     //    }
     //});
 });
-

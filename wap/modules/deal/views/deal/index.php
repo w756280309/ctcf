@@ -19,7 +19,7 @@ $pc_cat = Yii::$app->params['pc_cat'];
 <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/index.css?v=20160401-b"/>
 <script src="<?= ASSETS_BASE_URI ?>js/TouchSlide.1.1.js"></script>
 <script src="<?= ASSETS_BASE_URI ?>js/jquery.classyloader.js"></script>
-<script src="<?= ASSETS_BASE_URI ?>js/list.js?v=20160401-f"></script>
+<script src="<?= ASSETS_BASE_URI ?>js/list.js?v=20160412"></script>
 
 <div class="container">
     <div class="row tit-box">
@@ -57,7 +57,7 @@ $pc_cat = Yii::$app->params['pc_cat'];
                         <span class='desc-text <?= $is_hui?'hui':'' ?>'>期限</span>
                     </li>
                     <li class="col-xs-3 aa <?= $is_hui?'hui':'' ?>">
-                        <p class="<?= $is_hui?'hui':'' ?>"><?= doubleval($val['start_money']) ?><span class="column-lu">元</span></p>
+                        <p class="<?= $is_hui?'hui':'' ?>"><?= $val['start_money'] ?><span class="column-lu">元</span></p>
                         <span class='desc-text <?= $is_hui?'hui':'' ?>'>起投</span>
                     </li>
                     <li class="col-xs-3 bb nock1">
@@ -93,5 +93,3 @@ $pc_cat = Yii::$app->params['pc_cat'];
     <?php } else { ?>
         <div class="nodata" style="display:block;">暂无数据</div>
     <?php } ?>
-
-

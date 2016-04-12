@@ -18,11 +18,11 @@ $this->title="我的理财";
     <div class="row" id='licai-title'>
     	<div class="col-xs-4">
     		<div class="licai-title1"><img src="<?= ASSETS_BASE_URI ?>images/licaiGang.png" alt=""> 累计投资金额</div>
-                <div class="licai-money"><?= doubleval($list['totalFund']) ?><span>元</span></div>
+                <div class="licai-money"><?= rtrim(rtrim(number_format($list['totalFund'], 2), '0'), '.') ?><span>元</span></div>
     	</div>
     	<div class="col-xs-4">
     		<div class="licai-title2"><img src="<?= ASSETS_BASE_URI ?>images/licaiMoney.png" alt=""> 累计获得收益</div>
-                <div class="licai-money"><?= doubleval($profitFund) ?><span>元</span></div>
+                <div class="licai-money"><?= rtrim(rtrim(number_format($profitFund, 2), '0'), '.') ?><span>元</span></div>
     	</div>
     	<div class="col-xs-4">
     		<div class="licai-title3"><img src="<?= ASSETS_BASE_URI ?>images/licaiHead.png" alt=""> 待还清项目</div>

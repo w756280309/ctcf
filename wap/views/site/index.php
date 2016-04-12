@@ -110,7 +110,7 @@ $(function() {
                 </li>
                 <li class="col-xs-6 padding-5">
                     <div class="new-bottom-rg">
-                        <p ><span class="tishi"><?= rtrim(rtrim($deals->start_money, '0'), '.') ?>元起投，<?= implode($deals->loanExpires, '') ?></span></p>
+                        <p ><span class="tishi"><?= rtrim(rtrim(number_format($deals->start_money, 2), '0'), '.') ?>元起投，<?= implode($deals->loanExpires, '') ?></span></p>
                         <?php if (OnlineProduct::STATUS_PRE === $deals->status) { ?>
                             <!-- 未开标 -->
                             <span class="zhuangtai weikaibiao" ><?= $dates['desc'] ?> <?= date('H:i', $deals->start_date) ?></span>
@@ -141,7 +141,7 @@ $(function() {
                 </li>
                 <li class="col-xs-6 padding-5">
                     <div class="new-bottom-rg">
-                        <p ><span class="tishi"><?= rtrim(rtrim($deals->start_money, '0'), '.') ?>元起投，<?=  implode($deals->loanExpires, '') ?></span></p>
+                        <p ><span class="tishi"><?= rtrim(rtrim(number_format($deals->start_money, 2), '0'), '.') ?>元起投，<?=  implode($deals->loanExpires, '') ?></span></p>
                         <?php if (OnlineProduct::STATUS_PRE === $deals->status) { ?>
                             <!-- 未开标 -->
                             <span class="zhuangtai weikaibiao"><?= $dates['desc'] ?> <?= date('H:i', $deals->start_date) ?></span>

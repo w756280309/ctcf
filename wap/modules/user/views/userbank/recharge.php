@@ -36,7 +36,7 @@ $this->title="充值";
     <div class="row kahao">
         <div class="hidden-xs col-sm-1"></div>
         <div class="col-xs-3 col-sm-1">可用金额</div>
-        <div class="col-xs-9 col-sm-8"><?= $user_acount->available_balance?$user_acount->available_balance:0 ?>元</div>
+        <div class="col-xs-9 col-sm-8"><?= rtrim(rtrim(number_format($user_acount->available_balance, 2), '0'), '.') ?>元</div>
         <div class="hidden-xs col-sm-1"></div>
     </div>
     <!--充值金额-->

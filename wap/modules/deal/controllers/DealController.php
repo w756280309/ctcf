@@ -58,9 +58,8 @@ class DealController extends Controller
             $deals[$key]['finish_rate'] = number_format($val['finish_rate'] * 100, 0);
             $deals[$key]['yr'] = $val['yr'] ? OnlineProduct::calcBaseRate($val['yr'], $val['jiaxi']) : '0.00';
             $deals[$key]['statusval'] = Yii::$app->params['productonline'][$val['status']];
-            $deals[$key]['jiaxi'] = $val['jiaxi'];
             $deals[$key]['method'] = (1 === (int)$val['refund_method']) ? "天" : "个月";
-            $deals[$key]['start_money'] = $val['start_money'];
+            $deals[$key]['start_money'] = rtrim(rtrim(number_format($val['start_money'], 2), '0'), '.');
             $deals[$key]['cid'] = \Yii::$app->params['refund_method'][$val['refund_method']];
         }
         $tp = ceil($count / $size);
@@ -134,7 +133,7 @@ class DealController extends Controller
             $data[$key]['mobile'] = substr_replace($dat['mobile'], '****', 3, 4);
             $data[$key]['time'] = date('Y-m-d', $dat['time']);
             $data[$key]['his'] = date('H:i:s', $dat['time']);
-            $data[$key]['money'] = doubleval($dat['money']);
+            $data[$key]['money'] = rtrim(rtrim(number_format($dat['money'], 2), '0'), '.');
         }
 
         return ['orders' => $data, 'code' => 0, 'message' => '消息返回'];

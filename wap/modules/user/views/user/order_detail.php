@@ -51,7 +51,7 @@ $this->registerCssFile(ASSETS_BASE_URI .'css/touzixiangqing.css', ['depends' => 
                 <?php if (in_array($product->status, [2, 3, 7])) { ?>
                 <li>
                     <div class="information-content-left">本金</div>
-                    <div class="information-content-right"><?= $deal->order_money ?>元</div>
+                    <div class="information-content-right"><?= rtrim(rtrim(number_format($deal->order_money, 2), '0'), '.') ?>元</div>
                 </li>
                 <li>
                     <div class="information-content-left">募集进度</div>
@@ -64,11 +64,11 @@ $this->registerCssFile(ASSETS_BASE_URI .'css/touzixiangqing.css', ['depends' => 
                 <?php } elseif (5 === $product->status) { ?>
                 <li>
                     <div class="information-content-left">本金</div>
-                    <div class="information-content-right"><?= $deal->order_money ?>元</div>
+                    <div class="information-content-right"><?= rtrim(rtrim(number_format($deal->order_money, 2), '0'), '.') ?>元</div>
                 </li>
                 <li>
                     <div class="information-content-left">预期收益</div>
-                    <div class="information-content-right"><?= $profit ?>元</div>
+                    <div class="information-content-right"><?= rtrim(rtrim(number_format($profit, 2), '0'), '.') ?>元</div>
                 </li>
                 <li>
                     <div class="information-content-left">还款方式</div>
@@ -83,11 +83,11 @@ $this->registerCssFile(ASSETS_BASE_URI .'css/touzixiangqing.css', ['depends' => 
                 <?php } else { ?>
                 <li>
                     <div class="information-content-left">本金</div>
-                    <div class="information-content-right"><?= $deal->order_money ?>元</div>
+                    <div class="information-content-right"><?= rtrim(rtrim(number_format($deal->order_money, 2), '0'), '.') ?>元</div>
                 </li>
                 <li>
                     <div class="information-content-left">预期收益</div>
-                    <div class="information-content-right"><?= $profit ?>元</div>
+                    <div class="information-content-right"><?= rtrim(rtrim(number_format($profit, 2), '0'), '.') ?>元</div>
                 </li>
                 <li>
                     <div class="information-content-left">还款方式</div>
@@ -122,7 +122,7 @@ $this->registerCssFile(ASSETS_BASE_URI .'css/touzixiangqing.css', ['depends' => 
                     <div>第<?= $val['qishu'] ?>期</div>
                     <div><?= date('Y.m.d', $val['refund_time']) ?></div>
                     <div>本金</div>
-                    <div><?= $val['benjin'] ?>元</div>
+                    <div><?= rtrim(rtrim(number_format($val['benjin'], 2), '0'), '.') ?>元</div>
                     <!--还款计划-文字颜色-->
                     <p class="<?= (1 === $val['status']) ? 'repayment-green' : 'repayment-red' ?>"><?= (1 === $val['status']) ? '已还' : '未还' ?></p>
                 </li>
@@ -131,7 +131,7 @@ $this->registerCssFile(ASSETS_BASE_URI .'css/touzixiangqing.css', ['depends' => 
                     <div>第<?= $val['qishu'] ?>期</div>
                     <div><?= date('Y.m.d', $val['refund_time']) ?></div>
                     <div>利息</div>
-                    <div><?= $val['lixi'] ?>元</div>
+                    <div><?= rtrim(rtrim(number_format($val['lixi'], 2), '0'), '.') ?>元</div>
                     <!--还款计划-文字颜色-->
                     <p class="<?= (1 === $val['status']) ? 'repayment-green' : 'repayment-red' ?>"><?= (1 === $val['status']) ? '已还' : '未还' ?></p>
                 </li>
