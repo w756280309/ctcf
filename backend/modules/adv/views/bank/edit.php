@@ -33,7 +33,10 @@ use yii\widgets\ActiveForm;
 <?php $form = ActiveForm::begin() ?>
 <?= $form->field($eBank, 'typePersonal')->checkbox() ?>
 <?= $form->field($eBank, 'typeBusiness')->checkbox() ?>
-<?= $form->field($qPay, 'isDisabled')->checkbox() ?>
+<?= $form->field($qPay, 'isDisabled')->checkbox(['uncheck' => 1,'value'=>0]) ?>
+<div class="form-group ">
+    <label for="">快捷充值限额</label>
+</div>
 <?= $form->field($qPay, 'singleLimit', ['template' => '{input}{label}'])->textInput(['style' => 'width:80px;']) ?>
 <?= $form->field($qPay, 'dailyLimit', ['template' => '{input}{label}'])->textInput(['style' => 'width:80px']) ?>
 <div class="button_div">
@@ -43,16 +46,14 @@ use yii\widgets\ActiveForm;
 <?php ActiveForm::end() ?>
 <script type="text/javascript">
     $(function () {
-        var dis = $('#qpayconfig-isdisabled');
-        dis.trigger('click');
+        var div = $('div.form-group');
+        $(div[5]).css({'float':'left'});
+        $(div[4]).css({'float':'left'});
+        $(div[3]).css({'float':'left'});
+        $('.button_div').css({'clear':'both'});
         $('#submit_bank').click(function () {
-            if (dis.is(':checked')) {
-                isDisabled = 0;
-            } else {
-                isDisabled = 1;
-            }
             $.post('/adv/bank/edit?id=<?= $id ?>',
-                $('form').serialize() + '&QpayConfig[isDisabled]=' + isDisabled,
+                $('form').serialize(),
                 function (data) {
                     if (true === data.code) {
                         layer.msg(data.msg);
