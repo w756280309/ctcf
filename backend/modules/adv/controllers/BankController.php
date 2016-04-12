@@ -50,8 +50,12 @@ class BankController extends BaseController
         if (!$eBank || !$qPay) {
             throw new NotFoundHttpException('信息未找到');
         }
+        $qPay->singleLimit = number_format($qPay->singleLimit/10000,0);
+        $qPay->dailyLimit = number_format($qPay->dailyLimit/10000,0);
         if ($eBank->load(Yii::$app->request->post()) && $qPay->load(Yii::$app->request->post())) {
             Yii::$app->response->format = Response::FORMAT_JSON;
+            $qPay->singleLimit = 10000*$qPay->singleLimit;
+            $qPay->dailyLimit = 10000*$qPay->dailyLimit;
             if ($eBank->save(false) && $qPay->save(false)) {
                 return ['code' => true, 'msg' => '更新成功'];
             } else {

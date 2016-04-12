@@ -27,6 +27,7 @@ use yii\widgets\ActiveForm;
         .button_div {
             text-align: center;
         }
+        .title{margin-right: 10px;line-height: 39px;}
     </style>
 </head>
 <body>
@@ -34,11 +35,11 @@ use yii\widgets\ActiveForm;
 <?= $form->field($eBank, 'typePersonal')->checkbox() ?>
 <?= $form->field($eBank, 'typeBusiness')->checkbox() ?>
 <?= $form->field($qPay, 'isDisabled')->checkbox(['uncheck' => 1,'value'=>0]) ?>
-<div class="form-group ">
+<div class="form-group title">
     <label for="">快捷充值限额</label>
 </div>
-<?= $form->field($qPay, 'singleLimit', ['template' => '{input}{label}'])->textInput(['style' => 'width:80px;']) ?>
-<?= $form->field($qPay, 'dailyLimit', ['template' => '{input}{label}'])->textInput(['style' => 'width:80px']) ?>
+<?= $form->field($qPay, 'singleLimit', ['template' => '{input}{label}'])->textInput(['style' => 'width:30px;']) ?>
+<?= $form->field($qPay, 'dailyLimit', ['template' => '{input}{label}'])->textInput(['style' => 'width:30px']) ?>
 <div class="button_div">
     <span class="btn blue" id="submit_bank">确认修改</span>
     <span class="btn" id="cancel_bank">取消</span>
