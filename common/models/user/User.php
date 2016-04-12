@@ -218,7 +218,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface, UserInterf
             [['mobile'], 'string', 'max' => 11],
             [['usercode'], 'unique', 'message' => '会员编号已占用'],
             [['email'], 'unique', 'message' => 'Email已占用'],
-            [['email', 'real_name'], 'string', 'max' => 50],
+            [['email', 'real_name','campaign_source'], 'string', 'max' => 50],
             [['org_name'], 'string', 'max' => 150],
             [['org_code'], 'string', 'max' => 30],
             [['status'], 'default', 'value' => 1],

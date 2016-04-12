@@ -233,6 +233,7 @@ $(function() {
     </div>
 </div>
 <?php } ?>
+<?= \wap\widgets\campaign_source::widget()?>
 <?php $this->endBody() ?>
 </body>
 </html>
