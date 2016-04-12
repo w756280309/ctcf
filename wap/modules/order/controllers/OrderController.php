@@ -102,12 +102,15 @@ class OrderController extends BaseController
         $deal_id = Yii::$app->request->get('deal_id');
         if (!empty($deal_id)) {
             $deal = OnlineOrder::findOne($deal_id);
+            if (!$deal) {
+                $deal_id = null;   //对传入的参数做处理,当无效时,置为null,防止脚本等注入问题
+            }
         } else {
             $deal = null;
         }
 
         $model[$key] = ContractTemplate::replaceTemplate($model[$key], $deal);
 
-        return $this->render('agreement', ['model' => $model, 'key_f' => $key, 'content' => $model[$key]['content']]);
+        return $this->render('agreement', ['model' => $model, 'key_f' => $key, 'content' => $model[$key]['content'], 'deal_id' => $deal_id]);
     }
 }

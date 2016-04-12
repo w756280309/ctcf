@@ -47,7 +47,7 @@ $num = 0;
 <div id="legal-docs-switcher" class="swiper-container" style="line-height: 18px;">
     <div class="swiper-wrapper">
         <?php foreach($model as $key => $val): $num++; ?>
-        <div data-switcher-index="<?= $num-1 ?>" class="swiper-slide <?= $key_f == $key?"dian":"" ?>" onclick="location.replace('/order/order/agreement?id=<?= $val['pid'] ?>&key=<?= $key ?>')">
+        <div data-switcher-index="<?= $num-1 ?>" class="swiper-slide <?= $key_f == $key?"dian":"" ?>" onclick="location.replace('/order/order/agreement?id=<?= $val['pid'] ?>&key=<?= $key ?>&deal_id=<?= $deal_id ?>')">
             <?php
                 if (0 === $key) {
                     echo "认购协议";
