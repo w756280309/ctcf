@@ -55,3 +55,9 @@
     margin-left: 10px;
     line-height: 20px;
 }
+
+/* 添加显示红色字体的类 */
+.note {
+    color: #f44336;
+    padding-left: 1.5rem;
+}

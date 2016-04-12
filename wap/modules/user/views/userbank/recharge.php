@@ -2,7 +2,7 @@
 $this->title="充值";
 ?>
 <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/bind.css"/>
-<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/chongzhi.css"/>
+<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/chongzhi.css?v=20160412"/>
 <style type="text/css">
     .yzm-show {
         width: 100px !important;
@@ -49,12 +49,18 @@ $this->title="充值";
             <div class="col-xs-9 col-sm-8 safe-lf"><input type="text" id="fund"  name='RechargeRecord[fund]' placeholder="输入充值金额"/></div>
             <div class="hidden-xs col-sm-1"></div>
         </div>
-        <div class="form-bottom">&nbsp;</div>
+        <!--  当快捷充值被禁用,需要显示提示信息 -->
+        <?php if ($bank->isDisabled) { ?>
+        <div class="form-bottom note">*绑定银行暂不支持快捷充值，如有问题请联系客服<?= Yii::$app->params['contact_tel'] ?></div>
+        <?php } else { ?>
+        <div class="form-bottom note">&nbsp;</div>
+        <?php } ?>
         <!--提交按钮-->
         <div class="row">
             <div class="col-xs-3"></div>
             <div class="col-xs-6 login-sign-btn">
-                <input id="rechargebtn" class="btn-common btn-normal" type="submit" value="立即充值" >
+                <!--当快捷充值不支持时,按钮禁用-->
+                <input id="rechargebtn" class="btn-common btn-normal" type="submit" value="立即充值" <?= $bank->isDisabled ? "disabled=\"disabled\"" : "" ?>>
             </div>
             <div class="col-xs-3"></div>
         </div>
