@@ -33,7 +33,7 @@ use yii\widgets\ActiveForm;
 <?php $form = ActiveForm::begin() ?>
 <?= $form->field($eBank, 'typePersonal')->checkbox() ?>
 <?= $form->field($eBank, 'typeBusiness')->checkbox() ?>
-<?= $form->field($qPay, 'isDisabled')->checkbox(['id' => 'qpay_disabled']) ?>
+<?= $form->field($qPay, 'isDisabled')->checkbox() ?>
 <?= $form->field($qPay, 'singleLimit', ['template' => '{input}{label}'])->textInput(['style' => 'width:80px;']) ?>
 <?= $form->field($qPay, 'dailyLimit', ['template' => '{input}{label}'])->textInput(['style' => 'width:80px']) ?>
 <div class="button_div">
@@ -43,12 +43,8 @@ use yii\widgets\ActiveForm;
 <?php ActiveForm::end() ?>
 <script type="text/javascript">
     $(function () {
-        var dis = $('#qpay_disabled');
-        if (dis.is(':checked')) {
-            dis.prop('checked', false);
-        } else {
-            dis.prop('checked', true);
-        }
+        var dis = $('#qpayconfig-isdisabled');
+        dis.trigger('click');
         $('#submit_bank').click(function () {
             if (dis.is(':checked')) {
                 isDisabled = 0;
