@@ -82,7 +82,8 @@ $(function(){
                                 $.each(data.data, function(i, item) {
                                     var pstatus = item.pstatus;
                                     var profitDes = (pstatus == 6) ? "实际收益" : "预期收益";
-                                    
+                                    var profit = WDJF.numberFormat(item.profit, true);
+
                                     html += '<a class="loan-box block" href="/user/user/orderdetail?id='+ item.id +'">' +
                                             '<div class="loan-title"><div class="title-overflow">' + item.title +
                                             '</div><div class="loan-status '+ item.classname +'">'+ item.statusval +'</div></div>' +
@@ -97,7 +98,7 @@ $(function(){
                                     html += '</div>';
                                     if ('--' !== item.profit) {
                                         html += '<div class="col-xs-4 loan-info2">' +
-                                                '<p class="info-val">'+ item.profit +'元</p>' +
+                                                '<p class="info-val">'+ profit +'元</p>' +
                                                 '<p class="info-label">'+ profitDes +'</p></div>';
                                     } else {
                                         html += '<div class="col-xs-4 loan-info2">' +

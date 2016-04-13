@@ -12,7 +12,7 @@ $this->title="我的理财";
     var ctype='<?=(empty($type)?0:$type) ?>';
 </script>
 <script src="<?= ASSETS_BASE_URI ?>js/swiper.min.js"></script>
-<script src="<?= ASSETS_BASE_URI ?>js/licai.js"></script>
+<script src="<?= ASSETS_BASE_URI ?>js/licai.js?v=20160413"></script>
 
     <!-- Swiper -->
     <div class="row" id='licai-title'>
@@ -51,7 +51,7 @@ $this->title="我的理财";
         </div>
         <?php if ('--' !== $o['profit']) { ?>
         <div class="col-xs-4 loan-info2">
-            <p class="info-val"><?= $o['profit'] ?>元</p>
+            <p class="info-val"><?= rtrim(rtrim(number_format($o['profit'], 2), '0'), '.') ?>元</p>
             <p class="info-label"><?= ($o['pstatus']==6)?"实际收益":"预期收益" ?></p>
         </div>
         <?php } else { ?>

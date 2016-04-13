@@ -5,12 +5,11 @@ $this->registerJs('var yr='.$deal->yield_rate, 1);
 $this->registerJs('var qixian='.$deal->expires, 1);
 $this->registerJs('var retmet='.$deal->refund_method, 1);
 
-$this->registerJsFile(ASSETS_BASE_URI.'js/order.js?v=20160405', ['depends' => 'yii\web\YiiAsset','position' => 1]);
+$this->registerJsFile(ASSETS_BASE_URI.'js/order.js?v=20160413', ['depends' => 'yii\web\YiiAsset','position' => 1]);
 ?>
 <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/setting.css">
 
 <!--   购买页 start-->
-
     <div class="row produce">
         <div class="col-xs-12 text-align-lf first-hang" style="padding-right: 0;"><?=$deal->title?></div>
         <div class="col-xs-4 text-align-ct">年化收益</div>
@@ -65,4 +64,3 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/order.js?v=20160405', ['depends' => 'y
     </div>
     <!-- 输入弹出框 end  -->
     <!-- 购买页 end  -->
-

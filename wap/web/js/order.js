@@ -43,9 +43,9 @@ $(function () {
             money = 0;
         }
         if (1 == parseInt(retmet)) {
-            $('.yuqishouyi').html(accDiv(accMul(accMul(money, yr), qixian), 365).toFixed(2) + "元");
+            $('.yuqishouyi').html(WDJF.numberFormat(accDiv(accMul(accMul(money, yr), qixian), 365), false) + "元");
         } else {
-            $('.yuqishouyi').html(accDiv(accMul(accMul(money, yr), qixian), 12).toFixed(2) + "元");
+            $('.yuqishouyi').html(WDJF.numberFormat(accDiv(accMul(accMul(money, yr), qixian), 12), false) + "元");
         }
     });
 })
