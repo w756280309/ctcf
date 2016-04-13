@@ -31,15 +31,15 @@ $(function(){
                             if (data.data.length > 0) {
                                 var html = "";
                                 $.each(data.data, function (i, item) {
-                                    var in_money = WDJF.numberFormat(item.in_money, 1);
-                                    var out_money = WDJF.numberFormat(item.out_money, 1);
+                                    var in_money = WDJF.numberFormat(item.in_money, false);
+                                    var out_money = WDJF.numberFormat(item.out_money, false);
                                     var money = (item.in_money > item.out_money) ? ('+' + in_money) : ('-' + out_money);
                                     var className = (item.in_money > item.out_money) ? 'red' : 'green';
                                     var createdAt = moment(item.created_at*1000);
                                     html += '<div class="clear"></div>'+
                                         '<div  class="row jiaoyi"><div class="col-xs-1"></div><div class="col-xs-10"><div class="col-xs-6 lf">'+
                                         '<p  class="way">'+mingxitype[item.type]+'</p>'+
-                                        '<p class="revenue">余额：<span>'+ WDJF.numberFormat(item.balance, 1) +'元</span></p></div>'+
+                                        '<p class="revenue">余额：<span>'+ WDJF.numberFormat(item.balance, false) +'元</span></p></div>'+
                                         '<div class="col-xs-6 rg"><p  class="money '+ className +'" >'+ money +'</p>'+
                                         '<p  class="date" ><span class="data1">'+createdAt.format('YYYY-MM-DD')+'</span> '+
                                         '<span class="data2">'+createdAt.format('HH:mm:ss')+'</span></p></div>'+
