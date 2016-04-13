@@ -103,6 +103,7 @@ BaiduTongjiHelper::registerTo($this, BaiduTongjiHelper::WAP_KEY);
     </div>
     <?php } } ?>
 </div>
+<?= \wap\widgets\campaign_source::widget()?>
 <?php $this->endBody() ?>
 
 </body>

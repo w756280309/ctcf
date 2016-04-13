@@ -431,6 +431,9 @@ class OrderManager
         $order->expires = $model->expires;
         $order->mobile = $user->mobile;
         $order->username = $user->real_name;
+        if (Yii::$app->request->cookies->getValue('campaign_source')) {
+            $order->campaign_source = Yii::$app->request->cookies->getValue('campaign_source');
+        }
         if (!$order->validate()) {
             return ['code' => PayService::ERROR_MONEY_FORMAT,  'message' => current($order->firstErrors), 'tourl' => '/order/order/ordererror'];
         }

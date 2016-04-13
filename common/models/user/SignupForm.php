@@ -108,8 +108,8 @@ class SignupForm extends Model
             $user->type = User::USER_TYPE_PERSONAL;
             $user->mobile = $this->phone;
             $user->setPassword($this->password);
-            if(Yii::$app->session->get('campaign_source')){
-                $user->campaign_source = Yii::$app->session->get('campaign_source');
+            if(Yii::$app->request->cookies->getValue('campaign_source')){
+                $user->campaign_source = Yii::$app->request->cookies->getValue('campaign_source');
             }
             if (!$user->save()) {
                 $transaction->rollBack();
