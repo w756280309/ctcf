@@ -20,9 +20,9 @@ class CampaignController extends Controller
         $hmsr = htmlspecialchars(\Yii::$app->request->post('hmsr'));
         if (strlen($hmsr) > 0) {
             Yii::$app->response->cookies->add(new Cookie([
-                'name'=>'campaign_source',
-                'value'=>$hmsr,
-                'expire'=>time()+3600*24*3
+                'name' => 'campaign_source',
+                'value' => $hmsr,
+                'expire' => time() + 3600 * 24 * 3
             ]));
         }
     }
