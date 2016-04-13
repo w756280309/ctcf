@@ -39,11 +39,11 @@ function ret()
         }
       }});
 }
-$(function(){
-    var int = setInterval(ret,1000);
+$(function () {
+    var int = setInterval(ret, 1000);
     setTimeout(function () {
         clearInterval(int);
-            location.replace("/order/order/ordererror?osn=<?= $order->sn?>");
-        }, 3000);//3秒之后自动跳入结果页面
+        //location.replace("/order/order/ordererror?osn=<?= $order->sn?>");
+    }, 5000);//3秒之后自动跳入结果页面
 })
 </script>
