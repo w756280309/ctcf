@@ -34,14 +34,16 @@
 .kahao div {
     color: #161616;
 }
+/*设置字体左边距,用于对齐*/
 .kahao .col-xs-3{
     font-size: 15px;
-    text-align: center;
     padding: 0;
+    padding-left: 5%;
 }
 .kahao .col-xs-9{
     text-align: left;
     padding: 0;
+    padding-left: 3%;
 }
 .kahao input {
     width: 100%;
@@ -56,8 +58,8 @@
     line-height: 20px;
 }
 
-/* 添加显示红色字体的类 */
+/* 添加显示红色字体的类,设置左边距,用于左对齐 */
 .note {
     color: #f44336;
-    padding-left: 1.5rem;
+    padding-left: 5%;
 }
