@@ -22,10 +22,15 @@ class BookingController extends BaseController
      */
     public function actionBooking($pid)
     {
+        if (empty($pid)) {   //参数无效时,抛出404异常
+            throw new \yii\web\NotFoundHttpException();
+        }
+
         $product = BookingProduct::findOne($pid);
-        if (empty($product)) {
+        if (null === $product) {
             throw new \yii\web\NotFoundHttpException('booking production is not existed.');
         }
+
         $now = time();
         $count = BookingLog::find()->where(['pid' => $pid, 'uid' => $this->getAuthedUser()->id])->count();
         if ($product->is_disabled || (!empty($model->start_time) && $now < $model->start_time) || (!empty($model->end_time) && $now > $model->end_time) || $count) {
@@ -59,8 +64,12 @@ class BookingController extends BaseController
 
     public function actionDetail($pid)
     {
+        if (empty($pid)) {
+            throw new \yii\web\NotFoundHttpException();   //参数无效时,抛出404异常
+        }
+
         $model = BookingProduct::findOne($pid);
-        if (!$model) {
+        if (null === $model) {
             throw new \yii\web\NotFoundHttpException('booking production is not existed.');
         }
 

@@ -90,13 +90,15 @@ class DealController extends Controller
      */
     public function actionDetail($sn)
     {
-        if (empty($sn)) {
+        if (empty($sn)) {    //参数无效时,抛出异常
             throw new \yii\web\ServerErrorHttpException('标的编号不能为空');
         }
+
         $deals = OnlineProduct::findOne(['online_status' => OnlineProduct::STATUS_ONLINE, 'del_status' => OnlineProduct::STATUS_USE, 'sn' => $sn]);
-        if (empty($deals)) {
-            throw new \yii\web\NotFoundHttpException('您访问的页面找不到');
+        if (null === $deals) {   //对象没有查到时,抛出异常
+            throw new \yii\web\NotFoundHttpException();
         }
+
         $orderbalance = 0;
         if (OnlineProduct::STATUS_FOUND === (int) $deals['status']) {
             $orderbalance = 0;
@@ -123,11 +125,12 @@ class DealController extends Controller
      * @param type $pid
      * @return type
      */
-    public function actionOrderlist($pid = null)
+    public function actionOrderlist($pid)
     {
         if (empty($pid)) {
             return ['orders' => [], 'code' => 1, 'message' => 'pid参数不能为空'];
         }
+
         $data = OnlineOrder::getOrderListByCond(['online_pid' => $pid, 'status' => 1], 'mobile,order_time time,order_money money');
         foreach ($data as $key => $dat) {
             $data[$key]['mobile'] = substr_replace($dat['mobile'], '****', 3, 4);

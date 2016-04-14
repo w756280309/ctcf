@@ -93,7 +93,14 @@ class UserController extends BaseController
         }
 
         $deal = OnlineOrder::findOne($id);
+        if (null === $deal) {
+            return new \yii\web\NotFoundHttpException();    //当对象为空时,抛出404异常
+        }
+
         $product = OnlineProduct::findOne($deal->online_pid);
+        if (null === $product) {
+            return new \yii\web\NotFoundHttpException();    //当对象为空时,抛出404异常
+        }
 
         $profit = null;
         if (!in_array($product->status, [2, 3, 7])) {

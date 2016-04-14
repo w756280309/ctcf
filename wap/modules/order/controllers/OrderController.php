@@ -23,10 +23,15 @@ class OrderController extends BaseController
      */
     public function actionIndex($sn)
     {
+        if (empty($sn)) {
+            throw new \yii\web\NotFoundHttpException();
+        }
+
         $deal = OnlineProduct::findOne(['sn' => $sn]);
-        if (empty($deal)) {
+        if (null === $deal) {
             throw new \yii\web\NotFoundHttpException('This production is not existed.');
         }
+
         $uacore = new UserAccountCore();
         $ua = $uacore->getUserAccount($this->getAuthedUser()->id);
         $param['order_balance'] = $deal->getLoanBalance(); //获取标的可投余额;
@@ -42,8 +47,12 @@ class OrderController extends BaseController
      *
      * @return type
      */
-    public function actionDoorder($sn = null)
+    public function actionDoorder($sn)
     {
+        if (empty($sn)) {
+            throw new \yii\web\NotFoundHttpException();   //判断参数无效时,抛404异常
+        }
+
         Yii::$app->response->format = Response::FORMAT_JSON;
         $money = \Yii::$app->request->post('money');
         $pay = new PayService(PayService::REQUEST_AJAX);
@@ -56,8 +65,15 @@ class OrderController extends BaseController
         return $ordercore->createOrder($sn, $money,  $this->getAuthedUser()->id);
     }
 
-    public function actionOrdererror($osn = '')
+    /**
+     * 认购标的结果页
+     */
+    public function actionOrdererror($osn)
     {
+        if (empty($osn)) {
+            throw new \yii\web\NotFoundHttpException();   //判断参数无效时,抛404异常
+        }
+
         $order = OnlineOrder::ensureOrder($osn);
         $deal = null;
         if (null  !== $order && 1 !== $order->status) {
@@ -71,8 +87,15 @@ class OrderController extends BaseController
         return $this->render('error', ['order' => $order, 'deal' => $deal, 'ret' => (null  !== $order && 1 === $order->status) ? 'success' : 'fail']);
     }
 
-    public function actionOrderwait($osn = '')
+    /**
+     * 认购标的中间处理页
+     */
+    public function actionOrderwait($osn)
     {
+        if (empty($osn)) {
+            throw new \yii\web\NotFoundHttpException();   //判断参数无效时,抛404异常
+        }
+
         $order = OnlineOrder::ensureOrder($osn);
         if (OnlineOrder::STATUS_FALSE  !== $order->status) {
             return $this->redirect("/order/order/ordererror?osn=" . $order->sn);
@@ -94,10 +117,13 @@ class OrderController extends BaseController
     public function actionAgreement($id, $key = 0)
     {
         if (empty($id)) {
-            throw new \yii\web\NotFoundHttpException('The argument err.');
+            throw new \yii\web\NotFoundHttpException();
         }
 
         $model = ContractTemplate::find()->where(['pid' => $id])->select('pid,name,content')->all();
+        if (null === $model) {
+            throw new \yii\web\NotFoundHttpException();  //当对象为空时,抛出异常
+        }
 
         $deal_id = Yii::$app->request->get('deal_id');
         if (!empty($deal_id)) {
