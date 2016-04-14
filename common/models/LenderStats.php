@@ -77,7 +77,7 @@ class LenderStats extends \yii\db\ActiveRecord
     }
 
     /**
-     * 获取历时数据
+     * 获取历史数据
      * @param $time
      * @return array
      */
@@ -100,10 +100,9 @@ class LenderStats extends \yii\db\ActiveRecord
 
     /**
      * 将新数据更新至统计表
-     * @param $data
      * @return bool
      */
-    private static function updateData(array $data)
+    public static function updateData()
     {
         $time = time();
         /* $count = self::find()->count();
