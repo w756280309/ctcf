@@ -80,8 +80,8 @@ class UserStats
             $data[$key]['id'] = $val['id'];
             $data[$key]['created_at'] = date('Y-m-d H:i:s', $val['created_at']);
             $data[$key]['name'] = $val['real_name'];
-            $data[$key]['mobile'] = $val['mobile'];
-            $data[$key]['idcard'] = $val['idcard'];
+            $data[$key]['mobile'] = $val['mobile']."\t";   //手机号后面加入tab键,防止excel表格打开时,显示为科学计数法
+            $data[$key]['idcard'] = $val['idcard']."\t";   //身份证号后面加入tab键,防止excel表格打开时,显示为科学计数法
             $data[$key]['idcard_status'] = $val['idcard_status'];
             $data[$key]['mianmiStatus'] = $val['mianmiStatus'];
 
