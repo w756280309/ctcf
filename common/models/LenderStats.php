@@ -39,7 +39,7 @@ class LenderStats extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'lenderStats';
+        return 'LenderStats';
     }
 
 
