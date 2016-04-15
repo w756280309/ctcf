@@ -310,7 +310,7 @@ class OrderManager
             throw new Exception(PayService::getErrorByCode(PayService::ERROR_UA));
         }
         //用户资金表
-        $ua->available_balance = $bcrond->bcround(bcsub($ua->available_balance, $order->order_money), 2);
+        $ua->available_balance = bcsub($ua->available_balance, $order->order_money, 2);    //调整计算精度,防止小数位丢失
         if ($ua->available_balance * 1 < 0) {
             throw new Exception(PayService::getErrorByCode(PayService::ERROR_MONEY_LESS));
         }
