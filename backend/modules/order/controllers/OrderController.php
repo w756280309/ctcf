@@ -22,7 +22,7 @@ use common\lib\bchelp\BcRound;
 /**
  * OrderController implements the CRUD actions for OfflineOrder model.
  */
-class OrderController extends BaseController
+class OrderController extends BaseController    //该文件没有地方在用,暂时不做修改
 {
     public $layout = 'main';
 

@@ -8,9 +8,6 @@
 
 namespace backend\modules\adv\controllers;
 
-
-use yii\web\Controller;
-
 use Yii;
 use yii\web\Response;
 
@@ -23,8 +20,9 @@ class DefaultController extends BaseController
     public function init()
     {
         parent::init();
-        if (Yii::$app->request->isAjax)
+        if (Yii::$app->request->isAjax) {
             Yii::$app->response->format = Response::FORMAT_JSON;
+        }
     }
     public function actionIndex()
     {

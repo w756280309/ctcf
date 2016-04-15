@@ -10,14 +10,19 @@ use common\models\product\OnlineProduct;
 use common\lib\bchelp\BcRound;
 use backend\controllers\BaseController;
 use backend\modules\user\core\v1_0\UserAccountBackendCore;
+use yii\web\NotFoundHttpException;
 
 /**
  * OrderController implements the CRUD actions for OfflineOrder model.
  */
 class OnlineorderController extends BaseController
 {
-    public function actionList($id = null)
+    public function actionList($id)
     {
+        if (empty($id)) {
+            throw new NotFoundHttpException();   //参数无效时,抛出404异常
+        }
+
         //取出金额总计
         $username = Yii::$app->request->get('username');
         $mobile = Yii::$app->request->get('mobile');
@@ -68,6 +73,10 @@ class OnlineorderController extends BaseController
      */
     public function actionExport($id)
     {
+        if (empty($id)) {
+            throw new NotFoundHttpException();   //参数无效时,抛出404异常
+        }
+
         header("Content-Type: application/vnd.ms-excel");
         header("Content-Disposition: attachment; filename=投标记录（" . $id . "）-" . date('Ymd') . ".xls");
         header("Pragma: no-cache");
@@ -106,6 +115,10 @@ class OnlineorderController extends BaseController
      */
     public function actionDetailr($id, $type)
     {
+        if (empty($id) || empty($type) || !in_array($type, [1, 2])) {
+            throw new NotFoundHttpException();   //参数无效时,抛出404异常
+        }
+
         $status = Yii::$app->request->get('status');
         $time = Yii::$app->request->get('time');
         $title = Yii::$app->request->get('title');
@@ -158,6 +171,10 @@ class OnlineorderController extends BaseController
 
     public function actionDetailt($id = null, $type = null)
     {
+        if (empty($id) || empty($type) || !in_array($type, [1, 2])) {
+            throw new NotFoundHttpException();   //参数无效时,抛出404异常
+        }
+
         $status = Yii::$app->request->get('status');
         $time = Yii::$app->request->get('time');
 
@@ -185,7 +202,7 @@ class OnlineorderController extends BaseController
         $numdata = OnlineOrder::find()->where(['uid' => $id])->select('id,order_money,online_pid,status')->asArray()->all();
         $bc = new BcRound();
         bcscale(14);
-        foreach ($numdata as $data) {            
+        foreach ($numdata as $data) {
             if ($data['status'] == OnlineOrder::STATUS_SUCCESS) {
                 $moneyTotal = bcadd($moneyTotal, $data['order_money']);
                 ++$successNum;

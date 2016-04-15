@@ -1,5 +1,5 @@
 <?php
-use yii\widgets\ActiveForm;
+
 use yii\widgets\LinkPager;
 /**
  * Created by zhy.
@@ -21,7 +21,7 @@ $uid =  Yii::$app->request->get('uid');
 			<div class="exercise">
 				<a href="/user/user/list">会员列表</a><a href="/order/order/edit?uid=<?= $user['id'] ?>">添加订单</a>
 			</div>
-    
+
 		</div>
 		<div class="page_main">
 			<div class="page_menu" style="height:auto;">
@@ -57,7 +57,7 @@ $uid =  Yii::$app->request->get('uid');
 							</td>
 						</tr>
 						<tr>
-							
+
 							<td colspan="6"><input type="submit" class="button_small" onclick="" value="搜索" /></td>
 						</tr>
 					</table>
@@ -96,10 +96,10 @@ $uid =  Yii::$app->request->get('uid');
 							<a href="/order/order/edit?id=<?= $val['id'];?>&uid=<?= $val['user_id'];?>">编辑</a> | <a href="/order/order/delete?id=<?= $val['id'];?>">删除</a> | <a href="/order/order/view?id=<?= $val['id'];?>&uid=<?= $val['user_id'];?>">查看</a>
 						</td>
 					</tr>
-                                        
-                        <?php 
+
+                        <?php
                             }
-                        ?>  
+                        ?>
 				</table>
 			</div>
 		</div>

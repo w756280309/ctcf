@@ -13,7 +13,7 @@ use common\models\product\ProductCategory;
 use \common\models\product\OfflineProduct;
 use backend\controllers\BaseController;
 
-class CategoryController extends BaseController
+class CategoryController extends BaseController   //该文件暂时没有地方在使用,先不改动
 {
     public $layout = 'main';
 
@@ -25,15 +25,15 @@ class CategoryController extends BaseController
         //$model = ProductCategory::treeCategory();
         //echo "<pre>";
         //print_r(ProductCategory::treeCategory());exit;
-        $model = ProductCategory::getCategoryTree();   
+        $model = ProductCategory::getCategoryTree();
         //var_dump($model);exit;
         return $this->render('index',[
              'model' => $model
        ]);
     }
-    
-    
-    
+
+
+
     public function actionAdd($id = null) {
         $totalCategories = [];
         $_rawCategories = ProductCategory::getCategoryTree();
@@ -41,7 +41,7 @@ class CategoryController extends BaseController
             $totalCategories[$key] = $c['name'];
         }
         $model = $id ? ProductCategory::findOne($id) : new ProductCategory();
-        
+
         if ($model->load(Yii::$app->request->post()))
         {
             if (Yii::$app->request->isAjax)
@@ -70,23 +70,23 @@ class CategoryController extends BaseController
         }
         return $this->render('edit', ['model' => $model, 'categories'=>$totalCategories]);
     }
-    
+
     public function actionDelete($id = null) {
         $count = OfflineProduct::find()->andWhere(['category_id'=>$id,'del_status'=>  OfflineProduct::DEL_STATUS_SHOW])->count();
         if($count){
             echo "<script>alert('分类下还有产品，勿删除。请注意操作');location.href='/product/category/index';</script>";exit;
         }
-        
+
         $cat_count = ProductCategory::find()->andWhere(['parent_id'=>$id,'del_status'=>  0])->count();
         if($cat_count){
             echo "<script>alert('分类下还子分类。请注意操作');location.href='/product/category/index';</script>";exit;
         }
-        
+
         $model = new ProductCategory();
         $model->deleteAll('id='.$id);
         return $this->redirect(['index']);
     }
-    
-    
+
+
 
 }

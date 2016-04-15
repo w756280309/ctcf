@@ -78,7 +78,7 @@ class AdvController extends BaseController
         $model = $this->findModel($id);
         $model->scenario = 'update';
         $model->del_status = Adv::DEL_STATUS_DEL;
-        $result = $model->save();
+        $model->save();
 
         return $this->redirect('index');
     }
@@ -95,7 +95,7 @@ class AdvController extends BaseController
      */
     protected function findModel($id)
     {
-        if (($model = Adv::findOne($id)) !== null) {
+        if (!empty($id) && ($model = Adv::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
@@ -110,7 +110,12 @@ class AdvController extends BaseController
                 'message' => '非法请求',
             ];
         }
+
         $ids = Yii::$app->request->post('ids');
+        if (empty($ids)) {
+            return ['result' => 0, 'message' => '操作失败'];
+        }
+
         Adv::updateAll(['status' => 1], ['in', 'id', explode(',', $ids)]);
 
         return ['result' => 1, 'message' => '操作成功'];
@@ -124,7 +129,12 @@ class AdvController extends BaseController
                 'message' => '非法请求',
             ];
         }
+
         $ids = Yii::$app->request->post('ids');
+        if (empty($ids)) {
+            return ['result' => 0, 'message' => '操作失败'];
+        }
+
         Adv::updateAll(['status' => 0], ['in', 'id', explode(',', $ids)]);
 
         return ['result' => 1, 'message' => '操作成功'];
@@ -133,18 +143,20 @@ class AdvController extends BaseController
     public function actionMoreop($op = null, $id = null, $value = null)
     {
         $res = 0;
-        if ($op == 'status') {
+        if (!empty($id) && $op == 'status') {
             //项目状态
             $_model = $this->findModel($id);
-            if ($value ==  Adv::STATUS_HIDDEN) {
-                $_model->status = Adv::STATUS_SHOW;
-            } elseif ($value == Adv::STATUS_SHOW) {
-                $_model->status = Adv::STATUS_HIDDEN;
+            if (null !== $_model) {
+                if ($value ==  Adv::STATUS_HIDDEN) {
+                    $_model->status = Adv::STATUS_SHOW;
+                } elseif ($value == Adv::STATUS_SHOW) {
+                    $_model->status = Adv::STATUS_HIDDEN;
+                }
+                $_model->scenario = 'update';
+                $res = $_model->save();
             }
-            $_model->scenario = 'update';
-            $res = $_model->save();
-        } else {
         }
+
         echo json_encode(array('res' => $res));
     }
 
@@ -153,15 +165,16 @@ class AdvController extends BaseController
      */
     public function actionImgdel($id = null, $img = null)
     {
-         if ($id) {
+         if (!empty($id)) {
              Adv::deleteAll(['id' => $id]);
          }
-         $dr = $_SERVER['DOCUMENT_ROOT'];
 
+         $dr = $_SERVER['DOCUMENT_ROOT'];
          $f = $dr.'/upload/adv/'.$img;
          if (file_exists($f)) {
              unlink($f);
          }
+
          echo json_encode(1);
          exit;
      }

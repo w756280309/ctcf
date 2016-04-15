@@ -5,11 +5,7 @@
  * Date: 15-2-3
  * Time: 下午5:14
  */
-
 namespace backend\modules\news\controllers;
-
-
-use yii\web\Controller;
 
 use backend\controllers\BaseController;
 
@@ -21,7 +17,4 @@ class MainController extends BaseController
     {
         return $this->render('index');
     }
-
-
-
 }

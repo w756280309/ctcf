@@ -9,6 +9,9 @@ use yii\data\Pagination;
 use common\models\adminuser\AdminAuth;
 use common\models\adminuser\EditpassForm;
 use common\models\adminuser\Admin;
+use common\models\adminuser\Auth;
+use common\models\adminuser\RoleAuth;
+use common\models\adminuser\Role;
 
 class AdminController extends BaseController
 {
@@ -40,7 +43,7 @@ class AdminController extends BaseController
     public function actionEdit($id = null, $act = null)
     {
         $totalCategories = [];
-        $_rawCategories = \common\models\adminuser\Role::find()->where(['status' => 1])->asArray()->all();
+        $_rawCategories = Role::find()->where(['status' => 1])->asArray()->all();
         foreach ($_rawCategories as $c) {
             $totalCategories[$c['sn']] = $c['role_name'];
         }
@@ -106,12 +109,11 @@ class AdminController extends BaseController
         if (empty($aid) && empty($rid)) {
             return ['res' => 0, 'msg' => '数据读取错误'];
         }
-        $auth = \common\models\adminuser\Auth::find()->asArray()->select('sn,psn,auth_name')->all();
+        $auth = Auth::find()->asArray()->select('sn,psn,auth_name')->all();
         if (empty($aid)) {
-            $role = \common\models\adminuser\RoleAuth::find()->where(['role_sn' => $rid])->select('auth_sn')->asArray()->all();
+            $role = RoleAuth::find()->where(['role_sn' => $rid])->select('auth_sn')->asArray()->all();
             foreach ($auth as $key => $val) {
                 foreach ($role as $k => $v) {
-                    //echo $val['sn'].'--'.$v['auth_sn']."<br>";
                     if ($val['sn'] == $v['auth_sn']) {
                         $auth[$key]['checked'] = 1;
                         break;
@@ -121,10 +123,9 @@ class AdminController extends BaseController
                 }
             }
         } else {
-            $adminauth = \common\models\adminuser\AdminAuth::find()->where(['admin_id' => $aid])->select('auth_sn')->asArray()->all();
+            $adminauth = AdminAuth::find()->where(['admin_id' => $aid])->select('auth_sn')->asArray()->all();
             foreach ($auth as $key => $val) {
                 foreach ($adminauth as $k => $v) {
-                    //echo $val['sn'].'--'.$v['auth_sn']."<br>";
                     if ($val['sn'] == $v['auth_sn']) {
                         $auth[$key]['checked'] = 1;
                         break;
@@ -156,19 +157,21 @@ class AdminController extends BaseController
     public function actionActivedo($op = null, $id = null, $value = null)
     {
         $res = 0;
-        if ($op == 'status') {
+        if ($op == 'status' && !empty($id)) {
             //项目状态
             $_model = Admin::findOne($id);
-            //这儿会用到场景
-            $_model->scenario = 'active';
-            if ($value == Admin::STATUS_DELETED) {
-                $_model->status = Admin::STATUS_ACTIVE;
-            } elseif ($value == Admin::STATUS_ACTIVE) {
-                $_model->status = Admin::STATUS_DELETED;
+            if (null !== $_model) {
+                //这儿会用到场景
+                $_model->scenario = 'active';
+                if ($value == Admin::STATUS_DELETED) {
+                    $_model->status = Admin::STATUS_ACTIVE;
+                } elseif ($value == Admin::STATUS_ACTIVE) {
+                    $_model->status = Admin::STATUS_DELETED;
+                }
+                $res = $_model->save();
             }
-            $res = $_model->save();
-        } else {
         }
+
         echo json_encode(array('res' => $res));
     }
 
@@ -182,7 +185,6 @@ class AdminController extends BaseController
         if ($model->load(Yii::$app->request->post()) && $model->editpass()) {
             $this->alert = 1;
             $this->toUrl = '/adminuser/admin/editpass?flag=1';
-             //Yii::$app->user->logout();
         }
 
         return $this->render('editpass', ['model' => $model]);

@@ -2,10 +2,7 @@
 namespace backend\controllers;
 
 use Yii;
-use yii\filters\AccessControl;
-use yii\web\Controller;
 use common\models\LoginForm;
-use yii\filters\VerbFilter;
 
 /**
  * Site controller
@@ -27,9 +24,9 @@ class SiteController extends  \backend\controllers\BaseController
     }
 
     public function actionOpermsg(){
-        return $this->render('oper',['res'=>1,'message'=>"恭喜","links"=>array(    
-                    array('浏览发布的产品','/company/product/update/id/'),    
-                    array('继续发布产品','/company/product/create/step/1'),    
+        return $this->render('oper',['res'=>1,'message'=>"恭喜","links"=>array(
+                    array('浏览发布的产品','/company/product/update/id/'),
+                    array('继续发布产品','/company/product/create/step/1'),
                     )]);
     }
 
@@ -80,11 +77,11 @@ class SiteController extends  \backend\controllers\BaseController
             return $this->goHome();
         }
     }
-    
+
     public function actionDeny(){
         return $this->render('deny');
     }
-    
+
     public function actionError(){
         echo 123;
     }

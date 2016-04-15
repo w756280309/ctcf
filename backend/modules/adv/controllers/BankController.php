@@ -45,6 +45,10 @@ class BankController extends BaseController
     {
         $this->layout = false;
         $id = htmlspecialchars($id);
+        if (empty($id)) {
+            throw new NotFoundHttpException();   //当参数无效时,抛出异常
+        }
+
         $eBank = EbankConfig::find()->where(['bankId' => $id])->one();
         $qPay = QpayConfig::find()->where(['bankId' => $id])->one();
         if (!$eBank || !$qPay) {

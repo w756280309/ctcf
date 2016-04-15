@@ -8,7 +8,6 @@
 
 namespace backend\modules\product\controllers;
 
-
 use yii\web\Controller;
 
 class MainController extends Controller
@@ -19,7 +18,4 @@ class MainController extends Controller
     {
         return $this->render('index');
     }
-
-
-
 }
