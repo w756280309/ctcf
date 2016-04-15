@@ -90,7 +90,7 @@ class Client
      */
     public function register(UserInterface $user)
     {
-        $orderId = time();
+        $orderId = \common\utils\TxUtils::generateSn("REG");
 
         $data = [
             'service' => 'mer_register_person',
