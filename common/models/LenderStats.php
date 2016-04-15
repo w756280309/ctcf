@@ -74,7 +74,7 @@ class LenderStats extends \yii\db\ActiveRecord
      * @param $time
      * @return array
      */
-    private static function getOldData($time)
+    private static function getOldData()
     {
         $u = User::tableName();
         $b = UserBanks::tableName();
@@ -95,7 +95,6 @@ class LenderStats extends \yii\db\ActiveRecord
         $recharge = RechargeRecord::find()
             ->select("sum(fund) as rtotalFund, count(id) as rtotalNum, uid")
             ->where(['status' => RechargeRecord::STATUS_YES])
-            ->andWhere(['<=', 'created_at', $time])
             ->groupBy("uid")
             ->asArray()
             ->all();
@@ -103,7 +102,6 @@ class LenderStats extends \yii\db\ActiveRecord
         $draw = DrawRecord::find()
             ->select("sum(money) as dtotalFund, count(id) as dtotalNum, uid")
             ->where(['status' => [DrawRecord::STATUS_SUCCESS, DrawRecord::STATUS_EXAMINED]])
-            ->andWhere(['<=', 'created_at', $time])
             ->groupBy("uid")
             ->asArray()
             ->all();
@@ -111,7 +109,6 @@ class LenderStats extends \yii\db\ActiveRecord
         $order = OnlineOrder::find()
             ->select("sum(order_money) as ototalFund, count(id) as ototalNum, uid")
             ->where(['status' => OnlineOrder::STATUS_SUCCESS])
-            ->andWhere(['<=', 'created_at', $time])
             ->groupBy("uid")
             ->asArray()
             ->all();
@@ -119,7 +116,7 @@ class LenderStats extends \yii\db\ActiveRecord
         foreach ($model as $key => $val) {
             $data[$key]['uid'] = $val['id'];
             $data[$key]['created_at'] = $val['created_at'];
-            $data[$key]['updated_at'] = $time;
+            $data[$key]['updated_at'] = time();
             $data[$key]['name'] = $val['real_name'];
             $data[$key]['mobile'] = $val['mobile'];
             $data[$key]['idcard'] = $val['idcard'];
@@ -165,17 +162,63 @@ class LenderStats extends \yii\db\ActiveRecord
         return $data;
     }
 
-    /**
-     * 定时更新时获取当次数据
-     * @return array
-     */
-    private static function getData()
+
+    private static function getLastUpdateTime()
     {
-        //todo 获取新数据
-        return [];
+        //todo 获取上次更新时间
+        return time();
     }
 
 
+    private static function instructionUpdate(){
+        $last_update_time = self::getLastUpdateTime();
+        //todo 方案1 根据上次更新时间获取最新指令，并根据每条指令获取对应用户数据变动情况，更新对应用户数据变动情况
+
+        //todo 方案2 根据上次更新时间获取最新指令，根据最新指令获取对应的用户ids,清空对应的用户统计数据，统计对应用户的数据，插入对应用户数据
+
+        /**
+            两种方案分析，已充值为例。
+         * 方案一：
+         * （1）获取指令。从TradeLog表中查找所有 created_at 大于 $last_update_time 的数据
+         * （2）获取充值记录。循环指令，根据指令中的 txSn 字段，从 recharge_record 表中获取数据（根据recharge_record 表的 sn字段，并且 status=1 充值成功），如果没有找到数据则 continue；
+         * （3）获取数据。根据充值记录，获取 uid ，fund
+         * （4）将对应用户的统计结果的 充值金额加 fund，充值次数加1，账户余额加fund
+         *
+         * 方案二：
+         * （1）获取指令。从TradeLog表中查找所有 created_at 大于 $last_update_time 的数据
+         * （2）获取用户。如果指令中有uid，添加uid；如果没有则根据 txSn 获取用户uid
+         * （3）使用获取旧数据逻辑，获取这批用户的最新统计数据
+         * （4）删除数据库中对应uid数据，将获取到的数据插入数据库
+         */
+    }
+
+    private static function overallUpdate(){
+        //获取所有用户所有统计数据
+        $data = self::getOldData();
+        //清空数据库
+        (new Migration())->truncateTable(self::tableName());
+        //将新数据插入数据库
+       Yii::$app->db->createCommand()
+           ->batchInsert(self::tableName(), [
+               'uid',
+               'created_at',
+               'updated_at',
+               'name',
+               'mobile',
+               'idcard',
+               'idcardStatus',
+               'mianmiStatus',
+               'bid',
+               'accountBalance',
+               'rtotalFund',
+               'rtotalNum',
+               'dtotalFund',
+               'dtotalNum',
+               'ototalFund',
+               'ototalNum'
+           ], $data)
+           ->execute();
+    }
     /**
      * 将新数据更新至统计表
      * @return bool
@@ -184,35 +227,11 @@ class LenderStats extends \yii\db\ActiveRecord
     {
         @set_time_limit(0);
         $time = time();
-        /* $count = self::find()->count();
-         if ($count > 0) {
-             $data = self::getData();
-         } else {
-             $data = self::getOldData($time);
-         }*/
-        (new Migration())->truncateTable(self::tableName());
-        $data = self::getOldData($time);
-        Yii::$app->db->createCommand()
-            ->batchInsert(self::tableName(), [
-                'uid',
-                'created_at',
-                'updated_at',
-                'name',
-                'mobile',
-                'idcard',
-                'idcardStatus',
-                'mianmiStatus',
-                'bid',
-                'accountBalance',
-                'rtotalFund',
-                'rtotalNum',
-                'dtotalFund',
-                'dtotalNum',
-                'ototalFund',
-                'ototalNum'
-            ], $data)
-            ->execute();
-        return true;
+          //全局更新
+        self::overallUpdate();
+
+        //指令更新
+       // self::instructionUpdate();
     }
 
     /**
