@@ -10,6 +10,7 @@ use common\models\user\RechargeRecord;
 use common\models\user\DrawRecord;
 use common\models\order\OnlineOrder;
 use common\models\user\UserAccount;
+use yii\web\NotFoundHttpException;
 
 /**
  * This is the model class for table "lender_stats".
@@ -69,11 +70,7 @@ class LenderStats extends \yii\db\ActiveRecord
         ];
     }
 
-    /**
-     * 获取历史数据
-     * @param $time
-     * @return array
-     */
+
     private static function getOldData()
     {
         $u = User::tableName();
@@ -165,16 +162,48 @@ class LenderStats extends \yii\db\ActiveRecord
 
     private static function getLastUpdateTime()
     {
-        //todo 获取上次更新时间
-        return time();
+        $model = LenderStats::find()->select('updated_at')->orderBy(['updated_at'=>SORT_DESC])->asArray()->one();
+        if($model){
+            return $model['updated_at'];
+        }else{
+            return null;
+        }
     }
 
 
     private static function instructionUpdate(){
         $last_update_time = self::getLastUpdateTime();
-        //todo 方案1 根据上次更新时间获取最新指令，并根据每条指令获取对应用户数据变动情况，更新对应用户数据变动情况
+        if(is_null($last_update_time)){
+            self::overallUpdate();
+            return true;
+        }
+     /*   //获取充值指令
+        $tradeLogs = TradeLog::find()
+            ->select('txSn')
+            ->where(['>','created_at',$last_update_time])
+            ->andWhere(['in','txType',['mer_recharge_person','mer_recharge','recharge_notify']])
+            ->asArray()
+            ->all();
+        if(count($tradeLogs)>0){
+            foreach($tradeLogs as $v){
+                $sn = $v['txSn'];
+                if(!$sn){
+                    continue;
+                }
+                $recharge_record = RechargeRecord::find()->where(['sn'=>$sn,'status'=>1])->asArray()->one();
+                if(!$recharge_record){
+                    continue;
+                }
+                $lenderStats = LenderStats::find()->where(['uid'=>$recharge_record['uid']])->one();
+                if(!$lenderStats){
+                    throw new NotFoundHttpException('没找到对应统计数据');
+                }
 
-        //todo 方案2 根据上次更新时间获取最新指令，根据最新指令获取对应的用户ids,清空对应的用户统计数据，统计对应用户的数据，插入对应用户数据
+            }
+        }
+        return true;*/
+        //todo 方案1 根据上次更新时间和指令类型（充值、提现、交易、注册、身份验证、开通免密等）获取最新指令，并根据每条指令获取对应用户数据变动情况，更新对应用户数据变动情况
+        //todo 方案2 根据上次更新时间和所有指令类型获取最新指令，根据最新指令获取对应的用户ids,清空对应的用户统计数据，统计对应用户的数据，插入对应用户数据
 
         /**
             两种方案分析，已充值为例。
@@ -183,13 +212,17 @@ class LenderStats extends \yii\db\ActiveRecord
          * （2）获取充值记录。循环指令，根据指令中的 txSn 字段，从 recharge_record 表中获取数据（根据recharge_record 表的 sn字段，并且 status=1 充值成功），如果没有找到数据则 continue；
          * （3）获取数据。根据充值记录，获取 uid ，fund
          * （4）将对应用户的统计结果的 充值金额加 fund，充值次数加1，账户余额加fund
-         *
+         * （*5） 新增用户、用户状态更改（绑卡、开通免密等）,需要统计对应用户的所有信息，并插入数据库
          * 方案二：
          * （1）获取指令。从TradeLog表中查找所有 created_at 大于 $last_update_time 的数据
          * （2）获取用户。如果指令中有uid，添加uid；如果没有则根据 txSn 获取用户uid
          * （3）使用获取旧数据逻辑，获取这批用户的最新统计数据
          * （4）删除数据库中对应uid数据，将获取到的数据插入数据库
+         *
+         * 选择方案二
          */
+
+
     }
 
     private static function overallUpdate(){
@@ -226,12 +259,11 @@ class LenderStats extends \yii\db\ActiveRecord
     public static function updateData()
     {
         @set_time_limit(0);
-        $time = time();
           //全局更新
-        self::overallUpdate();
+        //self::overallUpdate();
 
         //指令更新
-       // self::instructionUpdate();
+        self::instructionUpdate();
     }
 
     /**
@@ -261,7 +293,6 @@ class LenderStats extends \yii\db\ActiveRecord
 
     /**
      * 生成csv文件
-     * @throws \yii\web\NotFoundHttpException
      */
     public static function createCsvFile()
     {
