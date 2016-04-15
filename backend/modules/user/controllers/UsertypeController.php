@@ -3,13 +3,6 @@
 namespace backend\modules\user\controllers;
 
 use common\models\user\UserType;
-use backend\controllers\BaseController;
-
-use Yii;
-use yii\data\ActiveDataProvider;
-use yii\web\Controller;
-use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
 use yii\data\Pagination;
 
 /**
@@ -17,57 +10,64 @@ use yii\data\Pagination;
  */
 class UsertypeController extends \backend\controllers\BaseController
 {
-
     /**
      * create a new user type
      * Lists all User models.
+     *
      * @return mixed
      */
-    public function actionIndex(){
+    public function actionIndex()
+    {
         $data = UserType::find();
         $pages = new Pagination(['totalCount' => $data->count(), 'pageSize' => '10']);
         $model = $data->offset($pages->offset)->limit($pages->limit)->orderBy('id asc')->all();
-        return $this->render('index',['model'=>$model, 'pages' => $pages]);
+
+        return $this->render('index', ['model' => $model, 'pages' => $pages]);
     }
 
     /**
-     * create a new user type
+     * create a new user type.
+     *
      * @return mixed
-     */     
-    public function actionEdit($id = null){
+     */
+    public function actionEdit($id = null)
+    {
         $model = $id ? UserType::findOne($id) : new UserType();
-        
-        if($id){
+
+        if ($id) {
             $model->scenario = 'update';
-        }else{
+        } else {
             $model->scenario = 'create';
             $model->creator_id = Yii::$app->user->id;
             $model->status = 1;
         }
-        if ($model->load(Yii::$app->request->post()) && $model->validate())
-        {
-//            return json_encode($model->save());
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            //            return json_encode($model->save());
             $model->save();
+
             return $this->redirect(['index']);
         }
-        
-        return $this->render('edit',['model'=>$model]);
+
+        return $this->render('edit', ['model' => $model]);
     }
-    public function actionMoreop($op=null,$id=null,$value=null) {
+
+    public function actionMoreop($op = null, $id = null, $value = null)
+    {
         $res = 0;
-        if($op=='status'){//项目状态
+        if (!empty($id) && $op == 'status') {
+            //项目状态
             $_model = UserType::findOne($id);
-            if($value==  UserType::STATUS_HIDDEN){
-                $_model->status = UserType::STATUS_SHOW;
-            }else if($value==UserType::STATUS_SHOW){
-                $_model->status = UserType::STATUS_HIDDEN;
+            if (null !== $_model) {
+                if ($value ==  UserType::STATUS_HIDDEN) {
+                    $_model->status = UserType::STATUS_SHOW;
+                } elseif ($value == UserType::STATUS_SHOW) {
+                    $_model->status = UserType::STATUS_HIDDEN;
+                }
+                $_model->scenario = 'update';
+                $res = $_model->save();
             }
-            $_model->scenario = 'update';
-            $res = $_model->save();
-        }else{
-
         }
-        echo json_encode(array('res'=>$res));
-    }
 
+        echo json_encode(array('res' => $res));
+    }
 }

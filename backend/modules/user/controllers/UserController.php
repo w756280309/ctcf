@@ -48,9 +48,8 @@ class UserController extends BaseController
 
     public function userList($name = null, $mobile = null, $type = null)
     {
-        if (empty($type)) {
+        if (empty($type) || !in_array($type, [1, 2])) {   //增加对type值的限定
             Yii::$app->response->format = Response::FORMAT_JSON;
-
             return ['TYPE参数错误'];
         }
 
@@ -113,7 +112,14 @@ class UserController extends BaseController
      */
     public function actionDetail($id, $type)
     {
+        if (empty($id) || empty($type) || !in_array($type, [1, 2])) {
+            throw new yii\web\NotFoundHttpException();     //参数无效,抛出404异常
+        }
+
         $userInfo = User::findOne($id);
+        if (null === $userInfo) {
+            throw new yii\web\NotFoundHttpException();     //对象为空时,抛出404异常
+        }
 
         $uabc = new UserAccountBackendCore();
         $recharge = $uabc->getRechargeSuccess($id);

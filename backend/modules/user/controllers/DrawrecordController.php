@@ -26,9 +26,14 @@ class DrawrecordController extends BaseController
      */
     public function actionDetail($id = null, $type = null)
     {
+        if (empty($id) || empty($type) || !in_array($type, [1, 2])) {
+            throw new yii\web\NotFoundHttpException();     //参数无效,抛出404异常
+        }
+
         //提现明细页面的搜索功能
         $status = Yii::$app->request->get('status');
         $time = Yii::$app->request->get('time');
+
         $query = DrawRecordTime::find()->where(['uid' => $id]);
         if ($type == User::USER_TYPE_PERSONAL) {
             if ($status === '-1') {
@@ -249,6 +254,10 @@ class DrawrecordController extends BaseController
      */
     public function actionExaminfk($pid, $id)
     {
+        if (empty($pid) || empty($id)) {
+            throw new yii\web\NotFoundHttpException();     //参数无效,抛出404异常
+        }
+
         $this->layout = false;
 
         $userBank = UserBank::find()->where(['uid' => $pid])->one();
@@ -258,7 +267,9 @@ class DrawrecordController extends BaseController
         return $this->render('examinfk', ['model' => $model, 'tixianSq' => $tixianUserInfo, 'userBank' => $userBank]);
     }
 
-    // 点击后审核通过或不通过
+    /**
+     * 点击后审核通过或不通过
+     */
     public function actionChecksq()
     {
         $id = Yii::$app->request->post('id');

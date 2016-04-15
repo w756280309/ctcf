@@ -24,6 +24,10 @@ class RechargerecordController extends BaseController
      */
     public function actionDetail($id, $type)
     {
+        if (empty($id) || empty($type) || !in_array($type, [1, 2])) {
+            throw new yii\web\NotFoundHttpException();     //参数无效,抛出404异常
+        }
+
         $status = Yii::$app->request->get('status');
         $time = Yii::$app->request->get('time');
 

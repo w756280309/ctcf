@@ -19,6 +19,7 @@ use common\service\LoanService;
 use common\lib\product\ProductProcessor;
 use common\models\user\MoneyRecord;
 use common\utils\TxUtils;
+use yii\web\NotFoundHttpException;
 
 /**
  * Description of OnlineProduct.
@@ -226,13 +227,21 @@ class ProductonlineController extends BaseController
 
     public function actionDelmore($ids = null)
     {
+        if (empty($ids)) {
+            throw new NotFoundHttpException();     //参数无效,抛出404异常
+        }
+
         $id_arr = explode(',', $ids);
         foreach ($id_arr as $id) {
             $_model = OnlineProduct::findOne($id);
+            if (null === $_model) {    //如果没有找到标的信息,跳过本次循环,继续下次循环操作
+                continue;
+            }
             $_model->del_status = 1;
             $_model->scenario = 'del';
             $_model->save();
         }
+
         echo json_encode(array('res' => 1));
     }
 
@@ -248,6 +257,9 @@ class ProductonlineController extends BaseController
             return ['res' => 0, 'msg' => 'id为空'];
         }
         $online_product = OnlineProduct::findOne($id);
+        if (null === $online_product) {
+            return ['res' => 0, 'msg' => '项目信息不存在'];    //当对象信息为空时,抛出错误信息
+        }
         if ($online_product->status == OnlineProduct::STATUS_PRE) {
             return ['res' => 0, 'msg' => '项目处于预告期'];
         }
@@ -304,9 +316,9 @@ class ProductonlineController extends BaseController
     /**
      * 贷款的详细信息
      */
-    public function actionDetail($id = null)
+    public function actionDetail()
     {
-        //        联表查出表前的记录。包括：已募集金额 **元 剩余可投金额：*元 已投资人数：**人 剩余时间：1天15小时6分
+        //联表查出表前的记录。包括：已募集金额 **元 剩余可投金额：*元 已投资人数：**人 剩余时间：1天15小时6分
         $totalMoney = (new \Yii\db\Query())
                 ->select('sum(order_money) as money')
                 ->from('online_order')
@@ -322,6 +334,7 @@ class ProductonlineController extends BaseController
 
         return $this->render('detail', ['info' => $query, 'totalMoney' => $totalMoney]);
     }
+
     //搜索
     public function actionSearch()
     {
@@ -441,10 +454,14 @@ class ProductonlineController extends BaseController
      */
     public function actionJixi($product_id)
     {
+        if (empty($product_id)) {
+            throw new NotFoundHttpException();   //当参数无效时,抛出404异常
+        }
+
         $c_flag = 0;
         $model = OnlineProduct::findOne($product_id);
-        if (!$model) {
-            throw new \yii\web\NotFoundHttpException('The production is not existed.');
+        if (null === $model) {
+            throw new NotFoundHttpException();
         }
 
         $err = '';
@@ -493,7 +510,6 @@ class ProductonlineController extends BaseController
         if (!empty($name)) {
             $data->andFilterWhere(['like', 'name', $name]);
         }
-        //$data->orderBy('id desc');
 
         $pages = new Pagination(['totalCount' => $data->count(), 'pageSize' => '20']);
         $model = $data->offset($pages->offset)->limit($pages->limit)->all();

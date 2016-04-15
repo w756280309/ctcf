@@ -8,9 +8,6 @@
 
 namespace backend\modules\user\controllers;
 
-
-use yii\web\Controller;
-
 class MainController extends \backend\controllers\BaseController
 {
     public $layout = 'main';
@@ -19,7 +16,4 @@ class MainController extends \backend\controllers\BaseController
     {
         return $this->render('index');
     }
-
-
-
 }

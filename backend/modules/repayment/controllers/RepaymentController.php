@@ -35,16 +35,25 @@ class RepaymentController extends BaseController
     }
 
     /**
-     * 还款计划详情页
+     * 还款计划详情页.
      */
     public function actionIndex($pid)
     {
+        if (empty($pid)) {
+            throw new yii\web\NotFoundHttpException();     //参数无效,抛出404异常
+        }
+
         $deal = OnlineProduct::find()->select('title,status')->where(['id' => $pid])->one();
         $model = (new \yii\db\Query())
                 ->select('orp.*,u.real_name,u.mobile')
                 ->from(['online_repayment_plan orp'])
                 ->innerJoin('user u', 'orp.uid=u.id')
                 ->where(['orp.online_pid' => $pid])->all();
+
+        if (null === $deal || null === $model) {
+            throw new yii\web\NotFoundHttpException();     //对象为空时,抛出404异常
+        }
+
         $total_bj = 0;
         $total_lixi = 0;
         $total_bx = 0;
@@ -57,8 +66,9 @@ class RepaymentController extends BaseController
             $total_bx = bcadd($total_bj, $total_lixi);
             $qimodel[$val['qishu']][] = $val;
         }
+
         //应还款人数
-        $count = OnlineRepaymentPlan::find()->select("uid")->where(['online_pid' => $pid])->groupBy('uid')->count();
+        $count = OnlineRepaymentPlan::find()->select('uid')->where(['online_pid' => $pid])->groupBy('uid')->count();
 
         $bcround = new BcRound();
 
@@ -93,9 +103,9 @@ class RepaymentController extends BaseController
         $eu = EpayUser::tableName();
 
         //查询还款计划信息
-        $orders = OnlineRepaymentPlan::findAll(["online_pid" => $pid, "status" => OnlineRepaymentPlan::STATUS_WEIHUAN, "qishu" => $qishu]);
+        $orders = OnlineRepaymentPlan::findAll(['online_pid' => $pid, 'status' => OnlineRepaymentPlan::STATUS_WEIHUAN, 'qishu' => $qishu]);
 
-        $_orders = (new \yii\db\Query)
+        $_orders = (new \yii\db\Query())
             ->select("$or.*, $eu.appUserId, $eu.epayUserId")
             ->from($or)
             ->leftJoin($eu, "$or.uid = $eu.appUserId")
@@ -148,7 +158,7 @@ class RepaymentController extends BaseController
         $bcround = new BcRound();
         bcscale(14);
 
-        foreach($orders as $val) {
+        foreach ($orders as $val) {
             $totalFund = bcadd($totalFund, $val->benxi);
         }
 
@@ -302,7 +312,7 @@ class RepaymentController extends BaseController
         }
 
         $_repaymentrecord = OnlineRepaymentRecord::find()->where(['online_pid' => $pid, 'status' => OnlineRepaymentRecord::STATUS_DID])->groupBy('uid');
-        $data = $_repaymentrecord->select("uid")->all();
+        $data = $_repaymentrecord->select('uid')->all();
         $product = OnlineProduct::findOne($pid);
         $sms = new SmsMessage([
             'level' => SmsMessage::LEVEL_LOW,
