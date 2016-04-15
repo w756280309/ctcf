@@ -1,7 +1,7 @@
 
 DROP TABLE IF EXISTS `lenderStats`;
 
-CREATE TABLE `lenderstats` (
+CREATE TABLE `lenderStats` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `uid` int(10) NOT NULL,
   `created_at` int(10) NOT NULL,
