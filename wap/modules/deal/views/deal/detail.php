@@ -3,7 +3,7 @@ $this->title = '项目详情';
 
 $deal['money'] = rtrim(rtrim($deal['money'], '0'), '.');
 ?>
-<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/xiangqing.css">
+<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/xiangqing.css?v=20160418">
         <!--xiangqing-->
         <div class="row column">
             <div class="hidden-xs col-sm-1"></div>
@@ -69,6 +69,7 @@ $deal['money'] = rtrim(rtrim($deal['money'], '0'), '.');
             <div class="col-xs-1"></div>
             <div class="col-xs-10 xian2">
                 <div class="m1">起投金额：<span><?= rtrim(rtrim(number_format($deal['start_money'], 2), '0'), '.') ?>元</span></div>
+                <div class="m5">递增金额：<span><?= rtrim(rtrim(number_format($deal['dizeng_money'], 2), '0'), '.') ?>元</span></div>   <!-- 增加递增金额字段 -->
                 <div class="m2">项目起息：<span><?= $deal['jixi_time']>0 ? date('Y-m-d',$deal['jixi_time']) : '项目成立日次日';?></span></div>
                 <?php if (0 === (int)$deal['finish_date']) { ?>
                     <div class="m3">项目期限：<span><?=$deal->expires?></span>

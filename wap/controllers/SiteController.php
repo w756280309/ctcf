@@ -101,7 +101,7 @@ class SiteController extends Controller
     {
         $this->layout = false;
         $ac = 5;
-        $adv = Adv::find()->where(['status' => 0, 'del_status' => 0])->limit($ac)->orderBy('id desc')->asArray()->all();
+        $adv = Adv::find()->where(['status' => 0, 'del_status' => 0])->limit($ac)->orderBy('show_order asc, id desc')->asArray()->all();  //修改轮播图显示顺序,先按照show_order升序排列,后按照id降序排列
 
         $deals = OnlineProduct::find()->where(['isPrivate' => 0, 'del_status' => OnlineProduct::STATUS_USE, 'online_status' => OnlineProduct::STATUS_ONLINE])
             ->andWhere('recommendTime != 0')

@@ -22,7 +22,7 @@ $this->title = '温都金服首页';
             </div>
         </div>
         <div class="first-box-right">
-            <img src="<?= ASSETS_BASE_URI ?>images/phone.png" class="first-phone1" alt="">
+            <img src="<?= ASSETS_BASE_URI ?>images/phone.png?v=20160418" class="first-phone1" alt="">
             <img src="<?= ASSETS_BASE_URI ?>images/phone1.png" class="first-phone2" alt="">
         </div>
     </div>

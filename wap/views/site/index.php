@@ -175,8 +175,8 @@ $(function() {
         </div>
         <div style="clear: both;"></div>
         <div class="row margin-add">
-            <div class="col-xs-4 padding-clear"><a href="/deal/deal/index?cat=1"><img src="<?= ASSETS_BASE_URI ?>images/type1.png" alt="温稳盈" /></a> </div>
-            <div class="col-xs-4 padding-clear"><a href="/deal/deal/index?cat=2"><img src="<?= ASSETS_BASE_URI ?>images/type2.png" alt="温稳赚" /></a> </div>
+            <div class="col-xs-4 padding-clear"><a href="/deal/deal/index?cat=1"><img src="<?= ASSETS_BASE_URI ?>images/type1.png?v=20160418" alt="温盈金" /></a> </div>
+            <div class="col-xs-4 padding-clear"><a href="/deal/deal/index?cat=2"><img src="<?= ASSETS_BASE_URI ?>images/type2.png?v=20160418" alt="温盈宝" /></a> </div>
             <div class="col-xs-4 padding-clear"><a href="/order/booking/detail?pid=1"><img src="<?= ASSETS_BASE_URI ?>images/type3.png" alt="温股投" /></a> </div>
         </div>
     </div>
