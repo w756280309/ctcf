@@ -18,6 +18,7 @@ use common\service\LoanService;
 use backend\modules\order\controllers\OnlinefangkuanController;
 use common\models\epay\EpayUser;
 use common\utils\TxUtils;
+use yii\web\NotFoundHttpException;
 
 /**
  * OrderController implements the CRUD actions for OfflineOrder model.
@@ -40,7 +41,7 @@ class RepaymentController extends BaseController
     public function actionIndex($pid)
     {
         if (empty($pid)) {
-            throw new yii\web\NotFoundHttpException();     //参数无效,抛出404异常
+            throw new NotFoundHttpException();     //参数无效,抛出404异常
         }
 
         $deal = OnlineProduct::find()->select('title,status')->where(['id' => $pid])->one();
@@ -51,7 +52,7 @@ class RepaymentController extends BaseController
                 ->where(['orp.online_pid' => $pid])->all();
 
         if (null === $deal || null === $model) {
-            throw new yii\web\NotFoundHttpException();     //对象为空时,抛出404异常
+            throw new NotFoundHttpException();     //对象为空时,抛出404异常
         }
 
         $total_bj = 0;

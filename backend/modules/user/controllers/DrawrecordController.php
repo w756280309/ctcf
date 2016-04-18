@@ -18,6 +18,7 @@ use common\utils\TxUtils;
 use common\models\sms\SmsMessage;
 use common\models\draw\DrawManager;
 use common\models\draw\DrawException;
+use yii\web\NotFoundHttpException;
 
 class DrawrecordController extends BaseController
 {
@@ -27,7 +28,7 @@ class DrawrecordController extends BaseController
     public function actionDetail($id = null, $type = null)
     {
         if (empty($id) || empty($type) || !in_array($type, [1, 2])) {
-            throw new yii\web\NotFoundHttpException();     //参数无效,抛出404异常
+            throw new NotFoundHttpException();     //参数无效,抛出404异常
         }
 
         //提现明细页面的搜索功能
@@ -95,7 +96,7 @@ class DrawrecordController extends BaseController
     //录入提现数据
     public function actionEdit($id = null, $type = null)       // DEPRECATED
     {
-        throw new \yii\web\NotFoundHttpException();
+        throw new NotFoundHttpException();
 
         $banks = Yii::$app->params['bank'];
         $bankInfo = [];
@@ -255,7 +256,7 @@ class DrawrecordController extends BaseController
     public function actionExaminfk($pid, $id)
     {
         if (empty($pid) || empty($id)) {
-            throw new yii\web\NotFoundHttpException();     //参数无效,抛出404异常
+            throw new NotFoundHttpException();     //参数无效,抛出404异常
         }
 
         $this->layout = false;

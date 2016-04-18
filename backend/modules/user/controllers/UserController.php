@@ -16,6 +16,7 @@ use common\models\epay\EpayUser;
 use backend\modules\user\core\v1_0\UserAccountBackendCore;
 use common\models\user\UserBanks;
 use common\lib\user\UserStats;
+use yii\web\NotFoundHttpException;
 
 /**
  * UserController implements the CRUD actions for User model.
@@ -113,12 +114,12 @@ class UserController extends BaseController
     public function actionDetail($id, $type)
     {
         if (empty($id) || empty($type) || !in_array($type, [1, 2])) {
-            throw new yii\web\NotFoundHttpException();     //参数无效,抛出404异常
+            throw new NotFoundHttpException();     //参数无效,抛出404异常
         }
 
         $userInfo = User::findOne($id);
         if (null === $userInfo) {
-            throw new yii\web\NotFoundHttpException();     //对象为空时,抛出404异常
+            throw new NotFoundHttpException();     //对象为空时,抛出404异常
         }
 
         $uabc = new UserAccountBackendCore();

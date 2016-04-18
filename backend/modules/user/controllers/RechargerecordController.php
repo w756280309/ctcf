@@ -13,6 +13,7 @@ use common\lib\bchelp\BcRound;
 use yii\log\FileTarget;
 use common\models\user\RechargeRecord;
 use common\models\bank\Bank;
+use yii\web\NotFoundHttpException;
 
 class RechargerecordController extends BaseController
 {
@@ -25,7 +26,7 @@ class RechargerecordController extends BaseController
     public function actionDetail($id, $type)
     {
         if (empty($id) || empty($type) || !in_array($type, [1, 2])) {
-            throw new yii\web\NotFoundHttpException();     //参数无效,抛出404异常
+            throw new NotFoundHttpException();     //参数无效,抛出404异常
         }
 
         $status = Yii::$app->request->get('status');
@@ -97,7 +98,7 @@ class RechargerecordController extends BaseController
      */
     public function actionEdit($id = null, $type = null)      // DEPRECATED
     {
-        throw new \yii\web\NotFoundHttpException();
+        throw new NotFoundHttpException();
 
         $banks = Yii::$app->params['bank'];
         $bankInfo = ['' => '--请选择--'];

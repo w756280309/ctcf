@@ -530,7 +530,7 @@ class ProductonlineController extends BaseController
 
         $deal = OnlineProduct::findOne($dealId);
         if (!$deal) {
-            throw new \yii\web\NotFoundHttpException('The deal info is not existed.');
+            throw new NotFoundHttpException('The deal info is not existed.');
         }
 
         if ($deal->isPrivate) {

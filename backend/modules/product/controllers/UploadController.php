@@ -327,7 +327,7 @@ class UploadFile
     private function dealFiles($files)
     {
         if (empty($files)) {
-            throw new yii\web\NotFoundHttpException();     //参数无效,抛出404异常
+            throw new \yii\web\NotFoundHttpException();     //参数无效,抛出404异常
         }
 
         $fileArray = array();
@@ -394,7 +394,7 @@ class UploadFile
     private function getSaveName($filename)
     {
         if (empty($filename)) {
-            throw new yii\web\NotFoundHttpException();     //参数无效,抛出404异常
+            throw new \yii\web\NotFoundHttpException();     //参数无效,抛出404异常
         }
 
         $rule = $this->saveRule;
@@ -429,7 +429,7 @@ class UploadFile
     private function getSubName($file)
     {
         if (empty($file)) {
-            throw new yii\web\NotFoundHttpException();     //参数无效,抛出404异常
+            throw new \yii\web\NotFoundHttpException();     //参数无效,抛出404异常
         }
 
         switch ($this->subType) {
