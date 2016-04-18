@@ -14,7 +14,7 @@ $this->title = '最新资讯';
                 <p class="text-indent-no">亲爱的朋友：</p>
                 <p>经过长久的精心筹备，温州报业传媒旗下理财平台——温都金服（wenjf.com），定于4月19日试上线。</p>
                 <p>上线当日，温都金服将发布精选优质资产项目，数量有限、秒杀在即！如需快速抢标，请您提前注册、充值。</p>
-                <p>4月19日起至5月3日，平台将推出“上线有红利，奖iphone6S与全场加息0.1%”活动，欢迎关注！</p>
+                <p>4月19日起至5月3日，平台将推出“上线有红利，奖iPhone 6S与全场加息0.1%”活动，欢迎关注！</p>
                 <p>活动地址：</p>
                 <p><a class="blue" href="http://promo.wenjf.com/1603/launch-bonus/">http://promo.wenjf.com/1603/launch-bonus/ </a>（欢迎<a class="blue" href="http://promo.wenjf.com/1603/launch-bonus/">点击查看</a>）</p>
                 <p class="header-content-luokuan">温都金服运营团队</p>
