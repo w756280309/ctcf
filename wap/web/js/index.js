@@ -4,17 +4,16 @@
 var csrf;
 $(function(){
     csrf = $("meta[name=csrf-token]").attr('content');
-
     if($.trim($("#slideBox ul").html())!==""){
         //轮播图
-        TouchSlide({
+        jQuery("#slideBox").slide({
             slideCell:"#slideBox",
             titCell:".hd ul", //开启自动分页 autoPage:true ，此时设置 titCell 为导航元素包裹层
             mainCell:".bd ul",
             effect:"leftLoop",
             autoPage:true,//自动分页
             autoPlay:true, //自动播放
-            interTime:2500
+            interTime:5000
         });
     }
 
