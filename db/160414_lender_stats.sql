@@ -4,6 +4,7 @@ DROP TABLE IF EXISTS `lenderStats`;
 CREATE TABLE `LenderStats` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `uid` int(10) NOT NULL,
+  `userRegTime` int(10) NOT NULL,
   `created_at` int(10) NOT NULL,
   `updated_at` int(10) DEFAULT NULL,
   `name` varchar(50) DEFAULT NULL,

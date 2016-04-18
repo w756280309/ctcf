@@ -3,14 +3,14 @@
 namespace common\models;
 
 use Yii;
-use yii\db\Migration;
+use yii\db\Exception;
 use common\models\user\User;
 use common\models\user\UserBanks;
 use common\models\user\RechargeRecord;
 use common\models\user\DrawRecord;
 use common\models\order\OnlineOrder;
 use common\models\user\UserAccount;
-use yii\web\NotFoundHttpException;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "lender_stats".
@@ -52,6 +52,7 @@ class LenderStats extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'uid' => 'Uid',
+            'userRegTime' => 'Register Time',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
             'name' => 'Name',
@@ -70,8 +71,13 @@ class LenderStats extends \yii\db\ActiveRecord
         ];
     }
 
-
-    private static function getOldData()
+    /**
+     * 获取用户统计数据
+     * @param integer $time 最新指令时间
+     * @param array $uids 当$uids不为空时候，获取指定用户数据；当$uids为空时候，获取全部用户数据；
+     * @return array
+     */
+    private static function getOldData($time, array $uids = [])
     {
         $u = User::tableName();
         $b = UserBanks::tableName();
@@ -82,16 +88,18 @@ class LenderStats extends \yii\db\ActiveRecord
             ->from($u)
             ->leftJoin($b, "$u.id = $b.uid")
             ->leftJoin($a, "$u.id = $a.uid")
-            ->where(["$u.type" => User::USER_TYPE_PERSONAL])
-            ->all();
-
-        if (!$model) {
-            throw new \yii\web\NotFoundHttpException('No data output.');
+            ->where(["$u.type" => User::USER_TYPE_PERSONAL]);
+        if ($uids) {
+            $model = $model->andWhere(['in', "$u.id", $uids]);
         }
-
+        $model = $model->all();
+        if (!$model) {
+            return [];
+        }
         $recharge = RechargeRecord::find()
             ->select("sum(fund) as rtotalFund, count(id) as rtotalNum, uid")
             ->where(['status' => RechargeRecord::STATUS_YES])
+            ->andWhere(['<=', 'created_at', $time])
             ->groupBy("uid")
             ->asArray()
             ->all();
@@ -99,6 +107,7 @@ class LenderStats extends \yii\db\ActiveRecord
         $draw = DrawRecord::find()
             ->select("sum(money) as dtotalFund, count(id) as dtotalNum, uid")
             ->where(['status' => [DrawRecord::STATUS_SUCCESS, DrawRecord::STATUS_EXAMINED]])
+            ->andWhere(['<=', 'created_at', $time])
             ->groupBy("uid")
             ->asArray()
             ->all();
@@ -106,13 +115,15 @@ class LenderStats extends \yii\db\ActiveRecord
         $order = OnlineOrder::find()
             ->select("sum(order_money) as ototalFund, count(id) as ototalNum, uid")
             ->where(['status' => OnlineOrder::STATUS_SUCCESS])
+            ->andWhere(['<=', 'created_at', $time])
             ->groupBy("uid")
             ->asArray()
             ->all();
 
         foreach ($model as $key => $val) {
             $data[$key]['uid'] = $val['id'];
-            $data[$key]['created_at'] = $val['created_at'];
+            $data[$key]['userRegTime'] = $val['created_at'];
+            $data[$key]['created_at'] = $time;
             $data[$key]['updated_at'] = time();
             $data[$key]['name'] = $val['real_name'];
             $data[$key]['mobile'] = $val['mobile'];
@@ -159,107 +170,185 @@ class LenderStats extends \yii\db\ActiveRecord
         return $data;
     }
 
-
+    /**
+     * 从tradelog中获取最新指令的created_at 当做 上次更新时间
+     * @return mixed|null
+     */
     private static function getLastUpdateTime()
     {
-        $model = LenderStats::find()->select('updated_at')->orderBy(['updated_at'=>SORT_DESC])->asArray()->one();
-        if($model){
-            return $model['updated_at'];
-        }else{
+        $model = LenderStats::find()->select('created_at')->orderBy(['created_at' => SORT_DESC])->asArray()->one();
+        if ($model) {
+            return $model['created_at'];
+        } else {
             return null;
         }
     }
 
-
-    private static function instructionUpdate(){
+    /**
+     * 增量更新
+     * 根据上次更新时间（上次最新指令时间）和所有指令类型获取最新指令，根据最新指令获取对应的用户ids,清空对应的用户统计数据，统计对应用户的数据，插入对应用户数据（新插入数据的更新时间为这次指令中的最新时间）
+     * @return bool
+     * @throws Exception
+     */
+    private static function instructionUpdate()
+    {
         $last_update_time = self::getLastUpdateTime();
-        if(is_null($last_update_time)){
+        if (is_null($last_update_time)) {
             self::overallUpdate();
             return true;
         }
-     /*   //获取充值指令
+        $types = [
+            //可能产生交易的指令
+            'project_transfer',//4.3.3标的转账(商户平台)
+            'project_tranfer_notify',//4.3.4标的交易通知(平台商户)
+            'project_transfer_nopwd',//4.3.5无密标的转入(商户平台)
+            //可能产生充值的指令
+            'mer_recharge_person',//4.4.1	个人客户充值申请(商户平台)
+            'recharge_notify',//4.4.3	充值结果通知(平台商户)
+            'mer_recharge_person_nopwd',//4.4.4	个人客户无密充值(商户平台)
+            //可能产生提现的指令
+            'cust_withdrawals',//4.4.5	个人客户提现(商户平台)
+            //可能差生绑卡的指令
+            'ptp_mer_bind_card',//4.2.2绑定银行卡(商户平台)
+            'mer_bind_card_apply_notify',//4.2.5绑卡换卡申请后台通知商户(平台商户)
+            'mer_bind_card_notify',//4.2.6绑卡换卡结果后台通知商户(平台商户)
+            //可能产生免密的指令
+            'mer_register_person',//4.2.7签约免密协议(商户平台)
+            'mer_bind_agreement_notify',//4.2.8签约免密协议结果通知商户(平台商户)
+        ];
+        //获取所有指令
         $tradeLogs = TradeLog::find()
-            ->select('txSn')
-            ->where(['>','created_at',$last_update_time])
-            ->andWhere(['in','txType',['mer_recharge_person','mer_recharge','recharge_notify']])
+            ->where(['in', 'txType', $types])
+            ->andWhere(['>', 'created_at', $last_update_time])
             ->asArray()
             ->all();
-        if(count($tradeLogs)>0){
-            foreach($tradeLogs as $v){
-                $sn = $v['txSn'];
-                if(!$sn){
+        if (count($tradeLogs) == 0) {
+            return false;
+        }
+        $time = max(ArrayHelper::getColumn($tradeLogs, 'created_at'));
+        //获取所有统计结果可能变动的用户uid
+        $uids = [];
+        foreach ($tradeLogs as $v) {
+            if (in_array($v['txType'], [
+                'cust_withdrawals',
+                'ptp_mer_bind_card',
+                'mer_bind_card_apply_notify',
+                'mer_bind_card_notify',
+                'mer_register_person',
+                'mer_bind_agreement_notify'
+            ])) {
+                //提现、绑卡、注册、免密 可以获取到用户uid , 没有uid信息暂不考虑
+                if ($v['uid'] > 0) {
+                    $uids[] = $v['uid'];
+                } else {
                     continue;
                 }
-                $recharge_record = RechargeRecord::find()->where(['sn'=>$sn,'status'=>1])->asArray()->one();
-                if(!$recharge_record){
+            } else {
+                //充值、交易 指令无法获取用户 uid ,只能通过 sn 查找
+                if (in_array($v['txType'], ['project_transfer', 'project_tranfer_notify', 'project_transfer_nopwd'])) {
+                    //交易
+                    $sn = $v['txSn'];
+                    $model = OnlineOrder::find()->where(['sn' => $sn, 'status' => 1])->asArray()->one();
+                    if (!$model) {
+                        continue;
+                    }
+                    $uids[] = $model['uid'];
+                } elseif (in_array($v['txType'], ['mer_recharge_person', 'recharge_notify', 'mer_recharge_person_nopwd'])) {
+                    //充值
+                    $sn = $v['txSn'];
+                    $model = RechargeRecord::find()->where(['sn' => $sn, 'status' => 1])->asArray()->one();
+                    if (!$model) {
+                        continue;
+                    }
+                    $uids[] = $model['uid'];
+                } else {
                     continue;
                 }
-                $lenderStats = LenderStats::find()->where(['uid'=>$recharge_record['uid']])->one();
-                if(!$lenderStats){
-                    throw new NotFoundHttpException('没找到对应统计数据');
-                }
-
             }
         }
-        return true;*/
-        //todo 方案1 根据上次更新时间和指令类型（充值、提现、交易、注册、身份验证、开通免密等）获取最新指令，并根据每条指令获取对应用户数据变动情况，更新对应用户数据变动情况
-        //todo 方案2 根据上次更新时间和所有指令类型获取最新指令，根据最新指令获取对应的用户ids,清空对应的用户统计数据，统计对应用户的数据，插入对应用户数据
-
-        /**
-            两种方案分析，已充值为例。
-         * 方案一：
-         * （1）获取指令。从TradeLog表中查找所有 created_at 大于 $last_update_time 的数据
-         * （2）获取充值记录。循环指令，根据指令中的 txSn 字段，从 recharge_record 表中获取数据（根据recharge_record 表的 sn字段，并且 status=1 充值成功），如果没有找到数据则 continue；
-         * （3）获取数据。根据充值记录，获取 uid ，fund
-         * （4）将对应用户的统计结果的 充值金额加 fund，充值次数加1，账户余额加fund
-         * （*5） 新增用户、用户状态更改（绑卡、开通免密等）,需要统计对应用户的所有信息，并插入数据库
-         * 方案二：
-         * （1）获取指令。从TradeLog表中查找所有 created_at 大于 $last_update_time 的数据
-         * （2）获取用户。如果指令中有uid，添加uid；如果没有则根据 txSn 获取用户uid
-         * （3）使用获取旧数据逻辑，获取这批用户的最新统计数据
-         * （4）删除数据库中对应uid数据，将获取到的数据插入数据库
-         *
-         * 选择方案二
-         */
-
-
+        //获取这批用户的统计结果
+        if (count($uids) > 0) {
+            $uids = array_unique($uids);
+            $data = self::getOldData($time, $uids);
+            $transaction = Yii::$app->db->beginTransaction();
+            try {
+                Yii::$app->db->createCommand()->delete(self::tableName(), ['in', 'uid', $uids])->execute();
+                Yii::$app->db->createCommand()
+                    ->batchInsert(self::tableName(), [
+                        'uid',
+                        'userRegTime',
+                        'created_at',
+                        'updated_at',
+                        'name',
+                        'mobile',
+                        'idcard',
+                        'idcardStatus',
+                        'mianmiStatus',
+                        'bid',
+                        'accountBalance',
+                        'rtotalFund',
+                        'rtotalNum',
+                        'dtotalFund',
+                        'dtotalNum',
+                        'ototalFund',
+                        'ototalNum'
+                    ], $data)
+                    ->execute();
+                $transaction->commit();
+            } catch (Exception $e) {
+                $transaction->rollBack();
+                throw $e;
+            }
+        }
+        return true;
     }
 
-    private static function overallUpdate(){
+    /**
+     * 全局更新
+     * 获取所有用户的统计数据，清空统计表，将数据插入数据库s
+     * @param null $time
+     * @throws Exception
+     */
+    private static function overallUpdate($time = null)
+    {
+        $time = is_null($time) ? time() : $time;
         //获取所有用户所有统计数据
-        $data = self::getOldData();
+        $data = self::getOldData($time);
         //清空数据库
-        (new Migration())->truncateTable(self::tableName());
+        Yii::$app->db->createCommand()->truncateTable(self::tableName())->execute();
         //将新数据插入数据库
-       Yii::$app->db->createCommand()
-           ->batchInsert(self::tableName(), [
-               'uid',
-               'created_at',
-               'updated_at',
-               'name',
-               'mobile',
-               'idcard',
-               'idcardStatus',
-               'mianmiStatus',
-               'bid',
-               'accountBalance',
-               'rtotalFund',
-               'rtotalNum',
-               'dtotalFund',
-               'dtotalNum',
-               'ototalFund',
-               'ototalNum'
-           ], $data)
-           ->execute();
+        Yii::$app->db->createCommand()
+            ->batchInsert(self::tableName(), [
+                'uid',
+                'userRegTime',
+                'created_at',
+                'updated_at',
+                'name',
+                'mobile',
+                'idcard',
+                'idcardStatus',
+                'mianmiStatus',
+                'bid',
+                'accountBalance',
+                'rtotalFund',
+                'rtotalNum',
+                'dtotalFund',
+                'dtotalNum',
+                'ototalFund',
+                'ototalNum'
+            ], $data)
+            ->execute();
     }
+
     /**
      * 将新数据更新至统计表
+     * 可以全局统计，也可以增量统计
      * @return bool
      */
     public static function updateData()
     {
         @set_time_limit(0);
-          //全局更新
+        //全局更新
         //self::overallUpdate();
 
         //指令更新
@@ -298,7 +387,7 @@ class LenderStats extends \yii\db\ActiveRecord
     {
         $data = self::find()->select([
             'uid',
-            'created_at',
+            'userRegTime',
             'name',
             'mobile',
             'idcard',
@@ -312,12 +401,12 @@ class LenderStats extends \yii\db\ActiveRecord
             'dtotalNum',
             'ototalFund',
             'ototalNum'
-        ])->orderBy(['created_at' => SORT_ASC])->asArray()->all();
+        ])->orderBy(['userRegTime' => SORT_ASC])->asArray()->all();
         $data = array_merge(self::getTitle(), $data);
         $record = null;
         foreach ($data as $key => $val) {
             if ('title' !== $key) {
-                $val['created_at'] = date('Y-m-d H:i:s', $val['created_at']);
+                $val['userRegTime'] = date('Y-m-d H:i:s', $val['userRegTime']);
             }
             $record .= implode("\t" . ',', $val) . "\n";
         }
