@@ -496,8 +496,8 @@ TPL;
             //$('#onlineproduct-is_fdate').click();
         <?php } ?>
 
-        <?php if ($model->refund_method) { ?>
-            $('#onlineproduct-expires').next().html('(个月)')
+        <?php if ((int)$model->refund_method > 1) { ?>
+            $('#onlineproduct-expires').next().html('(个月)');//当编辑项目的还款方式是：除了到期本息之外的任意的还款方式。单位都默认是个月
         <?php } ?>
         kindEdit();
     });
