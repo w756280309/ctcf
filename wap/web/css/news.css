@@ -102,4 +102,7 @@ body {background-color: #fff;}
     .production .production-content{font-size: 1.5rem;}
     .production .production-content p{line-height:26px;}
 }
+a.blue {
+    color: #007aff;
+}
 
