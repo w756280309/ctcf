@@ -93,7 +93,7 @@ class BankManager
         $t = time();
         $start = mktime(0,0,0,date("m",$t),date("d",$t),date("Y",$t));
         $end = mktime(23,59,59,date("m",$t),date("d",$t),date("Y",$t));
-        $rc = RechargeRecord::find()->where(['status' => 1, 'pay_type' => 1])->andFilterWhere(['between','created_at',$start,$end])->sum('fund');
+        $rc = RechargeRecord::find()->where(['uid' => $banks->uid, 'status' => 1, 'pay_type' => 1])->andFilterWhere(['between','created_at',$start,$end])->sum('fund');
         if (bccomp(bcadd($rc, $money), $config->dailyLimit) > 0) {
             throw new \Exception('超过单日' .\Yii::$app->functions->toFormatMoney($config->dailyLimit) . '限额');
         }
