@@ -58,6 +58,25 @@ BaiduTongjiHelper::registerTo($this, BaiduTongjiHelper::WAP_KEY);
 
     <?= $content ?>
 
+    <!-- 添加首页页尾, 当标志位showIndexBottomNav为真时,需要显示 -->
+    <!-- nav start -->
+    <?php if ($this->showIndexBottomNav) { ?>
+    <div class="nav-box <?= (!defined('IN_APP') && $this->showBottomNav) ? '' : 'no-margin-bottom' ?>">
+        <div class="pos-rel">
+            <div class="pos-fixer">
+                <nav>
+                    <li class="first"><a href="/">首页</a></li>
+                    <li><a href="/site/about">关于我们</a></li>
+                    <li><a href="/site/advantage">平台优势</a></li>
+                    <li><a href="/site/help">帮助中心</a></li>
+                    <li><a href="/site/contact">联系我们</a></li>
+                </nav>
+            </div>
+        </div>
+        <p>客服热线：<?= Yii::$app->params['contact_tel'] ?>（09:00-20:00）</p>
+    </div>
+    <?php } ?>
+
     <!--footer-->
     <?php if (!defined('IN_APP')) { ?>
     <?php if ($this->showBottomNav) { ?>
