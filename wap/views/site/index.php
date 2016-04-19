@@ -8,10 +8,11 @@ WapAsset::register($this);
 
 $this->title = '温都金服';
 $this->params['breadcrumbs'][] = $this->title;
-$this->registerJsFile(ASSETS_BASE_URI . 'js/jquery.SuperSlide.2.1.1.js?v=20160418', ['depends' => 'yii\web\JqueryAsset', 'position' => 1]);
+$this->registerCssFile(ASSETS_BASE_URI . 'css/swiper.min.css?v=20160418', ['depends' => 'frontend\assets\WapAsset']);
+$this->registerJsFile(ASSETS_BASE_URI . 'js/swiper.min.js?v=20160418', ['depends' => 'yii\web\JqueryAsset', 'position' => 1]);
 $this->registerJsFile(ASSETS_BASE_URI . 'js/jquery.classyloader.js', ['depends' => 'yii\web\JqueryAsset', 'position' => 1]);
-$this->registerJsFile(ASSETS_BASE_URI . 'js/index.js?v=20160411', ['depends' => 'yii\web\JqueryAsset', 'position' => 1]);
-$this->registerCssFile(ASSETS_BASE_URI . 'css/index.css', ['depends' => 'frontend\assets\WapAsset']);  //加载在depends之后
+$this->registerJsFile(ASSETS_BASE_URI . 'js/index.js?v=20160418', ['depends' => 'yii\web\JqueryAsset', 'position' => 1]);
+$this->registerCssFile(ASSETS_BASE_URI . 'css/index.css?v=20160418', ['depends' => 'frontend\assets\WapAsset']);  //加载在depends之后
 $this->registerCssFile(ASSETS_BASE_URI . 'css/first.css', ['depends' => 'frontend\assets\WapAsset']);
 
 BaiduTongjiHelper::registerTo($this, BaiduTongjiHelper::WAP_KEY);
@@ -63,19 +64,15 @@ $(function() {
     </header>
     <?php } ?>
 
-    <div class="slideBox" id="slideBox">
-        <div class="bd">
-            <ul>
+    <div class="row swiper-container">
+        <div class="col-xs-12 swiper-wrapper">
                 <?php foreach($adv as $val): ?>
-                    <li> <a class="pic" href="<?= $val['link'] ?>"><img src="<?= ASSETS_BASE_URI ?>upload/adv/<?= $val['image'] ?>" alt=""></a> </li>
+                    <div class="swiper-slide"> <a href="<?= $val['link'] ?>"><img src="<?= ASSETS_BASE_URI ?>upload/adv/<?= $val['image'] ?>" alt=""></a> </div>
                 <?php endforeach; ?>
-            </ul>
         </div>
-        <div class="hd">
-            <ul></ul>
-        </div>
+        <!-- Add Pagination -->
+        <div class="swiper-pagination"></div>
     </div>
-
     <!-- 登录 注册 start -->
     <div class="row btn" id="isLoggedin" style="display: none;">
         <div class="col-sm-2"></div>

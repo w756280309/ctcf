@@ -4,20 +4,34 @@
 var csrf;
 $(function(){
     csrf = $("meta[name=csrf-token]").attr('content');
-    if($.trim($("#slideBox ul").html())!==""){
-        //轮播图
-        jQuery("#slideBox").slide({
-            slideCell:"#slideBox",
-            titCell:".hd ul", //开启自动分页 autoPage:true ，此时设置 titCell 为导航元素包裹层
-            mainCell:".bd ul",
-            effect:"leftLoop",
-            autoPage:true,//自动分页
-            autoPlay:true, //自动播放
-            interTime:5000
+    //轮播图
+    function swiper(){
+        var swiper = new Swiper('.swiper-container', {
+            pagination: '.swiper-pagination',
+            paginationClickable: true,
+            centeredSlides: true,
+            speed:500,
+            autoplay: 5000,
+            loop:true,
+            autoHeight:false,
+            direction: "horizontal",
+            updateOnImagesReady : true,
+            onTouchStart:function(swiper){
+                setTimeout(function(){
+                    swiper.startAutoplay();
+                },1000);
+
+            }
+        });
+        $('.swiper-container').hover(function(){
+            swiper.stopAutoplay();
+        },function(){
+            swiper.startAutoplay();
         });
     }
-
-
+    $(window).load(function(){
+        swiper();
+    });
 //    //去往详情页
 //    $('.dealdata').bind('click', function () {
 //        location.href='/deal/deal/detail?sn='+$(this).attr('data-index');
