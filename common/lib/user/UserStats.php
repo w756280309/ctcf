@@ -145,7 +145,7 @@ class UserStats
         }
 
         if (null !== $record) {
-            $record = iconv('utf-8', 'gb2312', $record);//转换编码
+            $record = iconv('UTF-8', 'GB18030', $record);//转换编码
 
             header('Content-Disposition: attachment; filename="statistics.csv"');
             header('Content-Length: ' .strlen($record)); // 内容的字节数
