@@ -84,7 +84,7 @@ $(function() {
 
     <!-- 推荐区start  -->
     <div class="row new-box">
-        <a class="new-head bot-line block" href="/deal/deal/index?cat=<?= $deals->cid ?>'" >
+        <a class="new-head bot-line block" href="/deal/deal/index" >
             <div class="col-xs-8 col-sm-7 new-head-title">
                 <div class="arrow-rg"></div>
                 <div class="new-head-tit"><span>推荐区</span><span class="new-head-txt">优选资产，安全无忧</span></div>
@@ -172,8 +172,8 @@ $(function() {
         </div>
         <div style="clear: both;"></div>
         <div class="row margin-add">
-            <div class="col-xs-4 padding-clear"><a href="/deal/deal/index?cat=1"><img src="<?= ASSETS_BASE_URI ?>images/type1.png?v=20160418" alt="温盈金" /></a> </div>
-            <div class="col-xs-4 padding-clear"><a href="/deal/deal/index?cat=2"><img src="<?= ASSETS_BASE_URI ?>images/type2.png?v=20160418" alt="温盈宝" /></a> </div>
+            <div class="col-xs-4 padding-clear"><a href="/deal/deal/index"><img src="<?= ASSETS_BASE_URI ?>images/type1.png?v=20160418" alt="温盈金" /></a> </div>
+            <div class="col-xs-4 padding-clear"><a href="/deal/deal/index"><img src="<?= ASSETS_BASE_URI ?>images/type2.png?v=20160418" alt="温盈宝" /></a> </div>
             <div class="col-xs-4 padding-clear"><a href="/order/booking/detail?pid=1"><img src="<?= ASSETS_BASE_URI ?>images/type3.png" alt="温股投" /></a> </div>
         </div>
     </div>
