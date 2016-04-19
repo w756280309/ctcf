@@ -3,7 +3,7 @@ $this->title="绑定银行卡";
 ?>
 <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/bind.css?v=20160406"/>
 <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/swiper.min.css"/>
-<script src="<?= ASSETS_BASE_URI ?>js/qpay.js"></script>
+<script src="<?= ASSETS_BASE_URI ?>js/qpay.js?v=20160419001"></script>
 <script src="<?= ASSETS_BASE_URI ?>js/swiper.min.js"></script>
 <script src="<?= ASSETS_BASE_URI ?>js/bind.js"></script>
 

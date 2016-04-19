@@ -37,8 +37,11 @@ $(function () {
     $('#qpay-binding-confirm-diag').on('click', '.x-cancel', function () {
         qpay_dismissConfirmModal();
     }).on('click', '.x-confirm', function () {
-        $('.x-confirm').removeClass("x-confirm").addClass("x_wait_confirm");
         var $form = $('#form');
+        if ($form.data('submitting')) {
+            return;
+        }
+        $form.data('submitting', true);
         var xhr = $.post(
                 '/user/qpay/binding/verify',
                 $form.serialize()
@@ -46,7 +49,6 @@ $(function () {
 
         xhr.done(function (data) {
             toast('转入联动优势进行绑卡操作');
-            $('.x-confirm').removeClass("x_wait_confirm").addClass("x-confirm");
             setTimeout(function () {
                 window.location.href = data.next;
             }, 1500);
@@ -58,10 +60,10 @@ $(function () {
                     : '未知错误，请刷新重试或联系客服';
 
             toast(errMsg);
-            $('.x-confirm').removeClass("x_wait_confirm").addClass("x-confirm");
         });
 
         xhr.always(function () {
+            $form.data('submitting', false);
             qpay_dismissConfirmModal();
         });
     });
