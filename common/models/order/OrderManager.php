@@ -296,6 +296,7 @@ class OrderManager
 
     public static function confirmOrder($ordOrSn)
     {
+        bcscale(14);
         $order = OnlineOrder::ensureOrder($ordOrSn);
         if (OnlineOrder::STATUS_SUCCESS === $order->status) {
             return true;
@@ -363,7 +364,7 @@ class OrderManager
             } elseif (0 === bccomp($finish_rate, 0, 2)) {
                 $finish_rate = 0.01;
             }
-            $update['finish_rate'] = $finish_rate;
+            $update['finish_rate'] = $insert_sum / $loan->money;
         }
 
         $res = Loan::updateAll($update, ['id' => $loan->id]);
