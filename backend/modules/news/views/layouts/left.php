@@ -3,7 +3,7 @@
 use backend\assets\AppAsset;
 use yii\helpers\Html;
 use common\models\AuthSys;
-$menus = AuthSys::getMenus('N1000000');
+$menus = AuthSys::getMenus('A100000');
 ?>
 
 <?php $this->beginBlock('block1eft'); ?>
@@ -18,7 +18,7 @@ $menus = AuthSys::getMenus('N1000000');
                 <span class="arrow "></span>
                 </a>
             <ul class="sub-menu" style="display: block">
-                        <li>
+                        <!--<li>
                                 <a href="/news/category/edit">分类添加</a>
                         </li>
                         <li>
@@ -29,7 +29,7 @@ $menus = AuthSys::getMenus('N1000000');
                         </li>
                         <li>
                                 <a href="/news/news/index">新闻列表</a>
-                        </li>
+                        </li>-->
                           <?php foreach ($menus as $val){ ?>
                             <li><a href="/<?=$val['path']?>" target="main"><?=$val['auth_name']?></a></li>
                         <?php } ?>

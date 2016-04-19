@@ -32,7 +32,7 @@ class NewsController extends BaseController
     public function actionIndex()
     {
         //分类
-        $_allCategories = NewsCategory::getCategoryTree();
+       // $_allCategories = NewsCategory::getCategoryTree();
         //状态
         $_statusList = News::getStatusList();
         //首页推荐状态
@@ -43,7 +43,8 @@ class NewsController extends BaseController
         $_selectQueryParams = Yii::$app->request->get();
 
         foreach ($_selectQueryParams as $key => $val){
-            if($key != 'title' && $key != 'category_id' && $key != 'status' && $key != 'home_status'){
+            //if($key != 'title' && $key != 'category_id' && $key != 'status' && $key != 'home_status'){
+            if($key != 'title' && $key != 'status' && $key != 'home_status'){
                 unset($_selectQueryParams[$key]);
                 continue;
             }
@@ -71,7 +72,14 @@ class NewsController extends BaseController
         $pages = new Pagination(['totalCount' => $countQuery->count(), 'pageSize' => static::NEWS_PAGE_SIZE]);
         $models = $query->offset($pages->offset)->limit($pages->limit)->all();
 
-        return $this->render('index', ['models' =>$models, 'pages' => $pages, 'categories' => $_allCategories, 'status' => $_statusList, 'homeStatus' => $_homeStatusList, 'selectQueryParams'=>$_selectQueryParams ]);
+        return $this->render('index', [
+            'models' =>$models,
+            'pages' => $pages,
+            //'categories' => $_allCategories,
+            'status' => $_statusList,
+            'homeStatus' => $_homeStatusList,
+            'selectQueryParams'=>$_selectQueryParams
+        ]);
     }
 
 
