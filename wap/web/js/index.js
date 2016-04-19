@@ -47,10 +47,6 @@ $(function(){
     $(window).load(function(){
         swiper();
     });
-//    //去往详情页
-//    $('.dealdata').bind('click', function () {
-//        location.href='/deal/deal/detail?sn='+$(this).attr('data-index');
-//    })
 
     //圆圈进度
     var canvasArray=document.getElementsByTagName('canvas');

@@ -8,11 +8,11 @@ WapAsset::register($this);
 
 $this->title = '温都金服';
 $this->params['breadcrumbs'][] = $this->title;
-$this->registerCssFile(ASSETS_BASE_URI . 'css/swiper.min.css?v=20160418', ['depends' => 'frontend\assets\WapAsset']);
-$this->registerJsFile(ASSETS_BASE_URI . 'js/swiper.min.js?v=20160418', ['depends' => 'yii\web\JqueryAsset', 'position' => 1]);
+$this->registerCssFile(ASSETS_BASE_URI . 'css/swiper.min.css?v=20160419', ['depends' => 'frontend\assets\WapAsset']);
+$this->registerJsFile(ASSETS_BASE_URI . 'js/swiper.min.js?v=20160419', ['depends' => 'yii\web\JqueryAsset', 'position' => 1]);
 $this->registerJsFile(ASSETS_BASE_URI . 'js/jquery.classyloader.js', ['depends' => 'yii\web\JqueryAsset', 'position' => 1]);
-$this->registerJsFile(ASSETS_BASE_URI . 'js/index.js?v=20160418', ['depends' => 'yii\web\JqueryAsset', 'position' => 1]);
-$this->registerCssFile(ASSETS_BASE_URI . 'css/index.css?v=20160418', ['depends' => 'frontend\assets\WapAsset']);  //加载在depends之后
+$this->registerJsFile(ASSETS_BASE_URI . 'js/index.js?v=20160419', ['depends' => 'yii\web\JqueryAsset', 'position' => 1]);
+$this->registerCssFile(ASSETS_BASE_URI . 'css/index.css?v=20160419', ['depends' => 'frontend\assets\WapAsset']);  //加载在depends之后
 $this->registerCssFile(ASSETS_BASE_URI . 'css/first.css', ['depends' => 'frontend\assets\WapAsset']);
 
 BaiduTongjiHelper::registerTo($this, BaiduTongjiHelper::WAP_KEY);
@@ -46,12 +46,12 @@ $(function() {
     checkLoginStatus();
 });
 </script>
-    <style>
-        body {
-            padding-bottom: 30px;
-            background: #f7f8f8;
-        }
-    </style>
+<style>
+    body {
+        padding-bottom: 30px;
+        background: #f7f8f8;
+    }
+</style>
 </head>
 <body>
 <?php $this->beginBody() ?>
@@ -67,7 +67,7 @@ $(function() {
     <div class="row swiper-container">
         <div class="col-xs-12 swiper-wrapper">
                 <?php foreach($adv as $val): ?>
-                    <div class="swiper-slide"> <a href="<?= $val['link'] ?>"><img src="<?= ASSETS_BASE_URI ?>upload/adv/<?= $val['image'] ?>" alt=""></a> </div>
+                    <div class="swiper-slide"><a href="<?= $val['link'] ?>"><img src="<?= ASSETS_BASE_URI ?>upload/adv/<?= $val['image'] ?>" alt=""></a></div>
                 <?php endforeach; ?>
         </div>
         <!-- Add Pagination -->
