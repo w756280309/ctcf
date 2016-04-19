@@ -55,7 +55,7 @@ $menus = AuthSys::getMenus('A1000000');
                     </td>-->
                         <td><span class="title">状态</span></td>
                         <td>
-                            <select class="small m-wrap" style="margin-bottom: 0px">
+                            <select class="small m-wrap" style="margin-bottom: 0px" name="status">
                                 <option value="">--全部--</option>
                                 <?php foreach ($status as $key => $val): ?>
                                     <option value='<?= $key ?>' <?php
@@ -66,9 +66,7 @@ $menus = AuthSys::getMenus('A1000000');
                                 <?php endforeach; ?>
                             </select>
                         </td>
-                    </tr>
-                    <tr>
-                        <td colspan="6" align="right" style=" text-align: right">
+                        <td>
                             <button class="btn blue btn-block" style="width: 100px;">
                                 查询 <i class="m-icon-swapright m-icon-white"></i>
                             </button>
@@ -88,6 +86,7 @@ $menus = AuthSys::getMenus('A1000000');
                     <th>新闻标题</th>
                     <th>状态</th>
                     <th>发布时间</th>
+                    <th>显示顺序</th>
                     <th>操作</th>
                 </tr>
                 </thead>
@@ -97,7 +96,9 @@ $menus = AuthSys::getMenus('A1000000');
                         <td>
                             <?= $val['id'] ?>
                         </td>
-                        <td><?= $val['title'] ?></td>
+                        <td>
+                            <a href="/news/news/edit?id=<?= $val['id']?>"><?= $val['title'] ?></a>
+                        </td>
                         <td><?php
                             foreach ($status as $k => $v) {
                                 if ($k == $val['status']) {
@@ -106,6 +107,9 @@ $menus = AuthSys::getMenus('A1000000');
                             }
                             ?></td>
                         <td><?= date('Y-m-d H:i:m', $val['news_time']) ?></td>
+                        <td>
+                            <?= $val['sort']?>
+                        </td>
                         <td>
                             <a href="/news/news/edit?id=<?= $val['id'] ?>" class="btn mini purple"><i
                                     class="icon-edit"></i> 编辑</a>
