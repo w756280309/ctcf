@@ -29,10 +29,16 @@ class NotifyController extends Controller
         }
         TradeLog::initLog(2, $data, $data['sign'])->save();
         if (Yii::$container->get('ump')->verifySign($data) && '0000' === $data['ret_code']) {
-            $bind = QpayBinding::findOne(['binding_sn' => $data['order_id'], 'status' => QpayBinding::STATUS_INIT]);
+            $bind = QpayBinding::findOne(['binding_sn' => $data['order_id']]);
             if (null !== $bind) {
-                $bind->status = QpayBinding::STATUS_ACK;//处理中
-                if ($bind->save(false)) {
+                if (QpayBinding::STATUS_INIT === (int)$bind->status) {
+                    $bind->status = QpayBinding::STATUS_ACK;//处理中
+                    if ($bind->save(false)) {
+                        return $this->redirect('/user/userbank/accept?ret=success');
+                    } else {
+                        return $this->redirect('/user/userbank/accept');
+                    }
+                } else if(QpayBinding::STATUS_ACK === (int)$bind->status) {
                     return $this->redirect('/user/userbank/accept?ret=success');
                 } else {
                     return $this->redirect('/user/userbank/accept');
