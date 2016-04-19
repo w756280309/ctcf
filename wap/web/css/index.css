@@ -43,46 +43,33 @@ i,em{
 .row{
     margin: 0;
 }
-.slideBox {
-    position: relative;
-    max-width: 1200px;
+.swiper-container {
+    padding: 0;
+    width: 100%;
     overflow: hidden;
-    margin: 0 auto;
 }
-.slideBox .hd {
-    position: absolute;
-    height: 28px;
-    line-height: 28px;
-    bottom: 1px;
-    z-index: 1;
-    margin: auto auto;
-    left: 0;
-    right: 0;
-    text-align: center;
+.swiper-container .col-xs-12 {
+    padding: 0;
 }
-.slideBox .hd li {
-    display:inline-block;
-    width:30px;
-    height:3px;
+.swiper-slide {
+    width: 100%;
+}
+.swiper-slide img {
+    width: 100%;
+}
+.swiper-pagination-bullet {
+    width: 30px;
+    height: 3px;
     -webkit-border-radius:5px;
     -moz-border-radius:5px;
     border-radius:5px;
     background:#333;
-    text-indent:-9999px;
-    overflow:hidden;
-    margin:0 6px;
     opacity: 0.6;
 }
-.slideBox .hd li.on { background:#fff;  }
-.slideBox .bd {
-    position:relative;
-    z-index:0;
+.swiper-pagination-bullet-active {
+    background:#fff!important;
 }
-.slideBox .bd li {
-    position:relative;
-    text-align:center;
-}
-/*.bd ul li a{*/
+    /*.bd ul li a{*/
     /*display: block;*/
     /*height: 200px!important;*/
     /*margin: 0 auto;*/
