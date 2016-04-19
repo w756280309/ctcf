@@ -63,11 +63,6 @@ $(function () {
         if (stop === true && currentPage <= totalPage) {
             stop = false;
             $(".load").html("正在加载...");
-            if(xs===undefined){
-                param = {page: currentPage,cat:cid};
-            }else{
-                param = {page: currentPage,xs:1};
-            }
             $.ajax({
                 type: 'GET',
                 url: "/deal/deal/",
@@ -168,22 +163,5 @@ $(function () {
                 }
             });
         }
-        //单个项目点击事件
-        //$('.dealdata').on('click', function () {
-        //    if ($(this).attr('data-index') !== undefined) {
-        //        location.href = '/deal/deal/detail?sn=' + $(this).attr('data-index');
-        //    }
-        //});
     }
-    //单个项目点击事件
-    //$('.dealdata').on('click', function () {
-    //    if ($(this).attr('data-index') !== undefined) {
-    //        location.href = '/deal/deal/detail?sn=' + $(this).attr('data-index');
-    //    }
-    //});
-    //$('.dealdata').click(function(){
-    //    if ($(this).attr('data-index') !== undefined) {
-    //        location.href = '/deal/deal/detail?sn=' + $(this).attr('data-index');
-    //    }
-    //});
 });
