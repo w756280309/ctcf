@@ -15,7 +15,7 @@ $pc_cat = Yii::$app->params['pc_cat'];
 <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/index.css?v=20160401-b"/>
 <script src="<?= ASSETS_BASE_URI ?>js/TouchSlide.1.1.js"></script>
 <script src="<?= ASSETS_BASE_URI ?>js/jquery.classyloader.js"></script>
-<script src="<?= ASSETS_BASE_URI ?>js/list.js?v=20160419"></script>
+<script src="<?= ASSETS_BASE_URI ?>js/list.js?v=20160419-f"></script>
 
 <?php if ($deals) { ?>
     <div id="item-list">
