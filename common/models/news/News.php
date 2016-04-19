@@ -74,11 +74,14 @@ class News extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['title', 'source', 'category_id', 'body', 'news_time','sort'], 'required'],
+            [['title', 'body', 'news_time','sort','status','creator_id'], 'required'],
             [[ 'status', 'home_status', 'sort'], 'integer'],            
             [['body'], 'string'],
             [['title', 'source','child_title'], 'string', 'max' => 100],
-            [['image', 'attach_file'], 'string', 'max' => 250]
+            [['image', 'attach_file'], 'string', 'max' => 250],
+            [['title','body'],'filter','filter'=>function($value){
+                return htmlspecialchars($value);
+            }]
         ];
     }
 
@@ -105,18 +108,19 @@ class News extends \yii\db\ActiveRecord
             'created_at' => 'Created At',
         ];
     }
-    
-    
-        /**
-     * 
-     * @param type $id
-     * @return type
-     */
-    public static function findById($id)
+
+
+    public function beforeSave($insert)
     {
-        return static::findOne(['id' => $id]);
+        if(parent::beforeSave($insert)){
+            if(!is_integer($this->news_time)){
+                $this->news_time = strtotime($this->news_time);
+            }
+            return true;
+        }else{
+            return false;
+        }
     }
-    
-   
-    
+
+
 }

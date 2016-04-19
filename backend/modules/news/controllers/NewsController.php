@@ -31,54 +31,39 @@ class NewsController extends BaseController
      */
     public function actionIndex()
     {
-        //分类
-       // $_allCategories = NewsCategory::getCategoryTree();
         //状态
         $_statusList = News::getStatusList();
-        //首页推荐状态
-        $_homeStatusList = News::getHomeStatusList();
-
-        $_where=[];
-        $_andWhere='';
+        $_where = [];
+        $_andWhere = '';
         $_selectQueryParams = Yii::$app->request->get();
-
-        foreach ($_selectQueryParams as $key => $val){
-            //if($key != 'title' && $key != 'category_id' && $key != 'status' && $key != 'home_status'){
-            if($key != 'title' && $key != 'status' && $key != 'home_status'){
+        foreach ($_selectQueryParams as $key => $val) {
+            if ($key != 'title' && $key != 'status' && $key != 'home_status') {
                 unset($_selectQueryParams[$key]);
                 continue;
             }
-            if($val !== ''){
-                if($key == 'title'){
+            if ($val !== '') {
+                if ($key == 'title') {
                     $_andWhere = ['like', $key, $val];
-                }
-                else{
+                } else {
                     $_where[$key] = $val;
                 }
             }
         }
 
         $query = News::find();
-        if($_where){
+        if ($_where) {
             $query = $query->where($_where);
         }
-        if($_andWhere){
+        if ($_andWhere) {
             $query = $query->andWhere($_andWhere);
         }
-        $query = $query->orderBy('id desc');
-
-        $countQuery = clone $query;
-
-        $pages = new Pagination(['totalCount' => $countQuery->count(), 'pageSize' => static::NEWS_PAGE_SIZE]);
-        $models = $query->offset($pages->offset)->limit($pages->limit)->all();
-
+        $pages = new Pagination(['totalCount' => $query->count(), 'pageSize' => static::NEWS_PAGE_SIZE]);
+        $models = $query->orderBy('id desc')->offset($pages->offset)->limit($pages->limit)->all();
         return $this->render('index', [
-            'models' =>$models,
+            'models' => $models,
             'pages' => $pages,
-            //'categories' => $_allCategories,
             'status' => $_statusList,
-            'homeStatus' => $_homeStatusList,
-            'selectQueryParams'=>$_selectQueryParams
+            'selectQueryParams' => $_selectQueryParams
         ]);
     }
 
@@ -88,47 +73,24 @@ class NewsController extends BaseController
      * @param string $id
      * @return mixed
      */
-    public function actionEdit($id=null)
+    public function actionEdit($id = null)
     {
-        //分类
-        $_allCategories = NewsCategory::getCategoryTree();
         //状态
         $_statusList = News::getStatusList();
-        //首页推荐状态
-        $_homeStatusList = News::getHomeStatusList();
-
-        $model=new News();
-        if($id) {
-            $model = News::findById($id);
-            if(!$model){
-                return $this->redirect('/news/default/index');
-            }
-        }
-        else{
+        if ($id) {
+            $model = $this->findModel($id);
+            $model->news_time = date('Y-m-d H:i:s', $model->news_time);
+        } else {
+            $model = new News();
             $model->creator_id = Yii::$app->user->getId();
         }
-        $files = NewsFiles::find()->where(array("news_id"=>$id))->all();
-
-        if ($model->load(Yii::$app->request->post())&&$model->validate()) {
-            $re = $model->save();
-            if($re){
-                NewsFiles::deleteAll(['news_id' => $model->id]);
-                $news_files_model = new NewsFiles();
-                if($_POST['content']){
-                foreach ($_POST['content'] as $key => $val) {
-                    $_model = clone $news_files_model;
-                    $_model->news_id= $model->id;
-                    $_model->content= $val;
-                    $_model->save();
-                }
-                }
-            }
+       // $files = NewsFiles::find()->where(array("news_id" => $id))->all();
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['index']);
         }
-        if($id){
-            $model->news_time = date('Y-m-d H:i:m', $model->news_time);
-        }
-        return $this->render('edit', ['model' => $model,'files'=>$files, 'categories' => $_allCategories, 'status' => $_statusList, 'homeStatus' => $_homeStatusList]);
+        return $this->render('edit', ['model' => $model,
+            'status' => $_statusList,
+        ]);
     }
 
     /**
@@ -139,24 +101,13 @@ class NewsController extends BaseController
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $model = $this->findModel($id);
+        $model->status = News::STATUS_DELETE;
+        $model->save(false);
 
         return $this->redirect(['index']);
     }
 
-
-    public function actionImgdel($id = null, $img = null) {
-        if (!empty($id)) {
-            NewsFiles::deleteAll(['id' => $id]);
-        }
-        $dr = $_SERVER['DOCUMENT_ROOT'];
-        $f = $dr.'/upload/news/'.$img;
-        if(file_exists($f)){
-            unlink($f);
-        }
-        echo json_encode(1);
-        exit;
-    }
 
     protected function findModel($id)
     {

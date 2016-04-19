@@ -14,6 +14,9 @@ $menus = AuthSys::getMenus('A1000000');
             <h3 class="page-title">
                 资讯管理
                 <small>新闻资讯类模块</small>
+                <a href="/news/news/edit" id="sample_editable_1_new" class="btn green" style="float: right;">
+                   添加资讯 <i class="icon-plus"></i>
+               </a>
             </h3>
             <ul class="breadcrumb">
                 <li>
@@ -109,7 +112,6 @@ $menus = AuthSys::getMenus('A1000000');
                             <a href="/news/news/delete?id=<?= $val['id'] ?>"
                                onclick="javascript:return confirm('确定要删除吗？');" class="btn mini black"><i
                                     class="icon-trash"></i> 删除</a>
-                            <a href="#" class="btn mini green-stripe">查看</a>
                         </td>
                     </tr>
                 <?php endforeach; ?>
