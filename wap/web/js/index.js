@@ -16,11 +16,26 @@ $(function(){
             autoHeight:false,
             direction: "horizontal",
             updateOnImagesReady : true,
-            onTouchStart:function(swiper){
-                setTimeout(function(){
-                    swiper.startAutoplay();
-                },1000);
-
+            //onTouchStart:function(swiper){
+            //    setTimeout(function(){
+            //        swiper.startAutoplay();
+            //    },1000);
+            //},
+            //onTouchMoveOpposite:function(swiper, event){
+            //    alert(1);
+            //    setTimeout(function(){
+            //        swiper.startAutoplay();
+            //    },1000);
+            //}
+            onAutoplayStop:function(swiper){
+                    setTimeout(function(){
+                        swiper.startAutoplay();
+                    },100);
+                $('.swiper-container').on('mousedown', function(e) {
+                    setTimeout(function(){
+                        swiper.stopAutoplay();
+                    },500);
+                })
             }
         });
         $('.swiper-container').hover(function(){
