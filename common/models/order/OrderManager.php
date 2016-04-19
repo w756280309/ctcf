@@ -360,7 +360,7 @@ class OrderManager
             if (0 === bccomp($finish_rate, 1) && 0 !== bccomp($insert_sum, $loan->money)) {
                 //主要处理由于四舍五入造成的不应该募集完成的募集完成了：完成比例等于1了，并且包含此次交易成功所有金额不等于募集金额
                 $finish_rate = 0.99;
-            } elseif (0 === bccomp($finish_rate, 0)) {
+            } elseif (0 === bccomp($finish_rate, 0, 2)) {
                 $finish_rate = 0.01;
             }
             $update['finish_rate'] = $finish_rate;
