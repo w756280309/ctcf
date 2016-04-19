@@ -74,12 +74,10 @@ class NotifyController extends Controller
             $bind = QpayBinding::findOne(['binding_sn' => $data['order_id']]);
             if (null !== $bind) {
                 if ('0000' === $data['ret_code']) {
-                    if (null === UserBanks::findOne(['binding_sn' => $data['order_id']])) {
-                        if (true === self::processing($bind)) {
-                            $err = '0000';
-                        } else {
-                            $errmsg = "数据修改失败";
-                        }
+                    if (true === self::processing($bind)) {
+                        $err = '0000';
+                    } else {
+                        $errmsg = "数据修改失败";
                     }
                 } else {
                     $bind->status = QpayBinding::STATUS_FAIL;
