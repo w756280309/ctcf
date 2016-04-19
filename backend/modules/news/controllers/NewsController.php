@@ -58,7 +58,7 @@ class NewsController extends BaseController
             $query = $query->andWhere($_andWhere);
         }
         $pages = new Pagination(['totalCount' => $query->count(), 'pageSize' => static::NEWS_PAGE_SIZE]);
-        $models = $query->orderBy(['sort'=>SORT_DESC,'id'=>SORT_DESC])->offset($pages->offset)->limit($pages->limit)->all();
+        $models = $query->orderBy(['sort'=>SORT_ASC,'id'=>SORT_DESC])->offset($pages->offset)->limit($pages->limit)->all();
         return $this->render('index', [
             'models' => $models,
             'pages' => $pages,

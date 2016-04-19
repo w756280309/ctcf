@@ -87,6 +87,7 @@ $menus = AuthSys::getMenus('A1000000');
                     <th>状态</th>
                     <th>发布时间</th>
                     <th>显示顺序</th>
+                    <th>创建时间</th>
                     <th>操作</th>
                 </tr>
                 </thead>
@@ -106,10 +107,11 @@ $menus = AuthSys::getMenus('A1000000');
                                 }
                             }
                             ?></td>
-                        <td><?= date('Y-m-d H:i:m', $val['news_time']) ?></td>
+                        <td><?= date('Y-m-d H:i:s', $val['news_time']) ?></td>
                         <td>
                             <?= $val['sort']?>
                         </td>
+                        <td><?= date('Y-m-d H:i:s',$val['created_at'])?></td>
                         <td>
                             <a href="/news/news/edit?id=<?= $val['id'] ?>" class="btn mini purple"><i
                                     class="icon-edit"></i> 编辑</a>
