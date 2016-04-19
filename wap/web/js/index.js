@@ -16,26 +16,26 @@ $(function(){
             autoHeight:false,
             direction: "horizontal",
             updateOnImagesReady : true,
-            //onTouchStart:function(swiper){
-            //    setTimeout(function(){
-            //        swiper.startAutoplay();
-            //    },1000);
-            //},
-            //onTouchMoveOpposite:function(swiper, event){
-            //    alert(1);
-            //    setTimeout(function(){
-            //        swiper.startAutoplay();
-            //    },1000);
-            //}
             onAutoplayStop:function(swiper){
+                function IsPC() {
+                    var userAgentInfo = navigator.userAgent;
+                    var Agents = ["Android", "iPhone",
+                        "SymbianOS", "Windows Phone",
+                        "iPad", "iPod"];
+                    var flag = true;
+                    for (var v = 0; v < Agents.length; v++) {
+                        if (userAgentInfo.indexOf(Agents[v]) > 0) {
+                            flag = false;
+                            break;
+                        }
+                    }
+                    return flag;
+                }
+                if (!IsPC()) {
                     setTimeout(function(){
                         swiper.startAutoplay();
                     },100);
-                $('.swiper-container').on('mousedown', function(e) {
-                    setTimeout(function(){
-                        swiper.stopAutoplay();
-                    },500);
-                })
+                }
             }
         });
         $('.swiper-container').hover(function(){
