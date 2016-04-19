@@ -38,6 +38,13 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\we
                         </div>
                     </div>
                     <div class="control-group">
+                        <label class="control-label">分类</label>
+                        <div class="controls">
+                            <?= $form->field($model, 'category', ['template' => '{input}', 'inputOptions'=>['autocomplete'=>"off",'class'=>'m-wrap span12','placeholder'=>'标题']])->checkboxList(\yii\helpers\ArrayHelper::map($categories,'id','name')) ?>
+                            <?= $form->field($model, 'category', ['template' => '{error}']); ?>
+                        </div>
+                    </div>
+                    <div class="control-group">
                         <label class="control-label">状态</label>
                         <div class="controls">
                             <?= $form->field($model, 'status', ['template' => '{input}', 'inputOptions'=>['autocomplete'=>"off",'class'=>'m-wrap span3 Wdate','placeholder'=>'状态']])->dropDownList($status) ?>
@@ -52,19 +59,19 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\we
                         </div>
                     </div>
                     <div class="control-group">
-                        <label class="control-label">显示顺序</label>
-                        <div class="controls">
-                            <?= $form->field($model, 'sort', ['template' => '{input}', 'inputOptions'=>['autocomplete'=>"off",'class'=>'m-wrap span3','placeholder'=>'资讯排序']])->textInput() ?>
-                            <?= $form->field($model, 'sort', ['template' => '{error}']); ?>
-                        </div>
-                    </div>
-                    <div class="control-group">
                         <label class="control-label">内容</label>
                         <div class="controls">
-                            <?= $form->field($model, 'body', ['template' => '{input}', 'inputOptions'=>['id' => 'news_body', 'class'=>'text_value', 'style' => "width:688px; height:350px;"]])->textarea(); ?>
+                            <?= $form->field($model, 'body', ['template' => '{input}', 'inputOptions'=>[ 'style' => "width:688px; height:350px;"]])->textarea(); ?>
                             <?= $form->field($model, 'body', ['template' => '{error}']); ?>
                         </div>
                     </div>
+                <div class="control-group">
+                    <label class="control-label">显示顺序</label>
+                    <div class="controls">
+                        <?= $form->field($model, 'sort', ['template' => '{input}', 'inputOptions'=>['autocomplete'=>"off",'class'=>'m-wrap span3','placeholder'=>'资讯排序']])->textInput() ?>
+                        <?= $form->field($model, 'sort', ['template' => '{error}']); ?>
+                    </div>
+                </div>
                     <div class="form-actions">
                             <button type="submit" class="btn blue"><i class="icon-ok"></i> 提交</button>
                             <a href="/news/news/index" class="btn">取消</a>

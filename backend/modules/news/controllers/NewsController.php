@@ -1,6 +1,8 @@
 <?php
 namespace backend\modules\news\controllers;
 
+use common\models\Category;
+use common\models\ItemCategory;
 use Yii;
 use yii\data\Pagination;
 use backend\controllers\BaseController;
@@ -8,6 +10,7 @@ use backend\controllers\BaseController;
 use common\models\news\News;
 use common\models\news\NewsCategory;
 use common\models\news\NewsFiles;
+use yii\helpers\ArrayHelper;
 use yii\web\NotFoundHttpException;
 
 /*
@@ -31,19 +34,29 @@ class NewsController extends BaseController
      */
     public function actionIndex()
     {
+        //所有文章分类
+        $categories = Category::getTree(5, Category::TYPE_ARTICLE);
         //状态
         $_statusList = News::getStatusList();
         $_where = [];
-        $_andWhere = '';
+        $_andWhere = [];
         $_selectQueryParams = Yii::$app->request->get();
         foreach ($_selectQueryParams as $key => $val) {
-            if ($key != 'title' && $key != 'status' && $key != 'home_status') {
+            if ($key != 'title' && $key != 'status' && $key != 'home_status' && $key != 'category') {
                 unset($_selectQueryParams[$key]);
                 continue;
             }
             if ($val !== '') {
                 if ($key == 'title') {
                     $_andWhere = ['like', $key, $val];
+                } elseif ($key == 'category') {
+                    if ($val) {
+                        $ids = ItemCategory::getItems([$val]);
+                        if ($ids) {
+                            $_where['id'] = $ids;
+                        }
+                    }
+
                 } else {
                     $_where[$key] = $val;
                 }
@@ -58,12 +71,13 @@ class NewsController extends BaseController
             $query = $query->andWhere($_andWhere);
         }
         $pages = new Pagination(['totalCount' => $query->count(), 'pageSize' => static::NEWS_PAGE_SIZE]);
-        $models = $query->orderBy(['sort'=>SORT_ASC,'id'=>SORT_DESC])->offset($pages->offset)->limit($pages->limit)->all();
+        $models = $query->orderBy(['sort' => SORT_DESC, 'id' => SORT_DESC])->offset($pages->offset)->limit($pages->limit)->all();
         return $this->render('index', [
             'models' => $models,
             'pages' => $pages,
             'status' => $_statusList,
-            'selectQueryParams' => $_selectQueryParams
+            'selectQueryParams' => $_selectQueryParams,
+            'categories' => ArrayHelper::map($categories, 'id', 'name')
         ]);
     }
 
@@ -75,21 +89,26 @@ class NewsController extends BaseController
      */
     public function actionEdit($id = null)
     {
+        //所有文章分类
+        $categories = Category::getTree(5, Category::TYPE_ARTICLE);
         //状态
         $_statusList = News::getStatusList();
         if ($id) {
             $model = $this->findModel($id);
             $model->news_time = date('Y-m-d H:i:s', $model->news_time);
+            $item_category = $model->getItemCategories();
+            $model->category = $item_category ? ArrayHelper::getColumn($item_category, 'category_id') : [];
+            ItemCategory::clearItems([$model->id], Category::TYPE_ARTICLE);
         } else {
             $model = new News();
             $model->creator_id = Yii::$app->user->getId();
         }
-       // $files = NewsFiles::find()->where(array("news_id" => $id))->all();
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['index']);
         }
         return $this->render('edit', ['model' => $model,
             'status' => $_statusList,
+            'categories' => $categories
         ]);
     }
 

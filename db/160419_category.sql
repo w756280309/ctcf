@@ -17,7 +17,7 @@ CREATE TABLE `item_category` (
   `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   `item_id` INT(10) UNSIGNED NOT NULL COMMENT '项目ID',
   `category_id` INT(10) UNSIGNED NOT NULL COMMENT '分类ID',
-  `type` TINYINT(1) NOT NULL DEFAULT '1' COMMENT '分类类型 1-资讯分类 ',
+   `type` TINYINT(1) NOT NULL DEFAULT '1' COMMENT '分类类型 1-资讯分类 ',
   `updated_at` INT(10) NOT NULL COMMENT '更新时间',
   `created_at` INT(10) NOT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`)
