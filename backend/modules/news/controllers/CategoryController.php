@@ -2,7 +2,9 @@
 
 namespace backend\modules\news\controllers;
 
+use common\models\Category;
 use Yii;
+use yii\helpers\ArrayHelper;
 use yii\web\NotFoundHttpException;
 
 use backend\controllers\BaseController;
@@ -13,13 +15,6 @@ use common\models\news\NewsCategory;
  */
 class CategoryController extends BaseController
 {
-    public function init()
-    {
-        parent::init();
-        if (Yii::$app->request->isAjax){
-            Yii::$app->response->format = Response::FORMAT_JSON;
-        }
-    }
 
     /**
      * Lists all NewsCategory models.
@@ -27,8 +22,10 @@ class CategoryController extends BaseController
      */
     public function actionIndex()
     {
-        $models = NewsCategory::getCategoryList();
-        return $this->render( 'index', ['models'=>$models] );
+        $models = Category::find()->orderBy(['type' => SORT_ASC, 'parent' => SORT_ASC, 'sort' => SORT_DESC])->all();
+        return $this->render('index', [
+            'models' => $models,
+        ]);
     }
 
 
@@ -37,23 +34,23 @@ class CategoryController extends BaseController
      * @param string $id
      * @return mixed
      */
-    public function actionEdit($id=null)
+    public function actionEdit($id = null)
     {
-        $_allCategories = NewsCategory::getCategoryTree();
-
-        $model=new NewsCategory();
-        if($id) {
-            $model = NewsCategory::findById($id);
-            if(!$model){
-                return $this->redirect('/news/default/index');
-            }
+        $categoryTree = Category::getDropDownTree(5, Category::TYPE_ARTICLE);
+        if ($id) {
+            $model = $this->findModel($id);
+        } else {
+            $model = new Category();
         }
 
-        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            $model->save();
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect('index');
         }
 
-        return $this->render('edit', ['model' => $model, 'categories' => $_allCategories]);
+        return $this->render('edit', [
+            'model' => $model,
+            'categoryTree' => $categoryTree
+        ]);
     }
 
     /**
@@ -64,21 +61,23 @@ class CategoryController extends BaseController
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $model = $this->findModel($id);
+        $model->status = Category::STATUS_HIDDEN;
+        $model->save(false);
 
         return $this->redirect(['index']);
     }
 
     /**
-     * Finds the NewsCategory model based on its primary key value.
+     * Finds the Category model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param string $id
-     * @return NewsCategory the loaded model
+     * @return Category the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (!empty($id) && ($model = NewsCategory::findOne($id)) !== null) {
+        if (!empty($id) && ($model = Category::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

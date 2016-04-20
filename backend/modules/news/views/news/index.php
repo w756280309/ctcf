@@ -1,11 +1,3 @@
-<?php
-
-use yii\widgets\ActiveForm;
-use yii\widgets\LinkPager;
-use common\models\AuthSys;
-
-$menus = AuthSys::getMenus('A1000000');
-?>
 <?php $this->beginBlock('blockmain'); ?>
 <div class="container-fluid">
     <!-- BEGIN PAGE HEADER-->
@@ -13,20 +5,23 @@ $menus = AuthSys::getMenus('A1000000');
         <div class="span12">
             <h3 class="page-title">
                 资讯管理
-                <small>新闻资讯类模块</small>
+                <small>运营模块</small>
                 <a href="/news/news/edit" id="sample_editable_1_new" class="btn green" style="float: right;">
-                   添加资讯 <i class="icon-plus"></i>
-               </a>
+                    添加资讯 <i class="icon-plus"></i>
+                </a>
             </h3>
             <ul class="breadcrumb">
                 <li>
                     <i class="icon-home"></i>
-                    <a href="/news/">资讯管理</a>
+                    <a href="/adv/adv/index">运营管理</a>
                     <i class="icon-angle-right"></i>
                 </li>
                 <li>
-                    <a href="/news/news/index">资讯列表</a>
+                    <a href="/news/news/index">资讯管理</a>
                     <i class="icon-angle-right"></i>
+                </li>
+                <li>
+                    <a href="javascript:void(0);">资讯列表</a>
                 </li>
             </ul>
         </div>
@@ -39,18 +34,19 @@ $menus = AuthSys::getMenus('A1000000');
                         <td>
                             <span class="title">标题</span>
                         </td>
-                        <td><input type="text" class="m-wrap" style="margin-bottom: 0px" id="title" name='title' value="<?= $selectQueryParams['title'] ?>" placeholder="请输入标题"/></td>
+                        <td><input type="text" class="m-wrap" style="margin-bottom: 0px" id="title" name='title'
+                                   value="<?= $selectQueryParams['title'] ?>" placeholder="请输入标题"/></td>
                         <td><span class="title">新闻分类</span></td>
                         <td>
                             <select class="small m-wrap" style="margin-bottom: 0px" name="category">
-                                    <option value="">--全部--</option>
-                                    <?php foreach ($categories as $key => $val):  ?>
-                                    <option value="<?= $key  ?>" <?php
-                                                            if ($selectQueryParams['category_id'] == $key) {
-                                                                    echo 'selected';
-                                                            }
-                                                             ?> ><?= $val  ?></option>
-                                    <?php endforeach;  ?>
+                                <option value="">--全部--</option>
+                                <?php foreach ($categories as $key => $val): ?>
+                                    <option value="<?= $key ?>" <?php
+                                    if ($selectQueryParams['category_id'] == $key) {
+                                        echo 'selected';
+                                    }
+                                    ?> ><?= $val ?></option>
+                                <?php endforeach; ?>
                             </select>
                         </td>
                         <td><span class="title">状态</span></td>
@@ -99,10 +95,10 @@ $menus = AuthSys::getMenus('A1000000');
                             <?= $val['id'] ?>
                         </td>
                         <td style="text-align: center">
-                            <a href="/news/news/edit?id=<?= $val['id']?>"><?= $val['title'] ?></a>
+                            <a href="/news/news/edit?id=<?= $val['id'] ?>"><?= $val['title'] ?></a>
                         </td>
                         <td style="text-align: center">
-                            <?= $val->getCategoryName()?>
+                            <?= $val->getCategoryName() ?>
                         </td>
                         <td style="text-align: center"><?php
                             foreach ($status as $k => $v) {
@@ -113,9 +109,9 @@ $menus = AuthSys::getMenus('A1000000');
                             ?></td>
                         <td style="text-align: center"><?= date('Y-m-d H:i:s', $val['news_time']) ?></td>
                         <td style="text-align: center">
-                            <?= $val['sort']?>
+                            <?= $val['sort'] ?>
                         </td>
-                        <td style="text-align: center"><?= date('Y-m-d H:i:s',$val['created_at'])?></td>
+                        <td style="text-align: center"><?= date('Y-m-d H:i:s', $val['created_at']) ?></td>
                         <td style="text-align: center">
                             <a href="/news/news/edit?id=<?= $val['id'] ?>" class="btn mini purple"><i
                                     class="icon-edit"></i> 编辑</a>
@@ -133,10 +129,5 @@ $menus = AuthSys::getMenus('A1000000');
 
 </div>
 
-<script type="text/javascript">
-    jQuery(document).ready(function () {
-
-    });
-</script>
 <?php $this->endBlock(); ?>
 
