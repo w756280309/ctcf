@@ -11,7 +11,7 @@ use yii\helpers\ArrayHelper;
  *
  * @property string $id
  * @property string $name
- * @property string $parent
+ * @property string $parent_id
  * @property string $description
  * @property string $sort
  * @property integer $status
@@ -44,18 +44,18 @@ class Category extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name', 'parent', 'status'], 'required'],
-            [['parent', 'sort', 'status', 'type', 'updated_at', 'created_at'], 'integer'],
+            [['name', 'parent_id', 'status'], 'required'],
+            [['parent_id', 'sort', 'status', 'type', 'updated_at', 'created_at'], 'integer'],
             [['name'], 'string', 'max' => 50],
             [['description'], 'string', 'max' => 128],
             ['status', 'default', 'value' => Category::STATUS_ACTIVE],
             ['type', 'default', 'value' => Category::TYPE_ARTICLE],
-            ['parent', 'default', 'value' => 0],
+            ['parent_id', 'default', 'value' => 0],
             ['sort', 'default', 'value' => 1],
             [['name', 'description'], 'filter', 'filter' => function ($value) {
                 return htmlspecialchars($value);
             }],
-            ['parent', 'compare', 'compareAttribute' => 'id', 'operator' => '!='],
+            ['parent_id', 'compare', 'compareAttribute' => 'id', 'operator' => '!='],
         ];
     }
 
@@ -67,7 +67,7 @@ class Category extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'name' => '分类名称',
-            'parent' => '上级分类id',
+            'parent_id' => '上级分类id',
             'description' => '分类描述',
             'sort' => '分类序号',
             'status' => '分类状态',
@@ -127,7 +127,7 @@ class Category extends \yii\db\ActiveRecord
      */
     public static function getAllCategories($type = self::TYPE_ARTICLE)
     {
-        return self::find()->where(['status' => self::STATUS_ACTIVE, 'type' => $type])->orderBy(['parent' => SORT_ASC, 'sort' => SORT_DESC])->all();
+        return self::find()->where(['status' => self::STATUS_ACTIVE, 'type' => $type])->orderBy(['parent_id' => SORT_ASC, 'sort' => SORT_DESC])->all();
     }
 
     /**
@@ -142,7 +142,7 @@ class Category extends \yii\db\ActiveRecord
         static $tree = [];
         if (count($list) > 0 && $level > 0) {
             foreach ($list as $k => $v) {
-                if ($v['parent'] == $pid) {
+                if ($v['parent_id'] == $pid) {
                     $tree[] = $v;
                     unset($list[$k]);
                     static::_tree($list, $v['id'], $level - 1);
@@ -181,10 +181,10 @@ class Category extends \yii\db\ActiveRecord
      */
     public function getParentName()
     {
-        if (intval($this->parent) === 0) {
+        if (intval($this->parent_id) === 0) {
             return '顶级分类';
         } else {
-            $model = Category::find()->where(['id' => $this->parent])->one();
+            $model = Category::find()->where(['id' => $this->parent_id])->one();
             if ($model) {
                 return $model->name;
             } else {

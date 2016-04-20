@@ -22,7 +22,7 @@ class CategoryController extends BaseController
      */
     public function actionIndex()
     {
-        $models = Category::find()->orderBy(['type' => SORT_ASC, 'parent' => SORT_ASC, 'sort' => SORT_DESC])->all();
+        $models = Category::find()->orderBy(['type' => SORT_ASC, 'parent_id' => SORT_ASC, 'sort' => SORT_DESC])->all();
         return $this->render('index', [
             'models' => $models,
         ]);

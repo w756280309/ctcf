@@ -56,8 +56,8 @@ $this->title = '添加/编辑分类';
             <div class="control-group">
                 <label class="control-label">上级分类</label>
                 <div class="controls">
-                    <?= $form->field($model, 'parent', ['template' => '{input}', 'inputOptions' => ['autocomplete' => "off", 'class' => 'm-wrap span3', 'placeholder' => '上级分类']])->dropDownList($categoryTree) ?>
-                    <?= $form->field($model, 'parent', ['template' => '{error}']); ?>
+                    <?= $form->field($model, 'parent_id', ['template' => '{input}', 'inputOptions' => ['autocomplete' => "off", 'class' => 'm-wrap span3', 'placeholder' => '上级分类']])->dropDownList($categoryTree) ?>
+                    <?= $form->field($model, 'parent_id', ['template' => '{error}']); ?>
                 </div>
             </div>
             <div class="control-group">
