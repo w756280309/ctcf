@@ -36,7 +36,7 @@ class DealController extends Controller
         $count = $data->count();
         $size = 5;
         $pages = new Pagination(['totalCount' => $count, 'pageSize' => $size]);
-        $deals = $data->offset(($page - 1) * $size)->limit($pages->limit)->orderBy('recommendTime desc,sort asc,id desc')->asArray()->all();
+        $deals = $data->offset(($page - 1) * $size)->limit($pages->limit)->orderBy('recommendTime desc, sort asc, yield_rate desc, id desc')->asArray()->all();
         foreach ($deals as $key => $val) {
             $dates = Yii::$app->functions->getDateDesc($val['start']);
             $deals[$key]['start'] = date('H:i', $val['start']);
