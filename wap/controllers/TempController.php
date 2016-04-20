@@ -2,6 +2,8 @@
 
 namespace app\controllers;
 
+use Yii;
+use yii\web\Controller;
 use common\models\user\QpayBinding;
 use common\models\TradeLog;
 
@@ -10,16 +12,17 @@ use common\models\TradeLog;
  */
 class TempController extends Controller
 {
-    public function actionReplacecard()
+    public function actionReplacecard($mobile)
     {
+        $user = \common\models\user\User::findOne(['mobile' => $mobile]);
         $qpay = new QpayBinding([
             'binding_sn' => \common\utils\TxUtils::generateSn('B'),
-            'uid' => 335,
-            'epayUserId' => 'UB201603112148500000000000047478',
-            'bank_id' => '102',
-            'bank_name' => '工商银行',
-            'account' => '夏曼茹',
-            'card_number' => '6212261202023522874',
+            'uid' => $user->id,
+            'epayUserId' => $user->epayUser->epayUserId,
+            'bank_id' => $user->qpay->bank_id,
+            'bank_name' => $user->qpay->bank_name,
+            'account' => $user->qpay->account,
+            'card_number' => $user->qpay->card_number,
             'account_type' => 11,
             'status' => 0,
             'created_at' => time(),
