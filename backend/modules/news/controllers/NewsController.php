@@ -35,7 +35,7 @@ class NewsController extends BaseController
     public function actionIndex()
     {
         //所有文章分类
-        $categories = Category::getTree(5, Category::TYPE_ARTICLE);
+        $categories = Category::getTree(Category::TYPE_ARTICLE,3);
         //状态
         $_statusList = News::getStatusList();
         $_where = [];
@@ -51,7 +51,7 @@ class NewsController extends BaseController
                     $_andWhere = ['like', $key, $val];
                 } elseif ($key == 'category') {
                     if ($val) {
-                        $ids = ItemCategory::getItems([$val]);
+                        $ids = ItemCategory::getItems([$val],Category::TYPE_ARTICLE);
                         if ($ids) {
                             $_where['id'] = $ids;
                         }
@@ -90,7 +90,7 @@ class NewsController extends BaseController
     public function actionEdit($id = null)
     {
         //所有文章分类
-        $categories = Category::getTree(5, Category::TYPE_ARTICLE);
+        $categories = Category::getTree(Category::TYPE_ARTICLE,3);
         //状态
         $_statusList = News::getStatusList();
         if ($id) {

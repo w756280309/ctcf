@@ -56,14 +56,14 @@ $this->title = '添加/编辑分类';
             <div class="control-group">
                 <label class="control-label">上级分类</label>
                 <div class="controls">
-                    <?= $form->field($model, 'parent_id', ['template' => '{input}', 'inputOptions' => ['autocomplete' => "off", 'class' => 'm-wrap span3', 'placeholder' => '上级分类']])->dropDownList($categoryTree) ?>
+                    <?= $form->field($model, 'parent_id', ['template' => '{input}', 'inputOptions' => ['autocomplete' => "off", 'class' => 'm-wrap span3', 'placeholder' => '上级分类']])->dropDownList(ArrayHelper::map($categoryTree,'id','name'),['prompt'=>'不选择']) ?>
                     <?= $form->field($model, 'parent_id', ['template' => '{error}']); ?>
                 </div>
             </div>
             <div class="control-group">
                 <label class="control-label">状态</label>
                 <div class="controls">
-                    <?= $form->field($model, 'status', ['template' => '{input}', 'inputOptions' => ['autocomplete' => "off", 'class' => 'm-wrap span3 Wdate', 'placeholder' => '状态']])->dropDownList(\common\models\Category::getStatusArray()) ?>
+                    <?= $form->field($model, 'status', ['template' => '{input}', 'inputOptions' => ['autocomplete' => "off", 'class' => 'm-wrap span3 Wdate', 'placeholder' => '状态']])->dropDownList(Category::getStatusArray()) ?>
                     <?= $form->field($model, 'status', ['template' => '{error}']); ?>
                 </div>
             </div>

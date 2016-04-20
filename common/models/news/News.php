@@ -5,10 +5,7 @@ namespace common\models\news;
 use common\models\Category;
 use common\models\ItemCategory;
 use Yii;
-use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
-use yii\db\ActiveRecord;
-use yii\data\Pagination;
 use yii\helpers\ArrayHelper;
 
 /**
@@ -116,7 +113,6 @@ class News extends \yii\db\ActiveRecord
     public function afterSave($insert, $changedAttributes)
     {
         if ($this->category && is_array($this->category)) {
-            echo 111;
             foreach ($this->category as $id) {
                 ItemCategory::addItem($this->id, $id);
             }

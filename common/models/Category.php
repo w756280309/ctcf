@@ -12,6 +12,7 @@ use yii\helpers\ArrayHelper;
  * @property string $id
  * @property string $name
  * @property string $parent_id
+ * @property string $level
  * @property string $description
  * @property string $sort
  * @property integer $status
@@ -44,19 +45,24 @@ class Category extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name', 'parent_id', 'status'], 'required'],
-            [['parent_id', 'sort', 'status', 'type', 'updated_at', 'created_at'], 'integer'],
+            [['name', 'status'], 'required'],
+            [['parent_id', 'sort', 'status', 'type', 'updated_at', 'created_at','level'], 'integer'],
             [['name'], 'string', 'max' => 50],
             [['description'], 'string', 'max' => 128],
-            ['status', 'default', 'value' => Category::STATUS_ACTIVE],
-            ['type', 'default', 'value' => Category::TYPE_ARTICLE],
-            ['parent_id', 'default', 'value' => 0],
-            ['sort', 'default', 'value' => 1],
             [['name', 'description'], 'filter', 'filter' => function ($value) {
                 return htmlspecialchars($value);
             }],
             ['parent_id', 'compare', 'compareAttribute' => 'id', 'operator' => '!='],
         ];
+    }
+
+    public static function initNew(){
+        $model = new self();
+        $model->status = Category::STATUS_ACTIVE;
+        $model->parent_id = 0;
+        $model->level = 1;
+        $model->sort = 1;
+        return $model;
     }
 
     /**
@@ -84,50 +90,49 @@ class Category extends \yii\db\ActiveRecord
         ];
     }
 
-    /**
-     * 获取执行类型分类的分类树，默认获取五级，保持分类顺序
-     * @param int $level 分类等级
-     * @param int $type 分类类型
-     * @return array        Category对象数组
-     */
-    public static function getTree($level = 5, $type = self::TYPE_ARTICLE)
+    public function beforeSave($insert)
     {
-        $list = self::getAllCategories(self::TYPE_ARTICLE);
-        return self::_tree($list, 0, 5);
+        if(parent::beforeSave($insert)){
+            if($this->parent){
+                $this->level = $this->parent->level + 1;
+            }
+            return true;
+        }else{
+            return false;
+        }
     }
 
-    public static function getDropDownTree($level = 5, $type = self::TYPE_ARTICLE)
-    {
-        $list = ArrayHelper::map(self::getTree($level, $type), 'id', 'name');
-        $return['0'] = '顶级分类';
-        if (count($list) > 0) {
-            foreach ($list as $key => $value) {
-                $return[$key] = $value;
-            }
-        }
-        return $return;
+    public function getParent(){
+        return $this->hasOne(Category::className(),['id'=>'parent_id']);
     }
 
     /**
      * 获取指定节点的子类，默认获取3级，保持循序
-     * @param Category $node 分类对象
+     * @param integer $type 分类类型
      * @param int $level 子类最高层级
+     *  @param Category $node 分类对象
      * @return array    排好序的分类对象数组
      */
-    public static function getChildren(Category $node, $level = 3)
+    public static function getTree($type, $level = 3,Category $node = null)
     {
-        $list = self::getAllCategories($node['type']);
-        return self::_tree($list, $node['id'], $level);
+        $list = self::getAllCategories($node?$node['type']:$type,$level,$node?$node['id']:-1);
+        return self::_tree($list, $node?$node['id']:0, $level);
     }
 
     /**
      * 获取指定类型的所有分类,不要顺序
      * @param int $type 分类类型
+     * @param int $level 最高层级
+     * @param int $parent_id
      * @return array|\yii\db\ActiveRecord[]
      */
-    public static function getAllCategories($type = self::TYPE_ARTICLE)
+    private static function getAllCategories($type,$level=3,$parent_id = -1)
     {
-        return self::find()->where(['status' => self::STATUS_ACTIVE, 'type' => $type])->orderBy(['parent_id' => SORT_ASC, 'sort' => SORT_DESC])->all();
+        $query = self::find()->where(['status' => self::STATUS_ACTIVE, 'type' => $type])->andWhere(['<=','level',$level]);
+        if($parent_id>=0){
+            $query = $query->andWhere(['parent_id'=>$parent_id]);
+        }
+        return $query->orderBy(['parent_id' => SORT_ASC, 'sort' => SORT_DESC])->all();
     }
 
     /**
@@ -161,9 +166,8 @@ class Category extends \yii\db\ActiveRecord
         $types = Category::getTypeArray();
         if (in_array($this->type, array_keys($types))) {
             return $types[$this->type];
-        } else {
-            return '-';
         }
+        return null;
     }
 
     /**
@@ -175,36 +179,10 @@ class Category extends \yii\db\ActiveRecord
         return [self::TYPE_ARTICLE => '文章分类', self::TYPE_PRODUCT => '标的分类', self::TYPE_AUTH => '权限分类', self::TYPE_OTHER => '其他分类'];
     }
 
-    /**
-     * 获取父类名称
-     * @return string
-     */
-    public function getParentName()
-    {
-        if (intval($this->parent_id) === 0) {
-            return '顶级分类';
-        } else {
-            $model = Category::find()->where(['id' => $this->parent_id])->one();
-            if ($model) {
-                return $model->name;
-            } else {
-                return '-';
-            }
-        }
-    }
 
     public static function getStatusArray()
     {
         return [self::STATUS_ACTIVE => '可用', self::STATUS_HIDDEN => '禁用'];
     }
 
-    public function getStatusName()
-    {
-        $status_array = Category::getStatusArray();
-        if (in_array($this->status, array_keys($status_array))) {
-            return $status_array[$this->status];
-        } else {
-            return '-';
-        }
-    }
 }

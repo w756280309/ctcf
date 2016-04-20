@@ -3,6 +3,7 @@ CREATE TABLE `category` (
   `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(50) NOT NULL COMMENT '分类名称',
   `parent_id` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '上级分类id',
+  `level` TINYINT(1) NOT NULL DEFAULT '1' COMMENT '分类层级 ',
   `description` CHAR(128) NOT NULL DEFAULT '' COMMENT '描述',
   `sort` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '分类序号',
   `status` TINYINT(1) NOT NULL DEFAULT '1' COMMENT '状态 0-锁定 1-正常 ',

@@ -1,3 +1,6 @@
+<?php
+    use common\models\Category;
+?>
 <?php $this->beginBlock('blockmain'); ?>
 <div class="container-fluid">
     <!-- BEGIN PAGE HEADER-->
@@ -49,12 +52,12 @@
                         <td style="text-align: center">
                             <a href="/news/category/edit?id=<?= $val['id'] ?>"><?= $val['name'] ?></a>
                         </td>
-                        <td style="text-align: center"><?= $val->getParentName() ?></td>
+                        <td style="text-align: center"><?= $val->parent?$val->parent->name:'-' ?></td>
                         <td style="text-align: center">
                             <?= $val['description'] ?>
                         </td>
                         <td style="text-align: center">
-                            <?php if ($val['status'] === \common\models\Category::STATUS_ACTIVE): ?>
+                            <?php if ($val['status'] === Category::STATUS_ACTIVE): ?>
                                 <i class="icon-ok green" style="color: green;"></i>
                             <?php else: ?>
                                 <i class="icon-remove" style="color: red;"></i>

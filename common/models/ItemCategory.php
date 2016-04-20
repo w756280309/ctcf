@@ -61,17 +61,16 @@ class ItemCategory extends \yii\db\ActiveRecord
     /**
      * 添加项目和分类对照
      * @param integer $item_id 项目ID
-     * @param integer $category_id 分类ID
-     * @param int $type 项目类型
+     * @param Category $category 分类对象
      * @return bool
      */
-    public static function addItem($item_id, $category_id, $type = Category::TYPE_ARTICLE)
+    public static function addItem($item_id, Category $category)
     {
-        if (!self::find()->where(['item_id' => $item_id, 'category_id' => $category_id, 'type' => $type])->one()) {
+        if (!self::find()->where(['item_id' => $item_id, 'category_id' => $category['id'], 'type' => $category['type']])->one()) {
             $model = new self([
                 'item_id' => $item_id,
-                'category_id' => $category_id,
-                'type' => $type
+                'category_id' => $category['id'],
+                'type' => $category['type']
             ]);
             $res = $model->save();
             return $res ? true : false;
@@ -85,7 +84,7 @@ class ItemCategory extends \yii\db\ActiveRecord
      * @param int $type 分类类型
      * @return array  对象数组或空数组
      */
-    public static function getItems(array $categoryIds, $type = Category::TYPE_ARTICLE)
+    public static function getItems(array $categoryIds, $type)
     {
         $model = self::find()->where(['in', 'category_id', $categoryIds])->andWhere(['type' => $type])->all();
         if ($model) {
@@ -101,7 +100,7 @@ class ItemCategory extends \yii\db\ActiveRecord
      * @param int $type 分类类型
      * @throws \Exception
      */
-    public static function clearItems(array $item_ids, $type = Category::TYPE_ARTICLE)
+    public static function clearItems(array $item_ids, $type)
     {
         $items = self::find()->where(['in', 'item_id', $item_ids])->andWhere(['type' => $type])->all();
         if (count($items) > 0) {

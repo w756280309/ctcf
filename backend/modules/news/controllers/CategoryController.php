@@ -36,13 +36,12 @@ class CategoryController extends BaseController
      */
     public function actionEdit($id = null)
     {
-        $categoryTree = Category::getDropDownTree(5, Category::TYPE_ARTICLE);
+        $categoryTree = Category::getTree(Category::TYPE_ARTICLE,3);
         if ($id) {
             $model = $this->findModel($id);
         } else {
-            $model = new Category();
+            $model = Category::initNew();
         }
-
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect('index');
         }
