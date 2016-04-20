@@ -1,7 +1,7 @@
 <?php
 use yii\helpers\ArrayHelper;
 use yii\bootstrap\ActiveForm;
-use common\models\Category;
+use common\models\category\Category;
 
 $this->title = '添加/编辑分类';
 ?>

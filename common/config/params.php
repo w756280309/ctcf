@@ -85,4 +85,8 @@ return [
     'pc_assets_base_uri' => "https://static.wenjf.com/pc/",
     'enable_baidu_tongji' => false,
     'enable_dev_helpers' => false,
+    'category_type'=>[
+        '1'=>'文章分类',
+        '9'=>'其他分类'
+    ]
 ];

@@ -1,5 +1,5 @@
 <?php
-    use common\models\Category;
+    use common\models\category\Category;
 ?>
 <?php $this->beginBlock('blockmain'); ?>
 <div class="container-fluid">

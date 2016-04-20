@@ -2,8 +2,8 @@
 
 namespace common\models\news;
 
-use common\models\Category;
-use common\models\ItemCategory;
+use common\models\category\Category;
+use common\models\category\ItemCategory;
 use Yii;
 use yii\behaviors\TimestampBehavior;
 use yii\helpers\ArrayHelper;
@@ -27,13 +27,11 @@ use yii\helpers\ArrayHelper;
  */
 class News extends \yii\db\ActiveRecord
 {
-    const HOME_STATUS_HIDDEN = 0;
-    const HOME_STATUS_SHOW = 1;
+    const STATUS_NO_PUBLISH = 0;    //未上线
+    const STATUS_PUBLISH = 1;   //上线
+    const STATUS_DELETE = 3;    //删除
 
-    const STATUS_NO_PUBLISH = 0;
-    const STATUS_PUBLISH = 1;
-    const STATUS_DELETE = 3;
-
+    const CATEGORY_TYPE_ARTICLE = 1;//分类类型，文章分类
 
     public $category;
 
@@ -131,17 +129,10 @@ class News extends \yii\db\ActiveRecord
         );
     }
 
-    public static function getHomeStatusList()
-    {
-        return array(
-            self::HOME_STATUS_HIDDEN => "不显示",
-            self::HOME_STATUS_SHOW => "显示",
-        );
-    }
 
     public function getItemCategories()
     {
-        $item_category = ItemCategory::find()->where(['item_id' => $this->id, 'type' => Category::TYPE_ARTICLE])->all();
+        $item_category = ItemCategory::find()->where(['item_id' => $this->id, 'type' => self::CATEGORY_TYPE_ARTICLE])->all();
         return $item_category;
     }
 
@@ -149,7 +140,7 @@ class News extends \yii\db\ActiveRecord
     {
         $item_category = $this->getItemCategories();
         if ($item_category) {
-            return Category::find()->where(['in', 'id', ArrayHelper::getColumn($item_category, 'category_id')])->andWhere(['type' => Category::TYPE_ARTICLE])->all();
+            return Category::find()->where(['in', 'id', ArrayHelper::getColumn($item_category, 'category_id')])->andWhere(['type' => self::CATEGORY_TYPE_ARTICLE])->all();
         }
         return [];
     }

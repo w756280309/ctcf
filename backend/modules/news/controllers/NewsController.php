@@ -1,15 +1,12 @@
 <?php
 namespace backend\modules\news\controllers;
 
-use common\models\Category;
-use common\models\ItemCategory;
+use common\models\category\Category;
+use common\models\category\ItemCategory;
 use Yii;
 use yii\data\Pagination;
 use backend\controllers\BaseController;
-
 use common\models\news\News;
-use common\models\news\NewsCategory;
-use common\models\news\NewsFiles;
 use yii\helpers\ArrayHelper;
 use yii\web\NotFoundHttpException;
 
@@ -35,7 +32,7 @@ class NewsController extends BaseController
     public function actionIndex()
     {
         //所有文章分类
-        $categories = Category::getTree(Category::TYPE_ARTICLE,3);
+        $categories = Category::getTree(News::CATEGORY_TYPE_ARTICLE, 3);
         //状态
         $_statusList = News::getStatusList();
         $_where = [];
@@ -51,7 +48,7 @@ class NewsController extends BaseController
                     $_andWhere = ['like', $key, $val];
                 } elseif ($key == 'category') {
                     if ($val) {
-                        $ids = ItemCategory::getItems([$val],Category::TYPE_ARTICLE);
+                        $ids = ItemCategory::getItems([$val], News::CATEGORY_TYPE_ARTICLE);
                         if ($ids) {
                             $_where['id'] = $ids;
                         }
@@ -90,7 +87,7 @@ class NewsController extends BaseController
     public function actionEdit($id = null)
     {
         //所有文章分类
-        $categories = Category::getTree(Category::TYPE_ARTICLE,3);
+        $categories = Category::getTree(News::CATEGORY_TYPE_ARTICLE, 3);
         //状态
         $_statusList = News::getStatusList();
         if ($id) {
@@ -98,7 +95,7 @@ class NewsController extends BaseController
             $model->news_time = date('Y-m-d H:i:s', $model->news_time);
             $item_category = $model->getItemCategories();
             $model->category = $item_category ? ArrayHelper::getColumn($item_category, 'category_id') : [];
-            ItemCategory::clearItems([$model->id], Category::TYPE_ARTICLE);
+            ItemCategory::clearItems([$model->id], News::CATEGORY_TYPE_ARTICLE);
         } else {
             $model = new News();
             $model->creator_id = Yii::$app->user->getId();

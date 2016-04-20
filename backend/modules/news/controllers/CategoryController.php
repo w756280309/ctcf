@@ -2,13 +2,11 @@
 
 namespace backend\modules\news\controllers;
 
-use common\models\Category;
+use common\models\category\Category;
+use common\models\news\News;
 use Yii;
-use yii\helpers\ArrayHelper;
 use yii\web\NotFoundHttpException;
-
 use backend\controllers\BaseController;
-use common\models\news\NewsCategory;
 
 /**
  * CategoryController implements the CRUD actions for NewsCategory model.
@@ -36,7 +34,7 @@ class CategoryController extends BaseController
      */
     public function actionEdit($id = null)
     {
-        $categoryTree = Category::getTree(Category::TYPE_ARTICLE,3);
+        $categoryTree = Category::getTree(News::CATEGORY_TYPE_ARTICLE, 3);
         if ($id) {
             $model = $this->findModel($id);
         } else {

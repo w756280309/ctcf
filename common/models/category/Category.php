@@ -1,10 +1,9 @@
 <?php
 
-namespace common\models;
+namespace common\models\category;
 
 use Yii;
 use yii\behaviors\TimestampBehavior;
-use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "category".
@@ -25,11 +24,6 @@ class Category extends \yii\db\ActiveRecord
     const STATUS_HIDDEN = 0;//禁用
     const STATUS_ACTIVE = 1;//可用
 
-    const TYPE_ARTICLE = 1;//分类类型，文章分类
-    const TYPE_PRODUCT = 2; //分类类型，标的
-    const TYPE_AUTH = 3;//分类类型，权限
-    const TYPE_OTHER = 9;//分类类型，其他
-
 
     /**
      * @inheritdoc
@@ -46,7 +40,7 @@ class Category extends \yii\db\ActiveRecord
     {
         return [
             [['name', 'status'], 'required'],
-            [['parent_id', 'sort', 'status', 'type', 'updated_at', 'created_at','level'], 'integer'],
+            [['parent_id', 'sort', 'status', 'type', 'updated_at', 'created_at', 'level'], 'integer'],
             [['name'], 'string', 'max' => 50],
             [['description'], 'string', 'max' => 128],
             [['name', 'description'], 'filter', 'filter' => function ($value) {
@@ -56,7 +50,8 @@ class Category extends \yii\db\ActiveRecord
         ];
     }
 
-    public static function initNew(){
+    public static function initNew()
+    {
         $model = new self();
         $model->status = Category::STATUS_ACTIVE;
         $model->parent_id = 0;
@@ -83,6 +78,9 @@ class Category extends \yii\db\ActiveRecord
         ];
     }
 
+    /**
+     * @return array
+     */
     public function behaviors()
     {
         return [
@@ -90,48 +88,54 @@ class Category extends \yii\db\ActiveRecord
         ];
     }
 
+    /**
+     * 插入数据前计算分类层级
+     * @param bool $insert
+     * @return bool
+     */
     public function beforeSave($insert)
     {
-        if(parent::beforeSave($insert)){
-            if($this->parent){
+        if (parent::beforeSave($insert)) {
+            if ($this->parent) {
                 $this->level = $this->parent->level + 1;
             }
             return true;
-        }else{
+        } else {
             return false;
         }
     }
 
-    public function getParent(){
-        return $this->hasOne(Category::className(),['id'=>'parent_id']);
+    /**
+     * 获取父类关联对象
+     * @return \yii\db\ActiveQuery
+     */
+    public function getParent()
+    {
+        return $this->hasOne(Category::className(), ['id' => 'parent_id']);
     }
 
     /**
-     * 获取指定节点的子类，默认获取3级，保持循序
+     * 获取指定节点的子类(或全部节点)，默认最高层级为3级，保持分类父子关系
      * @param integer $type 分类类型
      * @param int $level 子类最高层级
-     *  @param Category $node 分类对象
+     * @param Category $node 分类对象
      * @return array    排好序的分类对象数组
      */
-    public static function getTree($type, $level = 3,Category $node = null)
+    public static function getTree($type, $level = 3, Category $node = null)
     {
-        $list = self::getAllCategories($node?$node['type']:$type,$level,$node?$node['id']:-1);
-        return self::_tree($list, $node?$node['id']:0, $level);
+        $list = self::getAllCategories($node ? $node['type'] : $type, $level);
+        return self::_tree($list, $node ? $node['id'] : 0, $level);
     }
 
     /**
-     * 获取指定类型的所有分类,不要顺序
+     * 获取指定类型的所有分类
      * @param int $type 分类类型
      * @param int $level 最高层级
-     * @param int $parent_id
-     * @return array|\yii\db\ActiveRecord[]
+     * @return array|\yii\db\ActiveRecord[] 分类对象数组
      */
-    private static function getAllCategories($type,$level=3,$parent_id = -1)
+    private static function getAllCategories($type, $level = 3)
     {
-        $query = self::find()->where(['status' => self::STATUS_ACTIVE, 'type' => $type])->andWhere(['<=','level',$level]);
-        if($parent_id>=0){
-            $query = $query->andWhere(['parent_id'=>$parent_id]);
-        }
+        $query = self::find()->where(['status' => self::STATUS_ACTIVE, 'type' => $type])->andWhere(['<=', 'level', $level]);
         return $query->orderBy(['parent_id' => SORT_ASC, 'sort' => SORT_DESC])->all();
     }
 
@@ -142,7 +146,7 @@ class Category extends \yii\db\ActiveRecord
      * @param int $level 子类最高层级
      * @return array        分类对象数组
      */
-    private static function _tree(array $list, $pid = 0, $level = 5)
+    private static function _tree(array $list, $pid = 0, $level = 3)
     {
         static $tree = [];
         if (count($list) > 0 && $level > 0) {
@@ -176,7 +180,8 @@ class Category extends \yii\db\ActiveRecord
      */
     public static function getTypeArray()
     {
-        return [self::TYPE_ARTICLE => '文章分类', self::TYPE_PRODUCT => '标的分类', self::TYPE_AUTH => '权限分类', self::TYPE_OTHER => '其他分类'];
+        $types = Yii::$app->params['category_type'];
+        return $types ?: [];
     }
 
 
