@@ -80,7 +80,7 @@ $(function () {
                                     var itemyr = changeTwoDecimal(item.yr);
                                     var itemjx = item.jiaxi === null ? '' : item.jiaxi;
                                     var hui = ('4' === item.status || '5' === item.status || '6' === item.status) ? 'hui' : '';
-                                    var dataPer = (7 === item.status) ? 100 : ('hui' === hui ? 0 : item.finish_rate)
+                                    var dataPer = ('7' === item.status) ? 100 : ('hui' === hui ? 0 : item.finish_rate);
                                     var finishHtml = "";
                                     if (item.status == 1) {
                                         finishHtml = '<div class="column-clock"><span>' + item.start_desc + '</span>' + item.start + '</div>';
