@@ -189,6 +189,31 @@ class Client
     }
 
     /**
+     * 4.2.3 更换银行卡
+     * @param QpayBindInterface $bind
+     * @return string
+     */
+    public function changeQpay(QpayBindInterface $bind)
+    {
+        $data = [
+            'service' => 'ptp_mer_replace_card',
+            'ret_url' => $this->hostInfo . "/temp/frontend",
+            'notify_url' => $this->hostInfo . "/temp/backend",
+            'sourceV' => 'HTML5',
+            'order_id' => $bind->getTxSn(),
+            'mer_date' => $bind->getTxDate(),
+            'user_id' => $bind->getEpayUserId(),
+            'card_id' => $this->encrypt($bind->getCardNo()),
+            'account_name' => $this->encrypt($bind->getLegalName()),
+            'identity_type' => $bind->getIdType(),
+            'identity_code' => $this->encrypt($bind->getIdNo())
+        ];
+        $params = $this->buildQuery($data);
+
+        return $this->apiUrl.'?'.$params;
+    }
+    
+    /**
      * 申请提现.
      *
      * @param WithdrawalInterface $draw
