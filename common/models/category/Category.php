@@ -4,6 +4,7 @@ namespace common\models\category;
 
 use Yii;
 use yii\behaviors\TimestampBehavior;
+use yii\web\NotFoundHttpException;
 
 /**
  * This is the model class for table "category".
@@ -24,18 +25,11 @@ class Category extends \yii\db\ActiveRecord
     const STATUS_HIDDEN = 0;//禁用
     const STATUS_ACTIVE = 1;//可用
 
-
-    /**
-     * @inheritdoc
-     */
     public static function tableName()
     {
         return 'category';
     }
 
-    /**
-     * @inheritdoc
-     */
     public function rules()
     {
         return [
@@ -50,6 +44,10 @@ class Category extends \yii\db\ActiveRecord
         ];
     }
 
+    /**
+     * 初始化对象
+     * @return Category
+     */
     public static function initNew()
     {
         $model = new self();
@@ -61,8 +59,23 @@ class Category extends \yii\db\ActiveRecord
     }
 
     /**
-     * @inheritdoc
+     * @param int $id   对象id
+     * @return null|static
+     * @throws NotFoundHttpException
      */
+    public static function findOrNew($id){
+        if(!empty($id)){
+            if(($model = self::findOne($id)) !== null){
+                return $model;
+            }else{
+                throw new NotFoundHttpException('指定对象没有找到');
+            }
+        }else{
+            $model = self::initNew();
+            return $model;
+        }
+    }
+
     public function attributeLabels()
     {
         return [
@@ -78,9 +91,6 @@ class Category extends \yii\db\ActiveRecord
         ];
     }
 
-    /**
-     * @return array
-     */
     public function behaviors()
     {
         return [

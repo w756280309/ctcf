@@ -10,25 +10,10 @@ use common\models\news\News;
 use yii\helpers\ArrayHelper;
 use yii\web\NotFoundHttpException;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/**
- * Description of NewsController
- *
- * @author Administrator
- */
 class NewsController extends BaseController
 {
     const NEWS_PAGE_SIZE = 10;
 
-    /**
-     * Lists all NewsCategory models.
-     * @return mixed
-     */
     public function actionIndex()
     {
         //所有文章分类
@@ -73,16 +58,11 @@ class NewsController extends BaseController
             'pages' => $pages,
             'status' => $_statusList,
             'selectQueryParams' => $_selectQueryParams,
-            'categories' => ArrayHelper::map($categories, 'id', 'name')
+            'categories' => ArrayHelper::map($categories, 'id', 'name'),
         ]);
     }
 
 
-    /**
-     * Displays a single NewsCategory model.
-     * @param string $id
-     * @return mixed
-     */
     public function actionEdit($id = null)
     {
         //所有文章分类
@@ -103,16 +83,10 @@ class NewsController extends BaseController
         }
         return $this->render('edit', ['model' => $model,
             'status' => $_statusList,
-            'categories' => $categories
+            'categories' => $categories,
         ]);
     }
 
-    /**
-     * Deletes an existing NewsCategory model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param string $id
-     * @return mixed
-     */
     public function actionDelete($id)
     {
         $model = $this->findModel($id);
