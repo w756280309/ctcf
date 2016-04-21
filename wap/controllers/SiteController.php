@@ -446,8 +446,8 @@ class SiteController extends Controller
     /**
      * 用户隐私政策页
      */
-    public function actionPrivate()
+    public function actionPrivacy()
     {
-        return $this->render('private');
+        return $this->render('privacy');
     }
 }
