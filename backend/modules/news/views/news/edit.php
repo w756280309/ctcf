@@ -1,5 +1,6 @@
 <?php
 use yii\widgets\ActiveForm;
+use yii\helpers\ArrayHelper;
 
 $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\web\YiiAsset']);
 $this->title = '编辑资讯';
@@ -16,21 +17,21 @@ $this->title = '编辑资讯';
                 <ul class="breadcrumb">
                     <li>
                         <i class="icon-home"></i>
-                        <a href="/news/">资讯管理</a>
+                        <a href="/adv/adv/index">运营管理</a>
                         <i class="icon-angle-right"></i>
                     </li>
                     <li>
-                        <a href="/news/news/index">资讯列表</a>
+                        <a href="/news/news/index">资讯管理</a>
                         <i class="icon-angle-right"></i>
                     </li>
                     <li>
-                        <a href="javascript:void(0);">内容编辑</a>
+                        <a href="javascript:void(0);">编辑资讯</a>
                     </li>
                 </ul>
             </div>
             <div class="portlet-body form">
                 <!-- BEGIN FORM-->
-                <?php $form = ActiveForm::begin(['id' => 'news_form', 'action' => "/news/news/edit?id=" . $model->id, 'options' => ['class' => 'form-horizontal form-bordered form-label-stripped']]); ?>
+                <?php $form = ActiveForm::begin([ 'action' => "/news/news/edit?id=" . $model->id, 'options' => ['class' => 'form-horizontal form-bordered form-label-stripped']]); ?>
                 <div class="control-group">
                     <label class="control-label">标题</label>
                     <div class="controls">
@@ -41,7 +42,7 @@ $this->title = '编辑资讯';
                 <div class="control-group">
                     <label class="control-label">分类</label>
                     <div class="controls">
-                        <?= $form->field($model, 'category', ['template' => '{input}', 'inputOptions' => ['autocomplete' => "off", 'class' => 'm-wrap span12', 'placeholder' => '分类']])->checkboxList(\yii\helpers\ArrayHelper::map($categories, 'id', 'name')) ?>
+                        <?= $form->field($model, 'category', ['template' => '{input}', 'inputOptions' => ['autocomplete' => "off", 'class' => 'm-wrap span12', 'placeholder' => '分类']])->checkboxList(ArrayHelper::map($categories, 'id', 'name')) ?>
                         <?= $form->field($model, 'category', ['template' => '{error}']); ?>
                     </div>
                 </div>

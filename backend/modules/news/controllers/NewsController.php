@@ -53,7 +53,6 @@ class NewsController extends BaseController
                             $_where['id'] = $ids;
                         }
                     }
-
                 } else {
                     $_where[$key] = $val;
                 }
@@ -95,9 +94,8 @@ class NewsController extends BaseController
             $model->news_time = date('Y-m-d H:i:s', $model->news_time);
             $item_category = $model->getItemCategories();
             $model->category = $item_category ? ArrayHelper::getColumn($item_category, 'category_id') : [];
-            ItemCategory::clearItems([$model->id], News::CATEGORY_TYPE_ARTICLE);
         } else {
-            $model = new News();
+            $model = News::initNew();
             $model->creator_id = Yii::$app->user->getId();
         }
         if ($model->load(Yii::$app->request->post()) && $model->save()) {

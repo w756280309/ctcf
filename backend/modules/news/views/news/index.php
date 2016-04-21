@@ -1,3 +1,6 @@
+<?php
+    use yii\helpers\ArrayHelper;
+?>
 <?php $this->beginBlock('blockmain'); ?>
 <div class="container-fluid">
     <!-- BEGIN PAGE HEADER-->
@@ -98,15 +101,24 @@
                             <a href="/news/news/edit?id=<?= $val['id'] ?>"><?= $val['title'] ?></a>
                         </td>
                         <td style="text-align: center">
-                            <?= $val->getCategoryName() ?>
+                            <?php
+                                $categories = $val->getCategories();
+                                if ($categories) {
+                                    echo implode('，', ArrayHelper::getColumn($categories, 'name'));
+                                }else{
+                                    echo '-';
+                                 }
+                            ?>
                         </td>
-                        <td style="text-align: center"><?php
+                        <td style="text-align: center">
+                            <?php
                             foreach ($status as $k => $v) {
                                 if ($k == $val['status']) {
                                     echo $v;
                                 }
                             }
-                            ?></td>
+                            ?>
+                        </td>
                         <td style="text-align: center"><?= date('Y-m-d H:i:s', $val['news_time']) ?></td>
                         <td style="text-align: center">
                             <?= $val['sort'] ?>

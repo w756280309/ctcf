@@ -67,8 +67,14 @@ class News extends \yii\db\ActiveRecord
             [['title', 'body'], 'filter', 'filter' => function ($value) {
                 return htmlspecialchars($value);
             }],
-            ['sort', 'default', 'value' => 0],
         ];
+    }
+
+    public static function initNew(){
+        $model = new self();
+        $model->sort = 0;
+        $model->category = [];
+        return $model;
     }
 
     /**
@@ -102,6 +108,8 @@ class News extends \yii\db\ActiveRecord
             if (!is_integer($this->news_time)) {
                 $this->news_time = strtotime($this->news_time);
             }
+            //保存之前，清空原有分类
+            ItemCategory::clearItems([$this->id], News::CATEGORY_TYPE_ARTICLE);
             return true;
         } else {
             return false;
@@ -110,9 +118,13 @@ class News extends \yii\db\ActiveRecord
 
     public function afterSave($insert, $changedAttributes)
     {
-        if ($this->category && is_array($this->category)) {
+        if (count($this->category)>0) {
+            //保存之后添加分类
             foreach ($this->category as $id) {
-                ItemCategory::addItem($this->id, $id);
+                $category = Category::find()->where(['id'=>$id,'type'=>Category::STATUS_ACTIVE])->one();
+                if($category){
+                    ItemCategory::addItem($this->id, $category);
+                }
             }
             return true;
         } else {
@@ -140,18 +152,9 @@ class News extends \yii\db\ActiveRecord
     {
         $item_category = $this->getItemCategories();
         if ($item_category) {
-            return Category::find()->where(['in', 'id', ArrayHelper::getColumn($item_category, 'category_id')])->andWhere(['type' => self::CATEGORY_TYPE_ARTICLE])->all();
+            return Category::find()->where(['in', 'id', ArrayHelper::getColumn($item_category, 'category_id')])->andWhere(['type' => self::CATEGORY_TYPE_ARTICLE,'status'=>Category::STATUS_ACTIVE])->all();
         }
         return [];
     }
 
-    public function getCategoryName()
-    {
-        $category = $this->getCategories();
-        if ($category) {
-            return implode('，', ArrayHelper::getColumn($category, 'name'));
-        } else {
-            return '-';
-        }
-    }
 }

@@ -96,8 +96,13 @@ class Category extends \yii\db\ActiveRecord
     public function beforeSave($insert)
     {
         if (parent::beforeSave($insert)) {
+            if(!$this->parent_id){
+                $this->parent_id = 0;
+            }
             if ($this->parent) {
                 $this->level = $this->parent->level + 1;
+            }else{
+                $this->level = 1;
             }
             return true;
         } else {
