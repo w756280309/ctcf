@@ -66,8 +66,8 @@ class UserController extends Controller
                 'msg' => '成功',
                 'content' => [
                     'user_id' => $user->id,
-                    'asset_total' => strval($ua->getTotalFund($user->id)),
-                    'profit_balance' => strval($ua->getTotalProfit($user->id)),
+                    'asset_total' => strval($ua->getTotalFund()),
+                    'profit_balance' => strval($ua->getTotalProfit()),
                     'investment_balance' => strval(bcadd($ua->investment_balance, $ua->freeze_balance, 2)),
                     'available_balance' => strval($ua->available_balance),
                     'mobile' => substr_replace($user->mobile,'***', 3, -4),
