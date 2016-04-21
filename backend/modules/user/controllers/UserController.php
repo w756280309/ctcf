@@ -125,19 +125,20 @@ class UserController extends BaseController
         $uabc = new UserAccountBackendCore();
         $recharge = $uabc->getRechargeSuccess($id);
         $draw = $uabc->getDrawSuccess($id);
-        $ua = $uabc->getUserAccount($id);
-        $userLiCai = $ua->investment_balance; //理财金额
 
         if (User::USER_TYPE_PERSONAL === (int) $type) {
             $rcMax = RechargeRecord::find()->where(['status' => RechargeRecord::STATUS_YES, 'uid' => $id])->max('updated_at');
             $order = $uabc->getOrderSuccess($id);
             $product = $ret = ['count' => 0, 'sum' => 0];
+            $ua = $userInfo->lendAccount;    //获取投资用户账户信息
         } else {
             $rcMax = OnlineProduct::find()->where(['del_status' => OnlineProduct::STATUS_USE, 'borrow_uid' => $id])->min('start_date');
             $ret = $uabc->getReturnInfo($id);
             $product = $uabc->getProduct($id);
             $order = ['count' => 0, 'sum' => 0];
+            $ua = $userInfo->borrowAccount;  //获取融资用户账户信息
         }
+
         $tztimeMax = OnlineOrder::find()->where(['status' => OnlineOrder::STATUS_SUCCESS, 'uid' => $id])->max('updated_at');
         $bc = new \common\lib\bchelp\BcRound();
         $userYuE = $bc->bcround(bcadd($ua['available_balance'], $ua['freeze_balance']), 2);
@@ -149,7 +150,7 @@ class UserController extends BaseController
                 'txNum' => $draw['count'],
                 'txMoneyTotal' => $draw['sum'],
                 'userYuE' => $userYuE,
-                'userLiCai' => $userLiCai,
+                'userLiCai' => $ua->investment_balance,
                 'tzTime' => $tztimeMax,
                 'tzNum' => $order['count'],
                 'tzMoneyTotal' => $order['sum'],

@@ -9,7 +9,6 @@ use common\models\product\OnlineProduct;
 use common\models\contract\ContractTemplate;
 use common\models\order\OnlineOrder;
 use common\service\PayService;
-use common\core\UserAccountCore;
 use common\models\order\OrderManager;
 
 class OrderController extends BaseController
@@ -32,8 +31,7 @@ class OrderController extends BaseController
             throw new \yii\web\NotFoundHttpException('This production is not existed.');
         }
 
-        $uacore = new UserAccountCore();
-        $ua = $uacore->getUserAccount($this->getAuthedUser()->id);
+        $ua = $this->getAuthedUser()->lendAccount;    //获取用户的账户信息
         $param['order_balance'] = $deal->getLoanBalance(); //获取标的可投余额;
         $param['my_balance'] = $ua->available_balance; //用户账户余额;
 

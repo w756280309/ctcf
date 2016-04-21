@@ -5,7 +5,6 @@ namespace app\modules\user\controllers;
 use Yii;
 use app\controllers\BaseController;
 use yii\web\Response;
-use common\core\UserAccountCore;
 use common\models\user\MoneyRecord;
 use common\models\order\OnlineOrder;
 use common\models\product\OnlineProduct;
@@ -24,15 +23,14 @@ class UserController extends BaseController
         $bc = new BcRound();
         bcscale(14);
         $user = $this->getAuthedUser();
-        $uacore = new UserAccountCore();
         $ua = $this->getAuthedUser()->lendAccount;
-        $leijishouyi = $uacore->getTotalProfit($user->id);//累计收益
+        $leijishouyi = $ua->getTotalProfit();//累计收益
         $dhsbj = $bc->bcround(bcadd($ua->investment_balance, $ua->freeze_balance), 2);//在wap端理财资产等于实际理财资产+用户投资冻结金额freeze_balance
-        $zcze = $uacore->getTotalFund($user->id);//账户余额+理财资产
+        $zcze = $ua->getTotalFund();//账户余额+理财资产
 
         $data = BankService::checkKuaijie($user);
 
-        return $this->render('index', ['ua' => $ua, 'user' => $this->getAuthedUser(), 'ljsy' => $leijishouyi, 'dhsbj' => $dhsbj, 'zcze' => $zcze, 'data' => $data]);
+        return $this->render('index', ['ua' => $ua, 'user' => $user, 'ljsy' => $leijishouyi, 'dhsbj' => $dhsbj, 'zcze' => $zcze, 'data' => $data]);
     }
 
     /**

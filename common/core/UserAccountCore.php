@@ -14,7 +14,7 @@ use common\lib\bchelp\BcRound;
  * Time: 下午4:02
  */
 class UserAccountCore {
-    
+
     /**
      * 账户信息
      * @param type $uid
@@ -31,37 +31,35 @@ class UserAccountCore {
         }
         return $ua;
     }
-    
+
     /**
-     * 累计收益
-     * @param type $uid
+     * 计算累计收益
      */
-    public function getTotalProfit($uid=null){
-        $total = OnlineRepaymentRecord::find()->where("status=".OnlineRepaymentRecord::STATUS_DID.' or status='.OnlineRepaymentRecord::STATUS_BEFORE)
-                ->andWhere(['uid'=>$uid])->sum('lixi');
-        return empty($total)?'0.00':$total;
+    public function getTotalProfit()
+    {
+        $total = OnlineRepaymentRecord::find()
+            ->where(['status' => [OnlineRepaymentRecord::STATUS_DID, OnlineRepaymentRecord::STATUS_BEFORE], 'uid' => $this->uid])
+            ->sum('lixi');
+
+        return empty($total) ? '0.00' : $total;
     }
-    
+
      /**
      * 累计待回收资金【本金】满标或提前募集结束后待还款本金
      * @param type $uid
-     */   
+     */
     public function getTotalWaitMoney($ua){
         return $ua->investment_balance;
     }
-    
+
     /**
-     * 资产总额=账户余额+理财资产
-     * @param type $uid
+     * 资产总额 = 账户余额 + 理财资产
      */
-    public function getTotalFund($uid = null){
-        $ua = $this->getUserAccount($uid);
-        $available_balance = $ua->available_balance;//可用余额
-        $freeze_balance = $ua->freeze_balance;//可用余额
-        $investment_balance = $ua->investment_balance;
+    public function getTotalFund()
+    {
         bcscale(14);
-        $total = bcadd(bcadd($available_balance, $freeze_balance),$investment_balance);
-        $bcRound = new BcRound();        
+        $total = bcadd(bcadd($this->available_balance, $this->freeze_balance), $this->investment_balance);
+        $bcRound = new BcRound();
         return $bcRound->bcround($total, 2);
     }
 }

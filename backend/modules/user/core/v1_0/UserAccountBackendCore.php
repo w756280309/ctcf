@@ -2,7 +2,6 @@
 
 namespace backend\modules\user\core\v1_0;
 
-use common\core\UserAccountCore;
 use common\lib\bchelp\BcRound;
 use common\models\user\RechargeRecord;
 use common\models\user\DrawRecord;
@@ -16,7 +15,7 @@ use common\models\product\OnlineProduct;
  * Date: 15-11-19
  * Time: 下午4:02.
  */
-class UserAccountBackendCore extends UserAccountCore
+class UserAccountBackendCore
 {
     /**
      * 获取充值成功

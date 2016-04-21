@@ -3,6 +3,8 @@
 namespace common\models\user;
 
 use yii\behaviors\TimestampBehavior;
+use common\models\order\OnlineRepaymentRecord;
+use common\lib\bchelp\BcRound;
 
 /**
  * This is the model class for table "user_account".
@@ -25,6 +27,28 @@ class UserAccount extends \yii\db\ActiveRecord
 
     const TYPE_LEND = 1; //投资者
     const TYPE_BORROW = 2; //融资者
+
+    /**
+     * 属性列表
+     */
+    public function attributes()
+    {
+        return [
+            'id',
+            'type',
+            'uid',
+            'account_balance',
+            'available_balance',
+            'freeze_balance',
+            'profit_balance',
+            'investment_balance',
+            'drawable_balance',
+            'in_sum',
+            'out_sum',
+            'created_at',
+            'updated_at',
+        ];
+    }
 
     /**
      * 是投资账户？
@@ -103,5 +127,28 @@ class UserAccount extends \yii\db\ActiveRecord
         return [
             TimestampBehavior::className(),
         ];
+    }
+
+    /**
+     * 计算累计收益
+     */
+    public function getTotalProfit()
+    {
+        $total = OnlineRepaymentRecord::find()
+            ->where(['status' => [OnlineRepaymentRecord::STATUS_DID, OnlineRepaymentRecord::STATUS_BEFORE], 'uid' => $this->uid])
+            ->sum('lixi');
+
+        return empty($total) ? '0.00' : $total;
+    }
+
+    /**
+     * 资产总额 = 账户余额 + 理财资产
+     */
+    public function getTotalFund()
+    {
+        bcscale(14);
+        $total = bcadd(bcadd($this->available_balance, $this->freeze_balance), $this->investment_balance);
+        $bcRound = new BcRound();
+        return $bcRound->bcround($total, 2);
     }
 }

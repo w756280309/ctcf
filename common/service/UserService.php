@@ -2,7 +2,7 @@
 
 namespace common\service;
 
-use common\core\UserAccountCore;
+use common\models\user\UserAccount;
 
 /**
  * Desc 主要用于用户模块的服务
@@ -11,13 +11,10 @@ use common\core\UserAccountCore;
  * Date: 15-11-19
  * Time: 下午4:02.
  */
-class UserService
+class UserService    //暂时没有地方在用该类
 {
     const TYPE_TOUZI = 1;//投资用户
     const TYPE_RONGZI = 2;//融资用户
-    public function __construct()
-    {
-    }
 
     /**
      * 用户提现验证
@@ -33,13 +30,13 @@ class UserService
         if (empty($uid) || empty($money) ||  !in_array($type, [self::TYPE_TOUZI,  self::TYPE_RONGZI])) {
             return ['code' => 1, 'message' => '数据传输错误'];
         }
+
         if (!preg_match('/^[0-9]+(.[0-9]{1,2})?$/', $money)) {
             return ['code' => 1, 'message' => '金额格式错误'];
         }
-        $uac = new UserAccountCore();
-        $ua = $uac->getUserAccount($uid, $type);
-        $available_balance = $ua->available_balance;
-        $diff = bccomp($available_balance, $money, 2);//此函数比较二个高精确度的数字。输入二个字符串，若二个字符串一样大则返回 0；
+
+        $ua = UserAccount::findOne(['uid' => $uid, 'type' => $type]);
+        $diff = bccomp($ua->available_balance, $money, 2);//此函数比较二个高精确度的数字。输入二个字符串，若二个字符串一样大则返回 0；
                                                     //若左边的数字字符串 (left operand) 比右边 (right operand) 的大则返回 +1；
                                                     //若左边的数字字符串比右边的小则返回 -1。scale 是一个可有可无的选项，表示返回值的
                                                     //小数点后所需的位数。
