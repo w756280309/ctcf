@@ -66,9 +66,6 @@ class News extends \yii\db\ActiveRecord
             [['title', 'source', 'child_title'], 'string', 'max' => 100],
             [['image', 'attach_file'], 'string', 'max' => 250],
             [['summary'], 'string', 'max' => 200],
-            [['title', 'body', 'summary'], 'filter', 'filter' => function ($value) {
-                return htmlspecialchars($value);
-            }],
         ];
     }
 

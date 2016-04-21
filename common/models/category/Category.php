@@ -39,9 +39,7 @@ class Category extends \yii\db\ActiveRecord
             [['name'], 'string', 'max' => 50],
             [['key'], 'string', 'max' => 20],
             [['description'], 'string', 'max' => 128],
-            [['name', 'description', 'key'], 'filter', 'filter' => function ($value) {
-                return htmlspecialchars($value);
-            }],
+            ['key','match','pattern'=>'/^[a-zA-Z_]{1,20}$/'],
             ['parent_id', 'compare', 'compareAttribute' => 'id', 'operator' => '!='],
         ];
     }
