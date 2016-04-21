@@ -442,4 +442,12 @@ class SiteController extends Controller
             'isLoggedin' => !Yii::$app->user->isGuest,
         ];
     }
+
+    /**
+     * 用户隐私政策页
+     */
+    public function actionPrivate()
+    {
+        return $this->render('private');
+    }
 }
