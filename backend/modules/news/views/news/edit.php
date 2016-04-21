@@ -40,6 +40,13 @@ $this->title = '编辑资讯';
                     </div>
                 </div>
                 <div class="control-group">
+                    <label class="control-label">概括</label>
+                    <div class="controls">
+                        <?= $form->field($model, 'summary', ['template' => '{input}', 'inputOptions' => ['autocomplete' => "off", 'class' => 'm-wrap span12', 'placeholder' => '概括']])->textInput() ?>
+                        <?= $form->field($model, 'summary', ['template' => '{error}']); ?>
+                    </div>
+                </div>
+                <div class="control-group">
                     <label class="control-label">分类</label>
                     <div class="controls">
                         <?= $form->field($model, 'category', ['template' => '{input}', 'inputOptions' => ['autocomplete' => "off", 'class' => 'm-wrap span12', 'placeholder' => '分类']])->checkboxList(ArrayHelper::map($categories, 'id', 'name')) ?>

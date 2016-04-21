@@ -35,6 +35,7 @@
                     <th style="text-align: center">ID</th>
                     <th style="text-align: center">类型</th>
                     <th style="text-align: center">名称</th>
+                    <th style="text-align: center">分类KEY</th>
                     <th style="text-align: center">父类</th>
                     <th style="text-align: center">描述</th>
                     <th style="text-align: center">状态</th>
@@ -52,6 +53,7 @@
                         <td style="text-align: center">
                             <a href="/news/category/edit?id=<?= $val['id'] ?>"><?= $val['name'] ?></a>
                         </td>
+                        <th style="text-align: center"><?= $val['key']?></th>
                         <td style="text-align: center"><?= $val->parent?$val->parent->name:'-' ?></td>
                         <td style="text-align: center">
                             <?= $val['description'] ?>

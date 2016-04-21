@@ -11,6 +11,7 @@ use yii\web\NotFoundHttpException;
  *
  * @property string $id
  * @property string $name
+ * @property string $key
  * @property string $parent_id
  * @property string $level
  * @property string $description
@@ -33,11 +34,12 @@ class Category extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name', 'status'], 'required'],
+            [['name', 'status', 'key'], 'required'],
             [['parent_id', 'sort', 'status', 'type', 'updated_at', 'created_at', 'level'], 'integer'],
             [['name'], 'string', 'max' => 50],
+            [['key'], 'string', 'max' => 20],
             [['description'], 'string', 'max' => 128],
-            [['name', 'description'], 'filter', 'filter' => function ($value) {
+            [['name', 'description', 'key'], 'filter', 'filter' => function ($value) {
                 return htmlspecialchars($value);
             }],
             ['parent_id', 'compare', 'compareAttribute' => 'id', 'operator' => '!='],
@@ -59,18 +61,19 @@ class Category extends \yii\db\ActiveRecord
     }
 
     /**
-     * @param int $id   对象id
+     * @param int $id 对象id
      * @return null|static
      * @throws NotFoundHttpException
      */
-    public static function findOrNew($id){
-        if(!empty($id)){
-            if(($model = self::findOne($id)) !== null){
+    public static function findOrNew($id)
+    {
+        if (!empty($id)) {
+            if (($model = self::findOne($id)) !== null) {
                 return $model;
-            }else{
+            } else {
                 throw new NotFoundHttpException('指定对象没有找到');
             }
-        }else{
+        } else {
             $model = self::initNew();
             return $model;
         }
@@ -106,12 +109,12 @@ class Category extends \yii\db\ActiveRecord
     public function beforeSave($insert)
     {
         if (parent::beforeSave($insert)) {
-            if(!$this->parent_id){
+            if (!$this->parent_id) {
                 $this->parent_id = 0;
             }
             if ($this->parent) {
                 $this->level = $this->parent->level + 1;
-            }else{
+            } else {
                 $this->level = 1;
             }
             return true;

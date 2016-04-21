@@ -13,6 +13,7 @@ use yii\helpers\ArrayHelper;
  *
  * @property string $id
  * @property string $title
+ * @property string $summary
  * @property string $image
  * @property string $source
  * @property string $category_id
@@ -64,13 +65,15 @@ class News extends \yii\db\ActiveRecord
             [['body'], 'string'],
             [['title', 'source', 'child_title'], 'string', 'max' => 100],
             [['image', 'attach_file'], 'string', 'max' => 250],
-            [['title', 'body'], 'filter', 'filter' => function ($value) {
+            [['summary'], 'string', 'max' => 200],
+            [['title', 'body', 'summary'], 'filter', 'filter' => function ($value) {
                 return htmlspecialchars($value);
             }],
         ];
     }
 
-    public static function initNew(){
+    public static function initNew()
+    {
         $model = new self();
         $model->sort = 0;
         $model->category = [];
@@ -118,11 +121,11 @@ class News extends \yii\db\ActiveRecord
 
     public function afterSave($insert, $changedAttributes)
     {
-        if (count($this->category)>0) {
+        if (count($this->category) > 0) {
             //保存之后添加分类
             foreach ($this->category as $id) {
-                $category = Category::find()->where(['id'=>$id,'type'=>Category::STATUS_ACTIVE])->one();
-                if($category){
+                $category = Category::find()->where(['id' => $id, 'type' => Category::STATUS_ACTIVE])->one();
+                if ($category) {
                     ItemCategory::addItem($this->id, $category);
                 }
             }
@@ -152,7 +155,7 @@ class News extends \yii\db\ActiveRecord
     {
         $item_category = $this->getItemCategories();
         if ($item_category) {
-            return Category::find()->where(['in', 'id', ArrayHelper::getColumn($item_category, 'category_id')])->andWhere(['type' => self::CATEGORY_TYPE_ARTICLE,'status'=>Category::STATUS_ACTIVE])->all();
+            return Category::find()->where(['in', 'id', ArrayHelper::getColumn($item_category, 'category_id')])->andWhere(['type' => self::CATEGORY_TYPE_ARTICLE, 'status' => Category::STATUS_ACTIVE])->all();
         }
         return [];
     }

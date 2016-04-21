@@ -47,6 +47,13 @@ $this->title = '添加/编辑分类';
                 </div>
             </div>
             <div class="control-group">
+                <label class="control-label">分类KEY</label>
+                <div class="controls">
+                    <?= $form->field($model, 'key', ['template' => '{input}', 'inputOptions' => ['autocomplete' => "off", 'class' => 'm-wrap span3', 'placeholder' => '分类KEY']])->textInput() ?>
+                    <?= $form->field($model, 'key', ['template' => '{error}']); ?>
+                </div>
+            </div>
+            <div class="control-group">
                 <label class="control-label">分类简介</label>
                 <div class="controls">
                     <?= $form->field($model, 'description', ['template' => '{input}', 'inputOptions' => ['autocomplete' => "off", 'class' => 'm-wrap span12', 'placeholder' => '分类简介']])->textInput() ?>
