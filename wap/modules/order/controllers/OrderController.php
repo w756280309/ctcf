@@ -10,7 +10,7 @@ use common\models\contract\ContractTemplate;
 use common\models\order\OnlineOrder;
 use common\service\PayService;
 use common\core\UserAccountCore;
-use common\core\OrderCore;
+use common\models\order\OrderManager;
 
 class OrderController extends BaseController
 {
@@ -60,9 +60,9 @@ class OrderController extends BaseController
         if ($ret['code'] != PayService::ERROR_SUCCESS) {
             return $ret;
         }
-        $ordercore = new OrderCore();
+        $orderManager = new OrderManager();
 
-        return $ordercore->createOrder($sn, $money,  $this->getAuthedUser()->id);
+        return $orderManager->createOrder($sn, $money,  $this->getAuthedUser()->id);
     }
 
     /**
