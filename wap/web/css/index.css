@@ -212,6 +212,8 @@ i,em{
     color: #fe0000;
 }
 .column-content .col-xs-2 p {
+    width: 106%;
+    margin-left: -3%;
     margin-top: 10px;
     font-size: 16px;
      height: 32px;

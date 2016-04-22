@@ -12,13 +12,13 @@ $this->title = '修改登录密码';
     <div class="row sm-height border-bottom">
             <div class="col-xs-3 safe-txt text-align-ct">原密码</div>
             <div class="col-xs-9 safe-lf text-align-lf">
-                <input type="password" id="password" name="EditpassForm[password]" maxlength="20" placeholder="请输入原密码">
+                <input type="password" id="password" class="change-input" name="EditpassForm[password]" maxlength="20" placeholder="请输入原密码">
             </div>
         </div>
         <div class="row sm-height border-bottom">
             <div class="col-xs-3 safe-txt text-align-ct">新密码</div>
             <div class="col-xs-7 safe-lf text-align-lf">
-                <input type="password" id="new_pass" placeholder="请输入6到20位的新密码" name="EditpassForm[new_pass]" maxlength="20">
+                <input type="password" id="new_pass" class="change-input" placeholder="请输入6到20位的新密码" name="EditpassForm[new_pass]" maxlength="20">
             </div>
             <div class="col-xs-2 eye text-align-ct col">
                 <img src="<?= ASSETS_BASE_URI ?>images/eye-close.png"  align="absmiddle" alt=" 闭眼" >
@@ -27,7 +27,7 @@ $this->title = '修改登录密码';
         <div class="row sm-height border-bottom">
             <div class="col-xs-3 safe-txt text-align-ct">验证码</div>
             <div class="col-xs-5 safe-lf" style="padding-right: 0;">
-                <input type="text" id="sms" placeholder="请输入验证码" name="EditpassForm[verifyCode]" maxlength="4" >
+                <input type="text" id="sms" class="change-input" placeholder="请输入验证码" name="EditpassForm[verifyCode]" maxlength="4" >
             </div>
             <div class="col-xs-4 yz-code text-align-rg col">
                 <?= $form->field($model, 'verifyCode', ['inputOptions' => ['style' => 'height: 40px']])->widget(Captcha::className(), [
@@ -38,7 +38,7 @@ $this->title = '修改登录密码';
         <div class="row login-sign-btn">
             <div class="col-xs-3"></div>
             <div class="col-xs-6 text-align-ct">
-                <input id="editpassbtn" class="btn-common btn-normal" style="margin-top:40px; background: #F2F2F2" type="button" value="确认重置">
+                <input id="editpassbtn"  class="btn-common btn-normal" style="margin-top:40px; background: #F2F2F2" type="button" value="确认重置">
             </div>
             <div class="col-xs-3"></div>
         </div>
@@ -127,4 +127,3 @@ $this->title = '修改登录密码';
         });
     }
 </script>
-

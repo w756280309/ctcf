@@ -10,13 +10,13 @@ $this->title="开通资金托管账户";
         <input name="_csrf" type="hidden" id="_csrf" value="<?= Yii::$app->request->csrfToken ?>">
         <div class="row kahao">
             <div class="hidden-xs col-sm-1"></div>
-            <div class="col-xs-3 col-sm-1">真实姓名</div>
+            <div class="col-xs-3 col-sm-2">真实姓名</div>
             <div class="col-xs-9 col-sm-8"><input type="text" id="real_name" name='User[real_name]' placeholder="请输入您的真实姓名"/></div>
             <div class="hidden-xs col-sm-1"></div>
         </div>
         <div class="row kahao">
             <div class="hidden-xs col-sm-1"></div>
-            <div class="col-xs-3 col-sm-1">身份证号</div>
+            <div class="col-xs-3 col-sm-2">身份证号</div>
             <div class="col-xs-9 col-sm-8"><input type="text" id="idcard" name='User[idcard]' placeholder="请输入您的身份证号"/></div>
             <div class="hidden-xs col-sm-1"></div>
         </div>
@@ -122,4 +122,3 @@ $this->title="开通资金托管账户";
         })
     }
     </script>
-

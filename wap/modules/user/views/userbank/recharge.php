@@ -44,7 +44,7 @@ $this->title="充值";
         <input name="_csrf" type="hidden" id="_csrf" value="<?= Yii::$app->request->csrfToken ?>">
         <input name="from" type="hidden" value="<?= Yii::$app->request->get('from'); ?>">
         <div class="row kahao">
-            <div class="col-xs-3 col-sm-1">充值金额</div>
+            <div class="col-xs-3 col-sm-2">充值金额</div>
             <div class="col-xs-9 col-sm-8 safe-lf"><input type="text" id="fund"  name='RechargeRecord[fund]' placeholder="输入充值金额"/></div>
         </div>
         <!--  当快捷充值被禁用,需要显示提示信息 -->
@@ -137,5 +137,3 @@ $this->title="充值";
             });
         }
     </script>
-
-

@@ -328,6 +328,11 @@ a:hover {
 .page_padding div {
     padding: 0px 20px;
 }
+.change-input {
+    height: 26px;
+    line-height: 26px;
+    overflow: hidden;
+}
 .reset {
     opacity: 0.5;
 }

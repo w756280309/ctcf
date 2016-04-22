@@ -451,3 +451,15 @@ a.block {
 a.block:hover {
     text-decoration: none;
 }
+.back-btns {
+    width: 16px;
+    height: 16px;
+    border-left: 2px solid #fff;
+    border-top:2px solid #fff;
+    transform: rotate(-45deg);
+    -webkit-transform: rotate(-45deg);
+    -o-transform: rotate(-45deg);
+    -moz-transform: rotate(-45deg);
+    margin: 0 auto;
+    margin-top: 17px;
+}
