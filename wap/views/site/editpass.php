@@ -4,7 +4,7 @@ use yii\captcha\Captcha;
 
 $this->title = '修改登录密码';
 ?>
-<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/setting.css">
+<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/setting.css?v=20160422">
 
 <div class="row kongxi">
     <?php $form = ActiveForm::begin(['id' => 'editpassform', 'action' => '/site/editpass', 'options' => ['class' => 'cmxform']]); ?>
@@ -81,7 +81,7 @@ $this->title = '修改登录密码';
             var vals = $('#editpassform').serialize();
 
             $(this).attr('disabled', true);
-            $(this).removeClass("btn-normal").addClass("btn-press");
+            $(this).addClass("reset");
             var xhr = $.post($('#editpassform').attr("action"), vals, function (data) {
                 if (data.code !== 0) {
                     toast(data.message, function() {
@@ -95,7 +95,7 @@ $this->title = '修改登录密码';
             });
 
             xhr.always(function() {
-                $('#editpassbtn').removeClass("btn-press").addClass("btn-normal");
+                $('#editpassbtn').removeClass("reset");
                 $('#editpassbtn').attr('disabled', false);
             });
         });

@@ -328,3 +328,6 @@ a:hover {
 .page_padding div {
     padding: 0px 20px;
 }
+.reset {
+    opacity: 0.5;
+}
