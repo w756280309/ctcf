@@ -7,6 +7,11 @@
             "": "lib/"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "Test\\": "tests/"
+        }
+    },
     "minimum-stability": "stable",
     "require": {
         "php": ">=5.4.0",
