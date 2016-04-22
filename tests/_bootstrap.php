@@ -10,7 +10,6 @@ Yii::setAlias('wap', dirname(__DIR__).'/wap');
 Yii::setAlias('borrower', dirname(__DIR__).'/borrower');
 Yii::setAlias('console', dirname(__DIR__).'/console');
 Yii::setAlias('api', dirname(__DIR__).'/api');
-Yii::setAlias('Test', dirname(__DIR__).'/tests');
 
 $config = require(__DIR__.'/_config.php');
 $localConfigFile = __DIR__.'/_config-local.php';
