@@ -1,0 +1,1 @@
+ALTER TABLE `adv` ADD COLUMN `isDisabledInApp` tinyint(1) UNSIGNED NOT NULL DEFAULT 0 COMMENT '是否在手机APP端显示' AFTER `del_status`;

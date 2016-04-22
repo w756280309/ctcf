@@ -20,7 +20,7 @@ $this->registerJsFile('/js/swfupload/handlers.js', ['depends' => 'yii\web\YiiAss
             <ul class="breadcrumb">
                     <li>
                         <i class="icon-home"></i>
-                        <a href="/adv/adv/index">运营管理</a> 
+                        <a href="/adv/adv/index">运营管理</a>
                         <i class="icon-angle-right"></i>
                     </li>
                     <li>
@@ -29,19 +29,19 @@ $this->registerJsFile('/js/swfupload/handlers.js', ['depends' => 'yii\web\YiiAss
                     </li>
                     <li>
                         <a href="/adv/adv/index">首页轮播</a>
-                        <i class="icon-angle-right"></i>                    
+                        <i class="icon-angle-right"></i>
                     </li>
                     <li>
-                        <a href="javascript:void(0);">添加</a>                    
+                        <a href="javascript:void(0);">添加</a>
                     </li>
             </ul>
         </div>
-        
+
 
 <div class="portlet-body form">
         <?php $form = ActiveForm::begin(['id' => 'adv_form', 'action' => "/adv/adv/edit?id=" . $model->id,'options' => ['class'=>'form-horizontal form-bordered form-label-stripped']]); ?>
-    
-     
+
+
 
     <?php if($model->id){ ?>
     <div class="control-group">
@@ -49,31 +49,37 @@ $this->registerJsFile('/js/swfupload/handlers.js', ['depends' => 'yii\web\YiiAss
         <div class="controls"><?= $model->sn ?></div>
     </div>
     <?php } ?>
-    
-    
+
+
     <div class="control-group">
         <label class="control-label">标题</label>
-        <div class="controls">                           
+        <div class="controls">
                 <?= $form->field($model, 'title', ['template' => '{input}','inputOptions'=>['autocomplete'=>"off",'class'=>'m-wrap span12','placeholder'=>'标题']])->textInput() ?>
                 <?= $form->field($model, 'title', ['template' => '{error}']) ?>
              </div>
     </div>
-    
-    
-    
+
+
+
     <div class="control-group">
         <label class="control-label">描述</label>
-        <div class="controls">                           
+        <div class="controls">
                 <?= $form->field($model, 'description', ['template' => '{input}','inputOptions'=>['autocomplete'=>"off",'class'=>'m-wrap span12','placeholder'=>'描述']])->textarea(['rows'=>3]) ?>
                 <?= $form->field($model, 'description', ['template' => '{error}']) ?>
              </div>
     </div>
-    
-    
-    
+
+    <div class="control-group">
+        <label class="control-label">App端不显示</label>
+        <div class="controls">
+                <?= $form->field($model, 'isDisabledInApp', ['template' => '{input}'])->checkBox(['autocomplete'=>"on"]) ?>
+                <?= $form->field($model, 'isDisabledInApp', ['template' => '{error}']) ?>
+             </div>
+    </div>
+
 <div class="control-group">
     <label class="control-label">上传图片</label>
-    <div class="controls">   
+    <div class="controls">
         <?= $form->field($model, 'image', ['template' => '{input}'])->hiddenInput(['id'=>"hidimage"]) ?>
             <div style="width: 180px; height: 18px; border: solid 1px #7FAAFF; background-color: #C5D9FF; padding: 2px;">
                 <span id="spanButtonPlaceholder_baoli"></span>
@@ -85,41 +91,41 @@ $this->registerJsFile('/js/swfupload/handlers.js', ['depends' => 'yii\web\YiiAss
                 <?php }?>
             </div>
     </div>
-    <div class="controls"> 
+    <div class="controls">
         <span style="color:red">图片大小不超过2M，只限于jpg格式图片,并且大小限定为：高350px,宽750px
             <?= $form->field($model, 'image', ['template' => '{error}']) ?>
         </span>
     </div>
 </div>
-    
+
     <div class="control-group">
         <label class="control-label">链接</label>
-        <div class="controls">                           
+        <div class="controls">
                 <?= $form->field($model, 'link', ['template' => '{input}','inputOptions'=>['autocomplete'=>"off",'class'=>'m-wrap span12','placeholder'=>'链接']])->textarea(['rows'=>3]) ?>
                 <?= $form->field($model, 'link', ['template' => '{error}']) ?>
              </div>
     </div>
-    
-    
+
+
     <div class="control-group">
         <label class="control-label">显示顺序</label>
-        <div class="controls">                           
+        <div class="controls">
             <?= $form->field($model, 'show_order', ['template' => '{input}','inputOptions'=>['autocomplete'=>"off",'class'=>'m-wrap span12','placeholder'=>'显示顺序']])->textarea(['rows'=>3]) ?>
             <?= $form->field($model, 'show_order', ['template' => '{error}']) ?>
         </div>
     </div>
-                              
+
         <!--普通提交-->
         <div class="form-actions">
 
                     <button type="submit" class="btn blue"><i class="icon-ok"></i> 提交</button>
 
-                    <a href="/adv/adv/index" class="btn">取消</a> 
+                    <a href="/adv/adv/index" class="btn">取消</a>
 
         </div>
-        <?php $form->end(); ?> 
+        <?php $form->end(); ?>
     </div>
-                                    
+
 </div>
 
 <!--<style type="text/css">
@@ -135,16 +141,16 @@ $this->registerJsFile('/js/swfupload/handlers.js', ['depends' => 'yii\web\YiiAss
 //    $('#adv-pos_id').change(function(){
 //        showPosInfo($(this).val())
 //    });
-//    
+//
 //    function showPosInfo(i){
 //        $('.h').hide();
 //        $('#l_'+i).show();
 //    }
-    
+
 	var swfu;
 	var swfu_baoli;
 	var swfu_gongguan;
-	window.onload = function () 
+	window.onload = function ()
 	{
 		swfu_baoli = new SWFUpload({
 			// Backend Settings
@@ -175,19 +181,19 @@ $this->registerJsFile('/js/swfupload/handlers.js', ['depends' => 'yii\web\YiiAss
 			flash_url : "/js/swfupload/swfupload.swf",
 			flash9_url : "/js/swfupload/swfupload_fp9.swf",
 
-			custom_settings : 
+			custom_settings :
 			{
                             upload_target : "divFileProgressContainer_baoli",
 			},
 			debug: false
 		});
-		
-		
-			
 
-		
+
+
+
+
 	};
-	
+
 	function delimg(id,img,obj)
 	{
 		var status=confirm("是否确定删除！");
@@ -206,18 +212,18 @@ $this->registerJsFile('/js/swfupload/handlers.js', ['depends' => 'yii\web\YiiAss
 			});
 		}
 	}
-	
-$(function(){ 
+
+$(function(){
     $('.ajax_button').click(function(){
        vals = $("#adv_form").serialize();
-        $.post($("#adv_form").attr("action"), vals, function (data) {  
-            
+        $.post($("#adv_form").attr("action"), vals, function (data) {
+
            res(data,"/adv/adv/index");
-            
-        });  
+
+        });
     })
 
-});	
+});
 </script>
 
 <?php $this->endBlock(); ?>

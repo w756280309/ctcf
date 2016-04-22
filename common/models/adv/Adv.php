@@ -47,8 +47,8 @@ class Adv extends ActiveRecord
     public function scenarios()
     {
         return [
-            'update' => ['id', 'sn', 'title', 'pos_id', 'image', 'show_order', 'link', 'description', 'del_status'],
-            'create' => ['pos_id', 'sn', 'title', 'image', 'show_order', 'link', 'description', 'del_status'],
+            'update' => ['id', 'sn', 'title', 'pos_id', 'image', 'show_order', 'link', 'description', 'del_status', 'isDisabledInApp'],
+            'create' => ['pos_id', 'sn', 'title', 'image', 'show_order', 'link', 'description', 'del_status', 'isDisabledInApp'],
         ];
     }
 
@@ -87,6 +87,7 @@ class Adv extends ActiveRecord
             'image' => '图片',
             'pos_id' => '位置id',
             'status' => '是否显示',
+            'isDisabledInApp' => '',
             'link' => '链接',
             'del_status' => '是否删除',
             'creator_id' => '创建者管理员id',
