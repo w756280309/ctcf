@@ -1,5 +1,4 @@
-
-DROP TABLE IF EXISTS `lenderStats`;
+DROP TABLE IF EXISTS `LenderStats`;
 
 CREATE TABLE `LenderStats` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
