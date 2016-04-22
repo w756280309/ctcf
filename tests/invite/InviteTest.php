@@ -24,14 +24,6 @@ class InviteTest extends YiiAppTestCase
         $stubrequest = $this->getInviterMock();
         $this->assertEquals('yes', InviteHelper::extractToken($stubrequest));//检查token是否有效
     }
-    /**
-     * 根据邀请链接获取邀请Invite对象
-     * 邀请链接生成的时候必定对应一个用户.
-     */
-    public function testGetInviteObject()
-    {
-        $this->assertTrue(null !== InviteHelper::findInviterByToken('yzm'));
-    }
 
     /**
      * 创建一个邀请数据是否成功
