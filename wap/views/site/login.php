@@ -69,7 +69,7 @@ $this->title = '登录';
                     return false;
                 }
                 var tel = $('#iphone').val();
-                var reg = /^0?1[3|4|5|6|8][0-9]\d{8}$/;
+                var reg = /^0?1[3|4|5|6|7|8][0-9]\d{8}$/;
                 if (!reg.test(tel)) {
                     toast('手机号格式错误');
                     $(this).removeClass("btn-press").addClass("btn-normal");

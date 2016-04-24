@@ -86,7 +86,7 @@ $this->params['breadcrumbs'][] = $this->title;
             return false;
         }
         var tel = $('#iphone').val();
-        reg = /^0?1[3|4|5|6|8][0-9]\d{8}$/;
+        reg = /^0?1[3|4|5|6|7|8][0-9]\d{8}$/;
         if (!reg.test(tel)) {
             toast('手机号格式错误');
             $("#signup-btn").removeClass("btn-press").addClass("btn-normal");
