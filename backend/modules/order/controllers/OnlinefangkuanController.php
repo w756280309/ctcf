@@ -130,12 +130,8 @@ class OnlinefangkuanController extends BaseController
             return ['res' => 0, 'msg' => 'The borrower account info is not existed.'];
         }
 
-        $fee = \Yii::$app->params['drawFee'];
-        if (empty($fee)) {
-            return ['res' => 0, 'msg' => 'the fee info is not existed.'];
-        }
-
-        $draw = DrawManager::initDraw($account, bcsub($onlineFangkuan->order_money, $fee, 2), $fee);
+        //融资方放款,不收取手续费
+        $draw = DrawManager::initDraw($account, $onlineFangkuan->order_money);
         if (!$draw) {
             return ['res' => 0, 'msg' => '提现申请失败'];
         }

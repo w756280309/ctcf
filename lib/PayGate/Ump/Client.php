@@ -212,7 +212,7 @@ class Client
 
         return $this->apiUrl.'?'.$params;
     }
-    
+
     /**
      * 申请提现.
      *
@@ -456,8 +456,8 @@ class Client
             'amount' => $ord->getAmount() * 100,
         ];
         return $this->doRequest($data);
-    }    
-    
+    }
+
     /**
      * 4.3.3 标的转账【由标的账户转到借款人同步请求】.
      *
@@ -613,7 +613,7 @@ class Client
             'mer_date' => date('Ymd', $draw->getTxDate()), //商户生成订单的日期，格式YYYYMMDD
             'withdraw_mer_id' => $draw->getEpayUserId(),
             'amount' => $draw->getAmount() * 100, //单位为分
-            'com_amt_type' => '1',
+            'com_amt_type' => '2',    //手续费由温都金服平台承担
         ];
 
         return $this->doRequest($data);
