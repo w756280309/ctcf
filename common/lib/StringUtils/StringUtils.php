@@ -12,7 +12,7 @@ class StringUtils
     public static function obfsIdCardNo($idCardNo)
     {
         if (empty($idCardNo) || !is_string($idCardNo)) {    //验证身份证号的有效性,包括值和格式
-            return $idCardNo;
+            return '';
         }
 
         $length = strlen($idCardNo);
@@ -35,7 +35,7 @@ class StringUtils
     public static function obfsMobileNumber($mobileNumber)
     {
         if (empty($mobileNumber) || !is_string($mobileNumber)) {   //验证手机号的有效性,包括值和格式
-            return $mobileNumber;
+            return '';
         }
 
         if (11 !== strlen($mobileNumber)) {   //验证手机号长度
