@@ -199,6 +199,9 @@ $('#x-purchase').on('click', function(e) {
     }
     $this.data('x-purchase-clicked', true);
     var xhr = subForm2('#toorderform');
+    xhr.always(function() {
+        $this.data('x-purchase-clicked', false);
+    });
 });
 
             // 新的
