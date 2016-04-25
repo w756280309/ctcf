@@ -411,7 +411,7 @@ class LenderStats extends \yii\db\ActiveRecord
             $record .= implode("\t" . ',', $val) . "\n";
         }
         if (null !== $record) {
-            $record = iconv('utf-8', 'gb2312', $record);//转换编码
+            $record = iconv('utf-8', 'GB18030', $record);//转换编码
             header('Content-Disposition: attachment; filename="LenderStats_' . date('YmdHis') . '.csv"');
             header('Content-Length: ' . strlen($record)); // 内容的字节数
             echo $record;
