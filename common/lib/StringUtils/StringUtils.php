@@ -12,12 +12,12 @@ class StringUtils
     public static function obfsIdCardNo($idCardNo)
     {
         if (empty($idCardNo) || (!is_integer($idCardNo) && !is_string($idCardNo))) {    //验证身份证号的有效性,包括值和格式
-            return null;
+            return $idCardNo;
         }
 
         $length = strlen($idCardNo);
         if (!in_array($length, [15, 18])) {    //验证身份证号长度有效性
-            return null;
+            return $idCardNo;
         }
 
         if (15 === $length) {    //15位身份证号替换规则
@@ -35,11 +35,11 @@ class StringUtils
     public static function obfsMobileNumber($mobileNumber)
     {
         if (empty($mobileNumber) || (!is_integer($mobileNumber) && !is_string($mobileNumber))) {   //验证手机号的有效性,包括值和格式
-            return null;
+            return $mobileNumber;
         }
 
         if (11 !== strlen($mobileNumber)) {   //验证手机号长度
-            return null;
+            return $mobileNumber;
         }
 
         return substr_replace($mobileNumber, '******', 3, 6);
