@@ -21,6 +21,8 @@ BaiduTongjiHelper::registerTo($this, BaiduTongjiHelper::WAP_KEY);
     <script src="<?= ASSETS_BASE_URI ?>js/jquery.js"></script>
     <script src="<?= ASSETS_BASE_URI ?>js/common.js?v=160407"></script>
     <script src="<?= ASSETS_BASE_URI ?>js/lib.js?v=160412"></script>
+    <script src="<?= ASSETS_BASE_URI ?>js/jquery.cookie.js?v=160424"></script>
+    <script src="<?= ASSETS_BASE_URI ?>js/hmsr.js?v=160424"></script>
     <script>
     $(function() {
         $(document).ajaxSend(function(event, jqXHR, settings) {

@@ -14,7 +14,8 @@ $this->registerJsFile(ASSETS_BASE_URI . 'js/jquery.classyloader.js', ['depends' 
 $this->registerJsFile(ASSETS_BASE_URI . 'js/index.js?v=20160419', ['depends' => 'yii\web\JqueryAsset', 'position' => 1]);
 $this->registerCssFile(ASSETS_BASE_URI . 'css/index.css?v=20160419', ['depends' => 'frontend\assets\WapAsset']);  //加载在depends之后
 $this->registerCssFile(ASSETS_BASE_URI . 'css/first.css', ['depends' => 'frontend\assets\WapAsset']);
-
+$this->registerJsFile(ASSETS_BASE_URI . 'js/jquery.cookie.js?v=20160425', ['depends' => 'yii\web\JqueryAsset', 'position' => 1]);//加载jquery.cookie
+$this->registerJsFile(ASSETS_BASE_URI . 'js/hmsr.js?v=20160425', ['depends' => 'yii\web\JqueryAsset', 'position' => 1]);//加载来源统计记录代码
 BaiduTongjiHelper::registerTo($this, BaiduTongjiHelper::WAP_KEY);
 ?>
 
