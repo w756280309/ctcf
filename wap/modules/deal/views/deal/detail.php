@@ -164,10 +164,10 @@ $deal['money'] = rtrim(rtrim($deal['money'], '0'), '.');
 
 
             function subForm2(form){
-                vals = $(form).serialize();
+                //vals = $(form).serialize();
                 to = $(form).attr("data-to");//设置如果返回错误，是否需要跳转界面
 
-                var xhr = $.post($(form).attr("action"), vals, function (data) {
+                var xhr = $.get($(form).attr("action"), function (data) {
                     if(data.code!=0&&to==1&&data.tourl!=undefined){
                         if(data.message=='请登录'){
                             toast(data.message, function() {
