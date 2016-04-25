@@ -8,6 +8,7 @@ use common\models\product\OnlineProduct;
 use common\models\order\OnlineOrder;
 use common\service\PayService;
 use common\controllers\HelpersTrait;
+use common\lib\StringUtils\StringUtils;
 
 class DealController extends Controller
 {
@@ -36,7 +37,9 @@ class DealController extends Controller
         $count = $data->count();
         $size = 5;
         $pages = new Pagination(['totalCount' => $count, 'pageSize' => $size]);
-        $deals = $data->offset(($page - 1) * $size)->limit($pages->limit)->orderBy('recommendTime desc, sort asc, yield_rate desc, id desc')->asArray()->all();
+        $deals = $data->offset(($page - 1) * $size)->limit($pages->limit)
+            ->orderBy('recommendTime desc, sort asc, finish_rate desc, id desc')
+            ->asArray()->all();
         foreach ($deals as $key => $val) {
             $dates = Yii::$app->functions->getDateDesc($val['start']);
             $deals[$key]['start'] = date('H:i', $val['start']);
@@ -115,9 +118,9 @@ class DealController extends Controller
             return ['orders' => [], 'code' => 1, 'message' => 'pid参数不能为空'];
         }
 
-        $data = OnlineOrder::getOrderListByCond(['online_pid' => $pid, 'status' => 1], 'mobile,order_time time,order_money money');
+        $data = OnlineOrder::find()->where(['online_pid' => $pid, 'status' => 1])->select('mobile,order_time time,order_money money')->orderBy("id desc")->asArray()->all();
         foreach ($data as $key => $dat) {
-            $data[$key]['mobile'] = substr_replace($dat['mobile'], '****', 3, 4);
+            $data[$key]['mobile'] = StringUtils::obfsMobileNumber($dat['mobile']);
             $data[$key]['time'] = date('Y-m-d', $dat['time']);
             $data[$key]['his'] = date('H:i:s', $dat['time']);
             $data[$key]['money'] = rtrim(rtrim(number_format($dat['money'], 2), '0'), '.');

@@ -8,6 +8,7 @@ use common\models\user\RechargeRecord;
 use common\models\user\DrawRecord;
 use common\models\order\OnlineOrder;
 use common\models\user\UserAccount;
+use common\lib\StringUtils\StringUtils;
 
 /**
  * 用户统计.
@@ -81,7 +82,7 @@ class UserStats
             $data[$key]['created_at'] = date('Y-m-d H:i:s', $val['created_at']);
             $data[$key]['name'] = $val['real_name'];
             $data[$key]['mobile'] = $val['mobile']."\t";   //手机号后面加入tab键,防止excel表格打开时,显示为科学计数法
-            $data[$key]['idcard'] = $val['idcard']."\t";   //身份证号后面加入tab键,防止excel表格打开时,显示为科学计数法
+            $data[$key]['idcard'] = StringUtils::obfsIdCardNo($val['idcard']);    //隐藏身份证号信息,只保留生日信息
             $data[$key]['idcard_status'] = $val['idcard_status'];
             $data[$key]['mianmiStatus'] = $val['mianmiStatus'];
 

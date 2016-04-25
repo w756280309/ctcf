@@ -1,5 +1,6 @@
 <?php
 use common\models\user\User;
+use common\lib\StringUtils\StringUtils;
 ?>
 <?php $this->beginBlock('blockmain'); ?>
 
@@ -49,7 +50,7 @@ use common\models\user\User;
                 <li><span>投资时间</span><?php echo empty($tzTime)?"--":date("Y-m-d H:i:s",$tzTime);?></li>
             </ul>
             <ul class="breadcrumb_detail">
-                <li><span>身份证号</span><?=$userinfo['idcard']?></li>
+                <li><span>身份证号</span><?= StringUtils::obfsIdCardNo($userinfo['idcard']) ?></li>
                 <li><span>实名认证</span>
                     <?php
                         if($userinfo['idcard_status']=='-1'){
@@ -124,7 +125,7 @@ use common\models\user\User;
             </ul>
             <ul class="breadcrumb_detail">
                 <li><span>姓名</span><?=$userinfo['law_master']?></li>
-                <li><span>身份证号</span><?=$userinfo['law_master_idcard']?></li>
+                <li><span>身份证号</span><?= StringUtils::obfsIdCardNo($userinfo['law_master_idcard']) ?></li>
                 <li><span>联系电话</span><?=$userinfo['law_mobile']?></li>
             </ul>
             <ul class="breadcrumb_detail">
@@ -132,7 +133,7 @@ use common\models\user\User;
             </ul>
             <ul class="breadcrumb_detail">
                 <li><span>姓名</span><?=$userinfo['real_name']?></li>
-                <li><span>身份证号</span><?=$userinfo['idcard']?></li>
+                <li><span>身份证号</span><?= StringUtils::obfsIdCardNo($userinfo['idcard']) ?></li>
                 <li><span>联系电话</span><?=$userinfo['mobile']?></li>
             </ul>
             <ul class="breadcrumb_detail">
@@ -191,11 +192,4 @@ use common\models\user\User;
         font-size: 16px;
     }
 </style>
-
-<script type="text/javascript">
-    $(function(){
-
-    })
-</script>
 <?php $this->endBlock(); ?>
-

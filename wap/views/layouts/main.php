@@ -1,6 +1,7 @@
 <?php
 use yii\helpers\Html;
 use common\view\BaiduTongjiHelper;
+use common\lib\StringUtils\StringUtils;
 
 frontend\assets\WapAsset::register($this);
 BaiduTongjiHelper::registerTo($this, BaiduTongjiHelper::WAP_KEY);
@@ -40,7 +41,7 @@ BaiduTongjiHelper::registerTo($this, BaiduTongjiHelper::WAP_KEY);
     <!--header-->
     <div class="row account-title">
         <div class="col-xs-2 back"><img src="<?= ASSETS_BASE_URI ?>images/headpic.png" alt=""/></div>
-        <div class="col-xs-8 ">ID:<?= Yii::$app->user->identity->mobile ?></div>
+        <div class="col-xs-8 ">ID:<?= StringUtils::obfsMobileNumber(Yii::$app->user->identity->mobile) ?></div>
         <div class="col-xs-1 col"><a href="/system/system/setting" class="set">设置</a></div>
         <div class="col-xs-1"></div>
     </div>
