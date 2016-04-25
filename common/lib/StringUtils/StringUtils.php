@@ -6,12 +6,12 @@ class StringUtils
 {
     /**
      * 保留身份证号里面的生日信息,其他信息一律隐藏
-     * @param string|int $idCardNo 字符串格式或数字格式的身份证号
+     * @param string $idCardNo 字符串格式的身份证号
      * @return string 完成隐藏信息处理的身份证号字符串
      */
     public static function obfsIdCardNo($idCardNo)
     {
-        if (empty($idCardNo) || (!is_integer($idCardNo) && !is_string($idCardNo))) {    //验证身份证号的有效性,包括值和格式
+        if (empty($idCardNo) || !is_string($idCardNo)) {    //验证身份证号的有效性,包括值和格式
             return $idCardNo;
         }
 
@@ -29,12 +29,12 @@ class StringUtils
 
     /**
      * 隐藏手机号4-9位
-     * @param string|int $mobileNumber 字符串格式或数字格式的手机号
+     * @param string $mobileNumber 字符串格式的手机号
      * @return string 隐藏后的手机号字符串
      */
     public static function obfsMobileNumber($mobileNumber)
     {
-        if (empty($mobileNumber) || (!is_integer($mobileNumber) && !is_string($mobileNumber))) {   //验证手机号的有效性,包括值和格式
+        if (empty($mobileNumber) || !is_string($mobileNumber)) {   //验证手机号的有效性,包括值和格式
             return $mobileNumber;
         }
 
