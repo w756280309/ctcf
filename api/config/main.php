@@ -30,7 +30,6 @@ return [
                 'ordtx/<type:\d+>/<id:\d+>/ump' => 'v1/ordertx/ump',
                 'pos/notify' => 'v1/pos/notify',
                 'lenderstats' => 'v1/lender-stats/export',
-                'lenderstats_update' => 'v1/lender-stats/update',
                 'lenderstats_export' => 'v1/lender-stats/new-export',
                 'app/serverts' => 'v1/app/server/timestamp',
                 'app/logout' => 'v1/app/auth/logout',

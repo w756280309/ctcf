@@ -27,11 +27,4 @@ class LenderStatsController extends Controller
     {
         LenderStats::createCsvFile();
     }
-
-    /**
-     * 定时更新数据库
-     */
-    public function actionUpdate(){
-       LenderStats::updateData();
-    }
 }
