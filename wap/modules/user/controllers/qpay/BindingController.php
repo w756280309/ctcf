@@ -50,7 +50,7 @@ class BindingController extends BaseController
             }
             $acct_model->binding_sn = TxUtils::generateSn('B');
             $acct_model->epayUserId = $this->getAuthedUser()->epayUser->epayUserId;
-            QpayAcct::deleteAll(['uid' => $acct_model->uid, 'status' => 0]); //将之前的绑卡未处理的删掉
+            //QpayAcct::deleteAll(['uid' => $acct_model->uid, 'status' => 0]); //将之前的绑卡未处理的删掉
             $acct_model->save();
             $next = \Yii::$container->get('ump')->enableQpay($acct_model);//获取跳转页面
             return [
