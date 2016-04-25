@@ -52,7 +52,7 @@ class BankService
         if (($cond & self::IDCARDRZ_VALIDATE_N) && $user->idcard_status == User::IDCARD_STATUS_WAIT) {
             return ['tourl' => '/user/userbank/idcardrz', 'code' => 1, 'message' => '您还没有开通第三方资金托管账户，请前往开通'];
         }
-        
+
         if (($cond & self::MIANMI_VALIDATE) && $user->mianmiStatus == 0) {
             return ['tourl' => '/user/qpay/binding/umpmianmi', 'code' => 1, 'message' => '您还没有开通免密支付，请前往开通'];
         }
@@ -72,7 +72,7 @@ class BankService
             }
         }
 
-        return ['code' => 0];
+        return ['code' => 0, 'message' => null, 'tourl' => null];
     }
 
     /**
@@ -103,7 +103,7 @@ class BankService
         if (empty($card)) {
             return ['code' => 1, 'message' => 'card参数错误'];
         }
-        
+
         try {
             $bin = BankManager::getBankFromCardNo($card);
             if (!BankManager::isDebitCard($bin)) {
@@ -113,7 +113,7 @@ class BankService
         } catch (\Exception $ex) {
             return ['code' => 0, 'bank_id' => '', 'bank_name' => ''];
         }
-        
+
     }
 
     /**
