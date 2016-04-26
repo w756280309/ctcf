@@ -110,32 +110,32 @@ class SiteController extends Controller
 
         $deals = OnlineProduct::find()->where(['isPrivate' => 0, 'del_status' => OnlineProduct::STATUS_USE, 'online_status' => OnlineProduct::STATUS_ONLINE])
             ->andWhere('recommendTime != 0')
-            ->orderBy('recommendTime asc,sort asc, id desc')->all();
-        if (!$deals) {
-            throw new \yii\web\NotFoundHttpException('The production is not existed.');
-        }
+            ->orderBy('recommendTime asc, sort asc, id desc')
+            ->all();
 
-        $num = 0;
-        $key = 0;
         $deal = null;
-        foreach ($deals as $k => $val) {
-            ++$num;
-            if ($val['status'] < 3) {
-                $deal = $val;
-            } else {
-                $key = $k;
+        if (!empty($deals)) {    //当没有推荐标的时,返回null
+            $num = 0;
+            $key = 0;
+            foreach ($deals as $k => $val) {
+                ++$num;
+                if ($val['status'] < 3) {
+                    $deal = $val;
+                } else {
+                    $key = $k;
+                }
+            }
+
+            if (1 === $num) {
+                $deal = $deals[0];
+            }
+
+            if (empty($deal)) {
+                $deal = $deals[$key];
             }
         }
 
-        if (1 === $num) {
-            $deal = $deals[0];
-        }
-
-        if (empty($deal)) {
-            $deal = $deals[$key];
-        }
-
-        return $this->render('index', ['adv' => $adv, 'deals' => $deal]);
+        return $this->render('index', ['adv' => $adv, 'deal' => $deal]);
     }
 
     /**

@@ -31,8 +31,8 @@ $this->title="提现";
         <input name="flag" type="hidden" value="checktrade">
         <div class="row kahao">
             <div class="hidden-xs col-sm-1"></div>
-            <div class="col-xs-3 col-sm-1">提现金额</div>
-            <div class="col-xs-7 col-sm-8"><input id="money" type="text" name="DrawRecord[money]" placeholder="输入提现金额"/></div>
+            <div class="col-xs-4 col-sm-2">提现金额</div>
+            <div class="col-xs-7 col-sm-7"><input id="money" type="text" name="DrawRecord[money]" placeholder="输入提现金额"/></div>
             <div class="col-xs-1 col-sm-1">元</div>
             <div class="hidden-xs col-sm-1"></div>
         </div>
@@ -58,17 +58,6 @@ $this->title="提现";
     <script type="text/javascript">
         var csrf;
         $(function(){
-           var err = '<?= $data['code'] ?>';
-           var mess = '<?= $data['message'] ?>';
-           var tourl = '<?= $data['tourl'] ?>';
-           if(err === '1') {
-               toast(mess, function() {
-                   if (tourl !== '') {
-                       location.href = tourl;
-                   }
-               });
-           }
-
            csrf = $("meta[name=csrf-token]").attr('content');
            $('#tixianbtn').bind('click', function() {
                $(this).addClass("btn-press").removeClass("btn-normal");

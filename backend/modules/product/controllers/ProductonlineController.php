@@ -397,7 +397,7 @@ class ProductonlineController extends BaseController
                 }
 
                 if (!empty($model->recommendTime)) {
-                    $count = OnlineProduct::find()->where("recommendTime != 0")->count();
+                    $count = OnlineProduct::find()->where("recommendTime != 0")->andWhere(['isPrivate' => 0])->count();
 
                     if ($count > 1) {
                         $model->recommendTime = 0;
@@ -538,7 +538,7 @@ class ProductonlineController extends BaseController
         }
 
         if (!empty($deal->recommendTime)) {
-            $count = OnlineProduct::find()->where("recommendTime != 0")->count();
+            $count = OnlineProduct::find()->where("recommendTime != 0")->andWhere(['isPrivate' => 0])->count();
 
             if ($count <= 1) {
                 return ['code' => 0, 'message' => '推荐标的至少要有一个'];

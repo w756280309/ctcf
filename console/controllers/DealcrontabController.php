@@ -30,7 +30,7 @@ class DealcrontabController extends Controller
         $bc = new BcRound();
         foreach ($data as $dat) {
             if (!empty($dat['recommendTime'])) {
-                $count = OnlineProduct::find()->where("recommendTime != 0")->count();
+                $count = OnlineProduct::find()->where("recommendTime != 0")->andWhere(['isPrivate' => 0])->count();
 
                 if ($count > 1) {
                     $dat->recommendTime = 0;
