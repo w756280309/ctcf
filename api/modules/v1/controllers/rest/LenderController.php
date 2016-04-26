@@ -1,8 +1,9 @@
 <?php
 
-namespace api\modules\v1\controllers;
+namespace api\modules\v1\controllers\rest;
 
 use common\models\user\User;
+use api\modules\v1\controllers\Controller;
 
 /**
  * 用户API.

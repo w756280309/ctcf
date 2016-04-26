@@ -1,8 +1,8 @@
 <?php
 
-namespace api\modules\v1\controllers;
+namespace api\modules\v1\controllers\rest;
 
-use common\models\epay\EpayUser;
+use api\modules\v1\controllers\Controller;
 use common\models\user\User;
 
 class BorrowerController extends Controller

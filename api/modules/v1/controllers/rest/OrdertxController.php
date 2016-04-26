@@ -1,10 +1,11 @@
 <?php
 
-namespace api\modules\v1\controllers;
+namespace api\modules\v1\controllers\rest;
 
 use Yii;
 use common\models\order\OnlineOrder;
 use common\models\order\CancelOrder;
+use api\modules\v1\controllers\Controller;
 
 /**
  * 投标类交易API.
