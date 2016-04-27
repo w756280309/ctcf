@@ -526,6 +526,10 @@ TPL;
         //是否使用浮动利率设置。如果勾选，浮动利率可以填写。
         var isFlexRate = $('#onlineproduct-isflexrate');
         var rateSteps = $('#onlineproduct-ratesteps');
+        if(!rateSteps.val()){
+            rateSteps.val('');
+            rateSteps.attr('disabled', 'disabled');
+        }
         isFlexRate.bind('click', function () {
             if (true === $(this).parent().hasClass('checked')) {
                 rateSteps.val('');

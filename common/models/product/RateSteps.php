@@ -17,19 +17,47 @@ class RateSteps
     public static function parse($str)
     {
         $rateSteps = [];
-        if (empty($str) || !is_string($str)) {
+        if (!self::checkRateSteps($str)) {
             return $rateSteps;
         }
         $rates = explode(PHP_EOL, $str);
         foreach ($rates as $rate) {
-            if (preg_match('/^(\s*\d+\.?\d*\s*),(\s*\d+\.?\d*\s*)$/', $rate)) {
+            if (0 !== strlen($rate)) {
                 $data = explode(',', trim($rate));
-                if (isset($data[0]) && isset($data[1])) {
-                    $rateSteps[] = ['min' => trim($data[0]), 'rate' => trim($data[1])];
-                }
+                $rateSteps[] = ['min' => trim($data[0]), 'rate' => trim($data[1])];
             }
         }
         return $rateSteps;
+    }
+
+    /**
+     * 检查浮动利率字符串是否合法
+     * @param $rateSteps
+     * @return bool
+     */
+    public static function checkRateSteps($rateSteps)
+    {
+        if (!is_string($rateSteps) || empty($rateSteps)) {
+            return false;
+        }
+        $rates = explode(PHP_EOL, $rateSteps);
+        if (empty($rates)) {
+            return false;
+        }
+        foreach ($rates as $rate) {
+            if (0 === strlen($rate)) {
+                continue;
+            }
+            if (!preg_match('/^(\s*\d+\.?\d*\s*),(\s*\d+\.?\d*\s*)$/', $rate)) {
+                return false;
+            } else {
+                $data = explode(',', trim($rate));
+                if (!isset($data[0]) || !isset($data[1])) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     public static function getTopRate(array $config)

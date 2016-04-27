@@ -217,21 +217,12 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
     {
         $rateSteps = $this->rateSteps;
         $isFlexRate = $this->isFlexRate;
-        if ($isFlexRate) {
+        if (boolval($isFlexRate)) {
             if (empty($rateSteps)) {
                 $this->addError('rateSteps', '浮动利率不能为空');
             }
-            $rates = explode(PHP_EOL, $rateSteps);
-            if (empty($rates)) {
-                $this->addError('rateSteps', '浮动利率不能为空');
-            }
-            foreach ($rates as $rate) {
-                if (0 === strlen($rate)) {
-                    continue;
-                }
-                if (!preg_match('/^(\s*\d+\.?\d*\s*,)(\s*\d+\.?\d*\s*)$/', $rate)) {
-                    $this->addError('rateSteps', '浮动利率格式错误');
-                }
+            if (!RateSteps::checkRateSteps($rateSteps)) {
+                $this->addError('rateSteps', '浮动利率格式错误');
             }
         }
     }

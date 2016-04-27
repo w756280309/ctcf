@@ -11,7 +11,7 @@ $this->registerJs(<<<JS
     var qixian = "$qixian";
     var retmet = "$retmet";
     var sn = "$sn";
-    var isFlexRate = "$isFlexRate";
+    var isFlexRate = Boolean("$isFlexRate");
 JS
     , 1);
 

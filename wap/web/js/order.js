@@ -42,7 +42,7 @@ $(function () {
         if (!$.isNumeric(money)) {
             money = 0;
         }
-        if (1 === parseInt(isFlexRate)) {
+        if (isFlexRate) {
             $.post('/order/order/rate', {'sn': sn, '_csrf': csrf, 'amount': money}, function (data) {
                 if (true === data.res) {
                     rate = data.rate;
