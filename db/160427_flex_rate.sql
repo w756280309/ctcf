@@ -1,0 +1,2 @@
+ALTER TABLE `online_product` ADD COLUMN `isFlexRate` TINYINT(1) DEFAULT 0 NULL COMMENT '是否启用浮动利率';
+ALTER TABLE `online_product` ADD COLUMN `rateSteps` VARCHAR(500) DEFAULT NULL NULL COMMENT '浮动利率';

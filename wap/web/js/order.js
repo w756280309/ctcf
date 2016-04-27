@@ -42,12 +42,28 @@ $(function () {
         if (!$.isNumeric(money)) {
             money = 0;
         }
-        if (1 == parseInt(retmet)) {
-            $('.yuqishouyi').html(WDJF.numberFormat(accDiv(accMul(accMul(money, yr), qixian), 365), false) + "元");
+        if (1 === parseInt(isFlexRate)) {
+            $.post('/order/order/rate', {'sn': sn, '_csrf': csrf, 'amount': money}, function (data) {
+                if (true === data.res) {
+                    rate = data.rate;
+                } else {
+                    rate = yr;
+                }
+                if (1 == parseInt(retmet)) {
+                    $('.yuqishouyi').html(WDJF.numberFormat(accDiv(accMul(accMul(money, rate), qixian), 365), false) + "元");
+                } else {
+                    $('.yuqishouyi').html(WDJF.numberFormat(accDiv(accMul(accMul(money, rate), qixian), 12), false) + "元");
+                }
+            });
         } else {
-            $('.yuqishouyi').html(WDJF.numberFormat(accDiv(accMul(accMul(money, yr), qixian), 12), false) + "元");
+            if (1 == parseInt(retmet)) {
+                $('.yuqishouyi').html(WDJF.numberFormat(accDiv(accMul(accMul(money, yr), qixian), 365), false) + "元");
+            } else {
+                $('.yuqishouyi').html(WDJF.numberFormat(accDiv(accMul(accMul(money, yr), qixian), 12), false) + "元");
+            }
         }
+
     });
-})
+});
 
 

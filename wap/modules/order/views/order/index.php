@@ -1,9 +1,19 @@
 <?php
 $this->title="购买";
 
-$this->registerJs('var yr='.$deal->yield_rate, 1);
-$this->registerJs('var qixian='.$deal->expires, 1);
-$this->registerJs('var retmet='.$deal->refund_method, 1);
+$yr = $deal->yield_rate;
+$qixian = $deal->expires;
+$retmet = $deal->refund_method;
+$sn = $deal->sn;
+$isFlexRate = $deal->isFlexRate;
+$this->registerJs(<<<JS
+    var yr = "$yr";
+    var qixian = "$qixian";
+    var retmet = "$retmet";
+    var sn = "$sn";
+    var isFlexRate = "$isFlexRate";
+JS
+    , 1);
 
 $this->registerJsFile(ASSETS_BASE_URI.'js/order.js?v=20160413', ['depends' => 'yii\web\YiiAsset','position' => 1]);
 ?>

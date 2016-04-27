@@ -375,6 +375,28 @@ TPL;
         <!--/span-->
         </div>
 
+        <div class="row-fluid">
+            <div class="span6 ">
+                <div class="control-group">
+                    <label class="control-label">浮动利率</label>
+                    <div class="controls">
+                        <?= $form->field($model, 'rateSteps', ['template' => '<div class="input-append">{input}</div>', 'inputOptions'=>['placeholder'=>'浮动利率','maxlength'=>true]])->textarea(['rows'=>'5','cols'=>'250']) ?>
+                        <?= $form->field($model, 'rateSteps', ['template' => '{error}']); ?>
+                        <?=  $form->field($model, 'isFlexRate')->checkbox(['autocomplete' => 'on'])?>
+                    </div>
+                </div>
+            </div>
+            <div class="span6">
+                <div class="control-group">
+                    <label class="control-label">浮动利率示例</label>
+                    <div class="controls">
+                        1000,8<br/>
+                        2000,9
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <h3 class="form-section">项目合同信息</h3>
         <?=
         $form->field($model, 'contract_type', ['template' => '{error}']);
@@ -500,6 +522,18 @@ TPL;
             $('#onlineproduct-expires').next().html('(个月)');//当编辑项目的还款方式是：除了到期本息之外的任意的还款方式。单位都默认是个月
         <?php } ?>
         kindEdit();
+
+        //是否使用浮动利率设置。如果勾选，浮动利率可以填写。
+        var isFlexRate = $('#onlineproduct-isflexrate');
+        var rateSteps = $('#onlineproduct-ratesteps');
+        isFlexRate.bind('click', function () {
+            if (true === $(this).parent().hasClass('checked')) {
+                rateSteps.val('');
+                rateSteps.attr('disabled', 'disabled');
+            } else {
+                rateSteps.removeAttr('disabled');
+            }
+        })
     });
 
     //选择还款方式是到期本息的可以设置项目截止日以及宽限期。否则不可以设置

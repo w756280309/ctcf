@@ -15,6 +15,7 @@ use common\models\user\User;
 use common\service\PayService;
 use common\models\order\OnlineOrder;
 use common\models\order\OrderQueue;
+use common\models\product\RateSteps;
 
 /**
  * 订单manager.
@@ -77,7 +78,7 @@ class OrderManager
         if (!$resp->isSuccessful() || '2' !== $resp->get('tran_state')) {
             throw new \Exception('交易状态异常或者查询失败');
         }
-
+        $loan = Loan::findOne($order->online_pid);
         $transaction = Yii::$app->db->beginTransaction();
         $cancelOrder = CancelOrder::initForOrder($order, $ret_money);
         if (!$cancelOrder->save()) {
@@ -141,6 +142,20 @@ class OrderManager
             $transaction->rollBack();
             throw new \Exception('资金记录失败');
         }
+
+        //如果是阶梯利率
+        if ($loan->isFlexRate) {
+            $rateStepsConfig = RateSteps::parse($loan->rateSteps);//获取阶梯利率配置
+            $cur_usr_total_money = self::getTotalInvestment($loan, $order->user);//获取当前投标人对当前标的的总投资额
+            $rate = RateSteps::getRateForAmount($rateStepsConfig, $cur_usr_total_money);
+            if (!$rate) {
+                $rate = $loan->yield_rate;
+            } else {
+                $rate = $rate/100;
+            }
+            OnlineOrder::updateAll(["yield_rate" => $rate], ["online_pid" => $loan->id, "uid" => $order->user->id, "status" => OnlineOrder::STATUS_SUCCESS]);
+        }
+
         //联动标的转账
         $trans_resp = Yii::$container->get('ump')->loanTransferToLender($cancelOrder);
         if (!$trans_resp->isSuccessful()) {
@@ -378,6 +393,20 @@ class OrderManager
         $command = Yii::$app->db->createCommand('UPDATE '.Loan::tableName().' SET funded_money=funded_money+'.$order->order_money.' WHERE id='.$loan->id);
         $command->execute();//更新实际募集金额
         OrderQueue::updateAll(['status' => 1], 'orderSn='.$order->sn);
+
+        //如果是阶梯利率
+        if ($loan->isFlexRate) {
+            $rateStepsConfig = RateSteps::parse($loan->rateSteps);//获取阶梯利率配置
+            $cur_usr_total_money = self::getTotalInvestment($loan, $user);//获取当前投标人对当前标的的总投资额
+            $rate = RateSteps::getRateForAmount($rateStepsConfig, $cur_usr_total_money);
+            if (!$rate) {
+                $rate = $loan->yield_rate;
+            } else {
+                $rate = $rate/100;
+            }
+            OnlineOrder::updateAll(["yield_rate" => $rate], ["online_pid" => $loan->id, "uid" => $user->id, "status" => OnlineOrder::STATUS_SUCCESS]);
+        }
+
         //投标成功，向用户发送短信
         $message = [
             $user->real_name,
@@ -458,5 +487,11 @@ class OrderManager
         } else {
             return ['code' => PayService::ERROR_MONEY_FORMAT, 'message' => $res->get('ret_msg'), 'tourl' => '/order/order/ordererror?osn='.$order->sn];
         }
+    }
+
+    public static function getTotalInvestment(Loan $loan, User $user)
+    {
+        $total = OnlineOrder::find()->where(['status' => OnlineOrder::STATUS_SUCCESS, "uid" => $user->id, "online_pid" => $loan->id])->sum('order_money');
+        return null === $total ? 0 : $total;
     }
 }

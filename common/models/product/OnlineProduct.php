@@ -34,6 +34,8 @@ use P2pl\Borrower;
  * @property string $creator_id
  * @property string $create_at
  * @property string $updated_at
+ * @property string $isFlexRate
+ * @property string $rateSteps
  */
 class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
 {
@@ -94,7 +96,7 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
             'create' => ['title', 'sn', 'cid', 'money', 'borrow_uid', 'expires', 'expires_show', 'yield_rate', 'start_money', 'borrow_uid', 'fee', 'status',
                 'description', 'refund_method', 'account_name', 'account', 'bank', 'dizeng_money', 'start_date', 'end_date', 'full_time',
                 'is_xs', 'yuqi_faxi', 'order_limit', 'creator_id', 'del_status', 'status', 'isPrivate', 'allowedUids', 'finish_date', 'channel', 'jixi_time', 'sort',
-                'jiaxi', 'kuanxianqi', 'graceDays', ],
+                'jiaxi', 'kuanxianqi', 'graceDays', 'isFlexRate', 'rateSteps'],
         ];
     }
 
@@ -204,7 +206,34 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
             ['expires', 'checkExpires'],
             ['epayLoanAccountId', 'default', 'value' => ''],
             [['start_date', 'end_date', 'finish_date'], 'checkDate'],
+
+            ['isFlexRate', 'integer'],
+            ['rateSteps', 'string', 'max' => 500],
+            [['rateSteps', 'isFlexRate'], 'checkRateSteps'],
         ];
+    }
+
+    public function checkRateSteps()
+    {
+        $rateSteps = $this->rateSteps;
+        $isFlexRate = $this->isFlexRate;
+        if ($isFlexRate) {
+            if (empty($rateSteps)) {
+                $this->addError('rateSteps', '浮动利率不能为空');
+            }
+            $rates = explode(PHP_EOL, $rateSteps);
+            if (empty($rates)) {
+                $this->addError('rateSteps', '浮动利率不能为空');
+            }
+            foreach ($rates as $rate) {
+                if (0 === strlen($rate)) {
+                    continue;
+                }
+                if (!preg_match('/^(\s*\d+\.?\d*\s*,)(\s*\d+\.?\d*\s*)$/', $rate)) {
+                    $this->addError('rateSteps', '浮动利率格式错误');
+                }
+            }
+        }
     }
 
     public function checkDate()
@@ -315,6 +344,8 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
             'creator_id' => '创建者',
             'updated_at' => '创建时间',
             'created_at' => '更新时间',
+            'isFlexRate'=>'是否启用浮动利率',
+            'rateSteps'=>'浮动利率',
         ];
     }
 

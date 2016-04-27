@@ -2,8 +2,10 @@
 
 namespace app\modules\order\controllers;
 
+use common\models\product\RateSteps;
 use Yii;
 use app\controllers\BaseController;
+use yii\helpers\Html;
 use yii\web\Response;
 use common\models\product\OnlineProduct;
 use common\models\contract\ContractTemplate;
@@ -136,5 +138,32 @@ class OrderController extends BaseController
         $model[$key] = ContractTemplate::replaceTemplate($model[$key], $deal);
 
         return $this->render('agreement', ['model' => $model, 'key_f' => $key, 'content' => $model[$key]['content'], 'deal_id' => $deal_id]);
+    }
+
+    /**
+     * 根据投资金额和产品利率阶梯获取订单的利率
+     * @return array
+     */
+    public function actionRate()
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        if (Yii::$app->request->isPost) {
+            $sn = Html::encode(Yii::$app->request->post('sn'));
+            $amount = Html::encode(Yii::$app->request->post('amount'));
+            $product = OnlineProduct::find()->where(['sn' => $sn])->one();
+            if ($product && $amount) {
+                if (1 === $product->isFlexRate && !empty($product->rateSteps)) {
+                    $config = RateSteps::parse($product->rateSteps);
+                    if (!empty($config)) {
+                        $rate = RateSteps::getRateForAmount($config, $amount);
+                        if (false !== $rate) {
+                            return ['res' => true, 'rate' => $rate / 100];
+                        }
+                    }
+                }
+            }
+            return ['res' => false, 'rate' => false];
+        }
+        return ['res' => false, 'rate' => false];
     }
 }
