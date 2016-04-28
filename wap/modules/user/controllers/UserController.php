@@ -100,6 +100,8 @@ class UserController extends BaseController
             return new \yii\web\NotFoundHttpException();    //当对象为空时,抛出404异常
         }
 
+        $totalFund = OrderManager::getTotalInvestment($product, $this->getAuthedUser());
+
         $profit = null;
         if (!in_array($product->status, [2, 3, 7])) {
             $profit = OnlineRepaymentPlan::getTotalLixi($product, $deal);
@@ -110,7 +112,7 @@ class UserController extends BaseController
         if (in_array($product->status, [OnlineProduct::STATUS_HUAN, OnlineProduct::STATUS_OVER])) {
             $plan = OnlineRepaymentPlan::findAll(['online_pid' => $deal->online_pid, 'uid' => $this->getAuthedUser()->id, 'order_id' => $deal->id]);
 
-            if ($plan) {
+            if (!empty($plan)) {
                 $hkDate = end($plan)['refund_time'];
                 $flag = 0;
                 foreach($plan as $val) {
@@ -122,6 +124,6 @@ class UserController extends BaseController
             }
         }
 
-        return $this->render('order_detail', ['deal' => $deal, 'product' => $product, 'plan' => $plan, 'profit' => $profit, 'hkDate' => $hkDate]);
+        return $this->render('order_detail', ['deal' => $deal, 'product' => $product, 'plan' => $plan, 'profit' => $profit, 'hkDate' => $hkDate, 'totalFund' => $totalFund]);
     }
 }

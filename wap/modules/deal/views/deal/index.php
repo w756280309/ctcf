@@ -12,10 +12,10 @@ $this->registerJs('var cp=' . $header['cp'] . ';', 1);
 $pc_cat = Yii::$app->params['pc_cat'];
 
 ?>
-<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/index.css?v=20160401-b"/>
+<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/index.css?v=20160427"/>
 <script src="<?= ASSETS_BASE_URI ?>js/TouchSlide.1.1.js"></script>
 <script src="<?= ASSETS_BASE_URI ?>js/jquery.classyloader.js"></script>
-<script src="<?= ASSETS_BASE_URI ?>js/list.js?v=20160420"></script>
+<script src="<?= ASSETS_BASE_URI ?>js/list.js?v=20160427"></script>
 
 <?php if ($deals) { ?>
     <div id="item-list">
@@ -23,7 +23,7 @@ $pc_cat = Yii::$app->params['pc_cat'];
         $is_hui = in_array($val['status'], [4, 5, 6]); ?>
     <a class="row column dealdata" href="/deal/deal/detail?sn=<?= $val['num'] ?>">
         <div class="col-xs-12 col-sm-10 column-title">
-            <?php if (empty($val['jiaxi'])) { ?>
+            <?php if (empty($val['jiaxi']) || $val['isFlexRate']) { ?>
             <img class="qian show" src="<?= ASSETS_BASE_URI ?>images/qian.png" alt="">
             <?php } else { ?>
             <img class="badges show" src="<?= ASSETS_BASE_URI ?>images/badge.png" alt="">
@@ -34,9 +34,9 @@ $pc_cat = Yii::$app->params['pc_cat'];
             <ul class="row column-content">
                 <li class="col-xs-4">
                     <div>
-                    <span class="interest-rate <?= $is_hui?'hui':'' ?>">
-                        <?= doubleval($val['yr']) ?><span class="column-lu">%</span>
-                        <?php if (!empty($val['jiaxi'])) { ?><span class="bonus-badge <?= $is_hui?'hui':'' ?>">+<?= doubleval($val['jiaxi']) ?>%</span><?php } ?>
+                    <span class="interest-rate <?= $is_hui?'hui':'' ?> rate-steps">
+                        <?= $val['yr'] ?><span class="column-lu">%</span>
+                        <?php if (!empty($val['jiaxi']) && !$val['isFlexRate']) { ?><span class="bonus-badge <?= $is_hui?'hui':'' ?>">+<?= doubleval($val['jiaxi']) ?>%</span><?php } ?>
                     </span>
                     </div>
                     <span class="desc-text nianRate <?= $is_hui?'hui':'' ?>">年化收益率</span>

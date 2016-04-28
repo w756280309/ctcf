@@ -9,6 +9,7 @@ use common\models\order\OnlineOrder;
 use common\service\PayService;
 use common\controllers\HelpersTrait;
 use common\lib\StringUtils\StringUtils;
+use common\models\product\RateSteps;
 
 class DealController extends Controller
 {
@@ -33,7 +34,7 @@ class DealController extends Controller
     {
         $cond = ['isPrivate' => 0, 'del_status' => OnlineProduct::STATUS_USE, 'online_status' => OnlineProduct::STATUS_ONLINE];
 
-        $data = OnlineProduct::find()->where($cond)->select('id k,sn as num,title,yield_rate as yr,status,expires as qixian,money,start_date as start,finish_rate,jiaxi,start_money,refund_method');
+        $data = OnlineProduct::find()->where($cond)->select('id k,sn as num,title,yield_rate as yr,status,expires as qixian,money,start_date as start,finish_rate,jiaxi,start_money,refund_method, isFlexRate, rateSteps');
         $count = $data->count();
         $size = 5;
         $pages = new Pagination(['totalCount' => $count, 'pageSize' => $size]);
@@ -45,7 +46,12 @@ class DealController extends Controller
             $deals[$key]['start'] = date('H:i', $val['start']);
             $deals[$key]['start_desc'] = $dates['desc'];
             $deals[$key]['finish_rate'] = number_format($val['finish_rate'] * 100, 0);
-            $deals[$key]['yr'] = $val['yr'] ? OnlineProduct::calcBaseRate($val['yr'], $val['jiaxi']) : '0.00';
+            $deals[$key]['yr'] = $val['yr'] ? rtrim(rtrim(number_format(OnlineProduct::calcBaseRate($val['yr'], $val['jiaxi']), 2), '0'), '.') : '0';
+
+            if ($val['isFlexRate'] && null !== $val['rateSteps']) {
+                $deals[$key]['yr'] .= '~'.rtrim(rtrim(number_format(RateSteps::getTopRate(RateSteps::parse($val['rateSteps'])), 2), '0'), '.');
+            }
+
             $deals[$key]['statusval'] = Yii::$app->params['productonline'][$val['status']];
             $deals[$key]['method'] = (1 === (int)$val['refund_method']) ? "天" : "个月";
             $deals[$key]['start_money'] = rtrim(rtrim(number_format($val['start_money'], 2), '0'), '.');

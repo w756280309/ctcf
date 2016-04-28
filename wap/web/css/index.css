@@ -354,3 +354,7 @@ a.active { border-bottom: 1px solid #f44336; /* 当前状态 */}
     border-radius: 50%;
     background: #f49f12;
 }
+/* 添加阶梯利率显示字体大小样式 */
+.rate-steps {
+    font-size: 17px !important;
+}

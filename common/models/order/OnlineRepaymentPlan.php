@@ -151,7 +151,7 @@ class OnlineRepaymentPlan extends \yii\db\ActiveRecord
             //到期本息
             return self::calcRepayment($order, 'd', $product);
         } elseif (OnlineProduct::REFUND_METHOD_MONTH === (int) $product->refund_method) {
-            //按月还息            
+            //按月还息
             return self::calcRepayment($order, 'm', $product);
         } elseif (OnlineProduct::REFUND_METHOD_QUARTER === (int) $product->refund_method) {
             //按季度还息
@@ -192,7 +192,7 @@ class OnlineRepaymentPlan extends \yii\db\ActiveRecord
         $bc = new BcRound();
         bcscale(14);
         $total_lixi = $pp->getProductDayReturn($order['yield_rate'], $order['order_money'], $order['expires']);
-        $each_day_lixi = $pp->getProductDayReturn($order['yield_rate'], $order['order_money'], 1, false);//每日利息       
+        $each_day_lixi = $pp->getProductDayReturn($order['yield_rate'], $order['order_money'], 1, false);//每日利息
         $qiday = $pp->getDays($periodType);//对应$periodType的每期的天数
         $each_lixi = bcmul($qiday, $each_day_lixi); //每期利息
         $qishu = 'd' === $periodType ? 1 : $pp->getQishu($order['expires'], $periodType);
@@ -249,9 +249,9 @@ class OnlineRepaymentPlan extends \yii\db\ActiveRecord
         $bc = new BcRound();
         if (OnlineProduct::REFUND_METHOD_DAOQIBENXI === (int) $loan->refund_method) {
             //到期本息
-            return $bc->bcround(bcmul($ord->order_money, bcmul($loan->expires, bcdiv($loan->yield_rate, 365))), 2);
+            return $bc->bcround(bcmul($ord->order_money, bcmul($loan->expires, bcdiv($ord->yield_rate, 365))), 2);  //以订单里面的利率为准
         } else {
-            return $bc->bcround(bcdiv(bcmul(bcmul($ord->order_money, $loan->yield_rate), $loan->expires), 12), 2);
+            return $bc->bcround(bcdiv(bcmul(bcmul($ord->order_money, $ord->yield_rate), $loan->expires), 12), 2);
         }
     }
 
@@ -272,7 +272,7 @@ class OnlineRepaymentPlan extends \yii\db\ActiveRecord
                  $finish_date = $pp->LoanTerms('d1', date('Y-m-d', $loan->jixi_time), $loan->expires);
             } else {
                  $finish_date = date("Y-m-d", $pp->calcRetDate($loan->expires, $loan->jixi_time));//如果由于29,30,31造成的跨月的要回归到上一个月最后一天
-            }      
+            }
             if (null !== $finish_date) {
                 $up['finish_date'] = strtotime($finish_date);
                 $loan->finish_date = $up['finish_date'];

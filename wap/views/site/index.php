@@ -3,6 +3,7 @@ use yii\helpers\Html;
 use frontend\assets\WapAsset;
 use common\models\product\OnlineProduct;
 use common\view\BaiduTongjiHelper;
+use common\view\LoanHelper;
 
 WapAsset::register($this);
 
@@ -13,7 +14,7 @@ $this->registerJsFile(ASSETS_BASE_URI . 'js/swiper.min.js?v=20160419', ['depends
 $this->registerJsFile(ASSETS_BASE_URI . 'js/jquery.classyloader.js', ['depends' => 'yii\web\JqueryAsset', 'position' => 1]);
 $this->registerJsFile(ASSETS_BASE_URI . 'js/index.js?v=20160419', ['depends' => 'yii\web\JqueryAsset', 'position' => 1]);
 $this->registerCssFile(ASSETS_BASE_URI . 'css/index.css?v=20160419', ['depends' => 'frontend\assets\WapAsset']);  //加载在depends之后
-$this->registerCssFile(ASSETS_BASE_URI . 'css/first.css', ['depends' => 'frontend\assets\WapAsset']);
+$this->registerCssFile(ASSETS_BASE_URI . 'css/first.css?v=20160427', ['depends' => 'frontend\assets\WapAsset']);
 $this->registerJsFile(ASSETS_BASE_URI . 'js/jquery.cookie.js?v=20160425', ['depends' => 'yii\web\JqueryAsset', 'position' => 1]);//加载jquery.cookie
 $this->registerJsFile(ASSETS_BASE_URI . 'js/hmsr.js?v=20160425', ['depends' => 'yii\web\JqueryAsset', 'position' => 1]);//加载来源统计记录代码
 BaiduTongjiHelper::registerTo($this, BaiduTongjiHelper::WAP_KEY);
@@ -95,7 +96,7 @@ $(function() {
             <div class="col-xs-3 col-sm-2 more">更多》</div>
         </a>
 
-        <?php if (!empty($deal->jiaxi)) { ?>
+        <?php if (!empty($deal->jiaxi) && !$deal->isFlexRate) { ?>
         <ul class="row new-bottom" >
             <a class="block" href="/deal/deal/detail?sn=<?= $deal->sn ?>">
                 <h3><?= $deal->title ?></h3>
@@ -134,7 +135,9 @@ $(function() {
                 <h3><?= $deal->title ?></h3>
                 <li class="col-xs-6 padding-5">
                     <div class="xian">
-                        <span class="interest-rate"><?= rtrim(rtrim(number_format($deal->yield_rate*100, 2), '0'), '.') ?>%</span>
+                        <span class="interest-rate <?= !$deal->isFlexRate ? '' : 'rate-steps' ?>">
+                            <?= LoanHelper::getDealRate($deal) ?>%   <!--添加阶梯利率显示 -->
+                        </span>
                         <div class="col-xs-12 percentage-txt"><span><i class="percentage-point"></i><?= \Yii::$app->params['refund_method'][$deal->refund_method] ?></span></div>
                     </div>
                 </li>

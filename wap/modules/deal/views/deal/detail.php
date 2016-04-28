@@ -1,19 +1,23 @@
 <?php
 $this->title = '项目详情';
 
+use common\models\product\RateSteps;
+use common\view\LoanHelper;
+
 $deal['money'] = rtrim(rtrim($deal['money'], '0'), '.');
 ?>
-<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/xiangqing.css?v=20160418">
+<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/xiangqing.css?v=20160427">
         <!--xiangqing-->
         <div class="row column">
             <div class="hidden-xs col-sm-1"></div>
             <div class="col-xs-12 col-sm-10 column-title"><span><?=$deal['title']?></span></div>
             <div class="container">
-                <ul class="row column-content">
+                <ul class="row column-content <?= $deal['isFlexRate'] ? 'rate-steps' : '' ?>">
                     <li class="col-xs-6">
                         <div class="xian">
-                            <?= rtrim(rtrim($deal->baseRate, '0'), '.') ?><span class="column-lu">%</span>
-                            <?php if (!empty($deal['jiaxi'])) { ?><span class="bonus-badge">+<?=  doubleval($deal['jiaxi']) ?>%</span><?php } ?>
+                            <?= LoanHelper::getDealRate($deal) ?>
+                            <span class="column-lu">%</span>
+                            <?php if (!empty($deal['jiaxi']) && !$deal['isFlexRate']) { ?><span class="bonus-badge">+<?=  doubleval($deal['jiaxi']) ?>%</span><?php } ?>
                         </div>
                         <span class="qing">年化收益率</span>
                     </li>
@@ -87,6 +91,40 @@ $deal['money'] = rtrim(rtrim($deal['money'], '0'), '.');
             </div>
             <div class="col-xs-1"></div>
         </div>
+
+        <?php if ($deal['isFlexRate']) { ?>
+        <div class="row tab lee_title">
+            <div class="col-xs-1"></div>
+            <div class="col-xs-10 lee_shuoming">收益说明</div>
+            <div class="col-xs-1"></div>
+        </div>
+        <div class="row message"  style="padding-bottom: 0px;" >
+            <div class="col-xs-1  col-sm-1" ></div>
+            <div class="col-xs-6 money  col-sm-5" style="color:#9c9c9c">认购金额(元)</div>
+            <div class="col-xs-4 shouyi right_num col-sm-5"  style="color:#9c9c9c;" >年化收益率(%)</div>
+            <div class="col-xs-1 right_hide  col-sm-1" ></div>
+        </div>
+        <div class="row message" style="padding-bottom: 0px;" >
+            <div class="col-xs-1  col-sm-1" ></div>
+            <div class="col-xs-7 money  col-sm-5" >累计认购<?= rtrim(rtrim(number_format($deal['start_money'], 2), '0'), '.') ?>起</div>
+            <div class="col-xs-3 shouyi center_num  col-sm-5" ><?= rtrim(rtrim(number_format($deal['yield_rate']*100, 2), '0'), '.') ?></div>
+            <div class="col-xs-1 col-sm-1" ></div>
+        </div>
+        <?php foreach (RateSteps::parse($deal['rateSteps']) as $val) { ?>
+        <div class="row message" style="padding-bottom: 0px;" >
+            <div class="col-xs-1  col-sm-1" ></div>
+            <div class="col-xs-7 money  col-sm-5" >累计认购<?= rtrim(rtrim(number_format($val['min'], 2), '0'), '.') ?>起</div>
+            <div class="col-xs-3 shouyi center_num  col-sm-5" ><?= rtrim(rtrim(number_format($val['rate'], 2), '0'), '.') ?></div>
+            <div class="col-xs-1 col-sm-1" ></div>
+        </div>
+        <?php } ?>
+
+        <div class="row message" >
+            <div class="col-xs-1" ></div>
+            <div class="col-xs-10 txt_orange" >投资金额越多,年化收益率越高</div>
+            <div class="col-xs-1" ></div>
+        </div>
+        <?php } ?>
 
         <div class="row tab">
             <div class="col-xs-1"></div>
@@ -192,17 +230,17 @@ $deal['money'] = rtrim(rtrim($deal['money'], '0'), '.');
                 return xhr;
             }
 
-$('#x-purchase').on('click', function(e) {
-    var $this = $(this);
-    if ($this.data('x-purchase-clicked')) {
-        return;
-    }
-    $this.data('x-purchase-clicked', true);
-    var xhr = subForm2('#toorderform');
-    xhr.always(function() {
-        $this.data('x-purchase-clicked', false);
-    });
-});
+            $('#x-purchase').on('click', function(e) {
+                var $this = $(this);
+                if ($this.data('x-purchase-clicked')) {
+                    return;
+                }
+                $this.data('x-purchase-clicked', true);
+                var xhr = subForm2('#toorderform');
+                xhr.always(function() {
+                    $this.data('x-purchase-clicked', false);
+                });
+            });
 
             // 新的
             $('.qing img').on('click',function(){

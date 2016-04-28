@@ -60,8 +60,25 @@ class RateSteps
         return true;
     }
 
+    /**
+     * 获取阶梯利率最大值
+     * @param array $config 一个包含阶梯利率信息的数组
+     * @return number|boolean 当输入数组为空时,返回false,否则,返回阶梯利率最大值
+     */
     public static function getTopRate(array $config)
     {
+        if (empty($config)) {
+            return false;
+        }
+
+        $topRate = 0;
+        foreach ($config as $val) {
+            if (-1 === bccomp($topRate, $val['rate'])) {
+                $topRate = $val['rate'];
+            }
+        }
+
+        return 0 === (int) $topRate ? false : $topRate;
     }
 
     /**

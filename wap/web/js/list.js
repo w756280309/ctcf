@@ -70,14 +70,12 @@ $(function () {
                 data: param,
                 dataType: 'json',
                 success: function (data) {
-
                     if (data.code === 0) {
                         //如果当前页和返回页码相同，则改变页面html,否则视为异常
                         if (currentPage === data.header.cp) {
                             if (data.deals.length > 0) {
                                 var html = "";
                                 $.each(data.deals, function (i, item) {
-                                    var itemyr = changeTwoDecimal(item.yr);
                                     var itemjx = item.jiaxi === null ? '' : item.jiaxi;
                                     var hui = ('4' === item.status || '5' === item.status || '6' === item.status) ? 'hui' : '';
                                     var dataPer = ('7' === item.status) ? 100 : ('hui' === hui ? 0 : item.finish_rate);
@@ -94,7 +92,7 @@ $(function () {
 
                                     html += '<a class="row column dealdata" href="/deal/deal/detail?sn='+ item.num +'">' +
                                             '<div class="col-xs-12 col-sm-10 column-title">';
-                                    if ('' === itemjx) {
+                                    if ('' === itemjx || '1' === item.isFlexRate) {
                                         html += '<img class="qian show" src="/images/qian.png" alt="">';
                                     } else {
                                         html += '<img class="badges show" src="/images/badge.png" alt="">';
@@ -104,9 +102,9 @@ $(function () {
                                             '</div><div class="container" style="clear:both;">' +
                                             '<ul class="row column-content">' +
                                             ' <li class="col-xs-4"><div>' +
-                                            '<span class="interest-rate '+ hui +'">' +
-                                            + itemyr +'<span class="column-lu">%</span>';
-                                    if ('' !== itemjx) {
+                                            '<span class="interest-rate rate-steps '+ hui +'">'
+                                            + item.yr +'<span class="column-lu">%</span>';
+                                    if ('' !== itemjx && '0' === item.isFlexRate) {
                                         html += '<span class="bonus-badge '+ hui +'">+'+ itemjx +'%</span>';
                                     }
                                     html += '</span></div>' +

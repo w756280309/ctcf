@@ -635,3 +635,6 @@ nav li.first {
 .no-margin-bottom {
     margin-bottom: 0px;
 }
+.rate-steps {
+    font-size: 25px !important;
+}

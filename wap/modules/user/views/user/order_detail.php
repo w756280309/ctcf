@@ -1,9 +1,11 @@
 <?php
 $this->title = '投资详情';
 
+use common\models\product\RateSteps;
+
 $this->registerJsFile(ASSETS_BASE_URI .'js/fastclick.js', ['position' => 1, ]);
 $this->registerJsFile(ASSETS_BASE_URI .'js/touzixiangqing.js', ['depends' => 'yii\web\JqueryAsset', 'position' => 1]);
-$this->registerCssFile(ASSETS_BASE_URI .'css/touzixiangqing.css', ['depends' => 'frontend\assets\WapAsset']);
+$this->registerCssFile(ASSETS_BASE_URI .'css/touzixiangqing.css?v=20160427', ['depends' => 'frontend\assets\WapAsset']);
 ?>
 
 <div class="container">
@@ -48,6 +50,14 @@ $this->registerCssFile(ASSETS_BASE_URI .'css/touzixiangqing.css', ['depends' => 
     <div class="row" id="information-content">
         <div class="col-xs-12">
             <ul class="information-content">
+                <?php if ($product->isFlexRate) {
+                    $rate = RateSteps::getRateForAmount(RateSteps::parse($product->rateSteps), $totalFund);
+                    if (false !== $rate) {
+                ?>
+                <li>
+                    <div class="rate-steps-notes">因为该项目的累计投资金额已达<?= rtrim(rtrim(number_format($totalFund, 2), '0'), '.') ?>元，本订单享受年化率<?= rtrim(rtrim(number_format($rate, 2), '0'), '.') ?>%</div>
+                </li>
+                <?php } } ?>
                 <?php if (in_array($product->status, [2, 3, 7])) { ?>
                 <li>
                     <div class="information-content-left">本金</div>
