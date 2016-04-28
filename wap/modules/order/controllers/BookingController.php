@@ -87,4 +87,15 @@ class BookingController extends BaseController
     {
         return $this->render('productend');
     }
+
+    /**
+     * 预约须知页面
+     */
+    public function actionBookingNotes($pid)
+    {
+        if (empty($pid) || 1 !== (int)$pid) {
+            throw new \yii\web\NotFoundHttpException();
+        }
+        return $this->render('booking_notes', ['pid' => $pid]);
+    }
 }
