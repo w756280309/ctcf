@@ -35,3 +35,5 @@ ump_prod.crt
 .idea/
 
 tests/_config-local.php
+
+.DS_Store
