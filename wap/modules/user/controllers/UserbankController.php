@@ -245,4 +245,20 @@ class UserbankController extends BaseController
     {
         return $this->render('rzres', ['ret' => $ret]);
     }
+
+    public function actionMycard()
+    {
+        return $this->render('mycard');
+    }
+
+    public function actionReplacecard()
+    {
+        $banks = BankManager::getQpayBanks();
+        return $this->render('replacecard', ['banklist' => $banks]);
+    }
+
+    public function actionReplacecardnotify($ret = "error")
+    {
+        return $this->render('replacecardnotify', ['ret' => $ret]);
+    }
 }
