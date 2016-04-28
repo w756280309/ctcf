@@ -34,7 +34,7 @@ class DatatjController extends BaseController {
             'fail_count'=>$fail_count,
             'fail_sum'=>$bcround->bcround($fail_sum,2)
         ];
-        
+
         $data = CheckaccountWdjf::find()->where(['is_checked'=>1]);
         if(!empty($start)&&!empty($end)){
             $data->andFilterWhere(['between','tx_date',$start,$end]);
@@ -52,7 +52,7 @@ class DatatjController extends BaseController {
      * view creator zyw
      * code creator zhy
      * @return type
-     */    
+     */
     public function actionTjbydays($start=null,$end=null) {
         $data = CheckaccountHz::find();
         if(!empty($start)&&!empty($end)){
@@ -80,7 +80,7 @@ class DatatjController extends BaseController {
         $model = $data->offset($pages->offset)->limit($pages->limit)->all();
         return $this->render('tjbydays',['params'=>$params,'model'=>$model, 'pages' => $pages]);
     }
-    
+
     /**
      * desc 充值结算记录
      * view creator zyw
@@ -92,7 +92,7 @@ class DatatjController extends BaseController {
         $end = Yii::$app->request->get('end');
         $status = Yii::$app->request->get('status');
         $name = Yii::$app->request->get('name');
-        
+
         $r = RechargeRecord::tableName();
         $u = User::tableName();
         $recharge = RechargeRecord::find()->leftJoin($u, "$r.uid=$u.id")->select("$r.*,$u.real_name");
@@ -108,7 +108,7 @@ class DatatjController extends BaseController {
             if(in_array($status, [RechargeRecord::SETTLE_NO,RechargeRecord::SETTLE_ACCEPT,RechargeRecord::SETTLE_IN,RechargeRecord::SETTLE_YES,RechargeRecord::SETTLE_FAULT])) {
                 $data->andWhere(['settlement' => $status]);
             } else {
-                $data->andWhere(["$r.status" => $status-3]);   
+                $data->andWhere(["$r.status" => $status-3]);
             }
         }
         if(!empty($name)) {
@@ -116,10 +116,10 @@ class DatatjController extends BaseController {
         }
         $pages = new Pagination(['totalCount' => $data->count(), 'pageSize' => '15']);
         $model = $data->offset($pages->offset)->limit($pages->limit)->orderBy('id desc')->asArray()->all();
-        
+
         $recharge = $recharge->asArray()->all();
         //统计冲值成功笔数，冲值失败笔数，充值金额总计，待结算笔数，待结算金额总计
-        $arr = array('succ_num' => 0, 'fail_num' => 0, 'fund_sum' => 0, 'djs_num' => 0, 'djs_sum' => 0); 
+        $arr = array('succ_num' => 0, 'fail_num' => 0, 'fund_sum' => 0, 'djs_num' => 0, 'djs_sum' => 0);
         $bc = new BcRound();
         bcscale(14);
         foreach($recharge as $val) {
@@ -135,10 +135,18 @@ class DatatjController extends BaseController {
             }
             $arr['fund_sum'] = bcadd($arr['fund_sum'], $val['fund']);
         }
-        
+
         $arr['djs_sum'] = $bc->bcround($arr['djs_sum'],2);
         $arr['fund_sum'] = $bc->bcround($arr['fund_sum'],2);
-        
+
         return $this->render('rechargejs',['model' => $model, 'pages' => $pages, 'arr' => $arr]);
+    }
+
+    /**
+     * 汇总统计页面
+     */
+    public function actionHuizongtj()
+    {
+        return $this->render('huizongtj');
     }
 }

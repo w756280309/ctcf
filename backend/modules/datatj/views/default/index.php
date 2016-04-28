@@ -9,8 +9,7 @@ $this->title = 'Show Main';
     <!--左边-->
     <div id="nav" class="scroll-pane" style="height: 591px;"><div class="title"><a href="javascript:void(0)">数据统计首页</a></div>
         <ul class="load menu">
-            <li><a href="/datatj/datatj/accountsta" target="main">对账单</a></li>
-            <li><a href="/datatj/datatj/rechargejs" target="main">充值结算记录</a></li>
+            <li><a href="/datatj/datatj/accountsta" target="main">汇总统计</a></li>
         </ul>
     </div>
 </td>
