@@ -252,7 +252,7 @@ class OrderManager
             return false;
         }
         $query1 = (new \yii\db\Query())
-                ->select('order.*,p.title,p.status pstatus,p.end_date penddate,p.expires expiress,p.finish_date,p.jiaxi,p.finish_rate,p.sn psn,p.refund_method prm,p.yield_rate pyr')
+                ->select('order.*,p.title,p.status pstatus,p.end_date penddate,p.expires expiress,p.finish_date,p.jiaxi,p.finish_rate,p.sn psn,p.refund_method prm')
                 ->from(['online_order order'])
                 ->innerJoin('online_product p', 'order.online_pid=p.id')
                 ->where(['order.uid' => $uid, 'order.status' => 1]);
@@ -298,7 +298,7 @@ class OrderManager
             if (in_array($dat['pstatus'], [Loan::STATUS_NOW])) {
                 $query[$key]['profit'] = '--';   //收益金额
             } else {
-                $query[$key]['profit'] = OnlineRepaymentPlan::getTotalLixi(new Loan(['refund_method' => $dat['prm'], 'expires' => $dat['expiress'], 'yield_rate' => $dat['pyr']]), new OnlineOrder(['order_money' => $dat['order_money']]));
+                $query[$key]['profit'] = OnlineRepaymentPlan::getTotalLixi(new Loan(['refund_method' => $dat['prm'], 'expires' => $dat['expiress']]), new OnlineOrder(['order_money' => $dat['order_money'], 'yield_rate' => $dat['yield_rate']]));
             }
             if (!in_array($dat['pstatus'], [Loan::STATUS_HUAN, Loan::STATUS_OVER])) {
                 $query[$key]['classname'] = 'column-title-rg';
