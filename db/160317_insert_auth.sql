@@ -1,1 +1,0 @@
-insert into `auth` ( `auth_name`, `auth_description`, `created_at`, `psn`, `path`, `type`, `level`, `order_code`, `updated_at`, `sn`, `status`) values ( '查看融资明细', '查看融资明细', null, 'H100200', 'order/onlineorder/detailr', '2', '3', '3', null, 'H100204', '1');

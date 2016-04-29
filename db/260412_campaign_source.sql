@@ -1,2 +1,0 @@
-ALTER TABLE `user` ADD COLUMN `campaign_source` VARCHAR(50) CHARACTER SET utf8  COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT  '百度统计来源标志';
-ALTER TABLE `online_order` ADD COLUMN `campaign_source` VARCHAR(50) CHARACTER SET utf8  COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT  '百度统计来源标志';

@@ -1,1 +1,0 @@
-ALTER TABLE `online_product` CHANGE COLUMN `recommendTime` `recommendTime` int(10) NOT NULL COMMENT '推荐时间';

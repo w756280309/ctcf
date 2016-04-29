@@ -1,2 +1,0 @@
-ALTER TABLE  `online_product` CHANGE  `target`  `isPrivate` TINYINT( 1 ) NULL DEFAULT  '0' COMMENT  '是否是定向标，0否1是';
-ALTER TABLE  `online_product` CHANGE  `target_uid`  `allowedUids` VARCHAR( 200 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT  '定向标用户id。以,分隔';
