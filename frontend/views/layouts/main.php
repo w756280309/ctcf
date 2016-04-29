@@ -15,12 +15,12 @@ BaiduTongjiHelper::registerTo($this, BaiduTongjiHelper::PC_KEY);
         <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
         <link rel="stylesheet" href="<?=ASSETS_BASE_URI ?>css/jquery.fullPage.css">
         <link rel="stylesheet" href="<?=ASSETS_BASE_URI ?>css/jquery.fullPage.extend.css">
-        <link rel="stylesheet" href="<?=ASSETS_BASE_URI ?>css/index.css?v=20160406">
+        <link rel="stylesheet" href="<?=ASSETS_BASE_URI ?>css/index.css?v=20160410">
         <script src="<?=ASSETS_BASE_URI ?>js/jquery-1.8.3.min.js"></script>
         <script src="<?=ASSETS_BASE_URI ?>js/jquery-ui.min.js"></script>
         <script src="<?=ASSETS_BASE_URI ?>js/jquery.fullPage.min.js"></script>
         <script src="<?=ASSETS_BASE_URI ?>js/jquery.fullPage.extend.js"></script>
-        <script src="<?=ASSETS_BASE_URI ?>js/index.js"></script>
+        <script src="<?=ASSETS_BASE_URI ?>js/index.js?v=20160428"></script>
         <!--[if lt IE 9]>
         <style>
             .section1 {

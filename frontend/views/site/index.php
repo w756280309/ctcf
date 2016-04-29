@@ -30,11 +30,17 @@ $this->title = '温都金服首页';
 <!--section2-->
 <div class="section section2">
     <div class="two-box">
-        <div class="tow-content1">全场加息0.1%</div>
-        <div class="tow-content2">全场加息0.1%</div>
-        <div class="tow-content3">iphone6s</div>
-        <div class="tow-content4">iphone6s</div>
-        <img src="<?= ASSETS_BASE_URI ?>images/phone2.png" class="tow-phone" alt="">
+        <div class="tow-content1">Profession</div>
+        <div class="tow-content2">Legitimate</div>
+        <div class="tow-content3">Safety</div>
+        <div class="tow-content4">Transparent</div>
+        <div class="two-content5">Legitimate</div>
+        <div class="section2-title">温都金服<span>理财安全吗？</span></div>
+        <div class="two-title">温都报业传媒旗下互联网金融平台，更放心！</div>
+        <p class="two-content two-content1"><img src="<?= ASSETS_BASE_URI ?>images/lock.png" alt="">风控<span>专业</span>，更<span>合规</span>，更<span>透明</span></p>
+        <p class="two-content two-content2"><img src="<?= ASSETS_BASE_URI ?>images/lock.png" alt=""><span>实名</span>认证，资金同卡进出，很放心</p>
+        <p class="two-content two-content3"><img src="<?= ASSETS_BASE_URI ?>images/lock.png" alt="">合作方<span>南京金交中心</span>挂牌项目，很靠谱</p>
+        <img class="two-mima" src="<?= ASSETS_BASE_URI ?>images/mima.png" alt="">
     </div>
 </div>
 <!--section3-->
