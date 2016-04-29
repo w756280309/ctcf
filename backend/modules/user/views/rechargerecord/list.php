@@ -135,7 +135,7 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\we
                     <tr>
                         <td><?= $val['sn'] ?></td>
                         <td><?= number_format($val['fund'],2) ?></td>
-                        <td><?= $val['bankName'] ?></td>
+                        <td><?= $val['bank_name'] ?></td>
                         <td><?= date('Y-m-d H:i',$val['created_at'])?></td>
                         <td>
                             <?php if($type==User::USER_TYPE_PERSONAL) { ?>

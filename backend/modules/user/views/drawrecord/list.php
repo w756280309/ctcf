@@ -20,7 +20,7 @@ $status = Yii::$app->request->get('status');
             <ul class="breadcrumb">
                     <li>
                         <i class="icon-home"></i>
-                        <a href="/user/user/<?= $type==2?'listr':'listt'?>">会员管理</a> 
+                        <a href="/user/user/<?= $type==2?'listr':'listt'?>">会员管理</a>
                         <i class="icon-angle-right"></i>
                     </li>
                      <?php if($type==User::USER_TYPE_PERSONAL){?>
@@ -46,10 +46,10 @@ $status = Yii::$app->request->get('status');
                         <a href="javascript:void(0);">提现流水明细</a>
                     </li>
             </ul>
-                
+
         </div>
-        
-         
+
+
          <div class="portlet-body">
             <table class="table">
                     <tr>
@@ -76,15 +76,15 @@ $status = Yii::$app->request->get('status');
                     </tr>
             </table>
         </div>
-       
-        
+
+
         <!--search start-->
         <div class="portlet-body">
-            
-                
+
+
             <form action="/user/drawrecord/detail" method="get" target="_self">
                 <table class="table">
-                    
+
                     <tbody>
                         <tr>
                                 <input type="hidden" name="id" value="<?= $id ?>">
@@ -97,27 +97,27 @@ $status = Yii::$app->request->get('status');
                                 <select name="status" >
                                     <option value=""
                                         >---未选择---</option>
-                                    <option value="-1" 
+                                    <option value="-1"
                                         <?php if ($status === '-1') {
                                             echo "selected='selected'";
                                         }?>
                                             >未处理</option>
-                                    <option value="1" 
+                                    <option value="1"
                                         <?php if($status==1){
                                             echo "selected='selected'";
                                         }?>
                                             >已审核</option>
-                                    <option value="21" 
+                                    <option value="21"
                                         <?php if($status==21){
                                             echo "selected='selected'";
                                         }?>
                                             >提现不成功</option>
-                                    <option value="2" 
+                                    <option value="2"
                                         <?php if($status==2){
                                             echo "selected='selected'";
                                         }?>
                                             >提现成功</option>
-                                    <option value="11" 
+                                    <option value="11"
                                         <?php if($status==11){
                                             echo "selected='selected'";
                                         }?>
@@ -127,7 +127,7 @@ $status = Yii::$app->request->get('status');
                             <?php }?>
                             <td><span class="title">提现时间</span></td>
                             <td>
-                                <input type="text" value="<?= Yii::$app->request->get('time') ?>" name = "time" onclick='WdatePicker({dateFmt:"yyyy-MM-dd",maxDate:"<?=  date('Y-m-d') ?>"});'/>                 
+                                <input type="text" value="<?= Yii::$app->request->get('time') ?>" name = "time" onclick='WdatePicker({dateFmt:"yyyy-MM-dd",maxDate:"<?=  date('Y-m-d') ?>"});'/>
                             </td>
                             <td><div align="right" style="margin-right: 20px">
                                 <button type='submit' class="btn blue btn-block" style="width: 100px;">搜索 <i class="m-icon-swapright m-icon-white"></i></button>
@@ -137,10 +137,10 @@ $status = Yii::$app->request->get('status');
                 </table>
             </form>
         </div>
-        
+
         <!--search end -->
-        
-        
+
+
         <div class="portlet-body">
             <table class="table table-striped table-bordered table-advance table-hover">
                 <thead>
@@ -156,8 +156,8 @@ $status = Yii::$app->request->get('status');
                 <?php foreach ($model as $key => $val) : ?>
                     <tr>
                         <td><?= $val['sn'] ?></td>
-                        <td><?= number_format($val['money'], 2) ?></td>                        
-                        <td><?= Yii::$app->params['bank'][$val['bank_id']]['bankname'] ?></td>                        
+                        <td><?= number_format($val['money'], 2) ?></td>
+                        <td><?= $val['bankName'] ?></td>
                         <td><?= date('Y-m-d H:i:s',$val['created_at'])?></td>
                         <td>
                             <?php
@@ -181,14 +181,14 @@ $status = Yii::$app->request->get('status');
                             ?>
                             </td>
                     </tr>
-                    <?php endforeach; ?>   
+                    <?php endforeach; ?>
                 </tbody>
             </table>
         </div>
         <!--分页-->
-        <div class="pagination" style="text-align:center"><?= LinkPager::widget(['pagination' => $pages]); ?></div> 
+        <div class="pagination" style="text-align:center"><?= LinkPager::widget(['pagination' => $pages]); ?></div>
     </div>
-                                    
+
 </div>
 <script type="text/javascript">
     var uid = "<?= $id ?>";
@@ -202,19 +202,19 @@ $status = Yii::$app->request->get('status');
         });
     }
     $(function () {
-         
+
         $('.ajax_op').bind('click', function () {
             index = $(this).attr('index');
             csrf = '<?= Yii::$app->request->getCsrfToken(); ?>';
-            layer.confirm('确定审核通过吗？',{title:'充值审核',btn:['提现完成','撤销','关闭'],closeBtn:false},function(){ 
+            layer.confirm('确定审核通过吗？',{title:'充值审核',btn:['提现完成','撤销','关闭'],closeBtn:false},function(){
                     doop(index,2);
             },function(){
-                doop(index,3);  
+                doop(index,3);
             })
-        
+
         });
-            
-            
+
+
     })
 </script>
 <?php $this->endBlock(); ?>

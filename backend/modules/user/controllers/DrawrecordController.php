@@ -19,13 +19,14 @@ use common\models\sms\SmsMessage;
 use common\models\draw\DrawManager;
 use common\models\draw\DrawException;
 use yii\web\NotFoundHttpException;
+use common\models\bank\Bank;
 
 class DrawrecordController extends BaseController
 {
     /**
      * 提现流水明细
      */
-    public function actionDetail($id = null, $type = null)
+    public function actionDetail($id, $type)
     {
         if (empty($id) || empty($type) || !in_array($type, [1, 2])) {
             throw new NotFoundHttpException();     //参数无效,抛出404异常
@@ -35,7 +36,12 @@ class DrawrecordController extends BaseController
         $status = Yii::$app->request->get('status');
         $time = Yii::$app->request->get('time');
 
-        $query = DrawRecordTime::find()->where(['uid' => $id]);
+        $b = Bank::tableName();
+        $d = DrawRecordTime::tableName();
+        $query = DrawRecordTime::find()
+            ->leftJoin($b, "$d.bank_id = $b.id")
+            ->select("$d.*, $b.bankName")
+            ->where(['uid' => $id]);
         if ($type == User::USER_TYPE_PERSONAL) {
             if ($status === '-1') {
                 $query->andWhere(['status' => 0]);

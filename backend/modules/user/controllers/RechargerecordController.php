@@ -12,8 +12,9 @@ use common\models\user\User;
 use common\lib\bchelp\BcRound;
 use yii\log\FileTarget;
 use common\models\user\RechargeRecord;
-use common\models\bank\Bank;
 use yii\web\NotFoundHttpException;
+use common\models\user\UserBanks;
+use common\models\bank\Bank;
 
 class RechargerecordController extends BaseController
 {
@@ -33,31 +34,50 @@ class RechargerecordController extends BaseController
         $time = Yii::$app->request->get('time');
 
         $r = RechargeRecord::tableName();
-        $u = Bank::tableName();
-        $query = (new \yii\db\Query)
-            ->select("$r.*, $u.bankName")
+        $u = UserBanks::tableName();
+        $query = (new \yii\db\Query)    //连表查询,获取充值记录银行名称
+            ->select("$r.*, $u.bank_name")
             ->from($r)
             ->leftJoin($u, "$r.bank_id = $u.id")
-            ->where(['uid' => $id]);
+            ->where(["$r.uid" => $id]);
 
         // 状态
         if (!empty($status)) {
             if ('3' === substr($status, 0, 1)) {
-                $query->andWhere(['status' => substr($status, 1, 1), 'pay_type' => RechargeRecord::PAY_TYPE_POS]);
+                $query->andWhere(["$r.status" => substr($status, 1, 1), 'pay_type' => RechargeRecord::PAY_TYPE_POS]);
             } else {
-                $query->andWhere(['status' => substr($status, 1, 1), 'pay_type' => [RechargeRecord::PAY_TYPE_QUICK, RechargeRecord::PAY_TYPE_NET]]);
+                $query->andWhere(["$r.status" => substr($status, 1, 1), 'pay_type' => [RechargeRecord::PAY_TYPE_QUICK, RechargeRecord::PAY_TYPE_NET]]);
             }
         }
 
         // 时间
         if (!empty($time)) {
-            $query->andFilterWhere(['<', 'created_at', strtotime($time.' 23:59:59')]);
-            $query->andFilterWhere(['>=', 'created_at', strtotime($time.' 0:00:00')]);
+            $query->andFilterWhere(['<', "$r.created_at", strtotime($time.' 23:59:59')]);
+            $query->andFilterWhere(['>=', "$r.created_at", strtotime($time.' 0:00:00')]);
         }
 
         //正常显示详情页
         $pages = new Pagination(['totalCount' => $query->count(), 'pageSize' => '10']);
         $model = $query->offset($pages->offset)->limit($pages->limit)->orderBy('id desc')->all();
+
+        $arr = [];
+        foreach ($model as $key => $val) {
+            if (RechargeRecord::PAY_TYPE_NET === (int)$val['pay_type']) {
+                $arr[$key] = $val['bank_id'];
+            }
+        }
+
+        if (!empty($arr)) {
+            $bank = Bank::findAll(['id' => $arr]);       //获取所有通过网银充值用户的充值银行卡信息
+
+            foreach ($arr as $key => $val) {      //替换前台显示内容
+                foreach ($bank as $v) {
+                    if ((int)$arr[$key] === $v['id']) {
+                        $model[$key]['bank_name'] = $v['bankName'];
+                    }
+                }
+            }
+        }
 
         //取出用户
         $user = User::findOne(['id' => $id]);
