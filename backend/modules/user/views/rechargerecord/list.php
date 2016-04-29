@@ -60,16 +60,19 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\we
                             <span class="title">成功（次）：<?=$successNum?></span></td>
                         <td>
                             <span class="title">失败（次）：<?=$failureNum?></span></td>
-                        </td>
                     <?php }else{?>
-                      <td>
+                      <td colspan="2">
                             <span class="title">企业名：<?= $user['org_name'] ?></span>
                         </td>
-                        <td>
+                        <td colspan="2">
                             <span class="title">充值金额总计（元）：<?=  number_format($moneyTotal,2)?></span>
                         </td>
                     <?php }?>
                     </tr>
+                <tr>
+                    <td colspan="2">（温都金服账户）当前可用余额（元）：<?= $available_balance?></td>
+                    <td colspan="2">（第三方托管平台账户）联动账户余额（元）：<?= $user_account?></td>
+                </tr>
             </table>
         </div>
 
@@ -125,6 +128,7 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\we
                         <th>银行</th>
                         <th>充值时间</th>
                         <th>状态</th>
+                        <th>联动状态</th>
                         <?php if($type==User::USER_TYPE_ORG) { ?>
                         <th>操作</th>
                         <?php } ?>
@@ -165,6 +169,9 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\we
                                     }
                              ?>
                              <?php } ?>
+                        </td>
+                        <td>
+                            <button class="btn btn-primary get_order_status" sn="<?= $val['sn'] ?>">查询流水在联动状态</button>
                         </td>
                         <?php if($type==User::USER_TYPE_ORG) { ?>
                         <td>
@@ -213,6 +220,20 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\we
 
         });
 
+        //点击获取流水状态
+        $('.get_order_status').bind('click', function () {
+            var _this = $(this);
+            var sn = _this.attr('sn');
+            if (sn) {
+                $.get('/user/rechargerecord/get-order-status?sn=' + sn, function (data) {
+                    if (data.code) {
+                        _this.parent().html(data.message);
+                    } else {
+                        layer.msg(data.message);
+                    }
+                });
+            }
+        });
 
     })
 </script>

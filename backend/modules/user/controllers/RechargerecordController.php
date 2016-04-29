@@ -2,6 +2,7 @@
 
 namespace backend\modules\user\controllers;
 
+use common\models\epay\EpayUser;
 use Yii;
 use yii\data\Pagination;
 use yii\web\Response;
@@ -98,6 +99,22 @@ class RechargerecordController extends BaseController
         }
         $moneyTotal = $bc->bcround($moneyTotal, 2);
 
+        //查看当前用户账户信息
+        $userAccount = UserAccount::find()->where(['uid' => $id])->one();
+        $available_balance = $userAccount ? number_format($userAccount->available_balance, 2) : 0;
+        //获取联动用户信息
+        $ePayUser = EpayUser::find()->where(['appUserId' => $id])->one();
+        $user_account = 0;
+        if ($ePayUser && $ePayUser['epayUserId']) {
+            $res = Yii::$container->get('ump')->getUserInfo($ePayUser['epayUserId']);
+            if ($res->isSuccessful()) {
+                $account = $res->get('balance');//以分为单位
+                if ($account) {
+                    $user_account = number_format($account / 100, 2);
+                }
+            }
+        }
+
         //渲染到静态页面
         return $this->render('list', [
             'uid' => $id,
@@ -110,7 +127,39 @@ class RechargerecordController extends BaseController
             'moneyTotal' => $moneyTotal,
             'successNum' => $successNum,
             'failureNum' => $failureNum,
+            'available_balance' => $available_balance,
+            'user_account' => $user_account,
         ]);
+    }
+
+    /**
+     * 获取指定充值订单在联动的状态
+     * @return array
+     * @throws \yii\base\InvalidConfigException
+     */
+    public function actionGetOrderStatus()
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        if (Yii::$app->request->isGet) {
+            $sn = Yii::$app->request->get('sn');
+            $rechargeRecord = RechargeRecord::find()->where(['sn' => $sn])->one();
+            if ($rechargeRecord) {
+                $res = Yii::$container->get('ump')->getRechargeInfo($rechargeRecord['sn'], $rechargeRecord['created_at']);
+                if ($res->isSuccessful()) {
+                    $tran_state = intval($res->get('tran_state'));
+                    //0初始,2成功,3失败,4不明,5交易关闭
+                    $return_message = [0 => '初始', 2 => '成功', 3 => '失败', 4 => '不明', 5 => '交易关闭'];
+                    if ($tran_state >= 0 && key_exists($tran_state, $return_message)) {
+                        return ['code' => true, 'message' => $return_message[$tran_state]];
+                    }
+                    return ['code' => false, 'message' => '返回信息不明确'];
+                }
+                return ['code' => false, 'message' => '链接失败'];
+            }
+            return ['code' => false, 'message' => '订单不存在'];
+        } else {
+            return ['code' => false, 'message' => '非法请求'];
+        }
     }
 
     /**
