@@ -121,7 +121,7 @@ class OrderController extends BaseController
         }
 
         $model = ContractTemplate::find()->where(['pid' => $id])->select('pid,name,content')->all();
-        if (null === $model) {
+        if (empty($model)) {
             throw new \yii\web\NotFoundHttpException();  //当对象为空时,抛出异常
         }
 

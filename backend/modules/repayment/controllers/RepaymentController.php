@@ -51,7 +51,7 @@ class RepaymentController extends BaseController
                 ->innerJoin('user u', 'orp.uid=u.id')
                 ->where(['orp.online_pid' => $pid])->all();
 
-        if (null === $deal || null === $model) {
+        if (null === $deal || empty($model)) {
             throw new NotFoundHttpException();     //对象为空时,抛出404异常
         }
 
