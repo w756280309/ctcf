@@ -2,6 +2,7 @@
 $this->title="换卡信息";
 ?>
 <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/bind.css?v=20160406"/>
+<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/replacecard.css?v=20160428"/>
 <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/swiper.min.css"/>
 <script src="<?= ASSETS_BASE_URI ?>js/qpay.js?v=20160419001"></script>
 <script src="<?= ASSETS_BASE_URI ?>js/swiper.min.js"></script>
@@ -39,11 +40,6 @@ $this->title="换卡信息";
 <form method="post" class="cmxform" id="form" action="/user/qpay/binding/verify" data-to="1">
     <input name="_csrf" type="hidden" id="_csrf" value="<?= Yii::$app->request->csrfToken ?>">
     <div class="row kahao">
-        <div class="col-xs-3 xian">卡号</div>
-        <div class="col-xs-9 xian"><input id="card_no" type="tel" name='QpayBinding[card_number]' placeholder="请输入银行卡号" AUTOCOMPLETE="on"/></div>
-    </div>
-
-    <div class="row kahao">
         <div class="col-xs-3 xian">开户行</div>
         <div class="col-xs-7 xian">
             <input id="bank_id" type="hidden" name='QpayBinding[bank_id]'/>
@@ -54,12 +50,23 @@ $this->title="换卡信息";
         </div>
         <div class="col-xs-2 xian"><img class='you' src="<?= ASSETS_BASE_URI ?>images/jiantou.png" alt=""/></div>
     </div>
-
+    <div class="row kahao">
+        <div class="col-xs-3 xian">卡号</div>
+        <div class="col-xs-9 xian"><input id="card_no" type="tel" name='QpayBinding[card_number]' placeholder="请输入银行卡号" AUTOCOMPLETE="on"/></div>
+    </div>
     <!--限额提醒-->
     <div class="row tixing form-bottom">
         <div class="col-xs-10">
             <div class="notice">?</div>
             <span><a href="/user/userbank/bankxiane">限额提醒</a></span>
+        </div>
+    </div>
+    <div class="row replacecard-tixin">
+        <div class="col-xs-12">
+            <div>*换卡提醒：</div>
+            <div>若您的账户余额为0，系统将在半小时以内自动审核换卡；</div>
+            <div>若您的账户余额不为0且有回款金额，则需拨打客服热线<?= \Yii::$app->params['contact_tel'] ?>，提交相关资料，提交资料后，进行2-5天的人工审核换卡；</div>
+            <div>换卡申请期间不影响充值和提现。</div>
         </div>
     </div>
     <!--提交按钮-->
@@ -90,18 +97,6 @@ $this->title="换卡信息";
 <script type="text/javascript">
     var csrf;
     $(function() {
-        var err = '<?= $data['code'] ?>';
-        var mess = '<?= $data['message'] ?>';
-        var tourl = '<?= $data['tourl'] ?>';
-        if (err === '1') {
-            toast(mess, function() {
-                if (tourl !== '') {
-                    location.href = tourl;
-                }
-            });
-            return;
-        }
-
         csrf = $("meta[name=csrf-token]").attr('content');
         $('#form').on('submit', function(e) {
             e.preventDefault();
