@@ -1,14 +1,16 @@
 <?php
 namespace backend\modules\datatj\controllers;
 
-use Yii;
 use backend\controllers\BaseController;
-use common\models\checkaccount\CheckaccountWdjf;
-use common\models\checkaccount\CheckaccountHz;
 use common\lib\bchelp\BcRound;
-use yii\data\Pagination;
+use common\models\checkaccount\CheckaccountHz;
+use common\models\checkaccount\CheckaccountWdjf;
+use common\models\stats\Perf;
 use common\models\user\RechargeRecord;
 use common\models\user\User;
+use yii\data\Pagination;
+use yii\db\Query;
+use Yii;
 
 class DatatjController extends BaseController {
 
@@ -147,6 +149,143 @@ class DatatjController extends BaseController {
      */
     public function actionHuizongtj()
     {
-        return $this->render('huizongtj');
+        $date = new \DateTime($this->getStartDate());
+        $endDate = $this->getEndDate();
+
+        for ($i = 0; $i < 5; $i++) {
+            if ($date > new \DateTime($endDate)) {
+                break;
+            }
+        
+            $ymd = $date->format('Y-m-d');
+            $perf = new Perf();
+            $perf->bizDate = $ymd;
+            
+            foreach (['reg', 'idVerified', 'qpayEnabled', 'investor', 'newInvestor', 'chargeViaPos', 'chargeViaEpay', 'drawAmount', 'investmentInWyj', 'investmentInWyb', 'totalInvestment'] as $field) {
+                $method = 'get'.ucfirst($field);
+                $perf->{$field} = $this->{$method}($ymd);
+            }
+            
+            $perf->save();
+            
+            $date = $date->add(new \DateInterval('P1D'));
+        }
+
+$perfs = Perf::find()->orderBy('bizDate DESC')->all();
+
+            $ymd = (new \DateTime())->format('Y-m-d');
+            $perf = new Perf();
+            $perf->bizDate = $ymd;
+            
+            foreach (['reg', 'idVerified', 'qpayEnabled', 'investor', 'newInvestor', 'chargeViaPos', 'chargeViaEpay', 'drawAmount', 'investmentInWyj', 'investmentInWyb', 'totalInvestment'] as $field) {
+                $method = 'get'.ucfirst($field);
+                $perf->{$field} = $this->{$method}($ymd);
+            }
+
+array_unshift($perfs, $perf);
+
+        return $this->render('huizongtj', ['perfs' => $perfs]);
+    }
+
+    private function getStartDate()
+    {
+        $date = Yii::$app->db->createCommand('select max(bizDate) from perf')
+            ->queryScalar();
+        if (null === $date) {
+            $date = Yii::$app->db->createCommand('SELECT MIN(DATE(FROM_UNIXTIME(created_at))) FROM user WHERE type=1')
+                ->queryScalar();
+        } else {
+            $date = (new \DateTime($date))->add(new \DateInterval('P1D'))->format('Y-m-d');
+        }
+    
+        return $date;
+    }
+
+    private function getEndDate()
+    {
+        return (new \DateTime('-1 day'))->format('Y-m-d');
+    }
+
+    private function getReg($date)
+    {
+        return Yii::$app->db->createCommand('SELECT COUNT(id) FROM user WHERE type=1 AND DATE(FROM_UNIXTIME(created_at))=:date')
+            ->bindValue('date', $date, \PDO::PARAM_STR)
+            ->queryScalar();
+    }
+    
+    private function getIdVerified($date)
+    {
+        return Yii::$app->db->createCommand('SELECT COUNT(id) FROM EpayUser WHERE regDate=:date')
+            ->bindValue('date', $date, \PDO::PARAM_STR)
+            ->queryScalar();
+    }
+    
+    private function getQpayEnabled($date)
+    {
+        return Yii::$app->db->createCommand('SELECT COUNT(id) FROM user_bank WHERE DATE(FROM_UNIXTIME(created_at))=:date')
+            ->bindValue('date', $date, \PDO::PARAM_STR)
+            ->queryScalar();
+    }
+    
+    private function getInvestor($date)
+    {
+        return Yii::$app->db->createCommand('SELECT COUNT(DISTINCT(uid)) FROM online_order WHERE status=1 AND DATE(FROM_UNIXTIME(created_at))=:date')
+            ->bindValue('date', $date, \PDO::PARAM_STR)
+            ->queryScalar();
+    }
+    
+    private function getNewInvestor($date)
+    {
+        $totalInvestor = Yii::$app->db->createCommand('SELECT COUNT(DISTINCT(uid)) FROM online_order WHERE status=1 AND DATE(FROM_UNIXTIME(created_at))<=:date')
+            ->bindValue('date', $date, \PDO::PARAM_STR)
+            ->queryScalar();
+        
+        $investor = Yii::$app->db->createCommand('SELECT COUNT(DISTINCT(uid)) FROM online_order WHERE status=1 AND DATE(FROM_UNIXTIME(created_at))<:date')
+            ->bindValue('date', $date, \PDO::PARAM_STR)
+            ->queryScalar();
+        
+        return $totalInvestor - $investor;
+    }
+    
+    private function getChargeViaPos($date)
+    {
+        return Yii::$app->db->createCommand('SELECT SUM(r.fund) FROM recharge_record r LEFT JOIN user u ON r.uid=u.id WHERE r.status=1 AND r.pay_type=3 AND u.type=1 AND DATE(FROM_UNIXTIME(r.created_at))=:date')
+            ->bindValue('date', $date, \PDO::PARAM_STR)
+            ->queryScalar();
+    }
+    
+    private function getChargeViaEpay($date)
+    {
+        return Yii::$app->db->createCommand('SELECT SUM(r.fund) FROM recharge_record r LEFT JOIN user u ON r.uid=u.id WHERE r.status=1 AND r.pay_type<>3 AND u.type=1 AND DATE(FROM_UNIXTIME(r.created_at))=:date')
+            ->bindValue('date', $date, \PDO::PARAM_STR)
+            ->queryScalar();
+    }
+    
+    private function getDrawAmount($date)
+    {
+        return Yii::$app->db->createCommand('SELECT SUM(r.money) FROM draw_record r LEFT JOIN user u on r.uid=u.id WHERE r.status=1 and u.type=1 and DATE(FROM_UNIXTIME(r.created_at))=:date')
+            ->bindValue('date', $date, \PDO::PARAM_STR)
+            ->queryScalar();
+    }
+    
+    private function getInvestmentInWyj($date)
+    {
+        return Yii::$app->db->createCommand('select sum(o.order_money) from online_order o left join online_product l on o.online_pid=l.id where l.cid=1 and o.status=1 and DATE(FROM_UNIXTIME(o.created_at))=:date')
+            ->bindValue('date', $date, \PDO::PARAM_STR)
+            ->queryScalar();
+    }
+    
+    private function getInvestmentInWyb($date)
+    {
+        return Yii::$app->db->createCommand('select sum(o.order_money) from online_order o left join online_product l on o.online_pid=l.id where l.cid=2 and o.status=1 and DATE(FROM_UNIXTIME(o.created_at))=:date')
+            ->bindValue('date', $date, \PDO::PARAM_STR)
+            ->queryScalar();
+    }
+    
+    private function getTotalInvestment($date)
+    {
+        return Yii::$app->db->createCommand('select sum(o.order_money) from online_order o where o.status=1 and DATE(FROM_UNIXTIME(o.created_at))=:date')
+            ->bindValue('date', $date, \PDO::PARAM_STR)
+            ->queryScalar();
     }
 }
