@@ -25,6 +25,10 @@ class NewsController extends Controller
      */
     public function actionDetail($id)
     {
+        if (empty($id) || is_int($id)) {
+            throw new \yii\web\NotFoundHttpException();     //参数无效,抛出404异常
+        }
+
         return $this->render('detail', ['id' => $id]);
     }
 }

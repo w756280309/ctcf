@@ -5,6 +5,11 @@ $this->title = '最新资讯';
 
 <!-- 主体 -->
 <div class="information-list">
+        <a href="/news/detail?id=3" class="single">
+                <p class="single-title">【资讯标题】温都金服试上线活动现场报道</p>
+                <p class="single-description">温都金服试上线活动现场热闹非凡，用户踊跃参与领取食用油。</p>
+                <p class="single-time">2016-4-29</p>
+        </a>
         <a href="/news/detail?id=1" class="single">
                 <p class="single-title">【资讯标题】温都金服定于4月19日试上线</p>
                 <p class="single-description">温州报业传媒旗下理财平台—温都金服（wenjf.com），定于4月19日试上线。</p>

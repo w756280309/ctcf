@@ -2,7 +2,7 @@
 $this->title = '最新资讯';
 $this->showIndexBottomNav = true;
 ?>
-<link href="<?= ASSETS_BASE_URI ?>css/news.css?v=20160418" rel="stylesheet">
+<link href="<?= ASSETS_BASE_URI ?>css/news.css?v=20160429" rel="stylesheet">
 <link href="<?= ASSETS_BASE_URI ?>css/first.css?v=20160418-f" rel="stylesheet">
 
 <?php if (1 === (int) $id) { ?>
@@ -38,6 +38,30 @@ $this->showIndexBottomNav = true;
                 <p> 联动优势拥有历经数年考验的专业风控体系，采用国际最先进的动态密码算法，最大限度保护账户及资金安全；使用国际先进的客户关系管理系统和数据挖掘系统， 加强对交易的实时监控；2010年，系统已达到国家信息安全检测中心的系统安全一级资质，是中国商务信用平台，并通过ISO27001安全认证。</p>
                 <p class="header-content-luokuan">温都金服运营团队</p>
                 <p class="header-content-time">2016年4月18日</p>
+        </div>
+</div>
+<?php } elseif (3 === (int) $id) { ?>
+<!-- 主体 -->
+<div class="information-details">
+        <div class="header">
+                <p class="header-title">温都金服试上线活动现场报道</p>
+                <p class="header-time">2016-4-29</p>
+        </div>
+        <div class="header-content">
+                <p class="text-inline">温都金服试上线的第一天，早上八点半还没到，服务体验店就挤满了邀约而来的会员们。“温都金服几天之前就电话邀约我们过来参加活动，给我们提供理财的资讯、咨询。我们觉得非常好，所以过来看看了解一下。”黄大伯这样说。</p>
+                <p>“今天现场活动，温都金服还给我们每个人准备了食用油，真是贴心。正好家里炒菜的油快没了。”张女士说。</p>
+                <p>温都金服活动的第一天，共吸引了近300名会员前来参加活动，分享理财心得、解决投资困惑。</p>
+                <img src="<?= ASSETS_BASE_URI ?>images/news/image001.jpg"/>
+                <p class="pic-des">（图为客户在服务体验店进行咨询）</p>
+                <img src="<?= ASSETS_BASE_URI ?>images/news/image002.jpg"/>
+                <p class="pic-des">（图为客服人员在为客户解答问题）</p>
+                <img src="<?= ASSETS_BASE_URI ?>images/news/image003.jpg"/>
+                <p class="pic-des">（图为现场接待场景）</p>
+                <p>一些客户有疑问提出，工作人员都热心地解答，大家纷纷对小伙伴们耐心的服务表示了赞赏和肯定呢！</p>
+                <img src="<?= ASSETS_BASE_URI ?>images/news/image004.jpg"/>
+                <p class="pic-des">（图为客服人员在为客户解答问题）</p>
+                <p>试上线活动将会持续到5月3日，如果您工作日还没来得及来现场领取奖品的话，告诉您一个好消息：我们节假日无休，敬请打扰哦。我们“温都金服”的小伙伴在温州市区飞霞南路657号保丰大楼二层（老党校对面）恭候您的到来。如果您有什么问题，欢迎随时拨打我们的咨询电话：400-101-5151。</p>
+                <p>温都金服定位市民身边的财富管家，采取稳健发展策略，平台不自产项目，所有交易产品均来自于各类金融机构/优质企业/政府平台类项目，引导社会资金支持实体经济， 让更多市民享受到金融的升级之利。</p>
         </div>
 </div>
 <?php } ?>

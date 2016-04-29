@@ -105,4 +105,14 @@ body {background-color: #fff;}
 a.blue {
     color: #007aff;
 }
+/* 添加图片下方注释样式 */
+p.pic-des {
+    text-align: center;
+    font-size: 1rem;
+    text-indent: 0 !important;
+}
+.header-content img {
+    width: 100%;
+    margin: 5px 0;
+}
 
