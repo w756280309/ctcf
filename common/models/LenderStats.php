@@ -193,6 +193,7 @@ class LenderStats extends \yii\db\ActiveRecord
     private static function instructionUpdate()
     {
         $last_update_time = self::getLastUpdateTime();
+        //没有更新过就初始化
         if (is_null($last_update_time)) {
             self::overallUpdate();
             return true;
@@ -222,50 +223,62 @@ class LenderStats extends \yii\db\ActiveRecord
             ->andWhere(['>', 'created_at', $last_update_time])
             ->asArray()
             ->all();
-        if (count($tradeLogs) == 0) {
-            return false;
-        }
-        $time = max(ArrayHelper::getColumn($tradeLogs, 'created_at'));
-        //获取所有统计结果可能变动的用户uid
         $uids = [];
-        foreach ($tradeLogs as $v) {
-            if (in_array($v['txType'], [
-                'cust_withdrawals',
-                'ptp_mer_bind_card',
-                'mer_bind_card_apply_notify',
-                'mer_bind_card_notify',
-                'mer_register_person',
-                'mer_bind_agreement_notify'
-            ])) {
-                //提现、绑卡、注册、免密 可以获取到用户uid , 没有uid信息暂不考虑
-                if ($v['uid'] > 0) {
-                    $uids[] = $v['uid'];
-                } else {
-                    continue;
-                }
-            } else {
-                //充值、交易 指令无法获取用户 uid ,只能通过 sn 查找
-                if (in_array($v['txType'], ['project_transfer', 'project_tranfer_notify', 'project_transfer_nopwd'])) {
-                    //交易
-                    $sn = $v['txSn'];
-                    $model = OnlineOrder::find()->where(['sn' => $sn, 'status' => 1])->asArray()->one();
-                    if (!$model) {
+        $time = time();
+        //有指令的时候分析指令
+        if (0 !== count($tradeLogs)) {
+            $time = max(ArrayHelper::getColumn($tradeLogs, 'created_at'));
+            //获取所有统计结果可能变动的用户uid
+            foreach ($tradeLogs as $v) {
+                if (in_array($v['txType'], [
+                    'cust_withdrawals',
+                    'ptp_mer_bind_card',
+                    'mer_bind_card_apply_notify',
+                    'mer_bind_card_notify',
+                    'mer_register_person',
+                    'mer_bind_agreement_notify'
+                ])) {
+                    //提现、绑卡、注册、免密 可以获取到用户uid , 没有uid信息暂不考虑
+                    if ($v['uid'] > 0) {
+                        $uids[] = $v['uid'];
+                    } else {
                         continue;
                     }
-                    $uids[] = $model['uid'];
-                } elseif (in_array($v['txType'], ['mer_recharge_person', 'recharge_notify', 'mer_recharge_person_nopwd'])) {
-                    //充值
-                    $sn = $v['txSn'];
-                    $model = RechargeRecord::find()->where(['sn' => $sn, 'status' => 1])->asArray()->one();
-                    if (!$model) {
+                } else {
+                    //充值、交易 指令无法获取用户 uid ,只能通过 sn 查找
+                    if (in_array($v['txType'], ['project_transfer', 'project_tranfer_notify', 'project_transfer_nopwd'])) {
+                        //交易
+                        $sn = $v['txSn'];
+                        $model = OnlineOrder::find()->where(['sn' => $sn, 'status' => 1])->asArray()->one();
+                        if (!$model) {
+                            continue;
+                        }
+                        $uids[] = $model['uid'];
+                    } elseif (in_array($v['txType'], ['mer_recharge_person', 'recharge_notify', 'mer_recharge_person_nopwd'])) {
+                        //充值
+                        $sn = $v['txSn'];
+                        $model = RechargeRecord::find()->where(['sn' => $sn, 'status' => 1])->asArray()->one();
+                        if (!$model) {
+                            continue;
+                        }
+                        $uids[] = $model['uid'];
+                    } else {
                         continue;
                     }
-                    $uids[] = $model['uid'];
-                } else {
-                    continue;
                 }
             }
         }
+        //获取只在文都金服、没有与联动差生交互的新注册用户;时间间隔,上次更新时间到这次最新命令时间（$last_update_time,$time）
+        $users = User::find()
+            ->select('id')
+            ->where(['mianmiStatus' => 0, 'idcard_status' => 0])
+            ->andWhere(['between', 'created_at', $last_update_time, $time])
+            ->asArray()
+            ->all();
+        if ($users) {
+            $uids = array_merge($uids, ArrayHelper::getColumn($users, 'id'));
+        }
+
         //获取这批用户的统计结果
         if (count($uids) > 0) {
             $uids = array_unique($uids);
