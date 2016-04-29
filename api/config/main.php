@@ -38,6 +38,9 @@ return [
                 'app/user' => 'v1/app/user/info',
                 'app/appver' => 'v1/app/deploy/appver',
                 'app/token' => 'v1/app/server/tokeninfo',
+
+                'notify/draw/frontend' => 'v1/notify/draw/frontend',
+                'notify/draw/backend' => 'v1/notify/draw/backend',
             ],
         ],
     ],

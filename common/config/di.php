@@ -9,5 +9,6 @@
     \Yii::$app->params['ump']['wdjf_key'],
     \Yii::$app->params['ump']['ump_cert'],
     isset(Yii::$app->request->hostInfo) ? Yii::$app->request->hostInfo : "",
+    \Yii::$app->params['clientOption'],
 ]);
 \Yii::$container->set('sms', 'SmsGate\\SmsRequest', [false, []]);

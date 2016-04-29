@@ -48,6 +48,8 @@ class Client
      *
      * @var type
      */
+    private $clientOption;
+
     private $hostInfo;
 
     /**
@@ -67,13 +69,14 @@ class Client
 
     private $logAdapter;
 
-    public function __construct($apiUrl, $merchantId, $clientKeyPath, $umpCertPath, $hostInfo, LoggerInterface $logAdapter)
+    public function __construct($apiUrl, $merchantId, $clientKeyPath, $umpCertPath, $hostInfo, $clientOption, LoggerInterface $logAdapter)
     {
         $this->apiUrl = $apiUrl;
         $this->merchantId = $merchantId;
         $this->clientKeyPath = $clientKeyPath;
         $this->umpCertPath = $umpCertPath;
         $this->hostInfo = $hostInfo;
+        $this->clientOption = $clientOption;
         $this->logAdapter = $logAdapter;
     }
 
@@ -225,8 +228,8 @@ class Client
     {
         $data = [
             'service' => 'cust_withdrawals',
-            'ret_url' => $this->hostInfo . "/user/qpay/drawnotify/frontend" .('pc' === $channel ? '?channel=pc' : ''),
-            'notify_url' => $this->hostInfo . "/user/qpay/drawnotify/backend",
+            'ret_url' => $this->clientOption['host']['api'] . "notify/draw/frontend" .('pc' === $channel ? '?channel=pc' : ''),
+            'notify_url' => $this->clientOption['host']['api'] . "notify/draw/backend",
             'order_id' => $draw->getTxSn(),
             'mer_date' => date('Ymd', $draw->getTxDate()),
             'user_id' => $draw->getEpayUserId(),

@@ -88,5 +88,12 @@ return [
     'category_type'=>[
         '1'=>'文章分类',
         '9'=>'其他分类'
+    ],
+    'clientOption' => [
+        'host' => [
+            'api' => 'https://api.wenjf.com/',
+            'frontend' => 'https://www.wenjf.com/',
+            'wap' => 'https://m.wenjf.com/',
+        ]
     ]
 ];
