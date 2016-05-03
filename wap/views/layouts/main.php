@@ -5,6 +5,11 @@ use common\lib\StringUtils\StringUtils;
 
 frontend\assets\WapAsset::register($this);
 BaiduTongjiHelper::registerTo($this, BaiduTongjiHelper::WAP_KEY);
+$this->registerJsFile(ASSETS_BASE_URI . 'js/common.js?v=20160428', ['depends' => 'yii\web\JqueryAsset', 'position' => 1]);
+$this->registerJsFile(ASSETS_BASE_URI . 'js/lib.js?v=20160428', ['depends' => 'yii\web\JqueryAsset', 'position' => 1]);
+$this->registerJsFile(ASSETS_BASE_URI . 'js/jquery.cookie.js?v=20160428', ['depends' => 'yii\web\JqueryAsset', 'position' => 1]);//加载jquery.cookie
+$this->registerJsFile(ASSETS_BASE_URI . 'js/hmsr.js?v=20160428', ['depends' => 'yii\web\JqueryAsset', 'position' => 1]);//加载来源统计记录代码
+
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
@@ -17,12 +22,6 @@ BaiduTongjiHelper::registerTo($this, BaiduTongjiHelper::WAP_KEY);
     <title><?= Html::encode($this->title) ?></title>
     <?= Html::csrfMetaTags() ?>
     <?php $this->head() ?>
-
-    <script src="<?= ASSETS_BASE_URI ?>js/jquery.js"></script>
-    <script src="<?= ASSETS_BASE_URI ?>js/common.js?v=160407"></script>
-    <script src="<?= ASSETS_BASE_URI ?>js/lib.js?v=160412"></script>
-    <script src="<?= ASSETS_BASE_URI ?>js/jquery.cookie.js?v=160424"></script>
-    <script src="<?= ASSETS_BASE_URI ?>js/hmsr.js?v=160424"></script>
     <script>
     $(function() {
         $(document).ajaxSend(function(event, jqXHR, settings) {
@@ -106,7 +105,6 @@ BaiduTongjiHelper::registerTo($this, BaiduTongjiHelper::WAP_KEY);
     </div>
     <?php } } ?>
 </div>
-<?= \wap\widgets\campaign_source::widget() ?>
 <?php $this->endBody() ?>
 
 </body>
