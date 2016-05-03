@@ -124,7 +124,7 @@ $(function() {
                             </div>
                             <?php } else { ?>
                             <div class="zhuangtai" style="margin:10px 8px; background-color: #9fa0a0;">
-                                <font style="color: #fff; line-height: 34px;"><?= Yii::$app->params['productonline'][$deal->status] ?></font>
+                                <font style="color: #fff; line-height: 34px;"><?= Yii::$app->params['deal_status'][$deal->status] ?></font>
                             </div>
                         <?php } ?>
                     </div>
@@ -157,7 +157,7 @@ $(function() {
                             </div>
                             <?php } else { ?>
                             <div class="zhuangtai" style="margin:10px 8px; background-color: #9fa0a0;">
-                                <font style="color: #fff; line-height: 34px;"><?= Yii::$app->params['productonline'][$deal->status] ?></font>
+                                <font style="color: #fff; line-height: 34px;"><?= Yii::$app->params['deal_status'][$deal->status] ?></font>
                             </div>
                         <?php } ?>
                     </div>

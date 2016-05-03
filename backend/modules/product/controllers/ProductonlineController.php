@@ -41,7 +41,6 @@ class ProductonlineController extends BaseController
      */
     public function actionEdit($id = null)
     {
-        $product_status = OnlineProduct::getProductStatusAll();
         $rongziUser = User::find()->where(['type' => User::USER_TYPE_ORG])->asArray()->all();
         $rongziInfo = [];
         foreach ($rongziUser as $v) {
@@ -135,7 +134,6 @@ class ProductonlineController extends BaseController
             'pid' => $id,
             'model' => $model,
             'ctmodel' => $ctmodel,
-            'product_status' => $product_status,
             'rongziInfo' => $rongziInfo,
             'con_name_arr' => $con_name_arr,
             'con_content_arr' => $con_content_arr,

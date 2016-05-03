@@ -52,7 +52,7 @@ class DealController extends Controller
                 $deals[$key]['yr'] .= '~'.rtrim(rtrim(number_format(RateSteps::getTopRate(RateSteps::parse($val['rateSteps'])), 2), '0'), '.');
             }
 
-            $deals[$key]['statusval'] = Yii::$app->params['productonline'][$val['status']];
+            $deals[$key]['statusval'] = Yii::$app->params['deal_status'][$val['status']];
             $deals[$key]['method'] = (1 === (int)$val['refund_method']) ? "天" : "个月";
             $deals[$key]['start_money'] = rtrim(rtrim(number_format($val['start_money'], 2), '0'), '.');
             $deals[$key]['cid'] = \Yii::$app->params['refund_method'][$val['refund_method']];
