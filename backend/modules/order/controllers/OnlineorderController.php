@@ -82,8 +82,13 @@ class OnlineorderController extends BaseController
         header("Pragma: no-cache");
         header("Expires: 0");
 
-        $lists = OnlineOrder::find()->where(['online_pid' => $id, 'status' => OnlineOrder::STATUS_SUCCESS])->asArray()->all();
-        $str = "<table border='1'><tr><th style='width: 200px;'>编号</th><th>真实姓名</th><th>手机号</th><th>投资金额（元）</th><th>投资时间</th><th>状态</th>";
+        $lists = OnlineOrder::find()
+            ->select(['online_order.sn', 'online_order.status', 'online_order.username', 'online_order.mobile', 'online_order.order_money', 'online_order.created_at', 'user.idcard'])
+            ->where(['online_order.online_pid' => $id, 'online_order.status' => OnlineOrder::STATUS_SUCCESS])
+            ->leftJoin(User::tableName(), 'online_order.uid = user.id')
+            ->asArray()
+            ->all();
+        $str = "<table border='1'><tr><th style='width: 200px;'>编号</th><th>真实姓名</th><th>手机号</th><th>身份证</th><th>投资金额（元）</th><th>投资时间</th><th>状态</th>";
         if (0 !== count($lists)) {
             foreach ($lists as $list) {
                 if ($list['status'] == 0) {
@@ -99,6 +104,7 @@ class OnlineorderController extends BaseController
                 <td style=\"vnd.ms-excel.numberformat:@\">" . strval($list['sn']) . "</td>
                 <td>" . $list['username'] . "</td>
                 <td>" . $list['mobile'] . "</td>
+                 <td style=\"vnd.ms-excel.numberformat:@\">" . strval($list['idcard']) . "</td>
                 <td>" . $list['order_money'] . "</td>
                 <td>" . date('Y-m-d H:i:s', $list['created_at']) . "</td>
                 <td>" . $status . "</td>
@@ -106,7 +112,7 @@ class OnlineorderController extends BaseController
             }
         }
         $str .= "</table>";
-        $str = mb_convert_encoding($str, "GB2312", "UTF-8");
+        $str = iconv('utf-8', 'GB18030', $str);//转换编码
         echo $str;
     }
 
