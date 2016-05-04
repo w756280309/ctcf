@@ -38,8 +38,8 @@ input {
     margin: 0 auto;
 }
 .icon img {
-    padding: 0;
-    margin: 0;
+    padding: -1px 0 0;
+    margin:  0;
     width: 100%;
     float: left;
 }
@@ -60,44 +60,56 @@ input {
 }
 .line-border p {
     text-align: center;
-    line-height: 32px;
+    line-height: 22px;
     font-size: .83rem;
     color: #3f3f3f;
 }
+.group_border {
+    margin:15px 14px 0;
+    border:2px solid #eb7f97;
+}
+.group_border img {
+    width:100%;
+}
+.top_line {
+    margin:2px 14px 0;
+    height: 2px;
+    background: #eb7f97;
+}
 p.title_01 {
-    margin:16px 24px;
-    height: 30px;
-    line-height: 30px;
-    font-size: 1rem;
-    color:#fff;
+    margin:4px 14px 8px;
+    height: 26px;
+    line-height: 26px;
+    font-size: .9rem;
+    color:#eb7f97;
     text-align: center;
-    background:#eb7f97 url("../images/monther_01.png");
+    background:url("../images/monther_01.png");
 }
 .line {
     position: relative;
     top:0;
     left:0;
-    margin:0 24px;
+    margin:0 14px;
     height: 1px;
     background: #eb7f97;
 }
 p.line_img {
     position: absolute;
     left:50%;
-    top:-16px;
-    margin-left: -25px;
-    width: 50px;
+    top:-12px;
+    margin-left: -20px;
+    width: 40px;
     height: 30px;
 }
 p.line img {
     width:100%;
 }
 .content_txt {
-    margin:40px 22px 5px;
+    margin:28px 16px 5px;
 }
 .content_txt p{
     text-align: center;
-    line-height:26px;
+    line-height:22px;
     font-size: 0.83rem;
     color: #3f3f3f;
 }
@@ -108,8 +120,18 @@ p.first {
 .two_people img {
     width:100%;
 }
+.code_box {
+    margin:28px auto 0;
+}
+.code_box p {
+    margin:0 auto;
+    width:50%;
+}
+.code_box p img {
+    width:100%;
+}
 .star {
-    margin:10px auto 20px;
+    margin:4px auto 8px;
     width:300px;
 }
 .star img {
@@ -117,15 +139,14 @@ p.first {
     width:30px;
 }
 p.tel {
-    margin: 0 10px;
+    margin: 10px;
     font-size: 1rem;
     color: #eb7f97!important;
     text-align: center;
 }
 p.banquan {
-    padding-top: 8px;
     padding-bottom: 28px;
-    font-size: 0.6rem;
+    font-size: 0.7rem;
     color: #eb7f97;
     text-align: center;
 }
