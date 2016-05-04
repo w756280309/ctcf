@@ -209,7 +209,7 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
 
             ['isFlexRate', 'integer'],
             ['rateSteps', 'string', 'max' => 500],
-            [['rateSteps', 'isFlexRate'], 'checkRateSteps'],
+            [['rateSteps'], 'checkRateSteps'],
         ];
     }
 
@@ -217,11 +217,12 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
     {
         $rateSteps = $this->rateSteps;
         $isFlexRate = $this->isFlexRate;
+        $yield_rate = $this->yield_rate;//项目利率
         if (boolval($isFlexRate)) {
             if (empty($rateSteps)) {
                 $this->addError('rateSteps', '浮动利率不能为空');
             }
-            if (!RateSteps::checkRateSteps($rateSteps)) {
+            if (!RateSteps::checkRateSteps($rateSteps, floatval($yield_rate))) {
                 $this->addError('rateSteps', '浮动利率格式错误');
             }
         }
