@@ -20,12 +20,14 @@ class DrawController extends Controller
         $data = Yii::$app->request->get();
         $channel = null;
         $app_token = "";
+        $website = "wap";
         if (array_key_exists('channel', $data)) {
             $channel = $data['channel'];
             unset($data['channel']);
         }
         if (array_key_exists('app_token', $data)) {
             $app_token = "&token=" . $data['app_token'];
+            $website = "app";
             unset($data['app_token']);
         }
         $ret = $this->processing($data);
@@ -34,13 +36,13 @@ class DrawController extends Controller
                 return $this->redirect(Yii::$app->params['clientOption']['host']['frontend'].'user/draw/draw-notify?flag=succ');
             }
 
-            return $this->redirect(Yii::$app->params['clientOption']['host']['wap'].'user/userbank/drawres?ret=success' . $app_token);
+            return $this->redirect(Yii::$app->params['clientOption']['host'][$website].'user/userbank/drawres?ret=success' . $app_token);
         } else {
             if ('pc' === $channel) {
                 return $this->redirect(Yii::$app->params['clientOption']['host']['frontend'].'user/draw/draw-notify?flag=err');
             }
 
-            return $this->redirect(Yii::$app->params['clientOption']['host']['wap'].'user/userbank/drawres' . $app_token);
+            return $this->redirect(Yii::$app->params['clientOption']['host'][$website].'user/userbank/drawres' . $app_token);
         }
     }
 

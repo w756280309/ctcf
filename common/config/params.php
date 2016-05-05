@@ -93,6 +93,7 @@ return [
             'api' => 'https://api.wenjf.com/',
             'frontend' => 'https://www.wenjf.com/',
             'wap' => 'https://m.wenjf.com/',
+            'app' => 'https://app.wenjf.com/',
         ]
     ]
 ];
