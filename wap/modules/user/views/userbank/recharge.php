@@ -20,7 +20,7 @@ $this->title="充值";
     <!--银行卡-->
     <div class="row bank-card">
         <div class="col-xs-2 bank-img"><img src="<?= ASSETS_BASE_URI ?>images/bankicon/<?= $user_bank->bank_id ?>.png" alt=""/></div>
-        <div class="col-xs-8 bank-content">
+        <div class="col-xs-10 bank-content">
             <div class="bank-content1" style="font-size: 14px;">
                 <?= $user_bank->bank_name ?>
                 <span style="font-size: 12px;">(限额<?= \Yii::$app->functions->toFormatMoney($bank['singleLimit']) ?>/笔，<?= \Yii::$app->functions->toFormatMoney($bank['dailyLimit']) ?>/日)</span>
@@ -30,7 +30,7 @@ $this->title="充值";
                 </br>银行预留手机号 <?= substr_replace(Yii::$app->user->identity->mobile,'****',3,-4); ?>
             </div>
         </div>
-        <div class="col-xs-2"></div>
+<!--        <div class="col-xs-1"></div>-->
     </div>
     <!--可用金额-->
     <div class="row kahao">
