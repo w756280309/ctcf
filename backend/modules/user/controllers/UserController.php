@@ -54,7 +54,7 @@ class UserController extends BaseController
             return ['TYPE参数错误'];
         }
 
-        $query = User::find()->where(['type' => $type]);
+        $query = User::find()->where(['type' => $type, 'is_soft_deleted' => 0]);
         if ($type == User::USER_TYPE_PERSONAL) {
             $query->with('lendAccount');
             if (!empty($name)) {
