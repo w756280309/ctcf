@@ -166,7 +166,11 @@ class UserbankController extends BaseController
         if ($draw->load(Yii::$app->request->post()) && $draw->validate()) {
             try {
                 $drawres = DrawManager::initDraw($user_acount, $draw->money, \Yii::$app->params['drawFee']);
-                $next = Yii::$container->get('ump')->initDraw($drawres);
+                $option = array();
+                if (null != Yii::$app->request->get("token")) {
+                    $option['app_token'] = Yii::$app->request->get("token");
+                }
+                $next = Yii::$container->get('ump')->initDraw($drawres, null, $option);
                 return ['code' => 0, 'message' => '', 'tourl' => $next];
             } catch (DrawException $ex) {
                 if (DrawException::ERROR_CODE_ENOUGH === $ex->getCode()) {

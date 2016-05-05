@@ -221,14 +221,26 @@ class Client
      *
      * @param WithdrawalInterface $draw
      * @param $channel 渠道识别标志 pc代表pc端
+     * @param array $option 其他配置
      *
      * @return type
      */
-    public function initDraw(WithdrawalInterface $draw, $channel = null)
+    public function initDraw(WithdrawalInterface $draw, $channel = null, $option = array())
     {
+        $ret_url_param = "";
+        if ('pc' === $channel) {
+            $ret_url_param = "?channel=pc";
+        }
+        if (array_key_exists('app_token', $option)) {
+            if ("" === $ret_url_param) {
+                $ret_url_param = "?token=" . $option['app_token'];
+            } else {
+                $ret_url_param .= "&token=" . $option['app_token'];
+            }
+        }
         $data = [
             'service' => 'cust_withdrawals',
-            'ret_url' => $this->clientOption['host']['api'] . "notify/draw/frontend" .('pc' === $channel ? '?channel=pc' : ''),
+            'ret_url' => $this->clientOption['host']['api'] . "notify/draw/frontend" . $ret_url_param,
             'notify_url' => $this->clientOption['host']['api'] . "notify/draw/backend",
             'order_id' => $draw->getTxSn(),
             'mer_date' => date('Ymd', $draw->getTxDate()),

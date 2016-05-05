@@ -15,14 +15,18 @@ use common\models\TradeLog;
  */
 class DrawController extends Controller
 {
-    //http://api.wdjf.com/notify/draw/frontend?order_id=1333lslslsl&mer_date=2016-04-29
     public function actionFrontend()
     {
         $data = Yii::$app->request->get();
         $channel = null;
+        $app_token = "";
         if (array_key_exists('channel', $data)) {
             $channel = $data['channel'];
             unset($data['channel']);
+        }
+        if (array_key_exists('app_token', $data)) {
+            $app_token = "&token=" . $data['app_token'];
+            unset($data['app_token']);
         }
         $ret = $this->processing($data);
         if ($ret instanceof DrawRecord) {
@@ -30,13 +34,13 @@ class DrawController extends Controller
                 return $this->redirect(Yii::$app->params['clientOption']['host']['frontend'].'user/draw/draw-notify?flag=succ');
             }
 
-            return $this->redirect(Yii::$app->params['clientOption']['host']['wap'].'user/userbank/drawres?ret=success');
+            return $this->redirect(Yii::$app->params['clientOption']['host']['wap'].'user/userbank/drawres?ret=success' . $app_token);
         } else {
             if ('pc' === $channel) {
                 return $this->redirect(Yii::$app->params['clientOption']['host']['frontend'].'user/draw/draw-notify?flag=err');
             }
 
-            return $this->redirect(Yii::$app->params['clientOption']['host']['wap'].'user/userbank/drawres');
+            return $this->redirect(Yii::$app->params['clientOption']['host']['wap'].'user/userbank/drawres' . $app_token);
         }
     }
 
