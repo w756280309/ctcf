@@ -12,7 +12,7 @@ $this->registerJs('var cp=' . $header['cp'] . ';', 1);
 $pc_cat = Yii::$app->params['pc_cat'];
 
 ?>
-<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/index.css?v=20160427"/>
+<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/index.css?v=20160505"/>
 <script src="<?= ASSETS_BASE_URI ?>js/TouchSlide.1.1.js"></script>
 <script src="<?= ASSETS_BASE_URI ?>js/jquery.classyloader.js"></script>
 <script src="<?= ASSETS_BASE_URI ?>js/list.js?v=20160427"></script>
