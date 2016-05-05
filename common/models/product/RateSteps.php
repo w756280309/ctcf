@@ -60,20 +60,20 @@ class RateSteps
                     return false;
                 }
                 //浮动利率和基础利率作比较
-                if (floatval(trim($data[1])) < $yield_rate) {
+                if (floatval(trim($data[1])) <= $yield_rate) {
                     return false;
                 }
                 $s = floatval(trim($data[0]));
                 $r = floatval(trim($data[1]));
                 //下一个利率大于上一个利率
                 $next_rate = $r;
-                if ($next_rate < $last_rate) {
+                if ($next_rate <= $last_rate) {
                     return false;
                 }
                 $last_rate = $r;
                 //下一个金额大于上一个金额
                 $next_state = $s;
-                if ($next_state < $last_state) {
+                if ($next_state <= $last_state) {
                     return false;
                 }
                 $last_state = $s;
