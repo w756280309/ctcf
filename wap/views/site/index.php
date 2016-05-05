@@ -198,9 +198,9 @@ $(function() {
             <div class="col-xs-3 col-sm-2 more news-more">更多》</div>
         </a>
         <div class="notice-bottom">
-            <a class="col-xs-12 notice border-top" href="/news/detail?id=3"><span>【</span>资讯信息<span>】</span>温都金服试上线活动现场报道</a>
-            <a class="col-xs-12 notice" href="/news/detail?id=1"><span>【</span>资讯信息<span>】</span>温都金服定于4月19日试上线</a>
-            <a class="col-xs-12 notice border-bot" href="/news/detail?id=2"><span>【</span>资讯信息<span>】</span>用户资金托管引入联动优势</a>
+            <a class="col-xs-12 notice border-top" href="/news/detail?id=4"><span>【</span>资讯信息<span>】</span>奖品发布公告</a>
+            <a class="col-xs-12 notice" href="/news/detail?id=3"><span>【</span>资讯信息<span>】</span>温都金服试上线活动现场报道</a>
+            <a class="col-xs-12 notice border-bot" href="/news/detail?id=1"><span>【</span>资讯信息<span>】</span>温都金服定于4月19日试上线</a>
         </div>
     </div>
     <!-- 最新资讯 end -->

@@ -2,7 +2,7 @@
 $this->title = '最新资讯';
 $this->showIndexBottomNav = true;
 ?>
-<link href="<?= ASSETS_BASE_URI ?>css/news.css?v=20160429" rel="stylesheet">
+<link href="<?= ASSETS_BASE_URI ?>css/news.css?v=20160505" rel="stylesheet">
 <link href="<?= ASSETS_BASE_URI ?>css/first.css?v=20160418-f" rel="stylesheet">
 
 <?php if (1 === (int) $id) { ?>
@@ -62,6 +62,117 @@ $this->showIndexBottomNav = true;
                 <p class="pic-des">（图为客服人员在为客户解答问题）</p>
                 <p>试上线活动将会持续到5月3日，如果您工作日还没来得及来现场领取奖品的话，告诉您一个好消息：我们节假日无休，敬请打扰哦。我们“温都金服”的小伙伴在温州市区飞霞南路657号保丰大楼二层（老党校对面）恭候您的到来。如果您有什么问题，欢迎随时拨打我们的咨询电话：400-101-5151。</p>
                 <p>温都金服定位市民身边的财富管家，采取稳健发展策略，平台不自产项目，所有交易产品均来自于各类金融机构/优质企业/政府平台类项目，引导社会资金支持实体经济， 让更多市民享受到金融的升级之利。</p>
+        </div>
+</div>
+<?php } elseif (4 === (int) $id) { ?>
+<!-- 主体 -->
+<div class="information-details">
+        <div class="header">
+                <p class="header-title">奖品发布公告</p>
+                <p class="header-time">2016-5-5</p>
+        </div>
+        <div class="header-content">
+                <p class="text-indent-no">亲爱的用户：</p>
+                <p>温都金服“上线有红利”活动，于4月20日开始，5月3日圆满结束啦！感谢各位投资人对温都金服试上线活动的关注和支持，获奖名单已经公布：</p>
+                <p class="text-indent-no">豪士奖（理财用户投资榜）中奖名单：</p>
+                <table>
+                    <tr>
+                        <th>排名</th>
+                        <th>用户名</th>
+                        <th>理财总额</th>
+                        <th>奖品</th>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td>138******60</td>
+                        <td>1,000,000.00元</td>
+                        <td>iPhone 6S</td>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td>138******31</td>
+                        <td>1,000,000.00元</td>
+                        <td>iPhone 6S</td>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td>136******87</td>
+                        <td>1,000,000.00元</td>
+                        <td>iPhone 6S</td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td>138******73</td>
+                        <td>580,000.00元</td>
+                        <td>1000元油卡</td>
+                    </tr>
+                    <tr>
+                        <td>5</td>
+                        <td>136******98</td>
+                        <td>560,000.00元</td>
+                        <td>1000元油卡</td>
+                    </tr>
+                    <tr>
+                        <td>6</td>
+                        <td>137******81</td>
+                        <td>510,000.00元</td>
+                        <td>1000元油卡</td>
+                    </tr>
+                    <tr>
+                        <td>7</td>
+                        <td>180******11</td>
+                        <td>500,000.00元</td>
+                        <td>1000元油卡</td>
+                    </tr>
+                    <tr>
+                        <td>8</td>
+                        <td>135******76</td>
+                        <td>400,000.00元</td>
+                        <td>1000元油卡</td>
+                    </tr>
+                    <tr>
+                        <td>8</td>
+                        <td>130******80</td>
+                        <td>400,000.00元</td>
+                        <td>1000元油卡</td>
+                    </tr>
+                </table>
+                <p class="text-indent-no">欢乐奖（投资用户抽奖榜）部分中奖名单：</p>
+                <table>
+                    <tr>
+                        <th>奖项</th>
+                        <th>用户名</th>
+                        <th>奖品</th>
+                    </tr>
+                    <tr>
+                        <td>一等奖</td>
+                        <td>138******11</td>
+                        <td>iPhone 6S</td>
+                    </tr>
+                    <tr>
+                        <td>二等奖</td>
+                        <td>137******16</td>
+                        <td>Ipad mini4</td>
+                    </tr>
+                    <tr>
+                        <td>二等奖</td>
+                        <td>158******09</td>
+                        <td>Ipad mini4</td>
+                    </tr>
+                    <tr>
+                        <td>三等奖</td>
+                        <td>138******90</td>
+                        <td>1000元油卡</td>
+                    </tr>
+                </table>
+                <p class="text-indent-no">……</p>
+                <p class="text-indent-no">更多欢乐奖中奖名单请点击以下链接查看：</p>
+                <p class="text-indent-no"><a class="blue" href="http://promo.wenjf.com/1603/billboard/">http://promo.wenjf.com/1603/billboard/</a></p>
+                <p>恭喜获奖的朋友们，再次感谢大家的参与，祝投资愉快！</p>
+                <p>给新老用户带来更多的福利，欢迎大家关注温都金服官方微信“wendujinfu”，以便第一时间获得活动讯息！</p>
+                <p>温馨提示：温都金服客服将会和获奖用户电话确认，请保持电话畅通，便于确认收货地址等信息，所有奖品会在7个工作日内寄出；如需要前来领取的用户请和客服提前沟通；3次联系不上或活动结束后30日内用户未主动联系，视为用户自动放弃奖品，不再具有获奖资格。</p>
+                <p>如有任何疑问，欢迎咨询客服热线：400-101-5151。</p><br>
+                <p><b>在法律许可内，本活动最终解释权归温州温都金融信息服务股份有限公司所有，感谢大家一直以来对温都金服（m.wenjf.com）的信任与支持，祝大家生活愉快。</b></p>
         </div>
 </div>
 <?php } ?>

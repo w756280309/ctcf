@@ -5,6 +5,11 @@ $this->title = '最新资讯';
 
 <!-- 主体 -->
 <div class="information-list">
+        <a href="/news/detail?id=4" class="single">
+                <p class="single-title">【资讯标题】奖品发布公告</p>
+                <p class="single-description">温都金服“上线有红利”活动圆满结束，公布获奖名单。</p>
+                <p class="single-time">2016-5-5</p>
+        </a>
         <a href="/news/detail?id=3" class="single">
                 <p class="single-title">【资讯标题】温都金服试上线活动现场报道</p>
                 <p class="single-description">温都金服试上线活动现场热闹非凡，用户踊跃参与领取食用油。</p>

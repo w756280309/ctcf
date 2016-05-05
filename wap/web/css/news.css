@@ -115,4 +115,16 @@ p.pic-des {
     width: 100%;
     margin: 5px 0;
 }
-
+/* 增加资讯页表格样式 */
+table {
+    width: 100%;
+    text-align: center;
+}
+th {
+    border: 1px solid #595757;
+    border-bottom: 0px;
+    text-align: center;
+}
+table tr td {
+    border: 1px solid #595757;
+}
