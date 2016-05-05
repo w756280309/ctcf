@@ -25,10 +25,10 @@ class DrawController extends Controller
             $channel = $data['channel'];
             unset($data['channel']);
         }
-        if (array_key_exists('app_token', $data)) {
-            $app_token = "&token=" . $data['app_token'];
+        if (array_key_exists('token', $data)) {
+            $app_token = "&token=" . $data['token'];
             $website = "app";
-            unset($data['app_token']);
+            unset($data['token']);
         }
         $ret = $this->processing($data);
         if ($ret instanceof DrawRecord) {
