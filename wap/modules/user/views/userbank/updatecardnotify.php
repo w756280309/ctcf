@@ -3,11 +3,10 @@ $this->title = "换卡申请结果";
 $this->backUrl = false;
 
 $this->registerJsFile('', ['depends' => 'yii\web\YiiAsset', 'position' => 1]);
-$ret = 'success';
 ?>
-
 <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/setting.css">
 <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/mycard.css">
+
 <div class="row" id='bind-box'>
     <div class="col-xs-12">
         <?php if ('success' === $ret) { ?>
@@ -39,7 +38,7 @@ $ret = 'success';
     <div class="row" id='bind-close1'>
         <div class="col-xs-3"></div>
         <div class="col-xs-6">
-            <a href="/user/user" class="bind-close1">关闭</a>
+            <a href="/user/userbank/mycard" class="bind-close1">关闭</a>
         </div>
         <div class="col-xs-3"></div>
     </div>
@@ -51,7 +50,7 @@ $ret = 'success';
                 $('.daojishi .col-xs-12 span').html(num + '秒');
                 if (num == 0) {
                     clearInterval(t);
-//                    location.href = '/user/user';
+                    location.href = '/user/userbank/mycard';
                 }
             }, 1000);
         })
@@ -60,7 +59,7 @@ $ret = 'success';
     <div class="row" id='bind-close1'>
         <div class="col-xs-3"></div>
         <div class="col-xs-6">
-            <a href="#" class="bind-close1">重新提交</a>
+            <a href="/user/userbank/updatecard" class="bind-close1">重新提交</a>
         </div>
         <div class="col-xs-3"></div>
     </div>

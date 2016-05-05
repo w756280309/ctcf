@@ -200,8 +200,8 @@ class Client
     {
         $data = [
             'service' => 'ptp_mer_replace_card',
-            'ret_url' => $this->hostInfo . "/temp/frontend",
-            'notify_url' => $this->hostInfo . "/temp/backend",
+            'ret_url' => $this->clientOption['host']['api'] . "notify/updatecard/frontend",
+            'notify_url' => $this->clientOption['host']['api'] . "notify/updatecard/backend",
             'sourceV' => 'HTML5',
             'order_id' => $bind->getTxSn(),
             'mer_date' => $bind->getTxDate(),

@@ -41,6 +41,9 @@ return [
 
                 'notify/draw/frontend' => 'v1/notify/draw/frontend',
                 'notify/draw/backend' => 'v1/notify/draw/backend',
+
+                'notify/updatecard/frontend' => 'v1/notify/updatecard/frontend',
+                'notify/updatecard/backend' => 'v1/notify/updatecard/backend',
             ],
         ],
     ],

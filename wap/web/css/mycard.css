@@ -92,3 +92,16 @@ a:active, a:hover, a:visited {
 }
 .daojishi .col-xs-12 div span{color:#f44336;}
 .daojishi .col-xs-12 div{color:#7c7c7c;}
+.apply-exchange-zhong {
+    font-size: 1.7rem;
+    line-height: 3rem;
+    text-align: center;
+    display: block;
+    width: 95%;
+    margin: 0 auto;
+    color: #999999;
+    border: 1px solid #999999;
+    border-radius: 30px;
+    text-decoration: none;
+    cursor: pointer;
+}

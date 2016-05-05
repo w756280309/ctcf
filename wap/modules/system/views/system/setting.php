@@ -1,5 +1,6 @@
 <?php
-$this->title="系统设置";
+$this->title = "系统设置";
+$this->backUrl = '/user/user';
 
 $muri = ASSETS_BASE_URI;
 ?>

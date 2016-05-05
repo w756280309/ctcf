@@ -2,9 +2,9 @@
 
 namespace common\models\bank;
 
-use Yii;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
+use common\models\user\User;
 
 /**
  * This is the model class for table "BankCardUpdate".
@@ -22,14 +22,18 @@ use yii\db\ActiveRecord;
  * @property string $created_at
  * @property string $updated_at
  */
-class BankCardUpdate extends ActiveRecord
+class BankCardUpdate extends ActiveRecord implements \P2pl\QpayBindInterface
 {
+    const STATUS_PENDING = 0;   //已申请
+    const STATUS_SUCCESS = 1;//处理成功
+    const STATUS_FAIL = 2;//处理失败
+
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
-        return 'BankCardUpdate';
+        return 'bank_card_update';
     }
 
     /**
@@ -64,7 +68,7 @@ class BankCardUpdate extends ActiveRecord
             'bankName' => '银行名称',
             'cardHolder' => '持卡人姓名',
             'cardNo' => '银行卡号',
-            'status' => '状态',//状态 0-已申请 1-处理中 3-已通过
+            'status' => '状态',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];
@@ -75,5 +79,48 @@ class BankCardUpdate extends ActiveRecord
         return [
             TimestampBehavior::className(),
         ];
+    }
+
+    /**
+     * 获取用户信息.
+     */
+    public function getUser()
+    {
+        return $this->hasOne(User::className(), ['id' => 'uid']);
+    }
+
+    public function getTxSn()
+    {
+        return $this->sn;
+    }
+
+    public function getTxDate()
+    {
+        return date('Ymd', $this->created_at);
+    }
+
+    public function getLegalName()
+    {
+        return $this->cardHolder;
+    }
+
+    public function getIdType()
+    {
+        return 'IDENTITY_CARD';
+    }
+
+    public function getIdNo()
+    {
+        return $this->user->idcard;
+    }
+
+    public function getEpayUserId()
+    {
+        return $this->epayUserId;
+    }
+
+    public function getCardNo()
+    {
+        return $this->cardNo;
     }
 }

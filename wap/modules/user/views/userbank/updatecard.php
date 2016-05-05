@@ -1,10 +1,10 @@
 <?php
-$this->title="换卡信息";
+$this->title = "换卡申请";
+$this->backUrl = '/user/userbank/mycard';
 ?>
 <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/bind.css?v=20160406"/>
 <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/replacecard.css?v=20160428"/>
 <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/swiper.min.css"/>
-<script src="<?= ASSETS_BASE_URI ?>js/qpay.js?v=20160419001"></script>
 <script src="<?= ASSETS_BASE_URI ?>js/swiper.min.js"></script>
 <script src="<?= ASSETS_BASE_URI ?>js/bind.js"></script>
 
@@ -29,7 +29,7 @@ $this->title="换卡信息";
                             <span><?= $bank->bank->bankName ?></span>
                         </div>
                     </div>
-                     <?php endforeach; ?>
+                    <?php endforeach; ?>
                 </div>
             </div>
         </div>
@@ -37,13 +37,13 @@ $this->title="换卡信息";
     <div class="col-xs-2"></div>
 </div>
 
-<form method="post" class="cmxform" id="form" action="/user/qpay/binding/verify" data-to="1">
+<form method="post" class="cmxform" id="form" action="/user/qpay/bankcardupdate/init" data-to="1">
     <input name="_csrf" type="hidden" id="_csrf" value="<?= Yii::$app->request->csrfToken ?>">
     <div class="row kahao">
         <div class="col-xs-3 xian">开户行</div>
         <div class="col-xs-7 xian">
-            <input id="bank_id" type="hidden" name='QpayBinding[bank_id]'/>
-            <input id="bank_name" type="hidden" name='QpayBinding[bank_name]' placeholder="请选择开户行"/>
+            <input id="bank_id" type="hidden" name='BankCardUpdate[bankId]'/>
+            <input id="bank_name" type="hidden" name='BankCardUpdate[bankName]' placeholder="请选择开户行"/>
             <div class="selecter kaihu">请选择开户行</div>
             <img class="selecter kaihu1"/>
             <span class="selecter kaihu1 kaihu2"></span>
@@ -52,7 +52,7 @@ $this->title="换卡信息";
     </div>
     <div class="row kahao">
         <div class="col-xs-3 xian">卡号</div>
-        <div class="col-xs-9 xian"><input id="card_no" type="tel" name='QpayBinding[card_number]' placeholder="请输入银行卡号" AUTOCOMPLETE="on"/></div>
+        <div class="col-xs-9 xian"><input id="card_no" type="tel" name='BankCardUpdate[cardNo]' placeholder="请输入银行卡号" AUTOCOMPLETE="on"/></div>
     </div>
     <!--限额提醒-->
     <div class="row tixing form-bottom">
@@ -77,31 +77,48 @@ $this->title="换卡信息";
         </div>
         <div class="col-xs-3"></div>
     </div>
-
-    <input id="qpay-binding-sn" name="QpayBinding[binding_sn]" type="hidden" />
 </form>
-<!-- 卡号弹出框 start  -->
-<div class="error-info">您输入的卡号有误</div>
-<!-- 开好弹出框 end  -->
-<!-- 绑定提示 start  -->
-<div id="qpay-binding-confirm-mask" class="mask"></div>
-<div id="qpay-binding-confirm-diag" class="bing-info">
-    <div class="bing-tishi">提示</div>
-    <p>绑定的银行卡将作为唯一充值，提现银行卡</p>
-    <div class="bind-btn">
-        <span class="bind-xian x-cancel">取消</span>
-        <span class="x-confirm">确定</span>
-    </div>
-</div>
-<!-- 绑定提示 end  -->
 <script type="text/javascript">
     var csrf;
     $(function() {
         csrf = $("meta[name=csrf-token]").attr('content');
         $('#form').on('submit', function(e) {
             e.preventDefault();
-            if (validateBinding()) {
-                qpay_showConfirmModal();
+            if (validate()) {
+                if ($(this).data('submitting')) {
+                    return;
+                }
+                $(this).data('submitting', true);
+                var xhr = $.post(
+                    $(this).attr("action"),
+                    $(this).serialize()
+                );
+
+                xhr.done(function (data) {
+                    if ('undefined' !== typeof data.message) {
+                        toast(data.message);
+                        return;
+                    }
+
+                    if ('undefined' !== typeof data.next) {
+                        toast('转入联动优势进行换卡操作');
+                        setTimeout(function () {
+                            window.location.href = data.next;
+                        }, 1500);
+                    }
+                });
+
+                xhr.fail(function (jqXHR) {
+                    var errMsg = jqXHR.responseJSON && jqXHR.responseJSON.message
+                            ? jqXHR.responseJSON.message
+                            : '未知错误，请刷新重试或联系客服';
+
+                    toast(errMsg);
+                });
+
+                xhr.always(function () {
+                    $("#form").data('submitting', false);
+                });
             }
         });
 
@@ -135,4 +152,21 @@ $this->title="换卡信息";
             });
        });
     })
+
+    function validate() {
+        if ($.trim($('#card_no').val()) == '') {
+            toast('银行卡号不能为空');
+            return false;
+        }
+        var reg = /^[0-9]{16,19}$/;
+        if (!reg.test($.trim($('#card_no').val()))) {
+            toast('你输入的银行卡号有误');
+            return false;
+        }
+        if ($('#bank_name').val() == '') {
+            toast('开户行不能为空');
+            return false;
+        }
+        return true;
+    }
 </script>

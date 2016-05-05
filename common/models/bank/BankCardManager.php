@@ -2,8 +2,6 @@
 
 namespace common\models\bank;
 
-
-use common\models\user\User;
 use common\models\user\UserBank;
 use yii\base\Exception;
 

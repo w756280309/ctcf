@@ -13,6 +13,7 @@ use common\models\draw\DrawManager;
 use common\models\draw\DrawException;
 use common\models\bank\BankManager;
 use common\models\bank\QpayConfig;
+use common\models\bank\BankCardUpdate;
 
 class UserbankController extends BaseController
 {
@@ -250,19 +251,47 @@ class UserbankController extends BaseController
         return $this->render('rzres', ['ret' => $ret]);
     }
 
+    /**
+     * 我的银行卡页面
+     */
     public function actionMycard()
     {
-        return $this->render('mycard');
+        $user = $this->getAuthedUser();
+
+        $data = BankService::checkKuaijie($user);
+        if (1 === $data['code']) {
+            return $this->goHome();
+        }
+
+        $userBank = $user->qpay;
+        $bankcardUpdate = BankCardUpdate::find()
+            ->where(['oldSn' => $userBank->binding_sn, 'uid' => $user->id, 'status' => BankCardUpdate::STATUS_PENDING])
+            ->orderBy('id')->one();
+
+        return $this->render('mycard', ['userBank' => $userBank, 'bankcardUpdate' => $bankcardUpdate]);
     }
 
-    public function actionReplacecard()
+    /**
+     * 换卡申请页面
+     */
+    public function actionUpdatecard()
     {
+        $user = $this->getAuthedUser();
+
+        $data = BankService::checkKuaijie($user);
+        if (1 === $data['code']) {
+            $this->goHome();
+        }
+
         $banks = BankManager::getQpayBanks();
-        return $this->render('replacecard', ['banklist' => $banks]);
+        return $this->render('updatecard', ['banklist' => $banks]);
     }
 
-    public function actionReplacecardnotify($ret = "error")
+    /**
+     * 换卡申请结果页面
+     */
+    public function actionUpdatecardnotify($ret = "error")
     {
-        return $this->render('replacecardnotify', ['ret' => $ret]);
+        return $this->render('updatecardnotify', ['ret' => $ret]);
     }
 }

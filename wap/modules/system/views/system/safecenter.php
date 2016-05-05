@@ -1,7 +1,8 @@
 <?php
-$this->title="安全中心";
+$this->title = "安全中心";
+$this->backUrl = '/system/system/setting';
 ?>
-<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/setting.css">
+<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/setting.css?v=20160504">
 
 <a class="row sm-height border-bottom margin-top block" href="/site/editpass">
     <div class="col-xs-5 safe-txt text-align-lf">修改登录密码</div>
@@ -22,7 +23,7 @@ $this->title="安全中心";
 </a>
 <div class="row sm-height border-bottom margin-top">
     <div class="col-xs-4 safe-txt  text-align-lf">实名验证</div>
-    <div class="col-xs-5 safe-lf"><?= $user->idcard?substr_replace($user->idcard,'***',5,-2):"" ?></div>
+    <div class="col-xs-5 safe-lf"><?= (null !== $user && $user->idcard) ? substr_replace($user->idcard,'***',5,-2) : "" ?></div>
     <div class="col-xs-3 arrow">
         <?php if(!$user){ ?>
         <a href="/user/userbank/idcardrz">去认证</a>
@@ -30,16 +31,21 @@ $this->title="安全中心";
     </div>
 </div>
 <?php if($user_bank){ ?>
-    <div class="row sm-height border-bottom">
+    <a class="row sm-height border-bottom visit" style="display: block;" href="<?= (int)$user_bank->status !== 3 ? '/user/userbank/mycard' : 'javascript:void(0)' ?>">
         <div class="col-xs-4 safe-txt  text-align-lf">银行卡</div>
         <div class="col-xs-2 safe-lf"><?= $user_bank->card_number ? substr_replace($user_bank->card_number,'*****',3,-2) : "" ?></div>
         <?php if((int)$user_bank->status === 3) { ?>
         <div class="col-xs-5 arrow" style="text-align: right;">
-                <a href="javascript:void(0);">正在审核中</a>
+            <span style="color: #337ab7;">正在审核中</span>
+        </div>
+        <?php } else { ?>
+        <div class="col-xs-4"></div>
+        <div class="col-xs-1 arrow">
+            <img src="<?= ASSETS_BASE_URI ?>images/arrow.png" alt="右箭头">
         </div>
         <?php } ?>
-    </div>
-<?php }else{ ?>
+    </a>
+<?php } else { ?>
     <div class="row sm-height border-bottom">
         <div class="col-xs-4 safe-txt  text-align-lf">银行卡</div>
         <div class="col-xs-2 safe-lf col"></div>
