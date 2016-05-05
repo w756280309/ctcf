@@ -5,7 +5,9 @@ use yii\captcha\Captcha;
 $this->title = '修改登录密码';
 ?>
 <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/setting.css?v=20160422">
-
+<style>
+    .sm-height {  line-height: 47px; }
+</style>
 <div class="row kongxi">
     <?php $form = ActiveForm::begin(['id' => 'editpassform', 'action' => '/site/editpass', 'options' => ['class' => 'cmxform']]); ?>
     <input name="_csrf" type="hidden" id="_csrf" value="<?= Yii::$app->request->csrfToken ?>">

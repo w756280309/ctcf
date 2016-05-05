@@ -12,7 +12,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <input name="_csrf" type="hidden" id="_csrf" value="<?= Yii::$app->request->csrfToken ?>">
     <input id="iphone" class="login-info" name="SignupForm[phone]" maxlength="11" type="tel"
            placeholder="请输入手机号">
-    <div class="row sm-height border-bottom">
+    <div class="row sm-height border-bottom" style="line-height: 47px;">
         <div class="col-xs-8 col">
         <input id="captchaCode" class="login-info" type="text" name="SignupForm[captchaCode]" maxlength="4"
                placeholder="请输入图形验证码" AUTOCOMPLETE="off">
