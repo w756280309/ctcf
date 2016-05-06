@@ -46,6 +46,7 @@ class UserbankController extends BaseController
             $umpService = new \common\service\UmpService();
             try {
                 $umpService->register($model);
+
                 return ['tourl' => '/user/userbank/rzres?ret=success', 'code' => 0, 'message' => '您已成功开户'];
             } catch (\Exception $ex) {
                 return ['code' => 1, 'message' => $ex->getMessage()];
@@ -54,6 +55,7 @@ class UserbankController extends BaseController
 
         if ($model->getErrors()) {
             $err = $model->getSingleError();
+
             return ['code' => 1, 'message' => $err['message']];
         }
 
@@ -72,11 +74,13 @@ class UserbankController extends BaseController
                 return $data;
             } else {
                 $arr = array();
+
                 return $this->render('bindbank', ['banklist' => $arr, 'data' => $data]);
             }
         }
 
         $banks = BankManager::getQpayBanks();
+
         return $this->render('bindbank', ['banklist' => $banks]);
     }
 
@@ -113,7 +117,8 @@ class UserbankController extends BaseController
         if ($resp->isSuccessful()) {
             return ['code' => 0, 'message' => '重置后的密码已经发送到您的手机'];
         } else {
-            \Yii::trace('【重置交易密码】'.$this->getAuthedUser()->idcard.":".$resp->get('ret_code').":".$resp->get('ret_msg'), 'umplog');
+            \Yii::trace('【重置交易密码】'.$this->getAuthedUser()->idcard.':'.$resp->get('ret_code').':'.$resp->get('ret_msg'), 'umplog');
+
             return ['code' => 1, 'message' => '当前网络异常，请稍后重试'];
         }
     }
@@ -138,6 +143,7 @@ class UserbankController extends BaseController
         if ($from = Yii::$app->request->get('from')) {
             Yii::$app->session['recharge_from_url'] = urldecode($from);
         }
+
         return $this->render('recharge', ['user_bank' => $user_bank, 'user_acount' => $user_acount, 'data' => $data, 'bank' => $bank]);
     }
 
@@ -168,14 +174,15 @@ class UserbankController extends BaseController
             try {
                 $drawres = DrawManager::initDraw($user_acount, $draw->money, \Yii::$app->params['drawFee']);
                 $option = array();
-                if (null != Yii::$app->request->get("token")) {
-                    $option['app_token'] = Yii::$app->request->get("token");
+                if (null != Yii::$app->request->get('token')) {
+                    $option['app_token'] = Yii::$app->request->get('token');
                 }
                 $next = Yii::$container->get('ump')->initDraw($drawres, null, $option);
+
                 return ['code' => 0, 'message' => '', 'tourl' => $next];
             } catch (DrawException $ex) {
                 if (DrawException::ERROR_CODE_ENOUGH === $ex->getCode()) {
-                    return ['code' => 1, 'message' => '您的账户余额不足,仅可提现' . $ex->getMessage() . '元', 'money' => $ex->getMessage()];
+                    return ['code' => 1, 'message' => '您的账户余额不足,仅可提现'.$ex->getMessage().'元', 'money' => $ex->getMessage()];
                 } else {
                     return ['code' => 1, 'message' => $ex->getMessage()];
                 }
@@ -186,6 +193,7 @@ class UserbankController extends BaseController
 
         if ($draw->getErrors()) {
             $message = $draw->firstErrors;
+
             return ['code' => 1, 'message' => current($message)];
         }
 
@@ -206,11 +214,13 @@ class UserbankController extends BaseController
     public function actionBankxiane()
     {
         $qpayBanks = QpayConfig::find()->all();
+
         return $this->render('bankxiane', ['banks' => $qpayBanks]);
     }
 
     /**
-     * 绑卡受理结果页面
+     * 绑卡受理结果页面.
+     *
      * @param $ret success/error
      */
     public function actionAccept($ret = 'error')
@@ -219,7 +229,8 @@ class UserbankController extends BaseController
     }
 
     /**
-     * 快捷充值结果页面
+     * 快捷充值结果页面.
+     *
      * @param type $ret
      */
     public function actionQpayres($ret = 'error')
@@ -234,7 +245,8 @@ class UserbankController extends BaseController
     }
 
     /**
-     * 提现结果页
+     * 提现结果页.
+     *
      * @param type $ret
      */
     public function actionDrawres($ret = 'error')
@@ -243,7 +255,8 @@ class UserbankController extends BaseController
     }
 
     /**
-     * 开户结果页
+     * 开户结果页.
+     *
      * @param type $ret
      */
     public function actionRzres($ret = 'error')
@@ -252,7 +265,7 @@ class UserbankController extends BaseController
     }
 
     /**
-     * 我的银行卡页面
+     * 我的银行卡页面.
      */
     public function actionMycard()
     {
@@ -265,14 +278,18 @@ class UserbankController extends BaseController
 
         $userBank = $user->qpay;
         $bankcardUpdate = BankCardUpdate::find()
-            ->where(['oldSn' => $userBank->binding_sn, 'uid' => $user->id, 'status' => BankCardUpdate::STATUS_PENDING])
-            ->orderBy('id')->one();
+            ->where(['oldSn' => $userBank->binding_sn, 'uid' => $user->id])
+            ->orderBy('id desc')->one();
+
+        if (null !== $bankcardUpdate && BankCardUpdate::STATUS_PENDING !== $bankcardUpdate->status) {
+            $bankcardUpdate = null;
+        }
 
         return $this->render('mycard', ['userBank' => $userBank, 'bankcardUpdate' => $bankcardUpdate]);
     }
 
     /**
-     * 换卡申请页面
+     * 换卡申请页面.
      */
     public function actionUpdatecard()
     {
@@ -284,13 +301,14 @@ class UserbankController extends BaseController
         }
 
         $banks = BankManager::getQpayBanks();
+
         return $this->render('updatecard', ['banklist' => $banks]);
     }
 
     /**
-     * 换卡申请结果页面
+     * 换卡申请结果页面.
      */
-    public function actionUpdatecardnotify($ret = "error")
+    public function actionUpdatecardnotify($ret = 'error')
     {
         return $this->render('updatecardnotify', ['ret' => $ret]);
     }

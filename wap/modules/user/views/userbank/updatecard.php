@@ -1,5 +1,5 @@
 <?php
-$this->title = "换卡申请";
+$this->title = '换卡申请';
 $this->backUrl = '/user/userbank/mycard';
 ?>
 <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/bind.css?v=20160406"/>
@@ -22,7 +22,7 @@ $this->backUrl = '/user/userbank/mycard';
             <div class="close"><img src="<?= ASSETS_BASE_URI ?>images/close.png" alt=""/></div>
             <div class="swiper-container">
                 <div class="swiper-wrapper" id='bank'>
-                    <?php foreach($banklist as $bank): ?>
+                    <?php foreach ($banklist as $bank): ?>
                     <div class="swiper-slide" data-id='<?= $bank->bankId ?>'>
                         <div>
                             <img src="<?= ASSETS_BASE_URI ?>images/bankicon/<?= $bank->bankId ?>.png" alt=""/>
@@ -103,7 +103,7 @@ $this->backUrl = '/user/userbank/mycard';
                     if ('undefined' !== typeof data.next) {
                         toast('转入联动优势进行换卡操作');
                         setTimeout(function () {
-                            window.location.href = data.next;
+                            window.location.replace(data.next);
                         }, 1500);
                     }
                 });
