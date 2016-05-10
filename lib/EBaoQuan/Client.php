@@ -54,7 +54,7 @@ class Client
                         //获取合同模板
                         $content = $v['content'];
                         //用订单填充合同模板
-                        $content = $this->handleContent($content, $order);
+                        $content = $this->handleContent($k, $content, $order);
                         //生成PDF
                         $file = $this->createPdf($content, $order->sn);
                         if (file_exists($file)) {
@@ -308,12 +308,23 @@ class Client
 
     /**
      * 根据指定模板生成合同
+     * @param integer $type 合同类型
      * @param string $content 合同模板
      * @param OnlineOrder $onlineOrder
      * @return string
      */
-    private function handleContent($content, OnlineOrder $onlineOrder)
+    private function handleContent($type, $content, OnlineOrder $onlineOrder)
     {
+        if (in_array($type, [0, 1, 2])) {
+            if ($type === 0) {
+                $title = '认购协议';
+            } elseif ($type === 1) {
+                $title = '风险提示书';
+            } else {
+                $title = '产品要素表';
+            }
+            $content = '<h4 style="margin: 5px auto;text-align: center;font-size: 14px;color: #000;line-height: 18px;">' . $title . '</h4>' . $content;
+        }
         $real_name = '';
         $idCard = '';
         $date = "年月日";
