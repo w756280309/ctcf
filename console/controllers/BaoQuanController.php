@@ -31,6 +31,8 @@ class BaoQuanController extends Controller
                     }
                 }
             }
+        } else {
+            sleep(3);
         }
     }
 
