@@ -1,31 +1,25 @@
 <?php
 $this->title = '最新资讯';
+
+$this->registerJsFile(ASSETS_BASE_URI . 'js/jquery-dateFormat.min.js', ['depends' => 'yii\web\YiiAsset','position' => 1]);
+$this->registerJsFile(ASSETS_BASE_URI . 'js/news.js', ['depends' => 'yii\web\YiiAsset','position' => 1]);
+$this->registerJs('var total=' . $header['count'] . ';', 1);
+$this->registerJs('var size=' . $header['size'] . ';', 1);
+$this->registerJs('var tp=' . $header['tp'] . ';', 1);
+$this->registerJs('var cp=' . $header['cp'] . ';', 1);
 ?>
 <link href="<?= ASSETS_BASE_URI ?>css/news.css" rel="stylesheet">
 
 <!-- 主体 -->
 <div class="information-list">
-        <a href="/news/detail?id=4" class="single">
-                <p class="single-title">【资讯标题】奖品发布公告</p>
-                <p class="single-description">温都金服“上线有红利”活动圆满结束，公布获奖名单。</p>
-                <p class="single-time">2016-5-5</p>
+    <?php foreach ($model as $val) : ?>
+        <a href="/news/detail?id=<?= $val['id'] ?>" class="single">
+            <p class="single-title">【资讯标题】<?= $val['title'] ?></p>
+            <p class="single-description"><?= $val['summary'] ?></p>
+            <p class="single-time"><?= empty($val['news_time']) ? '' : date('Y-m-d', $val['news_time']) ?></p>
         </a>
-        <a href="/news/detail?id=3" class="single">
-                <p class="single-title">【资讯标题】温都金服试上线活动现场报道</p>
-                <p class="single-description">温都金服试上线活动现场热闹非凡，用户踊跃参与领取食用油。</p>
-                <p class="single-time">2016-4-29</p>
-        </a>
-        <a href="/news/detail?id=1" class="single">
-                <p class="single-title">【资讯标题】温都金服定于4月19日试上线</p>
-                <p class="single-description">温州报业传媒旗下理财平台—温都金服（wenjf.com），定于4月19日试上线。</p>
-                <p class="single-time">2016-4-18</p>
-        </a>
-        <a href="/news/detail?id=2" class="single">
-                <p class="single-title">【资讯标题】用户资金托管引入联动优势</p>
-                <p class="single-description">温都金服引入联动优势（由中国银联与中国移动联合发起成立）提供用户资金托管综合服务。</p>
-                <p class="single-time">2016-4-18</p>
-        </a>
-        <!--加载跟多-->
-        <div class="load" style="display:block;"></div>
+    <?php endforeach; ?>
+    <!--加载跟多-->
+    <div class="load" style="display:block;"></div>
 </div>
 

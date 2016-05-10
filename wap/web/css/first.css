@@ -426,7 +426,6 @@ a.login:visited {
     border-bottom: 1px solid #e6e7e7;
     background: #fff;
 }
-
 .notice {
     padding: 0 18px 0 10px;
     font-size: 1.1rem;
@@ -434,6 +433,9 @@ a.login:visited {
     line-height: 3.8rem;
     color: #595757;
     border-bottom: 1px solid #e6e7e7;
+    text-overflow: ellipsis;   /* 标题太长,自动隐藏 */
+    white-space: nowrap;
+    overflow: hidden;
 }
 .border-top {
     border-top:none;

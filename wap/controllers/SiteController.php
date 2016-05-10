@@ -22,6 +22,7 @@ use common\models\app\AccessToken;
 use common\models\bank\EbankConfig;
 use common\models\bank\QpayConfig;
 use common\models\bank\Bank;
+use common\models\news\News;
 
 /**
  * Site controller.
@@ -135,7 +136,13 @@ class SiteController extends Controller
             }
         }
 
-        return $this->render('index', ['adv' => $adv, 'deal' => $deal]);
+        $news = News::find()
+            ->where(['status' => News::STATUS_PUBLISH])
+            ->orderBy('news_time desc')
+            ->limit(3)
+            ->all();
+
+        return $this->render('index', ['adv' => $adv, 'deal' => $deal, 'news' => $news]);
     }
 
     /**
@@ -449,7 +456,7 @@ class SiteController extends Controller
     }
 
     /**
-     * 用户隐私政策页
+     * 用户隐私政策页.
      */
     public function actionPrivacy()
     {

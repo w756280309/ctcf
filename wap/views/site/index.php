@@ -14,8 +14,7 @@ $this->registerJsFile(ASSETS_BASE_URI . 'js/swiper.min.js?v=20160419', ['depends
 $this->registerJsFile(ASSETS_BASE_URI . 'js/jquery.classyloader.js', ['depends' => 'yii\web\JqueryAsset', 'position' => 1]);
 $this->registerJsFile(ASSETS_BASE_URI . 'js/index.js?v=20160419', ['depends' => 'yii\web\JqueryAsset', 'position' => 1]);
 $this->registerCssFile(ASSETS_BASE_URI . 'css/index.css?v=20160419', ['depends' => 'frontend\assets\WapAsset']);  //加载在depends之后
-$this->registerCssFile(ASSETS_BASE_URI . 'css/first.css?v=20160427', ['depends' => 'frontend\assets\WapAsset']);
-$this->registerCssFile(ASSETS_BASE_URI . 'css/first.css', ['depends' => 'frontend\assets\WapAsset']);
+$this->registerCssFile(ASSETS_BASE_URI . 'css/first.css?v=20160509', ['depends' => 'frontend\assets\WapAsset']);
 $this->registerJsFile(ASSETS_BASE_URI . 'js/jquery.cookie.js?v=20160428', ['depends' => 'yii\web\JqueryAsset', 'position' => 1]);//加载jquery.cookie
 $this->registerJsFile(ASSETS_BASE_URI . 'js/hmsr.js?v=20160428', ['depends' => 'yii\web\JqueryAsset', 'position' => 1]);//加载来源统计记录代码
 
@@ -188,6 +187,7 @@ $(function() {
     <!-- 理财区 end -->
 
     <!-- 最新资讯 start-->
+    <?php if (!empty($news)) { ?>
     <div class="row notice-box new-box">
         <a class="new-head news-tra block" href="/news/index">
             <div class="col-xs-8 col-sm-7 new-head-title">
@@ -198,12 +198,14 @@ $(function() {
             <div class="col-xs-3 col-sm-2 more news-more">更多》</div>
         </a>
         <div class="notice-bottom">
-            <a class="col-xs-12 notice border-top" href="/news/detail?id=4"><span>【</span>资讯信息<span>】</span>“上线有红利”活动奖品发布公告</a>
-            <a class="col-xs-12 notice" href="/news/detail?id=3"><span>【</span>资讯信息<span>】</span>温都金服试上线活动现场报道</a>
-            <a class="col-xs-12 notice border-bot" href="/news/detail?id=1"><span>【</span>资讯信息<span>】</span>温都金服定于4月19日试上线</a>
+            <?php foreach ($news as $key => $val) : ?>
+            <a class="col-xs-12 notice <?= 0 === $key ? 'border-top' : (3 === $key ? 'border-bot' : '') ?>" href="/news/detail?id=<?= $val['id'] ?>"><span>【</span>资讯信息<span>】</span><?= $val['title'] ?></a>
+            <?php endforeach; ?>
         </div>
     </div>
+    <?php } ?>
     <!-- 最新资讯 end -->
+
     <!-- nav start -->
     <div class="nav-box">
         <div class="pos-rel">
