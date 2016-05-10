@@ -18,6 +18,10 @@ use yii\db\ActiveRecord;
  */
 class BaoQuanQueue extends ActiveRecord
 {
+    const STATUS_SUSPEND = 0;//待处理
+    const STATUS_SUCCESS = 1;//处理成功
+    const STATUS_FAILED = -1;//处理失败
+
     public static function tableName()
     {
         return 'bao_quan_queue';

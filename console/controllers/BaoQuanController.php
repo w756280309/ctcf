@@ -15,7 +15,7 @@ class BaoQuanController extends Controller
     //根据保全队列批量添加保全
     public function actionIndex()
     {
-        $queues = BaoQuanQueue::find()->where(['status' => 1])->orderBy(['id' => SORT_DESC])->all();
+        $queues = BaoQuanQueue::find()->where(['status' => BaoQuanQueue::STATUS_SUSPEND])->orderBy(['id' => SORT_DESC])->all();
         if (count($queues) > 0) {
             $client = new Client();
             foreach ($queues as $queue) {
@@ -24,9 +24,10 @@ class BaoQuanController extends Controller
                 if (null !== $product) {
                     try {
                         $client->createBq($product);
-                        $queue->delete();
+                        $queue->status = BaoQuanQueue::STATUS_SUCCESS;//处理成功
+                        $queue->save(false);
                     } catch (Exception $e) {
-                        $queue->status = 0;
+                        $queue->status = BaoQuanQueue::STATUS_FAILED;//处理失败
                         $queue->save(false);
                     }
                 }

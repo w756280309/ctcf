@@ -44,7 +44,7 @@ $num = 0;
     .bao_quan_button{
         text-align: right;
         position: fixed;
-        top:500px;
+        top:80%;
         right: 20px;
     }
     .bao_quan_button button{
