@@ -2,9 +2,12 @@
 
 namespace app\modules\order\controllers;
 
+use common\models\order\EbaoQuan;
 use common\models\product\RateSteps;
+use EBaoQuan\Client;
 use Yii;
 use app\controllers\BaseController;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\web\Response;
 use common\models\product\OnlineProduct;
@@ -137,8 +140,46 @@ class OrderController extends BaseController
 
         $model[$key] = ContractTemplate::replaceTemplate($model[$key], $deal);
 
-        return $this->render('agreement', ['model' => $model, 'key_f' => $key, 'content' => $model[$key]['content'], 'deal_id' => $deal_id]);
+        //获取证书
+        $baoQuan = EbaoQuan::find()->where(['type' => $key, 'orderId' => $deal_id, 'uid' => Yii::$app->user->identity->getId()])->one();
+        $linkUrl = $downUrl = null;
+        if (null !== $baoQuan) {
+            $client = new Client();
+            $downUrl = $client->contractFileDownload($baoQuan);
+            //查看证书地址
+            $linkUrl = $client->certificateLinkGet($baoQuan);
+        }
+
+        return $this->render('agreement', [
+            'model' => $model,
+            'key_f' => $key,
+            'content' => $model[$key]['content'],
+            'deal_id' => $deal_id,
+            'linkUrl' => $linkUrl,
+            'downUrl' => $downUrl,
+        ]);
     }
+
+    /*public function actionBaoQuan($deal_id, $type = 1)
+    {
+        $baoQuan = EbaoQuan::find()->where(['type' => $type, 'orderId' => $deal_id, 'uid' => Yii::$app->user->identity->getId()])->one();
+        $data = [];
+        if (null !== $baoQuan) {
+            $data = ArrayHelper::toArray($baoQuan);
+            $res = (new Client())->contractFileDownload($baoQuan);
+            if ($res->success) {
+                $data['downUrl'] = $res->downUrl;
+            }
+            //查看证书地址
+            $res = (new Client())->certificateLinkGet($baoQuan);
+            if ($res->success) {
+                $data['link'] = $res->link;
+            }
+        }
+        return $this->render('bao-quan', [
+            'baoQuan' => $data,
+        ]);
+    }*/
 
     /**
      * 根据投资金额和产品利率阶梯获取订单的利率

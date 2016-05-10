@@ -41,6 +41,15 @@ $num = 0;
         color: #000;
         line-height: 18px;
     }
+    .bao_quan_button{
+        text-align: right;
+        position: fixed;
+        top:500px;
+        right: 20px;
+    }
+    .bao_quan_button button{
+        display: block;
+    }
 </style>
 
 <!-- Swiper -->
@@ -74,4 +83,12 @@ $num = 0;
             <div class="list-txt"><?= html_entity_decode($content) ?></div>
         </div>
     </div>
+</div>
+<div class="bao_quan_button">
+    <?php if (null !== $downUrl) {?>
+        <button class="btn btn-primary" onclick="window.location = '<?= $downUrl?>'" style="background:#f54337;border: 0px;">下载合同</button>
+    <?php }?>
+    <?php if (null !== $linkUrl) {?>
+        <button class="btn btn-primary" onclick="window.location = '<?= $linkUrl?>'" style="background:#f54337;border: 0px;margin-top: 5px;">保全证书</button>
+    <?php }?>
 </div>

@@ -2,6 +2,7 @@
 
 namespace backend\modules\product\controllers;
 
+use common\models\order\BaoQuanQueue;
 use Yii;
 use yii\web\Response;
 use common\models\product\OnlineProduct;
@@ -437,6 +438,9 @@ class ProductonlineController extends BaseController
                 //$res = OnlineRepaymentPlan::createPlan($id);//转移到开始计息部分old
                 $res = OnlineRepaymentPlan::generatePlan($model);
                 if ($res) {
+                    //确认计息完成之后将标的添加至保全队列
+                    $job = new BaoQuanQueue(['proId' => $id, 'status' => 1]);
+                    $job->save();
                     return ['result' => '1', 'message' => '操作成功'];
                 } else {
                     return ['result' => '0', 'message' => '操作失败，请联系技术'];
