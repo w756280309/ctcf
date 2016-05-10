@@ -6,7 +6,7 @@ class m160510_170800_create_UserAffiliation_table extends Migration
 {
     public function up()
     {
-        $this->createTable('UserAffiliation', [
+        $this->createTable('user_affiliation', [
             'id' => $this->primaryKey(),
             'user_id' => $this->integer(),
             'trackCode' => $this->string(),
@@ -16,6 +16,6 @@ class m160510_170800_create_UserAffiliation_table extends Migration
 
     public function down()
     {
-        $this->dropTable('UserAffiliation');
+        $this->dropTable('user_affiliation');
     }
 }

@@ -6,7 +6,7 @@ class m160510_170801_create_OrderAffiliation_table extends Migration
 {
     public function up()
     {
-        $this->createTable('OrderAffiliation', [
+        $this->createTable('order_affiliation', [
             'id' => $this->primaryKey(),
             'order_id' => $this->integer(),
             'trackCode' => $this->string(),
@@ -16,6 +16,6 @@ class m160510_170801_create_OrderAffiliation_table extends Migration
 
     public function down()
     {
-        $this->dropTable('OrderAffiliation');
+        $this->dropTable('order_affiliation');
     }
 }

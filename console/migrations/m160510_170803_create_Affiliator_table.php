@@ -6,7 +6,7 @@ class m160510_170803_create_Affiliator_table extends Migration
 {
     public function up()
     {
-        $this->createTable('Affiliator', [
+        $this->createTable('affiliator', [
             'id' => $this->primaryKey(),
             'name' => $this->string(),
         ]);
@@ -14,6 +14,6 @@ class m160510_170803_create_Affiliator_table extends Migration
 
     public function down()
     {
-        $this->dropTable('Affiliator');
+        $this->dropTable('affiliator');
     }
 }

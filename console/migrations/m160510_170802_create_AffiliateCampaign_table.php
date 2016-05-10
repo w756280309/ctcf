@@ -6,7 +6,7 @@ class m160510_170802_create_AffiliateCampaign_table extends Migration
 {
     public function up()
     {
-        $this->createTable('AffiliateCampaign', [
+        $this->createTable('affiliate_campaign', [
             'id' => $this->primaryKey(),
             'trackCode' => $this->string(),
             'affiliator_id' => $this->integer()
@@ -15,6 +15,6 @@ class m160510_170802_create_AffiliateCampaign_table extends Migration
 
     public function down()
     {
-        $this->dropTable('AffiliateCampaign');
+        $this->dropTable('affiliate_campaign');
     }
 }
