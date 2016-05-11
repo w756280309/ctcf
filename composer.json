@@ -19,7 +19,9 @@
         "yiisoft/yii2-bootstrap": "*",
         "yiisoft/yii2-swiftmailer": "*",
         "guzzlehttp/guzzle": "6.1.1",
-        "gregwar/captcha": "1.1.1"
+        "gregwar/captcha": "1.1.1",
+        "knplabs/knp-snappy": "^0.4.3",
+        "h4cc/wkhtmltopdf-amd64": "0.12.x"
     },
     "require-dev": {
         "yiisoft/yii2-codeception": "*",

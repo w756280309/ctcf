@@ -7,6 +7,7 @@ use yii\base\Model;
 use common\service\SmsService;
 use Zii\Validator\CnMobileValidator;
 use common\lib\validator\LoginpassValidator;
+use common\models\affiliation\AffiliationManager;
 
 /**
  * Signup form.
@@ -127,7 +128,9 @@ class SignupForm extends Model
             }
             $transaction->commit();
             SmsService::editSms($user->mobile);
-
+            if (Yii::$app->request->cookies->getValue('campaign_source')) {
+                (new AffiliationManager())->log(Yii::$app->request->cookies->getValue('campaign_source'), $user);
+            }
             return $user;
         } else {
             return false;

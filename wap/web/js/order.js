@@ -38,7 +38,7 @@ $(function () {
     $('#money').on('keyup', function () {
         var $this = $(this);
         var money = $this.val();
-        money = money.replace(/^[^1-9]+/, '');
+        money = money.replace(/^[^0-9]+/, '');
         if (!$.isNumeric(money)) {
             money = 0;
         }

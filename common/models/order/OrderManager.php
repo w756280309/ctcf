@@ -16,6 +16,7 @@ use common\service\PayService;
 use common\models\order\OnlineOrder;
 use common\models\order\OrderQueue;
 use common\models\product\RateSteps;
+use common\models\affiliation\AffiliationManager;
 
 /**
  * 订单manager.
@@ -474,6 +475,9 @@ class OrderManager
         //免密逻辑处理
         $res = Yii::$container->get('ump')->orderNopass($order);
         if ($res->isSuccessful()) {
+            if (Yii::$app->request->cookies->getValue('campaign_source')) {
+                (new AffiliationManager())->log(Yii::$app->request->cookies->getValue('campaign_source'), $order);
+            }
             try {
                 //OrderManager::confirmOrder($order);
                 if (null === OrderQueue::findOne(['orderSn' => $order->sn])) {

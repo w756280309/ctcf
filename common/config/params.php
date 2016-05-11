@@ -95,5 +95,11 @@ return [
             'wap' => 'https://m.wenjf.com/',
             'app' => 'https://app.wenjf.com/',
         ]
+    ],
+    //易保全正式环境配置
+    'bao_quan_config' => [
+        'services_url' =>'http://api.ebaoquan.org/services',
+        'app_key' => '8f5ca3eb5cbac210',
+        'app_secret' => 'cc7c180b7e016f9802b1bcb9e493450e'
     ]
 ];
