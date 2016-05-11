@@ -239,7 +239,7 @@ class Client
         $requestObj->contractNumber = $onlineOrder['sn'] . '-' . strval($type) . '-' . time();
         //$requestObj->objectId="0000001";//关联保全时使用
         $requestObj->comments = $title;
-        //$requestObj->isNeedSign="0";
+        $requestObj->isNeedSign="1";
         //isNeedSign 这个参数如果为1是需要签名，则上传的文件必须是pdf文件，且服务端会将文件做签名后再保全.请->
         //使用保全contractFileDownloadUrl.php例子的使用方法得到合同保全的保全后文件的下载地址进行下载。（下载地址有时效性，过期后重新按此方法取得新地址）
 
