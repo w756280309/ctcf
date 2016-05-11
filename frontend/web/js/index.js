@@ -14,11 +14,11 @@ $(function(){
                 '<div class="footer-fixed-left">随时<i>投</i>随时<i>赚</i>，APP投标<i>更方便</i></div>'+
                 '<div class="footer-fixed-right">'+
                 '<div class="footer-fixed-right-code">'+
-                '<img src="/images/wen-code.jpg" alt="">'+
+                '<img src="/images/web_chat.jpg" alt="">'+
                 '<p style="margin-top: 46px;">扫一扫</p>'+
                 '<p>关注微信订阅号</p></div>'+
                 '<div class="footer-fixed-right-code">'+
-                '<img src="/images/wen-app-new.jpg" alt="">'+
+                '<img src="/images/web_app.jpg" alt="">'+
                 '<p style="margin-top: 67px;">扫描下载APP</p>'+
                 '<img src="/images/wen-close.png" alt="" class="wen-close"></div></div></div></div>').insertAfter($('.footer-mark'));
         },
