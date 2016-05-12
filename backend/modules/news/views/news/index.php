@@ -1,5 +1,6 @@
 <?php
     use yii\helpers\ArrayHelper;
+    use yii\widgets\LinkPager;
 ?>
 <?php $this->beginBlock('blockmain'); ?>
 <div class="container-fluid">
@@ -136,7 +137,7 @@
                 </tbody>
             </table>
         </div>
-
+        <div class="pagination" style="text-align:center"><?= LinkPager::widget(['pagination' => $pages]); ?></div>
     </div>
 
 </div>
