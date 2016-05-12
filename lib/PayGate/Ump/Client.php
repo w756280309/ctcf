@@ -276,6 +276,7 @@ class Client
             'project_expire_date' => date('Ymd', $loan->getLoanExpireDate()), // 只做格式校验。没有对时间做其他限制
             'loan_user_id' => $borrower->getLoanUserId(), // 会去联动一侧判断用户是否存在[测试上投资用户可以用来融资]
             'loan_acc_type' => (null === $borrower->getLoanAccountType() || 1 === $borrower->getLoanAccountType()) ? '01' : '02', //当为商户号时loan_acc_type 为必填字段，值02
+            'ctrl_over_invest' => 0,//联动控制超投标志0不允许超投1允许
         ];
 
         return $this->doRequest($data);
