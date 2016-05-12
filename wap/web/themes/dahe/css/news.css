@@ -1,0 +1,130 @@
+﻿/*bootstrap格式化开始*/
+.container-fluid, .row, .col-lg-1, .col-lg-10, .col-lg-11, .col-lg-12, .col-lg-2, .col-lg-3, .col-lg-4, .col-lg-5, .col-lg-6, .col-lg-7, .col-lg-8, .col-lg-9, .col-md-1, .col-md-10, .col-md-11, .col-md-12, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-9, .col-sm-1, .col-sm-10, .col-sm-11, .col-sm-12, .col-sm-2, .col-sm-3, .col-sm-4, .col-sm-5, .col-sm-6, .col-sm-7, .col-sm-8, .col-sm-9, .col-xs-1, .col-xs-10, .col-xs-11, .col-xs-12, .col-xs-2, .col-xs-3, .col-xs-4, .col-xs-5, .col-xs-6, .col-xs-7, .col-xs-8, .col-xs-9 {
+    padding: 0px;
+}
+
+.bootstrap-common .row {
+    position: relative;
+    z-index: 10;
+    overflow: hidden;
+}
+
+.bootstrap-common .common_single {
+    position: absolute;
+    z-index: 20;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+/*bootstrap格式化结束*/
+/*白色背景*/
+body {background-color: #fff;}
+/*资讯列表*/
+.information-list{width: 100%;background-color: #fff;}
+.information-list .single{display:block;padding:15px 5%;font-size:1.3rem;color: #595757;border-bottom: 1px solid #d9dce4;}
+.information-list .single .single-title{font-size: 1.6rem;width:100%;height:30px;line-height: 30px;overflow: hidden;white-space:nowrap;text-overflow: ellipsis;color: #161616;}
+.information-list .single .single-description{width:100%;line-height: 24px;word-break:break-all;}
+.information-list .single .single-time{text-align: right;width: 98%;}
+/*资讯详情*/
+.information-details{background-color: #fff;color: #595757;}
+.information-details .header{width: 95%;margin: 0 auto;padding:20px 0 10px;border-bottom: 1px dashed #dcdcdc;}
+.information-details .header p{width: 95%;margin: 0 auto;}
+.information-details .header .header-title{font-size: 1.6rem;line-height: 30px;text-align: center;color: #161616;}
+.information-details .header .header-time{font-size: 1.3rem;line-height: 20px;text-align: right;}
+.information-details .header-content{width: 90%;margin: 20px auto;font-size:1.4rem;}
+.information-details .header-content p {line-height: 30px;text-indent: 2em;}
+.information-details .header-content .text-indent-no{text-indent: 0;}
+.information-details .header-content .header-content-luokuan{text-align: right;padding-top: 20px;}
+.information-details .header-content .header-content-time{text-align: right;}/*帮助中心*/
+.back-e6e6e6{background-color: #e6e6e6;}
+.helpcenter .kong-width{padding:0 15px 30px 15px;}
+.helpcenter .kong-width a{display:block;margin-bottom: 15px;}
+.helpcenter .mask-center{width: 100%;height:100%;font-size: 2rem;text-align: center;color:#fff;letter-spacing: 3px;}
+.helpcenter .back_icon{float: right;}
+.helpcenter .header{width: 100%;height: 50px;line-height: 50px;overflow-x: hidden;text-align: center;font-size: 1.5rem;color: #161616;}
+.helpcenter .header span{font-size:1.5rem;color: #dcdcdc;}
+/*iphone6*/
+@media screen and (min-width: 375px) {
+    .helpcenter .header{font-size: 1.8rem;}
+    .helpcenter .header span{font-size:1.8rem;}
+    .helpcenter .mask-center {font-size: 3rem;}
+}
+/*iphone6 plus*/
+@media screen and (min-width: 414px) {
+    .helpcenter .header{font-size: 2rem;}
+    .helpcenter .header span{font-size:2.1rem;}
+    .helpcenter .mask-center {font-size: 3rem;}
+}
+/*帮助中心——通用*/
+.helpcenter_login_resister .kong-width{padding:0 15px 30px 15px;}
+.helpcenter_login_resister .header{width: 100%;height: 50px;line-height: 50px;overflow-x: hidden;text-align: center;font-size: 1.4rem;color: #161616;}
+.helpcenter_login_resister .header span{font-size:1.5rem;color: #dcdcdc;}
+.helpcenter_login_resister .single{padding: 5px 5px 15px;font-size: 1.2rem;line-height: 25px;color: #595757;}
+.helpcenter_login_resister .single .single-title{color:#161616;}
+.helpcenter_login_resister .beset .p_left{float: left;}
+.helpcenter_login_resister .beset .p_right{float: left;width: 80%;}
+/*iphone6*/
+@media screen and (min-width: 375px) {
+    .helpcenter_login_resister .header{font-size: 1.8rem;}
+    .helpcenter_login_resister .header span{font-size:1.8rem;}
+    .helpcenter_login_resister .single{font-size: 1.4rem;line-height:30px;}
+}
+/*iphone6 plus*/
+@media screen and (min-width: 414px) {
+    .helpcenter_login_resister .header{font-size: 2rem;}
+    .helpcenter_login_resister .header span{font-size:2.1rem;}
+    .helpcenter_login_resister .single{padding: 5px 8px 20px;font-size: 1.6rem;line-height:30px;}
+}
+/*公司介绍*/
+.production .logo_icon{margin: 25px 0px 0px;}
+.production .production-title{width: 100%;height: 40px;line-height: 40px;font-size: 1.4rem;text-align: center;color: #161616;margin-bottom: 20px;}
+.production .header{width: 100%;height: 50px;line-height: 50px;overflow-x: hidden;text-align: center;font-size: 1.4rem;color: #161616;}
+.production .header span{font-size:1.5rem;color: #dcdcdc;}
+.production .production-content{width: 90%;margin: 0 auto;font-size: 1.2rem;}
+.production .production-content p{text-indent: 2em;margin-bottom: 10px;line-height: 20px;}
+.production .production-content .indent{text-indent: 0;}
+.production .book{margin: 20px 0px 40px;}
+/*iphone6*/
+@media screen and (min-width: 375px) {
+    .production .logo_icon{margin: 30px 0px 10px;}
+    .production .header{font-size: 1.8rem;}
+    .production .header span{font-size:1.8rem;}
+    .production .production-title{font-size: 1.6rem;}
+    .production .production-content{font-size: 1.4rem;}
+    .production .production-content p{line-height:25px;}
+}
+/*iphone6 plus*/
+@media screen and (min-width: 414px) {
+    .production .header{font-size: 2rem;}
+    .production .header span{font-size:2.1rem;}
+    .production .production-title{font-size: 1.7rem;}
+    .production .production-content{font-size: 1.5rem;}
+    .production .production-content p{line-height:26px;}
+}
+a.blue {
+    color: #007aff;
+}
+/* 添加图片下方注释样式 */
+p.pic-des {
+    text-align: center;
+    font-size: 1rem;
+    text-indent: 0 !important;
+}
+.header-content img {
+    width: 100%;
+    margin: 5px 0;
+}
+/* 增加资讯页表格样式 */
+table {
+    width: 100%;
+    text-align: center;
+}
+th {
+    border: 1px solid #595757;
+    border-bottom: 0px;
+    text-align: center;
+}
+table tr td {
+    border: 1px solid #595757;
+}

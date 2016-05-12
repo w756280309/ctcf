@@ -1,0 +1,61 @@
+﻿.container {
+    background-color: #fff;
+}
+.about-content {
+    position: relative;
+    margin:60px auto 10px;
+    padding-left: 40px;
+    padding-right: 40px;
+    color:#000;
+    font-size: 14px;
+}
+.about-content p {
+    margin: 0 auto;
+    width:254px;
+}
+.tuckunder {
+    padding-left: 28px;
+}
+
+.about-icon {
+    margin: 0 auto;
+    width:245px;
+    background: url("/images/about-wdjf.png") no-repeat top right;
+    background-size: 100px 80px;
+    height:80px;
+}
+
+.about-tel {
+    margin:80px auto 10px;
+    padding: 0;
+    width:240px;
+    text-align: right;
+    height: 20px;
+    color:#000;
+    font-size:12px;
+}
+
+.problem-title {
+    color:#f44336;
+    font-size:20px;
+    height: 48px;
+    line-height: 48px;
+}
+
+.xiang {
+    color:#000;
+    font-size:14px;
+    height: 20px;
+    line-height: 20px;
+}
+.marg {
+    margin-top: 30px!important;
+}
+.margs {
+    margin-top: 20px!important;
+}
+.linehei {
+    line-height: 20px;
+    color:#000;
+    font-size:14px;
+}
