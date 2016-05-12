@@ -78,7 +78,7 @@ class OnlineorderController extends BaseController
         }
 
         header("Content-Type: application/vnd.ms-excel");
-        header("Content-Disposition: attachment; filename=投标记录（" . $id . "）-" . date('Ymd') . ".xls");
+        header("Content-Disposition: attachment; filename=".urlencode("投标记录（" . $id . "）-") . date('Ymd') . ".xls");
         header("Pragma: no-cache");
         header("Expires: 0");
 
