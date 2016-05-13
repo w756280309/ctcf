@@ -129,6 +129,7 @@ class UserbankController extends BaseController
     public function actionRecharge()
     {
         \Yii::$app->session->remove('cfca_qpay_recharge');
+        \Yii::$app->session->remove('recharge_back_url');
         $user = $this->getAuthedUser();
         $uid = $user->id;
         $user_bank = UserBanks::find()->where(['uid' => $uid])->select('id,binding_sn,bank_id,bank_name,card_number')->one();
@@ -141,7 +142,10 @@ class UserbankController extends BaseController
         }
         //保存充值来源
         if ($from = Yii::$app->request->get('from')) {
-            Yii::$app->session['recharge_from_url'] = urldecode($from);
+            \Yii::$app->session['recharge_from_url'] = urldecode($from);
+        }
+        if ($to = Yii::$app->request->get('backUrl')) {
+            \Yii::$app->session['recharge_back_url'] = $to;
         }
 
         return $this->render('recharge', ['user_bank' => $user_bank, 'user_acount' => $user_acount, 'data' => $data, 'bank' => $bank]);

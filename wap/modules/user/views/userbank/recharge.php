@@ -1,5 +1,11 @@
 <?php
+use yii\helpers\Html;
+
 $this->title="充值";
+
+if ($backUrl = \Yii::$app->session['recharge_back_url']) {
+    $this->backUrl = Html::encode($backUrl);
+}
 ?>
 <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/bind.css"/>
 <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/chongzhi.css?v=20160412"/>

@@ -1,4 +1,6 @@
 <?php
+use yii\helpers\Html;
+
 $this->title="绑卡受理结果";
 $this->backUrl = false;
 
@@ -45,7 +47,7 @@ $this->registerJsFile('', ['depends' => 'yii\web\YiiAsset','position' => 1]);
 <div class="row" id='bind-close2'>
     <div class="col-xs-4"></div>
     <div class="col-xs-4">
-        <a href="/user/userbank/recharge" class="bind-close1">去充值</a>
+        <a href="/user/userbank/recharge?backUrl=<?= Html::decode('/user/user') ?>" class="bind-close1">去充值</a>
     </div>
     <div class="col-xs-4"></div>
 </div>
