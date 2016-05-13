@@ -1,5 +1,5 @@
 <?php
-$this->title="大河-购买";
+$this->title="购买";
 
 $yr = $deal->yield_rate;
 $qixian = $deal->expires;

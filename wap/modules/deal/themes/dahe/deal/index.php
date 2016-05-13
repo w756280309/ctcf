@@ -1,7 +1,7 @@
 <?php
 frontend\assets\WapAsset::register($this);
 
-$this->title = '大河-理财列表';
+$this->title = '理财列表';
 $this->showBottomNav = true;
 $this->backUrl = false;
 
