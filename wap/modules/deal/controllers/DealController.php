@@ -10,6 +10,7 @@ use common\service\PayService;
 use common\controllers\HelpersTrait;
 use common\lib\StringUtils\StringUtils;
 use common\models\product\RateSteps;
+use yii\web\NotFoundHttpException;
 
 class DealController extends Controller
 {
@@ -89,9 +90,19 @@ class DealController extends Controller
 
         $deals = OnlineProduct::findOne(['online_status' => OnlineProduct::STATUS_ONLINE, 'del_status' => OnlineProduct::STATUS_USE, 'sn' => $sn]);
         if (null === $deals) {   //对象没有查到时,抛出异常
-            throw new \yii\web\NotFoundHttpException();
+            throw new NotFoundHttpException();
         }
-
+        //未登录或者登录了，但不是定向用户的情况下，报404
+        if (1 === $deals->isPrivate) {
+            if (Yii::$app->user->isGuest) {
+                throw new NotFoundHttpException();
+            } else {
+                $uids = explode(',', $deals->allowedUids);
+                if (!in_array(Yii::$app->user->identity->getId(), $uids)) {
+                    throw new NotFoundHttpException();
+                }
+            }
+        }
         $orderbalance = 0;
         if (OnlineProduct::STATUS_FOUND === (int) $deals['status']) {
             $orderbalance = 0;
