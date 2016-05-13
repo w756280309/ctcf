@@ -106,34 +106,27 @@
 
 <div class="container advan" >
     <!-- 主体 -->
-    <!-- banner  -->
     <div class="ico">
         <img src="<?= ASSETS_BASE_URI ?>images/system/ico.png" alt="国资平台，值得信赖" >
     </div>
-    <!-- 主体 -->
+
     <div class="about-content row">
         <div class="line">
-            <div class="head-line ico"><span>—————</span>温都金服五大优势<span>—————</span></div>
+            <div class="head-line ico"><span>—————</span>大河理财五大优势<span>—————</span></div>
         </div>
 
-        <p class="h-first"><a href="javascript:;" class="number">1</a><span>国资</span>背景</p>
-        <p class="suojin">隶属温州日报报业集团旗下，国资平台，可信赖；</p>
-        <p class="h-num"><a href="javascript:;" class="number">2</a><span>股东</span>强势</p>
-        <p class="suojin">温州日报报业集团，实力雄厚的现代国有传媒集团</p>
-        <p class="suojin">南京金融资产交易中心，</p>
-        <p class="suojin">省级金融主管部门审批的合规平台；</p>
-        <p class="h-num"><a href="javascript:;" class="number">3</a><span>安全</span>合规</p>
-        <p class="suojin">资金全程托管，与平台隔离不被挪用；</p>
-        <p class="suojin">绑定本人银行卡，提现只进本人账户很安全；</p>
-        <p class="suojin">层层风控，安全至上；专业稳健，合法合规；</p>
-        <p class="h-num"><a href="javascript:;" class="number">4</a>产品<span>优质</span></p>
-        <p class="suojin">主流金融机构产品、优质政府平台类产品、</p>
-        <p class="suojin">优质供应链金融产品，期限多样，收益可观；</p>
-        <p class="h-num"><a href="javascript:;" class="number">5</a><span>灵活</span>便捷</p>
-        <p class="suojin">网上有平台，线下有门店，温都金服在您身边</p>
-        <p class="suojin">千元起投，手机操作，随时随地实现财富增值。</p>
-
-        <div class="about-icon"><img src="<?= ASSETS_BASE_URI ?>images/system/pay.png" alt="合作伙伴"></div>
+        <p class="h-first"><a href="javascript:;" class="number">1</a>实力背景<span>可信任</span></p>
+        <p class="suojin">隶属河南日报报业集团旗下，国资平台规范运营，实力背景可信赖；</p>
+        <p class="h-num"><a href="javascript:;" class="number">2</a>合法合规<span>有保证</span></p>
+        <p class="suojin">承载大河报全媒体16年信誉，省级金融主管部门审批的合规平台，有保证；</p>
+        <p class="h-num"><a href="javascript:;" class="number">3</a>资金托管<span>很安心</span></p>
+        <p class="suojin">资金全程第三方托管，用户与平台资金有效隔离；</p>
+        <p class="suojin">绑定本人银行卡，资金提现只进本人账户，很安全；</p>
+        <p class="h-num"><a href="javascript:;" class="number">4</a>项目优质<span>风险低</span></p>
+        <p class="suojin">主流金融机构产品、优质政府平台类项目，风险低；</p>
+        <p class="suojin">项目期限有长有短，期限匹配年化收益率，任您选；</p>
+        <p class="h-num"><a href="javascript:;" class="number">5</a>操作灵活<span>很便捷</span></p>
+        <p class="suojin">线下有服务，网上可交易，咨询、了解触手可及；</p>
+        <p class="suojin">门槛低至千元可投，随时随地手机操作，很便捷。</p>
     </div>
-
 </div>
