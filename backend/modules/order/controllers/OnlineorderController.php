@@ -78,7 +78,17 @@ class OnlineorderController extends BaseController
         }
 
         header("Content-Type: application/vnd.ms-excel");
-        header("Content-Disposition: attachment; filename=".urlencode("投标记录（" . $id . "）-") . date('Ymd') . ".xls");
+        $file_name = "投标记录（" . $id . "）-" . date('Ymd') . ".xls";
+        $encoded_filename = urlencode($file_name);
+        $encoded_filename = str_replace("+", "%20", $encoded_filename);
+        $ua = $_SERVER["HTTP_USER_AGENT"];
+        if (preg_match("/MSIE/", $ua) || preg_match("/Trident\/7.0/", $ua)) {
+            header('Content-Disposition: attachment; filename="' . $encoded_filename . '"');
+        } else if (preg_match("/Firefox/", $ua)) {
+            header('Content-Disposition: attachment; filename*="utf8\'\'' . $file_name . '"');
+        } else {
+            header('Content-Disposition: attachment; filename="' . $file_name . '"');
+        }
         header("Pragma: no-cache");
         header("Expires: 0");
 
