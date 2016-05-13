@@ -132,8 +132,6 @@
         <p class="h-num"><a href="javascript:;" class="number">5</a><span>灵活</span>便捷</p>
         <p class="suojin">网上有平台，线下有门店，温都金服在您身边</p>
         <p class="suojin">千元起投，手机操作，随时随地实现财富增值。</p>
-
-        <div class="about-icon"><img src="<?= ASSETS_BASE_URI ?>images/system/pay.png" alt="合作伙伴"></div>
     </div>
 
 </div>

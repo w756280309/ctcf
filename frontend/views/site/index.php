@@ -73,10 +73,6 @@ $this->title = '温都金服首页';
             <div class="three-content-title"><span>灵活</span>便捷</div>
             <em><p>网上有平台，线下有门店，温都金服在您身边，</p><p>千元起投，手机操作，随时随地实现财富增值。</p></em>
         </div>
-        <div class="three-hang">
-            <img src="<?= ASSETS_BASE_URI ?>images/gongsi.png" alt="">
-            <p>*联动优势是中国银联与中国移动联合成立的第三方支付公司</p>
-        </div>
     </div>
     <div class="three-bottom">
         <img src="<?= ASSETS_BASE_URI ?>images/three-footer.png" alt="">
