@@ -59,7 +59,7 @@ $(function() {
     <?php if (!defined('IN_APP')) { ?>
     <!--header-->
     <header class="row head-title">
-        <div class="logo col-xs-12 col-sm-12"><img src="<?= ASSETS_BASE_URI ?>images/logo.png" alt="logo" ></div>
+        <div class="logo col-xs-12 col-sm-12"><img src="<?= ASSETS_BASE_URI ?>images/dahe/logo.png" alt="logo" ></div>
         <div class="logo_tit">大河理财</div>
     </header>
     <?php } ?>
@@ -179,9 +179,9 @@ $(function() {
         </div>
         <div style="clear: both;"></div>
         <div class="row margin-add">
-            <div class="col-xs-4 padding-clear"><a href="/deal/deal/index"><img src="<?= ASSETS_BASE_URI ?>images/type1.jpg?v=20160418" alt="温盈金" /></a> </div>
-            <div class="col-xs-4 padding-clear"><a href="/deal/deal/index"><img src="<?= ASSETS_BASE_URI ?>images/type2.jpg?v=20160418" alt="温盈宝" /></a> </div>
-            <div class="col-xs-4 padding-clear"><a href="/order/booking/detail?pid=1"><img src="<?= ASSETS_BASE_URI ?>images/type3.jpg" alt="温股投" /></a> </div>
+            <div class="col-xs-4 padding-clear"><a href="/deal/deal/index"><img src="<?= ASSETS_BASE_URI ?>images/dahe/type1.jpg?v=20160418" alt="大盈通" /></a> </div>
+            <div class="col-xs-4 padding-clear"><a href="/deal/deal/index"><img src="<?= ASSETS_BASE_URI ?>images/dahe/type2.jpg?v=20160418" alt="大盈宝" /></a> </div>
+            <div class="col-xs-4 padding-clear"><a href="/order/booking/detail?pid=1"><img src="<?= ASSETS_BASE_URI ?>images/dahe/type3.jpg" alt="股权项目" /></a> </div>
         </div>
     </div>
     <!-- 理财区 end -->
