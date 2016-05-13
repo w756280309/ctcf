@@ -10,7 +10,7 @@ use common\models\bank\BankCardUpdate;
 class UpdatecardController extends Controller
 {
     /**
-     * 换卡申请页面前台回调函数
+     * 换卡申请页面前台回调函数.
      */
     public function actionFrontend()
     {
@@ -25,6 +25,12 @@ class UpdatecardController extends Controller
         if (\Yii::$container->get('ump')->verifySign($data)
             && 'mer_bind_card_apply_notify' === $data['service']
             && '0000' === $data['ret_code']) {
+            $model = BankCardUpdate::findOne(['sn' => $data['order_id']]);
+            if (BankCardUpdate::STATUS_PENDING === $model->status) {
+                $model->status = BankCardUpdate::STATUS_ACCEPT;
+                $model->save();
+            }
+
             return $this->redirect(\Yii::$app->params['clientOption']['host']['wap'].'user/userbank/updatecardnotify?ret=success');
         }
 
@@ -32,7 +38,7 @@ class UpdatecardController extends Controller
     }
 
     /**
-     * 换卡申请页面后台回调函数
+     * 换卡申请页面后台回调函数.
      */
     public function actionBackend()
     {
@@ -40,7 +46,7 @@ class UpdatecardController extends Controller
 
         $this->layout = false;
         $err = '0000';
-        $errmsg = "no error";
+        $errmsg = 'no error';
 
         if (array_key_exists('token', $data)) {
             unset($data['token']);
@@ -51,6 +57,12 @@ class UpdatecardController extends Controller
         if (\Yii::$container->get('ump')->verifySign($data)) {
             if ('mer_bind_card_apply_notify' === $data['service']) {    //换卡申请后台通知
                 if ('0000' === $data['ret_code']) {
+                    $model = BankCardUpdate::findOne(['sn' => $data['order_id']]);
+                    if (BankCardUpdate::STATUS_PENDING === $model->status) {
+                        $model->status = BankCardUpdate::STATUS_ACCEPT;
+                        $model->save();
+                    }
+
                     return $this->redirect(\Yii::$app->params['clientOption']['host']['wap'].'user/userbank/updatecardnotify?ret=success');
                 } else {
                     return $this->redirect(\Yii::$app->params['clientOption']['host']['wap'].'user/userbank/updatecardnotify');

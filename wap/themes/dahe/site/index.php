@@ -60,7 +60,7 @@ $(function() {
     <!--header-->
     <header class="row head-title">
         <div class="logo col-xs-12 col-sm-12"><img src="<?= ASSETS_BASE_URI ?>images/dahe/logo.png" alt="logo" ></div>
-        <div class="logo_tit">大河理财</div>
+        <div class="logo_tit">河南日报报业集团旗下理财平台</div>
     </header>
     <?php } ?>
 

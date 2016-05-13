@@ -18,18 +18,19 @@ use common\models\user\User;
  * @property string $bankName
  * @property string $cardHolder
  * @property string $cardNo
- * @property integer $status
+ * @property int $status
  * @property string $created_at
  * @property string $updated_at
  */
 class BankCardUpdate extends ActiveRecord implements \P2pl\QpayBindInterface
 {
     const STATUS_PENDING = 0;   //已申请
+    const STATUS_ACCEPT = 3; //已受理
     const STATUS_SUCCESS = 1;//处理成功
     const STATUS_FAIL = 2;//处理失败
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public static function tableName()
     {
@@ -37,7 +38,7 @@ class BankCardUpdate extends ActiveRecord implements \P2pl\QpayBindInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function rules()
     {
@@ -54,7 +55,7 @@ class BankCardUpdate extends ActiveRecord implements \P2pl\QpayBindInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function attributeLabels()
     {

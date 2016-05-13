@@ -281,7 +281,7 @@ class UserbankController extends BaseController
             ->where(['oldSn' => $userBank->binding_sn, 'uid' => $user->id])
             ->orderBy('id desc')->one();
 
-        if (null !== $bankcardUpdate && BankCardUpdate::STATUS_PENDING !== $bankcardUpdate->status) {
+        if (null !== $bankcardUpdate && BankCardUpdate::STATUS_ACCEPT !== $bankcardUpdate->status) {
             $bankcardUpdate = null;
         }
 
@@ -298,6 +298,15 @@ class UserbankController extends BaseController
         $data = BankService::checkKuaijie($user);
         if (1 === $data['code']) {
             $this->goHome();
+        }
+
+        $userBank = $user->qpay;
+        $bankcardUpdate = BankCardUpdate::find()
+            ->where(['oldSn' => $userBank->binding_sn, 'uid' => $user->id])
+            ->orderBy('id desc')->one();
+
+        if (null !== $bankcardUpdate && BankCardUpdate::STATUS_ACCEPT === $bankcardUpdate->status) {
+            return $this->redirect('/user/userbank/mycard');
         }
 
         $banks = BankManager::getQpayBanks();
