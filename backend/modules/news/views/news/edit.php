@@ -3,6 +3,11 @@ use yii\widgets\ActiveForm;
 use yii\helpers\ArrayHelper;
 
 $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\web\YiiAsset']);
+$this->registerCssFile('/vendor/kindeditor/4.1.11/themes/default/default.css');
+$this->registerCssFile('/vendor/kindeditor/4.1.11/plugins/code/prettify.css');
+$this->registerJsFile('/vendor/kindeditor/4.1.11/kindeditor-all-min.js', ['depends' => 'yii\web\YiiAsset']);
+$this->registerJsFile('/vendor/kindeditor/4.1.11/lang/zh-CN.js', ['depends' => 'yii\web\YiiAsset']);
+$this->registerJsFile('/vendor/kindeditor/4.1.11/plugins/code/prettify.js', ['depends' => 'yii\web\YiiAsset']);
 $this->title = '编辑资讯';
 ?>
 <?php $this->beginBlock('blockmain'); ?>
@@ -92,6 +97,14 @@ $this->title = '编辑资讯';
     </div>
     <script type="text/javascript">
         jQuery(document).ready(function () {
+            KindEditor.ready(function(K) {
+                var editor1 = K.create('#news-body', {
+                    items:[ 'fontname', 'fontsize',  'forecolor', 'hilitecolor', 'bold', 'italic', 'underline', 'removeformat', '|','wordpaste', '|', 'justifyleft', 'justifycenter', 'justifyright','justifyfull', 'insertorderedlist','insertunorderedlist', '|', 'image', 'table', 'link', 'unlink'],
+                    uploadJson :'/news/news/upload', //指定上传文件的服务器端程序
+                    extraFileUploadParams:{_csrf:"<?= Yii::$app->request->csrfToken ?>"}
+                });
+                prettyPrint();
+            });
 
         });
     </script>
