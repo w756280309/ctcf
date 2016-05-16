@@ -117,9 +117,10 @@
         </div>
 
         <p class="h-first"><a href="javascript:;" class="number">1</a><span>国资</span>背景</p>
-        <p class="suojin">隶属温州日报报业集团旗下，国资平台，可信赖；</p>
+        <p class="suojin">隶属温州报业传媒旗下，国资平台，可信赖；</p>
         <p class="h-num"><a href="javascript:;" class="number">2</a><span>股东</span>强势</p>
-        <p class="suojin">温州日报报业集团，实力雄厚的现代国有传媒集团</p>
+        <p class="suojin">温州报业传媒有限公司，</p>
+        <p class="suojin">系温州日报报业集团全资子公司；</p>
         <p class="suojin">南京金融资产交易中心，</p>
         <p class="suojin">省级金融主管部门审批的合规平台；</p>
         <p class="h-num"><a href="javascript:;" class="number">3</a><span>安全</span>合规</p>
