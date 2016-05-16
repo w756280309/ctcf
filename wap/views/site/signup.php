@@ -59,15 +59,10 @@ $this->params['breadcrumbs'][] = $this->title;
             $("#signup-btn").removeClass("btn-press").addClass("btn-normal");
             return false;
         }
-        var reg = /[a-zA-Z]/;
-        var reg2 = /[0-9]/;
-        if (!(-1 === $('#pass').val().indexOf(' ') && reg.test($('#pass').val()) && reg2.test($('#pass').val()))) {
-            toast('请至少输入字母与数字组合');
-            $("#signup-btn").removeClass("btn-press").addClass("btn-normal");
-            return false;
-        }
-        if ($('#pass').val() == '') {
-            toast('密码不能为空');
+        var tel = $('#iphone').val();
+        reg = /^0?1[3|4|5|6|7|8][0-9]\d{8}$/;
+        if (!reg.test(tel)) {
+            toast('手机号格式错误');
             $("#signup-btn").removeClass("btn-press").addClass("btn-normal");
             return false;
         }
@@ -91,15 +86,21 @@ $this->params['breadcrumbs'][] = $this->title;
             $("#signup-btn").removeClass("btn-press").addClass("btn-normal");
             return false;
         }
-        var tel = $('#iphone').val();
-        reg = /^0?1[3|4|5|6|7|8][0-9]\d{8}$/;
-        if (!reg.test(tel)) {
-            toast('手机号格式错误');
+
+        if ($('#pass').val() == '') {
+            toast('密码不能为空');
             $("#signup-btn").removeClass("btn-press").addClass("btn-normal");
             return false;
         }
         if ($('#pass').val().length < 6) {
             toast('密码长度最少6位');
+            $("#signup-btn").removeClass("btn-press").addClass("btn-normal");
+            return false;
+        }
+        var reg = /[a-zA-Z]/;
+        var reg2 = /[0-9]/;
+        if (!(-1 === $('#pass').val().indexOf(' ') && reg.test($('#pass').val()) && reg2.test($('#pass').val()))) {
+            toast('请至少输入字母与数字组合');
             $("#signup-btn").removeClass("btn-press").addClass("btn-normal");
             return false;
         }
