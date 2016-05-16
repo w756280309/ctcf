@@ -29,7 +29,7 @@ $this->title = '预约申请单';
     </div>
     <div class="row">
         <div class="hidden-xs col-sm-1"></div>
-        <div class="col-xs-7 col-sm-8"><p class="p-notice">*温股投起购金额<?= $product->min_fund ?>万元</p></div>
+        <div class="col-xs-7 col-sm-8"><p class="p-notice">*股权项目起购金额<?= $product->min_fund ?>万元</p></div>
         <div class="hidden-xs col-sm-1"></div>
     </div>
     <!--提交按钮-->
