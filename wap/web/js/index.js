@@ -70,16 +70,24 @@ $(function(){
             textStr:'' //显示文字
         });
     }
-
-})
+});
 
 function checkLoginStatus()
 {
     var xhr = $.get('/site/session');
-
     xhr.done(function(data) {
         if (!data.isLoggedin) {
             $('#isLoggedin').show();
+            //未登录状态点击温股投弹出提示框
+            var wgt = $('#wgt');
+            wgt.find('a').removeAttr('href');
+            wgt.css('cursor', 'pointer');
+            wgt.click(function () {
+                var res = confirm('根据合规性要求，私募基金产品，定向发行，请先登录后方可了解相关内容');
+                if (true === res) {
+                    location.href = '/site/login';
+                }
+            });
         }
     });
 }
