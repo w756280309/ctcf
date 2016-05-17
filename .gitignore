@@ -37,3 +37,5 @@ ump_prod.crt
 tests/_config-local.php
 
 .DS_Store
+
+backend/web/vendor/kindeditor/4.1.11/attached/

@@ -62,6 +62,9 @@ return [
         'daoqibenxi' => 70049,
         'fenqihuikuan' => 70048,
         'lfenqihuikuan' => 70046,
+        'config' => [
+            'APP_ID' => "8a48b551525cdd3301526207479a0bcc"
+        ],
     ],
     'contact_tel' => '400-101-5151',
     'white_list' => ['15810036547','18518154492'],

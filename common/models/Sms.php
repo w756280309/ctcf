@@ -13,7 +13,7 @@ class Sms
 {
 	private $AccountSid = '8a48b551525cdd33015261e8d0d00b3f';             //主账户id
 	private $AccountToken ='e8d03fa22d77482280daadcfb90c5fc6';            //主账户授权令牌
-	private $AppId = '8a48b551525cdd3301526207479a0bcc';                  //应用id  
+	private $AppId = '';                  //应用id  
 	private $ServerIP= 'app.cloopen.com';                                 //服务器地址
 	private $ServerPort= '8883';                                          //服务器端口
 	private $SoftVersion= '2013-12-26';                                   //API版本
@@ -25,6 +25,7 @@ class Sms
 	
 	public function __construct()
 	{
+            $this->AppId = \Yii::$app->params['sms']['config']['APP_ID'];//
         $this->Filename = dirname(dirname(__DIR__))."/data/log/sms.log.txt";
 		$this->Batch = date("YmdHis");											//时间戳
         $this->Handle = fopen($this->Filename, 'a');
