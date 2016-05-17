@@ -1,47 +1,55 @@
 <?php $this->beginBlock('blockmain'); ?>
-<style>
-    .stats-perf-daily {
-        margin-top: 1em;
-    }
-    .stats-perf-daily td {
-        text-align: right;
-    }
-    .stats-perf-daily td.tcol-id {
-        text-align: left;
-    }
-</style>
 <div class="container-fluid">
-    <table class="stats-perf-daily table table-striped">
-        <tr>
-            <td class="tcol-id">日期</td>
-            <td>注册数</td>
-            <td>实名认证</td>
-            <td>绑卡</td>
-            <td>投资人数</td>
-            <td>新增投资人数</td>
-            <td>POS充值</td>
-            <td>线上充值</td>
-            <td>提现</td>
-            <td>温盈金</td>
-            <td>温盈宝</td>
-            <td>投资金额</td>
-        </tr>
-        <?php foreach($perfs as $perf): ?>
-        <tr>
-            <td class="tcol-id"><?= $perf->bizDate ?></td>
-            <td><?= $perf->reg ?></td>
-            <td><?= $perf->idVerified ?></td>
-            <td><?= $perf->qpayEnabled ?></td>
-            <td><?= $perf->investor ?></td>
-            <td><?= $perf->newInvestor ?></td>
-            <td><?= $perf->chargeViaPos ?></td>
-            <td><?= $perf->chargeViaEpay ?></td>
-            <td><?= $perf->drawAmount ?></td>
-            <td><?= $perf->investmentInWyj ?></td>
-            <td><?= $perf->investmentInWyb ?></td>
-            <td><?= $perf->totalInvestment ?></td>
-        </tr>
-        <?php endforeach; ?>
-    </table>
+    <div class="row-fluid">
+        <div class="span12">
+            <h3 class="page-title">
+                汇总统计
+                <small style="color: red;">数据截止至 <?= $countDate ?>，每小时更新</small>
+            </h3>
+        </div>
+    </div>
+    <div style="float: right">
+        <a href="/datatj/datatj/monthtj" class="btn blue btn-block" style="display: block;">月历史数据</a>
+        <a href="/datatj/datatj/daytj" class="btn blue btn-block" style="display: block;margin-top: 10px;">日历史数据</a>
+    </div>
+    <div class="row-fluid">
+        <h3>资金统计</h3>
+    </div>
+    <div class="row-fluid">
+        <div class="span4">平台累计交易额：<span style="color: red;"><?= number_format($totalTotalInve, 3) ?></span> 元</div>
+        <div class="span4">本月交易额：<?= number_format($monthTotalInvestment, 3) ?>元</div>
+        <div class="span4">今日交易额：<?= number_format($todayTotalInve, 3) ?>元</div>
+    </div>
+    <div class="row-fluid">
+        <div class="span4">贷后余额： <?= number_format($remainMoney, 3) ?>元</div>
+        <div class="span4">平台可用金额：<?= number_format($usableMoney, 3) ?>元</div>
+    </div>
+    <div class="row-fluid">
+        <div class="span4">今日充值金额：<?= number_format($todayRechargeMoney, 3) ?>元</div>
+        <div class="span4">今日提现金额：<?= number_format($todayDraw, 3) ?>元</div>
+    </div>
+    <div class="row-fluid">
+        <div class="span4">累计充值手续费：<?= number_format($totalRechargeCost, 3) ?>元</div>
+        <div class="span4">今日充值手续费：<?= number_format($toadyRechargeCost, 3) ?>元</div>
+    </div>
+    <div class="row-fluid">
+        <h3>用户统计</h3>
+    </div>
+    <div class="row-fluid">
+        <div class="span4">平台累计注册用户数：<span style="color: red;"><?= intval($totalReg) ?></span>人</div>
+        <div class="span4">平台累计实名认证用户数：<span style="color: red;"><?= intval($totalIdVerified) ?></span>人</div>
+    </div>
+    <div class="row-fluid">
+        <div class="span4">平台今日注册用户数：<?= intval($todayReg) ?>人</div>
+        <div class="span4">平台今日实名认证用户数：<?= intval($todayIdVerified) ?>人</div>
+    </div>
+    <div class="row-fluid">
+        <h3>项目统计</h3>
+    </div>
+    <div class="row-fluid">
+        <div class="span4">平台累计融资项目数：<span style="color: red"><?= intval($totalSuccessFound) ?></span>个</div>
+        <div class="span4">平台本月融资项目数：<?= intval($monthSuccessFound) ?>个</div>
+        <div class="span4">平台今日融资项目数：<?= intval($todaySuccessFound) ?>个</div>
+    </div>
 </div>
 <?php $this->endBlock(); ?>
