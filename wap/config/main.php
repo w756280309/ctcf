@@ -64,6 +64,9 @@ return [
         'system' => [
             'class' => 'app\modules\system\Module',
         ],
+        'promotion' => [
+            'class' => 'wap\modules\promotion\Module',
+        ],
     ],
     'params' => $params,
 ];
