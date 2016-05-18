@@ -26,7 +26,7 @@ class Promo160520Log extends ActiveRecord
     public function rules()
     {
         return [
-            [['mobile', 'prizeId', 'count'], 'required'],
+            [['mobile', 'prizeId', 'count', 'isNewUser'], 'required'],
         ];
     }
 }
