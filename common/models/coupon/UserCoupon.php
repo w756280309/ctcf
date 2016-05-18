@@ -116,4 +116,20 @@ class UserCoupon extends \yii\db\ActiveRecord
 
         return $coupon;
     }
+
+    public static function unuseCoupon(OnlineOrder $ord)
+    {
+        if ($ord->userCoupon_id) {
+            $coupon = UserCoupon::findOne($ord->userCoupon_id);
+            if (null === $coupon) {
+                throw new \Exception('无法找到代金券');
+            } elseif (!$coupon->isUsed || $coupon->order_id !== $ord->id) {
+                throw new \Exception('代金券使用异常');
+            }
+            $coupon->order_id = 0;
+            $coupon->isUsed = 0;
+            return $coupon->save(false);
+        }
+        return true;
+    }
 }

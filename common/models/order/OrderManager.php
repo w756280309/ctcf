@@ -192,6 +192,8 @@ class OrderManager
         }
         $transaction = Yii::$app->db->beginTransaction();
         try {
+            UserCoupon::unuseCoupon($ord);
+
             $cancelOrder = CancelOrder::initForOrder($ord, $ord->order_money);
             $cancelOrder->txStatus = CancelOrder::ORDER_CANCEL_SUCCESS;
             if (!$cancelOrder->save()) {
