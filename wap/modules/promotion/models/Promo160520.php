@@ -55,11 +55,11 @@ class Promo160520
             $log->save();
         } else {
             if ($log) {
-                $prizeId = (1 === $log->count) ? rand(1, 2) : 3;
+                $prizeId = (1 === $log->count) ? (1 === $log->prizeId ? 2 : 1) : 3;
                 $log->prizeId = $prizeId;
                 $log->count = (3 === $log->count) ? 1 : $log->count + 1;
             } else {
-                $log = new Promo160520Log(['mobile' => $mobile, 'prizeId' => 1, 'count' => 1, 'isNewUser' => 1]);
+                $log = new Promo160520Log(['mobile' => $mobile, 'prizeId' => rand(1, 2), 'count' => 1, 'isNewUser' => 1]);
             }
 
             if (!$log->save()) {

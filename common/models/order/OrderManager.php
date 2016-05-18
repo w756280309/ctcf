@@ -474,13 +474,6 @@ class OrderManager
             $order->userCoupon_id = $coupon->id;
             $order->couponAmount = $coupon->couponType->amount;
             $order->paymentAmount = bcsub($price, $order->couponAmount, 2);
-
-            $coupon->order_id = $order->id;
-            $coupon->isUsed = 1;
-            if (!$coupon->save(false)) {
-                $transaction->rollBack();
-                return ['code' => PayService::ERROR_SYSTEM, 'message' => '代金券使用异常'];
-            }
         } else {
             $order->userCoupon_id = 0;
             $order->couponAmount = 0;
@@ -499,6 +492,14 @@ class OrderManager
             return ['code' => PayService::ERROR_ORDER_CREATE,  'message' => PayService::getErrorByCode(PayService::ERROR_ORDER_CREATE), 'tourl' => '/order/order/ordererror'];
         }
 
+        if ($coupon) {
+            $coupon->order_id = $order->id;
+            $coupon->isUsed = 1;
+            if (!$coupon->save(false)) {
+                $transaction->rollBack();
+                return ['code' => PayService::ERROR_SYSTEM, 'message' => '代金券使用异常'];
+            }
+        }
         //免密逻辑处理
         $res = Yii::$container->get('ump')->orderNopass($order);
         $errmsg = '';
