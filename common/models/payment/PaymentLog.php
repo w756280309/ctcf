@@ -28,7 +28,7 @@ class PaymentLog extends ActiveRecord implements PaymentTxInterface
     public function rules()
     {
         return [
-            [['txSn', 'amount', 'toParty_id'], 'required'],
+            [['txSn', 'amount', 'toParty_id', 'loan_id'], 'required'],
         ];
     }
 

@@ -521,7 +521,7 @@ class OrderManager
         }
 
         if ($coupon) {
-            $coupon->order_id = 0;
+            $coupon->order_id = null;
             $coupon->isUsed = 0;
             if (!$coupon->save(false)) {
                 $transaction->rollBack();

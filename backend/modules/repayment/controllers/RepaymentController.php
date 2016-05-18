@@ -19,6 +19,7 @@ use backend\modules\order\controllers\OnlinefangkuanController;
 use common\models\epay\EpayUser;
 use common\utils\TxUtils;
 use yii\web\NotFoundHttpException;
+use common\models\payment\PaymentLog;
 
 /**
  * OrderController implements the CRUD actions for OfflineOrder model.
@@ -377,6 +378,14 @@ class RepaymentController extends BaseController
         bcscale(14);
         $bcround = new BcRound();
         if (OnlineFangkuan::STATUS_EXAMINED === (int) $fk->status) {
+            $payLog = PaymentLog::findOne(['loan_id' => $pid]);
+            if ($payLog) {
+                $ret = Yii::$container->get('ump')->transfer($payLog);
+                if (!$ret->isSuccessful()) {
+                    return ['res' => 0, 'msg' => '联动一侧：'.$ret->get('ret_msg')];
+                }
+            }
+
             $transaction = Yii::$app->db->beginTransaction();
             try {
                 LoanService::updateLoanState($product, OnlineProduct::STATUS_HUAN);
@@ -387,23 +396,23 @@ class RepaymentController extends BaseController
             }
 
             $ua = UserAccount::findOne(['uid' => $product->borrow_uid, 'type' => UserAccount::TYPE_BORROW]);
-            $ua->account_balance = $bcround->bcround(bcadd($ua->account_balance, $product->money), 2);
+            $ua->account_balance = $bcround->bcround(bcadd($ua->account_balance, $product->funded_money), 2);
             $ua->available_balance = $bcround->bcround(bcadd($ua->available_balance, $product->funded_money), 2);
-            $ua->drawable_balance = $bcround->bcround(bcadd($ua->drawable_balance, $product->money), 2);
-            $ua->in_sum = $bcround->bcround(bcadd($ua->in_sum, $product->money), 2);
+            $ua->drawable_balance = $bcround->bcround(bcadd($ua->drawable_balance, $product->funded_money), 2);
+            $ua->in_sum = $bcround->bcround(bcadd($ua->in_sum, $product->funded_money), 2);
             if (!$ua->save()) {
                 $transaction->rollBack();
 
                 return ['res' => 0, 'msg' => '更新用户融资账户异常'];
             }
             OnlineFangkuan::updateAll(['status' => OnlineFangkuan::STATUS_FANGKUAN], ['online_product_id' => $pid]); //将所有放款批次变为已经放款
-           $mre_model = new MoneyRecord();
+            $mre_model = new MoneyRecord();
             $mre_model->type = MoneyRecord::TYPE_FANGKUAN;
             $mre_model->sn = MoneyRecord::createSN();
             $mre_model->osn = $fk->sn;
             $mre_model->account_id = $ua->id;
             $mre_model->uid = $product->borrow_uid;
-            $mre_model->in_money = $fk->order_money;
+            $mre_model->in_money = $product->funded_money;
             $mre_model->remark = '已放款';
             $mre_model->balance = $ua->available_balance;
             if (!$mre_model->save()) {
@@ -415,7 +424,6 @@ class RepaymentController extends BaseController
             $resp = Yii::$container->get('ump')->loanTransferToMer($fk);
             if (!$resp->isSuccessful()) {
                 $transaction->rollBack();
-
                 return ['res' => 0, 'msg' => '联动一侧：'.$resp->get('ret_msg')];
             }
             $transaction->commit();

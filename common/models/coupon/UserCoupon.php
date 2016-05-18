@@ -129,7 +129,7 @@ class UserCoupon extends \yii\db\ActiveRecord
             } elseif (!$coupon->isUsed || $coupon->order_id !== $ord->id) {
                 throw new \Exception('代金券使用异常');
             }
-            $coupon->order_id = 0;
+            $coupon->order_id = null;
             $coupon->isUsed = 0;
             return $coupon->save(false);
         }
