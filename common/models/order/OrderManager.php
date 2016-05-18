@@ -194,7 +194,7 @@ class OrderManager
         try {
             UserCoupon::unuseCoupon($ord);
 
-            $cancelOrder = CancelOrder::initForOrder($ord, $ord->order_money);
+            $cancelOrder = CancelOrder::initForOrder($ord, $ord->paymentAmount);
             $cancelOrder->txStatus = CancelOrder::ORDER_CANCEL_SUCCESS;
             if (!$cancelOrder->save()) {
                 throw new \Exception('撤销交易创建失败');
