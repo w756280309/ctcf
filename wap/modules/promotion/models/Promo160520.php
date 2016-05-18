@@ -48,10 +48,11 @@ class Promo160520
         $user = User::findOne(['mobile' => $mobile]);
         $log = Promo160520Log::findOne(['mobile' => $mobile]);
         if (null !== $user) {
-            if (!self::insertCoupon($user, $log->prizeId)) {
+            if (!self::insertCoupon($user, 3)) {
                 throw new Exception('获取优惠券失败');
             }
-            (new Promo160520Log(['mobile' => $mobile, 'prizeId' => 3, 'count' => 1, 'isNewUser' => 0]))->save();
+            $log = (new Promo160520Log(['mobile' => $mobile, 'prizeId' => 3, 'count' => 1, 'isNewUser' => 0]));
+            $log->save();
         } else {
             if ($log) {
                 $prizeId = (1 === $log->count) ? rand(1, 2) : 3;
@@ -61,7 +62,7 @@ class Promo160520
                 $log = new Promo160520Log(['mobile' => $mobile, 'prizeId' => 1, 'count' => 1, 'isNewUser' => 1]);
             }
 
-            if ($log->save()) {
+            if (!$log->save()) {
                 throw new Exception('获取优惠券失败');
             }
         }
@@ -81,7 +82,7 @@ class Promo160520
                 throw new Exception('您已领过,请用本手机登录账户中心查看');
             }
         } else {
-            $start = time() - 3 * 24 * 60 * 60;//三天内 
+            $start = time() - 3 * 24 * 60 * 60;//三天内
             if (Promo160520Log::find()->where("createdAt > $start")->andWhere(['mobile' => $mobile, 'prizeId' => 3])->exists()) {
                 throw new Exception('您已领过,请用本手机登录账户中心查看');
             }
@@ -106,7 +107,7 @@ class Promo160520
             return true;
         }
 
-        $transaction = Yii::$app->db->beginTransaction();
+        $transaction = \Yii::$app->db->beginTransaction();
         foreach ($coupons as $coupon) {
             $ret = (new UserCoupon([
                 'couponType_id' => $coupon->id,

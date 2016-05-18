@@ -26,6 +26,7 @@ class Promo160520Controller extends Controller
 
     public function actionIndex()
     {
+        return $this->render('index', ['endFlag' => $this->isEnd()]);
     }
 
     public function actionDraw($mobile)
@@ -38,17 +39,18 @@ class Promo160520Controller extends Controller
             if (!$this->isStart()) {
                 throw new BadRequestHttpException('活动未开始');
             }
-            if ($this->isEnd()) { //活动结束
-            }
 
             Promo160520::checkDraw($mobile);
-            if (!Promo160520::draw($mobile)) {
+            $log = Promo160520::draw($mobile);
+            if (!$log) {
                 throw new Exception('领取失败');
             }
 
             Yii::$app->response->statusCode = 200;
 
             return [
+                'prizeId' => $log->prizeId,
+                'isNewUser' => $log->isNewUser,
                 'message' => '',
             ];
         } catch (BadRequestHttpException $exc) {
