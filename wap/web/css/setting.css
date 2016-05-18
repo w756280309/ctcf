@@ -1,8 +1,9 @@
 .left-txt {
     padding: 0;
-    text-align: right;
+    text-align: left;
     font-size: 15px;
     color:#161616;
+    padding-left: 2rem;
 }
 .right-txt {
     padding-left: 0;
@@ -315,6 +316,11 @@ a:hover {
     margin-top: 0px;
 }
 .yuqishouyi {
+    color:#f44336;
+    line-height:35px;
+    font-size:12px;
+}
+.shijizhifu {
     color:#f44336;
     line-height:35px;
     font-size:12px;
