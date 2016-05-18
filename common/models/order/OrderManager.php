@@ -323,8 +323,11 @@ class OrderManager
         }
         $bcrond = new BcRound();
         $loan = Loan::findOne($order->online_pid);
-        $coupon = UserCoupon::findOne($order->userCoupon_id);
 
+        $coupon = UserCoupon::findOne(['order_id' => $order->id]);
+        if ($coupon && $coupon->id !== intval($order->userCoupon_id)) {
+            throw new Exception("代金券使用异常");
+        }
         $user = $order->user;
         $ua = $user->type === User::USER_TYPE_PERSONAL ? $user->lendAccount : false;//当前限制投资人进行投资
 
@@ -339,10 +342,6 @@ class OrderManager
         $transaction = Yii::$app->db->beginTransaction();
         $order->status = OnlineOrder::STATUS_SUCCESS;
         $order->save();
-
-        $coupon->order_id = $order->id;
-        $coupon->isUsed = 1;
-        $coupon->save(false);
 
         $ua->drawable_balance = $bcrond->bcround(bcsub($ua->drawable_balance, $order->order_money), 2);
         $ua->freeze_balance = $bcrond->bcround(bcadd($ua->freeze_balance, $order->order_money), 2);
@@ -452,7 +451,7 @@ class OrderManager
             return ['code' => PayService::ERROR_SYSTEM, 'message' => '新手标只允许投3次'];
         }
 
-        $user = \common\models\user\User::findOne($uid);
+        $user = User::findOne($uid);
         $order = new OnlineOrder();
         $order->order_money = $price;
         $order->uid = $uid;
@@ -468,10 +467,18 @@ class OrderManager
         $order->mobile = $user->mobile;
         $order->username = $user->real_name;
 
+        $transaction = Yii::$app->db->beginTransaction();
         if ($coupon) {
             $order->userCoupon_id = $coupon->id;
             $order->couponAmount = $coupon->couponType->amount;
             $order->paymentAmount = bcsub($price, $order->couponAmount, 2);
+
+            $coupon->order_id = $order->id;
+            $coupon->isUsed = 1;
+            if (!$coupon->save(false)) {
+                $transaction->rollBack();
+                return ['code' => PayService::ERROR_SYSTEM, 'message' => '代金券使用异常'];
+            }
         } else {
             $order->userCoupon_id = 0;
             $order->couponAmount = 0;
@@ -486,28 +493,41 @@ class OrderManager
         }
         $ore = $order->save(false);
         if (!$ore) {
+            $transaction->rollBack();
             return ['code' => PayService::ERROR_ORDER_CREATE,  'message' => PayService::getErrorByCode(PayService::ERROR_ORDER_CREATE), 'tourl' => '/order/order/ordererror'];
         }
 
         //免密逻辑处理
         $res = Yii::$container->get('ump')->orderNopass($order);
+        $errmsg = '';
         if ($res->isSuccessful()) {
             if (Yii::$app->request->cookies->getValue('campaign_source')) {
                 (new AffiliationManager())->log(Yii::$app->request->cookies->getValue('campaign_source'), $order);
             }
             try {
-                //OrderManager::confirmOrder($order);
                 if (null === OrderQueue::findOne(['orderSn' => $order->sn])) {
                     OrderQueue::initForQueue($order)->save();
                 }
+                $transaction->commit();
                 return ['code' => PayService::ERROR_SUCCESS, 'message' => '', 'tourl' => '/order/order/orderwait?osn='.$order->sn];
-                //return ['code' => PayService::ERROR_SUCCESS, 'message' => '', 'tourl' => '/order/order/ordererror?osn='.$order->sn];
             } catch (\Exception $ex) {
-                return ['code' => PayService::ERROR_MONEY_FORMAT, 'message' => $ex->getMessage(), 'tourl' => '/order/order/ordererror?osn='.$order->sn];
+                $errmsg = $ex->getMessage();
             }
         } else {
-            return ['code' => PayService::ERROR_MONEY_FORMAT, 'message' => $res->get('ret_msg'), 'tourl' => '/order/order/ordererror?osn='.$order->sn];
+            $errmsg = $res->get('ret_msg');
         }
+
+        if ($coupon) {
+            $coupon->order_id = 0;
+            $coupon->isUsed = 0;
+            if (!$coupon->save(false)) {
+                $transaction->rollBack();
+                $errmsg = "代金券退回异常";
+            } else {
+                $transaction->commit();
+            }
+        }
+        return ['code' => PayService::ERROR_MONEY_FORMAT, 'message' => $errmsg, 'tourl' => '/order/order/ordererror?osn='.$order->sn];
     }
 
     public static function getTotalInvestment(Loan $loan, User $user)
