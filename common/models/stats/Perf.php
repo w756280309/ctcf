@@ -125,7 +125,7 @@ class Perf extends ActiveRecord
     //提现
     public function getDrawAmount($date)
     {
-        return Yii::$app->db->createCommand('SELECT SUM(r.money) FROM draw_record r LEFT JOIN user u on r.uid=u.id WHERE r.status=1 and u.type=1 and DATE(FROM_UNIXTIME(r.created_at))=:date')
+        return Yii::$app->db->createCommand('SELECT SUM(r.money) FROM draw_record r LEFT JOIN user u on r.uid=u.id WHERE r.status=2 and u.type=1 and DATE(FROM_UNIXTIME(r.created_at))=:date')
             ->bindValue('date', $date, \PDO::PARAM_STR)
             ->queryScalar();
     }
