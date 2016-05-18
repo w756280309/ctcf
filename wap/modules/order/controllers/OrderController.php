@@ -15,6 +15,7 @@ use common\models\contract\ContractTemplate;
 use common\models\order\OnlineOrder;
 use common\service\PayService;
 use common\models\order\OrderManager;
+use common\models\coupon\UserCoupon;
 
 class OrderController extends BaseController
 {
@@ -58,14 +59,23 @@ class OrderController extends BaseController
 
         Yii::$app->response->format = Response::FORMAT_JSON;
         $money = \Yii::$app->request->post('money');
+        $coupon_id = \Yii::$app->request->post('couponId');
+        $coupon = null;
+        if ($coupon_id) {
+            $coupon = UserCoupon::findOne($coupon_id);
+            if (null === $coupon) {
+                return ['code' => 1,  'message' => '无效的代金券'];
+            }
+        }
+
         $pay = new PayService(PayService::REQUEST_AJAX);
-        $ret = $pay->checkAllowPay($this->getAuthedUser(), $sn, $money);
+        $ret = $pay->checkAllowPay($this->getAuthedUser(), $sn, $money, $coupon);
         if ($ret['code'] != PayService::ERROR_SUCCESS) {
             return $ret;
         }
         $orderManager = new OrderManager();
 
-        return $orderManager->createOrder($sn, $money,  $this->getAuthedUser()->id);
+        return $orderManager->createOrder($sn, $money,  $this->getAuthedUser()->id, $coupon);
     }
 
     /**

@@ -46,10 +46,10 @@ class Promo160520
             throw new Exception('无效的手机号');
         }
         $user = User::findOne(['mobile' => $mobile]);
+        $log = Promo160520Log::findOne(['mobile' => $mobile]);
         if (null !== $user) {
-            return self::insertCoupon($user, 3);
+            return self::insertCoupon($user, $log->prizeId);
         } else {
-            $log = Promo160520Log::findOne(['mobile' => $mobile]);
             if ($log) {
                 $prizeId = (1 === $log->count) ? rand(1, 2) : 3;
                 $log->prizeId = $prizeId;
@@ -90,6 +90,15 @@ class Promo160520
         }
 
         $coupons = CouponType::find()->where(['sn' => $config])->all();
+        $type_ids = array();
+        foreach ($coupons as $coupon) {
+            $type_ids[] = $coupon->id;
+        }
+
+        if (!empty($type_ids) && UserCoupon::find()->where(['couponType_id' => $type_ids])->exists()) {
+            return true;
+        }
+
         $transaction = Yii::$app->db->beginTransaction();
         foreach ($coupons as $coupon) {
             $ret = (new UserCoupon([

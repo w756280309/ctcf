@@ -17,6 +17,7 @@ use common\models\order\OnlineOrder;
 use common\models\order\OrderQueue;
 use common\models\product\RateSteps;
 use common\models\affiliation\AffiliationManager;
+use common\models\coupon\UserCoupon;
 
 /**
  * 订单manager.
@@ -322,6 +323,7 @@ class OrderManager
         }
         $bcrond = new BcRound();
         $loan = Loan::findOne($order->online_pid);
+        $coupon = UserCoupon::findOne($order->userCoupon_id);
 
         $user = $order->user;
         $ua = $user->type === User::USER_TYPE_PERSONAL ? $user->lendAccount : false;//当前限制投资人进行投资
@@ -337,6 +339,10 @@ class OrderManager
         $transaction = Yii::$app->db->beginTransaction();
         $order->status = OnlineOrder::STATUS_SUCCESS;
         $order->save();
+
+        $coupon->order_id = $order->id;
+        $coupon->isUsed = 1;
+        $coupon->save(false);
 
         $ua->drawable_balance = $bcrond->bcround(bcsub($ua->drawable_balance, $order->order_money), 2);
         $ua->freeze_balance = $bcrond->bcround(bcadd($ua->freeze_balance, $order->order_money), 2);
@@ -431,7 +437,7 @@ class OrderManager
     /**
      * 创建用户标的订单.
      */
-    public function createOrder($sn = null, $price = null, $uid = null)
+    public function createOrder($sn = null, $price = null, $uid = null, UserCoupon $coupon = null)
     {
         if (empty($sn)) {
             return ['code' => PayService::ERROR_LAW, 'message' => '缺少参数'];   //参数为空,抛出错误信息
@@ -461,6 +467,17 @@ class OrderManager
         $order->expires = $model->expires;
         $order->mobile = $user->mobile;
         $order->username = $user->real_name;
+
+        if ($coupon) {
+            $order->userCoupon_id = $coupon->id;
+            $order->couponAmount = $coupon->couponType->amount;
+            $order->paymentAmount = bcsub($price, $order->couponAmount, 2);
+        } else {
+            $order->userCoupon_id = 0;
+            $order->couponAmount = 0;
+            $order->paymentAmount = $price;
+        }
+
         if (Yii::$app->request->cookies->getValue('campaign_source')) {
             $order->campaign_source = Yii::$app->request->cookies->getValue('campaign_source');
         }

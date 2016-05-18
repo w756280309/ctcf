@@ -443,7 +443,7 @@ class Client
             'partic_type' => '01',
             'partic_acc_type' => '01',
             'partic_user_id' => $ord->getEpayUserId(),
-            'amount' => $ord->getAmount() * 100,
+            'amount' => $ord->getPaymentAmount() * 100,
         ];
         $params = $this->buildQuery($data);
 
@@ -469,7 +469,7 @@ class Client
             'partic_type' => '01',
             'partic_acc_type' => '01',
             'partic_user_id' => $ord->getEpayUserId(),
-            'amount' => $ord->getAmount() * 100,
+            'amount' => $ord->getPaymentAmount() * 100,
         ];
         return $this->doRequest($data);
     }

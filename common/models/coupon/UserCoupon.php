@@ -3,22 +3,25 @@
 namespace common\models\coupon;
 
 use common\models\order\OnlineOrder;
+use common\models\product\OnlineProduct as Loan;
+use common\models\user\User;
+use Exception;
 use yii\behaviors\TimestampBehavior;
 
 /**
  * This is the model class for table "user_coupon".
  *
- * @property integer $id
- * @property integer $couponType_id
- * @property integer $user_id
- * @property integer $order_id
- * @property integer $isUsed
- * @property integer $created_at
+ * @property int $id
+ * @property int $couponType_id
+ * @property int $user_id
+ * @property int $order_id
+ * @property int $isUsed
+ * @property int $created_at
  */
 class UserCoupon extends \yii\db\ActiveRecord
 {
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public static function tableName()
     {
@@ -26,14 +29,14 @@ class UserCoupon extends \yii\db\ActiveRecord
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function rules()
     {
         return [
             [['couponType_id', 'user_id', 'isUsed', 'created_at'], 'required'],
             [['couponType_id', 'user_id', 'order_id', 'isUsed', 'created_at'], 'integer'],
-            [['order_id'], 'unique']
+            [['order_id'], 'unique'],
         ];
     }
 
@@ -48,7 +51,7 @@ class UserCoupon extends \yii\db\ActiveRecord
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function attributeLabels()
     {
@@ -68,5 +71,49 @@ class UserCoupon extends \yii\db\ActiveRecord
     public function getOrder()
     {
         return $this->hasOne(OnlineOrder::className(), ['id' => 'order_id']);
+    }
+
+    public function getCouponType()
+    {
+        return $this->hasOne(CouponType::className(), ['id' => 'couponType_id']);
+    }
+
+    /**
+     * 检查代金券是否可用.
+     *
+     * @param \common\models\coupon\UserCoupon $coupon
+     * @param type                             $money
+     * @param User                             $user
+     * @param Loan                             $loan
+     *
+     * @return UserCoupon
+     *
+     * @throws Exception
+     */
+    public static function checkAllowUse(UserCoupon $coupon, $money, User $user = null, Loan $loan = null)
+    {
+        if ($coupon->isUsed) {
+            throw new Exception('已经使用');
+        }
+
+        if (null !== $user && $coupon->user_id !== $user->id) {
+            throw new Exception('代金券使用异常');
+        }
+
+        $time = time();
+        if (
+                strtotime($coupon->couponType->useStartDate) > $time
+                || strtotime($coupon->couponType->useEndDate) < $time
+                || strtotime($coupon->couponType->issueStartDate) > $time
+                || strtotime($coupon->couponType->issueEndDate) < $time
+         ) {
+            throw new Exception('代金券不可以使用');
+        }
+
+        if (bccomp($coupon->couponType->minInvest, $money, 2) > 0) {
+            throw new Exception('最低投资'.$coupon->couponType->minInvest.'元');
+        }
+
+        return $coupon;
     }
 }
