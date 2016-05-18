@@ -48,18 +48,24 @@ class Promo160520
         $user = User::findOne(['mobile' => $mobile]);
         $log = Promo160520Log::findOne(['mobile' => $mobile]);
         if (null !== $user) {
-            return self::insertCoupon($user, $log->prizeId);
+            if (!self::insertCoupon($user, $log->prizeId)) {
+                throw new Exception('获取优惠券失败');
+            }
         } else {
             if ($log) {
                 $prizeId = (1 === $log->count) ? rand(1, 2) : 3;
                 $log->prizeId = $prizeId;
                 $log->count = (3 === $log->count) ? 1 : $log->count + 1;
-
-                return $log->save();
             } else {
-                return (new Promo160520Log(['mobile' => $mobile, 'prizeId' => 1, 'count' => 1]))->save();
+                $log = new Promo160520Log(['mobile' => $mobile, 'prizeId' => 1, 'count' => 1]);
+            }
+
+            if ($log->save()) {
+                throw new Exception('获取优惠券失败');
             }
         }
+
+        return $log;
     }
 
     public static function checkDraw($mobile)
