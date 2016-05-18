@@ -337,7 +337,7 @@ class OrderManager
             throw new Exception(PayService::getErrorByCode(PayService::ERROR_UA));
         }
         //用户资金表
-        $ua->available_balance = bcsub($ua->available_balance, $order->order_money, 2);    //调整计算精度,防止小数位丢失
+        $ua->available_balance = bcsub($ua->available_balance, $order->paymentAmount, 2);    //调整计算精度,防止小数位丢失
         if ($ua->available_balance * 1 < 0) {
             throw new Exception(PayService::getErrorByCode(PayService::ERROR_MONEY_LESS));
         }
@@ -345,9 +345,9 @@ class OrderManager
         $order->status = OnlineOrder::STATUS_SUCCESS;
         $order->save();
 
-        $ua->drawable_balance = $bcrond->bcround(bcsub($ua->drawable_balance, $order->order_money), 2);
-        $ua->freeze_balance = $bcrond->bcround(bcadd($ua->freeze_balance, $order->order_money), 2);
-        $ua->out_sum = $bcrond->bcround(bcadd($ua->out_sum, $order->order_money), 2);
+        $ua->drawable_balance = $bcrond->bcround(bcsub($ua->drawable_balance, $order->paymentAmount), 2);
+        $ua->freeze_balance = $bcrond->bcround(bcadd($ua->freeze_balance, $order->paymentAmount), 2);
+        $ua->out_sum = $bcrond->bcround(bcadd($ua->out_sum, $order->paymentAmount), 2);
         $uare = $ua->save();
         if (!$uare) {
             $transaction->rollBack();
@@ -362,7 +362,7 @@ class OrderManager
         $mrmodel->osn = $order->sn;
         $mrmodel->uid = $order->uid;
         $mrmodel->balance = $ua->available_balance;
-        $mrmodel->out_money = $order->order_money;
+        $mrmodel->out_money = $order->paymentAmount;
         $mrmodel->remark = '资金流水号:'.$mrmodel->sn.',订单流水号:'.($order->sn).',账户余额:'.($ua->account_balance).'元，可用余额:'.($ua->available_balance).'元，冻结金额:'.$ua->freeze_balance.'元。';
         $mrres = $mrmodel->save();
         if (!$mrres) {
@@ -419,7 +419,7 @@ class OrderManager
         $message = [
             $user->real_name,
             $loan->title,
-            $order->order_money,
+            $order->paymentAmount,
             Yii::$app->params['contact_tel'],
         ];
         $sms = new SmsMessage([
