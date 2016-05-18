@@ -49,7 +49,7 @@ input {
 }
 .title_box {
     width:100%;
-    background: url('../promo/160520/images/img_520_5.png') no-repeat center center;
+    background: url('/promo/1605/choujiang/images/img_520_5.png') no-repeat center center;
     background-size: 100% 100%;
 }
 .title_box .title_cn {
@@ -63,7 +63,7 @@ input {
 .center_box {
     width:100%;
     height:140px;
-    background: url('../promo/160520/images/img_520_7.png') no-repeat center center;
+    background: url('/promo/1605/choujiang/images/img_520_7.png') no-repeat center center;
     background-size: 100% 100%;
 }
 .center_box_tip {
@@ -145,7 +145,7 @@ input.input_txt:-ms-input-placeholder { /* Internet Explorer 10+ */
 .p_box {
     width:100%;
     height:100px;
-    background: url('../promo/160520/images/img_520_82.png') no-repeat center center;
+    background: url('/promo/1605/choujiang/images/img_520_82.png') no-repeat center center;
     background-size: 100% 100%;
 }
 .informations {

@@ -26,6 +26,7 @@ class Promo160520Controller extends Controller
 
     public function actionIndex()
     {
+        $this->layout = false;
         return $this->render('index', ['endFlag' => $this->isEnd()]);
     }
 
@@ -63,6 +64,7 @@ class Promo160520Controller extends Controller
             Yii::$app->response->statusCode = 500;
 
             return [
+                'code' => $exc->getCode(),
                 'message' => $exc->getMessage(),
             ];
         }

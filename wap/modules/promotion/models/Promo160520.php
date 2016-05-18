@@ -79,12 +79,12 @@ class Promo160520
         $user = User::findOne(['mobile' => $mobile]);
         if ($user) {
             if (Promo160520Log::find()->where(['mobile' => $mobile])->exists()) {
-                throw new Exception('您已领过,请用本手机登录账户中心查看');
+                throw new Exception('您已领过,请用本手机登录账户中心查看', 1);
             }
         } else {
             $start = time() - 3 * 24 * 60 * 60;//三天内
             if (Promo160520Log::find()->where("createdAt > $start")->andWhere(['mobile' => $mobile, 'prizeId' => 3])->exists()) {
-                throw new Exception('您已领过,请用本手机登录账户中心查看');
+                throw new Exception('您已领过,请用本手机登录账户中心查看', 1);
             }
         }
     }
