@@ -98,15 +98,6 @@ class Promo160520
         }
 
         $coupons = CouponType::find()->where(['sn' => $config])->all();
-        $type_ids = array();
-        foreach ($coupons as $coupon) {
-            $type_ids[] = $coupon->id;
-        }
-
-        if (!empty($type_ids) && UserCoupon::find()->where(['couponType_id' => $type_ids])->exists()) {
-            return true;
-        }
-
         $transaction = \Yii::$app->db->beginTransaction();
         foreach ($coupons as $coupon) {
             $ret = (new UserCoupon([

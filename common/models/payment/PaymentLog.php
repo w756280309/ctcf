@@ -8,7 +8,7 @@ use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 
 /**
- * Description of PaymentLog
+ * Description of PaymentLog.
  *
  * @author zhanghongyu<zhanghongyu@wangcaigu.com>
  */
@@ -31,12 +31,12 @@ class PaymentLog extends ActiveRecord implements PaymentTxInterface
             [['txSn', 'amount', 'toParty_id'], 'required'],
         ];
     }
- 
+
     public function getUser()
     {
         return $this->hasOne(User::className(), ['id' => 'toParty_id']);
     }
-    
+
     public function getTxSn()
     {
         return $this->txSn;
@@ -46,14 +46,14 @@ class PaymentLog extends ActiveRecord implements PaymentTxInterface
     {
         return $this->createdAt;
     }
-    
+
     public function getEpayUserId()
     {
         return $this->user->epayUser->epayUserId;
     }
+
     public function getAmount()
     {
         return $this->amount;
     }
-    
 }
