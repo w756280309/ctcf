@@ -86,7 +86,11 @@ class FkCore
             $ofkd_model = clone $ofkd;
             $ofkd_model->fangkuan_order_id = $ofk->id;
             $ofkd_model->product_order_id = $order['id'];
-            $ofkd_model->order_money = $order['order_money'];
+            if ($val['userCoupon_id']) {
+                $ofkd_model->order_money = $order['paymentAmount'];
+            } else {
+                $ofkd_model->order_money = $order['order_money'];
+            }            
             $ofkd_model->online_product_id = $pid;
             $ofkd_model->order_time = $order['order_time'];
             $ofkd_model->admin_id = Yii::$app->user->id;
