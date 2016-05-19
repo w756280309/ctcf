@@ -9,7 +9,7 @@ $this->registerJsFile(ASSETS_BASE_URI . 'js/hmsr.js?v=20160428', ['depends' => '
 $this->registerCssFile(ASSETS_BASE_URI . 'promo/1605/choujiang/css/520.css', ['depends' => 'frontend\assets\WapAsset']);
 $this->registerJsFile(ASSETS_BASE_URI . 'promo/1605/choujiang/js/520.js', ['depends' => 'yii\web\JqueryAsset', 'position' => 1]);//加载来源统计记录代码
 $this->registerJsFile('https://res.wx.qq.com/open/js/jweixin-1.0.0.js');
-$this->registerJsFile(ASSETS_BASE_URI . 'js/weixin.js', ['depends' => 'yii\web\JqueryAsset']);//加载来源统计记录代码
+$this->registerJsFile(ASSETS_BASE_URI . 'js/weixin.js');//加载来源统计记录代码
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
