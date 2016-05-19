@@ -150,7 +150,7 @@ class SiteController extends Controller
     /**
      * 用户登陆表单页.
      */
-    public function actionLogin()
+    public function actionLogin($next = null)
     {
         if (!\Yii::$app->user->isGuest) {
             return $this->goHome();
@@ -161,10 +161,14 @@ class SiteController extends Controller
         }
 
         $model = new LoginForm();
-        $from = Yii::$app->request->referrer;
-        $from = Yii::$app->functions->dealurl($from);
-        if (in_array($from, ['/site/signup', '/site/login'])) {
-            $from = '/';
+
+        if (empty($next) || !filter_var($next, FILTER_VALIDATE_URL)) {
+            $from = Yii::$app->functions->dealurl(Yii::$app->request->referrer);
+            if (in_array($from, ['/site/signup', '/site/login'])) {
+                $from = '/';
+            }
+        } else {
+            $from = $next;
         }
 
         $is_flag = Yii::$app->request->post('is_flag');    //是否需要校验图形验证码标志位

@@ -66,7 +66,7 @@ $(function() {
 
     //登录查看按钮
     $('.login').on('click', function() {
-        location.href = '/user/user';
+        location.href = '/site/login?next='+location.protocol+'\/\/'+location.hostname+'/user/user';
     });
 
     //返回首页按钮
