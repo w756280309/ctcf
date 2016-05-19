@@ -3,7 +3,6 @@
 namespace app\controllers;
 
 use common\models\weixin\WeixinAuth;
-use common\models\weixin\WeixinUrl;
 use Yii;
 use yii\web\Controller;
 use yii\web\Response;
