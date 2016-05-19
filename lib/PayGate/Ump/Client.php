@@ -7,6 +7,7 @@ use GuzzleHttp\Client as HttpClient;
 use P2pl\BorrowerInterface;
 use P2pl\LoanInterface;
 use Psr\Http\Message\ResponseInterface as Psr7ResponseInterface;
+use P2pl\PaymentTxInterface;
 use P2pl\QpayTxInterface;
 use P2pl\OrderTxInterface;
 use P2pl\QpayBindInterface;
@@ -443,7 +444,7 @@ class Client
             'partic_type' => '01',
             'partic_acc_type' => '01',
             'partic_user_id' => $ord->getEpayUserId(),
-            'amount' => $ord->getAmount() * 100,
+            'amount' => $ord->getPaymentAmount() * 100,
         ];
         $params = $this->buildQuery($data);
 
@@ -469,7 +470,7 @@ class Client
             'partic_type' => '01',
             'partic_acc_type' => '01',
             'partic_user_id' => $ord->getEpayUserId(),
-            'amount' => $ord->getAmount() * 100,
+            'amount' => $ord->getPaymentAmount() * 100,
         ];
         return $this->doRequest($data);
     }
@@ -719,6 +720,26 @@ class Client
             'service' => 'download_settle_file_p',
             'settle_date_p2p' => $date,
             'settle_type_p2p' => '03',
+        ];
+
+        return $this->doRequest($data);
+    }
+
+    /**
+     * 普通无密转账
+     * @param PaymentTxInterface $pay
+     * @return type
+     */
+    public function transfer(PaymentTxInterface $pay)
+    {
+        $data = [
+            'service' => 'transfer',
+            'order_id' => $pay->getTxSn(),
+            'mer_date' => date('Ymd', $pay->getTxDate()),
+            'partic_user_id' => $pay->getEpayUserId(),
+            'partic_acc_type' => '02',//对公
+            'trans_action' => '02',//p2p平台向用户转账
+            'amount' => $pay->getAmount() * 100,
         ];
 
         return $this->doRequest($data);

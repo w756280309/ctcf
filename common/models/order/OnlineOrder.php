@@ -75,8 +75,8 @@ class OnlineOrder extends \yii\db\ActiveRecord implements \P2pl\OrderTxInterface
             [['order_money'], 'required'],
             ['drawpwd', 'trim'],
             ['drawpwd', 'validatePassword'],
-            [['online_pid', 'order_time', 'uid', 'status', 'created_at', 'updated_at'], 'integer'],
-            [['order_money'], 'number'],
+            [['online_pid', 'order_time', 'uid', 'status', 'userCoupon_id'], 'integer'],
+            [['order_money', 'couponAmount', 'paymentAmount'], 'number'],
             [['sn'], 'string', 'max' => 30],
             [['campaign_source'], 'string', 'max' => 50],
             [['status'], 'default', 'value' => 0],
@@ -294,5 +294,10 @@ class OnlineOrder extends \yii\db\ActiveRecord implements \P2pl\OrderTxInterface
             throw new \Exception('参数错误');
         }
         return $ord;
+    }
+
+    public function getPaymentAmount()
+    {
+        return $this->paymentAmount;
     }
 }

@@ -2,19 +2,20 @@
 
 namespace app\modules\order\controllers;
 
-use common\models\order\EbaoQuan;
-use common\models\product\RateSteps;
-use EBaoQuan\Client;
-use Yii;
 use app\controllers\BaseController;
-use yii\helpers\ArrayHelper;
+use EBaoQuan\Client;
+use common\models\coupon\CouponType;
+use common\models\contract\ContractTemplate;
+use common\models\coupon\UserCoupon;
+use common\models\order\OnlineOrder;
+use common\models\order\OrderManager;
+use common\models\order\EbaoQuan;
+use common\models\product\OnlineProduct;
+use common\models\product\RateSteps;
+use common\service\PayService;
+use Yii;
 use yii\helpers\Html;
 use yii\web\Response;
-use common\models\product\OnlineProduct;
-use common\models\contract\ContractTemplate;
-use common\models\order\OnlineOrder;
-use common\service\PayService;
-use common\models\order\OrderManager;
 
 class OrderController extends BaseController
 {
@@ -25,22 +26,63 @@ class OrderController extends BaseController
      *
      * @return page
      */
-    public function actionIndex($sn)
+    public function actionIndex()
     {
-        if (empty($sn)) {
+        $request = array_replace([
+                'sn' => null,
+                'money' => null,
+                'couponId' => null,
+            ], Yii::$app->request->get());
+
+        if (empty($request['sn']) || !preg_match('/^[A-Za-z0-9]+$/', $request['sn'])) {
             throw new \yii\web\NotFoundHttpException();
         }
 
-        $deal = OnlineProduct::findOne(['sn' => $sn]);
+        if (!empty($request['money']) && !preg_match('/^[0-9|.]+$/', $request['money'])) {
+            throw new \yii\web\NotFoundHttpException();
+        }
+
+        if (!empty($request['couponId']) && !preg_match('/^[0-9]+$/', $request['couponId'])) {
+            throw new \yii\web\NotFoundHttpException();
+        }
+
+        $deal = OnlineProduct::findOne(['sn' => $request['sn']]);
         if (null === $deal) {
             throw new \yii\web\NotFoundHttpException('This production is not existed.');
         }
 
-        $ua = $this->getAuthedUser()->lendAccount;    //获取用户的账户信息
+        $user = $this->getAuthedUser();
+        $ua = $user->lendAccount;    //获取用户的账户信息
         $param['order_balance'] = $deal->getLoanBalance(); //获取标的可投余额;
         $param['my_balance'] = $ua->available_balance; //用户账户余额;
 
-        return $this->render('index', ['deal' => $deal, 'param' => $param]);
+        $ct = CouponType::tableName();
+        $uc = UserCoupon::tableName();
+
+        $coupon = (new \yii\db\Query())    //获取有效的代金券信息
+            ->select("$ct.*, $uc.user_id, $uc.order_id, $uc.isUsed, $uc.id as uid")
+            ->from($ct)
+            ->innerJoin($uc, "$ct.id = $uc.couponType_id")
+            ->where(['isUsed' => 0, 'order_id' => null, 'isDisabled' => 0])
+            ->andFilterWhere(['<=', 'useStartDate', date('Y-m-d')])
+            ->andFilterWhere(['>=', 'useEndDate', date('Y-m-d')])
+            ->andWhere(['user_id' => $user->id]);
+
+        if (!empty($request['couponId'])) {
+            $coupon->andWhere(["$uc.id" => $request['couponId']]);
+        }
+
+        if (!empty($request['money'])) {
+            $coupon->andFilterWhere(['<=', 'minInvest', $request['money']]);
+        }
+
+        return $this->render('index', [
+                'deal' => $deal,
+                'param' => $param,
+                'coupon' => $coupon->all(),
+                'money' => $request['money'],
+                'couponId' => $request['couponId'],
+            ]);
     }
 
     /**
@@ -58,14 +100,23 @@ class OrderController extends BaseController
 
         Yii::$app->response->format = Response::FORMAT_JSON;
         $money = \Yii::$app->request->post('money');
+        $coupon_id = \Yii::$app->request->post('couponId');
+        $coupon = null;
+        if ($coupon_id) {
+            $coupon = UserCoupon::findOne($coupon_id);
+            if (null === $coupon) {
+                return ['code' => 1,  'message' => '无效的代金券'];
+            }
+        }
+
         $pay = new PayService(PayService::REQUEST_AJAX);
-        $ret = $pay->checkAllowPay($this->getAuthedUser(), $sn, $money);
+        $ret = $pay->checkAllowPay($this->getAuthedUser(), $sn, $money, $coupon);
         if ($ret['code'] != PayService::ERROR_SUCCESS) {
             return $ret;
         }
         $orderManager = new OrderManager();
 
-        return $orderManager->createOrder($sn, $money,  $this->getAuthedUser()->id);
+        return $orderManager->createOrder($sn, $money,  $this->getAuthedUser()->id, $coupon);
     }
 
     /**

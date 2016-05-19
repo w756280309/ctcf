@@ -23,6 +23,8 @@ use common\models\bank\EbankConfig;
 use common\models\bank\QpayConfig;
 use common\models\bank\Bank;
 use common\models\news\News;
+use wap\modules\promotion\models\Promo160520;
+use wap\modules\promotion\models\Promo160520Log;
 
 /**
  * Site controller.
@@ -312,6 +314,11 @@ class SiteController extends Controller
         if ($model->load(Yii::$app->request->post()) && Yii::$app->request->isAjax) {
             Yii::$app->response->format = Response::FORMAT_JSON;
             if ($user = $model->signup()) {
+                $promo160520log = Promo160520Log::findOne(['mobile' => $user->mobile]);
+                if ($promo160520log) {
+                    Promo160520::insertCoupon($user, $promo160520log->prizeId);
+                }
+
                 $isLoggedin = defined('IN_APP')
                     ? Yii::$app->user->setIdentity($user) || true
                     : Yii::$app->user->login($user);

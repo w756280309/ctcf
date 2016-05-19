@@ -36,7 +36,22 @@ $(function () {
     });
 
     $('#money').on('keyup', function () {
+        $('#couponMoney').val('');  //消除提交表单信息
+        $('#couponId').val('');
+
         profit($(this));
+        var url = toCoupon(true);
+
+        $.get(url, function(data)
+        {
+            if (data.data.length > 0) {
+                $('.coupon-title').html("使用代金券");
+                $('.coupon-content').html("<div onclick=\"toCoupon()\"><span class=\"notice\">请选择</span></div>");
+            } else {
+                $('.coupon-title').html("使用代金券");
+                $('.coupon-content').html("无可用");
+            }
+        });
     });
 
     profit($("#money"));
@@ -49,6 +64,19 @@ function profit($this)
     if(!$.isNumeric(money)) {
         money = 0;
     }
+
+    var couponMoney = $('#couponMoney').val();
+    if ('undefined' !== typeof couponMoney) {
+        couponMoney = couponMoney.replace(/^[^0-9]+/, '');
+        if(!$.isNumeric(couponMoney)) {
+            couponMoney = 0;
+        }
+        var m = Subtr(money, couponMoney);
+        $('.shijizhifu').html(WDJF.numberFormat((m > 0) ? m : money , false) + "元");
+    } else {
+        $('.shijizhifu').html(WDJF.numberFormat(money, false) + "元");
+    }
+
     if(isFlexRate) {
         $.post('/order/order/rate', {'sn': sn, '_csrf': csrf, 'amount': money}, function(data)
         {

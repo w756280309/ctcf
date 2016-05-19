@@ -15,9 +15,9 @@ $this->registerJs(<<<JS
 JS
     , 1);
 
-$this->registerJsFile(ASSETS_BASE_URI.'js/order.js?v=20160513', ['depends' => 'yii\web\YiiAsset']);
+$this->registerJsFile(ASSETS_BASE_URI.'js/order.js?v=20160517', ['depends' => 'yii\web\YiiAsset']);
 ?>
-<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/setting.css">
+<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/setting.css?v=20160518">
 
 <!--   购买页 start-->
     <div class="row produce">
@@ -44,14 +44,35 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/order.js?v=20160513', ['depends' => 'y
         <input name="_csrf" type="hidden" id="_csrf" value="<?=Yii::$app->request->csrfToken ?>">
         <div class="row sm-height border-bottom">
             <div class="col-xs-4 safe-txt text-align-ct">投资金额</div>
-        <input name="money" type="number" id="money" value="" placeholder="请输入投资金额"  class="col-xs-6 safe-lf text-align-lf">
+            <input name="money" type="number" id="money" value="<?= empty($money) ? '' : $money ?>" placeholder="请输入投资金额"  class="col-xs-6 safe-lf text-align-lf">
             <div class="col-xs-2 safe-txt">元</div>
         </div>
 
+        <div class="row sm-height border-bottom">
+            <?php if (empty($couponId)) { ?>
+                <div class="col-xs-4 safe-txt text-align-ct coupon-title">使用代金券</div>
+                <?php if (empty($coupon)) { ?>
+                <div class="col-xs-8 safe-txt coupon-content">无可用</div>
+                <?php } else { ?>
+                <div class="col-xs-8 safe-txt coupon-content" onclick="toCoupon()"><span class="notice">请选择</span></div>
+                <?php } ?>
+            <?php } else { ?>
+                <div class="col-xs-4 safe-txt text-align-ct coupon-title">代金券抵扣</div>
+                <div class="col-xs-8 safe-txt coupon-content" onclick="toCoupon()"><?= $coupon[0]['amount'] ?>元</div>
+                <input name="couponId" id="couponId" type="text" value="<?= $coupon[0]['uid'] ?>" hidden="hidden">
+                <input name="couponMoney" id="couponMoney" type="text" value="<?= $coupon[0]['amount'] ?>" hidden="hidden">
+            <?php } ?>
+        </div>
+
+        <div class="row shouyi">
+            <div class="col-xs-4 safe-lf text-align-ct">实际支付</div>
+            <div class="col-xs-8 safe-lf text-align-lf shijizhifu">0.00元</div>
+        </div>
         <div class="row shouyi">
             <div class="col-xs-4 safe-lf text-align-ct">预计收益</div>
             <div class="col-xs-8 safe-lf text-align-lf yuqishouyi">0.00元</div>
         </div>
+
         <div class="row login-sign-btn ht">
             <div class="col-xs-3"></div>
             <div class="col-xs-6 text-align-ct">
@@ -74,3 +95,17 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/order.js?v=20160513', ['depends' => 'y
     </div>
     <!-- 输入弹出框 end  -->
     <!-- 购买页 end  -->
+
+    <script type="text/javascript">
+        function toCoupon(urlFlag)
+        {
+            var money = $('#money').val();
+            var url = '/user/coupon/valid?sn=<?= $deal->sn ?>&money='+money;
+
+            if (urlFlag) {
+                return url;
+            }
+
+            location.href = url;
+        }
+    </script>

@@ -13,4 +13,5 @@ interface OrderTxInterface
     public function getTxDate();
     public function getEpayUserId();
     public function getAmount();
+    public function getPaymentAmount();
 }

@@ -22,7 +22,7 @@
     </div>
     <div class="row-fluid">
         <div class="span4">贷后余额： <?= number_format($remainMoney, 3) ?>元</div>
-        <div class="span4">平台可用金额：<?= number_format($usableMoney, 3) ?>元</div>
+        <div class="span4">平台可用余额：<?= number_format($usableMoney, 3) ?>元</div>
     </div>
     <div class="row-fluid">
         <div class="span4">今日充值金额：<?= number_format($todayRechargeMoney, 3) ?>元</div>

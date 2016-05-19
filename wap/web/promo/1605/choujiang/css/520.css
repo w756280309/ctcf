@@ -1,0 +1,253 @@
+.col-xs-1,.col-xs-2,.col-xs-3,.col-xs-4,.col-xs-5,.col-xs-6,.col-xs-7,.col-xs-8,.col-xs-9,.col-xs-10,.col-xs-11,.col-xs-12 {
+    padding:0;
+}
+html,body,p,ul,ol,li,dl,dt,dd,form,h1,h2,h3,h4,h5,h6,input{
+    margin:0;
+    padding:0;
+}
+ul,ol,li{
+    list-style:none;
+}
+img{
+    border:0;
+}
+a{
+    text-decoration:none;
+}
+body{
+    font-family: 'Microsoft YaHei', Helvetica, Arial, sans-serif;
+    font-size: 62.5%;
+}
+i,em {
+    font-style: normal;
+}
+input {
+    outline: none;
+    border: none;
+}
+.container{
+    padding: 0;
+    margin: 0 auto;
+    background: #feaa25;
+    min-height:640px;
+}
+.row{
+    margin: 0;
+}
+.clear {
+    clear: both;
+}
+.icon {
+    padding: 0;
+    margin: 0 auto;
+}
+.icon img {
+    padding: -1px 0 0;
+    margin:  0;
+    width: 100%;
+    float: left;
+}
+.title_box {
+    width:100%;
+    background: url('/promo/1605/choujiang/images/img_520_5.png') no-repeat center center;
+    background-size: 100% 100%;
+}
+.title_box .title_cn {
+    height:50px;
+    line-height:50px;
+    color:#fff;
+    font-size: 1.3rem;
+    text-align: center;
+}
+.center_box {
+    width:100%;
+    height:140px;
+    background: url('/promo/1605/choujiang/images/img_520_7.png') no-repeat center center;
+    background-size: 100% 100%;
+}
+.center_box_tip {
+    margin:15px auto;
+    height:110px;
+    font-size: 1.14rem;
+    text-align: center;
+    /*background: #f0f;*/
+    background: #ff9000;
+}
+.center_box_tip p.tip1 {
+    height:40px;
+    line-height:40px;
+    color:#fff;
+    font-size: 1.3rem;
+}
+.tipbolder {
+    font-size: 1.5rem!important;
+}
+.center_box_tip p.tip2 {
+    height:22px;
+    line-height:22px;
+    color:#fff;
+    font-size: 1.24rem;
+}
+.center_box_tip .tip3 {
+    color:#eb452d;
+    font-size: 1.23rem;
+}
+.center_box_tip .tip4 {
+    margin: 8px 0 2px;
+}
+.center_box_tip .tip5 {
+    margin: 8px 0 5px;
+}
+input.input_btn,input.input_txt {
+    margin:5px auto;
+    border-radius:4px;
+    -moz-border-radius:4px;
+    -webkit-border-radius:4px;
+}
+.center_box_tip input.input_txt {
+    padding:12px 0 12px 10px;
+    width:100%;
+    height:30px;
+    color:#feaa24;
+    font-size: 1.5rem;
+    background: #fff;
+}
+input.input_txt::-webkit-input-placeholder { /* WebKit browsers */
+    color: #feaa24!important;
+}
+input.input_txt:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+    color: #feaa24!important;
+}
+input.input_txt::-moz-placeholder { /* Mozilla Firefox 19+ */
+    color: #feaa24!important;
+}
+input.input_txt:-ms-input-placeholder { /* Internet Explorer 10+ */
+    color: #feaa24!important;
+}
+.center_box_tip input.input_btn {
+    padding: 2px auto;
+    width:100%;
+    height:30px;
+    line-height:30px;
+    color: #fff;
+    font-size: 2rem;
+    background: #eb452d;
+}
+.center_box_tip .blue_btn {
+    margin-bottom:2px!important;
+    background-color: #58c7e0!important;
+}
+.foot {
+    line-height:46px;
+    font-size: 1.4rem;
+    color:#ffc983;
+    text-align: center;
+    background: #feaa25;
+}
+.p_box {
+    padding: 5px 0 10px;
+    width:100%;
+    max-height:210px;
+    background: url('/promo/1605/choujiang/images/img_520_82.png') no-repeat center center;
+    background-size: 100% 100%;
+    box-sizing: content-box;
+}
+.informations {
+    padding:0 0 0 6%;
+    line-height:2.2rem;
+    font-size: 1.45rem;
+    color: #fff;
+}
+.only {
+    line-height:1.45rem!important;
+}
+.informations span {
+    width: 15px;
+    height: 15px;
+    line-height: 15px;
+    margin-right: 5px;
+    font-size: 1.3rem;
+    color: #ff9000;
+    text-align: center;
+    display: inline-block;
+    border-radius:100%;
+    background:#feaa25;
+}
+.one {
+    margin-left: 13px;
+}
+.two {
+    margin-left: 5px;
+}
+.three {
+    margin-left: 3px;
+}
+.four {
+    margin-left: 9px;
+}
+.five {
+    margin-left: 16px;
+}
+.six {
+    margin-left: 38px;
+}
+.informations .five_only {
+    margin-left: 24px;
+    width: 15px;
+    height: 15px;
+    display: inline-block;
+}
+.informations .six_only{
+    margin-left: 45px;
+    width: 15px;
+    height: 15px;
+    display: inline-block;
+}
+@media (min-width:321px) and (max-width:366px)  {
+    .title_box .title_cn {
+        font-size: 1.2rem;
+    }
+    .title {
+        font-size: 1.1rem;
+    }
+    .informations {
+        padding:1px 0 0 4%;
+        font-size: 1.3rem;
+    }
+}
+@media (min-width:300px) and (max-width:320px) {
+    .center_box_tip p.tip1 {
+        font-size: 1.14rem;
+    }
+    .title_box .title_cn {
+        font-size: 1.2rem;
+    }
+    .title {
+        font-size: 1.1rem;
+    }
+    .informations {
+        padding:1px 0 0 4%;
+        font-size: 1.3rem;
+    }
+    .tiponly {
+        font-size: 1.4rem!important; ;
+    }
+}
+.error-info {
+    font-size: 1.6rem;
+}
+.home {
+    margin:10px 0 20px;
+    padding: 2px auto;
+    width:100%;
+    height:30px;
+    line-height:30px;
+    color: #fff;
+    font-size: 2rem;
+    text-align: center;
+    border-radius:4px;
+    -moz-border-radius:4px;
+    -webkit-border-radius:4px;
+    background: #eb452d;
+    display: inline-block;
+}

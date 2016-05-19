@@ -214,6 +214,7 @@ class DatatjController extends BaseController
 FROM perf WHERE DATE_FORMAT(bizDate,'%Y-%m') < DATE_FORMAT(NOW(),'%Y-%m')  GROUP BY DATE_FORMAT(bizDate,'%Y-%m') ORDER BY DATE_FORMAT(bizDate,'%Y-%m') DESC";
         $query = new ActiveQuery(Perf::className(), ['sql' => $sql,]);
         $dataProvider = new ActiveDataProvider(['query' => $query]);
+        $dataProvider->setSort(false);
         return $this->render('monthtj', [
             'dataProvider' => $dataProvider,
         ]);
@@ -225,6 +226,7 @@ FROM perf WHERE DATE_FORMAT(bizDate,'%Y-%m') < DATE_FORMAT(NOW(),'%Y-%m')  GROUP
         $pages = new Pagination(['totalCount' => $query->count(), 'pageSize' => 20]);
         $query = $query->orderBy(['bizDate' => SORT_DESC])->offset($pages->offset)->limit($pages->limit);
         $dataProvider = new ActiveDataProvider(['query' => $query,]);
+        $dataProvider->setSort(false);
         return $this->render('daytj', [
             'pages' => $pages,
             'dataProvider' => $dataProvider,

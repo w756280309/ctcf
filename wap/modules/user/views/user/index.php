@@ -4,7 +4,7 @@ $this->showBottomNav = true;
 $this->showAvatar = true;
 ?>
 <link href="<?= ASSETS_BASE_URI ?>css/informationAndHelp.css" rel="stylesheet">
-<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/setting.css">
+<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/setting.css?v=20160517">
 <script>
     $(function(){
         $('.footer-inner a').css({color: '#8c8c8c'});
@@ -51,8 +51,16 @@ $this->showAvatar = true;
         </div>
         <div class="clear"></div>
         <a class="row sm-height border-bottom margin-top block" href="/user/user/myorder" >
-            <div class="col-xs-3 left-txt">我的理财</div>
-            <div class="col-xs-7"></div>
+            <div class="col-xs-10 left-txt">我的理财</div>
+            <div class="col-xs-1 arrow">
+                <img src="<?= ASSETS_BASE_URI ?>images/arrow.png" alt="右箭头">
+            </div>
+            <div class="col-xs-1"></div>
+        </a>
+
+        <div class="clear"></div>
+        <a class="row sm-height border-bottom block" href="/user/coupon/list" >
+            <div class="col-xs-10 left-txt">我的代金券</div>
             <div class="col-xs-1 arrow">
                 <img src="<?= ASSETS_BASE_URI ?>images/arrow.png" alt="右箭头">
             </div>
@@ -61,8 +69,7 @@ $this->showAvatar = true;
 
         <div class="clear"></div>
         <a class="row sm-height border-bottom block" href="/user/user/mingxi" >
-            <div class="col-xs-3 left-txt">交易明细</div>
-            <div class="col-xs-7"></div>
+            <div class="col-xs-10 left-txt">交易明细</div>
             <div class="col-xs-1 arrow">
                 <img src="<?= ASSETS_BASE_URI ?>images/arrow.png" alt="右箭头">
             </div>

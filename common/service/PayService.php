@@ -2,7 +2,9 @@
 
 namespace common\service;
 
+use common\models\coupon\UserCoupon;
 use common\models\product\OnlineProduct;
+use Exception;
 
 /**
  * Desc 主要用于购买标的环节的验证
@@ -157,7 +159,7 @@ class PayService
      *
      * @return type
      */
-    public function checkAllowPay($user, $sn = null, $money = null)
+    public function checkAllowPay($user, $sn = null, $money = null, $coupon = null)
     {
         $commonret = $this->checkCommonCond($user, $sn);
         if ($commonret !== true) {
@@ -196,6 +198,15 @@ class PayService
             //否则必须投满
             if (bcdiv($orderbalance, $money) * 1 != 1) {
                 return ['code' => self::ERROR_MONEY_BALANCE,  'message' => self::getErrorByCode(self::ERROR_MONEY_BALANCE)];
+            }
+        }
+
+        //代金券检验
+        if ($coupon) {
+            try {
+                UserCoupon::checkAllowUse($coupon, $money, $user);
+            } catch (Exception $ex) {
+                return ['code' => 1,  'message' => $ex->getMessage()];
             }
         }
     }
