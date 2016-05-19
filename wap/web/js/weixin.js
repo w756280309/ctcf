@@ -11,24 +11,23 @@ xhr.done(function(data) {
     });
 
     wx.ready(function(){
+        wx.onMenuShareAppMessage({
+            title: '仲夏狂欢送现金，最高288元', // 分享标题
+            desc: '温都金服正式上线送金喜，理财代金券等你来抽，最高可得288元！', // 分享描述
+            link: 'https://m.wenjf.com/promotion/promo160520/', // 分享链接
+            imgUrl: '', // 分享图标
+            /*type: '', // 分享类型,music、video或link，不填默认为link
+            dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+            success: function () {
+                // 用户确认分享后执行的回调函数
+            },
+            cancel: function () {
+                // 用户取消分享后执行的回调函数
+            }*/
+        });
     });
 
     wx.error(function(res){
         console.log(res);
-    });
-
-    wx.onMenuShareAppMessage({
-        title: '仲夏狂欢送现金，最高288元', // 分享标题
-        desc: '温都金服正式上线送金喜，理财代金券等你来抽，最高可得288元！', // 分享描述
-        link: 'https://m.wenjf.com/promotion/promo160520/', // 分享链接
-        imgUrl: '', // 分享图标
-        /*type: '', // 分享类型,music、video或link，不填默认为link
-        dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
-        success: function () {
-            // 用户确认分享后执行的回调函数
-        },
-        cancel: function () {
-            // 用户取消分享后执行的回调函数
-        }*/
     });
 });
