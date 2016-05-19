@@ -103,7 +103,7 @@ $this->registerJsFile(ASSETS_BASE_URI . 'js/weixin.js');//加载来源统计记�
                     <?php } else { ?>
                         <div id="no7">
                             <p class="tip2 tip5">我们等的花儿都谢了,您却在活动结束后才看</p>
-                            <p class="tip2 tip5 ">请您取看看其他活动吧</p>
+                            <p class="tip2 tip5 ">请您去看看其他活动吧</p>
                             <input type="button" class="input_btn" id="index" value="回到首页">
                         </div>
                     <?php } ?>
