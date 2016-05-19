@@ -46,10 +46,10 @@ $(function () {
         {
             if (data.data.length > 0) {
                 $('.coupon-title').html("使用代金券");
-                $('.coupon-content').html("<div class=\"col-xs-8 safe-txt\" onclick=\"toCoupon()\">请选择</div>");
+                $('.coupon-content').html("<div onclick=\"toCoupon()\"><span class=\"notice\">请选择</span></div>");
             } else {
                 $('.coupon-title').html("使用代金券");
-                $('.coupon-content').html("<div class=\"col-xs-8 safe-txt\">无可用</div>");
+                $('.coupon-content').html("无可用");
             }
         });
     });
@@ -71,7 +71,8 @@ function profit($this)
         if(!$.isNumeric(couponMoney)) {
             couponMoney = 0;
         }
-        $('.shijizhifu').html(WDJF.numberFormat(Subtr(money, couponMoney), false) + "元");
+        var m = Subtr(money, couponMoney);
+        $('.shijizhifu').html(WDJF.numberFormat((m > 0) ? m : money , false) + "元");
     } else {
         $('.shijizhifu').html(WDJF.numberFormat(money, false) + "元");
     }

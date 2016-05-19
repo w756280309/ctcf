@@ -6,7 +6,7 @@ frontend\assets\WapAsset::register($this);
 BaiduTongjiHelper::registerTo($this, BaiduTongjiHelper::WAP_KEY);
 $this->registerJsFile(ASSETS_BASE_URI . 'js/common.js?v=20160428', ['depends' => 'yii\web\JqueryAsset', 'position' => 1]);
 $this->registerJsFile(ASSETS_BASE_URI . 'js/hmsr.js?v=20160428', ['depends' => 'yii\web\JqueryAsset', 'position' => 1]);//加载来源统计记录代码
-$this->registerCssFile(ASSETS_BASE_URI . 'promo/1605/choujiang/css/520.css', ['depends' => 'frontend\assets\WapAsset']);
+$this->registerCssFile(ASSETS_BASE_URI . 'promo/1605/choujiang/css/520.css?v=20150', ['depends' => 'frontend\assets\WapAsset']);
 $this->registerJsFile(ASSETS_BASE_URI . 'promo/1605/choujiang/js/520.js', ['depends' => 'yii\web\JqueryAsset', 'position' => 1]);//加载来源统计记录代码
 $this->registerJsFile('https://res.wx.qq.com/open/js/jweixin-1.0.0.js');
 $this->registerJsFile(ASSETS_BASE_URI . 'js/weixin.js');//加载来源统计记录代码
@@ -131,6 +131,13 @@ $this->registerJsFile(ASSETS_BASE_URI . 'js/weixin.js');//加载来源统计记�
             <p class="clear"></p>
             <div class="icon">
                 <div class="foot">理财非存款，产品有风险，投资需谨慎</div>
+            </div>
+            <div class="row">
+                <div class="col-xs-4"></div>
+                <div class="col-xs-4">
+                    <a class="home" href="/">返回首页</a>
+                </div>
+                <div class="col-xs-4"></div>
             </div>
         </div>
         <form></form>

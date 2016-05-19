@@ -349,3 +349,7 @@ a.visit:visited {
 a.visit:hover {
     color: #8c8c8c;
 }
+/* 添加警示字体颜色 */
+span.notice {
+    color: #f44336;
+}

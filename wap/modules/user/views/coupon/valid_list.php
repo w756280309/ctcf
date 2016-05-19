@@ -12,7 +12,7 @@ $this->registerJs('var cp=' . $header['cp'] . ';', 1);
 <div class="container coupon">
     <?php foreach ($coupon as $val) : ?>
         <div class="box">
-            <div class="row coupon_num" onclick="location.href='/order/order?sn=<?= $sn ?>&money=<?= $money ?>&couponId=<?= $val['uid'] ?>'">
+            <div class="row coupon_num" onclick="location.replace('/order/order?sn=<?= $sn ?>&money=<?= $money ?>&couponId=<?= $val['uid'] ?>')">
                 <img src="<?= ASSETS_BASE_URI ?>images/ok_ticket.png" alt="券">
                 <div class="row pos_box">
                     <div class="col-xs-2"></div>

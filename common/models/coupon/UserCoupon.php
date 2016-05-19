@@ -104,12 +104,7 @@ class UserCoupon extends \yii\db\ActiveRecord
         }
 
         $time = time();
-        if (
-                strtotime($coupon->couponType->useStartDate) > $time
-                || strtotime($coupon->couponType->useEndDate) < $time
-                || strtotime($coupon->couponType->issueStartDate) > $time
-                || strtotime($coupon->couponType->issueEndDate) < $time
-         ) {
+        if (strtotime($coupon->couponType->useStartDate) > $time || strtotime($coupon->couponType->useEndDate.'23:59:59') < $time) {
             throw new Exception('代金券不可以使用');
         }
 
