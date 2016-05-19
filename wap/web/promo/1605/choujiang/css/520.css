@@ -56,8 +56,7 @@ input {
     height:50px;
     line-height:50px;
     color:#fff;
-    /*font-size: 1rem;*/
-    font-size: 1.14rem;
+    font-size: 1.3rem;
     text-align: center;
 }
 .center_box {
@@ -78,17 +77,20 @@ input {
     height:40px;
     line-height:40px;
     color:#fff;
-    font-size: 1.2rem;
+    font-size: 1.3rem;
+}
+.tipbolder {
+    font-size: 1.5rem!important;
 }
 .center_box_tip p.tip2 {
     height:22px;
     line-height:22px;
     color:#fff;
-    font-size: 1.2rem;
+    font-size: 1.24rem;
 }
 .center_box_tip .tip3 {
     color:#eb452d;
-    font-size: 1.2rem;
+    font-size: 1.23rem;
 }
 .center_box_tip .tip4 {
     margin: 8px 0 2px;
@@ -136,30 +138,35 @@ input.input_txt:-ms-input-placeholder { /* Internet Explorer 10+ */
     background-color: #58c7e0!important;
 }
 .foot {
-    height:40px;
-    font-size: 1.2rem;
+    line-height:46px;
+    font-size: 1.4rem;
     color:#ffc983;
     text-align: center;
     background: #feaa25;
 }
 .p_box {
+    padding: 5px 0 10px;
     width:100%;
-    height:100px;
+    max-height:210px;
     background: url('/promo/1605/choujiang/images/img_520_82.png') no-repeat center center;
     background-size: 100% 100%;
+    box-sizing: content-box;
 }
 .informations {
-    padding:1px 0 0 7%;
-    font-size: 1.1rem;
+    padding:0 0 0 6%;
+    line-height:2.2rem;
+    font-size: 1.45rem;
     color: #fff;
 }
+.only {
+    line-height:1.45rem!important;
+}
 .informations span {
-    margin-top: 2px;
-    width:10px;
-    height:10px;
-    line-height:10px;
+    width: 15px;
+    height: 15px;
+    line-height: 15px;
     margin-right: 5px;
-    font-size: .9rem;
+    font-size: 1.3rem;
     color: #ff9000;
     text-align: center;
     display: inline-block;
@@ -179,17 +186,53 @@ input.input_txt:-ms-input-placeholder { /* Internet Explorer 10+ */
     margin-left: 9px;
 }
 .five {
-    margin-left: 18px;
+    margin-left: 16px;
 }
 .six {
     margin-left: 38px;
 }
-@media (min-width:315px) and (max-width:370px)  {
+.informations .five_only {
+    margin-left: 24px;
+    width: 15px;
+    height: 15px;
+    display: inline-block;
+}
+.informations .six_only{
+    margin-left: 45px;
+    width: 15px;
+    height: 15px;
+    display: inline-block;
+}
+@media (min-width:321px) and (max-width:366px)  {
+    .title_box .title_cn {
+        font-size: 1.2rem;
+    }
     .title {
-        font-size: 1.04rem;
+        font-size: 1.1rem;
     }
     .informations {
         padding:1px 0 0 4%;
-        font-size: .98rem;
+        font-size: 1.3rem;
     }
+}
+@media (min-width:300px) and (max-width:320px) {
+    .center_box_tip p.tip1 {
+        font-size: 1.14rem;
+    }
+    .title_box .title_cn {
+        font-size: 1.2rem;
+    }
+    .title {
+        font-size: 1.1rem;
+    }
+    .informations {
+        padding:1px 0 0 4%;
+        font-size: 1.3rem;
+    }
+    .tiponly {
+        font-size: 1.4rem!important; ;
+    }
+}
+.error-info {
+    font-size: 1.6rem;
 }

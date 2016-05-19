@@ -43,11 +43,11 @@ $this->registerJsFile(ASSETS_BASE_URI . 'promo/1605/choujiang/js/520.js', ['depe
                 <p class="clear"></p>
             </div>
             <div class="title_box row">
-                <div class="col-xs-2"></div>
-                <div class="col-xs-8 title_cn">
+                <div class="col-xs-1"></div>
+                <div class="col-xs-10 title_cn">
                     温都金服正式上线有金喜,理财代金券注册即抽
                 </div>
-                <div class="col-xs-2"></div>
+                <div class="col-xs-1"></div>
             </div>
             <div class="icon">
                 <img src="<?= ASSETS_BASE_URI ?>promo/1605/choujiang/images/img_520_6.png?v=1.0" alt="广告图">
@@ -58,43 +58,43 @@ $this->registerJsFile(ASSETS_BASE_URI . 'promo/1605/choujiang/js/520.js', ['depe
                 <div class="col-xs-2"></div>
                 <div class="col-xs-8 center_box_tip">
                     <?php if (!$endFlag) { ?>
-                        <div id="no1">
+                        <div id="no1" class="hid e">
                             <p class="tip1">温都金服起航有金喜，看看你能得多少？</p>
                             <input type="text" class="input_txt" id="phone" placeholder="请输人手机号" maxlength="11">
                             <input type="button" class="input_btn draw" value="立即抽奖">
                         </div>
 
                         <div id="no2">
-                            <p class="tip2">恭喜您，豪中<span class="tip3">248元</span>！</p>
+                            <p class="tip2 tipbolder">恭喜您，豪中<span class="tip3 tipbolder">248元</span>！</p>
                             <p class="tip2">即刻起航财富新高度，我们的鼓励是真金白银</p>
                             <input type="button" class="input_btn blue_btn draw" value="再抽一次">
                             <input type="button" class="input_btn register" value="立即注册赚起来">
                         </div>
 
                         <div id="no3">
-                            <p class="tip2">真出彩，抽中<span class="tip3">268元</span>！</p>
+                            <p class="tip2 tipbolder">真出彩，抽中<span class="tip3 tipbolder">268元</span>！</p>
                             <p class="tip2">金光闪闪的红包,尽然这么多</p>
                             <input type="button" class="input_btn blue_btn draw" value="再抽一次">
                             <input type="button" class="input_btn register" value="立即注册赚起来">
                         </div>
 
                         <div id="no4">
-                            <p class="tip2">棒极啦，<span class="tip3">288元</span>已擒获</p>
+                            <p class="tip2 tipbolder">棒极啦，<span class="tip3 tipbolder">288元</span>已擒获</p>
                             <p class="tip2">努力没白费,登顶最高奖</p>
                             <p class="tip2 tip4">已经记录您领取的最高奖,请立即注册</p>
                             <input type="button" class="input_btn register" value="立即注册赚起来">
                         </div>
 
                         <div id="no5">
-                            <p class="tip2">真情回馈老用户</p>
-                            <p class="tip2">惊喜奖励不含糊</p>
-                            <p class="tip2 tip4">最高奖券<span class="tip3">288元</span>,已发放到您的账户</p>
+                            <p class="tip2 tipbolder">真情回馈老用户</p>
+                            <p class="tip2 tipbolder">惊喜奖励不含糊</p>
+                            <p class="tip2 tip4 tiponly">最高奖券<span class="tip3 tiponly">288元</span>,已发放到您的账户</p>
                             <input type="button" class="input_btn login" value="登录查看">
                         </div>
 
                         <div id="no6">
                             <p class="tip2"></p>
-                            <p class="tip2">您已领过,请用本手机号登录账户中心查看</p>
+                            <p class="tip2 tipbolder">您已领过,请用本手机号登录账户中心查看</p>
                             <p class="tip2"></p>
                             <input type="button" class="input_btn login" value="登录查看">
                         </div>
@@ -119,15 +119,15 @@ $this->registerJsFile(ASSETS_BASE_URI . 'promo/1605/choujiang/js/520.js', ['depe
                     <p class="informations"><span class="two">2</span>新老用户均可参与,领券和注册时手机号须一致；</p>
                     <p class="informations"><span class="three">3</span>每笔投资限用一张券,使用时请参看代金券规则；</p>
                     <p class="informations"><span class="four">4</span>领券后6月20日前未使用,代金券失效；</p>
-                    <p class="informations"><span class="five">5</span>代金券等同于现金,与投资本金一并计息，随项目还款时返还；</p>
-                    <p class="informations"><span class="six">6</span>法律许可范围内,本活动最终解释权归温都金服所有。</p>
+                    <p class="informations"><span class="five">5</span>代金券等同于现金,与投资本金一并计息，</p>
+                    <p class="informations only"><i class="five_only"></i>随项目还款时返还；</p>
+                    <p class="informations"><span class="six">6</span>法律许可范围内,本活动最终解释权归</p>
+                    <p class="informations only"><i class="six_only"></i>温都金服所有。</p>
                 </div>
                 <p class="clear"></p>
             </div>
             <p class="clear"></p>
             <div class="icon">
-                <img src="<?= ASSETS_BASE_URI ?>promo/1605/choujiang/images/img_520_83.png?v=1.0" alt="广告图">
-
                 <div class="foot">理财非存款，产品有风险，投资需谨慎</div>
             </div>
         </div>
