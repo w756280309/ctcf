@@ -67,7 +67,7 @@ $(function() {
     <div class="row swiper-container">
         <div class="col-xs-12 swiper-wrapper">
                 <?php foreach($adv as $val): ?>
-                    <div class="swiper-slide"><a href="<?= $val['link'] ?>"><img src="<?= ASSETS_BASE_URI ?>upload/adv/<?= $val['image'] ?>" alt=""></a></div>
+                    <div class="swiper-slide"><a href="<?= $val['link'] ?>"><img src="<?= UPLOAD_BASE_URI ?>upload/adv/<?= $val['image'] ?>" alt=""></a></div>
                 <?php endforeach; ?>
         </div>
         <!-- Add Pagination -->
