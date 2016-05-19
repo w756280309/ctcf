@@ -112,7 +112,7 @@
 
     <div class="about-content row">
         <div class="line">
-            <div class="head-line ico"><span>—————</span>大河理财五大优势<span>—————</span></div>
+            <div class="head-line ico"><span>—————</span>大河金服五大优势<span>—————</span></div>
         </div>
 
         <p class="h-first"><a href="javascript:;" class="number">1</a>实力背景<span>可信任</span></p>
