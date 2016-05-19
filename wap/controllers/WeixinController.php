@@ -93,7 +93,7 @@ class WeixinController extends Controller
     private function sign(WeixinUrl $weiUrl)
     {
         $params = [
-            'noncestr' => time().sha1(uniqid(mt_rand(), true)),
+            'noncestr' => sha1(uniqid(mt_rand(), true)),
             'jsapi_ticket' => $weiUrl->auth->jsApiTicket,
             'timestamp' => time(),
             'url' => $weiUrl->url,
@@ -101,7 +101,12 @@ class WeixinController extends Controller
 
         ksort($params);
 
-        $params['sign'] = sha1(http_build_query($params));
+        $pairs = [];
+        foreach ($params as $key => $value) {
+            $pairs[] = $key.'='.$value;
+        }
+
+        $params['sign'] = sha1(implode('&', $pairs));
 
         return $params;
     }
