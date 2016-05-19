@@ -1,4 +1,7 @@
-var xhr = $.get("/weixin/auth", {id: 1});
+var xhr = $.get("/weixin/auth", {
+    appId: 1,
+    url: location.protocol+'\/\/'+location.hostname+location.pathname+location.search
+});
 
 xhr.done(function(data) {
     wx.config({

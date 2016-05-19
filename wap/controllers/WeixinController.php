@@ -10,18 +10,18 @@ use yii\web\Response;
 
 class WeixinController extends Controller
 {
-    public function actionAuth($id)
+    public function actionAuth($appId, $url)
     {
         try {
-            $weiUrl = WeixinUrl::findOne($id);
+            $auth = WeixinAuth::findOne($appId);
 
-            if (null === $weiUrl) {
+            if (null === $auth || empty($url) || !filter_var($url, FILTER_VALIDATE_URL)) {
                 throw new \Exception();
             }
 
-            $this->getJsApiTicket($weiUrl->auth);   //得到有效的jsApiTicket
+            $this->getJsApiTicket($auth);   //得到有效的jsApiTicket
 
-            $params = $this->sign($weiUrl);   //签名
+            $params = $this->sign($auth, $url);   //签名
         } catch (Exception $ex) {
             Yii::$app->response->statusCode = 400;
 
@@ -90,13 +90,13 @@ class WeixinController extends Controller
     /**
      * 签名函数.
      */
-    private function sign(WeixinUrl $weiUrl)
+    private function sign(WeixinAuth $auth, $url)
     {
         $params = [
             'noncestr' => sha1(uniqid(mt_rand(), true)),
-            'jsapi_ticket' => $weiUrl->auth->jsApiTicket,
+            'jsapi_ticket' => $auth->jsApiTicket,
             'timestamp' => time(),
-            'url' => $weiUrl->url,
+            'url' => $url,
         ];
 
         ksort($params);
