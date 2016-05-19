@@ -469,7 +469,6 @@ class OrderManager
         $order->mobile = $user->mobile;
         $order->username = $user->real_name;
 
-        $transaction = Yii::$app->db->beginTransaction();
         if ($coupon) {
             $order->userCoupon_id = $coupon->id;
             $order->couponAmount = $coupon->couponType->amount;
@@ -488,10 +487,9 @@ class OrderManager
         }
         $ore = $order->save(false);
         if (!$ore) {
-            $transaction->rollBack();
             return ['code' => PayService::ERROR_ORDER_CREATE,  'message' => PayService::getErrorByCode(PayService::ERROR_ORDER_CREATE), 'tourl' => '/order/order/ordererror'];
         }
-
+        $transaction = Yii::$app->db->beginTransaction();
         if ($coupon) {
             $coupon->order_id = $order->id;
             $coupon->isUsed = 1;

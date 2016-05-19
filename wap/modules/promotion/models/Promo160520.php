@@ -96,7 +96,12 @@ class Promo160520
             return false;
         }
 
-        $coupons = CouponType::find()->where(['sn' => $config])->all();
+        $coupons = CouponType::find()->where(['sn' => $config])->andFilterWhere(['<=' , 'issueEndDate' , date('Y-m-d')])->all();
+
+        if (!$coupons) {
+            return true;
+        }
+
         $transaction = \Yii::$app->db->beginTransaction();
         foreach ($coupons as $coupon) {
             $ret = (new UserCoupon([
