@@ -219,7 +219,7 @@ $(function() {
                 </nav>
             </div>
         </div>
-        <p>客服热线：<?= Yii::$app->params['contact_tel'] ?>（09:00-20:00）</p>
+        <p>客服热线：<?= Yii::$app->params['contact_tel'] ?></p>
     </div>
 </div>
 
