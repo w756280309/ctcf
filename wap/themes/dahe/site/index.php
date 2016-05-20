@@ -181,7 +181,7 @@ $(function() {
         <div class="row margin-add">
             <div class="col-xs-4 padding-clear"><a href="/deal/deal/index"><img src="<?= ASSETS_BASE_URI ?>images/dahe/type1.jpg?v=20160418" alt="大盈通" /></a> </div>
             <div class="col-xs-4 padding-clear"><a href="/deal/deal/index"><img src="<?= ASSETS_BASE_URI ?>images/dahe/type2.jpg?v=20160418" alt="大盈宝" /></a> </div>
-            <div class="col-xs-4 padding-clear"><a href="/order/booking/detail?pid=1"><img src="<?= ASSETS_BASE_URI ?>images/dahe/type3.jpg" alt="股权项目" /></a> </div>
+            <div class="col-xs-4 padding-clear" id="wgt"><a href="/order/booking/detail?pid=1"><img src="<?= ASSETS_BASE_URI ?>images/dahe/type3.jpg" alt="股权项目" /></a> </div>
         </div>
     </div>
     <!-- 理财区 end -->
