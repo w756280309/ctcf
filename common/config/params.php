@@ -38,7 +38,7 @@ return [
         'clientKeyExportPass' => 'fake',
         'cfcaCertPath' => dirname(__DIR__).'/cfca_test/cfca.crt',
     ],
-    'drawFee' => 2,//单位元，提现手续费
+    'drawFee' => 2, //单位元，提现手续费
     'settlement' => [
         /*结算账号设置 start */
         'bank_id' => '424', //南京银行编号
@@ -63,13 +63,13 @@ return [
         'fenqihuikuan' => 70048,
         'lfenqihuikuan' => 70046,
         'config' => [
-            'APP_ID' => "8a48b551525cdd3301526207479a0bcc"
+            'APP_ID' => '8a48b551525cdd3301526207479a0bcc',
         ],
     ],
     'contact_tel' => '400-101-5151',
-    'white_list' => ['15810036547','18518154492'],
-    'pc_cat' => ['1'=>'温盈金','2'=>'温盈宝',],
-    'refund_method' => ['1' => '到期本息', '2' => '按月付息，到期本息', '3' => '按季付息，到期本息', '4' => '按半年付息，到期本息', '5' => '按年付息，到期本息'],//
+    'white_list' => ['15810036547', '18518154492'],
+    'pc_cat' => ['1' => '温盈金', '2' => '温盈宝'],
+    'refund_method' => ['1' => '到期本息', '2' => '按月付息，到期本息', '3' => '按季付息，到期本息', '4' => '按半年付息，到期本息', '5' => '按年付息，到期本息'], //
     'page_info' => [
         'beian' => '@版权归温都金服开发团队所有',
     ],
@@ -80,17 +80,17 @@ return [
         'ump_cert' => __DIR__.'/payment/ump/ump_prod.crt',
         'draw' => [
             'min' => 10,
-            'max' => 1000000000
+            'max' => 1000000000,
         ],
     ],
-    'm_assets_base_uri' => "https://static.wenjf.com/m/",
-    'pc_assets_base_uri' => "https://static.wenjf.com/pc/",
-    'upload_base_uri' => "https://static.wenjf.com/",
+    'm_assets_base_uri' => 'https://static.wenjf.com/m/',
+    'pc_assets_base_uri' => 'https://static.wenjf.com/pc/',
+    'upload_base_uri' => 'https://static.wenjf.com/',
     'enable_baidu_tongji' => false,
     'enable_dev_helpers' => false,
-    'category_type'=>[
-        '1'=>'文章分类',
-        '9'=>'其他分类'
+    'category_type' => [
+        '1' => '文章分类',
+        '9' => '其他分类',
     ],
     'clientOption' => [
         'host' => [
@@ -98,12 +98,13 @@ return [
             'frontend' => 'https://www.wenjf.com/',
             'wap' => 'https://m.wenjf.com/',
             'app' => 'https://app.wenjf.com/',
-        ]
+        ],
     ],
     //易保全正式环境配置
     'bao_quan_config' => [
-        'services_url' =>'http://api.ebaoquan.org/services',
+        'services_url' => 'http://api.ebaoquan.org/services',
         'app_key' => '8f5ca3eb5cbac210',
-        'app_secret' => 'cc7c180b7e016f9802b1bcb9e493450e'
-    ]
+        'app_secret' => 'cc7c180b7e016f9802b1bcb9e493450e',
+    ],
+    'mock_sms' => false,
 ];

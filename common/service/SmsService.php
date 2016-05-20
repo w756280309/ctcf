@@ -59,7 +59,15 @@ class SmsService
         $model->time_len = 5;
         $model->end_time = $time + $model->time_len * 60;
 
+        if (Yii::$app->params['mock_sms']) {
+            $model->code = '888888';
+        }
+
         if ($model->save()) {
+            if (Yii::$app->param['mock_sms']) {
+                return ['code' => 0, 'message' => ''];
+            }
+
             $message = [];
             $template_id = null;
             if (1 === $type) {
