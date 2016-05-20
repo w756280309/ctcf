@@ -173,7 +173,18 @@ class PayService
             return ['code' => self::ERROR_MONEY_FORMAT,  'message' => self::getErrorByCode(self::ERROR_MONEY_FORMAT)];
         }
 
-        if (bccomp($user->lendAccount->available_balance, $money) < 0) {
+        //代金券检验
+        $couponMoney = 0;
+        if ($coupon) {
+            $couponMoney = $coupon->couponType->amount;
+            try {
+                UserCoupon::checkAllowUse($coupon, $money, $user);
+            } catch (Exception $ex) {
+                return ['code' => 1,  'message' => $ex->getMessage()];
+            }
+        }
+
+        if (bccomp(bcadd($user->lendAccount->available_balance, $couponMoney, 2), $money, 2) < 0) {
             return ['code' => 1,  'message' => '金额不足'];
         }
         $orderbalance = $this->cdeal->getLoanBalance();
@@ -198,15 +209,6 @@ class PayService
             //否则必须投满
             if (bcdiv($orderbalance, $money) * 1 != 1) {
                 return ['code' => self::ERROR_MONEY_BALANCE,  'message' => self::getErrorByCode(self::ERROR_MONEY_BALANCE)];
-            }
-        }
-
-        //代金券检验
-        if ($coupon) {
-            try {
-                UserCoupon::checkAllowUse($coupon, $money, $user);
-            } catch (Exception $ex) {
-                return ['code' => 1,  'message' => $ex->getMessage()];
             }
         }
     }
