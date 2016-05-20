@@ -64,7 +64,7 @@ class SmsService
         }
 
         if ($model->save()) {
-            if (Yii::$app->param['mock_sms']) {
+            if (Yii::$app->params['mock_sms']) {
                 return ['code' => 0, 'message' => ''];
             }
 
