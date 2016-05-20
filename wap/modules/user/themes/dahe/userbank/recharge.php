@@ -64,21 +64,22 @@ $this->title="充值";
 
     <script type="text/javascript">
         var csrf;
-        function validateform(){
-            if($.trim($('#fund').val()) == '') {
+        function validateform()
+        {
+            if($.trim($('#fund').val()) === '') {
                 toast('充值金额不能为空');
-                $(this).removeClass("btn-press").addClass("btn-normal");
+                $('#rechargebtn').removeClass("btn-press").addClass("btn-normal");
                 return false;
             }
-            if ($('#fund').val() == 0) {
+            if ($('#fund').val() === '0') {
                 toast('充值金额不能为零');
-                $(this).removeClass("btn-press").addClass("btn-normal");
+                $('#rechargebtn').removeClass("btn-press").addClass("btn-normal");
                 return false;
             }
             var reg = /^[0-9]+([.]{1}[0-9]{1,2})?$/;
             if (!reg.test($('#fund').val())) {
                 toast('充值金额格式不正确');
-                $(this).removeClass("btn-press").addClass("btn-normal");
+                $('#rechargebtn').removeClass("btn-press").addClass("btn-normal");
                 return false;
             }
             return true;
