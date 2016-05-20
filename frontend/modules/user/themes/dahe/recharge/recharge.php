@@ -3,7 +3,7 @@
 use yii\bootstrap\ActiveForm;
 use yii\web\View;
 
-$this->title = '充值 - 大河金服';
+$this->title = '充值 - 大河阳光理财';
 
 $_js = <<<'JS'
 $(function() {
@@ -84,7 +84,7 @@ $this->registerJs($_js, View::POS_END, 'body_close');
         <h3>温馨提示</h3>
         <div class="section">
             <ol>
-                <li>投资人充值手续费由大河金服垫付；</li>
+                <li>投资人充值手续费由大河阳光理财垫付；</li>
                 <li>最低充值金额应大于等于1元；</li>
                 <li>充值期间请勿关闭浏览器，待充值成功并返回账户中心后，所充资金才能入账。如有疑问，请联系客服<?= Yii::$app->params['contact_tel'] ?>。</li>
             </ol>

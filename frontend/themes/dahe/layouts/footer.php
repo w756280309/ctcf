@@ -26,7 +26,7 @@ BaiduTongjiHelper::registerTo($this, BaiduTongjiHelper::PC_KEY);
             <div class="container">
                 <div class="navbar-header">
                     <a class="navbar-brand" href="/">
-                        大河金服
+                        大河阳光理财
                     </a>
                 </div>
 

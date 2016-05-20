@@ -4,7 +4,7 @@ use yii\bootstrap\ActiveForm;
 use yii\captcha\Captcha;
 use yii\web\View;
 
-$this->title = '登陆注册 - 大河金服';
+$this->title = '登陆注册 - 大河阳光理财';
 
 $_js = <<<'JS'
 $(function() {

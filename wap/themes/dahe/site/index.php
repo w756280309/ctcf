@@ -7,7 +7,7 @@ use common\view\LoanHelper;
 
 WapAsset::register($this);
 
-$this->title = '大河金服';
+$this->title = '大河阳光理财';
 $this->params['breadcrumbs'][] = $this->title;
 $this->registerCssFile(ASSETS_BASE_URI . 'css/swiper.min.css?v=20160419', ['depends' => 'frontend\assets\WapAsset']);
 $this->registerJsFile(ASSETS_BASE_URI . 'js/swiper.min.js?v=20160419', ['depends' => 'yii\web\JqueryAsset', 'position' => 1]);
@@ -59,7 +59,7 @@ $(function() {
     <?php if (!defined('IN_APP')) { ?>
     <!--header-->
     <header class="row head-title">
-        <div class="logo col-xs-12 col-sm-12"><img src="<?= ASSETS_BASE_URI ?>images/dahe/logo.png?v=20160519" alt="logo" ></div>
+        <div class="logo col-xs-12 col-sm-12"><img src="<?= ASSETS_BASE_URI ?>images/dahe/logo.png?v=20160520" alt="logo" ></div>
         <div class="logo_tit">大河报旗下理财平台</div>
     </header>
     <?php } ?>

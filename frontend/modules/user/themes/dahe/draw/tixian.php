@@ -1,7 +1,7 @@
 <?php
 
 use yii\bootstrap\ActiveForm;
-$this->title = '提现 - 大河金服';
+$this->title = '提现 - 大河阳光理财';
 
 ?>
 <div class="container">

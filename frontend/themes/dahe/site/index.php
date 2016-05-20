@@ -1,5 +1,5 @@
 <?php
-$this->title = '大河金服首页';
+$this->title = '大河阳光理财首页';
 ?>
 
 <!--section1-->
@@ -15,7 +15,7 @@ $this->title = '大河金服首页';
                     </div>
                 </div>
                 <div class="first-content">
-                    <p>大河金服</p>
+                    <p>大河阳光理财</p>
                     <div>正式上线</div>
                 </div>
                 <div class="first-web">官方网站：www.dahejf.com/</div>
@@ -35,7 +35,7 @@ $this->title = '大河金服首页';
         <div class="tow-content3">Safety</div>
         <div class="tow-content4">Transparent</div>
         <div class="two-content5">Legitimate</div>
-        <div class="section2-title">大河金服<span>理财安全吗？</span></div>
+        <div class="section2-title">大河阳光理财<span>安全吗？</span></div>
         <div class="two-title">大河报旗下互联网金融平台，更放心！</div>
         <p class="two-content two-content1"><img src="<?= ASSETS_BASE_URI ?>images/lock.png" alt="">风控<span>专业</span>，更<span>合规</span>，更<span>透明</span></p>
         <p class="two-content two-content2"><img src="<?= ASSETS_BASE_URI ?>images/lock.png" alt=""><span>实名</span>认证，资金同卡进出，很放心</p>
@@ -47,7 +47,7 @@ $this->title = '大河金服首页';
 <div class="section section3">
     <div class="three-box">
         <div class="three-box-title">国资平台 值得信任</div>
-        <div class="three-box-title1">—— 大河金服五大优势 ——</div>
+        <div class="three-box-title1">—— 大河阳光理财五大优势 ——</div>
         <div class="three-content three-content1">
             <img src="<?= ASSETS_BASE_URI ?>images/one.png" alt="">
             <div class="three-content-title"><span>实力背景</span>可信任</div>
@@ -81,12 +81,12 @@ $this->title = '大河金服首页';
 <!--section4-->
 <div class="section section4">
     <div class="four-box">
-        <div class="four-title">大河金服是什么？ </div>
+        <div class="four-title">大河阳光理财是什么？ </div>
         <div class="four-content"><span>专业、安全、规范、</span>最有诚意的国资互联网金融平台</div>
         <div class="four-ins">
             <div class="four-left">
                 <img src="<?= ASSETS_BASE_URI ?>images/four-left.png" alt="">
-                <div class="four-left-content">大河金服，是由河南日报报业集团旗下《大河报》及相关媒体与南京易投贷金融信息服务有限公司公司联合运营的互联网金融平台，由相关部门监管，坚持合法合规运营，上线初始便引进第三方资金托管的阳光化交易型平台。致力于打造扎根河南本土，服务当地建设，覆盖全国的金融与互联网结合之典范企业。<br/><br/>公司管理团队的成员均为互联网金融领域及相关专业领域资深人士，正全力将大河金服打造成一个集金融信息发布、线上理财交易、线下理财咨询服务于一体的综合型一站式平台。</div>
+                <div class="four-left-content">大河阳光理财，是由河南日报报业集团旗下《大河报》及相关媒体与南京易投贷金融信息服务有限公司公司联合运营的互联网金融平台，由相关部门监管，坚持合法合规运营，上线初始便引进第三方资金托管的阳光化交易型平台。致力于打造扎根河南本土，服务当地建设，覆盖全国的金融与互联网结合之典范企业。<br/><br/>公司管理团队的成员均为互联网金融领域及相关专业领域资深人士，正全力将大河阳光理财打造成一个集金融信息发布、线上理财交易、线下理财咨询服务于一体的综合型一站式平台。</div>
             </div>
             <div class="four-right">
                 <img src="<?= ASSETS_BASE_URI ?>images/four-right.png" alt="">

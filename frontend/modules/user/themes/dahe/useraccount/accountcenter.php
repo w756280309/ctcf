@@ -2,7 +2,7 @@
 
 use yii\web\View;
 
-$this->title = '账户中心-大河金服';
+$this->title = '账户中心-大河阳光理财';
 
 $_js = <<<'JS'
 $(function() {
