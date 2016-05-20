@@ -56,7 +56,7 @@ $this->title = '大河金服首页';
         <div class="three-content three-content2">
             <img src="<?= ASSETS_BASE_URI ?>images/two.png" alt="">
             <div class="three-content-title"><span>合法合规</span>有保证</div>
-            <em><p>承载大河报全媒体16年信誉，省级金融主管部门审批的合规平台，有保证；</p></em>
+            <i>承载大河报全媒体16年信誉，省级金融主管部门审批的合规平台，有保证；</i>
         </div>
         <div class="three-content three-content3">
             <img src="<?= ASSETS_BASE_URI ?>images/three.png" alt="">
