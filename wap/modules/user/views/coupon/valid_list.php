@@ -1,8 +1,8 @@
 <?php
 $this->title = '可用代金券';
 
-$this->registerCssFile(ASSETS_BASE_URI . 'css/coupon.css', ['depends' => 'frontend\assets\WapAsset']);
-$this->registerJsFile(ASSETS_BASE_URI . 'js/coupon-valid.js', ['depends' => 'yii\web\YiiAsset', 'position' => 1]);
+$this->registerCssFile(ASSETS_BASE_URI . 'css/coupon.css?v=20150520', ['depends' => 'frontend\assets\WapAsset']);
+$this->registerJsFile(ASSETS_BASE_URI . 'js/coupon-valid.js?v=20150520', ['depends' => 'yii\web\YiiAsset', 'position' => 1]);
 $this->registerJs('var total=' . $header['count'] . ';', 1);
 $this->registerJs('var size=' . $header['size'] . ';', 1);
 $this->registerJs('var tp=' . $header['tp'] . ';', 1);
@@ -23,7 +23,7 @@ $this->registerJs('var cp=' . $header['cp'] . ';', 1);
                             <p class="b_h4"><?= $val['name'] ?></p>
                         </div>
                         <div class="c_height">
-                            <p class="condition1">单笔投资满<?= rtrim(rtrim(number_format($val['minInvest'], 2), '0'), '.') ?>元可用</p>
+                            <p class="condition1">单笔投资满<?= $val['minInvestDesc'] ?>可用</p>
                         </div>
                         <div class="d_height"></div>
                         <div class="c_height">

@@ -43,7 +43,7 @@ $(function(){
                                             '<p class="b_h4">'+ item.name +'</p>' +
                                             '</div>' +
                                             '<div class="c_height">' +
-                                            '<p class="condition1">单笔投资满'+ WDJF.numberFormat(item.minInvest, true) +'元可用</p>' +
+                                            '<p class="condition1">单笔投资满'+ item.minInvestDesc +'可用</p>' +
                                             '</div>' +
                                             '<div class="d_height"></div>' +
                                             '<div class="c_height">' +

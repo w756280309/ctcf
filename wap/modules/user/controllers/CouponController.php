@@ -26,6 +26,10 @@ class CouponController extends BaseController
         $pg = \Yii::$container->get('paginator')->paginate($data, $page, $size);
         $model = $pg->getItems();
 
+        foreach ($model as $key => $val) {
+            $model[$key]['minInvestDesc'] = \Yii::$app->functions->toFormatMoney(rtrim(rtrim($val['minInvest'], '0'), '.'));
+        }
+
         $tp = $pg->getPageCount();
         $code = ($page > $tp) ? 1 : 0;
 
@@ -81,6 +85,10 @@ class CouponController extends BaseController
 
         $pg = \Yii::$container->get('paginator')->paginate($data, $page, $size);
         $coupon = $pg->getItems();
+
+        foreach ($coupon as $key => $val) {
+            $coupon[$key]['minInvestDesc'] = \Yii::$app->functions->toFormatMoney(rtrim(rtrim($val['minInvest'], '0'), '.'));
+        }
 
         $tp = $pg->getPageCount();
         $code = ($page > $tp) ? 1 : 0;

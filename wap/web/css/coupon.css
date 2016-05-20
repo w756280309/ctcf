@@ -123,3 +123,8 @@ body{
 .box_img img {
     width:100%;
 }
+@media ( max-width:370px ) {
+    .condition1 {
+      font-size:1.14rem;
+    }
+}
