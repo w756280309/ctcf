@@ -37,11 +37,9 @@ class FkCore
         $coupon_amount = 0;
         foreach ($orders as $val) {
             if ($val['userCoupon_id']) {
-                $total = bcadd($total, $val['paymentAmount']);
                 $coupon_amount = bcadd($coupon_amount, $val['couponAmount']);
-            } else {
-                $total = bcadd($total, $val['order_money']);
             }
+            $total = bcadd($total, $val['order_money']);
         }
 
         /*生成放款批次 start*/
@@ -86,11 +84,7 @@ class FkCore
             $ofkd_model = clone $ofkd;
             $ofkd_model->fangkuan_order_id = $ofk->id;
             $ofkd_model->product_order_id = $order['id'];
-            if ($val['userCoupon_id']) {
-                $ofkd_model->order_money = $order['paymentAmount'];
-            } else {
-                $ofkd_model->order_money = $order['order_money'];
-            }            
+            $ofkd_model->order_money = $order['order_money'];
             $ofkd_model->online_product_id = $pid;
             $ofkd_model->order_time = $order['order_time'];
             $ofkd_model->admin_id = Yii::$app->user->id;

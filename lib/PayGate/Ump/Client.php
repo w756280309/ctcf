@@ -476,6 +476,30 @@ class Client
     }
 
     /**
+     * 4.3.5 标的转账
+     * 平台方投标.
+     *
+     * @param PaymentTxInterface $pay
+     */
+    public function merOrder(PaymentTxInterface $pay)
+    {
+        $data = [
+            'service' => 'project_transfer',
+            'notify_url' => $this->clientOption['host']['api'] . "notify/payment/backend",
+            'order_id' => $pay->getTxSn(),
+            'mer_date' => date('Ymd', $pay->getTxDate()),
+            'project_id' => $pay->getLoanId(),
+            'serv_type' => '05',//贴现
+            'trans_action' => '01',
+            'partic_type' => '03',
+            'partic_acc_type' => '02',//转账方类型：对公
+            'partic_user_id' => $this->merchantId,
+            'amount' => $pay->getAmount() * 100,
+        ];
+        return $this->doRequest($data);
+    }
+
+    /**
      * 4.3.3 标的转账【由标的账户转到借款人同步请求】.
      *
      * @param LoanFkInterface $fk
