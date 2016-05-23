@@ -1,7 +1,7 @@
 <?php
 $this->title = '可用代金券';
 
-$this->registerCssFile(ASSETS_BASE_URI . 'css/coupon.css?v=20150520', ['depends' => 'frontend\assets\WapAsset']);
+$this->registerCssFile(ASSETS_BASE_URI . 'css/coupon.css?v=20150520', ['depends' => 'wap\assets\WapAsset']);
 $this->registerJsFile(ASSETS_BASE_URI . 'js/coupon-valid.js?v=20150520', ['depends' => 'yii\web\YiiAsset', 'position' => 1]);
 $this->registerJs('var total=' . $header['count'] . ';', 1);
 $this->registerJs('var size=' . $header['size'] . ';', 1);

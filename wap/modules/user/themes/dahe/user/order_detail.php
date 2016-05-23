@@ -5,7 +5,7 @@ use common\models\product\RateSteps;
 
 $this->registerJsFile(ASSETS_BASE_URI .'js/fastclick.js', ['position' => 1, ]);
 $this->registerJsFile(ASSETS_BASE_URI .'js/touzixiangqing.js', ['depends' => 'yii\web\JqueryAsset', 'position' => 1]);
-$this->registerCssFile(ASSETS_BASE_URI .'css/touzixiangqing.css?v=20160427', ['depends' => 'frontend\assets\WapAsset']);
+$this->registerCssFile(ASSETS_BASE_URI .'css/touzixiangqing.css?v=20160427', ['depends' => 'wap\assets\WapAsset']);
 ?>
 
 <div class="container">

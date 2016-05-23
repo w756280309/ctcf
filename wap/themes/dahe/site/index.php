@@ -1,24 +1,22 @@
 <?php
 use yii\helpers\Html;
-use frontend\assets\WapAsset;
+use wap\assets\WapAsset;
 use common\models\product\OnlineProduct;
-use common\view\BaiduTongjiHelper;
+use common\view\AnalyticsHelper;
 use common\view\LoanHelper;
 
 WapAsset::register($this);
 
 $this->title = '大河阳光理财';
 $this->params['breadcrumbs'][] = $this->title;
-$this->registerCssFile(ASSETS_BASE_URI . 'css/swiper.min.css?v=20160419', ['depends' => 'frontend\assets\WapAsset']);
+$this->registerCssFile(ASSETS_BASE_URI . 'css/swiper.min.css?v=20160419', ['depends' => 'wap\assets\WapAsset']);
 $this->registerJsFile(ASSETS_BASE_URI . 'js/swiper.min.js?v=20160419', ['depends' => 'yii\web\JqueryAsset', 'position' => 1]);
 $this->registerJsFile(ASSETS_BASE_URI . 'js/jquery.classyloader.js', ['depends' => 'yii\web\JqueryAsset', 'position' => 1]);
 $this->registerJsFile(ASSETS_BASE_URI . 'js/index.js?v=20160419', ['depends' => 'yii\web\JqueryAsset', 'position' => 1]);
-$this->registerCssFile(ASSETS_BASE_URI . 'css/index.css?v=20160419', ['depends' => 'frontend\assets\WapAsset']);  //加载在depends之后
-$this->registerCssFile(ASSETS_BASE_URI . 'css/first.css?v=20160509', ['depends' => 'frontend\assets\WapAsset']);
-$this->registerJsFile(ASSETS_BASE_URI . 'js/jquery.cookie.js?v=20160428', ['depends' => 'yii\web\JqueryAsset', 'position' => 1]);//加载jquery.cookie
-$this->registerJsFile(ASSETS_BASE_URI . 'js/hmsr.js?v=20160428', ['depends' => 'yii\web\JqueryAsset', 'position' => 1]);//加载来源统计记录代码
+$this->registerCssFile(ASSETS_BASE_URI . 'css/index.css?v=20160419', ['depends' => 'wap\assets\WapAsset']);  //加载在depends之后
+$this->registerCssFile(ASSETS_BASE_URI . 'css/first.css?v=20160509', ['depends' => 'wap\assets\WapAsset']);
 
-BaiduTongjiHelper::registerTo($this, BaiduTongjiHelper::WAP_KEY);
+AnalyticsHelper::registerTo($this);
 ?>
 
 <?php $this->beginPage() ?>

@@ -86,7 +86,7 @@ return [
     'm_assets_base_uri' => 'https://static.wenjf.com/m/',
     'pc_assets_base_uri' => 'https://static.wenjf.com/pc/',
     'upload_base_uri' => 'https://static.wenjf.com/',
-    'enable_baidu_tongji' => false,
+    'enable_analytics' => false,
     'enable_dev_helpers' => false,
     'category_type' => [
         '1' => '文章分类',

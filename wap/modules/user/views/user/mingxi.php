@@ -7,7 +7,7 @@ foreach (Yii::$app->params['mingxi'] as $key => $val) {
 }
 $this->registerJsFile(ASSETS_BASE_URI . 'js/moment.min.js', ['depends' => 'yii\web\YiiAsset','position' => 1]);
 $this->registerJsFile(ASSETS_BASE_URI . 'js/jiaoyimingxi.js?v=20160412', ['depends' => 'yii\web\YiiAsset','position' => 1]);
-frontend\assets\WapAsset::register($this);
+wap\assets\WapAsset::register($this);
 $this->registerJs('var total=' . $header['count'] . ';', 1);
 $this->registerJs('var size=' . $header['size'] . ';', 1);
 $this->registerJs('var tp=' . $header['tp'] . ';', 1);

@@ -1,12 +1,6 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: xhy
- * Date: 15-3-11
- * Time: 上午10:53
- */
 
-namespace frontend\assets;
+namespace wap\assets;
 
 use yii\web\AssetBundle;
 
@@ -19,9 +13,15 @@ class WapAsset extends AssetBundle
         'css/base.css?v=20160407',
     ];
     public $js = [
-        //'js/jquery.js'
+        'js/common.js',
+        'js/lib.js',
+        'js/jquery.cookie.js',
+        'js/hmsr.js?v=20160428',
     ];
     public $depends = [
-       // 'backend\assets\AppAsset.php',
+        'yii\web\JqueryAsset',
+    ];
+    public $jsOptions = [
+        'position' => 1,
     ];
 }

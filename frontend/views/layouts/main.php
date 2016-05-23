@@ -1,8 +1,8 @@
 <?php
 use yii\helpers\Html;
-use common\view\BaiduTongjiHelper;
+use common\view\AnalyticsHelper;
 
-BaiduTongjiHelper::registerTo($this, BaiduTongjiHelper::PC_KEY);
+AnalyticsHelper::registerTo($this);
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>

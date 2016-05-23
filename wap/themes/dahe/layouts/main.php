@@ -1,15 +1,10 @@
 <?php
 use yii\helpers\Html;
-use common\view\BaiduTongjiHelper;
+use common\view\AnalyticsHelper;
 use common\lib\StringUtils\StringUtils;
 
-frontend\assets\WapAsset::register($this);
-BaiduTongjiHelper::registerTo($this, BaiduTongjiHelper::WAP_KEY);
-$this->registerJsFile(ASSETS_BASE_URI . 'js/common.js?v=20160428', ['depends' => 'yii\web\JqueryAsset', 'position' => 1]);
-$this->registerJsFile(ASSETS_BASE_URI . 'js/lib.js?v=20160428', ['depends' => 'yii\web\JqueryAsset', 'position' => 1]);
-$this->registerJsFile(ASSETS_BASE_URI . 'js/jquery.cookie.js?v=20160428', ['depends' => 'yii\web\JqueryAsset', 'position' => 1]);//加载jquery.cookie
-$this->registerJsFile(ASSETS_BASE_URI . 'js/hmsr.js?v=20160428', ['depends' => 'yii\web\JqueryAsset', 'position' => 1]);//加载来源统计记录代码
-
+wap\assets\WapAsset::register($this);
+AnalyticsHelper::registerTo($this);
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>

@@ -51,8 +51,7 @@ $this->showAvatar = true;
         </div>
         <div class="clear"></div>
         <a class="row sm-height border-bottom margin-top block" href="/user/user/myorder" >
-            <div class="col-xs-3 left-txt">我的理财</div>
-            <div class="col-xs-7"></div>
+            <div class="col-xs-10 left-txt">我的理财</div>
             <div class="col-xs-1 arrow">
                 <img src="<?= ASSETS_BASE_URI ?>images/arrow.png" alt="右箭头">
             </div>
@@ -61,8 +60,7 @@ $this->showAvatar = true;
 
         <div class="clear"></div>
         <a class="row sm-height border-bottom block" href="/user/user/mingxi" >
-            <div class="col-xs-3 left-txt">交易明细</div>
-            <div class="col-xs-7"></div>
+            <div class="col-xs-10 left-txt">交易明细</div>
             <div class="col-xs-1 arrow">
                 <img src="<?= ASSETS_BASE_URI ?>images/arrow.png" alt="右箭头">
             </div>

@@ -2,10 +2,10 @@
 
 use yii\helpers\Html;
 use frontend\assets\AppAsset;
-use common\view\BaiduTongjiHelper;
+use common\view\AnalyticsHelper;
 
 AppAsset::register($this);
-BaiduTongjiHelper::registerTo($this, BaiduTongjiHelper::PC_KEY);
+AnalyticsHelper::registerTo($this);
 
 ?>
 <?php $this->beginPage() ?>
