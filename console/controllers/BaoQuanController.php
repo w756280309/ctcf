@@ -9,12 +9,20 @@ use common\models\product\OnlineProduct;
 use EBaoQuan\Client;
 use yii\base\Exception;
 use yii\console\Controller;
+use yii\helpers\Console;
 
 class BaoQuanController extends Controller
 {
     //根据保全队列批量添加保全
     public function actionIndex()
     {
+        //保全开关
+        $toggle = \Yii::$app->params['enable_ebaoquan'];
+        if (!$toggle) {
+            $this->stdout("缺少配置参数：enable_ebaoquan；或者enable_ebaoquan 被配置为false 。\n", Console::BOLD);
+            return 0;
+        }
+        
         $queues = BaoQuanQueue::find()->where(['status' => BaoQuanQueue::STATUS_SUSPEND])->orderBy(['id' => SORT_DESC])->all();
         if (count($queues) > 0) {
             $client = new Client();

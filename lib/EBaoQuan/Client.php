@@ -219,7 +219,7 @@ class Client
         } else {
             $name = '合同';
         }
-        $requestObj->preservationTitle = "温都金服公司" . $name;
+        $requestObj->preservationTitle = $name;
 
         //个人用户
         $requestObj->userIdentifer = $user['idcard'];

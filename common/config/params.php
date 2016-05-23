@@ -107,4 +107,5 @@ return [
         'app_secret' => 'cc7c180b7e016f9802b1bcb9e493450e',
     ],
     'mock_sms' => false,
+    'enable_ebaoquan' => true,
 ];
