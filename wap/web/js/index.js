@@ -72,6 +72,17 @@ $(function(){
     }
 });
 
+function myConfirm() {
+    var chongzhi = $('<div class="mask" style="display: block;height: 1000px;"></div><div class="bing-info show" style="position: fixed;"> <p class="tishi-p" style="line-height: 20px;">根据合规性要求，私募基金产品，定向发行，请先登录后方可了解相关内容</p > <div class="bind-btn"> <span class="no" style="border-right: 1px solid #ccc;">取消</span> <span class="yes"  style="border-left: 1px solid #ccc;">确定</span></div> </div>');
+    $(chongzhi).insertAfter($('body'));
+    $('.bing-info .yes').on('click', function () {
+        $(chongzhi).remove();
+        window.location.href = '/site/login';
+    });
+    $('.bing-info .no').on('click', function () {
+        $(chongzhi).remove();
+    });
+}
 function checkLoginStatus()
 {
     var xhr = $.get('/site/session');
@@ -83,10 +94,7 @@ function checkLoginStatus()
             wgt.find('a').removeAttr('href');
             wgt.css('cursor', 'pointer');
             wgt.click(function () {
-                var res = confirm('根据合规性要求，私募基金产品，定向发行，请先登录后方可了解相关内容');
-                if (true === res) {
-                    location.href = '/site/login';
-                }
+                myConfirm();
             });
         }
     });
