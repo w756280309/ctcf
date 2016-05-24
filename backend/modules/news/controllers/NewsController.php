@@ -111,7 +111,7 @@ class NewsController extends BaseController
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
         $php_path = Yii::$app->basePath . '/web/upload/news';
-        $php_url = '/upload/news/';
+        $php_url = UPLOAD_BASE_URI . 'upload/news/';
         $image_ext = ['gif', 'jpg', 'jpeg', 'png', 'bmp'];
         $max_size = 1024 * 1024 * 10;
         $save_path = realpath($php_path) . '/';
