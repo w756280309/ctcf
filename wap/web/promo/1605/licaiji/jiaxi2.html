@@ -41,80 +41,6 @@
     <div class="row back_fff">
         <div class="col-xs-12">
             <table class="award">
-                <tr>
-                    <th class="th-top" colspan="4">豪士奖：理财用户投资榜单</th>
-                </tr>
-                <tr>
-                    <td>排名</td>
-                    <td>用户名</td>
-                    <td>理财总额</td>
-                    <td>奖品</td>
-                </tr>
-
-                <tr>
-                    <td>1</td>
-                    <td>135******63</td>
-                    <td>270,000.00元</td>
-                    <td class="red">华为P9(32G)</td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td>138******48</td>
-                    <td>201,000.00元</td>
-                    <td class="blue">小米净水器</td>
-                </tr>
-                <tr>
-                    <td>3</td>
-                    <td>136******22</td>
-                    <td>200,000.00元</td>
-                    <td class="blue">小米净水器</td>
-                </tr>
-                <tr>
-                    <td>4</td>
-                    <td>135******68</td>
-                    <td>170,000.00元</td>
-                    <td class="green">小米空气净化器2</td>
-                </tr>
-                <tr>
-                    <td>5</td>
-                    <td>137******16</td>
-                    <td>161,000.00元</td>
-                    <td class="green">小米空气净化器2</td>
-                </tr>
-                <tr>
-                    <td>6</td>
-                    <td>138******52</td>
-                    <td>161,000.00元</td>
-                    <td class="green">小米空气净化器2</td>
-                </tr>
-                <tr>
-                    <td>7</td>
-                    <td>135******10</td>
-                    <td>161,000.00元</td>
-                    <td class="green">小米运动相机</td>
-                </tr>
-                <tr>
-                    <td>8</td>
-                    <td>139******00</td>
-                    <td>151,000.00元</td>
-                    <td class="green">小米运动相机</td>
-                </tr>
-                <tr>
-                    <td>9</td>
-                    <td>135******55</td>
-                    <td>151,000.00元</td>
-                    <td class="green">小米运动相机</td>
-                </tr>
-                <tr>
-                    <td>10</td>
-                    <td>137******04</td>
-                    <td>150,000.00元</td>
-                    <td class="green">小米运动相机</td>
-                </tr>
-
-                <tr>
-                    <th class="th-bottom" colspan="4">*数据每天10点更新，以活动结束最终成功交易数据为准</th>
-                </tr>
             </table>
         </div>
     </div>
@@ -138,5 +64,43 @@
         </div>
     </div>
 </div>
+<script>
+    $(function () {
+        //配置奖品、样式类 和 名次的对应
+        var award = [[1, 1, '华为P9（32G）', 'red'], [2, 3, '小米净水器', 'blue'], [4, 6, '小米空气净化器2', 'green'], [7, 10, '小米运动相机', 'green']];
+        //配置活动id，参考数据表 ranking_promo
+        var id = 1;
+        var table = $('.award');
+        $.get('/promotion/sale/ranking/?id=' + id, function (data) {
+            var html = '';
+            if (data.code) {
+                var res = data.data;
+                html += '<tr> <th class="th-top" colspan="4">豪士奖：理财用户投资榜单</th> </tr>';
+                if (res.length >= 1) {
+                    html += '<tr><td>排名</td><td>用户名</td><td>理财总额</td><td>奖品</td></tr>';
+                    for (var i = 0; i < res.length; i++) {
+                        var num = i + 1;
+                        var name = '';
+                        var c = '';
+                        for (var j = 0; j < award.length; j++) {
+                            if (num >= award[j][0] && num <= award[j][i]) {
+                                c = award[j][3];
+                                name = award[j][2];
+                                break;
+                            }
+                        }
+                        html += '<tr><td>' + num + '</td><td>' + res[i]['mobile'] + '</td><td>' + res[i]['totalInvest'] + '元</td><td class="' + c + '">' + name + '</td></tr>';
+                    }
+                } else {
+                    html += '<tr><td>没有数据</td></tr>';
+                }
+                html += ' <tr> <td class="th-bottom" colspan="4">*数据实时更新，以活动结束最终成功交易数据为准</td> </tr>';
+            } else {
+                html += '<tr><td>' + data.message + '</td></tr>';
+            }
+            table.html(html);
+        });
+    });
+</script>
 </body>
 </html>

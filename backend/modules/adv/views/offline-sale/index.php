@@ -59,7 +59,7 @@ $this->title = '活动';
                             'attribute' => 'totalInvest',
                             'format' => 'html',
                             'value' => function ($model) {
-                                return number_format($model->totalInvest, 3);
+                                return number_format($model->totalInvest, 2);
                             }
                         ],
                         [
