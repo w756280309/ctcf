@@ -56,4 +56,9 @@ class PaymentLog extends ActiveRecord implements PaymentTxInterface
     {
         return $this->amount;
     }
+
+    public function getLoanId()
+    {
+        return $this->loan_id;
+    }
 }

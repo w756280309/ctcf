@@ -380,7 +380,7 @@ class RepaymentController extends BaseController
         if (OnlineFangkuan::STATUS_EXAMINED === (int) $fk->status) {
             $payLog = PaymentLog::findOne(['loan_id' => $pid]);
             if ($payLog) {
-                $ret = Yii::$container->get('ump')->transfer($payLog);
+                $ret = Yii::$container->get('ump')->merOrder($payLog);
                 if (!$ret->isSuccessful()) {
                     return ['res' => 0, 'msg' => '联动一侧：'.$ret->get('ret_msg')];
                 }
