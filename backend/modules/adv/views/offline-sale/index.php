@@ -66,7 +66,7 @@ $this->title = '活动';
                             'label' => '操作',
                             'format' => 'raw',
                             'value' => function ($model) {
-                                $html = '<a href="/adv/offine-sale/update?id=' . $model->id . '" class="btn mini green ajax_op"><i class="icon-edit"></i>编辑</a> |';
+                                $html = '<a href="/adv/offline-sale/update?id=' . $model->id . '" class="btn mini green ajax_op"><i class="icon-edit"></i>编辑</a> |';
                                 $html .= " <button onclick=\"if(confirm('确认删除')){window.location.href='/adv/offline-sale/delete?id=" . $model->id . "'}\" class=\"btn mini red ajax_op\">删除</button> ";
                                 return $html;
                             }
