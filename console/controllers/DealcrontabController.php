@@ -45,7 +45,7 @@ class DealcrontabController extends Controller
             foreach ($orders as $ord) {
                 $ua = UserAccount::findOne(['type' => UserAccount::TYPE_LEND, 'uid' => $ord['uid']]);
                 $ua->investment_balance = $bc->bcround(bcadd($ua->investment_balance, $ord['order_money']), 2);
-                $ua->freeze_balance = $bc->bcround(bcsub($ua->freeze_balance, $ord['order_money']), 2);
+                $ua->freeze_balance = $bc->bcround(bcsub($ua->freeze_balance, $ord['paymentAmount']), 2);//冻结金额减去实付金额
                 $ua->save();
                 $mrmodel = new MoneyRecord();
                 $mrmodel->account_id = $ua->id;
