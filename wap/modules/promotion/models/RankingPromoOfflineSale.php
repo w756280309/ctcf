@@ -32,6 +32,7 @@ class RankingPromoOfflineSale extends ActiveRecord
             [['investedAt'], 'string'],
             [['mobile'], 'match', 'pattern' => '/^1[34578]\d{9}$/'],
             [['investedAt', 'rankingPromoOfflineSale_id'], 'validateInvestedAt'],
+            ['totalInvest', 'compare', 'compareValue' => '0', 'operator' => '>']
         ];
     }
 

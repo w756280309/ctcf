@@ -6,6 +6,7 @@ use backend\controllers\BaseController;
 use wap\modules\promotion\models\RankingPromo;
 use wap\modules\promotion\models\RankingPromoOfflineSale;
 use yii\data\ActiveDataProvider;
+use yii\data\Pagination;
 use yii\web\NotFoundHttpException;
 
 class OfflineSaleController extends BaseController
@@ -13,12 +14,18 @@ class OfflineSaleController extends BaseController
     public function actionIndex()
     {
         $query = RankingPromoOfflineSale::find()->orderBy(['id' => SORT_DESC]);
+        $pages = new Pagination([
+            'totalCount' => $query->count(),
+            'pageSize' => 20
+        ]);
+        $query = $query->offset($pages->offset)->limit($pages->limit);
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
         $dataProvider->setSort(false);
         return $this->render('index', [
             'dataProvider' => $dataProvider,
+            'pages' => $pages
         ]);
     }
 

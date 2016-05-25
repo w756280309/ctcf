@@ -60,7 +60,7 @@ class RankingPromo extends ActiveRecord
     public function getOffline()
     {
         //获取线下用户
-        $offline = RankingPromoOfflineSale::find()->select(['mobile', 'totalInvest', 'UNIX_TIMESTAMP(investedAt) as `time`'])->where(['rankingPromoOfflineSale_id' => $this->id])->orderBy(['totalInvest' => SORT_DESC, 'investedAt' => SORT_ASC])->asArray()->all();
+        $offline = RankingPromoOfflineSale::find()->select(['mobile', 'totalInvest', 'UNIX_TIMESTAMP(investedAt) as `time`'])->where(['rankingPromoOfflineSale_id' => $this->id])->andWhere(['>=', 'investedAt', date('Y-m-d H:i:s', $this->startAt)])->andWhere(['<=', 'investedAt', date('Y-m-d H:i:s', $this->endAt)])->orderBy(['totalInvest' => SORT_DESC, 'investedAt' => SORT_ASC])->asArray()->all();
         return $offline;
     }
 
@@ -68,9 +68,12 @@ class RankingPromo extends ActiveRecord
     public function getBoth()
     {
         $offline = $this->offline;
+        $online = $this->online;
+        //排除在线下且在线上前十用户
+        $mobile = array_diff(ArrayHelper::getColumn($offline, 'mobile'), ArrayHelper::getColumn($online, 'mobile'));
         $result = [];
         if (count($offline) > 0) {
-            $mobiles = '(\'' . implode('\',\'', ArrayHelper::getColumn($offline, 'mobile')) . '\')';
+            $mobiles = '(\'' . implode('\',\'', $mobile) . '\')';
             $sql = "SELECT mobile ,SUM(order_money) AS totalInvest, MAX(order_time) AS `time`
                     FROM `online_order` AS o
                     WHERE o.status = 1

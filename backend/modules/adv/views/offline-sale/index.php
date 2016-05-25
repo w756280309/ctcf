@@ -80,6 +80,7 @@ $this->title = '活动';
                     ]
                 ]) ?>
             </div>
+            <div class="pagination" style="text-align:center;"><?= \yii\widgets\LinkPager::widget(['pagination' => $pages]); ?></div>
         </div>
     </div>
 </div>
