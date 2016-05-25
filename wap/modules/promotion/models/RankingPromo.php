@@ -27,6 +27,7 @@ class RankingPromo extends ActiveRecord
             [['title', 'startAt', 'endAt'], 'required'],
             [['startAt', 'endAt'], 'string'],
             [['title'], 'string', 'max' => 50],
+            ['endAt', 'compare', 'compareAttribute' => 'startAt', 'operator' => '>']
         ];
     }
 
@@ -59,7 +60,7 @@ class RankingPromo extends ActiveRecord
     public function getOffline()
     {
         //获取线下用户
-        $offline = RankingPromoOfflineSale::find()->select(['mobile', 'totalInvest'])->where(['rankingPromoOfflineSale_id' => $this->id])->orderBy(['totalInvest' => SORT_DESC])->asArray()->all();
+        $offline = RankingPromoOfflineSale::find()->select(['mobile', 'totalInvest', 'UNIX_TIMESTAMP(investedAt) as `time`'])->where(['rankingPromoOfflineSale_id' => $this->id])->orderBy(['totalInvest' => SORT_DESC, 'investedAt' => SORT_ASC])->asArray()->all();
         return $offline;
     }
 
@@ -70,7 +71,7 @@ class RankingPromo extends ActiveRecord
         $result = [];
         if (count($offline) > 0) {
             $mobiles = '(\'' . implode('\',\'', ArrayHelper::getColumn($offline, 'mobile')) . '\')';
-            $sql = "SELECT mobile ,SUM(order_money) AS totalInvest
+            $sql = "SELECT mobile ,SUM(order_money) AS totalInvest, MAX(order_time) AS `time`
                     FROM `online_order` AS o
                     WHERE o.status = 1
                     AND o.`mobile` IN " . $mobiles . "
@@ -84,7 +85,7 @@ class RankingPromo extends ActiveRecord
     //获取线上用户的投资金额排名前10
     public function getOnline()
     {
-        $sql = "SELECT mobile ,SUM(order_money) AS totalInvest
+        $sql = "SELECT mobile ,SUM(order_money) AS totalInvest, MAX(order_time) AS `time`
                 FROM `online_order` AS o
                 WHERE o.status = 1
                 AND o.`created_at` BETWEEN :startAt AND :endAt
@@ -101,15 +102,31 @@ class RankingPromo extends ActiveRecord
         if (count($data) > 0) {
             foreach ($data as $v) {
                 if (isset($v['mobile']) && isset($v['totalInvest'])) {
-                    if (in_array($v['mobile'], $key)) {
-                        $result[$v['mobile']] = $v['totalInvest'] + $result[$v['mobile']];
+                    $mobile = $v['mobile'];
+                    if (in_array($mobile, $key)) {
+                        $result[$mobile] = ['mobile' => $mobile, 'totalInvest' => $v['totalInvest'] + $result[$mobile]['totalInvest'], 'time' => max($v['time'], $result[$mobile]['time'])];
                     } else {
-                        $result[$v['mobile']] = $v['totalInvest'];
-                        $key[] = $v['mobile'];
+                        $result[$mobile] = ['mobile' => $mobile, 'totalInvest' => $v['totalInvest'], 'time' => $v['time']];
+                        $key[] = $mobile;
                     }
                 }
             }
         }
         return $result;
+    }
+
+    public static function rankingSort($a, $b)
+    {
+        if ($a['totalInvest'] > $b['totalInvest']) {
+            return -1;
+        } elseif ($a['totalInvest'] < $b['totalInvest']) {
+            return 1;
+        } else {
+            if ($a['time'] > $b['time']) {
+                return 1;
+            } else {
+                return -1;
+            }
+        }
     }
 }

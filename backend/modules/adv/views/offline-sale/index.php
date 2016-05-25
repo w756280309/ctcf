@@ -46,7 +46,6 @@ $this->title = '活动';
                             'value' => function ($model) {
                                 return $model->rankingPromo ? $model->rankingPromo->title : '';
                             },
-                            'contentOptions' => ['style' => 'width:40%;']
                         ],
                         [
                             'attribute' => 'mobile',
@@ -60,6 +59,13 @@ $this->title = '活动';
                             'format' => 'html',
                             'value' => function ($model) {
                                 return number_format($model->totalInvest, 2);
+                            }
+                        ],
+                        [
+                            'attribute' => 'investedAt',
+                            'format' => 'html',
+                            'value' => function ($model) {
+                                return $model->investedAt;
                             }
                         ],
                         [

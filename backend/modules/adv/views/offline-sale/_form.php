@@ -1,16 +1,17 @@
 <?php
 if ($model->isNewRecord) {
-    $this->title = '新建活动';
+    $this->title = '新建投资记录';
 } else {
-    $this->title = '更新活动';
+    $this->title = '更新投资记录';
 }
+$this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\web\YiiAsset']);
 ?>
 <?php $this->beginBlock('blockmain'); ?>
 <div class="container-fluid">
     <div class="span12">
         <h3 class="page-title">
             运营管理
-            <small>活动管理</small>
+            <small>投资记录管理</small>
         </h3>
         <ul class="breadcrumb">
             <li>
@@ -19,7 +20,7 @@ if ($model->isNewRecord) {
                 <i class="icon-angle-right"></i>
             </li>
             <li>
-                <a href="/adv/ranking/index">活动管理</a>
+                <a href="/adv/offline-sale/index">投资记录管理</a>
                 <i class="icon-angle-right"></i>
             </li>
             <li>
@@ -32,7 +33,7 @@ if ($model->isNewRecord) {
         <div class="control-group">
             <label class="control-label">活动</label>
             <div class="controls">
-                <?= $form->field($model, 'rankingPromoOfflineSale_id', ['template' => '{input}', 'inputOptions' => [ 'class' => 'm-wrap span6']])->dropDownList(\yii\helpers\ArrayHelper::map($ranking, 'id', 'title')) ?>
+                <?= $form->field($model, 'rankingPromoOfflineSale_id', ['template' => '{input}', 'inputOptions' => ['class' => 'm-wrap span6']])->dropDownList(\yii\helpers\ArrayHelper::map($ranking, 'id', 'title')) ?>
                 <?= $form->field($model, 'rankingPromoOfflineSale_id', ['template' => '{error}']) ?>
             </div>
         </div>
@@ -50,9 +51,16 @@ if ($model->isNewRecord) {
                 <?= $form->field($model, 'totalInvest', ['template' => '{error}']) ?>
             </div>
         </div>
+        <div class="control-group">
+            <label class="control-label">投资时间</label>
+            <div class="controls">
+                <?= $form->field($model, 'investedAt', ['template' => '{input}', 'inputOptions' => ['autocomplete' => "off", 'class' => 'm-wrap span3 Wdate', 'placeholder' => '选择投资时间', 'onclick' => 'WdatePicker({dateFmt:"yyyy-MM-dd HH:mm:ss"})']])->textInput() ?>
+                <?= $form->field($model, 'investedAt', ['template' => '{error}']); ?>
+            </div>
+        </div>
         <div class="form-actions">
             <button type="submit" class="btn blue"><i class="icon-ok"></i> 提交</button>
-            <a href="/adv/ranking/index" class="btn">取消</a>
+            <a href="/adv/offline-sale/index" class="btn">取消</a>
         </div>
         <?php $form->end() ?>
     </div>

@@ -37,14 +37,16 @@ class SaleController extends Controller
         $both = $ranking->both;
         //获取线上用户的投资金额排名前10
         $online = $ranking->online;
-        //合并两次排名，重新排名
+        //合并三次排名，重新排名
         $rankingUser = array_merge_recursive($online, $offline, $both);
         //相同手机号进行合并
         $rankingUser = $ranking->getMergeMobile($rankingUser);
         //排序
-        arsort($rankingUser);
-        //截取前十，处理手机号和金额
-        $rankingResult = RankingPromoOfflineSale::handleRankingResult(array_slice($rankingUser, 0, 10));
+        usort($rankingUser, [RankingPromo::class, 'rankingSort']);
+        //获取前十
+        $ten = array_slice($rankingUser, 0, 10, true);
+        //处理手机号和金额
+        $rankingResult = RankingPromoOfflineSale::handleRankingResult($ten);
         return ['code' => true, 'data' => $rankingResult];
     }
 }
