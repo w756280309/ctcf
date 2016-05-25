@@ -85,5 +85,8 @@ return [
         'datatj' => [
             'class' => 'backend\modules\datatj\Module',
         ],
+        'fenxiao' => [
+            'class' => 'backend\modules\fenxiao\Module',
         ],
+    ],
 ];

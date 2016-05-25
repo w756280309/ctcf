@@ -7,6 +7,7 @@
  */
 namespace backend\controllers;
 
+use common\controllers\HelpersTrait;
 use Yii;
 use yii\web\Controller;
 use yii\filters\AccessControl;
@@ -20,6 +21,8 @@ class BaseController extends Controller
     protected $time = 1; //提示时间
     protected $admin_id = 0;
     protected $admin_name = '';
+
+    use HelpersTrait;
 
     public function init()
     {
