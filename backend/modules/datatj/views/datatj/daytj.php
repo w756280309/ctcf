@@ -50,14 +50,14 @@
                 ],
                 [
                     'attribute' => 'investmentInWyb',
-                    'label' => '温盈宝销售额',
+                    'label' => Yii::$app->params['pc_cat'][2].'销售额',
                     'value' => function ($data) {
                         return number_format($data['investmentInWyb'], 2);
                     }
                 ],
                 [
                     'attribute' => 'investmentInWyj',
-                    'label' => '温盈金销售额',
+                    'label' => Yii::$app->params['pc_cat'][1].'销售额',
                     'value' => function ($data) {
                         return number_format($data['investmentInWyj'], 2);
                     }

@@ -5,6 +5,15 @@ use common\lib\StringUtils\StringUtils;
 
 wap\assets\WapAsset::register($this);
 AnalyticsHelper::registerTo($this);
+
+$this->registerMetaTag([
+    'name' => 'keywords',
+    'content' => Yii::$app->params['wap_page_keywords'],
+]);
+$this->registerMetaTag([
+    'name' => 'description',
+    'content' => Yii::$app->params['wap_page_descritpion'],
+]);
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>

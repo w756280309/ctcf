@@ -17,6 +17,16 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/index.css?v=20160419', ['depends' 
 $this->registerCssFile(ASSETS_BASE_URI . 'css/first.css?v=20160509', ['depends' => 'wap\assets\WapAsset']);
 
 AnalyticsHelper::registerTo($this);
+
+$this->registerMetaTag([
+    'name' => 'keywords',
+    'content' => Yii::$app->params['wap_page_keywords'],
+]);
+$this->registerMetaTag([
+    'name' => 'description',
+    'content' => Yii::$app->params['wap_page_descritpion'],
+]);
+
 ?>
 
 <?php $this->beginPage() ?>
@@ -28,7 +38,7 @@ AnalyticsHelper::registerTo($this);
     <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
     <meta name="renderer" content="webkit">
     <meta name="format-detection" content="telephone=no"/>
-    <title>温都金服</title>
+    <title>温都金服-温州报业传媒旗下理财平台</title>
     <?= Html::csrfMetaTags() ?>
     <?php $this->head() ?>
 <script>

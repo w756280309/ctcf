@@ -28,7 +28,7 @@ $this->title = 'Show Main';
         <div class="span12">
             
                 <h3 class="page-title">
-                        欢迎使用温都金服后台管理系统
+                        欢迎使用后台管理系统
                 </h3>
         </div>
     </div>

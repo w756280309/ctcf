@@ -70,7 +70,7 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\we
                     <?php }?>
                     </tr>
                 <tr>
-                    <td colspan="2">（温都金服账户）当前可用余额（元）：<?= $available_balance?></td>
+                    <td colspan="2">（本平台账户）当前可用余额（元）：<?= $available_balance?></td>
                     <td colspan="2">（第三方托管平台账户）联动账户余额（元）：<?= $user_account?></td>
                 </tr>
             </table>

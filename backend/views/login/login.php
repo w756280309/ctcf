@@ -44,7 +44,7 @@ $this->title = '后台管理系统登录';
 		<!-- BEGIN LOGIN FORM -->
 <!--		<form class="form-vertical login-form" action="index.html">-->
 <?php $form = ActiveForm::begin(['id'=>'admin_form' , 'action' =>"/login",'options' => ['class' => 'form-vertical login-form']]); ?>
-			<h3 class="form-title">欢迎使用温都金服后台管理系统</h3>
+			<h3 class="form-title">欢迎使用后台管理系统</h3>
 			
 			<div class="control-group">
 				<!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->

@@ -1,20 +1,9 @@
 <?php
 
 use yii\helpers\Html;
-use frontend\assets\AppAsset;
-use common\view\AnalyticsHelper;
+use borrower\assets\AppAsset;
 
 AppAsset::register($this);
-AnalyticsHelper::registerTo($this);
-
-$this->registerMetaTag([
-    'name' => 'keywords',
-    'content' => Yii::$app->params['pc_page_keywords'],
-]);
-$this->registerMetaTag([
-    'name' => 'description',
-    'content' => Yii::$app->params['pc_page_desc'],
-]);
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
@@ -24,7 +13,6 @@ $this->registerMetaTag([
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title><?= Html::encode($this->title) ?></title>
         <?php $this->head() ?>
-        <link rel="stylesheet" href="<?=ASSETS_BASE_URI ?>css/index.css?v=20160405">
     </head>
 
     <body>
@@ -34,19 +22,18 @@ $this->registerMetaTag([
             <div class="container">
                 <div class="navbar-header">
                     <a class="navbar-brand" href="/">
-                        温都金服
+                        大河金服
                     </a>
                 </div>
 
-                <p class="brand-sub">大额充值通道</p>
+                <p class="brand-sub">企业入口</p>
 
                 <div class="navbar-text navbar-right">
                     <?php if (Yii::$app->user->isGuest) { ?>
                         <a class="navbar-link" href="/site/login">登录</a>
-                        <a class="navbar-link" href="/site/login?flag=reg">注册</a>
                     <?php } else { ?>
                         <a class="navbar-link" href="/user/useraccount/accountcenter">我的账户</a>
-                        <a class="navbar-link" href="javascript:void(0)" onclick="$('#logout').submit();">安全退出</a>
+                        <a class="navbar-link" href="javascript:void(0)" onclick="$('#logout').submit();">退出登录</a>
                         <form method="post" id="logout" action="/site/logout">
                             <input name="_csrf" type="hidden" id="_csrf" value="<?= Yii::$app->request->csrfToken ?>">
                         </form>
@@ -54,9 +41,12 @@ $this->registerMetaTag([
                 </div>
             </div>
         </div>
-        <div style="line-height: 60px;">&nbsp;</div>
+
         <?= $content ?>
-        <?= $this->render('@frontend/views/site/footer.php'); ?>
+
+        <div class="footer">
+            <?= Yii::$app->params['page_info']['beian'] ?>
+        </div>
 
         <?php $this->endBody() ?>
     </body>

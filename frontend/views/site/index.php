@@ -1,5 +1,5 @@
 <?php
-$this->title = '温都金服首页';
+$this->title = Yii::$app->params['pc_page_title'];
 ?>
 
 <!--section1-->

@@ -7,6 +7,15 @@ use common\view\AnalyticsHelper;
 AppAsset::register($this);
 AnalyticsHelper::registerTo($this);
 
+$this->title = Yii::$app->params['pc_page_title'];
+$this->registerMetaTag([
+    'name' => 'keywords',
+    'content' => Yii::$app->params['pc_page_keywords'],
+]);
+$this->registerMetaTag([
+    'name' => 'description',
+    'content' => Yii::$app->params['pc_page_desc'],
+]);
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
