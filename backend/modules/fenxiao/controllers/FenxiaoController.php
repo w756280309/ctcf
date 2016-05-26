@@ -65,7 +65,7 @@ class FenxiaoController extends BaseController
                 if (1 === $ex->getCode()) {
                     $model->addError('password', $ex->getMessage());
                 } else {
-                    $model->addError('loginName', $ex->getMessage());
+                    throw new \Exception($ex->getMessage());
                 }
             }
         }
@@ -95,41 +95,37 @@ class FenxiaoController extends BaseController
         $old = clone $model;
 
         if ($model->load(Yii::$app->request->post()) && $model->validate() && $this->checkUnique($model, $old)) {
-            try {
-                $transaction = Yii::$app->db->beginTransaction();
+            $transaction = Yii::$app->db->beginTransaction();
 
-                $admin->loginName = $model->loginName;
-                $admin->name = $model->affName;
+            $admin->loginName = $model->loginName;
+            $admin->name = $model->affName;
 
-                if (!empty($model->password)) {
-                    $admin->passwordHash = Yii::$app->security->generatePasswordHash($model->password);
-                }
-
-                if (!$admin->save(false)) {
-                    $transaction->rollBack();
-                    throw new \Exception('数据库错误');
-                }
-
-                $aff->name = $model->affName;
-
-                if (!$aff->save(false)) {
-                    $transaction->rollBack();
-                    throw new \Exception('数据库错误');
-                }
-
-                $affCam->trackCode = $model->affCode;
-
-                if (!$affCam->save(false)) {
-                    $transaction->rollBack();
-                    throw new \Exception('数据库错误');
-                }
-
-                $transaction->commit();
-
-                $this->redirect('list');
-            } catch (\Exception $ex) {
-                $model->addError('loginName', $ex->getMessage());
+            if (!empty($model->password)) {
+                $admin->passwordHash = Yii::$app->security->generatePasswordHash($model->password);
             }
+
+            if (!$admin->save(false)) {
+                $transaction->rollBack();
+                throw new \Exception('数据库错误');
+            }
+
+            $aff->name = $model->affName;
+
+            if (!$aff->save(false)) {
+                $transaction->rollBack();
+                throw new \Exception('数据库错误');
+            }
+
+            $affCam->trackCode = $model->affCode;
+
+            if (!$affCam->save(false)) {
+                $transaction->rollBack();
+                throw new \Exception('数据库错误');
+            }
+
+            $transaction->commit();
+
+            $this->redirect('list');
         }
 
         return $this->render('edit', ['model' => $model, 'admin' => $admin]);
@@ -156,7 +152,7 @@ class FenxiaoController extends BaseController
         if (null === $old || (null !== $old && $fx->loginName !== $old->loginName)) {
             $count = Admin::find()->where(['loginName' => $fx->loginName])->count();
 
-            if (0 !== $count) {
+            if ($count > 0) {
                 $fx->addError('loginName', '登录名称已被占用,请重试');
 
                 return false;
@@ -166,7 +162,7 @@ class FenxiaoController extends BaseController
         if (null === $old || (null !== $old && $fx->affName !== $old->affName)) {
             $count = Affiliator::find()->where(['name' => $fx->affName])->count();
 
-            if (0 !== $count) {
+            if ($count > 0) {
                 $fx->addError('affName', '分销商名称已被占用,请重试');
 
                 return false;
@@ -176,7 +172,7 @@ class FenxiaoController extends BaseController
         if (null === $old || (null !== $old && $fx->affCode !== $old->affCode)) {
             $count = AffiliateCampaign::find()->where(['trackCode' => $fx->affCode])->count();
 
-            if (0 !== $count) {
+            if ($count > 0) {
                 $fx->addError('affCode', '分销商渠道码已被占用,请重试');
 
                 return false;
