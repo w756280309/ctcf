@@ -88,5 +88,8 @@ return [
         'fenxiao' => [
             'class' => 'backend\modules\fenxiao\Module',
         ],
+        'coupon' => [
+            'class' => 'backend\modules\coupon\Module',
+        ],
     ],
 ];

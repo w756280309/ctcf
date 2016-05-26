@@ -2,6 +2,8 @@
 
 namespace common\models\coupon;
 
+use yii\behaviors\TimestampBehavior;
+
 /**
  * This is the model class for table "coupon_type".
  *
@@ -17,29 +19,37 @@ namespace common\models\coupon;
  * @property integer $isDisabled
  * @property integer $created_at
  * @property integer $updated_at
+ * @property integer $expiresInDays
+ * @property integer $customerType
+ * @property string $loanCategories
+ * @property integer $allowCollect
+ * @property integer $isAudited
  */
 class CouponType extends \yii\db\ActiveRecord
 {
     /**
      * @inheritdoc
      */
-    public static function tableName()
-    {
-        return 'coupon_type';
-    }
-
-    /**
-     * @inheritdoc
-     */
     public function rules()
     {
         return [
-            [['name', 'amount', 'minInvest', 'issueStartDate', 'isDisabled'], 'required'],
+            [['name', 'amount', 'minInvest', 'issueStartDate', 'issueEndDate'], 'required'],
             [['amount', 'minInvest'], 'number'],
             [['useStartDate', 'useEndDate', 'issueStartDate', 'issueEndDate'], 'safe'],
-            [['isDisabled', 'created_at', 'updated_at'], 'integer'],
+            [['isDisabled', 'created_at', 'updated_at', 'expiresInDays', 'customerType', 'allowCollect'], 'integer'],
             [['name'], 'string', 'max' => 255],
+            [['loanCategories'], 'string', 'max' => 30],
             [['sn'], 'unique']
+        ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function behaviors()
+    {
+        return [
+            TimestampBehavior::className(),
         ];
     }
 
@@ -61,6 +71,11 @@ class CouponType extends \yii\db\ActiveRecord
             'isDisabled' => '是否有效',
             'created_at' => '记录创建时间',
             'updated_at' => '记录修改时间',
+            'expiresInDays' => '有效天数',
+            'customerType' => '发放用户类型',
+            'loanCategories' => '项目类型',
+            'allowCollect' => '是否允许用户领取',
+            'isAudited' => '是否审核',
         ];
     }
 }
