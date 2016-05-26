@@ -99,7 +99,7 @@ $this->title = '编辑资讯';
         jQuery(document).ready(function () {
             KindEditor.ready(function(K) {
                 var editor1 = K.create('#news-body', {
-                    items:[ 'fontname', 'fontsize',  'forecolor', 'hilitecolor', 'bold', 'italic', 'underline', 'removeformat', '|','wordpaste', '|', 'justifyleft', 'justifycenter', 'justifyright','justifyfull', 'insertorderedlist','insertunorderedlist', '|', 'image', 'table', 'link', 'unlink'],
+                    items:['source', 'fontname', 'fontsize',  'forecolor', 'hilitecolor', 'bold', 'italic', 'underline', 'removeformat', '|','wordpaste', '|', 'justifyleft', 'justifycenter', 'justifyright','justifyfull', 'insertorderedlist','insertunorderedlist', '|', 'image', 'table', 'link', 'unlink'],
                     uploadJson :'/news/news/upload', //指定上传文件的服务器端程序
                     extraFileUploadParams:{_csrf:"<?= Yii::$app->request->csrfToken ?>"}
                 });
