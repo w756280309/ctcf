@@ -9,6 +9,7 @@ use common\models\stats\Perf;
 use common\models\user\RechargeRecord;
 use common\models\user\User;
 use yii\data\ActiveDataProvider;
+use yii\data\ArrayDataProvider;
 use yii\data\Pagination;
 use yii\db\ActiveQuery;
 use yii\db\Query;
@@ -156,53 +157,40 @@ class DatatjController extends BaseController
     public function actionHuizongtj()
     {
         $count_time = Perf::getLastTime();
-        //统计累计数据
-        $total = Yii::$app->db->createCommand('SELECT SUM(totalInvestment) AS totalTotalInve, SUM(rechargeCost) AS totalRechargeCost, SUM(reg) AS totalReg,SUM(idVerified) AS totalIdVerified,SUM(successFound) AS totalSuccessFound FROM perf')->queryOne();
-        if (false === $total) {
-            $totalTotalInve = $totalRechargeCost = $totalReg = $totalIdVerified = $totalSuccessFound = null;
-        } else {
-            list($totalTotalInve, $totalRechargeCost, $totalReg, $totalIdVerified, $totalSuccessFound) = array_values($total);
-        }
+        //统计累计数据，不含今日
+        $total = Yii::$app->db->createCommand('SELECT SUM(totalInvestment) AS totalTotalInve, SUM(rechargeCost) AS totalRechargeCost, SUM(reg) AS totalReg,SUM(idVerified) AS totalIdVerified,SUM(successFound) AS totalSuccessFound,sum(qpayEnabled) as totalQpayEnabled, sum(investor) as totalInvestor, sum(investmentInWyb) as totalInvestmentInWyb, sum(investmentInWyj) as totalInvestmentInWyj FROM perf WHERE DATE_FORMAT(bizDate,\'%Y-%m-%d\') < DATE_FORMAT(NOW(),\'%Y-%m-%d\')')->queryOne();
         //今日统计数据
-        $today = Perf::find()->where(['bizDate' => date('Y-m-d')])->asArray()->one();
-        if (null === $today) {
-            $todayTotalInve = $toadyRechargeCost = $todayRechargeMoney = $todayDraw = $todayReg = $todayIdVerified = $todaySuccessFound = null;
-        } else {
-            $todayTotalInve = $today['totalInvestment'];
-            $toadyRechargeCost = $today['rechargeCost'];
-            $todayRechargeMoney = $today['rechargeMoney'];
-            $todayDraw = $today['draw'];
-            $todayReg = $today['reg'];
-            $todayIdVerified = $today['idVerified'];
-            $todaySuccessFound = $today['successFound'];
-        }
-        //本月统计
-        $month = Yii::$app->db->createCommand("SELECT SUM(totalInvestment) AS monthTotalInvestment,SUM(successFound) AS monthSuccessFound FROM perf WHERE DATE_FORMAT(bizDate,'%Y-%m')=DATE_FORMAT(NOW(),'%Y-%m')")->queryOne();
-        if (false === $month) {
-            $monthTotalInvestment = $monthSuccessFound = null;
-        } else {
-            list($monthTotalInvestment, $monthSuccessFound) = array_values($month);
-        }
+        $today = Perf::getTodayCount();
+        //本月统计,不包含今天数据
+        $month = Yii::$app->db->createCommand("SELECT SUM(totalInvestment) AS monthTotalInvestment,SUM(successFound) AS monthSuccessFound FROM perf WHERE DATE_FORMAT(bizDate,'%Y-%m-%d') < DATE_FORMAT(NOW(),'%Y-%m-%d') AND DATE_FORMAT(bizDate,'%Y-%m')=DATE_FORMAT(NOW(),'%Y-%m')")->queryOne();
         //贷后余额、平台可用余额
         $remainMoney = Perf::getRemainMoney();
         $usableMoney = Perf::getUsableMoney();
 
         return $this->render('huizongtj', [
-            'totalTotalInve' => $totalTotalInve,//平台累计交易额
-            'totalRechargeCost' => $totalRechargeCost,//累计充值手续费
-            'totalReg' => $totalReg,//累计注册用户
-            'totalIdVerified' => $totalIdVerified,//累计实名认证
-            'totalSuccessFound' => $totalSuccessFound,//累计项目数
+            'totalTotalInve' => $total['totalTotalInve'] + $today['totalInvestment'],//平台累计交易额
+            'totalRechargeCost' => $total['totalRechargeCost'] + $today['rechargeCost'],//累计充值手续费
+            'totalReg' => $total['totalReg'] + $today['reg'],//累计注册用户
+            'totalIdVerified' => $total['totalIdVerified'] + $today['idVerified'],//累计实名认证
+            'totalSuccessFound' => $total['totalSuccessFound'] + $today['successFound'],//累计项目数
+            'totalQpayEnabled' => $total['totalQpayEnabled'] + $today['qpayEnabled'],//累计绑卡人数
+            'totalInvestor' => $total['totalInvestor'] + $today['investor'],//累计投资人数
+            'totalInvestmentInWyb' => $total['totalInvestmentInWyb'] + $today['investmentInWyb'],//温盈宝累计销售额
+            'totalInvestmentInWyj' => $total['totalInvestmentInWyj'] + $today['investmentInWyj'],//温盈金累计销售额
             'countDate' => date('Y年m月d日 H:i', $count_time),
-            'todayTotalInve' => $todayTotalInve,//今日交易额
-            'toadyRechargeCost' => $toadyRechargeCost,//今日充值手续费
-            'todayRechargeMoney' => $todayRechargeMoney,//今日充值金额
-            'todayDraw' => $todayDraw,//今日体现
-            'todayReg' => $todayReg,//今日注册
-            'todayIdVerified' => $todayIdVerified,//今日实名认证
-            'todaySuccessFound' => $todaySuccessFound,//今日项目
-            'monthTotalInvestment' => $monthTotalInvestment,//本月交易额
-            'monthSuccessFound' => $monthSuccessFound,//本月融资项目
+            'todayTotalInve' => $today['totalInvestment'],//今日交易额
+            'toadyRechargeCost' => $today['rechargeCost'],//今日充值手续费
+            'todayRechargeMoney' => $today['rechargeMoney'],//今日充值金额
+            'todayDraw' => $today['draw'],//今日体现
+            'todayReg' => $today['reg'],//今日注册
+            'todayIdVerified' => $today['idVerified'],//今日实名认证
+            'todaySuccessFound' => $today['successFound'],//今日项目
+            'todayInvestmentInWyb' => $today['investmentInWyb'],//今日温盈宝销售额
+            'todayInvestmentInWyj' => $today['investmentInWyj'],//今日温盈金销售额
+            'qpayEnabled' => $today['qpayEnabled'],//今日绑卡用户数
+            'newInvestor' => $today['newInvestor'],//今日新增投资人数
+            'monthTotalInvestment' => $month['monthTotalInvestment'] + $today['totalInvestment'],//本月交易额
+            'monthSuccessFound' => $month['monthSuccessFound'] + $today['successFound'],//本月融资项目
             'remainMoney' => $remainMoney,//贷后余额
             'usableMoney' => $usableMoney,//可用余额
         ]);
@@ -210,11 +198,16 @@ class DatatjController extends BaseController
 
     public function actionMonthtj()
     {
-        $sql = "SELECT bizDate, SUM(totalInvestment) AS totalInvestment,SUM(rechargeMoney) AS rechargeMoney,SUM(drawAmount) AS drawAmount,SUM(rechargeCost) AS rechargeCost ,SUM(reg) AS reg,SUM(idVerified) AS idVerified,SUM(successFound) AS successFound
+        //获取当月数据
+        $month = Perf::getThisMonthCount();
+        //历史数据，不包含当月
+        $sql = "SELECT bizDate, SUM(totalInvestment) AS totalInvestment,SUM(rechargeMoney) AS rechargeMoney,SUM(drawAmount) AS drawAmount,SUM(rechargeCost) AS rechargeCost ,SUM(reg) AS reg,SUM(idVerified) AS idVerified,SUM(successFound) AS successFound, SUM(qpayEnabled) AS qpayEnabled, SUM(newInvestor) AS newInvestor,SUM(investmentInWyb) AS investmentInWyb, SUM(investmentInWyj) AS investmentInWyj
 FROM perf WHERE DATE_FORMAT(bizDate,'%Y-%m') < DATE_FORMAT(NOW(),'%Y-%m')  GROUP BY DATE_FORMAT(bizDate,'%Y-%m') ORDER BY DATE_FORMAT(bizDate,'%Y-%m') DESC";
-        $query = new ActiveQuery(Perf::className(), ['sql' => $sql,]);
-        $dataProvider = new ActiveDataProvider(['query' => $query]);
-        $dataProvider->setSort(false);
+        $data = Yii::$app->db->createCommand($sql)->queryAll();
+        $allData = array_merge([$month], $data);
+        $dataProvider = new ArrayDataProvider([
+            'allModels' => $allData,
+        ]);
         return $this->render('monthtj', [
             'dataProvider' => $dataProvider,
         ]);
@@ -222,11 +215,22 @@ FROM perf WHERE DATE_FORMAT(bizDate,'%Y-%m') < DATE_FORMAT(NOW(),'%Y-%m')  GROUP
 
     public function actionDaytj()
     {
+        //获取历史数据
         $query = Perf::find()->where(['<', 'bizDate', date('Y-m-d')]);
         $pages = new Pagination(['totalCount' => $query->count(), 'pageSize' => 20]);
         $query = $query->orderBy(['bizDate' => SORT_DESC])->offset($pages->offset)->limit($pages->limit);
-        $dataProvider = new ActiveDataProvider(['query' => $query,]);
-        $dataProvider->setSort(false);
+        $data = $query->asArray()->all();
+        $page = Yii::$app->request->get('page');
+        if (!isset($page) || 1 === intval($page)) {
+            //获取今日数据
+            $today = Perf::getTodayCount();
+            $allData = array_merge([$today], $data);
+        } else {
+            $allData = $data;
+        }
+        $dataProvider = new ArrayDataProvider([
+            'allModels' => $allData,
+        ]);
         return $this->render('daytj', [
             'pages' => $pages,
             'dataProvider' => $dataProvider,

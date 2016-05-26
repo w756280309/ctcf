@@ -16,7 +16,7 @@ class CountController extends Controller
         $date = date('Y-m-d');
         $time = time();
         //每次更新从第一条用户数据时间到今天的所有数据
-        while ($startDate <= $date) {
+        while ($startDate < $date) {
             $model = Perf::find()->where(['bizDate' => $startDate])->one();
             //没有找到，标示统计表中无数据；找到之后就全局更新。
             if (null === $model) {
