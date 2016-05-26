@@ -1,6 +1,8 @@
 <?php
 
 return [
+    'ui_main_logo' => '/image/logo.png',
+    'ui_nav_bgcolor_hex' => null,
     'front_url' => '',
     'admin' => 3,
     //贷款管理->分销渠道
@@ -17,7 +19,7 @@ return [
         1311 => '充值',
         1375 => '快捷充值',
         1341 => '结算',
-        1510 => '批量代付'
+        1510 => '批量代付',
     ],
     'recharge' => [
         'status' => [0 => '待处理', 1 => '充值成功', 2 => '充值失败'],

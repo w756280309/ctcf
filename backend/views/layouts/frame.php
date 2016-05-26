@@ -31,7 +31,7 @@ $menus = AuthSys::getMenus();
         <link href="/css/default.css" rel="stylesheet" type="text/css" id="style_color"/>
         <link href="/css/uniform.default.css" rel="stylesheet" type="text/css"/>
         <script src="/js/jquery-1.10.1.min.js" type="text/javascript"></script>
-        
+
         <script type="text/javascript" src="/js/layer/layer.min.js"></script>
         <script type="text/javascript" src="/js/layer/extend/layer.ext.js"></script>
         <script type="text/javascript" src="/js/showres.js"></script>
@@ -45,10 +45,19 @@ $menus = AuthSys::getMenus();
     }
     .has-error .help-block{
         color: red;
-    } 
+    }
     .form-group div.radio label{
         width:400px;
     }
+
+<?php if (Yii::$app->params['ui_nav_bgcolor_hex']): ?>
+    .header .navbar-inner {
+        background-color: <?= Yii::$app->params['ui_nav_bgcolor_hex'] ?> !important;
+    }
+    .navbar-inverse .nav>li>a {
+        color: #fff;
+    }
+<?php endif; ?>
 </style>
 <script type="text/javascript">
     $(function(){
@@ -70,7 +79,7 @@ $menus = AuthSys::getMenus();
 
                     <a class="brand" href="/">
 
-                        <img src="/image/logo.png" alt="logo">
+                    <img src="<?= Yii::$app->params['ui_main_logo'] ?>" alt="logo">
 
                     </a>
 
@@ -81,7 +90,7 @@ $menus = AuthSys::getMenus();
                             <ul class="nav">
 
                             <li><a href="/">首页</a></li>
-                            
+
                             <?php  foreach ($menus as $val){ ?>
                                 <li><a href="/<?=$val['path']?>"><?=$val['auth_name']?></a></li>
                             <?php  } ?>
@@ -90,7 +99,7 @@ $menus = AuthSys::getMenus();
                             <li><a href="/user/user/list">会员管理</a></li>
                             <li><a href="/adv/adv/index">运营管理</a></li>
                             <li><a href="javascript:alert('正在开发中……');">数据统计</a></li>-->
-                            
+
 <!--                            <li><a href="/news/">资讯内容管理</a></li>
                             <li><a href="/adv/">广告营销</a></li>
                             -->
@@ -105,7 +114,7 @@ $menus = AuthSys::getMenus();
 
                         <img src="/image/menu-toggler.png" alt="">
 
-                    </a>          
+                    </a>
 
                     <ul class="nav pull-right">
 
@@ -138,8 +147,8 @@ $menus = AuthSys::getMenus();
             </div>
 
         </div>
-        
-        
+
+
         <div class="page-container row-fluid">
 
 		<!-- BEGIN HORIZONTAL MENU PAGE SIDEBAR1 -->
@@ -156,7 +165,7 @@ $menus = AuthSys::getMenus();
 
 		</div>
 
-		<!-- END PAGE -->    
+		<!-- END PAGE -->
 
 	</div>
 <?php $this->endBody() ?>
@@ -166,18 +175,18 @@ $menus = AuthSys::getMenus();
 <!--        <script src="/js/jquery-1.10.1.min.js" type="text/javascript"></script>-->
         <script src="/js/jquery-migrate-1.2.1.min.js" type="text/javascript"></script>
         <!-- IMPORTANT! Load jquery-ui-1.10.1.custom.min.js before bootstrap.min.js to fix bootstrap tooltip conflict with jquery ui tooltip -->
-        <script src="/js/jquery-ui-1.10.1.custom.min.js" type="text/javascript"></script>      
+        <script src="/js/jquery-ui-1.10.1.custom.min.js" type="text/javascript"></script>
         <script src="/js/bootstrap.min.js" type="text/javascript"></script>
         <!--[if lt IE 9]>
         <script src="/js/excanvas.min.js"></script>
-        <script src="/js/respond.min.js"></script>  
-        <![endif]-->   
+        <script src="/js/respond.min.js"></script>
+        <![endif]-->
         <script src="/js/jquery.slimscroll.min.js" type="text/javascript"></script>
-        <script src="/js/jquery.blockui.min.js" type="text/javascript"></script>  
+        <script src="/js/jquery.blockui.min.js" type="text/javascript"></script>
         <script src="/js/jquery.cookie.min.js" type="text/javascript"></script>
         <script src="/js/jquery.uniform.min.js" type="text/javascript" ></script>
         <!-- END CORE PLUGINS -->
-        <script src="/js/app.js"></script>      
+        <script src="/js/app.js"></script>
         <script>
             jQuery(document).ready(function() {
                 App.init();
