@@ -7,7 +7,7 @@ class m160524_091620_update_auth_table extends Migration
     public function up()
     {
         $this->insert('auth', [
-            'sn' => 'A100700',
+            'sn' => 'A100800',
             'psn' => 'A100000',
             'level' => '2',
             'auth_name' => '渠道管理',
@@ -19,8 +19,8 @@ class m160524_091620_update_auth_table extends Migration
         ]);
 
         $this->insert('auth', [
-            'sn' => 'A100701',
-            'psn' => 'A100700',
+            'sn' => 'A100801',
+            'psn' => 'A100800',
             'level' => '3',
             'auth_name' => '添加渠道',
             'path' => 'fenxiao/fenxiao/add',
@@ -31,8 +31,8 @@ class m160524_091620_update_auth_table extends Migration
         ]);
 
         $this->insert('auth', [
-            'sn' => 'A100702',
-            'psn' => 'A100700',
+            'sn' => 'A100802',
+            'psn' => 'A100800',
             'level' => '3',
             'auth_name' => '编辑渠道',
             'path' => 'fenxiao/fenxiao/edit',
