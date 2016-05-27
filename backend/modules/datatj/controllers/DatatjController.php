@@ -189,6 +189,7 @@ class DatatjController extends BaseController
             'todayInvestmentInWyj' => $today['investmentInWyj'],//今日温盈金销售额
             'qpayEnabled' => $today['qpayEnabled'],//今日绑卡用户数
             'newInvestor' => $today['newInvestor'],//今日新增投资人数
+            'newRegisterAndInvestor' => $today['newRegisterAndInvestor'],//今日注册今日投资人数
             'monthTotalInvestment' => $month['monthTotalInvestment'] + $today['totalInvestment'],//本月交易额
             'monthSuccessFound' => $month['monthSuccessFound'] + $today['successFound'],//本月融资项目
             'remainMoney' => $remainMoney,//贷后余额
@@ -201,7 +202,7 @@ class DatatjController extends BaseController
         //获取当月数据
         $month = Perf::getThisMonthCount();
         //历史数据，不包含当月
-        $sql = "SELECT bizDate, SUM(totalInvestment) AS totalInvestment,SUM(rechargeMoney) AS rechargeMoney,SUM(drawAmount) AS drawAmount,SUM(rechargeCost) AS rechargeCost ,SUM(reg) AS reg,SUM(idVerified) AS idVerified,SUM(successFound) AS successFound, SUM(qpayEnabled) AS qpayEnabled, SUM(newInvestor) AS newInvestor,SUM(investmentInWyb) AS investmentInWyb, SUM(investmentInWyj) AS investmentInWyj
+        $sql = "SELECT bizDate, SUM(totalInvestment) AS totalInvestment,SUM(rechargeMoney) AS rechargeMoney,SUM(drawAmount) AS drawAmount,SUM(rechargeCost) AS rechargeCost ,SUM(reg) AS reg,SUM(idVerified) AS idVerified,SUM(successFound) AS successFound, SUM(qpayEnabled) AS qpayEnabled, SUM(investor) AS investor, SUM(newRegisterAndInvestor) AS newRegisterAndInvestor, SUM(newInvestor) AS newInvestor,SUM(investmentInWyb) AS investmentInWyb, SUM(investmentInWyj) AS investmentInWyj
 FROM perf WHERE DATE_FORMAT(bizDate,'%Y-%m') < DATE_FORMAT(NOW(),'%Y-%m')  GROUP BY DATE_FORMAT(bizDate,'%Y-%m') ORDER BY DATE_FORMAT(bizDate,'%Y-%m') DESC";
         $data = Yii::$app->db->createCommand($sql)->queryAll();
         $allData = array_merge([$month], $data);

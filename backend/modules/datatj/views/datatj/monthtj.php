@@ -87,6 +87,20 @@ use yii\grid\GridView;
                     }
                 ],
                 [
+                    'attribute' => 'investor',
+                    'label' => '投资人数',
+                    'value' => function ($data) {
+                        return intval($data['investor']);
+                    }
+                ],
+                [
+                    'attribute' => 'newRegisterAndInvestor',
+                    'label' => '当日注册当日投资人数',
+                    'value' => function ($data) {
+                        return intval($data['newRegisterAndInvestor']);
+                    }
+                ],
+                [
                     'attribute' => 'newInvestor',
                     'label' => '新增投资人数',
                     'value' => function ($data) {

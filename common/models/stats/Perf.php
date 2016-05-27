@@ -19,6 +19,7 @@ use Yii;
  * @property integer $qpayEnabled   绑卡
  * @property integer $investor  投资人数
  * @property integer $newInvestor   新增投资人数
+ * @property integer $newRegisterAndInvestor   当日注册当日投资人数
  * @property string $chargeViaPos   POS充值
  * @property string $chargeViaEpay  线上充值
  * @property string $drawAmount 提现
@@ -92,14 +93,28 @@ class Perf extends ActiveRecord
             ->queryScalar();
     }
 
-    //新增投资人数
+    //新增投资人数（以前注册未投资，但今日投资了的）
     public function getNewInvestor($date)
     {
-        $totalInvestor = Yii::$app->db->createCommand('SELECT COUNT(DISTINCT(uid)) FROM online_order WHERE status=1 AND DATE(FROM_UNIXTIME(created_at))<=:date')
+        $totalInvestor = Yii::$app->db->createCommand('SELECT COUNT(DISTINCT(o.uid)) FROM online_order AS o LEFT JOIN `user` AS u ON o.uid = o.id WHERE o.`status`= 1 AND DATE(FROM_UNIXTIME(u.`created_at`)) < :date AND DATE(FROM_UNIXTIME(o.created_at))<=:date')
             ->bindValue('date', $date, \PDO::PARAM_STR)
             ->queryScalar();
 
-        $investor = Yii::$app->db->createCommand('SELECT COUNT(DISTINCT(uid)) FROM online_order WHERE status=1 AND DATE(FROM_UNIXTIME(created_at))<:date')
+        $investor = Yii::$app->db->createCommand('SELECT COUNT(DISTINCT(o.uid)) FROM online_order AS o LEFT JOIN `user` AS u ON o.uid = o.id WHERE o.`status`= 1 AND DATE(FROM_UNIXTIME(u.`created_at`)) < :date AND DATE(FROM_UNIXTIME(o.created_at)) <:date')
+            ->bindValue('date', $date, \PDO::PARAM_STR)
+            ->queryScalar();
+
+        return $totalInvestor - $investor;
+    }
+
+    //当日注册当日投资人数
+    public function getNewRegisterAndInvestor($date)
+    {
+        $totalInvestor = Yii::$app->db->createCommand('SELECT COUNT(DISTINCT(o.uid)) FROM online_order AS o LEFT JOIN `user` AS u ON o.uid = o.id WHERE o.`status`= 1 AND DATE(FROM_UNIXTIME(u.`created_at`)) = :date AND DATE(FROM_UNIXTIME(o.created_at))<=:date')
+            ->bindValue('date', $date, \PDO::PARAM_STR)
+            ->queryScalar();
+
+        $investor = Yii::$app->db->createCommand('SELECT COUNT(DISTINCT(o.uid)) FROM online_order AS o LEFT JOIN `user` AS u ON o.uid = o.id WHERE o.`status`= 1 AND DATE(FROM_UNIXTIME(u.`created_at`)) = :date AND DATE(FROM_UNIXTIME(o.created_at)) <:date')
             ->bindValue('date', $date, \PDO::PARAM_STR)
             ->queryScalar();
 
@@ -210,9 +225,10 @@ class Perf extends ActiveRecord
         $today = [];
         $model = new Perf();
         $today['bizDate'] = $startDate;
-        $funList = ['reg', 'idVerified', 'qpayEnabled', 'investor', 'newInvestor', 'chargeViaPos', 'chargeViaEpay', 'drawAmount', 'investmentInWyj', 'investmentInWyb', 'totalInvestment', 'successFound', 'rechargeMoney', 'rechargeCost', 'draw'];
+        $funList = ['reg', 'idVerified', 'qpayEnabled', 'investor', 'newRegisterAndInvestor', 'newInvestor', 'chargeViaPos', 'chargeViaEpay', 'drawAmount', 'investmentInWyj', 'investmentInWyb', 'totalInvestment', 'successFound', 'rechargeMoney', 'rechargeCost', 'draw'];
         foreach ($funList as $field) {
             $method = 'get' . ucfirst($field);
+            $model->$field = $model->{$method}($startDate);
             $today[$field] = $model->{$method}($startDate);
         }
         return $today;
@@ -222,7 +238,7 @@ class Perf extends ActiveRecord
     public static function getThisMonthCount()
     {
         //当月数据，排除当天
-        $month = Yii::$app->db->createCommand("SELECT bizDate, SUM(totalInvestment) AS totalInvestment,SUM(rechargeMoney) AS rechargeMoney,SUM(drawAmount) AS drawAmount,SUM(rechargeCost) AS rechargeCost ,SUM(reg) AS reg,SUM(idVerified) AS idVerified,SUM(successFound) AS successFound, SUM(qpayEnabled) AS qpayEnabled, SUM(newInvestor) AS newInvestor,SUM(investmentInWyb) AS investmentInWyb, SUM(investmentInWyj) AS investmentInWyj FROM perf WHERE DATE_FORMAT(bizDate,'%Y-%m-%d') < DATE_FORMAT(NOW(),'%Y-%m-%d') AND DATE_FORMAT(bizDate,'%Y-%m')=DATE_FORMAT(NOW(),'%Y-%m')")->queryOne();
+        $month = Yii::$app->db->createCommand("SELECT bizDate, SUM(totalInvestment) AS totalInvestment,SUM(rechargeMoney) AS rechargeMoney,SUM(drawAmount) AS drawAmount,SUM(rechargeCost) AS rechargeCost ,SUM(reg) AS reg,SUM(idVerified) AS idVerified,SUM(successFound) AS successFound, SUM(qpayEnabled) AS qpayEnabled, SUM(investor) AS investor, SUM(newRegisterAndInvestor) AS newRegisterAndInvestor,  SUM(newInvestor) AS newInvestor,SUM(investmentInWyb) AS investmentInWyb, SUM(investmentInWyj) AS investmentInWyj FROM perf WHERE DATE_FORMAT(bizDate,'%Y-%m-%d') < DATE_FORMAT(NOW(),'%Y-%m-%d') AND DATE_FORMAT(bizDate,'%Y-%m')=DATE_FORMAT(NOW(),'%Y-%m')")->queryOne();
         //当天数据
         $today = Perf::getTodayCount();
         //获取当月实时数据
@@ -234,6 +250,8 @@ class Perf extends ActiveRecord
         $month['idVerified'] = $month['idVerified'] + $today['idVerified'];
         $month['successFound'] = $month['successFound'] + $today['successFound'];
         $month['qpayEnabled'] = $month['qpayEnabled'] + $today['qpayEnabled'];
+        $month['investor'] = $month['investor'] + $today['investor'];
+        $month['newRegisterAndInvestor'] = $month['newRegisterAndInvestor'] + $today['newRegisterAndInvestor'];
         $month['newInvestor'] = $month['newInvestor'] + $today['newInvestor'];
         $month['investmentInWyb'] = $month['investmentInWyb'] + $today['investmentInWyb'];
         $month['investmentInWyj'] = $month['investmentInWyj'] + $today['investmentInWyj'];
