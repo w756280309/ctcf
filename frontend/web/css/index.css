@@ -948,9 +948,9 @@ body.page-login {
     transition-delay: 0.2s;
 }
 .six-tilt {
-    /* font-size: 36px; */
-    /* color: #404040; */
-    /* font-weight: bold; */
+     font-size: 36px;
+     color: #404040;
+     font-weight: bold; 
     padding-left: 10%;
     transform: translateX(-300px);
     -webkit-transform: translateX(-300px);
@@ -959,10 +959,10 @@ body.page-login {
     opacity: 0;
 }
 .active .six-tilt {
-    /* opacity: 1; */
-    /* transform: translateX(0); */
-    /* -webkit-transform: translateX(0); */
-    /* transition-delay: 0.6s; */
+     opacity: 1;
+     transform: translateX(0);
+     -webkit-transform: translateX(0);
+     transition-delay: 0.6s;
 }
 .six-tilt span {
     color: #f44336;
