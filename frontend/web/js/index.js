@@ -1,7 +1,7 @@
 $(function(){
     $('#box').fullpage({
         'verticalCentered': false,
-        'anchors': ['page1', 'page2', 'page3', 'page4', 'page5'],
+        'anchors': ['page1', 'page2', 'page3', 'page4', 'page5', 'page6'],
         'css3': true,
         'navigation': true,
         slideSelector: '.horizontal-scrolling',
@@ -23,7 +23,7 @@ $(function(){
                 '<img src="/images/wen-close.png" alt="" class="wen-close"></div></div></div></div>').insertAfter($('.footer-mark'));
         },
         afterLoad:function(anchorLink, index){
-            if(index==5){
+            if(index==6){
                 $('.four-title').addClass('four-title1');
                 $('.four-content').addClass('four-content1');
                 $('.four-left').addClass('four-left1');
@@ -45,7 +45,7 @@ $(function(){
             }
         },
         onLeave: function(index, nextIndex,direction) {
-            if(index == 4) {
+            if(index == 5) {
                 if(direction=='down'){
                     $('.four-title').addClass('four-title1');
                     $('.four-content').addClass('four-content1');
@@ -65,9 +65,9 @@ $(function(){
         }
     });
 
-   $('.wen-close').on('click',function(){
-       $('.footer-mark').fadeOut();
-       $('.footer-fixed').fadeOut();
-       $('.footer-fixed').attr({'data-sign':'1'});
-   })
+    $('.wen-close').on('click',function(){
+        $('.footer-mark').fadeOut();
+        $('.footer-fixed').fadeOut();
+        $('.footer-fixed').attr({'data-sign':'1'});
+    })
 });

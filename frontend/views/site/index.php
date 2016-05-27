@@ -98,3 +98,29 @@ $this->title = Yii::$app->params['pc_page_title'];
         <div style="clear: both"></div>
     </div>
 </div>
+<div class="section section6">
+    <div class="six-box">
+        <div class="six-logo">
+            <img src="<?= ASSETS_BASE_URI ?>images/yilogo.png" alt=" ">
+        </div>
+        <div class="six-tilt"><span>温都金服</span>交易电子数据保全</div>
+        <div class="yitiao"><img src="<?= ASSETS_BASE_URI ?>images/yitiao.png" alt=""></div>
+        <div class="six-tilts">将交易合同锁进保险箱</div>
+        <ul class="six-inner">
+            <li>电子合同保全</li>
+            <li>证据提取</li>
+            <li>代理公正</li>
+            <li>交易文件保全</li>
+            <li>司法鉴定</li>
+        </ul>
+        <div style="clear: both"></div>
+        <div class="six-right">
+            <img class="bxx" src="<?= ASSETS_BASE_URI ?>images/bxx.png" alt="">
+            <img class="yi1" src="<?= ASSETS_BASE_URI ?>images/yi1.png" alt="">
+            <img class="yi2" src="<?= ASSETS_BASE_URI ?>images/yi2.png" alt="">
+            <img class="yi3" src="<?= ASSETS_BASE_URI ?>images/yi3.png" alt="">
+            <img class="yi4" src="<?= ASSETS_BASE_URI ?>images/yi4.png" alt="">
+            <img class="yi5" src="<?= ASSETS_BASE_URI ?>images/yi5.png" alt="">
+        </div>
+    </div>
+</div>

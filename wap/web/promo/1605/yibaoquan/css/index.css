@@ -1,0 +1,64 @@
+body {
+    /*font-size: 1rem;*/
+}
+.bg_color {
+    background-color: #ffffff;
+}
+
+.icon {
+    padding: 0;
+    margin: 0 auto;
+}
+.icon img {
+    padding: -1px 0 0;
+    margin:  0;
+    width: 100%;
+    float: left;
+}
+.title_h3 {
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    color: #41b9ee;
+}
+.title_h4 {
+    margin-top: 15px;
+    margin-bottom: 15px;
+    margin-left: 5px;
+    color: #41b9ee;
+}
+.row p {
+    margin-bottom: 5px;
+}
+.content {
+    font-size: 14px;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+.content-subtitle {
+    color:#41b9ee;
+}
+.content-img {
+    padding-left: 0px;
+    padding-right: 0px;
+}
+
+@media only screen and (min-device-width: 375px) and (max-device-width: 667px)
+and (orientation : portrait) {
+    /*iPhone 6 Portrait*/
+    .content {
+        font-size: 15px;
+    }
+}
+
+@media only screen and (min-device-width: 414px) and (max-device-width: 736px)
+and (orientation : portrait) {
+    /*iPhone 6+ Portrait*/
+    .content {
+        font-size: 16.9px;
+    }
+}
+
+
+
+
