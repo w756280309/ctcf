@@ -97,7 +97,7 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\we
                             ])->textInput([
                                 'readonly' => 'readonly',
                                 'class' => 'm-wrap span12',
-                                'onclick' => 'WdatePicker({dateFmt:"yyyy-MM-dd"});'
+                                'onclick' => 'WdatePicker({dateFmt:"yyyy-MM-dd", minDate:\''.date('Y-m-d').'\'});'
                             ])
                     ?>
                     ---
@@ -108,7 +108,7 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\we
                             ])->textInput([
                                 'readonly' => 'readonly',
                                 'class' => 'm-wrap span12',
-                                'onclick' => 'WdatePicker({dateFmt:"yyyy-MM-dd"});'
+                                'onclick' => 'WdatePicker({dateFmt:"yyyy-MM-dd", minDate:"#F{$dp.$D(\'coupontype-issuestartdate\',{d:1})}"});'
                             ])
                     ?>
                 </div>

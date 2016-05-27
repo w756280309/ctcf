@@ -27,6 +27,7 @@ class CouponController extends BaseController
     public function actionAdd()
     {
         $model = new CouponType([
+            'sn' => null,
             'isDisabled' => 0,
             'isAudited' => 0,
         ]);

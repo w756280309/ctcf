@@ -73,11 +73,12 @@ use yii\widgets\LinkPager;
                         <td><?= empty($val['issueStartDate']) ? "---" : $val['issueStartDate']." - ".$val['issueEndDate'] ?></td>
                         <td>
                             <center>
-                                <a href="/coupon/coupon/edit?id=<?= $val['id'] ?>" class="btn mini green"><i class="icon-edit"></i> 编辑</a>
                                 <!--<a href="/coupon/coupon/edit?id=<?= $val['id'] ?>" class="btn mini green"><i class="icon-edit"></i> 发放</a>-->
                                 <?php if (!$val['isAudited']) { ?>
+                                <a href="/coupon/coupon/edit?id=<?= $val['id'] ?>" class="btn mini green"><i class="icon-edit"></i> 编辑</a>
                                 <a href="javascript:void(0)" data-id="<?= $val['id'] ?>" class="btn mini green examine"><i class="icon-edit"></i> 审核</a>
                                 <?php } else { ?>
+                                <a href="/coupon/coupon/edit?id=<?= $val['id'] ?>" class="btn mini green"><i class="icon-edit"></i> 查看</a>
                                 <a href="/coupon/coupon/owner-list?id=<?= $val['id'] ?>" class="btn mini green"><i class="icon-edit"></i> 领取记录</a>
                                 <?php } ?>
                             </center>
