@@ -158,7 +158,7 @@ class DatatjController extends BaseController
     {
         $count_time = Perf::getLastTime();
         //统计累计数据，不含今日
-        $total = Yii::$app->db->createCommand('SELECT SUM(totalInvestment) AS totalTotalInve, SUM(rechargeCost) AS totalRechargeCost, SUM(reg) AS totalReg,SUM(idVerified) AS totalIdVerified,SUM(successFound) AS totalSuccessFound,sum(qpayEnabled) as totalQpayEnabled, sum(investor) as totalInvestor, sum(investmentInWyb) as totalInvestmentInWyb, sum(investmentInWyj) as totalInvestmentInWyj FROM perf WHERE DATE_FORMAT(bizDate,\'%Y-%m-%d\') < DATE_FORMAT(NOW(),\'%Y-%m-%d\')')->queryOne();
+        $total = Yii::$app->db->createCommand('SELECT SUM(totalInvestment) AS totalTotalInve, SUM(rechargeCost) AS totalRechargeCost, SUM(reg) AS totalReg,SUM(idVerified) AS totalIdVerified,SUM(successFound) AS totalSuccessFound,sum(qpayEnabled) as totalQpayEnabled, sum(newRegisterAndInvestor) as newRegisterAndInvestor, sum(newInvestor) as newInvestor, sum(investmentInWyb) as totalInvestmentInWyb, sum(investmentInWyj) as totalInvestmentInWyj FROM perf WHERE DATE_FORMAT(bizDate,\'%Y-%m-%d\') < DATE_FORMAT(NOW(),\'%Y-%m-%d\')')->queryOne();
         //今日统计数据
         $today = Perf::getTodayCount();
         //本月统计,不包含今天数据
@@ -174,7 +174,7 @@ class DatatjController extends BaseController
             'totalIdVerified' => $total['totalIdVerified'] + $today['idVerified'],//累计实名认证
             'totalSuccessFound' => $total['totalSuccessFound'] + $today['successFound'],//累计项目数
             'totalQpayEnabled' => $total['totalQpayEnabled'] + $today['qpayEnabled'],//累计绑卡人数
-            'totalInvestor' => $total['totalInvestor'] + $today['investor'],//累计投资人数
+            'totalInvestor' => $total['newRegisterAndInvestor'] + $today['newRegisterAndInvestor'] + $total['newInvestor'] + $today['newInvestor'],//累计投资人数
             'totalInvestmentInWyb' => $total['totalInvestmentInWyb'] + $today['investmentInWyb'],//温盈宝累计销售额
             'totalInvestmentInWyj' => $total['totalInvestmentInWyj'] + $today['investmentInWyj'],//温盈金累计销售额
             'countDate' => date('Y年m月d日 H:i', $count_time),

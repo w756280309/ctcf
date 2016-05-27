@@ -96,11 +96,10 @@ class Perf extends ActiveRecord
     //新增投资人数（以前注册未投资，但今日投资了的）
     public function getNewInvestor($date)
     {
-        $totalInvestor = Yii::$app->db->createCommand('SELECT COUNT(DISTINCT(o.uid)) FROM online_order AS o LEFT JOIN `user` AS u ON o.uid = o.id WHERE o.`status`= 1 AND DATE(FROM_UNIXTIME(u.`created_at`)) < :date AND DATE(FROM_UNIXTIME(o.created_at))<=:date')
+        $totalInvestor = Yii::$app->db->createCommand('SELECT COUNT(DISTINCT(o.uid)) FROM online_order AS o LEFT JOIN `user` AS u ON o.uid = u.id WHERE o.`status`= 1 AND DATE(FROM_UNIXTIME(u.`created_at`)) < :date AND DATE(FROM_UNIXTIME(o.created_at))<=:date')
             ->bindValue('date', $date, \PDO::PARAM_STR)
             ->queryScalar();
-
-        $investor = Yii::$app->db->createCommand('SELECT COUNT(DISTINCT(o.uid)) FROM online_order AS o LEFT JOIN `user` AS u ON o.uid = o.id WHERE o.`status`= 1 AND DATE(FROM_UNIXTIME(u.`created_at`)) < :date AND DATE(FROM_UNIXTIME(o.created_at)) <:date')
+        $investor = Yii::$app->db->createCommand('SELECT COUNT(DISTINCT(o.uid)) FROM online_order AS o LEFT JOIN `user` AS u ON o.uid = u.id WHERE o.`status`= 1 AND DATE(FROM_UNIXTIME(u.`created_at`)) < :date AND DATE(FROM_UNIXTIME(o.created_at)) <:date')
             ->bindValue('date', $date, \PDO::PARAM_STR)
             ->queryScalar();
 
@@ -110,15 +109,11 @@ class Perf extends ActiveRecord
     //当日注册当日投资人数
     public function getNewRegisterAndInvestor($date)
     {
-        $totalInvestor = Yii::$app->db->createCommand('SELECT COUNT(DISTINCT(o.uid)) FROM online_order AS o LEFT JOIN `user` AS u ON o.uid = o.id WHERE o.`status`= 1 AND DATE(FROM_UNIXTIME(u.`created_at`)) = :date AND DATE(FROM_UNIXTIME(o.created_at))<=:date')
+        $investor = Yii::$app->db->createCommand('SELECT COUNT(DISTINCT(o.uid)) FROM online_order AS o LEFT JOIN `user` AS u ON o.uid = u.id WHERE o.`status`= 1 AND DATE(FROM_UNIXTIME(u.`created_at`)) = :date AND DATE(FROM_UNIXTIME(o.created_at)) = :date')
             ->bindValue('date', $date, \PDO::PARAM_STR)
             ->queryScalar();
 
-        $investor = Yii::$app->db->createCommand('SELECT COUNT(DISTINCT(o.uid)) FROM online_order AS o LEFT JOIN `user` AS u ON o.uid = o.id WHERE o.`status`= 1 AND DATE(FROM_UNIXTIME(u.`created_at`)) = :date AND DATE(FROM_UNIXTIME(o.created_at)) <:date')
-            ->bindValue('date', $date, \PDO::PARAM_STR)
-            ->queryScalar();
-
-        return $totalInvestor - $investor;
+        return $investor;
     }
 
     //POS充值

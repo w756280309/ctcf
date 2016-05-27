@@ -45,7 +45,7 @@
     </div>
     <div class="row-fluid">
         <div class="span4">平台累计注册用户数：<span style="color: red;"><?= intval($totalReg) ?></span>人</div>
-        <div class="span4">平台累计实名认证用户数：<span style="color: red;"><?= intval($totalQpayEnabled) ?></span>人</div>
+        <div class="span4">平台累计实名认证用户数：<span style="color: red;"><?= intval($totalIdVerified) ?></span>人</div>
     </div>
     <div class="row-fluid">
         <div class="span4">平台累计绑卡用户数：<span style="color: red;"><?= intval($totalQpayEnabled) ?></span>人</div>
