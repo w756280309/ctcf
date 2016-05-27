@@ -64,6 +64,12 @@ class CouponController extends BaseController
             return false;
         }
 
+        if ($obj->issueEndDate < $obj->issueStartDate) {
+            $obj->addErrors(['issueEndDate' => '发放结束日期必须大于等于发放开始日期', 'issueStartDate' => '发放结束日期必须大于等于发放开始日期']);
+
+            return false;
+        }
+
         return true;
     }
 
