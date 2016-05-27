@@ -947,6 +947,11 @@ body.page-login {
     -webkit-transform: translateX(0);
     transition-delay: 0.2s;
 }
+.six-logo1{
+    opacity: 1!important;
+    transform: translateX(0)!important;
+    -webkit-transform: translateX(0)!important;
+}
 .six-tilt {
      font-size: 36px;
      color: #404040;
@@ -963,6 +968,11 @@ body.page-login {
      transform: translateX(0);
      -webkit-transform: translateX(0);
      transition-delay: 0.6s;
+}
+.six-tilt1 {
+     opacity: 1;
+     transform: translateX(0);
+     -webkit-transform: translateX(0);
 }
 .six-tilt span {
     color: #f44336;
@@ -983,6 +993,11 @@ body.page-login {
     -webkit-transform: translateX(0);
     transition-delay: 1s;
 }
+.six-tilts1 {
+    opacity: 1;
+    transform: translateX(0);
+    -webkit-transform: translateX(0);
+}
 .yitiao {
     width: 440px;
     height: 10px;
@@ -998,6 +1013,11 @@ body.page-login {
     transform: translateX(0);
     -webkit-transform: translateX(0);
     transition-delay: 0.6s;
+}
+.yitiao1 {
+    opacity: 1;
+    transform: translateX(0);
+    -webkit-transform: translateX(0);
 }
 .yitiao img {
     position: relative;
@@ -1020,11 +1040,15 @@ body.page-login {
     -webkit-transform: translateX(0);
     transition-delay: 1.4s;
 }
+.six-inner1 {
+    opacity: 1;
+    transform: translateX(0);
+    -webkit-transform: translateX(0);
+}
 .six-inner li{
     float: left;
     font-size: 18px;
     color: #777777;
-    background: url("../images/redyuan.png") no-repeat 0 center;
     padding-left: 6px;
     margin-right: 30px;
     margin-top: 10px;
@@ -1036,11 +1060,26 @@ body.page-login {
     width: 300px;
     height: 300px;
 }
+.bxx {
+     width: 270px;
+     transform: translateY(300px);
+     -webkit-transform: translateY(300px);
+     transition: all 1s;
+     -webkit-transition: all 1s;
+     opacity: 0;
+     margin-left: 30px;
+ }
+
 .active .bxx {
     opacity: 1;
     transform: translateY(0);
     -webkit-transform: translateY(0);
     transition-delay: 0.8s;
+}
+.bxx1 {
+    opacity: 1;
+    transform: translateY(0);
+    -webkit-transform: translateY(0);
 }
 .yi1 {
     position: absolute;
@@ -1059,6 +1098,11 @@ body.page-login {
     -webkit-transform: translateY(0);
     transition-delay: 1.2s;
 }
+.yi11 {
+    opacity: 1;
+    transform: translateY(0);
+    -webkit-transform: translateY(0);
+}
 .yi2 {
     position: absolute;
     left: -3px;
@@ -1075,6 +1119,11 @@ body.page-login {
     transform: translateY(0);
     -webkit-transform: translateY(0);
     transition-delay: 1.6s;
+}
+.yi22 {
+    opacity: 1;
+    transform: translateY(0);
+    -webkit-transform: translateY(0);
 }
 .yi3{
     position: absolute;
@@ -1093,6 +1142,11 @@ body.page-login {
     -webkit-transform: translateY(0);
     transition-delay: 2s;
 }
+.yi33 {
+    opacity: 1;
+    transform: translateY(0);
+    -webkit-transform: translateY(0);
+}
 .yi4 {
     position: absolute;
     left: 264px;
@@ -1109,6 +1163,11 @@ body.page-login {
     transform: translateY(0);
     -webkit-transform: translateY(0);
     transition-delay: 2.4s;
+}
+.yi44 {
+    opacity: 1;
+    transform: translateY(0);
+    -webkit-transform: translateY(0);
 }
 .yi5 {
     position: absolute;
@@ -1127,12 +1186,8 @@ body.page-login {
     -webkit-transform: translateY(0);
     transition-delay: 2.8s;
 }
-.bxx {
-    width: 270px;
-    transform: translateY(300px);
-    -webkit-transform: translateY(300px);
-    transition: all 1s;
-    -webkit-transition: all 1s;
-    opacity: 0;
-    margin-left: 30px;
+.yi55 {
+    opacity: 1;
+    transform: translateY(0);
+    -webkit-transform: translateY(0);
 }

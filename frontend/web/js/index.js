@@ -24,19 +24,31 @@ $(function(){
         },
         afterLoad:function(anchorLink, index){
             if(index==6){
-                $('.four-title').addClass('four-title1');
-                $('.four-content').addClass('four-content1');
-                $('.four-left').addClass('four-left1');
-                $('.four-right').addClass('four-right1');
-                $('.four-bottom').addClass('four-bottom1');
+                $('.six-logo img').addClass('six-logo1');
+                $('.six-tilt').addClass('six-tilt1');
+                $('.six-tilts').addClass('sixbxx-tilts1');
+                $('.yitiao').addClass('yitiao1');
+                $('.six-inner').addClass('six-inner1');
+                $('.bxx').addClass('bxx1');
+                $('.yi1').addClass('yi11');
+                $('.yi2').addClass('yi22');
+                $('.yi3').addClass('yi33');
+                $('.yi4').addClass('yi44');
+                $('.yi5').addClass('yi55');
                 $('.footer-mark').fadeOut();
                 $('.footer-fixed').fadeOut();
             }else {
-                $('.four-left').removeClass('four-left1');
-                $('.four-right').removeClass('four-right1');
-                $('.four-bottom').removeClass('four-bottom1');
-                $('.four-title').removeClass('four-title1');
-                $('.four-content').removeClass('four-content1');
+                $('.six-logo img').removeClass('six-logo1');
+                $('.six-tilt').removeClass('six-tilt1');
+                $('.six-tilts').removeClass('six-tilts1');
+                $('.yitiao').removeClass('yitiao1');
+                $('.six-inner').removeClass('six-inner1');
+                $('.bxx').removeClass('bxx1');
+                $('.yi1').removeClass('yi11');
+                $('.yi2').removeClass('yi22');
+                $('.yi3').removeClass('yi33');
+                $('.yi4').removeClass('yi44');
+                $('.yi5').removeClass('yi55');
                 var dataSign=$('.footer-fixed').attr('data-sign');
                 if(dataSign==0){
                     $('.footer-mark').fadeIn();
@@ -47,19 +59,31 @@ $(function(){
         onLeave: function(index, nextIndex,direction) {
             if(index == 5) {
                 if(direction=='down'){
-                    $('.four-title').addClass('four-title1');
-                    $('.four-content').addClass('four-content1');
-                    $('.four-left').addClass('four-left1');
-                    $('.four-right').addClass('four-right1');
-                    $('.four-bottom').addClass('four-bottom1');
+                    $('.six-logo img').addClass('six-logo1');
+                    $('.six-tilt').addClass('six-tilt1');
+                    $('.six-tilts').addClass('six-tilts1');
+                    $('.yitiao').addClass('yitiao1');
+                    $('.six-inner').addClass('six-inner1');
+                    $('.bxx').addClass('bxx1');
+                    $('.yi1').addClass('yi11');
+                    $('.yi2').addClass('yi22');
+                    $('.yi3').addClass('yi33');
+                    $('.yi4').addClass('yi44');
+                    $('.yi5').addClass('yi55');
                     $('.footer-mark').fadeOut();
                     $('.footer-fixed').fadeOut();
                 }else if(direction=='up'){
-                    $('.four-left').removeClass('four-left1');
-                    $('.four-right').removeClass('four-right1');
-                    $('.four-bottom').removeClass('four-bottom1');
-                    $('.four-title').removeClass('four-title1');
-                    $('.four-content').removeClass('four-content1');
+                    $('.six-logo img').removeClass('six-logo1');
+                    $('.six-tilt').removeClass('six-tilt1');
+                    $('.six-tilts').removeClass('six-tilts1');
+                    $('.yitiao').removeClass('yitiao1');
+                    $('.six-inner').removeClass('six-inner1');
+                    $('.bxx').removeClass('bxx1');
+                    $('.yi1').removeClass('yi11');
+                    $('.yi2').removeClass('yi22');
+                    $('.yi3').removeClass('yi33');
+                    $('.yi4').removeClass('yi44');
+                    $('.yi5').removeClass('yi55');
                 }
             }
         }
