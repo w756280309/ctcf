@@ -107,4 +107,9 @@ class CancelOrder extends \yii\db\ActiveRecord implements \P2pl\OrderTxInterface
     {
         return $this->money;
     }
+
+    public function getPaymentAmount()
+    {
+        return $this->order->paymentAmount;
+    }
 }
