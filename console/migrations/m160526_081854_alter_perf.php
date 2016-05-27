@@ -16,8 +16,6 @@ class m160526_081854_alter_perf extends Migration
         $this->alterColumn('perf', 'rechargeMoney', $this->decimal(10, 2));
         $this->alterColumn('perf', 'rechargeCost', $this->decimal(10, 2));
         $this->alterColumn('perf', 'draw', $this->decimal(10, 2));
-        $this->alterColumn('perf', 'remainMoney', $this->decimal(10, 2));
-        $this->alterColumn('perf', 'usableMoney', $this->decimal(10, 2));
         $this->addColumn('perf', 'newRegisterAndInvestor', $this->integer());
     }
 
