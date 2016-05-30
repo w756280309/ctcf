@@ -8,11 +8,21 @@ class AnalyticsHelper
 {
     public static function registerTo($viewObj)
     {
+        if (!\Yii::$app->params['enable_analytics']) {
+            return;
+        }
+
+        $baiduKey = \Yii::$app->params['baidu_tongji_key'];
+        $gaId = \Yii::$app->params['ga_tracking_id'];
+        if (empty($baiduKey) || empty($gaId)) {
+            return;
+        }
+
         $_js = <<<JS
 var _hmt = _hmt || [];
 (function() {
   var hm = document.createElement("script");
-  hm.src = "//hm.baidu.com/hm.js?d2417f8d221ffd4b883d5e257e21736c";
+  hm.src = "//hm.baidu.com/hm.js?$baiduKey";
   var s = document.getElementsByTagName("script")[0];
   s.parentNode.insertBefore(hm, s);
 })();
@@ -27,12 +37,10 @@ var _hmt = _hmt || [];
     a.src = g;
     m.parentNode.insertBefore(a, m)
 })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
-ga('create', 'UA-77716435-1', 'auto');
+ga('create', '$gaId', 'auto');
 ga('send', 'pageview');
 JS;
 
-        if (\Yii::$app->params['enable_analytics']) {
-            $viewObj->registerJs($_js, View::POS_HEAD, 'body_close');
-        }
+        $viewObj->registerJs($_js, View::POS_HEAD, 'body_close');
     }
 }
