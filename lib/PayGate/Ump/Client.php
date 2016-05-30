@@ -218,6 +218,22 @@ class Client
     }
 
     /**
+     * 4.5.6绑卡换卡订单查询
+     *
+     * @param QpayBindInterface $binding
+     * @return Response
+     */
+    public function getBindingTx(QpayBindInterface $bind) {
+        $data = [
+            'service' => 'bindcard_search',
+            'order_id' => $bind->getTxSn(),
+            'mer_date' => $bind->getTxDate(),
+        ];
+
+        return $this->doRequest($data);
+    }
+
+    /**
      * 申请提现.
      *
      * @param WithdrawalInterface $draw
