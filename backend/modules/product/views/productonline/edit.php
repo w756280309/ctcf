@@ -123,7 +123,7 @@ TPL;
                     <label class="control-label">项目名称<span style="color: red;">(<?= $desc ?>)</span></label>
                     <div class="controls">
                         <?=
-                        $form->field($model, 'title', ['template' => '{input}{error}', 'inputOptions' => ['autocomplete' => 'off', 'placeholder' => '项目名称']])->textInput(['class' => 'm-wrap span12'])
+                            $form->field($model, 'title', ['template' => '{input}{error}', 'inputOptions' => ['autocomplete' => 'off', 'placeholder' => '项目名称', 'maxLength' => 32]])->textInput(['class' => 'm-wrap span12'])
                         ?>
                     </div>
                 </div>
@@ -135,7 +135,7 @@ TPL;
                     <label class="control-label">项目类型</label>
                     <div class="controls">
                         <?=
-                        $form->field($model, 'cid', ['template' => '{input}{error}', 'inputOptions' => ['autocomplete' => 'off', 'class' => 'chosen-with-diselect span6']])->dropDownList(['' => '--选择--'] + Yii::$app->params['pc_cat'])
+                            $form->field($model, 'cid', ['template' => '{input}{error}', 'inputOptions' => ['autocomplete' => 'off', 'class' => 'chosen-with-diselect span6']])->dropDownList(['' => '--选择--'] + Yii::$app->params['pc_cat'])
                         ?>
                     </div>
                 </div>
