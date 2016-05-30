@@ -25,10 +25,13 @@ use yii\widgets\ActiveForm;
             </ul>
         </div>
 
-        <?php $form = ActiveForm::begin([
-            'id' => 'adv_form',
-            'action' => empty($admin) ? "/fenxiao/fenxiao/add" : "/fenxiao/fenxiao/edit?id=$admin->id",
-            'options' => ['class' => 'form-horizontal form-bordered form-label-stripped']
+        <?php
+            $form = ActiveForm::begin([
+                'action' => empty($admin) ? "/fenxiao/fenxiao/add" : "/fenxiao/fenxiao/edit?id=$admin->id",
+                'options' => [
+                    'class' => 'form-horizontal form-bordered form-label-stripped',
+                    'enctype' => 'multipart/form-data',
+                ]
             ]); ?>
         <div class="portlet-body form">
 
@@ -61,6 +64,14 @@ use yii\widgets\ActiveForm;
                 <div class="controls">
                     <?= $form->field($model, 'affCode', ['template' => '{input}', 'inputOptions' => ['autocomplete' => "off", 'class' => 'm-wrap span12', 'placeholder' => '渠道码']])->textInput() ?>
                     <?= $form->field($model, 'affCode', ['template' => '{error}']) ?>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label">分销商图片</label>
+                <div class="controls">
+                    <?= $form->field($model, 'imageFile', ['template' => '{input}'])->fileInput() ?>
+                    <?= $form->field($model, 'imageFile', ['template' => '{error}']) ?>
                 </div>
             </div>
 

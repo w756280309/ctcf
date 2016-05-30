@@ -9,6 +9,7 @@ use common\models\fenxiao\Admin;
 use common\models\fenxiao\FenxiaoForm;
 use Yii;
 use yii\data\Pagination;
+use yii\web\UploadedFile;
 
 class FenxiaoController extends BaseController
 {
@@ -19,20 +20,26 @@ class FenxiaoController extends BaseController
     {
         $model = new FenxiaoForm();
 
-        if ($model->load(Yii::$app->request->post()) && $model->validate() && $this->checkUnique($model)) {
+        if ($model->load(Yii::$app->request->post())
+            && $model->validate()
+            && $this->checkUnique($model)) {
+            $this->upload($model);
+
+            $transaction = Yii::$app->db->beginTransaction();
             try {
                 if (empty($model->password)) {
                     throw new \Exception('密码不能为空。', 1);
                 }
 
-                $transaction = Yii::$app->db->beginTransaction();
-
                 $aff = new Affiliator([
                     'name' => $model->affName,
                 ]);
 
+                if (!empty($model->imageFile)) {
+                    $aff->picPath = $model->imageFile;
+                }
+
                 if (!$aff->save(false)) {
-                    $transaction->rollBack();
                     throw new \Exception('数据库错误');
                 }
 
@@ -42,7 +49,6 @@ class FenxiaoController extends BaseController
                 ]);
 
                 if (!$affCam->save(false)) {
-                    $transaction->rollBack();
                     throw new \Exception('数据库错误');
                 }
 
@@ -54,7 +60,6 @@ class FenxiaoController extends BaseController
                 ]);
 
                 if (!$admin->save(false)) {
-                    $transaction->rollBack();
                     throw new \Exception('数据库错误');
                 }
 
@@ -62,6 +67,8 @@ class FenxiaoController extends BaseController
 
                 $this->redirect('list');
             } catch (\Exception $ex) {
+                $transaction->rollBack();
+
                 if (1 === $ex->getCode()) {
                     $model->addError('password', $ex->getMessage());
                 } else {
@@ -94,36 +101,44 @@ class FenxiaoController extends BaseController
 
         $old = clone $model;
 
-        if ($model->load(Yii::$app->request->post()) && $model->validate() && $this->checkUnique($model, $old)) {
+        if ($model->load(Yii::$app->request->post())
+            && $model->validate()
+            && $this->checkUnique($model, $old)) {
+            $this->upload($model);
+
             $transaction = Yii::$app->db->beginTransaction();
+            try {
+                $admin->loginName = $model->loginName;
+                $admin->name = $model->affName;
 
-            $admin->loginName = $model->loginName;
-            $admin->name = $model->affName;
+                if (!empty($model->password)) {
+                    $admin->passwordHash = Yii::$app->security->generatePasswordHash($model->password);
+                }
 
-            if (!empty($model->password)) {
-                $admin->passwordHash = Yii::$app->security->generatePasswordHash($model->password);
-            }
+                if (!$admin->save(false)) {
+                    throw new \Exception('数据库错误');
+                }
 
-            if (!$admin->save(false)) {
+                $aff->name = $model->affName;
+                if (!empty($model->imageFile)) {
+                    $aff->picPath = $model->imageFile;
+                }
+
+                if (!$aff->save(false)) {
+                    throw new \Exception('数据库错误');
+                }
+
+                $affCam->trackCode = $model->affCode;
+
+                if (!$affCam->save(false)) {
+                    throw new \Exception('数据库错误');
+                }
+
+                $transaction->commit();
+            } catch (\Exception $ex) {
                 $transaction->rollBack();
-                throw new \Exception('数据库错误');
+                throw new \Exception($ex->getMessage());
             }
-
-            $aff->name = $model->affName;
-
-            if (!$aff->save(false)) {
-                $transaction->rollBack();
-                throw new \Exception('数据库错误');
-            }
-
-            $affCam->trackCode = $model->affCode;
-
-            if (!$affCam->save(false)) {
-                $transaction->rollBack();
-                throw new \Exception('数据库错误');
-            }
-
-            $transaction->commit();
 
             $this->redirect('list');
         }
@@ -180,5 +195,20 @@ class FenxiaoController extends BaseController
         }
 
         return true;
+    }
+
+    /**
+     * 检查上传图片
+     */
+    private function upload(FenxiaoForm $obj)
+    {
+        $obj->imageFile = UploadedFile::getInstance($obj, 'imageFile');
+
+        if ($obj->imageFile) {
+            $picPath = 'upload/fenxiao/fx'.time().'.'.$obj->imageFile->extension;
+
+            $obj->imageFile->saveAs($picPath);
+            $obj->imageFile = $picPath;
+        }
     }
 }

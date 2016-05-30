@@ -10,6 +10,8 @@ use yii\filters\AccessControl;
 use yii\web\Response;
 use common\controllers\HelpersTrait;
 use common\models\adv\Adv;
+use common\models\affiliation\Affiliator;
+use common\models\affiliation\AffiliateCampaign;
 use common\models\product\OnlineProduct;
 use common\models\user\SignupForm;
 use common\models\user\LoginForm;
@@ -224,10 +226,21 @@ class SiteController extends Controller
             return ['code' => 1, 'message' => current($message)];
         }
 
+        $hmsr = Yii::$app->request->get('hmsr');
+        $aff = null;
+
+        if (!empty($hmsr)) {
+            $affCam = AffiliateCampaign::findOne(['trackCode' => $hmsr]);
+            if (null !== $affCam) {
+                $aff = Affiliator::findOne($affCam->affiliator_id);
+            }
+        }
+
         return $this->render('login', [
-                    'model' => $model,
-                    'from' => $from,
-                    'is_flag' => $is_flag,
+            'model' => $model,
+            'from' => $from,
+            'is_flag' => $is_flag,
+            'aff' => $aff,
         ]);
     }
 

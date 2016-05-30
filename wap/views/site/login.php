@@ -6,6 +6,12 @@ $this->title = '登录';
 ?>
 <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/loginsign.css">
 
+<?php if (!empty($aff)) { ?>
+    <div>
+        <center><image src="<?= UPLOAD_BASE_URI.$aff->picPath ?>" /></center>
+    </div>
+<?php } ?>
+
 <div class="row kongxi">
     <?php $form = ActiveForm::begin(['id' => 'login', 'action' => "/site/login", 'options' => ['data-to'=>'1']]); ?>
     <input name="from" type="hidden" value="<?=$from ?>">
