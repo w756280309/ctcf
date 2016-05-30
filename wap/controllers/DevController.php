@@ -11,8 +11,9 @@ class DevController extends Controller
 {
     public function actionView($viewPath)
     {
-        if ('dev' !== YII_ENV) {
-            throw new NotFoundHttpException('只有在 ENV 环境下允许访问该页面。请通过index-dev.php入口文件进行访问');
+        $dev = Yii::$app->params['enable_dev_helpers'];
+        if (true !== $dev) {
+            throw new NotFoundHttpException('只有在 ENV 环境下(enable_dev_helpers 配置为true)允许访问该页面。');
         }
         $basePath = Yii::getAlias('@wap') . '/';
         $viewFile = $basePath . $viewPath;
@@ -23,7 +24,7 @@ class DevController extends Controller
             }
             return $this->renderFile($viewFile);
         } else {
-            throw new NotFoundHttpException('指定模板（' . $viewFile . '）没有找到。模板示例：文件位置，wap/views/ebaoquan/index.php;$viewPath = "views/ebaoquan/index.php";访问地址 /index-dev.php/dev/view?viewPath=views/ebaoquan/index.php ');
+            throw new NotFoundHttpException('指定模板（' . $viewFile . '）没有找到。模板示例：文件位置，wap/views/ebaoquan/index.php;$viewPath = "views/ebaoquan/index.php";访问地址 /dev/view?viewPath=views/ebaoquan/index.php ');
         }
     }
 }
