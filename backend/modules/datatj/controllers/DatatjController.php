@@ -3,14 +3,17 @@ namespace backend\modules\datatj\controllers;
 
 use backend\controllers\BaseController;
 use common\lib\bchelp\BcRound;
+use common\lib\user\UserStats;
 use common\models\checkaccount\CheckaccountHz;
 use common\models\checkaccount\CheckaccountWdjf;
 use common\models\stats\Perf;
 use common\models\user\RechargeRecord;
 use common\models\user\User;
+use yii\data\ActiveDataProvider;
 use yii\data\ArrayDataProvider;
 use yii\data\Pagination;
 use Yii;
+use yii\web\NotFoundHttpException;
 
 class DatatjController extends BaseController
 {
@@ -205,6 +208,8 @@ class DatatjController extends BaseController
 
     public function actionMonthtj()
     {
+        //获取月投资人数
+        $monthInvestor = Perf::getMonthInvestor();
         //获取当月数据
         $month = Perf::getThisMonthCount();
         //历史数据，不包含当月
@@ -217,6 +222,7 @@ FROM perf WHERE DATE_FORMAT(bizDate,'%Y-%m') < DATE_FORMAT(NOW(),'%Y-%m')  GROUP
         ]);
         return $this->render('monthtj', [
             'dataProvider' => $dataProvider,
+            'monthInvestor' => $monthInvestor
         ]);
     }
 
@@ -285,5 +291,74 @@ FROM perf WHERE DATE_FORMAT(bizDate,'%Y-%m') < DATE_FORMAT(NOW(),'%Y-%m')  GROUP
             header('Content-Length: ' . strlen($record)); // 内容的字节数
             echo $record;
         }
+    }
+
+    public function actionList($type, $field, $date, $result)
+    {
+        if (!in_array($type, ['day', 'month'])) {
+            throw new NotFoundHttpException('type 参数错误');
+        }
+        $perf = new Perf();
+        $fun = 'getDay' . ucfirst($field);
+        if ('day' === $type) {
+            if (!in_array($field, ['investor', 'newRegisterAndInvestor', 'newInvestor', 'investAndLogin', 'notInvestAndLogin'])) {
+                throw new NotFoundHttpException("日统计的 field 参数目前只支持 'investor', 'newRegisterAndInvestor', 'newInvestor', 'investAndLogin', 'notInvestAndLogin'");
+            }
+            $ids = $perf->{$fun}($date);
+        } else {
+            if (!in_array($field, ['investor', 'newRegisterAndInvestor', 'newInvestor'])) {
+                throw new NotFoundHttpException("月统计的 field 参数目前只支持 'investor', 'newRegisterAndInvestor', 'newInvestor', 'investAndLogin', 'notInvestAndLogin'");
+            }
+            $num = date('t', strtotime($date));
+            $ids = [];
+            for ($i = 1; $i <= $num; $i++) {
+                $newDate = $date . '-' . str_pad($i, 2, '0', STR_PAD_LEFT);
+                $res = $perf->{$fun}($newDate);
+                $ids = array_merge($ids, $res);
+            }
+            $ids = array_unique($ids);
+        }
+        $query = User::find()->where(['type' => 1])->andWhere(['in', 'id', $ids]);
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query
+        ]);
+        $pages = new Pagination(['totalCount' => $query, 'pageSize' => 20]);
+        $dataProvider->sort = false;
+        return $this->render('list', [
+            'dataProvider' => $dataProvider,
+            'pages' => $pages,
+            'type' => $type,
+            'date' => $date,
+            'field' => $field
+        ]);
+    }
+
+    public function actionListExport($type, $field, $date)
+    {
+        if (!in_array($type, ['day', 'month'])) {
+            throw new NotFoundHttpException('type 参数错误');
+        }
+        $perf = new Perf();
+        $fun = 'getDay' . ucfirst($field);
+        if ('day' === $type) {
+            if (!in_array($field, ['investor', 'newRegisterAndInvestor', 'newInvestor', 'investAndLogin', 'notInvestAndLogin'])) {
+                throw new NotFoundHttpException("日统计的 field 参数目前只支持 'investor', 'newRegisterAndInvestor', 'newInvestor', 'investAndLogin', 'notInvestAndLogin'");
+            }
+            $ids = $perf->{$fun}($date);
+        } else {
+            if (!in_array($field, ['investor', 'newRegisterAndInvestor', 'newInvestor'])) {
+                throw new NotFoundHttpException("月统计的 field 参数目前只支持 'investor', 'newRegisterAndInvestor', 'newInvestor', 'investAndLogin', 'notInvestAndLogin'");
+            }
+            $num = date('t', strtotime($date));
+            $ids = [];
+            for ($i = 1; $i <= $num; $i++) {
+                $newDate = $date . '-' . str_pad($i, 2, '0', STR_PAD_LEFT);
+                $res = $perf->{$fun}($newDate);
+                $ids = array_merge($ids, $res);
+            }
+            $ids = array_unique($ids);
+        }
+        $data = UserStats::collectLenderData(['in', '`user`.id', $ids]);
+        UserStats::createCsvFile($data);
     }
 }
