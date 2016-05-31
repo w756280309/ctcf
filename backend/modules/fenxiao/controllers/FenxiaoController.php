@@ -204,6 +204,11 @@ class FenxiaoController extends BaseController
     {
         $obj->imageFile = UploadedFile::getInstance($obj, 'imageFile');
 
+        $path = Yii::getAlias('@backend').'/web/upload/fenxiao';
+        if (!file_exists($path)) {
+            mkdir($path);
+        }
+
         if ($obj->imageFile) {
             $picPath = 'upload/fenxiao/fx'.time().'.'.$obj->imageFile->extension;
 
