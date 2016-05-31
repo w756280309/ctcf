@@ -8,11 +8,8 @@ use common\models\checkaccount\CheckaccountWdjf;
 use common\models\stats\Perf;
 use common\models\user\RechargeRecord;
 use common\models\user\User;
-use yii\data\ActiveDataProvider;
 use yii\data\ArrayDataProvider;
 use yii\data\Pagination;
-use yii\db\ActiveQuery;
-use yii\db\Query;
 use Yii;
 
 class DatatjController extends BaseController
@@ -245,5 +242,48 @@ FROM perf WHERE DATE_FORMAT(bizDate,'%Y-%m') < DATE_FORMAT(NOW(),'%Y-%m')  GROUP
             'pages' => $pages,
             'dataProvider' => $dataProvider,
         ]);
+    }
+
+    //日历史数据导出
+    public function actionDayExport()
+    {
+        //获取历史数据
+        $history = Perf::find()->where(['<', 'bizDate', date('Y-m-d')])->orderBy(['bizDate' => SORT_DESC])->asArray()->all();
+        $today = Perf::getTodayCount();
+        $allData = array_merge([$today], $history);
+        $record = implode("\t" . ',', ['日期', '交易额', '充值金额', '提现金额', '充值手续费', Yii::$app->params['pc_cat'][2] . '销售额', Yii::$app->params['pc_cat'][1] . '销售额', '注册用户', '实名认证', '绑卡用户数', '投资人数', '当日注册当日投资人数', '新增投资人数', '已投用户登录数', '未投用户登录数', '融资项目']) . "\n";
+        foreach ($allData as $k => $data) {
+            $array = [$data['bizDate'], floatval($data['totalInvestment']), floatval($data['rechargeMoney']), floatval($data['drawAmount']), floatval($data['rechargeCost']), floatval($data['investmentInWyb']), floatval($data['investmentInWyj']), intval($data['reg']), intval($data['idVerified']), intval($data['qpayEnabled']), intval($data['investor']), intval($data['newRegisterAndInvestor']), intval($data['newInvestor']), intval($data['investAndLogin']), intval($data['notInvestAndLogin']), intval($data['successFound'])];
+            $record .= implode("\t" . ',', $array) . "\n";
+        }
+        if (null !== $record) {
+            $record = iconv('UTF-8', 'GB18030', $record);//转换编码
+            header('Content-Disposition: attachment; filename="day-count(' . date('Y-m-d') . ').csv"');
+            header('Content-Length: ' . strlen($record)); // 内容的字节数
+            echo $record;
+        }
+    }
+
+    //月数据导出
+    public function actionMonthExport()
+    {
+        //获取当月数据
+        $month = Perf::getThisMonthCount();
+        //历史数据，不包含当月
+        $sql = "SELECT bizDate, SUM(totalInvestment) AS totalInvestment,SUM(rechargeMoney) AS rechargeMoney,SUM(drawAmount) AS drawAmount,SUM(rechargeCost) AS rechargeCost ,SUM(reg) AS reg,SUM(idVerified) AS idVerified,SUM(successFound) AS successFound, SUM(qpayEnabled) AS qpayEnabled, SUM(investor) AS investor, SUM(newRegisterAndInvestor) AS newRegisterAndInvestor, SUM(newInvestor) AS newInvestor,SUM(investmentInWyb) AS investmentInWyb, SUM(investmentInWyj) AS investmentInWyj
+FROM perf WHERE DATE_FORMAT(bizDate,'%Y-%m') < DATE_FORMAT(NOW(),'%Y-%m')  GROUP BY DATE_FORMAT(bizDate,'%Y-%m') ORDER BY DATE_FORMAT(bizDate,'%Y-%m') DESC";
+        $history = Yii::$app->db->createCommand($sql)->queryAll();
+        $allData = array_merge([$month], $history);
+        $record = implode("\t" . ',', ['日期', '交易额', '充值金额', '提现金额', '充值手续费', Yii::$app->params['pc_cat'][2] . '销售额', Yii::$app->params['pc_cat'][1] . '销售额', '注册用户', '实名认证', '绑卡用户数', '投资人数', '当日注册当日投资人数', '新增投资人数', '融资项目']) . "\n";
+        foreach ($allData as $k => $data) {
+            $array = [date('Y-m', strtotime($data['bizDate'])), floatval($data['totalInvestment']), floatval($data['rechargeMoney']), floatval($data['drawAmount']), floatval($data['rechargeCost']), floatval($data['investmentInWyb']), floatval($data['investmentInWyj']), intval($data['reg']), intval($data['idVerified']), intval($data['qpayEnabled']), intval($data['investor']), intval($data['newRegisterAndInvestor']), intval($data['newInvestor']), intval($data['successFound'])];
+            $record .= implode("\t" . ',', $array) . "\n";
+        }
+        if (null !== $record) {
+            $record = iconv('UTF-8', 'GB18030', $record);//转换编码
+            header('Content-Disposition: attachment; filename="month-count(' . date('Y-m') . ').csv"');
+            header('Content-Length: ' . strlen($record)); // 内容的字节数
+            echo $record;
+        }
     }
 }

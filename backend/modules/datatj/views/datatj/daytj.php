@@ -9,6 +9,7 @@ use yii\grid\GridView;
             <h3 class="page-title">
                 日历史数据
             </h3>
+            <a class="btn green btn-block" style="width: 140px;" href="/datatj/datatj/day-export">日统计数据导出</a>
         </div>
     </div>
     <div class="portlet-body">
