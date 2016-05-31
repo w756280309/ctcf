@@ -51,12 +51,12 @@ $this->title = Yii::$app->params['pc_page_title'];
         <div class="three-content three-content1">
             <img src="<?= ASSETS_BASE_URI ?>images/one.png" alt="">
             <div class="three-content-title"><span>国资</span>背景</div>
-            <i>隶属温州日报报业集团旗下，国资平台，可信赖；</i>
+            <i>隶属温州报业传媒旗下，国资平台，可信赖；</i>
         </div>
         <div class="three-content three-content2">
             <img src="<?= ASSETS_BASE_URI ?>images/two.png" alt="">
             <div class="three-content-title"><span>股东</span>强势</div>
-            <em><p>温州日报报业集团，实力雄厚的现代国有传媒集团；</p><p>南京金融资产交易中心，省级金融主管部门审批的合规平台；</p></em>
+            <em><p>温州报业传媒有限公司，系温州日报报业集团全资子公司；</p><p>南京金融资产交易中心，省级金融主管部门审批的合规平台；</p></em>
         </div>
         <div class="three-content three-content3">
             <img src="<?= ASSETS_BASE_URI ?>images/three.png" alt="">
