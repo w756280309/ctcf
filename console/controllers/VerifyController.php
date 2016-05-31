@@ -23,7 +23,8 @@ class VerifyController extends Controller
         $users = User::find()->where(['idcard_status' => User::IDCARD_STATUS_PASS, 'mianmiStatus' => 0])->all();
         foreach ($users as $user) {
             $resp = Yii::$container->get('ump')->getUserInfo($user->epayUser->epayUserId);
-            if (false !== strpos($resp->get('user_bind_agreement_list'), 'ZTBB0G00')) {
+            $rparr = $resp->toArray();
+            if (isset($rparr['user_bind_agreement_list']) && false !== strpos($resp->get('user_bind_agreement_list'), 'ZTBB0G00')) {
                 //免密投资
                 User::updateAll(['mianmiStatus' => 1], 'id='.$user->id);
             }
