@@ -61,12 +61,24 @@
         <div class="span4">平台当日注册当日投资人数：<?= intval($newRegisterAndInvestor) ?>人</div>
     </div>
     <div class="row-fluid">
+        <div class="span4">平台今日已投用户登录数：<?= intval($investAndLogin) ?>人</div>
+        <div class="span4">平台今日未投用户登录数：<?= intval($notInvestAndLogin) ?>人</div>
+    </div>
+    <div class="row-fluid">
         <h3>项目统计</h3>
     </div>
     <div class="row-fluid">
         <div class="span4">平台累计融资项目数：<span style="color: red"><?= intval($totalSuccessFound) ?></span>个</div>
         <div class="span4">平台本月融资项目数：<?= intval($monthSuccessFound) ?>个</div>
         <div class="span4">平台今日融资项目数：<?= intval($todaySuccessFound) ?>个</div>
+    </div>
+    <div class="row-fluid">
+        <h3>代金券统计</h3>
+    </div>
+    <div class="row-fluid">
+        <div class="span4">平台累计已发放代金券：<?= number_format($totalCoupon, 2) ?>元</div>
+        <div class="span4">平台累计已使用代金券：<?= number_format($usedCoupon, 2) ?>元</div>
+        <div class="span4">平台累计未使用代金券：<?= number_format($unusedCoupon, 2) ?>元</div>
     </div>
 </div>
 <?php $this->endBlock(); ?>

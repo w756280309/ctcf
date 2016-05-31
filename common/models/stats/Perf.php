@@ -2,8 +2,11 @@
 
 namespace common\models\stats;
 
+use common\models\coupon\CouponType;
+use common\models\coupon\UserCoupon;
 use yii\db\ActiveRecord;
 use Yii;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "perf".
@@ -33,6 +36,8 @@ use Yii;
  * @property string $rechargeCost    充值手续费
  * @property string $draw    提现
  * @property integer $created_at    统计时间
+ * @property integer $investAndLogin    已投用户登录
+ * @property integer $notInvestAndLogin 未投用户登录
  */
 class Perf extends ActiveRecord
 {
@@ -213,6 +218,53 @@ class Perf extends ActiveRecord
         return Yii::$app->db->createCommand($sql, ['date' => $date])->queryScalar();
     }
 
+    //获取已投用户登录
+    public function getInvestAndLogin($date)
+    {
+        $sql = "SELECT COUNT(id) FROM `user` WHERE `type` = 1 AND DATE(FROM_UNIXTIME(last_login)) = :date AND id  IN (SELECT DISTINCT uid FROM online_order WHERE `status` = 1)";
+        return Yii::$app->db->createCommand($sql, ['date' => $date])->queryScalar();
+    }
+
+    //获取未投有用户登录
+    public function getNotInvestAndLogin($date)
+    {
+        $sql = "SELECT COUNT(id) FROM `user` WHERE `type` = 1 AND DATE(FROM_UNIXTIME(last_login)) = :date AND id NOT IN (SELECT DISTINCT uid FROM online_order WHERE `status` = 1)";
+        return Yii::$app->db->createCommand($sql, ['date' => $date])->queryScalar();
+    }
+
+    //获取代金券
+    /**
+     * @param integer $type 1表示已使用，0表示未使用，null 表示已发放
+     * @return int
+     */
+    public static function getCoupon($type = null)
+    {
+        if (null !== $type && in_array($type, [0, 1])) {
+            $sql = "SELECT couponType_id AS cid,COUNT(couponType_id) AS cou FROM user_coupon WHERE isUsed = " . $type . " GROUP BY couponType_id";
+        } else {
+            $sql = "SELECT couponType_id AS cid,COUNT(couponType_id) AS cou FROM user_coupon GROUP BY couponType_id";
+        }
+        $result = Yii::$app->db->createCommand($sql)->queryAll();
+        if (count($result) > 0) {
+            $num = ArrayHelper::map($result, 'cid', 'cou');
+        } else {
+            return 0;
+        }
+        $cids = '(' . implode(',', ArrayHelper::getColumn($result, 'cid')) . ')';
+        $sql = "SELECT id,amount FROM coupon_type WHERE id in " . $cids;
+        $result = Yii::$app->db->createCommand($sql)->queryAll();
+        if (count($result) > 0) {
+            $amount = ArrayHelper::map($result, 'id', 'amount');
+        }
+        $money = 0;
+        foreach ($num as $k => $v) {
+            if (isset($amount[$k])) {
+                $money += intval($v) * floatval($amount[$k]);
+            }
+        }
+        return $money;
+    }
+
     //实时获取当日实时数据
     public static function getTodayCount()
     {
@@ -220,7 +272,7 @@ class Perf extends ActiveRecord
         $today = [];
         $model = new Perf();
         $today['bizDate'] = $startDate;
-        $funList = ['reg', 'idVerified', 'qpayEnabled', 'investor', 'newRegisterAndInvestor', 'newInvestor', 'chargeViaPos', 'chargeViaEpay', 'drawAmount', 'investmentInWyj', 'investmentInWyb', 'totalInvestment', 'successFound', 'rechargeMoney', 'rechargeCost', 'draw'];
+        $funList = ['reg', 'idVerified', 'qpayEnabled', 'investor', 'newRegisterAndInvestor', 'newInvestor', 'chargeViaPos', 'chargeViaEpay', 'drawAmount', 'investmentInWyj', 'investmentInWyb', 'totalInvestment', 'successFound', 'rechargeMoney', 'rechargeCost', 'draw', 'investAndLogin', 'notInvestAndLogin'];
         foreach ($funList as $field) {
             $method = 'get' . ucfirst($field);
             $model->$field = $model->{$method}($startDate);

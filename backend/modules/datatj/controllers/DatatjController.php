@@ -167,6 +167,10 @@ class DatatjController extends BaseController
         $remainMoney = Perf::getRemainMoney();
         $usableMoney = Perf::getUsableMoney();
 
+        //代金券统计
+        $totalCoupon = Perf::getCoupon();
+        $usedCoupon = Perf::getCoupon(1);
+        $unusedCoupon = Perf::getCoupon(0);
         return $this->render('huizongtj', [
             'totalTotalInve' => $total['totalTotalInve'] + $today['totalInvestment'],//平台累计交易额
             'totalRechargeCost' => $total['totalRechargeCost'] + $today['rechargeCost'],//累计充值手续费
@@ -190,10 +194,15 @@ class DatatjController extends BaseController
             'qpayEnabled' => $today['qpayEnabled'],//今日绑卡用户数
             'newInvestor' => $today['newInvestor'],//今日新增投资人数
             'newRegisterAndInvestor' => $today['newRegisterAndInvestor'],//今日注册今日投资人数
+            'investAndLogin' => $today['investAndLogin'],//今日已投用户登录数
+            'notInvestAndLogin' => $today['notInvestAndLogin'],//今日未投用户登录数
             'monthTotalInvestment' => $month['monthTotalInvestment'] + $today['totalInvestment'],//本月交易额
             'monthSuccessFound' => $month['monthSuccessFound'] + $today['successFound'],//本月融资项目
             'remainMoney' => $remainMoney,//贷后余额
             'usableMoney' => $usableMoney,//可用余额
+            'usedCoupon' => $usedCoupon,//已使用代金券
+            'unusedCoupon' => $unusedCoupon,//未使用代金券
+            'totalCoupon' => $totalCoupon,//已发放代金券
         ]);
     }
 
