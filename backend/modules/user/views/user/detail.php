@@ -1,6 +1,6 @@
 <?php
 use common\models\user\User;
-use common\lib\StringUtils\StringUtils;
+use common\utils\StringUtils;
 ?>
 <?php $this->beginBlock('blockmain'); ?>
 

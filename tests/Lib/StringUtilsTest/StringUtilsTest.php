@@ -2,7 +2,7 @@
 namespace Test\Lib\StringUtilsTest;
 
 use Test\YiiAppTestCase;
-use common\lib\StringUtils\StringUtils;
+use common\utils\StringUtils;
 
 class StringUtilsTest extends YiiAppTestCase
 {

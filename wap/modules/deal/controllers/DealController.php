@@ -8,7 +8,7 @@ use common\models\product\OnlineProduct;
 use common\models\order\OnlineOrder;
 use common\service\PayService;
 use common\controllers\HelpersTrait;
-use common\lib\StringUtils\StringUtils;
+use common\utils\StringUtils;
 use common\models\product\RateSteps;
 use yii\web\NotFoundHttpException;
 

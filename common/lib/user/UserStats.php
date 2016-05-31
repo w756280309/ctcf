@@ -8,7 +8,7 @@ use common\models\user\RechargeRecord;
 use common\models\user\DrawRecord;
 use common\models\order\OnlineOrder;
 use common\models\user\UserAccount;
-use common\lib\StringUtils\StringUtils;
+use common\utils\StringUtils;
 
 /**
  * 用户统计.

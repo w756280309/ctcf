@@ -1,7 +1,7 @@
 <?php
 use yii\helpers\Html;
 use common\view\AnalyticsHelper;
-use common\lib\StringUtils\StringUtils;
+use common\utils\StringUtils;
 
 wap\assets\WapAsset::register($this);
 AnalyticsHelper::registerTo($this);
