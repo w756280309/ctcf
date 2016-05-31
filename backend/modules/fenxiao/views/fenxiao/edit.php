@@ -70,9 +70,14 @@ use yii\widgets\ActiveForm;
             <div class="control-group">
                 <label class="control-label">分销商图片</label>
                 <div class="controls">
-                    <?= $form->field($model, 'imageFile', ['template' => '{input}'])->fileInput() ?>
+                    <?= $form->field($model, 'imageFile', ['template' => '{input}<span class="notice">*图片上传格式必须为PNG或JPG，且大小不超过50K，尺寸限定为：高250px，宽750px</span>'])->fileInput() ?>
                     <?= $form->field($model, 'imageFile', ['template' => '{error}']) ?>
                 </div>
+                <?php if ($aff && !empty($aff->picPath)) { ?>
+                    <div class="controls">
+                        <img src="<?= '/'.$aff->picPath ?>" alt="分销商图片"/>
+                    </div>
+                <?php } ?>
             </div>
 
             <div class="form-actions">

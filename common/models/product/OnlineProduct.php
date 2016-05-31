@@ -102,7 +102,7 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
 
     public static function createSN($pre = 'DK')
     {
-        $last = self::find()->select('sn')->orderBy('id desc')->one();
+        $last = self::find()->select('sn')->orderBy('sn desc')->one();
         $date = date('Ymd');
         $sn = $pre;
         if (strpos($last['sn'], $date) === false) {

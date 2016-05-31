@@ -24,7 +24,8 @@ class FenxiaoForm extends Model
             ['loginName', 'match', 'pattern' => '/(?!^\d+$)(?!^[a-zA-Z]+$)^[0-9a-zA-Z]{6,20}$/', 'message' => '{attribute}必须为数字和字母的组合'],
             ['password', LoginpassValidator::className(), 'skipOnEmpty' => true],
             ['affCode', 'match', 'pattern' => '/^[0-9a-zA-Z_-]+$/', 'message' => '{attribute}格式错误，只允许字母、数字、"_"和"-"。'],
-            ['imageFile', 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg', 'maxSize' => 10240],
+            ['imageFile', 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg'],
+            ['imageFile', 'file', 'skipOnEmpty' => true, 'maxSize' => 51200, 'tooBig' => '图片大小不能超过50KB'],
         ];
     }
 

@@ -143,7 +143,7 @@ class FenxiaoController extends BaseController
             $this->redirect('list');
         }
 
-        return $this->render('edit', ['model' => $model, 'admin' => $admin]);
+        return $this->render('edit', ['model' => $model, 'admin' => $admin, 'aff' => $aff]);
     }
 
     /**
