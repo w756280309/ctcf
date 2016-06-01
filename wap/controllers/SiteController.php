@@ -106,12 +106,12 @@ class SiteController extends Controller
     {
         $this->layout = false;
         $ac = 5;
-        $adv = Adv::find()->where(['status' => 0, 'del_status' => 0]);
+        $record = Adv::find()->where(['status' => 0, 'del_status' => 0, 'showOnPc' => 0]);
         if (defined('IN_APP')) {   //App端isDisabledInApp为1时,不显示轮播图
-            $adv->andWhere(['isDisabledInApp' => 0]);
+            $record->andWhere(['isDisabledInApp' => 0]);
         }
 
-        $adv = $adv->limit($ac)->orderBy('show_order asc, id desc')->asArray()->all();  //修改轮播图显示顺序,先按照show_order升序排列,后按照id降序排列
+        $adv = $record->limit($ac)->orderBy('show_order asc, id desc')->all();  //修改轮播图显示顺序,先按照show_order升序排列,后按照id降序排列
 
         $deals = OnlineProduct::find()->where(['isPrivate' => 0, 'del_status' => OnlineProduct::STATUS_USE, 'online_status' => OnlineProduct::STATUS_ONLINE])
             ->andWhere('recommendTime != 0')

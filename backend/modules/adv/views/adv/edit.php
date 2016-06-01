@@ -1,6 +1,5 @@
 <?php
 use yii\widgets\ActiveForm;
-use yii\helpers\Html;
 
 $this->registerJs("var t=0;",1);//在头部加载  0:adv 1:product
 $this->registerJsFile('/js/swfupload/swfupload.js', ['depends' => 'yii\web\YiiAsset']);
@@ -50,31 +49,36 @@ $this->registerJsFile('/js/swfupload/handlers.js', ['depends' => 'yii\web\YiiAss
     </div>
     <?php } ?>
 
-
     <div class="control-group">
         <label class="control-label">标题</label>
         <div class="controls">
-                <?= $form->field($model, 'title', ['template' => '{input}','inputOptions'=>['autocomplete'=>"off",'class'=>'m-wrap span12','placeholder'=>'标题']])->textInput() ?>
-                <?= $form->field($model, 'title', ['template' => '{error}']) ?>
-             </div>
+            <?= $form->field($model, 'title', ['template' => '{input}','inputOptions'=>['autocomplete'=>"off",'class'=>'m-wrap span12','placeholder'=>'标题']])->textInput() ?>
+            <?= $form->field($model, 'title', ['template' => '{error}']) ?>
+        </div>
     </div>
-
-
 
     <div class="control-group">
         <label class="control-label">描述</label>
         <div class="controls">
-                <?= $form->field($model, 'description', ['template' => '{input}','inputOptions'=>['autocomplete'=>"off",'class'=>'m-wrap span12','placeholder'=>'描述']])->textarea(['rows'=>3]) ?>
-                <?= $form->field($model, 'description', ['template' => '{error}']) ?>
-             </div>
+            <?= $form->field($model, 'description', ['template' => '{input}','inputOptions'=>['autocomplete'=>"off",'class'=>'m-wrap span12','placeholder'=>'描述']])->textarea(['rows'=>3]) ?>
+            <?= $form->field($model, 'description', ['template' => '{error}']) ?>
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label class="control-label">只在PC端显示</label>
+        <div class="controls">
+            <?= $form->field($model, 'showOnPc', ['template' => '{input}'])->checkBox(['autocomplete'=>"on"]) ?>
+            <?= $form->field($model, 'showOnPc', ['template' => '{error}']) ?>
+        </div>
     </div>
 
     <div class="control-group">
         <label class="control-label">App端不显示</label>
         <div class="controls">
-                <?= $form->field($model, 'isDisabledInApp', ['template' => '{input}'])->checkBox(['autocomplete'=>"on"]) ?>
-                <?= $form->field($model, 'isDisabledInApp', ['template' => '{error}']) ?>
-             </div>
+            <?= $form->field($model, 'isDisabledInApp', ['template' => '{input}'])->checkBox(['autocomplete'=>"on"]) ?>
+            <?= $form->field($model, 'isDisabledInApp', ['template' => '{error}']) ?>
+        </div>
     </div>
 
 <div class="control-group">

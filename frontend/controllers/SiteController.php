@@ -6,11 +6,15 @@ use Yii;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
+use common\models\adv\Adv;
+use common\models\product\OnlineProduct;
+use common\models\news\News;
 use common\controllers\HelpersTrait;
 use common\models\user\LoginForm;
 use common\service\LoginService;
 use common\models\log\LoginLog;
 use common\models\user\User;
+
 
 /**
  * Site controller.
@@ -68,7 +72,43 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('index');
+        //轮播图展示
+        $adv = Adv::find()
+            ->where(['status' => 0, 'del_status' => 0, 'showOnPc' => 1])
+            ->limit(5)
+            ->orderBy('show_order asc, id desc')
+            ->all();
+
+        //理财公告展示
+        $notice = News::find()
+            ->where(['status' => News::STATUS_PUBLISH, 'category_id' => Yii::$app->params['news_cid_notice']])
+            ->orderBy('news_time desc, id desc')
+            ->limit(3)
+            ->all();
+
+        //媒体报道
+        $media = News::find()
+            ->where(['status' => News::STATUS_PUBLISH, 'category_id' => Yii::$app->params['news_cid_media']])
+            ->orderBy('news_time desc, id desc')
+            ->limit(3)
+            ->all();
+
+        //推荐区展示
+        $loans = OnlineProduct::find()
+            ->where(['isPrivate' => 0, 'del_status' => OnlineProduct::STATUS_USE, 'online_status' => OnlineProduct::STATUS_ONLINE])
+            ->andWhere('recommendTime != 0')
+            ->limit(3)
+            ->orderBy('recommendTime desc, sort asc, id desc')
+            ->all();
+
+        //最新资讯
+        $news = News::find()
+            ->where(['status' => News::STATUS_PUBLISH, 'category_id' => Yii::$app->params['news_cid_info']])
+            ->orderBy('news_time desc, id desc')
+            ->limit(5)
+            ->all();
+
+        return $this->render('index', ['adv' => $adv, 'loans' => $loans, 'notice' => $notice, 'media' => $media, 'news' => $news]);
     }
 
     /**

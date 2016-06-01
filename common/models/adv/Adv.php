@@ -47,8 +47,8 @@ class Adv extends ActiveRecord
     public function scenarios()
     {
         return [
-            'update' => ['id', 'sn', 'title', 'pos_id', 'image', 'show_order', 'link', 'description', 'del_status', 'isDisabledInApp'],
-            'create' => ['pos_id', 'sn', 'title', 'image', 'show_order', 'link', 'description', 'del_status', 'isDisabledInApp'],
+            'update' => ['id', 'sn', 'title', 'pos_id', 'image', 'show_order', 'link', 'description', 'del_status', 'isDisabledInApp', 'showOnPc'],
+            'create' => ['pos_id', 'sn', 'title', 'image', 'show_order', 'link', 'description', 'del_status', 'isDisabledInApp', 'showOnPc'],
         ];
     }
 
@@ -68,6 +68,7 @@ class Adv extends ActiveRecord
     public function rules()
     {
         return [
+            ['showOnPc', 'default', 'value' => 0],
             [['image', 'description'], 'required', 'on' => ['create', 'update']],
             ['status', 'default', 'value' => self::STATUS_SHOW, 'on' => ['create']],
             ['del_status', 'default', 'value' => self::DEL_STATUS_SHOW, 'on' => ['create']],
@@ -88,6 +89,7 @@ class Adv extends ActiveRecord
             'pos_id' => '位置id',
             'status' => '是否显示',
             'isDisabledInApp' => '',
+            'showOnPc' => '',
             'link' => '链接',
             'del_status' => '是否删除',
             'creator_id' => '创建者管理员id',
