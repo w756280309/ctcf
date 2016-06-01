@@ -4,11 +4,11 @@ use yii\captcha\Captcha;
 
 $this->title = '登录';
 ?>
-<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/loginsign.css">
+<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/loginsign.css?v=20160531">
 
 <?php if (!empty($aff)) { ?>
     <div>
-        <center><image src="<?= UPLOAD_BASE_URI.$aff->picPath ?>" /></center>
+        <center><img class="fenxiao" src="<?= UPLOAD_BASE_URI.$aff->picPath ?>"></center>
     </div>
 <?php } ?>
 

@@ -89,3 +89,8 @@ input.xieyi {
 .kongxi {
     margin-top: 10px;
 }
+
+/* 增加分销商图片样式 */
+img.fenxiao {
+    width: 100%;
+}
