@@ -53,7 +53,6 @@ return [
             'enableCookieValidation' => false,
         ],
     ],
-
     'modules' => [
         'news' => [
             'class' => 'app\modules\news\Module',
@@ -66,4 +65,7 @@ return [
         ],
     ],
     'params' => $params,
+    'as AjaxJsonFormat' => [
+        'class' => 'common\components\RequestBehavior',
+    ],
 ];
