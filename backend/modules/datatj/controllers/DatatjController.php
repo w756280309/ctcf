@@ -319,10 +319,11 @@ FROM perf WHERE DATE_FORMAT(bizDate,'%Y-%m') < DATE_FORMAT(NOW(),'%Y-%m')  GROUP
             $ids = array_unique($ids);
         }
         $query = User::find()->where(['type' => 1])->andWhere(['in', 'id', $ids]);
+        $pages = new Pagination(['totalCount' => $query->count(), 'pageSize' => 20]);
+        $query = $query->orderBy(['id' => SORT_DESC])->offset($pages->offset)->limit($pages->limit);
         $dataProvider = new ActiveDataProvider([
             'query' => $query
         ]);
-        $pages = new Pagination(['totalCount' => $query, 'pageSize' => 20]);
         $dataProvider->sort = false;
         return $this->render('list', [
             'dataProvider' => $dataProvider,

@@ -110,7 +110,7 @@ use yii\grid\GridView;
             'tableOptions' => ['class' => 'table table-striped table-bordered table-advance table-hover']
         ]) ?>
         <div class="pagination" style="text-align:center;clear: both">
-            <?= \yii\widgets\LinkPager::widget(['pagination' => $pages]); ?>
+            <?= LinkPager::widget(['pagination' => $pages]); ?>
         </div>
     </div>
     <?php $this->endBlock(); ?>
