@@ -11,6 +11,20 @@ use yii\grid\GridView;
                 日历史数据
             </h3>
             <a class="btn green btn-block" style="width: 140px;" href="/datatj/datatj/day-export">日统计数据导出</a>
+            <ul class="breadcrumb">
+                <li>
+                    <i class="icon-home"></i>
+                    <a href="/datatj/datatj/huizongtj">数据统计</a>
+                    <i class="icon-angle-right"></i>
+                </li>
+                <li>
+                    <a href="/datatj/datatj/daytj">日历史数据</a>
+                    <i class="icon-angle-right"></i>
+                </li>
+                <li>
+                    <a href="javascript:void(0);">日历史数据</a>
+                </li>
+            </ul>
         </div>
     </div>
     <div class="portlet-body">

@@ -289,6 +289,7 @@ class Perf extends ActiveRecord
         //当天数据
         $today = Perf::getTodayCount();
         //获取当月实时数据
+        $month['bizDate'] = $month['bizDate']?:$today['bizDate'];
         $month['totalInvestment'] = $month['totalInvestment'] + $today['totalInvestment'];
         $month['rechargeMoney'] = $month['rechargeMoney'] + $today['rechargeMoney'];
         $month['drawAmount'] = $month['drawAmount'] + $today['drawAmount'];

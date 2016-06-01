@@ -54,8 +54,8 @@ class UserStats
             $model = $model->andWhere($where);
         }
         $model = $model->all();
-        if (!$model) {
-            throw new \yii\web\NotFoundHttpException('No data output.');
+        if (0 === count($model)) {
+            return $data;
         }
 
         $recharge = RechargeRecord::find()
