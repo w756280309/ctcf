@@ -55,13 +55,13 @@ return [
     ],
     'modules' => [
         'news' => [
-            'class' => 'app\modules\news\Module',
+            'class' => 'frontend\modules\news\Module',
         ],
         'user' => [
-            'class' => 'app\modules\user\Module',
+            'class' => 'frontend\modules\user\Module',
         ],
         'product' => [
-            'class' => 'app\modules\product\Module',
+            'class' => 'frontend\modules\product\Module',
         ],
     ],
     'params' => $params,
