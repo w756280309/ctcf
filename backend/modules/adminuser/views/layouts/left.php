@@ -1,7 +1,4 @@
 <?php
-
-use backend\assets\AppAsset;
-use yii\helpers\Html;
 use common\models\AuthSys;
 $menus = AuthSys::getMenus('U100000');
 ?>
@@ -13,7 +10,7 @@ $menus = AuthSys::getMenus('U100000');
         </li>
         <li class="open">
                 <a href="javascript:;">
-                <i class="icon-th-list"></i> 
+                <i class="icon-th-list"></i>
                 <span class="title">菜单列表</span>
                 <span class="arrow "></span>
                 </a>

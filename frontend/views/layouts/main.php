@@ -1,6 +1,9 @@
 <?php
-use yii\helpers\Html;
+
 use common\view\AnalyticsHelper;
+use yii\helpers\Html;
+
+frontend\assets\FrontAsset::register($this);
 
 AnalyticsHelper::registerTo($this);
 

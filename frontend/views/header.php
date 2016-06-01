@@ -24,7 +24,7 @@
     <div>
         <ul>
             <li><a href="/">首页</a></li>
-            <li><a href="/licai/">理财列表</a></li>
+            <li><a href="/licai/">我要理财</a></li>
         </ul>
     </div>
 </div>

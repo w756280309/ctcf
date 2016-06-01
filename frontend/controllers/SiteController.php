@@ -9,25 +9,17 @@ use yii\filters\AccessControl;
 use common\models\adv\Adv;
 use common\models\product\OnlineProduct;
 use common\models\news\News;
+use wap\modules\promotion\models\RankingPromo;
 use common\controllers\HelpersTrait;
 use common\models\user\LoginForm;
 use common\service\LoginService;
 use common\models\log\LoginLog;
 use common\models\user\User;
 
-
-/**
- * Site controller.
- */
 class SiteController extends Controller
 {
     use HelpersTrait;
 
-    public $layout = 'main';
-
-    /**
-     * {@inheritdoc}
-     */
     public function behaviors()
     {
         return [
@@ -48,12 +40,12 @@ class SiteController extends Controller
                     'logout' => ['post'],
                 ],
             ],
+            'requestbehavior' => [
+                'class' => 'common\components\RequestBehavior',
+            ],
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function actions()
     {
         return [
@@ -108,7 +100,31 @@ class SiteController extends Controller
             ->limit(5)
             ->all();
 
-        return $this->render('index', ['adv' => $adv, 'loans' => $loans, 'notice' => $notice, 'media' => $media, 'news' => $news]);
+        return $this->render('index', [
+                'adv' => $adv,
+                'loans' => $loans,
+                'notice' => $notice,
+                'media' => $media,
+                'news' => $news,
+            ]);
+    }
+
+    /**
+     * 首页榜单.
+     */
+    public function actionTopList()
+    {
+        $cache = Yii::$app->cache;
+        $key = 'topList';
+
+        if (!$cache->get($key)) {
+            $rank = new RankingPromo(['startAt' => 0, 'endAt' => 9999999999]);
+            $topList = $rank->getOnline();
+
+            $cache->set($key, $topList, 600);   //缓存十分钟
+        }
+
+        return ['data' => $cache->get($key)];
     }
 
     /**

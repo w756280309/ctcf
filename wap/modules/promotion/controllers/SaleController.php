@@ -1,18 +1,9 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Administrator
- * Date: 2016/5/19
- * Time: 10:42
- */
 
 namespace wap\modules\promotion\controllers;
 
-
-use common\models\user\User;
 use wap\modules\promotion\models\RankingPromo;
 use wap\modules\promotion\models\RankingPromoOfflineSale;
-use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\Response;
 
