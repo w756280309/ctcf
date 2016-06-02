@@ -1,7 +1,7 @@
 <?php
 $this->title = '我的代金券';
 
-use yii\widgets\LinkPager;
+use common\widgets\Pager;
 ?>
 
 可用代金券:<?= empty($data['totalAmount']) ? 0 : rtrim(rtrim(number_format($data['totalAmount'], 2), '0'), '.') ?>元&nbsp;
@@ -50,6 +50,6 @@ use yii\widgets\LinkPager;
     <?php endforeach; ?>
 </table>
 
-<?= LinkPager::widget(['pagination' => $pages]); ?>
+<?= Pager::widget(['pagination' => $pages]); ?>
 
 <br>

@@ -1,6 +1,5 @@
 <?php
     $this->title = '账户中心首页';
-    use Yii;
     use common\models\order\OnlineRepaymentPlan as Plan;
 ?>
 <p>是否实名<?= $user->isIdVerified()?></p>
@@ -32,7 +31,7 @@
         <?= $model->loan->expires ?>
         <?= $model->loan->refund_method ? "天" : "个月" ?>
         </td>
-        <td><?= Yii::$app->params['deal_status'][$model->loan->status] ?></td>
+        <td><?= \Yii::$app->params['deal_status'][$model->loan->status] ?></td>
     </tr>
     <?php } ?>
 </table>

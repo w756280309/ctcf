@@ -11,7 +11,7 @@
             <a href="/site/signup">注册</a> |
             <a href="/site/login">登录</a>
         <?php } else { ?>
-            <a href=""><?= StringUtils::obfsMobileNumber(Yii::$app->user->identity->mobile) ?></a>
+            <a href="/user/user"><?= StringUtils::obfsMobileNumber(Yii::$app->user->identity->mobile) ?></a>
             <a href="javascript:void(0)" onclick="$('#logout').submit();">安全退出</a>
             <form method="post" id="logout" action="/site/logout">
                 <input name="_csrf" type="hidden" id="_csrf" value="<?= Yii::$app->request->csrfToken ?>">
