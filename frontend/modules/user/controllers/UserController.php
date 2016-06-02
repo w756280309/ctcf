@@ -2,6 +2,8 @@
 
 namespace frontend\modules\user\controllers;
 
+use common\models\order\OnlineOrder as Ord;
+use common\models\product\OnlineProduct as Loan;
 use common\models\user\MoneyRecord;
 use frontend\controllers\BaseController;
 use Yii;
@@ -16,9 +18,22 @@ class UserController extends BaseController
         $pages = new Pagination(['totalCount' => $query->count(), 'pageSize' => 10]);
         $query = $query->orderBy(['created_at' => SORT_DESC])->offset($pages->offset)->limit($pages->limit);
         $lists = $query->all();
+
         return $this->render('mingxi', [
             'pages' => $pages,
-            'lists' => $lists
+            'lists' => $lists,
+        ]);
+    }
+
+    public function actionIndex()
+    {
+        $o = Ord::tableName();
+        $l = Loan::tableName();
+        $orders = Ord::find()->innerJoinWith('loan')->where(["$o.uid" => $this->user->id, "$l.status" => [3, 5, 7]])->limit(5)->all();
+
+        return $this->render('index', [
+            'orders' => $orders,
+            'user' => $this->user,
         ]);
     }
 }

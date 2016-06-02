@@ -300,4 +300,9 @@ class OnlineOrder extends \yii\db\ActiveRecord implements \P2pl\OrderTxInterface
     {
         return $this->paymentAmount;
     }
+
+    public function getLoan()
+    {
+        return $this->hasOne(OnlineProduct::className(), ['id' => 'online_pid']);
+    }
 }
