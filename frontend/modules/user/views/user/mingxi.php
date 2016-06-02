@@ -3,6 +3,7 @@
     use common\models\user\MoneyRecord;
     use common\models\product\OnlineProduct;
     use common\models\order\OnlineOrder;
+    use common\widgets\Pager;
 ?>
 <table>
     <tr>
@@ -42,4 +43,4 @@
         </tr>
     <?php }?>
 </table>
-<?= \yii\widgets\LinkPager::widget(['pagination' => $pages]); ?>
+<?= Pager::widget(['pagination' => $pages,]); ?>

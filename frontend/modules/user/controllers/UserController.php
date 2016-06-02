@@ -5,7 +5,6 @@ namespace frontend\modules\user\controllers;
 use common\models\user\MoneyRecord;
 use frontend\controllers\BaseController;
 use Yii;
-use yii\data\ActiveDataProvider;
 use yii\data\Pagination;
 
 class UserController extends BaseController
