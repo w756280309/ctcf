@@ -13,15 +13,9 @@ class BaseController extends Controller
     public function behaviors()
     {
         return [
-            \common\filters\UserAccountAcesssControl::className(),//至于access之前是为了如果是app端登录先要拿token使用户登录
             'access' => [
                 'class' => AccessControl::className(),
                 'rules' => [
-                    [
-                        'allow' => true,
-                        'actions' => ['login', 'signup'],
-                        'roles' => ['?'], //访客注册登录
-                    ],
                     [
                         'allow' => true,
                         'roles' => ['@'], //登录用户退出

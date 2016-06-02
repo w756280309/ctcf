@@ -2,6 +2,7 @@
 namespace app\modules\deal\controllers;
 
 use Yii;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\data\Pagination;
 use common\models\product\OnlineProduct;
@@ -18,15 +19,6 @@ class DealController extends Controller
     /**
      * 行为设置，对于请求如果是ajax请求返回json.
      */
-    public function behaviors()
-    {
-        return [
-            'requestbehavior' => [
-                'class' => 'common\components\RequestBehavior',
-            ],
-            \common\filters\AppAcesssControl::className(),
-        ];
-    }
 
     /**
      * 获取理财列表.
