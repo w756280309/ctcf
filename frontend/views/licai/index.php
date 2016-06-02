@@ -19,14 +19,14 @@ use yii\widgets\LinkPager;
 
     <?php foreach ($loans as $val) : ?>
     <tr>
-        <td><?= Yii::$app->params['refund_method'][$val['refund_method']] ?></td>
-        <td><?= $val['title'] ?></td>
-        <td><?= rtrim(rtrim(number_format(OnlineProduct::calcBaseRate($val['yield_rate'], $val['jiaxi']), 2), '0'), '.') ?>%</td>
-        <td><?= $val['expires'] ?></td>
-        <td><?= rtrim(rtrim(number_format($val['money'], 2), '0'), '.') ?>元</td>
-        <td><?= number_format($val['finish_rate'] * 100) ?>%</td>
-        <td><?= rtrim(rtrim(number_format($val['money'] - $val['funded_money'], 2), '0'), '.') ?>元</td>
-        <td><?= Yii::$app->params['deal_status'][$val['online_status']] ?></td>
+        <td><?= Yii::$app->params['refund_method'][$val->refund_method] ?></td>
+        <td><?= $val->title ?></td>
+        <td><?= rtrim(rtrim(number_format(OnlineProduct::calcBaseRate($val->yield_rate, $val->jiaxi), 2), '0'), '.') ?>%</td>
+        <td><?= $val->expires ?></td>
+        <td><?= rtrim(rtrim(number_format($val->money, 2), '0'), '.') ?>元</td>
+        <td><?= number_format($val->finish_rate * 100) ?>%</td>
+        <td><?= rtrim(rtrim(number_format($val->money - $val->funded_money, 2), '0'), '.') ?>元</td>
+        <td><?= Yii::$app->params['deal_status'][$val->online_status] ?></td>
     </tr>
     <?php endforeach; ?>
 </table>
