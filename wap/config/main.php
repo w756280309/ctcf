@@ -72,4 +72,7 @@ return [
         ],
     ],
     'params' => $params,
+    'as requestBehavior' => [
+        'class' => \common\components\RequestBehavior::className(),
+    ]
 ];

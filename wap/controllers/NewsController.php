@@ -30,7 +30,6 @@ class NewsController extends Controller
         $code = ($page > $tp) ? 1 : 0;
 
         if (\Yii::$app->request->isAjax) {
-            \Yii::$app->response->format = Response::FORMAT_JSON;
             $message = ($page > $tp) ? '数据错误' : '消息返回';
 
             return ['header' => $pg, 'data' => $model, 'code' => $code, 'message' => $message];

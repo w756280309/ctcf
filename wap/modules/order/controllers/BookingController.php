@@ -9,13 +9,6 @@ use common\models\booking\BookingLog;
 
 class BookingController extends BaseController
 {
-    public function init()
-    {
-        parent::init();
-        if (Yii::$app->request->isAjax) {
-            Yii::$app->response->format = Response::FORMAT_JSON;
-        }
-    }
 
     /**
      * 客户预约申请

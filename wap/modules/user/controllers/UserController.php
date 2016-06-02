@@ -50,7 +50,6 @@ class UserController extends BaseController
         $code = ($page > $tp) ? 1 : 0;
 
         if (Yii::$app->request->isAjax) {
-            Yii::$app->response->format = Response::FORMAT_JSON;
             $message = ($page > $tp) ? '数据错误' : '消息返回';
 
             return ['header' => $pg, 'data' => $model, 'code' => $code, 'message' => $message];
@@ -70,8 +69,6 @@ class UserController extends BaseController
         $os = new OrderManager();
         $list = $os->getUserOrderList($this->getAuthedUser()->id, $type, $page);
         if (Yii::$app->request->isAjax) {
-            Yii::$app->response->format = Response::FORMAT_JSON;
-
             return $list;
         }
 

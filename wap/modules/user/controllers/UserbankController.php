@@ -17,14 +17,6 @@ use common\models\bank\BankCardUpdate;
 
 class UserbankController extends BaseController
 {
-    public function init()
-    {
-        parent::init();
-        if (Yii::$app->request->isAjax) {
-            Yii::$app->response->format = Response::FORMAT_JSON;
-        }
-    }
-
     /**
      * 实名认证表单页.
      */

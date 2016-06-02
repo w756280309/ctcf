@@ -28,9 +28,6 @@ class BaseController extends Controller
                     ],
                 ],
             ],
-            'requestbehavior' => [
-                'class' => 'common\components\RequestBehavior',
-            ],
         ];
     }
 }

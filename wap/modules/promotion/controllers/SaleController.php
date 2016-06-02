@@ -19,7 +19,6 @@ class SaleController extends Controller
      */
     public function actionRanking($id)
     {
-        \Yii::$app->response->format = Response::FORMAT_JSON;
         $ranking = RankingPromo::find()->where(['id' => $id])->one();
         if (null === $ranking) {
             return ['code' => false, 'message' => '没有找到指定活动'];

@@ -29,8 +29,6 @@ class WeixinController extends Controller
             ];
         }
 
-        Yii::$app->response->format = Response::FORMAT_JSON;
-
         return [
             'timestamp' => $params['timestamp'], // 必填，生成签名的时间戳
             'nonceStr' => $params['noncestr'], // 必填，生成签名的随机串

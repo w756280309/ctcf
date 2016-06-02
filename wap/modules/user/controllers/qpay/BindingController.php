@@ -15,8 +15,6 @@ class BindingController extends BaseController
 {
     public function actionVerify()
     {
-        Yii::$app->response->format = Response::FORMAT_JSON;
-
         // 已验证的数据
         $safe = [
             'realName' => $this->getAuthedUser()->real_name,

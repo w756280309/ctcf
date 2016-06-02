@@ -98,7 +98,6 @@ class OrderController extends BaseController
             throw new \yii\web\NotFoundHttpException();   //判断参数无效时,抛404异常
         }
 
-        Yii::$app->response->format = Response::FORMAT_JSON;
         $money = \Yii::$app->request->post('money');
         $coupon_id = \Yii::$app->request->post('couponId');
         $coupon = null;
@@ -134,7 +133,6 @@ class OrderController extends BaseController
             $deal = OnlineProduct::findOne($order->online_pid);
         }
         if (\Yii::$app->request->isAjax) {
-            Yii::$app->response->format = Response::FORMAT_JSON;
             return ['status' => $order->status];
         }
 
@@ -238,7 +236,6 @@ class OrderController extends BaseController
      */
     public function actionRate()
     {
-        Yii::$app->response->format = Response::FORMAT_JSON;
         if (Yii::$app->request->isPost) {
             $sn = Html::encode(Yii::$app->request->post('sn'));
             $amount = Html::encode(Yii::$app->request->post('amount'));

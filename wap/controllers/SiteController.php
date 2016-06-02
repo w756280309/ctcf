@@ -158,10 +158,6 @@ class SiteController extends Controller
             return $this->goHome();
         }
 
-        if (Yii::$app->request->isAjax) {
-            Yii::$app->response->format = Response::FORMAT_JSON;
-        }
-
         $model = new LoginForm();
 
         if (empty($next) || !filter_var($next, FILTER_VALIDATE_URL)) {
@@ -263,10 +259,6 @@ class SiteController extends Controller
             return $this->redirect('/site/login');
         }
 
-        if (Yii::$app->request->isAjax) {
-            Yii::$app->response->format = Response::FORMAT_JSON;
-        }
-
         $model = new EditpassForm();
         $model->scenario = 'edituserpass';
         if ($model->load(Yii::$app->request->post())) {
@@ -294,13 +286,8 @@ class SiteController extends Controller
             return $this->goHome();
         }
 
-        if (Yii::$app->request->isAjax) {
-            Yii::$app->response->format = Response::FORMAT_JSON;
-        }
-
         $model = new SignupForm();
         if ($model->load(Yii::$app->request->post()) && Yii::$app->request->isAjax) {
-            Yii::$app->response->format = Response::FORMAT_JSON;
             $model->reset_flag = 1;
             if ($model->validate() && $model->resetpass()) {
                 \Yii::$app->user->logout();
@@ -329,7 +316,6 @@ class SiteController extends Controller
 
         $model = new SignupForm();
         if ($model->load(Yii::$app->request->post()) && Yii::$app->request->isAjax) {
-            Yii::$app->response->format = Response::FORMAT_JSON;
             if ($user = $model->signup()) {
                 $promo160520log = Promo160520Log::findOne(['mobile' => $user->mobile]);
                 if ($promo160520log) {
@@ -472,8 +458,6 @@ class SiteController extends Controller
 
     public function actionSession()
     {
-        Yii::$app->response->format = Response::FORMAT_JSON;
-
         return [
             'isLoggedin' => !Yii::$app->user->isGuest,
         ];
