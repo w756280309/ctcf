@@ -1,6 +1,7 @@
 <?php
 $this->title = '日历史数据';
 use yii\grid\GridView;
+
 ?>
 <?php $this->beginBlock('blockmain'); ?>
 <div class="container-fluid">
@@ -9,6 +10,21 @@ use yii\grid\GridView;
             <h3 class="page-title">
                 日历史数据
             </h3>
+            <a class="btn green btn-block" style="width: 140px;" href="/datatj/datatj/day-export">日统计数据导出</a>
+            <ul class="breadcrumb">
+                <li>
+                    <i class="icon-home"></i>
+                    <a href="/datatj/datatj/huizongtj">数据统计</a>
+                    <i class="icon-angle-right"></i>
+                </li>
+                <li>
+                    <a href="/datatj/datatj/daytj">日历史数据</a>
+                    <i class="icon-angle-right"></i>
+                </li>
+                <li>
+                    <a href="javascript:void(0);">日历史数据</a>
+                </li>
+            </ul>
         </div>
     </div>
     <div class="portlet-body">
@@ -86,36 +102,41 @@ use yii\grid\GridView;
                 [
                     'attribute' => 'investor',
                     'label' => '投资人数',
+                    'format' => 'html',
                     'value' => function ($data) {
-                        return intval($data['investor']);
+                        return '<a href="/datatj/datatj/list?type=day&field=investor&date=' . $data['bizDate'] . '&result=' . intval($data['investor']) . '">' . intval($data['investor']) . '</a>';
                     }
                 ],
                 [
                     'attribute' => 'newRegisterAndInvestor',
                     'label' => '当日注册当日投资人数',
+                    'format' => 'html',
                     'value' => function ($data) {
-                        return intval($data['newRegisterAndInvestor']);
+                        return '<a href="/datatj/datatj/list?type=day&field=newRegisterAndInvestor&date=' . $data['bizDate'] . '&result=' . intval($data['newRegisterAndInvestor']) . '">' . intval($data['newRegisterAndInvestor']) . '</a>';
                     }
                 ],
                 [
                     'attribute' => 'newInvestor',
                     'label' => '新增投资人数',
+                    'format' => 'html',
                     'value' => function ($data) {
-                        return intval($data['newInvestor']);
+                        return '<a href="/datatj/datatj/list?type=day&field=newInvestor&date=' . $data['bizDate'] . '&result=' . intval($data['newInvestor']) . '">' . intval($data['newInvestor']) . '</a>';
                     }
                 ],
                 [
                     'attribute' => 'investAndLogin',
                     'label' => '已投用户登录数',
+                    'format' => 'html',
                     'value' => function ($data) {
-                        return intval($data['investAndLogin']);
+                        return '<a href="/datatj/datatj/list?type=day&field=investAndLogin&date=' . $data['bizDate'] . '&result=' . intval($data['investAndLogin']) . '">' . intval($data['investAndLogin']) . '</a>';
                     }
                 ],
                 [
                     'attribute' => 'notInvestAndLogin',
                     'label' => '未投用户登录数',
+                    'format' => 'html',
                     'value' => function ($data) {
-                        return intval($data['notInvestAndLogin']);
+                        return '<a href="/datatj/datatj/list?type=day&field=notInvestAndLogin&date=' . $data['bizDate'] . '&result=' . intval($data['notInvestAndLogin']) . '">' . intval($data['notInvestAndLogin']) . '</a>';
                     }
                 ],
                 [
@@ -132,6 +153,5 @@ use yii\grid\GridView;
             <?= \yii\widgets\LinkPager::widget(['pagination' => $pages]); ?>
         </div>
     </div>
-
     <?php $this->endBlock(); ?>
 

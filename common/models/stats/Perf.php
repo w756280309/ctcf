@@ -289,6 +289,7 @@ class Perf extends ActiveRecord
         //当天数据
         $today = Perf::getTodayCount();
         //获取当月实时数据
+        $month['bizDate'] = $month['bizDate']?:$today['bizDate'];
         $month['totalInvestment'] = $month['totalInvestment'] + $today['totalInvestment'];
         $month['rechargeMoney'] = $month['rechargeMoney'] + $today['rechargeMoney'];
         $month['drawAmount'] = $month['drawAmount'] + $today['drawAmount'];
@@ -303,5 +304,69 @@ class Perf extends ActiveRecord
         $month['investmentInWyb'] = $month['investmentInWyb'] + $today['investmentInWyb'];
         $month['investmentInWyj'] = $month['investmentInWyj'] + $today['investmentInWyj'];
         return $month;
+    }
+
+    //获取当天投资用户
+    public function getDayInvestor($date)
+    {
+        $investor = Yii::$app->db->createCommand('SELECT DISTINCT(uid) FROM online_order WHERE status=1 AND DATE(FROM_UNIXTIME(created_at))=:date')
+            ->bindValue('date', $date, \PDO::PARAM_STR)
+            ->queryAll();
+        return ArrayHelper::getColumn($investor, 'uid');
+    }
+
+    //当日注册当日投资用户
+    public function getDayNewRegisterAndInvestor($date)
+    {
+        $investor = Yii::$app->db->createCommand('SELECT DISTINCT(o.uid) FROM online_order AS o LEFT JOIN `user` AS u ON o.uid = u.id WHERE o.`status`= 1 AND DATE(FROM_UNIXTIME(u.`created_at`)) = :date AND DATE(FROM_UNIXTIME(o.created_at)) = :date')
+            ->bindValue('date', $date, \PDO::PARAM_STR)
+            ->queryAll();
+        return ArrayHelper::getColumn($investor, 'uid');
+    }
+
+    //新增投资用户（以前注册未投资，但今日投资了的）
+    public function getDayNewInvestor($date)
+    {
+        $totalInvestor = Yii::$app->db->createCommand('SELECT DISTINCT(o.uid) FROM online_order AS o LEFT JOIN `user` AS u ON o.uid = u.id WHERE o.`status`= 1 AND DATE(FROM_UNIXTIME(u.`created_at`)) < :date AND DATE(FROM_UNIXTIME(o.created_at))<=:date')
+            ->bindValue('date', $date, \PDO::PARAM_STR)
+            ->queryAll();
+        $totalInvestor = ArrayHelper::getColumn($totalInvestor, 'uid');
+        $investor = Yii::$app->db->createCommand('SELECT DISTINCT(o.uid) FROM online_order AS o LEFT JOIN `user` AS u ON o.uid = u.id WHERE o.`status`= 1 AND DATE(FROM_UNIXTIME(u.`created_at`)) < :date AND DATE(FROM_UNIXTIME(o.created_at)) <:date')
+            ->bindValue('date', $date, \PDO::PARAM_STR)
+            ->queryAll();
+        $investor = ArrayHelper::getColumn($investor, 'uid');
+        return array_diff($totalInvestor, $investor);
+    }
+
+    //获取已投用户登录的用户
+    public function getDayInvestAndLogin($date)
+    {
+        $sql = "SELECT id FROM `user` WHERE `type` = 1 AND DATE(FROM_UNIXTIME(last_login)) = :date AND id  IN (SELECT DISTINCT uid FROM online_order WHERE `status` = 1)";
+        $res = Yii::$app->db->createCommand($sql, ['date' => $date])->queryAll();
+        return ArrayHelper::getColumn($res, 'id');
+    }
+
+    //获取未投有用户登录的用户
+    public function getDayNotInvestAndLogin($date)
+    {
+        $sql = "SELECT id FROM `user` WHERE `type` = 1 AND DATE(FROM_UNIXTIME(last_login)) = :date AND id NOT IN (SELECT DISTINCT uid FROM online_order WHERE `status` = 1)";
+        $res = Yii::$app->db->createCommand($sql, ['date' => $date])->queryAll();
+        return ArrayHelper::getColumn($res, 'id');
+    }
+
+    //获取月统计的统计人数
+    public static function getMonthInvestor()
+    {
+        $startDate = Perf::getStartDate();
+        $startDate = date('Y-m', strtotime($startDate));
+        $date = date('Y-m');
+        $result = [];
+        while ($startDate <= $date) {
+            $sql = "SELECT COUNT(DISTINCT uid) FROM online_order WHERE `status`=1  AND DATE_FORMAT(FROM_UNIXTIME(created_at),'%Y-%m')= :date";
+            $res = Yii::$app->db->createCommand($sql, ['date' => $startDate])->queryScalar();
+            $result[$startDate] = $res;
+            $startDate = (new \DateTime($startDate))->add(new \DateInterval('P1M'))->format('Y-m');
+        }
+        return $result;
     }
 }

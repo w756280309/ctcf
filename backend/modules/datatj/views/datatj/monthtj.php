@@ -1,6 +1,7 @@
 <?php
 $this->title = '月历史数据';
 use yii\grid\GridView;
+
 ?>
 <?php $this->beginBlock('blockmain'); ?>
 <div class="container-fluid">
@@ -9,6 +10,21 @@ use yii\grid\GridView;
             <h3 class="page-title">
                 月历史数据
             </h3>
+            <a class="btn green btn-block" style="width: 140px;" href="/datatj/datatj/month-export">月统计数据导出</a>
+            <ul class="breadcrumb">
+                <li>
+                    <i class="icon-home"></i>
+                    <a href="/datatj/datatj/huizongtj">数据统计</a>
+                    <i class="icon-angle-right"></i>
+                </li>
+                <li>
+                    <a href="/datatj/datatj/monthtj">月历史数据</a>
+                    <i class="icon-angle-right"></i>
+                </li>
+                <li>
+                    <a href="javascript:void(0);">月历史数据</a>
+                </li>
+            </ul>
         </div>
     </div>
     <div class="portlet-body">
@@ -19,8 +35,8 @@ use yii\grid\GridView;
                 [
                     'attribute' => 'bizDate',
                     'label' => '日期',
-                    'value' => function($data) {
-                        return date('Y-m',strtotime($data['bizDate']));
+                    'value' => function ($data) {
+                        return date('Y-m', strtotime($data['bizDate']));
                     }
                 ],
                 [
@@ -89,22 +105,26 @@ use yii\grid\GridView;
                 [
                     'attribute' => 'investor',
                     'label' => '投资人数',
-                    'value' => function ($data) {
-                        return intval($data['investor']);
+                    'format' => 'html',
+                    'value' => function ($data) use ($monthInvestor) {
+                        $investor = (key_exists(date('Y-m', strtotime($data['bizDate'])), $monthInvestor) ? $monthInvestor[date('Y-m', strtotime($data['bizDate']))] : 0);
+                        return '<a href="/datatj/datatj/list?type=month&field=investor&date=' . date('Y-m', strtotime($data['bizDate'])) . '&result=' . intval($investor) . '">' . intval($investor) . '</a>';
                     }
                 ],
                 [
                     'attribute' => 'newRegisterAndInvestor',
                     'label' => '当日注册当日投资人数',
+                    'format' => 'html',
                     'value' => function ($data) {
-                        return intval($data['newRegisterAndInvestor']);
+                        return '<a href="/datatj/datatj/list?type=month&field=newRegisterAndInvestor&date=' . date('Y-m', strtotime($data['bizDate'])) . '&result=' . intval($data['newRegisterAndInvestor']) . '">' . intval($data['newRegisterAndInvestor']) . '</a>';
                     }
                 ],
                 [
                     'attribute' => 'newInvestor',
                     'label' => '新增投资人数',
+                    'format' => 'html',
                     'value' => function ($data) {
-                        return intval($data['newInvestor']);
+                        return '<a href="/datatj/datatj/list?type=month&field=newInvestor&date=' . date('Y-m', strtotime($data['bizDate'])) . '&result=' . intval($data['newInvestor']) . '">' . intval($data['newInvestor']) . '</a>';
                     }
                 ],
                 [
@@ -117,7 +137,7 @@ use yii\grid\GridView;
             ],
             'tableOptions' => ['class' => 'table table-striped table-bordered table-advance table-hover']
         ]) ?>
-</div>
+    </div>
 
-<?php $this->endBlock(); ?>
+    <?php $this->endBlock(); ?>
 

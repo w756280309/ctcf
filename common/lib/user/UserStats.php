@@ -18,9 +18,9 @@ class UserStats
     /**
      * 统计投资用户信息.
      */
-    public static function collectLenderData()
+    public static function collectLenderData($where = [])
     {
-        $data = [ 'title' =>
+        $data = ['title' =>
             [
                 '用户ID',
                 '注册时间',
@@ -49,11 +49,13 @@ class UserStats
             ->from($u)
             ->leftJoin($b, "$u.id = $b.uid")
             ->leftJoin($a, "$u.id = $a.uid")
-            ->where(["$u.type" => User::USER_TYPE_PERSONAL])
-            ->all();
-
-        if (!$model) {
-            throw new \yii\web\NotFoundHttpException('No data output.');
+            ->where(["$u.type" => User::USER_TYPE_PERSONAL]);
+        if (!empty($where)) {
+            $model = $model->andWhere($where);
+        }
+        $model = $model->all();
+        if (0 === count($model)) {
+            return $data;
         }
 
         $recharge = RechargeRecord::find()
@@ -81,7 +83,7 @@ class UserStats
             $data[$key]['id'] = $val['id'];
             $data[$key]['created_at'] = date('Y-m-d H:i:s', $val['created_at']);
             $data[$key]['name'] = $val['real_name'];
-            $data[$key]['mobile'] = $val['mobile']."\t";   //手机号后面加入tab键,防止excel表格打开时,显示为科学计数法
+            $data[$key]['mobile'] = $val['mobile'] . "\t";   //手机号后面加入tab键,防止excel表格打开时,显示为科学计数法
             $data[$key]['idcard'] = StringUtils::obfsIdCardNo($val['idcard']);    //隐藏身份证号信息,只保留生日信息
             $data[$key]['idcard_status'] = $val['idcard_status'];
             $data[$key]['mianmiStatus'] = $val['mianmiStatus'];
@@ -96,7 +98,7 @@ class UserStats
 
             $data[$key]['rtotalFund'] = 0;
             $data[$key]['rtotalNum'] = 0;
-            if (1 === (int) $val['idcard_status'] && $recharge) {
+            if (1 === (int)$val['idcard_status'] && $recharge) {
                 foreach ($recharge as $v) {
                     if ($val['id'] == $v['uid']) {
                         $data[$key]['rtotalFund'] = $v['rtotalFund'];
@@ -142,14 +144,14 @@ class UserStats
 
         $record = null;
         foreach ($data as $val) {
-            $record .= implode(',', $val)."\n";
+            $record .= implode("\t" . ',', $val) . "\n";
         }
 
         if (null !== $record) {
             $record = iconv('UTF-8', 'GB18030', $record);//转换编码
 
             header('Content-Disposition: attachment; filename="statistics.csv"');
-            header('Content-Length: ' .strlen($record)); // 内容的字节数
+            header('Content-Length: ' . strlen($record)); // 内容的字节数
 
             echo $record;
         }
