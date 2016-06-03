@@ -35,6 +35,14 @@ $(function () {
         })
     });
 
+    $('#reset').bind('click', function () {
+        $('#couponId').val('');   //消除提交表单信息
+        $('#couponMoney').val('');
+        $(this).hide();
+        $('.coupon-title').html("使用代金券");
+        $('.coupon-content').html('<span class=\"notice\">请选择</span>');
+    });
+
     $('#money').on('keyup', function () {
         profit($(this));
     });
