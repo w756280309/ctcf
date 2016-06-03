@@ -36,22 +36,7 @@ $(function () {
     });
 
     $('#money').on('keyup', function () {
-        $('#couponMoney').val('');  //消除提交表单信息
-        $('#couponId').val('');
-
         profit($(this));
-        var url = toCoupon(true);
-
-        $.get(url, function(data)
-        {
-            if (data.data.length > 0) {
-                $('.coupon-title').html("使用代金券");
-                $('.coupon-content').html("<div onclick=\"toCoupon()\"><span class=\"notice\">请选择</span></div>");
-            } else {
-                $('.coupon-title').html("使用代金券");
-                $('.coupon-content').html("无可用");
-            }
-        });
     });
 
     profit($("#money"));

@@ -21,10 +21,6 @@ class OrderController extends BaseController
 {
     /**
      * 认购页面.
-     *
-     * @param type $sn 标的编号
-     *
-     * @return page
      */
     public function actionIndex()
     {
@@ -87,10 +83,6 @@ class OrderController extends BaseController
 
     /**
      * 购买标的.
-     *
-     * @param type $sn
-     *
-     * @return type
      */
     public function actionDoorder($sn)
     {
