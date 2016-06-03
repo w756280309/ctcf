@@ -8,7 +8,9 @@ use yii\helpers\Html;
 class Pager extends LinkPager
 {
     public $internalButtonCount = 5;
-    public $ellipsis = '……';
+    public $ellipsis = '...';
+    public $prevPageLabel = '上一页';
+    public $nextPageLabel = '下一页';
 
     public function run()
     {
@@ -25,64 +27,66 @@ class Pager extends LinkPager
         if ($pageCount < 2 && $this->hideOnSinglePage) {
             return '';
         }
-
-        $buttons = [];
         $currentPage = $this->pagination->getPage();
+        $currentPage++;
+        $buttons = [];
+        $endPage = $pageCount;
+        $startPage = 1;
+        // prev page
+        if ($this->prevPageLabel !== false) {
+            $page = max($currentPage - 1, $startPage);
+            $buttons[] = $this->renderPageButton($this->prevPageLabel, $page - 1, $this->prevPageCssClass, $currentPage <= $startPage, false);
+        }
 
         // internal pages
-        $endPage = $pageCount;
-        $currentPage++;
-        if ($endPage <= $this->internalButtonCount + 2) {
+        $offset = ceil(($this->internalButtonCount - 1) / 2);
+        $linkOptions = $this->linkOptions;
+        //总页数没有超过 $this->internalButtonCount + 1 的时候，打印全部
+        if ($this->internalButtonCount + 1 >= $endPage) {
             for ($i = 1; $i <= $endPage; $i++) {
                 $buttons[] = $this->renderPageButton($i, $i - 1, null, false, $i == $currentPage);
             }
         } else {
-            //偏移量
-            $offset = ceil(($this->internalButtonCount - 1) / 2);
-            $linkOptions = $this->linkOptions;
-            if ($currentPage >= 1 && $currentPage <= 1 + $offset) {
-                for ($i = 1; $i <= $this->internalButtonCount; $i++) {
+            if ($currentPage >= 1 && $currentPage <= $startPage + $offset) {
+                for ($i = $startPage; $i <= $this->internalButtonCount; $i++) {
                     $buttons[] = $this->renderPageButton($i, $i - 1, null, false, $i == $currentPage);
                 }
-                if ($this->internalButtonCount < $endPage - 1) {
+                if (max($currentPage + $offset, $startPage - 1 + $this->internalButtonCount) < $endPage - 1) {
                     $buttons[] = Html::tag('li', Html::a($this->ellipsis, null, $linkOptions), $linkOptions);
-                    $buttons[] = $this->renderPageButton($endPage, $endPage - 1, null, false, $endPage == $currentPage);
                 }
-            } elseif ($currentPage > 1 + $offset && $currentPage < $endPage - $offset) {
-                if ($currentPage == 2 + $offset) {
-                    for ($i = 1; $i <= min($currentPage + $offset, $this->internalButtonCount); $i++) {
-                        $buttons[] = $this->renderPageButton($i, $i - 1, null, false, $i == $currentPage);
-                    }
+                $buttons[] = $this->renderPageButton($endPage, $endPage - 1, null, false, $endPage == $currentPage);
+            } elseif ($currentPage > $startPage + $offset && $currentPage < $endPage - $offset) {
+                //第一页
+                $buttons[] = $this->renderPageButton($startPage, $startPage - 1, null, false, $startPage == $currentPage);
+                //判断开始省略号
+                if ($currentPage - $offset > $startPage + 1) {
+                    $buttons[] = Html::tag('li', Html::a($this->ellipsis, null, $linkOptions), $linkOptions);
                 }
-                if ($currentPage > 2 + $offset && $currentPage < $endPage - 1 - $offset) {
-                    $buttons[] = $this->renderPageButton(1, 1 - 1, null, false, 1 == $currentPage);
-                    if ($currentPage - $offset > 1 + 1) {
-                        $buttons[] = Html::tag('li', Html::a($this->ellipsis, null, $linkOptions), $linkOptions);
-                    }
-                    for ($i = $currentPage - $offset; $i <= $currentPage + $offset; $i++) {
-                        $buttons[] = $this->renderPageButton($i, $i - 1, null, false, $i == $currentPage);
-                    }
-                }
-                if ($currentPage == $endPage - 1 - $offset) {
-                    $buttons[] = $this->renderPageButton(1, 1 - 1, null, false, 1 == $currentPage);
-                    if ($currentPage - $offset > 1 + 1) {
-                        $buttons[] = Html::tag('li', Html::a($this->ellipsis, null, $linkOptions), $linkOptions);
-                    }
-                    for ($i = $endPage - $this->internalButtonCount + 1; $i < $endPage; $i++) {
-                        $buttons[] = $this->renderPageButton($i, $i - 1, null, false, $i == $currentPage);
-                    }
+                for ($i = max($startPage + 1, $currentPage - $offset); $i <= min($endPage - 1, $currentPage + $offset); $i++) {
+                    $buttons[] = $this->renderPageButton($i, $i - 1, null, false, $i == $currentPage);
                 }
                 if ($currentPage + $offset < $endPage - 1) {
                     $buttons[] = Html::tag('li', Html::a($this->ellipsis, null, $linkOptions), $linkOptions);
                 }
+                //最后一页
                 $buttons[] = $this->renderPageButton($endPage, $endPage - 1, null, false, $endPage == $currentPage);
             } elseif ($currentPage >= $endPage - $offset && $currentPage <= $endPage) {
-                $buttons[] = $this->renderPageButton(1, 1 - 1, null, false, 1 == $currentPage);
-                $buttons[] = Html::tag('li', Html::a($this->ellipsis, null, $linkOptions), $linkOptions);
-                for ($i = $endPage - $this->internalButtonCount + 1; $i <= $endPage; $i++) {
+                $buttons[] = $this->renderPageButton($startPage, $startPage - 1, null, false, 1 == $currentPage);
+                if (min($currentPage - $offset, $endPage + 1 - $this->internalButtonCount) > $startPage + 1) {
+                    $buttons[] = Html::tag('li', Html::a($this->ellipsis, null, $linkOptions), $linkOptions);
+                }
+                for ($i = min($endPage + 1, $endPage - ($this->internalButtonCount - 1)); $i <= $endPage; $i++) {
                     $buttons[] = $this->renderPageButton($i, $i - 1, null, false, $i == $currentPage);
                 }
             }
+        }
+
+
+        // next page
+        if ($this->nextPageLabel !== false) {
+            $page = $currentPage + 1;
+            $page = min($page, $endPage);
+            $buttons[] = $this->renderPageButton($this->nextPageLabel, $page - 1, $this->nextPageCssClass, $currentPage >= $pageCount, false);
         }
 
         return Html::tag('ul', implode("\n", $buttons), $this->options);
