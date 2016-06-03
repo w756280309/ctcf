@@ -15,7 +15,7 @@ $this->registerJs(<<<JS
 JS
     , 1);
 
-$this->registerJsFile(ASSETS_BASE_URI.'js/order.js?v=20160517', ['depends' => 'yii\web\YiiAsset']);
+$this->registerJsFile(ASSETS_BASE_URI.'js/order.js?v=20160603-v', ['depends' => 'yii\web\YiiAsset']);
 ?>
 <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/setting.css?v=20160518">
 
@@ -50,17 +50,18 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/order.js?v=20160517', ['depends' => 'y
 
         <div class="row sm-height border-bottom">
             <?php if (empty($couponId)) { ?>
-                <div class="col-xs-4 safe-txt text-align-ct coupon-title">使用代金券</div>
+                <div class="col-xs-4 safe-txt text-align-ct">使用代金券</div>
                 <?php if (empty($coupon)) { ?>
-                <div class="col-xs-8 safe-txt coupon-content">无可用</div>
+                <div class="col-xs-8 safe-txt">无可用</div>
                 <?php } else { ?>
-                <div class="col-xs-8 safe-txt coupon-content" onclick="toCoupon()"><span class="notice">请选择</span></div>
+                <div class="col-xs-8 safe-txt" onclick="toCoupon()"><span class="notice">请选择</span></div>
                 <?php } ?>
             <?php } else { ?>
-                <div class="col-xs-4 safe-txt text-align-ct coupon-title">代金券抵扣</div>
-                <div class="col-xs-8 safe-txt coupon-content" onclick="toCoupon()"><?= $coupon[0]['amount'] ?>元</div>
-                <input name="couponId" id="couponId" type="text" value="<?= $coupon[0]['uid'] ?>" hidden="hidden">
-                <input name="couponMoney" id="couponMoney" type="text" value="<?= $coupon[0]['amount'] ?>" hidden="hidden">
+                <div class="col-xs-4 safe-txt text-align-ct">代金券抵扣</div>
+                <div class="col-xs-5 safe-txt" onclick="toCoupon()"><?= $coupon['amount'] ?>元</div>
+                <div class="col-xs-3 safe-txt text-align-ct" onclick="resetCoupon()">清除</div>
+                <input name="couponId" id="couponId" type="text" value="<?= $coupon['uid'] ?>" hidden="hidden">
+                <input name="couponMoney" id="couponMoney" type="text" value="<?= $coupon['amount'] ?>" hidden="hidden">
             <?php } ?>
         </div>
 
@@ -97,15 +98,19 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/order.js?v=20160517', ['depends' => 'y
     <!-- 购买页 end  -->
 
     <script type="text/javascript">
-        function toCoupon(urlFlag)
+        function toCoupon()
         {
             var money = $('#money').val();
             var url = '/user/coupon/valid?sn=<?= $deal->sn ?>&money='+money;
 
-            if (urlFlag) {
-                return url;
-            }
-
             location.href = url;
+        }
+
+        function resetCoupon()
+        {
+            var money = $('#money').val();
+            var url = '/order/order?sn=<?= $deal->sn ?>&money='+money;
+
+            location.replace(url);
         }
     </script>

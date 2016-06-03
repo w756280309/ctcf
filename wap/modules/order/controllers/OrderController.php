@@ -21,10 +21,6 @@ class OrderController extends BaseController
 {
     /**
      * 认购页面.
-     *
-     * @param type $sn 标的编号
-     *
-     * @return page
      */
     public function actionIndex()
     {
@@ -35,21 +31,18 @@ class OrderController extends BaseController
             ], Yii::$app->request->get());
 
         if (empty($request['sn']) || !preg_match('/^[A-Za-z0-9]+$/', $request['sn'])) {
-            throw new \yii\web\NotFoundHttpException();
+            $this->ex404();
         }
 
         if (!empty($request['money']) && !preg_match('/^[0-9|.]+$/', $request['money'])) {
-            throw new \yii\web\NotFoundHttpException();
+            $this->ex404();
         }
 
         if (!empty($request['couponId']) && !preg_match('/^[0-9]+$/', $request['couponId'])) {
-            throw new \yii\web\NotFoundHttpException();
+            $this->ex404();
         }
 
-        $deal = OnlineProduct::findOne(['sn' => $request['sn']]);
-        if (null === $deal) {
-            throw new \yii\web\NotFoundHttpException('This production is not existed.');
-        }
+        $deal = $this->findOr404(OnlineProduct::class, ['sn' => $request['sn']]);
 
         $user = $this->getAuthedUser();
         $ua = $user->lendAccount;    //获取用户的账户信息
@@ -72,14 +65,10 @@ class OrderController extends BaseController
             $coupon->andWhere(["$uc.id" => $request['couponId']]);
         }
 
-        if (!empty($request['money'])) {
-            $coupon->andFilterWhere(['<=', 'minInvest', $request['money']]);
-        }
-
         return $this->render('index', [
                 'deal' => $deal,
                 'param' => $param,
-                'coupon' => $coupon->all(),
+                'coupon' => $coupon->one(),
                 'money' => $request['money'],
                 'couponId' => $request['couponId'],
             ]);
@@ -87,10 +76,6 @@ class OrderController extends BaseController
 
     /**
      * 购买标的.
-     *
-     * @param type $sn
-     *
-     * @return type
      */
     public function actionDoorder($sn)
     {

@@ -52,21 +52,18 @@ class CouponController extends BaseController
 
         $request = array_replace([
                 'sn' => null,
-                'money' => 0,
+                'money' => null,
             ], \Yii::$app->request->get());
 
         if (empty($request['sn']) || !preg_match('/^[A-Za-z0-9]+$/', $request['sn'])) {
-            throw new \yii\web\NotFoundHttpException();
-        }
-
-        $product = OnlineProduct::findOne(['sn' => $request['sn']]);
-        if (null === $product) {
-            throw new \yii\web\NotFoundHttpException();
+            $this->ex404();
         }
 
         if (!empty($request['money']) && !preg_match('/^[0-9|.]+$/', $request['money'])) {
-            throw new \yii\web\NotFoundHttpException();
+            $this->ex404();
         }
+
+        $this->findOr404(OnlineProduct::class, ['sn' => $request['sn']]);
 
         $data = CouponType::find()    //获取有效的代金券信息
             ->select("$ct.*, $uc.user_id, $uc.order_id, $uc.isUsed, $uc.id uid")
@@ -74,13 +71,8 @@ class CouponController extends BaseController
             ->where(['isUsed' => 0, 'order_id' => null, 'isDisabled' => 0])
             ->andFilterWhere(['<=', 'useStartDate', date('Y-m-d')])
             ->andFilterWhere(['>=', 'useEndDate', date('Y-m-d')])
-            ->andWhere(['user_id' => $this->getAuthedUser()->id]);
-
-        if (0 !== doubleval($request['money'])) {
-            $data->andFilterWhere(['<=', 'minInvest', $request['money']]);
-        }
-
-        $data->orderBy('useEndDate desc, amount desc, minInvest asc');
+            ->andWhere(['user_id' => $this->getAuthedUser()->id])
+            ->orderBy('useEndDate desc, amount desc, minInvest asc');
 
         $pg = \Yii::$container->get('paginator')->paginate($data, $page, $size);
         $coupon = $pg->getItems();

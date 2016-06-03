@@ -96,7 +96,7 @@ class UserCoupon extends \yii\db\ActiveRecord
     public static function checkAllowUse(UserCoupon $coupon, $money, User $user = null, Loan $loan = null)
     {
         if ($coupon->isUsed) {
-            throw new Exception('已经使用');
+            throw new Exception('代金券已经使用');
         }
 
         if (null !== $user && $coupon->user_id !== $user->id) {
@@ -109,7 +109,7 @@ class UserCoupon extends \yii\db\ActiveRecord
         }
 
         if (bccomp($coupon->couponType->minInvest, $money, 2) > 0) {
-            throw new Exception('最低投资'.$coupon->couponType->minInvest.'元');
+            throw new Exception('代金券最低投资'.rtrim(rtrim($coupon->couponType->minInvest, '0'), '.').'元可用');
         }
 
         return $coupon;
