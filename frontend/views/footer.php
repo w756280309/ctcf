@@ -16,6 +16,8 @@ $this->registerCssFile(ASSETS_BASE_URI.'css/footer.css', ['depends' => 'frontend
                 <li>温州人杂志</li>
                 <li style="border-left:0;padding-left: 0;">南京金融资产交易中心</li>
                 <li>同信证券</li>
+                <li>联动优势</li>
+                <li>电子数据保全中心</li>
             </ul>
         </div>
         <div class="five-copyright">Copyright ©温州温都金融信息服务有限公司 浙ICP备16003187号-1</div>
