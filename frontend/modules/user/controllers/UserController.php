@@ -29,7 +29,7 @@ class UserController extends BaseController
     {
         $o = Ord::tableName();
         $l = Loan::tableName();
-        $orders = Ord::find()->innerJoinWith('loan')->where(["$o.uid" => $this->user->id, "$l.status" => [3, 5, 7]])->limit(5)->all();
+        $orders = Ord::find()->innerJoinWith('loan')->where(["$o.uid" => $this->user->id, "$l.status" => [2, 3, 5, 7]])->limit(5)->all();
 
         return $this->render('index', [
             'orders' => $orders,
