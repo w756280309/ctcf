@@ -121,7 +121,9 @@ class SiteController extends Controller
             $cache->set($key, $topList, 600);   //缓存十分钟
         }
 
-        return ['data' => $cache->get($key)];
+        $this->layout = false;
+
+        return $this->render('top_list', ['data' => $cache->get($key)]);
     }
 
     /**

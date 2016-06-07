@@ -4,7 +4,7 @@ $this->registerCssFile(ASSETS_BASE_URI.'css/footer.css', ['depends' => 'frontend
 <div class="section section5 fp-auto-height fp-section fp-table">
     <div class="five-box" style="height: 200px">
         <div class="five-address">公司地址：温州市鹿城区飞霞南路657号保丰大楼四层</div>
-        <div class="five-tel">客服电话：<span><?= Yii::$app->params['contact_tel'] ?></span><span style="padding-left: 8px;margin-right: 8px;">客服QQ：1430843929</span>工作时间：9:00-17:00（周一至周六）</div>
+        <div class="five-tel">客服电话：<span><?= Yii::$app->params['contact_tel'] ?></span><span style="padding-left: 8px;margin-right: 8px;">客服QQ：1430843929</span>客服时间：9:00-20:00（周一至周日）</div>
         <div class="five-partner clearfix"><i>合作伙伴：</i>
             <ul>
                 <li style="border-left:0;padding-left: 0;">温州日报</li>

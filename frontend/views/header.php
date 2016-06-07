@@ -17,7 +17,6 @@ $this->registerCssFile(ASSETS_BASE_URI.'css/header.css', ['depends' => 'frontend
             <div class="top-login" id="after-login">
                 <div class="top-name">
                     <a href="/user/user" id="user-name"><?= StringUtils::obfsMobileNumber(Yii::$app->user->identity->mobile) ?></a>
-                    <a href="" id="msg-count">1</a>
                 </div>
                 <i>|</i>
                 <span>
@@ -40,8 +39,8 @@ $this->registerCssFile(ASSETS_BASE_URI.'css/header.css', ['depends' => 'frontend
         </a>
         <div class="nav">
             <ul>
-                <li><a href="/">首页</a></li>
-                <li><a href="/licai/">我要理财</a></li>
+                <li><a class="<?= 'site/index' === Yii::$app->controller->action->getUniqueId() ? 'nav-click' : '' ?>" href="/">首页</a></li>
+                <li><a class="<?= 'licai/index' === Yii::$app->controller->action->getUniqueId() ? 'nav-click' : '' ?>" href="/licai/">我要理财</a></li>
                 <li><a>安全保障</a></li>
                 <li><a>帮助中心</a></li>
                 <li class="nav-last"><a href="">新手引导</a></li>
