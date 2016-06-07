@@ -95,15 +95,8 @@ class DealController extends Controller
                 }
             }
         }
-        $orderbalance = 0;
-        if (OnlineProduct::STATUS_FOUND === (int) $deals['status']) {
-            $orderbalance = 0;
-        } else if ($deals['status'] >= OnlineProduct::STATUS_NOW) {
-            //募集期的取剩余
-            $orderbalance = $deals->getLoanBalance(); //项目可投余额
-        } else {
-            $orderbalance = $deals['money'];
-        }
+
+        $orderbalance = $deals->getLoanBalance(); //项目可投余额
 
         if ($deals['status'] == OnlineProduct::STATUS_PRE) {
             $start = Yii::$app->functions->getDateDesc($deals['start_date']);

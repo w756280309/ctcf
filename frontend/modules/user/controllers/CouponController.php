@@ -52,48 +52,27 @@ class CouponController extends BaseController
     /**
      * 可用代金券.
      */
-    public function actionValid($page = 1, $size = 10)
+    public function actionValid()
     {
+        $sn = \Yii::$app->request->get('sn');
+        $this->findOr404(OnlineProduct::class, ['sn' => $sn]);
+        $monty = \Yii::$app->request->get('monty');
+        if (!empty($monty) && !preg_match('/^[0-9|.]+$/', $monty)) {
+            $this->ex404();
+        }
+
         $ct = CouponType::tableName();
-        $uc = UserCoupon::tableName();
-
-        $request = array_replace([
-            'sn' => null,
-            'money' => null,
-        ], \Yii::$app->request->get());
-
-        if (empty($request['sn']) || !preg_match('/^[A-Za-z0-9]+$/', $request['sn'])) {
-            $this->ex404();
-        }
-
-        if (!empty($request['money']) && !preg_match('/^[0-9|.]+$/', $request['money'])) {
-            $this->ex404();
-        }
-
-        $this->findOr404(OnlineProduct::class, ['sn' => $request['sn']]);
-
-        $data = CouponType::find()    //获取有效的代金券信息
-        ->select("$ct.*, $uc.user_id, $uc.order_id, $uc.isUsed, $uc.id uid")
-            ->innerJoin($uc, "$ct.id = $uc.couponType_id")
-            ->where(['isUsed' => 0, 'order_id' => null, 'isDisabled' => 0])
-            ->andFilterWhere(['<=', 'useStartDate', date('Y-m-d')])
-            ->andFilterWhere(['>=', 'useEndDate', date('Y-m-d')])
+        $data = UserCoupon::find()
+            ->innerJoinWith('couponType')
+            ->where(['isUsed' => 0, 'order_id' => null, "$ct.isDisabled" => 0])
+            ->andWhere(['<=', "$ct.useStartDate", date('Y-m-d')])
+            ->andWhere(['>=', "$ct.useEndDate", date('Y-m-d')])
             ->andWhere(['user_id' => $this->getAuthedUser()->id])
-            ->orderBy('useEndDate desc, amount desc, minInvest asc');
-
-        $pg = \Yii::$container->get('paginator')->paginate($data, $page, $size);
-        $coupon = $pg->getItems();
-
-        foreach ($coupon as $key => $val) {
-            $coupon[$key]['minInvestDesc'] = \Yii::$app->functions->toFormatMoney(rtrim(rtrim($val['minInvest'], '0'), '.'));
-        }
-
-        $tp = $pg->getPageCount();
-        $code = ($page > $tp) ? 1 : 0;
-
-        $message = ($page > $tp) ? '数据错误' : '消息返回';
-
-        return ['header' => $pg, 'data' => $coupon, 'code' => $code, 'message' => $message];
+            ->orderBy("$ct.useEndDate desc, $ct.amount desc, $ct.minInvest asc")
+            ->all();
+        return $this->renderFile('@frontend/modules/user/views/coupon/_valid_coupon.php', [
+            'data' => $data
+        ]);
     }
 }
 

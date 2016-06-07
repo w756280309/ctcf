@@ -11,10 +11,11 @@ class Pager extends LinkPager
     public $ellipsis = '...';
     public $prevPageLabel = '上一页';
     public $nextPageLabel = '下一页';
+    public $ellipsisClass = 'ellipsis';
 
     public function run()
     {
-        $this->view->registerCss('.active a{color:red;}');
+        $this->view->registerCss('.active a{color:red;} .ellipsis{border:0px;}');
         if ($this->registerLinkTags) {
             $this->registerLinkTags();
         }
@@ -52,7 +53,7 @@ class Pager extends LinkPager
                     $buttons[] = $this->renderPageButton($i, $i - 1, null, false, $i == $currentPage);
                 }
                 if (max($currentPage + $offset, $startPage - 1 + $this->internalButtonCount) < $endPage - 1) {
-                    $buttons[] = Html::tag('li', Html::a($this->ellipsis, null, $linkOptions), $linkOptions);
+                    $buttons[] = Html::tag('li', Html::a($this->ellipsis, null, array_merge(['class' => $this->ellipsisClass], $linkOptions)), $linkOptions);
                 }
                 $buttons[] = $this->renderPageButton($endPage, $endPage - 1, null, false, $endPage == $currentPage);
             } elseif ($currentPage > $startPage + $offset && $currentPage < $endPage - $offset) {
@@ -60,20 +61,20 @@ class Pager extends LinkPager
                 $buttons[] = $this->renderPageButton($startPage, $startPage - 1, null, false, $startPage == $currentPage);
                 //判断开始省略号
                 if ($currentPage - $offset > $startPage + 1) {
-                    $buttons[] = Html::tag('li', Html::a($this->ellipsis, null, $linkOptions), $linkOptions);
+                    $buttons[] = Html::tag('li', Html::a($this->ellipsis, null, array_merge(['class' => $this->ellipsisClass], $linkOptions)), $linkOptions);
                 }
                 for ($i = max($startPage + 1, $currentPage - $offset); $i <= min($endPage - 1, $currentPage + $offset); $i++) {
                     $buttons[] = $this->renderPageButton($i, $i - 1, null, false, $i == $currentPage);
                 }
                 if ($currentPage + $offset < $endPage - 1) {
-                    $buttons[] = Html::tag('li', Html::a($this->ellipsis, null, $linkOptions), $linkOptions);
+                    $buttons[] = Html::tag('li', Html::a($this->ellipsis, null, array_merge(['class' => $this->ellipsisClass], $linkOptions)), $linkOptions);
                 }
                 //最后一页
                 $buttons[] = $this->renderPageButton($endPage, $endPage - 1, null, false, $endPage == $currentPage);
             } elseif ($currentPage >= $endPage - $offset && $currentPage <= $endPage) {
                 $buttons[] = $this->renderPageButton($startPage, $startPage - 1, null, false, 1 == $currentPage);
                 if (min($currentPage - $offset, $endPage + 1 - $this->internalButtonCount) > $startPage + 1) {
-                    $buttons[] = Html::tag('li', Html::a($this->ellipsis, null, $linkOptions), $linkOptions);
+                    $buttons[] = Html::tag('li', Html::a($this->ellipsis, null, array_merge(['class' => $this->ellipsisClass], $linkOptions)), $linkOptions);
                 }
                 for ($i = min($endPage + 1, $endPage - ($this->internalButtonCount - 1)); $i <= $endPage; $i++) {
                     $buttons[] = $this->renderPageButton($i, $i - 1, null, false, $i == $currentPage);

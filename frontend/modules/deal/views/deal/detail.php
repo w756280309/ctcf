@@ -5,6 +5,7 @@ use common\models\product\RateSteps;
 use common\models\product\OnlineProduct;
 
 $user = Yii::$app->user->identity;
+$deal->money = rtrim(rtrim($deal->money, '0'), '.');
 ?>
 <hr>
 <p><?= $deal->title ?></p>
@@ -96,13 +97,13 @@ $user = Yii::$app->user->identity;
     <div id="order_list"></div>
 </div>
 <div>
-    <p>项目可投余额：<?= ($deal->status==1)?(Yii::$app->functions->toFormatMoney($deal['money'])) : rtrim(rtrim(number_format($dealBalance, 2), '0'), '.').'元'?></p>
+    <p>项目可投余额：<?= ($deal->status==1)?(Yii::$app->functions->toFormatMoney($deal->money)) : rtrim(rtrim(number_format($deal->getLoanBalance(), 2), '0'), '.').'元'?></p>
    <p> 我的可用余额：<?= (null === $user)?'查看余额请【<a href="/site/login">登录</a>】':($user->lendAccount?$user->lendAccount->available_balance.' 元':'0 元')?></p>
     <div>
         <?php if($deal->status == OnlineProduct::STATUS_NOW) {?>
             <form action="/order/order/doorder?sn=<?= $deal->sn ?>" method="post" id="order_form">
                 <input type="hidden" name="_csrf" value="<?= Yii::$app->request->csrfToken?>"/>
-                <input type="text"  name="money"  placeholder = "起投金额<?= rtrim(rtrim(number_format($deal['start_money'], 2), '0'), '.') ?>元，递增金额<?= rtrim(rtrim(number_format($deal['dizeng_money'], 2), '0'), '.') ?>元" id="deal_money"/>
+                <input type="text"  name="money"  placeholder = "起投金额<?= rtrim(rtrim(number_format($deal->start_money, 2), '0'), '.') ?>元，递增金额<?= rtrim(rtrim(number_format($deal->dizeng_money, 2), '0'), '.') ?>元" id="deal_money"/>
                 <input type="submit" name="立即投资" id="order_submit"/>
                 <p>
                     代金券 <span id="coupon_count">0</span>
@@ -113,7 +114,11 @@ $user = Yii::$app->user->identity;
                 </div>
             </form>
         <?php } elseif($deal->status == OnlineProduct::STATUS_PRE){ ?>
-           <?= $deal['start_date'] ?>起售
+            <?php
+                $start = Yii::$app->functions->getDateDesc($deal['start_date']);
+                $deal->start_date = $start['desc'] . date('H:i', $start['time']);
+            ?>
+           <?= $deal->start_date ?>起售
             <p>投资其他项目</p>
         <?php } else {?>
             项目募集完成，收益中...
@@ -128,27 +133,23 @@ $user = Yii::$app->user->identity;
         //获取投资记录
         getOrderList('/deal/deal/order-list?pid=<?=$deal->id?>');
         //获取代金券
-        $('#deal_money').keyup(function(){
+        $('#deal_money').keyup(function () {
             var money = $(this).val();
             $.ajax({
-                'url':'/user/coupon/valid?sn=<?= $deal->sn?>&mmoney='+money,
-                'type' : 'get',
-                'success':function(data){
-                    if(data.code == 0){
-                        var list = data.data;
-                        $('#coupon_count').html(list.length);
-                        var html = '';
-                        for(var i=0;i<list.length;i++){
-                            html +='<div>';
-                            html +='<input type="radio" name="couponId" value="'+list[i]['uid']+'">';
-                            html +='¥'+parseInt(list[i]['amount']);
-                            html +=list[i]['name'];
-                            html += '单笔投资满'+list[i]['minInvestDesc']+'元可用';
-                            html += ' <p>所有项目可用</p>';
-                            html +='</div>';
+                beforeSend: function (req) {
+                    req.setRequestHeader("Accept", "text/html");
+                },
+                'url': '/user/coupon/valid?sn=<?= $deal->sn?>&mmoney=' + money,
+                'type': 'get',
+                'dataType': 'html',
+                'success': function (html) {
+                    $('#coupon_count').html($(html).attr('data_count'));
+                    $('#valid_coupon_list').html(html);
+                    $('#valid_coupon_list .coupon_radio').bind('click', function () {
+                        if ($(this).attr('checked')) {
+                            $('#coupon_title').html($(this).parent().find('.coupon_name').text());
                         }
-                        $('#valid_coupon_list').html(html);
-                    }
+                    });
                 }
             });
         });
