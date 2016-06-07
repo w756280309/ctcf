@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: xmac
- * Date: 15-3-19
- * Time: 下午3:51.
- */
 namespace frontend\controllers;
 
 use common\controllers\HelpersTrait;

@@ -100,10 +100,17 @@ $user = Yii::$app->user->identity;
    <p> 我的可用余额：<?= (null === $user)?'查看余额请【<a href="/site/login">登录</a>】':($user->lendAccount?$user->lendAccount->available_balance.' 元':'0 元')?></p>
     <div>
         <?php if($deal->status == OnlineProduct::STATUS_NOW) {?>
-            <form action="" method="post">
+            <form action="/order/order/doorder?sn=<?= $deal->sn ?>" method="post" id="order_form">
                 <input type="hidden" name="_csrf" value="<?= Yii::$app->request->csrfToken?>"/>
-                <input type="text"  name="money"  placeholder = "起投金额<?= rtrim(rtrim(number_format($deal['start_money'], 2), '0'), '.') ?>元，递增金额<?= rtrim(rtrim(number_format($deal['dizeng_money'], 2), '0'), '.') ?>元">
-                <input type="submit" name="立即投资"/>
+                <input type="text"  name="money"  placeholder = "起投金额<?= rtrim(rtrim(number_format($deal['start_money'], 2), '0'), '.') ?>元，递增金额<?= rtrim(rtrim(number_format($deal['dizeng_money'], 2), '0'), '.') ?>元" id="deal_money"/>
+                <input type="submit" name="立即投资" id="order_submit"/>
+                <p>
+                    代金券 <span id="coupon_count">0</span>
+                    <span id="coupon_title">无可用代金券</span>
+                </p>
+                <div id="valid_coupon_list">
+
+                </div>
             </form>
         <?php } elseif($deal->status == OnlineProduct::STATUS_PRE){ ?>
            <?= $deal['start_date'] ?>起售
@@ -118,7 +125,65 @@ $user = Yii::$app->user->identity;
 <hr>
 <script>
     $(function () {
+        //获取投资记录
         getOrderList('/deal/deal/order-list?pid=<?=$deal->id?>');
+        //获取代金券
+        $('#deal_money').keyup(function(){
+            var money = $(this).val();
+            $.ajax({
+                'url':'/user/coupon/valid?sn=<?= $deal->sn?>&mmoney='+money,
+                'type' : 'get',
+                'success':function(data){
+                    if(data.code == 0){
+                        var list = data.data;
+                        $('#coupon_count').html(list.length);
+                        var html = '';
+                        for(var i=0;i<list.length;i++){
+                            html +='<div>';
+                            html +='<input type="radio" name="couponId" value="'+list[i]['uid']+'">';
+                            html +='¥'+parseInt(list[i]['amount']);
+                            html +=list[i]['name'];
+                            html += '单笔投资满'+list[i]['minInvestDesc']+'元可用';
+                            html += ' <p>所有项目可用</p>';
+                            html +='</div>';
+                        }
+                        $('#valid_coupon_list').html(html);
+                    }
+                }
+            });
+        });
+        //提交表单
+        var buy = $('#order_submit');
+        var form = $('#order_form');
+        form.on('submit', function (e) {
+            e.preventDefault();
+
+            if ($('#deal_money').val() == '') {
+                toast('投资金额不能为空');
+                return false;
+            }
+
+            buy.attr('disabled', true);
+            buy.val("购买中……");
+            var vals = form.serialize();
+            var xhr = $.post(form.attr("action"), vals, function (data) {
+                if (data.code == 0) {
+                    //toast('投标成功');
+                } else {
+                    alert(data.message);
+                }
+                if (data.tourl != undefined) {
+                    setTimeout(function () {
+                        location.replace(data.tourl);
+                    }, 1000);
+                }
+            });
+            xhr.always(function () {
+                buy.attr('disabled', false);
+                buy.val("购买");
+            })
+        });
+
     });
 
     function getOrderList(url) {
@@ -138,5 +203,6 @@ $user = Yii::$app->user->identity;
             }
         });
     }
+
 </script>
 

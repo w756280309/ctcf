@@ -52,6 +52,9 @@ return [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'enableCookieValidation' => false,
         ],
+        'view' => [
+            'class' => 'common\view\WapView',
+        ],
     ],
     'modules' => [
         'news' => [
@@ -65,6 +68,9 @@ return [
         ],
         'deal' => [
             'class' => 'frontend\modules\deal\Module',
+        ],
+        'order' => [
+            'class' => 'frontend\modules\order\Module',
         ],
     ],
     'params' => $params,
