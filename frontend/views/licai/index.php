@@ -13,7 +13,7 @@ use common\widgets\Pager;
     <div class="projectList">
         <!--预告期-->
         <?php foreach ($loans as $val) : ?>
-            <div class="deal-single <?= in_array($val->status, [OnlineProduct::STATUS_PRE, OnlineProduct::STATUS_NOW]) ? 'deal-single-border' : '' ?>">
+            <a class="deal-single <?= in_array($val->status, [OnlineProduct::STATUS_PRE, OnlineProduct::STATUS_NOW]) ? 'deal-single-border' : '' ?>" href="/deal/deal/detail?sn=<?= $val->sn ?>">
                 <!--类btn_ing_border为预告期和可投期的红边框-->
                 <div class="single_left">
                     <div class="single_title">
@@ -28,7 +28,7 @@ use common\widgets\Pager;
                                 <?php if ($val->isFlexRate && $val->rateSteps) { ?>
                                     ~<?= rtrim(rtrim(number_format(RateSteps::getTopRate(RateSteps::parse($val->rateSteps)), 2), '0'), '.') ?><span>%</span>
                                 <?php } elseif ($val->jiaxi) { ?>
-                                    <span>%</span><a class="addRadeNumber">+<?= rtrim(rtrim(number_format($val->jiaxi, 2), '0'), '.') ?>%</a>
+                                    <span>%</span><span class="addRadeNumber">+<?= rtrim(rtrim(number_format($val->jiaxi, 2), '0'), '.') ?>%</span>
                                 <?php } else { ?>
                                     <span>%</span>
                                 <?php } ?>
@@ -36,7 +36,7 @@ use common\widgets\Pager;
                             <li class="li_2">年化收益率</li>
                         </ul>
                         <ul class="single_ul_center">
-                            <li class="li_1"><?= $val->expires ?><span><?= 1 === (int) $val->refund_method ? "天" : "个月" ?></span></li>
+                            <li class="li_1"><?= $val->expires ?><span><?= $val->refund_method ? "天" : "个月" ?></span></li>
                             <li class="li_2">项目期限</li>
                         </ul>
 
@@ -64,11 +64,11 @@ use common\widgets\Pager;
                             if (OnlineProduct::STATUS_PRE === $val->status) {
                                 $dates = Yii::$app->functions->getDateDesc($val->start_date);
                         ?>
-                            <a class="single_right_button"><?= $dates['desc'].date('H:i', $dates['time']) ?>起售</a>
+                            <span class="single_right_button"><?= $dates['desc'].date('H:i', $dates['time']) ?>起售</span>
                         <?php } elseif (OnlineProduct::STATUS_NOW === $val->status) { ?>
-                            <a class="single_right_button">立即投资</a>
+                            <span class="single_right_button">立即投资</span>
                         <?php } else { ?>
-                            <a class="single_right_button_over"><?= \Yii::$app->params['deal_status'][$val->status] ?></a>
+                            <span class="single_right_button_over"><?= \Yii::$app->params['deal_status'][$val->status] ?></span>
                         <?php } ?>
                     </div>
                 <?php } else { ?>
@@ -77,7 +77,7 @@ use common\widgets\Pager;
                         <img class="shouyi-img" alt="" src="<?= ASSETS_BASE_URI ?>images/shouyizhong_icon.png">
                     </div>
                 <?php } ?>
-            </div>
+            </a>
         <?php endforeach; ?>
         <center><?= Pager::widget(['pagination' => $pages]); ?></center>
     </div>

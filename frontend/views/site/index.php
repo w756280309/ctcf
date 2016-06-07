@@ -14,7 +14,7 @@ use common\models\product\RateSteps;
         <!--banner 图-->
         <div class="banner-box">
             <?php foreach ($adv as $val) : ?>
-                <div class="banner" style="background: url('/upload/adv/<?= $val->image ?>') no-repeat center center;"><a href="<?= $val->link ?>"></a></div>
+                <div class="banner" style="background-image: url('/upload/adv/<?= $val->image ?>');"><a href="<?= $val->link ?>"></a></div>
             <?php endforeach; ?>
         </div>
         <!--选项卡-->
@@ -95,24 +95,24 @@ use common\models\product\RateSteps;
 
 <!--推荐标 start-->
 <?php if ($loans) { ?>
-    <div class="new-heade"><span>推荐标</span><a href="">更多&gt;</a></div>
+    <div class="new-heade"><span>推荐标</span><a href="/licai/">更多&gt;</a></div>
     <div class="yingshou-box">
         <div class="yingshou-content1">
             <ul class="yingshou-inner1">
                 <?php foreach ($loans as $val) : ?>
                     <li>
-                        <a href="" class="yingshou-left yingshou <?= (!in_array($val->status, [OnlineProduct::STATUS_PRE, OnlineProduct::STATUS_NOW])) ? 'huibian' : '' ?>">
+                        <a href="/deal/deal/detail?sn=<?= $val->sn ?>" class="yingshou-left yingshou <?= (!in_array($val->status, [OnlineProduct::STATUS_PRE, OnlineProduct::STATUS_NOW])) ? 'huibian' : '' ?>">
                             <div class="yingshou-top"><span><?= $val->title ?></span></div>
                             <?php if (!in_array($val->status, [OnlineProduct::STATUS_HUAN, OnlineProduct::STATUS_OVER])) { ?>
                                 <div style="clear: both"></div>
                                 <div class="yingshou-content">
-                                    <p>融资金额：<?= rtrim(rtrim(number_format($val->money, 2), '0'), '.') ?>元</p>
-                                    <p>可投金额：<?= rtrim(rtrim(number_format($val->money - $val->funded_money, 2), '0'), '.') ?>元</p>
+                                    <p>项目总额：<?= rtrim(rtrim(number_format($val->money, 2), '0'), '.') ?>元</p>
+                                    <p>可投余额：<?= rtrim(rtrim(number_format($val->money - $val->funded_money, 2), '0'), '.') ?>元</p>
                                     <div><?= Yii::$app->params['refund_method'][$val->refund_method] ?></div>
                                 </div>
                             <?php } else { ?>
                                 <div class="yingshou-content2">
-                                    <p class="yingshou-content2-left">年化利率
+                                    <p class="yingshou-content2-left">年化收益率
                                         <span>
                                             <?php
                                                 echo rtrim(rtrim(number_format(OnlineProduct::calcBaseRate($val->yield_rate, $val->jiaxi), 2), '0'), '.');
@@ -123,7 +123,7 @@ use common\models\product\RateSteps;
                                                 }
                                             ?>%
                                         </span></p>
-                                    <p class="yingshou-content2-right">项目期限 <span><?= $val->expires.(1 === (int) $val->refund_method ? "天" : "个月") ?></span></p>
+                                    <p class="yingshou-content2-right">项目期限 <span><?= $val->expires.($val->refund_method ? "天" : "个月") ?></span></p>
                                 </div>
                             <?php } ?>
                             <div class="yingshou-jindu">
@@ -142,16 +142,16 @@ use common\models\product\RateSteps;
                                                 <?php if ($val->isFlexRate && $val->rateSteps) { ?>
                                                     ~<?= rtrim(rtrim(number_format(RateSteps::getTopRate(RateSteps::parse($val->rateSteps)), 2), '0'), '.') ?><span>%</span><i></i>
                                                 <?php } elseif ($val->jiaxi) { ?>
-                                                    <span>%</span><i>+rtrim(rtrim(number_format($val->jiaxi, 2), '0'), '.')%</i>
+                                                    <span>%</span><i>+<?= rtrim(rtrim(number_format($val->jiaxi, 2), '0'), '.') ?>%</i>
                                                 <?php } else { ?>
                                                     <span>%</span>
                                                 <?php } ?>
                                             </em>
                                         </div>
-                                        <p>年化利率</p>
+                                        <p>年化收益率</p>
                                     </div>
                                     <div class="yingshou-nian yingshou-xian">
-                                        <?= $val->expires ?><span><?= 1 === (int) $val->refund_method ? "天" : "个月" ?></span>
+                                        <?= $val->expires ?><span><?= $val->refund_method ? "天" : "个月" ?></span>
                                         <p>项目期限</p>
                                     </div>
                                 </div>
@@ -160,7 +160,7 @@ use common\models\product\RateSteps;
                                         if (OnlineProduct::STATUS_PRE === $val->status) {
                                             $dates = Yii::$app->functions->getDateDesc($val->start_date);
                                     ?>
-                                        <div class="yingshou-liji"><?= $dates['desc'].date('H:i', $dates['time']) ?></div>
+                                        <div class="yingshou-liji"><?= $dates['desc'].date('H:i', $dates['time']) ?>起售</div>
                                     <?php } elseif (OnlineProduct::STATUS_NOW === $val->status) { ?>
                                         <div class="yingshou-liji">立即投资</div>
                                     <?php } else { ?>
