@@ -1,10 +1,10 @@
 <?php
 
 $params = array_merge(
-    require(__DIR__.'/../../common/config/params.php'),
-    require(__DIR__.'/../../common/config/params-local.php'),
-    require(__DIR__.'/params.php'),
-    require(__DIR__.'/params-local.php')
+    require(__DIR__ . '/../../common/config/params.php'),
+    require(__DIR__ . '/../../common/config/params-local.php'),
+    require(__DIR__ . '/params.php'),
+    require(__DIR__ . '/params-local.php')
 );
 
 return [
@@ -63,9 +63,13 @@ return [
         'product' => [
             'class' => 'frontend\modules\product\Module',
         ],
+        'deal' => [
+            'class' => 'frontend\modules\deal\Module',
+        ],
     ],
     'params' => $params,
     'as AjaxJsonFormat' => [
-        'class' => 'common\components\RequestBehavior',
+        'class' => \common\components\RequestBehavior::className(),
     ],
+    'as userAccountAccess' => \common\filters\UserAccountAcesssControl::className(),
 ];
