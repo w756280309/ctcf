@@ -15,6 +15,7 @@ $this->registerJsFile(ASSETS_BASE_URI . 'js/jquery.classyloader.js', ['depends' 
 $this->registerJsFile(ASSETS_BASE_URI . 'js/index.js?v=20160516', ['depends' => 'yii\web\JqueryAsset', 'position' => 3]);
 $this->registerCssFile(ASSETS_BASE_URI . 'css/index.css?v=20160419', ['depends' => 'wap\assets\WapAsset']);  //加载在depends之后
 $this->registerCssFile(ASSETS_BASE_URI . 'css/first.css?v=20160509', ['depends' => 'wap\assets\WapAsset']);
+$this->registerCssFile(ASSETS_BASE_URI . 'css/kaipin.css', ['depends' => 'wap\assets\WapAsset']);
 
 AnalyticsHelper::registerTo($this);
 
@@ -63,6 +64,17 @@ $(function() {
 </head>
 <body>
 <?php $this->beginBody() ?>
+<div class="mask" id="mask_kaiping" style="position: fixed;z-index: 2000;display: block; "></div>
+<div class="tail">
+    <div class="tail_img_top"></div>
+    <a class="tail_close">
+        <img src="<?= ASSETS_BASE_URI ?>images/kaiping_02.png" alt="开屏图">
+    </a>
+    <div class="tail_img_bottom">
+        <img src="<?= ASSETS_BASE_URI ?>images/kaiping_08.png" alt="开屏图">
+    </div>
+</div>
+
 <div class="container">
     <?php if (!defined('IN_APP')) { ?>
     <!--header-->
@@ -256,3 +268,16 @@ $(function() {
 </body>
 </html>
 <?php $this->endPage() ?>
+<script>
+    $('html').attr('ontouchmove','event.preventDefault()');
+
+    setTimeout(function() {
+        $('#mask_kaiping,.tail').hide();
+        $('html').removeAttr('ontouchmove');
+    }, 4000);
+
+    $('.tail_close').on('click',function() {
+        $('#mask_kaiping,.tail').hide();
+        $('html').removeAttr('ontouchmove');
+    })
+</script>
