@@ -8,7 +8,7 @@ $this->registerCssFile(ASSETS_BASE_URI.'css/left.css', ['depends' => 'frontend\a
         <li class="nav-title"><span>我的账户</span></li>
         <li class="nav-content">
             <ul>
-                <li class=""><a href=""><span class="star"></span>资产总览</a></li>
+                <li class="<?= 'user/user/index' === Yii::$app->controller->action->getUniqueId() ? 'selected' : '' ?>"><a href="/user/user"><span class="star"></span>资产总览</a></li>
                 <li class=""><a href=""><span class="star"></span>充值</a></li>
                 <li class=""><a href=""><span class="star"></span>提现</a></li>
             </ul>
@@ -31,15 +31,3 @@ $this->registerCssFile(ASSETS_BASE_URI.'css/left.css', ['depends' => 'frontend\a
         </li>
     </ul>
 </div>
-
-<script type="text/javascript">
-    $(function () {
-        var pathname = window.location.pathname;
-        var name = pathname.split("/");
-        name = name[1] + "-" + ((name[2] == undefined) ? "index" : name[2]);
-        $(".userAccount-left-nav .nav-content li").each(function () {
-            $(this).removeClass("selected");
-        })
-        $("." + name).addClass("selected");
-    });
-</script>
