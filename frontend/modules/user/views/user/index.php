@@ -76,7 +76,7 @@ use common\utils\StringUtils;
                                 <i>冻结资金</i>
                                 <img class="tips" src="<?= ASSETS_BASE_URI ?>images/UserAccount/tip.png" alt="">
                                 <i class="redFont"><?= number_format($user->lendAccount->freeze_balance, 2) ?></i>元
-                                <div class="property-tishi" style="left: -18px;">投资资金在项目未满标是锁定的金额 <img class="dialog-jiao" src="<?= ASSETS_BASE_URI ?>images/UserAccount/diglog-jiao.png" alt=""></div>
+                                <div class="property-tishi" style="left: -18px;">投资资金在项目未满标时锁定的金额<img class="dialog-jiao" src="<?= ASSETS_BASE_URI ?>images/UserAccount/diglog-jiao.png" alt=""></div>
                             </li>
                         </ul>
                     </div>
@@ -89,16 +89,16 @@ use common\utils\StringUtils;
                     <div class="investment-box-content blackFont">在投项目</div>
                     <div class="investment-link"><a href=""><img src="<?= ASSETS_BASE_URI ?>images/UserAccount/jiantou.png" alt=""></a></div>
                 </div>
-                <div class="investment-bottom-title">
-                    <ul>
-                        <li class="investment-name"><div style="padding-left: 10px;">项目名称</div></li>
-                        <li class="investment-money"><div>投资金额(元)</div></li>
-                        <li class="investment-profit"><div>预期收益(元)</div></li>
-                        <li class="investment-time"><div>项目期限</div></li>
-                        <li class="investment-contract"><div>状态</div></li>
-                    </ul>
-                </div>
                 <div class="investment-box-bottom">
+                    <div class="investment-bottom-title">
+                        <ul>
+                            <li class="investment-name"><div style="padding-left: 10px;">项目名称</div></li>
+                            <li class="investment-money"><div>投资金额(元)</div></li>
+                            <li class="investment-profit"><div>预期收益(元)</div></li>
+                            <li class="investment-time"><div>项目期限</div></li>
+                            <li class="investment-contract"><div>状态</div></li>
+                        </ul>
+                    </div>
                     <?php if ($orders) { ?>
                         <ul class="investment-bottom-content">
                             <?php foreach($orders as $model) : ?>

@@ -265,11 +265,10 @@ path {
     margin: 0 auto;
 }
 .investment-bottom-title {
-    width: 778px;
+    width: 760px;
     height: 50px;
     background: #e4e4e8;
     border-bottom: 1px solid #e4e4e8;
-    padding-left: 20px;
 }
 .investment-bottom-title li {
     float: left;
