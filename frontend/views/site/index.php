@@ -26,7 +26,7 @@ use common\models\product\RateSteps;
             </ul>
             <ul class="banner-btn1">
                 <?php foreach ($adv as $val) : ?>
-                    <li><div><?= $val->title ?></div></li>
+                    <li><div><span><?= $val->title ?></span></div></li>
                 <?php endforeach; ?>
             </ul>
         </div>
@@ -66,11 +66,11 @@ use common\models\product\RateSteps;
                 <p>谷东强势</p>
             </div>
             <div>
-                <img src="<?= ASSETS_BASE_URI ?>images/tu.png" alt="">
+                <img src="<?= ASSETS_BASE_URI ?>images/zhang.png" alt="">
                 <p>安全合规</p>
             </div>
             <div>
-                <img src="<?= ASSETS_BASE_URI ?>images/tu.png" alt="">
+                <img src="<?= ASSETS_BASE_URI ?>images/zhang.png" alt="">
                 <p>产品优质</p>
             </div>
             <div>

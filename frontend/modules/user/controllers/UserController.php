@@ -12,8 +12,6 @@ use yii\filters\AccessControl;
 
 class UserController extends BaseController
 {
-    public $layout = 'main';
-
     public function behaviors()
     {
         return [

@@ -1,1 +1,202 @@
-$(function(){function n(){u++,u==e&&(u=0),$(".banner-box div").eq(s).fadeOut(),$(".banner-box div").eq(u).fadeIn(),$(".banner-btn1 li div").css({opacity:.6}),$(".banner-btn1 li div").eq(u).css({opacity:1}),s=u}function i(){d&&(d=!1,$(".licai-lunbo div").eq(0).animate({marginTop:"-20px"},1e3,function(){$(".licai-lunbo div").eq(0).css({marginTop:0}),$(".licai-lunbo div").eq(0).appendTo($(".licai-lunbo")),d=!0}))}function o(n){if(void 0!=n&&0!=n&&""!=n)var i=Math.round(n),o=setInterval(function(){return h++,h>i?void clearInterval(o):($(".yingshou-jindu span").eq(0).html(h+"%"),void $(".yingshou-jindutiao1").eq(0).css("width",h+"%"))},5)}function t(n){if(void 0!=n&&0!=n&&""!=n)var i=Math.round(n),o=setInterval(function(){return b++,b>i?void clearInterval(o):($(".yingshou-jindu span").eq(1).html(b+"%"),void $(".yingshou-jindutiao1").eq(1).css("width",b+"%"))},5)}function a(n){if(void 0!=n&&0!=n&&""!=n)var i=Math.round(n),o=setInterval(function(){return g++,g>i?void clearInterval(o):($(".yingshou-jindu span").eq(2).html(g+"%"),void $(".yingshou-jindutiao1").eq(2).css("width",g+"%"))},5)}$(".banner-btn1 li div").eq(0).css({opacity:1}),$(".banner-box div").hide(),$(".banner-box div").eq(0).stop(!0,!1).show();var e=$(".banner-btn li").length,r=setInterval(n,5e3),s=0,u=0,d=!0;$(".banner-box").hover(function(){clearInterval(r)},function(){r=setInterval(n,5e3)}),$(".banner-content").hover(function(){clearInterval(r)},function(){r=setInterval(n,5e3)}),$(".banner-btn1 li").hover(function(){clearInterval(r);var n=$(".banner-btn1 li").index(this);s!=n&&($(".banner-box div").eq(s).stop(!0,!1).fadeOut(),$(".banner-box div").eq(n).stop(!0,!1).fadeIn(),$(".banner-btn1 li div").css({opacity:.6}),$(".banner-btn1 li div").eq(n).css({opacity:1}),s=u=n)},function(){r=setInterval(n,5e3)});var v=setInterval(i,2e3);$(".licai-lunbo div").hover(function(){clearInterval(v)},function(){v=setInterval(i,2e3)});var l;l=$(".yingshou-jindutiao1").offset().top;var c=$(window).height(),h=0,b=0,g=0,f=$(window).scrollTop();if(f+=c,$(window).bind("scroll",function(){if($(window).scrollTop()>l-c){var n=$(".yingshou-jindutiao1").eq(0).attr("progressbar"),i=$(".yingshou-jindutiao1").eq(1).attr("progressbar"),e=$(".yingshou-jindutiao1").eq(2).attr("progressbar");o(n),t(i),a(e);for(var r=3;r<$(".yingshou-jindutiao1").length;r++){var s=$(".yingshou-jindutiao1").eq(r).attr("progressbar"),u=Math.round(s);$(".yingshou-jindu span").eq(r).html(u+"%"),$(".yingshou-jindutiao1").eq(r).css("width",u+"%"),$(window).unbind("scroll")}}}),f>l+c){var p=$(".yingshou-jindutiao1").eq(0).attr("progressbar"),q=$(".yingshou-jindutiao1").eq(1).attr("progressbar"),y=$(".yingshou-jindutiao1").eq(2).attr("progressbar");o(p),t(q),a(y);for(var j=3;j<$(".yingshou-jindutiao1").length;j++){var I=$(".yingshou-jindutiao1").eq(j).attr("progressbar"),w=Math.round(I);$(".yingshou-jindu span").eq(j).html(w+"%"),$(".yingshou-jindutiao1").eq(j).css("width",w+"%")}}$(".yingshou-liji div").hover(function(){$(".yingshou-liji div").css({background:"#f41c11"})},function(){$(".yingshou-liji div").css({background:"#f44336"})})});
+$(function(){
+    //轮播图
+    $('.banner-btn1 li div').eq(0).css({opacity:1});
+    $(".banner-box div").hide();
+    $(".banner-box div").eq(0).stop(true,false).show();
+    var lengths=$('.banner-btn li').length;
+    var t=setInterval(move,5000);
+    var index=0;
+    var next=0;
+    var flag=true;
+    function move(){
+        //if(!flag){
+        //    return;
+        //}
+        next++;
+        if(next==lengths){
+            next=0;
+        }
+        //flag=false;
+        $(".banner-box div").eq(index).fadeOut();
+        $(".banner-box div").eq(next).fadeIn();
+        $('.banner-btn1 li div').css({opacity:0.6});
+        $('.banner-btn1 li div').eq(next).css({opacity:1});
+        index=next;
+    }
+
+    $(".banner-box").hover(function(){
+        clearInterval(t);
+    },function(){
+        t=setInterval(move,5000);
+    });
+    $(".banner-content").hover(function(){
+        clearInterval(t);
+    },function(){
+        t=setInterval(move,5000);
+    });
+    $('.banner-btn1 li').hover(function(){
+        clearInterval(t);
+        var that=$('.banner-btn1 li').index(this);
+        if(index==that){
+            return;
+        }
+        $(".banner-box div").eq(index).stop(true,false).fadeOut();
+        $(".banner-box div").eq(that).stop(true,false).fadeIn();
+        $('.banner-btn1 li div').css({opacity:0.6});
+        $('.banner-btn1 li div').eq(that).css({opacity:1});
+
+        index=next=that;
+
+    },function(){
+        t=setInterval(move,5000);
+    });
+    var bL=$('.banner').length;
+    console.log(bL);
+    if(bL==0){
+
+    }else  if(bL==1){
+        $('.banner-btn li').css({width:'100%'});
+        $('.banner-btn1 li').css({width:'100%'});
+    }else  if(bL==2){
+        $('.banner-btn li').css({width:'50%'});
+        $('.banner-btn1 li').css({width:'50%'});
+    }else  if(bL==3){
+        $('.banner-btn li').css({width:'333px'});
+        $('.banner-btn1 li').css({width:'333px'});
+    }else  if(bL==4){
+        $('.banner-btn li').css({width:'25%'});
+        $('.banner-btn1 li').css({width:'25%'});
+    }else if(bL==5){
+        $('.banner-btn li').css({width:'20%'});
+        $('.banner-btn1 li').css({width:'20%'});
+    }
+
+    //理财公告轮播图
+    var ts=setInterval(move1,2000);
+    function move1(){
+        if(!flag){
+            return;
+        }
+        flag=false;
+        $('.licai-lunbo div').eq(0).animate({marginTop:'-20px'},1000,function(){
+            $('.licai-lunbo div').eq(0).css({marginTop:0});
+            $('.licai-lunbo div').eq(0).appendTo($('.licai-lunbo'));
+            flag=true;
+        })
+    }
+    $('.licai-lunbo div').hover(function(){
+        clearInterval(ts);
+    },function(){
+        ts=setInterval(move1,2000);
+    });
+
+    //进度条
+    var tops2;
+    tops2 = $('.yingshou-jindutiao1').offset().top;
+    var ch=$(window).height();
+    var num3=0;
+    var num4=0;
+    var num5=0;
+    var Top=$(window).scrollTop();
+    Top+=ch;
+
+    $(window).bind('scroll',function(){
+        if($(window).scrollTop()>(tops2-ch)){
+            var bars1=$('.yingshou-jindutiao1').eq(0).attr('progressbar');
+            var bars2=$('.yingshou-jindutiao1').eq(1).attr('progressbar');
+            var bars3=$('.yingshou-jindutiao1').eq(2).attr('progressbar');
+            scrollbar3(bars1);
+            scrollbar4(bars2);
+            scrollbar5(bars3);
+
+            for(var i=3;i<$('.yingshou-jindutiao1').length;i++){
+                var bars=$('.yingshou-jindutiao1').eq(i).attr('progressbar');
+                var nums1=Math.round(bars);
+                $('.yingshou-jindu span').eq(i).html(nums1+'%');
+                $('.yingshou-jindutiao1').eq(i).css('width',nums1+'%');
+                $(window).unbind('scroll');
+            }
+
+        }
+    });
+
+    if(Top>tops2+ch){
+
+        var bars1=$('.yingshou-jindutiao1').eq(0).attr('progressbar');
+        var bars2=$('.yingshou-jindutiao1').eq(1).attr('progressbar');
+        var bars3=$('.yingshou-jindutiao1').eq(2).attr('progressbar');
+        scrollbar3(bars1);
+        scrollbar4(bars2);
+        scrollbar5(bars3);
+
+        for(var i=3;i<$('.yingshou-jindutiao1').length;i++){
+            var bars=$('.yingshou-jindutiao1').eq(i).attr('progressbar');
+            var nums1=Math.round(bars);
+            $('.yingshou-jindu span').eq(i).html(nums1+'%');
+            $('.yingshou-jindutiao1').eq(i).css('width',nums1+'%');
+        }
+    }
+    function scrollbar3(progressbars){
+        if(progressbars!=undefined&&progressbars!=0&&progressbars!=''){
+            var nums=Math.round(progressbars);
+            var t3=setInterval(function(){
+                num3++;
+                if(num3>nums){
+                    clearInterval(t3);
+                    return;
+                }
+                $('.yingshou-jindu span').eq(0).html(num3+'%');
+                $('.yingshou-jindutiao1').eq(0).css('width',num3+'%');
+            },5)
+        }
+    }
+    function scrollbar4(progressbars){
+        if(progressbars!=undefined&&progressbars!=0&&progressbars!=''){
+            var nums=Math.round(progressbars);
+            var t4=setInterval(function(){
+                num4++;
+                if(num4>nums){
+                    clearInterval(t4);
+                    return;
+                }
+                $('.yingshou-jindu span').eq(1).html(num4+'%');
+                $('.yingshou-jindutiao1').eq(1).css('width',num4+'%');
+            },5)
+        }
+    }
+    function scrollbar5(progressbars){
+        if(progressbars!=undefined&&progressbars!=0&&progressbars!=''){
+            var nums=Math.round(progressbars);
+            var t5=setInterval(function(){
+                num5++;
+                if(num5>nums){
+                    clearInterval(t5);
+                    return;
+                }
+                $('.yingshou-jindu span').eq(2).html(num5+'%');
+                $('.yingshou-jindutiao1').eq(2).css('width',num5+'%');
+            },5)
+        }
+    }
+    $('.yingshou-liji').hover(function(){
+        var index=$('.yingshou-liji').index(this);
+        $('.yingshou-liji').eq(index).css({background:'#f41c11'});
+    },function(){
+        var index=$('.yingshou-liji').index(this);
+        $('.yingshou-liji').eq(index).css({background:'#f44336'});
+    });
+    $('.yingshou-manbiao').hover(function(){
+        var index=$('.yingshou-manbiao').index(this);
+        $('.yingshou-manbiao').eq(index).css({background:'#bababf'});
+    },function(){
+        var index=$('.yingshou-manbiao').index(this);
+        $('.yingshou-manbiao').eq(index).css({background:'#d5d5d8'});
+    });
+    $('.yingshou-left').hover(function(){
+        var index=$('.yingshou-left').index(this);
+        $('.yingshou-left').eq(index).addClass('yingshou-lefts')
+    },function(){
+        var index=$('.yingshou-left').index(this);
+        $('.yingshou-left').eq(index).removeClass('yingshou-lefts')
+    })
+});
