@@ -1,0 +1,46 @@
+.userAccount-left-nav {
+    width: 157px;
+    background-color: #6e7780;
+}
+.userAccount-left-nav .nav-head {
+    height: 45px;
+    color: #fff;
+    line-height: 45px;
+    background-color: #f44336;
+    font-size: 16px;
+    padding-left: 21px;
+}
+.userAccount-left-nav .nav-title {
+    height: 52px;
+    line-height: 52px;
+    color: #fff;
+    font-size: 14px;
+    padding-left: 21px;
+}
+.userAccount-left-nav .nav-content {
+    font-size: 12px;
+    position: relative;
+}
+.userAccount-left-nav .nav-content li a {
+    display: block;
+    height: 36px;
+    line-height: 36px;
+    padding-left: 21px;
+    color: #c1c6cb;
+}
+.userAccount-left-nav .nav-content li a .star{
+    display: inline-block;
+    width: 11px;
+    height: 7px;
+}
+.userAccount-left-nav .nav-content li.selected a {
+    color: #fff;
+    background-color: #434c56;
+}
+.userAccount-left-nav .nav-content li.selected a .star {
+    display: inline-block;
+    width: 11px;
+    height: 7px;
+    background: url(../../images/userAccount/left-nav-icon.png) no-repeat center left;
+    vertical-align: middle;
+}

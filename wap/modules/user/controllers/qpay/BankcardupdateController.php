@@ -16,8 +16,6 @@ class BankcardupdateController extends BaseController
      */
     public function actionInit()
     {
-        Yii::$app->response->format = Response::FORMAT_JSON;
-
         $user = $this->getAuthedUser();
         $bank = $user->qpay;
 

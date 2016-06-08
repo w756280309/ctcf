@@ -1,10 +1,10 @@
 <?php
 
 $params = array_merge(
-    require(__DIR__.'/../../common/config/params.php'),
-    require(__DIR__.'/../../common/config/params-local.php'),
-    require(__DIR__.'/params.php'),
-    require(__DIR__.'/params-local.php')
+    require(__DIR__ . '/../../common/config/params.php'),
+    require(__DIR__ . '/../../common/config/params-local.php'),
+    require(__DIR__ . '/params.php'),
+    require(__DIR__ . '/params-local.php')
 );
 
 return [
@@ -52,18 +52,30 @@ return [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'enableCookieValidation' => false,
         ],
+        'view' => [
+            'class' => 'common\view\WapView',
+        ],
     ],
-
     'modules' => [
         'news' => [
-            'class' => 'app\modules\news\Module',
+            'class' => 'frontend\modules\news\Module',
         ],
         'user' => [
-            'class' => 'app\modules\user\Module',
+            'class' => 'frontend\modules\user\Module',
         ],
         'product' => [
-            'class' => 'app\modules\product\Module',
+            'class' => 'frontend\modules\product\Module',
+        ],
+        'deal' => [
+            'class' => 'frontend\modules\deal\Module',
+        ],
+        'order' => [
+            'class' => 'frontend\modules\order\Module',
         ],
     ],
     'params' => $params,
+    'as AjaxJsonFormat' => [
+        'class' => \common\components\RequestBehavior::className(),
+    ],
+    'as userAccountAccess' => \common\filters\UserAccountAcesssControl::className(),
 ];

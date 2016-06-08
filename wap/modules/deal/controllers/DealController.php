@@ -2,6 +2,7 @@
 namespace app\modules\deal\controllers;
 
 use Yii;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\data\Pagination;
 use common\models\product\OnlineProduct;
@@ -18,15 +19,6 @@ class DealController extends Controller
     /**
      * 行为设置，对于请求如果是ajax请求返回json.
      */
-    public function behaviors()
-    {
-        return [
-            'requestbehavior' => [
-                'class' => 'common\components\RequestBehavior',
-            ],
-            \common\filters\AppAcesssControl::className(),
-        ];
-    }
 
     /**
      * 获取理财列表.
@@ -103,15 +95,8 @@ class DealController extends Controller
                 }
             }
         }
-        $orderbalance = 0;
-        if (OnlineProduct::STATUS_FOUND === (int) $deals['status']) {
-            $orderbalance = 0;
-        } else if ($deals['status'] >= OnlineProduct::STATUS_NOW) {
-            //募集期的取剩余
-            $orderbalance = $deals->getLoanBalance(); //项目可投余额
-        } else {
-            $orderbalance = $deals['money'];
-        }
+
+        $orderbalance = $deals->getLoanBalance(); //项目可投余额
 
         if ($deals['status'] == OnlineProduct::STATUS_PRE) {
             $start = Yii::$app->functions->getDateDesc($deals['start_date']);

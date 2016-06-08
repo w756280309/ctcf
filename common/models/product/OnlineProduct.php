@@ -545,6 +545,15 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
      */
     public function getLoanBalance()
     {
-        return bcsub($this->money, $this->funded_money);
+        if (intval($this->status) === OnlineProduct::STATUS_FOUND) {
+            $dealBalance = 0;
+        } else if ($this->status >= OnlineProduct::STATUS_NOW) {
+            //募集期的取剩余
+            $dealBalance = bcsub($this->money, $this->funded_money);
+        } else {
+            $dealBalance = $this->money;
+        }
+
+        return $dealBalance;
     }
 }

@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: xmac
- * Date: 15-3-19
- * Time: 下午3:51.
- */
 namespace frontend\controllers;
 
 use common\controllers\HelpersTrait;
@@ -26,29 +20,5 @@ class BaseController extends Controller
         }
 
         parent::init();
-    }
-
-    public function behaviors()
-    {
-        return [
-            'access' => [
-                'class' => AccessControl::className(),
-                'rules' => [
-                    [
-                        'allow' => true,
-                        'actions' => ['login', 'signup'],
-                        'roles' => ['?'], //访客注册登录
-                    ],
-                    [
-                        'allow' => true,
-                        'roles' => ['@'], //登录用户退出
-                    ],
-                ],
-            ],
-            'requestbehavior' => [
-                'class' => 'common\components\RequestBehavior',
-            ],
-            \common\filters\UserAccountAcesssControl::className(),
-        ];
     }
 }

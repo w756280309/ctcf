@@ -18,8 +18,13 @@ class RequestBehavior extends Behavior
 
     public function beforeAction()
     {
-        if (Yii::$app->request->isAjax) {
-            Yii::$app->response->format = Response::FORMAT_JSON;
+        $request = Yii::$app->request;
+        if ($request->isAjax) {
+            $headers = Yii::$app->request->headers;
+            $accept = $headers->get('Accept');
+            if ('text/html' !== $accept){
+                Yii::$app->response->format = Response::FORMAT_JSON;
+            }
         }
     }
 }

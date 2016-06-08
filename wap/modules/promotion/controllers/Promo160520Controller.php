@@ -32,7 +32,6 @@ class Promo160520Controller extends Controller
 
     public function actionDraw($mobile)
     {
-        Yii::$app->response->format = Response::FORMAT_JSON;
         try {
             if (!Promo160520::isValidMobile($mobile)) {
                 throw new BadRequestHttpException('无效的手机号');

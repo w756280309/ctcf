@@ -10,6 +10,10 @@ use P2pl\Borrower;
 use common\models\epay\EpayUser;
 use P2pl\UserInterface;
 use Zii\Validator\CnMobileValidator;
+use common\models\user\RechargeRecord as Recharge;
+use common\models\user\DrawRecord as Draw;
+use common\models\order\OnlineOrder as Ord;
+use common\models\order\OnlineRepaymentPlan as RepaymentPlan;
 
 /**
  * This is the model class for table "user".
@@ -585,47 +589,6 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface, UserInterf
     }
 
     /**
-     * 获取是否设置交易密码
-     */
-    public function ensureTxPassSet()
-    {
-        return ('' === $this->trade_pwd) ? false : true;
-    }
-
-    /**
-     * 获取是否设置快捷卡
-     */
-    public function ensureQpayEnabled()
-    {
-        return (null === $this->qpay) ? false : true;
-    }
-
-    /**
-     * 获取银行卡分支行信息.
-     */
-    public function ensureQpayInfoEnabled()
-    {
-        if (null === $this->qpay) {
-            return false;
-        }
-        if (empty($this->qpay->sub_bank_name) || empty($this->qpay->province) || empty($this->qpay->city)) {
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
-     * 返回总的.
-     *
-     * @return bool
-     */
-    public function ensure()
-    {
-        return ($this->ensureIdVerified() && $this->ensureQpayEnabled() && $this->ensureTxPassSet()) ? true : false;
-    }
-
-    /**
      * 返回联动借款人对象
      *
      * @param type $user
@@ -674,5 +637,40 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface, UserInterf
     public function getEpayUserId()
     {
         return $this->epayUser->epayUserId;
+    }
+
+    public function isIdVerified()
+    {
+        return $this->idcard_status;
+    }
+
+    public function isQpayEnabled()
+    {
+        return null === $this->qpay;
+    }
+
+    public function getTotalInvestment()
+    {
+        return Ord::find()->where(['uid' => $this->id, 'status' => Ord::STATUS_SUCCESS])->sum('order_money');
+    }
+
+    public function getTotalRecharge()
+    {
+        return Recharge::find()->where(['uid' => $this->id, 'status' => Recharge::STATUS_YES])->sum('fund');
+    }
+
+    public function getTotalDraw()
+    {
+        return Draw::find()->where(['uid' => $this->id, 'status' => Draw::STATUS_SUCCESS])->sum('money');
+    }
+
+    public function getProfit()
+    {
+        return $this->lendAccount->profit_balance;
+    }
+
+    public function getPendingProfit()
+    {
+        return RepaymentPlan::find()->where(['uid' => $this->id, 'status' => RepaymentPlan::STATUS_WEIHUAN])->sum('lixi');
     }
 }

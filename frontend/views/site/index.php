@@ -1,126 +1,257 @@
 <?php
 $this->title = Yii::$app->params['pc_page_title'];
+
+$this->registerCssFile(ASSETS_BASE_URI.'css/index.css', ['depends' => 'frontend\assets\FrontAsset']);
+$this->registerJsFile(ASSETS_BASE_URI.'js/index.js', ['depends' => 'frontend\assets\FrontAsset']);
+
+use common\models\product\OnlineProduct;
+use common\models\product\RateSteps;
 ?>
 
-<!--section1-->
-<div class="section section1">
-    <div class="first-box">
-        <div class="first-box-left">
-            <div class="first-box-left1">
-                <div class="first-title">
-                    <p><img src="<?= ASSETS_BASE_URI ?>images/he.png" alt=""></p>
-                    <div class="first-title-content">
-                        <div>温州报业传媒</div>
-                        <div>旗下理财平台</div>
-                    </div>
-                </div>
-                <div class="first-content">
-                    <p>温都金服</p>
-                    <div>正式上线</div>
-                </div>
-                <div class="first-web">官方网站：www.wenjf.com</div>
+<!--banner start-->
+<?php if ($adv) { ?>
+    <div id="banner-box">
+        <!--banner 图-->
+        <div class="banner-box">
+            <?php foreach ($adv as $val) : ?>
+                <div class="banner" style="background-image: url('/upload/adv/<?= $val->image ?>');"><a href="<?= $val->link ?>"></a></div>
+            <?php endforeach; ?>
+        </div>
+        <!--选项卡-->
+        <div class="banner-bottom">
+            <ul class="banner-btn">
+                <?php foreach ($adv as $val) : ?>
+                    <li><div></div></li>
+                <?php endforeach; ?>
+            </ul>
+            <ul class="banner-btn1">
+                <?php foreach ($adv as $val) : ?>
+                    <li><div><?= $val->title ?></div></li>
+                <?php endforeach; ?>
+            </ul>
+        </div>
+    </div>
+<?php } ?>
+<!--banner end-->
+
+<!--理财公告-->
+<?php if ($notice) { ?>
+    <div id="licai-box">
+        <div class="licai-box">
+            <img src="<?= ASSETS_BASE_URI ?>images/sound.png" alt="">
+            <span>理财公告</span>
+            <div class="licai-lunbo">
+                <?php foreach ($notice as $val) : ?>
+                    <div><a href=""><?= $val->title ?></a></div>
+                <?php endforeach; ?>
             </div>
         </div>
-        <div class="first-box-right">
-            <img src="<?= ASSETS_BASE_URI ?>images/phone.png?v=20160418" class="first-phone1" alt="">
-            <img src="<?= ASSETS_BASE_URI ?>images/phone1.png" class="first-phone2" alt="">
-        </div>
     </div>
-</div>
-<!--section2-->
-<div class="section section2">
-    <div class="two-box">
-        <div class="tow-content1">Profession</div>
-        <div class="tow-content2">Legitimate</div>
-        <div class="tow-content3">Safety</div>
-        <div class="tow-content4">Transparent</div>
-        <div class="two-content5">Legitimate</div>
-        <div class="section2-title">温都金服<span>理财安全吗？</span></div>
-        <div class="two-title">温都报业传媒旗下互联网金融平台，更放心！</div>
-        <p class="two-content two-content1"><img src="<?= ASSETS_BASE_URI ?>images/lock.png" alt="">风控<span>专业</span>，更<span>合规</span>，更<span>透明</span></p>
-        <p class="two-content two-content2"><img src="<?= ASSETS_BASE_URI ?>images/lock.png" alt=""><span>实名</span>认证，资金同卡进出，很放心</p>
-        <p class="two-content two-content3"><img src="<?= ASSETS_BASE_URI ?>images/lock.png" alt="">合作方<span>南京金交中心</span>挂牌项目，很靠谱</p>
-        <img class="two-mima" src="<?= ASSETS_BASE_URI ?>images/mima.png" alt="">
-    </div>
-</div>
-<!--section3-->
-<div class="section section3">
-    <div class="three-box">
-        <div class="three-box-title">国资平台 值得信任</div>
-        <div class="three-box-title1">—— 温都金服五大优势 ——</div>
-        <div class="three-content three-content1">
-            <img src="<?= ASSETS_BASE_URI ?>images/one.png" alt="">
-            <div class="three-content-title"><span>国资</span>背景</div>
-            <i>隶属温州报业传媒旗下，国资平台，可信赖；</i>
+<?php } ?>
+<!--理财公告-->
+
+<!--chengji start-->
+<div class="chengji-box">
+    <div class="chengji-left">
+        <div class="chengji-left-bottom">
+            <span>平台优势</span>
         </div>
-        <div class="three-content three-content2">
-            <img src="<?= ASSETS_BASE_URI ?>images/two.png" alt="">
-            <div class="three-content-title"><span>股东</span>强势</div>
-            <em><p>温州报业传媒有限公司，系温州日报报业集团全资子公司；</p><p>南京金融资产交易中心，省级金融主管部门审批的合规平台；</p></em>
-        </div>
-        <div class="three-content three-content3">
-            <img src="<?= ASSETS_BASE_URI ?>images/three.png" alt="">
-            <div class="three-content-title"><span>安全</span>合规</div>
-            <em><p>资金全程托管，与平台隔离不被挪用；绑定本人银行卡，提现只进本人账户很安全；</p><p>层层风控，安全至上；专业稳健，合法合规；</p></em>
-        </div>
-        <div class="three-content three-content4">
-            <img src="<?= ASSETS_BASE_URI ?>images/four.png" alt="">
-            <div class="three-content-title">产品<span>优质</span></div>
-            <em><p>主流金融机构产品、优质政府平台类产品、</p><p>优质供应链金融产品，期限多样，收益可观；</p></em>
-        </div>
-        <div class="three-content three-content5">
-            <img src="<?= ASSETS_BASE_URI ?>images/five.png" alt="">
-            <div class="three-content-title"><span>灵活</span>便捷</div>
-            <em><p>网上有平台，线下有门店，温都金服在您身边，</p><p>千元起投，手机操作，随时随地实现财富增值。</p></em>
-        </div>
-    </div>
-    <div class="three-bottom">
-        <img src="<?= ASSETS_BASE_URI ?>images/three-footer.png" alt="">
-    </div>
-</div>
-<!--section4-->
-<div class="section section4">
-    <div class="four-box">
-        <div class="four-title">温都金服是什么？ </div>
-        <div class="four-content"><span>专业、安全、规范、</span>最有诚意的国资互联网金融平台</div>
-        <div class="four-ins">
-            <div class="four-left">
-                <img src="<?= ASSETS_BASE_URI ?>images/four-left.png" alt="">
-                <div class="four-left-content">温州温都金融信息服务股份有限公司（简称“温都金服”），隶属温州报业传媒旗下，核心股东为温州报业传媒有限公司和南京金融资产交易中心，是由双方分别整合自身强大的公信力、受众、行业资源优势和专业的风控、理财产品采集、网络技术能力所倾力打造的一家理财平台。<br/><br/>温都金服将以客户需求为中心，运用互联网技术提供金融及产业服务的创新模式，通过规范的操作流程和完善的风险控制体系，为符合国家发展战略的产业和企业提供多元化的平台，为客户供应更契合自身资产配置的金融产品，为广大用户创造更多的价值，助推普惠金融的发展。</div>
+        <div class="chengji-left-top">
+            <div>
+                <img src="<?= ASSETS_BASE_URI ?>images/cup.png" alt="">
+                <p>国资背景</p>
             </div>
-            <div class="four-right">
-                <img src="<?= ASSETS_BASE_URI ?>images/four-right.png" alt="">
+            <div>
+                <img src="<?= ASSETS_BASE_URI ?>images/zhang.png" alt="">
+                <p>谷东强势</p>
             </div>
-            <div class="four-bottom">
-                <img src="<?= ASSETS_BASE_URI ?>images/four-bottom.png" alt="">
+            <div>
+                <img src="<?= ASSETS_BASE_URI ?>images/tu.png" alt="">
+                <p>安全合规</p>
+            </div>
+            <div>
+                <img src="<?= ASSETS_BASE_URI ?>images/tu.png" alt="">
+                <p>产品优质</p>
+            </div>
+            <div>
+                <img src="<?= ASSETS_BASE_URI ?>images/tu.png" alt="">
+                <p>灵活便捷</p>
             </div>
         </div>
-        <div style="clear: both"></div>
     </div>
-</div>
-<div class="section section6">
-    <div class="six-box">
-        <div class="six-logo">
-            <img src="<?= ASSETS_BASE_URI ?>images/yilogo.png" alt=" ">
+    <div class="chengji-right">
+        <div class="chengji-right-top">
+            <span>媒体报道</span>
+            <a href="">更多&gt;</a>
         </div>
-        <div class="six-tilt"><span>温都金服</span>交易电子数据保全</div>
-        <div class="yitiao"><img src="<?= ASSETS_BASE_URI ?>images/yitiao.png" alt=""></div>
-        <div class="six-tilts">将交易合同锁进保险箱</div>
-        <ul class="six-inner">
-            <li>电子合同保全</li>
-            <li>证据提取</li>
-            <li>代理公正</li>
-            <li>交易文件保全</li>
-            <li>司法鉴定</li>
+<!--        <div class="videos"><img src="<?= ASSETS_BASE_URI ?>images/video-bg2.jpg" alt=""></div>-->
+        <ul class="chengji-right-bottom">
+            <?php foreach ($media as $val) : ?>
+                <li><a href=""><?= $val->title ?></a></li>
+            <?php endforeach; ?>
         </ul>
+    </div>
+</div>
+
+<!--推荐标 start-->
+<?php if ($loans) { ?>
+    <div class="new-heade"><span>推荐标</span><a href="/licai/">更多&gt;</a></div>
+    <div class="yingshou-box">
+        <div class="yingshou-content1">
+            <ul class="yingshou-inner1">
+                <?php foreach ($loans as $val) : ?>
+                    <li>
+                        <a href="/deal/deal/detail?sn=<?= $val->sn ?>" class="yingshou-left yingshou <?= (!in_array($val->status, [OnlineProduct::STATUS_PRE, OnlineProduct::STATUS_NOW])) ? 'huibian' : '' ?>">
+                            <div class="yingshou-top"><span><?= $val->title ?></span></div>
+                            <?php if (!in_array($val->status, [OnlineProduct::STATUS_HUAN, OnlineProduct::STATUS_OVER])) { ?>
+                                <div style="clear: both"></div>
+                                <div class="yingshou-content">
+                                    <p>项目总额：<?= rtrim(rtrim(number_format($val->money, 2), '0'), '.') ?>元</p>
+                                    <p>可投余额：<?= rtrim(rtrim(number_format($val->money - $val->funded_money, 2), '0'), '.') ?>元</p>
+                                    <div><?= Yii::$app->params['refund_method'][$val->refund_method] ?></div>
+                                </div>
+                            <?php } else { ?>
+                                <div class="yingshou-content2">
+                                    <p class="yingshou-content2-left">年化收益率
+                                        <span>
+                                            <?php
+                                                echo rtrim(rtrim(number_format(OnlineProduct::calcBaseRate($val->yield_rate, $val->jiaxi), 2), '0'), '.');
+                                                if ($val->isFlexRate && $val->rateSteps) {
+                                                    echo '~'.rtrim(rtrim(number_format(RateSteps::getTopRate(RateSteps::parse($val->rateSteps)), 2), '0'), '.');
+                                                } elseif ($val->jiaxi) {
+                                                    echo '+'.rtrim(rtrim(number_format($val->jiaxi, 2), '0'), '.');
+                                                }
+                                            ?>%
+                                        </span></p>
+                                    <p class="yingshou-content2-right">项目期限 <span><?= $val->expires.($val->refund_method ? "天" : "个月") ?></span></p>
+                                </div>
+                            <?php } ?>
+                            <div class="yingshou-jindu">
+                                <div class="yingshou-jindutiao">
+                                    <div class="yingshou-jindutiao1" progressbar="<?= number_format($val->finish_rate * 100) ?>"></div>
+                                </div>
+                                <span><?= number_format($val->finish_rate * 100) ?>%</span>
+                            </div>
+                            <div style="clear: both"></div>
+                            <?php if (!in_array($val->status, [OnlineProduct::STATUS_HUAN, OnlineProduct::STATUS_OVER])) { ?>
+                                <div class="yingshou-number">
+                                    <div class="yingshou-nian">
+                                        <div>
+                                            <em>
+                                                <?= rtrim(rtrim(number_format(OnlineProduct::calcBaseRate($val->yield_rate, $val->jiaxi), 2), '0'), '.') ?>
+                                                <?php if ($val->isFlexRate && $val->rateSteps) { ?>
+                                                    ~<?= rtrim(rtrim(number_format(RateSteps::getTopRate(RateSteps::parse($val->rateSteps)), 2), '0'), '.') ?><span>%</span><i></i>
+                                                <?php } elseif ($val->jiaxi) { ?>
+                                                    <span>%</span><i>+<?= rtrim(rtrim(number_format($val->jiaxi, 2), '0'), '.') ?>%</i>
+                                                <?php } else { ?>
+                                                    <span>%</span>
+                                                <?php } ?>
+                                            </em>
+                                        </div>
+                                        <p>年化收益率</p>
+                                    </div>
+                                    <div class="yingshou-nian yingshou-xian">
+                                        <?= $val->expires ?><span><?= $val->refund_method ? "天" : "个月" ?></span>
+                                        <p>项目期限</p>
+                                    </div>
+                                </div>
+                                <div class="yingshou-liji">
+                                    <?php
+                                        if (OnlineProduct::STATUS_PRE === $val->status) {
+                                            $dates = Yii::$app->functions->getDateDesc($val->start_date);
+                                    ?>
+                                        <div class="yingshou-liji"><?= $dates['desc'].date('H:i', $dates['time']) ?>起售</div>
+                                    <?php } elseif (OnlineProduct::STATUS_NOW === $val->status) { ?>
+                                        <div class="yingshou-liji">立即投资</div>
+                                    <?php } else { ?>
+                                        <div class="yingshou-manbiao"><?= \Yii::$app->params['deal_status'][$val->status] ?></div>
+                                    <?php } ?>
+                                </div>
+                            <?php } else { ?>
+                                <div class="yingshou-shouyi"><?= \Yii::$app->params['deal_status'][$val->status] ?></div>
+                                <img src="<?= ASSETS_BASE_URI ?>images/shouyizhong_icon.png" class="yingshou-shouyi-img" alt="">
+                            <?php } ?>
+                        </a>
+                    </li>
+                <?php endforeach; ?>
+            </ul>
+        </div>
         <div style="clear: both"></div>
-        <div class="six-right">
-            <img class="bxx" src="<?= ASSETS_BASE_URI ?>images/bxx.png" alt="">
-            <img class="yi1" src="<?= ASSETS_BASE_URI ?>images/yi1.png" alt="">
-            <img class="yi2" src="<?= ASSETS_BASE_URI ?>images/yi2.png" alt="">
-            <img class="yi3" src="<?= ASSETS_BASE_URI ?>images/yi3.png" alt="">
-            <img class="yi4" src="<?= ASSETS_BASE_URI ?>images/yi4.png" alt="">
-            <img class="yi5" src="<?= ASSETS_BASE_URI ?>images/yi5.png" alt="">
+    </div>
+<?php } ?>
+<!--推荐标 end-->
+
+<!--card start-->
+<div class="card">
+    <a href="">
+        <img src="<?= ASSETS_BASE_URI ?>images/card.png" alt="">
+    </a>
+</div>
+<div style="clear: both"></div>
+<!--card end-->
+
+<!--more start-->
+<div style="clear: both"></div>
+<div class="more-box ">
+    <div class="more-box-left">
+        <div class="more-right-top">
+            <span>帮助中心</span>
+            <a href="">更多&gt;</a>
+        </div>
+        <ul class="more-right-bottom">
+            <li><a href="">网站流程如何操作？</a></li>
+            <li><a href="">为什么在温都金服投资是安全的？</a></li>
+            <li><a href="">了解温都金服。</a></li>
+            <li><a href="">资产品种都有哪些？特点和优势是什么？</a></li>
+            <li><a href="">如何联系我们？</a></li>
+        </ul>
+    </div>
+    <div class="more-box-middle">
+        <div class="more-right-top">
+            <span>最新资讯</span>
+            <a href="">更多&gt;</a>
+        </div>
+        <ul class="more-right-bottom">
+            <?php foreach ($news as $val) : ?>
+                <li><a href=""><?= $val->title ?></a></li>
+            <?php endforeach; ?>
+        </ul>
+    </div>
+    <div class = "more-box-right">
+        <div class = "more-right-top" style = "border-bottom: 0;">
+            <span>投资榜单</span>
+            <a href = "">更多&gt;
+            </a>
+        </div>
+        <div class = "more-middle">
+            <div class = "more-middle-left">排名</div>
+            <div class = "more-middle-middle">用户</div>
+            <div class = "more-middle-right">累计投资金额(元)</div>
+        </div>
+        <div class = "more-bottom top-list-show"></div>
+    </div>
+</div>
+<div style="clear: both"></div>
+<!--more end-->
+
+<!--股东背景 start-->
+<div class="background-box">
+    <div class="background-title">股东背景</div>
+    <div class="background-bottom">
+        <div class="background-left">
+            <img src="<?= ASSETS_BASE_URI ?>images/logo1.png" alt="">
+        </div>
+        <div class="background-right">
+            <img src="<?= ASSETS_BASE_URI ?>images/logo2.png" alt="">
         </div>
     </div>
 </div>
+<!--股东背景 end-->
+
+<script>
+    $(function() {
+        $.get('/site/top-list', function(data) {
+            $('.top-list-show').html(data);
+        });
+    })
+</script>

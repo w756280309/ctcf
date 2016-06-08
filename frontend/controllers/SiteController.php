@@ -6,24 +6,20 @@ use Yii;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
+use common\models\adv\Adv;
+use common\models\product\OnlineProduct;
+use common\models\news\News;
+use wap\modules\promotion\models\RankingPromo;
 use common\controllers\HelpersTrait;
 use common\models\user\LoginForm;
 use common\service\LoginService;
 use common\models\log\LoginLog;
 use common\models\user\User;
 
-/**
- * Site controller.
- */
 class SiteController extends Controller
 {
     use HelpersTrait;
 
-    public $layout = 'main';
-
-    /**
-     * {@inheritdoc}
-     */
     public function behaviors()
     {
         return [
@@ -47,9 +43,6 @@ class SiteController extends Controller
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function actions()
     {
         return [
@@ -68,7 +61,69 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('index');
+        //轮播图展示
+        $adv = Adv::find()
+            ->where(['status' => 0, 'del_status' => 0, 'showOnPc' => 1])
+            ->limit(5)
+            ->orderBy('show_order asc, id desc')
+            ->all();
+
+        //理财公告展示
+        $notice = News::find()
+            ->where(['status' => News::STATUS_PUBLISH, 'category_id' => Yii::$app->params['news_cid_notice']])
+            ->orderBy('news_time desc, id desc')
+            ->limit(3)
+            ->all();
+
+        //媒体报道
+        $media = News::find()
+            ->where(['status' => News::STATUS_PUBLISH, 'category_id' => Yii::$app->params['news_cid_media']])
+            ->orderBy('news_time desc, id desc')
+            ->limit(3)
+            ->all();
+
+        //推荐区展示
+        $loans = OnlineProduct::find()
+            ->where(['isPrivate' => 0, 'del_status' => OnlineProduct::STATUS_USE, 'online_status' => OnlineProduct::STATUS_ONLINE])
+            ->andWhere('recommendTime != 0')
+            ->limit(3)
+            ->orderBy('recommendTime desc, sort asc, id desc')
+            ->all();
+
+        //最新资讯
+        $news = News::find()
+            ->where(['status' => News::STATUS_PUBLISH, 'category_id' => Yii::$app->params['news_cid_info']])
+            ->orderBy('news_time desc, id desc')
+            ->limit(5)
+            ->all();
+
+        return $this->render('index', [
+                'adv' => $adv,
+                'loans' => $loans,
+                'notice' => $notice,
+                'media' => $media,
+                'news' => $news,
+            ]);
+    }
+
+    /**
+     * 首页榜单.
+     */
+    public function actionTopList()
+    {
+        $cache = Yii::$app->cache;
+        $key = 'topList';
+
+        if (!$cache->get($key)) {
+            $rank = new RankingPromo(['startAt' => 0, 'endAt' => 9999999999]);
+            $topList = $rank->getOnline();
+
+            $cache->set($key, $topList, 600);   //缓存十分钟
+        }
+
+        $this->layout = false;
+
+        return $this->render('top_list', ['data' => $cache->get($key)]);
     }
 
     /**
@@ -76,7 +131,7 @@ class SiteController extends Controller
      */
     public function actionLogin($flag = null)
     {
-        $this->layout = '@app/views/layouts/login';
+        $this->layout = 'main';
 
         if (!\Yii::$app->user->isGuest) {
             return $this->goHome();

@@ -14,8 +14,6 @@ class QrechargeController extends BaseController
 {
     public function actionVerify()
     {
-        Yii::$app->response->format = Response::FORMAT_JSON;
-
         $cpuser = $this->getAuthedUser();
         $ubank = $cpuser->qpay;
         if (empty($ubank)) {
