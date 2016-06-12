@@ -44,5 +44,45 @@ class StringUtils
 
         return substr_replace($mobileNumber, '******', 3, 6);
     }
-}
 
+    /**
+     * 金额显示样式一:
+     * 1. 添加千分位显示
+     * 2. 以万、亿为单位
+     *
+     * @param string $html html模板字符串,样式如下:
+     * <span>{{ amount }}</span><span>{{ unit }}</span>
+     */
+    public static function amountFormat1($html, $val)
+    {
+        if (strlen(intval($val)) > 8) {
+            return str_replace(['{amount}', '{unit}'], [$val / 100000000, '亿元'], $html);
+        }
+
+        if (strlen(intval($val)) > 4) {
+            return str_replace(['{amount}', '{unit}'], [$val / 10000, '万元'], $html);
+        }
+
+        return str_replace(['{amount}', '{unit}'], [self::amountFormat2($val), '元'], $html);
+    }
+
+    /**
+     * 金额显示样式二:
+     * 1. 添加千分位显示
+     * 2. 去除小数点最右端多余的0,不带计数单位
+     */
+    public static function amountFormat2($val)
+    {
+        return rtrim(rtrim(self::amountFormat3($val), '0'), '.');
+    }
+
+    /**
+     * 金额显示样式三:
+     * 1. 添加千分位显示
+     * 2. 小数位保留两位,不带计数单位
+     */
+    public static function amountFormat3($val)
+    {
+        return number_format($val, 2);
+    }
+}
