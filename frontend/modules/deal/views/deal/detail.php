@@ -6,6 +6,8 @@ use common\models\product\OnlineProduct;
 
 $user = Yii::$app->user->identity;
 $deal->money = rtrim(rtrim($deal->money, '0'), '.');
+
+$this->registerJsFile('/js/lib.js');
 ?>
 <hr>
 <p><?= $deal->title ?></p>
@@ -32,8 +34,7 @@ $deal->money = rtrim(rtrim($deal->money, '0'), '.');
         <div>
             项目期限
             <?php if (!empty($deal->kuanxianqi)) { ?>
-                <i>(包含<?= $deal->kuanxianqi ?>天宽限期)</i> <img
-                    src="<?= ASSETS_BASE_URI ?>images/dina.png" alt="">
+                <i>(包含<?= $deal->kuanxianqi ?>天宽限期)</i> <img src="<?= ASSETS_BASE_URI ?>images/dina.png" alt="">
             <?php } ?>
             <?php if (!empty($deal->kuanxianqi)) { ?>
                 宽限期：应收账款的付款方因内部财务审核,结算流程或结算日遇银行非工作日等因素，账款的实际结算日可能有几天的延后
@@ -79,8 +80,8 @@ $deal->money = rtrim(rtrim($deal->money, '0'), '.');
             </tr>
             <?php foreach (RateSteps::parse($deal->rateSteps) as $val) { ?>
                 <tr>
-                    <td>累计认购<?= rtrim(rtrim(number_format($val->min, 2), '0'), '.') ?>起</td>
-                    <td><?= rtrim(rtrim(number_format($val->rate, 2), '0'), '.') ?></td>
+                    <td>累计认购<?= rtrim(rtrim(number_format($val['min'], 2), '0'), '.') ?>起</td>
+                    <td><?= rtrim(rtrim(number_format($val['rate'], 2), '0'), '.') ?></td>
                 </tr>
             <?php } ?>
         </table>
@@ -97,13 +98,16 @@ $deal->money = rtrim(rtrim($deal->money, '0'), '.');
     <div id="order_list"></div>
 </div>
 <div>
-    <p>项目可投余额：<?= ($deal->status==1)?(Yii::$app->functions->toFormatMoney($deal->money)) : rtrim(rtrim(number_format($deal->getLoanBalance(), 2), '0'), '.').'元'?></p>
-   <p> 我的可用余额：<?= (null === $user)?'查看余额请【<a href="/site/login">登录</a>】':($user->lendAccount?$user->lendAccount->available_balance.' 元':'0 元')?></p>
+    <p>
+        项目可投余额：<?= ($deal->status == 1) ? (Yii::$app->functions->toFormatMoney($deal->money)) : rtrim(rtrim(number_format($deal->getLoanBalance(), 2), '0'), '.') . '元' ?></p>
+    <p>
+        我的可用余额：<?= (null === $user) ? '查看余额请【<a href="/site/login">登录</a>】' : ($user->lendAccount ? $user->lendAccount->available_balance . ' 元' : '0 元') ?></p>
     <div>
-        <?php if($deal->status == OnlineProduct::STATUS_NOW) {?>
+        <?php if ($deal->status == OnlineProduct::STATUS_NOW) { ?>
             <form action="/order/order/doorder?sn=<?= $deal->sn ?>" method="post" id="order_form">
-                <input type="hidden" name="_csrf" value="<?= Yii::$app->request->csrfToken?>"/>
-                <input type="text"  name="money"  placeholder = "起投金额<?= rtrim(rtrim(number_format($deal->start_money, 2), '0'), '.') ?>元，递增金额<?= rtrim(rtrim(number_format($deal->dizeng_money, 2), '0'), '.') ?>元" id="deal_money"/>
+                <input type="hidden" name="_csrf" value="<?= Yii::$app->request->csrfToken ?>"/>
+                <input type="text" name="money" placeholder="起投金额<?= rtrim(rtrim(number_format($deal->start_money, 2), '0'), '.') ?>元，递增金额<?= rtrim(rtrim(number_format($deal->dizeng_money, 2), '0'), '.') ?>元" id="deal_money"/>
+                预期收益：<span id="expect_profit">
                 <input type="submit" name="立即投资" id="order_submit"/>
                 <p>
                     代金券 <span id="coupon_count">0</span>
@@ -113,17 +117,24 @@ $deal->money = rtrim(rtrim($deal->money, '0'), '.');
 
                 </div>
             </form>
-        <?php } elseif($deal->status == OnlineProduct::STATUS_PRE){ ?>
+        <?php } elseif ($deal->status == OnlineProduct::STATUS_PRE) { ?>
             <?php
-                $start = Yii::$app->functions->getDateDesc($deal['start_date']);
-                $deal->start_date = $start['desc'] . date('H:i', $start['time']);
+            $start = Yii::$app->functions->getDateDesc($deal['start_date']);
+            $deal->start_date = $start['desc'] . date('H:i', $start['time']);
             ?>
-           <?= $deal->start_date ?>起售
+            <?= $deal->start_date ?>起售
             <p>投资其他项目</p>
-        <?php } else {?>
-            项目募集完成，收益中...
+        <?php } elseif ($deal->status == OnlineProduct::STATUS_FULL || $deal->status == OnlineProduct::STATUS_FOUND) { ?>
+            项目已售罄
             <p>投资其他项目</p>
-        <?php }?>
+        <?php } elseif ($deal->status == OnlineProduct::STATUS_OVER) { ?>
+            项目已还清
+            <p>投资其他项目</p>
+        <?php } elseif ($deal->status == OnlineProduct::STATUS_HUAN) { ?>
+            项目募集完成，还款中...
+            <p>投资其他项目</p>
+        <?php } else { ?>
+        <?php } ?>
     </div>
 </div>
 
@@ -132,9 +143,11 @@ $deal->money = rtrim(rtrim($deal->money, '0'), '.');
     $(function () {
         //获取投资记录
         getOrderList('/deal/deal/order-list?pid=<?=$deal->id?>');
-        //获取代金券
+
+        //获取代金券,获取预期收益
         $('#deal_money').keyup(function () {
             var money = $(this).val();
+            //获取可用代金券
             $.ajax({
                 beforeSend: function (req) {
                     req.setRequestHeader("Accept", "text/html");
@@ -152,18 +165,18 @@ $deal->money = rtrim(rtrim($deal->money, '0'), '.');
                     });
                 }
             });
+            //获取预期收益
+            profit($(this));
         });
         //提交表单
         var buy = $('#order_submit');
         var form = $('#order_form');
         form.on('submit', function (e) {
             e.preventDefault();
-
             if ($('#deal_money').val() == '') {
                 toast('投资金额不能为空');
                 return false;
             }
-
             buy.attr('disabled', true);
             buy.val("购买中……");
             var vals = form.serialize();
@@ -186,7 +199,7 @@ $deal->money = rtrim(rtrim($deal->money, '0'), '.');
         });
 
     });
-
+    //获取投标记录
     function getOrderList(url) {
         $.ajax({
             beforeSend: function (req) {
@@ -205,5 +218,39 @@ $deal->money = rtrim(rtrim($deal->money, '0'), '.');
         });
     }
 
+    //获取预期收益
+    function profit($this) {
+        var yr = "<?= $deal->yield_rate ?>";
+        var qixian = "<?= $deal->expires ?>";
+        var retmet = "<?= $deal->refund_method ?>";
+        var sn = "<?= $deal->sn ?>";
+        var isFlexRate = <?= $deal->isFlexRate ?>;
+        var csrf = "<?= Yii::$app->request->csrfToken ?>";
+        var money = $this.val();
+        money = money.replace(/^[^0-9]+/, '');
+        if (!$.isNumeric(money)) {
+            money = 0;
+        }
+        if (isFlexRate) {
+            $.post('/deal/deal/rate', {'sn': sn, '_csrf': csrf, 'amount': money}, function (data) {
+                if (true === data.res) {
+                    rate = data.rate;
+                } else {
+                    rate = yr;
+                }
+                if (1 == parseInt(retmet)) {
+                    $('#expect_profit').html(WDJF.numberFormat(accDiv(accMul(accMul(money, rate), qixian), 365), false) + "元");
+                } else {
+                    $('#expect_profit').html(WDJF.numberFormat(accDiv(accMul(accMul(money, rate), qixian), 12), false) + "元");
+                }
+            });
+        } else {
+            if (1 == parseInt(retmet)) {
+                $('#expect_profit').html(WDJF.numberFormat(accDiv(accMul(accMul(money, yr), qixian), 365), false) + "元");
+            } else {
+                $('#expect_profit').html(WDJF.numberFormat(accDiv(accMul(accMul(money, yr), qixian), 12), false) + "元");
+            }
+        }
+    }
 </script>
 

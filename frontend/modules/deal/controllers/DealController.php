@@ -4,9 +4,11 @@ namespace frontend\modules\deal\controllers;
 
 use common\models\order\OnlineOrder;
 use common\models\product\OnlineProduct;
+use common\models\product\RateSteps;
 use frontend\controllers\BaseController;
 use Yii;
 use yii\data\Pagination;
+use yii\helpers\Html;
 
 class DealController extends BaseController
 {
@@ -43,5 +45,31 @@ class DealController extends BaseController
             'data' => $data,
             'pages' => $pages,
         ]);
+    }
+
+    /**
+     * 根据投资金额和产品利率阶梯获取订单的利率
+     * @return array
+     */
+    public function actionRate()
+    {
+        if (Yii::$app->request->isPost) {
+            $sn = Html::encode(Yii::$app->request->post('sn'));
+            $amount = Html::encode(Yii::$app->request->post('amount'));
+            $product = OnlineProduct::find()->where(['sn' => $sn])->one();
+            if ($product && $amount) {
+                if (1 === $product->isFlexRate && !empty($product->rateSteps)) {
+                    $config = RateSteps::parse($product->rateSteps);
+                    if (!empty($config)) {
+                        $rate = RateSteps::getRateForAmount($config, $amount);
+                        if (false !== $rate) {
+                            return ['res' => true, 'rate' => $rate / 100];
+                        }
+                    }
+                }
+            }
+            return ['res' => false, 'rate' => false];
+        }
+        return ['res' => false, 'rate' => false];
     }
 }
