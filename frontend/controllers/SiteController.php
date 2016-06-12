@@ -2,19 +2,20 @@
 
 namespace frontend\controllers;
 
+use common\controllers\HelpersTrait;
+use common\models\adv\Adv;
+use common\models\category\ItemCategory;
+use common\models\log\LoginLog;
+use common\models\news\News;
+use common\models\product\OnlineProduct;
+use common\models\user\LoginForm;
+use common\models\user\User;
+use common\service\LoginService;
+use wap\modules\promotion\models\RankingPromo;
 use Yii;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
-use common\models\adv\Adv;
-use common\models\product\OnlineProduct;
-use common\models\news\News;
-use wap\modules\promotion\models\RankingPromo;
-use common\controllers\HelpersTrait;
-use common\models\user\LoginForm;
-use common\service\LoginService;
-use common\models\log\LoginLog;
-use common\models\user\User;
 
 class SiteController extends Controller
 {
@@ -68,17 +69,22 @@ class SiteController extends Controller
             ->orderBy('show_order asc, id desc')
             ->all();
 
+        $ic = ItemCategory::tableName();
+        $n = News::tableName();
+
         //理财公告展示
         $notice = News::find()
-            ->where(['status' => News::STATUS_PUBLISH, 'category_id' => Yii::$app->params['news_cid_notice']])
-            ->orderBy('news_time desc, id desc')
+            ->innerJoin($ic, "$ic.item_id = $n.id")
+            ->where(["$n.status" => News::STATUS_PUBLISH, "$ic.category_id" => Yii::$app->params['news_cid_notice']])
+            ->orderBy(["$n.news_time" => 'desc', "$n.id" => 'desc'])
             ->limit(3)
             ->all();
 
         //媒体报道
         $media = News::find()
-            ->where(['status' => News::STATUS_PUBLISH, 'category_id' => Yii::$app->params['news_cid_media']])
-            ->orderBy('news_time desc, id desc')
+            ->innerJoin($ic, "$ic.item_id = $n.id")
+            ->where(["$n.status" => News::STATUS_PUBLISH, "$ic.category_id" => Yii::$app->params['news_cid_media']])
+            ->orderBy(["$n.news_time" => 'desc', "$n.id" => 'desc'])
             ->limit(3)
             ->all();
 
@@ -92,8 +98,9 @@ class SiteController extends Controller
 
         //最新资讯
         $news = News::find()
-            ->where(['status' => News::STATUS_PUBLISH, 'category_id' => Yii::$app->params['news_cid_info']])
-            ->orderBy('news_time desc, id desc')
+            ->innerJoin($ic, "$ic.item_id = $n.id")
+            ->where(["$n.status" => News::STATUS_PUBLISH, "$ic.category_id" => Yii::$app->params['news_cid_info']])
+            ->orderBy(["$n.news_time" => 'desc', "$n.id" => 'desc'])
             ->limit(5)
             ->all();
 

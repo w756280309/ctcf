@@ -6,6 +6,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/index.js', ['depends' => 'frontend\ass
 
 use common\models\product\OnlineProduct;
 use common\models\product\RateSteps;
+use common\utils\StringUtils;
 ?>
 
 <!--banner start-->
@@ -106,8 +107,8 @@ use common\models\product\RateSteps;
                             <?php if (!in_array($val->status, [OnlineProduct::STATUS_HUAN, OnlineProduct::STATUS_OVER])) { ?>
                                 <div style="clear: both"></div>
                                 <div class="yingshou-content">
-                                    <p>项目总额：<?= rtrim(rtrim(number_format($val->money, 2), '0'), '.') ?>元</p>
-                                    <p>可投余额：<?= rtrim(rtrim(number_format($val->money - $val->funded_money, 2), '0'), '.') ?>元</p>
+                                    <p>项目总额：<?= StringUtils::amountFormat2($val->money) ?>元</p>
+                                    <p>可投余额：<?= StringUtils::amountFormat2($val->money - $val->funded_money) ?>元</p>
                                     <div><?= Yii::$app->params['refund_method'][$val->refund_method] ?></div>
                                 </div>
                             <?php } else { ?>
@@ -115,15 +116,15 @@ use common\models\product\RateSteps;
                                     <p class="yingshou-content2-left">年化收益率
                                         <span>
                                             <?php
-                                                echo rtrim(rtrim(number_format(OnlineProduct::calcBaseRate($val->yield_rate, $val->jiaxi), 2), '0'), '.');
+                                                echo StringUtils::amountFormat2(OnlineProduct::calcBaseRate($val->yield_rate, $val->jiaxi));
                                                 if ($val->isFlexRate && $val->rateSteps) {
-                                                    echo '~'.rtrim(rtrim(number_format(RateSteps::getTopRate(RateSteps::parse($val->rateSteps)), 2), '0'), '.');
+                                                    echo '~'.StringUtils::amountFormat2(RateSteps::getTopRate(RateSteps::parse($val->rateSteps)));
                                                 } elseif ($val->jiaxi) {
-                                                    echo '+'.rtrim(rtrim(number_format($val->jiaxi, 2), '0'), '.');
+                                                    echo '+'.StringUtils::amountFormat2($val->jiaxi);
                                                 }
                                             ?>%
                                         </span></p>
-                                    <p class="yingshou-content2-right">项目期限 <span><?= $val->expires.($val->refund_method ? "天" : "个月") ?></span></p>
+                                    <p class="yingshou-content2-right">项目期限 <span><?= $val->expires.(1 === $val->refund_method ? "天" : "个月") ?></span></p>
                                 </div>
                             <?php } ?>
                             <div class="yingshou-jindu">
@@ -138,11 +139,11 @@ use common\models\product\RateSteps;
                                     <div class="yingshou-nian">
                                         <div>
                                             <em>
-                                                <?= rtrim(rtrim(number_format(OnlineProduct::calcBaseRate($val->yield_rate, $val->jiaxi), 2), '0'), '.') ?>
+                                                <?= StringUtils::amountFormat2(OnlineProduct::calcBaseRate($val->yield_rate, $val->jiaxi)) ?>
                                                 <?php if ($val->isFlexRate && $val->rateSteps) { ?>
-                                                    ~<?= rtrim(rtrim(number_format(RateSteps::getTopRate(RateSteps::parse($val->rateSteps)), 2), '0'), '.') ?><span>%</span><i></i>
+                                                    ~<?= StringUtils::amountFormat2(RateSteps::getTopRate(RateSteps::parse($val->rateSteps))) ?><span>%</span><i></i>
                                                 <?php } elseif ($val->jiaxi) { ?>
-                                                    <span>%</span><i>+<?= rtrim(rtrim(number_format($val->jiaxi, 2), '0'), '.') ?>%</i>
+                                                    <span>%</span><i>+<?= StringUtils::amountFormat2($val->jiaxi) ?>%</i>
                                                 <?php } else { ?>
                                                     <span>%</span>
                                                 <?php } ?>
@@ -151,7 +152,7 @@ use common\models\product\RateSteps;
                                         <p>年化收益率</p>
                                     </div>
                                     <div class="yingshou-nian yingshou-xian">
-                                        <?= $val->expires ?><span><?= $val->refund_method ? "天" : "个月" ?></span>
+                                        <?= $val->expires ?><span><?= 1 === $val->refund_method ? "天" : "个月" ?></span>
                                         <p>项目期限</p>
                                     </div>
                                 </div>

@@ -40,6 +40,9 @@ class UserController extends BaseController
         ]);
     }
 
+    /**
+     * 账户中心首页
+     */
     public function actionIndex()
     {
         $o = Ord::tableName();

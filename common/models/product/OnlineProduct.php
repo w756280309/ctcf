@@ -500,12 +500,10 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
 
     /**
      * 用于加息时候，利率的显示.
-     *
-     * @return decimal
      */
     public static function calcBaseRate($yr, $jiaxi)
     {
-        return null === $jiaxi ? bcmul($yr, 100, 2) : bcsub(bcmul($yr, 100), $jiaxi, 2);
+        return null === $jiaxi ? bcmul($yr, 100, 2) : bcsub(bcmul($yr, 100, 2), $jiaxi, 2);
     }
 
     public function getLoanExpires()

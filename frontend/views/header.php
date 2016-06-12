@@ -20,7 +20,7 @@ $this->registerCssFile(ASSETS_BASE_URI.'css/header.css', ['depends' => 'frontend
                 </div>
                 <i>|</i>
                 <span>
-                    <a class="header-top-back" href="javascript:void(0)" onclick="$('#logout').submit();">安全退出</a>
+                    <a class="header-top-back" href="javascript:void(0)" onclick="$('#header-logout').submit();">安全退出</a>
                     <form method="post" id="header-logout" action="/site/logout">
                         <input name="_csrf" type="hidden" value="<?= Yii::$app->request->csrfToken ?>">
                     </form>

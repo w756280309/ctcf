@@ -6,6 +6,7 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/deallist.css', ['depends' => 'fron
 
 use common\models\product\OnlineProduct;
 use common\models\product\RateSteps;
+use common\utils\StringUtils;
 use common\widgets\Pager;
 
 ?>
@@ -27,11 +28,11 @@ use common\widgets\Pager;
                     <div class="single_content">
                         <ul class="single_ul_left">
                             <li class="li_1">
-                                <i class="float-left"><?= rtrim(rtrim(number_format(OnlineProduct::calcBaseRate($val->yield_rate, $val->jiaxi), 2), '0'), '.') ?></i>
+                                <i class="float-left"><?= StringUtils::amountFormat2(OnlineProduct::calcBaseRate($val->yield_rate, $val->jiaxi)) ?></i>
                                 <?php if ($val->isFlexRate && $val->rateSteps) { ?>
-                                    ~<?= rtrim(rtrim(number_format(RateSteps::getTopRate(RateSteps::parse($val->rateSteps)), 2), '0'), '.') ?><span>%</span>
+                                    ~<?= StringUtils::amountFormat2(RateSteps::getTopRate(RateSteps::parse($val->rateSteps))) ?><span>%</span>
                                 <?php } elseif ($val->jiaxi) { ?>
-                                    <span>%</span><span class="addRadeNumber">+<?= rtrim(rtrim(number_format($val->jiaxi, 2), '0'), '.') ?>%</span>
+                                    <span>%</span><span class="addRadeNumber">+<?= StringUtils::amountFormat2($val->jiaxi) ?>%</span>
                                 <?php } else { ?>
                                     <span>%</span>
                                 <?php } ?>
@@ -39,16 +40,16 @@ use common\widgets\Pager;
                             <li class="li_2">年化收益率</li>
                         </ul>
                         <ul class="single_ul_center">
-                            <li class="li_1"><?= $val->expires ?><span><?= $val->refund_method ? "天" : "个月" ?></span></li>
+                            <li class="li_1"><?= $val->expires ?><span><?= 1 === $val->refund_method ? "天" : "个月" ?></span></li>
                             <li class="li_2">项目期限</li>
                         </ul>
 
                         <ul class="single_ul_right">
-                            <li class="li_1"><?= rtrim(rtrim(number_format($val->start_money, 2), '0'), '.') ?><span>元</span></li>
+                            <li class="li_1"><?= StringUtils::amountFormat2($val->start_money) ?><span>元</span></li>
                             <li class="li_2">起投金额</li>
                         </ul>
                         <ul class="single_ul_right-add">
-                            <li class="li_1"><?= rtrim(rtrim(number_format($val->money, 2), '0'), '.') ?><span>元</span></li>
+                            <li class="li_1"><?= StringUtils::amountFormat1('{amount}<span>{unit}</span>', $val->money) ?></li>
                             <li class="li_2">融资金额</li>
                         </ul>
                     </div>
@@ -61,7 +62,7 @@ use common\widgets\Pager;
                             </div>
                             <span class="single_right_tiao_span"><?= number_format($val->finish_rate * 100) ?>%</span>
                             <div class="clear"></div>
-                            <p class="remain-number">可投余额：<?= number_format($val->money - $val->funded_money, 2) ?>元</p>
+                            <p class="remain-number">可投余额：<?= StringUtils::amountFormat3($val->money - $val->funded_money) ?>元</p>
                         </div>
                         <?php
                         if (OnlineProduct::STATUS_PRE === $val->status) {

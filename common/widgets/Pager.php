@@ -15,7 +15,6 @@ class Pager extends LinkPager
 
     public function run()
     {
-        $this->view->registerCss('.active a{color:red;} .ellipsis{border:0px;}');
         if ($this->registerLinkTags) {
             $this->registerLinkTags();
         }
