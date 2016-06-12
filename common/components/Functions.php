@@ -187,7 +187,7 @@ class Functions extends Component
      *
      * @param type $sign         经过64位加密的签名
      * @param type $data         需要验证的数据
-     * @param type $pub_key_path 公钥路径 
+     * @param type $pub_key_path 公钥路径
      *
      * @return bool
      */
@@ -215,8 +215,8 @@ class Functions extends Component
     {
         $private = file_get_contents($pri_key_path);
         $pi_key = openssl_pkey_get_private($private);
-        openssl_private_encrypt($data, $encrypted, $pi_key); //私钥加密  
-        $encrypted = base64_encode($encrypted); //加密后的内容通常含有特殊字符，需要编码转换下，在网络间通过url传输时要注意base64编码是否是url安全的  
+        openssl_private_encrypt($data, $encrypted, $pi_key); //私钥加密
+        $encrypted = base64_encode($encrypted); //加密后的内容通常含有特殊字符，需要编码转换下，在网络间通过url传输时要注意base64编码是否是url安全的
         return $encrypted;
     }
 
@@ -231,8 +231,8 @@ class Functions extends Component
     public function rsaPubDecrypt($pub_key_path = '', $encrypt = '')
     {
         $public = file_get_contents($pub_key_path);
-        $pu_key = openssl_pkey_get_public($public); //这个函数可用来判断公钥是否是可用的  
-        openssl_public_decrypt(base64_decode($encrypt), $decrypted, $pu_key); //私钥加密的内容通过公钥可用解密出来 
+        $pu_key = openssl_pkey_get_public($public); //这个函数可用来判断公钥是否是可用的
+        openssl_public_decrypt(base64_decode($encrypt), $decrypted, $pu_key); //私钥加密的内容通过公钥可用解密出来
         return $decrypted;
     }
 
@@ -246,8 +246,8 @@ class Functions extends Component
     public function rsaPubEncrypt($pub_key_path = '', $data = '')
     {
         $public_key = file_get_contents($pub_key_path);
-        $pu_key = openssl_pkey_get_public($public_key); //这个函数可用来判断公钥是否是可用的  
-        openssl_public_encrypt($data, $encrypted, $pu_key); //公钥加密  
+        $pu_key = openssl_pkey_get_public($public_key); //这个函数可用来判断公钥是否是可用的
+        openssl_public_encrypt($data, $encrypted, $pu_key); //公钥加密
         $encrypted = base64_encode($encrypted);
 
         return $encrypted;
@@ -288,8 +288,8 @@ class Functions extends Component
         return true;
     }
 
-// $parent is the parent of the children we want to see 
-// $level is increased when we go deeper into the tree, 
+// $parent is the parent of the children we want to see
+// $level is increased when we go deeper into the tree,
 // used to display a nice indented tree
     /*
       通过数据库获取所有元素，通过下面函数构造树形结构
@@ -442,7 +442,7 @@ class Functions extends Component
         } elseif (date('d', $time) == date('d')) {
             return ['today' => 1, 'desc' => '今日', 'time' => $time];
         } else {
-            return ['today' => 0, 'desc' => date('m月d日', $time), 'time' => $time];
+            return ['today' => 0, 'desc' => date('n月j日', $time), 'time' => $time];
         }
     }
 
@@ -462,7 +462,7 @@ class Functions extends Component
         if ($simple == 1) {
             $chars = '0123456789';
         } else {
-            $chars = 'abcdefghijkmnpqrstuvwxyz23456789ABCDEFGHIJKMNPQRSTUVWXYZ'; //去掉1跟字母l防混淆      
+            $chars = 'abcdefghijkmnpqrstuvwxyz23456789ABCDEFGHIJKMNPQRSTUVWXYZ'; //去掉1跟字母l防混淆
         }
         if ($len > strlen($chars)) {
             //位数过长重复字符串一定次数

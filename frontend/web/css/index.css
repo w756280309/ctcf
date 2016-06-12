@@ -250,7 +250,7 @@ body {
 .chengji-right-bottom {
     margin-top: 10px;
 }
-.chengji-right-bottom li{
+.chengji-right-bottom li {
     margin-top: 4px;
     list-style: disc;
     margin-left: 20px;
@@ -259,9 +259,10 @@ body {
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
+    color:#99999d;
 }
-.chengji-right-bottom li a{
-    color:#99999d
+.chengji-right-bottom li a {
+    color:#99999d;
 }
 .chengji-right-bottom li a:hover {
     color: #6e6e72;
@@ -278,7 +279,7 @@ body {
     line-height: 60px;
     margin-top: 20px;
 }
-.new-heade span{
+.new-heade span {
     float: left;
 }
 .new-heade a {
