@@ -11,7 +11,7 @@ use common\utils\StringUtils;
 ?>
 
 <!--账户总资产-->
-<input id="property-value" type="hidden" value="<?= number_format($user->lendAccount->totalFund, 2) ?>">
+<input id="property-value" type="hidden" value="<?= StringUtils::amountFormat3($user->lendAccount->totalFund) ?>">
 <!--可用余额-->
 <input id="AvlBal" type="hidden" value="<?= $user->lendAccount->available_balance ?>">
 <!--理财资产-->
@@ -39,8 +39,8 @@ use common\utils\StringUtils;
                 </div>
                 <div class="top-box-bottom">
                     <ul class="clearfix">
-                        <li class="grayFont">累计投资：<span class="redFont"><?= number_format($user->getTotalInvestment(), 2) ?></span> <i class="blackFont">元</i><img id="tip" src="<?= ASSETS_BASE_URI ?>images/UserAccount/tip.png" alt=""><div class="grayFont dialog">投资金额累计相加</div></li>
-                        <li class="grayFont">累计收益：<span class="redFont"><?= number_format($user->getProfit(), 2) ?></span> <i class="blackFont">元</i></li>
+                        <li class="grayFont">累计投资：<span class="redFont"><?= StringUtils::amountFormat3($user->getTotalInvestment()) ?></span> <i class="blackFont">元</i><img id="tip" src="<?= ASSETS_BASE_URI ?>images/UserAccount/tip.png" alt=""><div class="grayFont dialog">投资金额累计相加</div></li>
+                        <li class="grayFont">累计收益：<span class="redFont"><?= StringUtils::amountFormat3($user->getProfit()) ?></span> <i class="blackFont">元</i></li>
                     </ul>
                 </div>
             </div>
@@ -61,21 +61,21 @@ use common\utils\StringUtils;
                                 <div class="property-point orangeBgdeep"></div>
                                 <i>可用余额</i>
                                 <img class="tips" src="<?= ASSETS_BASE_URI ?>images/UserAccount/tip.png" alt="">
-                                <i class="redFont"><?= number_format($user->lendAccount->available_balance, 2) ?></i>元
+                                <i class="redFont"><?= StringUtils::amountFormat3($user->lendAccount->available_balance) ?></i>元
                                 <div class="property-tishi" style="left: -2px;">当前账户可用投资，提现金额 <img class="dialog-jiao" src="<?= ASSETS_BASE_URI ?>images/UserAccount/diglog-jiao.png" alt=""></div>
                             </li>
                             <li class="grayFont">
                                 <div class="property-point greenBg"></div>
                                 <i>理财资产</i>
                                 <img class="tips" src="<?= ASSETS_BASE_URI ?>images/UserAccount/tip.png" alt="">
-                                <i class="redFont"><?= number_format($user->lendAccount->investment_balance, 2) ?></i>元
+                                <i class="redFont"><?= StringUtils::amountFormat3($user->lendAccount->investment_balance) ?></i>元
                                 <div class="property-tishi" style="left: -46px;">正在投资中待回收本金总和(含理财，债券转让) <img class="dialog-jiao" src="<?= ASSETS_BASE_URI ?>images/UserAccount/diglog-jiao.png" alt=""></div>
                             </li>
                             <li class="grayFont">
                                 <div class="property-point redBg"></div>
                                 <i>冻结资金</i>
                                 <img class="tips" src="<?= ASSETS_BASE_URI ?>images/UserAccount/tip.png" alt="">
-                                <i class="redFont"><?= number_format($user->lendAccount->freeze_balance, 2) ?></i>元
+                                <i class="redFont"><?= StringUtils::amountFormat3($user->lendAccount->freeze_balance) ?></i>元
                                 <div class="property-tishi" style="left: -18px;">投资资金在项目未满标时锁定的金额<img class="dialog-jiao" src="<?= ASSETS_BASE_URI ?>images/UserAccount/diglog-jiao.png" alt=""></div>
                             </li>
                         </ul>
@@ -104,9 +104,9 @@ use common\utils\StringUtils;
                             <?php foreach($orders as $model) : ?>
                                 <li  class="clearfix">
                                     <div class="investment-inner investment-inner1"><div class="investment-name grayFont investment-box-vertical" style="text-align: left;"><div class="investment-name1"><a href="/deal/deal/detail?sn=<?= $model->loan->sn ?>"><?= $model->loan->title ?></a></div></div></div>
-                                    <div class="investment-inner"><div class="investment-money grayFont investment-box-vertical"><i><?= number_format($model->order_money) ?></i></div></div>
-                                    <div class="investment-inner"><div class="investment-profit grayFont investment-box-vertical"><i><?= number_format(Plan::getTotalLixi($model->loan, $model), 2) ?></i></div></div>
-                                    <div class="investment-inner"><div class="investment-time grayFont investment-box-vertical"><i><?= $model->loan->expires.($model->loan->refund_method ? "天" : "个月") ?></i></div></div>
+                                    <div class="investment-inner"><div class="investment-money grayFont investment-box-vertical"><i><?= StringUtils::amountFormat3($model->order_money) ?></i></div></div>
+                                    <div class="investment-inner"><div class="investment-profit grayFont investment-box-vertical"><i><?= StringUtils::amountFormat3(Plan::getTotalLixi($model->loan, $model)) ?></i></div></div>
+                                    <div class="investment-inner"><div class="investment-time grayFont investment-box-vertical"><i><?= $model->loan->expires.(1 === $model->loan->refund_method ? "天" : "个月") ?></i></div></div>
                                     <div class="investment-inner"><div class="investment-state grayFont investment-box-vertical"><i><?= \Yii::$app->params['deal_status'][$model->loan->status] ?></i></div></div>
                                 </li>
                             <?php endforeach; ?>

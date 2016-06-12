@@ -50,7 +50,7 @@ use common\widgets\Pager;
                         </ul>
                         <ul class="single_ul_right-add">
                             <li class="li_1"><?= StringUtils::amountFormat1('{amount}<span>{unit}</span>', $val->money) ?></li>
-                            <li class="li_2">融资金额</li>
+                            <li class="li_2">项目总额</li>
                         </ul>
                     </div>
                 </div>
