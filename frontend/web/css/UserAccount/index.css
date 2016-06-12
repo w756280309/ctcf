@@ -272,7 +272,6 @@ path {
 }
 .investment-bottom-title li {
     float: left;
-    text-align: left;
     color: #464648;
     font-size: 14px;
 }
@@ -298,6 +297,14 @@ path {
 }
 .investment-contract {
     width: 82px;
+}
+.investment-money i {
+    float: right;
+    margin-right: 68px;
+}
+.investment-profit i {
+    float: right;
+    margin-right: 47px;
 }
 .investment-name1 {
     width: 200px;
