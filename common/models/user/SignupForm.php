@@ -109,6 +109,8 @@ class SignupForm extends Model
             $user->type = User::USER_TYPE_PERSONAL;
             $user->mobile = $this->phone;
             $user->setPassword($this->password);
+            $user->username = '';
+            $user->law_mobile = '';
             if (Yii::$app->request->cookies->getValue('campaign_source')) {
                 $user->campaign_source = Yii::$app->request->cookies->getValue('campaign_source');
             }
