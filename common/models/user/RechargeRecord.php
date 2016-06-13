@@ -77,7 +77,7 @@ class RechargeRecord extends \yii\db\ActiveRecord implements \P2pl\QpayTxInterfa
             [['bank_id'], 'string', 'max' => 20],
             [['remark'], 'string', 'max' => 100],
             ['pay_type', 'default', 'value' => self::PAY_TYPE_QUICK],
-
+            ['pay_id', 'default', 'value' => 0],
             [['clientIp'], 'integer'],//存入时候ip2long 读取时候long2ip
             [['epayUserId', 'clientIp'], 'default', 'value' => 0],
         ];

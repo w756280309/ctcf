@@ -84,6 +84,7 @@ class TradeLog extends \yii\db\ActiveRecord
         $log->requestData = json_encode($rqData);//存储没有进行签名的数据
         $log->rawRequest = $rq;
         $log->duration = $duration;
+        $log->responseMessage = '';
         if (null !== $rp) {
             $log->responseCode = $rp->get('ret_code');
             $log->rawResponse = json_encode($rp->toArray());

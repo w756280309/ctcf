@@ -55,6 +55,13 @@ class ProductonlineController extends BaseController
             $model->yield_rate = bcmul($model->yield_rate, 100, 2);
             $isPrivate = $model->isPrivate;
             $ctmodel = ContractTemplate::find()->where(['pid' => $id])->all();
+        } else {
+            $model->epayLoanAccountId = '';
+            $model->pcid = 0;
+            $model->fee = 0;
+            $model->funded_money = 0;
+            $model->full_time = 0;
+            $model->yuqi_faxi = 0;
         }
 
         $con_name_arr = Yii::$app->request->post('name');
