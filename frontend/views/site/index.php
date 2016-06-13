@@ -139,14 +139,16 @@ use common\utils\StringUtils;
                                     <div class="yingshou-nian">
                                         <div>
                                             <em>
-                                                <?= StringUtils::amountFormat2(OnlineProduct::calcBaseRate($val->yield_rate, $val->jiaxi)) ?>
-                                                <?php if ($val->isFlexRate && $val->rateSteps) { ?>
-                                                    ~<?= StringUtils::amountFormat2(RateSteps::getTopRate(RateSteps::parse($val->rateSteps))) ?><span>%</span><i></i>
-                                                <?php } elseif ($val->jiaxi) { ?>
-                                                    <span>%</span><i>+<?= StringUtils::amountFormat2($val->jiaxi) ?>%</i>
-                                                <?php } else { ?>
-                                                    <span>%</span>
-                                                <?php } ?>
+                                                <?php
+                                                    $rate = StringUtils::amountFormat2(OnlineProduct::calcBaseRate($val->yield_rate, $val->jiaxi));
+                                                    if ($val->isFlexRate && $val->rateSteps) {
+                                                        echo $rate.'~'.StringUtils::amountFormat2(RateSteps::getTopRate(RateSteps::parse($val->rateSteps))).'<span>%</span><i></i>';
+                                                    } elseif ($val->jiaxi) {
+                                                        echo $rate.'<span>%</span><i>+'.StringUtils::amountFormat2($val->jiaxi).'%</i>';
+                                                    } else {
+                                                        echo $rate.'<span>%</span>';
+                                                    }
+                                                ?>
                                             </em>
                                         </div>
                                         <p>年化收益率</p>
