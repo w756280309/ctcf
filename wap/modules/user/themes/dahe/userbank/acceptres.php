@@ -10,9 +10,9 @@ $this->registerJsFile('', ['depends' => 'yii\web\YiiAsset','position' => 1]);
 <div class="row" id='bind-box'>
     <div class="col-xs-12">
         <?php if ('success' === $ret) { ?>
-        <div>綁卡提交申请成功</div>
+        <div>绑卡提交申请成功</div>
         <?php } else { ?>
-        <div>綁卡提交申请失败</div>
+        <div>绑卡提交申请失败</div>
         <?php } ?>
     </div>
 </div>
