@@ -57,7 +57,6 @@ class ProductonlineController extends BaseController
             $ctmodel = ContractTemplate::find()->where(['pid' => $id])->all();
         } else {
             $model->epayLoanAccountId = '';
-            $model->pcid = 0;
             $model->fee = 0;
             $model->funded_money = 0;
             $model->full_time = 0;
