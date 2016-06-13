@@ -1,4 +1,7 @@
 <?php
+
+use common\models\user\QpayBinding;
+
 $this->title = "安全中心";
 $this->backUrl = '/system/system/setting';
 ?>
@@ -31,10 +34,10 @@ $this->backUrl = '/system/system/setting';
     </div>
 </div>
 <?php if($user_bank){ ?>
-    <a class="row sm-height border-bottom visit" style="display: block;" href="<?= (int)$user_bank->status !== 3 ? '/user/userbank/mycard' : 'javascript:void(0)' ?>">
+    <a class="row sm-height border-bottom visit" style="display: block;" href="<?= $user_bank instanceof QpayBinding && (int)$user_bank->status !== 3 ? '/user/userbank/mycard' : 'javascript:void(0)' ?>">
         <div class="col-xs-4 safe-txt  text-align-lf">银行卡</div>
         <div class="col-xs-2 safe-lf"><?= $user_bank->card_number ? substr_replace($user_bank->card_number,'*****',3,-2) : "" ?></div>
-        <?php if((int)$user_bank->status === 3) { ?>
+        <?php if($user_bank instanceof QpayBinding && (int)$user_bank->status === 3) { ?>
         <div class="col-xs-5 arrow" style="text-align: right;">
             <span style="color: #337ab7;">正在审核中</span>
         </div>
