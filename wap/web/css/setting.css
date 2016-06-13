@@ -353,3 +353,13 @@ a.visit:hover {
 span.notice {
     color: #f44336;
 }
+
+/* 正在审核中文字样式 */
+.bing-doing {
+    text-align: right;
+    color: #337ab7;
+}
+
+.safe-btn {
+    background: #F2F2F2;
+}

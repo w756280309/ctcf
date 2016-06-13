@@ -26,16 +26,14 @@ class SystemController extends BaseController
      */
     public function actionSafecenter()
     {
-        $uid = $this->getAuthedUser()->id;
+        $user = $this->getAuthedUser();
 
-        $user = User::find()->where(['id' => $uid, 'type' => User::USER_TYPE_PERSONAL, 'status' => User::STATUS_ACTIVE, 'idcard_status' => User::IDCARD_STATUS_PASS])->select('idcard')->one();
-        $user_bank = null;
-        $qpaystatus = BankService::getQpayStatus($this->getAuthedUser());
-        if (User::QPAY_ENABLED === $qpaystatus) {
-            $user_bank = $this->getAuthedUser()->qpay;
-        } else if (User::QPAY_PENDING === $qpaystatus) {
-            $user_bank = QpayBinding::findOne(['uid' => $uid, 'status' => QpayBinding::STATUS_ACK]);
+        $user_bank = $user->qpay;
+
+        if (null === $user_bank) {
+            $user_bank = QpayBinding::findOne(['uid' => $user->id, 'status' => QpayBinding::STATUS_ACK]);
         }
+
         return $this->render('safecenter', ['user' => $user, 'user_bank' => $user_bank]);
     }
 }
