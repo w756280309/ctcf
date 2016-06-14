@@ -57,12 +57,19 @@ use common\widgets\Pager;
                 <?php if (!in_array($val->status, [OnlineProduct::STATUS_HUAN, OnlineProduct::STATUS_OVER])) { ?>
                     <div class="single_right">
                         <div class="single_right_tiao">
-                            <div class="tiao_content">
-                                <span class="tiao_content_length" style="width:<?= number_format($val->finish_rate * 100) ?>%"></span>
-                            </div>
-                            <span class="single_right_tiao_span"><?= number_format($val->finish_rate * 100) ?>%</span>
+                            <?php if ($val->status == OnlineProduct::STATUS_FOUND) { ?>
+                                <div class="tiao_content">
+                                    <span class="tiao_content_length" style="width:100%"></span>
+                                </div>
+                                <span class="single_right_tiao_span">100%</span>
+                            <?php } else { ?>
+                                <div class="tiao_content">
+                                    <span class="tiao_content_length" style="width:<?= number_format($val->finish_rate * 100) ?>%"></span>
+                                </div>
+                                <span class="single_right_tiao_span"><?= number_format($val->finish_rate * 100) ?>%</span>
+                            <?php }?>
                             <div class="clear"></div>
-                            <p class="remain-number">可投余额：<?= StringUtils::amountFormat3($val->money - $val->funded_money) ?>元</p>
+                            <p class="remain-number">可投余额：<?= ($val->status == 1) ? (Yii::$app->functions->toFormatMoney($val->money)) : rtrim(rtrim(number_format($val->getLoanBalance(), 2), '0'), '.') ?>元</p>
                         </div>
                         <?php
                         if (OnlineProduct::STATUS_PRE === $val->status) {
@@ -71,6 +78,8 @@ use common\widgets\Pager;
                             <span class="single_right_button"><?= $dates['desc'] . date('H:i', $dates['time']) ?>起售</span>
                         <?php } elseif (OnlineProduct::STATUS_NOW === $val->status) { ?>
                             <span class="single_right_button">立即投资</span>
+                        <?php } elseif (OnlineProduct::STATUS_FOUND === $val->status) { ?>
+                            <span class="single_right_button_over">已成立</span>
                         <?php } else { ?>
                             <span class="single_right_button_over"><?= \Yii::$app->params['deal_status'][$val->status] ?></span>
                         <?php } ?>

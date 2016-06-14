@@ -133,10 +133,17 @@ FrontAsset::register($this);
             <div class="pR-box-inner">
                 <div class="pR-title">募集进度：</div>
                 <div class="dR-progress-box">
+                    <?php if ($deal->status == OnlineProduct::STATUS_FOUND) { ?>
                     <div class="dR-progress">
-                        <span data-progress="<?= number_format($deal->finish_rate * 100, 0) ?>" style="width: <?= number_format($deal->finish_rate * 100, 0) ?>%;"></span>
+                        <span data-progress="100" style="width: 100%;"></span>
                     </div>
-                    <div class="dRP-data"><?= number_format($deal->finish_rate * 100, 0) ?>%</div>
+                    <div class="dRP-data">100%</div>
+                    <?php } else { ?>
+                        <div class="dR-progress">
+                            <span data-progress="<?= number_format($deal->finish_rate * 100, 0) ?>" style="width: <?= number_format($deal->finish_rate * 100, 0) ?>%;"></span>
+                        </div>
+                        <div class="dRP-data"><?= number_format($deal->finish_rate * 100, 0) ?>%</div>
+                    <?php }?>
                 </div>
                 <ul class="clearfix dR-inner">
                     <li class="dR-inner-left">项目可投余额：</li>
@@ -216,14 +223,17 @@ FrontAsset::register($this);
                     ?>
                     <div class="dR-shouqing"><?= $deal->start_date ?>起售</div>
                     <div class="dR-btn" onclick="window.location = '/licai/index'">投资其他项目</div>
-                <?php } elseif ($deal->status == OnlineProduct::STATUS_FULL || $deal->status == OnlineProduct::STATUS_FOUND) { ?>
+                <?php } elseif ($deal->status == OnlineProduct::STATUS_FOUND) { ?>
+                    <div class="dR-shouqing">项目已成立</div>
+                    <div class="dR-btn" onclick="window.location = '/licai/index'">投资其他项目</div>
+                <?php } elseif ($deal->status == OnlineProduct::STATUS_FULL) { ?>
                     <div class="dR-shouqing">项目已售罄</div>
                     <div class="dR-btn" onclick="window.location = '/licai/index'">投资其他项目</div>
                 <?php } elseif ($deal->status == OnlineProduct::STATUS_OVER) { ?>
-                    项目已还清
+                    <div class="dR-shouqing">项目已还清</div>
                     <div class="dR-btn" onclick="window.location = '/licai/index'">投资其他项目</div>
                 <?php } elseif ($deal->status == OnlineProduct::STATUS_HUAN) { ?>
-                    项目募集完成，收益中...
+                    <div class="dR-shouqing">项目募集完成，收益中...</div>
                     <div class="dR-btn" onclick="window.location = '/licai/index'">投资其他项目</div>
                 <?php } else { ?>
                 <?php } ?>
@@ -236,7 +246,7 @@ FrontAsset::register($this);
         //获取投资记录
         getOrderList('/deal/deal/order-list?pid=<?=$deal->id?>');
         var money = $(this).val();
-        //获取可用代金券
+        //代金券选择
         $('#valid_coupon_list li').bind('click', function () {
             var index = $('.dR-quan li').index(this);
             if ('none' == $('.quan-true').eq(index).css('display')) {
@@ -254,12 +264,39 @@ FrontAsset::register($this);
         $('#deal_money').keyup(function () {
             profit($(this));
         });
+
+        $('#deal_money').blur(function () {
+            //判断起投金额
+            var money = $(this).val();
+            if (money) {
+                if (money < <?= $deal->start_money ?>) {
+                    $('.dR-tishi-error ').show();
+                    $('.dR-tishi-error .err_message').html('投资金额小于起投金额（<?= rtrim(rtrim(number_format($deal->start_money, 2), '0'), '.') ?>元）');
+                }
+                if (money > <?= $user->lendAccount->available_balance ?>) {
+                    $('.dR-tishi-error ').show();
+                    $('.dR-tishi-error .err_message').html('可用余额不足');
+                }
+            }
+        });
         //提交表单
         var buy = $('#order_submit');
         var form = $('#order_form');
         form.on('submit', function (e) {
+            var money = $('#deal_money').val();
             e.preventDefault();
-            if ($('#deal_money').val() == '') {
+            if (money > 0) {
+                if (money < <?= $deal->start_money ?>) {
+                    $('.dR-tishi-error ').show();
+                    $('.dR-tishi-error .err_message').html('投资金额小于起投金额（<?= rtrim(rtrim(number_format($deal->start_money, 2), '0'), '.') ?>元）');
+                    return false;
+                }
+                if (money > <?= $user->lendAccount->available_balance ?>) {
+                    $('.dR-tishi-error ').show();
+                    $('.dR-tishi-error .err_message').html('可用余额不足');
+                    return false;
+                }
+            } else {
                 $('.dR-tishi-error ').show();
                 $('.dR-tishi-error .err_message').html('投资金额不能为空');
                 return false;
@@ -327,16 +364,16 @@ FrontAsset::register($this);
                     rate = yr;
                 }
                 if (1 == parseInt(retmet)) {
-                    $('#expect_profit').html(WDJF.numberFormat(accDiv(accMul(accMul(money, rate), qixian), 365), false) + "元");
+                    $('#expect_profit').html(WDJF.numberFormat(accDiv(accMul(accMul(money, rate), qixian), 365), false));
                 } else {
-                    $('#expect_profit').html(WDJF.numberFormat(accDiv(accMul(accMul(money, rate), qixian), 12), false) + "元");
+                    $('#expect_profit').html(WDJF.numberFormat(accDiv(accMul(accMul(money, rate), qixian), 12), false));
                 }
             });
         } else {
             if (1 == parseInt(retmet)) {
-                $('#expect_profit').html(WDJF.numberFormat(accDiv(accMul(accMul(money, yr), qixian), 365), false) + "元");
+                $('#expect_profit').html(WDJF.numberFormat(accDiv(accMul(accMul(money, yr), qixian), 365), false));
             } else {
-                $('#expect_profit').html(WDJF.numberFormat(accDiv(accMul(accMul(money, yr), qixian), 12), false) + "元");
+                $('#expect_profit').html(WDJF.numberFormat(accDiv(accMul(accMul(money, yr), qixian), 12), false));
             }
         }
     }
