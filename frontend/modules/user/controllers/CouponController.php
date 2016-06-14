@@ -48,31 +48,5 @@ class CouponController extends BaseController
 
         return $this->render('index', ['model' => $model, 'pages' => $pages, 'data' => $data]);
     }
-
-    /**
-     * 可用代金券.
-     */
-    public function actionValid()
-    {
-        $sn = \Yii::$app->request->get('sn');
-        $this->findOr404(OnlineProduct::class, ['sn' => $sn]);
-        $monty = \Yii::$app->request->get('monty');
-        if (!empty($monty) && !preg_match('/^[0-9|.]+$/', $monty)) {
-            $this->ex404();
-        }
-
-        $ct = CouponType::tableName();
-        $data = UserCoupon::find()
-            ->innerJoinWith('couponType')
-            ->where(['isUsed' => 0, 'order_id' => null, "$ct.isDisabled" => 0])
-            ->andWhere(['<=', "$ct.useStartDate", date('Y-m-d')])
-            ->andWhere(['>=', "$ct.useEndDate", date('Y-m-d')])
-            ->andWhere(['user_id' => $this->getAuthedUser()->id])
-            ->orderBy("$ct.useEndDate desc, $ct.amount desc, $ct.minInvest asc")
-            ->all();
-        return $this->renderFile('@frontend/modules/user/views/coupon/_valid_coupon.php', [
-            'data' => $data
-        ]);
-    }
 }
 

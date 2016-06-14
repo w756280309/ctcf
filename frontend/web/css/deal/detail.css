@@ -52,7 +52,7 @@ body {
     height: 119px;
 }
 .pl-middle ul li div{
-    padding: 0 26px;
+    padding: 0px;
     height: 44px;
     border-right:1px solid #f4f4f7;
     margin-top: 42px;
@@ -60,7 +60,7 @@ body {
 }
 .pl-middle-inner {
     position: relative;
-    font-size: 36px;
+    font-size: 34px;
     color: #f44336;
 }
 .pl-middle-inner i{
@@ -374,7 +374,7 @@ body {
     display: none;
     position: absolute;
     top: -5px;
-    left: 287px;
+    left: 292px;
     width: 132px;
 }
 .dR-tishi-error{

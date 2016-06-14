@@ -25,16 +25,4 @@ $(function () {
     $('.dR-down').on('click', function () {
         $('.dR-quan').stop(true, false).slideToggle();
     });
-    $('.dR-quan li').on('click', function () {
-        var index = $('.dR-quan li').index(this);
-        $('.quan-true').hide();
-        $('.quan-true').eq(index).show();
-    });
-    $('.dR-quan li').hover(function () {
-        var index = $('.dR-quan li').index(this);
-        $('.dR-quan li').stop(true, false).eq(index).css({top: '-2px'});
-    }, function () {
-        var index = $('.dR-quan li').index(this);
-        $('.dR-quan li').stop(true, false).eq(index).css({top: 0});
-    })
 });

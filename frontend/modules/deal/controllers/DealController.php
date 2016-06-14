@@ -2,6 +2,8 @@
 
 namespace frontend\modules\deal\controllers;
 
+use common\models\coupon\CouponType;
+use common\models\coupon\UserCoupon;
 use common\models\order\OnlineOrder;
 use common\models\product\OnlineProduct;
 use common\models\product\RateSteps;
@@ -27,8 +29,23 @@ class DealController extends BaseController
                 }
             }
         }
+        //获取可用代金券
+        if(!Yii::$app->user->isGuest){
+            $ct = CouponType::tableName();
+            $data = UserCoupon::find()
+                ->innerJoinWith('couponType')
+                ->where(['isUsed' => 0, 'order_id' => null, "$ct.isDisabled" => 0])
+                ->andWhere(['<=', "$ct.useStartDate", date('Y-m-d')])
+                ->andWhere(['>=', "$ct.useEndDate", date('Y-m-d')])
+                ->andWhere(['user_id' => $this->getAuthedUser()->id])
+                ->orderBy("$ct.useEndDate desc, $ct.amount desc, $ct.minInvest asc")
+                ->all();
+        } else {
+            $data = [];
+        }
         return $this->render('detail', [
             'deal' => $deal,
+            'data' => $data
         ]);
     }
 
@@ -38,7 +55,7 @@ class DealController extends BaseController
         $query = OnlineOrder::find()->where(['online_pid' => $pid, 'status' => 1])->select('mobile,order_time,order_money')->orderBy("id desc");
         $pages = new Pagination([
             'totalCount' => $query->count(),
-            'pageSize' => 20
+            'pageSize' => 10
         ]);
         $data = $query->offset($pages->offset)->limit($pages->limit)->all();
         return $this->renderFile('@frontend/modules/deal/views/deal/_order_list.php', [
