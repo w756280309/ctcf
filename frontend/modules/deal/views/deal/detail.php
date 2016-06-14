@@ -25,7 +25,7 @@ FrontAsset::register($this);
             <div class="pl-top-title"><?= $deal->title ?></div>
             <div class="pl-middle">
                 <ul class="clearfix">
-                    <li>
+                    <li style="22%">
                         <div class="clearfix">
                             <span class="pl-middle-inner">
                                 <?= LoanHelper::getDealRate($deal) ?><i>%</i>
@@ -36,7 +36,7 @@ FrontAsset::register($this);
                             <p>年化收益率</p>
                         </div>
                     </li>
-                    <li>
+                    <li style="width: 25%">
                         <div>
                             <span class="pl-middle-inner">
                                  <?= $deal->expires ?>
@@ -56,13 +56,13 @@ FrontAsset::register($this);
                             <?php } ?>
                         </div>
                     </li>
-                    <li>
+                    <li style="width: 30%">
                         <div>
                             <span class="pl-middle-content"><?= Yii::$app->functions->toFormatMoney($deal->money) ?></span>
                             <p>项目总额</p>
                         </div>
                     </li>
-                    <li>
+                    <li style="width: 20%">
                         <div class="pl-last-li">
                             <span class="pl-middle-last"><?= Yii::$app->params['refund_method'][$deal->refund_method] ?></span>
                         </div>
@@ -141,12 +141,14 @@ FrontAsset::register($this);
                 <ul class="clearfix dR-inner">
                     <li class="dR-inner-left">项目可投余额：</li>
                     <li class="dR-inner-right">
-                        <span><i><?= ($deal->status == 1) ? (Yii::$app->functions->toFormatMoney($deal->money)) : rtrim(rtrim(number_format($deal->getLoanBalance(), 2), '0'), '.') . '元' ?></i>元</span>
+                        <span><i><?= ($deal->status == 1) ? (Yii::$app->functions->toFormatMoney($deal->money)) : rtrim(rtrim(number_format($deal->getLoanBalance(), 2), '0'), '.') . '元' ?></i></span>
                     </li>
                     <li class="dR-inner-left">我的可用余额：</li>
                     <li class="dR-inner-right"><?= (null === $user) ? '查看余额请【<a href="/site/login">登录</a>】' : ($user->lendAccount ? number_format($user->lendAccount->available_balance, 2) . ' 元' : '0 元') ?></li>
                     <li class="dR-inner-left">投资金额(元)：</li>
-                    <li class="dR-inner-right"><a href="/user/userbank/recharge">去充值</a></li>
+                    <?php if ($deal->status != OnlineProduct::STATUS_FULL && $deal->status != OnlineProduct::STATUS_FOUND){ ?>
+                        <li class="dR-inner-right"><a href="/user/userbank/recharge">去充值</a></li>
+                    <?php }?>
                 </ul>
                 <!--已售罄-->
                 <?php if ($deal->status == OnlineProduct::STATUS_NOW) { ?>
@@ -155,7 +157,7 @@ FrontAsset::register($this);
                         <div class="dR-input">
                             <input type="text" class="dR-money" name="money" id="deal_money"/>
                             <!--输入款提示信息-->
-                            <div class="tishi">
+                            <div class="tishi tishi-dev">
                                 <img class="jiao-left" src="/images/deal/jiao-right.png" alt="">
                                 <ul class="dR-tishi">
                                     <li><span>起投金额<?= rtrim(rtrim(number_format($deal->start_money, 2), '0'), '.') ?>元</span></li>
@@ -163,10 +165,10 @@ FrontAsset::register($this);
                                 </ul>
                             </div>
                             <!--输入款错误提示信息-->
-                            <div class="dR-tishi-error">
+                            <div class="tishi-dev dR-tishi-error">
                                 <img class="jiao-left" src="/images/deal/jiao-right.png" alt="">
                                 <ul class="dR-tishi">
-                                    <li style="width: 83px;"> <span  class="err_message"></span> </li>
+                                    <li> <span  class="err_message"></span> </li>
                                 </ul>
                             </div>
                         </div>
@@ -175,15 +177,17 @@ FrontAsset::register($this);
                             <li class="dR-inner-right"><span><i id="expect_profit"></i></span>元</li>
                         </ul>
 
-                        <!--待选代金券-->
-                        <ul class="dR-down clearfix">
-                            <li class="dR-down-left"  id="coupon_title"><img class="dR-add" src="/images/deal/add.png" alt="">选择一张代金券<i id="coupon_count">0</i></li>
-                            <li class="dR-down-right"><img src="/images/deal/down.png" alt=""></li>
-                        </ul>
-                        <!--代金券选择-->
-                        <div class="dR-quan" id="valid_coupon_list">
+                        <?php if(!Yii::$app->user->isGuest) {?>
+                            <!--待选代金券-->
+                            <ul class="dR-down clearfix">
+                                <li class="dR-down-left"  id="coupon_title"><img class="dR-add" src="/images/deal/add.png" alt="">选择一张代金券<i id="coupon_count">0</i></li>
+                                <li class="dR-down-right"><img src="/images/deal/down.png" alt=""></li>
+                            </ul>
+                            <!--代金券选择-->
+                            <div class="dR-quan" id="valid_coupon_list">
 
-                        </div>
+                            </div>
+                        <?php }?>
                         <div>
                             <input type="submit" class="dR-btn" id="order_submit" value="立即投资"/>
                         </div>
@@ -226,22 +230,28 @@ FrontAsset::register($this);
             'dataType': 'html',
             'success': function (html) {
                 var count = $(html).attr('data_count');
-                $('#coupon_count').html($(html).attr('data_count'));
-                $('#valid_coupon_list').html(html);
-                $('.dR-quan li').on('click', function () {
-                    var index = $('.dR-quan li').index(this);
-                    if('none' ==  $('.quan-true').eq(index).css('display')){
-                        $('.quan-true').hide();
-                        $('.quan-true').eq(index).show();
-                        $(this).find('.coupon_radio').attr('checked', true);
-                        $('#coupon_title').html($(this).find('.coupon_name').text());
-                    }else{
-                        $('.quan-true').hide();
-                        $(this).find('.coupon_radio').removeAttr('checked');
-                        $('#coupon_title').html('<img class="dR-add" src="/images/deal/add.png" alt="">选择一张代金券<i id="coupon_count">'+count+'</i>');
-                    }
+                if (count > 0) {
+                    $('#coupon_count').html($(html).attr('data_count'));
+                    $('#valid_coupon_list').html(html);
+                    $('.dR-quan li').on('click', function () {
+                        var index = $('.dR-quan li').index(this);
+                        if ('none' == $('.quan-true').eq(index).css('display')) {
+                            $('.quan-true').hide();
+                            $('.quan-true').eq(index).show();
+                            $(this).find('.coupon_radio').attr('checked', true);
+                            $('#coupon_title').html($(this).find('.coupon_name').text());
+                        } else {
+                            $('.quan-true').hide();
+                            $(this).find('.coupon_radio').removeAttr('checked');
+                            $('#coupon_title').html('<img class="dR-add" src="/images/deal/add.png" alt="">选择一张代金券<i id="coupon_count">' + count + '</i>');
+                        }
 
-                });
+                    });
+                } else {
+                    $('.dR-down').hide();
+                    $('#valid_coupon_list').hide();
+                }
+
             }
         });
         <?php }?>

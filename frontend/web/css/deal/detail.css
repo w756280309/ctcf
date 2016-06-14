@@ -370,13 +370,15 @@ body {
     padding: 0 15px;
     font-size: 24px;
 }
-.tishi {
+.tishi-dev {
     display: none;
     position: absolute;
-    right: -147px;
     top: -5px;
-    background: #f9e5e4;
-    border: 1px solid #edc2c0;
+    left: 287px;
+    width: 132px;
+}
+.dR-tishi-error{
+    top:4px;
 }
 .jiao-left {
     position: absolute;
@@ -391,6 +393,8 @@ body {
     padding-bottom: 6px;
     font-size: 12px;
     color: #f44336;
+    background: #f9e5e4;
+    border: 1px solid #edc2c0;
 }
 .dR-tishi li{
     list-style-type: disc;
@@ -398,14 +402,6 @@ body {
 }
 .dR-tishi li span {
     color: #464648;
-}
-.dR-tishi-error {
-    display: none;
-    position: absolute;
-    right: -147px;
-    top: 4px;
-    background: #f9e5e4;
-    border: 1px solid #edc2c0;
 }
 .jiao-left {
     position: absolute;
