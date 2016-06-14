@@ -57,7 +57,7 @@
     </div>
     <div class="row-fluid">
         <div class="span4">平台今日绑卡用户数：<?= intval($qpayEnabled) ?>人</div>
-        <div class="span4">平台今日新增投资人数：<?= intval($newInvestor) ?>人</div>
+        <div class="span4">平台非今日注册于今日投资新增人数：<?= intval($newInvestor) ?>人</div>
         <div class="span4">平台当日注册当日投资人数：<?= intval($newRegisterAndInvestor) ?>人</div>
     </div>
     <div class="row-fluid">

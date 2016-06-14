@@ -121,7 +121,7 @@ use yii\grid\GridView;
                 ],
                 [
                     'attribute' => 'newInvestor',
-                    'label' => '新增投资人数',
+                    'label' => '非当月注册于当月投资新增人数',
                     'format' => 'html',
                     'value' => function ($data) {
                         return '<a href="/datatj/datatj/list?type=month&field=newInvestor&date=' . date('Y-m', strtotime($data['bizDate'])) . '&result=' . intval($data['newInvestor']) . '">' . intval($data['newInvestor']) . '</a>';
