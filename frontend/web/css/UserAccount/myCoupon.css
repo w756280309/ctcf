@@ -1,0 +1,117 @@
+.myCoupon-box {
+    border: 1px solid #e3e3e3;
+    background-color: #fff;
+}
+
+.myCoupon-box .myCoupon-header {
+    height: 50px;
+    line-height: 50px;
+    padding-left: 20px;
+    border-bottom: 1px solid #efeff3;
+}
+
+.myCoupon-box .myCoupon-header .myCoupon-header-icon {
+    width: 20px;
+    height: 15px;
+    margin-top: 18px;
+    margin-right: 10px;
+    background: url("../../images/UserAccount/background-icon.png") no-repeat -181px 0;
+    float: left;
+}
+
+.myCoupon-box .myCoupon-header .myCoupon-header-font {
+    font-size: 16px;
+    color: #464648;
+}
+
+.myCoupon-box .myCoupon-content {
+    color: #464648;
+    padding: 0 20px 20px;
+    position: relative;
+}
+
+.myCoupon-box .display_number {
+    padding: 0 11px;
+    height: 45px;
+    line-height: 45px;
+    color: #6e6e72;
+}
+
+.myCoupon-box .display_number .p_left {
+    padding-right: 89px;
+    float: left
+}
+
+.myCoupon-box .display_number .p_right {
+    float: left
+}
+
+.myCoupon-box .display_number span {
+    color: #ff2b01;
+    padding-right: 3px
+}
+
+.myCoupon-box .display_number a {
+    cursor: pointer;
+    margin-top: 9px;
+    line-height: 28px;
+    display: block;
+    float: right;
+    padding: 0 18px;
+    color: #fff;
+    background-color: #f44336;
+}
+
+.myCoupon-box .display_number a:hover {
+    background-color: #DB1809;
+}
+
+.myCoupon-box table {
+    width: 100%;
+    font-size: 12px;
+}
+
+.myCoupon-box table th {
+    height: 50px;
+    background-color: #e4e4e8;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.myCoupon-box table td {
+    text-align: left;
+    height: 60px;
+}
+
+.myCoupon-box table td.table-text-number {
+    text-align: center;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.myCoupon-box .color-red {
+    color: #f44336;
+}
+
+.myCoupon-box .already-use {
+    color: #99999d;
+}
+
+.myCoupon-box .table-kong {
+    background-color: #efeff3;
+    height: 60px;
+    margin-top: 60px;
+}
+
+.myCoupon-box .without-font {
+    position: absolute;
+    top: 172px;
+    left: 0px;
+    right: 0px;
+    text-align: center;
+    font-size: 18px;
+    color: #99999d;
+}
+.myCoupon-box .td-back-color {
+    background-color: #efeff3;
+}

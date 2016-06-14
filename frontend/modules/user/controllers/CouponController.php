@@ -2,8 +2,6 @@
 
 namespace frontend\modules\user\controllers;
 
-use common\models\coupon\CouponType;
-use common\models\product\OnlineProduct;
 use frontend\controllers\BaseController;
 use common\models\coupon\UserCoupon;
 use yii\data\Pagination;
