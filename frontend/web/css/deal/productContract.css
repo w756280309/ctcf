@@ -1,0 +1,103 @@
+/*  产品合同 页面  */
+.contract-box {
+    width: 100%;
+    background-color: #f4f4f7;
+    padding-top: 50px;
+}
+.contract-box .contract-container {
+    margin:0 auto 50px;
+    width:1000px;
+    border:1px solid #e6e6e6;
+}
+.contract-box .contract-container .contract-container-box {
+    background: #fff;
+}
+.contract-box .contract-container .contract-container-box .contract-title {
+    padding-left: 30px;
+    width:920px;
+    height:50px;
+    line-height:50px;
+    font-size: 16px;
+    font-weight:bold;
+    color:#464648;
+    border-bottom:1px solid #efeff3;
+}
+.contract-content {
+    margin:0 48px 0 20px;
+}
+.contract-content .title-box {
+    background: #fff;
+    margin-right:12px;
+    height:51px;
+    border-bottom:1px solid #efeff3;
+}
+.contract-content .title-box li.title {
+    float: left;
+    margin-right:48px;
+}
+.contract-content .title-box li.title a {
+    padding:10px 10px 0;
+    height:40px;
+    line-height:40px;
+    font-size: 16px;
+    cursor: pointer;
+    color:#99999d;
+    display: inline-block;
+}
+.contract-content .title-box li.active a {
+    color:#f44336;
+    border-bottom:2px solid #f44336;
+}
+.contract-content .pagination {
+    width:920px;
+}
+.contract-content .pagination .list {
+    padding:40px 0 50px 40px;
+}
+.contract-content .pagination .list h3 {
+    text-align: center;
+    font-size: 16px;
+    color:#464648;
+}
+.contract-content .pagination .list p {
+    line-height: 20px;
+}
+.contract-content .pagination .list .txt {
+    text-align:left;
+    font-size: 14px;
+    color:#464648;
+}
+.contract-content .pagination .list h4 {
+    padding-left:16px;
+}
+.contract-content .pagination .list .margin-top {
+    margin-top: 20px;
+}
+.contract-content .pagination .list .a-btn {
+    margin-top:62px;
+    height:28px;
+}
+.contract-content .pagination .list .a-btn a {
+    width:90px;
+    height:28px;
+    line-height:28px;
+    color:#fff;
+    font-size: 14px;
+    text-align: center;
+    background: #f44336;
+    display: inline-block;
+    cursor: pointer;
+}
+.contract-content .pagination .list .a-btn a:hover {
+    background: #d43125;
+}
+.contract-content .pagination .list .a-btn a.a-lf {
+    margin:0 20px 0 372px;
+}
+.hide {
+    display: none;
+}
+.show {
+    display: block;
+}
+

@@ -2,11 +2,14 @@
 
 namespace frontend\modules\order\controllers;
 
+use common\models\contract\ContractTemplate;
 use common\models\coupon\UserCoupon;
+use common\models\order\EbaoQuan;
 use common\models\order\OnlineOrder;
 use common\models\order\OrderManager;
 use common\models\product\OnlineProduct;
 use common\service\PayService;
+use EBaoQuan\Client;
 use frontend\controllers\BaseController;
 use yii\web\NotFoundHttpException;
 
@@ -41,7 +44,7 @@ class OrderController extends BaseController
     }
 
     /**
-     * 认购标的结果页
+     * 认购标的结果页.
      */
     public function actionOrdererror($osn)
     {
@@ -62,7 +65,7 @@ class OrderController extends BaseController
     }
 
     /**
-     * 认购标的中间处理页
+     * 认购标的中间处理页.
      */
     public function actionOrderwait($osn)
     {
@@ -72,8 +75,53 @@ class OrderController extends BaseController
 
         $order = OnlineOrder::ensureOrder($osn);
         if (OnlineOrder::STATUS_FALSE  !== $order->status) {
-            return $this->redirect("/order/order/ordererror?osn=" . $order->sn);
+            return $this->redirect('/order/order/ordererror?osn='.$order->sn);
         }
+
         return $this->render('wait', ['order' => $order]);
+    }
+
+    /**
+     * 合同页面.
+     */
+    public function actionAgreement($pid)
+    {
+        if (empty($pid)) {
+            $this->ex404();
+        }
+
+        $model = ContractTemplate::findAll(['pid' => $pid]);
+        if (empty($model)) {
+            $this->ex404();  //当对象为空时,抛出异常
+        }
+
+        $orderId = \Yii::$app->request->get('order_id');
+        if (!empty($orderId) && !preg_match('/^[0-9]+$/', $orderId)) {
+            $this->ex404();
+        }
+
+        if (empty($orderId)) {
+            $order = null;
+        } else {
+            $order = OnlineOrder::findOne($orderId);
+        }
+
+        $ebao = [];
+        foreach ($model as $key => $val) {
+            $model[$key] = ContractTemplate::replaceTemplate($val, $order);
+
+            //获取证书
+            $baoQuan = EbaoQuan::findOne(['type' => $key, 'orderId' => $orderId, 'uid' => $this->getAuthedUser()->id]);
+            if (null !== $baoQuan) {
+                $client = new Client();
+                $ebao[$key]['downUrl'] = $client->contractFileDownload($baoQuan);
+                $ebao[$key]['linkUrl'] = $client->certificateLinkGet($baoQuan);
+            }
+        }
+
+        return $this->render('agreement', [
+            'model' => $model,
+            'ebao' => $ebao,
+        ]);
     }
 }
