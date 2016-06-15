@@ -51,7 +51,6 @@ $(function(){
         t=setInterval(move,5000);
     });
     var bL=$('.banner').length;
-    console.log(bL);
     if(bL==0){
 
     }else  if(bL==1){

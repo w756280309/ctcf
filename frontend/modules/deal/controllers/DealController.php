@@ -7,14 +7,19 @@ use common\models\coupon\UserCoupon;
 use common\models\order\OnlineOrder;
 use common\models\product\OnlineProduct;
 use common\models\product\RateSteps;
+use common\service\PayService;
 use frontend\controllers\BaseController;
 use Yii;
 use yii\data\Pagination;
 use yii\helpers\Html;
+use yii\web\NotFoundHttpException;
 
 class DealController extends BaseController
 {
 
+    /**
+     * 项目详情页面
+     */
     public function actionDetail($sn)
     {
         $deal = $this->findOr404(OnlineProduct::className(), ['online_status' => OnlineProduct::STATUS_ONLINE, 'del_status' => OnlineProduct::STATUS_USE, 'sn' => $sn]);
@@ -30,7 +35,7 @@ class DealController extends BaseController
             }
         }
         //获取可用代金券
-        if(!Yii::$app->user->isGuest){
+        if (!Yii::$app->user->isGuest) {
             $ct = CouponType::tableName();
             $data = UserCoupon::find()
                 ->innerJoinWith('couponType')
@@ -43,12 +48,19 @@ class DealController extends BaseController
         } else {
             $data = [];
         }
+        //获取session中购买数据
+        $detail_data = Yii::$app->session['detail_' . $sn . '_data'];
         return $this->render('detail', [
             'deal' => $deal,
-            'data' => $data
+            'data' => $data,
+            'money' => ($detail_data['money'] > 0) ? $detail_data['money'] : 0,
+            'coupon_id' => ($detail_data['coupon_id'] > 0) ? $detail_data['coupon_id'] : 0,
         ]);
     }
 
+    /**
+     *获取投资记录
+     */
     public function actionOrderList($pid)
     {
         $this->findOr404(OnlineProduct::className(), ['id' => $pid]);
@@ -61,6 +73,59 @@ class DealController extends BaseController
         return $this->renderFile('@frontend/modules/deal/views/deal/_order_list.php', [
             'data' => $data,
             'pages' => $pages,
+        ]);
+    }
+
+    /**
+     * 检查标的
+     */
+    public function actionCheck($sn)
+    {
+        if (empty($sn)) {
+            throw new NotFoundHttpException();   //判断参数无效时,抛404异常
+        }
+        $money = \Yii::$app->request->post('money');
+        $coupon_id = \Yii::$app->request->post('couponId');
+        $coupon = null;
+        if ($coupon_id) {
+            $coupon = UserCoupon::findOne($coupon_id);
+            if (null === $coupon) {
+                return ['code' => 1, 'message' => '无效的代金券'];
+            }
+        }
+        //未登录时候保存购买数据
+        if (Yii::$app->user->isGuest) {
+            Yii::$app->session['detail_' . $sn . '_data'] = ['money' => $money];
+            return ['code' => 1, 'message' => '请登录', 'tourl' => '/site/login'];
+        }
+        $pay = new PayService(PayService::REQUEST_AJAX);
+        $ret = $pay->checkAllowPay($this->getAuthedUser(), $sn, $money, $coupon);
+        if ($ret['code'] != PayService::ERROR_SUCCESS) {
+            return $ret;
+        }
+        //已登录时候保存购买数据
+        Yii::$app->session['detail_' . $sn . '_data'] = ['money' => $money, 'coupon_id' => $coupon_id];
+        return ['code' => 0, 'message' => '', 'tourl' => '/deal/deal/confirm?sn=' . $sn . '&money=' . $money . '&coupon_id=' . $coupon_id];
+    }
+
+    /**
+     * 确认订单页面
+     */
+    public function actionConfirm($sn, $money)
+    {
+        $coupon_id = Yii::$app->request->get('coupon_id');
+        $coupon = null;
+        if ($coupon_id) {
+            $coupon = $this->findOr404(UserCoupon::className(), $coupon_id);
+        }
+        $deal = $this->findOr404(OnlineProduct::className(), ['online_status' => OnlineProduct::STATUS_ONLINE, 'del_status' => OnlineProduct::STATUS_USE, 'sn' => $sn]);
+        $cou_money = $coupon ? ($coupon->couponType ? $coupon->couponType->amount : 0) : 0;
+        return $this->render('confirm', [
+            'deal' => $deal,
+            'coupon' => $coupon,
+            'money' => $money,
+            'cou_money' => $cou_money,
+            'sn' => $sn,
         ]);
     }
 

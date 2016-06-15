@@ -372,10 +372,10 @@ class Functions extends Component
     public function toFormatMoney($number)
     {
         if (strlen(intval($number)) > 8) {
-            return ($number / 100000000).'亿元';
+            return number_format(($number / 100000000), 0) . '亿元';
         }
         if (strlen(intval($number)) > 4) {
-            return ($number / 10000).'万元';
+            return number_format(($number / 10000), 0) . '万元';
         }
 
         return $number.'元';

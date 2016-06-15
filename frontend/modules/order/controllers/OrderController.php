@@ -12,11 +12,12 @@ use common\service\PayService;
 use EBaoQuan\Client;
 use frontend\controllers\BaseController;
 use yii\web\NotFoundHttpException;
+use Yii;
 
 class OrderController extends BaseController
 {
     /**
-     * 购买标的.
+     * 生成订单
      */
     public function actionDoorder($sn)
     {
@@ -29,7 +30,7 @@ class OrderController extends BaseController
         if ($coupon_id) {
             $coupon = UserCoupon::findOne($coupon_id);
             if (null === $coupon) {
-                return ['code' => 1,  'message' => '无效的代金券'];
+                return ['code' => 1, 'message' => '无效的代金券'];
             }
         }
 
@@ -38,10 +39,15 @@ class OrderController extends BaseController
         if ($ret['code'] != PayService::ERROR_SUCCESS) {
             return $ret;
         }
+        //下订单之前删除保存在session中的购买数据
+        if (Yii::$app->session->has('detail_' . $sn . '_data')) {
+            Yii::$app->session['detail_' . $sn . '_data'] = null;
+        }
         $orderManager = new OrderManager();
 
-        return $orderManager->createOrder($sn, $money,  $this->getAuthedUser()->id, $coupon);
+        return $orderManager->createOrder($sn, $money, $this->getAuthedUser()->id, $coupon);
     }
+
 
     /**
      * 认购标的结果页.
@@ -54,14 +60,14 @@ class OrderController extends BaseController
 
         $order = OnlineOrder::ensureOrder($osn);
         $deal = null;
-        if (null  !== $order && 1 !== $order->status) {
+        if (null !== $order && 1 !== $order->status) {
             $deal = OnlineProduct::findOne($order->online_pid);
         }
         if (\Yii::$app->request->isAjax) {
             return ['status' => $order->status];
         }
 
-        return $this->render('error', ['order' => $order, 'deal' => $deal, 'ret' => (null  !== $order && 1 === $order->status) ? 'success' : 'fail']);
+        return $this->render('error', ['order' => $order, 'deal' => $deal, 'ret' => (null !== $order && 1 === $order->status) ? 'success' : 'fail']);
     }
 
     /**
@@ -74,8 +80,8 @@ class OrderController extends BaseController
         }
 
         $order = OnlineOrder::ensureOrder($osn);
-        if (OnlineOrder::STATUS_FALSE  !== $order->status) {
-            return $this->redirect('/order/order/ordererror?osn='.$order->sn);
+        if (OnlineOrder::STATUS_FALSE !== $order->status) {
+            return $this->redirect('/order/order/ordererror?osn=' . $order->sn);
         }
 
         return $this->render('wait', ['order' => $order]);

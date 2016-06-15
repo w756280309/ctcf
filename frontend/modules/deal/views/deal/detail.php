@@ -159,10 +159,10 @@ FrontAsset::register($this);
                 </ul>
                 <!--已售罄-->
                 <?php if ($deal->status == OnlineProduct::STATUS_NOW) { ?>
-                    <form action="/order/order/doorder?sn=<?= $deal->sn ?>" method="post" id="order_form">
+                    <form action="/deal/deal/check?sn=<?= $deal->sn ?>" method="post" id="order_form">
                         <input type="hidden" name="_csrf" value="<?= Yii::$app->request->csrfToken ?>"/>
                         <div class="dR-input">
-                            <input type="text" class="dR-money" name="money" id="deal_money" placeholder=""/>
+                            <input type="text" class="dR-money" name="money" id="deal_money" placeholder="" value="<?= ($money > 0) ? $money : null?>"/>
                             <!--输入款提示信息-->
                             <div class="tishi tishi-dev">
                                 <img class="jiao-left" src="/images/deal/jiao-right.png" alt="">
@@ -192,9 +192,9 @@ FrontAsset::register($this);
                                 <ul>
                                     <?php foreach ($data as $v) { ?>
                                         <li class="quan-false">
-                                            <input type="radio" name="couponId" value="<?= $v->id ?>" class="coupon_radio" style="display: none;">
+                                            <input type="radio" name="couponId" value="<?= $v->id ?>" class="coupon_radio" style="display: none;" <?=($v->id === $coupon_id ) ? 'checked' : '' ?>>
                                             <div class="quan-left">
-                                                <span>￥</span><?= $v->couponType->amount ?><
+                                                <span>￥</span><?= number_format($v->couponType->amount, 0) ?>
                                             </div>
                                             <div class="quan-right">
                                                 <div class="quan-right-content">
@@ -263,6 +263,10 @@ FrontAsset::register($this);
         //获取预期收益
         $('#deal_money').keyup(function () {
             profit($(this));
+            var val = $(this).val();
+            if (false == $.isNumeric(val) || ' ' == val.substring(val.length - 1, val.length)) {
+                $(this).val(val.substring(0, val.length - 1));
+            }
         });
 
         $('#deal_money').blur(function () {
@@ -272,10 +276,6 @@ FrontAsset::register($this);
                 if (money < <?= $deal->start_money ?>) {
                     $('.dR-tishi-error ').show();
                     $('.dR-tishi-error .err_message').html('投资金额小于起投金额（<?= rtrim(rtrim(number_format($deal->start_money, 2), '0'), '.') ?>元）');
-                }
-                if (money > <?= $user->lendAccount->available_balance ?>) {
-                    $('.dR-tishi-error ').show();
-                    $('.dR-tishi-error .err_message').html('可用余额不足');
                 }
             }
         });
@@ -291,30 +291,30 @@ FrontAsset::register($this);
                     $('.dR-tishi-error .err_message').html('投资金额小于起投金额（<?= rtrim(rtrim(number_format($deal->start_money, 2), '0'), '.') ?>元）');
                     return false;
                 }
-                if (money > <?= $user->lendAccount->available_balance ?>) {
-                    $('.dR-tishi-error ').show();
-                    $('.dR-tishi-error .err_message').html('可用余额不足');
-                    return false;
-                }
             } else {
                 $('.dR-tishi-error ').show();
                 $('.dR-tishi-error .err_message').html('投资金额不能为空');
                 return false;
             }
             buy.attr('disabled', true);
-            buy.val("购买中……");
             var vals = form.serialize();
             var xhr = $.post(form.attr("action"), vals, function (data) {
                 if (data.code == 0) {
+                    location.replace(data.tourl);
                     //toast('投标成功');
                 } else {
                     $('.dR-tishi-error ').show();
                     $('.dR-tishi-error .err_message').html(data.message);
                 }
-                if (data.tourl != undefined) {
-                    setTimeout(function () {
-                        location.replace(data.tourl);
-                    }, 1000);
+                if ('/site/login' == data.tourl) {
+                    //获取登录信息
+                    login();
+                } else {
+                    if (data.tourl != undefined) {
+                        setTimeout(function () {
+                            location.replace(data.tourl);
+                        }, 1000);
+                    }
                 }
             });
             xhr.always(function () {
@@ -324,6 +324,47 @@ FrontAsset::register($this);
         });
 
     });
+    //处理ajax登录
+    function login() {
+        //如果已经加载过登录页面，则直接显示
+        if ($('.login-mark').length > 0) {
+            $('.login-mark').show();
+            $('.loginUp-box').show();
+        } else {
+            //加载登录页面
+            getLoginHtml();
+        }
+        //处理登录信息
+        if ($('.loginUp-box').length > 0) {
+            var mobile = $('#phone').val();
+            var password = $('#password').val();
+            var verity = $('#verity').val();
+            $.post('', {}, function (data) {
+                //成功
+
+                //刷新验证码
+
+                //失败
+            });
+        }
+    }
+
+    //获取登录页面
+    function getLoginHtml() {
+        $.ajax({
+            beforeSend: function (req) {
+                req.setRequestHeader("Accept", "text/html");
+            },
+            'url': '/site/login-form',
+            'type': 'get',
+            'dataType': 'html',
+            'success': function (html) {
+                $('body').append(html);
+            }
+        });
+        return '';
+    }
+
     //获取投标记录
     function getOrderList(url) {
         $.ajax({

@@ -198,4 +198,12 @@ class SiteController extends Controller
         $this->layout = '@app/views/layouts/footer';
         return $this->render('usererr');
     }
+
+    /**
+     *获取登录页面
+     */
+    public function actionLoginForm()
+    {
+        return $this->renderFile('@frontend/views/site/_login.php');
+    }
 }
