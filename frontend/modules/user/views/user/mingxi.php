@@ -61,5 +61,6 @@ use common\widgets\Pager;
                 </div>
             </div>
         </div>
+        <div class="clear"></div>
     </div>
 </div>
