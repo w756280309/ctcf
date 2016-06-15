@@ -49,12 +49,13 @@ class UserController extends BaseController
             if ($val->type === MoneyRecord::TYPE_ORDER || $val->type === MoneyRecord::TYPE_HUIKUAN) {
                 $ord = Ord::findOne(['sn' => $val->osn]);
                 if ($ord->loan) {
-                    $desc[$key] = $ord->loan->title;
+                    $desc[$key]['desc'] = $ord->loan->title;
+                    $desc[$key]['sn'] = $ord->loan->sn;
                 } else {
-                    $desc[$key] = $val->osn;
+                    $desc[$key]['desc'] = $val->osn;
                 }
             } else {
-                $desc[$key] = $val->osn;
+                $desc[$key]['desc'] = $val->osn;
             }
         }
 

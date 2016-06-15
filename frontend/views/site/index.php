@@ -59,15 +59,15 @@ use common\utils\StringUtils;
         </div>
         <div class="chengji-left-top">
             <div>
-                <img src="<?= ASSETS_BASE_URI ?>images/cup.png" alt="">
+                <img src="<?= ASSETS_BASE_URI ?>images/guo.png" alt="">
                 <p>国资背景</p>
             </div>
             <div>
-                <img src="<?= ASSETS_BASE_URI ?>images/zhang.png" alt="">
+                <img src="<?= ASSETS_BASE_URI ?>images/cup.png" alt="">
                 <p>谷东强势</p>
             </div>
             <div>
-                <img src="<?= ASSETS_BASE_URI ?>images/zhang.png" alt="">
+                <img src="<?= ASSETS_BASE_URI ?>images/tu.png" alt="">
                 <p>安全合规</p>
             </div>
             <div>
@@ -75,7 +75,7 @@ use common\utils\StringUtils;
                 <p>产品优质</p>
             </div>
             <div>
-                <img src="<?= ASSETS_BASE_URI ?>images/tu.png" alt="">
+                <img src="<?= ASSETS_BASE_URI ?>images/ling.png" alt="">
                 <p>灵活便捷</p>
             </div>
         </div>
