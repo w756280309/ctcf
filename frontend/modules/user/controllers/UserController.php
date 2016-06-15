@@ -27,16 +27,41 @@ class UserController extends BaseController
         ];
     }
 
+    /**
+     * 交易明细.
+     */
     public function actionMingxi()
     {
-        $query = MoneyRecord::find()->select(['created_at', 'type', 'in_money', 'out_money', 'balance', 'osn'])->where(['uid' => Yii::$app->user->identity->id])->andWhere(['in', 'type', MoneyRecord::getLenderMrType()]);
+        $query = MoneyRecord::find()
+            ->where(['uid' => Yii::$app->user->identity->id])
+            ->andWhere(['in', 'type', MoneyRecord::getLenderMrType()]);
+
         $pages = new Pagination(['totalCount' => $query->count(), 'pageSize' => 10]);
-        $query = $query->orderBy(['id' => SORT_DESC])->offset($pages->offset)->limit($pages->limit);
-        $lists = $query->all();
+
+        $lists = $query
+            ->orderBy(['id' => SORT_DESC])
+            ->offset($pages->offset)
+            ->limit($pages->limit)
+            ->all();
+
+        $desc = [];
+        foreach ($lists as $key => $val) {
+            if ($val->type === MoneyRecord::TYPE_ORDER || $val->type === MoneyRecord::TYPE_HUIKUAN) {
+                $ord = Ord::findOne(['sn' => $val->osn]);
+                if ($ord->loan) {
+                    $desc[$key] = $ord->loan->title;
+                } else {
+                    $desc[$key] = $val->osn;
+                }
+            } else {
+                $desc[$key] = $val->osn;
+            }
+        }
 
         return $this->render('mingxi', [
             'pages' => $pages,
             'lists' => $lists,
+            'desc' => $desc,
         ]);
     }
 

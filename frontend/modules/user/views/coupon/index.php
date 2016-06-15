@@ -26,55 +26,55 @@ use common\widgets\Pager;
                         <p class="p_right">共：<span><?= $data['count'] ?></span>个</p>
                         <a href="/licai/">立即投资</a>
                     </div>
-                    <?php if ($model) { ?>
-                        <table>
-                            <tr>
-                                <th width="148" class="table-text-ct">面值（元）</th>
-                                <th width="320" class="text-align-lf">使用规则</th>
-                                <th width="210" class="text-align-lf">使用期限</th>
-                                <th width="80" class="text-align-lf">状态</th>
+                    <table>
+                        <tr>
+                            <th width="148" class="table-text-ct">面值（元）</th>
+                            <th width="320" class="text-align-lf">使用规则</th>
+                            <th width="210" class="text-align-lf">使用期限</th>
+                            <th width="80" class="text-align-lf">状态</th>
+                        </tr>
+                        <?php foreach ($model as $key => $val) : ?>
+                            <?php if (!$val->isUsed && date('Y-m-d') <= $val->couponType->useEndDate) { ?>
+                                <tr class="<?= 0 === $key%2 ? '' : 'td-back-color' ?>">
+                                    <td class="table-text-number color-red"><?= StringUtils::amountFormat2($val->couponType->amount) ?></td>
+                            <?php } else { ?>
+                                <tr class="already-use <?= 0 === $key%2 ? '' : 'td-back-color' ?>">
+                                    <td class="table-text-number"><?= StringUtils::amountFormat2($val->couponType->amount) ?></td>
+                            <?php } ?>
+                                <td>
+                                    单笔投资满<?= StringUtils::amountFormat1('{amount}{unit}', $val->couponType->minInvest) ?>可用；
+                                    <?php
+                                        if (empty($val->couponType->loanCategories)) {
+                                            echo '所有';
+                                        } else {
+                                            $arr = array_filter(explode(',', $val->couponType->loanCategories));
+
+                                            foreach ($arr as $k => $v) {
+                                                $arr[$k] = \Yii::$app->params['pc_cat'][$v];
+                                            }
+
+                                            echo implode('、', $arr);
+                                        }
+                                     ?>项目可用；
+                                </td>
+                                <td><?= $val->couponType->useStartDate ?>至<?= $val->couponType->useEndDate ?></td>
+                                <td>
+                                    <?php
+                                        if ($val->isUsed) {
+                                            echo '已使用';
+                                        } elseif (date('Y-m-d') > $val->couponType->useEndDate) {
+                                            echo '已过期';
+                                        } else {
+                                            echo '未使用';
+                                        }
+                                    ?>
+                                </td>
                             </tr>
-                            <?php foreach ($model as $key => $val) : ?>
-                                <?php if (!$val->isUsed && date('Y-m-d') <= $val->couponType->useEndDate) { ?>
-                                    <tr class="<?= 0 === $key%2 ? '' : 'td-back-color' ?>">
-                                        <td class="table-text-number color-red"><?= StringUtils::amountFormat2($val->couponType->amount) ?></td>
-                                <?php } else { ?>
-                                    <tr class="already-use <?= 0 === $key%2 ? '' : 'td-back-color' ?>">
-                                        <td class="table-text-number"><?= StringUtils::amountFormat2($val->couponType->amount) ?></td>
-                                <?php } ?>
-                                    <td>
-                                        单笔投资满<?= StringUtils::amountFormat1('{amount}{unit}', $val->couponType->minInvest) ?>可用；
-                                        <?php
-                                            if (empty($val->couponType->loanCategories)) {
-                                                echo '所有';
-                                            } else {
-                                                $arr = array_filter(explode(',', $val->couponType->loanCategories));
+                        <?php endforeach; ?>
+                    </table>
+                    <center><?= Pager::widget(['pagination' => $pages]); ?></center>
 
-                                                foreach ($arr as $k => $v) {
-                                                    $arr[$k] = \Yii::$app->params['pc_cat'][$v];
-                                                }
-
-                                                echo implode('、', $arr);
-                                            }
-                                         ?>项目可用；
-                                    </td>
-                                    <td><?= $val->couponType->useStartDate ?>至<?= $val->couponType->useEndDate ?></td>
-                                    <td>
-                                        <?php
-                                            if ($val->isUsed) {
-                                                echo '已使用';
-                                            } elseif (date('Y-m-d') > $val->couponType->useEndDate) {
-                                                echo '已过期';
-                                            } else {
-                                                echo '未使用';
-                                            }
-                                        ?>
-                                    </td>
-                                </tr>
-                            <?php endforeach; ?>
-                        </table>
-                        <?= Pager::widget(['pagination' => $pages]); ?>
-                    <?php } else { ?>
+                    <?php if (!$model) { ?>
                         <div class="table-kong"></div>
                         <div class="table-kong"></div>
                         <p class="without-font">暂无代金券</p>
