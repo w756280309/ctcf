@@ -3,6 +3,7 @@
 namespace frontend\modules\user\controllers;
 
 use common\models\order\OnlineOrder as Ord;
+use common\models\order\OnlineRepaymentPlan as Plan;
 use common\models\product\OnlineProduct as Loan;
 use common\models\user\MoneyRecord;
 use frontend\controllers\BaseController;
@@ -47,7 +48,13 @@ class UserController extends BaseController
         $desc = [];
         foreach ($lists as $key => $val) {
             if ($val->type === MoneyRecord::TYPE_ORDER || $val->type === MoneyRecord::TYPE_HUIKUAN) {
-                $ord = Ord::findOne(['sn' => $val->osn]);
+                if ($val->type === MoneyRecord::TYPE_HUIKUAN) {    //回款的时候,流水里面记录的osn是还款计划表中得sn
+                    $plan = Plan::findOne(['sn' => $val->osn]);
+                    $ord = Ord::findOne($plan->order_id);
+                } else {
+                    $ord = Ord::findOne(['sn' => $val->osn]);
+                }
+
                 if ($ord->loan) {
                     $desc[$key]['desc'] = $ord->loan->title;
                     $desc[$key]['sn'] = $ord->loan->sn;

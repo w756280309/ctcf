@@ -3,6 +3,7 @@
 namespace frontend\modules\user\controllers;
 
 use frontend\controllers\BaseController;
+use common\models\coupon\CouponType;
 use common\models\coupon\UserCoupon;
 use yii\data\Pagination;
 use yii\filters\AccessControl;
@@ -26,9 +27,16 @@ class CouponController extends BaseController
 
     /**
      * 我的代金券.
+     * 1. 代金券排序规则:
+     *  a. 状态: 未使用,已使用,已过期;
+     *  b. 截止日期由近到远;
+     *  c. 同一状态,同一时间,面值降序;
+     *  d. 同一状态,同一时间,最小使用额升序;
      */
     public function actionIndex()
     {
+        $uc = UserCoupon::tableName();
+
         $query = UserCoupon::find()
             ->innerJoinWith('couponType')
             ->where(['user_id' => $this->getAuthedUser()->id, 'isDisabled' => 0]);
@@ -36,7 +44,12 @@ class CouponController extends BaseController
         $_query = clone $query;
 
         $pages = new Pagination(['totalCount' => $query->count(), 'pageSize' => '10']);
-        $model = $query->offset($pages->offset)->limit($pages->limit)->orderBy('isUsed asc, useEndDate desc, amount desc')->all();
+        $model = $query
+            ->select("$uc.*, if($uc.isUsed, bin(0), $uc.expiryDate < date(now())) as isExpired")
+            ->offset($pages->offset)
+            ->limit($pages->limit)
+            ->orderBy("isExpired, isUsed, $uc.expiryDate, amount desc, minInvest")
+            ->all();
 
         $data = $_query->select("count(*) as count, sum(amount) as totalAmount")
             ->andWhere(['isUsed' => 0, 'order_id' => null])
