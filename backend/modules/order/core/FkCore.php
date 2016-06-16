@@ -96,8 +96,7 @@ class FkCore
             }
         }
 
-        //修改标的状态为还款中
-        $opres = OnlineProduct::updateAll(['fk_examin_time' => time(), 'sort' => OnlineProduct::SORT_HKZ], ['id' => $pid]);//'status'=>OnlineProduct::STATUS_HUAN,
+        $opres = OnlineProduct::updateAll(['fk_examin_time' => time()], ['id' => $pid]);
         if (!$opres) {
             $transaction->rollBack();
 
