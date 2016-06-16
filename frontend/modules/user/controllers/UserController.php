@@ -33,6 +33,7 @@ class UserController extends BaseController
      */
     public function actionMingxi()
     {
+        $this->layout = 'main';
         $query = MoneyRecord::find()
             ->where(['uid' => Yii::$app->user->identity->id])
             ->andWhere(['in', 'type', MoneyRecord::getLenderMrType()]);
