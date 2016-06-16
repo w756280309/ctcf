@@ -105,12 +105,12 @@ class SiteController extends Controller
             ->all();
 
         return $this->render('index', [
-                'adv' => $adv,
-                'loans' => $loans,
-                'notice' => $notice,
-                'media' => $media,
-                'news' => $news,
-            ]);
+            'adv' => $adv,
+            'loans' => $loans,
+            'notice' => $notice,
+            'media' => $media,
+            'news' => $news,
+        ]);
     }
 
     /**
@@ -152,15 +152,15 @@ class SiteController extends Controller
         ]);
     }
 
-   /**
-    * 1.通过登录ip或用户名判断是否需要验证码
-    * 2.若输入的密码错误，则相关信息写入login_log表，用于上述1的判断
-    * 3.返回信息格式（json）
-    * 参数说明: code 状态信息 0,1,2,3 (0正确1手机号错误2密码错误3图片验证码错误)
-    *       requiresCaptcha 是否需要验证码
-    *       message 提示信息
-    *       tourl 需要跳转页面的url
-    */
+    /**
+     * 1.通过登录ip或用户名判断是否需要验证码
+     * 2.若输入的密码错误，则相关信息写入login_log表，用于上述1的判断
+     * 3.返回信息格式（json）
+     * 参数说明: code 状态信息 0,1,2,3 (0正确1手机号错误2密码错误3图片验证码错误)
+     *       requiresCaptcha 是否需要验证码
+     *       message 提示信息
+     *       tourl 需要跳转页面的url
+     */
     public function actionDologin()
     {
         $model = new LoginForm();
@@ -175,9 +175,9 @@ class SiteController extends Controller
 
         if ($model->load(Yii::$app->request->post()) && $model->validate() && $model->login(User::USER_TYPE_PERSONAL)) {
             if ('yes' == \Yii::$app->request->post('agree')) {
-                setcookie("userphone", $model->phone, time()+365*86400, '/');
+                setcookie("userphone", $model->phone, time() + 365 * 86400, '/');
             }
-            return ['code' => 0, 'message' => '登陆成功', 'tourl' => \Yii::$app->request->hostInfo, 'requiresCaptcha'=>$is_flag, 'key'=>''];
+            return ['code' => 0, 'message' => '登陆成功', 'tourl' => \Yii::$app->request->hostInfo, 'requiresCaptcha' => $is_flag, 'key' => ''];
         }
 
         if ($model->getErrors()) {
@@ -195,7 +195,7 @@ class SiteController extends Controller
                 $code = 3;
             }
 
-            return ['requiresCaptcha'=> $is_flag, 'tourl'=> '', 'code' => $code, 'message' => current($message)];
+            return ['requiresCaptcha' => $is_flag, 'tourl' => '', 'code' => $code, 'message' => current($message)];
         }
     }
 
@@ -223,6 +223,10 @@ class SiteController extends Controller
      */
     public function actionLoginForm()
     {
-        return $this->renderFile('@frontend/views/site/_login.php');
+        $login = new LoginService();
+        $requiresCaptcha = $login->isCaptchaRequired(Yii::$app->request, '', 30 * 60, 5);
+        return $this->renderFile('@frontend/views/site/_login.php', [
+            'requiresCaptcha' => $requiresCaptcha
+        ]);
     }
 }

@@ -8,7 +8,7 @@ use frontend\controllers\BaseController;
 use Yii;
 use yii\filters\AccessControl;
 
-class UserbankController extends BaseController
+class UserBankController extends BaseController
 {
     public function behaviors()
     {
