@@ -86,7 +86,7 @@ class FenxiaoController extends BaseController
     public function actionEdit($id)
     {
         if (empty($id)) {
-            $this->ex404();
+            throw $this->ex404();
         }
 
         $admin = $this->findOr404(Admin::class, $id);

@@ -11,18 +11,34 @@ use common\models\product\OnlineProduct;
 use common\service\PayService;
 use EBaoQuan\Client;
 use frontend\controllers\BaseController;
-use yii\web\NotFoundHttpException;
 use Yii;
+use yii\filters\AccessControl;
+
 
 class OrderController extends BaseController
 {
+    public function behaviors()
+    {
+        return [
+            'access' => [    //登录控制,如果没有登录,则跳转到登录页面
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                ],
+            ],
+        ];
+    }
+
     /**
      * 生成订单
      */
     public function actionDoorder($sn)
     {
         if (empty($sn)) {
-            throw new NotFoundHttpException();   //判断参数无效时,抛404异常
+            throw $this->ex404();   //判断参数无效时,抛404异常
         }
         $money = \Yii::$app->request->post('money');
         $coupon_id = \Yii::$app->request->post('couponId');
@@ -55,7 +71,7 @@ class OrderController extends BaseController
     public function actionOrdererror($osn)
     {
         if (empty($osn)) {
-            throw new NotFoundHttpException();   //判断参数无效时,抛404异常
+            throw $this->ex404();   //判断参数无效时,抛404异常
         }
 
         $order = OnlineOrder::ensureOrder($osn);
@@ -76,7 +92,7 @@ class OrderController extends BaseController
     public function actionOrderwait($osn)
     {
         if (empty($osn)) {
-            throw new NotFoundHttpException();   //判断参数无效时,抛404异常
+            throw $this->ex404();   //判断参数无效时,抛404异常
         }
 
         $order = OnlineOrder::ensureOrder($osn);
@@ -93,17 +109,17 @@ class OrderController extends BaseController
     public function actionAgreement($pid)
     {
         if (empty($pid)) {
-            $this->ex404();
+            throw $this->ex404();
         }
 
         $model = ContractTemplate::findAll(['pid' => $pid]);
         if (empty($model)) {
-            $this->ex404();  //当对象为空时,抛出异常
+            throw $this->ex404();  //当对象为空时,抛出异常
         }
 
         $orderId = \Yii::$app->request->get('order_id');
         if (!empty($orderId) && !preg_match('/^[0-9]+$/', $orderId)) {
-            $this->ex404();
+            throw $this->ex404();
         }
 
         if (empty($orderId)) {

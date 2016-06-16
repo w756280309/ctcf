@@ -30,15 +30,15 @@ class OrderController extends BaseController
             ], Yii::$app->request->get());
 
         if (empty($request['sn']) || !preg_match('/^[A-Za-z0-9]+$/', $request['sn'])) {
-            $this->ex404();
+            throw $this->ex404();
         }
 
         if (!empty($request['money']) && !preg_match('/^[0-9|.]+$/', $request['money'])) {
-            $this->ex404();
+            throw $this->ex404();
         }
 
         if (!empty($request['couponId']) && !preg_match('/^[0-9]+$/', $request['couponId'])) {
-            $this->ex404();
+            throw $this->ex404();
         }
 
         $deal = $this->findOr404(OnlineProduct::class, ['sn' => $request['sn']]);

@@ -79,7 +79,7 @@ class CouponController extends BaseController
     public function actionEdit($id)
     {
         if (empty($id)) {
-            $this->ex404();
+            throw $this->ex404();
         }
 
         $model = $this->findOr404(CouponType::class, $id);
@@ -127,7 +127,7 @@ class CouponController extends BaseController
     public function actionAudit($id)
     {
         if (empty($id)) {
-            $this->ex404();
+            throw $this->ex404();
         }
 
         $model = $this->findOr404(CouponType::class, $id);
@@ -149,11 +149,11 @@ class CouponController extends BaseController
         $status = Yii::$app->request->get('status');
 
         if (empty($id) || !preg_match('/^[0-9]+$/', $id)) {
-            $this->ex404();
+            throw $this->ex404();
         }
 
         if (!empty($status) && !in_array($status, ['', 'a', 'b'])) {
-            $this->ex404();
+            throw $this->ex404();
         }
 
         $uc = UserCoupon::tableName();
