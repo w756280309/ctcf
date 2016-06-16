@@ -56,3 +56,21 @@ i,em{
     z-index: 1000;
     display: none;
 }
+/*wcg-body*/
+.wdjf-body {
+    padding-top: 50px;
+    padding-bottom: 50px;
+}
+.wdjf-ucenter {
+    width: 1000px;
+    margin: 0 auto;
+}
+/*leftmenu*/
+.leftmenu {
+    float: left;
+}
+/*rightcontent*/
+.rightcontent {
+    float: right;
+    width: 800px;
+}
