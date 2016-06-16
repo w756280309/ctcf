@@ -34,7 +34,7 @@ use common\widgets\Pager;
                             <th width="80" class="text-align-lf">状态</th>
                         </tr>
                         <?php foreach ($model as $key => $val) : ?>
-                            <?php if (!$val->isUsed && date('Y-m-d') <= $val->couponType->useEndDate) { ?>
+                            <?php if (!$val->isUsed && date('Y-m-d') <= $val->expiryDate) { ?>
                                 <tr class="<?= 0 === $key%2 ? '' : 'td-back-color' ?>">
                                     <td class="table-text-number color-red"><?= StringUtils::amountFormat2($val->couponType->amount) ?></td>
                             <?php } else { ?>
@@ -62,7 +62,7 @@ use common\widgets\Pager;
                                     <?php
                                         if ($val->isUsed) {
                                             echo '已使用';
-                                        } elseif (date('Y-m-d') > $val->couponType->useEndDate) {
+                                        } elseif (date('Y-m-d') > $val->expiryDate) {
                                             echo '已过期';
                                         } else {
                                             echo '未使用';

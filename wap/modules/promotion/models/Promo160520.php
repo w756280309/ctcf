@@ -104,11 +104,14 @@ class Promo160520
 
         $transaction = \Yii::$app->db->beginTransaction();
         foreach ($coupons as $coupon) {
-            $ret = (new UserCoupon([
+            $time = time();
+
+            $ret = (new UserCoupon([    //expiryDate记录了代金券的有效结束时间,如果有效天数不为空,则以领用时间为起点计算有效结束时间,否则直接读取代金券的有效结束时间
                 'couponType_id' => $coupon->id,
                 'user_id' => $user->id,
                 'isUsed' => 0,
-                'created_at' => time(),
+                'created_at' => $time,
+                'expiryDate' => empty($coupon->expiresInDays) ? $coupon->useEndDate : date('Y-m-d', $time + 24 * 60 * 60 * ($coupon->expiresInDays - 1)),
             ]))->save(false);
 
             if (!$ret) {

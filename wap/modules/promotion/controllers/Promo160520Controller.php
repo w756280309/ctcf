@@ -7,7 +7,6 @@ use wap\modules\promotion\models\Promo160520;
 use Yii;
 use yii\web\BadRequestHttpException;
 use yii\web\Controller;
-use yii\web\Response;
 
 class Promo160520Controller extends Controller
 {

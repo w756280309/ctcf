@@ -3,7 +3,6 @@
 namespace frontend\modules\user\controllers;
 
 use frontend\controllers\BaseController;
-use common\models\coupon\CouponType;
 use common\models\coupon\UserCoupon;
 use yii\data\Pagination;
 use yii\filters\AccessControl;
@@ -53,7 +52,7 @@ class CouponController extends BaseController
 
         $data = $_query->select("count(*) as count, sum(amount) as totalAmount")
             ->andWhere(['isUsed' => 0, 'order_id' => null])
-            ->andWhere(['>=', 'useEndDate', date('Y-m-d')])
+            ->andWhere(['>=', 'expiryDate', date('Y-m-d')])
             ->createCommand()
             ->queryone();
 

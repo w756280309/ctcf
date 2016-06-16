@@ -7,7 +7,6 @@ use yii\web\Controller;
 use common\service\SmsService;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
-use yii\web\Response;
 use common\controllers\HelpersTrait;
 use common\models\adv\Adv;
 use common\models\affiliation\Affiliator;
