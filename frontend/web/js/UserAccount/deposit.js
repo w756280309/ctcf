@@ -1,10 +1,4 @@
 $(function () {
-    var mask = $('.mask');
-    var idcard_message = $('.idcard_message');
-    $('#idcard_confirm').click(function () {
-        mask.hide();
-        idcard_message.hide();
-    });
     $('.name-text').bind('blur', function () {
         validate_name()
     });

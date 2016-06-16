@@ -151,7 +151,7 @@ FrontAsset::register($this);
                         <span><i><?= ($deal->status == 1) ? (Yii::$app->functions->toFormatMoney($deal->money)) : rtrim(rtrim(number_format($deal->getLoanBalance(), 2), '0'), '.') . '元' ?></i></span>
                     </li>
                     <li class="dR-inner-left">我的可用余额：</li>
-                    <li class="dR-inner-right"><?= (null === $user) ? '查看余额请【<a href="/site/login">登录</a>】' : ($user->lendAccount ? number_format($user->lendAccount->available_balance, 2) . ' 元' : '0 元') ?></li>
+                    <li class="dR-inner-right"><?= (null === $user) ? '查看余额请【<a onclick="login()" style="cursor: pointer">登录</a>】' : ($user->lendAccount ? number_format($user->lendAccount->available_balance, 2) . ' 元' : '0 元') ?></li>
                     <?php if ($deal->status == OnlineProduct::STATUS_NOW){ ?>
                         <li class="dR-inner-left">投资金额(元)：</li>
                         <li class="dR-inner-right"><a href="/user/userbank/recharge">去充值</a></li>
@@ -285,6 +285,11 @@ FrontAsset::register($this);
         form.on('submit', function (e) {
             var money = $('#deal_money').val();
             e.preventDefault();
+            var log = <?= Yii::$app->user->isGuest?0:1 ?>;
+            if (log == 0) {
+                login();
+                return false;
+            }
             if (money > 0) {
                 if (money < <?= $deal->start_money ?>) {
                     $('.dR-tishi-error ').show();
@@ -319,7 +324,7 @@ FrontAsset::register($this);
             });
             xhr.always(function () {
                 buy.attr('disabled', false);
-                buy.val("购买");
+                buy.val("立即投资");
             })
         });
 

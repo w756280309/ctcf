@@ -60,4 +60,5 @@ class UserBankController extends BaseController
         }
     }
 
+
 }

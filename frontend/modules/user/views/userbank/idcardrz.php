@@ -1,8 +1,8 @@
 <?php
-    \frontend\assets\FrontAsset::register($this);
-    $this->registerJsFile(ASSETS_BASE_URI.'js/UserAccount/deposit.js');
-    $this->registerCssFile(ASSETS_BASE_URI.'css/UserAccount/usercenter.css');
-    $this->registerCssFile(ASSETS_BASE_URI.'css/UserAccount/chargedeposit.css');
+\frontend\assets\FrontAsset::register($this);
+$this->registerJsFile(ASSETS_BASE_URI . 'js/UserAccount/deposit.js');
+$this->registerCssFile(ASSETS_BASE_URI . 'css/UserAccount/usercenter.css');
+$this->registerCssFile(ASSETS_BASE_URI . 'css/UserAccount/chargedeposit.css');
 ?>
 <div class="deposit-box">
     <div class="deposit-header">
@@ -61,17 +61,9 @@
         <div class="clear"></div>
     </div>
 </div>
-<!--类mask为遮罩层-->
-<div class="mask" style="display: block;"></div>
-<!--类pop-open为开通免密-->
-<div class="result-pop pop-open idcard_message">
-    <p class="result-pop-hender">提示</p>
-    <p class="result-pop-content">将为您开通免密支付功能，之后进行投资时，无需输入资金托管账户支付密码。但是，当您需要提现时，为确保您的资金安全，仍需输入支付密码。</p>
-    <p class="result-pop-phone">如遇到问题请拨打我们的客服热线：<?= Yii::$app->params['contact_tel']?>（9:00~20:00)</p>
-    <p><span class="link-confirm" id="idcard_confirm">确定</span></p>
-</div>
 <script>
     $(function () {
+        mianmi();
         /*点击立即开通*/
         $('.deposit-content-link').on('click', function () {
             var name = $('.name-text');

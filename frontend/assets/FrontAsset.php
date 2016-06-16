@@ -13,6 +13,7 @@ class FrontAsset extends AssetBundle
     ];
     public $js = [
         'js/jquery-1.8.3.min.js',
+        'js/lib.js',
     ];
     public $depends = [
     ];
