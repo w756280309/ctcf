@@ -135,26 +135,38 @@ class SiteController extends Controller
 
     /**
      * PC端登陆页面.
+     *
+     * 判断当前登录IP短时间内是否多次输入密码错误，需要图片验证码
      */
-    public function actionLogin($flag = null)
+    public function actionLogin()
     {
-        $this->layout = 'main';
-
         if (!\Yii::$app->user->isGuest) {
             return $this->goHome();
         }
 
-        if ('reg' !== $flag) {
-            $flag = 'login';
-        }
+        $login = new LoginService();
+        $requiresCaptcha = $login->isCaptchaRequired(Yii::$app->request, '', 30 * 60, 5);
 
+        return $this->render('login', [
+            'requiresCaptcha' => $requiresCaptcha,
+        ]);
+    }
+
+   /**
+    * 1.通过登录ip或用户名判断是否需要验证码
+    * 2.若输入的密码错误，则相关信息写入login_log表，用于上述1的判断
+    * 3.返回信息格式（json）
+    * 参数说明: code 状态信息 0,1,2,3 (0正确1手机号错误2密码错误3图片验证码错误)
+    *       requiresCaptcha 是否需要验证码
+    *       message 提示信息
+    *       tourl 需要跳转页面的url
+    */
+    public function actionDologin()
+    {
         $model = new LoginForm();
-
-        $is_flag = Yii::$app->request->post('is_flag');    //是否需要校验图形验证码标志位
-        if ($is_flag && !is_bool($is_flag)) {
-            $is_flag = true;
-        }
-
+        $login = new LoginService();
+        $LoginForm = Yii::$app->request->post("LoginForm");
+        $is_flag = $login->isCaptchaRequired(Yii::$app->request, $LoginForm['phone'], 30 * 60, 5);
         if ($is_flag) {
             $model->scenario = 'verifycode';
         } else {
@@ -162,22 +174,29 @@ class SiteController extends Controller
         }
 
         if ($model->load(Yii::$app->request->post()) && $model->validate() && $model->login(User::USER_TYPE_PERSONAL)) {
-            return $this->goHome();
+            if ('yes' == \Yii::$app->request->post('agree')) {
+                setcookie("userphone", $model->phone, time()+365*86400, '/');
+            }
+            return ['code' => 0, 'message' => '登陆成功', 'tourl' => \Yii::$app->request->hostInfo, 'requiresCaptcha'=>$is_flag, 'key'=>''];
         }
 
-        $login = new LoginService();
+        if ($model->getErrors()) {
+            if ($model->getErrors('password')) {
+                $login->logFailure(Yii::$app->request, $model->phone, LoginLog::TYPE_PC);
+            }
 
-        if ($model->getErrors('password')) {
-            $login->logFailure(Yii::$app->request, $model->phone, LoginLog::TYPE_PC);
+            $message = $model->firstErrors;
+            $key = array_keys($message)[0];
+            if ('phone' === $key) {
+                $code = 1;
+            } else if ('password' === $key) {
+                $code = 2;
+            } else if ('verifyCode' === $key) {
+                $code = 3;
+            }
+
+            return ['requiresCaptcha'=> $is_flag, 'tourl'=> '', 'code' => $code, 'message' => current($message)];
         }
-
-        $is_flag = $is_flag ? $is_flag : $login->isCaptchaRequired(Yii::$app->request, $model->phone, 30 * 60, 5);
-
-        return $this->render('login', [
-            'model' => $model,
-            'is_flag' => $is_flag,
-            'flag' => $flag,
-        ]);
     }
 
     /**
