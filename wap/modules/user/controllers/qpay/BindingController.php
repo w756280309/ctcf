@@ -7,7 +7,6 @@ use common\models\user\QpayBinding as QpayAcct;
 use common\utils\TxUtils;
 use Yii;
 use yii\base\Model;
-use yii\web\Response;
 use common\models\bank\BankManager;
 use common\models\bank\QpayConfig;
 

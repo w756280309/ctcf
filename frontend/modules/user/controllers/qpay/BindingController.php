@@ -2,17 +2,35 @@
 
 namespace frontend\modules\user\controllers\qpay;
 
-use frontend\controllers\BaseController;
-use common\models\user\QpayBinding as QpayAcct;
-use common\utils\TxUtils;
-use Yii;
-use yii\base\Model;
-use yii\web\Response;
 use common\models\bank\BankManager;
 use common\models\bank\QpayConfig;
+use common\models\user\QpayBinding as QpayAcct;
+use common\utils\TxUtils;
+use frontend\controllers\BaseController;
+use Yii;
+use yii\base\Model;
+use yii\filters\AccessControl;
 
 class BindingController extends BaseController
 {
+    public function behaviors()
+    {
+        return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * 绑卡申请处理.
+     */
     public function actionVerify()
     {
         // 已验证的数据
@@ -48,9 +66,8 @@ class BindingController extends BaseController
             }
             $acct_model->binding_sn = TxUtils::generateSn('B');
             $acct_model->epayUserId = $this->getAuthedUser()->epayUser->epayUserId;
-            //QpayAcct::deleteAll(['uid' => $acct_model->uid, 'status' => 0]); //将之前的绑卡未处理的删掉
             $acct_model->save();
-            $next = \Yii::$container->get('ump')->enableQpay($acct_model);//获取跳转页面
+            $next = Yii::$container->get('ump')->enableQpay($acct_model);//获取跳转页面
             return [
                 'next' => $next,
             ];

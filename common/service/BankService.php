@@ -2,8 +2,6 @@
 
 namespace common\service;
 
-use Yii;
-use yii\web\Response;
 use common\models\user\User;
 use common\models\user\QpayBinding;
 use common\models\bank\BankManager;
@@ -93,10 +91,6 @@ class BankService
 
     /**
      * 根据卡号自动匹配开户行.
-     *
-     * @param $card_no
-     *
-     * @return bool
      */
     public static function checkBankcard($card = null)
     {

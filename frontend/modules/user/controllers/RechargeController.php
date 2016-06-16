@@ -12,8 +12,6 @@ use common\models\bank\EbankConfig;
 
 class RechargeController extends BaseController
 {
-    public $layout = '@app/views/layouts/footer';
-
     public function beforeAction($action)
     {
         $cond = 0 | BankService::IDCARDRZ_VALIDATE_N;

@@ -2,7 +2,6 @@
 namespace app\modules\deal\controllers;
 
 use Yii;
-use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\data\Pagination;
 use common\models\product\OnlineProduct;
@@ -16,9 +15,6 @@ use yii\web\NotFoundHttpException;
 class DealController extends Controller
 {
     use HelpersTrait;
-    /**
-     * 行为设置，对于请求如果是ajax请求返回json.
-     */
 
     /**
      * 获取理财列表.

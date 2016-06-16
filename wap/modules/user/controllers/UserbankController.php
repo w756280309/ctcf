@@ -3,7 +3,6 @@
 namespace app\modules\user\controllers;
 
 use Yii;
-use yii\web\Response;
 use app\controllers\BaseController;
 use common\models\user\DrawRecord;
 use common\models\user\UserAccount;

@@ -2,13 +2,13 @@
 
 namespace frontend\modules\user\controllers;
 
-
+use common\models\bank\BankManager;
 use common\service\BankService;
 use frontend\controllers\BaseController;
 use Yii;
 use yii\filters\AccessControl;
 
-class UserBankController extends BaseController
+class UserbankController extends BaseController
 {
     public function behaviors()
     {
@@ -30,7 +30,6 @@ class UserBankController extends BaseController
      */
     public function actionIdcardrz()
     {
-        $this->layout = 'main';
         $cond = 0 | BankService::IDCARDRZ_VALIDATE_Y;
         $data = BankService::check($this->getAuthedUser(), $cond);
         if ($data['code'] == 1) {
@@ -60,5 +59,22 @@ class UserBankController extends BaseController
         }
     }
 
+    /**
+     * 绑定银行卡.
+     * 先决条件:
+     * 1. 实名认证
+     * 2. 开通免密
+     */
+    public function actionBindbank()
+    {
+        $cond = 0 | BankService::IDCARDRZ_VALIDATE_N | BankService::MIANMI_VALIDATE | BankService::BINDBANK_VALIDATE_Y;
+        $data = BankService::check($this->getAuthedUser(), $cond);
+        if ($data['code']) {
+            return $this->redirect('/user/userbank/');
+        }
 
+        $banks = BankManager::getQpayBanks();
+
+        return $this->render('bindbank', ['banklist' => $banks]);
+    }
 }

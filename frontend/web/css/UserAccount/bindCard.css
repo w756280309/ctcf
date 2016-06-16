@@ -1,0 +1,267 @@
+.clearfix:before, .clearfix:after {
+    content: '';
+    display: table;
+}
+.clearfix:after {
+    clear: both;
+}
+.clearfix {
+    *zoom: 1;
+}
+.bindCard-box {
+    width: 798px;
+    border: 1px solid #e3e3e3;
+    background: #fff;
+}
+.bindCard-box .bindCard-header {
+    height: 50px;
+    line-height: 50px;
+    padding-left: 20px;
+    border-bottom: 1px solid #efeff3;
+}
+
+.bindCard-box .bindCard-header .bindCard-header-icon {
+    width: 20px;
+    height: 15px;
+    margin-top: 18px;
+    margin-right: 10px;
+    background: url("../../images/UserAccount/background-icon.png") no-repeat -90px 0;
+    float: left;
+}
+.bindCard-box .bindCard-header .bindCard-header-font {
+    font-size: 16px;
+    color: #464648;
+}
+.bind-middle {
+    width: 100%;
+    height: 254px;
+    border-bottom: 1px solid #e3e3e3;
+    overflow: hidden;
+}
+.bind-limit {
+    text-align: right;
+    font-size: 14px;
+    padding-right: 37px;
+    height: 20px;
+    line-height: 20px;
+    margin-top: 20px;
+}
+.bind-limit a{
+    color: #46669f;
+    margin-left: 6px;
+}
+.bind-limit a:hover {
+    color: #0c4a7f;
+    text-decoration: underline;
+}
+.bind-kaihu {
+    float: left;
+    width: 114px;
+    height: 46px;
+    line-height: 46px;
+    font-size: 14px;
+    color: #464648;
+    padding-right: 10px;
+    text-align: right;
+}
+.bind-card {
+    display: none;
+    float: left;
+    width: 150px;
+    height: 44px;
+    line-height: 44px;
+    border: 1px solid #e3e3e3;
+    background: #efeff3;
+    cursor: pointer;
+}
+.bind-card div {
+    float: left;
+    line-height: 44px;
+}
+.bind-card div img {
+    position: relative;
+    top:3px;
+}
+.bind-icon {
+    margin: 0 10px;
+}
+.bind-bank {
+    margin-right: 14px;
+}
+.bind-check a{
+    color: #46669f;
+    margin-left: 6px;
+}
+.bind-check {
+    float: left;
+    width: 229px;
+    height: 44px;
+    line-height: 44px;
+}
+.bind-check a:hover {
+    color: #0c4a7f;
+    text-decoration: underline;
+}
+.bind-info {
+    margin-top: 10px;
+    height: 70px;
+}
+.bind-input {
+    float: left;
+    height: 44px;
+    line-height: 44px;
+}
+.bind-input input {
+    float: left;
+    width: 208px;
+    height: 38px;
+    line-height: 38px;
+    outline: none;
+    padding: 0 15px;
+    border: 1px solid #e4e4e8;
+    margin-top: 2px;
+}
+.bind-input ul {
+    position: relative;
+    float: left;
+    width: 218px;
+    height: 38px;
+    line-height: 38px;
+    border: 1px solid #ebbdbb;
+    background: #f9e5e4;
+    margin-top: 2px;
+    margin-left: 16px;
+    font-size: 12px;
+    color: #f44336;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+.bind-input ul li {
+    list-style-type: disc;
+    list-style-position: inside;
+}
+.bind-input ul li span {
+    color: #464648;
+}
+.jiao-left {
+    position: absolute;
+    left: -5px;
+    top: 50%;
+    margin-top: -4px;
+}
+.error-border {
+    border: 1px solid #f44336!important;
+}
+.error-ins {
+    font-size: 14px;
+    color: #f44336;
+    height: 20px;
+    line-height: 20px;
+}
+.bind-btn {
+    width: 190px;
+    height: 40px;
+    background: #f44336;
+    text-align: center;
+    line-height: 40px;
+    color: #fff;
+    font-size: 14px;
+    margin-left: 124px;
+    margin-top: 15px;
+    cursor: pointer;
+}
+.charge-explain {
+    background-color: #fff;
+    padding-left: 60px;
+    padding-bottom: 40px;
+}
+
+.charge-explain .charge-explain-title {
+    padding-top: 36px;
+    padding-bottom: 20px;
+    font-size: 16px;
+    color: #464648;
+    font-weight: bold;
+}
+
+.charge-explain .charge-explain-content {
+    font-size: 12px;
+    color: #6e6e72;
+}
+.bank-mark {
+    display: none;
+    position: fixed;
+    left: 0;
+    top:0;
+    width: 100%;
+    height: 100%;
+    background: #000;
+    opacity: 0.6;
+    filter: alpha(opacity=60);
+    z-index: 1000;
+}
+.bankIcon-box {
+    display: none;
+    position: fixed;
+    left: 50%;
+    top:50%;
+    width: 475px;
+    height: 392px;
+    margin-left: -238px;
+    margin-top: -147px;
+    background: #fff;
+    z-index: 10001;
+}
+.bankIcon-top {
+    width: 460px;
+    height: 50px;
+    line-height: 50px;
+    font-size: 16px;
+    color: #464648;
+    padding-left: 15px;
+    border-bottom: 1px solid #efeff3;
+}
+.close {
+    float: right;
+    margin-right: 16px;
+    margin-top: 12px;
+    cursor: pointer;
+}
+.bankIcon-inner {
+    width: 450px;
+    margin: 0 auto;
+    margin-right: 4px;
+    margin-top: 4px;
+}
+.bankIcon-inner li {
+    float: left;
+    width: 136px;
+    height: 31px;
+    border: 1px solid #efeff3;
+    margin-right: 10px;
+    margin-top: 15px;
+    cursor: pointer;
+}
+.bankIcon-inner li img {
+    width: 100%;
+    height: 100%;
+}
+.bankIcon-btn {
+    width: 190px;
+    height: 40px;
+    margin: 0 auto;
+    background: #f44336;
+    color: #fff;
+    text-align: center;
+    line-height: 40px;
+    font-size: 14px;
+    margin-top: 27px;
+    margin-bottom: 30px;
+    cursor: pointer;
+}
+.border-red {
+    border: 1px solid #f44336!important;
+}
+p.error {
+    display: none;
+}
