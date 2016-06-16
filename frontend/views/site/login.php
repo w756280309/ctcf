@@ -1,6 +1,6 @@
 <?php
 
-$this->title = '登陆注册 - 温都金服';
+$this->title = '登陆 - 温都金服';
 
 ?>
 <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/login/login.css">
@@ -20,13 +20,13 @@ $this->title = '登陆注册 - 温都金服';
                     <div class="login-right-box">
                         <div class="phone-box">
                             <label for="phone">手机号码</label>
-                            <input id="phone" type="tel" name="LoginForm[phone]" maxlength="11" placeholder="请输入手机号码" AUTOCOMPLETE="off">
+                            <input id="phone" type="tel" name="LoginForm[phone]" maxlength="11" placeholder="请输入手机号码" AUTOCOMPLETE="off"  tabindex="1">
                             <div style="clear: both"></div>
                             <div class="popUp"></div>
                         </div>
                         <div class="password-box">
                             <label for="password">登录密码</label>
-                            <input id="password" name="LoginForm[password]" type="password" maxlength="20" placeholder="请输入密码" AUTOCOMPLETE="off">
+                            <input id="password" name="LoginForm[password]" type="password" maxlength="20" placeholder="请输入密码" AUTOCOMPLETE="off"  tabindex="2">
                             <div style="clear: both"></div>
                             <div class="popUp"></div>
                         </div>
@@ -42,14 +42,19 @@ $this->title = '登陆注册 - 温都金服';
 
                         <div class="login-bottom">
                             <div class="login-check">
-                                <input type="hidden" name="agree" class="agree" value="no">
-                                <img src="../../images/login/check-false.png" alt="">记住用户名</div>
+                                <input type="hidden" class="agree" name="agree" value="no">
+                                <span>
+                                     <input type="checkbox" name="remember" tabindex="3">
+                                </span>
+                                记住用户名
+                            </div>
                             <div class="login-bottom-right">
                                 <i><a class="mima" href="">忘记密码</a></i>
                             </div>
                         </div>
                     </div>
-                    <input type="button" class="login-btn" id="login-btn" value="立即登录">
+                    <input type="hidden" name="is_flag" value="<?= $requiresCaptcha ?>">
+                    <input type="submit" class="login-btn" id="login-btn" value="立即登录">
                     <div class="resign-btn">没有账号？<a class="resign" href="">免费注册</a></div>
                 </form>
             </div>
@@ -63,6 +68,8 @@ $this->title = '登陆注册 - 温都金服';
             checkCookie();
             if ('0' != requiresCaptcha) {
                 $(".verity-box").show();
+                $("#verity").attr("tabindex", "3")
+                $("input[name='remember']").attr("tabindex", 4);
             }
             function errorInput(obj, content) {
                 error_status = true;
@@ -122,7 +129,8 @@ $this->title = '登陆注册 - 温都金服';
                 })
             }
 
-            $(".login-btn").bind("click", function(){
+            $('form').submit(function(e){
+                e.preventDefault();
                 error_status = false;
                 $("#phone").trigger("blur");
                 if (error_status) {
@@ -159,11 +167,12 @@ $this->title = '登陆注册 - 温都金服';
                     } else if (data.code > 0) {
                         if (data.requiresCaptcha) {
                             $(".verity-box").show();
+                            $("input[name='is_flag']").val(true);
+                            $("#verity").attr("tabindex", "3")
+                            $("input[name='remember']").attr("tabindex", 4);
                             $(".verity-img").attr("src", "/site/captcha?"+Math.random());
                         }
-                        if (1 == data.code) {
-                            $(".phone-box .popUp").html(data.message);
-                        } else if (2 == data.code) {
+                        if (1 == data.code || 2 == data.code) {
                             $(".password-box .popUp").html(data.message);
                         } else if (3 == data.code) {
                             $(".verity-box .popUp").html(data.message);

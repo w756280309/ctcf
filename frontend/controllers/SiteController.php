@@ -134,7 +134,7 @@ class SiteController extends Controller
     }
 
     /**
-     * PC端登陆页面.
+     * PC端登录页面.
      *
      * 判断当前登录IP短时间内是否多次输入密码错误，需要图片验证码
      */
@@ -165,8 +165,7 @@ class SiteController extends Controller
     {
         $model = new LoginForm();
         $login = new LoginService();
-        $LoginForm = Yii::$app->request->post("LoginForm");
-        $is_flag = $login->isCaptchaRequired(Yii::$app->request, $LoginForm['phone'], 30 * 60, 5);
+        $is_flag = \Yii::$app->request->post("is_flag");
         if ($is_flag) {
             $model->scenario = 'verifycode';
         } else {
@@ -175,9 +174,12 @@ class SiteController extends Controller
 
         if ($model->load(Yii::$app->request->post()) && $model->validate() && $model->login(User::USER_TYPE_PERSONAL)) {
             if ('yes' == \Yii::$app->request->post('agree')) {
-                setcookie("userphone", $model->phone, time() + 365 * 86400, '/');
+                setcookie("userphone", $model->phone, time()+365*86400, '/');
+            } else if ('no' == \Yii::$app->request->post('agree')) {
+                setcookie("userphone", "", time()-3600, "/");
             }
-            return ['code' => 0, 'message' => '登陆成功', 'tourl' => \Yii::$app->request->hostInfo, 'requiresCaptcha' => $is_flag, 'key' => ''];
+            $is_flag = $login->isCaptchaRequired(Yii::$app->request, $model->phone, 30 * 60, 5);
+            return ['code' => 0, 'message' => '登录成功', 'tourl' => \Yii::$app->request->hostInfo, 'requiresCaptcha'=>$is_flag, 'key'=>''];
         }
 
         if ($model->getErrors()) {
@@ -189,18 +191,21 @@ class SiteController extends Controller
             $key = array_keys($message)[0];
             if ('phone' === $key) {
                 $code = 1;
+                $message = "手机号或密码错误";
             } else if ('password' === $key) {
                 $code = 2;
+                $message = "手机号或密码错误";
             } else if ('verifyCode' === $key) {
                 $code = 3;
+                $message = current($message);
             }
-
-            return ['requiresCaptcha' => $is_flag, 'tourl' => '', 'code' => $code, 'message' => current($message)];
+            $is_flag = $login->isCaptchaRequired(Yii::$app->request, $model->phone, 30 * 60, 5);
+            return ['requiresCaptcha'=> $is_flag, 'tourl'=> '', 'code' => $code, 'message' => $message];
         }
     }
 
     /**
-     * 登陆注销
+     * 登录注销
      */
     public function actionLogout()
     {

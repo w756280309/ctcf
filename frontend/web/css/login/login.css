@@ -17,7 +17,7 @@
 .login-ad {
     float: left;
     width: 545px;
-    height: 100%;
+    min-height: 328px;
 }
 .login-ad img {
     width: 100%;

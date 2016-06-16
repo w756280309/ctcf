@@ -2,11 +2,11 @@ $(function(){
     var flags=true;
     $('.login-check').on('click',function(){
         if(!flags){
-            $('.login-check img')[0].src='../../images/login/check-false.png';
+            $("input[name='remember']").attr("checked", false);
             $('.agree').val('no');
             flags=true;
         }else if(flags){
-            $('.login-check img')[0].src='../../images/login/check-true.png';
+            $("input[name='remember']").attr("checked", true);
             $('.agree').val('yes');
             flags=false;
         }
