@@ -300,7 +300,7 @@ FrontAsset::register($this);
             var vals = form.serialize();
             var xhr = $.post(form.attr("action"), vals, function (data) {
                 if (data.code == 0) {
-                    location.replace(data.tourl);
+                    location.href = data.tourl;
                     //toast('投标成功');
                 } else {
                     $('.dR-tishi-error ').show();
@@ -312,7 +312,7 @@ FrontAsset::register($this);
                 } else {
                     if (data.tourl != undefined) {
                         setTimeout(function () {
-                            location.replace(data.tourl);
+                            location.href = data.tourl;
                         }, 1000);
                     }
                 }

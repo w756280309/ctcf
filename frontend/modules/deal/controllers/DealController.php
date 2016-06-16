@@ -16,7 +16,6 @@ use yii\web\NotFoundHttpException;
 
 class DealController extends BaseController
 {
-
     /**
      * 项目详情页面
      */
@@ -113,6 +112,9 @@ class DealController extends BaseController
      */
     public function actionConfirm($sn, $money)
     {
+        if (Yii::$app->user->isGuest) {
+            return $this->redirect('/site/login');
+        }
         $coupon_id = Yii::$app->request->get('coupon_id');
         $coupon = null;
         if ($coupon_id) {
