@@ -1,6 +1,6 @@
 <?php
 
-$this->title = '登陆 - 温都金服';
+$this->title = '登录 - 温都金服';
 
 ?>
 <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/login/login.css">
