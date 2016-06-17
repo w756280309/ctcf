@@ -42,6 +42,22 @@ class InfoController extends Controller
                 'linkType' => 2,
                 'jumpReferWords' => '',
             ],
+            'chongzhi' => [
+                'title' => '充值结果',
+                'mainTitle' => '恭喜您，充值成功！',
+                'firstFuTitle' => '页面将在<em class="em_time">5</em>秒后自动关闭，<a href="javascript:;" class="a-close">点击这里</a>立即关闭!',
+                'requireJump' => true,
+                'linkType' => 2,
+                'jumpReferWords' => '',
+            ],
+            'tixian' => [
+                'title' => '提现结果',
+                'mainTitle' => '恭喜您，提现成功！',
+                'firstFuTitle' => '页面将在<em class="em_time">5</em>秒后自动关闭，<a href="javascript:;" class="a-close">点击这里</a>立即关闭!',
+                'requireJump' => true,
+                'linkType' => 2,
+                'jumpReferWords' => '',
+            ],
         ],
         'fail' => [
             'tuoguan' => [
@@ -76,6 +92,22 @@ class InfoController extends Controller
                 'linkType' => 0,
                 'jumpReferWords' => '',
             ],
+            'chongzhi' => [
+                'title' => '充值结果',
+                'mainTitle' => '充值失败！',
+                'firstFuTitle' => '如有疑问，请联系客服，电话：400-101-5151(09:00-20:00)',
+                'requireJump' => false,
+                'linkType' => 0,
+                'jumpReferWords' => '',
+            ],
+            'tixian' => [
+                'title' => '提现结果',
+                'mainTitle' => '提现失败！',
+                'firstFuTitle' => '如有疑问，请联系客服，电话：400-101-5151(09:00-20:00)',
+                'requireJump' => false,
+                'linkType' => 0,
+                'jumpReferWords' => '',
+            ],
         ],
     ];
 
@@ -84,6 +116,8 @@ class InfoController extends Controller
         'touzi',
         'bangka',
         'huanka',
+        'chongzhi',
+        'tixian',
     ];
 
     public function actionSuccess()
