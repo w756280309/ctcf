@@ -51,7 +51,7 @@ class StringUtils
      * 2. 以万、亿为单位
      *
      * @param string $html html模板字符串,样式如下:
-     * <span>{{ amount }}</span><span>{{ unit }}</span>
+     * <span>{amount}</span><span>{unit}</span>
      */
     public static function amountFormat1($html, $val)
     {

@@ -5,7 +5,6 @@ namespace common\models\user;
 use Yii;
 use yii\base\Model;
 use Zii\Validator\CnMobileValidator;
-use common\models\app\AccessToken;
 
 /**
  * Login form.

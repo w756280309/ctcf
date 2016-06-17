@@ -16,8 +16,8 @@ class CaptchaForm extends Model
     public function rules()
     {
         return [
-            ['captchaCode', 'required'],
-            ['captchaCode', 'captcha'],
+            ['captchaCode', 'required', 'message' => '图形验证码不能为空'],
+            ['captchaCode', 'captcha', 'message' => '图形验证码输入错误'],
         ];
     }
 

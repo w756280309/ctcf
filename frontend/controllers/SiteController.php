@@ -8,7 +8,9 @@ use common\models\category\ItemCategory;
 use common\models\log\LoginLog;
 use common\models\news\News;
 use common\models\product\OnlineProduct;
+use common\models\user\CaptchaForm;
 use common\models\user\LoginForm;
+use common\models\user\SignupForm;
 use common\models\user\User;
 use common\service\LoginService;
 use wap\modules\promotion\models\RankingPromo;
@@ -215,6 +217,32 @@ class SiteController extends Controller
     }
 
     /**
+     * 注册.
+     */
+    public function actionSignup()
+    {
+        if (!\Yii::$app->user->isGuest) {
+            return $this->goHome();
+        }
+
+        $model = new SignupForm();
+        $captcha = new CaptchaForm();
+
+        if ($model->load(Yii::$app->request->post())) {
+            $user = $model->signup();
+            if ($user && Yii::$app->user->login($user)) {
+                $user->scenario = 'login';
+                $user->last_login = time();
+                $user->save();
+
+                return $this->redirect('/');
+            }
+        }
+
+        return $this->render('signup', ['model' => $model, 'captcha' => $captcha]);
+    }
+
+    /**
      * 用户被锁定提示页面.
      */
     public function actionUsererr()
@@ -233,5 +261,35 @@ class SiteController extends Controller
         return $this->renderFile('@frontend/views/site/_login.php', [
             'requiresCaptcha' => $requiresCaptcha
         ]);
+    }
+
+    /**
+     * 获取短信验证码.
+     */
+    public function actionCreateSms()
+    {
+        $type = Yii::$app->request->post('type');
+        $phone = Yii::$app->request->post('phone');
+        $captchaCode = Yii::$app->request->post('captchaCode');
+
+        if (empty($type) || empty($phone) || empty($captchaCode)) {
+            return ['code' => 1, 'message' => '发送短信参数错误'];
+        }
+
+        $model = new CaptchaForm();
+        $model->captchaCode = $captchaCode;
+
+        if (!$model->validate()) {
+            return ['code' => 1, 'message' => '图形验证码输入错误'];
+        }
+
+        if (1 === (int) $type) {
+            $user = User::findOne(['mobile' => $phone]);
+            if (null !== $user) {
+                return ['code' => 1, 'message' => '此手机号已经注册'];
+            }
+        }
+
+        return SmsService::createSmscode($type, $phone);
     }
 }
