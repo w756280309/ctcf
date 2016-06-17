@@ -34,7 +34,7 @@ $(function() {
 JS;
 
 $this->registerJs($_js, View::POS_END, 'body_close');
-
+$this->registerCssFile('/css/frontend.css');
 ?>
 <div class="container">
     <div class="main">
@@ -46,6 +46,7 @@ $this->registerJs($_js, View::POS_END, 'body_close');
         <div id="payment-method" class="section">
             <ul class="picker">
                 <li class="picker-item picked" id='tobank' data-url='<?= $resp ?>'>个人网银</li>
+                <li class="picker-item" onclick="location.href='/user/userbank/recharge'">快捷充值</li>
             </ul>
         </div>
 
