@@ -63,7 +63,6 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/UserAccount/chargedeposit.css');
 </div>
 <script>
     $(function () {
-        mianmi();
         /*点击立即开通*/
         $('.deposit-content-link').on('click', function () {
             var name = $('.name-text');

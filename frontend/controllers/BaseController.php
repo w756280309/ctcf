@@ -21,4 +21,10 @@ class BaseController extends Controller
 
         parent::init();
     }
+
+    //记录进入开户、免密、绑卡流程的入口
+    public function saveReferrer()
+    {
+        \Yii::$app->session->set('tx_url', \Yii::$app->request->referrer);
+    }
 }

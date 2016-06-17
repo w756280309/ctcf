@@ -27,7 +27,11 @@ class AgreementnotifyController extends Controller
             $ret = BankService::checkKuaijie($user);
             if (1 === (int)$ret['code']) {
                 //跳到来源页面，如从充值过来的跳到充值页面；
-                return $this->redirect($ret['tourl']);
+                if ($url = Yii::$app->session->get('tx_url')) {
+                    return $this->redirect($url);
+                } else {
+                    return $this->redirect($ret['tourl']);
+                }
             }
         } catch (\Exception $ex) {
         }

@@ -1,6 +1,6 @@
 <?php
 
-namespace app\modules\user\controllers\qpay;
+namespace frontend\modules\user\controllers\bpay;
 
 use Yii;
 use yii\web\Controller;
