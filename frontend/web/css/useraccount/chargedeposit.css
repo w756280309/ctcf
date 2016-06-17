@@ -15,7 +15,7 @@
     height: 15px;
     margin-top: 18px;
     margin-right: 10px;
-    background: url("../../images/userAccount/background-icon.png") no-repeat 0 0;
+    background: url("../../images/useraccount/background-icon.png") no-repeat 0 0;
     float: left;
 }
 
@@ -95,7 +95,7 @@
     height: 15px;
     margin-top: 18px;
     margin-right: 10px;
-    background: url("../../images/userAccount/background-icon.png") no-repeat -43px 0;
+    background: url("../../images/useraccount/background-icon.png") no-repeat -43px 0;
     float: left;
 }
 
@@ -213,7 +213,7 @@
     display: block;
     width: 5px;
     height: 5px;
-    background: url("../../images/userAccount/background-icon.png") no-repeat 0 -59px;
+    background: url("../../images/useraccount/background-icon.png") no-repeat 0 -59px;
     float: left;
     margin-top: 16px;
 }

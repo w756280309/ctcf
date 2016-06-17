@@ -1,9 +1,9 @@
 <?php
 $this->title = '绑定银行卡';
 
-$this->registerCssFile(ASSETS_BASE_URI.'css/UserAccount/usercenter.css', ['depends' => 'frontend\assets\FrontAsset']);
-$this->registerCssFile(ASSETS_BASE_URI.'css/UserAccount/bindCard.css', ['depends' => 'frontend\assets\FrontAsset']);
-$this->registerJsFile(ASSETS_BASE_URI.'js/UserAccount/bindCard.js', ['depends' => 'frontend\assets\FrontAsset']);
+$this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/usercenter.css', ['depends' => 'frontend\assets\FrontAsset']);
+$this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/bindcard.css', ['depends' => 'frontend\assets\FrontAsset']);
+$this->registerJsFile(ASSETS_BASE_URI.'js/useraccount/bindcard.js', ['depends' => 'frontend\assets\FrontAsset']);
 ?>
 
 <div class="wdjf-body">
@@ -20,7 +20,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/UserAccount/bindCard.js', ['depends' =
                     <span class="bindCard-header-font">绑定银行卡</span>
                 </div>
                 <div class="bind-middle">
-                    <div class="bind-limit"><img src="<?= ASSETS_BASE_URI ?>images/UserAccount/tip-red.png" alt="/user/userbank/xiane"><a href="">限额提醒</a></div>
+                    <div class="bind-limit"><img src="<?= ASSETS_BASE_URI ?>images/useraccount/tip-red.png" alt="/user/userbank/xiane"><a href="">限额提醒</a></div>
                     <div class="clearfix">
                         <div class="bind-kaihu">开户行</div>
                         <!--选择银行卡-->

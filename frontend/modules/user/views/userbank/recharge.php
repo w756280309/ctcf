@@ -1,7 +1,7 @@
 <?php
     $this->title = '快捷充值';
     \frontend\assets\FrontAsset::register($this);
-    $this->registerCssFile('/css/UserAccount/bindCardAlready.css');
+    $this->registerCssFile('/css/useraccount/bindcardalready.css');
 ?>
 <div class="bindCard-box">
     <div class="bindCard-header">
@@ -19,7 +19,7 @@
         <div class="bindCard-already">
             <span class="single-left">银行卡</span>
             <div class="single-div no-pointer">
-                <span class="single-icon"><img class="single-icon-img" height="18" src="<?= ASSETS_BASE_URI ?>images/UserAccount/bankIcon/<?= $user_bank->bank_id ?>.png" alt=""></span>
+                <span class="single-icon"><img class="single-icon-img" height="18" src="<?= ASSETS_BASE_URI ?>images/useraccount/bankIcon/<?= $user_bank->bank_id ?>.png" alt=""></span>
                 <span class="single-name"><?= $user_bank->bank_name ?></span>
                 <span class="single-number">尾号<?= $user_bank->card_number?substr($user_bank->card_number, -4):"" ?></span>
             </div>

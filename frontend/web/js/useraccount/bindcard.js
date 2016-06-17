@@ -17,7 +17,7 @@ $(function(){
         $('.bankIcon-inner li').eq(index).addClass('border-red');
         var dataImg=$('.bankIcon-inner li').eq(index).attr('data-img');
         var dataBank=$('.bankIcon-inner li').eq(index).attr('data-bank');
-        $('.bind-icon img')[0].src='/images/UserAccount/bankIcon/'+dataImg+'.png';
+        $('.bind-icon img')[0].src='/images/useraccount/bankIcon/'+dataImg+'.png';
         $('.bind-bank').html(dataBank);
         $('#bank_id').val(dataImg);
         $('#bank_name').val(dataBank);

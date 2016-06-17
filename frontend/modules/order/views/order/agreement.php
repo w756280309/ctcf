@@ -1,7 +1,7 @@
 <?php
 $this->title = '产品合同';
 
-$this->registerCssFile(ASSETS_BASE_URI.'css/deal/productContract.css', ['depends' => 'frontend\assets\FrontAsset']);
+$this->registerCssFile(ASSETS_BASE_URI.'css/deal/productcontract.css', ['depends' => 'frontend\assets\FrontAsset']);
 ?>
 
 <div class="contract-box clearfix">

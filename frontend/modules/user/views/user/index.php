@@ -1,10 +1,10 @@
 <?php
 $this->title = '账户中心首页';
 
-$this->registerCssFile(ASSETS_BASE_URI.'css/UserAccount/usercenter.css', ['depends' => 'frontend\assets\FrontAsset']);
-$this->registerCssFile(ASSETS_BASE_URI.'css/UserAccount/index.css', ['depends' => 'frontend\assets\FrontAsset']);
-$this->registerJsFile(ASSETS_BASE_URI.'js/UserAccount/highcharts.js', ['depends' => 'frontend\assets\FrontAsset']);
-$this->registerJsFile(ASSETS_BASE_URI.'js/UserAccount/index.js', ['depends' => 'frontend\assets\FrontAsset']);
+$this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/usercenter.css', ['depends' => 'frontend\assets\FrontAsset']);
+$this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/index.css', ['depends' => 'frontend\assets\FrontAsset']);
+$this->registerJsFile(ASSETS_BASE_URI.'js/useraccount/highcharts.js', ['depends' => 'frontend\assets\FrontAsset']);
+$this->registerJsFile(ASSETS_BASE_URI.'js/useraccount/index.js', ['depends' => 'frontend\assets\FrontAsset']);
 
 use common\models\order\OnlineRepaymentPlan as Plan;
 use common\utils\StringUtils;
@@ -30,9 +30,9 @@ use common\utils\StringUtils;
                 <div class="top-box-top">
                     <ul class="top-inner clearfix">
                         <li class="name blackFont">欢迎您，<?= StringUtils::obfsMobileNumber($user->mobile) ?></li>
-                        <li style="margin-left: 19px;"><a href=""><img src="<?= ASSETS_BASE_URI ?>images/UserAccount/pass<?= $user->isIdVerified()?>.png" alt=""></a></li>
-                        <li><a href=""><img src="<?= ASSETS_BASE_URI ?>images/UserAccount/phone1.png" alt=""></a></li>
-                        <li><a href=""><img src="<?= ASSETS_BASE_URI ?>images/UserAccount/card<?= $user->isQpayEnabled() ? 0 : 1 ?>.png" alt=""></a></li>
+                        <li style="margin-left: 19px;"><a href=""><img src="<?= ASSETS_BASE_URI ?>images/useraccount/pass<?= $user->isIdVerified()?>.png" alt=""></a></li>
+                        <li><a href=""><img src="<?= ASSETS_BASE_URI ?>images/useraccount/phone1.png" alt=""></a></li>
+                        <li><a href=""><img src="<?= ASSETS_BASE_URI ?>images/useraccount/card<?= $user->isQpayEnabled() ? 0 : 1 ?>.png" alt=""></a></li>
                     </ul>
                     <a href="" class="recharge-btn redBtnBg">充值</a>
                     <a href="" class="tixian-btn redBtnBg">提现</a>
@@ -51,8 +51,8 @@ use common\utils\StringUtils;
                     <div class="property-top-content blackFont">我的资产</div>
                 </div>
                 <div class="property-bottom">
-                    <div class="property-tip-show grayFont">账户总资产=可用余额+理财资产+冻结资金 <img class="dialog-jiao" src="<?= ASSETS_BASE_URI ?>images/UserAccount/diglog-jiao.png" alt=""></div>
-                    <img class="property-tip" src="<?= ASSETS_BASE_URI ?>images/UserAccount/tip.png" alt="">
+                    <div class="property-tip-show grayFont">账户总资产=可用余额+理财资产+冻结资金 <img class="dialog-jiao" src="<?= ASSETS_BASE_URI ?>images/useraccount/diglog-jiao.png" alt=""></div>
+                    <img class="property-tip" src="<?= ASSETS_BASE_URI ?>images/useraccount/tip.png" alt="">
                     <div class="property-bottom-left" id="container">
                     </div>
                     <div class="property-bottom-right">
@@ -60,23 +60,23 @@ use common\utils\StringUtils;
                             <li class="grayFont">
                                 <div class="property-point orangeBgdeep"></div>
                                 <i>可用余额</i>
-                                <img class="tips" src="<?= ASSETS_BASE_URI ?>images/UserAccount/tip.png" alt="">
+                                <img class="tips" src="<?= ASSETS_BASE_URI ?>images/useraccount/tip.png" alt="">
                                 <i class="redFont"><?= StringUtils::amountFormat3($user->lendAccount->available_balance) ?></i>元
-                                <div class="property-tishi" style="left: -2px;">当前账户可用投资，提现金额 <img class="dialog-jiao" src="<?= ASSETS_BASE_URI ?>images/UserAccount/diglog-jiao.png" alt=""></div>
+                                <div class="property-tishi" style="left: -2px;">当前账户可用投资，提现金额 <img class="dialog-jiao" src="<?= ASSETS_BASE_URI ?>images/useraccount/diglog-jiao.png" alt=""></div>
                             </li>
                             <li class="grayFont">
                                 <div class="property-point greenBg"></div>
                                 <i>理财资产</i>
-                                <img class="tips" src="<?= ASSETS_BASE_URI ?>images/UserAccount/tip.png" alt="">
+                                <img class="tips" src="<?= ASSETS_BASE_URI ?>images/useraccount/tip.png" alt="">
                                 <i class="redFont"><?= StringUtils::amountFormat3($user->lendAccount->investment_balance) ?></i>元
-                                <div class="property-tishi" style="left: -46px;">正在投资中待回收本金总和(含理财，债券转让) <img class="dialog-jiao" src="<?= ASSETS_BASE_URI ?>images/UserAccount/diglog-jiao.png" alt=""></div>
+                                <div class="property-tishi" style="left: -46px;">正在投资中待回收本金总和(含理财，债券转让) <img class="dialog-jiao" src="<?= ASSETS_BASE_URI ?>images/useraccount/diglog-jiao.png" alt=""></div>
                             </li>
                             <li class="grayFont">
                                 <div class="property-point redBg"></div>
                                 <i>冻结资金</i>
-                                <img class="tips" src="<?= ASSETS_BASE_URI ?>images/UserAccount/tip.png" alt="">
+                                <img class="tips" src="<?= ASSETS_BASE_URI ?>images/useraccount/tip.png" alt="">
                                 <i class="redFont"><?= StringUtils::amountFormat3($user->lendAccount->freeze_balance) ?></i>元
-                                <div class="property-tishi" style="left: -18px;">投资资金在项目未满标时锁定的金额<img class="dialog-jiao" src="<?= ASSETS_BASE_URI ?>images/UserAccount/diglog-jiao.png" alt=""></div>
+                                <div class="property-tishi" style="left: -18px;">投资资金在项目未满标时锁定的金额<img class="dialog-jiao" src="<?= ASSETS_BASE_URI ?>images/useraccount/diglog-jiao.png" alt=""></div>
                             </li>
                         </ul>
                     </div>
@@ -87,7 +87,7 @@ use common\utils\StringUtils;
                 <div class="investment-box-top">
                     <div class="investment-box-logo"></div>
                     <div class="investment-box-content blackFont">在投项目</div>
-                    <div class="investment-link"><a href=""><img src="<?= ASSETS_BASE_URI ?>images/UserAccount/jiantou.png" alt=""></a></div>
+                    <div class="investment-link"><a href=""><img src="<?= ASSETS_BASE_URI ?>images/useraccount/jiantou.png" alt=""></a></div>
                 </div>
                 <div class="investment-box-bottom">
                     <div class="investment-bottom-title">

@@ -94,7 +94,7 @@
     width: 100px;
     height: 26px;
     line-height: 26px;
-    background: url("../../images/UserAccount/diglog.png") no-repeat 0 0;
+    background: url("../../images/useraccount/diglog.png") no-repeat 0 0;
     font-size: 12px;
     text-align: center;
 }
@@ -117,7 +117,7 @@
     float: left;
     width: 20px;
     height: 15px;
-    background: url("../../images/UserAccount/icons.png") no-repeat -57px -87px;
+    background: url("../../images/useraccount/icons.png") no-repeat -57px -87px;
     margin-top: 18px;
     margin-left: 21px;
 }
@@ -242,7 +242,7 @@ path {
     float: left;
     width: 20px;
     height: 15px;
-    background: url("../../images/UserAccount/icons.png") no-repeat -23px -87px;
+    background: url("../../images/useraccount/icons.png") no-repeat -23px -87px;
     margin-top: 18px;
     margin-left: 21px;
 }
