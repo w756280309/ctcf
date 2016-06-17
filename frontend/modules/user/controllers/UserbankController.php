@@ -10,6 +10,9 @@ use yii\filters\AccessControl;
 use common\models\user\UserBanks;
 use common\models\user\UserAccount;
 use common\models\bank\QpayConfig;
+use common\models\user\DrawRecord;
+use common\models\draw\DrawManager;
+use common\models\draw\DrawException;
 
 
 class UserbankController extends BaseController
@@ -94,7 +97,7 @@ class UserbankController extends BaseController
         \Yii::$app->session->remove('recharge_back_url');
         $user = $this->getAuthedUser();
         $uid = $user->id;
-        $user_bank = UserBanks::find()->where(['uid' => $uid])->select('id,binding_sn,bank_id,bank_name,card_number')->one();
+        $user_bank = $user->qpay;
         $user_acount = UserAccount::find()->where(['type' => UserAccount::TYPE_LEND, 'uid' => $uid])->select('id,uid,in_sum,available_balance')->one();
         $bank = QpayConfig::findOne($user_bank->bank_id);
         //检查用户是否完成快捷支付

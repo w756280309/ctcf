@@ -11,7 +11,6 @@ use common\models\draw\DrawManager;
 
 class DrawController extends BaseController
 {
-    public $layout = '@app/views/layouts/footer';
 
     public function beforeAction($action)
     {
@@ -30,31 +29,46 @@ class DrawController extends BaseController
      */
     public function actionTixian()
     {
-        $user = $this->user;
+        $this->layout = 'main';
+
+        $user = $this->getAuthedUser();
         $uid = $user->id;
 
         $user_acount = $user->lendAccount;
         $user_bank = $user->qpay;
+        
+        if(Yii::$app->request->isPost) {
+            $draw = new DrawRecord();
+            $draw->uid = $uid;
+            if ($draw->load(Yii::$app->request->post()) && $draw->validate()) {
+                try {
+                    $drawres = DrawManager::initDraw($user_acount, $draw->money, \Yii::$app->params['drawFee']);
+                    $option = array();
+                    if (null != Yii::$app->request->get('token')) {
+                        $option['app_token'] = Yii::$app->request->get('token');
+                    }
+                    $next = Yii::$container->get('ump')->initDraw($drawres, 'pc', $option);
 
-        $draw = new DrawRecord();
-        $draw->uid = $uid;
-        if ($draw->load(Yii::$app->request->post()) && $draw->validate()) {
-            try {
-                $drawres = DrawManager::initDraw($user_acount, $draw->money, \Yii::$app->params['drawFee']);
-                $next = Yii::$container->get('ump')->initDraw($drawres, 'pc');
-                return $this->redirect($next);
-            } catch (DrawException $ex) {
-                if (DrawException::ERROR_CODE_ENOUGH === $ex->getCode()) {
-                    $draw->addError('money', '您的账户余额不足,仅可提现' . $ex->getMessage() . '元');
-                } else {
+                    return ['code' => 0, 'message' => '', 'tourl' => $next];
+                } catch (DrawException $ex) {
+                    if (DrawException::ERROR_CODE_ENOUGH === $ex->getCode()) {
+                        return ['code' => 1, 'message' => '您的账户余额不足,仅可提现'.$ex->getMessage().'元', 'money' => $ex->getMessage()];
+                    } else {
+                        return ['code' => 1, 'message' => $ex->getMessage()];
+                    }
+                } catch (\Exception $ex) {
                     $draw->addError('money', $ex->getMessage());
                 }
-            } catch (\Exception $ex) {
-                $draw->addError('money', $ex->getMessage());
             }
-        }
 
-        return $this->render('tixian', ['bank' => $user_bank, 'user_account' => $user_acount, 'draw' => $draw]);
+            if ($draw->getErrors()) {
+                $message = $draw->firstErrors;
+
+                return ['code' => 1, 'message' => current($message)];
+            }
+        } else {
+            return $this->render('tixian', ['user_bank' => $user_bank, 'user_acount' => $user_acount]);
+        }
     }
 
     /**
@@ -62,6 +76,7 @@ class DrawController extends BaseController
      */
     public function actionDrawNotify($flag)
     {
+        $this->layout = 'main';
         if (!in_array($flag, ['err', 'succ'])) {
             exit('参数错误');
         }

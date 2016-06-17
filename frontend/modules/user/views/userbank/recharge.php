@@ -6,13 +6,13 @@
 <div class="bindCard-box">
     <div class="bindCard-header">
         <div class="bindCard-header-icon"></div>
-        <span class="bindCard-header-font">我的银行卡</span>
+        <span class="bindCard-header-font">快捷充值</span>
     </div>
     <div class="bindCard-content">
         <p class="bindCard-content-header">已绑定银行卡：</p>
         <div class="bindCard-single">
             <span class="single-left">持卡人</span>
-            <span class="single-right">左盟主</span>
+            <span class="single-right"><?= $user_bank->account ?></span>
         </div>
         <!------------------已绑卡开始------------------>
         <?php if($user_bank) { ?>
