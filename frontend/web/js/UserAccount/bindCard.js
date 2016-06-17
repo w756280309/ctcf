@@ -82,16 +82,12 @@ function subForm()
     );
 
     xhr.done(function (data) {
-        alert('转入联动优势进行绑卡操作');
-        setTimeout(function () {
-            window.location.href = data.next;
-        }, 1500);
+        window.location.href = data.next;
     });
 
     xhr.fail(function (jqXHR) {
-        var errMsg = jqXHR.responseJSON && jqXHR.responseJSON.message
-                ? jqXHR.responseJSON.message
-                : '未知错误，请刷新重试或联系客服';
+        var errMsg = jqXHR.responseText ? $.parseJSON(jqXHR.responseText).message
+            : '未知错误，请刷新重试或联系客服';
 
         error(errMsg);
     });

@@ -44,16 +44,19 @@ class BindingController extends BaseController
         $acct_model->account = $safe['realName'];
         $acct_model->account_type = QpayAcct::PERSONAL_ACCOUNT;
 
-        if (
-            $acct_model->load(Yii::$app->request->post())
-            && $acct_model->validate()
-        ) {
+        if ($acct_model->load(Yii::$app->request->post()) && $acct_model->validate()) {
             try {
                 //对于绑卡时候如果没有找到要过滤掉异常
+                $bind = QpayAcct::findOne(['card_number' => $acct_model->card_number, 'status' => QpayAcct::STATUS_SUCCESS]);
+                if ($bind) {
+                    return $this->createErrorResponse('卡号已被占用，请换一张卡片重试');
+                }
+
                 $bin = BankManager::getBankFromCardNo($acct_model->card_number);
                 if (!BankManager::isDebitCard($bin)) {
                     return $this->createErrorResponse('该操作只支持借记卡');
                 }
+
                 if ((int) $bin->bankId !== (int) $acct_model->bank_id) {
                     return $this->createErrorResponse('请选择银行卡对应的银行');
                 }
@@ -95,8 +98,6 @@ class BindingController extends BaseController
             $message = current($modelOrMessage->getFirstErrors());
         }
 
-        return [
-            'message' => $message,
-        ];
+        return ['message' => $message];
     }
 }

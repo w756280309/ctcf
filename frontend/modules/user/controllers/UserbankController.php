@@ -68,6 +68,7 @@ class UserbankController extends BaseController
      * 先决条件:
      * 1. 实名认证
      * 2. 开通免密
+     * 3. 未绑卡
      */
     public function actionBindbank()
     {
