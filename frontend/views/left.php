@@ -16,7 +16,7 @@ $this->registerCssFile(ASSETS_BASE_URI.'css/left.css', ['depends' => 'frontend\a
         <li class="nav-title"><span>资产管理</span></li>
         <li class="nav-content">
             <ul>
-                <li class=""><a href=""><span class="star"></span>我的理财</a></li>
+                <li class="<?= 'user/user/myorder' === Yii::$app->controller->action->getUniqueId() ? 'selected' : '' ?>"><a href="/user/user/myorder"><span class="star"></span>我的理财</a></li>
                 <li class="<?= 'user/coupon/index' === Yii::$app->controller->action->getUniqueId() ? 'selected' : '' ?>"><a href="/user/coupon/"><span class="star"></span>我的代金券</a></li>
                 <li class="<?= 'user/user/mingxi' === Yii::$app->controller->action->getUniqueId() ? 'selected' : '' ?>"><a href="/user/user/mingxi"><span class="star"></span>交易明细</a></li>
             </ul>

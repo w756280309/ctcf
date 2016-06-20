@@ -1,0 +1,287 @@
+.myCoupon-box {
+    border: 1px solid #e3e3e3;
+    background-color: #fff;
+}
+
+.myCoupon-box .myCoupon-header {
+    height: 50px;
+    line-height: 50px;
+    padding-left: 20px;
+    border-bottom: 1px solid #efeff3;
+}
+
+.myCoupon-box .myCoupon-header .myCoupon-header-icon {
+    width: 20px;
+    height: 15px;
+    margin-top: 18px;
+    margin-right: 10px;
+    background: url("../../images/useraccount/background-icon.png") no-repeat -229px 0;
+    float: left;
+}
+
+.myCoupon-box .myCoupon-header .myCoupon-header-font {
+    font-size: 16px;
+    color: #464648;
+}
+
+.myCoupon-box .myCoupon-content {
+    color: #464648;
+    padding: 12px 20px 20px;
+    position: relative;
+}
+
+.myCoupon-box .list-single {
+    color: #555;
+    font-size: 16px;
+    line-height: 16px;
+    width: 100%;
+    height: 36px;
+    position: relative;
+    border-bottom: 1px solid #e3e3e3
+}
+
+.myCoupon-box .list-single a {
+    position: absolute;
+    top: 10px;
+    color: #99999d;
+    cursor: pointer;
+    padding: 0 10px;
+}
+
+.myCoupon-box .list-single a：hover {
+    coor: #ff5736
+}
+
+.myCoupon-box .list-single .a_first {
+    left: 0
+}
+
+.myCoupon-box .list-single .a_second {
+    left: 162px
+}
+
+.myCoupon-box .list-single .a_third {
+    left: 315px
+}
+
+.myCoupon-box .list-single a.select {
+    color: #f44336;
+    padding-bottom: 9px;
+    border-bottom: 2px solid #f44336
+}
+
+.myCoupon-box .display_number {
+    height: 45px;
+    color: #6e6e72;
+    padding: 0 10px;
+}
+
+.myCoupon-box .display_number .p_left {
+    float: left;
+    line-height: 45px;
+}
+
+.myCoupon-box .display_number .p_right {
+    padding-top: 18px;
+    float: right
+}
+
+.myCoupon-box .display_number span {
+    color: #ff2b01;
+    padding-right: 3px
+}
+
+.myCoupon-box table {
+    width: 100%;
+    font-size: 12px;
+}
+
+.myCoupon-box table th {
+    height: 50px;
+    background-color: #e4e4e8;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.myCoupon-box table td {
+    height: 60px;
+}
+
+.myCoupon-box table .text-first {
+    text-align: left;
+    text-indent: 20px;
+}
+
+.myCoupon-box table .text-second {
+    text-align: left;
+}
+
+.myCoupon-box table .text-second a {
+    display: block;
+    width: 190px;
+    height: 40px;
+    padding-left: 16px;
+    line-height: 20px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.myCoupon-box table a {
+    color: #46669f;
+}
+
+.myCoupon-box table a:hover {
+    color: #46669f;
+}
+
+.myCoupon-box .tip-cursor {
+    cursor: pointer;
+    position: relative;
+    display: block;
+    width: 45px;
+    height: 20px;
+    margin: 0 auto;
+}
+
+.myCoupon-box .tip-cursor .tip-font {
+    padding-right: 7px;
+}
+
+.myCoupon-box .tip-cursor .tip-icon-enna {
+    display: block;
+    float: right;
+    width: 10px;
+    height: 10px;
+    margin-top: 7px;
+}
+
+.myCoupon-box .tip-cursor .tip-icon-top {
+    background: url("../../images/useraccount/background-icon.png") no-repeat 0px -131px;
+}
+
+.myCoupon-box .tip-cursor .tip-icon-bottom {
+    background: url("../../images/useraccount/background-icon.png") no-repeat 0px -157px;
+}
+
+.myCoupon-box .inner-box {
+    border: 1px solid #e3e3e3;
+    box-shadow: 0px 0px 6px 0 #e3e3e3;
+    margin-bottom: 5px;
+    position: relative;
+}
+
+.myCoupon-box .inner-box .text-inner-first {
+    padding-right: 40px;
+    text-align: center;
+}
+
+.myCoupon-box .inner-box th {
+    background-color: #fff;
+    height: 50px;
+    line-height: 50px;
+    font-weight: normal;
+}
+
+.myCoupon-box .inner-box td {
+    height: 40px;
+    line-height: 40px;
+    border-top: 1px solid #efeff3;
+}
+
+.myCoupon-box .inner-box .text-inner-second {
+    padding-right: 40px;
+    text-align: right;
+}
+
+.myCoupon-box .td-back-color {
+    background-color: #efeff3;
+}
+
+.myCoupon-box .tr-show {
+    display: none;
+}
+
+.myCoupon-box .inner-box .tip-border-en {
+    position: absolute;
+    top: -7px;
+    right: 109px;
+}
+
+.myCoupon-box .inner-box .yihikuan-sanjiaoxing {
+    position: absolute;
+    top: -7px;
+    right: 186px;
+}
+
+.myCoupon-box .inner-box .tip-border-en .tip-border-inner {
+    position: relative;
+    top: -5px;
+}
+
+.myCoupon-box .inner-box .tip-border-en em {
+    width: 0;
+    height: 0;
+    position: absolute;
+    top: -1px;
+    left: 0;
+    border-style: solid;
+    border-width: 0 12px 12px;
+    border-color: transparent;
+    border-color: transparent \0;
+    border-bottom-color: #e3e3e3
+}
+
+.myCoupon-box .inner-box .tip-border-en span {
+    width: 0;
+    height: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    border-style: solid;
+    border-width: 0 12px 12px;
+    border-color: transparent;
+    border-color: transparent \0;
+    border-bottom-color: #fff
+}
+
+.myCoupon-box .table-kong {
+    background-color: #efeff3;
+    height: 60px;
+    margin-top: 60px;
+}
+
+.myCoupon-box .without-font {
+    position: absolute;
+    top: 216px;
+    left: 0px;
+    right: 0px;
+    text-align: center;
+    font-size: 18px;
+    color: #99999d;
+}
+
+.myCoupon-box .link-tender {
+    display: block;
+    width: 190px;
+    height: 40px;
+    line-height: 40px;
+    background-color: #f44336;
+    color: #fff;
+    text-align: center;
+    margin: 0 auto;
+    position: absolute;
+    top: 265px;
+    left: 0px;
+    right: 0px;
+}
+
+.myCoupon-box .link-tender:hover{
+background-color: #DB1809;
+}
+
+/*待成立的项目*/
+.myCoupon-box .text-third{
+padding-right: 60px;
+    text-align: right;
+}
+

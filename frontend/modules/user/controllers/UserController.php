@@ -93,4 +93,73 @@ class UserController extends BaseController
             'user' => $this->user,
         ]);
     }
+
+    /**
+     * 我的理财页面.
+     * 1. 每页显示10条记录;
+     */
+    public function actionMyorder($type = 1)
+    {
+        if (!in_array($type, [1, 2, 3])) {
+            throw $this->ex404();
+        }
+
+        switch ($type) {
+            case 1:
+                $status = Loan::STATUS_HUAN;
+                $tj = Plan::find()
+                    ->where(['uid' => $this->getAuthedUser()->id, 'status' => Plan::STATUS_WEIHUAN])
+                    ->groupBy('online_pid')
+                    ->select("sum(benxi) as benxi")
+                    ->asArray()
+                    ->all();
+                break;
+            case 2:
+                $status = [Loan::STATUS_NOW, Loan::STATUS_FULL, Loan::STATUS_FOUND];
+                break;
+            case 3:
+                $status = Loan::STATUS_OVER;
+                $tj = Plan::find()
+                    ->where(['uid' => $this->getAuthedUser()->id, 'status' => Plan::STATUS_YIHUAN])
+                    ->groupBy('online_pid')
+                    ->select("sum(benxi) as benxi")
+                    ->asArray()
+                    ->all();
+                break;
+        }
+
+        $o = Ord::tableName();
+        $l = Loan::tableName();
+
+        $query = Ord::find()
+            ->innerJoinWith('loan')
+            ->where(["$o.uid" => $this->getAuthedUser()->id, "$o.status" => Ord::STATUS_SUCCESS])
+            ->andWhere(["$l.status" => $status])
+            ->orderBy(["$o.id" => 'desc']);
+
+        $count = $query->count();
+        if (2 === (int) $type) {
+            $tj['count'] = $count;
+            $tj['totalAmount'] = $query->sum('order_money');
+        }
+
+        $pages = new Pagination(['totalCount' => $count, 'pageSize' => 10]);
+        $model = $query->offset($pages->offset)->limit($pages->limit)->all();
+
+        $plan = [];
+        foreach ($model as $key => $val) {
+            $data = Plan::findAll(['online_pid' => $val->online_pid, 'uid' => $this->getAuthedUser()->id, 'order_id' => $val->id]);
+
+            $plan[$key]['obj'] = $data;
+            $plan[$key]['yihuan'] = 0;
+
+            foreach ($data as $v) {
+                if (Plan::STATUS_YIHUAN === $v->status) {
+                    ++$plan[$key]['yihuan'];
+                }
+            }
+        }
+
+        return $this->render('myorder', ['model' => $model, 'pages' => $pages, 'type' => $type, 'plan' => $plan, 'tj' => $tj]);
+    }
 }

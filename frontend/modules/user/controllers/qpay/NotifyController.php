@@ -30,20 +30,20 @@ class NotifyController extends BaseController
                 if (QpayBinding::STATUS_INIT === (int)$bind->status) {
                     $bind->status = QpayBinding::STATUS_ACK;//处理中
                     if ($bind->save(false)) {
-                        return $this->redirect('/user/userbank/accept?ret=success');
+                        return $this->redirect('/info/success?source=bangka&jumpUrl=/user/userbank/mybankcard');
                     } else {
-                        return $this->redirect('/user/userbank/accept');
+                        return $this->redirect('/info/fail?source=bangka');
                     }
                 } else if(QpayBinding::STATUS_ACK === (int)$bind->status) {
-                    return $this->redirect('/user/userbank/accept?ret=success');
+                    return $this->redirect('/info/success?source=bangka&jumpUrl=/user/userbank/mybankcard');
                 } else {
-                    return $this->redirect('/user/userbank/accept');
+                    return $this->redirect('/info/fail?source=bangka');
                 }
             } else {
                 throw $this->ex404($data['order_id'] . ':无法找到申请数据');
             }
         } else {
-            return $this->redirect('/user/userbank/accept');
+            return $this->redirect('/info/fail?source=bangka');
         }
     }
 

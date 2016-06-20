@@ -214,12 +214,6 @@ class OnlineRepaymentPlan extends \yii\db\ActiveRecord
 
     /**
      * 获取期数.
-     *
-     * @param OnlineProduct $loan
-     *
-     * @return type
-     *
-     * @throws Exception
      */
     public static function getQishu(OnlineProduct $loan)
     {

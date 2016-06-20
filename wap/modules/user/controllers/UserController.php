@@ -4,7 +4,6 @@ namespace app\modules\user\controllers;
 
 use Yii;
 use app\controllers\BaseController;
-use yii\web\Response;
 use common\models\user\MoneyRecord;
 use common\models\order\OnlineOrder;
 use common\models\product\OnlineProduct;
@@ -84,17 +83,17 @@ class UserController extends BaseController
     public function actionOrderdetail($id)
     {
         if (empty($id)) {
-            throw new \yii\web\NotFoundHttpException('The argument is not existed.');
+            throw $this->ex404();
         }
 
         $deal = OnlineOrder::findOne($id);
         if (null === $deal) {
-            return new \yii\web\NotFoundHttpException();    //当对象为空时,抛出404异常
+            throw $this->ex404();    //当对象为空时,抛出404异常
         }
 
         $product = OnlineProduct::findOne($deal->online_pid);
         if (null === $product) {
-            return new \yii\web\NotFoundHttpException();    //当对象为空时,抛出404异常
+            throw $this->ex404();    //当对象为空时,抛出404异常
         }
 
         $totalFund = OrderManager::getTotalInvestment($product, $this->getAuthedUser());
