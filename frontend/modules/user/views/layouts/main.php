@@ -12,7 +12,7 @@ $this->registerCssFile(ASSETS_BASE_URI.'css/left.css', ['depends' => 'frontend\a
                     <li class="nav-content">
                         <ul>
                             <li class="<?= 'user/user/index' === Yii::$app->controller->action->getUniqueId() ? 'selected' : '' ?>"><a href="/user/user"><span class="star"></span>资产总览</a></li>
-                            <li class=""><a href=""><span class="star"></span>充值</a></li>
+                            <li class="<?= 'user/userbank/recharge' === Yii::$app->controller->action->getUniqueId() ? 'selected' : '' ?>"><a href="/user/userbank/recharge/"><span class="star"></span>充值</a></li>
                             <li class=""><a href=""><span class="star"></span>提现</a></li>
                         </ul>
                     </li>
@@ -27,7 +27,7 @@ $this->registerCssFile(ASSETS_BASE_URI.'css/left.css', ['depends' => 'frontend\a
                     <li class="nav-title"><span>账户管理</span></li>
                     <li class="nav-content">
                         <ul>
-                            <li class=""><a href=""><span class="star"></span>我的银行卡</a></li>
+                            <li class="<?= 'user/userbank/mybankcard' === Yii::$app->controller->action->getUniqueId() ? 'selected' : '' ?>"><a href="/user/userbank/mybankcard/"><span class="star"></span>我的银行卡</a></li>
                             <li class=""><a href=""><span class="star"></span>安全中心</a></li>
                             <li class=""><a href=""><span class="star"></span>资金托管账户</a></li>
                         </ul>
