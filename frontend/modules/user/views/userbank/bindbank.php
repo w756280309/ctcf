@@ -39,7 +39,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/useraccount/bindcard.js', ['depends' =
                         <div class="bind-kaihu">卡号</div>
                         <div class="bind-input">
                             <input name="_csrf" type="hidden" id="_csrf" value="<?= Yii::$app->request->csrfToken ?>">
-                            <input id="card_no" type="tel" name='QpayBinding[card_number]'>
+                            <input id="card_no" type="tel" name='QpayBinding[card_number]' placeholder="请输入银行卡号">
                             <input id="bank_id" type="hidden" name='QpayBinding[bank_id]'>
                             <input id="bank_name" type="hidden" name='QpayBinding[bank_name]'>
                             <br>
@@ -54,7 +54,8 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/useraccount/bindcard.js', ['depends' =
                     <p class="charge-explain-title">温馨提示：</p>
                     <p class="charge-explain-content">1、绑定银行卡为快捷卡，绑定后将默认为快捷充值卡和取现卡，如需修改，可申请更换银行卡；</p>
                     <p class="charge-explain-content">2、暂不支持设置多张快捷支付卡；</p>
-                    <p class="charge-explain-content">3、绑定快捷卡后，不影响使用本人其他银行卡或他人银行卡代充值。</p>
+                    <p class="charge-explain-content">3、绑定的银行卡必须为本人身份证办理；</p>
+                    <p class="charge-explain-content">4、绑定快捷卡后，不影响使用本人其他银行卡或他人银行卡代充值。</p>
                 </div>
             </div>
             <!--选择银行卡-->

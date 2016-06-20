@@ -1,0 +1,36 @@
+.server-box {
+    width: 1000px;
+    margin: 0 auto;
+    margin-top: 50px;
+    margin-bottom: 50px;
+    border: 1px solid #e4e4e8;
+    background: #fff;
+    overflow: hidden;
+}
+.server-top {
+    width: 922px;
+    height: 50px;
+    font-size: 16px;
+    color: #464648;
+    line-height: 50px;
+    border-bottom: 1px solid #e4e4e8;
+    padding-left: 28px;
+}
+.server-content {
+    width: 890px;
+    margin: 0 auto;
+    margin-top: 40px;
+    padding-bottom: 70px;
+}
+.server-content p {
+    width: 100%;
+    font-size: 14px;
+    color: #464648;
+    text-align: justify;
+    margin-top: 10px;
+}
+.server-content h5,.server-content h6  {
+    font-size: 14px;
+    color: #464648;
+    margin-top: 10px;
+}

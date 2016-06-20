@@ -3,17 +3,12 @@
 namespace frontend\modules\user\controllers;
 
 use common\models\bank\BankManager;
+use common\models\bank\QpayConfig;
+use common\models\user\UserAccount;
 use common\service\BankService;
 use frontend\controllers\BaseController;
 use Yii;
 use yii\filters\AccessControl;
-use common\models\user\UserBanks;
-use common\models\user\UserAccount;
-use common\models\bank\QpayConfig;
-use common\models\user\DrawRecord;
-use common\models\draw\DrawManager;
-use common\models\draw\DrawException;
-
 
 class UserbankController extends BaseController
 {
@@ -86,7 +81,7 @@ class UserbankController extends BaseController
         $cond = 0 | BankService::IDCARDRZ_VALIDATE_N | BankService::MIANMI_VALIDATE | BankService::BINDBANK_VALIDATE_Y;
         $data = BankService::check($this->getAuthedUser(), $cond);
         if ($data['code']) {
-            return $this->redirect('/user/userbank/');
+            return $this->redirect('/user/userbank/mybankcard');
         }
 
         $banks = BankManager::getQpayBanks();
@@ -99,8 +94,6 @@ class UserbankController extends BaseController
      */
     public function actionRecharge()
     {
-        $this->layout = 'main';
-
         \Yii::$app->session->remove('cfca_qpay_recharge');
         \Yii::$app->session->remove('recharge_back_url');
         $user = $this->getAuthedUser();

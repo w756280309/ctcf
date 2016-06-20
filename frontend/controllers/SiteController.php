@@ -13,6 +13,7 @@ use common\models\user\LoginForm;
 use common\models\user\SignupForm;
 use common\models\user\User;
 use common\service\LoginService;
+use common\service\SmsService;
 use wap\modules\promotion\models\RankingPromo;
 use Yii;
 use yii\web\Controller;
@@ -236,10 +237,20 @@ class SiteController extends Controller
                 $user->save();
 
                 return $this->redirect('/');
+            } else {
+                return ['code' => 1, 'error' => $model->firstErrors];
             }
         }
 
         return $this->render('signup', ['model' => $model, 'captcha' => $captcha]);
+    }
+
+    /**
+     * 注册协议.
+     */
+    public function actionXieyi()
+    {
+        return $this->render('xieyi');
     }
 
     /**
@@ -286,7 +297,7 @@ class SiteController extends Controller
         if (1 === (int) $type) {
             $user = User::findOne(['mobile' => $phone]);
             if (null !== $user) {
-                return ['code' => 1, 'message' => '此手机号已经注册'];
+                return ['code' => 1, 'key' => 'phone', 'message' => '此手机号已经注册'];
             }
         }
 
