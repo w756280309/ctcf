@@ -5,10 +5,8 @@ namespace frontend\modules\user\controllers;
 use Yii;
 use frontend\controllers\BaseController;
 use common\models\user\RechargeRecord;
-use common\utils\TxUtils;
 use common\service\BankService;
 use common\models\bank\BankManager;
-use common\models\bank\EbankConfig;
 
 class RechargeController extends BaseController
 {
@@ -21,10 +19,9 @@ class RechargeController extends BaseController
             Yii::$app->session->set('to_url', '/user/recharge/init');
         }
 
+        //检查是否开户
         $cond = 0 | BankService::IDCARDRZ_VALIDATE_N;
-
         $data = BankService::check($this->user, $cond);
-        //没有开户
         if (1 === $data['code']) {
             return $this->redirect('/user/userbank/identity');
         }
@@ -41,6 +38,7 @@ class RechargeController extends BaseController
 
         $recharge = new RechargeRecord();
         $user_account = $this->user->lendAccount;
+
         //充值成功跳转url
         if (\Yii::$app->session->has('tx_url')) {
             $url = \Yii::$app->session->get('tx_url');
@@ -48,11 +46,16 @@ class RechargeController extends BaseController
             $url = '/user/user/index';
         }
 
+        //检查是否开通免密
+        $cond = 0 | BankService::IDCARDRZ_VALIDATE_N;
+        $data = BankService::check($this->user, $cond);
+
         return $this->render('recharge', [
             'recharge' => $recharge,
             'user_account' => $user_account,
             'bank' => $bank,
-            'url' => $url
+            'url' => $url,
+            'data' => $data,
         ]);
     }
 
@@ -141,13 +144,5 @@ class RechargeController extends BaseController
         }
 
         return $this->redirect('/user/recharge/recharge-err');
-    }
-
-    /**
-     * 充值失败页面.
-     */
-    public function actionRechargeErr()
-    {
-        return $this->render('recharge_err');
     }
 }

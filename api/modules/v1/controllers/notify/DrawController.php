@@ -31,15 +31,22 @@ class DrawController extends Controller
             unset($data['token']);
         }
         $ret = $this->processing($data);
+
         if ($ret instanceof DrawRecord) {
+            if (Yii::$app->session->has('tx_ur')) {
+                $url = Yii::$app->session->get('tx_url');
+                Yii::$app->session->remove('tx_url');
+            } else {
+                $url = '/user/user/index';
+            }
             if ('pc' === $channel) {
-                return $this->redirect(Yii::$app->params['clientOption']['host']['frontend'].'user/draw/draw-notify?flag=succ');
+                return $this->redirect(Yii::$app->params['clientOption']['host']['frontend'].'info/success?source=tixian&jumpUrl=' . $url);
             }
 
             return $this->redirect(Yii::$app->params['clientOption']['host'][$website].'user/userbank/drawres?ret=success' . $app_token);
         } else {
             if ('pc' === $channel) {
-                return $this->redirect(Yii::$app->params['clientOption']['host']['frontend'].'user/draw/draw-notify?flag=err');
+                return $this->redirect(Yii::$app->params['clientOption']['host']['frontend'].'info/fail?source=tixian&jumpUrl');
             }
 
             return $this->redirect(Yii::$app->params['clientOption']['host'][$website].'user/userbank/drawres' . $app_token);

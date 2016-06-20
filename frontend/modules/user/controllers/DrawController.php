@@ -14,7 +14,6 @@ class DrawController extends BaseController
 
     public function beforeAction($action)
     {
-        $cond = 0 | BankService::IDCARDRZ_VALIDATE_N | BankService::BINDBANK_VALIDATE_N;
         if (Yii::$app->controller->action->id == 'tixian') {
             //记录提现来源
             $this->saveReferrer();
@@ -22,9 +21,11 @@ class DrawController extends BaseController
             Yii::$app->session->set('to_url', '/user/draw/tixian');
         }
 
+        //检查是否开户
+        $cond = 0 | BankService::IDCARDRZ_VALIDATE_N;
         $data = BankService::check($this->user, $cond);
         if (1 === $data['code']) {
-            return $this->redirect('/user/user/index');
+            return $this->redirect('/user/userbank/identity');
         }
 
         return parent::beforeAction($action);
@@ -73,7 +74,14 @@ class DrawController extends BaseController
                 return ['code' => 1, 'message' => current($message)];
             }
         } else {
-            return $this->render('tixian', ['user_bank' => $user_bank, 'user_acount' => $user_acount]);
+            //检查是否开通免密
+            $cond = 0 | BankService::IDCARDRZ_VALIDATE_N;
+            $data = BankService::check($this->user, $cond);
+            return $this->render('tixian', [
+                'user_bank' => $user_bank,
+                'user_acount' => $user_acount,
+                'data' => $data,
+            ]);
         }
     }
 

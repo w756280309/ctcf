@@ -2,11 +2,25 @@
     $this->title = '开户';
     \frontend\assets\FrontAsset::register($this);
     $this->registerCssFile('/css/useraccount/chargedeposit.css');
+    //获取目标操作
+    $to_url = Yii::$app->session->get('to_url');
 ?>
 <div class="charge-box">
     <div class="charge-header">
         <div class="charge-header-icon"></div>
-        <span class="charge-header-font">充值</span>
+        <span class="charge-header-font">
+            <?php
+                if ($to_url == '/user/recharge/init') {
+                    echo '充值';
+                }  elseif ($to_url == '/user/draw/tixian') {
+                    echo '提现';
+                }  elseif ($to_url == '/user/userbank/bindbank') {
+                    echo '绑卡';
+                } else {
+                    echo '开户';
+                }
+            ?>
+        </span>
     </div>
     <div class="charge-content">
         <span>开通联动优势资金托管账户，享资金安全保障</span>
@@ -26,5 +40,4 @@
         <span class="span-right">开通第三方资金存管账户后，可避免资金挪用风险，用户完全拥有资金自主使用权，可有效保证投/融资双方资金安全。</span>
         <div class="clear"></div>
     </div>
-</div>
 </div>

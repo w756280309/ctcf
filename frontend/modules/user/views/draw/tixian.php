@@ -9,13 +9,13 @@
     <span class="bindCard-header-font">提现</span>
 </div>
 <div class="bindCard-content">
-    <p class="bindCard-content-header">已绑定银行卡：</p>
-    <div class="bindCard-single">
-        <span class="single-left">持卡人</span>
-        <span class="single-right"><?= $user_bank->account ?></span>
-    </div>
-    <!------------------已绑卡开始------------------>
     <?php if($user_bank) { ?>
+        <p class="bindCard-content-header">已绑定银行卡：</p>
+        <div class="bindCard-single">
+            <span class="single-left">持卡人</span>
+            <span class="single-right"><?= $user_bank->account ?></span>
+        </div>
+        <!------------------已绑卡开始------------------>
         <div class="bindCard-already">
             <span class="single-left">银行卡</span>
             <div class="single-div no-pointer">
@@ -28,7 +28,7 @@
                 <span style="font-size: 12px;">可提现金额：<?= rtrim(rtrim(number_format($user_acount->available_balance, 2), '0'), '.') ?>元</span>
             </div>
         </div>
-        <form method="post" class="cmxform" id="form" action="/user/userbank/tixian" data-to="1">
+        <form method="post" class="cmxform" id="form" action="/user/draw/tixian" data-to="1">
             <input name="_csrf" type="hidden" id="_csrf" value="<?= Yii::$app->request->csrfToken ?>">
             <input name="flag" type="hidden" value="checktrade">
             <div class="row kahao">
@@ -41,12 +41,13 @@
         </form>
         <!------------------已绑卡结束------------------>
     <?php } else { ?>
+        <p class="bindCard-content-header">未绑定银行卡：</p>
         <!------------------未绑卡开始------------------>
         <div class="bindCard-yet">
             <span class="single-left">银行卡</span>
             <a class="single-div">
                 <span class="add-icon"></span>
-                <span class="link-font">点击绑定银行卡</span>
+                <span class="link-font"  onclick="location.href='/user/userbank/bindbank'">点击绑定银行卡</span>
             </a>
             <a class="clear"></a>
         </div>
@@ -62,6 +63,11 @@
 </div>
 </div>
 <script>
+    var mianmi = <?= intval($data['code'])?>;
+    if (mianmi == 1) {
+        mianmi();
+    }
+
     function err_message(message){
         if (message.length > 0) {
             $('.error').show();

@@ -108,3 +108,9 @@ $this->registerCssFile('/css/frontend.css');
         </div>
     </div>
 </div>
+<script>
+    var mianmi = <?= intval($data['code'])?>;
+    if (mianmi == 1) {
+        mianmi();
+    }
+</script>
