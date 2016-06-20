@@ -121,4 +121,18 @@ class UserbankController extends BaseController
             'bank' => $bank
         ]);
     }
+
+    /**
+     * 我的银行卡
+     */
+    public function actionMybankcard()
+    {
+        $this->layout = 'main';
+        $user = $this->getAuthedUser();
+        $user_bank = $user->qpay;
+        return $this->render('mybank', [
+            'user_bank' => $user_bank,
+        ]);
+    }
 }
+
