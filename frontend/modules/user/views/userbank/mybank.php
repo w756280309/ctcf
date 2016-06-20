@@ -1,7 +1,7 @@
 <?php
     $this->title = '我的银行卡';
     \frontend\assets\FrontAsset::register($this);
-    $this->registerCssFile('/css/UserAccount/bindCardAlready.css');
+    $this->registerCssFile('/css/useraccount/bindcardalready.css');
 ?>
 <div class="bindCard-box">
     <div class="bindCard-header">
