@@ -2,8 +2,8 @@
 
 namespace frontend\modules\user\controllers\qpay;
 
+use frontend\controllers\BaseController;
 use Yii;
-use yii\web\Controller;
 use common\models\TradeLog;
 use common\models\epay\EpayUser;
 use common\models\user\User;
@@ -14,7 +14,7 @@ use common\service\BankService;
  *
  * @author zhanghongyu <zhanghongyu@wangcaigu.com>
  */
-class AgreementnotifyController extends Controller
+class AgreementnotifyController extends BaseController
 {
     /**
      * 前台通知地址
@@ -27,11 +27,12 @@ class AgreementnotifyController extends Controller
             $ret = BankService::checkKuaijie($user);
             if (1 === (int)$ret['code']) {
                 //跳到来源页面，如从充值过来的跳到充值页面；
-                if ($url = Yii::$app->session->get('tx_url')) {
+                if (\Yii::$app->session->has('to_url')) {
+                    $url = \Yii::$app->session->get('to_url');
+                    \Yii::$app->session->remove('to_url');
                     return $this->redirect($url);
-                } else {
-                    return $this->redirect($ret['tourl']);
                 }
+                return $this->goReferrer($ret['tourl']);
             }
         } catch (\Exception $ex) {
         }

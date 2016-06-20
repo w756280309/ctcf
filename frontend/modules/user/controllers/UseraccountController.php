@@ -15,6 +15,7 @@ class UseraccountController extends BaseController
      */
     public function actionAccountcenter()
     {
+        $this->layout = 'main';
         $uid = $this->user->id;
         $check_arr = BankService::checkKuaijie($this->user);
 

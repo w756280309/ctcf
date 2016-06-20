@@ -14,11 +14,19 @@ class RechargeController extends BaseController
 {
     public function beforeAction($action)
     {
+        if (Yii::$app->controller->action->id == 'init') {
+            //记录充值来源
+            $this->saveReferrer();
+            //记录转跳url
+            Yii::$app->session->set('to_url', '/user/recharge/init');
+        }
+
         $cond = 0 | BankService::IDCARDRZ_VALIDATE_N;
 
         $data = BankService::check($this->user, $cond);
+        //没有开户
         if (1 === $data['code']) {
-            return $this->redirect('/user/useraccount/accountcenter');
+            return $this->redirect('/user/userbank/identity');
         }
 
         return parent::beforeAction($action);
@@ -33,8 +41,19 @@ class RechargeController extends BaseController
 
         $recharge = new RechargeRecord();
         $user_account = $this->user->lendAccount;
+        //充值成功跳转url
+        if (\Yii::$app->session->has('tx_url')) {
+            $url = \Yii::$app->session->get('tx_url');
+        } else {
+            $url = '/user/user/index';
+        }
 
-        return $this->render('recharge', ['recharge' => $recharge, 'user_account' => $user_account, 'bank' => $bank]);
+        return $this->render('recharge', [
+            'recharge' => $recharge,
+            'user_account' => $user_account,
+            'bank' => $bank,
+            'url' => $url
+        ]);
     }
 
     /**
@@ -65,7 +84,7 @@ class RechargeController extends BaseController
         if ($recharge->load(Yii::$app->request->post()) && $recharge->validate()) {
             //录入recharge_record记录
             if (!$recharge->save(false)) {
-                return $this->redirect('/user/recharge/recharge-err');
+                return $this->redirect('/info/fail?source=chongzhi&jumpUrl=/user/recharge/init');
             }
 
             // 设置session。用来验证数据的不可修改
@@ -78,7 +97,7 @@ class RechargeController extends BaseController
 
             $ump->rechargeViaBpay($recharge, $bank->bank->gateId);
         } else {
-            return $this->redirect('/user/recharge/recharge-err');
+            return $this->redirect('/info/fail?source=chongzhi&jumpUrl=/user/recharge/init');
         }
     }
 

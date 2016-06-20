@@ -2,12 +2,12 @@
 
 namespace frontend\modules\user\controllers\bpay;
 
+use frontend\controllers\BaseController;
 use Yii;
-use yii\web\Controller;
 use common\models\user\RechargeRecord;
 use common\models\TradeLog;
 
-class BrechargeController extends Controller
+class BrechargeController extends BaseController
 {
     /**
      * 融资用户充值前台通知接口
@@ -34,11 +34,11 @@ class BrechargeController extends Controller
             $accService = Yii::$container->get('account_service');
 
             if ($accService->confirmRecharge($recharge)) {
-                return $this->redirect('/user/useraccount/accountcenter');
+                return $this->goReferrer('/user/user/index');
             }
         }
 
-        return $this->redirect('/user/recharge/recharge-err');
+        return $this->redirect('/info/fail?source=chongzhi&jumpUrl=/user/recharge/init');
     }
 
     /**

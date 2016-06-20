@@ -4,7 +4,8 @@ use yii\bootstrap\ActiveForm;
 use yii\web\View;
 
 $this->title = '充值 - 温都金服';
-
+$this->registerJsFile('/js/bootstrap-modal.js');
+$this->registerJsFile('/js/bootstrap-modalmanager.js');
 $_js = <<<'JS'
 $(function() {
     $('#payment-bank').each(function() {
@@ -100,8 +101,8 @@ $this->registerCssFile('/css/frontend.css');
                 <p><h5>充值结果</h5></p>
 
                 <p>
-                    <a class="btn btn-primary" href="/user/recharge/query">充值成功</a>
-                    <a class="btn btn-default" href="/user/recharge/query">充值失败</a>
+                    <a class="btn btn-primary" href="/info/success?source=chongzhi&jumpUrl=<?= $url ?>">充值成功</a>
+                    <a class="btn btn-default" href='/info/fail?source=chongzhi&jumpUrl=/user/recharge/init'>充值失败</a>
                 </p>
             </div>
         </div>

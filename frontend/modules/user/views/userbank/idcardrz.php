@@ -43,7 +43,7 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/useraccount/chargedeposit.css');
             </div>
         </div>
         <div class="deposit-content-right">
-            <span class="deposit-content-link">立即开通</span>
+            <span class="deposit-content-link" style="cursor: pointer">立即开通</span>
         </div>
         <div class="clear"></div>
     </div>
@@ -81,7 +81,7 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/useraccount/chargedeposit.css');
                     } else {
                         //失败
                         var message = data.message;
-                        console.log(message);
+                        $('.identity-text').siblings('.tip_pop').show().find('.identity-content').text(message);
                         if (data.tourl) {
                             location.herf = data.tourl;
                         }

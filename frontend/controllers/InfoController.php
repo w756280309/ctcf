@@ -96,9 +96,9 @@ class InfoController extends Controller
                 'title' => '充值结果',
                 'mainTitle' => '充值失败！',
                 'firstFuTitle' => '如有疑问，请联系客服，电话：400-101-5151(09:00-20:00)',
-                'requireJump' => false,
-                'linkType' => 0,
-                'jumpReferWords' => '',
+                'requireJump' => true,
+                'linkType' => 1,
+                'jumpReferWords' => '重新充值',
             ],
             'tixian' => [
                 'title' => '提现结果',

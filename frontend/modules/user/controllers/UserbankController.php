@@ -32,11 +32,19 @@ class UserbankController extends BaseController
         ];
     }
 
+    //未开户进入页面
+   public function actionIdentity(){
+        $this->layout = 'main';
+        return $this->render('identity');
+   }
+
     /**
      * 实名认证表单页.
      */
     public function actionIdcardrz()
     {
+        $this->layout = 'main';
+
         $cond = 0 | BankService::IDCARDRZ_VALIDATE_Y;
         $data = BankService::check($this->getAuthedUser(), $cond);
         if ($data['code'] == 1) {
@@ -53,7 +61,7 @@ class UserbankController extends BaseController
                 $umpService = new \common\service\UmpService();
                 try {
                     $umpService->register($model);
-                    return ['tourl' => '/user/userbank/rzres?ret=success', 'code' => 0, 'message' => '您已成功开户'];
+                    return ['tourl' => '/info/success?source=tuoguan&jumpUrl=/user/qpay/binding/umpmianmi', 'code' => 0, 'message' => '您已成功开户'];
                 } catch (\Exception $ex) {
                     return ['code' => 1, 'message' => $ex->getMessage()];
                 }

@@ -15,10 +15,16 @@ class DrawController extends BaseController
     public function beforeAction($action)
     {
         $cond = 0 | BankService::IDCARDRZ_VALIDATE_N | BankService::BINDBANK_VALIDATE_N;
+        if (Yii::$app->controller->action->id == 'tixian') {
+            //记录提现来源
+            $this->saveReferrer();
+            //记录目标url
+            Yii::$app->session->set('to_url', '/user/draw/tixian');
+        }
 
         $data = BankService::check($this->user, $cond);
         if (1 === $data['code']) {
-            return $this->redirect('/user/useraccount/accountcenter');
+            return $this->redirect('/user/user/index');
         }
 
         return parent::beforeAction($action);

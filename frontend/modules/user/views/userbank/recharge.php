@@ -9,13 +9,13 @@
         <span class="bindCard-header-font">快捷充值</span>
     </div>
     <div class="bindCard-content">
+        <?php if($user_bank) { ?>
         <p class="bindCard-content-header">已绑定银行卡：</p>
         <div class="bindCard-single">
             <span class="single-left">持卡人</span>
             <span class="single-right"><?= $user_bank->account ?></span>
         </div>
-        <!------------------已绑卡开始------------------>
-        <?php if($user_bank) { ?>
+            <!------------------已绑卡开始------------------>
         <div class="bindCard-already">
             <span class="single-left">银行卡</span>
             <div class="single-div no-pointer">
@@ -41,12 +41,13 @@
         </form>
         <!------------------已绑卡结束------------------>
         <?php } else { ?>
+        <p class="bindCard-content-header">未绑定银行卡：</p>
         <!------------------未绑卡开始------------------>
         <div class="bindCard-yet">
         <span class="single-left">银行卡</span>
         <a class="single-div">
         <span class="add-icon"></span>
-        <span class="link-font">点击绑定银行卡</span>
+        <span class="link-font" onclick="location.href='/user/userbank/bindbank'">点击绑定银行卡</span>
         </a>
         <a class="clear"></a>
         </div>
