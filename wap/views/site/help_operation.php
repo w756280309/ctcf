@@ -81,7 +81,7 @@ $this->title="帮助中心";
 
             <p class="single-tuchu">3、可以使用哪些银行卡充值？充值的限额是多少？
             <p class="single-title">（1）网银充值：
-            <p>平台支持通过国内各大银行借记卡网银向自己账户充值，15家银行可供选择：
+            <p>平台支持通过国内各大银行借记卡网银向自己账户充值，以下银行可供选择：
             <?php if ($ebank) { ?>
             <table>
                 <?php for ($key = 0; $key < count($ebank); $key+=3) { ?>

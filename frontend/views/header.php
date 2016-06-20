@@ -42,7 +42,7 @@ $this->registerCssFile(ASSETS_BASE_URI.'css/header.css', ['depends' => 'frontend
                 <li><a class="<?= 'site/index' === Yii::$app->controller->action->getUniqueId() ? 'header-nav-click' : '' ?>" href="/">首页</a></li>
                 <li><a class="<?= 'licai/index' === Yii::$app->controller->action->getUniqueId() ? 'header-nav-click' : '' ?>" href="/licai/">我要理财</a></li>
                 <li><a class="<?= 'safeguard/index' === Yii::$app->controller->action->getUniqueId() ? 'header-nav-click' : '' ?>" href="/safeguard/">安全保障</a></li>
-                <li><a>帮助中心</a></li>
+                <li><a class="<?= 'helpcenter/operation' === Yii::$app->controller->action->getUniqueId() ? 'header-nav-click' : '' ?>" href="/helpcenter/operation/">帮助中心</a></li>
                 <li class="header-nav-last"><a href="">新手引导</a></li>
             </ul>
         </div>
