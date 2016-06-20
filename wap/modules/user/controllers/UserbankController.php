@@ -50,7 +50,11 @@ class UserbankController extends BaseController
             return ['code' => 1, 'message' => $err['message']];
         }
 
-        return $this->render('idcardrz');
+        return $this->render('idcardrz', [
+            'code' => 0,
+            'message' => '',
+            'tourl' => '',
+        ]);
     }
 
     /**
