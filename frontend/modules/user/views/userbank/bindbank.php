@@ -4,6 +4,7 @@ $this->title = '绑定银行卡';
 $this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/usercenter.css', ['depends' => 'frontend\assets\FrontAsset']);
 $this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/bindcard.css', ['depends' => 'frontend\assets\FrontAsset']);
 $this->registerJsFile(ASSETS_BASE_URI.'js/useraccount/bindcard.js', ['depends' => 'frontend\assets\FrontAsset']);
+$this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/chargedeposit.css');
 ?>
 
 <div class="bindCard-box">
@@ -62,3 +63,9 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/useraccount/bindcard.js', ['depends' =
     </ul>
     <div class="bankIcon-btn">确定</div>
 </div>
+<script>
+    var m = <?= $data['code'] ?>;
+    if (m == 1) {
+        mianmi();
+    }
+</script>

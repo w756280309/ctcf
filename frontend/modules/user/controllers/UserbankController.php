@@ -5,6 +5,7 @@ namespace frontend\modules\user\controllers;
 use common\models\bank\BankCardUpdate;
 use common\models\bank\BankManager;
 use common\models\bank\QpayConfig;
+use common\models\user\QpayBinding;
 use common\models\user\UserAccount;
 use common\service\BankService;
 use frontend\controllers\BaseController;
@@ -158,9 +159,11 @@ class UserbankController extends BaseController
 
         $user = $this->getAuthedUser();
         $user_bank = $user->qpay;
+        $binding = QpayBinding::find()->where(['uid' => $user->id ,'status' => 3])->one();
         return $this->render('mybank', [
             'user_bank' => $user_bank,
             'data' => $data,
+            'binding' => $binding,
         ]);
     }
 

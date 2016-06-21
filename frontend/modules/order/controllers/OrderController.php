@@ -64,28 +64,6 @@ class OrderController extends BaseController
         return $orderManager->createOrder($sn, $money, $this->getAuthedUser()->id, $coupon);
     }
 
-
-    /**
-     * 认购标的结果页.
-     */
-    public function actionOrdererror($osn)
-    {
-        if (empty($osn)) {
-            throw $this->ex404();   //判断参数无效时,抛404异常
-        }
-
-        $order = OnlineOrder::ensureOrder($osn);
-        $deal = null;
-        if (null !== $order && 1 !== $order->status) {
-            $deal = OnlineProduct::findOne($order->online_pid);
-        }
-        if (\Yii::$app->request->isAjax) {
-            return ['status' => $order->status];
-        }
-
-        return $this->render('error', ['order' => $order, 'deal' => $deal, 'ret' => (null !== $order && 1 === $order->status) ? 'success' : 'fail']);
-    }
-
     /**
      * 认购标的中间处理页.
      */
@@ -97,7 +75,7 @@ class OrderController extends BaseController
 
         $order = OnlineOrder::ensureOrder($osn);
         if (OnlineOrder::STATUS_FALSE !== $order->status) {
-            return $this->redirect('/order/order/ordererror?osn=' . $order->sn);
+            return $this->redirect('/info/success?source=touzi&jumpUrl=/licai/index');
         }
 
         return $this->render('wait', ['order' => $order]);

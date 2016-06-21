@@ -13,7 +13,7 @@ use common\models\epay\EpayUser;
 use common\models\user\UserAccount;
 
 /**
- * 绑卡回调控制器4.2.
+ * 快捷充值回调控制器4.2.
  *
  * @author zhanghongyu <zhanghongyu@wangcaigu.com>
  */
@@ -27,10 +27,16 @@ class QpaynotifyController extends Controller
         $data = Yii::$app->request->get();
         $ret = $this->processing($data);
         if ($ret instanceof RechargeRecord) {
-            return $this->redirect('/user/userbank/qpayres?ret=success');
+            if (Yii::$app->session->has('tx_url')) {
+                $url = Yii::$app->session->get('tx_url');
+                Yii::$app->session->remove('tx_url');
+            } else {
+                $url = '/user/user/index';
+            }
+            return $this->redirect('/info/success?source=chongzhi&jumpUrl='.$url);
         }
 
-        return $this->redirect('/user/userbank/qpayres');
+        return $this->redirect('/info/fail?source=chongzhi&jumpUrl=/user/userbank/recharge');
     }
 
     /**

@@ -1,39 +1,24 @@
 <?php
 $this->title= "订单处理中";
-
+\frontend\assets\FrontAsset::register($this);
+$this->registerCssFile('/css/deal/buy.css');
 ?>
-
-<div class="row" id='bind-box'>
-    <div class="col-xs-12">
-        <div>订单处理中……</div>
+<div class="invest-box clearfix">
+    <div class="invest-container">
+        <div class="invest-container-box invest-success">
+            <div class="invest-content">
+                <p class="buy-txt"><span>订单处理中……</span></p>
+                <p class="buy-txt-tip">遇到问题请联系客服，电话：<?= Yii::$app->params['contact_tel'] ?> <a href="javascript:void(0)" onclick="location.replace('/user/user/myorder')" class="bind-close1">查看订单</a></p>
+            </div>
+        </div>
     </div>
-</div>
-<div class="row" id='bind-true'>
-
-</div>
-<div class="row daojishi" id='bind-close1'>
-    <div class="col-xs-12 page_padding">
-        <div>遇到问题请联系客服，电话：<?= Yii::$app->params['contact_tel'] ?></div>
-    </div>
-    <div class="col-xs-4"></div>
-    <div class="col-xs-4">
-        <a href="javascript:void(0)" onclick="location.replace('/user/user/myorder')" class="bind-close1">查看订单</a>
-    </div>
-     <div class="col-xs-4"></div>
-</div>
-<div class="row" id='bind-close1'>
-    <div class="col-xs-4"></div>
-    <div class="col-xs-4">
-        <a href="/" class="bind-close1">回到首页</a>
-    </div>
-    <div class="col-xs-4"></div>
 </div>
 <script type="text/javascript">
 function ret()
 {
     $.ajax({url: "/order/order/ordererror?osn=<?= $order->sn?>", success: function(data){
         if (0 !== data.status) {
-            location.replace("/order/order/ordererror?osn=<?= $order->sn?>");
+            location.replace("/info/success?source=touzi&jumpUrl=/licai/index");
         }
       }});
 }
@@ -41,7 +26,6 @@ $(function () {
     var int = setInterval(ret, 1000);
     setTimeout(function () {
         clearInterval(int);
-        //location.replace("/order/order/ordererror?osn=<?= $order->sn?>");
     }, 5000);//3秒之后自动跳入结果页面
 })
 </script>
