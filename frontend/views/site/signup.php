@@ -49,7 +49,7 @@ use yii\captcha\Captcha;
             <div style="clear: both"></div>
             <div class="popUp xieyi-err">您未同意网站服务协议</div>
             <div class="resign-btn-box">
-                <input type="submit" class="resign-btn" value="注册">
+                <input type="submit" class="resign-btn btn" value="注册">
                 <div class="login-btn">已有账号？<a href="/site/login">登录</a></div>
                 <div style="clear: both"></div>
             </div>

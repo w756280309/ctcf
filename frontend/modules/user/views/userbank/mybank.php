@@ -27,7 +27,7 @@ $this->registerCssFile('/css/useraccount/chargedeposit.css');
                     <span class="single-name"><?= $user_bank->bank_name ?></span>
                     <span class="single-number">尾号<?= $user_bank->card_number?substr($user_bank->card_number, -4):"" ?></span>
                 </div>
-               <!-- <a href="" class="link-changeCard">申请更换银行卡</a>-->
+                <a href="/user/userbank/updatecard" class="link-changeCard">申请更换银行卡</a>
                 <div class="clear"></div>
                 <div class="link-en">
                     <a href="/user/recharge/init" class="link-charge">充值</a>
@@ -48,7 +48,6 @@ $this->registerCssFile('/css/useraccount/chargedeposit.css');
                     <span class="single-name"><?= $binding->bank_name ?></span>
                     <span class="single-number">尾号<?= $binding->card_number?substr($binding->card_number, -4):"" ?></span>
                 </div>
-                <!-- <a href="" class="link-changeCard">申请更换银行卡</a>-->
                 <div class="clear"></div>
                 <div class="link-en">
                 </div>

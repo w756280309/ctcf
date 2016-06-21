@@ -91,7 +91,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/leadpage/leadpage.js', ['depends' => '
     </div>
     <div class="clear"></div>
     <?php if (\Yii::$app->getUser()->isGuest) { ?>
-    <a class="link-register" href="">立即注册</a>
-    <p class="bottom-font">1分钟成为温都金服会员，轻松开始理财</p>
+        <a class="link-register" href="/site/signup">立即注册</a>
+        <p class="bottom-font">1分钟成为温都金服会员，轻松开始理财</p>
     <?php } ?>
 </div>

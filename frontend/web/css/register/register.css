@@ -170,7 +170,6 @@
 .resign-btn {
     float: left;
     width: 240px;
-    margin-top: 30px;
     height: 40px;
     background: #f44336;
     color: #fff;
@@ -205,4 +204,7 @@
 }
 .xieyi-err {
     display: none;
+}
+.btn {
+    margin-top: 30px;
 }
