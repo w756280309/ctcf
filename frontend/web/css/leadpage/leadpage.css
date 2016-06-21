@@ -1,0 +1,143 @@
+body {
+    background-color: #fff;
+}
+
+.container-leadpage {
+    width: 1000px;
+    margin: 70px auto;
+}
+
+.container-leadpage .change-box {
+    margin-left: 40px;
+}
+
+.container-leadpage .change-single {
+    float: left;
+    color: #e04c54;
+}
+
+.container-leadpage .change-single .change-left, .container-leadpage .change-single .change-center, .container-leadpage .change-single .change-right {
+    width: 146px;
+    height: 46px;
+    line-height: 46px;
+    font-size: 18px;
+    text-align: center;
+    margin-right: 10px;
+    background: url("../../images/leadpage/leadpage-back.png");
+    background-repeat: no-repeat;
+}
+
+.container-leadpage .change-single .change-left {
+    background-position: 0 0;
+}
+
+.container-leadpage .change-single .change-center {
+    background-position: 0 -121px;
+}
+
+.container-leadpage .change-single .change-right {
+    background-position: 0 -243px;
+}
+
+.container-leadpage .change-selected {
+    color: #fff
+}
+
+.container-leadpage .change-selected .change-left {
+    background-position: 0 -61px;
+}
+
+.container-leadpage .change-selected .change-center {
+    background-position: 0 -183px;
+}
+
+.container-leadpage .change-selected .change-right {
+    background-position: 0 -299px;
+}
+
+.container-leadpage .tip-font {
+    color: #595757;
+    font-size: 18px;
+    text-align: center;
+    line-height: 86px;
+    padding-top: 17px;
+}
+
+.container-leadpage .tip-font span {
+    color: #f44336;
+}
+
+.container-box {
+    margin-left: 90px;
+}
+
+.container-box div {
+    float: left;
+}
+
+.hidden {
+    display: none;
+}
+
+.container-box .container-none {
+    float: left;
+    display: block;
+    width: 65px;
+    height: 166px;
+    margin-top: 136px;
+    margin-right: 36px;
+}
+
+.container-box .container-left {
+    float: left;
+    display: block;
+    width: 65px;
+    height: 166px;
+    background: url("../../images/leadpage/leadpage-back.png") no-repeat -172px 0;
+    cursor: pointer;
+    margin-top: 136px;
+    margin-right: 36px;
+}
+
+.container-leadpage .change-click {
+    cursor: pointer;
+}
+
+.container-box .container-right {
+    float: left;
+    display: block;
+    width: 65px;
+    height: 166px;
+    background: url("../../images/leadpage/leadpage-back.png") no-repeat -172px -175px;
+    cursor: pointer;
+    margin-top: 136px;
+    margin-left: 36px;
+}
+
+.link-register {
+    display: block;
+    width: 215px;
+    height: 45px;
+    line-height: 45px;
+    font-size: 20px;
+    margin: 50px auto 0;
+    color: #fff;
+    background-color: #f44336;
+    text-align: center;
+    cursor: pointer;
+}
+
+.bottom-font {
+    margin-top: 10px;
+    font-size: 20px;
+    color: #333333;
+    text-align: center;
+    line-height: 60px;
+}
+body{
+    -moz-user-select:none;/*火狐*/
+    -webkit-user-select:none;/*webkit浏览器*/
+    -ms-user-select:none;/*IE10*/
+    -khtml-user-select:none;/*早期浏览器*/
+    user-select:none;
+}
