@@ -329,4 +329,9 @@ class SiteController extends Controller
 
         return SmsService::createSmscode($type, $phone);
     }
+
+    public function actionAppdownload()
+    {
+        return $this->render("appdownload");
+    }
 }

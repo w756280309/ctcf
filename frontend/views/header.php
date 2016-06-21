@@ -7,7 +7,7 @@ $this->registerCssFile(ASSETS_BASE_URI.'css/header.css', ['depends' => 'frontend
 <div id="header-top-box">
     <div class="header-top-box">
         <div class="header-top-left">
-            <span><a href="http://a.app.qq.com/o/simple.jsp?pkgname=com.wz.wenjf">手机客户端</a></span><i>|</i><span>客服热线：<?= Yii::$app->params['contact_tel'] ?>(9:00~20:00)</span>
+            <span><a href="/site/appdownload">手机客户端</a></span><i>|</i><span>客服热线：<?= Yii::$app->params['contact_tel'] ?>(9:00~20:00)</span>
         </div>
         <?php if (Yii::$app->user->isGuest) { ?>
             <div class="header-top-right" id="header-before-login">
