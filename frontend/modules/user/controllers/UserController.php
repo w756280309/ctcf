@@ -150,6 +150,8 @@ class UserController extends BaseController
         if (2 === (int) $type) {
             $tj['count'] = $count;
             $tj['totalAmount'] = $query->sum('order_money');
+        } else {
+            $tj['count'] = $count;
         }
 
         $pages = new Pagination(['totalCount' => $count, 'pageSize' => 10]);
@@ -172,7 +174,9 @@ class UserController extends BaseController
         return $this->render('myorder', ['model' => $model, 'pages' => $pages, 'type' => $type, 'plan' => $plan, 'tj' => $tj]);
     }
 
-    //资金托管账户
+    /**
+     * 资金托管账户.
+     */
     public function actionAccount()
     {
         //检查是否开户

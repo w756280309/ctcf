@@ -160,7 +160,15 @@ class UserbankController extends BaseController
 
         $user = $this->getAuthedUser();
         $user_bank = $user->qpay;
-        $binding = QpayBinding::find()->where(['uid' => $user->id ,'status' => 3])->one();
+        $binding = BankCardUpdate::find()
+            ->where(['oldSn' => $user_bank->binding_sn, 'uid' => $user->id])
+            ->orderBy('id desc')->one();
+
+        if ($binding && BankCardUpdate::STATUS_ACCEPT === $binding->status) {
+        } else {
+            $binding = null;
+        }
+
         return $this->render('mybank', [
             'user_bank' => $user_bank,
             'data' => $data,

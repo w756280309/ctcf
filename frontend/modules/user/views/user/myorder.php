@@ -25,12 +25,12 @@ use common\widgets\Pager;
         <?php if (1 === (int) $type) { ?>
             <div class="display_number">
                 <p class="p_left">待回款总金额：<span><?= StringUtils::amountFormat3(array_sum(array_column($tj, 'benxi'))) ?></span>元</p>
-                <p class="p_right">共计：<span><?= count($tj) ?></span>笔</p>
+                <p class="p_right">共计：<span><?= $tj['count'] ?></span>笔</p>
             </div>
         <?php } else { ?>
             <div class="display_number">
                 <p class="p_left">已还清总金额：<span><?= StringUtils::amountFormat3(array_sum(array_column($tj, 'benxi'))) ?></span>元</p>
-                <p class="p_right">共计：<span><?= count($tj) ?></span>笔</p>
+                <p class="p_right">共计：<span><?= $tj['count'] ?></span>笔</p>
             </div>
         <?php } ?>
         <table>

@@ -40,7 +40,7 @@ use yii\captcha\Captcha;
                 <div style="clear: both"></div>
                 <div class="popUp password-err"></div>
             </div>
-            <input type="hidden" name="agree" id="agree" class="agree" value="yes">
+            <input class="agree" type="hidden" checked="checked">
             <div class="resign-btn-box">
                 <input type="submit" class="resign-btn" value="确认重置">
             </div>

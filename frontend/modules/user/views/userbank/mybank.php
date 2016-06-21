@@ -1,9 +1,12 @@
 <?php
-    $this->title = '我的银行卡';
-    \frontend\assets\FrontAsset::register($this);
-    $this->registerCssFile('/css/useraccount/bindcardalready.css');
-    $this->registerCssFile('/css/useraccount/chargedeposit.css');
+$this->title = '我的银行卡';
+
+\frontend\assets\FrontAsset::register($this);
+
+$this->registerCssFile('/css/useraccount/bindcardalready.css');
+$this->registerCssFile('/css/useraccount/chargedeposit.css');
 ?>
+
 <div class="bindCard-box">
     <div class="bindCard-header">
         <div class="bindCard-header-icon"></div>
@@ -30,7 +33,7 @@
                 </div>
             </div>
             <!------------------已绑卡结束------------------>
-        <?php } elseif($binding) { ?>
+        <?php } elseif ($binding) { ?>
             <p class="bindCard-content-header">绑卡处理中：</p>
             <div class="bindCard-single">
                 <span class="single-left">持卡人</span>

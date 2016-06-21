@@ -11,19 +11,6 @@ $(function() {
         $('.resign-btn').css({background:'#f44336'});
     });
 
-    var flags = false;
-    $('.resign-check').on('click',function() {
-        if(!flags){
-            $('.resign-check img')[0].src='../../images/login/check-false.png';
-            $('.agree').val('no');
-            flags = true;
-        }else if(flags){
-            $('.resign-check img')[0].src='../../images/login/check-true.png';
-            $('.agree').val('yes');
-            flags = false;
-        }
-    });
-
     $('#form').on('submit', function(e) {
         e.preventDefault();
 
@@ -116,7 +103,9 @@ function validateFormForSms()
 
 function validateForm()
 {
-    validateFormForSms();
+    if (!validateFormForSms()) {
+        return false;
+    }
 
     if ($('#sms').val() === '') {
         $('#sms').addClass('error-border');
@@ -165,7 +154,7 @@ function validateForm()
         $('.password-box .popUp').html('');
     }
 
-    if ($('.agree').val() !== 'yes') {
+    if ($('.agree').attr('checked') !== 'checked') {
         $('.xieyi-err').show();
         return false;
     } else {

@@ -42,8 +42,7 @@ use yii\captcha\Captcha;
             </div>
             <div class="resign-bottom">
                 <div class="resign-check">
-                    <input type="hidden" name="agree" id="agree" class="agree" value="yes">
-                    <img src="../../images/login/check-true.png" alt="">我已经阅读并同意
+                    <input class="agree" type="checkbox" checked="checked"> 我已经阅读并同意
                 </div>
                 <a href="/site/xieyi" target="_blank">《网站服务协议》</a>
             </div>
