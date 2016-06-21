@@ -35,6 +35,7 @@ class UserController extends BaseController
     public function actionMingxi()
     {
         $this->layout = 'main';
+
         $query = MoneyRecord::find()
             ->where(['uid' => Yii::$app->user->identity->id])
             ->andWhere(['in', 'type', MoneyRecord::getLenderMrType()]);
@@ -83,8 +84,10 @@ class UserController extends BaseController
         //清空session中存储的url信息
         Yii::$app->session->remove('tx_url');//记录来源
         Yii::$app->session->remove('to_url');//记录目的地
+        $this->layout = 'main';
         $o = Ord::tableName();
         $l = Loan::tableName();
+
         $orders = Ord::find()
             ->innerJoinWith('loan')
             ->where(["$o.uid" => $this->user->id, "$l.status" => [2, 3, 5, 7]])
@@ -107,6 +110,8 @@ class UserController extends BaseController
         if (!in_array($type, [1, 2, 3])) {
             throw $this->ex404();
         }
+
+        $this->layout = 'main';
 
         switch ($type) {
             case 1:

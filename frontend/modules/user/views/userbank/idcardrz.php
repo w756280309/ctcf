@@ -1,9 +1,9 @@
 <?php
 \frontend\assets\FrontAsset::register($this);
 $this->registerJsFile(ASSETS_BASE_URI . 'js/useraccount/deposit.js');
-$this->registerCssFile(ASSETS_BASE_URI . 'css/useraccount/usercenter.css');
 $this->registerCssFile(ASSETS_BASE_URI . 'css/useraccount/chargedeposit.css');
 ?>
+
 <div class="deposit-box">
     <div class="deposit-header">
         <div class="deposit-header-icon"></div>
@@ -61,6 +61,7 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/useraccount/chargedeposit.css');
         <div class="clear"></div>
     </div>
 </div>
+
 <script>
     $(function () {
         /*点击立即开通*/

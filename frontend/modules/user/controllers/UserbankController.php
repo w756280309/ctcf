@@ -4,6 +4,7 @@ namespace frontend\modules\user\controllers;
 
 use common\models\bank\BankCardUpdate;
 use common\models\bank\BankManager;
+use common\models\bank\EbankConfig;
 use common\models\bank\QpayConfig;
 use common\models\user\QpayBinding;
 use common\models\user\UserAccount;
@@ -192,6 +193,20 @@ class UserbankController extends BaseController
         $banks = BankManager::getQpayBanks();
 
         return $this->render('updatecard', ['banklist' => $banks]);
+    }
+
+    /**
+     * 银行限额.
+     * 包括快捷充值限额以及网银充值限额.
+     */
+    public function actionXiane()
+    {
+        $this->layout = 'main';
+
+        $qpayBanks = QpayConfig::find()->all();
+        $bpayBanks = EbankConfig::findAll(['typePersonal' => 1]);
+
+        return $this->render('xiane', ['qpay' => $qpayBanks, 'bpay' => $bpayBanks]);
     }
 }
 

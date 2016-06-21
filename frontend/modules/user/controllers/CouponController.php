@@ -34,6 +34,7 @@ class CouponController extends BaseController
      */
     public function actionIndex()
     {
+        $this->layout = 'main';
         $uc = UserCoupon::tableName();
 
         $query = UserCoupon::find()

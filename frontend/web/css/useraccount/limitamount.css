@@ -1,0 +1,80 @@
+.clearfix:before, .clearfix:after {
+    content: '';
+    display: table;
+}
+.clearfix:after {
+    clear: both;
+}
+.clearfix {
+    *zoom: 1;
+}
+.limit-box{
+    width: 798px;
+    border: 1px solid #e3e3e3;
+    background: #fff;
+}
+.limit-box .limit-header {
+    height: 50px;
+    line-height: 50px;
+    padding-left: 20px;
+    border-bottom: 1px solid #efeff3;
+}
+
+.limit-box .limit-header .limit-header-icon {
+    width: 20px;
+    height: 15px;
+    margin-top: 18px;
+    margin-right: 10px;
+    background:url(../../images/useraccount/limit.png) no-repeat 0 0;
+    float: left;
+}
+.limit-box .limit-header .limit-header-font {
+    font-size: 16px;
+    color: #464648;
+}
+.limit-inner {
+    width: 770px;
+    margin: 0 auto;
+}
+.limit-title {
+    padding-left:30px;
+    height: 60px;
+    line-height: 60px;
+    color: #6e6e72;
+    font-size: 14px;
+}
+.limit-content {
+    width: 100%;
+    margin-left: 2px;
+}
+.limit-content li {
+    float: left;
+    width: 33%;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    font-size: 14px;
+    color: #6e6e72;
+    border: 1px solid #efeff3;
+}
+.limit-right {
+    border-right:0!important;
+}
+.limit-bottom {
+    border-bottom: 0!important;
+}
+.limit-tishi {
+    padding-left:30px;
+    color: #6e6e72;
+    margin-top: 20px;
+    margin-bottom: 56px;
+}
+.limit-tishi h3 {
+    font-size: 14px;
+}
+.limit-tishi div {
+    font-size: 14px;
+}
+.limit-gray {
+    background: #f8f9f9;
+}
