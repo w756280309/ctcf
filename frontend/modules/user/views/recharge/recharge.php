@@ -34,38 +34,58 @@ $(function() {
 })
 JS;
 
+\frontend\assets\FrontAsset::register($this);
 $this->registerJs($_js, View::POS_END, 'body_close');
 $this->registerCssFile('/css/useraccount/chargedeposit.css');
 $this->registerCssFile('/css/frontend.css');
+$this->registerCssFile('/css/useraccount/mytrade.css');
+$this->registerCssFile('/css/useraccount/bindcardalready.css');
 ?>
-<div class="container">
-    <div class="main">
-        <div class="page-heading">
-            <h2>账户充值</h2>
+<style>
+    body{background: #f6f7f8 !important;}
+    .bindCard-header{
+        height: 50px;
+        line-height: 50px;
+        padding-left: 20px;
+        border-bottom: 1px solid #efeff3;
+    }
+    .bindCard-header-icon{
+        width: 20px;
+        height: 15px;
+        margin-top: 18px;
+        margin-right: 10px;
+        background: url("../../images/useraccount/background-icon.png") no-repeat -90px 0;
+        float: left;
+    }
+    #payment-bank{
+        margin: 20px auto;
+    }
+    .myCoupon-content h3{
+        padding: 10px;
+    }
+</style>
+<div class="myCoupon-box">
+    <div class="bindCard-header">
+        <div class="bindCard-header-icon"></div>
+        <span class="bindCard-header-font" style="font-size: 16px;">充值</span>
+    </div>
+    <div class="myCoupon-content">
+        <div class="list-single">
+            <a class="a_first select" href="/user/recharge/init">个人网银</a>
+            <a class="a_second " href="/user/userbank/recharge">快捷充值</a>
         </div>
-
-        <h3>付款方式</h3>
-        <div id="payment-method" class="section">
-            <ul class="picker">
-                <li class="picker-item picked" id='tobank' data-url='<?= $resp ?>'>个人网银</li>
-                <li class="picker-item" onclick="location.href='/user/userbank/recharge'">快捷充值</li>
-            </ul>
-        </div>
-
-        <h3>网银充值</h3>
         <div id="payment-bank" class="section">
+            <h3>网银充值</h3>
             <ul class="picker">
                 <?php foreach($bank as $val): ?>
-                <li class="picker-item <?= (strval($val->bankId) === $recharge->bank_id)?"picked":"" ?>" data-bankid="<?= $val->bankId ?>"><img src="<?= ASSETS_BASE_URI ?>images/banks/<?= $val->bankId ?>.jpg" alt="<?= $val->bank->bankName ?>"></li>
+                    <li class="picker-item <?= (strval($val->bankId) === $recharge->bank_id)?"picked":"" ?>" data-bankid="<?= $val->bankId ?>"><img src="<?= ASSETS_BASE_URI ?>images/banks/<?= $val->bankId ?>.jpg" alt="<?= $val->bank->bankName ?>"></li>
                 <?php endforeach; ?>
             </ul>
         </div>
-
         <h3>限额提醒</h3>
         <div class="section">
             <p style="margin-left:63px">具体限额以您在银行协定的额度为准，详细情况下请进入您的网上银行查看，如有疑问，请联系客服：<?= Yii::$app->params['contact_tel'] ?>。</p>
         </div>
-
         <h3>请填写充值金额</h3>
         <div class="section">
             <?php $form = ActiveForm::begin(['id' => 'recharge_form', 'action' => '/user/recharge/apply', 'options' => ['target' => '_blank']]); ?>
@@ -94,7 +114,6 @@ $this->registerCssFile('/css/frontend.css');
         </div>
     </div>
 </div>
-
 <div class="modal fade" id="bind-card-modal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">

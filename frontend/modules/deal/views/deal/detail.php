@@ -269,10 +269,9 @@ FrontAsset::register($this);
             }
         });
 
+        var guest = <?= intval(Yii::$app->user->isGuest)?>;//登录状态
         $('#deal_money').blur(function () {
-            var guest = <?= intval(Yii::$app->user->isGuest)?>;
             if (guest == 1){
-                login();
                 return false;
             }
             //判断起投金额

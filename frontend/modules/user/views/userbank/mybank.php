@@ -30,6 +30,8 @@ $this->registerCssFile('/css/useraccount/chargedeposit.css');
                <!-- <a href="" class="link-changeCard">申请更换银行卡</a>-->
                 <div class="clear"></div>
                 <div class="link-en">
+                    <a href="/user/recharge/init" class="link-charge">充值</a>
+                    <a href="/user/draw/tixian" class="link-withdraw">提现</a>
                 </div>
             </div>
             <!------------------已绑卡结束------------------>

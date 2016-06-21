@@ -33,7 +33,7 @@
             <input name="_csrf" type="hidden" id="_csrf" value="<?= Yii::$app->request->csrfToken ?>">
             <input name="flag" type="hidden" value="checktrade">
             <div class="row kahao">
-                <p class="bindCard-content-header">提现金额：<input style="width: 244px;height: 38px;border: 1px solid #e4e4e8;background: #efeff3;text-align: right;outline: none;color: #6e6e72;padding: 0 15px;font-size: 24px;" type="text" id="fund" name="DrawRecord[money]"  placeholder="输入提现金额"/></p>
+                <p class="bindCard-content-header">提现金额：<input style="width: 244px;height: 34px;border: 1px solid #e4e4e8;background: #efeff3;text-align: right;outline: none;color: #6e6e72;padding: 0 15px;font-size: 16px;" type="text" id="fund" name="DrawRecord[money]"  placeholder="输入提现金额"/></p>
                 <p class="error" style="display: none; padding-left: 70px;color: red;"></p>
             </div>
             <div class="link-en">
@@ -58,9 +58,11 @@
 </div>
 <div class="charge-explain">
     <p class="charge-explain-title">温馨提示：</p>
-    <p class="charge-explain-content">1、绑定银行卡为快捷卡，绑定后将默认为快捷充值卡和取现卡，如需修改，可申请更换银行卡；</p>
-    <p class="charge-explain-content">2、暂不支持设置多张快捷支付卡；</p>
-    <p class="charge-explain-content">3、绑定快捷卡后，不影响使用本人其他银行卡或他人银行卡代充值。</p>
+    <p class="charge-explain-content">身份认证、提现银行卡绑定均设置成功后，才能进行提现；</p>
+    <p class="charge-explain-content">工作日内17:00之前申请提现，当日到账；工作日17:00之后申请提现，会在下一个工作日到账。如遇双休日或法定节假日顺延。</p>
+    <p class="charge-explain-content">提现手续费每笔2元，由第三方资金托管平台收取；</p>
+    <p class="charge-explain-content"> 特殊声明：禁止洗钱、信用卡套现、虚假交易等行为，一经发现并确认，将终止该账户的使用；</p>
+    <p class="charge-explain-content">如需咨询请联系客服400-101-5151 (周一至周日9:00-20:00，假日另行告知)。</p>
 </div>
 </div>
 <script>

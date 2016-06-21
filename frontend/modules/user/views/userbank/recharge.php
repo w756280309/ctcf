@@ -3,12 +3,45 @@
     \frontend\assets\FrontAsset::register($this);
     $this->registerCssFile('/css/useraccount/bindcardalready.css');
 ?>
+<style>
+    .list-single {
+        color: #555;
+        font-size: 16px;
+        line-height: 16px;
+        width: 100%;
+        height: 36px;
+        position: relative;
+        border-bottom: 1px solid #e3e3e3;
+    }
+    .list-single a {
+        position: absolute;
+        top: 10px;
+        color: #99999d;
+        cursor: pointer;
+        padding: 0 10px;
+    }
+    .list-single a.select {
+        color: #f44336;
+        padding-bottom: 9px;
+        border-bottom: 2px solid #f44336;
+    }
+    .list-single .a_first {
+        left: 0;
+    }
+     .list-single .a_second {
+        left: 162px;
+    }
+</style>
 <div class="bindCard-box">
     <div class="bindCard-header">
         <div class="bindCard-header-icon"></div>
-        <span class="bindCard-header-font">快捷充值</span>
+        <span class="bindCard-header-font">充值</span>
     </div>
     <div class="bindCard-content">
+        <div class="list-single">
+            <a class="a_first " href="/user/recharge/init">个人网银</a>
+            <a class="a_second select" href="/user/userbank/recharge">快捷充值</a>
+        </div>
         <?php if($user_bank) { ?>
         <p class="bindCard-content-header">已绑定银行卡：</p>
         <div class="bindCard-single">
@@ -32,7 +65,7 @@
             <input name="_csrf" type="hidden" id="_csrf" value="<?= Yii::$app->request->csrfToken ?>">
             <input name="from" type="hidden" value="<?= Yii::$app->request->get('from'); ?>">
             <div class="row kahao">
-                <p class="bindCard-content-header">充值金额：<input style="width: 244px;height: 38px;border: 1px solid #e4e4e8;background: #efeff3;text-align: right;outline: none;color: #6e6e72;padding: 0 15px;font-size: 24px;" type="text" id="fund" name='RechargeRecord[fund]'  placeholder="输入充值金额"/></p>
+                <p class="bindCard-content-header">充值金额：<input style="width: 244px;height: 34px;border: 1px solid #e4e4e8;background: #efeff3;text-align: right;outline: none;color: #6e6e72;padding: 0 15px;font-size: 16px;" type="text" id="fund" name='RechargeRecord[fund]'  placeholder="输入充值金额"/></p>
                 <p class="error" style="display: none; padding-left: 70px;color: red;"></p>
             </div>
             <div class="link-en">
@@ -57,9 +90,11 @@
     </div>
     <div class="charge-explain">
         <p class="charge-explain-title">温馨提示：</p>
-        <p class="charge-explain-content">1、绑定银行卡为快捷卡，绑定后将默认为快捷充值卡和取现卡，如需修改，可申请更换银行卡；</p>
-        <p class="charge-explain-content">2、暂不支持设置多张快捷支付卡；</p>
-        <p class="charge-explain-content">3、绑定快捷卡后，不影响使用本人其他银行卡或他人银行卡代充值。</p>
+        <ul>
+            <li>投资人充值手续费由温都金服垫付；</li>
+            <li>最低充值金额应大于等于1元；</li>
+            <li>充值期间请勿关闭浏览器，待充值成功并返回账户中心后，所充资金才能入账。如有疑问，请联系客服<?= Yii::$app->params['contact_tel'] ?>。</li>
+        </ul>
     </div>
 </div>
 <script>

@@ -36,6 +36,7 @@ class RechargeController extends BaseController
      */
     public function actionInit()
     {
+        $this->layout = 'main';
         $bank = BankManager::getEbank('personal');
 
         $recharge = new RechargeRecord();

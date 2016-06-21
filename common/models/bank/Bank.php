@@ -85,7 +85,7 @@ class Bank extends \yii\db\ActiveRecord
         if (null !== $qPayConfig) {
             $singleLimit = $qPayConfig->singleLimit;
             $dailyLimit = $qPayConfig->dailyLimit;
-            return number_format($singleLimit/10000,0) . ' 万/次，' . number_format($dailyLimit/10000,0) . ' 万/日';
+            return floatval($singleLimit/10000) . ' 万/次，' . floatval($dailyLimit/10000) . ' 万/日';
         }
         return '无';
     }
