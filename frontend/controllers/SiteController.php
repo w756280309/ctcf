@@ -242,7 +242,33 @@ class SiteController extends Controller
             }
         }
 
-        return $this->render('signup', ['model' => $model, 'captcha' => $captcha]);
+        return $this->render('signup', ['captcha' => $captcha]);
+    }
+
+    /**
+     * 找回密码.
+     */
+    public function actionResetpass()
+    {
+        if (!\Yii::$app->user->isGuest) {
+            return $this->goHome();
+        }
+
+        $model = new SignupForm();
+        $captcha = new CaptchaForm();
+
+        if ($model->load(Yii::$app->request->post())) {
+            $model->reset_flag = 1;
+            if ($model->resetpass()) {
+                \Yii::$app->user->logout();
+
+                return $this->redirect('/site/login');
+            } else {
+                return ['code' => 1, 'error' => $model->firstErrors];
+            }
+        }
+
+        return $this->render('resetpass', ['captcha' => $captcha]);
     }
 
     /**

@@ -45,7 +45,7 @@ use common\widgets\Pager;
                             <tr>
                                 <th class="text-first" width="230">项目名称</th>
                                 <th class="text-align-lf" width="100">到期时间</th>
-                                <th class="text-align-ct" width="70">年化收益率</th>
+                                <th class="text-align-ct" width="70">年化率</th>
                                 <th class="text-align-rg" width="110">投资金额(元)</th>
                                 <th class="text-align-rg" width="100">预期收益(元)</th>
                                 <th class="text-align-ct" width="90">还款计划</th>
@@ -55,7 +55,7 @@ use common\widgets\Pager;
                             <tr>
                                 <th class="text-first" width="230">项目名称</th>
                                 <th class="text-align-lf" width="100">还款时间</th>
-                                <th class="text-align-ct" width="70">年化收益率</th>
+                                <th class="text-align-ct" width="70">年化率</th>
                                 <th class="text-align-rg" width="110">投资金额(元)</th>
                                 <th class="text-align-rg" width="100">实际收益(元)</th>
                                 <th class="text-align-ct" width="100">还款计划</th>
@@ -120,7 +120,7 @@ use common\widgets\Pager;
                     <?php if (empty($model)) : ?>
                         <div class="table-kong"></div>
                         <div class="table-kong"></div>
-                        <p class="without-font">暂无交易明细</p>
+                        <p class="without-font">暂无投资明细</p>
                         <a class="link-tender" href="/licai/">立即投资</a>
                     <?php endif; ?>
                     <?php } elseif (2 === (int) $type) { ?>
@@ -132,7 +132,7 @@ use common\widgets\Pager;
                         <tr>
                             <th class="text-first" width="240">项目名称</th>
                             <th class="text-align-ct" width="110">项目期限</th>
-                            <th class="text-align-ct" width="120">年化收益率</th>
+                            <th class="text-align-ct" width="120">年化率</th>
                             <th class="text-third" width="120">投资金额(元)</th>
                             <th class="text-align-ct" width="">募集进度</th>
                         </tr>
@@ -149,7 +149,7 @@ use common\widgets\Pager;
                     <?php if (empty($model)) : ?>
                         <div class="table-kong"></div>
                         <div class="table-kong"></div>
-                        <p class="without-font">暂无交易明细</p>
+                        <p class="without-font">暂无投资明细</p>
                         <a class="link-tender" href="/licai/">立即投资</a>
                     <?php endif; ?>
                     <?php } ?>

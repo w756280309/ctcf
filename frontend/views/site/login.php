@@ -49,7 +49,7 @@ $this->title = '登录 - 温都金服';
                                 记住用户名
                             </div>
                             <div class="login-bottom-right">
-                                <i><a class="mima" href="">忘记密码</a></i>
+                                <i><a class="mima" href="/site/resetpass">忘记密码</a></i>
                             </div>
                         </div>
                     </div>

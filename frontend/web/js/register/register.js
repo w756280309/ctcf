@@ -177,11 +177,12 @@ function validateForm()
 
 function createSmscode(fun)
 {
+    var type = $("#sms-type").val();
     var phone = $("#phone").val();
     var captchaCode = $("#verity").val();
     var csrf = $("#csrf").val();
 
-    $.post("/site/create-sms", {type: 1, phone: phone, captchaCode: captchaCode, _csrf: csrf}, function (result) {
+    $.post("/site/create-sms", {type: type, phone: phone, captchaCode: captchaCode, _csrf: csrf}, function (result) {
         if (0 === result.code) {
             fun();
         } else {

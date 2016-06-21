@@ -1,5 +1,5 @@
 <?php
-$this->title = '注册 - 温都金服';
+$this->title = '找回密码 - 温都金服';
 
 $this->registerCssFile(ASSETS_BASE_URI.'css/register/register.css', ['depends' => 'frontend\assets\FrontAsset']);
 $this->registerJsFile(ASSETS_BASE_URI.'js/register/register.js', ['depends' => 'frontend\assets\FrontAsset']);
@@ -9,9 +9,9 @@ use yii\captcha\Captcha;
 ?>
 
 <div class="register-box">
-    <h3 class="register-top">注册</h3>
-    <?php $form = ActiveForm::begin(['action' => "/site/signup", 'id' => 'form']); ?>
-    <input type="hidden" id="sms-type" value="1">
+    <h3 class="register-top">找回密码</h3>
+    <?php $form = ActiveForm::begin(['action' => "/site/resetpass", 'id' => 'form']); ?>
+    <input type="hidden" id="sms-type" value="2">
         <div class="register-inner">
             <div class="phone-box">
                 <label for="phone">手机号码</label>
@@ -35,24 +35,14 @@ use yii\captcha\Captcha;
                 <div class="popUp sms-err"></div>
             </div>
             <div class="password-box">
-                <label for="password">登录密码</label>
+                <label for="password">新登录密码</label>
                 <input id="password" name="SignupForm[password]" maxlength="20" type="password" placeholder="请输入6到20位的密码" AUTOCOMPLETE="off">
                 <div style="clear: both"></div>
                 <div class="popUp password-err"></div>
             </div>
-            <div class="resign-bottom">
-                <div class="resign-check">
-                    <input type="hidden" name="agree" id="agree" class="agree" value="yes">
-                    <img src="../../images/login/check-true.png" alt="">我已经阅读并同意
-                </div>
-                <a href="/site/xieyi">《网站服务协议》</a>
-            </div>
-            <div style="clear: both"></div>
-            <div class="popUp xieyi-err">请查看用户注册协议</div>
+            <input type="hidden" name="agree" id="agree" class="agree" value="yes">
             <div class="resign-btn-box">
-                <input type="submit" class="resign-btn" value="注册">
-                <div class="login-btn">已有账号？<a href="/site/login">登录</a></div>
-                <div style="clear: both"></div>
+                <input type="submit" class="resign-btn" value="确认重置">
             </div>
         </div>
     <?php ActiveForm::end(); ?>
