@@ -1,7 +1,7 @@
 <?php
     $this->title = '提现';
     \frontend\assets\FrontAsset::register($this);
-    $this->registerCssFile('/css/UserAccount/bindcardalready.css');
+    $this->registerCssFile('/css/useraccount/bindcardalready.css');
     $this->registerCssFile('/css/useraccount/chargedeposit.css');
 ?>
 <div class="bindCard-box">
@@ -20,7 +20,7 @@
         <div class="bindCard-already">
             <span class="single-left">银行卡</span>
             <div class="single-div no-pointer">
-                <span class="single-icon"><img class="single-icon-img" height="18" src="<?= ASSETS_BASE_URI ?>images/useraccount/bankIcon/<?= $user_bank->bank_id ?>.png" alt=""></span>
+                <span class="single-icon"><img class="single-icon-img" height="18" src="<?= ASSETS_BASE_URI ?>images/useraccount/bankicon/<?= $user_bank->bank_id ?>.png" alt=""></span>
                 <span class="single-name"><?= $user_bank->bank_name ?></span>
                 <span class="single-number">尾号<?= $user_bank->card_number?substr($user_bank->card_number, -4):"" ?></span>
             </div>

@@ -39,7 +39,7 @@ use common\utils\StringUtils;
                 </div>
                 <div class="top-box-bottom">
                     <ul class="clearfix">
-                        <li class="grayFont">累计投资：<span class="redFont"><?= StringUtils::amountFormat3($user->getTotalInvestment()) ?></span> <i class="blackFont">元</i><img id="tip" src="<?= ASSETS_BASE_URI ?>images/UserAccount/tip.png" alt=""><div class="grayFont dialog">投资金额累计相加</div></li>
+                        <li class="grayFont">累计投资：<span class="redFont"><?= StringUtils::amountFormat3($user->getTotalInvestment()) ?></span> <i class="blackFont">元</i><img id="tip" src="<?= ASSETS_BASE_URI ?>images/useraccount/tip.png" alt=""><div class="grayFont dialog">投资金额累计相加</div></li>
                         <li class="grayFont">累计收益：<span class="redFont"><?= StringUtils::amountFormat3($user->getProfit()) ?></span> <i class="blackFont">元</i></li>
                     </ul>
                 </div>
