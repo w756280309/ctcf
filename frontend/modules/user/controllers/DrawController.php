@@ -75,7 +75,7 @@ class DrawController extends BaseController
             }
         } else {
             //检查是否开通免密
-            $cond = 0 | BankService::IDCARDRZ_VALIDATE_N;
+            $cond = 0 | BankService::MIANMI_VALIDATE;
             $data = BankService::check($this->user, $cond);
             return $this->render('tixian', [
                 'user_bank' => $user_bank,

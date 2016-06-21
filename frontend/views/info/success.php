@@ -23,8 +23,9 @@ $this->title = $info['title'];
 <?php if ($info['requireJump'] && $info['linkType'] == 2) { ?>
 <script>
     $(function(){
+        var url = '<?= $info['jumpUrl'] ?>';
         $('.a-close').on('click',function(){
-            window.close();
+            location.href = url;
         });
 
         var em_time=5;
@@ -35,7 +36,7 @@ $this->title = $info['title'];
 
             if(em_time==0){
                 clearInterval(time);
-                window.close();
+                location.href = url;
             }
         },1000)
 

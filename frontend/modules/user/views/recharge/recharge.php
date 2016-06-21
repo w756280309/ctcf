@@ -35,6 +35,7 @@ $(function() {
 JS;
 
 $this->registerJs($_js, View::POS_END, 'body_close');
+$this->registerCssFile('/css/useraccount/chargedeposit.css');
 $this->registerCssFile('/css/frontend.css');
 ?>
 <div class="container">
@@ -109,8 +110,8 @@ $this->registerCssFile('/css/frontend.css');
     </div>
 </div>
 <script>
-    var mianmi = <?= intval($data['code'])?>;
-    if (mianmi == 1) {
+    var m = <?= intval($data['code'])?>;
+    if (m == 1) {
         mianmi();
     }
 </script>

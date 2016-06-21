@@ -2,6 +2,7 @@
     $this->title = '提现';
     \frontend\assets\FrontAsset::register($this);
     $this->registerCssFile('/css/UserAccount/bindcardalready.css');
+    $this->registerCssFile('/css/useraccount/chargedeposit.css');
 ?>
 <div class="bindCard-box">
 <div class="bindCard-header">
@@ -63,8 +64,8 @@
 </div>
 </div>
 <script>
-    var mianmi = <?= intval($data['code'])?>;
-    if (mianmi == 1) {
+    var m = <?= intval($data['code'])?>;
+    if (m == 1) {
         mianmi();
     }
 

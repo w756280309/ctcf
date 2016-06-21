@@ -78,15 +78,29 @@ class UserbankController extends BaseController
      */
     public function actionBindbank()
     {
-        $cond = 0 | BankService::IDCARDRZ_VALIDATE_N | BankService::MIANMI_VALIDATE | BankService::BINDBANK_VALIDATE_Y;
+        //检查是否已绑卡
+        $cond = 0 | BankService::BINDBANK_VALIDATE_Y;
         $data = BankService::check($this->getAuthedUser(), $cond);
         if ($data['code']) {
             return $this->redirect('/user/userbank/mybankcard');
         }
 
+        //检查是否开户
+        $cond = 0 | BankService::IDCARDRZ_VALIDATE_N;
+        $data = BankService::check($this->getAuthedUser(), $cond);
+        if ($data['code']) {
+            return $this->redirect('/user/userbank/identity');
+        }
+        //检查是否开通免密
+        $cond = 0 | BankService::MIANMI_VALIDATE;
+        $data = BankService::check($this->user, $cond);
+
         $banks = BankManager::getQpayBanks();
 
-        return $this->render('bindbank', ['banklist' => $banks]);
+        return $this->render('bindbank', [
+            'banklist' => $banks,
+            'data' => $data,
+        ]);
     }
 
     /**
@@ -94,8 +108,13 @@ class UserbankController extends BaseController
      */
     public function actionRecharge()
     {
-        \Yii::$app->session->remove('cfca_qpay_recharge');
-        \Yii::$app->session->remove('recharge_back_url');
+        $this->layout = 'main';
+        //检查是否开户
+        $cond = 0 | BankService::IDCARDRZ_VALIDATE_N;
+        $data = BankService::check($this->getAuthedUser(), $cond);
+        if ($data['code']) {
+            return $this->redirect('/user/userbank/identity');
+        }
         $user = $this->getAuthedUser();
         $uid = $user->id;
         $user_bank = $user->qpay;
@@ -105,13 +124,6 @@ class UserbankController extends BaseController
         $data = BankService::checkKuaijie($user);
         if ($data['code'] == 1 && \Yii::$app->request->isAjax) {
             return ['next' => $data['tourl']];
-        }
-        //保存充值来源
-        if ($from = Yii::$app->request->get('from')) {
-            \Yii::$app->session['recharge_from_url'] = urldecode($from);
-        }
-        if ($to = Yii::$app->request->get('backUrl')) {
-            \Yii::$app->session['recharge_back_url'] = $to;
         }
 
         return $this->render('recharge', [
@@ -127,11 +139,22 @@ class UserbankController extends BaseController
      */
     public function actionMybankcard()
     {
+        //检查是否开户
+        $cond = 0 | BankService::IDCARDRZ_VALIDATE_N;
+        $data = BankService::check($this->getAuthedUser(), $cond);
+        if ($data['code']) {
+            return $this->redirect('/user/userbank/identity');
+        }
+        //检查是否开通免密
+        $cond = 0 | BankService::MIANMI_VALIDATE;
+        $data = BankService::check($this->user, $cond);
+
         $this->layout = 'main';
         $user = $this->getAuthedUser();
         $user_bank = $user->qpay;
         return $this->render('mybank', [
             'user_bank' => $user_bank,
+            'data' => $data,
         ]);
     }
 }

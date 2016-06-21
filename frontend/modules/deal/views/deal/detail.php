@@ -154,7 +154,7 @@ FrontAsset::register($this);
                     <li class="dR-inner-right"><?= (null === $user) ? '查看余额请【<a onclick="login()" style="cursor: pointer">登录</a>】' : ($user->lendAccount ? number_format($user->lendAccount->available_balance, 2) . ' 元' : '0 元') ?></li>
                     <?php if ($deal->status == OnlineProduct::STATUS_NOW){ ?>
                         <li class="dR-inner-left">投资金额(元)：</li>
-                        <li class="dR-inner-right"><a href="/user/recharge/init">去充值</a></li>
+                        <li class="dR-inner-right"><a target="_blank" href="/user/recharge/init">去充值</a></li>
                     <?php }?>
                 </ul>
                 <!--已售罄-->

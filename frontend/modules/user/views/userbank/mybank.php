@@ -2,6 +2,7 @@
     $this->title = '我的银行卡';
     \frontend\assets\FrontAsset::register($this);
     $this->registerCssFile('/css/useraccount/bindcardalready.css');
+    $this->registerCssFile('/css/useraccount/chargedeposit.css');
 ?>
 <div class="bindCard-box">
     <div class="bindCard-header">
@@ -9,13 +10,13 @@
         <span class="bindCard-header-font">我的银行卡</span>
     </div>
     <div class="bindCard-content">
-        <p class="bindCard-content-header">已绑定银行卡：</p>
-        <div class="bindCard-single">
-            <span class="single-left">持卡人</span>
-            <span class="single-right"><?= $user_bank->account ?></span>
-        </div>
-        <!------------------已绑卡开始------------------>
         <?php if($user_bank) { ?>
+            <p class="bindCard-content-header">已绑定银行卡：</p>
+            <div class="bindCard-single">
+                <span class="single-left">持卡人</span>
+                <span class="single-right"><?= $user_bank->account ?></span>
+            </div>
+            <!------------------已绑卡开始------------------>
             <div class="bindCard-already">
                 <span class="single-left">银行卡</span>
                 <div class="single-div no-pointer">
@@ -23,21 +24,20 @@
                     <span class="single-name"><?= $user_bank->bank_name ?></span>
                     <span class="single-number">尾号<?= $user_bank->card_number?substr($user_bank->card_number, -4):"" ?></span>
                 </div>
-                <a href="" class="link-changeCard">申请更换银行卡</a>
+               <!-- <a href="" class="link-changeCard">申请更换银行卡</a>-->
                 <div class="clear"></div>
                 <div class="link-en">
-                    <a href="" class="link-charge">充值</a>
-                    <a href="" class="link-withdraw">提现</a>
                 </div>
             </div>
             <!------------------已绑卡结束------------------>
         <?php } else { ?>
+            <p class="bindCard-content-header">未绑定银行卡：</p>
             <!------------------未绑卡开始------------------>
             <div class="bindCard-yet">
                 <span class="single-left">银行卡</span>
                 <a class="single-div">
                     <span class="add-icon"></span>
-                    <span class="link-font">点击绑定银行卡</span>
+                    <span class="link-font" onclick="location.href='/user/userbank/bindbank'">点击绑定银行卡</span>
                 </a>
                 <a class="clear"></a>
             </div>
@@ -53,3 +53,9 @@
         <p class="charge-explain-content">4、绑定快捷卡后，不影响使用本人其他银行卡或他人银行卡代充值。</p>
     </div>
 </div>
+<script>
+    var m = <?= intval($data['code'])?>;
+    if (m == 1) {
+        mianmi();
+    }
+</script>

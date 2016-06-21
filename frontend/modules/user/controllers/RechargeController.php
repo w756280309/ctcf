@@ -7,6 +7,8 @@ use frontend\controllers\BaseController;
 use common\models\user\RechargeRecord;
 use common\service\BankService;
 use common\models\bank\BankManager;
+use common\utils\TxUtils;
+use common\models\bank\EbankConfig;
 
 class RechargeController extends BaseController
 {
@@ -47,7 +49,7 @@ class RechargeController extends BaseController
         }
 
         //检查是否开通免密
-        $cond = 0 | BankService::IDCARDRZ_VALIDATE_N;
+        $cond = 0 | BankService::MIANMI_VALIDATE;
         $data = BankService::check($this->user, $cond);
 
         return $this->render('recharge', [
