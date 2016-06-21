@@ -38,8 +38,7 @@ $this->title = $info['title'];
                 clearInterval(time);
                 location.href = url;
             }
-        },1000)
-
+        },1000);
     });
 </script>
 <?php } ?>

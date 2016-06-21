@@ -171,13 +171,12 @@ class Client
      *
      * @param QpayBinding $bind
      */
-    public function enableQpay(QpayBindInterface $bind)
+    public function enableQpay(QpayBindInterface $bind, $channel = null)
     {
         $data = [
             'service' => 'ptp_mer_bind_card',
             'ret_url' => $this->hostInfo . "/user/qpay/notify/frontend",
             'notify_url' => $this->hostInfo . "/user/qpay/notify/backend",
-            'sourceV' => 'HTML5',
             'order_id' => $bind->getTxSn(),
             'mer_date' => $bind->getTxDate(),
             'user_id' => $bind->getEpayUserId(),
@@ -187,6 +186,11 @@ class Client
             'identity_code' => $this->encrypt($bind->getIdNo()),
             'is_open_fastPayment' => '1',
         ];
+
+        if ('pc' !== $channel) {
+            $data['sourceV'] = 'HTML5';
+        }
+
         $params = $this->buildQuery($data);
 
         return $this->apiUrl.'?'.$params;
@@ -197,13 +201,12 @@ class Client
      * @param QpayBindInterface $bind
      * @return string
      */
-    public function changeQpay(QpayBindInterface $bind)
+    public function changeQpay(QpayBindInterface $bind, $channel = null)
     {
         $data = [
             'service' => 'ptp_mer_replace_card',
             'ret_url' => $this->clientOption['host']['api'] . "notify/updatecard/frontend",
             'notify_url' => $this->clientOption['host']['api'] . "notify/updatecard/backend",
-            'sourceV' => 'HTML5',
             'order_id' => $bind->getTxSn(),
             'mer_date' => $bind->getTxDate(),
             'user_id' => $bind->getEpayUserId(),
@@ -212,6 +215,13 @@ class Client
             'identity_type' => $bind->getIdType(),
             'identity_code' => $this->encrypt($bind->getIdNo())
         ];
+
+        if ('pc' === $channel) {
+            $data['ret_url'] .= '?channel=pc';
+        } else {
+            $data['sourceV'] = 'HTML5';
+        }
+
         $params = $this->buildQuery($data);
 
         return $this->apiUrl.'?'.$params;

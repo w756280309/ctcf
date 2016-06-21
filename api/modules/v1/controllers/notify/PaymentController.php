@@ -4,7 +4,6 @@ namespace api\modules\v1\controllers\notify;
 
 use common\models\payment\PaymentLog;
 use common\models\TradeLog;
-use Exception;
 use Yii;
 use yii\web\Controller;
 

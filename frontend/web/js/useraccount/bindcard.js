@@ -77,7 +77,7 @@ function subForm()
     }
     $form.data('submitting', true);
     var xhr = $.post(
-        '/user/qpay/binding/verify',
+        $form.attr('action'),
         $form.serialize()
     );
 

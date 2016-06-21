@@ -20,6 +20,12 @@ class UpdatecardController extends Controller
             unset($data['token']);
         }
 
+        $channel = null;
+        if (array_key_exists('channel', $data)) {
+            $channel = $data['channel'];
+            unset($data['channel']);
+        }
+
         TradeLog::initLog(2, $data, $data['sign'])->save();    //记录交易日志信息
 
         if (\Yii::$container->get('ump')->verifySign($data)
@@ -31,7 +37,15 @@ class UpdatecardController extends Controller
                 $model->save();
             }
 
+            if ('pc' === $channel) {
+                return $this->redirect(\Yii::$app->params['clientOption']['host']['frontend'].'info/success?source=huanka&jumpUrl=/user/userbank/mybankcard');
+            }
+
             return $this->redirect(\Yii::$app->params['clientOption']['host']['wap'].'user/userbank/updatecardnotify?ret=success');
+        }
+
+        if ('pc' === $channel) {
+            return $this->redirect(\Yii::$app->params['clientOption']['host']['frontend'].'info/fail?source=huanka');
         }
 
         return $this->redirect(\Yii::$app->params['clientOption']['host']['wap'].'user/userbank/updatecardnotify');

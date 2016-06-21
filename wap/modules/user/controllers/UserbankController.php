@@ -296,7 +296,7 @@ class UserbankController extends BaseController
 
         $data = BankService::checkKuaijie($user);
         if (1 === $data['code']) {
-            $this->goHome();
+            return $this->goHome();
         }
 
         $userBank = $user->qpay;

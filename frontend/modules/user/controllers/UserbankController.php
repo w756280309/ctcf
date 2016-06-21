@@ -2,6 +2,7 @@
 
 namespace frontend\modules\user\controllers;
 
+use common\models\bank\BankCardUpdate;
 use common\models\bank\BankManager;
 use common\models\bank\QpayConfig;
 use common\models\user\UserAccount;
@@ -78,6 +79,8 @@ class UserbankController extends BaseController
      */
     public function actionBindbank()
     {
+        $this->layout = 'main';
+
         //检查是否已绑卡
         $cond = 0 | BankService::BINDBANK_VALIDATE_Y;
         $data = BankService::check($this->getAuthedUser(), $cond);
@@ -91,6 +94,7 @@ class UserbankController extends BaseController
         if ($data['code']) {
             return $this->redirect('/user/userbank/identity');
         }
+
         //检查是否开通免密
         $cond = 0 | BankService::MIANMI_VALIDATE;
         $data = BankService::check($this->user, $cond);
@@ -109,6 +113,7 @@ class UserbankController extends BaseController
     public function actionRecharge()
     {
         $this->layout = 'main';
+
         //检查是否开户
         $cond = 0 | BankService::IDCARDRZ_VALIDATE_N;
         $data = BankService::check($this->getAuthedUser(), $cond);
@@ -139,6 +144,8 @@ class UserbankController extends BaseController
      */
     public function actionMybankcard()
     {
+        $this->layout = 'main';
+
         //检查是否开户
         $cond = 0 | BankService::IDCARDRZ_VALIDATE_N;
         $data = BankService::check($this->getAuthedUser(), $cond);
@@ -149,13 +156,39 @@ class UserbankController extends BaseController
         $cond = 0 | BankService::MIANMI_VALIDATE;
         $data = BankService::check($this->user, $cond);
 
-        $this->layout = 'main';
         $user = $this->getAuthedUser();
         $user_bank = $user->qpay;
         return $this->render('mybank', [
             'user_bank' => $user_bank,
             'data' => $data,
         ]);
+    }
+
+    /**
+     * 更换银行卡.
+     */
+    public function actionUpdatecard()
+    {
+        $this->layout = 'main';
+        $user = $this->getAuthedUser();
+
+        $data = BankService::checkKuaijie($user);
+        if ($data['code']) {
+            return $this->redirect('/user/userbank/mybankcard');
+        }
+
+        $userBank = $user->qpay;
+        $bankcardUpdate = BankCardUpdate::find()
+            ->where(['oldSn' => $userBank->binding_sn, 'uid' => $user->id])
+            ->orderBy('id desc')->one();
+
+        if ($bankcardUpdate && BankCardUpdate::STATUS_ACCEPT === $bankcardUpdate->status) {
+            return $this->redirect('/user/userbank/mybankcard');
+        }
+
+        $banks = BankManager::getQpayBanks();
+
+        return $this->render('updatecard', ['banklist' => $banks]);
     }
 }
 

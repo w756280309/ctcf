@@ -45,10 +45,10 @@ use yii\captcha\Captcha;
                     <input type="hidden" name="agree" id="agree" class="agree" value="yes">
                     <img src="../../images/login/check-true.png" alt="">我已经阅读并同意
                 </div>
-                <a href="/site/xieyi">《网站服务协议》</a>
+                <a href="/site/xieyi" target="_blank">《网站服务协议》</a>
             </div>
             <div style="clear: both"></div>
-            <div class="popUp xieyi-err">请查看用户注册协议</div>
+            <div class="popUp xieyi-err">您未同意网站服务协议</div>
             <div class="resign-btn-box">
                 <input type="submit" class="resign-btn" value="注册">
                 <div class="login-btn">已有账号？<a href="/site/login">登录</a></div>

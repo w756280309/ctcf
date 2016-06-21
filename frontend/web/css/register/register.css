@@ -143,7 +143,6 @@
 }
 .resign-bottom {
     width: 264px;
-    height: 40px;
     margin-left: 86px;
     font-size: 14px;
     color: #99999d;
@@ -171,6 +170,7 @@
 .resign-btn {
     float: left;
     width: 240px;
+    margin-top: 30px;
     height: 40px;
     background: #f44336;
     color: #fff;
