@@ -22,7 +22,7 @@ use common\utils\StringUtils;
     <div class="top-box-top">
         <ul class="top-inner clearfix">
             <li class="name blackFont">欢迎您，<?= StringUtils::obfsMobileNumber($user->mobile) ?></li>
-            <li style="margin-left: 19px;"><a href="<?= ($user->isIdVerified()) ? '/user/user/account' : '/user/userbank/idcardrz'?>"><img src="<?= ASSETS_BASE_URI ?>images/useraccount/pass<?= $user->isIdVerified()?>.png" alt=""></a></li>
+            <li style="margin-left: 19px;"><a href="<?= ($user->isIdVerified()) ? '/user/user/account' : '/user/userbank/idcardrz'?>"><img src="<?= ASSETS_BASE_URI ?>images/useraccount/pass<?= $user->idcard_status ?>.png" alt=""></a></li>
             <li><a href=""><img src="<?= ASSETS_BASE_URI ?>images/useraccount/phone1.png" alt=""></a></li>
             <li><a href="<?= ($user->isQpayEnabled()) ? '/user/userbank/bindbank' : '/user/userbank/bindbank'?>"><img src="<?= ASSETS_BASE_URI ?>images/useraccount/card<?= $user->isQpayEnabled() ? 0 : 1 ?>.png" alt=""></a></li>
         </ul>

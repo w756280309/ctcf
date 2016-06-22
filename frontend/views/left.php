@@ -17,16 +17,16 @@ $action = Yii::$app->controller->action->getUniqueId();
         <li class="nav-title"><span>资产管理</span></li>
         <li class="nav-content">
             <ul>
-                <li class="<?= 'user/user/myorder' === Yii::$app->controller->action->getUniqueId() ? 'selected' : '' ?>"><a href="/user/user/myorder"><span class="star"></span>我的理财</a></li>
-                <li class="<?= 'user/coupon/index' === Yii::$app->controller->action->getUniqueId() ? 'selected' : '' ?>"><a href="/user/coupon/"><span class="star"></span>我的代金券</a></li>
-                <li class="<?= 'user/user/mingxi' === Yii::$app->controller->action->getUniqueId() ? 'selected' : '' ?>"><a href="/user/user/mingxi"><span class="star"></span>交易明细</a></li>
+                <li class="<?= 'user/user/myorder' === $action ? 'selected' : '' ?>"><a href="/user/user/myorder"><span class="star"></span>我的理财</a></li>
+                <li class="<?= 'user/coupon/index' === $action ? 'selected' : '' ?>"><a href="/user/coupon/"><span class="star"></span>我的代金券</a></li>
+                <li class="<?= 'user/user/mingxi' === $action ? 'selected' : '' ?>"><a href="/user/user/mingxi"><span class="star"></span>交易明细</a></li>
             </ul>
         </li>
         <li class="nav-title"><span>账户管理</span></li>
         <li class="nav-content">
             <ul>
-                <li class="<?= 'user/userbank/mybankcard' === Yii::$app->controller->action->getUniqueId() ? 'selected' : '' ?>"><a href="/user/userbank/mybankcard"><span class="star"></span>我的银行卡</a></li>
-                <li class=""><a href=""><span class="star"></span>安全中心</a></li>
+                <li class="<?= 'user/userbank/mybankcard' === $action ? 'selected' : '' ?>"><a href="/user/userbank/mybankcard"><span class="star"></span>我的银行卡</a></li>
+                <li class="<?= 'user/securitycenter/index' === $action ? 'selected' : '' ?>"><a href="/user/securitycenter/"><span class="star"></span>安全中心</a></li>
                 <li class="<?= 'user/user/account' === $action ? 'selected' : '' ?>"><a href="/user/user/account"><span class="star"></span>资金托管账户</a></li>
             </ul>
         </li>

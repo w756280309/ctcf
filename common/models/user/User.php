@@ -583,7 +583,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface, UserInterf
     /**
      * 获取是否是实名认证
      */
-    public function ensureIdVerified()
+    public function isIdVerified()
     {
         return (self::IDCARD_STATUS_PASS === $this->idcard_status) ? true : false;
     }
@@ -637,11 +637,6 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface, UserInterf
     public function getEpayUserId()
     {
         return $this->epayUser->epayUserId;
-    }
-
-    public function isIdVerified()
-    {
-        return $this->idcard_status;
     }
 
     public function isQpayEnabled()
