@@ -140,7 +140,8 @@ class UserbankController extends BaseController
             'user_bank' => $user_bank,
             'user_acount' => $user_acount,
             'data' => $data,
-            'bank' => $bank
+            'bank' => $bank,
+            'user' => $user
         ]);
     }
 

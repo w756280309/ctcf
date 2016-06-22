@@ -2,6 +2,7 @@
     $this->title = '快捷充值';
     \frontend\assets\FrontAsset::register($this);
     $this->registerCssFile('/css/useraccount/bindcardalready.css');
+    $this->registerCssFile('/css/useraccount/chargedeposit.css');
 ?>
 <style>
     .list-single {
@@ -98,6 +99,10 @@
     </div>
 </div>
 <script>
+    var m = <?= $user->mianmiStatus?>;
+    if (m == 0) {
+        mianmi();
+    }
     function err_message(message){
         if (message.length > 0) {
             $('.error').show();
@@ -145,7 +150,10 @@
 
         $('#form').on('submit', function(e) {
             e.preventDefault();
-
+            if (m == 0) {
+                mianmi();
+                return false;
+            }
             var $btn = $('#rechargebtn');
             $btn.addClass("btn-press").removeClass("btn-normal");
             if (!validateform()) {
@@ -171,10 +179,10 @@
         });
 
         xhr.fail(function(jqXHR) {
-            var errMsg = jqXHR.responseJSON && jqXHR.responseJSON.message
-                ? jqXHR.responseJSON.message
-                : '未知错误，请刷新重试或联系客服';
+            var errMsg = jqXHR.responseJSON && jqXHR.responseJSON.message ? jqXHR.responseJSON.message : '';
 
+            errMsg = errMsg ? errMsg : $.parseJSON(jqXHR.responseText).message;
+            errMsg = errMsg ? errMsg : '未知错误，请刷新重试或联系客服';
             err_message(errMsg);
             $('#rechargebtn').attr('disabled', false);
         });

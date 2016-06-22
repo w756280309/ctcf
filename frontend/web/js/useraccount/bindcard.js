@@ -41,6 +41,10 @@ $(function(){
 
     csrf = $("meta[name=csrf-token]").attr('content');
     $('#form').on('submit', function(e) {
+        if (m == 1) {
+            mianmi();
+            return false;
+        }
         e.preventDefault();
         if (validate()) {
             subForm();

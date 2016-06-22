@@ -19,6 +19,10 @@ $(function() {
 
     var $form = $('#recharge_form');
     $form.on('beforeValidate', function() {
+         if (m == 1) {
+            mianmi();
+            return false;
+        }
         var bank_id = $('#bankid').val();
         if (bank_id === '') {
             alert("请选择银行信息");
@@ -28,6 +32,10 @@ $(function() {
         return true;
     });
     $form.on('beforeSubmit', function() {
+        if (m == 1) {
+            mianmi();
+            return false;
+        }
         var $modal = $('#bind-card-modal').modal({backdrop: 'static'});
         $modal.modal('show');
     });

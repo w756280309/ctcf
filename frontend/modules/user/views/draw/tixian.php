@@ -118,7 +118,10 @@
 
         $('#form').on('submit', function(e) {
             e.preventDefault();
-
+            if (m == 1) {
+                mianmi();
+                return false;
+            }
             var $btn = $('#rechargebtn');
             $btn.addClass("btn-press").removeClass("btn-normal");
             if (!validateform()) {

@@ -9,5 +9,11 @@ $(function(){
     $('.close').on('click',function(){
         $('.login-mark').fadeOut();
         $('.loginUp-box').fadeOut();
+        $('#phone').val('');
+        $('#password').val('');
+        $('#verity').val('');
+        $('.phone_err').html('').hide();
+        $('.pass_err').html('').hide();
+        $('.verity_err').html('').hide();
     })
-})
+});

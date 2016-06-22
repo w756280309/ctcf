@@ -32,7 +32,7 @@
             </div>
             <div class="loginUp-bottom">
                 <div class="loginUp-bottom-right">
-                    <i><a class="mima" href="">忘记密码</a></i>
+                    <i><a class="mima" href="/site/resetpass">忘记密码</a></i>
                 </div>
             </div>
             <span class="loginUp-btn" id="login_submit_button">立即登录</span>
@@ -122,7 +122,9 @@
         password.bind("blur", function () {
             verify_pass();
         });
-
+        $('#verity_img').click(function(){
+            $(this).attr("src", "/site/captcha?" + Math.random());
+        });
         var button = $('#login_submit_button');
         button.bind('click', function () {
             var res = verify_form();
