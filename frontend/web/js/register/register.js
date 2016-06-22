@@ -11,6 +11,17 @@ $(function() {
         $('.resign-btn').css({background:'#f44336'});
     });
 
+    var check = $('.agree').attr('checked');
+    $('.agree').bind('click', function () {
+        if (check === 'checked') {
+            $('.agree').attr('checked', false);
+            check = false;
+        } else {
+            $('.agree').attr('checked', true);
+            check = 'checked';
+        }
+    });
+
     $('#form').on('submit', function(e) {
         e.preventDefault();
 
