@@ -31,19 +31,45 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/common.js', ['depends' => 'yii\web\Yii
     <div class="col-xs-4"></div>
 </div>
 <script type="text/javascript">
-function ret()
-{
-    $.ajax({url: "/order/order/ordererror?osn=<?= $order->sn?>", success: function(data){
-        if (0 !== data.status) {
-            location.replace("/order/order/ordererror?osn=<?= $order->sn?>");
+    ga('require', 'ecommerce');
+
+    var orderSn = '<?= $order->sn ?>';
+    function logTx() {
+        if ($.cookie('fin_tid') == orderSn) {
+            return;
         }
-      }});
-}
-$(function () {
-    var int = setInterval(ret, 1000);
+
+        ga('ecommerce:addTransaction', {
+            'id': orderSn,
+            'revenue': '<?= $order->order_money ?>',
+            'hitCallback': function() {
+                $.cookie('fin_tid', orderSn);
+                location.replace("/order/order/ordererror?osn="+orderSn);
+            }
+        });
+
+        ga('ecommerce:send');
+    }
+
+    function ret() {
+        $.ajax({
+            url: "/order/order/ordererror?osn=<?= $order->sn?>",
+            success: function(data) {
+                if (0 !== data.status) {
+                    if (1 == data.status) {
+                        logTx();
+                    }
+
+                    setTimeout(function() {
+                        //location.replace("/order/order/ordererror?osn=<?= $order->sn?>");
+                    }, 1500);
+                }
+            }
+        });
+    }
+
+    var tick = setInterval(ret, 1000);
     setTimeout(function () {
-        clearInterval(int);
-        //location.replace("/order/order/ordererror?osn=<?= $order->sn?>");
-    }, 5000);//3秒之后自动跳入结果页面
-})
+        clearInterval(tick);
+    }, 5000);
 </script>
