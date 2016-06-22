@@ -29,7 +29,7 @@ class UserbankController extends BaseController
             ],
         ];
     }
-
+    
     /**
      * 未开户进入页面.
      */

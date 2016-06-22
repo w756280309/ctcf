@@ -60,7 +60,7 @@ class QrechargeController extends BaseController
             }
         }
 
-        return $this->createErrorResponse('充值申请失败:'.$rec_model->getSingleError()['message']);
+        return $this->createErrorResponse($rec_model->getSingleError()['message']);
     }
 
     private function createErrorResponse($modelOrMessage = null)

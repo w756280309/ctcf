@@ -143,7 +143,12 @@
 
         xhr.done(function(data) {
             $('#rechargebtn').attr('disabled', false);
-            location.href=data['tourl']
+            if(data.code == 1 && data.message.length > 0) {
+                err_message(data.message);
+            }
+            if (data.tourl) {
+                location.href=data['tourl']
+            }
         });
 
         xhr.fail(function(jqXHR) {
