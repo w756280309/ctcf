@@ -1,0 +1,64 @@
+.information-box {
+    background: #fff none repeat scroll 0 0;
+    border: 1px solid #e3e3e3;
+    width: 798px;
+}
+.information-box .information-header {
+    border-bottom: 1px solid #efeff3;
+    height: 50px;
+    line-height: 50px;
+    padding-left: 20px;
+}
+.information-box .information-header .information-header-icon {
+    background: rgba(0, 0, 0, 0) url("../../images/UserAccount/background-icon.png") no-repeat scroll -90px 0;
+    float: left;
+    height: 15px;
+    margin-right: 10px;
+    margin-top: 18px;
+    width: 20px;
+}
+.information-box .information-header .information-header-font {
+    color: #464648;
+    font-size: 16px;
+}
+.news_notice_detail_title {
+    display: inline-block;
+    width: 666px;
+    padding-top: 13px;
+    padding-left: 40px;
+    padding-right: 40px;
+    margin-bottom: 13px;
+    text-align: center;
+    font-size: 24px;
+    line-height: 35px;
+    color: #464648;
+    margin-top: 20px;
+}
+.news_details_time {
+    width: 324px;
+    height: 30px;
+    border: 1px dashed #e6e6e6;
+    line-height: 30px;
+    margin: 0 auto 46px;
+    text-align: center;
+    color: #7c7c7c;
+    font-size: 12px;
+}
+.news_details_time .span_01 {
+    margin-right: 40px;
+}
+.news_text {
+    padding: 0 40px 40px;
+}
+.news_text p {
+    line-height: 2em;
+}
+.news_text p span {
+    font-family: 微软雅黑, 'Microsoft YaHei'; font-size: 14px; line-height: 2em;color: #6e6e72;
+}
+.news_text div {
+    text-align: center;
+}
+.news_text div span{
+    font-family: 微软雅黑, 'Microsoft YaHei'; font-size: 14px;color: #4c4c4c;
+}

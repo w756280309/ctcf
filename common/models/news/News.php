@@ -74,6 +74,9 @@ class News extends \yii\db\ActiveRecord
         $model = new self();
         $model->sort = 0;
         $model->category = [];
+        $model->source = '';
+        $model->category_id = 0;
+        $model->attach_file = '';
         return $model;
     }
 

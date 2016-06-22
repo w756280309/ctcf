@@ -5,6 +5,7 @@ namespace frontend\controllers;
 use common\controllers\HelpersTrait;
 use common\models\adv\Adv;
 use common\models\category\ItemCategory;
+use common\models\category\Category;
 use common\models\log\LoginLog;
 use common\models\news\News;
 use common\models\product\OnlineProduct;
@@ -74,19 +75,22 @@ class SiteController extends Controller
 
         $ic = ItemCategory::tableName();
         $n = News::tableName();
+        $c = Category::tableName();
 
         //理财公告展示
         $notice = News::find()
-            ->innerJoin($ic, "$ic.item_id = $n.id")
-            ->where(["$n.status" => News::STATUS_PUBLISH, "$ic.category_id" => Yii::$app->params['news_cid_notice']])
+            ->innerJoin($ic, "$n.id = $ic.item_id")
+            ->leftJoin($c, "$ic.category_id = $c.id")
+            ->where(["$n.status" => News::STATUS_PUBLISH, "$c.key" => \Yii::$app->params['news_key_notice']])
             ->orderBy(["$n.news_time" => 'desc', "$n.id" => 'desc'])
             ->limit(3)
             ->all();
 
         //媒体报道
         $media = News::find()
-            ->innerJoin($ic, "$ic.item_id = $n.id")
-            ->where(["$n.status" => News::STATUS_PUBLISH, "$ic.category_id" => Yii::$app->params['news_cid_media']])
+            ->innerJoin($ic, "$n.id = $ic.item_id")
+            ->leftJoin($c, "$ic.category_id = $c.id")
+            ->where(["$n.status" => News::STATUS_PUBLISH, "$c.key" => \Yii::$app->params['news_key_media']])
             ->orderBy(["$n.news_time" => 'desc', "$n.id" => 'desc'])
             ->limit(3)
             ->all();
@@ -101,8 +105,9 @@ class SiteController extends Controller
 
         //最新资讯
         $news = News::find()
-            ->innerJoin($ic, "$ic.item_id = $n.id")
-            ->where(["$n.status" => News::STATUS_PUBLISH, "$ic.category_id" => Yii::$app->params['news_cid_info']])
+            ->innerJoin($ic, "$n.id = $ic.item_id")
+            ->leftJoin($c, "$ic.category_id = $c.id")
+            ->where(["$n.status" => News::STATUS_PUBLISH, "$c.key" => \Yii::$app->params['news_key_info']])
             ->orderBy(["$n.news_time" => 'desc', "$n.id" => 'desc'])
             ->limit(5)
             ->all();

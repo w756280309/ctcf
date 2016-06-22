@@ -1,0 +1,72 @@
+.information-box {
+    background: #fff none repeat scroll 0 0;
+    border: 1px solid #e3e3e3;
+    width: 798px;
+}
+.information-box .information-header {
+    border-bottom: 1px solid #efeff3;
+    height: 50px;
+    line-height: 50px;
+    padding-left: 20px;
+}
+.information-box .information-header .information-header-icon {
+    background: rgba(0, 0, 0, 0) url("../../images/UserAccount/background-icon.png") no-repeat scroll -90px 0;
+    float: left;
+    height: 15px;
+    margin-right: 10px;
+    margin-top: 18px;
+    width: 20px;
+}
+.information-box .information-header .information-header-font {
+    color: #464648;
+    font-size: 16px;
+}
+.com_news_01{
+    height:87px;
+    padding: 40px 20px 30px 30px;
+}
+.com_left {
+    float: left;
+}
+.com_text {
+    height: 87px;
+    float: left;
+    overflow: hidden;
+}
+.com_title {
+    height: 36px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.size_16 {
+    width: 500px;
+    font-size: 16px;
+    float: left;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+.com_title .size_16 a:link, .com_title .size_16 a {
+    color: #595757;
+}
+.com_title .size_16 a:link, .com_title .size_16 a:hover {
+    color: #8c8c8c;
+}
+.size_date {
+    font-size: 12px;
+    width: 130px;
+    float: right;
+    color: #bebebe;
+    padding-top: 5px;
+}
+.size_12 {
+    font-size: 12px;
+    color: #595757;
+}
+.xuxian {
+    width: 768px;
+    height: 1px;
+    border-bottom: 1px dashed #e6e6e6;
+    float: right;
+}

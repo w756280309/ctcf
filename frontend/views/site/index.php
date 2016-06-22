@@ -43,7 +43,7 @@ use common\utils\StringUtils;
             <span>理财公告</span>
             <div class="licai-lunbo">
                 <?php foreach ($notice as $val) : ?>
-                    <div><a href=""><?= $val->title ?></a></div>
+                    <div><a href="/news/detail?type=notice&id=<?= $val->id ?>"><?= $val->title ?></a></div>
                 <?php endforeach; ?>
             </div>
         </div>
@@ -83,12 +83,12 @@ use common\utils\StringUtils;
     <div class="chengji-right">
         <div class="chengji-right-top">
             <span>媒体报道</span>
-            <a href="">更多&gt;</a>
+            <a href="/news/index?type=media">更多&gt;</a>
         </div>
 <!--        <div class="videos"><img src="<?= ASSETS_BASE_URI ?>images/video-bg2.jpg" alt=""></div>-->
         <ul class="chengji-right-bottom">
             <?php foreach ($media as $val) : ?>
-                <li><a href=""><?= $val->title ?></a></li>
+                <li><a href="/news/detail?type=media&id=<?= $val->id ?>"><?= $val->title ?></a></li>
             <?php endforeach; ?>
         </ul>
     </div>
@@ -202,28 +202,28 @@ use common\utils\StringUtils;
             <a href="">更多&gt;</a>
         </div>
         <ul class="more-right-bottom">
-            <li><a href="">网站流程如何操作？</a></li>
-            <li><a href="">为什么在温都金服投资是安全的？</a></li>
-            <li><a href="">了解温都金服。</a></li>
-            <li><a href="">资产品种都有哪些？特点和优势是什么？</a></li>
-            <li><a href="">如何联系我们？</a></li>
+            <li><a href="/helpcenter/operation/">网站流程如何操作？</a></li>
+            <li><a href="/helpcenter/security/">为什么在温都金服投资是安全的？</a></li>
+            <li><a href="/helpcenter/background/">了解温都金服。</a></li>
+            <li><a href="/helpcenter/product/">资产品种都有哪些？特点和优势是什么？</a></li>
+            <li><a href="/helpcenter/contact/">如何联系我们？</a></li>
         </ul>
     </div>
     <div class="more-box-middle">
         <div class="more-right-top">
             <span>最新资讯</span>
-            <a href="">更多&gt;</a>
+            <a href="/news/index?type=info">更多&gt;</a>
         </div>
         <ul class="more-right-bottom">
             <?php foreach ($news as $val) : ?>
-                <li><a href=""><?= $val->title ?></a></li>
+                <li><a href="/news/detail?type=info&id=<?= $val->id ?>"><?= $val->title ?></a></li>
             <?php endforeach; ?>
         </ul>
     </div>
     <div class = "more-box-right">
         <div class = "more-right-top" style = "border-bottom: 0;">
             <span>投资榜单</span>
-            <a href = "">更多&gt;
+            <a href = " " style="display: none;">更多&gt;
             </a>
         </div>
         <div class = "more-middle">

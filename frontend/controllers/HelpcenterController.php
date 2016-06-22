@@ -49,4 +49,19 @@ class HelpcenterController extends Controller
     {
         return $this->render("security");
     }
+
+    public function actionAbout()
+    {
+        return $this->render("about");
+    }
+
+    public function actionAdvantage()
+    {
+        return $this->render("advantage");
+    }
+
+    public function actionContact()
+    {
+        return $this->render("advantage");
+    }
 }

@@ -57,14 +57,8 @@ return [
         ],
     ],
     'modules' => [
-        'news' => [
-            'class' => 'frontend\modules\news\Module',
-        ],
         'user' => [
             'class' => 'frontend\modules\user\Module',
-        ],
-        'product' => [
-            'class' => 'frontend\modules\product\Module',
         ],
         'deal' => [
             'class' => 'frontend\modules\deal\Module',
