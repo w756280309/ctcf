@@ -136,9 +136,10 @@ class OrderController extends BaseController
         }
 
         $order = OnlineOrder::ensureOrder($osn);
-        if (OnlineOrder::STATUS_FALSE  !== $order->status) {
+        // 统计转化，取消直接跳转
+        /*if (OnlineOrder::STATUS_FALSE  !== $order->status) {
             return $this->redirect("/order/order/ordererror?osn=" . $order->sn);
-        }
+        }*/
         return $this->render('wait', ['order' => $order]);
     }
 
