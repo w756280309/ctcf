@@ -1,6 +1,5 @@
 <?php
     $this->title = '快捷充值';
-    \frontend\assets\FrontAsset::register($this);
     $this->registerCssFile('/css/useraccount/bindcardalready.css');
     $this->registerCssFile('/css/useraccount/chargedeposit.css');
 ?>
@@ -33,6 +32,7 @@
         left: 162px;
     }
 </style>
+
 <div class="bindCard-box">
     <div class="bindCard-header">
         <div class="bindCard-header-icon"></div>
@@ -98,6 +98,7 @@
         </ul>
     </div>
 </div>
+
 <script>
     var m = <?= $user->mianmiStatus?>;
     if (m == 0) {
@@ -111,7 +112,7 @@
             $('.error').hide();
         }
     }
-    
+
     function validateform()
     {
         if($.trim($('#fund').val()) === '') {

@@ -17,22 +17,22 @@ use common\utils\StringUtils;
             <li class="limit-right limit-bottom"><h4>银行</h4></li>
             <li class="limit-right limit-bottom"><h4>单笔</h4></li>
             <li class="limit-bottom"><h4>单日</h4></li>
-            <?php foreach ($qpay as $val): ?>
-                <li class="limit-right limit-bottom"><?= $val->bank->bankName ?><?= $val->isDisabled ? '(暂停)' : '' ?></li>
-                <li class="limit-right limit-bottom"><?= StringUtils::amountFormat1('{amount}{unit}', $val->singleLimit) ?></li>
-                <li class="limit-bottom"><?= StringUtils::amountFormat1('{amount}{unit}', $val->dailyLimit) ?></li>
+            <?php $qcount = count($qpay) - 1; foreach ($qpay as $key => $val): ?>
+                <li class="limit-right <?= $qcount === $key ? 'end-table' : 'limit-bottom' ?>"><?= $val->bank->bankName ?><?= $val->isDisabled ? '(暂停)' : '' ?></li>
+                <li class="limit-right <?= $qcount === $key ? 'end-table' : 'limit-bottom' ?>"><?= StringUtils::amountFormat1('{amount}{unit}', $val->singleLimit) ?></li>
+                <li class="<?= $qcount === $key ? 'end-table' : 'limit-bottom' ?>"><?= StringUtils::amountFormat1('{amount}{unit}', $val->dailyLimit) ?></li>
             <?php endforeach; ?>
         </ul>
-        <br>
+
         <div class="limit-title">网银充值各银行限额说明（仅限储蓄卡）</div>
         <ul class="limit-content clearfix">
             <li class="limit-right limit-bottom"><h4>银行</h4></li>
             <li class="limit-right limit-bottom"><h4>单笔</h4></li>
             <li class="limit-bottom"><h4>单日</h4></li>
-            <?php foreach ($bpay as $val): ?>
-                <li class="limit-right limit-bottom"><?= $val->bank->bankName ?><?= $val->isDisabled ? '(暂停)' : '' ?></li>
-                <li class="limit-right limit-bottom"><?= StringUtils::amountFormat1('{amount}{unit}', $val->singleLimit) ?></li>
-                <li class="limit-bottom"><?= StringUtils::amountFormat1('{amount}{unit}', $val->dailyLimit) ?></li>
+            <?php $bcount = count($bpay) - 1; foreach ($bpay as $key => $val): ?>
+                <li class="limit-right <?= $bcount === $key ? 'end-table' : 'limit-bottom' ?>"><?= $val->bank->bankName ?><?= $val->isDisabled ? '(暂停)' : '' ?></li>
+                <li class="limit-right <?= $bcount === $key ? 'end-table' : 'limit-bottom' ?>"><?= StringUtils::amountFormat1('{amount}{unit}', $val->singleLimit) ?></li>
+                <li class="<?= $bcount === $key ? 'end-table' : 'limit-bottom' ?>"><?= StringUtils::amountFormat1('{amount}{unit}', $val->dailyLimit) ?></li>
             <?php endforeach; ?>
         </ul>
     </div>

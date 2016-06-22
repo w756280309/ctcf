@@ -5,6 +5,7 @@ namespace frontend\modules\user\controllers\qpay;
 use common\models\bank\BankManager;
 use common\models\bank\QpayConfig;
 use common\models\user\QpayBinding as QpayAcct;
+use common\models\user\UserBanks;
 use common\utils\TxUtils;
 use frontend\controllers\BaseController;
 use Yii;
@@ -47,8 +48,8 @@ class BindingController extends BaseController
         if ($acct_model->load(Yii::$app->request->post()) && $acct_model->validate()) {
             try {
                 //对于绑卡时候如果没有找到要过滤掉异常
-                $bind = QpayAcct::findOne(['card_number' => $acct_model->card_number, 'status' => QpayAcct::STATUS_SUCCESS]);
-                if ($bind) {
+                $userBank = UserBanks::findOne(['card_number' => $acct_model->card_number]);
+                if ($userBank) {
                     return $this->createErrorResponse('卡号已被占用，请换一张卡片重试');
                 }
 

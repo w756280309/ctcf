@@ -25,7 +25,12 @@ $action = Yii::$app->controller->action->getUniqueId();
         <li class="nav-title"><span>账户管理</span></li>
         <li class="nav-content">
             <ul>
-                <li class="<?= 'user/userbank/mybankcard' === $action ? 'selected' : '' ?>"><a href="/user/userbank/mybankcard"><span class="star"></span>我的银行卡</a></li>
+                <li class="<?= in_array($action, [
+                    'user/userbank/mybankcard',
+                    'user/userbank/bindcard',
+                    'user/userbank/updatecard',
+                    'user/userbank/xiane',
+                ]) ? 'selected' : '' ?> mycard"><a href="/user/userbank/mybankcard"><span class="star"></span>我的银行卡</a></li>
                 <li class="<?= 'user/securitycenter/index' === $action ? 'selected' : '' ?>"><a href="/user/securitycenter/"><span class="star"></span>安全中心</a></li>
                 <li class="<?= 'user/user/account' === $action ? 'selected' : '' ?>"><a href="/user/user/account"><span class="star"></span>资金托管账户</a></li>
             </ul>

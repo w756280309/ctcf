@@ -42,36 +42,13 @@ $(function() {
 })
 JS;
 
-\frontend\assets\FrontAsset::register($this);
 $this->registerJs($_js, View::POS_END, 'body_close');
 $this->registerCssFile('/css/useraccount/chargedeposit.css');
 $this->registerCssFile('/css/frontend.css');
 $this->registerCssFile('/css/useraccount/mytrade.css');
 $this->registerCssFile('/css/useraccount/bindcardalready.css');
 ?>
-<style>
-    body{background: #f6f7f8 !important;}
-    .bindCard-header{
-        height: 50px;
-        line-height: 50px;
-        padding-left: 20px;
-        border-bottom: 1px solid #efeff3;
-    }
-    .bindCard-header-icon{
-        width: 20px;
-        height: 15px;
-        margin-top: 18px;
-        margin-right: 10px;
-        background: url("../../images/useraccount/background-icon.png") no-repeat -90px 0;
-        float: left;
-    }
-    #payment-bank{
-        margin: 20px auto;
-    }
-    .myCoupon-content h3{
-        padding: 10px;
-    }
-</style>
+
 <div class="myCoupon-box">
     <div class="bindCard-header">
         <div class="bindCard-header-icon"></div>
@@ -99,10 +76,9 @@ $this->registerCssFile('/css/useraccount/bindcardalready.css');
             <?php $form = ActiveForm::begin(['id' => 'recharge_form', 'action' => '/user/recharge/apply', 'options' => ['target' => '_blank']]); ?>
             <ul class="wdjf-form">
                 <li><div class="wdjf-label">账户余额</div> <div class="wdjf-field"><span class="balance"><?= $user_account->available_balance ?></span> 元</div></li>
-                <li><div class="wdjf-label"><span class="fee-info">*</span>充值金额</div> <div class="wdjf-field"><?= $form->field($recharge, 'fund', ['template' => '{input}{error}'])->textInput(); ?></div><span style='margin-left: 5px;'>元</span></li>
+                <li><div class="wdjf-label"><span class="fee-info">*</span>充值金额</div> <div class="wdjf-field"><?= $form->field($recharge, 'fund', ['template' => '{input}{error}'])->textInput(); ?></div><span style='margin-left: 5px; line-height: 33px;'>元</span></li>
                 <li class="wdjf-action">
                     <input class="btn btn-primary" type="submit" value="充值">
-                    <p class="fee-info">* 充值所需费用由温都垫付</p>
                 </li>
             </ul>
             <input name="_csrf" type="hidden" id="_csrf" value="<?=Yii::$app->request->csrfToken ?>">
@@ -113,7 +89,7 @@ $this->registerCssFile('/css/useraccount/bindcardalready.css');
         </div>
 
         <h3>温馨提示</h3>
-        <div class="section">
+        <div class="section" style="margin-left:63px">
             <ol>
                 <li>投资人充值手续费由温都金服垫付；</li>
                 <li>最低充值金额应大于等于1元；</li>
@@ -136,6 +112,7 @@ $this->registerCssFile('/css/useraccount/bindcardalready.css');
         </div>
     </div>
 </div>
+
 <script>
     var m = <?= intval($data['code'])?>;
     if (m == 1) {

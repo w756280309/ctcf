@@ -4,6 +4,7 @@ namespace frontend\modules\user\controllers\qpay;
 use common\models\bank\BankCardUpdate;
 use common\models\bank\BankManager;
 use common\models\bank\QpayConfig;
+use common\models\user\UserBanks;
 use common\utils\TxUtils;
 use frontend\controllers\BaseController;
 use Yii;
@@ -44,12 +45,13 @@ class BankcardupdateController extends BaseController
         ]);
 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            if ($bank->card_number === $model->cardNo) {
-                return $this->createErrorResponse('您已绑定该银行卡');
-            }
-
             //对于换卡时候如果没有找到要过滤掉异常
             try {
+                $userBank = UserBanks::findOne(['card_number' => $model->cardNo]);
+                if ($userBank) {
+                    return $this->createErrorResponse('卡号已被占用，请换一张卡片重试');
+                }
+
                 $bin = BankManager::getBankFromCardNo($model->cardNo);
                 if (!BankManager::isDebitCard($bin)) {
                     return $this->createErrorResponse('该操作只支持借记卡');

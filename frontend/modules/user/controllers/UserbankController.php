@@ -6,6 +6,7 @@ use common\models\bank\BankCardUpdate;
 use common\models\bank\BankManager;
 use common\models\bank\EbankConfig;
 use common\models\bank\QpayConfig;
+use common\models\user\QpayBinding;
 use common\models\user\UserAccount;
 use common\service\BankService;
 use frontend\controllers\BaseController;
@@ -167,14 +168,7 @@ class UserbankController extends BaseController
 
         $user = $this->getAuthedUser();
         $user_bank = $user->qpay;
-        $binding = BankCardUpdate::find()
-            ->where(['oldSn' => $user_bank->binding_sn, 'uid' => $user->id])
-            ->orderBy('id desc')->one();
-
-        if ($binding && BankCardUpdate::STATUS_ACCEPT === $binding->status) {
-        } else {
-            $binding = null;
-        }
+        $binding = QpayBinding::findOne(['uid' => $user->id ,'status' => QpayBinding::STATUS_ACK]);
 
         return $this->render('mybank', [
             'user_bank' => $user_bank,
