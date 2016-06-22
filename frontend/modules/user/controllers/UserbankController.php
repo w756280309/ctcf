@@ -6,7 +6,6 @@ use common\models\bank\BankCardUpdate;
 use common\models\bank\BankManager;
 use common\models\bank\EbankConfig;
 use common\models\bank\QpayConfig;
-use common\models\user\QpayBinding;
 use common\models\user\UserAccount;
 use common\service\BankService;
 use frontend\controllers\BaseController;
@@ -30,9 +29,13 @@ class UserbankController extends BaseController
         ];
     }
 
-    //未开户进入页面
-   public function actionIdentity(){
+    /**
+     * 未开户进入页面.
+     */
+   public function actionIdentity()
+   {
         $this->layout = 'main';
+
         return $this->render('identity');
    }
 
@@ -152,8 +155,11 @@ class UserbankController extends BaseController
         $cond = 0 | BankService::IDCARDRZ_VALIDATE_N;
         $data = BankService::check($this->getAuthedUser(), $cond);
         if ($data['code']) {
+            Yii::$app->session->set('to_url', '/user/userbank/mybankcard');
+
             return $this->redirect('/user/userbank/identity');
         }
+
         //检查是否开通免密
         $cond = 0 | BankService::MIANMI_VALIDATE;
         $data = BankService::check($this->user, $cond);

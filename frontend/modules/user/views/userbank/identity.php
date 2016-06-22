@@ -1,22 +1,27 @@
 <?php
-    $this->title = '开户';
-    \frontend\assets\FrontAsset::register($this);
-    $this->registerCssFile('/css/useraccount/chargedeposit.css');
-    //获取目标操作
-    $to_url = Yii::$app->session->get('to_url');
+$this->registerCssFile('/css/useraccount/chargedeposit.css');
+$to_url = Yii::$app->session->get('to_url');  //获取目标操作
 ?>
+
 <div class="charge-box">
     <div class="charge-header">
         <div class="charge-header-icon"></div>
         <span class="charge-header-font">
             <?php
-                if ($to_url == '/user/recharge/init') {
+                if ($to_url === '/user/recharge/init') {
+                    $this->title = '充值';
                     echo '充值';
-                }  elseif ($to_url == '/user/draw/tixian') {
+                }  elseif ($to_url === '/user/draw/tixian') {
+                    $this->title = '提现';
                     echo '提现';
-                }  elseif ($to_url == '/user/userbank/bindbank') {
-                    echo '绑卡';
+                }  elseif ($to_url === '/user/userbank/bindbank') {
+                    $this->title = '绑定银行卡';
+                    echo '绑定银行卡';
+                } elseif ($to_url === '/user/userbank/mybankcard') {
+                    $this->title = '我的银行卡';
+                    echo '我的银行卡';
                 } else {
+                    $this->title = '开户';
                     echo '开户';
                 }
             ?>
@@ -41,3 +46,13 @@
         <div class="clear"></div>
     </div>
 </div>
+
+<script>
+    $(function () {
+        var toUrl = '<?= $to_url ?>';
+
+        if ('/user/userbank/mybankcard' === toUrl) {
+            $('.mycard').addClass('selected');
+        }
+    })
+</script>
