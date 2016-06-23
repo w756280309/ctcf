@@ -2,6 +2,8 @@
 use common\utils\StringUtils;
 
 $this->registerCssFile(ASSETS_BASE_URI.'css/header.css', ['depends' => 'frontend\assets\FrontAsset']);
+
+$action = Yii::$app->controller->action->getUniqueId();
 ?>
 
 <div id="header-top-box">
@@ -39,11 +41,11 @@ $this->registerCssFile(ASSETS_BASE_URI.'css/header.css', ['depends' => 'frontend
         </a>
         <div class="header-nav">
             <ul>
-                <li><a class="<?= 'site/index' === Yii::$app->controller->action->getUniqueId() ? 'header-nav-click' : '' ?>" href="/">首页</a></li>
-                <li><a class="<?= 'licai/index' === Yii::$app->controller->action->getUniqueId() ? 'header-nav-click' : '' ?>" href="/licai/">我要理财</a></li>
-                <li><a class="<?= 'safeguard/index' === Yii::$app->controller->action->getUniqueId() ? 'header-nav-click' : '' ?>" href="/safeguard/">安全保障</a></li>
-                <li><a class="<?= 'helpcenter/operation' === Yii::$app->controller->action->getUniqueId() ? 'header-nav-click' : '' ?>" href="/helpcenter/operation/">帮助中心</a></li>
-                <li class="header-nav-last <?= 'guide/index' === Yii::$app->controller->action->getUniqueId() ? 'header-nav-click' : '' ?>"><a href="/guide/">新手引导</a></li>
+                <li><a class="<?= 'site/index' === $action ? 'header-nav-click' : '' ?>" href="/">首页</a></li>
+                <li><a class="<?= 'licai/index' === $action ? 'header-nav-click' : '' ?>" href="/licai/">我要理财</a></li>
+                <li><a class="<?= 'safeguard/index' === $action ? 'header-nav-click' : '' ?>" href="/safeguard/">安全保障</a></li>
+                <li><a class="<?= 'helpcenter/operation' === $action ? 'header-nav-click' : '' ?>" href="/helpcenter/operation/">帮助中心</a></li>
+                <li class="header-nav-last"><a class="<?= 'guide/index' === $action ? 'header-nav-click' : '' ?>" href="/guide/">新手引导</a></li>
             </ul>
         </div>
     </div>
