@@ -1,0 +1,79 @@
+/* 404 页面 */
+body {
+    background: #fff;
+}
+.container {
+    padding-bottom: 50px;
+    width: 100%;
+    min-width: 1057px;
+    background: #fff;
+    overflow: hidden;
+}
+.container .header-nav-box {
+    margin: 0 auto;
+    width: 1000px;
+    height: 100%;
+    background: #fff;
+}
+.container .header-nav-box a {
+    cursor: pointer;
+}
+.container .header-nav-box .header-logo {
+    margin-left: 32px;
+    height: 140px;
+    line-height: 140px;
+    text-align: left;
+}
+.container .content {
+    margin: 0 auto;
+    width:1000px;
+    height:400px;
+}
+.container .content .content-lf {
+    width:445px;
+    height: 100%;
+    background: url('../images/404/404-bg.png') no-repeat 85px 0;
+}
+.container .content .content-rg {
+    margin-right: 110px;
+    padding-top: 82px;
+    width:410px;
+}
+.container .content .content-rg .error {
+    width:360px;
+    line-height: 40px;
+    font-size: 24px;
+    color:#f44336;
+}
+.container .content .content-rg .error .back-home {
+    float: right;
+    margin-right: 18px;
+    width:60px;
+    line-height: 40px;
+    font-size: 14px;
+    font-weight: bolder;
+    color:#595757;
+    text-align: right;
+    display: inline-block;
+    cursor:pointer;
+}
+.container .content .content-rg .code-tip {
+    margin-top:8px;
+    height:40px;
+    line-height:40px;
+    font-size: 16px;
+    color: #595757;
+}
+.container .content .content-rg .ul-code {  }
+.container .content .content-rg .ul-code li {
+    float: left;
+    margin-right: 47px;
+    width:132px;
+    height:132px;
+}
+.container .content .content-rg .ul-code li p {
+    width:132px;
+    height:16px;
+    font-size: 12px;
+    text-align: center;
+}

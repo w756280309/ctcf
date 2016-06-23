@@ -29,7 +29,7 @@ return [
             ],
         ],
         'errorHandler' => [
-            'errorAction' => 'site/error',
+            'errorAction' => 'page404/index',
         ],
         'assetManager' => [
             'bundles' => [
