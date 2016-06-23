@@ -28,7 +28,7 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/useraccount/chargedeposit.css');
             </div>
             <div class="deposit-inflow">
                 <span class="inflow-type">身份证号</span>
-                <input class="identity-text" type="text">
+                <input class="identity-text" type="text" maxlength="18">
                 <span class="tip-error error-identity"></span>
                 <div class="tip_pop">
                     <div class="tip_pop-en">
@@ -71,6 +71,8 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/useraccount/chargedeposit.css');
             var nameisok = validate_name();
             var identityisok = validate_idcard();
             if (nameisok != false && identityisok != false) {
+                $('.deposit-content-link').html('开通中...');
+
                 $.post('/user/userbank/idcardrz', {
                     'User[real_name]': name.val(),
                     'User[idcard]': idcard.val(),
@@ -86,6 +88,8 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/useraccount/chargedeposit.css');
                         if (data.tourl) {
                             location.herf = data.tourl;
                         }
+
+                        $('.deposit-content-link').html('立即开通');
                     }
                 });
             }

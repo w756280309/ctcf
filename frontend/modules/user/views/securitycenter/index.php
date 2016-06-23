@@ -291,11 +291,14 @@ foreach (['useraccount/safecenter.css'] as $cssFile) {
                     $('#'+i).addClass('error-border');
                     $('.'+err).html(item);
                 });
+
+                $("#editpassform-verifycode-image").click();
             }
         });
 
         xhr.fail(function() {
             $('.a-submit').attr('disabled', false);
+            $("#editpassform-verifycode-image").click();
         });
     }
 </script>

@@ -310,7 +310,7 @@ class SiteController extends Controller
      */
     public function actionCreateSms()
     {
-        $type = Yii::$app->request->post('type');
+        $type = (int) Yii::$app->request->post('type');
         $phone = Yii::$app->request->post('phone');
         $captchaCode = Yii::$app->request->post('captchaCode');
 
@@ -325,11 +325,13 @@ class SiteController extends Controller
             return ['code' => 1, 'message' => '图形验证码输入错误'];
         }
 
-        if (1 === (int) $type) {
-            $user = User::findOne(['mobile' => $phone]);
-            if (null !== $user) {
-                return ['code' => 1, 'key' => 'phone', 'message' => '此手机号已经注册'];
-            }
+        $user = User::findOne(['mobile' => $phone]);
+        if (1 === $type && null !== $user) {
+            return ['code' => 1, 'key' => 'phone', 'message' => '该手机号码已经注册'];
+        }
+
+        if (2 === $type && null === $user) {
+            return ['code' => 1, 'key' => 'phone', 'message' => '该手机号码未注册'];
         }
 
         return SmsService::createSmscode($type, $phone);

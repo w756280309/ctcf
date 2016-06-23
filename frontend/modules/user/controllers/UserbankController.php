@@ -15,6 +15,8 @@ use yii\filters\AccessControl;
 
 class UserbankController extends BaseController
 {
+    public $layout = 'main';
+
     public function behaviors()
     {
         return [
@@ -35,8 +37,6 @@ class UserbankController extends BaseController
      */
    public function actionIdentity()
    {
-        $this->layout = 'main';
-
         return $this->render('identity');
    }
 
@@ -45,8 +45,6 @@ class UserbankController extends BaseController
      */
     public function actionIdcardrz()
     {
-        $this->layout = 'main';
-
         $cond = 0 | BankService::IDCARDRZ_VALIDATE_Y;
         $data = BankService::check($this->getAuthedUser(), $cond);
         if ($data['code'] == 1) {
@@ -85,8 +83,6 @@ class UserbankController extends BaseController
      */
     public function actionBindbank()
     {
-        $this->layout = 'main';
-
         //检查是否已绑卡
         $cond = 0 | BankService::BINDBANK_VALIDATE_Y;
         $data = BankService::check($this->getAuthedUser(), $cond);
@@ -118,8 +114,6 @@ class UserbankController extends BaseController
      */
     public function actionRecharge()
     {
-        $this->layout = 'main';
-
         //检查是否开户
         $cond = 0 | BankService::IDCARDRZ_VALIDATE_N;
         $data = BankService::check($this->getAuthedUser(), $cond);
@@ -151,8 +145,6 @@ class UserbankController extends BaseController
      */
     public function actionMybankcard()
     {
-        $this->layout = 'main';
-
         //检查是否开户
         $cond = 0 | BankService::IDCARDRZ_VALIDATE_N;
         $data = BankService::check($this->getAuthedUser(), $cond);
@@ -182,7 +174,6 @@ class UserbankController extends BaseController
      */
     public function actionUpdatecard()
     {
-        $this->layout = 'main';
         $user = $this->getAuthedUser();
 
         $data = BankService::checkKuaijie($user);
@@ -210,12 +201,9 @@ class UserbankController extends BaseController
      */
     public function actionXiane()
     {
-        $this->layout = 'main';
-
         $qpayBanks = QpayConfig::find()->all();
         $bpayBanks = EbankConfig::findAll(['typePersonal' => 1]);
 
         return $this->render('xiane', ['qpay' => $qpayBanks, 'bpay' => $bpayBanks]);
     }
 }
-
