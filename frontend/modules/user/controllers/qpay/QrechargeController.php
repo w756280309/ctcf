@@ -51,7 +51,7 @@ class QrechargeController extends BaseController
                 if (!$rec_model->save(false)) {
                     throw new \Exception('Insert recharge record err.');
                 }
-                $next = Yii::$container->get('ump')->rechargeViaQpay($rec_model);
+                $next = Yii::$container->get('ump')->rechargeViaQpay($rec_model, 'pc');
                 if ($next->isRedirection()) {
                     return ['next' => $next->getLocation()];
                 } else {

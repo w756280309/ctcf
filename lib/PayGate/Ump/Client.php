@@ -401,13 +401,12 @@ class Client
      *
      * @return response
      */
-    public function rechargeViaQpay(QpayTxInterface $qpay)
+    public function rechargeViaQpay(QpayTxInterface $qpay, $channel = null)
     {
         $data = [
             'service' => 'mer_recharge_person',
             'ret_url' => $this->hostInfo . "/user/qpay/qpaynotify/frontend",
             'notify_url' => $this->hostInfo . "/user/qpay/qpaynotify/backend",
-            'sourceV' => 'HTML5',
             'order_id' => $qpay->getTxSn(),
             'mer_date' => $qpay->getTxDate(),
             'pay_type' => 'DEBITCARD',
@@ -416,7 +415,9 @@ class Client
             'user_ip' => $qpay->getClientIp(),
             'com_amt_type' => 2,
         ];
-
+        if ('pc' !== $channel) {
+            $data['sourceV'] = 'HTML5';
+        }
         return $this->doRequest($data);
     }
 
