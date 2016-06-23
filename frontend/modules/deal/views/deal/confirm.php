@@ -1,11 +1,8 @@
 <?php
-use frontend\assets\FrontAsset;
 use common\view\LoanHelper;
 
 $this->title = '确认订单';
-$this->registerCssFile('/css/deal/buy.css');
-FrontAsset::register($this);
-
+$this->registerCssFile(ASSETS_BASE_URI . 'css/deal/buy.css');
 ?>
 <!-- invest BUY start-->
 <div class="invest-box clearfix">
@@ -14,8 +11,8 @@ FrontAsset::register($this);
             <div class="invest-top">
                 <p class="invest-top-title lf"><?= $deal->title ?></p>
                 <div class="invest-top-tip rg text-align-rg">
-                    <input type="checkbox" checked="checked" class="" id="agree"/><span>同意并签署</span>
-                    <i>"产品合同"</i><a href="/order/order/agreement?pid=<?= $deal->id ?>" class="check">查看</a></div>
+                    <input type="checkbox" checked="checked" class="" id="agree"/><span> 同意并签署</span>
+                    <i>"产品合同"</i><a href="/order/order/agreement?pid=<?= $deal->id ?>" class="check" target="_blank">查看</a></div>
             </div>
             <div style="clear: both"></div>
             <div class="invest-centent">
@@ -49,11 +46,11 @@ FrontAsset::register($this);
                     </div>
                 </div>
                 <div class="rg invest-ct-rg">
-                    <p class="sum"><span class="lf-span">投资金额:</span><i class="rg-i text-align-rg"><?= number_format($money,2)?></i></p>
-                    <p class="reduce"><span class="lf-span">代金券抵扣:</span><i class="rg-i text-align-rg"><?= $cou_money ? '-' : '' ?><?= number_format($cou_money ,0) ?></i></p>
+                    <p class="sum"><span class="lf-span">投资金额:</span><i class="rg-i text-align-rg"><?= number_format($money,2)?>元</i></p>
+                    <p class="reduce"><span class="lf-span">代金券抵扣:</span><i class="rg-i text-align-rg"><?= $cou_money ? '-' : '' ?><?= number_format($cou_money ,0) ?>元</i></p>
                     <div class="real-invest rg">
-                        <p class="real-money"><span>实际支付:</span><i>￥</i><?= number_format(max($money-$cou_money,0), 2)?></p>
-                        <p><a  class="buy" id="sub_button">确认购买</a></p>
+                        <p class="real-money"><span>实际支付:</span><i>￥</i><?= number_format(max($money-$cou_money, 0), 2)?></p>
+                        <p><a class="buy" id="sub_button">确认购买</a></p>
                         <p style="color: red;" id="err_message"></p>
                     </div>
                 </div>
@@ -65,9 +62,15 @@ FrontAsset::register($this);
 <!-- invest BUY end-->
 <script>
     $(function () {
+        var allowSub = true;
         $('#sub_button').bind('click', function () {
             var buy = $(this);
             if ('checked' == $('#agree').attr('checked')) {
+                if (!allowSub) {
+                    return;
+                }
+
+                allowSub = false;
                 buy.html("购买中……");
                 var xhr = $.post('/order/order/doorder?sn=<?= $sn?>', {
                     'money':<?= $money?>,
@@ -81,6 +84,7 @@ FrontAsset::register($this);
                     } else {
                         $('#err_message').show();
                         $('#err_message').html(data.message);
+                        allowSub = true;
                     }
                     if (data.tourl != undefined) {
                         $('#err_message').hide();
@@ -90,7 +94,7 @@ FrontAsset::register($this);
                     }
                 });
                 xhr.always(function () {
-                    buy.attr('disabled', false);
+                    allowSub = true;
                     buy.val("确认购买");
                 })
             } else {

@@ -1,5 +1,5 @@
 <?php
-$this->title = '找回密码 - 温都金服';
+$this->title = '找回密码';
 
 $this->registerCssFile(ASSETS_BASE_URI.'css/register/register.css', ['depends' => 'frontend\assets\FrontAsset']);
 $this->registerJsFile(ASSETS_BASE_URI.'js/register/register.js', ['depends' => 'frontend\assets\FrontAsset']);

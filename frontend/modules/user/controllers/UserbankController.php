@@ -31,7 +31,7 @@ class UserbankController extends BaseController
             ],
         ];
     }
-    
+
     /**
      * 未开户进入页面.
      */
@@ -174,12 +174,22 @@ class UserbankController extends BaseController
 
         $user = $this->getAuthedUser();
         $user_bank = $user->qpay;
-        $binding = QpayBinding::findOne(['uid' => $user->id ,'status' => QpayBinding::STATUS_ACK]);
+        $binding = null;
+        $bankcardUpdate = null;
+
+        if ($user_bank) {
+            $bankcardUpdate = BankCardUpdate::find()
+                ->where(['oldSn' => $user_bank->binding_sn, 'uid' => $user->id])
+                ->orderBy('id desc')->one();
+        } else {
+            $binding = QpayBinding::findOne(['uid' => $user->id ,'status' => QpayBinding::STATUS_ACK]);
+        }
 
         return $this->render('mybank', [
             'user_bank' => $user_bank,
             'data' => $data,
             'binding' => $binding,
+            'bankcardUpdate' => $bankcardUpdate,
         ]);
     }
 

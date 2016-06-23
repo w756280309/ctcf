@@ -1,9 +1,7 @@
 <?php
-
 use common\view\LoanHelper;
 use common\models\product\RateSteps;
 use common\models\product\OnlineProduct;
-use frontend\assets\FrontAsset;
 
 $this->title = '项目详情';
 $user = Yii::$app->user->identity;
@@ -15,9 +13,8 @@ $this->registerCssFile('/css/deal/buy.css');
 $this->registerCssFile('/css/deal/deallist.css');
 $this->registerCssFile('/css/deal/detail.css');
 $this->registerCssFile('/css/pagination.css');
-FrontAsset::register($this);
-
 ?>
+
 <div class="project-box clearfix">
     <div class="project-left clearfix">
         <!--pL-top-box-->
@@ -162,7 +159,7 @@ FrontAsset::register($this);
                     <form action="/deal/deal/check?sn=<?= $deal->sn ?>" method="post" id="order_form">
                         <input type="hidden" name="_csrf" value="<?= Yii::$app->request->csrfToken ?>"/>
                         <div class="dR-input">
-                            <input type="text" class="dR-money" name="money" id="deal_money" placeholder="" value="<?= ($money > 0) ? $money : null?>"/>
+                            <input type="text" class="dR-money" name="money" id="deal_money" autocomplete="off" value="<?= ($money > 0) ? $money : null?>"/>
                             <!--输入款提示信息-->
                             <div class="tishi tishi-dev">
                                 <img class="jiao-left" src="/images/deal/jiao-right.png" alt="">
@@ -178,7 +175,7 @@ FrontAsset::register($this);
                         </div>
                         <ul class="clearfix dR-inner dR-shouyi">
                             <li class="dR-inner-left">预计收益:</li>
-                            <li class="dR-inner-right"><span><i id="expect_profit"></i></span>元</li>
+                            <li class="dR-inner-right"><span><i id="expect_profit">0.00</i></span>元</li>
                         </ul>
 
                         <?php if(count($data) > 0) {?>
@@ -241,6 +238,7 @@ FrontAsset::register($this);
         </div>
     </div>
 </div>
+
 <script>
     $(function () {
         //获取投资记录
@@ -287,9 +285,10 @@ FrontAsset::register($this);
         var buy = $('#order_submit');
         var form = $('#order_form');
         form.on('submit', function (e) {
-            var money = $('#deal_money').val();
             e.preventDefault();
+            var money = $('#deal_money').val();
             var log = <?= Yii::$app->user->isGuest?0:1 ?>;
+
             if (log == 0) {
                 login();
                 return false;

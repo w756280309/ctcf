@@ -21,7 +21,7 @@ $this->registerMetaTag([
 <html lang="<?= Yii::$app->language ?>">
     <head>
         <meta charset="<?= Yii::$app->charset ?>">
-        <title><?= Html::encode($this->title) ?></title>
+        <title><?= Html::encode($this->title).' - 温都金服' ?></title>
         <?php $this->head() ?>
         <meta name="baidu-site-verification" content="7YkufMc2UW" />
         <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />

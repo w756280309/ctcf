@@ -95,7 +95,7 @@ class RateSteps
 
         $topRate = 0;
         foreach ($config as $val) {
-            if (-1 === bccomp($topRate, $val['rate'])) {
+            if (-1 === bccomp($topRate, $val['rate'], 1)) {
                 $topRate = $val['rate'];
             }
         }

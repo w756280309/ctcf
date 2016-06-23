@@ -13,7 +13,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/useraccount/bindcard.js', ['depends' =
         <span class="bindCard-header-font">更换银行卡</span>
     </div>
     <div class="bind-middle">
-        <div class="bind-limit"><img src="<?= ASSETS_BASE_URI ?>images/useraccount/tip-red.png" alt=""><a href="/user/userbank/xiane" target="block">限额提醒</a></div>
+        <div class="bind-limit"><img src="<?= ASSETS_BASE_URI ?>images/useraccount/tip-red.png" alt=""><a href="/user/userbank/xiane" target="_blank">限额提醒</a></div>
         <div class="clearfix">
             <div class="bind-kaihu">开户行</div>
             <!--选择银行卡-->
@@ -62,3 +62,6 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/useraccount/bindcard.js', ['depends' =
     </ul>
     <div class="bankIcon-btn">确定</div>
 </div>
+<script>
+    var m = 0;
+</script>

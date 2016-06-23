@@ -263,3 +263,9 @@
     cursor: pointer;
 }
 
+/* 错误提示信息样式 */
+.err-info {
+    padding-left: 4rem;
+    color: #f44336;
+    display: none;
+}

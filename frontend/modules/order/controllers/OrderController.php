@@ -7,7 +7,6 @@ use common\models\coupon\UserCoupon;
 use common\models\order\EbaoQuan;
 use common\models\order\OnlineOrder;
 use common\models\order\OrderManager;
-use common\models\product\OnlineProduct;
 use common\service\PayService;
 use EBaoQuan\Client;
 use frontend\controllers\BaseController;

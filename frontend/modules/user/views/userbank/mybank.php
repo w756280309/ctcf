@@ -1,10 +1,10 @@
 <?php
 $this->title = '我的银行卡';
 
-\frontend\assets\FrontAsset::register($this);
-
 $this->registerCssFile('/css/useraccount/bindcardalready.css');
 $this->registerCssFile('/css/useraccount/chargedeposit.css');
+
+use common\models\bank\BankCardUpdate;
 ?>
 
 <div class="bindCard-box">
@@ -27,7 +27,11 @@ $this->registerCssFile('/css/useraccount/chargedeposit.css');
                     <span class="single-name"><?= $user_bank->bank_name ?></span>
                     <span class="single-number">尾号<?= $user_bank->card_number?substr($user_bank->card_number, -4):"" ?></span>
                 </div>
-                <a href="/user/userbank/updatecard" class="link-changeCard">申请更换银行卡</a>
+                <?php if ($bankcardUpdate && BankCardUpdate::STATUS_ACCEPT === $bankcardUpdate->status) { ?>
+                    <a href="javascript:void(0)" class="link-changeCard">换卡申请中</a>
+                <?php } else { ?>
+                    <a href="/user/userbank/updatecard" class="link-changeCard">申请更换银行卡</a>
+                <?php } ?>
                 <div class="clear"></div>
                 <div class="link-en">
                     <a href="/user/recharge/init" class="link-charge">充值</a>

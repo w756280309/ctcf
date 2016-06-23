@@ -13,7 +13,7 @@ $this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/chargedeposit.css');
         <span class="bindCard-header-font">绑定银行卡</span>
     </div>
     <div class="bind-middle">
-        <div class="bind-limit"><img src="<?= ASSETS_BASE_URI ?>images/useraccount/tip-red.png" alt=""><a href="/user/userbank/xiane" target="block">限额提醒</a></div>
+        <div class="bind-limit"><img src="<?= ASSETS_BASE_URI ?>images/useraccount/tip-red.png" alt=""><a href="/user/userbank/xiane" target="_blank">限额提醒</a></div>
         <div class="clearfix">
             <div class="bind-kaihu">开户行</div>
             <!--选择银行卡-->

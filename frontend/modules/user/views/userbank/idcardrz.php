@@ -1,5 +1,4 @@
 <?php
-\frontend\assets\FrontAsset::register($this);
 $this->registerJsFile(ASSETS_BASE_URI . 'js/useraccount/deposit.js');
 $this->registerCssFile(ASSETS_BASE_URI . 'css/useraccount/chargedeposit.css');
 ?>
@@ -12,34 +11,15 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/useraccount/chargedeposit.css');
     </div>
     <div class="deposit-content">
         <div class="deposit-content-left">
-            <div class="deposit-inflow">
+            <div class="deposit-inflow name">
                 <span class="inflow-type">真实姓名</span>
                 <input class="name-text" type="text">
-                <div class="tip_pop">
-                    <div class="tip_pop-en">
-                        <div class="tip_pop-border">
-                            <em></em>
-                            <span></span>
-                        </div>
-                        <span class="tip_pop-content-icon"></span>
-                        <div class="tip_pop-content name-content"></div>
-                    </div>
-                </div>
+                <p class="err-info"></p>
             </div>
-            <div class="deposit-inflow">
+            <div class="deposit-inflow identity">
                 <span class="inflow-type">身份证号</span>
                 <input class="identity-text" type="text" maxlength="18">
-                <span class="tip-error error-identity"></span>
-                <div class="tip_pop">
-                    <div class="tip_pop-en">
-                        <div class="tip_pop-border">
-                            <em></em>
-                            <span></span>
-                        </div>
-                        <span class="tip_pop-content-icon"></span>
-                        <div class="tip_pop-content identity-content"></div>
-                    </div>
-                </div>
+                <p class="err-info"></p>
             </div>
         </div>
         <div class="deposit-content-right">

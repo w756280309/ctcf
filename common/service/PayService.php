@@ -100,25 +100,25 @@ class PayService
         if (null === $user) {
             return ['code' => self::ERROR_LOGIN,  'message' => self::getErrorByCode(self::ERROR_LOGIN), 'tourl' => '/site/login'];
         }
+
         if (!in_array($this->postmethod, [1, 2])) {
             return ['code' => self::ERROR_LAW,  'message' => self::getErrorByCode(self::ERROR_LAW)];
         }
+
         if ($this->postmethod == 1 && !\Yii::$app->request->isAjax) {
             return ['code' => self::ERROR_LAW,  'message' => self::getErrorByCode(self::ERROR_LAW)];
         }
+
         if ($this->postmethod == 2 && !\Yii::$app->request->isPost) {
             return ['code' => self::ERROR_LAW,  'message' => self::getErrorByCode(self::ERROR_LAW)];
         }
 
-        if (empty($user->idcard_status)) {
-            return ['code' => self::ERROR_ID_SET,  'message' => self::getErrorByCode(self::ERROR_ID_SET), 'tourl' => '/user/userbank/idcardrz'];
-        }
         if ($user->status == 0) {
             return ['code' => self::ERROR_ID_SET,  'message' => '账户已被冻结', 'tourl' => '/site/usererror'];
         }
 
         $bankret = BankService::checkKuaijie($user);
-        if (0 !== $bankret['code']) {
+        if ($bankret['code']) {
             return $bankret;
         }
 
