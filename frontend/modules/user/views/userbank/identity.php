@@ -1,30 +1,28 @@
 <?php
 $this->registerCssFile('/css/useraccount/chargedeposit.css');
 $to_url = Yii::$app->session->get('to_url');  //获取目标操作
+
+if ($to_url === '/user/recharge/init') {
+    $this->title = '充值';
+}  elseif ($to_url === '/user/userbank/recharge') {
+    $this->title = '充值';
+}  elseif ($to_url === '/user/draw/tixian') {
+    $this->title = '提现';
+}  elseif ($to_url === '/user/userbank/bindbank') {
+    $this->title = '绑定银行卡';
+} elseif ($to_url === '/user/userbank/mybankcard') {
+    $this->title = '我的银行卡';
+} else {
+    $this->title = '开户';
+}
+
 ?>
 
 <div class="charge-box">
     <div class="charge-header">
         <div class="charge-header-icon"></div>
         <span class="charge-header-font">
-            <?php
-                if ($to_url === '/user/recharge/init') {
-                    $this->title = '充值';
-                    echo '充值';
-                }  elseif ($to_url === '/user/draw/tixian') {
-                    $this->title = '提现';
-                    echo '提现';
-                }  elseif ($to_url === '/user/userbank/bindbank') {
-                    $this->title = '绑定银行卡';
-                    echo '绑定银行卡';
-                } elseif ($to_url === '/user/userbank/mybankcard') {
-                    $this->title = '我的银行卡';
-                    echo '我的银行卡';
-                } else {
-                    $this->title = '开户';
-                    echo '开户';
-                }
-            ?>
+            <?= $this->title ?>
         </span>
     </div>
     <div class="charge-content">
@@ -50,9 +48,16 @@ $to_url = Yii::$app->session->get('to_url');  //获取目标操作
 <script>
     $(function () {
         var toUrl = '<?= $to_url ?>';
-
         if ('/user/userbank/mybankcard' === toUrl) {
             $('.mycard').addClass('selected');
+        } else if ('/user/recharge/init'  == toUrl) {
+            $('.userAccount-left-nav .recharge').addClass('selected');
+        } else if ('/user/userbank/recharge'  == toUrl) {
+            $('.userAccount-left-nav .recharge').addClass('selected');
+        } else if ('/user/draw/tixian'  == toUrl) {
+            $('.userAccount-left-nav .draw').addClass('selected');
+        } else {
+            $('.userAccount-left-nav .account').addClass('selected');
         }
     })
 </script>

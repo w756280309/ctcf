@@ -63,6 +63,7 @@ $this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/chargedeposit.css');
     <div class="bankIcon-btn">确定</div>
 </div>
 <script>
+    $('.mycard').addClass('selected');
     var m = <?= $data['code'] ?>;
     if (m == 1) {
         mianmi();

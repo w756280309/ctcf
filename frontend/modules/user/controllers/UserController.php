@@ -173,22 +173,4 @@ class UserController extends BaseController
 
         return $this->render('myorder', ['model' => $model, 'pages' => $pages, 'type' => $type, 'plan' => $plan, 'tj' => $tj]);
     }
-
-    /**
-     * 资金托管账户.
-     */
-    public function actionAccount()
-    {
-        //检查是否开户
-        $cond = 0 | BankService::IDCARDRZ_VALIDATE_N;
-        $data = BankService::check($this->getAuthedUser(), $cond);
-        if ($data['code']) {
-            return $this->redirect('/user/userbank/identity');
-        }
-
-        $this->layout = 'main';
-        return $this->render('account',[
-            'user' => $this->user,
-        ]);
-    }
 }

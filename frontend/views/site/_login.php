@@ -21,14 +21,14 @@
                 <label for="password">登录密码</label>
                 <input id="password" name="LoginForm[password]" type="password" maxlength="20" placeholder="请输入密码" required>
                 <div style="clear: both"></div>
-                <div class="popUp pass_err">手机号码应该包含11个字符</div>
+                <div class="popUp pass_err">密码不能为空</div>
             </div>
             <div class="verity-box" id="login_verity" style="display: none;">
                 <label>图形验证码</label>
                 <input type="text" id="verity" maxlength="4" placeholder="请输入图形验证码" name="LoginForm[verifyCode]"/>
                 <img src="/site/captcha" class="verity-img" alt="" id="verity_img"/>
                 <div style="clear: both"></div>
-                <div class="popUp verity_err">手机号码应该包含11个字符</div>
+                <div class="popUp verity_err">验证码不能为空</div>
             </div>
             <div class="loginUp-bottom">
                 <div class="loginUp-bottom-right">
@@ -38,6 +38,7 @@
             <span class="loginUp-btn" id="login_submit_button">立即登录</span>
             <div class="resign-btn">没有账号？<a class="resign" href="/site/signup">免费注册</a></div>
         </div>
+        <input type="hidden" name="is_flag" value="<?= $requiresCaptcha ?>">
     </form>
 </div>
 <script>
@@ -71,7 +72,7 @@
         var pass_err = $('.pass_err');
         if ('' == $('#password').val()) {
             pass_err.show();
-            pass_err.html('手机号格式错误');
+            pass_err.html('密码不能为空');
             return false;
         }
         if (6 > $('#password').val().length) {

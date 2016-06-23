@@ -88,7 +88,7 @@ foreach (['useraccount/safecenter.css'] as $cssFile) {
                     <!-- 未认证-->
                     <?php if (null === $user->qpay): ?>
                     <i class="red"></i><span>未绑定</span>
-                    <i class="/user/userbank/bindbank"></i><a href="" class="bunding">绑定</a>
+                    <i class="/user/userbank/bindbank"></i><a href="/user/userbank/bindbank" class="bunding">绑定</a>
                     <?php else: ?>
                     <!-- 已认证-->
                     <i class="blue"></i><span>已绑定</span>
@@ -158,7 +158,7 @@ foreach (['useraccount/safecenter.css'] as $cssFile) {
                     <i class=""></i><a href="javascript:;" class="join">修改</a>
                     <?php else: ?>
                     <i class="red"></i><span>未设置</span>
-                    <i class=""></i><a href="/user/userbank/identity" class="bunding">开户</a>
+                    <i class=""></i><a href="/user/userbank/idcardrz" class="bunding">开户</a>
                     <?php endif; ?>
                 </div>
             </div>

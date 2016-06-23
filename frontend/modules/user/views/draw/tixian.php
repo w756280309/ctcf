@@ -39,6 +39,7 @@
             <div class="link-en">
                 <input type="submit" class="link-charge" value="提现" id="rechargebtn" />
             </div>
+            <p class="fee-info" style="    margin-top: 15px;color: #f44336;    margin-left: 60px;">* 每笔提现收取2元手续费</p>
         </form>
         <!------------------已绑卡结束------------------>
     <?php } else { ?>

@@ -37,7 +37,17 @@ class UserbankController extends BaseController
      */
    public function actionIdentity()
    {
-        return $this->render('identity');
+       //检查是否开户
+       $cond = 0 | BankService::IDCARDRZ_VALIDATE_N;
+       $data = BankService::check($this->getAuthedUser(), $cond);
+       if ($data['code']) {
+           return $this->render('identity');
+       } else {
+           Yii::$app->session->set('to_url', '/user/userbank/identity');
+           return $this->render('account',[
+               'user' => $this->user,
+           ]);
+       }
    }
 
     /**
@@ -94,6 +104,7 @@ class UserbankController extends BaseController
         $cond = 0 | BankService::IDCARDRZ_VALIDATE_N;
         $data = BankService::check($this->getAuthedUser(), $cond);
         if ($data['code']) {
+            Yii::$app->session->set('to_url', '/user/userbank/mybankcard');
             return $this->redirect('/user/userbank/identity');
         }
 
@@ -114,6 +125,8 @@ class UserbankController extends BaseController
      */
     public function actionRecharge()
     {
+        //保存目的地
+        Yii::$app->session->set('to_url', '/user/userbank/recharge');
         //检查是否开户
         $cond = 0 | BankService::IDCARDRZ_VALIDATE_N;
         $data = BankService::check($this->getAuthedUser(), $cond);
@@ -130,13 +143,14 @@ class UserbankController extends BaseController
         if ($data['code'] == 1 && \Yii::$app->request->isAjax) {
             return ['next' => $data['tourl']];
         }
-
+        $binding = QpayBinding::findOne(['uid' => $user->id ,'status' => QpayBinding::STATUS_ACK]);
         return $this->render('recharge', [
             'user_bank' => $user_bank,
             'user_acount' => $user_acount,
             'data' => $data,
             'bank' => $bank,
-            'user' => $user
+            'user' => $user,
+            'binding' => $binding,
         ]);
     }
 

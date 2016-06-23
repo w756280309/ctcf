@@ -115,16 +115,19 @@ class Client
      *
      * @param $epayUserId 用户uid
      */
-    public function openmianmi($epayUserId)
+    public function openmianmi($epayUserId, $channel = null)
     {
         $data = [
             'service' => 'ptp_mer_bind_agreement',
             'ret_url' => $this->hostInfo . "/user/qpay/agreementnotify/frontend",
             'notify_url' => $this->hostInfo . "/user/qpay/agreementnotify/backend",
-            'sourceV' => 'HTML5',
             'user_id' => $epayUserId,
             'user_bind_agreement_list' => "ZTBB0G00",//无密投资
         ];
+
+        if ('pc' !== $channel) {
+            $data['sourceV'] = 'HTML5';
+        }
         $params = $this->buildQuery($data);
 
         return $this->apiUrl.'?'.$params;

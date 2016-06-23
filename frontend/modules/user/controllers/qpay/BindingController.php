@@ -82,7 +82,7 @@ class BindingController extends BaseController
 
     public function actionUmpmianmi()
     {
-        return $this->redirect(Yii::$container->get('ump')->openmianmi($this->getAuthedUser()->epayUser->epayUserId));
+        return $this->redirect(Yii::$container->get('ump')->openmianmi($this->getAuthedUser()->epayUser->epayUserId, 'pc'));
     }
 
     private function createErrorResponse($modelOrMessage = null)

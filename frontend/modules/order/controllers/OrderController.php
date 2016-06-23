@@ -124,4 +124,15 @@ class OrderController extends BaseController
             'ebao' => $ebao,
         ]);
     }
+
+    /**
+     * 认购标的结果页
+     */
+    public function actionOrdererror($osn)
+    {
+        $order = OnlineOrder::ensureOrder($osn);
+        if (\Yii::$app->request->isAjax) {
+            return ['status' => $order->status];
+        }
+    }
 }

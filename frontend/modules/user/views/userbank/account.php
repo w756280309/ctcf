@@ -17,6 +17,7 @@
         <p class="tuoguan">托管账号</p>
         <div class="tuoguan-img">登录联动优势查看账户总览及收支明细<a target="_blank"  href="https://www.soopay.net/" class="login-liandong">登录联动优势</a> </div>
     </div>
-
 </div>
-
+<script>
+    $('.userAccount-left-nav .account').addClass('selected');
+</script>
