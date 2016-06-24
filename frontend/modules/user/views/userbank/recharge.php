@@ -1,7 +1,8 @@
 <?php
-    $this->title = '快捷充值';
+    $this->title = '充值';
     $this->registerCssFile('/css/useraccount/bindcardalready.css');
     $this->registerCssFile('/css/useraccount/chargedeposit.css');
+    \frontend\assets\FrontAsset::register($this);
 ?>
 <style>
     .list-single {
@@ -58,12 +59,13 @@
                 <span class="single-number">尾号<?= $user_bank->card_number?substr($user_bank->card_number, -4):"" ?></span>
             </div>
             <div class="clear"></div>
-            <div>
+            <div style="    margin-top: 5px;margin-bottom: 10px;">
                 <span style="font-size: 12px;">(限额<?= \Yii::$app->functions->toFormatMoney($bank['singleLimit']) ?>/笔，<?= \Yii::$app->functions->toFormatMoney($bank['dailyLimit']) ?>/日)</span>
             </div>
-                <div>
-                    账户余额:<?= number_format($user->lendAccount->account_balance, 2) ?> ；可用余额:<?= number_format($user->lendAccount->available_balance, 2) ?>
-                </div>
+        </div>
+        <div class="bindCard-single">
+            <span class="single-left" style="line-height: 34px;">账户余额</span>
+            <span class="single-right" style="line-height: 34px;font-size: 20px;font-weight: bold;color: #f44336;"><?= number_format($user->lendAccount->available_balance, 2) ?></span>元
         </div>
         <form method="post" class="cmxform" id="form" action="/user/qpay/qrecharge/verify" data-to="1">
             <input name="_csrf" type="hidden" id="_csrf" value="<?= Yii::$app->request->csrfToken ?>">
@@ -168,8 +170,6 @@
             return;
         }
 
-        csrf = '<?= Yii::$app->request->csrfToken ?>';
-
         $('#form').on('submit', function(e) {
             e.preventDefault();
             if (m == 0) {
@@ -184,20 +184,24 @@
             subRecharge();
             $btn.removeClass("btn-press").addClass("btn-normal");
         });
-
     });
 
     function subRecharge(){
         var $form = $('#form');
         $('#rechargebtn').attr('disabled', true);
-        var xhr = $.post(
-            $form.attr('action'),
-            $form.serialize()
-        );
+        var xhr = $.ajax({
+            url: $form.attr('action'),
+            data: $form.serialize(),
+            type:'POST',
+            async:false
+        });
 
         xhr.done(function(data) {
             $('#rechargebtn').attr('disabled', false);
-            location.href=data['next']
+            if (data.next){
+                alertMessage('请在新打开的联动优势页面进行充值，充值完成前不要关闭该窗口。', '/user/user/index');
+                window.open(data.next);
+            }
         });
 
         xhr.fail(function(jqXHR) {

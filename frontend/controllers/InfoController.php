@@ -123,7 +123,10 @@ class InfoController extends Controller
         $this->paramValid($source);
         $info = $this->config['success'][$source];
         $info['jumpUrl'] = \Yii::$app->request->get("jumpUrl") != '' ? \Yii::$app->request->get("jumpUrl") : '';
-        return $this->render("success", ['info' => $info]);
+        return $this->render("success", [
+            'info' => $info,
+            'source' => $source,
+        ]);
     }
 
     public function actionFail()

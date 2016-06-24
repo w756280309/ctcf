@@ -15,8 +15,6 @@ class DrawController extends BaseController
     public function beforeAction($action)
     {
         if (Yii::$app->controller->action->id == 'tixian') {
-            //记录提现来源
-            $this->saveReferrer();
             //记录目标url
             Yii::$app->session->set('to_url', '/user/draw/tixian');
         }

@@ -15,8 +15,6 @@ class RechargeController extends BaseController
     public function beforeAction($action)
     {
         if (Yii::$app->controller->action->id == 'init') {
-            //记录充值来源
-            $this->saveReferrer();
             //记录转跳url
             Yii::$app->session->set('to_url', '/user/recharge/init');
         }
@@ -43,11 +41,7 @@ class RechargeController extends BaseController
         $user_account = $this->user->lendAccount;
 
         //充值成功跳转url
-        if (\Yii::$app->session->has('tx_url')) {
-            $url = \Yii::$app->session->get('tx_url');
-        } else {
-            $url = '/user/user/index';
-        }
+        $url = '/user/user/index';
 
         //检查是否开通免密
         $cond = 0 | BankService::MIANMI_VALIDATE;

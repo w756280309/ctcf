@@ -26,8 +26,13 @@ $jumpUrl = Html::encode($info['jumpUrl']);
 <script>
     $(function(){
         var url = '<?= $jumpUrl ?>';
+        var close = <?= intval(in_array($source,['bangka', 'huanka', 'chongzhi', 'tixian']))?>;
         $('.a-close').on('click',function(){
-            location.href = url;
+            if (close ==  1){
+                window.close();
+            } else {
+                location.href = url;
+            }
         });
 
         var em_time=5;
@@ -38,7 +43,11 @@ $jumpUrl = Html::encode($info['jumpUrl']);
 
             if(em_time==0){
                 clearInterval(time);
-                location.href = url;
+                if (close ==  1){
+                    window.close();
+                } else {
+                    location.href = url;
+                }
             }
         },1000);
     });

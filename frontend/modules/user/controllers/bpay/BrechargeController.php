@@ -34,7 +34,7 @@ class BrechargeController extends BaseController
             $accService = Yii::$container->get('account_service');
 
             if ($accService->confirmRecharge($recharge)) {
-                return $this->goReferrer('/user/user/index');
+                return $this->redirect('/info/success?source=chongzhi&jumpUrl=/user/user/index');
             }
         }
 

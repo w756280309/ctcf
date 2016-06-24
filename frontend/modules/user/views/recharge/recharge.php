@@ -4,7 +4,8 @@ use yii\bootstrap\ActiveForm;
 use yii\web\View;
 use yii\helpers\Html;
 
-$this->title = '充值 - 温都金服';
+$this->title = '充值';
+$this->registerJsFile('/js/lib.js');
 $this->registerJsFile('/js/bootstrap-modal.js', ['position' => View::POS_END,'depends' => \yii\web\JqueryAsset::className()]);
 $this->registerJsFile('/js/bootstrap-modalmanager.js', ['position' => View::POS_END,'depends' => \yii\web\JqueryAsset::className()]);
 $_js = <<<'JS'
@@ -37,8 +38,7 @@ $(function() {
             mianmi();
             return false;
         }
-        var $modal = $('#bind-card-modal').modal({backdrop: 'static'});
-        $modal.modal('show');
+        alertMessage('请在新打开的联动优势页面进行充值，充值完成前不要关闭该窗口。', '/user/user/index');
     });
 })
 JS;

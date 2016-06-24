@@ -42,18 +42,43 @@ function accMul(arg1, arg2) {
 }
 
 function mianmi(){
-    var html = '<!--类mask为遮罩层--><div class="mask" style="display: none;"></div> <!--类pop-open为开通免密--><div class="result-pop pop-open mianmi_message" style="display:none;"> <p class="result-pop-hender">提示<img class="close" id = "box_close" src="/images/login/close.png" alt="" style = "float: right;margin-top: 15px;margin-right: 15px;cursor: pointer;"></p> <p class="result-pop-content">将为您开通免密支付功能，之后进行投资时，无需输入资金托管账户支付密码。但是，当您需要提现时，为确保您的资金安全，仍需输入支付密码。</p> <p class="result-pop-phone">如遇到问题请拨打我们的客服热线：400-101-5151(9:00~20:00)</p> <p><span class="link-confirm" id="mianmi_confirm" onclick="location.href=\'/user/qpay/binding/umpmianmi\'">确定</span></p> </div>';
-    if($('body .mask').length == 0 && $('body .mianmi_message').length == 0){
-        $('body').append(html);
-    }
-    var mask = $('.mask');
-    var mianmi_message = $('.mianmi_message');
-    mask.show();
-    mianmi_message.show();
+    var message = '将为您开通免密支付功能，之后进行投资时，无需输入资金托管账户支付密码。但是，当您需要提现时，为确保您的资金安全，仍需输入支付密码。';
+    var url = '/user/qpay/binding/umpmianmi';
+    alertMessage(message, url, false);
+}
 
+function alertMessage(message, url,reload) {
+    var html = '<div class="mask" style="display: block"></div><div class="result-pop pop-open mianmi_message" style="display: block"><p class="result-pop-hender">提示<img class="close" id = "box_close" src="/images/login/close.png" alt="" style = "float: right;margin-top: 15px;margin-right: 15px;cursor: pointer;"></p> <p class="result-pop-content">' + message + '</p> ';
+    html = html + '<p class="result-pop-phone">如遇到问题请拨打我们的客服热线：400-101-5151(9:00~20:00)</p>';
+    html = html + ' <p><span class="link-confirm" id="mianmi_confirm">确定</span></p></div>';
+    var mask = $('body .mask');
+    var mianmi_message = $('body .mianmi_message');
+
+    if (mask.length == 0 && mianmi_message.length == 0) {
+        $('body').append(html);
+    } else {
+        mask.show();
+        mianmi_message.show();
+    }
+
+    $('#mianmi_confirm').click(function(){
+        if (url && url != '') {
+            window.location.href= url;
+        } else {
+            window.location.reload();
+        }
+    });
     $('#box_close').click(function(){
-        mask.hide();
-        mianmi_message.hide();
+        if(reload == false){
+            $('body .mask').hide();
+            $('body .mianmi_message').hide();
+        } else {
+            if (url && url != '') {
+                window.location.href= url;
+            } else {
+                window.location.reload();
+            }
+        }
     });
 }
 

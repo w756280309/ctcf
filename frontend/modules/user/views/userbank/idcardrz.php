@@ -1,6 +1,7 @@
 <?php
 $this->registerJsFile(ASSETS_BASE_URI . 'js/useraccount/deposit.js');
 $this->registerCssFile(ASSETS_BASE_URI . 'css/useraccount/chargedeposit.css');
+$this->title = '开户';
 ?>
 
 <div class="deposit-box">

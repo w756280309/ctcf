@@ -133,6 +133,12 @@ class OrderController extends BaseController
         $order = OnlineOrder::ensureOrder($osn);
         if (\Yii::$app->request->isAjax) {
             return ['status' => $order->status];
+        } else {
+            if (0 !== $order->status) {
+                return $this->redirect('/info/success?source=touzi&jumpUrl=/licai/index');
+            } else {
+                return $this->redirect('/info/fail?source=touzi');
+            }
         }
     }
 }

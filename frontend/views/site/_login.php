@@ -13,7 +13,7 @@
         <div class="loginUp-inner">
             <div class="phone-box">
                 <label for="phone">手机号码</label>
-                <input id="phone" class="error-border" type="tel" maxlength="11" placeholder="请输入手机号码" required name="LoginForm[phone]" />
+                <input id="phone" type="tel" maxlength="11" placeholder="请输入手机号码" required name="LoginForm[phone]" />
                 <div style="clear: both"></div>
                 <div class="popUp phone_err">手机号码应该包含11个字符</div>
             </div>

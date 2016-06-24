@@ -27,12 +27,7 @@ class NotifyController extends BaseController
         if (Yii::$container->get('ump')->verifySign($data) && '0000' === $data['ret_code']) {
             $bind = QpayBinding::findOne(['binding_sn' => $data['order_id']]);
             if (null !== $bind) {
-                if (\Yii::$app->session->has('tx_url')) {
-                    $url = \Yii::$app->session->get('tx_url');
-                    \Yii::$app->session->remove('tx_url');
-                } else {
-                    $url = '/user/userbank/mybankcard';
-                }
+                $url = '/user/userbank/mybankcard';
                 if (QpayBinding::STATUS_INIT === (int)$bind->status) {
                     $bind->status = QpayBinding::STATUS_ACK;//处理中
                     if ($bind->save(false)) {

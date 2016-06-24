@@ -27,12 +27,7 @@ class QpaynotifyController extends Controller
         $data = Yii::$app->request->get();
         $ret = $this->processing($data);
         if ($ret instanceof RechargeRecord) {
-            if (Yii::$app->session->has('tx_url')) {
-                $url = Yii::$app->session->get('tx_url');
-                Yii::$app->session->remove('tx_url');
-            } else {
-                $url = '/user/user/index';
-            }
+            $url = '/user/user/index';
             return $this->redirect('/info/success?source=chongzhi&jumpUrl='.$url);
         }
 

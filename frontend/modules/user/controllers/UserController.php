@@ -81,7 +81,6 @@ class UserController extends BaseController
     public function actionIndex()
     {
         //清空session中存储的url信息
-        Yii::$app->session->remove('tx_url');//记录来源
         Yii::$app->session->remove('to_url');//记录目的地
         $this->layout = 'main';
         $o = Ord::tableName();

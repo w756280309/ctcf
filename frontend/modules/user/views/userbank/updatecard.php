@@ -4,6 +4,7 @@ $this->title = '更换银行卡';
 $this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/usercenter.css', ['depends' => 'frontend\assets\FrontAsset']);
 $this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/bindcard.css', ['depends' => 'frontend\assets\FrontAsset']);
 $this->registerJsFile(ASSETS_BASE_URI.'js/useraccount/bindcard.js', ['depends' => 'frontend\assets\FrontAsset']);
+$this->registerCssFile('/css/useraccount/chargedeposit.css');
 ?>
 
 <div class="bindCard-box">

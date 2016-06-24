@@ -51,8 +51,9 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/deal/buy.css');
                     <div class="real-invest rg">
                         <p class="real-money"><span>实际支付:</span><i>￥</i><?= number_format(max($money-$cou_money, 0), 2)?></p>
                         <p><a class="buy" id="sub_button">确认购买</a></p>
-                        <p style="color: red;" id="err_message"></p>
                     </div>
+                    <div style="clear: both"></div>
+                    <p style="color: red;    padding-left: 10px;margin-top: 10px;" id="err_message"></p>
                 </div>
                 <div style="clear: both"></div>
             </div>

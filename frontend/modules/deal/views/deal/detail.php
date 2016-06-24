@@ -13,6 +13,7 @@ $this->registerCssFile('/css/deal/buy.css');
 $this->registerCssFile('/css/deal/deallist.css');
 $this->registerCssFile('/css/deal/detail.css');
 $this->registerCssFile('/css/pagination.css');
+$this->registerCssFile('/css/useraccount/chargedeposit.css');
 ?>
 
 <div class="project-box clearfix">
@@ -151,7 +152,7 @@ $this->registerCssFile('/css/pagination.css');
                     <li class="dR-inner-right"><?= (null === $user) ? '查看余额请【<a onclick="login()" style="cursor: pointer">登录</a>】' : ($user->lendAccount ? StringUtils::amountFormat3($user->lendAccount->available_balance) . ' 元' : '0 元') ?></li>
                     <?php if ($deal->status == OnlineProduct::STATUS_NOW){ ?>
                         <li class="dR-inner-left">投资金额(元)：</li>
-                        <li class="dR-inner-right"><a style="cursor: pointer" target="_blank" onclick="chongzhi()">去充值</a></li>
+                        <li class="dR-inner-right"><a style="cursor: pointer" onclick="chongzhi()">去充值</a></li>
                     <?php }?>
                 </ul>
                 <!--已售罄-->
@@ -268,6 +269,8 @@ $this->registerCssFile('/css/pagination.css');
         });
 
         var guest = <?= intval(Yii::$app->user->isGuest)?>;//登录状态
+        var rest = <?= ($deal->status == 1) ? 0 : floatval($deal->getLoanBalance())?>;
+        var start = <?= $deal->start_money ?>;
         $('#deal_money').blur(function () {
             if (guest == 1){
                 return false;
@@ -275,9 +278,12 @@ $this->registerCssFile('/css/pagination.css');
             //判断起投金额
             var money = $(this).val();
             if (money) {
-                if (money < <?= $deal->start_money ?>) {
-                    $('.dR-tishi-error ').show();
-                    $('.dR-tishi-error .err_message').html('投资金额小于起投金额（<?= StringUtils::amountFormat2($deal->start_money) ?>元）');
+                if (rest >= start) {
+                    if (money < start) {
+                        $('.dR-tishi-error ').show();
+                        $('.dR-tishi-error .err_message').html('投资金额小于起投金额（<?= rtrim(rtrim(number_format($deal->start_money, 2), '0'), '.') ?>元）');
+                        return false;
+                    }
                 }
             }
         });
@@ -294,10 +300,12 @@ $this->registerCssFile('/css/pagination.css');
                 return false;
             }
             if (money > 0) {
-                if (money < <?= $deal->start_money ?>) {
-                    $('.dR-tishi-error ').show();
-                    $('.dR-tishi-error .err_message').html('投资金额小于起投金额（<?= StringUtils::amountFormat2($deal->start_money) ?>元）');
-                    return false;
+                if (rest >= start) {
+                    if (money < start) {
+                        $('.dR-tishi-error ').show();
+                        $('.dR-tishi-error .err_message').html('投资金额小于起投金额（<?= rtrim(rtrim(number_format($deal->start_money, 2), '0'), '.') ?>元）');
+                        return false;
+                    }
                 }
             } else {
                 $('.dR-tishi-error ').show();
@@ -309,19 +317,23 @@ $this->registerCssFile('/css/pagination.css');
             var xhr = $.post(form.attr("action"), vals, function (data) {
                 if (data.code == 0) {
                     location.href = data.tourl;
-                    //toast('投标成功');
                 } else {
                     $('.dR-tishi-error ').show();
-                    $('.dR-tishi-error .err_message').html(data.message);
+                    //未免密不提示、不跳转，直接弹框
+                    if('/user/qpay/binding/umpmianmi' != data.tourl){
+                        $('.dR-tishi-error .err_message').html(data.message);
+                    } else {
+                        mianmi();
+                    }
                 }
                 if ('/site/login' == data.tourl) {
                     //获取登录信息
                     login();
+                } else if('/user/qpay/binding/umpmianmi' == data.tourl){
+                    //未免密不跳转，直接弹框;
                 } else {
                     if (data.tourl != undefined) {
-                        setTimeout(function () {
-                            location.href = data.tourl;
-                        }, 1000);
+                        //location.href = data.tourl;
                     }
                 }
             });
@@ -347,13 +359,7 @@ $this->registerCssFile('/css/pagination.css');
             var mobile = $('#phone').val();
             var password = $('#password').val();
             var verity = $('#verity').val();
-            $.post('', {}, function (data) {
-                //成功
-
-                //刷新验证码
-
-                //失败
-            });
+            $.post('', {}, function (data) {});
         }
     }
 
@@ -362,7 +368,7 @@ $this->registerCssFile('/css/pagination.css');
         if (guest) {
             login();
         } else {
-            window.open('/user/recharge/init');
+            location.href = '/user/recharge/init';
         }
     }
     //获取登录页面

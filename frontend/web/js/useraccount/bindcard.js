@@ -124,13 +124,16 @@ function subForm()
         return;
     }
     $form.data('submitting', true);
-    var xhr = $.post(
-        $form.attr('action'),
-        $form.serialize()
-    );
+    var xhr = $.ajax({
+        url: $form.attr('action'),
+        data: $form.serialize(),
+        type:'POST',
+        async:false
+    });
 
     xhr.done(function (data) {
-        window.location.href = data.next;
+        alertMessage('请在新打开的联动优势页面进行绑卡，绑卡完成前不要关闭该窗口。', '/user/userbank/mybankcard');
+        window.open(data.next);
     });
 
     xhr.fail(function (jqXHR) {
