@@ -26,8 +26,8 @@ use common\utils\StringUtils;
             <li><a href="/user/securitycenter/"><img src="<?= ASSETS_BASE_URI ?>images/useraccount/phone1.png" alt=""></a></li>
             <li><a href="/user/securitycenter/"><img src="<?= ASSETS_BASE_URI ?>images/useraccount/card<?= $user->isQpayEnabled() ? 0 : 1 ?>.png" alt=""></a></li>
         </ul>
-        <a target="_blank" href="/user/recharge/init" class="recharge-btn redBtnBg">充值</a>
-        <a target="_blank" href="/user/draw/tixian" class="tixian-btn redBtnBg">提现</a>
+        <a href="/user/recharge/init" class="recharge-btn redBtnBg">充值</a>
+        <a href="/user/draw/tixian" class="tixian-btn redBtnBg">提现</a>
     </div>
     <div class="top-box-bottom">
         <ul class="clearfix">
