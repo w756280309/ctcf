@@ -1,7 +1,9 @@
 <?php
 
 $this->title = $info['title'];
+use yii\helpers\Html;
 
+$jumpUrl = Html::encode($info['jumpUrl']);
 ?>
 
 <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/info/success.css">
@@ -13,7 +15,7 @@ $this->title = $info['title'];
                 <p class="buy-txt"><i></i><span><?= $info['mainTitle'] ?></span></p>
                 <p class="buy-txt-tip"><?= $info['firstFuTitle'] ?></p>
                 <?php if ($info['linkType'] == 1) { ?>
-                    <a href="<?= $info['jumpUrl'] ?>" class="button-close"><?= $info['jumpReferWords'] ?></a>
+                    <a href="<?= $jumpUrl ?>" class="button-close"><?= $info['jumpReferWords'] ?></a>
                 <?php } ?>
             </div>
         </div>
@@ -23,7 +25,7 @@ $this->title = $info['title'];
 <?php if ($info['requireJump'] && $info['linkType'] == 2) { ?>
 <script>
     $(function(){
-        var url = '<?= $info['jumpUrl'] ?>';
+        var url = '<?= $jumpUrl ?>';
         $('.a-close').on('click',function(){
             location.href = url;
         });

@@ -2,6 +2,7 @@
 
 use yii\bootstrap\ActiveForm;
 use yii\web\View;
+use yii\helpers\Html;
 
 $this->title = '充值 - 温都金服';
 $this->registerJsFile('/js/bootstrap-modal.js', ['position' => View::POS_END,'depends' => \yii\web\JqueryAsset::className()]);
@@ -129,7 +130,7 @@ $this->registerCssFile('/css/useraccount/bindcardalready.css');
                 <p><h5>充值结果</h5></p>
 
                 <p>
-                    <a class="btn btn-primary" href="/info/success?source=chongzhi&jumpUrl=<?= $url ?>">充值成功</a>
+                    <a class="btn btn-primary" href="/info/success?source=chongzhi&jumpUrl=<?= Html::encode($url) ?>">充值成功</a>
                     <a class="btn btn-default" href='/info/fail?source=chongzhi&jumpUrl=/user/recharge/init'>充值失败</a>
                 </p>
             </div>

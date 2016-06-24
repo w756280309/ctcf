@@ -1,6 +1,7 @@
 <?php
 
 $this->title = $info['title'];
+use yii\helpers\Html;
 
 ?>
 
@@ -13,7 +14,7 @@ $this->title = $info['title'];
                 <p class="buy-txt"><i></i><span><?= $info['mainTitle'] ?></span></p>
                 <p class="buy-txt-tip"><?= $info['firstFuTitle'] ?></p>
                 <?php if ($info['linkType'] == 1) { ?>
-                <a href="<?= $info['jumpUrl'] ?>" class="button-close"><?= $info['jumpReferWords'] ?></a>
+                <a href="<?= Html::encode($info['jumpUrl']) ?>" class="button-close"><?= $info['jumpReferWords'] ?></a>
                 <?php } ?>
             </div>
         </div>
