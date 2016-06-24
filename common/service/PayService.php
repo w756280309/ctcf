@@ -17,6 +17,7 @@ class PayService
 {
     private $postmethod = null;//允许提交方式1ajax 2post
     private $cdeal = null; //当前标的
+
     public function __construct($method = null)
     {
         $this->postmethod = $method;
@@ -95,7 +96,7 @@ class PayService
         return $data[$code];
     }
 
-    public function checkCommonCond($user = null, $sn = null)
+    public function checkCommonCond($user = null, $sn = null, $channel = 'wap')
     {
         if (null === $user) {
             return ['code' => self::ERROR_LOGIN,  'message' => self::getErrorByCode(self::ERROR_LOGIN), 'tourl' => '/site/login'];
@@ -117,9 +118,15 @@ class PayService
             return ['code' => self::ERROR_ID_SET,  'message' => '账户已被冻结', 'tourl' => '/site/usererror'];
         }
 
-        $bankret = BankService::checkKuaijie($user);
-        if ($bankret['code']) {
-            return $bankret;
+        $cond = 0 | BankService::IDCARDRZ_VALIDATE_N | BankService::MIANMI_VALIDATE;
+
+        if ('wap' === $channel) {
+            $cond |= BankService::BINDBANK_VALIDATE_N;
+        }
+
+        $bankRet = BankService::check($user, $cond);
+        if ($bankRet['code']) {
+            return $bankRet;
         }
 
         $deal = OnlineProduct::findOne(['sn' => $sn]);
@@ -152,16 +159,14 @@ class PayService
 
     /**
      * 验证是否允许支付.
-     *
-     * @param type $sn
-     * @param type $money
-     * @param type $tradepwd
-     *
-     * @return type
      */
-    public function checkAllowPay($user, $sn = null, $money = null, $coupon = null)
+    public function checkAllowPay($user, $sn = null, $money = null, $coupon = null, $channel = null)
     {
-        $commonret = $this->checkCommonCond($user, $sn);
+        if (empty($channel)) {
+            $channel = 'wap';
+        }
+
+        $commonret = $this->checkCommonCond($user, $sn, $channel);
         if ($commonret !== true) {
             return $commonret;
         }

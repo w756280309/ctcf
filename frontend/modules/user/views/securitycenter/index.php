@@ -125,7 +125,7 @@ foreach (['useraccount/safecenter.css'] as $cssFile) {
                     </div>
                     <p class="error new_pass_err"></p>
                     <div class="revise-login-bag">
-                        <span class="yzm-txt">验证码</span><input type="text" id="verifyCode" class="input-yzm-code" name="EditpassForm[verifyCode]" placeholder="请输入验证码" maxlength="4">
+                        <span class="yzm-txt">验证码</span><input type="text" id="verifyCode" class="input-yzm-code" name="EditpassForm[verifyCode]" placeholder="请输入图形验证码" maxlength="4">
                         <?=
                             $form->field($model, 'verifyCode')->label(false)->widget(Captcha::className(), [
                                 'template' => '{image}', 'captchaAction' => '/site/captcha',

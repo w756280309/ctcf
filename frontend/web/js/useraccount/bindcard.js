@@ -39,6 +39,48 @@ $(function(){
         $('.bankIcon-box').fadeOut();
     });
 
+    $('#card_no').blur(function() {
+        var card_no = $(this).val();
+        if(card_no === '') {
+            $('.bind-card').hide();
+            $('.bind-check').show();
+            $('#bank_id').val('');
+            $('#bank_name').val('');
+
+            return false;
+        }
+
+        $.get("/user/userbank/checkbank", {card: card_no}, function (result) {
+            if(result.code !== 0) {
+                $('.bind-card').hide();
+                $('.bind-check').show();
+                error(result.message);
+                $('#bank_id').val('');
+                $('#bank_name').val('');
+
+                return false;
+            }
+
+            if(result['bank_id'] !== '') {
+                $('#bank_id').val(result['bank_id']);
+                $('#bank_name').val(result['bank_name']);
+            }
+
+            if(result['bank_name'] === '') {
+                $('#bank_id').val('');
+                $('#bank_name').val('');
+
+                return false;
+            } else {
+                $('.bind-icon img')[0].src='/images/useraccount/bankicon/'+result['bank_id']+'.png';
+                $('.bind-bank').html(result['bank_name']);
+                $('.bind-check').hide();
+                $('.bind-card').show();
+            }
+
+        });
+    });
+
     csrf = $("meta[name=csrf-token]").attr('content');
     $('#form').on('submit', function(e) {
         e.preventDefault();

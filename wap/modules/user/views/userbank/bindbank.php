@@ -110,33 +110,32 @@ $this->title="绑定银行卡";
             }
         });
 
-       $('#card_no').blur(function(){
+       $('#card_no').blur(function() {
             var card_no = $(this).val();
-            if(card_no=='') {
+            if(card_no === '') {
                 return false;
             }
 
             $.post("/user/userbank/checkbank", {card: card_no, _csrf:csrf}, function (result) {
-                if(result.code!=0) {
-                    alert(result.message);
+                if(result.code !== 0) {
+                    toast(result.message);
                     return;
                 }
 
-                if(result['bank_id']!=''){
+                if(result['bank_id'] !== '') {
                     document.getElementById("bank_id").value = result['bank_id'];
                     document.getElementById("bank_name").value = result['bank_name'];
                 }
 
-                if(result['bank_name']==''){
+                if(result['bank_name'] === '') {
                     return;
-                }else{
+                } else {
                     $('.kaihu2').show();
                     $('.kaihu1').show();
                     $('.kaihu').hide();
                     $('.xian span')[0].innerHTML=result['bank_name'];
                     $('.xian img')[0].src='<?= ASSETS_BASE_URI ?>images/bankicon/'+result['bank_id']+'.png';
                 }
-
             });
        });
     })

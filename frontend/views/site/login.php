@@ -26,7 +26,7 @@ $this->title = '登录';
                         </div>
                         <div class="password-box">
                             <label for="password">登录密码</label>
-                            <input id="password" name="LoginForm[password]" type="password" maxlength="20" placeholder="请输入密码" AUTOCOMPLETE="off"  tabindex="2">
+                            <input id="password" name="LoginForm[password]" type="password" maxlength="20" placeholder="请输入密码" autocomplete="off" tabindex="2">
                             <div style="clear: both"></div>
                             <div class="popUp"></div>
                         </div>
@@ -34,7 +34,7 @@ $this->title = '登录';
                         <div class="verity-box verity-box_none">
                             <label>图形验证码</label>
                             <input type="hidden" name="is_flag" type="hidden" value="true">
-                            <input type="text" id="verity" maxlength="4" placeholder="请输入图形验证码" name="LoginForm[verifyCode]">
+                            <input type="text" id="verity" maxlength="4" placeholder="请输入图形验证码" autocomplete="off" name="LoginForm[verifyCode]">
                             <img src="/site/captcha" class="verity-img" alt="">
                             <div style="clear: both"></div>
                             <div class="popUp"></div>

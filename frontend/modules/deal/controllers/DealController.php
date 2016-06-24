@@ -23,13 +23,13 @@ class DealController extends BaseController
     {
         $deal = $this->findOr404(OnlineProduct::className(), ['online_status' => OnlineProduct::STATUS_ONLINE, 'del_status' => OnlineProduct::STATUS_USE, 'sn' => $sn]);
         //未登录或者登录了，但不是定向用户的情况下，报404
-        if (1 === $deal->isPrivate) {
+        if ($deal->isPrivate) {
             if (Yii::$app->user->isGuest) {
-                $this->ex404('未登录用户不能查看定向标');
+                throw $this->ex404('未登录用户不能查看定向标');
             } else {
                 $user_ids = explode(',', $deal->allowedUids);
-                if (!in_array(Yii::$app->user->identity->getId(), $user_ids)) {
-                    $this->ex404('不能查看他人的定向标');
+                if (!in_array($this->getAuthedUser()->id, $user_ids)) {
+                    throw $this->ex404('不能查看他人的定向标');
                 }
             }
         }
@@ -42,7 +42,7 @@ class DealController extends BaseController
                 ->andWhere(['<=', "$ct.useStartDate", date('Y-m-d')])
                 ->andWhere(['>=', "$ct.useEndDate", date('Y-m-d')])
                 ->andWhere(['user_id' => $this->getAuthedUser()->id])
-                ->orderBy("$ct.useEndDate desc, $ct.amount desc, $ct.minInvest asc")
+                ->orderBy("$ct.useEndDate, $ct.amount desc, $ct.minInvest")
                 ->all();
         } else {
             $data = [];
@@ -98,7 +98,7 @@ class DealController extends BaseController
             return ['code' => 1, 'message' => '请登录', 'tourl' => '/site/login'];
         }
         $pay = new PayService(PayService::REQUEST_AJAX);
-        $ret = $pay->checkAllowPay($this->getAuthedUser(), $sn, $money, $coupon);
+        $ret = $pay->checkAllowPay($this->getAuthedUser(), $sn, $money, $coupon, 'pc');
         if ($ret['code'] != PayService::ERROR_SUCCESS) {
             return $ret;
         }

@@ -63,7 +63,7 @@ use common\models\bank\BankCardUpdate;
                 <span class="single-left">银行卡</span>
                 <a class="single-div">
                     <span class="add-icon"></span>
-                    <span class="link-font" onclick="location.href='/user/userbank/bindbank'">点击绑定银行卡</span>
+                    <span class="link-font" onclick="goBinding()">点击绑定银行卡</span>
                 </a>
                 <a class="clear"></a>
             </div>
@@ -83,5 +83,16 @@ use common\models\bank\BankCardUpdate;
     var m = <?= intval($data['code'])?>;
     if (m == 1) {
         mianmi();
+    }
+
+    function goBinding()
+    {
+        var code = <?= $data['code'] ?>;
+
+        if (code) {
+            location.reload();
+        } else {
+            location.href = "/user/userbank/bindbank";
+        }
     }
 </script>

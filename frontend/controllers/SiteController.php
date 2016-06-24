@@ -96,12 +96,7 @@ class SiteController extends Controller
             ->all();
 
         //推荐区展示
-        $loans = OnlineProduct::find()
-            ->where(['isPrivate' => 0, 'del_status' => OnlineProduct::STATUS_USE, 'online_status' => OnlineProduct::STATUS_ONLINE])
-            ->andWhere('recommendTime != 0')
-            ->limit(3)
-            ->orderBy('recommendTime desc, sort asc, id desc')
-            ->all();
+        $loans = OnlineProduct::getRecommendLoans(3);
 
         //最新资讯
         $news = News::find()

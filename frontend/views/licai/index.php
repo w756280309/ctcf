@@ -14,11 +14,8 @@ use common\widgets\Pager;
     <div class="projectList">
         <!--预告期-->
         <?php foreach ($loans as $key => $val) : ?>
-        <form id="<?= $key ?>" method="post" target="_blank" action="/deal/deal/detail?sn=<?= $val->sn ?>">
-            <input type="hidden" name="_csrf" value="<?= Yii::$app->request->getCsrfToken(); ?>">
-        </form>
-        <div class="deal-single loan <?= $key === count($loans) - 1 ? 'last' : '' ?> <?= in_array($val->status, [OnlineProduct::STATUS_PRE, OnlineProduct::STATUS_NOW]) ? 'deal-single-border' : '' ?>"
-             onclick="$('#<?= $key ?>').submit()">
+        <a target="_blank" href="/deal/deal/detail?sn=<?= $val->sn ?>">
+        <div class="deal-single loan <?= $key === count($loans) - 1 ? 'last' : '' ?> <?= in_array($val->status, [OnlineProduct::STATUS_PRE, OnlineProduct::STATUS_NOW]) ? 'deal-single-border' : '' ?>">
                 <!--类btn_ing_border为预告期和可投期的红边框-->
                 <div class="single_left">
                     <div class="single_title">
@@ -71,7 +68,7 @@ use common\widgets\Pager;
                                 <span class="single_right_tiao_span"><?= number_format($val->finish_rate * 100) ?>%</span>
                             <?php }?>
                             <div class="clear"></div>
-                            <p class="remain-number">可投余额：<?= ($val->status == 1) ? (Yii::$app->functions->toFormatMoney($val->money)) : rtrim(rtrim(number_format($val->getLoanBalance(), 2), '0'), '.') ?>元</p>
+                            <p class="remain-number">可投余额：<?= ($val->status == 1) ? (StringUtils::amountFormat1('{amount}{unit}', $val->money)) : StringUtils::amountFormat2($val->getLoanBalance()).'元' ?></p>
                         </div>
                         <?php
                         if (OnlineProduct::STATUS_PRE === $val->status) {
@@ -93,6 +90,7 @@ use common\widgets\Pager;
                     </div>
                 <?php } ?>
             </div>
+        </a>
         <?php endforeach; ?>
         <center><?= Pager::widget(['pagination' => $pages]); ?></center>
     </div>

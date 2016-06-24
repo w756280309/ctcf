@@ -1,11 +1,11 @@
 <?php
-use common\view\LoanHelper;
 use common\models\product\RateSteps;
 use common\models\product\OnlineProduct;
+use common\utils\StringUtils;
+use common\view\LoanHelper;
 
 $this->title = '项目详情';
 $user = Yii::$app->user->identity;
-$deal->money = rtrim(rtrim($deal->money, '0'), '.');
 
 $this->registerJsFile('/js/lib.js');
 $this->registerJsFile('/js/detail.js');
@@ -55,7 +55,7 @@ $this->registerCssFile('/css/pagination.css');
                     </li>
                     <li style="width: 22%">
                         <div>
-                            <span class="pl-middle-content"><?= Yii::$app->functions->toFormatMoney($deal->money) ?></span>
+                            <span class="pl-middle-content"><?= StringUtils::amountFormat1('{amount}{unit}', $deal->money) ?></span>
                             <p>项目总额</p>
                         </div>
                     </li>
@@ -91,17 +91,17 @@ $this->registerCssFile('/css/pagination.css');
                     <li class="pl-grayBg"><span>认购金额（元）</span></li>
                     <li class="pl-grayBg pl-center">年化收益率（%）</li>
                     <li>
-                        <div><i>累计认购<?= rtrim(rtrim(number_format($deal->start_money, 2), '0'), '.') ?>起</i></div>
+                        <div><i>累计认购<?= StringUtils::amountFormat2($deal->start_money) ?>起</i></div>
                     </li>
                     <li>
-                        <div class="pl-rborder pl-center"><?= rtrim(rtrim(number_format($deal->yield_rate * 100, 2), '0'), '.') ?></div>
+                        <div class="pl-rborder pl-center"><?= StringUtils::amountFormat2($deal->yield_rate * 100) ?></div>
                     </li>
                     <?php foreach (RateSteps::parse($deal->rateSteps) as $val) { ?>
                         <li>
-                            <div><i>累计认购<?= rtrim(rtrim(number_format($val['min'], 2), '0'), '.') ?>起</i></div>
+                            <div><i>累计认购<?= StringUtils::amountFormat2($val['min']) ?>起</i></div>
                         </li>
                         <li>
-                            <div class="pl-rborder pl-center"><?= rtrim(rtrim(number_format($val['rate'], 2), '0'), '.') ?></div>
+                            <div class="pl-rborder pl-center"><?= StringUtils::amountFormat2($val['rate']) ?></div>
                         </li>
                     <?php } ?>
                 </ul>
@@ -137,18 +137,18 @@ $this->registerCssFile('/css/pagination.css');
                     <div class="dRP-data">100%</div>
                     <?php } else { ?>
                         <div class="dR-progress">
-                            <span data-progress="<?= number_format($deal->finish_rate * 100, 0) ?>" style="width: <?= number_format($deal->finish_rate * 100, 0) ?>%;"></span>
+                            <span data-progress="<?= number_format($deal->finish_rate * 100) ?>" style="width: <?= number_format($deal->finish_rate * 100) ?>%;"></span>
                         </div>
-                        <div class="dRP-data"><?= number_format($deal->finish_rate * 100, 0) ?>%</div>
+                        <div class="dRP-data"><?= number_format($deal->finish_rate * 100) ?>%</div>
                     <?php }?>
                 </div>
                 <ul class="clearfix dR-inner">
                     <li class="dR-inner-left">项目可投余额：</li>
                     <li class="dR-inner-right">
-                        <span><i><?= ($deal->status == 1) ? (Yii::$app->functions->toFormatMoney($deal->money)) : rtrim(rtrim(number_format($deal->getLoanBalance(), 2), '0'), '.') . '元' ?></i></span>
+                        <span><i><?= ($deal->status == 1) ? (StringUtils::amountFormat1('{amount}{unit}', $deal->money)) : StringUtils::amountFormat2($deal->getLoanBalance()) . '元' ?></i></span>
                     </li>
                     <li class="dR-inner-left">我的可用余额：</li>
-                    <li class="dR-inner-right"><?= (null === $user) ? '查看余额请【<a onclick="login()" style="cursor: pointer">登录</a>】' : ($user->lendAccount ? number_format($user->lendAccount->available_balance, 2) . ' 元' : '0 元') ?></li>
+                    <li class="dR-inner-right"><?= (null === $user) ? '查看余额请【<a onclick="login()" style="cursor: pointer">登录</a>】' : ($user->lendAccount ? StringUtils::amountFormat3($user->lendAccount->available_balance) . ' 元' : '0 元') ?></li>
                     <?php if ($deal->status == OnlineProduct::STATUS_NOW){ ?>
                         <li class="dR-inner-left">投资金额(元)：</li>
                         <li class="dR-inner-right"><a style="cursor: pointer" target="_blank" onclick="chongzhi()">去充值</a></li>
@@ -164,8 +164,8 @@ $this->registerCssFile('/css/pagination.css');
                             <div class="tishi tishi-dev">
                                 <img class="jiao-left" src="/images/deal/jiao-right.png" alt="">
                                 <ul class="dR-tishi">
-                                    <li><span>起投金额<?= rtrim(rtrim(number_format($deal->start_money, 2), '0'), '.') ?>元</span></li>
-                                    <li><span>递增金额<?= rtrim(rtrim(number_format($deal->dizeng_money, 2), '0'), '.') ?>元</span></li>
+                                    <li><span>起投金额<?= StringUtils::amountFormat2($deal->start_money) ?>元</span></li>
+                                    <li><span>递增金额<?= StringUtils::amountFormat2($deal->dizeng_money) ?>元</span></li>
                                 </ul>
                             </div>
                             <!--输入款错误提示信息-->
@@ -191,14 +191,14 @@ $this->registerCssFile('/css/pagination.css');
                                         <li class="quan-false">
                                             <input type="radio" name="couponId" value="<?= $v->id ?>" class="coupon_radio" style="display: none;" <?=($v->id === $coupon_id ) ? 'checked' : '' ?>>
                                             <div class="quan-left">
-                                                <span>￥</span><?= number_format($v->couponType->amount, 0) ?>
+                                                <span>￥</span><?= number_format($v->couponType->amount) ?>
                                             </div>
                                             <div class="quan-right">
                                                 <div class="quan-right-content">
                                                     <div><?= $v->couponType->name ?></div>
                                                     <p>
-                                                        单笔投资满<?= \Yii::$app->functions->toFormatMoney(rtrim(rtrim($v->couponType->minInvest, '0'), '.')) ?>可用</p>
-                                                    <p  class="coupon_name" style="display: none"> 单笔投资满<?= \Yii::$app->functions->toFormatMoney(rtrim(rtrim($v->couponType->minInvest, '0'), '.')) ?>可抵扣<?= $v->couponType->amount ?>元</p>
+                                                        单笔投资满<?= StringUtils::amountFormat1('{amount}{unit}', $v->couponType->minInvest) ?>可用</p>
+                                                    <p  class="coupon_name" style="display: none"> 单笔投资满<?= StringUtils::amountFormat1('{amount}{unit}', $v->couponType->minInvest) ?>可抵扣<?= $v->couponType->amount ?>元</p>
                                                     <p>所有项目可用</p>
                                                     <p>有效期至<?= $v->couponType->useEndDate ?></p>
                                                 </div>
@@ -277,7 +277,7 @@ $this->registerCssFile('/css/pagination.css');
             if (money) {
                 if (money < <?= $deal->start_money ?>) {
                     $('.dR-tishi-error ').show();
-                    $('.dR-tishi-error .err_message').html('投资金额小于起投金额（<?= rtrim(rtrim(number_format($deal->start_money, 2), '0'), '.') ?>元）');
+                    $('.dR-tishi-error .err_message').html('投资金额小于起投金额（<?= StringUtils::amountFormat2($deal->start_money) ?>元）');
                 }
             }
         });
@@ -296,7 +296,7 @@ $this->registerCssFile('/css/pagination.css');
             if (money > 0) {
                 if (money < <?= $deal->start_money ?>) {
                     $('.dR-tishi-error ').show();
-                    $('.dR-tishi-error .err_message').html('投资金额小于起投金额（<?= rtrim(rtrim(number_format($deal->start_money, 2), '0'), '.') ?>元）');
+                    $('.dR-tishi-error .err_message').html('投资金额小于起投金额（<?= StringUtils::amountFormat2($deal->start_money) ?>元）');
                     return false;
                 }
             } else {

@@ -49,8 +49,9 @@ class OrderController extends BaseController
             }
         }
 
+        $user = $this->getAuthedUser();
         $pay = new PayService(PayService::REQUEST_AJAX);
-        $ret = $pay->checkAllowPay($this->getAuthedUser(), $sn, $money, $coupon);
+        $ret = $pay->checkAllowPay($user, $sn, $money, $coupon, 'pc');
         if ($ret['code'] != PayService::ERROR_SUCCESS) {
             return $ret;
         }
@@ -60,7 +61,7 @@ class OrderController extends BaseController
         }
         $orderManager = new OrderManager();
 
-        return $orderManager->createOrder($sn, $money, $this->getAuthedUser()->id, $coupon);
+        return $orderManager->createOrder($sn, $money, $user->id, $coupon);
     }
 
     /**

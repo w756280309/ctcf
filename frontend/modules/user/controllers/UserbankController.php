@@ -230,4 +230,12 @@ class UserbankController extends BaseController
 
         return $this->render('xiane', ['qpay' => $qpayBanks, 'bpay' => $bpayBanks]);
     }
+
+    /**
+     * 检查银行卡号，返回开户行名称.
+     */
+    public function actionCheckbank($card)
+    {
+        return BankService::checkBankcard($card);
+    }
 }

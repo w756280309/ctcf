@@ -554,4 +554,20 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
 
         return $dealBalance;
     }
+
+    /**
+     * 查询推荐标的区标的列表.
+     * 1. 排序按照先推荐标的,后普通标的的顺序进行排序;
+     * 2. 根据count的值取查询列表的前count条记录;
+     */
+    public static function getRecommendLoans($count)
+    {
+        $loans = self::find()
+            ->where(['isPrivate' => 0, 'del_status' => OnlineProduct::STATUS_USE, 'online_status' => OnlineProduct::STATUS_ONLINE])
+            ->limit($count)
+            ->orderBy('recommendTime desc, sort asc, id desc')
+            ->all();
+
+        return $loans;
+    }
 }

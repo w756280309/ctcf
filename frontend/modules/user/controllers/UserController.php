@@ -10,7 +10,6 @@ use frontend\controllers\BaseController;
 use Yii;
 use yii\data\Pagination;
 use yii\filters\AccessControl;
-use common\service\BankService;
 
 class UserController extends BaseController
 {
