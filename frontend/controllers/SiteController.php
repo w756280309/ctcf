@@ -241,7 +241,7 @@ class SiteController extends Controller
                 $user->last_login = time();
                 $user->save();
 
-                return $this->redirect('/');
+                return ['code' => 0, 'tourl' => '/'];
             } else {
                 return ['code' => 1, 'error' => $model->firstErrors];
             }
@@ -267,7 +267,7 @@ class SiteController extends Controller
             if ($model->resetpass()) {
                 \Yii::$app->user->logout();
 
-                return $this->redirect('/site/login');
+                return ['code' => 0, 'tourl' => '/site/login'];
             } else {
                 return ['code' => 1, 'error' => $model->firstErrors];
             }

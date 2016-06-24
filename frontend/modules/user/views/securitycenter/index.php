@@ -126,13 +126,11 @@ foreach (['useraccount/safecenter.css'] as $cssFile) {
                     <p class="error new_pass_err"></p>
                     <div class="revise-login-bag">
                         <span class="yzm-txt">验证码</span><input type="text" id="verifyCode" class="input-yzm-code" name="EditpassForm[verifyCode]" placeholder="请输入验证码" maxlength="4">
-                        <i class="yzm">
-                            <?=
-                                $form->field($model, 'verifyCode')->label(false)->widget(Captcha::className(), [
-                                    'template' => '{image}', 'captchaAction' => '/site/captcha',
-                                ])
-                            ?>
-                        </i>
+                        <?=
+                            $form->field($model, 'verifyCode')->label(false)->widget(Captcha::className(), [
+                                'template' => '{image}', 'captchaAction' => '/site/captcha',
+                            ])
+                        ?>
                     </div>
                     <p class="error verifyCode_err"></p>
                     <input type="submit" class="a-submit" value="确认修改">
@@ -183,7 +181,7 @@ foreach (['useraccount/safecenter.css'] as $cssFile) {
 </div>
 
 <script>
-    $(function(){
+    $(function() {
         //张开收缩修改密码
         var c=$('.revise .info-btn .join').eq(0);
         var d=$('.revise .revise-container').eq(0);
@@ -197,6 +195,7 @@ foreach (['useraccount/safecenter.css'] as $cssFile) {
             $(a).on('click',function(){
                 var index=$(a).index(this);
                 $(b).stop(true,false).eq(index).slideToggle();
+                $("#editpassform-verifycode-image").addClass('yzm');
             });
         }
 

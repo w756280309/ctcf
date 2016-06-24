@@ -8,15 +8,17 @@ use common\models\product\OnlineProduct;
 use common\models\product\RateSteps;
 use common\utils\StringUtils;
 use common\widgets\Pager;
-
 ?>
 
 <div class="projectContainer">
     <div class="projectList">
         <!--预告期-->
         <?php foreach ($loans as $key => $val) : ?>
+        <form id="<?= $key ?>" method="post" target="_blank" action="/deal/deal/detail?sn=<?= $val->sn ?>">
+            <input type="hidden" name="_csrf" value="<?= Yii::$app->request->getCsrfToken(); ?>">
+        </form>
         <div class="deal-single loan <?= $key === count($loans) - 1 ? 'last' : '' ?> <?= in_array($val->status, [OnlineProduct::STATUS_PRE, OnlineProduct::STATUS_NOW]) ? 'deal-single-border' : '' ?>"
-                 onclick="window.location.href='/deal/deal/detail?sn='+'<?= $val->sn ?>'">
+             onclick="$('#<?= $key ?>').submit()">
                 <!--类btn_ing_border为预告期和可投期的红边框-->
                 <div class="single_left">
                     <div class="single_title">

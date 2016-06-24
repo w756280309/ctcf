@@ -1,4 +1,5 @@
 $(function() {
+     $("#captchaform-captchacode-image").addClass('verity-img');
      $('.verity-ins').hover(function() {
          $('.verity-ins').css({background:'#f41c11'});
      }, function() {
@@ -210,15 +211,17 @@ function subForm()
     );
 
     xhr.done(function(data) {
-        $('.resign-btn').attr('disabled', false);
-
-        if (1 === data.code) {
+        if (!data.code) {
+            location.href = data.tourl;
+        } else {
             $.each(data.error, function(i, item) {
                 var err = i + '-err';
                 $('#'+i).addClass('error-border');
                 $('.'+err).html(item);
             });
         }
+
+        $('.resign-btn').attr('disabled', false);
     });
 
     xhr.fail(function() {

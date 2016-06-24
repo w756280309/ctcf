@@ -45,12 +45,18 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/useraccount/chargedeposit.css');
 <script>
     $(function () {
         /*点击立即开通*/
+        var allowSub = true;
         $('.deposit-content-link').on('click', function () {
             var name = $('.name-text');
             var idcard = $('.identity-text');
             var nameisok = validate_name();
             var identityisok = validate_idcard();
             if (nameisok != false && identityisok != false) {
+                if (!allowSub) {
+                    return;
+                }
+
+                allowSub = false;
                 $('.deposit-content-link').html('开通中...');
 
                 $.post('/user/userbank/idcardrz', {
@@ -69,6 +75,7 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/useraccount/chargedeposit.css');
                             location.herf = data.tourl;
                         }
 
+                        allowSub = true;
                         $('.deposit-content-link').html('立即开通');
                     }
                 });

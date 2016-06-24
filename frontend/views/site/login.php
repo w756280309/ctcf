@@ -20,7 +20,7 @@ $this->title = '登录';
                     <div class="login-right-box">
                         <div class="phone-box">
                             <label for="phone">手机号码</label>
-                            <input id="phone" type="tel" name="LoginForm[phone]" maxlength="11" placeholder="请输入手机号码" AUTOCOMPLETE="off"  tabindex="1">
+                            <input id="phone" type="tel" name="LoginForm[phone]" maxlength="11" placeholder="请输入手机号码" tabindex="1">
                             <div style="clear: both"></div>
                             <div class="popUp"></div>
                         </div>

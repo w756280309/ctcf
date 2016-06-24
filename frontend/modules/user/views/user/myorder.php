@@ -71,7 +71,7 @@ use common\widgets\Pager;
                             <span class="tip-icon-enna tip-icon-top"></span>
                         </span>
                     </td>
-                    <td class="text-align-ct"><a href="/order/order/agreement?pid=<?= $val->loan->id ?>&order_id=<?= $val->id ?>">查看</a></td>
+                    <td class="text-align-ct"><a href="/order/order/agreement?pid=<?= $val->loan->id ?>&order_id=<?= $val->id ?>" target="_blank">查看</a></td>
                 </tr>
                 <?php if (!empty($plan[$key]['obj'])) : ?>
                 <tr class="tr-show">

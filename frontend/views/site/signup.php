@@ -23,7 +23,7 @@ use yii\captcha\Captcha;
                 <label>图形验证码</label>
                 <input type="hidden" id="csrf" value="<?= Yii::$app->request->csrfToken ?>">
                 <input id="verity" type="text" maxlength="4" placeholder="请输入图形验证码" AUTOCOMPLETE="off">
-                <?= $form->field($captcha, 'captchaCode')->label(false)->widget(Captcha::className(), ['template' => '<div class="verity-img">{image}</div>', 'captchaAction' => '/site/captcha']) ?>
+                <?= $form->field($captcha, 'captchaCode')->label(false)->widget(Captcha::className(), ['template' => '{image}', 'captchaAction' => '/site/captcha']) ?>
                 <div style="clear: both"></div>
                 <div class="popUp"></div>
             </div>

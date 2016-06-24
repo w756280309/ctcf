@@ -1,6 +1,6 @@
 <?php
     $this->title = '提现';
-    \frontend\assets\FrontAsset::register($this);
+
     $this->registerCssFile('/css/useraccount/bindcardalready.css');
     $this->registerCssFile('/css/useraccount/chargedeposit.css');
 ?>
