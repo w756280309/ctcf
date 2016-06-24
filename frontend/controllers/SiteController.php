@@ -191,7 +191,7 @@ class SiteController extends Controller
         }
 
         if ($model->getErrors()) {
-            if ($model->getErrors('password')) {
+            if ($model->getErrors('password') || $model->getErrors('phone')) {
                 $login->logFailure(Yii::$app->request, $model->phone, LoginLog::TYPE_PC);
             }
 

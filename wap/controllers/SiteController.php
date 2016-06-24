@@ -205,7 +205,7 @@ class SiteController extends Controller
 
         $login = new LoginService();
 
-        if ($model->getErrors('password')) {
+        if ($model->getErrors('password') || $model->getErrors('phone')) {
             $login->logFailure(Yii::$app->request, $model->phone, LoginLog::TYPE_WAP);
         }
 
