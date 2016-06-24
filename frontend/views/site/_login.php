@@ -140,10 +140,7 @@
                             $("#login_verity").show();
                             $("#verity_img").attr("src", "/site/captcha?" + Math.random());
                         }
-                        if (1 == data.code) {
-                            $('.phone_err').show();
-                            $('.phone_err').html(data.message);
-                        } else if (2 == data.code) {
+                        if (1 == data.code || 2 == data.code) {
                             $('.pass_err').show();
                             $('.pass_err').html(data.message);
                         } else if (3 == data.code) {
