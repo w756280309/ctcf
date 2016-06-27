@@ -62,6 +62,6 @@ class HelpcenterController extends Controller
 
     public function actionContact()
     {
-        return $this->render("advantage");
+        return $this->render("contact");
     }
 }

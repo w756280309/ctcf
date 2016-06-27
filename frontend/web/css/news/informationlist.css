@@ -29,6 +29,7 @@
     float: left;
 }
 .com_text {
+    width: 100%;
     height: 87px;
     float: left;
     overflow: hidden;
@@ -55,7 +56,6 @@
 }
 .size_date {
     font-size: 12px;
-    width: 130px;
     float: right;
     color: #bebebe;
     padding-top: 5px;
@@ -69,4 +69,7 @@
     height: 1px;
     border-bottom: 1px dashed #e6e6e6;
     float: right;
+}
+.pagination-content {
+    width: 100%;
 }

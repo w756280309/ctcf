@@ -1,6 +1,6 @@
 <?php
 
-$this->title = '媒体报道详情';
+$this->title = $new->title;
 $this->registerCssFile(ASSETS_BASE_URI.'css/news/mediumreport.css', ['depends' => 'frontend\assets\FrontAsset']);
 
 ?>

@@ -85,7 +85,9 @@ use common\utils\StringUtils;
             <span>媒体报道</span>
             <a href="/news/index?type=media">更多&gt;</a>
         </div>
-<!--        <div class="videos"><img src="<?= ASSETS_BASE_URI ?>images/video-bg2.jpg" alt=""></div>-->
+        <?php if ('' !== $first_media && '' !== $first_media->pc_thumb) { ?>
+        <div class="videos"><img src="<?= UPLOAD_BASE_URI.$first_media->pc_thumb ?>" alt=""></div>
+        <?php } ?>
         <ul class="chengji-right-bottom">
             <?php foreach ($media as $val) : ?>
                 <li><a href="/news/detail?type=media&id=<?= $val->id ?>"><?= $val->title ?></a></li>

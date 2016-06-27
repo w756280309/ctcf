@@ -1,8 +1,9 @@
 <?php
 
 $this->title = '网站公告';
-$this->registerCssFile(ASSETS_BASE_URI.'css/news/notice.css', ['depends' => 'frontend\assets\FrontAsset']);
+
 $this->registerCssFile(ASSETS_BASE_URI.'css/pagination.css', ['depends' => 'frontend\assets\FrontAsset']);
+$this->registerCssFile(ASSETS_BASE_URI.'css/news/notice.css', ['depends' => 'frontend\assets\FrontAsset']);
 
 use common\widgets\Pager;
 ?>

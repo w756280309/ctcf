@@ -82,7 +82,7 @@ class SiteController extends Controller
             ->innerJoin($ic, "$n.id = $ic.item_id")
             ->leftJoin($c, "$ic.category_id = $c.id")
             ->where(["$n.status" => News::STATUS_PUBLISH, "$c.key" => \Yii::$app->params['news_key_notice']])
-            ->orderBy(["$n.news_time" => 'desc', "$n.id" => 'desc'])
+            ->orderBy(["$n.news_time" => SORT_DESC, "$n.id" => SORT_DESC])
             ->limit(3)
             ->all();
 
@@ -91,9 +91,10 @@ class SiteController extends Controller
             ->innerJoin($ic, "$n.id = $ic.item_id")
             ->leftJoin($c, "$ic.category_id = $c.id")
             ->where(["$n.status" => News::STATUS_PUBLISH, "$c.key" => \Yii::$app->params['news_key_media']])
-            ->orderBy(["$n.news_time" => 'desc', "$n.id" => 'desc'])
+            ->orderBy(["$n.news_time" => SORT_DESC, "$n.id" => SORT_DESC])
             ->limit(3)
             ->all();
+        $first_media = !empty($media) ? $media[0] : '';
 
         //推荐区展示
         $loans = OnlineProduct::getRecommendLoans(3);
@@ -103,7 +104,7 @@ class SiteController extends Controller
             ->innerJoin($ic, "$n.id = $ic.item_id")
             ->leftJoin($c, "$ic.category_id = $c.id")
             ->where(["$n.status" => News::STATUS_PUBLISH, "$c.key" => \Yii::$app->params['news_key_info']])
-            ->orderBy(["$n.news_time" => 'desc', "$n.id" => 'desc'])
+            ->orderBy(["$n.news_time" => SORT_DESC, "$n.id" => SORT_DESC])
             ->limit(5)
             ->all();
 
@@ -113,6 +114,7 @@ class SiteController extends Controller
             'notice' => $notice,
             'media' => $media,
             'news' => $news,
+            'first_media' => $first_media,
         ]);
     }
 

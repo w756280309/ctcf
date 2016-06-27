@@ -1,8 +1,9 @@
 <?php
 
 $this->title = '最新资讯';
-$this->registerCssFile(ASSETS_BASE_URI.'css/news/informationlist.css', ['depends' => 'frontend\assets\FrontAsset']);
+
 $this->registerCssFile(ASSETS_BASE_URI.'css/pagination.css', ['depends' => 'frontend\assets\FrontAsset']);
+$this->registerCssFile(ASSETS_BASE_URI.'css/news/informationlist.css', ['depends' => 'frontend\assets\FrontAsset']);
 
 use common\widgets\Pager;
 ?>

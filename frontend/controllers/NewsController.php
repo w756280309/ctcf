@@ -18,6 +18,7 @@ class NewsController extends Controller
 
     public function actionIndex($type)
     {
+        $pageSize = 10;
         $ic = ItemCategory::tableName();
         $n = News::tableName();
         $c = Category::tableName();
@@ -26,6 +27,7 @@ class NewsController extends Controller
             $render = "info";
         } else if ($type === "media") {
             $key = \Yii::$app->params['news_key_media'];
+            $pageSize = 5;
             $render = "media";
         } else if ($type === "notice") {
             $key = \Yii::$app->params['news_key_notice'];
@@ -35,9 +37,9 @@ class NewsController extends Controller
             ->innerJoin($ic, "$n.id = $ic.item_id")
             ->leftJoin($c, "$ic.category_id = $c.id")
             ->where(["$n.status" => News::STATUS_PUBLISH, "$c.key" => $key])
-            ->orderBy(["$n.news_time" => 'desc', "$n.id" => 'desc']);
+            ->orderBy(["$n.news_time" => SORT_DESC, "$n.id" => SORT_DESC]);
 
-        $pages = new Pagination(['totalCount' => $data->count(), 'pageSize' => '10']);
+        $pages = new Pagination(['totalCount' => $data->count(), 'pageSize' => $pageSize]);
         $model = $data->offset($pages->offset)->limit($pages->limit)->all();
 
         return $this->render($render, ['model' => $model, 'pages' => $pages, 'type'=>$type]);

@@ -1,6 +1,6 @@
 <?php
 
-$this->title = '网站公告详情';
+$this->title = $new->title;
 $this->registerCssFile(ASSETS_BASE_URI.'css/news/notice.css', ['depends' => 'frontend\assets\FrontAsset']);
 
 ?>
