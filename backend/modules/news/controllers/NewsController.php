@@ -10,6 +10,7 @@ use common\models\news\News;
 use yii\helpers\ArrayHelper;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
+use yii\web\UploadedFile;
 
 class NewsController extends BaseController
 {
@@ -79,9 +80,26 @@ class NewsController extends BaseController
             $model = News::initNew();
             $model->creator_id = Yii::$app->user->getId();
         }
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['index']);
+
+        if (isset($_FILES['News']['tmp_name']['pc_thumb']) && '' !== $_FILES['News']['tmp_name']['pc_thumb']) {
+            $imageSize = getimagesize($_FILES['News']['tmp_name']['pc_thumb']);
+            if ($imageSize[1] !== 156 && $imageSize[0] !== 271) {
+                $model->addError("pc_thumb", "图片尺寸应限定为：宽271px，高156px");
+            }
         }
+
+        if (!$model->hasErrors("pc_thumb")) {
+            if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+                $this->uploadPcThump($model);
+                if (null === $model->pc_thumb) {
+                    unset($model->pc_thumb);
+                }
+                if ($model->save(false)) {
+                    return $this->redirect(['index']);
+                }
+            }
+        }
+
         return $this->render('edit', ['model' => $model,
             'status' => $_statusList,
             'categories' => $categories,
@@ -168,6 +186,26 @@ class NewsController extends BaseController
             return ['error' => 0, 'url' => $file_url];
         } else {
             return ['error' => 1, 'message' => '请选择文件'];
+        }
+    }
+
+    /**
+     * 检查上传图片
+     */
+    private function uploadPcThump(News $obj)
+    {
+        $obj->pc_thumb = UploadedFile::getInstance($obj, 'pc_thumb');
+
+        $path = Yii::getAlias('@backend').'/web/upload/news';
+        if (!file_exists($path)) {
+            mkdir($path);
+        }
+
+        if ($obj->pc_thumb) {
+            $picPath = 'upload/news/pcthumb'.time().rand(100000, 999999).'.'.$obj->pc_thumb->extension;
+
+            $obj->pc_thumb->saveAs($picPath);
+            $obj->pc_thumb = $picPath;
         }
     }
 }

@@ -1,6 +1,7 @@
 <?php
 use yii\widgets\ActiveForm;
 use yii\helpers\ArrayHelper;
+use yii\helpers\Html;
 
 $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\web\YiiAsset']);
 $this->registerCssFile('/vendor/kindeditor/4.1.11/themes/default/default.css');
@@ -36,7 +37,7 @@ $this->title = '编辑资讯';
             </div>
             <div class="portlet-body form">
                 <!-- BEGIN FORM-->
-                <?php $form = ActiveForm::begin([ 'action' => "/news/news/edit?id=" . $model->id, 'options' => ['class' => 'form-horizontal form-bordered form-label-stripped']]); ?>
+                <?php $form = ActiveForm::begin([ 'action' => "/news/news/edit?id=" . $model->id, 'options' => ['class' => 'form-horizontal form-bordered form-label-stripped', 'enctype' => 'multipart/form-data']]); ?>
                 <div class="control-group">
                     <label class="control-label">标题</label>
                     <div class="controls">
@@ -78,6 +79,18 @@ $this->title = '编辑资讯';
                         <?= $form->field($model, 'body', ['template' => '{input}', 'inputOptions' => ['style' => "width:688px; height:350px;"]])->textarea(); ?>
                         <?= $form->field($model, 'body', ['template' => '{error}']); ?>
                     </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">PC缩略图</label>
+                    <div class="controls">
+                        <?= $form->field($model, 'pc_thumb', ['template' => '{input}<br><span class="notice">*图片上传格式必须为PNG或JPG，且大小不超过50K，尺寸限定为：宽271px，高156px</span>', 'inputOptions' => ['style' => "width:78%"]])->fileInput() ?>
+                        <?= $form->field($model, 'pc_thumb', ['template' => '{error}']) ?>
+                    </div>
+                    <?php if (!empty($model->pc_thumb)) { ?>
+                        <div class="controls">
+                            <img src="<?= '/'.Html::encode($model->pc_thumb) ?>" alt="PC缩略图" />
+                        </div>
+                    <?php } ?>
                 </div>
                 <div class="control-group">
                     <label class="control-label">显示顺序</label>

@@ -15,7 +15,7 @@ use common\utils\StringUtils;
         <!--banner 图-->
         <div class="banner-box">
             <?php foreach ($adv as $val) : ?>
-                <div class="banner" style="background-image: url('/upload/adv/<?= $val->image ?>');"><a href="<?= $val->link ?>"></a></div>
+                <div class="banner" style="background-image: url('<?= UPLOAD_BASE_URI ?>/upload/adv/<?= $val->image ?>');"><a href="<?= $val->link ?>"></a></div>
             <?php endforeach; ?>
         </div>
         <!--选项卡-->

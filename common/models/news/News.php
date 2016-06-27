@@ -64,8 +64,10 @@ class News extends \yii\db\ActiveRecord
             [['status', 'home_status', 'sort'], 'integer'],
             [['body'], 'string'],
             [['title', 'source', 'child_title'], 'string', 'max' => 100],
-            [['image', 'attach_file'], 'string', 'max' => 250],
+            [['image'], 'string', 'max' => 250],
             [['summary'], 'string', 'max' => 200],
+            ['pc_thumb', 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg'],
+            //['pc_thumb', 'file', 'skipOnEmpty' => true, 'maxSize' => 51200, 'tooBig' => '图片大小不能超过50KB'],
         ];
     }
 
@@ -76,7 +78,7 @@ class News extends \yii\db\ActiveRecord
         $model->category = [];
         $model->source = '';
         $model->category_id = 0;
-        $model->attach_file = '';
+        $model->pc_thumb = '';
         return $model;
     }
 
@@ -98,7 +100,7 @@ class News extends \yii\db\ActiveRecord
             'sort' => '序号',
             'body' => '新闻内容',
             'news_time' => '新闻发布时间',
-            'attach_file' => '上传附件',
+            'pc_thumb' => 'PC缩略图',
             'updated_at' => 'Updated At',
             'created_at' => 'Created At',
         ];
