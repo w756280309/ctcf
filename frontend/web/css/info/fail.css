@@ -182,29 +182,32 @@
 .invest-box .invest-container .invest-false  {
     height:342px;
 }
-.invest-false .invest-content {
-    margin:137px auto;
-    width:400px;
-    height:80px;
-}
+/*.invest-false .invest-content {*/
+    /*margin:137px auto;*/
+    /*width:400px;*/
+    /*height:80px;*/
+/*}*/
 .invest-false .invest-content .buy-txt {
-    margin:0 auto;
-    height:38px;
+    padding-top: 100px;
+    text-align: center;
+    height: 42px;
+    /*margin:0 auto;*/
+    /*height:38px;*/
     line-height:38px;
     color:#464648;
     font-size: 30px;
     overflow: hidden;
 }
 .invest-false .invest-content .buy-txt i {
-    float: left;
+    /*float: left;*/
     width:36px;
     height:38px;
-    background:url('../../images/deal/false_icon.png') 0 4px no-repeat;
+    background:url('../../images/deal/false_icon.png') 0 10px no-repeat;
     display: inline-block;
     text-align: center;
 }
 .invest-false .invest-content .buy-txt span {
-    float: left;
+    /*float: left;*/
     height:38px;
     line-height:38px;
 }
