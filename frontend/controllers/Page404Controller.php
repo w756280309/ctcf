@@ -14,7 +14,7 @@ class Page404Controller extends Controller
         $this->layout = false;
         $exception = \Yii::$app->errorHandler->exception;
         if ($exception !== null) {
-            if ("404" === $exception->statusCode) {
+            if (404 === $exception->statusCode) {
                 return $this->render("@frontend/views/404.php");
             }
         }

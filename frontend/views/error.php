@@ -20,13 +20,14 @@
         <div class="lf content-lf"></div>
         <div class="content-rg">
             <p class="error">抱歉！您访问的页面出错了！<a href="/" class="back-home">回首页></a></p>
+            <br>
             <p class="code-tip">如果您急需我们，请扫描下方二维码。</p>
             <ul class="ul-code">
                 <li><a href="javascript:void(0)"><img src="<?= ASSETS_BASE_URI ?>images/404/404-wdjg-code.png" alt="微信订阅号"></a>
                     <p>微信订阅号(项目预告)</p>
                 </li>
                 <li><a href="javascript:void(0)"><img src="<?= ASSETS_BASE_URI ?>images/404/404-wdjg-codeapp.png" alt="温都金服app"></a>
-                    <p>温都金服app</p>
+                    <p>温都金服APP</p>
                 </li>
             </ul>
         </div>

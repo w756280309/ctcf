@@ -26,7 +26,7 @@
                     <p>微信订阅号(项目预告)</p>
                 </li>
                 <li><a href="javascript:void(0)"><img src="../images/404/404-wdjg-codeapp.png" alt="温都金服app"></a>
-                    <p>温都金服app</p>
+                    <p>温都金服APP</p>
                 </li>
             </ul>
         </div>
