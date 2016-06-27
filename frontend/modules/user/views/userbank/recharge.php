@@ -76,7 +76,7 @@
             <div class="link-en">
                 <input type="submit" class="link-charge" value="充值" id="rechargebtn" />
             </div>
-            <p class="fee-info" style="    margin-top: 15px;color: #f44336;    margin-left: 60px;">* 充值所需费用由温都垫付</p>
+            <p class="fee-info" style="    margin-top: -24px;color: #f44336;    margin-left: 60px;">* 充值所需费用由温都垫付</p>
         </form>
         <!------------------已绑卡结束------------------>
         <?php } elseif ($binding) { ?>
@@ -143,7 +143,7 @@
             return false;
         }
         if ($('#fund').val() === '0') {
-            err_message('充值金额不能为零');
+            err_message('充值金额的值必须不小于1');
             $('#rechargebtn').removeClass("btn-press").addClass("btn-normal");
             return false;
         }
@@ -198,9 +198,15 @@
         xhr.done(function(data) {
             $('#rechargebtn').attr('disabled', false);
             if (data.next){
-                alertMessage('请在新打开的联动优势页面进行充值，充值完成前不要关闭该窗口。', '/user/user/index');
-                window.open(data.next);
+                var w = window.open(data.next);
+                var url = data.next;
+                if (url && !w) {
+                    location.href = url;
+                } else if(url && w) {
+                    alertMessage('请在新打开的联动优势页面进行充值，充值完成前不要关闭该窗口。', '/user/user/index');
+                }
             }
+
         });
 
         xhr.fail(function(jqXHR) {

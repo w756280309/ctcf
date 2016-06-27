@@ -320,21 +320,19 @@ $this->registerCssFile('/css/useraccount/chargedeposit.css');
                 } else {
                     $('.dR-tishi-error ').show();
                     //未免密不提示、不跳转，直接弹框
-                    if('/user/qpay/binding/umpmianmi' != data.tourl){
+                    if('/user/qpay/binding/umpmianmi' != data.tourl && '/user/userbank/idcardrz' != data.tourl){
                         $('.dR-tishi-error .err_message').html(data.message);
-                    } else {
-                        mianmi();
                     }
                 }
                 if ('/site/login' == data.tourl) {
                     //获取登录信息
                     login();
                 } else if('/user/qpay/binding/umpmianmi' == data.tourl){
-                    //未免密不跳转，直接弹框;
+                    mianmi();
+                } else if('/user/userbank/idcardrz' == data.tourl){
+                    window.location.href = '/user/userbank/identity';
                 } else {
-                    if (data.tourl != undefined) {
-                        //location.href = data.tourl;
-                    }
+                    location.href = data.tourl;
                 }
             });
             xhr.always(function () {

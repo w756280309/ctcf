@@ -94,6 +94,9 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/deal/buy.css');
                         }, 1000);
                     }
                 });
+                xhr.fail(function(){
+                    window.location.reload()
+                });
                 xhr.always(function () {
                     allowSub = true;
                     buy.val("确认购买");

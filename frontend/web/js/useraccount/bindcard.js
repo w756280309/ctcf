@@ -132,8 +132,13 @@ function subForm()
     });
 
     xhr.done(function (data) {
-        alertMessage('请在新打开的联动优势页面进行绑卡，绑卡完成前不要关闭该窗口。', '/user/userbank/mybankcard');
-        window.open(data.next);
+        var w =  window.open(data.next);
+        var url = data.next;
+        if (url && !w) {
+            location.href = url;
+        } else if(url && w) {
+            alertMessage('请在新打开的联动优势页面进行绑卡，绑卡完成前不要关闭该窗口。', '/user/userbank/mybankcard');
+        }
     });
 
     xhr.fail(function (jqXHR) {

@@ -42,7 +42,7 @@
             <div class="link-en">
                 <input type="submit" class="link-charge" value="提现" id="rechargebtn" />
             </div>
-            <p class="fee-info" style="    margin-top: 15px;color: #f44336;    margin-left: 60px;">* 每笔提现收取2元手续费</p>
+            <p class="fee-info" style="    margin-top: -24px;color: #f44336;    margin-left: 60px;">* 每笔提现收取2元手续费</p>
         </form>
         <!------------------已绑卡结束------------------>
     <?php } else { ?>
@@ -147,16 +147,21 @@
         });
 
         xhr.done(function(data) {
+            res = true;
             $('#rechargebtn').attr('disabled', false);
             if(data.code == 1 && data.message.length > 0) {
                 err_message(data.message);
             }
             if (data.tourl) {
-                alertMessage('请在新打开的联动优势页面进行提现，提现完成前不要关闭该窗口。', '/user/user/index');
-                window.open(data.tourl);
+                var w = window.open(data.tourl);
+                var url = data.tourl;
+                if (url && !w) {
+                    location.href = url;
+                } else if(url && w) {
+                    alertMessage('请在新打开的联动优势页面进行提现，提现完成前不要关闭该窗口。', '/user/user/index');
+                }
             }
         });
-
         xhr.fail(function(jqXHR) {
             var errMsg = jqXHR.responseJSON && jqXHR.responseJSON.message
                 ? jqXHR.responseJSON.message
