@@ -64,8 +64,8 @@ $(function() {
 </head>
 <body>
 <?php $this->beginBody() ?>
-<div class="mask" id="mask_kaiping" style="position: fixed;z-index: 2000;display: block; "></div>
-<div class="tail">
+<div class="mask" id="mask_kaiping" style="position: fixed;z-index: 2000;display: none; "></div>
+<div class="tail" style="display: none;">
     <div class="tail_img_top"></div>
     <a class="tail_close">
         <img src="<?= ASSETS_BASE_URI ?>images/kaiping_02.png" alt="开屏图">
@@ -271,13 +271,19 @@ $(function() {
 <script>
     $('html').attr('ontouchmove','event.preventDefault()');
 
-    setTimeout(function() {
+    function closeAdv()
+    {
         $('#mask_kaiping,.tail').hide();
+        $('#mask_kaiping').hide();
         $('html').removeAttr('ontouchmove');
-    }, 4000);
-
-    $('.tail_close').on('click',function() {
-        $('#mask_kaiping,.tail').hide();
-        $('html').removeAttr('ontouchmove');
+    }
+    $(function(){
+        if ($.cookie('splash_show') !== "1") {
+            $.cookie('splash_show', "1");
+            $('#mask_kaiping').show();
+            $('#mask_kaiping,.tail').show();
+            setTimeout(closeAdv, 4000);
+            $('.tail_close').on('click', closeAdv);
+        }
     })
 </script>
