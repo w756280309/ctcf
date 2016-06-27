@@ -47,7 +47,7 @@ function mianmi(){
     alertMessage(message, url, false);
 }
 
-function alertMessage(message, url,reload) {
+function alertMessage(message, url, reload) {
     var html = '<div class="mask" style="display: block"></div><div class="result-pop pop-open mianmi_message" style="display: block"><p class="result-pop-hender">提示<img class="close" id = "box_close" src="/images/login/close.png" alt="" style = "float: right;margin-top: 15px;margin-right: 15px;cursor: pointer;"></p> <p class="result-pop-content">' + message + '</p> ';
     html = html + '<p class="result-pop-phone">如遇到问题请拨打我们的客服热线：400-101-5151(9:00~20:00)</p>';
     html = html + ' <p><span class="link-confirm" id="mianmi_confirm">确定</span></p></div>';
@@ -68,6 +68,7 @@ function alertMessage(message, url,reload) {
             window.location.reload();
         }
     });
+
     $('#box_close').click(function(){
         if(reload == false){
             $('body .mask').hide();
@@ -77,6 +78,22 @@ function alertMessage(message, url,reload) {
                 window.location.href= url;
             } else {
                 window.location.reload();
+            }
+        }
+    });
+
+    //键盘按下ESC时关闭窗口!
+    $(document).keydown(function(e) {
+        if(e.keyCode === 27) {
+            if(!reload) {
+                $('body .mask').hide();
+                $('body .mianmi_message').hide();
+            } else {
+                if (url && url !== '') {
+                    window.location.href = url;
+                } else {
+                    window.location.reload();
+                }
             }
         }
     });

@@ -65,16 +65,17 @@ $this->title = '开户';
                     'User[idcard]': idcard.val(),
                     '_csrf': '<?= Yii::$app->request->csrfToken?>'
                 }, function (data) {
-                    if (data.code == 0) {
+                    if (!data.code) {
                         //成功
                         window.location.href = data.tourl;
                     } else {
                         //失败
-                        var message = data.message;
-                        $('.identity-text').siblings('.tip_pop').show().find('.identity-content').text(message);
                         if (data.tourl) {
                             location.herf = data.tourl;
                         }
+
+                        $('.identity .err-info').text(data.message);
+                        $('.identity .err-info').show();
 
                         allowSub = true;
                         $('.deposit-content-link').html('立即开通');

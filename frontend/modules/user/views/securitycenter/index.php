@@ -199,12 +199,14 @@ foreach (['useraccount/safecenter.css'] as $cssFile) {
             });
         }
 
+        var csrf = '<?= Yii::$app->request->csrfToken?>';
         $('#x-reset-ump-pass').on('click', function(e) {
             e.preventDefault();
 
             var xhr = $.ajax({
+                type: 'POST',
                 url: '/user/securitycenter/reset-ump-pass',
-                method: 'POST',
+                data: {'_csrf': csrf},
                 dataType: 'json'
             });
 
