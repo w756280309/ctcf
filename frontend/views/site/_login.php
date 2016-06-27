@@ -55,16 +55,19 @@
         if ('' == $('#phone').val()) {
             phone_err.show();
             phone_err.html('手机号不能为空');
+            $('#phone').addClass('error-border');
             return false;
         }
         var reg = /^0?1[3|4|5|6|7|8][0-9]\d{8}$/;
         if (!reg.test($('#phone').val())) {
             phone_err.show();
             phone_err.html('手机号格式错误');
+            $('#phone').addClass('error-border');
             return false;
         }
         phone_err.hide();
         phone_err.html();
+        $('#phone').removeClass('error-border');
         return true;
     }
 
@@ -73,15 +76,18 @@
         if ('' == $('#password').val()) {
             pass_err.show();
             pass_err.html('密码不能为空');
+            $('#password').addClass('error-border');
             return false;
         }
         if (6 > $('#password').val().length) {
             pass_err.show();
             pass_err.html('密码长度最少6位');
+            $('#password').addClass('error-border');
             return false;
         }
         pass_err.hide();
         pass_err.html('');
+        $('#password').removeClass('error-border');
         return true;
     }
 
@@ -90,15 +96,18 @@
         if ('' == $('#verity').val()) {
             verity_err.show();
             verity_err.html('验证码不能为空');
+            $('#verity').addClass('error-border');
             return false;
         }
         if (4 !== $('#verity').val().length) {
             verity_err.show();
             verity_err.html('验证码长度必须为4位');
+            $('#verity').addClass('error-border');
             return false;
         }
         verity_err.hide();
         verity_err.html('');
+        $('#verity').removeClass('error-border');
         return true;
     }
 
@@ -125,6 +134,14 @@
         });
         $('#verity_img').click(function(){
             $(this).attr("src", "/site/captcha?" + Math.random());
+        });
+        $('.close').bind('click', function(){
+            $('.phone_err').hide().html('');
+            $('#phone').removeClass('error-border');
+            $('.pass_err').hide().html('');
+            $('#password').removeClass('error-border');
+            $('.verity_err').hide().html('');
+            $('#verity').removeClass('error-border');
         });
         var button = $('#login_submit_button');
         button.bind('click', function () {

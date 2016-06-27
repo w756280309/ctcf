@@ -315,7 +315,7 @@ $this->registerCssFile('/css/useraccount/chargedeposit.css');
             buy.attr('disabled', true);
             var vals = form.serialize();
             var xhr = $.post(form.attr("action"), vals, function (data) {
-                if (data.code == 0) {
+                if (data.code == 0 && data.tourl) {
                     location.href = data.tourl;
                 } else {
                     $('.dR-tishi-error ').show();
@@ -332,7 +332,9 @@ $this->registerCssFile('/css/useraccount/chargedeposit.css');
                 } else if('/user/userbank/idcardrz' == data.tourl){
                     window.location.href = '/user/userbank/identity';
                 } else {
-                    location.href = data.tourl;
+                    if (data.tourl) {
+                        location.href = data.tourl;
+                    }
                 }
             });
             xhr.always(function () {
