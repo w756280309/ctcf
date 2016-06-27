@@ -61,7 +61,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/common.js', ['depends' => 'yii\web\Yii
                     }
 
                     setTimeout(function() {
-                        //location.replace("/order/order/ordererror?osn=<?= $order->sn?>");
+                        location.replace("/order/order/ordererror?osn="+orderSn);
                     }, 1500);
                 }
             }
@@ -71,5 +71,6 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/common.js', ['depends' => 'yii\web\Yii
     var tick = setInterval(ret, 1000);
     setTimeout(function () {
         clearInterval(tick);
+        location.replace("/order/order/ordererror?osn="+orderSn);
     }, 5000);
 </script>
