@@ -14,7 +14,7 @@
     min-height:60%;
     position: absolute;
     top:5%;
-    background: url("/m/images/kaiping_07.png") no-repeat center center;
+    background: url("../images/kaiping_07.png") no-repeat center center;
     background-size: cover;
     border-radius: 15px
 }
