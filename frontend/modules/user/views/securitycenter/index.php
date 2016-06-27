@@ -40,7 +40,7 @@ foreach (['useraccount/safecenter.css'] as $cssFile) {
                     <i class="blue"></i><span>已认证</span>
                     <?php else: ?>
                     <i class="red"></i><span>未认证</span>
-                    <i class=""></i><a href="/user/userbank/identity" class="bunding renzheng">立即认证</a>
+                    <i class=""></i><a href="/user/userbank/idcardrz" class="bunding renzheng">立即认证</a>
                     <?php endif; ?>
                     <!-- 已认证-->
                 </div>
@@ -125,7 +125,7 @@ foreach (['useraccount/safecenter.css'] as $cssFile) {
                     </div>
                     <p class="error new_pass_err"></p>
                     <div class="revise-login-bag">
-                        <span class="yzm-txt">验证码</span><input type="text" id="verifyCode" class="input-yzm-code" name="EditpassForm[verifyCode]" placeholder="请输入图形验证码" maxlength="4">
+                        <span class="yzm-txt">验证码</span><input type="text" id="verifyCode" class="input-yzm-code" name="EditpassForm[verifyCode]" placeholder="请输入图形验证码" autocomplete="off" maxlength="4">
                         <?=
                             $form->field($model, 'verifyCode')->label(false)->widget(Captcha::className(), [
                                 'template' => '{image}', 'captchaAction' => '/site/captcha',

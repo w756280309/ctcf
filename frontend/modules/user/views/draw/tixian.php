@@ -3,6 +3,8 @@
 
     $this->registerCssFile('/css/useraccount/bindcardalready.css');
     $this->registerCssFile('/css/useraccount/chargedeposit.css');
+
+    use common\utils\StringUtils;
 ?>
 <div class="bindCard-box">
 <div class="bindCard-header">
@@ -28,13 +30,13 @@
         </div>
         <div class="bindCard-single" style="margin-top: 10px;">
             <span class="single-left" style="line-height: 34px;">可提现金额</span>
-            <span class="single-right" style="line-height: 34px;font-size: 20px;font-weight: bold;color: #f44336;"><?= rtrim(rtrim(number_format($user_acount->available_balance, 2), '0'), '.') ?></span>元
+            <span class="single-right" style="line-height: 34px;font-size: 20px;font-weight: bold;color: #f44336;"><?= StringUtils::amountFormat2($user_acount->available_balance) ?></span>元
         </div>
         <form method="post" class="cmxform" id="form" action="/user/draw/tixian" data-to="1">
             <input name="_csrf" type="hidden" id="_csrf" value="<?= Yii::$app->request->csrfToken ?>">
             <input name="flag" type="hidden" value="checktrade">
             <div class="row kahao">
-                <p class="bindCard-content-header">提现金额：<input style="width: 244px;height: 34px;border: 1px solid #e4e4e8;background: #efeff3;text-align: right;outline: none;color: #6e6e72;padding: 0 15px;font-size: 16px;" type="text" id="fund" name="DrawRecord[money]"  placeholder="输入提现金额"/></p>
+                <p class="bindCard-content-header">提现金额：<input style="width: 244px;height: 34px;border: 1px solid #e4e4e8;background: #efeff3;text-align: right;outline: none;color: #6e6e72;padding: 0 15px;font-size: 16px;" type="text" id="fund" name="DrawRecord[money]" autocomplete="off"  placeholder="输入提现金额"/></p>
                 <p class="error" style="display: none; padding-left: 70px;color: red;"></p>
             </div>
             <div class="link-en">
@@ -127,13 +129,14 @@
             if (!validateform()) {
                 return false;
             }
-            subRecharge();
+            subDraw();
             $btn.removeClass("btn-press").addClass("btn-normal");
         });
 
     });
 
-    function subRecharge(){
+    function subDraw()
+    {
         var $form = $('#form');
         $('#rechargebtn').attr('disabled', true);
         var xhr = $.ajax({

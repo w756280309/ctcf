@@ -102,7 +102,7 @@ $this->registerCssFile('/css/useraccount/bindcardalready.css');
             <?php $form = ActiveForm::begin(['id' => 'recharge_form', 'action' => '/user/recharge/apply', 'options' => ['target' => '_blank']]); ?>
             <ul class="wdjf-form">
                 <li><div class="wdjf-label">账户余额</div> <div class="wdjf-field"><span class="balance"><?= $user_account->available_balance ?></span> 元</div></li>
-                <li><div class="wdjf-label"><span class="fee-info">*</span>充值金额</div> <div class="wdjf-field"><?= $form->field($recharge, 'fund', ['template' => '{input}{error}'])->textInput(); ?></div><span style='margin-left: 5px; line-height: 33px;'>元</span></li>
+                <li><div class="wdjf-label"><span class="fee-info">*</span>充值金额</div> <div class="wdjf-field"><?= $form->field($recharge, 'fund', ['template' => '{input}{error}'])->textInput(['autocomplete' => 'off']); ?></div><span style='margin-left: 5px; line-height: 33px;'>元</span></li>
                 <li class="wdjf-action">
                     <input class="btn btn-primary" type="submit" style="    color: #fff;background-color: #f44336;width: 65px;height: 28px;border: 0px;border-radius: 0px;" value="充值">
                     <p class="fee-info">* 充值所需费用由温都垫付</p>

@@ -2,7 +2,6 @@
     $this->title = '充值';
     $this->registerCssFile('/css/useraccount/bindcardalready.css');
     $this->registerCssFile('/css/useraccount/chargedeposit.css');
-    \frontend\assets\FrontAsset::register($this);
 ?>
 <style>
     .list-single {
@@ -71,7 +70,7 @@
             <input name="_csrf" type="hidden" id="_csrf" value="<?= Yii::$app->request->csrfToken ?>">
             <input name="from" type="hidden" value="<?= Yii::$app->request->get('from'); ?>">
             <div class="row kahao">
-                <p class="bindCard-content-header">充值金额：<input style="width: 244px;height: 34px;border: 1px solid #e4e4e8;background: #efeff3;text-align: right;outline: none;color: #6e6e72;padding: 0 15px;font-size: 16px;" type="text" id="fund" name='RechargeRecord[fund]'  placeholder="输入充值金额"/></p>
+                <p class="bindCard-content-header">充值金额：<input style="width: 244px;height: 34px;border: 1px solid #e4e4e8;background: #efeff3;text-align: right;outline: none;color: #6e6e72;padding: 0 15px;font-size: 16px;" type="text" id="fund" name='RechargeRecord[fund]' autocomplete="off" placeholder="输入充值金额"/></p>
                 <p class="error" style="display: none; padding-left: 70px;color: red;"></p>
             </div>
             <div class="link-en">
