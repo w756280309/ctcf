@@ -61,15 +61,17 @@ function alertMessage(message, url, reload) {
         mianmi_message.show();
     }
 
-    $('#mianmi_confirm').click(function(){
+    $('#mianmi_confirm').click(function() {
         if (url && url != '') {
             window.location.href= url;
         } else {
             window.location.reload();
         }
+
+        document.documentElement.style.overflow = 'auto';
     });
 
-    $('#box_close').click(function(){
+    $('#box_close').click(function() {
         if(reload == false){
             $('body .mask').hide();
             $('body .mianmi_message').hide();
@@ -80,12 +82,16 @@ function alertMessage(message, url, reload) {
                 window.location.reload();
             }
         }
+
+        document.documentElement.style.overflow = 'auto';   //解除页面上下滚动效果
     });
+
+    document.documentElement.style.overflow = 'hidden';   //禁用页面上下滚动效果
 
     //键盘按下ESC时关闭窗口!
     $(document).keydown(function(e) {
-        if(e.keyCode === 27) {
-            if(!reload) {
+        if (e.keyCode === 27) {
+            if (!reload) {
                 $('body .mask').hide();
                 $('body .mianmi_message').hide();
             } else {
@@ -95,6 +101,8 @@ function alertMessage(message, url, reload) {
                     window.location.reload();
                 }
             }
+
+            document.documentElement.style.overflow = 'auto';
         }
     });
 }

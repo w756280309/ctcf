@@ -13,6 +13,8 @@ use yii\filters\AccessControl;
 
 class UserController extends BaseController
 {
+    public $layout = 'main';
+
     public function behaviors()
     {
         return [
@@ -33,10 +35,8 @@ class UserController extends BaseController
      */
     public function actionMingxi()
     {
-        $this->layout = 'main';
-
         $query = MoneyRecord::find()
-            ->where(['uid' => Yii::$app->user->identity->id])
+            ->where(['uid' => $this->getAuthedUser()->id])
             ->andWhere(['in', 'type', MoneyRecord::getLenderMrType()]);
 
         $pages = new Pagination(['totalCount' => $query->count(), 'pageSize' => 10]);
@@ -82,20 +82,21 @@ class UserController extends BaseController
     {
         //清空session中存储的url信息
         Yii::$app->session->remove('to_url');//记录目的地
-        $this->layout = 'main';
+
         $o = Ord::tableName();
         $l = Loan::tableName();
+        $user = $this->getAuthedUser();
 
         $orders = Ord::find()
             ->innerJoinWith('loan')
-            ->where(["$o.uid" => $this->user->id, "$l.status" => [2, 3, 5, 7]])
+            ->where(["$o.uid" => $user->id, "$l.status" => [2, 3, 5, 7], "$o.status" => Ord::STATUS_SUCCESS])
             ->orderBy(["$o.id" => SORT_DESC])
             ->limit(5)
             ->all();
 
         return $this->render('index', [
             'orders' => $orders,
-            'user' => $this->user,
+            'user' => $user,
         ]);
     }
 
@@ -109,13 +110,13 @@ class UserController extends BaseController
             throw $this->ex404();
         }
 
-        $this->layout = 'main';
+        $user = $this->getAuthedUser();
 
         switch ($type) {
             case 1:
                 $status = Loan::STATUS_HUAN;
                 $tj = Plan::find()
-                    ->where(['uid' => $this->getAuthedUser()->id, 'status' => Plan::STATUS_WEIHUAN])
+                    ->where(['uid' => $user->id, 'status' => Plan::STATUS_WEIHUAN])
                     ->groupBy('online_pid')
                     ->select("sum(benxi) as benxi")
                     ->asArray()
@@ -127,7 +128,7 @@ class UserController extends BaseController
             case 3:
                 $status = Loan::STATUS_OVER;
                 $tj = Plan::find()
-                    ->where(['uid' => $this->getAuthedUser()->id, 'status' => Plan::STATUS_YIHUAN])
+                    ->where(['uid' => $user->id, 'status' => Plan::STATUS_YIHUAN])
                     ->groupBy('online_pid')
                     ->select("sum(benxi) as benxi")
                     ->asArray()
@@ -140,7 +141,7 @@ class UserController extends BaseController
 
         $query = Ord::find()
             ->innerJoinWith('loan')
-            ->where(["$o.uid" => $this->getAuthedUser()->id, "$o.status" => Ord::STATUS_SUCCESS])
+            ->where(["$o.uid" => $user->id, "$o.status" => Ord::STATUS_SUCCESS])
             ->andWhere(["$l.status" => $status])
             ->orderBy("$o.id desc");
 
@@ -157,7 +158,7 @@ class UserController extends BaseController
 
         $plan = [];
         foreach ($model as $key => $val) {
-            $data = Plan::findAll(['online_pid' => $val->online_pid, 'uid' => $this->getAuthedUser()->id, 'order_id' => $val->id]);
+            $data = Plan::findAll(['online_pid' => $val->online_pid, 'uid' => $user->id, 'order_id' => $val->id]);
 
             $plan[$key]['obj'] = $data;
             $plan[$key]['yihuan'] = 0;
