@@ -32,9 +32,9 @@ class UserbankController extends BaseController
         ];
     }
 
-    /**
-     * 未开户进入页面.
-     */
+   /**
+    * 未开户进入页面.
+    */
    public function actionIdentity()
    {
        //检查是否开户
@@ -44,7 +44,8 @@ class UserbankController extends BaseController
            return $this->render('identity');
        } else {
            Yii::$app->session->set('to_url', '/user/userbank/identity');
-           return $this->render('account',[
+
+           return $this->render('account', [
                'user' => $this->user,
            ]);
        }
@@ -71,16 +72,22 @@ class UserbankController extends BaseController
                 $umpService = new \common\service\UmpService();
                 try {
                     $umpService->register($model);
+
                     return ['tourl' => '/info/success?source=tuoguan&jumpUrl=/user/qpay/binding/umpmianmi', 'code' => 0, 'message' => '您已成功开户'];
                 } catch (\Exception $ex) {
-                    return ['code' => 1, 'message' => $ex->getMessage()];
+                    if (1 === $ex->getCode()) {
+                        return ['code' => 1, 'message' => $ex->getMessage()];
+                    } else {
+                        return ['code' => 1, 'message' => '服务器繁忙，请稍后重试!'];
+                    }
                 }
             } else {
                 $err = $model->getSingleError();
+
                 return ['code' => 1, 'message' => $err['message']];
             }
         } else {
-            return $this->render('idcardrz', []);
+            return $this->render('idcardrz');
         }
     }
 
@@ -105,6 +112,7 @@ class UserbankController extends BaseController
         $data = BankService::check($this->getAuthedUser(), $cond);
         if ($data['code']) {
             Yii::$app->session->set('to_url', '/user/userbank/mybankcard');
+
             return $this->redirect('/user/userbank/identity');
         }
 
@@ -143,7 +151,8 @@ class UserbankController extends BaseController
         if ($data['code'] == 1 && \Yii::$app->request->isAjax) {
             return ['next' => $data['tourl']];
         }
-        $binding = QpayBinding::findOne(['uid' => $user->id ,'status' => QpayBinding::STATUS_ACK]);
+        $binding = QpayBinding::findOne(['uid' => $user->id, 'status' => QpayBinding::STATUS_ACK]);
+
         return $this->render('recharge', [
             'user_bank' => $user_bank,
             'user_acount' => $user_acount,
@@ -182,7 +191,7 @@ class UserbankController extends BaseController
                 ->where(['oldSn' => $user_bank->binding_sn, 'uid' => $user->id])
                 ->orderBy('id desc')->one();
         } else {
-            $binding = QpayBinding::findOne(['uid' => $user->id ,'status' => QpayBinding::STATUS_ACK]);
+            $binding = QpayBinding::findOne(['uid' => $user->id, 'status' => QpayBinding::STATUS_ACK]);
         }
 
         return $this->render('mybank', [

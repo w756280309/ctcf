@@ -71,7 +71,7 @@ $this->title = '开户';
                     } else {
                         //失败
                         if (data.tourl) {
-                            location.herf = data.tourl;
+                            location.href = data.tourl;
                         }
 
                         $('.identity .err-info').text(data.message);
