@@ -75,7 +75,11 @@ class OrderController extends BaseController
 
         $order = OnlineOrder::ensureOrder($osn);
         if (OnlineOrder::STATUS_FALSE !== $order->status) {
-            return $this->redirect('/info/success?source=touzi&jumpUrl=/licai/index');
+            if (OnlineOrder::STATUS_SUCCESS === $order->status) {
+                return $this->redirect('/info/success?source=touzi&jumpUrl=/licai/index');
+            } else {
+                return $this->redirect("/info/fail?source=touzi");
+            }
         }
 
         return $this->render('wait', ['order' => $order]);
