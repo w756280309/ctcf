@@ -11,7 +11,7 @@
 }
 .footer-five-box{
     position: relative;
-    width: 1000px;
+    width: 900px;
     height: 100%;
     margin: 0 auto;
 }
@@ -74,4 +74,145 @@
 .footer-section5 {
     background: #363636;
     overflow: hidden;
+}
+/*about-box*/
+.about-box {
+    position: fixed;
+    right: 0;
+    top: 50%;
+    width: 36px;
+    height: 188px;
+    margin-top: -223px;
+    z-index: 999;
+}
+.about-right {
+    float: right;
+    height: 188px;
+    position: relative;
+    width: 36px;
+}
+.about-right .about-img1 {
+    background: rgba(0, 0, 0, 0) url("../images/about.png") no-repeat scroll 0 0;
+    display: block;
+    height: 36px;
+    position: relative;
+    width: 36px;
+    z-index: 1;
+    transition: all 0.2s ease;
+}
+.about-right .about-img1:hover {
+    background: rgba(0, 0, 0, 0) url("../images/about-hover.png") no-repeat scroll 0 0;
+}
+.about-right .about-img2 {
+    background: rgba(0, 0, 0, 0) url("../images/about.png") no-repeat scroll 0 -38px;
+    display: block;
+    height: 36px;
+    margin-top: 2px;
+    position: relative;
+    width: 36px;
+}
+.about-right .about-img3 {
+    background: rgba(0, 0, 0, 0) url("../images/about.png") no-repeat scroll 0 -76px;
+    display: block;
+    height: 36px;
+    margin-top: 2px;
+    position: relative;
+    width: 36px;
+}
+.about-right .about-img4 {
+    background: rgba(0, 0, 0, 0) url("../images/about.png") no-repeat scroll 0 -114px;
+    display: block;
+    height: 36px;
+    margin-top: 2px;
+    position: relative;
+    width: 36px;
+}
+.about-right .about-img5 {
+    background: rgba(0, 0, 0, 0) url("../images/about.png") no-repeat scroll 0 -152px;
+    display: block;
+    height: 36px;
+    margin-top: 2px;
+    position: relative;
+    width: 36px;
+}
+.about-qq {
+    background: #f44336 url("../images/about-hover.png") no-repeat scroll right -76px;
+    color: #fff;
+    font-size: 14px;
+    height: 36px;
+    line-height: 36px;
+    opacity: 0;
+    padding-right: 36px;
+    position: absolute;
+    right: -300px;
+    text-align: center;
+    top: 0;
+    width: 250px;
+}
+.about-line {
+    background: #f44336 url("../images/about-hover.png") no-repeat scroll right -38px;
+    color: #fff;
+    font-size: 14px;
+    height: 36px;
+    line-height: 36px;
+    opacity: 0;
+    padding-right: 36px;
+    position: absolute;
+    right: -300px;
+    text-align: center;
+    top: 0;
+    width: 180px;
+}
+.about-left {
+    background: rgba(0, 0, 0, 0) url("../images/about-weixin.png") no-repeat scroll right 0;
+    float: left;
+    height: 76px;
+    opacity: 0;
+    padding-right: 38px;
+    position: absolute;
+    right: -300px;
+    text-align: center;
+    top: 0;
+    width: 120px;
+}
+.about-img {
+    background: #f44336 none repeat scroll 0 0;
+    height: 140px;
+    position: relative;
+    text-align: center;
+    width: 120px;
+}
+.about-img p {
+    color: #fff;
+    font-size: 14px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    width: 100%;
+}
+.about-app {
+    background: rgba(0, 0, 0, 0) url("../images/about-app.png") no-repeat scroll right 0;
+    float: left;
+    height: 76px;
+    opacity: 0;
+    padding-right: 38px;
+    position: absolute;
+    right: -300px;
+    text-align: center;
+    top: 0;
+    width: 120px;
+}
+.aboutApp-img {
+    background: #f44336 none repeat scroll 0 0;
+    height: 158px;
+    position: relative;
+    text-align: center;
+    width: 120px;
+}
+.aboutApp-img p {
+    color: #fff;
+    font-size: 14px;
+    text-align: center;
+    width: 100%;
+    padding: 4px 0;
 }
