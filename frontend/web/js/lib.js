@@ -41,13 +41,15 @@ function accMul(arg1, arg2) {
     return Number(s1.replace(".", "")) * Number(s2.replace(".", "")) / Math.pow(10, m)
 }
 
-function mianmi(){
+function mianmi()
+{
     var message = '将为您开通免密支付功能，之后进行投资时，无需输入资金托管账户支付密码。但是，当您需要提现时，为确保您的资金安全，仍需输入支付密码。';
     var url = '/user/qpay/binding/umpmianmi';
     alertMessage(message, url, false);
 }
 
-function alertMessage(message, url, reload) {
+function alertMessage(message, url, reload)
+{
     var html = '<div class="mask" style="display: block"></div><div class="result-pop pop-open mianmi_message" style="display: block"><p class="result-pop-hender">提示<img class="close" id = "box_close" src="/images/login/close.png" alt="" style = "float: right;margin-top: 15px;margin-right: 15px;cursor: pointer;"></p> <p class="result-pop-content">' + message + '</p> ';
     html = html + '<p class="result-pop-phone">如遇到问题请拨打我们的客服热线：400-101-5151(9:00~20:00)</p>';
     html = html + ' <p><span class="link-confirm" id="mianmi_confirm">确定</span></p></div>';

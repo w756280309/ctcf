@@ -1,15 +1,19 @@
 <style>
-    .popUp{display: none;}
+    .popUp {
+        display: none;
+    }
 </style>
-<link rel="stylesheet" href="/css/base.css"/>
-<link rel="stylesheet" href="/css/login/login_pop.css"/>
-<script src="/js/jquery-1.8.3.min.js"></script>
-<script src="/js/login/login_pop.js"></script>
+
+<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/base.css"/>
+<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/login/login_pop.css"/>
+<script src="<?= ASSETS_BASE_URI ?>js/jquery-1.8.3.min.js"></script>
+<script src="<?= ASSETS_BASE_URI ?>js/login/login_pop.js"></script>
+
 <div class="login-mark"></div>
 <div class="loginUp-box">
     <form id="login" action="/site/dologin" method="post">
         <input type="hidden" name="_csrf" value="<?= Yii::$app->request->csrfToken; ?>">
-        <h3 class="loginUp-top">登录 <img class="close" src="../../images/login/close.png" alt=""></h3>
+        <h3 class="loginUp-top">登录 <img class="close" src="<?= ASSETS_BASE_URI ?>images/login/close.png" alt=""></h3>
         <div class="loginUp-inner">
             <div class="phone-box">
                 <label for="phone">手机号码</label>
@@ -25,7 +29,7 @@
             </div>
             <div class="verity-box" id="login_verity" style="display: none;">
                 <label>图形验证码</label>
-                <input type="text" id="verity" maxlength="4" placeholder="请输入图形验证码" name="LoginForm[verifyCode]"/>
+                <input type="text" id="verity" maxlength="4" placeholder="请输入图形验证码" name="LoginForm[verifyCode]" autocomplete="off"/>
                 <img src="/site/captcha" class="verity-img" alt="" id="verity_img"/>
                 <div style="clear: both"></div>
                 <div class="popUp verity_err">验证码不能为空</div>

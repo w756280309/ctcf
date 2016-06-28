@@ -66,7 +66,7 @@ class SecuritycenterController extends BaseController
             if ($model->edituserpass()) {
                 \Yii::$app->user->logout();
 
-                return $this->redirect('/site/login');
+                return ['code' => 0, 'tourl' => '/site/login'];
             }
         }
 

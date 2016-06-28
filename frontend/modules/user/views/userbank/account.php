@@ -1,6 +1,5 @@
 <?php
     $this->title = '资金托管账户';
-    \frontend\assets\FrontAsset::register($this);
     $this->registerCssFile('/css/useraccount/accountentrust.css');
 ?>
 <div class="accountentrust-box">

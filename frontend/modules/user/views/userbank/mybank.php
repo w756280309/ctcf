@@ -13,7 +13,7 @@ use common\models\bank\BankCardUpdate;
         <span class="bindCard-header-font">我的银行卡</span>
     </div>
     <div class="bindCard-content">
-        <?php if($user_bank) { ?>
+        <?php if ($user_bank) { ?>
             <p class="bindCard-content-header">已绑定银行卡：</p>
             <div class="bindCard-single">
                 <span class="single-left">持卡人</span>
@@ -52,6 +52,7 @@ use common\models\bank\BankCardUpdate;
                     <span class="single-name"><?= $binding->bank_name ?></span>
                     <span class="single-number">尾号<?= $binding->card_number?substr($binding->card_number, -4):"" ?></span>
                 </div>
+                <a href="javascript:void(0)" class="link-changeCard">绑卡处理中</a>
                 <div class="clear"></div>
                 <div class="link-en">
                 </div>

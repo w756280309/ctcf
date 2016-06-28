@@ -200,9 +200,15 @@ foreach (['useraccount/safecenter.css'] as $cssFile) {
         }
 
         var csrf = '<?= Yii::$app->request->csrfToken?>';
+        var allowSub = true;
         $('#x-reset-ump-pass').on('click', function(e) {
             e.preventDefault();
 
+            if (!allowSub) {
+                return;
+            }
+
+            allowSub = false;
             var xhr = $.ajax({
                 type: 'POST',
                 url: '/user/securitycenter/reset-ump-pass',
@@ -212,10 +218,12 @@ foreach (['useraccount/safecenter.css'] as $cssFile) {
 
             xhr.done(function(data) {
                 alert(data.message);
+                allowSub = true;
             });
 
             xhr.fail(function(jqXHR) {
                 alert('请求失败');
+                allowSub = true;
             });
         });
 
@@ -286,7 +294,7 @@ foreach (['useraccount/safecenter.css'] as $cssFile) {
         xhr.done(function(data) {
             $('.a-submit').attr('disabled', false);
 
-            if (1 === data.code) {
+            if (data.code) {
                 $.each(data.error, function(i, item) {
                     var err = i + '_err';
                     $('#'+i).addClass('error-border');
@@ -294,6 +302,10 @@ foreach (['useraccount/safecenter.css'] as $cssFile) {
                 });
 
                 $("#editpassform-verifycode-image").click();
+            } else {
+                if ('undefined' !== typeof data.tourl) {
+                    location.href = data.tourl;
+                }
             }
         });
 

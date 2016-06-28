@@ -13,7 +13,7 @@ class InfoController extends Controller
                 'mainTitle' => '恭喜您，资金托管账户开通成功！',
                 'firstFuTitle' => '<em style="color:#f44336;">支付密码将会以短信的形式发送到您的手机上</em>，请注意查收并妥善保存。<br>支付密码为6位随机数，可根据短信内容修改密码。',
                 'requireJump' => true,
-                'linkType' => 1,
+                'linkType' => 3,
                 'jumpReferWords' => '下一步',
             ],
             'touzi' => [
