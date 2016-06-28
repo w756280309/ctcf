@@ -5,9 +5,9 @@ use yii\web\View;
 use yii\helpers\Html;
 
 $this->title = '充值';
-$this->registerJsFile('/js/lib.js');
-$this->registerJsFile('/js/bootstrap-modal.js', ['position' => View::POS_END,'depends' => \yii\web\JqueryAsset::className()]);
-$this->registerJsFile('/js/bootstrap-modalmanager.js', ['position' => View::POS_END,'depends' => \yii\web\JqueryAsset::className()]);
+$this->registerJsFile('/js/bootstrap-modal.js', ['position' => View::POS_END, 'depends' => \yii\web\JqueryAsset::className()]);
+$this->registerJsFile('/js/bootstrap-modalmanager.js', ['position' => View::POS_END, 'depends' => \yii\web\JqueryAsset::className()]);
+
 $_js = <<<'JS'
 $(function() {
     $('#payment-bank').each(function() {
@@ -49,6 +49,7 @@ $this->registerCssFile('/css/frontend.css');
 $this->registerCssFile('/css/useraccount/mytrade.css');
 $this->registerCssFile('/css/useraccount/bindcardalready.css');
 ?>
+
 <style>
     body{background: #f6f7f8 !important;}
     .bindCard-header{
@@ -75,6 +76,7 @@ $this->registerCssFile('/css/useraccount/bindcardalready.css');
         color: red;;
     }
 </style>
+
 <div class="myCoupon-box">
     <div class="bindCard-header">
         <div class="bindCard-header-icon"></div>

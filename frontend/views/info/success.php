@@ -15,7 +15,7 @@ $jumpUrl = Html::encode($info['jumpUrl']);
                 <p class="buy-txt"><i></i><span><?= $info['mainTitle'] ?></span></p>
                 <p class="buy-txt-tip"><?= $info['firstFuTitle'] ?></p>
                 <?php if ($info['linkType'] === 1 || $info['linkType'] === 3) { ?>
-                    <a href="<?= $jumpUrl ? $jumpUrl : 'javascript:void(0)' ?>" class="button-close"><?= $info['jumpReferWords'] ?></a>
+                    <a href="<?= $info['linkType'] === 1 && $jumpUrl ? $jumpUrl : 'javascript:void(0)' ?>" class="button-close"><?= $info['jumpReferWords'] ?></a>
                 <?php } ?>
             </div>
         </div>
@@ -53,6 +53,7 @@ $jumpUrl = Html::encode($info['jumpUrl']);
         });
     </script>
 <?php } ?>
+
 <?php if ($info['requireJump'] && $info['linkType'] === 3) { ?>
     <script>
         $(function() {

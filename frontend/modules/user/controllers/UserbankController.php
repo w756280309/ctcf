@@ -73,7 +73,7 @@ class UserbankController extends BaseController
                 try {
                     $umpService->register($model);
 
-                    return ['tourl' => '/info/success?source=tuoguan&jumpUrl=/user/qpay/binding/umpmianmi', 'code' => 0, 'message' => '您已成功开户'];
+                    return ['tourl' => '/info/success?source=tuoguan', 'code' => 0, 'message' => '您已成功开户'];
                 } catch (\Exception $ex) {
                     if (1 === $ex->getCode()) {
                         return ['code' => 1, 'message' => $ex->getMessage()];

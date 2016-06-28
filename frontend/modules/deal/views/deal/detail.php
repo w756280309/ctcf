@@ -7,13 +7,12 @@ use common\view\LoanHelper;
 $this->title = '项目详情';
 $user = Yii::$app->user->identity;
 
-$this->registerJsFile('/js/lib.js');
-$this->registerJsFile('/js/detail.js');
-$this->registerCssFile('/css/deal/buy.css');
-$this->registerCssFile('/css/deal/deallist.css');
-$this->registerCssFile('/css/deal/detail.css');
-$this->registerCssFile('/css/pagination.css');
-$this->registerCssFile('/css/useraccount/chargedeposit.css');
+$this->registerJsFile(ASSETS_BASE_URI . 'js/detail.js');
+$this->registerCssFile(ASSETS_BASE_URI . 'css/deal/buy.css');
+$this->registerCssFile(ASSETS_BASE_URI . 'css/deal/deallist.css');
+$this->registerCssFile(ASSETS_BASE_URI . 'css/deal/detail.css');
+$this->registerCssFile(ASSETS_BASE_URI . 'css/pagination.css');
+$this->registerCssFile(ASSETS_BASE_URI . 'css/useraccount/chargedeposit.css');
 ?>
 
 <div class="project-box clearfix">
@@ -38,7 +37,7 @@ $this->registerCssFile('/css/useraccount/chargedeposit.css');
                         <div>
                             <span class="pl-middle-inner">
                                  <?= $deal->expires ?>
-                                <?php if (1 === (int)$deal->refund_method) { ?>
+                                <?php if (1 === (int) $deal->refund_method) { ?>
                                     <i>天</i>
                                 <?php } else { ?>
                                     <i>个月</i>
@@ -72,11 +71,11 @@ $this->registerCssFile('/css/useraccount/chargedeposit.css');
                     <li>
                         项目起息:&nbsp;&nbsp;&nbsp;&nbsp;<span><?= $deal->jixi_time > 0 ? date('Y-m-d', $deal->jixi_time) : '项目成立日次日'; ?></span>
                     </li>
-                    <?php if (0 === (int)$deal->finish_date) { ?>
+                    <?php if (0 === (int) $deal->finish_date) { ?>
                         <li>
                             项目期限:&nbsp;&nbsp;&nbsp;&nbsp;
                             <span>
-                                <?= $deal->expires ?> <?= (1 === (int)$deal->refund_method) ? '天' : '个月' ?>
+                                <?= $deal->expires ?> <?= (1 === (int) $deal->refund_method) ? '天' : '个月' ?>
                             </span>
                         </li>
                     <?php } else { ?>
@@ -141,19 +140,19 @@ $this->registerCssFile('/css/useraccount/chargedeposit.css');
                             <span data-progress="<?= number_format($deal->finish_rate * 100) ?>" style="width: <?= number_format($deal->finish_rate * 100) ?>%;"></span>
                         </div>
                         <div class="dRP-data"><?= number_format($deal->finish_rate * 100) ?>%</div>
-                    <?php }?>
+                    <?php } ?>
                 </div>
                 <ul class="clearfix dR-inner">
                     <li class="dR-inner-left">项目可投余额：</li>
                     <li class="dR-inner-right">
-                        <span><i><?= ($deal->status == 1) ? (StringUtils::amountFormat1('{amount}{unit}', $deal->money)) : StringUtils::amountFormat2($deal->getLoanBalance()) . '元' ?></i></span>
+                        <span><i><?= ($deal->status == 1) ? (StringUtils::amountFormat1('{amount}{unit}', $deal->money)) : StringUtils::amountFormat2($deal->getLoanBalance()).'元' ?></i></span>
                     </li>
                     <li class="dR-inner-left">我的可用余额：</li>
-                    <li class="dR-inner-right"><?= (null === $user) ? '查看余额请【<a onclick="login()" style="cursor: pointer">登录</a>】' : ($user->lendAccount ? StringUtils::amountFormat3($user->lendAccount->available_balance) . ' 元' : '0 元') ?></li>
-                    <?php if ($deal->status == OnlineProduct::STATUS_NOW){ ?>
+                    <li class="dR-inner-right"><?= (null === $user) ? '查看余额请【<a onclick="login()" style="cursor: pointer">登录</a>】' : ($user->lendAccount ? StringUtils::amountFormat3($user->lendAccount->available_balance).' 元' : '0 元') ?></li>
+                    <?php if ($deal->status == OnlineProduct::STATUS_NOW) { ?>
                         <li class="dR-inner-left">投资金额(元)：</li>
                         <li class="dR-inner-right"><a style="cursor: pointer" onclick="chongzhi()">去充值</a></li>
-                    <?php }?>
+                    <?php } ?>
                 </ul>
                 <!--已售罄-->
                 <?php if ($deal->status == OnlineProduct::STATUS_NOW) { ?>
@@ -179,7 +178,7 @@ $this->registerCssFile('/css/useraccount/chargedeposit.css');
                             <li class="dR-inner-right"><span><i id="expect_profit">0.00</i></span>元</li>
                         </ul>
 
-                        <?php if(count($data) > 0) {?>
+                        <?php if (count($data) > 0) { ?>
                             <!--待选代金券-->
                             <ul class="dR-down clearfix">
                                 <li class="dR-down-left"  id="coupon_title"><img class="dR-add" src="/images/deal/add.png" alt="">选择一张代金券<i id="coupon_count"><?= count($data) ?></i></li>
@@ -190,7 +189,7 @@ $this->registerCssFile('/css/useraccount/chargedeposit.css');
                                 <ul>
                                     <?php foreach ($data as $v) { ?>
                                         <li class="quan-false">
-                                            <input type="radio" name="couponId" value="<?= $v->id ?>" class="coupon_radio" style="display: none;" <?=($v->id === $coupon_id ) ? 'checked' : '' ?>>
+                                            <input type="radio" name="couponId" value="<?= $v->id ?>" class="coupon_radio" style="display: none;" <?=($v->id === $coupon_id) ? 'checked' : '' ?>>
                                             <div class="quan-left">
                                                 <span>￥</span><?= number_format($v->couponType->amount) ?>
                                             </div>
@@ -209,15 +208,15 @@ $this->registerCssFile('/css/useraccount/chargedeposit.css');
                                     <?php } ?>
                                 </ul>
                             </div>
-                        <?php }?>
+                        <?php } ?>
                         <div>
                             <input type="submit" class="dR-btn" id="order_submit" value="立即投资"/>
                         </div>
                     </form>
                 <?php } elseif ($deal->status == OnlineProduct::STATUS_PRE) { ?>
                     <?php
-                    $start = Yii::$app->functions->getDateDesc($deal['start_date']);
-                    $deal->start_date = $start['desc'] . date('H:i', $start['time']);
+                        $start = Yii::$app->functions->getDateDesc($deal['start_date']);
+                        $deal->start_date = $start['desc'].date('H:i', $start['time']);
                     ?>
                     <div class="dR-shouqing"><?= $deal->start_date ?>起售</div>
                     <div class="dR-btn" onclick="window.location = '/licai/index'">投资其他项目</div>
@@ -233,7 +232,6 @@ $this->registerCssFile('/css/useraccount/chargedeposit.css');
                 <?php } elseif ($deal->status == OnlineProduct::STATUS_HUAN) { ?>
                     <div class="dR-shouqing">项目募集完成，收益中...</div>
                     <div class="dR-btn" onclick="window.location = '/licai/index'">投资其他项目</div>
-                <?php } else { ?>
                 <?php } ?>
             </div>
         </div>
@@ -293,7 +291,7 @@ $this->registerCssFile('/css/useraccount/chargedeposit.css');
         form.on('submit', function (e) {
             e.preventDefault();
             var money = $('#deal_money').val();
-            var log = <?= Yii::$app->user->isGuest?0:1 ?>;
+            var log = <?= Yii::$app->user->isGuest ? 0 : 1 ?>;
 
             if (log == 0) {
                 login();
@@ -346,6 +344,8 @@ $this->registerCssFile('/css/useraccount/chargedeposit.css');
     });
     //处理ajax登录
     function login() {
+        document.documentElement.style.overflow = 'hidden';   //禁用页面上下滚动效果
+
         //如果已经加载过登录页面，则直接显示
         if ($('.login-mark').length > 0) {
             $('.login-mark').fadeIn();

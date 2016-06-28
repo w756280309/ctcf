@@ -3,10 +3,10 @@
         display: none;
     }
 </style>
-<link rel="stylesheet" href="/css/base.css"/>
-<link rel="stylesheet" href="/css/login/login_pop.css"/>
-<script src="/js/jquery-1.8.3.min.js"></script>
-<script src="/js/login/login_pop.js"></script>
+
+<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/login/login_pop.css"/>
+<script src="<?= ASSETS_BASE_URI ?>js/login/login_pop.js"></script>
+
 <div class="login-mark" style="display: none;"></div>
 <div class="loginUp-box" style="display: none;">
     <form id="login" action="/site/dologin" method="post">
@@ -52,7 +52,9 @@
     if (requiresCaptcha) {
         $("#login_verity").show();
     }
-    function verify_phone() {
+
+    function verify_phone()
+    {
         var phone_err = $('.phone_err');
         if ('' == $('#phone').val()) {
             phone_err.show();
@@ -73,7 +75,8 @@
         return true;
     }
 
-    function verify_pass() {
+    function verify_pass()
+    {
         var pass_err = $('.pass_err');
         if ('' == $('#password').val()) {
             pass_err.show();
@@ -93,7 +96,8 @@
         return true;
     }
 
-    function verify_verity() {
+    function verify_verity()
+    {
         var verity_err = $('.verity_err');
         if ('' == $('#verity').val()) {
             verity_err.show();
@@ -113,7 +117,8 @@
         return true;
     }
 
-    function verify_form() {
+    function verify_form()
+    {
         var mobile_verify = verify_phone();
         var pass_verify = verify_pass();
         mobile.trigger('blur');
@@ -131,12 +136,15 @@
         mobile.bind("blur", function () {
             verify_phone();
         });
+
         password.bind("blur", function () {
             verify_pass();
         });
-        $('#verity_img').click(function(){
+
+        $('#verity_img').click(function() {
             $(this).attr("src", "/site/captcha?" + Math.random());
         });
+
         var button = $('#login_submit_button');
         button.bind('click', function () {
             var res = verify_form();

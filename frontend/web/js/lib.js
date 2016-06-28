@@ -74,7 +74,7 @@ function alertMessage(message, url, reload)
     });
 
     $('#box_close').click(function() {
-        if(reload == false){
+        if(reload == false) {
             $('body .mask').hide();
             $('body .mianmi_message').hide();
         } else {
@@ -93,7 +93,7 @@ function alertMessage(message, url, reload)
     //键盘按下ESC时关闭窗口!
     $(document).keydown(function(e) {
         if (e.keyCode === 27) {
-            if (!reload) {
+            if (reload == false) {
                 $('body .mask').hide();
                 $('body .mianmi_message').hide();
             } else {

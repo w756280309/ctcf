@@ -28,7 +28,7 @@ use common\models\bank\BankCardUpdate;
                     <span class="single-number">尾号<?= $user_bank->card_number?substr($user_bank->card_number, -4):"" ?></span>
                 </div>
                 <?php if ($bankcardUpdate && BankCardUpdate::STATUS_ACCEPT === $bankcardUpdate->status) { ?>
-                    <a href="javascript:void(0)" class="link-changeCard">换卡申请中</a>
+                    <span class="link-changeCard">换卡申请中</span>
                 <?php } else { ?>
                     <a href="/user/userbank/updatecard" class="link-changeCard">申请更换银行卡</a>
                 <?php } ?>
@@ -52,7 +52,7 @@ use common\models\bank\BankCardUpdate;
                     <span class="single-name"><?= $binding->bank_name ?></span>
                     <span class="single-number">尾号<?= $binding->card_number?substr($binding->card_number, -4):"" ?></span>
                 </div>
-                <a href="javascript:void(0)" class="link-changeCard">绑卡处理中</a>
+                <span class="link-changeCard">绑卡处理中</span>
                 <div class="clear"></div>
                 <div class="link-en">
                 </div>
@@ -80,6 +80,7 @@ use common\models\bank\BankCardUpdate;
         <p class="charge-explain-content">4、绑定快捷卡后，不影响使用本人其他银行卡或他人银行卡代充值。</p>
     </div>
 </div>
+
 <script>
     var m = <?= intval($data['code'])?>;
     if (m == 1) {
