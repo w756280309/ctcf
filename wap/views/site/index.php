@@ -269,8 +269,6 @@ $(function() {
 </html>
 <?php $this->endPage() ?>
 <script>
-    $('html').attr('ontouchmove','event.preventDefault()');
-
     function closeAdv()
     {
         $('#mask_kaiping,.tail').hide();
@@ -279,6 +277,7 @@ $(function() {
     }
     $(function(){
         if ($.cookie('splash_show') !== "1") {
+            $('html').attr('ontouchmove','event.preventDefault()');
             $.cookie('splash_show', "1");
             $('#mask_kaiping').show();
             $('#mask_kaiping,.tail').show();
