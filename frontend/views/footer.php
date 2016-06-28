@@ -2,6 +2,7 @@
 $this->registerCssFile(ASSETS_BASE_URI.'css/footer.css', ['depends' => 'frontend\assets\FrontAsset']);
 $this->registerJsFile(ASSETS_BASE_URI.'js/clipboard.min.js', ['depends' => 'frontend\assets\FrontAsset']);
 ?>
+
 <div class="footer-section footer-section5 footer-fp-auto-height footer-fp-section footer-fp-table">
     <div class="footer-five-box" style="height: 200px">
         <div class="footer-five-address">公司地址：温州市鹿城区飞霞南路657号保丰大楼四层</div>
@@ -56,33 +57,51 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/clipboard.min.js', ['depends' => 'fron
         </a>
     </div>
 </div>
+
 <script>
-    $(function(){
-        $('.message').hover(function(){
+    $(function() {
+        $('.message').hover(function() {
             var index=$('.message').index(this);
             $('.message span').eq(index).stop(true,false).animate({right:'0px',opacity: 1},600);
-        },function(){
+        }, function() {
             $('.message1').animate({right:'-300px',opacity: 0},600);
         });
-        $('.about-img1').on('click',function(){
+
+        if ($(window).scrollTop() <= 500) {
+            $(".about-img1").hide();
+        }
+
+        $(window).scroll(function () {
+            if ($(this).scrollTop() >= 500) {
+                $(".about-img1").show();
+            } else {
+                $(".about-img1").hide();
+            }
+        });
+
+        $('.about-img1').on('click', function() {
+            $("html").animate({scrollTop:0});
             $("body").animate({scrollTop:0});
         });
-        $('.about-img2').hover(function(){
+
+        $('.about-img2').hover(function() {
             $('.about-left').stop(true,false).animate({right:0,opacity:1},600);
-        },function(){
+        }, function() {
             $('.about-left').animate({right:'-200px',opacity:0},600);
         });
-        $('.about-img5').hover(function(){
+
+        $('.about-img5').hover(function() {
             $('.about-app').stop(true,false).animate({right:0,opacity:1},600);
-        },function(){
+        }, function() {
             $('.about-app').animate({right:'-200px',opacity:0},600);
         });
+
         //复制
         if(navigator.appName == "Microsoft Internet Explorer" && navigator.appVersion .split(";")[1].replace(/[ ]/g,"")=="MSIE8.0" && navigator.appVersion .split(";")[1].replace(/[ ]/g,"")=="MSIE7.0" && navigator.appVersion .split(";")[1].replace(/[ ]/g,"")=="MSIE6.0" ){
             $('#copy-buttons').on('click',function(){
                 alert('请手动复制QQ群号');
             })
-        }else {
+        } else {
             try {
                 var btn = document.getElementById('copy-buttons');
                 var clipboard = new Clipboard(btn);
@@ -93,10 +112,9 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/clipboard.min.js', ['depends' => 'fron
                 clipboard.on('error', function(e) {
                     alert('请重新复制');
                 });
-            }catch(error){
+            } catch(error) {
 
             }
-
         }
     })
 </script>
