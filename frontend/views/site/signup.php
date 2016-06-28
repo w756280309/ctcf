@@ -55,5 +55,8 @@ use yii\captcha\Captcha;
             </div>
         </div>
     <?php ActiveForm::end(); ?>
+    <div class="register-image">
+        <img alt="" src="<?= ASSETS_BASE_URI ?>images/fiveadvantage.jpg">
+    </div>
 </div>
 <div class="clear"></div>

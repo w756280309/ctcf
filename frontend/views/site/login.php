@@ -10,8 +10,7 @@ $this->title = '登录';
     <div class="login-content">
         <div class="login-inner">
             <div class="login-ad">
-                <!--小广告图-->
-                <img alt="">
+                <img alt="" src="<?= ASSETS_BASE_URI ?>images/fiveadvantage.jpg">
             </div>
             <div class="login-right">
                 <h3>登录</h3>

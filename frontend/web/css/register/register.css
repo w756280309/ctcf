@@ -17,6 +17,7 @@
     padding-left: 28px;
 }
 .register-inner {
+    float:left;
     width: 360px;
     padding-left: 45px;
     padding-top: 40px;
@@ -207,4 +208,7 @@
 }
 .btn {
     margin-top: 30px;
+}
+.register-image{
+    float: right;
 }
