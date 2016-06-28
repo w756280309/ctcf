@@ -92,7 +92,7 @@ class SiteController extends Controller
             ->leftJoin($c, "$ic.category_id = $c.id")
             ->where(["$n.status" => News::STATUS_PUBLISH, "$c.key" => \Yii::$app->params['news_key_media']])
             ->orderBy(["$n.news_time" => SORT_DESC, "$n.id" => SORT_DESC])
-            ->limit(3)
+            ->limit(2)
             ->all();
         $first_media = !empty($media) ? $media[0] : '';
 

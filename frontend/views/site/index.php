@@ -15,7 +15,7 @@ use common\utils\StringUtils;
         <!--banner 图-->
         <div class="banner-box">
             <?php foreach ($adv as $val) : ?>
-                <div class="banner" style="background-image: url('<?= UPLOAD_BASE_URI ?>/upload/adv/<?= $val->image ?>');"><a href="<?= $val->link ?>"></a></div>
+                <div class="banner" style="background-image: url('<?= UPLOAD_BASE_URI ?>/upload/adv/<?= $val->image ?>');"><a href="<?= $val->link ?>" target="_blank"></a></div>
             <?php endforeach; ?>
         </div>
         <!--选项卡-->
@@ -43,7 +43,7 @@ use common\utils\StringUtils;
             <span>理财公告</span>
             <div class="licai-lunbo">
                 <?php foreach ($notice as $val) : ?>
-                    <div><a href="/news/detail?type=notice&id=<?= $val->id ?>"><?= $val->title ?></a></div>
+                    <div><a href="/news/detail?type=notice&id=<?= $val->id ?>" target="_blank"><?= $val->title ?></a></div>
                 <?php endforeach; ?>
             </div>
         </div>
@@ -83,14 +83,14 @@ use common\utils\StringUtils;
     <div class="chengji-right">
         <div class="chengji-right-top">
             <span>媒体报道</span>
-            <a href="/news/index?type=media">更多&gt;</a>
+            <a href="/news/index?type=media" target="_blank">更多&gt;</a>
         </div>
         <?php if ('' !== $first_media && '' !== $first_media->pc_thumb) { ?>
-        <div class="videos"><img src="<?= UPLOAD_BASE_URI.$first_media->pc_thumb ?>" alt=""></div>
+        <div class="videos"><a href="/news/detail?type=media&id=<?= $first_media->id ?>" target="_blank"><img src="<?= UPLOAD_BASE_URI.$first_media->pc_thumb ?>" alt=""></a></div>
         <?php } ?>
         <ul class="chengji-right-bottom">
             <?php foreach ($media as $val) : ?>
-                <li><a href="/news/detail?type=media&id=<?= $val->id ?>"><?= $val->title ?></a></li>
+                <li><a href="/news/detail?type=media&id=<?= $val->id ?>" target="_blank"><?= $val->title ?></a></li>
             <?php endforeach; ?>
         </ul>
     </div>
@@ -98,13 +98,13 @@ use common\utils\StringUtils;
 
 <!--推荐标 start-->
 <?php if ($loans) { ?>
-    <div class="new-heade"><span>推荐标</span><a href="/licai/">更多&gt;</a></div>
+    <div class="new-heade"><span>推荐标</span><a href="/licai/" target="_blank">更多&gt;</a></div>
     <div class="yingshou-box">
         <div class="yingshou-content1">
             <ul class="yingshou-inner1">
                 <?php foreach ($loans as $val) : ?>
                     <li>
-                        <a href="/deal/deal/detail?sn=<?= $val->sn ?>" class="yingshou-left yingshou <?= (!in_array($val->status, [OnlineProduct::STATUS_PRE, OnlineProduct::STATUS_NOW])) ? 'huibian' : '' ?>">
+                        <a href="/deal/deal/detail?sn=<?= $val->sn ?>" target="_blank" class="yingshou-left yingshou <?= (!in_array($val->status, [OnlineProduct::STATUS_PRE, OnlineProduct::STATUS_NOW])) ? 'huibian' : '' ?>">
                             <div class="yingshou-top"><span><?= $val->title ?></span></div>
                             <?php if (!in_array($val->status, [OnlineProduct::STATUS_HUAN, OnlineProduct::STATUS_OVER])) { ?>
                                 <div style="clear: both"></div>
@@ -201,24 +201,24 @@ use common\utils\StringUtils;
     <div class="more-box-left">
         <div class="more-right-top">
             <span>帮助中心</span>
-            <a href="">更多&gt;</a>
+            <a href="/helpcenter/operation/" target="_blank">更多&gt;</a>
         </div>
         <ul class="more-right-bottom">
-            <li><a href="/helpcenter/operation/">网站流程如何操作？</a></li>
-            <li><a href="/helpcenter/security/">为什么在温都金服投资是安全的？</a></li>
-            <li><a href="/helpcenter/background/">了解温都金服。</a></li>
-            <li><a href="/helpcenter/product/">资产品种都有哪些？特点和优势是什么？</a></li>
-            <li><a href="/helpcenter/contact/">如何联系我们？</a></li>
+            <li><a href="/helpcenter/operation/" target="_blank">网站流程如何操作？</a></li>
+            <li><a href="/helpcenter/security/" target="_blank">为什么在温都金服投资是安全的？</a></li>
+            <li><a href="/helpcenter/background/" target="_blank">了解温都金服。</a></li>
+            <li><a href="/helpcenter/product/" target="_blank">资产品种都有哪些？特点和优势是什么？</a></li>
+            <li><a href="/helpcenter/contact/" target="_blank">如何联系我们？</a></li>
         </ul>
     </div>
     <div class="more-box-middle">
         <div class="more-right-top">
             <span>最新资讯</span>
-            <a href="/news/index?type=info">更多&gt;</a>
+            <a href="/news/index?type=info" target="_blank">更多&gt;</a>
         </div>
         <ul class="more-right-bottom">
             <?php foreach ($news as $val) : ?>
-                <li><a href="/news/detail?type=info&id=<?= $val->id ?>"><?= $val->title ?></a></li>
+                <li><a href="/news/detail?type=info&id=<?= $val->id ?>" target="_blank"><?= $val->title ?></a></li>
             <?php endforeach; ?>
         </ul>
     </div>
