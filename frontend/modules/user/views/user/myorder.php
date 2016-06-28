@@ -79,8 +79,7 @@ use common\widgets\Pager;
                         <div class="inner-box">
                             <div class="tip-border-en">
                                 <div class="tip-border-inner">
-                                    <em></em>
-                                    <span></span>
+                                    <div class="border-demo"></div>
                                 </div>
                             </div>
                             <table>

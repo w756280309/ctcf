@@ -285,3 +285,23 @@ padding-right: 60px;
     text-align: right;
 }
 
+.border-demo:after,.border-demo:before{
+    border: solid transparent;
+    content: ' ';
+    height: 0;
+    left: 50%;
+    position: absolute;
+    width: 0;
+}
+.border-demo:after {
+    border-width: 13px;
+    border-bottom-color: #fff;
+    top: -14px;
+}
+
+.border-demo:before {
+    border-width: 14px;
+    border-bottom-color: #e3e3e3;
+    top: -16px;
+    margin-left: -1px;
+}

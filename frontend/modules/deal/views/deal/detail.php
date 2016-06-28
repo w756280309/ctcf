@@ -348,18 +348,12 @@ $this->registerCssFile('/css/useraccount/chargedeposit.css');
     function login() {
         //如果已经加载过登录页面，则直接显示
         if ($('.login-mark').length > 0) {
-            $('.login-mark').show();
-            $('.loginUp-box').show();
+            $('.login-mark').fadeIn();
+            $('.loginUp-box').fadeIn();
         } else {
             //加载登录页面
             getLoginHtml();
-        }
-        //处理登录信息
-        if ($('.loginUp-box').length > 0) {
-            var mobile = $('#phone').val();
-            var password = $('#password').val();
-            var verity = $('#verity').val();
-            $.post('', {}, function (data) {});
+
         }
     }
 
@@ -382,6 +376,8 @@ $this->registerCssFile('/css/useraccount/chargedeposit.css');
             'dataType': 'html',
             'success': function (html) {
                 $('body').append(html);
+                $('.login-mark').fadeIn();
+                $('.loginUp-box').fadeIn();
             }
         });
         return '';

@@ -18,7 +18,11 @@ function ret()
 {
     $.ajax({url: "/order/order/ordererror?osn=<?= $order->sn?>", success: function(data){
         if (0 !== data.status) {
-            location.replace("/info/success?source=touzi&jumpUrl=/licai/index");
+            if (1 === data.status) {
+                location.replace("/info/success?source=touzi&jumpUrl=/licai/index");
+            } else {
+                location.replace("/info/fail?source=touzi");
+            }
         }
       }});
 }

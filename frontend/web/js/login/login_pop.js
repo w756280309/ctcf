@@ -9,11 +9,11 @@ $(function(){
     $('.close').on('click',function(){
         $('.login-mark').fadeOut();
         $('.loginUp-box').fadeOut();
-        $('#phone').val('');
-        $('#password').val('');
-        $('#verity').val('');
-        $('.phone_err').html('').hide();
-        $('.pass_err').html('').hide();
-        $('.verity_err').html('').hide();
+        $('.phone_err').hide().html('');
+        $('.pass_err').hide().html('');
+        $('.verity_err').hide().html('');
+        $('#phone').val('').removeClass('error-border');
+        $('#password').val('').removeClass('error-border');
+        $('#verity').val('').removeClass('error-border');
     })
 });

@@ -3,27 +3,25 @@
         display: none;
     }
 </style>
-
-<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/base.css"/>
-<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/login/login_pop.css"/>
-<script src="<?= ASSETS_BASE_URI ?>js/jquery-1.8.3.min.js"></script>
-<script src="<?= ASSETS_BASE_URI ?>js/login/login_pop.js"></script>
-
-<div class="login-mark"></div>
-<div class="loginUp-box">
+<link rel="stylesheet" href="/css/base.css"/>
+<link rel="stylesheet" href="/css/login/login_pop.css"/>
+<script src="/js/jquery-1.8.3.min.js"></script>
+<script src="/js/login/login_pop.js"></script>
+<div class="login-mark" style="display: none;"></div>
+<div class="loginUp-box" style="display: none;">
     <form id="login" action="/site/dologin" method="post">
         <input type="hidden" name="_csrf" value="<?= Yii::$app->request->csrfToken; ?>">
         <h3 class="loginUp-top">登录 <img class="close" src="<?= ASSETS_BASE_URI ?>images/login/close.png" alt=""></h3>
         <div class="loginUp-inner">
             <div class="phone-box">
                 <label for="phone">手机号码</label>
-                <input id="phone" type="tel" maxlength="11" placeholder="请输入手机号码" required name="LoginForm[phone]" />
+                <input id="phone" type="tel" maxlength="11" placeholder="请输入手机号码"  name="LoginForm[phone]" />
                 <div style="clear: both"></div>
                 <div class="popUp phone_err">手机号码应该包含11个字符</div>
             </div>
             <div class="password-box">
                 <label for="password">登录密码</label>
-                <input id="password" name="LoginForm[password]" type="password" maxlength="20" placeholder="请输入密码" required>
+                <input id="password" name="LoginForm[password]" type="password" maxlength="20" placeholder="请输入密码" />
                 <div style="clear: both"></div>
                 <div class="popUp pass_err">密码不能为空</div>
             </div>
@@ -138,14 +136,6 @@
         });
         $('#verity_img').click(function(){
             $(this).attr("src", "/site/captcha?" + Math.random());
-        });
-        $('.close').bind('click', function(){
-            $('.phone_err').hide().html('');
-            $('#phone').removeClass('error-border');
-            $('.pass_err').hide().html('');
-            $('#password').removeClass('error-border');
-            $('.verity_err').hide().html('');
-            $('#verity').removeClass('error-border');
         });
         var button = $('#login_submit_button');
         button.bind('click', function () {
