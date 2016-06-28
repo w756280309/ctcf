@@ -10,7 +10,7 @@ $this->registerCssFile(ASSETS_BASE_URI.'css/help/about.css', ['depends' => 'fron
             <?= $this->render('@frontend/views/news/left_nav.php') ?>
         </div>
         <div class="rightcontent">
-            <div class="about-box">
+            <div class="about-box1">
                 <div class="about-header">
                     <span class="about-header-font">关于我们</span>
                 </div>

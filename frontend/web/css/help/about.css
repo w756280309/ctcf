@@ -1,33 +1,33 @@
-.about-box {
+.about-box1 {
     background: #fff none repeat scroll 0 0;
     border: 1px solid #e3e3e3;
     width: 798px;
 }
-.about-box .about-header {
+.about-box1 .about-header {
     border-bottom: 1px solid #efeff3;
     height: 50px;
     line-height: 50px;
     padding-left: 20px;
 }
-.about-box .about-header .about-header-font {
+.about-box1 .about-header .about-header-font {
     color: #464648;
     font-size: 16px;
 }
-.about-box .about-content {
+.about-box1 .about-content {
     padding: 20px;
     overflow: hidden;
 }
-.about-box .about-content p {
+.about-box1 .about-content p {
     color: #6e6e72;
     margin-bottom: 15px;
     text-indent: 30px;
 }
-.about-box .about-content .zizhi {
+.about-box1 .about-content .zizhi {
     color: #161616;
     font-size: 16px;
     text-align: center;
 }
 
-.about-box .about-content .business-license img {
+.about-box1 .about-content .business-license img {
     margin-left: 60px;
 }
