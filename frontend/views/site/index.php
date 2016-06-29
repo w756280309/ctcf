@@ -64,7 +64,7 @@ use common\utils\StringUtils;
             </div>
             <div>
                 <img src="<?= ASSETS_BASE_URI ?>images/cup.png" alt="">
-                <p>谷东强势</p>
+                <p>股东强势</p>
             </div>
             <div>
                 <img src="<?= ASSETS_BASE_URI ?>images/tu.png" alt="">
