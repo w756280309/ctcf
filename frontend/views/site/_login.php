@@ -153,6 +153,10 @@
                 button.html('登录中...');
                 $.post('/site/dologin', $('#login').serialize(), function (data) {
                     if (0 == data.code) {
+                        if (typeof(callbackOnLogin) != 'undefined') {
+                            callbackOnLogin();
+                            return false;
+                        }
                         location.reload();
                     } else if (data.code > 0) {
                         if (data.requiresCaptcha) {

@@ -1,0 +1,111 @@
+.introduction-box {
+    width: 998px;
+    border: 1px solid #e4e4e8;
+    margin: 50px auto;
+    background-color: #fff;
+}
+
+.introduction-box .introduction-header {
+    height: 170px;
+    padding-top: 23px;
+    background: url("../../images/booking/introduction-head.png") no-repeat top center;
+    color: #fff;
+    text-align: center;
+    line-height: 28px;
+}
+
+.introduction-box .introduction-header p span {
+    font-size: 18px;
+}
+
+.introduction-box .introduction-content {
+    margin-right: 40px;
+    margin-top: 20px;
+    padding-left: 40px;
+    border-bottom: 1px solid #efeff3;
+    height: 90px;
+}
+
+.introduction-box .introduction-content h3 {
+    line-height: 36px;
+    color: #f4463a;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.introduction-box .introduction-content h3 span {
+    display: block;
+    width: 3px;
+    height: 18px;
+    float: left;
+    background-color: #f4463a;
+    margin-top: 10px;
+    margin-right: 10px;
+}
+
+.introduction-box .introduction-content p {
+    padding-right: 26px;
+    line-height: 18px;
+}
+.introduction-box .link-arrange {
+    display: block;
+    width: 210px;
+    height: 40px;
+    line-height: 40px;
+    margin: 30px auto;
+    color: #fff;
+    background-color: #f44336;
+    text-align: center;
+    cursor: pointer;
+}
+.introduction-box .link-arrange:hover{
+    background-color: #d43125;
+}
+.mask-show {
+    display: none;
+}
+
+.mask-over {
+    display: none;
+    width: 522px;
+    padding-bottom: 44px;
+    background-color: #fff;
+    position: absolute;
+    position:fixed !important;
+    top: 50%;
+    left: 50%;
+    margin-top: -219px;
+    margin-left: -261px;
+    border: 1px solid #e4e4e8;
+    z-index: 2000;
+}
+
+.mask-over .mask-over-head {
+    font-size: 16px;
+    font-weight: bold;
+    text-indent: 17px;
+    line-height: 50px;
+    border-bottom: 1px solid #efeff3;
+}
+
+.mask-over .mask-over-content {
+    padding: 40px 30px 30px;
+    line-height: 18px;
+    color: #6e6e72;
+}
+
+.mask-over .confirm-inner {
+    display: block;
+    width: 190px;
+    height: 40px;
+    line-height: 40px;
+    margin: 0 auto;
+    color: #fff;
+    background-color: #f44336;
+    text-align: center;
+    cursor: pointer;
+}
+
+.mask-over .confirm-inner:hover {
+    background-color: #d43125;
+}

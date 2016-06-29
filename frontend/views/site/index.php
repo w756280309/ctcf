@@ -187,8 +187,8 @@ use common\utils\StringUtils;
 <!--推荐标 end-->
 
 <!--card start-->
-<div class="card">
-    <a href="">
+<div class="card" id="wgt">
+    <a href="/order/booking/introduction?pid=1" target="_blank">
         <img src="<?= ASSETS_BASE_URI ?>images/card.png" alt="">
     </a>
 </div>
@@ -254,9 +254,67 @@ use common\utils\StringUtils;
 <!--股东背景 end-->
 
 <script>
+    var callbackOnLogin = function() {
+        location.href = "/order/booking/introduction?pid=1";
+    }
     $(function() {
         $.get('/site/top-list', function(data) {
             $('.top-list-show').html(data);
         });
+        //处理ajax登录
+        function login() {
+            //document.documentElement.style.overflow = 'hidden';   //禁用页面上下滚动效果
+            //如果已经加载过登录页面，则直接显示
+            if ($('.login-mark').length > 0) {
+                $('.login-mark').show();
+                $('.loginUp-box').show();
+            } else {
+                //加载登录页面
+                getLoginHtml();
+            }
+            //处理登录信息
+            if ($('.loginUp-box').length > 0) {
+                var mobile = $('#phone').val();
+                var password = $('#password').val();
+                var verity = $('#verity').val();
+            }
+        }
+        //获取登录页面
+        function getLoginHtml() {
+            $.ajax({
+                beforeSend: function (req) {
+                    req.setRequestHeader("Accept", "text/html");
+                },
+                'url': '/site/login-form',
+                'type': 'get',
+                'dataType': 'html',
+                'success': function (html) {
+                    $('body').append(html);
+                }
+            });
+            return '';
+        }
+
+        $('#wgt a').bind("click", function(e){
+            if ($(this).hasClass("is_loggedin")) {
+                e.preventDefault();
+                login();
+                return false;
+            }
+        });
+
+        function checkLoginStatus()
+        {
+            var xhr = $.get('/site/session');
+            xhr.done(function(data) {
+                if (!data.isLoggedin) {
+                    //未登录状态点击温股投弹出提示框
+                    var wgt = $('#wgt');
+                    wgt.find('a').attr("class", "is_loggedin");
+                    wgt.css('cursor', 'pointer');
+                }
+            });
+        }
+        checkLoginStatus();
     })
 </script>

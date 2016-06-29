@@ -354,6 +354,13 @@ class SiteController extends Controller
         return $this->render('signup', ['model' => $captcha]);
     }
 
+    public function actionSession()
+    {
+        return [
+            'isLoggedin' => !Yii::$app->user->isGuest,
+        ];
+    }
+
     /**
      * 用户协议展示.
      */
@@ -452,13 +459,6 @@ class SiteController extends Controller
     public function actionContact()
     {
         return $this->render('contact');
-    }
-
-    public function actionSession()
-    {
-        return [
-            'isLoggedin' => !Yii::$app->user->isGuest,
-        ];
     }
 
     /**

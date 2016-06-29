@@ -26,7 +26,7 @@ class BookingController extends BaseController
 
         $now = time();
         $count = BookingLog::find()->where(['pid' => $pid, 'uid' => $this->getAuthedUser()->id])->count();
-        if ($product->is_disabled || (!empty($model->start_time) && $now < $model->start_time) || (!empty($model->end_time) && $now > $model->end_time) || $count) {
+        if ($product->is_disabled || (!empty($product->start_time) && $now < $product->start_time) || (!empty($product->end_time) && $now > $product->end_time) || $count) {
             return $this->redirect('detail?pid='.$pid);
         }
 

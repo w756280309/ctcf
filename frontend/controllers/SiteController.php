@@ -157,6 +157,13 @@ class SiteController extends Controller
         ]);
     }
 
+    public function actionSession()
+    {
+        return [
+            'isLoggedin' => !Yii::$app->user->isGuest,
+        ];
+    }
+
     /**
      * 1.通过登录ip或用户名判断是否需要验证码
      * 2.若输入的密码错误，则相关信息写入login_log表，用于上述1的判断

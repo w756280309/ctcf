@@ -1,0 +1,166 @@
+.arrange-box {
+    width: 998px;
+    background-color: #fff;
+    border: 1px solid #e4e4e8;
+    margin: 50px auto 120px;
+
+}
+
+.arrange-box .arrange-box-head {
+    color: #464648;
+    font-size: 16px;
+    font-weight: bold;
+    line-height: 50px;
+    text-indent: 30px;
+}
+
+.arrange-box .arrange-box-content {
+    border-top: 1px solid #e4e4e8;
+    margin-right: 50px;
+    padding: 40px 0 75px;
+    color: #464648;
+}
+
+.arrange-box .combine-single {
+    position: relative;
+    height: 40px;
+}
+
+.arrange-box .combine-single-margin {
+    margin-bottom: 6px;
+}
+
+.arrange-box .combine-single div {
+    float: left;
+}
+
+.arrange-box .combine-single .single-font {
+    width: 116px;
+    padding-right: 12px;
+    height: 40px;
+    line-height: 40px;
+    text-align: right;
+}
+
+.arrange-box .combine-single input {
+    width: 260px;
+    height: 18px;
+    padding: 10px 0 10px 12px;
+    border: 1px solid #e4e4e8;
+}
+
+.arrange-box .combine-single .single-unit {
+    position: absolute;
+    top: 9px;
+    right: 557px;
+}
+
+.arrange-box .arrange-tip {
+    height: 30px;
+    line-height:30px;
+    color: #f44336;
+    text-indent: 128px;
+}
+
+.arrange-box .arrange-tip-real {
+    margin-bottom: 20px;
+    color: #f44336;
+    text-indent: 128px;
+}
+
+.arrange-box .confirm-arrange {
+    display: block;
+    width: 190px;
+    height: 40px;
+    line-height: 40px;
+    margin-top: 33px;
+    margin-left: 128px;
+    color: #fff;
+    background-color: #f44336;
+    text-align: center;
+    cursor: pointer;
+}
+
+.arrange-box .confirm-arrange:hover {
+    background-color: #d43125;
+}
+
+.arrange-box .text-en div span {
+    margin-top: 8px \9;
+}
+
+/*border三角形提示信息---开始*/
+.tip_pop {
+    display: none;
+    position: absolute;
+    top: 0px;
+    left: 417px;
+    font-size: 12px;
+    line-height: 34px;
+    zoom: 1;
+    color: #464648;
+    z-index: 99;
+}
+
+.tip_pop .tip_pop-en {
+    position: relative;
+    background-color: #f9e5e4;
+    border: 1px solid #edc2c0;
+    border-radius: 2px;
+    padding: 2px 14px;
+    zoom: 1;
+    _display: inline
+}
+
+.tip_pop .tip_pop-border {
+    position: absolute;
+    z-index: 10;
+    left: -125px;
+    top: 29px;
+}
+
+.tip_pop .tip_pop-border em {
+    width: 0px;
+    height: 0px;
+    position: absolute;
+    top: -16px;
+    left: 119px;
+    border-style: solid;
+    border-width: 6px 6px 6px 0;
+    border-color: rgba(0, 0, 0, 0);
+    border-color: transparent \0;
+    _border-color: tomato;
+    _filter: chroma(color=tomato);
+    border-right-color: #edc2c0;
+}
+
+.tip_pop .tip_pop-border span {
+    width: 0px;
+    height: 0px;
+    position: absolute;
+    top: -16px;
+    left: 120px;
+    border-style: solid;
+    border-width: 6px 6px 6px 0;
+    border-color: rgba(0, 0, 0, 0);
+    border-color: transparent \0;
+    _border-color: tomato;
+    _filter: chroma(color=tomato);
+    border-right-color: #f9e5e4;
+}
+
+.tip_pop .tip_pop-content {
+    word-break: keep-all;
+    padding-left: 10px;
+}
+
+.tip_pop-content-icon {
+    display: block;
+    width: 5px;
+    height: 5px;
+    background: url("../../images/userAccount/background-icon.png") no-repeat 0 -59px;
+    float: left;
+    margin-top: 15px;
+}
+
+/*border三角形提示信息---结束*/
