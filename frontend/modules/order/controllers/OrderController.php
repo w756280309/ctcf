@@ -113,16 +113,15 @@ class OrderController extends BaseController
         $ebao = [];
         foreach ($model as $key => $val) {
             $model[$key] = ContractTemplate::replaceTemplate($val, $order);
-
-            //获取证书
-            $baoQuan = EbaoQuan::findOne(['type' => $key, 'orderId' => $orderId, 'uid' => $this->getAuthedUser()->id]);
-            if (null !== $baoQuan) {
-                $client = new Client();
-                $ebao[$key]['downUrl'] = $client->contractFileDownload($baoQuan);
-                $ebao[$key]['linkUrl'] = $client->certificateLinkGet($baoQuan);
-            }
         }
 
+        //获取证书
+        $baoQuan = EbaoQuan::findOne(['orderId' => $orderId, 'uid' => $this->getAuthedUser()->id]);
+        if (null !== $baoQuan) {
+            $client = new Client();
+            $ebao['downUrl'] = $client->contractFileDownload($baoQuan);
+            $ebao['linkUrl'] = $client->certificateLinkGet($baoQuan);
+        }
         return $this->render('agreement', [
             'model' => $model,
             'ebao' => $ebao,

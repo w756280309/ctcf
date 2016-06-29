@@ -167,7 +167,7 @@ class OrderController extends BaseController
         $model[$key] = ContractTemplate::replaceTemplate($model[$key], $deal);
 
         //获取证书
-        $baoQuan = EbaoQuan::find()->where(['type' => $key, 'orderId' => $deal_id, 'uid' => Yii::$app->user->identity->getId()])->one();
+        $baoQuan = EbaoQuan::find()->where(['orderId' => $deal_id, 'uid' => Yii::$app->user->identity->getId()])->one();
         $linkUrl = $downUrl = null;
         if (null !== $baoQuan) {
             $client = new Client();

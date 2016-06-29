@@ -50,18 +50,24 @@ class Client
                     throw new NotFoundHttpException('the user of order not found');
                 }
                 try {
+                    $content = '';
                     foreach ($agreements as $k => $v) {
-                        //获取合同模板
-                        $content = $v['content'];
                         //用订单填充合同模板
-                        $content = $this->handleContent($k, $content, $order);
-                        //生成PDF
-                        $file = $this->createPdf($content, $order->sn);
-                        if (file_exists($file)) {
-                            //生成保全
-                            $this->contractFileCreate($file, $user, $order, $k, $onlineProduct->title);
-                            unlink($file);
+                        $c = $v['content'];
+                        if ($c) {
+                            //获取合同模板
+                            $c = $this->handleContent($k, $c, $order);
+                            $content = $content . $c . '<br/><br/><hr/><br/><br/>';
                         }
+                    }
+                    //多份合同合并成一份
+                    $content = rtrim($content, '<br/><br/><hr/><br/><br/>');
+                    //生成PDF
+                    $file = $this->createPdf($content, $order->sn);
+                    if (file_exists($file)) {
+                        //生成保全
+                        $this->contractFileCreate($file, $user, $order, $k, $onlineProduct->title);
+                        unlink($file);
                     }
                 } catch (Exception $e) {
                     throw $e;
@@ -239,7 +245,7 @@ class Client
         $requestObj->contractNumber = $onlineOrder['sn'] . '-' . strval($type) . '-' . time();
         //$requestObj->objectId="0000001";//关联保全时使用
         $requestObj->comments = $title;
-        $requestObj->isNeedSign="1";
+        $requestObj->isNeedSign = "1";
         //isNeedSign 这个参数如果为1是需要签名，则上传的文件必须是pdf文件，且服务端会将文件做签名后再保全.请->
         //使用保全contractFileDownloadUrl.php例子的使用方法得到合同保全的保全后文件的下载地址进行下载。（下载地址有时效性，过期后重新按此方法取得新地址）
 

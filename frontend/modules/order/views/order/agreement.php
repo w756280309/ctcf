@@ -32,13 +32,13 @@ $this->registerCssFile(ASSETS_BASE_URI.'css/deal/productcontract.css', ['depends
                         <div class="list <?= 0 !== $key ? 'hide' : '' ?>">
                             <?= html_entity_decode($val->content) ?>
 
-                            <?php if (isset($ebao[$key])) : ?>
+                            <?php if (isset($ebao)) : ?>
                                 <div class="a-btn">
-                                    <?php if (isset($ebao[$key]['downUrl'])) : ?>
-                                        <a class="a-lf" href="<?= $ebao[$key]['downUrl'] ?>">下载合同</a>
+                                    <?php if (isset($ebao['downUrl'])) : ?>
+                                        <a class="a-lf" href="<?= $ebao['downUrl'] ?>">下载合同</a>
                                     <?php endif; ?>
-                                    <?php if (isset($ebao[$key]['linkUrl'])) : ?>
-                                        <a class="a-rg" href="<?= $ebao[$key]['linkUrl'] ?>">保全证书</a>
+                                    <?php if (isset($ebao['linkUrl'])) : ?>
+                                        <a class="a-rg" href="<?= $ebao['linkUrl'] ?>">保全证书</a>
                                     <?php endif; ?>
                                 </div>
                             <?php endif; ?>
