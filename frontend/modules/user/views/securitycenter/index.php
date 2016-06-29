@@ -117,11 +117,11 @@ foreach (['useraccount/safecenter.css'] as $cssFile) {
                 <?php $form = ActiveForm::begin(['action' => "/user/securitycenter/reset-pass", 'id' => 'form']); ?>
                 <div class="revise-login-code">
                     <div class="revise-login-bag">
-                        <span>原密码</span><input type="password" id="password" class="input-code" name="EditpassForm[password]" placeholder="请输入原密码">
+                        <span>原密码</span><input type="password" id="password" class="input-code" name="EditpassForm[password]" placeholder="请输入原密码" autocomplete="off">
                     </div>
                     <p class="error password_err"></p>
                     <div class="revise-login-bag">
-                        <span>新密码</span><input type="password" id="new_pass" class="input-code" name="EditpassForm[new_pass]" placeholder="请输入6-20位的新密码" maxlength="20">
+                        <span>新密码</span><input type="password" id="new_pass" class="input-code" name="EditpassForm[new_pass]" placeholder="请输入6-20位的新密码" maxlength="20" autocomplete="off">
                     </div>
                     <p class="error new_pass_err"></p>
                     <div class="revise-login-bag">
