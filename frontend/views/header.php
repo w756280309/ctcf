@@ -18,7 +18,7 @@ $action = Yii::$app->controller->action->getUniqueId();
         <?php } else { ?>
             <div class="header-top-login" id="header-after-login">
                 <div class="header-top-name">
-                    <a href="/user/user" id="header-user-name"><?= StringUtils::obfsMobileNumber(Yii::$app->user->identity->mobile) ?></a>
+                    <a href="/user/user" id="header-user-name">我的账户：<?= StringUtils::obfsMobileNumber(Yii::$app->user->identity->mobile) ?></a>
                 </div>
                 <i>|</i>
                 <span>
