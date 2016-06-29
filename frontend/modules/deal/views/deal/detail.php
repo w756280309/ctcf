@@ -130,7 +130,7 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/useraccount/chargedeposit.css');
             <div class="pR-box-inner">
                 <div class="pR-title">募集进度：</div>
                 <div class="dR-progress-box">
-                    <?php if ($deal->status == OnlineProduct::STATUS_FOUND) { ?>
+                    <?php if ($deal->status == OnlineProduct::STATUS_FOUND || $deal->status == OnlineProduct::STATUS_OVER || $deal->status == OnlineProduct::STATUS_HUAN) { ?>
                     <div class="dR-progress">
                         <span data-progress="100" style="width: 100%;"></span>
                     </div>
@@ -145,7 +145,13 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/useraccount/chargedeposit.css');
                 <ul class="clearfix dR-inner">
                     <li class="dR-inner-left">项目可投余额：</li>
                     <li class="dR-inner-right">
-                        <span><i><?= ($deal->status == 1) ? (StringUtils::amountFormat1('{amount}{unit}', $deal->money)) : StringUtils::amountFormat2($deal->getLoanBalance()).'元' ?></i></span>
+                        <span><i>
+                                <?php if ($deal->status == OnlineProduct::STATUS_FOUND || $deal->status == OnlineProduct::STATUS_OVER || $deal->status == OnlineProduct::STATUS_HUAN) { ?>
+                                    0元
+                                <?php } else { ?>
+                                <?= ($deal->status == 1) ? (StringUtils::amountFormat1('{amount}{unit}', $deal->money)) : StringUtils::amountFormat2($deal->getLoanBalance()).'元' ?>
+                                <?php }?>
+                            </i></span>
                     </li>
                     <li class="dR-inner-left">我的可用余额：</li>
                     <li class="dR-inner-right"><?= (null === $user) ? '查看余额请【<a onclick="login()" style="cursor: pointer">登录</a>】' : ($user->lendAccount ? StringUtils::amountFormat3($user->lendAccount->available_balance).' 元' : '0 元') ?></li>
