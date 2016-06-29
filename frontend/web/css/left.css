@@ -42,6 +42,6 @@
     display: inline-block;
     width: 11px;
     height: 7px;
-    background: url(/images/useraccount/left-nav-icon.png) no-repeat center left;
+    background: url(../images/useraccount/left-nav-icon.png) no-repeat center left;
     vertical-align: middle;
 }
