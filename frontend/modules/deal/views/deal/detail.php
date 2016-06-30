@@ -36,12 +36,7 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/useraccount/chargedeposit.css');
                     <li style="width: 22%">
                         <div>
                             <span class="pl-middle-inner">
-                                 <?= $deal->expires ?>
-                                <?php if (1 === (int) $deal->refund_method) { ?>
-                                    <i>天</i>
-                                <?php } else { ?>
-                                    <i>个月</i>
-                                <?php } ?>
+                                <?php $ex = $deal->getDuration(); ?><?= $ex['value']?><?= $ex['unit'] ?>
                             </span>
                             <p>项目期限</p>
 
@@ -75,7 +70,7 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/useraccount/chargedeposit.css');
                         <li>
                             项目期限:&nbsp;&nbsp;&nbsp;&nbsp;
                             <span>
-                                <?= $deal->expires ?> <?= (1 === (int) $deal->refund_method) ? '天' : '个月' ?>
+                                <?php $ex = $deal->getDuration(); ?><?= $ex['value']?><?= $ex['unit'] ?>
                             </span>
                         </li>
                     <?php } else { ?>

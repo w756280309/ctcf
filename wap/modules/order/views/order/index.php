@@ -24,14 +24,10 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/order.js?v=20160603-v', ['depends' => 
         <div class="col-xs-12 text-align-lf first-hang" style="padding-right: 0;"><?=$deal->title?></div>
         <div class="col-xs-4 text-align-ct">年化收益</div>
         <div class="col-xs-8 text-align-lf col"><?=  ($deal->yield_rate*100)?>%</div>
-        <div class="col-xs-4 text-align-ct">项目期限</div>
-        <div class="col-xs-8 text-align-lf col"><?= $deal->expires ?>
-            <?php if (1 === (int)$deal['refund_method']) { ?>
-            天
-            <?php } else { ?>
-            个月
-            <?php } ?>
-            <?php if (!empty($deal['kuanxianqi'])) { ?>(含宽限期<?=$deal['kuanxianqi']?>天)<?php } ?></div>
+        <div class="col-xs-4 text-align-ct">项目</div>
+        <div class="col-xs-8 text-align-lf col">
+            <?php $ex = $deal->getDuration() ?><?= $ex['value'] ?><?= $ex['unit']?>
+            <?php if (!empty($deal->kuanxianqi)) { ?>(含宽限期<?=$deal->kuanxianqi?>天)<?php } ?></div>
         <div class="col-xs-4 text-align-ct">可投余额</div>
         <div class="col-xs-8 text-align-lf col"><?=  number_format($param['order_balance'], 2)?>元</div>
     </div>

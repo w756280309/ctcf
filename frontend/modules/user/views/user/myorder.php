@@ -8,6 +8,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/useraccount/my_trade.js', ['depends' =
 use common\models\order\OnlineRepaymentPlan;
 use common\utils\StringUtils;
 use common\widgets\Pager;
+use common\models\product\OnlineProduct;
 ?>
 
 <div class="myCoupon-box">
@@ -131,10 +132,18 @@ use common\widgets\Pager;
             <?php foreach ($model as $val) : ?>
                 <tr class="tr-click">
                     <td class="text-second"><a href="/deal/deal/detail?sn=<?= $val->loan->sn ?>"><?= $val->loan->title ?></a></td>
-                    <td class="text-align-ct"><?= $val->loan->expires ?><?= 1 === $val->refund_method ? "天" : "个月" ?></td>
+                    <td class="text-align-ct">
+                        <?php $ex = $val->loan->getDuration() ?><?= $ex['value'] ?><?= $ex['unit']?>
+                    </td>
                     <td class="text-align-ct"><?= rtrim(rtrim(number_format($val->yield_rate * 100, 2), '0'), '.') ?>%</td>
                     <td class="text-third"><?= StringUtils::amountFormat3($val->order_money) ?></td>
-                    <td class="text-align-ct"><?= number_format($val->loan->finish_rate * 100) ?>%</td>
+                    <td class="text-align-ct">
+                        <?php if ($val->loan->status == OnlineProduct::STATUS_FOUND || $val->loan->status == OnlineProduct::STATUS_OVER || $val->loan->status == OnlineProduct::STATUS_HUAN) { ?>
+                            100%
+                        <?php } else {?>
+                            <?= number_format($val->loan->finish_rate * 100) ?>%
+                        <?php } ?>
+                    </td>
                 </tr>
             <?php endforeach; ?>
         </table>

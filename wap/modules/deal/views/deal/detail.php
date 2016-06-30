@@ -4,41 +4,34 @@ $this->title = '项目详情';
 use common\models\product\RateSteps;
 use common\view\LoanHelper;
 
-$deal['money'] = rtrim(rtrim($deal['money'], '0'), '.');
+$deal->money = rtrim(rtrim($deal->money, '0'), '.');
 ?>
 <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/xiangqing.css?v=20160427">
         <!--xiangqing-->
         <div class="row column">
             <div class="hidden-xs col-sm-1"></div>
-            <div class="col-xs-12 col-sm-10 column-title"><span><?=$deal['title']?></span></div>
+            <div class="col-xs-12 col-sm-10 column-title"><span><?=$deal->title?></span></div>
             <div class="container">
-                <ul class="row column-content <?= $deal['isFlexRate'] ? 'rate-steps' : '' ?>">
+                <ul class="row column-content <?= $deal->isFlexRate ? 'rate-steps' : '' ?>">
                     <li class="col-xs-6">
                         <div class="xian">
                             <?= LoanHelper::getDealRate($deal) ?>
                             <span class="column-lu">%</span>
-                            <?php if (!empty($deal['jiaxi']) && !$deal['isFlexRate']) { ?><span class="bonus-badge">+<?=  doubleval($deal['jiaxi']) ?>%</span><?php } ?>
+                            <?php if (!empty($deal->jiaxi) && !$deal->isFlexRate) { ?><span class="bonus-badge">+<?=  doubleval($deal->jiaxi) ?>%</span><?php } ?>
                         </div>
                         <span class="qing">年化收益率</span>
                     </li>
                     <li class="col-xs-6">
                         <div>
-                            <?=$deal->expires?>
-                            <span class="column-lu">
-                                <?php if (1 === (int)$deal['refund_method']) { ?>
-                                天
-                                <?php } else { ?>
-                                个月
-                                <?php } ?>
-                            </span>
+                            <?php $ex = $deal->getDuration() ?><?= $ex['value'] ?><span class="column-lu"><?= $ex['unit']?></span>
                         </div>
                         <span class="qing">期限
-                            <?php if (!empty($deal['kuanxianqi'])) { ?>
-                            <i>(包含<?= $deal['kuanxianqi'] ?>天宽限期)</i> <img src="<?= ASSETS_BASE_URI ?>images/dina.png" alt="">
+                            <?php if (!empty($deal->kuanxianqi)) { ?>
+                            <i>(包含<?= $deal->kuanxianqi ?>天宽限期)</i> <img src="<?= ASSETS_BASE_URI ?>images/dina.png" alt="">
                             <?php } ?>
                         </span>
                     </li>
-                    <?php if (!empty($deal['kuanxianqi'])) { ?>
+                    <?php if (!empty($deal->kuanxianqi)) { ?>
                     <div class="row" id='chart-box' hidden="true">
                         <div class="col-xs-12">
                             <div>宽限期：应收账款的付款方因内部财务审核,结算流程或结算日遇银行非工作日等因素，账款的实际结算日可能有几天的延后</div>
@@ -53,7 +46,7 @@ $deal['money'] = rtrim(rtrim($deal['money'], '0'), '.');
             <div class="col-xs-1"></div>
             <div class="col-xs-10">
                 <div class="per">
-                    <div class="progress-bar progress-bar-red" style="width:<?= number_format($deal['finish_rate']*100,0)?>%"></div>
+                    <div class="progress-bar progress-bar-red" style="width:<?= number_format($deal->finish_rate * 100, 0)?>%"></div>
                 </div>
             </div>
             <div class="col-xs-1"></div>
@@ -61,38 +54,32 @@ $deal['money'] = rtrim(rtrim($deal['money'], '0'), '.');
         <div class="row shuju">
             <div class="col-xs-1"></div>
             <div class="col-xs-8" style="padding: 0;padding-left: 15px">
-                <span><?= ($deal['status']==1)?(Yii::$app->functions->toFormatMoney($deal['money'])) : rtrim(rtrim(number_format($deal_balace, 2), '0'), '.').'元'?></span><i>/<?= Yii::$app->functions->toFormatMoney($deal['money']); ?></i>
+                <span><?= ($deal->status == 1)?(Yii::$app->functions->toFormatMoney($deal->money)) : rtrim(rtrim(number_format($deal_balace, 2), '0'), '.').'元'?></span><i>/<?= Yii::$app->functions->toFormatMoney($deal->money); ?></i>
                 <div>可投余额/项目总额</div>
             </div>
             <div class="col-xs-1" style="padding: 0;">
-                <div class="shuju-bili"><?=  number_format($deal['finish_rate']*100,0)?><em>%</em></div>
+                <div class="shuju-bili"><?=  number_format($deal->finish_rate * 100, 0)?><em>%</em></div>
             </div>
             <div class="col-xs-1"></div>
         </div>
         <div class="row message">
             <div class="col-xs-1"></div>
             <div class="col-xs-10 xian2">
-                <div class="m1">起投金额：<span><?= rtrim(rtrim(number_format($deal['start_money'], 2), '0'), '.') ?>元</span></div>
-                <div class="m5">递增金额：<span><?= rtrim(rtrim(number_format($deal['dizeng_money'], 2), '0'), '.') ?>元</span></div>   <!-- 增加递增金额字段 -->
-                <div class="m2">项目起息：<span><?= $deal['jixi_time']>0 ? date('Y-m-d',$deal['jixi_time']) : '项目成立日次日';?></span></div>
-                <?php if (0 === (int)$deal['finish_date']) { ?>
-                    <div class="m3">项目期限：<span><?=$deal->expires?></span>
-                    <?php if (1 === (int)$deal['refund_method']) { ?>
-                    天
-                    <?php } else { ?>
-                    个月
-                    <?php } ?>
-                    </div>
+                <div class="m1">起投金额：<span><?= rtrim(rtrim(number_format($deal->start_money, 2), '0'), '.') ?>元</span></div>
+                <div class="m5">递增金额：<span><?= rtrim(rtrim(number_format($deal->dizeng_money, 2), '0'), '.') ?>元</span></div>   <!-- 增加递增金额字段 -->
+                <div class="m2">项目起息：<span><?= $deal->jixi_time > 0 ? date('Y-m-d',$deal->jixi_time) : '项目成立日次日';?></span></div>
+                <?php if (0 === (int)$deal->finish_date) { ?>
+                    <div class="m3">项目期限：<span><?php $ex = $deal->getDuration() ?><?= $ex['value'] ?></span><?= $ex['unit']?></div>
                 <?php } else { ?>
-                    <div class="m3">项目结束：<span><?= date('Y-m-d',$deal['finish_date']) ?></span></div>
+                    <div class="m3">项目结束：<span><?= date('Y-m-d',$deal->finish_date) ?></span></div>
                 <?php } ?>
 
-                <div class="m4">还款方式：<span><?= Yii::$app->params['refund_method'][$deal['refund_method']]?></span></div>
+                <div class="m4">还款方式：<span><?= Yii::$app->params['refund_method'][$deal->refund_method]?></span></div>
             </div>
             <div class="col-xs-1"></div>
         </div>
 
-        <?php if ($deal['isFlexRate']) { ?>
+        <?php if ($deal->isFlexRate) { ?>
         <div class="row tab lee_title">
             <div class="col-xs-1"></div>
             <div class="col-xs-10 lee_shuoming">收益说明</div>
@@ -106,15 +93,15 @@ $deal['money'] = rtrim(rtrim($deal['money'], '0'), '.');
         </div>
         <div class="row message" style="padding-bottom: 0px;" >
             <div class="col-xs-1  col-sm-1" ></div>
-            <div class="col-xs-7 money  col-sm-5" >累计认购<?= rtrim(rtrim(number_format($deal['start_money'], 2), '0'), '.') ?>起</div>
-            <div class="col-xs-3 shouyi center_num  col-sm-5" ><?= rtrim(rtrim(number_format($deal['yield_rate']*100, 2), '0'), '.') ?></div>
+            <div class="col-xs-7 money  col-sm-5" >累计认购<?= rtrim(rtrim(number_format($deal->start_money, 2), '0'), '.') ?>起</div>
+            <div class="col-xs-3 shouyi center_num  col-sm-5" ><?= rtrim(rtrim(number_format($deal->yield_rate * 100, 2), '0'), '.') ?></div>
             <div class="col-xs-1 col-sm-1" ></div>
         </div>
-        <?php foreach (RateSteps::parse($deal['rateSteps']) as $val) { ?>
+        <?php foreach (RateSteps::parse($deal->rateSteps) as $val) { ?>
         <div class="row message" style="padding-bottom: 0px;" >
             <div class="col-xs-1  col-sm-1" ></div>
-            <div class="col-xs-7 money  col-sm-5" >累计认购<?= rtrim(rtrim(number_format($val['min'], 2), '0'), '.') ?>起</div>
-            <div class="col-xs-3 shouyi center_num  col-sm-5" ><?= rtrim(rtrim(number_format($val['rate'], 2), '0'), '.') ?></div>
+            <div class="col-xs-7 money  col-sm-5" >累计认购<?= rtrim(rtrim(number_format($val->min, 2), '0'), '.') ?>起</div>
+            <div class="col-xs-3 shouyi center_num  col-sm-5" ><?= rtrim(rtrim(number_format($val->rate, 2), '0'), '.') ?></div>
             <div class="col-xs-1 col-sm-1" ></div>
         </div>
         <?php } ?>
@@ -137,7 +124,7 @@ $deal['money'] = rtrim(rtrim($deal['money'], '0'), '.');
         <div class="row tab-conten">
             <div class="col-xs-1"></div>
             <div class="col-xs-10">
-                <?=  \yii\helpers\HtmlPurifier::process($deal['description'])?>
+                <?=  \yii\helpers\HtmlPurifier::process($deal->description)?>
             </div>
             <div class="col-xs-1"></div>
         </div>
@@ -155,8 +142,8 @@ $deal['money'] = rtrim(rtrim($deal['money'], '0'), '.');
             <div class="col-xs-1"></div>
         </div>
     </div>
-    <?php if($deal['status']==2){?>
-    <form action="/deal/deal/toorder?sn=<?=$deal['sn'] . (defined('IN_APP') ? "&token=" . \yii\helpers\Html::encode(Yii::$app->request->get("token")): "") ?>" method="post" id="toorderform" data-to="1">
+    <?php if($deal->status==2){?>
+    <form action="/deal/deal/toorder?sn=<?=$deal->sn . (defined('IN_APP') ? "&token=" . \yii\helpers\Html::encode(Yii::$app->request->get("token")): "") ?>" method="post" id="toorderform" data-to="1">
             <input name="_csrf" type="hidden" id="_csrf" value="<?=Yii::$app->request->csrfToken ?>">
         </form>
         <div id="x-purchase" class="row rengou" style="cursor: pointer">
@@ -167,7 +154,7 @@ $deal['money'] = rtrim(rtrim($deal['money'], '0'), '.');
     <?php }else{ ?>
         <div class="row huankuang">
             <div class="col-xs-1"></div>
-            <div class="col-xs-10"><?=  Yii::$app->params['deal_status'][$deal['status']]?><?= $deal['status']==1?"(".$deal['start_date']."开始)":"" ?></div>
+            <div class="col-xs-10"><?=  Yii::$app->params['deal_status'][$deal->status]?><?= $deal->status==1?"(".$deal->start_date."开始)":"" ?></div>
             <div class="col-xs-1"></div>
         </div>
     <?php } ?>
@@ -185,7 +172,7 @@ $deal['money'] = rtrim(rtrim($deal['money'], '0'), '.');
                         $('.touzi-box').css({display:'none'});
                     }
                 })
-                pid = '<?=$deal['id'];?>';
+                pid = '<?=$deal->id;?>';
                 $.get('/deal/deal/orderlist',{pid:pid},function(data){
                     html = "";
                     for(var i=0;i<data.orders.length;i++){

@@ -39,7 +39,7 @@ use common\widgets\Pager;
                             <li class="li_2">年化收益率</li>
                         </ul>
                         <ul class="single_ul_center">
-                            <li class="li_1"><?= $val->expires ?><span><?= 1 === $val->refund_method ? "天" : "个月" ?></span></li>
+                            <li class="li_1"><?php $ex = $val->getDuration(); ?><?= $ex['value']?><span><?= $ex['unit'] ?></span></li>
                             <li class="li_2">项目期限</li>
                         </ul>
 

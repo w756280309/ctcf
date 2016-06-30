@@ -126,7 +126,7 @@ use common\utils\StringUtils;
                                                 }
                                             ?>%
                                         </span></p>
-                                    <p class="yingshou-content2-right">项目期限 <span><?= $val->expires.(1 === $val->refund_method ? "天" : "个月") ?></span></p>
+                                    <p class="yingshou-content2-right">项目期限 <span><?php $ex = $val->getDuration() ?><?= $ex['value']?><?= $ex['unit']?></span></p>
                                 </div>
                             <?php } ?>
                             <div class="yingshou-jindu">
@@ -156,7 +156,7 @@ use common\utils\StringUtils;
                                         <p>年化收益率</p>
                                     </div>
                                     <div class="yingshou-nian yingshou-xian">
-                                        <?= $val->expires ?><span><?= 1 === $val->refund_method ? "天" : "个月" ?></span>
+                                        <?php $ex = $val->getDuration() ?><?= $ex['value']?><span> <?= $ex['unit']?></span>
                                         <p>项目期限</p>
                                     </div>
                                 </div>

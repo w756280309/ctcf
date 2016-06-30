@@ -6,6 +6,7 @@ use Yii;
 use yii\behaviors\TimestampBehavior;
 use P2pl\LoanInterface;
 use P2pl\Borrower;
+use yii\web\NotFoundHttpException;
 
 /**
  * 标的（项目）.
@@ -569,5 +570,41 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
             ->all();
 
         return $loans;
+    }
+    
+    /**
+     * 获取项目期限 getDealExpires
+     * 上线未成立的项目，项目期限＝项目截止日－当前日；成立后的项目，项目期限＝项目截止日－计息日期+1
+     * @return array ['expires' => $expires, 'unit' => $unit]
+     * @throws NotFoundHttpException
+     */
+    public function getDuration()
+    {
+        //如果 项目 是到期本息 并且 有项目截止日，那么项目期限需要按照指定逻辑进行计算
+        if (intval($this->refund_method) === OnlineProduct::REFUND_METHOD_DAOQIBENXI) {
+            if ( $this->finish_date > 0) {
+                //项目成立
+                if (in_array($this->status, [3, 5, 6, 7])) {
+                    //项目期限＝ 项目截止日－计息日期 + 1
+                    $datetime1 = new \DateTime(date('Y-m-d H:i:s', $this->finish_date));
+                    $datetime2 = new \DateTime(date('Y-m-d H:i:s', $this->jixi_time));
+                    $interval = $datetime1->diff($datetime2);
+                    $expires = intval($interval->format('%a')) + 1;
+                } else {
+                    //项目截止日－当前日
+                    $datetime1 = new \DateTime(date('Y-m-d H:i:s', $this->finish_date));
+                    $datetime2 = new \DateTime(date('Y-m-d H:i:s'));
+                    $interval = $datetime1->diff($datetime2);
+                    $expires = intval($interval->format('%a'));
+                }
+            } else {
+                $expires = $this->expires;
+            }
+            $unit = '天';
+        } else {
+            $expires = $this->expires;
+            $unit = '个月';
+        }
+        return ['value' => $expires, 'unit' => $unit];
     }
 }

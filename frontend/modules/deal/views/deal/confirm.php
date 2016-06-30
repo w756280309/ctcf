@@ -31,15 +31,7 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/deal/buy.css');
 
                             </span>
                         </p>
-                        <p class="rg time">项目期限<span class="nums">
-                                 <?= $deal->expires ?>
-                                <?php if (1 === (int)$deal->refund_method) { ?>
-                                    <i>天</i>
-                                <?php } else { ?>
-                                    <i>个月</i>
-                                <?php } ?>
-                            </span>
-                        </p>
+                        <p class="rg time">项目期限<span class="nums"><?php $ex = $deal->getDuration() ?><?= $ex['value'] ?><?= $ex['unit']?></span></p>
                     </div>
                     <div class="invest-ct-lf-content">
                         <div class="txt-box"></div>
