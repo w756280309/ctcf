@@ -216,15 +216,7 @@ class Client
         $requestObj = new ContractFilePreservationCreateRequest();
         //init保全请求参数
         $requestObj->file = $file;
-        if ($type === 0) {
-            $name = '认购协议';
-        } elseif ($type === 1) {
-            $name = '风险提示书';
-        } elseif ($type === 2) {
-            $name = '产品要素表';
-        } else {
-            $name = '合同';
-        }
+        $name = '产品合同';
         $requestObj->preservationTitle = $name;
 
         //个人用户
@@ -322,13 +314,7 @@ class Client
     private function handleContent($type, $content, OnlineOrder $onlineOrder)
     {
         if (in_array($type, [0, 1, 2])) {
-            if ($type === 0) {
-                $title = '认购协议';
-            } elseif ($type === 1) {
-                $title = '风险提示书';
-            } else {
-                $title = '产品要素表';
-            }
+            $title = '产品合同';
             $content = '<h4 style="margin: 5px auto;text-align: center;font-size: 14px;color: #000;line-height: 18px;">' . $title . '</h4>' . $content;
         }
         $real_name = '';

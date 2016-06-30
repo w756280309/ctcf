@@ -62,7 +62,7 @@ use common\widgets\Pager;
                         <a href="/deal/deal/detail?sn=<?= $val->loan->sn ?>"><?= $val->loan->title ?></a>
                     </td>
                     <td class="text-align-lf"><?= $val->loan->finish_date ? date('Y-m-d', $val->loan->finish_date) : '' ?></td>
-                    <td class="text-align-ct"><?= number_format($val->yield_rate * 100) ?>%</td>
+                    <td class="text-align-ct"><?= rtrim(rtrim(number_format($val->yield_rate * 100, 2), '0'), '.') ?>%</td>
                     <td class="text-align-rg"><?= StringUtils::amountFormat3($val->order_money) ?></td>
                     <td class="text-align-rg"><?= StringUtils::amountFormat3(OnlineRepaymentPlan::getTotalLixi($val->loan, $val)) ?></td>
                     <td class="text-align-ct">
@@ -132,7 +132,7 @@ use common\widgets\Pager;
                 <tr class="tr-click">
                     <td class="text-second"><a href="/deal/deal/detail?sn=<?= $val->loan->sn ?>"><?= $val->loan->title ?></a></td>
                     <td class="text-align-ct"><?= $val->loan->expires ?><?= 1 === $val->refund_method ? "天" : "个月" ?></td>
-                    <td class="text-align-ct"><?= StringUtils::amountFormat2($val->yield_rate * 100) ?>%</td>
+                    <td class="text-align-ct"><?= rtrim(rtrim(number_format($val->yield_rate * 100, 2), '0'), '.') ?>%</td>
                     <td class="text-third"><?= StringUtils::amountFormat3($val->order_money) ?></td>
                     <td class="text-align-ct"><?= number_format($val->loan->finish_rate * 100) ?>%</td>
                 </tr>
