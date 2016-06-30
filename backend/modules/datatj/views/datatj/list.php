@@ -1,8 +1,6 @@
 <?php
 use yii\widgets\LinkPager;
-use common\models\user\User;
 use yii\grid\GridView;
-
 ?>
 <?php $this->beginBlock('blockmain'); ?>
 <div class="container-fluid">

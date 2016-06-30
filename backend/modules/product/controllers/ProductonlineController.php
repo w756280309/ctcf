@@ -2,25 +2,25 @@
 
 namespace backend\modules\product\controllers;
 
-use common\models\order\BaoQuanQueue;
-use Yii;
-use yii\web\Response;
-use common\models\product\OnlineProduct;
-use yii\data\Pagination;
 use backend\controllers\BaseController;
-use common\models\contract\ContractTemplate;
-use common\models\user\User;
-use common\models\order\OnlineRepaymentPlan;
-use common\models\order\OnlineOrder;
-use common\models\user\UserAccount;
 use common\lib\bchelp\BcRound;
-use common\models\booking\BookingLog;
-use P2pl\Borrower;
-use common\service\LoanService;
 use common\lib\product\ProductProcessor;
+use common\models\booking\BookingLog;
+use common\models\contract\ContractTemplate;
+use common\models\order\BaoQuanQueue;
+use common\models\order\OnlineOrder;
+use common\models\order\OnlineRepaymentPlan;
+use common\models\product\Issuer;
+use common\models\product\OnlineProduct;
 use common\models\user\MoneyRecord;
+use common\models\user\User;
+use common\models\user\UserAccount;
+use common\service\LoanService;
 use common\utils\TxUtils;
-use yii\web\NotFoundHttpException;
+use P2pl\Borrower;
+use Yii;
+use yii\data\Pagination;
+use yii\web\Response;
 
 /**
  * Description of OnlineProduct.
@@ -44,12 +44,15 @@ class ProductonlineController extends BaseController
     {
         $rongziUser = User::find()->where(['type' => User::USER_TYPE_ORG])->asArray()->all();
         $rongziInfo = [];
+
         foreach ($rongziUser as $v) {
             $rongziInfo[$v['id']] = $v['org_name'];
         }
+
         $model = $id ? OnlineProduct::findOne($id) : new OnlineProduct();
         $ctmodel = null;
         $model->scenario = 'create';
+
         if (!empty($id)) {
             $model->is_fdate = (0 === $model->finish_date) ? 0 : 1;
             $model->yield_rate = bcmul($model->yield_rate, 100, 2);
@@ -65,18 +68,25 @@ class ProductonlineController extends BaseController
 
         $con_name_arr = Yii::$app->request->post('name');
         $con_content_arr = Yii::$app->request->post('content');
+
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             $uids = LoanService::convertUid($model->allowedUids);
+
             if (!empty($model->finish_date) && OnlineProduct::REFUND_METHOD_DAOQIBENXI === (int)$model->refund_method) {
                 //若截止日期不为空，重新计算项目天数
                 $pp = new ProductProcessor();
                 $model->expires = $pp->LoanTimes($model->start_date, null, strtotime($model->finish_date), 'd', true)['days'][1]['period']['days'];
             }
+
             if (null === $model->id) {
                 $model->sn = OnlineProduct::createSN();
                 $model->sort = OnlineProduct::SORT_PRE;
             } else {
                 $model->isPrivate = $isPrivate;
+            }
+
+            if (0 === $model->issuer) {   //当发行方没有选择时,发行方项目编号为空
+                $model->issuerSn = null;
             }
 
             $_namearr = empty($con_name_arr) ? $con_name_arr : array_filter($con_name_arr);
@@ -87,6 +97,7 @@ class ProductonlineController extends BaseController
             if (false === strpos($con_name_arr[0], '认购协议')) {
                 $model->addError('contract_type', '合同名称错误,第一份合同应该录入认购协议');
             }
+
             if (false === strpos($con_name_arr[1], '风险揭示书')) {
                 $model->addError('contract_type', '合同名称错误,第二份合同应该录入风险揭示书');
             }
@@ -102,6 +113,7 @@ class ProductonlineController extends BaseController
 
             if (!$model->getErrors('contract_type')) {
                 $transaction = Yii::$app->db->beginTransaction();
+
                 $model->allowedUids = $uids;
                 $model->start_date = strtotime($model->start_date);
                 $model->end_date = strtotime($model->end_date);
@@ -110,14 +122,17 @@ class ProductonlineController extends BaseController
                 $model->yield_rate = bcdiv($model->yield_rate, 100, 14);
                 $model->jixi_time = $model->jixi_time !== '' ? strtotime($model->jixi_time) : 0;
                 $model->recommendTime = empty($model->recommendTime) ? 0 : $model->recommendTime;
+
                 $pre = $model->save(false);
                 if (!$pre) {
                     $transaction->rollBack();
                     $model->addError('title', '标的添加异常');
                 }
+
                 if (!empty($id)) {
                     ContractTemplate::deleteAll(['pid' => $id]);
                 }
+
                 $record = new ContractTemplate();
                 foreach ($con_name_arr as $key => $val) {
                     $record_model = clone $record;
@@ -129,6 +144,7 @@ class ProductonlineController extends BaseController
                         $model->addError('title', '录入ContractTemplate异常');
                     }
                 }
+
                 if (!$model->hasErrors()) {
                     $transaction->commit();
 
@@ -137,6 +153,8 @@ class ProductonlineController extends BaseController
             }
         }
 
+        $issuer = Issuer::find()->asArray()->all();
+
         return $this->render('edit', [
             'pid' => $id,
             'model' => $model,
@@ -144,6 +162,7 @@ class ProductonlineController extends BaseController
             'rongziInfo' => $rongziInfo,
             'con_name_arr' => $con_name_arr,
             'con_content_arr' => $con_content_arr,
+            'issuer' => $issuer,
         ]);
     }
 
@@ -233,7 +252,7 @@ class ProductonlineController extends BaseController
     public function actionDelmore($ids = null)
     {
         if (empty($ids)) {
-            throw new NotFoundHttpException();     //参数无效,抛出404异常
+            throw $this->ex404();     //参数无效,抛出404异常
         }
 
         $id_arr = explode(',', $ids);
@@ -462,13 +481,13 @@ class ProductonlineController extends BaseController
     public function actionJixi($product_id)
     {
         if (empty($product_id)) {
-            throw new NotFoundHttpException();   //当参数无效时,抛出404异常
+            throw $this->ex404();   //当参数无效时,抛出404异常
         }
 
         $c_flag = 0;
         $model = OnlineProduct::findOne($product_id);
         if (null === $model) {
-            throw new NotFoundHttpException();
+            throw $this->ex404();
         }
 
         $err = '';
@@ -537,7 +556,7 @@ class ProductonlineController extends BaseController
 
         $deal = OnlineProduct::findOne($dealId);
         if (!$deal) {
-            throw new NotFoundHttpException('The deal info is not existed.');
+            throw $this->ex404();
         }
 
         if ($deal->isPrivate) {

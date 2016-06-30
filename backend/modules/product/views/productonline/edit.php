@@ -1,6 +1,7 @@
 <?php
-use yii\widgets\ActiveForm;
 use PayGate\Cfca\CfcaUtils;
+use yii\helpers\ArrayHelper;
+use yii\widgets\ActiveForm;
 
 $this->registerCssFile('/kindeditor/themes/default/default.css', ['depends' => 'yii\web\YiiAsset', 'position' => 1]);
 $this->registerJsFile('/kindeditor/kindeditor-min.js', ['depends' => 'yii\web\YiiAsset', 'position' => 1]);
@@ -349,7 +350,31 @@ TPL;
                 </div>
             </div>
         </div>
-        <!--/row-->
+
+        <div class="row-fluid">
+            <div class="span6 ">
+                <div class="control-group">
+                    <label class="control-label">发行方</label>
+                    <div class="controls">
+                        <?=
+                            $form->field($model, 'issuer', ['template' => '{input}{error}', 'inputOptions' => ['autocomplete' => 'off', 'class' => 'chosen-with-diselect span6']])->dropDownList(ArrayHelper::merge([0 => '--请选择--'], ArrayHelper::map($issuer, 'id', 'name')))
+                        ?>
+                    </div>
+                </div>
+            </div>
+
+            <div class="span6 ">
+                <div class="control-group">
+                    <label class="control-label">发行方项目编号</label>
+                    <div class="controls">
+                        <?=
+                            $form->field($model, 'issuerSn', ['template' => '{input}{error}', 'inputOptions' => ['autocomplete' => 'off', 'placeholder' => '发行方项目编号']])->textInput(['class' => 'm-wrap span12'])
+                        ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="row-fluid">
             <div class="span6 ">
                 <div class="control-group">

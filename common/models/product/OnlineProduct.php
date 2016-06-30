@@ -1,12 +1,11 @@
 <?php
-
 namespace common\models\product;
 
+use common\models\user\User;
+use P2pl\Borrower;
+use P2pl\LoanInterface;
 use Yii;
 use yii\behaviors\TimestampBehavior;
-use P2pl\LoanInterface;
-use P2pl\Borrower;
-use yii\web\NotFoundHttpException;
 
 /**
  * 标的（项目）.
@@ -97,7 +96,7 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
             'create' => ['title', 'sn', 'cid', 'money', 'borrow_uid', 'expires', 'expires_show', 'yield_rate', 'start_money', 'borrow_uid', 'fee', 'status',
                 'description', 'refund_method', 'account_name', 'account', 'bank', 'dizeng_money', 'start_date', 'end_date', 'full_time',
                 'is_xs', 'yuqi_faxi', 'order_limit', 'creator_id', 'del_status', 'status', 'isPrivate', 'allowedUids', 'finish_date', 'channel', 'jixi_time', 'sort',
-                'jiaxi', 'kuanxianqi', 'graceDays', 'isFlexRate', 'rateSteps'],
+                'jiaxi', 'kuanxianqi', 'graceDays', 'isFlexRate', 'rateSteps', 'issuer', 'issuerSn'],
         ];
     }
 
@@ -571,7 +570,7 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
 
         return $loans;
     }
-    
+
     /**
      * 获取项目期限 getDealExpires
      * 上线未成立的项目，项目期限＝项目截止日－当前日；成立后的项目，项目期限＝项目截止日－计息日期+1
@@ -606,5 +605,13 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
             $unit = '个月';
         }
         return ['value' => $expires, 'unit' => $unit];
+    }
+
+    /**
+     * 获取融资用户信息.
+     */
+    public function getBorrower()
+    {
+        return $this->hasOne(User::className(), ['id' => 'borrow_uid']);
     }
 }
