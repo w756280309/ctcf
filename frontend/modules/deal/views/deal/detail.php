@@ -41,10 +41,8 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/useraccount/chargedeposit.css');
                             <p>项目期限</p>
 
                             <?php if (!empty($deal->kuanxianqi)) { ?>
-                                <p><i>(包含<?= $deal->kuanxianqi ?>天宽限期)</i> <img src="<?= ASSETS_BASE_URI ?>images/dina.png" alt=""></p>
-                            <?php } ?>
-                            <?php if (!empty($deal->kuanxianqi)) { ?>
-                                <p>宽限期：应收账款的付款方因内部财务审核,结算流程或结算日遇银行非工作日等因素，账款的实际结算日可能有几天的延后</p>
+                                <p><i>(包含<?= $deal->kuanxianqi ?>天宽限期)</i><img src="<?= ASSETS_BASE_URI ?>images/useraccount/tip.png" id="kuanxian_tip"></p>
+                               <div id="kuanxian_message" style="display: none;margin: 0px;position: relative;width: 276px;;height: 60px;top:-54px;left:125px;background: #fff0da; border-radius: 4px;border: 1px solid #ffd18d;padding: 5px 5px 5px 10px;line-height: 20px;color: #999999">宽限期：应收账款的付款方因内部财务审核,结算流程或结算日遇银行非工作日等因素，账款的实际结算日可能有几天的延后</div>
                             <?php } ?>
                         </div>
                     </li>
@@ -241,6 +239,13 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/useraccount/chargedeposit.css');
 
 <script>
     $(function () {
+        //宽限期
+        $('#kuanxian_tip').mouseover(function(){
+            $('#kuanxian_message').fadeIn();
+        }).mouseleave(function(){
+            $('#kuanxian_message').fadeOut();
+        });
+
         //获取投资记录
         getOrderList('/deal/deal/order-list?pid=<?=$deal->id?>');
         var money = $(this).val();
