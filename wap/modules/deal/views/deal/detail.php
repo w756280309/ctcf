@@ -100,8 +100,8 @@ $deal->money = rtrim(rtrim($deal->money, '0'), '.');
         <?php foreach (RateSteps::parse($deal->rateSteps) as $val) { ?>
         <div class="row message" style="padding-bottom: 0px;" >
             <div class="col-xs-1  col-sm-1" ></div>
-            <div class="col-xs-7 money  col-sm-5" >累计认购<?= rtrim(rtrim(number_format($val->min, 2), '0'), '.') ?>起</div>
-            <div class="col-xs-3 shouyi center_num  col-sm-5" ><?= rtrim(rtrim(number_format($val->rate, 2), '0'), '.') ?></div>
+            <div class="col-xs-7 money  col-sm-5" >累计认购<?= rtrim(rtrim(number_format($val['min'], 2), '0'), '.') ?>起</div>
+            <div class="col-xs-3 shouyi center_num  col-sm-5" ><?= rtrim(rtrim(number_format($val['rate'], 2), '0'), '.') ?></div>
             <div class="col-xs-1 col-sm-1" ></div>
         </div>
         <?php } ?>
