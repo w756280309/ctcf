@@ -2,12 +2,14 @@ $(document).ready(function () {
     $('.confirm-inner').on('click', function () {
         $('.mask,.mask-over').hide();
     });
-    $('.text-en').find('input').on('focus', function () {
-        $(this).css('border', '1px solid #f44336');
-    })
-    $('.text-en').find('input').on('blur', function () {
-        $(this).css('border', '1px solid #e4e4e8');
-    })
+    function showInputBorder(obj, status) {
+        if (!status) {
+            obj.css('border', '1px solid #f44336');
+        } else {
+            obj.css('border', '1px solid #e4e4e8');
+        }
+    }
+
     var nameisok = false;
     var phoneisok = false;
     var moneyisok = false;
@@ -23,6 +25,7 @@ $(document).ready(function () {
             $("#name_err").html('');
             nameisok = true;
         }
+        showInputBorder($(this), nameisok);
     });
     $('.phone-text').on('blur', function () {
         var phonereg = /^13[0-9]{9}$|14[0-9]{9}|15[0-9]{9}$|17[0-9]{9}|18[0-9]{9}$/g;
@@ -37,6 +40,7 @@ $(document).ready(function () {
             $("#phone_err").html('');
             phoneisok = true;
         }
+        showInputBorder($(this), phoneisok);
     });
     $('.money-text').on('blur', function () {
         var moneyText = $.trim($('.money-text').val());
@@ -55,6 +59,7 @@ $(document).ready(function () {
             $("#money_err").html('');
             moneyisok = true;
         }
+        showInputBorder($(this), moneyisok);
     });
     /*点击提交*/
     $('.confirm-arrange').on('click', function (e) {
@@ -68,15 +73,22 @@ $(document).ready(function () {
         var vals = $("form").serialize();
         $(this).attr('disabled', true);
         var xhr = $.post($("#form_wgt").attr("action"), vals, function (data) {
+            var inputObj = '';
             if (data.code == 0) {
                 alert("您已预约成功");
                 location.href = "/";
             } else if (data.code == 1) {
                 $("#name_err").html(data.message);
+                inputObj = $(".name-text");
             } else if (data.code == 2) {
                 $("#mobile_err").html(data.message);
+                inputObj = $(".phone-text");
             } else if (data.code == 3 || data.code == 4) {
                 $("#money_err").html(data.message);
+                inputObj = $(".money-text");
+            }
+            if (inputObj) {
+                showInputBorder(inputObj, false);
             }
         });
         xhr.always(function () {
