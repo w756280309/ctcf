@@ -31,24 +31,25 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/common.js', ['depends' => 'yii\web\Yii
     <div class="col-xs-4"></div>
 </div>
 <script type="text/javascript">
-    ga('require', 'ecommerce');
-
     var orderSn = '<?= $order->sn ?>';
-    function logTx() {
-        if ($.cookie('fin_tid') == orderSn) {
-            return;
-        }
-
-        ga('ecommerce:addTransaction', {
-            'id': orderSn,
-            'revenue': '<?= $order->order_money ?>',
-            'hitCallback': function() {
-                $.cookie('fin_tid', orderSn);
-                location.replace("/order/order/ordererror?osn="+orderSn);
+    if (typeof ga != 'undefined') {
+        ga('require', 'ecommerce');
+        function logTx() {
+            if ($.cookie('fin_tid') == orderSn) {
+                return;
             }
-        });
 
-        ga('ecommerce:send');
+            ga('ecommerce:addTransaction', {
+                'id': orderSn,
+                'revenue': '<?= $order->order_money ?>',
+                'hitCallback': function() {
+                    $.cookie('fin_tid', orderSn);
+                    location.replace("/order/order/ordererror?osn="+orderSn);
+                }
+            });
+
+            ga('ecommerce:send');
+        }
     }
 
     function ret() {
@@ -56,13 +57,18 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/common.js', ['depends' => 'yii\web\Yii
             url: "/order/order/ordererror?osn=<?= $order->sn?>",
             success: function(data) {
                 if (0 !== data.status) {
-                    if (1 == data.status) {
-                        logTx();
+                    if (typeof ga != 'undefined') {
+                        if (1 == data.status) {
+                            logTx();
+                        }
+
+                        setTimeout(function() {
+                            location.replace("/order/order/ordererror?osn="+orderSn);
+                        }, 1500);
+                    } else {
+                        location.replace("/order/order/ordererror?osn="+orderSn);
                     }
 
-                    setTimeout(function() {
-                        location.replace("/order/order/ordererror?osn="+orderSn);
-                    }, 1500);
                 }
             }
         });

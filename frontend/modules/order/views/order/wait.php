@@ -14,26 +14,29 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/deal/buy.css');
     </div>
 </div>
 <script type="text/javascript">
-    ga('require', 'ecommerce');
-
     var orderSn = '<?= $order->sn ?>';
-    function logTx()
-    {
-        if ($.cookie('fin_tid') === orderSn) {
-            return;
-        }
-
-        ga('ecommerce:addTransaction', {
-            'id': orderSn,
-            'revenue': '<?= $order->order_money ?>',
-            'hitCallback': function() {
-                $.cookie('fin_tid', orderSn);
-                location.replace("/order/order/ordererror?osn="+orderSn);
+    if (typeof ga != 'undefined') {
+        ga('require', 'ecommerce');
+        
+        function logTx()
+        {
+            if ($.cookie('fin_tid') === orderSn) {
+                return;
             }
-        });
 
-        ga('ecommerce:send');
+            ga('ecommerce:addTransaction', {
+                'id': orderSn,
+                'revenue': '<?= $order->order_money ?>',
+                'hitCallback': function() {
+                    $.cookie('fin_tid', orderSn);
+                    location.replace("/order/order/ordererror?osn="+orderSn);
+                }
+            });
+
+            ga('ecommerce:send');
+        }
     }
+
 
     function ret()
     {
@@ -41,13 +44,17 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/deal/buy.css');
             url: "/order/order/ordererror?osn=<?= $order->sn ?>",
             success: function(data) {
                 if (0 !== data.status) {
-                    if (1 === data.status) {
-                        logTx();
-                    }
+                    if (typeof ga != 'undefined') {
+                        if (1 === data.status) {
+                            logTx();
+                        }
 
-                    setTimeout(function() {
+                        setTimeout(function() {
+                            location.replace("/order/order/ordererror?osn="+orderSn);
+                        }, 1500);
+                    } else {
                         location.replace("/order/order/ordererror?osn="+orderSn);
-                    }, 1500);
+                    }
                 }
             }
         });
@@ -57,6 +64,6 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/deal/buy.css');
 
     setTimeout(function () {
         clearInterval(int);
-        location.replace("/order/order/ordererror?osn="+orderSn);
+        location.replace("/user/user/myorder");
     }, 5000);//3秒之后自动跳入结果页面
 </script>
