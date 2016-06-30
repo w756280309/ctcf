@@ -266,17 +266,11 @@ use common\utils\StringUtils;
             //document.documentElement.style.overflow = 'hidden';   //禁用页面上下滚动效果
             //如果已经加载过登录页面，则直接显示
             if ($('.login-mark').length > 0) {
-                $('.login-mark').show();
-                $('.loginUp-box').show();
+                $('.login-mark').fadeIn();
+                $('.loginUp-box').fadeIn();
             } else {
                 //加载登录页面
                 getLoginHtml();
-            }
-            //处理登录信息
-            if ($('.loginUp-box').length > 0) {
-                var mobile = $('#phone').val();
-                var password = $('#password').val();
-                var verity = $('#verity').val();
             }
         }
         //获取登录页面
@@ -290,6 +284,8 @@ use common\utils\StringUtils;
                 'dataType': 'html',
                 'success': function (html) {
                     $('body').append(html);
+                    $('.login-mark').fadeIn();
+                    $('.loginUp-box').fadeIn();
                 }
             });
             return '';
