@@ -279,7 +279,7 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
     }
 
     /**
-     * 验证项目天数 <= 项目截止日 - 募集开始时间.
+     * 验证项目天数 <= 产品到期日 - 募集开始时间.
      *
      * @param type $attribute
      * @param type $params
@@ -324,7 +324,7 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
             'jixi_time' => '计息开始时间',
             'del_status' => '删除状态',
             'account_name' => '账户名称',
-            'finish_date' => '项目截止日',
+            'finish_date' => '产品到期日',
             'bank' => '银行',
             'contract_type' => '使用固定模板',
             'status' => '标的进展',
@@ -573,26 +573,25 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
 
     /**
      * 获取项目期限 getDealExpires
-     * 上线未成立的项目，项目期限＝项目截止日－当前日；成立后的项目，项目期限＝项目截止日－计息日期+1
+     * 上线未成立的项目，项目期限＝产品到期日－当前日；成立后的项目，项目期限＝产品到期日－计息日期+1
      * @return array ['expires' => $expires, 'unit' => $unit]
      * @throws NotFoundHttpException
      */
     public function getDuration()
     {
-        //如果 项目 是到期本息 并且 有项目截止日，那么项目期限需要按照指定逻辑进行计算
+        //如果 项目 是到期本息 并且 有产品到期日，那么项目期限需要按照指定逻辑进行计算
         if (intval($this->refund_method) === OnlineProduct::REFUND_METHOD_DAOQIBENXI) {
             if ( $this->finish_date > 0) {
-                //项目成立
-                if (in_array($this->status, [3, 5, 6, 7])) {
-                    //项目期限＝ 项目截止日－计息日期 + 1
-                    $datetime1 = new \DateTime(date('Y-m-d H:i:s', $this->finish_date));
-                    $datetime2 = new \DateTime(date('Y-m-d H:i:s', $this->jixi_time));
+                if ($this->jixi_time) {
+                    //项目期限＝ 产品到期日－计息日期 + 1
+                    $datetime1 = new \DateTime(date('Y-m-d', $this->finish_date));
+                    $datetime2 = new \DateTime(date('Y-m-d', $this->jixi_time));
                     $interval = $datetime1->diff($datetime2);
                     $expires = intval($interval->format('%a')) + 1;
                 } else {
-                    //项目截止日－当前日
-                    $datetime1 = new \DateTime(date('Y-m-d H:i:s', $this->finish_date));
-                    $datetime2 = new \DateTime(date('Y-m-d H:i:s'));
+                    //产品到期日－当前日
+                    $datetime1 = new \DateTime(date('Y-m-d', $this->finish_date));
+                    $datetime2 = new \DateTime(date('Y-m-d', time()));
                     $interval = $datetime1->diff($datetime2);
                     $expires = intval($interval->format('%a'));
                 }
@@ -604,6 +603,7 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
             $expires = $this->expires;
             $unit = '个月';
         }
+
         return ['value' => $expires, 'unit' => $unit];
     }
 

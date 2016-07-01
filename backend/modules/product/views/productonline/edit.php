@@ -292,12 +292,12 @@ TPL;
         <div class="row-fluid sourceRfmet">
             <div class="span6 ">
                 <div class="control-group">
-                    <label class="control-label">项目截止日<span style="color: red;">(<?= $desc ?>)</span></label>
+                    <label class="control-label">产品到期日<span style="color: red;">(<?= $desc ?>)</span></label>
                     <div class="controls">
                         <?=
                         $form->field($model, 'finish_date', [
                             'template' => '<div class="input-append date form_datetime">{input}<span class="add-on" onclick="WdatePicker({el:\'onlineproduct-finish_date\',dateFmt:\'yyyy-MM-dd HH:mm\',minDate:\''.date('Y-m-d').'\'});"><i class="icon-calendar"></i></span></div>{error}',
-                            'inputOptions' => ['autocomplete' => 'off', 'placeholder' => '项目截止日', 'disabled' => 'disabled']
+                            'inputOptions' => ['autocomplete' => 'off', 'placeholder' => '产品到期日', 'disabled' => 'disabled']
                             ])->textInput([
                                 //'readonly' => 'readonly',
                                 'class' => 'm-wrap span12',
@@ -527,7 +527,7 @@ TPL;
             }
         });
 
-        //是否使用截止日期关系着项目截止日和宽限期天数的设置。如果勾选，可以填写截止日和宽限期，否则不可以填写
+        //是否使用截止日期关系着产品到期日和宽限期天数的设置。如果勾选，可以填写截止日和宽限期，否则不可以填写
         $('#onlineproduct-is_fdate').bind('click', function() {
             if (true === $(this).parent().hasClass('checked')) {
                 $('#onlineproduct-kuanxianqi').val('');
@@ -566,7 +566,7 @@ TPL;
         })
     });
 
-    //选择还款方式是到期本息的可以设置项目截止日以及宽限期。否则不可以设置
+    //选择还款方式是到期本息的可以设置产品到期日以及宽限期。否则不可以设置
     function changeRefmet(obj){
         if (1 === parseInt($(obj).val())) {
             $('#onlineproduct-expires').next().html('(天)');

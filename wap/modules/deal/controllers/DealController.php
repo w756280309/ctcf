@@ -23,28 +23,22 @@ class DealController extends Controller
     {
         $cond = ['isPrivate' => 0, 'del_status' => OnlineProduct::STATUS_USE, 'online_status' => OnlineProduct::STATUS_ONLINE];
 
-        $data = OnlineProduct::find()->where($cond)->select('id k,sn as num,title,yield_rate as yr,status,expires as qixian,money,start_date as start,finish_rate,jiaxi,start_money,refund_method, isFlexRate, rateSteps');
+        $data = OnlineProduct::find()->where($cond)->select('id,sn,title,yield_rate,status,expires,money,start_date,finish_rate,jiaxi,start_money,refund_method, isFlexRate, rateSteps');
         $count = $data->count();
         $size = 5;
         $pages = new Pagination(['totalCount' => $count, 'pageSize' => $size]);
         $deals = $data->offset(($page - 1) * $size)->limit($pages->limit)
             ->orderBy('recommendTime desc, sort asc, finish_rate desc, id desc')
-            ->asArray()->all();
+            ->all();
         foreach ($deals as $key => $val) {
-            $dates = Yii::$app->functions->getDateDesc($val['start']);
-            $deals[$key]['start'] = date('H:i', $val['start']);
-            $deals[$key]['start_desc'] = $dates['desc'];
-            $deals[$key]['finish_rate'] = number_format($val['finish_rate'] * 100, 0);
-            $deals[$key]['yr'] = $val['yr'] ? rtrim(rtrim(number_format(OnlineProduct::calcBaseRate($val['yr'], $val['jiaxi']), 2), '0'), '.') : '0';
+            $val->finish_rate = number_format($val->finish_rate * 100, 0);
+            $val->yield_rate = $val->yield_rate ? rtrim(rtrim(number_format(OnlineProduct::calcBaseRate($val->yield_rate, $val->jiaxi), 2), '0'), '.') : '0';
 
-            if ($val['isFlexRate'] && null !== $val['rateSteps']) {
-                $deals[$key]['yr'] .= '~'.rtrim(rtrim(number_format(RateSteps::getTopRate(RateSteps::parse($val['rateSteps'])), 2), '0'), '.');
+            if ($val->isFlexRate && null !== $val->rateSteps) {
+                $val->yield_rate = $val->yield_rate . '~' . rtrim(rtrim(number_format(RateSteps::getTopRate(RateSteps::parse($val->rateSteps)), 2), '0'), '.');
             }
 
-            $deals[$key]['statusval'] = Yii::$app->params['deal_status'][$val['status']];
-            $deals[$key]['method'] = (1 === (int)$val['refund_method']) ? "天" : "个月";
-            $deals[$key]['start_money'] = rtrim(rtrim(number_format($val['start_money'], 2), '0'), '.');
-            $deals[$key]['cid'] = \Yii::$app->params['refund_method'][$val['refund_method']];
+            $val->start_money = rtrim(rtrim(number_format($val->start_money, 2), '0'), '.');
         }
         $tp = ceil($count / $size);
         $code = ($page > $tp) ? 1 : 0;
@@ -58,8 +52,8 @@ class DealController extends Controller
 
         if (Yii::$app->request->isAjax) {
             $message = ($page > $tp) ? '数据错误' : '消息返回';
-
-            return ['header' => $header, 'deals' => $deals, 'code' => $code, 'message' => $message];
+            $html = $this->renderFile('@wap/modules/deal/views/deal/_more.php', ['deals' => $deals, 'header' => $header]);
+            return ['header' => $header, 'html' => $html, 'code' => $code, 'message' => $message];
         }
 
         return $this->render('index', ['deals' => $deals, 'header' => $header]);

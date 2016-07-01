@@ -25,7 +25,7 @@ $this->title="帮助中心";
         </div>
         <div class="row single">
             <h1>收益计算：</h1>
-            <p>到期本息项目为按天计息，项目截止日一次性偿还本金+利息。
+            <p>到期本息项目为按天计息，产品到期日一次性偿还本金+利息。
         </div>
         <div class="row single">
             <h1>结息计算：</h1>

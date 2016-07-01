@@ -62,7 +62,7 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/useraccount/chargedeposit.css');
             <div class="pl-bottom">
                 <ul>
                     <li>
-                        项目起息:&nbsp;&nbsp;&nbsp;&nbsp;<span><?= $deal->jixi_time > 0 ? date('Y-m-d', $deal->jixi_time) : '项目成立日次日'; ?></span>
+                        产品起息日:&nbsp;&nbsp;&nbsp;&nbsp;<span><?= $deal->jixi_time > 0 ? date('Y-m-d', $deal->jixi_time) : '项目成立日次日'; ?></span>
                     </li>
                     <?php if (0 === (int) $deal->finish_date) { ?>
                         <li>
@@ -72,7 +72,7 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/useraccount/chargedeposit.css');
                             </span>
                         </li>
                     <?php } else { ?>
-                        <li>项目结束:&nbsp;&nbsp;&nbsp;&nbsp;<span><?= date('Y-m-d', $deal->finish_date) ?></span></li>
+                        <li>产品到期日:&nbsp;&nbsp;&nbsp;&nbsp;<span><?= date('Y-m-d', $deal->finish_date) ?></span></li>
                     <?php } ?>
                 </ul>
             </div>

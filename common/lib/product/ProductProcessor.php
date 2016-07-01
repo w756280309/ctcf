@@ -57,7 +57,7 @@ class ProductProcessor {
      * @param string $order_money 投资金额
      * @param string $expires 项目期限
      * @param string $isbc 是否保留2位 
-     * @return string 项目截止日
+     * @return string 产品到期日
      */
     public function getProductDayReturn($yield_rate, $order_money, $expires, $isbc = true) {
 
@@ -80,12 +80,12 @@ class ProductProcessor {
 
     /**
      * 按天到期本息
-     * 按天到期本息，输入:项目还款方式 起息日、项目期限  返回:项目截止日
-     *  按月付息还本，输入:项目还款方式 起息日、项目期限、返回：每一期的项目截止日
+     * 按天到期本息，输入:项目还款方式 起息日、项目期限  返回:产品到期日
+     *  按月付息还本，输入:项目还款方式 起息日、项目期限、返回：每一期的产品到期日
      * @param string $product_type 项目还款方式 d1:按天到期本息 m1:按月付息还本
      * @param string $order_date 起息日
      * @param string $period 项目期限
-     * @return string 项目截止日
+     * @return string 产品到期日
      */
     function LoanTerms($product_type = 'd1', $order_date = null, $period = null) {
 

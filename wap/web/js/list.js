@@ -73,62 +73,8 @@ $(function () {
                     if (data.code === 0) {
                         //如果当前页和返回页码相同，则改变页面html,否则视为异常
                         if (currentPage === data.header.cp) {
-                            if (data.deals.length > 0) {
-                                var html = "";
-                                $.each(data.deals, function (i, item) {
-                                    var itemjx = item.jiaxi === null ? '' : item.jiaxi;
-                                    var hui = ('4' === item.status || '5' === item.status || '6' === item.status) ? 'hui' : '';
-                                    var dataPer = ('7' === item.status) ? 100 : ('hui' === hui ? 0 : item.finish_rate);
-                                    var finishHtml = "";
-                                    if (item.status == 1) {
-                                        finishHtml = '<div class="column-clock"><span>' + item.start_desc + '</span>' + item.start + '</div>';
-                                    } else if (item.status == 2) {
-                                        finishHtml = '<div class="column-clock column-clock_per">' + item.finish_rate + '%</div>';
-                                    } else if (item.status == 7) {
-                                        finishHtml = '<div class="column-clock column-clock_per">成立</div>';
-                                    }  else {
-                                        finishHtml = '<div class="column-clock column-clock_per '+ hui +'">'+ item.statusval +'</div>'
-                                    }
-
-                                    html += '<a class="row column dealdata" href="/deal/deal/detail?sn='+ item.num +'">' +
-                                            '<div class="col-xs-12 col-sm-10 column-title">';
-                                    if ('' === itemjx || '1' === item.isFlexRate) {
-                                        html += '<img class="qian show" src="/images/qian.png" alt="">';
-                                    } else {
-                                        html += '<img class="badges show" src="/images/badge.png" alt="">';
-                                    }
-
-                                    html += '<span class="'+ hui +'">'+ item.title +'</span>' +
-                                            '</div><div class="container" style="clear:both;">' +
-                                            '<ul class="row column-content">' +
-                                            ' <li class="col-xs-4"><div>' +
-                                            '<span class="interest-rate rate-steps '+ hui +'">'
-                                            + item.yr +'<span class="column-lu">%</span>';
-                                    if ('' !== itemjx && '0' === item.isFlexRate) {
-                                        html += '<span class="bonus-badge '+ hui +'">+'+ itemjx +'%</span>';
-                                    }
-                                    html += '</span></div>' +
-                                            '<span class="desc-text nianRate '+ hui +'">年化收益率</span></li>' +
-                                            '<li class="col-xs-2 '+ hui +'">' +
-                                            '<p class="'+ hui +'">'+ item.qixian +'<span class="column-lu">' + item.method +'</span></p>' +
-                                            '<span class="desc-text '+ hui +'">期限</span></li>' +
-                                            '<li class="col-xs-3 aa '+ hui +'">' +
-                                            '<p class="'+ hui +'">'+ item.start_money +'<span class="column-lu">元</span></p>' +
-                                            '<span class="desc-text '+ hui +'">起投</span></li>' +
-                                            '<li class="col-xs-3 bb nock1"><div class="nock">' +
-                                            '<canvas data-status="'+ item.status +'" data-per="'+ dataPer +'"></canvas>' + finishHtml +
-                                            '</div></li></ul></div>'+
-                                            '<div class="row list-line">'+
-                                            '<div class="col-xs-12">'+
-                                            '<div class="listLine-content">'+
-                                            '<span><i>还款方式</i></span><span class="refund-desc"><div class="listLine-point"></div>'+ item.cid +'</span>'+
-                                            '</div>'+
-                                            '</div>'+
-                                            '</div>'+
-                                            '</a>';
-                                });
-
-                                $('#item-list').html($('#item-list').html() + html);
+                            if (data.html) {
+                                $('#item-list').html($('#item-list').html() + data.html);
                                 //页码＋1
                                 currentPage = parseInt(data.header.cp) + 1;
                             } else {

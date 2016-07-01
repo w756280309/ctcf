@@ -67,11 +67,11 @@ $deal->money = rtrim(rtrim($deal->money, '0'), '.');
             <div class="col-xs-10 xian2">
                 <div class="m1">起投金额：<span><?= rtrim(rtrim(number_format($deal->start_money, 2), '0'), '.') ?>元</span></div>
                 <div class="m5">递增金额：<span><?= rtrim(rtrim(number_format($deal->dizeng_money, 2), '0'), '.') ?>元</span></div>   <!-- 增加递增金额字段 -->
-                <div class="m2">项目起息：<span><?= $deal->jixi_time > 0 ? date('Y-m-d',$deal->jixi_time) : '项目成立日次日';?></span></div>
+                <div class="m2">产品起息日：<span><?= $deal->jixi_time > 0 ? date('Y-m-d',$deal->jixi_time) : '项目成立日次日';?></span></div>
                 <?php if (0 === (int)$deal->finish_date) { ?>
                     <div class="m3">项目期限：<span><?php $ex = $deal->getDuration() ?><?= $ex['value'] ?></span><?= $ex['unit']?></div>
                 <?php } else { ?>
-                    <div class="m3">项目结束：<span><?= date('Y-m-d',$deal->finish_date) ?></span></div>
+                    <div class="m3">产品到期日：<span><?= date('Y-m-d',$deal->finish_date) ?></span></div>
                 <?php } ?>
 
                 <div class="m4">还款方式：<span><?= Yii::$app->params['refund_method'][$deal->refund_method]?></span></div>
