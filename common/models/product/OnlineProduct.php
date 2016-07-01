@@ -587,7 +587,12 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
                     $datetime1 = new \DateTime(date('Y-m-d', $this->finish_date));
                     $datetime2 = new \DateTime(date('Y-m-d', $this->jixi_time));
                     $interval = $datetime1->diff($datetime2);
-                    $expires = intval($interval->format('%a')) + 1;
+                    if (date('Y-m-d',$this->finish_date) !==(new \DateTime(date('Y-m-d',$this->jixi_time)))->add(new \DateInterval('P'.$this->expires.'D'))->format('Y-m-d')) {
+                        $expires = intval($interval->format('%a')) + 1;
+                    } else {
+                        $expires = intval($interval->format('%a'));
+                    }
+
                 } else {
                     //产品到期日－当前日
                     $datetime1 = new \DateTime(date('Y-m-d', $this->finish_date));

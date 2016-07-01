@@ -104,9 +104,6 @@ class OnlineRepaymentPlan extends \yii\db\ActiveRecord
         } else {
             $days = $pp->LoanTimes($start_jixi, null, $product->finish_date, 'd', true);
             $expires = $days['days'][1]['period']['days'];
-            if ($product->refund_method == 1) {
-                $expires = $expires - 1;
-            }
         }
         $orders = OnlineOrder::find()->where(['online_pid' => $pid, 'status' => OnlineOrder::STATUS_SUCCESS])->asArray()->all();
         $transaction = Yii::$app->db->beginTransaction();
