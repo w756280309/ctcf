@@ -23,7 +23,7 @@ class DealController extends Controller
     {
         $cond = ['isPrivate' => 0, 'del_status' => OnlineProduct::STATUS_USE, 'online_status' => OnlineProduct::STATUS_ONLINE];
 
-        $data = OnlineProduct::find()->where($cond)->select('id,sn,title,yield_rate,status,expires,money,start_date,finish_rate,jiaxi,start_money,refund_method, isFlexRate, rateSteps');
+        $data = OnlineProduct::find()->where($cond);
         $count = $data->count();
         $size = 5;
         $pages = new Pagination(['totalCount' => $count, 'pageSize' => $size]);
