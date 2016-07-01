@@ -37,7 +37,7 @@ var _hmt = _hmt || [];
     a.src = g;
     m.parentNode.insertBefore(a, m)
 })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
-ga('create', '$gaId', 'auto');
+ga('create', '$gaId', '.wenjf.com');
 ga('send', 'pageview');
 JS;
 
