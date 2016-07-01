@@ -25,19 +25,8 @@ $deal->money = rtrim(rtrim($deal->money, '0'), '.');
                         <div>
                             <?php $ex = $deal->getDuration() ?><?= $ex['value'] ?><span class="column-lu"><?= $ex['unit']?></span>
                         </div>
-                        <span class="qing">期限
-                            <?php if (!empty($deal->kuanxianqi)) { ?>
-                            <i>(包含<?= $deal->kuanxianqi ?>天宽限期)</i> <img src="<?= ASSETS_BASE_URI ?>images/dina.png" alt="">
-                            <?php } ?>
-                        </span>
+                        <span class="qing">期限</span>
                     </li>
-                    <?php if (!empty($deal->kuanxianqi)) { ?>
-                    <div class="row" id='chart-box' hidden="true">
-                        <div class="col-xs-12">
-                            <div>宽限期：应收账款的付款方因内部财务审核,结算流程或结算日遇银行非工作日等因素，账款的实际结算日可能有几天的延后</div>
-                        </div>
-                    </div>
-                    <?php } ?>
                 </ul>
             </div>
             <div class="hidden-xs col-sm-1"></div>
@@ -75,6 +64,9 @@ $deal->money = rtrim(rtrim($deal->money, '0'), '.');
                 <?php } ?>
 
                 <div class="m4">还款方式：<span><?= Yii::$app->params['refund_method'][$deal->refund_method]?></span></div>
+                <?php if (!empty($deal->kuanxianqi)) { ?>
+                    <p style="margin-top: 1em;">融资方可提前<?= $deal->kuanxianqi ?>天内任一天还款，客户收益按实际天数计息。</p>
+                <?php } ?>
             </div>
             <div class="col-xs-1"></div>
         </div>

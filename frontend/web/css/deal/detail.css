@@ -29,11 +29,16 @@ body {
 }
 /*pL-top-box*/
 .pL-top-box {
+    padding-bottom: 1em;
     width: 646px;
-    height: 258px;
     border: 1px solid #e6e6e6;
     background: #fff;
     overflow: hidden;
+}
+.pL-top-box .grace-period {
+    margin-top: 1em;
+    padding: 0 30px;
+    color: #6e6e72;
 }
 .pl-top-title {
     width: 90%;

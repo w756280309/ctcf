@@ -10,7 +10,7 @@ $user = Yii::$app->user->identity;
 $this->registerJsFile(ASSETS_BASE_URI . 'js/detail.js');
 $this->registerCssFile(ASSETS_BASE_URI . 'css/deal/buy.css');
 $this->registerCssFile(ASSETS_BASE_URI . 'css/deal/deallist.css');
-$this->registerCssFile(ASSETS_BASE_URI . 'css/deal/detail.css');
+$this->registerCssFile(ASSETS_BASE_URI . 'css/deal/detail.css?v=160701');
 $this->registerCssFile(ASSETS_BASE_URI . 'css/pagination.css');
 $this->registerCssFile(ASSETS_BASE_URI . 'css/useraccount/chargedeposit.css');
 ?>
@@ -40,10 +40,6 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/useraccount/chargedeposit.css');
                             </span>
                             <p>项目期限</p>
 
-                            <?php if (!empty($deal->kuanxianqi)) { ?>
-                                <p><i>(包含<?= $deal->kuanxianqi ?>天宽限期)</i><img src="<?= ASSETS_BASE_URI ?>images/useraccount/tip.png" id="kuanxian_tip"></p>
-                               <div id="kuanxian_message" style="display: none;margin: 0px;position: relative;width: 276px;;height: 60px;top:-54px;left:125px;background: #fff0da; border-radius: 4px;border: 1px solid #ffd18d;padding: 5px 5px 5px 10px;line-height: 20px;color: #999999">宽限期：应收账款的付款方因内部财务审核,结算流程或结算日遇银行非工作日等因素，账款的实际结算日可能有几天的延后</div>
-                            <?php } ?>
                         </div>
                     </li>
                     <li style="width: 22%">
@@ -76,6 +72,10 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/useraccount/chargedeposit.css');
                     <?php } ?>
                 </ul>
             </div>
+
+                            <?php if (!empty($deal->kuanxianqi)) { ?>
+                                <p class="grace-period">融资方可提前<?= $deal->kuanxianqi ?>天内任一天还款，客户收益按实际天数计息。</p>
+                            <?php } ?>
         </div>
         <?php if ($deal->isFlexRate) { ?>
             <!--pl-subscription-->
