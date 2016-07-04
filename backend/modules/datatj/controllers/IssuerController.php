@@ -55,7 +55,8 @@ class IssuerController extends BaseController
         $issuer = $this->findOr404(Issuer::class, ['id' => $id]);
 
         $query = OnlineProduct::find()
-            ->where(['online_status' => OnlineProduct::STATUS_ONLINE, 'del_status' => OnlineProduct::STATUS_USE, 'issuer' => $issuer->id]);
+            ->where(['online_status' => OnlineProduct::STATUS_ONLINE, 'del_status' => OnlineProduct::STATUS_USE, 'issuer' => $issuer->id])
+            ->orderBy(['created_at' => SORT_DESC]);
 
         if (empty($pageNum)) {
             $model = $query->innerJoinWith('borrower')->all();
