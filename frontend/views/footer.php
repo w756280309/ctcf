@@ -10,14 +10,14 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/clipboard.min.js', ['depends' => 'fron
         <div class="footer-five-partner footer-clearfix"><i>合作伙伴：</i>
             <ul>
                 <li style="border-left: 0;padding-left: 0;">温州日报</li>
-                <li>温州商报</li>
-                <li>温州都市报</li>
                 <li>温州晚报</li>
+                <li>温州都市报</li>
+                <li>温州商报</li>
                 <li>科技金融时报</li>
                 <li>温州网</li>
                 <li>温州人杂志</li>
                 <li style="border-left:0;padding-left: 0;">南京金融资产交易中心</li>
-                <li>同信证券</li>
+                <li>东方财富证券</li>
                 <li>联动优势</li>
                 <li>电子数据保全中心</li>
             </ul>
