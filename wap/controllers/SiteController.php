@@ -111,32 +111,7 @@ class SiteController extends Controller
 
         $adv = $record->limit($ac)->orderBy('show_order asc, id desc')->all();  //修改轮播图显示顺序,先按照show_order升序排列,后按照id降序排列
 
-        $deals = OnlineProduct::find()->where(['isPrivate' => 0, 'del_status' => OnlineProduct::STATUS_USE, 'online_status' => OnlineProduct::STATUS_ONLINE])
-            ->andWhere('recommendTime != 0')
-            ->orderBy('recommendTime asc, sort asc, id desc')
-            ->all();
-
-        $deal = null;
-        if (!empty($deals)) {    //当没有推荐标的时,返回null
-            $num = 0;
-            $key = 0;
-            foreach ($deals as $k => $val) {
-                ++$num;
-                if ($val['status'] < 3) {
-                    $deal = $val;
-                } else {
-                    $key = $k;
-                }
-            }
-
-            if (1 === $num) {
-                $deal = $deals[0];
-            }
-
-            if (empty($deal)) {
-                $deal = $deals[$key];
-            }
-        }
+        $deals = OnlineProduct::getRecommendLoans(3);
 
         $news = News::find()
             ->where(['status' => News::STATUS_PUBLISH])
@@ -144,7 +119,7 @@ class SiteController extends Controller
             ->limit(3)
             ->all();
 
-        return $this->render('index', ['adv' => $adv, 'deal' => $deal, 'news' => $news]);
+        return $this->render('index', ['adv' => $adv, 'deals' => $deals, 'news' => $news]);
     }
 
     /**

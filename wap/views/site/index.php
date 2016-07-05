@@ -103,87 +103,91 @@ $(function() {
     <!-- 登录 注册 end -->
 
     <!-- 推荐区start  -->
-    <?php if (null !== $deal) {
-        $dates = Yii::$app->functions->getDateDesc($deal->start_date);
-        $rate = number_format($deal->finish_rate * 100, 0);
-    ?>
+    <?php if (count($deals) > 0) { ?>
     <div class="row new-box">
-        <a class="new-head bot-line block" href="/deal/deal/index" >
-            <div class="col-xs-8 col-sm-7 new-head-title">
-                <div class="arrow-rg"></div>
-                <div class="new-head-tit"><span>推荐区</span><span class="new-head-txt">优选资产，安全无忧</span></div>
-            </div>
-            <div class="col-xs-1 col-sm-3 "> </div>
-            <div class="col-xs-3 col-sm-2 more">更多》</div>
-        </a>
-
-        <?php if (!empty($deal->jiaxi) && !$deal->isFlexRate) { ?>
-        <ul class="row new-bottom" >
-            <a class="block" href="/deal/deal/detail?sn=<?= $deal->sn ?>">
-                <h3><?= $deal->title ?></h3>
-                <li class="col-xs-6 padding-5">
-                    <div class="xian1">
-                        <div class="newcomer-badge"></div>
-                        <span class="interest-rate"><?= rtrim(rtrim(OnlineProduct::calcBaseRate($deal->yield_rate, $deal->jiaxi), '0'), '.') ?>%</span>
-                        <span class="interest-rate-add">+<?= $deal->jiaxi ?>%</span>
-                        <div class="col-xs-12 percentage-txt"><span><?= \Yii::$app->params['refund_method'][$deal->refund_method] ?></span></div>
-                    </div>
-                </li>
-                <li class="col-xs-6 padding-5">
-                    <div class="new-bottom-rg">
-                        <p ><span class="tishi"><?= rtrim(rtrim(number_format($deal->start_money, 2), '0'), '.') ?>元起投，<?php $ex = $deal->getDuration() ?><?= $ex['value'] ?><?= $ex['unit']?></span></p>
-                        <?php if (OnlineProduct::STATUS_PRE === $deal->status) { ?>
-                            <!-- 未开标 -->
-                            <span class="zhuangtai weikaibiao" ><?= $dates['desc'] ?> <?= date('H:i', $deal->start_date) ?></span>
-                            <?php } elseif (OnlineProduct::STATUS_NOW === $deal->status) { ?>
-                            <!-- 进度 % -->
-                            <div style="margin:10px 8px; border:1px solid #fe9b00; ">
-                                <span class="a-progress-bg"  style="width:<?= $rate ?>%;"></span>
-                                <span class="zhuangtai a-progress" ><?= $rate ?>%</span>
-                            </div>
-                            <?php } else { ?>
-                            <div class="zhuangtai" style="margin:10px 8px; background-color: #9fa0a0;">
-                                <font style="color: #fff; line-height: 34px;"><?= Yii::$app->params['deal_status'][$deal->status] ?></font>
-                            </div>
-                        <?php } ?>
-                    </div>
-                </li>
+        <div style="background: #fff;">
+            <a class="new-head bot-line block" href="/deal/deal/index" >
+                <div class="col-xs-8 col-sm-7 new-head-title">
+                    <div class="arrow-rg"></div>
+                    <div class="new-head-tit"><span>推荐区</span><span class="new-head-txt">优选资产，安全无忧</span></div>
+                </div>
+                <div class="col-xs-1 col-sm-3 "> </div>
+                <div class="col-xs-3 col-sm-2 more">更多》</div>
             </a>
-        </ul>
-        <?php } else { ?>
-        <ul class="row new-bottom" >
-            <a class="block" href="/deal/deal/detail?sn=<?= $deal->sn ?>">
-                <h3><?= $deal->title ?></h3>
-                <li class="col-xs-6 padding-5">
-                    <div class="xian">
+        </div>
+        <?php foreach($deals as $deal) { ?>
+            <?php
+            $dates = Yii::$app->functions->getDateDesc($deal->start_date);
+            $rate = number_format($deal->finish_rate * 100, 0);
+            ?>
+            <?php if (!empty($deal->jiaxi) && !$deal->isFlexRate) { ?>
+                <ul class="row new-bottom" >
+                    <a class="block" href="/deal/deal/detail?sn=<?= $deal->sn ?>">
+                        <h3><?= $deal->title ?></h3>
+                        <li class="col-xs-6 padding-5">
+                            <div class="xian1">
+                                <div class="newcomer-badge"></div>
+                                <span class="interest-rate"><?= rtrim(rtrim(OnlineProduct::calcBaseRate($deal->yield_rate, $deal->jiaxi), '0'), '.') ?>%</span>
+                                <span class="interest-rate-add">+<?= $deal->jiaxi ?>%</span>
+                                <div class="col-xs-12 percentage-txt"><span><?= \Yii::$app->params['refund_method'][$deal->refund_method] ?></span></div>
+                            </div>
+                        </li>
+                        <li class="col-xs-6 padding-5">
+                            <div class="new-bottom-rg">
+                                <p ><span class="tishi"><?= rtrim(rtrim(number_format($deal->start_money, 2), '0'), '.') ?>元起投，<?php $ex = $deal->getDuration() ?><?= $ex['value'] ?><?= $ex['unit']?></span></p>
+                                <?php if (OnlineProduct::STATUS_PRE === $deal->status) { ?>
+                                    <!-- 未开标 -->
+                                    <span class="zhuangtai weikaibiao" ><?= $dates['desc'] ?> <?= date('H:i', $deal->start_date) ?></span>
+                                <?php } elseif (OnlineProduct::STATUS_NOW === $deal->status) { ?>
+                                    <!-- 进度 % -->
+                                    <div style="margin:10px 8px; border:1px solid #fe9b00; ">
+                                        <span class="a-progress-bg"  style="width:<?= $rate ?>%;"></span>
+                                        <span class="zhuangtai a-progress" ><?= $rate ?>%</span>
+                                    </div>
+                                <?php } else { ?>
+                                    <div class="zhuangtai" style="margin:10px 8px; background-color: #9fa0a0;">
+                                        <font style="color: #fff; line-height: 34px;"><?= Yii::$app->params['deal_status'][$deal->status] ?></font>
+                                    </div>
+                                <?php } ?>
+                            </div>
+                        </li>
+                    </a>
+                </ul>
+            <?php } else { ?>
+                <ul class="row new-bottom" >
+                    <a class="block" href="/deal/deal/detail?sn=<?= $deal->sn ?>">
+                        <h3><?= $deal->title ?></h3>
+                        <li class="col-xs-6 padding-5">
+                            <div class="xian">
                         <span class="interest-rate <?= !$deal->isFlexRate ? '' : 'rate-steps' ?>">
                             <?= LoanHelper::getDealRate($deal) ?>%   <!--添加阶梯利率显示 -->
                         </span>
-                        <div class="col-xs-12 percentage-txt"><span><i class="percentage-point"></i><?= \Yii::$app->params['refund_method'][$deal->refund_method] ?></span></div>
-                    </div>
-                </li>
-                <li class="col-xs-6 padding-5">
-                    <div class="new-bottom-rg">
-                        <p ><span class="tishi"><?= rtrim(rtrim(number_format($deal->start_money, 2), '0'), '.') ?>元起投，<?php $ex = $deal->getDuration() ?><?= $ex['value'] ?><?= $ex['unit']?></span></span></p>
-                        <?php if (OnlineProduct::STATUS_PRE === $deal->status) { ?>
-                            <!-- 未开标 -->
-                            <span class="zhuangtai weikaibiao"><?= $dates['desc'] ?> <?= date('H:i', $deal->start_date) ?></span>
-                            <?php } elseif (OnlineProduct::STATUS_NOW === $deal->status) { ?>
-                            <!-- 进度 % -->
-                            <div style="margin:10px 8px; border:1px solid #fe9b00; ">
-                                <span class="a-progress-bg"  style="width:<?= $rate ?>%;"></span>
-                                <span class="zhuangtai a-progress"><?= $rate ?>%</span>
+                                <div class="col-xs-12 percentage-txt"><span><i class="percentage-point"></i><?= \Yii::$app->params['refund_method'][$deal->refund_method] ?></span></div>
                             </div>
-                            <?php } else { ?>
-                            <div class="zhuangtai" style="margin:10px 8px; background-color: #9fa0a0;">
-                                <font style="color: #fff; line-height: 34px;"><?= Yii::$app->params['deal_status'][$deal->status] ?></font>
+                        </li>
+                        <li class="col-xs-6 padding-5">
+                            <div class="new-bottom-rg">
+                                <p ><span class="tishi"><?= rtrim(rtrim(number_format($deal->start_money, 2), '0'), '.') ?>元起投，<?php $ex = $deal->getDuration() ?><?= $ex['value'] ?><?= $ex['unit']?></span></span></p>
+                                <?php if (OnlineProduct::STATUS_PRE === $deal->status) { ?>
+                                    <!-- 未开标 -->
+                                    <span class="zhuangtai weikaibiao"><?= $dates['desc'] ?> <?= date('H:i', $deal->start_date) ?></span>
+                                <?php } elseif (OnlineProduct::STATUS_NOW === $deal->status) { ?>
+                                    <!-- 进度 % -->
+                                    <div style="margin:10px 8px; border:1px solid #fe9b00; ">
+                                        <span class="a-progress-bg"  style="width:<?= $rate ?>%;"></span>
+                                        <span class="zhuangtai a-progress"><?= $rate ?>%</span>
+                                    </div>
+                                <?php } else { ?>
+                                    <div class="zhuangtai" style="margin:10px 8px; background-color: #9fa0a0;">
+                                        <font style="color: #fff; line-height: 34px;"><?= Yii::$app->params['deal_status'][$deal->status] ?></font>
+                                    </div>
+                                <?php } ?>
                             </div>
-                        <?php } ?>
-                    </div>
-                </li>
-            </a>
-        </ul>
-        <?php } ?>
+                        </li>
+                    </a>
+                </ul>
+            <?php } ?>
+        <?php }?>
     </div>
 <!--  推荐区 end  -->
     <div class="line-box" ></div>
