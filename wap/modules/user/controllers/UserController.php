@@ -68,7 +68,8 @@ class UserController extends BaseController
         $os = new OrderManager();
         $list = $os->getUserOrderList($this->getAuthedUser()->id, $type, $page);
         if (Yii::$app->request->isAjax) {
-            return $list;
+            $html = $this->renderFile('@wap/modules/user/views/user/_order_list.php', ['list' => $list, 'type' => $type, 'profitFund' => $this->getAuthedUser()->lendAccount->profit_balance]);
+            return ['header' => $list['header'], 'html' => $html, 'code' => $list['code'], 'message' => $list['message'], 'totalFund' => $list['totalFund'], 'daihuan' => $list['daihuan']];
         }
 
         return $this->render('order', ['list' => $list, 'type' => $type, 'profitFund' => $this->getAuthedUser()->lendAccount->profit_balance]);

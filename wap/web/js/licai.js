@@ -73,49 +73,14 @@ $(function(){
                 data: {page: currentPage},
                 dataType: 'json',
                 success: function (data) {
-                    //console.log(data);
                     if (data.code === 0) {
                         //如果当前页和返回页码相同，则改变页面html,否则视为异常
                         if (currentPage === data.header.cp) {
-                            if (data.data.length > 0) {
-                                var html = "";
-                                $.each(data.data, function(i, item) {
-                                    var pstatus = item.pstatus;
-                                    var profitDes = (pstatus == 6) ? "实际收益" : "预期收益";
-                                    var profit = WDJF.numberFormat(item.profit, true);
-
-                                    html += '<a class="loan-box block" href="/user/user/orderdetail?id='+ item.id +'">' +
-                                            '<div class="loan-title"><div class="title-overflow">' + item.title +
-                                            '</div><div class="loan-status '+ item.classname +'">'+ item.statusval +'</div></div>' +
-                                            '<div class="row loan-info">' +
-                                            '<div class="col-xs-8 loan-info1">' +
-                                            '<p><span class="info-label">认购金额：</span><span class="info-val">'+ item.order_money +'元</span></p>';
-                                    if (0 === parseInt(item.finish_date)) {
-                                        html += '<p><span class="info-label">项目期限：</span><span class="info-val">'+ item.expiress + item.method +'</span></p>';
-                                    } else {
-                                        html += '<p><span class="info-label">到期时间：</span><span class="info-val">'+ item.returndate +'</span></p>';
-                                    }
-                                    html += '</div>';
-                                    if ('--' !== item.profit) {
-                                        html += '<div class="col-xs-4 loan-info2">' +
-                                                '<p class="info-val">'+ profit +'元</p>' +
-                                                '<p class="info-label">'+ profitDes +'</p></div>';
-                                    } else {
-                                        html += '<div class="col-xs-4 loan-info2">' +
-                                                '<p class="info-val">'+ item.finish_rate +'%</p>' +
-                                                '<p class="info-label">募集进度</p></div>';
-
-                                    }
-                                    html += '</div></a>';
-                                });
-                                $('.load').before(html);
+                            if (data.html) {
+                                $('.load').before(data.html);
                                 //页码＋1
                                 currentPage = parseInt(data.header.cp) + 1;
-                            } else {
-//                                alert("暂无数据");
                             }
-                        } else {
-                            //异常,不做处理
                         }
                         //当前页大于总页数,隐藏加载更多提示(暂无数据时,tp为0)
                         if (currentPage >= data.header.tp) {

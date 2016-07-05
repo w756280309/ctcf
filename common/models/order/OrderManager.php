@@ -255,27 +255,20 @@ class OrderManager
         if (empty($uid)) {
             return false;
         }
-        $query1 = (new \yii\db\Query())
-                ->select('order.*,p.title,p.status pstatus,p.end_date penddate,p.expires expiress,p.finish_date,p.jiaxi,p.finish_rate,p.sn psn,p.refund_method prm')
-                ->from(['online_order order'])
-                ->innerJoin('online_product p', 'order.online_pid=p.id')
-                ->where(['order.uid' => $uid, 'order.status' => 1]);
-
+        $query1 = OnlineOrder::find()
+            ->innerJoinWith('loan')
+            ->where(['online_order.uid' => $uid, 'online_order.status' => 1]);
         if (!empty($type)) {
-            $query1->andWhere(['p.status' => $type]);
+            $query1->andWhere(['online_product.status' => $type]);
         }
 
-        $querysql = $query1->orderBy('order.id desc')->createCommand()->getRawSql();
-        $query = (new \yii\db\Query())
-                ->select('*')
-                ->from(['('.$querysql.')T']);
-
+        $query = $query1->orderBy('online_order.id desc');
         $record = $query->all();
         $totalFund = 0;
         $daihuan = 0;
         foreach ($record as $val) {
-            $totalFund = bcadd($totalFund, $val['order_money'], 2);
-            if (Loan::STATUS_OVER !== (int) $val['pstatus']) {
+            $totalFund = bcadd($totalFund, $val->order_money, 2);
+            if (Loan::STATUS_OVER !== (int)$val->loan->status) {
                 ++$daihuan;
             }
         }
@@ -292,26 +285,6 @@ class OrderManager
         ];
         $code = ($page > $tp) ? 1 : 0;
         $message = ($page > $tp) ? '数据错误' : '消息返回';
-        foreach ($query as $key => $dat) {
-            $query[$key]['statusval'] = Yii::$app->params['deal_status'][$dat['pstatus']]; //标的状态
-            $query[$key]['finish_rate'] = number_format($dat['finish_rate'] * 100, 0);  //募集进度
-            $query[$key]['returndate'] = date('Y-m-d', $dat['finish_date']); //到期时间
-            $query[$key]['order_money'] = rtrim(rtrim(number_format($dat['order_money'], 2), '0'), '.');
-            $query[$key]['finish_rate'] = (Loan::STATUS_FOUND === (int) $dat['pstatus']) ? 100 : number_format($dat['finish_rate'] * 100, 0);
-            $query[$key]['method'] = (1 === (int) $dat['prm']) ? '天' : '个月';
-            if (in_array($dat['pstatus'], [Loan::STATUS_NOW])) {
-                $query[$key]['profit'] = '--';   //收益金额
-            } else {
-                $query[$key]['profit'] = OnlineRepaymentPlan::getTotalLixi(new Loan(['refund_method' => $dat['prm'], 'expires' => $dat['expiress']]), new OnlineOrder(['order_money' => $dat['order_money'], 'yield_rate' => $dat['yield_rate']]));
-            }
-            if (!in_array($dat['pstatus'], [Loan::STATUS_HUAN, Loan::STATUS_OVER])) {
-                $query[$key]['classname'] = 'column-title-rg';
-            } elseif (Loan::STATUS_HUAN === (int) $dat['pstatus']) {
-                $query[$key]['classname'] = 'column-title-rg2';
-            } else {
-                $query[$key]['classname'] = 'column-title-rg1';
-            }
-        }
 
         return ['header' => $header, 'data' => $query, 'code' => $code, 'message' => $message, 'totalFund' => $totalFund, 'daihuan' => $daihuan];
     }

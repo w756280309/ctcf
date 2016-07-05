@@ -33,37 +33,9 @@ $this->title="我的理财";
     	<div class="col-xs-12">我投资过的项目</div>
     </div>
 
-<?php if($list['data']) { foreach ($list['data'] as $o) { ?>
-<a class="loan-box block" href="/user/user/orderdetail?id=<?= $o['id'] ?>">
-    <div class="loan-title">
-        <div class="title-overflow"><?=$o['title']?></div>
-        <div class="loan-status <?= $o['classname'] ?>"><?=$o['statusval']?></div>
-    </div>
-
-    <div class="row loan-info">
-        <div class="col-xs-8 loan-info1">
-            <p><span class="info-label">认购金额：</span><span class="info-val"><?= $o['order_money'] ?>元</span></p>
-            <?php if (0 === (int)$o['finish_date']) { ?>
-                <p><span class="info-label">项目期限：</span><span class="info-val"><?= $o['expiress'].$o['method'] ?></span></p>
-            <?php } else { ?>
-                <p><span class="info-label">到期时间：</span><span class="info-val"><?= $o['returndate'] ?></span></p>
-            <?php } ?>
-        </div>
-        <?php if ('--' !== $o['profit']) { ?>
-        <div class="col-xs-4 loan-info2">
-            <p class="info-val"><?= rtrim(rtrim(number_format($o['profit'], 2), '0'), '.') ?>元</p>
-            <p class="info-label"><?= ($o['pstatus']==6)?"实际收益":"预期收益" ?></p>
-        </div>
-        <?php } else { ?>
-        <div class="col-xs-4 loan-info2">
-            <p class="info-val"><?= $o['finish_rate'] ?>%</p>
-            <p class="info-label">募集进度</p>
-        </div>
-        <?php } ?>
-    </div>
-</a>
-<?php } ?>
+<?php if($list['data'])  { ?>
+    <?= $this->renderFile('@wap/modules/user/views/user/_order_list.php',['list' => $list, 'type' => $type, 'profitFund' =>Yii::$app->user->getIdentity()->lendAccount->profit_balance])?>
     <div class="load" style="display: block"></div>
-<?php } else{ ?>
+ <?php } else {?>
     <div class="nodata" style="display: block">暂无数据</div>
 <?php } ?>
