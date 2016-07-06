@@ -103,11 +103,14 @@ $(function() {
     <!-- 登录 注册 end -->
 
     <!-- 推荐区start  -->
-    <?php if (count($deals) > 0) { ?>
+    <?php
+    $deals_num_sub = count($deals) - 1;
+    if (!empty($deals) > 0) {
+    ?>
     <div class="row new-box">
         <div style="background: #fff;">
             <a class="new-head bot-line block" href="/deal/deal/index" >
-                <div class="col-xs-8 col-sm-7 new-head-title">
+                <div class="col-xs-8 col-sm-7 new-head-title new-ml-5">
                     <div class="arrow-rg"></div>
                     <div class="new-head-tit"><span>推荐区</span><span class="new-head-txt">优选资产，安全无忧</span></div>
                 </div>
@@ -115,13 +118,13 @@ $(function() {
                 <div class="col-xs-3 col-sm-2 more">更多》</div>
             </a>
         </div>
-        <?php foreach($deals as $deal) { ?>
+        <?php foreach($deals as $dealk=>$deal) { ?>
             <?php
             $dates = Yii::$app->functions->getDateDesc($deal->start_date);
             $rate = number_format($deal->finish_rate * 100, 0);
             ?>
             <?php if (!empty($deal->jiaxi) && !$deal->isFlexRate) { ?>
-                <ul class="row new-bottom" >
+                <ul class="row new-bottom <?= $dealk === $deals_num_sub ? 'margin-bottom-0' :'' ?>" >
                     <a class="block" href="/deal/deal/detail?sn=<?= $deal->sn ?>">
                         <h3><?= $deal->title ?></h3>
                         <li class="col-xs-6 padding-5">
@@ -129,7 +132,7 @@ $(function() {
                                 <div class="newcomer-badge"></div>
                                 <span class="interest-rate"><?= rtrim(rtrim(OnlineProduct::calcBaseRate($deal->yield_rate, $deal->jiaxi), '0'), '.') ?>%</span>
                                 <span class="interest-rate-add">+<?= $deal->jiaxi ?>%</span>
-                                <div class="col-xs-12 percentage-txt"><span><?= \Yii::$app->params['refund_method'][$deal->refund_method] ?></span></div>
+                                <div class="col-xs-12 percentage-txt"><span><i class="percentage-point"></i><?= \Yii::$app->params['refund_method'][$deal->refund_method] ?></span></div>
                             </div>
                         </li>
                         <li class="col-xs-6 padding-5">
@@ -154,7 +157,7 @@ $(function() {
                     </a>
                 </ul>
             <?php } else { ?>
-                <ul class="row new-bottom" >
+                <ul class="row new-bottom <?= $dealk === $deals_num_sub ? 'margin-bottom-0' :'' ?>" >
                     <a class="block" href="/deal/deal/detail?sn=<?= $deal->sn ?>">
                         <h3><?= $deal->title ?></h3>
                         <li class="col-xs-6 padding-5">
@@ -212,7 +215,7 @@ $(function() {
 
     <!-- 最新资讯 start-->
     <?php if (!empty($news)) { ?>
-    <div class="row notice-box new-box">
+    <div class="row notice-box new-box notice-bg-fff">
         <a class="new-head news-tra block" href="/news/index">
             <div class="col-xs-8 col-sm-7 new-head-title">
                 <div class="arrow-rg"></div>
@@ -222,8 +225,9 @@ $(function() {
             <div class="col-xs-3 col-sm-2 more news-more">更多》</div>
         </a>
         <div class="notice-bottom">
+            <?php $news_num_sub = count($news) - 1; ?>
             <?php foreach ($news as $key => $val) : ?>
-            <a class="col-xs-12 notice <?= 0 === $key ? 'border-top' : (3 === $key ? 'border-bot' : '') ?>" href="/news/detail?id=<?= $val['id'] ?>"><span>【</span>资讯信息<span>】</span><?= $val['title'] ?></a>
+            <a class="col-xs-12 notice <?= 0 === $key ? 'border-top' : ''?> <?= $news_num_sub === $key ? 'border-bot' : '' ?>" href="/news/detail?id=<?= $val['id'] ?>"><span>【</span>资讯信息<span>】</span><?= $val['title'] ?></a>
             <?php endforeach; ?>
         </div>
     </div>
