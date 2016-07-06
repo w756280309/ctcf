@@ -107,7 +107,7 @@ class OnlineRepaymentPlan extends \yii\db\ActiveRecord
         }
         $orders = OnlineOrder::find()->where(['online_pid' => $pid, 'status' => OnlineOrder::STATUS_SUCCESS])->asArray()->all();
         $transaction = Yii::$app->db->beginTransaction();
-        OnlineProduct::updateAll(['is_jixi' => 1], ['id' => $pid]);//修改已经计息
+        OnlineProduct::updateAll(['is_jixi' => 1, 'expires' => $expires], ['id' => $pid]);//修改已经计息
         $username = '';
         $sms = new SmsMessage([
             'template_id' => Yii::$app->params['sms']['manbiao'],

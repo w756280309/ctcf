@@ -12,7 +12,7 @@ class CnCardNoValidator extends Validator
     public function validateAttribute($model, $attribute)
     {
         if (!preg_match('/^[0-9]{16,19}$/', $model->$attribute)) {
-            $model->addError($attribute, "你输入的银行卡号有误");
+            $this->addError($model, $attribute, '你输入的银行卡号有误');
         }
     }
 }
