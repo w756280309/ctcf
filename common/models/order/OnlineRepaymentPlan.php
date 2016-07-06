@@ -273,7 +273,7 @@ class OnlineRepaymentPlan extends \yii\db\ActiveRecord
                 $loan->finish_date = $up['finish_date'];
             }
         }
-        $expires = (new \DateTime(date('Y-m-d', $loan->finish_date)))->diff((new \DateTime(date('Y-m-d',$loan->jixi_time))))->d;
+        $expires = (new \DateTime(date('Y-m-d', $loan->finish_date)))->diff((new \DateTime(date('Y-m-d',$loan->jixi_time))))->d + 1;
         $loan->expires = $expires;
         $up['expires'] = $expires;
         OnlineProduct::updateAll($up, ['id' => $loan->id]);//修改已经计息
