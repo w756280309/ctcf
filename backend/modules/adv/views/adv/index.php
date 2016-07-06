@@ -1,5 +1,4 @@
 <?php
-
 use yii\widgets\LinkPager;
 use common\models\AuthSys;
 
@@ -8,9 +7,7 @@ $menus = AuthSys::getMenus('A100000');
 <?php $this->beginBlock('blockmain'); ?>
 
 <div class="container-fluid">
-
     <!-- BEGIN PAGE HEADER-->
-
     <div class="row-fluid">
         <div class="span12">
             <h3 class="page-title">
@@ -22,7 +19,7 @@ $menus = AuthSys::getMenus('A100000');
             <ul class="breadcrumb">
                 <li>
                     <i class="icon-home"></i>
-                    <a href="/adv/adv/index">运营管理</a> 
+                    <a href="/adv/adv/index">运营管理</a>
                     <i class="icon-angle-right"></i>
                 </li>
                 <li>
@@ -30,11 +27,10 @@ $menus = AuthSys::getMenus('A100000');
                     <i class="icon-angle-right"></i>
                 </li>
                 <li>
-                    <a href="javascript:void(0);">首页轮播</a>                    
+                    <a href="javascript:void(0);">首页轮播</a>
                 </li>
             </ul>
         </div>
-
 
         <!--search start-->
         <div class="portlet-body">
@@ -54,14 +50,14 @@ $menus = AuthSys::getMenus('A100000');
                             <td>
                                 <select name="status" style="width:300px">
                                     <option value="">---未选择---</option>
-                                    <option value="0" 
+                                    <option value="0"
                                     <?php
                                     if (Yii::$app->request->get('status') == '0') {
                                         echo "selected='selected'";
                                     }
                                     ?>
                                             >上线</option>
-                                    <option value="1" 
+                                    <option value="1"
                                     <?php
                                     if (Yii::$app->request->get('status') == '1') {
                                         echo "selected='selected'";
@@ -92,6 +88,7 @@ $menus = AuthSys::getMenus('A100000');
                         <th>标题</th>
                         <th>状态</th>
                         <th>显示顺序</th>
+                        <th>显示设备</th>
                         <th style="text-align: center">操作</th>
                     </tr>
                 </thead>
@@ -113,7 +110,7 @@ $menus = AuthSys::getMenus('A100000');
                                 }
                                 ?></td>
                             <td><input style="width:20px;height: 10px" type="text" name="show_order" readonly="true" value="<?= $val['show_order'] ?>"></td>
-
+                            <td><?= !empty($val['showOnPc']) ? 'PC端' : '移动端' ?></td>
                             <td style="text-align: center">
                                 <a href="/adv/adv/edit?id=<?= $val->id ?>" class="btn mini green ajax_op" op="status" data-index="<?= $val['status'] ?>" index="<?= $val['id'] ?>"><i class="icon-edit"></i>编辑
                                 </a>
@@ -176,6 +173,6 @@ $menus = AuthSys::getMenus('A100000');
 
 
     })
-</script> 
+</script>
 <?php $this->endBlock(); ?>
 

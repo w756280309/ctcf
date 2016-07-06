@@ -28,7 +28,7 @@ class AdvController extends BaseController
         $status = Yii::$app->request->get('status');
         $title = Yii::$app->request->get('title');
 
-        $advInfo = Adv::find()->select('id,sn,title,status,show_order')->andWhere(['del_status' => Adv::DEL_STATUS_SHOW]);
+        $advInfo = Adv::find()->andWhere(['del_status' => Adv::DEL_STATUS_SHOW]);
         if (!empty($title)) {
             $advInfo->andFilterWhere(['like', title, $title]);
         }
@@ -56,7 +56,12 @@ class AdvController extends BaseController
             $model->creator_id = Yii::$app->user->id;
             $model->sn = Adv::create_code();
         }
+
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            if ($model->showOnPc) {
+                $model->isDisabledInApp = 0;
+            }
+
             $model->save();
             $this->alert = 1;
             $this->toUrl = 'index';
