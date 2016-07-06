@@ -61,14 +61,14 @@ use common\utils\StringUtils;
                     <i>理财资产</i>
                     <img class="tips" src="<?= ASSETS_BASE_URI ?>images/useraccount/tip.png" alt="">
                     <i class="redFont"><?= StringUtils::amountFormat3($user->lendAccount->investment_balance) ?></i>元
-                    <div class="property-tishi" style="left: -46px;">正在投资中待回收本金总和(含理财，债券转让) <img class="dialog-jiao" src="<?= ASSETS_BASE_URI ?>images/useraccount/diglog-jiao.png" alt=""></div>
+                    <div class="property-tishi" style="left: 3px;">正在投资中待回收本金总和 <img class="dialog-jiao" src="<?= ASSETS_BASE_URI ?>images/useraccount/diglog-jiao.png" alt=""></div>
                 </li>
                 <li class="grayFont">
                     <div class="property-point redBg"></div>
                     <i>冻结资金</i>
                     <img class="tips" src="<?= ASSETS_BASE_URI ?>images/useraccount/tip.png" alt="">
                     <i class="redFont"><?= StringUtils::amountFormat3($user->lendAccount->freeze_balance) ?></i>元
-                    <div class="property-tishi" style="left: -18px;">投资资金在项目未满标时锁定的金额<img class="dialog-jiao" src="<?= ASSETS_BASE_URI ?>images/useraccount/diglog-jiao.png" alt=""></div>
+                    <div class="property-tishi" style="left: -20px;">投资资金在项目未满标时锁定的金额<img class="dialog-jiao" src="<?= ASSETS_BASE_URI ?>images/useraccount/diglog-jiao.png" alt=""></div>
                 </li>
             </ul>
         </div>
