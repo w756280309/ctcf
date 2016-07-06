@@ -17,7 +17,7 @@ class RankingPromo extends ActiveRecord
 {
     public static function tableName()
     {
-        return 'ranking_promo';
+        return 'promo';
     }
 
     public function rules()
