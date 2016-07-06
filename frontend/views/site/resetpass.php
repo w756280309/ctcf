@@ -2,7 +2,7 @@
 $this->title = '找回密码';
 
 $this->registerCssFile(ASSETS_BASE_URI.'css/register/register.css', ['depends' => 'frontend\assets\FrontAsset']);
-$this->registerJsFile(ASSETS_BASE_URI.'js/register/register.js', ['depends' => 'frontend\assets\FrontAsset']);
+$this->registerJsFile(ASSETS_BASE_URI.'js/register/register.js?v=20160701', ['depends' => 'frontend\assets\FrontAsset']);
 
 use yii\bootstrap\ActiveForm;
 use yii\captcha\Captcha;
@@ -36,13 +36,17 @@ use yii\captcha\Captcha;
             </div>
             <div class="password-box">
                 <label for="password">新登录密码</label>
-                <input id="password" name="SignupForm[password]" maxlength="20" type="password" placeholder="请输入6到20位的密码" AUTOCOMPLETE="off">
+                <?php if (preg_match("/MSIE/", $_SERVER["HTTP_USER_AGENT"])) { ?>
+                    <input id="password" name="SignupForm[password]" maxlength="20" type="password" placeholder="请输入6到20位的密码" AUTOCOMPLETE="off">
+                <?php } else { ?>
+                    <input id="password" name="SignupForm[password]" maxlength="20" onfocus="this.type='password'" placeholder="请输入6到20位的密码" AUTOCOMPLETE="off">
+                <?php } ?>
                 <div style="clear: both"></div>
                 <div class="popUp password-err"></div>
             </div>
             <input class="agree" type="hidden" checked="checked">
             <div class="resign-btn-box">
-                <input type="submit" class="resign-btn" value="确认重置">
+                <input type="button" class="resign-btn" id="submit" value="确认重置">
             </div>
         </div>
     <?php ActiveForm::end(); ?>

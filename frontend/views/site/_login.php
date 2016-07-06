@@ -20,7 +20,7 @@
             </div>
             <div class="password-box">
                 <label for="password">登录密码</label>
-                <input id="password" name="LoginForm[password]" type="password" maxlength="20" placeholder="请输入密码" />
+                <input id="password" name="LoginForm[password]" type="password" maxlength="20" placeholder="请输入密码" autocomplete="off"/>
                 <div style="clear: both"></div>
                 <div class="popUp pass_err">密码不能为空</div>
             </div>
@@ -130,6 +130,12 @@
             return mobile_verify && pass_verify;
         }
     }
+
+    $("input").bind('keypress', function(e) {
+        if (e.keyCode === 13) {
+            $('#login_submit_button').click();
+        }
+    });
 
     $(function () {
         var lH=$('.loginUp-box').height()/2;

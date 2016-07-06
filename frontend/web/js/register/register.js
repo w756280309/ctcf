@@ -1,10 +1,17 @@
+$("input").bind('keypress', function(e) {
+    if (e.keyCode === 13) {
+        $('#submit').click();
+    }
+});
+
 $(function() {
-     $("#captchaform-captchacode-image").addClass('verity-img');
-     $('.verity-ins').hover(function() {
-         $('.verity-ins').css({background:'#f41c11'});
-     }, function() {
-         $('.verity-ins').css({background:'#f44336'});
-     });
+    $("#captchaform-captchacode-image").addClass('verity-img');
+
+    $('.verity-ins').hover(function() {
+        $('.verity-ins').css({background:'#f41c11'});
+    }, function() {
+        $('.verity-ins').css({background:'#f44336'});
+    });
 
     $('.resign-btn').hover(function() {
         $('.resign-btn').css({background:'#f41c11'});
@@ -23,7 +30,7 @@ $(function() {
         }
     });
 
-    $('#form').on('submit', function(e) {
+    $('#submit').click(function(e) {
         e.preventDefault();
 
         if (!validateForm()) {

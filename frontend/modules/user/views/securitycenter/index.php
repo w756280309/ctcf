@@ -133,7 +133,7 @@ foreach (['useraccount/safecenter.css'] as $cssFile) {
                         ?>
                     </div>
                     <p class="error verifyCode_err"></p>
-                    <input type="submit" class="a-submit" value="确认修改">
+                    <input type="button" class="a-submit" id="submit" value="确认修改">
                 </div>
                 <?php ActiveForm::end(); ?>
             </div>
@@ -181,6 +181,12 @@ foreach (['useraccount/safecenter.css'] as $cssFile) {
 </div>
 
 <script>
+    $("input").bind('keypress', function(e) {
+        if (e.keyCode === 13) {
+            $('#submit').click();
+        }
+    });
+
     $(function() {
         //张开收缩修改密码
         var c=$('.revise .info-btn .join').eq(0);
@@ -227,7 +233,7 @@ foreach (['useraccount/safecenter.css'] as $cssFile) {
             });
         });
 
-        $('#form').on('submit', function(e) {
+        $('#submit').click(function(e) {
             e.preventDefault();
 
             if (!validateForm()) {

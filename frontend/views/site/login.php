@@ -1,7 +1,5 @@
 <?php
-
 $this->title = '登录';
-
 ?>
 <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/login/login.css">
 <script src="<?= ASSETS_BASE_URI ?>js/login/login.js"></script>
@@ -53,7 +51,7 @@ $this->title = '登录';
                         </div>
                     </div>
                     <input type="hidden" name="is_flag" value="<?= $requiresCaptcha ?>">
-                    <input type="submit" class="login-btn" id="login-btn" value="立即登录">
+                    <input type="button" class="login-btn" id="login-btn" value="立即登录">
                     <div class="resign-btn">没有账号？<a class="resign" href="/site/signup">免费注册</a></div>
                 </form>
             </div>
@@ -66,7 +64,13 @@ $this->title = '登录';
     var csrf;
     var requiresCaptcha = '<?= $requiresCaptcha ? 1 : 0 ?>';
     var error_status = false;
-    $(function(){
+    $("input").bind('keypress', function(e) {
+        if (e.keyCode === 13) {
+            $('#login-btn').click();
+        }
+    });
+
+    $(function() {
         checkCookie();
         if ('0' != requiresCaptcha) {
             $(".verity-box").show();
@@ -131,24 +135,26 @@ $this->title = '登录';
             })
         }
 
-        $('form').submit(function(e){
+        $('#login-btn').click(function(e) {
             e.preventDefault();
+
             error_status = false;
             $("#phone").trigger("blur");
+
             if (error_status) {
-                //$("#phone").focus();
                 error_status = false;
                 return false;
             }
+
             $("#password").trigger("blur");
+
             if (error_status) {
-                //$("#password").focus();
                 error_status = false;
                 return false;
             }
+
             if ('1' == requiresCaptcha) {
                 $("#verity").trigger("blur");
-                //$("#verity").focus();
                 if (error_status) {
                     error_status = false;
                     return false;
