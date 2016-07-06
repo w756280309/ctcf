@@ -649,6 +649,12 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface, UserInterf
         return Ord::find()->where(['uid' => $this->id, 'status' => Ord::STATUS_SUCCESS])->sum('order_money');
     }
 
+    public function getUserIsInvested()
+    {
+        $order = Ord::find()->where(['uid' => $this->id, 'status' => Ord::STATUS_SUCCESS])->one();
+        return null !== $order;
+    }
+
     public function getTotalRecharge()
     {
         return Recharge::find()->where(['uid' => $this->id, 'status' => Recharge::STATUS_YES])->sum('fund');
