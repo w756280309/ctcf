@@ -22,7 +22,7 @@ $action = Yii::$app->controller->action->getUniqueId();
                 </div>
                 <i>|</i>
                 <span>
-                    <a class="header-top-back" href="javascript:void(0)" onclick="$('#header-logout').submit();">安全退出</a>
+                    <a class="header-top-back" href="javascript:void(0)" onclick="if(!$(this).hasClass('logout')){$(this).addClass('logout');$('#header-logout').submit();}">安全退出</a>
                     <form method="post" id="header-logout" action="/site/logout">
                         <input name="_csrf" type="hidden" value="<?= Yii::$app->request->csrfToken ?>">
                     </form>
