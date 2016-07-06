@@ -1,6 +1,13 @@
 <?php
 use common\models\AuthSys;
-$menus = AuthSys::getMenus('D100000');
+
+$action = Yii::$app->controller->action->getUniqueId();
+if ('datatj/issuer/lh-list' === $action) {
+    $menus = AuthSys::getMenus('L100000');
+} else {
+    $menus = AuthSys::getMenus('D100000');
+}
+
 ?>
 
 <?php $this->beginBlock('block1eft'); ?>
