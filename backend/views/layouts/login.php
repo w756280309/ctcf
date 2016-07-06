@@ -1,12 +1,5 @@
 <?php
-use backend\assets\AppAsset;
 use yii\helpers\Html;
-
-
-/* @var $this \yii\web\View */
-/* @var $content string */
-
-//AppAsset::register($this);
 ?>
 <?php $this->beginPage() ?>
 
@@ -20,7 +13,7 @@ use yii\helpers\Html;
     <link rel="shortcut icon" href="/images/favicon.ico" type="imagend.microsoft.icon">
     <title><?= Html::encode($this->title) ?></title>
     <?= Html::csrfMetaTags() ?>
-    
+
     <?php $this->head() ?>
     <?php if (isset($this->blocks['blockhead'])): ?>
         <?= $this->blocks['blockhead'] ?>

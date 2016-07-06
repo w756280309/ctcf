@@ -11,18 +11,19 @@ use yii\data\Pagination;
 class IssuerController extends BaseController
 {
     /**
-     * 发行方统计列表.
+     * 立合旺通统计列表.
      * 1. 每页显示20条记录;
      */
-    public function actionList($id)
+    public function actionLhList()
     {
-        $record = $this->getRecord($id, 20);
+        $record = $this->getRecord(1, 20);
 
         return $this->render('list', $record);
     }
 
     /**
      * 发行方统计数据导出.
+     * 当面没有验证登录者身份,此处优化后期等融资方较多时,再行优化;
      */
     public function actionExport($id)
     {

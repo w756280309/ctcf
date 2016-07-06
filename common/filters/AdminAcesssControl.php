@@ -12,8 +12,6 @@ use common\models\AuthSys;
 
 /**
  * AccessControl provides simple access control based on a set of rules.
- *
-
  */
 class AdminAcesssControl extends ActionFilter
 {
@@ -68,21 +66,25 @@ class AdminAcesssControl extends ActionFilter
      */
     public function beforeAction($action)
     {
-        //return true;
         $user = $this->user;
+
         if ($user->id == Yii::$app->params['admin']) {
                 return true;
         }
+
         $auth_code = \Yii::$app->request->get('auth_code');
         $auth_res = AuthSys::checkAuth($auth_code);
+
         if ($auth_res) {
             return true;
         } else {
             if(Yii::$app->request->isAjax){
                 echo json_encode(['result'=>0,'message'=>"没有权限进行此操作"]);exit;
             }
+
             return Yii::$app->getResponse()->redirect("/site/deny");
         }
+
         return true;
     }
 
