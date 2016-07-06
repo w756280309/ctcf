@@ -87,6 +87,7 @@ class OnlineRepaymentPlan extends \yii\db\ActiveRecord
         ];
     }
 
+    //已舍弃
     public static function createPlan($pid = null)
     {
         if (empty($pid)) {
@@ -107,7 +108,7 @@ class OnlineRepaymentPlan extends \yii\db\ActiveRecord
         }
         $orders = OnlineOrder::find()->where(['online_pid' => $pid, 'status' => OnlineOrder::STATUS_SUCCESS])->asArray()->all();
         $transaction = Yii::$app->db->beginTransaction();
-        OnlineProduct::updateAll(['is_jixi' => 1, 'expires' => $expires], ['id' => $pid]);//修改已经计息
+        OnlineProduct::updateAll(['is_jixi' => 1], ['id' => $pid]);//修改已经计息
         $username = '';
         $sms = new SmsMessage([
             'template_id' => Yii::$app->params['sms']['manbiao'],
@@ -272,13 +273,15 @@ class OnlineRepaymentPlan extends \yii\db\ActiveRecord
                 $loan->finish_date = $up['finish_date'];
             }
         }
+        $expires = (new \DateTime(date('Y-m-d', $loan->finish_date)))->diff((new \DateTime(date('Y-m-d',$loan->jixi_time))))->d;
+        $loan->expires = $expires;
+        $up['expires'] = $expires;
         OnlineProduct::updateAll($up, ['id' => $loan->id]);//修改已经计息
         $username = '';
         $sms = new SmsMessage([
             'template_id' => Yii::$app->params['sms']['manbiao'],
             'level' => SmsMessage::LEVEL_LOW,
         ]);
-
         foreach ($orders as $ord) {
             $total = self::getTotalLixi($loan, $ord);
             if (OnlineProduct::REFUND_METHOD_DAOQIBENXI === (int) $loan->refund_method) {
