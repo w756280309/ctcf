@@ -1,12 +1,12 @@
 <?php
 $this->title = '幸运砸金蛋';
 ?>
-<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/promo/201607/zadan.css">
+<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/promo/201607/zadan.css?v=20160707">
 
 <div class="container-fluid">
     <div class="banner-top"></div>
     <div class="banner-bottom">
-        <img src="" alt="二维码">
+        <img src="<?= ASSETS_BASE_URI ?>images/promo/201607/zadan/ma.png" alt="二维码">
     </div>
     <div class="wrap">
         <div class="award-show">
