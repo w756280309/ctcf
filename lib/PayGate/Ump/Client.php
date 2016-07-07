@@ -768,12 +768,12 @@ class Client
      *
      * @return string
      */
-    public function getSettlement($date)
+    public function getSettlement($date, $type = '03')
     {
         $data = [
             'service' => 'download_settle_file_p',
             'settle_date_p2p' => $date,
-            'settle_type_p2p' => '03',
+            'settle_type_p2p' => $type,
         ];
 
         return $this->doRequest($data);
