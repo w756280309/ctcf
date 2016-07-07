@@ -2,6 +2,7 @@
 namespace common\models\product;
 
 use common\models\order\OnlineOrder;
+use common\models\user\MoneyRecord;
 use common\models\user\User;
 use P2pl\Borrower;
 use P2pl\LoanInterface;
@@ -632,6 +633,9 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
      * @return float
      */
     public static function getInvestmentIncreaseBetween($user_id, $start, $end) {
+        $startAt = strtotime($start);
+        $endAt = strtotime($end);
+        //计算开始时间点的在途资金
         $query = OnlineOrder::find()
             ->select('online_order.order_money')
             ->innerJoin('online_product' ,'online_order.online_pid = online_product.id')
@@ -639,10 +643,15 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
             ->andWhere(['online_order.status' => 1])
             ->andWhere(['online_order.uid' => $user_id]);
         $new_query = clone $query;
-        $startTotalAsset = $query->andWhere(['<=', 'online_order.order_time', strtotime($start)])->sum('online_order.order_money');
-        $startTotalAsset = floatval($startTotalAsset);
-        $endTotalAsset = $new_query->andWhere(['<=', 'online_order.order_time', strtotime($end)])->sum('online_order.order_money');
-        $endTotalAsset = floatval($endTotalAsset);
-        return $endTotalAsset - $startTotalAsset;
+        $startTotalAsset = $query->andWhere(['<=', 'online_order.order_time', $startAt])->sum('online_order.order_money');
+        //计算开始时间到结束时间的回款
+        $money = MoneyRecord::find()
+            ->where(['uid' => $user_id])
+            ->andWhere(['type' => 4])
+            ->andWhere(['between', 'created_at', $startAt, $endAt])
+            ->sum('in_money');
+        //计算结束时间点的在途资金
+        $endTotalAsset = $new_query->andWhere(['<=', 'online_order.order_time', $endAt])->sum('online_order.order_money');
+        return floatval($endTotalAsset) - floatval($startTotalAsset) - floatval($money);
     }
 }
