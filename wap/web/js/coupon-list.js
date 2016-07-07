@@ -35,12 +35,12 @@ $(function(){
                                     var $div = '';
                                     var $image = 'ok_ticket';
 
-                                    if (item.isUsed) {
+                                    if (parseInt(item.isUsed) > 0) {
                                         $desc = '已使用';
                                         $div = '<div class="row over_img over_user_img"></div>';
                                         $image = 'over_ticket';
                                     } else {
-                                        if (date('Y-m-d') > item.expiryDate) {
+                                        if (item.isExpired) {
                                             $desc = '已过期';
                                             $div = '<div class="row over_img over_time_img"></div>';
                                             $image = 'over_ticket';

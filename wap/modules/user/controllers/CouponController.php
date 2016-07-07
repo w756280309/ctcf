@@ -20,13 +20,15 @@ class CouponController extends BaseController
             ->select("user_coupon.id, user_coupon.isUsed, user_coupon.expiryDate, $c.amount,$c.name,$c.minInvest")
             ->innerJoin($c, "couponType_id = $c.id")
             ->where(['user_id' => $this->getAuthedUser()->id, 'isDisabled' => 0])
-            ->orderBy('isUsed, expiryDate, amount desc, minInvest');
+            ->orderBy('isUsed asc, expiryDate asc, amount desc, minInvest asc');
 
         $pg = \Yii::$container->get('paginator')->paginate($data, $page, $size);
         $model = $pg->getItems();
 
+        $today = date('Y-m-d');
         foreach ($model as $key => $val) {
             $model[$key]['minInvestDesc'] = \Yii::$app->functions->toFormatMoney(rtrim(rtrim($val['minInvest'], '0'), '.'));
+            $model[$key]['isExpired'] = $today > $val['expiryDate'];
         }
 
         $tp = $pg->getPageCount();
