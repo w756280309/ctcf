@@ -202,7 +202,7 @@ $this->registerJsFile('/js/swfupload/handlers.js', ['depends' => 'yii\web\YiiAss
                 $('#app').hide();
             }
 
-            $('#shebei').bind('input propertychange', function() {
+            $('#shebei').on('change', function() {
                 var v = $(this).val();
                 if ('1' === v) {
                     $('#app').hide();
