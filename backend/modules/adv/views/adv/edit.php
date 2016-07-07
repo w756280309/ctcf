@@ -204,14 +204,19 @@ $this->registerJsFile('/js/swfupload/handlers.js', ['depends' => 'yii\web\YiiAss
 
             $('#shebei').on('change', function() {
                 var v = $(this).val();
+                var deviceName;
                 if ('1' === v) {
+                    deviceName = 'pc';
                     $('#app').hide();
                     $('#isDisabledInApp').val('');
                     $('#notice').html('图片大小不超过2M，只限于jpg格式图片，并且大小限定为：高340px，宽1920px');
                 } else {
+                    deviceName = 'wap';
                     $('#app').show();
                     $('#notice').html('图片大小不超过2M，只限于jpg格式图片，并且大小限定为：高350px，宽750px');
                 }
+
+                swfu_baoli.setUploadURL("/js/swfupload/upload_baoli.php?type=adv&shebei="+deviceName);
             })
         });
     </script>
