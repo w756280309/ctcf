@@ -638,9 +638,10 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
             ->where(['online_product.status' => [2,3,5,7]])
             ->andWhere(['online_order.status' => 1])
             ->andWhere(['online_order.uid' => $user_id]);
+        $new_query = clone $query;
         $startTotalAsset = $query->andWhere(['<=', 'online_order.order_time', strtotime($start)])->sum('online_order.order_money');
         $startTotalAsset = floatval($startTotalAsset);
-        $endTotalAsset = $query->andWhere(['<=', 'online_order.order_time', strtotime($end)])->sum('online_order.order_money');
+        $endTotalAsset = $new_query->andWhere(['<=', 'online_order.order_time', strtotime($end)])->sum('online_order.order_money');
         $endTotalAsset = floatval($endTotalAsset);
         return $endTotalAsset - $startTotalAsset;
     }
