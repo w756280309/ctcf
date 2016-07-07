@@ -21,7 +21,7 @@ $(function(){
             $(".load").html("正在加载...");
             $.ajax({
                 type: 'GET',
-                url: "/user/coupon/valid",
+                url: "/user/coupon/valid?sn="+orderSn+"&money="+bidMoney,
                 data: {page: currentPage},
                 dataType: 'json',
                 success: function (data) {
@@ -53,7 +53,7 @@ $(function(){
                                             '<div class="row gray_time">' +
                                             '<img src="/images/coupon_img.png" alt="底图">' +
                                             '<div class="row pos_box">' +
-                                            '<div class="col-xs-8 ticket_time">有效期至'+ item.useEndDate +'</div>' +
+                                            '<div class="col-xs-8 ticket_time">有效期至'+ item.expiryDate +'</div>' +
                                             '<div class="col-xs-4 no-use">未使用</div>' +
                                             '</div></div></div>';
                                 });

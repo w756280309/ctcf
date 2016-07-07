@@ -7,6 +7,7 @@ $this->registerJs('var total=' . $header['count'] . ';', 1);
 $this->registerJs('var size=' . $header['size'] . ';', 1);
 $this->registerJs('var tp=' . $header['tp'] . ';', 1);
 $this->registerJs('var cp=' . $header['cp'] . ';', 1);
+
 ?>
 
 <div class="container coupon">
@@ -44,5 +45,8 @@ $this->registerJs('var cp=' . $header['cp'] . ';', 1);
     <?php endforeach; ?>
     <div class="load" style="display:block;"></div>
 </div>
-
+<script>
+    var orderSn = '<?= $sn ?>';
+    var bidMoney = '<?= $money ?>';
+</script>
 

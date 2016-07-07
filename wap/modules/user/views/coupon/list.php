@@ -10,7 +10,7 @@ $this->registerJs('var cp=' . $header['cp'] . ';', 1);
 ?>
 
 <!--有优惠券的状态  -->
-<?php if (!empty($model)) { ?>
+<?php if (!empty($model)) {?>
     <div class="container coupon">
         <?php
             foreach ($model as $val) :
@@ -67,3 +67,4 @@ $this->registerJs('var cp=' . $header['cp'] . ';', 1);
     <!--无优惠券的状态  -->
     <div class="container coupon coupon_none"></div>
 <?php } ?>
+

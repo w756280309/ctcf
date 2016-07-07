@@ -40,7 +40,7 @@ $(function(){
                                         $div = '<div class="row over_img over_user_img"></div>';
                                         $image = 'over_ticket';
                                     } else {
-                                        if (date('Y-m-d') > item.useEndDate) {
+                                        if (date('Y-m-d') > item.expiryDate) {
                                             $desc = '已过期';
                                             $div = '<div class="row over_img over_time_img"></div>';
                                             $image = 'over_ticket';
@@ -69,7 +69,7 @@ $(function(){
                                             '<div class="row gray_time">' +
                                             '<img src="/images/coupon_img.png" alt="底图">' +
                                             '<div class="row pos_box">' +
-                                            '<div class="col-xs-8 ticket_time">有效期至'+ item.useEndDate +'</div>' +
+                                            '<div class="col-xs-8 ticket_time">有效期至'+ item.expiryDate +'</div>' +
                                             '<div class="col-xs-4 no-use">'+ $desc +'</div>' +
                                             '</div></div></div>';
                                 });
