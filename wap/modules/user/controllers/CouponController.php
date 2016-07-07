@@ -6,7 +6,6 @@ use app\controllers\BaseController;
 use common\models\coupon\CouponType;
 use common\models\coupon\UserCoupon;
 use common\models\product\OnlineProduct;
-use yii\web\Response;
 
 class CouponController extends BaseController
 {

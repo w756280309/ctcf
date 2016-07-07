@@ -2,9 +2,7 @@
 namespace frontend\controllers;
 
 use common\controllers\HelpersTrait;
-use yii\filters\AccessControl;
 use yii\web\Controller;
-use yii\web\NotFoundHttpException;
 
 class BaseController extends Controller
 {

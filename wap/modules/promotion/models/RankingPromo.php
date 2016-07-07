@@ -12,6 +12,7 @@ use yii\helpers\ArrayHelper;
  * @property string $title
  * @property integer $startAt
  * @property integer $endAt
+ * @property string $key
  */
 class RankingPromo extends ActiveRecord
 {
@@ -24,7 +25,7 @@ class RankingPromo extends ActiveRecord
     {
         return [
             [['title', 'startAt', 'endAt'], 'required'],
-            [['startAt', 'endAt'], 'string'],
+            [['startAt', 'endAt', 'key'], 'string'],
             [['title'], 'string', 'max' => 50],
             ['endAt', 'compare', 'compareAttribute' => 'startAt', 'operator' => '>']
         ];
@@ -34,6 +35,7 @@ class RankingPromo extends ActiveRecord
     {
         return [
             'id' => 'ID',
+            'key' => '活动KEY',
             'title' => '活动名称',
             'startAt' => '开始时间',
             'endAt' => '结束时间',

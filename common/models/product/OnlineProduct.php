@@ -1,6 +1,7 @@
 <?php
 namespace common\models\product;
 
+use common\models\order\OnlineOrder;
 use common\models\user\User;
 use P2pl\Borrower;
 use P2pl\LoanInterface;
@@ -618,5 +619,29 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
     public function getBorrower()
     {
         return $this->hasOne(User::className(), ['id' => 'borrow_uid']);
+    }
+
+    /**
+     * 获取指定时间段的新增资产
+     * 用户新增投资资产：两次在途资产（标的状态为 募集中、满表、提前结束、收益中 的标的的累计成功投资金额）相减
+     * 如果没有开始时间，表示从项目上线开始
+     * 如果没有结束时间，表示一直到程序运行时间
+     * @param integer $user_id
+     * @param string $start
+     * @param string $end
+     * @return float
+     */
+    public static function getInvestmentIncreaseBetween($user_id, $start, $end) {
+        $query = OnlineOrder::find()
+            ->select('online_order.order_money')
+            ->innerJoin('online_product' ,'online_order.online_pid = online_product.id')
+            ->where(['online_product.status' => [2,3,5,7]])
+            ->andWhere(['online_order.status' => 1])
+            ->andWhere(['online_order.uid' => $user_id]);
+        $startTotalAsset = $query->andWhere(['<=', 'online_order.order_time', strtotime($start)])->sum('online_order.order_money');
+        $startTotalAsset = floatval($startTotalAsset);
+        $endTotalAsset = $query->andWhere(['<=', 'online_order.order_time', strtotime($end)])->sum('online_order.order_money');
+        $endTotalAsset = floatval($endTotalAsset);
+        return $endTotalAsset - $startTotalAsset;
     }
 }

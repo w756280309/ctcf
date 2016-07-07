@@ -12,4 +12,13 @@ class PromoController extends BaseController
     public function actionB2() {
         return $this->renderFile('@frontend/views/promo/201606/b2.php');
     }
+
+    /**
+     * 活动要放在对应的以年月命名的文件夹下.
+     * @param string $name 活动文件名称
+     */
+    public function actionZadan160708()
+    {
+        return $this->render('@frontend/views/promo/201607/zadan.php');
+    }
 }

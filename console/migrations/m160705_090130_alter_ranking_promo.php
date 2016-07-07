@@ -10,8 +10,8 @@ class m160705_090130_alter_ranking_promo extends Migration
         $this->insert('ranking_promo', [
             'title' => 'PC端上线砸金蛋活动',
             'key' => 'PC_LAUNCH_160707',
-            'startAt' => time(),
-            'endAt' => time()
+            'startAt' => strtotime('2016-07-08'),
+            'endAt' => strtotime('2016-07-22')
         ]);
     }
 

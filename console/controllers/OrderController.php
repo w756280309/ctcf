@@ -6,14 +6,18 @@
  */
 namespace console\controllers;
 
+use common\models\order\OnlineOrder;
 use yii\console\Controller;
 use common\models\order\OrderQueue;
 use common\models\order\OrderManager;
+use wap\modules\promotion\models\RankingPromo;
+use wap\modules\promotion\promo\Promo160707;
 
 class OrderController extends Controller
 {
     public function actionQueue()
     {
+
         for ($i = 0; $i < 10;++$i) {
             $queues = OrderQueue::find()->where(['status' => 0])->orderBy('created_at asc')->limit(3)->all();//没有查到数据会返回空数组
             if (count($queues)) {
@@ -23,6 +27,15 @@ class OrderController extends Controller
                         if (!OrderManager::cancelNoPayOrder($queue->order)) {
                             //cancelNoPayOrder返回值false代表订单成立
                             OrderManager::confirmOrder($queue->order);
+                        }
+                        //投资完成之后计算抽奖机会
+                        $promoConfig = RankingPromo::find()->where(['key' => 'PC_LAUNCH_160707'])->one();
+                        if ($promoConfig) {
+                            $time = time();
+                            $promo = new Promo160707($promoConfig);
+                            if ($time > $promo->startAt && $time < $promo->endAt) {
+                                $promo->onInvested($queue->order);
+                            }
                         }
                     } catch (\Exception $ex) {
                         //TODO
