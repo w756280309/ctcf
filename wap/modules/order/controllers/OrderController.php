@@ -52,12 +52,11 @@ class OrderController extends BaseController
         $uc = UserCoupon::tableName();
 
         $coupon = (new \yii\db\Query())    //获取有效的代金券信息
-            ->select("$ct.*, $uc.user_id, $uc.order_id, $uc.isUsed, $uc.id as uid")
+            ->select("$ct.*, $uc.user_id, $uc.order_id, $uc.isUsed, $uc.id as uid, $uc.expiryDate expiryDate")
             ->from($ct)
             ->innerJoin($uc, "$ct.id = $uc.couponType_id")
             ->where(['isUsed' => 0, 'order_id' => null, 'isDisabled' => 0])
-            ->andFilterWhere(['<=', 'useStartDate', date('Y-m-d')])
-            ->andFilterWhere(['>=', 'useEndDate', date('Y-m-d')])
+            ->andFilterWhere(['>=', 'expiryDate', date('Y-m-d')])
             ->andWhere(['user_id' => $user->id]);
 
         if (!empty($request['couponId'])) {

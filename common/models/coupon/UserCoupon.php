@@ -99,12 +99,13 @@ class UserCoupon extends \yii\db\ActiveRecord
             throw new Exception('代金券已经使用');
         }
 
-        if (null !== $user && $coupon->user_id !== $user->id) {
+        if (null !== $user && $coupon->user_id !== intval($user->id)) {
             throw new Exception('代金券使用异常');
         }
 
         $time = time();
-        if (strtotime($coupon->couponType->useStartDate) > $time || strtotime($coupon->couponType->useEndDate.'23:59:59') < $time) {
+
+        if (strtotime($coupon->expiryDate.' 23:59:59') < $time) {
             throw new Exception('代金券不可以使用');
         }
 

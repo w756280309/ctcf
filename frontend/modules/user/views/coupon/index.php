@@ -50,7 +50,7 @@ use common\widgets\Pager;
                             }
                          ?>项目可用；
                     </td>
-                    <td><?= $val->couponType->useStartDate ?>至<?= $val->couponType->useEndDate ?></td>
+                    <td><?= date('Y-m-d', $val->created_at) ?>至<?= $val->expiryDate ?></td>
                     <td>
                         <?php
                             if ($val->isUsed) {

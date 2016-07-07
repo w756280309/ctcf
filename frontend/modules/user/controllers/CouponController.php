@@ -53,7 +53,7 @@ class CouponController extends BaseController
 
         $data = $_query->select("count(*) as count, sum(amount) as totalAmount")
             ->andWhere(['isUsed' => 0, 'order_id' => null])
-            ->andWhere(['>=', 'expiryDate', date('Y-m-d')])
+            ->andFilterWhere(['>=', 'expiryDate', date('Y-m-d')])
             ->createCommand()
             ->queryone();
 

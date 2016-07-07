@@ -36,7 +36,7 @@ $this->registerJs('var cp=' . $header['cp'] . ';', 1);
             <div class="row gray_time">
                 <img src="<?= ASSETS_BASE_URI ?>images/coupon_img.png" alt="底图">
                 <div class="row pos_box">
-                    <div class="col-xs-8 ticket_time">有效期至<?= $val['useEndDate'] ?></div>
+                    <div class="col-xs-8 ticket_time">有效期至<?= $val['expiryDate'] ?></div>
                     <div class="col-xs-4 no-use">未使用</div>
                 </div>
             </div>

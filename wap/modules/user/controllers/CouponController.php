@@ -18,10 +18,10 @@ class CouponController extends BaseController
         $c = CouponType::tableName();
 
         $data = UserCoupon::find()
-            ->select("$c.*, isUsed")
+            ->select("$c.*, isUsed, expiryDate")
             ->innerJoin($c, "couponType_id = $c.id")
             ->where(['user_id' => $this->getAuthedUser()->id, 'isDisabled' => 0])
-            ->orderBy('isUsed asc, useEndDate desc, amount desc');
+            ->orderBy('isUsed asc, expiryDate desc, amount desc');
 
         $pg = \Yii::$container->get('paginator')->paginate($data, $page, $size);
         $model = $pg->getItems();
@@ -66,13 +66,12 @@ class CouponController extends BaseController
         $this->findOr404(OnlineProduct::class, ['sn' => $request['sn']]);
 
         $data = CouponType::find()    //获取有效的代金券信息
-            ->select("$ct.*, $uc.user_id, $uc.order_id, $uc.isUsed, $uc.id uid")
+            ->select("$ct.*, $uc.user_id, $uc.order_id, $uc.isUsed, $uc.id uid, $uc.expiryDate expiryDate")
             ->innerJoin($uc, "$ct.id = $uc.couponType_id")
             ->where(['isUsed' => 0, 'order_id' => null, 'isDisabled' => 0])
-            ->andFilterWhere(['<=', 'useStartDate', date('Y-m-d')])
-            ->andFilterWhere(['>=', 'useEndDate', date('Y-m-d')])
+            ->andFilterWhere(['>=', 'expiryDate', date('Y-m-d')])
             ->andWhere(['user_id' => $this->getAuthedUser()->id])
-            ->orderBy('useEndDate desc, amount desc, minInvest asc');
+            ->orderBy('expiryDate desc, amount desc, minInvest asc');
 
         $pg = \Yii::$container->get('paginator')->paginate($data, $page, $size);
         $coupon = $pg->getItems();
