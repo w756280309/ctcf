@@ -187,12 +187,12 @@ use common\utils\StringUtils;
 <!--推荐标 end-->
 
 <!--card start-->
-<div class="card" id="wgt">
+<!--<div class="card" id="wgt">
     <a href="/order/booking/introduction?pid=1" target="_blank">
         <img src="<?= ASSETS_BASE_URI ?>images/card.png" alt="">
     </a>
 </div>
-<div style="clear: both"></div>
+<div style="clear: both"></div>-->
 <!--card end-->
 
 <!--more start-->

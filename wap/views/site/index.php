@@ -206,9 +206,9 @@ $(function() {
         </div>
         <div style="clear: both;"></div>
         <div class="row margin-add">
-            <div class="col-xs-4 padding-clear"><a href="/deal/deal/index"><img src="<?= ASSETS_BASE_URI ?>images/type1.png?v=20160418" alt="温盈金" /></a> </div>
-            <div class="col-xs-4 padding-clear"><a href="/deal/deal/index"><img src="<?= ASSETS_BASE_URI ?>images/type2.png?v=20160418" alt="温盈宝" /></a> </div>
-            <div class="col-xs-4 padding-clear" id="wgt"><a href="/order/booking/detail?pid=1"><img src="<?= ASSETS_BASE_URI ?>images/type3.png" alt="温股投" /></a> </div>
+            <div class="col-xs-4 col-xs-offset-1 padding-clear"><a href="/deal/deal/index"><img src="<?= ASSETS_BASE_URI ?>images/type1.png?v=20160418" alt="温盈金" /></a> </div>
+            <div class="col-xs-4 col-xs-offset-2 padding-clear"><a href="/deal/deal/index"><img src="<?= ASSETS_BASE_URI ?>images/type2.png?v=20160418" alt="温盈宝" /></a> </div>
+            <!--<div class="col-xs-4 padding-clear" id="wgt"><a href="/order/booking/detail?pid=1"><img src="<?= ASSETS_BASE_URI ?>images/type3.png" alt="温股投" /></a> </div>-->
         </div>
     </div>
     <!-- 理财区 end -->
