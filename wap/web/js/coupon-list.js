@@ -40,7 +40,7 @@ $(function(){
                                         $div = '<div class="row over_img over_user_img"></div>';
                                         $image = 'over_ticket';
                                     } else {
-                                        if (item.isExpired) {
+                                        if (parseInt(item.isExpired) > 0) {
                                             $desc = '已过期';
                                             $div = '<div class="row over_img over_time_img"></div>';
                                             $image = 'over_ticket';
