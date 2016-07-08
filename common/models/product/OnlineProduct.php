@@ -585,16 +585,8 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
         if (intval($this->refund_method) === OnlineProduct::REFUND_METHOD_DAOQIBENXI) {
             if ( $this->finish_date > 0) {
                 if ($this->jixi_time) {
-                    //项目期限＝ 产品到期日－计息日期 + 1
-                    $datetime1 = new \DateTime(date('Y-m-d', $this->finish_date));
-                    $datetime2 = new \DateTime(date('Y-m-d', $this->jixi_time));
-                    $interval = $datetime1->diff($datetime2);
-                    if (date('Y-m-d',$this->finish_date) !==(new \DateTime(date('Y-m-d',$this->jixi_time)))->add(new \DateInterval('P'.$this->expires.'D'))->format('Y-m-d')) {
-                        $expires = intval($interval->format('%a')) + 1;
-                    } else {
-                        $expires = intval($interval->format('%a'));
-                    }
-
+                    //项目期限＝ 产品到期日－计息日期 + 1；后台确认计息时候已经算好并保存到数据库了
+                    $expires = $this->expires;
                 } else {
                     //产品到期日－当前日
                     $datetime1 = new \DateTime(date('Y-m-d', $this->finish_date));
