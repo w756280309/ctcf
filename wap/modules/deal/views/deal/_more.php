@@ -32,7 +32,7 @@
                 </li>
                 <li class="col-xs-3 bb nock1">
                     <div class="nock">
-                        <canvas data-status="<?= $val->status ?>" data-per="<?= (7 === (int) $val->status) ? 100 : ($is_hui ? 0 : $val->finish_rate) ?>"></canvas>
+                        <canvas data-status="<?= $val->status ?>" data-per="<?= (7 === (int) $val->status) ? 100 : ($is_hui ? 0 : $val->finish_rate*100) ?>"></canvas>
                         <?php if ($val->status == 1) { ?>
                             <div class="column-clock"><span>
                                 <?php $dates = Yii::$app->functions->getDateDesc($val->start_date); ?>
