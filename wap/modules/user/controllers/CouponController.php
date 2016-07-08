@@ -17,10 +17,11 @@ class CouponController extends BaseController
         $c = CouponType::tableName();
 
         $data = UserCoupon::find()
-            ->select("user_coupon.id, user_coupon.isUsed, user_coupon.expiryDate, $c.amount,$c.name,$c.minInvest")
-            ->innerJoin($c, "couponType_id = $c.id")
-            ->where(['user_id' => $this->getAuthedUser()->id, 'isDisabled' => 0])
-            ->orderBy('isUsed asc, expiryDate asc, amount desc, minInvest asc');
+            ->select("user_coupon.id, user_coupon.isUsed, user_coupon.expiryDate, user_coupon.couponType_id, $c.amount, $c.name, $c.minInvest")
+            ->innerJoinWith('couponType')
+            ->where(['user_coupon.user_id' => $this->getAuthedUser()->id, "$c.isDisabled" => 0])
+            //->orderBy('isUsed ASC, expiryDate asc, amount desc, minInvest asc');
+            ->orderBy('isUsed ASC, expiryDate ASC, amount DESC, minInvest ASC');
 
         $pg = \Yii::$container->get('paginator')->paginate($data, $page, $size);
         $model = $pg->getItems();
