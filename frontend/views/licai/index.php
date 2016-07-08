@@ -56,17 +56,10 @@ use common\widgets\Pager;
                 <?php if (!in_array($val->status, [OnlineProduct::STATUS_HUAN, OnlineProduct::STATUS_OVER])) { ?>
                     <div class="single_right">
                         <div class="single_right_tiao">
-                            <?php if ($val->status == OnlineProduct::STATUS_FOUND) { ?>
-                                <div class="tiao_content">
-                                    <span class="tiao_content_length" style="width:100%"></span>
-                                </div>
-                                <span class="single_right_tiao_span">100%</span>
-                            <?php } else { ?>
-                                <div class="tiao_content">
-                                    <span class="tiao_content_length" style="width:<?= number_format($val->finish_rate * 100) ?>%"></span>
-                                </div>
-                                <span class="single_right_tiao_span"><?= number_format($val->finish_rate * 100) ?>%</span>
-                            <?php }?>
+                            <div class="tiao_content">
+                                <span class="tiao_content_length" style="width:<?= $val->getProgressForDisplay()?>%"></span>
+                            </div>
+                            <span class="single_right_tiao_span"><?= $val->getProgressForDisplay()?>%</span>
                             <div class="clear"></div>
                             <p class="remain-number">可投余额：<?= ($val->status == 1) ? (StringUtils::amountFormat1('{amount}{unit}', $val->money)) : StringUtils::amountFormat2($val->getLoanBalance()).'元' ?></p>
                         </div>

@@ -123,17 +123,10 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/useraccount/chargedeposit.css');
             <div class="pR-box-inner">
                 <div class="pR-title">募集进度：</div>
                 <div class="dR-progress-box">
-                    <?php if ($deal->status == OnlineProduct::STATUS_FOUND || $deal->status == OnlineProduct::STATUS_OVER || $deal->status == OnlineProduct::STATUS_HUAN) { ?>
                     <div class="dR-progress">
-                        <span data-progress="100" style="width: 100%;"></span>
+                        <span data-progress="<?= $deal->getProgressForDisplay()?>" style="width: <?= $deal->getProgressForDisplay()?>%;"></span>
                     </div>
-                    <div class="dRP-data">100%</div>
-                    <?php } else { ?>
-                        <div class="dR-progress">
-                            <span data-progress="<?= number_format($deal->finish_rate * 100) ?>" style="width: <?= number_format($deal->finish_rate * 100) ?>%;"></span>
-                        </div>
-                        <div class="dRP-data"><?= number_format($deal->finish_rate * 100) ?>%</div>
-                    <?php } ?>
+                    <div class="dRP-data"><?= $deal->getProgressForDisplay()?>%</div>
                 </div>
                 <ul class="clearfix dR-inner">
                     <li class="dR-inner-left">项目可投余额：</li>

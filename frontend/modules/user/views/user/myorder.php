@@ -138,11 +138,7 @@ use common\models\product\OnlineProduct;
                     <td class="text-align-ct"><?= rtrim(rtrim(number_format($val->yield_rate * 100, 2), '0'), '.') ?>%</td>
                     <td class="text-third"><?= StringUtils::amountFormat3($val->order_money) ?></td>
                     <td class="text-align-ct">
-                        <?php if ($val->loan->status == OnlineProduct::STATUS_FOUND || $val->loan->status == OnlineProduct::STATUS_OVER || $val->loan->status == OnlineProduct::STATUS_HUAN) { ?>
-                            100%
-                        <?php } else {?>
-                            <?= number_format($val->loan->finish_rate * 100) ?>%
-                        <?php } ?>
+                        <?= $val->loan->getProgressForDisplay()?>%
                     </td>
                 </tr>
             <?php endforeach; ?>

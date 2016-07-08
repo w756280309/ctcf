@@ -65,7 +65,7 @@ $this->registerCssFile(ASSETS_BASE_URI .'css/touzixiangqing.css?v=20160427', ['d
                 </li>
                 <li>
                     <div class="information-content-left">募集进度</div>
-                    <div class="information-content-right"><?= number_format($product->finish_rate*100, 0) ?>%</div>
+                    <div class="information-content-right"><?= $product->getProgressForDisplay()?>%</div>
                 </li>
                 <li>
                     <div class="information-content-left">还款方式</div>

@@ -35,7 +35,7 @@ $deal->money = rtrim(rtrim($deal->money, '0'), '.');
             <div class="col-xs-1"></div>
             <div class="col-xs-10">
                 <div class="per">
-                    <div class="progress-bar progress-bar-red" style="width:<?= number_format($deal->finish_rate * 100, 0)?>%"></div>
+                    <div class="progress-bar progress-bar-red" style="width:<?= $deal->getProgressForDisplay()?>%"></div>
                 </div>
             </div>
             <div class="col-xs-1"></div>
@@ -47,7 +47,7 @@ $deal->money = rtrim(rtrim($deal->money, '0'), '.');
                 <div>可投余额/项目总额</div>
             </div>
             <div class="col-xs-1" style="padding: 0;">
-                <div class="shuju-bili"><?=  number_format($deal->finish_rate * 100, 0)?><em>%</em></div>
+                <div class="shuju-bili"><?= $deal->getProgressForDisplay()?><em>%</em></div>
             </div>
             <div class="col-xs-1"></div>
         </div>

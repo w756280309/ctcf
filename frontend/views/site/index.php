@@ -131,9 +131,9 @@ use common\utils\StringUtils;
                             <?php } ?>
                             <div class="yingshou-jindu">
                                 <div class="yingshou-jindutiao">
-                                    <div class="yingshou-jindutiao1" progressbar="<?= number_format($val->finish_rate * 100) ?>"></div>
+                                    <div class="yingshou-jindutiao1" progressbar="<?= $val->getProgressForDisplay() ?>"></div>
                                 </div>
-                                <span><?= number_format($val->finish_rate * 100) ?>%</span>
+                                <span><?= $val->getProgressForDisplay() ?>%</span>
                             </div>
                             <div style="clear: both"></div>
                             <?php if (!in_array($val->status, [OnlineProduct::STATUS_HUAN, OnlineProduct::STATUS_OVER])) { ?>

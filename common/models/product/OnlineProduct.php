@@ -646,4 +646,16 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
         $endTotalAsset = $new_query->andWhere(['<=', 'online_order.order_time', $endAt])->sum('online_order.order_money');
         return floatval($endTotalAsset) - floatval($startTotalAsset) - floatval($money);
     }
+
+    /**
+     * 获取项目的募集进度
+     * @return int
+     */
+    public function getProgressForDisplay(){
+        if (in_array($this->status, [3, 5, 6, 7])){
+            return 100;
+        } else {
+            return intval($this->finish_rate*100);
+        }
+    }
 }

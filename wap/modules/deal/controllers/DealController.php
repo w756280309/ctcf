@@ -92,9 +92,6 @@ class DealController extends Controller
             $start = Yii::$app->functions->getDateDesc($deals->start_date);
             $deals->start_date = $start['desc'].date('H:i', $start['time']);
         }
-        if ($deals->status == OnlineProduct::STATUS_HUAN || $deals->status == OnlineProduct::STATUS_OVER || $deals->status == OnlineProduct::STATUS_FOUND) {
-            $deals->finish_rate = 1;
-        }
 
         return $this->render('detail', ['deal' => $deals, 'deal_balace' => $orderbalance]);
     }

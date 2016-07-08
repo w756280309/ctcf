@@ -30,7 +30,7 @@
             </div>
             <?php if (in_array($o->loan->status, [OnlineProduct::STATUS_NOW])) { ?>
                 <div class="col-xs-4 loan-info2">
-                    <p class="info-val"><?= (OnlineProduct::STATUS_FOUND === (int) $o->loan->status) ? 100 : number_format($o->loan->finish_rate * 100, 0) ?>%</p>
+                    <p class="info-val"><?= $o->loan->getProgressForDisplay()?>%</p>
                     <p class="info-label">募集进度</p>
                 </div>
             <?php } else { ?>
