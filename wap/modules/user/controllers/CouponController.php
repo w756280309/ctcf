@@ -6,42 +6,45 @@ use app\controllers\BaseController;
 use common\models\coupon\CouponType;
 use common\models\coupon\UserCoupon;
 use common\models\product\OnlineProduct;
+use yii\data\Pagination;
 
 class CouponController extends BaseController
 {
     /**
      * 我的代金券.
      */
-    public function actionList($page = 1, $size = 10)
+    public function actionList($page=1)
     {
         $c = CouponType::tableName();
+        $uc = UserCoupon::tableName();
 
-        $data = UserCoupon::find()
-            ->select("user_coupon.id, user_coupon.isUsed, user_coupon.expiryDate, user_coupon.couponType_id, $c.amount, $c.name, $c.minInvest")
+        $query = UserCoupon::find()
             ->innerJoinWith('couponType')
-            ->where(['user_coupon.user_id' => $this->getAuthedUser()->id, "$c.isDisabled" => 0])
-            //->orderBy('isUsed ASC, expiryDate asc, amount desc, minInvest asc');
-            ->orderBy('isUsed ASC, expiryDate ASC, amount DESC, minInvest ASC');
+            ->where(['user_id' => $this->getAuthedUser()->id, 'isDisabled' => 0]);
 
-        $pg = \Yii::$container->get('paginator')->paginate($data, $page, $size);
-        $model = $pg->getItems();
+        $count = $query->count();
+        $pages = new Pagination(['totalCount' => $count, 'pageSize' => '10']);
+        $model = $query
+            ->select("$c.amount, $c.name, $c.minInvest,if($uc.isUsed, bin(0), $uc.expiryDate < date(now())) as isExpired, $uc.expiryDate, $uc.isUsed")
+            ->offset($pages->offset)
+            ->limit($pages->limit)
+            ->orderBy("isExpired, isUsed, $uc.expiryDate, amount desc, minInvest")
+            ->asArray()
+            ->all();
 
-        $today = date('Y-m-d');
         foreach ($model as $key => $val) {
             $model[$key]['minInvestDesc'] = \Yii::$app->functions->toFormatMoney(rtrim(rtrim($val['minInvest'], '0'), '.'));
-            $model[$key]['isExpired'] = $today > $val['expiryDate'];
         }
 
-        $tp = $pg->getPageCount();
+        $tp = $pages->getPageCount();
         $code = ($page > $tp) ? 1 : 0;
-
         if (\Yii::$app->request->isAjax) {
             $message = ($page > $tp) ? '数据错误' : '消息返回';
 
-            return ['header' => $pg, 'data' => $model, 'code' => $code, 'message' => $message];
+            return ['header' => $pages, 'data' => $model, 'code' => $code, 'message' => $message, 'tp'=>$tp, 'cp'=>$page];
         }
 
-        return $this->render('list', ['model' => $model, 'header' => $pg->jsonSerialize()]);
+        return $this->render('list', ['model' => $model, 'header' => $pages]);
     }
 
     /**

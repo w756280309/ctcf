@@ -27,7 +27,7 @@ $(function(){
                 success: function (data) {
                     if (data.code === 0) {
                         //如果当前页和返回页码相同，则改变页面html,否则视为异常
-                        if (currentPage === data.header.cp) {
+                        if (currentPage === parseInt(data.cp)) {
                             if (data.data.length > 0) {
                                 var html = "";
                                 $.each(data.data, function (i, item) {
@@ -76,22 +76,22 @@ $(function(){
 
                                 $('.load').before(html);
                                 //页码＋1
-                                currentPage = parseInt(data.header.cp) + 1;
+                                currentPage = parseInt(data.cp) + 1;
                             }
                         }
                         //当前页大于总页数,隐藏加载更多提示(暂无数据时,tp为0)
-                        if (currentPage >= data.header.tp) {
+                        if (currentPage >= data.tp) {
                             $(".load").hide();
                         } else {
                             $(".load").show();
                         }
                         //没有数据列表
-                        if (data.header.tp === 0) {
-                            //显示暂无数据视图
-                            $(".nodata").show();
-                        } else {
-                            $(".nodata").hide();
-                        }
+                        //if (data.tp === 0) {
+                        //    //显示暂无数据视图
+                        //    $(".nodata").show();
+                        //} else {
+                        //    $(".nodata").hide();
+                        //}
                     } else {
                         alert(data.message);
                     }

@@ -3,10 +3,7 @@ $this->title = '我的代金券';
 
 $this->registerCssFile(ASSETS_BASE_URI . 'css/coupon.css?v=20150520', ['depends' => 'wap\assets\WapAsset']);
 $this->registerJsFile(ASSETS_BASE_URI . 'js/coupon-list.js?v=20150707', ['depends' => 'yii\web\YiiAsset', 'position' => 1]);
-$this->registerJs('var total=' . $header['count'] . ';', 1);
-$this->registerJs('var size=' . $header['size'] . ';', 1);
-$this->registerJs('var tp=' . $header['tp'] . ';', 1);
-$this->registerJs('var cp=' . $header['cp'] . ';', 1);
+$this->registerJs('var tp=' . $header->pageCount . ';', 1);
 ?>
 
 <!--有优惠券的状态  -->
