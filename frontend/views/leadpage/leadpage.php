@@ -3,7 +3,7 @@
 $this->title = "新手引导";
 
 $this->registerCssFile(ASSETS_BASE_URI.'css/leadpage/leadpage.css', ['depends' => 'frontend\assets\FrontAsset']);
-$this->registerJsFile(ASSETS_BASE_URI.'js/leadpage/leadpage.js', ['depends' => 'frontend\assets\FrontAsset']);
+$this->registerJsFile(ASSETS_BASE_URI.'js/leadpage/leadpage.js?v=20160708', ['depends' => 'frontend\assets\FrontAsset']);
 
 ?>
 

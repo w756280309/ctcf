@@ -4,7 +4,7 @@
     }
 </style>
 
-<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/login/login_pop.css"/>
+<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/login/login_pop.css?v=20160708"/>
 
 <div class="login-mark" style="display: none;"></div>
 <div class="loginUp-box" style="display: none;">
