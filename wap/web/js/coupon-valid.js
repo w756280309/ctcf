@@ -32,7 +32,7 @@ $(function(){
                                 var html = "";
                                 $.each(data.data, function (i, item) {
                                     html += '<div class="box">' +
-                                            '<div class="row coupon_num">' +
+                                            '<div class="row coupon_num" onclick="location.replace(\'/order/order?sn='+orderSn+'&money='+bidMoney+'&couponId='+item.uid+'\')">' +
                                             '<img src="/images/ok_ticket.png" alt="券">' +
                                             '<div class="row pos_box">' +
                                             '<div class="col-xs-2"></div>' +
