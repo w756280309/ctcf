@@ -39,7 +39,7 @@
                                 <?= $dates['desc'] ?>
                             </span><?= date('H:i', $val->start_date) ?></div>
                         <?php } else if ($val->status == 2) { ?>
-                            <div class="column-clock column-clock_per"><?= $val->finish_rate ?>%</div>
+                            <div class="column-clock column-clock_per"><?= $val->getProgressForDisplay() ?>%</div>
                         <?php } else if ($val->status == 7) { ?>
                             <div class="column-clock column-clock_per">成立</div>
                         <?php } else { ?>

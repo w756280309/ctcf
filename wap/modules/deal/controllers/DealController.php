@@ -31,7 +31,6 @@ class DealController extends Controller
             ->orderBy('recommendTime desc, sort asc, finish_rate desc, id desc')
             ->all();
         foreach ($deals as $key => $val) {
-            $val->finish_rate = number_format($val->finish_rate * 100, 0);
             $val->yield_rate = $val->yield_rate ? rtrim(rtrim(number_format(OnlineProduct::calcBaseRate($val->yield_rate, $val->jiaxi), 2), '0'), '.') : '0';
 
             if ($val->isFlexRate && null !== $val->rateSteps) {
