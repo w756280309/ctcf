@@ -359,3 +359,7 @@ a.active { border-bottom: 1px solid #f44336; /* 当前状态 */}
 .rate-steps {
     font-size: 17px !important;
 }
+/* 首页理财区图片格式 */
+.licai-img {
+    padding: 0 10px;
+}

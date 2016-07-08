@@ -13,7 +13,7 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/swiper.min.css?v=20160419', ['depe
 $this->registerJsFile(ASSETS_BASE_URI . 'js/swiper.min.js?v=20160419', ['depends' => 'yii\web\JqueryAsset', 'position' => 1]);
 $this->registerJsFile(ASSETS_BASE_URI . 'js/jquery.classyloader.js', ['depends' => 'yii\web\JqueryAsset', 'position' => 1]);
 $this->registerJsFile(ASSETS_BASE_URI . 'js/index.js?v=20160516', ['depends' => 'yii\web\JqueryAsset', 'position' => 3]);
-$this->registerCssFile(ASSETS_BASE_URI . 'css/index.css?v=20160419', ['depends' => 'wap\assets\WapAsset']);  //加载在depends之后
+$this->registerCssFile(ASSETS_BASE_URI . 'css/index.css?v=20160708', ['depends' => 'wap\assets\WapAsset']);  //加载在depends之后
 $this->registerCssFile(ASSETS_BASE_URI . 'css/first.css?v=20160509', ['depends' => 'wap\assets\WapAsset']);
 $this->registerCssFile(ASSETS_BASE_URI . 'css/kaipin.css', ['depends' => 'wap\assets\WapAsset']);
 
@@ -205,10 +205,14 @@ $(function() {
             <div class="col-xs-4 col-sm-5"></div>
         </div>
         <div style="clear: both;"></div>
-        <div class="row margin-add">
+<!--        <div class="row margin-add">
             <div class="col-xs-4 col-xs-offset-1 padding-clear"><a href="/deal/deal/index"><img src="<?= ASSETS_BASE_URI ?>images/type1.png?v=20160418" alt="温盈金" /></a> </div>
             <div class="col-xs-4 col-xs-offset-2 padding-clear"><a href="/deal/deal/index"><img src="<?= ASSETS_BASE_URI ?>images/type2.png?v=20160418" alt="温盈宝" /></a> </div>
-            <!--<div class="col-xs-4 padding-clear" id="wgt"><a href="/order/booking/detail?pid=1"><img src="<?= ASSETS_BASE_URI ?>images/type3.png" alt="温股投" /></a> </div>-->
+            <div class="col-xs-4 padding-clear" id="wgt"><a href="/order/booking/detail?pid=1"><img src="<?= ASSETS_BASE_URI ?>images/type3.png" alt="温股投" /></a> </div>
+        </div>-->
+        <div class="row licai-img">
+            <div class="col-xs-6 licai-img"><a href="/deal/deal/index"><img src="<?= ASSETS_BASE_URI ?>images/type5.jpg" alt="温盈金" /></a></div>
+            <div class="col-xs-6 licai-img"><a href="/deal/deal/index"><img src="<?= ASSETS_BASE_URI ?>images/type4.jpg" alt="温盈宝" /></a></div>
         </div>
     </div>
     <!-- 理财区 end -->
