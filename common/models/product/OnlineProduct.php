@@ -1,6 +1,7 @@
 <?php
 namespace common\models\product;
 
+use common\models\order\OnlineFangkuan;
 use common\models\order\OnlineOrder;
 use common\models\user\MoneyRecord;
 use common\models\user\User;
@@ -657,5 +658,9 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
         } else {
             return intval($this->finish_rate*100);
         }
+    }
+
+    public function getFangkuan(){
+        return $this->hasOne(OnlineFangkuan::class,['online_product_id'=> 'id']);
     }
 }

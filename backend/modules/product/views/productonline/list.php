@@ -104,8 +104,9 @@ $pc_cat = Yii::$app->params['pc_cat'];
                                         <td><?= $val['title'] ?></td>
                                         <td><?= $val['is_xs'] ? "新手标" : $pc_cat[$val['cid']] ?></td>
                                         <td>
-                                            <?= $val['expires'] ?>
-                                            <?= (1 === (int)$val['refund_method']) ? "天" : "个月" ?>
+                                            <?php $ex = $val->getDuration() ?>
+                                            <?= $ex['value'] ?>
+                                            <?= $ex['unit']?>
                                         </td>
                                         <td><?= doubleval(100*$val['yield_rate']) ?></td>
                                         <td><?= number_format($val['money'],2) ?></td>
@@ -128,10 +129,10 @@ $pc_cat = Yii::$app->params['pc_cat'];
                                             <?php if ($val['online_status'] == 1 && $val['status'] > 1){ ?>
                                             | <a href="/order/onlineorder/list?id=<?= $val['id'] ?>" class="btn mini green"><i class="icon-edit"></i> 投标记录</a>
                                             <?php } ?>
-                                            <?php if (($val['status'] == 5 || $val['status'] == 6) && $val['fstatus'] !== '3') { ?>
+                                            <?php if (($val['status'] == 5 || $val['status'] == 6) && $val->fangkuan->status !== '3') { ?>
                                             | <a href="/repayment/repayment?pid=<?= $val['id'] ?>" class="btn mini green"><i class="icon-edit"></i> 还款</a>
                                             <?php } ?>
-                                            <?php if (($val['fk_examin_time']) > 0 && ($val['status'] == 3 || $val['status'] == 7 || $val['fstatus'] === '3') && 1 === (int)$val['is_jixi']){ ?>
+                                            <?php if (($val['fk_examin_time']) > 0 && ($val['status'] == 3 || $val['status'] == 7 || $val->fangkuan->status === '3') && 1 === (int)$val['is_jixi']){ ?>
                                             | <a href="javascript:fk('<?= $val['id'] ?>');" class="btn mini green"><i class="icon-edit"></i> 放款</a>
                                             <?php } ?>
                                             <?php if ($val['online_status']==1&&(in_array($val['status'],[3,5,7]))&&$val['is_jixi']==0){ ?>

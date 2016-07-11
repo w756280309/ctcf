@@ -312,12 +312,9 @@ class ProductonlineController extends BaseController
         $request = Yii::$app->request->get();
 
         $op = OnlineProduct::tableName();
-        $of = \common\models\order\OnlineFangkuan::tableName();
-        $data = (new \yii\db\Query())
-            ->select("$op.*, $of.status as fstatus")
-            ->from($op)
-            ->leftJoin($of, "$op.id = $of.online_product_id")
-            ->where(array("$op.del_status" => 0));
+        $data = OnlineProduct::find()
+            ->joinWith('fangkuan')
+            ->where(['del_status' => 0]);
         if ($request['name']) {
             $data->andFilterWhere(['like', 'title', $request['name']]);
         }
@@ -329,7 +326,6 @@ class ProductonlineController extends BaseController
         $data->orderBy("recommendTime desc, $op.id desc");
         $pages = new Pagination(['totalCount' => $data->count(), 'pageSize' => '20']);
         $model = $data->offset($pages->offset)->limit($pages->limit)->all();
-
         return $this->render('list', [
                     'models' => $model,
                     'pages' => $pages,
