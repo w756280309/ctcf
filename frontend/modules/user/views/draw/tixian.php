@@ -66,7 +66,7 @@
     <p class="charge-explain-content">工作日内17:00之前申请提现，当日到账；工作日17:00之后申请提现，会在下一个工作日到账。如遇双休日或法定节假日顺延。</p>
     <p class="charge-explain-content">提现手续费每笔2元，由第三方资金托管平台收取；</p>
     <p class="charge-explain-content"> 特殊声明：禁止洗钱、信用卡套现、虚假交易等行为，一经发现并确认，将终止该账户的使用；</p>
-    <p class="charge-explain-content">如需咨询请联系客服400-101-5151 (周一至周日9:00-20:00，假日另行告知)。</p>
+    <p class="charge-explain-content">如需咨询请联系客服400-101-5151 (周一至周日8:30-20:00，假日另行告知)。</p>
 </div>
 </div>
 <script>

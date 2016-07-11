@@ -38,7 +38,7 @@ $this->registerCssFile('/css/useraccount/chargedeposit.css');
                 <input id="bank_name" type="hidden" name='BankCardUpdate[bankName]'>
                 <br>
                 <p class="error-ins error" id="error"></p>
-                <p class="error-ins">提示：绑定银行卡为快捷卡，将作为唯一充值、提现银行卡</p>
+                <p class="error-ins">提示：换卡请先咨询客服热线<?= Yii::$app->params['contact_tel'] ?></p>
             </div>
         </div>
         <input class="bind-btn" type="submit" value="更换">

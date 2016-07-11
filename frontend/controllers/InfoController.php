@@ -61,7 +61,7 @@ class InfoController extends Controller
             'tuoguan' => [
                 'title' => '开通资金托管结果',
                 'mainTitle' => '资金托管账户开通失败！',
-                'firstFuTitle' => '如有疑问，请联系客服，电话：400-101-5151(09:00-20:00)',
+                'firstFuTitle' => '如有疑问，请联系客服，电话：400-101-5151(8:30-20:00)',
                 'requireJump' => true,
                 'linkType' => 0,
                 'jumpReferWords' => '',
@@ -69,7 +69,7 @@ class InfoController extends Controller
             'touzi' => [
                 'title' => '购买结果',
                 'mainTitle' => '购买失败！',
-                'firstFuTitle' => '如有疑问，请联系客服，电话：400-101-5151(09:00-20:00)',
+                'firstFuTitle' => '如有疑问，请联系客服，电话：400-101-5151(8:30-20:00)',
                 'requireJump' => false,
                 'linkType' => 0,
                 'jumpReferWords' => '',
@@ -77,7 +77,7 @@ class InfoController extends Controller
             'bangka' => [
                 'title' => '绑卡结果',
                 'mainTitle' => '银行卡绑定失败！',
-                'firstFuTitle' => '如有疑问，请联系客服，电话：400-101-5151(09:00-20:00)',
+                'firstFuTitle' => '如有疑问，请联系客服，电话：400-101-5151(8:30-20:00)',
                 'requireJump' => false,
                 'linkType' => 0,
                 'jumpReferWords' => '',
@@ -85,7 +85,7 @@ class InfoController extends Controller
             'huanka' => [
                 'title' => '换卡结果',
                 'mainTitle' => '换卡申请提交失败！',
-                'firstFuTitle' => '如有疑问，请联系客服，电话：400-101-5151(09:00-20:00)',
+                'firstFuTitle' => '如有疑问，请联系客服，电话：400-101-5151(8:30-20:00)',
                 'requireJump' => false,
                 'linkType' => 0,
                 'jumpReferWords' => '',
@@ -93,7 +93,7 @@ class InfoController extends Controller
             'chongzhi' => [
                 'title' => '充值结果',
                 'mainTitle' => '充值失败！',
-                'firstFuTitle' => '如有疑问，请联系客服，电话：400-101-5151(09:00-20:00)',
+                'firstFuTitle' => '如有疑问，请联系客服，电话：400-101-5151(8:30-20:00)',
                 'linkType' => 0,
                 'jumpReferWords' => '',
                 'requireJump' => false,
@@ -101,7 +101,7 @@ class InfoController extends Controller
             'tixian' => [
                 'title' => '提现结果',
                 'mainTitle' => '提现失败！',
-                'firstFuTitle' => '如有疑问，请联系客服，电话：400-101-5151(09:00-20:00)',
+                'firstFuTitle' => '如有疑问，请联系客服，电话：400-101-5151(8:30-20:00)',
                 'requireJump' => false,
                 'linkType' => 0,
                 'jumpReferWords' => '',

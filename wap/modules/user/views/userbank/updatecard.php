@@ -9,7 +9,7 @@ $this->backUrl = '/user/userbank/mycard';
 <script src="<?= ASSETS_BASE_URI ?>js/bind.js"></script>
 
 <div class="row tishi">
-    <div class="col-xs-12">*绑定的银行卡必须为本人身份证办理</div>
+    <div class="col-xs-12">*换卡请先咨询客服热线<?= Yii::$app->params['contact_tel'] ?></div>
 </div>
 
 <div class="mask"></div>
@@ -64,6 +64,7 @@ $this->backUrl = '/user/userbank/mycard';
     <div class="row replacecard-tixin">
         <div class="col-xs-12">
             <div>*换卡提醒：</div>
+            <div>绑定的银行卡必须为本人身份证办理；</div>
             <div>若您的账户余额为0且没有在途资金，系统将在半小时以内自动审核换卡；否则需拨打客服热线<?= \Yii::$app->params['contact_tel'] ?>提交相关资料，提交资料后，进行2-5天的人工审核换卡；</div>
             <div>换卡申请期间不影响充值和提现。</div>
             <div>注：在途资金指有投资回款或提现冻结金额。</div>
