@@ -32,12 +32,9 @@ $(function(){
     },function(){
         $('.bankIcon-btn').css({background:'#f44336'});
     });
-    $('.bankIcon-btn').on('click',function(){
-        $('.bind-check').hide();
-        $('.bind-card').show();
-        $('.bank-mark').fadeOut();
-        $('.bankIcon-box').fadeOut();
-    });
+
+    $('.bankIcon-btn').on('click', selectOneBank);
+    $(".bank-li-box").on('dblclick', selectOneBank);
 
     $('#card_no').blur(function() {
         var card_no = $(this).val();
@@ -158,4 +155,12 @@ function error(desc)
     $('#card_no').addClass('error-border');
     $('#error').show();
     $('#error').html(desc);
+}
+
+function selectOneBank()
+{
+    $('.bind-check').hide();
+    $('.bind-card').show();
+    $('.bank-mark').fadeOut();
+    $('.bankIcon-box').fadeOut();
 }

@@ -57,7 +57,7 @@ $this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/chargedeposit.css');
     <h3 class="bankIcon-top">选择银行 <img class="close" src="<?= ASSETS_BASE_URI ?>images/login/close.png" alt=""></h3>
     <ul class="clearfix bankIcon-inner">
         <?php foreach ($banklist as $val) : ?>
-            <li data-img="<?= $val->bankId ?>" data-bank="<?= $val->bank->bankName ?>"><img src="<?= ASSETS_BASE_URI ?>images/banks/<?= $val->bankId ?>.jpg" alt=""></li>
+            <li class="bank-li-box" data-img="<?= $val->bankId ?>" data-bank="<?= $val->bank->bankName ?>"><img src="<?= ASSETS_BASE_URI ?>images/banks/<?= $val->bankId ?>.jpg" alt=""></li>
         <?php endforeach; ?>
     </ul>
     <div class="bankIcon-btn">确定</div>
