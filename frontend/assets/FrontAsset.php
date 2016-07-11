@@ -12,10 +12,10 @@ class FrontAsset extends AssetBundle
         'css/base.css',
     ];
     public $js = [
-        'js/jquery-1.8.3.min.js',
         'js/lib.js',
     ];
     public $depends = [
+        'yii\web\JqueryAsset',
     ];
     public $jsOptions = [
         'position' => 1,

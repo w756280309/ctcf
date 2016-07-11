@@ -37,7 +37,7 @@ $(function() {
             return false;
         }
 
-        subForm();
+        signup();
     });
 
     //60秒倒计时
@@ -207,7 +207,7 @@ function createSmscode(fun)
     });
 }
 
-function subForm()
+function signup()
 {
     var $form = $('#form');
     $('.resign-btn').attr('disabled', true);

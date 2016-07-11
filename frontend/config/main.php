@@ -31,23 +31,6 @@ return [
         'errorHandler' => [
             'errorAction' => 'page404/index',
         ],
-        'assetManager' => [
-            'bundles' => [
-                'yii\bootstrap\BootstrapAsset' => [
-                    'css' => [],
-                ],
-                'yii\bootstrap\BootstrapPluginAsset' => [
-                    'js' => [],
-                ],
-                'yii\web\JqueryAsset' => [
-                    'sourcePath' => '@app/assets',
-                    'js' => [
-                        'vendor/jquery/dist/jquery.min.js',
-                    ],
-                ],
-            ],
-
-        ],
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'enableCookieValidation' => false,

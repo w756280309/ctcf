@@ -8,7 +8,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/loginsign.css">
 
 <div class="row kongxi">
-    <?php $form = ActiveForm::begin(['id' => 'signup_form', 'action' => '/site/signup', 'options' => ['data-to' => '1']]); ?>
+    <?php $form = ActiveForm::begin(['id' => 'signup_form', 'action' => '/site/signup']); ?>
     <input name="_csrf" type="hidden" id="_csrf" value="<?= Yii::$app->request->csrfToken ?>">
     <input id="iphone" class="login-info" name="SignupForm[phone]" maxlength="11" type="tel"
            placeholder="请输入手机号">
@@ -42,8 +42,7 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
     <div class="col-xs-3"></div>
     <div class="col-xs-6 login-sign-btn">
-        <input id="signup-btn" class="btn-common btn-normal" name="signUp" type="button" value="注册"
-               onclick="subsignup()">
+        <input id="signup-btn" class="btn-common btn-normal" type="submit" value="注册">
     </div>
     <div class="col-xs-3"></div>
     <div class="col-xs-12" style="text-align: center;"><p>已有账号 <a href="/site/login" style="color: #f44336;">登录</a></p></div>
@@ -52,7 +51,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <!-- 注册页 end  -->
 
 <script>
-    function subsignup()
+    function validateForm()
     {
         $("#signup-btn").addClass("btn-press").removeClass("btn-normal");
 
@@ -120,9 +119,40 @@ $this->params['breadcrumbs'][] = $this->title;
             return false;
         }
 
-        subForm("#signup_form", "#signup-btn");
-        $("#signup-btn").removeClass("btn-press").addClass("btn-normal");
+        return true;
     }
+
+    function signup()
+    {
+        var $form = $('#signup_form');
+        $('#signup-btn').attr('disabled', true);
+
+        var xhr = $.post(
+            $form.attr('action'),
+            $form.serialize()
+        );
+
+        xhr.done(function(data) {
+            if (data.code) {
+                if ('undefined' !== typeof data.tourl) {
+                    toast(data.message, function() {
+                        location.href = data.tourl;
+                    });
+                } else if ('undefined' !== typeof data.message) {
+                    toast(data.message);
+                }
+            }
+
+            $("#signup-btn").removeClass("btn-press").addClass("btn-normal");
+            $('#signup-btn').attr('disabled', false);
+        });
+
+        xhr.fail(function() {
+            $("#signup-btn").removeClass("btn-press").addClass("btn-normal");
+            $('#signup-btn').attr('disabled', false);
+        });
+    }
+
     $(function () {
         $('input.login-info').focus(function () {
             $(this).css("color", "#000");
@@ -130,13 +160,21 @@ $this->params['breadcrumbs'][] = $this->title;
 
         $('input.login-info').blur(function () {
             $(this).css("color", "");
-            var loginInfo = $(this).val();
-            if (loginInfo == '') {
+        });
+
+        /* 提交表单 */
+        $('#signup_form').submit(function(e) {
+            e.preventDefault();
+
+            if (!validateForm()) {
+                return false;
             }
+
+            signup();
         });
 
         $(".login-eye img").on("click", function () {
-            if ($("#pass").attr("type") == "password") {
+            if ($("#pass").attr("type") === "password") {
                 $("#pass").attr("type", "text");
                 $(this).removeAttr("src", "<?= ASSETS_BASE_URI ?>images/eye-close.png");
                 $(this).attr({src: "<?= ASSETS_BASE_URI ?>images/eye-open.png", alt: "eye-open"});
@@ -148,7 +186,7 @@ $this->params['breadcrumbs'][] = $this->title;
         });
 
         $('#xieyi').bind('click', function () {
-            if ($(this).attr('checked') == 'checked') {
+            if ($(this).attr('checked') === 'checked') {
                 $(this).attr('checked', false);
             } else {
                 $(this).attr('checked', true);
@@ -178,7 +216,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
         function SetRemainTime()
         {
-            if (curCount == 0) {
+            if (curCount === 0) {
                 window.clearInterval(InterValObj);//停止计时器
                 $('#yzm').removeAttr("disabled");//启用按钮
                 $('#yzm').removeClass("yzm-disabled");
