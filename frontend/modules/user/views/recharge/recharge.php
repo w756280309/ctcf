@@ -5,8 +5,8 @@ use yii\web\View;
 use yii\helpers\Html;
 
 $this->title = '充值';
-$this->registerJsFile('/js/bootstrap-modal.js', ['position' => View::POS_END, 'depends' => \yii\web\JqueryAsset::className()]);
-$this->registerJsFile('/js/bootstrap-modalmanager.js', ['position' => View::POS_END, 'depends' => \yii\web\JqueryAsset::className()]);
+$this->registerJsFile('/js/bootstrap-modal.js', ['position' => View::POS_END, 'depends' => 'frontend\assets\FrontAsset']);
+$this->registerJsFile('/js/bootstrap-modalmanager.js', ['position' => View::POS_END, 'depends' => 'frontend\assets\FrontAsset']);
 
 $_js = <<<'JS'
 $(function() {
