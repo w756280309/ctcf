@@ -51,7 +51,7 @@ function mianmi()
 function alertMessage(message, url, reload)
 {
     var html = '<div class="mask" style="display: block"></div><div class="result-pop pop-open mianmi_message" style="display: block"><p class="result-pop-hender">提示<img class="close" id = "box_close" src="/images/login/close.png" alt="" style = "float: right;margin-top: 15px;margin-right: 15px;cursor: pointer;"></p> <p class="result-pop-content">' + message + '</p> ';
-    html = html + '<p class="result-pop-phone">如遇到问题请拨打我们的客服热线：400-101-5151(9:00~20:00)</p>';
+    html = html + '<p class="result-pop-phone">如遇到问题请拨打我们的客服热线：400-101-5151(8:30~20:00)</p>';
     html = html + ' <p><span class="link-confirm" id="mianmi_confirm">确定</span></p></div>';
     var mask = $('body .mask');
     var mianmi_message = $('body .mianmi_message');
