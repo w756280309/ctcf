@@ -178,8 +178,13 @@ function selectOneBank(dataImg, dataBank)
     $('#bank_id').val(dataImg);
     $('#bank_name').val(dataBank);
 
-    $('.bind-check').hide();
-    $('.bind-card').show();
+    if ($('.bankIcon-inner .border-red').length > 0){
+        $('.bind-check').hide();
+        $('.bind-card').show();
+    } else {
+        $('.bind-check').show();
+        $('.bind-card').hide();
+    }
     $('.bank-mark').fadeOut();
     $('.bankIcon-box').fadeOut();
 }
