@@ -91,7 +91,7 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/deal/buy.css');
                 });
                 xhr.always(function () {
                     allowSub = true;
-                    buy.val("确认购买");
+                    buy.html("确认购买");
                 })
             } else {
                 $('#err_message').show();
