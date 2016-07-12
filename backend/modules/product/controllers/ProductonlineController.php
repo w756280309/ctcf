@@ -71,11 +71,14 @@ class ProductonlineController extends BaseController
 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             $uids = LoanService::convertUid($model->allowedUids);
+            $finish_date = is_integer($model->finish_date) ? $model->finish_date : strtotime($model->finish_date);
+            $start_date = is_integer($model->start_date) ? $model->start_date : strtotime($model->start_date);
+            $end_date = is_integer($model->end_date) ? $model->end_date : strtotime($model->end_date);
 
             if (!empty($model->finish_date) && OnlineProduct::REFUND_METHOD_DAOQIBENXI === (int)$model->refund_method) {
                 //若截止日期不为空，重新计算项目天数
                 $pp = new ProductProcessor();
-                $model->expires = $pp->LoanTimes($model->start_date, null, strtotime($model->finish_date), 'd', true)['days'][1]['period']['days'];
+                $model->expires = $pp->LoanTimes(date('Y-m-d H:i:s', $start_date), null, $finish_date, 'd', true)['days'][1]['period']['days'];
             }
 
             if (null === $model->id) {
@@ -115,9 +118,9 @@ class ProductonlineController extends BaseController
                 $transaction = Yii::$app->db->beginTransaction();
 
                 $model->allowedUids = $uids;
-                $model->start_date = strtotime($model->start_date);
-                $model->end_date = strtotime($model->end_date);
-                $model->finish_date = $model->finish_date !== null ? strtotime($model->finish_date) : 0;
+                $model->start_date = $start_date;
+                $model->end_date = $end_date;
+                $model->finish_date = $model->finish_date ? $finish_date : 0;
                 $model->creator_id = Yii::$app->user->id;
                 $model->yield_rate = bcdiv($model->yield_rate, 100, 14);
                 $model->jixi_time = $model->jixi_time !== '' ? strtotime($model->jixi_time) : 0;

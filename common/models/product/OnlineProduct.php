@@ -234,14 +234,14 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
 
     public function checkDate()
     {
-        $start = strtotime($this->start_date);
-        $end = strtotime($this->end_date);
+        $start = is_integer($this->start_date) ? $this->start_date : strtotime($this->start_date);
+        $end = is_integer($this->end_date) ? $this->end_date : strtotime($this->end_date);
         if ($start > $end) {
             $this->addError('start_date', '募集开始时间小于募集结束时间小于项目结束日');
             $this->addError('end_date', '募集开始时间小于募集结束时间小于项目结束日');
         }
         if (null !== $this->finish_date && '' !== $this->finish_date && 0 !== $this->finish_date) {
-            $finish = strtotime($this->finish_date);
+            $finish = is_integer($this->finish_date) ? $this->finish_date : strtotime($this->finish_date);
             if ($start > $finish) {
                 $this->addError('start_date', '募集开始时间小于募集结束时间小于项目结束日');
                 $this->addError('finish_date', '募集开始时间小于募集结束时间小于项目结束日');

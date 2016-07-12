@@ -72,6 +72,8 @@ $tpl2 = <<<TPL
     </div>
 </div>
 TPL;
+
+$is_online = in_array($model->status, [2, 3, 4, 5, 6, 7]);//判断标的是否已经上线
 ?>
 <?php $this->beginBlock('blockmain'); ?>
 
@@ -123,8 +125,16 @@ TPL;
                 <div class="control-group">
                     <label class="control-label">项目名称<span style="color: red;">(<?= $desc ?>)</span></label>
                     <div class="controls">
+                        <?php
+
+                            if ($is_online) {
+                                $title_input_options = ['disabled' => 'disabled'];
+                            } else {
+                                $title_input_options = [];
+                            }
+                        ?>
                         <?=
-                            $form->field($model, 'title', ['template' => '{input}{error}', 'inputOptions' => ['autocomplete' => 'off', 'placeholder' => '项目名称', 'maxLength' => 32]])->textInput(['class' => 'm-wrap span12'])
+                            $form->field($model, 'title', ['template' => '{input}{error}', 'inputOptions' => ['autocomplete' => 'off', 'placeholder' => '项目名称', 'maxLength' => 32, 'class' => 'm-wrap span12']])->textInput($title_input_options)
                         ?>
                     </div>
                 </div>
@@ -207,8 +217,15 @@ TPL;
                 <div class="control-group">
                     <label class="control-label">募集金额<span style="color: red;">(<?= $desc ?>)</span></label>
                     <div class="controls">
+                        <?php
+                        if ($is_online) {
+                            $money_input_options = ['disabled' => 'disabled'];
+                        } else {
+                            $money_input_options = [];
+                        }
+                        ?>
                         <?=
-                        $form->field($model, 'money', ['template' => '<div class="input-prepend input-append"><span class="add-on">￥</span>{input}<span class="add-on">元</span> </div>{error}', 'inputOptions' => ['autocomplete' => 'off', 'placeholder' => '募集金额']])->textInput(['class' => 'm-wrap span12'])
+                        $form->field($model, 'money', ['template' => '<div class="input-prepend input-append"><span class="add-on">￥</span>{input}<span class="add-on">元</span> </div>{error}', 'inputOptions' => ['autocomplete' => 'off', 'placeholder' => '募集金额', 'class' => 'm-wrap span12']])->textInput($money_input_options)
                         ?>
                     </div>
                 </div>
@@ -221,12 +238,17 @@ TPL;
                 <div class="control-group">
                     <label class="control-label">募集开始时间<span style="color: red;">(<?= $desc ?>)</span></label>
                     <div class="controls">
+                        <?php
+                            $start_date_input_option = ['autocomplete' => 'off', 'placeholder' => '募集开始时间'];
+                            if ($is_online) {
+                                $start_date_input_option = array_merge($start_date_input_option, ['disabled' => 'disabled']);
+                            }
+                        ?>
                         <?=
                         $form->field($model, 'start_date', [
                             'template' => '<div class="input-append date form_datetime">{input}<span class="add-on" onclick="WdatePicker({el:\'onlineproduct-start_date\',dateFmt:\'yyyy-MM-dd HH:mm\',minDate:\''.date('Y-m-d').'\'});"><i class="icon-calendar"></i></span></div>{error}',
-                            'inputOptions' => ['autocomplete' => 'off', 'placeholder' => '募集开始时间']
+                            'inputOptions' => $start_date_input_option
                             ])->textInput([
-                                'readonly' => 'readonly',
                                 'class' => 'm-wrap span12',
                                 'value' => $model->start_date ? Yii::$app->formatter->asDatetime($model->start_date, 'php:Y-m-d H:i') : '',
                                 'onclick' => 'WdatePicker({dateFmt:"yyyy-MM-dd HH:mm",minDate:\''.date('Y-m-d').'\'});'
@@ -245,7 +267,6 @@ TPL;
                             'template' => '<div class="input-append date form_datetime">{input}<span class="add-on" onclick="WdatePicker({el:\'onlineproduct-end_date\',dateFmt:\'yyyy-MM-dd HH:mm\',minDate:\''.date('Y-m-d').'\'});"><i class="icon-calendar"></i></span></div>{error}',
                             'inputOptions' => ['autocomplete' => 'off', 'placeholder' => '募集结束时间']
                             ])->textInput([
-                                'readonly' => 'readonly',
                                 'class' => 'm-wrap span12',
                                 'value' =>  $model->end_date ? Yii::$app->formatter->asDatetime($model->end_date, 'php:Y-m-d H:i') : '',
                                 'onclick' => 'WdatePicker({dateFmt:"yyyy-MM-dd HH:mm",minDate:\''.date('Y-m-d').'\'});'
@@ -294,10 +315,16 @@ TPL;
                 <div class="control-group">
                     <label class="control-label">产品到期日<span style="color: red;">(<?= $desc ?>)</span></label>
                     <div class="controls">
+                        <?php
+                            $fd_input_option = ['autocomplete' => 'off', 'placeholder' => '产品到期日'];
+                            if (!$model->is_fdate || $is_online){
+                                $fd_input_option = array_merge($fd_input_option, ['disabled' => 'disabled']);
+                            }
+                        ?>
                         <?=
                         $form->field($model, 'finish_date', [
                             'template' => '<div class="input-append date form_datetime">{input}<span class="add-on" onclick="WdatePicker({el:\'onlineproduct-finish_date\',dateFmt:\'yyyy-MM-dd HH:mm\',minDate:\''.date('Y-m-d').'\'});"><i class="icon-calendar"></i></span></div>{error}',
-                            'inputOptions' => ['autocomplete' => 'off', 'placeholder' => '产品到期日', 'disabled' => 'disabled']
+                            'inputOptions' => $fd_input_option
                             ])->textInput([
                                 //'readonly' => 'readonly',
                                 'class' => 'm-wrap span12',
@@ -306,7 +333,7 @@ TPL;
                                 ])
                         ?>
                         <?=
-                        $form->field($model, 'is_fdate', ['template' => '{input}'])->checkbox(['autocomplete' => 'on']);
+                        $form->field($model, 'is_fdate', ['template' => '{input}', 'inputOptions' => ['autocomplete' => 'on']])->checkbox();
                         ?>
                     </div>
                 </div>
@@ -328,8 +355,14 @@ TPL;
                 <div class="control-group">
                     <label class="control-label">融资用户<span style="color: red;">(<?= $desc ?>)</span></label>
                     <div class="controls">
+                        <?php
+                            $borrow_uid_input_option = ['autocomplete' => 'off', 'class' => 'chosen-with-diselect span6'];
+                            if ($is_online) {
+                                $borrow_uid_input_option = array_merge($borrow_uid_input_option, ['disabled' => 'disabled']);
+                            }
+                        ?>
                         <?=
-                        $form->field($model, 'borrow_uid', ['template' => '{input}{error}', 'inputOptions' => ['autocomplete' => 'off', 'class' => 'chosen-with-diselect span6']])->dropDownList($rongziInfo, [0 => '--请选择--'])
+                        $form->field($model, 'borrow_uid', ['template' => '{input}{error}', 'inputOptions' => $borrow_uid_input_option])->dropDownList($rongziInfo, [0 => '--请选择--'])
                         ?>
                     </div>
                 </div>
