@@ -222,7 +222,7 @@ function signup()
             ga('send', {
                 hitType: 'event',
                 eventCategory: 'reg',
-                eventAction: 'm',
+                eventAction: 'pc',
                 hitCallback: function() {
                     location.href = data.tourl;
                 }
