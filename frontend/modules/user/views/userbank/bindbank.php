@@ -2,7 +2,7 @@
 $this->title = '绑定银行卡';
 
 $this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/bindcard.css', ['depends' => 'frontend\assets\FrontAsset']);
-$this->registerJsFile(ASSETS_BASE_URI.'js/useraccount/bindcard.js', ['depends' => 'frontend\assets\FrontAsset']);
+$this->registerJsFile(ASSETS_BASE_URI.'js/useraccount/bindcard.js?v=20160711', ['depends' => 'frontend\assets\FrontAsset']);
 $this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/chargedeposit.css');
 ?>
 

@@ -1,44 +1,56 @@
-$(function(){
-   $('.bind-check a').on('click',function(){
-       $('.bank-mark').fadeIn();
-       $('.bankIcon-box').fadeIn();
-   });
-    $('.bind-card').on('click',function(){
+$(function() {
+    $('.bind-check a').on('click', function() {
         $('.bank-mark').fadeIn();
         $('.bankIcon-box').fadeIn();
     });
-    $('.close').on('click',function(){
+
+    $('.bind-card').on('click', function() {
+        $('.bank-mark').fadeIn();
+        $('.bankIcon-box').fadeIn();
+    });
+
+    /*
+     * 关闭窗口
+     */
+    $('.close').on('click', function() {
         $('.bank-mark').fadeOut();
         $('.bankIcon-box').fadeOut();
     });
-    $('.bankIcon-inner li').on('click',function(){
-        var index= $('.bankIcon-inner li').index(this);
+
+    /*
+     * 选择银行
+     */
+    var dataImg, dataBank;
+    $('.bankIcon-inner li').on('click', function() {
+        var index = $('.bankIcon-inner li').index(this);
         $('.bankIcon-inner li').removeClass('border-red');
         $('.bankIcon-inner li').eq(index).addClass('border-red');
-        var dataImg=$('.bankIcon-inner li').eq(index).attr('data-img');
-        var dataBank=$('.bankIcon-inner li').eq(index).attr('data-bank');
-        $('.bind-icon img')[0].src='/images/useraccount/bankicon/'+dataImg+'.png';
-        $('.bind-bank').html(dataBank);
-        $('#bank_id').val(dataImg);
-        $('#bank_name').val(dataBank);
-    });
-    $('.bind-btn').hover(function(){
-        $('.bind-btn').css({background:'#f41c11'});
-    },function(){
-        $('.bind-btn').css({background:'#f44336'});
-    });
-    $('.bankIcon-btn').hover(function(){
-        $('.bankIcon-btn').css({background:'#f41c11'});
-    },function(){
-        $('.bankIcon-btn').css({background:'#f44336'});
+        dataImg = $('.bankIcon-inner li').eq(index).attr('data-img');
+        dataBank = $('.bankIcon-inner li').eq(index).attr('data-bank');
     });
 
-    $('.bankIcon-btn').on('click', selectOneBank);
-    $(".bank-li-box").on('dblclick', selectOneBank);
+    $('.bind-btn').hover(function() {
+        $('.bind-btn').css({background: '#f41c11'});
+    }, function() {
+        $('.bind-btn').css({background: '#f44336'});
+    });
+
+    $('.bankIcon-btn').hover(function() {
+        $('.bankIcon-btn').css({background: '#f41c11'});
+    }, function() {
+        $('.bankIcon-btn').css({background: '#f44336'});
+    });
+
+    $('.bankIcon-btn').on('click', function() {
+        selectOneBank(dataImg, dataBank);
+    });
+    $(".bank-li-box").on('dblclick', function() {
+        selectOneBank(dataImg, dataBank);
+    });
 
     $('#card_no').blur(function() {
         var card_no = $(this).val();
-        if(card_no === '') {
+        if (card_no === '') {
             $('.bind-card').hide();
             $('.bind-check').show();
             $('#bank_id').val('');
@@ -47,8 +59,8 @@ $(function(){
             return false;
         }
 
-        $.get("/user/userbank/checkbank", {card: card_no}, function (result) {
-            if(result.code !== 0) {
+        $.get("/user/userbank/checkbank", {card: card_no}, function(result) {
+            if (result.code !== 0) {
                 $('.bind-card').hide();
                 $('.bind-check').show();
                 error(result.message);
@@ -58,23 +70,22 @@ $(function(){
                 return false;
             }
 
-            if(result['bank_id'] !== '') {
+            if (result['bank_id'] !== '') {
                 $('#bank_id').val(result['bank_id']);
                 $('#bank_name').val(result['bank_name']);
             }
 
-            if(result['bank_name'] === '') {
+            if (result['bank_name'] === '') {
                 $('#bank_id').val('');
                 $('#bank_name').val('');
 
                 return false;
             } else {
-                $('.bind-icon img')[0].src='/images/useraccount/bankicon/'+result['bank_id']+'.png';
+                $('.bind-icon img')[0].src = '/images/useraccount/bankicon/' + result['bank_id'] + '.png';
                 $('.bind-bank').html(result['bank_name']);
                 $('.bind-check').hide();
                 $('.bind-card').show();
             }
-
         });
     });
 
@@ -124,28 +135,31 @@ function subForm()
     var xhr = $.ajax({
         url: $form.attr('action'),
         data: $form.serialize(),
-        type:'POST',
-        async:false
+        type: 'POST',
+        async: false
     });
 
-    xhr.done(function (data) {
-        var w =  window.open(data.next);
+    xhr.done(function(data)
+    {
+        var w = window.open(data.next);
         var url = data.next;
         if (url && !w) {
             location.href = url;
-        } else if(url && w) {
+        } else if (url && w) {
             alertMessage('请在新打开的联动优势页面进行绑卡，绑卡完成前不要关闭该窗口。', '/user/userbank/mybankcard');
         }
     });
 
-    xhr.fail(function (jqXHR) {
+    xhr.fail(function(jqXHR)
+    {
         var errMsg = jqXHR.responseText ? $.parseJSON(jqXHR.responseText).message
-            : '未知错误，请刷新重试或联系客服';
+                : '未知错误，请刷新重试或联系客服';
 
         error(errMsg);
     });
 
-    xhr.always(function () {
+    xhr.always(function()
+    {
         $form.data('submitting', false);
     });
 }
@@ -157,8 +171,13 @@ function error(desc)
     $('#error').html(desc);
 }
 
-function selectOneBank()
+function selectOneBank(dataImg, dataBank)
 {
+    $('.bind-icon img')[0].src = '/images/useraccount/bankicon/' + dataImg + '.png';
+    $('.bind-bank').html(dataBank);
+    $('#bank_id').val(dataImg);
+    $('#bank_name').val(dataBank);
+
     $('.bind-check').hide();
     $('.bind-card').show();
     $('.bank-mark').fadeOut();

@@ -4,7 +4,7 @@
     }
 </style>
 
-<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/login/login_pop.css?v=20160708"/>
+<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/login/login_pop.css?v=20160711"/>
 
 <div class="login-mark" style="display: none;"></div>
 <div class="loginUp-box" style="display: none;">
@@ -138,10 +138,6 @@
     });
 
     $(function () {
-        var lH=$('.loginUp-box').height()/2;
-
-        $('.loginUp-box').css({marginTop:-lH});
-
         $('.loginUp-btn').hover(function(){
             $('.loginUp-btn').css({background:'#f41c11'});
         },function(){
