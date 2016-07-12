@@ -91,5 +91,8 @@ return [
         'coupon' => [
             'class' => 'backend\modules\coupon\Module',
         ],
+        'adminupload' => [
+            'class' => 'backend\modules\adminupload\Module',
+        ],
     ],
 ];
