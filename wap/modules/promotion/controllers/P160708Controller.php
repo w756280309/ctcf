@@ -25,17 +25,14 @@ class P160708Controller extends Controller
     {
         $this->layout = false;
 
-        $model = RankingPromo::findOne(['key' => self::PROMOKEY]);
+        $model = $this->findOr404(RankingPromo::class, ['key' => self::PROMOKEY]);
 
         if (!Yii::$app->user->isGuest) {
             //初始化用户机会
-            $promoConfig = RankingPromo::find()->where(['key' => 'PC_LAUNCH_160707'])->one();
-            if ($promoConfig) {
-                $time = time();
-                $promo = new Promo160707($promoConfig);
-                if ($time > $promo->startAt && $time < $promo->endAt) {
-                    $promo->initTicket(Yii::$app->user->identity);
-                }
+            $promo = new Promo160707($model);
+
+            if (date('Y-m-d') >= date('Y-m-d', $promo->startAt) && date('Y-m-d') <= date('Y-m-d', $promo->endAt)) {
+                $promo->initTicket($this->getAuthedUser());
             }
 
             $drawNum = $this->getDrawNum();
@@ -51,7 +48,8 @@ class P160708Controller extends Controller
      */
     public function actionDraw()
     {
-        $rank = RankingPromo::findOne(['key' => self::PROMOKEY]);
+        $rank = $this->findOr404(RankingPromo::class, ['key' => self::PROMOKEY]);
+
         if (date('Y-m-d', $rank->startAt) > date('Y-m-d')) {
             return ['code' => 102, 'msg' => '活动还未开始！'];
         }
@@ -70,7 +68,6 @@ class P160708Controller extends Controller
         }
 
         $user = $this->getAuthedUser();
-        $drawConfig = Promo160707::getDrawConfig();
         $transaction = Yii::$app->db->beginTransaction();
 
         try {
@@ -84,24 +81,18 @@ class P160708Controller extends Controller
                         throw new \Exception('发奖失败');
                     }
                 } else {
-                    $promoConfig = RankingPromo::find()->where(['key' => 'PC_LAUNCH_160707'])->one();
-                    if ($promoConfig) {
-                        $p = new Promo160707($promoConfig);
-                        $time = time();
-                        if ($time > $p->startAt && $time < $p->endAt) {
-                            $drawId = $p->drawReward($user);
-                            $ticket = $this->draw($user->id, $drawId, self::PROMOKEY);
-                            if ($this->rewardPrize($user, $ticket)) {
-                                $transaction->commit();
-                                return $this->getBackInfo($drawId);
-                            } else {
-                                throw new \Exception('发奖失败');
-                            }
-                        }
+                    $p = new Promo160707($rank);
+                    $drawId = $p->drawReward($user);
+                    $ticket = $this->draw($user->id, $drawId, self::PROMOKEY);
+                    if ($this->rewardPrize($user, $ticket)) {
+                        $transaction->commit();
+                        return $this->getBackInfo($drawId);
+                    } else {
+                        throw new \Exception('发奖失败');
                     }
                 }
             } else {
-                if (0 === $drawNum['yichou']) {
+                if (0 === $drawNum['yichou']) {    //未投资用户首次必中28元券
                     $ticket = $this->draw($user->id, 1, self::PROMOKEY);
                     if ($this->rewardPrize($user, $ticket)) {
                         $transaction->commit();
@@ -109,15 +100,7 @@ class P160708Controller extends Controller
                     } else {
                         throw new \Exception('发奖失败');
                     }
-                } elseif (1 === $drawNum['yichou']) {
-                    $ticket = $this->draw($user->id, 7, self::PROMOKEY);
-                    if ($this->rewardPrize($user, $ticket)) {
-                        $transaction->commit();
-                        return $this->getBackInfo(7);
-                    } else {
-                        throw new \Exception('发奖失败');
-                    }
-                } elseif (2 === $drawNum['yichou']) {
+                } elseif (1 === $drawNum['yichou']) {     //第二次必中50元券
                     $ticket = $this->draw($user->id, 2, self::PROMOKEY);
                     if ($this->rewardPrize($user, $ticket)) {
                         $transaction->commit();
@@ -125,11 +108,11 @@ class P160708Controller extends Controller
                     } else {
                         throw new \Exception('发奖失败');
                     }
-                } elseif (3 === $drawNum['yichou']) {
-                    $ticket = $this->draw($user->id, 8, self::PROMOKEY);
+                } elseif (2 === $drawNum['yichou']) {     //第三次必中90元券
+                    $ticket = $this->draw($user->id, 3, self::PROMOKEY);
                     if ($this->rewardPrize($user, $ticket)) {
                         $transaction->commit();
-                        return $this->getBackInfo(8);
+                        return $this->getBackInfo(3);
                     } else {
                         throw new \Exception('发奖失败');
                     }
@@ -140,7 +123,6 @@ class P160708Controller extends Controller
         } catch(\Exception $ex) {
             $transaction->rollBack();
             throw $ex;
-            //return $this->getBackInfo(0);
         }
     }
 

@@ -4,7 +4,6 @@ namespace wap\modules\promotion\promo;
 
 use common\models\order\OnlineOrder;
 use common\models\product\OnlineProduct;
-use Yii;
 use common\models\user\User;
 use wap\modules\promotion\models\RankingPromo as Promo;
 use yii\web\NotFoundHttpException;
