@@ -42,7 +42,7 @@ class UploadController extends BaseController
             $model = new Upload();
             //去除首次显示错误
             if (!empty(Yii::$app->request->post())) {
-                if (!isset($_FILES['upload']['tmp_name']['link']) || '' === $_FILES['upload']['tmp_name']['link']) {
+                if (!isset($_FILES['Upload']['tmp_name']['link']) || '' === $_FILES['Upload']['tmp_name']['link']) {
                     $model->addError("link", "图片不能为空");
                 }
             }
