@@ -84,7 +84,7 @@ class UserStats
             $data[$key]['created_at'] = date('Y-m-d H:i:s', $val['created_at']);
             $data[$key]['name'] = $val['real_name'];
             $data[$key]['mobile'] = $val['mobile'] . "\t";   //手机号后面加入tab键,防止excel表格打开时,显示为科学计数法
-            $data[$key]['idcard'] = StringUtils::obfsIdCardNo($val['idcard']);    //隐藏身份证号信息,只保留生日信息
+            $data[$key]['idcard'] = $val['idcard'] ? substr($val['idcard'], 0, 14) . '****' : '';    //隐藏身份证号信息,显示前14位
             $data[$key]['idcard_status'] = $val['idcard_status'];
             $data[$key]['mianmiStatus'] = $val['mianmiStatus'];
 
