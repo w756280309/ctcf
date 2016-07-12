@@ -316,6 +316,10 @@ class ProductonlineController extends BaseController
 
         $op = OnlineProduct::tableName();
         $data = OnlineProduct::find()
+            ->select("$op.*")
+            ->addSelect(['isrecommended'=>'if(`online_status`=1 && `isPrivate`=0, `recommendTime`, 0)'])
+            ->addSelect(['effect_jixi_time'=>'if(`is_jixi`=1, `jixi_time`, 0)'])
+            ->addSelect(['product_status'=>"(case $op.`status` when 4 then 7 when 7 then 4 else $op.`status` end)"])
             ->joinWith('fangkuan')
             ->where(['del_status' => 0]);
         if ($request['name']) {
@@ -326,8 +330,10 @@ class ProductonlineController extends BaseController
         } elseif ($request['status']) {
             $data->andWhere(['online_status' => OnlineProduct::STATUS_ONLINE, "$op.status" => $request['status']]);
         }
-        $data->orderBy("recommendTime desc, $op.id desc");
-        $pages = new Pagination(['totalCount' => $data->count(), 'pageSize' => '20']);
+        $_data = clone $data;
+
+        $data->orderBy("isrecommended desc, online_status asc, product_status asc,effect_jixi_time desc,sn desc");
+        $pages = new Pagination(['totalCount' => $_data->count(), 'pageSize' => '20']);
         $model = $data->offset($pages->offset)->limit($pages->limit)->all();
         return $this->render('list', [
                     'models' => $model,
