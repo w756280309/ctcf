@@ -9,20 +9,21 @@
     if ($type === 'adv' && isset($_FILES['Filedata']['tmp_name']) && '' !== $_FILES['Filedata']['tmp_name']) {
         $shebei = $_GET['shebei'];
         if (!in_array($shebei, ['wap', 'pc'])) {
-            echo "参数错误!";
-            exit;
+            exit("参数错误!");
+        }
+
+        if ($_FILES['Filedata']['size'] > 2097152) {
+            exit('图片大小应小于2MB!');
         }
 
         $imageSize = getimagesize($_FILES['Filedata']['tmp_name']);
 
         if ('wap' === $shebei && $imageSize[1] !== 350 && $imageSize[0] !== 750) {
-            echo "图片尺寸应为：宽750px，高350px!";
-            exit;
+            exit("图片尺寸应为：高350px，宽750px!");
         }
 
         if ('pc' === $shebei && $imageSize[1] !== 340 && $imageSize[0] !== 1920) {
-            echo "图片尺寸应为：宽1920px，高340px!";
-            exit;
+            exit("图片尺寸应为：高340px，宽1920px!");
         }
     }
 
@@ -37,7 +38,6 @@
             echo "ERROR:invalid upload";
             exit(0);
     }
-
 
     if (!isset($_SESSION["file_info"])) {
             $_SESSION["file_info"] = array();

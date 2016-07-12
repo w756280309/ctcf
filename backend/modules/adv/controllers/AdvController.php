@@ -2,16 +2,12 @@
 
 namespace backend\modules\adv\controllers;
 
-use Yii;
-use common\models\adv\Adv;
-use yii\web\NotFoundHttpException;
-use yii\data\Pagination;
 use backend\controllers\BaseController;
+use common\models\adv\Adv;
+use Yii;
+use yii\data\Pagination;
 use yii\web\Response;
 
-/**
- * OrderController implements the CRUD actions for OfflineOrder model.
- */
 class AdvController extends BaseController
 {
     public function init()
@@ -43,7 +39,7 @@ class AdvController extends BaseController
     }
 
     /**
-     * 首页轮播图的添加
+     * 首页轮播图的添加.
      */
     public function actionEdit($id = null)
     {
@@ -53,7 +49,7 @@ class AdvController extends BaseController
             $model->scenario = 'update';
         } else {
             $model->scenario = 'create';
-            $model->creator_id = Yii::$app->user->id;
+            $model->creator_id = $this->getAuthedUser()->id;
             $model->sn = Adv::create_code();
         }
 
@@ -103,7 +99,7 @@ class AdvController extends BaseController
         if (!empty($id) && ($model = Adv::findOne($id)) !== null) {
             return $model;
         } else {
-            throw new NotFoundHttpException('The requested page does not exist.');
+            throw $this->ex404();
         }
     }
 

@@ -79,7 +79,7 @@ $this->registerJsFile('/js/swfupload/handlers.js', ['depends' => 'yii\web\YiiAss
             <div class="control-group">
                 <label class="control-label">上传图片</label>
                 <div class="controls">
-                    <?= $form->field($model, 'image', ['template' => '{input}'])->hiddenInput(['id' => "hidimage"]) ?>
+                    <?= $form->field($model, 'image', ['template' => '{input}'])->hiddenInput() ?>
                     <div style="width: 180px; height: 18px; border: solid 1px #7FAAFF; background-color: #C5D9FF; padding: 2px;">
                         <span id="spanButtonPlaceholder_baoli"></span>
                     </div>
@@ -122,102 +122,109 @@ $this->registerJsFile('/js/swfupload/handlers.js', ['depends' => 'yii\web\YiiAss
             <?php $form->end(); ?>
         </div>
     </div>
-    <script type="text/javascript">
-        var swfu;
-        var swfu_baoli;
-        var swfu_gongguan;
-        window.onload = function()
-        {
-            var shebei = 'wap';
+</div>
 
-            if ('1' === $('#shebei').val()) {
-                shebei = 'pc';
-            }
-
-            swfu_baoli = new SWFUpload({
-                // Backend Settings
-                upload_url: "/js/swfupload/upload_baoli.php?type=adv&shebei="+shebei,
-                post_params: {"PHPSESSID": "<?= rand(time(), time() + time()) ?>"},
-                file_size_limit: "2 MB",
-                file_types: "*.jpg;",
-                file_types_description: "JPG Images;",
-                file_upload_limit: 1,
-                swfupload_preload_handler: preLoad,
-                swfupload_load_failed_handler: loadFailed,
-                file_queue_error_handler: fileQueueError,
-                file_dialog_complete_handler: fileDialogComplete,
-                upload_progress_handler: uploadProgress,
-                upload_error_handler: uploadError,
-                upload_success_handler: uploadSuccess,
-                upload_complete_handler: uploadComplete,
-                button_image_url: "/js/swfupload/SmallSpyGlassWithTransperancy_17x18.png",
-                button_placeholder_id: "spanButtonPlaceholder_baoli",
-                button_width: 180,
-                button_height: 18,
-                button_text: '<span class="button">选择图片 <span class="buttonSmall">(2 MB Max)</span></span>',
-                button_text_style: '.button { font-family: Helvetica, Arial, sans-serif; font-size: 12pt; } .buttonSmall { font-size: 10pt; }',
-                button_text_top_padding: 0,
-                button_text_left_padding: 18,
-                button_window_mode: SWFUpload.WINDOW_MODE.TRANSPARENT,
-                button_cursor: SWFUpload.CURSOR.HAND,
-                flash_url: "/js/swfupload/swfupload.swf",
-                flash9_url: "/js/swfupload/swfupload_fp9.swf",
-                custom_settings:
-                {
-                    upload_target: "divFileProgressContainer_baoli",
-                },
-                debug: false
-            });
-        };
-
-        function delimg(id, img, obj)
-        {
-            var status = confirm("是否确定删除！");
-            if (status)
+<script type="text/javascript">
+    var swfu;
+    var swfu_baoli;
+    var swfu_gongguan;
+    window.onload = function()
+    {
+        swfu_baoli = new SWFUpload({
+            // Backend Settings
+            upload_url: "/js/swfupload/upload_baoli.php?type=adv&shebei=<?= $model->showOnPc ? 'pc' : 'wap' ?>",
+            post_params: {"PHPSESSID": "<?= rand(time(), time() + time()) ?>"},
+            file_size_limit: "2 MB",
+            file_types: "*.jpg;",
+            file_types_description: "JPG Images;",
+            file_upload_limit: 1,
+            swfupload_preload_handler: preLoad,
+            swfupload_load_failed_handler: loadFailed,
+            file_queue_error_handler: fileQueueError,
+            file_dialog_complete_handler: fileDialogComplete,
+            upload_progress_handler: uploadProgress,
+            upload_error_handler: uploadError,
+            upload_success_handler: uploadSuccess,
+            upload_complete_handler: uploadComplete,
+            button_image_url: "/js/swfupload/SmallSpyGlassWithTransperancy_17x18.png",
+            button_placeholder_id: "spanButtonPlaceholder_baoli",
+            button_width: 180,
+            button_height: 18,
+            button_text: '<span class="button">选择图片 <span class="buttonSmall">(2 MB Max)</span></span>',
+            button_text_style: '.button { font-family: Helvetica, Arial, sans-serif; font-size: 12pt; } .buttonSmall { font-size: 10pt; }',
+            button_text_top_padding: 0,
+            button_text_left_padding: 18,
+            button_window_mode: SWFUpload.WINDOW_MODE.TRANSPARENT,
+            button_cursor: SWFUpload.CURSOR.HAND,
+            flash_url: "/js/swfupload/swfupload.swf",
+            flash9_url: "/js/swfupload/swfupload_fp9.swf",
+            custom_settings:
             {
-                $.get("/adv/adv/imgdel", {img: img, id: id}, function(data)
-                {
-                    if (data)
-                    {
-                        $(obj).parent().find('img').detach();
-                        var stats = swfu_baoli.getStats();
-                                        stats.successful_uploads--;
-                                        swfu_baoli.setStats(stats);
-                        alert("成功删除");
-                    }
-                });
-            }
-        }
-
-        $(function() {
-            $('.ajax_button').click(function() {
-                vals = $("#adv_form").serialize();
-                $.post($("#adv_form").attr("action"), vals, function(data)
-                {
-                    res(data, "/adv/adv/index");
-                });
-            })
-
-            if ('1' === $('#shebei').val()) {
-                $('#app').hide();
-            }
-
-            $('#shebei').on('change', function() {
-                var v = $(this).val();
-                var deviceName;
-                if ('1' === v) {
-                    deviceName = 'pc';
-                    $('#app').hide();
-                    $('#isDisabledInApp').val('');
-                    $('#notice').html('图片大小不超过2M，只限于jpg格式图片，并且大小限定为：高340px，宽1920px');
-                } else {
-                    deviceName = 'wap';
-                    $('#app').show();
-                    $('#notice').html('图片大小不超过2M，只限于jpg格式图片，并且大小限定为：高350px，宽750px');
-                }
-
-                swfu_baoli.setUploadURL("/js/swfupload/upload_baoli.php?type=adv&shebei="+deviceName);
-            })
+                upload_target: "divFileProgressContainer_baoli",
+            },
+            debug: false
         });
-    </script>
+    };
+
+    function delimg(id, img, obj)
+    {
+        var status = confirm("是否确定删除！");
+        if (status)
+        {
+            $.get("/adv/adv/imgdel", {img: img, id: id}, function(data)
+            {
+                if (data)
+                {
+                    del();
+                    alert("成功删除");
+                }
+            });
+        }
+    }
+
+    $(function() {
+        $('.ajax_button').click(function() {
+            vals = $("#adv_form").serialize();
+            $.post($("#adv_form").attr("action"), vals, function(data)
+            {
+                res(data, "/adv/adv/index");
+            });
+        });
+
+        notice();
+
+        $('#shebei').on('change', function() {
+            var deviceName = notice();
+            swfu_baoli.setUploadURL("/js/swfupload/upload_baoli.php?type=adv&shebei="+deviceName);
+            del();
+        });
+    });
+
+    function notice()
+    {
+        var v = $('#shebei').val();
+
+        if ('1' === v) {
+            $('#app').hide();
+            $('#isDisabledInApp').val('');
+            $('#notice').html('图片大小不超过2M，只限于jpg格式图片，并且大小限定为：高340px，宽1920px');
+
+            return 'pc';
+        } else {
+            $('#app').show();
+            $('#notice').html('图片大小不超过2M，只限于jpg格式图片，并且大小限定为：高350px，宽750px');
+
+            return 'wap';
+        }
+    }
+
+    function del()
+    {
+        var stats = swfu_baoli.getStats();
+        stats.successful_uploads--;
+        swfu_baoli.setStats(stats);
+        $('#thumbnails_baoli').find('img').detach();
+        $('#adv-image').val('');
+    }
+</script>
 <?php $this->endBlock(); ?>
