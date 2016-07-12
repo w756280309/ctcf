@@ -219,7 +219,17 @@ function signup()
 
     xhr.done(function(data) {
         if (!data.code) {
-            location.href = data.tourl;
+            ga('send', {
+                hitType: 'event',
+                eventCategory: 'reg',
+                eventAction: 'm',
+                hitCallback: function() {
+                    location.href = data.tourl;
+                }
+            });
+            setTimeout(function() {
+                location.href = data.tourl;
+            }, 1500);
         } else {
             $.each(data.error, function(i, item) {
                 var err = i + '-err';

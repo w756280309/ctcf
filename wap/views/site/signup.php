@@ -136,7 +136,17 @@ $this->params['breadcrumbs'][] = $this->title;
             if (data.code) {
                 if ('undefined' !== typeof data.tourl) {
                     toast(data.message, function() {
-                        location.href = data.tourl;
+                        ga('send', {
+                            hitType: 'event',
+                            eventCategory: 'reg',
+                            eventAction: 'm',
+                            hitCallback: function() {
+                                location.href = data.tourl;
+                            }
+                        });
+                        setTimeout(function() {
+                            location.href = data.tourl;
+                        }, 1500);
                     });
                 } else if ('undefined' !== typeof data.message) {
                     toast(data.message);
