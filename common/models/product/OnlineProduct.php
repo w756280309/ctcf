@@ -1,6 +1,7 @@
 <?php
 namespace common\models\product;
 
+use common\lib\product\ProductProcessor;
 use common\models\order\OnlineFangkuan;
 use common\models\order\OnlineOrder;
 use common\models\user\MoneyRecord;
@@ -8,6 +9,7 @@ use common\models\user\User;
 use P2pl\Borrower;
 use P2pl\LoanInterface;
 use Yii;
+use yii\base\Exception;
 use yii\behaviors\TimestampBehavior;
 
 /**
@@ -669,4 +671,108 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
     public function getFangkuan(){
         return $this->hasOne(OnlineFangkuan::class,['online_product_id'=> 'id']);
     }
+
+    /**
+     * 获取指定标的的所有还款日
+     * 注意点： 默认标的的起息日期和截止日期是正确的；如果还款日超过当月最后一天，实际还款日取最后一天
+     * demo：调用方式 $load->getPaymentDates()
+     * return array 返回所有还款日自然排序后组成的数组,返回 date('Y-m-d',$time) 组成的数组
+     * @throws Exception
+     */
+    public function getPaymentDates()
+    {
+        $productProcessor = new ProductProcessor();
+        //必要信息判断
+        if (!$this->jixi_time) {
+            throw new Exception();
+        }
+        //初始化数据项
+        $jixi_time = $this->jixi_time;//计息日志
+        $finish_time = $this->finish_date;//截止日期
+        $method = intval($this->refund_method);//还款方式
+        $expires = intval($this->expires);
+        $paymentDay = $this->paymentDay;//设定的还款日期
+        //计算实际最后一次还款日期
+        if ($method === 1) {
+            if (!$finish_time) {
+                $finish_time = strtotime("+ " . $expires . " day", $jixi_time);
+            }
+        } else {
+            $finish_time = $productProcessor->calcRetDate($expires, $jixi_time);
+        }
+        //枚举所有还款方式
+        //$num 表示期数 $total 表示 每期多少月
+        if ($method === 2 || $method === 6) {
+            $num = $expires;
+            $total = 1;
+        } elseif ($method === 3 || $method === 7) {
+            $num = ceil($expires / 3);
+            $total = 3;
+        } elseif ($method === 4 || $method === 8) {
+            $num = ceil($expires / 6);
+            $total = 6;
+        } elseif ($method === 5 || $method === 9) {
+            $num = ceil($expires / 12);
+            $total = 12;
+        }
+        //还款日期
+        $paymentDays = [];
+        if ($method === 1) {
+            $paymentDays[] = date('Y-m-d', $finish_time);
+        } elseif (in_array($method, [2, 3, 4, 5])) {
+            //最后一次还款日期为计算出的 项目截止日期
+            for ($i = 1; $i < $num; $i++) {
+                //获取当期还款日期
+                $time = $productProcessor->calcRetDate($total, $jixi_time);
+                $paymentDays[] = date('Y-m-d', $time);
+            }
+            $paymentDays[] = date('Y-m-d', $finish_time);//最后一个还款日为截止日
+        } elseif (in_array($method, [6, 7, 8, 9])) {
+            for ($i = 1; $i <= $num; $i++) {
+                //获取当期还款时间
+                $time = $productProcessor->calcRetDate(($i - 1) * $total, $jixi_time);
+                $paymentDay = min(intval($paymentDay), intval(date('t', $time)));//取还款日和当月最后一天的最小值
+                $paymentDay = str_pad($paymentDay, 2, '0', STR_PAD_LEFT);
+                $m = intval(date('m', $time));
+                if ($method === 7) {
+                    if ($m <= 3) {
+                        $m = '03';
+                    } elseif ($m <= 6) {
+                        $m = '06';
+                    } elseif ($m <= 9) {
+                        $m = '09';
+                    } else {
+                        $m = '12';
+                    }
+                } elseif ($method === 8) {
+                    if ($m <= 6) {
+                        $m = '06';
+                    } else {
+                        $m = '12';
+                    }
+                } else if ($method === 9) {
+                    $m = '12';
+                } else {
+                    $m = str_pad($m, 2, '0', STR_PAD_LEFT);
+                }
+                $paymentDate = date('Y', $time) . '-' . $m . '-' . $paymentDay;
+                //如果还款时间大于最后一个还款日退出
+                if (strtotime($paymentDate) > $finish_time) {
+                    break;
+                }
+
+                if (strtotime($paymentDate) > $jixi_time) {
+                    $paymentDays[] = $paymentDate;
+                } else {
+                    //如果还款时间小于起息日期，期数+1
+                    $num++;
+                }
+            }
+            if (!in_array(date('Y-m-d', $finish_time), $paymentDays)) {
+                $paymentDays[] = date('Y-m-d', $finish_time);//最后一个还款日为截止日
+            }
+        }
+        return $paymentDays;
+    }
+
 }
