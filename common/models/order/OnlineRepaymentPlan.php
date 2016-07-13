@@ -352,4 +352,73 @@ class OnlineRepaymentPlan extends \yii\db\ActiveRecord
         $transaction->commit();
         return true;
     }
+
+    /**
+     * 计算每期应还本息.
+     * @param \common\models\order\OnlineOrder $ord 订单对象
+     * 要点:
+     * 1. 到期本息和自然日期计息的方式,都是按照天数计算的;
+     * 2. 其他计息方式,是按照月份来计算的;
+     */
+    public static function getBenxi(OnlineOrder $ord)
+    {
+        if (!$ord || !$ord->loan) {
+            throw new \Exception();
+        }
+
+        $res = [];
+        $paymentDates = $ord->loan->paymentDates;
+        if (empty($paymentDates)) {
+            throw new \Exception();
+        }
+
+        $qishu = count($paymentDates);
+        $bc = new BcRound();
+        bcscale(14);
+
+        foreach ($paymentDates as $key => $val) {
+            $benjin = 0;
+            if ($key === ($qishu - 1)) {
+                $benjin = $ord->order_money;
+                if (OnlineProduct::REFUND_METHOD_DAOQIBENXI === $ord->loan->refund_method) {    //到期本息计算利息
+                    $lixi = $bc->bcround(bcmul($ord->order_money, bcmul($ord->loan->expires, bcdiv($ord->yield_rate, 365))), 2);
+                } else {    //最后一期分期利息计算,用总的减去前面计算出来的,确保总额没有差错
+                    $total = $bc->bcround(bcdiv(bcmul(bcmul($ord->order_money, $ord->yield_rate), $ord->loan->expires), 12), 2);
+                    $lixi = $bc->bcround(bcsub($total, array_sum(array_column($res, 2))), 2);
+                }
+            } else {
+                switch ($ord->loan->refund_method) {
+                    case OnlineProduct::REFUND_METHOD_MONTH :
+                    case OnlineProduct::REFUND_METHOD_QUARTER :
+                    case OnlineProduct::REFUND_METHOD_HALF_YEAR:
+                    case OnlineProduct::REFUND_METHOD_YEAR :
+                        $lixi = $bc->bcround(bcdiv(bcdiv(bcmul(bcmul($ord->order_money, $ord->yield_rate), $ord->loan->expires), 12), $qishu), 2);
+                        break;
+                    case OnlineProduct::REFUND_METHOD_NATURE_MONTH :
+                    case OnlineProduct::REFUND_METHOD_NATURE_QUARTER :
+                    case OnlineProduct::REFUND_METHOD_NATURE_HALF_YEAR :
+                    case OnlineProduct::REFUND_METHOD_NATURE_YEAR :
+                        $startDay = !$key ? strtotime(date('Y-m-d', $ord->loan->jixi_time)) : strtotime($paymentDates[$key - 1]);
+                        $refundDay = strtotime($val);
+                        if ($refundDay <= $startDay) {
+                            throw new \Exception();
+                        }
+
+                        $totalDays = ($refundDay - $startDay) / (24 * 60 * 60);
+                        $lixi = $bc->bcround(bcmul($ord->order_money, bcmul($totalDays, bcdiv($ord->yield_rate, 365))), 2);
+                        break;
+                    default :
+                        throw new \Exception();
+                }
+            }
+
+            $res[$key] = [
+                $val,    //还款日期
+                $benjin,   //还款本金
+                $lixi,    //还款利息
+            ];
+        }
+
+        return $res;
+    }
 }
