@@ -219,17 +219,21 @@ function signup()
 
     xhr.done(function(data) {
         if (!data.code) {
-            ga('send', {
-                hitType: 'event',
-                eventCategory: 'reg',
-                eventAction: 'pc',
-                hitCallback: function() {
+            if ('undefined' !== typeof ga) {
+                ga('send', {
+                    hitType: 'event',
+                    eventCategory: 'reg',
+                    eventAction: 'pc',
+                    hitCallback: function() {
+                        location.href = data.tourl;
+                    }
+                });
+                setTimeout(function() {
                     location.href = data.tourl;
-                }
-            });
-            setTimeout(function() {
+                }, 1500);
+            } else {
                 location.href = data.tourl;
-            }, 1500);
+            }
         } else {
             $.each(data.error, function(i, item) {
                 var err = i + '-err';
