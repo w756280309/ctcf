@@ -39,6 +39,7 @@ use yii\behaviors\TimestampBehavior;
  * @property string $updated_at
  * @property string $isFlexRate
  * @property string $rateSteps
+ * @property integer $paymentDay
  */
 class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
 {
@@ -59,11 +60,15 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
     const STATUS_ONLINE = 1;
     const STATUS_PREPARE = 0;
 
-    const REFUND_METHOD_DAOQIBENXI = 1;
-    const REFUND_METHOD_MONTH = 2;
-    const REFUND_METHOD_QUARTER = 3;
-    const REFUND_METHOD_HALF_YEAR = 4;
-    const REFUND_METHOD_YEAR = 5;
+    const REFUND_METHOD_DAOQIBENXI = 1;//到期本息
+    const REFUND_METHOD_MONTH = 2;//按月付息，到期本息
+    const REFUND_METHOD_QUARTER = 3;//按季付息，到期本息
+    const REFUND_METHOD_HALF_YEAR = 4;//按半年付息，到期本息
+    const REFUND_METHOD_YEAR = 5;//按年付息，到期本息
+    const REFUND_METHOD_NATURE_MONTH = 6;//按自然月付息，到期本息
+    const REFUND_METHOD_NATURE_QUARTER = 7;//按自然季度付息，到期本息
+    const REFUND_METHOD_NATURE_HALF_YEAR = 8;//按自然半年付息，到期本息
+    const REFUND_METHOD_NATURE_YEAR = 9;//按自然年付息，到期本息
 
     /*定义错误级别*/
     const ERROR_SUCCESS = 100;
@@ -214,6 +219,7 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
             ['isFlexRate', 'integer'],
             ['rateSteps', 'string', 'max' => 500],
             [['rateSteps'], 'checkRateSteps'],
+            ['paymentDay', 'integer'],
         ];
     }
 
