@@ -85,6 +85,8 @@ $(function() {
                 $('.bind-bank').html(result['bank_name']);
                 $('.bind-check').hide();
                 $('.bind-card').show();
+                //当银行卡名称成功发生改变时，应重新前台验证一下
+                validate();
             }
         });
     });
@@ -122,6 +124,11 @@ function validate()
         return false;
     }
 
+    //前台验证无错误时，还原初始状态
+    if ($('#card_no').hasClass('error-border')) {
+        $('#card_no').removeClass('error-border');
+    }
+    $('#error').html('').hide();
     return true;
 }
 
