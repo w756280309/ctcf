@@ -123,7 +123,7 @@ class ProductonlineController extends BaseController
                 $model->finish_date = $model->finish_date ? $finish_date : 0;
                 $model->creator_id = Yii::$app->user->id;
                 $model->yield_rate = bcdiv($model->yield_rate, 100, 14);
-                $model->jixi_time = $model->jixi_time !== '' ? strtotime($model->jixi_time) : 0;
+                $model->jixi_time = $model->jixi_time !== '' ? is_integer($model->jixi_time) ? $model->jixi_time : strtotime($model->jixi_time) : 0;
                 $model->recommendTime = empty($model->recommendTime) ? 0 : $model->recommendTime;
 
                 $pre = $model->save(false);
