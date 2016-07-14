@@ -255,7 +255,6 @@ class OnlineRepaymentPlan extends \yii\db\ActiveRecord
         $pp = new ProductProcessor();
         bcscale(14);
         $bc = new BcRound();
-        $qishu = self::getQishu($loan);
         //获取所有订单
         $orders = OnlineOrder::find()->where(['online_pid' => $loan->id, 'status' => OnlineOrder::STATUS_SUCCESS])->all();
 
@@ -288,44 +287,16 @@ class OnlineRepaymentPlan extends \yii\db\ActiveRecord
             'level' => SmsMessage::LEVEL_LOW,
         ]);
         foreach ($orders as $ord) {
-            $total = self::getTotalLixi($loan, $ord);
-            if (OnlineProduct::REFUND_METHOD_DAOQIBENXI === (int) $loan->refund_method) {
-                //到期本息
-                $initplan = [
-                        'qishu' => 1,
-                        'benxi' => $bc->bcround(bcadd($total, $ord->order_money), 2),
-                        'benjin' => $ord->order_money,
-                        'lixi' => $total,
-                        'refund_time' => $loan->finish_date,
-                    ];
-                $plan = self::initPlan($ord, $initplan);
-                if (!$plan->save()) {
-                    $transaction->rollBack();
-                    return false;
-                }
-            } else {
-                $each = 1;
-                if (OnlineProduct::REFUND_METHOD_MONTH === (int) $loan->refund_method) {
-                    $each = 1;
-                } elseif (OnlineProduct::REFUND_METHOD_QUARTER === (int) $loan->refund_method) {
-                    $each = 3;
-                } elseif (OnlineProduct::REFUND_METHOD_HALF_YEAR === (int) $loan->refund_method) {
-                    $each = 6;
-                } elseif (OnlineProduct::REFUND_METHOD_YEAR === (int) $loan->refund_method) {
-                    $each = 12;
-                }
-                $total_paid = 0;
-                for ($i = 0; $i < $qishu; ++$i) {
-                    $monlen = ($i == $qishu - 1) ? $loan->expires : $each * ($i + 1);
-                    $cur_lixi = ($i == $qishu - 1) ? $bc->bcround(bcsub($total, $total_paid), 2) : $bc->bcround(bcdiv($total, $qishu), 2);
-                    $total_paid = bcadd($total_paid, $bc->bcround(bcdiv($total, $qishu), 2));//确保不会由于进位造成的少利息
-                    $cur_bj = ($i == $qishu - 1) ? $ord->order_money : 0;
+            //获取每个订单的还款金额详情
+            $res_money = self::getBenxi($ord);
+            if ($res_money) {
+                foreach ($res_money as $k => $v) {
                     $initplan = [
-                        'qishu' => ($i + 1),
-                        'benxi' => $bc->bcround(bcadd($cur_lixi, $cur_bj), 2),
-                        'benjin' => $cur_bj,
-                        'lixi' => $cur_lixi,
-                        'refund_time' => $pp->calcRetDate($monlen, $loan->jixi_time),
+                        'qishu' => ($k + 1),
+                        'benxi' => $bc->bcround(bcadd($v[1], $v[2]), 2),
+                        'benjin' => $bc->bcround($v[1], 2),
+                        'lixi' => $bc->bcround($v[2], 2),
+                        'refund_time' => strtotime($v[0]),
                     ];
                     $plan = self::initPlan($ord, $initplan);
                     if (!$plan->save()) {
@@ -334,6 +305,7 @@ class OnlineRepaymentPlan extends \yii\db\ActiveRecord
                     }
                 }
             }
+
             if ($username != $ord->username) {
                 $message = [
                     $ord->username,
@@ -377,17 +349,18 @@ class OnlineRepaymentPlan extends \yii\db\ActiveRecord
         bcscale(14);
 
         foreach ($paymentDates as $key => $val) {
+            $method = intval($ord->loan->refund_method);
             $benjin = 0;
             if ($key === ($qishu - 1)) {
                 $benjin = $ord->order_money;
-                if (OnlineProduct::REFUND_METHOD_DAOQIBENXI === $ord->loan->refund_method) {    //到期本息计算利息
+                if (OnlineProduct::REFUND_METHOD_DAOQIBENXI === $method) {    //到期本息计算利息
                     $lixi = $bc->bcround(bcmul($ord->order_money, bcmul($ord->loan->expires, bcdiv($ord->yield_rate, 365))), 2);
                 } else {    //最后一期分期利息计算,用总的减去前面计算出来的,确保总额没有差错
                     $total = $bc->bcround(bcdiv(bcmul(bcmul($ord->order_money, $ord->yield_rate), $ord->loan->expires), 12), 2);
                     $lixi = $bc->bcround(bcsub($total, array_sum(array_column($res, 2))), 2);
                 }
             } else {
-                switch ($ord->loan->refund_method) {
+                switch ($method) {
                     case OnlineProduct::REFUND_METHOD_MONTH :
                     case OnlineProduct::REFUND_METHOD_QUARTER :
                     case OnlineProduct::REFUND_METHOD_HALF_YEAR:
