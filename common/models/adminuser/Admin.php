@@ -64,9 +64,6 @@ class Admin extends \yii\db\ActiveRecord implements IdentityInterface
             ['status', 'default', 'value' => self::STATUS_ACTIVE, 'on' => 'register'],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
             [['username', 'email'], 'trim'],
-//            ['username', 'required', 'message' => '用户名不能为空!'],
-//            ['email', 'required', 'message' => 'email不能为空!'],
-//            [['role_sn','auths'], 'required'],
             [['username', 'email', 'role_sn', 'auths'], 'required', 'on' => 'register'],
             [['role_sn'], 'compare', 'compareValue' => 0, 'operator' => '!=', 'message' => '请选择角色!'],
             ['email', 'email', 'message' => ' 必须为email格式', 'on' => 'register'],
@@ -75,22 +72,11 @@ class Admin extends \yii\db\ActiveRecord implements IdentityInterface
                 'username',
                 'string',
                 'length' => [5, 16],
-//                'tooShort' => "用户名太短了,用户名要大于5位！",
-//                'tooLong' => "用户名超长了,用户名要小于等于16位！",
                 'on' => 'register',
             ],
-//            [
-//                'password',
-//                'string',
-//                'length' => [6, 12],
-//                'tooShort' => "密码太短了,用户名要大于6位！",
-//                'tooLong' => "密码超长了,用户名要小于等于12位！"
-//            ],
-//            [['username'], 'string', 'max' => 32, 'on' => 'register'],
             [['real_name'], 'string', 'max' => 20],
             [['email'], 'string', 'max' => 50],
             [['password_hash', 'auth_key'], 'string', 'max' => 128],
-//            [[ 'password_hash'], 'required', 'on' => 'register'],
             ['last_login_time', 'default', 'value' => time(), 'on' => 'log'],
         ];
     }

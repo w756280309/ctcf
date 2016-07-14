@@ -160,7 +160,7 @@ $is_online = in_array($model->status, [2, 3, 4, 5, 6, 7]);//判断标的是否�
                                 'template' => '{input}{error}',
                                 'inputOptions'=>[
                                     'autocomplete' => "off",
-                                    'class' => 'chosen-with-diselect span6',
+                                    'class' => 'chosen-with-diselect span6 refund_method',
                                     'onchange' => 'changeRefmet(this)'
                                     ]
                                 ])->dropDownList(['' => "--选择--"] + Yii::$app->params['refund_method'])
@@ -456,6 +456,19 @@ $is_online = in_array($model->status, [2, 3, 4, 5, 6, 7]);//判断标的是否�
             </div>
         </div>
 
+        <div class="row-fluid">
+            <div class="span6 gudinghk">
+                <div class="control-group">
+                    <label class="control-label">固定还款日</label>
+                    <div class="controls">
+                        <?=
+                            $form->field($model, 'paymentDay', ['template' => '<div class="input-append">{input}<span class="add-on">(日)</span></div>{error}', 'inputOptions' => ['autocomplete' => 'off', 'placeholder' => '固定还款日']])->textInput(['class' => 'm-wrap span12', 'value' => empty($model->paymentDay) ? 20 : $model->paymentDay])
+                        ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <h3 class="form-section">项目合同信息</h3>
         <?=
         $form->field($model, 'contract_type', ['template' => '{error}']);
@@ -519,7 +532,6 @@ $is_online = in_array($model->status, [2, 3, 4, 5, 6, 7]);//判断标的是否�
             </div>
         </div>
 
-        <!--/row-->
         <h3 class="form-section">项目描述信息</h3>
         <div class="row-fluid">
             <div class="span12 ">
@@ -535,18 +547,17 @@ $is_online = in_array($model->status, [2, 3, 4, 5, 6, 7]);//判断标的是否�
             </div>
         </div>
 
-
         <div class="form-actions">
             <?= $form->field($model, 'status', ['template' => '{error}'])->textInput(); ?>
             <button id="product-submit" type="submit" class="btn blue"><i class="icon-ok"></i> 提交</button>
             <a href="/product/productonline/list" class="btn">取消</a>
         </div>
-
         <?php $form->end(); ?>
         <!-- END FORM-->
     </div>
     <!--end-->
 </div>
+
 <script type="text/javascript">
     $(function() {
         var $productForm = $('#product_product_form');
@@ -560,6 +571,12 @@ $is_online = in_array($model->status, [2, 3, 4, 5, 6, 7]);//判断标的是否�
             }
         });
 
+        if ($('.refund_method').val() >= '6') {
+            $('.gudinghk').show();
+        } else {
+            $('.gudinghk').hide();
+        }
+
         //是否使用截止日期关系着产品到期日和宽限期天数的设置。如果勾选，可以填写截止日和宽限期，否则不可以填写
         $('#onlineproduct-is_fdate').bind('click', function() {
             if (true === $(this).parent().hasClass('checked')) {
@@ -572,10 +589,6 @@ $is_online = in_array($model->status, [2, 3, 4, 5, 6, 7]);//判断标的是否�
                 $('#onlineproduct-kuanxianqi').removeAttr('disabled');
             }
         });
-
-        <?php if (1 == (int)$model->refund_method) { ?>
-            //$('#onlineproduct-is_fdate').click();
-        <?php } ?>
 
         <?php if ((int)$model->refund_method > 1) { ?>
             $('#onlineproduct-expires').next().html('(个月)');//当编辑项目的还款方式是：除了到期本息之外的任意的还款方式。单位都默认是个月
@@ -600,11 +613,18 @@ $is_online = in_array($model->status, [2, 3, 4, 5, 6, 7]);//判断标的是否�
     });
 
     //选择还款方式是到期本息的可以设置产品到期日以及宽限期。否则不可以设置
-    function changeRefmet(obj){
+    function changeRefmet(obj)
+    {
         if (1 === parseInt($(obj).val())) {
             $('#onlineproduct-expires').next().html('(天)');
         } else {
             $('#onlineproduct-expires').next().html('(个月)');
+        }
+
+        if ($(obj).val() >= '6') {
+            $('.gudinghk').show();
+        } else {
+            $('.gudinghk').hide();
         }
     }
 

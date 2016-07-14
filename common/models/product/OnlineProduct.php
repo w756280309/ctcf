@@ -106,7 +106,7 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
             'create' => ['title', 'sn', 'cid', 'money', 'borrow_uid', 'expires', 'expires_show', 'yield_rate', 'start_money', 'borrow_uid', 'fee', 'status',
                 'description', 'refund_method', 'account_name', 'account', 'bank', 'dizeng_money', 'start_date', 'end_date', 'full_time',
                 'is_xs', 'yuqi_faxi', 'order_limit', 'creator_id', 'del_status', 'status', 'isPrivate', 'allowedUids', 'finish_date', 'channel', 'jixi_time', 'sort',
-                'jiaxi', 'kuanxianqi', 'graceDays', 'isFlexRate', 'rateSteps', 'issuer', 'issuerSn'],
+                'jiaxi', 'kuanxianqi', 'graceDays', 'isFlexRate', 'rateSteps', 'issuer', 'issuerSn', 'paymentDay'],
         ];
     }
 
@@ -212,16 +212,17 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
             [['jiaxi'], 'compare', 'compareValue' => 0, 'operator' => '>='],
             [['money'], 'compare', 'compareValue' => 1000000000, 'operator' => '<='],
             [['money'], 'compare', 'compareValue' => 1, 'operator' => '>='],
-
             ['status', 'checkDealStatus'],
             ['expires', 'checkExpires'],
             ['epayLoanAccountId', 'default', 'value' => ''],
             [['start_date', 'end_date', 'finish_date'], 'checkDate'],
-
             ['isFlexRate', 'integer'],
             ['rateSteps', 'string', 'max' => 500],
             [['rateSteps'], 'checkRateSteps'],
             ['paymentDay', 'integer'],
+            ['paymentDay', 'default', 'value' => 20],    //固定还款日,默认值每月20号,范围为1到28
+            ['paymentDay', 'compare', 'compareValue' => 1, 'operator' => '>='],
+            ['paymentDay', 'compare', 'compareValue' => 28, 'operator' => '<='],
         ];
     }
 
@@ -775,4 +776,18 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
         return $paymentDays;
     }
 
+
+    /**
+     * 判断标的是否为按自然时间付息方式
+     * @return boolean
+     */
+    public function isNatureRefundMethod()
+    {
+        return in_array($this->refund_method, [
+            self::REFUND_METHOD_NATURE_MONTH,
+            self::REFUND_METHOD_NATURE_QUARTER,
+            self::REFUND_METHOD_NATURE_HALF_YEAR,
+            self::REFUND_METHOD_NATURE_YEAR,
+        ]);
+    }
 }

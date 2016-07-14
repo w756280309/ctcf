@@ -92,6 +92,10 @@ class ProductonlineController extends BaseController
                 $model->issuerSn = null;
             }
 
+            if (!$model->isNatureRefundMethod()) {  //当标的还款方式不为按自然时间付息的方式时,固定日期置为null
+                $model->paymentDay = null;
+            }
+
             $_namearr = empty($con_name_arr) ? $con_name_arr : array_filter($con_name_arr);
             if (empty($_namearr)) {
                 $model->addError('contract_type', '合同协议至少要输入一份');
