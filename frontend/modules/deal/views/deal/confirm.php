@@ -58,7 +58,7 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/deal/buy.css');
         var allowSub = true;
         $('#sub_button').bind('click', function () {
             var buy = $(this);
-            if ('checked' == $('#agree').attr('checked')) {
+            if ($('#agree').is(':checked')) {
                 if (!allowSub) {
                     return;
                 }
