@@ -8,7 +8,6 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/useraccount/my_trade.js', ['depends' =
 use common\models\order\OnlineRepaymentPlan;
 use common\utils\StringUtils;
 use common\widgets\Pager;
-use common\models\product\OnlineProduct;
 ?>
 
 <div class="myCoupon-box">
@@ -68,7 +67,7 @@ use common\models\product\OnlineProduct;
                     <td class="text-align-rg"><?= StringUtils::amountFormat3(OnlineRepaymentPlan::getTotalLixi($val->loan, $val)) ?></td>
                     <td class="text-align-ct">
                         <span class="tip-cursor">
-                            <span class="tip-font"><?= $plan[$key]['yihuan'] ?>/<?= OnlineRepaymentPlan::getQishu($val->loan) ?></span>
+                            <span class="tip-font"><?= $plan[$key]['yihuan'] ?>/<?= count($plan[$key]['obj']) ?></span>
                             <span class="tip-icon-enna tip-icon-top"></span>
                         </span>
                     </td>
