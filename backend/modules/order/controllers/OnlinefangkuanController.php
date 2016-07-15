@@ -4,60 +4,20 @@ namespace backend\modules\order\controllers;
 
 use Yii;
 use common\models\user\User;
-use yii\data\Pagination;
 use common\models\product\OnlineProduct;
 use backend\controllers\BaseController;
 use common\models\order\OnlineFangkuan;
-use common\models\adminuser\Admin;
 use backend\modules\order\service\FkService;
 use backend\modules\order\core\FkCore;
 use common\models\user\UserAccount;
 use common\models\draw\DrawManager;
 use yii\web\Response;
-use yii\web\NotFoundHttpException;
 
 /**
  * OrderController implements the CRUD actions for OfflineOrder model.
  */
 class OnlinefangkuanController extends BaseController
 {
-    public function actionList($uid = 1, $status = null, $time = null)    //该方法暂时没有使用
-    {
-        if (empty($uid)) {
-            throw new NotFoundHttpException();  //参数无效时,返回404错误
-        }
-
-        //联表查出对应的放款用户名username
-        $adminInfo = Admin::findOne($uid);
-        //联表查出对应的借款用户的username
-        $jiekuanInfo = User::findOne($uid);
-        //搜索数据
-       if ($status !== '' && !empty($time)) {
-           $time = strtotime($time);
-           $query = "status='$status' and created_at<=$time and uid=$uid";
-       } elseif (isset($status) && $status !== '' && empty($time)) {
-           $query = "status='$status' and uid=$uid";
-       } elseif ($status === '' && !empty($time)) {
-           $time = strtotime($time);
-           $query = "created_at<=$time and uid=$uid";
-       } else {
-           $query = "uid=$uid";
-       }
-
-        $data = OnlineFangkuan::find()->where($query);
-
-        $pages = new Pagination(['totalCount' => $data->count(), 'pageSize' => '10']);
-        $model = $data->offset($pages->offset)->limit($pages->limit)->orderBy('id desc')->all();
-
-        return $this->render('list', [
-            'userUsername' => $jiekuanInfo['username'],
-            'adminUsername' => $adminInfo['username'],
-            'uid' => $uid,
-            'model' => $model,
-            'pages' => $pages,
-        ]);
-    }
-
     /**
      * 放款审核界面.
      */
@@ -65,13 +25,13 @@ class OnlinefangkuanController extends BaseController
     {
         $this->layout = false;
         if (empty($pid)) {
-            throw new NotFoundHttpException();  //参数无效时,返回404错误
+            throw $this->ex404();  //参数无效时,返回404错误
         }
 
         $deal = OnlineProduct::findOne($pid);
         $financing_user = User::findOne(['type' => User::USER_TYPE_ORG, 'id' => $deal->borrow_uid]);
         if (null === $deal || null === $financing_user) {    //当数据库中没有标的和融资人信息时,抛出404错误
-            throw new NotFoundHttpException();  //参数无效时,返回404错误
+            throw $this->ex404();  //参数无效时,返回404错误
         }
 
         return $this->render('examinfk', ['deal' => $deal, 'borrow_user' => $financing_user]);
@@ -97,16 +57,12 @@ class OnlinefangkuanController extends BaseController
 
     /**
      * 融资会员提现.
-     *
-     * @param type $pid
-     *
-     * @return type
      */
     public static function actionInit($pid)
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
         if (empty($pid)) {
-            throw new NotFoundHttpException();  //参数无效时,返回404错误
+            throw $this->ex404();  //参数无效时,返回404错误
         }
 
         $onlineProduct = OnlineProduct::findOne($pid);
