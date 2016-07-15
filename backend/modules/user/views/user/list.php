@@ -99,9 +99,12 @@ use common\models\user\User;
                         <th>真实姓名</th>
                 <?php }else{?>
                         <th>企业名称</th>
-                 <?php }?>
+                <?php }?>
                         <th>注册时间</th>
                         <th>可用余额（元）</th>
+                <?php if($category==User::USER_TYPE_PERSONAL){?>
+                        <th>联动状态</th>
+                <?php }?>
                         <th><center>操作</center></th>
                     </tr>
                 </thead>
@@ -114,9 +117,14 @@ use common\models\user\User;
                         <td><?= $val['real_name']?'<a href="">'.$val['real_name'].'</a>':"---" ?></td>
                 <?php }else{?>
                         <td><?= $val['org_name'] ?></td>
-                 <?php }?>
+                <?php }?>
                         <td><?= date('Y-m-d H:i:s',$val['created_at'])?></td>
                         <td><?= number_format(($category==User::USER_TYPE_PERSONAL)?($val->lendAccount['available_balance']):($val->borrowAccount['available_balance']),2) ?></td>
+                        <?php if($category==User::USER_TYPE_PERSONAL){?>
+                        <td>
+                            <button class="btn btn-primary get_order_status" uid="<?= $val['id'] ?>">查询联动状态</button>
+                        </td>
+                        <?php }?>
                         <td>
                         <center>
                              <?php if($category==User::USER_TYPE_PERSONAL){?>
@@ -137,6 +145,36 @@ use common\models\user\User;
     </div>
 
 </div>
+<script>
+    $('.get_order_status').bind('click', function () {
+        var csrf = '<?= Yii::$app->request->getCsrfToken(); ?>';
+        var _this = $(this);
+        if (_this.hasClass("isclicked")) {
+            return false;
+        }
+        _this.addClass("isclicked");
+        var uid = $(this).attr("uid");
+        var xhr = $.ajax({
+            type: 'POST',
+            url: '/user/user/umpuserinfo?uid='+uid,
+            data: {'_csrf': csrf},
+            dataType: 'json'
+        });
 
+        xhr.done(function(data) {
+            _this.removeClass("isclicked");
+            if (parseInt(data.code) >= 0) {
+                _this.parent().html(data.message);
+            } else if (-1 === parseInt(data.code)) {
+                _this.html("查询失败，点击重试");
+            }
+        });
+
+        xhr.fail(function(jqXHR) {
+            _this.removeClass("isclicked");
+            alert('请求失败');
+        });
+    })
+</script>
 <?php $this->endBlock(); ?>
 

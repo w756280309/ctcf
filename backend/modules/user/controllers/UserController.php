@@ -340,4 +340,37 @@ class UserController extends BaseController
         $data = UserStats::collectLenderData();
         UserStats::createCsvFile($data);
     }
+
+    /**
+     * 根据本地数据库用户名id查询联动信息
+     */
+    public function actionUmpuserinfo($uid)
+    {
+        //判断参数是否正确
+        if (empty($uid)) {
+            throw new NotFoundHttpException();
+        }
+
+        $user = User::findOne($uid);
+
+        if (null === $user) {
+            throw new NotFoundHttpException();
+        }
+
+        if (null !== $user->epayUser) {
+            try {
+                $epayuser = new EpayUser();
+                $info = $epayuser->getUmpAccountStatus($user->epayUser);
+                if (4 === $info['code']) {
+                    $info['message'] = number_format($info['message']/100, 2);
+                }
+                return $info;
+            } catch(\Exception $e) {
+                return ['code' => -1, 'message'=>$e->getMessage()];
+            }
+        }
+
+        //返回状态-初始
+        return ['code'=>0, 'message'=>'初始'];
+    }
 }
