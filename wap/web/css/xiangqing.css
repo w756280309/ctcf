@@ -340,9 +340,9 @@ i,em {
     padding-left: 10px;
     padding-right: 10px;
     margin: 0 auto;
-    background: url('/images/kuang.png') no-repeat 0 0;
+    background: url('../images/kuang.png') no-repeat 0 0;
     background-size: 100% 100%;
-    font-size: 10px;
+    font-size: 13px;
     text-align: justify;
 }
 /* 收益说明模块样式 */
