@@ -67,40 +67,21 @@ class AdvController extends BaseController
     }
 
     /**
-     * Deletes an existing OfflineOrder model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     *
-     * @param string $id
-     *
-     * @return mixed
+     * 删除banner图.
      */
     public function actionDelete($id)
     {
-        $model = $this->findModel($id);
+        if (empty($id)) {
+            throw $this->ex404();
+        }
+
+        $model = $this->findOr404(Adv::class, $id);
+
         $model->scenario = 'update';
         $model->del_status = Adv::DEL_STATUS_DEL;
         $model->save();
 
         return $this->redirect('index');
-    }
-
-    /**
-     * Finds the OfflineOrder model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
-     *
-     * @param string $id
-     *
-     * @return OfflineOrder the loaded model
-     *
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    protected function findModel($id)
-    {
-        if (!empty($id) && ($model = Adv::findOne($id)) !== null) {
-            return $model;
-        } else {
-            throw $this->ex404();
-        }
     }
 
     public function actionLineon()
@@ -146,7 +127,7 @@ class AdvController extends BaseController
         $res = 0;
         if (!empty($id) && $op == 'status') {
             //项目状态
-            $_model = $this->findModel($id);
+            $_model = $this->findOr404(Adv::class, $id);
             if (null !== $_model) {
                 if ($value ==  Adv::STATUS_HIDDEN) {
                     $_model->status = Adv::STATUS_SHOW;

@@ -137,7 +137,6 @@ $menus = AuthSys::getMenus('A100000');
 <script type="text/javascript">
     $(function() {
         $(".chooseall").click(function() {
-            //var isChecked = $(this).prop("checked");
             var isChecked = $(this).parent().hasClass('checked');
             if (!isChecked) {
                 $("input[name='choose[]']").parent().addClass('checked');
@@ -163,15 +162,11 @@ $menus = AuthSys::getMenus('A100000');
             }
             var csrftoken = '<?= Yii::$app->request->getCsrfToken(); ?>';
             if (confirm('确认此次操作吗？')) {
-                $.post(url, {ids: ids.join(','), _csrf: csrftoken}, function(data)
-                {
-//                        alert(data.message);
+                $.post(url, {ids: ids.join(','), _csrf: csrftoken}, function(data) {
                     newalert(true, data.message, 1);
                 });
             }
         })
-
-
     })
 </script>
 <?php $this->endBlock(); ?>
