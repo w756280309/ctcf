@@ -1,6 +1,7 @@
 /*login-box*/
 .login-box {
     width: 100%;
+    min-width: 1057px;
     background: #f4f3f8;
     overflow: hidden;
     padding-bottom: 50px;

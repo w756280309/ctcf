@@ -9,6 +9,10 @@
 .footer-clearfix {
     *zoom:1;
 }
+.footer-section{
+    width: 100%;
+    min-width: 1057px;
+}
 .footer-five-box{
     position: relative;
     width: 900px;
