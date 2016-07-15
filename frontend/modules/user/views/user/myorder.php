@@ -38,7 +38,7 @@ use common\widgets\Pager;
                 <tr>
                     <th class="text-first" width="230">项目名称</th>
                     <th class="text-align-lf" width="100">到期时间</th>
-                    <th class="text-align-ct" width="70">年化率</th>
+                    <th class="text-align-ct" width="70">预期年化</th>
                     <th class="text-align-rg" width="110">投资金额(元)</th>
                     <th class="text-align-rg" width="100">预期收益(元)</th>
                     <th class="text-align-ct" width="90">还款计划</th>
@@ -48,7 +48,7 @@ use common\widgets\Pager;
                 <tr>
                     <th class="text-first" width="230">项目名称</th>
                     <th class="text-align-lf" width="100">还款时间</th>
-                    <th class="text-align-ct" width="70">年化率</th>
+                    <th class="text-align-ct" width="70">预期年化</th>
                     <th class="text-align-rg" width="110">投资金额(元)</th>
                     <th class="text-align-rg" width="100">实际收益(元)</th>
                     <th class="text-align-ct" width="100">还款计划</th>
@@ -124,7 +124,7 @@ use common\widgets\Pager;
             <tr>
                 <th class="text-first" width="240">项目名称</th>
                 <th class="text-align-ct" width="110">项目期限</th>
-                <th class="text-align-ct" width="120">年化率</th>
+                <th class="text-align-ct" width="120">预期年化</th>
                 <th class="text-third" width="120">投资金额(元)</th>
                 <th class="text-align-ct" width="">募集进度</th>
             </tr>

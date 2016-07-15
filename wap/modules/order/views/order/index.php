@@ -22,7 +22,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/order.js?v=20160603-v', ['depends' => 
 <!--   购买页 start-->
     <div class="row produce">
         <div class="col-xs-12 text-align-lf first-hang" style="padding-right: 0;"><?=$deal->title?></div>
-        <div class="col-xs-4 text-align-ct">年化收益</div>
+        <div class="col-xs-4 text-align-ct">预期年化收益</div>
         <div class="col-xs-8 text-align-lf col"><?=  ($deal->yield_rate*100)?>%</div>
         <div class="col-xs-4 text-align-ct">项目</div>
         <div class="col-xs-8 text-align-lf col">
