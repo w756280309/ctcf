@@ -30,7 +30,7 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/useraccount/chargedeposit.css');
                                     <?php if (!empty($deal->jiaxi) && !$deal->isFlexRate) { ?>+<?= doubleval($deal->jiaxi) ?>%<?php } ?>
                                 </em>
                             </span>
-                            <p>年化收益率</p>
+                            <p>预期年化收益率</p>
                         </div>
                     </li>
                     <li>
@@ -80,7 +80,7 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/useraccount/chargedeposit.css');
             <div class="pl-subscription">
                 <ul class="clearfix">
                     <li class="pl-grayBg"><span>认购金额（元）</span></li>
-                    <li class="pl-grayBg pl-center">年化收益率（%）</li>
+                    <li class="pl-grayBg pl-center">预期年化收益率（%）</li>
                     <li>
                         <div><i>累计认购<?= StringUtils::amountFormat2($deal->start_money) ?>起</i></div>
                     </li>

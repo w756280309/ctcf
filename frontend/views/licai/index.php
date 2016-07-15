@@ -2,7 +2,7 @@
 $this->title = '我要理财';
 
 $this->registerCssFile(ASSETS_BASE_URI . 'css/pagination.css', ['depends' => 'frontend\assets\FrontAsset']);
-$this->registerCssFile(ASSETS_BASE_URI . 'css/deallist.css', ['depends' => 'frontend\assets\FrontAsset']);
+$this->registerCssFile(ASSETS_BASE_URI . 'css/deallist.css?v=160715', ['depends' => 'frontend\assets\FrontAsset']);
 
 use common\models\product\OnlineProduct;
 use common\models\product\RateSteps;
@@ -36,7 +36,7 @@ use common\widgets\Pager;
                                     <span>%</span>
                                 <?php } ?>
                             </li>
-                            <li class="li_2">年化收益率</li>
+                            <li class="li_2">预期年化收益率</li>
                         </ul>
                         <ul class="single_ul_center">
                             <li class="li_1"><?php $ex = $val->getDuration(); ?><?= $ex['value']?><span><?= $ex['unit'] ?></span></li>

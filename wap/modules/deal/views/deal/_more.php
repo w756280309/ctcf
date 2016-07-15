@@ -18,7 +18,7 @@
                         <?php if (!empty($val->jiaxi) && !$val->isFlexRate) { ?><span class="bonus-badge <?= $is_hui?'hui':'' ?>">+<?= doubleval($val->jiaxi) ?>%</span><?php } ?>
                     </span>
                     </div>
-                    <span class="desc-text nianRate <?= $is_hui?'hui':'' ?>">年化收益率</span>
+                    <span class="desc-text nianRate <?= $is_hui?'hui':'' ?>">预期年化率</span>
                 </li>
                 <li class="col-xs-2 <?= $is_hui?'hui':'' ?>">
                     <p class="<?= $is_hui?'hui':'' ?>">
