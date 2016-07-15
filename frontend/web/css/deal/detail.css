@@ -37,7 +37,7 @@ body {
 }
 .pL-top-box .grace-period {
     margin-top: 1em;
-    padding: 0 30px;
+    padding: 0 56px;
     color: #6e6e72;
 }
 .pl-top-title {
@@ -110,7 +110,7 @@ body {
 .pl-bottom {
     width: 586px;
     margin: 0 auto;
-    height: 45px;
+    height: 90px;
     background: #f4f4f7;
     color: #bababf;
 }
@@ -531,4 +531,30 @@ body {
     line-height: 95px;
     font-size: 18px;
     color: #f44336;
+}
+li.yield_rate {
+    width: 44%;
+}
+li.yield_rate div {
+    padding-left: 26px !important;
+}
+.expires {
+    border-right: 0px !important;
+}
+li.amount {
+    width: 35%;
+}
+.dialog {
+    display: none;
+    position: absolute;
+    left: 42%;
+    top: 270px;
+    width: 16em;
+    line-height: 20px;
+    font-size: 12px;
+    padding: 10px 10px;
+    background-color: #FFEBCD;
+    border-radius:3px;
+    box-shadow:1px 1px 0 0 #FFE4C4;
+    border: 1px solid #ff9800;
 }

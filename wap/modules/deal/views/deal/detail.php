@@ -6,7 +6,7 @@ use common\view\LoanHelper;
 
 $deal->money = rtrim(rtrim($deal->money, '0'), '.');
 ?>
-<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/xiangqing.css?v=20160427">
+<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/xiangqing.css?v=20160714">
         <!--xiangqing-->
         <div class="row column">
             <div class="hidden-xs col-sm-1"></div>
@@ -35,7 +35,7 @@ $deal->money = rtrim(rtrim($deal->money, '0'), '.');
             <div class="col-xs-1"></div>
             <div class="col-xs-10">
                 <div class="per">
-                    <div class="progress-bar progress-bar-red" style="width:<?= $deal->getProgressForDisplay()?>%"></div>
+                    <div class="progress-bar progress-bar-red" style="width:<?= $deal->getProgressForDisplay() ?>%"></div>
                 </div>
             </div>
             <div class="col-xs-1"></div>
@@ -47,7 +47,7 @@ $deal->money = rtrim(rtrim($deal->money, '0'), '.');
                 <div>可投余额/项目总额</div>
             </div>
             <div class="col-xs-1" style="padding: 0;">
-                <div class="shuju-bili"><?= $deal->getProgressForDisplay()?><em>%</em></div>
+                <div class="shuju-bili"><?= $deal->getProgressForDisplay() ?><em>%</em></div>
             </div>
             <div class="col-xs-1"></div>
         </div>
@@ -62,10 +62,23 @@ $deal->money = rtrim(rtrim($deal->money, '0'), '.');
                 <?php } else { ?>
                     <div class="m3">产品到期日：<span><?= date('Y-m-d',$deal->finish_date) ?></span></div>
                 <?php } ?>
-
-                <div class="m4">还款方式：<span><?= Yii::$app->params['refund_method'][$deal->refund_method]?></span></div>
+                <?php if ($deal->isNatureRefundMethod()) { ?>
+                    <div class="m4">还款方式：
+                        <span><?= Yii::$app->params['refund_method'][$deal->refund_method]?></span>
+                        <img src="<?= ASSETS_BASE_URI ?>images/dina.png" alt="">
+                    </div>
+                    <div class="row" id='chart-box' hidden="true">
+                        <div class="col-xs-12">
+                            <div>付息时间固定日期，按自然月在每个月还款，按自然季度是3、6、9、12月还款，按自然半年是6、12月还款，按自然年是12月还款</div>
+                        </div>
+                    </div>
+                <?php } else { ?>
+                    <div class="m4">还款方式：
+                        <span><?= Yii::$app->params['refund_method'][$deal->refund_method]?></span>
+                    </div>
+                <?php } ?>
                 <?php if (!empty($deal->kuanxianqi)) { ?>
-                    <p style="margin-top: 1em;">融资方可提前<?= $deal->kuanxianqi ?>天内任一天还款，客户收益按实际天数计息。</p>
+                    <p class="notice">融资方可提前<?= $deal->kuanxianqi ?>天内任一天还款，客户收益按实际天数计息。</p>
                 <?php } ?>
             </div>
             <div class="col-xs-1"></div>
@@ -116,7 +129,7 @@ $deal->money = rtrim(rtrim($deal->money, '0'), '.');
         <div class="row tab-conten">
             <div class="col-xs-1"></div>
             <div class="col-xs-10">
-                <?=  \yii\helpers\HtmlPurifier::process($deal->description)?>
+                <?=  \yii\helpers\HtmlPurifier::process($deal->description) ?>
             </div>
             <div class="col-xs-1"></div>
         </div>
@@ -150,81 +163,81 @@ $deal->money = rtrim(rtrim($deal->money, '0'), '.');
             <div class="col-xs-1"></div>
         </div>
     <?php } ?>
-   <script>
-            $(function(){
-                $('.tabs div').click(function(){
-                    var index=$('.tabs div').index(this);
-                    $('.tabs div').css({background:'#ffffff',color:'#f34334'}); //303030
-                    $('.tabs div').eq(index).css({background:'#f34334',color:'#ffffff'});
-                    if(index==1){
-                        $('.tab-conten').css({display:'none'});
-                        $('.touzi-box').css({display:'block'});
-                    }else{
-                        $('.tab-conten').css({display:'block'});
-                        $('.touzi-box').css({display:'none'});
-                    }
-                })
-                pid = '<?=$deal->id;?>';
-                $.get('/deal/deal/orderlist',{pid:pid},function(data){
-                    html = "";
-                    for(var i=0;i<data.orders.length;i++){
-                            html+='<div class="row touzi-content border-bottom1">';
-                            html+='    <div class="col-xs-3 col">'+data.orders[i]['mobile']+'</div>';
-                            html+='    <div class="col-xs-5 data"><span class="data1">'+data.orders[i]['time']+'</span><span class="data2">'+data.orders[i]['his']+'</span></div>';
-                            html+='    <div class="col-xs-4">'+data.orders[i]['money']+'</div>';
-                            html+='</div>';
-                    }
-                    $('.datafirst').after(html)
-                })
-
-            });
-
-
-            function subForm2(form){
-                //vals = $(form).serialize();
-                to = $(form).attr("data-to");//设置如果返回错误，是否需要跳转界面
-
-                var xhr = $.get($(form).attr("action"), function (data) {
-                    if(data.code!=0&&to==1&&data.tourl!=undefined){
-                        if(data.message=='请登录'){
-                            toast(data.message, function() {
-                                location.href = data.tourl;
-                            });
-                        }else{
-                            alertTrueVal(data.message,function(){
-                                location.href=data.tourl;
-                            });
-                        }
-                    }else{
-                        if(data.code!=0){
-                            toast(data.message);
-                        }
-
-                        if(to==1&&data.tourl!=undefined){
-                           location.href=data.tourl;
-                        }
-                    }
-                });
-
-                return xhr;
-            }
-
-            $('#x-purchase').on('click', function(e) {
-                var $this = $(this);
-                if ($this.data('x-purchase-clicked')) {
-                    return;
+    <script>
+        $(function() {
+            $('.tabs div').click(function(){
+                var index=$('.tabs div').index(this);
+                $('.tabs div').css({background:'#ffffff',color:'#f34334'}); //303030
+                $('.tabs div').eq(index).css({background:'#f34334',color:'#ffffff'});
+                if(index==1){
+                    $('.tab-conten').css({display:'none'});
+                    $('.touzi-box').css({display:'block'});
+                }else{
+                    $('.tab-conten').css({display:'block'});
+                    $('.touzi-box').css({display:'none'});
                 }
-                $this.data('x-purchase-clicked', true);
-                var xhr = subForm2('#toorderform');
-                xhr.always(function() {
-                    $this.data('x-purchase-clicked', false);
-                });
+            })
+            pid = '<?=$deal->id;?>';
+            $.get('/deal/deal/orderlist',{pid:pid},function(data){
+                html = "";
+                for(var i=0;i<data.orders.length;i++){
+                        html+='<div class="row touzi-content border-bottom1">';
+                        html+='    <div class="col-xs-3 col">'+data.orders[i]['mobile']+'</div>';
+                        html+='    <div class="col-xs-5 data"><span class="data1">'+data.orders[i]['time']+'</span><span class="data2">'+data.orders[i]['his']+'</span></div>';
+                        html+='    <div class="col-xs-4">'+data.orders[i]['money']+'</div>';
+                        html+='</div>';
+                }
+                $('.datafirst').after(html)
+            })
+
+        });
+
+
+        function subForm2(form){
+            //vals = $(form).serialize();
+            to = $(form).attr("data-to");//设置如果返回错误，是否需要跳转界面
+
+            var xhr = $.get($(form).attr("action"), function (data) {
+                if(data.code!=0&&to==1&&data.tourl!=undefined){
+                    if(data.message=='请登录'){
+                        toast(data.message, function() {
+                            location.href = data.tourl;
+                        });
+                    }else{
+                        alertTrueVal(data.message,function(){
+                            location.href=data.tourl;
+                        });
+                    }
+                }else{
+                    if(data.code!=0){
+                        toast(data.message);
+                    }
+
+                    if(to==1&&data.tourl!=undefined){
+                       location.href=data.tourl;
+                    }
+                }
             });
 
-            // 新的
-            $('.qing img').on('click',function(){
-                $('#chart-box').stop(true,false).fadeToggle();
-            })
-        </script>
+            return xhr;
+        }
+
+        $('#x-purchase').on('click', function(e) {
+            var $this = $(this);
+            if ($this.data('x-purchase-clicked')) {
+                return;
+            }
+            $this.data('x-purchase-clicked', true);
+            var xhr = subForm2('#toorderform');
+            xhr.always(function() {
+                $this.data('x-purchase-clicked', false);
+            });
+        });
+
+        // 新的
+        $('.m4 img').on('click',function(){
+            $('#chart-box').stop(true,false).fadeToggle();
+        })
+    </script>
 </body>
 </html>

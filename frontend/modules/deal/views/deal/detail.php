@@ -10,7 +10,7 @@ $user = Yii::$app->user->identity;
 $this->registerJsFile(ASSETS_BASE_URI . 'js/detail.js');
 $this->registerCssFile(ASSETS_BASE_URI . 'css/deal/buy.css');
 $this->registerCssFile(ASSETS_BASE_URI . 'css/deal/deallist.css');
-$this->registerCssFile(ASSETS_BASE_URI . 'css/deal/detail.css?v=160701');
+$this->registerCssFile(ASSETS_BASE_URI . 'css/deal/detail.css?v=160714');
 $this->registerCssFile(ASSETS_BASE_URI . 'css/pagination.css');
 $this->registerCssFile(ASSETS_BASE_URI . 'css/useraccount/chargedeposit.css');
 ?>
@@ -22,7 +22,7 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/useraccount/chargedeposit.css');
             <div class="pl-top-title"><?= $deal->title ?></div>
             <div class="pl-middle">
                 <ul class="clearfix">
-                    <li style="width: 28%">
+                    <li class="yield_rate">
                         <div class="clearfix">
                             <span class="pl-middle-inner">
                                 <?= LoanHelper::getDealRate($deal) ?><i>%</i>
@@ -33,36 +33,34 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/useraccount/chargedeposit.css');
                             <p>年化收益率</p>
                         </div>
                     </li>
-                    <li style="width: 22%">
-                        <div>
+                    <li>
+                        <div class="expires">
                             <span class="pl-middle-inner">
                                 <?php $ex = $deal->getDuration(); ?><?= $ex['value']?><?= $ex['unit'] ?>
                             </span>
                             <p>项目期限</p>
-
-                        </div>
-                    </li>
-                    <li style="width: 22%">
-                        <div>
-                            <span class="pl-middle-content"><?= StringUtils::amountFormat1('{amount}{unit}', $deal->money) ?></span>
-                            <p>项目总额</p>
-                        </div>
-                    </li>
-                    <li style="width: 24%">
-                        <div class="pl-last-li">
-                            <span class="pl-middle-last"><?= Yii::$app->params['refund_method'][$deal->refund_method] ?></span>
                         </div>
                     </li>
                 </ul>
             </div>
             <div class="pl-bottom">
                 <ul>
+                    <li class="amount">
+                        项目总额:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span><?= StringUtils::amountFormat1('{amount}{unit}', $deal->money) ?></span>
+                    </li>
                     <li>
+                        还款方式:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span><?= Yii::$app->params['refund_method'][$deal->refund_method] ?></span>
+                        <?php if ($deal->isNatureRefundMethod()) { ?>
+                            <img id="tip" src="<?= ASSETS_BASE_URI ?>images/useraccount/tip.png" alt="">
+                            <div class="dialog">付息时间固定日期，按自然月在每个月还款，按自然季度是3、6、9、12月还款，按自然半年是6、12月还款，按自然年是12月还款</div>
+                        <?php } ?>
+                    </li>
+                    <li class="amount">
                         产品起息日:&nbsp;&nbsp;&nbsp;&nbsp;<span><?= $deal->jixi_time > 0 ? date('Y-m-d', $deal->jixi_time) : '项目成立日次日'; ?></span>
                     </li>
                     <?php if (0 === (int) $deal->finish_date) { ?>
                         <li>
-                            项目期限:&nbsp;&nbsp;&nbsp;&nbsp;
+                            项目期限:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                             <span>
                                 <?php $ex = $deal->getDuration(); ?><?= $ex['value']?><?= $ex['unit'] ?>
                             </span>
@@ -73,9 +71,9 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/useraccount/chargedeposit.css');
                 </ul>
             </div>
 
-                            <?php if (!empty($deal->kuanxianqi)) { ?>
-                                <p class="grace-period">融资方可提前<?= $deal->kuanxianqi ?>天内任一天还款，客户收益按实际天数计息。</p>
-                            <?php } ?>
+            <?php if (!empty($deal->kuanxianqi)) { ?>
+                <p class="grace-period">融资方可提前<?= $deal->kuanxianqi ?>天内任一天还款，客户收益按实际天数计息。</p>
+            <?php } ?>
         </div>
         <?php if ($deal->isFlexRate) { ?>
             <!--pl-subscription-->
@@ -232,6 +230,12 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/useraccount/chargedeposit.css');
 
 <script>
     $(function () {
+        $('#tip').hover(function () {
+            $('.dialog').stop(true, false).show();
+        }, function () {
+            $('.dialog').stop(true, false).hide();
+        });
+
         //宽限期
         $('#kuanxian_tip').mouseover(function(){
             $('#kuanxian_message').fadeIn();

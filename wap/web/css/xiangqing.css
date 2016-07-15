@@ -335,7 +335,6 @@ i,em {
 }
 #chart-box .col-xs-12 div {
     width: 80%;
-    /*height: 80px;*/
     padding-top: 24px;
     padding-bottom: 12px;
     padding-left: 10px;
@@ -357,4 +356,11 @@ i,em {
 .message .txt_orange { padding-right:0; padding-bottom:20px;font-size:14px;line-height:24px;text-align: left; color:#FF9900;}
 @media (min-width:490px)  {
     .message .right_num { text-align: center;}
+}
+p.notice {
+    margin-top: 2em;
+}
+.m4 img {
+    width: 14px;
+    height: 14px;
 }
