@@ -72,8 +72,6 @@ class Adv extends ActiveRecord
             [['image', 'description'], 'required', 'on' => ['create', 'update']],
             ['status', 'default', 'value' => self::STATUS_SHOW, 'on' => ['create']],
             ['del_status', 'default', 'value' => self::DEL_STATUS_SHOW, 'on' => ['create']],
-            [['link', 'link'], 'match', 'pattern' => '/^((\w\.)+)|[^\d]$/', 'message' => '网址格式错误'], //一些简单的验证，不能为中文、不能为纯数字
-
         ];
     }
 
