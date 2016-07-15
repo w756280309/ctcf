@@ -725,7 +725,7 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
             //最后一次还款日期为计算出的 项目截止日期
             for ($i = 1; $i < $num; $i++) {
                 //获取当期还款日期
-                $time = $productProcessor->calcRetDate($total, $jixi_time);
+                $time = $productProcessor->calcRetDate($i * $total, $jixi_time);
                 $paymentDays[] = date('Y-m-d', $time);
             }
             $paymentDays[] = date('Y-m-d', $finish_time);//最后一个还款日为截止日

@@ -252,4 +252,46 @@ class OnlineProductTest extends YiiAppTestCase
         $res = $loan->getPaymentDates();
         $this->assertEquals($res, ['2016-12-20', '2017-07-15']);
     }
+
+    /**
+     * 测试   按月付息，到期本息
+     */
+    public function testPaymentDates18()
+    {
+        $loan = new OnlineProduct([
+            'jixi_time' => strtotime('2016-07-06'),
+            'expires' => 3,
+            'refund_method' => 2,
+        ]);
+        $res = $loan->getPaymentDates();
+        $this->assertEquals($res, ['2016-08-06', '2016-09-06', '2016-10-06']);
+    }
+
+    /**
+     * 测试   按年付息，到期本息
+     */
+    public function testPaymentDates19()
+    {
+        $loan = new OnlineProduct([
+            'jixi_time' => strtotime('2016-07-06'),
+            'expires' => 36,
+            'refund_method' => 5,
+        ]);
+        $res = $loan->getPaymentDates();
+        $this->assertEquals($res, ['2017-07-06', '2018-07-06', '2019-07-06']);
+    }
+
+    /**
+     * 测试   按季付息，到期本息, 超过两季
+     */
+    public function testPaymentDates20()
+    {
+        $loan = new OnlineProduct([
+            'jixi_time' => strtotime('2016-07-06'),
+            'expires' => 9,
+            'refund_method' => 3,
+        ]);
+        $res = $loan->getPaymentDates();
+        $this->assertEquals($res, ['2016-10-06', '2017-01-06', '2017-04-06']);
+    }
 }
