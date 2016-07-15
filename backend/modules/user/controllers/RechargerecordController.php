@@ -90,8 +90,8 @@ class RechargerecordController extends BaseController
         $bc = new BcRound();
         bcscale(14);
         foreach ($numdata as $data) {
-            $moneyTotal = bcadd($moneyTotal, $data['fund']);
             if ($data['status'] == 1) {
+                $moneyTotal = bcadd($moneyTotal, $data['fund']);
                 ++$successNum;
             } else {
                 ++$failureNum;
