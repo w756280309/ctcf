@@ -19,7 +19,7 @@ $deal->money = rtrim(rtrim($deal->money, '0'), '.');
                             <span class="column-lu">%</span>
                             <?php if (!empty($deal->jiaxi) && !$deal->isFlexRate) { ?><span class="bonus-badge">+<?=  doubleval($deal->jiaxi) ?>%</span><?php } ?>
                         </div>
-                        <span class="qing">年化收益率</span>
+                        <span class="qing">预期年化收益率</span>
                     </li>
                     <li class="col-xs-6">
                         <div>
@@ -93,7 +93,7 @@ $deal->money = rtrim(rtrim($deal->money, '0'), '.');
         <div class="row message"  style="padding-bottom: 0px;" >
             <div class="col-xs-1  col-sm-1" ></div>
             <div class="col-xs-6 money  col-sm-5" style="color:#9c9c9c">认购金额(元)</div>
-            <div class="col-xs-4 shouyi right_num col-sm-5"  style="color:#9c9c9c;" >年化收益率(%)</div>
+            <div class="col-xs-4 shouyi right_num col-sm-5"  style="color:#9c9c9c;" >预期年化收益率(%)</div>
             <div class="col-xs-1 right_hide  col-sm-1" ></div>
         </div>
         <div class="row message" style="padding-bottom: 0px;" >
@@ -110,12 +110,6 @@ $deal->money = rtrim(rtrim($deal->money, '0'), '.');
             <div class="col-xs-1 col-sm-1" ></div>
         </div>
         <?php } ?>
-
-        <div class="row message" >
-            <div class="col-xs-1" ></div>
-            <div class="col-xs-10 txt_orange" >投资金额越多,年化收益率越高</div>
-            <div class="col-xs-1" ></div>
-        </div>
         <?php } ?>
 
         <div class="row tab">

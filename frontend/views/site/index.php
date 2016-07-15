@@ -115,7 +115,7 @@ use common\utils\StringUtils;
                                 </div>
                             <?php } else { ?>
                                 <div class="yingshou-content2">
-                                    <p class="yingshou-content2-left">年化收益率
+                                    <p class="yingshou-content2-left">预期年化收益率
                                         <span>
                                             <?php
                                                 echo StringUtils::amountFormat2(OnlineProduct::calcBaseRate($val->yield_rate, $val->jiaxi));
@@ -153,7 +153,7 @@ use common\utils\StringUtils;
                                                 ?>
                                             </em>
                                         </div>
-                                        <p>年化收益率</p>
+                                        <p>预期年化收益率</p>
                                     </div>
                                     <div class="yingshou-nian yingshou-xian">
                                         <?php $ex = $val->getDuration() ?><?= $ex['value']?><span> <?= $ex['unit']?></span>

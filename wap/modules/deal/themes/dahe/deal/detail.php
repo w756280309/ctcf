@@ -118,12 +118,6 @@ $deal['money'] = rtrim(rtrim($deal['money'], '0'), '.');
             <div class="col-xs-1 col-sm-1" ></div>
         </div>
         <?php } ?>
-
-        <div class="row message" >
-            <div class="col-xs-1" ></div>
-            <div class="col-xs-10 txt_orange" >投资金额越多,年化收益率越高</div>
-            <div class="col-xs-1" ></div>
-        </div>
         <?php } ?>
 
         <div class="row tab">
