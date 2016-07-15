@@ -351,6 +351,7 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
             'created_at' => '更新时间',
             'isFlexRate'=>'是否启用浮动利率',
             'rateSteps'=>'浮动利率',
+            'paymentDay' => '固定还款日',
         ];
     }
 

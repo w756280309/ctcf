@@ -468,7 +468,7 @@ $is_online = in_array($model->status, [2, 3, 4, 5, 6, 7]);//判断标的是否�
                             }
                         ?>
                         <?=
-                            $form->field($model, 'paymentDay', ['template' => '<div class="input-append">{input}<span class="add-on">(日)</span></div>{error}', 'inputOptions' => ['autocomplete' => 'off', 'placeholder' => '固定还款日', 'class' => 'm-wrap span12', 'value' => empty($model->paymentDay) ? 20 : $model->paymentDay]])->textInput($paymentDayInputOptions)
+                            $form->field($model, 'paymentDay', ['template' => '<div class="input-append">{input}<span class="add-on">(日)</span></div>{error}', 'inputOptions' => ['autocomplete' => 'off', 'placeholder' => '固定还款日', 'class' => 'm-wrap span12 gdhk', 'value' => empty($model->paymentDay) ? 20 : $model->paymentDay]])->textInput($paymentDayInputOptions)
                         ?>
                     </div>
                 </div>
@@ -627,6 +627,7 @@ $is_online = in_array($model->status, [2, 3, 4, 5, 6, 7]);//判断标的是否�
             $('#onlineproduct-expires').next().html('(个月)');
         }
 
+        $('.gdhk').val(20);
         if ($(obj).val() >= '6') {
             $('.gudinghk').show();
         } else {
