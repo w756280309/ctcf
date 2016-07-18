@@ -78,7 +78,7 @@ use common\models\user\User;
                         <!--添加导出投资会员信息按钮-->
                         <?php if($category === User::USER_TYPE_PERSONAL) { ?>
                         <tr>
-                            <td colspan="6">
+                            <td colspan="8">
                                 <div align="right" style="margin-right: 20px">
                                     <a class="btn green btn-block" style="width: 140px;" href="/user/user/lenderstats">导出投资会员信息</a>
                                 </div>
