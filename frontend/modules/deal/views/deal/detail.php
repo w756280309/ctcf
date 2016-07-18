@@ -408,7 +408,7 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/useraccount/chargedeposit.css');
     //获取预期收益
     function profit($this) {
         var yr = "<?= $deal->yield_rate ?>";
-        var qixian = "<?= $deal->expires ?>";
+        var qixian = "<?= $deal->getDuration()['value'] ?>";
         var retmet = "<?= $deal->refund_method ?>";
         var sn = "<?= $deal->sn ?>";
         var isFlexRate = <?= $deal->isFlexRate ?>;
