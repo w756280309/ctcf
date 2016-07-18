@@ -125,7 +125,7 @@ $menus = AuthSys::getMenus('A100000');
             </table>
             <div style="height: 40px">
             <button class="btn green btn-block btn-block-line-on" h='/adv/adv/lineoff' style="width: 100px; float: left"><i class="icon-edit"></i>上线</button>
-            <button class="btn green btn-block btn-block-line-on" h='/adv/adv/lineon' style="width: 100px; float: left; margin-top: 0px; margin-left: 10px"><i class="icon-edit"></i>下线</button>
+            <button class="btn green btn-block btn-block-line-on offline" h='/adv/adv/lineon' style="width: 100px; float: left; margin-top: 0px; margin-left: 10px"><i class="icon-edit"></i>下线</button>
             </div>
             <div class="pagination" style="text-align:center;"><?=  LinkPager::widget(['pagination' => $pages]); ?></div>
         </div>
@@ -157,7 +157,11 @@ $menus = AuthSys::getMenus('A100000');
                 }
             }
             if (ids.length == 0) {
-                alert('请选择上线记录');
+                if ($(this).hasClass("offline")) {
+                    alert('请选择下线记录');
+                } else {
+                    alert('请选择上线记录');
+                }
                 return false;
             }
             var csrftoken = '<?= Yii::$app->request->getCsrfToken(); ?>';
