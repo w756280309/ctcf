@@ -68,6 +68,7 @@ class Adv extends ActiveRecord
     public function rules()
     {
         return [
+            ['title', 'required'],
             ['showOnPc', 'default', 'value' => 0],
             [['image', 'description'], 'required', 'on' => ['create', 'update']],
             ['status', 'default', 'value' => self::STATUS_SHOW, 'on' => ['create']],
@@ -82,6 +83,7 @@ class Adv extends ActiveRecord
     {
         return [
             'id' => 'ID',
+            'title' => '标题',
             'description' => '描述',
             'image' => '图片',
             'pos_id' => '位置id',
