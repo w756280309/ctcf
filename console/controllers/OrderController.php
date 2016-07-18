@@ -7,6 +7,7 @@
 namespace console\controllers;
 
 use common\models\order\OnlineOrder;
+use common\models\user\UserInfo;
 use yii\console\Controller;
 use common\models\order\OrderQueue;
 use common\models\order\OrderManager;
@@ -36,6 +37,25 @@ class OrderController extends Controller
                             if ($time > $promo->startAt && $time < $promo->endAt) {
                                 $promo->onInvested($queue->order);
                             }
+                        }
+
+                        //投资成功之后更新用户信息
+                        $order = $queue->order;
+                        if ($order->status == 1) {
+                            $info = UserInfo::find()->where(['user_id' => $order['uid']])->one();
+                            if (null === $info) {
+                                $info = new UserInfo();
+                                $info->user_id = $order['uid'];
+                                $info->isInvested = 1;
+                                $info->firstInvestAmount = $order['order_money'];
+                                $info->firstInvestDate = date('Y-m-d', $order['order_time']);
+                            }
+                            $info->investCount = $info->investCount + 1;
+                            $info->investTotal = $info->investTotal + $order['order_money'];
+                            $info->averageInvestAmount = $info->investTotal / $info->investCount;
+                            $info->lastInvestAmount = $order['order_money'];
+                            $info->lastInvestDate = date('Y-m-d', $order['order_time']);
+                            $info->save();
                         }
                     } catch (\Exception $ex) {
                         //TODO

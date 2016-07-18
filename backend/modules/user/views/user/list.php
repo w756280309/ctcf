@@ -53,10 +53,14 @@ use common\models\user\User;
                                 <td>
                                     <span class="title">真实姓名</span>
                                 </td>
-                                <td><input type="text" class="m-wrap span6" style="margin-bottom: 0px;width:300px" name='name' value="<?= Yii::$app->request->get('name') ?>"  placeholder="真实姓名"/></td>
+                                <td><input type="text" class="m-wrap span6" style="margin-bottom: 0px;width:200px" name='name' value="<?= Yii::$app->request->get('name') ?>"  placeholder="真实姓名"/></td>
                                 <td><span class="title">手机号</span></td>
                                 <td>
                                     <input type="text" class="m-wrap span6" style="margin-bottom: 0px;width:300px" name='mobile' value="<?= Yii::$app->request->get('mobile') ?>"  placeholder="手机号"/>
+                                </td>
+                                <td><span class="title">未投资时长（天）</span></td>
+                                <td>
+                                    <input type="text" class="m-wrap span6" style="margin-bottom: 0px;width:50px" name='noInvestDays' value="<?= Yii::$app->request->get('noInvestDays') ?>"  placeholder="天数"/>
                                 </td>
                             <?php }else{?>
                                 <td>
@@ -103,6 +107,8 @@ use common\models\user\User;
                         <th>注册时间</th>
                         <th>可用余额（元）</th>
                 <?php if($category==User::USER_TYPE_PERSONAL){?>
+                        <th>未投资时长（天）</th>
+                        <th>最后一次购买金额</th>
                         <th>联动状态</th>
                 <?php }?>
                         <th><center>操作</center></th>
@@ -121,6 +127,20 @@ use common\models\user\User;
                         <td><?= date('Y-m-d H:i:s',$val['created_at'])?></td>
                         <td><?= number_format(($category==User::USER_TYPE_PERSONAL)?($val->lendAccount['available_balance']):($val->borrowAccount['available_balance']),2) ?></td>
                         <?php if($category==User::USER_TYPE_PERSONAL){?>
+                        <td>
+                            <?php
+                                $info = $val->info;
+                                if ($info){
+                                    $days = (new \DateTime)->diff(new \DateTime($info->lastInvestDate))->days;
+                                } else {
+                                    $days = 0;
+                                }
+                                echo $days ;
+                            ?>
+                        </td>
+                        <td>
+                            <?= $val->info ? number_format($val->info->lastInvestAmount, 2) : 0?>
+                        </td>
                         <td>
                             <button class="btn btn-primary get_order_status" uid="<?= $val['id'] ?>">查询联动状态</button>
                         </td>

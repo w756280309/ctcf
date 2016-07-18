@@ -55,6 +55,13 @@ class UserController extends BaseController
         }
 
         $query = User::find()->where(['type' => $type, 'is_soft_deleted' => 0]);
+        //过滤 未投资时长
+        $noInvestDays = intval(Yii::$app->request->get('noInvestDays'));
+        if (!empty($noInvestDays)) {
+            $date = date('Y-m-d', strtotime('- ' . $noInvestDays . ' day'));
+            $query->leftJoin('user_info', 'user_info.user_id = user.id')->andFilterWhere(['<=', 'user_info.lastInvestDate', $date]);
+        }
+
         if ($type == User::USER_TYPE_PERSONAL) {
             $query->with('lendAccount');
             if (!empty($name)) {

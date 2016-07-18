@@ -674,4 +674,10 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface, UserInterf
     {
         return RepaymentPlan::find()->where(['uid' => $this->id, 'status' => RepaymentPlan::STATUS_WEIHUAN])->sum('lixi');
     }
+
+    //关联用户信息对象
+    public function getInfo()
+    {
+        return $this->hasOne(UserInfo::class, ['user_id' => 'id']);
+    }
 }
