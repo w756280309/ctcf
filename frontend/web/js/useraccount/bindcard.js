@@ -180,6 +180,7 @@ function error(desc)
 
 function selectOneBank(dataImg, dataBank)
 {
+    var pre_bank_id = $('#bank_id').val();
     $('.bind-icon img')[0].src = '/images/useraccount/bankicon/' + dataImg + '.png';
     $('.bind-bank').html(dataBank);
     $('#bank_id').val(dataImg);
@@ -194,4 +195,9 @@ function selectOneBank(dataImg, dataBank)
     }
     $('.bank-mark').fadeOut();
     $('.bankIcon-box').fadeOut();
+
+    //判断当前所选的银行是否与已选银行一致，若不一致，则将卡号置为空
+    if ('' !== pre_bank_id && parseInt(pre_bank_id) !== parseInt(dataImg)) {
+        $("#card_no").val('');
+    }
 }
