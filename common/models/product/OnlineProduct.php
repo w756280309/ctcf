@@ -595,7 +595,7 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
         //如果 项目 是到期本息 并且 有产品到期日，那么项目期限需要按照指定逻辑进行计算
         if (intval($this->refund_method) === OnlineProduct::REFUND_METHOD_DAOQIBENXI) {
             if ( $this->finish_date > 0) {
-                if ($this->jixi_time) {
+                if ($this->jixi_time && $this->is_jixi) {
                     //项目期限＝ 产品到期日－计息日期 + 1；后台确认计息时候已经算好并保存到数据库了
                     $expires = $this->expires;
                 } else {
@@ -603,7 +603,7 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
                     $datetime1 = new \DateTime(date('Y-m-d', $this->finish_date));
                     $datetime2 = new \DateTime(date('Y-m-d', time()));
                     $interval = $datetime1->diff($datetime2);
-                    $expires = intval($interval->format('%a'));
+                    $expires = $interval->days - 1;
                 }
             } else {
                 $expires = $this->expires;
