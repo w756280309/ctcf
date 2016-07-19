@@ -46,8 +46,14 @@ class OrderController extends Controller
                             if (null === $info) {
                                 $info = new UserInfo();
                                 $info->user_id = $order['uid'];
+                            }
+                            if (!$info->isInvested) {
                                 $info->isInvested = 1;
+                            }
+                            if (!$info->firstInvestAmount) {
                                 $info->firstInvestAmount = $order['order_money'];
+                            }
+                            if (!$info->firstInvestDate) {
                                 $info->firstInvestDate = date('Y-m-d', $order['order_time']);
                             }
                             $info->investCount = $info->investCount + 1;
