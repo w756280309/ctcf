@@ -2,7 +2,7 @@
 $this->title="购买";
 
 $yr = $deal->yield_rate;
-$qixian = $deal->expires;
+$qixian = $deal->getDuration()['value'];
 $retmet = $deal->refund_method;
 $sn = $deal->sn;
 $isFlexRate = $deal->isFlexRate;
