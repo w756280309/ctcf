@@ -8,6 +8,7 @@ use common\models\user\RechargeRecord;
 use common\models\user\DrawRecord;
 use common\models\order\OnlineOrder;
 use common\models\user\UserAccount;
+use common\models\user\UserInfo;
 use common\utils\StringUtils;
 
 /**
@@ -37,18 +38,21 @@ class UserStats
                 '提现成功次数(次)',
                 '投资成功金额(元)',
                 '投资成功次数(次)',
+                '首次购买金额(元)',
             ],
         ];
 
         $u = User::tableName();
         $b = UserBanks::tableName();
         $a = UserAccount::tableName();
+        $info = UserInfo::tableName();
 
         $model = (new \yii\db\Query)
-            ->select("$u.*, $b.id as bid, $a.account_balance")
+            ->select("$u.*, $b.id as bid, $a.account_balance, $info.firstInvestAmount as firstInvestAmount")
             ->from($u)
             ->leftJoin($b, "$u.id = $b.uid")
             ->leftJoin($a, "$u.id = $a.uid")
+            ->leftJoin($info, "$info.user_id = $u.id")
             ->where(["$u.type" => User::USER_TYPE_PERSONAL]);
         if (!empty($where)) {
             $model = $model->andWhere($where);
@@ -128,6 +132,8 @@ class UserStats
                     }
                 }
             }
+
+            $data[$key]['firstInvestAmount'] = $val['firstInvestAmount'];
         }
 
         return $data;
