@@ -4,8 +4,8 @@ $this->title = '投资详情';
 use common\models\product\RateSteps;
 
 $this->registerJsFile(ASSETS_BASE_URI .'js/fastclick.js', ['position' => 1, ]);
-$this->registerJsFile(ASSETS_BASE_URI .'js/touzixiangqing.js', ['depends' => 'yii\web\JqueryAsset', 'position' => 1]);
-$this->registerCssFile(ASSETS_BASE_URI .'css/touzixiangqing.css?v=20160427', ['depends' => 'wap\assets\WapAsset']);
+$this->registerJsFile(ASSETS_BASE_URI .'js/touzixiangqing.js?v=20160718', ['depends' => 'yii\web\JqueryAsset', 'position' => 1]);
+$this->registerCssFile(ASSETS_BASE_URI .'css/touzixiangqing.css?v=20160718', ['depends' => 'wap\assets\WapAsset']);
 ?>
 
 <div class="container">

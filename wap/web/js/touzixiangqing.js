@@ -44,6 +44,9 @@ $(function(){
     var h=40*repaymentN;
     if(repaymentN>5){
         $('.repayment-down').show();
+        //init li>5时
+        repaymentDown.addClass("arrowRotateLeft");
+        repaymentContent.addClass("repayment-plan-box");
         down(repayment,repaymentDown,repaymentContent,'224px',function(){
             $('.repayment-down').show();
         });

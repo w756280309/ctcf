@@ -182,6 +182,9 @@ i,em {
     position: relative;
     overflow: hidden;
 }
+.repayment-plan-box{
+    height: 224px;
+}
 .repayment-content li {
     margin-left: 22px;
     height: 40px;
