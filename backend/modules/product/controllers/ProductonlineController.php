@@ -75,7 +75,7 @@ class ProductonlineController extends BaseController
             $start_date = is_integer($model->start_date) ? $model->start_date : strtotime($model->start_date);
             $end_date = is_integer($model->end_date) ? $model->end_date : strtotime($model->end_date);
 
-            if (!empty($model->finish_date) && OnlineProduct::REFUND_METHOD_DAOQIBENXI === (int)$model->refund_method) {
+            if (!empty($model->finish_date) && OnlineProduct::REFUND_METHOD_DAOQIBENXI === (int) $model->refund_method) {
                 //若截止日期不为空，重新计算项目天数
                 $pp = new ProductProcessor();
                 $model->expires = $pp->LoanTimes(date('Y-m-d H:i:s', $start_date), null, $finish_date, 'd', true)['days'][1]['period']['days'];
@@ -109,7 +109,7 @@ class ProductonlineController extends BaseController
                 $model->addError('contract_type', '合同名称错误,第二份合同应该录入风险揭示书');
             }
 
-            foreach($con_name_arr as $key => $val) {
+            foreach ($con_name_arr as $key => $val) {
                 if (empty($val)) {
                     $model->addError('contract_type', '合同名称不能为空');
                 }
@@ -311,7 +311,7 @@ class ProductonlineController extends BaseController
     }
 
     /**
-     * 贷款管理->项目列表页
+     * 贷款管理->项目列表页.
      */
     public function actionList()
     {
@@ -321,9 +321,9 @@ class ProductonlineController extends BaseController
         $op = OnlineProduct::tableName();
         $data = OnlineProduct::find()
             ->select("$op.*")
-            ->addSelect(['isrecommended'=>'if(`online_status`=1 && `isPrivate`=0, `recommendTime`, 0)'])
-            ->addSelect(['effect_jixi_time'=>'if(`is_jixi`=1, `jixi_time`, 0)'])
-            ->addSelect(['product_status'=>"(case $op.`status` when 4 then 7 when 7 then 4 else $op.`status` end)"])
+            ->addSelect(['isrecommended' => 'if(`online_status`=1 && `isPrivate`=0, `recommendTime`, 0)'])
+            ->addSelect(['effect_jixi_time' => 'if(`is_jixi`=1, `jixi_time`, 0)'])
+            ->addSelect(['product_status' => "(case $op.`status` when 4 then 7 when 7 then 4 else $op.`status` end)"])
             ->joinWith('fangkuan')
             ->where(['del_status' => 0]);
         if ($request['name']) {
@@ -336,9 +336,10 @@ class ProductonlineController extends BaseController
         }
         $_data = clone $data;
 
-        $data->orderBy("isrecommended desc, online_status asc, product_status asc,effect_jixi_time desc,sn desc");
+        $data->orderBy('isrecommended desc, online_status asc, product_status asc,effect_jixi_time desc,sn desc');
         $pages = new Pagination(['totalCount' => $_data->count(), 'pageSize' => '20']);
         $model = $data->offset($pages->offset)->limit($pages->limit)->all();
+
         return $this->render('list', [
                     'models' => $model,
                     'pages' => $pages,
@@ -347,7 +348,7 @@ class ProductonlineController extends BaseController
     }
 
     /**
-     * 贷款的详细信息
+     * 贷款的详细信息.
      */
     public function actionDetail()
     {
@@ -375,18 +376,23 @@ class ProductonlineController extends BaseController
         var_dump($result);
     }
 
-    //ajax请求删除
+    /**
+     * 标的删除.
+     */
     public function actionDel()
     {
         $id = Yii::$app->request->post('id');
+
         if ($id) {
             $model = OnlineProduct::findOne($id);
             $model->scenario = 'del';
             $model->del_status = 1;
             if ($model->save()) {
-                echo json_encode('success');
+                return json_encode(['result' => 1, 'message' => '删除成功']);
             }
         }
+
+        return json_encode(['result' => 0, 'message' => '删除失败']);
     }
 
     /**
@@ -406,6 +412,7 @@ class ProductonlineController extends BaseController
                 $up_srs = OnlineProduct::updateAll(['status' => OnlineProduct::STATUS_FOUND, 'sort' => OnlineProduct::SORT_FOUND, 'full_time' => time()], ['id' => $id]);
                 if (!$up_srs) {
                     $transaction->rollBack();
+
                     return ['result' => '0', 'message' => '操作失败,状态更新失败,请联系技术'];
                 }
                 $orders = OnlineOrder::getOrderListByCond(['online_pid' => $id, 'status' => OnlineOrder::STATUS_SUCCESS]);
@@ -421,20 +428,22 @@ class ProductonlineController extends BaseController
                     $mrmodel->uid = $ord['uid'];
                     $mrmodel->balance = $ua->available_balance;
                     $mrmodel->in_money = $ord['order_money'];
-                    $mrmodel->remark = '项目成立,冻结金额转入理财金额账户。交易金额'. $ord['order_money'];
+                    $mrmodel->remark = '项目成立,冻结金额转入理财金额账户。交易金额'.$ord['order_money'];
                     if (!$ua->save() || !$mrmodel->save()) {
                         $transaction->rollBack();
+
                         return ['result' => '0', 'message' => '操作失败,账户更新失败,请联系技术'];
                     }
                 }
 
                 if (!empty($model->recommendTime)) {
-                    $count = OnlineProduct::find()->where("recommendTime != 0")->andWhere(['isPrivate' => 0, 'del_status' => 0])->count();
+                    $count = OnlineProduct::find()->where('recommendTime != 0')->andWhere(['isPrivate' => 0, 'del_status' => 0])->count();
 
                     if ($count > 1) {
                         $model->recommendTime = 0;
                         if (!$model->save(false)) {
                             $transaction->rollBack();
+
                             return ['code' => 0, 'message' => '操作失败'];
                         }
                     }
@@ -474,6 +483,7 @@ class ProductonlineController extends BaseController
                     //确认计息完成之后将标的添加至保全队列
                     $job = new BaoQuanQueue(['proId' => $id, 'status' => BaoQuanQueue::STATUS_SUSPEND]);
                     $job->save();
+
                     return ['result' => '1', 'message' => '操作成功'];
                 } else {
                     return ['result' => '0', 'message' => '操作失败，请联系技术'];
@@ -557,7 +567,7 @@ class ProductonlineController extends BaseController
     }
 
     /**
-     * 标的推荐功能
+     * 标的推荐功能.
      */
     public function actionRecommend()
     {
@@ -573,7 +583,7 @@ class ProductonlineController extends BaseController
         }
 
         if (!empty($deal->recommendTime)) {
-            $count = OnlineProduct::find()->where("recommendTime != 0")->andWhere(['isPrivate' => 0, 'del_status' => 0])->count();
+            $count = OnlineProduct::find()->where('recommendTime != 0')->andWhere(['isPrivate' => 0, 'del_status' => 0])->count();
 
             if ($count <= 1) {
                 return ['code' => 0, 'message' => '推荐标的至少要有一个'];
