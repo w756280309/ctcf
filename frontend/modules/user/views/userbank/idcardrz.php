@@ -45,6 +45,12 @@ $this->title = '开户';
 
 <script>
     $(function () {
+        $("input").bind('keypress', function(e) {
+            if (e.keyCode === 13) {
+                $('.deposit-content-link').click();
+            }
+        });
+
         /*点击立即开通*/
         var allowSub = true;
         $('.deposit-content-link').on('click', function () {
