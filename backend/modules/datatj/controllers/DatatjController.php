@@ -257,10 +257,10 @@ FROM perf WHERE DATE_FORMAT(bizDate,'%Y-%m') < DATE_FORMAT(NOW(),'%Y-%m')  GROUP
         $history = Perf::find()->where(['<', 'bizDate', date('Y-m-d')])->orderBy(['bizDate' => SORT_DESC])->asArray()->all();
         $today = Perf::getTodayCount();
         $allData = array_merge([$today], $history);
-        $record = implode("\t" . ',', ['日期', '交易额', '充值金额', '提现金额', '充值手续费', Yii::$app->params['pc_cat'][2] . '销售额', Yii::$app->params['pc_cat'][1] . '销售额', '注册用户', '实名认证', '绑卡用户数', '投资人数', '当日注册当日投资人数', '新增投资人数', '已投用户登录数', '未投用户登录数', '融资项目']) . "\n";
+        $record = implode(',', ['日期', '交易额', '充值金额', '提现金额', '充值手续费', Yii::$app->params['pc_cat'][2] . '销售额', Yii::$app->params['pc_cat'][1] . '销售额', '注册用户', '实名认证', '绑卡用户数', '投资人数', '当日注册当日投资人数', '新增投资人数', '已投用户登录数', '未投用户登录数', '融资项目']) . "\n";
         foreach ($allData as $k => $data) {
             $array = [$data['bizDate'], floatval($data['totalInvestment']), floatval($data['rechargeMoney']), floatval($data['drawAmount']), floatval($data['rechargeCost']), floatval($data['investmentInWyb']), floatval($data['investmentInWyj']), intval($data['reg']), intval($data['idVerified']), intval($data['qpayEnabled']), intval($data['investor']), intval($data['newRegisterAndInvestor']), intval($data['newInvestor']), intval($data['investAndLogin']), intval($data['notInvestAndLogin']), intval($data['successFound'])];
-            $record .= implode("\t" . ',', $array) . "\n";
+            $record .= implode(',', $array) . "\n";
         }
         if (null !== $record) {
             $record = iconv('UTF-8', 'GB18030', $record);//转换编码
@@ -283,7 +283,7 @@ FROM perf WHERE DATE_FORMAT(bizDate,'%Y-%m') < DATE_FORMAT(NOW(),'%Y-%m')  GROUP
         $record = implode("\t" . ',', ['日期', '交易额', '充值金额', '提现金额', '充值手续费', Yii::$app->params['pc_cat'][2] . '销售额', Yii::$app->params['pc_cat'][1] . '销售额', '注册用户', '实名认证', '绑卡用户数', '投资人数', '当日注册当日投资人数', '新增投资人数', '融资项目']) . "\n";
         foreach ($allData as $k => $data) {
             $array = [date('Y-m', strtotime($data['bizDate'])), floatval($data['totalInvestment']), floatval($data['rechargeMoney']), floatval($data['drawAmount']), floatval($data['rechargeCost']), floatval($data['investmentInWyb']), floatval($data['investmentInWyj']), intval($data['reg']), intval($data['idVerified']), intval($data['qpayEnabled']), intval($data['investor']), intval($data['newRegisterAndInvestor']), intval($data['newInvestor']), intval($data['successFound'])];
-            $record .= implode("\t" . ',', $array) . "\n";
+            $record .= implode(',', $array) . "\n";
         }
         if (null !== $record) {
             $record = iconv('UTF-8', 'GB18030', $record);//转换编码

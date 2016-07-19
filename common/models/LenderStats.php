@@ -421,7 +421,7 @@ class LenderStats extends \yii\db\ActiveRecord
             if ('title' !== $key) {
                 $val['userRegTime'] = date('Y-m-d H:i:s', $val['userRegTime']);
             }
-            $record .= implode("\t" . ',', $val) . "\n";
+            $record .= implode(',', $val) . "\n";
         }
         if (null !== $record) {
             $record = iconv('utf-8', 'GB18030', $record);//转换编码

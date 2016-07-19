@@ -150,7 +150,7 @@ class UserStats
 
         $record = null;
         foreach ($data as $val) {
-            $record .= implode("\t" . ',', $val) . "\n";
+            $record .= implode(',', $val) . "\n";
         }
 
         if (null !== $record) {
