@@ -44,9 +44,12 @@
                         <td>
                             <select class="small m-wrap" style="margin-bottom: 0px" name="category">
                                 <option value="">--全部--</option>
+                                <?php
+                                    $category_id = intval($selectQueryParams['category']);
+                                ?>
                                 <?php foreach ($categories as $key => $val): ?>
                                     <option value="<?= $key ?>" <?php
-                                    if ($selectQueryParams['category_id'] == $key) {
+                                    if ($category_id === $key) {
                                         echo 'selected';
                                     }
                                     ?> ><?= $val ?></option>
@@ -55,11 +58,12 @@
                         </td>
                         <td><span class="title">状态</span></td>
                         <td>
+                            <?php $query_status = is_numeric($selectQueryParams['status']) ? intval($selectQueryParams['status']) : $selectQueryParams['status']; ?>
                             <select class="small m-wrap" style="margin-bottom: 0px" name="status">
                                 <option value="">--全部--</option>
                                 <?php foreach ($status as $key => $val): ?>
                                     <option value='<?= $key ?>' <?php
-                                    if ($selectQueryParams['status'] == $key && $selectQueryParams['status'] != "") {
+                                    if ($query_status === $key) {
                                         echo 'selected';
                                     }
                                     ?> ><?= $val ?></option>
