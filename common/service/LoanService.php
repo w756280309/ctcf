@@ -85,7 +85,7 @@ class LoanService
                 break;
         }
 
-        if (null !== $umpLoanState) {
+        if (null !== $umpLoanState && Yii::$app->params['ump_uat']) {
             $resp = Yii::$container->get('ump')->updateLoanState($deal->id, $umpLoanState);
             if (!$resp->isSuccessful()) {
                 throw new Exception('联动状态修改失败');
