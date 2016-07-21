@@ -124,7 +124,7 @@ class UserStats
 
             $data[$key]['ototalFund'] = 0;
             $data[$key]['ototalNum'] = 0;
-            if (null !== $val['bid'] && $order) {
+            if ($order) {
                 foreach ($order as $v) {
                     if ($val['id'] === $v['uid']) {
                         $data[$key]['ototalFund'] = $v['ototalFund'];
