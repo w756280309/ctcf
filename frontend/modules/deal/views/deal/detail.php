@@ -202,6 +202,8 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/useraccount/chargedeposit.css');
                         <div>
                             <input type="submit" class="dR-btn" id="order_submit" value="立即投资"/>
                         </div>
+
+                        <p style="padding-bottom: 0.5em; font-size: 12px; color: #bababf;">*理财非存款，产品有风险，投资需谨慎</p>
                     </form>
                 <?php } elseif ($deal->status == OnlineProduct::STATUS_PRE) { ?>
                     <?php
