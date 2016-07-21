@@ -2,6 +2,7 @@
 
 namespace backend\modules\repayment\controllers;
 
+use common\models\payment\Repayment;
 use Yii;
 use common\models\order\OnlineRepaymentRecord;
 use common\models\product\OnlineProduct;
@@ -133,26 +134,34 @@ class RepaymentController extends BaseController
         }
 
         $ump = Yii::$container->get('ump');
+        //当不允许访问联动时候，默认联动测处理成功
+        if (Yii::$app->params['ump_uat']){
+            //调用联动接口,查询标的信息
+            $loanResp = $ump->getLoanInfo($pid);
 
-        //调用联动接口,查询标的信息
-        $loanResp = $ump->getLoanInfo($pid);
-
-        if ($loanResp->isSuccessful()) {
-            if ('02' === $loanResp->get('project_account_state')) {
-                return ['result' => 0, 'message' => '当前联动标的状态为冻结状态'];
+            if ($loanResp->isSuccessful()) {
+                if ('02' === $loanResp->get('project_account_state')) {
+                    return ['result' => 0, 'message' => '当前联动标的状态为冻结状态'];
+                }
+                if ('2' !== $loanResp->get('project_state')) {
+                    return ['result' => 0, 'message' => '当前联动标的状态不允许此操作'];
+                }
+            } else {
+                return ['result' => 0, 'message' => $loanResp->get('ret_msg')];
             }
-            if ('2' !== $loanResp->get('project_state')) {
-                return ['result' => 0, 'message' => '当前联动标的状态不允许此操作'];
-            }
-        } else {
-            return ['result' => 0, 'message' => $loanResp->get('ret_msg')];
         }
+
 
         $saleac = UserAccount::findOne(['uid' => $deal->borrow_uid, 'type' => UserAccount::TYPE_BORROW]);
         $epayUser = EpayUser::findOne(['appUserId' => $deal->borrow_uid]);
 
         if (!$saleac || !$epayUser) {
             return ['result' => 0, 'message' => '融资方信息不存在'];
+        }
+        //查看还款记录
+        $repayment = Repayment::findOne(['loan_id' => $pid, 'term' => $qishu]);
+        if (!$repayment) {
+            return ['result' => 0, 'message' => '还款信息不存在'];
         }
 
         //融资人需要扣除的金额计算
@@ -170,25 +179,28 @@ class RepaymentController extends BaseController
         if (0 >= bccomp($balance, 0)) {
             return ['result' => 0, 'message' => '融资用户账户余额不足'];
         }
+        //当不允许访问联动时候，默认联动测处理成功
+        if (Yii::$app->params['ump_uat']) {
+            $orgResp = $ump->getMerchantInfo($epayUser->epayUserId);
 
-        $orgResp = $ump->getMerchantInfo($epayUser->epayUserId);
+            if ($orgResp->isSuccessful()) {
+                if ('1' !== $orgResp->get('account_state')) {
+                    return ['result' => 0, 'message' => '当前联动端商户状态异常'];
+                }
 
-        if ($orgResp->isSuccessful()) {
-            if ('1' !== $orgResp->get('account_state')) {
-                return ['result' => 0, 'message' => '当前联动端商户状态异常'];
+                if (-1 === bccomp($orgResp->get('balance'), $total_repayment * 100)) {
+                    return ['result' => 0, 'message' => '当前联动端商户余额不足'];
+                }
+            } else {
+                return ['result' => 0, 'message' => $orgResp->get('ret_msg')];
             }
-
-            if (-1 === bccomp($orgResp->get('balance'), $total_repayment * 100)) {
-                return ['result' => 0, 'message' => '当前联动端商户余额不足'];
-            }
-        } else {
-            return ['result' => 0, 'message' => $orgResp->get('ret_msg')];
         }
+
 
         $sum_benxi_yue = OnlineRepaymentPlan::find()->where(['online_pid' => $pid, 'status' => OnlineRepaymentPlan::STATUS_WEIHUAN])->andWhere("qishu not in ($qishu)")->sum('benxi'); //未还其它期数的总和
         $sum_benxi_yue = !$sum_benxi_yue ? 0 : $sum_benxi_yue;
 
-        if (OnlineProduct::STATUS_HUAN === $deal->status) {
+        if (OnlineProduct::STATUS_HUAN === $deal->status && !$repayment->isRepaid) {
             $transaction = Yii::$app->db->beginTransaction();
 
             $saleac->account_balance = $bcround->bcround(bcsub($saleac->account_balance, $total_repayment), 2);
@@ -226,16 +238,19 @@ class RepaymentController extends BaseController
                     return ['result' => 0, 'message' => '还款失败，修改标的状态错误'];
                 }
             }
+            //还款金额大于0 并且 是正式环境才请求联动
+            if ($total_repayment > 0 && Yii::$app->params['ump_uat']) {
+                $hkResp = $ump->huankuan(TxUtils::generateSn('HK'), $deal->id, $epayUser->epayUserId, $total_repayment);  //还款的订单日期只允许订单当日或订单前一天
+                if (!$hkResp->isSuccessful()) {
+                    $transaction->rollBack();
 
-            $hkResp = $ump->huankuan(TxUtils::generateSn('HK'), $deal->id, $epayUser->epayUserId, $total_repayment);  //还款的订单日期只允许订单当日或订单前一天
-
-            if ($hkResp->isSuccessful()) {
-                $transaction->commit();
-            } else {
-                $transaction->rollBack();
-
-                return ['result' => 0, 'message' => $hkResp->get('ret_code').$hkResp->get('ret_msg')];
+                    return ['result' => 0, 'message' => $hkResp->get('ret_code').$hkResp->get('ret_msg')];
+                }
             }
+            $repayment->isRepaid = 1;
+            $repayment->repaidAt = date('Y-m-d H:i:s');
+            $repayment->save();
+            $transaction->commit();
         }
 
         $repaymentrecord = new OnlineRepaymentRecord();
@@ -300,17 +315,21 @@ class RepaymentController extends BaseController
 
                 return ['result' => 0, 'message' => '还款失败，资金记录失败'];
             }
-
-            //调用联动返款接口,返款给投资用户
-            $fkResp = $ump->fankuan($order->sn, $record->refund_time, $order->online_pid, $_orders[$key]['epayUserId'], $order->benxi);
-
-            if ($fkResp->isSuccessful()) {
-                $transaction->commit();
-            } else {
-                $transaction->rollBack();
-
-                return ['result' => 0, 'message' => $fkResp->get('ret_msg')];
+            //应还本息大于0 并且 是正式环境才请求联动
+            if ($order->benxi > 0 && Yii::$app->params['ump_uat']){
+                //调用联动返款接口,返款给投资用户
+                $fkResp = $ump->fankuan($order->sn, $record->refund_time, $order->online_pid, $_orders[$key]['epayUserId'], $order->benxi);
+                if (!$fkResp->isSuccessful()) {
+                    $transaction->rollBack();
+                    return ['result' => 0, 'message' => $fkResp->get('ret_msg')];
+                }
             }
+
+            $repayment->isRefunded = 1;
+            $repayment->refundedAt = date('Y-m-d H:i:s');
+            $repayment->save();
+
+            $transaction->commit();
         }
 
         $_repaymentrecord = OnlineRepaymentRecord::find()->where(['online_pid' => $pid, 'status' => OnlineRepaymentRecord::STATUS_DID])->groupBy('uid');
@@ -367,6 +386,7 @@ class RepaymentController extends BaseController
         ];
     }
 
+    //放款操作
     public function actionFk()
     {
         $pid = Yii::$app->request->post('pid');
@@ -379,13 +399,13 @@ class RepaymentController extends BaseController
         $bcround = new BcRound();
         if (OnlineFangkuan::STATUS_EXAMINED === (int) $fk->status) {
             $payLog = PaymentLog::findOne(['loan_id' => $pid]);
-            if ($payLog) {
+            //当不允许访问联动时候，默认联动测处理成功
+            if ($payLog && Yii::$app->params['ump_uat']) {
                 $ret = Yii::$container->get('ump')->merOrder($payLog);
                 if (!$ret->isSuccessful()) {
                     return ['res' => 0, 'msg' => '联动一侧：'.$ret->get('ret_msg')];
                 }
             }
-
             $transaction = Yii::$app->db->beginTransaction();
             try {
                 LoanService::updateLoanState($product, OnlineProduct::STATUS_HUAN);
@@ -420,11 +440,13 @@ class RepaymentController extends BaseController
 
                 return ['res' => 0, 'msg' => '资金记录失败'];
             }
-
-            $resp = Yii::$container->get('ump')->loanTransferToMer($fk);
-            if (!$resp->isSuccessful()) {
-                $transaction->rollBack();
-                return ['res' => 0, 'msg' => '联动一侧：'.$resp->get('ret_msg')];
+            //当不允许访问联动时候，默认联动测处理成功
+            if (Yii::$app->params['ump_uat']) {
+                $resp = Yii::$container->get('ump')->loanTransferToMer($fk);
+                if (!$resp->isSuccessful()) {
+                    $transaction->rollBack();
+                    return ['res' => 0, 'msg' => '联动一侧：'.$resp->get('ret_msg')];
+                }
             }
             $transaction->commit();
         } elseif (OnlineFangkuan::STATUS_FANGKUAN === (int) $fk->status) {

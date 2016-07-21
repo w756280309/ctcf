@@ -2,6 +2,7 @@
 
 namespace common\models\order;
 
+use common\models\payment\Repayment;
 use yii\behaviors\TimestampBehavior;
 use common\models\product\OnlineProduct;
 use common\lib\product\ProductProcessor;
@@ -149,16 +150,22 @@ class OnlineRepaymentPlan extends \yii\db\ActiveRecord
             'template_id' => Yii::$app->params['sms']['manbiao'],
             'level' => SmsMessage::LEVEL_LOW,
         ]);
+        $repayment = [];
         foreach ($orders as $ord) {
             //获取每个订单的还款金额详情
             $res_money = self::calcBenxi($ord);
             if ($res_money) {
                 foreach ($res_money as $k => $v) {
+                    $term = $k + 1;
+                    $amount = $bc->bcround(bcadd($v[1], $v[2]), 2);
+                    $principal = $bc->bcround($v[1], 2);
+                    $interest = $bc->bcround($v[2], 2);
+                    //生成还款计划
                     $initplan = [
-                        'qishu' => ($k + 1),
-                        'benxi' => $bc->bcround(bcadd($v[1], $v[2]), 2),
-                        'benjin' => $bc->bcround($v[1], 2),
-                        'lixi' => $bc->bcround($v[2], 2),
+                        'qishu' => $term,
+                        'benxi' => $amount,
+                        'benjin' => $principal,
+                        'lixi' => $interest,
                         'refund_time' => strtotime($v[0]),
                     ];
                     $plan = self::initPlan($ord, $initplan);
@@ -166,6 +173,11 @@ class OnlineRepaymentPlan extends \yii\db\ActiveRecord
                         $transaction->rollBack();
                         return false;
                     }
+                    //统计还款数据
+                    $totalAmount = isset($repayment[$term]['amount']) ? bcadd($repayment[$term]['amount'], $amount) : $amount;
+                    $totalPrincipal = isset($repayment[$term]['principal']) ? bcadd($repayment[$term]['principal'], $principal) : $principal;
+                    $totalInterest = isset($repayment[$term]['interest']) ? bcadd($repayment[$term]['interest'], $interest) : $interest;
+                    $repayment[$term] = ['amount' => $totalAmount, 'principal' => $totalPrincipal, 'interest' => $totalInterest, 'dueDate' => $v[0]];
                 }
             }
 
@@ -183,6 +195,17 @@ class OnlineRepaymentPlan extends \yii\db\ActiveRecord
                 $_sms->save();
             }
             $username = $ord->username;
+        }
+        foreach ($repayment as $key => $val) {
+            $rep = new Repayment([
+                'loan_id' => $loan->id,
+                'term' => $key,
+                'dueDate' => $val['dueDate'],
+                'amount' => $val['amount'],
+                'principal' => $val['principal'],
+                'interest' => $val['interest'],
+            ]);
+            $rep->save();
         }
         $transaction->commit();
         return true;

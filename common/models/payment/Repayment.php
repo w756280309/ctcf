@@ -17,7 +17,7 @@ use yii\db\ActiveRecord;
  * @property string $interest   利息
  * @property integer $isRepaid  是否还款，指融资用户扣钱
  * @property string $repaidAt  还款时间 dateTime类型
- * @property integer $isRefund  是否回款,指给用户转钱
+ * @property integer $isRefunded  是否回款,指给用户转钱
  * @property string $refundedAt 回款时间 dateTime类型
  */
 class Repayment extends ActiveRecord
@@ -30,7 +30,7 @@ class Repayment extends ActiveRecord
     public function rules()
     {
         return [
-            [['loan_id', 'term', 'isRepaid', 'isRefund'], 'integer'],
+            [['loan_id', 'term', 'isRepaid', 'isRefunded'], 'integer'],
             [['dueDate', 'repaidAt', 'refundedAt'], 'safe'],
             [['amount', 'principal', 'interest'], 'number']
         ];
@@ -48,7 +48,7 @@ class Repayment extends ActiveRecord
             'interest' => '利息',
             'isRepaid' => '是否还款',
             'repaidAt' => '还款时间',
-            'isRefund' => '是否回款',
+            'isRefunded' => '是否回款',
             'refundedAt' => '回款时间',
         ];
     }

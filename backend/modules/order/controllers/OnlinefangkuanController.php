@@ -11,6 +11,7 @@ use backend\modules\order\service\FkService;
 use backend\modules\order\core\FkCore;
 use common\models\user\UserAccount;
 use common\models\draw\DrawManager;
+use yii\web\NotFoundHttpException;
 use yii\web\Response;
 
 /**
@@ -62,7 +63,7 @@ class OnlinefangkuanController extends BaseController
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
         if (empty($pid)) {
-            throw $this->ex404();  //参数无效时,返回404错误
+            throw new NotFoundHttpException();  //参数无效时,返回404错误
         }
 
         $onlineProduct = OnlineProduct::findOne($pid);
@@ -98,18 +99,17 @@ class OnlinefangkuanController extends BaseController
         }
 
         $ump = Yii::$container->get('ump');
-
-        $resp = $ump->orgDrawApply($draw);
-
-        if ($resp->isSuccessful()) {
-            DrawManager::ackDraw($draw);
-
-            $onlineFangkuan->status = OnlineFangkuan::STATUS_TIXIAN_APPLY;
-            if (!$onlineFangkuan->save()) {
-                return ['res' => 0, 'msg' => '修改放款审核状态失败'];
+        //当不允许访问联动时候，默认联动测处理成功
+        if (Yii::$app->params['ump_uat']) {
+            $resp = $ump->orgDrawApply($draw);
+            if (!$resp->isSuccessful()) {
+                return ['res' => 0, 'msg' => $resp->get('ret_code') . $resp->get('ret_msg')];
             }
-        } else {
-            return ['res' => 0, 'msg' => $resp->get('ret_code').$resp->get('ret_msg')];
+        }
+        DrawManager::ackDraw($draw);
+        $onlineFangkuan->status = OnlineFangkuan::STATUS_TIXIAN_APPLY;
+        if (!$onlineFangkuan->save()) {
+            return ['res' => 0, 'msg' => '修改放款审核状态失败'];
         }
 
         return ['res' => 1, 'msg' => '提现申请成功'];
