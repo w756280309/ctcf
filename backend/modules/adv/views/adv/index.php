@@ -115,7 +115,7 @@ $menus = AuthSys::getMenus('A100000');
                                 <a href="/adv/adv/edit?id=<?= $val->id ?>" class="btn mini green ajax_op" op="status" data-index="<?= $val['status'] ?>" index="<?= $val['id'] ?>"><i class="icon-edit"></i>编辑
                                 </a>
                                 |
-                                <a href="/adv/adv/delete?id=<?= $val->id ?>" class="btn mini red ajax_op" op="status" data-index="<?= $val['status'] ?>" index="<?= $val['id'] ?>"><i class="icon-minus-sign"></i>删除
+                                <a href="/adv/adv/delete?id=<?= $val->id ?>" class="btn mini red ajax_op" op="status" data-index="<?= $val['status'] ?>" index="<?= $val['id'] ?>" onclick="javascript:return confirm('确认删除？');"><i class="icon-minus-sign"></i>删除
                                 </a>
 
                             </td>

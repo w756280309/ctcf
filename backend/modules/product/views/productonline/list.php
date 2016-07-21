@@ -208,11 +208,13 @@ $pc_cat = Yii::$app->params['pc_cat'];
 
     function del(url, id)
     {
-        var csrftoken = '<?= Yii::$app->request->getCsrfToken(); ?>';
-        $.post(url, {id: id, _csrf: csrftoken}, function(data) {
-            var ret = jQuery.parseJSON(data);
-            newalert(ret.result, ret.message, 1);
-        });
+        if (confirm('确认删除？')) {
+            var csrftoken = '<?= Yii::$app->request->getCsrfToken(); ?>';
+            $.post(url, {id: id, _csrf: csrftoken}, function(data) {
+                var ret = jQuery.parseJSON(data);
+                newalert(ret.result, ret.message, 1);
+            });
+        }
     }
 
     function corfirmJixi(pid)
