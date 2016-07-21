@@ -75,7 +75,13 @@ class ProductonlineController extends BaseController
             $start_date = is_integer($model->start_date) ? $model->start_date : strtotime($model->start_date);
             $end_date = is_integer($model->end_date) ? $model->end_date : strtotime($model->end_date);
 
-            if (!empty($model->finish_date) && OnlineProduct::REFUND_METHOD_DAOQIBENXI === (int) $model->refund_method) {
+            $refund_method = (int) $model->refund_method;
+            if (OnlineProduct::REFUND_METHOD_DAOQIBENXI !== $refund_method) {   //还款方式只有到期本息,才设置项目截止日和宽限期
+                $model->finish_date = null;
+                $model->kuanxianqi = 0;
+            }
+
+            if (!empty($model->finish_date) && OnlineProduct::REFUND_METHOD_DAOQIBENXI === $refund_method) {
                 //若截止日期不为空，重新计算项目天数
                 $pp = new ProductProcessor();
                 $model->expires = $pp->LoanTimes(date('Y-m-d H:i:s', $start_date), null, $finish_date, 'd', true)['days'][1]['period']['days'];

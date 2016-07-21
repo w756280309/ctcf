@@ -193,7 +193,7 @@ $is_online = in_array($model->status, [2, 3, 4, 5, 6, 7]);//判断标的是否�
                     <label class="control-label">项目期限</label>
                     <div class="controls">
                         <?=
-                        $form->field($model, 'expires', ['template' => '<div class="input-append">{input}<span class="add-on">(天)</span></div>{error}', 'inputOptions' => ['autocomplete' => 'off', 'placeholder' => '项目期限']])->textInput(['class' => 'm-wrap span12'])
+                        $form->field($model, 'expires', ['template' => '<div class="input-append">{input}<span class="add-on">(天)</span></div>{error}', 'inputOptions' => ['autocomplete' => 'off', 'placeholder' => '项目期限']])->textInput(['class' => 'm-wrap span12 expires'])
                         ?>
                     </div>
                 </div>
@@ -326,7 +326,6 @@ $is_online = in_array($model->status, [2, 3, 4, 5, 6, 7]);//判断标的是否�
                             'template' => '<div class="input-append date form_datetime">{input}<span class="add-on" onclick="WdatePicker({el:\'onlineproduct-finish_date\',dateFmt:\'yyyy-MM-dd HH:mm\',minDate:\''.date('Y-m-d').'\'});"><i class="icon-calendar"></i></span></div>{error}',
                             'inputOptions' => $fd_input_option
                             ])->textInput([
-                                //'readonly' => 'readonly',
                                 'class' => 'm-wrap span12',
                                 'value' =>  $model->finish_date ? Yii::$app->formatter->asDatetime($model->finish_date, 'Y-M-d H:i') : '',
                                 'onclick' => 'WdatePicker({dateFmt:"yyyy-MM-dd HH:mm",minDate:\''.date('Y-m-d').'\'});'
@@ -583,16 +582,18 @@ $is_online = in_array($model->status, [2, 3, 4, 5, 6, 7]);//判断标的是否�
             $('.gudinghk').hide();
         }
 
+        if ($('.refund_method').val() !== '1') {
+            disabledIsFdate(1);
+            $('#onlineproduct-is_fdate').attr('disabled', 'disabled');
+            $('#onlineproduct-is_fdate').parent().removeClass('checked');
+        }
+
         //是否使用截止日期关系着产品到期日和宽限期天数的设置。如果勾选，可以填写截止日和宽限期，否则不可以填写
         $('#onlineproduct-is_fdate').bind('click', function() {
             if (true === $(this).parent().hasClass('checked')) {
-                $('#onlineproduct-kuanxianqi').val('');
-                $('#onlineproduct-finish_date').val('');
-                $('#onlineproduct-finish_date').attr('disabled', 'disabled');
-                $('#onlineproduct-kuanxianqi').attr('disabled', 'disabled');
+                disabledIsFdate(1);
             } else {
-                $('#onlineproduct-finish_date').removeAttr('disabled');
-                $('#onlineproduct-kuanxianqi').removeAttr('disabled');
+                disabledIsFdate(0);
             }
         });
 
@@ -621,6 +622,7 @@ $is_online = in_array($model->status, [2, 3, 4, 5, 6, 7]);//判断标的是否�
     //选择还款方式是到期本息的可以设置产品到期日以及宽限期。否则不可以设置
     function changeRefmet(obj)
     {
+        $('.expires').val('');
         if (1 === parseInt($(obj).val())) {
             $('#onlineproduct-expires').next().html('(天)');
         } else {
@@ -632,6 +634,15 @@ $is_online = in_array($model->status, [2, 3, 4, 5, 6, 7]);//判断标的是否�
             $('.gudinghk').show();
         } else {
             $('.gudinghk').hide();
+        }
+
+        if ($(obj).val() === '1') {
+            disabledIsFdate(0);
+            $('#onlineproduct-is_fdate').removeAttr('disabled');
+        } else {
+            disabledIsFdate(1);
+            $('#onlineproduct-is_fdate').attr('disabled', 'disabled');
+            $('#onlineproduct-is_fdate').parent().removeClass('checked');
         }
     }
 
@@ -697,6 +708,19 @@ $is_online = in_array($model->status, [2, 3, 4, 5, 6, 7]);//判断标的是否�
             $("#"+id).detach();
             layer.close(index);
         });
+    }
+
+    function disabledIsFdate(flag)
+    {
+        if (flag) {
+            $('#onlineproduct-kuanxianqi').val('');
+            $('#onlineproduct-finish_date').val('');
+            $('#onlineproduct-finish_date').attr('disabled', 'disabled');
+            $('#onlineproduct-kuanxianqi').attr('disabled', 'disabled');
+        } else {
+            $('#onlineproduct-finish_date').removeAttr('disabled');
+            $('#onlineproduct-kuanxianqi').removeAttr('disabled');
+        }
     }
 </script>
 <?php $this->endBlock(); ?>
