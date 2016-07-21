@@ -242,15 +242,21 @@ class OnlineRepaymentPlan extends \yii\db\ActiveRecord
             $lixi = $bc->bcround(bcmul($ord->order_money, bcmul($ord->loan->expires, bcdiv($ord->yield_rate, 365))), 2);
 
             return [
-                $paymentDates[0],    //还款日期
-                $ord->order_money,   //还款本金
-                $lixi,    //还款利息
+                [
+                    $paymentDates[0],    //还款日期
+                    $ord->order_money,   //还款本金
+                    $lixi,    //还款利息
+                ]
             ];
         }
 
         $res = [];
         $totalLixi = $bc->bcround(bcdiv(bcmul(bcmul($ord->order_money, $ord->yield_rate), $ord->loan->expires), 12), 2);    //计算总利息
         $isNature = $ord->loan->isNatureRefundMethod();
+
+        if (!bccomp($totalLixi, '0', 2)) {
+            $totalLixi = '0.01';
+        }
 
         if ($isNature) {
             $startDay = date('Y-m-d', $ord->loan->jixi_time);
@@ -270,18 +276,10 @@ class OnlineRepaymentPlan extends \yii\db\ActiveRecord
                     }
 
                     $refundDays = (new \DateTime($startDay))->diff(new \DateTime($val))->days;    //应还款天数
-                    $lixi = $bc->bcround(bcmul($totalLixi, bcdiv($refundDays, $totalDays)), 2);
+                    $lixi = bcmul($totalLixi, bcdiv($refundDays, $totalDays), 2);
                 } else {
-                    $lixi = $bc->bcround(bcdiv(bcdiv(bcmul(bcmul($ord->order_money, $ord->yield_rate), $ord->loan->expires), 12), $qishu), 2);
+                    $lixi = $bc->bcround(bcdiv($totalLixi, $qishu), 2);
                 }
-            }
-
-            if (!bccomp($lixi, '0', 2)) {
-                $lixi = '0.01';
-            }
-
-            if (-1 === bccomp($lixi, '0', 2)) {
-                throw new \Exception();
             }
 
             $res[$key] = [
