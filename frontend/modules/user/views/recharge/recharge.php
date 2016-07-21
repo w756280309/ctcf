@@ -5,8 +5,8 @@ use yii\web\View;
 use yii\helpers\Html;
 
 $this->title = '充值';
-$this->registerJsFile('/js/bootstrap-modal.js', ['position' => View::POS_END, 'depends' => 'frontend\assets\FrontAsset']);
-$this->registerJsFile('/js/bootstrap-modalmanager.js', ['position' => View::POS_END, 'depends' => 'frontend\assets\FrontAsset']);
+$this->registerJsFile(ASSETS_BASE_URI.'js/bootstrap-modal.js', ['position' => View::POS_END, 'depends' => 'frontend\assets\FrontAsset']);
+$this->registerJsFile(ASSETS_BASE_URI.'js/bootstrap-modalmanager.js', ['position' => View::POS_END, 'depends' => 'frontend\assets\FrontAsset']);
 
 $_js = <<<'JS'
 $(function() {
@@ -44,10 +44,10 @@ $(function() {
 JS;
 
 $this->registerJs($_js, View::POS_END, 'body_close');
-$this->registerCssFile('/css/useraccount/chargedeposit.css');
-$this->registerCssFile('/css/frontend.css');
-$this->registerCssFile('/css/useraccount/mytrade.css');
-$this->registerCssFile('/css/useraccount/bindcardalready.css');
+$this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/chargedeposit.css');
+$this->registerCssFile(ASSETS_BASE_URI.'css/frontend.css');
+$this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/mytrade.css?v=20160720');
+$this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/bindcardalready.css');
 ?>
 
 <style>
