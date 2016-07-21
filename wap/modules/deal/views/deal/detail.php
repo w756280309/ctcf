@@ -125,7 +125,7 @@ use common\utils\StringUtils;
             <div class="col-xs-10">
                 <?=  \yii\helpers\HtmlPurifier::process($deal->description) ?>
 
-                <p style="margin-top: 1em; padding-bottom: 0.5em; font-size: 12px; color: #bababf;">*理财非存款，产品有风险，投资需谨慎</p>
+                <p style="margin-top: 1em; padding-bottom: 0.5em; font-size: 12px; color: #bababf;">*理财非存款，产品有风险，投资须谨慎</p>
             </div>
             <div class="col-xs-1"></div>
         </div>

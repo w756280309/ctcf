@@ -224,7 +224,7 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/useraccount/chargedeposit.css');
                     <div class="dR-btn" onclick="window.location = '/licai/index'">投资其他项目</div>
                 <?php } ?>
 
-                <p style="padding-bottom: 0.5em; font-size: 12px; color: #bababf;">*理财非存款，产品有风险，投资需谨慎</p>
+                <p style="padding-bottom: 0.5em; font-size: 12px; color: #bababf;">*理财非存款，产品有风险，投资须谨慎</p>
             </div>
         </div>
     </div>
