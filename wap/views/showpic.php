@@ -5,7 +5,7 @@
     </head>
     <body>
         <center>
-            <img src="<?= UPLOAD_BASE_URI.$model->link ?>" alt=""/>
+            <img src="<?= UPLOAD_BASE_URI.$model->link ?>" width="100%" alt=""/>
         </center>
     </body>
 </html>
