@@ -81,6 +81,10 @@
     line-height: 45px;
 }
 
+.myCoupon-box .display_number .p_left_mg {
+    margin-left: 28px;
+}
+
 .myCoupon-box .display_number .p_right {
     padding-top: 18px;
     float: right

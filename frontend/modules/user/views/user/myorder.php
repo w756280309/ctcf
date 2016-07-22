@@ -1,13 +1,14 @@
 <?php
 $this->title = '我的理财';
 
-$this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/mytrade.css?v=20160720', ['depends' => 'frontend\assets\FrontAsset']);
+$this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/mytrade.css?v=20160721', ['depends' => 'frontend\assets\FrontAsset']);
 $this->registerCssFile(ASSETS_BASE_URI.'css/pagination.css', ['depends' => 'frontend\assets\FrontAsset']);
 $this->registerJsFile(ASSETS_BASE_URI.'js/useraccount/my_trade.js', ['depends' => 'frontend\assets\FrontAsset']);
 
 use common\models\order\OnlineRepaymentPlan;
 use common\utils\StringUtils;
 use common\widgets\Pager;
+
 ?>
 
 <div class="myCoupon-box">
@@ -17,14 +18,18 @@ use common\widgets\Pager;
     </div>
     <div class="myCoupon-content">
         <div class="list-single">
-            <a class="a_first <?= 1 === (int) $type ? 'select' : '' ?>" href="/user/user/myorder">收益中的项目</a>
-            <a class="a_second <?= 2 === (int) $type ? 'select' : '' ?>" href="/user/user/myorder?type=2">待成立的项目</a>
-            <a class="a_third <?= 3 === (int) $type ? 'select' : '' ?>" href="/user/user/myorder?type=3">已还清的项目</a>
+            <a class="a_first <?= 1 === $type ? 'select' : '' ?>" href="/user/user/myorder">收益中的项目</a>
+            <a class="a_second <?= 2 === $type ? 'select' : '' ?>" href="/user/user/myorder?type=2">待成立的项目</a>
+            <a class="a_third <?= 3 === $type ? 'select' : '' ?>" href="/user/user/myorder?type=3">已还清的项目</a>
         </div>
         <?php if (in_array($type, [1, 3])) { ?>
-        <?php if (1 === (int) $type) { ?>
+        <?php if (1 === $type) { ?>
+            <?php
+                $waitbenxi = array_sum(array_column($tj, 'benxi'));
+            ?>
             <div class="display_number">
-                <p class="p_left">待回款总金额：<span><?= StringUtils::amountFormat3(array_sum(array_column($tj, 'benxi'))) ?></span>元</p>
+                <p class="p_left">待回款总金额：<span><?= StringUtils::amountFormat3($waitbenxi) ?></span>元</p>
+                <p class="p_left p_left_mg">已回款总金额：<span><?= StringUtils::amountFormat3($totalbenxi-$waitbenxi) ?></span>元</p>
                 <p class="p_right">共计：<span><?= $tj['count'] ?></span>笔</p>
             </div>
         <?php } else { ?>
@@ -34,7 +39,7 @@ use common\widgets\Pager;
             </div>
         <?php } ?>
         <table>
-            <?php if (1 === (int) $type) { ?>
+            <?php if (1 === $type) { ?>
                 <tr>
                     <th class="text-first" width="230">项目名称</th>
                     <th class="text-align-lf" width="100">到期时间</th>
@@ -115,7 +120,7 @@ use common\widgets\Pager;
             <p class="without-font">暂无投资明细</p>
             <a class="link-tender" href="/licai/">立即投资</a>
         <?php endif; ?>
-        <?php } elseif (2 === (int) $type) { ?>
+        <?php } elseif (2 === $type) { ?>
         <div class="display_number">
             <p class="p_left">待成立项目总金额：<span><?= StringUtils::amountFormat3($tj['totalAmount']) ?></span>元</p>
             <p class="p_right">共计：<span><?= $tj['count'] ?></span>笔</p>

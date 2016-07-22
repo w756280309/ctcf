@@ -106,18 +106,23 @@ class UserController extends BaseController
      */
     public function actionMyorder($type = 1)
     {
+        $type = intval($type);
         if (!in_array($type, [1, 2, 3])) {
             throw $this->ex404();
         }
 
         $user = $this->getAuthedUser();
+        $o = Ord::tableName();
+        $l = Loan::tableName();
+        $p = Plan::tableName();
 
         switch ($type) {
             case 1:
                 $status = Loan::STATUS_HUAN;
                 $tj = Plan::find()
-                    ->where(['uid' => $user->id, 'status' => Plan::STATUS_WEIHUAN])
-                    ->groupBy('online_pid')
+                    ->innerJoin($l, "$l.id=$p.online_pid")
+                    ->where(["uid" => $user->id, "$p.status" => Plan::STATUS_WEIHUAN, "$l.status" => 5])
+                    ->groupBy("online_pid")
                     ->select("sum(benxi) as benxi")
                     ->asArray()
                     ->all();
@@ -136,9 +141,6 @@ class UserController extends BaseController
                 break;
         }
 
-        $o = Ord::tableName();
-        $l = Loan::tableName();
-
         $query = Ord::find()
             ->innerJoinWith('loan')
             ->where(["$o.uid" => $user->id, "$o.status" => Ord::STATUS_SUCCESS])
@@ -146,17 +148,26 @@ class UserController extends BaseController
             ->orderBy("$o.id desc");
 
         $count = $query->count();
-        if (2 === (int) $type) {
-            $tj['count'] = $count;
+        $tj['count'] = $count;
+
+        if (2 === $type) {
             $tj['totalAmount'] = $query->sum('order_money');
-        } else {
-            $tj['count'] = $count;
+        }
+
+        //计算当前用户收益中项目的本息和，每个项目对应多个订单，每笔订单对应多期还款计划
+        $totalbenxi = 0;
+        if (1 === $type) {
+            $totaldata = $query->all();
+            foreach ($totaldata as $v) {
+                $totalbenxi += ($v->order_money + Plan::getTotalLixi($v->loan, $v));
+            }
         }
 
         $pages = new Pagination(['totalCount' => $count, 'pageSize' => 10]);
         $model = $query->offset($pages->offset)->limit($pages->limit)->all();
 
         $plan = [];
+
         foreach ($model as $key => $val) {
             $data = Plan::findAll(['online_pid' => $val->online_pid, 'uid' => $user->id, 'order_id' => $val->id]);
 
@@ -170,6 +181,6 @@ class UserController extends BaseController
             }
         }
 
-        return $this->render('myorder', ['model' => $model, 'pages' => $pages, 'type' => $type, 'plan' => $plan, 'tj' => $tj]);
+        return $this->render('myorder', ['model' => $model, 'pages' => $pages, 'type' => $type, 'plan' => $plan, 'tj' => $tj, 'totalbenxi' => $totalbenxi]);
     }
 }
