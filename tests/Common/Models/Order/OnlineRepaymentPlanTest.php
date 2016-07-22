@@ -54,8 +54,8 @@ class OnlineRepaymentPlanTest extends YiiAppTestCase
         $ord->yield_rate = 0.09;
 
         $this->assertEquals([
-            ['2016-06-13', 0, '0.08'],
-            ['2016-07-13', 10, '0.07'],
+            ['2016-06-13', 0, '0.07'],
+            ['2016-07-13', 10, '0.08'],
         ], OnlineRepaymentPlan::calcBenxi($ord));
     }
 
@@ -98,10 +98,10 @@ class OnlineRepaymentPlanTest extends YiiAppTestCase
         $ord->yield_rate = 0.086;
 
         $this->assertEquals([
-            ['2016-11-12', 0, '0.52'],
-            ['2017-05-12', 0, '0.52'],
-            ['2017-11-12', 0, '0.52'],
-            ['2018-05-12', 12, '0.50'],
+            ['2016-11-12', 0, '0.51'],
+            ['2017-05-12', 0, '0.51'],
+            ['2017-11-12', 0, '0.51'],
+            ['2018-05-12', 12, '0.53'],
         ], OnlineRepaymentPlan::calcBenxi($ord));
     }
 
@@ -236,7 +236,7 @@ class OnlineRepaymentPlanTest extends YiiAppTestCase
 
     public function testNegativeLixi()  //当投资金额很少的时候,最后一期利息出现负数的情况 优先测试
     {
-        $loan = new OnlineProduct([
+        $loan = new OnlineProduct([    //自然方式计息
             'refund_method' => 6,
             'jixi_time' => 1469894400,
             'finish_date' => 1501430400,
@@ -263,6 +263,25 @@ class OnlineRepaymentPlanTest extends YiiAppTestCase
             ['2017-07-20', 0, '0.00'],
             ['2017-07-31', 1, '0.09'],
         ], OnlineRepaymentPlan::calcBenxi($ord));
+
+        $product = new OnlineProduct([      //普通计息
+            'refund_method' => 4,
+            'jixi_time' => 1462982400,
+            'finish_date' => 1526054400,
+            'expires' => 24,
+            'paymentDay' => null,
+        ]);
+
+        $order = $this->getOrderMock($product);
+        $order->order_money = 1;
+        $order->yield_rate = 0.01;
+
+        $this->assertEquals([
+            ['2016-11-12', 0, '0.00'],
+            ['2017-05-12', 0, '0.00'],
+            ['2017-11-12', 0, '0.00'],
+            ['2018-05-12', 1, '0.02'],
+        ], OnlineRepaymentPlan::calcBenxi($order));
     }
 
     public function testZeroLixi()  //当投资金额很少的时候,总利息正常算出来是0,应自动加0.01元  优先测试

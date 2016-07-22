@@ -278,7 +278,7 @@ class OnlineRepaymentPlan extends \yii\db\ActiveRecord
                     $refundDays = (new \DateTime($startDay))->diff(new \DateTime($val))->days;    //应还款天数
                     $lixi = bcmul($totalLixi, bcdiv($refundDays, $totalDays), 2);
                 } else {
-                    $lixi = $bc->bcround(bcdiv($totalLixi, $qishu), 2);
+                    $lixi = bcdiv($totalLixi, $qishu, 2);    //普通计息和自然计息都按照14位精度严格计算,即从小数位后第三位舍去
                 }
             }
 
