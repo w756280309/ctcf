@@ -27,8 +27,8 @@ use common\widgets\Pager;
                 <tr class="<?= 0 === $key%2 ? '' : 'td-back-color' ?>">
                     <td class="table-text-left"><?= Yii::$app->params['mingxi'][$val->type] ?></td>
                     <td class="text-align-lf"><?= date('Y-m-d H:i:s', $val->created_at) ?></td>
-                    <td class="text-align-rg <?= $val->in_money > $val->out_money ? 'color-red' : 'color-green' ?>">
-                        <?= $val->in_money > $val->out_money ? ('+' . StringUtils::amountFormat3($val->in_money)) : ('-' . StringUtils::amountFormat3($val->out_money)) ?>
+                    <td class="text-align-rg <?= $val->in_money >= $val->out_money ? 'color-red' : 'color-green' ?>">
+                        <?= $val->in_money >= $val->out_money ? ('+' . StringUtils::amountFormat3($val->in_money)) : ('-' . StringUtils::amountFormat3($val->out_money)) ?>
                     </td>
                     <td class="text-align-rg"><?= number_format($val->balance, 2) ?></td>
                     <td class="table-text-right">
