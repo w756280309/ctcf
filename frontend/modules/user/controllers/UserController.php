@@ -133,8 +133,9 @@ class UserController extends BaseController
             case 3:
                 $status = Loan::STATUS_OVER;
                 $tj = Plan::find()
-                    ->where(['uid' => $user->id, 'status' => Plan::STATUS_YIHUAN])
-                    ->groupBy('online_pid')
+                    ->innerJoin($l, "$l.id=$p.online_pid")
+                    ->where(["uid" => $user->id, "$p.status" => Plan::STATUS_YIHUAN, "$l.status" => 6])
+                    ->groupBy("online_pid")
                     ->select("sum(benxi) as benxi")
                     ->asArray()
                     ->all();
