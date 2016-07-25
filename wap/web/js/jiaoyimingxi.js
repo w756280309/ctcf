@@ -33,8 +33,8 @@ $(function(){
                                 $.each(data.data, function (i, item) {
                                     var in_money = WDJF.numberFormat(item.in_money, false);
                                     var out_money = WDJF.numberFormat(item.out_money, false);
-                                    var money = (item.in_money > item.out_money) ? ('+' + in_money) : ('-' + out_money);
-                                    var className = (item.in_money > item.out_money) ? 'red' : 'green';
+                                    var money = (item.in_money >= item.out_money) ? ('+' + in_money) : ('-' + out_money);
+                                    var className = (item.in_money >= item.out_money) ? 'red' : 'green';
                                     var createdAt = moment(item.created_at*1000);
                                     html += '<div class="clear"></div>'+
                                         '<div  class="row jiaoyi"><div class="col-xs-1"></div><div class="col-xs-10"><div class="col-xs-6 lf">'+
