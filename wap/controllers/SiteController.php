@@ -302,6 +302,14 @@ class SiteController extends Controller
                 if ($isLoggedin) {
                     $user->scenario = 'login';
                     $user->last_login = time();
+                    $regFrom = User::REG_FROM_WAP;
+                    if (defined('IN_APP') && IN_APP) {
+                        $regFrom = User::REG_FROM_APP;
+                    }
+                    if ($this->fromWx()) {
+                        $regFrom = User::REG_FROM_WX;
+                    }
+                    $user->regFrom = $regFrom;
                     $user->save();
 
                     $tourl = '/';

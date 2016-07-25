@@ -243,6 +243,11 @@ class SiteController extends Controller
             if ($user && Yii::$app->user->login($user)) {
                 $user->scenario = 'login';
                 $user->last_login = time();
+                $regFrom = User::REG_FROM_PC;
+                if ($this->fromWx()) {
+                    $regFrom = User::REG_FROM_WX;
+                }
+                $user->regFrom = $regFrom;
                 $user->save();
 
                 return ['code' => 0, 'tourl' => '/'];

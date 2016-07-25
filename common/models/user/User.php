@@ -36,6 +36,7 @@ use common\models\order\OnlineRepaymentPlan as RepaymentPlan;
  * @property int $idcard_status
  * @property int $updated_at
  * @property int $created_at
+ * @property int $regFrom   注册来源。0表示未知，1表示wap，2表示wx，3表示app，4表示pc
  */
 class User extends \yii\db\ActiveRecord implements IdentityInterface, UserInterface
 {
@@ -65,6 +66,13 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface, UserInterf
     const QPAY_NONE = 0;//未绑卡
     const QPAY_ENABLED = 1;//已经绑卡
     const QPAY_PENDING = 2;//绑卡中
+
+    const REG_FROM_WAP = 1;//wap注册
+    const REG_FROM_WX = 2;//微信注册
+    const REG_FROM_APP = 3;//app注册
+    const REG_FROM_PC = 4;//pc注册
+    const REG_FROM_OTHER = 0;//未知
+
 
     public static function examinStatus($key = null)
     {
@@ -196,7 +204,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface, UserInterf
     {
         return [
             [['username', 'usercode', 'email'], 'trim'],
-            [['type', 'status', 'updated_at', 'created_at', 'kuaijie_status'], 'integer'],
+            [['type', 'status', 'updated_at', 'created_at', 'kuaijie_status', 'regFrom'], 'integer'],
             [
                 'username',
                 'string',

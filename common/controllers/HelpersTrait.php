@@ -13,11 +13,11 @@ trait HelpersTrait
             if (strncmp($view, '@', 1) === 0) {
                 $file = Yii::getAlias($view);
             } elseif (strncmp($view, '//', 2) === 0) {
-                $file = Yii::$app->getViewPath().DIRECTORY_SEPARATOR.ltrim($view, '/');
+                $file = Yii::$app->getViewPath() . DIRECTORY_SEPARATOR . ltrim($view, '/');
             } elseif (strncmp($view, '/', 1) === 0) {
-                $file = $this->module->getViewPath().DIRECTORY_SEPARATOR.ltrim($view, '/');
+                $file = $this->module->getViewPath() . DIRECTORY_SEPARATOR . ltrim($view, '/');
             } else {
-                $file = $this->getViewPath().DIRECTORY_SEPARATOR.$view;
+                $file = $this->getViewPath() . DIRECTORY_SEPARATOR . $view;
             }
 
             Yii::$app->getResponse()->getHeaders()->set('DEV-VIEW-PATH', $file);
@@ -34,8 +34,8 @@ trait HelpersTrait
     /**
      * 创建一个404异常对象
      *
-     * @param string|null $message  异常消息
-     * @param \Exception  $previous 前置异常
+     * @param string|null $message 异常消息
+     * @param \Exception $previous 前置异常
      *
      * @return NotFoundHttpException
      */
@@ -48,7 +48,7 @@ trait HelpersTrait
      * 根据ActiveRecord类名和查询条件，查找对象，如果不存在，抛出404异常
      *
      * @param string $class ActiveRecord类名
-     * @param mixed  $cond  查询条件
+     * @param mixed $cond 查询条件
      *
      * @return object
      *
@@ -62,5 +62,15 @@ trait HelpersTrait
         }
 
         return $result;
+    }
+
+    /**
+     * 判断请求来源是否来自微信
+     * 忽略用户主动模拟微信请求及微信历史版本影响
+     * @return bool
+     */
+    public function fromWx()
+    {
+        return $_SERVER["HTTP_USER_AGENT"] && false !== strpos($_SERVER["HTTP_USER_AGENT"], 'MicroMessenger');
     }
 }
