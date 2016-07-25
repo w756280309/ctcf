@@ -210,9 +210,16 @@ $pc_cat = Yii::$app->params['pc_cat'];
     {
         if (confirm('确认删除？')) {
             var csrftoken = '<?= Yii::$app->request->getCsrfToken(); ?>';
-            $.post(url, {id: id, _csrf: csrftoken}, function(data) {
-                var ret = jQuery.parseJSON(data);
-                newalert(ret.result, ret.message, 1);
+            var xhr = $.post(url, {id: id, _csrf: csrftoken}, function(data) {
+                newalert(data.code, data.message, 1);
+            });
+
+            xhr.fail(function(jqXHR) {
+                var errMsg = jqXHR.responseJSON && jqXHR.responseJSON.message
+                    ? jqXHR.responseJSON.message
+                    : '未知错误，请刷新重试或联系客服';
+
+                newalert(0, errMsg, 1);
             });
         }
     }

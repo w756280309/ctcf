@@ -5326,3 +5326,6 @@ button.button-search {
 .notice {
     color: red;
 }
+.hk-notice a {
+    color: red;
+}

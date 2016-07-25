@@ -79,8 +79,10 @@ class AdminAcesssControl extends ActionFilter
             return true;
         } else {
             if(Yii::$app->request->isAjax) {
-                echo json_encode(['result' => 0, 'message' => "没有权限进行此操作"]);
-                exit;
+                Yii::$app->response->statusCode = 403;
+
+                echo json_encode(['message' => "没有权限进行此操作"]);
+                return false;
             }
 
             return Yii::$app->getResponse()->redirect("/site/deny")->send();

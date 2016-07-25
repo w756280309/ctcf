@@ -10,6 +10,7 @@ use common\models\contract\ContractTemplate;
 use common\models\order\BaoQuanQueue;
 use common\models\order\OnlineOrder;
 use common\models\order\OnlineRepaymentPlan;
+use common\models\payment\Repayment;
 use common\models\product\Issuer;
 use common\models\product\OnlineProduct;
 use common\models\user\MoneyRecord;
@@ -340,9 +341,15 @@ class ProductonlineController extends BaseController
         } elseif ($request['status']) {
             $data->andWhere(['online_status' => OnlineProduct::STATUS_ONLINE, "$op.status" => $request['status']]);
         }
-        $_data = clone $data;
 
+        $days = $request['days'];
+        if (in_array($days, [1, 7])) {
+            $data->andWhere(["$op.id" => $this->HkStats(intval($days))]);
+        }
+
+        $_data = clone $data;
         $data->orderBy('isrecommended desc, online_status asc, product_status asc,effect_jixi_time desc,sn desc');
+
         $pages = new Pagination(['totalCount' => $_data->count(), 'pageSize' => '20']);
         $model = $data->offset($pages->offset)->limit($pages->limit)->all();
 
@@ -351,6 +358,43 @@ class ProductonlineController extends BaseController
                     'pages' => $pages,
                     'status' => $status,
         ]);
+    }
+
+    /**
+     * 获取待还款统计数量.
+     * 1. 统计7日内待还款数量;
+     * 2. 统计当日待还款数量;
+     */
+    public function actionHkStatsCount()
+    {
+        return ['week' => count($this->HkStats(7)), 'today' => count($this->HkStats(1))];  //返回包含所有统计信息的数量数组
+    }
+
+    /**
+     * 1. 计算截止日,自今天起往后延$days天;
+     * 2. 统计自截止日之前的所有待还款项目;
+     */
+    private function HkStats($days)
+    {
+        if (!is_integer($days)) {
+            throw new \Exception();
+        }
+
+        $query = Repayment::find();
+
+        if (1 === $days || 0 === $days) {   //$days为0或1时,都代表只统计当天的数据
+            $query->where(['dueDate' => date('Y-m-d')]);
+        } else {
+            $endDay = date('Y-m-d', strtotime("+$days days"));
+
+            $query->where(['<', 'dueDate', $endDay]);
+        }
+
+        $model = $query->andWhere(['isRefunded' => 0])->select(['loan_id'])
+            ->asArray()
+            ->all();
+
+        return array_unique(array_column($model, 'loan_id'));
     }
 
     /**
@@ -394,11 +438,11 @@ class ProductonlineController extends BaseController
             $model->scenario = 'del';
             $model->del_status = 1;
             if ($model->save()) {
-                return json_encode(['result' => 1, 'message' => '删除成功']);
+                return ['code' => 1, 'message' => '删除成功'];
             }
         }
 
-        return json_encode(['result' => 0, 'message' => '删除失败']);
+        return ['code' => 0, 'message' => '删除失败'];
     }
 
     /**
