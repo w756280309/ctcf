@@ -99,7 +99,7 @@ class SignupForm extends Model
     /**
      * 注册用户主函数.
      */
-    public function signup()
+    public function signup($regFrom = User::REG_FROM_OTHER)
     {
         if ($this->validate()) {
             $transaction = Yii::$app->db->beginTransaction();
@@ -114,6 +114,14 @@ class SignupForm extends Model
             if (Yii::$app->request->cookies->getValue('campaign_source')) {
                 $user->campaign_source = Yii::$app->request->cookies->getValue('campaign_source');
             }
+            //添加来源
+            if (defined('IN_APP') && IN_APP) {
+                $regFrom = User::REG_FROM_APP;
+            }
+            if ($_SERVER["HTTP_USER_AGENT"] && false !== strpos($_SERVER["HTTP_USER_AGENT"], 'MicroMessenger')) {
+                $regFrom = User::REG_FROM_WX;
+            }
+            $user->regFrom = $regFrom;
             if (!$user->save()) {
                 $transaction->rollBack();
 

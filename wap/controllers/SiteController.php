@@ -289,7 +289,7 @@ class SiteController extends Controller
 
         $model = new SignupForm();
         if ($model->load(Yii::$app->request->post()) && Yii::$app->request->isAjax) {
-            if ($user = $model->signup()) {
+            if ($user = $model->signup(User::REG_FROM_WAP)) {
                 $promo160520log = Promo160520Log::findOne(['mobile' => $user->mobile]);
                 if ($promo160520log) {
                     Promo160520::insertCoupon($user, $promo160520log->prizeId);
@@ -302,14 +302,6 @@ class SiteController extends Controller
                 if ($isLoggedin) {
                     $user->scenario = 'login';
                     $user->last_login = time();
-                    $regFrom = User::REG_FROM_WAP;
-                    if (defined('IN_APP') && IN_APP) {
-                        $regFrom = User::REG_FROM_APP;
-                    }
-                    if ($this->fromWx()) {
-                        $regFrom = User::REG_FROM_WX;
-                    }
-                    $user->regFrom = $regFrom;
                     $user->save();
 
                     $tourl = '/';
