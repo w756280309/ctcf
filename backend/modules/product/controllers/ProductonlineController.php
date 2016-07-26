@@ -381,14 +381,8 @@ class ProductonlineController extends BaseController
         }
 
         $query = Repayment::find();
-
-        if (1 === $days || 0 === $days) {   //$days为0或1时,都代表只统计当天的数据
-            $query->where(['dueDate' => date('Y-m-d')]);
-        } else {
-            $endDay = date('Y-m-d', strtotime("+$days days"));
-
-            $query->where(['<', 'dueDate', $endDay]);
-        }
+        $endDay = date('Y-m-d', strtotime("+$days days"));    //所有区段都要统计自截止日之前的所有待还款项目
+        $query->where(['<', 'dueDate', $endDay]);
 
         $model = $query->andWhere(['isRefunded' => 0])->select(['loan_id'])
             ->asArray()
