@@ -279,26 +279,6 @@ $is_online = in_array($model->status, [2, 3, 4, 5, 6, 7]);//判断标的是否�
         </div>
 
         <div class="row-fluid">
-            <?php if (!$model->is_jixi) { ?>
-            <div class="span6 ">
-                <div class="control-group">
-                    <label class="control-label">计息开始日</label>
-                    <div class="controls">
-                        <?=
-                        $form->field($model, 'jixi_time', [
-                            'template' => '<div class="input-append date form_datetime">{input}<span class="add-on"><i class="icon-calendar"></i></span></div>{error}',
-                            'inputOptions' => ['autocomplete' => 'off', 'placeholder' => '计息开始日']
-                            ])->textInput([
-                                'readonly' => 'readonly',
-                                'class' => 'm-wrap span12',
-                                'value' =>  $model->jixi_time ? Yii::$app->formatter->asDatetime($model->jixi_time, 'Y-M-d') : '',
-                                'onclick' => 'WdatePicker({dateFmt:"yyyy-MM-dd",minDate:"#F{$dp.$D(\'onlineproduct-start_date\',{d:1})}",maxDate:"#F{$dp.$D(\'onlineproduct-finish_date\',{d:-1})}"});'
-                                ])
-                        ?>
-                    </div>
-                </div>
-            </div>
-            <?php } ?>
             <div class="span6 ">
                 <div class="control-group">
                     <label class="control-label">兑付日</label>
