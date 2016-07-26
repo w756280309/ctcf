@@ -94,8 +94,15 @@ class OrderController extends BaseController
             return $ret;
         }
         $orderManager = new OrderManager();
-
-        return $orderManager->createOrder($sn, $money,  $this->getAuthedUser()->id, $coupon);
+        //记录订单来源
+        $investFrom = OnlineOrder::INVEST_FROM_WAP;
+        if (defined('IN_APP') && IN_APP) {
+            $investFrom = OnlineOrder::INVEST_FROM_APP;
+        }
+        if ($this->fromWx()) {
+            $investFrom  = OnlineOrder::INVEST_FROM_WX;
+        }
+        return $orderManager->createOrder($sn, $money,  $this->getAuthedUser()->id, $coupon, $investFrom);
     }
 
     /**

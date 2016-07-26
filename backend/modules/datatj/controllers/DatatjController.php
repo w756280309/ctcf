@@ -9,6 +9,7 @@ use common\models\checkaccount\CheckaccountWdjf;
 use common\models\stats\Perf;
 use common\models\user\RechargeRecord;
 use common\models\user\User;
+use yii\bootstrap\Html;
 use yii\data\ActiveDataProvider;
 use yii\data\ArrayDataProvider;
 use yii\data\Pagination;
@@ -171,6 +172,10 @@ class DatatjController extends BaseController
         $totalCoupon = Perf::getCoupon();
         $usedCoupon = Perf::getCoupon(1);
         $unusedCoupon = Perf::getCoupon(0);
+
+        //统计，PC、wap、APP、微信的注册人数、购买人数、购买金额
+        $registerData = Yii::$app->db->createCommand("SELECT COUNT(*) AS c,regFrom AS f FROM `user` WHERE `type` = 1  GROUP BY f ORDER BY f ASC")->queryAll();//不同来源的注册数
+        $investorData = Yii::$app->db->createCommand("SELECT COUNT(DISTINCT uid) AS c ,SUM(o.order_money) AS m ,o.investFrom AS f FROM online_order AS o WHERE o.status = 1 GROUP BY f ORDER BY f ASC")->queryAll();//不同来源的购买人数、购买金额
         return $this->render('huizongtj', [
             'totalTotalInve' => $total['totalTotalInve'] + $today['totalInvestment'],//平台累计交易额
             'totalRechargeCost' => $total['totalRechargeCost'] + $today['rechargeCost'],//累计充值手续费
@@ -203,6 +208,8 @@ class DatatjController extends BaseController
             'usedCoupon' => $usedCoupon,//已使用代金券
             'unusedCoupon' => $unusedCoupon,//未使用代金券
             'totalCoupon' => $totalCoupon,//已发放代金券
+            'registerData' => $registerData,//不同来源的注册数
+            'investorData' => $investorData,//不同来源的购买人数、购买金额
         ]);
     }
 
@@ -361,5 +368,50 @@ FROM perf WHERE DATE_FORMAT(bizDate,'%Y-%m') < DATE_FORMAT(NOW(),'%Y-%m')  GROUP
         }
         $data = UserStats::collectLenderData(['in', '`user`.id', $ids]);
         UserStats::createCsvFile($data);
+    }
+
+    //统计分销商的 注册人数、购买人数、购买金额
+    public function actionAffiliation()
+    {
+        $sql = "SELECT a.id, a.name, COUNT(DISTINCT u.id) AS uc, COUNT(DISTINCT o.`uid`) AS oc, SUM(o.`order_money`) AS m
+FROM affiliator AS a
+LEFT JOIN user_affiliation AS ua ON a.id = ua.`affiliator_id`
+LEFT JOIN `user` AS u ON u.id = ua.`user_id`  AND u.type = 1
+LEFT JOIN online_order AS o ON o.`uid` = ua.`user_id` AND o.status = 1
+GROUP BY a.id;";
+        $data = Yii::$app->db->createCommand($sql)->queryAll();
+        $dataProvider = new ArrayDataProvider([
+            'allModels' => $data,
+        ]);
+        $pages = new Pagination([
+            'totalCount' => count($data),
+        ]);
+        return $this->render('affiliation', [
+           'dataProvider' => $dataProvider,
+            'pages' => $pages
+        ]);
+    }
+
+    //统计分销商的 注册人数、购买人数、购买金额 导出
+    public function actionAffiliationExport()
+    {
+        $sql = "SELECT a.id, a.name, COUNT(DISTINCT u.id) AS uc, COUNT(DISTINCT o.`uid`) AS oc, SUM(o.`order_money`) AS m
+FROM affiliator AS a
+LEFT JOIN user_affiliation AS ua ON a.id = ua.`affiliator_id`
+LEFT JOIN `user` AS u ON u.id = ua.`user_id`  AND u.type = 1
+LEFT JOIN online_order AS o ON o.`uid` = ua.`user_id` AND o.status = 1
+GROUP BY a.id;";
+        $data = Yii::$app->db->createCommand($sql)->queryAll();
+        $record = implode(',', ['ID', '分销商名称', '注册人数（人）', '投资人数（人）', '投资金额（元）']) . "\n";
+        foreach ($data as $v) {
+            $array = [$v['id'], Html::encode($v['name']), intval($v['uc']), intval($v['oc']), floatval($v['m'])];
+            $record .= implode(',', $array) . "\n";
+        }
+        if (null !== $record) {
+            $record = iconv('UTF-8', 'GB18030', $record);//转换编码
+            header('Content-Disposition: attachment; filename="day-count(' . date('Y-m-d') . ').csv"');
+            header('Content-Length: ' . strlen($record)); // 内容的字节数
+            echo $record;
+        }
     }
 }

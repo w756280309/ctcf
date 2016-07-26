@@ -22,6 +22,7 @@ use common\models\epay\EpayUser;
  * @property int $status
  * @property string $created_at
  * @property string $updated_at
+ * @property integer $investFrom 投资来源 0表示未知，1表示wap，2表示wx，3表示app，4表示pc
  */
 class OnlineOrder extends \yii\db\ActiveRecord implements \P2pl\OrderTxInterface
 {
@@ -30,6 +31,13 @@ class OnlineOrder extends \yii\db\ActiveRecord implements \P2pl\OrderTxInterface
     const STATUS_SUCCESS = 1;
     const STATUS_CANCEL = 2;
     const STATUS_WUXIAO = 3;
+
+    //投资来源
+    const INVEST_FROM_WAP = 1;//wap
+    const INVEST_FROM_WX = 2;//微信
+    const INVEST_FROM_APP = 3;//app
+    const INVEST_FROM_PC = 4;//pc
+    const INVEST_FROM_OTHER = 0;//未知
 
     public $agree = '';
     public $order_return;
@@ -75,7 +83,7 @@ class OnlineOrder extends \yii\db\ActiveRecord implements \P2pl\OrderTxInterface
             [['order_money'], 'required'],
             ['drawpwd', 'trim'],
             ['drawpwd', 'validatePassword'],
-            [['online_pid', 'order_time', 'uid', 'status', 'userCoupon_id'], 'integer'],
+            [['online_pid', 'order_time', 'uid', 'status', 'userCoupon_id', 'investFrom'], 'integer'],
             [['order_money', 'couponAmount', 'paymentAmount'], 'number'],
             [['sn'], 'string', 'max' => 30],
             [['campaign_source'], 'string', 'max' => 50],

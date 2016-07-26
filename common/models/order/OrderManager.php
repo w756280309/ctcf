@@ -411,7 +411,7 @@ class OrderManager
     /**
      * 创建用户标的订单.
      */
-    public function createOrder($sn = null, $price = null, $uid = null, UserCoupon $coupon = null)
+    public function createOrder($sn = null, $price = null, $uid = null, UserCoupon $coupon = null, $investFrom = 0)
     {
         if (empty($sn)) {
             return ['code' => PayService::ERROR_LAW, 'message' => '缺少参数'];   //参数为空,抛出错误信息
@@ -428,6 +428,7 @@ class OrderManager
 
         $user = User::findOne($uid);
         $order = new OnlineOrder();
+        $order->investFrom = $investFrom;
         $order->order_money = $price;
         $order->uid = $uid;
         $time = time();
