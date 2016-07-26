@@ -42,25 +42,37 @@ $this->registerMetaTag([
 <?php $this->beginBody() ?>
 <div class="container">
     <?php if (!defined('IN_APP')) { ?>
-    <?php if ($this->showAvatar) { ?>
-    <!--header-->
-    <div class="row account-title">
-        <div class="col-xs-2 back"><img src="<?= ASSETS_BASE_URI ?>images/headpic.png" alt=""/></div>
-        <div class="col-xs-8 ">ID:<?= StringUtils::obfsMobileNumber(Yii::$app->user->identity->mobile) ?></div>
-        <div class="col-xs-1 col"><a href="/system/system/setting" class="set">设置</a></div>
-        <div class="col-xs-1"></div>
-    </div>
-    <?php } else { ?>
-    <div class="row title-box nav-height">
-        <div class="col-xs-2 back">
-            <?php if (false === $this->backUrl) {} else { ?>
-            <img src="<?= ASSETS_BASE_URI ?>images/back.png" alt="" onclick="<?= (null === $this->backUrl) ? 'history.go(-1)' : "window.location.href='$this->backUrl'" ?>"/>
-            <?php } ?>
-        </div>
-        <div class="col-xs-8 title"><?= Html::encode($this->title) ?></div>
-        <div class="col-xs-2"></div>
-    </div>
-    <?php } } ?>
+        <?php if ($this->header_nav_on) { ?>
+            <header class="row head-title">
+                <div class="logo col-xs-12 col-sm-12"><img src="<?= ASSETS_BASE_URI ?>images/logo.png" alt="logo"></div>
+                <div class="logo_tit"><?= Html::encode($this->title) ?></div>
+            </header>
+        <?php } else { ?>
+            <?php if ($this->showAvatar) { ?>
+                <!--header-->
+                <div class="row account-title">
+                    <div class="col-xs-2 back"><img src="<?= ASSETS_BASE_URI ?>images/headpic.png" alt=""/></div>
+                    <div class="col-xs-8 ">
+                        ID:<?= StringUtils::obfsMobileNumber(Yii::$app->user->identity->mobile) ?></div>
+                    <div class="col-xs-1 col"><a href="/system/system/setting" class="set">设置</a></div>
+                    <div class="col-xs-1"></div>
+                </div>
+            <?php } else { ?>
+                <div class="row title-box nav-height">
+                    <div class="col-xs-2 back">
+                        <?php if (false === $this->backUrl) {
+                        } else { ?>
+                            <img src="<?= ASSETS_BASE_URI ?>images/back.png" alt=""
+                                 onclick="<?= (null === $this->backUrl) ? 'history.go(-1)' : "window.location.href='$this->backUrl'" ?>"/>
+                        <?php } ?>
+                    </div>
+                    <div class="col-xs-8 title"><?= Html::encode($this->title) ?></div>
+                    <div class="col-xs-2"></div>
+                </div>
+            <?php }
+        }
+    }
+    ?>
 
     <?= $content ?>
 
