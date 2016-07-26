@@ -40,10 +40,9 @@ class DealController extends BaseController
             $ct = CouponType::tableName();
             $data = UserCoupon::find()
                 ->innerJoinWith('couponType')
-                ->where(['isUsed' => 0, 'order_id' => null, "$ct.isDisabled" => 0])
+                ->where(['isUsed' => 0, 'user_id' => $this->getAuthedUser()->id, "$ct.isDisabled" => 0])
                 ->andFilterWhere(['>=', "expiryDate", date('Y-m-d')])
-                ->andWhere(['user_id' => $this->getAuthedUser()->id])
-                ->orderBy("$ct.useEndDate, $ct.amount desc, $ct.minInvest")
+                ->orderBy("expiryDate, amount desc, minInvest")
                 ->all();
         } else {
             $data = [];
