@@ -50,10 +50,10 @@ use yii\captcha\Captcha;
                 <p class="tip-error popUp password-err"></p>
             </div>
             <div class="agreement">
-                <input type="checkbox" id="agreement-button" tabindex="5" class="agree">
+                <input type="checkbox" id="agreement-button" tabindex="5" class="agree"  checked="checked">
                 <label class="agreement" for="agreement-button">我已阅读并同意<a href="/site/xieyi" target="_blank">《网站服务协议》</a></label>
             </div>
-
+            <div class="popUp xieyi-err">您未同意网站服务协议</div>
             <input type="button" class="resign-btn" id="submit" value="立即注册" tabindex="6">
             <p class="leave-login">已有账号？<a href="/site/login" target="_self">登录</a></p>
         </div>
