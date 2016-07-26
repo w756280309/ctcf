@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'timeZone' => 'Asia/Shanghai',
     'class' => 'yii\\web\\Application',
     'id' => 'test',
     'basePath' => __DIR__,
