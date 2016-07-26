@@ -70,13 +70,17 @@ use common\utils\StringUtils;
             <ul class="breadcrumb_detail">
                 <li><span>注册渠道</span>
                     <?php
-                            if($userinfo['login_from']==0){
-                                echo "官网注册";
-                            }elseif($userinfo['login_from']==1){
-                                echo "wap注册";
-                            }else{
-                                echo "app注册";
-                            }
+                    if ($userinfo['regFrom'] === 1) {
+                        echo "wap注册";
+                    } elseif ($userinfo['regFrom'] === 2) {
+                        echo "微信注册";
+                    } elseif ($userinfo['regFrom'] === 3) {
+                        echo "app注册";
+                    } elseif ($userinfo['regFrom'] === 4) {
+                        echo "pc注册";
+                    } else {
+                        echo "未知来源注册";
+                    }
                     ?>
                     </li>
                     <li><span>最后登录时间</span><?php echo empty($userinfo['last_login'])?"--":date("Y-m-d H:i:s",$userinfo['last_login']);?></li>
