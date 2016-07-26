@@ -617,7 +617,6 @@ $is_online = in_array($model->status, [2, 3, 4, 5, 6, 7]);//判断标的是否�
         }
 
         if ($(obj).val() === '1') {
-            disabledIsFdate(0);
             $('#onlineproduct-is_fdate').removeAttr('disabled');
         } else {
             disabledIsFdate(1);
