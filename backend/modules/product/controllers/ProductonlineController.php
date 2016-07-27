@@ -343,8 +343,13 @@ class ProductonlineController extends BaseController
         }
 
         $days = $request['days'];
-        if (in_array($days, [1, 7])) {
-            $data->andWhere(["$op.id" => $this->HkStats(intval($days))]);
+
+        if (!empty($days)) {
+            if (in_array($days, [1, 7])) {
+                $data->andWhere(["$op.id" => $this->HkStats(intval($days))]);
+            } else {
+                throw $this->ex404();
+            }
         }
 
         $_data = clone $data;
@@ -357,6 +362,7 @@ class ProductonlineController extends BaseController
                     'models' => $model,
                     'pages' => $pages,
                     'status' => $status,
+                    'days' => $days,
         ]);
     }
 
@@ -380,11 +386,16 @@ class ProductonlineController extends BaseController
             throw new \Exception();
         }
 
-        $query = Repayment::find();
+        $op = OnlineProduct::tableName();
+        $r = Repayment::tableName();
+
+        $query = Repayment::find()
+            ->innerJoin($op, "$r.loan_id = $op.id");
+
         $endDay = date('Y-m-d', strtotime("+$days days"));    //所有区段都要统计自截止日之前的所有待还款项目
         $query->where(['<', 'dueDate', $endDay]);
 
-        $model = $query->andWhere(['isRefunded' => 0])->select(['loan_id'])
+        $model = $query->andWhere(['isRefunded' => 0, "$op.status" => OnlineProduct::STATUS_HUAN])->select(['loan_id'])   //只统计规定时间内的状态为还款中的标的
             ->asArray()
             ->all();
 

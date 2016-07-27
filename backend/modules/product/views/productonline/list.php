@@ -1,5 +1,6 @@
 <?php
 use yii\widgets\LinkPager;
+use yii\Helpers\Html;
 
 $pc_cat = Yii::$app->params['pc_cat'];
 ?>
@@ -54,6 +55,7 @@ $pc_cat = Yii::$app->params['pc_cat'];
                                 </option>
                             <?php endforeach; ?>
                         </select>
+                        <input type="hidden" name="days" value="<?= Html::encode($days) ?>">
                     </td>
                     <td>
                         <div align="right" style="margin-right: 20px">
