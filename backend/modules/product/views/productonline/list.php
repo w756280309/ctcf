@@ -1,6 +1,6 @@
 <?php
 use yii\widgets\LinkPager;
-use yii\Helpers\Html;
+use yii\helpers\Html;
 
 $pc_cat = Yii::$app->params['pc_cat'];
 ?>
