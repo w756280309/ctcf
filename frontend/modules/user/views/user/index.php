@@ -79,7 +79,7 @@ use common\utils\StringUtils;
     <div class="investment-box-top">
         <div class="investment-box-logo"></div>
         <div class="investment-box-content blackFont">在投项目</div>
-        <div class="investment-link"><a href="/licai/"><img src="<?= ASSETS_BASE_URI ?>images/useraccount/jiantou.png" alt=""></a></div>
+        <div class="investment-link"><a href="/user/user/myorder/">it<img src="<?= ASSETS_BASE_URI ?>images/useraccount/jiantou.png" alt=""></a></div>
     </div>
     <div class="investment-box-bottom">
         <div class="investment-bottom-title">
