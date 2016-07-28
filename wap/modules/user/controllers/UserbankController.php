@@ -76,7 +76,14 @@ class UserbankController extends BaseController
 
         $banks = BankManager::getQpayBanks();
 
-        return $this->render('bindbank', ['banklist' => $banks]);
+        return $this->render('bindbank', [
+            'banklist' => $banks,
+            'data' => [
+                'code' => 0,
+                'message' => '',
+                'tourl' => '',
+            ],
+        ]);
     }
 
     /**
