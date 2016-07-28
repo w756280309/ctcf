@@ -1,7 +1,7 @@
 <?php
 $this->title = '我的理财';
 
-$this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/mytrade.css?v=20160721', ['depends' => 'frontend\assets\FrontAsset']);
+$this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/mytrade.css?v=20160727', ['depends' => 'frontend\assets\FrontAsset']);
 $this->registerCssFile(ASSETS_BASE_URI.'css/pagination.css', ['depends' => 'frontend\assets\FrontAsset']);
 $this->registerJsFile(ASSETS_BASE_URI.'js/useraccount/my_trade.js', ['depends' => 'frontend\assets\FrontAsset']);
 
@@ -115,8 +115,8 @@ use common\widgets\Pager;
         </table>
 
         <?php if (empty($model)) : ?>
-            <div class="table-kong"></div>
-            <div class="table-kong"></div>
+            <div class="no-data"></div>
+            <div class="no-data"></div>
             <p class="without-font">暂无投资明细</p>
             <a class="link-tender" href="/licai/">立即投资</a>
         <?php endif; ?>
@@ -148,8 +148,8 @@ use common\widgets\Pager;
             <?php endforeach; ?>
         </table>
         <?php if (empty($model)) : ?>
-            <div class="table-kong"></div>
-            <div class="table-kong"></div>
+            <div class="no-data"></div>
+            <div class="no-data"></div>
             <p class="without-font">暂无投资明细</p>
             <a class="link-tender" href="/licai/">立即投资</a>
         <?php endif; ?>

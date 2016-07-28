@@ -261,7 +261,7 @@ path {
 }
 .investment-box-bottom {
     width: 760px;
-    min-height: 200px;
+    min-height: 245px;
     margin: 0 auto;
 }
 .investment-bottom-title {
@@ -346,17 +346,29 @@ path {
 .investment-name1 a:hover{
     color: #ff2b01;
 }
-.not_yet {
+.investment-box-bottom .without-font {
+    position: absolute;
+    top: 920px;
+    left: 185px;
+    right: 0px;
     text-align: center;
-    color: #a6a6a6;
-    margin-top: 162px;
-    margin-bottom: 162px;
+    font-size: 18px;
+    color: #99999d;
 }
-.not_yet a {
+.investment-box-bottom .link-tender {
+    display: block;
+    width: 190px;
+    height: 40px;
+    line-height: 40px;
+    background-color: #f44336;
     color: #fff;
-    background-color: #ff5736;
-    padding: 5px 18px;
-    margin-left: 15px;
-    border-radius: 4px;
-    box-shadow: 2px 1px 6px 0 #ff5736;
+    text-align: center;
+    margin: 0 auto;
+    position: absolute;
+    top: 955px;
+    left: 183px;
+    right: 0px;
+}
+.link-tender:hover {
+    background-color: #DB1809;
 }

@@ -253,6 +253,11 @@
     margin-top: 60px;
 }
 
+.myCoupon-box .no-data {
+    height: 60px;
+    margin-top: 60px;
+}
+
 .myCoupon-box .without-font {
     position: absolute;
     top: 216px;

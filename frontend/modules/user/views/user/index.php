@@ -1,7 +1,7 @@
 <?php
 $this->title = '账户中心首页';
 
-$this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/index.css', ['depends' => 'frontend\assets\FrontAsset']);
+$this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/index.css?v=20160727', ['depends' => 'frontend\assets\FrontAsset']);
 $this->registerJsFile(ASSETS_BASE_URI.'js/useraccount/highcharts.js', ['depends' => 'frontend\assets\FrontAsset']);
 $this->registerJsFile(ASSETS_BASE_URI.'js/useraccount/index.js', ['depends' => 'frontend\assets\FrontAsset']);
 
@@ -105,7 +105,8 @@ use common\utils\StringUtils;
             </ul>
         <?php } else { ?>
             <!--无数据是显示-->
-            <p class="not_yet">暂无投资项目<a href="/licai/">立即投资</a></p>
+            <p class="without-font">暂无投资明细</p>
+            <a class="link-tender" href="/licai/">立即投资</a>
         <?php } ?>
     </div>
 </div>
