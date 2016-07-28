@@ -203,7 +203,15 @@ class UserbankController extends BaseController
             return ['code' => 1, 'message' => current($message)];
         }
 
-        return $this->render('tixian', ['user_bank' => $user_bank, 'user_acount' => $user_acount]);
+        return $this->render('tixian', [
+            'user_bank' => $user_bank,
+            'user_acount' => $user_acount,
+            'data' => [
+                'code' => 0,
+                'message' => '',
+                'tourl' => '',
+            ],
+        ]);
     }
 
     /**
