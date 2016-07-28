@@ -25,7 +25,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/fastclick.js', ['depends' => 'wap\asse
         <div class="clear"></div>
     </div>
     <div class="text-box">
-        <input id="captchaCode" class="login-info text-single" type="text" name="SignupForm[captchaCode]" maxlength="4" placeholder="请输入图形验证码" AUTOCOMPLETE="off">
+        <input id="captchaform-captchacode" class="login-info text-single" type="text" name="SignupForm[captchaCode]" maxlength="4" placeholder="请输入图形验证码" AUTOCOMPLETE="off">
         <?= $form->field($captcha, 'captchaCode',['template' => '{input}'])->label(false)->widget(Captcha::className(), ['template' => '{image}', 'imageOptions'=>['class'=>'varify-img'], 'captchaAction' => '/site/captcha']) ?>
         <div class="clear"></div>
     </div>
@@ -119,12 +119,12 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/fastclick.js', ['depends' => 'wap\asse
             return false;
         }
 
-        if ($("#captchaCode").val() === '') {
+        if ($("#captchaform-captchacode").val() === '') {
             toast('图形验证码不能为空');
             return false;
         }
 
-        if ($("#captchaCode").val().length !== 4) {
+        if ($("#captchaform-captchacode").val().length !== 4) {
             toast('图形验证码必须为4位字符');
             return false;
         }
@@ -258,15 +258,15 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/fastclick.js', ['depends' => 'wap\asse
         var curCount;//当前剩余秒数
         var count = 60; //间隔函数，1秒执行
         $('#yzm').bind('click', function () {
-            if ($("#captchaCode").val() === '') {
+            if ($("#captchaform-captchacode").val() === '') {
                 toast('图形验证码不能为空');
                 return false;
             }
-            if ($("#captchaCode").val().length !== 4) {
+            if ($("#captchaform-captchacode").val().length !== 4) {
                 toast('图形验证码必须为4位字符');
                 return false;
             }
-            createSms("#iphone", 1, "#captchaCode", function ()
+            createSms("#iphone", 1, "#captchaform-captchacode", function ()
             {
                 fun_timedown();
             });
