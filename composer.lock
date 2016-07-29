@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "8bcf0413b069e76c7fc945c6c6bdad0c",
-    "content-hash": "4935437814333a32ba693c2027d80739",
+    "hash": "83e4819cd991af555290b5b73745932a",
+    "content-hash": "101fa689c4715a24fab67855320fc5f7",
     "packages": [
         {
             "name": "bower-asset/bootstrap",
@@ -773,6 +773,35 @@
             "description": "Symfony Process Component",
             "homepage": "https://symfony.com",
             "time": "2016-04-14 15:30:28"
+        },
+        {
+            "name": "wcg/dingnotify",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "ssh://vcs@dx.wangcaigu.cn/diffusion/DINGNOTIFY/dingnotify.git",
+                "reference": "88891a4f1782ac4512191f2f96b9f4e66c334e75"
+            },
+            "require": {
+                "php": ">=5.5.0"
+            },
+            "type": "project",
+            "autoload": {
+                "psr-4": {
+                    "DingNotify\\": "DingNotify"
+                }
+            },
+            "license": [
+                "proprietary"
+            ],
+            "authors": [
+                {
+                    "name": "shiyang",
+                    "email": "shiyang@wangcaigu.com"
+                }
+            ],
+            "description": "旺财谷钉钉插件",
+            "time": "2016-07-26 09:28:44"
         },
         {
             "name": "yiisoft/yii2",
@@ -2487,16 +2516,16 @@
         },
         {
             "name": "nette/security",
-            "version": "v2.3.1",
+            "version": "v2.3.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nette/security.git",
-                "reference": "744264a42b506d63009d7e3853ed72b04c99e964"
+                "reference": "779254a5484a106344a81c8cb9ce2b8570e38f34"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nette/security/zipball/744264a42b506d63009d7e3853ed72b04c99e964",
-                "reference": "744264a42b506d63009d7e3853ed72b04c99e964",
+                "url": "https://api.github.com/repos/nette/security/zipball/779254a5484a106344a81c8cb9ce2b8570e38f34",
+                "reference": "779254a5484a106344a81c8cb9ce2b8570e38f34",
                 "shasum": ""
             },
             "require": {
@@ -2526,16 +2555,16 @@
             "authors": [
                 {
                     "name": "David Grudl",
-                    "homepage": "http://davidgrudl.com"
+                    "homepage": "https://davidgrudl.com"
                 },
                 {
                     "name": "Nette Community",
-                    "homepage": "http://nette.org/contributors"
+                    "homepage": "https://nette.org/contributors"
                 }
             ],
             "description": "Nette Security: Access Control Component",
-            "homepage": "http://nette.org",
-            "time": "2015-07-11 21:22:53"
+            "homepage": "https://nette.org",
+            "time": "2016-05-17 15:37:18"
         },
         {
             "name": "nette/utils",
@@ -3244,7 +3273,9 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "wcg/dingnotify": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
