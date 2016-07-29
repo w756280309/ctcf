@@ -1,0 +1,482 @@
+@charset "utf-8";
+a, a:hover {
+    text-decoration: none;
+}
+
+.container {
+    background-color: #efefef;
+}
+
+.col-xs-12 {
+    padding: 0;
+}
+
+.description-box {
+    color: #595757;
+    background-color: #efefef;
+}
+
+.description-box .description-header {
+    font-size: 2rem;
+    line-height: 3.5rem;
+    text-align: center;
+    background-image: url("../../images/luodiye/header-back.png");
+    background-repeat: repeat-x;
+    background-position: center center;
+}
+
+.description-box .description-header span {
+    padding: 0 1rem 0 1.5rem;
+    background-color: #efefef;
+}
+
+.description-box .description-content {
+    margin: 0 1.5rem;
+    padding-bottom: 1rem;
+    font-size: 1.6rem;
+    line-height: 2.8rem;
+    text-indent: 2em;
+    border-bottom: 1px dashed #d1d1cf;
+}
+
+.production-box {
+    color: #595757;
+    background-color: #efefef;
+    padding-bottom: 2rem;
+}
+
+.production-box .production-header {
+    font-size: 2rem;
+    line-height: 5rem;
+    text-align: center;
+}
+
+/*border三角形提示信息---开始*/
+.tip_pop {
+    width: 60%;
+    height: 3rem;
+    line-height: 3rem;
+    font-size: 1rem;
+    text-align: center;
+    color: #303030;
+    margin: 1rem auto 1.5rem;
+    zoom: 1;
+}
+
+.tip_pop .tip_pop-en {
+    position: relative;
+    background-color: #fff;
+    border: 1px solid #d7d7d7;
+    box-shadow: 0 1px 1px 0 #d7d7d7;
+    border-radius: 4px;
+    zoom: 1;
+    _display: inline
+}
+
+.tip_pop .tip_pop-border {
+    position: absolute;
+    left: 45%;
+    bottom: 0;
+    z-index: 10;
+}
+
+.tip_pop .tip_pop-border em {
+    width: 0px;
+    height: 0px;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    border-style: solid;
+    border-width: 6px 6px 0 6px;
+    border-color: rgba(0, 0, 0, 0);
+    border-color: transparent \0;
+    _border-color: tomato;
+    _filter: chroma(color=tomato);
+    border-top-color: #d7d7d7;
+}
+
+.tip_pop .tip_pop-border span {
+    width: 0px;
+    height: 0px;
+    position: absolute;
+    top: -1px;
+    left: 0px;
+    border-style: solid;
+    border-width: 6px 6px 0 6px;
+    border-color: rgba(0, 0, 0, 0);
+    border-color: transparent \0;
+    _border-color: tomato;
+    _filter: chroma(color=tomato);
+    border-top-color: #fff;
+}
+
+.tip_pop .tip_pop-content {
+    word-break: keep-all;
+}
+
+/*border三角形提示信息---结束*/
+
+.choose-box {
+    color: #595757;
+    padding: 1rem 0 2rem;
+    background-color: #fff;
+}
+
+.choose-box h3 {
+    font-size: 2rem;
+    line-height: 5rem;
+    text-align: center;
+}
+
+.choose-box .choose-content img {
+    width: 100%;
+}
+
+.link-last {
+    display: block;
+    width: 80%;
+    height: 3rem;
+    line-height: 3rem;
+    font-size: 1.6rem;
+    text-align: center;
+    border-radius: 5px;
+    letter-spacing: 2px;
+    margin: 0 auto;
+    color: #fff;
+    background-color: #f44336;
+}
+
+.back-fff {
+    width: 100%;
+    background-color: #fff;
+    padding: 0.5rem 0 3.5rem;
+}
+
+.fixed-float {
+    width: 100%;
+    background-color: #fff;
+}
+
+.fixed-float img {
+    width: 100%;
+}
+
+.fixed-box {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+.fixed-opacity {
+    background-color: #000;
+    opacity: 0.8;
+}
+
+.fixed-opacity img {
+    width: 100%;
+    height: 60px;
+}
+
+.fixed-outside {
+    position: relative;
+    bottom: 100%;
+    width: 100%;
+    height: 100%;
+}
+
+.fixed-content {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 99;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    color: #fff;
+    font-size: 1.4rem;
+}
+
+.fixed-content .table-img img {
+    width: 100%;
+}
+
+.fixed-content .content-font {
+    text-align: center;
+}
+
+.fixed-content .content-link {
+    padding: 0.3rem 1rem;
+    border-radius: 5px;
+    color: #fff;
+    background-color: #f44336;
+    float: left;
+}
+
+.fixed-content .content-picture {
+    display: inline-block;
+}
+
+.fixed-content .content-picture img {
+    width: 24px;
+}
+
+.table-content {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+
+}
+
+.table-content td {
+    height: 100%;
+}
+
+/*6*/
+@media (min-device-width: 375px) {
+    .tip_pop {
+        width: 50%;
+    }
+
+    .fixed-content {
+        font-size: 1.4rem;
+    }
+
+    .register-box .text-box .get-phonecode {
+        font-size: 1.6rem;
+    }
+}
+
+.licai-img {
+    padding: 0 10px;
+}
+
+.licai-img img {
+    width: 100%;
+}
+
+.transform-box {
+    position: relative;
+    min-height: 40rem;
+    margin: 1.6rem 1.6rem 3.2rem;
+    box-shadow: -2px 2px 4px 0px #8b8587;
+    border-radius: 5px;
+    background-color: #ce4d42;
+}
+
+.transform-front-box .logo-back {
+    padding: 7.2rem 0 2.3rem;
+    background-color: #d55247;
+}
+
+.transform-front-box .logo-back img {
+    width: 100%;
+}
+
+.transform-front-box .front-font {
+    padding-bottom: 4.2rem;
+    background-color: #d55247;
+}
+
+.transform-front-box .front-font p {
+    font-size: 1.8rem;
+    line-height: 3rem;
+    color: #fbdfaf;
+    text-align: center;
+}
+
+.transform-front-box .transform-rotate {
+    position: relative;
+    padding-bottom: 4rem;
+}
+
+.transform-front-box .transform-rotate img {
+    width: 100%;
+}
+
+.transform-front-box .transform-absolute {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+}
+
+.transform-front-box .transform-absolute img {
+    display: block;
+    width: 30%;
+    margin: 0 auto;
+    cursor: pointer;
+    border-radius: 100px;
+}
+
+.transform-back-box {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+}
+
+.transform-back-box .transform-top {
+    padding-top: 6rem;
+    background-color: #d55247;
+}
+
+.transform-back-box .transform-top img {
+    width: 100%;
+}
+
+.transform-back-box .transform-center {
+    font-size: 1.8rem;
+    line-height: 2rem;
+    color: #fbdfaf;
+    text-align: center;
+}
+
+.transform-back-box .p-tip {
+    padding-top: 3rem;
+    padding-bottom: 1.5rem;
+}
+
+.transform-back-box .p-number {
+    font-size: 4.6rem;
+    line-height: 4.6rem;
+}
+
+.transform-back-box .p-use {
+    padding-top: 1rem;
+    padding-bottom: 4rem;
+}
+
+.transform-back-box .transform-bottom a {
+    display: block;
+    width: 72%;
+    padding: 1.2rem 0;
+    margin: 0 auto;
+    border-radius: 5px;
+    font-size: 2.2rem;
+    line-height: 2.2rem;
+    text-align: center;
+    letter-spacing: 0.3rem;
+    color: #d55247;
+    background-color: #fbdfaf;
+}
+.transform-front-box .transform-start {
+    transform-style: preserve-3d;
+    -webkit-transform-style: preserve-3d;
+    transform: rotateY(90deg);
+    -webkit-transform: rotateY(90deg);
+    transition: all 0.7s ease;
+    -webkit-transition: all 0.7s ease;
+}
+
+/*6*/
+@media (min-device-width: 375px) and (max-device-width: 500px) {
+    .transform-box {
+        min-height: 48.5rem;
+    }
+
+    .transform-front-box .logo-back {
+        padding: 9.2rem 0 2.3rem;
+    }
+
+    .transform-front-box .front-font {
+        padding-bottom: 6.2rem;
+    }
+
+    .transform-back-box .transform-top {
+        padding-top: 10rem;
+    }
+
+    .transform-back-box .p-tip {
+        padding-top: 3.8rem;
+        padding-bottom: 2rem;
+    }
+
+    .transform-back-box .p-number {
+        font-size: 4.6rem;
+        line-height: 4.6rem;
+    }
+
+    .transform-back-box .p-use {
+        padding-top: 1rem;
+        padding-bottom: 4rem;
+    }
+}
+
+@media (min-device-width: 501px) {
+    .transform-box {
+        min-height: 50rem;
+    }
+
+    .transform-front-box .logo-back {
+        padding: 3.2rem 0 1.3rem;
+    }
+}
+
+@media (min-device-width: 680px) {
+    .transform-box {
+        min-height: 53rem;
+    }
+}
+
+@media (min-device-width: 992px) {
+    .transform-back-box .transform-top {
+        padding-top: 9rem;
+        margin-bottom: 3rem;
+    }
+
+    .transform-box {
+        min-height: 65rem;
+    }
+}
+
+@media (min-device-width: 1200px) {
+    .transform-back-box .transform-top {
+        padding-top: 9rem;
+        margin-bottom: 3rem;
+    }
+
+    .transform-box {
+        min-height: 74rem;
+    }
+}
+@media (min-width: 501px) {
+    .transform-box {
+        min-height: 50rem;
+    }
+
+    .transform-front-box .logo-back {
+        padding: 3.2rem 0 1.3rem;
+    }
+}
+
+@media (min-width: 680px) {
+    .transform-box {
+        min-height: 54rem;
+    }
+}
+
+@media (min-width: 992px) {
+    .transform-back-box .transform-top {
+        padding-top: 9rem;
+        margin-bottom: 3rem;
+    }
+
+    .transform-box {
+        min-height: 65rem;
+    }
+}
+
+@media (min-width: 1200px) {
+    .transform-back-box .transform-top {
+        padding-top: 13rem;
+        margin-bottom: 5rem;
+    }
+
+    .transform-box {
+        min-height: 75rem;
+    }
+}
