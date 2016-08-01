@@ -6,13 +6,11 @@
  */
 namespace console\controllers;
 
-use common\models\order\OnlineOrder;
+use common\models\promo\InviteRecord;
 use common\models\user\UserInfo;
 use yii\console\Controller;
 use common\models\order\OrderQueue;
 use common\models\order\OrderManager;
-use wap\modules\promotion\models\RankingPromo;
-use wap\modules\promotion\promo\Promo160707;
 
 class OrderController extends Controller
 {
@@ -29,18 +27,12 @@ class OrderController extends Controller
                             //cancelNoPayOrder返回值false代表订单成立
                             OrderManager::confirmOrder($queue->order);
                         }
-                        //投资完成之后计算抽奖机会
-                        $promoConfig = RankingPromo::find()->where(['key' => 'PC_LAUNCH_160707'])->one();
-                        if ($promoConfig) {
-                            $time = time();
-                            $promo = new Promo160707($promoConfig);
-                            if ($time > $promo->startAt && $time < $promo->endAt) {
-                                $promo->onInvested($queue->order);
-                            }
-                        }
+                        $order = $queue->order;
+
+                        //投资完成之后做邀请好友逻辑处理
+                        InviteRecord::dealWithOrder($order);
 
                         //投资成功之后更新用户信息
-                        $order = $queue->order;
                         if ($order->status == 1) {
                             $info = UserInfo::find()->where(['user_id' => $order['uid']])->one();
                             if (null === $info) {

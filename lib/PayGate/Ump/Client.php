@@ -800,6 +800,29 @@ class Client
     }
 
     /**
+     * 普通无密转账，向用户转账
+     * @param string $sn
+     * @param integer $time
+     * @param integer $epayUserId
+     * @param float $amount
+     * @return Response
+     */
+    public function transferToUser($sn, $epayUserId, $amount, $time)
+    {
+        $data = [
+            'service' => 'transfer',
+            'order_id' => $sn,
+            'mer_date' => date('Ymd', $time),
+            'partic_user_id' => $epayUserId,
+            'partic_acc_type' => '01',//对私，向个人账户转账
+            'trans_action' => '02',//p2p平台向用户转账
+            'amount' => $amount * 100,
+        ];
+
+        return $this->doRequest($data);
+    }
+
+    /**
      * 生成流水串号.
      *
      * @param type $prefix

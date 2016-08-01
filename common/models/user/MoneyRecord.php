@@ -38,6 +38,7 @@ class MoneyRecord extends \yii\db\ActiveRecord
     const TYPE_DRAW_RETURN = 102; //批量代付失败退款
     const TYPE_DRAW_FEE = 103; //提现手续费
     const TYPE_DRAW_FEE_RETURN = 104; //提现退回手续费
+    const TYPE_CASH_GIFT = 105;//现金红包
 
     public static function createSN()
     {
