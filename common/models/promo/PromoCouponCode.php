@@ -54,7 +54,11 @@ class PromoCouponCode
                 }
             }
         } catch (\Exception $ex) {
+            $code = $ex->getCode();
             $transaction->rollBack();
+        }
+        if ($code === 1 || $code === 2) {
+            return ['code'=>2, 'message'=>'兑换码未生效', 'data'=>''];
         }
         return ['code'=>2, 'message'=>'兑换失败，请重试', 'data'=>''];
     }

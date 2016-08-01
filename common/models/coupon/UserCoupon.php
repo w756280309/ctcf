@@ -143,12 +143,12 @@ class UserCoupon extends \yii\db\ActiveRecord
     {
         if ($couponType->issueStartDate) {
             if (date('Y-m-d') < $couponType->issueStartDate) {
-                throw new \Exception('发行日期异常');
+                throw new \Exception('发行日期异常', 1);
             }
         }
         if ($couponType->issueEndDate) {
             if (date('Y-m-d') > $couponType->issueEndDate) {
-                throw new \Exception('发行日期异常');
+                throw new \Exception('发行日期异常', 2);
             }
         }
         if (!$couponType->expiresInDays && !$couponType->useEndDate) {

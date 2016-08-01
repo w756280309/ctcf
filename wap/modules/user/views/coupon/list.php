@@ -7,11 +7,11 @@ $this->registerJsFile(ASSETS_BASE_URI . 'js/couponcode.js', ['depends' => 'wap\a
 $this->registerJs('var tp=' . $header->pageCount . ';', 1);
 ?>
 
+<a href="javascript:" id="couponcode" class="couponcode">我有兑换码</a>
+<div style="clear:both"></div>
 <!--有优惠券的状态  -->
 <?php if (!empty($model)) {?>
     <div class="container coupon">
-        <a href="javascript:" id="couponcode" class="couponcode">我有兑换码</a>
-        <div style="clear:both"></div>
         <?php
             foreach ($model as $val) :
                 $desc = '未使用';
