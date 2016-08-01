@@ -21,6 +21,7 @@ $(function(){
         $(".code-mark").hide();
         $("#couponcode-box").hide();
         initCodeBox();
+        location.reload();
     });
     $("#code_submit_button").click(function(){
         if ($(".code-bottom").hasClass("continue-button")) {

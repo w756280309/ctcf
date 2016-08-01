@@ -80,7 +80,7 @@ use common\widgets\Pager;
 <div class="code-mark"></div>
 <div class="couponcode-box" id="couponcode-box">
     <form action="/user/couponcode/duihuan" method="post" id="code-forms">
-    <h3 class="code-top">领取兑换码<img class="close" src="<?= ASSETS_BASE_URI ?>images/login/close.png" alt=""></h3>
+    <h3 class="code-top">领取代金券<img class="close" src="<?= ASSETS_BASE_URI ?>images/login/close.png" alt=""></h3>
     <div class="code-content">
             <input type="hidden" name="_csrf" value="<?= Yii::$app->request->csrfToken; ?>">
             <div class="code-box">
