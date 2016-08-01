@@ -13,22 +13,22 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/invite/activedisplay.js', ['depends' =
 <div class="row transform-box">
     <div class="col-xs-12 transform-front-box">
         <div class="logo-back">
-            <img src="../../images/invite/logo-back.png" alt="">
+            <img src="<?= ASSETS_BASE_URI ?>images/invite/logo-back.png" alt="">
         </div>
         <div class="front-font">
             <p>好友邀请送好礼</p>
             <p>快来领取吧！</p>
         </div>
         <div class="transform-rotate">
-            <img src="../../images/invite/transform-back.png" alt="">
+            <img src="<?= ASSETS_BASE_URI ?>images/invite/transform-back.png" alt="">
             <div class="transform-absolute">
-                <img id="transform-icon" src="../../images/invite/transform-icon.png" alt="">
+                <img id="transform-icon" src="<?= ASSETS_BASE_URI ?>images/invite/transform-icon.png" alt="">
             </div>
         </div>
     </div>
     <div class="col-xs-12 transform-back-box">
         <div class="transform-top">
-            <img src="../../images/invite/transform-complete.png" alt="">
+            <img src="<?= ASSETS_BASE_URI ?>images/invite/transform-complete.png" alt="">
         </div>
         <div class="transform-center">
             <p class="p-tip">恭喜您获得代金券！</p>
@@ -49,12 +49,12 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/invite/activedisplay.js', ['depends' =
     <div class="licai-img">
         <div class="col-xs-6 licai-img">
             <a href="/deal/deal/index/">
-                <img src="../../images/luodiye/production-left.png" alt="温盈金">
+                <img src="<?= ASSETS_BASE_URI ?>images/luodiye/production-left.png" alt="温盈金">
             </a>
         </div>
         <div class="col-xs-6 licai-img">
             <a href="/deal/deal/index/">
-                <img src="../../images/luodiye/production-right.png" alt="温盈宝">
+                <img src="<?= ASSETS_BASE_URI ?>images/luodiye/production-right.png" alt="温盈宝">
             </a>
         </div>
         <div class="clear"></div>
@@ -63,27 +63,28 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/invite/activedisplay.js', ['depends' =
 <div class="row choose-box">
     <h3>为什么选择温都金服？</h3>
     <div class="choose-content">
-        <img src="../../images/luodiye/choose-top.png" alt="">
-        <img src="../../images/luodiye/choose-bottom.png" alt="">
+        <img src="<?= ASSETS_BASE_URI ?>images/luodiye/choose-top.png" alt="">
+        <img src="<?= ASSETS_BASE_URI ?>images/luodiye/choose-bottom.png" alt="">
     </div>
 </div>
-<a class="link-last" href="/deal/deal/index/">立即赚钱</a>
-
+<div class="back-fff">
+    <a class="link-last" href="/deal/deal/index/">立即赚钱</a>
+</div>
 <div class="fixed-float">
-    <img src="../../images/luodiye/fixed-float.png" alt="">
+    <img src="<?= ASSETS_BASE_URI ?>images/luodiye/fixed-float.png" alt="">
 </div>
 <div class="fixed-box">
     <div class="fixed-outside">
-        <div class="fixed-opacity"><img src="../../images/luodiye/fixed-float.png" alt=""></div>
+        <div class="fixed-opacity"><img src="<?= ASSETS_BASE_URI ?>images/luodiye/fixed-float.png" alt=""></div>
         <table class="fixed-content">
             <tr>
-                <td colspan="3" class="table-img"><img src="../../images/luodiye/fixed-float.png" alt=""></td>
+                <td colspan="3" class="table-img"><img src="<?= ASSETS_BASE_URI ?>images/luodiye/fixed-float.png" alt=""></td>
             </tr>
             <tr class="table-content">
                 <td width="600"><p class="content-font">使用APP客户端，理财随时随地！</p></td>
                 <td width="300"><a class="content-link" href="http://a.app.qq.com/o/simple.jsp?pkgname=com.wz.wenjf" target="_self">立即下载</a></td>
                 <td width="200">
-                    <a class="content-picture"><img src="../../images/luodiye/close-icon-height.png" alt=""></a>
+                    <a class="content-picture"><img src="<?= ASSETS_BASE_URI ?>images/luodiye/close-icon-height.png" alt=""></a>
                 </td>
             </tr>
         </table>
