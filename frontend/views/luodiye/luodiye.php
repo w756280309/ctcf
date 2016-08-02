@@ -2,7 +2,7 @@
 
 $this->title = '温州报业传媒旗下理财平台';
 
-$this->registerCssFile(ASSETS_BASE_URI.'css/luodiye/luodiye.css', ['depends' => 'frontend\assets\FrontAsset']);
+$this->registerCssFile(ASSETS_BASE_URI.'css/luodiye/luodiye.css?160802', ['depends' => 'frontend\assets\FrontAsset']);
 $this->registerJsFile(ASSETS_BASE_URI.'js/JPlaceholder.js', ['depends' => 'frontend\assets\FrontAsset']);
 $this->registerJsFile(ASSETS_BASE_URI.'js/register/register.js', ['depends' => 'frontend\assets\FrontAsset']);
 
