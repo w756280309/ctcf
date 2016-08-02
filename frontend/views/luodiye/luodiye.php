@@ -2,7 +2,7 @@
 
 $this->title = '温州报业传媒旗下理财平台';
 
-$this->registerCssFile(ASSETS_BASE_URI.'css/luodiye/luodiye.css?160802', ['depends' => 'frontend\assets\FrontAsset']);
+$this->registerCssFile(ASSETS_BASE_URI.'css/luodiye/luodiye.css?v=160802', ['depends' => 'frontend\assets\FrontAsset']);
 $this->registerJsFile(ASSETS_BASE_URI.'js/JPlaceholder.js', ['depends' => 'frontend\assets\FrontAsset']);
 $this->registerJsFile(ASSETS_BASE_URI.'js/register/register.js', ['depends' => 'frontend\assets\FrontAsset']);
 
@@ -81,8 +81,6 @@ use yii\captcha\Captcha;
                 <div class="tip_pop">
                     <div class="tip_pop-en">
                         <div class="tip_pop-border">
-                            <em></em>
-                            <span></span>
                         </div>
                         <div class="tip_pop-content">1000元起投</div>
                     </div>
@@ -98,8 +96,6 @@ use yii\captcha\Captcha;
                 <div class="tip_pop">
                     <div class="tip_pop-en">
                         <div class="tip_pop-border">
-                            <em></em>
-                            <span></span>
                         </div>
                         <div class="tip_pop-content">1万元起投</div>
                     </div>
