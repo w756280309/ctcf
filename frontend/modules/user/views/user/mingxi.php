@@ -2,7 +2,7 @@
 $this->title = '交易明细';
 
 $this->registerCssFile(ASSETS_BASE_URI.'css/pagination.css', ['depends' => 'frontend\assets\FrontAsset']);
-$this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/transactiondetail.css', ['depends' => 'frontend\assets\FrontAsset']);
+$this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/transactiondetail.css?v=160802', ['depends' => 'frontend\assets\FrontAsset']);
 
 use common\models\user\MoneyRecord;
 use common\utils\StringUtils;
