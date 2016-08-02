@@ -94,9 +94,10 @@ class InviteRecord extends ActiveRecord
                     ->andWhere(['between', 'order_time', $promo->startAt, $promo->endAt])
                     ->orderBy(['order_time' => SORT_ASC])
                     ->limit(3)
-                    ->sum('order_money');
+                    ->all();
                 if ($thirdMoney) {
-                    $cash = round(floatval($thirdMoney) / 1000, 1);
+                    $money = ArrayHelper::getColumn($thirdMoney, 'order_money');
+                    $cash = round(floatval(array_sum($money)) / 1000, 1);
                 } else {
                     $cash = 0;
                 }
@@ -140,14 +141,14 @@ class InviteRecord extends ActiveRecord
                         if ($order->order_money < 10000) {
                             //发放30元代金券 0011:10000-30
                             $coupon = CouponType::find()->where(['sn' => '0011:10000-30'])->one();
-                            if ($coupon) {
+                            if ($coupon && $coupon->allowIssue()) {
                                 $userCoupon = UserCoupon::addUserCoupon($user, $coupon);
                                 $userCoupon->save();
                             }
                         } else {
                             //发放50元代金券 0011:10000-50
                             $coupon = CouponType::find()->where(['sn' => '0011:10000-50'])->one();
-                            if ($coupon) {
+                            if ($coupon && $coupon->allowIssue()) {
                                 $userCoupon = UserCoupon::addUserCoupon($user, $coupon);
                                 $userCoupon->save();
                             }
