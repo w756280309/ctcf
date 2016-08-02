@@ -130,10 +130,10 @@ class InviteRecord extends ActiveRecord
                 $orderIds = ArrayHelper::getColumn($orderData, 'id');
                 //获取邀请者
                 $user = User::find()
-                    ->innerJoin('invite_record', ['user.id' => 'invite_record.user_id'])
+                    ->innerJoin('invite_record', 'user.id = invite_record.user_id')
                     ->where(['invite_record.invitee_id' => $order->uid])
                     ->one();
-                if (count($orderIds) > 0) {
+                if (count($orderIds) > 0 && $user) {
                     //首次投资给邀请者发代金券
                     if ($orderIds[0] === $order->id) {
                         //todo 等更改代金券时候需要手工更改代码
@@ -141,13 +141,15 @@ class InviteRecord extends ActiveRecord
                             //发放30元代金券 0011:10000-30
                             $coupon = CouponType::find()->where(['sn' => '0011:10000-30'])->one();
                             if ($coupon) {
-                                UserCoupon::addUserCoupon($user, $coupon);
+                                $userCoupon = UserCoupon::addUserCoupon($user, $coupon);
+                                $userCoupon->save();
                             }
                         } else {
                             //发放50元代金券 0011:10000-50
                             $coupon = CouponType::find()->where(['sn' => '0011:10000-50'])->one();
                             if ($coupon) {
-                                UserCoupon::addUserCoupon($user, $coupon);
+                                $userCoupon = UserCoupon::addUserCoupon($user, $coupon);
+                                $userCoupon->save();
                             }
                         }
                     }
