@@ -8,7 +8,7 @@ $this->params['breadcrumbs'][] = $this->title;
 $this->header_nav_on = true;
 
 $this->registerCssFile(ASSETS_BASE_URI.'css/first.css', ['depends' => 'wap\assets\WapAsset']);
-$this->registerCssFile(ASSETS_BASE_URI.'css/luodiye/luodiye.css', ['depends' => 'wap\assets\WapAsset']);
+$this->registerCssFile(ASSETS_BASE_URI.'css/luodiye/luodiye.css?v=160802', ['depends' => 'wap\assets\WapAsset']);
 $this->registerJsFile(ASSETS_BASE_URI.'js/fastclick.js', ['depends' => 'wap\assets\WapAsset']);
 ?>
 <div class="row banner-box">
