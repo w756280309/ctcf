@@ -2,14 +2,12 @@
 
 namespace common\models\promo;
 
-use common\lib\bchelp\BcRound;
 use common\models\coupon\CouponType;
 use common\models\coupon\UserCoupon;
 use common\models\order\OnlineOrder;
 use common\models\user\User;
 use common\service\AccountService;
 use wap\modules\promotion\models\RankingPromo;
-use Yii;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\helpers\ArrayHelper;
@@ -17,11 +15,11 @@ use yii\helpers\ArrayHelper;
 /**
  * This is the model class for table "invite_record".
  *
- * @property integer $id
- * @property integer $user_id   邀请者ID
- * @property integer $invitee_id    被邀请者ID
- * @property integer $created_at
- * @property integer $updated_at
+ * @property int $id
+ * @property int $user_id   邀请者ID
+ * @property int $invitee_id    被邀请者ID
+ * @property int $created_at
+ * @property int $updated_at
  */
 class InviteRecord extends ActiveRecord
 {
@@ -35,7 +33,7 @@ class InviteRecord extends ActiveRecord
     public function rules()
     {
         return [
-            [['user_id', 'invitee_id', 'created_at', 'updated_at'], 'integer']
+            [['user_id', 'invitee_id', 'created_at', 'updated_at'], 'integer'],
         ];
     }
 
@@ -58,9 +56,10 @@ class InviteRecord extends ActiveRecord
     }
 
     /**
-     * 获取用户的邀请好友记录
+     * 获取用户的邀请好友记录.
+     *
      * @param User $user
-     * @return array    ['name' => '用户真名', 'day' => '用户注册时间Y-m-d', 'coupon' => '代金券金额', 'cash' => '现金红包金额']
+     * @return array ['name' => '用户真名', 'mobile' => '手机号', 'day' => '用户注册时间Y-m-d', 'coupon' => '代金券金额', 'cash' => '现金红包金额']
      */
     public static function getInviteRecord(User $user)
     {
@@ -69,7 +68,7 @@ class InviteRecord extends ActiveRecord
         $ids = ArrayHelper::getColumn($invitee, 'invitee_id');
         $res = [];
         if ($ids) {
-            $users = User::find()->where(['id' => $ids])->all();
+            $users = User::find()->where(['id' => $ids])->orderBy(['id' => SORT_DESC])->all();
             foreach ($users as $k => $v) {
                 //邀请者因为此被邀请者得到的代金券金额
                 $order = OnlineOrder::find()
@@ -101,20 +100,21 @@ class InviteRecord extends ActiveRecord
                 } else {
                     $cash = 0;
                 }
-                $res[$k] = ['name' => $v->real_name, 'day' => date('Y-m-d', $v->created_at), 'coupon' => $coupon, 'cash' => $cash];
+                $res[$k] = ['name' => $v->real_name, 'mobile' => $v->mobile, 'day' => date('Y-m-d', $v->created_at), 'coupon' => $coupon, 'cash' => $cash];
             }
         }
+
         return $res;
     }
 
     //投资成功之后处理逻辑
     public static function dealWithOrder(OnlineOrder $order)
     {
-        $promo = RankingPromo::find()->where(['key' => InviteRecord::PROMO_KEY])->one();
+        $promo = RankingPromo::find()->where(['key' => self::PROMO_KEY])->one();
         $time = time();
         if (intval($order->status) === 1 && $time >= $promo->startAt && $time <= $promo->endAt) {
             //判断是不是被邀请者
-            $invite = InviteRecord::find()
+            $invite = self::find()
                 ->where(['invitee_id' => $order->uid])
                 ->andWhere(['between', 'created_at', $promo->startAt, $promo->endAt])
                 ->count();

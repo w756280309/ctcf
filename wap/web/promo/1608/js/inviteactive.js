@@ -1,0 +1,10 @@
+$(function(){
+    $('.invite-btn').on('click',function(){
+        $('.mark-box').show();
+        $('.share-box').show();
+    });
+    $('.share-box').on('click',function(){
+        $('.mark-box').hide();
+        $('.share-box').hide();
+    })
+})

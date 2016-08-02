@@ -85,8 +85,6 @@ class SiteController extends Controller
         $exception = \Yii::$app->errorHandler->exception;
         if ($exception !== null) {
             return $exception;
-
-            return $this->redirect('/');
         } else {
             return '';
         }

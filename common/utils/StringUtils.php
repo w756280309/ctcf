@@ -46,6 +46,30 @@ class StringUtils
     }
 
     /**
+     * 隐藏姓名部分信息,四个字的隐藏前两个字,其他的隐藏前一个字
+     * @param string $name 字符串格式的姓名
+     * @return string 隐藏后的姓名字符串
+     */
+    public static function obfsName($name)
+    {
+        if (empty($name) || !is_string($name)) {   //验证手机号的有效性,包括值和格式
+            return '';
+        }
+
+        $num = mb_strlen($name, 'utf-8');
+
+        if (1 === $num) {
+            return $name;
+        }
+
+        if ($num >= 4) {
+            return '**'.mb_substr($name, 2, $num - 2, 'utf-8');
+        }
+
+        return '*'.mb_substr($name, 1, $num - 1, 'utf-8');
+    }
+
+    /**
      * 金额显示样式一:
      * 1. 添加千分位显示
      * 2. 以万、亿为单位

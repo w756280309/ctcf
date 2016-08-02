@@ -1,0 +1,282 @@
+.inviteFriends-box {
+    border: 1px solid #e3e3e3;
+    background-color: #fff;
+}
+
+.inviteFriends-box .inviteFriends-box-header {
+    height: 50px;
+    line-height: 50px;
+    padding-left: 20px;
+    border-bottom: 1px solid #efeff3;
+}
+
+.inviteFriends-box .inviteFriends-box-header .inviteFriends-box-header-icon {
+    width: 20px;
+    height: 15px;
+    margin-top: 18px;
+    margin-right: 10px;
+    background: url("../../images/useraccount/background-icon.png") no-repeat -277px 0;
+    float: left;
+}
+
+.inviteFriends-box .inviteFriends-box-header .inviteFriends-box-header-font {
+    font-size: 16px;
+    /*color: #464648;*/
+}
+
+.inviteFriends-box .inviteFriends-img {
+    margin:30px auto;
+    width: 720px;
+    height: 120px;
+    background: url('../../images/useraccount/invitefriends/banner.png') no-repeat;
+}
+.inviteFriends-box .lf_title {
+    height: 30px;
+    line-height: 30px;
+    font-size: 16px;
+    color: #333;
+}
+.inviteFriends-box .lf_title span {
+    margin: 0 5px 0 20px;
+    width:2px;
+    height:12px;
+    display: inline-block;
+    background: #f44336;
+}
+.inviteFriends-box .code-box {
+    margin:30px 20px 24px;
+    height:262px;
+    border-bottom: 1px solid #efeff3;
+}
+.inviteFriends-box .code-box .code {
+    width:50%;
+    text-align: center;
+}
+.inviteFriends-box .code-box .code .txt {
+    position: relative;
+    margin:0 auto 20px;
+    width:64px;
+    height:21px;
+    line-height:21px;
+    font-size: 16px;
+    color:#333;
+    border-bottom:1px solid #f44336;
+}
+.inviteFriends-box .code-box .code .txt-rg {
+    width:100px;
+}
+.triangle {
+    position: absolute;
+    bottom:-4px;
+    left:26px;
+}
+.triangle-rg {
+    left:44px;
+}
+.inviteFriends-box .code-box .code-lf {
+    position: relative;
+}
+.inviteFriends-box .code-box .code-lf .qrcode-img{
+    margin: 0 auto 20px;
+    width:156px;
+    height:156px;
+}
+.inviteFriends-box .code-box .code-lf p {
+    position: absolute;
+    top:202px;
+    left:84px;
+    line-height:36px;
+    font-size: 12px;
+    color:#6e6e72;
+}
+.inviteFriends-box .code-box .code-rg p.code-tip {
+    margin-top: 16px;
+    line-height:36px;
+    font-size: 12px;
+    color:#6e6e72;
+    text-align: center;
+}
+.inviteFriends-box .code-box .code-rg .linking {
+    margin: 0 auto;
+    width:312px;
+    height:35px;
+    line-height:35px;
+    font-size: 12px;
+    color:#bababf;
+    text-align: center;
+    background: url("../../images/UserAccount/invitefriends/alink-border.png") no-repeat 1px 1px;
+    overflow: hidden;
+}
+.inviteFriends-box .code-box .code-rg a.copy-alink {
+    margin: 16px auto 0;
+    width:80px;
+    height:24px;
+    line-height:24px;
+    font-size: 12px;
+    color:#fff;
+    display: block;
+    cursor: pointer;
+    background: #f44336;
+}
+.inviteFriends-box .code-box .code-rg a.copy-alink:hover {
+    background: #d53024;
+}
+
+.inviteFriends-box .box {
+    margin: 0 20px;
+    padding-bottom: 24px ;
+    border-bottom: 1px solid #efeff3;
+}
+.inviteFriends-box .box .box-ticket {
+    float: left;
+}
+.inviteFriends-box .box .ticket {
+    position: relative;
+    margin:22px 30px 18px 30px;
+    padding-top: 12px;
+    width:118px;
+    height:68px;
+    text-align: center;
+}
+.inviteFriends-box .box .ticket .num {
+    height: 32px;
+    line-height: 32px;
+    font-size: 18px;
+    color:#fff;
+}
+.inviteFriends-box .box .ticket .num span {
+    line-height: 32px;
+    font-size: 30px;
+}
+.inviteFriends-box .box .ticket .coupon {
+    line-height: 34px;
+    text-align: center;
+    font-size: 14px;
+    color:#fff;
+}
+.border-fff {
+    position: absolute;
+    top:1px;
+    left: 1px;
+}
+.ticket-left {
+    margin-left:55px!important;
+    background: #ffad35;
+}
+.ticket-center {
+    background: #ff8d49;
+}
+.ticket-right {
+    background: #ff7563;
+}
+.ticket-last {
+    background: #ff5e4c;
+}
+.ticket-txt {
+    font-size: 14px;
+    line-height: 18px ;
+    color:#333;
+    text-align: center;
+}
+.inviteFriends-box .inviteFriends-box-content {
+    margin:30px 60px;
+    color: #464648;
+    position: relative;
+}
+.count {
+    margin: 0 0 28px;
+    height:40px;
+    line-height:40px;
+    font-size: 14px;
+    border:1px solid #ffd18d;
+    background: #fff0da;
+}
+.count .block {
+    float: left;
+    margin: 0 0 0 30px;
+    width:170px;
+}
+.count .block span {
+    color:#555;
+}
+.count .block i {
+    margin: 0 5px;
+    line-height:40px;
+    font-style: normal;
+    color: #f44336;
+    display: inline-block;
+}
+
+.page-title {
+    margin:0 0 20px;
+    height:40px;
+    line-height:40px;
+    color:#555;
+    border-bottom:1px solid #efeff3;
+}
+.page-title span {
+    margin-right: 100px;
+    font-size: 16px;
+    color:#555;
+    border-bottom:0;
+    display: inline-block;
+    cursor: pointer;
+}
+.page-title span.active {
+    color:#f44336;
+    border-bottom:2px solid #f44336;
+}
+
+.inviteFriends-box .active-box {
+
+    border:1px solid #efeff3;
+}
+.inviteFriends-box table {
+    position: relative;
+    width: 100%;
+    font-size: 12px;
+}
+
+.inviteFriends-box table th {
+    height: 50px;
+    font-size: 14px;
+    color:#464648;
+    font-weight: normal;
+    text-align: center;
+    background: #e4e4e8;
+}
+
+.inviteFriends-box table td {
+    height: 60px;
+    text-align: center;
+}
+
+.inviteFriends-box .without-font {
+    margin: 100px;
+    text-align: center;
+    font-size: 18px;
+    color: #999;
+}
+.inviteFriends-box .td-back-color {
+    background-color: #efeff3;
+}
+
+.inviteFriends-box .rule {
+    padding: 10px 0 10px 30px;
+    font-size: 14px;
+    color:#555;
+}
+.inviteFriends-box .rule h4 {
+    margin: 10px 0 4px;
+    font-weight: bolder;
+    line-height: 36px;
+}
+.inviteFriends-box p {
+    line-height: 30px;
+}
+.hide {
+    display: none;
+}
+.pagination-content {
+    width: 100% !important;
+}

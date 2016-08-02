@@ -1,0 +1,373 @@
+body, p, ul, ol, li, dl, dt, dd, form, h1, h2, h3, h4, h5, h6, input {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+img {
+    border: 0;
+}
+
+a {
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: none;
+}
+
+body, html {
+    font: 62.5%/1.5 "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif, "宋体";
+    box-sizing: border-box;
+    background: #f9f9f9;
+}
+
+i, em {
+    font-style: normal;
+}
+
+.container {
+    padding: 0;
+}
+
+.row {
+    margin: 0;
+}
+.clearfix:before,.clearfix:after {
+    content:'';
+    display:table;
+}
+.clearfix:after{
+    clear: both;
+}
+.clearfix {
+    *zoom:1;
+}
+/*banner-box*/
+.banner-box .col-xs-12 {
+    padding: 0;
+}
+.banner-box .col-xs-12 img {
+    width: 100%;
+}
+/*invite-box*/
+.invite-box .col-xs-12 {
+    background: #fff6ea;
+    padding: 4% 0;
+    border-bottom: 1px solid #fe6030;
+}
+.invite-box .inv-title {
+    text-align: center;
+    font-size: 1.6rem;
+    color: #444444;
+    margin-bottom: 20px;
+}
+.invite-box .inv-title span {
+    position: relative;
+}
+.invite-box .inv-title .left {
+    position: absolute;
+    left: -9px;
+    top: -6px;
+    width: 16px;
+}
+.invite-box .inv-title .right {
+    position: absolute;
+    right: -9px;
+    bottom: -6px;
+    width: 16px;
+}
+.invite-inner li {
+    float: left;
+    width: 33.33%;
+}
+.invite-quan {
+    width: 70%;
+    max-width: 97px;
+    margin: 0 auto;
+    overflow: hidden;
+    padding: 1px;
+}
+.background-yellow {
+    background: #ffad35;
+}
+.background-orange {
+    background: #ff8d49;
+}
+.background-red {
+    background: #ff7563;
+}
+.invite-quan div {
+    width: 100%;
+    height: 100%;
+    border: 1px dashed #fff;
+    text-align: center;
+    padding: 6% 0;
+}
+.invite-quan div p {
+    font-size: 1.4rem;
+    color: #fff;
+    height: 20px;
+    text-align: center;
+    margin-bottom: 4px;
+}
+.invite-quan div p img {
+    width: 15px;
+}
+.invite-quan div p i {
+    font-size: 1rem!important;
+}
+.invite-quan div span {
+    font-size: 1rem;
+    color: #fff;
+}
+.invite-inner em {
+    display: block;
+    width: 75px;
+    margin: 0 auto;
+    text-align: left;
+    color: #333333;
+    font-size: 1.2rem;
+    padding-top: 6px;
+}
+/*invited-box*/
+.invited-box {
+    margin-top: 4%;
+}
+.invited-box .col-xs-12 {
+    background: #fff6ea;
+    padding: 4% 0;
+    border-bottom: 1px solid #fe6030;
+}
+.invited-box .inv-title {
+    text-align: center;
+    font-size: 1.6rem;
+    color: #444444;
+    margin-bottom:14%;
+}
+.invited-box .inv-title span {
+    position: relative;
+}
+.invited-box .inv-title .left {
+    position: absolute;
+    left: -9px;
+    top: -6px;
+    width: 16px;
+}
+.invited-box .inv-title .right {
+    position: absolute;
+    right: -9px;
+    bottom: -6px;
+    width: 16px;
+}
+.invited-inner {
+    padding-bottom: 22%;
+}
+.invited-inner li{
+    position: relative;
+    float: left;
+    width: 33.33%;
+}
+.invited-quan {
+    width: 70%;
+    max-width: 97px;
+    margin: 0 auto;
+    overflow: hidden;
+    padding: 1px;
+}
+.invited-quan div {
+    width: 100%;
+    height: 100%;
+    border: 1px dashed #fff;
+    text-align: center;
+    padding: 6% 0;
+}
+.invited-quan div p {
+    font-size: 1.4rem;
+    color: #fff;
+    height: 20px;
+    text-align: center;
+    margin-bottom: 4px;
+}
+.invited-quan div p i {
+    font-size: 1rem!important;
+}
+.invited-quan div span {
+    font-size: 1rem;
+    color: #fff;
+}
+
+.invited-quans {
+    position: absolute;
+    left: 30%;
+    top: 0;
+    transform-origin: left bottom;
+    transform: rotate(-30deg);
+    z-index: 1;
+    opacity: 0.8;
+}
+.invited-quans1 {
+    position: absolute;
+    top:0;
+    left: 30%;
+    z-index: 2;
+}
+.invited-inner em {
+    position: absolute;
+    top:0;
+    left: 30%;
+    display: block;
+    width: 70%;
+    margin: 0 auto;
+    text-align: center;
+    color: #333333;
+    font-size: 1.2rem;
+    padding-top: 6px;
+    margin-top: 50%;
+}
+/*middle-box*/
+.middle-box .col-xs-12 {
+    padding: 0;
+}
+.middle-box .col-xs-12 .inv-title {
+    text-align: center;
+    font-size: 1.6rem;
+    color: #ff5e4c;
+    padding: 4% 0;
+}
+.middle-inner {
+    width: 94%;
+    margin: 0 auto;
+    background: #fff0da;border: 1px solid #ffd18d;
+    padding: 1% 0;
+}
+.middle-inner li {
+    float: left;
+    font-size: 1.2rem;
+    color: #555555;
+    margin-right: 10px;
+    margin-left: 6px;
+}
+.middle-inner li span {
+    color: #ff5e4c!important;
+}
+/*bottom-box*/
+.bottom-box .col-xs-12 {
+    margin-top: 4%;
+    padding: 0 0 14% 0;
+}
+.bottom-box .col-xs-12 .title-box {
+    background: #fff;
+}
+.bottom-box .inv-title {
+    width: 94%;
+    margin: 0 auto;
+}
+.bottom-box .inv-title span {
+    float: left;
+    padding: 2% 0;
+    margin-right: 30px;
+    border-bottom: 1px solid #fff;
+    font-size: 1.4rem;
+}
+.selected {
+    color: #ff5e4c!important;
+    border-bottom: 1px solid #ff5e4c!important;
+    transition: all 0.5s ease;
+    -webkit-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+}
+.bottom-inner {
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+    color: #6e6e72;
+    font-size: 1.2rem;
+}
+.bottom-inner tr th {
+    text-align: center;
+    font-weight: 300;
+    padding: 2% 0;
+    background: #fff0da;
+}
+.bottom-inner tr td {
+    text-align: center;
+    padding: 2% 0;
+}
+.bottom-inner tr:nth-child(2n+1){
+    background: #f3f3f3;
+}
+.no-data {
+    color: #6e6e72;
+    font-size: 1.2rem;
+    text-align: center;
+    padding: 10% 0;
+}
+.hide {
+    display: none;
+}
+.show {
+    display: block;
+}
+.rule-box {
+    display: none;
+    width: 94%;
+    margin: 0 auto;
+    margin-top: 4%;
+    background: #fff0da;
+    color: #444444;
+    font-size: 1.4rem;
+    padding: 4% 0;
+}
+.rule-box .inv-title {
+    width: 94%;
+    margin: 0 auto;
+    padding-top: 2%;
+    color: #444444;
+}
+.rule-box ul {
+    width: 94%;
+    margin: 0 auto;
+}
+.rule-box ul li {
+    list-style: decimal;
+    list-style-position: inside;
+    color: #444444;
+    text-align: justify;
+}
+.invite-btn {
+    position: fixed;
+    left: 0;
+    bottom:0;
+    width: 100%;
+    padding: 2% 0;
+    text-align: center;
+    background: #f44336;
+    color: #fff;
+    font-size: 1.6rem;
+    z-index: 10;
+}
+.mark-box {
+    display: none;
+    position: fixed;
+    left: 0;
+    bottom:0;
+    width: 100%;
+    height: 100%;
+    background: #000;
+    opacity: 0.6;
+    z-index: 11;
+}
+.share-box {
+    display: none;
+    position: fixed;
+    left: 0;
+    bottom:0;
+    width: 100%;
+    height: 100%;
+    z-index: 12;
+    text-align: right;
+}
+.share-box img {
+    width: 80%;
+}

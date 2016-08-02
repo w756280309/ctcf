@@ -68,6 +68,15 @@ $this->showAvatar = true;
         </a>
 
         <div class="clear"></div>
+        <a class="row sm-height border-bottom block" href="/user/invite" >
+            <div class="col-xs-10 left-txt">邀请好友</div>
+            <div class="col-xs-1 arrow">
+                <img src="<?= ASSETS_BASE_URI ?>images/arrow.png" alt="右箭头">
+            </div>
+            <div class="col-xs-1"></div>
+        </a>
+
+        <div class="clear"></div>
         <a class="row sm-height border-bottom block" href="/user/user/mingxi" >
             <div class="col-xs-10 left-txt">交易明细</div>
             <div class="col-xs-1 arrow">

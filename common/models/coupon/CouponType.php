@@ -78,4 +78,27 @@ class CouponType extends \yii\db\ActiveRecord
             'isAudited' => '是否审核',
         ];
     }
+
+    /**
+     * 判断代金券是否可以发放.
+     * @return boolean
+     */
+    public function allowIssue()
+    {
+        $date = date('Y-m-d');
+
+        if ($this->issueStartDate) {
+            if ($date < $this->issueStartDate) {
+                return false;
+            }
+        }
+
+        if ($this->issueEndDate) {
+            if ($date > $this->issueEndDate) {
+                return false;
+            }
+        }
+
+        return true;
+    }
 }

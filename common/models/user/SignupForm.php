@@ -2,12 +2,15 @@
 
 namespace common\models\user;
 
-use Yii;
-use yii\base\Model;
-use common\service\SmsService;
-use Zii\Validator\CnMobileValidator;
+use common\models\coupon\CouponType;
+use common\models\coupon\UserCoupon;
 use common\lib\validator\LoginpassValidator;
 use common\models\affiliation\AffiliationManager;
+use common\models\promo\InviteRecord;
+use common\service\SmsService;
+use Yii;
+use yii\base\Model;
+use Zii\Validator\CnMobileValidator;
 
 /**
  * Signup form.
@@ -136,6 +139,29 @@ class SignupForm extends Model
 
                 return false;
             }
+
+            //邀请好友
+            $inviteCode = Yii::$app->session->get('inviteCode');
+            if ($inviteCode) {
+                $u = User::findOne(['usercode' => $inviteCode]);
+                if ($u) {
+                    $invite = new InviteRecord([
+                        'user_id' => $u->id,
+                        'invitee_id' => $user->id,
+                    ]);
+
+                    if (!$invite->save()) {
+                        $transaction->rollBack();
+                        return false;
+                    }
+
+                    $couponType = CouponType::findOne(['sn' => '0011:10000-50']);   //赠送50元代金券
+                    if ($couponType && $couponType->allowIssue()) {
+                        UserCoupon::addUserCoupon($user, $couponType)->save();
+                    }
+                }
+            }
+
             $transaction->commit();
             SmsService::editSms($user->mobile);
             if (Yii::$app->request->cookies->getValue('campaign_source')) {

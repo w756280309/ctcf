@@ -1,0 +1,199 @@
+@charset "utf-8";
+.wdjf-invite {
+    width:100%;
+    min-width: 1057px;
+    color: #444;
+    background: #ffeacf;
+}
+.wdjf-invite .banner{
+    width:100%;
+    height:83px;
+    background-size: 100% 100%;
+}
+.banner1 {
+    margin-top: -1px;
+    background:url(../../images/invite/banner1.png) no-repeat center center;
+}
+.banner2 {
+    background:url(../../images/invite/banner2.png) no-repeat center center;
+}
+.banner3 {
+    background:url(../../images/invite/banner3.png) no-repeat center center;
+}
+.wdjf-invite .banner4 {
+    height: 104px;
+    background:url(../../images/invite/banner4.png) no-repeat center center;
+    background-size: 100% 100%;
+}
+.wdjf-invite .invite {
+    margin:0 auto 20px;
+    padding: 30px 0 28px;
+    width:900px;
+    height:232px;
+    border-bottom: 2px solid #fe6030;
+    background: #fff6ea;
+}
+.wdjf-invite .invite .title {
+    position: relative;
+    margin:0 auto 36px;
+    height:64px;
+    line-height:64px;
+    text-align: center;
+    font-size: 30px;
+}
+.wdjf-invite .invite .first {
+    width: 200px;
+}
+.wdjf-invite .invite .second {
+    width: 236px;
+}
+.wdjf-invite .invite .three {
+    width: 176px;
+}
+.wdjf-invite .invite .title-lf {
+    position: absolute;
+    top:0;
+    left:0;
+}
+.wdjf-invite .invite .title-rg {
+    position: absolute;
+    top:0;
+    right:0;
+}
+.wdjf-invite .invite .box {
+    padding: 0 119px;
+    height:132px;
+}
+.wdjf-invite .invite .box .box-ticket {
+    float: left;
+}
+.wdjf-invite .invite .box .marg-lf {
+    margin-left: 75px;
+}
+.wdjf-invite .invite .box .ticket {
+    position: relative;
+    margin:17px 19px 17px 19px;
+    padding-top: 12px;
+    width:130px;
+    height:68px;
+    text-align: center;
+}
+.wdjf-invite .invite .box .ticket .num {
+    height: 32px;
+    line-height: 32px;
+    font-size: 18px;
+    color:#fff;
+}
+.wdjf-invite .invite .box .ticket .num span {
+    line-height: 32px;
+    font-size: 30px;
+}
+.wdjf-invite .invite .box .ticket .coupon {
+    line-height: 34px;
+    text-align: center;
+    font-size: 14px;
+    color:#fff;
+}
+.border-fff {
+    position: absolute;
+    top:1px;
+    left: 1px;
+}
+.ticket-left {
+    margin-left:20px!important;
+    background: #ffad35;
+}
+.ticket-center {
+    background: #ff8d49;
+}
+.ticket-right {
+    background: #ff7563;
+}
+.ticket-txt {
+    font-size: 14px;
+    color:#333;
+    text-align: center;
+}
+
+.wdjf-invite .invite .box .zhuce {
+    position: relative;
+    margin: 0 auto;
+    width:330px;
+    height: 132px;
+    background: url("../../images/invite/inviter-bg.png") no-repeat 30px 0;
+}
+.wdjf-invite .invite .box .zhuce .ticket-pos {
+    position: absolute;
+    top:55px;
+    left:70px;
+    padding-top: 12px;
+    width:130px;
+    height:65px;
+    text-align: center;
+}
+.wdjf-invite .invite .box .zhuce .ticket-pos .num {
+    height: 32px;
+    line-height: 32px;
+    font-size: 18px;
+    color:#fff;
+}
+.wdjf-invite .invite .box .zhuce .ticket-pos .num span {
+    line-height: 32px;
+    font-size: 30px;
+}
+.wdjf-invite .invite .box .zhuce .ticket-pos .coupon {
+    line-height: 34px;
+    text-align: center;
+    font-size: 14px;
+    color:#fff;
+}
+.wdjf-invite .invite .box .zhuce .zhuce-bottom {
+    position: absolute;
+    bottom:-4px;
+    left:208px;
+    color: #333;
+    font-size: 14px;
+}
+
+.wdjf-invite .rule {
+    height:580px;
+}
+.wdjf-invite .rule .box {
+    padding:0 0 0 60px;
+    height:460px;
+}
+.wdjf-invite .rule .box p {
+    line-height: 30px;
+    color:#444;
+    font-size: 18px;
+}
+.wdjf-invite .rule .box  p span {
+   font-weight: bolder;
+}
+
+a.a-invite-btn {
+    margin:37px auto 27px;
+    width:227px;
+    height:42px ;
+    line-height:42px ;
+    font-size: 24px;
+    text-align: center;
+    color:#fff;
+    background: url('../../images/invite/a-invite-btn.png') no-repeat;
+    display: block;
+    cursor: pointer;
+}
+a.a-invite-btn:hover {
+    line-height:44px ;
+    background: url('../../images/invite/a-invite-btn.png') no-repeat 0 2px;
+}
+.invite-tips {
+    line-height:42px ;
+    font-size: 18px;
+    color:#ff8f6d;
+    text-align: center;
+}
+
+
+
+

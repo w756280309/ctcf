@@ -21,4 +21,12 @@ class PromoController extends BaseController
     {
         return $this->render('@frontend/views/promo/201607/zadan.php');
     }
+
+    /**
+     * 邀请好友活动页
+     */
+    public function actionInvite160804()
+    {
+        return $this->render('@frontend/views/promo/201608/invite.php');
+    }
 }

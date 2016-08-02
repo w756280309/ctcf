@@ -141,19 +141,14 @@ class UserCoupon extends \yii\db\ActiveRecord
      */
     public static function addUserCoupon(User $user, CouponType $couponType)
     {
-        if ($couponType->issueStartDate) {
-            if (date('Y-m-d') < $couponType->issueStartDate) {
-                throw new \Exception('发行日期异常', 1);
-            }
+        if (!$couponType->allowIssue()) {
+            throw new \Exception('代金券发放时间错误', 1);
         }
-        if ($couponType->issueEndDate) {
-            if (date('Y-m-d') > $couponType->issueEndDate) {
-                throw new \Exception('发行日期异常', 2);
-            }
-        }
+
         if (!$couponType->expiresInDays && !$couponType->useEndDate) {
-            throw new \Exception('代金券截止日期异常');
+            throw new \Exception('代金券截止日期异常', 2);
         }
+
         $time = time();
         $expiryDate = empty($couponType->expiresInDays) ? $couponType->useEndDate : date('Y-m-d', $time + 24 * 60 * 60 * ($couponType->expiresInDays - 1));
         $model = new self([    //expiryDate记录了代金券的有效结束时间,如果有效天数不为空,则以领用时间为起点计算有效结束时间,否则直接读取代金券的有效结束时间

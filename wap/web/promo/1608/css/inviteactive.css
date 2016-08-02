@@ -1,0 +1,323 @@
+body, p, ul, ol, li, dl, dt, dd, form, h1, h2, h3, h4, h5, h6, input {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+img {
+    border: 0;
+}
+
+a {
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: none;
+}
+
+body, html {
+    font: 62.5%/1.5 "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif, "宋体";
+    box-sizing: border-box;
+    background: #ffeacf;
+}
+
+i, em {
+    font-style: normal;
+}
+
+.container {
+    padding: 0;
+}
+
+.row {
+    margin: 0;
+}
+.clearfix:before,.clearfix:after {
+    content:'';
+    display:table;
+}
+.clearfix:after{
+    clear: both;
+}
+.clearfix {
+    *zoom:1;
+}
+/*banner-box*/
+.banner-box .col-xs-12 {
+    padding: 0;
+}
+.banner-box .col-xs-12 img {
+    width: 100%;
+}
+/*invite-box*/
+.invite-box .col-xs-12 {
+    background: #fff6ea;
+    padding: 4% 0;
+    border-bottom: 1px solid #fe6030;
+}
+.invite-box .title {
+    text-align: center;
+    font-size: 1.6rem;
+    color: #444444;
+    margin-bottom: 20px;
+}
+.invite-box .title span {
+    position: relative;
+}
+.invite-box .title .left {
+    position: absolute;
+    left: -9px;
+    top: -6px;
+    width: 16px;
+}
+.invite-box .title .right {
+    position: absolute;
+    right: -9px;
+    bottom: -6px;
+    width: 16px;
+}
+.invite-inner li {
+    float: left;
+    width: 33.33%;
+}
+.invite-quan {
+    width: 70%;
+    max-width: 97px;
+    margin: 0 auto;
+    overflow: hidden;
+    padding: 1px;
+}
+.background-yellow {
+    background: #ffad35;
+}
+.background-orange {
+    background: #ff8d49;
+}
+.background-red {
+    background: #ff7563;
+}
+.invite-quan div {
+    width: 100%;
+    height: 100%;
+    border: 1px dashed #fff;
+    text-align: center;
+    padding: 6% 0;
+}
+.invite-quan div p {
+    font-size: 1.4rem;
+    color: #fff;
+    height: 20px;
+    text-align: center;
+    margin-bottom: 4px;
+}
+.invite-quan div p img {
+    width: 15px;
+}
+.invite-quan div p i {
+    font-size: 1rem!important;
+}
+.invite-quan div span {
+    font-size: 1rem;
+    color: #fff;
+}
+.invite-inner em {
+    display: block;
+    width: 75px;
+    margin: 0 auto;
+    text-align: left;
+    color: #333333;
+    font-size: 1.2rem;
+    padding-top: 6px;
+}
+/*invited-box*/
+.invited-box {
+    margin-top: 4%;
+}
+.invited-box .col-xs-12 {
+    background: #fff6ea;
+    padding: 4% 0;
+    border-bottom: 1px solid #fe6030;
+}
+.invited-box .title {
+    text-align: center;
+    font-size: 1.6rem;
+    color: #444444;
+    margin-bottom:14%;
+}
+.invited-box .title span {
+    position: relative;
+}
+.invited-box .title .left {
+    position: absolute;
+    left: -9px;
+    top: -6px;
+    width: 16px;
+}
+.invited-box .title .right {
+    position: absolute;
+    right: -9px;
+    bottom: -6px;
+    width: 16px;
+}
+.invited-inner {
+    padding-bottom: 22%;
+}
+.invited-inner li{
+    position: relative;
+    float: left;
+    width: 33.33%;
+}
+.invited-quan {
+    width: 70%;
+    max-width: 97px;
+    margin: 0 auto;
+    overflow: hidden;
+    padding: 1px;
+}
+.invited-quan div {
+    width: 100%;
+    height: 100%;
+    border: 1px dashed #fff;
+    text-align: center;
+    padding: 6% 0;
+}
+.invited-quan div p {
+    font-size: 1.4rem;
+    color: #fff;
+    height: 20px;
+    text-align: center;
+    margin-bottom: 4px;
+}
+.invited-quan div p i {
+    font-size: 1rem!important;
+}
+.invited-quan div span {
+    font-size: 1rem;
+    color: #fff;
+}
+
+.invited-quans {
+    position: absolute;
+    left: 30%;
+    top: 0;
+    transform-origin: left bottom;
+    transform: rotate(-30deg);
+    z-index: 1;
+    opacity: 0.8;
+}
+.invited-quans1 {
+    position: absolute;
+    top:0;
+    left: 30%;
+    z-index: 2;
+}
+.invited-inner em {
+    position: absolute;
+    top:0;
+    left: 30%;
+    display: block;
+    width: 70%;
+    margin: 0 auto;
+    text-align: center;
+    color: #333333;
+    font-size: 1.2rem;
+    padding-top: 6px;
+    margin-top: 50%;
+}
+/*rule-box*/
+.rule-boxs .col-xs-12 {
+    padding: 0;
+    background: #fff6ea;
+    border-bottom: 1px solid #fe6030;
+    margin-top: 4%;
+}
+.rule-boxs .title {
+    text-align: center;
+    font-size: 1.6rem;
+    color: #444444;
+    padding: 4% 0;
+}
+.rule-boxs .title span {
+    position: relative;
+}
+.rule-boxs .title .left {
+    position: absolute;
+    left: -9px;
+    top: -6px;
+    width: 16px;
+}
+.rule-boxs .title .right {
+    position: absolute;
+    right: -9px;
+    bottom: -6px;
+    width: 16px;
+}
+.rule-box {
+    width: 90%;
+    margin: 0 auto;
+    color: #444444;
+    font-size: 1.4rem;
+    padding-bottom: 4%;
+}
+.rule-box .title {
+    width: 100%;
+    padding-top: 2%;
+    color: #444444;
+    text-align: left!important;
+}
+.rule-box ul {
+    width: 100%;
+}
+.rule-box ul li {
+    list-style: decimal;
+    list-style-position: inside;
+    color: #444444;
+    text-align: justify;
+}
+/*tishi-box*/
+.tishi-box .col-xs-12 {
+    padding: 0 0 11% 0;
+}
+.tishi-box .col-xs-12 div {
+    text-align: center;
+    padding: 2% 0;
+    font-size: 1.2rem;
+    color: #ffc06e;
+}
+.invite-btn {
+    position: fixed;
+    left: 0;
+    bottom:0;
+    width: 100%;
+    padding: 2% 0;
+    text-align: center;
+    background: #f44336;
+    color: #fff;
+    font-size: 1.6rem;
+    z-index: 10;
+}
+.mark-box {
+    display: none;
+    position: fixed;
+    left: 0;
+    bottom:0;
+    width: 100%;
+    height: 100%;
+    background: #000;
+    opacity: 0.6;
+    z-index: 11;
+}
+.share-box {
+    display: none;
+    position: fixed;
+    left: 0;
+    bottom:0;
+    width: 100%;
+    height: 100%;
+    z-index: 12;
+    text-align: right;
+}
+.share-box img {
+    width: 80%;
+}
