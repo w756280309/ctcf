@@ -93,7 +93,11 @@ use yii\helpers\Html;
         </div>
 
         <!-- 邀请好友按钮 -->
-        <a href="/site/login?next=<?= Html::encode(\Yii::$app->request->hostInfo.'/user/invite') ?>" class="a-invite-btn">邀请好友</a>
+        <?php if (\Yii::$app->user->isGuest) {  ?>
+            <a href="/site/login?next=<?= Html::encode(\Yii::$app->request->hostInfo.'/user/invite') ?>" class="a-invite-btn">邀请好友</a>
+        <?php } else { ?>
+            <a href="/user/invite" class="a-invite-btn">邀请好友</a>
+        <?php } ?>
         <p class="invite-tips">理财非存款，产品有风险，投资须谨慎</p>
     </div>
 </div>

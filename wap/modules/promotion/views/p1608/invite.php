@@ -1,51 +1,55 @@
+<?php
+use common\view\AnalyticsHelper;
+use yii\helpers\Html;
+
+AnalyticsHelper::registerTo($this);
+$this->registerJs('var cdn = \'' . ASSETS_BASE_URI . '\';', 1);
+$this->registerJs('var url = \'' . \Yii::$app->request->hostInfo . '/luodiye/invite?code=' . $user->usercode . '\';', 1);
+$this->registerJsFile('https://res.wx.qq.com/open/js/jweixin-1.0.0.js');
+$this->registerJsFile(ASSETS_BASE_URI . 'promo/1608/js/weixin.js');//加载来源统计记录代码
+?>
+<?php $this->beginPage() ?>
 <!doctype html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>邀请好友来挣钱，大把红包轻松拿</title>
+    <meta name="keywords" content="温都金服,邀请好友,邀请,邀请奖励,代金券,现金红包">
+    <meta name="description" content="邀请好友来挣钱，大把红包轻松拿">
     <meta name="viewport" content="width=device-width,height=device-height,inital-scale=1.0,maximum-scale=1.0,user-scalable=no;"/>
-    <link href="https://static.wenjf.com/m/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="../css/inviteactive.css">
-    <script src="https://static.wenjf.com/m/js/jquery.js"></script>
-    <script src="../js/inviteactive.js"></script>
-    <script src="https://static.wenjf.com/m/js/hmsr.js?v=20160425"></script>
+    <?= Html::csrfMetaTags() ?>
+    <?php $this->head() ?>
+    <link href="<?= ASSETS_BASE_URI ?>css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>promo/1608/css/inviteactive.css">
+    <script src="<?= ASSETS_BASE_URI ?>js/jquery.js"></script>
+    <script src="<?= ASSETS_BASE_URI ?>promo/1608/js/inviteactive.js"></script>
     <script>
-        var _hmt = _hmt || [];
-        (function() {
-            var hm = document.createElement("script");
-            hm.src = "//hm.baidu.com/hm.js?d2417f8d221ffd4b883d5e257e21736c";
-            var s = document.getElementsByTagName("script")[0];
-            s.parentNode.insertBefore(hm, s);
-        })();
-
-        (function(i, s, o, g, r, a, m) {
-            i['GoogleAnalyticsObject'] = r;
-            i[r]=i[r] || function() {
-                (i[r].q = i[r].q || []).push(arguments)
-            }, i[r].l = 1 * new Date();
-            a = s.createElement(o), m = s.getElementsByTagName(o)[0];
-            a.async = 1;
-            a.src = g;
-            m.parentNode.insertBefore(a, m)
-        })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
-        ga('create', 'UA-77716435-1', '.wenjf.com');
-        ga('send', 'pageview');
+        $(function() {
+            $(document).ajaxSend(function(event, jqXHR, settings) {
+                var match = window.location.search.match(new RegExp('[?&]token=([^&]+)(&|$)'));
+                if (match) {
+                    var val = decodeURIComponent(match[1].replace(/\+/g, " "));
+                    settings.url = settings.url+(settings.url.indexOf('?') >= 0 ? '&' : '?')+'token='+encodeURIComponent(val);
+                }
+            });
+        });
     </script>
 </head>
 <body>
+    <?php $this->beginBody() ?>
     <div class="container">
         <!--banner-box-->
         <div class="row banner-box">
             <div class="col-xs-12">
-                <img src="../images/invite/banner3.png" alt="">
-                <img src="../images/invite/banner4.png" alt="">
+                <img src="<?= ASSETS_BASE_URI ?>promo/1608/images/invite/banner3.png" alt="">
+                <img src="<?= ASSETS_BASE_URI ?>promo/1608/images/invite/banner4.png" alt="">
             </div>
         </div>
         <!--invite-box-->
         <div class="row invite-box">
             <div class="col-xs-12">
                 <div class="title">
-                    <span><img class="left" src="../images/invite/left.png" alt="">邀请人奖励<img class="right" src="../images/invite/right.png" alt=""></span>
+                    <span><img class="left" src="<?= ASSETS_BASE_URI ?>promo/1608/images/invite/left.png" alt="">邀请人奖励<img class="right" src="<?= ASSETS_BASE_URI ?>promo/1608/images/invite/right.png" alt=""></span>
                 </div>
                 <ul class="invite-inner clearfix">
                     <li>
@@ -69,7 +73,7 @@
                     <li>
                         <div class="invite-quan background-red">
                             <div>
-                                <p><img src="../images/invite/hongbao.png" alt=""></p>
+                                <p><img src="<?= ASSETS_BASE_URI ?>promo/1608/images/invite/hongbao.png" alt=""></p>
                                 <span>(现金红包)</span>
                             </div>
                         </div>
@@ -82,7 +86,7 @@
         <div class="row invited-box">
             <div class="col-xs-12">
                 <div class="title">
-                    <span><img class="left" src="../images/invite/left.png" alt="">被邀请人奖励<img class="right" src="../images/invite/right.png" alt=""></span>
+                    <span><img class="left" src="<?= ASSETS_BASE_URI ?>promo/1608/images/invite/left.png" alt="">被邀请人奖励<img class="right" src="<?= ASSETS_BASE_URI ?>promo/1608/images/invite/right.png" alt=""></span>
                 </div>
                 <ul class="invited-inner clearfix">
                     <li>
@@ -117,7 +121,7 @@
         <div class="row rule-boxs">
             <div class="col-xs-12">
                 <div class="title">
-                    <span><img class="left" src="../images/invite/left.png" alt="">邀请人奖励<img class="right" src="../images/invite/right.png" alt=""></span>
+                    <span><img class="left" src="<?= ASSETS_BASE_URI ?>promo/1608/images/invite/left.png" alt="">邀请人奖励<img class="right" src="<?= ASSETS_BASE_URI ?>promo/1608/images/invite/right.png" alt=""></span>
                 </div>
                 <!--活动规则-->
                 <div class="rule-box">
@@ -155,8 +159,10 @@
         <!--share-box-->
         <div class="mark-box"></div>
         <div class="share-box">
-            <img src="../images/invite/share.png" alt="">
+            <img src="<?= ASSETS_BASE_URI ?>promo/1608/images/invite/share.png" alt="">
         </div>
     </div>
+    <?php $this->endBody() ?>
 </body>
 </html>
+<?php $this->endPage() ?>

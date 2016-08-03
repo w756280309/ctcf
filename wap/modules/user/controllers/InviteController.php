@@ -15,7 +15,8 @@ class InviteController extends BaseController
      */
     public function actionIndex($page = 1)
     {
-        $model = InviteRecord::getInviteRecord($this->getAuthedUser());
+        $user = $this->getAuthedUser();
+        $model = InviteRecord::getInviteRecord($user);
         $pageSize = 5;
         $count = count($model);
 
@@ -42,6 +43,6 @@ class InviteController extends BaseController
             return ['header' => $header, 'html' => $html, 'code' => $code, 'message' => $message];
         }
 
-        return $this->render('index', ['model' => $model, 'data' => $data->getModels(), 'pages' => $pages]);
+        return $this->render('index', ['model' => $model, 'data' => $data->getModels(), 'pages' => $pages, 'user' => $user]);
     }
 }

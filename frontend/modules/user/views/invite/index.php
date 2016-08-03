@@ -159,7 +159,7 @@ use common\widgets\Pager;
         $(".qrcode-img").qrcode({
             render: "div",
             size: 156,
-            text: '<?= Yii::$app->params['clientOption']['host']['wap'] ?>promo/1608/invite/inviteactive.html'// 需要修改成正确的地址
+            text: '<?= Yii::$app->params['clientOption']['host']['wap'] ?>promotion/p1608/invite'// 需要修改成正确的地址
         });
 
         //2.复制
