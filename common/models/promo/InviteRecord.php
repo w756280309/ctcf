@@ -5,6 +5,7 @@ namespace common\models\promo;
 use common\models\coupon\CouponType;
 use common\models\coupon\UserCoupon;
 use common\models\order\OnlineOrder;
+use common\models\sms\SmsMessage;
 use common\models\user\User;
 use common\service\AccountService;
 use wap\modules\promotion\models\RankingPromo;
@@ -135,6 +136,7 @@ class InviteRecord extends ActiveRecord
                     ->where(['invite_record.invitee_id' => $order->uid])
                     ->one();
                 if (count($orderIds) > 0 && $user) {
+                    $mess = '';
                     //首次投资给邀请者发代金券
                     if ($orderIds[0] === $order->id) {
                         //todo 等更改代金券时候需要手工更改代码
@@ -144,6 +146,7 @@ class InviteRecord extends ActiveRecord
                             if ($coupon && $coupon->allowIssue()) {
                                 $userCoupon = UserCoupon::addUserCoupon($user, $coupon);
                                 $userCoupon->save();
+                                $mess = '30元代金券';
                             }
                         } else {
                             //发放50元代金券 0011:10000-50
@@ -151,6 +154,7 @@ class InviteRecord extends ActiveRecord
                             if ($coupon && $coupon->allowIssue()) {
                                 $userCoupon = UserCoupon::addUserCoupon($user, $coupon);
                                 $userCoupon->save();
+                                $mess = '50元代金券';
                             }
                         }
                     }
@@ -161,7 +165,23 @@ class InviteRecord extends ActiveRecord
                         $record = OnlineOrder::find()->where(['status' => 1, 'uid' => $user->id])->count();
                         if ($money > 0 && $record > 0) {
                             AccountService::userTransfer($user, $money);
+                            $mess = $mess ? $mess . '和' . $money . '元现金红包' : $money . '元现金红包';
                         }
+                    }
+                    //发短信
+                    if ($mess) {
+                        $sms = new SmsMessage([
+                            'template_id' => \Yii::$app->params['sms']['invite_bonus'],
+                            'level' => SmsMessage::LEVEL_LOW,
+                        ]);
+                        $message = [
+                            $order->mobile,
+                            $mess,
+                        ];
+                        $sms->uid = $user->id;
+                        $sms->mobile = $user->mobile;
+                        $sms->message = json_encode($message);
+                        $sms->save();
                     }
                 }
             }

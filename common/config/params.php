@@ -66,6 +66,8 @@ return [
         'config' => [
             'APP_ID' => '8a48b551525cdd3301526207479a0bcc',
         ],
+        'invite_bonus' => 105818,//邀请好友奖励
+        'coupon_expire' => 105820,//代金券3天后失效
     ],
     'contact_tel' => '400-101-5151',
     'white_list' => ['15810036547', '18518154492'],
