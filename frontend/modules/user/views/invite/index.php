@@ -24,13 +24,13 @@ use common\widgets\Pager;
     <!-- 邀请链接 -->
     <div class="code-box">
         <div class="lf code code-lf">
-            <div class="txt">微信邀请<img class="triangle triangle-lf" src="<?= ASSETS_BASE_URI ?>images/useraccount/inviteFriends/triangle.png"></div>
+            <div class="txt">微信邀请<img class="triangle triangle-lf" src="<?= ASSETS_BASE_URI ?>images/useraccount/invitefriends/triangle.png"></div>
             <div id="qrcode-img" class="qrcode-img"></div>
             <p>打开微信，使用“扫一扫”即可分享给好友</p>
         </div>
         <div class="lf code code-rg">
-            <div class="txt txt-rg">发送邀请链接<img class="triangle triangle-rg" src="<?= ASSETS_BASE_URI ?>images/useraccount/inviteFriends/triangle.png"></div>
-            <img class="code-img" src="<?= ASSETS_BASE_URI ?>images/useraccount/inviteFriends/alink.png" alt="用户邀请链接">
+            <div class="txt txt-rg">发送邀请链接<img class="triangle triangle-rg" src="<?= ASSETS_BASE_URI ?>images/useraccount/invitefriends/triangle.png"></div>
+            <img class="code-img" src="<?= ASSETS_BASE_URI ?>images/useraccount/invitefriends/alink.png" alt="用户邀请链接">
             <p class="code-tip">您可以复制以下链接，发送给您的好友：</p>
             <div class="linking">
                 <?= Yii::$app->params['clientOption']['host']['frontend'] ?>luodiye/invite?code=<?= $user->usercode ?>

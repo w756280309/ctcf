@@ -1,7 +1,7 @@
 <?php
 $this->title = '邀请好友';
 
-$this->registerJsFile(ASSETS_BASE_URI . 'js/invite/invite.js', ['depends' => 'yii\web\JqueryAsset', 'position' => 1]);
+$this->registerJsFile(ASSETS_BASE_URI . 'js/invite/invite.js?v=20160802', ['depends' => 'yii\web\JqueryAsset', 'position' => 1]);
 $this->registerCssFile(ASSETS_BASE_URI . 'css/invite/invite.css', ['depends' => 'wap\assets\WapAsset']);
 
 use common\utils\StringUtils;
@@ -112,20 +112,22 @@ use common\utils\StringUtils;
             </div>
         </div>
         <!--邀请列表-->
-        <table class="bottom-inner">
-            <tr>
-                <th>姓名</th>
-                <th>注册日期</th>
-                <th>代金券(元)</th>
-                <th>现金红包(元)</th>
-            </tr>
-            <?= $this->renderFile('@wap/modules/user/views/invite/list.php',['data' => $data])?>
-            <tr class="load"></tr>
-        </table>
+        <div class="invite-list">
+            <table class="bottom-inner">
+                <tr>
+                    <th>姓名</th>
+                    <th>注册日期</th>
+                    <th>代金券(元)</th>
+                    <th>现金红包(元)</th>
+                </tr>
+                <?= $this->renderFile('@wap/modules/user/views/invite/list.php',['data' => $data])?>
+                <tr class="load"></tr>
+            </table>
 
-        <?php if (empty($model)) : ?>
-            <div class="no-data">暂未获得邀请奖励，快前去邀请吧</div>
-        <?php endif; ?>
+            <?php if (empty($model)) : ?>
+                <div class="no-data">暂未获得邀请奖励，快前去邀请吧</div>
+            <?php endif; ?>
+        </div>
 
         <!--活动规则-->
         <div class="rule-box">

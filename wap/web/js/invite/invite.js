@@ -2,11 +2,11 @@ $(function(){
     $('.bottom-box .inv-title span').on('click',function(){
         var index=$('.bottom-box .inv-title span').index(this);
         $('.bottom-box .inv-title span').removeClass('selected');
-        $('.bottom-inner').hide();
+        $('.invite-list').hide();
         $('.rule-box').hide();
         if(index==0){
             $('.bottom-box .inv-title span').eq(0).addClass('selected');
-            $('.bottom-inner').show();
+            $('.invite-list').show();
         }else if(index==1){
             $('.bottom-box .inv-title span').eq(1).addClass('selected');
             $('.rule-box').show();
