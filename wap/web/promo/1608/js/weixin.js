@@ -17,12 +17,12 @@ xhr.done(function(data) {
         wx.onMenuShareAppMessage({
             title: '领50元代金券，温都金服理财，亲测靠谱！', // 分享标题
             desc: '温州报业传媒旗下理财平台，国资背景，稳健好收益。', // 分享描述
-            link: url, // 分享链接
+            link: invite_url, // 分享链接
             imgUrl: cdn + 'promo/1608/images/invite/icon.jpg', // 分享图标
         });
         wx.onMenuShareTimeline({
             title: '领50元代金券，温都金服理财，亲测靠谱！', // 分享标题
-            link: url, // 分享链接
+            link: invite_url, // 分享链接
             imgUrl: cdn + 'promo/1608/images/invite/icon.jpg', // 分享图标
         });
     });
