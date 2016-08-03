@@ -36,6 +36,8 @@ use common\widgets\Pager;
                             <a class="table-link color-blue" href="<?= isset($desc[$key]['sn']) ? '/deal/deal/detail?sn='.$desc[$key]['sn'] : 'javascript:void(0)' ?>">
                                 <?= $desc[$key]['desc'] ?>
                             </a>
+                        <?php } elseif ($val->type === MoneyRecord::TYPE_CASH_GIFT) { ?>
+                            <p>邀请好友获得现金红包奖励<?= $val->in_money ?>元</p>
                         <?php } else { ?>
                             <p>流水号：<?= $desc[$key]['desc'] ?></p>
                         <?php } ?>

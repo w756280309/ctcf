@@ -111,6 +111,7 @@ class MoneyRecord extends \yii\db\ActiveRecord
             self::TYPE_DRAW_SUCCESS,
             self::TYPE_ORDER,
             self::TYPE_RECHARGE_POS,
+            self::TYPE_CASH_GIFT,
         ];
     }
 
