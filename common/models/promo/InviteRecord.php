@@ -65,6 +65,8 @@ class InviteRecord extends ActiveRecord
     public static function getInviteRecord(User $user)
     {
         $promo = RankingPromo::find()->where(['key' => self::PROMO_KEY])->one();
+        //判断用户是否投资过
+        $count = OnlineOrder::find()->where(['uid' => $user->id, 'status' => 1])->count();
         $invitee = self::find()->where(['user_id' => $user->id])->andWhere(['between', 'created_at', $promo->startAt, $promo->endAt])->select('invitee_id')->asArray()->all();
         $ids = ArrayHelper::getColumn($invitee, 'invitee_id');
         $res = [];
@@ -74,7 +76,7 @@ class InviteRecord extends ActiveRecord
                 //邀请者因为此被邀请者得到的代金券金额
                 $order = OnlineOrder::find()
                     ->select('order_money')
-                    ->where(['uid' => $v->id])
+                    ->where(['uid' => $v->id, 'status' => 1])
                     ->andWhere(['between', 'order_time', $promo->startAt, $promo->endAt])
                     ->orderBy(['order_time' => SORT_ASC])
                     ->asArray()
@@ -89,16 +91,20 @@ class InviteRecord extends ActiveRecord
                 } else {
                     $coupon = 0;
                 }
-                //邀请者因为此被邀请者得到的现金红包
-                $thirdMoney = OnlineOrder::find()
-                    ->where(['uid' => $v->id])
-                    ->andWhere(['between', 'order_time', $promo->startAt, $promo->endAt])
-                    ->orderBy(['order_time' => SORT_ASC])
-                    ->limit(3)
-                    ->all();
-                if ($thirdMoney) {
-                    $money = ArrayHelper::getColumn($thirdMoney, 'order_money');
-                    $cash = round(floatval(array_sum($money)) / 1000, 1);
+                if ($count > 0) {
+                    //邀请者因为此被邀请者得到的现金红包
+                    $thirdMoney = OnlineOrder::find()
+                        ->where(['uid' => $v->id, 'status' => 1])
+                        ->andWhere(['between', 'order_time', $promo->startAt, $promo->endAt])
+                        ->orderBy(['order_time' => SORT_ASC])
+                        ->limit(3)
+                        ->all();
+                    if ($thirdMoney) {
+                        $money = ArrayHelper::getColumn($thirdMoney, 'order_money');
+                        $cash = round(floatval(array_sum($money)) / 1000, 1);
+                    } else {
+                        $cash = 0;
+                    }
                 } else {
                     $cash = 0;
                 }
@@ -124,7 +130,7 @@ class InviteRecord extends ActiveRecord
                 //获取被邀请者活动期间前三次投资订单id
                 $orderData = OnlineOrder::find()
                     ->select('id')
-                    ->where(['uid' => $order->uid])
+                    ->where(['uid' => $order->uid, 'status' => 1])
                     ->andWhere(['between', 'order_time', $promo->startAt, $promo->endAt])
                     ->orderBy(['order_time' => SORT_ASC])
                     ->limit(3)

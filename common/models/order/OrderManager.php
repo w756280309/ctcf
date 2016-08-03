@@ -2,6 +2,8 @@
 
 namespace common\models\order;
 
+use common\models\promo\InviteRecord;
+use common\models\user\UserInfo;
 use Yii;
 use Exception;
 use yii\data\Pagination;
@@ -404,6 +406,12 @@ class OrderManager
         ]);
         $sms->save();
         $transaction->commit();
+
+        //投资成功之后更新用户信息
+        UserInfo::dealWidthOrder($order);
+
+        //投资完成之后做邀请好友逻辑处理
+        InviteRecord::dealWithOrder($order);
 
         return true;
     }

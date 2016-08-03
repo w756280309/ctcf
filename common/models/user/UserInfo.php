@@ -121,4 +121,31 @@ class UserInfo extends ActiveRecord
             }
         }
     }
+
+    //投资成功之后更新用户信息
+    public static function dealWidthOrder(OnlineOrder $order)
+    {
+        if ($order->status === 1) {
+            $info = UserInfo::find()->where(['user_id' => $order->uid])->one();
+            if (null === $info) {
+                $info = new UserInfo();
+                $info->user_id = $order->uid;
+            }
+            if (!$info->isInvested) {
+                $info->isInvested = 1;
+            }
+            if (!$info->firstInvestAmount) {
+                $info->firstInvestAmount = $order->order_money;
+            }
+            if (!$info->firstInvestDate) {
+                $info->firstInvestDate = date('Y-m-d', $order->order_time);
+            }
+            $info->investCount = $info->investCount + 1;
+            $info->investTotal = $info->investTotal + $order->order_money;
+            $info->averageInvestAmount = $info->investTotal / $info->investCount;
+            $info->lastInvestAmount = $order->order_money;
+            $info->lastInvestDate = date('Y-m-d', $order->order_time);
+            $info->save();
+        }
+    }
 }

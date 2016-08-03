@@ -169,6 +169,7 @@ class AccountService
         $log->responseCode = $ret->get('ret_code');
         $log->rawResponse = json_encode($ret->toArray());
         $log->responseMessage = $ret->get('ret_msg');
+        $log->duration = 0;
         $log->uid = $user->id;
         if (!$log->save()) {
             $transaction->rollBack();
