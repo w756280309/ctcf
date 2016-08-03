@@ -31,7 +31,7 @@ class LuodiyeController extends Controller
 
         $code = Yii::$app->request->get('code');
         if (empty($code) || null === User::find()->where(['usercode' => $code, 'status' => 1])->one()) {
-            throw $this->ex404();
+            return $this->redirect('index');
         }
         Yii::$app->session->set('inviteCode', $code);
 
