@@ -2,7 +2,7 @@
 $this->title = '邀请好友';
 
 $this->registerJsFile(ASSETS_BASE_URI . 'js/invite/invite.js?v=20160802', ['depends' => 'yii\web\JqueryAsset', 'position' => 1]);
-$this->registerCssFile(ASSETS_BASE_URI . 'css/invite/invite.css', ['depends' => 'wap\assets\WapAsset']);
+$this->registerCssFile(ASSETS_BASE_URI . 'css/invite/invite.css?v=20160803', ['depends' => 'wap\assets\WapAsset']);
 $this->registerJs('var cdn = \'' . (ASSETS_BASE_URI === '/' ? \Yii::$app->request->hostInfo . '/' : ASSETS_BASE_URI) . '\';', 1);
 $this->registerJs('var invite_url = \'' . \Yii::$app->request->hostInfo . '/luodiye/invite?code=' . $user->usercode . '\';', 1);
 $this->registerJsFile('https://res.wx.qq.com/open/js/jweixin-1.0.0.js');
@@ -99,8 +99,7 @@ use common\utils\StringUtils;
     <div class="col-xs-12">
         <div class="inv-title">邀请越多好友，奖励越多，最高奖励无上限</div>
         <ul class="middle-inner clearfix">
-            <li>邀请人数：<span><?= count($model) ?></span>个</li>
-            <li>代金券奖励：<span><?= StringUtils::amountFormat2(array_sum(array_column($model, 'coupon'))) ?></span>元</li><br/>
+            <li>邀请人数：<span><?= count($model) ?></span>个 <i>代金券奖励：<span><?= StringUtils::amountFormat2(array_sum(array_column($model, 'coupon'))) ?></span>元</i></li>
             <li>现金红包奖励：<span><?= StringUtils::amountFormat3(array_sum(array_column($model, 'cash'))) ?></span>元</li>
         </ul>
     </div>
@@ -140,8 +139,8 @@ use common\utils\StringUtils;
             <ul>
                 <li>登录温都金服网站，进入“我的账户”；</li>
                 <li>点击“邀请好友”可以看到邀请好友活动，通过微信或者链接进行邀请；</li>
-                <li>当您的小伙伴通过此邀请链接注册并成功投资后，您即可获得邀请好友的奖励啦；</li>
-                <li>邀请好友发放奖励现金时，以"角"为单位取整，采用四舍五入；</li>
+                <li>当您的小伙伴通过此邀请链接注册并成功投资后，您即可获得邀请好友的奖励；</li>
+                <li>现金奖励需要您有投资记录才能发放，发放奖励现金时，以"角"为单位取整，采用四舍五入；</li>
                 <li>严禁恶意刷邀请好友，如有发生，封号处理。</li>
             </ul>
             <div class="inv-title"><b>奖励规则：</b></div>

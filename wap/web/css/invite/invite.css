@@ -242,11 +242,13 @@ i, em {
     padding: 1% 0;
 }
 .middle-inner li {
-    float: left;
     font-size: 1.2rem;
     color: #555555;
     margin-right: 10px;
     margin-left: 6px;
+}
+.middle-inner li i {
+    margin-left: 40px;
 }
 .middle-inner li span {
     color: #ff5e4c!important;

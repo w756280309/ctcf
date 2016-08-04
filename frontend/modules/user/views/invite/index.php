@@ -101,9 +101,9 @@ use common\widgets\Pager;
                     <th width="135">代金券(元)</th>
                     <th width="135">现金红包(元)</th>
                 </tr>
-                <?php if (!empty($data)) : ?>
-                    <?php foreach ($data as $val) : ?>
-                        <tr class="<?= ($key + 1) % 2 === 0 ? 'td-back-color' : '' ?>">
+                <?php if (!empty($data)) : $count = 0; ?>
+                    <?php foreach ($data as $val) : ++$count; ?>
+                        <tr class="<?= $count % 2 === 0 ? 'td-back-color' : '' ?>">
                             <td><?= empty($val['name']) ? '---' : StringUtils::obfsName($val['name']) ?></td>
                             <td><?= StringUtils::obfsMobileNumber($val['mobile']) ?></td>
                             <td><?= $val['day'] ?></td>
@@ -128,7 +128,7 @@ use common\widgets\Pager;
 
             <p>1. 登录温都金服网站，进入“我的账户”；</p>
             <p>2. 点击“邀请好友”可以看到邀请好友活动，通过微信或者链接进行邀请；</p>
-            <p>3. 当您的小伙伴通过此邀请链接注册并成功投资后，您即可获得邀请好友的奖励啦；</p>
+            <p>3. 当您的小伙伴通过此邀请链接注册并成功投资后，您即可获得邀请好友的奖励；</p>
             <p>4. 现金奖励需要您有投资记录才能发放，发放奖励现金时，以"角"为单位取整，采用四舍五入；</p>
             <p>5. 严禁恶意刷邀请好友，如有发生，封号处理。</p>
 
