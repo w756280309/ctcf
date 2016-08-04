@@ -389,7 +389,6 @@ a, a:hover {
     .transform-front-box .logo-back {
         padding: 3.2rem 0 2.3rem;
     }
-
     .transform-front-box .front-font {
         padding-bottom: 1.2rem;
     }
@@ -448,7 +447,6 @@ a, a:hover {
         margin-bottom: 3rem;
     }
 }
-
 @media (min-width: 501px) {
     .transform-front-box .logo-back {
         padding: 3.2rem 0 1.3rem;
