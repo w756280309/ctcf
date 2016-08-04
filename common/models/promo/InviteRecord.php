@@ -65,8 +65,8 @@ class InviteRecord extends ActiveRecord
     public static function getInviteRecord(User $user)
     {
         $promo = RankingPromo::find()->where(['key' => self::PROMO_KEY])->one();
-        //判断用户是否投资过
-        $count = OnlineOrder::find()->where(['uid' => $user->id, 'status' => 1])->count();
+        //获取邀请者首次投资记录
+        $firstOrder = OnlineOrder::find()->where(['uid' => $user->id, 'status' => 1])->orderBy(['order_time' => SORT_ASC])->one();
         $invitee = self::find()->where(['user_id' => $user->id])->andWhere(['between', 'created_at', $promo->startAt, $promo->endAt])->select('invitee_id')->asArray()->all();
         $ids = ArrayHelper::getColumn($invitee, 'invitee_id');
         $res = [];
@@ -91,11 +91,11 @@ class InviteRecord extends ActiveRecord
                 } else {
                     $coupon = 0;
                 }
-                if ($count > 0) {
+                if ($firstOrder) {
                     //邀请者因为此被邀请者得到的现金红包
                     $thirdMoney = OnlineOrder::find()
                         ->where(['uid' => $v->id, 'status' => 1])
-                        ->andWhere(['between', 'order_time', $promo->startAt, $promo->endAt])
+                        ->andWhere(['between', 'order_time', max($promo->startAt, $firstOrder->order_time), $promo->endAt])
                         ->orderBy(['order_time' => SORT_ASC])
                         ->limit(3)
                         ->all();
