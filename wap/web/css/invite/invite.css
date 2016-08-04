@@ -136,14 +136,14 @@ i, em {
 }
 .invited-box .col-xs-12 {
     background: #fff6ea;
-    padding: 4% 0;
+    padding: 10px 0;
     border-bottom: 1px solid #fe6030;
 }
 .invited-box .inv-title {
     text-align: center;
     font-size: 1.6rem;
     color: #444444;
-    margin-bottom:14%;
+    margin-bottom:54px;
 }
 .invited-box .inv-title span {
     position: relative;
@@ -160,8 +160,14 @@ i, em {
     bottom: -6px;
     width: 16px;
 }
+.invited-content {
+    width: 70%;
+    max-width: 97px;
+    margin: 0 auto;
+    position: relative;
+}
 .invited-inner {
-    padding-bottom: 22%;
+    /*padding-bottom: 22%;*/
 }
 .invited-inner li{
     position: relative;
@@ -169,7 +175,7 @@ i, em {
     width: 33.33%;
 }
 .invited-quan {
-    width: 70%;
+    width: 100%;
     max-width: 97px;
     margin: 0 auto;
     overflow: hidden;
@@ -199,31 +205,32 @@ i, em {
 
 .invited-quans {
     position: absolute;
-    left: 30%;
+    left: 0;
     top: 0;
     transform-origin: left bottom;
+    -webkit-transform-origin: left bottom;
+    -moz-transform-origin: left bottom;
+    -o-transform-origin: left bottom;
     transform: rotate(-30deg);
+    -webkit-transform: rotate(-30deg);
+    -moz-transform: rotate(-30deg);
+    -o-transform: rotate(-30deg);
     z-index: 1;
     opacity: 0.8;
 }
 .invited-quans1 {
-    position: absolute;
-    top:0;
-    left: 30%;
-    z-index: 2;
+    position: relative;
+    z-index: 10;
+    margin: 0 auto;
 }
 .invited-inner em {
-    position: absolute;
-    top:0;
-    left: 30%;
     display: block;
     width: 70%;
     margin: 0 auto;
-    text-align: center;
     color: #333333;
     font-size: 1.2rem;
-    padding-top: 6px;
-    margin-top: 50%;
+    text-align: center;
+    margin-top: 6px;
 }
 /*middle-box*/
 .middle-box .col-xs-12 {

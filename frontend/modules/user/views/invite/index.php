@@ -3,7 +3,7 @@ $this->title = '邀请好友';
 
 frontend\assets\FrontAsset::register($this);
 $this->registerCssFile(ASSETS_BASE_URI.'css/pagination.css');
-$this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/invitefriends.css?v=20160803');
+$this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/invitefriends.css?v=20160805');
 
 use common\utils\StringUtils;
 use common\widgets\Pager;
@@ -33,7 +33,7 @@ use common\widgets\Pager;
             <img class="code-img" src="<?= ASSETS_BASE_URI ?>images/useraccount/invitefriends/alink.png" alt="用户邀请链接">
             <p class="code-tip">您可以复制以下链接，发送给您的好友：</p>
             <div class="linking">
-                <?= Yii::$app->params['clientOption']['host']['frontend'] ?>luodiye/invite?code=<?= $user->usercode ?>
+                <input value="<?= Yii::$app->params['clientOption']['host']['frontend'] ?>luodiye/invite?code=<?= $user->usercode ?>" />
             </div>
             <a class="copy-alink" id="copy-button" data-clipboard-text='<?= Yii::$app->params['clientOption']['host']['frontend'] ?>luodiye/invite?code=<?= $user->usercode ?>'>复制链接</a>
         </div>
@@ -147,9 +147,9 @@ use common\widgets\Pager;
 
 <script src="<?= ASSETS_BASE_URI ?>js/ZeroClipboard.min.js" type="text/javascript"></script>
 <script src="<?= ASSETS_BASE_URI ?>js/jquery.qrcode.min.js" type="text/javascript" charset="utf-8"></script>
-<!--[if gte IE 9]><!-->
+<!--[if gte IE 9]>
     <script src="<?= ASSETS_BASE_URI ?>js/clipboard.min.js" type="text/javascript"></script>
-<!--[endif]-->
+<![endif]-->
 <!--[if !IE]><!-->
     <script src="<?= ASSETS_BASE_URI ?>js/clipboard.min.js" type="text/javascript"></script>
 <!--<![endif]-->

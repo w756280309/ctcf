@@ -166,6 +166,7 @@ a, a:hover {
     bottom: 0;
     left: 0;
     right: 0;
+    z-index: 999;
 }
 
 .fixed-opacity {
@@ -234,7 +235,7 @@ a, a:hover {
     height: 100%;
 }
 
-/*6*/
+/*6++++*/
 @media (min-device-width: 375px) {
     .tip_pop {
         width: 50%;
@@ -309,6 +310,8 @@ a, a:hover {
     margin: 0 auto;
     cursor: pointer;
     border-radius: 100px;
+    position: relative;
+    z-index: 10;
 }
 
 .transform-back-box {
@@ -372,6 +375,16 @@ a, a:hover {
     -webkit-transition: all 0.7s ease;
 }
 
+/*iphone se*/
+@media (max-device-width: 319px) {
+    .transform-front-box .logo-back {
+        padding: 3.2rem 0 2.3rem;
+    }
+    .transform-front-box .front-font{
+        padding-bottom: 1.2rem;
+    }
+}
+
 /*6*/
 @media (min-device-width: 375px) and (max-device-width: 500px) {
     .transform-box {
@@ -407,18 +420,8 @@ a, a:hover {
 }
 
 @media (min-device-width: 501px) {
-    .transform-box {
-        min-height: 50rem;
-    }
-
     .transform-front-box .logo-back {
         padding: 3.2rem 0 1.3rem;
-    }
-}
-
-@media (min-device-width: 680px) {
-    .transform-box {
-        min-height: 53rem;
     }
 }
 
@@ -427,10 +430,6 @@ a, a:hover {
         padding-top: 9rem;
         margin-bottom: 3rem;
     }
-
-    .transform-box {
-        min-height: 65rem;
-    }
 }
 
 @media (min-device-width: 1200px) {
@@ -438,24 +437,10 @@ a, a:hover {
         padding-top: 9rem;
         margin-bottom: 3rem;
     }
-
-    .transform-box {
-        min-height: 74rem;
-    }
 }
 @media (min-width: 501px) {
-    .transform-box {
-        min-height: 50rem;
-    }
-
     .transform-front-box .logo-back {
         padding: 3.2rem 0 1.3rem;
-    }
-}
-
-@media (min-width: 680px) {
-    .transform-box {
-        min-height: 54rem;
     }
 }
 
@@ -464,19 +449,11 @@ a, a:hover {
         padding-top: 9rem;
         margin-bottom: 3rem;
     }
-
-    .transform-box {
-        min-height: 65rem;
-    }
 }
 
 @media (min-width: 1200px) {
     .transform-back-box .transform-top {
         padding-top: 13rem;
         margin-bottom: 5rem;
-    }
-
-    .transform-box {
-        min-height: 75rem;
     }
 }

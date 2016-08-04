@@ -141,13 +141,13 @@
     cursor: pointer;
     position: relative;
     display: block;
-    width: 45px;
+    width: 55px;
     height: 20px;
     margin: 0 auto;
 }
 
 .myCoupon-box .tip-cursor .tip-font {
-    padding-right: 7px;
+    padding-right: 0;
 }
 
 .myCoupon-box .tip-cursor .tip-icon-enna {

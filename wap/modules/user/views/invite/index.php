@@ -74,16 +74,18 @@ use common\utils\StringUtils;
                 </div>
             </li>
             <li>
-                <div class="invited-quan background-red invited-quans">
-                    <div>
-                        <p>30<i>元</i></p>
-                        <span>(投资代金券)</span>
+                <div class="invited-content">
+                    <div class="invited-quan background-red invited-quans">
+                        <div>
+                            <p>30<i>元</i></p>
+                            <span>(投资代金券)</span>
+                        </div>
                     </div>
-                </div>
-                <div class="invited-quan background-red invited-quans1">
-                    <div>
-                        <p>50<i>元</i></p>
-                        <span>(投资代金券)</span>
+                    <div class="invited-quan background-red invited-quans1">
+                        <div>
+                            <p>50<i>元</i></p>
+                            <span>(投资代金券)</span>
+                        </div>
                     </div>
                 </div>
                 <em>好友注册即得</em>
