@@ -99,7 +99,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/clipboard.min.js', ['depends' => 'fron
         //复制
         if(navigator.appName == "Microsoft Internet Explorer" && navigator.appVersion .split(";")[1].replace(/[ ]/g,"")=="MSIE8.0" && navigator.appVersion .split(";")[1].replace(/[ ]/g,"")=="MSIE7.0" && navigator.appVersion .split(";")[1].replace(/[ ]/g,"")=="MSIE6.0" ){
             $('#copy-buttons').on('click',function(){
-                alert('请手动复制QQ群号');
+                alert('请手动复制QQ号');
             })
         } else {
             try {
