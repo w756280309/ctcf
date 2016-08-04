@@ -172,7 +172,8 @@ class SiteController extends Controller
                     $output['expire'] = $accessToken->expireTime;
                 }
 
-                return ['code' => 0, 'message' => '登录成功', 'tourl' => $urls['path'].'?'.http_build_query($output)];
+                $params = http_build_query($output);
+                return ['code' => 0, 'message' => '登录成功', 'tourl' => $urls['path'].(empty($params) ? '' : '?'.$params)];
             }
         }
 
