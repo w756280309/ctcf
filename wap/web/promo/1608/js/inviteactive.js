@@ -1,5 +1,5 @@
 $(function(){
-    $('.invite-btn').on('click',function(){
+    $('.invite-click').on('click',function(){
         $('.mark-box').show();
         $('.share-box').show();
     });

@@ -3,10 +3,13 @@ use common\view\AnalyticsHelper;
 use yii\helpers\Html;
 
 AnalyticsHelper::registerTo($this);
-$this->registerJs('var cdn = \'' . (ASSETS_BASE_URI === '/' ? \Yii::$app->request->hostInfo . '/' : ASSETS_BASE_URI) . '\';', 1);
-$this->registerJs('var invite_url = \'' . \Yii::$app->request->hostInfo . '/luodiye/invite?code=' . $user->usercode . '\';', 1);
-$this->registerJsFile('https://res.wx.qq.com/open/js/jweixin-1.0.0.js');
-$this->registerJsFile(ASSETS_BASE_URI . 'promo/1608/js/weixin.js?v=20160803');//加载来源统计记录代码
+
+if (!\Yii::$app->user->isGuest) {
+    $this->registerJs('var cdn = \'' . (ASSETS_BASE_URI === '/' ? \Yii::$app->request->hostInfo . '/' : ASSETS_BASE_URI) . '\';', 1);
+    $this->registerJs('var invite_url = \'' . \Yii::$app->request->hostInfo . '/luodiye/invite?code=' . \Yii::$app->user->getIdentity()->usercode . '\';', 1);
+    $this->registerJsFile('https://res.wx.qq.com/open/js/jweixin-1.0.0.js');
+    $this->registerJsFile(ASSETS_BASE_URI . 'promo/1608/js/weixin.js?v=20160803');//加载来源统计记录代码
+}
 ?>
 <?php $this->beginPage() ?>
 <!doctype html>
@@ -22,7 +25,7 @@ $this->registerJsFile(ASSETS_BASE_URI . 'promo/1608/js/weixin.js?v=20160803');//
     <link href="<?= ASSETS_BASE_URI ?>css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>promo/1608/css/inviteactive.css">
     <script src="<?= ASSETS_BASE_URI ?>js/jquery.js"></script>
-    <script src="<?= ASSETS_BASE_URI ?>promo/1608/js/inviteactive.js"></script>
+    <script src="<?= ASSETS_BASE_URI ?>promo/1608/js/inviteactive.js?v=20160804"></script>
     <script>
         $(function() {
             $(document).ajaxSend(function(event, jqXHR, settings) {
@@ -155,7 +158,7 @@ $this->registerJsFile(ASSETS_BASE_URI . 'promo/1608/js/weixin.js?v=20160803');//
             </div>
         </div>
         <!--invite-btn-->
-        <div class="invite-btn">邀请好友</div>
+        <div class="invite-btn <?= \Yii::$app->user->isGuest ? '' : 'invite-click' ?>" <?php if (\Yii::$app->user->isGuest) { ?> onclick="location.href='/site/login'" <?php } ?>>邀请好友</div>
         <!--share-box-->
         <div class="mark-box"></div>
         <div class="share-box">

@@ -2,9 +2,9 @@
 
 namespace wap\modules\promotion\controllers;
 
-use app\controllers\BaseController;
+use yii\web\Controller;
 
-class P1608Controller extends BaseController
+class P1608Controller extends Controller
 {
     /**
      * 邀请好友.
@@ -12,7 +12,6 @@ class P1608Controller extends BaseController
     public function actionInvite()
     {
         $this->layout = false;
-
-        return $this->render('invite', ['user' => $this->getAuthedUser()]);
+        return $this->render('invite');
     }
 }
