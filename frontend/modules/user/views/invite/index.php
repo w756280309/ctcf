@@ -33,7 +33,7 @@ use common\widgets\Pager;
             <img class="code-img" src="<?= ASSETS_BASE_URI ?>images/useraccount/invitefriends/alink.png" alt="用户邀请链接">
             <p class="code-tip">您可以复制以下链接，发送给您的好友：</p>
             <div class="linking">
-                <input disabled="disabled" value="<?= Yii::$app->params['clientOption']['host']['frontend'] ?>luodiye/invite?code=<?= $user->usercode ?>" />
+                <input value="<?= Yii::$app->params['clientOption']['host']['frontend'] ?>luodiye/invite?code=<?= $user->usercode ?>" />
             </div>
             <a class="copy-alink" id="copy-button" data-clipboard-text='<?= Yii::$app->params['clientOption']['host']['frontend'] ?>luodiye/invite?code=<?= $user->usercode ?>'>复制链接</a>
         </div>
