@@ -9,8 +9,14 @@ KindEditor.ready(function() {
                 filterMode: false,
                 afterUpload: function(url, data) {
                     $('#file_id').val($('#file_id').val() + data.id + ',');
+                },
+                afterCreate : function() {
+                    this.sync();
+                },
+                afterBlur:function(){
+                    this.sync();
                 }
-            });
+        });
             
 });
 function createTemp(){

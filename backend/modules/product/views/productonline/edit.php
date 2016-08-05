@@ -9,7 +9,7 @@ $this->registerJsFile('/kindeditor/lang/zh_CN.js', ['depends' => 'yii\web\YiiAss
 $this->registerJs('var t=1;', 1); //在头部加载
 
 $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\web\YiiAsset']);
-$this->registerJsFile('/js/product.js', ['depends' => 'yii\web\YiiAsset']);
+$this->registerJsFile('/js/product.js?v=160803', ['depends' => 'yii\web\YiiAsset']);
 
 $readonly = $model->online_status ? ['readonly' => 'readonly'] : [];
 
