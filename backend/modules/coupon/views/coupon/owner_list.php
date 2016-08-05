@@ -1,6 +1,9 @@
 <?php
 use yii\helpers\Html;
 use yii\widgets\LinkPager;
+
+$status = Html::encode($status);
+$now_date = date('Y-m-d');
 ?>
 <?php $this->beginBlock('blockmain'); ?>
 
@@ -39,19 +42,25 @@ use yii\widgets\LinkPager;
                                     <option value="">---未选择---</option>
                                     <option value="a"
                                     <?php
-                                        if ('a' === Html::encode($status)) {
+                                        if ('a' === $status) {
                                             echo "selected='selected'";
                                         }
                                     ?>
                                             >未使用</option>
                                     <option value="b"
                                     <?php
-                                        if ('b' === Html::encode($status)) {
+                                        if ('b' === $status) {
                                             echo "selected='selected'";
                                         }
                                     ?>
                                             >已使用</option>
-
+                                    <option value='c'
+                                        <?php
+                                        if ('c' === $status) {
+                                            echo "selected='selected'";
+                                        }
+                                        ?>
+                                    >已过期</option>
                                 </select>
                             </td>
                             <td>
@@ -83,10 +92,20 @@ use yii\widgets\LinkPager;
                     <tr>
                         <td><?= ++$key ?></td>
                         <td><?= $val['mobile'] ?></td>
-                        <td><?= empty($val['real_name']) ? "---" : $val['real_name'] ?></td>
+                        <td><?= empty($val['real_name']) ? '---' : $val['real_name'] ?></td>
                         <td><?= date('Y-m-d H:i:s', $val['collectDateTime']) ?></td>
                         <td><?= date('Y-m-d H:i:s', $val['created_at']) ?></td>
-                        <td><?= $val['isUsed'] ? "已使用" : "未使用" ?></td>
+                        <td>
+                            <?php
+                                if ($val['isUsed']) {
+                                    echo '已使用';
+                                } else if ($now_date > $val['expiryDate']) {
+                                    echo '已过期';
+                                } else {
+                                    echo '未使用';
+                                }
+                            ?>
+                        </td>
                     </tr>
                 <?php endforeach; ?>
                 </tbody>

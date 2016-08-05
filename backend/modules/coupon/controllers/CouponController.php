@@ -152,7 +152,7 @@ class CouponController extends BaseController
             throw $this->ex404();
         }
 
-        if (!empty($status) && !in_array($status, ['', 'a', 'b'])) {
+        if (!empty($status) && !in_array($status, ['', 'a', 'b', 'c'])) {
             throw $this->ex404();
         }
 
@@ -163,13 +163,17 @@ class CouponController extends BaseController
             ->from($uc)
             ->innerJoin($u, "$uc.user_id = $u.id")
             ->where(["$uc.couponType_id" => $id])
-            ->select("$u.*, $uc.created_at as collectDateTime, $uc.isUsed");
+            ->select("$u.*, $uc.created_at as collectDateTime, $uc.isUsed, $uc.expiryDate");
 
         if (!empty($status)) {
             if ('a' === $status) {
                 $query->andWhere(["$uc.isUsed" => 0]);
-            } else {
+                $query->andWhere(['>', "$uc.expiryDate", date('Y-m-d')]);
+            } else if ('b' === $status) {
                 $query->andWhere(["$uc.isUsed" => 1]);
+            } else if ('c' === $status) {
+                $query->andWhere(["$uc.isUsed" => 0]);
+                $query->andWhere(['<=', "$uc.expiryDate", date('Y-m-d')]);
             }
         }
 
