@@ -7,9 +7,9 @@ $this->title = "温州报业传媒旗下理财平台";
 $this->params['breadcrumbs'][] = $this->title;
 $this->header_nav_on = true;
 
-$this->registerCssFile(ASSETS_BASE_URI.'css/first.css', ['depends' => 'wap\assets\WapAsset']);
-$this->registerCssFile(ASSETS_BASE_URI.'css/luodiye/luodiye.css?v=160802', ['depends' => 'wap\assets\WapAsset']);
-$this->registerJsFile(ASSETS_BASE_URI.'js/fastclick.js', ['depends' => 'wap\assets\WapAsset']);
+$this->registerCssFile(ASSETS_BASE_URI . 'css/first.css', ['depends' => 'wap\assets\WapAsset']);
+$this->registerCssFile(ASSETS_BASE_URI . 'css/luodiye/luodiye.css?v=160802', ['depends' => 'wap\assets\WapAsset']);
+$this->registerJsFile(ASSETS_BASE_URI . 'js/fastclick.js', ['depends' => 'wap\assets\WapAsset']);
 ?>
 <div class="row banner-box">
     <div class="col-xs-12">
@@ -26,7 +26,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/fastclick.js', ['depends' => 'wap\asse
     </div>
     <div class="text-box">
         <input id="captchaform-captchacode" class="login-info text-single" type="text" name="SignupForm[captchaCode]" maxlength="4" placeholder="请输入图形验证码" AUTOCOMPLETE="off">
-        <?= $form->field($captcha, 'captchaCode',['template' => '{input}'])->label(false)->widget(Captcha::className(), ['template' => '{image}', 'imageOptions'=>['class'=>'varify-img'], 'captchaAction' => '/site/captcha']) ?>
+        <?= $form->field($captcha, 'captchaCode', ['template' => '{input}'])->label(false)->widget(Captcha::className(), ['template' => '{image}', 'imageOptions' => ['class' => 'varify-img'], 'captchaAction' => '/site/captcha']) ?>
         <div class="clear"></div>
     </div>
     <div class="text-box">
@@ -37,9 +37,9 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/fastclick.js', ['depends' => 'wap\asse
     <div class="text-box password-box">
         <input id="pass" class="login-info text-single" name="SignupForm[password]" maxlength="20" type="password" placeholder="请输入6到20位的密码" AUTOCOMPLETE="off">
         <a class="eye-choose login-eye">
-			<img width="26" height="20" alt="eye-close" src="<?= ASSETS_BASE_URI ?>images/eye-close.png">
-		</a>
-		<div class="clear"></div>
+            <img width="26" height="20" alt="eye-close" src="<?= ASSETS_BASE_URI ?>images/eye-close.png">
+        </a>
+        <div class="clear"></div>
     </div>
     <div class="agreement">
         <table>
@@ -57,7 +57,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/fastclick.js', ['depends' => 'wap\asse
 <?php $form->end(); ?>
 <div class="row description-box">
     <p class="description-header"><span>什么是温都金服？</span></p>
-    <p class="description-content">温州温都金融信息服务股份有限公司简称“温都金服”，隶属温州报业传媒旗下的理财平台。甄选各类金融机构、优质企业理财产品。提供银行级安全理财服务，保障用户资金安全，安享稳健高收益。</p>
+    <p class="description-content">温州温都金融信息服务股份有限公司简称“温都金服”，隶属温州报业传媒旗下的理财平台。甄选各类金融机构、优质企业理财产品。提供银行级理财服务，保障用户资金安全，安享稳健高收益。</p>
 </div>
 <div class="row production-box">
     <p class="production-header">精品理财</p>
@@ -78,12 +78,12 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/fastclick.js', ['depends' => 'wap\asse
 <div class="row choose-box">
     <h3>为什么选择温都金服？</h3>
     <div class="choose-content">
-		<img src="<?= ASSETS_BASE_URI ?>images/luodiye/choose-top.png" alt="">
-		<img src="<?= ASSETS_BASE_URI ?>images/luodiye/choose-bottom.png" alt="">
+        <img src="<?= ASSETS_BASE_URI ?>images/luodiye/choose-top.png" alt="">
+        <img src="<?= ASSETS_BASE_URI ?>images/luodiye/choose-bottom.png" alt="">
     </div>
 </div>
 <a class="link-last" href="/deal/deal/index/">立即赚钱</a>
-
+<p class="danger-tip">理财非存款，产品有风险，投资须谨慎</p>
 <div class="fixed-float">
     <img src="<?= ASSETS_BASE_URI ?>images/luodiye/fixed-float.png" alt="">
 </div>
@@ -105,8 +105,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/fastclick.js', ['depends' => 'wap\asse
     </div>
 </div>
 <script>
-    function validateForm()
-    {
+    function validateForm() {
         if ($('#iphone').val() === '') {
             toast('手机号不能为空');
             return false;
@@ -164,8 +163,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/fastclick.js', ['depends' => 'wap\asse
         return true;
     }
 
-    function signup()
-    {
+    function signup() {
         var $form = $('#signup_form');
         $('#signup-btn').attr('disabled', true);
 
@@ -174,20 +172,20 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/fastclick.js', ['depends' => 'wap\asse
             $form.serialize()
         );
 
-        xhr.done(function(data) {
+        xhr.done(function (data) {
             if (data.code) {
                 if ('undefined' !== typeof data.tourl) {
-                    toast(data.message, function() {
+                    toast(data.message, function () {
                         if ('undefined' !== typeof ga) {
                             ga('send', {
                                 hitType: 'event',
                                 eventCategory: 'reg',
                                 eventAction: 'm',
-                                hitCallback: function() {
+                                hitCallback: function () {
                                     location.href = data.tourl;
                                 }
                             });
-                            setTimeout(function() {
+                            setTimeout(function () {
                                 location.href = data.tourl;
                             }, 1500);
                         } else {
@@ -201,7 +199,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/fastclick.js', ['depends' => 'wap\asse
             $('#signup-btn').attr('disabled', false);
         });
 
-        xhr.fail(function() {
+        xhr.fail(function () {
             $('#signup-btn').attr('disabled', false);
         });
     }
@@ -223,7 +221,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/fastclick.js', ['depends' => 'wap\asse
         });
 
         /* 提交表单 */
-        $('#signup_form').submit(function(e) {
+        $('#signup_form').submit(function (e) {
             e.preventDefault();
 
             if (!validateForm()) {
@@ -266,14 +264,12 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/fastclick.js', ['depends' => 'wap\asse
                 toast('图形验证码必须为4位字符');
                 return false;
             }
-            createSms("#iphone", 1, "#captchaform-captchacode", function ()
-            {
+            createSms("#iphone", 1, "#captchaform-captchacode", function () {
                 fun_timedown();
             });
         });
 
-        function SetRemainTime()
-        {
+        function SetRemainTime() {
             if (curCount === 0) {
                 window.clearInterval(InterValObj);//停止计时器
                 $('#yzm').removeAttr("disabled");//启用按钮
@@ -285,8 +281,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/fastclick.js', ['depends' => 'wap\asse
             }
         }
 
-        function fun_timedown()
-        {
+        function fun_timedown() {
             curCount = count;
             $('#yzm').addClass("yzm-disabled");
             $("#yzm").attr("disabled", "true");

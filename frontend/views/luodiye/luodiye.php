@@ -2,7 +2,7 @@
 
 $this->title = '温州报业传媒旗下理财平台';
 
-$this->registerCssFile(ASSETS_BASE_URI.'css/luodiye/luodiye.css?v=160802', ['depends' => 'frontend\assets\FrontAsset']);
+$this->registerCssFile(ASSETS_BASE_URI.'css/luodiye/luodiye.css?v=160805', ['depends' => 'frontend\assets\FrontAsset']);
 $this->registerJsFile(ASSETS_BASE_URI.'js/JPlaceholder.js', ['depends' => 'frontend\assets\FrontAsset']);
 $this->registerJsFile(ASSETS_BASE_URI.'js/register/register.js', ['depends' => 'frontend\assets\FrontAsset']);
 
@@ -63,7 +63,7 @@ use yii\captcha\Captcha;
 <div class="container-fluid">
     <div class="container-content content-why">
         <h3>什么是温都金服？</h3>
-        <p>温州温都金融信息服务股份有限公司简称“温都金服”，隶属温州报业传媒旗下的理财平台。甄选各类金融机构、优质企业理财产品。提供银行级安全理财服务，保障用户资金安全，安享稳健高收益。</p>
+        <p>温州温都金融信息服务股份有限公司简称“温都金服”，隶属温州报业传媒旗下的理财平台。甄选各类金融机构、优质企业理财产品。提供银行级理财服务，保障用户资金安全，安享稳健高收益。</p>
     </div>
 </div>
 <div class="container-fluid container-fluid-because">
@@ -114,25 +114,28 @@ use yii\captcha\Captcha;
         <div class="content-choose">
             <div class="choose-single choose-first">
                 <div class="single-back"></div>
-                <p>稳收益，年化收益5.5~9%</p>
+                <p>收益稳健，</p>
+                <p>预期年化收益5.5~9%</p>
             </div>
             <div class="choose-single choose-second">
                 <div class="single-back"></div>
-                <p>低门槛，1000元即可投资</p>
+                <p>门槛较低，</p>
+                <p>1000元即可投资</p>
             </div>
 
             <div class="choose-single choose-third">
                 <div class="single-back"></div>
-                <p>低门槛，1000元即可投资</p>
-                <p>平台全程监管</p>
+                <p>资金安全，第三方</p>
+                <p>资金托管平台全程监管</p>
             </div>
 
             <div class="choose-single choose-fourth">
                 <div class="single-back"></div>
-                <p>产品优，金融机构、政府</p>
-                <p>平台类优质产品</p>
+                <p>产品优质，金融机</p>
+                <p>构、政府平台类优质产品</p>
             </div>
         </div>
-        <a class="link-last" href="/licai/">立即赚钱</a>
+        <a class="link-last" href="/licai/">立即赚钱</a><br>
+        <center><p>理财非存款，产品有风险，投资须谨慎</p></center>
     </div>
 </div>

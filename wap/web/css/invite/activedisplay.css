@@ -149,7 +149,14 @@ a, a:hover {
 .back-fff {
     width: 100%;
     background-color: #fff;
-    padding: 0.5rem 0 3.5rem;
+    padding: 0.5rem 0 2rem;
+}
+
+.danger-tip {
+    background-color: #fff;
+    text-align: center;
+    font-size: 1.4rem;
+    padding-bottom: 2rem;
 }
 
 .fixed-float {
@@ -366,6 +373,7 @@ a, a:hover {
     color: #d55247;
     background-color: #fbdfaf;
 }
+
 .transform-front-box .transform-start {
     transform-style: preserve-3d;
     -webkit-transform-style: preserve-3d;
@@ -380,7 +388,8 @@ a, a:hover {
     .transform-front-box .logo-back {
         padding: 3.2rem 0 2.3rem;
     }
-    .transform-front-box .front-font{
+
+    .transform-front-box .front-font {
         padding-bottom: 1.2rem;
     }
 }
@@ -438,6 +447,7 @@ a, a:hover {
         margin-bottom: 3rem;
     }
 }
+
 @media (min-width: 501px) {
     .transform-front-box .logo-back {
         padding: 3.2rem 0 1.3rem;

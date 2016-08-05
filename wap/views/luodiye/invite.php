@@ -5,7 +5,7 @@ $this->params['breadcrumbs'][] = $this->title;
 $this->header_nav_on = true;
 
 $this->registerCssFile(ASSETS_BASE_URI.'css/first.css', ['depends' => 'wap\assets\WapAsset']);
-$this->registerCssFile(ASSETS_BASE_URI.'css/invite/activedisplay.css', ['depends' => 'wap\assets\WapAsset']);
+$this->registerCssFile(ASSETS_BASE_URI.'css/invite/activedisplay.css?v=20160805', ['depends' => 'wap\assets\WapAsset']);
 $this->registerJsFile(ASSETS_BASE_URI.'js/fastclick.js', ['depends' => 'wap\assets\WapAsset']);
 $this->registerJsFile(ASSETS_BASE_URI.'js/invite/activedisplay.js', ['depends' => 'wap\assets\WapAsset']);
 
@@ -42,7 +42,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/invite/activedisplay.js', ['depends' =
 </div>
 <div class="row description-box">
     <p class="description-header"><span>什么是温都金服？</span></p>
-    <p class="description-content">温州温都金融信息服务股份有限公司简称“温都金服”，隶属温州报业传媒旗下的理财平台。甄选各类金融机构、优质企业理财产品。提供银行级安全理财服务，保障用户资金安全，安享稳健高收益。</p>
+    <p class="description-content">温州温都金融信息服务股份有限公司简称“温都金服”，隶属温州报业传媒旗下的理财平台。甄选各类金融机构、优质企业理财产品。提供银行级理财服务，保障用户资金安全，安享稳健高收益。</p>
 </div>
 <div class="row production-box">
     <p class="production-header">精品理财</p>
@@ -70,6 +70,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/invite/activedisplay.js', ['depends' =
 <div class="back-fff">
     <a class="link-last" href="/deal/deal/index/">立即赚钱</a>
 </div>
+<p class="danger-tip">理财非存款，产品有风险，投资须谨慎</p>
 <div class="fixed-float">
     <img src="<?= ASSETS_BASE_URI ?>images/luodiye/fixed-float.png" alt="">
 </div>

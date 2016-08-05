@@ -71,9 +71,9 @@ a, a:hover {
     text-align: center;
 }
 
-.password-box a{
+.password-box a {
     position: relative;
-    top:0.8rem;
+    top: 0.8rem;
 }
 
 .register-box .agreement {
@@ -259,12 +259,18 @@ a, a:hover {
     height: 3rem;
     line-height: 3rem;
     font-size: 1.6rem;
-    margin: 0.5rem auto 3.5rem;
+    margin: 0.5rem auto 2rem;
     text-align: center;
     border-radius: 5px;
     letter-spacing: 2px;
     color: #fff;
     background-color: #f44336;
+}
+
+.danger-tip {
+    text-align: center;
+    font-size: 1.4rem;
+    padding-bottom: 2rem;
 }
 
 .fixed-float {
@@ -357,7 +363,8 @@ a, a:hover {
     .fixed-content {
         font-size: 1.4rem;
     }
-    .register-box .text-box .get-phonecode{
+
+    .register-box .text-box .get-phonecode {
         font-size: 1.6rem;
     }
 }
@@ -369,4 +376,3 @@ a, a:hover {
 .licai-img img {
     width: 100%;
 }
-
