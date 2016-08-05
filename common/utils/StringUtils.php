@@ -73,21 +73,25 @@ class StringUtils
      * 金额显示样式一:
      * 1. 添加千分位显示
      * 2. 以万、亿为单位
+     * 3. 小数点后保留到金额的分,不是两位，例如以万为单位的应为4+2=6位
      *
      * @param string $html html模板字符串,样式如下:
      * <span>{amount}</span><span>{unit}</span>
      */
     public static function amountFormat1($html, $val)
     {
-        if (strlen(intval($val)) > 8) {
-            return str_replace(['{amount}', '{unit}'], [$val / 100000000, '亿元'], $html);
+        $len = strlen(intval($val));
+        $wei = 0;
+        $dw = '元';
+        if ($len > 8) {
+            $wei = 8;
+            $dw = '亿元';
+        } else if ($len > 4) {
+            $wei = 4;
+            $dw = '万元';
         }
 
-        if (strlen(intval($val)) > 4) {
-            return str_replace(['{amount}', '{unit}'], [$val / 10000, '万元'], $html);
-        }
-
-        return str_replace(['{amount}', '{unit}'], [self::amountFormat2($val), '元'], $html);
+        return str_replace(['{amount}', '{unit}'], [rtrim(rtrim(number_format($val / pow(10, $wei), $wei + 2), '0'), '.'), $dw], $html);
     }
 
     /**
