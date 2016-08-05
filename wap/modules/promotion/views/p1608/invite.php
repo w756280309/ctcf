@@ -8,7 +8,7 @@ if (!\Yii::$app->user->isGuest) {
     $this->registerJs('var cdn = \'' . (ASSETS_BASE_URI === '/' ? \Yii::$app->request->hostInfo . '/' : ASSETS_BASE_URI) . '\';', 1);
     $this->registerJs('var invite_url = \'' . \Yii::$app->request->hostInfo . '/luodiye/invite?code=' . \Yii::$app->user->getIdentity()->usercode . '\';', 1);
     $this->registerJsFile('https://res.wx.qq.com/open/js/jweixin-1.0.0.js');
-    $this->registerJsFile(ASSETS_BASE_URI . 'promo/1608/js/weixin.js?v=20160803');//加载来源统计记录代码
+    $this->registerJsFile(ASSETS_BASE_URI . 'promo/1608/js/weixin.js?v=20160805');//加载来源统计记录代码
 }
 ?>
 <?php $this->beginPage() ?>
