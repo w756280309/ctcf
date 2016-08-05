@@ -398,8 +398,9 @@ input {
 }
 
 .content-choose .choose-first p, .content-choose .choose-second p {
+    padding-top: 17px;
     text-align: center;
-    line-height: 65px;
+    line-height: 20px;
 }
 
 .content-choose .choose-third, .content-choose .choose-fourth {
