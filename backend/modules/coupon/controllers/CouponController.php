@@ -168,12 +168,12 @@ class CouponController extends BaseController
         if (!empty($status)) {
             if ('a' === $status) {
                 $query->andWhere(["$uc.isUsed" => 0]);
-                $query->andWhere(['>', "$uc.expiryDate", date('Y-m-d')]);
+                $query->andWhere(['>=', "$uc.expiryDate", date('Y-m-d')]);
             } else if ('b' === $status) {
                 $query->andWhere(["$uc.isUsed" => 1]);
             } else if ('c' === $status) {
                 $query->andWhere(["$uc.isUsed" => 0]);
-                $query->andWhere(['<=', "$uc.expiryDate", date('Y-m-d')]);
+                $query->andWhere(['<', "$uc.expiryDate", date('Y-m-d')]);
             }
         }
 
