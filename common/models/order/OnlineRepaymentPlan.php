@@ -160,6 +160,11 @@ class OnlineRepaymentPlan extends \yii\db\ActiveRecord
                     $amount = $bc->bcround(bcadd($v[1], $v[2]), 2);
                     $principal = $bc->bcround($v[1], 2);
                     $interest = $bc->bcround($v[2], 2);
+                    //判断指定还款计划没有被生成过
+                    $plan = OnlineRepaymentPlan::findOne(['order_id' => $ord->id, 'qishu' => $term]);
+                    if ($plan) {
+                        continue;
+                    }
                     //生成还款计划
                     $initplan = [
                         'qishu' => $term,
