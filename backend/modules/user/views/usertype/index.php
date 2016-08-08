@@ -1,8 +1,4 @@
 <?php
-
-use yii\widgets\ActiveForm;
-use yii\widgets\LinkPager;
-
 error_reporting(E_ALL ^ E_NOTICE);
 
 use common\models\AuthSys;
@@ -12,6 +8,7 @@ $menus = AuthSys::getMenus('U1001000');
 $list_edit = AuthSys::checkMenus($menus, "U1", "001", AuthSys::OP_TYPE_LIST, AuthSys::LIST_RULE_EDIT);   //编辑
 $list_display = AuthSys::checkMenus($menus, "U1", "001", AuthSys::OP_TYPE_LIST, AuthSys::LIST_RULE_DISPLAY);   //显示
 ?>
+
 <?php $this->beginBlock('blockmain'); ?>
 <div class="page_function">
 	<div class="info">
@@ -86,18 +83,11 @@ $list_display = AuthSys::checkMenus($menus, "U1", "001", AuthSys::OP_TYPE_LIST, 
 </div>
 <script type="text/javascript">
     $(function () {
-
         $('.ajax_op').bind('click', function () {
             op = $(this).attr('op');
             data_index = $(this).attr('data-index');
             index = $(this).attr('index');
             $.get("/user/usertype/moreop", {op: op, value: data_index, id: index}, function (result) {
-//            if(result){
-//                alert('修改成功');
-//                location.reload();
-//            }else{
-//                alert('系统异常');
-//            }
                 res(result, "/user/usertype/index");
             });
         });

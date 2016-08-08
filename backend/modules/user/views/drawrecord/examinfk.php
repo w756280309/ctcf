@@ -26,6 +26,7 @@ use yii\helpers\Html;
         <script type="text/javascript" src="/js/layer/layer.min.js"></script>
         <script type="text/javascript" src="/js/layer/extend/layer.ext.js"></script>
         <script type="text/javascript" src="/js/showres.js"></script>
+        <script type="text/javascript" src="/js/ajax.js"></script>
         <style type="text/css">
             .portlet-body .title{
                 height: 34px;
@@ -35,7 +36,7 @@ use yii\helpers\Html;
             }
             .has-error .help-block{
                 color: red;
-            } 
+            }
             .form-group div.radio label{
                 width:400px;
             }
@@ -43,7 +44,7 @@ use yii\helpers\Html;
 
     </head>
     <body class="page-header-fixed page-full-width" style="background-color:white !important">
-        <div class="page-container row-fluid" style="margin-top:0px">		
+        <div class="page-container row-fluid" style="margin-top:0px">
             <div class="page-content">
                 <div class="form-horizontal form-view">
                     <div class="control-group">
@@ -101,19 +102,19 @@ use yii\helpers\Html;
                                         <div class="controls">
                                             <span class="text">提现成功</span>
                                         </div>
-                                    </div>                        
+                                    </div>
                                     <div class="control-group">
                                         <label class="control-label" for="">放款时间：</label>
                                         <div class="controls">
                                             <span class="text"><?= date('Y-m-d H:i:s', $model->updated_at) ?></span>
                                         </div>
-                                    </div>                        
+                                    </div>
                                 <?php } ?>
                             </div>
                         </div>
-     
+
                     <?php } else { ?>
-                    
+
                         <div class="row-fluid">
                             <div class="span6 ">
                                 <div class="control-group">
@@ -157,16 +158,16 @@ use yii\helpers\Html;
                         <div class="form-actions">
                             <button type="button" class="btn green fkbutton" data-index="fk">确定</button>
                             <button type="button" class="btn red fkbutton" data-index="close">取消</button>
-                        </div>          
+                        </div>
                     <?php }else if($model->status == 0){ ?>
                         <div class="form-actions">
                             <button type="button" class="btn green fkbutton" data-index="sh" data-type="1">通过</button>
                             <button type="button" class="btn red fkbutton" data-index="sh" data-type="11">不通过</button>
-                        </div>           
+                        </div>
                     <?php } else { ?>
                         <div class="form-actions">
-                            <button type="button" class="btn green fkbutton" data-index="close">确定</button>                     
-                        </div>           
+                            <button type="button" class="btn green fkbutton" data-index="close">确定</button>
+                        </div>
                     <?php } ?>
                 </div>
             </div>
@@ -207,4 +208,3 @@ use yii\helpers\Html;
         </script>
     </body>
 </html>
-

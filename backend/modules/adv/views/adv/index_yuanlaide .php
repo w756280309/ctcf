@@ -1,6 +1,4 @@
 <?php
-
-use yii\widgets\ActiveForm;
 use yii\widgets\LinkPager;
 
 error_reporting(E_ALL ^ E_NOTICE);
@@ -100,12 +98,6 @@ $list_display = AuthSys::checkMenus($menus, "A1", "004", AuthSys::OP_TYPE_LIST, 
             data_index = $(this).attr('data-index');
             index = $(this).attr('index');
             $.get("/adv/adv/moreop", {op: op, value: data_index, id: index}, function (result) {
-                //            if(result){
-                //                alert('修改成功');
-                //                location.reload();
-                //            }else{
-                //                alert('系统异常');
-                //            }
                 res(result, "/adv/adv/index");
             });
         });

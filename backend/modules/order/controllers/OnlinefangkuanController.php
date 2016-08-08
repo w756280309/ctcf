@@ -14,9 +14,6 @@ use common\models\draw\DrawManager;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
 
-/**
- * OrderController implements the CRUD actions for OfflineOrder model.
- */
 class OnlinefangkuanController extends BaseController
 {
     /**
@@ -38,6 +35,9 @@ class OnlinefangkuanController extends BaseController
         return $this->render('examinfk', ['deal' => $deal, 'borrow_user' => $financing_user]);
     }
 
+    /**
+     * 放款审核.
+     */
     public function actionCheckfk()
     {
         Yii::$app->response->format = Response::FORMAT_JSON;

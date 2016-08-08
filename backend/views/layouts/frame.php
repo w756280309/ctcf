@@ -33,6 +33,7 @@ $menus = AuthSys::getMenus();
         <script type="text/javascript" src="/js/layer/extend/layer.ext.js"></script>
         <script type="text/javascript" src="/js/showres.js"></script>
         <script type="text/javascript" src="/js/JPlaceholder.js"></script>
+        <script type="text/javascript" src="/js/ajax.js"></script>
         <style type="text/css">
             .portlet-body .title{
                 height: 34px;
@@ -57,13 +58,13 @@ $menus = AuthSys::getMenus();
             <?php endif; ?>
         </style>
         <script type="text/javascript">
-            $(function(){
-                $('form .radio').each(function(k,o){
-                    if(k/2==0){
+            $(function() {
+                $('form .radio').each(function(k, o) {
+                    if(k/2 == 0) {
                         $($('form .radio').get(k)).css({width:'100px'});
                     }
-                })
-            })
+                });
+            });
         </script>
     </head>
     <body class="page-header-fixed">
@@ -150,4 +151,3 @@ $menus = AuthSys::getMenus();
     </body>
 </html>
 <?php $this->endPage() ?>
-

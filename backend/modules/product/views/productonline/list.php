@@ -215,14 +215,6 @@ $pc_cat = Yii::$app->params['pc_cat'];
             var xhr = $.post(url, {id: id, _csrf: csrftoken}, function(data) {
                 newalert(data.code, data.message, 1);
             });
-
-            xhr.fail(function(jqXHR) {
-                var errMsg = jqXHR.responseJSON && jqXHR.responseJSON.message
-                    ? jqXHR.responseJSON.message
-                    : '未知错误，请刷新重试或联系客服';
-
-                newalert(0, errMsg, 1);
-            });
         }
     }
 
