@@ -213,6 +213,11 @@ class SiteController extends Controller
             if ('phone' === $key) {
                 $code = 1;
                 $message = '手机号或密码错误';
+                if ($model->isUserExist()) {
+                    if (User::findOne(['mobile' => $model->phone])->isLocked()) {
+                        $message = '该用户已被锁定';
+                    }
+                }
             } elseif ('password' === $key) {
                 $code = 2;
                 $message = '手机号或密码错误';

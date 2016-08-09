@@ -688,4 +688,13 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface, UserInterf
     {
         return $this->hasOne(UserInfo::class, ['user_id' => 'id']);
     }
+
+    /**
+     * 返回用户是否被锁定
+     *
+     * @return bool
+     */
+    public function isLocked() {
+        return $this->status === static::STATUS_DELETED;
+    }
 }

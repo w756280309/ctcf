@@ -129,4 +129,13 @@ class LoginForm extends Model
 
         return false;
     }
+
+    /**
+     * 用于判断用户是否存在
+     *
+     * @return bool
+     */
+    public function isUserExist() {
+        return false !== $this->_user;
+    }
 }
