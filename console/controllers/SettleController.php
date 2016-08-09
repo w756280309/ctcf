@@ -139,7 +139,7 @@ class SettleController extends Controller
             case '06';
                 $items = explode('|', $settle);
                 $txSn = $items[0];   //商户用户标识
-                $txDate = $items[8];
+                $txDate = $items[7];
                 $money = 0.00;
                 $fee = 0.00;
                 $serviceSn = $items[1]; //资金托管平台用户号
