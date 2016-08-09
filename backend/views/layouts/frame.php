@@ -33,7 +33,11 @@ $menus = AuthSys::getMenus();
         <script type="text/javascript" src="/js/layer/extend/layer.ext.js"></script>
         <script type="text/javascript" src="/js/showres.js"></script>
         <script type="text/javascript" src="/js/JPlaceholder.js"></script>
-        <script type="text/javascript" src="/js/ajax.js"></script>
+
+        <?php if ('/' !== \Yii::$app->request->url) { ?>
+            <script type="text/javascript" src="/js/ajax.js"></script>
+        <?php } ?>
+
         <style type="text/css">
             .portlet-body .title{
                 height: 34px;

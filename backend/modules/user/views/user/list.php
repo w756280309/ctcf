@@ -190,9 +190,8 @@ use common\models\user\User;
             }
         });
 
-        xhr.fail(function(jqXHR) {
+        xhr.fail(function() {
             _this.removeClass("isclicked");
-            alert('请求失败');
         });
     })
 </script>

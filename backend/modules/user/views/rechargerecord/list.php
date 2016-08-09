@@ -197,7 +197,6 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\we
 <script type="text/javascript">
     var uid = '<?= $uid ?>';
     $(function () {
-
         $('.ajax_op').bind('click', function () {
             op = $(this).attr('op');
             index = $(this).attr('index');
@@ -234,7 +233,6 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\we
                 });
             }
         });
-
     })
 </script>
 <?php $this->endBlock(); ?>
