@@ -6,7 +6,6 @@ $this->registerCssFile(ASSETS_BASE_URI.'css/pagination.css');
 $this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/invitefriends.css?v=20160805');
 
 use common\utils\StringUtils;
-use common\widgets\Pager;
 ?>
 
 <div class="inviteFriends-box">
@@ -92,32 +91,8 @@ use common\widgets\Pager;
         </div>
 
         <!-- 邀请详情 -->
-        <div class="active-box" >
-            <table>
-                <tr>
-                    <th width="135">姓名</th>
-                    <th width="135">手机号</th>
-                    <th width="135">注册日期</th>
-                    <th width="135">代金券(元)</th>
-                    <th width="135">现金红包(元)</th>
-                </tr>
-                <?php if (!empty($data)) : $count = 0; ?>
-                    <?php foreach ($data as $val) : ++$count; ?>
-                        <tr class="<?= $count % 2 === 0 ? 'td-back-color' : '' ?>">
-                            <td><?= empty($val['name']) ? '---' : StringUtils::obfsName($val['name']) ?></td>
-                            <td><?= StringUtils::obfsMobileNumber($val['mobile']) ?></td>
-                            <td><?= $val['day'] ?></td>
-                            <td><?= $val['coupon'] ?></td>
-                            <td><?= StringUtils::amountFormat3($val['cash']) ?></td>
-                        </tr>
-                    <?php endforeach; ?>
-                <?php endif; ?>
-            </table>
-            <?php if (empty($model)) : ?>
-                <div class="without-font">暂未获得邀请奖励，快前去邀请吧</div>
-            <?php endif; ?>
-
-            <center><?= Pager::widget(['pagination' => $pages]); ?></center>
+        <div class="active-box invite-record" >
+            <?= $this->renderFile('@frontend/modules/user/views/invite/_list.php', ['model' => $model, 'data' => $data, 'pages' => $pages]) ?>
         </div>
 
         <!-- 活动规则 -->
@@ -203,5 +178,25 @@ use common\widgets\Pager;
             $('.active-box').each(function() {$(this).addClass('hide')});
             $('.active-box').eq(index).removeClass('hide');
         });
+
+        $('.invite-record').on('click', 'a', function (e) {
+            e.preventDefault(); // 禁用a标签默认行为
+            getList($(this).attr('href'));
+        });
     });
+
+    function getList(url)
+    {
+        $.ajax({
+            beforeSend: function (req) {
+                req.setRequestHeader("Accept", "text/html");
+            },
+            'url': url,
+            'type': 'get',
+            'dataType': 'html',
+            'success': function (html) {
+                $('.invite-record').html(html);
+            }
+        });
+    }
 </script>

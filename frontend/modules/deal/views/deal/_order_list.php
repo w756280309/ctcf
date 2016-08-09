@@ -25,5 +25,5 @@
         <p class="not_yet">暂无投资记录</p>
     <?php }?>
     <!--分页-->
-    <?= \common\widgets\Pager::widget(['pagination' => $pages])?>
+    <center><?= \common\widgets\Pager::widget(['pagination' => $pages])?></center>
 </div>

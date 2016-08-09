@@ -247,6 +247,11 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/useraccount/chargedeposit.css');
 
         //获取投资记录
         getOrderList('/deal/deal/order-list?pid=<?=$deal->id?>');
+        $('#order_list').on('click', 'a', function (e) {
+            e.preventDefault(); // 禁用a标签默认行为
+            getOrderList($(this).attr('href'));
+        });
+
         var money = $(this).val();
         //代金券选择
         $('#valid_coupon_list li').bind('click', function () {
@@ -389,7 +394,8 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/useraccount/chargedeposit.css');
     }
 
     //获取投标记录
-    function getOrderList(url) {
+    function getOrderList(url)
+    {
         $.ajax({
             beforeSend: function (req) {
                 req.setRequestHeader("Accept", "text/html");
@@ -399,10 +405,6 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/useraccount/chargedeposit.css');
             'dataType': 'html',
             'success': function (html) {
                 $('#order_list').html(html);
-                $('#order_list .pagination li a').on('click', function (e) {
-                    e.preventDefault(); // 禁用a标签默认行为
-                    getOrderList($(this).attr('href'));
-                })
             }
         });
     }
