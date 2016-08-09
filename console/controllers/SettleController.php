@@ -4,6 +4,7 @@ namespace console\controllers;
 
 use Yii;
 use yii\console\Controller;
+use common\models\settle\Settle;
 
 class SettleController extends Controller
 {
@@ -73,5 +74,84 @@ class SettleController extends Controller
 
             echo $line."\n";
         }
+    }
+
+    /**
+     * @return int
+     */
+    public function actionInsert($type)
+    {
+        $startdate = new \DateTime('2016-07-01 00:00:00');
+        $enddate = new \DateTime('2016-07-31 00:00:00');
+        $num = 0;
+
+        while (true) {
+            $dateString = $startdate->format('Ymd');
+            $content = Yii::$container->get('ump')->getSettlement($dateString, $type);
+            $carr = explode("\n", $content);
+            foreach ($carr as $line) {
+                if (false !== stripos($line, 'start') or false !== stripos($line, 'end')) {
+                    continue;
+                }
+                $settle = $this->initSettle($type, $line);
+                if ($settle->save()) {
+                    $num++;
+                }
+                $settle = null;
+            }
+
+            $startdate->add(new \DateInterval('P1D'));
+            if ($startdate > $enddate) {
+                break;
+            }
+        }
+        echo $num;
+    }
+
+    private function initSettle($type, $settle)
+    {
+        $newsettle = new Settle();
+        switch ($type) {
+            case '01';
+                $items = explode(',', $settle);
+                $txSn = $items[0];
+                $txDate = $items[1];
+                $money = $items[5] / 100;
+                $fee = $items[9] / 100;
+                $serviceSn = $items[8];
+                $txType = Settle::TXTYPE_RECHARGE;
+                break;
+            case '02';
+                $items = explode(',', $settle);
+                $txSn = $items[2];
+                $txDate = $items[3];
+                $money = $items[4] / 100;
+                $fee = $items[5] / 100;
+                $serviceSn = $items[9];
+                $txType = Settle::TXTYPE_DRAW;
+                break;
+            case '03';
+                break;
+            case '04';
+                break;
+            case '05';
+                break;
+            case '06';
+                $items = explode('|', $settle);
+                $txSn = $items[0];   //商户用户标识
+                $txDate = $items[8];
+                $money = 0.00;
+                $fee = 0.00;
+                $serviceSn = $items[1]; //资金托管平台用户号
+                $txType = Settle::TXTYPE_REALNAME;
+                break;
+        }
+        $newsettle->txSn = $txSn;
+        $newsettle->txDate = $txDate;
+        $newsettle->money = $money;
+        $newsettle->fee = $fee;
+        $newsettle->serviceSn = $serviceSn;
+        $newsettle->txType = $txType;
+        return $newsettle;
     }
 }
