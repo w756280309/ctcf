@@ -93,8 +93,8 @@ $now_date = date('Y-m-d');
                         <td><?= ++$key ?></td>
                         <td><?= $val['mobile'] ?></td>
                         <td><?= empty($val['real_name']) ? '---' : $val['real_name'] ?></td>
-                        <td><?= date('Y-m-d H:i:s', $val['collectDateTime']) ?></td>
                         <td><?= date('Y-m-d H:i:s', $val['created_at']) ?></td>
+                        <td><?= date('Y-m-d H:i:s', $val['collectDateTime']) ?></td>
                         <td>
                             <?php
                                 if ($val['isUsed']) {
