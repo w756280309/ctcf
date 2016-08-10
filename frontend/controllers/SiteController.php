@@ -214,7 +214,8 @@ class SiteController extends Controller
                 $code = 1;
                 $message = '手机号或密码错误';
                 if ($model->isUserExist()) {
-                    if (User::findOne(['mobile' => $model->phone])->isLocked()) {
+                    $user= User::findOne(['mobile' => $model->phone]);
+                    if (null !== $user && $user->isLocked()) {
                         $message = '该用户已被锁定';
                     }
                 }
