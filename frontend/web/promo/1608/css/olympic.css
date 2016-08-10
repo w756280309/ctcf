@@ -1,0 +1,150 @@
+.clearfix:before,.clearfix:after {
+    content: '';
+    display: table;
+}
+.clearfix:after {
+    clear: both;
+}
+.clearfix{
+    *zoom:1;
+}
+.wrapper {
+    margin: 0 auto;
+    background: #fff;
+}
+.banner {
+    position: relative;
+    width: 100%;
+    height:667px;
+}
+.img-top-1 {
+    height: 123px;
+    background: url("../images/olympic/banner-top-1.png")  center 0 no-repeat;
+}
+.img-top-2 {
+    height: 115px;
+    background: url("../images/olympic/banner-top-2.png")  center 0 no-repeat;
+}
+.img-top-3 {
+    height: 112px;
+    background: url("../images/olympic/banner-top-3.png")  center 0 no-repeat;
+}
+.img-top-4 {
+    height: 97px;
+    background: url("../images/olympic/banner-top-4.png")  center 0 no-repeat;
+}
+.img-top-5 {
+    height: 150px;
+    background: url("../images/olympic/banner-top-5.png")  center 0 no-repeat;
+}
+.position_father {
+    position: absolute;
+    left:50%;
+    top:376px;
+    margin-left: -178px;
+    width: 356px;
+    height: 290px;
+}
+.position_father .code {
+    width:210px;
+    height:210px;
+}
+.position_father p {
+    padding-top: 20px;
+    font-size: 18px;
+    color:#686ffa;
+    text-align: center;
+}
+.wrap {
+    margin: 0 auto;
+    width:1000px;
+}
+.wrap ul {
+    margin:0 0 0 68px;
+}
+.wrap ul li a {
+    float: left;
+    margin:0 0 35px 39px;
+    width:169px;
+    height:140px;
+    display: block;
+    transition: all 0.8s linear;
+    -moz-transition: all 0.8s linear;
+    -webkit-transition: all 0.8s linear;
+    -o-transition: all 0.8s linear;
+}
+.wrap ul li a.margin-lf-short {
+    margin-left: 35px!important;
+}
+.wrap ul li a:hover{
+    transform: rotateY(-180deg);
+    -o-transform: rotateY(-180deg);
+    -moz-transform: rotateY(-180deg);
+    -ms-transform: rotateY(-180deg);
+    -webkit-transform: rotateY(-180deg);
+}
+.wrap ul li a.sport1{
+    background: #fff url('../images/olympic/pingpangball.png');
+}
+.wrap ul li a.sport2{
+    background: #fff url('../images/olympic/swimming.png');
+}
+.wrap ul li a.sport3{
+    background: #fff url('../images/olympic/taekwondo.png');
+}
+.wrap ul li a.sport4{
+    background: #fff url('../images/olympic/running.png');
+}
+.wrap ul li a.sport5{
+    background: #fff url('../images/olympic/volleyball.png');
+}
+.wrap ul li a.sport6{
+    background: #fff url('../images/olympic/tennis.png');
+}
+.wrap ul li a.sport7{
+    background: #fff url('../images/olympic/basketball.png');
+}
+.wrap ul li a.sport8 {
+    background: #fff url('../images/olympic/football.png');
+}
+
+.wrap ul li a.sport1:hover{
+    background: #fff url('../images/olympic/pingpangball-gift.png?v=1.0');
+}
+.wrap ul li a.sport2:hover{
+    background: #fff url('../images/olympic/swimming-gift.png?v=1.0');
+}
+.wrap ul li a.sport3:hover{
+    background: #fff url('../images/olympic/taekwondo-gift.png?v=1.0');
+}
+.wrap ul li a.sport4:hover{
+    background: #fff url('../images/olympic/running-gift.png?v=1.0');
+}
+.wrap ul li a.sport5:hover{
+    background: #fff url('../images/olympic/volleyball-gift.png?v=1.0');
+}
+.wrap ul li a.sport6:hover{
+    background: #fff url('../images/olympic/tennis-gift.png?v=1.0');
+}
+.wrap ul li a.sport7:hover{
+    background: #fff url('../images/olympic/basketball-gift.png?v=1.0');
+}
+.wrap ul li a.sport8:hover{
+    background: #fff url('../images/olympic/football-gift.png?v=1.0');
+}
+
+.sport-rule {
+    margin: 100px auto 0;
+    padding-bottom: 40px;
+    width: 100%;
+}
+
+.sport-rule p {
+    margin-left: 102px;
+    padding-left: 38px;
+    line-height: 32px;
+    font-size: 18px;
+    color:#393939;
+    background: url('../images/olympic/icon.png') no-repeat;
+    background-size: 32px 32px;
+}

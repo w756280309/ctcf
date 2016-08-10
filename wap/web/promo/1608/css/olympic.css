@@ -1,0 +1,377 @@
+body,p,ul,ol,li,dl,dt,dd,form,h1,h2,h3,h4,h5,h6,input{
+    margin:0;
+    padding:0;
+    list-style:none;
+}
+img{
+    border:0;
+}
+a{
+    text-decoration:none;
+}
+a:hover {
+    text-decoration:none;
+}
+body{
+    font:14px/1.5 "Microsoft YaHei","Helvetica Neue",Helvetica,Arial,sans-serif,"宋体";
+}
+i,em {
+    font-style: normal;
+}
+.container{
+    padding: 0;
+}
+.row{
+    margin: 0;
+}
+.clearfix:before,.clearfix:after {
+    content:'';
+    display:table;
+}
+.clearfix:after{
+    clear: both;
+}
+.clearfix {
+    *zoom:1;
+}
+/*banner-box*/
+.banner-box .col-xs-12 {
+    padding: 0;
+}
+.banner-box .col-xs-12 img {
+    width: 100%;
+}
+/*help-box*/
+.help-box .col-xs-12{
+    padding: 0;
+}
+.help-box .col-xs-12 ul {
+    width: 84%;
+    margin: 0 auto;
+}
+.help-box .col-xs-12 ul li {
+    width: 33%;
+    float: left;
+    margin-top: 4%;
+    margin-bottom: 4%;
+}
+.help-box .col-xs-12 ul li div {
+    width: 80%;
+    margin: 0 auto;
+}
+.help-box .col-xs-12 ul li div img {
+    width: 100%;
+}
+.help-box .col-xs-12 ul li div p {
+    width: 100%;
+    height: 24px;
+    line-height: 24px;
+    font-size: 1.4rem;
+    color: #fff;
+    text-align: center;
+    background: #6f9efc;
+    margin-top: 10px;
+}
+.aoyun img {
+    position: relative;
+    top:14px;
+}
+/*rule-box*/
+.rule-box {
+    padding-bottom: 10%;
+}
+.rule-box .col-xs-12 {
+    padding: 0;
+}
+.rule-title {
+    padding-top: 30px;
+    width: 80%;
+    margin: 0 auto;
+    font-size: 1.8rem;
+    color: #393939;
+    text-align: left;
+}
+.rule-box .col-xs-12 ul {
+    width: 80%;
+    margin: 0 auto;
+}
+.rule-box .col-xs-12 ul li {
+    position: relative;
+    margin-top: 4%;
+}
+.rule-box .col-xs-12 ul span {
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+.rule-box .col-xs-12 ul span img {
+    position: relative;
+    top: -2px;
+    width: 16px;
+}
+.rule-box .col-xs-12 ul p {
+    text-align: justify;
+    font-size: 1.4rem;
+    padding-left: 20px;
+    color: #393939;
+}
+/*mark-box*/
+.mark-box {
+    display: none;
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: #000000;
+    opacity: 0.6;
+    z-index: 1000;
+}
+.award-box {
+    display: none;
+    position: fixed;
+    left: 18%;
+    top: 50%;
+    width: 64%;
+    z-index: 1001;
+    background: #fff;
+    border-radius: 6px;
+    overflow: hidden;
+    padding-bottom: 8%;
+}
+.award-top {
+    width: 100%;
+}
+.award-top img:nth-child(1) {
+    width: 100%;
+}
+.award-top img:nth-child(2) {
+    position: absolute;
+    right: 4%;
+    top:4%;
+    width: 10%;
+}
+.award-inner {
+    width: 100%;
+    text-align: center;
+}
+.award-inner img {
+    width: 70%;
+}
+.award-inner div {
+    width: 64%;
+    margin: 0 auto;
+    text-align: center;
+    padding: 6px 0;
+    background: #6f9efc;
+    color: #fff;
+    font-size: 1.4rem;
+}
+/*address-box*/
+.address-box {
+    display: none;
+    position: fixed;
+    left: 18%;
+    top: 50%;
+    width: 64%;
+    z-index: 1001;
+    background: #fff;
+    border-radius: 6px;
+    overflow: hidden;
+    padding-bottom: 8%;
+}
+.address-top {
+    width: 100%;
+}
+.address-top img:nth-child(1) {
+    width: 100%;
+}
+.address-top img:nth-child(2) {
+    position: absolute;
+    right: 4%;
+    top:4%;
+    width: 10%;
+}
+.address-inner {
+    width: 64%;
+    margin: 0 auto;
+}
+.address-title {
+    width: 100%;
+    text-align: left;
+    font-size: 1.6rem;
+    color: #666cfa;
+}
+.address-inner textarea{
+    width: 100%;
+    height: 75px;
+    font-size: 1.4rem;
+    border: 0;
+    -webkit-appearance:none;
+    border-radius:0;
+    outline: none;
+    resize:none;
+    border-bottom: 2px solid #666cfa;
+}
+.save-address {
+    width: 100%;
+    text-align: center;
+    padding: 6px 0;
+    background: #6f9efc;
+    color: #fff;
+    font-size: 1.4rem;
+    margin-top: 16%;
+}
+/*invite-box*/
+.invite-box {
+    display: none;
+    position: fixed;
+    left: 18%;
+    top: 50%;
+    width: 64%;
+    z-index: 1001;
+    background: #fff;
+    border-radius: 6px;
+    overflow: hidden;
+    padding-bottom: 8%;
+}
+.invite-top {
+    width: 100%;
+}
+.invite-top img:nth-child(1) {
+    width: 100%;
+}
+.invite-top img:nth-child(2) {
+    position: absolute;
+    right: 4%;
+    top:4%;
+    width: 10%;
+}
+.invite-inner {
+    width: 70%;
+    margin: 0 auto;
+    text-align: center;
+    color: #666cfa;
+    font-size: 1.4rem;
+    padding: 6% 0;
+}
+.invite-btn {
+    width: 100%;
+    text-align: center;
+    padding: 6px 0;
+    background: #6f9efc;
+    color: #fff;
+    font-size: 1.4rem;
+    margin-top: 6%;
+}
+/*login-box*/
+.login-box {
+    display: none;
+    position: fixed;
+    left: 18%;
+    top: 50%;
+    width: 64%;
+    z-index: 1001;
+    background: #fff;
+    border-radius: 6px;
+    overflow: hidden;
+    padding-bottom: 8%;
+}
+.login-top {
+    width: 100%;
+}
+.login-top img:nth-child(1) {
+    width: 100%;
+}
+.login-top img:nth-child(2) {
+    position: absolute;
+    right: 4%;
+    top:4%;
+    width: 10%;
+}
+.login-inner {
+    width: 64%;
+    margin: 0 auto;
+    text-align: center;
+    color: #666cfa;
+    font-size: 1.4rem;
+    padding: 6% 0;
+}
+.login-btn {
+    display: block;
+    width: 100%;
+    text-align: center;
+    padding: 6px 0;
+    background: #6f9efc;
+    color: #fff;
+    font-size: 1.4rem;
+    margin-top: 20%;
+}
+.login-btn:hover {
+    color: #fff;
+}
+/*touzi-box*/
+.touzi-box {
+    display: none;
+    position: fixed;
+    left: 18%;
+    top: 50%;
+    width: 64%;
+    z-index: 1001;
+    background: #fff;
+    border-radius: 6px;
+    overflow: hidden;
+    padding-bottom: 8%;
+}
+.touzi-top {
+    width: 100%;
+}
+.touzi-top img:nth-child(1) {
+    width: 100%;
+}
+.touzi-top img:nth-child(2) {
+    position: absolute;
+    right: 4%;
+    top:4%;
+    width: 10%;
+}
+.touzi-inner {
+    width: 64%;
+    margin: 0 auto;
+    text-align: center;
+    color: #666cfa;
+    font-size: 1.4rem;
+    padding: 6% 0;
+}
+.touzi-btn {
+    display: block;
+    width: 100%;
+    text-align: center;
+    padding: 6px 0;
+    background: #6f9efc;
+    color: #fff;
+    font-size: 1.4rem;
+    margin-top: 20%;
+}
+.touzi-btn:hover {
+    color: #fff;
+}
+/*share-box*/
+.share-box {
+    display: none;
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    text-align: right;
+    z-index: 10001;
+}
+.share-box img {
+    width: 50%;
+}
+/*以领取的状态*/
+.blue-back {
+    background: #51648c!important;
+    border-bottom: 2px solid #667eb2;
+    box-sizing: border-box;
+}

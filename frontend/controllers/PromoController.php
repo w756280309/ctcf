@@ -29,4 +29,12 @@ class PromoController extends BaseController
     {
         return $this->render('@frontend/views/promo/201608/invite.php');
     }
+
+    /**
+     * 奥运活动页.
+     */
+    public function actionOlympic160809()
+    {
+        return $this->render('@frontend/views/promo/201608/olympic.php');
+    }
 }
