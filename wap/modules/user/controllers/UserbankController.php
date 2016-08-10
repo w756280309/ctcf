@@ -101,7 +101,7 @@ class UserbankController extends BaseController
             }
         }
 
-        return $this->render('editbuspass');
+        return $this->render('editbuspass', ['data' => $data]);
     }
 
     public function actionResetTradePass()
