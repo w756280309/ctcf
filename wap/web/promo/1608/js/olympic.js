@@ -1,5 +1,6 @@
 $(function() {
-    $(window).load(function(){
+    function centers()
+    {
         //初始化
         var hL=$('.help-box ul li').eq(0).height();
         $('.help-box ul li').css({height:hL});
@@ -13,6 +14,13 @@ $(function() {
         $('.login-box').css({marginTop:-lH});
         var tH=$('.touzi-box').height()/2;
         $('.touzi-box').css({marginTop:-tH});
+    }
+    centers();
+    $(window).load(function() {
+        centers();
+        $(window).resize(function() {
+            centers();
+        })
     });
     $('.close-box').on('click',function(){
         $('.award-box').fadeOut('fast');

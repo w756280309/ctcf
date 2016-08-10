@@ -166,14 +166,16 @@ $this->registerJsFile(ASSETS_BASE_URI . 'promo/1608/js/olywx.js');//加载来源
                 <img src="<?= ASSETS_BASE_URI ?>promo/1608/images/olympic/top.jpg" alt="">
                 <img class="close-address" src="<?= ASSETS_BASE_URI ?>promo/1608/images/olympic/close.png" alt="">
             </div>
-            <div class="address-inner">
-                <div class="address-title">地址：</div>
-                <form id="form" action="/promotion/p1608/add-user-address">
-                    <input name="_csrf" type="hidden" id="_csrf" value="<?= \Yii::$app->request->csrfToken ?>">
-                    <input type="hidden" name="Promo0809Log[prize_id]" id="type" value="<?= $log ? $log->prize_id : 0 ?>">
-                    <textarea name="Promo0809Log[user_address]" id="address"></textarea>
-                </form>
-                <div class="save-address">保存地址</div>
+            <div class="address-inner-box">
+                <div class="address-inner">
+                    <div class="address-title">地址：</div>
+                        <form id="form" action="/promotion/p1608/add-user-address">
+                            <input name="_csrf" type="hidden" id="_csrf" value="<?= \Yii::$app->request->csrfToken ?>">
+                            <input type="hidden" name="Promo0809Log[prize_id]" id="type" value="<?= $log ? $log->prize_id : 0 ?>">
+                            <textarea name="Promo0809Log[user_address]" id="address"></textarea>
+                        </form>
+                    <div class="save-address">保存地址</div>
+                </div>
             </div>
         </div>
         <!--invite-box-->
@@ -183,13 +185,15 @@ $this->registerJsFile(ASSETS_BASE_URI . 'promo/1608/js/olywx.js');//加载来源
                 <img src="<?= ASSETS_BASE_URI ?>promo/1608/images/olympic/top.jpg" alt="">
                 <img class="close-invite" src="<?= ASSETS_BASE_URI ?>promo/1608/images/olympic/close.png" alt="">
             </div>
-            <div class="invite-inner">
-                <span>
-                    恭喜您！领取成功！<br/>
-                    我们将在10个工作日内<br/>发货！<br/>
-                    您也可以邀请好友参加活动！领取<br/>邀请奖<br/>励！
-                </span>
-                <div class="invite-btn">立即邀请</div>
+            <div class="invite-inner-box">
+                <div class="invite-inner">
+                    <span>
+                        恭喜您！领取成功！<br/>
+                        我们将在10个工作日内<br/>发货！<br/>
+                        您也可以邀请好友参加活动！领取<br/>邀请奖<br/>励！
+                    </span>
+                    <div class="invite-btn">立即邀请</div>
+                </div>
             </div>
         </div>
         <!--login-box-->
@@ -199,9 +203,11 @@ $this->registerJsFile(ASSETS_BASE_URI . 'promo/1608/js/olywx.js');//加载来源
                 <img src="<?= ASSETS_BASE_URI ?>promo/1608/images/olympic/top.jpg" alt="">
                 <img class="close-login" src="<?= ASSETS_BASE_URI ?>promo/1608/images/olympic/close.png" alt="">
             </div>
-            <div class="login-inner">
-                登录才能助力哦~~
-                <div class="login-btn" onclick="location.href='/site/login'">立即登录</div>
+            <div class="login-inner-box">
+                <div class="login-inner">
+                    登录才能助力哦~~
+                    <div class="login-btn" onclick="location.href='/site/login'">立即登录</div>
+                </div>
             </div>
         </div>
     </div>

@@ -134,10 +134,8 @@ i,em {
     top: 50%;
     width: 64%;
     z-index: 1001;
-    background: #fff;
     border-radius: 6px;
     overflow: hidden;
-    padding-bottom: 8%;
 }
 .award-top {
     width: 100%;
@@ -153,6 +151,9 @@ i,em {
 }
 .award-inner {
     width: 100%;
+    background: #fff;
+    border-radius: 0 0 6px 6px;
+    padding-bottom: 8%;
     text-align: center;
 }
 .award-inner img {
@@ -175,10 +176,8 @@ i,em {
     top: 50%;
     width: 64%;
     z-index: 1001;
-    background: #fff;
     border-radius: 6px;
     overflow: hidden;
-    padding-bottom: 8%;
 }
 .address-top {
     width: 100%;
@@ -191,6 +190,11 @@ i,em {
     right: 4%;
     top:4%;
     width: 10%;
+}
+.address-inner-box {
+    background: #fff;
+    padding-bottom: 8%;
+    border-radius: 0 0 6px 6px;
 }
 .address-inner {
     width: 64%;
@@ -230,10 +234,8 @@ i,em {
     top: 50%;
     width: 64%;
     z-index: 1001;
-    background: #fff;
     border-radius: 6px;
     overflow: hidden;
-    padding-bottom: 8%;
 }
 .invite-top {
     width: 100%;
@@ -246,6 +248,11 @@ i,em {
     right: 4%;
     top:4%;
     width: 10%;
+}
+.invite-inner-box {
+    background: #fff;
+    padding-bottom: 8%;
+    border-radius: 0 0 6px 6px;
 }
 .invite-inner {
     width: 70%;
@@ -272,10 +279,8 @@ i,em {
     top: 50%;
     width: 64%;
     z-index: 1001;
-    background: #fff;
     border-radius: 6px;
     overflow: hidden;
-    padding-bottom: 8%;
 }
 .login-top {
     width: 100%;
@@ -288,6 +293,11 @@ i,em {
     right: 4%;
     top:4%;
     width: 10%;
+}
+.login-inner-box {
+    background: #fff;
+    padding-bottom: 8%;
+    border-radius: 0 0 6px 6px;
 }
 .login-inner {
     width: 64%;
