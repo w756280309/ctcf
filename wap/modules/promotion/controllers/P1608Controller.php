@@ -55,7 +55,7 @@ class P1608Controller extends Controller
         if (4 === $res) {
             $log = new Promo0809Log([
                 'user_id' => $this->getAuthedUser()->id,
-                'createdAt' => date('Y-m-d H:i:s'),
+                'createdAt' => date('Y-m-d'),
             ]);
 
             if ($log->load(Yii::$app->request->post()) && $log->validate()) {
@@ -80,11 +80,11 @@ class P1608Controller extends Controller
             return 7;   //活动已结束
         }
 
-        $user = $this->getAuthedUser();
-
-        if (!$user) {
+        if (Yii::$app->user->isGuest) {
             return 1;    //没有登录的情况
         }
+
+        $user = $this->getAuthedUser();
 
         $logCount = Promo0809Log::find()
             ->where(['user_id' => $user->id])

@@ -1,6 +1,4 @@
-$(function(){
-    var add=$('#address').val();
-    $('#add').val(add);
+$(function() {
     $(window).load(function(){
         //初始化
         var hL=$('.help-box ul li').eq(0).height();
@@ -27,27 +25,36 @@ $(function(){
     $('.close-invite').on('click',function(){
         $('.invite-box').fadeOut('fast');
         $('.mark-box').hide();
+
+        if ($('.invite-inner').hasClass('success')) {
+            location.reload();
+        }
     });
     $('.close-login').on('click',function(){
         $('.login-box').fadeOut('fast');
         $('.mark-box').hide();
     });
-    $('.close-touzi').on('click',function(){
-        $('.touzi-box').fadeOut('fast');
-        $('.mark-box').hide();
-    });
+
     //点击助力显示对应奖品
-    var award=['/promo/1608/images/olympic/pingpangqiupai.jpg','/promo/1608/images/olympic/yongjing.jpg','/promo/1608/images/olympic/shoutao.jpg','/promo/1608/images/olympic/paiqiu.jpg','/promo/1608/images/olympic/lanqiu.jpg','/promo/1608/images/olympic/shouhuan.jpg','/promo/1608/images/olympic/zhuqiu.jpg','/promo/1608/images/olympic/wangqiupai.jpg'];
-    $('.help-btn').on('click',function(){
-        var index=$('.help-btn').index(this);
-        $('.award-inner img').attr({src:award[index]});
-        var type=$('#type').val()-1;
-        if(index!=type){
-            $('.award-box').fadeIn('fast');
-            $('.mark-box').show();
-            lingqu(index+1);
-        }
+    var award = [
+        '../../promo/1608/images/olympic/pingpangqiupai.jpg',
+        '../../promo/1608/images/olympic/yongjing.jpg',
+        '../../promo/1608/images/olympic/shoutao.jpg',
+        '../../promo/1608/images/olympic/paiqiu.jpg',
+        '../../promo/1608/images/olympic/lanqiu.jpg',
+        '../../promo/1608/images/olympic/shouhuan.jpg',
+        '../../promo/1608/images/olympic/zhuqiu.jpg',
+        '../../promo/1608/images/olympic/wangqiupai.jpg',
+    ];
+
+    $('.help-btn').on('click', function() {
+        var index = $('.help-btn').index(this);
+        $('.award-inner img').attr({src: award[index]});
+        $('.award-box').fadeIn('fast');
+        $('.mark-box').show();
+        lingqu(index + 1);
     });
+
     function lingqu(a)
     {
         $('.award-inner div').on('click', function() {
@@ -64,7 +71,7 @@ $(function(){
             } else if (status === 3) {
                 $('.invite-box').fadeIn('fast');
                 $('.mark-box').show();
-                $('.invite-inner span').html('您还未投资哦！投资成功即可领取奖励！');
+                $('.invite-inner span').html('单笔投资未满1万元哦！投资成功即可领取奖励！');
                 $('.invite-btn').html('<span onclick="location.href=\'/deal/deal/index\'">马上投资</span>');
             } else if (status === 4) {
                 $('#type').val(a);
@@ -108,6 +115,7 @@ $(function(){
                 $('.mark-box').show();
                 $('.invite-inner span').html('恭喜您！领取成功！<br>我们将在10个工作日内<br>发货！<br>您也可以邀请好友参加<br>活动！领取<br>邀请奖励！');
                 $('.invite-btn').html('<span onclick="location.href=\'/user/invite\'">邀请好友</span>');
+                $('.invite-inner').addClass('success');
             } else {
                 alert('地址提交失败，请重试!');
             }
@@ -122,7 +130,7 @@ $(function(){
         });
     });
 
-    $('.invite-btn').on('click', function() {
+    $('.invite-btn span').on('click', function() {
         $('.invite-box').fadeOut('fast');
         $('.mark-box').hide();
     });
@@ -134,6 +142,10 @@ $(function(){
         $('.address-box').fadeOut('fast');
         $('.login-box').fadeOut('fast');
         $('.touzi-box').fadeOut('fast');
+
+        if ($('.invite-inner').hasClass('success')) {
+            location.reload();
+        }
     });
 
     $type = parseInt($('#type').val());
