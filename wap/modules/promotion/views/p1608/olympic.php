@@ -22,7 +22,7 @@ $this->registerJsFile(ASSETS_BASE_URI . 'promo/1608/js/olywx.js');//加载来源
     <link href="<?= ASSETS_BASE_URI ?>css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>promo/1608/css/olympic.css">
     <script src="<?= ASSETS_BASE_URI ?>js/jquery.js"></script>
-    <script src="<?= ASSETS_BASE_URI ?>promo/1608/js/olympic.js"></script>
+    <script src="<?= ASSETS_BASE_URI ?>promo/1608/js/olympic.js?v=20160811"></script>
     <script>
         $(function() {
             $(document).ajaxSend(function(event, jqXHR, settings) {

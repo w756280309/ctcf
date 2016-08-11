@@ -107,6 +107,7 @@ $(function() {
     $('.save-address').on('click',function() {
         if ($('#address').val() === '') {
             alert('地址不能为空');
+            window.location.href = window.location.href + "?v=0" + Math.random();
             return;
         }
 
