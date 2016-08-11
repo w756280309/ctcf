@@ -31,17 +31,17 @@ $pc_cat = Yii::$app->params['pc_cat'];
 
         <!--search start-->
         <div class="portlet-body">
-            <form action="/product/productonline/list" method="get" target="_self">
+            <form action="/product/productonline/list" method="get" target="_self" id="loanFilter">
             <table class="table">
                 <tbody>
                 <tr>
                     <td>
                         <span class="title">项目名称</span>
                     </td>
-                    <td><input type="text" class="m-wrap span6" style="margin-bottom: 0px;width:300px" name='name' value="<?= Yii::$app->request->get('name') ?>"  placeholder="请输入项目名称"/></td>
+                    <td><input id="name" type="text" class="m-wrap span6" style="margin-bottom: 0px;width:300px" name='name' value="<?= Yii::$app->request->get('name') ?>"  placeholder="请输入项目名称"/></td>
                     <td><span class="title">状态</span></td>
                     <td>
-                        <select class="m-wrap" style="margin-bottom: 0px;width:300px" name = 'status'>
+                        <select id="type" class="m-wrap" style="width:200px" name = 'status'>
                             <option value="">--请选择--</option>
                             <option value="0" <?= Yii::$app->request->get('status') == '0' ? 'selected' : '' ?>>未上线</option>
                             <?php foreach ($status as $key => $val): ?>
@@ -58,8 +58,15 @@ $pc_cat = Yii::$app->params['pc_cat'];
                         <input type="hidden" name="days" value="<?= Html::encode($days) ?>">
                     </td>
                     <td>
+                        <select class="m-wrap" name="isTest" id="isTest" style="width: 80px;">
+                            <option value="0" <?= $isTest ? '' : 'selected'?> >正式标</option>
+                            <option value="1" <?= $isTest ? 'selected' : ''?>>测试标</option>
+                        </select>
+                    </td>
+                    <td>
                         <div align="right" style="margin-right: 20px">
-                            <button type='submit' class="btn blue btn-block" style="width: 100px;">查询 <i class="m-icon-swapright m-icon-white"></i></button>
+                            <input type="button"  class="btn" value="重置" style="width: 60px;" onclick="formReset()"/>
+                            <button type='submit' class="btn blue" style="width: 100px;">查询 <i class="m-icon-swapright m-icon-white"></i></button>
                         </div>
                     </td>
                 </tr>
@@ -256,6 +263,13 @@ $pc_cat = Yii::$app->params['pc_cat'];
                 location.reload();
             }
         });
+    }
+
+    function formReset()
+    {
+        $('#name').val('');
+        $('#type').val('');
+        $('#isTest').val(0);
     }
 </script>
 <?php $this->endBlock(); ?>

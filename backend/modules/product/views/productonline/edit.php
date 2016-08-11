@@ -393,7 +393,7 @@ $is_online = in_array($model->status, [2, 3, 4, 5, 6, 7]);//判断标的是否�
                     <label class="control-label">起投金额</label>
                     <div class="controls">
                         <?=
-                        $form->field($model, 'start_money', ['template' => '<div class="input-append"><span class="add-on">￥</span>{input}<span class="add-on">元</span> </div>{error}', 'inputOptions' => ['autocomplete' => 'off', 'placeholder' => '起投金额,必须是1的整数倍', 'value' => intval($model->start_money)]])->textInput(['class' => 'm-wrap span12'])
+                        $form->field($model, 'start_money', ['template' => '<div class="input-append"><span class="add-on">￥</span>{input}<span class="add-on">元</span> </div>{error}', 'inputOptions' => ['autocomplete' => 'off', 'placeholder' => '起投金额,必须是1的整数倍', 'value' => $model->isTest ? $model->start_money : intval($model->start_money)]])->textInput(['class' => 'm-wrap span12'])
                         ?>
                     </div>
                 </div>
@@ -404,7 +404,7 @@ $is_online = in_array($model->status, [2, 3, 4, 5, 6, 7]);//判断标的是否�
                     <label class="control-label">递增金额</label>
                     <div class="controls">
                         <?=
-                        $form->field($model, 'dizeng_money', ['template' => '<div class="input-append"><span class="add-on">￥</span>{input}<span class="add-on">元</span></div>{error}', 'inputOptions' => ['autocomplete' => 'off', 'placeholder' => '递增金额,必须是1的整数倍', 'value' => intval($model->dizeng_money)]])->textInput(['class' => 'm-wrap span12'])
+                        $form->field($model, 'dizeng_money', ['template' => '<div class="input-append"><span class="add-on">￥</span>{input}<span class="add-on">元</span></div>{error}', 'inputOptions' => ['autocomplete' => 'off', 'placeholder' => '递增金额,必须是1的整数倍', 'value' => $model->isTest ? $model->dizeng_money : intval($model->dizeng_money)]])->textInput(['class' => 'm-wrap span12'])
                         ?>
                     </div>
                 </div>
@@ -449,6 +449,16 @@ $is_online = in_array($model->status, [2, 3, 4, 5, 6, 7]);//判断标的是否�
                         <?=
                             $form->field($model, 'paymentDay', ['template' => '<div class="input-append">{input}<span class="add-on">(日)</span></div>{error}', 'inputOptions' => ['autocomplete' => 'off', 'placeholder' => '固定还款日', 'class' => 'm-wrap span12 gdhk', 'value' => empty($model->paymentDay) ? 20 : $model->paymentDay]])->textInput($paymentDayInputOptions)
                         ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row-fluid">
+            <div class="span6 ">
+                <div class="control-group">
+                    <label class="control-label">测试标的</label>
+                    <div class="controls">
+                        <?=  $form->field($model, 'isTest')->checkbox(['autocomplete' => 'on'])->label(false)?>
                     </div>
                 </div>
             </div>

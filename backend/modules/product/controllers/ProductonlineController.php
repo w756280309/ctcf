@@ -21,6 +21,7 @@ use common\utils\TxUtils;
 use P2pl\Borrower;
 use Yii;
 use yii\data\Pagination;
+use yii\web\Cookie;
 use yii\web\Response;
 
 /**
@@ -71,6 +72,11 @@ class ProductonlineController extends BaseController
         $con_content_arr = Yii::$app->request->post('content');
 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            //非测试标，起投金额、递增金额取整
+            if (!$model->isTest) {
+                $model->start_money = intval($model->start_money);
+                $model->dizeng_money = intval($model->dizeng_money);
+            }
             $uids = LoanService::convertUid($model->allowedUids);
             $finish_date = is_integer($model->finish_date) ? $model->finish_date : strtotime($model->finish_date);
             $start_date = is_integer($model->start_date) ? $model->start_date : strtotime($model->start_date);
@@ -341,6 +347,16 @@ class ProductonlineController extends BaseController
         } elseif ($request['status']) {
             $data->andWhere(['online_status' => OnlineProduct::STATUS_ONLINE, "$op.status" => $request['status']]);
         }
+        //根据是否测试标进行过滤
+        if (isset($request['isTest'])) {
+            $isTest = $request['isTest'];
+        } else {
+            $isTest = Yii::$app->request->cookies->getValue('loanListFilterIsTest', 0);
+        }
+        $data->andWhere(['isTest' => $isTest]);
+        if ($isTest) {
+            Yii::$app->response->cookies->add(new Cookie(['name' => 'loanListFilterIsTest', 'value' => 1, 'expire' => strtotime('next year')]));
+        }
 
         $days = $request['days'];
 
@@ -359,10 +375,11 @@ class ProductonlineController extends BaseController
         $model = $data->offset($pages->offset)->limit($pages->limit)->all();
 
         return $this->render('list', [
-                    'models' => $model,
-                    'pages' => $pages,
-                    'status' => $status,
-                    'days' => $days,
+            'models' => $model,
+            'pages' => $pages,
+            'status' => $status,
+            'days' => $days,
+            'isTest' => $isTest,
         ]);
     }
 

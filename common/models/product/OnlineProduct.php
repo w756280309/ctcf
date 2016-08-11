@@ -42,6 +42,7 @@ use yii\behaviors\TimestampBehavior;
  * @property string $isFlexRate
  * @property string $rateSteps
  * @property integer $paymentDay
+ * @property int $isTest
  */
 class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
 {
@@ -106,7 +107,7 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
             'create' => ['title', 'sn', 'cid', 'money', 'borrow_uid', 'expires', 'expires_show', 'yield_rate', 'start_money', 'borrow_uid', 'fee', 'status',
                 'description', 'refund_method', 'account_name', 'account', 'bank', 'dizeng_money', 'start_date', 'end_date', 'full_time',
                 'is_xs', 'yuqi_faxi', 'order_limit', 'creator_id', 'del_status', 'status', 'isPrivate', 'allowedUids', 'finish_date', 'channel', 'jixi_time', 'sort',
-                'jiaxi', 'kuanxianqi', 'graceDays', 'isFlexRate', 'rateSteps', 'issuer', 'issuerSn', 'paymentDay'],
+                'jiaxi', 'kuanxianqi', 'graceDays', 'isFlexRate', 'rateSteps', 'issuer', 'issuerSn', 'paymentDay', 'isTest'],
         ];
     }
 
@@ -202,8 +203,7 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
             [['del_status', 'funded_money'], 'default', 'value' => 0],
             [['money', 'start_money', 'dizeng_money', 'yuqi_faxi', 'fee'], 'double'],
             [['yuqi_faxi', 'fee'], 'compare', 'compareValue' => 0, 'operator' => '>='],
-            [['money', 'start_money'], 'compare', 'compareValue' => 0, 'operator' => '>'],
-            [['dizeng_money'], 'compare', 'compareValue' => 1, 'operator' => '>='],
+            [['money'], 'compare', 'compareValue' => 0, 'operator' => '>'],
             [['start_money'], 'compare', 'compareAttribute' => 'money', 'operator' => '<', 'type' => "number"],//以数字做比较
             [['yield_rate', 'jiaxi'], 'compare', 'compareValue' => 100, 'operator' => '<='],
             [['yield_rate', 'jiaxi', 'kuanxianqi'], 'compare', 'compareValue' => 0, 'operator' => '>='],
@@ -223,7 +223,29 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
             ['paymentDay', 'default', 'value' => 20],    //固定还款日,默认值每月20号,范围为1到28
             ['paymentDay', 'compare', 'compareValue' => 1, 'operator' => '>='],
             ['paymentDay', 'compare', 'compareValue' => 28, 'operator' => '<='],
+            ['isTest', 'integer'],
+            [['start_money', 'dizeng_money'], 'checkMoney'],
         ];
+    }
+
+    //起投金额、递增金额判断
+    public function checkMoney()
+    {
+        if ($this->isTest) {
+            if ($this->start_money < 0) {
+                $this->addError('start_money', '起投金额的值不能小于零');
+            }
+            if ($this->dizeng_money < 0) {
+                $this->addError('dizeng_money', '递增金额的值不能小于零');
+            }
+        } else {
+            if ($this->start_money <= 0) {
+                $this->addError('start_money', '起投金额的值必须大于零');
+            }
+            if ($this->dizeng_money < 1) {
+                $this->addError('dizeng_money', '递增金额的值必须大于或等于1');
+            }
+        }
     }
 
     public function checkRateSteps()
@@ -352,6 +374,7 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
             'isFlexRate'=>'是否启用浮动利率',
             'rateSteps'=>'浮动利率',
             'paymentDay' => '固定还款日',
+            'isTest' => '是测试标',
         ];
     }
 

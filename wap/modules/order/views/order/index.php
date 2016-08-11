@@ -40,7 +40,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/order.js?v=20160603-v', ['depends' => 
         <input name="_csrf" type="hidden" id="_csrf" value="<?=Yii::$app->request->csrfToken ?>">
         <div class="row sm-height border-bottom">
             <div class="col-xs-4 safe-txt text-align-ct">投资金额</div>
-            <input name="money" type="number" id="money" value="<?= empty($money) ? '' : $money ?>" placeholder="请输入投资金额"  class="col-xs-6 safe-lf text-align-lf">
+            <input name="money" type="number" id="money" value="<?= empty($money) ? '' : $money ?>" placeholder="请输入投资金额"  class="col-xs-6 safe-lf text-align-lf" step="<?=$deal->dizeng_money ?>">
             <div class="col-xs-2 safe-txt">元</div>
         </div>
 
