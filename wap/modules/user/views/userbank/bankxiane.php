@@ -1,5 +1,9 @@
 <?php
-    $this->title = '限额说明';
+
+$this->title = '限额说明';
+
+use common\utils\StringUtils;
+
 ?>
  <style>
     h1 {
@@ -46,8 +50,8 @@
                     echo '(暂停)';
                 } ?>
             </td>
-            <td><?= \Yii::$app->functions->toFormatMoney($bank->singleLimit) ?></td>
-            <td><?= \Yii::$app->functions->toFormatMoney($bank->dailyLimit) ?></td>
+            <td><?= StringUtils::amountFormat1('{amount}{unit}', $bank->singleLimit) ?></td>
+            <td><?= StringUtils::amountFormat1('{amount}{unit}', $bank->dailyLimit) ?></td>
         </tr>
         <?php endforeach; ?>
     </table>

@@ -1,5 +1,9 @@
 <?php
+
 $this->title="充值";
+
+use common\utils\StringUtils;
+
 ?>
 <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/bind.css"/>
 <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/chongzhi.css?v=20160412"/>
@@ -23,7 +27,7 @@ $this->title="充值";
         <div class="col-xs-10 bank-content">
             <div class="bank-content1" style="font-size: 14px;">
                 <?= $user_bank->bank_name ?>
-                <span style="font-size: 12px;">(限额<?= \Yii::$app->functions->toFormatMoney($bank['singleLimit']) ?>/笔，<?= \Yii::$app->functions->toFormatMoney($bank['dailyLimit']) ?>/日)</span>
+                <span style="font-size: 12px;">(限额<?=  StringUtils::amountFormat1('{amount}{unit}', $bank['singleLimit']) ?>/笔，<?= StringUtils::amountFormat1('{amount}{unit}', $bank['dailyLimit']) ?>/日)</span>
             </div>
             <div class="bank-content2">
                 尾号<?= $user_bank->card_number?substr($user_bank->card_number, -4):"" ?> 储蓄卡

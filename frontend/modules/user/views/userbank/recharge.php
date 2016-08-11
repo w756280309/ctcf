@@ -1,7 +1,11 @@
 <?php
-    $this->title = '充值';
-    $this->registerCssFile('/css/useraccount/bindcardalready.css');
-    $this->registerCssFile('/css/useraccount/chargedeposit.css');
+
+$this->title = '充值';
+$this->registerCssFile('/css/useraccount/bindcardalready.css');
+$this->registerCssFile('/css/useraccount/chargedeposit.css');
+
+use common\utils\StringUtils;
+
 ?>
 <style>
     .list-single {
@@ -59,7 +63,7 @@
             </div>
             <div class="clear"></div>
             <div style="    margin-top: 5px;margin-bottom: 10px;">
-                <span style="font-size: 12px;">(限额<?= \Yii::$app->functions->toFormatMoney($bank['singleLimit']) ?>/笔，<?= \Yii::$app->functions->toFormatMoney($bank['dailyLimit']) ?>/日)</span>
+                <span style="font-size: 12px;">(限额<?= StringUtils::amountFormat1('{amount}{unit}', $bank['singleLimit']) ?>/笔，<?= StringUtils::amountFormat1('{amount}{unit}', $bank['dailyLimit']) ?>/日)</span>
             </div>
         </div>
         <div class="bindCard-single">

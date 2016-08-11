@@ -4,6 +4,8 @@ namespace common\models\bank;
 
 use common\models\user\UserBanks;
 use common\models\user\RechargeRecord;
+use common\utils\StringUtils;
+
 /**
  * 银行服务类.
  *
@@ -88,14 +90,14 @@ class BankManager
     {
         $config = QpayConfig::findOne($banks->bank_id);
         if (bccomp($config->singleLimit, $money) < 0) {
-            throw new \Exception('超过单笔' . \Yii::$app->functions->toFormatMoney($config->singleLimit) . '限额');
+            throw new \Exception('超过单笔' . StringUtils::amountFormat1('{amount}{unit}', $config->singleLimit) . '限额');
         }
         $t = time();
         $start = mktime(0,0,0,date("m",$t),date("d",$t),date("Y",$t));
         $end = mktime(23,59,59,date("m",$t),date("d",$t),date("Y",$t));
         $rc = RechargeRecord::find()->where(['uid' => $banks->uid, 'status' => 1, 'pay_type' => 1])->andFilterWhere(['between','created_at',$start,$end])->sum('fund');
         if (bccomp(bcadd($rc, $money), $config->dailyLimit) > 0) {
-            throw new \Exception('超过单日' .\Yii::$app->functions->toFormatMoney($config->dailyLimit) . '限额');
+            throw new \Exception('超过单日' .StringUtils::amountFormat1('{amount}{unit}', $config->dailyLimit) . '限额');
         }
         return true;
     }

@@ -82,7 +82,7 @@ class CouponController extends BaseController
         $coupon = $pg->getItems();
 
         foreach ($coupon as $key => $val) {
-            $coupon[$key]['minInvestDesc'] = \Yii::$app->functions->toFormatMoney(rtrim(rtrim($val['minInvest'], '0'), '.'));
+            $coupon[$key]['minInvestDesc'] = StringUtils::amountFormat1('{amount}{unit}', $val['minInvest']);
         }
 
         $tp = $pg->getPageCount();

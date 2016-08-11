@@ -3,6 +3,7 @@ $this->title = '项目详情';
 
 use common\models\product\RateSteps;
 use common\view\LoanHelper;
+use common\utils\StringUtils;
 
 $deal['money'] = rtrim(rtrim($deal['money'], '0'), '.');
 ?>
@@ -61,7 +62,7 @@ $deal['money'] = rtrim(rtrim($deal['money'], '0'), '.');
         <div class="row shuju">
             <div class="col-xs-1"></div>
             <div class="col-xs-8" style="padding: 0;padding-left: 15px">
-                <span><?= ($deal['status']==1)?(Yii::$app->functions->toFormatMoney($deal['money'])) : rtrim(rtrim(number_format($deal_balace, 2), '0'), '.').'元'?></span><i>/<?= Yii::$app->functions->toFormatMoney($deal['money']); ?></i>
+                <span><?= $deal->status == 1 ? StringUtils::amountFormat1('{amount}{unit}', $deal->money) : StringUtils::amountFormat2($deal_balace).'元' ?></span><i>/<?= StringUtils::amountFormat1('{amount}{unit}', $deal->money) ?></i>
                 <div>可投余额/项目总额</div>
             </div>
             <div class="col-xs-1" style="padding: 0;">

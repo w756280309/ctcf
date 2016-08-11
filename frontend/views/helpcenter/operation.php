@@ -3,6 +3,8 @@
 $this->title = "帮助中心";
 $this->registerJsFile(ASSETS_BASE_URI.'js/help/operation.js', ['depends' => 'frontend\assets\FrontAsset']);
 
+use common\utils\StringUtils;
+
 ?>
 
 <div class="wdjf-body">
@@ -152,7 +154,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/help/operation.js', ['depends' => 'fro
                         <?php foreach ($qpay as $val) { ?>
                         <tr>
                             <td><?= $val['bankName'] ?></td>
-                            <td><?= \Yii::$app->functions->toFormatMoney($val['singleLimit']) ?></td>
+                            <td><?= StringUtils::amountFormat1('{amount}{unit}', $val['singleLimit']) ?></td>
                         </tr>
                         <?php } ?>
                         </tbody>

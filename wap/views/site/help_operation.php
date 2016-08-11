@@ -1,5 +1,9 @@
 <?php
+
 $this->title="帮助中心";
+
+use common\utils\StringUtils;
+
 ?>
 <link href="/css/informationAndHelp.css" rel="stylesheet">
 
@@ -106,7 +110,7 @@ $this->title="帮助中心";
                 <?php foreach ($qpay as $val) { ?>
                 <tr>
                     <td><?= $val['bankName'] ?></td>
-                    <td><?= \Yii::$app->functions->toFormatMoney($val['singleLimit']) ?></td>
+                    <td><?= StringUtils::amountFormat1('{amount}{unit}', $val['singleLimit']) ?></td>
                 </tr>
                 <?php } ?>
             </table>

@@ -1,5 +1,7 @@
 <?php
+
 use yii\helpers\Html;
+use common\utils\StringUtils;
 
 $this->title="充值";
 
@@ -29,7 +31,7 @@ if ($backUrl = \Yii::$app->session['recharge_back_url']) {
     <div class="col-xs-10 bank-content">
         <div class="bank-content1" style="font-size: 14px;">
             <?= $user_bank->bank_name ?>
-            <span style="font-size: 12px;">(限额<?= \Yii::$app->functions->toFormatMoney($bank['singleLimit']) ?>/笔，<?= \Yii::$app->functions->toFormatMoney($bank['dailyLimit']) ?>/日)</span>
+            <span style="font-size: 12px;">(限额<?= StringUtils::amountFormat1('{amount}{unit}', $bank['singleLimit']) ?>/笔，<?= StringUtils::amountFormat1('{amount}{unit}', $bank['dailyLimit']) ?>/日)</span>
         </div>
         <div class="bank-content2">
             尾号<?= $user_bank->card_number?substr($user_bank->card_number, -4):"" ?> 储蓄卡
