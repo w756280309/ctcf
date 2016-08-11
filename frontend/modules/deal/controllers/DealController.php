@@ -53,7 +53,7 @@ class DealController extends BaseController
             'deal' => $deal,
             'data' => $data,
             'money' => ($detail_data['money'] > 0) ? $detail_data['money'] : 0,
-            'coupon_id' => ($detail_data['coupon_id'] > 0) ? $detail_data['coupon_id'] : 0,
+            'coupon_id' => ($detail_data['coupon_id'] > 0) ? intval($detail_data['coupon_id']) : 0,
         ]);
     }
 

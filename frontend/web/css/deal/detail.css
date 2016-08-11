@@ -222,7 +222,7 @@ body {
     font-size: 14px;
     color: #bababf;
 }
-.plD-innerStyle{
+.plD-innerStyle {
     list-style: decimal;
     margin-left: 20px;
 }
@@ -231,10 +231,7 @@ body {
     margin:0 auto;
     margin-top: 10px;
 }
-.show{
-    display: block;
-}
-.hide{
+.hide {
     display: none;
 }
 .piD-data-inner {
@@ -511,6 +508,9 @@ body {
     position: absolute;
     right: 0;
     top: 0;
+}
+.show {
+    display: block;
 }
 .dR-btn {
     width: 100%;

@@ -10,7 +10,7 @@ $user = Yii::$app->user->identity;
 $this->registerJsFile(ASSETS_BASE_URI . 'js/detail.js');
 $this->registerCssFile(ASSETS_BASE_URI . 'css/deal/buy.css');
 $this->registerCssFile(ASSETS_BASE_URI . 'css/deal/deallist.css');
-$this->registerCssFile(ASSETS_BASE_URI . 'css/deal/detail.css?v=160714');
+$this->registerCssFile(ASSETS_BASE_URI . 'css/deal/detail.css?v=160810');
 $this->registerCssFile(ASSETS_BASE_URI . 'css/pagination.css');
 $this->registerCssFile(ASSETS_BASE_URI . 'css/useraccount/chargedeposit.css');
 ?>
@@ -176,10 +176,10 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/useraccount/chargedeposit.css');
                             </ul>
                             <!--代金券选择-->
                             <div class="dR-quan" id="valid_coupon_list">
+                                <input type="hidden" name="couponId" class="hide_coupon" value="<?= $coupon_id ?>">
                                 <ul>
                                     <?php foreach ($data as $v) { ?>
-                                        <li class="quan-false">
-                                            <input type="radio" name="couponId" value="<?= $v->id ?>" class="coupon_radio" style="display: none;" <?=($v->id === $coupon_id) ? 'checked' : '' ?>>
+                                        <li class="quan-false<?php if ($v->id === $coupon_id) { ?> picked-box<?php } ?>" cid="<?= $v->id ?>">
                                             <div class="quan-left">
                                                 <span>￥</span><?= number_format($v->couponType->amount) ?>
                                             </div>
@@ -193,7 +193,7 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/useraccount/chargedeposit.css');
                                                     <p>有效期至<?= $v->expiryDate ?></p>
                                                 </div>
                                             </div>
-                                            <img class="quan-true" src="/images/deal/quan-true.png" alt="">
+                                            <img class="quan-true <?php if ($v->id === $coupon_id) { ?>show<?php } ?>" src="/images/deal/quan-true.png" alt="">
                                         </li>
                                     <?php } ?>
                                 </ul>
@@ -245,6 +245,15 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/useraccount/chargedeposit.css');
             $('#kuanxian_message').fadeOut();
         });
 
+        //回退时保持选中状态，并保持代金券单笔投资限额提示信息
+        var coupon_id = <?= $coupon_id ?>;
+        if (coupon_id > 0) {
+            if ($('.picked-box') && $('.picked-box').length > 0) {
+                $('#coupon_title').html($('.picked-box').find('.coupon_name').text());
+                $("#valid_coupon_list").show();
+            }
+        }
+
         //获取投资记录
         getOrderList('/deal/deal/order-list?pid=<?=$deal->id?>');
         $('#order_list').on('click', 'a', function (e) {
@@ -255,17 +264,17 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/useraccount/chargedeposit.css');
         var money = $(this).val();
         //代金券选择
         $('#valid_coupon_list li').bind('click', function () {
-            var index = $('.dR-quan li').index(this);
-            if ('none' == $('.quan-true').eq(index).css('display')) {
-                $('.quan-true').hide();
-                $('.quan-true').eq(index).show();
-                $(this).find('.coupon_radio').attr('checked', true);
+            if (!$(this).hasClass('picked-box')) {
+                $('.hide_coupon').val($(this).attr('cid'));
+                $(this).addClass('picked-box').siblings().removeClass('picked-box');
+                $(this).find('.quan-true').show().end().siblings().find('.quan-true').hide();
                 $('#coupon_title').html($(this).find('.coupon_name').text());
             } else {
-                $('.quan-true').hide();
-                $(this).find('.coupon_radio').removeAttr('checked');
+                $('.hide_coupon').val('');
+                $(this).removeClass('picked-box').find('.quan-true').hide();
                 $('#coupon_title').html('<img class="dR-add" src="/images/deal/add.png" alt="">选择一张代金券<i id="coupon_count"><?= count($data)?></i>');
             }
+
         });
         //获取预期收益
         $('#deal_money').keyup(function () {
