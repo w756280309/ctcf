@@ -355,7 +355,7 @@ class ProductonlineController extends BaseController
         }
         $data->andWhere(['isTest' => $isTest]);
         if ($isTest) {
-            Yii::$app->response->cookies->add(new Cookie(['name' => 'loanListFilterIsTest', 'value' => 1, 'expire' => strtotime('next year')]));
+            Yii::$app->response->cookies->add(new Cookie(['name' => 'loanListFilterIsTest', 'value' => 1, 'expire' => strtotime('next year'), 'httpOnly' => false]));
         }
 
         $days = $request['days'];

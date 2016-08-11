@@ -267,9 +267,8 @@ $pc_cat = Yii::$app->params['pc_cat'];
 
     function formReset()
     {
-        $('#name').val('');
-        $('#type').val('');
-        $('#isTest').val(0);
+        $.removeCookie('loanListFilterIsTest', { path: '/' });
+        window.location.href = '/product/productonline/list';
     }
 </script>
 <?php $this->endBlock(); ?>
