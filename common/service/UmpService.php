@@ -34,6 +34,7 @@ class UmpService
             'createTime' => date('Y-m-d H:i:s'),
             'epayUserId' => $resp->get('user_id'),
             'accountNo' => $resp->get('account_id'),
+            'epayId' => 1,
         ]);
 
         if (!$epayUser->save(false)) {

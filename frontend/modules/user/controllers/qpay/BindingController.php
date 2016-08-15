@@ -48,11 +48,6 @@ class BindingController extends BaseController
         if ($acct_model->load(Yii::$app->request->post()) && $acct_model->validate()) {
             try {
                 //对于绑卡时候如果没有找到要过滤掉异常
-                $userBank = UserBanks::findOne(['card_number' => $acct_model->card_number]);
-                if ($userBank) {
-                    return $this->createErrorResponse('卡号已被占用，请换一张卡片重试');
-                }
-
                 $bin = BankManager::getBankFromCardNo($acct_model->card_number);
                 if (!BankManager::isDebitCard($bin)) {
                     return $this->createErrorResponse('该操作只支持借记卡');

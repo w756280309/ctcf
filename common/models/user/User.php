@@ -236,7 +236,6 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface, UserInterf
             [['status'], 'default', 'value' => 1],
             [['password_hash', 'trade_pwd', 'auth_key'], 'string', 'max' => 128],
             [['real_name', 'idcard'], 'required', 'on' => 'idcardrz'],
-            [['idcard'], 'checkIdNumberUnique', 'on' => 'idcardrz'],
             [['idcard'], 'match', 'pattern' => '/(^\d{15}$)|(^\d{17}(\d|X)$)/', 'message' => '{attribute}身份证号码不正确,必须为15位或者18位', 'on' => 'idcardrz'],
             [['tel'], 'match', 'pattern' => '/^[0-9\-]{6,16}$/', 'message' => '格式不正确，应为数字和中划线', 'on' => ['add', 'edit']],
             [['org_code'], 'match', 'pattern' => '/[a-zA-Z0-9-]/', 'message' => '格式不正确，应为字母数字中划线', 'on' => ['add', 'edit']],
@@ -273,25 +272,6 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface, UserInterf
             return true;
         } else {
             $this->addError($attribute, '身份证号错误');
-        }
-    }
-
-    /**
-     * 验证身份证号唯一性.
-     *
-     * @param type $attribute
-     * @param type $params
-     *
-     * @return bool
-     */
-    public function checkIdNumberUnique($attribute, $params)
-    {
-        $num = $this->$attribute;
-        $data = self::find()->where(['idcard' => $num])->one();
-        if ($data) {
-            $this->addError($attribute, '该身份证号已被占用');
-        } else {
-            return true;
         }
     }
 
