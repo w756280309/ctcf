@@ -25,10 +25,6 @@ class LuodiyeController extends Controller
 
     public function actionInvite()
     {
-        if (!Yii::$app->user->isGuest) {
-            return $this->goHome();
-        }
-
         $code = Yii::$app->request->get('code');
         if (empty($code) || null === User::find()->where(['usercode' => $code, 'status' => 1])->one()) {
             return $this->redirect('index');
