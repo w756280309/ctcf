@@ -412,7 +412,7 @@ class ProductonlineController extends BaseController
         $endDay = date('Y-m-d', strtotime("+$days days"));    //所有区段都要统计自截止日之前的所有待还款项目
         $query->where(['<', 'dueDate', $endDay]);
 
-        $model = $query->andWhere(['isRefunded' => 0, "$op.status" => OnlineProduct::STATUS_HUAN])->select(['loan_id'])   //只统计规定时间内的状态为还款中的标的
+        $model = $query->andWhere(['isRefunded' => 0, "$op.status" => OnlineProduct::STATUS_HUAN, "$op.isTest" => 0])->select(['loan_id'])   //只统计规定时间内的状态为还款中的标的
             ->asArray()
             ->all();
 

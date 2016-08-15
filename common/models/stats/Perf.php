@@ -93,7 +93,7 @@ class Perf extends ActiveRecord
     //投资人数
     public function getInvestor($date)
     {
-        return Yii::$app->db->createCommand('SELECT COUNT(DISTINCT(uid)) FROM online_order WHERE status=1 AND DATE(FROM_UNIXTIME(created_at))=:date')
+        return Yii::$app->db->createCommand('SELECT COUNT(DISTINCT(o.`uid`)) FROM online_order AS o INNER JOIN online_product AS p ON o.`online_pid` = p.`id` WHERE o.`status`=1 AND p.`isTest` = 0 AND DATE(FROM_UNIXTIME(o.created_at))=:date')
             ->bindValue('date', $date, \PDO::PARAM_STR)
             ->queryScalar();
     }
@@ -101,10 +101,10 @@ class Perf extends ActiveRecord
     //新增投资人数（以前注册未投资，但今日投资了的）
     public function getNewInvestor($date)
     {
-        $totalInvestor = Yii::$app->db->createCommand('SELECT COUNT(DISTINCT(o.uid)) FROM online_order AS o LEFT JOIN `user` AS u ON o.uid = u.id WHERE o.`status`= 1 AND DATE(FROM_UNIXTIME(u.`created_at`)) < :date AND DATE(FROM_UNIXTIME(o.created_at))<=:date')
+        $totalInvestor = Yii::$app->db->createCommand('SELECT COUNT(DISTINCT(o.uid)) FROM online_order AS o LEFT JOIN `user` AS u ON o.uid = u.id INNER JOIN online_product AS p ON o.online_pid = p.id WHERE o.`status`= 1 AND p.isTest = 0 AND DATE(FROM_UNIXTIME(u.`created_at`)) < :date AND DATE(FROM_UNIXTIME(o.created_at))<=:date')
             ->bindValue('date', $date, \PDO::PARAM_STR)
             ->queryScalar();
-        $investor = Yii::$app->db->createCommand('SELECT COUNT(DISTINCT(o.uid)) FROM online_order AS o LEFT JOIN `user` AS u ON o.uid = u.id WHERE o.`status`= 1 AND DATE(FROM_UNIXTIME(u.`created_at`)) < :date AND DATE(FROM_UNIXTIME(o.created_at)) <:date')
+        $investor = Yii::$app->db->createCommand('SELECT COUNT(DISTINCT(o.uid)) FROM online_order AS o LEFT JOIN `user` AS u ON o.uid = u.id INNER JOIN online_product AS p ON o.online_pid = p.id WHERE o.`status`= 1 AND p.isTest = 0 AND DATE(FROM_UNIXTIME(u.`created_at`)) < :date AND DATE(FROM_UNIXTIME(o.created_at)) <:date')
             ->bindValue('date', $date, \PDO::PARAM_STR)
             ->queryScalar();
 
@@ -114,7 +114,7 @@ class Perf extends ActiveRecord
     //当日注册当日投资人数
     public function getNewRegisterAndInvestor($date)
     {
-        $investor = Yii::$app->db->createCommand('SELECT COUNT(DISTINCT(o.uid)) FROM online_order AS o LEFT JOIN `user` AS u ON o.uid = u.id WHERE o.`status`= 1 AND DATE(FROM_UNIXTIME(u.`created_at`)) = :date AND DATE(FROM_UNIXTIME(o.created_at)) = :date')
+        $investor = Yii::$app->db->createCommand('SELECT COUNT(DISTINCT(o.uid)) FROM online_order AS o LEFT JOIN `user` AS u ON o.uid = u.id INNER JOIN online_product AS p ON o.`online_pid` = p.`id` WHERE o.`status`= 1 AND p.isTest = 0 AND DATE(FROM_UNIXTIME(u.`created_at`)) = :date AND DATE(FROM_UNIXTIME(o.created_at)) = :date')
             ->bindValue('date', $date, \PDO::PARAM_STR)
             ->queryScalar();
 
@@ -148,7 +148,7 @@ class Perf extends ActiveRecord
     //温盈金
     public function getInvestmentInWyj($date)
     {
-        return Yii::$app->db->createCommand('select sum(o.order_money) from online_order o left join online_product l on o.online_pid=l.id where l.cid=1 and o.status=1 and DATE(FROM_UNIXTIME(o.created_at))=:date')
+        return Yii::$app->db->createCommand('select sum(o.order_money) from online_order o left join online_product l on o.online_pid=l.id where l.cid=1 and l.isTest=0 and o.status=1 and DATE(FROM_UNIXTIME(o.created_at))=:date')
             ->bindValue('date', $date, \PDO::PARAM_STR)
             ->queryScalar();
     }
@@ -156,7 +156,7 @@ class Perf extends ActiveRecord
     //温盈宝
     public function getInvestmentInWyb($date)
     {
-        return Yii::$app->db->createCommand('select sum(o.order_money) from online_order o left join online_product l on o.online_pid=l.id where l.cid=2 and o.status=1 and DATE(FROM_UNIXTIME(o.created_at))=:date')
+        return Yii::$app->db->createCommand('select sum(o.order_money) from online_order o left join online_product l on o.online_pid=l.id where l.cid=2 and l.isTest = 0 and o.status=1 and DATE(FROM_UNIXTIME(o.created_at))=:date')
             ->bindValue('date', $date, \PDO::PARAM_STR)
             ->queryScalar();
     }
@@ -164,7 +164,7 @@ class Perf extends ActiveRecord
     //投资金额
     public function getTotalInvestment($date)
     {
-        return Yii::$app->db->createCommand('select sum(o.order_money) from online_order o where o.status=1 and DATE(FROM_UNIXTIME(o.created_at))=:date')
+        return Yii::$app->db->createCommand('select sum(o.order_money) from online_order o INNER JOIN online_product AS p ON o.`online_pid` = p.`id` where o.status=1 AND p.isTest = 0 and DATE(FROM_UNIXTIME(o.created_at))=:date')
             ->bindValue('date', $date, \PDO::PARAM_STR)
             ->queryScalar();
     }
@@ -172,14 +172,14 @@ class Perf extends ActiveRecord
     //融资项目,成立及之后的项目，status [5,6,7],项目成立时间按照 full_time
     public function getSuccessFound($date)
     {
-        $sql = 'SELECT COUNT(*) FROM online_product WHERE `status` IN (5,6,7) AND DATE(FROM_UNIXTIME(full_time))=:date;';
+        $sql = 'SELECT COUNT(*) FROM online_product WHERE `status` IN (5,6,7) AND isTest = 0 AND DATE(FROM_UNIXTIME(full_time))=:date;';
         return Yii::$app->db->createCommand($sql, ['date' => $date])->queryScalar();
     }
 
     //贷后余额,募集了但是还没有还款的那部分资金(只是已经成立但是还没有还款的项目,不包含募集中)，status [5,7]
     public static function getRemainMoney()
     {
-        $sql = 'SELECT SUM(funded_money) FROM online_product WHERE `status` IN(5,7)';
+        $sql = 'SELECT SUM(funded_money) FROM online_product WHERE `status` IN(5,7) AND isTest = 0';
         return Yii::$app->db->createCommand($sql)->queryScalar();
     }
 
@@ -221,14 +221,14 @@ class Perf extends ActiveRecord
     //获取已投用户登录
     public function getInvestAndLogin($date)
     {
-        $sql = "SELECT COUNT(id) FROM `user` WHERE `type` = 1 AND DATE(FROM_UNIXTIME(last_login)) = :date AND id  IN (SELECT DISTINCT uid FROM online_order WHERE `status` = 1)";
+        $sql = "SELECT COUNT(id) FROM `user` WHERE `type` = 1 AND DATE(FROM_UNIXTIME(last_login)) = :date AND id  IN (SELECT DISTINCT o.uid FROM online_order AS o INNER JOIN online_product AS p ON o.`online_pid` = p.`id` WHERE o.`status` = 1 AND p.isTest = 0)";
         return Yii::$app->db->createCommand($sql, ['date' => $date])->queryScalar();
     }
 
     //获取未投有用户登录
     public function getNotInvestAndLogin($date)
     {
-        $sql = "SELECT COUNT(id) FROM `user` WHERE `type` = 1 AND DATE(FROM_UNIXTIME(last_login)) = :date AND id NOT IN (SELECT DISTINCT uid FROM online_order WHERE `status` = 1)";
+        $sql = "SELECT COUNT(id) FROM `user` WHERE `type` = 1 AND DATE(FROM_UNIXTIME(last_login)) = :date AND id NOT IN (SELECT DISTINCT o.uid FROM online_order AS o INNER JOIN online_product AS p ON o.`online_pid` = p.`id`  WHERE o.`status` = 1 AND p.isTest = 0)";
         return Yii::$app->db->createCommand($sql, ['date' => $date])->queryScalar();
     }
 
@@ -309,7 +309,7 @@ class Perf extends ActiveRecord
     //获取当天投资用户
     public function getDayInvestor($date)
     {
-        $investor = Yii::$app->db->createCommand('SELECT DISTINCT(uid) FROM online_order WHERE status=1 AND DATE(FROM_UNIXTIME(created_at))=:date')
+        $investor = Yii::$app->db->createCommand('SELECT DISTINCT(o.uid) FROM online_order AS o INNER JOIN online_product AS p ON o.`online_pid` = p.`id` WHERE o.status=1 AND p.isTest=0 AND DATE(FROM_UNIXTIME(o.created_at))=:date')
             ->bindValue('date', $date, \PDO::PARAM_STR)
             ->queryAll();
         return ArrayHelper::getColumn($investor, 'uid');
@@ -318,7 +318,7 @@ class Perf extends ActiveRecord
     //当日注册当日投资用户
     public function getDayNewRegisterAndInvestor($date)
     {
-        $investor = Yii::$app->db->createCommand('SELECT DISTINCT(o.uid) FROM online_order AS o LEFT JOIN `user` AS u ON o.uid = u.id WHERE o.`status`= 1 AND DATE(FROM_UNIXTIME(u.`created_at`)) = :date AND DATE(FROM_UNIXTIME(o.created_at)) = :date')
+        $investor = Yii::$app->db->createCommand('SELECT DISTINCT(o.uid) FROM online_order AS o LEFT JOIN `user` AS u ON o.uid = u.id INNER JOIN online_product AS p ON o.`online_pid` = p.`id` WHERE o.`status`= 1 AND p.isTest = 0 AND DATE(FROM_UNIXTIME(u.`created_at`)) = :date AND DATE(FROM_UNIXTIME(o.created_at)) = :date')
             ->bindValue('date', $date, \PDO::PARAM_STR)
             ->queryAll();
         return ArrayHelper::getColumn($investor, 'uid');
@@ -327,11 +327,11 @@ class Perf extends ActiveRecord
     //新增投资用户（以前注册未投资，但今日投资了的）
     public function getDayNewInvestor($date)
     {
-        $totalInvestor = Yii::$app->db->createCommand('SELECT DISTINCT(o.uid) FROM online_order AS o LEFT JOIN `user` AS u ON o.uid = u.id WHERE o.`status`= 1 AND DATE(FROM_UNIXTIME(u.`created_at`)) < :date AND DATE(FROM_UNIXTIME(o.created_at))<=:date')
+        $totalInvestor = Yii::$app->db->createCommand('SELECT DISTINCT(o.uid) FROM online_order AS o LEFT JOIN `user` AS u ON o.uid = u.id INNER JOIN online_product AS p ON o.`online_pid` = p.`id` WHERE o.`status`= 1 AND p.isTest=0 AND DATE(FROM_UNIXTIME(u.`created_at`)) < :date AND DATE(FROM_UNIXTIME(o.created_at))<=:date')
             ->bindValue('date', $date, \PDO::PARAM_STR)
             ->queryAll();
         $totalInvestor = ArrayHelper::getColumn($totalInvestor, 'uid');
-        $investor = Yii::$app->db->createCommand('SELECT DISTINCT(o.uid) FROM online_order AS o LEFT JOIN `user` AS u ON o.uid = u.id WHERE o.`status`= 1 AND DATE(FROM_UNIXTIME(u.`created_at`)) < :date AND DATE(FROM_UNIXTIME(o.created_at)) <:date')
+        $investor = Yii::$app->db->createCommand('SELECT DISTINCT(o.uid) FROM online_order AS o LEFT JOIN `user` AS u ON o.uid = u.id INNER JOIN online_product AS p ON o.`online_pid` = p.`id` WHERE o.`status`= 1 AND p.isTest = 0 AND DATE(FROM_UNIXTIME(u.`created_at`)) < :date AND DATE(FROM_UNIXTIME(o.created_at)) <:date')
             ->bindValue('date', $date, \PDO::PARAM_STR)
             ->queryAll();
         $investor = ArrayHelper::getColumn($investor, 'uid');
@@ -341,7 +341,7 @@ class Perf extends ActiveRecord
     //获取已投用户登录的用户
     public function getDayInvestAndLogin($date)
     {
-        $sql = "SELECT id FROM `user` WHERE `type` = 1 AND DATE(FROM_UNIXTIME(last_login)) = :date AND id  IN (SELECT DISTINCT uid FROM online_order WHERE `status` = 1)";
+        $sql = "SELECT id FROM `user` WHERE `type` = 1 AND DATE(FROM_UNIXTIME(last_login)) = :date AND id  IN (SELECT DISTINCT o.uid FROM online_order AS o INNER JOIN online_product AS p ON o.`online_pid` = p.`id` WHERE o.`status` = 1 AND p.isTest = 0)";
         $res = Yii::$app->db->createCommand($sql, ['date' => $date])->queryAll();
         return ArrayHelper::getColumn($res, 'id');
     }
@@ -349,7 +349,7 @@ class Perf extends ActiveRecord
     //获取未投有用户登录的用户
     public function getDayNotInvestAndLogin($date)
     {
-        $sql = "SELECT id FROM `user` WHERE `type` = 1 AND DATE(FROM_UNIXTIME(last_login)) = :date AND id NOT IN (SELECT DISTINCT uid FROM online_order WHERE `status` = 1)";
+        $sql = "SELECT id FROM `user` WHERE `type` = 1 AND DATE(FROM_UNIXTIME(last_login)) = :date AND id NOT IN (SELECT DISTINCT o.uid FROM online_order AS o INNER JOIN online_product AS p ON o.`online_pid` = p.`id` WHERE o.`status` = 1 and p.isTest = 0)";
         $res = Yii::$app->db->createCommand($sql, ['date' => $date])->queryAll();
         return ArrayHelper::getColumn($res, 'id');
     }
@@ -362,7 +362,7 @@ class Perf extends ActiveRecord
         $date = date('Y-m');
         $result = [];
         while ($startDate <= $date) {
-            $sql = "SELECT COUNT(DISTINCT uid) FROM online_order WHERE `status`=1  AND DATE_FORMAT(FROM_UNIXTIME(created_at),'%Y-%m')= :date";
+            $sql = "SELECT COUNT(DISTINCT o.uid) FROM online_order AS o INNER JOIN online_product AS p ON o.`online_pid` = p.`id` WHERE o.`status`=1  AND DATE_FORMAT(FROM_UNIXTIME(o.created_at),'%Y-%m')= :date";
             $res = Yii::$app->db->createCommand($sql, ['date' => $startDate])->queryScalar();
             $result[$startDate] = $res;
             $startDate = (new \DateTime($startDate))->add(new \DateInterval('P1M'))->format('Y-m');

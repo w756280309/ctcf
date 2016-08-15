@@ -175,7 +175,8 @@ class DatatjController extends BaseController
 
         //统计，PC、wap、APP、微信的注册人数、购买人数、购买金额
         $registerData = Yii::$app->db->createCommand("SELECT COUNT(*) AS c,regFrom AS f FROM `user` WHERE `type` = 1  GROUP BY f ORDER BY f ASC")->queryAll();//不同来源的注册数
-        $investorData = Yii::$app->db->createCommand("SELECT COUNT(DISTINCT uid) AS c ,SUM(o.order_money) AS m ,o.investFrom AS f FROM online_order AS o WHERE o.status = 1 GROUP BY f ORDER BY f ASC")->queryAll();//不同来源的购买人数、购买金额
+        $investorData = Yii::$app->db->createCommand("SELECT COUNT(DISTINCT uid) AS c ,SUM(o.order_money) AS m ,o.investFrom AS f FROM online_order AS o INNER JOIN online_product AS p ON o.online_pid = p.id WHERE o.status = 1 AND p.isTest = 0
+ GROUP BY f ORDER BY f ASC")->queryAll();//不同来源的购买人数、购买金额
         return $this->render('huizongtj', [
             'totalTotalInve' => $total['totalTotalInve'] + $today['totalInvestment'],//平台累计交易额
             'totalRechargeCost' => $total['totalRechargeCost'] + $today['rechargeCost'],//累计充值手续费
