@@ -780,7 +780,7 @@
             "source": {
                 "type": "git",
                 "url": "ssh://vcs@dx.wangcaigu.cn/diffusion/DINGNOTIFY/dingnotify.git",
-                "reference": "88891a4f1782ac4512191f2f96b9f4e66c334e75"
+                "reference": "15b81201c6b7373a7939d6bea3b81f92e3b76ca7"
             },
             "require": {
                 "php": ">=5.5.0"
@@ -801,7 +801,7 @@
                 }
             ],
             "description": "旺财谷钉钉插件",
-            "time": "2016-07-26 09:28:44"
+            "time": "2016-07-29 02:24:13"
         },
         {
             "name": "yiisoft/yii2",
