@@ -63,7 +63,7 @@ class UserBanks extends \yii\db\ActiveRecord
             [['uid', 'bank_id', 'account', 'card_number', 'account_type'], 'required', 'on' => 'step_first'],
             [['bank_id', 'card_number'], 'required', 'on' => 'org_insert'],
             [['card_number'], 'checkCardNumber', 'on' => ['step_first', 'org_insert']],
-            [['card_number'], 'unique', 'message' => '该银行卡号已被占用', 'on' => ['step_first', 'org_insert']],
+            [['card_number'], 'unique', 'message' => '该银行卡号已被占用', 'on' => 'org_insert'],
             [['mobile'], CnMobileValidator::className(), 'on' => 'step_first'],
             [['sub_bank_name', 'province', 'city'], 'required', 'on' => 'step_second'],
             [['uid', 'account_type'], 'integer'],
