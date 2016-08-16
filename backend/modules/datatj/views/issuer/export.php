@@ -1,5 +1,6 @@
 <?php
 use common\utils\StringUtils;
+use common\view\LoanHelper;
 ?>
 
 <table border='1'>
@@ -10,8 +11,10 @@ use common\utils\StringUtils;
         <th>项目名称</th>
         <th>项目编号</th>
         <th>项目状态</th>
+        <th>备案金额（元）</th>
         <th>募集金额（元）</th>
         <th>实际募集金额（元）</th>
+        <th>年化收益率（%）</th>
         <th>开始融资时间</th>
         <th>满标时间</th>
         <th>起息日</th>
@@ -30,8 +33,10 @@ use common\utils\StringUtils;
                     <td><?= $val->title ?></td>
                     <td><?= $val->issuerSn ?></td>
                     <td><?= \Yii::$app->params['deal_status'][$val->status] ?></td>
+                    <td><?= StringUtils::amountFormat2($val->filingAmount) ?></td>
                     <td><?= StringUtils::amountFormat2($val->money) ?></td>
-                    <td class="text-align-rg"><?= StringUtils::amountFormat2($val->funded_money) ?></td>
+                    <td><?= StringUtils::amountFormat2($val->funded_money) ?></td>
+                    <td style="text-align: right;"><?= LoanHelper::getDealRate($val) ?></td>
                     <td><?= empty($val->start_date) ? '---' : date('Y-m-d', $val->start_date) ?></td>
                     <td><?= empty($val->full_time) ? '---' : date('Y-m-d', $val->full_time) ?></td>
                     <td><?= empty($val->jixi_time) ? '---' : date('Y-m-d', $val->jixi_time) ?></td>
@@ -49,8 +54,10 @@ use common\utils\StringUtils;
                 <td><?= $val->title ?></td>
                 <td><?= $val->issuerSn ?></td>
                 <td><?= \Yii::$app->params['deal_status'][$val->status] ?></td>
+                <td><?= StringUtils::amountFormat2($val->filingAmount) ?></td>
                 <td><?= StringUtils::amountFormat2($val->money) ?></td>
-                <td class="text-align-rg"><?= StringUtils::amountFormat2($val->funded_money) ?></td>
+                <td><?= StringUtils::amountFormat2($val->funded_money) ?></td>
+                <td style="text-align: right;"><?= LoanHelper::getDealRate($val) ?></td>
                 <td><?= empty($val->start_date) ? '---' : date('Y-m-d', $val->start_date) ?></td>
                 <td><?= empty($val->full_time) ? '---' : date('Y-m-d', $val->full_time) ?></td>
                 <td><?= empty($val->jixi_time) ? '---' : date('Y-m-d', $val->jixi_time) ?></td>

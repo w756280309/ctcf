@@ -47,8 +47,7 @@ class IssuerController extends BaseController
         header("Expires: 0");
 
         $this->layout = false;
-        $str = iconv('utf-8', 'GB18030', $this->render('export', $record));//转换编码
-        echo $str;
+        echo $this->render('export', $record);
     }
 
     private function getRecord($id = null, $pageNum = null)

@@ -107,7 +107,7 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
             'create' => ['title', 'sn', 'cid', 'money', 'borrow_uid', 'expires', 'expires_show', 'yield_rate', 'start_money', 'borrow_uid', 'fee', 'status',
                 'description', 'refund_method', 'account_name', 'account', 'bank', 'dizeng_money', 'start_date', 'end_date', 'full_time',
                 'is_xs', 'yuqi_faxi', 'order_limit', 'creator_id', 'del_status', 'status', 'isPrivate', 'allowedUids', 'finish_date', 'channel', 'jixi_time', 'sort',
-                'jiaxi', 'kuanxianqi', 'graceDays', 'isFlexRate', 'rateSteps', 'issuer', 'issuerSn', 'paymentDay', 'isTest'],
+                'jiaxi', 'kuanxianqi', 'graceDays', 'isFlexRate', 'rateSteps', 'issuer', 'issuerSn', 'paymentDay', 'isTest', 'filingAmount'],
         ];
     }
 
@@ -201,7 +201,7 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
             ['sn', 'unique', 'message' => '编号已占用'],
             [['expires_show'], 'string', 'max' => 50],
             [['del_status', 'funded_money'], 'default', 'value' => 0],
-            [['money', 'start_money', 'dizeng_money', 'yuqi_faxi', 'fee'], 'double'],
+            [['money', 'start_money', 'dizeng_money', 'yuqi_faxi', 'fee', 'filingAmount'], 'double'],
             [['yuqi_faxi', 'fee'], 'compare', 'compareValue' => 0, 'operator' => '>='],
             [['money'], 'compare', 'compareValue' => 0, 'operator' => '>'],
             [['start_money'], 'compare', 'compareAttribute' => 'money', 'operator' => '<', 'type' => "number"],//以数字做比较

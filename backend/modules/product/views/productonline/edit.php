@@ -388,6 +388,19 @@ $is_online = in_array($model->status, [2, 3, 4, 5, 6, 7]);//判断标的是否�
         </div>
 
         <div class="row-fluid">
+            <div class="span6">
+                <div class="control-group">
+                    <label class="control-label">备案金额</label>
+                    <div class="controls">
+                        <?=
+                            $form->field($model, 'filingAmount', ['template' => '<div class="input-append"><span class="add-on">￥</span>{input}<span class="add-on">元</span></div>{error}', 'inputOptions' => ['autocomplete' => 'off', 'placeholder' => '备案金额']])->textInput(['class' => 'm-wrap span12'])
+                        ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row-fluid">
             <div class="span6 ">
                 <div class="control-group">
                     <label class="control-label">起投金额</label>
