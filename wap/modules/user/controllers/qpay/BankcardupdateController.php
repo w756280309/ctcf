@@ -1,13 +1,12 @@
 <?php
 namespace app\modules\user\controllers\qpay;
 
-use Yii;
-use yii\web\Response;
 use app\controllers\BaseController;
 use common\models\bank\BankCardUpdate;
 use common\models\bank\BankManager;
 use common\models\bank\QpayConfig;
 use common\utils\TxUtils;
+use Yii;
 
 class BankcardupdateController extends BaseController
 {
