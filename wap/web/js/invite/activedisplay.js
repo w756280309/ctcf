@@ -18,7 +18,10 @@ $(document).ready(function () {
 
         xhr.done(function(data) {
             if (typeof data.isLoggedin !== 'undefined' && data.isLoggedin) {
-                alert('您已注册，快去邀请好友，共享实惠');
+                var conf = confirm('您已注册，快去邀请好友，共享实惠');
+                if (conf) {
+                    location.href = '/';
+                }
                 return false;
             }
             location.href = _this.attr('href');
