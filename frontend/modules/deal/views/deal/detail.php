@@ -154,8 +154,8 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/useraccount/chargedeposit.css');
                             <div class="tishi tishi-dev">
                                 <img class="jiao-left" src="/images/deal/jiao-right.png" alt="">
                                 <ul class="dR-tishi">
-                                    <li><span>起投金额<?= StringUtils::amountFormat2($deal->start_money) ?>元</span></li>
-                                    <li><span>递增金额<?= StringUtils::amountFormat2($deal->dizeng_money) ?>元</span></li>
+                                    <li><span>起投<?= StringUtils::amountFormat2($deal->start_money) ?>元</span></li>
+                                    <li><span>递增<?= StringUtils::amountFormat2($deal->dizeng_money) ?>元</span></li>
                                 </ul>
                             </div>
                             <!--输入款错误提示信息-->
