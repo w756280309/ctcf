@@ -16,7 +16,6 @@ $(function(){
         //判断域名,用以区别是否是app内嵌网页
         var protocol = window.location.protocol;
         var host = window.location.host.toLocaleLowerCase();
-        alert(invite_url);
         if(host.substr(0,4)==='app.') {
             //分享四要素(标题+描述+链接地址+图标地址)
             var title = '注册领50元代金券，温都金服理财，亲测靠谱！';
@@ -29,6 +28,7 @@ $(function(){
                 window.webkit.messageHandlers.share.postMessage(shareObj);
             } else if(browser.versions.android) {
                 //android 设备
+                var shareAction;
                 shareAction.share(shareObj);
             } else {
                 //其它
