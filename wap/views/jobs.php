@@ -9,7 +9,7 @@ $this->showIndexBottomNav = true;
 <div class="zhaopin-content">
     <div class="zhaopin-list">
         <div>
-            <span class="span-first">招聘岗位：</span>
+            <span class="span-first">岗位：</span>
             <span>理财顾问</span>
         </div>
         <div>
@@ -33,7 +33,7 @@ $this->showIndexBottomNav = true;
     <hr>
     <div class="zhaopin-list">
         <div>
-            <span class="span-first">招聘岗位：</span>
+            <span class="span-first">岗位：</span>
             <span>文案策划</span>
         </div>
         <div>
@@ -56,7 +56,7 @@ $this->showIndexBottomNav = true;
     <hr>
     <div class="zhaopin-list">
         <div>
-            <span class="span-first">招聘岗位：</span>
+            <span class="span-first">岗位：</span>
             <span>平面设计师</span>
         </div>
         <div>
@@ -81,7 +81,7 @@ $this->showIndexBottomNav = true;
     <hr>
     <div class="zhaopin-list">
         <div>
-            <span class="span-first">招聘岗位：</span>
+            <span class="span-first">岗位：</span>
             <span>客服门店专员</span>
         </div>
         <div>
@@ -104,7 +104,7 @@ $this->showIndexBottomNav = true;
     <hr>
     <div class="zhaopin-list">
         <div>
-            <span class="span-first">招聘岗位：</span>
+            <span class="span-first">岗位：</span>
             <span>客服微电专员</span>
         </div>
         <div>
@@ -127,7 +127,7 @@ $this->showIndexBottomNav = true;
     <hr>
     <div class="zhaopin-list">
         <div>
-            <span class="span-first">招聘岗位：</span>
+            <span class="span-first">岗位：</span>
             <span>高级运营经理</span>
         </div>
         <div>
