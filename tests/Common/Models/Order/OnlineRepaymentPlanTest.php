@@ -207,9 +207,9 @@ class OnlineRepaymentPlanTest extends YiiAppTestCase
 
         $this->assertEquals([
             ['2016-12-20', 0, '213.97'],
-            ['2017-12-20', 0, '549.99'],
-            ['2018-12-20', 0, '549.99'],
-            ['2019-07-31', 10000, '336.05'],
+            ['2017-12-20', 0, '550'],
+            ['2018-12-20', 0, '550'],
+            ['2019-07-31', 10000, '336.03'],
         ], OnlineRepaymentPlan::calcBenxi($ord));
     }
 

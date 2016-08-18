@@ -106,9 +106,8 @@ class OnlineRepaymentPlan extends \yii\db\ActiveRecord
     {
         bcscale(14);
         $bc = new BcRound();
-        if (OnlineProduct::REFUND_METHOD_DAOQIBENXI === (int) $loan->refund_method) {
-            //到期本息
-            return $bc->bcround(bcmul($ord->order_money, bcmul($loan->expires, bcdiv($ord->yield_rate, 365))), 2);  //以订单里面的利率为准
+        if (OnlineProduct::REFUND_METHOD_DAOQIBENXI === (int) $loan->refund_method) {   //到期本息
+            return $bc->bcround(bcdiv(bcmul($ord->order_money, bcmul($loan->expires, $ord->yield_rate)), 365), 2);  //以订单里面的利率为准
         } else {
             return $bc->bcround(bcdiv(bcmul(bcmul($ord->order_money, $ord->yield_rate), $loan->expires), 12), 2);
         }
@@ -244,7 +243,7 @@ class OnlineRepaymentPlan extends \yii\db\ActiveRecord
                 throw new \Exception();
             }
 
-            $lixi = $bc->bcround(bcmul($ord->order_money, bcmul($ord->loan->expires, bcdiv($ord->yield_rate, 365))), 2);
+            $lixi = $bc->bcround(bcdiv(bcmul($ord->order_money, bcmul($ord->loan->expires, $ord->yield_rate)), 365), 2);
 
             return [
                 [
@@ -281,7 +280,7 @@ class OnlineRepaymentPlan extends \yii\db\ActiveRecord
                     }
 
                     $refundDays = (new \DateTime($startDay))->diff(new \DateTime($val))->days;    //应还款天数
-                    $lixi = bcmul($totalLixi, bcdiv($refundDays, $totalDays), 2);
+                    $lixi = bcdiv(bcmul($totalLixi, $refundDays), $totalDays, 2);
                 } else {
                     $lixi = bcdiv($totalLixi, $qishu, 2);    //普通计息和自然计息都按照14位精度严格计算,即从小数位后第三位舍去
                 }
