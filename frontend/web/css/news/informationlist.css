@@ -73,3 +73,28 @@
 .pagination-content {
     width: 100%;
 }
+.gangwei {
+    margin: 20px;
+    color: #6e6e72;
+    text-align: center;
+}
+.gangwei tr {
+    border:1px solid #e3e3e3;
+}
+.gangwei .tr-first {
+    font-size: 16px;
+    line-height: 40px;
+}
+.gangwei tr td {
+    border:1px solid #e3e3e3;
+}
+.gangwei tr .td-last {
+    text-align: left;
+    padding-left: 5px;
+}
+.gangwei tr .td-last .p-first{
+    padding-top: 5px;
+}
+.gangwei tr .td-last .p-last{
+    padding-bottom: 5px;
+}
