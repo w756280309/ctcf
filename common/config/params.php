@@ -134,4 +134,15 @@ return [
 
     'baidu_tongji_key' => '',   //温都金服百度统计key
     'ga_tracking_id' => '',  //GA跟踪ID
+
+    /* 债券相关配置信息 */
+    'credit_trade' => [
+        'hold_days' => 30,   //持有天数
+        'max_discount_rate' => 3,    //最高折让率
+        'trade_count_limit' => 1,    //可转让次数
+        'fee_rate' => 0.003,    //手续费费率
+        'min_order_amount' => 1000,     //起投金额
+        'incr_order_amount' => 1000,    //递增金额
+        'listing_duration' => 3,   //转让周期
+    ],
 ];
