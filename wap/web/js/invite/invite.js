@@ -27,9 +27,8 @@ $(function(){
                 //苹果设备
                 window.webkit.messageHandlers.share.postMessage(shareObj);
             } else if(browser.versions.android) {
-                //android 设备
-                var shareAction;
-                shareAction.share(shareObj);
+                //android 设备,四个参数位置不可颠倒
+                window.shareAction.share(title,des,linkurl,thumurl);
             } else {
                 //其它
                 $('.mark-box').show();
@@ -43,7 +42,7 @@ $(function(){
     $('.share-box').on('click',function(){
         $('.mark-box').hide();
         $('.share-box').hide();
-    })
+    });
 });
 //判断终端类型(ios/android)
 var browser={
