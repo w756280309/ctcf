@@ -52,7 +52,7 @@ $bid = (int)Yii::$app->request->get('bid');
                     <tr>
                         <td colspan="7">
                             <div>
-                                总交易量：<span><?= $totalmoney*10000 ?></span>元
+                                总交易量：<span><?= number_format($totalmoney, 2) ?></span>万元
                             </div>
                         </td>
                     </tr>
