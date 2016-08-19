@@ -28,6 +28,7 @@ $action = Yii::$app->controller->action->getUniqueId();
                 <li class="<?= 'helpcenter/about' === $action ? 'selected' : '' ?>"><a href="/helpcenter/about/"><span class="star"></span>关于我们</a></li>
                 <li class="<?= 'helpcenter/advantage' === $action ? 'selected' : '' ?>"><a href="/helpcenter/advantage/"><span class="star"></span>平台优势</a></li>
                 <li class="<?= 'helpcenter/contact' === $action ? 'selected' : '' ?>"><a href="/helpcenter/contact/"><span class="star"></span>联系我们</a></li>
+                <li class="<?= 'jobs/index' === $action ? 'selected' : '' ?>"><a href="/jobs/"><span class="star"></span>加入我们</a></li>
             </ul>
         </li>
     </ul>

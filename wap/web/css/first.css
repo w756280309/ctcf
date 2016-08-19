@@ -652,3 +652,10 @@ nav li.first {
 .rate-steps {
     font-size: 25px !important;
 }
+.zhaopin-content {
+     background-color: #fff;
+     padding:10px 10px;
+ }
+.span-first {
+    color:#161616;
+}
