@@ -94,5 +94,8 @@ return [
         'adminupload' => [
             'class' => 'backend\modules\adminupload\Module',
         ],
+        'offline' => [
+            'class' => 'backend\modules\offline\Module',
+        ],
     ],
 ];

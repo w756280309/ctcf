@@ -22,7 +22,8 @@
         "gregwar/captcha": "1.1.1",
         "knplabs/knp-snappy": "^0.4.3",
         "h4cc/wkhtmltopdf-amd64": "0.12.x",
-        "wcg/dingnotify": "dev-master"
+        "wcg/dingnotify": "dev-master",
+        "phpoffice/phpexcel": "1.8.1"
     },
     "require-dev": {
         "yiisoft/yii2-codeception": "*",
