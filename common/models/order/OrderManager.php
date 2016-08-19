@@ -3,6 +3,7 @@
 namespace common\models\order;
 
 use common\models\promo\InviteRecord;
+use common\models\user\UserAsset;
 use common\models\user\UserInfo;
 use Yii;
 use Exception;
@@ -405,6 +406,13 @@ class OrderManager
             'message' => json_encode($message),
         ]);
         $sms->save();
+
+        //投资成功之后同步用户资源表
+        if ($order->status === 1) {
+            $userAsset = UserAsset::initUserAssetFromOrder($order);
+            $userAsset->save();
+        }
+
         $transaction->commit();
 
         //投资成功之后更新用户信息
