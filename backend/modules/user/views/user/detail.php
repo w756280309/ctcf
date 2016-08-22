@@ -65,7 +65,7 @@ use common\utils\StringUtils;
             </ul>
             <ul class="breadcrumb_detail">
                 <li><span>免密支付</span><?= $userinfo['mianmiStatus'] ? "已开通" : "未开通" ?></li>
-                <li><span>绑定银行卡</span><?= $userinfo->qpay ? "已开通" : "未开通" ?></li>
+                <li><span>绑定银行卡</span><?= $userinfo->qpay ? "已开通" : "未开通" ?>&nbsp;&nbsp;&nbsp;<a href="/user/bank-card/list?uid=<?= $userinfo->id ?>">查看</a></li>
             </ul>
             <ul class="breadcrumb_detail">
                 <li><span>注册渠道</span>
@@ -109,7 +109,7 @@ use common\utils\StringUtils;
             </ul>
             <hr />
         </div>
-    <?php }else{?>
+    <?php } else { ?>
 
         <div class="portlet-body">
             <div class="detail_font">会员账户详情</div>

@@ -37,20 +37,9 @@ return [
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
-//        'as beforeRequest' => [
-//            'class' => 'yii\filters\AccessControl',
-//            'rules' => [
-//                [
-//                    'actions' => ['login', 'error'],
-//                    'allow' => true,
-//                ],
-//                [
-//
-//                    'allow' => true,
-//                    'roles' => ['@'],
-//                ],
-//            ],
-//        ],
+    ],
+    'as requestBehavior' => [
+        'class' => \common\components\RequestBehavior::className(),
     ],
     'params' => $params,
     'defaultRoute' => '/frame/index',
