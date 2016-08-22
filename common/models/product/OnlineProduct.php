@@ -218,6 +218,11 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
             [['start_date', 'end_date', 'finish_date'], 'checkDate'],
             ['isFlexRate', 'integer'],
             ['rateSteps', 'string', 'max' => 500],
+            ['rateSteps', 'required', 'when' => function ($model) {
+                return $model->isFlexRate == 1;
+            },  'whenClient' => "function (attribute, value) {
+                return $('#onlineproduct-isflexrate').parent().hasClass('checked');
+            }"],
             [['rateSteps'], 'checkRateSteps'],
             ['paymentDay', 'integer'],
             ['paymentDay', 'default', 'value' => 20],    //固定还款日,默认值每月20号,范围为1到28
@@ -271,7 +276,7 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
             $this->addError('start_date', '募集开始时间小于募集结束时间小于项目结束日');
             $this->addError('end_date', '募集开始时间小于募集结束时间小于项目结束日');
         }
-        if (null !== $this->finish_date && '' !== $this->finish_date && 0 !== $this->finish_date) {
+        if (null !== $this->finish_date && '' !== $this->finish_date && 0 != $this->finish_date) {
             $finish = is_integer($this->finish_date) ? $this->finish_date : strtotime($this->finish_date);
             if ($start > $finish) {
                 $this->addError('start_date', '募集开始时间小于募集结束时间小于项目结束日');

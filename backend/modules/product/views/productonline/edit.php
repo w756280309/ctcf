@@ -295,6 +295,7 @@ $is_online = in_array($model->status, [2, 3, 4, 5, 6, 7]);//判断标的是否�
                 <div class="control-group">
                     <label class="control-label">产品到期日<span style="color: red;">(<?= $desc ?>)</span></label>
                     <div class="controls">
+                        <?= $form->field($model, 'finish_date', ['template'=>'{input}'])->hiddenInput(['value' => 0, 'id' => 'finish_date_hide'])->label(false)?>
                         <?php
                             $fd_input_option = ['autocomplete' => 'off', 'placeholder' => '产品到期日'];
                             if (!$model->is_fdate || $is_online){
@@ -311,8 +312,14 @@ $is_online = in_array($model->status, [2, 3, 4, 5, 6, 7]);//判断标的是否�
                                 'onclick' => 'WdatePicker({dateFmt:"yyyy-MM-dd HH:mm",minDate:\''.date('Y-m-d').'\'});'
                                 ])
                         ?>
+                        <?php
+                        $fd_input_option = [];
+                        if ($is_online){
+                            $fd_input_option = array_merge($fd_input_option, ['disabled' => 'disabled']);
+                        }
+                        ?>
                         <?=
-                        $form->field($model, 'is_fdate', ['template' => '{input}', 'inputOptions' => ['autocomplete' => 'on']])->checkbox();
+                        $form->field($model, 'is_fdate', ['template' => '{input}', 'inputOptions' => ['autocomplete' => 'on']])->checkbox($fd_input_option);
                         ?>
                     </div>
                 </div>
@@ -322,8 +329,15 @@ $is_online = in_array($model->status, [2, 3, 4, 5, 6, 7]);//判断标的是否�
                 <div class="control-group">
                     <label class="control-label">项目宽限期</label>
                     <div class="controls">
+                        <?php
+                        $fd_input_option = ['autocomplete' => 'off', 'placeholder' => '默认0天'];
+                        if (!$model->is_fdate || $is_online){
+                            $fd_input_option = array_merge($fd_input_option, ['disabled' => 'disabled']);
+                        }
+                        ?>
+                        <?= $form->field($model, 'kuanxianqi', ['template'=>'{input}'])->hiddenInput(['value' => 0, 'id' => 'kuanxianqi_hide'])->label(false)?>
                         <?=
-                        $form->field($model, 'kuanxianqi', ['template' => '<div class="input-append">{input}<span class="add-on">(天)</span></div>{error}', 'inputOptions' => ['autocomplete' => 'off', 'placeholder' => '默认0天', 'disabled' => 'disabled']])->textInput(['class' => 'm-wrap span6'])
+                        $form->field($model, 'kuanxianqi', ['template' => '<div class="input-append">{input}<span class="add-on">(天)</span></div>{error}', 'inputOptions' => $fd_input_option])->textInput(['class' => 'm-wrap span6'])
                         ?>
                     </div>
                 </div>
@@ -608,7 +622,8 @@ $is_online = in_array($model->status, [2, 3, 4, 5, 6, 7]);//判断标的是否�
         //是否使用浮动利率设置。如果勾选，浮动利率可以填写。
         var isFlexRate = $('#onlineproduct-isflexrate');
         var rateSteps = $('#onlineproduct-ratesteps');
-        if(!rateSteps.val()){
+        var isFlex = <?= intval($model->isFlexRate)?>;
+        if(!isFlex){
             rateSteps.val('');
             rateSteps.attr('disabled', 'disabled');
         }
