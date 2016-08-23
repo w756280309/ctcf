@@ -39,7 +39,7 @@ $bid = (int)Yii::$app->request->get('bid');
                             <select name="bid" style="margin-left:5px;">
                                 <option value="">全部</option>
                                 <?php foreach($branches as $branch) : ?>
-                                    <option value="<?= $branch->id ?>" <?php if($bid === $branch->id){ ?> selected="selected" <?php } ?>><?= $branch->branchName ?></option>
+                                    <option value="<?= $branch->id ?>" <?php if($bid === $branch->id){ ?> selected="selected" <?php } ?>><?= $branch->name ?></option>
                                 <?php endforeach;?>
                             </select>
                         </td>
@@ -82,7 +82,7 @@ $bid = (int)Yii::$app->request->get('bid');
                             <?= $order->id ?>
                         </td>
                         <td style="text-align: center">
-                            <?= $order->branch->branchName ?>
+                            <?= $order->affliator->name ?>
                         </td>
                         <td style="text-align: center">
                             <?= $order->loan->title ?>

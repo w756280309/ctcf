@@ -3,7 +3,7 @@
 namespace common\models\offline;
 
 use yii\db\ActiveRecord;
-use common\models\salebranch\SaleBranch;
+use common\models\affiliation\Affiliator;
 use common\models\offline\OfflineLoan;
 use Zii\Validator\CnMobileValidator;
 
@@ -12,8 +12,8 @@ class OfflineOrder extends ActiveRecord
     public function rules()
     {
         return [
-            [['branch_id', 'loan_id', 'realName', 'mobile', 'money', 'orderDate', 'created_at'], 'required'],
-            [['branch_id', 'loan_id', 'created_at'], 'integer'],
+            [['affiliator_id', 'loan_id', 'realName', 'mobile', 'money', 'orderDate', 'created_at'], 'required'],
+            [['affiliator_id', 'loan_id', 'created_at'], 'integer'],
             ['realName', 'string', 'max' => 50],
             ['money', 'number'],
             ['orderDate', 'safe'],
@@ -25,7 +25,7 @@ class OfflineOrder extends ActiveRecord
     {
         return [
             'id' => 'ID',
-            'branch_id' => '网点ID',
+            'affiliator_id' => '分销商ID',
             'loan_id' => '线下产品ID',
             'realName' => '姓名',
             'mobile' => '联系电话',
@@ -35,9 +35,9 @@ class OfflineOrder extends ActiveRecord
         ];
     }
 
-    public function getBranch()
+    public function getAffliator()
     {
-        return $this->hasOne(SaleBranch::className(), ['id' => 'branch_id']);
+        return $this->hasOne(Affiliator::className(), ['id' => 'affiliator_id']);
     }
 
     public function getLoan()
