@@ -3,31 +3,93 @@
 namespace Ding;
 
 
-use DingNotify\Client\Service;
+use DingNotify\Client\Client;
+use DingNotify\Client\Text;
 
 class DingNotify
 {
-    public $corpid = 'ding9c03c9121e27baf4';
-    public $corpsecret = 'FZ2JybJ-t5oKYAZWd0Fm6N1kIIDGt1en0EtTP_ggDus_6gsvNiEpwRO_iF1vlvwb';
-    public $agentid = '17714114';
-    public $log_path ;
+    public $corpid;
+    public $corpsecret;
+    public $agentid;
+    public $chatId;
+    public $user;
+    public $log_path;
 
-    private $_config;
-    private $_service;
+    private $_client;
 
-    public function __construct()
+    public function __construct($company = 'wdjf')
     {
+        $config = \Yii::$app->params['ding_config'][$company];
+        if (!$config) {
+            return false;
+        }
         $this->log_path = __DIR__ . '/../../console/runtime/ding/';
         if (!file_exists($this->log_path)) {
             @mkdir($this->log_path);
         }
-        $this->_config = ['corpid' => $this->corpid, 'corpsecret' => $this->corpsecret, 'agentid' => $this->agentid, 'log_path' => $this->log_path];
-        $this->_service = new Service($this->_config);
+        if (isset($config['corp_id'])) {
+            $this->corpid = $config['corp_id'];
+        }
+        if (isset($config['corp_secret'])) {
+            $this->corpsecret = $config['corp_secret'];
+        }
+        if (isset($config['agent_id'])) {
+            $this->agentid = $config['agent_id'];
+        }
+        if (isset($config['chat_id'])) {
+            $this->chatId = $config['chat_id'];
+        }
+        if (isset($config['user'])) {
+            $this->user = $config['user'];
+        }
+        $client = new Client(['corpid' => $this->corpid, 'corpsecret' => $this->corpsecret, 'agentid' => $this->agentid, 'log_path' => $this->log_path]);
+        $client = $client->initNew();
+        $this->_client = $client;
     }
 
-    //向指定钉钉群发送消息
-    public function sendMessage($message)
+    //钉钉向群发送消息服务
+    public function charSentText($content)
     {
-        $this->_service->charSentText($message);
+        $client = $this->_client;
+        $text = new Text($content);
+        $client->chatSend($this->chatId, $this->user, $text);
+    }
+
+
+    //创建群
+    public function chatCreate($chatName)
+    {
+        if ($chatName) {
+            $client = $this->_client;
+            return $client->chatCreate($chatName, $this->user, [$this->user]);
+        } else {
+            return null;
+        }
+    }
+
+    //获取组织架构
+    public function getDepartment()
+    {
+        $client = $this->_client;
+        return $client->getDepartment();
+    }
+
+    //获取部门成员
+    public function getDepartmentUser($department_id)
+    {
+        $client = $this->_client;
+        return $client->getDepartmentUser($department_id);
+    }
+
+    //获取所有用户
+    public function getAllUser()
+    {
+        $client = $this->_client;
+        $department = $client->getDepartment();
+        $user = [];
+        foreach ($department as $v) {
+            $user = array_merge($client->getDepartmentUser($v['id']), $user);
+        }
+        return $user;
     }
 }

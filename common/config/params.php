@@ -146,4 +146,21 @@ return [
         'incr_order_amount' => 1000,    //递增金额
         'listing_duration' => 3,   //转让周期
     ],
+    //钉钉账号相关配置
+    'ding_config' => [
+        'nj' => [
+            'corp_id' => '',//默认南京易投贷corpid
+            'corp_secret' => '',//默认南京易投贷secret
+            'agent_id' => '',//默认技术部
+            'chat_id' => '',//新建群ID，群名称：温都金服系统消息自动通知群
+            'user' => ''//默认发送消息用户id，姓名：史阳
+        ],
+        'wdjf' => [
+            'corp_id' => '',//默认温都corpid
+            'corp_secret' => '',//默认温都secret
+            'agent_id' => '',//默认运营群
+            'chat_id' => "",//新建群ID，群名称：温都系统通知群
+            'user' => ''//默认发送消息用,姓名：莫荻
+        ]
+    ]
 ];
