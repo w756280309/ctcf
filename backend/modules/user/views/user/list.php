@@ -73,7 +73,7 @@ use common\models\user\User;
                                                 未投资时长（天）: <input type="text" class="m-wrap span6" style="margin-bottom: 0px;width:50px" name='noInvestDays' value="<?= Yii::$app->request->get('noInvestDays') ?>"  placeholder="天数"/>
                                             </li>
                                             <li>
-                                                有余额未投:<input type="checkbox" name="noInvest" value="1" <?= Yii::$app->request->get('noInvest') ? 'checked' : ''?>/>
+                                                可用余额（元）:<input type="text" name="balance" value="<?= Yii::$app->request->get('balance') ?: 0 ?>" style="margin-bottom: 0px;width:55px"/>
                                             </li>
                                         </ul>
                                     </div>
@@ -211,7 +211,12 @@ use common\models\user\User;
         });
     });
     $('.menuBtn').click(function(){
-        $('.dropDownMenu').slideDown();
+        var dis = $('.dropDownMenu').css('display');
+        if (dis == 'block'){
+            $('.dropDownMenu').slideUp();
+        } else {
+            $('.dropDownMenu').slideDown();
+        }
     });
     $('body'). mouseup(function(e){
         var _con = $('.dropDownBox');   // 设置目标区域

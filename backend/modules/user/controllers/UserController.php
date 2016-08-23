@@ -61,11 +61,12 @@ class UserController extends BaseController
             $date = date('Y-m-d', strtotime('- ' . $noInvestDays . ' day'));
             $query->leftJoin('user_info', 'user_info.user_id = user.id')->andFilterWhere(['<=', 'user_info.lastInvestDate', $date]);
         }
-        //过滤有余额未投资
-        $noInvest = boolval(Yii::$app->request->get('noInvest'));
-        if ($noInvest) {
-            $query->leftJoin('user_info', 'user_info.user_id = user.id')->andFilterWhere(['isInvested' => 0])->leftJoin('user_account', 'user_account.uid = user.id')->andFilterWhere(['>', 'available_balance', 0]);
+        //过滤可用余额
+        $balance = floatval(Yii::$app->request->get('balance'));
+        if ($balance > 0) {
+            $query->innerJoin('user_account', 'user.id = user_account.uid')->andFilterWhere(['>', 'user_account.available_balance', $balance]);
         }
+        
         if ($type == User::USER_TYPE_PERSONAL) {
             $query->with('lendAccount');
             if (!empty($name)) {
