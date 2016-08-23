@@ -14,7 +14,8 @@ class AnalyticsHelper
 
         $baiduKey = \Yii::$app->params['baidu_tongji_key'];
         $gaId = \Yii::$app->params['ga_tracking_id'];
-        if (empty($baiduKey) || empty($gaId)) {
+        $ptweb_account = \Yii::$app->params['ptweb_account'];
+        if (empty($baiduKey) || empty($gaId) || empty($ptweb_account)) {
             return;
         }
 
@@ -39,6 +40,19 @@ var _hmt = _hmt || [];
 })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
 ga('create', '$gaId', '.wenjf.com');
 ga('send', 'pageview');
+
+window._pt_lt = new Date().getTime();
+window._pt_sp_2 = [];
+_pt_sp_2.push('setAccount,$ptweb_account');
+var _protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+(function() {
+var atag = document.createElement('script'); atag.type = 'text/javascript'; atag.async = true;
+atag.src = _protocol + 'js.ptengine.cn/pta.js';
+var stag = document.createElement('script'); stag.type = 'text/javascript'; stag.async = true;
+stag.src = _protocol + 'js.ptengine.cn/pts.js';
+var s = document.getElementsByTagName('script')[0];
+s.parentNode.insertBefore(atag, s); s.parentNode.insertBefore(stag, s);
+})();
 JS;
 
         $viewObj->registerJs($_js, View::POS_HEAD, 'body_close');

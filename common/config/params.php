@@ -134,6 +134,7 @@ return [
 
     'baidu_tongji_key' => '',   //温都金服百度统计key
     'ga_tracking_id' => '',  //GA跟踪ID
+    'ptweb_account' => '', //ptmind统计key
 
     /* 债券相关配置信息 */
     'credit_trade' => [
