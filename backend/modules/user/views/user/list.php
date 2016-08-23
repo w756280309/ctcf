@@ -4,7 +4,11 @@ use yii\widgets\LinkPager;
 use common\models\user\User;
 ?>
 <?php $this->beginBlock('blockmain'); ?>
-
+<style>
+    .dropDownMenu {list-style: none;padding: 5px;margin: 0px;display: none;position: absolute;}
+    .dropDownMenu li{height: 30px;line-height: 30px;}
+    .dropDownMenu li:hover {background: #eeeeff;}
+</style>
 <div class="container-fluid">
 
     <!-- BEGIN PAGE HEADER-->
@@ -50,17 +54,29 @@ use common\models\user\User;
                     <tbody>
                         <tr>
                             <?php if($category==User::USER_TYPE_PERSONAL){ ?>
-                                <td>
+                                <td  style="margin-bottom: 0px;width:60px">
                                     <span class="title">真实姓名</span>
                                 </td>
-                                <td><input type="text" class="m-wrap span6" style="margin-bottom: 0px;width:200px" name='name' value="<?= Yii::$app->request->get('name') ?>"  placeholder="真实姓名"/></td>
-                                <td><span class="title">手机号</span></td>
-                                <td>
-                                    <input type="text" class="m-wrap span6" style="margin-bottom: 0px;width:300px" name='mobile' value="<?= Yii::$app->request->get('mobile') ?>"  placeholder="手机号"/>
+                                <td  style="margin-bottom: 0px;width:200px"><input type="text" name='name' value="<?= Yii::$app->request->get('name') ?>"  placeholder="真实姓名"/></td>
+                                <td  style="margin-bottom: 0px;width:60px"><span class="title">手机号</span></td>
+                                <td style="margin-bottom: 0px;width:250px">
+                                    <input type="text"  name='mobile' value="<?= Yii::$app->request->get('mobile') ?>"  placeholder="手机号"/>
                                 </td>
-                                <td><span class="title">未投资时长（天）</span></td>
-                                <td>
-                                    <input type="text" class="m-wrap span6" style="margin-bottom: 0px;width:50px" name='noInvestDays' value="<?= Yii::$app->request->get('noInvestDays') ?>"  placeholder="天数"/>
+                                <td style="margin-bottom: 0px;width:100px">
+                                    <div class="dropDownBox">
+                                        <span class="btn btn-default menuBtn">
+                                            其他条件
+                                            <span class="caret"></span>
+                                        </span>
+                                        <ul class="dropDownMenu">
+                                            <li>
+                                                未投资时长（天）: <input type="text" class="m-wrap span6" style="margin-bottom: 0px;width:50px" name='noInvestDays' value="<?= Yii::$app->request->get('noInvestDays') ?>"  placeholder="天数"/>
+                                            </li>
+                                            <li>
+                                                有余额未投:<input type="checkbox" name="noInvest" value="1" <?= Yii::$app->request->get('noInvest') ? 'checked' : ''?>/>
+                                            </li>
+                                        </ul>
+                                    </div>
                                 </td>
                             <?php }else{?>
                                 <td>
@@ -193,7 +209,20 @@ use common\models\user\User;
         xhr.fail(function() {
             _this.removeClass("isclicked");
         });
+    });
+    $('.menuBtn').click(function(){
+        $('.dropDownMenu').slideDown();
+    });
+    $('body'). mouseup(function(e){
+        var _con = $('.dropDownBox');   // 设置目标区域
+        if(!_con.is(e.target) && _con.has(e.target).length === 0){ // Mark 1
+            var dis = $('.dropDownMenu').css('display');
+            if (dis == 'block'){
+                $('.dropDownMenu').slideUp();
+            }
+        }
     })
+
 </script>
 <?php $this->endBlock(); ?>
 

@@ -54,14 +54,18 @@ class UserController extends BaseController
             return ['TYPE参数错误'];
         }
 
-        $query = User::find()->where(['type' => $type, 'is_soft_deleted' => 0]);
+        $query = User::find()->where(['user.type' => $type, 'is_soft_deleted' => 0]);
         //过滤 未投资时长
         $noInvestDays = intval(Yii::$app->request->get('noInvestDays'));
         if (!empty($noInvestDays)) {
             $date = date('Y-m-d', strtotime('- ' . $noInvestDays . ' day'));
             $query->leftJoin('user_info', 'user_info.user_id = user.id')->andFilterWhere(['<=', 'user_info.lastInvestDate', $date]);
         }
-
+        //过滤有余额未投资
+        $noInvest = boolval(Yii::$app->request->get('noInvest'));
+        if ($noInvest) {
+            $query->leftJoin('user_info', 'user_info.user_id = user.id')->andFilterWhere(['isInvested' => 0])->leftJoin('user_account', 'user_account.uid = user.id')->andFilterWhere(['>', 'available_balance', 0]);
+        }
         if ($type == User::USER_TYPE_PERSONAL) {
             $query->with('lendAccount');
             if (!empty($name)) {
