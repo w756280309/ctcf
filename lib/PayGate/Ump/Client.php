@@ -216,11 +216,12 @@ class Client
             'card_id' => $this->encrypt($bind->getCardNo()),
             'account_name' => $this->encrypt($bind->getLegalName()),
             'identity_type' => $bind->getIdType(),
-            'identity_code' => $this->encrypt($bind->getIdNo())
+            'identity_code' => $this->encrypt($bind->getIdNo()),
         ];
 
         if ('pc' === $channel) {
             $data['ret_url'] .= '?channel=pc';
+            $data['notify_url'] .= '?channel=pc';
         } else {
             $data['sourceV'] = 'HTML5';
         }

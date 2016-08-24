@@ -2,10 +2,10 @@
 
 namespace api\modules\v1\controllers\notify;
 
-use yii\web\Controller;
-use common\models\TradeLog;
 use common\models\bank\BankCardManager;
 use common\models\bank\BankCardUpdate;
+use common\models\TradeLog;
+use yii\web\Controller;
 
 class UpdatecardController extends Controller
 {
@@ -15,16 +15,8 @@ class UpdatecardController extends Controller
     public function actionFrontend()
     {
         $data = \Yii::$app->request->get();
-
-        if (array_key_exists('token', $data)) {
-            unset($data['token']);
-        }
-
-        $channel = null;
-        if (array_key_exists('channel', $data)) {
-            $channel = $data['channel'];
-            unset($data['channel']);
-        }
+        $channel = $this->getChannel($data);
+        $isSucc = false;
 
         TradeLog::initLog(2, $data, $data['sign'])->save();    //记录交易日志信息
 
@@ -37,18 +29,12 @@ class UpdatecardController extends Controller
                 $model->save();
             }
 
-            if ('pc' === $channel) {
-                return $this->redirect(\Yii::$app->params['clientOption']['host']['frontend'].'info/success?source=huanka&jumpUrl=/user/userbank/mybankcard');
-            }
-
-            return $this->redirect(\Yii::$app->params['clientOption']['host']['wap'].'user/userbank/updatecardnotify?ret=success');
+            $isSucc = true;
         }
 
-        if ('pc' === $channel) {
-            return $this->redirect(\Yii::$app->params['clientOption']['host']['frontend'].'info/fail?source=huanka');
-        }
+        $backUrl = $this->getBackUrl($channel, $isSucc);
 
-        return $this->redirect(\Yii::$app->params['clientOption']['host']['wap'].'user/userbank/updatecardnotify');
+        return $this->redirect($backUrl);
     }
 
     /**
@@ -57,19 +43,17 @@ class UpdatecardController extends Controller
     public function actionBackend()
     {
         $data = \Yii::$app->request->get();
+        $channel = $this->getChannel($data);
 
         $this->layout = false;
         $err = '0000';
         $errmsg = 'no error';
 
-        if (array_key_exists('token', $data)) {
-            unset($data['token']);
-        }
-
         TradeLog::initLog(2, $data, $data['sign'])->save();  //记录交易日志
 
         if (\Yii::$container->get('ump')->verifySign($data)) {
             if ('mer_bind_card_apply_notify' === $data['service']) {    //换卡申请后台通知
+                $isSucc = false;
                 if ('0000' === $data['ret_code']) {
                     $model = BankCardUpdate::findOne(['sn' => $data['order_id']]);
                     if (BankCardUpdate::STATUS_PENDING === $model->status) {
@@ -77,10 +61,12 @@ class UpdatecardController extends Controller
                         $model->save();
                     }
 
-                    return $this->redirect(\Yii::$app->params['clientOption']['host']['wap'].'user/userbank/updatecardnotify?ret=success');
-                } else {
-                    return $this->redirect(\Yii::$app->params['clientOption']['host']['wap'].'user/userbank/updatecardnotify');
+                    $isSucc = true;
                 }
+
+                $backUrl = $this->getBackUrl($channel, $isSucc);
+
+                return $this->redirect($backUrl);
             } elseif ('mer_bind_card_notify' === $data['service']) {    //换卡结果后台通知
                 $model = BankCardUpdate::findOne(['sn' => $data['order_id']]);
                 if (null === $model) {
@@ -125,5 +111,46 @@ class UpdatecardController extends Controller
         ]);
 
         return $this->render('@borrower/modules/user/views/recharge/recharge_notify.php', ['content' => $content]);
+    }
+
+    private function getChannel(&$data)
+    {
+        if (array_key_exists('channel', $data) && 'pc' === $data['channel']) {
+            unset($data['channel']);
+
+            return 'pc';
+        }
+
+        if (array_key_exists('token', $data) && $data['token']) {
+            unset($data['token']);
+
+            return 'app';
+        }
+
+        return 'wap';
+    }
+
+    private function getBackUrl($channel, $isSucc)
+    {
+        if ('pc' === $channel) {
+            $host = \Yii::$app->params['clientOption']['host']['frontend'];
+            if ($isSucc) {
+                return $host.'info/success?source=huanka&jumpUrl=/user/userbank/mybankcard';
+            }
+
+            return $host.'info/fail?source=huanka';
+        }
+
+        if ('app' === $channel) {
+            $host = \Yii::$app->params['clientOption']['host']['app'];
+        } else {
+            $host = \Yii::$app->params['clientOption']['host']['wap'];
+        }
+
+        if ($isSucc) {
+            return $host.'user/userbank/updatecardnotify?ret=success';
+        }
+
+        return $host.'user/userbank/updatecardnotify';
     }
 }
