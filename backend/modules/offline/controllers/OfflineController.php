@@ -36,8 +36,9 @@ class OfflineController extends BaseController
             try {
                 $arr = $this->readExcelToArray($filepath);
             } catch (\Exception $ex) {
-                $model->addError('excel', '读取文件错误');
+                $model->addError('excel', $ex->getMessage());
             }
+
             $transaction = Yii::$app->db->beginTransaction();
             if (!$model->hasErrors()) {
                 try {
@@ -56,15 +57,15 @@ class OfflineController extends BaseController
                         } else {
                             $error_index = $key + 1;
                             if ($neworder->hasErrors('affiliator_id')) {
-                                throw new \Exception($error_index . ',请在后台添加分销商' . $order[0]);
+                                throw new \Exception('文件内容有错,行号' . $error_index . ',请在后台添加分销商' . $order[0]);
                             }
-                            throw new \Exception($error_index);
+                            throw new \Exception('文件内容有错,行号' . $error_index);
                         }
                     }
                     $transaction->commit();
                     return $this->redirect('list');
                 } catch (\Exception $ex) {
-                    $model->addError('excel', '文件内容有错,行号' . $ex->getMessage());
+                    $model->addError('excel', $ex->getMessage());
                     $transaction->rollBack();
                 }
                 @unlink($filepath);
@@ -103,13 +104,12 @@ class OfflineController extends BaseController
      */
     private function readExcelToArray($filePath)
     {
-        ini_set('memory_limit', '512M');
         $filterSubset = new MyReadFilter();
         $PHPReader = new \PHPExcel_Reader_Excel2007(); // Reader很关键，用来读excel文件
         if (!$PHPReader->canRead($filePath)) { // 这里是用Reader尝试去读文件，07不行用05，05不行就报错。
             $PHPReader = new \PHPExcel_Reader_Excel5();
             if (!$PHPReader->canRead($filePath)) {
-                throw new \Exception('不支持该版本的excel');
+                throw new \Exception('读取文件错误');
             }
         }
 
@@ -117,6 +117,10 @@ class OfflineController extends BaseController
         $PHPExcel = $PHPReader->load($filePath); // Reader读出来后，加载给Excel实例
         $currentSheet = $PHPExcel->getSheet(0);
         $row = $currentSheet->getHighestRow();
+        $max_read_line = MyReadFilter::MAX_READ_LINE;
+        if ($row > $max_read_line) {
+            throw new \Exception('该excel文件行数超出' . $max_read_line . '行');
+        }
         //将F行日期转为php的'Y-m-d'
         $d = 'F' . $row;
         //excel在‘2016/7/12’识别该列时，日期格式的保持不变，非日期格式的识别为'07-12-06'，或者识别成float(42258),使用下面的是都可以转换成'2016-07-12'
