@@ -100,46 +100,4 @@ class RechargeController extends BaseController
             return $this->redirect('/info/fail?source=chongzhi&jumpUrl=/user/recharge/init');
         }
     }
-
-    /**
-     * 充值结果查询.
-     */
-    public function actionQuery()
-    {
-        $record = Yii::$app->session->get('epayLend_brecharge');
-
-        if (empty($record['recharge_sn'])) {
-            return $this->redirect('/user/recharge/recharge-err');
-        }
-
-        $recharge = RechargeRecord::findOne(['sn' => $record['recharge_sn']]);
-
-        if (!$recharge) {
-            return $this->redirect('/user/recharge/recharge-err');
-        }
-
-        $ump = Yii::$container->get('ump');
-
-        $resp = $ump->getRechargeInfo(
-            $recharge->sn, $recharge->created_at
-        );
-
-        if ($resp->isSuccessful()) {
-            $accService = Yii::$container->get('account_service');
-
-            if ('2' === $resp->get('tran_state')) {
-                if ($accService->confirmRecharge($recharge)) {
-                    \Yii::$app->session->remove('epayLend_brecharge');
-
-                    return $this->redirect('/user/useraccount/accountcenter');
-                } elseif ('3' === $resp->get('tran_state') || '5' === $resp->get('tran_state')) {
-                    if ($accService->cancelRecharge($recharge)) {
-                        \Yii::$app->session->remove('epayLend_brecharge');
-                    }
-                }
-            }
-        }
-
-        return $this->redirect('/user/recharge/recharge-err');
-    }
 }

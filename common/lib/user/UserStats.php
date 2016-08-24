@@ -31,7 +31,7 @@ class UserStats
                 '是否开户(1 开户 0 未开户)',
                 '是否开通免密(1 开通 0 未开通)',
                 '是否绑卡(1 绑卡 0 未绑卡)',
-                '账户余额(元)',
+                '可用余额(元)',
                 '充值成功金额(元)',
                 '充值成功次数(次)',
                 '提现成功金额(元)',
@@ -48,7 +48,7 @@ class UserStats
         $info = UserInfo::tableName();
 
         $model = (new \yii\db\Query)
-            ->select("$u.*, $b.id as bid, $a.account_balance, $info.firstInvestAmount as firstInvestAmount")
+            ->select("$u.*, $b.id as bid, $a.available_balance, $info.firstInvestAmount as firstInvestAmount")
             ->from($u)
             ->leftJoin($b, "$u.id = $b.uid")
             ->leftJoin($a, "$u.id = $a.uid")
@@ -98,7 +98,7 @@ class UserStats
                 $data[$key]['bid'] = 1;
             }
 
-            $data[$key]['account_balance'] = $val['account_balance'];
+            $data[$key]['available_balance'] = $val['available_balance'];
 
             $data[$key]['rtotalFund'] = 0;
             $data[$key]['rtotalNum'] = 0;

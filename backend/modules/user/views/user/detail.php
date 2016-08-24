@@ -90,7 +90,7 @@ use common\utils\StringUtils;
             <div class="detail_font">会员资金详情</div>
             <ul class="breadcrumb_detail">
                 <li><span>理财资产（元）</span><?=$userLiCai?></li>
-                <li><span>账户余额（元）</span><?php echo empty($userYuE)?'0.00':$userYuE?></li>
+                <li><span>可用余额（元）</span><?php echo empty($userYuE)?'0.00':$userYuE?></li>
             </ul>
             <ul class="breadcrumb_detail">
                 <li><span>充值次数（次）</span><?=$czNum?></li>

@@ -62,9 +62,10 @@ class UserController extends BaseController
             $query->leftJoin('user_info', 'user_info.user_id = user.id')->andFilterWhere(['<=', 'user_info.lastInvestDate', $date]);
         }
         //过滤可用余额
-        $balance = floatval(Yii::$app->request->get('balance'));
-        if ($balance > 0) {
-            $query->innerJoin('user_account', 'user.id = user_account.uid')->andFilterWhere(['>', 'user_account.available_balance', $balance]);
+        $balance = Yii::$app->request->get('balance');
+        if (isset($balance)) {
+            $balance = floatval($balance);
+            $query->innerJoin('user_account', 'user.id = user_account.uid')->andFilterWhere(['>=', 'user_account.available_balance', $balance]);
         }
         
         if ($type == User::USER_TYPE_PERSONAL) {
@@ -153,7 +154,7 @@ class UserController extends BaseController
 
         $tztimeMax = OnlineOrder::find()->where(['status' => OnlineOrder::STATUS_SUCCESS, 'uid' => $id])->max('updated_at');
         $bc = new \common\lib\bchelp\BcRound();
-        $userYuE = $bc->bcround(bcadd($ua['available_balance'], $ua['freeze_balance']), 2);
+        $userYuE = $ua['available_balance'];
 
         return $this->render('detail', [
                 'czTime' => $rcMax,
