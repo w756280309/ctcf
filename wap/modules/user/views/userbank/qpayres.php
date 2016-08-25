@@ -31,7 +31,7 @@ $this->backUrl = false;
                  <div><span>5秒</span>后回到账户</div>
              <?php } ?>
         <?php } else { ?>
-        <div>请联系客服: <?= Yii::$app->params['contact_tel'] ?></div>
+        <div>请联系客服: <a class="contact-tel" href="tel:<?= Yii::$app->params['contact_tel'] ?>"><?= Yii::$app->params['contact_tel'] ?></a></div>
         <?php } ?>
      </div>
 </div>

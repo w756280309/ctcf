@@ -91,7 +91,7 @@ $this->registerMetaTag([
                 </nav>
             </div>
         </div>
-        <p>客服热线：<?= Yii::$app->params['contact_tel'] ?>（8:30-20:00）</p>
+        <p>客服热线：<a class="contact-tel" href="tel:<?= Yii::$app->params['contact_tel'] ?>"><?= Yii::$app->params['contact_tel'] ?></a>（8:30-20:00）</p>
     </div>
     <?php } ?>
 

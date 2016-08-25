@@ -15,7 +15,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/common.js', ['depends' => 'yii\web\Yii
 </div>
 <div class="row daojishi" id='bind-close1'>
     <div class="col-xs-12 page_padding">
-        <div>遇到问题请联系客服，电话：<?= Yii::$app->params['contact_tel'] ?></div>
+        <div>遇到问题请联系客服，电话：<a class="contact-tel" href="tel:<?= Yii::$app->params['contact_tel'] ?>"><?= Yii::$app->params['contact_tel'] ?></a></div>
     </div>
     <div class="col-xs-4"></div>
     <div class="col-xs-4">

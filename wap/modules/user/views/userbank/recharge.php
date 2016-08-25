@@ -54,7 +54,7 @@ if ($backUrl = \Yii::$app->session['recharge_back_url']) {
     </div>
     <!--  当快捷充值被禁用,需要显示提示信息 -->
     <?php if ($bank->isDisabled) { ?>
-    <div class="form-bottom note">*绑定银行暂不支持快捷充值，如有问题请联系客服<?= Yii::$app->params['contact_tel'] ?></div>
+    <div class="form-bottom note">*绑定银行暂不支持快捷充值，如有问题请联系客服<a class="contact-tel" href="tel:<?= Yii::$app->params['contact_tel'] ?>"><?= Yii::$app->params['contact_tel'] ?></a></div>
     <?php } else { ?>
     <div class="form-bottom">&nbsp;</div>
     <?php } ?>

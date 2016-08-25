@@ -26,9 +26,9 @@ $this->backUrl = false;
      <div class="col-xs-12">
         <?php if ('success' === $ret) { ?>
         <div>您申请的提现将会在24小时内到账</div>
-        <div>如有疑问请客服电话：<?= Yii::$app->params['contact_tel'] ?></div>
+        <div>如有疑问请客服电话：<a class="contact-tel" href="tel:<?= Yii::$app->params['contact_tel'] ?>"><?= Yii::$app->params['contact_tel'] ?></a></div>
         <?php } else { ?>
-        <div>请联系客服: <?= Yii::$app->params['contact_tel'] ?></div>
+        <div>请联系客服: <a class="contact-tel" href="tel:<?= Yii::$app->params['contact_tel'] ?>"><?= Yii::$app->params['contact_tel'] ?></a></div>
         <?php } ?>
      </div>
 </div>

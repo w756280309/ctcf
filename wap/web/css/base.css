@@ -463,3 +463,10 @@ a.block:hover {
     margin: 0 auto;
     margin-top: 17px;
 }
+/* 全局联系方式样式 */
+a.contact-tel {
+    color: #f44336;
+}
+a.contact-tel:hover {
+    color: #f44336;
+}

@@ -32,7 +32,7 @@ $this->registerJsFile('', ['depends' => 'yii\web\YiiAsset','position' => 1]);
         <?php if ('success' === $ret) { ?>
         <div><span>5秒</span>后前往关闭页面</div>
         <?php } else { ?>
-        <div>请联系客服: <?= Yii::$app->params['contact_tel'] ?></div>
+        <div>请联系客服: <a class="contact-tel" href="tel:<?= Yii::$app->params['contact_tel'] ?>"><?= Yii::$app->params['contact_tel'] ?></a></div>
         <?php } ?>
      </div>
 </div>

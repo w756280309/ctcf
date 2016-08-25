@@ -28,7 +28,7 @@ $this->backUrl = false;
         <?php if ('success' === $ret) { ?>
          <div><span style="font-weight: bold">支付密码将会以短信的形式发送到您的手机上</span>,请注意查收并妥善保存.支付密码为6位随机数,可根据短信内容修改密码</div>
         <?php } else { ?>
-         <div style="text-align: center">请联系客服: <?= Yii::$app->params['contact_tel'] ?></div>
+         <div style="text-align: center">请联系客服: <a class="contact-tel" href="tel:<?= Yii::$app->params['contact_tel'] ?>"><?= Yii::$app->params['contact_tel'] ?></a></div>
         <?php } ?>
      </div>
     <div class="col-xs-1"></div>

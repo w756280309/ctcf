@@ -27,7 +27,7 @@ $this->backUrl = false;
         <?php if ('success' === $ret) { ?>
             <div>您已成功认购项目，可以进入我的理财查看认购详情</div>
         <?php } else { ?>
-            <div>遇到问题请联系客服，电话：<?= Yii::$app->params['contact_tel'] ?></div>
+            <div>遇到问题请联系客服，电话：<a class="contact-tel" href="tel:<?= Yii::$app->params['contact_tel'] ?>"><?= Yii::$app->params['contact_tel'] ?></a></div>
         <?php } ?>
     </div>
     <?php if ('success' === $ret) { ?>

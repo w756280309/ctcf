@@ -30,6 +30,6 @@ $this->registerCssFile(ASSETS_BASE_URI.'css/banklimit.css', ['depends' => 'wap\a
     <h1>提示：</h1>
     <ol class="desc">
         <li>根据同卡进出原则，用户只能使用唯一一张绑定的银行卡进行充值和提现</li>
-        <li>客服电话：<span><?= \Yii::$app->params['contact_tel'] ?></span></li>
+        <li>客服电话：<a class="contact-tel" href="tel:<?= Yii::$app->params['contact_tel'] ?>"><?= Yii::$app->params['contact_tel'] ?></a></li>
     </ol>
  </div>
