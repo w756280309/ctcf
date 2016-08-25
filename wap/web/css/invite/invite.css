@@ -139,22 +139,22 @@ i, em {
     padding: 10px 0;
     border-bottom: 1px solid #fe6030;
 }
-.invited-box .title {
+.invited-box .inv-title {
     text-align: center;
     font-size: 1.6rem;
     color: #444444;
     margin-bottom:54px;
 }
-.invited-box .title span {
+.invited-box .inv-title span {
     position: relative;
 }
-.invited-box .title .left {
+.invited-box .inv-title .left {
     position: absolute;
     left: -9px;
     top: -6px;
     width: 16px;
 }
-.invited-box .title .right {
+.invited-box .inv-title .right {
     position: absolute;
     right: -9px;
     bottom: -6px;

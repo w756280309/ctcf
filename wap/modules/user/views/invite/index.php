@@ -2,7 +2,7 @@
 $this->title = '邀请好友';
 
 $this->registerJsFile(ASSETS_BASE_URI . 'js/invite/invite.js?v=2016081801', ['depends' => 'yii\web\JqueryAsset', 'position' => 1]);
-$this->registerCssFile(ASSETS_BASE_URI . 'css/invite/invite.css?v=20160803', ['depends' => 'wap\assets\WapAsset']);
+$this->registerCssFile(ASSETS_BASE_URI . 'css/invite/invite.css?v=20160824', ['depends' => 'wap\assets\WapAsset']);
 $this->registerJs('var cdn = \'' . (ASSETS_BASE_URI === '/' ? \Yii::$app->request->hostInfo . '/' : ASSETS_BASE_URI) . '\';', 1);
 $this->registerJs('var invite_url = \'' . \Yii::$app->request->hostInfo . '/luodiye/invite?code=' . $user->usercode . '\';', 1);
 $this->registerJsFile('https://res.wx.qq.com/open/js/jweixin-1.0.0.js');
