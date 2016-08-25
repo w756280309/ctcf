@@ -1,6 +1,7 @@
 <?php
 use yii\widgets\LinkPager;
 use yii\helpers\Html;
+use common\view\LoanHelper;
 
 $pc_cat = Yii::$app->params['pc_cat'];
 ?>
@@ -108,7 +109,15 @@ $pc_cat = Yii::$app->params['pc_cat'];
                                 <?= $ex['value'] ?>
                                 <?= $ex['unit']?>
                             </td>
-                            <td><?= doubleval(100 * $val['yield_rate']) ?></td>
+                            <td>
+                                <?php
+                                    if (!empty($val->jiaxi) && !$val->isFlexRate) {
+                                        echo doubleval(100 * $val['yield_rate']);
+                                    } else {
+                                        echo LoanHelper::getDealRate($val);
+                                    }
+                                ?>
+                            </td>
                             <td><?= number_format($val['money'], 2) ?></td>
                             <td><?= number_format($val['funded_money'], 2) ?></td>
                             <td>

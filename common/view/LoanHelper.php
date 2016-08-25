@@ -24,6 +24,6 @@ class LoanHelper
             return $yr;
         }
 
-        return $yr.'~'.rtrim(rtrim(number_format($topRate, 2), '0'), '.');
+        return $yr.'～'.rtrim(rtrim(number_format($topRate, 2), '0'), '.');
     }
 }
