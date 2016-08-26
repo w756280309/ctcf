@@ -53,15 +53,16 @@ use common\utils\StringUtils;
                 <li><span>身份证号</span><?= StringUtils::obfsIdCardNo($userinfo['idcard']) ?></li>
                 <li><span>实名认证</span>
                     <?php
-                        if($userinfo['idcard_status']=='-1'){
+                        if ($userinfo['idcard_status'] == '-1') {
                             echo "未通过";
-                        }else if ($userinfo['idcard_status']=='1') {
+                        } elseif ($userinfo['idcard_status'] == '1') {
                             echo "验证通过";
-                        }else{
+                        } else {
                             echo "未验证";
                         }
                     ?>
                 </li>
+                <li><span>代金券</span><a href="/coupon/coupon/list-for-user?uid=<?= $userinfo->id ?>">查看</a></li>
             </ul>
             <ul class="breadcrumb_detail">
                 <li><span>免密支付</span><?= $userinfo['mianmiStatus'] ? "已开通" : "未开通" ?></li>

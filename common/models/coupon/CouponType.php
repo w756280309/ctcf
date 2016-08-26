@@ -99,6 +99,10 @@ class CouponType extends \yii\db\ActiveRecord
             }
         }
 
+        if (!$this->isAudited) {
+            return false;
+        }
+
         return true;
     }
 }

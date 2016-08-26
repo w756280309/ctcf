@@ -7,22 +7,13 @@ use common\models\coupon\CouponType;
 use common\models\coupon\UserCoupon;
 use common\models\user\User;
 use Yii;
+use yii\data\ActiveDataProvider;
 use yii\data\Pagination;
-use yii\web\Response;
 
 class CouponController extends BaseController
 {
-    public function init()
-    {
-        parent::init();
-
-        if (Yii::$app->request->isAjax) {
-            Yii::$app->response->format = Response::FORMAT_JSON;
-        }
-    }
-
     /**
-     * 代金券添加
+     * 代金券添加.
      */
     public function actionAdd()
     {
@@ -44,7 +35,7 @@ class CouponController extends BaseController
     }
 
     /**
-     * 代金券添加编辑预处理
+     * 代金券添加编辑预处理.
      */
     private function preprocess(CouponType $obj)
     {
@@ -74,7 +65,7 @@ class CouponController extends BaseController
     }
 
     /**
-     * 代金券修改
+     * 代金券修改.
      */
     public function actionEdit($id)
     {
@@ -96,7 +87,7 @@ class CouponController extends BaseController
     }
 
     /**
-     * 代金券列表
+     * 代金券列表.
      */
     public function actionList()
     {
@@ -114,15 +105,86 @@ class CouponController extends BaseController
     }
 
     /**
-     * 代金券发放
+     * 用户代金券列表.
+     * 1. 每页最多显示15条记录;
+     * 2. 按照代金券发放时间的降序排列;
      */
-    public function actionIssue()
+    public function actionListForUser($uid)
     {
-        return ['code' => 0];
+        $user = $this->findOr404(User::class, $uid);
+        $u = UserCoupon::tableName();
+
+        $query = UserCoupon::find()
+            ->innerJoinWith('couponType')
+            ->where(['user_id' => $uid])
+            ->orderBy(["$u.created_at" => SORT_DESC]);
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => [
+                'pageSize' => 15,
+            ],
+        ]);
+
+        return $this->render('user_list', ['dataProvider' => $dataProvider, 'user' => $user]);
     }
 
     /**
-     * 代金券审核
+     * 获取可以发放的代金券信息.
+     *
+     * 1. 按面值的升序为第一序列,起投金额的升序为第二序列排序;
+     */
+    public function actionAllowIssueList($uid, $cid = null)
+    {
+        $nowDate = date('Y-m-d');
+
+        $query = CouponType::find()
+            ->where(['<=', 'issueStartDate', $nowDate])
+            ->andWhere(['>=', 'issueEndDate', $nowDate])
+            ->andWhere(['isDisabled' => 0, 'isAudited' => 1]);
+
+        if (!empty($cid)) {
+            $query->andWhere(['id' => $cid]);
+        }
+
+        if (Yii::$app->request->isAjax) {
+            return ['code' => 0, 'data' => $query->asArray()->all()];
+        }
+
+        $query->orderBy(['amount' => SORT_ASC, 'minInvest' => SORT_ASC]);
+
+        $this->layout = false;
+
+        return $this->render('issue_list', ['model' => $query->all(), 'uid' => $uid]);
+    }
+
+    /**
+     * 为个人发放代金券.
+     */
+    public function actionIssueForUser($uid, $cid)
+    {
+        $user = $this->findOr404(User::class, $uid);
+        $coupon = $this->findOr404(CouponType::class, $cid);
+
+        $res = 1;
+        $mess = '发券失败';
+
+        if ($coupon->allowIssue()) {
+            try {
+                if (UserCoupon::addUserCoupon($user, $coupon)->save()) {
+                    $res = 0;
+                    $mess = '发券成功';
+                }
+            } catch (\Exception $ex) {
+                $mess = $ex->getMessage();
+            }
+        }
+
+        return ['code' => $res, 'message' => $mess];
+    }
+
+    /**
+     * 代金券审核.
      */
     public function actionAudit($id)
     {
@@ -142,7 +204,7 @@ class CouponController extends BaseController
     }
 
     /**
-     * 代金券领取记录
+     * 代金券领取记录.
      */
     public function actionOwnerList($id)
     {
@@ -169,9 +231,9 @@ class CouponController extends BaseController
             if ('a' === $status) {
                 $query->andWhere(["$uc.isUsed" => 0]);
                 $query->andWhere(['>=', "$uc.expiryDate", date('Y-m-d')]);
-            } else if ('b' === $status) {
+            } elseif ('b' === $status) {
                 $query->andWhere(["$uc.isUsed" => 1]);
-            } else if ('c' === $status) {
+            } elseif ('c' === $status) {
                 $query->andWhere(["$uc.isUsed" => 0]);
                 $query->andWhere(['<', "$uc.expiryDate", date('Y-m-d')]);
             }

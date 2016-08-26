@@ -142,7 +142,7 @@ class UserCoupon extends \yii\db\ActiveRecord
     public static function addUserCoupon(User $user, CouponType $couponType)
     {
         if (!$couponType->allowIssue()) {
-            throw new \Exception('代金券发放时间错误', 1);
+            throw new \Exception('代金券不满足发放条件', 1);
         }
 
         if (!$couponType->expiresInDays && !$couponType->useEndDate) {
