@@ -34,18 +34,29 @@ $user_id = Html::encode($uid);
             $(function() {
                 $('#issue-coupon').on('change', function() {
                     var cid = $(this).val();
-                    $.get('/coupon/coupon/allow-issue-list?uid=<?= $user_id ?>&cid='+cid, function(data) {
-                        if (!data.code) {
-                            $('.coupon-info').html('该代金券面值为'+data.data[0]['amount']+'元，最小投资金额为'+data.data[0]['minInvest']+'元。');
-                        } else {
-                            alert('获取代金券数据失败');
-                        }
-                    });
+
+                    if ('' === cid) {
+                        $('.coupon-info').html('');
+                    } else {
+                        $.get('/coupon/coupon/allow-issue-list?uid=<?= $user_id ?>&cid='+cid, function(data) {
+                            if (!data.code) {
+                                $('.coupon-info').html('该代金券面值为'+data.data[0]['amount']+'元，最小投资金额为'+data.data[0]['minInvest']+'元。');
+                            } else {
+                                alert('获取代金券数据失败');
+                            }
+                        });
+                    }
                 });
 
                 var allowClick = true;
                 $('#issue').on('click', function() {
                     if (!allowClick) {
+                        return;
+                    }
+
+                    var cid = $('#issue-coupon').val();
+                    if ('' === cid) {
+                        newalert(0, '您还没有选择代金券');
                         return;
                     }
 
