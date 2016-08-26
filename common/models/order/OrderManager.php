@@ -183,6 +183,7 @@ class OrderManager
      */
     public static function cancelNoPayOrder($ordOrSn)
     {
+        bcscale(14);
         $ord = OnlineOrder::ensureOrder($ordOrSn);
         if (OnlineOrder::STATUS_FALSE !== $ord->status) {
             throw new \Exception('状态异常');

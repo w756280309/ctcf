@@ -191,6 +191,7 @@ class PayService
             }
         }
 
+        bcscale(14);
         if (bccomp(bcadd($user->lendAccount->available_balance, $couponMoney, 2), $money, 2) < 0) {
             return ['code' => 1,  'message' => '金额不足'];
         }
@@ -206,7 +207,6 @@ class PayService
             } elseif (bcdiv($orderbalance, $money) * 1 < 1) { //可投金额除以投标金额，如果是小于1的数字，代表超额投资
                 return ['code' => self::ERROR_MONEY_MUCH,  'message' => self::getErrorByCode(self::ERROR_MONEY_MUCH)];
             } elseif ($this->cdeal->dizeng_money / 1) {
-                bcscale(14);
                 $v = bcdiv($money, $this->cdeal->dizeng_money);
                 $varr = explode('.', $v);
                 if ((bccomp($varr[1], 0)) > 0 &&  bcsub($orderbalance, $money) * 1 != 0) {
