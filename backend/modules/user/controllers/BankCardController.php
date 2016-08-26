@@ -43,10 +43,26 @@ class BankCardController extends BaseController
         $resp = Yii::$container->get('ump')->getBindingTx($model);
 
         if ($resp->isSuccessful()) {
+            $tranState = (int) $resp->get('tran_state');
+            if (1 === $tranState) {
+                $result = '处理中（涉及资料上传，人工审核）';
+            } elseif (2 === $tranState) {
+                $result = '成功';
+            } elseif (3 === $tranState) {
+                $result = '失败';
+            } elseif (4 === $tranState) {
+                $result = '不明（需要人工查询）';
+            } elseif (6 === $tranState) {
+                $result = '其他（需要人工查询）';
+            } else {
+                $result = $tranState;
+            }
+
             $mess = '商户订单编号：'.$resp->get('order_id').'<br>'
                 .'商户订单日期：'.$resp->get('mer_date').'<br>'
                 .'返回码：'.$resp->get('ret_code').'<br>'
-                .'返回信息：'.$resp->get('ret_msg');
+                .'返回信息：'.$resp->get('ret_msg').'<br>'
+                .'返回结果：'.$result;
 
             return ['code' => 0, 'message' => $mess];
         } else {
