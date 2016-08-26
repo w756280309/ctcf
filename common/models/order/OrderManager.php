@@ -190,14 +190,14 @@ class OrderManager
         //查找截止当前订单是否超投
         $loan = Loan::findOne($ord->online_pid);
         $orderbalance = $loan->getLoanBalance();//标的剩余可投金额
-        $lastAmount = bcsub($orderbalance, $ord->order_money);//此笔交易成功后的剩余资金
-        $com = bccomp($lastAmount, 0);
+        $lastAmount = bcsub($orderbalance, $ord->order_money, 2);//此笔交易成功后的剩余资金
+        $com = bccomp($lastAmount, 0, 2);
         if ($com === 0) {
             //刚好投完
             return false;//不是超投
         } elseif ($com > 0) {
             //有剩余资金
-            if (bccomp($lastAmount, $loan->start_money) >= 0) {
+            if (bccomp($lastAmount, $loan->start_money, 2) >= 0) {
                 //剩余资金超过或者等于起投金额
                 return false;//不是超投
             }
