@@ -47,6 +47,7 @@ class PayService
     const ERROR_TRADE_PWD_SET = 117;//没有设置交易密码
     const ERROR_ID_SET = 118;//需要实名认证
     const ERROR_BANK_BIND = 119;//需要绑定银行卡
+    const ERROR_MONEY_LAST = 120;//投后标的可投资金小于起投金额
 
     const ERROR_ORDER_CREATE = 190;//订单生成失败
     const ERROR_UA = 191;//用户账户异常
@@ -91,6 +92,7 @@ class PayService
             self::ERROR_LAW => '非法请求',
             self::ERROR_SYSTEM => '系统异常，请稍后重试',
             self::ERROR_BANK_BIND => '您未绑定银行卡',
+            self::ERROR_MONEY_LAST => '购买后可投余额不可低于起投金额',
         ];
 
         return $data[$code];
@@ -192,11 +194,12 @@ class PayService
         if (bccomp(bcadd($user->lendAccount->available_balance, $couponMoney, 2), $money, 2) < 0) {
             return ['code' => 1,  'message' => '金额不足'];
         }
-        $orderbalance = $this->cdeal->getLoanBalance();
+        $orderbalance = $this->cdeal->getLoanBalance();//标的剩余可投金额
         if (bccomp($orderbalance, 0) == 0) {
             return ['code' => 1,  'message' => '当前项目不可投,可投余额为0'];
         }
-        if (bcdiv($orderbalance, $this->cdeal->start_money) * 1 >= 1) {
+        $lastAmount = bcsub($orderbalance, $money);//此笔交易成功后的剩余资金
+        if (bcdiv($orderbalance, $this->cdeal->start_money) * 1 >= 2) {
             //若可投金额大于起投金额
             if (bcdiv($money, $this->cdeal->start_money) * 1 < 1) {
                 return ['code' => self::ERROR_LESS_START_MONEY,  'message' => self::getErrorByCode(self::ERROR_LESS_START_MONEY).'('.$this->cdeal->start_money.'元)'];
@@ -208,6 +211,8 @@ class PayService
                 $varr = explode('.', $v);
                 if ((bccomp($varr[1], 0)) > 0 &&  bcsub($orderbalance, $money) * 1 != 0) {
                     return ['code' => self::ERROR_DIZENG,  'message' => $this->cdeal->start_money.'元起投,'.$this->cdeal->dizeng_money.'元递增'];
+                } elseif ($lastAmount != 0 && bcdiv($lastAmount, $this->cdeal->start_money) * 1 < 1) {
+                    return ['code' => self::ERROR_MONEY_LAST,  'message' => self::getErrorByCode(self::ERROR_MONEY_LAST)];
                 }
             }
         } else {
