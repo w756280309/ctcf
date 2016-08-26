@@ -5,7 +5,6 @@ namespace common\models\offline;
 use yii\db\ActiveRecord;
 use common\models\affiliation\Affiliator;
 use common\models\offline\OfflineLoan;
-use Zii\Validator\CnMobileValidator;
 
 class OfflineOrder extends ActiveRecord
 {
@@ -15,9 +14,9 @@ class OfflineOrder extends ActiveRecord
             [['affiliator_id', 'loan_id', 'realName', 'mobile', 'money', 'orderDate', 'created_at'], 'required'],
             [['affiliator_id', 'loan_id', 'created_at'], 'integer'],
             ['realName', 'string', 'max' => 50],
+            ['mobile', 'string', 'max' => 20],
             ['money', 'number'],
             ['orderDate', 'safe'],
-            ['mobile', CnMobileValidator::className(), 'skipOnEmpty' => false],
         ];
     }
 
