@@ -3,7 +3,7 @@ $this->title = '邀请好友来挣钱，大把红包轻松拿';
 
 use yii\helpers\Html;
 ?>
-<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/invite/invite.css">
+<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/invite/invite.css?v=20160828">
 
 <div class="wdjf-invite">
     <div class="banner banner1"></div>
