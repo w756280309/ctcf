@@ -104,9 +104,6 @@ $is_online = in_array($model->status, [2, 3, 4, 5, 6, 7]);//判断标的是否�
     <div class="portlet-body form">
         <!-- BEGIN FORM-->
         <?php $form = ActiveForm::begin(['id' => 'product_product_form', 'action' => '/product/productonline/edit?id='.$model['id'], 'options' => ['enctype' => 'multipart/form-data']]); ?>
-        <?=
-            $form->field($model, 'refund_method', ['template' => '{input}', 'inputOptions' => ['value' => '1']])->hiddenInput()
-        ?>
         <h3 class="form-section">项目基本信息</h3>
         <?php if ($model->id) {  ?>
         <div class="row-fluid">

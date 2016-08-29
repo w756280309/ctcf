@@ -182,7 +182,7 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
     public function rules()
     {
         return [
-            [['title', 'borrow_uid', 'yield_rate', 'money', 'start_money', 'dizeng_money', 'start_date', 'end_date', 'expires', 'cid', 'description'], 'required'],
+            [['title', 'borrow_uid', 'yield_rate', 'money', 'start_money', 'dizeng_money', 'start_date', 'end_date', 'expires', 'cid', 'description', 'refund_method'], 'required'],
             ['finish_date', 'required', 'when' => function ($model) {
                 return $model->is_fdate == 1;
             },  'whenClient' => "function (attribute, value) {
