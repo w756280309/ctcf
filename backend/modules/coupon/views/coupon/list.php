@@ -1,4 +1,7 @@
 <?php
+$this->title = '代金券列表';
+
+use common\utils\StringUtils;
 use yii\helpers\Html;
 use yii\widgets\LinkPager;
 ?>
@@ -58,6 +61,7 @@ use yii\widgets\LinkPager;
                         <th>序号</th>
                         <th>名称</th>
                         <th>面值</th>
+                        <th>起投金额</th>
                         <th>有效期</th>
                         <th>发放时间</th>
                         <th><center>操作</center></th>
@@ -67,19 +71,19 @@ use yii\widgets\LinkPager;
                 <?php foreach ($model as $key => $val) : ?>
                     <tr>
                         <td><?= ++$key ?></td>
-                        <td><?= $val['name'] ?></td>
-                        <td class="text-align-rg"><?= rtrim(rtrim($val['amount'], '0'), '.') ?>元</td>
-                        <td><?= empty($val['expiresInDays']) ? $val['useEndDate'] : $val['expiresInDays']."天" ?></td>
-                        <td><?= empty($val['issueStartDate']) ? "---" : $val['issueStartDate']." - ".$val['issueEndDate'] ?></td>
+                        <td><?= $val->name ?></td>
+                        <td class="text-align-rg"><?= StringUtils::amountFormat2($val->amount) ?>元</td>
+                        <td class="text-align-rg"><?= StringUtils::amountFormat2($val->minInvest) ?>元</td>
+                        <td><?= empty($val->expiresInDays) ? $val->useEndDate : $val->expiresInDays.'天' ?></td>
+                        <td><?= empty($val->issueStartDate) ? '---' : $val->issueStartDate.' - '.$val->issueEndDate ?></td>
                         <td>
                             <center>
-                                <!--<a href="/coupon/coupon/edit?id=<?= $val['id'] ?>" class="btn mini green"><i class="icon-edit"></i> 发放</a>-->
-                                <?php if (!$val['isAudited']) { ?>
-                                <a href="/coupon/coupon/edit?id=<?= $val['id'] ?>" class="btn mini green"><i class="icon-edit"></i> 编辑</a>
-                                <a href="javascript:void(0)" data-id="<?= $val['id'] ?>" class="btn mini green examine"><i class="icon-edit"></i> 审核</a>
+                                <?php if (!$val->isAudited) { ?>
+                                <a href="/coupon/coupon/edit?id=<?= $val->id ?>" class="btn mini green"><i class="icon-edit"></i> 编辑</a>
+                                <a href="javascript:void(0)" data-id="<?= $val->id ?>" class="btn mini green examine"><i class="icon-edit"></i> 审核</a>
                                 <?php } else { ?>
-                                <a href="/coupon/coupon/edit?id=<?= $val['id'] ?>" class="btn mini green"><i class="icon-edit"></i> 查看</a>
-                                <a href="/coupon/coupon/owner-list?id=<?= $val['id'] ?>" class="btn mini green"><i class="icon-edit"></i> 领取记录</a>
+                                <a href="/coupon/coupon/edit?id=<?= $val->id ?>" class="btn mini green"><i class="icon-edit"></i> 查看</a>
+                                <a href="/coupon/coupon/owner-list?id=<?= $val->id ?>" class="btn mini green"><i class="icon-edit"></i> 领取记录</a>
                                 <?php } ?>
                             </center>
                         </td>

@@ -1,6 +1,7 @@
 <?php
 $this->title = '发放代金券';
 
+use common\utils\StringUtils;
 use yii\helpers\Html;
 
 $user_id = Html::encode($uid);
@@ -40,7 +41,8 @@ $user_id = Html::encode($uid);
                     } else {
                         $.get('/coupon/coupon/allow-issue-list?uid=<?= $user_id ?>&cid='+cid, function(data) {
                             if (!data.code) {
-                                $('.coupon-info').html('该代金券面值为'+data.data[0]['amount']+'元，最小投资金额为'+data.data[0]['minInvest']+'元。');
+                                var expire = data.data[0]['useEndDate'] ? '有效截止日期为'+data.data[0]['useEndDate'] : '有效期为'+data.data[0]['expiresInDays']+'天';
+                                $('.coupon-info').html('该代金券面值为'+data.data[0]['amount']+'元，最小投资金额为'+data.data[0]['minInvest']+'元，'+expire+'。');
                             } else {
                                 alert('获取代金券数据失败');
                             }
@@ -91,7 +93,7 @@ $user_id = Html::encode($uid);
                             <select name="cid" id="issue-coupon">
                                 <option value="">--请选择--</option>
                                 <?php foreach($model as $val) : ?>
-                                    <option value="<?= $val->id ?>"><?= $val->name ?></option>
+                                    <option value="<?= $val->id ?>"><?= $val->name ?>-<?= StringUtils::amountFormat2($val->amount) ?>元-<?= StringUtils::amountFormat2($val->minInvest) ?>元起投</option>
                                 <?php endforeach; ?>
                             </select>
                         </div>
