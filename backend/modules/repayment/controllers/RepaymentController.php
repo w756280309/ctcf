@@ -2,6 +2,7 @@
 
 namespace backend\modules\repayment\controllers;
 
+use common\models\adminuser\AdminLog;
 use common\models\payment\Repayment;
 use Yii;
 use common\models\order\OnlineRepaymentRecord;
@@ -231,7 +232,15 @@ class RepaymentController extends BaseController
             }
 
             if (empty($sum_benxi_yue)) {
-                $opres = OnlineProduct::updateAll(['status' => OnlineProduct::STATUS_OVER, 'sort' => 60], ['id' => $pid]);
+                $updateData = ['status' => OnlineProduct::STATUS_OVER, 'sort' => 60];
+                try {
+                    $log = AdminLog::initNew(['tableName' => OnlineProduct::tableName(), 'primaryKey' => $pid], Yii::$app->user, $updateData);
+                    $log->save();
+                } catch (\Exception $e) {
+                    $transaction->rollBack();
+                    return ['result' => 0, 'message' => '标的日志记录失败'];
+                }
+                $opres = OnlineProduct::updateAll($updateData, ['id' => $pid]);
                 if (!$opres) {
                     $transaction->rollBack();
 

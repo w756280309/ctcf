@@ -5,6 +5,7 @@ namespace backend\modules\product\controllers;
 use backend\controllers\BaseController;
 use common\lib\bchelp\BcRound;
 use common\lib\product\ProductProcessor;
+use common\models\adminuser\AdminLog;
 use common\models\booking\BookingLog;
 use common\models\contract\ContractTemplate;
 use common\models\order\BaoQuanQueue;
@@ -143,10 +144,23 @@ class ProductonlineController extends BaseController
                 $model->jixi_time = $model->jixi_time !== '' ? is_integer($model->jixi_time) ? $model->jixi_time : strtotime($model->jixi_time) : 0;
                 $model->recommendTime = empty($model->recommendTime) ? 0 : $model->recommendTime;
 
-                $pre = $model->save(false);
-                if (!$pre) {
+                try {
+                    if ($model->isNewRecord) {
+                        $pre = $model->save(false);
+                        $log = AdminLog::initNew($model);
+                        $log->save();
+                    } else {
+                        $log = AdminLog::initNew($model);
+                        $log->save();
+                        $pre = $model->save(false);
+                    }
+                    if (!$pre) {
+                        $transaction->rollBack();
+                        $model->addError('title', '标的添加异常');
+                    }
+                } catch (\Exception $e) {
                     $transaction->rollBack();
-                    $model->addError('title', '标的添加异常');
+                    $model->addError('title', '标的添加异常' . $e->getMessage());
                 }
 
                 if (!empty($id)) {
@@ -211,7 +225,11 @@ class ProductonlineController extends BaseController
             $loanObj = new OnlineProduct($loan);
             try {
                 $resp = OnlineProduct::createLoan($loanObj, $borrow);
-                OnlineProduct::updateAll(['epayLoanAccountId' => $resp, 'online_status' => 1], 'id='.$loan['id']);
+                $updateData = ['epayLoanAccountId' => $resp, 'online_status' => 1];
+                //添加标的更改记录
+                $log = AdminLog::initNew(['tableName' => OnlineProduct::tableName(), 'primaryKey' => $loan['id']], Yii::$app->user, $updateData);
+                $log->save();
+                OnlineProduct::updateAll($updateData, 'id=' . $loan['id']);
                 LoanService::updateLoanState($loanObj, OnlineProduct::STATUS_PRE);
             } catch (\Exception $ex) {
                 $error_loans .= $loanObj->sn.$ex->getMessage().',';
@@ -239,7 +257,7 @@ class ProductonlineController extends BaseController
     }
 
     /**
-     * 删除.
+     * 删除.（未使用）
      *
      * @param type $id
      * @param type $page
@@ -459,6 +477,16 @@ class ProductonlineController extends BaseController
             $model = OnlineProduct::findOne($id);
             $model->scenario = 'del';
             $model->del_status = 1;
+            //修改标的修改记录
+            try {
+                $log = AdminLog::initNew($model);
+                $log->save();
+            } catch (\Exception $e) {
+                return [
+                    'result' => 0,
+                    'message' => '标的日志记录失败',
+                ];
+            }
             if ($model->save()) {
                 return ['code' => 1, 'message' => '删除成功'];
             }
@@ -481,7 +509,18 @@ class ProductonlineController extends BaseController
             } else {
                 $bc = new BcRound();
                 $transaction = Yii::$app->db->beginTransaction();
-                $up_srs = OnlineProduct::updateAll(['status' => OnlineProduct::STATUS_FOUND, 'sort' => OnlineProduct::SORT_FOUND, 'full_time' => time()], ['id' => $id]);
+                $updateData = ['status' => OnlineProduct::STATUS_FOUND, 'sort' => OnlineProduct::SORT_FOUND, 'full_time' => time()];
+                //修改标的修改记录
+                try {
+                    $log = AdminLog::initNew($model, Yii::$app->user, $updateData);
+                    $log->save();
+                } catch (\Exception $e) {
+                    return [
+                        'result' => 0,
+                        'message' => '标的日志记录失败',
+                    ];
+                }
+                $up_srs = OnlineProduct::updateAll($updateData, ['id' => $id]);
                 if (!$up_srs) {
                     $transaction->rollBack();
 
@@ -600,6 +639,12 @@ class ProductonlineController extends BaseController
             if (!empty($err)) {
                 $model->addError('jixi_time', $err);
             } else {
+                try {
+                    $log = AdminLog::initNew($model);
+                    $log->save();
+                } catch (\Exception $e) {
+                    $model->addError('jixi_time', '标的日志错误');
+                }
                 $model->save();
                 $c_flag = 'close';
             }
@@ -665,7 +710,13 @@ class ProductonlineController extends BaseController
         } else {
             $deal->recommendTime = time();
         }
-
+        //记录标的日志
+        try {
+            $log = AdminLog::initNew($deal);
+            $log->save();
+        } catch (\Exception $e) {
+            return ['code' => 0, 'message' => '标的日志记录失败'];
+        }
         if (!$deal->save(false)) {
             return ['code' => 0, 'message' => '操作失败'];
         }

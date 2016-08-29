@@ -2,6 +2,7 @@
 
 namespace common\models\order;
 
+use common\models\adminuser\AdminLog;
 use common\models\payment\Repayment;
 use yii\behaviors\TimestampBehavior;
 use common\models\product\OnlineProduct;
@@ -142,7 +143,13 @@ class OnlineRepaymentPlan extends \yii\db\ActiveRecord
                 $up['expires'] = $expires;
             }
         }
-
+        //记录标的日志
+        try {
+            $log = AdminLog::initNew(['tableName' => OnlineProduct::tableName(), 'primaryKey' => $loan->id], Yii::$app->user, $up);
+            $log->save();
+        } catch (\Exception $e) {
+            $transaction->rollBack();
+        }
         OnlineProduct::updateAll($up, ['id' => $loan->id]);//修改已经计息
         $username = '';
         $sms = new SmsMessage([
