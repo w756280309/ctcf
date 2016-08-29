@@ -296,17 +296,17 @@ $is_online = in_array($model->status, [2, 3, 4, 5, 6, 7]);//判断标的是否�
                         <?php
                             $fd_input_option = ['autocomplete' => 'off', 'placeholder' => '产品到期日'];
                             if (!$model->is_fdate || $is_online){
-                                $fd_input_option = array_merge($fd_input_option, ['disabled' => 'disabled']);
+                                $fd_input_option = array_merge($fd_input_option, ['readonly' => 'readonly']);
                             }
                         ?>
                         <?=
                         $form->field($model, 'finish_date', [
-                            'template' => '<div class="input-append date form_datetime">{input}<span class="add-on" onclick="WdatePicker({el:\'onlineproduct-finish_date\',dateFmt:\'yyyy-MM-dd HH:mm\',minDate:\''.date('Y-m-d').'\'});"><i class="icon-calendar"></i></span></div>{error}',
+                            'template' => '<div class="input-append date form_datetime">{input}<span class="add-on" onclick="if ($(\'#onlineproduct-finish_date\').attr(\'readonly\')) {return false;}WdatePicker({el:\'onlineproduct-finish_date\',dateFmt:\'yyyy-MM-dd HH:mm\',minDate:\''.date('Y-m-d').'\'});"><i class="icon-calendar"></i></span></div>{error}',
                             'inputOptions' => $fd_input_option
                             ])->textInput([
                                 'class' => 'm-wrap span12',
                                 'value' =>  $model->finish_date ? Yii::$app->formatter->asDatetime($model->finish_date, 'Y-M-d H:i') : '',
-                                'onclick' => 'WdatePicker({dateFmt:"yyyy-MM-dd HH:mm",minDate:\''.date('Y-m-d').'\'});'
+                                'onclick' => 'if ($(this).attr("readonly")) {return false;}WdatePicker({dateFmt:"yyyy-MM-dd HH:mm",minDate:\''.date('Y-m-d').'\'});'
                                 ])
                         ?>
                         <?php
@@ -329,7 +329,7 @@ $is_online = in_array($model->status, [2, 3, 4, 5, 6, 7]);//判断标的是否�
                         <?php
                         $fd_input_option = ['autocomplete' => 'off', 'placeholder' => '默认0天'];
                         if (!$model->is_fdate || $is_online){
-                            $fd_input_option = array_merge($fd_input_option, ['disabled' => 'disabled']);
+                            $fd_input_option = array_merge($fd_input_option, ['readonly' => 'readonly']);
                         }
                         ?>
                         <?= $form->field($model, 'kuanxianqi', ['template'=>'{input}'])->hiddenInput(['value' => 0, 'id' => 'kuanxianqi_hide'])->label(false)?>
@@ -729,11 +729,11 @@ $is_online = in_array($model->status, [2, 3, 4, 5, 6, 7]);//判断标的是否�
         if (flag) {
             $('#onlineproduct-kuanxianqi').val('');
             $('#onlineproduct-finish_date').val('');
-            $('#onlineproduct-finish_date').attr('disabled', 'disabled');
-            $('#onlineproduct-kuanxianqi').attr('disabled', 'disabled');
+            $('#onlineproduct-finish_date').attr('readonly', 'readonly');
+            $('#onlineproduct-kuanxianqi').attr('readonly', 'readonly');
         } else {
-            $('#onlineproduct-finish_date').removeAttr('disabled');
-            $('#onlineproduct-kuanxianqi').removeAttr('disabled');
+            $('#onlineproduct-finish_date').removeAttr('readonly');
+            $('#onlineproduct-kuanxianqi').removeAttr('readonly');
         }
     }
 </script>
