@@ -35,8 +35,7 @@ class AdminLog extends ActiveRecord
     public function rules()
     {
         return [
-            [['created_at'], 'integer'],
-            [['admin_id'], 'string', 'max' => 10],
+            [['created_at', 'admin_id'], 'integer'],
             [['allAttributes', 'changeSet', 'tableName'], 'string'],
             [['ip', 'tableName'], 'string', 'max' => 30],
             [['primaryKey'], 'string', 'max' => 32],
@@ -101,11 +100,11 @@ class AdminLog extends ActiveRecord
             $admin_id = $user->identity->getId();
         }
         $log = new self([
-            'admin_id' => $admin_id,
+            'admin_id' => intval($admin_id),
             'created_at' => time(),
             'ip' => $ip,
             'tableName' => $tableName,
-            'primaryKey' => $primaryKey,
+            'primaryKey' => strval($primaryKey),
             'allAttributes' => json_encode($attributes),
             'changeSet' => json_encode($changedAttributes),
         ]);
