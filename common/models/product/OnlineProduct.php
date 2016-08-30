@@ -184,7 +184,7 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
         return [
             [['title', 'borrow_uid', 'yield_rate', 'money', 'start_money', 'dizeng_money', 'start_date', 'end_date', 'expires', 'cid', 'description', 'refund_method'], 'required'],
             ['finish_date', 'required', 'when' => function ($model) {
-                return $model->is_fdate == 1;
+                return $model->is_fdate == 1 && !empty($model->finish_date);
             },  'whenClient' => "function (attribute, value) {
                 return $('#onlineproduct-is_fdate').parent().hasClass('checked');
             }"],

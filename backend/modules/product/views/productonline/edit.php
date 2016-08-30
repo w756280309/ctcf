@@ -152,14 +152,16 @@ $is_online = in_array($model->status, [2, 3, 4, 5, 6, 7]);//判断标的是否�
                 <div class="control-group">
                         <label class="control-label">还款方式</label>
                         <div class="controls">
+                            <?php
+                            $refund_input_option = ['autocomplete' => 'off', 'class' => 'chosen-with-diselect span6 refund_method', 'onchange' => 'changeRefmet(this)'];
+                            if ($is_online) {
+                                $refund_input_option = array_merge($refund_input_option, ['disabled' => 'disabled']);
+                            }
+                            ?>
                             <?=
                             $form->field($model, 'refund_method', [
                                 'template' => '{input}{error}',
-                                'inputOptions'=>[
-                                    'autocomplete' => "off",
-                                    'class' => 'chosen-with-diselect span6 refund_method',
-                                    'onchange' => 'changeRefmet(this)'
-                                    ]
+                                'inputOptions' => $refund_input_option,
                                 ])->dropDownList(['' => "--选择--"] + Yii::$app->params['refund_method'])
                             ?>
                         </div>
