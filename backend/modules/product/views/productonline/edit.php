@@ -276,19 +276,6 @@ $is_online = in_array($model->status, [2, 3, 4, 5, 6, 7]);//判断标的是否�
             </div>
             <!--/span-->
         </div>
-
-        <div class="row-fluid">
-            <div class="span6 ">
-                <div class="control-group">
-                    <label class="control-label">兑付日</label>
-                    <div class="controls">
-                        <?=
-                        $form->field($model, 'graceDays', ['template' => '<div class="input-append">{input}<span class="add-on">(天)</span></div>{error}', 'inputOptions' => ['autocomplete' => 'off', 'placeholder' => '宽限天数']])->textInput(['class' => 'm-wrap span12'])
-                        ?>
-                    </div>
-                </div>
-            </div>
-        </div>
         <div class="row-fluid sourceRfmet">
             <div class="span6 ">
                 <div class="control-group">

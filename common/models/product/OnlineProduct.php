@@ -107,7 +107,7 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
             'create' => ['title', 'sn', 'cid', 'money', 'borrow_uid', 'expires', 'expires_show', 'yield_rate', 'start_money', 'borrow_uid', 'fee', 'status',
                 'description', 'refund_method', 'account_name', 'account', 'bank', 'dizeng_money', 'start_date', 'end_date', 'full_time',
                 'is_xs', 'yuqi_faxi', 'order_limit', 'creator_id', 'del_status', 'status', 'isPrivate', 'allowedUids', 'finish_date', 'channel', 'jixi_time', 'sort',
-                'jiaxi', 'kuanxianqi', 'graceDays', 'isFlexRate', 'rateSteps', 'issuer', 'issuerSn', 'paymentDay', 'isTest', 'filingAmount'],
+                'jiaxi', 'kuanxianqi', 'isFlexRate', 'rateSteps', 'issuer', 'issuerSn', 'paymentDay', 'isTest', 'filingAmount'],
         ];
     }
 
@@ -192,7 +192,7 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
             [['yield_rate', 'fee', 'money', 'start_money', 'dizeng_money', 'yuqi_faxi', 'jiaxi'], 'number'],
             [['isPrivate', 'kuanxianqi'], 'integer'],
             ['isPrivate', 'default', 'value' => 0],
-            [['is_xs', 'kuanxianqi', 'is_fdate', 'graceDays'], 'default', 'value' => 0],
+            [['is_xs', 'kuanxianqi', 'is_fdate'], 'default', 'value' => 0],
             [['description'], 'string'],
             [['title'], 'string', 'max' => 32],
             [['allowedUids'], 'string', 'max' => 128],
