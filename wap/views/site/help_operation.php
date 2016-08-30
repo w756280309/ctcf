@@ -106,12 +106,14 @@ use common\utils\StringUtils;
                 <tr>
                     <td><b>银行名称</b></td>
                     <td><b>风控限额（单笔）</b></td>
+                    <td><b>风控限额（单日）</b></td>
                 </tr>
                 <?php foreach ($qpay as $val) { ?>
-                <tr>
-                    <td><?= $val['bankName'] ?></td>
-                    <td><?= StringUtils::amountFormat1('{amount}{unit}', $val['singleLimit']) ?></td>
-                </tr>
+                    <tr>
+                        <td><?= $val['bankName'] ?></td>
+                        <td><?= StringUtils::amountFormat1('{amount}{unit}', $val['singleLimit']) ?></td>
+                        <td><?= StringUtils::amountFormat1('{amount}{unit}', $val['dailyLimit']) ?></td>
+                    </tr>
                 <?php } ?>
             </table>
             <?php } ?>

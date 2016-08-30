@@ -13,9 +13,19 @@ $(function() {
     $('#payment-bank').each(function() {
         $(this).on('click', '.picker-item', function() {
             var $this = $(this);
+            var bankid = $this.data('bankid');
             $this.closest('.picker').find('.picker-item').removeClass('picked');
             $this.addClass('picked');
-            $('#bankid').val($this.data('bankid'));
+            $('#bankid').val(bankid);
+
+            $.get('/user/userbank/ebank-limit', {bid: bankid}, function(data) {
+                if (data.length !== 1) {
+                    $('.bank-limit').show();
+                    $('div.bank-limit').html(data+'<br>');
+                } else {
+                    $('.bank-limit').hide();
+                }
+            });
         });
     });
 
@@ -45,37 +55,10 @@ JS;
 
 $this->registerJs($_js, View::POS_END, 'body_close');
 $this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/chargedeposit.css');
-$this->registerCssFile(ASSETS_BASE_URI.'css/frontend.css');
+$this->registerCssFile(ASSETS_BASE_URI.'css/frontend.css?v=20160829');
 $this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/mytrade.css?v=20160720');
 $this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/bindcardalready.css');
 ?>
-
-<style>
-    body{background: #f6f7f8 !important;}
-    .bindCard-header{
-        height: 50px;
-        line-height: 50px;
-        padding-left: 20px;
-        border-bottom: 1px solid #efeff3;
-    }
-    .bindCard-header-icon{
-        width: 20px;
-        height: 15px;
-        margin-top: 18px;
-        margin-right: 10px;
-        background: url("../../images/useraccount/background-icon.png") no-repeat -90px 0;
-        float: left;
-    }
-    #payment-bank{
-        margin: 20px auto;
-    }
-    .myCoupon-content h3{
-        padding: 10px;
-    }
-    .help-block-error {
-        color: red;;
-    }
-</style>
 
 <div class="myCoupon-box">
     <div class="bindCard-header">
@@ -87,23 +70,22 @@ $this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/bindcardalready.css');
             <a class="a_first select" href="/user/recharge/init">个人网银</a>
             <a class="a_second " href="/user/userbank/recharge">快捷充值</a>
         </div>
+        <br>
+        <h3>网银充值</h3>
         <div id="payment-bank" class="section">
-            <h3>网银充值</h3>
             <ul class="picker">
                 <?php foreach($bank as $val): ?>
                     <li class="picker-item <?= (strval($val->bankId) === $recharge->bank_id)?"picked":"" ?>" data-bankid="<?= $val->bankId ?>"><img src="<?= ASSETS_BASE_URI ?>images/banks/<?= $val->bankId ?>.jpg" alt="<?= $val->bank->bankName ?>"></li>
                 <?php endforeach; ?>
             </ul>
         </div>
-        <h3>限额提醒</h3>
-        <div class="section">
-            <p style="margin-left:30px">具体限额以您在银行协定的额度为准，详细情况下请进入您的网上银行查看，如有疑问，请联系客服：<?= Yii::$app->params['contact_tel'] ?>。</p>
-        </div>
+        <h3 class="bank-limit">限额提醒</h3>
+        <div class="section bank-limit"></div>
         <h3>请填写充值金额</h3>
         <div class="section">
             <?php $form = ActiveForm::begin(['id' => 'recharge_form', 'action' => '/user/recharge/apply', 'options' => ['target' => '_blank']]); ?>
             <ul class="wdjf-form">
-                <li><div class="wdjf-label">账户余额</div> <div class="wdjf-field"><span class="balance"><?= $user_account->available_balance ?></span> 元</div></li>
+                <li><div class="wdjf-label">&nbsp;账户余额</div> <div class="wdjf-field"><span class="balance"><?= $user_account->available_balance ?></span> 元</div></li>
                 <li><div class="wdjf-label"><span class="fee-info">*</span>充值金额</div> <div class="wdjf-field"><?= $form->field($recharge, 'fund', ['template' => '{input}{error}'])->textInput(['autocomplete' => 'off']); ?></div><span style='margin-left: 5px; line-height: 33px;'>元</span></li>
                 <li class="wdjf-action">
                     <input class="btn btn-primary" type="submit" style="    color: #fff;background-color: #f44336;width: 65px;border: 0px;border-radius: 0px;" value="充值">
@@ -119,9 +101,9 @@ $this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/bindcardalready.css');
 
         <h3>温馨提示</h3>
         <div class="section">
-            <p style="margin-left:30px">投资人充值手续费由温都金服垫付；</p>
-            <p style="margin-left:30px">最低充值金额应大于等于1元；</p>
-            <p style="margin-left:30px">充值期间请勿关闭浏览器，待充值成功并返回账户中心后，所充资金才能入账。如有疑问，请联系客服<?= Yii::$app->params['contact_tel'] ?>。</p>
+            <p>投资人充值手续费由温都金服垫付；</p>
+            <p>最低充值金额应大于等于1元；</p>
+            <p>充值期间请勿关闭浏览器，待充值成功并返回账户中心后，所充资金才能入账。如有疑问，请联系客服<?= Yii::$app->params['contact_tel'] ?>。</p>
         </div>
     </div>
 </div>

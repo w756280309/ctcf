@@ -115,8 +115,6 @@
 }
 .wdjf-form .wdjf-label {
     margin-right: 15px;
-    width: 120px;
-    text-align: right;
 }
 .wdjf-form .balance {
     line-height: 34px;
@@ -126,7 +124,7 @@
 }
 .wdjf-form .wdjf-action {
     margin-top: 15px;
-    margin-left: 135px;
+    margin-left: 77px;
 }
 .wdjf-form .fee-info {
     margin-top: 15px;
@@ -483,10 +481,44 @@ body {
     background: url("../../images/useraccount/background-icon.png") no-repeat -90px 0;
     float: left;
 }
-#payment-bank {
-    margin: 20px auto;
-}
 .myCoupon-content h3 {
     padding: 10px;
     padding-left: 0px;
+}
+body {
+    background: #f6f7f8 !important;
+}
+.bindCard-header {
+    height: 50px;
+    line-height: 50px;
+    padding-left: 20px;
+    border-bottom: 1px solid #efeff3;
+}
+.bindCard-header-icon {
+    width: 20px;
+    height: 15px;
+    margin-top: 18px;
+    margin-right: 10px;
+    background: url("../../images/useraccount/background-icon.png") no-repeat -90px 0;
+    float: left;
+}
+.myCoupon-content h3 {
+    padding: 10px;
+}
+.help-block-error {
+    color: red;
+}
+table, tr, th, td {
+    border: 1px solid #000 !important;
+    height: auto !important;
+    text-align: center;
+}
+.section {
+    margin: 0 30px;
+}
+.section .bank-note {
+    margin-top: 10px;
+}
+.bank-limit {
+    display: none;
 }
