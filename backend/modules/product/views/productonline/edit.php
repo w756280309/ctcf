@@ -731,6 +731,7 @@ $is_online = in_array($model->status, [2, 3, 4, 5, 6, 7]);//判断标的是否�
             $('#onlineproduct-finish_date').val('');
             $('#onlineproduct-finish_date').attr('readonly', 'readonly');
             $('#onlineproduct-kuanxianqi').attr('readonly', 'readonly');
+            $('#onlineproduct-finish_date').replaceWith($('#onlineproduct-finish_date').clone());
         } else {
             $('#onlineproduct-finish_date').removeAttr('readonly');
             $('#onlineproduct-kuanxianqi').removeAttr('readonly');
