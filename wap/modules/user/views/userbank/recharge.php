@@ -10,20 +10,7 @@ if ($backUrl = \Yii::$app->session['recharge_back_url']) {
 }
 ?>
 <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/bind.css"/>
-<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/chongzhi.css?v=20160412"/>
-<style type="text/css">
-    .yzm-show {
-        width: 100px !important;
-        margin-top:-4px !important;
-        font-size:12px !important;
-        height:28px !important;
-        line-height:27px !important;
-    }
-    .ryzm-disabled {
-        background:#fff !important;
-        border: 1px solid #f44336 !important;
-    }
-</style>
+<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/chongzhi.css?v=20160803"/>
 
 <!--银行卡-->
 <div class="row bank-card">
@@ -54,9 +41,18 @@ if ($backUrl = \Yii::$app->session['recharge_back_url']) {
     </div>
     <!--  当快捷充值被禁用,需要显示提示信息 -->
     <?php if ($bank->isDisabled) { ?>
-    <div class="form-bottom note">*绑定银行暂不支持快捷充值，如有问题请联系客服<a class="contact-tel" href="tel:<?= Yii::$app->params['contact_tel'] ?>"><?= Yii::$app->params['contact_tel'] ?></a></div>
+        <div class="note form-bottom">*绑定银行暂不支持快捷充值，如有问题请联系客服<a class="contact-tel" href="tel:<?= Yii::$app->params['contact_tel'] ?>"><?= Yii::$app->params['contact_tel'] ?></a>。</div>
     <?php } else { ?>
-    <div class="form-bottom">&nbsp;</div>
+        <br>
+        <div class="note">
+            <ul>
+                <li>*温馨提示：</li>
+                <li>为保障安全，连续3次因余额不足导致充值失败，快捷充值通道将被锁定24小时，请核实后交易；</li>
+                <li>如果快捷充值通道已被锁定，可先选择PC官网进行网银充值；</li>
+                <li>如需要大额充值，可选择PC官网进行网银充值，地址（www.wenjf.com），如有疑问，请联系客服<a class="contact-tel" href="tel:<?= Yii::$app->params['contact_tel'] ?>"><?= Yii::$app->params['contact_tel'] ?></a>。</li>
+            </ul>
+        </div>
+        <div class="form-bottom">&nbsp;</div>
     <?php } ?>
     <!--提交按钮-->
     <div class="row">

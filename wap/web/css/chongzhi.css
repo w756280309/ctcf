@@ -61,8 +61,22 @@
 /* 添加显示红色字体的类,设置左边距,用于左对齐 */
 .note {
     color: #f44336;
-    padding-left: 5%;
+    padding: 0 5%;
 }
+
 .kahao div input {
     margin-top: 10px;
+}
+
+.yzm-show {
+    width: 100px !important;
+    margin-top:-4px !important;
+    font-size:12px !important;
+    height:28px !important;
+    line-height:27px !important;
+}
+
+.ryzm-disabled {
+    background:#fff !important;
+    border: 1px solid #f44336 !important;
 }

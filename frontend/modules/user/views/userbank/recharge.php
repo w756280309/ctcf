@@ -2,40 +2,11 @@
 
 $this->title = '充值';
 $this->registerCssFile('/css/useraccount/bindcardalready.css');
-$this->registerCssFile('/css/useraccount/chargedeposit.css');
+$this->registerCssFile('/css/useraccount/chargedeposit.css?v=20160830');
 
 use common\utils\StringUtils;
 
 ?>
-<style>
-    .list-single {
-        color: #555;
-        font-size: 16px;
-        line-height: 16px;
-        width: 100%;
-        height: 36px;
-        position: relative;
-        border-bottom: 1px solid #e3e3e3;
-    }
-    .list-single a {
-        position: absolute;
-        top: 10px;
-        color: #99999d;
-        cursor: pointer;
-        padding: 0 10px;
-    }
-    .list-single a.select {
-        color: #f44336;
-        padding-bottom: 9px;
-        border-bottom: 2px solid #f44336;
-    }
-    .list-single .a_first {
-        left: 0;
-    }
-     .list-single .a_second {
-        left: 162px;
-    }
-</style>
 
 <div class="bindCard-box">
     <div class="bindCard-header">
@@ -80,7 +51,7 @@ use common\utils\StringUtils;
             <div class="link-en">
                 <input type="submit" class="link-charge" value="充值" id="rechargebtn" />
             </div>
-            <p class="fee-info" style="    margin-top: -24px;color: #f44336;    margin-left: 60px;">* 充值所需费用由温都垫付</p>
+            <p class="fee-info">* 充值所需费用由温都垫付</p>
         </form>
         <!------------------已绑卡结束------------------>
         <?php } elseif ($binding) { ?>
@@ -115,11 +86,14 @@ use common\utils\StringUtils;
         <?php }?>
         <div class="clear"></div>
     </div>
+
     <div class="charge-explain">
         <p class="charge-explain-title">温馨提示：</p>
         <ul>
             <li>投资人充值手续费由温都金服垫付；</li>
             <li>最低充值金额应大于等于1元；</li>
+            <li>为保障安全，连续3次因余额不足导致充值失败，快捷充值通道将被锁定24小时，请核实后交易；</li>
+            <li>如果快捷充值通道已被锁定，可先选择网银充值；</li>
             <li>充值期间请勿关闭浏览器，待充值成功并返回账户中心后，所充资金才能入账。如有疑问，请联系客服<?= Yii::$app->params['contact_tel'] ?>。</li>
         </ul>
     </div>
