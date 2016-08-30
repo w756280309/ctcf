@@ -1,7 +1,6 @@
 <?php
 
 return [
-    'ui_main_logo' => '/image/logo.png',
     'ui_nav_bgcolor_hex' => null,
     'front_url' => '',
     'admin' => 3,

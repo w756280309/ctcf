@@ -338,15 +338,8 @@ Header and header elements.
 
 .header .brand {
   display: inline-block;
-  margin-top: -1px;
-  margin-right: 0;
-  padding-left: 0;
-  padding-right: 0;
-  width: 225px;
-}
-
-.header .brand img {
-  margin-left: 20px;
+  width: 200px;
+  color: #ffd700;
 }
 
 .header .btn-navbar {

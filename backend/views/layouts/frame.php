@@ -76,9 +76,7 @@ $menus = AuthSys::getMenus();
         <div class="header navbar navbar-inverse navbar-fixed-top">
             <div class="navbar-inner">
                 <div class="container-fluid">
-                    <a class="brand" href="/">
-                        <img src="<?= Yii::$app->params['ui_main_logo'] ?>" alt="logo">
-                    </a>
+                    <a class="brand" href="/">温都金服</a>
 
                     <div class="navbar hor-menu hidden-phone hidden-tablet">
                         <div class="navbar-inner">
