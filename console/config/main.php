@@ -28,7 +28,18 @@ return [
                     'prefix' => function ($message) {
                         return "";//去掉消息返回的[IP address][User ID][Session ID][Severity Level]
                     }
-               ],
+                ],
+                [
+                    'class' => 'yii\log\FileTarget',
+                    'levels' => ['trace'],
+                    'categories' => ['cancel_order'],
+                    'logFile' => '@app/runtime/logs/order/cancel_order' . date('Ym') . '.log',
+                    'maxFileSize' => 1024 * 2,
+                    'logVars' => ['trace'],
+                    'prefix' => function ($message) {
+                        return "";//去掉消息返回的[IP address][User ID][Session ID][Severity Level]
+                    }
+                ],
             ],
         ],
         'beanstalk'=>[

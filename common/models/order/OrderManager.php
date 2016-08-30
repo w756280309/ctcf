@@ -207,7 +207,7 @@ class OrderManager
         $transaction = Yii::$app->db->beginTransaction();
         try {
             UserCoupon::unuseCoupon($ord);
-
+            
             $cancelOrder = CancelOrder::initForOrder($ord, $ord->paymentAmount);
             $cancelOrder->txStatus = CancelOrder::ORDER_CANCEL_SUCCESS;
             if (!$cancelOrder->save()) {
@@ -228,6 +228,9 @@ class OrderManager
             return true;
         } catch (\Exception $ex) {
             $transaction->rollBack();
+            //记录异常日志
+            $msg = "超投处理    订单ID:" . $ord->id . "   错误信息：" . $ex->getMessage() . PHP_EOL;
+            Yii::trace($msg, 'cancel_order');
             throw $ex;
         }
     }
