@@ -23,3 +23,17 @@
 frontend项目下assets下需要添加第三方的js/css文件，可以用bower安装，或者手工上传（症状：PC端缺js/css）
 
 14.已有SQL不允许修改,db目录下存的都是新增的SQL语句
+
+添加站点：lstatic.wenjf.com（所有流量走CDN）
+/m/* 根目录指向 web01的/path/to/WDJF/wap/web
+/pc/* 根目录指向 web01的/path/to/WDJF/frontend/web
+/promo/* 根目录指向 cache01的/path/to/PROMO
+
+例如 static.wenjf.com/m/upload/adv/xxxx 可以访问到 m.wenjf.com/upload/adv/xxx
+
+cdn已经上线，具体信息如下：
+
+- wap站的图片与css,js访问方式如下： http://static.wenjf.com/m/images/tubiao.png
+- pc站的图片与css,js访问方式如下： http://static.wenjf.com/pc/js/common.js
+- 后台上传的图片访问地址为： http://static.wenjf.com/upload/adv/c636f7c79be7672c44b5535504fe686d.jpg
+- 活动页面的访问方式： http://static.wenjf.com/promo
