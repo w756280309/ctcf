@@ -72,118 +72,116 @@ class ProductonlineController extends BaseController
         $con_name_arr = Yii::$app->request->post('name');
         $con_content_arr = Yii::$app->request->post('content');
 
-        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            //非测试标，起投金额、递增金额取整
-            if (!$model->isTest) {
-                $model->start_money = intval($model->start_money);
-                $model->dizeng_money = intval($model->dizeng_money);
-            }
-            $uids = LoanService::convertUid($model->allowedUids);
-            $finish_date = is_integer($model->finish_date) ? $model->finish_date : strtotime($model->finish_date);
-            $start_date = is_integer($model->start_date) ? $model->start_date : strtotime($model->start_date);
-            $end_date = is_integer($model->end_date) ? $model->end_date : strtotime($model->end_date);
-
-            $refund_method = (int) $model->refund_method;
-            if (OnlineProduct::REFUND_METHOD_DAOQIBENXI !== $refund_method) {   //还款方式只有到期本息,才设置项目截止日和宽限期
-                $model->finish_date = null;
-                $model->kuanxianqi = 0;
-            }
-
-            if (!empty($model->finish_date) && OnlineProduct::REFUND_METHOD_DAOQIBENXI === $refund_method) {
-                //若截止日期不为空，重新计算项目天数
-                $pp = new ProductProcessor();
-                $model->expires = $pp->LoanTimes(date('Y-m-d H:i:s', $start_date), null, $finish_date, 'd', true)['days'][1]['period']['days'];
-            }
-
-            if (null === $model->id) {
-                $model->sn = OnlineProduct::createSN();
-                $model->sort = OnlineProduct::SORT_PRE;
-            } else {
-                $model->isPrivate = $isPrivate;
-            }
-
-            if (0 === $model->issuer) {   //当发行方没有选择时,发行方项目编号为空
-                $model->issuerSn = null;
-            }
-
-            if (!$model->isNatureRefundMethod()) {  //当标的还款方式不为按自然时间付息的方式时,固定日期置为null
-                $model->paymentDay = null;
-            }
-
-            $model->start_date = $start_date;
-            $model->end_date = $end_date;
-            $model->finish_date = $model->finish_date ? $finish_date : 0;
-
-            $_namearr = empty($con_name_arr) ? $con_name_arr : array_filter($con_name_arr);
-            if (empty($_namearr)) {
-                $model->addError('contract_type', '合同协议至少要输入一份');
-            }
-
-            if (false === strpos($con_name_arr[0], '认购协议')) {
-                $model->addError('contract_type', '合同名称错误,第一份合同应该录入认购协议');
-            }
-
-            if (false === strpos($con_name_arr[1], '风险揭示书')) {
-                $model->addError('contract_type', '合同名称错误,第二份合同应该录入风险揭示书');
-            }
-
-            foreach ($con_name_arr as $key => $val) {
-                if (empty($val)) {
-                    $model->addError('contract_type', '合同名称不能为空');
+        if ($model->load(Yii::$app->request->post())) {
+            $model->finish_date = is_integer($model->finish_date) ? $model->finish_date : strtotime($model->finish_date);
+            $model->start_date = is_integer($model->start_date) ? $model->start_date : strtotime($model->start_date);
+            $model->end_date = is_integer($model->end_date) ? $model->end_date : strtotime($model->end_date);
+            if ($model->validate()) {
+                //非测试标，起投金额、递增金额取整
+                if (!$model->isTest) {
+                    $model->start_money = intval($model->start_money);
+                    $model->dizeng_money = intval($model->dizeng_money);
                 }
-                if (empty($con_content_arr[$key])) {
-                    $model->addError('contract_type', '合同内容不能为空');
-                }
-            }
+                $uids = LoanService::convertUid($model->allowedUids);
 
-            if (!$model->getErrors('contract_type')) {
-                $transaction = Yii::$app->db->beginTransaction();
-
-                $model->allowedUids = $uids;
-                $model->creator_id = Yii::$app->user->id;
-                $model->yield_rate = bcdiv($model->yield_rate, 100, 14);
-                $model->jixi_time = $model->jixi_time !== '' ? is_integer($model->jixi_time) ? $model->jixi_time : strtotime($model->jixi_time) : 0;
-                $model->recommendTime = empty($model->recommendTime) ? 0 : $model->recommendTime;
-
-                try {
-                    if ($model->isNewRecord) {
-                        $pre = $model->save(false);
-                        $log = AdminLog::initNew($model);
-                        $log->save();
-                    } else {
-                        $log = AdminLog::initNew($model);
-                        $log->save();
-                        $pre = $model->save(false);
-                    }
-                    if (!$pre) {
-                        $transaction->rollBack();
-                        $model->addError('title', '标的添加异常');
-                    }
-                } catch (\Exception $e) {
-                    $transaction->rollBack();
-                    $model->addError('title', '标的添加异常' . $e->getMessage());
+                $refund_method = (int) $model->refund_method;
+                if (OnlineProduct::REFUND_METHOD_DAOQIBENXI !== $refund_method) {   //还款方式只有到期本息,才设置项目截止日和宽限期
+                    $model->finish_date = null;
+                    $model->kuanxianqi = 0;
                 }
 
-                if (!empty($id)) {
-                    ContractTemplate::deleteAll(['pid' => $id]);
+                if (!empty($model->finish_date) && OnlineProduct::REFUND_METHOD_DAOQIBENXI === $refund_method) {
+                    //若截止日期不为空，重新计算项目天数
+                    $pp = new ProductProcessor();
+                    $model->expires = $pp->LoanTimes(date('Y-m-d H:i:s', $model->start_date), null, $model->finish_date, 'd', true)['days'][1]['period']['days'];
                 }
 
-                $record = new ContractTemplate();
+                if (null === $model->id) {
+                    $model->sn = OnlineProduct::createSN();
+                    $model->sort = OnlineProduct::SORT_PRE;
+                } else {
+                    $model->isPrivate = $isPrivate;
+                }
+
+                if (0 === $model->issuer) {   //当发行方没有选择时,发行方项目编号为空
+                    $model->issuerSn = null;
+                }
+
+                if (!$model->isNatureRefundMethod()) {  //当标的还款方式不为按自然时间付息的方式时,固定日期置为null
+                    $model->paymentDay = null;
+                }
+
+                $_namearr = empty($con_name_arr) ? $con_name_arr : array_filter($con_name_arr);
+                if (empty($_namearr)) {
+                    $model->addError('contract_type', '合同协议至少要输入一份');
+                }
+
+                if (false === strpos($con_name_arr[0], '认购协议')) {
+                    $model->addError('contract_type', '合同名称错误,第一份合同应该录入认购协议');
+                }
+
+                if (false === strpos($con_name_arr[1], '风险揭示书')) {
+                    $model->addError('contract_type', '合同名称错误,第二份合同应该录入风险揭示书');
+                }
+
                 foreach ($con_name_arr as $key => $val) {
-                    $record_model = clone $record;
-                    $record_model->pid = $model->id;
-                    $record_model->name = $val;
-                    $record_model->content = $con_content_arr[$key];
-                    if (!$record_model->save()) {
-                        $transaction->rollBack();
-                        $model->addError('title', '录入ContractTemplate异常');
+                    if (empty($val)) {
+                        $model->addError('contract_type', '合同名称不能为空');
+                    }
+                    if (empty($con_content_arr[$key])) {
+                        $model->addError('contract_type', '合同内容不能为空');
                     }
                 }
 
-                if (!$model->hasErrors()) {
-                    $transaction->commit();
+                if (!$model->getErrors('contract_type')) {
+                    $transaction = Yii::$app->db->beginTransaction();
 
-                    return $this->redirect(['list']);
+                    $model->allowedUids = $uids;
+                    $model->creator_id = Yii::$app->user->id;
+                    $model->yield_rate = bcdiv($model->yield_rate, 100, 14);
+                    $model->jixi_time = $model->jixi_time !== '' ? is_integer($model->jixi_time) ? $model->jixi_time : strtotime($model->jixi_time) : 0;
+                    $model->recommendTime = empty($model->recommendTime) ? 0 : $model->recommendTime;
+
+                    try {
+                        if ($model->isNewRecord) {
+                            $pre = $model->save(false);
+                            $log = AdminLog::initNew($model);
+                            $log->save();
+                        } else {
+                            $log = AdminLog::initNew($model);
+                            $log->save();
+                            $pre = $model->save(false);
+                        }
+                        if (!$pre) {
+                            $transaction->rollBack();
+                            $model->addError('title', '标的添加异常');
+                        }
+                    } catch (\Exception $e) {
+                        $transaction->rollBack();
+                        $model->addError('title', '标的添加异常' . $e->getMessage());
+                    }
+
+                    if (!empty($id)) {
+                        ContractTemplate::deleteAll(['pid' => $id]);
+                    }
+
+                    $record = new ContractTemplate();
+                    foreach ($con_name_arr as $key => $val) {
+                        $record_model = clone $record;
+                        $record_model->pid = $model->id;
+                        $record_model->name = $val;
+                        $record_model->content = $con_content_arr[$key];
+                        if (!$record_model->save()) {
+                            $transaction->rollBack();
+                            $model->addError('title', '录入ContractTemplate异常');
+                        }
+                    }
+
+                    if (!$model->hasErrors()) {
+                        $transaction->commit();
+
+                        return $this->redirect(['list']);
+                    }
                 }
             }
         }
