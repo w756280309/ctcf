@@ -2,7 +2,7 @@
 
 $this->title = '充值';
 $this->registerCssFile('/css/useraccount/bindcardalready.css');
-$this->registerCssFile('/css/useraccount/chargedeposit.css?v=20160830');
+$this->registerCssFile('/css/useraccount/chargedeposit.css?v=20160831');
 
 use common\utils\StringUtils;
 
@@ -51,7 +51,7 @@ use common\utils\StringUtils;
             <div class="link-en">
                 <input type="submit" class="link-charge" value="充值" id="rechargebtn" />
             </div>
-            <p class="fee-info">* 充值所需费用由温都垫付</p>
+            <p class="recharge-note">* 充值所需费用由温都垫付</p>
         </form>
         <!------------------已绑卡结束------------------>
         <?php } elseif ($binding) { ?>
