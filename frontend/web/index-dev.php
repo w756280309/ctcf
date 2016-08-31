@@ -1,5 +1,7 @@
 <?php
 
+require(__DIR__ . '/../../backend/web/access_limit.php');
+
 defined('YII_DEBUG') or define('YII_DEBUG', true);
 defined('YII_ENV') or define('YII_ENV', 'dev');
 
