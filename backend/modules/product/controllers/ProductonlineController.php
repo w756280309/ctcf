@@ -110,6 +110,10 @@ class ProductonlineController extends BaseController
                 $model->paymentDay = null;
             }
 
+            $model->start_date = $start_date;
+            $model->end_date = $end_date;
+            $model->finish_date = $model->finish_date ? $finish_date : 0;
+
             $_namearr = empty($con_name_arr) ? $con_name_arr : array_filter($con_name_arr);
             if (empty($_namearr)) {
                 $model->addError('contract_type', '合同协议至少要输入一份');
@@ -136,9 +140,6 @@ class ProductonlineController extends BaseController
                 $transaction = Yii::$app->db->beginTransaction();
 
                 $model->allowedUids = $uids;
-                $model->start_date = $start_date;
-                $model->end_date = $end_date;
-                $model->finish_date = $model->finish_date ? $finish_date : 0;
                 $model->creator_id = Yii::$app->user->id;
                 $model->yield_rate = bcdiv($model->yield_rate, 100, 14);
                 $model->jixi_time = $model->jixi_time !== '' ? is_integer($model->jixi_time) ? $model->jixi_time : strtotime($model->jixi_time) : 0;
