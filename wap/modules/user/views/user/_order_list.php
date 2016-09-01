@@ -1,7 +1,5 @@
 <?php
     use common\models\product\OnlineProduct;
-    use common\models\order\OnlineRepaymentPlan;
-    use common\models\order\OnlineOrder;
 ?>
 <?php if($list['data']) { foreach ($list['data'] as $o) { ?>
     <a class="loan-box block" href="/user/user/orderdetail?id=<?= $o->id ?>">
@@ -35,7 +33,7 @@
                 </div>
             <?php } else { ?>
                 <div class="col-xs-4 loan-info2">
-                    <?php $profit = OnlineRepaymentPlan::getTotalLixi(new OnlineProduct(['refund_method' => $o->loan->refund_method, 'expires' => $o->loan->expires]), new OnlineOrder(['order_money' => $o->order_money, 'yield_rate' => $o->yield_rate])) ;?>
+                    <?php $profit = $o->getProceeds();?>
                     <p class="info-val"><?= rtrim(rtrim(number_format($profit, 2), '0'), '.') ?>元</p>
                     <p class="info-label"><?= ($o->loan->status==6)?"实际收益":"预期收益" ?></p>
                 </div>

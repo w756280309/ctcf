@@ -313,4 +313,38 @@ class OnlineOrder extends \yii\db\ActiveRecord implements \P2pl\OrderTxInterface
     {
         return $this->hasOne(OnlineProduct::className(), ['id' => 'online_pid']);
     }
+
+    //获取当前订单的还款计划
+    public function getRepaymentPlan()
+    {
+        return $this->hasMany(OnlineRepaymentPlan::class, ['order_id' => 'id']);
+    }
+
+    //获取当前订单预期（实际）收益
+    public function getProceeds()
+    {
+        $plans = $this->repaymentPlan;
+        $amount = 0;
+        if ($plans) {
+            foreach ($plans as $plan) {
+                if (in_array($plan->status, [OnlineRepaymentPlan::STATUS_WEIHUAN, OnlineRepaymentPlan::STATUS_YIHUAN, OnlineRepaymentPlan::STATUS_TIQIAM])) {
+                    $amount = $amount + $plan->lixi;
+                }
+            }
+        }
+        return $amount;
+    }
+
+    //获取当前订单的最后一次还款时间
+    public function getLastPaymentDate()
+    {
+        $plans = $this->repaymentPlan;
+        if ($plans) {
+            $plan = end($plans);
+            $date = date('Y-m-d', $plan->refund_time);
+        } else {
+            $date = date('Y-m-d', $this->loan->finish_date);
+        }
+        return $date;
+    }
 }

@@ -134,7 +134,7 @@ class UserController extends BaseController
                 $status = Loan::STATUS_OVER;
                 $tj = Plan::find()
                     ->innerJoin($l, "$l.id=$p.online_pid")
-                    ->where(["uid" => $user->id, "$p.status" => Plan::STATUS_YIHUAN, "$l.status" => 6])
+                    ->where(["uid" => $user->id, "$p.status" => [Plan::STATUS_YIHUAN, Plan::STATUS_TIQIAM], "$l.status" => 6])
                     ->groupBy("online_pid")
                     ->select("sum(benxi) as benxi")
                     ->asArray()
@@ -160,7 +160,7 @@ class UserController extends BaseController
         if (1 === $type) {
             $totaldata = $query->all();
             foreach ($totaldata as $v) {
-                $totalbenxi += ($v->order_money + Plan::getTotalLixi($v->loan, $v));
+                $totalbenxi += ($v->order_money + $v->getProceeds());
             }
         }
 
@@ -176,7 +176,7 @@ class UserController extends BaseController
             $plan[$key]['yihuan'] = 0;
 
             foreach ($data as $v) {
-                if (Plan::STATUS_YIHUAN === $v->status) {
+                if (in_array($v->status, [Plan::STATUS_YIHUAN, Plan::STATUS_TIQIAM])) {
                     ++$plan[$key]['yihuan'];
                 }
             }

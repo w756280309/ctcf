@@ -5,7 +5,6 @@ $this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/mytrade.css?v=20160804',
 $this->registerCssFile(ASSETS_BASE_URI.'css/pagination.css', ['depends' => 'frontend\assets\FrontAsset']);
 $this->registerJsFile(ASSETS_BASE_URI.'js/useraccount/my_trade.js', ['depends' => 'frontend\assets\FrontAsset']);
 
-use common\models\order\OnlineRepaymentPlan;
 use common\utils\StringUtils;
 use common\widgets\Pager;
 ?>
@@ -65,10 +64,10 @@ use common\widgets\Pager;
                     <td class="text-second">
                         <a href="/deal/deal/detail?sn=<?= $val->loan->sn ?>"><?= $val->loan->title ?></a>
                     </td>
-                    <td class="text-align-lf"><?= $val->loan->finish_date ? date('Y-m-d', $val->loan->finish_date) : '' ?></td>
+                    <td class="text-align-lf"><?= $val->getLastPaymentDate() ?></td>
                     <td class="text-align-ct"><?= rtrim(rtrim(number_format($val->yield_rate * 100, 2), '0'), '.') ?>%</td>
                     <td class="text-align-rg"><?= StringUtils::amountFormat3($val->order_money) ?></td>
-                    <td class="text-align-rg"><?= StringUtils::amountFormat3(OnlineRepaymentPlan::getTotalLixi($val->loan, $val)) ?></td>
+                    <td class="text-align-rg"><?= StringUtils::amountFormat3($val->getProceeds()) ?></td>
                     <td class="text-align-ct">
                         <span class="tip-cursor">
                             <span class="tip-font"><?= $plan[$key]['yihuan'] ?>/<?= count($plan[$key]['obj']) ?></span>

@@ -77,7 +77,7 @@ class DataController extends Controller
         }
 
         //更新历史数据：所有已还、提前款款的还款计划
-        $plan = OnlineRepaymentPlan::find()->where(['status' => [1, 2]])->all();
+        $plan = OnlineRepaymentPlan::find()->where(['status' => [OnlineRepaymentPlan::STATUS_YIHUAN, OnlineRepaymentPlan::STATUS_TIQIAM]])->all();
         if ($plan) {
             foreach ($plan as $v) {
                 $rep = Repayment::find()->where(['loan_id' => $v['online_pid'], 'term' => $v['qishu'], 'isRepaid' => 0])->one();

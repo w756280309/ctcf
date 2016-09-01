@@ -101,7 +101,7 @@ class UserController extends BaseController
 
         $profit = null;
         if (!in_array($product->status, [2, 3, 7])) {
-            $profit = OnlineRepaymentPlan::getTotalLixi($product, $deal);
+            $profit = $deal->getProceeds();
         }
 
         $plan = null;

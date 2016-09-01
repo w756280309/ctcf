@@ -48,7 +48,7 @@ class RepaymentController extends BaseController
             throw new NotFoundHttpException();     //参数无效,抛出404异常
         }
 
-        $deal = OnlineProduct::find()->select('title,status')->where(['id' => $pid])->one();
+        $deal = OnlineProduct::find()->where(['id' => $pid])->one();
         $model = (new \yii\db\Query())
                 ->select('orp.*,u.real_name,u.mobile')
                 ->from(['online_repayment_plan orp'])
@@ -63,9 +63,27 @@ class RepaymentController extends BaseController
         $total_lixi = 0;
         $total_bx = 0;
         bcscale(14);
-
+        $bcround = new BcRound();
         $qimodel = null;
+        $isInGracePeriod = $deal->isInGracePeriod();//判断当前标的是否处于宽限期
+        $days = (new \DateTime())->diff(new \DateTime(date('Y-m-d', $deal->jixi_time)))->days;//计算当前时间到计息日期的天数
         foreach ($model as $val) {
+            $qishu = intval($val['qishu']);
+            //判断当前是否已经还过款
+            $repayment = Repayment::findOne(['loan_id' => $pid, 'term' => $qishu]);
+            if (!$repayment) {
+                return ['result' => 0, 'message' => '还款信息不存在'];
+            }
+            //当没有还过款时候才从新计算利息
+            $payed = $repayment->isRefunded;
+            if ($isInGracePeriod) {
+                if (!$payed) {
+                    $val['lixi'] = $bcround->bcround(bcdiv(bcmul($days, $val['lixi']), $deal->expires), 2);//宽限期的还款计划的利息是用原有还款计划的利息计算得到的
+                    $val['lixi'] = max($val['lixi'], 0.01);
+                    $val['benxi'] = bcadd($val['lixi'], $val['benjin']);
+                }
+            }
+            $val['payed'] = $payed ? true : false;
             $total_bj = bcadd($total_bj, $val['benjin']);
             $total_lixi = bcadd($total_lixi, $val['lixi']);
             $total_bx = bcadd($total_bj, $total_lixi);
@@ -75,8 +93,6 @@ class RepaymentController extends BaseController
         //应还款人数
         $count = OnlineRepaymentPlan::find()->select('uid')->where(['online_pid' => $pid])->groupBy('uid')->count();
 
-        $bcround = new BcRound();
-
         return $this->render('liebiao', [
             'count' => $count,
             'yhbj' => $bcround->bcround($total_bj, 2),
@@ -84,6 +100,7 @@ class RepaymentController extends BaseController
             'total_bx' => $bcround->bcround($total_bx, 2),
             'deal' => $deal,
             'model' => $qimodel,
+            'isInGracePeriod' => $isInGracePeriod,
         ]);
     }
 
@@ -98,6 +115,14 @@ class RepaymentController extends BaseController
             return [
                 'result' => 0,
                 'message' => '非法请求',
+            ];
+        }
+        //1:00-23:00才可进行还款处理
+        $h = intval(date('H'));
+        if ($h < 1 || $h >= 23) {
+            return [
+                'result' => 0,
+                'message' => '只能在01:00-22:59期间进行确认还款操作',
             ];
         }
 
@@ -166,12 +191,21 @@ class RepaymentController extends BaseController
             return ['result' => 0, 'message' => '还款信息不存在'];
         }
 
+        $isInGracePeriod = $deal->isInGracePeriod();//判断当前标的是否是在宽限期中
+        $days = (new \DateTime())->diff(new \DateTime(date('Y-m-d', $deal->jixi_time)))->days;//计算当前时间到计息日期的天数
+
         //融资人需要扣除的金额计算
         $totalFund = 0;
         $bcround = new BcRound();
         bcscale(14);
 
         foreach ($orders as $val) {
+            //如果在宽限期中，并且没有进行过还款操作，重新计算利息
+            if ($isInGracePeriod && !$repayment->isRepaid) {
+                $val->lixi = max(0.01, $bcround->bcround(bcdiv(bcmul($days, $val->lixi), $deal->expires), 2));//更新还款计划的利息
+                $val->benxi = bcadd($val->benjin, $val->lixi);//更新还款计划的本息
+                $val->refund_time = time();//更新还款计划的还款时间
+            }
             $totalFund = bcadd($totalFund, $val->benxi);
         }
 
@@ -204,6 +238,25 @@ class RepaymentController extends BaseController
 
         if (OnlineProduct::STATUS_HUAN === $deal->status && !$repayment->isRepaid) {
             $transaction = Yii::$app->db->beginTransaction();
+            //如果是在宽限期内
+            if ($isInGracePeriod) {
+                //更新还款计划
+                foreach ($orders as $val) {
+                    $res = $val->save(false);
+                    if (!$res) {
+                        $transaction->rollBack();
+                        return ['result' => 0, 'message' => '更新还款计划异常'];
+                    }
+                }
+                //更新Repayment表
+                $repayment->interest = max(0.01, $bcround->bcround(bcdiv(bcmul($days, $repayment->interest), $deal->expires), 2));
+                $repayment->amount = $bcround->bcround(bcadd($repayment->principal, $repayment->interest), 2);
+                $res = $repayment->save(false);
+                if (!$res) {
+                    $transaction->rollBack();
+                    return ['result' => 0, 'message' => '更新还款记录异常'];
+                }
+            }
 
             $saleac->account_balance = $bcround->bcround(bcsub($saleac->account_balance, $total_repayment), 2);
             $saleac->available_balance = $bcround->bcround(bcsub($saleac->available_balance, $total_repayment), 2);
@@ -278,7 +331,12 @@ class RepaymentController extends BaseController
             $record->benxi = $order['benxi'];
             $record->benjin = $order['benjin'];
             $record->benxi_yue = $sum_benxi_yue;
-            $record->status = OnlineRepaymentRecord::STATUS_DID;
+            if ($isInGracePeriod) {
+                $record->status = OnlineRepaymentRecord::STATUS_BEFORE;
+            } else {
+                $record->status = OnlineRepaymentRecord::STATUS_DID;
+            }
+
             $record->refund_time = time();
 
             if (!$record->save()) {
@@ -286,8 +344,11 @@ class RepaymentController extends BaseController
 
                 return ['result' => 0, 'message' => '还款失败，记录失败'];
             }
-
-            $order->status = OnlineRepaymentPlan::STATUS_YIHUAN;
+            if ($isInGracePeriod) {
+                $order->status = OnlineRepaymentPlan::STATUS_TIQIAM;
+            } else {
+                $order->status = OnlineRepaymentPlan::STATUS_YIHUAN;
+            }
             if (!$order->save()) {
                 $transaction->rollBack();
 
@@ -342,7 +403,7 @@ class RepaymentController extends BaseController
             $transaction->commit();
         }
 
-        $_repaymentrecord = OnlineRepaymentRecord::find()->where(['online_pid' => $pid, 'status' => OnlineRepaymentRecord::STATUS_DID])->groupBy('uid');
+        $_repaymentrecord = OnlineRepaymentRecord::find()->where(['online_pid' => $pid, 'status' => OnlineRepaymentRecord::STATUS_DID, OnlineRepaymentRecord::STATUS_BEFORE])->groupBy('uid');
         $data = $_repaymentrecord->select('uid')->all();
         $product = OnlineProduct::findOne($pid);
 

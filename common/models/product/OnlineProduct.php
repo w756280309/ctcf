@@ -819,4 +819,20 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
             self::REFUND_METHOD_NATURE_YEAR,
         ]);
     }
+
+    /**
+     * 判断当期标的是否在宽限期
+     * @return bool
+     */
+    public function isInGracePeriod()
+    {
+        if ($this->finish_date && $this->kuanxianqi > 0 && intval($this->refund_method) === OnlineProduct::REFUND_METHOD_DAOQIBENXI) {
+            $start = date('Y-m-d', strtotime('- ' . $this->kuanxianqi . ' day', $this->finish_date));
+            $date = date('Y-m-d');
+            $end = date('Y-m-d', $this->finish_date);
+            return $date >= $start && $date < $end;
+        } else {
+            return false;
+        }
+    }
 }
