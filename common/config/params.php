@@ -51,7 +51,11 @@ return [
         /*结算账号设置 end*/
     ],
     'bank' => require(__DIR__.'/banks.php'),
+    'sms_white_list' => [],   //用户白名单功能只在mock_sms为true的时候有效，即mock_sms为true时，除了白名单里面设置的手机号，其他手机号一律不发短信
     'sms' => [
+        'config' => [
+            'APP_ID' => '8a48b551525cdd3301526207479a0bcc',
+        ],
         'manbiao' => 71622,
         'tixian_succ' => 60753,
         'tixian_err' => 60757,
@@ -63,15 +67,12 @@ return [
         'daoqibenxi' => 70049,
         'fenqihuikuan' => 70048,
         'lfenqihuikuan' => 70046,
-        'config' => [
-            'APP_ID' => '8a48b551525cdd3301526207479a0bcc',
-        ],
-        'invite_bonus' => 105818,//邀请好友奖励
-        'coupon_expire' => 105820,//代金券3天后失效
+        'invite_bonus' => 105818, //邀请好友奖励
+        'coupon_expire' => 105820, //代金券3天后失效
+        'register_coupon' => 113105, //注册用户送代金券
         'coupon_reminder' => 113109,//代金券过期提醒
     ],
     'contact_tel' => '400-101-5151',
-    'white_list' => ['15810036547', '18518154492'],
     'pc_cat' => ['1' => '温盈金', '2' => '温盈宝'],
     'refund_method' => [
         '1' => '到期本息',
@@ -120,7 +121,7 @@ return [
         'app_key' => '8f5ca3eb5cbac210',
         'app_secret' => 'cc7c180b7e016f9802b1bcb9e493450e',
     ],
-    'mock_sms' => false,
+    'mock_sms' => false,   //发送短信开关(当为true的时候,除了白名单里面的手机号,其他手机号一律不实际发送短信;当为false的时候,所有手机号都可以发送短信)
     'enable_ebaoquan' => true,
 
     /*wap seo*/
@@ -163,5 +164,5 @@ return [
             'chat_id' => "",//新建群ID，群名称：温都系统通知群
             'user' => ''//默认发送消息用,姓名：莫荻
         ]
-    ]
+    ],
 ];

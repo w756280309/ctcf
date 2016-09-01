@@ -7,7 +7,7 @@ use common\models\user\DrawRecord;
 use common\models\user\MoneyRecord;
 use common\lib\bchelp\BcRound;
 use common\models\user\UserAccount;
-use common\models\sms\SmsMessage;
+use common\service\SmsService;
 
 /**
  * draw form.
@@ -105,11 +105,11 @@ class DrawManager
             throw new DrawException('提现申请失败');
         }
 
-        SmsMessage::initSms(
-             $user,
-             [$user->real_name,  date('Y-m-d H:i', $draw->created_at), $draw->money, 'T+1', Yii::$app->params['contact_tel']],
-             Yii::$app->params['sms']['tixian_apply']
-         )->save(false);
+        $message = [$user->real_name,  date('Y-m-d H:i', $draw->created_at), $draw->money, 'T+1', Yii::$app->params['contact_tel']];
+        $templateId = Yii::$app->params['sms']['tixian_apply'];
+
+        SmsService::send($user->mobile, $templateId, $message, $user);
+
         $transaction->commit();
 
         return $draw;

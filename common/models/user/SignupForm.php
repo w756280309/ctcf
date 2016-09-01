@@ -2,11 +2,12 @@
 
 namespace common\models\user;
 
-use common\models\coupon\CouponType;
-use common\models\coupon\UserCoupon;
 use common\lib\validator\LoginpassValidator;
 use common\models\affiliation\AffiliationManager;
+use common\models\coupon\CouponType;
+use common\models\coupon\UserCoupon;
 use common\models\promo\InviteRecord;
+use common\models\sms\SmsMessage;
 use common\service\SmsService;
 use Yii;
 use yii\base\Model;
@@ -160,6 +161,31 @@ class SignupForm extends Model
                         UserCoupon::addUserCoupon($user, $couponType)->save();
                     }
                 }
+            }
+
+            //注册即送代金券两张，20元，起投1万，30元，起投2万，有效期30天
+            $regCouponTypes = CouponType::findAll(['sn' => ['0015:10000-20', '0015:20000-30']]);
+            $issuedCoupon = false;
+
+            foreach ($regCouponTypes as $regCouponType) {
+                try {
+                    if (UserCoupon::addUserCoupon($user, $regCouponType)->save()) {
+                        $issuedCoupon = true;
+                    }
+                } catch (\Exception $ex) {
+                    // do nothing.
+                }
+            }
+
+            if ($issuedCoupon) {
+                $message = [
+                    'http://dwz.cn/43x1YL',
+                    Yii::$app->params['contact_tel'],
+                ];
+
+                $templateId = Yii::$app->params['sms']['register_coupon'];
+
+                SmsService::send($user->mobile, $templateId, $message, $user);
             }
 
             $transaction->commit();

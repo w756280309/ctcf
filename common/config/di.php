@@ -11,4 +11,4 @@
     isset(Yii::$app->request->hostInfo) ? Yii::$app->request->hostInfo : "",
     \Yii::$app->params['clientOption'],
 ]);
-\Yii::$container->set('sms', 'SmsGate\\SmsRequest', [false, []]);
+\Yii::$container->set('sms', 'SmsGate\\SmsRequest');

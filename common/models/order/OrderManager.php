@@ -13,9 +13,9 @@ use yii\helpers\ArrayHelper;
 use common\models\product\OnlineProduct as Loan;
 use common\lib\bchelp\BcRound;
 use common\models\user\MoneyRecord;
-use common\models\sms\SmsMessage;
 use common\models\user\User;
 use common\service\PayService;
+use common\service\SmsService;
 use common\models\order\OnlineOrder;
 use common\models\order\OrderQueue;
 use common\models\product\RateSteps;
@@ -207,7 +207,7 @@ class OrderManager
         $transaction = Yii::$app->db->beginTransaction();
         try {
             UserCoupon::unuseCoupon($ord);
-            
+
             $cancelOrder = CancelOrder::initForOrder($ord, $ord->paymentAmount);
             $cancelOrder->txStatus = CancelOrder::ORDER_CANCEL_SUCCESS;
             if (!$cancelOrder->save()) {
@@ -412,14 +412,9 @@ class OrderManager
             $order->paymentAmount,
             Yii::$app->params['contact_tel'],
         ];
-        $sms = new SmsMessage([
-            'uid' => $user->id,
-            'template_id' => Yii::$app->params['sms']['toubiao'],
-            'mobile' => $user->mobile,
-            'level' => SmsMessage::LEVEL_LOW,
-            'message' => json_encode($message),
-        ]);
-        $sms->save();
+
+        $templateId = Yii::$app->params['sms']['toubiao'];
+        SmsService::send($user->mobile, $templateId, $message, $user);
 
         //投资成功之后同步用户资源表
         if ($order->status === 1) {

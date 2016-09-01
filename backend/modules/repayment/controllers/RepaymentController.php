@@ -15,13 +15,14 @@ use common\models\user\UserAccount;
 use common\lib\bchelp\BcRound;
 use common\models\order\OnlineFangkuan;
 use common\models\user\User;
-use common\models\sms\SmsMessage;
 use common\service\LoanService;
+use common\service\SmsService;
 use backend\modules\order\controllers\OnlinefangkuanController;
 use common\models\epay\EpayUser;
 use common\utils\TxUtils;
 use yii\web\NotFoundHttpException;
 use common\models\payment\PaymentLog;
+
 
 /**
  * OrderController implements the CRUD actions for OfflineOrder model.
@@ -344,17 +345,13 @@ class RepaymentController extends BaseController
         $_repaymentrecord = OnlineRepaymentRecord::find()->where(['online_pid' => $pid, 'status' => OnlineRepaymentRecord::STATUS_DID])->groupBy('uid');
         $data = $_repaymentrecord->select('uid')->all();
         $product = OnlineProduct::findOne($pid);
-        $sms = new SmsMessage([
-            'level' => SmsMessage::LEVEL_LOW,
-        ]);
 
         foreach ($data as $val) {
             $user = User::findOne($val->uid);
             $data_arr = $_repaymentrecord->having(['uid' => $val['uid']])->select('sum(benjin) as benjin, sum(lixi) as lixi')->andWhere(['qishu' => $qishu])->createCommand()->queryAll();
 
-            $_sms = clone $sms;
             if (OnlineProduct::REFUND_METHOD_DAOQIBENXI === $product->refund_method) {
-                $_sms['template_id'] = Yii::$app->params['sms']['daoqibenxi'];
+                $templateId = Yii::$app->params['sms']['daoqibenxi'];
                 $message = [
                     $user->real_name,
                     $product->title,
@@ -363,7 +360,7 @@ class RepaymentController extends BaseController
                     Yii::$app->params['contact_tel'],
                 ];
             } elseif (0 === $sum_benxi_yue) {
-                $_sms['template_id'] = Yii::$app->params['sms']['lfenqihuikuan'];
+                $templateId = Yii::$app->params['sms']['lfenqihuikuan'];
                 $message = [
                     $user->real_name,
                     $product->title,
@@ -373,7 +370,7 @@ class RepaymentController extends BaseController
                     Yii::$app->params['contact_tel'],
                 ];
             } else {
-                $_sms['template_id'] = Yii::$app->params['sms']['fenqihuikuan'];
+                $templateId = Yii::$app->params['sms']['fenqihuikuan'];
                 $message = [
                     $user->real_name,
                     $product->title,
@@ -383,10 +380,7 @@ class RepaymentController extends BaseController
                 ];
             }
 
-            $_sms->uid = $user->id;
-            $_sms->mobile = $user->mobile;
-            $_sms->message = json_encode($message);
-            $_sms->save();
+            SmsService::send($user->mobile, $templateId, $message, $user);
         }
 
         return [

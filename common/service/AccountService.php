@@ -3,14 +3,13 @@
 namespace common\service;
 
 use common\models\TradeLog;
-use common\models\user\UserAccount;
 use common\utils\TxUtils;
 use Yii;
 use common\models\user\RechargeRecord;
 use common\lib\bchelp\BcRound;
-use common\models\sms\SmsMessage;
 use common\models\user\MoneyRecord;
 use common\models\user\User;
+use common\service\SmsService;
 
 class AccountService
 {
@@ -70,14 +69,9 @@ class AccountService
             $recharge->fund,
             Yii::$app->params['contact_tel']
         ];
-        $sms = new SmsMessage([
-            'uid' => $user->id,
-            'template_id' => Yii::$app->params['sms']['recharge'],
-            'mobile' => $user->mobile,
-            'level' => SmsMessage::LEVEL_LOW,
-            'message' => json_encode($message)
-        ]);
-        $sms->save();
+
+        $templateId = Yii::$app->params['sms']['recharge'];
+        SmsService::send($user->mobile, $templateId, $message, $user);
 
         $transaction->commit();
 

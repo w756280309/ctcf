@@ -16,7 +16,7 @@ use common\models\user\RechargeRecord;
 use PayGate\Cfca\Message\Request1320;
 use common\lib\cfca\Cfca;
 use PayGate\Cfca\Response\Response1320;
-use common\models\sms\SmsMessage;
+use common\service\SmsService;
 
 class BrechargecrontabController extends Controller
 {
@@ -66,13 +66,9 @@ class BrechargecrontabController extends Controller
                         $rc->fund,
                         Yii::$app->params['contact_tel']
                     ];
-                    $sms = new SmsMessage([
-                        'uid' => $user->id,
-                        'template_id' => Yii::$app->params['sms']['recharge'],
-                        'mobile' => $user->mobile,
-                        'message' => json_encode($message),
-                    ]);
-                    $sms->save();
+
+                    $templateId = Yii::$app->params['sms']['recharge'];
+                    SmsService::send($user->mobile, $templateId, $message, $user);
                 }
             }
         }

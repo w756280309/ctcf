@@ -15,11 +15,11 @@ use common\models\user\UserBank;
 use common\models\user\Batchpay;
 use yii\web\Response;
 use common\utils\TxUtils;
-use common\models\sms\SmsMessage;
 use common\models\draw\DrawManager;
 use common\models\draw\DrawException;
 use yii\web\NotFoundHttpException;
 use common\models\bank\Bank;
+use common\service\SmsService;
 
 class DrawrecordController extends BaseController
 {
@@ -295,20 +295,15 @@ class DrawrecordController extends BaseController
                 number_format($model->money, 2),
                 Yii::$app->params['contact_tel'],
             ];
-            $sms = new SmsMessage([
-                'uid' => $model->uid,
-                'mobile' => $user->mobile,
-                'message' => json_encode($mess),
-                'level' => SmsMessage::LEVEL_LOW,
-            ]);
 
             if (DrawRecord::STATUS_DENY === (int) $type) {
-                $sms->template_id = Yii::$app->params['sms']['tixian_err'];
-                $sms->save();
+                $templateId = Yii::$app->params['sms']['tixian_err'];
             } elseif (DrawRecord::STATUS_EXAMINED === (int) $type) {
-                $sms->template_id = Yii::$app->params['sms']['tixian_succ'];
-                $sms->save();
+                $templateId = Yii::$app->params['sms']['tixian_succ'];
             }
+
+            SmsService::send($user->mobile, $templateId, $mess, $user);
+
             return true;
         } catch (DrawException $ex) {
             return false;

@@ -2,9 +2,10 @@
 
 namespace common\service;
 
-use Yii;
 use common\models\sms\SmsTable;
 use common\models\sms\SmsMessage;
+use common\models\user\User;
+use Yii;
 
 /**
  * Desc 主要用于短信生成验证码及其校验
@@ -15,10 +16,6 @@ use common\models\sms\SmsMessage;
  */
 class SmsService
 {
-    public function __construct()
-    {
-    }
-
     /**
      * 生成短信验证码
      *
@@ -31,7 +28,7 @@ class SmsService
         }
 
         if (!in_array($type, [1, 2])) {
-            return ['code' => 1, 'message' => "短信发送失败"];
+            return ['code' => 1, 'message' => '短信发送失败'];
         }
 
         if (!is_string($phone)) {
@@ -64,7 +61,8 @@ class SmsService
         }
 
         if ($model->save()) {
-            if (Yii::$app->params['mock_sms']) {
+            $smsWhiteList = Yii::$app->params['sms_white_list'];
+            if (Yii::$app->params['mock_sms'] && (!empty($smsWhiteList) && !in_array($model->mobile, $smsWhiteList))) {
                 return ['code' => 0, 'message' => ''];
             }
 
@@ -139,5 +137,26 @@ class SmsService
     public static function editSms($phone)
     {
         SmsTable::updateAll(['status' => SmsTable::STATUS_USE], ['mobile' => $phone, 'status' => SmsTable::STATUS_UNUSE]);
+    }
+
+    /**
+     * 异步发送短信.
+     */
+    public static function send($mobile, $templateId, array $data = [], User $user = null, $level = SmsMessage::LEVEL_MIDDLE)
+    {
+        $smsMessage = new SmsMessage([
+            'template_id' => $templateId,
+            'uid' => $user ? $user->id : 0,
+            'mobile' => $mobile,
+            'message' => json_encode($data),
+            'level' => $level,
+        ]);
+
+        $smsWhiteList = Yii::$app->params['sms_white_list'];
+        if (Yii::$app->params['mock_sms'] && (!empty($smsWhiteList) && !in_array($mobile, $smsWhiteList))) {
+            $smsMessage->status = SmsMessage::STATUS_SENT;
+        }
+
+        return $smsMessage->save();
     }
 }

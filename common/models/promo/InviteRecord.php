@@ -5,9 +5,9 @@ namespace common\models\promo;
 use common\models\coupon\CouponType;
 use common\models\coupon\UserCoupon;
 use common\models\order\OnlineOrder;
-use common\models\sms\SmsMessage;
 use common\models\user\User;
 use common\service\AccountService;
+use common\service\SmsService;
 use wap\modules\promotion\models\RankingPromo;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
@@ -176,18 +176,13 @@ class InviteRecord extends ActiveRecord
                     }
                     //发短信
                     if ($mess) {
-                        $sms = new SmsMessage([
-                            'template_id' => \Yii::$app->params['sms']['invite_bonus'],
-                            'level' => SmsMessage::LEVEL_LOW,
-                        ]);
+                        $templateId = \Yii::$app->params['sms']['invite_bonus'];
                         $message = [
                             $order->mobile,
                             $mess,
                         ];
-                        $sms->uid = $user->id;
-                        $sms->mobile = $user->mobile;
-                        $sms->message = json_encode($message);
-                        $sms->save();
+
+                        SmsService::send($user->mobile, $templateId, $message, $user);
                     }
                 }
             }

@@ -7,8 +7,8 @@ use common\models\payment\Repayment;
 use yii\behaviors\TimestampBehavior;
 use common\models\product\OnlineProduct;
 use common\lib\product\ProductProcessor;
-use common\models\sms\SmsMessage;
 use common\lib\bchelp\BcRound;
+use common\service\SmsService;
 use Yii;
 
 class OnlineRepaymentPlan extends \yii\db\ActiveRecord
@@ -152,11 +152,9 @@ class OnlineRepaymentPlan extends \yii\db\ActiveRecord
         }
         OnlineProduct::updateAll($up, ['id' => $loan->id]);//修改已经计息
         $username = '';
-        $sms = new SmsMessage([
-            'template_id' => Yii::$app->params['sms']['manbiao'],
-            'level' => SmsMessage::LEVEL_LOW,
-        ]);
         $repayment = [];
+        $templateId = Yii::$app->params['sms']['manbiao'];
+
         foreach ($orders as $ord) {
             //获取每个订单的还款金额详情
             $res_money = self::calcBenxi($ord);
@@ -199,11 +197,8 @@ class OnlineRepaymentPlan extends \yii\db\ActiveRecord
                     date('Y-m-d', $loan->jixi_time),
                     Yii::$app->params['contact_tel'],
                 ];
-                $_sms = clone $sms;
-                $_sms->uid = $ord->uid;
-                $_sms->mobile = $ord->mobile;
-                $_sms->message = json_encode($message);
-                $_sms->save();
+
+                SmsService::send($ord->mobile, $templateId, $message, $ord->user);
             }
             $username = $ord->username;
         }
