@@ -68,6 +68,7 @@ return [
         ],
         'invite_bonus' => 105818,//邀请好友奖励
         'coupon_expire' => 105820,//代金券3天后失效
+        'coupon_reminder' => 113109,//代金券过期提醒
     ],
     'contact_tel' => '400-101-5151',
     'white_list' => ['15810036547', '18518154492'],
