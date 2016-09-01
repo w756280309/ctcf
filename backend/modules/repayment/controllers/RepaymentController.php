@@ -403,7 +403,7 @@ class RepaymentController extends BaseController
             $transaction->commit();
         }
 
-        $_repaymentrecord = OnlineRepaymentRecord::find()->where(['online_pid' => $pid, 'status' => OnlineRepaymentRecord::STATUS_DID, OnlineRepaymentRecord::STATUS_BEFORE])->groupBy('uid');
+        $_repaymentrecord = OnlineRepaymentRecord::find()->where(['online_pid' => $pid, 'status' => [OnlineRepaymentRecord::STATUS_DID, OnlineRepaymentRecord::STATUS_BEFORE]])->groupBy('uid');
         $data = $_repaymentrecord->select('uid')->all();
         $product = OnlineProduct::findOne($pid);
 
