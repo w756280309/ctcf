@@ -86,7 +86,7 @@ class ProductonlineController extends BaseController
 
                 $refund_method = (int) $model->refund_method;
                 if (OnlineProduct::REFUND_METHOD_DAOQIBENXI !== $refund_method) {   //还款方式只有到期本息,才设置项目截止日和宽限期
-                    $model->finish_date = null;
+                    $model->finish_date = 0;
                     $model->kuanxianqi = 0;
                 }
 
