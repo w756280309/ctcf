@@ -61,7 +61,6 @@ return [
         'tixian_err' => 60757,
         'tixian_apply' => 71400,
         'toubiao' => 70040,
-        'recharge' => 60764,
         'yzm' => 70052,
         'forget' => 70036,
         'daoqibenxi' => 70049,

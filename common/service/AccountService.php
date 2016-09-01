@@ -9,7 +9,6 @@ use common\models\user\RechargeRecord;
 use common\lib\bchelp\BcRound;
 use common\models\user\MoneyRecord;
 use common\models\user\User;
-use common\service\SmsService;
 
 class AccountService
 {
@@ -63,15 +62,6 @@ class AccountService
             $transaction->rollBack();
             return false;
         }
-
-        $message = [
-            $user->real_name,
-            $recharge->fund,
-            Yii::$app->params['contact_tel']
-        ];
-
-        $templateId = Yii::$app->params['sms']['recharge'];
-        SmsService::send($user->mobile, $templateId, $message, $user);
 
         $transaction->commit();
 
