@@ -489,15 +489,7 @@ class RepaymentController extends BaseController
 
                 return ['res' => 0, 'msg' => '更新用户融资账户异常'];
             }
-            $updateData = ['status' => OnlineFangkuan::STATUS_FANGKUAN];
-            try {
-                $log = AdminLog::initNew(['tableName' => OnlineProduct::tableName(), 'primaryKey' => $pid], Yii::$app->user, $updateData);
-                $log->save();
-            } catch (\Exception $e) {
-                $transaction->rollBack();
-                return ['res' => 0, 'msg' => '记录标的操作日志添加失败'];
-            }
-            OnlineFangkuan::updateAll($updateData, ['online_product_id' => $pid]); //将所有放款批次变为已经放款
+            OnlineFangkuan::updateAll(['status' => OnlineFangkuan::STATUS_FANGKUAN], ['online_product_id' => $pid]); //将所有放款批次变为已经放款
             $mre_model = new MoneyRecord();
             $mre_model->type = MoneyRecord::TYPE_FANGKUAN;
             $mre_model->sn = MoneyRecord::createSN();

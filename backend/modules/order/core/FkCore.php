@@ -2,6 +2,7 @@
 
 namespace backend\modules\order\core;
 
+use common\models\adminuser\AdminLog;
 use Yii;
 use common\lib\bchelp\BcRound;
 use common\models\order\OnlineOrder;
@@ -95,8 +96,15 @@ class FkCore
                 return ['res' => 0, 'msg' => '放款批次详情异常'];
             }
         }
-
-        $opres = OnlineProduct::updateAll(['fk_examin_time' => time()], ['id' => $pid]);
+        $updateData = ['fk_examin_time' => time()];
+        try {
+            $log = AdminLog::initNew(['tableName' => OnlineProduct::tableName(), 'primaryKey' => $pid], Yii::$app->user, $updateData);
+            $log->save();
+        } catch (\Exception $e) {
+            $transaction->rollBack();
+            return ['res' => 0, 'msg' => '记录标的操作日志添加失败'];
+        }
+        $opres = OnlineProduct::updateAll($updateData, ['id' => $pid]);
         if (!$opres) {
             $transaction->rollBack();
 
