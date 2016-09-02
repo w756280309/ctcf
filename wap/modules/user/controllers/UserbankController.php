@@ -8,6 +8,7 @@ use common\models\user\DrawRecord;
 use common\models\user\UserAccount;
 use common\models\user\UserBanks;
 use common\service\BankService;
+use common\service\UmpService;
 use common\models\draw\DrawManager;
 use common\models\draw\DrawException;
 use common\models\bank\BankManager;
@@ -34,13 +35,16 @@ class UserbankController extends BaseController
         $model = $this->getAuthedUser();
         $model->scenario = 'idcardrz';
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            $umpService = new \common\service\UmpService();
+            $umpService = new UmpService();
             try {
                 $umpService->register($model);
 
                 return ['tourl' => '/user/userbank/rzres?ret=success', 'code' => 0, 'message' => '您已成功开户'];
             } catch (\Exception $ex) {
-                return ['code' => 1, 'message' => $ex->getMessage()];
+                return [
+                    'code' => 1,
+                    'message' => 1 === $ex->getCode() ? $ex->getMessage() : '服务器繁忙，请稍后重试!',
+                ];
             }
         }
 

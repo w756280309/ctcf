@@ -74,11 +74,10 @@ class UserbankController extends BaseController
 
                     return ['tourl' => '/info/success?source=tuoguan', 'code' => 0, 'message' => '您已成功开户'];
                 } catch (\Exception $ex) {
-                    if (1 === $ex->getCode()) {
-                        return ['code' => 1, 'message' => $ex->getMessage()];
-                    } else {
-                        return ['code' => 1, 'message' => '服务器繁忙，请稍后重试!'];
-                    }
+                    return [
+                        'code' => 1,
+                        'message' => 1 === $ex->getCode() ? $ex->getMessage() : '服务器繁忙，请稍后重试!',
+                    ];
                 }
             } else {
                 $err = $model->getSingleError();
