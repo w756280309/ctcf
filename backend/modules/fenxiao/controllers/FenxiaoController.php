@@ -3,12 +3,15 @@
 namespace backend\modules\fenxiao\controllers;
 
 use backend\controllers\BaseController;
+use common\models\adminuser\AdminLog;
 use common\models\affiliation\Affiliator;
 use common\models\affiliation\AffiliateCampaign;
+use common\models\affiliation\UserAffiliation;
 use common\models\fenxiao\Admin;
 use common\models\fenxiao\FenxiaoForm;
 use Yii;
 use yii\data\Pagination;
+use yii\db\Query;
 use yii\web\UploadedFile;
 
 class FenxiaoController extends BaseController
@@ -215,5 +218,85 @@ class FenxiaoController extends BaseController
             $obj->imageFile->saveAs($picPath);
             $obj->imageFile = $picPath;
         }
+    }
+
+    /**
+     * 获取分销商信息.
+     */
+    public function actionGetAffInfo($uid)
+    {
+        $userAff = UserAffiliation::findOne(['user_id' => $uid]);
+        $affCamName = AffiliateCampaign::tableName();
+        $affName = Affiliator::tableName();
+
+        $affiliators = (new Query())
+            ->select(["$affName.id", "name", "trackCode"])
+            ->from($affName)
+            ->innerJoin($affCamName, "$affName.id = $affCamName.affiliator_id")
+            ->createCommand()
+            ->queryAll();
+
+        $this->layout = false;
+        return $this->render('affiliator_list', ['affiliators' => $affiliators, 'userAff' => $userAff, 'uid' => $uid]);
+    }
+
+    /**
+     * 修改投资用户分销商.
+     * 1. 原来没有分销商的可以添加新的分销商;
+     * 2. 原来有分销商的可以修改分销商;
+     * 3. 原来有分销商的也可以删除分销商;
+     */
+    public function actionEditForUser()
+    {
+        $data = Yii::$app->request->post();
+        $code = false;
+        $dataForLog = null;
+        $isNeedLog = true;
+
+        if (empty($data['uid'])) {
+            throw $this->ex404();
+        }
+
+        $userAff = UserAffiliation::findOne(['user_id' => $data['uid']]);
+
+        if (empty($data['aff_id'])) {
+            if ($userAff) {   //删除分销商
+                $code = $userAff->delete();
+            } else {    //没有分销商,也没有选择分销商时,成功返回,且不记日志
+                $code = true;
+                $isNeedLog = false;
+            }
+        } else {
+            $affCam = $this->findOr404(AffiliateCampaign::class, ['affiliator_id' => $data['aff_id']]);
+
+            if (!$userAff) {    //新增分销商
+                $userAff = new UserAffiliation([
+                    'user_id' => $data['uid'],
+                    'trackCode' => $affCam->trackCode,
+                    'affiliator_id' => $data['aff_id'],
+                ]);
+
+                $code = $userAff->save();
+            } elseif ($userAff->affiliator_id !== (int) $data['aff_id']) {    //修改分销商
+                $userAff->trackCode = $affCam->trackCode;
+                $userAff->affiliator_id = $data['aff_id'];
+
+                $dataForLog =  clone $userAff;
+                $code = $userAff->save();
+            } else {     //如果没有修改,则忽略,直接返回成功
+                $code = true;
+                $isNeedLog = false;
+            }
+        }
+
+        if ($isNeedLog && $code) {
+            $dataForLog = $dataForLog ? $dataForLog : $userAff;
+            AdminLog::initNew($dataForLog)->save();
+        }
+
+        return [
+            'code' => $code ? 0 : 1,
+            'message' => $code ? '操作成功' : '操作失败',
+        ];
     }
 }

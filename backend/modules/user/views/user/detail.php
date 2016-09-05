@@ -67,6 +67,7 @@ use common\utils\StringUtils;
             <ul class="breadcrumb_detail">
                 <li><span>免密支付</span><?= $userinfo['mianmiStatus'] ? "已开通" : "未开通" ?></li>
                 <li><span>绑定银行卡</span><?= $userinfo->qpay ? "已开通" : "未开通" ?>&nbsp;&nbsp;&nbsp;<a href="/user/bank-card/list?uid=<?= $userinfo->id ?>">查看</a></li>
+                <li><span>分销商</span><?= $userAff ? $userAff->affiliator->name : '官方' ?>&nbsp;&nbsp;&nbsp;<a href="javascript:openwin('/fenxiao/fenxiao/get-aff-info?uid=<?= $userinfo->id ?>' , 500, 300)">修改</a></li>
             </ul>
             <ul class="breadcrumb_detail">
                 <li><span>注册渠道</span>

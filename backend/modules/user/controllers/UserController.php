@@ -2,35 +2,24 @@
 
 namespace backend\modules\user\controllers;
 
-use Yii;
 use backend\controllers\BaseController;
-use common\models\user\User;
-use yii\filters\VerbFilter;
-use yii\data\Pagination;
-use yii\web\Response;
-use common\models\user\UserAccount;
-use common\models\user\RechargeRecord;
+use common\lib\user\UserStats;
+use common\models\affiliation\UserAffiliation;
+use common\models\epay\EpayUser;
 use common\models\order\OnlineOrder;
 use common\models\product\OnlineProduct;
-use common\models\epay\EpayUser;
 use backend\modules\user\core\v1_0\UserAccountBackendCore;
+use common\models\user\User;
+use common\models\user\UserAccount;
 use common\models\user\UserBanks;
-use common\lib\user\UserStats;
-use yii\web\NotFoundHttpException;
+use common\models\user\RechargeRecord;
+use Yii;
+use yii\data\Pagination;
+use yii\filters\VerbFilter;
+use yii\web\Response;
 
-/**
- * UserController implements the CRUD actions for User model.
- */
 class UserController extends BaseController
 {
-    public function init()
-    {
-        parent::init();
-        if (Yii::$app->request->isAjax) {
-            Yii::$app->response->format = Response::FORMAT_JSON;
-        }
-    }
-
     public function behaviors()
     {
         $params = array_merge(
@@ -67,7 +56,7 @@ class UserController extends BaseController
             $balance = floatval($balance);
             $query->innerJoin('user_account', 'user.id = user_account.uid')->andFilterWhere(['>=', 'user_account.available_balance', $balance]);
         }
-        
+
         if ($type == User::USER_TYPE_PERSONAL) {
             $query->with('lendAccount');
             if (!empty($name)) {
@@ -127,12 +116,12 @@ class UserController extends BaseController
     public function actionDetail($id, $type)
     {
         if (empty($id) || empty($type) || !in_array($type, [1, 2])) {
-            throw new NotFoundHttpException();     //参数无效,抛出404异常
+            throw $this->ex404();     //参数无效,抛出404异常
         }
 
         $userInfo = User::findOne($id);
         if (null === $userInfo) {
-            throw new NotFoundHttpException();     //对象为空时,抛出404异常
+            throw $this->ex404();     //对象为空时,抛出404异常
         }
 
         $uabc = new UserAccountBackendCore();
@@ -144,16 +133,17 @@ class UserController extends BaseController
             $order = $uabc->getOrderSuccess($id);
             $product = $ret = ['count' => 0, 'sum' => 0];
             $ua = $userInfo->lendAccount;    //获取投资用户账户信息
+            $userAff = UserAffiliation::findOne(['user_id' => $userInfo->id]);
         } else {
             $rcMax = OnlineProduct::find()->where(['del_status' => OnlineProduct::STATUS_USE, 'borrow_uid' => $id])->min('start_date');
             $ret = $uabc->getReturnInfo($id);
             $product = $uabc->getProduct($id);
             $order = ['count' => 0, 'sum' => 0];
             $ua = $userInfo->borrowAccount;  //获取融资用户账户信息
+            $userAff = null;
         }
 
         $tztimeMax = OnlineOrder::find()->where(['status' => OnlineOrder::STATUS_SUCCESS, 'uid' => $id])->max('updated_at');
-        $bc = new \common\lib\bchelp\BcRound();
         $userYuE = $ua['available_balance'];
 
         return $this->render('detail', [
@@ -171,6 +161,7 @@ class UserController extends BaseController
                 'rzMoneyTotal' => $product['sum'],
                 'ret' => $ret,
                 'userinfo' => $userInfo,
+                'userAff' => $userAff,
         ]);
     }
 
@@ -361,13 +352,13 @@ class UserController extends BaseController
     {
         //判断参数是否正确
         if (empty($uid)) {
-            throw new NotFoundHttpException();
+            throw $this->ex404();
         }
 
         $user = User::findOne($uid);
 
         if (null === $user) {
-            throw new NotFoundHttpException();
+            throw $this->ex404();
         }
 
         if (null !== $user->epayUser) {
