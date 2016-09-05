@@ -2,6 +2,7 @@
 $this->title = '投资详情';
 
 use common\models\product\RateSteps;
+use common\models\order\OnlineRepaymentPlan;
 
 $this->registerJsFile(ASSETS_BASE_URI .'js/fastclick.js', ['position' => 1, ]);
 $this->registerJsFile(ASSETS_BASE_URI .'js/touzixiangqing.js?v=20160718', ['depends' => 'yii\web\JqueryAsset', 'position' => 1]);
@@ -127,6 +128,7 @@ $this->registerCssFile(ASSETS_BASE_URI .'css/touzixiangqing.css?v=20160718', ['d
         <div class="col-xs-12">
             <ul class="repayment-content">
                 <?php foreach($plan as $val): ?>
+                    <?php $hasRepaid = in_array($val['status'], [OnlineRepaymentPlan::STATUS_YIHUAN, OnlineRepaymentPlan::STATUS_TIQIAM]);?>
                 <?php if (0 !== (int) $val['benjin']) { ?>
                 <li>
                     <div>第<?= $val['qishu'] ?>期</div>
@@ -134,7 +136,7 @@ $this->registerCssFile(ASSETS_BASE_URI .'css/touzixiangqing.css?v=20160718', ['d
                     <div>本金</div>
                     <div><?= rtrim(rtrim(number_format($val['benjin'], 2), '0'), '.') ?>元</div>
                     <!--还款计划-文字颜色-->
-                    <p class="<?= (1 === $val['status']) ? 'repayment-green' : 'repayment-red' ?>"><?= (1 === $val['status']) ? '已还' : '未还' ?></p>
+                    <p class="<?= $hasRepaid ? 'repayment-green' : 'repayment-red' ?>"><?= $hasRepaid ? '已还' : '未还' ?></p>
                 </li>
                 <?php } ?>
                 <li>
@@ -143,7 +145,7 @@ $this->registerCssFile(ASSETS_BASE_URI .'css/touzixiangqing.css?v=20160718', ['d
                     <div>利息</div>
                     <div><?= rtrim(rtrim(number_format($val['lixi'], 2), '0'), '.') ?>元</div>
                     <!--还款计划-文字颜色-->
-                    <p class="<?= (1 === $val['status']) ? 'repayment-green' : 'repayment-red' ?>"><?= (1 === $val['status']) ? '已还' : '未还' ?></p>
+                    <p class="<?= $hasRepaid ? 'repayment-green' : 'repayment-red' ?>"><?= $hasRepaid ? '已还' : '未还' ?></p>
                 </li>
                 <?php endforeach; ?>
                 <!--下拉按钮-->

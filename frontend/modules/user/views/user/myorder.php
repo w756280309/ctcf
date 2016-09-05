@@ -7,6 +7,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/useraccount/my_trade.js', ['depends' =
 
 use common\utils\StringUtils;
 use common\widgets\Pager;
+use common\models\order\OnlineRepaymentPlan;
 ?>
 
 <div class="myCoupon-box">
@@ -100,7 +101,7 @@ use common\widgets\Pager;
                                             <td class="text-align-lf"><?= $val->refund_time ? date('Y-m-d', $val->refund_time) : '' ?></td>
                                             <td class="text-align-rg"><?= StringUtils::amountFormat3($val->benjin) ?></td>
                                             <td class="text-inner-second"><?= StringUtils::amountFormat3($val->lixi) ?></td>
-                                            <td class="text-align-ct"><?= 1 === $val->status ? '已还' : '未还' ?></td>
+                                            <td class="text-align-ct"><?= in_array($val->status, [OnlineRepaymentPlan::STATUS_YIHUAN, OnlineRepaymentPlan::STATUS_TIQIAM]) ? '已还' : '未还' ?></td>
                                         </tr>
                                     <?php endforeach; ?>
                                 </tbody>
