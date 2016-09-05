@@ -188,10 +188,8 @@ use common\utils\StringUtils;
         });
 
         xhr.fail(function(jqXHR) {
-            var errMsg = jqXHR.responseJSON && jqXHR.responseJSON.message ? jqXHR.responseJSON.message : '';
+            var errMsg = jqXHR.status === 400 && jqXHR.responseText ? $.parseJSON(jqXHR.responseText).message : '系统繁忙，请稍后重试！';
 
-            errMsg = errMsg ? errMsg : $.parseJSON(jqXHR.responseText).message;
-            errMsg = errMsg ? errMsg : '未知错误，请刷新重试或联系客服';
             err_message(errMsg);
             $('#rechargebtn').attr('disabled', false);
         });

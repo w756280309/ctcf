@@ -43,7 +43,7 @@ class UserbankController extends BaseController
             } catch (\Exception $ex) {
                 return [
                     'code' => 1,
-                    'message' => 1 === $ex->getCode() ? $ex->getMessage() : '服务器繁忙，请稍后重试!',
+                    'message' => 1 === $ex->getCode() ? $ex->getMessage() : '系统繁忙，请稍后重试！',
                 ];
             }
         }

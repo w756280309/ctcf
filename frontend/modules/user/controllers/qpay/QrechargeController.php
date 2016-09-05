@@ -2,13 +2,12 @@
 
 namespace frontend\modules\user\controllers\qpay;
 
+use common\models\bank\BankManager;
+use common\models\user\RechargeRecord;
 use common\utils\TxUtils;
+use frontend\controllers\BaseController;
 use Yii;
 use yii\base\Model;
-use yii\web\Response;
-use frontend\controllers\BaseController;
-use common\models\user\RechargeRecord;
-use common\models\bank\BankManager;
 
 class QrechargeController extends BaseController
 {
@@ -41,7 +40,7 @@ class QrechargeController extends BaseController
         if (
             $rec_model->load(Yii::$app->request->post())
             && $rec_model->validate()
-        ) {        
+        ) {
             try {
                 BankManager::verifyQpayLimit($ubank, $rec_model->fund);
             } catch (\Exception $ex) {

@@ -228,6 +228,10 @@ use common\utils\StringUtils;
             xhr.always(function() {
                 $this.data('x-purchase-clicked', false);
             });
+
+            xhr.fail(function() {
+                toast('系统繁忙，请稍后重试！');
+            });
         });
 
         // 新的

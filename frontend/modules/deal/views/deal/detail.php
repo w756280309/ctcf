@@ -357,7 +357,12 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/useraccount/chargedeposit.css');
             xhr.always(function () {
                 buy.attr('disabled', false);
                 buy.val("立即投资");
-            })
+            });
+
+            xhr.fail(function () {
+                $('.dR-tishi-error ').show();
+                $('.dR-tishi-error .err_message').html('系统繁忙，请稍后重试！');
+            });
         });
 
     });

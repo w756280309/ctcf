@@ -130,9 +130,9 @@ if ($backUrl = \Yii::$app->session['recharge_back_url']) {
         });
 
         xhr.fail(function(jqXHR) {
-            var errMsg = jqXHR.responseJSON && jqXHR.responseJSON.message
+            var errMsg = jqXHR.status === 400 && jqXHR.responseJSON && jqXHR.responseJSON.message
                 ? jqXHR.responseJSON.message
-                : '未知错误，请刷新重试或联系客服';
+                : '系统繁忙，请稍后重试！';
 
             toast(errMsg);
             $('#rechargebtn').attr('disabled', false);
