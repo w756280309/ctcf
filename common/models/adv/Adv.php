@@ -141,4 +141,24 @@ class Adv extends ActiveRecord
 
         return $sn;
     }
+
+    public function beforeSave($insert)
+    {
+        $host = parse_url($this->link, PHP_URL_HOST);
+        if ($host) {
+            $baseDomain = \Yii::$app->params['base_domain'];
+            if (false !== strpos($host, 'm.' . $baseDomain)) {
+                $target = 'm.' . $baseDomain;
+            } elseif (false !== strpos($host, 'app.' . $baseDomain)) {
+                $target = 'app.' . $baseDomain;
+            }
+            if (isset($target)) {
+                $pos = strpos($this->link, $target);
+                if (false !== $pos) {
+                    $this->link = '/' . ltrim(substr($this->link, $pos + strlen($target)), '/');
+                }
+            }
+        }
+        return true;
+    }
 }

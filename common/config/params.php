@@ -164,4 +164,5 @@ return [
             'user' => ''//默认发送消息用,姓名：莫荻
         ]
     ],
+    'base_domain' => 'wenjf.com',//根域名，banner图处使用
 ];
