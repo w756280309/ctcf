@@ -154,7 +154,7 @@ class RechargerecordController extends BaseController
                     }
                     return ['code' => false, 'message' => '返回信息不明确'];
                 }
-                return ['code' => false, 'message' => '链接失败'];
+                return ['code' => false, 'message' => '['.$res->get('ret_code').']'.$res->get('ret_msg')];
             }
             return ['code' => false, 'message' => '订单不存在'];
         } else {

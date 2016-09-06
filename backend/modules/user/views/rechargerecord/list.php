@@ -228,7 +228,7 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\we
                     if (data.code) {
                         _this.parent().html(data.message);
                     } else {
-                        layer.msg(data.message);
+                        newalert(0, data.message);
                     }
                 });
             }
