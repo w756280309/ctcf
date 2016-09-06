@@ -137,15 +137,17 @@ class UserbankController extends BaseController
         \Yii::$app->session->remove('cfca_qpay_recharge');
         \Yii::$app->session->remove('recharge_back_url');
         $user = $this->getAuthedUser();
-        $uid = $user->id;
-        $user_bank = UserBanks::find()->where(['uid' => $uid])->select('id,binding_sn,bank_id,bank_name,card_number')->one();
-        $user_acount = UserAccount::find()->where(['type' => UserAccount::TYPE_LEND, 'uid' => $uid])->select('id,uid,in_sum,available_balance')->one();
-        $bank = QpayConfig::findOne($user_bank->bank_id);
+
         //检查用户是否完成快捷支付
         $data = BankService::checkKuaijie($user);
         if ($data['code'] == 1 && \Yii::$app->request->isAjax) {
             return ['next' => $data['tourl']];
         }
+
+        $user_bank = UserBanks::find()->where(['uid' => $user->id])->select('id,binding_sn,bank_id,bank_name,card_number')->one();
+        $user_acount = UserAccount::find()->where(['type' => UserAccount::TYPE_LEND, 'uid' => $user->id])->select('id,uid,in_sum,available_balance')->one();
+        $bank = QpayConfig::findOne($user_bank->bank_id);
+
         //保存充值来源
         if ($from = Yii::$app->request->get('from')) {
             \Yii::$app->session['recharge_from_url'] = urldecode($from);

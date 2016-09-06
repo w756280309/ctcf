@@ -44,13 +44,6 @@ $this->registerJsFile('', ['depends' => 'yii\web\YiiAsset','position' => 1]);
     </div>
     <div class="col-xs-4"></div>
 </div>
-<div class="row" id='bind-close2'>
-    <div class="col-xs-4"></div>
-    <div class="col-xs-4">
-        <a href="/user/userbank/recharge?backUrl=<?= Html::decode('/user/user') ?>" class="bind-close1">去充值</a>
-    </div>
-    <div class="col-xs-4"></div>
-</div>
 <script>
     $(function(){
         var num=5;
