@@ -81,8 +81,8 @@ class SettleController extends Controller
      */
     public function actionInsert($type)
     {
-        $startdate = new \DateTime('2016-07-01 00:00:00');
-        $enddate = new \DateTime('2016-07-31 00:00:00');
+        $startdate = new \DateTime('2016-08-01');
+        $enddate = new \DateTime('2016-09-01');
         $num = 0;
 
         while (true) {
