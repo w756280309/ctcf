@@ -88,9 +88,9 @@ if ($backUrl = \Yii::$app->session['recharge_back_url']) {
         return true;
     }
     $(function() {
-       var err = '<?= $data['code'] ?>';
-       var mess = '<?= $data['message'] ?>';
-       var tourl = '<?= $data['tourl'] ?>';
+       var err = '<?= isset($data['code']) ? $data['code'] : '' ?>';
+       var mess = '<?= isset($data['message']) ? $data['message'] : '' ?>';
+       var tourl = '<?= isset($data['tourl']) ? $data['tourl'] : '' ?>';
        if(err === '1') {
            toast(mess, function() {
                if (tourl !== '') {
