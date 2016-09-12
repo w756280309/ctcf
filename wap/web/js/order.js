@@ -15,8 +15,9 @@ $(function () {
         }
 
         $buy.attr('disabled', true);
-        $buy.val("购买中……");
+        $buy.val('购买中...');
         var vals = $("#orderform").serialize();
+
         var xhr = $.post($("#orderform").attr("action"), vals, function (data) {
             if (data.code == 0) {
                 //toast('投标成功');
@@ -29,10 +30,11 @@ $(function () {
                 }, 1000);
             }
         });
+
         xhr.always(function () {
             $buy.attr('disabled', false);
             $buy.val("购买");
-        })
+        });
     });
 
     $('#money').on('keyup', function () {

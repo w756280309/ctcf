@@ -15,7 +15,7 @@ $this->registerJs(<<<JS
 JS
     , 1);
 
-$this->registerJsFile(ASSETS_BASE_URI.'js/order.js?v=20160603-v', ['depends' => 'yii\web\YiiAsset']);
+$this->registerJsFile(ASSETS_BASE_URI.'js/order.js?v=20160908', ['depends' => 'yii\web\YiiAsset']);
 ?>
 <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/setting.css?v=20160518">
 

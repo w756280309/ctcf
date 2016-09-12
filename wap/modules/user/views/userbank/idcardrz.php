@@ -80,15 +80,17 @@ $this->title="开通资金托管账户";
         if(!validateform()){
            return false;
         }
+
         var $form = $('#form');
         $('#idcardbtn').attr('disabled', true);
+        $('#idcardbtn').val('开通中...');
+
         var xhr = $.post(
             $form.attr('action'),
             $form.serialize()
         );
 
         xhr.done(function(data) {
-            $('#idcardbtn').attr('disabled', false);
             if (0 === data.code) {
                 alertTrue(function() {
                     location.href = data.tourl;
@@ -103,13 +105,17 @@ $this->title="开通资金托管账户";
 
         });
 
+        xhr.always(function() {
+            $('#idcardbtn').val('开 通');
+            $('#idcardbtn').attr('disabled', false);
+        });
+
         xhr.fail(function(jqXHR) {
             var errMsg = jqXHR.responseJSON && jqXHR.responseJSON.message
                 ? jqXHR.responseJSON.message
                 : '未知错误，请刷新重试或联系客服';
 
             toast(errMsg);
-            $('#idcardbtn').attr('disabled', false);
         });
     }
 
