@@ -133,7 +133,6 @@ class DrawManager
                 $transaction = Yii::$app->db->beginTransaction();
                 $money = bcadd($draw->money, $draw->fee);
                 $userAccount = UserAccount::find()->where('uid = '.$draw->uid)->one();
-                //$userAccount->freeze_balance = $bc->bcround(bcsub($userAccount->freeze_balance, $money), 2);//160309冻结不做改动
                 $draw->status = DrawRecord::STATUS_SUCCESS;
 
                 $momeyRecord = new MoneyRecord();
@@ -141,12 +140,11 @@ class DrawManager
                 $momeyRecord->sn = MoneyRecord::createSN();
                 $momeyRecord->osn = $draw->sn;
                 $momeyRecord->account_id = $userAccount->id;
-                //$YuE = $userAccount->account_balance = $bc->bcround(bcsub($userAccount->account_balance, $money), 2);//160309账户总额由于在提现受理阶段已扣除，所以此处不做扣减
                 $momeyRecord->type = MoneyRecord::TYPE_DRAW_SUCCESS;
                 $momeyRecord->balance = $userAccount->available_balance;
                 $momeyRecord->out_money = $bc->bcround($money, 2);
 
-                if ($draw->save(false) !== false && $momeyRecord->save(false) !== false && $userAccount->save(false) !== false) {
+                if ($draw->save(false) && $momeyRecord->save(false) && $userAccount->save(false)) {
                     $transaction->commit();
                 } else {
                     $transaction->rollBack();
@@ -204,7 +202,6 @@ class DrawManager
             }
             $account->drawable_balance = $bc->bcround(bcadd($account->drawable_balance, $draw->money), 2);
             $account->in_sum = $bc->bcround(bcadd($account->in_sum, $draw->money), 2);
-            //$account->freeze_balance = $bc->bcround(bcsub($account->freeze_balance, $draw->money), 2);//160309冻结金额没有扣除了
             if (!$money_record->save() || !$account->save() || (null !== $fee_record && !$fee_record->save(false))) {
                 $transaction->rollBack();
                 throw new DrawException('审核失败');
