@@ -49,6 +49,9 @@ return [
         'order' => [
             'class' => 'frontend\modules\order\Module',
         ],
+        'credit' => [
+            'class' => 'frontend\modules\credit\Module',
+        ],
     ],
     'params' => $params,
     'as AjaxJsonFormat' => [
