@@ -19,6 +19,7 @@ use common\models\user\User;
 use common\models\user\UserAccount;
 use common\service\LoanService;
 use common\utils\TxUtils;
+use GuzzleHttp\Client;
 use P2pl\Borrower;
 use Yii;
 use yii\data\Pagination;
@@ -32,14 +33,6 @@ use yii\web\Response;
  */
 class ProductonlineController extends BaseController
 {
-    public function init()
-    {
-        parent::init();
-        if (Yii::$app->request->isAjax) {
-            Yii::$app->response->format = Response::FORMAT_JSON;
-        }
-    }
-
     /**
      * 新增、编辑标的项目.
      */
@@ -569,16 +562,12 @@ class ProductonlineController extends BaseController
     }
 
     /**
-     * 确认起息.
-     *
-     * @param type $id
-     *
-     * @return type
+     * 确认计息.
      */
     public function actionJixicorfirm()
     {
         $id = Yii::$app->request->post('id');
-        Yii::$app->response->format = Response::FORMAT_JSON;
+
         if ($id) {
             $model = OnlineProduct::findOne($id);
             if (empty($model) ||
@@ -586,21 +575,70 @@ class ProductonlineController extends BaseController
                empty($model->jixi_time)
              ) {
                 return ['result' => '0', 'message' => '无法找到该项目,或者项目现阶段不允许开始计息'];
-            } else {
-                //$res = OnlineRepaymentPlan::createPlan($id);//转移到开始计息部分old
-                $res = OnlineRepaymentPlan::generatePlan($model);
-                if ($res) {
-                    //确认计息完成之后将标的添加至保全队列
-                    $job = new BaoQuanQueue(['proId' => $id, 'status' => BaoQuanQueue::STATUS_SUSPEND]);
-                    $job->save();
-
-                    return ['result' => '1', 'message' => '操作成功'];
-                } else {
-                    return ['result' => '0', 'message' => '操作失败，请联系技术'];
-                }
             }
-        } else {
-            return ['result' => '0', 'message' => 'ID不能为空'];
+
+            try {
+                $this->initUserAssets($model);
+            } catch (\Exception $e) {
+                $message = $e->getMessage();
+
+                Yii::trace('项目成立异常,项目ID为'.$model->id.
+                    ',错误信息为'.$message.
+                    ',操作时间为'.date('Y-m-d H:i:s').
+                    ',操作人为'.$this->getAuthedUser()->username);
+
+                return ['result' => '0', 'message' => $message];
+            }
+
+            $res = OnlineRepaymentPlan::generatePlan($model);
+            if ($res) {
+                //确认计息完成之后将标的添加至保全队列
+                $job = new BaoQuanQueue(['proId' => $id, 'status' => BaoQuanQueue::STATUS_SUSPEND]);
+                $job->save();
+
+                return ['result' => '1', 'message' => '操作成功'];
+            }
+
+            return ['result' => '0', 'message' => '操作失败，请联系技术人员'];
+        }
+
+        return ['result' => '0', 'message' => 'ID不能为空'];
+    }
+
+    private function initUserAssets(OnlineProduct $model)
+    {
+        $orders = OnlineOrder::findAll(['online_pid' => $model->id, 'status'  => OnlineOrder::STATUS_SUCCESS]);
+
+        if (empty($orders)) {
+            throw new \Exception('请求数据不能为空');
+        }
+
+        foreach ($orders as $order) {
+            $reqData[] = [
+                'user_id' => $order->uid,
+                'order_id' => $order->id,
+                'loan_id' => $order->online_pid,
+                'amount' => $order->order_money * 100,
+                'orderTime' => date('Y-m-d H:i:s', $order->created_at),
+            ];
+        }
+
+        $client = new Client(['base_uri' => Yii::$app->params['clientOption']['host']['tx']]);
+
+        $response = $client->request('POST', '/Api/assets/record', [
+            'json' => $reqData,
+        ]);
+
+        $respData = json_decode($response->getBody()->getContents(), true);
+
+        if (count($respData) !== count($reqData)) {
+            throw new \Exception('请求记录条数与返回记录条数不符');
+        }
+
+        foreach ($reqData as $key => $data) {   //二次比较返回结果与请求结果
+            if (!empty(array_diff_assoc($data, $respData[$key]))) {
+                throw new \Exception('请求记录内容与返回记录内容不符');
+            }
         }
     }
 

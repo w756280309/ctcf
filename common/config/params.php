@@ -108,10 +108,11 @@ return [
     ],
     'clientOption' => [
         'host' => [
-            'api' => 'https://api.wenjf.com/',
-            'frontend' => 'https://www.wenjf.com/',
-            'wap' => 'https://m.wenjf.com/',
-            'app' => 'https://app.wenjf.com/',
+            'api' => 'https://api.wenjf.com/',  //温都金服API正式站地址
+            'frontend' => 'https://www.wenjf.com/', //温都金服PC端正式站地址
+            'wap' => 'https://m.wenjf.com/',    //温都金服WAP端正式站地址
+            'app' => 'https://app.wenjf.com/',  //温都金服APP端正式站地址
+            'tx' => 'https://tx.wenjf.com/',   //交易系统正式站地址
         ],
     ],
     //易保全正式环境配置
