@@ -112,7 +112,7 @@ $(function() {
             <a class="new-head bot-line block" href="/deal/deal/index" >
                 <div class="col-xs-8 col-sm-7 new-head-title new-ml-5">
                     <div class="arrow-rg"></div>
-                    <div class="new-head-tit"><span>推荐区</span><span class="new-head-txt">优选资产，安全无忧</span></div>
+                    <div class="new-head-tit"><span>推荐区</span></div>
                 </div>
                 <div class="col-xs-1 col-sm-3 "> </div>
                 <div class="col-xs-3 col-sm-2 more">更多》</div>
@@ -200,7 +200,7 @@ $(function() {
         <div class="licai-head">
             <div class="col-xs-8 col-sm-7 new-head-title">
                 <div class="arrow-rg"></div>
-                <div class="new-head-tit"><span>理财区</span><span class="new-head-txt">固定收益，稳定本息</span></div>
+                <div class="new-head-tit"><span>理财区</span></div>
             </div>
             <div class="col-xs-4 col-sm-5"></div>
         </div>
