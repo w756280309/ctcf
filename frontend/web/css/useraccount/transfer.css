@@ -1,0 +1,253 @@
+.clearfix_all:after{
+    content: '';
+    display: block;
+    height: 0;
+    clear: both;
+    overflow: hidden;
+}
+.left{
+    float: left;
+}
+.relative{
+    position: relative;
+}
+.common_color{
+    color: #f44336;
+}
+
+.text_center{
+    text-align: center;
+}
+.text_left{
+    text-align: left;
+}
+.text_right{
+    text-align: right;
+}
+
+/*.header-nav-click{*/
+/*color: #6e6e72 !important;*/
+/*border-bottom:none;*/
+/*}*/
+
+.rightcontent {
+    border:1px solid #e3e3e3;
+    background: #fff;
+}
+
+.title {
+    height: 50px;
+    line-height:50px;
+    font-size:16px;
+    padding:0 20px;
+    border-bottom: 1px solid #e3e3e3;
+}
+
+.title i{
+    display: inline-block;
+    width:20px;
+    height:15px;
+    background: url("../../images/useraccount/icons.png") no-repeat -402px -37px;
+    margin-right: 10px;
+    position: relative;
+    top: 2px;
+}
+
+.contentCenter {
+    padding-left:40px;
+    color: #a9a9a9;
+    border-bottom: 1px solid #e3e3e3;
+    font-size:16px;
+}
+
+.contentCenter p{
+    height:66px;
+    line-height: 66px;
+    font-size:16px;
+    border-bottom: 1px solid #e3e3e3;
+    color: #555;
+}
+.contentCenter_ul{
+    position: relative;
+    padding:35px 0;
+    text-align: left;
+}
+.contentCenter_ul ul{
+    float: left;
+    width: 190px;
+}
+.contentCenter_ul_li{
+    margin-bottom: 25px;
+    font-size: 30px;
+    color: #000;
+}
+.contentCenter_ul_li_income{
+    padding-left:14px;
+}
+.contentCenter_ul_li_day{
+    padding-left:6px;
+}
+.contentCenter_ul_li_allMoney{
+    margin-left: -20px;
+}
+
+.contentCenter_ul_li span{
+    font-size: 16px;
+}
+#current_interest{
+    background: url(../../images/useraccount/tip.png);
+    background-repeat: no-repeat;
+    background-position: top left;
+    display: block;
+    width: 13px;
+    height: 13px;
+    position: relative;
+    top: -18px;
+    right: -115px;
+}
+.contentCenter_tip {
+    position: absolute;
+    width: 325px;
+    top: 130px;
+    left: 416px;
+    display: none;
+}
+.ui-poptip-shadow {
+    background-color: rgba(229,169,107,.15);
+    border-radius: 2px;
+    padding: 2px;
+    zoom: 1;
+    _display: inline;
+}
+.ui-poptip-container {
+    position: relative;
+    background-color: #FFFCEF;
+    border: 1px solid #ffbb76;
+    border-radius: 2px;
+    padding: 5px 15px;
+    zoom: 1;
+    _display: inline;
+}
+.ui-poptip-arrow {
+    position: absolute;
+    z-index: 10;
+}
+#ui-poptip-arrow_add_one img {
+    position: absolute;
+    right: -231px;
+    top: -8px;
+}
+#ui-poptip-arrow_add_two img {
+    position: absolute;
+    right: -68px;
+    top: -8px;
+}
+.ui-poptip-content{
+    font-size: 12px;
+}
+.contentBottom{
+    padding: 20px 20px 50px 40px;
+    color: #555;
+}
+.contentBottom_box{
+    font-size:16px;
+}
+.contentBottom_box ul{
+    margin-bottom: 35px;
+}
+.availableAssets_space{
+
+}
+.availableAssets_money,.canObtain_money,.discountObtain_money,.poundage_money{
+    width:275px;
+    text-align: right;
+}
+.transferMoney_title,.discountRate_title{
+    padding-top:3px;
+}
+.transferMoney_space{
+    width:25px;
+    height:10px;
+}
+
+.discountRate_space{
+    width:42px;
+    height:10px;
+}
+.transfer_common{
+    padding:2px 5px;
+    border:1px solid #e3e3e3;
+    -webkit-border-radius:3px;
+    -moz-border-radius:3px;
+    border-radius:3px;
+}
+.transfer_common input{
+    width:235px;
+    text-align: right;
+}
+.discountRate_tip_icon{
+    background: url(../../images/useraccount/tip.png);
+    background-repeat: no-repeat;
+    background-position: top left;
+    width: 13px;
+    height: 13px;
+    position: absolute;
+    top:10px;
+    left:375px;
+}
+.discountRate_tip{
+    position: absolute;
+    width: 420px;
+    top: 30px;
+    left: 300px;
+    display: none;
+}
+
+.canObtain_space{
+    width:14px;
+    height:10px;
+}
+.poundage_space{
+    width:30px;
+    height:10px;
+}
+
+.poundage_tip_icon{
+    background: url(../../images/useraccount/tip.png);
+    background-repeat: no-repeat;
+    background-position: top left;
+    width: 13px;
+    height: 13px;
+    position: absolute;
+    top:6px;
+    left:375px;
+}
+.poundage_tip{
+    position: absolute;
+    width: 410px;
+    top: 25px;
+    left: 300px;
+    display: none;
+}
+
+.submit_btn {
+    width: 300px;
+    height: 40px;
+    background: #f44336;
+    color: white;
+    font-size: 16px;
+    margin: 0 0 0 70px;
+    cursor: pointer;
+}
+.submit_btn:hover {
+    background: #DB1809;
+}
+.transferMoney_error,.discountRate_error{
+    position: absolute;
+    top: 36px;
+    left: 105px;
+    font-size:12px;
+}
+#amount_error,#discount_rate_error{
+    display: none;
+}

@@ -835,4 +835,35 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
             return false;
         }
     }
+
+    /**
+     * 获取指定标的的剩余期限
+     * 到期本息返回天数；分期返回月数和天数（不足一月就不返回月数）
+     * @return array
+     */
+    public function getRemainingDuration()
+    {
+        $date = new \DateTime();
+        $endDate = (new \DateTime())->setTimestamp($this->finish_date)->sub(new \DateInterval('P1D'));
+        if ($endDate > $date) {
+            return ['days' => 0];
+        }
+        $diff = $date->diff($endDate);
+        $method = intval($this->refund_method);
+        if (OnlineProduct::REFUND_METHOD_DAOQIBENXI === $method) {
+            $day = $diff->days;
+            $res = ['days' => $day];
+        } else {
+            $y = $diff->y;
+            $m = $diff->m;
+            $d = $diff->d;
+            $m = $y * 12 + $m;
+            if ($m > 0) {
+                $res = ['days' => $d, 'months' => $m];
+            } else {
+                $res = ['days' => $d];
+            }
+        }
+        return $res;
+    }
 }
