@@ -2,16 +2,23 @@
 $this->title = '我要理财';
 
 $this->registerCssFile(ASSETS_BASE_URI . 'css/pagination.css', ['depends' => 'frontend\assets\FrontAsset']);
-$this->registerCssFile(ASSETS_BASE_URI . 'css/deallist.css?v=160715', ['depends' => 'frontend\assets\FrontAsset']);
+$this->registerCssFile(ASSETS_BASE_URI . 'css/deallist.css?v=160918', ['depends' => 'frontend\assets\FrontAsset']);
 
 use common\models\product\OnlineProduct;
 use common\models\product\RateSteps;
 use common\utils\StringUtils;
 use common\widgets\Pager;
+
+$action = Yii::$app->controller->action->getUniqueId();
+
 ?>
 
 <div class="projectContainer">
     <div class="projectList">
+        <div class="alist-box">
+            <a href='/licai/' class="list-span <?= 'licai/index' === $action ? 'select-span' : '' ?>">理财列表</a>
+            <a href='/licai/notes' class="list-span <?= 'licai/notes' === $action ? 'select-span' : '' ?>">转让列表</a>
+        </div>
         <!--预告期-->
         <?php foreach ($loans as $key => $val) : ?>
         <a target="_blank" href="/deal/deal/detail?sn=<?= $val->sn ?>">
