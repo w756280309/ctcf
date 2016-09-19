@@ -1,11 +1,10 @@
 <?php
 namespace app\modules\order\controllers;
 
-use Yii;
 use app\controllers\BaseController;
-use yii\web\Response;
 use common\models\booking\BookingProduct;
 use common\models\booking\BookingLog;
+use Yii;
 
 class BookingController extends BaseController
 {

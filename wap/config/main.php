@@ -70,6 +70,9 @@ return [
         'promotion' => [
             'class' => 'wap\modules\promotion\Module',
         ],
+        'credit' => [
+            'class' => 'wap\modules\credit\Module',
+        ],
     ],
     'params' => $params,
     'as requestBehavior' => [
