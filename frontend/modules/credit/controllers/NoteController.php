@@ -16,15 +16,9 @@ class NoteController extends BaseController
             return $this->redirect('/site/login');
         }
         //获取资产详情
-        $client = new Client(['base_uri' => rtrim(\Yii::$app->params['clientOption']['host']['tx'], '/')]);
-        $res = $client->request('GET', '/Api/assets/detail?id=' . $asset_id, [
-            'headers' => [
-                'Content-Type' => 'application/json',
-                'Accept' => 'application/json',
-            ],
-        ]);
-        $asset = json_decode($res->getBody(), true);
-        if (!$asset) {
+        $txClient = \Yii::$container->get('txClient');
+        $asset = $txClient->get('assets/detail', ['id' => $asset_id]);
+        if (null === $asset) {
             throw $this->ex404('没有找到指定资产');
         }
         $loan = OnlineProduct::findOne($asset['loan_id']);
@@ -47,19 +41,12 @@ class NoteController extends BaseController
         $rate = $rate ?: 0;
         if ($asset_id > 0 && $amount > 0 && $rate >= 0) {
             try {
-                $client = new Client(['base_uri' => rtrim(\Yii::$app->params['clientOption']['host']['tx'], '/')]);
-                $res = $client->request('POST', '/Api/credit-note/new', [
-                    'headers' => [
-                        'Content-Type' => 'application/json',
-                        'Accept' => 'application/json',
-                    ],
-                    'json' => [
-                        'discountRate' => $rate,
-                        'asset_id' => $asset_id,
-                        'amount' => $amount * 100,
-                    ],
+                $txClient = \Yii::$container->get('txClient');
+                $result = $txClient->post('credit-note/new', [
+                    'discountRate' => $rate,
+                    'asset_id' => $asset_id,
+                    'amount' => $amount * 100,
                 ]);
-                $result = json_decode($res->getBody(), true);
                 $responseData = ['code' => 0, 'data' => $result];
             } catch (\Exception $e) {
                 $result = json_decode(strval($e->getResponse()->getBody()), true);

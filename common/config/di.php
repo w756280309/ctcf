@@ -12,3 +12,4 @@
     \Yii::$app->params['clientOption'],
 ]);
 \Yii::$container->set('sms', 'SmsGate\\SmsRequest');
+\Yii::$container->set('txClient', 'Tx\\TxClient');

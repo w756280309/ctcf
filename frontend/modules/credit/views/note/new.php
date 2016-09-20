@@ -233,7 +233,7 @@ $action = Yii::$app->controller->action->getUniqueId();
             amount_error.hide();
 
             $('#expect_money').html(parseInt(amount / total_amount * current_interest * 100) / 100);
-            $('#fee').html(amount * 0.003);
+            $('#fee').html(parseInt(amount * 0.003 * 100) / 100);
 
             $('#expect_amount').html(amount * (1 - parseInt(rate) / 100));
         }
