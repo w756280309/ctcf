@@ -5,7 +5,6 @@ namespace frontend\controllers;
 use common\controllers\HelpersTrait;
 use common\models\order\OnlineOrder;
 use common\models\product\OnlineProduct;
-use GuzzleHttp\Client;
 use Yii;
 use yii\data\Pagination;
 use yii\web\Controller;
@@ -38,35 +37,24 @@ class LicaiController extends Controller
      */
     public function actionNotes($page = 1)
     {
-        $client = new Client(['base_uri' => rtrim(\Yii::$app->params['clientOption']['host']['tx'], '/')]);
-
         $notes = [];
         $totalCount = 0;
         $pageSize = 0;
-        try {
-            $response = $client->request('GET', '/Api/credit-note/list', [
-                'query' => [
-                    'page' => $page,
-                    'isCanceled' => false,
-                ],
-            ]);
 
-            $responseCode = $response->getStatusCode();
-            if ($responseCode === 200) {
-                $respData = json_decode($response->getBody()->getContents(), true);
-                $notes = $respData['data'];
-                $totalCount = $respData['total_count'];
-                $pageSize = $respData['page_size'];
+        $txClient = Yii::$container->get('txClient');
+        $response = $txClient->get('credit-note/list', ['page' => $page, 'isCanceled' => false]);
+        if (null !== $response) {
+            $notes = $response['data'];
+            $totalCount = $response['total_count'];
+            $pageSize = $response['page_size'];
+
+
+            foreach ($notes as $key => $note) {
+                $loan_id = (int) $note['loan_id'];
+                $order_id = (int) $note['order_id'];
+                $notes[$key]['loan'] = OnlineProduct::findOne($loan_id);
+                $notes[$key]['order'] = OnlineOrder::findOne($order_id);
             }
-        } catch(\Exception $ex) {
-            //不做任何处理
-        }
-
-        foreach ($notes as $key => $note) {
-            $loan_id = (int) $note['loan_id'];
-            $order_id = (int) $note['order_id'];
-            $notes[$key]['loan'] = OnlineProduct::findOne($loan_id);
-            $notes[$key]['order'] = OnlineOrder::findOne($order_id);
         }
 
         $pages = new Pagination(['totalCount' => $totalCount, 'pageSize' => $pageSize]);
