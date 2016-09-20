@@ -845,7 +845,7 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
     {
         $date = new \DateTime();
         $endDate = (new \DateTime())->setTimestamp($this->finish_date)->sub(new \DateInterval('P1D'));
-        if ($endDate > $date) {
+        if ($date > $endDate) {
             return ['days' => 0];
         }
         $diff = $date->diff($endDate);
@@ -864,6 +864,7 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
                 $res = ['days' => $d];
             }
         }
+
         return $res;
     }
 }

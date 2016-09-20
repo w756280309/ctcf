@@ -4,8 +4,11 @@ namespace frontend\modules\credit\controllers;
 
 use common\models\order\OnlineOrder;
 use common\models\product\OnlineProduct;
+use common\models\user\User;
 use frontend\controllers\BaseController;
-use GuzzleHttp\Client;
+use Yii;
+use yii\data\Pagination;
+use yii\helpers\ArrayHelper;
 
 class NoteController extends BaseController
 {
@@ -72,5 +75,77 @@ class NoteController extends BaseController
         }
 
         return $responseData;
+    }
+
+    /**
+     * 转让详情.
+     */
+    public function actionDetail($id)
+    {
+        if (empty($id)) {
+            throw $this->ex404();
+        }
+
+        $respData = Yii::$container->get('txClient')->get('credit-note/detail', ['id' => $id], function(\Exception $e) {
+            $code = $e->getCode();
+
+            if (200 !== $code) {
+                throw $this->ex404();
+            }
+        });
+
+        $loan = $this->findOr404(OnlineProduct::class, $respData['loan_id']);
+        $order = $this->findOr404(OnlineOrder::class, $respData['order_id']);
+        $user = $this->getAuthedUser();
+
+        return $this->render('detail', ['loan' => $loan, 'order' => $order, 'user' => $user, 'respData' => $respData]);
+    }
+
+    /**
+     * 获取转让订单信息.
+     */
+    public function actionOrders($id, $page = null)
+    {
+        $pageSize = 10;
+
+        if (empty($page)) {
+            $page = 1;
+        }
+
+
+        $respData = Yii::$container->get('txClient')->get('credit-note/orders', [
+            'id' => $id,
+            'page' => $page,
+            'page_size' => $pageSize,
+        ], function(\Exception $e) {
+            $code = $e->getCode();
+
+            if (200 !== $code) {
+                return ['data' => []];
+            }
+        });
+
+        $orders = $respData['data'];
+
+        if (!empty($orders)) {
+            $users = User::find()
+                ->where(['id' => ArrayHelper::getColumn($orders, 'user_id')])
+                ->asArray()
+                ->all();
+
+            if (!empty($users)) {
+                $users = ArrayHelper::index($users, 'id');
+            }
+
+            $pages = new Pagination([
+                'totalCount' => $respData['totalCount'],
+                'pageSize' => $respData['pageSize'],
+            ]);
+        } else {
+            $users = null;
+        }
+
+        $this->layout = false;
+        return $this->render('_order_list', ['data' => $orders, 'users' => $users, 'pages' => $pages]);
     }
 }
