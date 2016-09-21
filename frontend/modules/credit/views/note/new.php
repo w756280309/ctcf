@@ -1,5 +1,6 @@
 <?php
 use yii\helpers\Html;
+$this->title = '发起债权';
 
 $this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/usercenter.css', ['depends' => 'frontend\assets\FrontAsset']);
 $this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/transfer.css', ['depends' => 'frontend\assets\FrontAsset']);
@@ -199,7 +200,7 @@ $action = Yii::$app->controller->action->getUniqueId();
                         }
                     }
                 } else if (data['code'] === 0) {
-                    window.location.href = '/info/success?source=credit_new&jumpUrl=/user/user'
+                    window.location.href = '/info/success?source=credit_new&jumpUrl=/credit/trade/assets?type=2'
                 }
             })
         } else {
@@ -216,7 +217,7 @@ $action = Yii::$app->controller->action->getUniqueId();
             discount_rate_error.show();
         } else {
             discount_rate_error.hide();
-            $('#expect_amount').html(amount * (1 - parseInt(rate) / 100));
+            $('#expect_amount').html(parseInt(amount * (1 - rate / 100) * 100) / 100);
         }
     }
 
@@ -235,7 +236,7 @@ $action = Yii::$app->controller->action->getUniqueId();
             $('#expect_money').html(parseInt(amount / total_amount * current_interest * 100) / 100);
             $('#fee').html(parseInt(amount * 0.003 * 100) / 100);
 
-            $('#expect_amount').html(amount * (1 - parseInt(rate) / 100));
+            $('#expect_amount').html(parseInt(amount * (1 - rate / 100) * 100) / 100);
         }
     }
 </script>

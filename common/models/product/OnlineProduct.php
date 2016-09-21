@@ -843,8 +843,8 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
      */
     public function getRemainingDuration()
     {
-        $date = new \DateTime();
-        $endDate = (new \DateTime())->setTimestamp($this->finish_date)->sub(new \DateInterval('P1D'));
+        $date = new \DateTime(date('Y-m-d'));
+        $endDate = (new \DateTime(date('Y-m-d', $this->finish_date)))->sub(new \DateInterval('P1D'));
         if ($date > $endDate) {
             return ['days' => 0];
         }
