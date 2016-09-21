@@ -9,7 +9,7 @@ $action = Yii::$app->controller->action->getUniqueId();
         <li class="nav-title"><span>我的账户</span></li>
         <li class="nav-content">
             <ul>
-                <li class="<?= 'user/user/index' === Yii::$app->controller->action->getUniqueId() ? 'selected' : '' ?>"><a href="/user/user"><span class="star"></span>资产总览</a></li>
+                <li class="<?= 'user/user/index' === $action ? 'selected' : '' ?>"><a href="/user/user"><span class="star"></span>资产总览</a></li>
                 <li class="recharge <?= ('user/userbank/recharge' == $action || 'user/recharge/init' == $action) ? 'selected' : '' ?>"><a href="/user/recharge/init"><span class="star"></span>充值</a></li>
                 <li class="draw <?= ('user/draw/tixian' == $action) ? 'selected' : '' ?>"><a href="/user/draw/tixian"><span class="star"></span>提现</a></li>
             </ul>
@@ -18,7 +18,7 @@ $action = Yii::$app->controller->action->getUniqueId();
         <li class="nav-content">
             <ul>
                 <li class="<?= 'user/user/myorder' === $action ? 'selected' : '' ?>"><a href="/user/user/myorder"><span class="star"></span>我的理财</a></li>
-                <li class="<?= in_array($action, ['credit/note/new']) ? 'selected' : '' ?>"><a href="javascript:void(0)"><span class="star"></span>债权转让</a></li>
+                <li class="<?= 'credit/trade/assets' === $action ? 'selected' : '' ?>"><a href="/credit/trade/assets"><span class="star"></span>债权转让</a></li>
                 <li class="<?= 'user/coupon/index' === $action ? 'selected' : '' ?>"><a href="/user/coupon/"><span class="star"></span>我的代金券</a></li>
                 <li class="<?= 'user/invite/index' === $action ? 'selected' : '' ?>"><a href="/user/invite/"><span class="star"></span>邀请好友</a></li>
                 <li class="<?= 'user/user/mingxi' === $action ? 'selected' : '' ?>"><a href="/user/user/mingxi"><span class="star"></span>交易明细</a></li>
