@@ -49,7 +49,7 @@ class NoteController extends BaseController
                 $result = $txClient->post('credit-note/new', [
                     'discountRate' => $rate,
                     'asset_id' => $asset_id,
-                    'amount' => $amount * 100,
+                    'amount' => bcmul($amount, 100, 0),
                 ]);
                 $responseData = ['code' => 0, 'data' => $result];
             } catch (\Exception $e) {

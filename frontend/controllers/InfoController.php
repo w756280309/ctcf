@@ -63,7 +63,15 @@ class InfoController extends Controller
                 'requireJump' => true,
                 'linkType' => 2,
                 'jumpReferWords' => '',
-            ]
+            ],
+            'credit_order' => [
+                'title' => '债权购买成功',
+                'mainTitle' => '恭喜您，转让购买成功！',
+                'firstFuTitle' => '页面将在<em class="em_time">5</em>秒后自动关闭，<a href="javascript:;" class="a-close">点击这里</a>立即关闭!',
+                'requireJump' => true,
+                'linkType' => 2,
+                'jumpReferWords' => '',
+            ],
         ],
         'fail' => [
             'tuoguan' => [
@@ -114,6 +122,14 @@ class InfoController extends Controller
                 'linkType' => 0,
                 'jumpReferWords' => '',
             ],
+            'credit_order' => [
+                'title' => '债权购买失败',
+                'mainTitle' => '债权购买失败！',
+                'firstFuTitle' => '如有疑问，请联系客服，电话：400-101-5151(8:30-20:00)',
+                'requireJump' => false,
+                'linkType' => 0,
+                'jumpReferWords' => '',
+            ],
         ],
     ];
 
@@ -124,7 +140,8 @@ class InfoController extends Controller
         'huanka',
         'chongzhi',
         'tixian',
-        'credit_new',
+        'credit_new',//新建债权
+        'credit_order',//购买债权
     ];
 
     public function actionSuccess()

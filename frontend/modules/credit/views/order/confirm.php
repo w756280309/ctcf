@@ -54,7 +54,16 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/credit/creditpay.css');
         $('#sub_button').bind('click', function () {
             var buy = $(this);
             if ($('#agree').is(':checked')) {
-                alert('我要购买啦');
+                $.post('/credit/order/new', {
+                    "_csrf":"<?= Yii::$app->request->csrfToken?>",
+                    "user_id":<?= Yii::$app->user->identity->getId() ?>,
+                    "note_id":<?= $note['id']?>,
+                    "principal":<?= $amount ?>
+                }, function (data) {
+                    setTimeout(function () {
+                        location.replace(data.url);
+                    }, 1000);
+                })
             } else {
                 $('#err_message').show();
                 $('#err_message').html('您还没有勾选 同意并签署"产品合同"');

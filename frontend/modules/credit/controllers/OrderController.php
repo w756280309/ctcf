@@ -35,19 +35,16 @@ class OrderController extends BaseController
         if (null === $note || !isset($note['asset'])) {
             $this->ex404('没有找到指定债权');
         }
-        $rate = bcdiv($note['discountRate'], 100);
+        $rate = bcdiv($note['discountRate'], 100, 2);
         $asset = $note['asset'];
         $loan = OnlineProduct::findOne($asset['loan_id']);
         $order = OnlineOrder::findOne($asset['order_id']);
         if (null === $loan || null === $order) {
             $this->ex404('没有找到指定债权');
         }
-        $currentInterest = bcdiv($asset['currentInterest'], 100);
-        $remainingInterest = bcdiv($asset['remainingInterest'], 100);
-        $maxTradableAmount = bcdiv($asset['maxTradableAmount'], 100);
-        $interest = bcdiv(bcmul($currentInterest, $amount), $maxTradableAmount);//应付利息
-        $profit = bcdiv(bcmul($remainingInterest, $amount), $maxTradableAmount);//预期收益
-        $payAmount = bcmul(bcadd($amount, $interest), bcsub(1, $rate));//实际支付金额
+        $interest = bcdiv(bcmul($asset['currentInterest'], $amount, 2), $asset['maxTradableAmount'], 2);//应付利息
+        $profit = bcdiv(bcmul($asset['remainingInterest'], $amount, 2), $asset['maxTradableAmount'], 2);//预期收益
+        $payAmount = bcmul(bcadd($amount, $interest, 2), bcsub(1, $rate, 2), 2);//实际支付金额
         return $this->render('confirm', [
             'note' => $note,
             'order' => $order,
@@ -57,5 +54,60 @@ class OrderController extends BaseController
             'amount' => $amount,
             'payAmount' => $payAmount,
         ]);
+    }
+
+    /**
+     * ajax请求新建债权订单
+     */
+    public function actionNew()
+    {
+        $request = \Yii::$app->request;
+        $userId = $request->post('user_id');
+        $noteId = $request->post('note_id');
+        $principal = $request->post('principal');//实际购买本金
+        try {
+            $txClient = \Yii::$container->get('txClient');
+            $res = $txClient->post('order/new', [
+                'user_id' => $userId,
+                'note_id' => $noteId,
+                'principal' => bcmul($principal, 100, 0),
+            ]);
+            if (isset($res['id'])) {
+                return ['code' => 0, 'url' => '/credit/order/wait?order_id=' . $res['id']];
+            } else {
+                return ['code' => 1, 'url' => '/info/fail?source=credit_order'];
+            }
+        } catch (\Exception $ex) {
+            return ['code' => 1, 'url' => '/info/fail?source=credit_order'];
+        }
+    }
+
+    //购买债权等待页
+    public function actionWait()
+    {
+        $request = \Yii::$app->request;
+        $order_id = intval($request->get('order_id'));
+        if ($request->isPost) {
+            $order_id = intval($request->post('order_id'));
+        }
+        $txClient = \Yii::$container->get('txClient');
+        $order = $txClient->get('order/detail', ['id' => $order_id]);
+        if (null === $order) {
+            throw $this->ex404('没有找到指定订单');
+        }
+        if ($request->isPost) {
+            if ($order['status'] === 1) {
+                //todo 订单成功操作
+                return ['code' => 0, 'url' => '/info/success?source=credit_order&jumpUrl=/user/user/myorder'];
+            } elseif ($order['status'] === 2) {
+                return ['code' => 0, 'url' => '/info/fail?source=credit_order'];
+            } else {
+                return ['code' => 1];
+            }
+        } else {
+            return $this->render('wait', [
+                'order_id' => $order_id,
+            ]);
+        }
     }
 }
