@@ -9,6 +9,7 @@ use frontend\controllers\BaseController;
 use Yii;
 use yii\data\Pagination;
 use yii\helpers\ArrayHelper;
+use common\service\BankService;
 
 class NoteController extends BaseController
 {
@@ -82,6 +83,9 @@ class NoteController extends BaseController
      */
     public function actionDetail($id)
     {
+        //记录来源
+        Yii::$app->session->set('to_url', Yii::$app->request->url);
+
         if (empty($id)) {
             throw $this->ex404();
         }
@@ -94,8 +98,8 @@ class NoteController extends BaseController
             }
         });
 
-        $loan = $this->findOr404(OnlineProduct::class, $respData['loan_id']);
-        $order = $this->findOr404(OnlineOrder::class, $respData['order_id']);
+        $loan = $this->findOr404(OnlineProduct::class, $respData['asset']['loan_id']);
+        $order = $this->findOr404(OnlineOrder::class, $respData['asset']['order_id']);
         $user = $this->getAuthedUser();
 
         return $this->render('detail', ['loan' => $loan, 'order' => $order, 'user' => $user, 'respData' => $respData]);
@@ -147,5 +151,28 @@ class NoteController extends BaseController
 
         $this->layout = false;
         return $this->render('_order_list', ['data' => $orders, 'users' => $users, 'pages' => $pages]);
+    }
+
+    public function actionCheck($id)
+    {
+        if (empty($id)) {
+            throw $this->ex404();
+        }
+
+        $amount = \Yii::$app->request->post('amount');
+
+        $user = $this->getAuthedUser();
+        if (null === $user) {
+            return ['tourl' => '/site/login', 'code' => 1, 'message' => '请登录'];
+        }
+
+        $cond = 0 | BankService::IDCARDRZ_VALIDATE_N | BankService::MIANMI_VALIDATE;
+        $checkResult = BankService::check($user, $cond);
+        if (1 === $checkResult['code']) {
+            return $checkResult;
+        }
+
+        //判断金额在下一步操作
+        return ['tourl' => '/credit/order/confirm?id='.$id.'&amount='.$amount, 'code' => 0, 'message' => ''];
     }
 }

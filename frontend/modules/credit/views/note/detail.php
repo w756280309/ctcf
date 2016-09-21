@@ -4,6 +4,7 @@ $this->title = '转让详情';
 $this->registerCssFile(ASSETS_BASE_URI.'css/credit/credit.css', ['depends' => 'frontend\assets\FrontAsset']);
 $this->registerJsFile(ASSETS_BASE_URI.'js/credit/detail.js', ['depends' => 'frontend\assets\FrontAsset']);
 $this->registerCssFile(ASSETS_BASE_URI.'css/pagination.css');
+$this->registerCssFile(ASSETS_BASE_URI . 'css/useraccount/chargedeposit.css');
 
 use common\utils\StringUtils;
 ?>
@@ -30,7 +31,7 @@ use common\utils\StringUtils;
                                 <?php
                                     $remainingDuration = $loan->remainingDuration;
 
-                                    echo ($remainingDuration['months'] ? $remainingDuration['months'].'<i>个月</i>'
+                                    echo (isset($remainingDuration['months']) ? $remainingDuration['months'].'<i>个月</i>'
                                         : '').$remainingDuration['days'].'<i>天</i>';
                                 ?>
                             </span>
@@ -78,7 +79,7 @@ use common\utils\StringUtils;
                 <div class="pR-title">转让进度：</div>
                 <div class="dR-progress-box">
                     <div class="dR-progress">
-                        <?php $progress = $respData['isClosed'] ? 100 : bcdiv(bcmul($respData['tradedAmount'], 100), $respData['amount']); ?>
+                        <?php $progress = $respData['isClosed'] ? 100 : bcdiv(bcmul($respData['tradedAmount'], 100), $respData['amount'], 0); ?>
                         <span data-progress="<?= $progress ?>"></span>
                     </div>
                     <div class="dRP-data"><?= $progress ?>%</div>
@@ -100,8 +101,10 @@ use common\utils\StringUtils;
                     <?php } ?>
                 </ul>
                 <?php if (!$respData['isClosed']) { ?>
+                <form action="/credit/note/check?id=<?= $respData['id'] ?>" method="post" id="note_order">
+                    <input type="hidden" name="_csrf" value="<?= Yii::$app->request->csrfToken ?>" />
                     <div class="dR-input">
-                        <input type="text" class="dR-money" value="0">
+                        <input type="text" name="amount" class="dR-money">
                         <!--输入款提示信息-->
                         <div class="tishi">
                             <span>剩余金额不可低于99元</span>
@@ -120,7 +123,8 @@ use common\utils\StringUtils;
                         <li class="dR-inner-right"><span><i>aaa</i></span>元</li>
                     </ul>
 
-                    <a href="" class="dR-btn">立即投资</a>
+                    <input type="submit" class="dR-btn" id="order_submit" value="立即投资" />
+                </form>
                 <?php } else { ?>
                     <div class="over-credit">转让完成...</div>
                     <a href="/licai/" class="dR-btn">查看其他项目</a>
@@ -145,6 +149,56 @@ use common\utils\StringUtils;
         $('#order_list').on('click', 'a', function (e) {
             e.preventDefault(); // 禁用a标签默认行为
             getOrderList($(this).attr('href'));
+        });
+
+        var note_form = $('#note_order');
+        var note_button = $('#order_submit');
+        note_form.on('submit', function (e) {
+            e.preventDefault();
+
+            //判断登录
+            var log = <?= intval(Yii::$app->user->isGuest) ?>;
+            if (log) {
+                login();
+                return false;
+            }
+            //判断金额-next
+
+            note_button.attr('disabled', 'disabled');
+            var xhr = $.post(note_form.attr('action'), note_form.serialize(), function (data) {
+                if (data.code == 0 && data.tourl) {
+                    location.href = data.tourl;
+                } else {
+                    $('.dR-tishi-error').show();
+                    //未免密不提示、不跳转，直接弹框
+                    if ('/user/qpay/binding/umpmianmi' != data.tourl && '/user/userbank/idcardrz' != data.tourl) {
+                        $('.dR-tishi-error .err_message').html(data.message);
+                    }
+                }
+                if ('/site/login' == data.tourl) {
+                    //获取登录信息
+                    login();
+                } else if('/user/qpay/binding/umpmianmi' == data.tourl){
+                    mianmi();
+                } else if('/user/userbank/idcardrz' == data.tourl){
+                    window.location.href = '/user/userbank/identity';
+                } else {
+                    if (data.tourl) {
+                        location.href = data.tourl;
+                    }
+                }
+            });
+
+            xhr.always(function () {
+                note_button.attr('disabled', false);
+                note_button.val("立即投资");
+            });
+
+            xhr.fail(function () {
+                $('.dR-tishi-error').show();
+                $('.dR-tishi-error .err_message').html('系统繁忙，请稍后重试！');
+            });
+
         });
     })
 
