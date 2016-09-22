@@ -9,6 +9,7 @@ $(function() {
         $('.plD-content').eq(index).show();
     });
     $('.dR-money').on('click',function(){
+        $('.dR-tishi-error ').hide();
         $('.tishi').show();
     });
     $('.dR-money').on('blur',function(){

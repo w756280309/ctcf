@@ -10,6 +10,7 @@ use Yii;
 use yii\data\Pagination;
 use yii\helpers\ArrayHelper;
 use common\service\BankService;
+use common\lib\credit\CreditNote;
 
 class NoteController extends BaseController
 {
@@ -117,7 +118,7 @@ class NoteController extends BaseController
         }
 
 
-        $respData = Yii::$container->get('txClient')->get('credit-note/orders', [
+        $respData = Yii::$container->get('txClient')->get('credit-order/list', [
             'id' => $id,
             'page' => $page,
             'page_size' => $pageSize,
@@ -153,26 +154,40 @@ class NoteController extends BaseController
         return $this->render('_order_list', ['data' => $orders, 'users' => $users, 'pages' => $pages]);
     }
 
-    public function actionCheck($id)
+    /**
+     * 转让详情-立即投资前金额及用户状态检查
+     * 
+     * @param string $id     挂牌记录id
+     * @param string $amount 购买金额（元）
+     *
+     * @return array
+     */
+    public function actionCheck()
     {
-        if (empty($id)) {
-            throw $this->ex404();
-        }
-
+        $noteId = \Yii::$app->request->get('id');
         $amount = \Yii::$app->request->post('amount');
 
+        //检查是否登录
         $user = $this->getAuthedUser();
         if (null === $user) {
             return ['tourl' => '/site/login', 'code' => 1, 'message' => '请登录'];
         }
 
+        //检查是否开通资金托管与免密
         $cond = 0 | BankService::IDCARDRZ_VALIDATE_N | BankService::MIANMI_VALIDATE;
         $checkResult = BankService::check($user, $cond);
         if (1 === $checkResult['code']) {
             return $checkResult;
         }
 
-        //判断金额在下一步操作
-        return ['tourl' => '/credit/order/confirm?id='.$id.'&amount='.$amount, 'code' => 0, 'message' => ''];
+        //检查购买金额是否可以购买指定id的转让项目
+        $creditNote = new CreditNote();
+        $checkNoteResult = $creditNote->check($noteId, $amount, $user);
+        if (1 === $checkNoteResult['code']) {
+            $checkNoteResult['tourl'] = '';
+            return $checkNoteResult;
+        }
+
+        return ['tourl' => '/credit/order/confirm?id='.$noteId.'&amount='.$amount, 'code' => 0, 'message' => ''];
     }
 }

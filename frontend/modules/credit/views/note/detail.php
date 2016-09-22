@@ -1,12 +1,14 @@
 <?php
 $this->title = '转让详情';
 
-$this->registerCssFile(ASSETS_BASE_URI.'css/credit/credit.css', ['depends' => 'frontend\assets\FrontAsset']);
-$this->registerJsFile(ASSETS_BASE_URI.'js/credit/detail.js', ['depends' => 'frontend\assets\FrontAsset']);
+$this->registerCssFile(ASSETS_BASE_URI.'css/credit/credit.css?v=160922', ['depends' => 'frontend\assets\FrontAsset']);
+$this->registerJsFile(ASSETS_BASE_URI.'js/credit/detail.js?v=160922', ['depends' => 'frontend\assets\FrontAsset']);
 $this->registerCssFile(ASSETS_BASE_URI.'css/pagination.css');
 $this->registerCssFile(ASSETS_BASE_URI . 'css/useraccount/chargedeposit.css');
 
 use common\utils\StringUtils;
+
+$note_config = json_decode($respData['config'], true);
 ?>
 
 <div class="project-box clearfix">
@@ -106,12 +108,16 @@ use common\utils\StringUtils;
                     <div class="dR-input">
                         <input type="text" name="amount" class="dR-money">
                         <!--输入款提示信息-->
-                        <div class="tishi">
-                            <span>剩余金额不可低于99元</span>
+                        <div class="tishi tishi-dev">
+                            <img class="jiao-left" src="/images/deal/jiao-right.png" alt="">
+                            <ul class="dR-tishi">
+                                <li><span>起投<?= StringUtils::amountFormat2(bcdiv($note_config['min_order_amount'], 100, 2)) ?>元</span></li>
+                                <li><span>递增<?= StringUtils::amountFormat2(bcdiv($note_config['incr_order_amount'], 100, 2)) ?>元</span></li>
+                            </ul>
                         </div>
                         <!--输入款错误提示信息-->
                         <div class="dR-tishi-error">
-                            <span>投资金额大于可用余额</span>
+                            <span></span>
                         </div>
                     </div>
                     <ul class="clearfix dR-inner dR-shouyi">
@@ -151,6 +157,33 @@ use common\utils\StringUtils;
             getOrderList($(this).attr('href'));
         });
 
+        $('.dR-money').keyup(function () {
+            var val = $(this).val();
+            if (false == $.isNumeric(val) || ' ' == val.substring(val.length - 1, val.length)) {
+                $(this).val(val.substring(0, val.length - 1));
+            }
+            //计算预期收益,再次调用计算应付利息与预计收益的函数
+        });
+
+        var qitou_money = <?= $note_config['min_order_amount'] ?>;
+        var rest_money = <?= bcsub($respData['amount'], $respData['tradedAmount']) ?>;
+        $('.dR-money').blur(function () {
+            var money = $(this).val();
+            if (/[0-9]+(\.)[0-9]{3,}/.test(money)) {
+                $(this).val(money.substring(0, money.indexOf(".") + 3));
+            }
+            var moneys = parseFloat(money) * 100;
+            if (moneys >= 0) {
+                if (rest_money >= qitou_money) {
+                    if (moneys < qitou_money) {
+                        $('.dR-tishi-error ').show();
+                        $('.dR-tishi-error').html('投资金额小于起投金额（<?= StringUtils::amountFormat2(bcdiv($note_config['min_order_amount'], 100, 2)) ?>元）');
+                        return false;
+                    }
+                }
+            }
+        });
+
         var note_form = $('#note_order');
         var note_button = $('#order_submit');
         note_form.on('submit', function (e) {
@@ -163,28 +196,43 @@ use common\utils\StringUtils;
                 return false;
             }
             //判断金额-next
+            var money = $('.dR-money').val();
+            if (/[0-9]+(\.)[0-9]{3,}/.test(money)) {
+                $(this).val(money.substring(0, money.indexOf(".") + 3));
+            }
+            var moneys = parseFloat(money) * 100;
+            if (moneys >= 0) {
+                if (rest_money >= qitou_money) {
+                    if (moneys < qitou_money) {
+                        $('.dR-tishi-error ').show();
+                        $('.dR-tishi-error').html('投资金额小于起投金额（<?= StringUtils::amountFormat2(bcdiv($note_config['min_order_amount'], 100, 2)) ?>元）');
+                        return false;
+                    }
+                }
+            } else {
+                $('.dR-tishi-error ').show();
+                $('.dR-tishi-error').html('投资金额不能为空');
+                return false;
+            }
 
             note_button.attr('disabled', 'disabled');
             var xhr = $.post(note_form.attr('action'), note_form.serialize(), function (data) {
                 if (data.code == 0 && data.tourl) {
                     location.href = data.tourl;
                 } else {
-                    $('.dR-tishi-error').show();
-                    //未免密不提示、不跳转，直接弹框
-                    if ('/user/qpay/binding/umpmianmi' != data.tourl && '/user/userbank/idcardrz' != data.tourl) {
-                        $('.dR-tishi-error .err_message').html(data.message);
-                    }
-                }
-                if ('/site/login' == data.tourl) {
-                    //获取登录信息
-                    login();
-                } else if('/user/qpay/binding/umpmianmi' == data.tourl){
-                    mianmi();
-                } else if('/user/userbank/idcardrz' == data.tourl){
-                    window.location.href = '/user/userbank/identity';
-                } else {
-                    if (data.tourl) {
-                        location.href = data.tourl;
+                    if ('/site/login' == data.tourl) {
+                        //获取登录信息
+                        login();
+                    } else if('/user/qpay/binding/umpmianmi' == data.tourl){
+                        mianmi();
+                    } else if('/user/userbank/idcardrz' == data.tourl){
+                        location.href = '/user/userbank/identity';
+                    } else {
+                        if (data.tourl) {
+                            location.href = data.tourl;
+                        }
+                        $('.dR-tishi-error').show();
+                        $('.dR-tishi-error').html(data.message);
                     }
                 }
             });
@@ -196,11 +244,11 @@ use common\utils\StringUtils;
 
             xhr.fail(function () {
                 $('.dR-tishi-error').show();
-                $('.dR-tishi-error .err_message').html('系统繁忙，请稍后重试！');
+                $('.dR-tishi-error').html('系统繁忙，请稍后重试！');
             });
 
         });
-    })
+    });
 
     //处理ajax登录
     function login()

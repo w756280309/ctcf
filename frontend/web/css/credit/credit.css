@@ -590,3 +590,32 @@ body {
 .show{
     display: block;
 }
+.tishi-dev {
+    position: absolute;
+    top: -5px;
+    left: 292px;
+    width: 134px;
+}
+.dR-tishi {
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    font-size: 12px;
+    color: #f44336;
+    background: #f9e5e4;
+    border: 1px solid #edc2c0;
+}
+.dR-tishi li {
+    list-style-type: disc;
+    list-style-position: inside;
+}
+.dR-tishi li span {
+    color: #464648;
+}
+.jiao-left {
+    position: absolute;
+    left: -5px;
+    top: 50%;
+    margin-top: -4px;
+}
