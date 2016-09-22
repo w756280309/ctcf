@@ -2,9 +2,10 @@
 
 namespace frontend\modules\credit\controllers;
 
-
+use common\lib\credit\CreditNote;
 use common\models\order\OnlineOrder;
 use common\models\product\OnlineProduct;
+use common\models\user\User;
 use frontend\controllers\BaseController;
 use yii\filters\AccessControl;
 
@@ -65,6 +66,16 @@ class OrderController extends BaseController
         $userId = $request->post('user_id');
         $noteId = $request->post('note_id');
         $principal = $request->post('principal');//实际购买本金
+        $user = User::findOne($userId);
+        if (null === $user) {
+            return ['code' => 0, 'url' => '', 'message' => '无法找到该用户'];
+        }
+        $creditNote = new CreditNote();
+        $checkResult = $creditNote->check($noteId, $principal, $user);
+        if (1 === $checkResult['code']) {
+            $checkResult['url'] = '';
+            return $checkResult;
+        }
         try {
             $txClient = \Yii::$container->get('txClient');
             $res = $txClient->post('order/new', [

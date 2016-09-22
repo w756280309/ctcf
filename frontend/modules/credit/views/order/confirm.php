@@ -53,17 +53,36 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/credit/creditpay.css');
     $(function () {
         $('#sub_button').bind('click', function () {
             var buy = $(this);
+            $('#err_message').hide();
+            $('#err_message').html('');
+            var _this = $(this);
             if ($('#agree').is(':checked')) {
-                $.post('/credit/order/new', {
-                    "_csrf":"<?= Yii::$app->request->csrfToken?>",
+                if (_this.hasClass('twoFire')) {
+                    return false;
+                }
+                _this.addClass('twoFire');
+                var jqXhr = $.post('/credit/order/new', {
+                    "_csrf":"<?= Yii::$app->request->csrfToken ?>",
                     "user_id":<?= Yii::$app->user->identity->getId() ?>,
-                    "note_id":<?= $note['id']?>,
-                    "principal":<?= $amount ?>
+                    "note_id":<?= $note['id'] ?>,
+                    "principal":<?= $amount ?>,
                 }, function (data) {
                     setTimeout(function () {
-                        location.replace(data.url);
+                        _this.removeClass('twoFire');
+                        if (0 !== data.code && '' === data.url) {
+                            $('#err_message').show();
+                            $('#err_message').html(data.message);
+                        }
+                        if ('' !== data.url) {
+                            location.replace(data.url);
+                        }
                     }, 1000);
-                })
+                });
+                jqXhr.fail(function () {
+                    _this.removeClass('twoFire');
+                    $('#err_message').show();
+                    $('#err_message').html('系统繁忙，请稍后重试！');
+                });
             } else {
                 $('#err_message').show();
                 $('#err_message').html('您还没有勾选 同意并签署"产品合同"');
