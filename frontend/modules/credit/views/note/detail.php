@@ -106,7 +106,7 @@ $note_config = json_decode($respData['config'], true);
                 <form action="/credit/note/check?id=<?= $respData['id'] ?>" method="post" id="note_order">
                     <input type="hidden" name="_csrf" value="<?= Yii::$app->request->csrfToken ?>" />
                     <div class="dR-input">
-                        <input type="text" name="amount" class="dR-money">
+                        <input type="text" autocomplete="off" name="amount" class="dR-money">
                         <!--输入款提示信息-->
                         <div class="tishi tishi-dev">
                             <img class="jiao-left" src="/images/deal/jiao-right.png" alt="">
@@ -168,6 +168,15 @@ $note_config = json_decode($respData['config'], true);
         var qitou_money = <?= $note_config['min_order_amount'] ?>;
         var rest_money = <?= bcsub($respData['amount'], $respData['tradedAmount']) ?>;
         $('.dR-money').blur(function () {
+            var isGuest = <?= Yii::$app->user->isGuest ? 'true' : 'false' ?>;//登录状态
+            if (isGuest){
+                return false;
+            }
+
+            if (isOwnUserItem()){
+                return false;
+            }
+
             var money = $(this).val();
             if (/[0-9]+(\.)[0-9]{3,}/.test(money)) {
                 $(this).val(money.substring(0, money.indexOf(".") + 3));
@@ -190,11 +199,16 @@ $note_config = json_decode($respData['config'], true);
             e.preventDefault();
 
             //判断登录
-            var log = <?= intval(Yii::$app->user->isGuest) ?>;
-            if (log) {
+            var isGuest = <?= Yii::$app->user->isGuest ? 'true' : 'false' ?>;
+            if (isGuest) {
                 login();
                 return false;
             }
+
+            if (isOwnUserItem()){
+                return false;
+            }
+
             //判断金额-next
             var money = $('.dR-money').val();
             if (/[0-9]+(\.)[0-9]{3,}/.test(money)) {
@@ -250,6 +264,18 @@ $note_config = json_decode($respData['config'], true);
         });
     });
 
+    function isOwnUserItem()
+    {
+        var currentUserId = <?= Yii::$app->user->isGuest ? '0' : Yii::$app->user->getIdentity()->getId() ?>;
+        var creditUserId = <?= $respData['user_id'] ?>;
+        if (currentUserId === creditUserId) {
+            $('.dR-tishi-error ').show();
+            $('.dR-tishi-error').html('您不能购买自己的转让项目');
+            return true;
+        }
+        return false;
+    }
+
     //处理ajax登录
     function login()
     {
@@ -267,8 +293,8 @@ $note_config = json_decode($respData['config'], true);
 
     function recharge()
     {
-        var guest = <?= intval(Yii::$app->user->isGuest)?>;
-        if (guest) {
+        var isGuest = <?= Yii::$app->user->isGuest ? 'true' : 'false' ?>;
+        if (isGuest) {
             login();
         } else {
             location.href = '/user/recharge/init';

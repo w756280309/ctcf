@@ -35,7 +35,7 @@ $action = Yii::$app->controller->action->getUniqueId();
             //转让中状态应对应为：isClosed=false
             $progress = $note['isClosed'] ? 100 : bcdiv(bcmul($tradedAmount, '100'), $amount, 0);
         ?>
-        <a class="credit-single credit-single-border" href="/credit/note/detail?id=<?= $note['id'] ?>"> <!--类btn_ing_border为转让中的红边框-->
+        <a class="credit-single credit-single-border" href="/credit/note/detail?id=<?= $note['id'] ?>" target="_blank"> <!--类btn_ing_border为转让中的红边框-->
             <div class="single_left">
                 <div class="single_title">
                     <p class="p_left" title="温盈金13号-5"><span>【转让】</span><?= $loan->title ?></p>
@@ -46,9 +46,11 @@ $action = Yii::$app->controller->action->getUniqueId();
                 <div class="single_content">
                     <ul class="single_ul_left">
                         <li class="li_1">
-                            <?=
+                            <i class="float-left">
+                                <?=
                                 StringUtils::amountFormat2(bcmul($order->yield_rate, 100, 2));
-                            ?>
+                                ?>
+                            </i>
                             <span>%</span>
                         </li>
                         <li class="li_2">预期年化收益率</li>

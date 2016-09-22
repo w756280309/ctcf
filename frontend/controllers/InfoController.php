@@ -65,7 +65,7 @@ class InfoController extends Controller
                 'jumpReferWords' => '',
             ],
             'credit_order' => [
-                'title' => '债权购买成功',
+                'title' => '购买成功',
                 'mainTitle' => '恭喜您，转让购买成功！',
                 'firstFuTitle' => '页面将在<em class="em_time">5</em>秒后自动关闭，<a href="javascript:;" class="a-close">点击这里</a>立即关闭!',
                 'requireJump' => true,
@@ -123,8 +123,8 @@ class InfoController extends Controller
                 'jumpReferWords' => '',
             ],
             'credit_order' => [
-                'title' => '债权购买失败',
-                'mainTitle' => '债权购买失败！',
+                'title' => '购买失败',
+                'mainTitle' => '购买失败！',
                 'firstFuTitle' => '如有疑问，请联系客服，电话：400-101-5151(8:30-20:00)',
                 'requireJump' => false,
                 'linkType' => 0,
