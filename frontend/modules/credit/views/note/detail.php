@@ -50,7 +50,7 @@ $note_config = json_decode($respData['config'], true);
                     </li>
                     <li><span>转让起息日:</span>购买日次日</li>
                     <li><span>产品到期日:</span><?= date('Y-m-d', $loan->finish_date) ?></li>
-                    <li><span>预期剩余收益:</span><?= StringUtils::amountFormat3(bcdiv($respData['asset']['remainingInterest'], 100, 2)) ?>元</li>
+                    <li><span>预期剩余收益:</span><?= StringUtils::amountFormat3(bcdiv($respData['remainingInterest'], 100, 2)) ?>元</li>
 
                     <!-- 按自然半年付息时  -->
                     <li class="last-li"><span>还款方式:</span><?= Yii::$app->params['refund_method'][$loan->refund_method] ?>
@@ -158,11 +158,13 @@ $note_config = json_decode($respData['config'], true);
         });
 
         var note_amount = <?= $respData['amount'] ?>;
-        var remaining_interest = <?= $respData['asset']['remainingInterest'] ?>;
-        var current_interest = <?= $respData['asset']['currentInterest'] ?>;
+        var remaining_interest = <?= $respData['remainingInterest'] ?>;
+        var current_interest = <?= $respData['currentInterest'] ?>;
         $('.dR-money').keyup(function () {
             var val = $(this).val();
-            var rate = accDiv(accMul(val, 100), note_amount);
+            var amount = $.isNumeric(val) ? val : 0;
+
+            var rate = accDiv(accMul(amount, 100), note_amount);
 
             if (remaining_interest) {
                 $('.yuqi i').html(WDJF.numberFormat(accDiv(accMul(rate, remaining_interest), 100), false));

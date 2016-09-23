@@ -91,7 +91,7 @@ class NoteController extends BaseController
             throw $this->ex404();
         }
 
-        $respData = Yii::$container->get('txClient')->get('credit-note/detail', ['id' => $id], function (\Exception $e) {
+        $respData = Yii::$container->get('txClient')->get('credit-note/detail', ['id' => $id, 'is_long' => true], function (\Exception $e) {
             $code = $e->getCode();
 
             if (200 !== $code) {
@@ -156,7 +156,7 @@ class NoteController extends BaseController
 
     /**
      * 转让详情-立即投资前金额及用户状态检查
-     * 
+     *
      * @param string $id     挂牌记录id
      * @param string $amount 购买金额（元）
      *
