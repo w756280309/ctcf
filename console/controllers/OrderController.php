@@ -6,11 +6,9 @@
  */
 namespace console\controllers;
 
-use common\models\promo\InviteRecord;
-use common\models\user\UserInfo;
-use yii\console\Controller;
-use common\models\order\OrderQueue;
 use common\models\order\OrderManager;
+use common\models\order\OrderQueue;
+use yii\console\Controller;
 
 class OrderController extends Controller
 {

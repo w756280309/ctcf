@@ -19,7 +19,6 @@ use common\models\user\User;
 use common\models\user\UserAccount;
 use common\service\LoanService;
 use common\utils\TxUtils;
-use GuzzleHttp\Client;
 use P2pl\Borrower;
 use Yii;
 use yii\data\Pagination;
@@ -620,16 +619,12 @@ class ProductonlineController extends BaseController
                 'loan_id' => $order->online_pid,
                 'amount' => $order->order_money * 100,
                 'orderTime' => date('Y-m-d H:i:s', $order->created_at),
+                'isTest' => $model->isTest,
             ];
         }
 
-        $client = new Client(['base_uri' => Yii::$app->params['clientOption']['host']['tx']]);
-
-        $response = $client->request('POST', '/Api/assets/record', [
-            'json' => $reqData,
-        ]);
-
-        $respData = json_decode($response->getBody()->getContents(), true);
+        $txClient = \Yii::$container->get('txClient');
+        $respData = $txClient->post('assets/record', $reqData);
 
         if (count($respData) !== count($reqData)) {
             throw new \Exception('请求记录条数与返回记录条数不符');

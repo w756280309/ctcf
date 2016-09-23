@@ -1,12 +1,19 @@
 <?php
 
+$this->title = '我的转让';
+
+use common\models\order\OnlineRepaymentPlan as Plan;
+use common\utils\StringUtils;
+use common\widgets\Pager;
 use frontend\assets\FrontAsset;
 use yii\web\JqueryAsset;
 
 $this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/usercenter.css', ['depends' => FrontAsset::class]);
 $this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/transfering.css', ['depends' => FrontAsset::class]);
+$this->registerCssFile(ASSETS_BASE_URI.'css/pagination.css');
 $this->registerJsFile(ASSETS_BASE_URI.'js/useraccount/transfering.js', ['depends' => JqueryAsset::class]);
 ?>
+
 <div class="wdjf-body">
     <div class="wdjf-ucenter clearfix">
         <div class="leftmenu">
@@ -20,45 +27,176 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/useraccount/transfering.js', ['depends
                 </div>
                 <div class="myCoupon-content">
                     <div class="list-single">
-                        <a class="a_first  select" href="">可转让的项目</a>
-                        <a class="a_second" href="">转让中的项目</a>
-                        <a class="a_third" href="">已转让的项目</a>
+                        <a class="a_first <?= 1 === $type ? 'select' : '' ?>" href="/credit/trade/assets">可转让的项目</a>
+                        <a class="a_second <?= 2 === $type ? 'select' : '' ?>" href="/credit/trade/assets?type=2">转让中的项目</a>
+                        <a class="a_third <?= 3 === $type ? 'select' : '' ?>" href="/credit/trade/assets?type=3">已转让的项目</a>
                     </div>
-                    <div class="display_number">
-                        <p class="p_left">待转让金额：<span>13,066.00</span>元</p>
-                        <p class="p_right">总计：<span>20</span>笔</p>
-                    </div>
-                    <table>
-                        <tr>
-                            <th class="text-first" width="120">项目名称</th>
-                            <th class="text-align-ct" width="100">剩余期限</th>
-                            <th class="text-third" width="110">预期年化</th>
-                            <th class="text-third" width="130">投资金额(元)</th>
-                            <th class="text-align-ct" width="110">还款计划</th>
-                            <th class="text-third" width="60">合同</th>
-                            <th class="text-align-ct" width="60">操作</th>
-                        </tr>
-                    </table>
-                    <!----------------------------无数据结束------------------------------->
-                    <div class="table-kong"></div>
-                    <div class="table-kong"></div>
-                    <p class="without-font">暂无可转让的项目</p>
-                    <a class="link-tender" href="#">立即投资</a>
-                    <!----------------------------无数据结束------------------------------->
+                    <?php if (1 === $type) { ?>
+                        <div class="display_number">
+                            <p class="p_left">可转让金额：<span><?= StringUtils::amountFormat3(bcdiv($creditAmount, 100, 2)) ?></span>元</p>
+                            <p class="p_right">总计：<span><?= $totalCount ?></span>笔</p>
+                        </div>
+                        <table>
+                            <tr>
+                                <th class="text-first" width="120">项目名称</th>
+                                <th class="text-align-ct" width="100">剩余期限</th>
+                                <th class="text-third" width="110">预期年化</th>
+                                <th class="text-third" width="130">可转让金额(元)</th>
+                                <th class="text-align-ct" width="110">还款计划</th>
+                                <th class="text-third" width="60">合同</th>
+                                <th class="text-align-ct" width="60">操作</th>
+                            </tr>
+                            <?php foreach ($assets as $asset) { ?>
+                                <tr class="tr-click">
+                                    <td class="text-second"><a href="/deal/deal/detail?sn=<?= $asset['loan']->sn ?>"><?= $asset['loan']->title ?></a></td>
+                                    <td class="text-align-ct">
+                                        <?php
+                                            $remainingDuration = $asset['loan']->remainingDuration;
+
+                                            echo (isset($remainingDuration['months']) ? $remainingDuration['months'].'个月'
+                                                : '').$remainingDuration['days'].'天';
+                                        ?>
+                                    </td>
+                                    <td class="text-align-ct"><?= StringUtils::amountFormat2($asset['order']->yield_rate * 100) ?>%</td>
+                                    <td class="text-third"><?= StringUtils::amountFormat3(bcdiv($asset['amount'], 100, 2)) ?></td>
+                                    <td class="text-align-ct">
+                                        <span class="tip-cursor">
+                                        <span class="tip-font">
+                                            <?php
+                                                $tj = array_count_values(array_column($asset['plan'], 'status'));
+                                                $weihuan = isset($tj[Plan::STATUS_WEIHUAN]) ? $tj[Plan::STATUS_WEIHUAN] : 0;
+                                                $count = count($asset['plan']);
+
+                                                echo ($count - $weihuan).'/'.$count
+                                            ?>
+                                        </span>&nbsp;
+                                        <span class="tip-icon-enna tip-icon-top"></span>
+                                        </span>
+                                    </td>
+                                    <td class="text-third">
+                                        <a href="" target="_blank">查看</a>
+                                    </td>
+                                    <td class="text-align-ct"><a class="color-blue" href="/credit/note/new?asset_id=<?= $asset['id'] ?>">转让</a></td>
+                                </tr>
+                                <!--下拉显示信息-->
+                                <tr class="tr-show">
+                                    <td colspan="7">
+                                        <div class="inner-box">
+                                            <div class="tip-border-en">
+                                                <div class="tip-border-inner">
+                                                    <div class="border-demo"></div>
+                                                </div>
+                                            </div>
+                                            <table>
+                                                <tbody>
+                                                <tr>
+                                                    <th class="text-inner-first" width="90">期数</th>
+                                                    <th class="text-align-lf" width="120">还款时间</th>
+                                                    <th class="text-align-rg" width="130">还款本金(元)</th>
+                                                    <th class="text-inner-second" width="180">还款利息(元)</th>
+                                                    <th class="text-align-ct">还款状态</th>
+                                                </tr>
+                                                <?php foreach ($asset['plan'] as $plan) { ?>
+                                                    <tr>
+                                                        <td class="text-inner-first"><?= $plan['qishu'] ?></td>
+                                                        <td class="text-align-lf"><?= date('Y-m-d', $plan['refund_time']) ?></td>
+                                                        <td class="text-align-rg"><?= StringUtils::amountFormat3($plan['benjin']) ?></td>
+                                                        <td class="text-inner-second"><?= StringUtils::amountFormat3($plan['lixi']) ?></td>
+                                                        <td class="text-align-ct"><?= in_array($plan['status'], [Plan::STATUS_YIHUAN, Plan::STATUS_TIQIAM]) ? '已还' : '未还' ?></td>
+                                                    </tr>
+                                                <?php } ?>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </td>
+                                </tr>
+                            <?php } ?>
+                        </table>
+                        <?php if (empty($assets)) { ?>
+                            <div class="table-kong"></div>
+                            <div class="table-kong"></div>
+                            <p class="without-font">暂无可转让的项目</p>
+                            <a class="link-tender" href="/licai/">立即投资</a>
+                        <?php } else { ?>
+                            <center><?= Pager::widget(['pagination' => $pages]); ?></center>
+                        <?php } ?>
+                    <?php } elseif (2 === $type) { ?>
+                        <div class="display_number">
+                            <p class="p_left">待转让金额：<span><?= StringUtils::amountFormat3(bcdiv($tradingTotalAmount, 100, 2)) ?></span>元</p>
+                            <p class="p_left p_left_mg">已转让金额：<span><?= StringUtils::amountFormat3(bcdiv($tradedTotalAmount, 100, 2)) ?></span>元</p>
+                            <p class="p_right">总计：<span><?= $totalCount ?></span>笔</p>
+                        </div>
+                        <table>
+                            <tr>
+                                <th class="text-first" width="226">项目名称</th>
+                                <th class="text-align-ct" width="80">转让时间</th>
+                                <th class="text-third" width="90">转让金额(元)</th>
+                                <th class="text-align-ct" width="90">折让率(%)</th>
+                                <th class="text-third" width="100">已转让金额(元)</th>
+                                <th class="text-align-ct" width="60">操作</th>
+                            </tr>
+                            <?php foreach ($notes as $note) { ?>
+                                <tr class="tr-click">
+                                    <td class="text-second"><a href="/deal/deal/detail?sn=<?= $note['loan']->sn ?>"><?= $note['loan']->title ?></a></td>
+                                    <td class="text-align-ct"><?= substr($note['createTime'], 0, 10) ?></td>
+                                    <td class="text-third"><?= StringUtils::amountFormat3(bcdiv($note['amount'], 100, 2)) ?></td>
+                                    <td class="text-align-ct"><?= $note['discountRate'] ?></td>
+                                    <td class="text-third"><?= StringUtils::amountFormat3(bcdiv($asset['tradedAmount'], 100, 2)) ?></td>
+                                    <td class="text-align-ct"><a class="color-blue" href="">撤销</a></td>
+                                </tr>
+                            <?php } ?>
+                        </table>
+                        <?php if (empty($notes)) { ?>
+                            <div class="table-kong"></div>
+                            <div class="table-kong"></div>
+                            <p class="without-font">暂无转让中的项目</p>
+                            <a class="link-tender" href="/licai/">立即投资</a>
+                        <?php } else { ?>
+                            <center><?= Pager::widget(['pagination' => $pages]); ?></center>
+                        <?php } ?>
+                    <?php } elseif (3 === $type) { ?>
+                        <div class="display_number">
+                            <p class="p_left">已转让金额：<span><?= StringUtils::amountFormat3(bcdiv($tradedTotalAmount, 100, 2)) ?></span>元</p>
+                            <p class="p_right">总计：<span><?= $totalCount ?></span>笔</p>
+                        </div>
+                        <table>
+                            <tr>
+                                <th class="text-first" width="226">项目名称</th>
+                                <th class="text-align-ct" width="80">完成时间</th>
+                                <th class="text-third" width="90">转让金额(元)</th>
+                                <th class="text-align-ct" width="90">折让率(%)</th>
+                                <th class="text-third" width="80">手续费(元)</th>
+                                <th class="text-third" width="90">实际收入(元)</th>
+                                <th class="text-align-ct" width="60">合同</th>
+                            </tr>
+                            <?php foreach ($notes as $note) { ?>
+                                <tr class="tr-click">
+                                    <td class="text-second"><a href="/deal/deal/detail?sn=<?= $note['loan']->sn ?>"><?= $note['loan']->title ?></a></td>
+                                    <td class="text-align-ct"><?= substr($note['closeTime'], 0, 10) ?></td>
+                                    <td class="text-third"><?= StringUtils::amountFormat3(bcdiv($note['amount'], 100, 2)) ?></td>
+                                    <td class="text-align-ct"><?= $note['discountRate'] ?></td>
+                                    <td class="text-third">
+                                        <?php
+                                            $config = json_decode($note['config'], true);
+                                            $fee = bcmul($config['fee_rate'], $note['amount']);
+                                            StringUtils::amountFormat3(bcdiv($fee, 100, 2));
+                                        ?>
+                                    </td>
+                                    <td class="text-third"><?= StringUtils::amountFormat3(bcdiv(bcsub($note['tradedAmount'], $fee), 100, 2)); ?></td>
+                                    <td class="text-align-ct"><a class="color-blue" href="">查看</a></td>
+                                </tr>
+                            <?php } ?>
+                        </table>
+                        <?php if (empty($notes)) { ?>
+                            <div class="table-kong"></div>
+                            <div class="table-kong"></div>
+                            <p class="without-font">暂无已转让的项目</p>
+                            <a class="link-tender" href="/licai/">立即投资</a>
+                        <?php } else { ?>
+                            <center><?= Pager::widget(['pagination' => $pages]); ?></center>
+                        <?php } ?>
+                    <?php } ?>
                 </div>
-                <!--<div class="pagination-content">-->
-                    <!--<ul class="pagination">-->
-                        <!--<li class="prev disabled"><span>上一页</span></li>-->
-                        <!--<li class="active"><a href="/licai/index?page=1&amp;per-page=10" data-page="0">1</a></li>-->
-                        <!--<li><a href="/licai/index?page=2&amp;per-page=10" data-page="1">2</a></li>-->
-                        <!--<li><a href="/licai/index?page=3&amp;per-page=10" data-page="2">3</a></li>-->
-                        <!--<li><a href="/licai/index?page=4&amp;per-page=10" data-page="3">4</a></li>-->
-                        <!--<li><a href="/licai/index?page=5&amp;per-page=10" data-page="4">5</a></li>-->
-                        <!--<li><a class="ellipsis">...</a></li>-->
-                        <!--<li><a href="/licai/index?page=23&amp;per-page=10" data-page="22">23</a></li>-->
-                        <!--<li class="next"><a href="/licai/index?page=2&amp;per-page=10" data-page="1">下一页</a></li>-->
-                    <!--</ul>-->
-                <!--</div>-->
             </div>
         </div>
         <div class="clear"></div>
