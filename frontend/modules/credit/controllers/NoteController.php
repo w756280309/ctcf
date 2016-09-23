@@ -41,8 +41,8 @@ class NoteController extends BaseController
     public function actionCreate()
     {
         $asset_id = \Yii::$app->request->post('asset_id');
-        $amount = \Yii::$app->request->post('amount');
-        $rate = \Yii::$app->request->post('rate', 0);
+        $amount = floatval(\Yii::$app->request->post('amount'));
+        $rate = floatval(\Yii::$app->request->post('rate', 0));
         $rate = $rate ?: 0;
         if ($asset_id > 0 && $amount > 0 && $rate >= 0) {
             try {
@@ -91,7 +91,7 @@ class NoteController extends BaseController
             throw $this->ex404();
         }
 
-        $respData = Yii::$container->get('txClient')->get('credit-note/detail', ['id' => $id], function(\Exception $e) {
+        $respData = Yii::$container->get('txClient')->get('credit-note/detail', ['id' => $id], function (\Exception $e) {
             $code = $e->getCode();
 
             if (200 !== $code) {
@@ -122,7 +122,7 @@ class NoteController extends BaseController
             'id' => $id,
             'page' => $page,
             'page_size' => $pageSize,
-        ], function(\Exception $e) {
+        ], function (\Exception $e) {
             $code = $e->getCode();
 
             if (200 !== $code) {

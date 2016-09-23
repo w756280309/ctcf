@@ -78,7 +78,7 @@ class OrderController extends BaseController
         }
         try {
             $txClient = \Yii::$container->get('txClient');
-            $res = $txClient->post('order/new', [
+            $res = $txClient->post('credit-order/new', [
                 'user_id' => $userId,
                 'note_id' => $noteId,
                 'principal' => bcmul($principal, 100, 0),
@@ -102,7 +102,7 @@ class OrderController extends BaseController
             $order_id = intval($request->post('order_id'));
         }
         $txClient = \Yii::$container->get('txClient');
-        $order = $txClient->get('order/detail', ['id' => $order_id]);
+        $order = $txClient->get('credit-order/detail', ['id' => $order_id]);
         if (null === $order) {
             throw $this->ex404('没有找到指定订单');
         }

@@ -1,6 +1,6 @@
 <?php
 use yii\helpers\Html;
-$this->title = '发起债权';
+$this->title = '发起转让';
 
 $this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/usercenter.css', ['depends' => 'frontend\assets\FrontAsset']);
 $this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/transfer.css', ['depends' => 'frontend\assets\FrontAsset']);
@@ -114,19 +114,19 @@ $action = Yii::$app->controller->action->getUniqueId();
                     <ul class="canObtain clearfix_all">
                         <li class="left canObtain_title">应收利息：</li>
                         <li class="left canObtain_space"></li>
-                        <li class="left canObtain_money"><span class="common_color" id="expect_money"><?= number_format($asset['currentInterest'] / 100, 2)?></span>&nbsp;&nbsp;元</li>
+                        <li class="left canObtain_money"><span class="common_color" id="expect_money">0.00</span>&nbsp;&nbsp;元</li>
                     </ul>
 
                     <ul class="discountObtain clearfix_all">
                         <li class="left discountObtain_title">折让后价格：</li>
                         <li class="left discountObtain_space"></li>
-                        <li class="left discountObtain_money"><span class="common_color" id="expect_amount"><?= number_format($asset['maxTradableAmount'] / 100, 2)?></span>&nbsp;&nbsp;元</li>
+                        <li class="left discountObtain_money"><span class="common_color" id="expect_amount">0.00</span>&nbsp;&nbsp;元</li>
                     </ul>
 
                     <ul class="poundage clearfix_all relative">
                         <li class="left poundage_title">手续费：</li>
                         <li class="left poundage_space"></li>
-                        <li class="left poundage_money"><span class="common_color" id="fee"><?= number_format($asset['maxTradableAmount'] / 100 * 0.003, 2)?></span>&nbsp;&nbsp;元</li>
+                        <li class="left poundage_money"><span class="common_color" id="fee">0.00</span>&nbsp;&nbsp;元</li>
                         <li class="poundage_tip_icon"></li>
                         <li>
                             <div class="poundage_tip" style="display: none;">
@@ -173,9 +173,9 @@ $action = Yii::$app->controller->action->getUniqueId();
     });
 
     submit_btn.click(function () {
-        var amount = amount_input.val();
+        var amount = parseFloat(amount_input.val());
         discount_rate_error.hide();
-        var rate = discount_rate_input.val();
+        var rate = parseFloat(discount_rate_input.val());
         if (amount > 0 && rate >= 0) {
             discount_rate_error.hide();
             $.post('/credit/note/create', {
@@ -210,8 +210,8 @@ $action = Yii::$app->controller->action->getUniqueId();
     });
 
     function validateRate() {
-        var amount = amount_input.val();
-        var rate = discount_rate_input.val();
+        var amount = parseFloat(amount_input.val());
+        var rate = parseFloat(discount_rate_input.val());
         if (rate < 0) {
             discount_rate_error.html('折让率不能小于0');
             discount_rate_error.show();
@@ -222,13 +222,13 @@ $action = Yii::$app->controller->action->getUniqueId();
     }
 
     function validateAmount() {
-        var rate = discount_rate_input.val();
+        var rate = parseFloat(discount_rate_input.val());
         if (!rate) {
             rate = 0;
         }
-        var amount = amount_input.val();
+        var amount = parseFloat(amount_input.val());
         if (amount <= 0) {
-            amount_error.html('转让金额必须大于0元');
+            amount_error.html('转让金额必须大于起投金额');
             amount_error.show();
         } else {
             amount_error.hide();
