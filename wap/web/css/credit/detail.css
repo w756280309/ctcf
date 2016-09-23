@@ -1,0 +1,320 @@
+.column {
+    position: relative;
+    background: #fff;
+    overflow: hidden;
+}
+.column-title {
+    position: relative;
+    padding-top: 15px;
+    padding-bottom: 10px;
+    font-size: 16px;
+    line-height: 60px;
+    color: #131313;
+}
+.column-title span{
+    float: left;
+    line-height: 20px;
+    margin-left: 60px;
+}
+.column-title div {
+    position: absolute;
+    left: 16px;
+    top: -5px;
+}
+.column-title-rg {
+    position: absolute;
+    top: 10px;
+    right: -50px;
+    width: 150px;
+    height: 30px;
+    padding-left: 20px;
+    border: 1px solid #f85158;
+    border-radius: 40px;
+    line-height: 30px;
+    font-size: 16px;
+    color: #f85158;
+}
+.column-content {
+    height: 100%;
+    margin: 0 auto;
+}
+.column-content li {
+    float: left;
+    text-align: center;
+    padding: 0;
+}
+.column-content li div {
+    width: 100%;
+    margin-top: 30px;
+    font-size: 34px;
+    color: #ff9836;
+}
+/* 阶梯利率字体大小样式 */
+.rate-steps li div {
+    font-size: 27px;
+}
+.xian {
+    border-right: 1px solid #ebebed;
+    position: relative;
+}
+.xian .bonus-badge {
+    position: absolute;
+    padding: 2px 4px;
+    font-size: 12px;
+    line-height: 100%;
+    color: #ea5514;
+    border: 1px solid #ea5514;
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    border-radius: 8px;
+}
+.qing {
+    position: relative;
+    display: block;
+    border-right: 1px solid #ebebed;
+}
+.column-content li span {
+    font-size: 14px;
+    color: #737373;
+}
+.column-lu {
+    font-size: 20px!important;
+    color: #ff9836!important;
+}
+
+.bili{
+    background: #fff;
+}
+.bili .col-xs-12 {
+    padding: 0;
+    padding: 0 30px;
+}
+.bili .per {
+    position: relative;
+    height: 8px;
+    background: #d8d8d8;
+    margin-top: 20px;
+    border-radius: 14px;
+}
+.progress-bar-red {
+    position: absolute;
+    top:0;
+    left: 0;
+    height: 8px;
+    background: #f34334;
+    border-radius: 14px;
+}
+.shuju {
+    padding-top: 10px;
+    background: #fff;
+}
+.shuju div span {
+    font-size: 16px;
+    color: #fa9801;
+}
+.shuju div i,em {
+    color: #757575;
+    font-style: normal;
+}
+.shuju-bili {
+    font-size: 16px;
+    text-align: right;
+    color: #f2837a;
+}
+.shuju-bili em {
+    font-size: 14px;
+    color: #f2837a;
+}
+
+.message {
+    background: #fff;
+    overflow: hidden;
+}
+.message .col-xs-12{
+    padding: 0;
+}
+.message div {
+    margin-top: 10px;
+    font-size: 14px;
+}
+.message div span{
+    color: #7c7c7c;
+}
+.xian2 {
+    border-top: 1px solid #ebebed;
+    padding-top: 3px!important;
+    padding-bottom: 10px!important;
+    margin-left: 20px!important;
+    padding-right: 20px!important;
+    padding-left: 10px!important;
+}
+.xuxian .col-xs-12 {
+    padding: 0;
+}
+.xuxian .col-xs-12 div{
+    margin: 0 20px;
+    border-bottom: 1px dashed #e8e8e8;
+}
+.m1{
+    height: 26px;
+    line-height: 26px;
+    padding-left: 20px;
+    background: url("../../images/credit/tubiao.png") no-repeat -3px 1px;
+}
+.m2{
+    height: 26px;
+    line-height: 26px;
+    padding-left: 20px;
+    background: url("../../images/credit/tubiao.png") no-repeat -3px -29px;
+}
+.m3{
+    height: 26px;
+    line-height: 26px;
+    padding-left: 20px;
+    background: url("../../images/credit/tubiao.png") no-repeat -3px -58px;
+}
+.m4 {
+    position: relative;
+    line-height: 26px;
+    padding-left: 20px;
+}
+.m4 div{
+    position: absolute;
+    left: 0;
+    top: -10px;
+    width: 26px;
+    height: 26px;
+    line-height: 26px;
+    padding-left: 20px;
+    background: url("../../images/credit/tubiao.png") no-repeat -3px -87px;
+    overflow: hidden;
+}
+.m5 {
+    height: 26px;
+    line-height: 26px;
+    padding-left: 20px;
+    background: url("../../images/credit/tubiao.png") no-repeat -3px -116px;
+}
+.m4 img {
+    width: 12px;
+}
+#chart-box {
+    margin-top: -10px;
+}
+#chart-box .col-xs-12 div {
+    position: relative;
+    width: 288px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    padding-left: 10px;
+    padding-right: 10px;
+    background-size: 100% 100%;
+    font-size: 13px;
+    text-align: justify;
+    background: #ffe6e4;
+    color: #777777;
+    border-radius: 4px;
+    border: 1px solid #fbb4af;
+    margin: 0;
+}
+#chart-box .col-xs-12 img {
+    position: absolute;
+    width: 16px;
+    left: 261px;
+    top:-7px;
+    z-index: 1;
+}
+
+.link-box {
+    margin-top: 10px;
+    margin-bottom: 50px;
+}
+.link-en {
+    display: block;
+    background: #fff;
+    text-underline: none;
+}
+.link-en:hover {
+    text-underline: none;
+}
+.header-you {
+    float: right;
+    padding-right: 15px;
+}
+
+.header-you img {
+    display: block;
+    height: 1.5rem;
+}
+.header-box {
+    padding: 18px 0 10px 0;
+    margin-left: 30px;
+    border-bottom: 1px solid #dddddd!important;
+}
+.header-box .header-icon {
+    margin-right: 4px;
+}
+.header-box .header-icon img {
+    display: block;
+    height: 1.5rem;
+    float: left;
+    position: relative;
+    top: 2px;
+}
+
+.header-box .header-name {
+    font-size: 17px;
+    line-height: 19px;
+    padding-left: 0.5px;
+    color: #666666;
+}
+.rengou .col-xs-12 {
+    padding: 0;
+}
+.rengou .col-xs-12 a{
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    max-width: 1170px;
+    padding: 0;
+    height: 40px;
+    text-align: center;
+    line-height: 40px;
+    color: #fff;
+    font-size: 18px;
+    background: #f34334;
+}
+.rengou .col-xs-12 a:hover {
+    color: #fff;
+    text-underline: none;
+}
+.data span {
+    margin-top:12px;
+    margin-bottom:5px;
+    display:block;
+    height: 4px!important;
+}
+.data1 {
+    font-size: 12px;
+    line-height:16px!important;
+}
+.data2 {
+    font-size: 12px;
+    line-height:16px!important;
+}
+
+.red-gray {
+    background: #f7958d!important;
+}
+/*daojishi*/
+.daojishi .col-xs-12 {
+    padding: 0;
+}
+.daojishi .col-xs-12 div {
+    height: 40px;
+    line-height: 40px;
+    font-size: 14px;
+    text-align: center;
+    background: #d7d7d7;
+    color: #777777;
+}

@@ -1,0 +1,39 @@
+.credit-content {
+    margin: 0 auto;
+    padding: 0;
+}
+.credit-content .cre-list {
+    margin: 0;
+    padding: 0;
+    line-height: 50px;
+}
+.credit-content .cre-title {
+    margin: 0;
+    padding: 0;
+    text-align: center;
+}
+.credit-content .cre-list-nums {
+    margin: 0;
+    padding: 0;
+    line-height: 50px;
+    font-size: 12px;
+    background: #fff;
+    border-top: 1px solid #ddd;
+}
+.credit-content .cre-list-nums .cre-data span {
+    margin: 12px 0 5px;
+    font-size: 12px;
+    line-height: 14px;
+    display: block;
+}
+.credit-content .cre-list-nums .cre-data .data1 {
+    margin-bottom: 0;
+}
+.credit-content .cre-list-nums .cre-data .data2 {
+    margin-top: 0px;
+}
+.credit-content .cre-list-nums-none {
+    padding-top: 100px;
+    text-align: center;
+    font-size: 14px;
+}
