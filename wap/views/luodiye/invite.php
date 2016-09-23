@@ -16,8 +16,13 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/invite/activedisplay.js?v=20160817', [
             <img src="<?= ASSETS_BASE_URI ?>images/invite/logo-back.png" alt="">
         </div>
         <div class="front-font">
-            <p>好友邀请送好礼</p>
-            <p>快来领取吧！</p>
+            <?php if ($isLuodiye) { ?>
+                <p>送你一个红包</p>
+                <p>快打开看看！</p>
+            <?php } else { ?>
+                <p>好友邀请送好礼</p>
+                <p>快来领取吧！</p>
+            <?php } ?>
         </div>
         <div class="transform-rotate">
             <img src="<?= ASSETS_BASE_URI ?>images/invite/transform-back.png" alt="">
@@ -32,7 +37,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/invite/activedisplay.js?v=20160817', [
         </div>
         <div class="transform-center">
             <p class="p-tip">恭喜您获得代金券！</p>
-            <p class="p-number">50元</p>
+            <p class="p-number"><?= $isLuodiye ? 288 : 50 ?>元</p>
             <p class="p-use">投资即可使用</p>
         </div>
         <div class="transform-bottom">

@@ -3,7 +3,6 @@
 namespace app\controllers;
 
 use common\controllers\HelpersTrait;
-use common\models\user\CaptchaForm;
 use common\models\user\User;
 use Yii;
 use yii\web\Controller;
@@ -18,9 +17,7 @@ class LuodiyeController extends Controller
             return $this->goHome();
         }
 
-        $captcha = new CaptchaForm();
-
-        return $this->render('luodiye', ['captcha' => $captcha]);
+        return $this->render('invite', ['isLuodiye' => true]);
     }
 
     public function actionInvite()
@@ -31,6 +28,6 @@ class LuodiyeController extends Controller
         }
         Yii::$app->session->set('inviteCode', $code);
 
-        return $this->render('invite');
+        return $this->render('invite', ['isLuodiye' => false]);
     }
 }
