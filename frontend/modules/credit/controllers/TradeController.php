@@ -10,7 +10,6 @@ use Yii;
 use yii\data\ArrayDataProvider;
 use yii\data\Pagination;
 use yii\filters\AccessControl;
-use yii\helpers\ArrayHelper;
 
 class TradeController extends BaseController
 {
@@ -55,7 +54,7 @@ class TradeController extends BaseController
                 $creditAmount = 0;
                 $totalCount = 0;
             } else {
-                $creditAmount = array_sum(ArrayHelper::getColumn($assets, 'maxTradableAmount'));
+                $creditAmount = array_sum(array_column($assets, 'maxTradableAmount'));
                 $totalCount = count($assets);
 
                 $provider = new ArrayDataProvider([

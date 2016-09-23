@@ -16,7 +16,7 @@ $note_config = json_decode($respData['config'], true);
         <!--pL-top-box-->
         <div class="pL-top-box">
             <div class="pl-top-title"><span>【转让】</span><div class="a-title"><?= $loan->title ?></div>
-                <a class="a-project" href="/deal/deal/detail?sn=<?= $loan->sn ?>">查看原始项目</a>
+                <a class="a-project" href="/deal/deal/detail?sn=<?= $loan->sn ?>" target="_blank">查看原始项目</a>
                 <div class="clear"></div>
             </div>
             <div class="pl-middle">
@@ -50,7 +50,7 @@ $note_config = json_decode($respData['config'], true);
                     </li>
                     <li><span>转让起息日:</span>购买日次日</li>
                     <li><span>产品到期日:</span><?= date('Y-m-d', $loan->finish_date) ?></li>
-                    <li><span>预期剩余收益:</span>aaaa元</li>
+                    <li><span>预期剩余收益:</span><?= StringUtils::amountFormat3(bcdiv($respData['asset']['remainingInterest'], 100, 2)) ?>元</li>
 
                     <!-- 按自然半年付息时  -->
                     <li class="last-li"><span>还款方式:</span><?= Yii::$app->params['refund_method'][$loan->refund_method] ?>
@@ -88,7 +88,7 @@ $note_config = json_decode($respData['config'], true);
                 </div>
                 <ul class="clearfix dR-inner">
                     <li class="dR-inner-left">可交易金额：</li>
-                    <li class="dR-inner-right"><span><i><?= StringUtils::amountFormat2(bcdiv(bcsub($respData['amount'], $respData['tradedAmount']), 100, 2)) ?></i>元</span></li>
+                    <li class="dR-inner-right"><span><i><?= $respData['isClosed'] ? '0.00' : StringUtils::amountFormat2(bcdiv(bcsub($respData['amount'], $respData['tradedAmount']), 100, 2)) ?></i>元</span></li>
                     <?php if (empty($user)) { ?>
                         <li class="dR-inner-left">我的可用余额：</li>
                         <li class="dR-inner-right">查看余额请 <a href="javascript:login()">[登录]</a></li>
@@ -122,11 +122,11 @@ $note_config = json_decode($respData['config'], true);
                     </div>
                     <ul class="clearfix dR-inner dR-shouyi">
                         <li class="dR-inner-left dR-lixi">应付利息: </li>
-                        <li class="dR-inner-right"><span><i>aaa</i></span>元</li>
+                        <li class="dR-inner-right yingfu"><span><i>0.00</i></span>元</li>
                     </ul>
                     <ul class="clearfix dR-inner dR-shouyi">
                         <li class="dR-inner-left">预计收益: </li>
-                        <li class="dR-inner-right"><span><i>aaa</i></span>元</li>
+                        <li class="dR-inner-right yuqi"><span><i>0.00</i></span>元</li>
                     </ul>
 
                     <input type="submit" class="dR-btn" id="order_submit" value="立即投资" />
@@ -157,8 +157,21 @@ $note_config = json_decode($respData['config'], true);
             getOrderList($(this).attr('href'));
         });
 
+        var note_amount = <?= $respData['amount'] ?>;
+        var remaining_interest = <?= $respData['asset']['remainingInterest'] ?>;
+        var current_interest = <?= $respData['asset']['currentInterest'] ?>;
         $('.dR-money').keyup(function () {
             var val = $(this).val();
+            var rate = accDiv(accMul(val, 100), note_amount);
+
+            if (remaining_interest) {
+                $('.yuqi i').html(WDJF.numberFormat(accDiv(accMul(rate, remaining_interest), 100), false));
+            }
+
+            if (current_interest) {
+                $('.yingfu i').html(WDJF.numberFormat(accDiv(accMul(rate, current_interest), 100), false));
+            }
+
             if (false == $.isNumeric(val) || ' ' == val.substring(val.length - 1, val.length)) {
                 $(this).val(val.substring(0, val.length - 1));
             }
