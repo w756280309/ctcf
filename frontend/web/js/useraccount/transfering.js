@@ -1,3 +1,7 @@
+function closeConfirmBox() {
+    $('.mask').hide();
+    $('.confirmBox').hide();
+}
 $(function(){
     $('.tr-click:odd').find('td').addClass('td-back-color');
 })
@@ -12,5 +16,39 @@ $(document).ready(function () {
             $(this).parents('.tr-click').next('.tr-show').hide();
             $(this).find('.tip-icon-enna').removeClass('tip-icon-bottom').addClass('tip-icon-top');
         }
+    });
+
+    $('.cancel-note').bind('click', function () {
+        $('.mask').show();
+        $('.confirmBox').show();
+    });
+    $('.confirmBox-left').bind('click', function () {
+        closeConfirmBox();
+    });
+    $('.confirmBox-right').bind('click', function () {
+        closeConfirmBox();
+        var noteBtn = $('.cancel-note');
+        if (noteBtn.hasClass('twoClick')) {
+            return false;
+        }
+
+        noteBtn.addClass('twoClick');
+        var id = noteBtn.attr('note-id');
+        var xhr = $.get('/credit/trade/cancel?id=' + id, function (data) {
+            if (0 === data.code) {
+                window.location.reload();
+                return false;
+            }
+            alert(data.message);
+        });
+
+        xhr.always(function () {
+            noteBtn.removeClass('twoClick');
+        });
+
+        xhr.fail(function () {
+            noteBtn.removeClass('twoClick');
+            alert('系统繁忙，撤销失败，请稍后重试!');
+        });
     });
 });

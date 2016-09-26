@@ -9,9 +9,9 @@ use frontend\assets\FrontAsset;
 use yii\web\JqueryAsset;
 
 $this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/usercenter.css', ['depends' => FrontAsset::class]);
-$this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/transfering.css', ['depends' => FrontAsset::class]);
+$this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/transfering.css?v=160926', ['depends' => FrontAsset::class]);
 $this->registerCssFile(ASSETS_BASE_URI.'css/pagination.css');
-$this->registerJsFile(ASSETS_BASE_URI.'js/useraccount/transfering.js', ['depends' => JqueryAsset::class]);
+$this->registerJsFile(ASSETS_BASE_URI.'js/useraccount/transfering.js?v=160926', ['depends' => JqueryAsset::class]);
 ?>
 
 <div class="wdjf-body">
@@ -142,7 +142,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/useraccount/transfering.js', ['depends
                                     <td class="text-third"><?= StringUtils::amountFormat3(bcdiv($note['amount'], 100, 2)) ?></td>
                                     <td class="text-align-ct"><?= $note['discountRate'] ?></td>
                                     <td class="text-third"><?= StringUtils::amountFormat3(bcdiv($asset['tradedAmount'], 100, 2)) ?></td>
-                                    <td class="text-align-ct"><a class="color-blue" href="">撤销</a></td>
+                                    <td class="text-align-ct"><a class="color-blue cancel-note" href="javascript:void(0)" note-id="<?= $note['id'] ?>">撤销</a></td>
                                 </tr>
                             <?php } ?>
                         </table>
@@ -200,5 +200,19 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/useraccount/transfering.js', ['depends
             </div>
         </div>
         <div class="clear"></div>
+    </div>
+</div>
+<!--mask弹框-->
+<div class="mask"></div>
+
+<!--确认弹框-->
+<div class="confirmBox">
+    <div class="confirmBox-title">提示</div>
+    <div class="confirmBox-top">
+        <p>确认撤销当前转让中的项目？已转让的债权不能撤回，发起后立即生效。</p>
+    </div>
+    <div class="confirmBox-bottom">
+        <div class="confirmBox-left">关闭</div>
+        <div class="confirmBox-right">确认</div>
     </div>
 </div>

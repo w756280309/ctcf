@@ -342,3 +342,46 @@
     border-bottom-color: #fff;
     top: -14px;
 }
+/*弹出框*/
+.confirmBox {
+    display: none;
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    width: 343px;
+    height: 150px;
+    margin-left: -172px;
+    margin-top: -78px;
+    background: #fff;
+    border: 1px solid #cccccc;
+    z-index: 1001;
+}
+.confirmBox-title {
+    text-align: center;
+    padding: 10px 0;
+}
+.confirmBox-top {
+    padding: 15px 17px;
+    border-bottom: 1px solid #ccc;
+    height:45px;
+    text-align: center;
+}
+.confirmBox-bottom {
+    text-align: center;
+    height: 36px;
+    line-height: 36px;
+    font-size: 16px;
+}
+.confirmBox-left {
+    float: left;
+    width: 171px;
+    color: #000000;
+    border-right: 1px solid #ccc;
+    cursor: pointer;
+}
+.confirmBox-right {
+    float: left;
+    width: 171px;
+    color: #ff3333;
+    cursor: pointer;
+}
