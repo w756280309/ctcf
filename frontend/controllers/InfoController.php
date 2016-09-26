@@ -57,7 +57,7 @@ class InfoController extends Controller
                 'jumpReferWords' => '',
             ],
             'credit_new' => [
-                'title' => '发起债券结果',
+                'title' => '发起转让结果',
                 'mainTitle' => '恭喜您，转让提交成功！',
                 'firstFuTitle' => '页面将在<em class="em_time">5</em>秒后自动关闭，<a href="javascript:;" class="a-close">点击这里</a>立即关闭!',
                 'requireJump' => true,

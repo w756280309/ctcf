@@ -39,6 +39,7 @@ class MoneyRecord extends \yii\db\ActiveRecord
     const TYPE_DRAW_FEE = 103; //提现手续费
     const TYPE_DRAW_FEE_RETURN = 104; //提现退回手续费
     const TYPE_CASH_GIFT = 105;//现金红包
+    const TYPE_CREDIT_NOTE = 106;//购买债权
 
     public static function createSN()
     {
@@ -94,7 +95,7 @@ class MoneyRecord extends \yii\db\ActiveRecord
             'out_money' => '提现金额',
             'balance' => '余额',
             'remark' => 'Remark',
-            'create_at' => 'Create At',
+            'created_at' => 'Create At',
             'updated_at' => 'Updated At',
         ];
     }
@@ -112,6 +113,7 @@ class MoneyRecord extends \yii\db\ActiveRecord
             self::TYPE_ORDER,
             self::TYPE_RECHARGE_POS,
             self::TYPE_CASH_GIFT,
+            self::TYPE_CREDIT_NOTE,
         ];
     }
 

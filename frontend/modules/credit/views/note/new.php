@@ -78,7 +78,7 @@ $action = Yii::$app->controller->action->getUniqueId();
                         <li class="left transferMoney_title">转让金额：</li>
                         <li class="left transferMoney_space"></li>
                         <li class="left transferMoney_money transfer_common">
-                            <input type="text" name="" id="credit_amount" placeholder="起投1,000元，递增1,000元" onkeyup="" autocomplete="off">
+                            <input type="text" name="" id="credit_amount" placeholder="起投1,000元，递增1,000元" autocomplete="off" t_value="" o_value="" onkeypress="if(!this.value.match(/^[\+\-]?\d*?\.?\d*?$/))this.value=this.t_value;else this.t_value=this.value;if(this.value.match(/^(?:[\+\-]?\d+(?:\.\d+)?)?$/))this.o_value=this.value" onkeyup="if(!this.value.match(/^[\+\-]?\d*?\.?\d*?$/))this.value=this.t_value;else this.t_value=this.value;if(this.value.match(/^(?:[\+\-]?\d+(?:\.\d+)?)?$/))this.o_value=this.value" onblur="if(!this.value.match(/^(?:[\+\-]?\d+(?:\.\d+)?|\.\d*?)?$/))this.value=this.o_value;else{if(this.value.match(/^\.\d+$/))this.value=0+this.value;if(this.value.match(/^\.$/))this.value=0;this.o_value=this.value}">
                             <span>元</span>
                         </li>
                         <li class="transferMoney_error common_color" id="amount_error">*转让金额不能小于1000元</li>
@@ -89,7 +89,7 @@ $action = Yii::$app->controller->action->getUniqueId();
                         <li class="left discountRate_title">折让率：</li>
                         <li class="left discountRate_space"></li>
                         <li class="left discountRate_rate transfer_common">
-                            <input type="text" name="discount_rate" id="discount_rate_input" value="" onkeyup="" placeholder="不高于3%，可设置2位小数" autocomplete="off" maxlength="4">
+                            <input type="text" name="discount_rate" id="discount_rate_input" value=""  placeholder="不高于3%，可设置2位小数" autocomplete="off" maxlength="4" t_value="" o_value="" onkeypress="if(!this.value.match(/^[\+\-]?\d*?\.?\d*?$/))this.value=this.t_value;else this.t_value=this.value;if(this.value.match(/^(?:[\+\-]?\d+(?:\.\d+)?)?$/))this.o_value=this.value" onkeyup="if(!this.value.match(/^[\+\-]?\d*?\.?\d*?$/))this.value=this.t_value;else this.t_value=this.value;if(this.value.match(/^(?:[\+\-]?\d+(?:\.\d+)?)?$/))this.o_value=this.value" onblur="if(!this.value.match(/^(?:[\+\-]?\d+(?:\.\d+)?|\.\d*?)?$/))this.value=this.o_value;else{if(this.value.match(/^\.\d+$/))this.value=0+this.value;if(this.value.match(/^\.$/))this.value=0;this.o_value=this.value}">
                             <span>%</span>
                         </li>
                         <li class="discountRate_tip_icon"></li>
@@ -156,6 +156,20 @@ $action = Yii::$app->controller->action->getUniqueId();
         <div class="clear"></div>
     </div>
 </div>
+<!--mask弹框-->
+<div class="mask"></div>
+
+<!--确认弹框-->
+<div class="confirmBox">
+    <div class="confirmBox-title">提示</div>
+    <div class="confirmBox-top">
+        <p></p>
+    </div>
+    <div class="confirmBox-bottom">
+        <div class="confirmBox-left" onclick="subClose()">关闭</div>
+        <div class="confirmBox-right" onclick="subConfirm()">确认</div>
+    </div>
+</div>
 <script>
     var submit_btn = $('#credit_submit_btn');
     var amount_input = $('#credit_amount');
@@ -164,78 +178,101 @@ $action = Yii::$app->controller->action->getUniqueId();
     var total_amount = <?= floatval($asset['maxTradableAmount'] / 100)?>;
     var amount_error = $('#amount_error');
     var discount_rate_error = $('#discount_rate_error');
-    amount_input.change(function () {
-        validateAmount();
-    });
 
+    amount_input.change(function () {
+        validateData();
+    });
     discount_rate_input.change(function () {
-        validateRate();
+        validateData();
     });
 
     submit_btn.click(function () {
-        var amount = parseFloat(amount_input.val());
         discount_rate_error.hide();
-        var rate = parseFloat(discount_rate_input.val());
-        if (amount > 0 && rate >= 0) {
-            discount_rate_error.hide();
-            $.post('/credit/note/create', {
-                '_csrf': '<?= Yii::$app->request->csrfToken?>',
-                'asset_id': '<?= $asset['id']?>',
-                'amount': amount,
-                'rate': rate
-            }, function (data) {
-                var res = data['data'];
-                if (data['code'] === 1) {
-                    for (var i = 0; i < res.length; i++) {
-                        var err = res[i];
-                        if (err['attribute'] === 'amount') {
-                            amount_error.html(err['msg']);
-                            amount_error.show();
-                        } else if (err['attribute'] === 'discountRate') {
-                            discount_rate_error.html(err['msg']);
-                            discount_rate_error.show();
-                        } else if (err['attribute'] === '' && err['msg']) {
-                            amount_error.html(err['msg']);
-                            amount_error.show();
-                        }
-                    }
-                } else if (data['code'] === 0) {
-                    window.location.href = '/info/success?source=credit_new&jumpUrl=/credit/trade/assets?type=2'
-                }
-            })
-        } else {
-            validateRate();
-            validateAmount();
-        }
-    });
-
-    function validateRate() {
-        var amount = parseFloat(amount_input.val());
-        var rate = parseFloat(discount_rate_input.val());
-        if (rate < 0) {
-            discount_rate_error.html('折让率不能小于0');
-            discount_rate_error.show();
-        } else {
-            discount_rate_error.hide();
-            $('#expect_amount').html(parseInt(amount * (1 - rate / 100) * 100) / 100);
-        }
-    }
-
-    function validateAmount() {
         var rate = parseFloat(discount_rate_input.val());
         if (!rate) {
             rate = 0;
         }
         var amount = parseFloat(amount_input.val());
+        if (!amount) {
+            amount = 0;
+        }
+        if (amount > 0 && rate >= 0) {
+            discount_rate_error.hide();
+            if (rate == 0) {
+                $('.mask').show();
+                $('.confirmBox').show();
+                $('.confirmBox-top').find('p').text('您确定要发布转让吗？');
+            }
+            if (rate > 0 && rate <= 3) {
+                $('.mask').show();
+                $('.confirmBox').show();
+                $('.confirmBox-top').find('p').text('折让率为' + rate + '%，您确定要发布转让吗？');
+            }
+        } else {
+            validateData();
+        }
+    });
+
+    function subConfirm() {
+        $('.mask').hide();
+        $('.confirmBox').hide();
+        var rate = parseFloat(discount_rate_input.val());
+        if (!rate) {
+            rate = 0;
+        }
+        var amount = parseFloat(amount_input.val());
+        if (!amount) {
+            amount = 0;
+        }
+        $.post('/credit/note/create', {
+            '_csrf': '<?= Yii::$app->request->csrfToken?>',
+            'asset_id': '<?= $asset['id']?>',
+            'amount': amount,
+            'rate': rate
+        }, function (data) {
+            var res = data['data'];
+            if (data['code'] === 1) {
+                for (var i = 0; i < res.length; i++) {
+                    var err = res[i];
+                    if (err['attribute'] === 'amount') {
+                        amount_error.html(err['msg']);
+                        amount_error.show();
+                    } else if (err['attribute'] === 'discountRate') {
+                        discount_rate_error.html(err['msg']);
+                        discount_rate_error.show();
+                    } else if (err['attribute'] === '' && err['msg']) {
+                        amount_error.html(err['msg']);
+                        amount_error.show();
+                    }
+                }
+            } else if (data['code'] === 0) {
+                window.location.href = '/info/success?source=credit_new&jumpUrl=/credit/trade/assets?type=2'
+            }
+        })
+    }
+
+    function validateData() {
+        var rate = parseFloat(discount_rate_input.val());
+        if (!rate) {
+            rate = 0;
+        }
+        var amount = parseFloat(amount_input.val());
+        if (!amount) {
+            amount = 0;
+        }
+        if (rate < 0) {
+            discount_rate_error.html('折让率不能小于0');
+            discount_rate_error.show();
+        }
         if (amount <= 0) {
             amount_error.html('转让金额必须大于起投金额');
             amount_error.show();
-        } else {
+        }
+        if (rate >= 0 && amount > 0) {
+            discount_rate_error.hide();
             amount_error.hide();
-
             $('#expect_money').html(parseInt(amount / total_amount * current_interest * 100) / 100);
             $('#fee').html(parseInt(amount * 0.003 * 100) / 100);
-
             $('#expect_amount').html(parseInt(amount * (1 - rate / 100) * 100) / 100);
         }
     }

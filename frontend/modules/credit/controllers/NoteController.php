@@ -22,12 +22,21 @@ class NoteController extends BaseController
         }
         //获取资产详情
         $txClient = \Yii::$container->get('txClient');
-        $asset = $txClient->get('assets/detail', ['id' => $asset_id]);
+        $asset = $txClient->get('assets/detail', ['id' => $asset_id, 'validate' => true]);
         if (null === $asset) {
             throw $this->ex404('没有找到指定资产');
         }
+        if (false === $asset['validate']) {
+            throw $this->ex404('债权不合适');
+        }
         $loan = OnlineProduct::findOne($asset['loan_id']);
+        if (null === $loan || $loan->status !== 5) {
+            $this->ex404('没有找到合适标的');
+        }
         $order = OnlineOrder::findOne($asset['order_id']);
+        if (null === $order) {
+            throw $this->ex404('没有找到订单');
+        }
         $apr = $order->yield_rate;
 
         return $this->render('new', [
