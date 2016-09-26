@@ -7,7 +7,6 @@ use common\models\affiliation\AffiliationManager;
 use common\models\coupon\CouponType;
 use common\models\coupon\UserCoupon;
 use common\models\promo\InviteRecord;
-use common\models\sms\SmsMessage;
 use common\service\SmsService;
 use Yii;
 use yii\base\Model;
@@ -163,8 +162,14 @@ class SignupForm extends Model
                 }
             }
 
-            //注册即送代金券两张，20元，起投1万，30元，起投2万，有效期30天
-            $regCouponTypes = CouponType::findAll(['sn' => ['0015:10000-20', '0015:20000-30']]);
+            //注册即送代金券
+            $regCouponTypes = CouponType::findAll(['sn' => [
+                '0015:10000-20',    //20元，起投1万，有效期30天
+                '0015:20000-30',    //30元，起投2万，有效期30天
+                '0016:1000-8',      //8元，起投1000元，有效期30天
+                '0016:100000-80',   //80元，起投10万，有效期30天
+                '0016:200000-150',  //150元，起投20万，有效期30天
+            ]]);
             $issuedCoupon = false;
 
             foreach ($regCouponTypes as $regCouponType) {
