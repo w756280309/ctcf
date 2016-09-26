@@ -9,6 +9,10 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/useraccount/chargedeposit.css');
 use common\utils\StringUtils;
 
 $note_config = json_decode($respData['config'], true);
+
+$nowTime = new \DateTime();
+$endTime = new \DateTime($respData['endTime']);
+$isClosed = $respData['isClosed'] || $nowTime >= $endTime;
 ?>
 
 <div class="project-box clearfix">
@@ -81,14 +85,14 @@ $note_config = json_decode($respData['config'], true);
                 <div class="pR-title">转让进度：</div>
                 <div class="dR-progress-box">
                     <div class="dR-progress">
-                        <?php $progress = $respData['isClosed'] ? 100 : bcdiv(bcmul($respData['tradedAmount'], 100), $respData['amount'], 0); ?>
+                        <?php $progress = $isClosed ? 100 : bcdiv(bcmul($respData['tradedAmount'], 100), $respData['amount'], 0); ?>
                         <span data-progress="<?= $progress ?>"></span>
                     </div>
                     <div class="dRP-data"><?= $progress ?>%</div>
                 </div>
                 <ul class="clearfix dR-inner">
                     <li class="dR-inner-left">可交易金额：</li>
-                    <li class="dR-inner-right"><span><i><?= $respData['isClosed'] ? '0.00' : StringUtils::amountFormat2(bcdiv(bcsub($respData['amount'], $respData['tradedAmount']), 100, 2)) ?></i>元</span></li>
+                    <li class="dR-inner-right"><span><i><?= $isClosed ? '0.00' : StringUtils::amountFormat2(bcdiv(bcsub($respData['amount'], $respData['tradedAmount']), 100, 2)) ?></i>元</span></li>
                     <?php if (empty($user)) { ?>
                         <li class="dR-inner-left">我的可用余额：</li>
                         <li class="dR-inner-right">查看余额请 <a href="javascript:login()">[登录]</a></li>
@@ -97,12 +101,12 @@ $note_config = json_decode($respData['config'], true);
                         <li class="dR-inner-right"><?= StringUtils::amountFormat3($user->lendAccount->available_balance) ?>元</li>
                     <?php } ?>
 
-                    <?php if (!$respData['isClosed']) { ?>
+                    <?php if (!$isClosed) { ?>
                         <li class="dR-inner-left">认购金额：</li>
                         <li class="dR-inner-right"><a href="javascript:recharge()">去充值</a></li>
                     <?php } ?>
                 </ul>
-                <?php if (!$respData['isClosed']) { ?>
+                <?php if (!$isClosed) { ?>
                 <form action="/credit/note/check?id=<?= $respData['id'] ?>" method="post" id="note_order">
                     <input type="hidden" name="_csrf" value="<?= Yii::$app->request->csrfToken ?>" />
                     <div class="dR-input">

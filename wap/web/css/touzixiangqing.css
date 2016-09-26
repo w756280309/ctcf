@@ -291,3 +291,19 @@ i,em {
     font-size: 1.4rem;
     margin-right: 22px;
 }
+/* 转让-投资详情 添加部分 */
+.credit-right-title {
+    float: right;
+    margin-top: 13px;
+    margin-right: 10px;
+    width: 60px;
+    line-height: 26px;
+    height: 26px;
+    text-align: center;
+    font-size: 1.6rem;
+    display: block;
+}
+.credit-red {
+    color: #fff;
+    background: #f44336;
+}

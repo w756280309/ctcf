@@ -81,7 +81,7 @@ class UserController extends BaseController
      * @return type
      * @throws \yii\web\NotFoundHttpException
      */
-    public function actionOrderdetail($id)
+    public function actionOrderdetail($id, $asset_id = null)
     {
         if (empty($id)) {
             throw $this->ex404();
@@ -121,6 +121,14 @@ class UserController extends BaseController
             }
         }
 
-        return $this->render('order_detail', ['deal' => $deal, 'product' => $product, 'plan' => $plan, 'profit' => $profit, 'hkDate' => $hkDate, 'totalFund' => $totalFund]);
+        return $this->render('order_detail', [
+            'deal' => $deal,
+            'product' => $product,
+            'plan' => $plan,
+            'profit' => $profit,
+            'hkDate' => $hkDate,
+            'totalFund' => $totalFund,
+            'assetId' => $asset_id,
+        ]);
     }
 }

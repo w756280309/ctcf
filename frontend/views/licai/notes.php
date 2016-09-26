@@ -38,8 +38,8 @@ $action = Yii::$app->controller->action->getUniqueId();
         <a class="credit-single credit-single-border" href="/credit/note/detail?id=<?= $note['id'] ?>" target="_blank"> <!--类btn_ing_border为转让中的红边框-->
             <div class="single_left">
                 <div class="single_title">
-                    <p class="p_left" title="温盈金13号-5"><span>【转让】</span><?= $loan->title ?></p>
-                    <p class="p_right" title=""><?= Yii::$app->params['refund_method'][$loan->refund_method] ?></p>
+                    <p class="p_left"><span>【转让】</span><?= $loan->title ?></p>
+                    <p class="p_right"><?= Yii::$app->params['refund_method'][$loan->refund_method] ?></p>
                     <div class="clear"></div>
                 </div>
                 <div class="center-border"></div>
