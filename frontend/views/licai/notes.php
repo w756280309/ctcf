@@ -5,7 +5,6 @@ $this->title = '我要理财';
 $this->registerCssFile(ASSETS_BASE_URI . 'css/pagination.css', ['depends' => 'frontend\assets\FrontAsset']);
 $this->registerCssFile(ASSETS_BASE_URI . 'css/credit/creditlist.css', ['depends' => 'frontend\assets\FrontAsset']);
 
-use common\models\product\OnlineProduct;
 use common\utils\StringUtils;
 use common\widgets\Pager;
 
@@ -32,8 +31,9 @@ $action = Yii::$app->controller->action->getUniqueId();
             $nowTime = new \DateTime();
             $tradedAmount = $note['tradedAmount'];
             $amount = $note['amount'];
+            $realClosed = $note['isClosed'] || $nowTime >= $endTime;
             //转让中状态应对应为：isClosed=false
-            $progress = $note['isClosed'] ? 100 : bcdiv(bcmul($tradedAmount, '100'), $amount, 0);
+            $progress = $realClosed ? 100 : bcdiv(bcmul($tradedAmount, '100'), $amount, 0);
         ?>
         <a class="credit-single credit-single-border" href="/credit/note/detail?id=<?= $note['id'] ?>" target="_blank"> <!--类btn_ing_border为转让中的红边框-->
             <div class="single_left">
@@ -86,7 +86,7 @@ $action = Yii::$app->controller->action->getUniqueId();
                     <p class="remain-number">
                         距离结束：
                         <?php
-                            if ($nowTime > $endTime || $note['isClosed']) {
+                            if ($realClosed) {
                                 echo '0天0时0分';
                             } else {
                                 $dateDiff = $endTime->diff($nowTime);
@@ -96,19 +96,17 @@ $action = Yii::$app->controller->action->getUniqueId();
                     </p>
                 </div>
                 <!-- 转让中 -->
-                <span class="single_right_button">
                     <?php
-                        if ($note['isClosed']) {
+                        if ($realClosed) {
                     ?>
-                            已转让
+                        <span class="single_right_button_over">已转让</span>
                     <?php
                         } else {
                     ?>
-                            转让中
+                            <span class="single_right_button">转让中</span>
                     <?php
                         }
                     ?>
-                </span>
             </div>
         </a>
         <?php endforeach; ?>

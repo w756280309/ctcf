@@ -39,6 +39,13 @@ class CreditNote
             return ['code' => 1, 'message' => '当前转让不存在'];
         }
 
+        //检查转让项目是否结束(判断时间是为了防止转让时间已到但是isClosed依然为false)
+        $nowTime = new \DateTime();
+        $endTime = new \DateTime($note['endTime']);
+        if ($nowTime >= $endTime || $note['isClosed']) {
+            return ['code' => 1, 'message' => '转让已结束'];
+        }
+
         //检查自己不能买自己的债权
         if ((int) $user->getId() === $note['user_id']) {
             return ['code' => 1, 'message' => '您不能购买自己的转让项目'];
