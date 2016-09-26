@@ -58,7 +58,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/useraccount/transfering.js', ['depends
                                         ?>
                                     </td>
                                     <td class="text-align-ct"><?= StringUtils::amountFormat2($asset['order']->yield_rate * 100) ?>%</td>
-                                    <td class="text-third"><?= StringUtils::amountFormat3(bcdiv($asset['amount'], 100, 2)) ?></td>
+                                    <td class="text-third"><?= StringUtils::amountFormat3(bcdiv($asset['maxTradableAmount'], 100, 2)) ?></td>
                                     <td class="text-align-ct">
                                         <span class="tip-cursor">
                                         <span class="tip-font">
@@ -129,7 +129,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/useraccount/transfering.js', ['depends
                         <table>
                             <tr>
                                 <th class="text-first" width="226">项目名称</th>
-                                <th class="text-align-ct" width="80">转让时间</th>
+                                <th class="text-align-ct" width="80">转让日期</th>
                                 <th class="text-third" width="90">转让金额(元)</th>
                                 <th class="text-align-ct" width="90">折让率(%)</th>
                                 <th class="text-third" width="100">已转让金额(元)</th>
@@ -162,8 +162,8 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/useraccount/transfering.js', ['depends
                         <table>
                             <tr>
                                 <th class="text-first" width="226">项目名称</th>
-                                <th class="text-align-ct" width="80">完成时间</th>
-                                <th class="text-third" width="90">转让金额(元)</th>
+                                <th class="text-align-ct" width="80">完成日期</th>
+                                <th class="text-third" width="90">已转让金额(元)</th>
                                 <th class="text-align-ct" width="90">折让率(%)</th>
                                 <th class="text-third" width="80">手续费(元)</th>
                                 <th class="text-third" width="90">实际收入(元)</th>
@@ -173,7 +173,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/useraccount/transfering.js', ['depends
                                 <tr class="tr-click">
                                     <td class="text-second"><a href="/credit/note/detail?id=<?= $note['asset_id'] ?>"><?= $note['loan']->title ?></a></td>
                                     <td class="text-align-ct"><?= substr($note['closeTime'], 0, 10) ?></td>
-                                    <td class="text-third"><?= StringUtils::amountFormat3(bcdiv($note['amount'], 100, 2)) ?></td>
+                                    <td class="text-third"><?= StringUtils::amountFormat3(bcdiv($note['tradedAmount'], 100, 2)) ?></td>
                                     <td class="text-align-ct"><?= $note['discountRate'] ?></td>
                                     <td class="text-third">
                                         <?php

@@ -1,4 +1,5 @@
 <?php
+
 namespace app\modules\credit\controllers;
 
 use common\controllers\HelpersTrait;
@@ -43,13 +44,9 @@ class NoteController extends Controller
      *
      * 1.一页显示十条记录;
      */
-    public function actionOrders($id, $page = null)
+    public function actionOrders($id, $page = 1)
     {
         $pageSize = 10;
-
-        if (empty($page)) {
-            $page = 1;
-        }
 
         $respData = Yii::$container->get('txClient')->get('credit-order/list', [
             'id' => $id,
