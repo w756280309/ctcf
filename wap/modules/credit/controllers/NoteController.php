@@ -96,4 +96,12 @@ class NoteController extends Controller
 
         return $this->render('orders', ['orders' => $orders, 'users' => $users, 'id' => $id, 'pages' => $pages]);
     }
+
+    /**
+     * 债权转让规则.
+     */
+    public function actionRules()
+    {
+        return $this->render('rules');
+    }
 }

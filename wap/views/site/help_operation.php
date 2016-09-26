@@ -5,7 +5,7 @@ $this->title="帮助中心";
 use common\utils\StringUtils;
 
 ?>
-<link href="/css/informationAndHelp.css" rel="stylesheet">
+<link href="<?= ASSETS_BASE_URI ?>css/informationAndHelp.css" rel="stylesheet">
 
 <div class="container bootstrap-common helpcenter_login_resister">
     <!-- 主体 -->
@@ -143,18 +143,37 @@ use common\utils\StringUtils;
             <p class="single-tuchu">2、产品出现逾期，本息由谁来保障？
             <p>产品出现逾期时，将由推荐产品的保障方按照保障措施相应条款规定，向投资者支付本金与约定收益。
 
-            <p class="single-tuchu">3、如何提现？
+            <p class="single-tuchu">3、投资金额有什么限制吗？
+            <p>用户的投资金额需要满足项目的起投金额和递增金额，并且不能使剩余可投金额小于一倍起投金额。
+
+            <p class="single-tuchu">4、如何申请转让？
+            <p>进入温都金服“账户中心－我的转让－可转让的项目”，进行转让操作；转让方在转让时，可以进行折价处理，折价比例在0%～3%之间。
+
+            <p class="single-tuchu">5、什么时候可以进行转让？
+            <p>已购项目持有30天后即可进行转让；持有天数从计息日开始计算；
+            <p>付息日和还款日前3天不可转让。
+
+            <p class="single-tuchu">6、转让的转让周期？
+            <p>从发布转让成功开始计算，周期时间为3天，即72小时，如果到72小时未转让完成，未转让部分会自动撤销，仍在“可转让列表”中，可继续申请转让；已转让部分可在“已转让列表”中查看。
+
+            <p class="single-tuchu">7、发起转让收取多少手续费？
+            <p>转让方需要支付转让金额的3‰手续费，在成交后直接从成交金额中扣除，不成交平台不向用户收取手续费。
+
+            <p class="single-tuchu">8、发布转让后可否撤销？
+            <p>已发布的转让如需撤销，可在“账户中心－我的转让－转让中的项目”进行撤销操作，已转让成功的部分不可撤回；撤销成功后，剩余部分仍在“可转让列表”中，可继续申请转让；已转让部分可在“已转让列表”中查看。
+
+            <p class="single-tuchu">9、如何提现？
             <p>用户登录后，进入【我的账户】->【提现】->点击“提现”按钮，按照提示完成提现操作。
 
-            <p class="single-tuchu">4、提现是否有限额？
+            <p class="single-tuchu">10、提现是否有限额？
             <p>没有限额，用户“可用余额”均可提现。
 
-            <p class="single-tuchu">5、提现多久可以到账？
+            <p class="single-tuchu">11、提现多久可以到账？
             <p>工作日内17:00之前申请提现，当日到账；
             <p>17:00之后申请提现，会在下一个工作日到账。
             <p>如遇双休日或法定节假日顺延。
 
-            <p class="single-tuchu">6、提现手续费怎么收取？
+            <p class="single-tuchu">12、提现手续费怎么收取？
             <p>每笔2元，按笔收取。此为第三方资金托管平台联动优势收取。
         </div>
     </div>

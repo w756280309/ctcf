@@ -199,4 +199,12 @@ class NoteController extends BaseController
 
         return ['tourl' => '/credit/order/confirm?id='.$noteId.'&amount='.$amount, 'code' => 0, 'message' => ''];
     }
+
+    /**
+     * 债权转让规则.
+     */
+    public function actionRules()
+    {
+        return $this->render('rules');
+    }
 }

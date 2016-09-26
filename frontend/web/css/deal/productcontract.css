@@ -100,4 +100,21 @@
 .show {
     display: block;
 }
-
+.rules-content {
+    padding: 2rem 4rem;
+}
+.rules-content h1 {
+    color: #464648;
+    padding: 10px 0;
+    font-size: 1rem;
+}
+.rules-content h2 {
+    color: #464648;
+    padding: 0.5rem 2rem;
+    font-size: 1rem;
+}
+.rules-content p {
+    padding-left: 2rem;
+    color: #595757;
+    line-height: 1.5rem;
+}
