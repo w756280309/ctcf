@@ -29,6 +29,7 @@ class OrderController extends BaseController
     //确认购买页
     public function actionConfirm($id, $amount)
     {
+        bcscale(14);
         //获取资产详情
         $amount = floatval($amount);
         $txClient = \Yii::$container->get('txClient');
@@ -36,7 +37,7 @@ class OrderController extends BaseController
         if (null === $note || !isset($note['asset'])) {
             $this->ex404('没有找到指定债权');
         }
-        $rate = bcdiv($note['discountRate'], 100, 14);
+        $rate = bcdiv($note['discountRate'], 100);
         $asset = $note['asset'];
         $loan = OnlineProduct::findOne($asset['loan_id']);
         $order = OnlineOrder::findOne($asset['order_id']);
