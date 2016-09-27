@@ -14,81 +14,12 @@ use common\lib\credit\CreditNote;
 
 class NoteController extends BaseController
 {
-    //发起债权页面
-    public function actionNew($asset_id)
+    public function actions()
     {
-        if (\Yii::$app->user->isGuest) {
-            return $this->redirect('/site/login');
-        }
-        //获取资产详情
-        $txClient = \Yii::$container->get('txClient');
-        $asset = $txClient->get('assets/detail', ['id' => $asset_id, 'validate' => true]);
-        if (null === $asset) {
-            throw $this->ex404('没有找到指定资产');
-        }
-        if (false === $asset['validate']) {
-            throw $this->ex404('债权不合适');
-        }
-        $loan = OnlineProduct::findOne($asset['loan_id']);
-        if (null === $loan || $loan->status !== 5) {
-            $this->ex404('没有找到合适标的');
-        }
-        $order = OnlineOrder::findOne($asset['order_id']);
-        if (null === $order) {
-            throw $this->ex404('没有找到订单');
-        }
-        if ($order->uid !== Yii::$app->user->identity->getId()) {
-            throw $this->ex404('资产信息不合法');
-        }
-        $apr = $order->yield_rate;
-
-        return $this->render('new', [
-            'asset' => $asset,
-            'loan' => $loan,
-            'apr' => $apr,
-        ]);
-    }
-
-    //ajax请求发起挂牌记录
-    public function actionCreate()
-    {
-        $asset_id = \Yii::$app->request->post('asset_id');
-        $amount = floatval(\Yii::$app->request->post('amount'));
-        $rate = floatval(\Yii::$app->request->post('rate', 0));
-        $rate = $rate ?: 0;
-        if ($asset_id > 0 && $amount > 0 && $rate >= 0) {
-            try {
-                $txClient = \Yii::$container->get('txClient');
-                $result = $txClient->post('credit-note/new', [
-                    'discountRate' => $rate,
-                    'asset_id' => $asset_id,
-                    'amount' => bcmul($amount, 100, 0),
-                ]);
-                $responseData = ['code' => 0, 'data' => $result];
-            } catch (\Exception $e) {
-                $result = json_decode(strval($e->getResponse()->getBody()), true);
-                if (isset($result['name'])
-                    && $result['name'] === 'Bad Request'
-                    && isset($result['message'])
-                    && isset($result['status'])
-                    && $result['status'] !== 200
-                ) {
-                    //获取没有指定属性的错误信息
-                    $responseData = ['code' => 1, 'data' => [['msg' => $result['message'], 'attribute' => '']]];
-                } else {
-                    //获取有指定属性的错误信息
-                    $data = [];
-                    foreach ($result as $attribute => $message) {
-                        $data[] = ['attribute' => $attribute, 'msg' => $message];
-                    }
-                    $responseData = ['code' => 1, 'data' => $data];
-                }
-            }
-        } else {
-            $responseData = ['code' => 1, 'data' => [['msg' => '参数错误', 'attribute' => '']]];
-        }
-
-        return $responseData;
+        return [
+            'new' => ['class' => 'common\action\credit\NewAction'],
+            'create' => ['class' => 'common\action\credit\CreateAction'],
+        ];
     }
 
     /**

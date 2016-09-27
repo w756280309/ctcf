@@ -15,6 +15,14 @@ class NoteController extends Controller
 {
     use HelpersTrait;
 
+    public function actions()
+    {
+        return [
+            'new' => ['class' => 'common\action\credit\NewAction'],
+            'create' => ['class' => 'common\action\credit\CreateAction'],
+        ];
+    }
+
     /**
      * 转让详情页.
      */
