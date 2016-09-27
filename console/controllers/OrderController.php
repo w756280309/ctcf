@@ -30,7 +30,7 @@ class OrderController extends Controller
                     }
                 }
             } else {
-                usleep(100000);
+                usleep(500000);
             }
         }
         exit(0);

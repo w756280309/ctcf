@@ -90,7 +90,7 @@ class OrderController extends BaseController
                 return ['code' => 1, 'url' => '/info/fail?source=credit_order'];
             }
         } catch (\Exception $ex) {
-            return ['code' => 1, 'url' => '/info/fail?source=credit_order'];
+           return ['code' => 1, 'url' => '', 'message' => $ex->getMessage()];
         }
     }
 

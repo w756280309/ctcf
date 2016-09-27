@@ -78,7 +78,7 @@ $action = Yii::$app->controller->action->getUniqueId();
                         <li class="left transferMoney_title">转让金额：</li>
                         <li class="left transferMoney_space"></li>
                         <li class="left transferMoney_money transfer_common">
-                            <input type="text" name="" id="credit_amount" placeholder="起投1,000元，递增1,000元" autocomplete="off" t_value="" o_value="" onkeypress="if(!this.value.match(/^[\+\-]?\d*?\.?\d*?$/))this.value=this.t_value;else this.t_value=this.value;if(this.value.match(/^(?:[\+\-]?\d+(?:\.\d+)?)?$/))this.o_value=this.value" onkeyup="if(!this.value.match(/^[\+\-]?\d*?\.?\d*?$/))this.value=this.t_value;else this.t_value=this.value;if(this.value.match(/^(?:[\+\-]?\d+(?:\.\d+)?)?$/))this.o_value=this.value" onblur="if(!this.value.match(/^(?:[\+\-]?\d+(?:\.\d+)?|\.\d*?)?$/))this.value=this.o_value;else{if(this.value.match(/^\.\d+$/))this.value=0+this.value;if(this.value.match(/^\.$/))this.value=0;this.o_value=this.value}">
+                            <input type="text" name="" id="credit_amount" placeholder="起投1,000元，递增1,000元" autocomplete="off" t_value="" onkeyup=" if (!this.value.match(/^[\+\-]?\d+?\.?\d*?$/)) {this.value = this.t_value;}else{this.t_value = this.value;}">
                             <span>元</span>
                         </li>
                         <li class="transferMoney_error common_color" id="amount_error">*转让金额不能小于1000元</li>
@@ -89,7 +89,7 @@ $action = Yii::$app->controller->action->getUniqueId();
                         <li class="left discountRate_title">折让率：</li>
                         <li class="left discountRate_space"></li>
                         <li class="left discountRate_rate transfer_common">
-                            <input type="text" name="discount_rate" id="discount_rate_input" value=""  placeholder="不高于3%，可设置2位小数" autocomplete="off" maxlength="4" t_value="" o_value="" onkeypress="if(!this.value.match(/^[\+\-]?\d*?\.?\d*?$/))this.value=this.t_value;else this.t_value=this.value;if(this.value.match(/^(?:[\+\-]?\d+(?:\.\d+)?)?$/))this.o_value=this.value" onkeyup="if(!this.value.match(/^[\+\-]?\d*?\.?\d*?$/))this.value=this.t_value;else this.t_value=this.value;if(this.value.match(/^(?:[\+\-]?\d+(?:\.\d+)?)?$/))this.o_value=this.value" onblur="if(!this.value.match(/^(?:[\+\-]?\d+(?:\.\d+)?|\.\d*?)?$/))this.value=this.o_value;else{if(this.value.match(/^\.\d+$/))this.value=0+this.value;if(this.value.match(/^\.$/))this.value=0;this.o_value=this.value}">
+                            <input type="text" name="discount_rate" id="discount_rate_input" value=""  placeholder="不高于3%，可设置2位小数" autocomplete="off" maxlength="4" t_value="" onkeyup=" if (!this.value.match(/^[\+\-]?\d+?\.?\d*?$/)) {this.value = this.t_value;}else{this.t_value = this.value;}" >
                             <span>%</span>
                         </li>
                         <li class="discountRate_tip_icon"></li>
