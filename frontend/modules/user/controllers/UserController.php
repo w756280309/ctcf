@@ -104,11 +104,13 @@ class UserController extends BaseController
      * 我的理财页面.
      * 1. 每页显示10条记录;
      */
-    public function actionMyorder($type = 1)
+    public function actionMyorder($type = 1, $page = 1)
     {
         $type = intval($type);
+        $pageSize = 10;
+
         if (!in_array($type, [1, 2, 3])) {
-            throw $this->ex404();
+            $type = 1;
         }
 
         $user = $this->getAuthedUser();
@@ -118,59 +120,52 @@ class UserController extends BaseController
 
         switch ($type) {
             case 1:
-                $status = Loan::STATUS_HUAN;
-                $tj = Plan::find()
-                    ->innerJoin($l, "$l.id=$p.online_pid")
-                    ->where(["uid" => $user->id, "$p.status" => Plan::STATUS_WEIHUAN, "$l.status" => 5])
-                    ->groupBy("online_pid")
-                    ->select("sum(benxi) as benxi")
-                    ->asArray()
-                    ->all();
+            case 3:
+                $stats = Yii::$container->get('txClient')->get('assets/plan-stats', [
+                    'user_id' => $user->id,
+                    'type' => $type,
+                ]);
                 break;
             case 2:
                 $status = [Loan::STATUS_NOW, Loan::STATUS_FULL, Loan::STATUS_FOUND];
-                break;
-            case 3:
-                $status = Loan::STATUS_OVER;
-                $tj = Plan::find()
-                    ->innerJoin($l, "$l.id=$p.online_pid")
-                    ->where(["uid" => $user->id, "$p.status" => [Plan::STATUS_YIHUAN, Plan::STATUS_TIQIAM], "$l.status" => 6])
-                    ->groupBy("online_pid")
-                    ->select("sum(benxi) as benxi")
-                    ->asArray()
-                    ->all();
-                break;
         }
-
-        $query = Ord::find()
-            ->innerJoinWith('loan')
-            ->where(["$o.uid" => $user->id, "$o.status" => Ord::STATUS_SUCCESS])
-            ->andWhere(["$l.status" => $status])
-            ->orderBy("$o.id desc");
-
-        $count = $query->count();
-        $tj['count'] = $count;
 
         if (2 === $type) {
+            $query = Ord::find()
+                ->innerJoinWith('loan')
+                ->where(["$o.uid" => $user->id, "$o.status" => Ord::STATUS_SUCCESS])
+                ->andWhere(["$l.status" => $status])
+                ->orderBy("$o.id desc");
+
+            $count = $query->count();
+            $tj['count'] = $count;
             $tj['totalAmount'] = $query->sum('order_money');
-        }
 
-        //计算当前用户收益中项目的本息和，每个项目对应多个订单，每笔订单对应多期还款计划
-        $totalbenxi = 0;
-        if (1 === $type) {
-            $totaldata = $query->all();
-            foreach ($totaldata as $v) {
-                $totalbenxi += ($v->order_money + $v->getProceeds());
-            }
-        }
+            $pages = new Pagination(['totalCount' => $count, 'pageSize' => $pageSize]);
+            $model = $query->offset($pages->offset)->limit($pages->limit)->all();
+        } else {
+            $assets = Yii::$container->get('txClient')->get('assets/list', [
+                'user_id' => $user->id,
+                'type' => $type,
+                'page' => $page,
+                'page_size' => $pageSize,
+            ]);
 
-        $pages = new Pagination(['totalCount' => $count, 'pageSize' => 10]);
-        $model = $query->offset($pages->offset)->limit($pages->limit)->all();
+            $tj['count'] = $assets['totalCount'];
+
+            $model = $assets['data'];
+            $pages = new Pagination(['totalCount' => $assets['totalCount'], 'pageSize' => $pageSize]);
+        }
 
         $plan = [];
 
         foreach ($model as $key => $val) {
-            $data = Plan::findAll(['online_pid' => $val->online_pid, 'uid' => $user->id, 'order_id' => $val->id]);
+            if (2 === $type) {
+                $data = Plan::findAll(['online_pid' => $val->online_pid, 'uid' => $user->id, 'order_id' => $val->id]);
+            } else {
+                $data = Plan::findAll(['online_pid' => $val['loan_id'], 'uid' => $user->id, 'order_id' => $val['order_id']]);
+                $model[$key]['order'] = Ord::findOne($val['order_id']);
+            }
 
             $plan[$key]['obj'] = $data;
             $plan[$key]['yihuan'] = 0;
@@ -182,6 +177,13 @@ class UserController extends BaseController
             }
         }
 
-        return $this->render('myorder', ['model' => $model, 'pages' => $pages, 'type' => $type, 'plan' => $plan, 'tj' => $tj, 'totalbenxi' => $totalbenxi]);
+        return $this->render('myorder', [
+            'model' => $model,
+            'pages' => $pages,
+            'type' => $type,
+            'plan' => $plan,
+            'tj' => $tj,
+            'stats' => $stats,
+        ]);
     }
 }

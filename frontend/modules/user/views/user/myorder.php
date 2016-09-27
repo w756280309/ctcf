@@ -23,17 +23,14 @@ use common\models\order\OnlineRepaymentPlan;
         </div>
         <?php if (in_array($type, [1, 3])) { ?>
         <?php if (1 === $type) { ?>
-            <?php
-                $waitbenxi = array_sum(array_column($tj, 'benxi'));
-            ?>
             <div class="display_number">
-                <p class="p_left">待回款总金额：<span><?= StringUtils::amountFormat3($waitbenxi) ?></span>元</p>
-                <p class="p_left p_left_mg">已回款总金额：<span><?= StringUtils::amountFormat3($totalbenxi-$waitbenxi) ?></span>元</p>
+                <p class="p_left">待回款总金额：<span><?= StringUtils::amountFormat3($stats['unpaidAount']) ?></span>元</p>
+                <p class="p_left p_left_mg">已回款总金额：<span><?= StringUtils::amountFormat3($stats['repaidAount']) ?></span>元</p>
                 <p class="p_right">共计：<span><?= $tj['count'] ?></span>笔</p>
             </div>
         <?php } else { ?>
             <div class="display_number">
-                <p class="p_left">已还清总金额：<span><?= StringUtils::amountFormat3(array_sum(array_column($tj, 'benxi'))) ?></span>元</p>
+                <p class="p_left">已还清总金额：<span><?= StringUtils::amountFormat3($stats['repaidAount']) ?></span>元</p>
                 <p class="p_right">共计：<span><?= $tj['count'] ?></span>笔</p>
             </div>
         <?php } ?>
@@ -63,19 +60,23 @@ use common\models\order\OnlineRepaymentPlan;
             <?php foreach ($model as $key => $val) : ?>
                 <tr class="tr-click">
                     <td class="text-second">
-                        <a href="/deal/deal/detail?sn=<?= $val->loan->sn ?>"><?= $val->loan->title ?></a>
+                        <a href="<?= empty($val['asset_id']) ? '/deal/deal/detail?sn='.$val['loan']['sn'] : '/credit/note/detail?id='.$val['note_id'] ?>">
+                            <?= (empty($val['asset_id']) ? '' : '【转让】').$val['loan']['title'] ?>
+                        </a>
                     </td>
-                    <td class="text-align-lf"><?= $val->getLastPaymentDate() ?></td>
-                    <td class="text-align-ct"><?= rtrim(rtrim(number_format($val->yield_rate * 100, 2), '0'), '.') ?>%</td>
-                    <td class="text-align-rg"><?= StringUtils::amountFormat3($val->order_money) ?></td>
-                    <td class="text-align-rg"><?= StringUtils::amountFormat3($val->getProceeds()) ?></td>
+                    <td class="text-align-lf"><?= $val['order']->getLastPaymentDate() ?></td>
+                    <td class="text-align-ct"><?= rtrim(rtrim(number_format($val['order']->yield_rate * 100, 2), '0'), '.') ?>%</td>
+                    <td class="text-align-rg"><?= StringUtils::amountFormat3(bcdiv($val['amount'], 100, 2)) ?></td>
+                    <td class="text-align-rg"><?= StringUtils::amountFormat3($val['order']->getProceeds()) ?></td>
                     <td class="text-align-ct">
                         <span class="tip-cursor">
                             <span class="tip-font"><?= $plan[$key]['yihuan'] ?>/<?= count($plan[$key]['obj']) ?></span>
                             <span class="tip-icon-enna tip-icon-top"></span>
                         </span>
                     </td>
-                    <td class="text-align-ct"><a href="/order/order/agreement?pid=<?= $val->loan->id ?>&order_id=<?= $val->id ?>" target="_blank">查看</a></td>
+                    <td class="text-align-ct">
+                        <a href="<?= empty($val['asset_id']) ? '/order/order/agreement?pid='.$val['loan']['id'].'&order_id='.$val['order_id'] : '' ?>" target="_blank">查看</a>
+                    </td>
                 </tr>
                 <?php if (!empty($plan[$key]['obj'])) : ?>
                 <tr class="tr-show">
