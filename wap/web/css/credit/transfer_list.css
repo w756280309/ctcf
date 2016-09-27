@@ -58,14 +58,6 @@ html {
     background: #fff;
     padding-bottom: 0.5rem;
 }
-
-.nav-height{
-    height:3.14rem;
-    line-height:3.14rem;
-}
-.nav-height img{
-    height: 1.5rem!important;
-}
 .title{
     font-size:1.3rem;
 }

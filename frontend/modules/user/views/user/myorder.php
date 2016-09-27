@@ -60,8 +60,8 @@ use common\models\order\OnlineRepaymentPlan;
             <?php foreach ($model as $key => $val) : ?>
                 <tr class="tr-click">
                     <td class="text-second">
-                        <a href="<?= empty($val['asset_id']) ? '/deal/deal/detail?sn='.$val['loan']['sn'] : '/credit/note/detail?id='.$val['note_id'] ?>">
-                            <?= (empty($val['asset_id']) ? '' : '【转让】').$val['loan']['title'] ?>
+                        <a href="<?= empty($val['note_id']) ? '/deal/deal/detail?sn='.$val['loan']['sn'] : '/credit/note/detail?id='.$val['note_id'] ?>">
+                            <?= (empty($val['note_id']) ? '' : '【转让】').$val['loan']['title'] ?>
                         </a>
                     </td>
                     <td class="text-align-lf"><?= $val['order']->getLastPaymentDate() ?></td>

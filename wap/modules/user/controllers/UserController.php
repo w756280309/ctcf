@@ -2,7 +2,6 @@
 
 namespace app\modules\user\controllers;
 
-use Yii;
 use app\controllers\BaseController;
 use common\models\user\MoneyRecord;
 use common\models\order\OnlineOrder;
@@ -11,6 +10,8 @@ use common\models\order\OnlineRepaymentPlan;
 use common\models\order\OrderManager;
 use common\service\BankService;
 use common\lib\bchelp\BcRound;
+use Yii;
+use yii\data\Pagination;
 
 class UserController extends BaseController
 {
@@ -58,21 +59,64 @@ class UserController extends BaseController
     }
 
     /**
-     * 我的理财页面
-     * @param type $type
-     * @param type $page
-     * @return type
+     * 我的理财页面.
+     *
+     * 1.一页显示5条记录;
      */
-    public function actionMyorder($type = null, $page = 1)
+    public function actionMyorder($type = 1, $page = 1)
     {
-        $os = new OrderManager();
-        $list = $os->getUserOrderList($this->getAuthedUser()->id, $type, $page);
-        if (Yii::$app->request->isAjax) {
-            $html = $this->renderFile('@wap/modules/user/views/user/_order_list.php', ['list' => $list, 'type' => $type, 'profitFund' => $this->getAuthedUser()->lendAccount->profit_balance]);
-            return ['header' => $list['header'], 'html' => $html, 'code' => $list['code'], 'message' => $list['message'], 'totalFund' => $list['totalFund'], 'daihuan' => $list['daihuan']];
+        $type = intval($type);
+        $pageSize = 5;
+
+        if (!in_array($type, [1, 2, 3])) {
+            $type = 1;
         }
 
-        return $this->render('order', ['list' => $list, 'type' => $type, 'profitFund' => $this->getAuthedUser()->lendAccount->profit_balance]);
+        $user = $this->getAuthedUser();
+        $o = OnlineOrder::tableName();
+        $l = OnlineProduct::tableName();
+
+        if (2 === $type) {
+            $query = OnlineOrder::find()
+                ->innerJoinWith('loan')
+                ->where(["$o.uid" => $user->id, "$o.status" => OnlineOrder::STATUS_SUCCESS])
+                ->andWhere(["$l.status" => [OnlineProduct::STATUS_NOW, OnlineProduct::STATUS_FULL, OnlineProduct::STATUS_FOUND]])
+                ->orderBy("$o.id desc");
+
+            $pages = new Pagination(['totalCount' => $query->count(), 'pageSize' => $pageSize]);
+            $model = $query->offset($pages->offset)->limit($pages->limit)->asArray()->all();
+        } else {
+            $assets = Yii::$container->get('txClient')->get('assets/list', [
+                'user_id' => $user->id,
+                'type' => $type,
+                'page' => $page,
+                'page_size' => $pageSize,
+            ]);
+
+            $pages = new Pagination(['totalCount' => $assets['totalCount'], 'pageSize' => $pageSize]);
+            $model = $assets['data'];
+
+            foreach ($model as $key => $val) {
+                $model[$key]['order'] = OnlineOrder::findOne($val['order_id']);
+            }
+        }
+
+        $tp = $pages->pageCount;
+        $header = [
+            'count' => $pages->totalCount,
+            'size' => $pageSize,
+            'tp' => $tp,
+            'cp' => intval($page),
+        ];
+        $code = ($page > $tp) ? 1 : 0;
+        $message = ($page > $tp) ? '数据错误' : '消息返回';
+
+        if (Yii::$app->request->isAjax) {
+            $html = $this->renderFile('@wap/modules/user/views/user/_order_list.php', ['model' => $model, 'type' => $type]);
+            return ['header' => $header, 'html' => $html, 'code' => $code, 'message' => $message];
+        }
+
+        return $this->render('order', ['model' => $model, 'type' => $type, 'pages' => $pages]);
     }
 
     /**

@@ -260,52 +260,6 @@ class OrderManager
         }
     }
 
-    /**
-     * 获取用户订单列表.
-     *
-     * @param type $uid
-     *
-     * @return bool
-     */
-    public function getUserOrderList($uid = null, $type = null, $page = 1)
-    {
-        if (empty($uid)) {
-            return false;
-        }
-        $query1 = OnlineOrder::find()
-            ->innerJoinWith('loan')
-            ->where(['online_order.uid' => $uid, 'online_order.status' => 1]);
-        if (!empty($type)) {
-            $query1->andWhere(['online_product.status' => $type]);
-        }
-
-        $query = $query1->orderBy('online_order.id desc');
-        $record = $query->all();
-        $totalFund = 0;
-        $daihuan = 0;
-        foreach ($record as $val) {
-            $totalFund = bcadd($totalFund, $val->order_money, 2);
-            if (Loan::STATUS_OVER !== (int)$val->loan->status) {
-                ++$daihuan;
-            }
-        }
-
-        $count = $query->count();
-        $pages = new Pagination(['totalCount' => $count, 'pageSize' => $this->pz]);
-        $query = $query->offset(($page - 1) * ($this->pz))->limit($pages->limit)->all();
-        $tp = ceil($count / $this->pz);
-        $header = [
-            'count' => intval($count),
-            'size' => $this->pz,
-            'tp' => $tp,
-            'cp' => intval($page),
-        ];
-        $code = ($page > $tp) ? 1 : 0;
-        $message = ($page > $tp) ? '数据错误' : '消息返回';
-
-        return ['header' => $header, 'data' => $query, 'code' => $code, 'message' => $message, 'totalFund' => $totalFund, 'daihuan' => $daihuan];
-    }
-
     public static function confirmOrder($ordOrSn)
     {
         bcscale(14);

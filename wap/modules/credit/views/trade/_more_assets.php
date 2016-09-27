@@ -14,9 +14,9 @@ use common\utils\StringUtils;
             <div class="col-xs-5 font-24 text-align-ct common-line-height">预期年化率</div>
         </a>
     <?php } elseif (2 === $type) { ?>
-        <a class="row col common-mar" href="/">
+        <a class="row col common-mar" href="">
             <div class="col-xs-12 transferitem-list-title">
-                <div class="inner-border"></div>
+                <div class="inner-border"><?= $val['loan']->title ?></div>
             </div>
             <div class="col-xs-7 font-24 common-line-height common-pad-lf">转让金额：<span class="font-28 common-color"><?= StringUtils::amountFormat2(bcdiv($val['amount'], 100, 2)) ?>元</span></div>
             <div class="col-xs-5 font-32 common-color text-align-ct common-line-height"><?= bcdiv($val['tradedAmount'], $val['amount'], 0) ?>%</div>
@@ -24,7 +24,7 @@ use common\utils\StringUtils;
             <div class="col-xs-5 font-24 text-align-ct common-line-height">转让进度</div>
         </a>
     <?php } elseif (3 === $type) { ?>
-        <a class="row col common-mar" href="/">
+        <a class="row col common-mar" href="">
             <div class="col-xs-12 transferitem-list-title">
                 <div class="inner-border"><?= $val['loan']->title ?></div>
             </div>

@@ -101,7 +101,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/credit/detail.js', ['depends' => 'wap\
             <span class="header-you"><img src="<?= ASSETS_BASE_URI ?>images/credit/youbiao.png"></span>
         </div>
     </a>
-    <a class="link-en" href="">
+    <a class="link-en" href="/credit/note/rules">
         <div class="header-box">
             <span class="header-icon"><img src="<?= ASSETS_BASE_URI ?>images/credit/xiang3.png"></span>
             <span class="header-name">转让规则</span>
