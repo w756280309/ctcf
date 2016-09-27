@@ -4,10 +4,27 @@ $this->title = "温州报业传媒旗下理财平台";
 $this->params['breadcrumbs'][] = $this->title;
 $this->header_nav_on = true;
 
-$this->registerCssFile(ASSETS_BASE_URI.'css/first.css', ['depends' => 'wap\assets\WapAsset']);
-$this->registerCssFile(ASSETS_BASE_URI.'css/invite/activedisplay.css?v=20160810', ['depends' => 'wap\assets\WapAsset']);
-$this->registerJsFile(ASSETS_BASE_URI.'js/fastclick.js', ['depends' => 'wap\assets\WapAsset']);
-$this->registerJsFile(ASSETS_BASE_URI.'js/invite/activedisplay.js?v=20160817', ['depends' => 'wap\assets\WapAsset']);
+use wap\assets\WapAsset;
+
+$this->registerCssFile(ASSETS_BASE_URI.'css/first.css', ['depends' => WapAsset::class]);
+$this->registerCssFile(ASSETS_BASE_URI.'css/invite/activedisplay.css?v=20160810', ['depends' => WapAsset::class]);
+$this->registerJsFile(ASSETS_BASE_URI.'js/fastclick.js', ['depends' => WapAsset::class]);
+$this->registerJsFile(ASSETS_BASE_URI.'js/invite/activedisplay.js?v=20160817', ['depends' => WapAsset::class]);
+
+if ($isLuodiye) {
+$hostInfo = \Yii::$app->request->hostInfo;
+$cdn = '/' === ASSETS_BASE_URI ? $hostInfo.'/' : ASSETS_BASE_URI;
+$_js = <<<JS
+   var wechatTitle = '送你一个红包，快打开看看！';
+   var wechatDesc = '温州报业传媒旗下理财平台，国资背景，稳健好收益。';
+   var wechatLink = '$hostInfo'+'/luodiye';
+   var imgUrl = '$cdn'+'images/wechat/0926.jpg';
+JS;
+
+$this->registerJs($_js, 1);
+$this->registerJsFile('https://res.wx.qq.com/open/js/jweixin-1.0.0.js');
+$this->registerJsFile($cdn.'js/wechat.js');
+}
 
 ?>
 <div class="row transform-box">
@@ -96,4 +113,3 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/invite/activedisplay.js?v=20160817', [
         </table>
     </div>
 </div>
-
