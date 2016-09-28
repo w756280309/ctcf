@@ -175,14 +175,19 @@ class TradeController extends BaseController
     /**
      * 撤销指定id的挂牌记录
      *
-     * @param int $id
+     * @param int    $id
      *
      * @return array ['code' => '0 or 1', 'message' =>'']
      */
     public function actionCancel($id)
     {
-        if (empty($id)) {
+        if (empty($id) || null === ($note = Yii::$container->get('txClient')->get('credit-note/detail', ['id' => $id]))) {
             return ['code' => 1, 'message' => '没有找到该转让信息'];
+        }
+
+        $userId = $this->getAuthedUser()->getId();
+        if ((int) $userId !== $note['user_id']) {
+            return ['code' => 1, 'message' => '非本人不能撤销该转让信息'];
         }
 
         try {

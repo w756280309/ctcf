@@ -11,7 +11,7 @@ use yii\web\JqueryAsset;
 $this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/usercenter.css', ['depends' => FrontAsset::class]);
 $this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/transfering.css?v=160926', ['depends' => FrontAsset::class]);
 $this->registerCssFile(ASSETS_BASE_URI.'css/pagination.css');
-$this->registerJsFile(ASSETS_BASE_URI.'js/useraccount/transfering.js?v=160926', ['depends' => JqueryAsset::class]);
+$this->registerJsFile(ASSETS_BASE_URI.'js/useraccount/transfering.js?v=160927', ['depends' => JqueryAsset::class]);
 ?>
 
 <div class="wdjf-body">
@@ -209,7 +209,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/useraccount/transfering.js?v=160926', 
 <div class="confirmBox">
     <div class="confirmBox-title">提示</div>
     <div class="confirmBox-top">
-        <p>确认撤销当前转让中的项目？已转让的债权不能撤回，发起后立即生效。</p>
+        <p>确认撤销当前转让中的项目？已转让的不能撤回，发起后立即生效。</p>
     </div>
     <div class="confirmBox-bottom">
         <div class="confirmBox-left">关闭</div>
