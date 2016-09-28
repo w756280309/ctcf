@@ -7,9 +7,6 @@ use common\utils\StringUtils;
     <?php
         $loan = $note['loan'];
         $order = $note['order'];
-        if (null === $loan || null === $order) {
-            continue;
-        }
         $endTime = new \DateTime($note['endTime']);
         $nowTime = new \DateTime();
         $tradedAmount = $note['tradedAmount'];
@@ -21,7 +18,7 @@ use common\utils\StringUtils;
         <div class="col-xs-12 col-sm-12 col-txt">
             <div class="row clearfix credit-num">
                 <div class="col-xs-10 col-sm-10 col-title">
-                    <span class="item-tit"><i class="credit-lf">【转让】</i><?= $loan->title ?></span>
+                    <span class="item-tit"><i class="credit-lf">【转让】</i><?= null === $loan ? '' : $loan->title ?></span>
                 </div>
                 <div class="col-xs-2 col-sm-2 col-title">
                     <?php
@@ -41,7 +38,7 @@ use common\utils\StringUtils;
                 <div class="col-xs-4">
                     <span class="rate-steps">
                         <?=
-                            StringUtils::amountFormat2(bcmul($order->yield_rate, 100, 2));
+                            null === $order ? '' : StringUtils::amountFormat2(bcmul($order->yield_rate, 100, 2));
                         ?>
                         <i class="col-lu">%</i></span>
                     <p>预期年化率</p>
@@ -49,12 +46,16 @@ use common\utils\StringUtils;
                 <div class="col-xs-4">
                     <span class="rate-steps">
                         <?php
-                            $remainingDuration = $loan->getRemainingDuration();
-                            if (isset($remainingDuration['months'])) {
-                                echo $remainingDuration['months'] . '<i class="col-lu">个月</i>';
-                            }
-                            if (isset($remainingDuration['days'])) {
-                                echo $remainingDuration['days'] . '<i class="col-lu">天</i>';
+                            if (null !== $loan) {
+                                $remainingDuration = $loan->getRemainingDuration();
+                                if (isset($remainingDuration['months'])) {
+                                    echo $remainingDuration['months'] . '<i class="col-lu">个月</i>';
+                                }
+                                if (isset($remainingDuration['days'])) {
+                                    echo $remainingDuration['days'] . '<i class="col-lu">天</i>';
+                                }
+                            } else {
+                                echo '0<span>天</span>';
                             }
                         ?>
                     </span>
@@ -74,7 +75,7 @@ use common\utils\StringUtils;
             <div class="row credit-repay">
                 <div class="col-xs-12">
                     <i></i>
-                    <span>还款方式：<?= Yii::$app->params['refund_method'][$loan->refund_method] ?></span>
+                    <span>还款方式：<?= null === $loan ? '' :  Yii::$app->params['refund_method'][$loan->refund_method] ?></span>
                 </div>
             </div>
         </div>

@@ -24,9 +24,6 @@ $action = Yii::$app->controller->action->getUniqueId();
         <?php
             $loan = $note['loan'];
             $order = $note['order'];
-            if (null === $loan || null === $order) {
-                continue;
-            }
             $endTime = new \DateTime($note['endTime']);
             $nowTime = new \DateTime();
             $tradedAmount = $note['tradedAmount'];
@@ -38,8 +35,8 @@ $action = Yii::$app->controller->action->getUniqueId();
         <a class="credit-single credit-single-border" href="/credit/note/detail?id=<?= $note['id'] ?>" target="_blank"> <!--类btn_ing_border为转让中的红边框-->
             <div class="single_left">
                 <div class="single_title">
-                    <p class="p_left"><span>【转让】</span><?= $loan->title ?></p>
-                    <p class="p_right"><?= Yii::$app->params['refund_method'][$loan->refund_method] ?></p>
+                    <p class="p_left"><span>【转让】</span><?= null === $loan ? '' : $loan->title ?></p>
+                    <p class="p_right"><?= null === $loan ? '' :  Yii::$app->params['refund_method'][$loan->refund_method] ?></p>
                     <div class="clear"></div>
                 </div>
                 <div class="center-border"></div>
@@ -47,9 +44,7 @@ $action = Yii::$app->controller->action->getUniqueId();
                     <ul class="single_ul_left">
                         <li class="li_1">
                             <i class="float-left">
-                                <?=
-                                StringUtils::amountFormat2(bcmul($order->yield_rate, 100, 2));
-                                ?>
+                                <?= null === $order ? '' : StringUtils::amountFormat2(bcmul($order->yield_rate, 100, 2)) ?>
                             </i>
                             <span>%</span>
                         </li>
@@ -58,14 +53,18 @@ $action = Yii::$app->controller->action->getUniqueId();
                     <ul class="single_ul_right">
                         <li class="li_1">
                             <?php
+                                if (null !== $loan) {
+                                    $remainingDuration = $loan->getRemainingDuration();
+                                    if (isset($remainingDuration['months'])) {
+                                        echo $remainingDuration['months'] . '<span>个月</span>';
+                                    }
+                                    if (isset($remainingDuration['days'])) {
+                                        echo $remainingDuration['days'] . '<span>天</span>';
+                                    }
+                                } else {
+                                    echo '0<span>天</span>';
+                                }
 
-                                $remainingDuration = $loan->getRemainingDuration();
-                                if (isset($remainingDuration['months'])) {
-                                    echo $remainingDuration['months'] . '<span>个月</span>';
-                                }
-                                if (isset($remainingDuration['days'])) {
-                                    echo $remainingDuration['days'] . '<span>天</span>';
-                                }
                             ?>
                         </li>
                         <li class="li_2">剩余期限</li>
