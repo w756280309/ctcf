@@ -2,7 +2,7 @@
 use common\view\LoanHelper;
 
 $this->title = '确认订单';
-$this->registerCssFile(ASSETS_BASE_URI . 'css/deal/buy.css');
+$this->registerCssFile(ASSETS_BASE_URI . 'css/deal/buy.css?v=20160928');
 ?>
 <!-- invest BUY start-->
 <div class="invest-box clearfix">
@@ -20,15 +20,12 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/deal/buy.css');
                     <div class="invest-ct-lf-title">
                         <p class="lf percentage">
                             预期年化收益率
-                            <span class="nums">
-
-                                <span class="nums"> <?= LoanHelper::getDealRate($deal) ?><i>%</i></span>
+                            <span class="nums"> <?= LoanHelper::getDealRate($deal) ?><i>%</i>
                                 <?php if (!empty($deal->jiaxi) && !$deal->isFlexRate) { ?>
-                                <span class="other-nums">
+                                    <span class="other-nums">
                                     +<?= doubleval($deal->jiaxi) ?>%
-                                </span>
+                                    </span>
                                 <?php } ?>
-
                             </span>
                         </p>
                         <p class="rg time">项目期限<span class="nums"><?php $ex = $deal->getDuration() ?><?= $ex['value'] ?><?= $ex['unit']?></span></p>

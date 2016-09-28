@@ -89,14 +89,15 @@
 }
 .invest-box .percentage span.nums,.invest-box .time span.nums  {
     padding-left: 18px;
-    /*width:40px;*/
-    /*line-height:18px;*/
     font-size:18px;
     color:#f44336;
     display: inline-block;
-    /*background: #ff9800;*/
+    position: relative;
 }
 .other-nums {
+    position: absolute;
+    top: -13px;
+    right: -40px;
     padding-left: 6px;
     font-size:14px;
     color:#f44336;
