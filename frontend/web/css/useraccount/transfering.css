@@ -271,16 +271,15 @@
     right: 0px;
 }
 
-.myCoupon-box .link-tender:hover{
+.myCoupon-box .link-tender:hover {
     background-color: #DB1809;
 }
 
 /*待成立的项目*/
-.myCoupon-box .text-third{
+.myCoupon-box .text-third {
     padding-right: 20px;
     text-align: right;
 }
-
 
 .myCoupon-box .display_number .p_left_mg {
     margin-left: 28px;

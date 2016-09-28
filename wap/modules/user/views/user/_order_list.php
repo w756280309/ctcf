@@ -5,11 +5,7 @@ use common\utils\StringUtils;
 ?>
 
 <?php foreach ($model as $val) { ?>
-        <?php if (2 === $type) { ?>
-            <a class="loan-box block" href="/user/user/orderdetail?id=<?= $val['id'] ?>">
-        <?php } else { ?>
-            <a class="loan-box block" href="">
-        <?php } ?>
+        <a class="loan-box block" href="/user/user/orderdetail<?= 2 === $type ? '?id='.$val['id'] : '?asset_id='.$val['id'] ?>">
         <div class="loan-title">
             <?php if (2 === $type) { ?>
                 <div class="title-overflow"><?= $val['loan']['title'] ?></div>

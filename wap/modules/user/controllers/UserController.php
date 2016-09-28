@@ -121,14 +121,28 @@ class UserController extends BaseController
 
     /**
      * 投资详情页
-     * @param type $id
-     * @return type
+     *
      * @throws \yii\web\NotFoundHttpException
      */
-    public function actionOrderdetail($id, $asset_id = null)
+    public function actionOrderdetail($id = null, $asset_id = null, $from_transfer = false)
     {
-        if (empty($id)) {
+        if (empty($id) && empty($asset_id)) {
             throw $this->ex404();
+        }
+
+        $fromTransfer = boolval($from_transfer);
+        $asset = null;
+
+        if (!empty($asset_id)) {
+            $asset = Yii::$container->get('txClient')->get('assets/detail', [
+                'id' => $asset_id,
+            ]);
+
+            if (null === $asset) {
+                throw $this->ex404();
+            }
+
+            $id = $asset['order_id'];
         }
 
         $deal = OnlineOrder::findOne($id);
@@ -172,7 +186,8 @@ class UserController extends BaseController
             'profit' => $profit,
             'hkDate' => $hkDate,
             'totalFund' => $totalFund,
-            'assetId' => $asset_id,
+            'asset' => $asset,
+            'fromTransfer' => $fromTransfer,
         ]);
     }
 }

@@ -3,11 +3,9 @@ $this->title = '投资详情';
 
 use common\models\product\RateSteps;
 use common\models\order\OnlineRepaymentPlan;
-use yii\helpers\Html;
+use common\utils\StringUtils;
 
-$assetId = Html::encode($assetId);
-
-$this->registerJsFile(ASSETS_BASE_URI .'js/fastclick.js', ['position' => 1, ]);
+$this->registerJsFile(ASSETS_BASE_URI .'js/fastclick.js', ['position' => 1]);
 $this->registerJsFile(ASSETS_BASE_URI .'js/touzixiangqing.js?v=20160926', ['depends' => 'yii\web\JqueryAsset', 'position' => 1]);
 $this->registerCssFile(ASSETS_BASE_URI .'css/touzixiangqing.css?v=20160718', ['depends' => 'wap\assets\WapAsset']);
 ?>
@@ -20,8 +18,8 @@ $this->registerCssFile(ASSETS_BASE_URI .'css/touzixiangqing.css?v=20160718', ['d
                 <div class="invest-title">
                     <div class="invest-left"><?= $product->title ?></div>
                     <div class="invest-right">
-                        <?php if (!empty($assetId)) { ?>
-                            <a href='/credit/note/new?asset_id=<?= $assetId ?>' class="credit-right-title credit-red">转让</a>
+                        <?php if ($fromTransfer && $asset) { ?>
+                            <a href='/credit/note/new?asset_id=<?= $asset['id'] ?>' class="credit-right-title credit-red">转让</a>
                         <?php } else { ?>
                             <?php if (5 === $product->status) { ?>
                             <!--还款中-已还清-募集中-文字颜色-->
@@ -63,13 +61,13 @@ $this->registerCssFile(ASSETS_BASE_URI .'css/touzixiangqing.css?v=20160718', ['d
                     if (false !== $rate) {
                 ?>
                 <li>
-                    <div class="rate-steps-notes">因为该项目的累计投资金额已达<?= rtrim(rtrim(number_format($totalFund, 2), '0'), '.') ?>元，本订单享受年化率<?= rtrim(rtrim(number_format($rate, 2), '0'), '.') ?>%</div>
+                    <div class="rate-steps-notes">因为该项目的累计投资金额已达<?= StringUtils::amountFormat2($totalFund) ?>元，本订单享受年化率<?= StringUtils::amountFormat2($rate) ?>%</div>
                 </li>
                 <?php } } ?>
                 <?php if (in_array($product->status, [2, 3, 7])) { ?>
                 <li>
                     <div class="information-content-left">本金</div>
-                    <div class="information-content-right"><?= rtrim(rtrim(number_format($deal->order_money, 2), '0'), '.') ?>元</div>
+                    <div class="information-content-right"><?= StringUtils::amountFormat2($deal->order_money) ?>元</div>
                 </li>
                 <li>
                     <div class="information-content-left">募集进度</div>
@@ -82,11 +80,11 @@ $this->registerCssFile(ASSETS_BASE_URI .'css/touzixiangqing.css?v=20160718', ['d
                 <?php } elseif (5 === $product->status) { ?>
                 <li>
                     <div class="information-content-left">本金</div>
-                    <div class="information-content-right"><?= rtrim(rtrim(number_format($deal->order_money, 2), '0'), '.') ?>元</div>
+                    <div class="information-content-right"><?= StringUtils::amountFormat2(bcdiv($asset['amount'], 100 , 2)) ?>元</div>
                 </li>
                 <li>
                     <div class="information-content-left">预期收益</div>
-                    <div class="information-content-right"><?= rtrim(rtrim(number_format($profit, 2), '0'), '.') ?>元</div>
+                    <div class="information-content-right"><?= StringUtils::amountFormat2($profit) ?>元</div>
                 </li>
                 <li>
                     <div class="information-content-left">还款方式</div>
@@ -101,11 +99,11 @@ $this->registerCssFile(ASSETS_BASE_URI .'css/touzixiangqing.css?v=20160718', ['d
                 <?php } else { ?>
                 <li>
                     <div class="information-content-left">本金</div>
-                    <div class="information-content-right"><?= rtrim(rtrim(number_format($deal->order_money, 2), '0'), '.') ?>元</div>
+                    <div class="information-content-right"><?= StringUtils::amountFormat2($asset ? bcdiv($asset['amount'], 100 , 2) : $deal->order_money) ?>元</div>
                 </li>
                 <li>
                     <div class="information-content-left">预期收益</div>
-                    <div class="information-content-right"><?= rtrim(rtrim(number_format($profit, 2), '0'), '.') ?>元</div>
+                    <div class="information-content-right"><?= StringUtils::amountFormat2($profit) ?>元</div>
                 </li>
                 <li>
                     <div class="information-content-left">还款方式</div>
@@ -141,7 +139,7 @@ $this->registerCssFile(ASSETS_BASE_URI .'css/touzixiangqing.css?v=20160718', ['d
                     <div>第<?= $val['qishu'] ?>期</div>
                     <div><?= date('Y.m.d', $val['refund_time']) ?></div>
                     <div>本金</div>
-                    <div><?= rtrim(rtrim(number_format($val['benjin'], 2), '0'), '.') ?>元</div>
+                    <div><?= StringUtils::amountFormat2($val['benjin']) ?>元</div>
                     <!--还款计划-文字颜色-->
                     <p class="<?= $hasRepaid ? 'repayment-green' : 'repayment-red' ?>"><?= $hasRepaid ? '已还' : '未还' ?></p>
                 </li>
@@ -150,7 +148,7 @@ $this->registerCssFile(ASSETS_BASE_URI .'css/touzixiangqing.css?v=20160718', ['d
                     <div>第<?= $val['qishu'] ?>期</div>
                     <div><?= date('Y.m.d', $val['refund_time']) ?></div>
                     <div>利息</div>
-                    <div><?= rtrim(rtrim(number_format($val['lixi'], 2), '0'), '.') ?>元</div>
+                    <div><?= StringUtils::amountFormat2($val['lixi']) ?>元</div>
                     <!--还款计划-文字颜色-->
                     <p class="<?= $hasRepaid ? 'repayment-green' : 'repayment-red' ?>"><?= $hasRepaid ? '已还' : '未还' ?></p>
                 </li>
@@ -164,7 +162,7 @@ $this->registerCssFile(ASSETS_BASE_URI .'css/touzixiangqing.css?v=20160718', ['d
     <!--认购合同-->
     <div class="row" id="subscription-box">
         <div class="col-xs-12">
-            <a href="/order/order/agreement?id=<?= $product->id ?>&deal_id=<?= $deal->id ?>" class="subscription-title">
+            <a href="<?= $asset && $asset['note_id'] ? '' : '/order/order/agreement?id='.$product->id.'&deal_id='.$deal->id ?>" class="subscription-title">
                 <div class="subscription-left">认购合同</div>
                 <div class="subscription-right"><img src="<?= ASSETS_BASE_URI ?>images/arrowShang.png" alt=""></div>
             </a>
