@@ -12,7 +12,7 @@
 }
 .credit-box .credit-container .credit-container-box {
     background: #fff;
-    border-top:3px solid #f44336;
+    border-top: 5px solid #f44336;
 }
 .credit-box .credit-container .credit-container-box .credit-top {
     padding: 21px 0;
@@ -62,39 +62,56 @@
     float: left;
 }
 .credit-box .credit-container-box .credit-centent .credit-ct-lf .credit-ct-lf-title {
-    margin:40px 0 0 30px;
+    margin: 40px 0 0 30px;
+    color: #464648;
+}
+.credit-box .credit-container-box .credit-centent .credit-ct-lf .credit-ct-lf-title p {
     padding-bottom: 30px;
-    width:474px;
-    height:20px;
-    line-height:20px;
-    color:#464648;
-    border-bottom:1px solid #e6e6e6;
+    height: 20px;
+    line-height: 20px;
+    border-bottom: 1px solid #e6e6e6;
 }
 .credit-box .credit-container-box .credit-centent .credit-ct-lf .credit-ct-lf-content {
+    clear: both;
     background: url(../../images/deal/buy_bg.png) no-repeat left bottom;
     background-size: 290px 190px;
 }
 .credit-box .credit-container-box .credit-centent .credit-ct-lf .credit-ct-lf-content .txt-box {
     min-height:190px;
 }
-
 .credit-box .credit-centent .credit-ct-lf .credit-ct-lf-title .percentage{
     padding-left: 2px;
-    width:180px;
-    font-size:14px;
+    font-size: 14px;
 }
 .credit-box .credit-centent .credit-ct-lf .credit-ct-lf-title .time {
-    /*padding-right: 21px;*/
-    font-size:14px;
+    padding-right: 18px;
+    width: 190px;
+    font-size: 14px;
+    text-align: center;
 }
 .credit-box .credit-centent .credit-ct-lf .credit-ct-lf-title .discount {
-    width:120px;
-    padding-left: 10px;
+    width: 114px;
 }
-.credit-box .percentage span.nums,.credit-box .time span.nums,.credit-box .discount span.nums {
+.credit-box .time span.nums {
     padding-left: 18px;
-    font-size:18px;
-    color:#f44336;
+    font-size: 18px;
+    color: #f44336;
+    display: inline-block;
+}
+.credit-box .percentage span.nums {
+    float: right;
+    padding-left: 18px;
+    padding-right: 18px;
+    font-size: 18px;
+    color: #f44336;
+    display: inline-block;
+    text-align: right;
+}
+.credit-box .discount span.nums {
+    padding-left: 18px;
+    padding-right: 0;
+    font-size: 18px;
+    color: #f44336;
     display: inline-block;
 }
 .other-nums {
@@ -102,7 +119,6 @@
     font-size:14px;
     color:#f44336;
 }
-
 .credit-box .credit-container-box .credit-centent .credit-ct-rg {
     margin-right: 50px;
     padding-top: 32px;
@@ -125,7 +141,6 @@
 }
 .credit-box .credit-ct-rg i.rg-i {
     float: right;
-    /*width:150px;*/
     height:14px;
     line-height:14px;
     color: #f44336;
@@ -178,10 +193,7 @@
 .credit-box .credit-ct-rg .real-credit a.buy:hover {
     background: #d43125;
 }
-
-
 /*  购买成功页面  */
-
 .credit-box .credit-container .credit-success {
     height:342px;
 }
@@ -260,4 +272,3 @@
     color:#99999c;
     text-align: center;
 }
-

@@ -16,7 +16,7 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/credit/creditpay.css');
             <div class="credit-centent">
                 <div class="lf credit-ct-lf">
                     <div class="credit-ct-lf-title">
-                        <p class="lf percentage">年化收益率<span class="nums"><?= number_format($order->yield_rate * 100, 1) ?>%</span></p>
+                        <p class="lf percentage">预期年化收益率<span class="nums"><?= number_format($order->yield_rate * 100, 1) ?>%</span></p>
                         <p class="lf time">剩余期限<span class="nums">
                                 <?php
                                 $remainingDuration = $loan->getRemainingDuration();
@@ -28,14 +28,14 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/credit/creditpay.css');
                                 }
                                 ?>
                             </span></p>
-                        <p class="rg discount">折让率<span class="nums"><?= number_format($note['discountRate'], 2)?>%</span></p>
+                        <p class="lf discount">折让率<span class="nums"><?= number_format($note['discountRate'], 2)?>%</span></p>
                     </div>
                     <div class="credit-ct-lf-content">
                         <div class="txt-box"></div>
                     </div>
                 </div>
                 <div class="rg credit-ct-rg">
-                    <p class="sum"><span class="lf-span">认购金额:</span><i class="rg-i text-align-rg"><?= number_format($amount, 2)?></i></p>
+                    <p class="sum"><span class="lf-span">投资金额:</span><i class="rg-i text-align-rg"><?= number_format($amount, 2)?></i></p>
                     <p class="reduce"><span class="lf-span">应付利息:</span><i class="rg-i text-align-rg"><?= number_format($interest, 2)?></i></p>
                     <p class="sum"><span class="lf-span">预期收益:</span><i class="rg-i text-align-rg"><?= number_format($profit, 2)?></i></p>
                     <div class="real-credit rg">
