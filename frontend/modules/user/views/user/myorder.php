@@ -64,10 +64,10 @@ use common\models\order\OnlineRepaymentPlan;
                             <?= (empty($val['note_id']) ? '' : '【转让】').$val['loan']['title'] ?>
                         </a>
                     </td>
-                    <td class="text-align-lf"><?= $val['order']->getLastPaymentDate() ?></td>
+                    <td class="text-align-lf"><?= $val['order'] ? $val['order']->getLastPaymentDate() : '' ?></td>
                     <td class="text-align-ct"><?= rtrim(rtrim(number_format($val['order']->yield_rate * 100, 2), '0'), '.') ?>%</td>
                     <td class="text-align-rg"><?= StringUtils::amountFormat3(bcdiv($val['amount'], 100, 2)) ?></td>
-                    <td class="text-align-rg"><?= StringUtils::amountFormat3($val['order']->getProceeds()) ?></td>
+                    <td class="text-align-rg"><?= StringUtils::amountFormat3($val['order'] ? $val['order']->getProceeds() : 0) ?></td>
                     <td class="text-align-ct">
                         <span class="tip-cursor">
                             <span class="tip-font"><?= $plan[$key]['yihuan'] ?>/<?= count($plan[$key]['obj']) ?></span>

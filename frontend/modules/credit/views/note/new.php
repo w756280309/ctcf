@@ -6,8 +6,8 @@ $this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/usercenter.css', ['depen
 $this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/transfer.css', ['depends' => 'frontend\assets\FrontAsset']);
 $this->registerJsFile(ASSETS_BASE_URI.'js/useraccount/transfer.js', ['depends' => \yii\web\JqueryAsset::class]);
 $action = Yii::$app->controller->action->getUniqueId();
-$minOrderAmount = number_format(Yii::$app->params['credit_trade']['min_order_amount']);
-$incrOrderAmount = number_format(Yii::$app->params['credit_trade']['incr_order_amount']);
+$minOrderAmount = Yii::$app->params['credit_trade']['min_order_amount'];
+$incrOrderAmount = Yii::$app->params['credit_trade']['incr_order_amount'];
 $discountRate = Yii::$app->params['credit_trade']['max_discount_rate'];
 $fee = Yii::$app->params['credit_trade']['fee_rate'] * 1000;
 ?>
@@ -82,7 +82,7 @@ $fee = Yii::$app->params['credit_trade']['fee_rate'] * 1000;
                         <li class="left transferMoney_title">转让金额：</li>
                         <li class="left transferMoney_space"></li>
                         <li class="left transferMoney_money transfer_common">
-                            <input type="text" name="" id="credit_amount" placeholder="起投<?= $minOrderAmount ?>元，递增<?= $incrOrderAmount ?>元" autocomplete="off" t_value="" onkeyup=" if(this.value){if (!this.value.match(/^[\+\-]?\d+?\.?\d*?$/)) {this.value = this.t_value;}else{this.t_value = this.value;}}">
+                            <input type="text" name="" id="credit_amount" placeholder="起投<?= number_format($minOrderAmount) ?>元，递增<?= number_format($incrOrderAmount) ?>元" autocomplete="off" t_value="" onkeyup="if (this.value) {if (!this.value.match(/^[\+\-]?\d+?\.?\d*?$/)) {if (this.t_value) {this.value = this.t_value;} else {this.value = '';}} else {this.t_value = this.value;}}">
                             <span>元</span>
                         </li>
                         <li class="transferMoney_error common_color" id="amount_error">/li>
@@ -93,7 +93,7 @@ $fee = Yii::$app->params['credit_trade']['fee_rate'] * 1000;
                         <li class="left discountRate_title">折让率：</li>
                         <li class="left discountRate_space"></li>
                         <li class="left discountRate_rate transfer_common">
-                            <input type="text" name="discount_rate" id="discount_rate_input" value=""  placeholder="不高于<?= $discountRate ?>%，可设置2位小数" autocomplete="off" maxlength="4" t_value="" onkeyup=" if (this.value) {if (!this.value.match(/^[\+\-]?\d+?\.?\d*?$/)) {this.value = this.t_value;}else{this.t_value = this.value;}}" >
+                            <input type="text" name="discount_rate" id="discount_rate_input" value=""  placeholder="不高于<?= $discountRate ?>%，可设置2位小数" autocomplete="off" maxlength="4" t_value="" onkeyup=" if (this.value) {if (!this.value.match(/^[\+\-]?\d+?\.?\d*?$/)) {if (this.t_value) {this.value = this.t_value;} else {this.value = '';}} else {this.t_value = this.value;}}" >
                             <span>%</span>
                         </li>
                         <li class="discountRate_tip_icon"></li>
@@ -183,6 +183,8 @@ $fee = Yii::$app->params['credit_trade']['fee_rate'] * 1000;
     var amount_error = $('#amount_error');
     var discount_rate_error = $('#discount_rate_error');
     var config_rate = <?= floatval($discountRate) ?>;
+    var minAmount = <?= floatval($minOrderAmount)?>;
+    var incAmount = <?= floatval($incrOrderAmount)?>
 
     amount_input.change(function () {
         validateData();
@@ -197,11 +199,7 @@ $fee = Yii::$app->params['credit_trade']['fee_rate'] * 1000;
         if (!rate) {
             rate = 0;
         }
-        var amount = parseFloat(amount_input.val());
-        if (!amount) {
-            amount = 0;
-        }
-        if (amount > 0 && rate >= 0 && rate <= config_rate) {
+        if (validateData()){
             discount_rate_error.hide();
             $('.mask').show();
             $('.confirmBox').show();
@@ -210,8 +208,6 @@ $fee = Yii::$app->params['credit_trade']['fee_rate'] * 1000;
             } else {
                 $('.confirmBox-top').find('p').text('折让率为' + rate + '%，您确定要发布转让吗？');
             }
-        } else {
-            validateData();
         }
     });
 
@@ -270,14 +266,6 @@ $fee = Yii::$app->params['credit_trade']['fee_rate'] * 1000;
         if (!rate) {
             rate = 0;
         }
-        var amount = parseFloat(amount_input.val());
-        if (!amount) {
-            amount = 0;
-        }
-        if (amount <= 0) {
-            amount_error.html('转让金额必须大于0元');
-            amount_error.show();
-        }
         if (rate < 0) {
             discount_rate_error.html('折让率不能小于0');
             discount_rate_error.show();
@@ -288,12 +276,54 @@ $fee = Yii::$app->params['credit_trade']['fee_rate'] * 1000;
             discount_rate_error.show();
             return false;
         }
-        if (amount > 0) {
-            discount_rate_error.hide();
-            amount_error.hide();
-            $('#expect_money').html(parseInt(amount / total_amount * current_interest * 100) / 100);
-            $('#fee').html(parseInt(amount * 0.003 * 100) / 100);
-            $('#expect_amount').html(parseInt(amount * (1 - rate / 100) * 100) / 100);
+        var amount = parseFloat(amount_input.val());
+        if (!amount) {
+            amount = 0;
         }
+        if (amount <= 0) {
+            amount_error.html('转让金额必须大于0元');
+            amount_error.show();
+            return false;
+        }
+        if (amount < minAmount) {
+            amount_error.html('转让金额必须大于起投金额');
+            amount_error.show();
+            return false;
+        }
+        if (amount > total_amount) {
+            amount_error.html('转让金额不能超过最大可转让金额');
+            amount_error.show();
+            return false;
+        }
+        if (total_amount >= minAmount) {
+            var lastAmount = total_amount - minAmount;
+            if (lastAmount >= minAmount) {
+                if ((amount - minAmount) % incAmount != 0) {
+                    amount_error.html('金额必须是递增金额整数倍');
+                    amount_error.show();
+                    return false;
+                }
+            } else {
+                if (amount != total_amount) {
+                    amount_error.html('必须将剩余金额全部投完');
+                    amount_error.show();
+                    return false;
+                }
+            }
+        } else {
+            if (amount != total_amount) {
+                amount_error.html('必须将金额全部投完');
+                amount_error.show();
+                return false;
+            }
+        }
+
+        amount_error.hide();
+        discount_rate_error.hide();
+        amount_error.hide();
+        $('#expect_money').html(parseInt(amount / total_amount * current_interest * 100) / 100);
+        $('#fee').html(parseInt(amount * 0.003 * 100) / 100);
+        $('#expect_amount').html(parseInt(amount * (1 - rate / 100) * 100) / 100);
+        return true;
     }
 </script>
