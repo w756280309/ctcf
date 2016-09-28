@@ -163,7 +163,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/useraccount/transfering.js?v=160927', 
                             <tr>
                                 <th class="text-first" width="226">项目名称</th>
                                 <th class="text-align-ct" width="80">完成日期</th>
-                                <th class="text-third" width="90">已转让金额(元)</th>
+                                <th class="text-third" width="100">已转让金额(元)</th>
                                 <th class="text-align-ct" width="90">折让率(%)</th>
                                 <th class="text-third" width="80">手续费(元)</th>
                                 <th class="text-third" width="90">实际收入(元)</th>

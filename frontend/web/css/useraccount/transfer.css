@@ -71,6 +71,7 @@
     position: relative;
     padding:35px 0;
     text-align: left;
+    margin-left: -30px;
 }
 .contentCenter_ul ul{
     float: left;
@@ -81,16 +82,6 @@
     font-size: 30px;
     color: #000;
 }
-.contentCenter_ul_li_income{
-    padding-left:14px;
-}
-.contentCenter_ul_li_day{
-    padding-left:6px;
-}
-.contentCenter_ul_li_allMoney{
-    margin-left: -20px;
-}
-
 .contentCenter_ul_li span{
     font-size: 16px;
 }
@@ -103,13 +94,13 @@
     height: 13px;
     position: relative;
     top: -18px;
-    right: -115px;
+    right: -155px;
 }
 .contentCenter_tip {
     position: absolute;
     width: 325px;
     top: 130px;
-    left: 416px;
+    left: 440px;
     display: none;
 }
 .ui-poptip-shadow {
@@ -134,7 +125,7 @@
 }
 #ui-poptip-arrow_add_one img {
     position: absolute;
-    right: -231px;
+    right: -275px;
     top: -8px;
 }
 #ui-poptip-arrow_add_two img {

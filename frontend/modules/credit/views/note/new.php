@@ -24,12 +24,12 @@ $fee = Yii::$app->params['credit_trade']['fee_rate'] * 1000;
             <div class="contentCenter">
                 <p><?= Html::encode($loan->title)?></p>
                 <div class="contentCenter_ul clearfix_all">
-                    <ul>
-                        <li class="contentCenter_ul_li contentCenter_ul_li_income"><?= floatval($apr) * 100 ?><span>%</span></li>
+                    <ul class="text_center">
+                        <li class="contentCenter_ul_li"><?= floatval($apr) * 100 ?><span>%</span></li>
                         <li>预期年化收益率</li>
                     </ul>
-                    <ul>
-                        <li class="contentCenter_ul_li contentCenter_ul_li_day">
+                    <ul class="text_center">
+                        <li class="contentCenter_ul_li">
                             <?php
                             $remainingDuration = $loan->getRemainingDuration();
                             if (isset($remainingDuration['months'])) {
@@ -42,12 +42,12 @@ $fee = Yii::$app->params['credit_trade']['fee_rate'] * 1000;
                             </li>
                         <li>剩余期限</li>
                     </ul>
-                    <ul>
-                        <li class="contentCenter_ul_li contentCenter_ul_li_allMoney"><?= number_format($asset['remainingInterest'] / 100, 2)?><span>元</span></li>
+                    <ul class="text_center">
+                        <li class="contentCenter_ul_li"><?= number_format($asset['remainingInterest'] / 100, 2)?><span>元</span></li>
                         <li>预期总收益</li>
                     </ul>
-                    <ul>
-                        <li class="contentCenter_ul_li contentCenter_ul_li_interest"><?= number_format($asset['currentInterest'] / 100, 2)?><span>元</span></li>
+                    <ul class="text_center">
+                        <li class="contentCenter_ul_li"><?= number_format($asset['currentInterest'] / 100, 2)?><span>元</span></li>
                         <li>当期持有期利息<a id="current_interest"></a></li>
                         <li>
                             <div class="contentCenter_tip" style="display: none;">
