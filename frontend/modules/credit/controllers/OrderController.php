@@ -64,7 +64,7 @@ class OrderController extends BaseController
     public function actionNew()
     {
         $request = \Yii::$app->request;
-        $userId = $request->post('user_id');
+        $userId = \Yii::$app->user->identity->getId();
         $noteId = $request->post('note_id');
         $principal = $request->post('principal');//实际购买本金
         $user = User::findOne($userId);

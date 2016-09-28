@@ -63,9 +63,8 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/credit/creditpay.css');
                 _this.addClass('twoFire');
                 var jqXhr = $.post('/credit/order/new', {
                     "_csrf":"<?= Yii::$app->request->csrfToken ?>",
-                    "user_id":<?= Yii::$app->user->identity->getId() ?>,
                     "note_id":<?= $note['id'] ?>,
-                    "principal":<?= $amount ?>,
+                    "principal":<?= $amount ?>
                 }, function (data) {
                     setTimeout(function () {
                         _this.removeClass('twoFire');

@@ -31,5 +31,5 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/deal/buy.css');
     setTimeout(function () {
         clearInterval(int);
         location.replace("/user/user/myorder");
-    }, 5000);//5秒之后自动跳入我的订单
+    }, 10000);//5秒之后自动跳入我的订单
 </script>
