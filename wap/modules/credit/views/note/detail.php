@@ -2,10 +2,11 @@
 $this->title = '转让详情';
 
 use common\utils\StringUtils;
+use yii\helpers\Html;
 
 $this->registerCssFile(ASSETS_BASE_URI.'css/credit/detail.css', ['depends' => 'wap\assets\WapAsset']);
 $this->registerJs('var remainTime = '.strtotime($respData['endTime']).';', 1);
-$this->registerJsFile(ASSETS_BASE_URI.'js/credit/detail.js', ['depends' => 'wap\assets\WapAsset']);
+$this->registerJsFile(ASSETS_BASE_URI.'js/credit/detail.js?v=160929', ['depends' => 'wap\assets\WapAsset']);
 ?>
 
 <div class="row daojishi">
@@ -86,6 +87,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/credit/detail.js', ['depends' => 'wap\
         <?php } ?>
     </div>
 </div>
+<div class="toRefer" note-id="<?= Html::encode($respData['id']) ?>"></div>
 <div class="row link-box">
     <a class="link-en" href="/deal/deal/detail?sn=<?= $loan->sn ?>">
         <div class="header-box">
@@ -112,7 +114,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/credit/detail.js', ['depends' => 'wap\
 <div id="x-purchase" class="row rengou" style="cursor: pointer">
     <div class="col-xs-12">
         <?php if (!$respData['isClosed']) { ?>
-            <a href="">立即认购</a>
+            <a href="javascript:void(0)" id="check-in">立即认购</a>
         <?php } else { ?>
             <a href="javascript:;" class="red-gray">转让完成</a>
         <?php } ?>

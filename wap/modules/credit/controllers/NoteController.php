@@ -6,6 +6,7 @@ use common\controllers\HelpersTrait;
 use common\models\product\OnlineProduct;
 use common\models\order\OnlineOrder;
 use common\models\user\User;
+use common\service\BankService;
 use Yii;
 use yii\data\Pagination;
 use yii\helpers\ArrayHelper;
@@ -111,5 +112,27 @@ class NoteController extends Controller
     public function actionRules()
     {
         return $this->render('rules');
+    }
+
+    /**
+     * 进入购买页面前添加开户，免密，快捷判断
+     */
+    public function actionCheck()
+    {
+        //检查是否登录
+        $user = $this->getAuthedUser();
+        if (null === $user) {
+            return ['tourl' => '/site/login', 'code' => 1, 'message' => '请登录'];
+        }
+
+        if ($user->status == 0) {
+            return ['tourl' => '/site/usererror', 'code' => 1, 'message' => '账户已被冻结'];
+        }
+
+        //检查是否开通资金托管与免密
+        $cond = 0 | BankService::IDCARDRZ_VALIDATE_N | BankService::MIANMI_VALIDATE | BankService::BINDBANK_VALIDATE_N;
+        $checkResult = BankService::check($user, $cond);
+
+        return $checkResult;
     }
 }

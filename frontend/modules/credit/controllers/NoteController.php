@@ -116,6 +116,10 @@ class NoteController extends BaseController
             return ['tourl' => '/site/login', 'code' => 1, 'message' => '请登录'];
         }
 
+        if ($user->status == 0) {
+            return ['tourl' => '/site/usererror', 'code' => 1, 'message' => '账户已被冻结'];
+        }
+
         //检查是否开通资金托管与免密
         $cond = 0 | BankService::IDCARDRZ_VALIDATE_N | BankService::MIANMI_VALIDATE;
         $checkResult = BankService::check($user, $cond);
