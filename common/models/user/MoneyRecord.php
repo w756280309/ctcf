@@ -10,7 +10,7 @@ use yii\behaviors\TimestampBehavior;
  *
  * @property string $id
  * @property string $sn
- * @property int $type
+ * @property int    $type
  * @property string $osn
  * @property string $account_id
  * @property string $uid
@@ -39,7 +39,9 @@ class MoneyRecord extends \yii\db\ActiveRecord
     const TYPE_DRAW_FEE = 103; //提现手续费
     const TYPE_DRAW_FEE_RETURN = 104; //提现退回手续费
     const TYPE_CASH_GIFT = 105;//现金红包
-    const TYPE_CREDIT_NOTE = 106;//购买债权
+    const TYPE_CREDIT_NOTE = 106;//购买转让
+    const TYPE_CREDIT_NOTE_FEE = 107;//债权手续费
+    const TYPE_CREDIT_REPAID = 108;//债权回款
 
     public static function createSN()
     {
@@ -114,7 +116,8 @@ class MoneyRecord extends \yii\db\ActiveRecord
             self::TYPE_RECHARGE_POS,
             self::TYPE_CASH_GIFT,
             self::TYPE_CREDIT_NOTE,
+            self::TYPE_CREDIT_NOTE_FEE,
+            self::TYPE_CREDIT_REPAID,
         ];
     }
-
 }

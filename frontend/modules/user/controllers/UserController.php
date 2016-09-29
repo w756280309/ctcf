@@ -63,6 +63,17 @@ class UserController extends BaseController
                 } else {
                     $desc[$key]['desc'] = $val->osn;
                 }
+            } elseif (in_array($val->type, [MoneyRecord::TYPE_CREDIT_NOTE, MoneyRecord::TYPE_CREDIT_NOTE_FEE, MoneyRecord::TYPE_CREDIT_REPAID])) {
+                $creditOrder = Yii::$container->get('txClient')->get('credit-order/detail', [
+                    'id' => $val->osn,
+                ]);
+
+                $creditNode = Yii::$container->get('txClient')->get('credit-note/detail', [
+                    'id' => $creditOrder['note_id'],
+                ]);
+
+                $desc[$key]['nodeId'] = $creditNode['id'];
+                $desc[$key]['loan'] = Loan::findOne($creditNode['loan_id']);
             } else {
                 $desc[$key]['desc'] = $val->osn;
             }

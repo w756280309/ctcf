@@ -141,7 +141,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/useraccount/transfering.js?v=160927', 
                                     <td class="text-align-ct"><?= substr($note['createTime'], 0, 10) ?></td>
                                     <td class="text-third"><?= StringUtils::amountFormat3(bcdiv($note['amount'], 100, 2)) ?></td>
                                     <td class="text-align-ct"><?= $note['discountRate'] ?></td>
-                                    <td class="text-third"><?= StringUtils::amountFormat3(bcdiv($asset['tradedAmount'], 100, 2)) ?></td>
+                                    <td class="text-third"><?= StringUtils::amountFormat3(bcdiv($note['tradedAmount'], 100, 2)) ?></td>
                                     <td class="text-align-ct"><a class="color-blue cancel-note" href="javascript:void(0)" note-id="<?= $note['id'] ?>">撤销</a></td>
                                 </tr>
                             <?php } ?>
@@ -179,7 +179,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/useraccount/transfering.js?v=160927', 
                                         <?php
                                             $config = json_decode($note['config'], true);
                                             $fee = bcmul($config['fee_rate'], $note['amount']);
-                                            StringUtils::amountFormat3(bcdiv($fee, 100, 2));
+                                            echo StringUtils::amountFormat3(bcdiv($fee, 100, 2));
                                         ?>
                                     </td>
                                     <td class="text-third"><?= StringUtils::amountFormat3(bcdiv(bcsub($note['tradedAmount'], $fee), 100, 2)); ?></td>

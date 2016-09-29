@@ -38,6 +38,10 @@ use common\widgets\Pager;
                             </a>
                         <?php } elseif ($val->type === MoneyRecord::TYPE_CASH_GIFT) { ?>
                             <p>邀请好友获得现金红包奖励<?= number_format($val->in_money, 2) ?>元</p>
+                        <?php } elseif (in_array ($val->type, [MoneyRecord::TYPE_CREDIT_NOTE, MoneyRecord::TYPE_CREDIT_NOTE_FEE, MoneyRecord::TYPE_CREDIT_REPAID])) { ?>
+                            <a class="table-link color-blue" href="/credit/note/detail?id=<?= $desc[$key]['nodeId'] ?>">
+                                【转让】<?= $desc[$key]['loan']->title ?>
+                            </a>
                         <?php } else { ?>
                             <p>流水号：<?= $desc[$key]['desc'] ?></p>
                         <?php } ?>
