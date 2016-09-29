@@ -3,11 +3,9 @@
 namespace common\models\order;
 
 use common\models\promo\InviteRecord;
-use common\models\user\UserAsset;
 use common\models\user\UserInfo;
 use Yii;
 use Exception;
-use yii\data\Pagination;
 use common\utils\TxUtils;
 use yii\helpers\ArrayHelper;
 use common\models\product\OnlineProduct as Loan;
@@ -369,12 +367,6 @@ class OrderManager
 
         $templateId = Yii::$app->params['sms']['toubiao'];
         SmsService::send($user->mobile, $templateId, $message, $user);
-
-        //投资成功之后同步用户资源表
-        if ($order->status === 1) {
-            $userAsset = UserAsset::initUserAssetFromOrder($order);
-            $userAsset->save();
-        }
 
         $transaction->commit();
 

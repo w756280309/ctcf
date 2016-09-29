@@ -2,7 +2,6 @@
 
 namespace common\models\payment;
 
-use Yii;
 use yii\db\ActiveRecord;
 
 /**

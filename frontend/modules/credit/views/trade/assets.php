@@ -183,7 +183,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/useraccount/transfering.js?v=160927', 
                                     <td class="text-third">
                                         <?php
                                             $config = json_decode($note['config'], true);
-                                            $fee = bcmul($config['fee_rate'], $note['amount']);
+                                            $fee = bcmul($config['fee_rate'], $note['tradedAmount']);
                                             echo StringUtils::amountFormat3(bcdiv($fee, 100, 2));
                                         ?>
                                     </td>

@@ -65,7 +65,7 @@ use common\models\order\OnlineRepaymentPlan;
                         </a>
                     </td>
                     <td class="text-align-lf"><?= $val['order'] ? $val['order']->getLastPaymentDate() : '' ?></td>
-                    <td class="text-align-ct"><?= rtrim(rtrim(number_format($val['order']->yield_rate * 100, 2), '0'), '.') ?>%</td>
+                    <td class="text-align-ct"><?= StringUtils::amountFormat2($val['order']->yield_rate * 100) ?>%</td>
                     <td class="text-align-rg"><?= StringUtils::amountFormat3(bcdiv($val['amount'], 100, 2)) ?></td>
                     <td class="text-align-rg"><?= StringUtils::amountFormat3($val['order'] ? $val['order']->getProceeds() : 0) ?></td>
                     <td class="text-align-ct">

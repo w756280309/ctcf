@@ -444,6 +444,22 @@ class RepaymentController extends BaseController
             SmsService::send($user->mobile, $templateId, $message, $user);
         }
 
+        if (empty($sum_benxi_yue)) {
+            $response = \Yii::$container->get('txClient')->post('assets/update-repaid-status', [
+                'loan_id' => $pid,
+            ], function (\Exception $e) {
+                $code = $e->getCode();
+
+                if (200 !== $code) {
+                    return false;
+                }
+            });
+
+            if (!$response) {
+                return ['result' => 0, 'message' => '更新用户资产回款状态失败'];
+            }
+        }
+
         return [
             'result' => 1,
             'message' => '还款成功',
