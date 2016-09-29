@@ -96,9 +96,9 @@ use common\models\order\OnlineRepaymentPlan;
                                         <th class="text-inner-second" width="180">还款利息(元)</th>
                                         <th class="text-align-ct">还款状态</th>
                                     </tr>
-                                    <?php foreach ($plan[$key]['obj'] as $val) : ?>
+                                    <?php foreach ($plan[$key]['obj'] as $key => $val) : ?>
                                         <tr>
-                                            <td class="text-inner-first"><?= $val->qishu ?></td>
+                                            <td class="text-inner-first"><?= $key + 1 ?></td>
                                             <td class="text-align-lf"><?= $val->refund_time ? date('Y-m-d', $val->refund_time) : '' ?></td>
                                             <td class="text-align-rg"><?= StringUtils::amountFormat3($val->benjin) ?></td>
                                             <td class="text-inner-second"><?= StringUtils::amountFormat3($val->lixi) ?></td>

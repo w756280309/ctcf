@@ -299,7 +299,7 @@ $fee = Yii::$app->params['credit_trade']['fee_rate'] * 1000;
                 amount_error.show();
                 return false;
             }
-            var lastAmount = total_amount - minAmount;
+            var lastAmount = total_amount - amount;
             if (lastAmount >= minAmount) {
                 if ((amount - minAmount) % incAmount != 0) {
                     amount_error.html('金额必须是递增金额整数倍');

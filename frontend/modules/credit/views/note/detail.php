@@ -204,6 +204,11 @@ $isClosed = $respData['isClosed'] || $nowTime >= $endTime;
                 $(this).val(money.substring(0, money.indexOf(".") + 3));
             }
             var moneys = parseFloat(money) * 100;
+            if(moneys > rest_money) {
+                $('.dR-tishi-error ').show();
+                $('.dR-tishi-error').html('投资金额不能超过可交易金额');
+                return false;
+            }
             if (moneys >= 0) {
                 if (rest_money >= qitou_money) {
                     if (moneys < qitou_money) {

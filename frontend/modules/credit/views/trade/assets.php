@@ -101,9 +101,9 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/useraccount/transfering.js?v=160927', 
                                                     <th class="text-inner-second" width="180">还款利息(元)</th>
                                                     <th class="text-align-ct">还款状态</th>
                                                 </tr>
-                                                <?php foreach ($asset['plan'] as $plan) { ?>
+                                                <?php foreach ($asset['plan'] as $key =>  $plan) { ?>
                                                     <tr>
-                                                        <td class="text-inner-first"><?= $plan['qishu'] ?></td>
+                                                        <td class="text-inner-first"><?= $key + 1 ?></td>
                                                         <td class="text-align-lf"><?= date('Y-m-d', $plan['refund_time']) ?></td>
                                                         <td class="text-align-rg"><?= StringUtils::amountFormat3($plan['benjin']) ?></td>
                                                         <td class="text-inner-second"><?= StringUtils::amountFormat3($plan['lixi']) ?></td>
