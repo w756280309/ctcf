@@ -32,11 +32,13 @@ $fee = Yii::$app->params['credit_trade']['fee_rate'] * 1000;
                         <li class="contentCenter_ul_li">
                             <?php
                             $remainingDuration = $loan->getRemainingDuration();
-                            if (isset($remainingDuration['months'])) {
+                            if (isset($remainingDuration['months']) && $remainingDuration['months'] > 0) {
                                 echo $remainingDuration['months'] . '<span>个月</span>';
                             }
                             if (isset($remainingDuration['days'])) {
-                                echo $remainingDuration['days'] . '<span>天</span>';
+                                if (!isset($remainingDuration['months']) || $remainingDuration['days'] >0) {
+                                    echo $remainingDuration['days'] . '<span>天</span>';
+                                }
                             }
                             ?>
                             </li>
@@ -184,7 +186,8 @@ $fee = Yii::$app->params['credit_trade']['fee_rate'] * 1000;
     var discount_rate_error = $('#discount_rate_error');
     var config_rate = <?= floatval($discountRate) ?>;
     var minAmount = <?= floatval($minOrderAmount)?>;
-    var incAmount = <?= floatval($incrOrderAmount)?>
+    var incAmount = <?= floatval($incrOrderAmount)?>;
+    var feeRate = <?= floatval($fee/1000) ?>;
 
     amount_input.change(function () {
         validateData();
@@ -285,17 +288,17 @@ $fee = Yii::$app->params['credit_trade']['fee_rate'] * 1000;
             amount_error.show();
             return false;
         }
-        if (amount < minAmount) {
-            amount_error.html('转让金额必须大于起投金额');
-            amount_error.show();
-            return false;
-        }
         if (amount > total_amount) {
             amount_error.html('转让金额不能超过最大可转让金额');
             amount_error.show();
             return false;
         }
         if (total_amount >= minAmount) {
+            if (amount < minAmount) {
+                amount_error.html('转让金额必须大于起投金额');
+                amount_error.show();
+                return false;
+            }
             var lastAmount = total_amount - minAmount;
             if (lastAmount >= minAmount) {
                 if ((amount - minAmount) % incAmount != 0) {
@@ -321,9 +324,10 @@ $fee = Yii::$app->params['credit_trade']['fee_rate'] * 1000;
         amount_error.hide();
         discount_rate_error.hide();
         amount_error.hide();
-        $('#expect_money').html(parseInt(amount / total_amount * current_interest * 100) / 100);
-        $('#fee').html(parseInt(amount * 0.003 * 100) / 100);
-        $('#expect_amount').html(parseInt(amount * (1 - rate / 100) * 100) / 100);
+        var interest = parseInt(amount / total_amount * current_interest * 100) / 100;
+        $('#expect_money').html(interest);
+        $('#fee').html(parseInt(amount * feeRate * 100) / 100);
+        $('#expect_amount').html(parseInt((amount + interest) * (1 - rate / 100) * 100) / 100);
         return true;
     }
 </script>

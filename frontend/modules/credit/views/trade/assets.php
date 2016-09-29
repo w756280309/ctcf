@@ -51,10 +51,15 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/useraccount/transfering.js?v=160927', 
                                     <td class="text-second"><a href="/deal/deal/detail?sn=<?= $asset['loan']->sn ?>"><?= $asset['loan']->title ?></a></td>
                                     <td class="text-align-ct">
                                         <?php
-                                            $remainingDuration = $asset['loan']->remainingDuration;
-
-                                            echo (isset($remainingDuration['months']) ? $remainingDuration['months'].'个月'
-                                                : '').$remainingDuration['days'].'天';
+                                        $remainingDuration = $asset['loan']->remainingDuration;
+                                        if (isset($remainingDuration['months']) && $remainingDuration['months'] > 0) {
+                                            echo $remainingDuration['months'] . '个月';
+                                        }
+                                        if (isset($remainingDuration['days'])) {
+                                            if (!isset($remainingDuration['months']) || $remainingDuration['days'] >0) {
+                                                echo $remainingDuration['days'] . '天';
+                                            }
+                                        }
                                         ?>
                                     </td>
                                     <td class="text-align-ct"><?= StringUtils::amountFormat2($asset['order']->yield_rate * 100) ?>%</td>

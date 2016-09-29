@@ -20,11 +20,13 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/credit/creditpay.css');
                         <p class="lf time">剩余期限<span class="nums">
                                 <?php
                                 $remainingDuration = $loan->getRemainingDuration();
-                                if (isset($remainingDuration['months'])) {
-                                    echo $remainingDuration['months'] . '个月';
+                                if (isset($remainingDuration['months']) && $remainingDuration['months'] > 0) {
+                                    echo $remainingDuration['months'] . '<span>个月</span>';
                                 }
                                 if (isset($remainingDuration['days'])) {
-                                    echo $remainingDuration['days'] . '天';
+                                    if (!isset($remainingDuration['months']) || $remainingDuration['days'] >0) {
+                                        echo $remainingDuration['days'] . '<span>天</span>';
+                                    }
                                 }
                                 ?>
                             </span></p>

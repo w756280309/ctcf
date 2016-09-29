@@ -35,10 +35,15 @@ $isClosed = $respData['isClosed'] || $nowTime >= $endTime;
                         <div class="clearfix pl-middle-rg">
                             <span class="pl-middle-inner">
                                 <?php
-                                    $remainingDuration = $loan->remainingDuration;
-
-                                    echo (isset($remainingDuration['months']) ? $remainingDuration['months'].'<i>个月</i>'
-                                        : '').$remainingDuration['days'].'<i>天</i>';
+                                $remainingDuration = $loan->getRemainingDuration();
+                                if (isset($remainingDuration['months']) && $remainingDuration['months'] > 0) {
+                                    echo $remainingDuration['months'] . '<i>个月</i>';
+                                }
+                                if (isset($remainingDuration['days'])) {
+                                    if (!isset($remainingDuration['months']) || $remainingDuration['days'] >0) {
+                                        echo $remainingDuration['days'] . '<i>天</i>';
+                                    }
+                                }
                                 ?>
                             </span>
                             <p>剩余期限</p>
@@ -161,21 +166,19 @@ $isClosed = $respData['isClosed'] || $nowTime >= $endTime;
             getOrderList($(this).attr('href'));
         });
 
-        var note_amount = <?= $respData['amount'] ?>;
-        var remaining_interest = <?= $respData['remainingInterest'] ?>;
-        var current_interest = <?= $respData['currentInterest'] ?>;
+        var note_amount = <?= bcdiv($respData['amount'], 100, 2) ?>;
+        var remaining_interest = <?= bcdiv($respData['remainingInterest'], 100, 2) ?>;
+        var current_interest = <?= bcdiv($respData['currentInterest'], 100, 2) ?>;
         $('.dR-money').keyup(function () {
             var val = $(this).val();
             var amount = $.isNumeric(val) ? val : 0;
 
-            var rate = accDiv(accMul(amount, 100), note_amount);
-
             if (remaining_interest) {
-                $('.yuqi i').html(WDJF.numberFormat(accDiv(accMul(rate, remaining_interest), 100), false));
+                $('.yuqi i').html(parseInt(amount * remaining_interest * 100 / note_amount) / 100);
             }
 
             if (current_interest) {
-                $('.yingfu i').html(WDJF.numberFormat(accDiv(accMul(rate, current_interest), 100), false));
+                $('.yingfu i').html(parseInt(amount * current_interest * 100 / note_amount) / 100);
             }
 
             if (false == $.isNumeric(val) || ' ' == val.substring(val.length - 1, val.length)) {

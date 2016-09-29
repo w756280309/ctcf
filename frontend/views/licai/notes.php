@@ -55,11 +55,13 @@ $action = Yii::$app->controller->action->getUniqueId();
                             <?php
                                 if (null !== $loan) {
                                     $remainingDuration = $loan->getRemainingDuration();
-                                    if (isset($remainingDuration['months'])) {
+                                    if (isset($remainingDuration['months']) && $remainingDuration['months'] > 0) {
                                         echo $remainingDuration['months'] . '<span>个月</span>';
                                     }
                                     if (isset($remainingDuration['days'])) {
-                                        echo $remainingDuration['days'] . '<span>天</span>';
+                                        if (!isset($remainingDuration['months']) || $remainingDuration['days'] >0) {
+                                            echo $remainingDuration['days'] . '<span>天</span>';
+                                        }
                                     }
                                 } else {
                                     echo '0<span>天</span>';
