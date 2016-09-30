@@ -175,7 +175,7 @@ class UserController extends BaseController
             if (2 === $type) {
                 $data = Plan::findAll(['online_pid' => $val->online_pid, 'uid' => $user->id, 'order_id' => $val->id]);
             } else {
-                $data = Plan::findAll(['online_pid' => $val['loan_id'], 'uid' => $user->id, 'asset_id' => $val['asset_id']]);
+                $data = Plan::findAll(['online_pid' => $val['loan_id'], 'uid' => $user->id, 'asset_id' => $val['id']]);
                 $model[$key]['order'] = Ord::findOne($val['order_id']);
                 $model[$key]['shouyi'] = array_sum(ArrayHelper::getColumn($data, 'lixi'));
             }
