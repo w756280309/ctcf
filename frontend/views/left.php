@@ -20,7 +20,7 @@ $action = Yii::$app->controller->action->getUniqueId();
                 <li class="<?= 'user/user/myorder' === $action ? 'selected' : '' ?>"><a href="/user/user/myorder"><span class="star"></span>我的理财</a></li>
                 <li class="<?= in_array($action, ['credit/trade/assets', 'credit/note/new']) ? 'selected' : '' ?>"><a href="/credit/trade/assets"><span class="star"></span>我的转让</a></li>
                 <li class="<?= 'user/coupon/index' === $action ? 'selected' : '' ?>"><a href="/user/coupon/"><span class="star"></span>我的代金券</a></li>
-                <li class="<?= 'user/invite/index' === $action ? 'selected' : '' ?>"><a href="/user/invite/"><span class="star"></span>邀请好友</a></li>
+                <!--<li class="<?= 'user/invite/index' === $action ? 'selected' : '' ?>"><a href="/user/invite/"><span class="star"></span>邀请好友</a></li>-->
                 <li class="<?= 'user/user/mingxi' === $action ? 'selected' : '' ?>"><a href="/user/user/mingxi"><span class="star"></span>交易明细</a></li>
             </ul>
         </li>
