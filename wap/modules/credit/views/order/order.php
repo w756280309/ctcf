@@ -21,11 +21,13 @@ $isClosed = $respData['isClosed'] || $nowTime >= $endTime;
     <div class="col-xs-8 text-align-lf col">
         <?php
             $remainingDuration = $loan->getRemainingDuration();
-            if (isset($remainingDuration['months'])) {
+            if (isset($remainingDuration['months']) && $remainingDuration['months'] > 0) {
                 echo $remainingDuration['months'] . '个月';
             }
             if (isset($remainingDuration['days'])) {
-                echo $remainingDuration['days'] . '天';
+                if (!isset($remainingDuration['months']) || $remainingDuration['days'] > 0) {
+                    echo $remainingDuration['days'] . '天';
+                }
             }
         ?>
     </div>
@@ -72,10 +74,10 @@ $isClosed = $respData['isClosed'] || $nowTime >= $endTime;
     <div class="col-xs-12 text-align-ct bottom_center">查看<a href="#">《认购协议》</a></div>
 </div>
 <script>
-    var currentInterest = <?= $respData['currentInterest'] ?>;
-    var remainingInterest = <?= $respData['remainingInterest'] ?>;
-    var tamount = <?= $respData['amount'] ?>;
-    var rate = '<?= $respData['discountRate'] ?>';
+    var currentInterest = <?= floatval($respData['currentInterest'] / 100) ?>;
+    var remainingInterest = <?= floatval($respData['remainingInterest'] / 100) ?>;
+    var total_amount = <?= floatval($respData['amount'] / 100) ?>;
+    var rate = '<?= floatval($respData['discountRate']) ?>';
 
     function profit(obj) {
         var amount = parseFloat($(obj).val());
@@ -83,12 +85,10 @@ $isClosed = $respData['isClosed'] || $nowTime >= $endTime;
             amount = 0;
         }
         if (amount > 0) {
-            var interest = (parseFloat(currentInterest) * amount / tamount).toString();
-            var profit = (parseFloat(remainingInterest) * amount / tamount).toString();
-            var payAmount = ((amount + parseFloat(interest)) * (1 - parseFloat(rate) / 100)).toString();
-            $('#interest').html(interest.substring(0, interest.lastIndexOf('.') + 3));
-            $('#profit').html(profit.substring(0, profit.lastIndexOf('.') + 3));
-            $('#payAmount').html(payAmount.substring(0, payAmount.lastIndexOf('.') + 3));
+            var interest = parseInt(amount / total_amount * currentInterest * 100) / 100;
+            $('#interest').html(interest);
+            $('#profit').html(parseInt(remainingInterest / total_amount * amount * 100) / 100);
+            $('#payAmount').html(parseInt((amount + interest) * (1 - rate / 100) * 100) / 100);
         }
     }
 

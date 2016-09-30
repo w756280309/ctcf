@@ -39,8 +39,7 @@ use common\utils\StringUtils;
                     <span class="rate-steps">
                         <?=
                             null === $order ? '' : StringUtils::amountFormat2(bcmul($order->yield_rate, 100, 2));
-                        ?>
-                        <i class="col-lu">%</i></span>
+                        ?><i class="col-lu">%</i></span>
                     <p>预期年化率</p>
                 </div>
                 <div class="col-xs-4">
@@ -48,11 +47,13 @@ use common\utils\StringUtils;
                         <?php
                             if (null !== $loan) {
                                 $remainingDuration = $loan->getRemainingDuration();
-                                if (isset($remainingDuration['months'])) {
+                                if (isset($remainingDuration['months']) && $remainingDuration['months'] > 0) {
                                     echo $remainingDuration['months'] . '<i class="col-lu">个月</i>';
                                 }
                                 if (isset($remainingDuration['days'])) {
-                                    echo $remainingDuration['days'] . '<i class="col-lu">天</i>';
+                                    if (!isset($remainingDuration['months']) || $remainingDuration['days'] > 0) {
+                                        echo $remainingDuration['days'] . '<i class="col-lu">天</i>';
+                                    }
                                 }
                             } else {
                                 echo '0<span>天</span>';

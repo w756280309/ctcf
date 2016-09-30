@@ -34,10 +34,15 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/credit/detail.js?v=160929', ['depends'
             <li class="col-xs-6">
                 <div>
                     <?php
-                        $remainingDuration = $loan->remainingDuration;
-
-                        echo (isset($remainingDuration['months']) ? $remainingDuration['months'].'<span class="column-lu">个月</span>'
-                            : '').$remainingDuration['days'].'<span class="column-lu">天</span>';
+                        $remainingDuration = $loan->getRemainingDuration();
+                        if (isset($remainingDuration['months']) && $remainingDuration['months'] > 0) {
+                            echo $remainingDuration['months'] . '<span class="column-lu">个月</span>';
+                        }
+                        if (isset($remainingDuration['days'])) {
+                            if (!isset($remainingDuration['months']) || $remainingDuration['days'] > 0) {
+                                echo $remainingDuration['days'] . '<span class="column-lu">天</span>';
+                            }
+                        }
                     ?>
                 </div>
                 <span class="qing">剩余期限</span>

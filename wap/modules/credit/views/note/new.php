@@ -3,7 +3,6 @@
 use yii\helpers\Html;
 
 $this->title = '转让';
-$this->backUrl = false;
 
 $this->registerCssFile(ASSETS_BASE_URI.'css/credit/transfer_order.css', ['depends' => 'wap\assets\WapAsset']);
 
@@ -26,11 +25,13 @@ $fee = Yii::$app->params['credit_trade']['fee_rate'] * 1000;
     <div class="col-xs-8 text-align-lf col">
         <?php
         $remainingDuration = $loan->getRemainingDuration();
-        if (isset($remainingDuration['months'])) {
+        if (isset($remainingDuration['months']) && $remainingDuration['months'] > 0) {
             echo $remainingDuration['months'] . '<span>个月</span>';
         }
         if (isset($remainingDuration['days'])) {
-            echo $remainingDuration['days'] . '<span>天</span>';
+            if (!isset($remainingDuration['months']) || $remainingDuration['days'] > 0) {
+                echo $remainingDuration['days'] . '<span>天</span>';
+            }
         }
         ?>
     </div>
@@ -124,6 +125,7 @@ $fee = Yii::$app->params['credit_trade']['fee_rate'] * 1000;
         var total_amount = <?= floatval($asset['maxTradableAmount'] / 100)?>;
         var current_interest = <?= floatval($asset['currentInterest'] / 100)?>;
         var config_rate = <?= floatval($discountRate) ?>;
+        var feeRate = <?= floatval($fee / 1000) ?>;
         amount_input.change(function () {
             validateData();
         });
@@ -152,9 +154,10 @@ $fee = Yii::$app->params['credit_trade']['fee_rate'] * 1000;
                 return false;
             }
             if (amount > 0) {
-                $('#expect_money').html(parseInt(amount / total_amount * current_interest * 100) / 100);
-                $('#fee').html(parseInt(amount * 0.003 * 100) / 100);
-                $('#expect_amount').html(parseInt(amount * (1 - rate / 100) * 100) / 100);
+                var interest = parseInt(amount / total_amount * current_interest * 100) / 100;
+                $('#expect_money').html(interest);
+                $('#fee').html(parseInt(amount * feeRate * 100) / 100);
+                $('#expect_amount').html(parseInt((amount + interest) * (1 - rate / 100) * 100) / 100);
             }
             return true;
         }

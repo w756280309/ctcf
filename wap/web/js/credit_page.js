@@ -1,5 +1,13 @@
 $(function() {
 
+    //将页面下部导航首页、理财、账户的理财置红
+    $('.footer-inner a').css({color: '#8c8c8c'});
+    $('.footer-inner2 a').css({color: '#8c8c8c'});
+    $('.footer-inner1 a').css({color: '#f44336'});
+    $('.footer-inner1 .licai').css({background: 'url("/images/footer2.png") no-repeat -113px -57px',backgroundSize: '200px'});
+    $('.footer-inner2 .zhanghu').css({background: 'url("/images/footer2.png") no-repeat -81px -3px',backgroundSize: '200px'});
+    $('.footer-inner .shouye').css({background: 'url("/images/footer2.png") no-repeat -145px -3px',backgroundSize: '200px'});
+
     canvasToCircle();
 
     function canvasToCircle(){
