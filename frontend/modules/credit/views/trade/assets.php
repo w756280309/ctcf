@@ -187,7 +187,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/useraccount/transfering.js?v=160927', 
                                             echo StringUtils::amountFormat3(bcdiv($fee, 100, 2));
                                         ?>
                                     </td>
-                                    <td class="text-third"><?= StringUtils::amountFormat3(bcdiv(bcsub($note['tradedAmount'], $fee), 100, 2)); ?></td>
+                                    <td class="text-third"><?= StringUtils::amountFormat3(bcdiv($actualIncome[$note['id']]['actualIncome'], 100, 2)); ?></td>
                                     <td class="text-align-ct"><a class="color-blue" href="">查看</a></td>
                                 </tr>
                             <?php } ?>

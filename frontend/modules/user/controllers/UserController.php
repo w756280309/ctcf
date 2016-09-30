@@ -9,6 +9,7 @@ use common\models\user\MoneyRecord;
 use frontend\controllers\BaseController;
 use Yii;
 use yii\data\Pagination;
+use yii\helpers\ArrayHelper;
 use yii\filters\AccessControl;
 
 class UserController extends BaseController
@@ -174,8 +175,9 @@ class UserController extends BaseController
             if (2 === $type) {
                 $data = Plan::findAll(['online_pid' => $val->online_pid, 'uid' => $user->id, 'order_id' => $val->id]);
             } else {
-                $data = Plan::findAll(['online_pid' => $val['loan_id'], 'uid' => $user->id, 'order_id' => $val['order_id']]);
+                $data = Plan::findAll(['online_pid' => $val['loan_id'], 'uid' => $user->id, 'asset_id' => $val['asset_id']]);
                 $model[$key]['order'] = Ord::findOne($val['order_id']);
+                $model[$key]['shouyi'] = array_sum(ArrayHelper::getColumn($data, 'lixi'));
             }
 
             $plan[$key]['obj'] = $data;

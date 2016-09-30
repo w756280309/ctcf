@@ -160,9 +160,19 @@ class TradeController extends BaseController
                 $notes = $provider->getModels();
             }
 
+            $actualIncome = [];
+            if (!empty($notes)) {
+                $ids = implode(',', array_column($notes, 'id'));
+
+                $actualIncome = Yii::$container->get('txClient')->get('credit-note/actual-income', [
+                    'ids' => $ids,
+                ]);
+            }
+
             $data = [
                 'notes' => $notes,
                 'tradedTotalAmount' => $tradedTotalAmount,
+                'actualIncome' => $actualIncome,
                 'totalCount' => $totalCount,
                 'type' => $type,
                 'pages' => $pages,
