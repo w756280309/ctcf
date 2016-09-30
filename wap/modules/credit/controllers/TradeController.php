@@ -11,6 +11,13 @@ use yii\data\Pagination;
 
 class TradeController extends BaseController
 {
+    public function actions()
+    {
+        return [
+            'cancel' => 'common\action\credit\CancelAction',
+        ];
+    }
+
     /**
      * 债权转让列表.
      *

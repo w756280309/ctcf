@@ -28,6 +28,13 @@ class TradeController extends BaseController
         ];
     }
 
+    public function actions()
+    {
+        return [
+            'cancel' => '\common\action\credit\CancelAction',
+        ];
+    }
+
     /**
      * 债权转让列表.
      */
@@ -180,42 +187,5 @@ class TradeController extends BaseController
         }
 
         return $this->render('assets', $data);
-    }
-
-    /**
-     * 撤销指定id的挂牌记录
-     *
-     * @param int    $id
-     *
-     * @return array ['code' => '0 or 1', 'message' =>'']
-     */
-    public function actionCancel($id)
-    {
-        if (empty($id) || null === ($note = Yii::$container->get('txClient')->get('credit-note/detail', ['id' => $id]))) {
-            return ['code' => 1, 'message' => '没有找到该转让信息'];
-        }
-
-        $userId = $this->getAuthedUser()->getId();
-        if ((int) $userId !== $note['user_id']) {
-            return ['code' => 1, 'message' => '非本人不能撤销该转让信息'];
-        }
-
-        try {
-            Yii::$container->get('txClient')->get('credit-note/cancel', [
-                'id' => $id,
-            ]);
-        } catch (\Exception $ex) {
-            $result = json_decode(strval($ex->getResponse()->getBody()), true);
-            if (isset($result['name'])
-                && $result['name'] === 'Bad Request'
-                && isset($result['message'])
-                && isset($result['status'])
-                && $result['status'] !== 200
-            ) {
-                return ['code' => 1, 'message' => $result['message']];
-            }
-        }
-
-        return ['code' => 0, 'message' => '撤销成功'];
     }
 }

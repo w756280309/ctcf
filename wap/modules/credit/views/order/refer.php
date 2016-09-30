@@ -1,15 +1,14 @@
 <?php
-$this->title = ("success" === $ret) ? "购买成功" : "购买失败";
-$this->backUrl = false;
+$this->title = ("success" === $ret) ? "转让成功" : "转让失败";
 ?>
 <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/setting.css?v=20160331">
 
 <div class="row" id='bind-box'>
     <div class="col-xs-12">
         <?php if ('success' === $ret) { ?>
-            <div>购买成功</div>
+            <div>转让成功</div>
         <?php } else { ?>
-            <div>购买失败</div>
+            <div>转让失败</div>
         <?php } ?>
     </div>
 </div>
@@ -39,7 +38,7 @@ $this->backUrl = false;
     <?php } else { ?>
         <div class="col-xs-4"></div>
         <div class="col-xs-4">
-            <a href="javascript:void(0)" onclick="history.go(-1)" class="bind-close1">重新购买</a>
+            <a href="javascript:void(0)" onclick="history.go(-1)" class="bind-close1">重新转让</a>
         </div>
         <div class="col-xs-4"></div>
     <?php } ?>

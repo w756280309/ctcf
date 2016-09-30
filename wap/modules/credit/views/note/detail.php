@@ -6,7 +6,11 @@ use yii\helpers\Html;
 
 $this->registerCssFile(ASSETS_BASE_URI.'css/credit/detail.css', ['depends' => 'wap\assets\WapAsset']);
 $this->registerJs('var remainTime = '.strtotime($respData['endTime']).';', 1);
-$this->registerJsFile(ASSETS_BASE_URI.'js/credit/detail.js?v=160929', ['depends' => 'wap\assets\WapAsset']);
+$this->registerJsFile(ASSETS_BASE_URI.'js/credit/detail.js?v=160930', ['depends' => 'wap\assets\WapAsset']);
+
+$nowTime = new \DateTime();
+$endTime = new \DateTime($respData['endTime']);
+$isClosed = $respData['isClosed'] || $nowTime >= $endTime;
 ?>
 
 <div class="row daojishi">
@@ -53,14 +57,14 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/credit/detail.js?v=160929', ['depends'
 <div class="row bili">
     <div class="col-xs-12">
         <div class="per">
-            <?php $progress = $respData['isClosed'] ? 100 : bcdiv(bcmul($respData['tradedAmount'], 100), $respData['amount'], 0); ?>
+            <?php $progress = $isClosed ? 100 : bcdiv(bcmul($respData['tradedAmount'], 100), $respData['amount'], 0); ?>
             <div class="progress-bar progress-bar-red" style="width:<?= $progress ?>%"></div>
         </div>
     </div>
 </div>
 <div class="row shuju">
     <div class="col-xs-9" style="padding: 0;padding-left: 30px">
-        <span><?= $respData['isClosed'] ? 0 : StringUtils::amountFormat2(bcdiv(bcsub($respData['amount'], $respData['tradedAmount']), 100, 2)) ?>元</span><i>/<?= StringUtils::amountFormat1('{amount}{unit}', bcdiv($respData['amount'], 100, 2)) ?></i>
+        <span><?= $isClosed ? 0 : StringUtils::amountFormat2(bcdiv(bcsub($respData['amount'], $respData['tradedAmount']), 100, 2)) ?>元</span><i>/<?= StringUtils::amountFormat1('{amount}{unit}', bcdiv($respData['amount'], 100, 2)) ?></i>
         <div>可投余额/转让金额</div>
     </div>
     <div class="col-xs-3" style="padding: 0;padding-right: 30px">
@@ -118,8 +122,14 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/credit/detail.js?v=160929', ['depends'
 </div>
 <div id="x-purchase" class="row rengou" style="cursor: pointer">
     <div class="col-xs-12">
-        <?php if (!$respData['isClosed']) { ?>
-            <a href="javascript:void(0)" id="check-in">立即认购</a>
+        <?php if (!$isClosed) { ?>
+            <?php
+                if (!Yii::$app->user->isGuest && $respData['user_id'] === (int) Yii::$app->user->identity->id) {
+            ?>
+                <a href="javascript:void(0)" id="cancel-note" note-id="<?= Html::encode($respData['id']) ?>">撤销转让</a>
+            <?php } else { ?>
+                <a href="javascript:void(0)" id="check-in">立即认购</a>
+            <?php } ?>
         <?php } else { ?>
             <a href="javascript:;" class="red-gray">转让完成</a>
         <?php } ?>
