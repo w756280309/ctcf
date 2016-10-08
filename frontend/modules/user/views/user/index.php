@@ -6,6 +6,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/useraccount/highcharts.js', ['depends'
 $this->registerJsFile(ASSETS_BASE_URI.'js/useraccount/index.js', ['depends' => 'frontend\assets\FrontAsset']);
 
 use common\models\order\OnlineRepaymentPlan as Plan;
+use common\models\product\OnlineProduct as Loan;
 use common\utils\StringUtils;
 ?>
 
@@ -93,14 +94,62 @@ use common\utils\StringUtils;
         </div>
         <?php if ($orders) { ?>
             <ul class="investment-bottom-content">
-                <?php foreach($orders as $model) : ?>
-                    <li  class="clearfix">
-                        <div class="investment-inner investment-inner1"><div class="investment-name grayFont investment-box-vertical" style="text-align: left;"><div class="investment-name1"><a href="/deal/deal/detail?sn=<?= $model->loan->sn ?>"><?= $model->loan->title ?></a></div></div></div>
-                        <div class="investment-inner"><div class="investment-money grayFont investment-box-vertical"><i><?= StringUtils::amountFormat3($model->order_money) ?></i></div></div>
-                        <div class="investment-inner"><div class="investment-profit grayFont investment-box-vertical"><i><?= StringUtils::amountFormat3(Plan::getTotalLixi($model->loan, $model)) ?></i></div></div>
-                        <div class="investment-inner"><div class="investment-time grayFont investment-box-vertical"><i><?= $model->loan->expires.(1 === $model->loan->refund_method ? "天" : "个月") ?></i></div></div>
-                        <div class="investment-inner"><div class="investment-state grayFont investment-box-vertical"><i><?= \Yii::$app->params['deal_status'][$model->loan->status] ?></i></div></div>
-                    </li>
+                <?php foreach($orders as $key => $model) : ?>
+                    <?php
+                        if ($key >= 5) {
+                            break;
+                        }
+                    ?>
+                    <?php if (isset($model['note_id'])) { ?>
+                        <li class="clearfix">
+                            <div class="investment-inner investment-inner1">
+                                <div class="investment-name grayFont investment-box-vertical" style="text-align: left;">
+                                    <div class="investment-name1">
+                                        <a href="/credit/note/detail?id=<?= $model['note_id'] ?>">
+                                           【转让】<?= $model['loan']['title'] ?>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="investment-inner"><div class="investment-money grayFont investment-box-vertical"><i><?= StringUtils::amountFormat3(bcdiv($model['principal'], 100, 2)) ?></i></div></div>
+                            <div class="investment-inner"><div class="investment-profit grayFont investment-box-vertical"><i><?= StringUtils::amountFormat3(bcdiv($model['earnings'], 100, 2)) ?></i></div></div>
+                            <div class="investment-inner">
+                                <div class="investment-time grayFont investment-box-vertical">
+                                    <i>
+                                        <?php
+                                            $loan = new Loan($model['loan']);
+                                            $remainingDuration = $loan->getRemainingDuration();
+                                            if (isset($remainingDuration['months']) && $remainingDuration['months'] > 0) {
+                                                echo $remainingDuration['months'].'<i>个月</i>';
+                                            }
+                                            if (isset($remainingDuration['days'])) {
+                                                if (!isset($remainingDuration['months']) || $remainingDuration['days'] > 0) {
+                                                    echo $remainingDuration['days'].'<i>天</i>';
+                                                }
+                                            }
+                                        ?>
+                                    </i>
+                                </div>
+                            </div>
+                            <div class="investment-inner"><div class="investment-state grayFont investment-box-vertical"><i><?= \Yii::$app->params['deal_status'][$model['loan']['status']] ?></i></div></div>
+                        </li>
+                    <?php } else { ?>
+                        <li class="clearfix">
+                            <div class="investment-inner investment-inner1">
+                                <div class="investment-name grayFont investment-box-vertical" style="text-align: left;">
+                                    <div class="investment-name1">
+                                        <a href="/deal/deal/detail?sn=<?= $model->loan->sn ?>">
+                                            <?= $model->loan->title ?>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="investment-inner"><div class="investment-money grayFont investment-box-vertical"><i><?= StringUtils::amountFormat3($model->order_money) ?></i></div></div>
+                            <div class="investment-inner"><div class="investment-profit grayFont investment-box-vertical"><i><?= StringUtils::amountFormat3(Plan::getTotalLixi($model->loan, $model)) ?></i></div></div>
+                            <div class="investment-inner"><div class="investment-time grayFont investment-box-vertical"><i><?= $model->loan->expires.(1 === $model->loan->refund_method ? "天" : "个月") ?></i></div></div>
+                            <div class="investment-inner"><div class="investment-state grayFont investment-box-vertical"><i><?= \Yii::$app->params['deal_status'][$model->loan->status] ?></i></div></div>
+                        </li>
+                    <?php } ?>
                 <?php endforeach; ?>
             </ul>
         <?php } else { ?>

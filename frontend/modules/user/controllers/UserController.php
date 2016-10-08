@@ -106,6 +106,38 @@ class UserController extends BaseController
             ->limit(5)
             ->all();
 
+        $creditOrders = Yii::$container->get('txClient')->get('credit-order/list-for-user', [
+            'user_id' => $user->id,
+            'limit' => 5,
+        ]);
+
+        foreach ($creditOrders['data'] as $creditOrder) {   //将债权订单记录按照创建时间的由近到远的顺序逐条插入到普通订单信息当中
+            $insertFlag = false;    //判断是否执行了插入操作标志位
+
+            foreach ($orders as $key => $order) {
+                $_createTime = isset($order['createTime']) ? $order['createTime'] : date('Y-m-d H:i:s', $order['created_at']);
+                if ($creditOrder['createTime'] <= $_createTime) {   //寻找插入的位置
+                    continue;
+                }
+
+                $data = array_splice($orders, $key);    //找到位置后,插入记录
+                $orders[$key] = $creditOrder;
+                array_splice($orders, $key + 1, 1, $data);
+                $insertFlag = true;
+                break;
+            }
+
+            if (!$insertFlag) { //如果前面没有执行插入操作,表明应该将该条记录插入到数组的末尾
+                array_push($orders, $creditOrder);
+            }
+        }
+
+        foreach ($orders as $key => $order) {
+            if (isset($order['note_id'])) {
+                $orders[$key]['loan'] = Loan::findOne($order['asset']['loan_id']);
+            }
+        }
+
         return $this->render('index', [
             'orders' => $orders,
             'user' => $user,
