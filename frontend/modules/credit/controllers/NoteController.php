@@ -29,8 +29,11 @@ class NoteController extends BaseController
     {
         //记录来源
         Yii::$app->session->set('to_url', Yii::$app->request->url);
+        $user = $this->getAuthedUser();
 
-        if (empty($id)) {
+        if (empty($id)
+            || (!Yii::$app->params['feature_credit_note_on']        //当债权功能开关关闭的时候,如果访问用户不是白名单里面的用户ID,就抛404异常
+            && !in_array($user->id, Yii::$app->params['feature_credit_note_whitelist_uids']))) {
             throw $this->ex404();
         }
 
@@ -44,7 +47,6 @@ class NoteController extends BaseController
 
         $loan = $this->findOr404(OnlineProduct::class, $respData['asset']['loan_id']);
         $order = $this->findOr404(OnlineOrder::class, $respData['asset']['order_id']);
-        $user = $this->getAuthedUser();
 
         return $this->render('detail', ['loan' => $loan, 'order' => $order, 'user' => $user, 'respData' => $respData]);
     }

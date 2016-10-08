@@ -169,4 +169,6 @@ return [
         ]
     ],
     'base_domain' => 'wenjf.com',//根域名，banner图处使用
+    'feature_credit_note_on' => true,  //债权转让功能开关,当为false时,隐藏进入债权功能页面入口
+    'feature_credit_note_whitelist_uids' => [], //债权转让白名单
 ];

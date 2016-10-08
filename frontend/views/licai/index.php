@@ -15,10 +15,12 @@ $action = Yii::$app->controller->action->getUniqueId();
 
 <div class="projectContainer">
     <div class="projectList">
-        <div class="alist-box">
-            <a href='/licai/' class="list-span <?= 'licai/index' === $action ? 'select-span' : '' ?>">理财列表</a>
-            <a href='/licai/notes' class="list-span <?= 'licai/notes' === $action ? 'select-span' : '' ?>">转让列表</a>
-        </div>
+        <?php if (Yii::$app->params['feature_credit_note_on']) {  ?>
+            <div class="alist-box">
+                <a href='/licai/' class="list-span <?= 'licai/index' === $action ? 'select-span' : '' ?>">理财列表</a>
+                <a href='/licai/notes' class="list-span <?= 'licai/notes' === $action ? 'select-span' : '' ?>">转让列表</a>
+            </div>
+        <?php } ?>
         <!--预告期-->
         <?php foreach ($loans as $key => $val) : ?>
         <a target="_blank" href="/deal/deal/detail?sn=<?= $val->sn ?>">

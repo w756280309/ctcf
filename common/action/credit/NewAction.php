@@ -14,6 +14,14 @@ class NewAction extends Action
         if (\Yii::$app->user->isGuest) {
             return $this->controller->redirect('/site/login');
         }
+
+        $uid = (int) Yii::$app->user->identity->id;
+
+        if (!Yii::$app->params['feature_credit_note_on']        //当债权功能开关关闭的时候,如果访问用户不是白名单里面的用户ID,就抛404异常
+            && !in_array($uid, Yii::$app->params['feature_credit_note_whitelist_uids'])) {
+            throw $this->controller->ex404();
+        }
+
         //获取资产详情
         $txClient = \Yii::$container->get('txClient');
         $asset = $txClient->get('assets/detail', ['id' => $asset_id, 'validate' => true]);
@@ -32,7 +40,7 @@ class NewAction extends Action
         if (null === $order) {
             throw $this->controller->ex404('没有找到订单');
         }
-        if ($order->uid !== (int) Yii::$app->user->identity->getId()) {
+        if ($order->uid !== $uid) {
             throw $this->controller->ex404('资产信息不合法');
         }
         $apr = $order->yield_rate;

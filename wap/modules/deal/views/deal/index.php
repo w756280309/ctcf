@@ -17,10 +17,12 @@ $action = Yii::$app->controller->action->getUniqueId();
 <script src="<?= ASSETS_BASE_URI ?>js/jquery.classyloader.js"></script>
 <script src="<?= ASSETS_BASE_URI ?>js/list.js?v=20160427"></script>
 
-<div class="row list-title">
-    <div class="col-xs-6"><a href="/deal/deal/index" class="cre-title <?= $action === 'deal/deal/index' ? 'active-cre-title' : '' ?>">理财列表</a></div>
-    <div class="col-xs-6"><a href="/licai/notes" class="cre-title <?= $action === 'licai/notes' ? 'active-cre-title' : '' ?>">转让列表</a></div>
-</div>
+<?php if (Yii::$app->params['feature_credit_note_on']) {  ?>
+    <div class="row list-title">
+        <div class="col-xs-6"><a href="/deal/deal/index" class="cre-title <?= $action === 'deal/deal/index' ? 'active-cre-title' : '' ?>">理财列表</a></div>
+        <div class="col-xs-6"><a href="/licai/notes" class="cre-title <?= $action === 'licai/notes' ? 'active-cre-title' : '' ?>">转让列表</a></div>
+    </div>
+<?php } ?>
 
 <?php if ($deals) { ?>
     <div id="item-list">

@@ -58,14 +58,16 @@ $this->showAvatar = true;
         <div class="col-xs-1"></div>
     </a>
 
-    <div class="clear"></div>
-    <a class="row sm-height border-bottom block" href="/credit/trade/assets" >
-        <div class="col-xs-10 left-txt">我的转让</div>
-        <div class="col-xs-1 arrow">
-            <img src="<?= ASSETS_BASE_URI ?>images/arrow.png" alt="右箭头">
-        </div>
-        <div class="col-xs-1"></div>
-    </a>
+    <?php if (Yii::$app->params['feature_credit_note_on']) {  ?>
+        <div class="clear"></div>
+        <a class="row sm-height border-bottom block" href="/credit/trade/assets" >
+            <div class="col-xs-10 left-txt">我的转让</div>
+            <div class="col-xs-1 arrow">
+                <img src="<?= ASSETS_BASE_URI ?>images/arrow.png" alt="右箭头">
+            </div>
+            <div class="col-xs-1"></div>
+        </a>
+    <?php } ?>
 
     <div class="clear"></div>
     <a class="row sm-height border-bottom block" href="/user/coupon/list" >
