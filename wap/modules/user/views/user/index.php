@@ -112,9 +112,9 @@ $this->showAvatar = true;
                     location.href = tourl;
                 }
             });
+        } else {
+            location.href='/user/userbank/tixian';
         }
-
-        location.href='/user/userbank/tixian';
     }
 
     function recharge()
@@ -127,8 +127,8 @@ $this->showAvatar = true;
                     location.href = tourl;
                 }
             });
+        } else {
+            location.href='/user/userbank/recharge';
         }
-
-        location.href='/user/userbank/recharge';
     }
 </script>
