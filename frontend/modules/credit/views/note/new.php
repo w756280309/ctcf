@@ -5,6 +5,7 @@ $this->title = '发起转让';
 $this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/usercenter.css', ['depends' => 'frontend\assets\FrontAsset']);
 $this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/transfer.css', ['depends' => 'frontend\assets\FrontAsset']);
 $this->registerJsFile(ASSETS_BASE_URI.'js/useraccount/transfer.js', ['depends' => \yii\web\JqueryAsset::class]);
+$this->registerJsFile(ASSETS_BASE_URI.'js/jquery.ba-throttle-debounce.min.js?v=161008', ['depends' => \yii\web\JqueryAsset::class]);
 $action = Yii::$app->controller->action->getUniqueId();
 $minOrderAmount = Yii::$app->params['credit_trade']['min_order_amount'];
 $incrOrderAmount = Yii::$app->params['credit_trade']['incr_order_amount'];
@@ -187,13 +188,15 @@ $fee = Yii::$app->params['credit_trade']['fee_rate'] * 1000;
     var config_rate = <?= floatval($discountRate) ?>;
     var minAmount = <?= floatval($minOrderAmount)?>;
     var incAmount = <?= floatval($incrOrderAmount)?>;
-    var feeRate = <?= floatval($fee/1000) ?>;
+    var feeRate = <?= floatval($fee / 1000) ?>;
 
-    amount_input.change(function () {
-        validateData();
-    });
-    discount_rate_input.change(function () {
-        validateData();
+    $(function(){
+        amount_input.change($.throttle(100,function () {
+            validateData();
+        }));
+        discount_rate_input.change(100,function () {
+            validateData();
+        });
     });
 
     submit_btn.click(function () {
@@ -202,7 +205,7 @@ $fee = Yii::$app->params['credit_trade']['fee_rate'] * 1000;
         if (!rate) {
             rate = 0;
         }
-        if (validateData()){
+        if (validateData()) {
             discount_rate_error.hide();
             $('.mask').show();
             $('.confirmBox').show();
@@ -255,10 +258,10 @@ $fee = Yii::$app->params['credit_trade']['fee_rate'] * 1000;
                 window.location.href = '/info/success?source=credit_new&jumpUrl=/credit/trade/assets?type=2'
             }
         });
-        xhr.always(function() {
+        xhr.always(function () {
             btn.removeClass('twoClick');
         });
-        xhr.fail(function() {
+        xhr.fail(function () {
             btn.removeClass('twoClick');
             alert('系统繁忙，请稍后重试！');
         });
@@ -324,10 +327,24 @@ $fee = Yii::$app->params['credit_trade']['fee_rate'] * 1000;
         amount_error.hide();
         discount_rate_error.hide();
         amount_error.hide();
-        var interest = parseInt(amount / total_amount * current_interest * 100) / 100;
-        $('#expect_money').html(interest);
-        $('#fee').html(parseInt(amount * feeRate * 100) / 100);
-        $('#expect_amount').html(parseInt((amount + interest) * (1 - rate / 100) * 100) / 100);
+        //请求交易系统计算进行计算
+        $.ajax({
+            type: "get",
+            url: "<?= rtrim(\Yii::$app->params['clientOption']['host']['tx'], '/')?>/credit-note/calc",
+            data: {asset_id:<?= $asset['id']?>, amount: amount, rate: rate},
+            dataType: "jsonp"
+        });
         return true;
+    }
+    function callback(data) {
+        if (data.interest) {
+            $('#expect_money').html(data.interest);
+        }
+        if (data.fee) {
+            $('#fee').html(data.fee);
+        }
+        if (data.realAmount) {
+            $('#expect_amount').html(data.realAmount);
+        }
     }
 </script>

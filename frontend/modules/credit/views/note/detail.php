@@ -3,6 +3,7 @@ $this->title = '转让详情';
 
 $this->registerCssFile(ASSETS_BASE_URI.'css/credit/credit.css?v=160922', ['depends' => 'frontend\assets\FrontAsset']);
 $this->registerJsFile(ASSETS_BASE_URI.'js/credit/detail.js?v=160922', ['depends' => 'frontend\assets\FrontAsset']);
+$this->registerJsFile(ASSETS_BASE_URI.'js/jquery.ba-throttle-debounce.min.js?v=161008', ['depends' => 'frontend\assets\FrontAsset']);
 $this->registerCssFile(ASSETS_BASE_URI.'css/pagination.css');
 $this->registerCssFile(ASSETS_BASE_URI . 'css/useraccount/chargedeposit.css');
 
@@ -152,6 +153,14 @@ $isClosed = $respData['isClosed'] || $nowTime >= $endTime;
 </div>
 
 <script>
+    function callback(data) {
+        if (data.interest) {
+            $('.yuqi i').html(data.interest);
+        }
+        if (data.profit) {
+            $('.yingfu i').html(data.profit);
+        }
+    }
     $(function(){
         $('.credi-tip').hover(function () {
             $(this).parent().find(".tips").stop(true, false).show();
@@ -169,23 +178,22 @@ $isClosed = $respData['isClosed'] || $nowTime >= $endTime;
         var note_amount = <?= bcdiv($respData['amount'], 100, 2) ?>;
         var remaining_interest = <?= bcdiv($respData['remainingInterest'], 100, 2) ?>;
         var current_interest = <?= bcdiv($respData['currentInterest'], 100, 2) ?>;
-        $('.dR-money').keyup(function () {
+
+        $('.dR-money').keyup($.throttle(100,function () {
             var val = $(this).val();
             var amount = $.isNumeric(val) ? val : 0;
-
-            if (remaining_interest) {
-                $('.yuqi i').html(parseInt(amount * remaining_interest * 100 / note_amount) / 100);
-            }
-
-            if (current_interest) {
-                $('.yingfu i').html(parseInt(amount * current_interest * 100 / note_amount) / 100);
-            }
-
+            //请求交易系统计算进行计算
+            $.ajax({
+                type: "get",
+                url: "<?= rtrim(\Yii::$app->params['clientOption']['host']['tx'], '/')?>/credit-note/calc",
+                data: {note_id:<?= $respData['id']?>, amount: amount},
+                dataType: "jsonp"
+            });
             if (false == $.isNumeric(val) || ' ' == val.substring(val.length - 1, val.length)) {
                 $(this).val(val.substring(0, val.length - 1));
             }
             //计算预期收益,再次调用计算应付利息与预计收益的函数
-        });
+        }));
 
         var qitou_money = <?= $note_config['min_order_amount'] ?>;
         var rest_money = <?= bcsub($respData['amount'], $respData['tradedAmount']) ?>;
