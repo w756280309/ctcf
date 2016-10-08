@@ -16,7 +16,7 @@ $this->registerCssFile(ASSETS_BASE_URI .'css/touzixiangqing.css?v=20160718', ['d
         <div class="col-xs-12">
             <div id="invest-title">
                 <div class="invest-title">
-                    <div class="invest-left"><?= $product->title ?></div>
+                    <div class="invest-left"><?= isset($asset['note_id']) ? '【转让】' : '' ?><?= $product->title ?></div>
                     <div class="invest-right">
                         <?php if ($fromTransfer && $asset) { ?>
                             <a href='/credit/note/new?asset_id=<?= $asset['id'] ?>' class="credit-right-title credit-red">转让</a>
@@ -118,55 +118,55 @@ $this->registerCssFile(ASSETS_BASE_URI .'css/touzixiangqing.css?v=20160718', ['d
         </div>
     </div>
     <?php if (!in_array($product->status, [2, 3, 7])) { ?>
-    <?php if ($plan) { ?>
-    <!--还款计划-->
-    <div class="row" id="repayment-box">
-        <div class="col-xs-12">
-            <div class="repayment-title">
-                <div class="repayment-left">还款计划</div>
-                <div class="repayment-right"><img src="<?= ASSETS_BASE_URI ?>images/arrowShang.png" alt=""></div>
+        <?php if ($plan) { ?>
+            <!--还款计划-->
+            <div class="row" id="repayment-box">
+                <div class="col-xs-12">
+                    <div class="repayment-title">
+                        <div class="repayment-left">还款计划</div>
+                        <div class="repayment-right"><img src="<?= ASSETS_BASE_URI ?>images/arrowShang.png" alt=""></div>
+                    </div>
+                </div>
+            </div>
+            <!--还款计划详情-->
+            <div class="row" id="repayment-content">
+                <div class="col-xs-12">
+                    <ul class="repayment-content">
+                        <?php foreach($plan as $key => $val) : ++$key; $benjin = (int) $val['benjin']; ?>
+                            <?php $hasRepaid = in_array($val['status'], [OnlineRepaymentPlan::STATUS_YIHUAN, OnlineRepaymentPlan::STATUS_TIQIAM]);?>
+                            <?php if (0 !== $benjin) { ?>
+                                <li>
+                                    <div>第<?= $key ?>期</div>
+                                    <div><?= date('Y.m.d', $val['refund_time']) ?></div>
+                                    <div>本金</div>
+                                    <div><?= StringUtils::amountFormat2($val['benjin']) ?>元</div>
+                                    <!--还款计划-文字颜色-->
+                                    <p class="<?= $hasRepaid ? 'repayment-green' : 'repayment-red' ?>"><?= $hasRepaid ? '已还' : '未还' ?></p>
+                                </li>
+                            <?php } ?>
+                            <li>
+                                <div>第<?= $key ?>期</div>
+                                <div><?= date('Y.m.d', $val['refund_time']) ?></div>
+                                <div>利息</div>
+                                <div><?= StringUtils::amountFormat2($val['lixi']) ?>元</div>
+                                <!--还款计划-文字颜色-->
+                                <p class="<?= $hasRepaid ? 'repayment-green' : 'repayment-red' ?>"><?= $hasRepaid ? '已还' : '未还' ?></p>
+                            </li>
+                        <?php endforeach; ?>
+                        <!--下拉按钮-->
+                        <div class="repayment-down"><img src="<?= ASSETS_BASE_URI ?>images/arrowShang.png" alt=""></div>
+                    </ul>
+                </div>
+            </div>
+        <?php } ?>
+        <!--认购合同-->
+        <div class="row" id="subscription-box">
+            <div class="col-xs-12">
+                <a href="<?= $asset && $asset['note_id'] ? '' : '/order/order/agreement?id='.$product->id.'&deal_id='.$deal->id ?>" class="subscription-title">
+                    <div class="subscription-left">认购合同</div>
+                    <div class="subscription-right"><img src="<?= ASSETS_BASE_URI ?>images/arrowShang.png" alt=""></div>
+                </a>
             </div>
         </div>
-    </div>
-    <!--还款计划详情-->
-    <div class="row" id="repayment-content">
-        <div class="col-xs-12">
-            <ul class="repayment-content">
-                <?php foreach($plan as $val): ?>
-                    <?php $hasRepaid = in_array($val['status'], [OnlineRepaymentPlan::STATUS_YIHUAN, OnlineRepaymentPlan::STATUS_TIQIAM]);?>
-                <?php if (0 !== (int) $val['benjin']) { ?>
-                <li>
-                    <div>第<?= $val['qishu'] ?>期</div>
-                    <div><?= date('Y.m.d', $val['refund_time']) ?></div>
-                    <div>本金</div>
-                    <div><?= StringUtils::amountFormat2($val['benjin']) ?>元</div>
-                    <!--还款计划-文字颜色-->
-                    <p class="<?= $hasRepaid ? 'repayment-green' : 'repayment-red' ?>"><?= $hasRepaid ? '已还' : '未还' ?></p>
-                </li>
-                <?php } ?>
-                <li>
-                    <div>第<?= $val['qishu'] ?>期</div>
-                    <div><?= date('Y.m.d', $val['refund_time']) ?></div>
-                    <div>利息</div>
-                    <div><?= StringUtils::amountFormat2($val['lixi']) ?>元</div>
-                    <!--还款计划-文字颜色-->
-                    <p class="<?= $hasRepaid ? 'repayment-green' : 'repayment-red' ?>"><?= $hasRepaid ? '已还' : '未还' ?></p>
-                </li>
-                <?php endforeach; ?>
-                <!--下拉按钮-->
-                <div class="repayment-down"><img src="<?= ASSETS_BASE_URI ?>images/arrowShang.png" alt=""></div>
-            </ul>
-        </div>
-    </div>
-    <?php } ?>
-    <!--认购合同-->
-    <div class="row" id="subscription-box">
-        <div class="col-xs-12">
-            <a href="<?= $asset && $asset['note_id'] ? '' : '/order/order/agreement?id='.$product->id.'&deal_id='.$deal->id ?>" class="subscription-title">
-                <div class="subscription-left">认购合同</div>
-                <div class="subscription-right"><img src="<?= ASSETS_BASE_URI ?>images/arrowShang.png" alt=""></div>
-            </a>
-        </div>
-    </div>
     <?php } ?>
 </div>

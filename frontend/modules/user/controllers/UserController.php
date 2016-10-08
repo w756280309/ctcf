@@ -160,7 +160,6 @@ class UserController extends BaseController
         $user = $this->getAuthedUser();
         $o = Ord::tableName();
         $l = Loan::tableName();
-        $p = Plan::tableName();
 
         switch ($type) {
             case 1:

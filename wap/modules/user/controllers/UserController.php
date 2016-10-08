@@ -4,9 +4,9 @@ namespace app\modules\user\controllers;
 
 use app\controllers\BaseController;
 use common\models\user\MoneyRecord;
-use common\models\order\OnlineOrder;
-use common\models\product\OnlineProduct;
-use common\models\order\OnlineRepaymentPlan;
+use common\models\order\OnlineOrder as Ord;
+use common\models\product\OnlineProduct as Loan;
+use common\models\order\OnlineRepaymentPlan as Plan;
 use common\models\order\OrderManager;
 use common\service\BankService;
 use common\lib\bchelp\BcRound;
@@ -73,14 +73,14 @@ class UserController extends BaseController
         }
 
         $user = $this->getAuthedUser();
-        $o = OnlineOrder::tableName();
-        $l = OnlineProduct::tableName();
+        $o = Ord::tableName();
+        $l = Loan::tableName();
 
         if (2 === $type) {
-            $query = OnlineOrder::find()
+            $query = Ord::find()
                 ->innerJoinWith('loan')
-                ->where(["$o.uid" => $user->id, "$o.status" => OnlineOrder::STATUS_SUCCESS])
-                ->andWhere(["$l.status" => [OnlineProduct::STATUS_NOW, OnlineProduct::STATUS_FULL, OnlineProduct::STATUS_FOUND]])
+                ->where(["$o.uid" => $user->id, "$o.status" => Ord::STATUS_SUCCESS])
+                ->andWhere(["$l.status" => [Loan::STATUS_NOW, Loan::STATUS_FULL, Loan::STATUS_FOUND]])
                 ->orderBy("$o.id desc");
 
             $pages = new Pagination(['totalCount' => $query->count(), 'pageSize' => $pageSize]);
@@ -97,7 +97,19 @@ class UserController extends BaseController
             $model = $assets['data'];
 
             foreach ($model as $key => $val) {
-                $model[$key]['order'] = OnlineOrder::findOne($val['order_id']);
+                $cond = ['online_pid' => $val['loan_id'], 'uid' => $user->id];
+                if (!empty($val['note_id'])) {
+                    $cond['asset_id'] = $val['id'];
+                } else {
+                    $cond['order_id'] = $val['order_id'];
+                }
+
+                $data = Plan::find()
+                    ->where($cond)
+                    ->asArray()
+                    ->all();
+
+                $model[$key]['shouyi'] = array_sum(array_column($data, 'lixi'));
             }
         }
 
@@ -145,12 +157,12 @@ class UserController extends BaseController
             $id = $asset['order_id'];
         }
 
-        $deal = OnlineOrder::findOne($id);
+        $deal = Ord::findOne($id);
         if (null === $deal) {
             throw $this->ex404();    //当对象为空时,抛出404异常
         }
 
-        $product = OnlineProduct::findOne($deal->online_pid);
+        $product = Loan::findOne($deal->online_pid);
         if (null === $product) {
             throw $this->ex404();    //当对象为空时,抛出404异常
         }
@@ -164,19 +176,31 @@ class UserController extends BaseController
 
         $plan = null;
         $hkDate = null;
-        if (in_array($product->status, [OnlineProduct::STATUS_HUAN, OnlineProduct::STATUS_OVER])) {
-            $plan = OnlineRepaymentPlan::findAll(['online_pid' => $deal->online_pid, 'uid' => $this->getAuthedUser()->id, 'order_id' => $deal->id]);
+        if (in_array($product->status, [Loan::STATUS_HUAN, Loan::STATUS_OVER])) {
+            $cond = ['online_pid' => $asset['loan_id'], 'uid' => $this->getAuthedUser()->id];
+            if (!empty($asset['note_id'])) {
+                $cond['asset_id'] = $asset['id'];
+            } else {
+                $cond['order_id'] = $deal->id;
+            }
+
+            $plan = Plan::find()
+                ->where($cond)
+                ->asArray()
+                ->all();
 
             if (!empty($plan)) {
                 $hkDate = end($plan)['refund_time'];
                 $flag = 0;
                 foreach($plan as $val) {
-                    if (0 === $flag && OnlineRepaymentPlan::STATUS_WEIHUAN === $val['status']) {
+                    if (0 === $flag && Plan::STATUS_WEIHUAN === $val['status']) {
                         $hkDate = $val['refund_time'];
                         $flag = 1;
                     }
                 }
             }
+
+            $profit = array_sum(array_column($plan, 'lixi'));
         }
 
         return $this->render('order_detail', [

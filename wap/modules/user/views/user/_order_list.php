@@ -61,9 +61,13 @@ use common\utils\StringUtils;
             <?php } else { ?>
                 <div class="col-xs-4 loan-info2">
                     <?php
-                        unset($val['loan']);
-                        $order = 2 === $type ? (new OnlineOrder($val)) : $val['order'];
-                        $profit = $order->getProceeds();
+                        if (2 === $type) {
+                            unset($val['loan']);
+                            $order = new OnlineOrder($val);
+                            $profit = $order->getProceeds();
+                        } else {
+                            $profit = $val['shouyi'];
+                        }
                     ?>
                     <p class="info-val"><?= StringUtils::amountFormat3($profit) ?>元</p>
                     <p class="info-label"><?= (OnlineProduct::STATUS_OVER === $loanStatus) ? "实际收益" : "预期收益" ?></p>
