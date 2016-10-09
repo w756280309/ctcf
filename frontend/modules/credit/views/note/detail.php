@@ -155,10 +155,10 @@ $isClosed = $respData['isClosed'] || $nowTime >= $endTime;
 <script>
     function callback(data) {
         if (data.interest) {
-            $('.yuqi i').html(data.interest);
+            $('.yingfu i').html(data.profit);
         }
         if (data.profit) {
-            $('.yingfu i').html(data.profit);
+            $('.yuqi i').html(data.interest);
         }
     }
     $(function(){
