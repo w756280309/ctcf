@@ -55,14 +55,15 @@ class SmsService
 
         $model->time_len = 5;
         $model->end_time = $time + $model->time_len * 60;
+        $mockSms = Yii::$app->params['mock_sms'];
 
-        if (Yii::$app->params['mock_sms']) {
+        if ($mockSms) {
             $model->code = '888888';
         }
 
         if ($model->save()) {
             $smsWhiteList = Yii::$app->params['sms_white_list'];
-            if (Yii::$app->params['mock_sms'] && (!empty($smsWhiteList) && !in_array($model->mobile, $smsWhiteList))) {
+            if ($mockSms && !in_array($model->mobile, $smsWhiteList)) {
                 return ['code' => 0, 'message' => ''];
             }
 
@@ -153,7 +154,7 @@ class SmsService
         ]);
 
         $smsWhiteList = Yii::$app->params['sms_white_list'];
-        if (Yii::$app->params['mock_sms'] && (!empty($smsWhiteList) && !in_array($mobile, $smsWhiteList))) {
+        if (Yii::$app->params['mock_sms'] && !in_array($mobile, $smsWhiteList)) {
             $smsMessage->status = SmsMessage::STATUS_SENT;
         }
 
