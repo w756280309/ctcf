@@ -14,9 +14,23 @@ class CreateAction extends Action
         $amount = floatval(\Yii::$app->request->post('amount'));
         $rate = floatval(\Yii::$app->request->post('rate', 0));
         $rate = $rate ?: 0;
+
+        if (Yii::$app->user->isGuest) {
+            return ['code' => 1, 'data' => [['msg' => '请登录', 'attribute' => '']]];
+        }
+
+        //判断是否存在该资产记录
+        $txClient = \Yii::$container->get('txClient');
+        if ($asset_id <= 0 || null === ($asset = $txClient->get('assets/detail', ['id' => $asset_id, 'validate' => true]))) {
+            return ['code' => 1, 'data' => [['msg' => '不满足转让发起条件', 'attribute' => '']]];
+        }
+
+        if ($asset['user_id'] !== (int) Yii::$app->user->identity->id) {
+            return ['code' => 1, 'data' => [['msg' => '非本人不能发起该转让', 'attribute' => '']]];
+        }
+
         if ($asset_id > 0 && $amount > 0 && $rate >= 0) {
             try {
-                $txClient = \Yii::$container->get('txClient');
                 $result = $txClient->post('credit-note/new', [
                     'discountRate' => $rate,
                     'asset_id' => $asset_id,
