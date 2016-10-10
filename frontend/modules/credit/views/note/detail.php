@@ -175,10 +175,6 @@ $isClosed = $respData['isClosed'] || $nowTime >= $endTime;
             getOrderList($(this).attr('href'));
         });
 
-        var note_amount = <?= bcdiv($respData['amount'], 100, 2) ?>;
-        var remaining_interest = <?= bcdiv($respData['remainingInterest'], 100, 2) ?>;
-        var current_interest = <?= bcdiv($respData['currentInterest'], 100, 2) ?>;
-
         $('.dR-money').keyup($.throttle(100,function () {
             var val = $(this).val();
             var amount = $.isNumeric(val) ? val : 0;
@@ -195,8 +191,6 @@ $isClosed = $respData['isClosed'] || $nowTime >= $endTime;
             //计算预期收益,再次调用计算应付利息与预计收益的函数
         }));
 
-        var qitou_money = <?= $note_config['min_order_amount'] ?>;
-        var rest_money = <?= bcsub($respData['amount'], $respData['tradedAmount']) ?>;
         $('.dR-money').blur(function () {
             var isGuest = <?= Yii::$app->user->isGuest ? 'true' : 'false' ?>;//登录状态
             if (isGuest){
@@ -207,24 +201,8 @@ $isClosed = $respData['isClosed'] || $nowTime >= $endTime;
                 return false;
             }
 
-            var money = $(this).val();
-            if (/[0-9]+(\.)[0-9]{3,}/.test(money)) {
-                $(this).val(money.substring(0, money.indexOf(".") + 3));
-            }
-            var moneys = parseFloat(money) * 100;
-            if(moneys > rest_money) {
-                $('.dR-tishi-error ').show();
-                $('.dR-tishi-error').html('投资金额不能超过可交易金额');
+            if (!validateMoney()) {
                 return false;
-            }
-            if (moneys >= 0) {
-                if (rest_money >= qitou_money) {
-                    if (moneys < qitou_money) {
-                        $('.dR-tishi-error ').show();
-                        $('.dR-tishi-error').html('投资金额小于起投金额（<?= StringUtils::amountFormat2(bcdiv($note_config['min_order_amount'], 100, 2)) ?>元）');
-                        return false;
-                    }
-                }
             }
         });
 
@@ -245,22 +223,7 @@ $isClosed = $respData['isClosed'] || $nowTime >= $endTime;
             }
 
             //判断金额-next
-            var money = $('.dR-money').val();
-            if (/[0-9]+(\.)[0-9]{3,}/.test(money)) {
-                $(this).val(money.substring(0, money.indexOf(".") + 3));
-            }
-            var moneys = parseFloat(money) * 100;
-            if (moneys >= 0) {
-                if (rest_money >= qitou_money) {
-                    if (moneys < qitou_money) {
-                        $('.dR-tishi-error ').show();
-                        $('.dR-tishi-error').html('投资金额小于起投金额（<?= StringUtils::amountFormat2(bcdiv($note_config['min_order_amount'], 100, 2)) ?>元）');
-                        return false;
-                    }
-                }
-            } else {
-                $('.dR-tishi-error ').show();
-                $('.dR-tishi-error').html('投资金额不能为空');
+            if (!validateMoney()) {
                 return false;
             }
 
@@ -298,6 +261,37 @@ $isClosed = $respData['isClosed'] || $nowTime >= $endTime;
 
         });
     });
+
+    function validateMoney()
+    {
+        var qitou_money = <?= $note_config['min_order_amount'] ?>;
+        var rest_money = <?= bcsub($respData['amount'], $respData['tradedAmount']) ?>;
+        var money = $('.dR-money').val();
+        if (/[0-9]+(\.)[0-9]{3,}/.test(money)) {
+            $(this).val(money.substring(0, money.indexOf(".") + 3));
+        }
+        var moneys = parseFloat(money) * 100;
+        if(moneys > rest_money) {
+            $('.dR-tishi-error ').show();
+            $('.dR-tishi-error').html('投资金额不能超过可交易金额');
+            return false;
+        }
+        if (moneys >= 0) {
+            if (rest_money >= qitou_money) {
+                if (moneys < qitou_money) {
+                    $('.dR-tishi-error ').show();
+                    $('.dR-tishi-error').html('投资金额小于起投金额（<?= StringUtils::amountFormat2(bcdiv($note_config['min_order_amount'], 100, 2)) ?>元）');
+                    return false;
+                }
+            }
+        } else {
+            $('.dR-tishi-error ').show();
+            $('.dR-tishi-error').html('投资金额不能为空');
+            return false;
+        }
+
+        return true;
+    }
 
     function isOwnUserItem()
     {
