@@ -320,6 +320,7 @@ body {
     height: 60px;
 }
 .piD-data-inner tr th{
+    font-weight: 400;
     height: 60px;
     color: #464648;
     font-size: 14px;

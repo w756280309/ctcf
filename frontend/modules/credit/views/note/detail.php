@@ -1,7 +1,7 @@
 <?php
 $this->title = '转让详情';
 
-$this->registerCssFile(ASSETS_BASE_URI.'css/credit/credit.css?v=160922', ['depends' => 'frontend\assets\FrontAsset']);
+$this->registerCssFile(ASSETS_BASE_URI.'css/credit/credit.css?v=161010', ['depends' => 'frontend\assets\FrontAsset']);
 $this->registerJsFile(ASSETS_BASE_URI.'js/credit/detail.js?v=160922', ['depends' => 'frontend\assets\FrontAsset']);
 $this->registerJsFile(ASSETS_BASE_URI.'js/jquery.ba-throttle-debounce.min.js?v=161008', ['depends' => 'frontend\assets\FrontAsset']);
 $this->registerCssFile(ASSETS_BASE_URI.'css/pagination.css');
