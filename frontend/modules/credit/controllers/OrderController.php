@@ -37,24 +37,19 @@ class OrderController extends BaseController
         if (null === $note || !isset($note['asset'])) {
             $this->ex404('没有找到指定债权');
         }
-        $rate = bcdiv($note['discountRate'], 100);
         $asset = $note['asset'];
         $loan = OnlineProduct::findOne($asset['loan_id']);
         $order = OnlineOrder::findOne($asset['order_id']);
         if (null === $loan || null === $order) {
             $this->ex404('没有找到指定债权');
         }
-        $interest = bcdiv(bcmul($note['currentInterest'], $amount), $note['amount'], 2);//应付利息
-        $profit = bcdiv(bcmul($note['remainingInterest'], $amount), $note['amount'], 2);//预期收益
-        $payAmount = bcmul(bcadd($amount, $interest), bcsub(1, $rate), 2);//实际支付金额
+
         return $this->render('confirm', [
             'note' => $note,
             'order' => $order,
             'loan' => $loan,
-            'interest' => $interest,
-            'profit' => $profit,
             'amount' => $amount,
-            'payAmount' => $payAmount,
+            'rate' => $note['discountRate'],
         ]);
     }
 

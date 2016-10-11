@@ -2,6 +2,7 @@
 use yii\helpers\Html;
 $this->title = '确认订单';
 $this->registerCssFile(ASSETS_BASE_URI . 'css/credit/creditpay.css');
+$this->registerJsFile(ASSETS_BASE_URI.'js/jquery.ba-throttle-debounce.min.js?v=161008', ['depends' => \yii\web\JqueryAsset::class]);
 ?>
 <div class="credit-box clearfix">
     <div class="credit-container">
@@ -38,10 +39,10 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/credit/creditpay.css');
                 </div>
                 <div class="rg credit-ct-rg">
                     <p class="sum"><span class="lf-span">投资金额:</span><i class="rg-i text-align-rg"><?= number_format($amount, 2)?></i></p>
-                    <p class="reduce"><span class="lf-span">应付利息:</span><i class="rg-i text-align-rg"><?= number_format($interest, 2)?></i></p>
-                    <p class="sum"><span class="lf-span">预期收益:</span><i class="rg-i text-align-rg"><?= number_format($profit, 2)?></i></p>
+                    <p class="reduce"><span class="lf-span">应付利息:</span><i class="rg-i text-align-rg" id="interest">0.00</i></p>
+                    <p class="sum"><span class="lf-span">预期收益:</span><i class="rg-i text-align-rg" id="profit">0.00</i></p>
                     <div class="real-credit rg">
-                        <p class="real-money"><span>实际支付:</span><i>￥</i><?= number_format($payAmount, 2)?></p>
+                        <p class="real-money"><span>实际支付:</span><i>￥</i><a id="payment"></a></p>
                         <a  class="buy" id="sub_button">确认购买</a>
                     </div>
                     <p style="color: red;    padding-left: 10px;margin-top: 10px;" id="err_message"></p>
@@ -52,7 +53,19 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/credit/creditpay.css');
     </div>
 </div>
 <script>
+    function callback(data) {
+        $('#interest').html(data.interest);
+        $('#profit').html(data.profit);
+        $('#payment').html(data.payment);
+    }
     $(function () {
+        $.ajax({
+            type: "get",
+            url: "<?= rtrim(\Yii::$app->params['clientOption']['host']['tx'], '/')?>/credit-note/calc",
+            data: {note_id:<?= $note['id']?>, amount: <?= $amount?>, rate: <?= $rate?>},
+            dataType: "jsonp"
+        });
+
         $('#sub_button').bind('click', function () {
             var buy = $(this);
             $('#err_message').hide();
