@@ -100,19 +100,25 @@ use common\utils\StringUtils;
                             break;
                         }
                     ?>
-                    <?php if (isset($model['note_id'])) { ?>
+                    <?php if (isset($model['createTime'])) { ?>
                         <li class="clearfix">
                             <div class="investment-inner investment-inner1">
                                 <div class="investment-name grayFont investment-box-vertical" style="text-align: left;">
                                     <div class="investment-name1">
-                                        <a href="/credit/note/detail?id=<?= $model['note_id'] ?>">
-                                           【转让】<?= $model['loan']['title'] ?>
-                                        </a>
+                                        <?php if (empty($model['note_id'])) { ?>
+                                            <a href="/deal/deal/detail?sn=<?= $model['loan']['sn'] ?>">
+                                                <?= $model['loan']['title'] ?>
+                                            </a>
+                                        <?php } else { ?>
+                                            <a href="/credit/note/detail?id=<?= $model['note_id'] ?>">
+                                               【转让】<?= $model['loan']['title'] ?>
+                                            </a>
+                                        <?php } ?>
                                     </div>
                                 </div>
                             </div>
-                            <div class="investment-inner"><div class="investment-money grayFont investment-box-vertical"><i><?= StringUtils::amountFormat3(bcdiv($model['principal'], 100, 2)) ?></i></div></div>
-                            <div class="investment-inner"><div class="investment-profit grayFont investment-box-vertical"><i><?= StringUtils::amountFormat3(bcdiv($model['earnings'], 100, 2)) ?></i></div></div>
+                            <div class="investment-inner"><div class="investment-money grayFont investment-box-vertical"><i><?= StringUtils::amountFormat3(bcdiv($model['amount'], 100, 2)) ?></i></div></div>
+                            <div class="investment-inner"><div class="investment-profit grayFont investment-box-vertical"><i><?= StringUtils::amountFormat3($model['shouyi']) ?></i></div></div>
                             <div class="investment-inner">
                                 <div class="investment-time grayFont investment-box-vertical">
                                     <i>

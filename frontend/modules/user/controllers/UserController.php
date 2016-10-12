@@ -101,40 +101,57 @@ class UserController extends BaseController
 
         $orders = Ord::find()
             ->innerJoinWith('loan')
-            ->where(["$o.uid" => $user->id, "$l.status" => [2, 3, 5, 7], "$o.status" => Ord::STATUS_SUCCESS])
+            ->where(["$o.uid" => $user->id, "$l.status" => [2, 3, 7], "$o.status" => Ord::STATUS_SUCCESS])
             ->orderBy(["$o.id" => SORT_DESC])
             ->limit(5)
             ->all();
 
-        $creditOrders = Yii::$container->get('txClient')->get('credit-order/list-for-user', [
+        $assets = Yii::$container->get('txClient')->get('assets/list', [
             'user_id' => $user->id,
-            'limit' => 5,
+            'type' => 1,
+            'page_size' => 5,
         ]);
 
-        foreach ($creditOrders['data'] as $creditOrder) {   //将债权订单记录按照创建时间的由近到远的顺序逐条插入到普通订单信息当中
+        foreach ($assets['data'] as $asset) {   //将债权订单记录按照创建时间的由近到远的顺序逐条插入到普通订单信息当中
             $insertFlag = false;    //判断是否执行了插入操作标志位
 
             foreach ($orders as $key => $order) {
-                $_createTime = isset($order['createTime']) ? $order['createTime'] : date('Y-m-d H:i:s', $order['created_at']);
-                if ($creditOrder['createTime'] <= $_createTime) {   //寻找插入的位置
+                $assetTime = empty($asset['note_id']) ? $asset['orderTime'] : $asset['createTime'];
+                $_createTime = isset($order['createTime'])
+                    ? (empty($order['note_id']) ? $order['orderTime'] : $order['createTime'])
+                    : date('Y-m-d H:i:s', $order['created_at']);    //如果是普通订单,就使用订单创建时间来判断;如果是债权,且没有被转让过就使用订单时间来判断,否则使用创建时间来判断
+
+                if ($assetTime <= $_createTime) {   //寻找插入的位置
                     continue;
                 }
 
                 $data = array_splice($orders, $key);    //找到位置后,插入记录
-                $orders[$key] = $creditOrder;
+                $orders[$key] = $asset;
                 array_splice($orders, $key + 1, 1, $data);
                 $insertFlag = true;
                 break;
             }
 
             if (!$insertFlag) { //如果前面没有执行插入操作,表明应该将该条记录插入到数组的末尾
-                array_push($orders, $creditOrder);
+                array_push($orders, $asset);
             }
         }
 
         foreach ($orders as $key => $order) {
-            if (isset($order['note_id'])) {
-                $orders[$key]['loan'] = Loan::findOne($order['asset']['loan_id']);
+            if ($key >= 5) {
+                break;
+            }
+
+            if (isset($order['createTime'])) {
+                $cond = ['online_pid' => $order['loan_id'], 'uid' => $user->id];
+                if (!empty($order['note_id'])) {
+                    $cond['asset_id'] = $order['id'];
+                } else {
+                    $cond['order_id'] = $order['order_id'];
+                }
+
+                $data = Plan::findAll($cond);
+                $orders[$key]['shouyi'] = array_sum(ArrayHelper::getColumn($data, 'lixi'));
             }
         }
 
