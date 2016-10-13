@@ -634,7 +634,9 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface, UserInterf
 
     public function getTotalInvestment()
     {
-        return Ord::find()->where(['uid' => $this->id, 'status' => Ord::STATUS_SUCCESS])->sum('order_money');
+        $investment = \Yii::$container->get('txClient')->get('user/total-investment', ['id' => $this->id]);
+        $investment = intval($investment) > 0 ? $investment : 0;
+        return $investment;
     }
 
     public function getUserIsInvested()
