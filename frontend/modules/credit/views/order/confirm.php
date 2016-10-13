@@ -81,16 +81,16 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/jquery.ba-throttle-debounce.min.js?v=1
                     "note_id":<?= $note['id'] ?>,
                     "principal":<?= $amount ?>
                 }, function (data) {
-                    setTimeout(function () {
-                        _this.removeClass('twoFire');
-                        if (0 !== data.code && '' === data.url) {
-                            $('#err_message').show();
-                            $('#err_message').html(data.message);
-                        }
-                        if ('' !== data.url) {
+                    _this.removeClass('twoFire');
+                    if (0 !== data.code && '' === data.url) {
+                        $('#err_message').show();
+                        $('#err_message').html(data.message);
+                    }
+                    if (data.url) {
+                        setTimeout(function () {
                             location.replace(data.url);
-                        }
-                    }, 1000);
+                        }, 1000);
+                    }
                 });
                 jqXhr.fail(function () {
                     _this.removeClass('twoFire');

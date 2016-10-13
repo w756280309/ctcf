@@ -79,13 +79,22 @@ class OrderController extends BaseController
                 'note_id' => $noteId,
                 'principal' => bcmul($principal, 100, 0),
             ]);
+
             if (isset($res['id'])) {
-                return ['code' => 0, 'url' => '/credit/order/wait?order_id=' . $res['id']];
+                $arr = ['code' => 0, 'url' => '/credit/order/wait?order_id='.$res['id']];
             } else {
-                return ['code' => 1, 'url' => '/info/fail?source=credit_order'];
+                $arr = ['code' => 1, 'url' => '/info/fail?source=credit_order'];
             }
+
+            return $arr;
         } catch (\Exception $ex) {
-           return ['code' => 1, 'url' => '', 'message' => $ex->getMessage()];
+            $result = json_decode(strval($ex->getResponse()->getBody()), true);
+
+            return [
+                'code' => 1,
+                'url' => '',
+                'message' => isset($result['message']) && isset($result['status']) ? $result['message'] : '系统繁忙，请稍后重试！',
+            ];
         }
     }
 
