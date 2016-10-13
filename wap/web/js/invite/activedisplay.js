@@ -5,11 +5,31 @@ $(document).ready(function () {
         $(this).parents('.fixed-box').hide().siblings('.fixed-float').hide();
     });
     $('#transform-icon').on('click', function () {
-        $(this).addClass('transform-start');
-        setTimeout(function () {
-            $('.transform-front-box').fadeOut(200);
-            $('.transform-back-box').fadeIn(200);
-        }, 500);
+        if ($(this).hasClass('clickFlag')) {
+            return false;
+        }
+        $(this).addClass('clickFlag');
+        var xhr = $.get('/site/session');
+        var _this = $(this);
+
+        xhr.done(function(data) {
+            if (typeof data.isLoggedin !== 'undefined' && data.isLoggedin) {
+                toastCenter('注册奖励仅限新用户哦，邀好友来注册吧！', function(){
+                    _this.removeClass('clickFlag');
+                });
+            } else {
+                _this.addClass('transform-start');
+                setTimeout(function () {
+                    $('.transform-front-box').fadeOut(200);
+                    $('.transform-back-box').fadeIn(200);
+                }, 500);
+            }
+        });
+
+        xhr.fail(function(jqXHR) {
+            _this.removeClass('clickFlag');
+            alert('请求失败');
+        });
     });
     $('#collect').bind('click', function(e) {
         e.preventDefault();

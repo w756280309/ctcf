@@ -153,6 +153,25 @@ function toast(val, active)
     }, 2000);
 }
 
+/**
+ * 居中弹窗.
+ */
+function toastCenter(val, active)
+{
+    var $alert = $('<div class="error-info" style="display: block; position: fixed;"><div>' + val + '</div></div>');
+    $('body').append($alert);
+    $alert.find('div').width($alert.width());
+    setTimeout(function () {
+        $alert.fadeOut();
+        setTimeout(function () {
+            $alert.remove();
+        }, 200);
+        if (active) {
+            active();
+        }
+    }, 2000);
+}
+
 //只有确定按钮的弹窗
 //alertTrue(function(){
 //    alert('true');
