@@ -199,24 +199,6 @@ $fee = Yii::$app->params['credit_trade']['fee_rate'] * 1000;
         });
     });
 
-    submit_btn.click(function () {
-        discount_rate_error.hide();
-        var rate = parseFloat(discount_rate_input.val());
-        if (!rate) {
-            rate = 0;
-        }
-        if (validateData()) {
-            discount_rate_error.hide();
-            $('.mask').show();
-            $('.confirmBox').show();
-            if (rate == 0) {
-                $('.confirmBox-top').find('p').text('您确定要发布转让吗？');
-            } else {
-                $('.confirmBox-top').find('p').text('折让率为' + rate + '%，您确定要发布转让吗？');
-            }
-        }
-    });
-
     function subConfirm(obj) {
         $('.mask').hide();
         $('.confirmBox').hide();
@@ -274,11 +256,6 @@ $fee = Yii::$app->params['credit_trade']['fee_rate'] * 1000;
         }
         if (rate < 0) {
             discount_rate_error.html('折让率不能小于0');
-            discount_rate_error.show();
-            return false;
-        }
-        if (rate > config_rate) {
-            discount_rate_error.html('折让率不能大于' + config_rate + '%');
             discount_rate_error.show();
             return false;
         }
@@ -346,5 +323,35 @@ $fee = Yii::$app->params['credit_trade']['fee_rate'] * 1000;
         if (data.realAmount) {
             $('#expect_amount').html(data.realAmount);
         }
+
+        var amount = parseFloat(amount_input.val());
+        var rate = parseFloat(discount_rate_input.val());
+        var interest = parseFloat(data.interest);
+        var maxRate = interest / (amount + interest) * 100;
+        maxRate = Math.min(config_rate, maxRate);
+        $('#discount_rate_input').attr('placeholder', '不高于' + (parseInt(maxRate * 100) / 100) + '，可设置2位小数');
+        if (rate > maxRate) {
+            discount_rate_error.html('折让率不能大于'+(parseInt(maxRate * 100) / 100));
+            discount_rate_error.show();
+            return false;
+        }
+
+        submit_btn.click(function () {
+            discount_rate_error.hide();
+            var rate = parseFloat(discount_rate_input.val());
+            if (!rate) {
+                rate = 0;
+            }
+            if (validateData()) {
+                discount_rate_error.hide();
+                $('.mask').show();
+                $('.confirmBox').show();
+                if (rate == 0) {
+                    $('.confirmBox-top').find('p').text('您确定要发布转让吗？');
+                } else {
+                    $('.confirmBox-top').find('p').text('折让率为' + rate + '%，您确定要发布转让吗？');
+                }
+            }
+        });
     }
 </script>
