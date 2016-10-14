@@ -342,6 +342,11 @@ $fee = Yii::$app->params['credit_trade']['fee_rate'] * 1000;
             if (!rate) {
                 rate = 0;
             }
+            if (rate > maxRate) {
+                discount_rate_error.html('折让率不能大于'+(parseInt(maxRate * 100) / 100));
+                discount_rate_error.show();
+                return false;
+            }
             if (validateData()) {
                 discount_rate_error.hide();
                 $('.mask').show();
