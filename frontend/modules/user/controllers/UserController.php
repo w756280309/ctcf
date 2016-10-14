@@ -75,6 +75,13 @@ class UserController extends BaseController
 
                 $desc[$key]['nodeId'] = $creditNode['id'];
                 $desc[$key]['loan'] = Loan::findOne($creditNode['loan_id']);
+            } elseif (MoneyRecord::TYPE_CREDIT_HUIKUAN === $val->type) {
+                $asset = Yii::$container->get('txClient')->get('assets/detail', [
+                    'id' => $val->osn,
+                ]);
+
+                $desc[$key]['nodeId'] = $asset['note_id'];
+                $desc[$key]['loan'] = Loan::findOne($asset['loan_id']);
             } else {
                 $desc[$key]['desc'] = $val->osn;
             }

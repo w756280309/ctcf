@@ -374,12 +374,12 @@ class RepaymentController extends BaseController
             $money_record = clone $mrmodel;
             $money_record->account_id = $ua->id;
             $money_record->sn = MoneyRecord::createSN();
-            $money_record->type = MoneyRecord::TYPE_HUIKUAN;
-            $money_record->osn = $order->sn;
-            $money_record->uid = $order['uid'];
+            $money_record->type = null !== $order->asset_id ? MoneyRecord::TYPE_CREDIT_HUIKUAN : MoneyRecord::TYPE_HUIKUAN;
+            $money_record->osn = null !== $order->asset_id ? $order->asset_id : $order->sn;
+            $money_record->uid = $order->uid;
             $money_record->in_money = $record->benxi;
             $money_record->balance = $ua->available_balance;
-            $money_record->remark = '第'.$qishu.'期'.'本金:'.$order['benjin'].'元;利息:'.$record->lixi.'元;';
+            $money_record->remark = '第'.$qishu.'期'.'本金:'.$order->benjin.'元;利息:'.$record->lixi.'元;';
 
             if (!$money_record->save()) {
                 $transaction->rollBack();
