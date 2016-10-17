@@ -2,7 +2,7 @@
 
 $this->title = "温州报业传媒旗下理财平台";
 $this->params['breadcrumbs'][] = $this->title;
-$this->header_nav_on = true;
+$this->headerNavOn = true;
 
 use wap\assets\WapAsset;
 

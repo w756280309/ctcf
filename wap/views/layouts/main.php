@@ -41,8 +41,8 @@ $this->registerMetaTag([
 <body>
 <?php $this->beginBody() ?>
 <div class="container">
-    <?php if (!defined('IN_APP')) { ?>
-        <?php if ($this->header_nav_on) { ?>
+    <?php if (!defined('IN_APP') && !$this->hideHeaderNav) { ?>
+        <?php if ($this->headerNavOn) { ?>
             <header class="row head-title">
                 <div class="logo col-xs-12 col-sm-12"><img src="<?= ASSETS_BASE_URI ?>images/logo.png" alt="logo"></div>
                 <div class="logo_tit"><?= Html::encode($this->title) ?></div>

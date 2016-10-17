@@ -1,70 +1,24 @@
 <?php
-use yii\helpers\Html;
-use wap\assets\WapAsset;
-use common\models\product\OnlineProduct;
-use common\view\AnalyticsHelper;
-use common\view\LoanHelper;
-
-WapAsset::register($this);
-
 $this->title = '温都金服';
 $this->params['breadcrumbs'][] = $this->title;
-$this->registerCssFile(ASSETS_BASE_URI . 'css/swiper.min.css?v=20160419', ['depends' => 'wap\assets\WapAsset']);
-$this->registerJsFile(ASSETS_BASE_URI . 'js/swiper.min.js?v=20160419', ['depends' => 'yii\web\JqueryAsset', 'position' => 1]);
-$this->registerJsFile(ASSETS_BASE_URI . 'js/jquery.classyloader.js', ['depends' => 'yii\web\JqueryAsset', 'position' => 1]);
-$this->registerJsFile(ASSETS_BASE_URI . 'js/index.js?v=20160516', ['depends' => 'yii\web\JqueryAsset', 'position' => 3]);
-$this->registerCssFile(ASSETS_BASE_URI . 'css/index.css?v=20160708', ['depends' => 'wap\assets\WapAsset']);  //加载在depends之后
-$this->registerCssFile(ASSETS_BASE_URI . 'css/first.css?v=20160509', ['depends' => 'wap\assets\WapAsset']);
-$this->registerCssFile(ASSETS_BASE_URI . 'css/kaipin.css', ['depends' => 'wap\assets\WapAsset']);
+$this->hideHeaderNav = true;
+$this->showBottomNav = true;
 
-AnalyticsHelper::registerTo($this);
+use common\models\product\OnlineProduct;
+use common\utils\StringUtils;
+use common\view\LoanHelper;
+use wap\assets\WapAsset;
+use yii\web\JqueryAsset;
 
-$this->registerMetaTag([
-    'name' => 'keywords',
-    'content' => Yii::$app->params['wap_page_keywords'],
-]);
-$this->registerMetaTag([
-    'name' => 'description',
-    'content' => Yii::$app->params['wap_page_descritpion'],
-]);
-
+$this->registerCssFile(ASSETS_BASE_URI.'css/swiper.min.css', ['depends' => WapAsset::class]);
+$this->registerCssFile(ASSETS_BASE_URI.'css/wap_index.css', ['depends' => WapAsset::class]);
+$this->registerCssFile(ASSETS_BASE_URI.'css/kaipin.css', ['depends' => WapAsset::class]);
+$this->registerJsFile(ASSETS_BASE_URI.'js/swiper.min.js', ['depends' => JqueryAsset::class, 'position' => 1]);
+$this->registerJsFile(ASSETS_BASE_URI.'js/lib.flexible/lib.flexible.js', ['depends' => JqueryAsset::class, 'position' => 1]);
+$this->registerJsFile(ASSETS_BASE_URI.'js/index.js', ['depends' => JqueryAsset::class]);
 ?>
 
-<?php $this->beginPage() ?>
-
-<!DOCTYPE html>
-<html>
-<head>
-   <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
-    <meta name="renderer" content="webkit">
-    <meta name="format-detection" content="telephone=no"/>
-    <title>温都金服-温州报业传媒旗下理财平台</title>
-    <?= Html::csrfMetaTags() ?>
-    <?php $this->head() ?>
-<script>
-$(function() {
-    $(document).ajaxSend(function(event, jqXHR, settings) {
-        var match = window.location.search.match(new RegExp('[?&]token=([^&]+)(&|$)'));
-        if (match) {
-            var val = decodeURIComponent(match[1].replace(/\+/g, " "));
-            settings.url = settings.url+(settings.url.indexOf('?') >= 0 ? '&' : '?')+'token='+encodeURIComponent(val);
-        }
-    });
-
-    checkLoginStatus();
-});
-</script>
-<style>
-    body {
-        padding-bottom: 30px;
-        background: #f7f8f8;
-    }
-</style>
-</head>
-<body>
-<?php $this->beginBody() ?>
-<div class="mask" id="mask_kaiping" style="position: fixed;z-index: 2000;display: none; "></div>
+<div class="mask" id="mask_kaiping" style="position: fixed; z-index: 2000; display: none;"></div>
 <div class="tail" style="display: none;">
     <div class="tail_img_top"></div>
     <a class="tail_close">
@@ -75,211 +29,164 @@ $(function() {
     </div>
 </div>
 
-<div class="container">
-    <?php if (!defined('IN_APP')) { ?>
-    <!--header-->
-    <header class="row head-title">
-        <div class="logo col-xs-12 col-sm-12"><img src="<?= ASSETS_BASE_URI ?>images/logo.png" alt="logo" ></div>
-        <div class="logo_tit">温州报业传媒旗下理财平台</div>
-    </header>
-    <?php } ?>
-
-    <div class="row swiper-container">
-        <div class="col-xs-12 swiper-wrapper">
-                <?php foreach($adv as $val): ?>
-                    <div class="swiper-slide"><a href="<?= $val['link'] ?>"><img src="<?= UPLOAD_BASE_URI ?>upload/adv/<?= $val['image'] ?>" alt=""></a></div>
-                <?php endforeach; ?>
-        </div>
-        <!-- Add Pagination -->
-        <div class="swiper-pagination"></div>
+<!--banner开始-->
+<div class="row swiper-container">
+    <div class="col-xs-12 swiper-wrapper">
+        <?php foreach($adv as $val) : ?>
+            <div class="swiper-slide"><a href="<?= $val->link ?>"><img src="<?= UPLOAD_BASE_URI ?>upload/adv/<?= $val->image ?>" alt=""></a></div>
+        <?php endforeach; ?>
     </div>
-    <!-- 登录 注册 start -->
-    <div class="row btn" id="isLoggedin" style="display: none;">
-        <div class="col-sm-2"></div>
-        <div class="col-xs-6 col-sm-4"><a class="signup a-btn" href="/site/signup" >注册</a></div>
-        <div class="col-xs-6 col-sm-4"><a class="login a-btn" href="/site/login" >登录</a></div>
-        <div class="col-sm-2"></div>
-    </div>
-    <!-- 登录 注册 end -->
+    <!-- Add Pagination -->
+    <div class="swiper-pagination"></div>
+</div>
+<!--banner结束-->
 
-    <!-- 推荐区start  -->
-    <?php
-    $deals_num_sub = count($deals) - 1;
-    if (!empty($deals) > 0) {
-    ?>
-    <div class="row new-box">
-        <div style="background: #fff;">
-            <a class="new-head bot-line block" href="/deal/deal/index" >
-                <div class="col-xs-8 col-sm-7 new-head-title new-ml-5">
-                    <div class="arrow-rg"></div>
-                    <div class="new-head-tit"><span>推荐区</span></div>
+<!-- 公告开始 -->
+<div class="row index-notice">
+    <?php if (!empty($news)) : ?>
+        <div class="index-notice-top clearfix">
+            <div class="index-notice-left lf clearfix">
+                <img class="lf" src="<?= ASSETS_BASE_URI ?>images/index/notice.png" alt="">
+                <div class="index-notices lf">
+                    <?php foreach ($news as $key => $val) : ?>
+                        <div><a href="/news/detail?id=<?= $val->id ?>"><?= $val->title ?></a></div>
+                    <?php endforeach; ?>
                 </div>
-                <div class="col-xs-1 col-sm-3 "> </div>
-                <div class="col-xs-3 col-sm-2 more">更多》</div>
-            </a>
-        </div>
-        <?php foreach($deals as $dealk=>$deal) { ?>
-            <?php
-            $dates = Yii::$app->functions->getDateDesc($deal->start_date);
-            $rate = number_format($deal->finish_rate * 100, 0);
-            ?>
-            <?php if (!empty($deal->jiaxi) && !$deal->isFlexRate) { ?>
-                <ul class="row new-bottom <?= $dealk === $deals_num_sub ? 'margin-bottom-0' :'' ?>" >
-                    <a class="block" href="/deal/deal/detail?sn=<?= $deal->sn ?>">
-                        <h3><?= $deal->title ?></h3>
-                        <li class="col-xs-6 padding-5">
-                            <div class="xian1">
-                                <div class="newcomer-badge"></div>
-                                <span class="interest-rate"><?= rtrim(rtrim(OnlineProduct::calcBaseRate($deal->yield_rate, $deal->jiaxi), '0'), '.') ?>%</span>
-                                <span class="interest-rate-add">+<?= $deal->jiaxi ?>%</span>
-                                <div class="col-xs-12 percentage-txt"><span><i class="percentage-point"></i><?= \Yii::$app->params['refund_method'][$deal->refund_method] ?></span></div>
-                            </div>
-                        </li>
-                        <li class="col-xs-6 padding-5">
-                            <div class="new-bottom-rg">
-                                <p ><span class="tishi"><?= rtrim(rtrim(number_format($deal->start_money, 2), '0'), '.') ?>元起投，<?php $ex = $deal->getDuration() ?><?= $ex['value'] ?><?= $ex['unit']?></span></p>
-                                <?php if (OnlineProduct::STATUS_PRE === $deal->status) { ?>
-                                    <!-- 未开标 -->
-                                    <span class="zhuangtai weikaibiao" ><?= $dates['desc'] ?> <?= date('H:i', $deal->start_date) ?></span>
-                                <?php } elseif (OnlineProduct::STATUS_NOW === $deal->status) { ?>
-                                    <!-- 进度 % -->
-                                    <div style="margin:10px 8px; border:1px solid #fe9b00; ">
-                                        <span class="a-progress-bg"  style="width:<?= $rate ?>%;"></span>
-                                        <span class="zhuangtai a-progress" ><?= $rate ?>%</span>
-                                    </div>
-                                <?php } else { ?>
-                                    <div class="zhuangtai" style="margin:10px 8px; background-color: #9fa0a0;">
-                                        <font style="color: #fff; line-height: 34px;"><?= Yii::$app->params['deal_status'][$deal->status] ?></font>
-                                    </div>
-                                <?php } ?>
-                            </div>
-                        </li>
-                    </a>
-                </ul>
-            <?php } else { ?>
-                <ul class="row new-bottom <?= $dealk === $deals_num_sub ? 'margin-bottom-0' :'' ?>" >
-                    <a class="block" href="/deal/deal/detail?sn=<?= $deal->sn ?>">
-                        <h3><?= $deal->title ?></h3>
-                        <li class="col-xs-6 padding-5">
-                            <div class="xian">
-                        <span class="interest-rate <?= !$deal->isFlexRate ? '' : 'rate-steps' ?>">
-                            <?= LoanHelper::getDealRate($deal) ?>%   <!--添加阶梯利率显示 -->
-                        </span>
-                                <div class="col-xs-12 percentage-txt"><span><i class="percentage-point"></i><?= \Yii::$app->params['refund_method'][$deal->refund_method] ?></span></div>
-                            </div>
-                        </li>
-                        <li class="col-xs-6 padding-5">
-                            <div class="new-bottom-rg">
-                                <p ><span class="tishi"><?= rtrim(rtrim(number_format($deal->start_money, 2), '0'), '.') ?>元起投，<?php $ex = $deal->getDuration() ?><?= $ex['value'] ?><?= $ex['unit']?></span></span></p>
-                                <?php if (OnlineProduct::STATUS_PRE === $deal->status) { ?>
-                                    <!-- 未开标 -->
-                                    <span class="zhuangtai weikaibiao"><?= $dates['desc'] ?> <?= date('H:i', $deal->start_date) ?></span>
-                                <?php } elseif (OnlineProduct::STATUS_NOW === $deal->status) { ?>
-                                    <!-- 进度 % -->
-                                    <div style="margin:10px 8px; border:1px solid #fe9b00; ">
-                                        <span class="a-progress-bg"  style="width:<?= $rate ?>%;"></span>
-                                        <span class="zhuangtai a-progress"><?= $rate ?>%</span>
-                                    </div>
-                                <?php } else { ?>
-                                    <div class="zhuangtai" style="margin:10px 8px; background-color: #9fa0a0;">
-                                        <font style="color: #fff; line-height: 34px;"><?= Yii::$app->params['deal_status'][$deal->status] ?></font>
-                                    </div>
-                                <?php } ?>
-                            </div>
-                        </li>
-                    </a>
-                </ul>
-            <?php } ?>
-        <?php }?>
-    </div>
-<!--  推荐区 end  -->
-    <div class="line-box" ></div>
-    <?php } ?>
-<!-- 理财区start -->
-    <div class="licai-box">
-        <div class="licai-head">
-            <div class="col-xs-8 col-sm-7 new-head-title">
-                <div class="arrow-rg"></div>
-                <div class="new-head-tit"><span>理财区</span></div>
             </div>
-            <div class="col-xs-4 col-sm-5"></div>
+            <div class="index-notice-right rg">
+                <a href="/news/index">更多<img src="<?= ASSETS_BASE_URI ?>images/index/arrow.png" alt=""></a>
+            </div>
         </div>
-        <div style="clear: both;"></div>
-<!--        <div class="row margin-add">
-            <div class="col-xs-4 col-xs-offset-1 padding-clear"><a href="/deal/deal/index"><img src="<?= ASSETS_BASE_URI ?>images/type1.png?v=20160418" alt="温盈金" /></a> </div>
-            <div class="col-xs-4 col-xs-offset-2 padding-clear"><a href="/deal/deal/index"><img src="<?= ASSETS_BASE_URI ?>images/type2.png?v=20160418" alt="温盈宝" /></a> </div>
-            <div class="col-xs-4 padding-clear" id="wgt"><a href="/order/booking/detail?pid=1"><img src="<?= ASSETS_BASE_URI ?>images/type3.png" alt="温股投" /></a> </div>
-        </div>-->
-        <div class="row licai-img">
-            <div class="col-xs-6 licai-img"><a href="/deal/deal/index"><img src="<?= ASSETS_BASE_URI ?>images/type5.jpg" alt="温盈金" /></a></div>
-            <div class="col-xs-6 licai-img"><a href="/deal/deal/index"><img src="<?= ASSETS_BASE_URI ?>images/type4.jpg" alt="温盈宝" /></a></div>
-        </div>
-    </div>
-    <!-- 理财区 end -->
+    <?php endif; ?>
 
-    <!-- 最新资讯 start-->
-    <?php if (!empty($news)) { ?>
-    <div class="row notice-box new-box notice-bg-fff">
-        <a class="new-head news-tra block" href="/news/index">
-            <div class="col-xs-8 col-sm-7 new-head-title">
-                <div class="arrow-rg"></div>
-                <div class="new-head-tit"><span>最新资讯</span></div>
-            </div>
-            <div class="col-xs-1 col-sm-3 "> </div>
-            <div class="col-xs-3 col-sm-2 more news-more">更多》</div>
-        </a>
-        <div class="notice-bottom">
-            <?php $news_num_sub = count($news) - 1; ?>
-            <?php foreach ($news as $key => $val) : ?>
-            <a class="col-xs-12 notice <?= 0 === $key ? 'border-top' : ''?> <?= $news_num_sub === $key ? 'border-bot' : '' ?>" href="/news/detail?id=<?= $val['id'] ?>"><span>【</span>资讯信息<span>】</span><?= $val['title'] ?></a>
-            <?php endforeach; ?>
-        </div>
-    </div>
-    <?php } ?>
-    <!-- 最新资讯 end -->
-
-    <!-- nav start -->
-    <div class="nav-box">
-        <div class="pos-rel">
-            <div class="pos-fixer">
-                <nav>
-                    <li class="first"><a href="/">首页</a></li>
-                    <li><a href="/site/about">关于我们</a></li>
-                    <li><a href="/site/advantage">平台优势</a></li>
-                    <li><a href="/site/help">帮助中心</a></li>
-                    <li><a href="/site/contact">联系我们</a></li>
-                </nav>
-            </div>
-        </div>
-        <p>客服热线：<a class="contact-tel" href="tel:<?= Yii::$app->params['contact_tel'] ?>"><?= Yii::$app->params['contact_tel'] ?></a>（8:30-20:00）</p>
+    <div class="index-notice-bottom">
+        <ul class="index-notice-bottom-bg">
+            <li class="lf">
+                <a href="/site/about">
+                    <img src="<?= ASSETS_BASE_URI ?>images/index/intro.png" alt="">
+                    <p>温都品牌介绍</p>
+                </a>
+            </li>
+            <li class="rg">
+                <a href="/site/advantage">
+                    <img src="<?= ASSETS_BASE_URI ?>images/index/strand.png" alt="">
+                    <p>严苛风控标准</p>
+                </a>
+            </li>
+        </ul>
     </div>
 </div>
+<!-- 公告结束 -->
 
-<!--   end  -->
-<!--footer-->
-<?php if (!defined('IN_APP')) { ?>
-<div class="row navbar-fixed-bottom footer">
-    <div class="col-xs-4 footer-title">
-        <div class="footer-inner">
-            <a href="/" class="shouye1"><span class="shouye"></span>首页</a>
+<!--精品推荐开始-->
+<div class="index-recommend">
+    <div class="index-recommend-top clearfix">
+        <div class="index-recommend-left lf clearfix">
+            <img class="lf" src="<?= ASSETS_BASE_URI ?>images/index/recomd.png" alt="">
+            <p>精品推荐</p>
+        </div>
+        <div class="index-recommend-right rg">
+            <a href="/deal/deal/index">更多<img src="<?= ASSETS_BASE_URI ?>images/index/arrow.png" alt=""></a>
         </div>
     </div>
-    <div class="col-xs-4 footer-title">
-        <div class="footer-inner1">
-            <a href="/deal/deal/index"><span class="licai"></span>理财</a>
+    <a href="/deal/deal/detail?sn=<?= $deal->sn ?>">
+        <div class="index-recommend-bottom">
+            <h2><?= $deal->title ?></h2>
+            <ul class="clearfix">
+                <li class="lf">
+                    <?php if (!empty($deal->jiaxi) && !$deal->isFlexRate) { ?>
+                        <span><?= StringUtils::amountFormat2(OnlineProduct::calcBaseRate($deal->yield_rate, $deal->jiaxi)) ?></span><em>%</em><em class="index-recommend-crea">+<?= StringUtils::amountFormat2($deal->jiaxi) ?>%</em>
+                    <?php } else { ?>
+                        <span><?= LoanHelper::getDealRate($deal) ?></span><em>%</em>
+                    <?php } ?>
+                    <p>预期年化</p>
+                </li>
+                <li class="lf">
+                    <?php $ex = $deal->getDuration() ?>
+                    <span><?= $ex['value'] ?></span><em><?= $ex['unit'] ?></em>
+                    <p>期限</p>
+                </li>
+                <li class="lf">
+                    <span><?= StringUtils::amountFormat2($deal->start_money) ?></span><em>元</em>
+                    <p>起投金额</p>
+                </li>
+            </ul>
+            <div class="recommend-progress">
+                <?php $rate = OnlineProduct::STATUS_FOUND === $deal->status ? 100 : number_format($deal->finish_rate * 100, 0); ?>
+                <span class="recommend-all"><span class="recommend-pro" style="width: <?= $rate ?>%;"></span></span>
+                <em class="rg"><?= $rate ?>%</em>
+            </div>
+
+            <div class="index-recommend-notice">
+                <img src="<?= ASSETS_BASE_URI ?>images/index/dot.png" alt="">
+                <span><?= Yii::$app->params['refund_method'][$deal->refund_method] ?></span>
+            </div>
         </div>
+    </a>
+</div>
+<!--精品推荐结束-->
+
+<!--股东背景开始-->
+<div class="shareholder">
+    <h2>股东背景</h2>
+    <div class="shareholder-m">
+        <span></span>
+        <img src="<?= ASSETS_BASE_URI ?>images/index/king.png" alt="">
+        <span></span>
     </div>
-    <div class="col-xs-4 footer-title">
-        <div class="footer-inner2">
-            <a href="/user/user"><span class="zhanghu"></span>账户</a>
+
+    <div class="shareholder-b clearfix">
+        <img class="lf" src="<?= ASSETS_BASE_URI ?>images/index/wz.png" alt="">
+        <img class="rg" src="<?= ASSETS_BASE_URI ?>images/index/nj.png" alt="">
+    </div>
+</div>
+<!--股东背景结束-->
+
+<!--bottom开始-->
+<div class="index-bottom">
+    <div class="swiper-container1">
+        <div class="swiper-wrapper">
+            <div class="swiper-slide">
+                <dl class="clearfix">
+                    <dt class="lf"><img src="<?= ASSETS_BASE_URI ?>images/index/icon1.png" alt=""></dt>
+                    <dd class="lf">
+                        <p>收益稳健</p>
+                        <span>预期年化5.5~9%</span>
+                    </dd>
+                </dl>
+            </div>
+            <div class="swiper-slide">
+                <dl class="clearfix">
+                    <dt class="lf"><img src="<?= ASSETS_BASE_URI ?>images/index/icon2.png" alt=""></dt>
+                    <dd class="lf">
+                        <p>产品优质</p>
+                        <span>金融、政府类产品</span>
+                    </dd>
+                </dl>
+            </div>
+            <div class="swiper-slide">
+                <dl class="clearfix">
+                    <dt class="lf"><img src="<?= ASSETS_BASE_URI ?>images/index/icon3.png" alt=""></dt>
+                    <dd class="lf">
+                        <p>资金安全</p>
+                        <span>第三方资金托管</span>
+                    </dd>
+                </dl>
+            </div>
+            <div class="swiper-slide">
+                <dl class="clearfix">
+                    <dt class="lf"><img src="<?= ASSETS_BASE_URI ?>images/index/icon4.png" alt=""></dt>
+                    <dd class="lf">
+                        <p>门槛较低</p>
+                        <span>1000元即可投资</span>
+                    </dd>
+                </dl>
+            </div>
         </div>
     </div>
 </div>
-<?php } ?>
-<?php $this->endBody() ?>
-</body>
-</html>
-<?php $this->endPage() ?>
+<!--bottom结束-->
+
 <script>
     function closeAdv()
     {
@@ -287,7 +194,7 @@ $(function() {
         $('#mask_kaiping').hide();
         $('html').removeAttr('ontouchmove');
     }
-    $(function(){
+    $(function() {
         if ($.cookie('splash_show') !== "1") {
             $('html').attr('ontouchmove','event.preventDefault()');
             $.cookie('splash_show', "1");
