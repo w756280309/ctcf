@@ -1,5 +1,7 @@
 <?php
 use yii\helpers\Html;
+use common\utils\StringUtils;
+
 $this->title = '发起转让';
 
 $this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/usercenter.css', ['depends' => 'frontend\assets\FrontAsset']);
@@ -7,10 +9,10 @@ $this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/transfer.css', ['depends
 $this->registerJsFile(ASSETS_BASE_URI.'js/useraccount/transfer.js', ['depends' => \yii\web\JqueryAsset::class]);
 $this->registerJsFile(ASSETS_BASE_URI.'js/jquery.ba-throttle-debounce.min.js?v=161008', ['depends' => \yii\web\JqueryAsset::class]);
 $action = Yii::$app->controller->action->getUniqueId();
-$minOrderAmount = Yii::$app->params['credit_trade']['min_order_amount'];
-$incrOrderAmount = Yii::$app->params['credit_trade']['incr_order_amount'];
 $discountRate = Yii::$app->params['credit_trade']['max_discount_rate'];
 $fee = Yii::$app->params['credit_trade']['fee_rate'] * 1000;
+$minOrderAmount = bcdiv($asset['minOrderAmount'], 100, 2);
+$incrOrderAmount = bcdiv($asset['incrOrderAmount'], 100, 2);
 ?>
 <div class="wdjf-body">
     <div class="wdjf-ucenter clearfix">
@@ -32,15 +34,15 @@ $fee = Yii::$app->params['credit_trade']['fee_rate'] * 1000;
                     <ul class="text_center">
                         <li class="contentCenter_ul_li">
                             <?php
-                            $remainingDuration = $loan->getRemainingDuration();
-                            if (isset($remainingDuration['months']) && $remainingDuration['months'] > 0) {
-                                echo $remainingDuration['months'] . '<span>个月</span>';
-                            }
-                            if (isset($remainingDuration['days'])) {
-                                if (!isset($remainingDuration['months']) || $remainingDuration['days'] >0) {
-                                    echo $remainingDuration['days'] . '<span>天</span>';
+                                $remainingDuration = $loan->getRemainingDuration();
+                                if (isset($remainingDuration['months']) && $remainingDuration['months'] > 0) {
+                                    echo $remainingDuration['months'] . '<span>个月</span>';
                                 }
-                            }
+                                if (isset($remainingDuration['days'])) {
+                                    if (!isset($remainingDuration['months']) || $remainingDuration['days'] >0) {
+                                        echo $remainingDuration['days'] . '<span>天</span>';
+                                    }
+                                }
                             ?>
                             </li>
                         <li>剩余期限</li>
@@ -66,7 +68,6 @@ $fee = Yii::$app->params['credit_trade']['fee_rate'] * 1000;
                                 </div>
                             </div>
                         </li>
-
                     </ul>
                 </div>
             </div>
@@ -77,7 +78,7 @@ $fee = Yii::$app->params['credit_trade']['fee_rate'] * 1000;
                         <li class="left availableAssets_title">可转让金额：</li>
                         <li class="left availableAssets_space"></li>
                         <li class="left availableAssets_money">
-                            <span class="common_color"><?= number_format($asset['maxTradableAmount'] / 100, 2)?></span> 元
+                            <span class="common_color"><?= number_format($asset['maxTradableAmount'] / 100, 2) ?></span> 元
                         </li>
                     </ul>
                     <ul class="transferMoney clearfix_all relative">
@@ -85,12 +86,11 @@ $fee = Yii::$app->params['credit_trade']['fee_rate'] * 1000;
                         <li class="left transferMoney_title">转让金额：</li>
                         <li class="left transferMoney_space"></li>
                         <li class="left transferMoney_money transfer_common">
-                            <input type="text" name="" id="credit_amount" placeholder="起投<?= number_format($minOrderAmount) ?>元，递增<?= number_format($incrOrderAmount) ?>元" autocomplete="off" t_value="" onkeyup="if (this.value) {if (!this.value.match(/^[\+\-]?\d+?\.?\d*?$/)) {if (this.t_value) {this.value = this.t_value;} else {this.value = '';}} else {this.t_value = this.value;}}">
+                            <input type="text" name="" id="credit_amount" placeholder="起投<?= StringUtils::amountFormat2($minOrderAmount) ?>元，递增<?= StringUtils::amountFormat2($incrOrderAmount) ?>元" autocomplete="off" t_value="" onkeyup="if (this.value) {if (!this.value.match(/^[\+\-]?\d+?\.?\d*?$/)) {if (this.t_value) {this.value = this.t_value;} else {this.value = '';}} else {this.t_value = this.value;}}">
                             <span>元</span>
                         </li>
                         <li class="transferMoney_error common_color" id="amount_error">/li>
                     </ul>
-                    <!--<div style="color: red" id="error_fen"></div>-->
 
                     <ul class="discountRate clearfix_all relative">
                         <li class="left discountRate_title">折让率：</li>
@@ -116,7 +116,6 @@ $fee = Yii::$app->params['credit_trade']['fee_rate'] * 1000;
                         </li>
                         <li class="discountRate_error common_color" id="discount_rate_error"></li>
                     </ul>
-                    <!--<div style="color: red" id="error_fen_discounts"></div>-->
 
                     <ul class="canObtain clearfix_all">
                         <li class="left canObtain_title">应收利息：</li>
@@ -149,13 +148,11 @@ $fee = Yii::$app->params['credit_trade']['fee_rate'] * 1000;
                                 </div>
                             </div>
                         </li>
-
                     </ul>
 
-                    <span class="">
-                            <input id="credit_submit_btn" type="button" name="" value="确定转让" class="submit_btn" onclick="">
-                            <input type="hidden" name="" id="" value="">
-                        </span>
+                    <span>
+                        <input id="credit_submit_btn" type="button" value="确定转让" class="submit_btn">
+                    </span>
                 </div>
 
             </div>
@@ -186,8 +183,8 @@ $fee = Yii::$app->params['credit_trade']['fee_rate'] * 1000;
     var amount_error = $('#amount_error');
     var discount_rate_error = $('#discount_rate_error');
     var config_rate = <?= floatval($discountRate) ?>;
-    var minAmount = <?= floatval($minOrderAmount)?>;
-    var incAmount = <?= floatval($incrOrderAmount)?>;
+    var minAmount = <?= floatval($minOrderAmount) ?>;
+    var incAmount = <?= floatval($incrOrderAmount) ?>;
     var feeRate = <?= floatval($fee / 1000) ?>;
 
     $(function(){

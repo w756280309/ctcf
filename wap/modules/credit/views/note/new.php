@@ -1,14 +1,12 @@
 <?php
 
+use common\utils\StringUtils;
 use yii\helpers\Html;
 
 $this->title = '转让';
 
 $this->registerCssFile(ASSETS_BASE_URI.'css/credit/transfer_order.css', ['depends' => 'wap\assets\WapAsset']);
 
-
-$minOrderAmount = number_format(Yii::$app->params['credit_trade']['min_order_amount']);
-$incrOrderAmount = number_format(Yii::$app->params['credit_trade']['incr_order_amount']);
 $discountRate = Yii::$app->params['credit_trade']['max_discount_rate'];
 $fee = Yii::$app->params['credit_trade']['fee_rate'] * 1000;
 ?>
@@ -38,7 +36,7 @@ $fee = Yii::$app->params['credit_trade']['fee_rate'] * 1000;
 </div>
 <div class="row sm-height margin-top">
     <div class="col-xs-3 col-xs-offset-1 safe-txt font-32">转让金额</div>
-    <input name="money" type="text" id="money" autocomplete="off" value="" t_value="" placeholder="起投<?= $minOrderAmount ?>元，递增<?= $incrOrderAmount ?>元" class="col-xs-6 safe-lf text-align-lf font-26" onkeyup=" if (this.value) {if (!this.value.match(/^[\+\-]?\d+?\.?\d*?$/)) {this.value = this.t_value;}else{this.t_value = this.value;}}">
+    <input name="money" type="text" id="money" autocomplete="off" value="" t_value="" placeholder="起投<?= StringUtils::amountFormat2(bcdiv($asset['minOrderAmount'], 100, 2)) ?>元，递增<?= StringUtils::amountFormat2(bcdiv($asset['incrOrderAmount'], 100, 2)) ?>元" class="col-xs-6 safe-lf text-align-lf font-26" onkeyup=" if (this.value) {if (!this.value.match(/^[\+\-]?\d+?\.?\d*?$/)) {this.value = this.t_value;}else{this.t_value = this.value;}}">
     <div class="col-xs-2 safe-txt font-32 money_yuan">元</div>
 </div>
 <div class="row sm-height">
@@ -87,7 +85,7 @@ $fee = Yii::$app->params['credit_trade']['fee_rate'] * 1000;
 </div>
 <script>
     $(function(){
-//        提示信息的显示与隐藏
+        //提示信息的显示与隐藏
         var flag_shouyi = 0;
         var flag_sm= 0;
         $('.shouyi_tips_img').bind('click',function(e){

@@ -1,9 +1,11 @@
 <?php
 $this->title = '转让详情';
 
-$this->registerCssFile(ASSETS_BASE_URI.'css/credit/credit.css?v=161010', ['depends' => 'frontend\assets\FrontAsset']);
-$this->registerJsFile(ASSETS_BASE_URI.'js/credit/detail.js?v=160922', ['depends' => 'frontend\assets\FrontAsset']);
-$this->registerJsFile(ASSETS_BASE_URI.'js/jquery.ba-throttle-debounce.min.js?v=161008', ['depends' => 'frontend\assets\FrontAsset']);
+use frontend\assets\FrontAsset;
+
+$this->registerCssFile(ASSETS_BASE_URI.'css/credit/credit.css?v=161010', ['depends' => FrontAsset::class]);
+$this->registerJsFile(ASSETS_BASE_URI.'js/credit/detail.js?v=160922', ['depends' => FrontAsset::class]);
+$this->registerJsFile(ASSETS_BASE_URI.'js/jquery.ba-throttle-debounce.min.js?v=161008', ['depends' => FrontAsset::class]);
 $this->registerCssFile(ASSETS_BASE_URI.'css/pagination.css');
 $this->registerCssFile(ASSETS_BASE_URI . 'css/useraccount/chargedeposit.css');
 
@@ -36,15 +38,15 @@ $isClosed = $respData['isClosed'] || $nowTime >= $endTime;
                         <div class="clearfix pl-middle-rg">
                             <span class="pl-middle-inner">
                                 <?php
-                                $remainingDuration = $loan->getRemainingDuration();
-                                if (isset($remainingDuration['months']) && $remainingDuration['months'] > 0) {
-                                    echo $remainingDuration['months'] . '<i>个月</i>';
-                                }
-                                if (isset($remainingDuration['days'])) {
-                                    if (!isset($remainingDuration['months']) || $remainingDuration['days'] >0) {
-                                        echo $remainingDuration['days'] . '<i>天</i>';
+                                    $remainingDuration = $loan->getRemainingDuration();
+                                    if (isset($remainingDuration['months']) && $remainingDuration['months'] > 0) {
+                                        echo $remainingDuration['months'] . '<i>个月</i>';
                                     }
-                                }
+                                    if (isset($remainingDuration['days'])) {
+                                        if (!isset($remainingDuration['months']) || $remainingDuration['days'] >0) {
+                                            echo $remainingDuration['days'] . '<i>天</i>';
+                                        }
+                                    }
                                 ?>
                             </span>
                             <p>剩余期限</p>
