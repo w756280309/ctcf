@@ -13,6 +13,7 @@ $discountRate = Yii::$app->params['credit_trade']['max_discount_rate'];
 $fee = Yii::$app->params['credit_trade']['fee_rate'] * 1000;
 $minOrderAmount = bcdiv($asset['minOrderAmount'], 100, 2);
 $incrOrderAmount = bcdiv($asset['incrOrderAmount'], 100, 2);
+$calcDiscountRate = min($discountRate, bcmul(bcdiv($asset['currentInterest'], bcadd($asset['currentInterest'], $asset['maxTradableAmount'], 14), 14), 100, 2));
 ?>
 <div class="wdjf-body">
     <div class="wdjf-ucenter clearfix">
@@ -96,7 +97,7 @@ $incrOrderAmount = bcdiv($asset['incrOrderAmount'], 100, 2);
                         <li class="left discountRate_title">折让率：</li>
                         <li class="left discountRate_space"></li>
                         <li class="left discountRate_rate transfer_common">
-                            <input type="text" name="discount_rate" id="discount_rate_input" value=""  placeholder="不高于<?= $discountRate ?>%，可设置2位小数" autocomplete="off" maxlength="4" t_value="" onkeyup=" if (this.value) {if (!this.value.match(/^[\+\-]?\d+?\.?\d*?$/)) {if (this.t_value) {this.value = this.t_value;} else {this.value = '';}} else {this.t_value = this.value;}}" >
+                            <input type="text" name="discount_rate" id="discount_rate_input" value=""  placeholder="不高于<?= $calcDiscountRate ?>%，可设置2位小数" autocomplete="off" maxlength="4" t_value="" onkeyup=" if (this.value) {if (!this.value.match(/^[\+\-]?\d+?\.?\d*?$/)) {if (this.t_value) {this.value = this.t_value;} else {this.value = '';}} else {this.t_value = this.value;}}" >
                             <span>%</span>
                         </li>
                         <li class="discountRate_tip_icon"></li>
