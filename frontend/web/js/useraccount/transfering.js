@@ -40,6 +40,9 @@ $(document).ready(function () {
                 return false;
             }
             alert(data.message);
+            if (data.message === '转让已结束') {
+                window.location.reload();
+            }
         });
 
         xhr.always(function () {

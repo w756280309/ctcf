@@ -11,7 +11,7 @@ use yii\web\JqueryAsset;
 $this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/usercenter.css', ['depends' => FrontAsset::class]);
 $this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/transfering.css?v=160928', ['depends' => FrontAsset::class]);
 $this->registerCssFile(ASSETS_BASE_URI.'css/pagination.css');
-$this->registerJsFile(ASSETS_BASE_URI.'js/useraccount/transfering.js?v=160927', ['depends' => JqueryAsset::class]);
+$this->registerJsFile(ASSETS_BASE_URI.'js/useraccount/transfering.js?v=161017', ['depends' => JqueryAsset::class]);
 ?>
 
 <div class="wdjf-body">
