@@ -40,7 +40,7 @@ class NewAction extends Action
         if (null === $order) {
             throw $this->controller->ex404('没有找到订单');
         }
-        if ($order->uid !== $uid) {
+        if ($asset['user_id'] !== $uid) {
             throw $this->controller->ex404('资产信息不合法');
         }
         $apr = $order->yield_rate;

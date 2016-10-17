@@ -145,6 +145,7 @@ return [
     /* 债券相关配置信息 */
     'credit_trade' => [
         'hold_days' => 30,   //持有天数
+        'repeatedly_hold_days' => 30,   //债权多次转让时候最低持有天数
         'max_discount_rate' => 3,    //最高折让率
         'trade_count_limit' => 1,    //可转让次数
         'fee_rate' => 0.003,    //手续费费率
