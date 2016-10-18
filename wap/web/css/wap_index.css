@@ -7,6 +7,7 @@ img {
     border: 0;
     margin: 0;
     padding: 0;
+    vertical-align: baseline;
 }
 a {
     cursor: default!important;
@@ -39,13 +40,16 @@ body {
         width:300px;
     }
 }
-@media screen and (min-width: 1250px) {
+@media screen and (min-width: 1170px) {
     body{
-        width:1250px;
+        width:1170px;
         margin: 0 auto;
     }
     .footer {
-        width:1250px!important;
+        width:1170px!important;
+    }
+    .recommend-all {
+        width: 900px!important;
     }
 }
 /*banner*/
@@ -53,7 +57,7 @@ body {
     padding: 0;
 }
 .row{
-    margin: 0;
+    margin: 0 auto;
 }
 .swiper-container {
     padding: 0;
@@ -110,13 +114,10 @@ body {
 }
 .index-notices a{
     display: block;
-    width:7rem;
+    width:6.5rem;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-}
-.index-notice-right {
-    margin-top: -0.05rem;
 }
 .index-notice-right img {
     width: 0.16rem;
@@ -235,7 +236,7 @@ body {
     display: block;
     height: 0.04rem;
     background: #f6f6f6;
-    width: 8.1rem;
+    width: 8rem;
 }
 .recommend-pro {
     position: absolute;
@@ -306,14 +307,10 @@ body {
 .index-bottom .swiper-container1 {
     height:100%;
 }
-.index-bottom .swiper-container1 .swiper-wrapper .swiper-slide {
-    width: 4rem;
-    height:100%;
-}
 .index-bottom .swiper-slide {
-    width: 3.96rem!important;
+    height:100%;
+    width: 3.96rem;
     background: #f8f8f8;
-    margin-right: 0.21rem;
 }
 .index-bottom dl {
     height:100%;
@@ -328,15 +325,16 @@ body {
     margin-top: 0.21rem;
 }
 .index-bottom span {
+    display: block;
     font-size: 0.29rem;
-    margin-top: 0.21rem;
+    margin-top: 0.1rem;
 }
 .footer a {
     cursor: default!important;
     -webkit-tap-highlight-color:rgba(0,0,0,0);
 }
 .footer-inner , .footer-inner1 , .footer-inner2 {
-    font-size: 12px;
+    font-size: 14px;
 }
 .footer .footer-title {
     padding-left: 0;
