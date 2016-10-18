@@ -33,8 +33,8 @@ class VerifyController extends Controller
 
     public function actionBindcard()
     {
-        $qpay = QpayBinding::find()->where(['status' => QpayBinding::STATUS_ACK])->all();
-        $update = BankCardUpdate::find()->where(['status' => QpayBinding::STATUS_ACK])->all();
+        $qpay = QpayBinding::find()->where(['status' => QpayBinding::STATUS_ACK])->andWhere(['>', 'created_at', strtotime('-1 day')])->all();
+        $update = BankCardUpdate::find()->where(['status' => QpayBinding::STATUS_ACK])->andWhere(['>', 'created_at', strtotime('-30 days')])->all();
         $datas = ArrayHelper::merge($qpay, $update);
         foreach ($datas as $dat) {
             $resp = Yii::$container->get('ump')->getBindingTx($dat);

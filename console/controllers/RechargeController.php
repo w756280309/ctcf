@@ -16,6 +16,7 @@ class RechargeController extends Controller
             ->where(['lastCronCheckTime' => null])
             ->orWhere(['<', 'lastCronCheckTime', time() - 5 * 60])   //查询间隔为五分钟
             ->andWhere(['status' => RechargeRecord::STATUS_NO])
+            ->andWhere(['>', 'created_at', strtotime('-1 day')])
             ->orderBy(['id' => SORT_DESC])
             ->all();
 
