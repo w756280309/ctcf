@@ -11,11 +11,11 @@ use wap\assets\WapAsset;
 use yii\web\JqueryAsset;
 
 $this->registerCssFile(ASSETS_BASE_URI.'css/swiper.min.css', ['depends' => WapAsset::class]);
-$this->registerCssFile(ASSETS_BASE_URI.'css/wap_index.css', ['depends' => WapAsset::class]);
+$this->registerCssFile(ASSETS_BASE_URI.'css/wap_index.css?v=20161018', ['depends' => WapAsset::class]);
 $this->registerCssFile(ASSETS_BASE_URI.'css/kaipin.css', ['depends' => WapAsset::class]);
 $this->registerJsFile(ASSETS_BASE_URI.'js/swiper.min.js', ['depends' => JqueryAsset::class, 'position' => 1]);
 $this->registerJsFile(ASSETS_BASE_URI.'js/lib.flexible/lib.flexible.js', ['depends' => JqueryAsset::class, 'position' => 1]);
-$this->registerJsFile(ASSETS_BASE_URI.'js/index.js', ['depends' => JqueryAsset::class]);
+$this->registerJsFile(ASSETS_BASE_URI.'js/index.js?v=20161018', ['depends' => JqueryAsset::class]);
 ?>
 
 <div class="mask" id="mask_kaiping" style="position: fixed; z-index: 2000; display: none;"></div>
@@ -54,7 +54,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/index.js', ['depends' => JqueryAsset::
                 </div>
             </div>
             <div class="index-notice-right rg">
-                <a href="/news/index">更多<img src="<?= ASSETS_BASE_URI ?>images/index/arrow.png" alt=""></a>
+                <a href="/news/index">更多 <img src="<?= ASSETS_BASE_URI ?>images/index/arrow.png" alt=""></a>
             </div>
         </div>
     <?php endif; ?>
@@ -86,7 +86,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/index.js', ['depends' => JqueryAsset::
             <p>精品推荐</p>
         </div>
         <div class="index-recommend-right rg">
-            <a href="/deal/deal/index">更多<img src="<?= ASSETS_BASE_URI ?>images/index/arrow.png" alt=""></a>
+            <a href="/deal/deal/index">更多 <img src="<?= ASSETS_BASE_URI ?>images/index/arrow.png" alt=""></a>
         </div>
     </div>
     <a href="/deal/deal/detail?sn=<?= $deal->sn ?>">
@@ -186,7 +186,6 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/index.js', ['depends' => JqueryAsset::
     </div>
 </div>
 <!--bottom结束-->
-
 <script>
     function closeAdv()
     {

@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Created by lcl on 2015/11/16.
  */
 var csrf;
@@ -48,31 +48,24 @@ $(function() {
 
     $(window).load(function() {
         swiper();
-        //文字轮播
-        var flag = true;
-        var ts = setInterval(move1, 2000);
 
-        function move1() {
-            if (!flag) {
-                return;
-            }
-            flag = false;
-            $('.index-notices div').eq(0).animate({marginTop: '-0.52rem'}, 1000, function () {
+        //文字轮播
+        setInterval(move1, 2000);
+        function move1()
+        {
+            $('.index-notices div').eq(0).animate({marginTop: '-0.5rem'}, 1000, function () {
                 $('.index-notices div').eq(0).css({marginTop: 0});
                 $('.index-notices div').eq(0).appendTo($('.index-notices'));
-                flag = true;
-            })
-        }
+            });
+        };
 
-        $('.index-notices div').hover(function () {
-            clearInterval(ts);
-        }, function () {
-            ts = setInterval(move1, 2000);
-        });
         //底部图片轮播
-        var mySwiper = new Swiper('.swiper-container1', {
+        var offX = document.documentElement.clientWidth * 0.15;
+        var mySwiper = new Swiper('.index-bottom .swiper-container1', {
             loop: true,
-            slidesPerView: 'auto',
+            slidesOffsetAfter : -offX,
+            slidesOffsetBefore : -offX,
+            slidesPerView : 'auto',
             spaceBetween: 20,
         });
     });
