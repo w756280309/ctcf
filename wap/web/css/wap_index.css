@@ -42,11 +42,14 @@ body {
 }
 @media screen and (min-width: 1170px) {
     body{
-        width: 1170px;
+        width:1170px;
         margin: 0 auto;
     }
     .footer {
-        width: 1170px!important;
+        width:1170px!important;
+    }
+    .recommend-all {
+        width: 900px!important;
     }
 }
 /*banner*/

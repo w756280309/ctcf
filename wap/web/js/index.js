@@ -48,7 +48,6 @@ $(function() {
 
     $(window).load(function() {
         swiper();
-
         //文字轮播
         setInterval(move1, 2000);
         function move1()
@@ -59,13 +58,16 @@ $(function() {
             });
         };
 
-        //底部图片轮播
-        var offX = document.documentElement.clientWidth * 0.15;
+        //通过window.orientation来判断设备横竖屏
+        window.onorientationchange = function (){
+            location.reload();
+        };
+        var offX = document.documentElement.clientWidth*0.15;
         var mySwiper = new Swiper('.index-bottom .swiper-container1', {
             loop: true,
             slidesOffsetAfter : -offX,
             slidesOffsetBefore : -offX,
-            slidesPerView : 'auto',
+            slidesPerView : "auto",
             spaceBetween: 20,
         });
     });

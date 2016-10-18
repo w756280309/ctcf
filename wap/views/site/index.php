@@ -10,11 +10,11 @@ use common\view\LoanHelper;
 use wap\assets\WapAsset;
 use yii\web\JqueryAsset;
 
-$this->registerCssFile(ASSETS_BASE_URI.'css/swiper.min.css', ['depends' => WapAsset::class]);
+$this->registerCssFile(ASSETS_BASE_URI.'css/swiper.min.css?v=20161018', ['depends' => WapAsset::class]);
 $this->registerCssFile(ASSETS_BASE_URI.'css/wap_index.css?v=20161018', ['depends' => WapAsset::class]);
-$this->registerCssFile(ASSETS_BASE_URI.'css/kaipin.css', ['depends' => WapAsset::class]);
-$this->registerJsFile(ASSETS_BASE_URI.'js/swiper.min.js', ['depends' => JqueryAsset::class, 'position' => 1]);
-$this->registerJsFile(ASSETS_BASE_URI.'js/lib.flexible/lib.flexible.js', ['depends' => JqueryAsset::class, 'position' => 1]);
+$this->registerCssFile(ASSETS_BASE_URI.'css/kaipin.css?v=20161018', ['depends' => WapAsset::class]);
+$this->registerJsFile(ASSETS_BASE_URI.'js/swiper.min.js?v=20161018', ['depends' => JqueryAsset::class, 'position' => 1]);
+$this->registerJsFile(ASSETS_BASE_URI.'js/lib.flexible/lib.flexible.js?v=20161018', ['depends' => JqueryAsset::class, 'position' => 1]);
 $this->registerJsFile(ASSETS_BASE_URI.'js/index.js?v=20161018', ['depends' => JqueryAsset::class]);
 ?>
 
