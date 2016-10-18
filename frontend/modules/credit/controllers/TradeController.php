@@ -75,10 +75,18 @@ class TradeController extends BaseController
                 $assets = $provider->getModels();
 
                 foreach ($assets as $key => $asset) {
+                    $cond = ['online_pid' => $asset['loan_id'], 'uid' => $asset['user_id']];
+                    if (!empty($asset['note_id'])) {
+                        $cond['asset_id'] = $asset['id'];
+                    } else {
+                        $cond['order_id'] = $asset['order_id'];
+                        $cond['asset_id'] = null;
+                    }
+
                     $assets[$key]['loan'] = Loan::findOne($asset['loan_id']);
                     $assets[$key]['order'] = Order::findOne($asset['order_id']);
                     $assets[$key]['plan'] = Plan::find()
-                        ->where(['online_pid' => $asset['loan_id'], 'uid' => $asset['user_id'], 'order_id' => $asset['order_id']])
+                        ->where($cond)
                         ->asArray()
                         ->all();
                 }

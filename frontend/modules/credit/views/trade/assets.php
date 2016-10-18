@@ -48,7 +48,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/useraccount/transfering.js?v=161017', 
                             </tr>
                             <?php foreach ($assets as $asset) { ?>
                                 <tr class="tr-click">
-                                    <td class="text-second"><a href="/deal/deal/detail?sn=<?= $asset['loan']->sn ?>"><?= $asset['loan']->title ?></a></td>
+                                    <td class="text-second"><a href="/deal/deal/detail?sn=<?= $asset['loan']->sn ?>"><?= empty($asset['note_id']) ? '' : '【转让】' ?><?= $asset['loan']->title ?></a></td>
                                     <td class="text-align-ct">
                                         <?php
                                         $remainingDuration = $asset['loan']->remainingDuration;
@@ -142,7 +142,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/useraccount/transfering.js?v=161017', 
                             </tr>
                             <?php foreach ($notes as $note) { ?>
                                 <tr class="tr-click">
-                                    <td class="text-second"><a href="/credit/note/detail?id=<?= $note['id'] ?>"><?= $note['loan']->title ?></a></td>
+                                    <td class="text-second"><a href="/credit/note/detail?id=<?= $note['id'] ?>">【转让】<?= $note['loan']->title ?></a></td>
                                     <td class="text-align-ct"><?= substr($note['createTime'], 0, 10) ?></td>
                                     <td class="text-third"><?= StringUtils::amountFormat3(bcdiv($note['amount'], 100, 2)) ?></td>
                                     <td class="text-align-ct"><?= $note['discountRate'] ?></td>
@@ -176,7 +176,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/useraccount/transfering.js?v=161017', 
                             </tr>
                             <?php foreach ($notes as $note) { ?>
                                 <tr class="tr-click">
-                                    <td class="text-second"><a href="/credit/note/detail?id=<?= $note['id'] ?>"><?= $note['loan']->title ?></a></td>
+                                    <td class="text-second"><a href="/credit/note/detail?id=<?= $note['id'] ?>">【转让】<?= $note['loan']->title ?></a></td>
                                     <td class="text-align-ct"><?= substr($note['closeTime'], 0, 10) ?></td>
                                     <td class="text-third"><?= StringUtils::amountFormat3(bcdiv($note['tradedAmount'], 100, 2)) ?></td>
                                     <td class="text-align-ct"><?= $note['discountRate'] ?></td>

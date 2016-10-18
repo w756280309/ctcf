@@ -235,6 +235,7 @@ class UserController extends BaseController
                     $cond['asset_id'] = $val['id'];
                 } else {
                     $cond['order_id'] = $val['order_id'];
+                    $cond['asset_id'] = null;
                 }
 
                 $data = Plan::findAll($cond);
