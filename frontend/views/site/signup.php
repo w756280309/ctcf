@@ -60,7 +60,7 @@ use yii\captcha\Captcha;
         </div>
     <?php ActiveForm::end(); ?>
     <div class="register-image">
-        <img alt="" src="<?= ASSETS_BASE_URI ?>images/fiveadvantage.jpg">
+        <img alt="" src="<?= ASSETS_BASE_URI ?>images/newbelongings.png">
     </div>
 </div>
 <div class="clear"></div>

@@ -14,10 +14,6 @@ class LuodiyeController extends Controller
 
     public function actionIndex()
     {
-        if (!Yii::$app->user->isGuest) {
-            return $this->goHome();
-        }
-
         $captcha = new CaptchaForm();
 
         return $this->render('luodiye', ['captcha' => $captcha]);

@@ -1,7 +1,7 @@
 <?php
 $this->title = Yii::$app->params['pc_page_title'];
 
-$this->registerCssFile(ASSETS_BASE_URI.'css/index.css', ['depends' => 'frontend\assets\FrontAsset']);
+$this->registerCssFile(ASSETS_BASE_URI.'css/index.css?061010', ['depends' => 'frontend\assets\FrontAsset']);
 $this->registerJsFile(ASSETS_BASE_URI.'js/index.js', ['depends' => 'frontend\assets\FrontAsset']);
 
 use common\models\product\OnlineProduct;
@@ -20,6 +20,40 @@ use common\utils\StringUtils;
         </div>
         <!--选项卡-->
         <div class="banner-bottom">
+            <!--半透明背景层-->
+            <div class="banner-rg-bg"></div>
+            <!--登录前-->
+            <?php if (Yii::$app->user->isGuest) { ?>
+            <div class="banner-rg loginbefore" data-status="before">
+                <div class="loginbox">
+                    <h4>温都金服预期年化收益率</h4>
+                    <div class="login-center">
+                        <h2>4<span>%</span>~9<span>%</span></h2>
+                        <p class="key-txt">一千元起投，国资平台值得信赖</p>
+                    </div>
+                    <a href="/site/signup" class="register-btn">注册领红包</a>
+                    <p class="p-login">
+                        <a href="/site/login" class="login-btn">请登录</a>
+                        <span>已有账号?</span>
+                    </p>
+                </div>
+            </div>
+            <?php } else { ?>
+            <!--登录后-->
+            <div class="banner-rg loginafter">
+                <div class="loginbox">
+                    <h4>欢迎来到温都金服！</h4>
+                    <div class="login-center">
+                        <p class="user-phone">您当前登录的账号是：</p>
+                        <p class="user-phone phone-txt"><?= StringUtils::obfsMobileNumber(Yii::$app->user->identity->mobile) ?></p>
+                    </div>
+                    <a href="/user/user" class="register-btn">进入我的账户</a>
+                    <p class="p-login">
+                        <a href="javascript:void(0)" onclick="if(!$(this).hasClass('logout')){$(this).addClass('logout');$('#header-logout').submit();}" class="login-btn">退出登录</a>
+                    </p>
+                </div>
+            </div>
+            <?php } ?>
             <ul class="banner-btn">
                 <?php foreach ($adv as $val) : ?>
                     <li><div></div></li>

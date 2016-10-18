@@ -5,7 +5,7 @@ use yii\captcha\Captcha;
 
 $this->title = "温州报业传媒旗下理财平台";
 $this->params['breadcrumbs'][] = $this->title;
-$this->header_nav_on = true;
+$this->headerNavOn = true;
 
 $this->registerCssFile(ASSETS_BASE_URI . 'css/first.css', ['depends' => 'wap\assets\WapAsset']);
 $this->registerCssFile(ASSETS_BASE_URI . 'css/luodiye/luodiye.css?v=160802', ['depends' => 'wap\assets\WapAsset']);

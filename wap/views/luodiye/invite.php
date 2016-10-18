@@ -2,14 +2,14 @@
 
 $this->title = "温州报业传媒旗下理财平台";
 $this->params['breadcrumbs'][] = $this->title;
-$this->header_nav_on = true;
+$this->headerNavOn = true;
 
 use wap\assets\WapAsset;
 
 $this->registerCssFile(ASSETS_BASE_URI.'css/first.css', ['depends' => WapAsset::class]);
 $this->registerCssFile(ASSETS_BASE_URI.'css/invite/activedisplay.css?v=20160810', ['depends' => WapAsset::class]);
 $this->registerJsFile(ASSETS_BASE_URI.'js/fastclick.js', ['depends' => WapAsset::class]);
-$this->registerJsFile(ASSETS_BASE_URI.'js/invite/activedisplay.js?v=20160817', ['depends' => WapAsset::class]);
+$this->registerJsFile(ASSETS_BASE_URI.'js/invite/activedisplay.js?v=20161013', ['depends' => WapAsset::class]);
 
 if ($isLuodiye) {
 $hostInfo = \Yii::$app->request->hostInfo;
