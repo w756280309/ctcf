@@ -109,7 +109,7 @@ $calcDiscountRate = min($discountRate, bcmul(bcdiv($asset['currentInterest'], bc
                                             <img src="../../images/useraccount/diglog-jiao1.png" alt="">
                                         </div>
                                         <div class="ui-poptip-content" data-role="content">
-                                            产品在转让时 折让的比率，如折让率1%，则按照转让价值的99%来出售
+                                            产品在转让时折让的比率，如折让率1%，则按照转让价值的99%来出售
                                         </div>
                                     </div>
                                 </div>

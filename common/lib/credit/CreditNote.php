@@ -87,7 +87,7 @@ class CreditNote
             } elseif (bcdiv($restAmount, $amountFen) < 1) {
                 return ['code' => 1, 'message' => '投资金额大于可投余额'];
             } elseif ($incrAmount > 0) {
-                if (bcmod($amountFen, $incrAmount) != 0 && bcsub($restAmount, $amountFen) != 0) {
+                if (bcmod(bcsub($amountFen, $minAmount, 0), $incrAmount) != 0 && bcsub($restAmount, $amountFen) != 0) {
                     return ['code' => 1, 'message' => $minAmountYuan.'元起投,'.$incrAmountYuan.'元递增'];
                 } elseif ($lastAmount != 0 && bcdiv($lastAmount, $minAmount) < 1) {
                     return ['code' => 1, 'message' => '购买后可投余额不可低于起投金额'];
