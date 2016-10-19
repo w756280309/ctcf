@@ -11,7 +11,7 @@ use yii\web\JqueryAsset;
 $this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/usercenter.css', ['depends' => FrontAsset::class]);
 $this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/transfering.css?v=160928', ['depends' => FrontAsset::class]);
 $this->registerCssFile(ASSETS_BASE_URI.'css/pagination.css');
-$this->registerJsFile(ASSETS_BASE_URI.'js/useraccount/transfering.js?v=161017', ['depends' => JqueryAsset::class]);
+$this->registerJsFile(ASSETS_BASE_URI.'js/useraccount/transfering.js?v=161019', ['depends' => JqueryAsset::class]);
 ?>
 
 <div class="wdjf-body">
@@ -147,7 +147,11 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/useraccount/transfering.js?v=161017', 
                                     <td class="text-third"><?= StringUtils::amountFormat3(bcdiv($note['amount'], 100, 2)) ?></td>
                                     <td class="text-align-ct"><?= $note['discountRate'] ?></td>
                                     <td class="text-third"><?= StringUtils::amountFormat3(bcdiv($note['tradedAmount'], 100, 2)) ?></td>
-                                    <td class="text-align-ct"><a class="color-blue cancel-note" href="javascript:void(0)" note-id="<?= $note['id'] ?>">撤销</a></td>
+                                    <?php if ($note['isCancelled']) { ?>
+                                        <td class="text-align-ct"><a class="color-blue" href="javascript:void(0)">处理中</a></td>
+                                    <?php } else { ?>
+                                        <td class="text-align-ct"><a class="color-blue cancel-note" href="javascript:void(0)" note-id="<?= $note['id'] ?>">撤销</a></td>
+                                    <?php } ?>
                                 </tr>
                             <?php } ?>
                         </table>

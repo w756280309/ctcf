@@ -35,6 +35,6 @@ class CancelAction extends Action
             }
         }
 
-        return ['code' => 0, 'message' => '撤销成功'];
+        return ['code' => 0, 'message' => '撤销处理成功'];
     }
 }

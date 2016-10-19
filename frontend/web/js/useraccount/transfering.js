@@ -36,7 +36,11 @@ $(document).ready(function () {
         var id = noteBtn.attr('note-id');
         var xhr = $.get('/credit/trade/cancel?id=' + id, function (data) {
             if (0 === data.code) {
-                window.location.reload();
+                $('.cancel-note').each(function () {
+                    if ($(this).attr("note-id") === id) {
+                        $(this).html('处理中');
+                    }
+                });
                 return false;
             }
             alert(data.message);
