@@ -4,13 +4,13 @@ $this->title = '转让详情';
 use common\utils\StringUtils;
 use yii\helpers\Html;
 
-$this->registerCssFile(ASSETS_BASE_URI.'css/credit/detail.css', ['depends' => 'wap\assets\WapAsset']);
-$this->registerJs('var remainTime = '.strtotime($respData['endTime']).';', 1);
-$this->registerJsFile(ASSETS_BASE_URI.'js/credit/detail.js?v=160930', ['depends' => 'wap\assets\WapAsset']);
-
 $nowTime = new \DateTime();
 $endTime = new \DateTime($respData['endTime']);
 $isClosed = $respData['isClosed'] || $nowTime >= $endTime;
+
+$this->registerCssFile(ASSETS_BASE_URI.'css/credit/detail.css', ['depends' => 'wap\assets\WapAsset']);
+$this->registerJs('var remainTime = '.strtotime($isClosed ? 'now' : $respData['endTime']).';', 1);
+$this->registerJsFile(ASSETS_BASE_URI.'js/credit/detail.js?v=160930', ['depends' => 'wap\assets\WapAsset']);
 ?>
 
 <div class="row daojishi">

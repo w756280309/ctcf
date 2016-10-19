@@ -19,7 +19,7 @@ $this->registerCssFile(ASSETS_BASE_URI.'css/credit/transfer_list.css?v=20160927'
 <?php if (!empty($data)) { ?>
     <div id="transferitem-list">
         <div class="col-xs-12 space_div"></div>
-        <?= $this->renderFile('@wap/modules/credit/views/trade/_more_assets.php', ['data' => $data, 'type' => $type]) ?>
+        <?= $this->renderFile('@wap/modules/credit/views/trade/_more_assets.php', ['data' => $data, 'type' => $type, 'actualIncome' => $actualIncome]) ?>
         <div class="load"></div>
     </div>
 <?php } else { ?>

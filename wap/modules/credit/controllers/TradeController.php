@@ -37,49 +37,45 @@ class TradeController extends BaseController
         if (1 === $type) {   //可转让
             $respData = Yii::$container->get('txClient')->get('assets/transferable-list', [
                 'user_id' => $user->id,
+                'offset' => ($page - 1) * $pageSize,
+                'limit' => $pageSize,
             ]);
+
+            $pages = new Pagination(['totalCount' => $respData['totalCount'], 'pageSize' => $pageSize]);
         } else {
+            $stats = Yii::$container->get('txClient')->get('credit-note/user-notes-stats', [
+                'user_id' => $user->id,
+                'type' => $type,
+            ]);
+
+            $pages = new Pagination(['totalCount' => $stats['totalCount'], 'pageSize' => $pageSize]);
+
             $respData = Yii::$container->get('txClient')->get('credit-note/user-notes', [
                 'user_id' => $user->id,
+                'type' => $type,
+                'offset' => $pages->offset,
+                'limit' => $pages->limit,
             ]);
         }
 
-        $respData = empty($respData) ? [] : $respData;
+        $data = $respData['data'];
 
-        if (2 === $type) {  //转让中
-            foreach ($respData as $key => $note) {
-                if ($note['isClosed']) {
-                    unset($respData[$key]);
-                    continue;
-                } else {
-                    $respData[$key]['loan'] = Loan::findOne($note['loan_id']);
-                }
-            }
-        } elseif (3 === $type) {  //转让已完成
-            foreach ($respData as $key => $note) {
-                if ($note['isClosed'] && $note['tradedAmount'] > 0) {
-                    $respData[$key]['loan'] = Loan::findOne($note['loan_id']);
-                    continue;
-                } else {
-                    unset($respData[$key]);
-                }
+        foreach ($data as $key => $asset) {
+            $data[$key]['loan'] = Loan::findOne($asset['loan_id']);
+
+            if (1 === $type) {   //可转让列表
+                $data[$key]['order'] = Order::findOne($asset['order_id']);
             }
         }
 
-        $provider = new ArrayDataProvider([
-            'allModels' => $respData,
-            'pagination' => [
-                'pageSize' => $pageSize,
-            ],
-        ]);
+        $actualIncome = [];
+        if (3 === $type) {
+            if (!empty($data)) {
+                $ids = implode(',', array_column($data, 'id'));
 
-        $pages = new Pagination(['totalCount' => count($respData), 'pageSize' => $pageSize]);
-        $data = $provider->getModels();
-
-        if (1 === $type) {   //可转让列表
-            foreach ($data as $key => $asset) {
-                $data[$key]['loan'] = Loan::findOne($asset['loan_id']);
-                $data[$key]['order'] = Order::findOne($asset['order_id']);
+                $actualIncome = Yii::$container->get('txClient')->get('credit-note/actual-income', [
+                    'ids' => $ids,
+                ]);
             }
         }
 
@@ -94,10 +90,10 @@ class TradeController extends BaseController
         $message = ($page > $tp) ? '数据错误' : '消息返回';
 
         if (Yii::$app->request->isAjax) {
-            $html = $this->renderFile('@wap/modules/credit/views/trade/_more_assets.php', ['data' => $data, 'type' => $type]);
+            $html = $this->renderFile('@wap/modules/credit/views/trade/_more_assets.php', ['data' => $data, 'type' => $type, 'actualIncome' => $actualIncome]);
             return ['header' => $header, 'html' => $html, 'code' => $code, 'message' => $message];
         }
 
-        return $this->render('assets', ['data' => $data, 'type' => $type, 'pages' => $pages]);
+        return $this->render('assets', ['data' => $data, 'type' => $type, 'pages' => $pages, 'actualIncome' => $actualIncome]);
     }
 }
