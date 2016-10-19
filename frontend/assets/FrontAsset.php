@@ -14,7 +14,7 @@ class FrontAsset extends AssetBundle
     public $js = [
         'js/lib.js',
         'js/jquery.cookie.js',
-        'js/hmsr.js',
+        'js/hmsr.js?v=20161019',
     ];
     public $depends = [
         'yii\web\JqueryAsset',
