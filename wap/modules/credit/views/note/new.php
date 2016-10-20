@@ -6,15 +6,19 @@ use yii\helpers\Html;
 $this->title = '转让';
 
 $this->registerCssFile(ASSETS_BASE_URI.'css/credit/transfer_order.css', ['depends' => 'wap\assets\WapAsset']);
+$this->registerJsFile(ASSETS_BASE_URI.'js/jquery.ba-throttle-debounce.min.js?v=161008', ['depends' => \yii\web\JqueryAsset::class]);
 
 $discountRate = Yii::$app->params['credit_trade']['max_discount_rate'];
 $fee = Yii::$app->params['credit_trade']['fee_rate'] * 1000;
+$minOrderAmount = bcdiv($asset['minOrderAmount'], 100, 2);
+$incrOrderAmount = bcdiv($asset['incrOrderAmount'], 100, 2);
+$calcDiscountRate = min($discountRate, bcmul(bcdiv($asset['currentInterest'], bcadd($asset['currentInterest'], $asset['maxTradableAmount'], 14), 14), 100, 2));
 ?>
 
 <div class="row produce">
     <div class="col-xs-11 col-xs-offset-1 text-align-lf first-line" style="padding-right: 0;"><?= Html::encode($loan->title)?></div>
     <div class="col-xs-3 col-xs-offset-1">可转让金额</div>
-    <div class="col-xs-8 text-align-lf col"><?= number_format($asset['maxTradableAmount'] / 100, 2)?>元</div>
+    <div class="col-xs-8 text-align-lf col"><?= number_format(bcdiv($asset['maxTradableAmount'], 100, 2), 2)?>元</div>
     <div class="col-xs-3 col-xs-offset-1">预期年化率</div>
     <div class="col-xs-8 text-align-lf col">
         <?= floatval($apr) * 100 ?>%
@@ -36,7 +40,7 @@ $fee = Yii::$app->params['credit_trade']['fee_rate'] * 1000;
 </div>
 <div class="row sm-height margin-top">
     <div class="col-xs-3 col-xs-offset-1 safe-txt font-32">转让金额</div>
-    <input name="money" type="text" id="money" autocomplete="off" value="" t_value="" placeholder="起投<?= StringUtils::amountFormat2(bcdiv($asset['minOrderAmount'], 100, 2)) ?>元，递增<?= StringUtils::amountFormat2(bcdiv($asset['incrOrderAmount'], 100, 2)) ?>元" class="col-xs-6 safe-lf text-align-lf font-26" onkeyup=" if (this.value) {if (!this.value.match(/^[\+\-]?\d+?\.?\d*?$/)) {this.value = this.t_value;}else{this.t_value = this.value;}}">
+    <input type="text" name="" id="credit_amount" placeholder="起投<?= StringUtils::amountFormat2($minOrderAmount) ?>元，递增<?= StringUtils::amountFormat2($incrOrderAmount) ?>元" autocomplete="off" t_value="" onkeyup="if (this.value) {if (!this.value.match(/^[\+\-]?\d+?\.?\d*?$/)) {if (this.t_value) {this.value = this.t_value;} else {this.value = '';}} else {this.t_value = this.value;}}" class="col-xs-6 safe-lf text-align-lf font-26">
     <div class="col-xs-2 safe-txt font-32 money_yuan">元</div>
 </div>
 <div class="row sm-height">
@@ -49,7 +53,7 @@ $fee = Yii::$app->params['credit_trade']['fee_rate'] * 1000;
         <img src="<?= ASSETS_BASE_URI ?>images/credit/triangle.png" alt="">
         产品在转让时折让的比率，如折让率1%，则按照转让价值的99%来出售。
     </p>
-    <input name="rate" type="text" id="rate" autocomplete="off" maxlength="4" value="" t_value="" placeholder="不高于<?= $discountRate ?>%，可设置2位小数"  class="col-xs-6 safe-lf text-align-lf font-26" onkeyup=" if (this.value) {if (!this.value.match(/^[\+\-]?\d+?\.?\d*?$/)) {this.value = this.t_value;}else{this.t_value = this.value;}}">
+    <input type="text" name="discount_rate" id="discount_rate_input" value=""  placeholder="不高于<?= $calcDiscountRate ?>%，可设置2位小数" autocomplete="off" maxlength="4" t_value="" onkeyup=" if (this.value) {if (!this.value.match(/^[\+\-]?\d+?\.?\d*?$/)) {if (this.t_value) {this.value = this.t_value;} else {this.value = '';}} else {this.t_value = this.value;}}" class="col-xs-6 safe-lf text-align-lf font-26">
     <div class="col-xs-2 safe-txt font-32 money_yuan">%</div>
 </div>
 <div class="hide toRefer"></div>
@@ -76,7 +80,7 @@ $fee = Yii::$app->params['credit_trade']['fee_rate'] * 1000;
 <!--bottom-->
 <div class="row login-sign-btn ht">
     <div class="col-xs-6 col-xs-offset-3 text-align-ct">
-        <input id="buybtn" class="btn-common btn-normal" type="button" value="确定转让">
+        <input id="credit_submit_btn" class="btn-common btn-normal" type="button" value="确定转让">
     </div>
     <div class="col-xs-3 empty_div"></div>
 </div>
@@ -93,134 +97,208 @@ $fee = Yii::$app->params['credit_trade']['fee_rate'] * 1000;
             if(!flag_shouyi){
                 $('.shouyi_tips').show();
                 flag_shouyi = 1;
+            } else {
+                $('.shouyi_tips').hide();
+                flag_shouyi = 0;
             }
             e.stopPropagation();
-        })
+        });
         $('body').bind('click',function(e){
             if(flag_shouyi){
                 $('.shouyi_tips').hide();
                 flag_shouyi = 0;
             }
-        })
+        });
 
         $('.sm-height_tips_img').bind('click',function(e){
             var e = event || window.event;
             if(!flag_sm){
                 $('.sm-height_tips').show();
                 flag_sm = 1;
+            } else {
+                $('.sm-height_tips').hide();
+                flag_sm = 0;
             }
             e.stopPropagation();
-        })
+        });
         $('body').bind('click',function(e){
             if(flag_sm){
                 $('.sm-height_tips').hide();
                 flag_sm = 0;
             }
-        })
-
-        var discount_rate_input = $('#rate');
-        var amount_input = $('#money');
-        var total_amount = <?= floatval($asset['maxTradableAmount'] / 100)?>;
-        var current_interest = <?= floatval($asset['currentInterest'] / 100)?>;
-        var config_rate = <?= floatval($discountRate) ?>;
-        var feeRate = <?= floatval($fee / 1000) ?>;
-        amount_input.change(function () {
-            validateData();
-        });
-        discount_rate_input.change(function () {
-            validateData();
-        });
-        function validateData() {
-            var rate = parseFloat(discount_rate_input.val());
-            if (!rate) {
-                rate = 0;
-            }
-            var amount = parseFloat(amount_input.val());
-            if (!amount) {
-                amount = 0;
-            }
-            if (amount <= 0) {
-                torefer('转让金额必须大于0元');
-                return false;
-            }
-            if (rate < 0) {
-                torefer('折让率不能小于0');
-                return false;
-            }
-            if (rate > config_rate) {
-                torefer('折让率不能大于' + config_rate + '%');
-                return false;
-            }
-            if (amount > 0) {
-                var interest = parseInt(amount / total_amount * current_interest * 100) / 100;
-                $('#expect_money').html(interest);
-                $('#fee').html(parseInt(amount * feeRate * 100) / 100);
-                $('#expect_amount').html(parseInt((amount + interest) * (1 - rate / 100) * 100) / 100);
-            }
-            return true;
-        }
-        $('#buybtn').bind('click',function () {
-            if (!validateData()) {
-                return false;
-            }
-            var rate = parseFloat(discount_rate_input.val());
-            if (!rate) {
-                rate = 0;
-            }
-            var amount = parseFloat(amount_input.val());
-            if (!amount) {
-                amount = 0;
-            }
-            var _this = $(this);
-            if (_this.hasClass('twoClick')) {
-                return false;
-            }
-            _this.addClass('twoClick');
-            var xhr = $.post('/credit/note/create', {
-                '_csrf': '<?= Yii::$app->request->csrfToken?>',
-                'asset_id': '<?= $asset['id']?>',
-                'amount': amount,
-                'rate': rate
-            }, function (data) {
-                _this.removeClass('twoClick');
-                var res = data['data'];
-                if (data['code'] === 1) {
-                    var arr = new Array();
-                    var brr = new Array();
-                    var crr = new Array();
-                    for (var i = 0; i < res.length; i++) {
-                        var err = res[i];
-                        if (err['attribute'] === 'amount') {
-                            arr.push(err['msg']);
-                        } else if (err['attribute'] === 'discountRate') {
-                            brr.push(err['msg']);
-                        } else if (err['attribute'] === '' && err['msg']) {
-                            crr.push(err['msg']);
-                        }
-                    }
-                    if (arr.length > 0) {
-                        torefer(arr[0]);
-                        return false;
-                    } else if (brr.length > 0) {
-                        torefer(brr[0]);
-                        return false;
-                    } else if (crr.length > 0) {
-                        torefer(crr[0]);
-                        return false;
-                    }
-                } else if (data['code'] === 0) {
-                    window.location.href = '/credit/note/detail?id=' + data['data']['id'];
-                }
-            });
-            xhr.always(function() {
-                _this.removeClass('twoClick');
-            });
-            xhr.fail(function() {
-                _this.removeClass('twoClick');
-                torefer('系统繁忙，请稍后重试！');
-            });
         });
     });
+
+    var submit_btn = $('#credit_submit_btn');
+    var amount_input = $('#credit_amount');
+    var discount_rate_input = $('#discount_rate_input');
+    var current_interest = <?= floatval($asset['currentInterest'] / 100)?>;
+    var total_amount = <?= floatval($asset['maxTradableAmount'] / 100)?>;
+    var config_rate = <?= floatval($discountRate) ?>;
+    var minAmount = <?= floatval($minOrderAmount) ?>;
+    var incAmount = <?= floatval($incrOrderAmount) ?>;
+    var feeRate = <?= floatval($fee / 1000) ?>;
+
+    $(function(){
+        amount_input.change($.throttle(100,function () {
+            validateData();
+        }));
+        discount_rate_input.change(100,function () {
+            validateData();
+        });
+    });
+    function alertReferBox(val, callback) {
+        var confirm = $('<div id="mask" class="mask" style="display: block;"></div><div id="bing_info" class="bing-info show" style="position: fixed;margin: 0px;left:15%"> <p class="tishi-p" style="line-height: 20px;">'+ val +'</p> <div class="bind-btn"> <span class="no" style="border-right: 1px solid #ccc;">取消</span> <span class="yes" style="border-left: 1px solid #ccc;">确定</span></div> </div>');
+        if ($('#mask').length > 0) {
+            $('#mask').remove();
+        }
+        if ($('#bing_info').length > 0) {
+            $('#bing_info').remove();
+        }
+        $(confirm).insertAfter($('.toRefer'));
+        $('.bind-btn .yes').on('click', function () {
+            $(confirm).remove();
+            if (typeof callback !== 'undefined') {
+                callback();
+            }
+        });
+        $('.bind-btn .no').on('click', function () {
+            $(confirm).remove();
+        });
+    }
+    function subConfirm() {
+        var rate = parseFloat(discount_rate_input.val());
+        if (!rate) {
+            rate = 0;
+        }
+        var amount = parseFloat(amount_input.val());
+        if (!amount) {
+            amount = 0;
+        }
+        var xhr = $.post('/credit/note/create', {
+            '_csrf': '<?= Yii::$app->request->csrfToken?>',
+            'asset_id': '<?= $asset['id']?>',
+            'amount': amount,
+            'rate': rate
+        }, function (data) {
+            var res = data['data'];
+            if (data['code'] === 1) {
+                for (var i = 0; i < res.length; i++) {
+                    var err = res[i];
+                    if (err['attribute'] === 'amount') {
+                        torefer(err['msg']);
+                        return false;
+                    } else if (err['attribute'] === 'discountRate') {
+                        torefer(err['msg']);
+                        return false;
+                    } else if (err['attribute'] === '' && err['msg']) {
+                        torefer(err['msg']);
+                        return false;
+                    }
+                }
+            } else if (data['code'] === 0) {
+                window.location.href = '/credit/note/res?res=success'
+            }
+        });
+        xhr.fail(function () {
+            torefer('系统繁忙，请稍后重试！');
+        });
+    }
+    function validateData() {
+        var rate = parseFloat(discount_rate_input.val());
+        if (!rate) {
+            rate = 0;
+        }
+        if (rate < 0) {
+            torefer('折让率不能小于0');
+            return false;
+        }
+        var amount = parseFloat(amount_input.val());
+        if (!amount) {
+            amount = 0;
+        }
+        if (amount <= 0) {
+            torefer('转让金额必须大于0元');
+            return false;
+        }
+        if (amount > total_amount) {
+            torefer('转让金额不能超过最大可转让金额');
+            return false;
+        }
+        if (total_amount >= minAmount) {
+            if (amount < minAmount) {
+                torefer('转让金额必须大于起投金额');
+                return false;
+            }
+            var lastAmount = total_amount - amount;
+            if (lastAmount >= minAmount) {
+                if ((amount - minAmount) % incAmount != 0) {
+                    torefer('金额必须是递增金额整数倍');
+                    return false;
+                }
+            } else {
+                if (amount != total_amount) {
+                    torefer('必须将剩余金额全部投完');
+                    return false;
+                }
+            }
+        } else {
+            if (amount != total_amount) {
+                torefer('必须将金额全部投完');
+                return false;
+            }
+        }
+
+        //请求交易系统计算进行计算
+        $.ajax({
+            type: "get",
+            url: "<?= rtrim(\Yii::$app->params['clientOption']['host']['tx'], '/')?>/credit-note/calc",
+            data: {asset_id:<?= $asset['id']?>, amount: amount, rate: rate},
+            dataType: "jsonp"
+        });
+        return true;
+    }
+    function callback(data) {
+        if (data.interest) {
+            $('#expect_money').html(data.interest);
+        }
+        if (data.fee) {
+            $('#fee').html(data.fee);
+        }
+        if (data.realAmount) {
+            $('#expect_amount').html(data.realAmount);
+        }
+
+        var amount = parseFloat(amount_input.val());
+        var rate = parseFloat(discount_rate_input.val());
+        var interest = parseFloat(data.interest);
+        var maxRate = interest / (amount + interest) * 100;
+        maxRate = Math.min(config_rate, maxRate);
+        $('#discount_rate_input').attr('placeholder', '不高于' + (parseInt(maxRate * 100) / 100) + '%，可设置2位小数');
+        if (rate > maxRate) {
+            torefer('折让率不能大于'+(parseInt(maxRate * 100) / 100)+'%');
+            return false;
+        }
+
+        submit_btn.click(function () {
+            var rate = parseFloat(discount_rate_input.val());
+            if (!rate) {
+                rate = 0;
+            }
+            if (rate > maxRate) {
+                torefer('折让率不能大于'+(parseInt(maxRate * 100) / 100)+'%');
+                return false;
+            }
+            if (validateData()) {
+                 if (rate) {
+                     alertReferBox('折让率为' + rate + '%，您确定要发起转让吗？', subConfirm);
+                 } else {
+                     alertReferBox('您确定要发起转让吗？', subConfirm);
+                 }
+
+            }
+        });
+    }
 
     function torefer(val)
     {
@@ -234,5 +312,4 @@ $fee = Yii::$app->params['credit_trade']['fee_rate'] * 1000;
             }, 200);
         }, 2000);
     }
-
 </script>

@@ -341,7 +341,7 @@ $calcDiscountRate = min($discountRate, bcmul(bcdiv($asset['currentInterest'], bc
                 rate = 0;
             }
             if (rate > maxRate) {
-                discount_rate_error.html('折让率不能大于'+(parseInt(maxRate * 100) / 100));
+                discount_rate_error.html('折让率不能大于'+(parseInt(maxRate * 100) / 100)+'%');
                 discount_rate_error.show();
                 return false;
             }

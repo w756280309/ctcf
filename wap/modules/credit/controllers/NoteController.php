@@ -138,4 +138,12 @@ class NoteController extends Controller
 
         return $checkResult;
     }
+
+    //发起债券结果页面
+    public function actionRes($res = 'success')
+    {
+        return $this->render('note_res', [
+            'res' => $res,
+        ]);
+    }
 }
