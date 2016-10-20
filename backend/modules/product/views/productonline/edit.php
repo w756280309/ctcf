@@ -123,7 +123,6 @@ $is_online = in_array($model->status, [2, 3, 4, 5, 6, 7]);//判断标的是否�
                     <label class="control-label">项目名称<span style="color: red;">(<?= $desc ?>)</span></label>
                     <div class="controls">
                         <?php
-
                             if ($is_online) {
                                 $title_input_options = ['disabled' => 'disabled'];
                             } else {
@@ -369,7 +368,7 @@ $is_online = in_array($model->status, [2, 3, 4, 5, 6, 7]);//判断标的是否�
                     <label class="control-label">发行方</label>
                     <div class="controls">
                         <?=
-                            $form->field($model, 'issuer', ['template' => '{input}{error}', 'inputOptions' => ['autocomplete' => 'off', 'class' => 'chosen-with-diselect span6']])->dropDownList(ArrayHelper::merge([0 => '--请选择--'], ArrayHelper::map($issuer, 'id', 'name')))
+                            $form->field($model, 'issuer', ['template' => '{input}{error}', 'inputOptions' => ['autocomplete' => 'off', 'class' => 'chosen-with-diselect span6']])->dropDownList(ArrayHelper::merge(['' => '--请选择--'], ArrayHelper::map($issuer, 'id', 'name')))
                         ?>
                     </div>
                 </div>

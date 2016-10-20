@@ -182,7 +182,7 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
     public function rules()
     {
         return [
-            [['title', 'borrow_uid', 'yield_rate', 'money', 'start_money', 'dizeng_money', 'start_date', 'end_date', 'expires', 'cid', 'description', 'refund_method'], 'required'],
+            [['title', 'borrow_uid', 'yield_rate', 'money', 'start_money', 'dizeng_money', 'start_date', 'end_date', 'expires', 'cid', 'description', 'refund_method', 'issuer', 'issuerSn'], 'required'],
             ['finish_date', 'required', 'when' => function ($model) {
                 return $model->is_fdate == 1 && !empty($model->finish_date);
             },  'whenClient' => "function (attribute, value) {
@@ -380,6 +380,8 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
             'rateSteps'=>'浮动利率',
             'paymentDay' => '固定还款日',
             'isTest' => '是测试标',
+            'issuer' => '发行方',
+            'issuerSn' => '发行方项目编号',
         ];
     }
 
