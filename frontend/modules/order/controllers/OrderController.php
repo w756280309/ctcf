@@ -142,7 +142,7 @@ class OrderController extends BaseController
             return ['status' => $order->status];
         } else {
             if (1 === $order->status) {
-                return $this->redirect('/info/success?source=touzi&jumpUrl=/licai/index');
+                return $this->redirect('/info/success?source=touzi&jumpUrl=/user/user/myorder');
             } else {
                 return $this->redirect('/info/fail?source=touzi');
             }
