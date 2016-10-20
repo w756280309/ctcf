@@ -4,6 +4,7 @@ namespace common\view;
 
 use common\models\product\RateSteps;
 use common\models\product\OnlineProduct;
+use common\utils\StringUtils;
 
 class LoanHelper
 {
@@ -14,7 +15,7 @@ class LoanHelper
      */
     public static function getDealRate(OnlineProduct $loan)
     {
-        $yr = rtrim(rtrim($loan->baseRate, '0'), '.');
+        $yr = StringUtils::amountFormat2($loan->baseRate);
         if (!$loan->isFlexRate || null === $loan->rateSteps) {
             return $yr;
         }
@@ -24,6 +25,6 @@ class LoanHelper
             return $yr;
         }
 
-        return $yr.'～'.rtrim(rtrim(number_format($topRate, 2), '0'), '.');
+        return $yr.'～'.StringUtils::amountFormat2($topRate);
     }
 }

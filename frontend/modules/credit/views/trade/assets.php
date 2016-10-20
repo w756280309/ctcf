@@ -46,9 +46,14 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/useraccount/transfering.js?v=161019', 
                                 <th class="text-third" width="60">合同</th>
                                 <th class="text-align-ct" width="60">操作</th>
                             </tr>
-                            <?php foreach ($assets as $asset) { ?>
+                            <?php foreach ($assets as $asset) { $isNote = !empty($asset['note_id']); ?>
                                 <tr class="tr-click">
-                                    <td class="text-second"><a href="/deal/deal/detail?sn=<?= $asset['loan']->sn ?>"><?= empty($asset['note_id']) ? '' : '【转让】' ?><?= $asset['loan']->title ?></a></td>
+                                    <td class="text-second">
+                                        <?php $url = $isNote ? '/credit/note/detail?id='.$asset['note_id'] : '/deal/deal/detail?sn='.$asset['loan']->sn; ?>
+                                        <a href="<?= $url ?>">
+                                            <?= $isNote ? '【转让】' : '' ?><?= $asset['loan']->title ?>
+                                        </a>
+                                    </td>
                                     <td class="text-align-ct">
                                         <?php
                                         $remainingDuration = $asset['loan']->remainingDuration;

@@ -21,24 +21,22 @@ class DealController extends Controller
      */
     public function actionIndex($page = 1)
     {
-        $cond = ['isPrivate' => 0, 'del_status' => OnlineProduct::STATUS_USE, 'online_status' => OnlineProduct::STATUS_ONLINE];
-
-        $data = OnlineProduct::find()->where($cond);
-        $count = $data->count();
         $size = 5;
+
+        $query = OnlineProduct::find()->where([
+            'isPrivate' => 0,
+            'del_status' => OnlineProduct::STATUS_USE,
+            'online_status' => OnlineProduct::STATUS_ONLINE
+        ]);
+
+        $count = $query->count();
+
         $pages = new Pagination(['totalCount' => $count, 'pageSize' => $size]);
-        $deals = $data->offset(($page - 1) * $size)->limit($pages->limit)
+
+        $deals = $query->offset($pages->offset)->limit($pages->limit)
             ->orderBy('recommendTime desc, sort asc, finish_rate desc, id desc')
             ->all();
-        foreach ($deals as $key => $val) {
-            $val->yield_rate = $val->yield_rate ? rtrim(rtrim(number_format(OnlineProduct::calcBaseRate($val->yield_rate, $val->jiaxi), 2), '0'), '.') : '0';
 
-            if ($val->isFlexRate && null !== $val->rateSteps) {
-                $val->yield_rate = $val->yield_rate . '~' . rtrim(rtrim(number_format(RateSteps::getTopRate(RateSteps::parse($val->rateSteps)), 2), '0'), '.');
-            }
-
-            $val->start_money = rtrim(rtrim(number_format($val->start_money, 2), '0'), '.');
-        }
         $tp = ceil($count / $size);
         $code = ($page > $tp) ? 1 : 0;
 

@@ -13,7 +13,7 @@ $this->registerCssFile(ASSETS_BASE_URI.'css/credit/creditcontent.css', ['depends
 
 <div class="container credit-content">
     <div class="row cre-list">
-        <div class="col-xs-4 cre-title">投资人</div>
+        <div class="col-xs-4 cre-title">受让人</div>
         <div class="col-xs-4 cre-title">投资时间</div>
         <div class="col-xs-4 cre-title">投资金额(元)</div>
     </div>

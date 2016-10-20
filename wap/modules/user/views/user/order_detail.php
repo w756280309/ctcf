@@ -84,7 +84,7 @@ $this->registerCssFile(ASSETS_BASE_URI .'css/touzixiangqing.css?v=20160718', ['d
                 </li>
                 <li>
                     <div class="information-content-left">预期收益</div>
-                    <div class="information-content-right"><?= StringUtils::amountFormat2($profit) ?>元</div>
+                    <div class="information-content-right"><?= StringUtils::amountFormat3($profit) ?>元</div>
                 </li>
                 <li>
                     <div class="information-content-left">还款方式</div>
@@ -103,7 +103,7 @@ $this->registerCssFile(ASSETS_BASE_URI .'css/touzixiangqing.css?v=20160718', ['d
                 </li>
                 <li>
                     <div class="information-content-left">预期收益</div>
-                    <div class="information-content-right"><?= StringUtils::amountFormat2($profit) ?>元</div>
+                    <div class="information-content-right"><?= StringUtils::amountFormat3($profit) ?>元</div>
                 </li>
                 <li>
                     <div class="information-content-left">还款方式</div>
@@ -148,7 +148,7 @@ $this->registerCssFile(ASSETS_BASE_URI .'css/touzixiangqing.css?v=20160718', ['d
                                 <div>第<?= $key ?>期</div>
                                 <div><?= date('Y.m.d', $val['refund_time']) ?></div>
                                 <div>利息</div>
-                                <div><?= StringUtils::amountFormat2($val['lixi']) ?>元</div>
+                                <div><?= StringUtils::amountFormat3($val['lixi']) ?>元</div>
                                 <!--还款计划-文字颜色-->
                                 <p class="<?= $hasRepaid ? 'repayment-green' : 'repayment-red' ?>"><?= $hasRepaid ? '已还' : '未还' ?></p>
                             </li>

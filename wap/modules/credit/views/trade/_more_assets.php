@@ -6,7 +6,7 @@ use common\utils\StringUtils;
     <?php if (1 === $type) { ?>
         <a class="row col common-mar" href="/user/user/orderdetail?asset_id=<?= $val['id'] ?>&from_transfer=1">
             <div class="col-xs-12 transferitem-list-title">
-                <div class="inner-border"><?= $val['loan']->title ?></div>
+                <div class="inner-border"><?= empty($val['note_id']) ? '' : '【转让】' ?><?= $val['loan']->title ?></div>
             </div>
             <div class="col-xs-7 font-24 common-line-height common-pad-lf">可转让金额：<span class="font-28 common-color"><?= StringUtils::amountFormat2(bcdiv($val['maxTradableAmount'], 100, 2)) ?>元</span></div>
             <div class="col-xs-5 font-32 common-color text-align-ct common-line-height"><?= StringUtils::amountFormat2($val['order']->yield_rate * 100) ?>%</div>
@@ -16,7 +16,7 @@ use common\utils\StringUtils;
     <?php } elseif (2 === $type) { ?>
         <a class="row col common-mar" href="/credit/note/detail?id=<?= $val['id'] ?>">
             <div class="col-xs-12 transferitem-list-title">
-                <div class="inner-border"><?= $val['loan']->title ?></div>
+                <div class="inner-border">【转让】<?= $val['loan']->title ?></div>
             </div>
             <div class="col-xs-7 font-24 common-line-height common-pad-lf">转让金额：<span class="font-28 common-color"><?= StringUtils::amountFormat2(bcdiv($val['amount'], 100, 2)) ?>元</span></div>
             <div class="col-xs-5 font-32 common-color text-align-ct common-line-height"><?= bcmul(bcdiv($val['tradedAmount'], $val['amount'], 14), 100, 0) ?>%</div>
@@ -26,7 +26,7 @@ use common\utils\StringUtils;
     <?php } elseif (3 === $type) { ?>
         <a class="row col common-mar" href="/credit/note/detail?id=<?= $val['id'] ?>">
             <div class="col-xs-12 transferitem-list-title">
-                <div class="inner-border"><?= $val['loan']->title ?></div>
+                <div class="inner-border">【转让】<?= $val['loan']->title ?></div>
             </div>
             <div class="col-xs-7 font-24 common-line-height common-pad-lf">已转让金额：<span class="font-28 common-color"><?= StringUtils::amountFormat2(bcdiv($val['tradedAmount'], 100, 2)) ?>元</span></div>
             <div class="col-xs-5 font-32 common-color text-align-ct common-line-height"><?= StringUtils::amountFormat3(bcdiv($actualIncome[$val['id']]['actualIncome'], 100, 2)) ?>元</div>
