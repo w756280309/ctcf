@@ -603,14 +603,13 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
      */
     public static function getRecommendLoans($count)
     {
-        $count = intval($count);
-
-        $query = self::find()
+        $loans = self::find()
             ->where(['isPrivate' => 0, 'del_status' => OnlineProduct::STATUS_USE, 'online_status' => OnlineProduct::STATUS_ONLINE])
             ->limit($count)
-            ->orderBy('recommendTime desc, sort asc, id desc');
+            ->orderBy('recommendTime desc, sort asc, id desc')
+            ->all();
 
-        return 1 === $count ? $query->one() : $query->all();
+        return $loans;
     }
 
     /**
