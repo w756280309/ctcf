@@ -88,7 +88,7 @@ foreach (['useraccount/safecenter.css'] as $cssFile) {
                     <!-- 未认证-->
                     <?php if (null === $user->qpay): ?>
                     <i class="red"></i><span>未绑定</span>
-                    <i class="/user/userbank/bindbank"></i><a href="/user/userbank/bindbank" class="bunding">绑定</a>
+                    <a href="/user/userbank/mybankcard" class="bunding">绑定</a>
                     <?php else: ?>
                     <!-- 已认证-->
                     <i class="blue"></i><span>已绑定</span>
@@ -176,7 +176,7 @@ foreach (['useraccount/safecenter.css'] as $cssFile) {
                         <p class="p-bloder">忘记资金托管账户支付密码</p>
                         <p>若您忘记了您的资金托管账户支付密码，可以申请密码重置，联动优势将新的支付密码以短信形式发送到您的手机，请注意接收并妥善保管。</p>
                     </div>
-                    <a id="x-reset-ump-pass" class="pay-submit" href="" >重置支付密码</a>
+                    <a id="x-reset-ump-pass" class="pay-submit" href="">重置支付密码</a>
                     <div style="clear: both"></div>
 
                     <div class="pay-txt">
