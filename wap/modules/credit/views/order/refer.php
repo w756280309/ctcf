@@ -38,7 +38,7 @@ $this->title = ("success" === $ret) ? "购买成功" : "购买失败";
     <?php } else { ?>
         <div class="col-xs-4"></div>
         <div class="col-xs-4">
-            <a href="javascript:void(0)" onclick="history.go(-1)" class="bind-close1">重新转让</a>
+            <a href="javascript:void(0)" onclick="history.go(-1)" class="bind-close1">重新购买</a>
         </div>
         <div class="col-xs-4"></div>
     <?php } ?>

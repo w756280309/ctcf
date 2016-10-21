@@ -88,11 +88,15 @@ body{
     font-size:0.86rem;
     color: #007aff;
 }
+.surplus a.rg{
+    padding-right: 10px;
+}
 .font-32{
     color: #161616;
 }
 .money_yuan{
     padding-left:1.3rem;
+    padding-right: 10px;
 }
 .sm-height{
     height:3.6rem;
@@ -101,6 +105,9 @@ body{
 }
 #money{
     padding-left:20px;
+    height: 1.8rem;
+    top: 0.9rem;
+    line-height: 1.8rem;
 }
 #buybtn{
     font-size:1.3rem;

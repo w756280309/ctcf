@@ -5,7 +5,7 @@ use yii\helpers\Html;
 $this->title = '购买';
 $this->backUrl = '/credit/note/detail?id='.$respData['id'];
 
-$this->registerCssFile(ASSETS_BASE_URI.'css/credit/order.css', ['depends' => 'wap\assets\WapAsset']);
+$this->registerCssFile(ASSETS_BASE_URI.'css/credit/order.css?v=20161021', ['depends' => 'wap\assets\WapAsset']);
 
 use common\utils\StringUtils;
 
@@ -42,15 +42,15 @@ $isClosed = $respData['isClosed'] || $nowTime >= $endTime;
 <div class="row surplus margin-top">
     <div class="col-xs-3 col-xs-offset-1">可用余额</div>
     <div class="col-xs-6 safe-lf padding-left-20"><?= StringUtils::amountFormat3($user->lendAccount->available_balance) ?>元</div>
-    <div class="col-xs-2 safe-txt"><a href="/user/userbank/recharge?from=<?= urlencode('/credit/order/order?note_id='.$respData['id'])?>">去充值</a></div>
+    <div class="col-xs-2 safe-txt"><a class="rg" href="/user/userbank/recharge?from=<?= urlencode('/credit/order/order?note_id='.$respData['id'])?>">去充值</a></div>
 </div>
 <form action="/credit/order/new" method="post" id="orderform" data-to="1">
 <input type="hidden" name="_csrf" value="<?= Yii::$app->request->csrfToken ?>" />
 <input type="hidden" name="note_id" value="<?= $respData['id'] ?>">
 <div class="row sm-height border-bottom">
     <div class="col-xs-3 col-xs-offset-1 safe-txt font-32">投资金额</div>
-    <input name="amount" type="text" id="money" value="" t_value="" AUTOCOMPLETE="off" placeholder="起投<?= StringUtils::amountFormat2(bcdiv($note_config['min_order_amount'], 100, 2)) ?>元，递增<?= StringUtils::amountFormat2(bcdiv($note_config['incr_order_amount'], 100, 2)) ?>元"  class="col-xs-6 safe-lf text-align-lf font-26" onkeyup="if (this.value) {if (!this.value.match(/^[\+\-]?\d+?\.?\d*?$/)) {if (this.t_value) {this.value = this.t_value;} else {this.value = '';}} else {this.t_value = this.value;}}">
-    <div class="col-xs-2 safe-txt font-32 money_yuan">元</div>
+    <input name="amount" type="text" id="money" value="" t_value="" AUTOCOMPLETE="off" placeholder="起投<?= StringUtils::amountFormat2(bcdiv($note_config['min_order_amount'], 100, 2)) ?>元，递增<?= StringUtils::amountFormat2(bcdiv($note_config['incr_order_amount'], 100, 2)) ?>元"  class="col-xs-7 safe-lf text-align-lf font-26" onkeyup="if (this.value) {if (!this.value.match(/^[\+\-]?\d+?\.?\d*?$/)) {if (this.t_value) {this.value = this.t_value;} else {this.value = '';}} else {this.t_value = this.value;}}">
+    <div class="safe-txt font-32 money_yuan">元</div>
 </div>
 
 <div class="row shouyi margin-top">
