@@ -100,7 +100,6 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        $this->layout = false;
         $ac = 5;
         $record = Adv::find()->where(['status' => 0, 'del_status' => 0, 'showOnPc' => 0]);
         if (defined('IN_APP')) {   //App端isDisabledInApp为1时,不显示轮播图
@@ -109,7 +108,7 @@ class SiteController extends Controller
 
         $adv = $record->limit($ac)->orderBy('show_order asc, id desc')->all();  //修改轮播图显示顺序,先按照show_order升序排列,后按照id降序排列
 
-        $deals = OnlineProduct::getRecommendLoans(3);
+        $deal = OnlineProduct::getRecommendLoans(1);
 
         $news = News::find()
             ->where(['status' => News::STATUS_PUBLISH])
@@ -117,7 +116,7 @@ class SiteController extends Controller
             ->limit(3)
             ->all();
 
-        return $this->render('index', ['adv' => $adv, 'deals' => $deals, 'news' => $news]);
+        return $this->render('index', ['adv' => $adv, 'deal' => $deal, 'news' => $news]);
     }
 
     /**
