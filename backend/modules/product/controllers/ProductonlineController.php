@@ -592,7 +592,7 @@ class ProductonlineController extends BaseController
             $res = OnlineRepaymentPlan::generatePlan($model);
             if ($res) {
                 //确认计息完成之后将标的添加至保全队列
-                $job = new BaoQuanQueue(['proId' => $id, 'status' => BaoQuanQueue::STATUS_SUSPEND]);
+                $job = new BaoQuanQueue(['itemId' => $id, 'status' => BaoQuanQueue::STATUS_SUSPEND, 'itemType' => BaoQuanQueue::TYPE_LOAN]);
                 $job->save();
 
                 return ['result' => '1', 'message' => '操作成功'];

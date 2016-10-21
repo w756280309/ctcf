@@ -57,11 +57,13 @@ class Client
                         if ($c) {
                             //获取合同模板
                             $c = $this->handleContent($k, $c, $order);
-                            $content = $content . $c . '<br/><br/><hr/><br/><br/>';
+                            $content = $content . $c . ' <br/><br/><hr/><br/><br/>';
                         }
                     }
                     //多份合同合并成一份
                     $content = rtrim($content, '<br/><br/><hr/><br/><br/>');
+                   // $url = file_get_contents(dirname(__DIR__).'/../lib/EBaoQuan/jinjiao_data_url');
+                    //$content .= '<img style="position: fixed;top:50px;right:170px;" src="'.$url.'"/>'; 保全签章
                     //生成PDF
                     $file = $this->createPdf($content, $order->sn);
                     if (file_exists($file)) {

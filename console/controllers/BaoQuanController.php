@@ -23,11 +23,11 @@ class BaoQuanController extends Controller
             return 0;
         }
         
-        $queues = BaoQuanQueue::find()->where(['status' => BaoQuanQueue::STATUS_SUSPEND])->orderBy(['id' => SORT_DESC])->all();
+        $queues = BaoQuanQueue::find()->where(['status' => BaoQuanQueue::STATUS_SUSPEND, 'itemType' => BaoQuanQueue::TYPE_LOAN])->orderBy(['id' => SORT_DESC])->all();
         if (count($queues) > 0) {
             $client = new Client();
             foreach ($queues as $queue) {
-                $proId = $queue['proId'];
+                $proId = $queue['itemId'];
                 $product = OnlineProduct::findOne($proId);
                 if (null !== $product) {
                     try {

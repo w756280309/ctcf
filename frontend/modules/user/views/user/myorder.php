@@ -75,7 +75,7 @@ use common\models\order\OnlineRepaymentPlan;
                         </span>
                     </td>
                     <td class="text-align-ct">
-                        <a href="<?= empty($val['asset_id']) ? '/order/order/agreement?pid='.$val['loan']['id'].'&order_id='.$val['order_id'] : '' ?>" target="_blank">查看</a>
+                        <a href="/order/order/contract?asset_id=<?= $val['id'] ?>" target="_blank">查看</a>
                     </td>
                 </tr>
                 <?php if (!empty($plan[$key]['obj'])) : ?>

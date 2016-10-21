@@ -42,6 +42,7 @@ use yii\behaviors\TimestampBehavior;
  * @property string $isFlexRate
  * @property string $rateSteps
  * @property integer $paymentDay
+ * @property integer $issuer
  * @property int $isTest
  */
 class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
@@ -868,5 +869,29 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
         }
 
         return $res;
+    }
+
+    //获取发行方名称
+    public function getIssuerName()
+    {
+        if ($this->issuer) {
+            $issuer = Issuer::findOne($this->issuer);
+            if ($issuer) {
+                return $issuer->name;
+            }
+        }
+        return null;
+    }
+
+    //获取标的的融资用户名称
+    public function getAffiliatorName()
+    {
+        if ($this->borrow_uid) {
+            $user = User::find()->where(['type' => User::USER_TYPE_ORG, 'id' => $this->borrow_uid])->one();
+            if ($user && $user->org_name) {
+                return $user->org_name;
+            }
+        }
+        return null;
     }
 }
