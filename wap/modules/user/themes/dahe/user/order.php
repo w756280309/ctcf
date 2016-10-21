@@ -2,7 +2,7 @@
 $this->title="我的理财";
 ?>
 <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/bind.css"/>
-<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/licai.css"/>
+<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/licai.css?v=20161020"/>
 <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/swiper.min.css">
 <script type="text/javascript">
     var total='<?=$list['header']['count'] ?>';
