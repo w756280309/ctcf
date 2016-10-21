@@ -17,7 +17,7 @@ $isClosed = $respData['isClosed'] || $nowTime >= $endTime;
 ?>
 
 <div class="row produce">
-    <div class="col-xs-11 col-xs-offset-1 text-align-lf first-line" style="padding-right: 0;"><?= Html::encode($loan->title)?></div>
+    <div class="col-xs-11 col-xs-offset-1 text-align-lf first-line" style="padding-right: 0;">【转让】<?= Html::encode($loan->title)?></div>
     <div class="col-xs-3 col-xs-offset-1">预期年化收益</div>
     <div class="col-xs-8 text-align-lf col"><?= number_format($order->yield_rate * 100, 1) ?>%</div>
     <div class="col-xs-3 col-xs-offset-1">剩余期限</div>
@@ -139,7 +139,7 @@ $isClosed = $respData['isClosed'] || $nowTime >= $endTime;
                 if (data.code != 0) {
                     toast(data.message);
                 }
-                if (data.url != undefined) {
+                if (typeof data.url !== 'undefined' && data.url !== '') {
                     setTimeout(function () {
                         location.replace(data.url);
                     }, 1000);

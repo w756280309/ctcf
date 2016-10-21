@@ -4,7 +4,7 @@ use common\models\product\OnlineProduct;
 use common\utils\StringUtils;
 ?>
 
-<?php foreach ($model as $val) { ?>
+<?php foreach ($model as $val) {  $loan = null; ?>
         <a class="loan-box block" href="/user/user/orderdetail<?= 2 === $type ? '?id='.$val['id'] : '?asset_id='.$val['id'] ?>">
         <div class="loan-title">
             <?php if (2 === $type) { ?>
@@ -55,7 +55,7 @@ use common\utils\StringUtils;
             </div>
             <?php if (OnlineProduct::STATUS_NOW === $loanStatus) { ?>
                 <div class="col-xs-4 loan-info2">
-                    <p class="info-val"><?= $loan->getProgressForDisplay() ?>%</p>
+                    <p class="info-val"><?php $loan = $loan === null ? new OnlineProduct($val['loan']) : $loan; ?><?= $loan->getProgressForDisplay() ?>%</p>
                     <p class="info-label">募集进度</p>
                 </div>
             <?php } else { ?>

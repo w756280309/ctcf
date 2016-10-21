@@ -20,11 +20,11 @@ use common\utils\StringUtils;
                     <p>预期年化率</p>
                 </div>
                 <div class="col-xs-4">
-                    <span class="rate-steps"><?php $ex = $val->getDuration() ?><?= $ex['value'] ?><?= $ex['unit']?></span>
+                    <span class="rate-steps"><?php $ex = $val->getDuration() ?><?= $ex['value'] ?><i class="col-lu"><?= $ex['unit']?></i></span>
                     <p>期限</p>
                 </div>
                 <div class="col-xs-4">
-                    <span class="rate-steps"><?= StringUtils::amountFormat2($val->start_money) ?>元</span>
+                    <span class="rate-steps"><?= StringUtils::amountFormat2($val->start_money) ?><i class="col-lu">元</i></span>
                     <p>起投</p>
                 </div>
             </div>
