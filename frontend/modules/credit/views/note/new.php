@@ -1,13 +1,16 @@
 <?php
-use yii\helpers\Html;
 use common\utils\StringUtils;
+use frontend\assets\FrontAsset;
+use yii\helpers\Html;
+use yii\web\JqueryAsset;
 
 $this->title = '发起转让';
 
-$this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/usercenter.css', ['depends' => 'frontend\assets\FrontAsset']);
-$this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/transfer.css', ['depends' => 'frontend\assets\FrontAsset']);
-$this->registerJsFile(ASSETS_BASE_URI.'js/useraccount/transfer.js', ['depends' => \yii\web\JqueryAsset::class]);
-$this->registerJsFile(ASSETS_BASE_URI.'js/jquery.ba-throttle-debounce.min.js?v=161008', ['depends' => \yii\web\JqueryAsset::class]);
+$this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/usercenter.css', ['depends' => FrontAsset::class]);
+$this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/transfer.css', ['depends' => FrontAsset::class]);
+$this->registerJsFile(ASSETS_BASE_URI.'js/useraccount/transfer.js', ['depends' => JqueryAsset::class]);
+$this->registerJsFile(ASSETS_BASE_URI.'js/jquery.ba-throttle-debounce.min.js?v=161008', ['depends' => JqueryAsset::class]);
+
 $action = Yii::$app->controller->action->getUniqueId();
 $discountRate = Yii::$app->params['credit_trade']['max_discount_rate'];
 $fee = Yii::$app->params['credit_trade']['fee_rate'] * 1000;
@@ -37,15 +40,15 @@ $calcDiscountRate = min($discountRate, bcmul(bcdiv($asset['currentInterest'], bc
                             <?php
                                 $remainingDuration = $loan->getRemainingDuration();
                                 if (isset($remainingDuration['months']) && $remainingDuration['months'] > 0) {
-                                    echo $remainingDuration['months'] . '<span>个月</span>';
+                                    echo $remainingDuration['months'].'<span>个月</span>';
                                 }
                                 if (isset($remainingDuration['days'])) {
                                     if (!isset($remainingDuration['months']) || $remainingDuration['days'] >0) {
-                                        echo $remainingDuration['days'] . '<span>天</span>';
+                                        echo $remainingDuration['days'].'<span>天</span>';
                                     }
                                 }
                             ?>
-                            </li>
+                        </li>
                         <li>剩余期限</li>
                     </ul>
                     <ul class="text_center">
@@ -60,7 +63,7 @@ $calcDiscountRate = min($discountRate, bcmul(bcdiv($asset['currentInterest'], bc
                                 <div class="ui-poptip-shadow">
                                     <div class="ui-poptip-container">
                                         <div id="ui-poptip-arrow_add_one" class="ui-poptip-arrow">
-                                            <img src="../../images/useraccount/diglog-jiao1.png" alt="">
+                                            <img src="<?= ASSETS_BASE_URI ?>images/useraccount/diglog-jiao1.png" alt="">
                                         </div>
                                         <div class="ui-poptip-content" data-role="content">
                                             在卖出转让前，剩余本金自上一期回款后所产生的利息
@@ -106,7 +109,7 @@ $calcDiscountRate = min($discountRate, bcmul(bcdiv($asset['currentInterest'], bc
                                 <div class="ui-poptip-shadow">
                                     <div class="ui-poptip-container">
                                         <div id="ui-poptip-arrow_add_two" class="ui-poptip-arrow">
-                                            <img src="../../images/useraccount/diglog-jiao1.png" alt="">
+                                            <img src="<?= ASSETS_BASE_URI ?>images/useraccount/diglog-jiao1.png" alt="">
                                         </div>
                                         <div class="ui-poptip-content" data-role="content">
                                             产品在转让时折让的比率，如折让率1%，则按照转让价值的99%来出售
@@ -140,7 +143,7 @@ $calcDiscountRate = min($discountRate, bcmul(bcdiv($asset['currentInterest'], bc
                                 <div class="ui-poptip-shadow">
                                     <div class="ui-poptip-container">
                                         <div id="ui-poptip-arrow_add_two" class="ui-poptip-arrow">
-                                            <img src="../../images/useraccount/diglog-jiao1.png" alt="">
+                                            <img src="<?= ASSETS_BASE_URI ?>images/useraccount/diglog-jiao1.png" alt="">
                                         </div>
                                         <div class="ui-poptip-content" data-role="content">
                                             转让需要支付转让金额的<?= $fee ?>‰手续费，在成交后直接从成交金额中扣除
@@ -152,7 +155,7 @@ $calcDiscountRate = min($discountRate, bcmul(bcdiv($asset['currentInterest'], bc
                     </ul>
 
                     <span>
-                        <input id="credit_submit_btn" type="button" value="确定转让" class="submit_btn">
+                        <input id="credit_submit_btn" type="button" value="确定转让" class="submit_btn" onclick="validateData()">
                     </span>
                 </div>
 
@@ -197,7 +200,8 @@ $calcDiscountRate = min($discountRate, bcmul(bcdiv($asset['currentInterest'], bc
         });
     });
 
-    function subConfirm(obj) {
+    function subConfirm(obj)
+    {
         $('.mask').hide();
         $('.confirmBox').hide();
         var rate = parseFloat(discount_rate_input.val());
@@ -247,7 +251,8 @@ $calcDiscountRate = min($discountRate, bcmul(bcdiv($asset['currentInterest'], bc
         });
     }
 
-    function validateData() {
+    function validateData()
+    {
         var rate = parseFloat(discount_rate_input.val());
         if (!rate) {
             rate = 0;
@@ -257,7 +262,14 @@ $calcDiscountRate = min($discountRate, bcmul(bcdiv($asset['currentInterest'], bc
             discount_rate_error.show();
             return false;
         }
-        var amount = parseFloat(amount_input.val());
+
+        var amount = amount_input.val();
+        if ('' === amount) {
+            amount_error.html('请输入转让金额');
+            amount_error.show();
+            return false;
+        }
+        amount = parseFloat(amount);
         if (!amount) {
             amount = 0;
         }
@@ -311,7 +323,9 @@ $calcDiscountRate = min($discountRate, bcmul(bcdiv($asset['currentInterest'], bc
         });
         return true;
     }
-    function callback(data) {
+
+    function callback(data)
+    {
         if (data.interest) {
             $('#expect_money').html(data.interest);
         }

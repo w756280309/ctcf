@@ -1,13 +1,14 @@
 <?php
-
 use common\utils\StringUtils;
+use wap\assets\WapAsset;
 use yii\helpers\Html;
+use yii\web\JqueryAsset;
 
 $this->title = '转让';
 
-$this->registerCssFile(ASSETS_BASE_URI.'css/credit/transfer_order.css?v=20161020', ['depends' => 'wap\assets\WapAsset']);
-$this->registerJsFile(ASSETS_BASE_URI.'js/jquery.ba-throttle-debounce.min.js?v=161008', ['depends' => \yii\web\JqueryAsset::class]);
-$this->registerJsFile(ASSETS_BASE_URI.'js/fastclick.js', ['depends' => \yii\web\JqueryAsset::class]);
+$this->registerCssFile(ASSETS_BASE_URI.'css/credit/transfer_order.css', ['depends' => WapAsset::class]);
+$this->registerJsFile(ASSETS_BASE_URI.'js/jquery.ba-throttle-debounce.min.js?v=161008', ['depends' => JqueryAsset::class]);
+$this->registerJsFile(ASSETS_BASE_URI.'js/fastclick.js', ['depends' => JqueryAsset::class]);
 
 $discountRate = Yii::$app->params['credit_trade']['max_discount_rate'];
 $fee = Yii::$app->params['credit_trade']['fee_rate'] * 1000;
@@ -27,15 +28,15 @@ $calcDiscountRate = min($discountRate, bcmul(bcdiv($asset['currentInterest'], bc
     <div class="col-xs-3 col-xs-offset-1">剩余期限</div>
     <div class="col-xs-8 text-align-lf col">
         <?php
-        $remainingDuration = $loan->getRemainingDuration();
-        if (isset($remainingDuration['months']) && $remainingDuration['months'] > 0) {
-            echo $remainingDuration['months'] . '<span>个月</span>';
-        }
-        if (isset($remainingDuration['days'])) {
-            if (!isset($remainingDuration['months']) || $remainingDuration['days'] > 0) {
-                echo $remainingDuration['days'] . '<span>天</span>';
+            $remainingDuration = $loan->getRemainingDuration();
+            if (isset($remainingDuration['months']) && $remainingDuration['months'] > 0) {
+                echo $remainingDuration['months'] . '<span>个月</span>';
             }
-        }
+            if (isset($remainingDuration['days'])) {
+                if (!isset($remainingDuration['months']) || $remainingDuration['days'] > 0) {
+                    echo $remainingDuration['days'] . '<span>天</span>';
+                }
+            }
         ?>
     </div>
 </div>
@@ -60,7 +61,7 @@ $calcDiscountRate = min($discountRate, bcmul(bcdiv($asset['currentInterest'], bc
 <div class="hide toRefer"></div>
 <div class="row shouyi shouyi_space">
     <div class="col-xs-3 col-xs-offset-1 safe-lf">应付利息</div>
-    <div class="col-xs-8 safe-lf common_color"><span id="expect_money">0.00元</span></div>
+    <div class="col-xs-8 safe-lf common_color"><span id="expect_money">0.00</span>元</div>
 </div>
 <div class="row shouyi">
     <div class="col-xs-3 col-xs-offset-1 safe-lf">折让后价格</div>
@@ -81,7 +82,7 @@ $calcDiscountRate = min($discountRate, bcmul(bcdiv($asset['currentInterest'], bc
 <!--bottom-->
 <div class="row login-sign-btn ht">
     <div class="col-xs-6 col-xs-offset-3 text-align-ct">
-        <input id="credit_submit_btn" class="btn-common btn-normal" type="button" value="确定转让">
+        <input id="credit_submit_btn" class="btn-common btn-normal" type="button" value="确定转让" onclick="validateData()">
     </div>
     <div class="col-xs-3 empty_div"></div>
 </div>
@@ -89,8 +90,9 @@ $calcDiscountRate = min($discountRate, bcmul(bcdiv($asset['currentInterest'], bc
     <div class="col-xs-12 text-align-ct bottom_center"><a href="/credit/note/rules">转让规则</a></div>
 </div>
 <script>
-    $(function(){
+    $(function() {
         FastClick.attach(document.body);
+
         //提示信息的显示与隐藏
         var flag_shouyi = 0;
         var flag_sm= 0;
@@ -145,7 +147,7 @@ $calcDiscountRate = min($discountRate, bcmul(bcdiv($asset['currentInterest'], bc
     var incAmount = <?= floatval($incrOrderAmount) ?>;
     var feeRate = <?= floatval($fee / 1000) ?>;
 
-    $(function(){
+    $(function() {
         amount_input.change($.throttle(100,function () {
             validateData();
         }));
@@ -153,7 +155,9 @@ $calcDiscountRate = min($discountRate, bcmul(bcdiv($asset['currentInterest'], bc
             validateData();
         });
     });
-    function alertReferBox(val, callback) {
+
+    function alertReferBox(val, callback)
+    {
         var confirm = $('<div id="mask" class="mask" style="display: block;"></div><div id="bing_info" class="bing-info show" style="position: fixed;margin: 0px;left:15%"> <p class="tishi-p" style="line-height: 20px;">'+ val +'</p> <div class="bind-btn"> <span class="no" style="border-right: 1px solid #ccc;">取消</span> <span class="yes" style="border-left: 1px solid #ccc;">确定</span></div> </div>');
         if ($('#mask').length > 0) {
             $('#mask').remove();
@@ -172,7 +176,9 @@ $calcDiscountRate = min($discountRate, bcmul(bcdiv($asset['currentInterest'], bc
             $(confirm).remove();
         });
     }
-    function subConfirm() {
+
+    function subConfirm()
+    {
         var rate = parseFloat(discount_rate_input.val());
         if (!rate) {
             rate = 0;
@@ -181,6 +187,7 @@ $calcDiscountRate = min($discountRate, bcmul(bcdiv($asset['currentInterest'], bc
         if (!amount) {
             amount = 0;
         }
+
         var xhr = $.post('/credit/note/create', {
             '_csrf': '<?= Yii::$app->request->csrfToken?>',
             'asset_id': '<?= $asset['id']?>',
@@ -192,13 +199,13 @@ $calcDiscountRate = min($discountRate, bcmul(bcdiv($asset['currentInterest'], bc
                 for (var i = 0; i < res.length; i++) {
                     var err = res[i];
                     if (err['attribute'] === 'amount') {
-                        torefer(err['msg']);
+                        toastCenter(err['msg']);
                         return false;
                     } else if (err['attribute'] === 'discountRate') {
-                        torefer(err['msg']);
+                        toastCenter(err['msg']);
                         return false;
                     } else if (err['attribute'] === '' && err['msg']) {
-                        torefer(err['msg']);
+                        toastCenter(err['msg']);
                         return false;
                     }
                 }
@@ -207,50 +214,57 @@ $calcDiscountRate = min($discountRate, bcmul(bcdiv($asset['currentInterest'], bc
             }
         });
         xhr.fail(function () {
-            torefer('系统繁忙，请稍后重试！');
+            toastCenter('系统繁忙，请稍后重试！');
         });
     }
-    function validateData() {
+
+    function validateData()
+    {
         var rate = parseFloat(discount_rate_input.val());
         if (!rate) {
             rate = 0;
         }
         if (rate < 0) {
-            torefer('折让率不能小于0');
+            toastCenter('折让率不能小于0');
             return false;
         }
-        var amount = parseFloat(amount_input.val());
+        var amount = amount_input.val();
+        if ('' === amount) {
+            toastCenter('请输入转让金额');
+            return false;
+        }
+        amount = parseFloat(amount);
         if (!amount) {
             amount = 0;
         }
         if (amount <= 0) {
-            torefer('转让金额必须大于0元');
+            toastCenter('转让金额必须大于0元');
             return false;
         }
         if (amount > total_amount) {
-            torefer('转让金额不能超过最大可转让金额');
+            toastCenter('转让金额不能超过最大可转让金额');
             return false;
         }
         if (total_amount >= minAmount) {
             if (amount < minAmount) {
-                torefer('转让金额必须大于起投金额');
+                toastCenter('转让金额必须大于起投金额');
                 return false;
             }
             var lastAmount = total_amount - amount;
             if (lastAmount >= minAmount) {
                 if ((amount - minAmount) % incAmount != 0) {
-                    torefer('金额必须是递增金额整数倍');
+                    toastCenter('金额必须是递增金额整数倍');
                     return false;
                 }
             } else {
                 if (amount != total_amount) {
-                    torefer('必须将剩余金额全部投完');
+                    toastCenter('必须将剩余金额全部投完');
                     return false;
                 }
             }
         } else {
             if (amount != total_amount) {
-                torefer('必须将金额全部投完');
+                toastCenter('必须将金额全部投完');
                 return false;
             }
         }
@@ -264,7 +278,9 @@ $calcDiscountRate = min($discountRate, bcmul(bcdiv($asset['currentInterest'], bc
         });
         return true;
     }
-    function callback(data) {
+
+    function callback(data)
+    {
         if (data.interest) {
             $('#expect_money').html(data.interest);
         }
@@ -282,7 +298,7 @@ $calcDiscountRate = min($discountRate, bcmul(bcdiv($asset['currentInterest'], bc
         maxRate = Math.min(config_rate, maxRate);
         $('#discount_rate_input').attr('placeholder', '不高于' + (parseInt(maxRate * 100) / 100) + '%，可设置2位小数');
         if (rate > maxRate) {
-            torefer('折让率不能大于'+(parseInt(maxRate * 100) / 100)+'%');
+            toastCenter('折让率不能大于'+(parseInt(maxRate * 100) / 100)+'%');
             return false;
         }
 
@@ -292,7 +308,7 @@ $calcDiscountRate = min($discountRate, bcmul(bcdiv($asset['currentInterest'], bc
                 rate = 0;
             }
             if (rate > maxRate) {
-                torefer('折让率不能大于'+(parseInt(maxRate * 100) / 100)+'%');
+                toastCenter('折让率不能大于'+(parseInt(maxRate * 100) / 100)+'%');
                 return false;
             }
             if (validateData()) {
@@ -304,18 +320,5 @@ $calcDiscountRate = min($discountRate, bcmul(bcdiv($asset['currentInterest'], bc
 
             }
         });
-    }
-
-    function torefer(val)
-    {
-        var $alert = $('<div class="error-info" style="display: block"><div>' + val + '</div></div>');
-        $alert.insertAfter($('.toRefer'));
-        $alert.find('div').width($alert.width());
-        setTimeout(function () {
-            $alert.fadeOut();
-            setTimeout(function () {
-                $alert.remove();
-            }, 200);
-        }, 2000);
     }
 </script>
