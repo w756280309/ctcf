@@ -5,8 +5,9 @@ use yii\helpers\Html;
 
 $this->title = '转让';
 
-$this->registerCssFile(ASSETS_BASE_URI.'css/credit/transfer_order.css', ['depends' => 'wap\assets\WapAsset']);
+$this->registerCssFile(ASSETS_BASE_URI.'css/credit/transfer_order.css?v=20161020', ['depends' => 'wap\assets\WapAsset']);
 $this->registerJsFile(ASSETS_BASE_URI.'js/jquery.ba-throttle-debounce.min.js?v=161008', ['depends' => \yii\web\JqueryAsset::class]);
+$this->registerJsFile(ASSETS_BASE_URI.'js/fastclick.js', ['depends' => \yii\web\JqueryAsset::class]);
 
 $discountRate = Yii::$app->params['credit_trade']['max_discount_rate'];
 $fee = Yii::$app->params['credit_trade']['fee_rate'] * 1000;
@@ -40,8 +41,8 @@ $calcDiscountRate = min($discountRate, bcmul(bcdiv($asset['currentInterest'], bc
 </div>
 <div class="row sm-height margin-top">
     <div class="col-xs-3 col-xs-offset-1 safe-txt font-32">转让金额</div>
-    <input type="text" name="" id="credit_amount" placeholder="起投<?= StringUtils::amountFormat2($minOrderAmount) ?>元，递增<?= StringUtils::amountFormat2($incrOrderAmount) ?>元" autocomplete="off" t_value="" onkeyup="if (this.value) {if (!this.value.match(/^[\+\-]?\d+?\.?\d*?$/)) {if (this.t_value) {this.value = this.t_value;} else {this.value = '';}} else {this.t_value = this.value;}}" class="col-xs-6 safe-lf text-align-lf font-26">
-    <div class="col-xs-2 safe-txt font-32 money_yuan">元</div>
+    <input type="text" name="" id="credit_amount" placeholder="起投<?= StringUtils::amountFormat2($minOrderAmount) ?>元，递增<?= StringUtils::amountFormat2($incrOrderAmount) ?>元" autocomplete="off" t_value="" onkeyup="if (this.value) {if (!this.value.match(/^[\+\-]?\d+?\.?\d*?$/)) {if (this.t_value) {this.value = this.t_value;} else {this.value = '';}} else {this.t_value = this.value;}}" class="col-xs-7 safe-lf text-align-lf font-26">
+    <div class=" safe-txt font-32 money_yuan">元</div>
 </div>
 <div class="row sm-height">
     <div class="col-xs-3 col-xs-offset-1 safe-txt font-32">
@@ -53,8 +54,8 @@ $calcDiscountRate = min($discountRate, bcmul(bcdiv($asset['currentInterest'], bc
         <img src="<?= ASSETS_BASE_URI ?>images/credit/triangle.png" alt="">
         产品在转让时折让的比率，如折让率1%，则按照转让价值的99%来出售。
     </p>
-    <input type="text" name="discount_rate" id="discount_rate_input" value=""  placeholder="不高于<?= $calcDiscountRate ?>%，可设置2位小数" autocomplete="off" maxlength="4" t_value="" onkeyup=" if (this.value) {if (!this.value.match(/^[\+\-]?\d+?\.?\d*?$/)) {if (this.t_value) {this.value = this.t_value;} else {this.value = '';}} else {this.t_value = this.value;}}" class="col-xs-6 safe-lf text-align-lf font-26">
-    <div class="col-xs-2 safe-txt font-32 money_yuan">%</div>
+    <input type="text" name="discount_rate" id="discount_rate_input" value=""  placeholder="不高于<?= $calcDiscountRate ?>%，可设置2位小数" autocomplete="off" maxlength="4" t_value="" onkeyup=" if (this.value) {if (!this.value.match(/^[\+\-]?\d+?\.?\d*?$/)) {if (this.t_value) {this.value = this.t_value;} else {this.value = '';}} else {this.t_value = this.value;}}" class="col-xs-7 safe-lf text-align-lf font-26">
+    <div class="safe-txt font-32 money_yuan">%</div>
 </div>
 <div class="hide toRefer"></div>
 <div class="row shouyi shouyi_space">
@@ -89,39 +90,44 @@ $calcDiscountRate = min($discountRate, bcmul(bcdiv($asset['currentInterest'], bc
 </div>
 <script>
     $(function(){
+        FastClick.attach(document.body);
         //提示信息的显示与隐藏
         var flag_shouyi = 0;
         var flag_sm= 0;
-        $('.shouyi_tips_img').bind('click',function(e){
-            var e = event || window.event;
+        $('.shouyi_tips_img').parent().bind('click',function(event){
+            var event = event || window.event;
             if(!flag_shouyi){
                 $('.shouyi_tips').show();
+                $('.sm-height_tips').hide();
                 flag_shouyi = 1;
+                flag_sm = 0;
             } else {
                 $('.shouyi_tips').hide();
                 flag_shouyi = 0;
             }
-            e.stopPropagation();
+            event.stopPropagation();
         });
-        $('body').bind('click',function(e){
+        $('body').bind('click',function(){
             if(flag_shouyi){
                 $('.shouyi_tips').hide();
                 flag_shouyi = 0;
             }
         });
 
-        $('.sm-height_tips_img').bind('click',function(e){
-            var e = event || window.event;
+        $('.sm-height_tips_img').parent().bind('click',function(event){
+            var event = event || window.event;
             if(!flag_sm){
                 $('.sm-height_tips').show();
+                $('.shouyi_tips').hide();
                 flag_sm = 1;
+                flag_shouyi = 0;
             } else {
                 $('.sm-height_tips').hide();
                 flag_sm = 0;
             }
-            e.stopPropagation();
+            event.stopPropagation();
         });
-        $('body').bind('click',function(e){
+        $('body').bind('click',function(){
             if(flag_sm){
                 $('.sm-height_tips').hide();
                 flag_sm = 0;

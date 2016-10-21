@@ -1,5 +1,3 @@
- * Created by lcl on 2015/11/16.
- */
 var csrf;
 $(function(){
     csrf = $("meta[name=csrf-token]").attr('content');

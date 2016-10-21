@@ -1,4 +1,4 @@
-/*公共样式*/
+/*公共样式111*/
 html {
     font-size: 62.5%;
 }
@@ -113,8 +113,8 @@ html {
     color: #f34d42;
 }
 .common_img{
-    width: 0.75rem;
-    height:0.75rem;
+    width: 0.85rem;
+    height:0.85rem;
 }
 .margin-top{
     margin-top: 0.7rem;
@@ -155,12 +155,17 @@ body{
 .font-32{
     color: #161616;
 }
-#money{
-    height:99%;
+#credit_amount{
+    height:1.8rem;
+    top:0.9rem;
+    line-height: 1.8rem;
 }
-.money_yuan{
-    padding-left:1.3rem;
+#discount_rate_input {
+    height:1.8rem;
+    top: 0.9rem;
+    line-height: 1.8rem;
 }
+
 .sm-height{
     height:3.6rem;
     line-height:3.6rem;
@@ -208,7 +213,7 @@ body{
 }
 .sm-height_tips img{
     position: absolute;
-    left: -11px;
+    left: -10.5px;
     top: 44%;
     transform:rotate(-90deg);
     -ms-transform:rotate(-90deg); 	/* IE 9 */
