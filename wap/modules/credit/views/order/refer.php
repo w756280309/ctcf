@@ -1,14 +1,14 @@
 <?php
-$this->title = ("success" === $ret) ? "转让成功" : "转让失败";
+$this->title = ("success" === $ret) ? "购买成功" : "购买失败";
 ?>
 <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/setting.css?v=20160331">
 
 <div class="row" id='bind-box'>
     <div class="col-xs-12">
         <?php if ('success' === $ret) { ?>
-            <div>转让成功</div>
+            <div>购买成功</div>
         <?php } else { ?>
-            <div>转让失败</div>
+            <div>购买失败</div>
         <?php } ?>
     </div>
 </div>
@@ -32,7 +32,7 @@ $this->title = ("success" === $ret) ? "转让成功" : "转让失败";
     <?php if ('success' === $ret) { ?>
         <div class="col-xs-4"></div>
         <div class="col-xs-4">
-            <a href="javascript:void(0)" onclick="location.replace('/user/user/orderdetail?asset_id=<?= $order['asset_id'] ?>')" class="bind-close1">查看详情</a>
+            <a href="javascript:void(0)" onclick="location.replace('/user/user/orderdetail?asset_id=<?= $order['currentAsset']['id'] ?>')" class="bind-close1">查看详情</a>
         </div>
         <div class="col-xs-4"></div>
     <?php } else { ?>

@@ -8,6 +8,9 @@ $this->backUrl = '/credit/note/detail?id='.$respData['id'];
 $this->registerCssFile(ASSETS_BASE_URI.'css/credit/order.css', ['depends' => 'wap\assets\WapAsset']);
 
 use common\utils\StringUtils;
+
+$note_config = json_decode($respData['config'], true);
+
 $nowTime = new \DateTime();
 $endTime = new \DateTime($respData['endTime']);
 $isClosed = $respData['isClosed'] || $nowTime >= $endTime;
@@ -46,21 +49,21 @@ $isClosed = $respData['isClosed'] || $nowTime >= $endTime;
 <input type="hidden" name="note_id" value="<?= $respData['id'] ?>">
 <div class="row sm-height border-bottom">
     <div class="col-xs-3 col-xs-offset-1 safe-txt font-32">投资金额</div>
-    <input name="amount" type="text" id="money" value="" t_value="" placeholder="请输入投资金额"  class="col-xs-6 safe-lf text-align-lf font-26" onkeyup="if (this.value) {if (!this.value.match(/^[\+\-]?\d+?\.?\d*?$/)) {if (this.t_value) {this.value = this.t_value;} else {this.value = '';}} else {this.t_value = this.value;}}">
+    <input name="amount" type="text" id="money" value="" t_value="" AUTOCOMPLETE="off" placeholder="起投<?= StringUtils::amountFormat2(bcdiv($note_config['min_order_amount'], 100, 2)) ?>元，递增<?= StringUtils::amountFormat2(bcdiv($note_config['incr_order_amount'], 100, 2)) ?>元"  class="col-xs-6 safe-lf text-align-lf font-26" onkeyup="if (this.value) {if (!this.value.match(/^[\+\-]?\d+?\.?\d*?$/)) {if (this.t_value) {this.value = this.t_value;} else {this.value = '';}} else {this.t_value = this.value;}}">
     <div class="col-xs-2 safe-txt font-32 money_yuan">元</div>
 </div>
 
 <div class="row shouyi margin-top">
     <div class="col-xs-3 col-xs-offset-1 safe-lf">应付利息</div>
-    <div class="col-xs-8 safe-lf common_color common-pad" id="interest">0.00元</div>
+    <div class="col-xs-8 safe-lf common_color common-pad" id="interest"><span>0.00</span>元</div>
 </div>
 <div class="row shouyi">
     <div class="col-xs-3 col-xs-offset-1 safe-lf">实际支付</div>
-    <div class="col-xs-8 safe-lf common_color shijizhifu common-pad" id="payAmount">0.00元</div>
+    <div class="col-xs-8 safe-lf common_color shijizhifu common-pad" id="payAmount"><span>0.00</span>元</div>
 </div>
 <div class="row shouyi">
     <div class="col-xs-3 col-xs-offset-1 safe-lf">预计收益</div>
-    <div class="col-xs-8 safe-lf common_color yuqishouyi common-pad" id="profit">0.00元</div>
+    <div class="col-xs-8 safe-lf common_color yuqishouyi common-pad" id="profit"><span>0.00</span>元</div>
 </div>
 
 <div class="row login-sign-btn ht">
@@ -73,22 +76,43 @@ $isClosed = $respData['isClosed'] || $nowTime >= $endTime;
 <div class="row surplus">
     <div class="col-xs-12 text-align-ct bottom_center">查看<a href="#">《认购协议》</a></div>
 </div>
+
 <script>
     var currentInterest = <?= floatval($respData['currentInterest'] / 100) ?>;
     var remainingInterest = <?= floatval($respData['remainingInterest'] / 100) ?>;
     var total_amount = <?= floatval($respData['amount'] / 100) ?>;
     var rate = '<?= floatval($respData['discountRate']) ?>';
 
-    function profit(obj) {
+    function callback(data)
+    {
+        if (data.interest) {
+            $('#interest span').html(data.interest);
+        }
+
+        if (data.profit) {
+            $('#profit span').html(data.profit);
+        }
+
+        if (data.payment) {
+            $('#payAmount span').html(data.payment);
+        }
+    }
+
+    function profit(obj)
+    {
         var amount = parseFloat($(obj).val());
         if (!amount) {
             amount = 0;
         }
         if (amount > 0) {
-            var interest = parseInt(amount / total_amount * currentInterest * 100) / 100;
-            $('#interest').html(interest);
-            $('#profit').html(parseInt(remainingInterest / total_amount * amount * 100) / 100);
-            $('#payAmount').html(parseInt((amount + interest) * (1 - rate / 100) * 100) / 100);
+            //请求交易系统计算进行计算
+            $.ajax({
+                type: "get",
+                url: "<?= rtrim(\Yii::$app->params['clientOption']['host']['tx'], '/')?>/credit-note/calc",
+                data: { note_id: <?= $respData['id']?>, amount: amount},
+                dataType: "jsonp"
+            });
+            //计算预期收益,再次调用计算应付利息与预计收益的函数
         }
     }
 

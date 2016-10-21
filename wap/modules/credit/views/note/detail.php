@@ -1,5 +1,6 @@
 <?php
 $this->title = '转让详情';
+$this->backUrl = '/licai/notes';
 
 use common\utils\StringUtils;
 use yii\helpers\Html;

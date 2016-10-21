@@ -1,10 +1,8 @@
 <?php
 $this->title= "订单处理中";
-
-$this->registerJsFile(ASSETS_BASE_URI.'js/common.js', ['depends' => 'yii\web\YiiAsset','position' => 1]);
 ?>
-
 <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/setting.css?v=20160331">
+
 <div class="row" id='bind-box'>
     <div class="col-xs-12">
         <div>订单处理中……</div>
