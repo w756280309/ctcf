@@ -165,7 +165,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/index.js?v=20161021', ['depends' => Jq
                     <dt class="lf"><img src="<?= ASSETS_BASE_URI ?>images/index/icon2.png" alt=""></dt>
                     <dd class="lf">
                         <p>产品优质</p>
-                        <span>金融、政府类产品</span>
+                        <span>国企、政信类产品</span>
                     </dd>
                 </dl>
             </div>
