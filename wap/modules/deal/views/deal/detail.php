@@ -6,7 +6,7 @@ use common\view\LoanHelper;
 use common\utils\StringUtils;
 
 ?>
-<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/xiangqing.css?v=20160714">
+<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/xiangqing.css?v=20161024">
         <!--xiangqing-->
         <div class="row column">
             <div class="hidden-xs col-sm-1"></div>
@@ -32,28 +32,24 @@ use common\utils\StringUtils;
             <div class="hidden-xs col-sm-1"></div>
         </div>
         <div class="row bili">
-            <div class="col-xs-1"></div>
-            <div class="col-xs-10">
+            <div class="col-xs-12">
                 <div class="per">
                     <div class="progress-bar progress-bar-red" style="width:<?= $deal->getProgressForDisplay() ?>%"></div>
                 </div>
             </div>
-            <div class="col-xs-1"></div>
         </div>
         <div class="row shuju">
-            <div class="col-xs-1"></div>
-            <div class="col-xs-8" style="padding: 0;padding-left: 15px">
+            <div class="col-xs-9 amt">
                 <span><?= $deal->status == 1 ? StringUtils::amountFormat1('{amount}{unit}', $deal->money) : StringUtils::amountFormat2($deal_balace).'元' ?></span><i>/<?= StringUtils::amountFormat1('{amount}{unit}', $deal->money) ?></i>
                 <div>可投余额/项目总额</div>
             </div>
-            <div class="col-xs-1" style="padding: 0;">
+            <div class="col-xs-2 progress">
                 <div class="shuju-bili"><?= $deal->getProgressForDisplay() ?><em>%</em></div>
             </div>
             <div class="col-xs-1"></div>
         </div>
         <div class="row message">
-            <div class="col-xs-1"></div>
-            <div class="col-xs-10 xian2">
+            <div class="col-xs-12 xian2">
                 <div class="m1">起投金额：<span><?= rtrim(rtrim(number_format($deal->start_money, 2), '0'), '.') ?>元</span></div>
                 <div class="m5">递增金额：<span><?= rtrim(rtrim(number_format($deal->dizeng_money, 2), '0'), '.') ?>元</span></div>   <!-- 增加递增金额字段 -->
                 <div class="m2">产品起息日：<span><?= $deal->jixi_time > 0 ? date('Y-m-d',$deal->jixi_time) : '项目成立日次日';?></span></div>
@@ -65,11 +61,14 @@ use common\utils\StringUtils;
                 <?php if ($deal->isNatureRefundMethod()) { ?>
                     <div class="m4">还款方式：
                         <span><?= Yii::$app->params['refund_method'][$deal->refund_method]?></span>
-                        <img src="<?= ASSETS_BASE_URI ?>images/dina.png" alt="">
+                        <img src="<?= ASSETS_BASE_URI ?>images/credit/tip.png" alt="">
                     </div>
                     <div class="row" id='chart-box' hidden="true">
                         <div class="col-xs-12">
-                            <div>付息时间固定日期，按自然月在每个月还款，按自然季度是3、6、9、12月还款，按自然半年是6、12月还款，按自然年是12月还款</div>
+                            <div>
+                                <img src="<?= ASSETS_BASE_URI ?>images/credit/jiao.png" alt="">
+                                付息时间固定日期，按自然月在每个月还款，按自然季度是3、6、9、12月还款，按自然半年是6、12月还款，按自然年是12月还款
+                            </div>
                         </div>
                     </div>
                 <?php } else { ?>
@@ -81,7 +80,6 @@ use common\utils\StringUtils;
                     <p class="notice">融资方可提前<?= $deal->kuanxianqi ?>天内任一天还款，客户收益按实际天数计息。</p>
                 <?php } ?>
             </div>
-            <div class="col-xs-1"></div>
         </div>
 
         <?php if ($deal->isFlexRate) { ?>

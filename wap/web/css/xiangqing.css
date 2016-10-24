@@ -125,6 +125,9 @@ i,em {
 .bili{
     background: #fff;
 }
+.bili .col-xs-12 {
+    padding: 0 30px;
+}
 .bili .per {
     position: relative;
     height: 8px;
@@ -164,6 +167,7 @@ i,em {
 
 .message {
     background: #fff;
+    overflow: hidden;
 }
 .message div {
     margin-top: 10px;
@@ -175,7 +179,8 @@ i,em {
 .xian2 {
     border-top: 1px solid #ebebed;
     padding-top: 30px;
-    padding-bottom: 40px;
+    padding-bottom: 10px;
+    margin-left: 15px;
 }
 .m1{
     height: 26px;
@@ -329,21 +334,35 @@ i,em {
     width: 12px;
     cursor: pointer;
 }
+#chart-box {
+    margin-top: -9px;
+}
 #chart-box .col-xs-12 {
     padding:0;
 
 }
 #chart-box .col-xs-12 div {
-    width: 80%;
-    padding-top: 24px;
-    padding-bottom: 12px;
+    position: relative;
+    width: 288px;
+    padding-top: 4px;
+    padding-bottom: 4px;
     padding-left: 10px;
     padding-right: 10px;
-    margin: 0 auto;
-    background: url('../images/kuang.png') no-repeat 0 0;
     background-size: 100% 100%;
     font-size: 13px;
     text-align: justify;
+    background: #ffe6e4;
+    color: #777777;
+    border-radius: 4px;
+    border: 1px solid #fbb4af;
+    margin: 0;
+}
+#chart-box .col-xs-12 img {
+    position: absolute;
+    width: 16px;
+    left: 261px;
+    top: -7px;
+    z-index: 1;
 }
 /* 收益说明模块样式 */
 .lee_title { padding-top:20px; }
@@ -363,4 +382,11 @@ p.notice {
 .m4 img {
     width: 14px;
     height: 14px;
+}
+.amt {
+    padding: 0;
+    padding-left: 30px;
+}
+.progress {
+    padding: 0;
 }
