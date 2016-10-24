@@ -50,6 +50,7 @@ class OrderController extends BaseController
             'loan' => $loan,
             'amount' => $amount,
             'rate' => $note['discountRate'],
+            'id' => $id,
         ]);
     }
 

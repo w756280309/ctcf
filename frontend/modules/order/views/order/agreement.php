@@ -10,38 +10,19 @@ $this->registerCssFile(ASSETS_BASE_URI.'css/deal/productcontract.css', ['depends
             <p class="contract-title">产品合同</p>
             <div class="contract-content">
                 <ul class="title-box">
-                    <?php foreach ($model as $key => $val) : ?>
+                    <?php foreach ($contracts as $key => $contract) : ?>
                         <li class="title <?= 0 === $key ? 'active' : '' ?>">
                             <a>
-                                <?php
-                                    if (0 === $key) {
-                                        echo '认购合同';
-                                    } elseif (1 === $key) {
-                                        echo '风险提示书';
-                                    } else {
-                                        echo Yii::$app->functions->cut_str($val->name, 5, 0, '**');
-                                    }
-                                ?>
+                                 <?= $contract['title']?>
                             </a>
                         </li>
                     <?php endforeach; ?>
                 </ul>
 
                 <div class="pagination">
-                    <?php foreach ($model as $key => $val) : ?>
+                    <?php foreach ($contracts as $key => $contract) : ?>
                         <div class="list <?= 0 !== $key ? 'hide' : '' ?>">
-                            <?= html_entity_decode($val->content) ?>
-
-                            <?php if (isset($ebao)) : ?>
-                                <div class="a-btn">
-                                    <?php if (isset($ebao['downUrl'])) : ?>
-                                        <a class="a-lf" href="<?= $ebao['downUrl'] ?>">下载合同</a>
-                                    <?php endif; ?>
-                                    <?php if (isset($ebao['linkUrl'])) : ?>
-                                        <a class="a-rg" href="<?= $ebao['linkUrl'] ?>">保全证书</a>
-                                    <?php endif; ?>
-                                </div>
-                            <?php endif; ?>
+                            <?= html_entity_decode($contract['content']) ?>
                         </div>
                     <?php endforeach; ?>
                 </div>

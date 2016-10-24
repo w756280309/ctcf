@@ -8,6 +8,16 @@ $this->registerCssFile(ASSETS_BASE_URI.'css/deal/productcontract.css', ['depends
     .my_option span{display: block;line-height: 30px;color: #99999d;}
     .my_option span:hover{color:#f44336;cursor: pointer; }
     .my_option span.active{color:#f44336;}
+    .credit_contract .caret{
+        display: inline-block;
+        width: 0;
+        height: 0;
+        margin-left: 2px;
+        vertical-align: middle;
+        border-top: 4px solid;
+        border-right: 4px solid transparent;
+        border-left: 4px solid transparent;
+    }
 </style>
 
 <div class="contract-box clearfix">
@@ -25,7 +35,7 @@ $this->registerCssFile(ASSETS_BASE_URI.'css/deal/productcontract.css', ['depends
                     <?php endforeach; ?>
                     <?php if(count($creditContracts) > 0) { ?>
                     <li class="credit_contract title">
-                            <a>产品转让协议</a>
+                            <a>产品转让协议<span class="caret"> </span></a>
                         <div class="my_option">
                             <?php foreach($creditContracts as $key => $contract) { ?>
                                 <span  value="<?= $key?>"><?= $contract['title'] . str_pad($key + 1, 2, '0', STR_PAD_LEFT);?></span>

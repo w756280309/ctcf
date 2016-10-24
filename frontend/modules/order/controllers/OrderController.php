@@ -178,11 +178,19 @@ class OrderController extends BaseController
     private function loadCreditContractByAsset($asset, TxClient $txClient, OnlineProduct $loan, OnlineOrder $loanOrder)
     {
         if ($asset['note_id'] && $asset['credit_order_id']) {
-            $user = $loanOrder->user;
             $queue = BaoQuanQueue::find()->where(['itemType' => BaoQuanQueue::TYPE_CREDIT_ORDER, 'itemId' => $asset['credit_order_id']])->one();
             $creditOrder = $txClient->get('credit-order/detail', ['id' => $asset['credit_order_id']]);
             $creditNote = $txClient->get('credit-note/detail', ['id' => $asset['note_id']]);
             $newPlans = $txClient->get('order/repayment', ['id' => $asset['order_id'], 'amount' => $creditOrder['principal']]);
+            if ($asset['asset_id']) {
+                $prevAsset = $txClient->get('assets/detail', ['id' => $asset['asset_id']]);
+                if (empty($prevAsset)) {
+                    throw new \Exception('没有找到资产');
+                }
+                $user = User::findOne($prevAsset['user_id']);
+            } else {
+                $user = $loanOrder->user;
+            }
             $buyer = User::findOne($creditOrder['user_id']);
             if (
                 !empty($queue)
@@ -195,8 +203,12 @@ class OrderController extends BaseController
             ) {
                 //生成标的利率
                 $loanRate = OnlineProduct::calcBaseRate($loan->yield_rate, $loan->jiaxi);
+                $loanRate = $loanRate . '%';
                 if ($loan->isFlexRate && $loan->rateSteps) {
-                    $loanRate = $loanRate . '~' . StringUtils::amountFormat2(RateSteps::getTopRate(RateSteps::parse($loan->rateSteps)));
+                    $loanRate = $loanRate . '~' . StringUtils::amountFormat2(bcadd(RateSteps::getTopRate(RateSteps::parse($loan->rateSteps)), 0.00, 2)).'%';
+                }
+                if ($loan->jiaxi) {
+                    $loanRate = $loanRate . '+' . $loan->jiaxi . '%';
                 }
                 //生成标的还款方式
                 $refund_methods = Yii::$app->params['refund_method'];
@@ -251,45 +263,58 @@ class OrderController extends BaseController
     }
 
     /**
-     * 合同页面.(已弃用)
+     * 合同页面(原始合同)
      */
-    public function actionAgreement($pid)
+    public function actionAgreement($pid, $note_id = null)
     {
-        if (empty($pid)) {
-            throw $this->ex404();
-        }
-
+        $contracts = [];
         $model = ContractTemplate::findAll(['pid' => $pid]);
         if (empty($model)) {
             throw $this->ex404();  //当对象为空时,抛出异常
         }
 
-        $orderId = \Yii::$app->request->get('order_id');
-        if (!empty($orderId) && !preg_match('/^[0-9]+$/', $orderId)) {
-            throw $this->ex404();
-        }
-
-        if (empty($orderId)) {
-            $order = null;
-        } else {
-            $order = OnlineOrder::findOne($orderId);
-        }
-
-        $ebao = [];
         foreach ($model as $key => $val) {
-            $model[$key] = ContractTemplate::replaceTemplate($val, $order);
+            if ($key === 0) {
+                $title = '认购合同';
+            } elseif ($key === 1) {
+                $title = '风险提示书';
+            } else {
+                $title = Yii::$app->functions->cut_str($val['name'], 5, 0, '**');
+            }
+            $contracts[]  = ['title' => $title, 'content' => $val['content']];
+        }
+        if (!empty($note_id)) {
+            $content = $this->renderFile('@common/views/credit_contract_template.php', [
+                'contractNum' => '',
+                'sellerName' => '',
+                'sellerIdCard' => '',
+                'buyerName' => '',
+                'buyerIdCard' => '',
+                'loanOrderCreateDate' => '',
+                'loanTitle' => '',
+                'loanOrderPrincipal' => '',
+                'creditOrderPrincipal' => '',
+                'loanIssuer' => '',
+                'affiliator' => '',
+                'exceptRaisedAmount' => '',
+                'incrAmount' => '',
+                'interestDate' => '',
+                'finishDate' => '',
+                'yieldRate' => '',
+                'refundMethod' => '',
+                'sellerInterest' => '',
+                'buyerInterest' => '',
+                'discountRate' => '',
+                'refundedInterest' => '',
+                'creditOrderPayAmount' => '',
+                'feeRate' => '',
+                'feeAmount' => '',
+            ]);
+            $contracts[] = ['title' => '产品转让协议', 'content' => $content];
         }
 
-        //获取证书
-        $baoQuan = EbaoQuan::findOne(['orderId' => $orderId, 'uid' => $this->getAuthedUser()->id]);
-        if (null !== $baoQuan) {
-            $client = new Client();
-            $ebao['downUrl'] = $client->contractFileDownload($baoQuan);
-            $ebao['linkUrl'] = $client->certificateLinkGet($baoQuan);
-        }
         return $this->render('agreement', [
-            'model' => $model,
-            'ebao' => $ebao,
+            'contracts' => $contracts,
         ]);
     }
 

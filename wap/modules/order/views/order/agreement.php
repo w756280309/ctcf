@@ -55,40 +55,17 @@ $num = 0;
 <!-- Swiper -->
 <div id="legal-docs-switcher" class="swiper-container" style="line-height: 18px;">
     <div class="swiper-wrapper">
-        <?php foreach($model as $key => $val): $num++; ?>
-        <div data-switcher-index="<?= $num-1 ?>" class="swiper-slide <?= $key_f == $key?"dian":"" ?>" onclick="location.replace('/order/order/agreement?id=<?= $val['pid'] ?>&key=<?= $key ?>&deal_id=<?= $deal_id ?>')">
-            <?php
-                if (0 === $key) {
-                    echo "认购协议";
-                } elseif (1 === $key) {
-                    echo "风险揭示书";
-                } else {
-                    echo Yii::$app->functions->cut_str($val['name'],5,0,'**');
-                }
-            ?>
+        <?php foreach($contracts as $key => $contract): $num++; ?>
+        <div data-switcher-index="<?= $num-1 ?>" class="swiper-slide <?= $fk == $key?"dian":"" ?>" onclick="location.replace('/order/order/agreement?id=<?=$id?>&note_id=<?=$note_id?>&key=<?=$key?>')">
+            <?= $contract['title']?>
         </div>
         <?php endforeach; ?>
     </div>
 </div>
 <div class="container-text" data-title="<?= $num ?>">
     <div class="row">
-        <div class="col-xs-1"></div>
-        <div class="col-xs-10">
-            <h4 class="agree_title"><?= $model[$key_f]['name'] ?></h4>
-        </div>
-        <div class="col-xs-1"></div>
-    </div>
-    <div class="row">
         <div class="col-xs-12">
             <div class="list-txt"><?= html_entity_decode($content) ?></div>
         </div>
     </div>
-</div>
-<div class="bao_quan_button">
-    <?php if (null !== $downUrl) {?>
-        <button class="btn btn-primary" onclick="window.location = '<?= $downUrl?>'" style="background:#f54337;border: 0px;">下载合同</button>
-    <?php }?>
-    <?php if (null !== $linkUrl) {?>
-        <button class="btn btn-primary" onclick="window.location = '<?= $linkUrl?>'" style="background:#f54337;border: 0px;margin-top: 5px;">保全证书</button>
-    <?php }?>
 </div>

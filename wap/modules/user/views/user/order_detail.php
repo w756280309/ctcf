@@ -162,7 +162,7 @@ $this->registerCssFile(ASSETS_BASE_URI .'css/touzixiangqing.css?v=20160718', ['d
         <!--认购合同-->
         <div class="row" id="subscription-box">
             <div class="col-xs-12">
-                <a href="<?= $asset && $asset['note_id'] ? '' : '/order/order/agreement?id='.$product->id.'&deal_id='.$deal->id ?>" class="subscription-title">
+                <a href="/order/order/contract?asset_id=<?= $asset['id']?>" class="subscription-title">
                     <div class="subscription-left">认购合同</div>
                     <div class="subscription-right"><img src="<?= ASSETS_BASE_URI ?>images/arrowShang.png" alt=""></div>
                 </a>

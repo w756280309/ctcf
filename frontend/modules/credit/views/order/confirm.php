@@ -11,7 +11,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/jquery.ba-throttle-debounce.min.js?v=1
                 <p class="credit-top-title lf">【转让】<?= Html::encode($loan->title)?></p>
                 <div class="credit-top-tip rg text-align-ct">
                     <input type="checkbox" checked="checked" class="" id="agree"><span>同意并签署</span>
-                    <i>"合同"</i><a href="/" class="check">查看</a></div>
+                    <i>"合同"</i><a href="/order/order/agreement?pid=<?= $loan->id?>&note_id=<?= $id?>" target="_blank" class="check">查看</a></div>
             </div>
             <div style="clear: both"></div>
             <div class="credit-centent">
