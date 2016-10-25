@@ -109,7 +109,7 @@ $isClosed = $respData['isClosed'] || $nowTime >= $endTime;
             $.ajax({
                 type: "get",
                 url: "<?= rtrim(\Yii::$app->params['clientOption']['host']['tx'], '/')?>/credit-note/calc",
-                data: { note_id: <?= $respData['id']?>, amount: amount},
+                data: { note_id: <?= $respData['id']?>, amount: amount, rate: <?= $respData['discountRate'] ?>},
                 dataType: "jsonp"
             });
             //计算预期收益,再次调用计算应付利息与预计收益的函数
