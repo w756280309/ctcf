@@ -53,7 +53,7 @@ use common\utils\StringUtils;
                     <p><span class="info-label">到期时间：</span><span class="info-val"><?= date('Y-m-d', $val['loan']['finish_date']) ?></span></p>
                 <?php } ?>
             </div>
-            <?php if (OnlineProduct::STATUS_NOW === $loanStatus) { ?>
+            <?php if (in_array($loanStatus, [OnlineProduct::STATUS_NOW, OnlineProduct::STATUS_FULL, OnlineProduct::STATUS_FOUND])) { ?>
                 <div class="col-xs-4 loan-info2">
                     <p class="info-val"><?php $loan = $loan === null ? new OnlineProduct($val['loan']) : $loan; ?><?= $loan->getProgressForDisplay() ?>%</p>
                     <p class="info-label">募集进度</p>
