@@ -36,7 +36,7 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/useraccount/chargedeposit.css');
                     <li>
                         <div class="expires">
                             <span class="pl-middle-inner">
-                                <?php $ex = $deal->getDuration(); ?><?= $ex['value']?><?= $ex['unit'] ?>
+                                <?php $ex = $deal->getDuration(); ?><?= $ex['value']?><i><?= $ex['unit'] ?></i>
                             </span>
                             <p>项目期限</p>
                         </div>
