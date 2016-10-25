@@ -387,6 +387,9 @@ p.notice {
     padding: 0;
     padding-left: 30px;
 }
-.progress {
+.progress-detail {
     padding: 0;
+}
+.bottom-note {
+    padding-bottom: 10px;
 }

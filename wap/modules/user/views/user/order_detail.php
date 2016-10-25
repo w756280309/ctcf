@@ -1,13 +1,17 @@
 <?php
 $this->title = '投资详情';
 
+if ($fromTransfer) {
+    $this->backUrl = '/credit/trade/assets?type=1';
+}
+
 use common\models\product\RateSteps;
 use common\models\order\OnlineRepaymentPlan;
 use common\utils\StringUtils;
 
 $this->registerJsFile(ASSETS_BASE_URI .'js/fastclick.js', ['position' => 1]);
 $this->registerJsFile(ASSETS_BASE_URI .'js/touzixiangqing.js?v=20160926', ['depends' => 'yii\web\JqueryAsset', 'position' => 1]);
-$this->registerCssFile(ASSETS_BASE_URI .'css/touzixiangqing.css?v=20160718', ['depends' => 'wap\assets\WapAsset']);
+$this->registerCssFile(ASSETS_BASE_URI .'css/touzixiangqing.css?v=20161024', ['depends' => 'wap\assets\WapAsset']);
 ?>
 
 <div class="container">
@@ -16,7 +20,15 @@ $this->registerCssFile(ASSETS_BASE_URI .'css/touzixiangqing.css?v=20160718', ['d
         <div class="col-xs-12">
             <div id="invest-title">
                 <div class="invest-title">
-                    <div class="invest-left"><?= isset($asset['note_id']) ? '【转让】' : '' ?><?= $product->title ?></div>
+                    <?php
+                        $isNote = isset($asset['note_id']);
+                        if ($isNote) {
+                            $url = '/credit/note/detail?id='.$asset['note_id'].'&fromType=4';
+                        } else {
+                            $url = '/deal/deal/detail?sn='.$product->sn;
+                        }
+                    ?>
+                    <div class="invest-left"><a href="<?= $url ?>"><?= $isNote ? '【转让】' : '' ?><?= $product->title ?></a></div>
                     <div class="invest-right">
                         <?php if ($fromTransfer && $asset) { ?>
                             <a href='/credit/note/new?asset_id=<?= $asset['id'] ?>' class="credit-right-title credit-red">转让</a>

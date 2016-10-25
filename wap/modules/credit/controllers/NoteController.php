@@ -26,8 +26,11 @@ class NoteController extends Controller
 
     /**
      * 转让详情页.
+     *
+     * @param int $id       挂牌记录ID
+     * @param int $fromType 来源标记, 1 代表我要理财页面 2 代表我的转让转让中列表页面 3 代表我的转让已转让列表页面 4 代表购买详情页面
      */
-    public function actionDetail($id)
+    public function actionDetail($id, $fromType = 1)
     {
         $user = $this->getAuthedUser();
 
@@ -35,6 +38,11 @@ class NoteController extends Controller
             || (!Yii::$app->params['feature_credit_note_on']        //当债权功能开关关闭的时候,如果访问用户不是白名单里面的用户ID,就抛404异常
             && !in_array($user->id, Yii::$app->params['feature_credit_note_whitelist_uids']))) {
             throw $this->ex404();
+        }
+
+        $fromType = intval($fromType);
+        if (!in_array($fromType, [1, 2, 3, 4])) {
+            $fromType = 1;
         }
 
         $respData = Yii::$container->get('txClient')->get('credit-note/detail', ['id' => $id], function(\Exception $e) {
@@ -48,7 +56,7 @@ class NoteController extends Controller
         $loan = $this->findOr404(OnlineProduct::class, $respData['asset']['loan_id']);
         $order = $this->findOr404(OnlineOrder::class, $respData['asset']['order_id']);
 
-        return $this->render('detail', ['loan' => $loan, 'order' => $order, 'user' => $user, 'respData' => $respData]);
+        return $this->render('detail', ['loan' => $loan, 'order' => $order, 'user' => $user, 'respData' => $respData, 'fromType' => $fromType]);
     }
 
     /**

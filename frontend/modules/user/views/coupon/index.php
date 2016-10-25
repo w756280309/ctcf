@@ -2,7 +2,7 @@
 $this->title = '我的代金券';
 
 $this->registerCssFile(ASSETS_BASE_URI.'css/pagination.css', ['depends' => 'frontend\assets\FrontAsset']);
-$this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/mycoupon.css?v=160802', ['depends' => 'frontend\assets\FrontAsset']);
+$this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/mycoupon.css?v=161024', ['depends' => 'frontend\assets\FrontAsset']);
 $this->registerJsFile(ASSETS_BASE_URI.'js/JPlaceholder.js', ['depends' => 'frontend\assets\FrontAsset']);
 $this->registerJsFile(ASSETS_BASE_URI.'js/useraccount/couponcode.js', ['depends' => 'frontend\assets\FrontAsset']);
 
@@ -24,17 +24,20 @@ use common\widgets\Pager;
         </div>
         <table>
             <tr>
-                <th width="148" class="table-text-ct">面值（元）</th>
-                <th width="320" class="text-align-lf">使用规则</th>
+                <th width="150">名称</th>
+                <th width="120" class="text-align-lf">面值（元）</th>
+                <th width="300" class="text-align-lf">使用规则</th>
                 <th width="210" class="text-align-lf">使用期限</th>
                 <th width="80" class="text-align-lf">状态</th>
             </tr>
             <?php foreach ($model as $key => $val) : ?>
                 <?php if (!$val->isUsed && date('Y-m-d') <= $val->expiryDate) { ?>
                     <tr class="<?= 0 === $key%2 ? '' : 'td-back-color' ?>">
+                        <td class="coupon-name"><?= $val->couponType->name ?></td>
                         <td class="table-text-number color-red"><?= StringUtils::amountFormat2($val->couponType->amount) ?></td>
                 <?php } else { ?>
                     <tr class="already-use <?= 0 === $key%2 ? '' : 'td-back-color' ?>">
+                        <td class="coupon-name"><?= $val->couponType->name ?></td>
                         <td class="table-text-number"><?= StringUtils::amountFormat2($val->couponType->amount) ?></td>
                 <?php } ?>
                     <td>

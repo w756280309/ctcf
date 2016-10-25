@@ -197,7 +197,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/useraccount/transfering.js?v=161019', 
                                         ?>
                                     </td>
                                     <td class="text-third"><?= StringUtils::amountFormat3(bcdiv($actualIncome[$note['id']]['actualIncome'], 100, 2)); ?></td>
-                                    <td class="text-align-ct"><a class="color-blue" href="/order/order/contract?asset_id=<?= $note['asset_id'] ?>">查看</a></td>
+                                    <td class="text-align-ct"><a class="color-blue" href="/order/order/contract?asset_id=<?= $note['asset_id'] ?>" target="_blank">查看</a></td>
                                 </tr>
                             <?php } ?>
                         </table>

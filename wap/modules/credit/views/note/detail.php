@@ -1,9 +1,16 @@
 <?php
 $this->title = '转让详情';
-$this->backUrl = '/licai/notes';
 
 use common\utils\StringUtils;
 use yii\helpers\Html;
+
+if (1 === $fromType) {
+    $this->backUrl = '/licai/notes';
+} elseif (2 === $fromType) {
+    $this->backUrl = '/credit/trade/assets?type=2';
+} elseif (3 === $fromType) {
+    $this->backUrl = '/credit/trade/assets?type=3';
+}
 
 $nowTime = new \DateTime();
 $endTime = new \DateTime($respData['endTime']);

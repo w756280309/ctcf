@@ -14,7 +14,7 @@ use common\utils\StringUtils;
             <div class="col-xs-5 font-24 text-align-ct common-line-height">预期年化率</div>
         </a>
     <?php } elseif (2 === $type) { ?>
-        <a class="row col common-mar" href="/credit/note/detail?id=<?= $val['id'] ?>">
+        <a class="row col common-mar" href="/credit/note/detail?id=<?= $val['id'] ?>&fromType=2">
             <div class="col-xs-12 transferitem-list-title">
                 <div class="inner-border">【转让】<?= $val['loan']->title ?></div>
             </div>
@@ -24,7 +24,7 @@ use common\utils\StringUtils;
             <div class="col-xs-5 font-24 text-align-ct common-line-height">转让进度</div>
         </a>
     <?php } elseif (3 === $type) { ?>
-        <a class="row col common-mar" href="/credit/note/detail?id=<?= $val['id'] ?>">
+        <a class="row col common-mar" href="/credit/note/detail?id=<?= $val['id'] ?>&fromType=3">
             <div class="col-xs-12 transferitem-list-title">
                 <div class="inner-border">【转让】<?= $val['loan']->title ?></div>
             </div>
