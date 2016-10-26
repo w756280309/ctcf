@@ -51,7 +51,7 @@ $(document).ready(function () {
                 $('.cancel-note').each(function () {
                     if ($(this).attr('note-id') === id) {
                         $(this).html('处理中');
-                        $(this).removeClass('cancel-note');
+                        $(this).removeClass('cancel-note color-blue').addClass('cancelling');
                     }
                 });
                 return false;

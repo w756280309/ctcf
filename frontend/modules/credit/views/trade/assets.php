@@ -9,7 +9,7 @@ use frontend\assets\FrontAsset;
 use yii\web\JqueryAsset;
 
 $this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/usercenter.css', ['depends' => FrontAsset::class]);
-$this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/transfering.css?v=16102005', ['depends' => FrontAsset::class]);
+$this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/transfering.css?v=161026', ['depends' => FrontAsset::class]);
 $this->registerCssFile(ASSETS_BASE_URI.'css/pagination.css');
 $this->registerJsFile(ASSETS_BASE_URI.'js/useraccount/transfering.js?v=161026', ['depends' => JqueryAsset::class]);
 ?>
@@ -153,7 +153,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/useraccount/transfering.js?v=161026', 
                                     <td class="text-align-ct"><?= $note['discountRate'] ?></td>
                                     <td class="text-third"><?= StringUtils::amountFormat3(bcdiv($note['tradedAmount'], 100, 2)) ?></td>
                                     <?php if ($note['isCancelled']) { ?>
-                                        <td class="text-align-ct"><a class="color-blue" href="javascript:void(0)">处理中</a></td>
+                                        <td class="text-align-ct">处理中</td>
                                     <?php } else { ?>
                                         <td class="text-align-ct cancel-operation"><a class="color-blue cancel-note" href="javascript:void(0)" note-id="<?= $note['id'] ?>">撤销</a></td>
                                     <?php } ?>

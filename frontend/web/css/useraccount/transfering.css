@@ -388,3 +388,12 @@ a.common-mar:hover, a.common-mar:focus {
     text-decoration: none;
     color: #7c7c7c;
 }
+
+.cancel-operation .cancelling {
+    cursor: text;
+    color: #464648;
+}
+
+.cancel-operation .cancelling:hover {
+    color: #464648;
+}
