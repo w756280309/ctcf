@@ -27,7 +27,7 @@ class CreditNote
 
         //金额格式错误
         if (empty($amount)) {
-            return ['code' => 1, 'message' => '金额格式错误'];
+            return ['code' => 1, 'message' => '投资金额不能为空'];
         }
         if (!preg_match('/^[0-9]+(\.[0-9]+)?$/', $amount) || preg_match('/^[0-9]+(\.)[0-9]{3,}$/', $amount)) {
             return ['code' => 1, 'message' => '金额格式错误'];
@@ -67,7 +67,7 @@ class CreditNote
 
         //余额不足
         if (bccomp($user->lendAccount->available_balance, $amount, 2) < 0) {
-            return ['code' => 1, 'message' => '金额不足'];
+            return ['code' => 1, 'message' => '您的可用余额不足'];
         }
 
         //可投余额为0
@@ -78,24 +78,26 @@ class CreditNote
         //把购买金额换成分来运算
         $amountFen = bcmul($amount, 100, 0);
         //该笔交易成功剩下的钱
-        $lastAmount = bcsub($restAmount, $amountFen);
+        $lastAmount = bcsub($restAmount, $amountFen, 0);
 
-        if (bcdiv($restAmount, $minAmount) >= 2) {
+        if ($lastAmount < 0) {
+            return ['code' => 1, 'message' => '投资金额不能超过可交易金额'];
+        }
+
+        if (bcdiv($restAmount, $minAmount, 0) >= 2) {
             //若可投金额大于起投金额
-            if (bcdiv($amountFen, $minAmount) < 1) {
+            if (bcdiv($amountFen, $minAmount, 0) < 1) {
                 return ['code' => 1, 'message' => '投资金额小于起投金额('.$minAmountYuan.'元)'];
-            } elseif (bcdiv($restAmount, $amountFen) < 1) {
-                return ['code' => 1, 'message' => '投资金额大于可投余额'];
             } elseif ($incrAmount > 0) {
-                if (bcmod(bcsub($amountFen, $minAmount, 0), $incrAmount) != 0 && bcsub($restAmount, $amountFen) != 0) {
+                if (bcmod(bcsub($amountFen, $minAmount, 0), $incrAmount) != 0 && bcsub($restAmount, $amountFen, 0) != 0) {
                     return ['code' => 1, 'message' => $minAmountYuan.'元起投,'.$incrAmountYuan.'元递增'];
-                } elseif ($lastAmount != 0 && bcdiv($lastAmount, $minAmount) < 1) {
+                } elseif ($lastAmount != 0 && bcdiv($lastAmount, $minAmount, 0) < 1) {
                     return ['code' => 1, 'message' => '购买后可投余额不可低于起投金额'];
                 }
             }
         } else {
             //最后一笔投满判断
-            if (bcsub($restAmount, $amountFen) != 0) {
+            if (bcsub($restAmount, $amountFen, 0) != 0) {
                 return ['code' => 1, 'message' => '最后一笔需要投满转让'];
             }
         }

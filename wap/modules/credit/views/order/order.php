@@ -103,9 +103,15 @@ $isClosed = $respData['isClosed'] || $nowTime >= $endTime;
     function profit(obj)
     {
         var amount = parseFloat($(obj).val());
+
         if (!amount) {
             amount = 0;
+
+            $('#interest span').html('0.00');
+            $('#profit span').html('0.00');
+            $('#payAmount span').html('0.00');
         }
+
         if (amount > 0) {
             //请求交易系统计算进行计算
             $.ajax({
@@ -128,6 +134,7 @@ $isClosed = $respData['isClosed'] || $nowTime >= $endTime;
                 toast('投资金额不能为空');
                 return false;
             }
+
             if ($('#money').val() <= 0) {
                 toast('投资金额应大于0');
                 return false;

@@ -156,7 +156,8 @@ $isClosed = $respData['isClosed'] || $nowTime >= $endTime;
 </div>
 
 <script>
-    function callback(data) {
+    function callback(data)
+    {
         if (data.interest) {
             $('.yingfu i').html(data.interest);
         }
@@ -164,7 +165,8 @@ $isClosed = $respData['isClosed'] || $nowTime >= $endTime;
             $('.yuqi i').html(data.profit);
         }
     }
-    $(function(){
+
+    $(function() {
         $('.credi-tip').hover(function () {
             $(this).parent().find(".tips").stop(true, false).show();
         }, function () {
@@ -178,9 +180,20 @@ $isClosed = $respData['isClosed'] || $nowTime >= $endTime;
             getOrderList($(this).attr('href'));
         });
 
-        $('.dR-money').keyup($.throttle(100,function () {
+        $('.dR-money').keyup($.throttle(100, function () {
             var val = $(this).val();
-            var amount = $.isNumeric(val) ? val : 0;
+            var amount = $.isNumeric(val) ? parseFloat(val) : 0;
+
+            if (0 === amount) {
+                $('.yingfu i').html('0.00');
+                $('.yuqi i').html('0.00');
+
+                $('.dR-tishi-error').show();
+                $('.dR-tishi-error').html('投资金额不能为空');
+
+                return;
+            }
+
             //请求交易系统计算进行计算
             $.ajax({
                 type: "get",
@@ -192,45 +205,33 @@ $isClosed = $respData['isClosed'] || $nowTime >= $endTime;
                 $(this).val(val.substring(0, val.length - 1));
             }
             //计算预期收益,再次调用计算应付利息与预计收益的函数
+
+            $.post(note_form.attr('action'), note_form.serialize(), function (data) {
+                if (1 === data.code) {
+                    if ('/site/login' == data.tourl) {
+                        //获取登录信息
+                        login();
+                    } else if('/user/qpay/binding/umpmianmi' == data.tourl){
+                        mianmi();
+                    } else if('/user/userbank/idcardrz' == data.tourl){
+                        location.href = '/user/userbank/identity';
+                    } else {
+                        if (data.tourl) {
+                            location.href = data.tourl;
+                        }
+                        $('.dR-tishi-error').show();
+                        $('.dR-tishi-error').html(data.message);
+                    }
+                }
+            });
         }));
-
-        $('.dR-money').blur(function () {
-            var isGuest = <?= Yii::$app->user->isGuest ? 'true' : 'false' ?>;//登录状态
-            if (isGuest){
-                return false;
-            }
-
-            if (isOwnUserItem()){
-                return false;
-            }
-
-            if (!validateMoney()) {
-                return false;
-            }
-        });
 
         var note_form = $('#note_order');
         var note_button = $('#order_submit');
         note_form.on('submit', function (e) {
             e.preventDefault();
-
-            //判断登录
-            var isGuest = <?= Yii::$app->user->isGuest ? 'true' : 'false' ?>;
-            if (isGuest) {
-                login();
-                return false;
-            }
-
-            if (isOwnUserItem()){
-                return false;
-            }
-
-            //判断金额-next
-            if (!validateMoney()) {
-                return false;
-            }
-
             note_button.attr('disabled', 'disabled');
+
             var xhr = $.post(note_form.attr('action'), note_form.serialize(), function (data) {
                 if (data.code == 0 && data.tourl) {
                     location.href = data.tourl;
@@ -264,49 +265,6 @@ $isClosed = $respData['isClosed'] || $nowTime >= $endTime;
 
         });
     });
-
-    function validateMoney()
-    {
-        var qitou_money = <?= $note_config['min_order_amount'] ?>;
-        var rest_money = <?= bcsub($respData['amount'], $respData['tradedAmount']) ?>;
-        var money = $('.dR-money').val();
-        if (/[0-9]+(\.)[0-9]{3,}/.test(money)) {
-            $(this).val(money.substring(0, money.indexOf(".") + 3));
-        }
-        var moneys = parseFloat(money) * 100;
-        if(moneys > rest_money) {
-            $('.dR-tishi-error ').show();
-            $('.dR-tishi-error').html('投资金额不能超过可交易金额');
-            return false;
-        }
-        if (moneys >= 0) {
-            if (rest_money >= qitou_money) {
-                if (moneys < qitou_money) {
-                    $('.dR-tishi-error ').show();
-                    $('.dR-tishi-error').html('投资金额小于起投金额（<?= StringUtils::amountFormat2(bcdiv($note_config['min_order_amount'], 100, 2)) ?>元）');
-                    return false;
-                }
-            }
-        } else {
-            $('.dR-tishi-error ').show();
-            $('.dR-tishi-error').html('投资金额不能为空');
-            return false;
-        }
-
-        return true;
-    }
-
-    function isOwnUserItem()
-    {
-        var currentUserId = <?= Yii::$app->user->isGuest ? '0' : Yii::$app->user->getIdentity()->getId() ?>;
-        var creditUserId = <?= $respData['user_id'] ?>;
-        if (currentUserId === creditUserId) {
-            $('.dR-tishi-error ').show();
-            $('.dR-tishi-error').html('您不能购买自己的转让项目');
-            return true;
-        }
-        return false;
-    }
 
     //处理ajax登录
     function login()
