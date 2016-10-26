@@ -67,7 +67,6 @@ $(function(){
                             $(".nodata").show();
                         } else {
                             $(".nodata").hide();
-                            //$('.load').show();
                         }
                     } else {
                         alert(data.message);
