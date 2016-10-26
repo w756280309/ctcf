@@ -31,12 +31,13 @@ $this->title= "订单处理中";
 <script type="text/javascript">
     var orderId = '<?= $order_id ?>';
 
-    function ret() {
+    function ret()
+    {
         $.ajax({
             url: "/credit/order/refer?id=" + orderId,
             success: function(data) {
-                if (0 === data.status) {
-                    location.replace("/credit/order/refer?order_id=" + orderId);
+                if (0 === data.status || 1 === data.status) {
+                    location.replace("/credit/order/refer?id=" + orderId);
                 }
             }
         });
@@ -45,6 +46,5 @@ $this->title= "订单处理中";
     var tick = setInterval(ret, 1000);
     setTimeout(function () {
         clearInterval(tick);
-        location.replace("/credit/order/refer?order_id=" + orderId);
     }, 5000);
 </script>

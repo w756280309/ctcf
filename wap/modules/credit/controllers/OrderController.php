@@ -112,21 +112,33 @@ class OrderController extends Controller
     public function actionRefer()
     {
         $request = \Yii::$app->request;
-        $order_id = intval($request->get('order_id'));
+        $order_id = intval($request->get('id'));
         if (empty($order_id)) {
             return $this->render('refer', ['ret' => 'fail']);
         }
 
         $txClient = \Yii::$container->get('txClient');
         $order = $txClient->get('credit-order/detail', ['id' => $order_id]);
-        $status = (null !== $order && $order['status'] === 1) ? 0 : 1;
+        if (null !== $order) {
+            if (1 === $order['status']) {    //成功
+                $status = 0;
+                $ret = 'success';
+            } elseif (2 === $order['status']) {    //失败
+                $status = 1;
+                $ret = 'fail';
+            } else {    //处理异常
+                $status = 3;
+                $ret = 'wait';
+            }
+        }
+
         if ($request->isAjax) {
             return ['status' => $status];
-        } else {
-            return $this->render('refer', [
-                'order' => $order,
-                'ret' => $status === 0 ? 'success' : 'fail',
-            ]);
         }
+
+        return $this->render('refer', [
+            'order' => $order,
+            'ret' => $ret,
+        ]);
     }
 }
