@@ -6,7 +6,7 @@ use yii\web\JqueryAsset;
 
 $this->title = '转让';
 
-$this->registerCssFile(ASSETS_BASE_URI.'css/credit/transfer_order.css', ['depends' => WapAsset::class]);
+$this->registerCssFile(ASSETS_BASE_URI.'css/credit/transfer_order.css?v=20161025', ['depends' => WapAsset::class]);
 $this->registerJsFile(ASSETS_BASE_URI.'js/jquery.ba-throttle-debounce.min.js?v=161008', ['depends' => JqueryAsset::class]);
 $this->registerJsFile(ASSETS_BASE_URI.'js/fastclick.js', ['depends' => JqueryAsset::class]);
 
@@ -79,6 +79,7 @@ $calcDiscountRate = min($discountRate, bcmul(bcdiv($asset['currentInterest'], bc
     <img class="shouyi_tips_tra" src="<?= ASSETS_BASE_URI ?>images/credit/triangle.png" alt="">
     转让需要支付转让金额的<?= $fee ?>‰手续费，在成交后直接从成交金额中扣除。
 </p>
+<div class="text-align-lf bottom_center rules-note"><a href="/credit/note/rules">转让规则</a></div>
 <!--bottom-->
 <div class="row login-sign-btn ht">
     <div class="col-xs-6 col-xs-offset-3 text-align-ct">
@@ -87,7 +88,7 @@ $calcDiscountRate = min($discountRate, bcmul(bcdiv($asset['currentInterest'], bc
     <div class="col-xs-3 empty_div"></div>
 </div>
 <div class="row surplus">
-    <div class="col-xs-12 text-align-ct bottom_center"><a href="/credit/note/rules">转让规则</a></div>
+    <div class="col-xs-12 text-align-ct bottom_center">查看<a href="/order/order/agreement?id=<?= $loan->id ?>&note_id=1">《转让协议》</a><a href="/credit/note/risk-note?type=1">《风险揭示》</a></div>
 </div>
 <script>
     $(function() {

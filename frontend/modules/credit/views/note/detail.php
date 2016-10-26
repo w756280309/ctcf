@@ -3,7 +3,7 @@ $this->title = '转让详情';
 
 use frontend\assets\FrontAsset;
 
-$this->registerCssFile(ASSETS_BASE_URI.'css/credit/credit.css?v=161010', ['depends' => FrontAsset::class]);
+$this->registerCssFile(ASSETS_BASE_URI.'css/credit/credit.css?v=161025', ['depends' => FrontAsset::class]);
 $this->registerJsFile(ASSETS_BASE_URI.'js/credit/detail.js?v=160922', ['depends' => FrontAsset::class]);
 $this->registerJsFile(ASSETS_BASE_URI.'js/jquery.ba-throttle-debounce.min.js?v=161008', ['depends' => FrontAsset::class]);
 $this->registerCssFile(ASSETS_BASE_URI.'css/pagination.css');
@@ -149,6 +149,7 @@ $isClosed = $respData['isClosed'] || $nowTime >= $endTime;
                 <?php } ?>
 
                 <p class="fengxian-tip">*理财非存款，产品有风险，投资须谨慎</p>
+                <p class="risk-note"><a href="/credit/note/risk-note?type=2&loanId=<?= $respData['loan_id'] ?>" target="_blank">查看并确认《风险提示》</a></p>
             </div>
         </div>
     </div>

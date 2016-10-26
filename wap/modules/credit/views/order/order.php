@@ -74,7 +74,9 @@ $isClosed = $respData['isClosed'] || $nowTime >= $endTime;
 </div>
 </form>
 <div class="row surplus">
-    <div class="col-xs-12 text-align-ct bottom_center">查看<a href="/order/order/agreement?id=<?=$loan['id']?>&note_id=<?=$respData['id']?>">《认购协议》</a></div>
+    <div class="col-xs-12 text-align-ct bottom_center">
+        查看<a href="/order/order/agreement?id=<?=$loan['id']?>&note_id=<?=$respData['id']?>">《认购协议》</a><a href="/credit/note/risk-note?type=2&loanId=<?= $loan['id'] ?>">《风险揭示》</a>
+    </div>
 </div>
 
 <script>

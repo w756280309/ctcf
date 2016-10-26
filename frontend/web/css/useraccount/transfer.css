@@ -285,3 +285,33 @@
     color: #ff3333;
     cursor: pointer;
 }
+.risk-note {
+    margin-left: 243px;
+}
+.risk-note a {
+    font-size: 12px;
+    color: #46669f;
+}
+.agreement {
+    margin-left: 163px;
+    margin-bottom: 5px;
+}
+.agreement a {
+    color: #46669f;
+}
+.agreement input {
+    width: 14px;
+    height: 14px;
+}
+.agreement-err {
+    margin-left: 70px;
+    color: red;
+}
+.hide {
+    display: none;
+}
+.contentCenter p a {
+    float: right;
+    padding-right: 40px;
+    color: #46669f;
+}

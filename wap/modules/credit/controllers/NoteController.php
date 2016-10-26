@@ -21,6 +21,7 @@ class NoteController extends Controller
         return [
             'new' => ['class' => 'common\action\credit\NewAction'],
             'create' => ['class' => 'common\action\credit\CreateAction'],
+            'risk-note' => ['class' => 'common\action\credit\RiskNoteAction'],
         ];
     }
 

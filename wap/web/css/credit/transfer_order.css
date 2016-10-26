@@ -238,3 +238,6 @@ body{
     position: absolute;
     top: -7px;
 }
+.rules-note {
+    padding-left: 2rem;
+}

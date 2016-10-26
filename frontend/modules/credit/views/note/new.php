@@ -7,7 +7,7 @@ use yii\web\JqueryAsset;
 $this->title = '发起转让';
 
 $this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/usercenter.css', ['depends' => FrontAsset::class]);
-$this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/transfer.css', ['depends' => FrontAsset::class]);
+$this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/transfer.css?v=20161025', ['depends' => FrontAsset::class]);
 $this->registerJsFile(ASSETS_BASE_URI.'js/useraccount/transfer.js', ['depends' => JqueryAsset::class]);
 $this->registerJsFile(ASSETS_BASE_URI.'js/jquery.ba-throttle-debounce.min.js?v=161008', ['depends' => JqueryAsset::class]);
 
@@ -29,7 +29,7 @@ $calcDiscountRate = min($discountRate, bcmul(bcdiv($asset['currentInterest'], bc
                 <span>我的转让</span>
             </p>
             <div class="contentCenter">
-                <p><?= Html::encode($loan->title)?></p>
+                <p><?= Html::encode($loan->title)?><a href="/credit/note/rules" target="_blank">转让规则</a></p>
                 <div class="contentCenter_ul clearfix_all">
                     <ul class="text_center">
                         <li class="contentCenter_ul_li"><?= floatval($apr) * 100 ?><span>%</span></li>
@@ -154,11 +154,13 @@ $calcDiscountRate = min($discountRate, bcmul(bcdiv($asset['currentInterest'], bc
                         </li>
                     </ul>
 
+                    <div class="agreement"><input id="agreement" type="checkbox" checked="checked">同意并签署"转让协议" <a href="/order/order/agreement?pid=<?= $loan->id ?>&note_id=1" target="_blank">查看</a></div>
                     <span>
                         <input id="credit_submit_btn" type="button" value="确定转让" class="submit_btn" onclick="validateData()">
                     </span>
+                    <div class="agreement-err hide">您还没有勾选同意并签署"转让协议"</div>
+                    <div class="risk-note"><a href="/credit/note/risk-note?type=1" target="_blank">查看并确认《风险提示》</a></div>
                 </div>
-
             </div>
         </div>
         <div class="clear"></div>
@@ -189,14 +191,21 @@ $calcDiscountRate = min($discountRate, bcmul(bcdiv($asset['currentInterest'], bc
     var config_rate = <?= floatval($discountRate) ?>;
     var minAmount = <?= floatval($minOrderAmount) ?>;
     var incAmount = <?= floatval($incrOrderAmount) ?>;
-    var feeRate = <?= floatval($fee / 1000) ?>;
 
-    $(function(){
+    $(function() {
         amount_input.change($.throttle(100,function () {
             validateData();
         }));
         discount_rate_input.change(100,function () {
             validateData();
+        });
+
+        $('#agreement').on('click', function () {
+            if ('checked' === $(this).attr('checked')) {
+                $(this).removeAttr('checked');
+            } else {
+                $(this).attr('checked', 'checked');
+            }
         });
     });
 
@@ -217,6 +226,7 @@ $calcDiscountRate = min($discountRate, bcmul(bcdiv($asset['currentInterest'], bc
             return false;
         }
         btn.addClass('twoClick');
+
         var xhr = $.post('/credit/note/create', {
             '_csrf': '<?= Yii::$app->request->csrfToken?>',
             'asset_id': '<?= $asset['id']?>',
@@ -349,6 +359,11 @@ $calcDiscountRate = min($discountRate, bcmul(bcdiv($asset['currentInterest'], bc
         }
 
         submit_btn.click(function () {
+            if ('checked' !== $('#agreement').attr('checked')) {
+                $('.agreement-err').removeClass('hide');
+                return false;
+            }
+
             discount_rate_error.hide();
             var rate = parseFloat(discount_rate_input.val());
             if (!rate) {

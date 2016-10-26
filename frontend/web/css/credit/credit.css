@@ -620,3 +620,10 @@ body {
     top: 50%;
     margin-top: -4px;
 }
+.risk-note {
+    margin-bottom: 10px;
+}
+.risk-note a {
+    font-size: 12px;
+    color: #46669f;
+}
