@@ -120,17 +120,10 @@ $is_online = in_array($model->status, [2, 3, 4, 5, 6, 7]);//判断标的是否�
         <div class="row-fluid">
             <div class="span12 ">
                 <div class="control-group">
-                    <label class="control-label">项目名称<span style="color: red;">(<?= $desc ?>)</span></label>
+                    <label class="control-label">项目名称</label>
                     <div class="controls">
-                        <?php
-                            if ($is_online) {
-                                $title_input_options = ['disabled' => 'disabled'];
-                            } else {
-                                $title_input_options = [];
-                            }
-                        ?>
                         <?=
-                            $form->field($model, 'title', ['template' => '{input}{error}', 'inputOptions' => ['autocomplete' => 'off', 'placeholder' => '项目名称', 'maxLength' => 32, 'class' => 'm-wrap span12']])->textInput($title_input_options)
+                            $form->field($model, 'title', ['template' => '{input}{error}', 'inputOptions' => ['autocomplete' => 'off', 'placeholder' => '项目名称', 'maxLength' => 32, 'class' => 'm-wrap span12']])->textInput()
                         ?>
                     </div>
                 </div>
