@@ -2,35 +2,35 @@
 
 namespace backend\modules\user\controllers;
 
+use backend\controllers\BaseController;
+use common\lib\bchelp\BcRound;
+use common\models\bank\Bank;
 use common\models\epay\EpayUser;
+use common\models\user\MoneyRecord;
+use common\models\user\RechargeRecord;
+use common\models\user\User;
+use common\models\user\UserAccount;
+use common\models\user\UserBanks;
 use Yii;
 use yii\data\Pagination;
-use yii\web\Response;
-use backend\controllers\BaseController;
-use common\models\user\MoneyRecord;
-use common\models\user\UserAccount;
-use common\models\user\User;
-use common\lib\bchelp\BcRound;
 use yii\log\FileTarget;
-use common\models\user\RechargeRecord;
-use yii\web\NotFoundHttpException;
-use common\models\user\UserBanks;
-use common\models\bank\Bank;
+use yii\web\Response;
 
 class RechargerecordController extends BaseController
 {
     /**
-     * 投资会员充值流水明细
-     * @param type $id
-     * @param type $type
-     * @return type
+     * 投资会员充值流水明细.
+     *
+     * @param int $id    用户ID
+     * @param int $type  用户类型
      */
     public function actionDetail($id, $type)
     {
         if (empty($id) || empty($type) || !in_array($type, [1, 2])) {
-            throw new NotFoundHttpException();     //参数无效,抛出404异常
+            throw $this->ex404();     //参数无效,抛出404异常
         }
 
+        $type = intval($type);
         $status = Yii::$app->request->get('status');
         $time = Yii::$app->request->get('time');
 
@@ -106,7 +106,14 @@ class RechargerecordController extends BaseController
         $ePayUser = EpayUser::find()->where(['appUserId' => $id])->one();
         $user_account = 0;
         if ($ePayUser && $ePayUser['epayUserId']) {
-            $res = Yii::$container->get('ump')->getUserInfo($ePayUser['epayUserId']);
+            $ump = Yii::$container->get('ump');
+
+            if (1 === $type) {
+                $res = $ump->getUserInfo($ePayUser['epayUserId']);
+            } else {
+                $res = $ump->getMerchantInfo($ePayUser['epayUserId']);
+            }
+
             if ($res->isSuccessful()) {
                 $account = $res->get('balance');//以分为单位
                 if ($account) {
@@ -160,61 +167,6 @@ class RechargerecordController extends BaseController
         } else {
             return ['code' => false, 'message' => '非法请求'];
         }
-    }
-
-    /**
-     * 录入充值数据.
-     */
-    public function actionEdit($id = null, $type = null)      // DEPRECATED
-    {
-        throw new NotFoundHttpException();
-
-        $banks = Yii::$app->params['bank'];
-        $bankInfo = ['' => '--请选择--'];
-        foreach ($banks as $k => $v) {
-            $bankInfo[$k] = $v['bankname'];
-        }
-        $model = new RechargeRecord();
-        $model->uid = $id;
-        $model->pay_type = RechargeRecord::PAY_TYPE_OFFLINE;
-        $model->created_at = strtotime(Yii::$app->request->post('created_at'));
-        $request = Yii::$app->request->post();
-        if ($request && empty($model->created_at)) {
-            $this->alert = 1;
-            $this->msg = '充值时间不能为空';
-
-            return $this->render('edit', [
-                   'banks' => $bankInfo,
-                   'type' => $type,
-                   'id' => $id,
-                   'model' => $model,
-            ]);
-        }
-
-        if ($model->load($request) && $model->validate()) {
-            $userAccountInfo = UserAccount::findOne(['uid' => $id, 'type' => UserAccount::TYPE_BORROW]);
-            if (null === $userAccountInfo) {
-                //无融资账户时候需要创建融资账户
-                $userAccountInfo = new UserAccount(['uid' => $id, 'type' => UserAccount::TYPE_BORROW]);
-                $userAccountInfo->save();
-            }
-            $model->account_id = $userAccountInfo->id;
-            if ($model->save()) {
-                $this->alert = 1;
-                $this->msg = '操作成功';
-                $this->toUrl = "detail?id=$id&type=$type";
-            } else {
-                $this->alert = 2;
-                $this->msg = '操作失败';
-            }
-        }
-
-        return $this->render('edit', [
-                    'banks' => $bankInfo,
-                    'type' => $type,
-                    'id' => $id,
-                    'model' => $model,
-        ]);
     }
 
     public function actionLog()
