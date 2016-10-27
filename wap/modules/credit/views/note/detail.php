@@ -18,7 +18,7 @@ $isClosed = $respData['isClosed'] || $nowTime >= $endTime;
 
 $this->registerCssFile(ASSETS_BASE_URI.'css/credit/detail.css', ['depends' => 'wap\assets\WapAsset']);
 $this->registerJs('var remainTime = '.strtotime($isClosed ? 'now' : $respData['endTime']).';', 1);
-$this->registerJsFile(ASSETS_BASE_URI.'js/credit/detail.js?v=160930', ['depends' => 'wap\assets\WapAsset']);
+$this->registerJsFile(ASSETS_BASE_URI.'js/credit/detail.js?v=161027', ['depends' => 'wap\assets\WapAsset']);
 ?>
 
 <div class="row daojishi">
@@ -129,14 +129,24 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/credit/detail.js?v=160930', ['depends'
     </a>
 </div>
 <div id="x-purchase" class="row rengou" style="cursor: pointer">
-    <div class="col-xs-12">
+    <div class="col-xs-12 button-init-cancel">
         <?php if (!$isClosed) { ?>
             <?php
                 if (!Yii::$app->user->isGuest && $respData['user_id'] === (int) Yii::$app->user->identity->id) {
             ?>
-                <a href="javascript:void(0)" id="cancel-note" note-id="<?= Html::encode($respData['id']) ?>">撤销转让</a>
+                <?php
+                    if ($respData['isCancelled']) {
+                ?>
+                    <a href="javascript:void(0)" class="red-gray" note-id="<?= Html::encode($respData['id']) ?>">处理中</a>
+                <?php
+                    } else {
+                ?>
+                    <a href="javascript:void(0)" id="cancel-note" note-id="<?= Html::encode($respData['id']) ?>">撤销转让</a>
+                <?php
+                    }
+                ?>
             <?php } else { ?>
-                <a href="javascript:void(0)" id="check-in">立即认购</a>
+                    <a href="javascript:void(0)" id="check-in">立即认购</a>
             <?php } ?>
         <?php } else { ?>
             <a href="javascript:;" class="red-gray">转让完成</a>

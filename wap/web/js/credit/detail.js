@@ -41,8 +41,11 @@ var dealCancel = function cancelNote() {
 
     noteBtn.addClass('twoClick');
     var xhr = $.get('/credit/trade/cancel?id=' + note_id, function (data) {
+        noteBtn.removeClass('twoClick');
         if (0 === data.code) {
-            location.href = "/credit/trade/assets?type=2";
+            noteBtn.removeAttr('id');
+            noteBtn.addClass('red-gray');
+            noteBtn.html('处理中');
             return false;
         }
         torefer(data.message);
@@ -112,7 +115,7 @@ $(function() {
         });
     });
 
-    $('#cancel-note').bind('click', function () {
+    $('.button-init-cancel').on('click', '#cancel-note', function () {
         alertReferBox('确认撤销当前转让中的项目？已转让的不能撤回，发起后立即生效。', 1, dealCancel);
     });
 });
