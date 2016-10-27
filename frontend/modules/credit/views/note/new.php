@@ -7,7 +7,7 @@ use yii\web\JqueryAsset;
 $this->title = '发起转让';
 
 $this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/usercenter.css', ['depends' => FrontAsset::class]);
-$this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/transfer.css?v=20161025', ['depends' => FrontAsset::class]);
+$this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/transfer.css?v=20161027', ['depends' => FrontAsset::class]);
 $this->registerJsFile(ASSETS_BASE_URI.'js/useraccount/transfer.js', ['depends' => JqueryAsset::class]);
 $this->registerJsFile(ASSETS_BASE_URI.'js/jquery.ba-throttle-debounce.min.js?v=161008', ['depends' => JqueryAsset::class]);
 
@@ -154,7 +154,7 @@ $calcDiscountRate = min($discountRate, bcmul(bcdiv($asset['currentInterest'], bc
                         </li>
                     </ul>
 
-                    <div class="agreement"><input id="agreement" type="checkbox" checked="checked">同意并签署"转让协议" <a href="/order/order/agreement?pid=<?= $loan->id ?>&note_id=1" target="_blank">查看</a></div>
+                    <div class="agreement"><input id="agreement" type="checkbox" checked="checked"> 同意并签署"转让协议" <a href="/order/order/agreement?pid=<?= $loan->id ?>&note_id=1" target="_blank">查看</a></div>
                     <span>
                         <input id="credit_submit_btn" type="button" value="确定转让" class="submit_btn" onclick="validateData()">
                     </span>

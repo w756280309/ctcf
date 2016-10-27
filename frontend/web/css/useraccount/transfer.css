@@ -293,8 +293,9 @@
     color: #46669f;
 }
 .agreement {
-    margin-left: 163px;
+    margin-left: 183px;
     margin-bottom: 5px;
+    font-size: 14px;
 }
 .agreement a {
     color: #46669f;
@@ -305,6 +306,7 @@
 }
 .agreement-err {
     margin-left: 70px;
+    font-size: 14px;
     color: red;
 }
 .hide {
