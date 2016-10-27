@@ -11,7 +11,7 @@ use wap\assets\WapAsset;
 use yii\web\JqueryAsset;
 
 $this->registerCssFile(ASSETS_BASE_URI.'css/swiper.min.css', ['depends' => WapAsset::class]);
-$this->registerCssFile(ASSETS_BASE_URI.'css/wap_index.css?v=20161021', ['depends' => WapAsset::class]);
+$this->registerCssFile(ASSETS_BASE_URI.'css/wap_index.css?v=20161026', ['depends' => WapAsset::class]);
 $this->registerCssFile(ASSETS_BASE_URI.'css/kaipin.css', ['depends' => WapAsset::class]);
 $this->registerJsFile(ASSETS_BASE_URI.'js/swiper.min.js', ['depends' => JqueryAsset::class, 'position' => 1]);
 $this->registerJsFile(ASSETS_BASE_URI.'js/lib.flexible/lib.flexible.js', ['depends' => JqueryAsset::class, 'position' => 1]);
@@ -153,7 +153,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/index.js?v=20161021', ['depends' => Jq
         <div class="swiper-wrapper">
             <div class="swiper-slide">
                 <dl class="clearfix">
-                    <dt class="lf"><img src="<?= ASSETS_BASE_URI ?>images/index/icon1.png" alt=""></dt>
+                    <dt class="lf"><img src="<?= ASSETS_BASE_URI ?>images/index/icon1.png?v=20161026" alt=""></dt>
                     <dd class="lf">
                         <p>收益稳健</p>
                         <span>预期年化5.5~9%</span>
@@ -162,7 +162,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/index.js?v=20161021', ['depends' => Jq
             </div>
             <div class="swiper-slide">
                 <dl class="clearfix">
-                    <dt class="lf"><img src="<?= ASSETS_BASE_URI ?>images/index/icon2.png" alt=""></dt>
+                    <dt class="lf"><img src="<?= ASSETS_BASE_URI ?>images/index/icon2.png?v=20161026" alt=""></dt>
                     <dd class="lf">
                         <p>产品优质</p>
                         <span>国企、政信类产品</span>
@@ -171,7 +171,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/index.js?v=20161021', ['depends' => Jq
             </div>
             <div class="swiper-slide">
                 <dl class="clearfix">
-                    <dt class="lf"><img src="<?= ASSETS_BASE_URI ?>images/index/icon3.png" alt=""></dt>
+                    <dt class="lf"><img src="<?= ASSETS_BASE_URI ?>images/index/icon3.png?v=20161026" alt=""></dt>
                     <dd class="lf">
                         <p>资金安全</p>
                         <span>第三方资金托管</span>
@@ -180,7 +180,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/index.js?v=20161021', ['depends' => Jq
             </div>
             <div class="swiper-slide">
                 <dl class="clearfix">
-                    <dt class="lf"><img src="<?= ASSETS_BASE_URI ?>images/index/icon4.png" alt=""></dt>
+                    <dt class="lf"><img src="<?= ASSETS_BASE_URI ?>images/index/icon4.png?v=20161026" alt=""></dt>
                     <dd class="lf">
                         <p>门槛较低</p>
                         <span>1000元即可投资</span>
