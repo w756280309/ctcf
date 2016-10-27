@@ -94,11 +94,10 @@ $this->registerJs($_js, View::POS_END, 'body_close');
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-body text-center">
-                <p><h5>充值结果</h5></p>
+                <p><h5>请在新打开的联动优势页面进行充值，充值完成前不要关闭该窗口。</h5></p>
 
                 <p>
-                    <a class="btn btn-primary" href="/user/recharge/query">充值成功</a>
-                    <a class="btn btn-default" href="/user/recharge/query">充值失败</a>
+                    <a class="btn btn-primary" href="/user/useraccount/accountcenter">确定</a>
                 </p>
             </div>
         </div>
