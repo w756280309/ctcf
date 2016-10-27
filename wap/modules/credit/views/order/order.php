@@ -116,7 +116,7 @@ $isClosed = $respData['isClosed'] || $nowTime >= $endTime;
             //请求交易系统计算进行计算
             $.ajax({
                 type: "get",
-                url: "<?= rtrim(\Yii::$app->params['clientOption']['host']['tx'], '/')?>/credit-note/calc",
+                url: "<?= rtrim(\Yii::$app->params['clientOption']['host']['tx_www'], '/')?>/credit-note/calc",
                 data: { note_id: <?= $respData['id']?>, amount: amount, rate: <?= $respData['discountRate'] ?>},
                 dataType: "jsonp"
             });

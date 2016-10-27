@@ -327,7 +327,7 @@ $calcDiscountRate = min($discountRate, bcmul(bcdiv($asset['currentInterest'], bc
         //请求交易系统计算进行计算
         $.ajax({
             type: "get",
-            url: "<?= rtrim(\Yii::$app->params['clientOption']['host']['tx'], '/')?>/credit-note/calc",
+            url: "<?= rtrim(\Yii::$app->params['clientOption']['host']['tx_www'], '/')?>/credit-note/calc",
             data: {asset_id:<?= $asset['id']?>, amount: amount, rate: rate},
             dataType: "jsonp"
         });
