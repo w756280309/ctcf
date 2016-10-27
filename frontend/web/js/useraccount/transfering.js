@@ -1,8 +1,16 @@
-function closeConfirmBox() {
+function closeConfirmBox()
+{
     $('.mask').hide();
     $('.confirmBox').hide();
 }
-$(function(){
+
+function alertReferBox()
+{
+    $('.mask').show();
+    $('.confirmBox').show();
+}
+
+$(function() {
     $('.tr-click:odd').find('td').addClass('td-back-color');
 })
 //查看下拉
@@ -18,16 +26,19 @@ $(document).ready(function () {
         }
     });
 
-    $('.cancel-note').bind('click', function () {
-        $('.mask').show();
-        $('.confirmBox').show();
+    $('.cancel-operation').on('click', '.cancel-note', function () {
+        $(this).addClass('refered');
+        alertReferBox();
     });
-    $('.confirmBox-left').bind('click', function () {
+
+    $('.confirmBox-bottom').on('click', '.confirmBox-left', function () {
+        $('.cancel-note').removeClass('refered');
         closeConfirmBox();
     });
-    $('.confirmBox-right').bind('click', function () {
+
+    $('.confirmBox-bottom').on('click', '.confirmBox-right', function () {
         closeConfirmBox();
-        var noteBtn = $('.cancel-note');
+        var noteBtn = $('.refered');
         if (noteBtn.hasClass('twoClick')) {
             return false;
         }
@@ -35,10 +46,12 @@ $(document).ready(function () {
         noteBtn.addClass('twoClick');
         var id = noteBtn.attr('note-id');
         var xhr = $.get('/credit/trade/cancel?id=' + id, function (data) {
+            $('.cancel-note').removeClass('refered');
             if (0 === data.code) {
                 $('.cancel-note').each(function () {
-                    if ($(this).attr("note-id") === id) {
+                    if ($(this).attr('note-id') === id) {
                         $(this).html('处理中');
+                        $(this).removeClass('cancel-note');
                     }
                 });
                 return false;
@@ -50,11 +63,11 @@ $(document).ready(function () {
         });
 
         xhr.always(function () {
-            noteBtn.removeClass('twoClick');
+            noteBtn.removeClass('twoClick refered');
         });
 
         xhr.fail(function () {
-            noteBtn.removeClass('twoClick');
+            noteBtn.removeClass('twoClick refered');
             alert('系统繁忙，撤销失败，请稍后重试!');
         });
     });

@@ -11,7 +11,7 @@ use yii\web\JqueryAsset;
 $this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/usercenter.css', ['depends' => FrontAsset::class]);
 $this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/transfering.css?v=16102005', ['depends' => FrontAsset::class]);
 $this->registerCssFile(ASSETS_BASE_URI.'css/pagination.css');
-$this->registerJsFile(ASSETS_BASE_URI.'js/useraccount/transfering.js?v=161019', ['depends' => JqueryAsset::class]);
+$this->registerJsFile(ASSETS_BASE_URI.'js/useraccount/transfering.js?v=161026', ['depends' => JqueryAsset::class]);
 ?>
 
 <div class="wdjf-body">
@@ -86,7 +86,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/useraccount/transfering.js?v=161019', 
                                     <td class="text-third">
                                         <a href="/order/order/contract?asset_id=<?= $asset['id']?>" target="_blank">查看</a>
                                     </td>
-                                    <td class="text-align-ct"><a class="color-blue" href="/credit/note/new?asset_id=<?= $asset['id'] ?>" target="_blank">转让</a></td>
+                                    <td class="text-align-ct"><a class="color-blue" href="/credit/note/new?asset_id=<?= $asset['id'] ?>">转让</a></td>
                                 </tr>
                                 <!--下拉显示信息-->
                                 <tr class="tr-show">
@@ -155,7 +155,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/useraccount/transfering.js?v=161019', 
                                     <?php if ($note['isCancelled']) { ?>
                                         <td class="text-align-ct"><a class="color-blue" href="javascript:void(0)">处理中</a></td>
                                     <?php } else { ?>
-                                        <td class="text-align-ct"><a class="color-blue cancel-note" href="javascript:void(0)" note-id="<?= $note['id'] ?>">撤销</a></td>
+                                        <td class="text-align-ct cancel-operation"><a class="color-blue cancel-note" href="javascript:void(0)" note-id="<?= $note['id'] ?>">撤销</a></td>
                                     <?php } ?>
                                 </tr>
                             <?php } ?>

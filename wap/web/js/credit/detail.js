@@ -13,7 +13,8 @@ function torefer(val, callback)
         }
     }, 2000);
 }
-function alertReferBox(val, isConfirm, callback) {
+function alertReferBox(val, isConfirm, callback)
+{
     if (isConfirm) {
         var chongzhi = $('<div class="mask" style="display: block;"></div><div class="bing-info show" style="position: fixed;margin: 0px;left:15%"> <p class="tishi-p" style="line-height: 20px;">'+ val +'</p> <div class="bind-btn"> <span class="no" style="border-right: 1px solid #ccc;">取消</span> <span class="yes" style="border-left: 1px solid #ccc;">确定</span></div> </div>');
     } else {
