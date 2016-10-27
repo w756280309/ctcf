@@ -4,15 +4,53 @@ $this->title="合同说明";
 $this->registerCssFile(ASSETS_BASE_URI.'css/licai.css', ['depends' => 'wap\assets\WapAsset']);
 $this->registerCssFile(ASSETS_BASE_URI.'css/swiper.min.css', ['depends' => 'wap\assets\WapAsset']);
 $this->registerJsFile(ASSETS_BASE_URI.'js/swiper.min.js');
-$this->registerJsFile(ASSETS_BASE_URI.'js/licai.js');
 
 $switcherJs = <<<'JS'
-var $switcher = $('#legal-docs-switcher');
-var activeIndex = $switcher.find('.dian').data('switcherIndex');
-if (activeIndex > 2) {
-var docSwiper = $switcher[0].swiper;
-docSwiper.slideTo(activeIndex);
-}
+$(function() {
+    var num = $('.container-text').attr('data-title');
+    if(num >= 3) {
+        num = 3;
+    }
+    var swiper = new Swiper('.swiper-container', {
+        direction: "horizontal",
+        pagination: '.swiper-pagination',
+        paginationClickable: true,
+        slidesPerView: num,
+        spaceBetween: 50,
+        breakpoints: {
+            1024: {
+                slidesPerView: num,
+                spaceBetween: 40
+            },
+            768: {
+                slidesPerView: num,
+                spaceBetween: 30
+            },
+            640: {
+                slidesPerView: num,
+                spaceBetween: 20
+            },
+            320: {
+                slidesPerView: num,
+                spaceBetween: 10
+            }
+        }
+    });
+    
+    $('.swiper-wrapper div').on('click',function() {
+        var index=$('.swiper-wrapper div').index(this);
+        
+        $('.swiper-wrapper div').removeClass('dian');
+        $('.swiper-wrapper div').eq(index).addClass('dian');
+    })
+    
+    var $switcher = $('#legal-docs-switcher');
+    var activeIndex = $switcher.find('.dian').data('switcherIndex');
+    if (activeIndex > 2) {
+        var docSwiper = $switcher[0].swiper;
+        docSwiper.slideTo(activeIndex);
+    }
+});
 JS;
 $this->registerJs($switcherJs);
 
@@ -55,10 +93,10 @@ $num = 0;
 <!-- Swiper -->
 <div id="legal-docs-switcher" class="swiper-container" style="line-height: 18px;">
     <div class="swiper-wrapper">
-        <?php foreach($contracts as $key => $contract): $num++; ?>
-        <div data-switcher-index="<?= $num-1 ?>" class="swiper-slide <?= $fk == $key?"dian":"" ?>" onclick="location.replace('/order/order/contract?asset_id=<?= $asset_id?>&key=<?= $key?>')">
-            <?= $contract['title']?>
-        </div>
+        <?php foreach($contracts as $key => $contract) : $num++; ?>
+            <div data-switcher-index="<?= $num - 1 ?>" class="swiper-slide <?= $fk == $key ? 'dian' : '' ?>" onclick="location.replace('/order/order/contract?asset_id=<?= $asset_id ?>&key=<?= $key ?>')">
+                <?= $contract['title']?>
+            </div>
         <?php endforeach; ?>
     </div>
 </div>
