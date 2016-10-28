@@ -41,18 +41,18 @@ class UserController extends BaseController
     {
         $data = MoneyRecord::find()->where(['uid' => $this->getAuthedUser()->id])
             ->andWhere(['type' => MoneyRecord::getLenderMrType()])
-            ->select('created_at,type,in_money,out_money,balance')
             ->orderBy('id desc');
         $pg = \Yii::$container->get('paginator')->paginate($data, $page, $size);
         $model = $pg->getItems();
 
         $tp = $pg->getPageCount();
         $code = ($page > $tp) ? 1 : 0;
+        $message = ($page > $tp) ? '数据错误' : '消息返回';
 
         if (Yii::$app->request->isAjax) {
-            $message = ($page > $tp) ? '数据错误' : '消息返回';
+            $html = $this->renderFile('@wap/modules/user/views/user/_mingxi_list.php', ['model' => $model]);
 
-            return ['header' => $pg, 'data' => $model, 'code' => $code, 'message' => $message];
+            return ['header' => $pg->jsonSerialize(), 'html' => $html, 'code' => $code, 'message' => $message];
         }
 
         return $this->render('mingxi', ['model' => $model, 'header' => $pg->jsonSerialize()]);

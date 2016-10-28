@@ -23,12 +23,12 @@ use common\widgets\Pager;
                 <th width="130" class="text-align-rg">可用余额(元)</th>
                 <th width="260" class="table-text-right"><p>详情</p></th>
             </tr>
-            <?php foreach ($lists as $key => $val) : ?>
+            <?php foreach ($lists as $key => $val) : $isIn = $val->in_money >= $val->out_money && !in_array($val->type, [MoneyRecord::TYPE_CREDIT_NOTE_FEE, MoneyRecord::TYPE_DRAW_FEE, MoneyRecord::TYPE_DRAW_FEE_RETURN, MoneyRecord::TYPE_FEE]); ?>
                 <tr class="<?= 0 === $key%2 ? '' : 'td-back-color' ?>">
                     <td class="table-text-left"><?= Yii::$app->params['mingxi'][$val->type] ?></td>
                     <td class="text-align-lf"><?= date('Y-m-d H:i:s', $val->created_at) ?></td>
-                    <td class="text-align-rg <?= $val->in_money >= $val->out_money ? 'color-red' : 'color-green' ?>">
-                        <?= $val->in_money >= $val->out_money ? ('+' . StringUtils::amountFormat3($val->in_money)) : ('-' . StringUtils::amountFormat3($val->out_money)) ?>
+                    <td class="text-align-rg <?= $isIn ? 'color-red' : 'color-green' ?>">
+                        <?= $isIn ? ('+' . StringUtils::amountFormat3($val->in_money)) : ('-' . StringUtils::amountFormat3($val->out_money)) ?>
                     </td>
                     <td class="text-align-rg"><?= number_format($val->balance, 2) ?></td>
                     <td class="table-text-right">
