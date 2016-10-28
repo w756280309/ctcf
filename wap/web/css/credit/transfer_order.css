@@ -2,110 +2,13 @@
 html {
     font-size: 62.5%;
 }
-@media screen and (max-width: 319px) {
-    .sm-height_tips{
-        width:50%;
-        left: 32%;
-    }
-}
-
-@media screen and (min-width: 320px) {
-    html {font-size: 87.5%;}
-    .shouyi_tips_tra{
-        left:3.1rem;
-    }
-    .sm-height_tips{
-        width:50%;
-        left: 32%;
-    }
-}
-
-@media screen and (min-width: 360px) {
-    html {font-size: 100%;}
-    .shouyi_tips_tra{
-        left:3.4rem;
-    }
-    .sm-height_tips{
-        width:50%;
-        left: 32%;
-    }
-}
-
-@media screen and (min-width: 400px) {
-    html {font-size: 112.5%;}
-    .shouyi_tips_tra{
-        left:3.5rem;
-    }
-    .sm-height_tips{
-        width:42%;
-        left: 32%;
-    }
-}
-
-@media screen and (min-width: 440px) {
-    html {font-size: 125%;}
-    .shouyi_tips_tra{
-        left:3.5rem;
-    }
-    .sm-height_tips{
-        width:42%;
-        left: 32%;
-    }
-}
-
-@media screen and (min-width: 480px) {
-    html {font-size: 137.5%;}
-    .shouyi_tips_tra{
-        left:4rem;
-    }
-    .sm-height_tips{
-        width:44%;
-        left: 29%;
-    }
-}
-
-@media screen and (min-width: 640px) {
-    html {font-size: 150%;}
-    .sm-height_tips{
-        width:36%;
-        left: 27%;
-    }
-}
-@media screen and (min-width: 750px) {
-    html {font-size: 175%;}
-    .shouyi_tips_tra{
-        left:4.4rem;
-    }
-    .sm-height_tips{
-        width:36%;
-        left: 28%;
-    }
-}
-@media (min-width: 800px){
-    .sm-height_tips{
-        width:36%;
-        left: 30%;
-    }
-}
-@media (min-width: 992px){
-    .sm-height_tips{
-        width:35%;
-        left: 24%;
-    }
-}
-@media (min-width: 1200px){
-    .sm-height_tips{
-        width:29%;
-        left: 22%;
-    }
-}
 .col-xs-1,.col-xs-2,.col-xs-3,.col-xs-4,.col-xs-5,.col-xs-6,.col-xs-7,.col-xs-8,.col-xs-9,.col-xs-10,.col-xs-11,.col-xs-12{
     padding-left:0;
     padding-right:0;
 }
 .font-32{
-     font-size:1.14rem;
- }
+    font-size:1.14rem;
+}
 .font-26{
     font-size:0.93rem;
 }
@@ -188,6 +91,7 @@ body{
 .shouyi{
     font-size:0.86rem;
     line-height:1.5rem;
+    position: relative;
 }
 .login-sign-btn{
     margin-top: 4rem;
@@ -222,11 +126,11 @@ body{
     -o-transform:rotate(-90deg); 	/* Opera */
 }
 .shouyi_tips{
-    position: relative;
+    position: absolute;
     width: 69%;
     border: 1px solid #fbb4af;
     background: #ffe6e4;
-    top: 5px;
+    top: 1.64rem;
     left: 20px;
     padding:0.5rem;
     font-size:0.7rem;
@@ -240,4 +144,112 @@ body{
 }
 .rules-note {
     padding-left: 2rem;
+}
+@media screen and (max-width: 319px) {
+    .sm-height_tips {
+        width: 50%;
+        left: 32%;
+    }
+}
+@media screen and (min-width: 320px) {
+    html {
+        font-size: 87.5%;
+    }
+    .shouyi_tips_tra {
+        left: 3.1rem;
+    }
+    .sm-height_tips {
+        width: 50%;
+        left: 32%;
+    }
+}
+@media screen and (min-width: 360px) {
+    html {
+        font-size: 100%;
+    }
+    .shouyi_tips_tra {
+        left: 3.4rem;
+    }
+    .sm-height_tips {
+        width: 50%;
+        left: 32%;
+    }
+}
+@media screen and (min-width: 400px) {
+    html {
+        font-size: 112.5%;
+    }
+    .shouyi_tips_tra {
+        left: 3.5rem;
+    }
+    .sm-height_tips {
+        width: 42%;
+        left: 32%;
+    }
+}
+@media screen and (min-width: 440px) {
+    html {
+        font-size: 125%;
+    }
+    .shouyi_tips_tra {
+        left: 3.5rem;
+    }
+    .sm-height_tips {
+        width: 42%;
+        left: 32%;
+    }
+}
+@media screen and (min-width: 480px) {
+    html {
+        font-size: 137.5%;
+    }
+    .shouyi_tips_tra {
+        left: 4rem;
+    }
+    .sm-height_tips {
+        width: 44%;
+        left: 29%;
+    }
+}
+@media screen and (min-width: 640px) {
+    html {
+        font-size: 150%;
+    }
+    .sm-height_tips {
+        width: 36%;
+        left: 27%;
+    }
+}
+@media screen and (min-width: 750px) {
+    html {
+        font-size: 175%;
+    }
+    .shouyi_tips_tra {
+        left: 4.4rem;
+    }
+    .sm-height_tips {
+        width: 36%;
+        left: 28%;
+    }
+    .shouyi_tips {
+        left: 4.5%;
+    }
+}
+@media (min-width: 800px) {
+    .sm-height_tips {
+        width: 36%;
+        left: 30%;
+    }
+}
+@media (min-width: 992px) {
+    .sm-height_tips {
+        width: 35%;
+        left: 24%;
+    }
+}
+@media (min-width: 1200px) {
+    .sm-height_tips {
+        width: 29%;
+        left: 22%;
+    }
 }

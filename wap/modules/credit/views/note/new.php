@@ -6,7 +6,7 @@ use yii\web\JqueryAsset;
 
 $this->title = '转让';
 
-$this->registerCssFile(ASSETS_BASE_URI.'css/credit/transfer_order.css?v=20161025', ['depends' => WapAsset::class]);
+$this->registerCssFile(ASSETS_BASE_URI.'css/credit/transfer_order.css?v=20161027', ['depends' => WapAsset::class]);
 $this->registerJsFile(ASSETS_BASE_URI.'js/jquery.ba-throttle-debounce.min.js?v=161008', ['depends' => JqueryAsset::class]);
 $this->registerJsFile(ASSETS_BASE_URI.'js/fastclick.js', ['depends' => JqueryAsset::class]);
 
@@ -73,12 +73,12 @@ $calcDiscountRate = min($discountRate, bcmul(bcdiv($asset['currentInterest'], bc
         <img class="common_img shouyi_tips_img" src="<?= ASSETS_BASE_URI ?>images/credit/icon_instruction.png" alt="">
     </div>
     <div class="col-xs-8 safe-lf common_color yuqishouyi"><span id="fee">0.00</span>元</div>
+    <!--tips-->
+    <p class="col-xs-12 shouyi_tips">
+        <img class="shouyi_tips_tra" src="<?= ASSETS_BASE_URI ?>images/credit/triangle.png" alt="">
+        转让需要支付转让金额的<?= $fee ?>‰手续费，在成交后直接从成交金额中扣除。
+    </p>
 </div>
-<!--tips-->
-<p class="col-xs-12 shouyi_tips">
-    <img class="shouyi_tips_tra" src="<?= ASSETS_BASE_URI ?>images/credit/triangle.png" alt="">
-    转让需要支付转让金额的<?= $fee ?>‰手续费，在成交后直接从成交金额中扣除。
-</p>
 <div class="text-align-lf bottom_center rules-note"><a href="/credit/note/rules">转让规则</a></div>
 <!--bottom-->
 <div class="row login-sign-btn ht">
