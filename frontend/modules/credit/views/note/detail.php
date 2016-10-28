@@ -181,15 +181,14 @@ $isClosed = $respData['isClosed'] || $nowTime >= $endTime;
         });
 
         $('.dR-money').keyup($.throttle(100, function () {
-            var val = $(this).val();
-            var amount = $.isNumeric(val) ? parseFloat(val) : 0;
+            var amount = $(this).val();
+            if (!$.isNumeric(amount) || ' ' === amount.substring(amount.length - 1, amount.length)) {
+                $(this).val(amount.substring(0, amount.length - 1));
+            }
 
-            if (0 === amount) {
+            if ('0' === amount || '' === amount) {
                 $('.yingfu i').html('0.00');
                 $('.yuqi i').html('0.00');
-
-                $('.dR-tishi-error').show();
-                $('.dR-tishi-error').html('投资金额不能为空');
 
                 return;
             }
@@ -201,30 +200,20 @@ $isClosed = $respData['isClosed'] || $nowTime >= $endTime;
                 data: {note_id:<?= $respData['id']?>, amount: amount},
                 dataType: "jsonp"
             });
-            if (false == $.isNumeric(val) || ' ' == val.substring(val.length - 1, val.length)) {
-                $(this).val(val.substring(0, val.length - 1));
-            }
             //计算预期收益,再次调用计算应付利息与预计收益的函数
 
+        }));
+
+        $('.dR-money').blur(function () {
             $.post(note_form.attr('action'), note_form.serialize(), function (data) {
                 if (1 === data.code) {
-                    if ('/site/login' == data.tourl) {
-                        //获取登录信息
-                        login();
-                    } else if('/user/qpay/binding/umpmianmi' == data.tourl){
-                        mianmi();
-                    } else if('/user/userbank/idcardrz' == data.tourl){
-                        location.href = '/user/userbank/identity';
-                    } else {
-                        if (data.tourl) {
-                            location.href = data.tourl;
-                        }
+                    if (typeof data.tourl === 'undefined' || '' === data.tourl) {
                         $('.dR-tishi-error').show();
                         $('.dR-tishi-error').html(data.message);
                     }
                 }
             });
-        }));
+        })
 
         var note_form = $('#note_order');
         var note_button = $('#order_submit');
