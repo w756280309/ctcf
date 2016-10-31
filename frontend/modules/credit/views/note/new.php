@@ -10,6 +10,7 @@ $this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/usercenter.css', ['depen
 $this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/transfer.css?v=20161027', ['depends' => FrontAsset::class]);
 $this->registerJsFile(ASSETS_BASE_URI.'js/useraccount/transfer.js', ['depends' => JqueryAsset::class]);
 $this->registerJsFile(ASSETS_BASE_URI.'js/jquery.ba-throttle-debounce.min.js?v=161008', ['depends' => JqueryAsset::class]);
+$this->registerJsFile(ASSETS_BASE_URI.'js/login/login_form.js', ['depends' => JqueryAsset::class]);
 
 $action = Yii::$app->controller->action->getUniqueId();
 $discountRate = Yii::$app->params['credit_trade']['max_discount_rate'];
@@ -238,6 +239,10 @@ $calcDiscountRate = min($discountRate, bcmul(bcdiv($asset['currentInterest'], bc
             if (data['code'] === 1) {
                 for (var i = 0; i < res.length; i++) {
                     var err = res[i];
+                    if ('请登录' === err['msg']) {
+                        login();
+                        return;
+                    }
                     if (err['attribute'] === 'amount') {
                         amount_error.html(err['msg']);
                         amount_error.show();

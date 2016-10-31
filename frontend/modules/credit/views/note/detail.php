@@ -2,10 +2,12 @@
 $this->title = '转让详情';
 
 use frontend\assets\FrontAsset;
+use yii\web\JqueryAsset;
 
-$this->registerCssFile(ASSETS_BASE_URI.'css/credit/credit.css?v=161025', ['depends' => FrontAsset::class]);
 $this->registerJsFile(ASSETS_BASE_URI.'js/credit/detail.js?v=160922', ['depends' => FrontAsset::class]);
 $this->registerJsFile(ASSETS_BASE_URI.'js/jquery.ba-throttle-debounce.min.js?v=161008', ['depends' => FrontAsset::class]);
+$this->registerJsFile(ASSETS_BASE_URI.'js/login/login_form.js', ['depends' => JqueryAsset::class]);
+$this->registerCssFile(ASSETS_BASE_URI.'css/credit/credit.css?v=161025', ['depends' => FrontAsset::class]);
 $this->registerCssFile(ASSETS_BASE_URI.'css/pagination.css');
 $this->registerCssFile(ASSETS_BASE_URI . 'css/useraccount/chargedeposit.css');
 
@@ -255,21 +257,6 @@ $isClosed = $respData['isClosed'] || $nowTime >= $endTime;
         });
     });
 
-    //处理ajax登录
-    function login()
-    {
-        document.documentElement.style.overflow = 'hidden';   //禁用页面上下滚动效果
-
-        //如果已经加载过登录页面，则直接显示
-        if ($('.login-mark').length > 0) {
-            $('.login-mark').fadeIn();
-            $('.loginUp-box').fadeIn();
-        } else {
-            //加载登录页面
-            getLoginHtml();
-        }
-    }
-
     function recharge()
     {
         var isGuest = <?= Yii::$app->user->isGuest ? 'true' : 'false' ?>;
@@ -278,26 +265,6 @@ $isClosed = $respData['isClosed'] || $nowTime >= $endTime;
         } else {
             location.href = '/user/recharge/init';
         }
-    }
-
-    //获取登录页面
-    function getLoginHtml()
-    {
-        $.ajax({
-            beforeSend: function (req) {
-                req.setRequestHeader("Accept", "text/html");
-            },
-            'url': '/site/login-form',
-            'type': 'get',
-            'dataType': 'html',
-            'success': function (html) {
-                $('body').append(html);
-                $('.login-mark').fadeIn();
-                $('.loginUp-box').fadeIn();
-            }
-        });
-
-        return '';
     }
 
     //获取投标记录

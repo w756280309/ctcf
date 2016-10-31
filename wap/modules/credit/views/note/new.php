@@ -206,7 +206,12 @@ $calcDiscountRate = min($discountRate, bcmul(bcdiv($asset['currentInterest'], bc
                         toastCenter(err['msg']);
                         return false;
                     } else if (err['attribute'] === '' && err['msg']) {
-                        toastCenter(err['msg']);
+                        toastCenter(err['msg'], function () {
+                            if ('请登录' === err['msg']) {
+                                location.href = '/site/login';
+                            }
+                        });
+
                         return false;
                     }
                 }
