@@ -61,7 +61,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/jquery.ba-throttle-debounce.min.js?v=1
     $(function () {
         $.ajax({
             type: "get",
-            url: "<?= rtrim(\Yii::$app->params['clientOption']['host']['tx'], '/')?>/credit-note/calc",
+            url: "<?= rtrim(\Yii::$app->params['clientOption']['host']['tx_www'], '/')?>/credit-note/calc",
             data: {note_id:<?= $note['id']?>, amount: <?= $amount?>, rate: <?= $rate?>},
             dataType: "jsonp"
         });
