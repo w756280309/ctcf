@@ -213,6 +213,7 @@ $calcDiscountRate = min($discountRate, bcmul(bcdiv($asset['currentInterest'], bc
     {
         $('.mask').hide();
         $('.confirmBox').hide();
+
         var rate = parseFloat(discount_rate_input.val());
         if (!rate) {
             rate = 0;
@@ -364,7 +365,12 @@ $calcDiscountRate = min($discountRate, bcmul(bcdiv($asset['currentInterest'], bc
                 return false;
             }
 
+            if (!$('.agreement-err').hasClass('hide')) {
+                $('.agreement-err').addClass('hide');
+            }
+
             discount_rate_error.hide();
+
             var rate = parseFloat(discount_rate_input.val());
             if (!rate) {
                 rate = 0;
