@@ -22,6 +22,9 @@ class OrderController extends BaseController
                         'roles' => ['@'],
                     ],
                 ],
+                'except' => [
+                    'new',
+                ],
             ],
         ];
     }
@@ -60,13 +63,14 @@ class OrderController extends BaseController
     public function actionNew()
     {
         $request = \Yii::$app->request;
-        $userId = \Yii::$app->user->identity->getId();
         $noteId = $request->post('note_id');
         $principal = $request->post('principal');//实际购买本金
-        $user = User::findOne($userId);
+        $user = $this->getAuthedUser();
+
         if (null === $user) {
-            return ['code' => 0, 'url' => '', 'message' => '无法找到该用户'];
+            return ['code' => 1, 'url' => '/site/login', 'message' => ''];
         }
+
         $creditNote = new CreditNote();
         $checkResult = $creditNote->check($noteId, $principal, $user);
         if (1 === $checkResult['code']) {
@@ -76,7 +80,7 @@ class OrderController extends BaseController
         try {
             $txClient = \Yii::$container->get('txClient');
             $res = $txClient->post('credit-order/new', [
-                'user_id' => $userId,
+                'user_id' => $user->id,
                 'note_id' => $noteId,
                 'principal' => bcmul($principal, 100, 0),
             ]);

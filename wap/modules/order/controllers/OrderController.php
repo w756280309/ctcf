@@ -79,7 +79,7 @@ class OrderController extends BaseController
     public function actionDoorder($sn)
     {
         if (empty($sn)) {
-            throw new \yii\web\NotFoundHttpException();   //判断参数无效时,抛404异常
+            throw $this->ex404();   //判断参数无效时,抛404异常
         }
 
         $money = \Yii::$app->request->post('money');

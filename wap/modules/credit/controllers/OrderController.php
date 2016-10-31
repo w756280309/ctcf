@@ -25,6 +25,9 @@ class OrderController extends Controller
                         'roles' => ['@'],
                     ],
                 ],
+                'except' => [
+                    'new',
+                ],
             ],
         ];
     }
@@ -63,6 +66,10 @@ class OrderController extends Controller
         $user = $this->getAuthedUser();
         $noteId = $request->post('note_id');
         $principal = $request->post('amount');//实际购买本金
+
+        if (null === $user) {
+            return ['code' => 1, 'message' => '请登录', 'url' => '/site/login'];
+        }
 
         $creditNote = new CreditNote();
         $checkResult = $creditNote->check($noteId, $principal, $user);
