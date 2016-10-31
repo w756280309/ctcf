@@ -11,7 +11,7 @@ use wap\assets\WapAsset;
 use yii\web\JqueryAsset;
 
 $this->registerCssFile(ASSETS_BASE_URI.'css/swiper.min.css', ['depends' => WapAsset::class]);
-$this->registerCssFile(ASSETS_BASE_URI.'css/wap_index.css?v=20161026', ['depends' => WapAsset::class]);
+$this->registerCssFile(ASSETS_BASE_URI.'css/wap_index.css?v=20161031', ['depends' => WapAsset::class]);
 $this->registerCssFile(ASSETS_BASE_URI.'css/kaipin.css', ['depends' => WapAsset::class]);
 $this->registerJsFile(ASSETS_BASE_URI.'js/swiper.min.js', ['depends' => JqueryAsset::class, 'position' => 1]);
 $this->registerJsFile(ASSETS_BASE_URI.'js/lib.flexible/lib.flexible.js', ['depends' => JqueryAsset::class, 'position' => 1]);
@@ -84,51 +84,54 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/index.js?v=20161021', ['depends' => Jq
 <!-- 公告结束 -->
 
 <!--精品推荐开始-->
-<div class="index-recommend">
-    <div class="index-recommend-top clearfix">
-        <div class="index-recommend-left lf clearfix">
-            <img class="lf" src="<?= ASSETS_BASE_URI ?>images/index/recomd.png" alt="">
-            <p>精品推荐</p>
-        </div>
-        <div class="index-recommend-right rg">
-            <a href="/deal/deal/index">更多 <img src="<?= ASSETS_BASE_URI ?>images/index/arrow.png" alt=""></a>
-        </div>
-    </div>
-    <a href="/deal/deal/detail?sn=<?= $deal->sn ?>">
-        <div class="index-recommend-bottom">
-            <h2><?= $deal->title ?></h2>
-            <ul class="clearfix">
-                <li class="lf">
-                    <?php if (!empty($deal->jiaxi) && !$deal->isFlexRate) { ?>
-                        <span><?= StringUtils::amountFormat2(OnlineProduct::calcBaseRate($deal->yield_rate, $deal->jiaxi)) ?></span><em>%</em><em class="index-recommend-crea">+<?= StringUtils::amountFormat2($deal->jiaxi) ?>%</em>
-                    <?php } else { ?>
-                        <span><?= LoanHelper::getDealRate($deal) ?></span><em>%</em>
-                    <?php } ?>
-                    <p>预期年化</p>
-                </li>
-                <li class="lf">
-                    <?php $ex = $deal->getDuration() ?>
-                    <span><?= $ex['value'] ?></span><em><?= $ex['unit'] ?></em>
-                    <p>期限</p>
-                </li>
-                <li class="lf">
-                    <span><?= StringUtils::amountFormat2($deal->start_money) ?></span><em>元</em>
-                    <p>起投金额</p>
-                </li>
-            </ul>
-            <div class="recommend-progress">
-                <?php $rate = OnlineProduct::STATUS_FOUND === $deal->status ? 100 : number_format($deal->finish_rate * 100, 0); ?>
-                <span class="recommend-all"><span class="recommend-pro" style="width: <?= $rate ?>%;"></span></span>
-                <em class="rg"><?= $rate ?>%</em>
+<?php if (!empty($deal)) { ?>
+    <div class="index-recommend">
+        <div class="index-recommend-top clearfix">
+            <div class="index-recommend-left lf clearfix">
+                <img class="lf" src="<?= ASSETS_BASE_URI ?>images/index/recomd.png" alt="">
+                <p>精品推荐</p>
             </div>
+        </div>
+        <a href="/deal/deal/detail?sn=<?= $deal->sn ?>">
+            <div class="index-recommend-bottom">
+                <h2><?= $deal->title ?></h2>
+                <ul class="clearfix">
+                    <li class="lf">
+                        <?php if (!empty($deal->jiaxi) && !$deal->isFlexRate) { ?>
+                            <span><?= StringUtils::amountFormat2(OnlineProduct::calcBaseRate($deal->yield_rate, $deal->jiaxi)) ?></span><em>%</em><em class="index-recommend-crea">+<?= StringUtils::amountFormat2($deal->jiaxi) ?>%</em>
+                        <?php } else { ?>
+                            <span><?= LoanHelper::getDealRate($deal) ?></span><em>%</em>
+                        <?php } ?>
+                        <p>预期年化</p>
+                    </li>
+                    <li class="lf">
+                        <?php $ex = $deal->getDuration() ?>
+                        <span><?= $ex['value'] ?></span><em><?= $ex['unit'] ?></em>
+                        <p>期限</p>
+                    </li>
+                    <li class="lf">
+                        <span><?= StringUtils::amountFormat2($deal->start_money) ?></span><em>元</em>
+                        <p>起投金额</p>
+                    </li>
+                </ul>
+                <div class="recommend-progress">
+                    <?php $rate = OnlineProduct::STATUS_FOUND === $deal->status ? 100 : number_format($deal->finish_rate * 100, 0); ?>
+                    <span class="recommend-all"><span class="recommend-pro" style="width: <?= $rate ?>%;"></span></span>
+                    <em class="rg"><?= $rate ?>%</em>
+                </div>
 
-            <div class="index-recommend-notice">
-                <img src="<?= ASSETS_BASE_URI ?>images/index/dot.png" alt="">
-                <span><?= Yii::$app->params['refund_method'][$deal->refund_method] ?></span>
+                <div class="index-recommend-notice">
+                    <img src="<?= ASSETS_BASE_URI ?>images/index/dot.png" alt="">
+                    <span><?= Yii::$app->params['refund_method'][$deal->refund_method] ?></span>
+                </div>
             </div>
-        </div>
-    </a>
-</div>
+        </a>
+        <a class="more-msg" href="/deal/deal/index">
+            更多理财产品
+            <img src="<?= ASSETS_BASE_URI ?>images/index/more.png" alt="">
+        </a>
+    </div>
+<?php } ?>
 <!--精品推荐结束-->
 
 <!--股东背景开始-->
@@ -173,7 +176,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/index.js?v=20161021', ['depends' => Jq
                 <dl class="clearfix">
                     <dt class="lf"><img src="<?= ASSETS_BASE_URI ?>images/index/icon3.png?v=20161026" alt=""></dt>
                     <dd class="lf">
-                        <p>资金安全</p>
+                        <p>资金稳妥</p>
                         <span>第三方资金托管</span>
                     </dd>
                 </dl>

@@ -123,10 +123,10 @@
         <p class="suojin">系温州日报报业集团全资子公司；</p>
         <p class="suojin">南京金融资产交易中心，</p>
         <p class="suojin">省级金融主管部门审批的合规平台；</p>
-        <p class="h-num"><a href="javascript:;" class="number">3</a><span>安全</span>合规</p>
+        <p class="h-num"><a href="javascript:;" class="number">3</a><span>专业</span>稳健</p>
         <p class="suojin">资金全程托管，与平台隔离不被挪用；</p>
-        <p class="suojin">绑定本人银行卡，提现只进本人账户很安全；</p>
-        <p class="suojin">层层风控，安全至上；专业稳健，合法合规；</p>
+        <p class="suojin">绑定本人银行卡，提现只进本人账户；</p>
+        <p class="suojin">层层风控，专业稳健，合法合规；</p>
         <p class="h-num"><a href="javascript:;" class="number">4</a>产品<span>优质</span></p>
         <p class="suojin">主流金融机构产品、优质政府平台类产品、</p>
         <p class="suojin">优质供应链金融产品，期限多样，收益可观；</p>

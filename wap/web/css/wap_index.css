@@ -177,7 +177,7 @@ body {
 }
 .index-recommend-bottom {
     height: 3.19rem;
-    padding:0.3rem 0.55rem 0.3rem 0.55rem;
+    padding:0.3rem 0.55rem 0.1rem 0.55rem;
 }
 .index-recommend-bottom h2{
     width:8.9rem;
@@ -374,4 +374,21 @@ a.index-notice-login:link {
 .index-notice-middle .index-notice-register {
     background: transparent;
     color: #ff6155;
+}
+.more-msg {
+    display: block;
+    height:0.96rem;
+    font-size: 0.32rem;
+    color: #f27277;
+    text-align: center;
+    line-height: 0.96rem;
+    border-top: 1px solid #eee;
+}
+.more-msg img {
+    width:0.33rem;
+    vertical-align: middle;
+    margin-top: -0.1rem;
+}
+a.more-msg:hover {
+    color: #f27277;
 }
