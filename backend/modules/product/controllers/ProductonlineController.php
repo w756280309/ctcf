@@ -325,7 +325,7 @@ class ProductonlineController extends BaseController
         if ($online_product->status > OnlineProduct::STATUS_LIU) {
             return ['res' => 0, 'msg' => '项目已经成立'];
         }
-        $order = new \common\models\order\OnlineOrder();
+        $order = new OnlineOrder();
         $res = $order->cancelOnlinePro($id);
         $msg = $res ? '撤标成功' : '撤标失败';
 

@@ -16,7 +16,6 @@ class OnlineRepaymentPlan extends \yii\db\ActiveRecord
     const STATUS_WEIHUAN = 0;//0、未还
     const STATUS_YIHUAN = 1;// 1、已还
     const STATUS_TIQIAM = 2;// 2、提前还款
-    const STATUS_WUXIAO = 3;// 3，无效;
 
     public static function createSN($pre = 'hkjh')
     {

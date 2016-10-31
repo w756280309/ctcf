@@ -30,7 +30,6 @@ class OnlineOrder extends \yii\db\ActiveRecord implements \P2pl\OrderTxInterface
     const STATUS_FALSE = 0;
     const STATUS_SUCCESS = 1;
     const STATUS_CANCEL = 2;
-    const STATUS_WUXIAO = 3;
 
     //投资来源
     const INVEST_FROM_WAP = 1;//wap
