@@ -62,12 +62,12 @@
     float: left;
 }
 .invest-box .invest-container-box .invest-centent .invest-ct-lf .invest-ct-lf-title {
-    margin:40px 0 0 30px;
+    margin: 40px 0 0 30px;
     padding-bottom: 30px;
-    width:476px;
-    height:20px;
-    line-height:20px;
-    border-bottom:1px solid #e6e6e6;
+    width: 516px;
+    height: 20px;
+    line-height: 20px;
+    border-bottom: 1px solid #e6e6e6;
 }
 .invest-box .invest-container-box .invest-centent .invest-ct-lf .invest-ct-lf-content {
     background: url(../../images/deal/buy_bg.png) no-repeat left bottom;
@@ -77,16 +77,18 @@
     min-height:190px;
 }
 
-.invest-box .invest-centent .invest-ct-lf .invest-ct-lf-title .percentage{
+.invest-box .invest-centent .invest-ct-lf .invest-ct-lf-title .percentage {
     padding-left: 21px;
-    width:208px;
-    font-size:14px;
+    width: 228px;
+    font-size: 14px;
 }
+
 .invest-box .invest-centent .invest-ct-lf .invest-ct-lf-title .time {
     padding-left: 21px;
-    width:208px;
-    font-size:14px;
+    width: 228px;
+    font-size: 14px;
 }
+
 .invest-box .percentage span.nums,.invest-box .time span.nums  {
     padding-left: 18px;
     font-size:18px;

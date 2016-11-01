@@ -2,7 +2,7 @@
 use common\view\LoanHelper;
 
 $this->title = '确认订单';
-$this->registerCssFile(ASSETS_BASE_URI . 'css/deal/buy.css?v=20160928');
+$this->registerCssFile(ASSETS_BASE_URI . 'css/deal/buy.css?v=20161101');
 ?>
 <!-- invest BUY start-->
 <div class="invest-box clearfix">
