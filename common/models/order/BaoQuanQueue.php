@@ -25,7 +25,7 @@ class BaoQuanQueue extends ActiveRecord
 
     const TYPE_LOAN = 'loan';//普通标的订单保全队列记录
     const TYPE_CREDIT_ORDER = 'credit_order';//买方债权订单保全记录队列
-    const TYPE_CREDIT_ASSET = 'asset';//卖方资产被购买订单综合保全队列
+    const TYPE_CREDIT_NOTE = 'credit_note';//卖方资产被购买订单综合保全队列
 
     public static function tableName()
     {

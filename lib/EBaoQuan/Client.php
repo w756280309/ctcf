@@ -37,7 +37,7 @@ class Client
      * @throws Exception
      * @throws NotFoundHttpException
      */
-    public function createBq(OnlineProduct $onlineProduct)
+    public static function createBq(OnlineProduct $onlineProduct)
     {
         //查看所有成功订单
         $orders = OnlineOrder::find()->where(['status' => 1, 'online_pid' => $onlineProduct->id])->orderBy(['order_time' => SORT_DESC])->all();
@@ -56,7 +56,7 @@ class Client
                         $c = $v['content'];
                         if ($c) {
                             //获取合同模板
-                            $c = $this->handleContent($k, $c, $order);
+                            $c = self::handleContent($k, $c, $order);
                             $content = $content . $c . ' <br/><br/><hr/><br/><br/>';
                         }
                     }
@@ -65,35 +65,130 @@ class Client
                    // $url = file_get_contents(dirname(__DIR__).'/../lib/EBaoQuan/jinjiao_data_url');
                     //$content .= '<img style="position: fixed;top:50px;right:170px;" src="'.$url.'"/>'; 保全签章
                     //生成PDF
-                    $file = $this->createPdf($content, $order->sn);
+                    $file = self::createPdf($content, $order->sn);
                     if (file_exists($file)) {
                         //生成保全
-                        $this->contractFileCreate($file, $user, $order, $k, $onlineProduct->title);
+                        $responseJson = self::contractFileCreate($file, $user, $order->order_money, $onlineProduct->title);
+                        self::addBaoQuan($responseJson, EbaoQuan::TYPE_LOAN, $order->id, EbaoQuan::ITEM_TYPE_LOAN_ORDER, $onlineProduct->title, $user->id);
                         unlink($file);
                     }
                 } catch (Exception $e) {
+                    \Yii::trace('确认计息时进行保全，标的ID:'.$onlineProduct->id.';保全失败,失败订单ID:'.$order->id.';失败信息'.$e->getMessage(), 'bao_quan');
                     throw $e;
                 }
             }
         }
     }
 
+    /**
+     * 债权保全（买方标的合同和买方转让合同）
+     * @param array $contracts  填充后的合同，包括标的相关合同和债权相关合同
+     */
+    public static function createCreditBq(array $contracts, User $user, array $asset)
+    {
+        if (!isset($contracts['loanContract']) || !isset($contracts['creditContract']) || !isset($contracts['loanAmount']) || !isset($contracts['loanId'])) {
+            throw new \Exception('合同内容不全');
+        }
+        $loan = OnlineProduct::findOne($contracts['loanId']);
+        if (count($contracts['loanContract']) <= 0 || count($contracts['creditContract']) <= 0 || empty($loan)) {
+            throw new \Exception('合同内容不全');
+        }
+        $loanContract = $contracts['loanContract'];
+        //合并标的合同
+        $finalLoanContent = implode(array_column($loanContract, 'content'), ' <br/><br/><hr/><br/><br/>');
+        $loanAmount = $contracts['loanAmount'];
+        //保全标的合同
+        try {
+            $file = self::createPdf($finalLoanContent, time().rand(10000, 99999));
+            if (file_exists($file)) {
+                //生成保全
+                $responseJson = self::contractFileCreate($file, $user, $loanAmount, $loan->title);
+                self::addBaoQuan($responseJson, EbaoQuan::TYPE_LOAN, $asset['credit_order_id'], EbaoQuan::ITEM_TYPE_CREDIT_ORDER, $loan->title, $user->id);
+                unlink($file);
+            }
+        } catch (\Exception $ex) {
+            \Yii::trace('购买债权订单成功之后保全标的合同，标的ID:'.$contracts['loanId'].';保全失败,资产ID:'.$asset['id'].';失败信息'.$ex->getMessage(), 'bao_quan');
+            throw $ex;
+        }
+        //保全债权合同
+        $creditContract = $contracts['creditContract'];
+        foreach ($creditContract as $contract) {
+            if (!isset($contract['type']) || !isset($contract['amount'])) {
+                throw new \Exception('合同信息不完善');
+            }
+            if ($contract['type'] === 'credit_order') {
+                //只保全其购买他人转让的合同
+                //保全标的合同
+                try {
+                    $file = self::createPdf($contract['content'], time().rand(10000, 99999));
+                    if (file_exists($file)) {
+                        //生成保全
+                        $responseJson = self::contractFileCreate($file, $user, $contract['amount'], $loan->title);
+                        self::addBaoQuan($responseJson, EbaoQuan::TYPE_CREDIT, $asset['credit_order_id'], EbaoQuan::ITEM_TYPE_CREDIT_ORDER, $loan->title, $user->id);
+                        unlink($file);
+                    }
+                } catch (\Exception $ex) {
+                    \Yii::trace('购买债权订单成功之后保全转让合同，标的ID:'.$contracts['loanId'].';保全失败,资产ID:'.$asset['id'].';失败信息'.$ex->getMessage(), 'bao_quan');
+                    throw $ex;
+                }
+            }
+        }
+    }
+
+    //债权转让保全（卖方合同）
+    public static function createCreditSellerBq($content, User $user, $amount, OnlineProduct $loan, $noteId, User $seller) {
+        try {
+            $file = self::createPdf($content, time().rand(10000, 99999));
+            if (file_exists($file)) {
+                //生成保全
+                $responseJson = self::contractFileCreate($file, $user, $amount, $loan->title);
+                self::addBaoQuan($responseJson, EbaoQuan::TYPE_CREDIT, $noteId, EbaoQuan::ITEM_TYPE_CREDIT_NOTE, $loan->title, $seller->id);
+                unlink($file);
+            }
+        } catch (\Exception $ex) {
+            \Yii::trace('转让结束之后生成保全合同，标的ID:'.$loan->id.';保全失败,债权ID:'.$noteId.';失败信息'.$ex->getMessage(), 'bao_quan');
+            throw $ex;
+        }
+    }
+
+    //保全成功之后添加保全记录
+    private static function addBaoQuan($responseJson, $type, $itemId, $itemType, $title, $userID)
+    {
+        $model = new EbaoQuan([
+            'type' => $type,
+            'title' => $title,
+            'itemId' => $itemId,
+            'itemType' => $itemType,
+            'uid' => $userID,
+            'baoId' => $responseJson->preservationId,
+            'docHash' => $responseJson->docHash,
+            'preservationTime' => $responseJson->preservationTime,
+            'success' => $responseJson->success,
+        ]);
+        if (!$responseJson->success) {
+            $model->errMessage = $responseJson->message . '解决方案：' . $responseJson->solution;
+        }
+        return $model->save(false);
+    }
+
     //测试连通性
-    public function ping()
+    public static function ping()
     {
         //组建请求参数
         $requestObj = new PingRequest();
         //请求
         $response = RopUtils::doPostByObj($requestObj);
 
-        //以下为返回的一些处理
-        $responseJson = json_decode($response);
-        echo("response:" . $response . "</br>");
-        var_dump(json_encode($responseJson)); //null
-        if ($responseJson->success) {
-            echo $requestObj->getMethod() . "->处理成功";
+        if ($response) {
+            //以下为返回的一些处理
+            $responseJson = json_decode($response);
+            if ($responseJson->success) {
+                echo $requestObj->getMethod() . "->处理成功";
+            } else {
+                echo $requestObj->getMethod() . "->处理失败";
+            }
         } else {
-            echo $requestObj->getMethod() . "->处理失败";
+            echo '链接异常';
         }
     }
 
@@ -103,7 +198,7 @@ class Client
      * @return string|null 返回下载地址或空字符串
      * @throws \Exception
      */
-    public function contractFileDownload(EbaoQuan $ebaoQuan)
+    public static function contractFileDownload(EbaoQuan $ebaoQuan)
     {
         //组建请求参数
         $requestObj = new ContractFileDownloadUrlRequest();
@@ -121,7 +216,7 @@ class Client
     }
 
     //用户查看保全信息，暂时未使用
-    public function preservationGet(EbaoQuan $ebaoQuan)
+    public static function preservationGet(EbaoQuan $ebaoQuan)
     {
         //组建请求参数
         $requestObj = new PreservationGetRequest();
@@ -147,7 +242,7 @@ class Client
      * @return string|null 证书查看地址或空字符村
      * @throws \Exception
      */
-    public function certificateLinkGet(EbaoQuan $ebaoQuan)
+    public static function certificateLinkGet(EbaoQuan $ebaoQuan)
     {
         //组建请求参数
         $requestObj = new CertificateLinkGetRequest();
@@ -166,7 +261,7 @@ class Client
     }
 
     //查看用户确认状态，暂时未使用
-    public function contractStatusGet(EbaoQuan $ebaoQuan)
+    public static function contractStatusGet(EbaoQuan $ebaoQuan)
     {
         //组建请求参数
         $requestObj = new ContractStatusGetRequest();
@@ -199,12 +294,11 @@ class Client
      * @throws NotFoundHttpException
      * @throws \Exception
      */
-    private function contractFileCreate($filePath, User $user, OnlineOrder $onlineOrder, $type, $title)
+    private static function contractFileCreate($filePath, User $user, $amount, $loanTitle)
     {
         if (!file_exists($filePath)) {
             throw new NotFoundHttpException('合同文件(' . $filePath . ')不存在');
         }
-        $type = intval($type);
         require_once dirname(__FILE__) . '/../org_mapu_themis_rop_model/enum.php';
         //组建请求参数
         //下面语句当系统为windows时，访问中文文件名的内容需转换，当前程序中的文件名从utf-8->gbk，再进行读取文件路径
@@ -235,10 +329,11 @@ class Client
         $requestObj->sourceRegistryId = $user['id'];
         $requestObj->userEmail = $user['email'];
         $requestObj->mobilePhone = $user['mobile'];
-        $requestObj->contractAmount = $onlineOrder['order_money'];
-        $requestObj->contractNumber = $onlineOrder['sn'] . '-' . strval($type) . '-' . time();
+        $requestObj->contractAmount = $amount;
+        $microtime = explode('.', microtime(true));
+        $requestObj->contractNumber = $microtime[0].$microtime[1].rand(10000, 99999);
         //$requestObj->objectId="0000001";//关联保全时使用
-        $requestObj->comments = $title;
+        $requestObj->comments = $loanTitle;
         $requestObj->isNeedSign = "1";
         //isNeedSign 这个参数如果为1是需要签名，则上传的文件必须是pdf文件，且服务端会将文件做签名后再保全.请->
         //使用保全contractFileDownloadUrl.php例子的使用方法得到合同保全的保全后文件的下载地址进行下载。（下载地址有时效性，过期后重新按此方法取得新地址）
@@ -247,42 +342,7 @@ class Client
         $response = RopUtils::doPostByObj($requestObj);
         //以下为返回的一些处理
         $responseJson = json_decode($response);
-        //var_dump($response);
-        //var_dump($responseJson); //null
-        if ($responseJson->success) {
-            $this->insertData([
-                'type' => $type,
-                'title' => $title,
-                'orderId' => $onlineOrder->id,
-                'uid' => $user->id,
-                'baoId' => $responseJson->preservationId,
-                'docHash' => $responseJson->docHash,
-                'preservationTime' => $responseJson->preservationTime,
-                'success' => $responseJson->success,
-            ]);
-            return true;
-            // echo $requestObj->getMethod()."->处理成功";
-        } else {
-            $this->insertData([
-                'type' => $type,
-                'title' => $title,
-                'orderId' => $onlineOrder->id,
-                'uid' => $user->id,
-                'baoId' => $responseJson->preservationId,
-                'docHash' => $responseJson->docHash,
-                'preservationTime' => $responseJson->preservationTime,
-                'success' => $responseJson->success,
-                'errMessage' => $responseJson->message . '解决方案：' . $responseJson->solution
-            ]);
-            return false;
-            //echo $requestObj->getMethod()."->处理失败";
-        }
-    }
-
-    private function insertData($data)
-    {
-        $model = new EbaoQuan($data);
-        return $model->save(false);
+        return $responseJson;
     }
 
     /**
@@ -291,7 +351,7 @@ class Client
      * @param string $fileName pdf文件名
      * @return string
      */
-    private function createPdf($content, $fileName)
+    private static function createPdf($content, $fileName)
     {
         $content = '<head><meta charset="utf-8"/></head>' . $content;
         $file = \Yii::$app->getBasePath() . '/runtime/bao_quan/' . $fileName . '(' . date('YmdHis') . ')' . '.pdf';
@@ -313,7 +373,7 @@ class Client
      * @param OnlineOrder $onlineOrder
      * @return string
      */
-    private function handleContent($type, $content, OnlineOrder $onlineOrder)
+    private static function handleContent($type, $content, OnlineOrder $onlineOrder)
     {
         if (in_array($type, [0, 1, 2])) {
             $title = '产品合同';

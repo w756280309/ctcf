@@ -11,7 +11,8 @@ use yii\behaviors\TimestampBehavior;
  * @property integer $id
  * @property integer $type
  * @property string $title
- * @property integer $orderId
+ * @property integer $itemId
+ * @property string  $itemType
  * @property integer $uid
  * @property integer $baoId
  * @property string $docHash
@@ -21,9 +22,12 @@ use yii\behaviors\TimestampBehavior;
  */
 class EbaoQuan extends \yii\db\ActiveRecord
 {
-    const TYPE_SUBSCRIPTION = 0;//认购协议
-    const TYPE_RISK = 1;//风险提示书
-    const TYPE_CONTENT = 2;//项目说明
+    const TYPE_LOAN = 0;//标的合同
+    const TYPE_CREDIT = 1;//债权合同
+
+    const ITEM_TYPE_LOAN_ORDER = 'loan_order';//从标的订单新建的保全
+    const ITEM_TYPE_CREDIT_ORDER = 'credit_order';//从债权订单新建的保全,买方
+    const ITEM_TYPE_CREDIT_NOTE = 'credit_note';//从结束的转让新建的保全,卖方
 
     /**
      * @inheritdoc
@@ -39,10 +43,11 @@ class EbaoQuan extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['orderId', 'uid', 'baoId'], 'required'],
-            [['orderId', 'uid', 'baoId', 'success', 'type', 'created_at', 'updated_at'], 'integer'],
+            [['itemId', 'uid', 'baoId', 'itemType', 'type'], 'required'],
+            [['itemId', 'uid', 'baoId', 'success', 'type', 'created_at', 'updated_at'], 'integer'],
             [['preservationTime'], 'integer', 'max' => 13],
-            [['docHash', 'errMessage', 'title'], 'string', 'max' => 200]
+            [['docHash', 'errMessage', 'title'], 'string', 'max' => 200],
+            [['itemType'], 'string'],
         ];
     }
 
@@ -53,7 +58,8 @@ class EbaoQuan extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'orderId' => 'Order ID',
+            'itemId' => 'Item Id',
+            'itemType' => 'Item Type',
             'uid' => 'Uid',
             'baoId' => 'Bao ID',
             'docHash' => 'Doc Hash',
