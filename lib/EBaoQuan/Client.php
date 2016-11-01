@@ -141,7 +141,7 @@ class Client
             $file = self::createPdf($content, time().rand(10000, 99999));
             if (file_exists($file)) {
                 //生成保全
-                $responseJson = self::contractFileCreate($file, $user, $amount, $loan->title);
+                $responseJson = self::contractFileCreate($file, $seller, $amount, $loan->title);
                 self::addBaoQuan($responseJson, EbaoQuan::TYPE_CREDIT, $noteId, EbaoQuan::ITEM_TYPE_CREDIT_NOTE, $loan->title, $seller->id);
                 unlink($file);
             }
