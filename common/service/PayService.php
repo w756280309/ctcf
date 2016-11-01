@@ -173,6 +173,10 @@ class PayService
             return $commonret;
         }
 
+        if (null === $this->cdeal) {
+            return ['code' => 1,  'message' => '标的信息不存在'];
+        }
+
         if (empty($money)) {
             return ['code' => self::ERROR_MONEY_FORMAT,  'message' => self::getErrorByCode(self::ERROR_MONEY_FORMAT)];
         }
@@ -185,7 +189,7 @@ class PayService
         if ($coupon) {
             $couponMoney = $coupon->couponType->amount;
             try {
-                UserCoupon::checkAllowUse($coupon, $money, $user);
+                UserCoupon::checkAllowUse($coupon, $money, $user, $this->cdeal);
             } catch (Exception $ex) {
                 return ['code' => 1,  'message' => $ex->getMessage()];
             }

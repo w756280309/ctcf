@@ -95,6 +95,10 @@ class UserCoupon extends \yii\db\ActiveRecord
      */
     public static function checkAllowUse(UserCoupon $coupon, $money, User $user = null, Loan $loan = null)
     {
+        if (null !== $loan && !$loan->allowUseCoupon) {
+            throw new Exception('该项目不允许使用代金券');
+        }
+
         if ($coupon->isUsed) {
             throw new Exception('代金券已经使用');
         }

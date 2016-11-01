@@ -461,6 +461,15 @@ $is_online = in_array($model->status, [2, 3, 4, 5, 6, 7]);//判断标的是否�
         <div class="row-fluid">
             <div class="span6 ">
                 <div class="control-group">
+                    <label class="control-label">允许使用代金券</label>
+                    <div class="controls">
+                        <?= $form->field($model, 'allowUseCoupon')->checkbox(['autocomplete' => 'on'])->label(false) ?>
+                    </div>
+                </div>
+            </div>
+
+            <div class="span6 ">
+                <div class="control-group">
                     <label class="control-label">测试标的</label>
                     <div class="controls">
                         <?=  $form->field($model, 'isTest')->checkbox(['autocomplete' => 'on'])->label(false)?>

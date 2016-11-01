@@ -12,7 +12,6 @@ use frontend\controllers\BaseController;
 use Yii;
 use yii\data\Pagination;
 use yii\helpers\Html;
-use yii\web\NotFoundHttpException;
 
 class DealController extends BaseController
 {
@@ -81,7 +80,7 @@ class DealController extends BaseController
     public function actionCheck($sn)
     {
         if (empty($sn)) {
-            throw new NotFoundHttpException();   //判断参数无效时,抛404异常
+            throw $this->ex404();   //判断参数无效时,抛404异常
         }
         $money = \Yii::$app->request->post('money');
         $coupon_id = \Yii::$app->request->post('couponId');
@@ -115,13 +114,20 @@ class DealController extends BaseController
         if (Yii::$app->user->isGuest) {
             return $this->redirect('/site/login');
         }
+
         $coupon_id = Yii::$app->request->get('coupon_id');
         $coupon = null;
         if ($coupon_id) {
+            $loan = $this->findOr404(OnlineProduct::class, ['sn' => $sn]);
+            if (!$loan->allowUseCoupon) {
+                throw new \Exception('该标的不能使用代金券');
+            }
+
             $coupon = $this->findOr404(UserCoupon::className(), $coupon_id);
         }
         $deal = $this->findOr404(OnlineProduct::className(), ['online_status' => OnlineProduct::STATUS_ONLINE, 'del_status' => OnlineProduct::STATUS_USE, 'sn' => $sn]);
         $cou_money = $coupon ? ($coupon->couponType ? $coupon->couponType->amount : 0) : 0;
+
         return $this->render('confirm', [
             'deal' => $deal,
             'coupon' => $coupon,

@@ -74,6 +74,10 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/useraccount/chargedeposit.css');
             <?php if (!empty($deal->kuanxianqi)) { ?>
                 <p class="grace-period">融资方可提前<?= $deal->kuanxianqi ?>天内任一天还款，客户收益按实际天数计息。</p>
             <?php } ?>
+
+            <?php if (!$deal->allowUseCoupon) { ?>
+                <p class="grace-period">此项目不参与活动，不可使用代金券。</p>
+            <?php } ?>
         </div>
         <?php if ($deal->isFlexRate) { ?>
             <!--pl-subscription-->
@@ -168,7 +172,7 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/useraccount/chargedeposit.css');
                             <li class="dR-inner-right"><span><i id="expect_profit">0.00</i></span>元</li>
                         </ul>
 
-                        <?php if (count($data) > 0) { ?>
+                        <?php if (count($data) > 0 && $deal->allowUseCoupon) { ?>
                             <!--待选代金券-->
                             <ul class="dR-down clearfix">
                                 <li class="dR-down-left"  id="coupon_title"><img class="dR-add" src="/images/deal/add.png" alt="">选择一张代金券<i id="coupon_count"><?= count($data) ?></i></li>

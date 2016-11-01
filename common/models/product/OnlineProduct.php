@@ -44,6 +44,7 @@ use yii\behaviors\TimestampBehavior;
  * @property integer $paymentDay
  * @property integer $issuer
  * @property int $isTest
+ * @property boolean $allUseCoupon 是否允许使用代金券
  */
 class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
 {
@@ -108,7 +109,7 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
             'create' => ['title', 'sn', 'cid', 'money', 'borrow_uid', 'expires', 'expires_show', 'yield_rate', 'start_money', 'borrow_uid', 'fee', 'status',
                 'description', 'refund_method', 'account_name', 'account', 'bank', 'dizeng_money', 'start_date', 'end_date', 'full_time',
                 'is_xs', 'yuqi_faxi', 'order_limit', 'creator_id', 'del_status', 'status', 'isPrivate', 'allowedUids', 'finish_date', 'channel', 'jixi_time', 'sort',
-                'jiaxi', 'kuanxianqi', 'isFlexRate', 'rateSteps', 'issuer', 'issuerSn', 'paymentDay', 'isTest', 'filingAmount'],
+                'jiaxi', 'kuanxianqi', 'isFlexRate', 'rateSteps', 'issuer', 'issuerSn', 'paymentDay', 'isTest', 'filingAmount', 'allowUseCoupon'],
         ];
     }
 
@@ -229,7 +230,7 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
             ['paymentDay', 'default', 'value' => 20],    //固定还款日,默认值每月20号,范围为1到28
             ['paymentDay', 'compare', 'compareValue' => 1, 'operator' => '>='],
             ['paymentDay', 'compare', 'compareValue' => 28, 'operator' => '<='],
-            ['isTest', 'integer'],
+            [['isTest', 'allowUseCoupon'], 'integer'],
             [['start_money', 'dizeng_money'], 'checkMoney'],
         ];
     }
@@ -383,6 +384,7 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
             'isTest' => '是测试标',
             'issuer' => '发行方',
             'issuerSn' => '发行方项目编号',
+            'allowUseCoupon' => '是否可以使用代金券',
         ];
     }
 

@@ -59,6 +59,7 @@ class ProductonlineController extends BaseController
             $model->funded_money = 0;
             $model->full_time = 0;
             $model->yuqi_faxi = 0;
+            $model->allowUseCoupon = true;
         }
 
         $con_name_arr = Yii::$app->request->post('name');

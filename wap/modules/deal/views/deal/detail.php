@@ -6,7 +6,7 @@ use common\view\LoanHelper;
 use common\utils\StringUtils;
 
 ?>
-<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/xiangqing.css?v=20161024">
+<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/xiangqing.css?v=20161101">
 
 <!--xiangqing-->
 <div class="row column">
@@ -81,6 +81,9 @@ use common\utils\StringUtils;
         <?php } ?>
         <?php if (!empty($deal->kuanxianqi)) { ?>
             <p class="notice">融资方可提前<?= $deal->kuanxianqi ?>天内任一天还款，客户收益按实际天数计息。</p>
+        <?php } ?>
+        <?php if (!$deal->allowUseCoupon) { ?>
+            <p class="notice">此项目不参与活动，不可使用代金券。</p>
         <?php } ?>
     </div>
 </div>

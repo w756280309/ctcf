@@ -44,22 +44,24 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/order.js?v=20160908', ['depends' => 'y
             <div class="col-xs-2 safe-txt">元</div>
         </div>
 
-        <div class="row sm-height border-bottom">
-            <?php if (empty($couponId)) { ?>
-                <div class="col-xs-4 safe-txt text-align-ct">使用代金券</div>
-                <?php if (empty($coupon)) { ?>
-                <div class="col-xs-8 safe-txt">无可用</div>
+        <?php if ($deal->allowUseCoupon) { ?>
+            <div class="row sm-height border-bottom">
+                <?php if (empty($couponId)) { ?>
+                    <div class="col-xs-4 safe-txt text-align-ct">使用代金券</div>
+                    <?php if (empty($coupon)) { ?>
+                    <div class="col-xs-8 safe-txt">无可用</div>
+                    <?php } else { ?>
+                    <div class="col-xs-8 safe-txt" onclick="toCoupon()"><span class="notice">请选择</span></div>
+                    <?php } ?>
                 <?php } else { ?>
-                <div class="col-xs-8 safe-txt" onclick="toCoupon()"><span class="notice">请选择</span></div>
+                    <div class="col-xs-4 safe-txt text-align-ct">代金券抵扣</div>
+                    <div class="col-xs-5 safe-txt" onclick="toCoupon()"><?= $coupon->couponType->amount ?>元</div>
+                    <div class="col-xs-3 safe-txt text-align-ct" onclick="resetCoupon()">清除</div>
+                    <input name="couponId" id="couponId" type="text" value="<?= $coupon->id ?>" hidden="hidden">
+                    <input name="couponMoney" id="couponMoney" type="text" value="<?= $coupon->couponType->amount ?>" hidden="hidden">
                 <?php } ?>
-            <?php } else { ?>
-                <div class="col-xs-4 safe-txt text-align-ct">代金券抵扣</div>
-                <div class="col-xs-5 safe-txt" onclick="toCoupon()"><?= $coupon->couponType->amount ?>元</div>
-                <div class="col-xs-3 safe-txt text-align-ct" onclick="resetCoupon()">清除</div>
-                <input name="couponId" id="couponId" type="text" value="<?= $coupon->id ?>" hidden="hidden">
-                <input name="couponMoney" id="couponMoney" type="text" value="<?= $coupon->couponType->amount ?>" hidden="hidden">
-            <?php } ?>
-        </div>
+            </div>
+        <?php } ?>
 
         <div class="row shouyi">
             <div class="col-xs-4 safe-lf text-align-ct">实际支付</div>
