@@ -23,7 +23,7 @@ class NotifyController extends Controller
     {
         $data = Yii::$app->request->get();
         $this->processing($data);
-         return $this->redirect('/user/user/myorder');
+         return $this->redirect('/user/user/myorder?type=2');
     }
 
     /**

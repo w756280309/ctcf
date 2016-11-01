@@ -19,7 +19,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/common.js', ['depends' => 'yii\web\Yii
     </div>
     <div class="col-xs-4"></div>
     <div class="col-xs-4">
-        <a href="javascript:void(0)" onclick="location.replace('/user/user/myorder')" class="bind-close1">查看订单</a>
+        <a href="javascript:void(0)" onclick="location.replace('/user/user/myorder?type=2')" class="bind-close1">查看订单</a>
     </div>
      <div class="col-xs-4"></div>
 </div>

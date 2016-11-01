@@ -8,7 +8,7 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/deal/buy.css');
         <div class="invest-container-box invest-success">
             <div class="invest-content">
                 <p class="buy-txt"><span>订单处理中……</span></p>
-                <p class="buy-txt-tip">遇到问题请联系客服，电话：<?= Yii::$app->params['contact_tel'] ?> <a href="javascript:void(0)" onclick="location.replace('/user/user/myorder')" class="bind-close1">查看订单</a></p>
+                <p class="buy-txt-tip">遇到问题请联系客服，电话：<?= Yii::$app->params['contact_tel'] ?> <a href="javascript:void(0)" onclick="location.replace('/user/user/myorder?type=2')" class="bind-close1">查看订单</a></p>
             </div>
         </div>
     </div>
@@ -17,7 +17,7 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/deal/buy.css');
     var orderSn = '<?= $order->sn ?>';
     if (typeof ga != 'undefined') {
         ga('require', 'ecommerce');
-        
+
         function logTx()
         {
             if ($.cookie('fin_tid') === orderSn) {
@@ -64,6 +64,6 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/deal/buy.css');
 
     setTimeout(function () {
         clearInterval(int);
-        location.replace("/user/user/myorder");
+        location.replace("/user/user/myorder?type=2");
     }, 5000);//3秒之后自动跳入结果页面
 </script>
