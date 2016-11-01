@@ -167,11 +167,16 @@ class OrderController extends BaseController
         $key = isset($contracts[$key]) ? $key : 0;
         if ($contracts[$key]['type'] === 'loan' && !empty($bqLoan)) {
             $bq = $bqLoan;
-        }elseif(in_array($contracts[$key]['type'], ['credit_note', 'credit_order']) && !empty($contracts[$key]['bqCredit'])) {
+        } elseif (in_array($contracts[$key]['type'], ['credit_note', 'credit_order']) && !empty($contracts[$key]['bqCredit'])) {
             $bq = $contracts[$key]['bqCredit'];
         } else {
             $bq = [];
         }
+
+        if (Yii::$app->request->isAjax) {
+            return $contracts[$key]['content'];
+        }
+
         return $this->render('contract', [
             'contracts' => $contracts,
             'fk' => $key,
@@ -184,12 +189,17 @@ class OrderController extends BaseController
     /**
      * 合同显示页面.
      */
-    public function actionAgreement($id, $note_id=0, $key = 0)
+    public function actionAgreement($id, $note_id = 0, $key = 0)
     {
         $contracts = $this->getContractTemplate($id, $note_id);
         $key = isset($contracts[$key]) ? $key : 0;
         $content = $contracts[$key]['content'];
-        return $this->render('agreement', [
+
+        if (Yii::$app->request->isAjax) {
+            return $content;
+        }
+
+        return $this->render('contract', [
             'contracts' => $contracts,
             'content' => $content,
             'fk' => $key,

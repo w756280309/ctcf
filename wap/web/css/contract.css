@@ -1,0 +1,31 @@
+body {
+    background-color: #fff;
+}
+.container-text {
+    padding: 4px 10px 64px;
+    font-size: 12px;
+    background: #fff;
+    font-family: "微软雅黑", Arial;
+}
+.list-txt {
+    margin: 1px 0 3px;
+    font-size: 12px;
+    color: #3e3a39;
+    line-height: 18px;
+}
+h4.agree_title {
+    margin: 5px auto;
+    text-align: center;
+    font-size: 14px;
+    color: #000;
+    line-height: 18px;
+}
+.bao_quan_button {
+    text-align: right;
+    position: fixed;
+    top: 80%;
+    right: 20px;
+}
+.bao_quan_button button {
+    display: block;
+}
