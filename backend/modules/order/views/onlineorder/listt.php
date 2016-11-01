@@ -37,7 +37,7 @@ $status = Yii::$app->request->get('status');
                         <i class="icon-angle-right"></i>
                     </li>
                     <li>
-                        <a href="javascript:void(0)">投资明细</a>
+                        <a href="javascript:void(0)">标的投资明细</a>
                     </li>
             </ul>
         </div>

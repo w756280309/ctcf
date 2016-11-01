@@ -47,7 +47,7 @@ use common\utils\StringUtils;
             <ul class="breadcrumb_detail">
                 <li><span>注册时间</span><?=date("Y-m-d H:i:s",$userinfo['created_at'])?></li>
                 <li><span>充值时间</span><?php echo empty($czTime)?"--":date("Y-m-d H:i:s",$czTime);?></li>
-                <li><span>投资时间</span><?php echo empty($tzTime)?"--":date("Y-m-d H:i:s",$tzTime);?></li>
+                <li><span>标的最后投资时间</span><?php echo empty($tzTime)?"--":date("Y-m-d H:i:s",$tzTime);?></li>
             </ul>
             <ul class="breadcrumb_detail">
                 <li><span>身份证号</span><?= StringUtils::obfsIdCardNo($userinfo['idcard']) ?></li>
@@ -86,6 +86,7 @@ use common\utils\StringUtils;
                     ?>
                     </li>
                     <li><span>最后登录时间</span><?php echo empty($userinfo['last_login'])?"--":date("Y-m-d H:i:s",$userinfo['last_login']);?></li>
+                    <li><span>债权最后投资时间</span><?= $latestCreditOrderTime?></li>
             </ul>
             <hr />
 
@@ -105,9 +106,14 @@ use common\utils\StringUtils;
                 <li><span>提现流水明细</span><a href="/user/drawrecord/detail?id=<?= $userinfo->id ?>&type=<?= $userinfo->type ?>">查看</a>&nbsp;</li>
             </ul>
             <ul class="breadcrumb_detail">
-                <li><span>投资次数（次）</span><?=$tzNum?></li>
-                <li><span>投资总计（元）</span><?php echo empty($tzMoneyTotal)?'0.00':$tzMoneyTotal?></li>
-                <li><span>投资流水明细</span><a href="/order/onlineorder/detailt?id=<?= $userinfo->id ?>&type=<?= $userinfo->type ?>">查看</li>
+                <li><span>标的投资次数（次）</span><?=$tzNum?></li>
+                <li><span>标的投资总计（元）</span><?php echo empty($tzMoneyTotal)?'0.00':$tzMoneyTotal?></li>
+                <li><span>标的投资流水明细</span><a href="/order/onlineorder/detailt?id=<?= $userinfo->id ?>&type=<?= $userinfo->type ?>">查看</a></li>
+            </ul>
+            <ul class="breadcrumb_detail">
+                <li><span>债权投资次数（次）</span><?=$creditSuccessCount?></li>
+                <li><span>债权投资总计（元）</span><?php echo empty($creditTotalAmount)?'0.00':$creditTotalAmount?></li>
+                <li><span>债权投资流水明细</span><a href="/user/user/credit-records?id=<?= $userinfo->id ?>&type=<?= $userinfo->type ?>">查看</a></li>
             </ul>
             <hr />
         </div>

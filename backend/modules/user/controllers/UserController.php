@@ -16,6 +16,7 @@ use common\models\user\RechargeRecord;
 use Yii;
 use yii\data\Pagination;
 use yii\filters\VerbFilter;
+use yii\helpers\ArrayHelper;
 use yii\web\Response;
 
 class UserController extends BaseController
@@ -134,11 +135,18 @@ class UserController extends BaseController
             $product = $ret = ['count' => 0, 'sum' => 0];
             $ua = $userInfo->lendAccount;    //获取投资用户账户信息
             $userAff = UserAffiliation::findOne(['user_id' => $userInfo->id]);
+            $txRes = Yii::$container->get('txClient')->get('credit-order/records', [
+                'user_id' => $id,
+                'require_list' => false,
+            ]);
+            $order['creditSuccessCount'] = $txRes['successCount'];
+            $order['creditTotalAmount'] = bcdiv($txRes['totalInvestAmount'], 100, 2);
+            $order['latestCreditOrderTime'] = $txRes['latestOrderTime'];
         } else {
             $rcMax = OnlineProduct::find()->where(['del_status' => OnlineProduct::STATUS_USE, 'borrow_uid' => $id])->min('start_date');
             $ret = $uabc->getReturnInfo($id);
             $product = $uabc->getProduct($id);
-            $order = ['count' => 0, 'sum' => 0];
+            $order = ['count' => 0, 'sum' => 0, 'creditSuccessCount' => 0, 'creditTotalAmount' => 0, 'latestOrderTime' => ''];
             $ua = $userInfo->borrowAccount;  //获取融资用户账户信息
             $userAff = null;
         }
@@ -147,21 +155,50 @@ class UserController extends BaseController
         $userYuE = $ua['available_balance'];
 
         return $this->render('detail', [
-                'czTime' => $rcMax,
-                'czNum' => $recharge['count'],
-                'czMoneyTotal' => $recharge['sum'],
-                'txNum' => $draw['count'],
-                'txMoneyTotal' => $draw['sum'],
-                'userYuE' => $userYuE,
-                'userLiCai' => $ua->investment_balance,
-                'tzTime' => $tztimeMax,
-                'tzNum' => $order['count'],
-                'tzMoneyTotal' => $order['sum'],
-                'rzNum' => $product['count'],
-                'rzMoneyTotal' => $product['sum'],
-                'ret' => $ret,
-                'userinfo' => $userInfo,
-                'userAff' => $userAff,
+            'czTime' => $rcMax,
+            'czNum' => $recharge['count'],
+            'czMoneyTotal' => $recharge['sum'],
+            'txNum' => $draw['count'],
+            'txMoneyTotal' => $draw['sum'],
+            'userYuE' => $userYuE,
+            'userLiCai' => $ua->investment_balance,
+            'tzTime' => $tztimeMax,
+            'tzNum' => $order['count'],
+            'tzMoneyTotal' => $order['sum'],
+            'rzNum' => $product['count'],
+            'rzMoneyTotal' => $product['sum'],
+            'ret' => $ret,
+            'userinfo' => $userInfo,
+            'userAff' => $userAff,
+            'creditSuccessCount' => $order['creditSuccessCount'],
+            'creditTotalAmount' => $order['creditTotalAmount'],
+            'latestCreditOrderTime' => $order['latestCreditOrderTime'],
+        ]);
+    }
+
+    /**
+     * 查看指定用户的债权投资明细
+     * @param $id
+     * @return Response
+     */
+    public function actionCreditRecords($id, $type)
+    {
+        $user = User::findOne($id);
+        $txRes = Yii::$container->get('txClient')->get('credit-order/records', [
+            'user_id' => $id,
+            'page' => Yii::$app->request->get('page'),
+            'page_size' => Yii::$app->request->get('page_size'),
+        ]);
+        $loan = OnlineProduct::find()->where(['in', 'id', ArrayHelper::getColumn($txRes['data'], 'loan_id')])->all();
+        $loan = ArrayHelper::index($loan, 'id');
+        $pages = new Pagination(['totalCount' => $txRes['totalCount'], 'pageSize' => 10]);
+        return $this->render('credit_records', [
+            'username' => $user->real_name,
+            'txRes' => $txRes,
+            'pages' => $pages,
+            'loan' => $loan,
+            'id' => $id,
+            'type' => $type,
         ]);
     }
 
