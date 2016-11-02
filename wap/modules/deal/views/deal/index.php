@@ -6,7 +6,7 @@ $this->backUrl = false;
 use wap\assets\WapAsset;
 use yii\web\JqueryAsset;
 
-$this->registerCssFile(ASSETS_BASE_URI.'css/credit/creditlist.css?v=20161019', ['depends' => WapAsset::class]);
+$this->registerCssFile(ASSETS_BASE_URI.'css/credit/creditlist.css?v=20161102', ['depends' => WapAsset::class]);
 $this->registerCssFile(ASSETS_BASE_URI.'css/list_tag.css', ['depends' => WapAsset::class]);
 $this->registerJsFile(ASSETS_BASE_URI .'js/TouchSlide.1.1.js', ['depends' => JqueryAsset::class, 'position' => 1]);
 $this->registerJsFile(ASSETS_BASE_URI .'js/jquery.classyloader.js', ['depends' => JqueryAsset::class, 'position' => 1]);
