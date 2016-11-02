@@ -8,9 +8,10 @@ $this->registerCssFile(ASSETS_BASE_URI.'css/swiper.min.css', ['depends' => WapAs
 $this->registerCssFile(ASSETS_BASE_URI.'css/contract.css', ['depends' => WapAsset::class]);
 $this->registerJsFile(ASSETS_BASE_URI.'js/swiper.min.js');
 
-$switcherJs = <<<'JS'
+$count = count($contracts);
+$switcherJs = <<<JS
 $(function() {
-    var num = $('.container-text').attr('data-title');
+    var num = $count;
     if(num >= 3) {
         num = 3;
     }
@@ -48,7 +49,7 @@ $(function() {
         $('.swiper-wrapper div').eq(index).addClass('dian');
         
         $.get(url, function(data) {
-            $('.list-txt').html(data);
+            $('#content').html(data);
         })
     });
 });
@@ -62,28 +63,14 @@ $action = Yii::$app->controller->action->getUniqueId();
 <!-- Swiper -->
 <div id="legal-docs-switcher" class="swiper-container" style="line-height: 18px;">
     <div class="swiper-wrapper">
-        <?php foreach($contracts as $key => $contract) : $num++; ?>
+        <?php foreach($contracts as $key => $contract) : ?>
             <?php $url = 'order/order/agreement' === $action ? "/order/order/agreement?id=$id&note_id=$note_id&key=$key" : "/order/order/contract?asset_id=$asset_id&key=$key"; ?>
-            <div data-switcher-index="<?= $num - 1 ?>" class="swiper-slide <?= $fk == $key ? 'dian' : '' ?>" url="<?= $url ?>">
+            <div data-switcher-index="<?= $key ?>" class="swiper-slide <?= $fk == $key ? 'dian' : '' ?>" url="<?= $url ?>">
                 <?= $contract['title'] ?>
             </div>
         <?php endforeach; ?>
     </div>
 </div>
-<div class="container-text" data-title="<?= $num ?>">
-    <div class="row">
-        <div class="col-xs-12">
-            <div class="list-txt"><?= $content ?></div>
-        </div>
-    </div>
+<div id="content">
+    <?= $this->renderFile('@wap/modules/order/views/order/_contract.php', array_merge(['content' => $content], 'order/order/agreement' === $action ? [] : ['bq' => $bq])) ?>
 </div>
-<?php if (isset($bq)) {?>
-    <div class="bao_quan_button">
-        <?php if (isset($bq['downUrl'])) : ?>
-            <button class="btn btn-primary" onclick="window.location = '<?= $bq['downUrl'] ?>'" style="background:#f54337;border: 0px;">下载合同</button>
-        <?php endif; ?>
-        <?php if (isset($bq['linkUrl'])) : ?>
-            <button class="btn btn-primary" onclick="window.location = '<?= $bq['linkUrl'] ?>'" style="background:#f54337;border: 0px;margin-top: 5px;">保全证书</button>
-        <?php endif; ?>
-    </div>
-<?php } ?>

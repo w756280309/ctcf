@@ -174,7 +174,7 @@ class OrderController extends BaseController
         }
 
         if (Yii::$app->request->isAjax) {
-            return $contracts[$key]['content'];
+            return $this->renderFile('@wap/modules/order/views/order/_contract.php', ['content' => $contracts[$key]['content'], 'bq' => $bq]);
         }
 
         return $this->render('contract', [
@@ -196,7 +196,7 @@ class OrderController extends BaseController
         $content = $contracts[$key]['content'];
 
         if (Yii::$app->request->isAjax) {
-            return $content;
+            return $this->renderFile('@wap/modules/order/views/order/_contract.php', ['content' => $content]);
         }
 
         return $this->render('contract', [
