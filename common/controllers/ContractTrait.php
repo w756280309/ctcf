@@ -221,10 +221,10 @@ trait ContractTrait
                 $loanRate = OnlineProduct::calcBaseRate($loan->yield_rate, $loan->jiaxi);
                 $loanRate = $loanRate . '%';
                 if ($loan->isFlexRate && $loan->rateSteps) {
-                    $loanRate = $loanRate . '~' . StringUtils::amountFormat2(bcadd(RateSteps::getTopRate(RateSteps::parse($loan->rateSteps)), 0.00, 2)).'%';
+                    $loanRate = $loanRate . '~' . bcadd(RateSteps::getTopRate(RateSteps::parse($loan->rateSteps)), 0.00, 2).'%';
                 }
                 if ($loan->jiaxi) {
-                    $loanRate = $loanRate . '+' . $loan->jiaxi . '%';
+                    $loanRate = $loanRate . '+' . bcadd($loan->jiaxi, 0.00, 2) . '%';
                 }
                 //生成标的还款方式
                 $refund_methods = Yii::$app->params['refund_method'];
