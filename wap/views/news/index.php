@@ -20,6 +20,6 @@ $this->registerJs('var cp=' . $header['cp'] . ';', 1);
         </a>
     <?php endforeach; ?>
     <!--加载跟多-->
-    <div class="load" style="display:block;"></div>
+    <div class="load"></div>
 </div>
 

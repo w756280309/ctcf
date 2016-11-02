@@ -61,7 +61,7 @@ $this->registerJs('var tp=' . $header->pageCount . ';', 1);
             </div>
         </div>
         <?php endforeach; ?>
-        <div class="load" style="display:block;"></div>
+        <div class="load"></div>
     </div>
 <?php } else { ?>
     <!--无优惠券的状态  -->

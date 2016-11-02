@@ -32,7 +32,7 @@ $action = Yii::$app->controller->action->getUniqueId();
         <?= $this->renderFile('@wap/modules/deal/views/deal/_more.php',['deals' => $deals, 'header' => $header]) ?>
     </div>
     <!--加载跟多-->
-    <div class="load" style="display:block;"></div>
+    <div class="load"></div>
 <?php } else { ?>
     <div class="nodata" style="display:block;">暂无数据</div>
 <?php } ?>

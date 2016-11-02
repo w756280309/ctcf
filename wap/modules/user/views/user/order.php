@@ -21,7 +21,7 @@ $this->registerCssFile(ASSETS_BASE_URI.'css/licai.css?v=20160927', ['depends' =>
 
 <?php if(!empty($model))  { ?>
     <?= $this->renderFile('@wap/modules/user/views/user/_order_list.php', ['model' => $model, 'type' => $type]) ?>
-    <div class="load" style="display: block"></div>
+    <div class="load"></div>
  <?php } else {?>
     <div class="nodata" style="display: block">暂无数据</div>
 <?php } ?>

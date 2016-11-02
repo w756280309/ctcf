@@ -431,7 +431,7 @@ input.mima-inp {
     height:20px;
 }
 .load{
-    display: none;
+    display: block;
     height: 50px;
     line-height: 50px;
     margin-top: 10px;

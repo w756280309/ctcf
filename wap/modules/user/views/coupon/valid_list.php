@@ -43,7 +43,7 @@ $this->registerJs('var cp=' . $header['cp'] . ';', 1);
             </div>
         </div>
     <?php endforeach; ?>
-    <div class="load" style="display:block;"></div>
+    <div class="load"></div>
 </div>
 <script>
     var orderSn = '<?= $sn ?>';

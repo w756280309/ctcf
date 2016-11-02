@@ -25,7 +25,7 @@ $action = Yii::$app->controller->action->getUniqueId();
         <?= $this->renderFile('@wap/views/licai/_more_note.php', ['notes' => $notes, 'tp' => $tp]) ?>
     </div>
     <!--加载更多-->
-    <div class="load" style="display:block;"></div>
+    <div class="load"></div>
 <?php } else { ?>
     <div class="cre-list-nums-none" style="display:block;">暂无数据</div>
 <?php } ?>
