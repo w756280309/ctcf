@@ -2,25 +2,21 @@
 
 namespace backend\modules\order\controllers;
 
-use Yii;
-use common\models\user\User;
-use yii\data\Pagination;
-use common\models\order\OnlineOrder;
-use common\models\product\OnlineProduct;
-use common\lib\bchelp\BcRound;
 use backend\controllers\BaseController;
 use backend\modules\user\core\v1_0\UserAccountBackendCore;
-use yii\web\NotFoundHttpException;
+use common\lib\bchelp\BcRound;
+use common\models\user\User;
+use common\models\order\OnlineOrder;
+use common\models\product\OnlineProduct;
+use Yii;
+use yii\data\Pagination;
 
-/**
- * OrderController implements the CRUD actions for OfflineOrder model.
- */
 class OnlineorderController extends BaseController
 {
     public function actionList($id)
     {
         if (empty($id)) {
-            throw new NotFoundHttpException();   //参数无效时,抛出404异常
+            throw $this->ex404();   //参数无效时,抛出404异常
         }
 
         //取出金额总计
@@ -74,7 +70,7 @@ class OnlineorderController extends BaseController
     public function actionExport($id)
     {
         if (empty($id)) {
-            throw new NotFoundHttpException();   //参数无效时,抛出404异常
+            throw $this->ex404();   //参数无效时,抛出404异常
         }
 
         header("Content-Type: application/vnd.ms-excel");
@@ -132,7 +128,7 @@ class OnlineorderController extends BaseController
     public function actionDetailr($id, $type)
     {
         if (empty($id) || empty($type) || !in_array($type, [1, 2])) {
-            throw new NotFoundHttpException();   //参数无效时,抛出404异常
+            throw $this->ex404();   //参数无效时,抛出404异常
         }
 
         $status = Yii::$app->request->get('status');
@@ -185,11 +181,16 @@ class OnlineorderController extends BaseController
         ]);
     }
 
-    public function actionDetailt($id = null, $type = null)
+    /**
+     * 投资用户交易明细页面.
+     */
+    public function actionDetailt($id)
     {
-        if (empty($id) || empty($type) || !in_array($type, [1, 2])) {
-            throw new NotFoundHttpException();   //参数无效时,抛出404异常
+        if (empty($id)) {
+            throw $this->ex404();   //参数无效时,抛出404异常
         }
+
+        $user = $this->findOr404(User::class, $id);
 
         $status = Yii::$app->request->get('status');
         $time = Yii::$app->request->get('time');
@@ -207,9 +208,6 @@ class OnlineorderController extends BaseController
         //正常显示详情页
         $pages = new Pagination(['totalCount' => $query->count(), 'pageSize' => '10']);
         $model = $query->offset($pages->offset)->limit($pages->limit)->orderBy('id desc')->all();
-
-        //取出用户名
-        $username = User::find()->where(['id' => $id])->select('username')->one();
 
         //取出投资金额总计，应该包括充值成功的和充值失败的
         $moneyTotal = 0;  //提现总额
@@ -234,17 +232,15 @@ class OnlineorderController extends BaseController
         foreach ($result as $v) {
             $res[$v['id']] = $v['title'];
         }
-        //渲染到静态页面
+
         return $this->render('listt', [
-                    'id' => $id,
-                    'type' => $type,
-                    'res' => $res,
-                    'model' => $model,
-                    'pages' => $pages,
-                    'username' => $username['username'],
-                    'moneyTotal' => $moneyTotal,
-                    'successNum' => $successNum,
-                    'failureNum' => $failureNum,
+            'res' => $res,
+            'model' => $model,
+            'pages' => $pages,
+            'user' => $user,
+            'moneyTotal' => $moneyTotal,
+            'successNum' => $successNum,
+            'failureNum' => $failureNum,
         ]);
     }
 }

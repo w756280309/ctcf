@@ -2,29 +2,32 @@
 
 namespace common\models\order;
 
-use yii\behaviors\TimestampBehavior;
-use Yii;
+use common\models\epay\EpayUser;
 use common\models\product\OnlineProduct;
 use common\models\user\MoneyRecord;
 use common\models\user\UserAccount;
 use common\models\user\User;
-use common\models\epay\EpayUser;
+use P2pl\OrderTxInterface;
+use Yii;
+use yii\behaviors\TimestampBehavior;
+use yii\db\ActiveRecord;
 
 /**
  * This is the model class for table "online_order".
  *
- * @property int $id
- * @property string $sn
- * @property string $online_pid
- * @property string $order_money
- * @property int $order_time
- * @property int $uid
- * @property int $status
- * @property string $created_at
- * @property string $updated_at
- * @property integer $investFrom 投资来源 0表示未知，1表示wap，2表示wx，3表示app，4表示pc
+ * @property int    id
+ * @property string sn
+ * @property string online_pid
+ * @property string order_money
+ * @property int    order_time
+ * @property int    uid
+ * @property int    status
+ * @property string created_at
+ * @property string updated_at
+ * @property int    investFrom      投资来源 0表示未知，1表示wap，2表示wx，3表示app，4表示pc
+ * @property string couponAmount    代金券使用金额
  */
-class OnlineOrder extends \yii\db\ActiveRecord implements \P2pl\OrderTxInterface
+class OnlineOrder extends ActiveRecord implements OrderTxInterface
 {
     //0--投标失败---1-投标成功 2.撤标 3，无效
     const STATUS_FALSE = 0;
@@ -50,6 +53,7 @@ class OnlineOrder extends \yii\db\ActiveRecord implements \P2pl\OrderTxInterface
     {
         return 'online_order';
     }
+
     /**
      * {@inheritdoc}
      */
@@ -60,9 +64,8 @@ class OnlineOrder extends \yii\db\ActiveRecord implements \P2pl\OrderTxInterface
         ];
     }
 
-    public static function createSN($pre = 'o_online')
+    public static function createSN()
     {
-        //$pre_val = Yii::$app->params['bill_prefix'][$pre];
         $pre_val = '00';//由于合同里未知的原因导致的错位，换00替换
         list($usec, $sec) = explode(' ', microtime());
         $v = ((float) $usec + (float) $sec);
@@ -72,9 +75,7 @@ class OnlineOrder extends \yii\db\ActiveRecord implements \P2pl\OrderTxInterface
 
         return $pre_val.str_replace('x', $sec, $date);
     }
-    /**
-     * {@inheritdoc}
-     */
+
     public function rules()
     {
         return [
@@ -108,11 +109,6 @@ class OnlineOrder extends \yii\db\ActiveRecord implements \P2pl\OrderTxInterface
         }
     }
 
-    /**
-     * Finds user by [[username]].
-     *
-     * @return User|null
-     */
     public function getUser()
     {
         if ($this->_user === false) {
@@ -122,9 +118,6 @@ class OnlineOrder extends \yii\db\ActiveRecord implements \P2pl\OrderTxInterface
         return $this->_user;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function attributeLabels()
     {
         return [
@@ -144,10 +137,6 @@ class OnlineOrder extends \yii\db\ActiveRecord implements \P2pl\OrderTxInterface
 
     /**
      * 计算融资百分比.
-     *
-     * @param type $pro_id
-     *
-     * @return type
      */
     public static function getRongziPercert($pro_id = 0)
     {
@@ -157,7 +146,9 @@ class OnlineOrder extends \yii\db\ActiveRecord implements \P2pl\OrderTxInterface
         return bcdiv($all_money, $product->money, 2);
     }
 
-    /*撤标*/
+    /**
+     * 撤标.
+     */
     public function cancelOnlinePro($pid = null)
     {
         $list = static::find()->where(['status' => self::STATUS_SUCCESS, 'online_pid' => $pid])->all();
@@ -248,8 +239,6 @@ class OnlineOrder extends \yii\db\ActiveRecord implements \P2pl\OrderTxInterface
 
     /**
      * 获取用户托管方平台信息.
-     *
-     * @return UserBanks
      */
     public function getEpayuser()
     {
@@ -282,9 +271,9 @@ class OnlineOrder extends \yii\db\ActiveRecord implements \P2pl\OrderTxInterface
     }
 
     /**
-     * 根据订单号或者对象返回订单
+     * 根据订单号或者对象返回订单.
+     *
      * @param 订单号或者订单对象
-     * @return type
      * @throws \Exception
      */
     public static function ensureOrder($ordOrSn)
@@ -313,13 +302,17 @@ class OnlineOrder extends \yii\db\ActiveRecord implements \P2pl\OrderTxInterface
         return $this->hasOne(OnlineProduct::className(), ['id' => 'online_pid']);
     }
 
-    //获取当前订单的还款计划
+    /**
+     * 获取当前订单的还款计划.
+     */
     public function getRepaymentPlan()
     {
         return $this->hasMany(OnlineRepaymentPlan::class, ['order_id' => 'id']);
     }
 
-    //获取当前订单预期（实际）收益
+    /**
+     * 获取当前订单预期（实际）收益.
+     */
     public function getProceeds()
     {
         $plans = $this->repaymentPlan;
@@ -334,7 +327,9 @@ class OnlineOrder extends \yii\db\ActiveRecord implements \P2pl\OrderTxInterface
         return $amount;
     }
 
-    //获取当前订单的最后一次还款时间
+    /**
+     * 获取当前订单的最后一次还款时间.
+     */
     public function getLastPaymentDate()
     {
         $plans = $this->repaymentPlan;

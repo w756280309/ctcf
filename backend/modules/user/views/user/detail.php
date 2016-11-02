@@ -12,27 +12,27 @@ use common\utils\StringUtils;
         <div class="span12">
             <h3 class="page-title">
                         会员管理 <small>会员管理模块【主要包含投资会员和融资会员的管理】</small>
-                </h3>
+            </h3>
             <ul class="breadcrumb">
+                <li>
+                    <i class="icon-home"></i>
+                    <a href="/user/user/<?= (User::USER_TYPE_ORG === (int) $userinfo->type) ? 'listr' : 'listt' ?>">会员管理</a>
+                    <i class="icon-angle-right"></i>
+                </li>
+                <?php if (User::USER_TYPE_PERSONAL === (int) $userinfo->type) {?>
                     <li>
-                        <i class="icon-home"></i>
-                        <a href="/user/user/<?= (User::USER_TYPE_ORG === (int) $userinfo->type) ? 'listr' : 'listt' ?>">会员管理</a>
+                        <a href="/user/user/listt">投资会员</a>
                         <i class="icon-angle-right"></i>
                     </li>
-                    <?php if (User::USER_TYPE_PERSONAL === (int) $userinfo->type) {?>
-                        <li>
-                            <a href="/user/user/listt">投资会员</a>
-                            <i class="icon-angle-right"></i>
-                        </li>
-                    <?php } else { ?>
-                        <li>
-                            <a href="/user/user/listr">融资会员</a>
-                            <i class="icon-angle-right"></i>
-                        </li>
-                    <?php } ?>
+                <?php } else { ?>
                     <li>
-                        <a href="javascript:void(0)">会员列表</a>
+                        <a href="/user/user/listr">融资会员</a>
+                        <i class="icon-angle-right"></i>
                     </li>
+                <?php } ?>
+                <li>
+                    <a href="javascript:void(0)">会员列表</a>
+                </li>
             </ul>
         </div>
 
@@ -108,14 +108,14 @@ use common\utils\StringUtils;
             <ul class="breadcrumb_detail">
                 <li><span>标的投资次数（次）</span><?=$tzNum?></li>
                 <li><span>标的投资总计（元）</span><?php echo empty($tzMoneyTotal)?'0.00':$tzMoneyTotal?></li>
-                <li><span>标的投资流水明细</span><a href="/order/onlineorder/detailt?id=<?= $userinfo->id ?>&type=<?= $userinfo->type ?>">查看</a></li>
+                <li><span>标的投资流水明细</span><a href="/order/onlineorder/detailt?id=<?= $userinfo->id ?>">查看</a></li>
             </ul>
             <ul class="breadcrumb_detail">
                 <li><span>债权投资次数（次）</span><?=$creditSuccessCount?></li>
                 <li><span>债权投资总计（元）</span><?php echo empty($creditTotalAmount)?'0.00':$creditTotalAmount?></li>
                 <li><span>债权投资流水明细</span><a href="/user/user/credit-records?id=<?= $userinfo->id ?>&type=<?= $userinfo->type ?>">查看</a></li>
             </ul>
-            <hr />
+            <hr>
         </div>
     <?php } else { ?>
 
