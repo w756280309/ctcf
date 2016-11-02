@@ -8,6 +8,7 @@ use common\models\user\MoneyRecord;
 use common\models\user\User;
 use P2pl\Borrower;
 use P2pl\LoanInterface;
+use Wcg\DateTime\DT;
 use Yii;
 use yii\base\Exception;
 use yii\behaviors\TimestampBehavior;
@@ -849,28 +850,32 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
      */
     public function getRemainingDuration()
     {
-        $date = new \DateTime(date('Y-m-d'));
-        $endDate = (new \DateTime(date('Y-m-d', $this->finish_date)))->sub(new \DateInterval('P1D'));
-        if ($date > $endDate) {
+        $startDate = date('Y-m-d');
+        $endDate = date('Y-m-d', strtotime('-1 day', $this->finish_date));
+
+        if ($startDate > $endDate) {
             return ['days' => 0];
         }
-        $diff = $date->diff($endDate);
         $method = intval($this->refund_method);
         if (OnlineProduct::REFUND_METHOD_DAOQIBENXI === $method) {
-            $day = $diff->days;
+            $day = (new \DateTime($startDate))->diff(new \DateTime($endDate))->days;
             $res = ['days' => $day];
         } else {
-            $y = $diff->y;
-            $m = $diff->m;
-            $d = $diff->d;
-            $m = $y * 12 + $m;
-            if ($m > 0) {
-                $res = ['days' => $d, 'months' => $m];
+            $diff = (new DT($startDate))->humanDiff(new DT($endDate));
+            if (!empty($diff) && isset($diff['y']) && isset($diff['m']) && isset($diff['d'])) {
+                $y = $diff['y'];
+                $m = $diff['m'];
+                $d = $diff['d'];
+                $m = $y * 12 + $m;
+                if ($m > 0) {
+                    $res = ['days' => $d, 'months' => $m];
+                } else {
+                    $res = ['days' => $d];
+                }
             } else {
-                $res = ['days' => $d];
+                $res = ['days' => 0];
             }
         }
-
         return $res;
     }
 
