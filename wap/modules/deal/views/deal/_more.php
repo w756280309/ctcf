@@ -15,7 +15,7 @@ use common\utils\StringUtils;
             <div class="row credit-all clearfix" >
                 <div class="col-xs-4">
                     <span class="rate-steps">
-                        <?= LoanHelper::getDealRate($val) ?><i class="col-lu">%<?php if (!empty($val->jiaxi) && !$val->isFlexRate) { ?><em class="credit-jiaxi">+<?= StringUtils::amountFormat2($val->jiaxi) ?>%</em><?php } ?></i>
+                        <?= LoanHelper::getDealRate($val) ?><i class="col-lu">%<?php if (!empty($val->jiaxi)) { ?><em class="credit-jiaxi">+<?= StringUtils::amountFormat2($val->jiaxi) ?>%</em><?php } ?></i>
                     </span>
                     <p>预期年化率</p>
                 </div>

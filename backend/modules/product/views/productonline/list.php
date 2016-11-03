@@ -1,7 +1,9 @@
 <?php
+
+use common\models\product\RateSteps;
+use common\utils\StringUtils;
 use yii\widgets\LinkPager;
 use yii\helpers\Html;
-use common\view\LoanHelper;
 
 $pc_cat = Yii::$app->params['pc_cat'];
 ?>
@@ -111,10 +113,9 @@ $pc_cat = Yii::$app->params['pc_cat'];
                             </td>
                             <td>
                                 <?php
-                                    if (!empty($val->jiaxi) && !$val->isFlexRate) {
-                                        echo doubleval(100 * $val['yield_rate']);
-                                    } else {
-                                        echo LoanHelper::getDealRate($val);
+                                    echo StringUtils::amountFormat2(bcmul($val['yield_rate'], 100, 2));
+                                    if ($val->isFlexRate) {
+                                        echo '~'.StringUtils::amountFormat2(RateSteps::getTopRate(RateSteps::parse($val['rateSteps'])));
                                     }
                                 ?>
                             </td>

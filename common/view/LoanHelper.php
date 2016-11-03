@@ -15,16 +15,21 @@ class LoanHelper
      */
     public static function getDealRate(OnlineProduct $loan)
     {
-        $yr = StringUtils::amountFormat2($loan->baseRate);
+        $baseRate = OnlineProduct::calcBaseRate($loan->yield_rate, $loan->jiaxi);
+
         if (!$loan->isFlexRate || null === $loan->rateSteps) {
-            return $yr;
+            return StringUtils::amountFormat2($baseRate);
         }
 
         $topRate = RateSteps::getTopRate(RateSteps::parse($loan->rateSteps));
         if (false === $topRate) {
-            return $yr;
+            return StringUtils::amountFormat2($baseRate);
         }
 
-        return $yr.'～'.StringUtils::amountFormat2($topRate);
+        if (null !== $loan->jiaxi) {
+            $topRate = bcsub($topRate, $loan->jiaxi, 2);
+        }
+
+        return StringUtils::amountFormat2($baseRate).'～'.StringUtils::amountFormat2($topRate);
     }
 }

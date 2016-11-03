@@ -97,11 +97,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/index.js?v=20161021', ['depends' => Jq
                 <h2><?= $deal->title ?></h2>
                 <ul class="clearfix">
                     <li class="lf">
-                        <?php if (!empty($deal->jiaxi) && !$deal->isFlexRate) { ?>
-                            <span><?= StringUtils::amountFormat2(OnlineProduct::calcBaseRate($deal->yield_rate, $deal->jiaxi)) ?></span><em>%</em><em class="index-recommend-crea">+<?= StringUtils::amountFormat2($deal->jiaxi) ?>%</em>
-                        <?php } else { ?>
-                            <span><?= LoanHelper::getDealRate($deal) ?></span><em>%</em>
-                        <?php } ?>
+                        <span><?= LoanHelper::getDealRate($deal) ?></span><em>%</em><?php if (!empty($deal->jiaxi)) { ?><em class="index-recommend-crea">+<?= StringUtils::amountFormat2($deal->jiaxi) ?>%</em><?php } ?>
                         <p>预期年化</p>
                     </li>
                     <li class="lf">

@@ -27,7 +27,7 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/useraccount/chargedeposit.css');
                             <span class="pl-middle-inner">
                                 <?= LoanHelper::getDealRate($deal) ?><i>%</i>
                                 <em class="pl-m-add">
-                                    <?php if (!empty($deal->jiaxi) && !$deal->isFlexRate) { ?>+<?= doubleval($deal->jiaxi) ?>%<?php } ?>
+                                    <?php if (!empty($deal->jiaxi)) { ?>+<?= doubleval($deal->jiaxi) ?>%<?php } ?>
                                 </em>
                             </span>
                             <p>预期年化收益率</p>

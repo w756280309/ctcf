@@ -5,8 +5,8 @@ $this->registerCssFile(ASSETS_BASE_URI.'css/index.css?061010', ['depends' => 'fr
 $this->registerJsFile(ASSETS_BASE_URI.'js/index.js', ['depends' => 'frontend\assets\FrontAsset']);
 
 use common\models\product\OnlineProduct;
-use common\models\product\RateSteps;
 use common\utils\StringUtils;
+use common\view\LoanHelper;
 ?>
 
 <!--banner start-->
@@ -150,16 +150,8 @@ use common\utils\StringUtils;
                             <?php } else { ?>
                                 <div class="yingshou-content2">
                                     <p class="yingshou-content2-left">预期年化收益率
-                                        <span>
-                                            <?php
-                                                echo StringUtils::amountFormat2(OnlineProduct::calcBaseRate($val->yield_rate, $val->jiaxi));
-                                                if ($val->isFlexRate && $val->rateSteps) {
-                                                    echo '~'.StringUtils::amountFormat2(RateSteps::getTopRate(RateSteps::parse($val->rateSteps)));
-                                                } elseif ($val->jiaxi) {
-                                                    echo '+'.StringUtils::amountFormat2($val->jiaxi);
-                                                }
-                                            ?>%
-                                        </span></p>
+                                        <span><?= LoanHelper::getDealRate($val) ?><?php if (!empty($val->jiaxi)) { ?>+<?= StringUtils::amountFormat2($val->jiaxi) ?><?php } ?>%</span>
+                                    </p>
                                     <p class="yingshou-content2-right">项目期限 <span><?php $ex = $val->getDuration() ?><?= $ex['value']?><?= $ex['unit']?></span></p>
                                 </div>
                             <?php } ?>
@@ -174,18 +166,7 @@ use common\utils\StringUtils;
                                 <div class="yingshou-number">
                                     <div class="yingshou-nian">
                                         <div>
-                                            <em>
-                                                <?php
-                                                    $rate = StringUtils::amountFormat2(OnlineProduct::calcBaseRate($val->yield_rate, $val->jiaxi));
-                                                    if ($val->isFlexRate && $val->rateSteps) {
-                                                        echo $rate.'~'.StringUtils::amountFormat2(RateSteps::getTopRate(RateSteps::parse($val->rateSteps))).'<span>%</span><i></i>';
-                                                    } elseif ($val->jiaxi) {
-                                                        echo $rate.'<span>%</span><i>+'.StringUtils::amountFormat2($val->jiaxi).'%</i>';
-                                                    } else {
-                                                        echo $rate.'<span>%</span>';
-                                                    }
-                                                ?>
-                                            </em>
+                                            <em><?= LoanHelper::getDealRate($val) ?><span>%</span><?php if (!empty($val->jiaxi)) { ?><i>+<?= doubleval($val->jiaxi) ?>%</i><?php } ?></em>
                                         </div>
                                         <p>预期年化收益率</p>
                                     </div>

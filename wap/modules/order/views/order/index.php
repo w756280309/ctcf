@@ -1,6 +1,9 @@
 <?php
 $this->title="购买";
 
+use common\utils\StringUtils;
+use common\view\LoanHelper;
+
 $yr = $deal->yield_rate;
 $qixian = $deal->getDuration()['value'];
 $retmet = $deal->refund_method;
@@ -23,10 +26,10 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/order.js?v=20160908', ['depends' => 'y
     <div class="row produce">
         <div class="col-xs-12 text-align-lf first-hang" style="padding-right: 0;"><?=$deal->title?></div>
         <div class="col-xs-4 text-align-ct">预期年化收益</div>
-        <div class="col-xs-8 text-align-lf col"><?=  ($deal->yield_rate*100)?>%</div>
+        <div class="col-xs-8 text-align-lf col"><?= LoanHelper::getDealRate($deal) ?>%<?php if (!empty($deal->jiaxi)) { ?>+<?= $deal->jiaxi ?>%<?php } ?></div>
         <div class="col-xs-4 text-align-ct">项目</div>
         <div class="col-xs-8 text-align-lf col">
-            <?php $ex = $deal->getDuration() ?><?= $ex['value'] ?><?= $ex['unit']?>
+            <?php $ex = $deal->getDuration() ?><?= $ex['value'] ?><?= $ex['unit'] ?>
             <?php if (!empty($deal->kuanxianqi)) { ?>(含宽限期<?=$deal->kuanxianqi?>天)<?php } ?></div>
         <div class="col-xs-4 text-align-ct">可投余额</div>
         <div class="col-xs-8 text-align-lf col"><?=  number_format($param['order_balance'], 2)?>元</div>

@@ -17,7 +17,7 @@ use common\utils\StringUtils;
             <li class="col-xs-6">
                 <div class="xian">
                     <?= LoanHelper::getDealRate($deal) ?><span class="column-lu">%</span>
-                    <?php if (!empty($deal->jiaxi) && !$deal->isFlexRate) { ?><span class="bonus-badge">+<?=  doubleval($deal->jiaxi) ?>%</span><?php } ?>
+                    <?php if (!empty($deal->jiaxi)) { ?><span class="bonus-badge">+<?=  doubleval($deal->jiaxi) ?>%</span><?php } ?>
                 </div>
                 <span class="qing">预期年化收益率</span>
             </li>

@@ -5,9 +5,9 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/pagination.css', ['depends' => 'fr
 $this->registerCssFile(ASSETS_BASE_URI . 'css/deallist.css?v=160918', ['depends' => 'frontend\assets\FrontAsset']);
 
 use common\models\product\OnlineProduct;
-use common\models\product\RateSteps;
 use common\utils\StringUtils;
 use common\widgets\Pager;
+use common\view\LoanHelper;
 
 $action = Yii::$app->controller->action->getUniqueId();
 
@@ -36,14 +36,7 @@ $action = Yii::$app->controller->action->getUniqueId();
                     <div class="single_content">
                         <ul class="single_ul_left">
                             <li class="li_1">
-                                <i class="float-left"><?= StringUtils::amountFormat2(OnlineProduct::calcBaseRate($val->yield_rate, $val->jiaxi)) ?></i>
-                                <?php if ($val->isFlexRate && $val->rateSteps) { ?>
-                                    ~<?= StringUtils::amountFormat2(RateSteps::getTopRate(RateSteps::parse($val->rateSteps))) ?><span>%</span>
-                                <?php } elseif ($val->jiaxi) { ?>
-                                    <span>%</span><span class="addRadeNumber">+<?= StringUtils::amountFormat2($val->jiaxi) ?>%</span>
-                                <?php } else { ?>
-                                    <span>%</span>
-                                <?php } ?>
+                                <i class="float-left"><?= LoanHelper::getDealRate($val) ?></i><span>%</span><?php if (!empty($val->jiaxi)) { ?><span class="addRadeNumber">+<?= StringUtils::amountFormat2($val->jiaxi) ?>%</span><?php } ?>
                             </li>
                             <li class="li_2">预期年化收益率</li>
                         </ul>

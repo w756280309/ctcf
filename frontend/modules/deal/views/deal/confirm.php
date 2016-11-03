@@ -1,4 +1,5 @@
 <?php
+use common\utils\StringUtils;
 use common\view\LoanHelper;
 
 $this->title = '确认订单';
@@ -21,9 +22,9 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/deal/buy.css?v=20161101');
                         <p class="lf percentage">
                             预期年化收益率
                             <span class="nums"> <?= LoanHelper::getDealRate($deal) ?><i>%</i>
-                                <?php if (!empty($deal->jiaxi) && !$deal->isFlexRate) { ?>
+                                <?php if (!empty($deal->jiaxi)) { ?>
                                     <span class="other-nums">
-                                    +<?= doubleval($deal->jiaxi) ?>%
+                                        +<?= StringUtils::amountFormat2($deal->jiaxi) ?>%
                                     </span>
                                 <?php } ?>
                             </span>
