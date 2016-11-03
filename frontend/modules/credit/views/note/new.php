@@ -197,9 +197,15 @@ $calcDiscountRate = min($discountRate, bcmul(bcdiv($asset['currentInterest'], bc
         amount_input.change($.throttle(100,function () {
             validateData();
         }));
-        discount_rate_input.change(100,function () {
+        discount_rate_input.change($.throttle(100,function () {
             validateData();
-        });
+        }));
+        amount_input.keyup($.throttle(100, function () {
+            calc();
+        }));
+        discount_rate_input.keyup($.throttle(100, function () {
+            calc();
+        }));
 
         $('#agreement').on('click', function () {
             if ('checked' === $(this).attr('checked')) {
@@ -264,6 +270,23 @@ $calcDiscountRate = min($discountRate, bcmul(bcdiv($asset['currentInterest'], bc
         xhr.fail(function () {
             btn.removeClass('twoClick');
             alert('系统繁忙，请稍后重试！');
+        });
+    }
+    
+    function calc() {
+        var rate = parseFloat(discount_rate_input.val());
+        if (!rate) {
+            rate = 0;
+        }
+        var amount = parseFloat(amount_input.val());
+        if (!amount) {
+            amount = 0;
+        }
+        $.ajax({
+            type: "get",
+            url: "<?= rtrim(\Yii::$app->params['clientOption']['host']['tx_www'], '/')?>/credit-note/calc",
+            data: {asset_id:<?= $asset['id']?>, amount: amount, rate: rate},
+            dataType: "jsonp"
         });
     }
 
