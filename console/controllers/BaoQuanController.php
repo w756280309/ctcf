@@ -28,25 +28,30 @@ class BaoQuanController extends Controller
             $this->stdout("缺少配置参数：enable_ebaoquan；或者enable_ebaoquan 被配置为false 。\n", Console::BOLD);
             return 0;
         }
-        
+
         $queues = BaoQuanQueue::find()->where(['status' => BaoQuanQueue::STATUS_SUSPEND, 'itemType' => BaoQuanQueue::TYPE_LOAN])->orderBy(['id' => SORT_ASC])->limit(20)->all();
         if (count($queues) > 0) {
-            foreach ($queues as $queue) {
-                $proId = $queue['itemId'];
-                $product = OnlineProduct::findOne($proId);
-                if (null !== $product) {
-                    try {
-                        Client::createBq($product);
-                        $queue->status = BaoQuanQueue::STATUS_SUCCESS;//处理成功
-                        $queue->save(false);
-                    } catch (Exception $e) {
-                        $queue->status = BaoQuanQueue::STATUS_FAILED;//处理失败
-                        $queue->save(false);
-                    }
-                }
-            }
+            $this->dealLoanOrderBaoQuan($queues);
         } else {
             sleep(3);
+        }
+    }
+
+    private function dealLoanOrderBaoQuan($queues)
+    {
+        foreach ($queues as $queue) {
+            $proId = $queue['itemId'];
+            $product = OnlineProduct::findOne($proId);
+            if (null !== $product) {
+                try {
+                    Client::createBq($product);
+                    $queue->status = BaoQuanQueue::STATUS_SUCCESS;//处理成功
+                    $queue->save(false);
+                } catch (Exception $e) {
+                    $queue->status = BaoQuanQueue::STATUS_FAILED;//处理失败
+                    $queue->save(false);
+                }
+            }
         }
     }
 
@@ -70,29 +75,34 @@ class BaoQuanController extends Controller
         }
         $queues = BaoQuanQueue::find()->where(['status' => BaoQuanQueue::STATUS_SUSPEND, 'itemType' => BaoQuanQueue::TYPE_CREDIT_ORDER])->orderBy(['id' => SORT_ASC])->limit(20)->all();
         if (count($queues) > 0) {
-            $txClient = \Yii::$container->get('txClient');
-            $ids = ArrayHelper::getColumn($queues, 'itemId');
-            $res = $txClient->post('assets/success-list', [
-                'credit_order_ids' => $ids,
-            ]);
-            $assets = $res['data'];
-            $assets = ArrayHelper::index($assets, 'credit_order_id');
-            foreach ($queues as $queue) {
-                if (!isset($assets[$queue['itemId']])) {
-                    continue;
-                }
-                $asset = $assets[$queue['itemId']];
-                $user = User::findOne($asset['user_id']);
-                try {
-                    $contracts = $this->getUserContract($asset);
-                    Client::createCreditBq($contracts, $user, $asset);
+            $this->dealCreditOrderBaoQuan($queues);
+        }
+    }
 
-                    $queue->status = BaoQuanQueue::STATUS_SUCCESS;
-                    $queue->save(false);
-                } catch (\Exception $ex) {
-                    $queue->status = BaoQuanQueue::STATUS_FAILED;
-                    $queue->save(false);
-                }
+    private function dealCreditOrderBaoQuan($queues)
+    {
+        $txClient = \Yii::$container->get('txClient');
+        $ids = ArrayHelper::getColumn($queues, 'itemId');
+        $res = $txClient->post('assets/success-list', [
+            'credit_order_ids' => $ids,
+        ]);
+        $assets = $res['data'];
+        $assets = ArrayHelper::index($assets, 'credit_order_id');
+        foreach ($queues as $queue) {
+            if (!isset($assets[$queue['itemId']])) {
+                continue;
+            }
+            $asset = $assets[$queue['itemId']];
+            $user = User::findOne($asset['user_id']);
+            try {
+                $contracts = $this->getUserContract($asset);
+                Client::createCreditBq($contracts, $user, $asset);
+
+                $queue->status = BaoQuanQueue::STATUS_SUCCESS;
+                $queue->save(false);
+            } catch (\Exception $ex) {
+                $queue->status = BaoQuanQueue::STATUS_FAILED;
+                $queue->save(false);
             }
         }
     }
@@ -103,51 +113,85 @@ class BaoQuanController extends Controller
      */
     public function actionCreditNote()
     {
+        //保全开关
+        $toggle = \Yii::$app->params['enable_ebaoquan'];
+        if (!$toggle) {
+            $this->stdout("缺少配置参数：enable_ebaoquan；或者enable_ebaoquan 被配置为false 。\n", Console::BOLD);
+            return 0;
+        }
+
         $queues = BaoQuanQueue::find()->where(['status' => BaoQuanQueue::STATUS_SUSPEND, 'itemType' => BaoQuanQueue::TYPE_CREDIT_NOTE])->orderBy(['id' => SORT_ASC])->limit(20)->all();
         if (!empty($queues)) {
-            $ids = ArrayHelper::getColumn($queues, 'itemId');
-            $txClient = \Yii::$container->get('txClient');
-            $res =  $txClient->post('credit-note/sold-res', ['credit_note_ids' => $ids]);
-            if (empty($res)) {
-                return;
-            }
-            $txClient = \Yii::$container->get('txClient');
-            foreach ($queues as $queue) {
-                $noteId = $queue['itemId'];
-                if (!isset($res[$noteId])) {
-                    continue;
-                }
-                $note = $txClient->get('credit-note/detail', ['id' => $noteId]);
-                $seller = User::findOne($note['user_id']);
-                $assets = $res[$noteId];
-                $amount = 0;
-                $creditContract = [];
-                $asset = reset($assets);
-                $user = User::findOne($asset['user_id']);
-                $loan = OnlineProduct::findOne($asset['loan_id']);
-                if (empty($user) || empty($loan)) {
-                    throw new \Exception('信息不全');
-                }
-                foreach ($assets as $asset) {
-                    if ($asset['note_id'] && $asset['credit_order_id']) {
-                        //购买该转让生成的转让合同
-                        $creditTemplate = $this->loadCreditContractByAsset($asset, $txClient, $loan);
-                        $creditContract[] = $creditTemplate['content'];
-                        $amount = bcadd($amount, $creditTemplate['amount'], 2);
-                    }
-                }
-                $content = implode(' <br><hr><br> ', $creditContract);
+            $this->dealCreditNoteBaoQuqn($queues);
+        }
+    }
 
-                $queue->status = BaoQuanQueue::STATUS_SUCCESS;
-                $queue->save(false);
-                try {
-                    Client::createCreditSellerBq($content, $user, $amount, $loan, $noteId, $seller);
-                } catch (\Exception $ex) {
-                    $queue->status = BaoQuanQueue::STATUS_FAILED;
-                    $queue->save(false);
-                    \Yii::trace('转让结束之后生成保全合同，标的ID:'.$loan->id.';保全失败,债权ID:'.$noteId.';失败信息'.$ex->getMessage(), 'bao_quan');
+    private function dealCreditNoteBaoQuqn($queues)
+    {
+        $ids = ArrayHelper::getColumn($queues, 'itemId');
+        $txClient = \Yii::$container->get('txClient');
+        $res = $txClient->post('credit-note/sold-res', ['credit_note_ids' => $ids]);
+        if (empty($res)) {
+            return;
+        }
+        $txClient = \Yii::$container->get('txClient');
+        foreach ($queues as $queue) {
+            $noteId = $queue['itemId'];
+            if (!isset($res[$noteId])) {
+                continue;
+            }
+            $note = $txClient->get('credit-note/detail', ['id' => $noteId]);
+            $seller = User::findOne($note['user_id']);
+            $assets = $res[$noteId];
+            $amount = 0;
+            $creditContract = [];
+            $asset = reset($assets);
+            $user = User::findOne($asset['user_id']);
+            $loan = OnlineProduct::findOne($asset['loan_id']);
+            if (empty($user) || empty($loan)) {
+                throw new \Exception('信息不全');
+            }
+            foreach ($assets as $asset) {
+                if ($asset['note_id'] && $asset['credit_order_id']) {
+                    //购买该转让生成的转让合同
+                    $creditTemplate = $this->loadCreditContractByAsset($asset, $txClient, $loan);
+                    $creditContract[] = $creditTemplate['content'];
+                    $amount = bcadd($amount, $creditTemplate['amount'], 2);
                 }
             }
+            $content = implode(' <br><hr><br> ', $creditContract);
+
+            $queue->status = BaoQuanQueue::STATUS_SUCCESS;
+            $queue->save(false);
+            try {
+                Client::createCreditSellerBq($content, $user, $amount, $loan, $noteId, $seller);
+            } catch (\Exception $ex) {
+                $queue->status = BaoQuanQueue::STATUS_FAILED;
+                $queue->save(false);
+                \Yii::trace('转让结束之后生成保全合同，标的ID:' . $loan->id . ';保全失败,债权ID:' . $noteId . ';失败信息' . $ex->getMessage(), 'bao_quan');
+            }
+        }
+    }
+
+    /**
+     * 失败的保全重新进行保全，手工运行，如果正式环境也出现失败保全，那么考虑增加定时任务。
+     */
+    public function actionCheck()
+    {
+        //处理普通标的失败保全
+        $queues = BaoQuanQueue::find()->where(['status' => BaoQuanQueue::STATUS_FAILED, 'itemType' => BaoQuanQueue::TYPE_LOAN])->orderBy(['id' => SORT_ASC])->limit(20)->all();
+        if (count($queues) > 0) {
+            $this->dealLoanOrderBaoQuan($queues);
+        }
+        //处理购买债权失败订单
+        $queues = BaoQuanQueue::find()->where(['status' => BaoQuanQueue::STATUS_FAILED, 'itemType' => BaoQuanQueue::TYPE_CREDIT_ORDER])->orderBy(['id' => SORT_ASC])->limit(20)->all();
+        if (count($queues) > 0) {
+            $this->dealCreditOrderBaoQuan($queues);
+        }
+        //处理卖方债权保全
+        $queues = BaoQuanQueue::find()->where(['status' => BaoQuanQueue::STATUS_FAILED, 'itemType' => BaoQuanQueue::TYPE_CREDIT_NOTE])->orderBy(['id' => SORT_ASC])->limit(20)->all();
+        if (!empty($queues)) {
+            $this->dealCreditNoteBaoQuqn($queues);
         }
     }
 }

@@ -154,20 +154,36 @@ class Client
     //保全成功之后添加保全记录
     private static function addBaoQuan($responseJson, $type, $itemId, $itemType, $title, $userID)
     {
-        $model = new EbaoQuan([
+        $model = EbaoQuan::find()->where([
             'type' => $type,
             'title' => $title,
             'itemId' => $itemId,
             'itemType' => $itemType,
-            'uid' => $userID,
-            'baoId' => $responseJson->preservationId,
-            'docHash' => $responseJson->docHash,
-            'preservationTime' => $responseJson->preservationTime,
-            'success' => $responseJson->success,
-        ]);
-        if (!$responseJson->success) {
-            $model->errMessage = $responseJson->message . '解决方案：' . $responseJson->solution;
+            'uid' => $userID])->one();
+        if (null === $model) {
+            $model = new EbaoQuan([
+                'type' => $type,
+                'title' => $title,
+                'itemId' => $itemId,
+                'itemType' => $itemType,
+                'uid' => $userID]);
         }
+        if ($responseJson->success) {
+            $model->setAttributes([
+                'baoId' => $responseJson->preservationId,
+                'docHash' => $responseJson->docHash,
+                'preservationTime' => $responseJson->preservationTime,
+                'success' => $responseJson->success
+            ], false);
+        } else {
+            $model->setAttributes([
+                'docHash' => $responseJson->docHash,
+                'preservationTime' => $responseJson->preservationTime,
+                'success' => $responseJson->success,
+                'errMessage' => $responseJson->message . '解决方案：' . $responseJson->solution
+            ], false);
+        }
+
         return $model->save(false);
     }
 
@@ -226,9 +242,6 @@ class Client
 
         //以下为返回的一些处理
         $responseJson = json_decode($response);
-        print_r("response:" . $response . "</br>");
-        print_r("format:</br>");
-        var_dump($responseJson); //null
         if ($responseJson->success) {
             echo $requestObj->getMethod() . "->处理成功";
         } else {
@@ -273,9 +286,6 @@ class Client
 
         //以下为返回的一些处理
         $responseJson = json_decode($response);
-        print_r("response:" . $response . "</br>");
-        print_r("format:</br>");
-        var_dump($responseJson); //null
         if ($responseJson->success) {
             echo $requestObj->getMethod() . "->处理成功";
         } else {
