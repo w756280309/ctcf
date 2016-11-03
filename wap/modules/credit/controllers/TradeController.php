@@ -6,7 +6,6 @@ use app\controllers\BaseController;
 use common\models\order\OnlineOrder as Order;
 use common\models\product\OnlineProduct as Loan;
 use Yii;
-use yii\data\ArrayDataProvider;
 use yii\data\Pagination;
 
 class TradeController extends BaseController
