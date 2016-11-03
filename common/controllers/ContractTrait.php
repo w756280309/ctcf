@@ -2,15 +2,14 @@
 
 namespace common\controllers;
 
-
 use common\models\contract\ContractTemplate;
 use common\models\order\BaoQuanQueue;
 use common\models\order\EbaoQuan;
 use common\models\order\OnlineOrder;
 use common\models\product\OnlineProduct;
-use common\models\product\RateSteps;
 use common\models\user\User;
 use common\utils\StringUtils;
+use common\view\LoanHelper;
 use EBaoQuan\Client;
 use Tx\TxClient;
 use Yii;
@@ -218,13 +217,9 @@ trait ContractTrait
                 && !empty($buyer)
             ) {
                 //生成标的利率
-                $loanRate = OnlineProduct::calcBaseRate($loan->yield_rate, $loan->jiaxi);
-                $loanRate = $loanRate . '%';
-                if ($loan->isFlexRate && $loan->rateSteps) {
-                    $loanRate = $loanRate . '~' . bcadd(RateSteps::getTopRate(RateSteps::parse($loan->rateSteps)), 0.00, 2).'%';
-                }
-                if ($loan->jiaxi) {
-                    $loanRate = $loanRate . '+' . bcadd($loan->jiaxi, 0.00, 2) . '%';
+                $loanRate = LoanHelper::getDealRate($loan).'%';
+                if (!empty($loan->jiaxi)) {
+                    $loanRate = $loanRate.'+'.StringUtils::amountFormat2($loan->jiaxi).'%';
                 }
                 //生成标的还款方式
                 $refund_methods = Yii::$app->params['refund_method'];

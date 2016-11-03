@@ -2,7 +2,7 @@
 $this->title = '我要理财';
 
 $this->registerCssFile(ASSETS_BASE_URI . 'css/pagination.css', ['depends' => 'frontend\assets\FrontAsset']);
-$this->registerCssFile(ASSETS_BASE_URI . 'css/deallist.css?v=160918', ['depends' => 'frontend\assets\FrontAsset']);
+$this->registerCssFile(ASSETS_BASE_URI . 'css/deallist.css?v=161103', ['depends' => 'frontend\assets\FrontAsset']);
 
 use common\models\product\OnlineProduct;
 use common\utils\StringUtils;
@@ -35,7 +35,7 @@ $action = Yii::$app->controller->action->getUniqueId();
                     <div class="center-border"></div>
                     <div class="single_content">
                         <ul class="single_ul_left">
-                            <li class="li_1">
+                            <li class="li_1 <?= $val->isFlexRate && $val->jiaxi ? 'rate-steps-jiaxi' : '' ?>">
                                 <i class="float-left"><?= LoanHelper::getDealRate($val) ?></i><span>%</span><?php if (!empty($val->jiaxi)) { ?><span class="addRadeNumber">+<?= StringUtils::amountFormat2($val->jiaxi) ?>%</span><?php } ?>
                             </li>
                             <li class="li_2">预期年化收益率</li>

@@ -36,7 +36,7 @@ use common\view\LoanHelper;
                     <td><?= StringUtils::amountFormat2($val->filingAmount) ?></td>
                     <td><?= StringUtils::amountFormat2($val->money) ?></td>
                     <td><?= StringUtils::amountFormat2($val->funded_money) ?></td>
-                    <td style="text-align: right;"><?= LoanHelper::getDealRate($val) ?></td>
+                    <td style="text-align: right;"><?= LoanHelper::getDealRate($val) ?><?php if (!empty($val->jiaxi)) { ?>+<?= StringUtils::amountFormat2($val->jiaxi) ?><?php } ?></td>
                     <td><?= empty($val->start_date) ? '---' : date('Y-m-d', $val->start_date) ?></td>
                     <td><?= empty($val->full_time) ? '---' : date('Y-m-d', $val->full_time) ?></td>
                     <td><?= empty($val->jixi_time) ? '---' : date('Y-m-d', $val->jixi_time) ?></td>
@@ -57,7 +57,7 @@ use common\view\LoanHelper;
                 <td><?= StringUtils::amountFormat2($val->filingAmount) ?></td>
                 <td><?= StringUtils::amountFormat2($val->money) ?></td>
                 <td><?= StringUtils::amountFormat2($val->funded_money) ?></td>
-                <td style="text-align: right;"><?= LoanHelper::getDealRate($val) ?></td>
+                <td style="text-align: right;"><?= LoanHelper::getDealRate($val) ?><?php if (!empty($val->jiaxi)) { ?>+<?= StringUtils::amountFormat2($val->jiaxi) ?><?php } ?></td>
                 <td><?= empty($val->start_date) ? '---' : date('Y-m-d', $val->start_date) ?></td>
                 <td><?= empty($val->full_time) ? '---' : date('Y-m-d', $val->full_time) ?></td>
                 <td><?= empty($val->jixi_time) ? '---' : date('Y-m-d', $val->jixi_time) ?></td>
