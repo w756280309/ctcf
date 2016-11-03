@@ -3,6 +3,7 @@
 namespace backend\modules\offline\controllers;
 
 use backend\controllers\BaseController;
+use common\models\adminuser\AdminLog;
 use common\models\offline\OfflineOrder;
 use common\models\affiliation\Affiliator;
 use common\models\offline\OfflineLoan;
@@ -76,20 +77,29 @@ class OfflineController extends BaseController
 
     /**
      * 线下数据页面
-     *
-     * @param null $bid
-     * @return string
      */
-    public function actionList($bid = null)
+    public function actionList()
     {
-        $order = OfflineOrder::find();
-        if (null !== $bid && is_numeric($bid)) {
-            $order->where(['affiliator_id' => $bid]);
+        $request = Yii::$app->request->get();
+        $ol = OfflineLoan::tableName();
+        $o = OfflineOrder::tableName();
+        $order = OfflineOrder::find()->innerJoinWith('loan')->where(["$o.isDeleted" => false]);
+        if (isset($request['bid']) && $request['bid'] > 0) {
+            $order->andWhere(["$o.affiliator_id" => $request['bid']]);
+        }
+        if (isset($request['title']) && !empty($request['title'])) {
+            $order->andFilterWhere(['like', "$ol.title", $request['title']]);
+        }
+        if (isset($request['realName']) && !empty($request['realName'])) {
+            $order->andFilterWhere(['like', "$o.realName", $request['realName']]);
+        }
+        if (isset($request['mobile']) && !empty($request['mobile'])) {
+            $order->andFilterWhere(['like', "$o.mobile", $request['mobile']]);
         }
 
         $branches = Affiliator::find()->all();
         $pages = new Pagination(['totalCount' => $order->count(), 'pageSize' => 10]);
-        $orders = $order->offset($pages->offset)->limit($pages->limit)->orderBy(['id' => SORT_DESC])->all();
+        $orders = $order->offset($pages->offset)->limit($pages->limit)->orderBy(["$o.id" => SORT_DESC])->all();
         $totalmoney = $order->sum('money');
 
         return $this->render('list', ['branches' => $branches, 'orders' => $orders, 'totalmoney' => $totalmoney, 'pages' => $pages]);
@@ -163,6 +173,35 @@ class OfflineController extends BaseController
         $model->money = $order[4];
         $model->orderDate = $order[5];
         $model->created_at = time();
+        $model->isDeleted = false;
         return $model;
+    }
+
+    /**
+     * 根据id删除对应的offline_order的一条记录（修改状态）
+     */
+    public function actionDelete()
+    {
+        $id = Yii::$app->request->post('id');
+
+        if ($id) {
+            $model = OfflineOrder::findOne($id);
+            $model->isDeleted = true;
+            //修改标的修改记录
+            try {
+                $log = AdminLog::initNew($model);
+                $log->save();
+            } catch (\Exception $e) {
+                return [
+                    'result' => 0,
+                    'message' => '线下数据删除操作日志记录失败',
+                ];
+            }
+            if ($model->save()) {
+                return ['code' => 1, 'message' => '删除成功'];
+            }
+        }
+
+        return ['code' => 0, 'message' => '删除失败'];
     }
 }

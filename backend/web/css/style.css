@@ -2026,6 +2026,10 @@ Custom tables
   border-left: 2px solid #e23e29;
 }
 
+.table-center th,
+.table-center td {
+  text-align: center;
+}
 
 /***
 Star rating

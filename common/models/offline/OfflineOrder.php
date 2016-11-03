@@ -31,6 +31,7 @@ class OfflineOrder extends ActiveRecord
             'money' => '购买金额',
             'orderDate' => '订单日期',
             'created_at' => '创建时间',
+            'isDeleted' => '是否删除',
         ];
     }
 
