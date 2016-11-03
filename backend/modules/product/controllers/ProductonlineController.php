@@ -46,6 +46,7 @@ class ProductonlineController extends BaseController
 
         $model = $id ? OnlineProduct::findOne($id) : new OnlineProduct();
         $ctmodel = null;
+        $allowUseCoupon = null;
         $model->scenario = 'create';
 
         if (!empty($id)) {
@@ -53,6 +54,9 @@ class ProductonlineController extends BaseController
             $model->yield_rate = bcmul($model->yield_rate, 100, 2);
             $isPrivate = $model->isPrivate;
             $ctmodel = ContractTemplate::find()->where(['pid' => $id])->all();
+            if ($model->online_status) {
+                $allowUseCoupon = $model->allowUseCoupon;
+            }
         } else {
             $model->epayLoanAccountId = '';
             $model->fee = 0;
@@ -69,6 +73,8 @@ class ProductonlineController extends BaseController
             $model->finish_date = is_integer($model->finish_date) ? $model->finish_date : strtotime($model->finish_date);
             $model->start_date = is_integer($model->start_date) ? $model->start_date : strtotime($model->start_date);
             $model->end_date = is_integer($model->end_date) ? $model->end_date : strtotime($model->end_date);
+            $model->allowUseCoupon = null !== $allowUseCoupon ? $allowUseCoupon : $model->allowUseCoupon;
+
             if ($model->validate()) {
                 //非测试标，起投金额、递增金额取整
                 if (!$model->isTest) {

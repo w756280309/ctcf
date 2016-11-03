@@ -206,7 +206,7 @@ $is_online = in_array($model->status, [2, 3, 4, 5, 6, 7]);//判断标的是否�
             <!--/span-->
             <div class="span6 ">
                 <div class="control-group">
-                    <label class="control-label">募集金额<span style="color: red;">(<?= $desc ?>)</span></label>
+                    <label class="control-label">募集金额<span class="notice">(<?= $desc ?>)</span></label>
                     <div class="controls">
                         <?php
                         if ($is_online) {
@@ -227,7 +227,7 @@ $is_online = in_array($model->status, [2, 3, 4, 5, 6, 7]);//判断标的是否�
         <div class="row-fluid">
             <div class="span6 ">
                 <div class="control-group">
-                    <label class="control-label">募集开始时间<span style="color: red;">(<?= $desc ?>)</span></label>
+                    <label class="control-label">募集开始时间<span class="notice">(<?= $desc ?>)</span></label>
                     <div class="controls">
                         <?php
                             $start_date_input_option = ['autocomplete' => 'off', 'placeholder' => '募集开始时间'];
@@ -271,7 +271,7 @@ $is_online = in_array($model->status, [2, 3, 4, 5, 6, 7]);//判断标的是否�
         <div class="row-fluid sourceRfmet">
             <div class="span6 ">
                 <div class="control-group">
-                    <label class="control-label">产品到期日<span style="color: red;">(<?= $desc ?>)</span></label>
+                    <label class="control-label">产品到期日<span class="notice">(<?= $desc ?>)</span></label>
                     <div class="controls">
                         <?= $form->field($model, 'finish_date', ['template'=>'{input}'])->hiddenInput(['value' => 0, 'id' => 'finish_date_hide'])->label(false)?>
                         <?php
@@ -324,7 +324,7 @@ $is_online = in_array($model->status, [2, 3, 4, 5, 6, 7]);//判断标的是否�
         <div class="row-fluid">
             <div class="span6 ">
                 <div class="control-group">
-                    <label class="control-label">融资用户<span style="color: red;">(<?= $desc ?>)</span></label>
+                    <label class="control-label">融资用户<span class="notice">(<?= $desc ?>)</span></label>
                     <div class="controls">
                         <?php
                             $borrow_uid_input_option = ['autocomplete' => 'off', 'class' => 'chosen-with-diselect span6'];
@@ -461,9 +461,9 @@ $is_online = in_array($model->status, [2, 3, 4, 5, 6, 7]);//判断标的是否�
         <div class="row-fluid">
             <div class="span6 ">
                 <div class="control-group">
-                    <label class="control-label">允许使用代金券</label>
+                    <label class="control-label">允许使用代金券<span class="notice">(<?= $desc ?>)</span></label>
                     <div class="controls">
-                        <?= $form->field($model, 'allowUseCoupon')->checkbox(['autocomplete' => 'on'])->label(false) ?>
+                        <?= $form->field($model, 'allowUseCoupon')->checkbox(array_merge(['autocomplete' => 'on'], $model->online_status ? ['disabled' => 'disabled'] : []))->label(false) ?>
                     </div>
                 </div>
             </div>
