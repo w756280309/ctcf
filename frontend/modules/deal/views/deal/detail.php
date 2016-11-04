@@ -10,7 +10,7 @@ $user = Yii::$app->user->identity;
 $this->registerJsFile(ASSETS_BASE_URI . 'js/detail.js');
 $this->registerCssFile(ASSETS_BASE_URI . 'css/deal/buy.css');
 $this->registerCssFile(ASSETS_BASE_URI . 'css/deal/deallist.css');
-$this->registerCssFile(ASSETS_BASE_URI . 'css/deal/detail.css?v=160810');
+$this->registerCssFile(ASSETS_BASE_URI . 'css/deal/detail.css?v=161104');
 $this->registerCssFile(ASSETS_BASE_URI . 'css/pagination.css');
 $this->registerCssFile(ASSETS_BASE_URI . 'css/useraccount/chargedeposit.css');
 ?>
@@ -76,7 +76,7 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/useraccount/chargedeposit.css');
             <?php } ?>
 
             <?php if (!$deal->allowUseCoupon) { ?>
-                <p class="grace-period">此项目不参与活动，不可使用代金券。</p>
+                <p class="grace-period notice-coupon">此项目不参与活动，不可使用代金券。</p>
             <?php } ?>
         </div>
         <?php if ($deal->isFlexRate) { ?>

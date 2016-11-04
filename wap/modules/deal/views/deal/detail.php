@@ -6,7 +6,7 @@ use common\view\LoanHelper;
 use common\utils\StringUtils;
 
 ?>
-<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/xiangqing.css?v=20161101">
+<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/xiangqing.css?v=20161104">
 
 <!--xiangqing-->
 <div class="row column">
@@ -53,6 +53,9 @@ use common\utils\StringUtils;
 
 <div class="row message">
     <div class="col-xs-12 xian2">
+        <?php if (!$deal->allowUseCoupon) { ?>
+            <p class="notice-coupon">此项目不参与活动，不可使用代金券。</p>
+        <?php } ?>
         <div class="m1">起投金额：<span><?= StringUtils::amountFormat2($deal->start_money) ?>元</span></div>
         <div class="m5">递增金额：<span><?= StringUtils::amountFormat2($deal->dizeng_money) ?>元</span></div>   <!-- 增加递增金额字段 -->
         <div class="m2">产品起息日：<span><?= $deal->jixi_time > 0 ? date('Y-m-d',$deal->jixi_time) : '项目成立日次日';?></span></div>
@@ -81,9 +84,6 @@ use common\utils\StringUtils;
         <?php } ?>
         <?php if (!empty($deal->kuanxianqi)) { ?>
             <p class="notice">融资方可提前<?= $deal->kuanxianqi ?>天内任一天还款，客户收益按实际天数计息。</p>
-        <?php } ?>
-        <?php if (!$deal->allowUseCoupon) { ?>
-            <p class="notice">此项目不参与活动，不可使用代金券。</p>
         <?php } ?>
     </div>
 </div>

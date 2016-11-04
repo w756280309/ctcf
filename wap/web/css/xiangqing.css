@@ -380,6 +380,9 @@ p.notice {
     margin-top: 2em;
     margin-right: 1em;
 }
+p.notice-coupon {
+    color: #f44336;
+}
 .m4 img {
     width: 14px;
     height: 14px;

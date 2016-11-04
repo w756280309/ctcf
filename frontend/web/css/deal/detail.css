@@ -558,3 +558,6 @@ li.amount {
     box-shadow:1px 1px 0 0 #FFE4C4;
     border: 1px solid #ff9800;
 }
+p.notice-coupon {
+    color: #f44336 !important;
+}
