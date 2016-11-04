@@ -2,24 +2,18 @@
 
 namespace backend\modules\user\controllers;
 
-use Yii;
 use backend\controllers\BaseController;
-use yii\data\Pagination;
-use common\models\user\DrawRecord;
-use common\models\user\DrawRecordTime;
-use common\models\user\MoneyRecord;
-use common\models\user\UserAccount;
-use common\models\user\User;
 use common\lib\bchelp\BcRound;
-use common\models\user\UserBank;
 use common\models\user\Batchpay;
-use yii\web\Response;
-use common\utils\TxUtils;
+use common\models\user\DrawRecord;
+use common\models\user\User;
+use common\models\user\UserBank;
 use common\models\draw\DrawManager;
 use common\models\draw\DrawException;
-use yii\web\NotFoundHttpException;
 use common\models\bank\Bank;
 use common\service\SmsService;
+use Yii;
+use yii\data\Pagination;
 
 class DrawrecordController extends BaseController
 {
@@ -28,26 +22,27 @@ class DrawrecordController extends BaseController
      */
     public function actionDetail($id, $type)
     {
-        if (empty($id) || empty($type) || !in_array($type, [1, 2])) {
-            throw new NotFoundHttpException();     //参数无效,抛出404异常
+        if (empty($id) || !in_array($type, [1, 2])) {
+            throw $this->ex404();     //参数无效,抛出404异常
         }
 
+        $user = $this->findOr404(User::class, $id);
+        $type = intval($type);
+
         //提现明细页面的搜索功能
-        $status = Yii::$app->request->get('status');
+        $status = intval(Yii::$app->request->get('status'));
         $time = Yii::$app->request->get('time');
 
         $b = Bank::tableName();
-        $d = DrawRecordTime::tableName();
-        $query = DrawRecordTime::find()
+        $d = DrawRecord::tableName();
+
+        $query = DrawRecord::find()
             ->leftJoin($b, "$d.bank_id = $b.id")
             ->select("$d.*, $b.bankName")
             ->where(['uid' => $id]);
-        if ($type == User::USER_TYPE_PERSONAL) {
-            if ($status === '-1') {
-                $query->andWhere(['status' => 0]);
-            } elseif (!empty($status)) {
-                $query->andWhere(['status' => $status]);
-            }
+
+        if ($type === User::USER_TYPE_PERSONAL && $status > 0) {
+            $query->andWhere(['status' => $status - 1]);
         }
 
         if (!empty($time)) {
@@ -59,160 +54,77 @@ class DrawrecordController extends BaseController
         $pages = new Pagination(['totalCount' => $query->count(), 'pageSize' => '10']);
         $model = $query->offset($pages->offset)->limit($pages->limit)->orderBy('id desc')->asArray()->all();
 
-        $user = User::find()->where(['id' => $id])->select('username,org_name')->one();
-
         $moneyTotal = 0;  //提现总额
         $successNum = 0;  //成功笔数
         $failureNum = 0;  //失败笔数
-        $numdata = DrawRecordTime::find()->where(['uid' => $id])->select('money,status')->asArray()->all();
+        $numdata = DrawRecord::find()->where(['uid' => $id])->select('money,status')->asArray()->all();
         $bc = new BcRound();
         bcscale(14);
         foreach ($numdata as $data) {
-            if ($data['status'] == DrawRecordTime::STATUS_SUCCESS) {
+            if ($data['status'] == DrawRecord::STATUS_SUCCESS) {
                 $moneyTotal = bcadd($moneyTotal, $data['money']);
                 ++$successNum;
-            } elseif ($data['status'] == DrawRecordTime::STATUS_FAIL) {
+            } elseif ($data['status'] == DrawRecord::STATUS_FAIL) {
                 ++$failureNum;
             }
         }
         $moneyTotal = $bc->bcround($moneyTotal, 2);
 
-        //渲染到静态页面
         return $this->render('list', [
-                    'type' => $type,
-                    'id' => $id,
-                    'model' => $model,
-                    'pages' => $pages,
-                    'user' => $user,
-                    'moneyTotal' => $moneyTotal,
-                    'successNum' => $successNum,
-                    'failureNum' => $failureNum,
+            'type' => $type,
+            'status' => $status,
+            'time' => $time,
+            'model' => $model,
+            'pages' => $pages,
+            'user' => $user,
+            'moneyTotal' => $moneyTotal,
+            'successNum' => $successNum,
+            'failureNum' => $failureNum,
         ]);
     }
 
-    private function alert($res, $msg, $tourl = null)
+    /**
+     * 查询提现记录在联动一侧的状态.
+     */
+    public function actionUmpStatus()
     {
-        $this->alert = $res;
-        $this->msg = $msg;
-        if (null !== $tourl) {
-            $this->toUrl = $tourl;
-        }
-    }
-
-    //录入提现数据
-    public function actionEdit($id = null, $type = null)       // DEPRECATED
-    {
-        throw new NotFoundHttpException();
-
-        $banks = Yii::$app->params['bank'];
-        $bankInfo = [];
-        foreach ($banks as $k => $v) {
-            $bankInfo[$k] = $v['bankname'];
-        }
-        $model = new DrawRecordTime();
-        $model->uid = $id;
-        $model->created_at = strtotime(Yii::$app->request->post('created_at'));
-        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            $userAccountInfo = UserAccount::findOne(['uid' => $id, 'type' => UserAccount::TYPE_BORROW]);//融资账户;
-            if (bccomp($userAccountInfo->available_balance, $model->money) < 0) {
-                $this->alert(2, '可用余额不足');
-            } else {
-                $money = $model->money;
-                $model->status = DrawRecord::STATUS_ZERO;
-                $bc = new BcRound();
-                bcscale(14); //设置小数位数
-                $userAccountInfo->available_balance = $bc->bcround(bcsub($userAccountInfo->available_balance, $money), 2);
-                $userAccountInfo->out_sum = $bc->bcround(bcadd($userAccountInfo->out_sum, $money), 2);
-                $userAccountInfo->freeze_balance = $bc->bcround(bcadd($userAccountInfo->freeze_balance, $money), 2);
-                $userAccountInfo->drawable_balance = $bc->bcround(bcsub($userAccountInfo->drawable_balance, $money), 2);
-
-                $money_record = new MoneyRecord();
-                $money_record->sn = TxUtils::generateSn("MR");
-                $money_record->type = MoneyRecord::TYPE_DRAW;
-                $money_record->osn = $model->sn;
-                $money_record->account_id = $userAccountInfo->id;
-                $money_record->uid = $id;
-                $money_record->balance = $userAccountInfo->available_balance;
-                $money_record->out_money = $money;
-
-                if ($model->save() && $userAccountInfo->save() && $money_record->save()) {
-                    $this->alert(1, '操作成功', "detail?id=$id&type=$type");
-                } else {
-                    $this->alert(2, '操作失败');
-                }
-            }
-        }
-
-        return $this->render('edit', [
-                    'banks' => $bankInfo,
-                    'type' => $type,
-                    'id' => $id,
-                    'model' => $model,
-        ]);
-    }
-
-    public function actionDrawexamin()
-    {
-        $id = Yii::$app->request->post('id');
-        $uid = Yii::$app->request->post('uid');
-        $status = (int) Yii::$app->request->post('status');
-        $res = 0;
-        $msg = '操作失败';
+        $id = Yii::$app->request->get('id');
         $draw = DrawRecord::findOne($id);
-        if (null !== $draw && in_array($status, [DrawRecord::STATUS_SUCCESS,DrawRecord::STATUS_FAIL])) {
-            $userAccountInfo = UserAccount::findOne(['uid' => $draw->uid, 'type' => UserAccount::TYPE_BORROW]); //融资账户;
-            $bc = new BcRound();
-            $money = $draw->money;
-            $YuE = $userAccountInfo->available_balance;
-            $money_type = 0;
-            bcscale(14); //设置小数位数
-            if ($status === DrawRecord::STATUS_SUCCESS) {
-                $userAccountInfo->account_balance = $bc->bcround(bcsub($userAccountInfo->account_balance, $money), 2);
-                $userAccountInfo->freeze_balance = $bc->bcround(bcsub($userAccountInfo->freeze_balance, $money), 2);
-                $money_type = MoneyRecord::TYPE_DRAW_SUCCESS;
-            } elseif ($status === DrawRecord::STATUS_FAIL) {
-                $userAccountInfo->available_balance = $bc->bcround(bcadd($userAccountInfo->available_balance, $money), 2);
-                $userAccountInfo->in_sum = $bc->bcround(bcadd($userAccountInfo->in_sum, $money), 2);
-                $userAccountInfo->freeze_balance = $bc->bcround(bcsub($userAccountInfo->freeze_balance, $money), 2);
-                $userAccountInfo->drawable_balance = $bc->bcround(bcadd($userAccountInfo->drawable_balance, $money), 2);
-                $money_type = MoneyRecord::TYPE_DRAW_RETURN;
+
+        if (null !== $draw) {
+            $res = Yii::$container->get('ump')->getDrawInfo($draw);
+
+            if ($res->isSuccessful()) {
+                $tranState = $res->get('tran_state');
+                $status = [
+                    0 => '初始',
+                    1 => '受理中',
+                    2 => '成功',
+                    3 => '失败',
+                    4 => '不明',
+                    5 => '交易关闭',
+                    6 => '其他',
+                    12 => '已冻结',
+                    13 => '待冻结',
+                    14 => '财务已审核',
+                    15 => '财务审核失败',
+                ];
+
+                if (isset($status[$tranState])) {
+                    return ['code' => 0, 'message' => $status[$tranState]];
+                }
+
+                return ['code' => 1, 'message' => '返回信息不明确'];
             }
 
-            $moneyInfo = new MoneyRecord();
-            // 生成一个SN流水号
-            $sn = TxUtils::generateSn("MR");
-            $moneyInfo->uid = $uid;
-            $moneyInfo->sn = $sn;
-            $moneyInfo->osn = $draw->sn;
-            $moneyInfo->type = $money_type;
-            $moneyInfo->balance = $YuE;
-            if($status == DrawRecord::STATUS_SUCCESS){
-                $moneyInfo->out_money = $money;
-                $draw->status = DrawRecord::STATUS_SUCCESS;
-            }else{
-                $moneyInfo->in_money = $money;
-                $draw->status = DrawRecord::STATUS_FAIL; //驳回
-            }
-            $moneyInfo->account_id = $userAccountInfo->id;
-
-            //开启事务
-            $transaction = Yii::$app->db->beginTransaction();
-            if (($draw->save()) && ($moneyInfo->save()) && ($userAccountInfo->save())) {
-                $transaction->commit();
-                $msg = '操作成功';
-                $res = 1;
-            } else {
-                $transaction->rollBack();
-            }
-        } else {
-            $msg = '无法找到';
+            return ['code' => 1, 'message' => '['.$res->get('ret_code').']'.$res->get('ret_msg')];
         }
-        Yii::$app->response->format = Response::FORMAT_JSON;
-        return ['res' => $res, 'msg' => $msg, 'data' => ''];
+
+        return ['code' => 1, 'message' => '订单不存在'];
     }
 
     /*
-     * 会员管理 提现申请页面
+     * 会员管理 提现申请页面.
      */
     public function actionApply()
     {
@@ -262,7 +174,7 @@ class DrawrecordController extends BaseController
     public function actionExaminfk($pid, $id)
     {
         if (empty($pid) || empty($id)) {
-            throw new NotFoundHttpException();     //参数无效,抛出404异常
+            throw $this->ex404();     //参数无效,抛出404异常
         }
 
         $this->layout = false;
@@ -275,7 +187,7 @@ class DrawrecordController extends BaseController
     }
 
     /**
-     * 点击后审核通过或不通过
+     * 点击后审核通过或不通过.
      */
     public function actionChecksq()
     {
@@ -313,8 +225,6 @@ class DrawrecordController extends BaseController
 
     /**
      * 点击放款后开始放款.
-     *
-     * @return bool
      */
     public function actionChecksqfangkuan()
     {
@@ -339,7 +249,9 @@ class DrawrecordController extends BaseController
         return false;
     }
 
-    //点击放款
+    /**
+     * 点击放款.
+     */
     public function actionFangkuan($pid = null, $id = null)
     {
         $this->layout = false;

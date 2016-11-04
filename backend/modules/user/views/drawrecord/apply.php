@@ -1,16 +1,15 @@
 <?php
-use yii\widgets\LinkPager;
+
 use common\models\user\User;
 use common\models\user\DrawRecord;
+use yii\web\YiiAsset;
+use yii\widgets\LinkPager;
 
-$this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\web\YiiAsset']);
+$this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => YiiAsset::class]);
 ?>
 <?php $this->beginBlock('blockmain'); ?>
-
 <div class="container-fluid">
-
     <!-- BEGIN PAGE HEADER-->
-
     <div class="row-fluid">
         <div class="span12">
             <h3 class="page-title">
@@ -84,8 +83,8 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\we
                         <th>提现金额（元）</th>
                         <th>申请时间</th>
                         <th>状态</th>
-                        <th>操作</th>
-                </tr>
+                        <th>联动状态</th>
+                    </tr>
                 </thead>
                 <tbody>
                     <?php foreach ($model as $key => $val) : ?>
@@ -95,34 +94,8 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\we
                             <td><a href="#"><?= $res[$val['uid']]['real_name'] ?></a></td>
                             <td><?= $val['money'] ?></td>
                             <td><?= date('Y-m-d H:i:s', $val['created_at']) ?></td>
-                            <td>
-                                <?php
-                                if ($val['status'] == DrawRecord::STATUS_ZERO) {
-                                    echo "------";
-                                } elseif ($val['status'] == DrawRecord::STATUS_EXAMINED) {
-                                    echo "审核通过";
-                                } elseif ($val['status'] == DrawRecord::STATUS_SUCCESS) {
-                                    echo "提现成功";
-                                } elseif ($val['status'] == DrawRecord::STATUS_LAUNCH_BATCHPAY) {
-                                    echo "已放款";
-                                } elseif($val['status'] == DrawRecord::STATUS_DENY) {
-                                    echo "审核未通过";
-                                } elseif($val['status'] == DrawRecord::STATUS_FAIL) {
-                                    echo "提现不成功";
-                                }
-                                ?>
-                            </td>
-                            <td style="text-align:left">
-                                <!--
-                                <?php if ($val['status'] == DrawRecord::STATUS_ZERO) { ?>
-                                    <a href="javascript:openwin('/user/drawrecord/examinfk?pid=<?= $val['uid'] ?>&id=<?= $val['id'] ?>',500,500)" class="btn mini green"><i class="icon-edit"></i> 审核</a>
-                                <?php } elseif ($val['status'] == DrawRecord::STATUS_EXAMINED) { ?>
-                                    <a href="javascript:openwin('/user/drawrecord/examinfk?pid=<?= $val['uid'] ?>&id=<?= $val['id'] ?>',500,500)" class="btn mini green"><i class="icon-edit"></i> 放款</a>
-                                <?php } elseif (in_array ($val['status'], [DrawRecord::STATUS_SUCCESS,DrawRecord::STATUS_LAUNCH_BATCHPAY,DrawRecord::STATUS_DENY])) { ?>
-                                    <a href="javascript:openwin('/user/drawrecord/examinfk?pid=<?= $val['uid'] ?>&id=<?= $val['id'] ?>',500,500)" class="btn mini green"><i class="icon-edit"></i> 查看</a>
-                                <?php } ?>
-                                -->
-                            </td>
+                            <td><?= Yii::$app->params['draw_status'][$val['status']] ?></td>
+                            <td><button class="btn btn-primary get_order_status" drawid="<?= $val['id'] ?>">查询流水在联动状态</button></td>
                     </tr>
                 <?php endforeach; ?>
                 </tbody>
@@ -131,12 +104,24 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\we
         <!--分页-->
         <div class="pagination" style="text-align:center"><?= LinkPager::widget(['pagination' => $pages]); ?></div>
     </div>
-
 </div>
 
-
 <script type="text/javascript">
+    $(function() {
+        //点击获取流水在联动的状态
+        $('.get_order_status').on('click', function () {
+            var _this = $(this);
+            var id = _this.attr('drawid');
+            if (id) {
+                var xhr = $.get('/user/drawrecord/ump-status?id='+id, function (data) {
+                    _this.parent().html(data.message);
+                });
 
+                xhr.fail(function() {
+                    newalert(0, '联动接口请求失败');
+                });
+            }
+        });
+    })
 </script>
 <?php $this->endBlock(); ?>
-
