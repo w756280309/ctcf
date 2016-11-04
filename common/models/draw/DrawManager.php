@@ -116,20 +116,25 @@ class DrawManager
     }
 
     /**
-     * 确定提现完成.
+     * 确定提现完成
      *
-     * @param type $draw
+     * @param DrawRecord $draw
+     *
+     * @throws \Exception
      */
     public static function commitDraw(DrawRecord $draw)
     {
-        if ((int) $draw->status !== DrawRecord::STATUS_EXAMINED) {
+        $drawStatus = (int) $draw->status;
+
+        if ($drawStatus !== DrawRecord::STATUS_EXAMINED) {
             throw new DrawException('必须是受理成功的');
         }
-
         $resp = \Yii::$container->get('ump')->getDrawInfo($draw);
+
         if ($resp->isSuccessful()) {
             $bc = new BcRound();
-            if (2 === (int) $resp->get('tran_state')) {
+            $tranState = (int) $resp->get('tran_state');
+            if (2 === $tranState) {
                 $transaction = Yii::$app->db->beginTransaction();
                 $money = bcadd($draw->money, $draw->fee);
                 $userAccount = UserAccount::find()->where('uid = '.$draw->uid)->one();
@@ -149,7 +154,7 @@ class DrawManager
                 } else {
                     $transaction->rollBack();
                 }
-            } elseif ((int) $resp->get('tran_state') === 3 || (int) $resp->get('tran_state') === 5 || (int) $resp->get('tran_state') === 15) {
+            } elseif ($tranState === 3 || $tranState === 5 || $tranState === 15) {
                 //失败的代码
                 self::cancel($draw, DrawRecord::STATUS_DENY);
             }
