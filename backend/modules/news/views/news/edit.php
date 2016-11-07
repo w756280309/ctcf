@@ -108,11 +108,39 @@ $this->title = '编辑资讯';
             </div>
         </div>
     </div>
+    <style>
+        .ke-icon-text_indent {
+            background-image: url('/vendor/kindeditor/4.1.11/themes/default/default.png');
+            background-position: 0px -672px;
+            width: 16px;
+            height: 16px;
+        }
+    </style>
     <script type="text/javascript">
         jQuery(document).ready(function () {
+            KindEditor.lang({
+                text_indent : '首行缩进'
+            });
+            KindEditor.plugin('text_index', function(K) {
+                var self = this, name = 'text_indent';
+                self.clickToolbar(name, function() {
+                    var cmd = self.cmd;
+                    var p = K(cmd.sel.anchorNode.parentNode);
+                    if (p.name == 'p') {
+                        if (p.hasClass('text_indent')) {
+                            p.removeClass('text_indent');
+                            p.css('text-indent', '0em');
+                        } else {
+                            p.addClass('text_indent');
+                            p.css('text-indent', '2em');
+                        }
+                    }
+                });
+            });
             KindEditor.ready(function(K) {
                 var editor1 = K.create('#news-body', {
-                    items:['source', 'fontname', 'fontsize',  'forecolor', 'hilitecolor', 'bold', 'italic', 'underline', 'removeformat', '|','wordpaste', '|', 'justifyleft', 'justifycenter', 'justifyright','justifyfull', 'insertorderedlist','insertunorderedlist', '|', 'image', 'table', 'link', 'unlink'],
+                    pasteType:1,
+                    items:['source', 'preview','fontname', 'fontsize',  'forecolor', 'hilitecolor', 'bold', 'italic', 'underline', 'removeformat', '|','plainpaste','wordpaste', '|', 'justifyleft', 'justifycenter', 'justifyright','justifyfull', 'insertorderedlist','insertunorderedlist', '|', 'image', 'table', 'link', 'unlink', 'text_indent'],
                     uploadJson :'/news/news/upload', //指定上传文件的服务器端程序
                     extraFileUploadParams:{_csrf:"<?= Yii::$app->request->csrfToken ?>"}
                 });
