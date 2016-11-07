@@ -10,6 +10,7 @@ use common\models\order\OnlineOrder;
 use common\models\product\OnlineProduct;
 use common\models\user\User;
 use EBaoQuan\Client;
+use Wcg\Lock\FileLock;
 use yii\base\Exception;
 use yii\console\Controller;
 use yii\helpers\ArrayHelper;
@@ -73,10 +74,17 @@ class BaoQuanController extends Controller
             $this->stdout("缺少配置参数：enable_ebaoquan；或者enable_ebaoquan 被配置为false 。\n", Console::BOLD);
             return 0;
         }
+        $cmdLock = new FileLock(\Yii::getAlias('@lock'), 'bao_quan_credit_order', 120);
+        if (!$cmdLock->acquire()) {
+            exit;
+        }
+
         $queues = BaoQuanQueue::find()->where(['status' => BaoQuanQueue::STATUS_SUSPEND, 'itemType' => BaoQuanQueue::TYPE_CREDIT_ORDER])->orderBy(['id' => SORT_ASC])->limit(20)->all();
         if (count($queues) > 0) {
             $this->dealCreditOrderBaoQuan($queues);
         }
+
+        $cmdLock->release();
     }
 
     private function dealCreditOrderBaoQuan($queues)
@@ -119,11 +127,17 @@ class BaoQuanController extends Controller
             $this->stdout("缺少配置参数：enable_ebaoquan；或者enable_ebaoquan 被配置为false 。\n", Console::BOLD);
             return 0;
         }
+        $cmdLock = new FileLock(\Yii::getAlias('@lock'), 'bao_quan_credit_note', 300);
+        if (!$cmdLock->acquire()) {
+            exit;
+        }
 
         $queues = BaoQuanQueue::find()->where(['status' => BaoQuanQueue::STATUS_SUSPEND, 'itemType' => BaoQuanQueue::TYPE_CREDIT_NOTE])->orderBy(['id' => SORT_ASC])->limit(20)->all();
         if (!empty($queues)) {
             $this->dealCreditNoteBaoQuqn($queues);
         }
+
+        $cmdLock->release();
     }
 
     private function dealCreditNoteBaoQuqn($queues)
@@ -178,6 +192,11 @@ class BaoQuanController extends Controller
      */
     public function actionCheck()
     {
+        $cmdLock = new FileLock(\Yii::getAlias('@lock'), 'bao_quan_check', 300);
+        if (!$cmdLock->acquire()) {
+            exit('其他进程正在占用资源，请稍后重试');
+        }
+
         //处理普通标的失败保全
         $queues = BaoQuanQueue::find()->where(['status' => BaoQuanQueue::STATUS_FAILED, 'itemType' => BaoQuanQueue::TYPE_LOAN])->orderBy(['id' => SORT_ASC])->limit(20)->all();
         if (count($queues) > 0) {
@@ -193,5 +212,7 @@ class BaoQuanController extends Controller
         if (!empty($queues)) {
             $this->dealCreditNoteBaoQuqn($queues);
         }
+
+        $cmdLock->release();
     }
 }
