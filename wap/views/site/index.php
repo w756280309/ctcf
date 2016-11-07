@@ -198,9 +198,9 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/index.js?v=20161021', ['depends' => Jq
         $('html').removeAttr('ontouchmove');
     }
     $(function() {
-        if ($.cookie('splash_show') !== "2") {
+        if ($.cookie('splash_show') !== "1") {
             $('html').attr('ontouchmove','event.preventDefault()');
-            $.cookie('splash_show', "2");
+            $.cookie('splash_show', "1");
             $('#mask_kaiping').show();
             $('#mask_kaiping,.tail').show();
             setTimeout(closeAdv, 4000);
