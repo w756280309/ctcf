@@ -507,7 +507,8 @@ class ProductonlineController extends BaseController
             } else {
                 $bc = new BcRound();
                 $transaction = Yii::$app->db->beginTransaction();
-                $updateData = ['status' => OnlineProduct::STATUS_FOUND, 'sort' => OnlineProduct::SORT_FOUND, 'full_time' => time()];
+                //提前成立的标的募集完成率应为100%，即1.0000
+                $updateData = ['status' => OnlineProduct::STATUS_FOUND, 'sort' => OnlineProduct::SORT_FOUND, 'full_time' => time(), 'finish_rate' => 1.0000];
                 //修改标的修改记录
                 try {
                     $log = AdminLog::initNew($model, Yii::$app->user, $updateData);
