@@ -2,13 +2,15 @@
 
 namespace common\models\product;
 
+use yii\db\ActiveRecord;
+
 /**
  * 发行方（项目）.
  *
  * @property string $id
  * @property string $name
  */
-class Issuer extends \yii\db\ActiveRecord
+class Issuer extends ActiveRecord
 {
     /**
      * {@inheritdoc}
@@ -16,6 +18,8 @@ class Issuer extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+            ['name', 'required'],
+            ['name', 'string'],
         ];
     }
 
