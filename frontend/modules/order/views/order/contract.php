@@ -89,7 +89,7 @@ $this->registerCssFile(ASSETS_BASE_URI.'css/deal/productcontract.css', ['depends
             $('.loan_content').removeClass('active');
             $(this).addClass('active');
             $('.contract-content .pagination .list .content').html(loanContracts[k]['content']);
-            if (bqLoan.downUrl && bqLoan.linkUrl) {
+            if (bqLoan && bqLoan.downUrl && bqLoan.linkUrl) {
                 $('.bq_div ').show();
                 $('.bq_div .down').attr('href', bqLoan.downUrl);
                 $('.bq_div .view').attr('href', bqLoan.linkUrl);
@@ -111,8 +111,7 @@ $this->registerCssFile(ASSETS_BASE_URI.'css/deal/productcontract.css', ['depends
         $('.loan_content').removeClass('active');
         $(this).parent().parent().addClass('active');
         $('.contract-content .pagination .list .content').html(creditContracts[key]['content']);
-        if (creditContracts[key]['bqCredit'].downUrl && creditContracts[key]['bqCredit'].linkUrl) {
-            console.log();
+        if (creditContracts[key]['bqCredit'] && creditContracts[key]['bqCredit'].downUrl && creditContracts[key]['bqCredit'].linkUrl) {
             $('.bq_div ').show();
             $('.bq_div .down').attr('href', creditContracts[key]['bqCredit']['downUrl']);
             $('.bq_div .view').attr('href', creditContracts[key]['bqCredit']['linkUrl']);

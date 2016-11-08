@@ -75,7 +75,6 @@ trait ContractTrait
     //获取债权销售的相关转让协议
     public function getUserSellerContract(TxClient $txClient, $asset, OnlineProduct $loan, $key)
     {
-        $bqCreditNote = [];
         $creditContract = [];
         //获取该资产被转让的记录
         $soldRes = $txClient->get('assets/sold-res', ['asset_id' => $asset['id']]);
@@ -101,6 +100,7 @@ trait ContractTrait
                         'uid' => $asset['user_id'],
                         'itemId' => $noteId,
                     ])->one();
+                    $bqCreditNote = [];
                     if (null !== $bq) {
                         $bqCreditNote['downUrl'] = Client::contractFileDownload($bq);
                         $bqCreditNote['linkUrl'] = Client::certificateLinkGet($bq);
