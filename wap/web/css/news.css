@@ -33,7 +33,7 @@ body {background-color: #fff;}
 .information-details .header .header-title{font-size: 1.6rem;line-height: 30px;text-align: center;color: #161616;}
 .information-details .header .header-time{font-size: 1.3rem;line-height: 20px;text-align: right;}
 .information-details .header-content{width: 90%;margin: 20px auto;font-size:1.4rem;}
-.information-details .header-content p {line-height: 30px;text-indent: 2em;}
+.information-details .header-content p {line-height: 30px;}
 .information-details .header-content .text-indent-no{text-indent: 0;}
 .information-details .header-content .header-content-luokuan{text-align: right;padding-top: 20px;}
 .information-details .header-content .header-content-time{text-align: right;}/*帮助中心*/

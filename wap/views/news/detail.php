@@ -2,7 +2,7 @@
 $this->title = '最新资讯';
 $this->showIndexBottomNav = true;
 ?>
-<link href="<?= ASSETS_BASE_URI ?>css/news.css?v=20160505" rel="stylesheet">
+<link href="<?= ASSETS_BASE_URI ?>css/news.css?v=20161108" rel="stylesheet">
 <link href="<?= ASSETS_BASE_URI ?>css/first.css?v=20160418-f" rel="stylesheet">
 
 <!-- 主体 -->
