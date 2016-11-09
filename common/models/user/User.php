@@ -37,6 +37,7 @@ use common\models\order\OnlineRepaymentPlan as RepaymentPlan;
  * @property int $updated_at
  * @property int $created_at
  * @property int $regFrom   注册来源。0表示未知，1表示wap，2表示wx，3表示app，4表示pc
+ * @property int $sort  融资用户排序，默认为0，从大到小排序
  */
 class User extends \yii\db\ActiveRecord implements IdentityInterface, UserInterface
 {

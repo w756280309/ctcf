@@ -37,7 +37,7 @@ class ProductonlineController extends BaseController
      */
     public function actionEdit($id = null)
     {
-        $rongziUser = User::find()->where(['type' => User::USER_TYPE_ORG])->asArray()->all();
+        $rongziUser = User::find()->where(['type' => User::USER_TYPE_ORG])->orderBy(['sort' => SORT_DESC])->asArray()->all();
         $rongziInfo = [];
 
         foreach ($rongziUser as $v) {
