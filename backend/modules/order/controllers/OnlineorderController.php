@@ -73,28 +73,13 @@ class OnlineorderController extends BaseController
             throw $this->ex404();   //参数无效时,抛出404异常
         }
 
-        header("Content-Type: application/vnd.ms-excel");
-        $file_name = "投标记录（" . $id . "）-" . date('Ymd') . ".xls";
-        $encoded_filename = urlencode($file_name);
-        $encoded_filename = str_replace("+", "%20", $encoded_filename);
-        $ua = $_SERVER["HTTP_USER_AGENT"];
-        if (preg_match("/MSIE/", $ua) || preg_match("/Trident\/7.0/", $ua)) {
-            header('Content-Disposition: attachment; filename="' . $encoded_filename . '"');
-        } else if (preg_match("/Firefox/", $ua)) {
-            header('Content-Disposition: attachment; filename*="utf8\'\'' . $file_name . '"');
-        } else {
-            header('Content-Disposition: attachment; filename="' . $file_name . '"');
-        }
-        header("Pragma: no-cache");
-        header("Expires: 0");
-
         $lists = OnlineOrder::find()
             ->select(['online_order.sn', 'online_order.status', 'online_order.username', 'online_order.mobile', 'online_order.order_money', 'online_order.created_at', 'user.idcard'])
             ->where(['online_order.online_pid' => $id, 'online_order.status' => OnlineOrder::STATUS_SUCCESS])
             ->leftJoin(User::tableName(), 'online_order.uid = user.id')
             ->asArray()
             ->all();
-        $str = "<table border='1'><tr><th style='width: 200px;'>编号</th><th>真实姓名</th><th>手机号</th><th>身份证</th><th>投资金额（元）</th><th>投资时间</th><th>状态</th>";
+        $str = "编号,真实姓名,手机号,身份证,投资金额（元）,投资时间,状态\n";
         if (0 !== count($lists)) {
             foreach ($lists as $list) {
                 if ($list['status'] == 0) {
@@ -106,19 +91,13 @@ class OnlineorderController extends BaseController
                 } else {
                     $status = "无效";
                 }
-                $str .= "<tr>
-                <td style=\"vnd.ms-excel.numberformat:@\">" . strval($list['sn']) . "</td>
-                <td>" . $list['username'] . "</td>
-                <td>" . $list['mobile'] . "</td>
-                 <td style=\"vnd.ms-excel.numberformat:@\">" . strval($list['idcard']) . "</td>
-                <td>" . $list['order_money'] . "</td>
-                <td>" . date('Y-m-d H:i:s', $list['created_at']) . "</td>
-                <td>" . $status . "</td>
-                </tr>";
+                $str .= strval($list['sn'])."\t,".$list['username']."\t,".$list['mobile']."\t,".strval($list['idcard'])."\t,".$list['order_money'].",".date('Y-m-d H:i:s', $list['created_at'])."\t,". "$status \n";
             }
         }
-        $str .= "</table>";
-        $str = iconv('utf-8', 'GB18030', $str);//转换编码
+        $str = iconv('UTF-8', 'GB18030', $str);//转换编码
+
+        header('Content-Disposition: attachment; filename="invest-records'.time().'.csv"');
+        header('Content-Length: ' . strlen($str)); // 内容的字节数
         echo $str;
     }
 
