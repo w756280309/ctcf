@@ -117,6 +117,21 @@ $this->title = '编辑资讯';
         }
     </style>
     <script type="text/javascript">
+        function parentP(KNode) {
+            if (!KNode) {
+                return null;
+            }
+            if (KNode.name == 'body') {
+                return null;
+            }
+            if (KNode.name == 'p') {
+                return KNode;
+            }
+            if (KNode.parent()) {
+                return parentP(KNode.parent());
+            }
+            return null;
+        }
         jQuery(document).ready(function () {
             KindEditor.lang({
                 text_indent : '首行缩进'
@@ -125,14 +140,17 @@ $this->title = '编辑资讯';
                 var self = this, name = 'text_indent';
                 self.clickToolbar(name, function() {
                     var cmd = self.cmd;
-                    var p = K(cmd.sel.anchorNode.parentNode);
-                    if (p.name == 'p') {
-                        if (p.hasClass('text_indent')) {
-                            p.removeClass('text_indent');
-                            p.css('text-indent', '0em');
-                        } else {
-                            p.addClass('text_indent');
-                            p.css('text-indent', '2em');
+                    if (cmd.sel.anchorNode) {
+                        var p = K(cmd.sel.anchorNode);
+                        p = parentP(p);
+                        if (p && p.name == 'p') {
+                            if (p.hasClass('text_indent')) {
+                                p.removeClass('text_indent');
+                                p.css('text-indent', '0em');
+                            } else {
+                                p.addClass('text_indent');
+                                p.css('text-indent', '2em');
+                            }
                         }
                     }
                 });
@@ -146,7 +164,6 @@ $this->title = '编辑资讯';
                 });
                 prettyPrint();
             });
-
         });
     </script>
 <?php $this->endBlock(); ?>
