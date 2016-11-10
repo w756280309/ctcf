@@ -1,7 +1,7 @@
 <?php
 
 $this->title = $new->title;
-$this->registerCssFile(ASSETS_BASE_URI.'css/news/notice.css', ['depends' => 'frontend\assets\FrontAsset']);
+$this->registerCssFile(ASSETS_BASE_URI.'css/news/notice.css?v=161110', ['depends' => 'frontend\assets\FrontAsset']);
 
 ?>
 <div class="wdjf-body">
