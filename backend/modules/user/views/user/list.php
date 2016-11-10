@@ -136,7 +136,7 @@ use common\models\user\User;
                         <td><?= $val['usercode'] ?></td>
                 <?php if($category==User::USER_TYPE_PERSONAL){?>
                         <td><?= $val['mobile'] ?></td>
-                        <td><?= $val['real_name']?'<a href="">'.$val['real_name'].'</a>':"---" ?></td>
+                        <td><?= $val['real_name']?'<a href="/user/user/detail?id='.$val['id'].'&type='.$category.'">'.$val['real_name'].'</a>':"---" ?></td>
                 <?php }else{?>
                         <td><?= $val['org_name'] ?></td>
                 <?php }?>
