@@ -3,7 +3,7 @@
 use frontend\assets\FrontAsset;
 
 $this->title = $new->title;
-$cssUrl = 'notice' === $type ? 'css/news/notice.css?v=161111' : 'css/news/mediumreport.css';
+$cssUrl = 'notice' === $type ? 'css/news/notice.css?v=161111-1' : 'css/news/mediumreport.css?v=161111';
 
 $this->registerCssFile(ASSETS_BASE_URI.$cssUrl, ['depends' => FrontAsset::class]);
 ?>
@@ -17,7 +17,7 @@ $this->registerCssFile(ASSETS_BASE_URI.$cssUrl, ['depends' => FrontAsset::class]
 
         <!-- right start-->
         <div class="right-box rg">
-            <div class="right-header"><span class="title"><?= 'notice' === $type ? '网站公告' : '' ?></span></div>
+            <div class="right-header"><span class="title"><?= 'notice' === $type ? '网站公告' : '媒体报道' ?></span></div>
             <h2><?= $new->title ?></h2>
             <h3><span class="span_01"><?= empty($new->news_time) ? '' : date('Y-m-d', $new->news_time) ?></span><?= $new->source ? '来源：'.$new->source : '' ?></h3>
             <div class="txt-box">

@@ -6,6 +6,7 @@ use common\controllers\HelpersTrait;
 use common\models\news\News;
 use common\models\category\ItemCategory;
 use common\models\category\Category;
+use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\data\Pagination;
 
@@ -52,12 +53,19 @@ class NewsController extends Controller
         }
 
         $new = $this->findOr404(News::class, $id);
+        $keys = ArrayHelper::getColumn($new->categories, 'key');
 
-        if ($type === 'info') {
+        if (!in_array($type, $keys)) {
+            throw $this->ex404();
+        }
+
+        if ('info' === $type) {
             $render = 'infos';
         } else {
             $render = 'notices';
         }
+
+
 
         return $this->render($render, ['new' => $new, 'type' => $type]);
     }
