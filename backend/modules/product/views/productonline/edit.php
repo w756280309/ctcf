@@ -344,9 +344,9 @@ $is_online = in_array($model->status, [2, 3, 4, 5, 6, 7]);//判断标的是否�
                     <label class="control-label">定向标用户手机号</label>
                     <div class="controls">
                         <?=
-                        $form->field($model, 'allowedUids', ['template' => '{input}{error}', 'inputOptions' => ['autocomplete' => 'off', 'placeholder' => '定向标用户手机号', 'value' => $model->mobiles]])->textInput(['class' => 'm-wrap span12'])
+                        $form->field($model, 'allowedUids', ['template' => '{input}{error}', 'inputOptions' => ['autocomplete' => 'off', 'placeholder' => '定向标用户手机号']])->textInput(['class' => 'm-wrap span12'])
                         ?>
-                        <?php $disable = empty($pid) ? [] : ['disabled' => 'true'] ?>
+                        <?php $disable = empty($model->id) ? [] : ['disabled' => 'true', 'uncheck' => $model->isPrivate] ?>
                         <?=
                         $form->field($model, 'isPrivate', ['template' => '<div class="input-append">{input}</div>{error}'])->checkbox($disable)
                         ?>
@@ -448,7 +448,7 @@ $is_online = in_array($model->status, [2, 3, 4, 5, 6, 7]);//判断标的是否�
                         <?php
                             $paymentDayInputOptions = [];
                             if ($model->is_jixi) {
-                                $paymentDayInputOptions = array_merge($paymentDayInputOptions, ['disabled' => 'disabled']) ;
+                                $paymentDayInputOptions = array_merge($paymentDayInputOptions, ['disabled' => 'disabled']);
                             }
                         ?>
                         <?=
@@ -463,7 +463,7 @@ $is_online = in_array($model->status, [2, 3, 4, 5, 6, 7]);//判断标的是否�
                 <div class="control-group">
                     <label class="control-label">允许使用代金券<span class="notice">(<?= $desc ?>)</span></label>
                     <div class="controls">
-                        <?= $form->field($model, 'allowUseCoupon')->checkbox(array_merge(['autocomplete' => 'on'], $model->online_status ? ['disabled' => 'disabled'] : []))->label(false) ?>
+                        <?= $form->field($model, 'allowUseCoupon')->checkbox(array_merge(['autocomplete' => 'on'], $model->online_status ? ['disabled' => 'disabled', 'uncheck' => $model->allowUseCoupon] : []))->label(false) ?>
                     </div>
                 </div>
             </div>

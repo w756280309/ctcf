@@ -37,34 +37,37 @@ class ProductonlineController extends BaseController
      */
     public function actionEdit($id = null)
     {
-        $rongziUser = User::find()->where(['type' => User::USER_TYPE_ORG])->orderBy(['sort' => SORT_DESC])->asArray()->all();
         $rongziInfo = [];
+        $rongziUser = User::find()->where(['type' => User::USER_TYPE_ORG])->orderBy(['sort' => SORT_DESC])->asArray()->all();
 
         foreach ($rongziUser as $v) {
             $rongziInfo[$v['id']] = $v['org_name'];
         }
 
-        $model = $id ? OnlineProduct::findOne($id) : new OnlineProduct();
+        $issuer = Issuer::find()->asArray()->all();
         $ctmodel = null;
-        $allowUseCoupon = null;
-        $model->scenario = 'create';
 
-        if (!empty($id)) {
+        if (empty($id)) {
+            $model = new OnlineProduct([
+                'sn' => OnlineProduct::createSN(),
+                'sort' => OnlineProduct::SORT_PRE,
+                'epayLoanAccountId' => '',
+                'fee' => 0,
+                'funded_money' => 0,
+                'full_time' => 0,
+                'yuqi_faxi' => 0,
+                'allowUseCoupon' => true,
+            ]);
+        } else {
+            $model = OnlineProduct::findOne($id);
+
             $model->is_fdate = (0 === $model->finish_date) ? 0 : 1;
             $model->yield_rate = bcmul($model->yield_rate, 100, 2);
-            $isPrivate = $model->isPrivate;
+            $model->allowedUids = $model->mobiles;
             $ctmodel = ContractTemplate::find()->where(['pid' => $id])->all();
-            if ($model->online_status) {
-                $allowUseCoupon = $model->allowUseCoupon;
-            }
-        } else {
-            $model->epayLoanAccountId = '';
-            $model->fee = 0;
-            $model->funded_money = 0;
-            $model->full_time = 0;
-            $model->yuqi_faxi = 0;
-            $model->allowUseCoupon = true;
         }
+
+        $model->scenario = 'create';
 
         $con_name_arr = Yii::$app->request->post('name');
         $con_content_arr = Yii::$app->request->post('content');
@@ -73,17 +76,17 @@ class ProductonlineController extends BaseController
             $model->finish_date = is_integer($model->finish_date) ? $model->finish_date : strtotime($model->finish_date);
             $model->start_date = is_integer($model->start_date) ? $model->start_date : strtotime($model->start_date);
             $model->end_date = is_integer($model->end_date) ? $model->end_date : strtotime($model->end_date);
-            $model->allowUseCoupon = null !== $allowUseCoupon ? $allowUseCoupon : $model->allowUseCoupon;
 
             if ($model->validate()) {
+                $model->allowedUids = $model->isPrivate ? LoanService::convertUid($model->allowedUids) : null;
+                $refund_method = (int) $model->refund_method;
+
                 //非测试标，起投金额、递增金额取整
                 if (!$model->isTest) {
                     $model->start_money = intval($model->start_money);
                     $model->dizeng_money = intval($model->dizeng_money);
                 }
-                $uids = LoanService::convertUid($model->allowedUids);
 
-                $refund_method = (int) $model->refund_method;
                 if (OnlineProduct::REFUND_METHOD_DAOQIBENXI !== $refund_method) {   //还款方式只有到期本息,才设置项目截止日和宽限期
                     $model->finish_date = 0;
                     $model->kuanxianqi = 0;
@@ -93,13 +96,6 @@ class ProductonlineController extends BaseController
                     //若截止日期不为空，重新计算项目天数
                     $pp = new ProductProcessor();
                     $model->expires = $pp->LoanTimes(date('Y-m-d H:i:s', $model->start_date), null, $model->finish_date, 'd', true)['days'][1]['period']['days'];
-                }
-
-                if (null === $model->id) {
-                    $model->sn = OnlineProduct::createSN();
-                    $model->sort = OnlineProduct::SORT_PRE;
-                } else {
-                    $model->isPrivate = $isPrivate;
                 }
 
                 if (0 === $model->issuer) {   //当发行方没有选择时,发行方项目编号为空
@@ -134,8 +130,6 @@ class ProductonlineController extends BaseController
 
                 if (!$model->getErrors('contract_type')) {
                     $transaction = Yii::$app->db->beginTransaction();
-
-                    $model->allowedUids = $uids;
                     $model->creator_id = Yii::$app->user->id;
                     $model->yield_rate = bcdiv($model->yield_rate, 100, 14);
                     $model->jixi_time = $model->jixi_time !== '' ? is_integer($model->jixi_time) ? $model->jixi_time : strtotime($model->jixi_time) : 0;
@@ -185,10 +179,7 @@ class ProductonlineController extends BaseController
             }
         }
 
-        $issuer = Issuer::find()->asArray()->all();
-
         return $this->render('edit', [
-            'pid' => $id,
             'model' => $model,
             'ctmodel' => $ctmodel,
             'rongziInfo' => $rongziInfo,
