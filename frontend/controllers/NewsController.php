@@ -47,17 +47,18 @@ class NewsController extends Controller
 
     public function actionDetail($id, $type)
     {
-        if (empty($id) || is_int($id)) {
+        if (empty($id) || is_int($id) || !in_array($type, ['info', 'media', 'notice'])) {
             throw $this->ex404();
         }
-        $new = News::findOne($id);
-        if ($type === "info") {
-            $render = "infos";
-        } else if ($type === "media") {
-            $render = "medias";
-        } else if ($type === "notice") {
-            $render = "notices";
+
+        $new = $this->findOr404(News::class, $id);
+
+        if ($type === 'info') {
+            $render = 'infos';
+        } else {
+            $render = 'notices';
         }
-        return $this->render($render, ['new' => $new, 'type'=>$type]);
+
+        return $this->render($render, ['new' => $new, 'type' => $type]);
     }
 }
