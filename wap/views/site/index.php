@@ -111,7 +111,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/index.js?v=20161021', ['depends' => Jq
                     </li>
                 </ul>
                 <div class="recommend-progress">
-                    <?php $rate = OnlineProduct::STATUS_FOUND === $deal->status ? 100 : number_format($deal->finish_rate * 100, 0); ?>
+                    <?php $rate = $deal->getProgressForDisplay() ?>
                     <span class="recommend-all"><span class="recommend-pro" style="width: <?= $rate ?>%;"></span></span>
                     <em class="rg"><?= $rate ?>%</em>
                 </div>
