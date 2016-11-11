@@ -4,14 +4,9 @@ namespace backend\modules\user\controllers;
 
 use backend\controllers\BaseController;
 use common\lib\bchelp\BcRound;
-use common\models\user\Batchpay;
 use common\models\user\DrawRecord;
 use common\models\user\User;
-use common\models\user\UserBank;
-use common\models\draw\DrawManager;
-use common\models\draw\DrawException;
 use common\models\bank\Bank;
-use common\service\SmsService;
 use Yii;
 use yii\data\Pagination;
 
@@ -166,99 +161,5 @@ class DrawrecordController extends BaseController
             'pages' => $pages,
             'request' => $request,
         ]);
-    }
-
-    /**
-     * 审核界面，弹框.
-     */
-    public function actionExaminfk($pid, $id)
-    {
-        if (empty($pid) || empty($id)) {
-            throw $this->ex404();     //参数无效,抛出404异常
-        }
-
-        $this->layout = false;
-
-        $userBank = UserBank::find()->where(['uid' => $pid])->one();
-        $model = DrawRecord::findOne($id);
-        $tixianUserInfo = User::findOne(['type' => User::USER_TYPE_PERSONAL, 'id' => $model->uid]);
-
-        return $this->render('examinfk', ['model' => $model, 'tixianSq' => $tixianUserInfo, 'userBank' => $userBank]);
-    }
-
-    /**
-     * 点击后审核通过或不通过.
-     */
-    public function actionChecksq()
-    {
-        $id = Yii::$app->request->post('id');
-        $type = Yii::$app->request->post('type');
-
-        if (empty($id) || empty($type)) {
-            return false;
-        }
-        $model = DrawRecord::findOne($id);
-        try {
-            $draw = DrawManager::audit($model, $type);
-            $user = $draw->user;
-            $mess = [
-                $user->real_name,
-                date('Y-m-d H:i:s', $model->created_at),
-                number_format($model->money, 2),
-                Yii::$app->params['contact_tel'],
-            ];
-
-            if (DrawRecord::STATUS_DENY === (int) $type) {
-                $templateId = Yii::$app->params['sms']['tixian_err'];
-            } elseif (DrawRecord::STATUS_EXAMINED === (int) $type) {
-                $templateId = Yii::$app->params['sms']['tixian_succ'];
-            }
-
-            SmsService::send($user->mobile, $templateId, $mess, $user);
-
-            return true;
-        } catch (DrawException $ex) {
-            return false;
-        }
-
-    }
-
-    /**
-     * 点击放款后开始放款.
-     */
-    public function actionChecksqfangkuan()
-    {
-        $id = Yii::$app->request->post('id');
-        $uid = Yii::$app->request->post('uid');
-        if (empty($id) || empty($uid)) {
-            return false;
-        }
-        $drawRord = DrawRecord::findOne($id);
-        if ($drawRord === null || $drawRord->status != DrawRecord::STATUS_EXAMINED) {
-            return false;
-        }
-        if ($id) {
-            $batchPay = new Batchpay();
-            $res_bat = $batchPay->singleInsert($this->admin_id, $id);
-            if ($res_bat) {
-                $drawRord->status = DrawRecord::STATUS_LAUNCH_BATCHPAY;//发起批量代付
-                return $drawRord->save();
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * 点击放款.
-     */
-    public function actionFangkuan($pid = null, $id = null)
-    {
-        $this->layout = false;
-        $money = Yii::$app->request->get('money');
-        $name = Yii::$app->request->get('name');
-        $id = Yii::$app->request->get('id');
-
-        return $this->render('examinfk_1', ['id' => $id, 'uid' => $pid, 'money' => $money, 'name' => $name]);
     }
 }
