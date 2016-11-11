@@ -89,7 +89,7 @@ use yii\grid\GridView;
                     'label' => '真实姓名',
                     'format' => 'html',
                     'value' => function ($model) {
-                        return '<a href ="/user/user/detail?id='.$model['id'].'&type='.\common\models\user\User::USER_TYPE_PERSONAL.'">'.$model['real_name'].'</a>';
+                        return '<a href ="/user/user/detail?id='.$model['id'].'&type='.\common\models\user\User::USER_TYPE_PERSONAL.'">'.($model['real_name'] ?: '---').'</a>';
                     }
                 ],
                 [

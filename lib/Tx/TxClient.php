@@ -12,7 +12,11 @@ class TxClient
     public function __construct()
     {
         $this->baseUrl = rtrim(\Yii::$app->params['clientOption']['host']['tx'], '/') . '/';
-        $this->client = new Client(['base_uri' => $this->baseUrl]);
+        $this->client = new Client([
+            'base_uri' => $this->baseUrl,
+            'connect_timeout' => 30,
+            'timeout' => 30,
+        ]);
     }
 
     /**

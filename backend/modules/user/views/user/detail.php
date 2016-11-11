@@ -88,6 +88,21 @@ use common\utils\StringUtils;
                     <li><span>最后登录时间</span><?php echo empty($userinfo['last_login'])?"--":date("Y-m-d H:i:s",$userinfo['last_login']);?></li>
                     <li><span>债权最后投资时间</span><?= $latestCreditOrderTime?></li>
             </ul>
+            <ul  class="breadcrumb_detail">
+                <li>
+                    <span>性别</span>
+                    <?php
+                        $gender = $userinfo->getGender();
+                        if ($gender === 'male') {
+                            echo '男性';
+                        } elseif ($gender === 'female') {
+                            echo '女性';
+                        } else {
+                            echo '其他';
+                        }
+                    ?>
+                </li>
+            </ul>
             <hr />
 
             <div class="detail_font">会员资金详情</div>

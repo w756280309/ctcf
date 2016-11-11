@@ -680,4 +680,23 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface, UserInterf
     public function isLocked() {
         return $this->status === static::STATUS_DELETED;
     }
+
+    /**
+     * 根据身份证倒数第二位判断用户性别
+     * @return string
+     */
+    public function getGender()
+    {
+        if ($this->idcard) {
+            $num = intval(substr($this->idcard, -2, 1));
+            if ($num > 0) {
+                if ($num % 2 === 1) {
+                    return 'male';
+                } else {
+                    return 'female';
+                }
+            }
+        }
+        return 'other';
+    }
 }
