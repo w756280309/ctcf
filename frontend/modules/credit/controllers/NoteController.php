@@ -28,8 +28,6 @@ class NoteController extends BaseController
      */
     public function actionDetail($id)
     {
-        //记录来源
-        Yii::$app->session->set('to_url', Yii::$app->request->url);
         $user = $this->getAuthedUser();
 
         if (empty($id)

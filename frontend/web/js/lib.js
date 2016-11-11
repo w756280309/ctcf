@@ -41,10 +41,12 @@ function accMul(arg1, arg2) {
     return Number(s1.replace(".", "")) * Number(s2.replace(".", "")) / Math.pow(10, m)
 }
 
-function mianmi()
+function mianmi(url)
 {
     var message = '将为您开通免密支付功能，之后进行投资时，无需输入资金托管账户支付密码。但是，当您需要提现时，为确保您的资金安全，仍需输入支付密码。';
-    var url = '/user/qpay/binding/umpmianmi';
+    if (!url) {
+        var url = '/user/qpay/binding/umpmianmi';
+    }
     alertMessage(message, url, false);
 }
 

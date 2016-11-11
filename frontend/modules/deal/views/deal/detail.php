@@ -345,13 +345,14 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/useraccount/chargedeposit.css');
                         $('.dR-tishi-error .err_message').html(data.message);
                     }
                 }
+                var currentUrl = encodeURIComponent(location.href);
                 if ('/site/login' == data.tourl) {
                     //获取登录信息
                     login();
-                } else if('/user/qpay/binding/umpmianmi' == data.tourl){
-                    mianmi();
-                } else if('/user/userbank/idcardrz' == data.tourl){
-                    window.location.href = '/user/userbank/identity';
+                } else if ('/user/qpay/binding/umpmianmi' == data.tourl) {
+                    mianmi('/user/qpay/binding/umpmianmi?from=' + currentUrl);
+                } else if ('/user/userbank/idcardrz' == data.tourl) {
+                    window.location.href = '/user/userbank/identity?from=' + currentUrl;
                 } else {
                     if (data.tourl) {
                         location.href = data.tourl;

@@ -20,8 +20,6 @@ class DealController extends BaseController
      */
     public function actionDetail($sn)
     {
-        //记录来源
-        Yii::$app->session->set('to_url', Yii::$app->request->url);
         $deal = $this->findOr404(OnlineProduct::className(), ['online_status' => OnlineProduct::STATUS_ONLINE, 'del_status' => OnlineProduct::STATUS_USE, 'sn' => $sn]);
         //未登录或者登录了，但不是定向用户的情况下，报404
         if ($deal->isPrivate) {

@@ -12,7 +12,7 @@ class FrontAsset extends AssetBundle
         'css/base.css',
     ];
     public $js = [
-        'js/lib.js',
+        'js/lib.js?161110',
         'js/jquery.cookie.js',
         'js/hmsr.js?v=20161019',
     ];

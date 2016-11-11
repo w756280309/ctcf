@@ -75,8 +75,17 @@ class BindingController extends BaseController
         return $this->createErrorResponse($acct_model);
     }
 
+    /**
+     * 免密进入跳转到联动的页面
+     *
+     * 记录来源url(转让详情页/理财标的详情页)，用来跳回到详情页
+     */
     public function actionUmpmianmi()
     {
+        $from = Yii::$app->request->get('from');
+        if ($from && filter_var($from, FILTER_VALIDATE_URL)) {
+            Yii::$app->session->set('to_url', $from);
+        }
         return $this->redirect(Yii::$container->get('ump')->openmianmi($this->getAuthedUser()->epayUser->epayUserId, 'pc'));
     }
 

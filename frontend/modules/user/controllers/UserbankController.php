@@ -33,6 +33,8 @@ class UserbankController extends BaseController
 
    /**
     * 未开户进入页面.
+    *
+    * 记录来源url(转让详情页/理财标的详情页)，用来跳回到详情页
     */
    public function actionIdentity()
    {
@@ -40,6 +42,10 @@ class UserbankController extends BaseController
        $cond = 0 | BankService::IDCARDRZ_VALIDATE_N;
        $data = BankService::check($this->getAuthedUser(), $cond);
        if ($data['code']) {
+           $from = Yii::$app->request->get('from');
+           if ($from && filter_var($from, FILTER_VALIDATE_URL)) {
+               Yii::$app->session->set('to_url', $from);
+           }
            return $this->render('identity');
        } else {
            Yii::$app->session->set('to_url', '/user/userbank/identity');

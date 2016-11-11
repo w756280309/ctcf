@@ -227,13 +227,14 @@ $isClosed = $respData['isClosed'] || $nowTime >= $endTime;
                 if (data.code == 0 && data.tourl) {
                     location.href = data.tourl;
                 } else {
+                    var currentUrl = encodeURIComponent(location.href);
                     if ('/site/login' == data.tourl) {
                         //获取登录信息
                         login();
-                    } else if('/user/qpay/binding/umpmianmi' == data.tourl){
-                        mianmi();
-                    } else if('/user/userbank/idcardrz' == data.tourl){
-                        location.href = '/user/userbank/identity';
+                    } else if ('/user/qpay/binding/umpmianmi' == data.tourl) {
+                        mianmi('/user/qpay/binding/umpmianmi?from=' + currentUrl);
+                    } else if ('/user/userbank/idcardrz' == data.tourl) {
+                        location.href = '/user/userbank/identity?from=' + currentUrl;
                     } else {
                         if (data.tourl) {
                             location.href = data.tourl;
