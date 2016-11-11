@@ -98,7 +98,7 @@ use common\utils\StringUtils;
                         } elseif ($gender === 'female') {
                             echo '女性';
                         } else {
-                            echo '其他';
+                            echo '---';
                         }
                     ?>
                 </li>
