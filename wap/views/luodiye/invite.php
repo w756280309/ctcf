@@ -64,19 +64,19 @@ $this->registerJsFile($cdn.'js/wechat.js');
 </div>
 <div class="row description-box">
     <p class="description-header"><span>什么是温都金服？</span></p>
-    <p class="description-content">温州温都金融信息服务股份有限公司简称“温都金服”，隶属温州报业传媒旗下的理财平台。甄选各类金融机构、优质企业理财产品。提供银行级理财服务，保障用户资金安全，安享稳健高收益。</p>
+    <p class="description-content">温州温都金融信息服务股份有限公司简称“温都金服”，隶属温州报业传媒旗下的理财平台。甄选各类金融机构、优质企业理财产品。提供银行级理财服务，保障用户资金，安享稳健收益。</p>
 </div>
 <div class="row production-box">
     <p class="production-header">精品理财</p>
     <div class="licai-img">
         <div class="col-xs-6 licai-img">
             <a href="/deal/deal/index/">
-                <img src="<?= ASSETS_BASE_URI ?>images/luodiye/production-left.png" alt="温盈金">
+                <img src="<?= ASSETS_BASE_URI ?>images/luodiye/prod-left.png" alt="温盈金">
             </a>
         </div>
         <div class="col-xs-6 licai-img">
             <a href="/deal/deal/index/">
-                <img src="<?= ASSETS_BASE_URI ?>images/luodiye/production-right.png" alt="温盈宝">
+                <img src="<?= ASSETS_BASE_URI ?>images/luodiye/prod-right.png" alt="温盈宝">
             </a>
         </div>
         <div class="clear"></div>
@@ -90,7 +90,7 @@ $this->registerJsFile($cdn.'js/wechat.js');
     </div>
 </div>
 <div class="back-fff">
-    <a class="link-last" href="/deal/deal/index/">立即赚钱</a>
+    <a class="link-last" href="/deal/deal/index/">立即认购</a>
 </div>
 <p class="danger-tip">理财非存款，产品有风险，投资须谨慎</p>
 <div class="fixed-float">
