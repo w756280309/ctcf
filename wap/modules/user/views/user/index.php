@@ -2,6 +2,8 @@
 $this->title = '账户中心';
 $this->showBottomNav = true;
 $this->showAvatar = true;
+
+use common\utils\StringUtils;
 ?>
 <link href="<?= ASSETS_BASE_URI ?>css/informationAndHelp.css" rel="stylesheet">
 <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/setting.css?v=20160803">
@@ -25,18 +27,29 @@ $this->showAvatar = true;
     </div>
     <div class="row earn-num1">
         <div class="col-xs-1"></div>
-        <div class="col-xs-7 col"><?= number_format($zcze, 2) ?></div>
+        <div class="col-xs-7 col"><?= StringUtils::amountFormat3($zcze) ?></div>
         <div class="col-xs-3"></div>
     </div>
     <div class="row accountcenter-center-left">
         <div class="col-xs-1"></div>
-        <div class="col-xs-5">累计收益（元）</div>
-        <div class="col-xs-6">理财资产（元）</div>
+        <div class="col-xs-5">理财资产（元）</div>
+        <div class="col-xs-6"></div>
     </div>
     <div class="row accountcenter-center-right">
         <div class="col-xs-1"></div>
-        <div class="col-xs-5"><?= number_format($ljsy, 2) ?></div>
-        <div class="col-xs-6"><?= number_format($dhsbj, 2) ?></div>
+        <div class="col-xs-5"><?= StringUtils::amountFormat3($dhsbj) ?></div>
+        <div class="col-xs-6"></div>
+    </div>
+    <br>
+    <div class="row accountcenter-center-left">
+        <div class="col-xs-1"></div>
+        <div class="col-xs-5">累计投资（元）</div>
+        <div class="col-xs-6">累计收益（元）</div>
+    </div>
+    <div class="row accountcenter-center-right">
+        <div class="col-xs-1"></div>
+        <div class="col-xs-5"><?= StringUtils::amountFormat3($user->getTotalInvestment()) ?></div>
+        <div class="col-xs-6"><?= StringUtils::amountFormat3($ljsy) ?></div>
     </div>
 </div>
 <div class="row accountcenter-other">
@@ -44,7 +57,7 @@ $this->showAvatar = true;
         <div class="col-xs-1"></div>
         <div class="col-xs-5">
                 <p>可用余额（元）</p>
-                <p class="unmber_remain"><?= number_format($ua->available_balance, 2) ?></p>
+                <p class="unmber_remain"><?= StringUtils::amountFormat3($ua->available_balance) ?></p>
         </div>
         <div class="col-xs-3 addcash" onclick="recharge()">充值</div>
         <div class="col-xs-3 rg-line drawcash" onclick="tixian()">提现</div>

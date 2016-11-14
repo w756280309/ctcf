@@ -1,5 +1,5 @@
 <?php
-$this->title = '我要理财';
+$this->title = '产品介绍';
 
 $this->registerCssFile(ASSETS_BASE_URI . 'css/pagination.css', ['depends' => 'frontend\assets\FrontAsset']);
 $this->registerCssFile(ASSETS_BASE_URI . 'css/deallist.css?v=161103', ['depends' => 'frontend\assets\FrontAsset']);
