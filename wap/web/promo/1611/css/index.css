@@ -183,6 +183,9 @@ img{
 	font-weight:bold;
 	color:#c1272d;
 }
+.active-bottom .active-des li a {
+	text-decoration: none;
+}
 .active-bottom ol{
 	margin-left:1.05rem;
 	margin-top:0.30rem;
@@ -201,10 +204,10 @@ img{
 .active-bottom ol li.goto-register a{
 	background:url(../img/goto-register.png) no-repeat center;
 	background-size:100% 100%;
-	
+
 }
 .active-bottom ol li.goto-invite a{
 	background:url(../img/goto-invite.png) no-repeat center;
 	background-size:100% 100%;
-	
+
 }
