@@ -79,7 +79,7 @@ $this->registerJsFile(ASSETS_BASE_URI . 'js/fastclick.js', ['depends' => 'wap\as
     <h3>为什么选择温都金服？</h3>
     <div class="choose-content">
         <img src="<?= ASSETS_BASE_URI ?>images/luodiye/choose-top.png" alt="">
-        <img src="<?= ASSETS_BASE_URI ?>images/luodiye/choose-bottom.png" alt="">
+        <img src="<?= ASSETS_BASE_URI ?>images/luodiye/why-wdjf-new.png" alt="">
     </div>
 </div>
 <a class="link-last" href="/deal/deal/index/">立即赚钱</a>
