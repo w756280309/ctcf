@@ -29,3 +29,15 @@ h4.agree_title {
 .bao_quan_button button {
     display: block;
 }
+.download-ybq {
+    background: #f54337 !important;
+    border: 0px;
+}
+.ybq {
+    background: #f54337;
+    border: 0px;
+    margin-top: 5px;
+}
+.tishi-p {
+    line-height: 1.5rem;
+}

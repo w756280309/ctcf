@@ -173,8 +173,10 @@ class OrderController extends BaseController
             $bq = [];
         }
 
+        $isDisDownload = defined('IN_APP') || ($this->fromWx() && !($_SERVER['HTTP_USER_AGENT'] && strpos($_SERVER['HTTP_USER_AGENT'], 'Android')));
+
         if (Yii::$app->request->isAjax) {
-            return $this->renderFile('@wap/modules/order/views/order/_contract.php', ['content' => $contracts[$key]['content'], 'bq' => $bq]);
+            return $this->renderFile('@wap/modules/order/views/order/_contract.php', ['content' => $contracts[$key]['content'], 'bq' => $bq, 'isDisDownload' => $isDisDownload]);
         }
 
         return $this->render('contract', [
@@ -183,6 +185,7 @@ class OrderController extends BaseController
             'content' => $contracts[$key]['content'],
             'asset_id' => $asset_id,
             'bq' => $bq,
+            'isDisDownload' => $isDisDownload,  //APP端,以及非安卓微信端打开此页面,不允许下载
         ]);
     }
 

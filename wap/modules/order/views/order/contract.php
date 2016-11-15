@@ -5,7 +5,7 @@ use wap\assets\WapAsset;
 
 $this->registerCssFile(ASSETS_BASE_URI.'css/licai.css', ['depends' => WapAsset::class]);
 $this->registerCssFile(ASSETS_BASE_URI.'css/swiper.min.css', ['depends' => WapAsset::class]);
-$this->registerCssFile(ASSETS_BASE_URI.'css/contract.css', ['depends' => WapAsset::class]);
+$this->registerCssFile(ASSETS_BASE_URI.'css/contract.css?v=20161114', ['depends' => WapAsset::class]);
 $this->registerJsFile(ASSETS_BASE_URI.'js/swiper.min.js');
 
 $count = count($contracts);
@@ -56,6 +56,29 @@ $(function() {
 JS;
 $this->registerJs($switcherJs);
 
+$_js = <<<JS2
+    $(function () {
+        $('#content').on('click', '.download-ybq', function(e) {
+            e.preventDefault();
+            
+            $('#mask-back').addClass('show');
+            $('#mask').addClass('show');
+        });
+        
+        $('#content').on('click', '.true', function(e) {
+            e.preventDefault();
+            
+            $('#mask-back').removeClass('show');
+            $('#mask').removeClass('show');
+        });
+    });
+JS2;
+
+if (isset($bq) && isset($isDisDownload) && $isDisDownload) {
+    $this->registerJs($_js);
+}
+
+
 $num = 0;
 $action = Yii::$app->controller->action->getUniqueId();
 ?>
@@ -72,5 +95,5 @@ $action = Yii::$app->controller->action->getUniqueId();
     </div>
 </div>
 <div id="content">
-    <?= $this->renderFile('@wap/modules/order/views/order/_contract.php', array_merge(['content' => $content], 'order/order/agreement' === $action ? [] : ['bq' => $bq])) ?>
+    <?= $this->renderFile('@wap/modules/order/views/order/_contract.php', array_merge(['content' => $content], 'order/order/agreement' === $action ? [] : ['bq' => $bq, 'isDisDownload' => $isDisDownload])) ?>
 </div>
