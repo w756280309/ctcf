@@ -1,6 +1,6 @@
 <?php
 
-$this->title = '产品介绍';
+$this->title = '我要理财';
 $this->showBottomNav = true;
 $this->backUrl = false;
 
