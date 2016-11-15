@@ -1,18 +1,34 @@
 <?php
-
 use yii\widgets\LinkPager;
 use common\models\user\User;
 ?>
+
 <?php $this->beginBlock('blockmain'); ?>
 <style>
-    .dropDownMenu {list-style: none;padding: 5px;margin: 0px;display: none;position: absolute;}
-    .dropDownMenu li{height: 30px;line-height: 30px;}
-    .dropDownMenu li:hover {background: #eeeeff;}
+    .dropDownMenu {
+        list-style: none;
+        padding: 5px;
+        margin: 0px;
+        display: none;
+        position: absolute;
+    }
+    .dropDownMenu li {
+        height: 30px;
+        line-height: 30px;
+    }
+    .dropDownMenu li:hover {
+        background: #eeeeff;
+    }
+    .note {
+        font-size: 1rem;
+        color: #666;
+        text-align: center;
+        margin: 50px 0;
+    }
 </style>
+
 <div class="container-fluid">
-
     <!-- BEGIN PAGE HEADER-->
-
     <div class="row-fluid">
         <div class="span12">
             <h3 class="page-title">
@@ -49,7 +65,6 @@ use common\models\user\User;
         <!--search start-->
         <div class="portlet-body">
             <form action="/user/user/<?=$category==1?"listt":"listr"?>" method="get" target="_self">
-
                 <table class="table">
                     <tbody>
                         <tr>
@@ -73,7 +88,7 @@ use common\models\user\User;
                                                 未投资时长（天）: <input type="text" class="m-wrap span6" style="margin-bottom: 0px;width:50px" name='noInvestDays' value="<?= Yii::$app->request->get('noInvestDays') ?>"  placeholder="天数"/>
                                             </li>
                                             <li>
-                                                可用余额（元）:<input type="text" name="balance" value="<?= Yii::$app->request->get('balance') ?: 0 ?>" style="margin-bottom: 0px;width:55px"/>
+                                                可用余额（元）: <input type="text" name="balance" value="<?= Yii::$app->request->get('balance') ?: 0 ?>" style="margin-bottom: 0px;width:55px"/>
                                             </li>
                                         </ul>
                                     </div>
@@ -86,8 +101,8 @@ use common\models\user\User;
                             <?php }?>
 
 
-                            <td><div align="right" style="margin-right: 20px">
-                                <button type='submit' class="btn blue btn-block" style="width: 100px;">搜索 <i class="m-icon-swapright m-icon-white"></i></button>
+                            <td><div align="right" class="search-btn">
+                                <button type='submit' class="btn blue btn-block button-search">搜索 <i class="m-icon-swapright m-icon-white"></i></button>
                             </div></td>
 
                         </tr>
@@ -95,7 +110,7 @@ use common\models\user\User;
                         <?php if($category === User::USER_TYPE_PERSONAL) { ?>
                         <tr>
                             <td colspan="8">
-                                <div align="right" style="margin-right: 20px">
+                                <div align="right" class="search-btn">
                                     <a class="btn green btn-block" style="width: 140px;" href="/user/user/lenderstats">导出投资会员信息</a>
                                 </div>
                             </td>
@@ -107,8 +122,6 @@ use common\models\user\User;
         </div>
 
         <!--search end -->
-
-
         <div class="portlet-body">
             <table class="table table-striped table-bordered table-advance table-hover">
                 <thead>
@@ -176,10 +189,13 @@ use common\models\user\User;
                 </tbody>
             </table>
         </div>
+
+        <?php if (empty($model)) { ?>
+            <div class="note">暂无数据</div>
+        <?php } ?>
         <!--分页-->
         <div class="pagination" style="text-align:center"><?= LinkPager::widget(['pagination' => $pages]); ?></div>
     </div>
-
 </div>
 <script>
     $('.get_order_status').bind('click', function () {
@@ -218,7 +234,7 @@ use common\models\user\User;
             $('.dropDownMenu').slideDown();
         }
     });
-    $('body'). mouseup(function(e){
+    $('body').mouseup(function(e) {
         var _con = $('.dropDownBox');   // 设置目标区域
         if(!_con.is(e.target) && _con.has(e.target).length === 0){ // Mark 1
             var dis = $('.dropDownMenu').css('display');
@@ -226,8 +242,7 @@ use common\models\user\User;
                 $('.dropDownMenu').slideUp();
             }
         }
-    })
-
+    });
 </script>
 <?php $this->endBlock(); ?>
 
