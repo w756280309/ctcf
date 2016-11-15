@@ -5,7 +5,6 @@ namespace app\controllers;
 use common\controllers\HelpersTrait;
 use common\models\news\News;
 use yii\web\Controller;
-use yii\web\Response;
 
 /**
  * 资讯信息类.
@@ -44,7 +43,7 @@ class NewsController extends Controller
     public function actionDetail($id)
     {
         if (empty($id) || is_int($id)) {
-            throw new \yii\web\NotFoundHttpException();     //参数无效,抛出404异常
+            throw $this->ex404();     //参数无效,抛出404异常
         }
 
         $new = News::findOne($id);

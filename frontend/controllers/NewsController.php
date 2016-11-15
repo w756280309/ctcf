@@ -6,6 +6,7 @@ use common\controllers\HelpersTrait;
 use common\models\news\News;
 use common\models\category\ItemCategory;
 use common\models\category\Category;
+use Yii;
 use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\data\Pagination;
@@ -17,33 +18,31 @@ class NewsController extends Controller
 {
     use HelpersTrait;
 
+    /**
+     * 网站公告,最新资讯,媒体报道列表页面.
+     */
     public function actionIndex($type)
     {
-        $pageSize = 10;
+        if (!in_array($type, ['info', 'media', 'notice'])) {
+            throw $this->ex404();
+        }
+
+        $pageSize = 'media' === $type ? 5 : 10;
+
         $ic = ItemCategory::tableName();
         $n = News::tableName();
         $c = Category::tableName();
-        if ($type === "info") {
-            $key = \Yii::$app->params['news_key_info'];
-            $render = "info";
-        } else if ($type === "media") {
-            $key = \Yii::$app->params['news_key_media'];
-            $pageSize = 5;
-            $render = "media";
-        } else if ($type === "notice") {
-            $key = \Yii::$app->params['news_key_notice'];
-            $render = "notice";
-        }
+
         $data = News::find()
             ->innerJoin($ic, "$n.id = $ic.item_id")
             ->leftJoin($c, "$ic.category_id = $c.id")
-            ->where(["$n.status" => News::STATUS_PUBLISH, "$c.key" => $key])
+            ->where(["$n.status" => News::STATUS_PUBLISH, "$c.key" => $type])
             ->orderBy(["$n.news_time" => SORT_DESC, "$n.id" => SORT_DESC]);
 
         $pages = new Pagination(['totalCount' => $data->count(), 'pageSize' => $pageSize]);
         $model = $data->offset($pages->offset)->limit($pages->limit)->all();
 
-        return $this->render($render, ['model' => $model, 'pages' => $pages, 'type'=>$type]);
+        return $this->render($type, ['model' => $model, 'pages' => $pages, 'type' => $type]);
     }
 
     public function actionDetail($id, $type)
@@ -64,8 +63,6 @@ class NewsController extends Controller
         } else {
             $render = 'notices';
         }
-
-
 
         return $this->render($render, ['new' => $new, 'type' => $type]);
     }

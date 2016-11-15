@@ -81,7 +81,7 @@ class SiteController extends Controller
         $notice = News::find()
             ->innerJoin($ic, "$n.id = $ic.item_id")
             ->leftJoin($c, "$ic.category_id = $c.id")
-            ->where(["$n.status" => News::STATUS_PUBLISH, "$c.key" => \Yii::$app->params['news_key_notice']])
+            ->where(["$n.status" => News::STATUS_PUBLISH, "$c.key" => "notice"])
             ->orderBy(["$n.news_time" => SORT_DESC, "$n.id" => SORT_DESC])
             ->limit(3)
             ->all();
@@ -90,7 +90,7 @@ class SiteController extends Controller
         $media = News::find()
             ->innerJoin($ic, "$n.id = $ic.item_id")
             ->leftJoin($c, "$ic.category_id = $c.id")
-            ->where(["$n.status" => News::STATUS_PUBLISH, "$c.key" => \Yii::$app->params['news_key_media']])
+            ->where(["$n.status" => News::STATUS_PUBLISH, "$c.key" => "media"])
             ->orderBy(["$n.news_time" => SORT_DESC, "$n.id" => SORT_DESC])
             ->limit(2)
             ->all();
@@ -103,7 +103,7 @@ class SiteController extends Controller
         $news = News::find()
             ->innerJoin($ic, "$n.id = $ic.item_id")
             ->leftJoin($c, "$ic.category_id = $c.id")
-            ->where(["$n.status" => News::STATUS_PUBLISH, "$c.key" => \Yii::$app->params['news_key_info']])
+            ->where(["$n.status" => News::STATUS_PUBLISH, "$c.key" => "info"])
             ->orderBy(["$n.news_time" => SORT_DESC, "$n.id" => SORT_DESC])
             ->limit(5)
             ->all();
