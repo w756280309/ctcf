@@ -5,7 +5,7 @@ use wap\assets\WapAsset;
 
 $this->registerCssFile(ASSETS_BASE_URI.'css/licai.css', ['depends' => WapAsset::class]);
 $this->registerCssFile(ASSETS_BASE_URI.'css/swiper.min.css', ['depends' => WapAsset::class]);
-$this->registerCssFile(ASSETS_BASE_URI.'css/contract.css?v=20161114', ['depends' => WapAsset::class]);
+$this->registerCssFile(ASSETS_BASE_URI.'css/contract.css?v=20161115', ['depends' => WapAsset::class]);
 $this->registerJsFile(ASSETS_BASE_URI.'js/swiper.min.js');
 
 $count = count($contracts);
