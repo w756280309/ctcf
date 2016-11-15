@@ -689,14 +689,13 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface, UserInterf
     {
         if ($this->idcard) {
             $num = intval(substr($this->idcard, -2, 1));
-            if ($num > 0) {
-                if ($num % 2 === 1) {
-                    return 'male';
-                } else {
-                    return 'female';
-                }
+            if ($num % 2 === 1) {
+                return 'male';
+            } else {
+                return 'female';
             }
         }
+
         return 'other';
     }
 }
