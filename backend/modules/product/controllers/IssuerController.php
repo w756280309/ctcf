@@ -56,4 +56,26 @@ class IssuerController extends BaseController
 
         return $this->render('edit', ['issuer' => $issuer, 'res' => $res]);
     }
+
+    /**
+     * 添加发行方视频.
+     */
+    public function actionMediaEdit($id)
+    {
+        $this->layout = false;
+        $issuer = $this->findOr404(Issuer::class, $id);
+
+        $res = false;
+        if ($issuer->load(Yii::$app->request->post()) && $issuer->validate()) {
+            if (empty($issuer->mediaTitle)) {
+                $issuer->addError('mediaTitle', '视频名称不能为空');
+            } elseif (empty($issuer->mediaUri)) {
+                $issuer->addError('mediaUri', '视频地址不能为空');
+            } else {
+                $res = $issuer->save(false);
+            }
+        }
+
+        return $this->render('media_edit', ['issuer' => $issuer, 'res' => $res]);
+    }
 }

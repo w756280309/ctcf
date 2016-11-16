@@ -46,7 +46,8 @@ $this->title = '发行方管理';
                                 <td><?= $issuer->name ?></td>
                                 <td>
                                     <center>
-                                        <a href="javascript:openwin('/product/issuer/edit?id=<?= $issuer->id ?>', 500, 300)" class="btn mini green"><i class="icon-edit"></i>编辑</a>
+                                        <a href="javascript:openwin('/product/issuer/edit?id=<?= $issuer->id ?>', 500, 300)" class="btn mini green"><i class="icon-edit"></i>编辑</a>&nbsp;
+                                        <a href="javascript:openwin('/product/issuer/media-edit?id=<?= $issuer->id ?>', 500, 300)" class="btn mini green"><i class="icon-edit"></i><?= $issuer->mediaUri ? '编辑' : '添加' ?>视频</a>
                                     </center>
                                 </td>
                             </tr>

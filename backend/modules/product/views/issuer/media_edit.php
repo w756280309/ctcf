@@ -3,7 +3,8 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
-$this->title = '发行方'.($issuer->id ? '编辑' : '添加');
+$btnDesc = $issuer->mediaUri ? '编辑' : '添加';
+$this->title = '发行方视频'.$btnDesc;
 ?>
 
 <!DOCTYPE html>
@@ -49,19 +50,30 @@ $this->title = '发行方'.($issuer->id ? '编辑' : '添加');
             <div class="page-content">
                 <div>&nbsp;</div>
                 <div class="form-horizontal form-view">
-                    <?php $form = ActiveForm::begin(['id' => 'issuer_form', 'action' => '/product/issuer/'.($issuer->id ? 'edit?id='.$issuer->id : 'add')]); ?>
-                        <div class="control-group">
-                            <label class="control-label">发行方名称</label>
-                            <div class="controls data-aff">
-                                <?= $form->field($issuer, 'name', ['template' => '{input}', 'inputOptions' => ['autocomplete' => 'off', 'placeholder' => '发行方名称']])->textInput() ?>
-                                <?= $form->field($issuer, 'name', ['template' => '{error}']) ?>
-                            </div>
+                    <?php $form = ActiveForm::begin(['id' => 'issuer_form', 'action' => '/product/issuer/media-edit?id='.$issuer->id]); ?>
+                    <div class="control-group">
+                        <label class="control-label">发行方名称</label>
+                        <div class="controls data-aff"><?= $issuer->name ?></div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label">视频名称</label>
+                        <div class="controls data-aff">
+                            <?= $form->field($issuer, 'mediaTitle', ['template' => '{input}', 'inputOptions' => ['autocomplete' => 'off', 'placeholder' => '视频名称']])->textInput() ?>
+                            <?= $form->field($issuer, 'mediaTitle', ['template' => '{error}']) ?>
                         </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label">视频地址</label>
+                        <div class="controls data-aff">
+                            <?= $form->field($issuer, 'mediaUri', ['template' => '{input}', 'inputOptions' => ['autocomplete' => 'off', 'placeholder' => '不应包含中文字符']])->textarea() ?>
+                            <?= $form->field($issuer, 'mediaUri', ['template' => '{error}']) ?>
+                        </div>
+                    </div>
 
-                        <div class="form-actions">
-                            <button type="submit" class="btn green"><?= $issuer->id ? '编辑' : '添加' ?></button>
-                            <button type="button" class="btn green" onclick="closewin()">关闭窗口</button>
-                        </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn green"><?= $btnDesc ?></button>
+                        <button type="button" class="btn green" onclick="closewin()">关闭窗口</button>
+                    </div>
                     <?php ActiveForm::end(); ?>
                 </div>
             </div>
