@@ -39,6 +39,7 @@ class UserStats
                 '投资成功金额(元)',
                 '投资成功次数(次)',
                 '首次购买金额(元)',
+                '理财资产(元)',
             ],
         ];
 
@@ -48,7 +49,7 @@ class UserStats
         $info = UserInfo::tableName();
 
         $model = (new \yii\db\Query)
-            ->select("$u.*, $b.id as bid, $a.available_balance, $info.firstInvestAmount as firstInvestAmount")
+            ->select("$u.*, $b.id as bid, $a.available_balance, $info.firstInvestAmount as firstInvestAmount, $a.investment_balance as investmentBalance")
             ->from($u)
             ->leftJoin($b, "$u.id = $b.uid")
             ->leftJoin($a, "$u.id = $a.uid")
@@ -133,7 +134,8 @@ class UserStats
                 }
             }
 
-            $data[$key]['firstInvestAmount'] = $val['firstInvestAmount'];
+            $data[$key]['firstInvestAmount'] = floatval($val['firstInvestAmount']);
+            $data[$key]['investmentBalance'] = floatval($val['investmentBalance']);
         }
 
         return $data;

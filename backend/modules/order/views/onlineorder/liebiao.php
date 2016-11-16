@@ -1,9 +1,8 @@
 <?php
 
-    use yii\widgets\ActiveForm;
     use yii\widgets\LinkPager;
-    use common\models\user\User;
-    
+    use common\utils\StringUtils;
+
     $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\web\YiiAsset']);
 
 ?>
@@ -39,15 +38,15 @@
             <table class="table">
                     <tr>
                         <td>
-                            <span class="title">已募集金额：<?= $moneyTotal?$moneyTotal:0 ?>元</span>
+                            <span class="title">已募集金额：<?= $moneyTotal ? $moneyTotal : 0 ?>元</span>
                         </td>
                         <td>
-                            <span class="title">剩余可投金额：<?=$shengyuKetou?>元</span>
+                            <span class="title">剩余可投金额：<?= $shengyuKetou ?>元</span>
                         </td>
                         <td>
-                            <span class="title">已投资人数：<?=$renshu?></span></td>
+                            <span class="title">已投资人数：<?= $renshu ?></span></td>
                         <td>
-                            <span class="title">募捐时间：<?=$mujuanTime?></span></td>
+                            <span class="title">募捐时间：<?= $mujuanTime ?></span></td>
                         </td>
                     </tr>
             </table>
@@ -56,18 +55,18 @@
         
         <!--search start-->
         <div class="portlet-body">
-            <form action="/order/onlineorder/list?id=<?=$model->online_pid?>" method="get" target="_self">
+            <form action="/order/onlineorder/list?id=<?= $model->online_pid ?>" method="get" target="_self">
                 <table class="table">
-                    <input type="hidden" name="id" value="<?=Yii::$app->request->get('id')?>"
+                    <input type="hidden" name="id" value="<?= Yii::$app->request->get('id') ?>"
                     <tbody>
                         <tr>
                             <td>
                                 <span class="title">真实姓名</span>
                             </td>
-                            <td><input type="text" class="m-wrap span6" style="margin-bottom: 0px;width:300px" name='username' value="<?=$_GET['username']?>"  placeholder="真实姓名"/></td>
+                            <td><input type="text" class="m-wrap span6" style="margin-bottom: 0px;width:300px" name='username' value="<?= $_GET['username'] ?>"  placeholder="真实姓名"/></td>
                             <td><span class="title">手机号</span></td>
                             <td>
-                                <input type="text" class="m-wrap span6" style="margin-bottom: 0px;width:300px" name='mobile' value="<?=$_GET['mobile']?>"  placeholder="手机号"/>
+                                <input type="text" class="m-wrap span6" style="margin-bottom: 0px;width:300px" name='mobile' value="<?= $_GET['mobile'] ?>"  placeholder="手机号"/>
                             </td>
                             <td colspan="6" align="right" style=" text-align: right">
                                 <button type='submit' class="btn blue btn-block" style="width: 100px;">搜索 </button>
@@ -75,7 +74,7 @@
                         </tr>
                         <tr>
                             <td colspan="5" align="right">
-                                <a href="/order/onlineorder/export?id=<?=$id?>" class="btn btn-primary" style="display: block;float: right;margin-right: 17px;">导出投标记录</a>
+                                <a href="/order/onlineorder/export?id=<?= $id ?>" class="btn btn-primary" style="display: block;float: right;margin-right: 17px;">导出投标记录</a>
                             </td>
                         </tr>
                     </tbody>
@@ -93,6 +92,7 @@
                         <th>真实姓名</th>
                         <th>手机号</th>
                         <th>投资金额（元）</th>
+                        <th>客户年化率（%）</th>
                         <th>投资时间</th>
                         <th>状态</th>
                     </tr>
@@ -103,19 +103,23 @@
                         <td><?= $val['sn'] ?></td>
                         <td><?= $val['username'] ?></td>                   
                         <td><?= $val['mobile'] ?></td>                   
-                        <td><?= $val['order_money'] ?></td>                   
-                        <td><?= date('Y-m-d H:i:s',$val['created_at'])?></td>
-                        <td><?php 
-                                    if($val['status']==0){
-                                        echo "投标失败";
-                                    }elseif($val['status']==1){
-                                        echo "投标成功";
-                                    }elseif($val['status']==2){
-                                        echo "撤标";
-                                    }else{
-                                        echo "无效";
-                                    }
-                                ?></td>
+                        <td><?= $val['order_money'] ?></td>
+                        <td><?= StringUtils::amountFormat2(bcmul($val['yield_rate'], 100, 2)); ?></td>
+                        <td><?= date('Y-m-d H:i:s',$val['created_at']) ?></td>
+                        <td>
+                            <?php
+                                $status = (int) $val['status'];
+                                if (0 === $status) {
+                                    echo "投标失败";
+                                } elseif (1 === $status){
+                                    echo "投标成功";
+                                } elseif (2 === $status) {
+                                    echo "撤标";
+                                } else {
+                                    echo "无效";
+                                }
+                            ?>
+                        </td>
                     </tr>
                     <?php endforeach; ?>   
                 </tbody>
