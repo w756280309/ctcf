@@ -1,0 +1,149 @@
+.clearfix:after {
+    content: "";
+    display: block;
+    clear: both;
+    visibility: hidden;
+    font-size: 0;
+    height: 0;
+}
+.common-color {
+    color: #c1272d;
+}
+.border-t {
+    border-top: 3px solid #000;
+}
+.border-l {
+    border-left: 3px solid #000;
+}
+.font-weig {
+    font-weight: bold;
+}
+.banner {
+    min-width:1260px;
+    height:612px;
+    background: url('../images/banner.png') no-repeat center;
+}
+.content-bg {
+    min-width:1260px;
+    height:1580px;
+    background: url('../images/content.png') no-repeat right bottom ;
+    background-size: 100% 100%;
+}
+.y-container {
+    width: 1260px;
+    height:1580px;
+    margin: 0 auto;
+}
+.y-contennt {
+    position: absolute;
+}
+.title1 {
+    width:645px;
+    position: absolute;
+    top:38px;
+    left: 194px;
+}
+.title2 {
+    width:560px;
+    position: absolute;
+    top:515px;
+    left: 194px;
+}
+.title3 {
+    width:479px;
+    position: absolute;
+    top:762px;
+    left: 194px;
+}
+.content-t1 {
+    width:983px;
+    position: absolute;
+    top:200px;
+    left: 142px;
+    font-size: 20px;
+}
+.content-t1 li {
+    width:192px;
+    height:65px;
+    line-height:65px;
+    text-align: center;
+    border-right: 3px solid #000;
+    border-bottom: 3px solid #000;
+}
+
+.content-p1 {
+    width:800px;
+    position: absolute;
+    top:360px;
+    left:218px;
+    font-size:24px;
+    letter-spacing: 1.5px;
+}
+.content-p1 span em{
+    font-size: 32px;
+}
+ .content-p1 .span-c1 {
+     font-size: 20px;
+ }
+ .content-p2 {
+     width:850px;
+     font-size: 24px;
+     position: absolute;
+     top:580px;
+     left:218px;
+     text-align: justify;
+     letter-spacing: 3px;
+ }
+.content-t2 {
+    width:983px;
+    position: absolute;
+    top:840px;
+    left: 142px;
+    font-size: 20px;
+    z-index: 9;
+}
+.content-t2 li {
+    width:136px;
+    height:65px;
+    line-height:65px;
+    text-align: center;
+    border-right: 3px solid #000;
+    border-bottom: 3px solid #000;
+}
+.content-t2 .special {
+    height:78px;
+    line-height: normal;
+    padding-top:22px;
+}
+.content-t3 {
+    width:983px;
+    position: absolute;
+    top:1050px;
+    left: 218px;
+    font-size: 24px;
+    z-index:10;
+    letter-spacing: 1.5px;
+}
+.content-t3 .over-time {
+    font-size:18px;
+}
+.concat {
+    width:800px;
+    position: absolute;
+    top:1160px;
+    left:218px;
+    font-size: 18px;
+    letter-spacing: 3px;
+}
+.register {
+    width:180px;
+    position: absolute;
+    top:1300px;
+    left:164px;
+}
+.login {
+    width:180px;
+    position: absolute;
+    top:1300px;
+    left:410px;
+}
