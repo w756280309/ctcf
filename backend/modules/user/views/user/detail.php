@@ -109,7 +109,7 @@ use common\utils\StringUtils;
             <ul class="breadcrumb_detail">
                 <li><span>理财资产（元）</span><?=$userLiCai?></li>
                 <li><span>可用余额（元）</span><?php echo empty($userYuE)?'0.00':$userYuE?></li>
-                <li><span>本年度160天及6个月以上项目累计投资额(元)</span><?php echo isset($leiji['total']) && !empty($leiji['total']) ? $leiji['total'] : '0.00' ?></li>
+                <li><span>本年度160天及以上项目累计投资额(元)</span><?= $leiji ?></li>
             </ul>
             <ul class="breadcrumb_detail">
                 <li><span>充值次数（次）</span><?=$czNum?></li>

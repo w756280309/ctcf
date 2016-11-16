@@ -145,14 +145,13 @@ class UserController extends BaseController
 
             $o = OnlineOrder::tableName();
             $p = OnlineProduct::tableName();
-            $leiji = OnlineOrder::find()->select('sum(order_money) as total')
+            $leiji = OnlineOrder::find()
                 ->innerJoinWith('loan')
                 ->where(["$p.del_status" => 0, "$p.isTest" => false, "$o.uid" => $id, "$o.status" => OnlineOrder::STATUS_SUCCESS])
                 ->andWhere(["(case when $p.refund_method = 1 then if($p.expires >= 160, 1, 0) when $p.refund_method > 1 then if($p.expires >= 6, 1, 0) end)" => 1])
                 ->andWhere(['>=', "$o.created_at", strtotime(date('Y') . '0101')])
                 ->andWhere(['<=', "$o.created_at", mktime(23, 59, 59, 12, 31, date('Y'))])
-                ->asArray()
-                ->one();
+                ->sum('order_money');
 
         } else {
             $rcMax = OnlineProduct::find()->where(['del_status' => OnlineProduct::STATUS_USE, 'borrow_uid' => $id])->min('start_date');
@@ -161,7 +160,7 @@ class UserController extends BaseController
             $order = ['count' => 0, 'sum' => 0, 'creditSuccessCount' => 0, 'creditTotalAmount' => 0, 'latestOrderTime' => ''];
             $ua = $userInfo->borrowAccount;  //获取融资用户账户信息
             $userAff = null;
-            $leiji = null;
+            $leiji = '0.00';
         }
 
         $tztimeMax = OnlineOrder::find()->where(['status' => OnlineOrder::STATUS_SUCCESS, 'uid' => $id])->max('updated_at');
@@ -186,7 +185,7 @@ class UserController extends BaseController
             'creditSuccessCount' => $order['creditSuccessCount'],
             'creditTotalAmount' => $order['creditTotalAmount'],
             'latestCreditOrderTime' => $order['latestCreditOrderTime'],
-            'leiji' => $leiji,
+            'leiji' => $leiji > 0 ? $leiji : '0.00',
         ]);
     }
 
