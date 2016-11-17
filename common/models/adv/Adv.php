@@ -161,4 +161,28 @@ class Adv extends ActiveRecord
         }
         return true;
     }
+
+    public function getShare()
+    {
+        return $this->hasOne(Share::className(), ['id' => 'share_id']);
+    }
+
+    //获取添加分享参数的链接地址
+    public function getLinkUrl()
+    {
+        $link = $this->link;
+        $parseUrl = parse_url($link);
+        $shareKey = $this->share ? $this->share->shareKey : '';
+        if ($shareKey) {
+            if (isset($parseUrl['query'])) {
+                $link = rtrim($link, '&');
+                $link .= '&wx_share_key=' . $shareKey;
+            } else {
+                $link = rtrim($link, '?');
+                $link = rtrim($link, '/');
+                $link .= '?wx_share_key=' . $shareKey;
+            }
+        }
+        return $link;
+    }
 }

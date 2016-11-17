@@ -46,6 +46,8 @@ return [
                 'notify/updatecard/backend' => 'v1/notify/updatecard/backend',
 
                 'settle/show/<type:\d+>/<date:\d+>' => 'v1/settle/settle/show',
+
+                'share/template' => 'v1/adv/share/template',
             ],
         ],
     ],
