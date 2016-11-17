@@ -4,20 +4,13 @@ namespace app\modules\order\controllers;
 
 use app\controllers\BaseController;
 use common\controllers\ContractTrait;
-use common\models\order\BaoQuanQueue;
-use common\models\user\User;
-use common\utils\StringUtils;
-use EBaoQuan\Client;
 use common\models\coupon\CouponType;
-use common\models\contract\ContractTemplate;
 use common\models\coupon\UserCoupon;
 use common\models\order\OnlineOrder;
 use common\models\order\OrderManager;
-use common\models\order\EbaoQuan;
 use common\models\product\OnlineProduct;
 use common\models\product\RateSteps;
 use common\service\PayService;
-use Tx\TxClient;
 use Yii;
 use yii\helpers\Html;
 
@@ -117,7 +110,7 @@ class OrderController extends BaseController
     public function actionOrdererror($osn)
     {
         if (empty($osn)) {
-            throw new \yii\web\NotFoundHttpException();   //判断参数无效时,抛404异常
+            throw $this->ex404();   //判断参数无效时,抛404异常
         }
 
         $order = OnlineOrder::ensureOrder($osn);
@@ -138,21 +131,16 @@ class OrderController extends BaseController
     public function actionOrderwait($osn)
     {
         if (empty($osn)) {
-            throw new \yii\web\NotFoundHttpException();   //判断参数无效时,抛404异常
+            throw $this->ex404();   //判断参数无效时,抛404异常
         }
 
         $order = OnlineOrder::ensureOrder($osn);
-        // 统计转化，取消直接跳转
-        /*if (OnlineOrder::STATUS_FALSE  !== $order->status) {
-            return $this->redirect("/order/order/ordererror?osn=" . $order->sn);
-        }*/
+
         return $this->render('wait', ['order' => $order]);
     }
 
     /**
-     * 查看用户合同
-     * @param $asset_id
-     * @return mixed
+     * 查看用户合同.
      */
     public function actionContract($asset_id, $key = 0)
     {
@@ -210,27 +198,6 @@ class OrderController extends BaseController
             'id' => $id,
         ]);
     }
-
-    /*public function actionBaoQuan($deal_id, $type = 1)
-    {
-        $baoQuan = EbaoQuan::find()->where(['type' => $type, 'orderId' => $deal_id, 'uid' => Yii::$app->user->identity->getId()])->one();
-        $data = [];
-        if (null !== $baoQuan) {
-            $data = ArrayHelper::toArray($baoQuan);
-            $res = (new Client())->contractFileDownload($baoQuan);
-            if ($res->success) {
-                $data['downUrl'] = $res->downUrl;
-            }
-            //查看证书地址
-            $res = (new Client())->certificateLinkGet($baoQuan);
-            if ($res->success) {
-                $data['link'] = $res->link;
-            }
-        }
-        return $this->render('bao-quan', [
-            'baoQuan' => $data,
-        ]);
-    }*/
 
     /**
      * 根据投资金额和产品利率阶梯获取订单的利率

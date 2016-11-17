@@ -61,6 +61,7 @@ $_js = <<<JS2
         $('#content').on('click', '.download-ybq', function(e) {
             e.preventDefault();
             
+            setDivCenter('#mask');
             $('#mask-back').addClass('show');
             $('#mask').addClass('show');
         });
@@ -72,6 +73,14 @@ $_js = <<<JS2
             $('#mask').removeClass('show');
         });
     });
+    
+    function setDivCenter(divName)
+    {   
+        var top = ($(window).height() - $(divName).height()) / 2;     
+        var scrollTop = $(document).scrollTop();
+           
+        $(divName).css({ position : 'absolute', 'top' : top + scrollTop});  
+    }  
 JS2;
 
 if (isset($bq) && isset($isDisDownload) && $isDisDownload) {
