@@ -9,7 +9,7 @@ $this->params['breadcrumbs'][] = $this->title;
 $this->hideHeaderNav = true;
 
 $this->registerCssFile(ASSETS_BASE_URI.'css/first.css', ['depends' => WapAsset::class]);
-$this->registerCssFile(ASSETS_BASE_URI.'css/luodiye/luodiye.css?v=161117', ['depends' => WapAsset::class]);
+$this->registerCssFile(ASSETS_BASE_URI.'css/luodiye/luodiye.css?v=161117-1', ['depends' => WapAsset::class]);
 $this->registerJsFile(ASSETS_BASE_URI.'js/fastclick.js', ['depends' => WapAsset::class]);
 ?>
 
@@ -103,26 +103,29 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/fastclick.js', ['depends' => WapAsset:
             <div class="fixed-float">
                 <img src="<?= ASSETS_BASE_URI ?>images/luodiye/fixed-float.png" alt="">
             </div>
-            <div class="fixed-box">
-                <div class="fixed-outside">
-                    <div class="fixed-opacity"><img src="<?= ASSETS_BASE_URI ?>images/luodiye/fixed-float.png" alt=""></div>
-                    <table class="fixed-content">
-                        <tr>
-                            <td colspan="3" class="table-img"><img src="<?= ASSETS_BASE_URI ?>images/luodiye/fixed-float.png" alt=""></td>
-                        </tr>
-                        <tr class="table-content">
-                            <td width="600"><p class="content-font">使用APP客户端，理财随时随地！</p></td>
-                            <td width="300"><a class="content-link" href="http://a.app.qq.com/o/simple.jsp?pkgname=com.wz.wenjf" target="_self">立即下载</a></td>
-                            <td width="200">
-                                <a class="content-picture"><img src="<?= ASSETS_BASE_URI ?>images/luodiye/close-icon-height.png" alt=""></a>
-                            </td>
-                        </tr>
-                    </table>
+            <div id="wrapper">
+                <div class="fixed-box">
+                    <div class="fixed-outside">
+                        <div class="fixed-opacity"><img src="<?= ASSETS_BASE_URI ?>images/luodiye/fixed-float.png" alt=""></div>
+                        <table class="fixed-content">
+                            <tr>
+                                <td colspan="3" class="table-img"><img src="<?= ASSETS_BASE_URI ?>images/luodiye/fixed-float.png" alt=""></td>
+                            </tr>
+                            <tr class="table-content">
+                                <td width="600"><p class="content-font">使用APP客户端，理财随时随地！</p></td>
+                                <td width="300"><a class="content-link" href="http://a.app.qq.com/o/simple.jsp?pkgname=com.wz.wenjf" target="_self">立即下载</a></td>
+                                <td width="200">
+                                    <a class="content-picture"><img src="<?= ASSETS_BASE_URI ?>images/luodiye/close-icon-height.png" alt=""></a>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
 <script>
     function validateForm()
     {
@@ -176,7 +179,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/fastclick.js', ['depends' => WapAsset:
         }
 
         if ($('#xieyi').attr('checked') !== 'checked') {
-            toastCenter('网站服务协议');
+            toastCenter('请查看网站服务协议');
             return false;
         }
 
@@ -226,6 +229,46 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/fastclick.js', ['depends' => WapAsset:
     }
 
     $(function () {
+        function parseUA()
+        {
+            var ugent = navigator.userAgent;
+            var ugentS = ugent.toLowerCase(); //转换成小写
+            return{
+                webKit: ugent.indexOf('AppleWebKit') > -1,//苹果、谷歌内核
+                mobile: !!ugent.match(/AppleWebKit.*Mobile.*/),//是否为移动终端
+                ios: !!ugent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/),//ios终端
+                weixin: ugent.indexOf('MicroMessenger') > -1,//是否微信
+                android: ugent.indexOf('Android') > -1|| ugent.indexOf('Linux') > -1,//android终端或者uc浏览器
+                iPhone: ugent.indexOf('iPhone') > -1, //是否为iPhone或者QQHD浏览器
+            }
+        }
+
+        var ua = parseUA();
+        function showfix()
+        {
+            if (ua.iPhone) {
+                $(".fixed-box").show();
+                $(".fixed-float").show();
+            }else if(ua.android){
+                $(".fixed-box").show();
+                $(".fixed-float").show();
+            }
+        }
+
+        function hidefix()
+        {
+            if (ua.iPhone) {
+                $(".fixed-box").hide();
+                $(".fixed-float").hide();
+            }else if(ua.android){
+                $(".fixed-box").hide();
+                $(".fixed-float").hide();
+            }
+        }
+
+        $("input.text-single").on("blur",showfix);
+        $("input.text-single").on("focus",hidefix);
+
         FastClick.attach(document.body);
 
         $(".field-captchaform-captchacode").css('float', 'left');
