@@ -4,6 +4,7 @@ namespace common\models\order;
 
 use common\models\promo\InviteRecord;
 use common\models\user\UserInfo;
+use Ding\DingNotify;
 use Yii;
 use Exception;
 use common\utils\TxUtils;
@@ -260,6 +261,8 @@ class OrderManager
 
     public static function confirmOrder($ordOrSn)
     {
+        $loanFullAndNotify = false;//是否需要满标钉钉提醒
+
         bcscale(14);
         $order = OnlineOrder::ensureOrder($ordOrSn);
         if (OnlineOrder::STATUS_SUCCESS === $order->status) {
@@ -334,7 +337,9 @@ class OrderManager
             }
             $update['finish_rate'] = $finish_rate;
         }
-
+        if ($loan->finish_rate < 0.9 && $update['finish_rate'] >= 0.9) {
+            $loanFullAndNotify = true ;
+        }
         $res = Loan::updateAll($update, ['id' => $loan->id]);
         if (false === $res) {
             $transaction->rollBack();
@@ -375,6 +380,12 @@ class OrderManager
 
         //投资完成之后做邀请好友逻辑处理
         InviteRecord::dealWithOrder($order);
+
+        //即将满标时候钉钉提醒
+        if ($loanFullAndNotify) {
+            $notify = new DingNotify('wdjf');
+            $notify->charSentText('标的 [' . $loan->title . '] 募集进度为 ' . $update['finish_rate'] . ', 请及时处理');
+        }
 
         return true;
     }
