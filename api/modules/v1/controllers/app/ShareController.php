@@ -20,19 +20,33 @@ class ShareController extends Controller
      */
     public function actionTemplate()
     {
+        $data = [];
         $shareKey = $this->getQueryParam('wx_share_key');
-        if (empty($shareKey)) {
-            throw $this->exBadParam('wx_share_key');
+        if (!empty($shareKey)) {
+            $share = Share::find()->where(['shareKey' => $shareKey])->one();
+            if (!empty($share)) {
+                $data = [
+                    'result' => 'success',
+                    'msg' => '成功',
+                    'content' => [
+                        'key' => $share->shareKey,
+                        'title' => $share->title,
+                        'description' => $share->description,
+                        'img' => $share->imgUrl,
+                    ],
+                ];
+                $message = '成功';
+            } else {
+                $message = '找不到share信息';
+            }
+        } else {
+            $message = '参数错误';
         }
-        $share = Share::find()->where(['shareKey' => $shareKey])->one();
-        if (empty($share)) {
-            throw $this->ex404();
-        }
+
         return [
-            'key' => $share->shareKey,
-            'title' => $share->title,
-            'description' => $share->description,
-            'img' => $share->imgUrl,
+            'status' => empty($data) ? 'fail' : 'success',
+            'message' => $message,
+            'data' => $data,
         ];
     }
 }
