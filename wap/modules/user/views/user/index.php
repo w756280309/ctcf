@@ -3,7 +3,10 @@ $this->title = '账户中心';
 $this->showBottomNav = true;
 $this->showAvatar = true;
 
+use yii\web\JqueryAsset;
 use common\utils\StringUtils;
+$this->registerJsFile(ASSETS_BASE_URI.'js/fastclick.js', ['depends' => JqueryAsset::class]);
+
 ?>
 <link href="<?= ASSETS_BASE_URI ?>css/informationAndHelp.css" rel="stylesheet">
 <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/setting.css?v=20160803">
@@ -157,12 +160,18 @@ use common\utils\StringUtils;
     }
 
     $(function() {
+        FastClick.attach(document.body);
         var flag = 0;
 
         $('.accountcenter-center-left').on('click', '.dj-tip-refer', function(event) {
             var event = event || window.event;
-            $('.sm-height_tips').show();
-            flag = 1;
+            if (!flag) {
+                $('.sm-height_tips').show();
+                flag = 1;
+            } else {
+                $('.sm-height_tips').hide();
+                flag = 0;
+            }
             event.stopPropagation();
         })
 
