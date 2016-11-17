@@ -47,7 +47,7 @@ return [
 
                 'settle/show/<type:\d+>/<date:\d+>' => 'v1/settle/settle/show',
 
-                'share/template' => 'v1/adv/share/template',
+                'app/share/template' => 'v1/app/share/template',
             ],
         ],
     ],

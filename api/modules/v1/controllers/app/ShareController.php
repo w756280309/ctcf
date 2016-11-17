@@ -1,5 +1,5 @@
 <?php
-namespace api\modules\v1\controllers\adv;
+namespace api\modules\v1\controllers\app;
 
 use api\modules\v1\controllers\Controller;
 use common\models\adv\Share;
