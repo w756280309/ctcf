@@ -102,29 +102,41 @@ class SignupForm extends Model
     /**
      * 注册用户主函数.
      */
-    public function signup($regFrom = User::REG_FROM_OTHER)
+    public function signup($regFrom = User::REG_FROM_OTHER, $regContext)
     {
+        if (!in_array($regContext, ['m', 'm_intro1611', 'pc', 'pc_landing'])) {
+            return false;
+        }
+
         if ($this->validate()) {
             $transaction = Yii::$app->db->beginTransaction();
-            $user = new User();
+            $user = new User([
+                'usercode' => User::create_code(),
+                'type' => User::USER_TYPE_PERSONAL,
+                'mobile' => $this->phone,
+                'username' => '',
+                'law_mobile' => '',
+                'regContext' => $regContext,
+            ]);
+
             $user->scenario = 'signup';
-            $user->usercode = User::create_code();   //生成usercode
-            $user->type = User::USER_TYPE_PERSONAL;
-            $user->mobile = $this->phone;
             $user->setPassword($this->password);
-            $user->username = '';
-            $user->law_mobile = '';
+
             if (Yii::$app->request->cookies->getValue('campaign_source')) {
                 $user->campaign_source = Yii::$app->request->cookies->getValue('campaign_source');
             }
+
             //添加来源
             if (defined('IN_APP') && IN_APP) {
                 $regFrom = User::REG_FROM_APP;
             }
+
             if ($_SERVER["HTTP_USER_AGENT"] && false !== strpos($_SERVER["HTTP_USER_AGENT"], 'MicroMessenger')) {
                 $regFrom = User::REG_FROM_WX;
             }
+
             $user->regFrom = $regFrom;
+
             if (!$user->save()) {
                 $transaction->rollBack();
 
@@ -134,6 +146,7 @@ class SignupForm extends Model
             $user_acount = new UserAccount();
             $user_acount->uid = $user->id;
             $user_acount->type = UserAccount::TYPE_LEND;
+
             if (!$user_acount->save()) {
                 $transaction->rollBack();
 
@@ -198,10 +211,11 @@ class SignupForm extends Model
             if (Yii::$app->request->cookies->getValue('campaign_source')) {
                 (new AffiliationManager())->log(Yii::$app->request->cookies->getValue('campaign_source'), $user);
             }
+
             return $user;
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     /**

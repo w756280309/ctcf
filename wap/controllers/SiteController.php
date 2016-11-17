@@ -2,30 +2,30 @@
 
 namespace app\controllers;
 
-use Yii;
-use yii\web\Controller;
-use common\service\SmsService;
-use yii\filters\VerbFilter;
-use yii\filters\AccessControl;
 use common\controllers\HelpersTrait;
+use common\service\SmsService;
+use common\service\LoginService;
 use common\models\adv\Adv;
 use common\models\affiliation\Affiliator;
 use common\models\affiliation\AffiliateCampaign;
-use common\models\product\OnlineProduct;
-use common\models\user\SignupForm;
-use common\models\user\LoginForm;
-use common\models\user\EditpassForm;
-use common\service\LoginService;
-use common\models\log\LoginLog;
-use common\models\user\User;
-use common\models\user\CaptchaForm;
 use common\models\app\AccessToken;
 use common\models\bank\EbankConfig;
 use common\models\bank\QpayConfig;
 use common\models\bank\Bank;
+use common\models\log\LoginLog;
+use common\models\product\OnlineProduct;
 use common\models\news\News;
+use common\models\user\SignupForm;
+use common\models\user\LoginForm;
+use common\models\user\EditpassForm;
+use common\models\user\User;
+use common\models\user\CaptchaForm;
 use wap\modules\promotion\models\Promo160520;
 use wap\modules\promotion\models\Promo160520Log;
+use Yii;
+use yii\filters\AccessControl;
+use yii\filters\VerbFilter;
+use yii\web\Controller;
 
 /**
  * Site controller.
@@ -286,8 +286,13 @@ class SiteController extends Controller
         }
 
         $model = new SignupForm();
-        if ($model->load(Yii::$app->request->post()) && Yii::$app->request->isAjax) {
-            if ($user = $model->signup(User::REG_FROM_WAP)) {
+        $data = Yii::$app->request->post();
+        if (!isset($data['regContext']) || empty($data['regContext'])) {
+            $data['regContext'] = 'm';
+        }
+
+        if ($model->load($data) && Yii::$app->request->isAjax) {
+            if ($user = $model->signup(User::REG_FROM_WAP, $data['regContext'])) {
                 $promo160520log = Promo160520Log::findOne(['mobile' => $user->mobile]);
                 if ($promo160520log) {
                     Promo160520::insertCoupon($user, $promo160520log->prizeId);

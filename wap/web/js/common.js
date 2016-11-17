@@ -212,7 +212,7 @@ function createSms(phoneId, type, captchaCodeId, fun)
                 fun();
             }
         } else {
-            toast(result.message);
+            toastCenter(result.message);
             $("#captchaform-captchacode-image").click();
         }
     });

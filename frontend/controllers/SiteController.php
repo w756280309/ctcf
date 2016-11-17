@@ -254,8 +254,13 @@ class SiteController extends Controller
         $model = new SignupForm();
         $captcha = new CaptchaForm();
 
-        if ($model->load(Yii::$app->request->post())) {
-            $user = $model->signup(User::REG_FROM_PC);
+        $data = Yii::$app->request->post();
+        if (!isset($data['regContext']) || empty($data['regContext'])) {
+            $data['regContext'] = 'pc';
+        }
+
+        if ($model->load($data)) {
+            $user = $model->signup(User::REG_FROM_PC, $data['regContext']);
             if ($user && Yii::$app->user->login($user)) {
                 $user->scenario = 'login';
                 $user->last_login = time();

@@ -38,6 +38,7 @@ use common\models\order\OnlineRepaymentPlan as RepaymentPlan;
  * @property int $created_at
  * @property int $regFrom   注册来源。0表示未知，1表示wap，2表示wx，3表示app，4表示pc
  * @property int $sort  融资用户排序，默认为0，从大到小排序
+ * @property string $regContext 注册页面来源 m 代表WAP端默认注册页 m_intro1611 代表WAP端落地页注册页 pc 代表PC端默认注册页 pc_landing 代表PC端落地页注册页
  */
 class User extends \yii\db\ActiveRecord implements IdentityInterface, UserInterface
 {
@@ -193,7 +194,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface, UserInterf
             ],
             'edit' => ['id', 'type', 'username', 'mobile', 'email', 'real_name', 'idcard', 'org_name', 'org_code', 'status', 'auth_key', 'user_pass', 'in_time', 'cat_id', 'law_master', 'law_master_idcard', 'law_mobile', 'shui_code', 'business_licence', 'tel', 'passwordLastUpdatedTime',
             ],
-            'signup' => ['type', 'modile', 'password_hash', 'auth_key', 'usercode'],
+            'signup' => ['type', 'modile', 'password_hash', 'auth_key', 'usercode', 'regContext'],
             'idcardrz' => ['real_name', 'idcard', 'idcard_status'],
             'editpass' => ['password_hash', 'trade_pwd', 'auth_key'],
             'login' => ['last_login'],
@@ -219,7 +220,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface, UserInterf
                 'string',
                 'length' => [5, 16],
             ],
-            [['mobile', 'username', 'real_name', 'idcard'], 'required'],
+            [['mobile', 'username', 'real_name', 'idcard', 'regContext'], 'required'],
             [['mobile'], 'unique', 'message' => '该手机号码已被占用，请重试', 'on' => 'add'],
             //身份证号码为15位或者18位，15位时全为数字，18位前17位为数字，最后一位是校验位，可能为数字或字符X
             [['idcard', 'law_master_idcard'], 'match', 'pattern' => '/(^\d{15}$)|(^\d{17}(\d|X)$)/', 'message' => '{attribute}身份证号码不正确,必须为15位或者18位'],
@@ -319,6 +320,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface, UserInterf
             'f_pwd' => '重置密码', 'c_f_pwd' => '确认密码',
             'trade_pwd' => '交易密码', 'old_trade' => '原交易密码',
             'new_trade' => '新交易密码', 'new_trade_confirm' => '确认交易密码',
+            'regContext' => '页面注册来源',
         ];
     }
 

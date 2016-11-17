@@ -16,6 +16,7 @@ use yii\captcha\Captcha;
         <?php $form = ActiveForm::begin(['action' => "/site/signup", 'id' => 'form']); ?>
         <input type="hidden" id="sms-type" value="1">
         <input type="hidden" id="csrf" value="<?= Yii::$app->request->csrfToken ?>">
+        <input name="regContext" type="hidden" value="pc_landing">
         <div class="register-en">
             <h2>免费注册</h2>
             <div class="text-single phone-box">

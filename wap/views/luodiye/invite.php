@@ -58,7 +58,7 @@ $this->registerJsFile($cdn.'js/wechat.js');
             <p class="p-use">投资即可使用</p>
         </div>
         <div class="transform-bottom">
-            <a href="/site/signup/" id="collect">立即领取</a>
+            <a href="/luodiye/signup/" id="collect">立即领取</a>
         </div>
     </div>
 </div>

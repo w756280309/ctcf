@@ -2,14 +2,29 @@
 
 namespace app\controllers;
 
+use common\models\user\CaptchaForm;
 use common\controllers\HelpersTrait;
 use common\models\user\User;
+
 use Yii;
 use yii\web\Controller;
 
 class LuodiyeController extends Controller
 {
     use HelpersTrait;
+
+    public function actionSignup()
+    {
+        if (!Yii::$app->user->isGuest) {
+            if (!\Yii::$app->user->isGuest) {
+                return $this->goHome();
+            }
+        }
+
+        $captcha = new CaptchaForm();
+
+        return $this->render('luodiye', ['captcha' => $captcha]);
+    }
 
     public function actionIndex()
     {
