@@ -1,0 +1,77 @@
+.sm-height_tips {
+    position: absolute;
+    width: 86%;
+    right: 5%;
+    top: 31px;
+    color: #777;
+    font-size: 1.4rem;
+    z-index: 100;
+    line-height: 1.5rem;
+    border: 1px solid #fbb4af;
+    background: #ffe6e4;
+    padding:0.5rem;
+    display: none;
+}
+.sm-height_tips img {
+    position: absolute;
+    left: 46%;
+    top: -15%;
+}
+
+@media screen and (max-width: 320px) {
+    .sm-height_tips img {
+        left: 64%;
+    }
+}
+@media (min-width:321px) and (max-width: 375px) {
+    .sm-height_tips img {
+        left: 54%;
+    }
+}
+@media (min-width:376px) and (max-width: 411px){
+    .sm-height_tips img {
+        left: 50%;
+    }
+}
+@media  (min-width:412px) and (max-width:478px) {
+    .sm-height_tips img {
+        left: 45%;
+    }
+}
+@media  (min-width:479px) and (max-width: 560px) {
+    .sm-height_tips img {
+        left: 39%;
+        top: -22%;
+    }
+}
+@media  (min-width:561px) and (max-width: 614px){
+    .sm-height_tips img {
+        left: 32%;
+        top: -22%;
+    }
+}
+@media  (min-width:615px) and (max-width: 730px) {
+    .sm-height_tips {
+        width: 65%;
+        left: 22%;
+    }
+    .sm-height_tips img {
+        left: 13%;
+        top: -22%;
+    }
+}
+@media  (min-width:736px) {
+    .sm-height_tips {
+        width: 65%;
+        left: 19%;
+    }
+    .sm-height_tips img {
+        left: 13%;
+        top: -22%;
+    }
+}
+@media (min-width: 800px) {
+    .sm-height_tips img {
+        left: 2%;
+    }
+}

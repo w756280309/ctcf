@@ -7,6 +7,7 @@ use common\utils\StringUtils;
 ?>
 <link href="<?= ASSETS_BASE_URI ?>css/informationAndHelp.css" rel="stylesheet">
 <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/setting.css?v=20160803">
+<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/tip.css?v=20161116">
 <script>
     $(function(){
         $('.footer-inner a').css({color: '#8c8c8c'});
@@ -27,18 +28,26 @@ use common\utils\StringUtils;
     </div>
     <div class="row earn-num1">
         <div class="col-xs-1"></div>
-        <div class="col-xs-7 col"><?= StringUtils::amountFormat3($zcze) ?></div>
+        <div class="col-xs-7 col"><?= StringUtils::amountFormat3($ua->getTotalFund()) ?></div>
         <div class="col-xs-3"></div>
     </div>
     <div class="row accountcenter-center-left">
         <div class="col-xs-1"></div>
         <div class="col-xs-5">理财资产（元）</div>
-        <div class="col-xs-6"></div>
+        <div class="col-xs-6 dj-tip-refer" style="position: relative;">
+            冻结资金（元）
+            <img class="common_img sm-height_tips_img" src="<?= ASSETS_BASE_URI ?>images/credit/icon_instruction.png" style="width: 16px" alt="">
+            <p class="sm-height_tips">
+                <img src="<?= ASSETS_BASE_URI ?>images/credit/triangle.png" alt="">
+                <span>投资资金在项目未满标时锁定的金额</span>
+            </p>
+        </div>
+
     </div>
     <div class="row accountcenter-center-right">
         <div class="col-xs-1"></div>
-        <div class="col-xs-5"><?= StringUtils::amountFormat3($dhsbj) ?></div>
-        <div class="col-xs-6"></div>
+        <div class="col-xs-5"><?= StringUtils::amountFormat3($ua->investment_balance) ?></div>
+        <div class="col-xs-6"><?= StringUtils::amountFormat3($ua->freeze_balance) ?></div>
     </div>
     <br>
     <div class="row accountcenter-center-left">
@@ -49,7 +58,7 @@ use common\utils\StringUtils;
     <div class="row accountcenter-center-right">
         <div class="col-xs-1"></div>
         <div class="col-xs-5"><?= StringUtils::amountFormat3($user->getTotalInvestment()) ?></div>
-        <div class="col-xs-6"><?= StringUtils::amountFormat3($ljsy) ?></div>
+        <div class="col-xs-6"><?= StringUtils::amountFormat3($user->getProfit()) ?></div>
     </div>
 </div>
 <div class="row accountcenter-other">
@@ -146,4 +155,23 @@ use common\utils\StringUtils;
             location.href='/user/userbank/recharge';
         }
     }
+
+    $(function() {
+        var flag = 0;
+
+        $('.accountcenter-center-left').on('click', '.dj-tip-refer', function(event) {
+            var event = event || window.event;
+            $('.sm-height_tips').show();
+            flag = 1;
+            event.stopPropagation();
+        })
+
+        $('html').on('click', 'body', function() {
+            if (flag) {
+                $('.sm-height_tips').hide();
+                flag = 0;
+            }
+        });
+    });
+
 </script>

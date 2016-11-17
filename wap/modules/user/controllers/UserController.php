@@ -9,7 +9,6 @@ use common\models\product\OnlineProduct as Loan;
 use common\models\order\OnlineRepaymentPlan as Plan;
 use common\models\order\OrderManager;
 use common\service\BankService;
-use common\lib\bchelp\BcRound;
 use Yii;
 use yii\data\Pagination;
 
@@ -20,17 +19,12 @@ class UserController extends BaseController
      */
     public function actionIndex()
     {
-        $bc = new BcRound();
-        bcscale(14);
         $user = $this->getAuthedUser();
         $ua = $this->getAuthedUser()->lendAccount;
-        $leijishouyi = $ua->getTotalProfit();//累计收益
-        $dhsbj = $bc->bcround(bcadd($ua->investment_balance, $ua->freeze_balance), 2);//在wap端理财资产等于实际理财资产+用户投资冻结金额freeze_balance
-        $zcze = $ua->getTotalFund();//账户余额+理财资产
 
         $data = BankService::checkKuaijie($user);
 
-        return $this->render('index', ['ua' => $ua, 'user' => $user, 'ljsy' => $leijishouyi, 'dhsbj' => $dhsbj, 'zcze' => $zcze, 'data' => $data]);
+        return $this->render('index', ['ua' => $ua, 'user' => $user, 'data' => $data]);
     }
 
     /**
