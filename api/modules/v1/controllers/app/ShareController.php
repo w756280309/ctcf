@@ -31,7 +31,7 @@ class ShareController extends Controller
                     'content' => [
                         'key' => $share->shareKey,
                         'title' => $share->title,
-                        'description' => $share->description,
+                        'desc' => $share->description,
                         'img' => $share->imgUrl,
                     ],
                 ];
