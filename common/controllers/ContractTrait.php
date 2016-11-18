@@ -57,8 +57,13 @@ trait ContractTrait
                 'itemId' => $asset['credit_order_id'],
             ])->one();
             if (null !== $bq) {
-                $bqCreditOrder['downUrl'] = Client::contractFileDownload($bq);
-                $bqCreditOrder['linkUrl'] = Client::certificateLinkGet($bq);
+                try {
+                    $bqCreditOrder['downUrl'] = Client::contractFileDownload($bq);
+                    $bqCreditOrder['linkUrl'] = Client::certificateLinkGet($bq);
+                } catch (\Exception $ex) {
+
+                }
+
             }
 
             $creditContract[] = ['title' => '产品转让协议'. str_pad($key, 2, '0', STR_PAD_LEFT), 'content' => $creditTemplate['content'], 'amount' => $creditTemplate['amount'], 'type' => 'credit_order', 'bqCredit' => $bqCreditOrder];
@@ -102,8 +107,12 @@ trait ContractTrait
                     ])->one();
                     $bqCreditNote = [];
                     if (null !== $bq) {
-                        $bqCreditNote['downUrl'] = Client::contractFileDownload($bq);
-                        $bqCreditNote['linkUrl'] = Client::certificateLinkGet($bq);
+                        try {
+                            $bqCreditNote['downUrl'] = Client::contractFileDownload($bq);
+                            $bqCreditNote['linkUrl'] = Client::certificateLinkGet($bq);
+                        } catch (\Exception $ex) {
+
+                        }
                     }
 
                     $creditContract[] = ['title' => '产品转让协议'. str_pad($key, 2, '0', STR_PAD_LEFT), 'content' => $contentRes, 'amount' => $amount, 'type' => 'credit_note', 'bqCredit' => $bqCreditNote];
@@ -162,8 +171,12 @@ trait ContractTrait
             ])->one();
         }
         if (null !== $bq) {
-            $bqLoan['downUrl'] = Client::contractFileDownload($bq);
-            $bqLoan['linkUrl'] = Client::certificateLinkGet($bq);
+            try {
+                $bqLoan['downUrl'] = Client::contractFileDownload($bq);
+                $bqLoan['linkUrl'] = Client::certificateLinkGet($bq);
+            } catch (\Exception $ex) {
+
+            }
         } else {
             $bqLoan = [];
         }
