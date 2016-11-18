@@ -13,6 +13,14 @@
         <script src="/js/jquery.cookie.js"></script>
         <script src="/js/analytics.js?v=20161118"></script>
         <script src="/js/hmsr.js"></script>
+        <script>
+            $(function() {
+                var host = location.host;
+                if(host.split('.')[0] === 'app') {
+                    $('#register').attr({'href':'/site/signup'});
+                }
+            })
+        </script>
     </head>
 
     <body>
@@ -75,7 +83,7 @@
             </div>
             <div class="nav">
                 <ul>
-                    <li><a href="/luodiye/signup">马上注册</a></li>
+                    <li><a id="register" href="/luodiye/signup">马上注册</a></li>
                     <li><a href="/deal/deal/index">立即投资</a></li>
                     <li><a style="border:none;" href="/site/about">了解温都金服</a></li>
                 </ul>
