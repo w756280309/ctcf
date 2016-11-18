@@ -1,0 +1,239 @@
+body,
+p,
+ul,
+ol,
+li,
+dl,
+dt,
+dd,
+form,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+input {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+html,
+body {
+  background: #fdf8eb;
+}
+body {
+  font-size: 16px;
+  padding-bottom: 1.33333333rem;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+.lf {
+  float: left;
+}
+.rg {
+  float: right;
+}
+.clearfix:after {
+  content: "";
+  display: block;
+  clear: both;
+  visibility: hidden;
+  font-size: 0;
+  height: 0;
+}
+a {
+  text-decoration: none;
+  cursor: pointer;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+.banner,
+.active {
+  width: 100%;
+}
+.banner img,
+.active img {
+  width: 100%;
+  display: block;
+}
+.content {
+  margin: 0 0.53333333rem;
+}
+.content .top {
+  height: 2.25333333rem;
+  background: url("../images/content-top.png") no-repeat center center;
+  background-size: 101% 101%;
+  text-align: center;
+  color: #ee222a;
+  padding: 0.53333333rem;
+}
+.content .top p:first-child {
+  font-size: 0.48rem;
+  line-height: 0.89333333rem;
+}
+.content .top p:last-child {
+  font-weight: bold;
+  font-size: 0.72rem;
+}
+.content .top p:last-child span {
+  font-size: 1.06666667rem;
+}
+.content .regular {
+  padding: 0 0.2rem;
+  background: #ed4952;
+}
+.content .regular .list {
+  background-color: #dc353c;
+}
+.content .regular .list ul li {
+  padding: 0 0.26666667rem;
+  font-size: 0.34666667rem;
+  line-height: 0.74666667rem;
+  text-align: center;
+}
+.content .regular .list ul li span:first-child {
+  color: #ffdb85;
+}
+.content .regular .list ul li img {
+  vertical-align: middle;
+}
+.content .regular .list ul li img:nth-of-type(1) {
+  width: 3.49333333rem;
+}
+.content .regular .list ul li span:last-child {
+  color: #fff;
+}
+.content .regular .list ul li span:last-child i {
+  font-style: normal;
+  color: #ffdb85;
+}
+.content .regular .btm {
+  margin: 0.26666667rem 0.36rem 0 0.36rem;
+}
+.content .regular .btm .list-img {
+  width: 100%;
+}
+.content .regular .construct {
+  text-align: center;
+  color: #fff;
+  font-size: 0.32rem;
+  line-height: 0.53333333rem;
+}
+.content .regular .construct img {
+  width: 0.50666667rem;
+  margin-top: 0.13333333rem;
+}
+.content .backactive {
+  margin: 0.13333333rem 0;
+}
+.content .backactive .active1 {
+  font-size: 0.4rem;
+  line-height: 1.36rem;
+  background-color: #ed4952;
+}
+.content .backactive .active1 .gift {
+  width: 1.38666667rem;
+  margin-right: 0.33333333rem;
+}
+.content .backactive .active1 a {
+  color: #fff;
+  display: block;
+  padding-right: 0.26666667rem;
+}
+.content .backactive .active1 a img {
+  width: 0.28rem;
+}
+.content .backactive .active1 a span:last-child {
+  color: #f4dea9;
+}
+.content .backactive ul {
+  background-color: #c23238;
+  padding: 0.26666667rem 0 0.33333333rem 0.46666667rem;
+}
+.content .backactive ul li {
+  color: #fff;
+  font-size: 0.34666667rem;
+  line-height: 0.64rem;
+}
+.content .backactive ul li span {
+  font-size: 0.18666667rem;
+}
+.content .backactive p {
+  color: #fff;
+  height: 0.94666667rem;
+  line-height: 0.94666667rem;
+  background-color: #af2e33;
+  font-size: 0.32rem;
+  padding-left: 0.36rem;
+}
+.content .backactive p a {
+  display: inline-block;
+  font-size: 0.4rem;
+  width: 3.14666667rem;
+  height: 0.73333333rem;
+  border-radius: 5px;
+  color: #ed4952;
+  background-color: #ffdb85;
+  text-align: center;
+  margin-top: 0.10666667rem;
+  line-height: 0.76rem;
+}
+.content .show-hide {
+  display: none;
+}
+.content .footer ul {
+  padding: 0.4rem 0;
+}
+.content .footer ul li {
+  font-size: 0.32rem;
+  color: #595757;
+  line-height: 0.64rem;
+}
+.content .footer ul li a {
+  display: inline-block;
+  font-size: 0.4rem;
+  width: 3.14666667rem;
+  height: 0.73333333rem;
+  border-radius: 5px;
+  color: #ed4952;
+  background-color: #ffdb85;
+  text-align: center;
+  margin-top: 0.10666667rem;
+  line-height: 0.76rem;
+}
+.content .footer ul li:last-child {
+  font-size: 0.24rem;
+}
+.listImg {
+  width: 100%;
+  display: block;
+}
+.content .backactive ul.list-btm {
+  background-color: #af2e33;
+  padding: 0.33333333rem 0 0.33333333rem 0.26666667rem;
+}
+.content .backactive ul.list-btm li {
+  font-size: 0.32rem;
+  line-height: 0.46666667rem;
+}
+.nav {
+  width: 100%;
+  position: fixed;
+  bottom: 0;
+  background: #fff;
+  border-top: 1px solid #a0a0a0;
+}
+.nav ul li {
+  width: 33%;
+  height: 1.33333333rem;
+  float: left;
+  text-align: center;
+}
+.nav ul li a {
+  color: #c1272d;
+  display: inline-block;
+  height: 0.58666667rem;
+  line-height: 0.58666667rem;
+  width: 100%;
+  margin-top: 0.36rem;
+  border-right: 1px solid #a0a0a0;
+}
