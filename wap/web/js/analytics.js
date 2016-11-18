@@ -19,15 +19,16 @@ var _hmt = _hmt || [];
 ga('create', 'UA-77716435-1', '.wenjf.com');
 ga('send', 'pageview');
 
-window._pt_lt = new Date().getTime();
-window._pt_sp_2 = [];
-_pt_sp_2.push('setAccount,6d0b2c48');
-var _protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
-(function() {
-    var atag = document.createElement('script'); atag.type = 'text/javascript'; atag.async = true;
-    atag.src = _protocol + 'js.ptengine.cn/pta.js';
-    var stag = document.createElement('script'); stag.type = 'text/javascript'; stag.async = true;
-    stag.src = _protocol + 'js.ptengine.cn/pts.js';
-    var s = document.getElementsByTagName('script')[0];
-    s.parentNode.insertBefore(atag, s); s.parentNode.insertBefore(stag, s);
+var _vds = _vds || [];
+window._vds = _vds;
+(function(){
+    _vds.push(['setAccountId', 'a905832e29f320c4']);
+    (function() {
+        var vds = document.createElement('script');
+        vds.type='text/javascript';
+        vds.async = true;
+        vds.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'dn-growing.qbox.me/vds.js';
+        var s = document.getElementsByTagName('script')[0];
+        s.parentNode.insertBefore(vds, s);
+    })();
 })();
