@@ -26,7 +26,8 @@ class OrderController extends Controller
                             OrderManager::confirmOrder($queue->order);
                         }
                     } catch (\Exception $ex) {
-                        //TODO
+                        $msg = '标的订单处理：订单号-'.$queue->order->id.';异常信息-'.$ex->getMessage();
+                        \Yii::trace($msg, 'loan_order');
                     }
                 }
             } else {
