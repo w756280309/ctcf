@@ -124,7 +124,6 @@ return [
     'bao_quan_config' => [
         'services_url' => 'http://api.ebaoquan.org/services',
         'app_key' => '8f5ca3eb5cbac210',
-        'app_secret' => 'cc7c180b7e016f9802b1bcb9e493450e',
     ],
     'mock_sms' => false,   //发送短信开关(当为true的时候,除了白名单里面的手机号,其他手机号一律不实际发送短信;当为false的时候,所有手机号都可以发送短信)
     'enable_ebaoquan' => true,
