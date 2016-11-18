@@ -76,10 +76,8 @@ $_js = <<<JS2
     
     function setDivCenter(divName)
     {   
-        var top = ($(window).height() - $(divName).height()) / 2;     
-        var scrollTop = $(document).scrollTop();
-           
-        $(divName).css({ position : 'absolute', 'top' : top + scrollTop});  
+        var top = ($(window).height() - $(divName).height()) / 2;
+        $(divName).css({ position : 'fixed', 'top' : top});
     }  
 JS2;
 
