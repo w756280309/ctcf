@@ -92,7 +92,7 @@ class OnlineorderController extends BaseController
                 } else {
                     $status = "无效";
                 }
-                $str .= strval($list['sn']) . "\t," . $list['username'] . "\t," . $list['mobile'] . "\t," . strval($list['idcard']) . "\t," . $list['order_money'] . "\t," . StringUtils::amountFormat2(bcmul($list['yield_rate'], 100, 2)) . "\t," . date('Y-m-d H:i:s', $list['created_at']) . "\t," . "$status \n";
+                $str .= strval($list['sn']) . "\t," . $list['username'] . "\t," . $list['mobile'] . "\t," . strval($list['idcard']) . "\t," . $list['order_money'] . "," . StringUtils::amountFormat2(bcmul($list['yield_rate'], 100, 2)) . "\t," . date('Y-m-d H:i:s', $list['created_at']) . "\t," . "$status \n";
             }
         }
         $str = iconv('UTF-8', 'GB18030', $str);//转换编码
