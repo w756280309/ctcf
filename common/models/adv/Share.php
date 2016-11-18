@@ -18,6 +18,13 @@ use yii\behaviors\TimestampBehavior;
  */
 class Share extends \yii\db\ActiveRecord
 {
+    public function init()
+    {
+        if (empty($this->shareKey)) {
+            $this->shareKey = time().rand(1,10);
+        }
+    }
+
     /**
      * @inheritdoc
      */
@@ -32,13 +39,16 @@ class Share extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['shareKey', 'title', 'description', 'imgUrl'], 'required'],
+            [['shareKey', 'title', 'description', 'imgUrl'], 'required', 'whenClient' => "function(attribute, value){
+                return $('#adv-canshare').attr('checked') == 'checked' && $('#shebei').val() == 0;
+            }"],
             [['description'], 'string'],
             [['created_at', 'updated_at'], 'integer'],
             [['shareKey'], 'string', 'max' => 20],
             [['title'], 'string', 'max' => 200],
             [['imgUrl'], 'string', 'max' => 100],
             ['shareKey', 'unique'],
+            ['imgUrl', 'url'],
         ];
     }
 

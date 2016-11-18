@@ -10,6 +10,8 @@ use yii\db\ActiveRecord;
  */
 class Adv extends ActiveRecord
 {
+    public $canShare = false;
+
     //0显示，1隐藏
     const STATUS_SHOW = 0;
     const STATUS_HIDDEN = 1;
@@ -47,8 +49,8 @@ class Adv extends ActiveRecord
     public function scenarios()
     {
         return [
-            'update' => ['id', 'sn', 'title', 'pos_id', 'image', 'show_order', 'link', 'description', 'del_status', 'isDisabledInApp', 'showOnPc'],
-            'create' => ['pos_id', 'sn', 'title', 'image', 'show_order', 'link', 'description', 'del_status', 'isDisabledInApp', 'showOnPc'],
+            'update' => ['id', 'sn', 'title', 'pos_id', 'image', 'show_order', 'link', 'description', 'del_status', 'isDisabledInApp', 'showOnPc', 'canShare'],
+            'create' => ['pos_id', 'sn', 'title', 'image', 'show_order', 'link', 'description', 'del_status', 'isDisabledInApp', 'showOnPc', 'canShare'],
         ];
     }
 
@@ -95,6 +97,7 @@ class Adv extends ActiveRecord
             'creator_id' => '创建者管理员id',
             'updated_at' => '更新时间',
             'created_at' => '添加时间',
+            'canShare'  => '页面可分享',
         ];
     }
 

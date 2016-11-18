@@ -4,6 +4,7 @@ namespace backend\modules\adv\controllers;
 
 use backend\controllers\BaseController;
 use common\models\adv\Adv;
+use common\models\adv\Share;
 use Yii;
 use yii\data\Pagination;
 use yii\web\Response;
@@ -52,18 +53,45 @@ class AdvController extends BaseController
             $model->creator_id = $this->getAuthedUser()->id;
             $model->sn = Adv::create_code();
         }
+        if (!$model->showOnPc && $model->share) {
+            $model->canShare = true;
+        } else {
+            $model->canShare = false;
+            $model->share_id = null;
+        }
+
+        $share = $model->share ?: new Share();
 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             if ($model->showOnPc) {
                 $model->isDisabledInApp = 0;
             }
-
-            $model->save();
-            $this->alert = 1;
-            $this->toUrl = 'index';
+            if (
+            (
+                ! $model->showOnPc
+                && $model->canShare
+                && $share->load(Yii::$app->request->post())
+                && $share->validate()
+            )
+            || !$model->canShare
+            || $model->showOnPc
+            ) {
+                if ($model->canShare && !$model->showOnPc) {
+                    $share->save();
+                    $model->share_id = $share->id;
+                } else {
+                    $model->share_id = null;
+                }
+                $model->save();
+                $this->alert = 1;
+                $this->toUrl = 'index';
+            }
         }
 
-        return $this->render('edit', ['model' => $model]);
+        return $this->render('edit', [
+            'model' => $model,
+            'share' => $share,
+        ]);
     }
 
     /**

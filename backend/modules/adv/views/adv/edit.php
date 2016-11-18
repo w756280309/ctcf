@@ -47,7 +47,7 @@ $this->registerJsFile('/js/swfupload/handlers.js', ['depends' => 'yii\web\YiiAss
             <div class="control-group">
                 <label class="control-label">标题</label>
                 <div class="controls">
-                    <?= $form->field($model, 'title', ['template' => '{input}', 'inputOptions' => ['autocomplete' => "off", 'class' => 'm-wrap span12', 'placeholder' => '标题']])->textInput() ?>
+                    <?= $form->field($model, 'title', ['template' => '{input}', 'inputOptions' => ['autocomplete' => "off", 'class' => 'm-wrap span12', 'placeholder' => '标题']])->textInput(['style' => 'display:block !important']) ?>
                     <?= $form->field($model, 'title', ['template' => '{error}']) ?>
                 </div>
             </div>
@@ -109,8 +109,32 @@ $this->registerJsFile('/js/swfupload/handlers.js', ['depends' => 'yii\web\YiiAss
             <div class="control-group">
                 <label class="control-label">显示顺序</label>
                 <div class="controls">
-                    <?= $form->field($model, 'show_order', ['template' => '{input}', 'inputOptions' => ['autocomplete' => "off", 'class' => 'm-wrap span12', 'placeholder' => '显示顺序']])->textarea(['rows' => 3]) ?>
+                    <?= $form->field($model, 'show_order', ['template' => '{input}', 'inputOptions' => ['autocomplete' => "off", 'class' => 'm-wrap span12', 'placeholder' => '显示顺序']])->textInput() ?>
                     <?= $form->field($model, 'show_order', ['template' => '{error}']) ?>
+                </div>
+            </div>
+
+            <div class="control-group" id="share_select" style="display: <?= $model->showOnPc === 0 ? 'block' : 'none'?>">
+                <label class="control-label">页面可分享</label>
+                <div class="controls">
+                    <?= $form->field($model, 'canShare', ['template' => '{input}', 'inputOptions' => ['autocomplete' => "off", 'class' => 'm-wrap span12']])->checkbox() ?>
+                    <?= $form->field($model, 'canShare', ['template' => '{error}']) ?>
+                </div>
+            </div>
+
+            <div class="control-group" style="display: <?= ($model->canShare && $model->showOnPc === 0) ? 'block' : 'none'?>" id="share_block">
+                <label class="control-label">分享详情</label>
+                <div class="controls">
+                    <?= $form->field($share, 'title', ['template' => '{input}', 'inputOptions' => ['autocomplete' => "off", 'class' => 'm-wrap span12', 'placeholder' => '分享标题']])->textInput() ?>
+                    <?= $form->field($share, 'title', ['template' => '{error}']) ?>
+                </div>
+                <div class="controls">
+                    <?= $form->field($share, 'description', ['template' => '{input}', 'inputOptions' => ['autocomplete' => "off", 'class' => 'm-wrap span12', 'placeholder' => '分享描述']])->textarea(['rows' => 3]) ?>
+                    <?= $form->field($share, 'description', ['template' => '{error}']) ?>
+                </div>
+                <div class="controls">
+                    <?= $form->field($share, 'imgUrl', ['template' => '{input}', 'inputOptions' => ['autocomplete' => "off", 'class' => 'm-wrap span12', 'placeholder' => '图片地址']])->textInput() ?>
+                    <?= $form->field($share, 'imgUrl', ['template' => '{error}']) ?>
                 </div>
             </div>
 
@@ -197,6 +221,23 @@ $this->registerJsFile('/js/swfupload/handlers.js', ['depends' => 'yii\web\YiiAss
             var deviceName = notice();
             swfu_baoli.setUploadURL("/js/swfupload/upload_baoli.php?type=adv&shebei="+deviceName);
             del();
+            if ($(this).val() == 1) {
+                $('#share_select').hide();
+                $('#share_block').hide();
+            } else {
+                $('#share_select').show();
+                if ($('#adv-canshare').attr('checked') == 'checked') {
+                    $('#share_block').show();
+                }
+            }
+        });
+
+        $('#adv-canshare').change(function(){
+            if ($(this).attr('checked') == 'checked') {
+                $('#share_block').show();
+            } else {
+                $('#share_block').hide();
+            }
         });
     });
 
