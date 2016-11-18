@@ -14,8 +14,8 @@ class AnalyticsHelper
 
         $baiduKey = \Yii::$app->params['baidu_tongji_key'];
         $gaId = \Yii::$app->params['ga_tracking_id'];
-        $ptweb_account = \Yii::$app->params['ptweb_account'];
-        if (empty($baiduKey) || empty($gaId) || empty($ptweb_account)) {
+        $growingioId = \Yii::$app->params['analytics_vendor_growingio_account_id'];
+        if (empty($baiduKey) || empty($gaId) || empty($growingioId)) {
             return;
         }
 
@@ -41,17 +41,18 @@ var _hmt = _hmt || [];
 ga('create', '$gaId', '.wenjf.com');
 ga('send', 'pageview');
 
-window._pt_lt = new Date().getTime();
-window._pt_sp_2 = [];
-_pt_sp_2.push('setAccount,$ptweb_account');
-var _protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
-(function() {
-var atag = document.createElement('script'); atag.type = 'text/javascript'; atag.async = true;
-atag.src = _protocol + 'js.ptengine.cn/pta.js';
-var stag = document.createElement('script'); stag.type = 'text/javascript'; stag.async = true;
-stag.src = _protocol + 'js.ptengine.cn/pts.js';
-var s = document.getElementsByTagName('script')[0];
-s.parentNode.insertBefore(atag, s); s.parentNode.insertBefore(stag, s);
+var _vds = _vds || [];
+window._vds = _vds;
+(function(){
+    _vds.push(['setAccountId', '$growingioId']);
+    (function() {
+        var vds = document.createElement('script');
+        vds.type='text/javascript';
+        vds.async = true;
+        vds.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'dn-growing.qbox.me/vds.js';
+        var s = document.getElementsByTagName('script')[0];
+        s.parentNode.insertBefore(vds, s);
+    })();
 })();
 JS;
 

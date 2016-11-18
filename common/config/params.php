@@ -104,7 +104,6 @@ return [
     'm_assets_base_uri' => 'https://static.wenjf.com/m/',
     'pc_assets_base_uri' => 'https://static.wenjf.com/pc/',
     'upload_base_uri' => 'https://static.wenjf.com/',
-    'enable_analytics' => false,
     'enable_dev_helpers' => false,
     'category_type' => [
         '1' => '文章分类',
@@ -139,9 +138,10 @@ return [
     'pc_page_keywords' => "温都金服,温金服,温州报业传媒理财,报纸理财,温州理财",
     'pc_page_desc' => "温都金服(wenjf.com)为温州报业传媒旗下理财平台，定位于市民身边的财富管家。联合卓越各类金融机构，资金采用第三方独立托管，为个人提供稳健收益的理财产品",
 
+    'enable_analytics' => false,
     'baidu_tongji_key' => '',   //温都金服百度统计key
     'ga_tracking_id' => '',  //GA跟踪ID
-    'ptweb_account' => '', //ptmind统计key
+    'analytics_vendor_growingio_account_id' => '', //growingio统计key
 
     /* 债券相关配置信息 */
     'credit_trade' => [
