@@ -89,7 +89,10 @@ class DrawManager
             throw new DrawException('提现申请失败');
         }
         if ($fee > 0) {
-            $mrecord = clone $money_record;
+            $mrecord = new MoneyRecord();
+            $mrecord->osn = $draw->sn;
+            $mrecord->account_id = $account->id;
+            $mrecord->uid = $user->id;
             $mrecord->sn = MoneyRecord::createSN();
             $mrecord->type = MoneyRecord::TYPE_DRAW_FEE;
             $mrecord->balance = $account->available_balance;
