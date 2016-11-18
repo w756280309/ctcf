@@ -700,4 +700,13 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface, UserInterf
 
         return 'other';
     }
+
+    /**
+     * 查询当前用户当前月份提现的次数
+     * @return int
+     */
+    public function getDrawCount()
+    {
+        return (int) Draw::find()->where(['uid' => $this->id, "date_format(from_unixtime(created_at), '%Y%m')" => date('Ym')])->count();
+    }
 }

@@ -277,7 +277,7 @@ class Client
             'mer_date' => date('Ymd', $draw->getTxDate()),
             'user_id' => $draw->getEpayUserId(),
             'amount' => $draw->getAmount() * 100,
-            'com_amt_type' => 1, //前向手续费：交易方承担
+            'com_amt_type' => $draw->fee > 0 ? 1 : 2, //1交易方承担 2平台商户（手续费账户）承担
         ];
 
         if ('pc' !== $channel) {

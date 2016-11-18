@@ -84,15 +84,20 @@ class DrawManager
 
         $account->available_balance = $bc->bcround(bcsub($account->available_balance, $fee), 2);
         $account->account_balance = $bc->bcround(bcsub($account->account_balance, $fee), 2);//160309提现受理成功之后账户余额要减去手续费
-        $mrecord = clone $money_record;
-        $mrecord->sn = MoneyRecord::createSN();
-        $mrecord->type = MoneyRecord::TYPE_DRAW_FEE;
-        $mrecord->balance = $account->available_balance;
-        $mrecord->out_money = $fee;
-
-        if (!$money_record->save() || !$mrecord->save()) {
+        if (!$money_record->save()) {
             $transaction->rollBack();
             throw new DrawException('提现申请失败');
+        }
+        if ($fee > 0) {
+            $mrecord = clone $money_record;
+            $mrecord->sn = MoneyRecord::createSN();
+            $mrecord->type = MoneyRecord::TYPE_DRAW_FEE;
+            $mrecord->balance = $account->available_balance;
+            $mrecord->out_money = $fee;
+            if (!$mrecord->save()) {
+                $transaction->rollBack();
+                throw new DrawException('提现申请失败');
+            }
         }
 
         //录入user_acount记录
