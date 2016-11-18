@@ -32,8 +32,8 @@ return [
                 [
                     'class' => 'yii\log\FileTarget',
                     'levels' => ['trace'],
-                    'categories' => ['cancel_order'],
-                    'logFile' => '@app/runtime/logs/order/cancel_order' . date('Ym') . '.log',
+                    'categories' => ['loan_order'],
+                    'logFile' => '@app/runtime/logs/order/loan_order' . date('Ym') . '.log',
                     'maxFileSize' => 1024 * 2,
                     'logVars' => ['trace'],
                     'prefix' => function ($message) {
