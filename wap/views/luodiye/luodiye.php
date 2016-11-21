@@ -12,6 +12,7 @@ $inApp = defined('IN_APP');
 $this->registerCssFile(ASSETS_BASE_URI.'css/first.css', ['depends' => WapAsset::class]);
 $this->registerCssFile(ASSETS_BASE_URI.'css/luodiye/luodiye.css?v=161117-1', ['depends' => WapAsset::class]);
 $this->registerJsFile(ASSETS_BASE_URI.'js/fastclick.js', ['depends' => WapAsset::class]);
+$this->registerJsFile(ASSETS_BASE_URI.'js/luodiye.js', ['depends' => WapAsset::class]);
 ?>
 
 <div class="container">
@@ -130,233 +131,48 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/fastclick.js', ['depends' => WapAsset:
     </div>
 </div>
 
+<?php if (!$inApp) { ?>
 <script>
-    function validateForm()
-    {
-        if ($('#iphone').val() === '') {
-            toastCenter('手机号不能为空');
-            return false;
-        }
-
-        var tel = $('#iphone').val();
-        reg = /^0?1[3|4|5|6|7|8][0-9]\d{8}$/;
-        if (!reg.test(tel)) {
-            toastCenter('手机号格式错误');
-            return false;
-        }
-
-        if ($("#captchaform-captchacode").val() === '') {
-            toastCenter('图形验证码不能为空');
-            return false;
-        }
-
-        if ($("#captchaform-captchacode").val().length !== 4) {
-            toastCenter('图形验证码必须为4位字符');
-            return false;
-        }
-
-        if ($('#yanzhengma').val() === '') {
-            toastCenter('短信验证码不能为空');
-            return false;
-        }
-
-        if ($('#yanzhengma').val().length !== 6) {
-            toastCenter('手机验证码必须为6位字符');
-            return false;
-        }
-
-        if ($('#pass').val() === '') {
-            toastCenter('密码不能为空');
-            return false;
-        }
-
-        if ($('#pass').val().length < 6) {
-            toastCenter('密码长度最少6位');
-            return false;
-        }
-
-        var reg = /[a-zA-Z]/;
-        var reg2 = /[0-9]/;
-        if (!(-1 === $('#pass').val().indexOf(' ') && reg.test($('#pass').val()) && reg2.test($('#pass').val()))) {
-            toastCenter('请至少输入字母与数字组合');
-            return false;
-        }
-
-        if ($('#xieyi').attr('checked') !== 'checked') {
-            toastCenter('请查看网站服务协议');
-            return false;
-        }
-
-        return true;
-    }
-
-    function signup()
-    {
-        var $form = $('#signup_form');
-        $('#signup-btn').attr('disabled', true);
-
-        var xhr = $.post(
-            $form.attr('action'),
-            $form.serialize()
-        );
-
-        xhr.done(function (data) {
-            if (data.code) {
-                if ('undefined' !== typeof data.tourl) {
-                    toastCenter(data.message, function () {
-                        if ('undefined' !== typeof ga) {
-                            ga('send', {
-                                hitType: 'event',
-                                eventCategory: 'reg',
-                                eventAction: 'm',
-                                hitCallback: function () {
-                                    location.href = data.tourl;
-                                }
-                            });
-                            setTimeout(function () {
-                                location.href = data.tourl;
-                            }, 1500);
-                        } else {
-                            location.href = data.tourl;
-                        }
-                    });
-                } else if ('undefined' !== typeof data.message) {
-                    toastCenter(data.message);
-                }
-            }
-            $('#signup-btn').attr('disabled', false);
-        });
-
-        xhr.fail(function () {
-            $('#signup-btn').attr('disabled', false);
-        });
-    }
-
     $(function () {
-        <?php if (!$inApp) { ?>
-            function parseUA()
-            {
-                var ugent = navigator.userAgent;
-                var ugentS = ugent.toLowerCase(); //转换成小写
-                return{
-                    webKit: ugent.indexOf('AppleWebKit') > -1,//苹果、谷歌内核
-                    mobile: !!ugent.match(/AppleWebKit.*Mobile.*/),//是否为移动终端
-                    ios: !!ugent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/),//ios终端
-                    weixin: ugent.indexOf('MicroMessenger') > -1,//是否微信
-                    android: ugent.indexOf('Android') > -1|| ugent.indexOf('Linux') > -1,//android终端或者uc浏览器
-                    iPhone: ugent.indexOf('iPhone') > -1, //是否为iPhone或者QQHD浏览器
-                }
-            }
-
-            var ua = parseUA();
-            function showfix()
-            {
-                if (ua.iPhone) {
-                    $(".fixed-box").show();
-                    $(".fixed-float").show();
-                }else if(ua.android){
-                    $(".fixed-box").show();
-                    $(".fixed-float").show();
-                }
-            }
-
-            function hidefix()
-            {
-                if (ua.iPhone) {
-                    $(".fixed-box").hide();
-                    $(".fixed-float").hide();
-                }else if(ua.android){
-                    $(".fixed-box").hide();
-                    $(".fixed-float").hide();
-                }
-            }
-
-            $("input.text-single").on("blur",showfix);
-            $("input.text-single").on("focus",hidefix);
-        <?php } ?>
-
-        FastClick.attach(document.body);
-
-        $(".field-captchaform-captchacode").css('float', 'left');
-        $('.content-picture').on('click', function () {
-            $(this).parents('.fixed-box').hide().siblings('.fixed-float').hide();
-        });
-
-        $('input.login-info').focus(function () {
-            $(this).css("color", "#000");
-        });
-
-        $('input.login-info').blur(function () {
-            $(this).css("color", "");
-        });
-
-        /* 提交表单 */
-        $('#signup_form').submit(function (e) {
-            e.preventDefault();
-
-            if (!validateForm()) {
-                return false;
-            }
-
-            signup();
-        });
-
-        $(".login-eye img").on("click", function () {
-            if ($("#pass").attr("type") === "password") {
-                $("#pass").attr("type", "text");
-                $(this).removeAttr("src", "<?= ASSETS_BASE_URI ?>images/eye-close.png");
-                $(this).attr({src: "<?= ASSETS_BASE_URI ?>images/eye-open.png", alt: "eye-open"});
-            } else {
-                $("#pass").attr("type", "password");
-                $(this).removeAttr("src", "<?= ASSETS_BASE_URI ?>images/eye-open.png");
-                $(this).attr({src: "<?= ASSETS_BASE_URI ?>images/eye-close.png", alt: "eye-close"});
-            }
-        });
-
-        $('#xieyi').bind('click', function () {
-            if ($(this).attr('checked') === 'checked') {
-                $(this).attr('checked', false);
-            } else {
-                $(this).attr('checked', true);
-            }
-        });
-
-        //60秒倒计时
-        var InterValObj; //timer变量，控制时间
-        var curCount;//当前剩余秒数
-        var count = 60; //间隔函数，1秒执行
-        $('#yzm').on('click', function () {
-            if ($("#captchaform-captchacode").val() === '') {
-                toastCenter('图形验证码不能为空');
-                return false;
-            }
-            if ($("#captchaform-captchacode").val().length !== 4) {
-                toastCenter('图形验证码必须为4位字符');
-                return false;
-            }
-            createSms("#iphone", 1, "#captchaform-captchacode", function () {
-                fun_timedown();
-            });
-        });
-
-        function SetRemainTime() {
-            if (curCount === 0) {
-                window.clearInterval(InterValObj);//停止计时器
-                $('#yzm').removeAttr("disabled");//启用按钮
-                $('#yzm').removeClass("yzm-disabled");
-                $("#yzm").val("重新发送");
-            } else {
-                curCount--;
-                $("#yzm").val(curCount + "s后重发");
+        function parseUA()
+        {
+            var ugent = navigator.userAgent;
+            var ugentS = ugent.toLowerCase(); //转换成小写
+            return{
+                webKit: ugent.indexOf('AppleWebKit') > -1,//苹果、谷歌内核
+                mobile: !!ugent.match(/AppleWebKit.*Mobile.*/),//是否为移动终端
+                ios: !!ugent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/),//ios终端
+                weixin: ugent.indexOf('MicroMessenger') > -1,//是否微信
+                android: ugent.indexOf('Android') > -1|| ugent.indexOf('Linux') > -1,//android终端或者uc浏览器
+                iPhone: ugent.indexOf('iPhone') > -1, //是否为iPhone或者QQHD浏览器
             }
         }
 
-        function fun_timedown() {
-            curCount = count;
-            $('#yzm').addClass("yzm-disabled");
-            $("#yzm").attr("disabled", "true");
-            $("#yzm").val(curCount + "s后重发");
-            InterValObj = window.setInterval(SetRemainTime, 1000); //启动计时器，1秒执行一次
+        var ua = parseUA();
+        function showfix()
+        {
+            if (ua.iPhone) {
+                $(".fixed-box").show();
+                $(".fixed-float").show();
+            }else if(ua.android){
+                $(".fixed-box").show();
+                $(".fixed-float").show();
+            }
         }
+
+        function hidefix()
+        {
+            if (ua.iPhone) {
+                $(".fixed-box").hide();
+                $(".fixed-float").hide();
+            }else if(ua.android){
+                $(".fixed-box").hide();
+                $(".fixed-float").hide();
+            }
+        }
+
+        $("input.text-single").on("blur",showfix);
+        $("input.text-single").on("focus",hidefix);
     });
 </script>
+<?php } ?>
