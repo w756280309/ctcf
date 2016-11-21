@@ -67,9 +67,12 @@ class IssuerController extends BaseController
 
         $res = false;
         if ($issuer->load(Yii::$app->request->post()) && $issuer->validate()) {
-            if (empty($issuer->mediaTitle)) {
+            $titleIsEmpty = empty($issuer->mediaTitle);
+            $uriIsEmpty = empty($issuer->mediaUri);
+
+            if ($titleIsEmpty && !$uriIsEmpty) {
                 $issuer->addError('mediaTitle', '视频名称不能为空');
-            } elseif (empty($issuer->mediaUri)) {
+            } elseif ($uriIsEmpty && !$titleIsEmpty) {
                 $issuer->addError('mediaUri', '视频地址不能为空');
             } else {
                 $res = $issuer->save(false);

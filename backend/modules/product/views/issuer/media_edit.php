@@ -3,7 +3,7 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
-$btnDesc = $issuer->mediaUri ? '编辑' : '添加';
+$btnDesc = $issuer->getOldAttribute('mediaUri') ? '编辑' : '添加';
 $this->title = '发行方视频'.$btnDesc;
 ?>
 
