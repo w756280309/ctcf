@@ -114,7 +114,7 @@ $this->registerJsFile('/js/swfupload/handlers.js', ['depends' => 'yii\web\YiiAss
                 </div>
             </div>
 
-            <div class="control-group" id="share_select" style="display: <?= $model->showOnPc === 0 ? 'block' : 'none'?>">
+            <div class="control-group" id="share_select" style="display: <?= $model->showOnPc === 1 ? 'none' : 'block'?>">
                 <label class="control-label">页面可分享</label>
                 <div class="controls">
                     <?= $form->field($model, 'canShare', ['template' => '{input}', 'inputOptions' => ['autocomplete' => "off", 'class' => 'm-wrap span12']])->checkbox() ?>
