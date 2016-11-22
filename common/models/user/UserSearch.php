@@ -80,7 +80,7 @@ class UserSearch extends User
         //过滤注册来源
         $regContext = trim($this->regContext);
         if (!empty($regContext)) {
-            $query->andFilterWhere(['user.regContext' => $regContext === 'other' ? '' : $regContext]);
+            $query->andWhere(['user.regContext' => $regContext === 'other' ? '' : $regContext]);
         }
         //过滤代金券
         $couponAmount = intval(trim($this->couponAmount));
@@ -95,7 +95,7 @@ class UserSearch extends User
             }
             $query->andFilterWhere(['user_coupon.isUsed' => 1]);
             $query->groupBy('user.id');
-            $query->having('sum(coupon_type.amount)');
+            $query->having(['>=', 'sum(coupon_type.amount)', $couponAmount]);
         }
 
         $query->with('lendAccount');
