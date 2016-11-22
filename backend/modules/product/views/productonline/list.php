@@ -15,7 +15,7 @@ $pc_cat = Yii::$app->params['pc_cat'];
         <div>
             <h3 class="page-title">
                 贷款管理 <small>贷款管理模块【主要包含项目的管理以及项目分类管理】</small>
-                <a href="edit" id="sample_editable_1_new" class="btn green" style="float: right;">
+                <a href="add" class="btn green float-right">
                 <i class="icon-plus"></i> 新增项目
                 </a>
             </h3>

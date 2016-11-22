@@ -892,4 +892,21 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
         }
         return null;
     }
+
+    /**
+     * 初始化对象.
+     */
+    public static function initNew()
+    {
+        return new self([
+            'sn' => OnlineProduct::createSN(),
+            'sort' => OnlineProduct::SORT_PRE,
+            'epayLoanAccountId' => '',
+            'fee' => 0,
+            'funded_money' => 0,
+            'full_time' => 0,
+            'yuqi_faxi' => 0,
+            'allowUseCoupon' => true,
+        ]);
+    }
 }

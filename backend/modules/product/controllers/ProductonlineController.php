@@ -21,7 +21,9 @@ use common\service\LoanService;
 use common\utils\TxUtils;
 use P2pl\Borrower;
 use Yii;
+use yii\base\Exception;
 use yii\data\Pagination;
+use yii\helpers\ArrayHelper;
 use yii\web\Cookie;
 use yii\web\Response;
 
@@ -33,148 +35,236 @@ use yii\web\Response;
 class ProductonlineController extends BaseController
 {
     /**
-     * 新增、编辑标的项目.
+     * 获取全部融资方信息.
      */
-    public function actionEdit($id = null)
+    private function orgUserInfo()
     {
-        $rongziInfo = [];
-        $rongziUser = User::find()->where(['type' => User::USER_TYPE_ORG])->orderBy(['sort' => SORT_DESC])->asArray()->all();
+        return User::find()
+            ->where(['type' => User::USER_TYPE_ORG])
+            ->orderBy(['sort' => SORT_DESC])
+            ->select('org_name')
+            ->indexBy('id')
+            ->column();
+    }
 
-        foreach ($rongziUser as $v) {
-            $rongziInfo[$v['id']] = $v['org_name'];
+    /**
+     * 获取全部发行商信息.
+     */
+    private function issuerInfo()
+    {
+        return Issuer::find()->all();
+    }
+
+    /**
+     * 添加合同信息.
+     */
+    private function initContract($pid, array $param)
+    {
+        $contracts = ContractTemplate::findOne(['pid' => $pid]);
+
+        if (null !== $contracts) {
+            ContractTemplate::deleteAll(['pid' => $pid]);
         }
 
-        $issuer = Issuer::find()->asArray()->all();
-        $ctmodel = null;
+        foreach ($param['title'] as $key => $val) {
+            $contract = ContractTemplate::initNew($pid, $val, $param['content'][$key]);
+            $contract->save(false);
+        }
+    }
 
-        if (empty($id)) {
-            $model = new OnlineProduct([
-                'sn' => OnlineProduct::createSN(),
-                'sort' => OnlineProduct::SORT_PRE,
-                'epayLoanAccountId' => '',
-                'fee' => 0,
-                'funded_money' => 0,
-                'full_time' => 0,
-                'yuqi_faxi' => 0,
-                'allowUseCoupon' => true,
-            ]);
-        } else {
-            $model = OnlineProduct::findOne($id);
-
-            $model->is_fdate = (0 === $model->finish_date) ? 0 : 1;
-            $model->yield_rate = bcmul($model->yield_rate, 100, 2);
-            $model->allowedUids = $model->mobiles;
-            $ctmodel = ContractTemplate::find()->where(['pid' => $id])->all();
+    /**
+     * 合同校验.
+     */
+    private function validateContract(array $param)
+    {
+        if (empty(array_filter($param['title']))) {
+            throw new \Exception('合同协议至少要输入一份');
         }
 
+        if (false === strpos($param['title'][0], '认购协议')) {
+            throw new \Exception('合同名称错误,第一份合同应该录入认购协议');
+        }
+
+        if (false === strpos($param['title'][1], '风险揭示书')) {
+            throw new \Exception('合同名称错误,第二份合同应该录入风险揭示书');
+        }
+
+        foreach ($param['title'] as $key => $title) {
+            if (empty($title)) {
+                throw new \Exception('合同名称不能为空');
+            }
+            if (empty($param['content'][$key])) {
+                throw new \Exception('合同内容不能为空');
+            }
+        }
+    }
+
+    /**
+     * 标的数据转换.
+     */
+    private function exchangeValues(OnlineProduct $loan, array $data)
+    {
+        $loan->finish_date = is_integer($loan->finish_date) ? $loan->finish_date : strtotime($loan->finish_date);
+        $loan->start_date = is_integer($loan->start_date) ? $loan->start_date : strtotime($loan->start_date);
+        $loan->end_date = is_integer($loan->end_date) ? $loan->end_date : strtotime($loan->end_date);
+        $loan->creator_id = $this->getAuthedUser()->id;
+        $loan->recommendTime = empty($loan->recommendTime) ? 0 : $loan->recommendTime;
+        $loan->is_fdate = isset($data['OnlineProduct']['is_fdate']) ? $data['OnlineProduct']['is_fdate'] : 0;
+        $refund_method = (int) $loan->refund_method;
+
+        //非测试标，起投金额、递增金额取整
+        if (!$loan->isTest) {
+            $loan->start_money = intval($loan->start_money);
+            $loan->dizeng_money = intval($loan->dizeng_money);
+        }
+
+        if (OnlineProduct::REFUND_METHOD_DAOQIBENXI !== $refund_method) {   //还款方式只有到期本息,才设置项目截止日和宽限期
+            $loan->finish_date = 0;
+            $loan->kuanxianqi = 0;
+        }
+
+        if (!empty($loan->finish_date) && OnlineProduct::REFUND_METHOD_DAOQIBENXI === $refund_method) {
+            //若截止日期不为空，重新计算项目天数
+            $pp = new ProductProcessor();
+            $loan->expires = $pp->LoanTimes(date('Y-m-d H:i:s', $loan->start_date), null, $loan->finish_date, 'd', true)['days'][1]['period']['days'];
+        }
+
+        if (0 === $loan->issuer) {   //当发行方没有选择时,发行方项目编号为空
+            $loan->issuerSn = null;
+        }
+
+        if (!$loan->isNatureRefundMethod()) {  //当标的还款方式不为按自然时间付息的方式时,固定日期置为null
+            $loan->paymentDay = null;
+        }
+
+        return $loan;
+    }
+
+    /**
+     * 新增标的.
+     */
+    public function actionAdd()
+    {
+        $model = OnlineProduct::initNew();
         $model->scenario = 'create';
 
         $con_name_arr = Yii::$app->request->post('name');
         $con_content_arr = Yii::$app->request->post('content');
+        $data = Yii::$app->request->post();
 
-        if ($model->load(Yii::$app->request->post())) {
-            $model->finish_date = is_integer($model->finish_date) ? $model->finish_date : strtotime($model->finish_date);
-            $model->start_date = is_integer($model->start_date) ? $model->start_date : strtotime($model->start_date);
-            $model->end_date = is_integer($model->end_date) ? $model->end_date : strtotime($model->end_date);
+        if ($model->load($data) && ($model = $this->exchangeValues($model, $data)) && $model->validate()) {
+            try {
+                 $this->validateContract([
+                    'title' => $con_name_arr,
+                    'content' => $con_content_arr,
+                 ]);
+            } catch (\Exception $e) {
+                $model->addError('contract_type', $e->getMessage());
+            }
 
-            if ($model->validate()) {
-                $model->allowedUids = $model->isPrivate ? LoanService::convertUid($model->allowedUids) : null;
-                $refund_method = (int) $model->refund_method;
+            if (!$model->hasErrors()) {
+                $transaction = Yii::$app->db->beginTransaction();
 
-                //非测试标，起投金额、递增金额取整
-                if (!$model->isTest) {
-                    $model->start_money = intval($model->start_money);
-                    $model->dizeng_money = intval($model->dizeng_money);
-                }
-
-                if (OnlineProduct::REFUND_METHOD_DAOQIBENXI !== $refund_method) {   //还款方式只有到期本息,才设置项目截止日和宽限期
-                    $model->finish_date = 0;
-                    $model->kuanxianqi = 0;
-                }
-
-                if (!empty($model->finish_date) && OnlineProduct::REFUND_METHOD_DAOQIBENXI === $refund_method) {
-                    //若截止日期不为空，重新计算项目天数
-                    $pp = new ProductProcessor();
-                    $model->expires = $pp->LoanTimes(date('Y-m-d H:i:s', $model->start_date), null, $model->finish_date, 'd', true)['days'][1]['period']['days'];
-                }
-
-                if (0 === $model->issuer) {   //当发行方没有选择时,发行方项目编号为空
-                    $model->issuerSn = null;
-                }
-
-                if (!$model->isNatureRefundMethod()) {  //当标的还款方式不为按自然时间付息的方式时,固定日期置为null
-                    $model->paymentDay = null;
-                }
-
-                $_namearr = empty($con_name_arr) ? $con_name_arr : array_filter($con_name_arr);
-                if (empty($_namearr)) {
-                    $model->addError('contract_type', '合同协议至少要输入一份');
-                }
-
-                if (false === strpos($con_name_arr[0], '认购协议')) {
-                    $model->addError('contract_type', '合同名称错误,第一份合同应该录入认购协议');
-                }
-
-                if (false === strpos($con_name_arr[1], '风险揭示书')) {
-                    $model->addError('contract_type', '合同名称错误,第二份合同应该录入风险揭示书');
-                }
-
-                foreach ($con_name_arr as $key => $val) {
-                    if (empty($val)) {
-                        $model->addError('contract_type', '合同名称不能为空');
-                    }
-                    if (empty($con_content_arr[$key])) {
-                        $model->addError('contract_type', '合同内容不能为空');
-                    }
-                }
-
-                if (!$model->getErrors('contract_type')) {
-                    $transaction = Yii::$app->db->beginTransaction();
-                    $model->creator_id = Yii::$app->user->id;
+                try {
                     $model->yield_rate = bcdiv($model->yield_rate, 100, 14);
-                    $model->jixi_time = $model->jixi_time !== '' ? is_integer($model->jixi_time) ? $model->jixi_time : strtotime($model->jixi_time) : 0;
-                    $model->recommendTime = empty($model->recommendTime) ? 0 : $model->recommendTime;
+                    $model->allowedUids = $model->isPrivate ? LoanService::convertUid($model->allowedUids) : null;
+                    $model->save(false);
 
-                    try {
-                        if ($model->isNewRecord) {
-                            $pre = $model->save(false);
-                            $log = AdminLog::initNew($model);
-                            $log->save();
-                        } else {
-                            $log = AdminLog::initNew($model);
-                            $log->save();
-                            $pre = $model->save(false);
-                        }
-                        if (!$pre) {
-                            $transaction->rollBack();
-                            $model->addError('title', '标的添加异常');
-                        }
-                    } catch (\Exception $e) {
-                        $transaction->rollBack();
-                        $model->addError('title', '标的添加异常' . $e->getMessage());
-                    }
+                    $log = AdminLog::initNew($model);
+                    $log->save();
+                } catch (\Exception $e) {
+                    $transaction->rollBack();
+                    $model->addError('title', '标的添加异常'.$e->getMessage());
+                }
 
-                    if (!empty($id)) {
-                        ContractTemplate::deleteAll(['pid' => $id]);
-                    }
-
-                    $record = new ContractTemplate();
-                    foreach ($con_name_arr as $key => $val) {
-                        $record_model = clone $record;
-                        $record_model->pid = $model->id;
-                        $record_model->name = $val;
-                        $record_model->content = $con_content_arr[$key];
-                        if (!$record_model->save()) {
-                            $transaction->rollBack();
-                            $model->addError('title', '录入ContractTemplate异常');
-                        }
-                    }
-
+                try {
                     if (!$model->hasErrors()) {
+                        $this->initContract($model->id, [
+                            'title' => $con_name_arr,
+                            'content' => $con_content_arr,
+                        ]);
+
                         $transaction->commit();
 
                         return $this->redirect(['list']);
                     }
+                } catch (\Exception $e) {
+                    $transaction->rollBack();
+                    $model->addError('title', '录入合同信息异常');
+                }
+            }
+        }
+
+        return $this->render('edit', [
+            'model' => $model,
+            'ctmodel' => null,
+            'rongziInfo' => $this->orgUserInfo(),
+            'con_name_arr' => $con_name_arr,
+            'con_content_arr' => $con_content_arr,
+            'issuer' => $this->issuerInfo(),
+        ]);
+    }
+
+    /**
+     * 编辑标的项目.
+     */
+    public function actionEdit($id)
+    {
+        if (empty($id)) {
+            throw $this->ex404();
+        }
+
+        $model = $this->findOr404(OnlineProduct::class, $id);
+
+        $model->scenario = 'create';
+        $model->is_fdate = (0 === $model->finish_date) ? 0 : 1;
+        $model->yield_rate = bcmul($model->yield_rate, 100, 2);
+        $model->allowedUids = $model->mobiles;
+        $ctmodel = ContractTemplate::find()->where(['pid' => $id])->all();
+
+        $con_name_arr = Yii::$app->request->post('name');
+        $con_content_arr = Yii::$app->request->post('content');
+        $data = Yii::$app->request->post();
+
+        if ($model->load($data) && ($model = $this->exchangeValues($model, $data)) && $model->validate()) {
+            try {
+                $this->validateContract([
+                    'title' => $con_name_arr,
+                    'content' => $con_content_arr,
+                ]);
+            } catch (\Exception $e) {
+                $model->addError('contract_type', $e->getMessage());
+            }
+
+            if (!$model->hasErrors()) {
+                $transaction = Yii::$app->db->beginTransaction();
+
+                try {
+                    $model->yield_rate = bcdiv($model->yield_rate, 100, 14);
+                    $model->allowedUids = $model->isPrivate ? LoanService::convertUid($model->allowedUids) : null;
+                    $model->save(false);
+
+                    $log = AdminLog::initNew($model);
+                    $log->save();
+                } catch (\Exception $e) {
+                    $transaction->rollBack();
+                    $model->addError('title', '标的添加异常'.$e->getMessage());
+                }
+
+                try {
+                    if (!$model->hasErrors()) {
+                        $this->initContract($model->id, [
+                            'title' => $con_name_arr,
+                            'content' => $con_content_arr,
+                        ]);
+
+                        $transaction->commit();
+
+                        return $this->redirect(['list']);
+                    }
+                } catch (\Exception $e) {
+                    $transaction->rollBack();
+                    $model->addError('title', '录入合同信息异常');
                 }
             }
         }
@@ -182,10 +272,10 @@ class ProductonlineController extends BaseController
         return $this->render('edit', [
             'model' => $model,
             'ctmodel' => $ctmodel,
-            'rongziInfo' => $rongziInfo,
+            'rongziInfo' => $this->orgUserInfo(),
             'con_name_arr' => $con_name_arr,
             'con_content_arr' => $con_content_arr,
-            'issuer' => $issuer,
+            'issuer' => $this->issuerInfo(),
         ]);
     }
 

@@ -2,9 +2,9 @@
 
 namespace common\models\contract;
 
-use Yii;
 use common\models\product\OnlineProduct;
 use common\models\order\OnlineOrder;
+use yii\base\Exception;
 
 /**
  * This is the model class for table "contract_template".
@@ -55,9 +55,12 @@ class ContractTemplate extends \yii\db\ActiveRecord
         ];
     }
 
-     public static function getContractTemplateData($pid=0,$type=1){
-        return static::find()->where(['pid'=>$pid,'type'=>$type])->orWhere(['type'=>self::TYPE_TEMP_ALL])->all();
-    }
+     public static function getContractTemplateData($pid = 0, $type = 1)
+     {
+        return static::find()
+            ->where(['pid' => $pid, 'type' => $type])->orWhere(['type' => self::TYPE_TEMP_ALL])
+            ->all();
+     }
 
     /**
      * 根据合同替换合同
@@ -89,5 +92,21 @@ class ContractTemplate extends \yii\db\ActiveRecord
         }
 
         return $temp;
+    }
+
+    /**
+     * 初始化对象.
+     */
+    public static function initNew($loanId, $name, $content)
+    {
+        if (empty($loanId) || empty($name) || empty($content)) {
+            throw new Exception('参数错误');
+        }
+
+        return new self([
+            'pid' => $loanId,
+            'name' => $name,
+            'content' => $content,
+        ]);
     }
 }

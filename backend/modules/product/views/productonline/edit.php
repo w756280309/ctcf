@@ -1,15 +1,15 @@
 <?php
 use PayGate\Cfca\CfcaUtils;
 use yii\helpers\ArrayHelper;
+use yii\web\YiiAsset;
 use yii\widgets\ActiveForm;
 
-$this->registerCssFile('/kindeditor/themes/default/default.css', ['depends' => 'yii\web\YiiAsset', 'position' => 1]);
-$this->registerJsFile('/kindeditor/kindeditor-min.js', ['depends' => 'yii\web\YiiAsset', 'position' => 1]);
-$this->registerJsFile('/kindeditor/lang/zh_CN.js', ['depends' => 'yii\web\YiiAsset', 'position' => 1]);
-$this->registerJs('var t=1;', 1); //在头部加载
-
-$this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\web\YiiAsset']);
-$this->registerJsFile('/js/product.js?v=160803', ['depends' => 'yii\web\YiiAsset']);
+$this->registerCssFile('/kindeditor/themes/default/default.css', ['depends' => YiiAsset::class, 'position' => 1]);
+$this->registerJsFile('/kindeditor/kindeditor-min.js', ['depends' => YiiAsset::class, 'position' => 1]);
+$this->registerJsFile('/kindeditor/lang/zh_CN.js', ['depends' => YiiAsset::class, 'position' => 1]);
+$this->registerJs('var t = 1;', 1); //在头部加载
+$this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => YiiAsset::class]);
+$this->registerJsFile('/js/product.js?v=160803', ['depends' => YiiAsset::class]);
 
 $readonly = $model->online_status ? ['readonly' => 'readonly'] : [];
 
@@ -75,8 +75,8 @@ TPL;
 
 $is_online = in_array($model->status, [2, 3, 4, 5, 6, 7]);//判断标的是否已经上线
 ?>
-<?php $this->beginBlock('blockmain'); ?>
 
+<?php $this->beginBlock('blockmain'); ?>
 <div class="container-fluid">
     <div class="row-fluid">
         <div class="span12">
@@ -103,7 +103,7 @@ $is_online = in_array($model->status, [2, 3, 4, 5, 6, 7]);//判断标的是否�
     <!--项目编辑区域 start-->
     <div class="portlet-body form">
         <!-- BEGIN FORM-->
-        <?php $form = ActiveForm::begin(['id' => 'product_product_form', 'action' => '/product/productonline/edit?id='.$model['id'], 'options' => ['enctype' => 'multipart/form-data']]); ?>
+        <?php $form = ActiveForm::begin(['id' => 'product_product_form', 'action' => '/product/productonline/'.($model->id ? 'edit?id='.$model->id : 'add'), 'options' => ['enctype' => 'multipart/form-data']]); ?>
         <h3 class="form-section">项目基本信息</h3>
         <?php if ($model->id) {  ?>
         <div class="row-fluid">
@@ -292,8 +292,8 @@ $is_online = in_array($model->status, [2, 3, 4, 5, 6, 7]);//判断标的是否�
                         ?>
                         <?php
                         $fd_input_option = [];
-                        if ($is_online){
-                            $fd_input_option = array_merge($fd_input_option, ['disabled' => 'disabled']);
+                        if ($is_online) {
+                            $fd_input_option = array_merge($fd_input_option, ['disabled' => 'disabled', 'uncheck' => $model->is_fdate]);
                         }
                         ?>
                         <?=
