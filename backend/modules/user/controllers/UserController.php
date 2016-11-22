@@ -13,6 +13,7 @@ use common\models\user\User;
 use common\models\user\UserAccount;
 use common\models\user\UserBanks;
 use common\models\user\RechargeRecord;
+use common\models\user\UserSearch;
 use Yii;
 use yii\data\Pagination;
 use yii\filters\VerbFilter;
@@ -37,78 +38,45 @@ class UserController extends BaseController
         return $params;
     }
 
-    public function userList($name = null, $mobile = null, $type = null)
+    /**
+     * 投资人列表
+     */
+    public function actionListt()
     {
-        if (empty($type) || !in_array($type, [1, 2])) {   //增加对type值的限定
-            Yii::$app->response->format = Response::FORMAT_JSON;
-            return ['TYPE参数错误'];
-        }
-
-        $query = User::find()->where(['user.type' => $type, 'is_soft_deleted' => 0]);
-        //过滤 未投资时长
-        $noInvestDays = intval(Yii::$app->request->get('noInvestDays'));
-        if (!empty($noInvestDays)) {
-            $date = date('Y-m-d', strtotime('- ' . $noInvestDays . ' day'));
-            $query->leftJoin('user_info', 'user_info.user_id = user.id')->andFilterWhere(['<=', 'user_info.lastInvestDate', $date]);
-        }
-        //过滤可用余额
-        $balance = Yii::$app->request->get('balance');
-        if (isset($balance)) {
-            $balance = floatval($balance);
-            $query->innerJoin('user_account', 'user.id = user_account.uid')->andFilterWhere(['>=', 'user_account.available_balance', $balance]);
-        }
-
-        if ($type == User::USER_TYPE_PERSONAL) {
-            $query->with('lendAccount');
-            if (!empty($name)) {
-                $query->andFilterWhere(['like', 'real_name', $name]);
-            }
-            if (!empty($mobile)) {
-                $query->andFilterWhere(['like', 'mobile', $mobile]);
-            }
-        } else {
-            $query->with('borrowAccount');
-            if (!empty($name)) {
-                $query->andFilterWhere(['like', 'org_name', $name]);
-            }
-        }
-
-        $pages = new Pagination(['totalCount' => $query->count(), 'pageSize' => '15']);
-        $model = $query->offset($pages->offset)->limit($pages->limit)->orderBy('created_at desc')->all();
+        $userSearch = new UserSearch();
+        $query = $userSearch->search(Yii::$app->request->get());
+        $pages = new Pagination([
+            'totalCount' => $query->count(),
+            'pageSize' => 15,
+        ]);
+        $user = $query->offset($pages->offset)->limit($pages->limit)->orderBy(['user.created_at' => SORT_DESC])->all();
 
         return $this->render('list', [
-                'model' => $model,
-                'category' => $type,
-                'pages' => $pages,
+            'model' => $user,
+            'pages' => $pages,
+            'category' => User::USER_TYPE_PERSONAL,
         ]);
     }
 
     /**
-     * 投资人.
-     *
-     * @param type $name
-     * @param type $mobile
-     * @param type $type
-     *
-     * @return type
+     * 融资人列表
      */
-    public function actionListt($name = null, $mobile = null, $type = 1)
+    public function actionListr()
     {
-        return $this->userList($name, $mobile, $type);
-    }
+        $query = User::find()->where(['user.type' => User::USER_TYPE_ORG, 'is_soft_deleted' => 0]);
+        $query->with('borrowAccount');
+        $name  = Yii::$app->request->get('name');
+        if (!empty($name)) {
+            $query->andFilterWhere(['like', 'org_name', $name]);
+        }
+        $pages = new Pagination(['totalCount' => $query->count(), 'pageSize' => '15']);
+        $model = $query->offset($pages->offset)->limit($pages->limit)->orderBy('created_at desc')->all();
 
-    /**
-     * 融资人.
-     *
-     * @param type $name
-     * @param type $mobile
-     * @param type $type
-     *
-     * @return type
-     */
-    public function actionListr($name = null, $mobile = null, $type = 2)
-    {
-        return $this->userList($name, $mobile, $type);
+        return $this->render('list', [
+            'model' => $model,
+            'category' => User::USER_TYPE_ORG,
+            'pages' => $pages,
+        ]);
     }
 
     /**

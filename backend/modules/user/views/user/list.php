@@ -1,32 +1,17 @@
 <?php
 use yii\widgets\LinkPager;
 use common\models\user\User;
+$this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\web\YiiAsset']);
 ?>
-
 <?php $this->beginBlock('blockmain'); ?>
 <style>
-    .dropDownMenu {
-        list-style: none;
-        padding: 5px;
+    .search_form td span {
+
+    }
+    .search_form td input {
         margin: 0px;
-        display: none;
-        position: absolute;
-    }
-    .dropDownMenu li {
-        height: 30px;
-        line-height: 30px;
-    }
-    .dropDownMenu li:hover {
-        background: #eeeeff;
-    }
-    .note {
-        font-size: 1rem;
-        color: #666;
-        text-align: center;
-        margin: 50px 0;
     }
 </style>
-
 <div class="container-fluid">
     <!-- BEGIN PAGE HEADER-->
     <div class="row-fluid">
@@ -65,57 +50,89 @@ use common\models\user\User;
         <!--search start-->
         <div class="portlet-body">
             <form action="/user/user/<?=$category==1?"listt":"listr"?>" method="get" target="_self">
-                <table class="table">
+                <table class="table search_form">
                     <tbody>
-                        <tr>
-                            <?php if($category==User::USER_TYPE_PERSONAL){ ?>
-                                <td  style="margin-bottom: 0px;width:60px">
+                        <?php if($category==User::USER_TYPE_PERSONAL){ ?>
+                            <tr>
+                                <td>
                                     <span class="title">真实姓名</span>
+                                    <input type="text" name='name' value="<?= Yii::$app->request->get('name') ?>" placeholder="真实姓名" class="m-wrap span4"/>
                                 </td>
-                                <td  style="margin-bottom: 0px;width:200px"><input type="text" name='name' value="<?= Yii::$app->request->get('name') ?>"  placeholder="真实姓名"/></td>
-                                <td  style="margin-bottom: 0px;width:60px"><span class="title">手机号</span></td>
-                                <td style="margin-bottom: 0px;width:250px">
-                                    <input type="text"  name='mobile' value="<?= Yii::$app->request->get('mobile') ?>"  placeholder="手机号"/>
+                                <td>
+                                    <span class="title">手机账号</span>
+                                    <input type="text" name='mobile' value="<?= Yii::$app->request->get('mobile') ?>" placeholder="手机号" class="m-wrap span8"/>
                                 </td>
-                                <td style="margin-bottom: 0px;width:100px">
-                                    <div class="dropDownBox">
-                                        <span class="btn btn-default menuBtn">
-                                            其他条件
-                                            <span class="caret"></span>
-                                        </span>
-                                        <ul class="dropDownMenu">
-                                            <li>
-                                                未投资时长（天）: <input type="text" class="m-wrap span6" style="margin-bottom: 0px;width:50px" name='noInvestDays' value="<?= Yii::$app->request->get('noInvestDays') ?>"  placeholder="天数"/>
-                                            </li>
-                                            <li>
-                                                可用余额（元）: <input type="text" name="balance" value="<?= Yii::$app->request->get('balance') ?: 0 ?>" style="margin-bottom: 0px;width:55px"/>
-                                            </li>
-                                        </ul>
+                                <td>
+                                    <span class="title">未资时长</span>
+                                    <input type="text" class="m-wrap span4"  name='noInvestDays' value="<?= Yii::$app->request->get('noInvestDays') ?>" placeholder="天数" />
+                                </td>
+                                <td>
+                                    <span class="title">可用余额</span>
+                                    <input type="text"  class="m-wrap span6" name="balance" value="<?= Yii::$app->request->get('balance') ?>"  placeholder="可用余额" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span class="title">投资次数</span>
+                                    <input type="text" name='investCount' value="<?= Yii::$app->request->get('investCount') ?>" placeholder="投资次数" class="m-wrap span4"/>
+                                </td>
+                                <td>
+                                    <span class="title">投资总额</span>
+                                    <input type="text" name='investTotal' value="<?= Yii::$app->request->get('investTotal') ?>" placeholder="投资总额" class="m-wrap span8"/>
+                                </td>
+                                <td>
+                                    <span class="title">注册时间</span>
+                                    <input type="text" class="m-wrap span4"  name='regTime' value="<?= Yii::$app->request->get('regTime') ?>" placeholder="注册时间" onclick="WdatePicker()"/>
+                                </td>
+                                <td>
+                                    <span class="title">注册来源</span>
+                                    <?php $regContext = Yii::$app->request->get('regContext') ?>
+                                    <select name="regContext" class="m-wrap span6">
+                                        <option value="">全部</option>
+                                        <option <?= $regContext === 'm' ? 'selected' : '' ?> value="m">wap注册</option>
+                                        <option <?= $regContext === 'm_intro1611' ? 'selected' : '' ?> value="m_intro1611">wap落地页注册</option>
+                                        <option <?= $regContext === 'pc' ? 'selected' : '' ?> value="pc">pc注册</option>
+                                        <option <?= $regContext === 'pc_landing' ? 'selected' : '' ?> value="pc_landing">pc落地页注册</option>
+                                        <option <?= $regContext === 'other' ? 'selected' : '' ?> value="other">未知</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span class="title">已用代金券</span>
+                                    <input type="text" class="m-wrap span6"  name='couponAmount' value="<?= Yii::$app->request->get('couponAmount') ?>" placeholder="已用代金券"/>
+                                </td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div align="left" class="search-btn">
+                                        <button type='submit' class="btn blue btn-block button-search">搜索
+                                            <i class="m-icon-swapright m-icon-white"></i></button>
                                     </div>
                                 </td>
-                            <?php }else{?>
+                                <td colspan="3">
+                                    <div align="right" class="search-btn">
+                                        <a class="btn green btn-block" style="width: 140px;" href="/user/user/lenderstats">导出投资会员信息</a>
+                                    </div>
+                                </td>
+                            </tr>
+                        <?php }else{?>
+                            <tr>
                                 <td>
                                     <span class="title">企业名称</span>
+                                    <input type="text" class="m-wrap span6" name='name' value="<?= Yii::$app->request->get('name') ?>" placeholder="企业名称" />
                                 </td>
-                                <td><input type="text" class="m-wrap span6" style="margin-bottom: 0px;width:300px" name='name' value="<?= Yii::$app->request->get('name') ?>"  placeholder="企业名称"/></td>
-                            <?php }?>
-
-
-                            <td><div align="right" class="search-btn">
-                                <button type='submit' class="btn blue btn-block button-search">搜索 <i class="m-icon-swapright m-icon-white"></i></button>
-                            </div></td>
-
-                        </tr>
-                        <!--添加导出投资会员信息按钮-->
-                        <?php if($category === User::USER_TYPE_PERSONAL) { ?>
-                        <tr>
-                            <td colspan="8">
-                                <div align="right" class="search-btn">
-                                    <a class="btn green btn-block" style="width: 140px;" href="/user/user/lenderstats">导出投资会员信息</a>
-                                </div>
-                            </td>
-                        </tr>
-                        <?php } ?>
+                                <td>
+                                    <div align="right" class="search-btn">
+                                        <button type='submit' class="btn blue btn-block button-search">搜索
+                                            <i class="m-icon-swapright m-icon-white"></i></button>
+                                    </div>
+                                </td>
+                            </tr>
+                        <?php }?>
                     </tbody>
                 </table>
             </form>
@@ -126,7 +143,6 @@ use common\models\user\User;
             <table class="table table-striped table-bordered table-advance table-hover">
                 <thead>
                     <tr>
-                        <th>会员ID</th>
                 <?php if($category==User::USER_TYPE_PERSONAL){?>
                         <th>手机号</th>
                         <th>真实姓名</th>
@@ -136,6 +152,7 @@ use common\models\user\User;
                         <th>注册时间</th>
                         <th>可用余额（元）</th>
                 <?php if($category==User::USER_TYPE_PERSONAL){?>
+                        <th>资产总额</th>
                         <th>未投资时长（天）</th>
                         <th>最后一次购买金额</th>
                         <th>联动状态</th>
@@ -146,7 +163,6 @@ use common\models\user\User;
                 <tbody>
                 <?php foreach ($model as $key => $val) : ?>
                     <tr>
-                        <td><?= $val['usercode'] ?></td>
                 <?php if($category==User::USER_TYPE_PERSONAL){?>
                         <td><?= $val['mobile'] ?></td>
                         <td><?= $val['real_name']?'<a href="/user/user/detail?id='.$val['id'].'&type='.$category.'">'.$val['real_name'].'</a>':"---" ?></td>
@@ -156,6 +172,7 @@ use common\models\user\User;
                         <td><?= date('Y-m-d H:i:s',$val['created_at'])?></td>
                         <td><?= number_format(($category==User::USER_TYPE_PERSONAL)?($val->lendAccount['available_balance']):($val->borrowAccount['available_balance']),2) ?></td>
                         <?php if($category==User::USER_TYPE_PERSONAL){?>
+                        <td><?= number_format($val->lendAccount->totalFund, 2)?></td>
                         <td>
                             <?php
                                 $info = $val->info;
