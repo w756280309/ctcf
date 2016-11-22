@@ -14,8 +14,11 @@ use common\models\user\UserAccount;
 use common\models\user\UserBanks;
 use common\models\user\RechargeRecord;
 use common\models\user\UserSearch;
+use common\models\user\DrawRecord;
 use Yii;
+use yii\data\ArrayDataProvider;
 use yii\data\Pagination;
+use yii\db\Query;
 use yii\filters\VerbFilter;
 use yii\helpers\ArrayHelper;
 use yii\web\Response;
@@ -394,5 +397,51 @@ class UserController extends BaseController
 
         //返回状态-初始
         return ['code'=>0, 'message'=>'初始'];
+    }
+
+    public function actionDrawStatsCount()
+    {
+        return ['small' => $this->DrawLimitCount(10), 'large' => $this->DrawLimitCount(40)];
+    }
+
+    public function actionDrawLimitList($times = 0)
+    {
+        $d = DrawRecord::tableName();
+        $u = User::tableName();
+        $ua = UserAccount::tableName();
+        $query = (new Query())
+            ->select("$u.id, count(*) as total, $u.usercode, $u.mobile, $u.real_name, from_unixtime($u.created_at) as createTime, $ua.available_balance")
+            ->from($d)
+            ->innerJoin($u, "$u.id = $d.uid")
+            ->innerJoin($ua, "$ua.uid = $d.uid")
+            ->where(["date_format(from_unixtime($d.created_at), '%Y%m')" => date('Ym')])
+            ->andWhere(["$u.type" => User::USER_TYPE_PERSONAL])
+            ->groupBy("$d.uid")
+            ->having(['>=', 'total', $times]);
+        $pages = new Pagination(['totalCount' => $query->count(), 'pageSize' => '10']);
+        $list = $query->offset($pages->offset)->limit($pages->limit);
+        $dataProvider = new ArrayDataProvider([
+            'allModels' => $list->all(),
+            'sort' => [
+                'attributes' => ['usercode', 'mobile', 'real_name', 'createTime', 'available_balance'],
+            ],
+        ]);
+
+        return $this->render('draw_list', ['dataProvider' => $dataProvider, 'pages' => $pages]);
+    }
+
+
+    private function DrawLimitCount($drawTimes)
+    {
+        $u = User::tableName();
+        $d = DrawRecord::tableName();
+        return (int) DrawRecord::find()
+            ->select('count(*) as total')
+            ->where(["date_format(from_unixtime($d.created_at), '%Y%m')" => date('Ym')])
+            ->andWhere(["$u.type" => User::USER_TYPE_PERSONAL])
+            ->innerJoin($u, "$u.id = $d.uid")
+            ->groupBy('uid')
+            ->having(['>=', 'total', $drawTimes])
+            ->count();
     }
 }
