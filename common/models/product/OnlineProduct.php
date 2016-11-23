@@ -228,9 +228,8 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
             }"],
             [['rateSteps'], 'checkRateSteps'],
             ['paymentDay', 'integer'],
-            ['paymentDay', 'default', 'value' => 20],    //固定还款日,默认值每月20号,范围为1到28
-            ['paymentDay', 'compare', 'compareValue' => 1, 'operator' => '>='],
-            ['paymentDay', 'compare', 'compareValue' => 28, 'operator' => '<='],
+            ['paymentDay', 'compare', 'compareValue' => 1, 'operator' => '>=', 'skipOnEmpty' => true],
+            ['paymentDay', 'compare', 'compareValue' => 28, 'operator' => '<=', 'skipOnEmpty' => true],
             [['isTest', 'allowUseCoupon'], 'integer'],
             [['start_money', 'dizeng_money'], 'checkMoney'],
         ];
@@ -907,6 +906,7 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
             'full_time' => 0,
             'yuqi_faxi' => 0,
             'allowUseCoupon' => true,
+            'paymentDay' => 20,
         ]);
     }
 }

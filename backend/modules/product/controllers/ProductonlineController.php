@@ -21,11 +21,8 @@ use common\service\LoanService;
 use common\utils\TxUtils;
 use P2pl\Borrower;
 use Yii;
-use yii\base\Exception;
 use yii\data\Pagination;
-use yii\helpers\ArrayHelper;
 use yii\web\Cookie;
-use yii\web\Response;
 
 /**
  * Description of OnlineProduct.
@@ -131,6 +128,10 @@ class ProductonlineController extends BaseController
 
         if (0 === $loan->issuer) {   //当发行方没有选择时,发行方项目编号为空
             $loan->issuerSn = null;
+        }
+
+        if (!$loan->isFlexRate) {   //当是否启用浮动利率标志位为false时,清空浮动利率相关数据
+            $loan->rateSteps = null;
         }
 
         if (!$loan->isNatureRefundMethod()) {  //当标的还款方式不为按自然时间付息的方式时,固定日期置为null
@@ -391,9 +392,8 @@ class ProductonlineController extends BaseController
      *
      * @param type $id
      */
-    public function actionCancel($id = null)
+    public function actionCancel($id)
     {
-        Yii::$app->response->format = Response::FORMAT_JSON;
         if (empty($id)) {
             return ['res' => 0, 'msg' => 'id为空'];
         }
@@ -579,7 +579,6 @@ class ProductonlineController extends BaseController
      */
     public function actionFound()
     {
-        Yii::$app->response->format = Response::FORMAT_JSON;
         $id = Yii::$app->request->post('id');
         if ($id) {
             $model = OnlineProduct::findOne($id);
