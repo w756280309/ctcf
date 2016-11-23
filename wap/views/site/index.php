@@ -206,5 +206,9 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/index.js?v=20161021', ['depends' => Jq
             setTimeout(closeAdv, 4000);
             $('.tail_close').on('click', closeAdv);
         }
+        var host = location.host;
+        if(host.split('.')[0] === 'app') {
+            $('body').css({'padding-bottom':0});
+        }
     })
 </script>
