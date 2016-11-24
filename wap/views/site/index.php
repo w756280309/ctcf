@@ -67,7 +67,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/index.js?v=20161021', ['depends' => Jq
     <div class="index-notice-bottom">
         <ul class="index-notice-bottom-bg">
             <li class="lf">
-                <a href="/site/about">
+                <a href="/site/about?wx_share_key=h5">
                     <img src="<?= ASSETS_BASE_URI ?>images/index/intro.png" alt="">
                     <p>温都品牌介绍</p>
                 </a>

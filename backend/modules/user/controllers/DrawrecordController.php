@@ -99,7 +99,7 @@ class DrawrecordController extends BaseController
                     4 => '不明',
                     5 => '交易关闭',
                     6 => '其他',
-                    12 => '已冻结',
+                    12 => '已冻结（正常，等待处理）',
                     13 => '待冻结',
                     14 => '财务已审核',
                     15 => '财务审核失败',

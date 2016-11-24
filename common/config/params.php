@@ -105,6 +105,7 @@ return [
     'm_assets_base_uri' => 'https://static.wenjf.com/m/',
     'pc_assets_base_uri' => 'https://static.wenjf.com/pc/',
     'upload_base_uri' => 'https://static.wenjf.com/',
+    'fe_base_uri' => 'https://static.wenjf.com/v2/',
     'enable_dev_helpers' => false,
     'category_type' => [
         '1' => '文章分类',

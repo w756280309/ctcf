@@ -24,6 +24,9 @@ if (!defined('ASSETS_BASE_URI')) {
 if (!defined('UPLOAD_BASE_URI')) {
     define('UPLOAD_BASE_URI', Yii::$app->params['upload_base_uri']);
 }
+if (!defined('FE_BASE_URI')) {
+    define('FE_BASE_URI', Yii::$app->params['fe_base_uri']);
+}
 if (!defined('IN_APP') && false !== strpos(Yii::$app->request->hostInfo,'//app.')) {
     define('IN_APP', true);
 }

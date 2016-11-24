@@ -6,6 +6,7 @@ use common\controllers\HelpersTrait;
 use common\service\SmsService;
 use common\service\LoginService;
 use common\models\adv\Adv;
+use common\models\adv\Share;
 use common\models\affiliation\Affiliator;
 use common\models\affiliation\AffiliateCampaign;
 use common\models\app\AccessToken;
@@ -379,13 +380,15 @@ class SiteController extends Controller
      */
     public function actionAbout()
     {
-        return $this->render('company_desc');
+        $this->layout = false;
+
+        $share = Share::findOne(['shareKey' => 'h5']);
+
+        return $this->render('company_desc', ['share' => $share]);
     }
 
     /**
      * 新手帮助.
-     *
-     * @return type
      */
     public function actionHelp($type = null)
     {
