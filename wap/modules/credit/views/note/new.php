@@ -258,7 +258,7 @@ $calcDiscountRate = min($discountRate, bcmul(bcdiv($asset['currentInterest'], bc
             }
             var lastAmount = total_amount - amount;
             if (lastAmount >= minAmount) {
-                if ((amount - minAmount) % incAmount != 0) {
+                if (accMod(accSub(amount, minAmount), incAmount) != "0") {
                     toastCenter('金额必须是递增金额整数倍');
                     return false;
                 }

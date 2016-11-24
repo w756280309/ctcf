@@ -13,7 +13,7 @@ class WapAsset extends AssetBundle
         'css/base.css?v=20161102',
     ];
     public $js = [
-        'js/common.js?v=20161117',
+        'js/common.js?v=20161123',
         'js/lib.js',
         'js/jquery.cookie.js',
         'js/hmsr.js?v=20161019',

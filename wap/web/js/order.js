@@ -58,7 +58,7 @@ function profit($this)
         if(!$.isNumeric(couponMoney)) {
             couponMoney = 0;
         }
-        var m = Subtr(money, couponMoney);
+        var m = accSub(money, couponMoney);
         $('.shijizhifu').html(WDJF.numberFormat((m > 0) ? m : money , false) + "元");
     } else {
         $('.shijizhifu').html(WDJF.numberFormat(money, false) + "元");
