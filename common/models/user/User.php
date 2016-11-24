@@ -709,4 +709,25 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface, UserInterf
     {
         return (int) Draw::find()->where(['uid' => $this->id, "date_format(from_unixtime(created_at), '%Y%m')" => date('Ym')])->count();
     }
+
+    /**
+     * 判断当前用户是否是融资用户
+     * @return bool
+     */
+    public function isOrgUser()
+    {
+        return $this->type === self::USER_TYPE_ORG;
+    }
+
+    /**
+     * 获取当前用户的生日
+     * @return string
+     */
+    public function getBirthday()
+    {
+        if ($this->idcard) {
+            return substr($this->idcard, 6, 4) . '-' . substr($this->idcard, 10, 2) . '-' . substr($this->idcard, 12, 2);
+        }
+        return null;
+    }
 }

@@ -122,11 +122,11 @@ class CouponController extends BaseController
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
             'pagination' => [
-                'pageSize' => 15,
+                'pageSize' => 10,
             ],
         ]);
 
-        return $this->render('user_list', ['dataProvider' => $dataProvider, 'user' => $user]);
+        return $this->renderFile('@backend/modules/coupon/views/coupon/user_list.php', ['dataProvider' => $dataProvider, 'user' => $user]);
     }
 
     /**

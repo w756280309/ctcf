@@ -9,6 +9,7 @@ use common\models\epay\EpayUser;
 use common\models\order\OnlineOrder;
 use common\models\product\OnlineProduct;
 use backend\modules\user\core\v1_0\UserAccountBackendCore;
+use common\models\user\MoneyRecord;
 use common\models\user\User;
 use common\models\user\UserAccount;
 use common\models\user\UserBanks;
@@ -16,6 +17,7 @@ use common\models\user\RechargeRecord;
 use common\models\user\UserSearch;
 use common\models\user\DrawRecord;
 use Yii;
+use yii\data\ActiveDataProvider;
 use yii\data\ArrayDataProvider;
 use yii\data\Pagination;
 use yii\db\Query;
@@ -85,55 +87,124 @@ class UserController extends BaseController
     /**
      * 查看用户详情.
      */
-    public function actionDetail($id, $type)
+    public function actionDetail($id)
     {
-        if (empty($id) || empty($type) || !in_array($type, [1, 2])) {
+        $user = User::findOne($id);
+        if (empty($user)) {
             throw $this->ex404();     //参数无效,抛出404异常
         }
-
-        $userInfo = User::findOne($id);
-        if (null === $userInfo) {
-            throw $this->ex404();     //对象为空时,抛出404异常
+        if ($user->isOrgUser()) {
+            return $this->orgUserDetail($user);
+        } else {
+            if (Yii::$app->request->isAjax) {
+                return $this->dealAjax($user);
+            }
+            return $this->normalUserDetail($user);
         }
+    }
 
+    private function dealAjax(User $user)
+    {
+        $key = Yii::$app->request->get('key');
+        switch ($key){
+            case 'money_record' :
+                $query = MoneyRecord::find()->where(['uid' => $user->id]);
+                $dataProvider = new ActiveDataProvider([
+                    'query' => $query,
+                    'pagination' => [
+                        'pageSize' => 10,
+                    ],
+                    'totalCount' => $query->count(),
+                ]);
+                $records = $dataProvider->getModels();
+                $recordTypes = Yii::$app->params['mingxi'];
+                if (count($records) > 0) {
+                    $data = Yii::$app->db->createCommand("SELECT p.title, p.id, r.osn, o.investFrom
+FROM money_record AS r
+INNER JOIN online_order AS o ON o.sn = r.osn
+INNER JOIN online_product AS p ON o.online_pid = p.id
+WHERE r.type =2
+AND r.id
+IN (".implode(',' ,ArrayHelper::getColumn($records, 'id')).")")->queryAll();
+                    $data = ArrayHelper::index($data, 'osn');
+                } else {
+                    $data = [];
+                }
+
+                return $this->renderFile('@backend/modules/user/views/user/_money_record.php', [
+                    'recordTypes' => $recordTypes,
+                    'data' => $data,
+                    'dataProvider' => $dataProvider,
+                ]);
+                break;
+            default :
+                break;
+        }
+        return [];
+    }
+
+    /**
+     * 融资会员详情
+     * @param User $user
+     */
+    private function orgUserDetail(User $user)
+    {
+        $id = $user->id;
         $uabc = new UserAccountBackendCore();
         $recharge = $uabc->getRechargeSuccess($id);
         $draw = $uabc->getDrawSuccess($id);
 
-        if (User::USER_TYPE_PERSONAL === (int) $type) {
-            $rcMax = RechargeRecord::find()->where(['status' => RechargeRecord::STATUS_YES, 'uid' => $id])->max('updated_at');
-            $order = $uabc->getOrderSuccess($id);
-            $product = $ret = ['count' => 0, 'sum' => 0];
-            $ua = $userInfo->lendAccount;    //获取投资用户账户信息
-            $userAff = UserAffiliation::findOne(['user_id' => $userInfo->id]);
-            $txRes = Yii::$container->get('txClient')->get('credit-order/records', [
-                'user_id' => $id,
-                'require_list' => false,
-            ]);
-            $order['creditSuccessCount'] = $txRes['successCount'];
-            $order['creditTotalAmount'] = bcdiv($txRes['totalInvestAmount'], 100, 2);
-            $order['latestCreditOrderTime'] = $txRes['latestOrderTime'];
+        $rcMax = OnlineProduct::find()->where(['del_status' => OnlineProduct::STATUS_USE, 'borrow_uid' => $id])->min('start_date');
+        $ret = $uabc->getReturnInfo($id);
+        $product = $uabc->getProduct($id);
+        $ua = $user->borrowAccount;  //获取融资用户账户信息
+        $userAff = null;
+        $userYuE = $ua['available_balance'];
+        return $this->render('org_user_detail', [
+            'czTime' => $rcMax,
+            'czNum' => $recharge['count'],
+            'czMoneyTotal' => $recharge['sum'],
+            'txNum' => $draw['count'],
+            'txMoneyTotal' => $draw['sum'],
+            'userYuE' => $userYuE,
+            'rzNum' => $product['count'],
+            'rzMoneyTotal' => $product['sum'],
+            'ret' => $ret,
+            'orgUser' => $user,
+        ]);
+    }
 
-            $o = OnlineOrder::tableName();
-            $p = OnlineProduct::tableName();
-            $leiji = OnlineOrder::find()
-                ->innerJoinWith('loan')
-                ->where(["$p.del_status" => 0, "$p.isTest" => false, "$o.uid" => $id, "$o.status" => OnlineOrder::STATUS_SUCCESS])
-                ->andWhere(["(case when $p.refund_method = 1 then if($p.expires >= 160, 1, 0) when $p.refund_method > 1 then if($p.expires >= 6, 1, 0) end)" => 1])
-                ->andWhere(['>=', "$o.created_at", strtotime(date('Y') . '0101')])
-                ->andWhere(['<=', "$o.created_at", mktime(23, 59, 59, 12, 31, date('Y'))])
-                ->sum('order_money');
+    /**
+     * 普通会员详情
+     * @param User $user
+     */
+    private function normalUserDetail(User $user)
+    {
+        $id = $user->id;
+        $uabc = new UserAccountBackendCore();
+        $recharge = $uabc->getRechargeSuccess($id);
+        $draw = $uabc->getDrawSuccess($id);
+        $rcMax = RechargeRecord::find()->where(['status' => RechargeRecord::STATUS_YES, 'uid' => $id])->max('updated_at');
+        $order = $uabc->getOrderSuccess($id);
+        $ua = $user->lendAccount;    //获取投资用户账户信息
+        $userAff = UserAffiliation::findOne(['user_id' => $user->id]);
+        $txRes = Yii::$container->get('txClient')->get('credit-order/records', [
+            'user_id' => $id,
+            'require_list' => false,
+        ]);
+        $order['creditSuccessCount'] = $txRes['successCount'];
+        $order['creditTotalAmount'] = bcdiv($txRes['totalInvestAmount'], 100, 2);
+        $order['latestCreditOrderTime'] = $txRes['latestOrderTime'];
 
-        } else {
-            $rcMax = OnlineProduct::find()->where(['del_status' => OnlineProduct::STATUS_USE, 'borrow_uid' => $id])->min('start_date');
-            $ret = $uabc->getReturnInfo($id);
-            $product = $uabc->getProduct($id);
-            $order = ['count' => 0, 'sum' => 0, 'creditSuccessCount' => 0, 'creditTotalAmount' => 0, 'latestOrderTime' => ''];
-            $ua = $userInfo->borrowAccount;  //获取融资用户账户信息
-            $userAff = null;
-            $leiji = '0.00';
-        }
-
+        $o = OnlineOrder::tableName();
+        $p = OnlineProduct::tableName();
+        $leiji = OnlineOrder::find()
+            ->innerJoinWith('loan')
+            ->where(["$p.del_status" => 0, "$p.isTest" => false, "$o.uid" => $id, "$o.status" => OnlineOrder::STATUS_SUCCESS])
+            ->andWhere(["(case when $p.refund_method = 1 then if($p.expires >= 160, 1, 0) when $p.refund_method > 1 then if($p.expires >= 6, 1, 0) end)" => 1])
+            ->andWhere(['>=', "$o.created_at", strtotime(date('Y') . '0101')])
+            ->andWhere(['<=', "$o.created_at", mktime(23, 59, 59, 12, 31, date('Y'))])
+            ->sum('order_money');
         $tztimeMax = OnlineOrder::find()->where(['status' => OnlineOrder::STATUS_SUCCESS, 'uid' => $id])->max('updated_at');
         $userYuE = $ua['available_balance'];
 
@@ -148,10 +219,7 @@ class UserController extends BaseController
             'tzTime' => $tztimeMax,
             'tzNum' => $order['count'],
             'tzMoneyTotal' => $order['sum'],
-            'rzNum' => $product['count'],
-            'rzMoneyTotal' => $product['sum'],
-            'ret' => $ret,
-            'userinfo' => $userInfo,
+            'normalUser' => $user,
             'userAff' => $userAff,
             'creditSuccessCount' => $order['creditSuccessCount'],
             'creditTotalAmount' => $order['creditTotalAmount'],
@@ -159,6 +227,8 @@ class UserController extends BaseController
             'leiji' => $leiji > 0 ? $leiji : '0.00',
         ]);
     }
+
+
 
     /**
      * 查看指定用户的债权投资明细

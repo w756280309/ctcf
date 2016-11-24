@@ -22,9 +22,12 @@ class BankCardController extends BaseController
 
         $dataProvider = new ArrayDataProvider([
             'allModels' => $data,
+            'pagination' => [
+                'pageSize' => 10,
+            ],
         ]);
 
-        return $this->render('list', ['dataProvider' => $dataProvider, 'uid' => $uid]);
+        return $this->renderFile('@backend/modules/user/views/bank-card/list.php', ['dataProvider' => $dataProvider, 'uid' => $uid]);
     }
 
     /**
