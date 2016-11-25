@@ -599,7 +599,7 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
         return self::find()
             ->where(['isPrivate' => 0, 'del_status' => OnlineProduct::STATUS_USE, 'online_status' => OnlineProduct::STATUS_ONLINE, 'is_xs' => true])
             ->andWhere(['in', 'status', [self::STATUS_PRE, self::STATUS_NOW]])
-            ->orderBy('id desc')
+            ->orderBy('sort desc, finish_rate desc, id desc')
             ->one();
     }
 
@@ -617,9 +617,9 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
         if ($requireNew) {
             $query->select('*')
                 ->addSelect(['xs_status' => 'if(is_xs = 1 && status < 3, 1, 0)'])
-                ->orderBy('xs_status desc, recommendTime desc, sort asc, id desc');
+                ->orderBy('xs_status desc, recommendTime desc, sort asc, finish_rate desc, id desc');
         } else {
-            $query->orderBy('recommendTime desc, sort asc, id desc');
+            $query->orderBy('recommendTime desc, sort asc, finish_rate desc, id desc');
         }
 
         $query->where(['isPrivate' => 0, 'del_status' => OnlineProduct::STATUS_USE, 'online_status' => OnlineProduct::STATUS_ONLINE])->limit($count);

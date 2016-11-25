@@ -128,7 +128,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/index.js?v=20161021', ['depends' => Jq
                 <ul class="clearfix">
                     <li class="lf">
                         <span><?= LoanHelper::getDealRate($deal) ?></span><em>%</em><?php if (!empty($deal->jiaxi)) { ?><em class="index-recommend-crea">+<?= StringUtils::amountFormat2($deal->jiaxi) ?>%</em><?php } ?>
-                        <p>预期年化</p>
+                        <p>预期年化率</p>
                     </li>
                     <li class="lf">
                         <?php $ex = $deal->getDuration() ?>
