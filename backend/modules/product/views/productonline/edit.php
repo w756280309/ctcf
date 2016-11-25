@@ -241,7 +241,7 @@ $is_online = in_array($model->status, [2, 3, 4, 5, 6, 7]);//判断标的是否�
                             'inputOptions' => $start_date_input_option
                             ])->textInput([
                                 'class' => 'm-wrap span12',
-                                'value' => $model->start_date ? Yii::$app->formatter->asDatetime($model->start_date, 'php:Y-m-d H:i') : '',
+                                'value' => $model->start_date ? date('Y-m-d H:i', $model->start_date) : '',
                                 'onclick' => 'WdatePicker({dateFmt:"yyyy-MM-dd HH:mm",minDate:\''.date('Y-m-d').'\'});'
                                 ])
                         ?>
@@ -259,7 +259,7 @@ $is_online = in_array($model->status, [2, 3, 4, 5, 6, 7]);//判断标的是否�
                             'inputOptions' => ['autocomplete' => 'off', 'placeholder' => '募集结束时间']
                             ])->textInput([
                                 'class' => 'm-wrap span12',
-                                'value' =>  $model->end_date ? Yii::$app->formatter->asDatetime($model->end_date, 'php:Y-m-d H:i') : '',
+                                'value' =>  $model->end_date ? date('Y-m-d H:i', $model->end_date) : '',
                                 'onclick' => 'WdatePicker({dateFmt:"yyyy-MM-dd HH:mm",minDate:\''.date('Y-m-d').'\'});'
                                 ])
                         ?>
@@ -286,7 +286,7 @@ $is_online = in_array($model->status, [2, 3, 4, 5, 6, 7]);//判断标的是否�
                             'inputOptions' => $fd_input_option
                             ])->textInput([
                                 'class' => 'm-wrap span12',
-                                'value' =>  $model->finish_date ? Yii::$app->formatter->asDatetime($model->finish_date, 'Y-M-d H:i') : '',
+                                'value' =>  $model->finish_date ? date('Y-m-d H:i', $model->finish_date) : '',
                                 'onclick' => 'if ($(this).attr("readonly")) {return false;}WdatePicker({dateFmt:"yyyy-MM-dd HH:mm",minDate:\''.date('Y-m-d').'\'});'
                                 ])
                         ?>
