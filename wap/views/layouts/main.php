@@ -84,7 +84,7 @@ $this->registerMetaTag([
             <div class="pos-fixer">
                 <nav>
                     <li class="first"><a href="/">首页</a></li>
-                    <li><a href="/site/about?wx_share_key=h5">关于我们</a></li>
+                    <li><a href="/site/about">关于我们</a></li>
                     <li><a href="/site/advantage">平台优势</a></li>
                     <li><a href="/site/help">帮助中心</a></li>
                     <li><a href="/site/contact">联系我们</a></li>

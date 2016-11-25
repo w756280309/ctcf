@@ -383,6 +383,14 @@ class SiteController extends Controller
      */
     public function actionAbout()
     {
+        return $this->render('about');
+    }
+
+    /**
+     * 公司介绍h5版.
+     */
+    public function actionH5()
+    {
         $this->layout = false;
 
         $share = Share::findOne(['shareKey' => 'h5']);

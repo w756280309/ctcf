@@ -8,9 +8,9 @@ use yii\web\View;
 
 class WxshareHelper
 {
-    public static function registerTo($viewObj, Share $share)
+    public static function registerTo($viewObj, $share)
     {
-        if (empty($share)) {
+        if (empty($share) || !($share instanceof Share)) {
             return;
         }
 

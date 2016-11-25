@@ -1,8 +1,10 @@
 <?php
+
 namespace api\modules\v1\controllers\app;
 
 use api\modules\v1\controllers\Controller;
 use common\models\adv\Share;
+use Yii;
 
 /**
  * Class ShareController
@@ -25,6 +27,10 @@ class ShareController extends Controller
         if (!empty($shareKey)) {
             $share = Share::find()->where(['shareKey' => $shareKey])->one();
             if (!empty($share)) {
+                if (empty($share->url)) {
+                    $share->url = rtrim(Yii::$app->params['clientOption']['host']['wap'], '/').Yii::$app->request->url;
+                }
+
                 $data = [
                     'result' => 'success',
                     'msg' => '成功',
@@ -33,6 +39,7 @@ class ShareController extends Controller
                         'title' => $share->title,
                         'desc' => $share->description,
                         'img' => $share->imgUrl,
+                        'url' => $share->url,
                     ],
                 ];
                 $message = '成功';
