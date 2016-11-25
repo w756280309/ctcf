@@ -152,18 +152,29 @@ use common\utils\StringUtils;
 </div>
 
 <?php if($deal->status == 2) { ?>
-    <form action="/deal/deal/toorder?sn=<?=$deal->sn . (defined('IN_APP') ? "&token=" . \yii\helpers\Html::encode(Yii::$app->request->get("token")): "") ?>" method="post" id="toorderform" data-to="1">
-        <input name="_csrf" type="hidden" id="_csrf" value="<?=Yii::$app->request->csrfToken ?>">
-    </form>
-    <div id="x-purchase" class="row rengou" style="cursor: pointer">
-        <div class="col-xs-1"></div>
-        <div class="col-xs-10">立即认购</div>
-        <div class="col-xs-1"></div>
-    </div>
+    <?php
+        $user = Yii::$app->user->identity;
+    ?>
+    <?php if (null !== $user && $deal->is_xs && $user->xsCount() >= Yii::$app->params['xs_trade_limit']) { ?>
+        <div class="row huankuang">
+            <div class="col-xs-1"></div>
+            <div class="col-xs-10">您已经参与过新手专享体验</div>
+            <div class="col-xs-1"></div>
+        </div>
+    <?php } else { ?>
+        <form action="/deal/deal/toorder?sn=<?=$deal->sn . (defined('IN_APP') ? "&token=" . \yii\helpers\Html::encode(Yii::$app->request->get("token")): "") ?>" method="post" id="toorderform" data-to="1">
+            <input name="_csrf" type="hidden" id="_csrf" value="<?=Yii::$app->request->csrfToken ?>">
+        </form>
+        <div id="x-purchase" class="row rengou" style="cursor: pointer">
+            <div class="col-xs-1"></div>
+            <div class="col-xs-10">立即认购</div>
+            <div class="col-xs-1"></div>
+        </div>
+    <?php } ?>
 <?php } else { ?>
     <div class="row huankuang">
         <div class="col-xs-1"></div>
-        <div class="col-xs-10"><?=  Yii::$app->params['deal_status'][$deal->status]?><?= $deal->status==1?"(".$deal->start_date."开始)":"" ?></div>
+        <div class="col-xs-10"><?=  Yii::$app->params['deal_status'][$deal->status]?><?= $deal->status == 1?"(".$deal->start_date."开始)":"" ?></div>
         <div class="col-xs-1"></div>
     </div>
 <?php } ?>

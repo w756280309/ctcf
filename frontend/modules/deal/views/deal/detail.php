@@ -9,7 +9,7 @@ $user = Yii::$app->user->identity;
 
 $this->registerJsFile(ASSETS_BASE_URI . 'js/detail.js');
 $this->registerCssFile(ASSETS_BASE_URI . 'css/deal/buy.css');
-$this->registerCssFile(ASSETS_BASE_URI . 'css/deal/deallist.css');
+$this->registerCssFile(ASSETS_BASE_URI . 'css/deal/deallist.css?v=161124');
 $this->registerCssFile(ASSETS_BASE_URI . 'css/deal/detail.css?v=161104');
 $this->registerCssFile(ASSETS_BASE_URI . 'css/pagination.css');
 $this->registerCssFile(ASSETS_BASE_URI . 'css/useraccount/chargedeposit.css');
@@ -150,63 +150,68 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/useraccount/chargedeposit.css');
                 </ul>
                 <!--已售罄-->
                 <?php if ($deal->status == OnlineProduct::STATUS_NOW) { ?>
-                    <form action="/deal/deal/check?sn=<?= $deal->sn ?>" method="post" id="order_form">
-                        <input type="hidden" name="_csrf" value="<?= Yii::$app->request->csrfToken ?>"/>
-                        <div class="dR-input">
-                            <input type="text" class="dR-money" name="money" id="deal_money" autocomplete="off" value="<?= ($money > 0) ? $money : null?>"/>
-                            <!--输入款提示信息-->
-                            <div class="tishi tishi-dev">
-                                <img class="jiao-left" src="/images/deal/jiao-right.png" alt="">
-                                <ul class="dR-tishi">
-                                    <li><span>起投<?= StringUtils::amountFormat2($deal->start_money) ?>元</span></li>
-                                    <li><span>递增<?= StringUtils::amountFormat2($deal->dizeng_money) ?>元</span></li>
-                                </ul>
+                    <?php if (null !== $user && $deal->is_xs && $user->xsCount() >= Yii::$app->params['xs_trade_limit']) { ?>
+                        <div class="dR-shouqing">您已经参与过新手专享体验</div>
+                        <div class="dR-btn" onclick="window.location = '/licai/index'">投资其他项目</div>
+                    <?php } else { ?>
+                        <form action="/deal/deal/check?sn=<?= $deal->sn ?>" method="post" id="order_form">
+                            <input type="hidden" name="_csrf" value="<?= Yii::$app->request->csrfToken ?>"/>
+                            <div class="dR-input">
+                                <input type="text" class="dR-money" name="money" id="deal_money" autocomplete="off" value="<?= ($money > 0) ? $money : null?>"/>
+                                <!--输入款提示信息-->
+                                <div class="tishi tishi-dev">
+                                    <img class="jiao-left" src="/images/deal/jiao-right.png" alt="">
+                                    <ul class="dR-tishi">
+                                        <li><span>起投<?= StringUtils::amountFormat2($deal->start_money) ?>元</span></li>
+                                        <li><span>递增<?= StringUtils::amountFormat2($deal->dizeng_money) ?>元</span></li>
+                                    </ul>
+                                </div>
+                                <!--输入款错误提示信息-->
+                                <div class="dR-tishi-error">
+                                    <span  class="err_message" style="color: red;"></span>
+                                </div>
                             </div>
-                            <!--输入款错误提示信息-->
-                            <div class="dR-tishi-error">
-                                <span  class="err_message" style="color: red;"></span>
-                            </div>
-                        </div>
-                        <ul class="clearfix dR-inner dR-shouyi">
-                            <li class="dR-inner-left">预计收益:</li>
-                            <li class="dR-inner-right"><span><i id="expect_profit">0.00</i></span>元</li>
-                        </ul>
-
-                        <?php if (count($data) > 0 && $deal->allowUseCoupon) { ?>
-                            <!--待选代金券-->
-                            <ul class="dR-down clearfix">
-                                <li class="dR-down-left"  id="coupon_title"><img class="dR-add" src="/images/deal/add.png" alt="">选择一张代金券<i id="coupon_count"><?= count($data) ?></i></li>
-                                <li class="dR-down-right"><img src="/images/deal/down.png" alt=""></li>
+                            <ul class="clearfix dR-inner dR-shouyi">
+                                <li class="dR-inner-left">预计收益:</li>
+                                <li class="dR-inner-right"><span><i id="expect_profit">0.00</i></span>元</li>
                             </ul>
-                            <!--代金券选择-->
-                            <div class="dR-quan" id="valid_coupon_list">
-                                <input type="hidden" name="couponId" class="hide_coupon" value="<?= $coupon_id ?>">
-                                <ul>
-                                    <?php foreach ($data as $v) { ?>
-                                        <li class="quan-false<?php if ($v->id === $coupon_id) { ?> picked-box<?php } ?>" cid="<?= $v->id ?>">
-                                            <div class="quan-left">
-                                                <span>￥</span><?= number_format($v->couponType->amount) ?>
-                                            </div>
-                                            <div class="quan-right">
-                                                <div class="quan-right-content">
-                                                    <div><?= $v->couponType->name ?></div>
-                                                    <p>
-                                                        单笔投资满<?= StringUtils::amountFormat1('{amount}{unit}', $v->couponType->minInvest) ?>可用</p>
-                                                    <p  class="coupon_name" style="display: none"> 单笔投资满<?= StringUtils::amountFormat1('{amount}{unit}', $v->couponType->minInvest) ?>可抵扣<?= $v->couponType->amount ?>元</p>
-                                                    <p>所有项目可用</p>
-                                                    <p>有效期至<?= $v->expiryDate ?></p>
-                                                </div>
-                                            </div>
-                                            <img class="quan-true <?php if ($v->id === $coupon_id) { ?>show<?php } ?>" src="/images/deal/quan-true.png" alt="">
-                                        </li>
-                                    <?php } ?>
+
+                            <?php if (count($data) > 0 && $deal->allowUseCoupon) { ?>
+                                <!--待选代金券-->
+                                <ul class="dR-down clearfix">
+                                    <li class="dR-down-left"  id="coupon_title"><img class="dR-add" src="/images/deal/add.png" alt="">选择一张代金券<i id="coupon_count"><?= count($data) ?></i></li>
+                                    <li class="dR-down-right"><img src="/images/deal/down.png" alt=""></li>
                                 </ul>
+                                <!--代金券选择-->
+                                <div class="dR-quan" id="valid_coupon_list">
+                                    <input type="hidden" name="couponId" class="hide_coupon" value="<?= $coupon_id ?>">
+                                    <ul>
+                                        <?php foreach ($data as $v) { ?>
+                                            <li class="quan-false<?php if ($v->id === $coupon_id) { ?> picked-box<?php } ?>" cid="<?= $v->id ?>">
+                                                <div class="quan-left">
+                                                    <span>￥</span><?= number_format($v->couponType->amount) ?>
+                                                </div>
+                                                <div class="quan-right">
+                                                    <div class="quan-right-content">
+                                                        <div><?= $v->couponType->name ?></div>
+                                                        <p>
+                                                            单笔投资满<?= StringUtils::amountFormat1('{amount}{unit}', $v->couponType->minInvest) ?>可用</p>
+                                                        <p  class="coupon_name" style="display: none"> 单笔投资满<?= StringUtils::amountFormat1('{amount}{unit}', $v->couponType->minInvest) ?>可抵扣<?= $v->couponType->amount ?>元</p>
+                                                        <p>所有项目可用</p>
+                                                        <p>有效期至<?= $v->expiryDate ?></p>
+                                                    </div>
+                                                </div>
+                                                <img class="quan-true <?php if ($v->id === $coupon_id) { ?>show<?php } ?>" src="/images/deal/quan-true.png" alt="">
+                                            </li>
+                                        <?php } ?>
+                                    </ul>
+                                </div>
+                            <?php } ?>
+                            <div>
+                                <input type="submit" class="dR-btn" id="order_submit" value="立即投资"/>
                             </div>
-                        <?php } ?>
-                        <div>
-                            <input type="submit" class="dR-btn" id="order_submit" value="立即投资"/>
-                        </div>
-                    </form>
+                        </form>
+                    <?php } ?>
                 <?php } elseif ($deal->status == OnlineProduct::STATUS_PRE) { ?>
                     <?php
                         $start = Yii::$app->functions->getDateDesc($deal['start_date']);

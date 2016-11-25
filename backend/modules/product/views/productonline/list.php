@@ -105,7 +105,7 @@ $pc_cat = Yii::$app->params['pc_cat'];
                             </td>
                             <td><?= $val['sn'] ?></td>
                             <td><?= $val['title'] ?></td>
-                            <td><?= $val['is_xs'] ? '新手标' : $pc_cat[$val['cid']] ?></td>
+                            <td><?= $pc_cat[$val['cid']] ?></td>
                             <td>
                                 <?php $ex = $val->getDuration() ?>
                                 <?= $ex['value'] ?>

@@ -97,7 +97,7 @@ class SiteController extends Controller
         $first_media = !empty($media) ? $media[0] : '';
 
         //推荐区展示
-        $loans = OnlineProduct::getRecommendLoans(3);
+        $loans = OnlineProduct::getRecommendLoans(3, true);
 
         //最新资讯
         $news = News::find()

@@ -173,4 +173,6 @@ return [
     'base_domain' => 'wenjf.com',//根域名，banner图处使用
     'feature_credit_note_on' => true,  //债权转让功能开关,当为false时,隐藏进入债权功能页面入口
     'feature_credit_note_whitelist_uids' => [], //债权转让白名单
+    'xs_money_limit' => 10000,//新手专享标最大可投金额，0为不限制
+    'xs_trade_limit' => 1,//新手专享标投资次数
 ];

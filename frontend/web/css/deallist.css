@@ -51,6 +51,14 @@
     -moz-transition: all .2s linear 0s;
     -webkit-transition: all .2s linear 0s
 }
+.projectContainer .deal-single .newer {
+    position: absolute;
+    top: -6px;
+    left: -7px;
+    width: 79px;
+    height:75px;
+    background: url("../images/newhandVip.png") ;
+}
 .projectContainer .single_left {
     float: left;
     width: 652px;

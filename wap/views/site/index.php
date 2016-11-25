@@ -4,14 +4,13 @@ $this->params['breadcrumbs'][] = $this->title;
 $this->hideHeaderNav = true;
 $this->showBottomNav = true;
 
-use common\models\product\OnlineProduct;
 use common\utils\StringUtils;
 use common\view\LoanHelper;
 use wap\assets\WapAsset;
 use yii\web\JqueryAsset;
 
 $this->registerCssFile(ASSETS_BASE_URI.'css/swiper.min.css', ['depends' => WapAsset::class]);
-$this->registerCssFile(ASSETS_BASE_URI.'css/wap_index.css?v=20161031', ['depends' => WapAsset::class]);
+$this->registerCssFile(ASSETS_BASE_URI.'css/wap_index.css?v=20161124', ['depends' => WapAsset::class]);
 $this->registerCssFile(ASSETS_BASE_URI.'css/kaipin.css?=20161104', ['depends' => WapAsset::class]);
 $this->registerJsFile(ASSETS_BASE_URI.'js/swiper.min.js', ['depends' => JqueryAsset::class, 'position' => 1]);
 $this->registerJsFile(ASSETS_BASE_URI.'js/lib.flexible/lib.flexible.js', ['depends' => JqueryAsset::class, 'position' => 1]);
@@ -82,6 +81,37 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/index.js?v=20161021', ['depends' => Jq
     </div>
 </div>
 <!-- 公告结束 -->
+
+<?php if (null !== $xsLoan) { ?>
+<!--新手专享开始-->
+<div class="newhandVip">
+    <div class="newhandVip-top clearfix">
+        <div class="newhandVip-left lf clearfix">
+            <img class="lf" src="<?= ASSETS_BASE_URI ?>images/index/newhand.png" alt="">
+            <p>新手专享</p>
+        </div>
+    </div>
+    <div class="newhandVip-middle">
+        <a href="/deal/deal/detail?sn=<?= $xsLoan->sn ?>"><h2><?= $xsLoan->title ?></h2></a>
+        <strong>
+            <?= LoanHelper::getDealRate($xsLoan) ?><span>%</span><?php if (!empty($xsLoan->jiaxi)) { ?><i>+<?= StringUtils::amountFormat2($xsLoan->jiaxi) ?>%</i><?php } ?>
+        </strong>
+        <p>预期年化率</p>
+        <ul class="clearfix">
+            <li class="lf"><img src="<?= ASSETS_BASE_URI ?>images/index/icont01.png" alt=""> <?= StringUtils::amountFormat2($xsLoan->start_money) ?>元起投</li>
+            <li class="lf newhandVip-middle-li"><img src="<?= ASSETS_BASE_URI ?>images/index/icont02.png" alt="">
+                <?php $ex = $xsLoan->getDuration() ?>
+                <span><?= $ex['value'] ?></span><?= $ex['unit'] ?>理财期限
+            </li>
+            <li class="lf newhandVip-middle-last"><img src="<?= ASSETS_BASE_URI ?>images/index/icont03.png" alt=""> 限购一万</li>
+        </ul>
+        <a class="newhandVip-invest" href="/deal/deal/detail?sn=<?= $xsLoan->sn ?>">
+            立即投资
+        </a>
+    </div>
+</div>
+<!--新手专享结束-->
+<?php } ?>
 
 <!--精品推荐开始-->
 <?php if (!empty($deal)) { ?>

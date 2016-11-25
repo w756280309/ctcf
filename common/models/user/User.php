@@ -2,18 +2,20 @@
 
 namespace common\models\user;
 
+use common\models\epay\EpayUser;
+use common\models\order\OnlineOrder as Ord;
+use common\models\order\OrderQueue;
+use common\models\order\OnlineRepaymentPlan as RepaymentPlan;
+use common\models\product\OnlineProduct;
+use common\models\user\RechargeRecord as Recharge;
+use common\models\user\DrawRecord as Draw;
+use P2pl\Borrower;
+use P2pl\UserInterface;
 use Yii;
 use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
 use yii\web\IdentityInterface;
-use P2pl\Borrower;
-use common\models\epay\EpayUser;
-use P2pl\UserInterface;
 use Zii\Validator\CnMobileValidator;
-use common\models\user\RechargeRecord as Recharge;
-use common\models\user\DrawRecord as Draw;
-use common\models\order\OnlineOrder as Ord;
-use common\models\order\OnlineRepaymentPlan as RepaymentPlan;
 
 /**
  * This is the model class for table "user".
@@ -729,5 +731,23 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface, UserInterf
             return substr($this->idcard, 6, 4) . '-' . substr($this->idcard, 10, 2) . '-' . substr($this->idcard, 12, 2);
         }
         return null;
+    }
+
+    /**
+     * 获取该用户新手标投资成功及在订单队列待处理的订单数
+     */
+    public function xsCount()
+    {
+        $o = Ord::tableName();
+        $q = OrderQueue::tableName();
+        $p = OnlineProduct::tableName();
+        return (int) (new \yii\db\Query())
+            ->from($o)
+            ->innerJoin($p, "$o.online_pid = $p.id")
+            ->innerJoin($q, "$o.sn = $q.orderSn")
+            ->where(["$o.status" => Ord::STATUS_SUCCESS])
+            ->orWhere(["$o.status" => Ord::STATUS_FALSE, "$q.status" => 0])
+            ->andWhere(["$o.uid" => $this->id, "$p.is_xs" => 1])
+            ->count();
     }
 }

@@ -372,7 +372,7 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
             'yuqi_faxi' => '逾期罚息',
             'order_limit' => '限制投标人次',
             'isPrivate' => '是否定向标',
-            'is_xs' => '是否新手标',
+            'is_xs' => '是否新手专享标',
             'is_fdate' => '是否使用截止日期',
             'allowedUids' => '定向标用户',
             'creator_id' => '创建者',
@@ -592,18 +592,37 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
     }
 
     /**
+     * 获得一个处于预告期及募集中的新手标
+     */
+    public static function getXsLoan()
+    {
+        return self::find()
+            ->where(['isPrivate' => 0, 'del_status' => OnlineProduct::STATUS_USE, 'online_status' => OnlineProduct::STATUS_ONLINE, 'is_xs' => true])
+            ->andWhere(['in', 'status', [self::STATUS_PRE, self::STATUS_NOW]])
+            ->orderBy('id desc')
+            ->one();
+    }
+
+    /**
      * 查询推荐标的区标的列表.
      * 1. 排序按照先推荐标的,后普通标的的顺序进行排序;
      * 2. 根据count的值取查询列表的前count条记录;
+     * 3. $requireNew=true推荐列表里包含预告期及募集中新手标且排在前面
      */
-    public static function getRecommendLoans($count)
+    public static function getRecommendLoans($count, $requireNew = false)
     {
         $count = intval($count);
 
-        $query = self::find()
-            ->where(['isPrivate' => 0, 'del_status' => OnlineProduct::STATUS_USE, 'online_status' => OnlineProduct::STATUS_ONLINE])
-            ->limit($count)
-            ->orderBy('recommendTime desc, sort asc, id desc');
+        $query = self::find();
+        if ($requireNew) {
+            $query->select('*')
+                ->addSelect(['xs_status' => 'if(is_xs = 1 && status < 3, 1, 0)'])
+                ->orderBy('xs_status desc, recommendTime desc, sort asc, id desc');
+        } else {
+            $query->orderBy('recommendTime desc, sort asc, id desc');
+        }
+
+        $query->where(['isPrivate' => 0, 'del_status' => OnlineProduct::STATUS_USE, 'online_status' => OnlineProduct::STATUS_ONLINE])->limit($count);
 
         return 1 === $count ? $query->one() : $query->all();
     }

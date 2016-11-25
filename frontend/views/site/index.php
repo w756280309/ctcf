@@ -1,7 +1,7 @@
 <?php
 $this->title = Yii::$app->params['pc_page_title'];
 
-$this->registerCssFile(ASSETS_BASE_URI.'css/index.css?061010', ['depends' => 'frontend\assets\FrontAsset']);
+$this->registerCssFile(ASSETS_BASE_URI.'css/index.css?v=061124', ['depends' => 'frontend\assets\FrontAsset']);
 $this->registerJsFile(ASSETS_BASE_URI.'js/index.js', ['depends' => 'frontend\assets\FrontAsset']);
 
 use common\models\product\OnlineProduct;
@@ -139,6 +139,9 @@ use common\view\LoanHelper;
                 <?php foreach ($loans as $val) : ?>
                     <li>
                         <a href="/deal/deal/detail?sn=<?= $val->sn ?>" target="_blank" class="yingshou-left yingshou <?= (!in_array($val->status, [OnlineProduct::STATUS_PRE, OnlineProduct::STATUS_NOW])) ? 'huibian' : '' ?>">
+                            <?php if ($val->is_xs) { ?>
+                                <div class="newhandVip"></div>
+                            <?php } ?>
                             <div class="yingshou-top"><span><?= $val->title ?></span></div>
                             <?php if (!in_array($val->status, [OnlineProduct::STATUS_HUAN, OnlineProduct::STATUS_OVER])) { ?>
                                 <div style="clear: both"></div>

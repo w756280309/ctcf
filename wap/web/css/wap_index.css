@@ -89,7 +89,7 @@ body {
     bottom:0.3rem;
 }
 /* 公告开始 */
-.index-recommend , .index-notice {
+.index-recommend , .index-notice , .newhandVip {
     margin-top: 0.27rem;
     background: #fff;
 }
@@ -151,6 +151,96 @@ body {
 .index-notice-bottom-bg li:first-child{
     border-right: 1px solid #eee;
 }
+/*新手专享*/
+.newhandVip-top {
+    border-bottom: 1px solid #eee;
+    height: 0.73rem;
+    padding:0.27rem 0.55rem 0 0.55rem;
+}
+.newhandVip-left img {
+    width: 0.48rem;
+    vertical-align: middle;
+    margin-right: 0.16rem;
+}
+.newhandVip-left p {
+    font-size: 0.37rem;
+    color: #666;
+    width:7rem;
+}
+.newhandVip-middle {
+    padding:0 0.55rem 0.48rem 0.55rem;
+    text-align: center;
+}
+.newhandVip-middle h2 {
+    width:100%;
+    font-size: 0.4rem;
+    color: #333;
+    line-height: 1.33rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.newhandVip-middle strong {
+    font-weight: 500;
+    position: relative;
+    line-height: 1.33rem;
+    font-size: 1.2rem;
+    color: #f44336;
+}
+.newhandVip-middle strong span {
+    font-size: 0.667rem;
+}
+.newhandVip-middle strong i{
+    font-size: 0.48rem;
+    font-style: normal;
+    position: absolute;
+    top: -0.3rem;
+    right: -1rem;
+}
+.newhandVip-middle p {
+    font-size: 0.32rem;
+    margin-top: -0.25rem;
+}
+.newhandVip-middle ul {
+    margin-top: 0.533rem;
+    width:100%;
+    border-top: 1px dotted #ddd;
+    text-align: left;
+}
+.newhandVip-middle ul li {
+    width:32%;
+    font-size: 0.4rem;
+    line-height: 1.067rem;
+}
+.newhandVip-middle ul li img {
+    margin-top: -0.1rem;
+    width:0.44rem;
+    vertical-align: middle;
+}
+
+.newhandVip-middle ul li.newhandVip-middle-li {
+    width:38%;
+    color: #f44336;
+    text-indent: 0.2em;
+    text-align: center;
+}
+.newhandVip-middle ul li.newhandVip-middle-last {
+    width:30%;
+    text-align: right;
+}
+.newhandVip-invest {
+    display: block;
+    font-size:0.48rem;
+    width:100%;
+    height:1.2rem;
+    line-height: 1.2rem;
+    background-color: #f44336;
+    color: #fff;
+    border-radius: 5px;
+}
+a.newhandVip-invest:hover{
+    color: #fff;
+}
 /*精品推荐*/
 .index-recommend-top {
     border-bottom: 1px solid #eee;
@@ -208,11 +298,11 @@ body {
 }
 .index-recommend-bottom ul li span{
     font-size:0.48rem;
-    color: #e34b3d;
+    color: #f44336;
 }
 .index-recommend-bottom ul li em{
     font-size:0.32rem;
-    color: #e34b3d;
+    color: #f44336;
 }
 .index-recommend-bottom ul li p{
     font-size:0.32rem;
@@ -239,11 +329,11 @@ body {
     position: absolute;
     display: block;
     height: 0.04rem;
-    background: #e34b3d;
+    background: #f44336;
 }
 .recommend-progress em{
     font-size: 0.29rem;
-    color: #e34b3d;
+    color: #f44336;
     position: relative;
     top: -0.2rem;
 }
@@ -350,11 +440,11 @@ body {
     width: 3.7rem;
     text-align: center;
     line-height: 1rem;
-    border: 1px solid #ff6155;
+    border: 1px solid #f44336;
     -webkit-border-radius: 10px;
     -moz-border-radius: 10px;
     border-radius: 10px;
-    background: #ff6155;
+    background: #f44336;
     font-size: 0.4rem;
     outline: none;
 }

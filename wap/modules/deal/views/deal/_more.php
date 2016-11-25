@@ -5,6 +5,9 @@ use common\utils\StringUtils;
 
 <?php foreach ($deals as $val): ?>
     <a class="row col" href="/deal/deal/detail?sn=<?= $val->sn ?>">
+        <?php if ($val->is_xs) { ?>
+        <div class="newer" ><img src="<?= ASSETS_BASE_URI ?>images/newer.png" alt="新手专享"></div>
+        <?php } ?>
         <div class="col-xs-12 col-sm-12 col-txt">
             <div class="row clearfix credit-num">
                 <div class="col-xs-10 col-sm-10 col-title">

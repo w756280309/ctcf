@@ -48,6 +48,7 @@ class PayService
     const ERROR_ID_SET = 118;//需要实名认证
     const ERROR_BANK_BIND = 119;//需要绑定银行卡
     const ERROR_MONEY_LAST = 120;//投后标的可投资金小于起投金额
+    const ERROR_MONEY_XS_LIMIT = 121;//新手标除标的最后一笔外不允许超过限额
 
     const ERROR_ORDER_CREATE = 190;//订单生成失败
     const ERROR_UA = 191;//用户账户异常
@@ -93,6 +94,7 @@ class PayService
             self::ERROR_SYSTEM => '系统异常，请稍后重试',
             self::ERROR_BANK_BIND => '您未绑定银行卡',
             self::ERROR_MONEY_LAST => '购买后可投余额不可低于起投金额',
+            self::ERROR_MONEY_XS_LIMIT => '新手专享标最多只能投' . \Yii::$app->params['xs_money_limit']. '元',
         ];
 
         return $data[$code];
@@ -195,6 +197,12 @@ class PayService
             }
         }
 
+        //当前标的是新手标且该用户新手标投资成功或订单队列存在未处理订单(不包括超投撤销的订单)
+        $isXsDeal = 1 === $this->cdeal->is_xs;
+        if ($isXsDeal && $user->xsCount() >= \Yii::$app->params['xs_trade_limit']) {
+            return ['code' => 1, 'message' => '您已经参与过新手专享体验'];
+        }
+
         bcscale(14);
         if (bccomp(bcadd($user->lendAccount->available_balance, $couponMoney, 2), $money, 2) < 0) {
             return ['code' => 1,  'message' => '金额不足'];
@@ -205,6 +213,13 @@ class PayService
         }
         $lastAmount = bcsub($orderbalance, $money);//此笔交易成功后的剩余资金
         if (bcdiv($orderbalance, $this->cdeal->start_money) * 1 >= 2) {
+            //新手标且不是最后一笔
+            if ($isXsDeal) {
+                $xsMoneyLimit = \Yii::$app->params['xs_money_limit'];
+                if ($xsMoneyLimit > 0 && $money > $xsMoneyLimit) {
+                    return ['code' => self::ERROR_MONEY_XS_LIMIT, 'message' => self::getErrorByCode(self::ERROR_MONEY_XS_LIMIT)];
+                }
+            }
             //若可投金额大于起投金额
             if (bcdiv($money, $this->cdeal->start_money) * 1 < 1) {
                 return ['code' => self::ERROR_LESS_START_MONEY,  'message' => self::getErrorByCode(self::ERROR_LESS_START_MONEY).'('.$this->cdeal->start_money.'元)'];

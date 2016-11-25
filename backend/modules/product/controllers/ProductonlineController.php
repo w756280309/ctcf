@@ -431,6 +431,7 @@ class ProductonlineController extends BaseController
         $op = OnlineProduct::tableName();
         $data = OnlineProduct::find()
             ->select("$op.*")
+            ->addSelect(['xs_status' => "if(`is_xs` = 1 && $op.`status` < 3, 1, 0)"])
             ->addSelect(['isrecommended' => 'if(`online_status`=1 && `isPrivate`=0, `recommendTime`, 0)'])
             ->addSelect(['effect_jixi_time' => 'if(`is_jixi`=1, `jixi_time`, 0)'])
             ->addSelect(['product_status' => "(case $op.`status` when 4 then 7 when 7 then 4 else $op.`status` end)"])
@@ -466,7 +467,7 @@ class ProductonlineController extends BaseController
         }
 
         $_data = clone $data;
-        $data->orderBy('isrecommended desc, online_status asc, product_status asc,effect_jixi_time desc,sn desc');
+        $data->orderBy('xs_status desc, isrecommended desc, online_status asc, product_status asc,effect_jixi_time desc, sn desc');
 
         $pages = new Pagination(['totalCount' => $_data->count(), 'pageSize' => '20']);
         $model = $data->offset($pages->offset)->limit($pages->limit)->all();

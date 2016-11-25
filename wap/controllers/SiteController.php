@@ -111,13 +111,16 @@ class SiteController extends Controller
 
         $deal = OnlineProduct::getRecommendLoans(1);
 
+        //新手专享区展示
+        $xsLoan = OnlineProduct::getXsLoan();
+
         $news = News::find()
             ->where(['status' => News::STATUS_PUBLISH])
             ->orderBy('news_time desc')
             ->limit(3)
             ->all();
 
-        return $this->render('index', ['adv' => $adv, 'deal' => $deal, 'news' => $news]);
+        return $this->render('index', ['adv' => $adv, 'deal' => $deal, 'news' => $news, 'xsLoan' => $xsLoan]);
     }
 
     /**

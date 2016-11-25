@@ -226,18 +226,6 @@ class OnlineOrder extends ActiveRecord implements OrderTxInterface
     }
 
     /**
-     * 获取新手标总数.
-     */
-    public static function xsCount($uid)
-    {
-        return (int) (new \yii\db\Query())
-                ->select('count(id)')
-                ->from(self::tableName().' o')
-                ->innerJoin('online_product p', 'o.online_pid=p.id')
-                ->where(['o.uid' => $uid, 'p.is_xs' => 1])->count();
-    }
-
-    /**
      * 获取用户托管方平台信息.
      */
     public function getEpayuser()

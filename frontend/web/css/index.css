@@ -419,7 +419,8 @@ body {
 .yingshou-content1 {
     width:1015px;
     height: 417px;
-    padding-top: 6px;
+    padding-top: 10px;
+    padding-left: 7px;
     padding-bottom: 6px;
     margin:0 auto;
     overflow: hidden;
@@ -440,7 +441,7 @@ body {
     height: 403px;
     border: 1px solid #f44336;
     background: #fff;
-    overflow: hidden;
+    /*overflow: hidden;*/
     -webkit-transition: all 0.2s linear 0s;
     transition: all 0.2s linear 0s;
 }
@@ -1003,3 +1004,13 @@ a.zhaiquan-number:hover {
     margin-left: 10px;
 }
 /*股东背景 end*/
+/*新添新手标图标*/
+.newhandVip {
+    width:79px;
+    height:75px;
+    position: absolute;
+    top:-7px;
+    left: -7px;
+    background: url("/images/newhandVip.png");
+    z-index: 100000;
+}

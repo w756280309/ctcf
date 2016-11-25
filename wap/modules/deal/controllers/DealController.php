@@ -23,18 +23,21 @@ class DealController extends Controller
     {
         $size = 5;
 
-        $query = OnlineProduct::find()->where([
-            'isPrivate' => 0,
-            'del_status' => OnlineProduct::STATUS_USE,
-            'online_status' => OnlineProduct::STATUS_ONLINE
-        ]);
+        $query = OnlineProduct::find()
+            ->select('*')
+            ->addSelect(['xs_status' => 'if(is_xs = 1 && status < 3, 1, 0)'])
+            ->where([
+                'isPrivate' => 0,
+                'del_status' => OnlineProduct::STATUS_USE,
+                'online_status' => OnlineProduct::STATUS_ONLINE
+            ]);
 
         $count = $query->count();
 
         $pages = new Pagination(['totalCount' => $count, 'pageSize' => $size]);
 
         $deals = $query->offset($pages->offset)->limit($pages->limit)
-            ->orderBy('recommendTime desc, sort asc, finish_rate desc, id desc')
+            ->orderBy('xs_status desc, recommendTime desc, sort asc, finish_rate desc, id desc')
             ->all();
 
         $tp = ceil($count / $size);

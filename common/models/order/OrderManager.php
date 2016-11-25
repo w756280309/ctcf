@@ -410,10 +410,6 @@ class OrderManager
             return ['code' => PayService::ERROR_SYSTEM, 'message' => '找不到标的信息'];   //对象为空,抛出错误信息
         }
 
-        if (OnlineOrder::xsCount($uid) >= 3 && 1 === $model->is_xs) {
-            return ['code' => PayService::ERROR_SYSTEM, 'message' => '新手标只允许投3次'];
-        }
-
         $user = User::findOne($uid);
         $order = new OnlineOrder();
         $order->investFrom = $investFrom;
