@@ -136,6 +136,10 @@ $this->registerJsFile('/js/swfupload/handlers.js', ['depends' => 'yii\web\YiiAss
                     <?= $form->field($share, 'imgUrl', ['template' => '{input}', 'inputOptions' => ['autocomplete' => "off", 'class' => 'm-wrap span12', 'placeholder' => '图片地址']])->textInput() ?>
                     <?= $form->field($share, 'imgUrl', ['template' => '{error}']) ?>
                 </div>
+                <div class="controls">
+                    <?= $form->field($share, 'url', ['template' => '{input}', 'inputOptions' => ['autocomplete' => "off", 'class' => 'm-wrap span12', 'placeholder' => '分享链接地址，必须为绝对地址']])->textarea(['rows' => 3]) ?>
+                    <?= $form->field($share, 'url', ['template' => '{error}']) ?>
+                </div>
             </div>
 
             <!--普通提交-->

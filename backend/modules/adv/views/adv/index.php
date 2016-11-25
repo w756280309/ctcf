@@ -89,7 +89,8 @@ $menus = AuthSys::getMenus('A100000');
                         <th>状态</th>
                         <th>显示顺序</th>
                         <th>显示设备</th>
-                        <th style="text-align: center">操作</th>
+                        <th>分享KEY</th>
+                        <th><center>操作</center></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -111,6 +112,7 @@ $menus = AuthSys::getMenus('A100000');
                                 ?></td>
                             <td><input style="width:20px;height: 10px" type="text" name="show_order" readonly="true" value="<?= $val['show_order'] ?>"></td>
                             <td><?= !empty($val['showOnPc']) ? 'PC端' : '移动端' ?></td>
+                            <td><?= empty($val->share) ? '---' : $val->share->shareKey ?></td>
                             <td style="text-align: center">
                                 <a href="/adv/adv/edit?id=<?= $val->id ?>" class="btn mini green ajax_op" op="status" data-index="<?= $val['status'] ?>" index="<?= $val['id'] ?>"><i class="icon-edit"></i>编辑
                                 </a>

@@ -3,7 +3,6 @@
 namespace common\view;
 
 use common\models\adv\Share;
-use Yii;
 use yii\web\View;
 
 class WxshareHelper
@@ -12,10 +11,6 @@ class WxshareHelper
     {
         if (empty($share) || !($share instanceof Share)) {
             return;
-        }
-
-        if (empty($share->url)) {
-            $share->url = rtrim(Yii::$app->params['clientOption']['host']['wap'], '/').Yii::$app->request->url;
         }
 
         $_js = <<<JS

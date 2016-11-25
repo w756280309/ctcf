@@ -27,10 +27,6 @@ class ShareController extends Controller
         if (!empty($shareKey)) {
             $share = Share::find()->where(['shareKey' => $shareKey])->one();
             if (!empty($share)) {
-                if (empty($share->url)) {
-                    $share->url = rtrim(Yii::$app->params['clientOption']['host']['wap'], '/').Yii::$app->request->url;
-                }
-
                 $data = [
                     'result' => 'success',
                     'msg' => '成功',

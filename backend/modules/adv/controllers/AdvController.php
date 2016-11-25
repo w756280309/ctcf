@@ -24,15 +24,18 @@ class AdvController extends BaseController
         //页面的搜索功能
         $status = Yii::$app->request->get('status');
         $title = Yii::$app->request->get('title');
+        $ad = Adv::tableName();
 
-        $advInfo = Adv::find()->andWhere(['del_status' => Adv::DEL_STATUS_SHOW]);
+        $advInfo = Adv::find()
+            ->joinWith('share')
+            ->andWhere(['del_status' => Adv::DEL_STATUS_SHOW]);
         if (!empty($title)) {
             $advInfo->andFilterWhere(['like', title, $title]);
         }
         if ($status == 0 || $status == 1) {
             $advInfo->andFilterWhere(['status' => $status]);
         }
-        $data = $advInfo->orderBy('id desc');
+        $data = $advInfo->orderBy(["$ad.id" => SORT_DESC]);
         $pages = new Pagination(['totalCount' => $data->count(), 'pageSize' => '10']);
         $model = $data->offset($pages->offset)->limit($pages->limit)->orderBy('sn desc,status asc')->all();
 
@@ -77,6 +80,15 @@ class AdvController extends BaseController
             || $model->showOnPc
             ) {
                 if ($model->canShare && !$model->showOnPc) {
+                    if (false === strpos($share->url, 'wx_share_key')) {      //后台自动添加分享key
+                        $share->url = rtrim($share->url, '/');
+                        if (false === strpos($share->url, '?')) {
+                            $share->url .= '?wx_share_key='.$share->shareKey;
+                        } else {
+                            $share->url .= '&wx_share_key='.$share->shareKey;
+                        }
+                    }
+
                     $share->save();
                     $model->share_id = $share->id;
                 } else {

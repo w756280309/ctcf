@@ -2,26 +2,27 @@
 
 namespace common\models\adv;
 
-use Yii;
 use yii\behaviors\TimestampBehavior;
+use yii\db\ActiveRecord;
 
 /**
  * This is the model class for table "share".
  *
- * @property integer $id
- * @property string $shareKey
- * @property string $title
- * @property string $description
- * @property string $imgUrl
- * @property integer $created_at
- * @property integer $updated_at
+ * @property integer $id            ID
+ * @property string  $shareKey      分享KEY
+ * @property string  $title         分享标题
+ * @property string  $description   分享描述
+ * @property string  $imgUrl        分享图片地址
+ * @property string  $url           分享链接地址
+ * @property integer $created_at    创建时间
+ * @property integer $updated_at    修改时间
  */
-class Share extends \yii\db\ActiveRecord
+class Share extends ActiveRecord
 {
     public function init()
     {
         if (empty($this->shareKey)) {
-            $this->shareKey = time().rand(1,10);
+            $this->shareKey = time().rand(1, 10);
         }
     }
 
@@ -39,7 +40,7 @@ class Share extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['shareKey', 'title', 'description', 'imgUrl'], 'required', 'whenClient' => "function(attribute, value){
+            [['shareKey', 'title', 'description', 'imgUrl', 'url'], 'required', 'whenClient' => "function(attribute, value){
                 return $('#adv-canshare').attr('checked') == 'checked' && $('#shebei').val() == 0;
             }"],
             [['description'], 'string'],
@@ -48,7 +49,7 @@ class Share extends \yii\db\ActiveRecord
             [['title'], 'string', 'max' => 200],
             [['imgUrl'], 'string', 'max' => 100],
             ['shareKey', 'unique'],
-            ['imgUrl', 'url'],
+            [['imgUrl', 'url'], 'url'],
         ];
     }
 
@@ -63,6 +64,7 @@ class Share extends \yii\db\ActiveRecord
             'title' => '标题',
             'description' => '描述',
             'imgUrl' => '图片地址',
+            'url' => '分享链接地址',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];
