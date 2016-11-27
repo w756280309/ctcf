@@ -1011,6 +1011,6 @@ a.zhaiquan-number:hover {
     position: absolute;
     top:-7px;
     left: -7px;
-    background: url("/images/newhandVip.png");
+    background: url("../images/newhandVip.png");
     z-index: 100000;
 }
