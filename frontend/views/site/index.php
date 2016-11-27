@@ -1,7 +1,7 @@
 <?php
 $this->title = Yii::$app->params['pc_page_title'];
 
-$this->registerCssFile(ASSETS_BASE_URI.'css/index.css?v=061124', ['depends' => 'frontend\assets\FrontAsset']);
+$this->registerCssFile(ASSETS_BASE_URI.'css/index.css?v=061126', ['depends' => 'frontend\assets\FrontAsset']);
 $this->registerJsFile(ASSETS_BASE_URI.'js/index.js', ['depends' => 'frontend\assets\FrontAsset']);
 
 use common\models\product\OnlineProduct;
