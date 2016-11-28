@@ -64,6 +64,8 @@ $_js = <<<JS2
             setDivCenter('#mask');
             $('#mask-back').addClass('show');
             $('#mask').addClass('show');
+            
+            document.documentElement.style.overflow = 'hidden';   //禁用页面上下滚动效果
         });
         
         $('#content').on('click', '.true', function(e) {
@@ -71,6 +73,8 @@ $_js = <<<JS2
             
             $('#mask-back').removeClass('show');
             $('#mask').removeClass('show');
+            
+            document.documentElement.style.overflow = 'auto';   //解除页面上下滚动效果
         });
     });
     
