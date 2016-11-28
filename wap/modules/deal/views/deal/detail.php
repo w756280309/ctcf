@@ -54,7 +54,7 @@ use common\utils\StringUtils;
 <div class="row message">
     <div class="col-xs-12 xian2">
         <?php if ($deal->is_xs) { ?>
-            <p class="notice-coupon">[新手专享] 每账户限投资一次，限购一万元。</p>
+            <p class="notice-coupon">新手专享标每账户限投资一次，限购一万元。</p>
         <?php } ?>
         <?php if (!$deal->allowUseCoupon) { ?>
             <p class="notice-coupon">此项目不参与活动，不可使用代金券。</p>
