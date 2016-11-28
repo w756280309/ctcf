@@ -75,6 +75,10 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/useraccount/chargedeposit.css');
                 <p class="grace-period">融资方可提前<?= $deal->kuanxianqi ?>天内任一天还款，客户收益按实际天数计息。</p>
             <?php } ?>
 
+            <?php if ($deal->is_xs) { ?>
+                <p class="grace-period notice-coupon">新手专享标每账户限投资一次，限购一万元。</p>
+            <?php } ?>
+
             <?php if (!$deal->allowUseCoupon) { ?>
                 <p class="grace-period notice-coupon">此项目不参与活动，不可使用代金券。</p>
             <?php } ?>
