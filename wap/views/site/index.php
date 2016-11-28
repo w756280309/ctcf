@@ -105,8 +105,8 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/index.js?v=20161021', ['depends' => Jq
             </li>
             <li class="lf newhandVip-middle-last"><img src="<?= ASSETS_BASE_URI ?>images/index/icont03.png" alt=""> 限购一万</li>
         </ul>
-        <a class="newhandVip-invest" href="/deal/deal/detail?sn=<?= $xsLoan->sn ?>">
-            立即投资
+        <a class="newhandVip-invest" href="/deal/deal/index">
+            去理财
         </a>
     </div>
 </div>
