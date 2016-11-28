@@ -3,7 +3,6 @@
 use yii\widgets\LinkPager;
 
 $this->title = '发行方管理';
-
 ?>
 
 <?php $this->beginBlock('blockmain'); ?>
@@ -12,7 +11,7 @@ $this->title = '发行方管理';
             <div class="span12">
                 <h3 class="page-title">
                     发行方管理 <small>运营模块</small>
-                    <a href="javascript:openwin('/product/issuer/add', 500, 300)" class="btn green float-right">
+                    <a href="/product/issuer/add" class="btn green float-right">
                         <i class="icon-plus"></i> 添加发行方
                     </a>
                 </h3>
@@ -36,7 +35,8 @@ $this->title = '发行方管理';
                 <table class="table table-striped table-bordered table-advance table-hover">
                     <thead>
                     <tr>
-                        <th>发行方名称</th>
+                        <th class="span4">发行方名称</th>
+                        <th>视频名称</th>
                         <th><center>操作</center></th>
                     </tr>
                     </thead>
@@ -44,10 +44,10 @@ $this->title = '发行方管理';
                         <?php foreach ($issuers as $issuer) : ?>
                             <tr>
                                 <td><?= $issuer->name ?></td>
+                                <td><?= empty($issuer->mediaTitle) ? '---' : $issuer->mediaTitle ?></td>
                                 <td>
                                     <center>
-                                        <a href="javascript:openwin('/product/issuer/edit?id=<?= $issuer->id ?>', 500, 300)" class="btn mini green"><i class="icon-edit"></i>编辑</a>&nbsp;
-                                        <a href="javascript:openwin('/product/issuer/media-edit?id=<?= $issuer->id ?>', 500, 300)" class="btn mini green"><i class="icon-edit"></i><?= $issuer->mediaUri ? '编辑' : '添加' ?>视频</a>
+                                        <a href="/product/issuer/edit?id=<?= $issuer->id ?>" class="btn mini green"><i class="icon-edit"></i>编辑</a>
                                     </center>
                                 </td>
                             </tr>

@@ -24,11 +24,6 @@ use Yii;
 use yii\data\Pagination;
 use yii\web\Cookie;
 
-/**
- * Description of OnlineProduct.
- *
- * @author zhy-pc
- */
 class ProductonlineController extends BaseController
 {
     /**

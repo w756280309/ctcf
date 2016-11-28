@@ -1,5 +1,7 @@
 <?php
 use yii\widgets\ActiveForm;
+
+$this->title = ($desc = empty($admin) ? "添加" : "编辑").'分销商';
 ?>
 <?php $this->beginBlock('blockmain'); ?>
 
@@ -20,7 +22,7 @@ use yii\widgets\ActiveForm;
                     <i class="icon-angle-right"></i>
                 </li>
                 <li>
-                    <a href="javascript:void(0);"><?= empty($admin) ? "添加" : "编辑" ?></a>
+                    <a href="javascript:void(0);"><?= $desc ?></a>
                 </li>
             </ul>
         </div>

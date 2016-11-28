@@ -1,70 +1,90 @@
 <?php
-
-use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
-$this->title = '发行方'.($issuer->id ? '编辑' : '添加');
+$btnDesc = empty($issuer->id) ? '添加' : '编辑';
+$this->title = '发行方'.$btnDesc;
 ?>
+    <style>
+        .help-block {
+            color: red;
+        }
+    </style>
 
-<!DOCTYPE html>
-<!--[if IE 8]> <html lang="en" class="ie8"> <![endif]-->
-<!--[if IE 9]> <html lang="en" class="ie9"> <![endif]-->
-<!--[if !IE]><!--> <html lang="en"> <!--<![endif]-->
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <meta charset="<?= Yii::$app->charset ?>">
-        <?= Html::csrfMetaTags() ?>
-        <meta http-equiv="X-UA-Compatible" content="IE=9; IE=8; IE=7; IE=EDGE">
-        <title><?= Html::encode($this->title) ?></title>
-        <?php $this->head() ?>
-        <link href="/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
-        <link href="/css/bootstrap-responsive.min.css" rel="stylesheet" type="text/css"/>
-        <link href="/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
-        <link href="/css/style-metro.css" rel="stylesheet" type="text/css"/>
-        <link href="/css/style.css" rel="stylesheet" type="text/css"/>
-        <link href="/css/style-responsive.css" rel="stylesheet" type="text/css"/>
-        <link href="/css/uniform.default.css" rel="stylesheet" type="text/css"/>
-        <script type="text/javascript" src="/js/jquery.js"></script>
-        <script type="text/javascript" src="/js/layer/layer.min.js"></script>
-        <script type="text/javascript" src="/js/layer/extend/layer.ext.js"></script>
-        <script type="text/javascript" src="/js/showres.js"></script>
-        <script type="text/javascript" src="/js/ajax.js"></script>
-        <?php if ($res) : ?>
-            <script type="text/javascript">
-                $(function() {
-                    newalert(1, '操作成功');
-                    parent.location.reload();
-                })
-            </script>
-        <?php endif; ?>
-        <style>
-            .help-block {
-                color: red;
-            }
-        </style>
-    </head>
+<?php $this->beginBlock('blockmain'); ?>
+    <div class="container-fluid">
+    <div class="row-fluid">
+        <div class="span12">
+            <h3 class="page-title">
+                发行方管理 <small>运营模块</small>
+            </h3>
+            <ul class="breadcrumb">
+                <li>
+                    <i class="icon-home"></i>
+                    <a href="/adv/adv/index">运营管理</a>
+                    <i class="icon-angle-right"></i>
+                </li>
+                <li>
+                    <a href="/product/issuer/list">发行方管理</a>
+                    <i class="icon-angle-right"></i>
+                </li>
+                <li>
+                    <a href="#"><?= $btnDesc ?></a>
+                </li>
+            </ul>
+        </div>
 
-    <body class="page-header-fixed page-full-width">
-        <div class="page-container row-fluid">
-            <div class="page-content">
-                <div>&nbsp;</div>
-                <div class="form-horizontal form-view">
-                    <?php $form = ActiveForm::begin(['id' => 'issuer_form', 'action' => '/product/issuer/'.($issuer->id ? 'edit?id='.$issuer->id : 'add')]); ?>
-                        <div class="control-group">
-                            <label class="control-label">发行方名称</label>
-                            <div class="controls data-aff">
-                                <?= $form->field($issuer, 'name', ['template' => '{input}', 'inputOptions' => ['autocomplete' => 'off', 'placeholder' => '发行方名称']])->textInput() ?>
-                                <?= $form->field($issuer, 'name', ['template' => '{error}']) ?>
-                            </div>
-                        </div>
-
-                        <div class="form-actions">
-                            <button type="submit" class="btn green"><?= $issuer->id ? '编辑' : '添加' ?></button>
-                            <button type="button" class="btn green" onclick="closewin()">关闭窗口</button>
-                        </div>
-                    <?php ActiveForm::end(); ?>
+        <?php
+        $form = ActiveForm::begin([
+            'action' => '/product/issuer/'.(empty($issuer->id) ? 'add' : 'edit?id='.$issuer->id),
+            'options' => [
+                'class' => 'form-horizontal form-bordered form-label-stripped',
+                'enctype' => 'multipart/form-data',
+            ]
+        ]);
+        ?>
+        <div class="portlet-body form">
+            <div class="control-group">
+                <label class="control-label">发行方名称</label>
+                <div class="controls">
+                    <?= $form->field($issuer, 'name', ['template' => '{input}', 'inputOptions' => ['autocomplete' => 'off', 'placeholder' => '发行方名称']])->textInput() ?>
+                    <?= $form->field($issuer, 'name', ['template' => '{error}']) ?>
                 </div>
             </div>
+
+            <div class="control-group">
+                <label class="control-label">视频名称</label>
+                <div class="controls">
+                    <?= $form->field($issuer, 'mediaTitle', ['template' => '{input}', 'inputOptions' => ['autocomplete' => 'off', 'placeholder' => '视频名称']])->textInput() ?>
+                    <?= $form->field($issuer, 'mediaTitle', ['template' => '{error}']) ?>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label">视频地址</label>
+                <div class="controls">
+                    <?= $form->field($issuer, 'videoUrl', ['template' => '{input}', 'inputOptions' => ['autocomplete' => 'off', 'placeholder' => '不应包含中文字符', 'class' => 'span12']])->textarea() ?>
+                    <?= $form->field($issuer, 'videoUrl', ['template' => '{error}']) ?>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label">视频示例图</label>
+                <div class="controls">
+                    <?= $form->field($issuer, 'imgUrl', ['template' => '{input}<span class="notice">*图片上传格式必须为PNG或JPG，尺寸限定为：宽750px，高340px</span>'])->fileInput() ?>
+                    <?= $form->field($issuer, 'imgUrl', ['template' => '{error}']) ?>
+                </div>
+                <?php if (!empty($issuer->imgUrl)) { ?>
+                    <div class="controls">
+                        <img src="<?= '/'.$issuer->imgUrl ?>" alt="发行方视频示例图"/>
+                    </div>
+                <?php } ?>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn blue"><i class="icon-ok"></i> <?= $btnDesc ?></button>&nbsp;&nbsp;&nbsp;
+                <a href="list" class="btn">取消</a>
+            </div>
         </div>
-    </body>
-</html>
+        <?php $form->end(); ?>
+    </div>
+<?php $this->endBlock(); ?>
