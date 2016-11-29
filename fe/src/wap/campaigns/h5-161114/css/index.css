@@ -1130,15 +1130,14 @@ html, body {
     position: absolute;
     top: 0;
     left: 24.6%;
-    margin-top: 3.85rem;
+    margin-top: 3.65rem;
     width:52%;
     font-size: .3rem;
-    line-height: .42rem;
+    line-height: .4rem;
     text-align: left;
     color:#373b3e;
     display: inline-block;
 }
-
 .page2 .page2-title {
     margin: 1rem auto 0;
     text-align: center;
