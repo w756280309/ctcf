@@ -101,7 +101,7 @@ $this->registerMetaTag([
     <div class="row navbar-fixed-bottom footer">
         <div class="col-xs-4 footer-title">
             <div class="footer-inner">
-                <a href="/" class="shouye1"><span class="shouye"></span>首页</a>
+                <a href="/#t=1" class="shouye1"><span class="shouye"></span>首页</a>
             </div>
         </div>
         <div class="col-xs-4 footer-title">
