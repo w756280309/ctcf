@@ -176,8 +176,13 @@ class UserController extends BaseController
             ],
         ]);
         $records = $dataProvider->getModels();
-        $banks = Bank::find()->where(['in', 'id', ArrayHelper::getColumn($records, 'bank_id')])->asArray()->all();
-        $banks = ArrayHelper::index($banks, 'id');
+        if ($records > 0) {
+            $banks = Bank::find()->where(['in', 'id', ArrayHelper::getColumn($records, 'bank_id')])->asArray()->all();
+            $banks = ArrayHelper::index($banks, 'id');
+        } else {
+            $banks = [];
+        }
+
         return $this->renderFile('@backend/modules/user/views/user/_recharge_record.php', [
             'dataProvider' => $dataProvider,
             'banks' => $banks,
@@ -197,11 +202,17 @@ class UserController extends BaseController
             ],
         ]);
         $records = $dataProvider->getModels();
-        $ids = ArrayHelper::getColumn($records, 'invitee_id');
-        $rechargeData = RechargeRecord::find()->select(['uid', 'sum(fund) as recharge_sum'])->where(['in', 'uid', $ids])->andWhere(['status' => RechargeRecord::STATUS_YES])->groupBy('uid')->asArray()->all();
-        $rechargeData = ArrayHelper::index($rechargeData, 'uid');
-        $loanData = OnlineOrder::find()->select(['uid', 'sum(order_money) as loan_sum'])->where(['in', 'uid', $ids])->andWhere(['status' => OnlineOrder::STATUS_SUCCESS])->groupBy('uid')->asArray()->all();
-        $loanData = ArrayHelper::index($loanData, 'uid');
+        if (count($records) > 0) {
+            $ids = ArrayHelper::getColumn($records, 'invitee_id');
+            $rechargeData = RechargeRecord::find()->select(['uid', 'sum(fund) as recharge_sum'])->where(['in', 'uid', $ids])->andWhere(['status' => RechargeRecord::STATUS_YES])->groupBy('uid')->asArray()->all();
+            $rechargeData = ArrayHelper::index($rechargeData, 'uid');
+            $loanData = OnlineOrder::find()->select(['uid', 'sum(order_money) as loan_sum'])->where(['in', 'uid', $ids])->andWhere(['status' => OnlineOrder::STATUS_SUCCESS])->groupBy('uid')->asArray()->all();
+            $loanData = ArrayHelper::index($loanData, 'uid');
+        } else {
+            $rechargeData = [];
+            $loanData = [];
+        }
+
         return $this->renderFile('@backend/modules/user/views/user/_invite_record.php', [
             'dataProvider' => $dataProvider,
             'rechargeData' => $rechargeData,
@@ -265,8 +276,14 @@ IN (".implode(',' ,ArrayHelper::getColumn($records, 'id')).")")->queryAll();
             'totalCount' => $noteData['totalNoteCount'],
             'pageSize' => 10,
         ]);
-        $loans = OnlineProduct::find()->where(['in', 'id', ArrayHelper::getColumn($noteData['noteList'], 'loan_id')])->all();
-        $loans = ArrayHelper::index($loans, 'id');
+
+        if (count($noteData['noteList']) > 0) {
+            $loanIds = ArrayHelper::getColumn($noteData['noteList'], 'loan_id');
+            $loans = OnlineProduct::find()->where(['in', 'id', $loanIds])->all();
+            $loans = ArrayHelper::index($loans, 'id');
+        } else {
+            $loans = [];
+        }
         return $this->renderFile('@backend/modules/user/views/user/_credit_note.php', [
             'dataProvider' => $dataProvider,
             'loans' => $loans,
@@ -384,8 +401,12 @@ IN (".implode(',' ,ArrayHelper::getColumn($records, 'id')).")")->queryAll();
             'page' => Yii::$app->request->get('page'),
             'page_size' => Yii::$app->request->get('page_size'),
         ]);
-        $loan = OnlineProduct::find()->where(['in', 'id', ArrayHelper::getColumn($txRes['data'], 'loan_id')])->all();
-        $loan = ArrayHelper::index($loan, 'id');
+        if (count($txRes['data']) > 0) {
+            $loan = OnlineProduct::find()->where(['in', 'id', ArrayHelper::getColumn($txRes['data'], 'loan_id')])->all();
+            $loan = ArrayHelper::index($loan, 'id');
+        } else {
+            $loan = [];
+        }
         $dataProvider = new ArrayDataProvider([
             'allModels' => $txRes['data'],
         ]);
