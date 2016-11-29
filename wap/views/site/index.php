@@ -92,7 +92,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/index.js?v=20161021', ['depends' => Jq
         </div>
     </div>
     <div class="newhandVip-middle">
-        <a href="/deal/deal/detail?sn=<?= $xsLoan->sn ?>"><h2><?= $xsLoan->title ?></h2></a>
+        <a href="/deal/deal/index"><h2><?= $xsLoan->title ?></h2></a>
         <strong>
             <?= LoanHelper::getDealRate($xsLoan) ?><span>%</span><?php if (!empty($xsLoan->jiaxi)) { ?><i>+<?= StringUtils::amountFormat2($xsLoan->jiaxi) ?>%</i><?php } ?>
         </strong>
