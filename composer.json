@@ -24,7 +24,8 @@
         "h4cc/wkhtmltopdf-amd64": "0.12.x",
         "wcg/dingnotify": "dev-master",
         "phpoffice/phpexcel": "1.8.1",
-        "bower-asset/jquery": "1.12.*"
+        "bower-asset/jquery": "1.12.*",
+        "wcg/libs": "dev-master"
     },
     "require-dev": {
         "yiisoft/yii2-codeception": "*",
@@ -45,9 +46,7 @@
         }
     },
     "repositories":[
-        {
-            "type": "vcs",
-            "url": "ssh://vcs@dx.wangcaigu.cn/diffusion/DINGNOTIFY/dingnotify.git"
-        }
+        { "type": "vcs", "url": "ssh://vcs@dx.wangcaigu.cn/diffusion/DINGNOTIFY/dingnotify.git" },
+        { "type": "composer", "url": "http://pkg.wendujf.com/" }
     ]
 }
