@@ -93,25 +93,27 @@
                         <th>手机号</th>
                         <th>投资金额（元）</th>
                         <th>客户年化率（%）</th>
+                        <th>注册时间</th>
                         <th>投资时间</th>
                         <th>状态</th>
                     </tr>
                 </thead>
                 <tbody>
-                <?php foreach ($model as $key => $val) : ?>
+                <?php foreach ($model as $key => $order) : ?>
                     <tr>
-                        <td><?= $val['sn'] ?></td>
-                        <td><?= $val['username'] ?></td>                   
-                        <td><?= $val['mobile'] ?></td>                   
-                        <td><?= $val['order_money'] ?></td>
-                        <td><?= StringUtils::amountFormat2(bcmul($val['yield_rate'], 100, 2)); ?></td>
-                        <td><?= date('Y-m-d H:i:s',$val['created_at']) ?></td>
+                        <td><?= $order->sn ?></td>
+                        <td><?= $order->username ?></td>                   
+                        <td><?= $order->mobile ?></td>                   
+                        <td><?= $order->order_money ?></td>
+                        <td><?= StringUtils::amountFormat2(bcmul($order->yield_rate, 100, 2)); ?></td>
+                        <td><?= date('Y-m-d H:i:s', $order->user->created_at) ?></td>
+                        <td><?= date('Y-m-d H:i:s', $order->created_at) ?></td>
                         <td>
                             <?php
-                                $status = (int) $val['status'];
+                                $status = (int) $order->status;
                                 if (0 === $status) {
                                     echo "投标失败";
-                                } elseif (1 === $status){
+                                } elseif (1 === $status) {
                                     echo "投标成功";
                                 } elseif (2 === $status) {
                                     echo "撤标";

@@ -76,13 +76,15 @@ class OnlineorderController extends BaseController
             throw $this->ex404();   //参数无效时,抛出404异常
         }
 
+        $u = User::tableName();
+        $o = OnlineOrder::tableName();
         $lists = OnlineOrder::find()
-            ->select(['online_order.sn', 'online_order.status', 'online_order.username', 'online_order.mobile', 'online_order.order_money', 'online_order.yield_rate', 'online_order.created_at', 'user.idcard'])
-            ->where(['online_order.online_pid' => $id, 'online_order.status' => OnlineOrder::STATUS_SUCCESS])
-            ->leftJoin(User::tableName(), 'online_order.uid = user.id')
+            ->select(['sn', "$o.status", "$o.username", "$o.mobile", 'order_money', 'yield_rate', "$u.created_at as regAt", "$o.created_at", "$u.idcard"])
+            ->where(["$o.online_pid" => $id, "$o.status" => OnlineOrder::STATUS_SUCCESS])
+            ->innerJoin($u, "$o.uid = $u.id")
             ->asArray()
             ->all();
-        $str = "编号,真实姓名,手机号,身份证,投资金额（元）,客户年化率（%）,投资时间,状态\n";
+        $str = "编号,真实姓名,手机号,身份证,投资金额（元）,客户年化率（%）,注册时间,投资时间,状态\n";
         if (0 !== count($lists)) {
             foreach ($lists as $list) {
                 if ($list['status'] == 0) {
@@ -94,7 +96,7 @@ class OnlineorderController extends BaseController
                 } else {
                     $status = "无效";
                 }
-                $str .= strval($list['sn']) . "\t," . $list['username'] . "\t," . $list['mobile'] . "\t," . strval($list['idcard']) . "\t," . $list['order_money'] . "," . StringUtils::amountFormat2(bcmul($list['yield_rate'], 100, 2)) . "\t," . date('Y-m-d H:i:s', $list['created_at']) . "\t," . "$status \n";
+                $str .= strval($list['sn']) . "\t," . $list['username'] . ',' . $list['mobile'] . "\t," . strval($list['idcard']) . "\t," . $list['order_money'] . ',' . StringUtils::amountFormat2(bcmul($list['yield_rate'], 100, 2)) . ',' . date('Y-m-d H:i:s', $list['regAt']) . "\t," . date('Y-m-d H:i:s', $list['created_at']) . "\t," . "$status \n";
             }
         }
         $str = iconv('UTF-8', 'GB18030', $str);//转换编码
