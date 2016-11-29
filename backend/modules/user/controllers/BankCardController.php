@@ -19,6 +19,7 @@ class BankCardController extends BaseController
         $qpay = QpayBinding::find()->where(['uid' => $uid])->all();
         $update = BankCardUpdate::find()->where(['uid' => $uid])->all();
         $data = ArrayHelper::merge($qpay, $update);
+        ArrayHelper::multisort($data, 'created_at', SORT_DESC);
 
         $dataProvider = new ArrayDataProvider([
             'allModels' => $data,

@@ -10,7 +10,9 @@ use common\models\order\OnlineOrder;
 use common\models\product\OnlineProduct;
 use common\utils\StringUtils;
 use Yii;
+use yii\data\ActiveDataProvider;
 use yii\data\Pagination;
+use yii\helpers\ArrayHelper;
 
 class OnlineorderController extends BaseController
 {
@@ -169,58 +171,32 @@ class OnlineorderController extends BaseController
         if (empty($id)) {
             throw $this->ex404();   //参数无效时,抛出404异常
         }
-
         $user = $this->findOr404(User::class, $id);
-
         $status = Yii::$app->request->get('status');
-        $time = Yii::$app->request->get('time');
-
+        $start = Yii::$app->request->get('start');
+        $end = Yii::$app->request->get('end');
         $query = OnlineOrder::find()->where(['uid' => $id]);
         if ($status != null) {
             $query->andWhere(['status' => $status]);
         }
-
-        if (!empty($time)) {
-            $query->andFilterWhere(['<', 'created_at', strtotime($time.' 23:59:59')]);
-            $query->andFilterWhere(['>=', 'created_at', strtotime($time.' 0:00:00')]);
+        if (!empty($start)) {
+            $query->andFilterWhere(['>=', 'created_at', strtotime($start.' 0:00:00')]);
         }
-
-        //正常显示详情页
-        $pages = new Pagination(['totalCount' => $query->count(), 'pageSize' => '10']);
-        $model = $query->offset($pages->offset)->limit($pages->limit)->orderBy('id desc')->all();
-
-        //取出投资金额总计，应该包括充值成功的和充值失败的
-        $moneyTotal = 0;  //提现总额
-        $successNum = 0;  //成功笔数
-        $failureNum = 0;  //失败笔数
-        $numdata = OnlineOrder::find()->where(['uid' => $id])->select('id,order_money,online_pid,status')->asArray()->all();
-        $bc = new BcRound();
-        bcscale(14);
-        foreach ($numdata as $data) {
-            if ($data['status'] == OnlineOrder::STATUS_SUCCESS) {
-                $moneyTotal = bcadd($moneyTotal, $data['order_money']);
-                ++$successNum;
-            } elseif ($data['status'] == OnlineOrder::STATUS_CANCEL) {
-                ++$failureNum;
-            }
+        if (!empty($end)) {
+            $query->andFilterWhere(['<=', 'created_at', strtotime($end.' 23:59:59')]);
         }
-        $moneyTotal = $bc->bcround($moneyTotal, 2);
+        $query->orderBy(['created_at' =>SORT_DESC]);
+        $query->with('loan');
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => [
+                'pageSize' => 10,
+            ],
+        ]);
 
-        //以online_order表中的id为下标online_id为单元值，组成一维数组
-        $result = OnlineProduct::findBySql("select oo.id,title from online_product op  left join online_order oo  on op.id=oo.online_pid where  oo.uid=$id")->asArray()->all();
-        $res = [];
-        foreach ($result as $v) {
-            $res[$v['id']] = $v['title'];
-        }
-
-        return $this->render('listt', [
-            'res' => $res,
-            'model' => $model,
-            'pages' => $pages,
+        return $this->renderFile('@backend/modules/order/views/onlineorder/listt.php', [
+            'dataProvider' => $dataProvider,
             'user' => $user,
-            'moneyTotal' => $moneyTotal,
-            'successNum' => $successNum,
-            'failureNum' => $failureNum,
         ]);
     }
 }

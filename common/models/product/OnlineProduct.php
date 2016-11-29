@@ -928,4 +928,10 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
             'paymentDay' => 20,
         ]);
     }
+
+    //判断是否分期
+    public function isAmortized()
+    {
+        return self::REFUND_METHOD_DAOQIBENXI !== intval($this->refund_method);
+    }
 }

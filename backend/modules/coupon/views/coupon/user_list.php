@@ -8,6 +8,7 @@ use yii\grid\GridView;
     </a>
 </div>
 <?= GridView::widget([
+    'id' => 'grid_view_coupon',
     'dataProvider' => $dataProvider,
     'layout' => '{items} <center><div class="pagination coupon_pager">{pager}</div></center>',
     'tableOptions' => ['class' => 'table table-striped table-bordered table-advance table-hover'],

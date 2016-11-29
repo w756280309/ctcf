@@ -3,6 +3,7 @@ use common\models\user\QpayBinding;
 use yii\grid\GridView;
 
 echo GridView::widget([
+    'id' => 'grid_view_bind_card',
     'dataProvider' => $dataProvider,
     'layout' => '{items} <center><div class="pagination money_record_pager">{pager}</div></center>',
     'tableOptions' => ['class' => 'band_card_list table table-hover table-striped'],

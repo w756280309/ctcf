@@ -188,4 +188,12 @@ class InviteRecord extends ActiveRecord
             }
         }
     }
+
+    /**
+     * 获取被邀请者
+     */
+    public function getInvitee()
+    {
+        return $this->hasOne(User::className(), ['id' => 'invitee_id']);
+    }
 }

@@ -1,6 +1,8 @@
 <?php
-use common\models\user\User;
 use common\utils\StringUtils;
+use yii\web\YiiAsset;
+$this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => YiiAsset::class]);
+$this->title = '用户详情';
 ?>
 <?php $this->beginBlock('blockmain'); ?>
 
@@ -83,44 +85,54 @@ use common\utils\StringUtils;
                 <li><span>充值时间</span><?php echo empty($czTime)?"--":date("Y-m-d H:i:s",$czTime);?></li>
                 <li><span>最后登录时间</span><?php echo empty($normalUser['last_login'])?"--":date("Y-m-d H:i:s",$normalUser['last_login']);?></li>
                 <li><span>标的最后投资时间</span><?php echo empty($tzTime)?"--":date("Y-m-d H:i:s",$tzTime);?></li>
-                <li><span>债权最后投资时间</span><?= $latestCreditOrderTime?></li>
+                <li><span>转让最后投资时间</span><?= $latestCreditOrderTime?></li>
+                <li><span>本年度160天及以上项目累计投资额(元)</span><?= $leiji ?></li>
             </ul>
             <hr />
 
             <div class="detail_font">会员资金详情</div>
-            <ul class="breadcrumb_detail">
-                <li><span>理财资产（元）</span><?=$userLiCai?></li>
-                <li><span>可用余额（元）</span><?php echo empty($userYuE)?'0.00':$userYuE?></li>
-                <li><span>本年度160天及以上项目累计投资额(元)</span><?= $leiji ?></li>
-                <li><span>充值次数（次）</span><?=$czNum?></li>
-                <li><span>充值总计（元）</span><?php echo empty($czMoneyTotal)?'0.00':$czMoneyTotal?></li>
-                <li><span>充值流水明细</span><a href="/user/rechargerecord/detail?id=<?= $normalUser->id ?>&type=<?= $normalUser->type ?>">查看</a>&nbsp;</li>
-                <li><span>提现次数（次）</span><?=$txNum?></li>
-                <li><span>提现总计（元）</span><?php echo empty($txMoneyTotal)?'0.00':$txMoneyTotal?></li>
-                <li><span>提现流水明细</span><a href="/user/drawrecord/detail?id=<?= $normalUser->id ?>&type=<?= $normalUser->type ?>">查看</a>&nbsp;</li>
-                <li><span>标的投资次数（次）</span><?=$tzNum?></li>
-                <li><span>标的投资总计（元）</span><?php echo empty($tzMoneyTotal)?'0.00':$tzMoneyTotal?></li>
-                <li><span>标的投资流水明细</span><a href="/order/onlineorder/detailt?id=<?= $normalUser->id ?>">查看</a></li>
-                <li><span>债权投资次数（次）</span><?=$creditSuccessCount?></li>
-                <li><span>债权投资总计（元）</span><?php echo empty($creditTotalAmount)?'0.00':$creditTotalAmount?></li>
-                <li><span>债权投资流水明细</span><a href="/user/user/credit-records?id=<?= $normalUser->id ?>&type=<?= $normalUser->type ?>">查看</a></li>
-            </ul>
-            <hr>
+            <table class="table table-condensed">
+                <tr>
+                    <td><span>充值次数（次）</span><?=$czNum?></td>
+                    <td><span>提现次数（次）</span><?=$txNum?></td>
+                    <td><span>转让次数（次）</span><?=$transferCount?></td>
+                    <td><span>标的投资次数（次）</span><?=$tzNum?></td>
+                    <td><span>转让投资次数（次）</span><?=$creditSuccessCount?></td>
+                </tr>
+                <tr>
+                    <td><span>充值总计（元）</span><?php echo empty($czMoneyTotal)?'0.00':$czMoneyTotal?></td>
+                    <td><span>提现总计（元）</span><?php echo empty($txMoneyTotal)?'0.00':$txMoneyTotal?></td>
+                    <td><span>转让总计（元）</span><?= number_format($transferSum, 2)?></td>
+                    <td><span>标的投资总计（元）</span><?php echo empty($tzMoneyTotal)?'0.00':$tzMoneyTotal?></td>
+                    <td><span>转让投资总计（元）</span><?php echo empty($creditTotalAmount)?'0.00':$creditTotalAmount?></td>
+                </tr>
+            </table>
         </div>
+        <hr/>
         <div>
             <div>
                 <ul class="nav nav-tabs nav-pills" role="tablist" id="list_nav">
                     <li role="presentation" class="money_record_nav active"><a>资金流水</a></li>
+                    <li role="presentation" class="recharge_nav"><a>充值流水明细</a></li>
+                    <li role="presentation" class="draw_nav"><a>提现流水明细</a></li>
+                    <li role="presentation" class="loan_order_nav"><a>标的投资明细</a></li>
+                    <li role="presentation" class="credit_order_nav"><a>转让买入明细</a></li>
+                    <li role="presentation" class="credit_note_nav"><a>转让卖出明细</a></li>
                     <li role="presentation" class="bind_nav"><a>绑卡明细</a></li>
                     <li role="presentation" class="coupon_nav"><a>代金券明细</a></li>
-                    <li role="presentation" class="relation_nav"><a>关系详情</a></li>
+                    <li role="presentation" class="invite_nav"><a>关系详情</a></li>
                 </ul>
             </div>
             <div class="container-fluid"  id="list">
                 <div class="list_detail" id="money_record_list"></div>
+                <div class="list_detail" id="recharge_list"></div>
+                <div class="list_detail" id="draw_list"></div>
+                <div class="list_detail" id="loan_order_list"></div>
+                <div class="list_detail" id="credit_order_list"></div>
+                <div class="list_detail" id="credit_note_list"></div>
                 <div class="list_detail" id="bind_card_list"></div>
                 <div class="list_detail" id="coupon_list"></div>
-                <div class="list_detail" id="relation_list"></div>
+                <div class="list_detail" id="invite_list"></div>
             </div>
         </div>
     </div>
@@ -165,7 +177,48 @@ use common\utils\StringUtils;
             }
         })
     }
-
+    function getInviteList(href) {
+        $.get(href, function(data) {
+            if (data) {
+                $('#invite_list').html(data);
+            }
+        })
+    }
+    function getRechargeList(href) {
+        $.get(href, function(data) {
+            if (data) {
+                $('#recharge_list').html(data);
+            }
+        })
+    }
+    function getDrawList(href) {
+        $.get(href, function(data) {
+            if (data) {
+                $('#draw_list').html(data);
+            }
+        })
+    }
+    function getLoanOrderList(href) {
+        $.get(href, function(data) {
+            if (data) {
+                $('#loan_order_list').html(data);
+            }
+        })
+    }
+    function getCreditOrderList(href) {
+        $.get(href, function(data) {
+            if (data) {
+                $('#credit_order_list').html(data);
+            }
+        })
+    }
+    function getCreditNoteList(href) {
+        $.get(href, function(data) {
+            if (data) {
+                $('#credit_note_list').html(data);
+            }
+        })
+    }
     getMoneyRecord('/user/user/detail?id=<?= $normalUser->id?>&key=money_record');
 
     $('#list_nav li').click(function () {
@@ -188,6 +241,39 @@ use common\utils\StringUtils;
         if (!$('#coupon_list').html()) {
             getCouponList('/coupon/coupon/list-for-user?uid=<?= $normalUser->id?>')
         }
-    })
+    });
+
+    $('.invite_nav').click(function(){
+        if (!$('#invite_list').html()) {
+            getInviteList('/user/user/detail?id=<?= $normalUser->id?>&key=invite_record')
+        }
+    });
+
+    $('.recharge_nav').click(function(){
+        if (!$('#recharge_list').html()) {
+            getRechargeList('/user/user/detail?id=<?= $normalUser->id?>&key=recharge_record')
+        }
+    });
+
+    $('.draw_nav').click(function(){
+        if (!$('#draw_list').html()) {
+            getDrawList('/user/user/detail?id=<?= $normalUser->id?>&key=draw_record')
+        }
+    });
+    $('.loan_order_nav').click(function(){
+        if (!$('#loan_order_list').html()) {
+            getLoanOrderList('/order/onlineorder/detailt?id=<?= $normalUser->id?>')
+        }
+    });
+    $('.credit_order_nav').click(function(){
+        if (!$('#credit_order_list').html()) {
+            getCreditOrderList('/user/user/credit-records?id=<?= $normalUser->id?>')
+        }
+    });
+    $('.credit_note_nav').click(function(){
+        if (!$('#credit_note_list').html()) {
+            getCreditNoteList('/user/user/detail?id=<?= $normalUser->id?>&key=credit_note')
+        }
+    });
 </script>
 <?php $this->endBlock(); ?>

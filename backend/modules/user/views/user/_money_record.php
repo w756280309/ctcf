@@ -4,6 +4,7 @@
 
 <?=
 \yii\grid\GridView::widget([
+    'id' => 'grid_view_money_record',
     'dataProvider' => $dataProvider,
     'layout' => '{items} <center><div class="pagination money_record_pager">{pager}</div></center>',
     'tableOptions' => ['class' => 'money_record_list table table-hover table-striped'],

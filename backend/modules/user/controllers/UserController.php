@@ -5,10 +5,12 @@ namespace backend\modules\user\controllers;
 use backend\controllers\BaseController;
 use common\lib\user\UserStats;
 use common\models\affiliation\UserAffiliation;
+use common\models\bank\Bank;
 use common\models\epay\EpayUser;
 use common\models\order\OnlineOrder;
 use common\models\product\OnlineProduct;
 use backend\modules\user\core\v1_0\UserAccountBackendCore;
+use common\models\promo\InviteRecord;
 use common\models\user\MoneyRecord;
 use common\models\user\User;
 use common\models\user\UserAccount;
@@ -108,39 +110,168 @@ class UserController extends BaseController
         $key = Yii::$app->request->get('key');
         switch ($key){
             case 'money_record' :
-                $query = MoneyRecord::find()->where(['uid' => $user->id]);
-                $dataProvider = new ActiveDataProvider([
-                    'query' => $query,
-                    'pagination' => [
-                        'pageSize' => 10,
-                    ],
-                    'totalCount' => $query->count(),
-                ]);
-                $records = $dataProvider->getModels();
-                $recordTypes = Yii::$app->params['mingxi'];
-                if (count($records) > 0) {
-                    $data = Yii::$app->db->createCommand("SELECT p.title, p.id, r.osn, o.investFrom
+                return $this->getMoneyRecord($user);
+                break;
+            case 'invite_record':
+                return $this->getInviteRecord($user);
+                break;
+            case 'recharge_record':
+                return $this->getRechargeRecord($user);
+                break;
+            case 'draw_record':
+                return $this->getDrawRecord($user);
+                break;
+            case 'credit_note':
+                return $this->getCreditNote($user);
+                break;
+            default :
+                break;
+        }
+        return [];
+    }
+
+    /**
+     * 提现记录
+     */
+    private function getDrawRecord(User $user)
+    {
+        $b = Bank::tableName();
+        $d = DrawRecord::tableName();
+
+        $query = (new \yii\db\Query)
+            ->select("$d.*, $b.bankName")
+            ->from($d)
+            ->leftJoin($b, "$d.bank_id = $b.id")
+            ->where(['uid' => $user->id])
+            ->orderBy(['created_at' => SORT_DESC]);
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => [
+                'pageSize' => 10,
+            ],
+        ]);
+        return $this->renderFile('@backend/modules/user/views/user/_draw_record.php', [
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+
+    /**
+     * 获取充值记录
+     */
+    private function getRechargeRecord(User $user)
+    {
+        $r = RechargeRecord::tableName();
+        $u = UserBanks::tableName();
+        $query = (new \yii\db\Query)
+            ->select(["$r.*", "$u.bank_name"])
+            ->from($r)
+            ->leftJoin($u, "$r.uid = $u.uid")
+            ->where(["$r.uid" => $user->id])
+            ->orderBy(["$r.created_at" => SORT_DESC]);
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => [
+                'pageSize' => 10,
+            ],
+        ]);
+        $records = $dataProvider->getModels();
+        $banks = Bank::find()->where(['in', 'id', ArrayHelper::getColumn($records, 'bank_id')])->asArray()->all();
+        $banks = ArrayHelper::index($banks, 'id');
+        return $this->renderFile('@backend/modules/user/views/user/_recharge_record.php', [
+            'dataProvider' => $dataProvider,
+            'banks' => $banks,
+        ]);
+    }
+
+    /**
+     * 获取用户邀请好友记录
+     */
+    private function getInviteRecord(User $user)
+    {
+        $query = InviteRecord::find()->where(['user_id' => $user->id])->orderBy(['created_at' => SORT_DESC]);
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => [
+                'pageSize' => 10,
+            ],
+        ]);
+        $records = $dataProvider->getModels();
+        $ids = ArrayHelper::getColumn($records, 'invitee_id');
+        $rechargeData = RechargeRecord::find()->select(['uid', 'sum(fund) as recharge_sum'])->where(['in', 'uid', $ids])->andWhere(['status' => RechargeRecord::STATUS_YES])->groupBy('uid')->asArray()->all();
+        $rechargeData = ArrayHelper::index($rechargeData, 'uid');
+        $loanData = OnlineOrder::find()->select(['uid', 'sum(order_money) as loan_sum'])->where(['in', 'uid', $ids])->andWhere(['status' => OnlineOrder::STATUS_SUCCESS])->groupBy('uid')->asArray()->all();
+        $loanData = ArrayHelper::index($loanData, 'uid');
+        return $this->renderFile('@backend/modules/user/views/user/_invite_record.php', [
+            'dataProvider' => $dataProvider,
+            'rechargeData' => $rechargeData,
+            'loanData' => $loanData,
+        ]);
+    }
+
+    /**
+     * 获取用户资金流水记录
+     */
+    private function getMoneyRecord(User $user)
+    {
+        $query = MoneyRecord::find()->where(['uid' => $user->id])->orderBy(['created_at' => SORT_DESC]);
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => [
+                'pageSize' => 10,
+            ],
+        ]);
+        $records = $dataProvider->getModels();
+        $recordTypes = Yii::$app->params['mingxi'];
+        if (count($records) > 0) {
+            $data = Yii::$app->db->createCommand("SELECT p.title, p.id, r.osn, o.investFrom
 FROM money_record AS r
 INNER JOIN online_order AS o ON o.sn = r.osn
 INNER JOIN online_product AS p ON o.online_pid = p.id
 WHERE r.type =2
 AND r.id
 IN (".implode(',' ,ArrayHelper::getColumn($records, 'id')).")")->queryAll();
-                    $data = ArrayHelper::index($data, 'osn');
-                } else {
-                    $data = [];
-                }
-
-                return $this->renderFile('@backend/modules/user/views/user/_money_record.php', [
-                    'recordTypes' => $recordTypes,
-                    'data' => $data,
-                    'dataProvider' => $dataProvider,
-                ]);
-                break;
-            default :
-                break;
+            $data = ArrayHelper::index($data, 'osn');
+        } else {
+            $data = [];
         }
-        return [];
+
+        return $this->renderFile('@backend/modules/user/views/user/_money_record.php', [
+            'recordTypes' => $recordTypes,
+            'data' => $data,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+
+    /**
+     * 获取用户发起债券记录
+     */
+    private function getCreditNote(User $user)
+    {
+        $page = Yii::$app->request->get('page');
+        //获取用户转让统计
+        $txClient = Yii::$container->get('txClient');
+        $noteData = $txClient->get('credit-note/user', [
+            'user_id' => $user->id,
+            'with' => 'list',
+            'page' => intval($page) ? intval($page) : 1,
+            'page_size' => 10,
+        ]);
+
+        $dataProvider = new ArrayDataProvider([
+            'allModels' => $noteData['noteList'],
+        ]);
+        $pages = new Pagination([
+            'totalCount' => $noteData['totalNoteCount'],
+            'pageSize' => 10,
+        ]);
+        $loans = OnlineProduct::find()->where(['in', 'id', ArrayHelper::getColumn($noteData['noteList'], 'loan_id')])->all();
+        $loans = ArrayHelper::index($loans, 'id');
+        return $this->renderFile('@backend/modules/user/views/user/_credit_note.php', [
+            'dataProvider' => $dataProvider,
+            'loans' => $loans,
+            'pages' => $pages,
+        ]);
     }
 
     /**
@@ -160,6 +291,7 @@ IN (".implode(',' ,ArrayHelper::getColumn($records, 'id')).")")->queryAll();
         $ua = $user->borrowAccount;  //获取融资用户账户信息
         $userAff = null;
         $userYuE = $ua['available_balance'];
+
         return $this->render('org_user_detail', [
             'czTime' => $rcMax,
             'czNum' => $recharge['count'],
@@ -188,7 +320,8 @@ IN (".implode(',' ,ArrayHelper::getColumn($records, 'id')).")")->queryAll();
         $order = $uabc->getOrderSuccess($id);
         $ua = $user->lendAccount;    //获取投资用户账户信息
         $userAff = UserAffiliation::findOne(['user_id' => $user->id]);
-        $txRes = Yii::$container->get('txClient')->get('credit-order/records', [
+        $txClient = Yii::$container->get('txClient');
+        $txRes = $txClient->get('credit-order/records', [
             'user_id' => $id,
             'require_list' => false,
         ]);
@@ -208,6 +341,12 @@ IN (".implode(',' ,ArrayHelper::getColumn($records, 'id')).")")->queryAll();
         $tztimeMax = OnlineOrder::find()->where(['status' => OnlineOrder::STATUS_SUCCESS, 'uid' => $id])->max('updated_at');
         $userYuE = $ua['available_balance'];
 
+        //获取用户转让统计
+        $noteData = $txClient->get('credit-note/user', [
+            'user_id' => $user->id,
+            'with' => 'transfer_count,transfer_sum',
+        ]);
+
         return $this->render('detail', [
             'czTime' => $rcMax,
             'czNum' => $recharge['count'],
@@ -225,6 +364,8 @@ IN (".implode(',' ,ArrayHelper::getColumn($records, 'id')).")")->queryAll();
             'creditTotalAmount' => $order['creditTotalAmount'],
             'latestCreditOrderTime' => $order['latestCreditOrderTime'],
             'leiji' => $leiji > 0 ? $leiji : '0.00',
+            'transferCount' => $noteData['transferCount'],
+            'transferSum' => bcdiv($noteData['transferSum'], 100, 2),
         ]);
     }
 
@@ -235,7 +376,7 @@ IN (".implode(',' ,ArrayHelper::getColumn($records, 'id')).")")->queryAll();
      * @param $id
      * @return Response
      */
-    public function actionCreditRecords($id, $type)
+    public function actionCreditRecords($id)
     {
         $user = User::findOne($id);
         $txRes = Yii::$container->get('txClient')->get('credit-order/records', [
@@ -245,14 +386,18 @@ IN (".implode(',' ,ArrayHelper::getColumn($records, 'id')).")")->queryAll();
         ]);
         $loan = OnlineProduct::find()->where(['in', 'id', ArrayHelper::getColumn($txRes['data'], 'loan_id')])->all();
         $loan = ArrayHelper::index($loan, 'id');
-        $pages = new Pagination(['totalCount' => $txRes['totalCount'], 'pageSize' => 10]);
-        return $this->render('credit_records', [
-            'username' => $user->real_name,
-            'txRes' => $txRes,
-            'pages' => $pages,
+        $dataProvider = new ArrayDataProvider([
+            'allModels' => $txRes['data'],
+        ]);
+        $pages = new Pagination([
+            'totalCount' => $txRes['totalCount'],
+            'pageSize' => 10,
+        ]);
+        return $this->renderFile('@backend/modules/user/views/user/credit_records.php', [
+            'user' => $user,
             'loan' => $loan,
-            'id' => $id,
-            'type' => $type,
+            'dataProvider' => $dataProvider,
+            'pages' => $pages,
         ]);
     }
 
