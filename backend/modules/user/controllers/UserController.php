@@ -577,7 +577,12 @@ IN (".implode(',' ,ArrayHelper::getColumn($records, 'id')).")")->queryAll();
      */
     public function actionLenderstats()
     {
-        $data = UserStats::collectLenderData();
+        $where = [];
+        if (Yii::$app->request->get()) {
+            $users = (new UserSearch())->search(Yii::$app->request->get())->all();
+            $where = ['in', 'user.id', ArrayHelper::getColumn($users, 'id')];
+        }
+        $data = UserStats::collectLenderData($where);
         UserStats::createCsvFile($data);
     }
 

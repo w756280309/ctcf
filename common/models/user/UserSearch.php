@@ -9,13 +9,19 @@ class UserSearch extends User
         return [
             'name',
             'mobile',
-            'noInvestDays',
-            'balance',
-            'investCount',
-            'investTotal',
-            'regTime',
+            'noInvestDaysMin',
+            'noInvestDaysMax',
+            'balanceMin',
+            'balanceMax',
+            'investCountMin',
+            'investCountMax',
+            'investTotalMin',
+            'investTotalMax',
+            'regTimeMin',
+            'regTimeMax',
             'regContext',
-            'couponAmount',
+            'couponAmountMin',
+            'couponAmountMax',
         ];
     }
 
@@ -36,46 +42,76 @@ class UserSearch extends User
         //过滤手机号
         $query->andFilterWhere(['like', 'user.mobile', trim($this->mobile)]);
         //过滤 未投资时长
-        $noInvestDays = intval(trim($this->noInvestDays));
-        if ($noInvestDays > 0) {
-            $date = date('Y-m-d', strtotime('- ' . $noInvestDays . ' day'));
+        $noInvestDaysMin = intval(trim($this->noInvestDaysMin));
+        $noInvestDaysMax = intval(trim($this->noInvestDaysMax));
+        if ($noInvestDaysMin > 0 || $noInvestDaysMax > 0) {
             if (!$join_user_info) {
                 $query->leftJoin('user_info', 'user_info.user_id = user.id');
                 $join_user_info = true;
             }
-            $query->andFilterWhere(['<=', 'user_info.lastInvestDate', $date]);
+            if ($noInvestDaysMin > 0) {
+                $date = date('Y-m-d', strtotime('- ' . $noInvestDaysMin . ' day'));
+                $query->andFilterWhere(['<=', 'user_info.lastInvestDate', $date]);
+            }
+            if ($noInvestDaysMax > 0){
+                $date = date('Y-m-d', strtotime('- ' . $noInvestDaysMax . ' day'));
+                $query->andFilterWhere(['>=', 'user_info.lastInvestDate', $date]);
+            }
         }
         //过滤可用余额
-        $balance = floatval(trim($this->balance));
-        if ($balance > 0) {
+        $balanceMin = floatval(trim($this->balanceMin));
+        $balanceMax = floatval(trim($this->balanceMax));
+        if ($balanceMin > 0 || $balanceMax > 0) {
             if (!$join_user_account) {
                 $query->innerJoin('user_account', 'user.id = user_account.uid');
                 $join_user_account = true;
             }
-            $query->andFilterWhere(['>=', 'user_account.available_balance', $balance]);
+            if ($balanceMin > 0) {
+                $query->andFilterWhere(['>=', 'user_account.available_balance', $balanceMin]);
+            }
+            if ($balanceMax > 0) {
+                $query->andFilterWhere(['<=', 'user_account.available_balance', $balanceMax]);
+            }
+
         }
         //过滤投资次数
-        $investCount = intval(trim($this->investCount));
-        if ($investCount > 0) {
+        $investCountMin = intval(trim($this->investCountMin));
+        $investCountMax = intval(trim($this->investCountMax));
+        if ($investCountMin > 0 || $investCountMax > 0) {
             if (!$join_user_info) {
                 $query->leftJoin('user_info', 'user_info.user_id = user.id');
                 $join_user_info = true;
             }
-            $query->andFilterWhere(['>=', 'user_info.investCount', $investCount]);
+            if ($investCountMin > 0) {
+                $query->andFilterWhere(['>=', 'user_info.investCount', $investCountMin]);
+            }
+            if($investCountMax > 0) {
+                $query->andFilterWhere(['<=', 'user_info.investCount', $investCountMax]);
+            }
         }
         //过滤投资总额
-        $investTotal = floatval(trim($this->investTotal));
-        if ($investTotal > 0) {
+        $investTotalMin = floatval(trim($this->investTotalMin));
+        $investTotalMax = floatval(trim($this->investTotalMax));
+        if ($investTotalMin > 0 || $investTotalMax > 0) {
             if (!$join_user_info) {
                 $query->leftJoin('user_info', 'user_info.user_id = user.id');
                 $join_user_info = true;
             }
-            $query->andFilterWhere(['>=', 'user_info.investTotal', $investTotal]);
+            if ($investTotalMin > 0) {
+                $query->andFilterWhere(['>=', 'user_info.investTotal', $investTotalMin]);
+            }
+            if($investTotalMax > 0) {
+                $query->andFilterWhere(['<=', 'user_info.investTotal', $investTotalMax]);
+            }
         }
         //过滤注册时间
-        $regTime = strtotime(trim($this->regTime));
-        if ($regTime > 0) {
-            $query->andFilterWhere(['>=', 'user.created_at', $regTime]);
+        $regTimeMin = strtotime(trim($this->regTimeMin));
+        $regTimeMax = strtotime(trim($this->regTimeMax));
+        if ($regTimeMin > 0) {
+            $query->andFilterWhere(['>=', 'user.created_at', $regTimeMin]);
+        }
+        if ($regTimeMax > 0) {
+            $query->andFilterWhere(['<=', 'user.created_at', $regTimeMax]);
         }
         //过滤注册来源
         $regContext = trim($this->regContext);
@@ -83,8 +119,9 @@ class UserSearch extends User
             $query->andWhere(['user.regContext' => $regContext === 'other' ? '' : $regContext]);
         }
         //过滤代金券
-        $couponAmount = intval(trim($this->couponAmount));
-        if ($couponAmount > 0) {
+        $couponAmountMin = intval(trim($this->couponAmountMin));
+        $couponAmountMax = intval(trim($this->couponAmountMax));
+        if ($couponAmountMin > 0 || $couponAmountMax > 0) {
             if (!$join_user_coupon) {
                 $query->leftJoin('user_coupon', 'user_coupon.user_id = user.id');
                 $join_user_coupon = true;
@@ -95,7 +132,12 @@ class UserSearch extends User
             }
             $query->andFilterWhere(['user_coupon.isUsed' => 1]);
             $query->groupBy('user.id');
-            $query->having(['>=', 'sum(coupon_type.amount)', $couponAmount]);
+            if ($couponAmountMin > 0) {
+                $query->andHaving(['>=', 'sum(coupon_type.amount)', $couponAmountMin]);
+            }
+            if($couponAmountMax > 0) {
+                $query->andHaving(['<=', 'sum(coupon_type.amount)', $couponAmountMax]);
+            }
         }
 
         $query->with('lendAccount');

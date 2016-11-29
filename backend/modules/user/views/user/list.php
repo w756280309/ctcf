@@ -64,25 +64,8 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\we
                                 </td>
                                 <td>
                                     <span class="title">未资时长</span>
-                                    <input type="text" class="m-wrap span4"  name='noInvestDays' value="<?= Yii::$app->request->get('noInvestDays') ?>" placeholder="天数" />
-                                </td>
-                                <td>
-                                    <span class="title">可用余额</span>
-                                    <input type="text"  class="m-wrap span6" name="balance" value="<?= Yii::$app->request->get('balance') ?>"  placeholder="可用余额" />
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <span class="title">投资次数</span>
-                                    <input type="text" name='investCount' value="<?= Yii::$app->request->get('investCount') ?>" placeholder="投资次数" class="m-wrap span4"/>
-                                </td>
-                                <td>
-                                    <span class="title">投资总额</span>
-                                    <input type="text" name='investTotal' value="<?= Yii::$app->request->get('investTotal') ?>" placeholder="投资总额" class="m-wrap span8"/>
-                                </td>
-                                <td>
-                                    <span class="title">注册时间</span>
-                                    <input type="text" class="m-wrap span4"  name='regTime' value="<?= Yii::$app->request->get('regTime') ?>" placeholder="注册时间" onclick="WdatePicker()"/>
+                                    <input type="text" class="m-wrap span4"  name='noInvestDaysMin' value="<?= Yii::$app->request->get('noInvestDaysMin') ?>"  />
+                                    <input type="text" class="m-wrap span4"  name='noInvestDaysMax' value="<?= Yii::$app->request->get('noInvestDaysMax') ?>"  />
                                 </td>
                                 <td>
                                     <span class="title">注册来源</span>
@@ -99,8 +82,31 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\we
                             </tr>
                             <tr>
                                 <td>
+                                    <span class="title">投资次数</span>
+                                    <input type="text" name='investCountMin' value="<?= Yii::$app->request->get('investCountMin') ?>" class="m-wrap span4"/>
+                                    <input type="text" name='investCountMax' value="<?= Yii::$app->request->get('investCountMax') ?>" class="m-wrap span4"/>
+                                </td>
+                                <td>
+                                    <span class="title">投资总额</span>
+                                    <input type="text" name='investTotalMin' value="<?= Yii::$app->request->get('investTotalMin') ?>" class="m-wrap span4"/>
+                                    <input type="text" name='investTotalMax' value="<?= Yii::$app->request->get('investTotalMax') ?>" class="m-wrap span4"/>
+                                </td>
+                                <td>
+                                    <span class="title">可用余额</span>
+                                    <input type="text"  class="m-wrap span4" name="balanceMin" value="<?= Yii::$app->request->get('balanceMin') ?>" />
+                                    <input type="text"  class="m-wrap span4" name="balanceMax" value="<?= Yii::$app->request->get('balanceMax') ?>" />
+                                </td>
+                                <td>
+                                    <span class="title">注册时间</span>
+                                    <input type="text" class="m-wrap span4"  name='regTimeMin' value="<?= Yii::$app->request->get('regTimeMin') ?>"  onclick="WdatePicker()"/>
+                                    <input type="text" class="m-wrap span4"  name='regTimeMax' value="<?= Yii::$app->request->get('regTimeMax') ?>"  onclick="WdatePicker()"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
                                     <span class="title">已用代金券</span>
-                                    <input type="text" class="m-wrap span6"  name='couponAmount' value="<?= Yii::$app->request->get('couponAmount') ?>" placeholder="已用代金券"/>
+                                    <input type="text" class="m-wrap span4"  name='couponAmountMin' value="<?= Yii::$app->request->get('couponAmountMin') ?>"/>
+                                    <input type="text" class="m-wrap span4"  name='couponAmountMax' value="<?= Yii::$app->request->get('couponAmountMax') ?>"/>
                                 </td>
                                 <td></td>
                                 <td></td>
@@ -115,7 +121,7 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\we
                                 </td>
                                 <td colspan="3">
                                     <div align="right" class="search-btn">
-                                        <a class="btn green btn-block" style="width: 140px;" href="/user/user/lenderstats">导出投资会员信息</a>
+                                        <a class="btn green btn-block" style="width: 140px;" href="/user/user/lenderstats?<?= http_build_query(Yii::$app->request->get())?>">导出投资会员信息</a>
                                     </div>
                                 </td>
                             </tr>
