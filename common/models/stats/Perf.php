@@ -38,6 +38,9 @@ use yii\helpers\ArrayHelper;
  * @property integer $created_at    统计时间
  * @property integer $investAndLogin    已投用户登录
  * @property integer $notInvestAndLogin 未投用户登录
+ * @property double  $repayMoney          回款金额
+ * @property int     $repayLoanCount      回款项目数
+ * @property int     $repayUserCount      回款人数
  */
 class Perf extends ActiveRecord
 {
@@ -272,7 +275,7 @@ class Perf extends ActiveRecord
         $today = [];
         $model = new Perf();
         $today['bizDate'] = $startDate;
-        $funList = ['reg', 'idVerified', 'qpayEnabled', 'investor', 'newRegisterAndInvestor', 'newInvestor', 'chargeViaPos', 'chargeViaEpay', 'drawAmount', 'investmentInWyj', 'investmentInWyb', 'totalInvestment', 'successFound', 'rechargeMoney', 'rechargeCost', 'draw', 'investAndLogin', 'notInvestAndLogin'];
+        $funList = ['reg', 'idVerified', 'qpayEnabled', 'investor', 'newRegisterAndInvestor', 'newInvestor', 'chargeViaPos', 'chargeViaEpay', 'drawAmount', 'investmentInWyj', 'investmentInWyb', 'totalInvestment', 'successFound', 'rechargeMoney', 'rechargeCost', 'draw', 'investAndLogin', 'notInvestAndLogin', 'repayMoney', 'repayLoanCount', 'repayUserCount'];
         foreach ($funList as $field) {
             $method = 'get' . ucfirst($field);
             $model->$field = $model->{$method}($startDate);
@@ -368,5 +371,34 @@ class Perf extends ActiveRecord
             $startDate = (new \DateTime($startDate))->add(new \DateInterval('P1M'))->format('Y-m');
         }
         return $result;
+    }
+
+    //统计每天回款总金额
+    public function getRepayMoney($date)
+    {
+        $sql = "SELECT SUM(  `benxi` ) FROM  `online_repayment_plan`  WHERE FROM_UNIXTIME( `refund_time` ) =  :date";
+        return Yii::$app->db->createCommand($sql,['date' => $date])->queryScalar();
+    }
+
+    //统计每天回款项目
+    public function getRepayLoanCount($date)
+    {
+        $sql = "SELECT count(distinct `online_pid`) FROM  `online_repayment_plan`  WHERE FROM_UNIXTIME( `refund_time` ) =  :date";
+        return Yii::$app->db->createCommand($sql,['date' => $date])->queryScalar();
+    }
+
+    //统计每天回款用户数
+    public function getRepayUserCount($date)
+    {
+        $sql = "SELECT count(distinct `uid` ) FROM  `online_repayment_plan`  WHERE FROM_UNIXTIME( `refund_time` ) =  :date";
+        return Yii::$app->db->createCommand($sql,['date' => $date])->queryScalar();
+    }
+
+    //获取每日还款的用户ID
+    public function getDayRepayUser($date)
+    {
+        $sql = "SELECT distinct `uid` FROM  `online_repayment_plan`  WHERE FROM_UNIXTIME( `refund_time` ) =  :date";
+        $data = Yii::$app->db->createCommand($sql,['date' => $date])->queryAll();
+        return ArrayHelper::getColumn($data, 'uid');
     }
 }

@@ -146,6 +146,25 @@ use yii\grid\GridView;
                         return intval($data['successFound']);
                     }
                 ],
+                [
+                    'label' => '回款金额',
+                    'value' => function ($data) {
+                        return number_format($data['repayMoney'], 2);
+                    }
+                ],
+                [
+                    'label' => '回款用户数',
+                    'format' => 'html',
+                    'value' => function ($data) {
+                        return '<a href="/datatj/datatj/list?type=day&field=repayUser&date='.$data['bizDate'].'">'.intval($data['repayUserCount']).'</a>';
+                    }
+                ],
+                [
+                    'label' => '回款项目数',
+                    'value' => function ($data) {
+                        return intval($data['repayLoanCount']);
+                    }
+                ],
             ],
             'tableOptions' => ['class' => 'table table-striped table-bordered table-advance table-hover']
         ]) ?>
