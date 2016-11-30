@@ -59,7 +59,6 @@ $status = Yii::$app->request->get('status');
                     $loanRate = $loanRate.'+'.\common\utils\StringUtils::amountFormat2($loan->jiaxi).'%';
                 }
                 $refundMethod = Yii::$app->params['refund_method'][$loan->refund_method];
-                $loanStatus = Yii::$app->params['deal_status'][$record->status];
                 $detailUrl = rtrim(Yii::$app->params['clientOption']['host']['frontend'], '/') . '/deal/deal/detail?sn='.$loan->sn;
 
                 $html = <<<HTML
@@ -75,7 +74,6 @@ $status = Yii::$app->request->get('status');
         <tr><td><span>期限:</span>$expires</td></tr>
         <tr><td><span>项目利率:</span>$loanRate</td></tr>
         <tr><td><span>还款方式:</span>$refundMethod</td></tr>
-        <tr><td><span>项目状态:</span>$loanStatus</td></tr>
         <tr><td> <a href="$detailUrl" target="_blank" class="btn">查看更多</a></td></tr>
     </table>
 </div>
@@ -138,11 +136,11 @@ HTML;
             'label' => '订单状态',
             'value' => function ($record){
                 if ($record->status === 0){
-                    $res = '未支付';
+                    $res = '投标失败';
                 } elseif ($record->status === 1) {
                     $res = '投标成功';
                 } elseif ($record->status === 2) {
-                    $res = '投标失败';
+                    $res = '撤标';
                 } else {
                     $res = '---';
                 }
@@ -167,6 +165,7 @@ HTML;
         $('.loan_title').click(function () {
             var _this = $(this);
             var detail = _this.parent().find('.loan_detail').eq(0);
+            $('.loan_detail').not(detail).hide();
             if (detail.css('display') == 'block') {
                 detail.hide();
                 _this.removeClass('btn-primary');
