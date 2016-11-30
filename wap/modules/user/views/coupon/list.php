@@ -45,7 +45,7 @@ $this->registerJs('var tp=' . $header->pageCount . ';', 1);
                         </div>
                         <div class="d_height"></div>
                         <div class="c_height">
-                            <p  class="condition1">所有项目可用</p>
+                            <p  class="condition1">新手标、转让不可用</p>
                         </div>
                     </div>
                 </div>

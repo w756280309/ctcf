@@ -201,7 +201,7 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/useraccount/chargedeposit.css');
                                                         <p>
                                                             单笔投资满<?= StringUtils::amountFormat1('{amount}{unit}', $v->couponType->minInvest) ?>可用</p>
                                                         <p  class="coupon_name" style="display: none"> 单笔投资满<?= StringUtils::amountFormat1('{amount}{unit}', $v->couponType->minInvest) ?>可抵扣<?= $v->couponType->amount ?>元</p>
-                                                        <p>所有项目可用</p>
+                                                        <p>新手标、转让不可用</p>
                                                         <p>有效期至<?= $v->expiryDate ?></p>
                                                     </div>
                                                 </div>

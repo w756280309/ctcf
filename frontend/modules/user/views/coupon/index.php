@@ -44,7 +44,7 @@ use common\widgets\Pager;
                         单笔投资满<?= StringUtils::amountFormat1('{amount}{unit}', $val->couponType->minInvest) ?>可用；
                         <?php
                             if (empty($val->couponType->loanCategories)) {
-                                echo '所有';
+                                echo '新手标、转让不可用';
                             } else {
                                 $arr = array_filter(explode(',', $val->couponType->loanCategories));
 
@@ -52,9 +52,9 @@ use common\widgets\Pager;
                                     $arr[$k] = \Yii::$app->params['pc_cat'][$v];
                                 }
 
-                                echo implode('、', $arr);
+                                echo implode('、', $arr).'项目可用';
                             }
-                         ?>项目可用；
+                         ?>；
                     </td>
                     <td><?= date('Y-m-d', $val->created_at) ?>至<?= $val->expiryDate ?></td>
                     <td>
