@@ -598,10 +598,13 @@ IN (".implode(',' ,ArrayHelper::getColumn($records, 'id')).")")->queryAll();
      */
     public function actionLenderstats()
     {
+        @ini_set('memory_limit','256M');
         $where = [];
-        if (Yii::$app->request->get()) {
-            $users = (new UserSearch())->search(Yii::$app->request->get())->all();
-            $where = ['in', 'user.id', ArrayHelper::getColumn($users, 'id')];
+        if (Yii::$app->request->get('search')) {
+            $users = (new UserSearch())->search(Yii::$app->request->get())->select('id')->asArray()->all();
+            if (count($users) > 0) {
+                $where = ['in', 'user.id', ArrayHelper::getColumn($users, 'id')];
+            }
         }
         $data = UserStats::collectLenderData($where);
         UserStats::createCsvFile($data);

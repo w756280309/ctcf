@@ -50,6 +50,7 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\we
         <!--search start-->
         <div class="portlet-body">
             <form action="/user/user/<?=$category==1?"listt":"listr"?>" method="get" target="_self">
+                <input type="hidden" name="search" value="user_list"/>
                 <table class="table search_form">
                     <tbody>
                         <?php if($category==User::USER_TYPE_PERSONAL){ ?>
