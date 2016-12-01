@@ -73,6 +73,9 @@ return [
         'credit' => [
             'class' => 'wap\modules\credit\Module',
         ],
+        'mall' => [
+            'class' => 'wap\modules\mall\Module',
+        ],
     ],
     'params' => $params,
     'as requestBehavior' => [
