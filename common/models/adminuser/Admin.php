@@ -64,7 +64,12 @@ class Admin extends \yii\db\ActiveRecord implements IdentityInterface
             ['status', 'default', 'value' => self::STATUS_ACTIVE, 'on' => 'register'],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
             [['username', 'email'], 'trim'],
-            [['username', 'email', 'role_sn', 'auths'], 'required', 'on' => 'register'],
+            [['username', 'email', 'role_sn'], 'required', 'on' => 'register'],
+            ['auths', 'required', 'when' => function($model) {
+                return 'R001' !== $model->role_sn;
+            }, 'whenClient' => "function (attribute, value) {
+                return $('#admin-role_sn').val() !== 'R001';
+            }", 'on' => 'register'],
             [['role_sn'], 'compare', 'compareValue' => 0, 'operator' => '!=', 'message' => '请选择角色!'],
             ['email', 'email', 'message' => ' 必须为email格式', 'on' => 'register'],
             [['status'], 'integer', 'on' => 'register'],

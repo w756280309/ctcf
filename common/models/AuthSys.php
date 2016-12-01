@@ -4,6 +4,7 @@ namespace common\models;
 
 use common\models\adminuser\Auth;
 use common\models\adminuser\AdminAuth;
+use common\models\adminuser\Permission;
 use Yii;
 
 class AuthSys
@@ -34,33 +35,40 @@ class AuthSys
     const LIST_RULE_USER_CREATE = '23';  //会员列表——创建融资账户
     const LIST_RULE_CHECKOUDER = '24'; //产品管理——线上标的管理——查看订单
 
-    public static function checkAuth($code = "")
+    public static function checkAuth()
     {
         $admin = Yii::$app->user->getIdentity();
-        $admin_id = $admin->id;
 
-        if ($admin_id == Yii::$app->params['admin']) {
+        if ('R001' === $admin->role_sn) {
             return true;
         }
 
-        return \common\models\adminuser\Permission::checkAuthByPath($admin_id, \Yii::$app->requestedRoute);
+        return Permission::checkAuthByPath($admin->id, \Yii::$app->requestedRoute);
     }
 
     /**
      * @param type $psn
      * @return type根据父sn获取子菜单
      */
-    public static function getMenus($psn = "0")
+    public static function getMenus($psn = '0')
     {
         $admin = Yii::$app->user->getIdentity();
-        $admin_id = $admin->id;
-        $db = Yii::$app->db;
 
-        $auth_table = Auth::tableName();
-        $admin_auth_table = AdminAuth::tableName();
-        $sql = AdminAuth::find()->innerJoin($auth_table, $admin_auth_table.".auth_sn=".$auth_table.".sn")
-                ->where(['admin_id' => $admin_id, $auth_table.'.psn' => $psn])->select("$auth_table.auth_name,$auth_table.psn,auth_sn,path")->createCommand()->getRawSql();
-        $menus = $db->createCommand($sql)->queryAll();
+        if ('R001' === $admin->role_sn) {
+            $menus = Auth::find()
+                ->where(['psn' => $psn])
+                ->asArray()
+                ->all();
+        } else {
+            $auth_table = Auth::tableName();
+            $admin_auth_table = AdminAuth::tableName();
+            $menus = AdminAuth::find()
+                ->innerJoin($auth_table, "$admin_auth_table.auth_sn = $auth_table.sn")
+                ->where(["admin_id" => $admin->id, "$auth_table.psn" => $psn])
+                ->select("$auth_table.auth_name, $auth_table.psn, auth_sn, path")
+                ->asArray()
+                ->all();
+        }
 
         return $menus;
     }
