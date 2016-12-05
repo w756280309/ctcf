@@ -36,7 +36,7 @@ $this->share = $share;
 </script>
 
 <div class="banner">
-    <img src="<?= ASSETS_BASE_URI ?>promo/1611/newuser/images/banner.png" alt="">
+    <img src="<?= ASSETS_BASE_URI ?>promo/1611/newuser/images/new_banner.jpg" alt="">
 </div>
 <div class="active">
     <img src="<?= ASSETS_BASE_URI ?>promo/1611/newuser/images/active.png" alt="">
