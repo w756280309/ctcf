@@ -601,7 +601,7 @@ IN (".implode(',' ,ArrayHelper::getColumn($records, 'id')).")")->queryAll();
         @ini_set('memory_limit','256M');
         $where = [];
         if (Yii::$app->request->get('search')) {
-            $users = (new UserSearch())->search(Yii::$app->request->get())->select('id')->asArray()->all();
+            $users = (new UserSearch())->search(Yii::$app->request->get())->select('user.id')->asArray()->all();
             if (count($users) > 0) {
                 $where = ['in', 'user.id', ArrayHelper::getColumn($users, 'id')];
             }
