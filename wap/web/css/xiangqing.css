@@ -212,6 +212,51 @@ i,em {
     padding-left: 20px;
     background: url("../images/tubiao.png") no-repeat -3px -116px;
 }
+
+/*视频的增加*/
+.col-zero{
+    margin:0;
+    padding:0;
+}
+.biaodi-video{
+    margin-top:20px;
+    background:#fff;
+    width:100%;
+    position:relative;
+    z-index:2;
+    margin-bottom:-5px;
+}
+.biaodi-video .play-img {
+    position: absolute;
+    left: 50%;
+    top: 60%;
+    margin-left: -16px;
+    margin-top: -16px;
+    z-index: 5;
+    display: none;
+}
+.biaodi-video .play-img img {
+    width: 32px;
+    height: 32px;
+}
+.biaodi-video .video-title{
+    font-size:16px;
+    margin:12px 0;
+    padding:0 20px;
+    line-height:18px;
+    max-height:36px;
+    overflow:hidden;
+
+}
+.biaodi-video .video-wrap{
+    width:100%;
+    background:#e7eaf1;
+}
+.biaodi-video .video-wrap .video{
+    width:100%;
+    object-fit: initial;
+}
+
 .tabs {
     height: 36px;
     border-radius: 6px;

@@ -482,3 +482,16 @@ a.index-notice-login:link {
 a.more-msg:hover {
     color: #f27277;
 }
+.phone {
+    padding-bottom:0.36rem;
+    text-align: center;
+    background-color: #eee;
+}
+.phone img {
+    vertical-align: middle;
+    width:0.61333rem;
+}
+.phone a {
+    font-size:0.48rem;
+    color: #999;
+}

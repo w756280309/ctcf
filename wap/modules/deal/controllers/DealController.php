@@ -1,16 +1,15 @@
 <?php
 namespace app\modules\deal\controllers;
 
-use Yii;
-use yii\web\Controller;
-use yii\data\Pagination;
+use common\controllers\HelpersTrait;
+use common\models\product\Issuer;
 use common\models\product\OnlineProduct;
 use common\models\order\OnlineOrder;
 use common\service\PayService;
-use common\controllers\HelpersTrait;
 use common\utils\StringUtils;
-use common\models\product\RateSteps;
-use yii\web\NotFoundHttpException;
+use Yii;
+use yii\web\Controller;
+use yii\data\Pagination;
 
 class DealController extends Controller
 {
@@ -61,8 +60,6 @@ class DealController extends Controller
 
     /**
      * 标的详情页面.
-     * @param type $sn
-     * @return type
      */
     public function actionDetail($sn)
     {
@@ -70,30 +67,26 @@ class DealController extends Controller
             throw new \yii\web\ServerErrorHttpException('标的编号不能为空');
         }
 
-        $deals = OnlineProduct::findOne(['online_status' => OnlineProduct::STATUS_ONLINE, 'del_status' => OnlineProduct::STATUS_USE, 'sn' => $sn]);
-        if (null === $deals) {   //对象没有查到时,抛出异常
-            throw new NotFoundHttpException();
-        }
+        $deal = $this->findOr404(OnlineProduct::class, [
+            'online_status' => OnlineProduct::STATUS_ONLINE,
+            'del_status' => OnlineProduct::STATUS_USE,
+            'sn' => $sn,
+        ]);
+        $user = $this->getAuthedUser();
+
         //未登录或者登录了，但不是定向用户的情况下，报404
-        if (1 === $deals->isPrivate) {
+        if (1 === $deal->isPrivate) {
             if (Yii::$app->user->isGuest) {
-                throw new NotFoundHttpException();
+                throw $this->ex404();
             } else {
-                $uids = explode(',', $deals->allowedUids);
-                if (!in_array(Yii::$app->user->identity->getId(), $uids)) {
-                    throw new NotFoundHttpException();
+                $uids = explode(',', $deal->allowedUids);
+                if (!in_array($user->id, $uids)) {
+                    throw $this->ex404();
                 }
             }
         }
 
-        $orderbalance = $deals->getLoanBalance(); //项目可投余额
-
-        if ($deals->status == OnlineProduct::STATUS_PRE) {
-            $start = Yii::$app->functions->getDateDesc($deals->start_date);
-            $deals->start_date = $start['desc'].date('H:i', $start['time']);
-        }
-
-        return $this->render('detail', ['deal' => $deals, 'deal_balace' => $orderbalance]);
+        return $this->render('detail', ['deal' => $deal, 'user' => $user]);
     }
 
     /**

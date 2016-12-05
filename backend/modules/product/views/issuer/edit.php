@@ -70,7 +70,7 @@ $this->title = '发行方'.$btnDesc;
             <div class="control-group">
                 <label class="control-label">视频示例图</label>
                 <div class="controls">
-                    <?= $form->field($issuer, 'imgUrl', ['template' => '{input}<span class="notice">*图片上传格式必须为PNG或JPG，尺寸限定为：宽750px，高340px</span>'])->fileInput() ?>
+                    <?= $form->field($issuer, 'imgUrl', ['template' => '{input}<span class="notice">*图片上传格式必须为PNG或JPG，尺寸限定为：宽750px，高420px</span>'])->fileInput() ?>
                     <?= $form->field($issuer, 'imgUrl', ['template' => '{error}']) ?>
                 </div>
                 <?php if (!empty($issuer->imgUrl)) { ?>

@@ -2,14 +2,16 @@
 
 namespace app\controllers;
 
+use common\controllers\HelpersTrait;
+use common\models\product\Issuer;
+use common\models\Upload;
 use yii;
 use yii\web\Controller;
-use common\controllers\HelpersTrait;
-use common\models\Upload;
 
 class UploadController extends Controller
 {
     use HelpersTrait;
+
     public function actionShowpic($id)
     {
         $this->layout = false;
@@ -22,5 +24,17 @@ class UploadController extends Controller
         }
 
         return $this->render("@wap/views/showpic.php", ['model'=>$model]);
+    }
+
+    /**
+     * 发行商视频展示.
+     */
+    public function actionIssuerVideo()
+    {
+        $issuers = Issuer::find()
+            ->where(['is not', 'video_id', null])
+            ->all();
+
+        return $this->render('issuer_video', ['issuers' => $issuers]);
     }
 }

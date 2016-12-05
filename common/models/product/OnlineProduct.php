@@ -887,19 +887,17 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
         return $res;
     }
 
-    //获取发行方名称
-    public function getIssuerName()
+    /**
+     * 获取发行方名称.
+     */
+    public function getIssuerInfo()
     {
-        if ($this->issuer) {
-            $issuer = Issuer::findOne($this->issuer);
-            if ($issuer) {
-                return $issuer->name;
-            }
-        }
-        return null;
+        return $this->hasOne(Issuer::class, ['id'=> 'issuer']);
     }
 
-    //获取标的的融资用户名称
+    /**
+     * 获取标的的融资用户名称.
+     */
     public function getAffiliatorName()
     {
         if ($this->borrow_uid) {

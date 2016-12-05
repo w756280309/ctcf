@@ -261,7 +261,7 @@ trait ContractTrait
                     'loanTitle' => $loan->title,
                     'loanOrderPrincipal' => $prevOrderAmount,
                     'creditOrderPrincipal' => bcdiv($creditOrder['principal'], 100, 2),
-                    'loanIssuer' => $loan->getIssuerName(),
+                    'loanIssuer' => $loan->issuerInfo ? $loan->issuerInfo->name : null,
                     'affiliator' => $loan->getAffiliatorName(),
                     'exceptRaisedAmount' => $loan->money,
                     'incrAmount' => $loan->start_money,

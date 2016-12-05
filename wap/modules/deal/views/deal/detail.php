@@ -4,11 +4,13 @@ $this->title = '项目详情';
 use common\models\product\RateSteps;
 use common\view\LoanHelper;
 use common\utils\StringUtils;
+use wap\assets\WapAsset;
+use yii\helpers\HtmlPurifier;
+
+$this->registerCssFile(ASSETS_BASE_URI.'css/xiangqing.css?v=20161205', ['depends' => WapAsset::class, 'position' => 1]);
 
 ?>
-<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/xiangqing.css?v=20161104">
 
-<!--xiangqing-->
 <div class="row column">
     <div class="hidden-xs col-sm-1"></div>
     <div class="col-xs-12 col-sm-10 column-title"><span><?=$deal->title?></span></div>
@@ -42,7 +44,7 @@ use common\utils\StringUtils;
 
 <div class="row shuju">
     <div class="col-xs-9 amt">
-        <span><?= $deal->status == 1 ? StringUtils::amountFormat1('{amount}{unit}', $deal->money) : StringUtils::amountFormat2($deal_balace).'元' ?></span><i>/<?= StringUtils::amountFormat1('{amount}{unit}', $deal->money) ?></i>
+        <span><?= $deal->status == 1 ? StringUtils::amountFormat1('{amount}{unit}', $deal->money) : StringUtils::amountFormat2($deal->getLoanBalance()).'元' ?></span><i>/<?= StringUtils::amountFormat1('{amount}{unit}', $deal->money) ?></i>
         <div>可投余额/项目总额</div>
     </div>
     <div class="col-xs-2 progress-detail">
@@ -123,6 +125,23 @@ use common\utils\StringUtils;
     <?php } ?>
 <?php } ?>
 
+<!--视频的增加-->
+<?php if ($deal->issuerInfo && $deal->issuerInfo->video) { ?>
+    <div class="row biaodi-video">
+        <div class="play-img img-responsive center-block" id="play-img">
+            <img src="<?= ASSETS_BASE_URI ?>images/credit/loading.gif">
+        </div>
+        <p class="video-title col-xs-12 col-sm-12 col-zero"><?= $deal->issuerInfo->mediaTitle ?></p>
+        <div id="video-wrap" class="video-wrap col-xs-12 col-sm-12 col-zero">
+            <video id="video" class="video"
+                   webkit-playsinline playsinline controls preload="none"
+                   poster="<?= $deal->issuerInfo->videoImg ? UPLOAD_BASE_URI.$deal->issuerInfo->videoImg->uri : '' ?>"
+                   src="<?= $deal->issuerInfo->video->uri ?>">
+            </video>
+        </div>
+    </div>
+<?php } ?>
+
 <div class="row tab">
     <div class="col-xs-1"></div>
     <div class="col-xs-10 tabs">
@@ -134,8 +153,7 @@ use common\utils\StringUtils;
 <div class="row tab-conten">
     <div class="col-xs-1"></div>
     <div class="col-xs-10">
-        <?=  \yii\helpers\HtmlPurifier::process($deal->description) ?>
-
+        <?= HtmlPurifier::process($deal->description) ?>
         <p style="margin-top: 1em; padding-bottom: 0.5em; font-size: 12px; color: #bababf;">*理财非存款，产品有风险，投资须谨慎</p>
     </div>
     <div class="col-xs-1"></div>
@@ -154,10 +172,7 @@ use common\utils\StringUtils;
     <div class="col-xs-1"></div>
 </div>
 
-<?php if($deal->status == 2) { ?>
-    <?php
-        $user = Yii::$app->user->identity;
-    ?>
+<?php if(2 === $deal->status) { ?>
     <?php if (null !== $user && $deal->is_xs && $user->xsCount() >= Yii::$app->params['xs_trade_limit']) { ?>
         <div class="row huankuang">
             <div class="col-xs-1"></div>
@@ -177,12 +192,38 @@ use common\utils\StringUtils;
 <?php } else { ?>
     <div class="row huankuang">
         <div class="col-xs-1"></div>
-        <div class="col-xs-10"><?=  Yii::$app->params['deal_status'][$deal->status]?><?= $deal->status == 1?"(".$deal->start_date."开始)":"" ?></div>
+        <div class="col-xs-10">
+            <?=  Yii::$app->params['deal_status'][$deal->status] ?>
+            <?php
+                if (1 === $deal->status) {
+                    $start = Yii::$app->functions->getDateDesc($deal->start_date);
+                    echo $start['desc'].date('H:i', $start['time']).'开始';
+                }
+            ?>
+        </div>
         <div class="col-xs-1"></div>
     </div>
 <?php } ?>
 
 <script>
+    window.onload = function () {
+        var videoDiv = document.getElementById('video');
+        var playImg = document.getElementById('play-img');
+        videoDiv.onclick = function() {
+            if (this.paused) {
+                this.play();
+            } else {
+                this.pause();
+            }
+        }
+        videoDiv.onwaiting = function() {
+            playImg.style.display = 'block';
+        }
+        videoDiv.oncanplay = function() {
+            playImg.style.display = 'none';
+        }
+    }
+
     $(function() {
         $('.tabs div').click(function() {
             var index = $('.tabs div').index(this);
@@ -196,6 +237,7 @@ use common\utils\StringUtils;
                 $('.touzi-box').css({display:'none'});
             }
         })
+
         pid = '<?=$deal->id;?>';
         $.get('/deal/deal/orderlist',{pid:pid},function(data){
             html = "";

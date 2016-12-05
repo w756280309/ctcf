@@ -224,7 +224,6 @@
     top:-7px;
     z-index: 1;
 }
-
 .link-box {
     margin-top: 10px;
     margin-bottom: 50px;
@@ -305,6 +304,7 @@
 
 .red-gray {
     background: #f7958d!important;
+    z-index:10;
 }
 /*daojishi*/
 .daojishi .col-xs-12 {

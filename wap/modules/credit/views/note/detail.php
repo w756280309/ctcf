@@ -16,11 +16,10 @@ $nowTime = new \DateTime();
 $endTime = new \DateTime($respData['endTime']);
 $isClosed = $respData['isClosed'] || $nowTime >= $endTime;
 
-$this->registerCssFile(ASSETS_BASE_URI.'css/credit/detail.css', ['depends' => 'wap\assets\WapAsset']);
+$this->registerCssFile(ASSETS_BASE_URI.'css/credit/detail.css?v=20161205', ['depends' => 'wap\assets\WapAsset']);
 $this->registerJs('var remainTime = '.strtotime($isClosed ? 'now' : $respData['endTime']).';', 1);
 $this->registerJsFile(ASSETS_BASE_URI.'js/credit/detail.js?v=161027', ['depends' => 'wap\assets\WapAsset']);
 ?>
-
 <div class="row daojishi">
     <div class="col-xs-12">
         <div><!--距离结束：2天7时22分18秒--></div>

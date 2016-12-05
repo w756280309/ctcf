@@ -10,7 +10,7 @@ use wap\assets\WapAsset;
 use yii\web\JqueryAsset;
 
 $this->registerCssFile(ASSETS_BASE_URI.'css/swiper.min.css', ['depends' => WapAsset::class]);
-$this->registerCssFile(ASSETS_BASE_URI.'css/wap_index.css?v=20161124', ['depends' => WapAsset::class]);
+$this->registerCssFile(ASSETS_BASE_URI.'css/wap_index.css?v=20161205', ['depends' => WapAsset::class]);
 $this->registerCssFile(ASSETS_BASE_URI.'css/kaipin.css?=20161104', ['depends' => WapAsset::class]);
 $this->registerJsFile(ASSETS_BASE_URI.'js/swiper.min.js', ['depends' => JqueryAsset::class, 'position' => 1]);
 $this->registerJsFile(ASSETS_BASE_URI.'js/lib.flexible/lib.flexible.js', ['depends' => JqueryAsset::class, 'position' => 1]);
@@ -72,9 +72,9 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/index.js?v=20161021', ['depends' => Jq
                 </a>
             </li>
             <li class="rg">
-                <a href="/site/advantage">
-                    <img src="<?= ASSETS_BASE_URI ?>images/index/strand.png" alt="">
-                    <p>严苛风控标准</p>
+                <a href="/upload/issuer-video">
+                    <img src="<?= ASSETS_BASE_URI ?>images/index/strand.png?v=20161121" alt="">
+                    <p>项目视频介绍</p>
                 </a>
             </li>
         </ul>
@@ -219,7 +219,15 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/index.js?v=20161021', ['depends' => Jq
         </div>
     </div>
 </div>
+
 <!--bottom结束-->
+<div class="phone">
+    <a href="tel:400-101-5151">
+        <img src="<?= ASSETS_BASE_URI ?>images/index/phone.png?v=20161121" alt="">
+        400-101-5151
+    </a>
+</div>
+
 <script>
     function closeAdv()
     {

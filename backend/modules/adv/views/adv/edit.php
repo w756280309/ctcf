@@ -133,7 +133,7 @@ $this->registerJsFile('/js/swfupload/handlers.js', ['depends' => 'yii\web\YiiAss
                     <?= $form->field($share, 'description', ['template' => '{error}']) ?>
                 </div>
                 <div class="controls">
-                    <?= $form->field($share, 'imgUrl', ['template' => '{input}', 'inputOptions' => ['autocomplete' => "off", 'class' => 'm-wrap span12', 'placeholder' => '图片地址']])->textInput() ?>
+                    <?= $form->field($share, 'imgUrl', ['template' => '{input}', 'inputOptions' => ['autocomplete' => "off", 'class' => 'm-wrap span12', 'placeholder' => '图片地址，图片大小为300*300']])->textInput() ?>
                     <?= $form->field($share, 'imgUrl', ['template' => '{error}']) ?>
                 </div>
                 <div class="controls">

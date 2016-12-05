@@ -2,6 +2,7 @@
 
 namespace common\models\product;
 
+use common\models\media\Media;
 use yii\db\ActiveRecord;
 
 /**
@@ -30,8 +31,8 @@ class Issuer extends ActiveRecord
             ['videoUrl', 'url'],
             ['videoUrl', 'match', 'pattern' => '/^[a-zA-Z0-9.:\/_-]+$/', 'message' => '{attribute}不应包含特殊字符,如中文等'],   //链接可以包含数字,字母,和一些特殊字符,如.:/_-
             ['imgUrl', 'image', 'skipOnEmpty' => true, 'extensions' => 'png, jpg'],
-            ['imgUrl', 'image', 'skipOnEmpty' => true, 'maxHeight' => 340, 'overHeight' => '{attribute}的高度应为340px'],
-            ['imgUrl', 'image', 'skipOnEmpty' => true, 'minHeight' => 340, 'underHeight' => '{attribute}的高度应为340px'],
+            ['imgUrl', 'image', 'skipOnEmpty' => true, 'maxHeight' => 420, 'overHeight' => '{attribute}的高度应为420px'],
+            ['imgUrl', 'image', 'skipOnEmpty' => true, 'minHeight' => 420, 'underHeight' => '{attribute}的高度应为420px'],
             ['imgUrl', 'image', 'skipOnEmpty' => true, 'maxWidth' => 750, 'overWidth' => '{attribute}的宽度应为750px'],
             ['imgUrl', 'image', 'skipOnEmpty' => true, 'minWidth' => 750, 'underWidth' => '{attribute}的宽度应为750px'],
         ];
@@ -49,5 +50,21 @@ class Issuer extends ActiveRecord
             'videoUrl' => '视频地址',
             'imgUrl' => '视频示例图',
         ];
+    }
+
+    /**
+     * 获取发行商视频信息.
+     */
+    public function getVideo()
+    {
+        return $this->hasOne(Media::class, ['id' => 'video_id']);
+    }
+
+    /**
+     * 获取发行商视频示例图.
+     */
+    public function getVideoImg()
+    {
+        return $this->hasOne(Media::class, ['id' => 'videoCover_id']);
     }
 }
