@@ -144,9 +144,15 @@ class ProductonlineController extends BaseController
         $loan = $this->findOr404(OnlineProduct::class, $id);
         $umpResp = Yii::$container->get('ump')->getLoanInfo($loan->id);
 
+        if ($umpResp->isSuccessful()) {
+            $balance = bcdiv($umpResp->get('balance'), 100, 2);
+        } else {
+            $balance = 0;
+        }
+
         return $this->render('show', [
             'loan' => $loan,
-            'balance' => bcdiv($umpResp->get('balance'), 100, 2),
+            'balance' => $balance,
         ]);
     }
 
