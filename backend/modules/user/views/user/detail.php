@@ -7,6 +7,47 @@ $this->title = '用户详情';
 ?>
 
 <?php $this->beginBlock('blockmain'); ?>
+
+<style type="text/css">
+    .breadcrumb_detail {
+        font-size: 14px;
+        padding: 8px 15px;
+        margin: 0 5px 20px;
+        list-style: none;
+        -webkit-border-radius: 4px;
+        -moz-border-radius: 4px;
+        border-radius: 4px;
+    }
+    .breadcrumb_detail>li {
+        width: 300px;
+        display: inline-block;
+        *display: inline;
+        text-shadow: 0 1px 0 #fff;
+        *zoom: 1;
+        margin-bottom: 10px;
+    }
+    .breadcrumb_detail>li>span {
+        width: 120px;
+        font-weight: bold;
+        margin: 0 20px;
+        display: inline-block;
+        *display: inline;
+        text-shadow: 0 1px 0 #fff;
+        *zoom: 1;
+    }
+    .detail_font{
+        width: 200px;
+        margin-bottom: 15px;
+        font-family: 微软雅黑;
+        font-weight: bold;
+        font-size: 15px;
+        color: blue;
+    }
+    #list_nav li {
+        cursor: pointer;
+    }
+</style>
+
 <div class="container-fluid">
     <!-- BEGIN PAGE HEADER-->
     <div class="row-fluid">
@@ -25,96 +66,123 @@ $this->title = '用户详情';
                     <i class="icon-angle-right"></i>
                 </li>
                 <li>
-                    <a href="javascript:void(0)">会员列表</a>
+                    <a href="javascript:void(0)">会员详情</a>
                 </li>
             </ul>
         </div>
 
         <div class="portlet-body">
             <div class="detail_font">会员账户详情</div>
-            <ul class="breadcrumb_detail">
-                <li><span>会员ID</span><?=$normalUser['usercode']?></li>
-                <li><span>手机号</span><?=$normalUser['mobile']?></li>
-                <li><span>真实姓名</span><?=$normalUser['real_name']?></li>
-                <li><span>身份证号</span><?= StringUtils::obfsIdCardNo($normalUser['idcard']) ?></li>
-                <li><span>生日</span><?= $normalUser->birthday?>
-                <li><span>银行卡</span><?= $normalUser->qpay ? substr_replace($normalUser->qpay->card_number, '**** **** **** ', 0, -4) : '未开通'?>
-                <li><span>分销商</span><?= $userAff ? $userAff->affiliator->name : '官方' ?>&nbsp;&nbsp;&nbsp;<a href="javascript:openwin('/fenxiao/fenxiao/get-aff-info?uid=<?= $normalUser->id ?>' , 500, 300)">修改</a></li>
-                <li><span>实名认证</span>
-                    <?php
-                    if ($normalUser['idcard_status'] == '-1') {
-                        echo "未通过";
-                    } elseif ($normalUser['idcard_status'] == '1') {
-                        echo "验证通过";
-                    } else {
-                        echo "未验证";
-                    }
-                    ?>
-                </li>
-                <li>
-                    <span>性别</span>
-                    <?php
-                    $gender = $normalUser->getGender();
-                    if ($gender === 'male') {
-                        echo '男性';
-                    } elseif ($gender === 'female') {
-                        echo '女性';
-                    } else {
-                        echo '---';
-                    }
-                    ?>
-                </li>
-                <li><span>免密支付</span><?= $normalUser['mianmiStatus'] ? "已开通" : "未开通" ?></li>
-                <li><span>注册渠道</span>
-                    <?php
-                    if ($normalUser['regFrom'] === 1) {
-                        echo "wap注册";
-                    } elseif ($normalUser['regFrom'] === 2) {
-                        echo "微信注册";
-                    } elseif ($normalUser['regFrom'] === 3) {
-                        echo "app注册";
-                    } elseif ($normalUser['regFrom'] === 4) {
-                        echo "pc注册";
-                    } else {
-                        echo "未知来源注册";
-                    }
-                    ?>
-                </li>
-                <li><span>注册时间</span><?=date("Y-m-d H:i:s",$normalUser['created_at'])?></li>
-                <li><span>充值时间</span><?php echo empty($czTime)?"--":date("Y-m-d H:i:s",$czTime);?></li>
-                <li><span>最后登录时间</span><?php echo empty($normalUser['last_login'])?"--":date("Y-m-d H:i:s",$normalUser['last_login']);?></li>
-                <li><span>标的最后投资时间</span><?php echo empty($tzTime)?"--":date("Y-m-d H:i:s",$tzTime);?></li>
-                <li><span>转让最后投资时间</span><?= $latestCreditOrderTime?></li>
-                <li><span>本年度160天及以上项目累计投资额(元)</span><?= $leiji ?></li>
-            </ul>
-            <hr />
+            <table class="table table-condensed">
+                <tr>
+                    <td><strong>会员ID</strong></td>
+                    <td><?= $normalUser['usercode'] ?></td>
+                    <td><strong>手机号</strong></td>
+                    <td><?= $normalUser['mobile'] ?></td>
+                    <td><strong>真实姓名</strong></td>
+                    <td><?= $normalUser['real_name'] ?></td>
+                </tr>
+                <tr>
+                    <td><strong>身份证号</strong></td>
+                    <td><?= StringUtils::obfsIdCardNo($normalUser['idcard']) ?></td>
+                    <td><strong>生日</strong></td>
+                    <td><?= $normalUser->birthday ?></td>
+                    <td><strong>银行卡</strong></td>
+                    <td><?= $normalUser->qpay ? substr_replace($normalUser->qpay->card_number, '**** **** **** ', 0, -4) : '未开通' ?></td>
+                </tr>
+                <tr>
+                    <td><strong>分销商</strong></td>
+                    <td><?= $userAff ? $userAff->affiliator->name : '官方' ?>&nbsp;&nbsp;&nbsp;<a href="javascript:openwin('/fenxiao/fenxiao/get-aff-info?uid=<?= $normalUser->id ?>' , 500, 300)">修改</a></td>
+                    <td><strong>实名认证</strong></td>
+                    <td>
+                        <?php
+                            if ($normalUser['idcard_status'] == '-1') {
+                                echo '未通过';
+                            } elseif ($normalUser['idcard_status'] == '1') {
+                                echo '验证通过';
+                            } else {
+                                echo '未验证';
+                            }
+                        ?>
+                    </td>
+                    <td><strong>性别</strong></td>
+                    <td>
+                        <?php
+                            $gender = $normalUser->getGender();
+                            if ($gender === 'male') {
+                                echo '男性';
+                            } elseif ($gender === 'female') {
+                                echo '女性';
+                            } else {
+                                echo '---';
+                            }
+                        ?>
+                    </td>
+                </tr>
+                <tr>
+                    <td><strong>免密支付</strong></td>
+                    <td><?= $normalUser['mianmiStatus'] ? '已开通' : '未开通' ?></td>
+                    <td><strong>注册渠道</strong></td>
+                    <td>
+                        <?php
+                            if ($normalUser['regFrom'] === 1) {
+                                echo 'wap注册';
+                            } elseif ($normalUser['regFrom'] === 2) {
+                                echo '微信注册';
+                            } elseif ($normalUser['regFrom'] === 3) {
+                                echo 'app注册';
+                            } elseif ($normalUser['regFrom'] === 4) {
+                                echo 'pc注册';
+                            } else {
+                                echo '未知来源注册';
+                            }
+                        ?>
+                    </td>
+                    <td><strong>注册时间</strong></td>
+                    <td><?= date('Y-m-d H:i:s', $normalUser['created_at']) ?></td>
+                </tr>
+                <tr>
+                    <td><strong>充值时间</strong></td>
+                    <td><?= empty($czTime) ? '---' : date('Y-m-d H:i:s', $czTime) ?></td>
+                    <td><strong>最后登录时间</strong></td>
+                    <td><?= empty($normalUser['last_login']) ? '---' : date('Y-m-d H:i:s', $normalUser['last_login']) ?></td>
+                    <td><strong>标的最后投资时间</strong></td>
+                    <td><?= empty($tzTime) ? '---' : date('Y-m-d H:i:s', $tzTime) ?></td>
+                </tr>
+                <tr>
+                    <td><strong>转让最后投资时间</strong></td>
+                    <td><?= $latestCreditOrderTime ?></td>
+                    <td><strong>本年度160天及以上项目累计投资额</strong></td>
+                    <td><?= StringUtils::amountFormat2($leiji) ?>元</td>
+                </tr>
+            </table>
 
             <div class="detail_font">会员资金详情</div>
             <table class="table table-condensed">
                 <tr>
-                    <td><span>充值次数（次）</span><?=$czNum?></td>
-                    <td><span>提现次数（次）</span><?=$txNum?></td>
-                    <td><span>转让次数（次）</span><?=$transferCount?></td>
-                    <td><span>标的投资次数（次）</span><?=$tzNum?></td>
-                    <td><span>转让投资次数（次）</span><?=$creditSuccessCount?></td>
-                </tr>
-                <tr>
-                    <td><span>充值总计（元）</span><?php echo empty($czMoneyTotal)?'0.00':$czMoneyTotal?></td>
-                    <td><span>提现总计（元）</span><?php echo empty($txMoneyTotal)?'0.00':$txMoneyTotal?></td>
-                    <td><span>转让总计（元）</span><?= number_format($transferSum, 2)?></td>
-                    <td><span>标的投资总计（元）</span><?php echo empty($tzMoneyTotal)?'0.00':$tzMoneyTotal?></td>
-                    <td><span>转让投资总计（元）</span><?php echo empty($creditTotalAmount)?'0.00':$creditTotalAmount?></td>
-                </tr>
-                <tr>
-                    <td><span>资产总额(元)</span><?= number_format($userAccount->getTotalFund(), 2)?></td>
-                    <td><span>理财资产（元）</span><?= number_format($userAccount->investment_balance, 2)?></td>
-                    <td><span>冻结资金（元）</span><?= number_format($userAccount->freeze_balance, 2)?></td>
-                    <td><span>可用余额（元）</span><?= number_format($userAccount->available_balance, 2)?></td>
+                    <td><span>资产总额(元)</span><?= StringUtils::amountFormat2($userAccount->getTotalFund()) ?></td>
+                    <td><span>理财资产（元）</span><?= StringUtils::amountFormat2($userAccount->investment_balance) ?></td>
+                    <td><span>冻结资金（元）</span><?= StringUtils::amountFormat2($userAccount->freeze_balance) ?></td>
+                    <td><span>可用余额（元）</span><?= StringUtils::amountFormat2($userAccount->available_balance) ?></td>
                     <td></td>
+                </tr>
+                <tr>
+                    <td><span>充值次数（次）</span><?= $czNum ?></td>
+                    <td><span>提现次数（次）</span><?= $txNum ?></td>
+                    <td><span>转让次数（次）</span><?= $transferCount ?></td>
+                    <td><span>标的投资次数（次）</span><?= $tzNum ?></td>
+                    <td><span>转让投资次数（次）</span><?= $creditSuccessCount ?></td>
+                </tr>
+                <tr>
+                    <td><span>充值总计（元）</span><?= empty($czMoneyTotal) ? '0.00' : $czMoneyTotal ?></td>
+                    <td><span>提现总计（元）</span><?= empty($txMoneyTotal) ? '0.00' : $txMoneyTotal ?></td>
+                    <td><span>转让总计（元）</span><?= StringUtils::amountFormat2($transferSum) ?></td>
+                    <td><span>标的投资总计（元）</span><?= empty($tzMoneyTotal) ? '0.00' : $tzMoneyTotal ?></td>
+                    <td><span>转让投资总计（元）</span><?= empty($creditTotalAmount) ? '0.00' : $creditTotalAmount ?></td>
                 </tr>
             </table>
         </div>
-        <hr/>
+
         <div>
             <div>
                 <ul class="nav nav-tabs nav-pills" role="tablist" id="list_nav">
@@ -142,23 +210,8 @@ $this->title = '用户详情';
             </div>
         </div>
     </div>
-
 </div>
-<style type="text/css">
-    .breadcrumb_detail{font-size:14px;padding:8px 15px;margin:0 5 20px;list-style:none;-webkit-border-radius:4px;-moz-border-radius:4px;border-radius:4px}
-    .breadcrumb_detail>li{width: 300px;display:inline-block;*display:inline;text-shadow:0 1px 0 #fff;*zoom:1;margin-bottom: 10px;}
-    .breadcrumb_detail>li>span{width: 120px;font-weight: bold;margin:0 20px;display:inline-block;*display:inline;text-shadow:0 1px 0 #fff;*zoom:1}
-    .detail_font{
-        width: 200px;
-        margin-left:40px;
-        margin-bottom: 15px;
-        font-family: 微软雅黑;
-        font-weight: bold;
-        font-size: 15px;
-        color: blue;
-    }
-    #list_nav li {cursor: pointer;}
-</style>
+
 <script>
     function getMoneyRecord(href)
     {
