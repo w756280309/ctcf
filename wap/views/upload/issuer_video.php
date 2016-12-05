@@ -32,6 +32,7 @@ $this->registerJsFile(FE_BASE_URI.'libs/videojs/video.min.js', ['position' => 1]
 
 <p class="wifi-tip">以下视频建议在WiFi环境下播放<span></span></p>
 
+<?php $count = count($issuers); ?>
 <?php foreach ($issuers as $key => $issuer) : ?>
     <h3 class="video-title"><?= $issuer->mediaTitle ?></h3>
     <div class="video-items">
@@ -41,7 +42,9 @@ $this->registerJsFile(FE_BASE_URI.'libs/videojs/video.min.js', ['position' => 1]
             您的浏览器不支持此种视频格式。
         </video>
     </div>
-    <p class="video-bottom-grey"></p>
+    <?php if ($key !== $count - 1) { ?>
+        <p class="video-bottom-grey"></p>
+    <?php } ?>
 <?php endforeach; ?>
 
 <script>
