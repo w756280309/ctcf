@@ -106,6 +106,13 @@ $this->title = '用户详情';
                     <td><span>标的投资总计（元）</span><?php echo empty($tzMoneyTotal)?'0.00':$tzMoneyTotal?></td>
                     <td><span>转让投资总计（元）</span><?php echo empty($creditTotalAmount)?'0.00':$creditTotalAmount?></td>
                 </tr>
+                <tr>
+                    <td><span>资产总额(元)</span><?= number_format($userAccount->getTotalFund(), 2)?></td>
+                    <td><span>理财资产（元）</span><?= number_format($userAccount->investment_balance, 2)?></td>
+                    <td><span>冻结资金（元）</span><?= number_format($userAccount->freeze_balance, 2)?></td>
+                    <td><span>可用余额（元）</span><?= number_format($userAccount->available_balance, 2)?></td>
+                    <td></td>
+                </tr>
             </table>
         </div>
         <hr/>

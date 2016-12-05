@@ -92,7 +92,7 @@ $now_date = date('Y-m-d');
                     <tr>
                         <td><?= ++$key ?></td>
                         <td><?= $val['mobile'] ?></td>
-                        <td><?= empty($val['real_name']) ? '---' : $val['real_name'] ?></td>
+                        <td><a href="/user/user/detail?id=<?= $val['id']?>"><?= empty($val['real_name']) ? '---' : $val['real_name'] ?></a></td>
                         <td><?= date('Y-m-d H:i:s', $val['created_at']) ?></td>
                         <td><?= date('Y-m-d H:i:s', $val['collectDateTime']) ?></td>
                         <td>

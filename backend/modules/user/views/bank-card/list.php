@@ -5,7 +5,7 @@ use yii\grid\GridView;
 echo GridView::widget([
     'id' => 'grid_view_bind_card',
     'dataProvider' => $dataProvider,
-    'layout' => '{items} <center><div class="pagination money_record_pager">{pager}</div></center>',
+    'layout' => '{items} <center><div class="pagination bank_card_pager">{pager}</div></center>',
     'tableOptions' => ['class' => 'band_card_list table table-hover table-striped'],
     'columns' => [
         [
@@ -91,7 +91,7 @@ echo GridView::widget([
             }
         });
 
-        $('.money_record_pager ul li').on('click', 'a', function(e) {
+        $('.bank_card_pager ul li').on('click', 'a', function(e) {
             e.preventDefault();
             getBindList($(this).attr('href'));
         })

@@ -91,7 +91,7 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => YiiAsse
                         <tr>
                             <td><?= $res[$val['uid']]['usercode'] ?></td>
                             <td><?= $res[$val['uid']]['mobile'] ?></td>
-                            <td><a href="#"><?= $res[$val['uid']]['real_name'] ?></a></td>
+                            <td><a href="/user/user/detail?id=<?=$val['uid'] ?>"><?= $res[$val['uid']]['real_name'] ?></a></td>
                             <td><?= $val['money'] ?></td>
                             <td><?= date('Y-m-d H:i:s', $val['created_at']) ?></td>
                             <td><?= Yii::$app->params['draw_status'][$val['status']] ?></td>

@@ -235,14 +235,25 @@ class UserController extends BaseController
         $records = $dataProvider->getModels();
         $recordTypes = Yii::$app->params['mingxi'];
         if (count($records) > 0) {
-            $data = Yii::$app->db->createCommand("SELECT p.title, p.id, r.osn, o.investFrom
+            $recordIds = ArrayHelper::getColumn($records, 'id');
+            //标的订单
+            $loanOrderData = Yii::$app->db->createCommand("SELECT p.title, p.id, r.osn, o.investFrom
 FROM money_record AS r
 INNER JOIN online_order AS o ON o.sn = r.osn
 INNER JOIN online_product AS p ON o.online_pid = p.id
 WHERE r.type =2
 AND r.id
-IN (".implode(',' ,ArrayHelper::getColumn($records, 'id')).")")->queryAll();
-            $data = ArrayHelper::index($data, 'osn');
+IN (".implode(',' ,$recordIds).")")->queryAll();
+            $data = ArrayHelper::index($loanOrderData, 'osn');
+            //标的回款
+            $repaymentData = Yii::$app->db->createCommand("SELECT r.osn, p.title, p.id
+FROM  `money_record` AS r
+INNER JOIN online_repayment_plan AS rp ON r.osn = rp.sn
+INNER JOIN online_product AS p ON p.id = rp.online_pid
+WHERE r.type =4 AND r.id
+IN (".implode(',' ,$recordIds).")")->queryAll();
+            $data = array_merge($data, ArrayHelper::index($repaymentData, 'osn'));
+
         } else {
             $data = [];
         }
@@ -356,7 +367,6 @@ IN (".implode(',' ,ArrayHelper::getColumn($records, 'id')).")")->queryAll();
             ->andWhere(['<=', "$o.created_at", mktime(23, 59, 59, 12, 31, date('Y'))])
             ->sum('order_money');
         $tztimeMax = OnlineOrder::find()->where(['status' => OnlineOrder::STATUS_SUCCESS, 'uid' => $id])->max('updated_at');
-        $userYuE = $ua['available_balance'];
 
         //获取用户转让统计
         $noteData = $txClient->get('credit-note/user', [
@@ -370,8 +380,6 @@ IN (".implode(',' ,ArrayHelper::getColumn($records, 'id')).")")->queryAll();
             'czMoneyTotal' => $recharge['sum'],
             'txNum' => $draw['count'],
             'txMoneyTotal' => $draw['sum'],
-            'userYuE' => $userYuE,
-            'userLiCai' => $ua->investment_balance,
             'tzTime' => $tztimeMax,
             'tzNum' => $order['count'],
             'tzMoneyTotal' => $order['sum'],
@@ -383,6 +391,7 @@ IN (".implode(',' ,ArrayHelper::getColumn($records, 'id')).")")->queryAll();
             'leiji' => $leiji > 0 ? $leiji : '0.00',
             'transferCount' => $noteData['transferCount'],
             'transferSum' => bcdiv($noteData['transferSum'], 100, 2),
+            'userAccount' => $ua,
         ]);
     }
 

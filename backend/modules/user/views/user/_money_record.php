@@ -36,10 +36,19 @@
         [
             'label' => '项目名称',
             'value' => function ($record) use ($data) {
-                if ($record->type === MoneyRecord::TYPE_ORDER) {
+                if (in_array($record->type ,[MoneyRecord::TYPE_ORDER, MoneyRecord::TYPE_HUIKUAN])) {
                     if (isset($data[$record->osn])) {
                         return $data[$record->osn]['title'];
                     }
+                } elseif (in_array($record->type, [MoneyRecord::TYPE_CREDIT_NOTE, MoneyRecord::TYPE_CREDIT_NOTE_FEE, MoneyRecord::TYPE_CREDIT_REPAID])) {
+                    $creditOrder = Yii::$container->get('txClient')->get('credit-order/detail', [
+                        'id' => $record->osn,
+                    ]);
+                    $creditNode = Yii::$container->get('txClient')->get('credit-note/detail', [
+                        'id' => $creditOrder['note_id'],
+                    ]);
+                    $loan = \common\models\product\OnlineProduct::find()->select('title')->where(['id' => $creditNode['loan_id']])->asArray()->one();
+                    return $loan['title'];
                 }
                 return '';
             }
