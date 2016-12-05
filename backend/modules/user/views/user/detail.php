@@ -1,19 +1,18 @@
 <?php
 use common\utils\StringUtils;
 use yii\web\YiiAsset;
+
 $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => YiiAsset::class]);
 $this->title = '用户详情';
 ?>
+
 <?php $this->beginBlock('blockmain'); ?>
-
 <div class="container-fluid">
-
     <!-- BEGIN PAGE HEADER-->
-
     <div class="row-fluid">
         <div class="span12">
             <h3 class="page-title">
-                        会员管理 <small>会员管理模块【主要包含投资会员和融资会员的管理】</small>
+                会员管理 <small>会员管理模块【主要包含投资会员和融资会员的管理】</small>
             </h3>
             <ul class="breadcrumb">
                 <li>

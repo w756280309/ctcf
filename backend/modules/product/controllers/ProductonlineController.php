@@ -137,6 +137,20 @@ class ProductonlineController extends BaseController
     }
 
     /**
+     * 查看标的信息.
+     */
+    public function actionShow($id)
+    {
+        $loan = $this->findOr404(OnlineProduct::class, $id);
+        $umpResp = Yii::$container->get('ump')->getLoanInfo($loan->id);
+
+        return $this->render('show', [
+            'loan' => $loan,
+            'balance' => bcdiv($umpResp->get('balance'), 100, 2),
+        ]);
+    }
+
+    /**
      * 新增标的.
      */
     public function actionAdd()
