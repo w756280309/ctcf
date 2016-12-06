@@ -13,9 +13,9 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/fastclick.js', ['depends' => JqueryAss
 <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/tip.css?v=20161116">
 <script>
     $(function(){
-        $('.footer-inner a').css({color: '#8c8c8c'});
-        $('.footer-inner2 a').css({color: '#f44336'});
-        $('.footer-inner1 a').css({color: '#8c8c8c'});
+        $('.footer-inner').parent().parent().css({color: '#8c8c8c'});
+        $('.footer-inner2').parent().parent().css({color: '#f44336'});
+        $('.footer-inner1').parent().parent().css({color: '#8c8c8c'});
         $('.footer-inner1 .licai').css({background: 'url("<?= ASSETS_BASE_URI ?>images/footer2.png") no-repeat -113px -3px',backgroundSize: '200px'});
         $('.footer-inner2 .zhanghu').css({background: 'url("<?= ASSETS_BASE_URI ?>images/footer2.png") no-repeat -81px -57px',backgroundSize: '200px'});
         $('.footer-inner .shouye').css({background: 'url("<?= ASSETS_BASE_URI ?>images/footer2.png") no-repeat -145px -3px',backgroundSize: '200px'});
