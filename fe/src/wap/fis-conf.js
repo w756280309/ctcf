@@ -38,6 +38,7 @@ fis.match('**.{png,jpg,gif,jpeg}', {
 fis.match('libs/**.*', {
     //发布到/dist/v2对应的目录下
     optimizer:null,
+    standard: false,
     release: 'dist/'+assetsRootPath+'$0',
     url:baseUrl+'$0'
 });
