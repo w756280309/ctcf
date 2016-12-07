@@ -12,6 +12,8 @@ $(function(){
         var classNmae = $(this).data('value');
         $('.'+classNmae).show();
         document.body.addEventListener('touchmove',eventTarget, false);
+        $('html').attr('ontouchmove', 'event.preventDefault()');
+
     })
 
     document.getElementById("giftBox").addEventListener("touchmove",function(e){
@@ -22,7 +24,11 @@ $(function(){
         $('.pop').hide();
         $('.mask').hide();
         document.body.removeEventListener('touchmove',eventTarget, false);
+        $('html').removeAttr('ontouchmove');
     });
+    $('.pop').on('click',function(event){
+        event.stopPropagation();
+    })
 })
 
 function lunBo(){
@@ -36,5 +42,6 @@ function lunBo(){
 }
 
 function eventTarget(event){
+    event.stopPropagation();
     event.preventDefault();
 }

@@ -101,7 +101,7 @@ section .step2 {
 }
 section .step1 span,
 section .step2 span {
-  font-size: 17px;
+  font-size: 0.45333333rem;
   font-family: "Adobe 黑体 Std R";
   color: #fff;
 }
@@ -114,7 +114,7 @@ section .lotternumber {
   width: 5.13333333rem;
   height: 0.66666667rem;
   color: #ff6d43;
-  font-size: 14px;
+  font-size: 0.37333333rem;
   background-color: #fff3d2;
   text-align: center;
   line-height: 0.66666667rem;
@@ -149,7 +149,7 @@ section .btn button {
 }
 section .moregift {
   color: #fff;
-  font-size: 15px;
+  font-size: 0.4rem;
   text-align: center;
   line-height: 0.8rem;
 }
@@ -173,12 +173,12 @@ section .award li:first-child div img {
 }
 section .award li:first-child div span {
   display: block;
-  font-size: 12px;
+  font-size: 0.32rem;
   color: #f16100;
 }
 section .award li:first-child p {
   height: 0.62666667rem;
-  font-size: 15px;
+  font-size: 0.4rem;
   background-color: #f16100;
   line-height: 0.62666667rem;
 }
@@ -196,7 +196,7 @@ section .award li:last-child div img {
 }
 section .award li:last-child div span {
   display: block;
-  font-size: 12px;
+  font-size: 0.32rem;
   color: #f16100;
 }
 section .award li:last-child div:nth-of-type(1) span {
@@ -213,12 +213,12 @@ section .award li:last-child div:nth-of-type(2) img {
 }
 section .award li:last-child p {
   height: 0.62666667rem;
-  font-size: 15px;
+  font-size: 0.4rem;
   background-color: #f16100;
   line-height: 0.62666667rem;
 }
 section .warn {
-  font-size: 11px;
+  font-size: 0.29333333rem;
 }
 section .people {
   position: relative;
@@ -231,7 +231,7 @@ section .people {
 section .people .title {
   width: 3.92rem;
   height: 0.85333333rem;
-  font-size: 17px;
+  font-size: 0.45333333rem;
   background: url("../images/title.png") no-repeat center;
   background-size: 100% 100%;
   position: absolute;
@@ -250,7 +250,7 @@ section .people ul {
 }
 section .people ul li {
   color: #f16100;
-  font-size: 13px;
+  font-size: 0.34666667rem;
   text-align: center;
   padding: 0 0.13333333rem;
   line-height: 0.69333333rem;
@@ -258,6 +258,7 @@ section .people ul li {
 }
 section .activeregular,
 section .accept {
+  font-size: 0.34666667rem;
   position: relative;
   padding-top: 0.53333333rem;
   padding-bottom: 0.26666667rem;
@@ -270,7 +271,7 @@ section .accept .title {
   color: #fff;
   width: 3.92rem;
   height: 0.85333333rem;
-  font-size: 17px;
+  font-size: 0.45333333rem;
   background: url("../images/title.png") no-repeat center;
   background-size: 100% 100%;
   position: absolute;
@@ -288,6 +289,10 @@ section .accept ul li {
   margin-bottom: 0.66666667rem;
   padding: 0 0.2rem;
 }
+section .activeregular ul li a,
+section .accept ul li a {
+  color: #9e521e;
+}
 section .activeregular ul li:last-child,
 section .accept ul li:last-child {
   margin-bottom: 0;
@@ -298,14 +303,12 @@ section .accept {
 footer {
   margin: 0.26666667rem 0 0.8rem 0;
   text-align: center;
-  font-size: 12px;
+  font-size: 0.32rem;
   color: #c23918;
 }
-footer span {
-  display: inline-block;
-  border: 1px solid #c23918;
-  font-size: 10px;
-  line-height: 1;
+footer img {
+  height: 0.29333333rem;
+  vertical-align: middle;
 }
 @media screen and (min-width: 620px) {
   section .regular ul li:nth-of-type(even) {
@@ -342,13 +345,13 @@ footer span {
 }
 .login p:nth-of-type(1),
 .nochance p:nth-of-type(1) {
-  font-size: 17px;
+  font-size: 0.45333333rem;
   color: #9b0300;
   margin-top: 0.93333333rem;
 }
 .login p:nth-of-type(2),
 .nochance p:nth-of-type(2) {
-  font-size: 13px;
+  font-size: 0.34666667rem;
   color: #ff4d22;
   line-height: 0.8rem;
 }
@@ -376,7 +379,7 @@ footer span {
 .login a,
 .nochance a {
   color: #fa8d00;
-  font-size: 13px;
+  font-size: 0.34666667rem;
   line-height: 0.8rem;
 }
 .nochance p:nth-of-type(1) {
@@ -390,7 +393,7 @@ footer span {
   top: 6.13333333rem;
   left: 2.06666667rem;
   text-align: center;
-  font-size: 15px;
+  font-size: 0.4rem;
   color: #9b0300;
   background-color: #fff2c5;
   border-radius: 10px;
@@ -435,7 +438,7 @@ footer span {
   top: 3.49333333rem;
   left: 1.2rem;
   text-align: center;
-  font-size: 15px;
+  font-size: 0.4rem;
   color: #9b0300;
   background-color: #fff2c5;
   border-radius: 10px;
@@ -455,7 +458,7 @@ footer span {
 }
 .nodrawgift p span {
   color: #796e6e;
-  font-size: 24px;
+  font-size: 0.64rem;
 }
 .nodrawgift a {
   width: 4.66666667rem;
@@ -477,7 +480,7 @@ footer span {
   -webkit-transform: translate(-50%, -50%);
   -moz-transform: translate(-50%, -50%);
   text-align: center;
-  font-size: 15px;
+  font-size: 0.4rem;
   color: #9b0300;
   background-color: #fff2c5;
   border-radius: 10px;
@@ -515,12 +518,12 @@ footer span {
   margin-right: 0.33333333rem;
 }
 .giftlist .giftlistbox ul li p {
-  font-size: 15px;
+  font-size: 0.4rem;
   height: 0.88rem;
-  margin-top: -0.15rem;
+  margin-top: -0.1rem;
 }
 .giftlist .giftlistbox ul li p span {
-  font-size: 12px;
+  font-size: 0.32rem;
 }
 .regular {
   margin-top: 0.53333333rem;
@@ -540,4 +543,11 @@ footer span {
 .btest {
   height: 1rem;
   width: 3rem;
+}
+.activetime {
+  position: absolute;
+  top: 0.13333333rem;
+  right: 0.26666667rem;
+  font-size: 0.29333333rem;
+  color: #fff;
 }
