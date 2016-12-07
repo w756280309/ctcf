@@ -7,6 +7,7 @@ use common\models\affiliation\AffiliationManager;
 use common\models\coupon\CouponType;
 use common\models\coupon\UserCoupon;
 use common\models\promo\InviteRecord;
+use common\models\promo\PromoService;
 use common\service\SmsService;
 use Yii;
 use yii\base\Model;
@@ -167,11 +168,6 @@ class SignupForm extends Model
                         $transaction->rollBack();
                         return false;
                     }
-
-                    $couponType = CouponType::findOne(['sn' => '0011:10000-50']);   //赠送50元代金券
-                    if ($couponType && $couponType->allowIssue()) {
-                        UserCoupon::addUserCoupon($user, $couponType)->save();
-                    }
                 }
             }
 
@@ -210,6 +206,15 @@ class SignupForm extends Model
             SmsService::editSms($user->mobile);
             if (Yii::$app->request->cookies->getValue('campaign_source')) {
                 (new AffiliationManager())->log(Yii::$app->request->cookies->getValue('campaign_source'), $user);
+            }
+            //统一活动逻辑
+            try {
+                //新用户注册，添加抽奖机会
+                PromoService::addTicket($user, 'register');
+                //用户注册之后给被邀请者送代金券
+                PromoService::addInviteeCoupon($user);
+            } catch (\Exception $ex) {
+
             }
 
             return $user;

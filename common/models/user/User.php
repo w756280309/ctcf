@@ -7,6 +7,7 @@ use common\models\order\OnlineOrder as Ord;
 use common\models\order\OrderQueue;
 use common\models\order\OnlineRepaymentPlan as RepaymentPlan;
 use common\models\product\OnlineProduct;
+use common\models\promo\InviteRecord;
 use common\models\user\RechargeRecord as Recharge;
 use common\models\user\DrawRecord as Draw;
 use P2pl\Borrower;
@@ -749,5 +750,23 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface, UserInterf
             ->orWhere(["$o.status" => Ord::STATUS_FALSE, "$q.status" => 0])
             ->andWhere(["$o.uid" => $this->id, "$p.is_xs" => 1])
             ->count();
+    }
+
+    /**
+     * 判断用户是否在某段时间内被邀请的
+     * @param null $startAt 开始时间戳
+     * @param null $endAt   结束时间戳
+     * @return bool
+     */
+    public function isInvited($startAt = null, $endAt = null){
+        $inviteRecord = InviteRecord::find()->where(['invitee_id' => $this->id]);
+        if ($startAt) {
+            $inviteRecord = $inviteRecord->andWhere(['>=', 'created_at', intval( $startAt)]);
+        }
+        if ($endAt) {
+            $inviteRecord = $inviteRecord->andWhere(['<=', 'created_at', intval( $endAt)]);
+        }
+        $inviteRecord = $inviteRecord->one();
+        return empty($inviteRecord) ? false : true;
     }
 }
