@@ -16,6 +16,8 @@ fis3 release -d ../../
 │   └── h5-161114  --h5
 │       └── index.html  （有领导页面）
 |       └── index-no-leader.html （无领导页面）
+├── video－list  --视频
+├── index  --首页
 ├── fis-conf.js  --配置文件
 └── libs  --依赖库文件
 
