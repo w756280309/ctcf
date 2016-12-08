@@ -108,6 +108,7 @@ section .step2 span {
 section .step1 a,
 section .step2 a {
   color: #fff;
+  font-size: 0.32rem;
 }
 section .lotternumber {
   margin: 0 auto;

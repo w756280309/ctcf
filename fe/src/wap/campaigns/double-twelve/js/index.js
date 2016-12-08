@@ -15,15 +15,17 @@ $(function(){
         $('html').attr('ontouchmove', 'event.preventDefault()');
 
     })
-
     document.getElementById("giftBox").addEventListener("touchmove",function(e){
-        e.stopPropagation();
-        //return false;
+        event.stopPropagation();
+    },false);
+    document.getElementById("giftBox").addEventListener("touchend",function(e){
+        $("body").css("overflow","hidden");
     },false);
     $('.mask,.closepop').on('click',function () {
         $('.pop').hide();
         $('.mask').hide();
         document.body.removeEventListener('touchmove',eventTarget, false);
+        $("body").css("overflow","auto");
         $('html').removeAttr('ontouchmove');
     });
     $('.pop').on('click',function(event){
@@ -42,6 +44,5 @@ function lunBo(){
 }
 
 function eventTarget(event){
-    event.stopPropagation();
     event.preventDefault();
 }
