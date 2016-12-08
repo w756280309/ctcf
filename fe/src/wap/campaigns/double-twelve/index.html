@@ -9,6 +9,53 @@
     <script src="../../libs/jquery-1.11.1.min.js"></script>
     <script src="../../libs/fastclick.js"></script>
     <script src="js/index.js"></script>
+    <style>
+        header div:first-child {
+            background: url("images/banner_01.png") no-repeat center;
+            background-size: 100% 100%;
+        }
+        header div:last-child {
+            background: url("images/banner_02.png") no-repeat center;
+            background-size: 100% 100%;
+        }
+        section .btn button {
+            background: url("images/btn.png") no-repeat center;
+            background-size: 100% 100%;
+        }
+        section .people .title {
+            background: url("images/title.png") no-repeat center;
+            background-size: 100% 100%;
+        }
+        section .activeregular .title,
+        section .accept .title {
+            background: url("images/title.png") no-repeat center;
+            background-size: 100% 100%;
+        }
+        .login .loginbtn,
+        .nochance .loginbtn,
+        .login .investbtn,
+        .nochance .investbtn {
+            background: url("images/btn_01.png") no-repeat center;
+            background-size: 100% 100%;
+        }
+        .login .investbtn,
+        .nochance .investbtn {
+            background: url("images/btn_02.png") no-repeat center;
+            background-size: 100% 100%;
+        }
+        .drawgift div {
+            background: url("images/drawgitfbg.png") no-repeat center;
+            background-size: 100% 100%;
+        }
+        .drawgift a {
+            background: url("images/btn_03.png") no-repeat center;
+            background-size: 100% 100%;
+        }
+        .nodrawgift a {
+            background: url("images/btn_04.png") no-repeat center;
+            background-size: 100% 100%;
+        }
+    </style>
 </head>
 <body>
 <!--banner-->
@@ -140,72 +187,72 @@
 
 <!--遮罩-->
 <div class="mask">
-    <!--弹框-->
-    <!--登录弹框-->
-    <div class="login pop">
-        <img class="closepop" src="images/close01.png" alt="">
-        <p>您还未登录！</p>
-        <p>登录即可参加抽奖活动，赶快行动吧~</p>
-        <img src="images/box.png" alt="">
-        <a href="" class="loginbtn"></a>
-        <a href="">没有账号，立即去注册</a>
+</div>
+<!--弹框-->
+<!--登录弹框-->
+<div class="login pop">
+    <img class="closepop" src="images/close01.png" alt="">
+    <p>您还未登录！</p>
+    <p>登录即可参加抽奖活动，赶快行动吧~</p>
+    <img src="images/box.png" alt="">
+    <a href="" class="loginbtn"></a>
+    <a href="">没有账号，立即去注册</a>
+</div>
+<!--没有抽奖机会-->
+<div class="nochance pop">
+    <img class="closepop" src="images/close01.png" alt="">
+    <p>没有抽奖机会了！</p>
+    <p>邀请好友，可获得更多抽奖机会哦~</p>
+    <img src="images/box.png" alt="">
+    <a href="" class="investbtn"></a>
+</div>
+<!--中奖效果-->
+<div class="drawgift pop">
+    <img class="bgtop" src="images/drawgiftbg_01.png" alt="">
+    <p>恭喜您获得 <span>20元</span>代金券！</p>
+    <div>
+        <img src="images/coupon_02.png" alt="">
     </div>
-    <!--没有抽奖机会-->
-    <div class="nochance pop">
-        <img class="closepop" src="images/close01.png" alt="">
-        <p>没有抽奖机会了！</p>
-        <p>邀请好友，可获得更多抽奖机会哦~</p>
-        <img src="images/box.png" alt="">
-        <a href="" class="investbtn"></a>
-    </div>
-    <!--中奖效果-->
-    <div class="drawgift pop">
-        <img class="bgtop" src="images/drawgiftbg_01.png" alt="">
-        <p>恭喜您获得 <span>20元</span>代金券！</p>
-        <div>
-            <img src="images/coupon_02.png" alt="">
-        </div>
-        <a href=""></a>
-    </div>
-    <!--中奖列表无礼品-->
-    <div class="nodrawgift pop">
-        <img src="images/drawgiftbg_02.png" alt="">
-        <p>您还未抽过奖！</p>
-        <img src="images/box.png" alt="">
-        <a href=""></a>
-    </div>
-    <!--中奖列表有礼品-->
-    <div class="giftlist pop">
-        <img  class="giftlistimg" src="images/drawgiftbg_02.png" alt="">
-        <img class="giftlistclose  closepop" src="images/close_02.png" alt="">
-        <div class="giftlistbox" id="giftBox">
-            <ul>
-                <li class="clearfix">
-                    <img class="lf" src="images/coupon_01.png" alt="">
-                    <p class="lf"><span>5元代金券</span><br><span>2016-12-14 15:30</span></p>
-                </li>
-                <li class="clearfix">
-                    <img class="lf" src="images/coupon_02.png" alt="">
-                    <p class="lf"><span>5元代金券</span><br><span>2016-12-14 15:30</span></p>
-                </li>
-                <li class="clearfix">
-                    <img class="lf" src="images/coupon_03.png" alt="">
-                    <p class="lf"><span>5元代金券</span><br><span>2016-12-14 15:30</span></p>
-                </li>
-                <li class="clearfix">
-                    <img class="lf" src="images/coupon_04.png" alt="">
-                    <p class="lf"><span>5元代金券</span><br><span>2016-12-14 15:30</span></p>
-                </li>
-                <li class="clearfix">
-                    <img class="lf" src="images/coupon_05.png" alt="">
-                    <p class="lf"><span>5元代金券</span><br><span>2016-12-14 15:30</span></p>
-                </li>
-                <li class="clearfix">
-                    <img class="lf" src="images/coupon_06.png" alt="">
-                    <p class="lf"><span>5元代金券</span><br><span>2016-12-14 15:30</span></p>
-                </li>
-            </ul>
-        </div>
+    <a href=""></a>
+</div>
+<!--中奖列表无礼品-->
+<div class="nodrawgift pop">
+    <img src="images/drawgiftbg_02.png" alt="">
+    <p>您还未抽过奖！</p>
+    <img src="images/box.png" alt="">
+    <a href=""></a>
+</div>
+<!--中奖列表有礼品-->
+<div class="giftlist pop">
+    <img  class="giftlistimg" src="images/drawgiftbg_02.png" alt="">
+    <img class="giftlistclose  closepop" src="images/close_02.png" alt="">
+    <div class="giftlistbox" id="giftBox">
+        <ul>
+            <li class="clearfix">
+                <img class="lf" src="images/coupon_01.png" alt="">
+                <p class="lf"><span>5元代金券</span><br><span>2016-12-14 15:30</span></p>
+            </li>
+            <li class="clearfix">
+                <img class="lf" src="images/coupon_02.png" alt="">
+                <p class="lf"><span>5元代金券</span><br><span>2016-12-14 15:30</span></p>
+            </li>
+            <li class="clearfix">
+                <img class="lf" src="images/coupon_03.png" alt="">
+                <p class="lf"><span>5元代金券</span><br><span>2016-12-14 15:30</span></p>
+            </li>
+            <li class="clearfix">
+                <img class="lf" src="images/coupon_04.png" alt="">
+                <p class="lf"><span>5元代金券</span><br><span>2016-12-14 15:30</span></p>
+            </li>
+            <li class="clearfix">
+                <img class="lf" src="images/coupon_05.png" alt="">
+                <p class="lf"><span>5元代金券</span><br><span>2016-12-14 15:30</span></p>
+            </li>
+            <li class="clearfix">
+                <img class="lf" src="images/coupon_06.png" alt="">
+                <p class="lf"><span>5元代金券</span><br><span>2016-12-14 15:30</span></p>
+            </li>
+        </ul>
     </div>
 </div>
 <button class="bt1 btest" data-value="login">登录弹框</button>

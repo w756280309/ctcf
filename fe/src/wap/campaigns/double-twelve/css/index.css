@@ -64,14 +64,6 @@ header div {
   width: 100%;
   height: 2.49333333rem;
 }
-header div:first-child {
-  background: url("../images/banner_01.png?__inline?__inline") no-repeat center;
-  background-size: 100% 100%;
-}
-header div:last-child {
-  background: url("../images/banner_02.png?__inline?__inline") no-repeat center;
-  background-size: 100% 100%;
-}
 section {
   padding: 0 0.53333333rem;
 }
@@ -125,8 +117,6 @@ section table.coupon tr td img {
 section .btn button {
   width: 100%;
   height: 1.57333333rem;
-  background: url("../images/btn.png?__inline");
-  background-size: 100% 100%;
   border: 0;
   outline: none;
 }
@@ -215,8 +205,6 @@ section .people .title {
   width: 3.92rem;
   height: 0.85333333rem;
   font-size: 0.45333333rem;
-  background: url("../images/title.png?__inline") no-repeat center;
-  background-size: 100% 100%;
   position: absolute;
   top: -0.57333333rem;
   left: 50%;
@@ -255,8 +243,6 @@ section .accept .title {
   width: 3.92rem;
   height: 0.85333333rem;
   font-size: 0.45333333rem;
-  background: url("../images/title.png?__inline") no-repeat center;
-  background-size: 100% 100%;
   position: absolute;
   top: -0.57333333rem;
   left: 50%;
@@ -352,16 +338,10 @@ footer img {
   width: 4.66666667rem;
   height: 1.04rem;
   display: block;
-  background: url("../images/btn_01.png?__inline") no-repeat center;
-  background-size: 100% 100%;
   margin: 0 auto;
   margin-top: -0.73333333rem;
 }
-.login .investbtn,
-.nochance .investbtn {
-  background: url("../images/btn_02.png?__inline") no-repeat center;
-  background-size: 100% 100%;
-}
+
 .login a,
 .nochance a {
   color: #fa8d00;
@@ -402,8 +382,6 @@ footer img {
 .drawgift div {
   width: 4.38666667rem;
   height: 3.78666667rem;
-  background: url("../images/drawgitfbg.png?__inline") no-repeat center;
-  background-size: 100% 100%;
   margin: 0 auto;
 }
 .drawgift div img {
@@ -416,8 +394,6 @@ footer img {
   display: block;
   margin: 0 auto;
   margin-top: 0.2rem;
-  background: url("../images/btn_03.png?__inline") no-repeat center;
-  background-size: 100% 100%;
 }
 .nodrawgift {
   display: none;
@@ -458,8 +434,6 @@ footer img {
   display: block;
   margin: 0 auto;
   margin-top: 0.2rem;
-  background: url("../images/btn_04.png?__inline") no-repeat center;
-  background-size: 100% 100%;
 }
 .giftlist {
   display: none;
