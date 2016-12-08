@@ -201,9 +201,6 @@ section .award li:last-child p {
   line-height: 0.62666667rem;
 }
 section .warn {
-  font-size: 0.29333333rem;
-}
-section .warn span {
   font-size: 0.34666667rem;
 }
 section .people {
@@ -495,7 +492,7 @@ footer img {
 }
 .giftlist .giftlistbox {
   overflow: auto;
-  height: 8.66666667rem;
+  height: 8.6rem;
   margin-top: 1.04rem;
 }
 .giftlist .giftlistbox ul li {

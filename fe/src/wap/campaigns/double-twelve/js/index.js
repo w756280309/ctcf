@@ -23,6 +23,7 @@ $(function(){
         $('.mask').hide();
         document.body.removeEventListener('touchmove',eventTarget, false);
         $("body,html").css("overflow","auto");
+        $("body,html").css("-webkit-overflow-scrolling","touch");
         $('html').removeAttr('ontouchmove');
     });
     $('.pop').on('click',function(event){
