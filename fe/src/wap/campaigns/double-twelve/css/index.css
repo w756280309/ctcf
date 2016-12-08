@@ -74,24 +74,6 @@ header div:last-child {
 }
 section {
   padding: 0 0.53333333rem;
-  /*.regular {
-    margin-top: 30/75rem;
-    ul {
-      padding-top:30/75rem;
-      li:nth-of-type(odd) {
-        font-size: 14px;
-        max-width: 20%;
-      }
-      li:nth-of-type(even){
-        max-width: 80%;
-        span {
-          font-size: 14px;
-        }
-        font-size: 12px;
-        margin-bottom: 30/75rem;
-      }
-    }
-  }*/
 }
 section .step1,
 section .step2 {
@@ -221,6 +203,9 @@ section .award li:last-child p {
 section .warn {
   font-size: 0.29333333rem;
 }
+section .warn span {
+  font-size: 0.34666667rem;
+}
 section .people {
   position: relative;
   padding-top: 0.4rem;
@@ -333,8 +318,11 @@ footer img {
   background-color: #fff2c5;
   text-align: center;
   position: absolute;
-  top: 3.46666667rem;
-  left: 1.2rem;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -50%);
+  -moz-transform: translate(-50%, -50%);
   border-radius: 10px;
 }
 .login img:nth-of-type(1),
@@ -391,8 +379,11 @@ footer img {
   height: 6.8rem;
   width: 5.86666667rem;
   position: absolute;
-  top: 6.13333333rem;
-  left: 2.06666667rem;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -50%);
+  -moz-transform: translate(-50%, -50%);
   text-align: center;
   font-size: 0.4rem;
   color: #9b0300;
@@ -436,8 +427,11 @@ footer img {
   height: 10.08rem;
   width: 7.6rem;
   position: absolute;
-  top: 3.49333333rem;
-  left: 1.2rem;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -50%);
+  -moz-transform: translate(-50%, -50%);
   text-align: center;
   font-size: 0.4rem;
   color: #9b0300;

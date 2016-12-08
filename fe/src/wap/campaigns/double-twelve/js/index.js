@@ -11,21 +11,18 @@ $(function(){
         $('.mask').show();
         var classNmae = $(this).data('value');
         $('.'+classNmae).show();
+        $("body,html").css("overflow","hidden");
         document.body.addEventListener('touchmove',eventTarget, false);
         $('html').attr('ontouchmove', 'event.preventDefault()');
-
-    })
+    });
     document.getElementById("giftBox").addEventListener("touchmove",function(e){
         event.stopPropagation();
-    },false);
-    document.getElementById("giftBox").addEventListener("touchend",function(e){
-        $("body").css("overflow","hidden");
     },false);
     $('.mask,.closepop').on('click',function () {
         $('.pop').hide();
         $('.mask').hide();
         document.body.removeEventListener('touchmove',eventTarget, false);
-        $("body").css("overflow","auto");
+        $("body,html").css("overflow","auto");
         $('html').removeAttr('ontouchmove');
     });
     $('.pop').on('click',function(event){
