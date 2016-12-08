@@ -2,6 +2,7 @@
 
 namespace wap\modules\promotion\models;
 
+use common\models\user\User;
 use yii\db\ActiveRecord;
 use yii\helpers\ArrayHelper;
 
@@ -12,7 +13,16 @@ use yii\helpers\ArrayHelper;
  * @property string $title
  * @property integer $startAt
  * @property integer $endAt
- * @property string $key
+ * @property string $key            活动key, 需要唯一
+ * @property string  $promoClass    处理活动的类，包含命名空间,可以直接 new $promoClass
+ * @property string  $whiteList     以英文逗号隔开的用户ID字符串
+ * @property boolean  $isOnline     活动是否可以公开访问
+ *
+ * 1) migration初始化活动数据，title,startAt,endAt,key,promoClass,isOnline = false;
+ * 2) 代码发布到正式环境
+ * 3) 更改活动数据，startAt 改为当天时间，将测试用户ID加入whiteList
+ * 4) 测试用户进入活动页面进行测试。
+ * 5) 活动正式上线时候将 startAt 改为活动上线时间，isOnLine = true.
  */
 class RankingPromo extends ActiveRecord
 {
@@ -27,7 +37,9 @@ class RankingPromo extends ActiveRecord
             [['title', 'startAt', 'endAt'], 'required'],
             [['startAt', 'endAt', 'key'], 'string'],
             [['title'], 'string', 'max' => 50],
-            ['endAt', 'compare', 'compareAttribute' => 'startAt', 'operator' => '>']
+            ['endAt', 'compare', 'compareAttribute' => 'startAt', 'operator' => '>'],
+            [['promoClass', 'whiteList'], 'string', 'max' => 255],
+            ['isOnline', 'boolean'],
         ];
     }
 
@@ -39,6 +51,9 @@ class RankingPromo extends ActiveRecord
             'title' => '活动名称',
             'startAt' => '开始时间',
             'endAt' => '结束时间',
+            'promoClass' => '活动处理类',
+            'whiteList' => '白名单',
+            'isOnline' => '活动是否上线',
         ];
     }
 
@@ -132,5 +147,21 @@ class RankingPromo extends ActiveRecord
                 return -1;
             }
         }
+    }
+
+    /**
+     * 判断活动对对指定用户来说是否在进行中
+     * @param User|null $user
+     * @return bool
+     */
+    public function isActive(User $user = null) {
+        $time = time();
+        if ($time >= $this->startAt && $time <= $this->endAt) {
+            $whiteList = explode(',', $this->whiteList);
+            if ($this->isOnline || ($user && in_array($user->id, $whiteList))) {
+                return true;
+            }
+        }
+        return false;
     }
 }

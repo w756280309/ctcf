@@ -3,6 +3,7 @@
 namespace common\models\order;
 
 use common\models\promo\InviteRecord;
+use common\models\promo\PromoService;
 use common\models\user\UserInfo;
 use Ding\DingNotify;
 use Yii;
@@ -378,8 +379,11 @@ class OrderManager
         //投资成功之后更新用户信息
         UserInfo::dealWidthOrder($order);
 
-        //投资完成之后做邀请好友逻辑处理
-        InviteRecord::dealWithOrder($order);
+        //投资完成之后活动统一处理逻辑
+        try {
+            PromoService::doAfterSuccessLoanOrder($order);
+        } catch (\Exception $ex) {
+        }
 
         //即将满标时候钉钉提醒
         try {
