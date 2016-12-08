@@ -265,8 +265,11 @@ section .featured ul li a img {
     color: #666666;
     font-size: 14px;
     line-height: 1.2rem;
+    text-align: center;
 }
-
+.commonLi a div:nth-of-type(5) {
+    text-align: center;
+}
 .commonLi a div:nth-of-type(5) span {
     padding: 0.078rem 0.12rem 0.055rem 0.12rem;
     font-size: 14px;
@@ -276,8 +279,8 @@ section .featured ul li a img {
     display: inline-block;
 }
 
-.commonLi a div:nth-of-type(5) span:first-child {
-    margin-right: 0.26666667rem;
+.commonLi a div:nth-of-type(5) span:nth-of-type(2) {
+    margin-left: 0.26666667rem;
 }
 
 .superscript {
@@ -307,12 +310,9 @@ section .featured ul li a img {
 }
 
 .activity .swiper-container .swiper-wrapper .swiper-slide {
-    /*width: 3.86666667rem;*/
     width: 2.90rem;
-    height: 1.91rem;
+    /*height: 1.91rem;*/
     height: 100%;
-    /*border-top: 1px solid #00f;*/
-    /*border-right: 1px solid #00f;*/
 }
 
 .activity .swiper-container .swiper-wrapper .swiper-slide a {
@@ -322,12 +322,8 @@ section .featured ul li a img {
 }
 
 .activity .swiper-container .swiper-wrapper .swiper-slide a img {
-    /*width: 3.86666667rem;*/
-    /*height: 2.53333333rem;*/
-    /*height: 2.65rem;*/
     width: 100%;
     height: 100%;
-    /*border: 1px solid rebeccapurple;*/
 }
 
 .notices {
