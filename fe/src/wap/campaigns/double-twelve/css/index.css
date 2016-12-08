@@ -341,6 +341,9 @@ footer img {
   margin: 0 auto;
   margin-top: -0.73333333rem;
 }
+.investbtn {
+  position: relative;
+}
 
 .login a,
 .nochance a {
