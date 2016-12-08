@@ -105,7 +105,8 @@ class PromoInvite12
                         }
                     }
                     //前三次投资给邀请者发现金红包
-                    if (in_array($order->id, $orderIds)) {
+                    $loan = $order->loan;
+                    if (in_array($order->id, $orderIds) && !$loan->is_xs) {
                         $money = round($order->order_money / 1000, 1);
                         //判断邀请者是否有过投资
                         $record = OnlineOrder::find()->where(['status' => 1, 'uid' => $user->id])->count();
