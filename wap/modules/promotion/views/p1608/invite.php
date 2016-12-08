@@ -25,7 +25,6 @@ if (!\Yii::$app->user->isGuest) {
     <link href="<?= ASSETS_BASE_URI ?>css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>promo/1608/css/inviteactive.css">
     <script src="<?= ASSETS_BASE_URI ?>js/jquery.js"></script>
-    <script src="<?= ASSETS_BASE_URI ?>promo/1608/js/inviteactive.js?v=20160804"></script>
     <script>
         $(function() {
             $(document).ajaxSend(function(event, jqXHR, settings) {
@@ -44,8 +43,8 @@ if (!\Yii::$app->user->isGuest) {
         <!--banner-box-->
         <div class="row banner-box">
             <div class="col-xs-12">
-                <img src="<?= ASSETS_BASE_URI ?>promo/1608/images/invite/banner3.png" alt="">
-                <img src="<?= ASSETS_BASE_URI ?>promo/1608/images/invite/banner4.png" alt="">
+                <img src="<?= ASSETS_BASE_URI ?>promo/1608/images/invite/banner6.png" alt="">
+                <img src="<?= ASSETS_BASE_URI ?>promo/1608/images/invite/banner5.png" alt="">
             </div>
         </div>
         <!--invite-box-->
@@ -124,24 +123,24 @@ if (!\Yii::$app->user->isGuest) {
         <div class="row rule-boxs">
             <div class="col-xs-12">
                 <div class="title">
-                    <span><img class="left" src="<?= ASSETS_BASE_URI ?>promo/1608/images/invite/left.png" alt="">邀请人奖励<img class="right" src="<?= ASSETS_BASE_URI ?>promo/1608/images/invite/right.png" alt=""></span>
+                    <span><img class="left" src="<?= ASSETS_BASE_URI ?>promo/1608/images/invite/left.png" alt="">活动规则<img class="right" src="<?= ASSETS_BASE_URI ?>promo/1608/images/invite/right.png" alt=""></span>
                 </div>
                 <!--活动规则-->
                 <div class="rule-box">
-                    <div class="title"><b>活动时间:</b>2016年8月4日~2016年9月25日</div>
                     <div class="title"><b>活动规则:</b></div>
                     <ul>
                         <li>登录温都金服网站，进入“我的账户”；</li>
                         <li>点击“邀请好友”可以看到邀请好友活动，通过微信或者链接进行邀请；</li>
                         <li>当您的小伙伴通过此邀请链接注册并成功投资后，您即可获得邀请好友的奖励；</li>
                         <li>邀请人在邀请好友之前必须在平台投资过，有投资记录才能参与现金返现活动，发放奖励现金时，以"角"为单位取整，采用四舍五入；</li>
+                        <li>新手专享标和转让均不参加邀请奖励</li>
                         <li>严禁恶意刷邀请好友，如有发生，封号处理。</li>
                     </ul>
                     <div class="title"><b>奖励规则:</b></div>
                     <ul>
-                        <li>被邀请好友首次单笔投资1万元以上（含1万元），邀请人获得1张50元代金券；</li>
-                        <li>被邀请好友首次单笔投资1万元以下（不含1万元），邀请人获得1张30元代金券；</li>
-                        <li>邀请人获得被邀请人投资额0.1% 的奖励返现（仅限前三次投资）；</li>
+                        <li>被邀请好友首次单笔投资（新手专享和转让除外）1万元以上（含1万元），邀请人获得1张50元代金券；</li>
+                        <li>被邀请好友首次单笔投资（新手专享和转让除外）1万元以下（不含1万元），邀请人获得1张30元代金券；</li>
+                        <li>邀请人获得被邀请人投资额0.1% 的奖励返现（仅限前三次投资，新手专享和转让除外）；</li>
                         <li>被邀请人注册即可获得50元代金券。</li>
                     </ul>
                     <div class="title"><b>代金券使用规则:</b></div>
@@ -158,12 +157,10 @@ if (!\Yii::$app->user->isGuest) {
             </div>
         </div>
         <!--invite-btn-->
-        <div class="invite-btn <?= \Yii::$app->user->isGuest ? '' : 'invite-click' ?>" <?php if (\Yii::$app->user->isGuest) { ?> onclick="location.href='/site/login'" <?php } ?>>邀请好友</div>
-        <!--share-box-->
-        <div class="mark-box"></div>
-        <div class="share-box">
-            <img src="<?= ASSETS_BASE_URI ?>promo/1608/images/invite/share.png" alt="">
+        <div class="invite-btn">
+            <a style="color: white;" href="<?= \Yii::$app->user->isGuest ? '/site/login?next='.Html::encode(\yii\helpers\Url::to('/user/invite', true)) : '/user/invite'?>" class="a-invite-btn">邀请好友</a>
         </div>
+        <!--share-box-->
     </div>
     <?php $this->endBody() ?>
 </body>

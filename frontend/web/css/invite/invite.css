@@ -12,17 +12,17 @@
 }
 .banner1 {
     margin-top: -1px;
-    background:url(../../images/invite/banner1.png) no-repeat center center;
+    background:url(../../images/invite/banner_1.png) no-repeat center center;
 }
 .banner2 {
-    background:url(../../images/invite/banner2.png) no-repeat center center;
+    background:url(../../images/invite/banner_2.png) no-repeat center center;
 }
 .banner3 {
-    background:url(../../images/invite/banner3.png) no-repeat center center;
+    background:url(../../images/invite/banner_3.png) no-repeat center center;
 }
 .wdjf-invite .banner4 {
     height: 104px;
-    background:url(../../images/invite/banner4.png) no-repeat center center;
+    background:url(../../images/invite/banner_4.jpg) no-repeat center center;
     background-size: 100% 100%;
 }
 .wdjf-invite .invite {
