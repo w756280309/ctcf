@@ -133,7 +133,7 @@ if (!\Yii::$app->user->isGuest) {
                         <li>点击“邀请好友”可以看到邀请好友活动，通过微信或者链接进行邀请；</li>
                         <li>当您的小伙伴通过此邀请链接注册并成功投资后，您即可获得邀请好友的奖励；</li>
                         <li>邀请人在邀请好友之前必须在平台投资过，有投资记录才能参与现金返现活动，发放奖励现金时，以"角"为单位取整，采用四舍五入；</li>
-                        <li>新手专享标和转让均不参加邀请奖励</li>
+                        <li>新手专享标和转让均不参加邀请奖励；</li>
                         <li>严禁恶意刷邀请好友，如有发生，封号处理。</li>
                     </ul>
                     <div class="title"><b>奖励规则:</b></div>
@@ -157,8 +157,8 @@ if (!\Yii::$app->user->isGuest) {
             </div>
         </div>
         <!--invite-btn-->
-        <div class="invite-btn">
-            <a style="color: white;" href="<?= \Yii::$app->user->isGuest ? '/site/login?next='.Html::encode(\yii\helpers\Url::to('/user/invite', true)) : '/user/invite'?>" class="a-invite-btn">邀请好友</a>
+        <div class="invite-btn" onclick="location.href='<?= \Yii::$app->user->isGuest ? '/site/login?next='.Html::encode(\yii\helpers\Url::to('/user/invite', true)) : '/user/invite'?>'">
+            邀请好友
         </div>
         <!--share-box-->
     </div>

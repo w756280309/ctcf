@@ -29,14 +29,14 @@
     margin:0 auto 20px;
     padding: 30px 0 28px;
     width:900px;
-    height:232px;
+    /*height:232px;*/
     border-bottom: 2px solid #fe6030;
     background: #fff6ea;
 }
 .wdjf-invite .invite .title {
     position: relative;
     margin:0 auto 36px;
-    height:64px;
+    /*height:64px;*/
     line-height:64px;
     text-align: center;
     font-size: 30px;
@@ -62,7 +62,7 @@
 }
 .wdjf-invite .invite .box {
     padding: 0 119px;
-    height:132px;
+    /*height:132px;*/
 }
 .wdjf-invite .invite .box .box-ticket {
     float: left;
@@ -156,11 +156,11 @@
 }
 
 .wdjf-invite .rule {
-    height: 620px;
+    /*height: 620px;*/
 }
 .wdjf-invite .rule .box {
     padding:0 0 0 60px;
-    height:460px;
+    /*height:460px;*/
 }
 .wdjf-invite .rule .box p {
     line-height: 30px;
