@@ -3,7 +3,7 @@ $this->title = '百万年终奖';
 $this->share = $share;
 ?>
 
-<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>promo/1611/css/index.css?20161116">
+<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>promo/1611/css/index.css?v=20161206">
 <script src="<?= ASSETS_BASE_URI ?>promo/1611/js/lib.flexible2.js"></script>
 <script>
     $(function() {

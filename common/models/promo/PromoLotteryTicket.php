@@ -16,8 +16,10 @@ use yii\behaviors\TimestampBehavior;
  * @property integer $created_at
  * @property integer $updated_at
  * @property integer $rewardedAt
+ * @property integer $drawAt
  * @property string $ip
- * @property integer $source
+ * @property string $source
+ * @property int    $promo_id
  */
 class PromoLotteryTicket extends \yii\db\ActiveRecord
 {
@@ -36,8 +38,8 @@ class PromoLotteryTicket extends \yii\db\ActiveRecord
     {
         return [
             [['user_id'], 'required'],
-            [['user_id', 'isDrawn', 'isRewarded', 'reward_id', 'created_at', 'updated_at', 'rewardedAt', 'source'], 'integer'],
-            [['ip'], 'string', 'max' => 30]
+            [['user_id', 'isDrawn', 'isRewarded', 'reward_id', 'created_at', 'updated_at', 'rewardedAt', 'drawAt', 'promo_id'], 'integer'],
+            [['ip', 'source'], 'string', 'max' => 30],
         ];
     }
 
@@ -49,14 +51,16 @@ class PromoLotteryTicket extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'user_id' => 'User ID',
-            'isDrawn' => 'Is Drawn',
-            'isRewarded' => 'Is Rewarded',
-            'reward_id' => 'Reward ID',
+            'isDrawn' => '是否已抽奖',
+            'isRewarded' => '是否已发奖',
+            'reward_id' => '奖品ID',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
-            'rewardedAt' => 'Rewarded At',
+            'rewardedAt' => '发奖时间',
+            'drawAt' => '发奖时间',
             'ip' => 'Ip',
-            'source' => '抽奖机会来源'//0表示初始化，1新增满5万，2累计满20万，3再来一次
+            'source' => '抽奖机会来源',
+            'promo_id' => '活动ID',
         ];
     }
 
