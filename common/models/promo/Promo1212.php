@@ -4,7 +4,7 @@ namespace common\models\promo;
 
 use common\models\coupon\CouponType;
 use common\models\coupon\UserCoupon;
-use common\models\order\OnlineOrder;
+use common\models\user\MoneyRecord;
 use common\models\user\User;
 use common\service\AccountService;
 use common\service\SmsService;
@@ -66,7 +66,7 @@ class Promo1212
             13 => ['data' => '福临门水晶米一袋', 'pic' => ''],
         ];
 
-        if (!in_array($lottery->reward_id, $config)) {
+        if (!isset($config[$lottery->reward_id])) {
             throw new \Exception('没有该奖品信息');
         }
 
@@ -138,7 +138,6 @@ class Promo1212
         }
 
         $config = [
-            'isInvested' => $user->getUserIsInvested(),
             'totalInvestMent' => $user->getTotalInvestment(),
             'isDrawn' => $this->isFirstDraw($user),
         ];
@@ -214,7 +213,7 @@ class Promo1212
         $totalInvestMent = $config['totalInvestMent'];
         $isFirstDraw = $config['isDrawn'];
 
-        if ($config['isInvested']) {
+        if ($totalInvestMent > 0) {
 
             if ($totalInvestMent >= self::TOTALINVESTMENT_LEVEL_MONEY) {
                 if ($isFirstDraw) {
@@ -282,44 +281,15 @@ class Promo1212
                     $transaction->rollBack();
                     throw new \Exception('发放代金券异常');
                 }
-
             }
         } elseif (isset($cashConfig[$rewardId]) && !empty($cashConfig[$rewardId])) {
             $cash = $cashConfig[$rewardId];
-            //第一笔订单成功可调用此逻辑
-            $count = (int) OnlineOrder::find()->where(['status' => 1, 'uid' => $user->id])->count();
-            if (1 === $count) {
-                try {
-                    if (AccountService::userTransfer($user, $cash)) {
-                        $lottery->isRewarded = true;
-                        $lottery->rewardedAt = time();
-                        if ($lottery->save()) {
-                            $transaction->commit();
-                            $sms = true;
-                        }
-                    }
-                } catch (\Exception $ex) {
-                    $transaction->rollBack();
-                    throw new \Exception($ex->getMessage());
-                }
-
-                if (isset($sms) && $sms) {
-                    $templateId = \Yii::$app->params['sms']['roundabout_redpacket'];
-                    $message = [
-                        $cash,
-                        \Yii::$app->params['clientOption']['host']['wap'],
-                    ];
-                    SmsService::send($user->mobile, $templateId, $message, $user);
-                }
-            } elseif (0 === $count) {
-                //如果用户还未投资
-                $templateId = \Yii::$app->params['sms']['intro_redpacket'];
-                $message = [
-                    $cash,
-                    \Yii::$app->params['contact_tel'],
-                ];
-                SmsService::send($user->mobile, $templateId, $message, $user);
-            }
+            $templateId = \Yii::$app->params['sms']['intro_redpacket'];
+            $message = [
+                $cash,
+                \Yii::$app->params['contact_tel'],
+            ];
+            SmsService::send($user->mobile, $templateId, $message, $user);
 
             return true;
         }
@@ -339,8 +309,41 @@ class Promo1212
     {
         $lottery = PromoLotteryTicket::find()->where(['promo_id' => $this->promo->id, 'isDrawn' => true, 'user_id' => $user->id, 'isRewarded' => false])->andWhere(['in', 'reward_id', array_keys(self::getCashConfig())])->one();
 
-        if (null !== $lottery) {
-            $this->reward($user, $lottery);
+        $moneyRecord = (int) MoneyRecord::find()->where(['uid' => $user->id])->andWhere(['in', 'type', [MoneyRecord::TYPE_ORDER, MoneyRecord::TYPE_CREDIT_NOTE]])->count();
+
+        //如果此人参加了该活动且现金红包未发，则该人只有一笔投资或转让的流水，即只发生一笔订单
+        if (null !== $lottery && $moneyRecord === 1) {
+            $db = \Yii::$app->db;
+            $transaction = $db->beginTransaction();
+            try {
+                $cashConfig = self::getCashConfig();
+                $cash = $cashConfig[$lottery->reward_id];
+                $table = PromoLotteryTicket::tableName();
+
+                $sql = 'update '.$table.' set isRewarded = true,rewardedAt = '.time().' where isRewarded = false and id = '.$lottery->id;
+
+                $affected_rows = $db->createCommand($sql)->execute();
+                if ($affected_rows > 0) {
+                    if (AccountService::userTransfer($user, $cash)) {
+                        $transaction->commit();
+                        $sms = true;
+                    } else {
+                        $transaction->rollBack();
+                    }
+                }
+            } catch (\Exception $ex) {
+                $transaction->rollBack();
+                throw new \Exception($ex->getMessage());
+            }
+
+            if (isset($sms) && $sms) {
+                $templateId = \Yii::$app->params['sms']['roundabout_redpacket'];
+                $message = [
+                    $cash,
+                    \Yii::$app->params['clientOption']['host']['wap'],
+                ];
+                SmsService::send($user->mobile, $templateId, $message, $user);
+            }
         }
     }
 

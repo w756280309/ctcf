@@ -48,6 +48,8 @@ return [
                 'settle/show/<type:\d+>/<date:\d+>' => 'v1/settle/settle/show',
 
                 'app/share/template' => 'v1/app/share/template',
+
+                'promo/reward/cash' => 'v1/promo/reward/cash',
             ],
         ],
     ],
