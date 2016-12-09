@@ -35,6 +35,7 @@ $(function () {
     $('.nodrawgift a').on('click',function(){
         $('.pop').hide();
         $('.mask').hide();
+        $('body').unbind('touchmove');
     })
 });
 
