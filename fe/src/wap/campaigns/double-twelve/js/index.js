@@ -33,7 +33,7 @@ $(function () {
     $('.step1 a,.step2 a').on('click',function(){
         $('body').animate({"scrollTop":scrollTop+'px'},1000);
     })
-    $('.drawgift').on('click',function(){
+    $('.drawgift a').on('click',function(){
         window.location.href = window.location.href +"?v="+ Math.random()*10;
     });
 });
