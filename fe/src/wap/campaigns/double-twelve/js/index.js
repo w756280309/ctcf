@@ -2,7 +2,7 @@
  * Created by lw on 2016/12/7.
  */
 $(function () {
-    var flag=false;
+    // var flag=false;
     FastClick.attach(document.body);
     initScroll();
     var len = $('.people ul li').length;
