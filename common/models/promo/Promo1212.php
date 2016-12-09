@@ -179,7 +179,7 @@ class Promo1212
      */
     public function getRewardList(User $user)
     {
-        return PromoLotteryTicket::find()->where(['promo_id' => $this->promo->id, 'isDrawn' => true, 'user_id' => $user->id])->all();
+        return PromoLotteryTicket::find()->where(['promo_id' => $this->promo->id, 'isDrawn' => true, 'user_id' => $user->id])->orderBy(['drawAt' => SORT_DESC])->all();
     }
 
     public function getBoardList($limit = 10)
