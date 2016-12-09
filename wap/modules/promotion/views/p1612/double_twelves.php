@@ -218,7 +218,7 @@ use common\utils\StringUtils;
     <img src="<?= FE_BASE_URI ?>wap/campaigns/double-twelve/images/drawgiftbg_02.png" alt="">
     <p>您还未抽过奖！</p>
     <img src="<?= FE_BASE_URI ?>wap/campaigns/double-twelve/images/box.png" alt="">
-    <a href=""></a>
+    <a></a>
 </div>
 <!--中奖列表有礼品-->
 <div class="giftlist pop">

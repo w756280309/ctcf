@@ -4,6 +4,8 @@ $this->title = "温州报业传媒旗下理财平台";
 $this->params['breadcrumbs'][] = $this->title;
 $this->headerNavOn = true;
 
+use common\models\adv\Share;
+use common\view\WxshareHelper;
 use wap\assets\WapAsset;
 
 $this->registerCssFile(ASSETS_BASE_URI.'css/first.css', ['depends' => WapAsset::class]);
@@ -12,18 +14,16 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/fastclick.js', ['depends' => WapAsset:
 $this->registerJsFile(ASSETS_BASE_URI.'js/invite/activedisplay.js?v=20161013', ['depends' => WapAsset::class]);
 
 if ($isLuodiye) {
-$hostInfo = \Yii::$app->request->hostInfo;
-$cdn = '/' === ASSETS_BASE_URI ? $hostInfo.'/' : ASSETS_BASE_URI;
-$_js = <<<JS
-   var wechatTitle = '送你一个红包，快打开看看！';
-   var wechatDesc = '温州报业传媒旗下理财平台，国资背景，稳健好收益。';
-   var wechatLink = '$hostInfo'+'/luodiye';
-   var imgUrl = '$cdn'+'images/wechat/0926.jpg';
-JS;
+    $host = Yii::$app->params['clientOption']['host']['wap'];
 
-$this->registerJs($_js, 1);
-$this->registerJsFile('https://res.wx.qq.com/open/js/jweixin-1.0.0.js');
-$this->registerJsFile($cdn.'js/wechat.js');
+    $share = new Share([
+        'title' => '送你一个红包，快打开看看！',
+        'description' => '温州报业传媒旗下理财平台，国资背景，稳健好收益。',
+        'url' => $host.'luodiye',
+        'imgUrl' => ('/' === ASSETS_BASE_URI ? $host : ASSETS_BASE_URI).'images/wechat/0926.jpg',
+    ]);
+
+    WxshareHelper::registerTo($this, $share);
 }
 
 ?>
