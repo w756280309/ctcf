@@ -468,8 +468,9 @@ footer img {
   width: 0.76rem;
 }
 .giftlist .giftlistbox {
-  overflow: auto;
+  position: relative;
   height: 8.6rem;
+  left: 6%;
   margin-top: 1.04rem;
 }
 .giftlist .giftlistbox ul li {
