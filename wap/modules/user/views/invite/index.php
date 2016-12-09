@@ -18,6 +18,8 @@ $share = new Share([
 ]);
 
 WxshareHelper::registerTo($this, $share);
+$this->registerJs('var invite_url = "'.$share->url.'";', 1);
+
 ?>
 <script type="text/javascript">
     var url = '/user/invite';

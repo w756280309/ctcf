@@ -315,7 +315,7 @@ class SiteController extends Controller
                     $user->last_login = time();
                     $user->save();
 
-                    if (!empty($next)) {
+                    if (!empty($next) && !defined('IN_APP')) {
                         $tourl = $next;
                     } else {
                         $tourl = '/';
