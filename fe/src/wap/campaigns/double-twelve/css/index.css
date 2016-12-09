@@ -521,3 +521,12 @@ footer img {
   font-size: 0.29333333rem;
   color: #fff;
 }
+
+.goinvest,.goindex {
+  width:100%;
+  display: block;
+  margin-top: 0.6rem;
+}
+.goinvest img,.goindex img {
+  width:100%;
+}
