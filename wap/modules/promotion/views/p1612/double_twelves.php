@@ -166,8 +166,7 @@ use common\utils\StringUtils;
             <li>4.可前往账户中心进行邀请好友。</li>
         </ul>
     </div>
-    <!--<div id="acceptreg"></div>-->
-    <a class="goinvest" href="/user/invite"><img src="<?= FE_BASE_URI ?>wap/campaigns/double-twelve/images/goinvest.png" alt=""></a>
+    <a class="goinvest" href="/user/invite?v=<?= time() ?>"><img src="<?= FE_BASE_URI ?>wap/campaigns/double-twelve/images/goinvest.png" alt=""></a>
     <div class="accept">
         <div class="title">领奖规则</div>
         <ul>
@@ -180,56 +179,57 @@ use common\utils\StringUtils;
             <li>7.本活动最终解释权在法律范围内归温都金服（温州温都金融信息服务股份有限公司）所有。</li>
         </ul>
     </div>
-    <a class="goindex" href="/"><img src="<?= FE_BASE_URI ?>wap/campaigns/double-twelve/images/goindex.png" alt=""></a>
+    <a class="goindex" href="/site/index?v=<?= time() ?>"><img src="<?= FE_BASE_URI ?>wap/campaigns/double-twelve/images/goindex.png" alt=""></a>
 </section>
 <!--footer-->
 <footer><img src="<?= FE_BASE_URI ?>wap/campaigns/double-twelve/images/adv.png" alt=""> 理财非存款 产品有风险 投资须谨慎 </footer>
 
 <!--遮罩-->
-<div class="mask">
-    <!--弹框-->
-    <!--登录弹框-->
-    <div class="login pop">
-        <img class="closepop" src="<?= FE_BASE_URI ?>wap/campaigns/double-twelve/images/close01.png" alt="">
-        <p>您还未登录！</p>
-        <p>登录即可参加抽奖活动，赶快行动吧~</p>
-        <img src="<?= FE_BASE_URI ?>wap/campaigns/double-twelve/images/box.png" alt="">
-        <a href="/site/login" class="loginbtn"></a>
-        <a href="/<?= defined('IN_APP') ? 'site' : 'luodiye' ?>/signup?next=<?= urlencode(Yii::$app->request->absoluteUrl) ?>">没有账号，立即去注册</a>
+<div class="mask"></div>
+<!--弹框-->
+<!--登录弹框-->
+<div class="login pop">
+    <img class="closepop" src="<?= FE_BASE_URI ?>wap/campaigns/double-twelve/images/close01.png" alt="">
+    <p>您还未登录！</p>
+    <p>登录即可参加抽奖活动，赶快行动吧~</p>
+    <img src="<?= FE_BASE_URI ?>wap/campaigns/double-twelve/images/box.png" alt="">
+    <a href="/site/login" class="loginbtn"></a>
+    <a href="/<?= defined('IN_APP') ? 'site' : 'luodiye' ?>/signup?next=<?= urlencode(Yii::$app->request->absoluteUrl) ?>">没有账号，立即去注册</a>
+</div>
+<!--没有抽奖机会-->
+<div class="nochance pop">
+    <img class="closepop" src="<?= FE_BASE_URI ?>wap/campaigns/double-twelve/images/close01.png" alt="">
+    <p>没有抽奖机会了！</p>
+    <p>邀请好友，可获得更多抽奖机会哦~</p>
+    <img src="<?= FE_BASE_URI ?>wap/campaigns/double-twelve/images/box.png" alt="">
+    <a href="/user/invite" class="investbtn"></a>
+</div>
+<!--中奖效果-->
+<div class="drawgift pop">
+    <img class="bgtop" src="<?= FE_BASE_URI ?>wap/campaigns/double-twelve/images/drawgiftbg_01.png" alt="">
+    <p></p>
+    <div>
+        <img src="" alt="">
     </div>
-    <!--没有抽奖机会-->
-    <div class="nochance pop">
-        <img class="closepop" src="<?= FE_BASE_URI ?>wap/campaigns/double-twelve/images/close01.png" alt="">
-        <p>没有抽奖机会了！</p>
-        <p>邀请好友，可获得更多抽奖机会哦~</p>
-        <img src="<?= FE_BASE_URI ?>wap/campaigns/double-twelve/images/box.png" alt="">
-        <a href="/user/invite" class="investbtn"></a>
-    </div>
-    <!--中奖效果-->
-    <div class="drawgift pop">
-        <img class="bgtop" src="<?= FE_BASE_URI ?>wap/campaigns/double-twelve/images/drawgiftbg_01.png" alt="">
-        <p></p>
-        <div>
-            <img src="" alt="">
-        </div>
-        <a href=""></a>
-    </div>
-    <!--中奖列表无礼品-->
-    <div class="nodrawgift pop">
-        <img src="<?= FE_BASE_URI ?>wap/campaigns/double-twelve/images/drawgiftbg_02.png" alt="">
-        <p>您还未抽过奖！</p>
-        <img src="<?= FE_BASE_URI ?>wap/campaigns/double-twelve/images/box.png" alt="">
-        <a href=""></a>
-    </div>
-    <!--中奖列表有礼品-->
-    <div class="giftlist pop">
-        <img  class="giftlistimg" src="<?= FE_BASE_URI ?>wap/campaigns/double-twelve/images/drawgiftbg_02.png" alt="">
-        <img class="giftlistclose  closepop" src="<?= FE_BASE_URI ?>wap/campaigns/double-twelve/images/close_02.png" alt="">
-        <div class="giftlistbox" id="giftBox"></div>
-    </div>
+    <a href=""></a>
+</div>
+<!--中奖列表无礼品-->
+<div class="nodrawgift pop">
+    <img src="<?= FE_BASE_URI ?>wap/campaigns/double-twelve/images/drawgiftbg_02.png" alt="">
+    <p>您还未抽过奖！</p>
+    <img src="<?= FE_BASE_URI ?>wap/campaigns/double-twelve/images/box.png" alt="">
+    <a href=""></a>
+</div>
+<!--中奖列表有礼品-->
+<div class="giftlist pop">
+    <img  class="giftlistimg" src="<?= FE_BASE_URI ?>wap/campaigns/double-twelve/images/drawgiftbg_02.png" alt="">
+    <img class="giftlistclose  closepop" src="<?= FE_BASE_URI ?>wap/campaigns/double-twelve/images/close_02.png" alt="">
+    <div class="giftlistbox" id="giftBox"></div>
 </div>
 
+
 <script type="text/javascript">
+    var isRefresh = false;   //是否刷新页面标志位
     $(function () {
         $('#draw').on('click', function () {
             $(this).attr('disabled', true);
@@ -243,6 +243,7 @@ use common\utils\StringUtils;
                         pop('.nochance');
                     }
                 } else {
+                    isRefresh = true;
                     $('.drawgift div img').attr('src', data.data.pic);
                     $('.drawgift p').html('恭喜您获得'+data.data.name+'！');
                     pop('.drawgift');
@@ -267,6 +268,7 @@ use common\utils\StringUtils;
                     }
                 } else {
                     $('#giftBox').html(data.html);
+                    initScroll();
                     pop('.giftlist');
                 }
 
