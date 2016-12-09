@@ -282,6 +282,8 @@ class SiteController extends Controller
 
     /**
      * 注册表单页.
+     *
+     * 1. next传入项为注册成功跳转链接,是经过转译的;
      */
     public function actionSignup()
     {
@@ -311,7 +313,12 @@ class SiteController extends Controller
                     $user->last_login = time();
                     $user->save();
 
-                    $tourl = '/';
+                    if (isset($data['next']) && $data['next']) {
+                        $tourl = urldecode($data['next']);
+                    } else {
+                        $tourl = '/';
+                    }
+
                     $urls = parse_url($tourl);
                     $output = array();
                     if (defined('IN_APP')) {

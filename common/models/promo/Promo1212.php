@@ -51,19 +51,19 @@ class Promo1212
     public static function getPrizeMessageConfig(PromoLotteryTicket $lottery)
     {
         $config = [
-            1 => ['data' => '5元代金券一张', 'pic' => ''],
-            2 => ['data' => '10元代金券一张', 'pic' => ''],
-            3 => ['data' => '25元代金券一张', 'pic' => ''],
-            4 => ['data' => '10元代金券一张', 'pic' => ''],
-            5 => ['data' => '20元代金券一张', 'pic' => ''],
-            6 => ['data' => '50元代金券一张', 'pic' => ''],
-            7 => ['data' => '2元现金红包一个', 'pic' => ''],
-            8 => ['data' => '3元现金红包一个', 'pic' => ''],
-            9 => ['data' => '4元现金红包一个', 'pic' => ''],
-            10 => ['data' => '5元现金红包一个', 'pic' => ''],
-            11 => ['data' => '手机指环扣一个', 'pic' => ''],
-            12 => ['data' => '俄罗斯原装进口食用油一桶', 'pic' => ''],
-            13 => ['data' => '福临门水晶米一袋', 'pic' => ''],
+            1 => ['name' => '5元代金券', 'pic' => FE_BASE_URI.'wap/campaigns/double-twelve/images/coupon_01.png'],
+            2 => ['name' => '10元代金券', 'pic' => FE_BASE_URI.'wap/campaigns/double-twelve/images/coupon_02.png'],
+            3 => ['name' => '25元代金券', 'pic' => FE_BASE_URI.'wap/campaigns/double-twelve/images/coupon_04.png'],
+            4 => ['name' => '10元代金券', 'pic' => FE_BASE_URI.'wap/campaigns/double-twelve/images/coupon_02.png'],
+            5 => ['name' => '20元代金券', 'pic' => FE_BASE_URI.'wap/campaigns/double-twelve/images/coupon_03.png'],
+            6 => ['name' => '50元代金券', 'pic' => FE_BASE_URI.'wap/campaigns/double-twelve/images/coupon_05.png'],
+            7 => ['name' => '2元现金红包', 'pic' => FE_BASE_URI.'wap/campaigns/double-twelve/images/coupon_06.png'],
+            8 => ['name' => '3元现金红包', 'pic' => FE_BASE_URI.'wap/campaigns/double-twelve/images/coupon_06.png'],
+            9 => ['name' => '4元现金红包', 'pic' => FE_BASE_URI.'wap/campaigns/double-twelve/images/coupon_06.png'],
+            10 => ['name' => '5元现金红包', 'pic' => FE_BASE_URI.'wap/campaigns/double-twelve/images/coupon_06.png'],
+            11 => ['name' => '手机指环扣', 'pic' => FE_BASE_URI.'wap/campaigns/double-twelve/images/coupon_07.png'],
+            12 => ['name' => '进口食用油', 'pic' => FE_BASE_URI.'wap/campaigns/double-twelve/images/coupon_08.png'],
+            13 => ['name' => '福临门水晶米', 'pic' => FE_BASE_URI.'wap/campaigns/double-twelve/images/coupon_09.png'],
         ];
 
         if (!isset($config[$lottery->reward_id])) {
@@ -146,7 +146,6 @@ class Promo1212
         $lottery->isDrawn = true;
         $lottery->drawAt = time();
         if ($lottery->save()) {
-
             try {
                 if ($this->reward($user, $lottery)) {
                     return $lottery;
@@ -154,7 +153,6 @@ class Promo1212
             } catch(\Exception $ex) {
                 throw new \Exception('发奖失败，请联系客服，客服电话' . \Yii::$app->params['contact_tel']);
             }
-
         }
 
         throw new \Exception($lottery->getFirstError());
@@ -364,7 +362,7 @@ class Promo1212
     {
         //获取用户初始化的抽奖机会
         $ticketCount = PromoLotteryTicket::find()->where(['user_id' => $user->id, 'source' => 'init', 'promo_id' => $this->promo->id])->count();
-        if ($ticketCount === 0) {
+        if (!$ticketCount) {
             $this->addTicketInternal($user->id, 'init', $this->promo->id, empty($request) ? '' : $request->getUserIP());
         }
     }

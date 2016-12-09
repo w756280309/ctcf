@@ -17,6 +17,7 @@ class InviteController extends BaseController
     {
         $user = $this->getAuthedUser();
         $model = InviteRecord::getInviteRecord($user);
+
         $pageSize = 5;
         $count = count($model);
 
