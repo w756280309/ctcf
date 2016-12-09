@@ -179,7 +179,7 @@ use common\utils\StringUtils;
             <li>7.本活动最终解释权在法律范围内归温都金服（温州温都金融信息服务股份有限公司）所有。</li>
         </ul>
     </div>
-    <a class="goindex" href="/?v=<?= time() ?>"><img src="<?= FE_BASE_URI ?>wap/campaigns/double-twelve/images/goindex.png" alt=""></a>
+    <a class="goindex" href="/<?= !defined('IN_APP') ? '?v='.time() : '' ?>"><img src="<?= FE_BASE_URI ?>wap/campaigns/double-twelve/images/goindex.png" alt=""></a>
 </section>
 <!--footer-->
 <footer><img src="<?= FE_BASE_URI ?>wap/campaigns/double-twelve/images/adv.png" alt=""> 理财非存款 产品有风险 投资须谨慎 </footer>
