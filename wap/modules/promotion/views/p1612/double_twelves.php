@@ -167,6 +167,7 @@ use common\utils\StringUtils;
         </ul>
     </div>
     <!--<div id="acceptreg"></div>-->
+    <a class="goinvest" href="/user/invite"><img src="<?= FE_BASE_URI ?>wap/campaigns/double-twelve/images/goinvest.png" alt=""></a>
     <div class="accept">
         <div class="title">领奖规则</div>
         <ul>
@@ -179,6 +180,7 @@ use common\utils\StringUtils;
             <li>7.本活动最终解释权在法律范围内归温都金服（温州温都金融信息服务股份有限公司）所有。</li>
         </ul>
     </div>
+    <a class="goindex" href="/"><img src="<?= FE_BASE_URI ?>wap/campaigns/double-twelve/images/goindex.png" alt=""></a>
 </section>
 <!--footer-->
 <footer><img src="<?= FE_BASE_URI ?>wap/campaigns/double-twelve/images/adv.png" alt=""> 理财非存款 产品有风险 投资须谨慎 </footer>
