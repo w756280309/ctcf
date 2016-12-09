@@ -20,7 +20,10 @@ class LuodiyeController extends Controller
     {
         $captcha = new CaptchaForm();
 
-        return $this->render('luodiye', ['captcha' => $captcha, 'next' => filter_var($next, FILTER_VALIDATE_URL)]);
+        return $this->render('luodiye', [
+            'captcha' => $captcha,
+            'next' => filter_var($next, FILTER_VALIDATE_URL),
+        ]);
     }
 
     public function actionIndex()

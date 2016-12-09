@@ -1,4 +1,5 @@
 <?php
+
 use yii\bootstrap\ActiveForm;
 use yii\captcha\Captcha;
 
@@ -8,7 +9,13 @@ $this->params['breadcrumbs'][] = $this->title;
 <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/loginsign.css">
 
 <div class="row kongxi">
-    <?php $form = ActiveForm::begin(['id' => 'signup_form', 'action' => '/site/signup']); ?>
+    <?php
+        $actionUrl = '/site/signup';
+        if (!empty($next)) {
+            $actionUrl .= '?next='.urlencode($next);
+        }
+    ?>
+    <?php $form = ActiveForm::begin(['id' => 'signup_form', 'action' => $actionUrl]); ?>
     <input name="_csrf" type="hidden" id="_csrf" value="<?= Yii::$app->request->csrfToken ?>">
     <input id="iphone" class="login-info" name="SignupForm[phone]" maxlength="11" type="tel"
            placeholder="请输入手机号">
