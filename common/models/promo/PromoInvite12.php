@@ -6,6 +6,7 @@ namespace common\models\promo;
 use common\models\coupon\CouponType;
 use common\models\coupon\UserCoupon;
 use common\models\order\OnlineOrder;
+use common\models\product\OnlineProduct;
 use common\models\user\User;
 use common\service\AccountService;
 use common\service\SmsService;
@@ -60,7 +61,8 @@ class PromoInvite12
     {
         $promo = $this->promo;
         $user = $order->user;
-        if (intval($order->status) === 1 && $promo->isActive($user)) {
+        $loan = $order->loan;
+        if (intval($order->status) === 1 && $promo->isActive($user) && !$loan->is_xs) {
             //判断是不是被邀请者
             $invite = InviteRecord::find()
                 ->where(['invitee_id' => $order->uid])
@@ -69,10 +71,12 @@ class PromoInvite12
             if ($invite > 0) {
                 //获取被邀请者活动期间前三次投资订单id
                 $orderData = OnlineOrder::find()
-                    ->select('id')
-                    ->where(['uid' => $order->uid, 'status' => 1])
-                    ->andWhere(['between', 'order_time', $promo->startAt, $promo->endAt])
-                    ->orderBy(['order_time' => SORT_ASC])
+                    ->select('online_order.id')
+                    ->innerJoin(OnlineProduct::tableName(), 'online_order.online_pid=online_product.id')
+                    ->where(['online_order.uid' => $order->uid, 'online_order.status' => 1])
+                    ->andWhere(['between', 'online_order.order_time', $promo->startAt, $promo->endAt])
+                    ->andWhere(['online_product.is_xs' => 0])
+                    ->orderBy(['online_order.order_time' => SORT_ASC])
                     ->limit(3)
                     ->all();
                 $orderIds = ArrayHelper::getColumn($orderData, 'id');
@@ -85,7 +89,6 @@ class PromoInvite12
                     $mess = '';
                     //首次投资给邀请者发代金券
                     if ($orderIds[0] === $order->id) {
-                        //todo 等更改代金券时候需要手工更改代码
                         if ($order->order_money < 10000) {
                             //发放30元代金券
                             $coupon = CouponType::find()->where(['sn' => self::COUPON_30_SN])->one();

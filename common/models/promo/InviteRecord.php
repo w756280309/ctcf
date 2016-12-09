@@ -2,12 +2,8 @@
 
 namespace common\models\promo;
 
-use common\models\coupon\CouponType;
-use common\models\coupon\UserCoupon;
 use common\models\order\OnlineOrder;
 use common\models\user\User;
-use common\service\AccountService;
-use common\service\SmsService;
 use wap\modules\promotion\models\RankingPromo;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
@@ -64,54 +60,54 @@ class InviteRecord extends ActiveRecord
      */
     public static function getInviteRecord(User $user)
     {
-        $promo = RankingPromo::find()->where(['key' => self::PROMO_KEY])->one();
-        //获取邀请者首次投资记录
-        $firstOrder = OnlineOrder::find()->where(['uid' => $user->id, 'status' => 1])->orderBy(['order_time' => SORT_ASC])->one();
-        $invitee = self::find()->where(['user_id' => $user->id])->andWhere(['between', 'created_at', $promo->startAt, $promo->endAt])->select('invitee_id')->asArray()->all();
-        $ids = ArrayHelper::getColumn($invitee, 'invitee_id');
+        $promoKey = [
+            'WAP_INVITE_PROMO_160804',
+            'promo_invite_12',
+        ];
+        $promos = RankingPromo::find()->where(['key' => $promoKey])->all();
         $res = [];
-        if ($ids) {
-            $users = User::find()->where(['id' => $ids])->orderBy(['id' => SORT_DESC])->all();
-            foreach ($users as $k => $v) {
-                //邀请者因为此被邀请者得到的代金券金额
-                $order = OnlineOrder::find()
-                    ->select('order_money')
-                    ->where(['uid' => $v->id, 'status' => 1])
-                    ->andWhere(['between', 'order_time', $promo->startAt, $promo->endAt])
-                    ->orderBy(['order_time' => SORT_ASC])
-                    ->asArray()
-                    ->one();
-                if ($order) {
-                    $firstMoney = $order['order_money'];
-                    if ($firstMoney < 10000) {
-                        $coupon = 30;
-                    } else {
-                        $coupon = 50;
-                    }
-                } else {
-                    $coupon = 0;
-                }
-                if ($firstOrder) {
-                    //邀请者因为此被邀请者得到的现金红包
-                    $thirdMoney = OnlineOrder::find()
-                        ->where(['uid' => $v->id, 'status' => 1])
-                        ->andWhere(['between', 'order_time', max($promo->startAt, $firstOrder->order_time), $promo->endAt])
-                        ->orderBy(['order_time' => SORT_ASC])
-                        ->limit(3)
-                        ->all();
-                    if ($thirdMoney) {
-                        $money = ArrayHelper::getColumn($thirdMoney, 'order_money');
-                        $cash = round(floatval(array_sum($money)) / 1000, 1);
-                    } else {
-                        $cash = 0;
-                    }
-                } else {
-                    $cash = 0;
-                }
-                $res[$k] = ['name' => $v->real_name, 'mobile' => $v->mobile, 'day' => date('Y-m-d', $v->created_at), 'coupon' => $coupon, 'cash' => $cash];
-            }
+        $dates = [];
+        foreach ($promos as $promo) {
+            $dates[] = ['start' => $promo->startAt, 'end' => $promo->endAt];
         }
+        $inviteRecords = InviteRecord::find()->select(['invitee_id', 'created_at'])->where(['user_id' => $user->id])->orderBy(['created_at' => SORT_DESC])->asArray()->all();
+        foreach ($inviteRecords as $record) {
+            $invitee = User::find()->where(['id' => $record['invitee_id']])->asArray()->one();
+            if (empty($invitee)) {
+                continue;
+            }
+            $coupon =0;
+            $cash = 0.00;
+            foreach ($dates as $date) {
+                if ($record['created_at'] >= $date['start'] && $record['created_at'] <= $date['end']) {
+                    $orderData = OnlineOrder::find()
+                        ->select(['online_order.id', 'online_order.order_money'])
+                        ->innerJoin('online_product', 'online_order.online_pid=online_product.id')
+                        ->where(['online_order.uid' => $invitee['id'], 'online_order.status' => 1])
+                        ->andWhere(['between', 'online_order.order_time', $date['start'], $date['end']])
+                        ->andWhere(['online_product.is_xs' => 0])
+                        ->orderBy(['online_order.order_time' => SORT_ASC])
+                        ->limit(3)
+                        ->asArray()
+                        ->all();
 
+                    //邀请者因为此被邀请者得到的代金券金额
+                    if (count($orderData) > 0) {
+                        $firstMoney = $orderData[0]['order_money'];
+                        if ($firstMoney < 10000) {
+                            $coupon = 30;
+                        } else {
+                            $coupon = 50;
+                        }
+                        //邀请者因为此被邀请者得到的现金红包
+                        $money = ArrayHelper::getColumn($orderData, 'order_money');
+                        $cash = bcdiv(array_sum($money), 1000, 2);
+                    }
+                    break;
+                }
+            }
+            $res[] = ['name' =>$invitee['real_name'], 'mobile' => $invitee['mobile'], 'day' => date('Y-m-d', $record['created_at']), 'coupon' => $coupon, 'cash' => $cash];
+        }
         return $res;
     }
 

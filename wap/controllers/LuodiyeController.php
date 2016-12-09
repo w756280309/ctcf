@@ -13,11 +13,14 @@ class LuodiyeController extends Controller
 {
     use HelpersTrait;
 
-    public function actionSignup()
+    /**
+     * 落地页注册页.
+     */
+    public function actionSignup($next = null)
     {
         $captcha = new CaptchaForm();
 
-        return $this->render('luodiye', ['captcha' => $captcha]);
+        return $this->render('luodiye', ['captcha' => $captcha, 'next' => filter_var($next, FILTER_VALIDATE_URL)]);
     }
 
     public function actionIndex()
