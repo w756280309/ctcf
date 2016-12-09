@@ -587,3 +587,27 @@ a.shouye1:active {
     background-size: 200px;
     font-size: 18px;
 }
+
+.mask {
+    z-index: 10000;
+    display: block;
+}
+
+.pop {
+    position: fixed;
+    top:50%;
+    left:50%;
+    transform: translate(-50%,-50%);
+    -moz-transform: translate(-50%,-50%);
+    -webkit-transform: translate(-50%,-50%);
+    z-index: 100000;
+}
+.pop img:nth-of-type(1) {
+    width:0.76rem;
+    position: absolute;
+    top:-14.5%;
+    right:0;
+}
+.pop img:nth-of-type(2) {
+    width:6.6666667rem;
+}

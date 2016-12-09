@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="css/index.css?v=1.0364">
     <link rel="stylesheet" href="../libs/swiper/swiper.min.css">
     <script src="js/flex.js"></script>
+    <script src="../libs/jquery-1.11.1.min.js"></script>
 </head>
 <body>
 <header>
@@ -183,7 +184,13 @@
         </div>
     </div>
 </div>
+<div class="mask">
+</div>
 
+<div class="pop">
+    <img src="images/close.png" alt="">
+    <img src="images/advantage.png" alt="">
+</div>
 <script src="https://static.wenjf.com/m/js/swiper.min.js"></script>
 <script>
     var mySwiper = new Swiper('.swiper-container', {
@@ -193,7 +200,18 @@
         spaceBetween:20,
         slidesOffsetBefore:20,
 //        slidesOffsetAfter:10,
-    })
+    });
+    $(function(){
+        document.body.addEventListener('touchmove',eventTarget,false);
+        $('.mask,.pop img:eq(0)').on('click',function(){
+            $('.mask').hide();
+            $('.pop').hide();
+            document.body.removeEventListener('touchmove',eventTarget,false);
+        })
+    });
+    function eventTarget(event){
+        event.preventDefault();
+    }
 </script>
 </body>
 </html>
