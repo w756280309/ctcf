@@ -21,7 +21,13 @@ $(function () {
         $('.pop').hide();
         $('.mask').hide();
         if(isRefresh){
-            window.location.href = window.location.href +"?v="+ Math.random()*10;
+            if(location.href.indexOf('?') == -1){
+                window.location.href = window.location.href +"?v="+ Math.random()*10;
+            } else {
+                window.location.href = window.location.href +"&v="+ Math.random()*10;
+            }
+
+
         }
         $('body').unbind('touchmove');
     });
@@ -30,7 +36,11 @@ $(function () {
         $('body').animate({"scrollTop":scrollTop+'px'},1000);
     })
     $('.drawgift a').on('click',function(){
-        window.location.href = window.location.href +"?v="+ Math.random()*10;
+        if(location.href.indexOf('?') == -1){
+            window.location.href = window.location.href +"?v="+ Math.random()*10;
+        } else {
+            window.location.href = window.location.href +"&v="+ Math.random()*10;
+        }
     });
     $('.nodrawgift a').on('click',function(){
         $('.pop').hide();

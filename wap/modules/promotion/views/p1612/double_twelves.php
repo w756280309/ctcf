@@ -10,7 +10,7 @@ use common\utils\StringUtils;
 <script src="<?= FE_BASE_URI ?>libs/flex.js"></script>
 <script src="<?= FE_BASE_URI ?>libs/jquery-1.11.1.min.js"></script>
 <script src="<?= FE_BASE_URI ?>libs/fastclick.js"></script>
-<script src="<?= FE_BASE_URI ?>wap/campaigns/double-twelve/js/index.js"></script>
+<script src="<?= FE_BASE_URI ?>wap/campaigns/double-twelve/js/index.js?v=20161209"></script>
 <style>
     header div:first-child {
         background: url("<?= FE_BASE_URI ?>wap/campaigns/double-twelve/images/banner_01.png") no-repeat center;
