@@ -32,6 +32,10 @@ $(function () {
     $('.drawgift a').on('click',function(){
         window.location.href = window.location.href +"?v="+ Math.random()*10;
     });
+    $('.nodrawgift a').on('click',function(){
+        $('.pop').hide();
+        $('.mask').hide();
+    })
 });
 
 function lunBo() {
