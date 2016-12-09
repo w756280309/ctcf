@@ -143,40 +143,55 @@ section .featured {
     margin: 0 0.53333333rem;
     padding-bottom: 0.53333333rem;
     padding-top: 0.2rem;
-    height: 4.8rem;
+    /*height: 4.8rem;*/
 }
 section .featured .project {
     font-size: 15px;
     color: #333;
     margin-bottom: 0.26666667rem;
 }
-section .featured ul {
+ section .featured .onepic {
+     width:100%;
+ }
+section .featured .onepic img {
     width:100%;
 }
-section .featured ul li:first-child {
+ section .featured .twopic {
+    width:100%;
+}
+section .featured .twopic li {
+    width:49%;
+}
+section .featured .twopic li img {
+    width:100%;
+}
+section .featured .threepic {
+    width:100%;
+}
+section .featured .threepic li:first-child {
     width: 55.58%;
 }
-section .featured ul li:first-child a {
+section .featured .threepic li:first-child a {
     width: 100%;
     display: -webkit-box;
 }
-section .featured ul li:last-child {
+section .featured .threepic li:last-child {
     width: 42.92%;
 }
-section .featured ul li:last-child a:first-child {
+section .featured .threepic li:last-child a:first-child {
     width: 100%;
     display: -webkit-box;
 }
-section .featured ul li:last-child a:last-child {
+section .featured .threepic li:last-child a:last-child {
     width: 100%;
     display: -webkit-box;
 }
-section .featured ul li:last-child .a-two {
+section .featured .threepic li:last-child .a-two {
     width: 100%;
     height: 0.134rem;
     display:  -webkit-box;
 }
-section .featured ul li a img {
+section .featured .threepic li a img {
     width: 100%;
 }
 
