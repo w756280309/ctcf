@@ -312,8 +312,9 @@ footer img {
 .nochance img:nth-of-type(1) {
   width: 0.38666667rem;
   position: absolute;
-  top: 0.49333333rem;
-  right: 0.49333333rem;
+  top: 0.29333333rem;
+  right: 0.29333333rem;
+    padding:0.2rem;
 }
 .login p:nth-of-type(1),
 .nochance p:nth-of-type(1) {
