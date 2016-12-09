@@ -3,7 +3,6 @@
  */
 $(function () {
     FastClick.attach(document.body);
-    initScroll();
     var len = $('.people ul li').length;
     if (len > 3) {
         lunBo();
