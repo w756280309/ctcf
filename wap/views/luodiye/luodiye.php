@@ -34,7 +34,13 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/luodiye.js', ['depends' => WapAsset::c
                 </div>
             </div>
 
-            <?php $form = ActiveForm::begin(['id' => 'signup_form', 'action' => '/site/signup']); ?>
+            <?php
+                $actionUrl = '/site/signup';
+                if (!empty($next)) {
+                    $actionUrl .= '?next='.urlencode($next);
+                }
+            ?>
+            <?php $form = ActiveForm::begin(['id' => 'signup_form', 'action' => $actionUrl]); ?>
             <div class="row register-box">
                 <div class="text-box">
                     <input name="regContext" type="hidden" value="m_intro1611">

@@ -39,6 +39,7 @@ class P1612Controller extends Controller
         return $this->render('double_twelves', [
             'share' => $share,
             'boardList' => $boardList,
+            'user' => $user,
             'tickets' => $tickets,
         ]);
     }

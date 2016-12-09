@@ -285,11 +285,13 @@ class SiteController extends Controller
      *
      * 1. next传入项为注册成功跳转链接,是经过转译的;
      */
-    public function actionSignup()
+    public function actionSignup($next = null)
     {
         if (!\Yii::$app->user->isGuest) {
             return $this->goHome();
         }
+
+        $next = filter_var($next, FILTER_VALIDATE_URL);
 
         $model = new SignupForm();
         $data = Yii::$app->request->post();
@@ -313,8 +315,8 @@ class SiteController extends Controller
                     $user->last_login = time();
                     $user->save();
 
-                    if (isset($data['next']) && $data['next']) {
-                        $tourl = urldecode($data['next']);
+                    if (!empty($next)) {
+                        $tourl = $next;
                     } else {
                         $tourl = '/';
                     }
@@ -327,6 +329,10 @@ class SiteController extends Controller
                         $output['token'] = $tokens->token;
                         $output['expire'] = $tokens->expireTime;
                         $tourl = $urls['path'].'?'.http_build_query($output);
+
+                        if (isset($urls['query'])) {
+                            $tourl .= '&'.$urls['query'];
+                        }
                     }
 
                     return ['code' => 1, 'message' => '注册成功', 'tourl' => $tourl];
@@ -340,7 +346,10 @@ class SiteController extends Controller
 
         $captcha = new CaptchaForm();
 
-        return $this->render('signup', ['model' => $captcha]);
+        return $this->render('signup', [
+            'model' => $captcha,
+            'next' => $next,
+        ]);
     }
 
     public function actionSession()

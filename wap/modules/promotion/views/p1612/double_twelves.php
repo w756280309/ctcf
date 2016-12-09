@@ -6,6 +6,7 @@ use common\models\promo\Promo1212;
 use common\utils\StringUtils;
 ?>
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/campaigns/double-twelve/css/index.css">
+<script src="<?= FE_BASE_URI ?>libs/iscroll.js"></script>
 <script src="<?= FE_BASE_URI ?>libs/flex.js"></script>
 <script src="<?= FE_BASE_URI ?>libs/jquery-1.11.1.min.js"></script>
 <script src="<?= FE_BASE_URI ?>libs/fastclick.js"></script>
@@ -65,101 +66,107 @@ use common\utils\StringUtils;
 </header>
 <!--content-->
 <section>
-    <div class="step1">
-        <span class="lf">第一步：幸运大礼包</span>
-        <a class="rg" href="#activereg">如何增加抽奖机会?</a>
-    </div>
-    <div class="lotternumber">
-        <img src="<?= FE_BASE_URI ?>wap/campaigns/double-twelve/images/gift.png" alt="">
-        您还有抽奖次数：
-        <span><?= $tickets ?></span>次
-    </div>
-
-    <table class="coupon" cellspacing="5" >
-        <tr>
-            <td><img src="<?= FE_BASE_URI ?>wap/campaigns/double-twelve/images/coupon_01.png" alt=""></td>
-            <td><img src="<?= FE_BASE_URI ?>wap/campaigns/double-twelve/images/coupon_02.png" alt=""></td>
-            <td><img src="<?= FE_BASE_URI ?>wap/campaigns/double-twelve/images/coupon_03.png" alt=""></td>
-        </tr>
-        <tr>
-            <td><img src="<?= FE_BASE_URI ?>wap/campaigns/double-twelve/images/coupon_04.png" alt=""></td>
-            <td><img src="<?= FE_BASE_URI ?>wap/campaigns/double-twelve/images/coupon_05.png" alt=""></td>
-            <td><img src="<?= FE_BASE_URI ?>wap/campaigns/double-twelve/images/coupon_06.png" alt=""></td>
-        </tr>
-        <tr>
-            <td><img src="<?= FE_BASE_URI ?>wap/campaigns/double-twelve/images/coupon_07.png" alt=""></td>
-            <td><img src="<?= FE_BASE_URI ?>wap/campaigns/double-twelve/images/coupon_08.png" alt=""></td>
-            <td><img src="<?= FE_BASE_URI ?>wap/campaigns/double-twelve/images/coupon_09.png" alt=""></td>
-        </tr>
-    </table>
-
-    <!--兑换按钮-->
-    <div class="btn" id="draw">
-        <button></button>
-    </div>
-
-    <!--对奖记录-->
-    <div class="moregift" id="drawForUser">
-        我的中奖纪录>
-    </div>
-
-    <div class="step2">
-        <span class="lf">第二步：幸运大奖</span>
-        <a class="rg" href="#activereg">如何获取幸运大奖?</a>
-    </div>
-
-    <ul class="award clearfix">
-        <li class="lf">
-            <div>
-                <img src="<?= FE_BASE_URI ?>wap/campaigns/double-twelve/images/ipad.png" alt="">
-                <span>ipad mini 4  64G</span>
-            </div>
-            <p>一等奖 1名</p>
-        </li>
-        <li class="rg">
-            <div>
-                <img src="<?= FE_BASE_URI ?>wap/campaigns/double-twelve/images/cooker.png" alt="">
-                <span>米家电饭煲</span>
-            </div>
-            <p>二等奖 2名</p>
-            <div>
-                <img src="<?= FE_BASE_URI ?>wap/campaigns/double-twelve/images/source.png" alt="">
-                <span>罗马仕充电宝</span>
-            </div>
-            <p>三等奖 5名</p>
-        </li>
-    </ul>
-
-    <div  class="regular">
-        <ul class="clearfix ">
-            <li><img src="<?= FE_BASE_URI ?>wap/campaigns/double-twelve/images/phase_01.png" alt=""></li>
-            <li><img src="<?= FE_BASE_URI ?>wap/campaigns/double-twelve/images/phase_02.png" alt=""></li>
-            <li><img src="<?= FE_BASE_URI ?>wap/campaigns/double-twelve/images/phase_03.png" alt=""></li>
-        </ul>
-        <p class="warn">*如果中奖号码超过奖品名额，最早投资温都金服的用户中奖，活动期间内每人仅限一次获奖机会。</p>
-    </div>
-
-    <?php if (!empty($boardList)) { ?>
-        <div class="people">
-            <div class="title">获奖名单</div>
-            <ul>
-                <?php foreach ($boardList as $record) {  $config = Promo1212::getPrizeMessageConfig($record) ?>
-                    <li><span class="lf">恭喜<?= StringUtils::obfsMobileNumber($record->user->mobile) ?> </span>获得  <?= $config['name'] ?><span class="rg"><?= date('Y/m/d', $record->drawAt) ?></span></li>
-                <?php } ?>
-            </ul>
+    <div id="activereg">
+        <div class="step1">
+            <span class="lf">第一步：幸运大礼包</span>
+            <a class="rg">如何增加抽奖机会?</a>
         </div>
-    <?php } ?>
+        <div class="lotternumber">
+            <img src="<?= FE_BASE_URI ?>wap/campaigns/double-twelve/images/gift.png" alt="">
+            您还有抽奖次数：
+            <?php if (null === $user) { ?>
+                <a href="/site/login"><span>未登录</span></a>
+            <?php } else { ?>
+                <span><?= $tickets ?></span>次
+            <?php } ?>
+        </div>
 
-    <div id="activereg"></div>
+        <table class="coupon" cellspacing="5" >
+            <tr>
+                <td><img src="<?= FE_BASE_URI ?>wap/campaigns/double-twelve/images/coupon_01.png" alt=""></td>
+                <td><img src="<?= FE_BASE_URI ?>wap/campaigns/double-twelve/images/coupon_02.png" alt=""></td>
+                <td><img src="<?= FE_BASE_URI ?>wap/campaigns/double-twelve/images/coupon_03.png" alt=""></td>
+            </tr>
+            <tr>
+                <td><img src="<?= FE_BASE_URI ?>wap/campaigns/double-twelve/images/coupon_04.png" alt=""></td>
+                <td><img src="<?= FE_BASE_URI ?>wap/campaigns/double-twelve/images/coupon_05.png" alt=""></td>
+                <td><img src="<?= FE_BASE_URI ?>wap/campaigns/double-twelve/images/coupon_06.png" alt=""></td>
+            </tr>
+            <tr>
+                <td><img src="<?= FE_BASE_URI ?>wap/campaigns/double-twelve/images/coupon_07.png" alt=""></td>
+                <td><img src="<?= FE_BASE_URI ?>wap/campaigns/double-twelve/images/coupon_08.png" alt=""></td>
+                <td><img src="<?= FE_BASE_URI ?>wap/campaigns/double-twelve/images/coupon_09.png" alt=""></td>
+            </tr>
+        </table>
+
+        <!--兑换按钮-->
+        <div class="btn" id="draw">
+            <button></button>
+        </div>
+
+        <!--对奖记录-->
+        <div class="moregift" id="drawForUser">
+            我的中奖纪录>
+        </div>
+
+        <div class="step2">
+            <span class="lf">第二步：幸运大奖</span>
+            <a class="rg">如何获取幸运大奖?</a>
+        </div>
+
+        <ul class="award clearfix">
+            <li class="lf">
+                <div>
+                    <img src="<?= FE_BASE_URI ?>wap/campaigns/double-twelve/images/ipad.png" alt="">
+                    <span>ipad mini 4  64G</span>
+                </div>
+                <p>一等奖 1名</p>
+            </li>
+            <li class="rg">
+                <div>
+                    <img src="<?= FE_BASE_URI ?>wap/campaigns/double-twelve/images/cooker.png" alt="">
+                    <span>米家电饭煲</span>
+                </div>
+                <p>二等奖 2名</p>
+                <div>
+                    <img src="<?= FE_BASE_URI ?>wap/campaigns/double-twelve/images/source.png" alt="">
+                    <span>罗马仕充电宝</span>
+                </div>
+                <p>三等奖 5名</p>
+            </li>
+        </ul>
+
+        <div class="regular">
+            <ul class="clearfix ">
+                <li><img src="<?= FE_BASE_URI ?>wap/campaigns/double-twelve/images/phase_01.png" alt=""></li>
+                <li><img src="<?= FE_BASE_URI ?>wap/campaigns/double-twelve/images/phase_02.png" alt=""></li>
+                <li><img src="<?= FE_BASE_URI ?>wap/campaigns/double-twelve/images/phase_03.png" alt=""></li>
+            </ul>
+            <p class="warn">*如果中奖号码超过奖品名额，最早投资温都金服的用户中奖，活动期间内每人仅限一次获奖机会。</p>
+        </div>
+
+        <?php if (!empty($boardList)) { ?>
+            <div class="people">
+                <div class="title">获奖名单</div>
+                <ul>
+                    <?php foreach ($boardList as $record) {  $config = Promo1212::getPrizeMessageConfig($record) ?>
+                        <li><span class="lf">恭喜<?= StringUtils::obfsMobileNumber($record->user->mobile) ?> </span>获得  <?= $config['name'] ?><span class="rg"><?= date('Y/m/d', $record->drawAt) ?></span></li>
+                    <?php } ?>
+                </ul>
+            </div>
+        <?php } ?>
+    </div>
+
     <div class="activeregular">
         <div class="title">获奖规则</div>
         <ul>
             <li>1.所有注册用户直接享有一次幸运大礼包的抽奖机会；</li>
             <li>2.所有注册用户邀请1人注册成功后享有1次幸运大礼包的抽奖机会，邀请2人注册成功享有3次幸运大礼包抽奖机会 ，邀请3人注册成功后享有5次幸运大礼包的抽奖机会，邀请3人以上每多邀请1人多得2次幸运大礼包的抽奖机会；</li>
             <li>3.活动期间内，邀请用户注册成功达到3人及以上就有机会获得幸运大奖；</li>
+            <li>4.可前往账户中心进行邀请好友。</li>
         </ul>
     </div>
-    <!--<div id="acceptreg"></div>-->
+    <a class="goinvest" href="/user/invite?v=<?= time() ?>"><img src="<?= FE_BASE_URI ?>wap/campaigns/double-twelve/images/goinvest.png" alt=""></a>
     <div class="accept">
         <div class="title">领奖规则</div>
         <ul>
@@ -167,59 +174,62 @@ use common\utils\StringUtils;
             <li>2.活动期间获奖人员须本人持身份证来温都金服领取；</li>
             <li>3.活动结束后一周内未领取礼品的视为自动放弃；</li>
             <li>4.领取地点：温州市鹿城区飞霞南路657号（老党校对面）；</li>
-            <li>5.详情可咨询客服热线：<a href="tel:400-101-5151">400-101-5151；</a></li>
-            <li>6.本活动最终解释权在法律范围内归温都金服（温州温都金融信息服务股份有限公司）所有。</li>
+            <li>5.未投资过的用户抽中现金红包后，需要首次投资后发放到账户中心，红包有效期20天；</li>
+            <li>6.详情可咨询客服热线：<a href="tel:400-101-5151">400-101-5151</a>；</li>
+            <li>7.本活动最终解释权在法律范围内归温都金服（温州温都金融信息服务股份有限公司）所有。</li>
         </ul>
     </div>
+    <a class="goindex" href="/?v=<?= time() ?>"><img src="<?= FE_BASE_URI ?>wap/campaigns/double-twelve/images/goindex.png" alt=""></a>
 </section>
 <!--footer-->
 <footer><img src="<?= FE_BASE_URI ?>wap/campaigns/double-twelve/images/adv.png" alt=""> 理财非存款 产品有风险 投资须谨慎 </footer>
 
 <!--遮罩-->
-<div class="mask">
-    <!--弹框-->
-    <!--登录弹框-->
-    <div class="login pop">
-        <img class="closepop" src="<?= FE_BASE_URI ?>wap/campaigns/double-twelve/images/close01.png" alt="">
-        <p>您还未登录！</p>
-        <p>登录即可参加抽奖活动，赶快行动吧~</p>
-        <img src="<?= FE_BASE_URI ?>wap/campaigns/double-twelve/images/box.png" alt="">
-        <a href="/site/login" class="loginbtn"></a>
-        <a href="/luodiye/signup?next=<?= urlencode(Yii::$app->request->absoluteUrl) ?>">没有账号，立即去注册</a>
+<div class="mask"></div>
+<!--弹框-->
+<!--登录弹框-->
+<div class="login pop">
+    <img class="closepop" src="<?= FE_BASE_URI ?>wap/campaigns/double-twelve/images/close01.png" alt="">
+    <p>您还未登录！</p>
+    <p>登录即可参加抽奖活动，赶快行动吧~</p>
+    <img src="<?= FE_BASE_URI ?>wap/campaigns/double-twelve/images/box.png" alt="">
+    <a href="/site/login" class="loginbtn"></a>
+    <a href="/<?= defined('IN_APP') ? 'site' : 'luodiye' ?>/signup?next=<?= urlencode(Yii::$app->request->absoluteUrl) ?>">没有账号，立即去注册</a>
+</div>
+<!--没有抽奖机会-->
+<div class="nochance pop">
+    <img class="closepop" src="<?= FE_BASE_URI ?>wap/campaigns/double-twelve/images/close01.png" alt="">
+    <p>没有抽奖机会了！</p>
+    <p>邀请好友，可获得更多抽奖机会哦~</p>
+    <img src="<?= FE_BASE_URI ?>wap/campaigns/double-twelve/images/box.png" alt="">
+    <a href="/user/invite" class="investbtn"></a>
+</div>
+<!--中奖效果-->
+<div class="drawgift pop">
+    <img class="bgtop" src="<?= FE_BASE_URI ?>wap/campaigns/double-twelve/images/drawgiftbg_01.png" alt="">
+    <p></p>
+    <div>
+        <img src="" alt="">
     </div>
-    <!--没有抽奖机会-->
-    <div class="nochance pop">
-        <img class="closepop" src="<?= FE_BASE_URI ?>wap/campaigns/double-twelve/images/close01.png" alt="">
-        <p>没有抽奖机会了！</p>
-        <p>邀请好友，可获得更多抽奖机会哦~</p>
-        <img src="<?= FE_BASE_URI ?>wap/campaigns/double-twelve/images/box.png" alt="">
-        <a href="/user/invite" class="investbtn"></a>
-    </div>
-    <!--中奖效果-->
-    <div class="drawgift pop">
-        <img class="bgtop" src="<?= FE_BASE_URI ?>wap/campaigns/double-twelve/images/drawgiftbg_01.png" alt="">
-        <p></p>
-        <div>
-            <img src="" alt="">
-        </div>
-        <a href=""></a>
-    </div>
-    <!--中奖列表无礼品-->
-    <div class="nodrawgift pop">
-        <img src="<?= FE_BASE_URI ?>wap/campaigns/double-twelve/images/drawgiftbg_02.png" alt="">
-        <p>您还未抽过奖！</p>
-        <img src="<?= FE_BASE_URI ?>wap/campaigns/double-twelve/images/box.png" alt="">
-        <a href=""></a>
-    </div>
-    <!--中奖列表有礼品-->
-    <div class="giftlist pop">
-        <img  class="giftlistimg" src="<?= FE_BASE_URI ?>wap/campaigns/double-twelve/images/drawgiftbg_02.png" alt="">
-        <img class="giftlistclose  closepop" src="<?= FE_BASE_URI ?>wap/campaigns/double-twelve/images/close_02.png" alt="">
-        <div class="giftlistbox" id="giftBox"></div>
-    </div>
+    <a href=""></a>
+</div>
+<!--中奖列表无礼品-->
+<div class="nodrawgift pop">
+    <img src="<?= FE_BASE_URI ?>wap/campaigns/double-twelve/images/drawgiftbg_02.png" alt="">
+    <p>您还未抽过奖！</p>
+    <img src="<?= FE_BASE_URI ?>wap/campaigns/double-twelve/images/box.png" alt="">
+    <a></a>
+</div>
+<!--中奖列表有礼品-->
+<div class="giftlist pop">
+    <img  class="giftlistimg" src="<?= FE_BASE_URI ?>wap/campaigns/double-twelve/images/drawgiftbg_02.png" alt="">
+    <img class="giftlistclose  closepop" src="<?= FE_BASE_URI ?>wap/campaigns/double-twelve/images/close_02.png" alt="">
+    <div class="giftlistbox" id="giftBox"></div>
 </div>
 
+
 <script type="text/javascript">
+    var isRefresh = false;   //是否刷新页面标志位
     $(function () {
         $('#draw').on('click', function () {
             $(this).attr('disabled', true);
@@ -228,17 +238,15 @@ use common\utils\StringUtils;
                     if ('活动未开始' === data.message || '活动已结束' === data.message) {
                         alert(data.message);
                     } else if ('您还未登录' === data.message) {
-                        $('.mask').show();
-                        $('.login').show();
+                        pop('.login');
                     } else if ('您没有抽奖机会了' === data.message) {
-                        $('.mask').show();
-                        $('.nochance').show();
+                        pop('.nochance');
                     }
                 } else {
+                    isRefresh = true;
                     $('.drawgift div img').attr('src', data.data.pic);
                     $('.drawgift p').html('恭喜您获得'+data.data.name+'！');
-                    $('.mask').show();
-                    $('.drawgift').show();
+                    pop('.drawgift');
                 }
 
                 $(this).attr('disabled', false);
@@ -251,17 +259,17 @@ use common\utils\StringUtils;
             $(this).attr('disabled', true);
             request('/promotion/p1612/draw-for-user', function (data) {
                 if (data.code) {
-                    if ('您还未登录' === data.message) {
-                        $('.mask').show();
-                        $('.login').show();
+                    if ('活动未开始' === data.message || '活动已结束' === data.message) {
+                        alert(data.message);
+                    } else if ('您还未登录' === data.message) {
+                        pop('.login');
                     } else if ('您还未抽过奖' === data.message) {
-                        $('.mask').show();
-                        $('.nodrawgift').show();
+                        pop('.nodrawgift');
                     }
                 } else {
                     $('#giftBox').html(data.html);
-                    $('.mask').show();
-                    $('.giftlist').show();
+                    initScroll();
+                    pop('.giftlist');
                 }
 
                 $(this).attr('disabled', false);
@@ -283,5 +291,12 @@ use common\utils\StringUtils;
             alert('系统繁忙，请稍后重试！');
             fail();
         });
+    }
+
+    function pop(className)
+    {
+        $('.mask').show();
+        $(className).show();
+        $('body').on('touchmove', eventTarget, false);
     }
 </script>
