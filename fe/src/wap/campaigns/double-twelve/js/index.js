@@ -21,8 +21,11 @@ $(function () {
         $('.mask').hide();
         // $('html').removeAttr('ontouchmove');
         $('body').unbind('touchmove');
-
     });
+    var scrollTop = $('header').height() + $('#activereg').height()+5;
+    $('.step1 a,.step2 a').on('click',function(){
+        $('body').animate({"scrollTop":scrollTop+'px'},1000);
+    })
 });
 
 function lunBo() {
