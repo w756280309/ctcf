@@ -24,7 +24,7 @@ $(function () {
         $('.pop').hide();
         $('.mask').hide();
         if(flag){
-            window.location.reload();
+            window.location.href = window.location.href +"?v="+ Math.random()*10;
         }
         // $('html').removeAttr('ontouchmove');
         $('body').unbind('touchmove');
@@ -34,7 +34,7 @@ $(function () {
         $('body').animate({"scrollTop":scrollTop+'px'},1000);
     })
     $('.drawgift').on('click',function(){
-        window.location.reload();
+        window.location.href = window.location.href +"?v="+ Math.random()*10;
     });
 });
 
