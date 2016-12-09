@@ -260,11 +260,11 @@ class Promo1212
         $rewardId = $lottery->reward_id;
         $couponConfig = self::getCouponConfig();
         $cashConfig = self::getCashConfig();
-        $transaction = \Yii::$app->db->beginTransaction();
 
         if (isset($couponConfig[$rewardId]) && !empty($couponConfig[$rewardId])) {
 
             if (!$lottery->isRewarded) {
+                $transaction = \Yii::$app->db->beginTransaction();
                 $couponType = CouponType::findOne(['sn' => $couponConfig[$rewardId]]);
                 try {
                     if (UserCoupon::addUserCoupon($user, $couponType)->save()) {
@@ -305,7 +305,11 @@ class Promo1212
      */
     public function sendRedPacket(User $user)
     {
-        $lottery = PromoLotteryTicket::find()->where(['promo_id' => $this->promo->id, 'isDrawn' => true, 'user_id' => $user->id, 'isRewarded' => false])->andWhere(['in', 'reward_id', array_keys(self::getCashConfig())])->one();
+        $lottery = PromoLotteryTicket::find()
+            ->where(['promo_id' => $this->promo->id, 'isDrawn' => true, 'user_id' => $user->id, 'isRewarded' => false])
+            ->andWhere(['in', 'reward_id', array_keys(self::getCashConfig())])
+            ->andWhere(['>=', 'drawAt', time() - 20 * 24 * 60 * 60])
+            ->one();
 
         $moneyRecord = (int) MoneyRecord::find()->where(['uid' => $user->id])->andWhere(['in', 'type', [MoneyRecord::TYPE_ORDER, MoneyRecord::TYPE_CREDIT_NOTE]])->count();
 
@@ -361,8 +365,8 @@ class Promo1212
     private function addInitTicketInternal(User $user, Request $request = null)
     {
         //获取用户初始化的抽奖机会
-        $ticketCount = PromoLotteryTicket::find()->where(['user_id' => $user->id, 'source' => 'init', 'promo_id' => $this->promo->id])->count();
-        if (!$ticketCount) {
+        $ticketCount = (int)PromoLotteryTicket::find()->where(['user_id' => $user->id, 'source' => 'init', 'promo_id' => $this->promo->id])->count();
+        if ($ticketCount === 0) {
             $this->addTicketInternal($user->id, 'init', $this->promo->id, empty($request) ? '' : $request->getUserIP());
         }
     }
@@ -379,9 +383,9 @@ class Promo1212
         if (!empty($inviteRecord)) {
             $inviterId = $inviteRecord->user_id;
             //获取邀请者在活动期间邀请人数
-            $inviteCount = InviteRecord::find()->where(['user_id' => $inviterId])->andWhere(['>=', 'created_at', $this->promo->startAt])->count();
+            $inviteCount = (int)InviteRecord::find()->where(['user_id' => $inviterId])->andWhere(['>=', 'created_at', $this->promo->startAt])->count();
             //获取当前用户因为邀请被赠送的抽奖机会
-            $ticketCount = PromoLotteryTicket::find()->where(['user_id' => $inviterId, 'source' => 'invite', 'promo_id' => $this->promo->id])->count();
+            $ticketCount = (int)PromoLotteryTicket::find()->where(['user_id' => $inviterId, 'source' => 'invite', 'promo_id' => $this->promo->id])->count();
             //用户第一次邀请，给一次抽奖机会
             if ($inviteCount === 1 && $ticketCount === 0) {
                 $this->addTicketInternal($inviterId, 'invite', $this->promo->id, empty($request) ? '' : $request->getUserIP());

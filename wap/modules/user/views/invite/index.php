@@ -3,12 +3,23 @@ $this->title = '邀请好友';
 
 $this->registerJsFile(ASSETS_BASE_URI . 'js/invite/invite.js?v=2016081801', ['depends' => 'yii\web\JqueryAsset', 'position' => 1]);
 $this->registerCssFile(ASSETS_BASE_URI . 'css/invite/invite.css?v=20161208', ['depends' => 'wap\assets\WapAsset']);
-$this->registerJs('var cdn = \'' . (ASSETS_BASE_URI === '/' ? \Yii::$app->request->hostInfo . '/' : ASSETS_BASE_URI) . '\';', 1);
-$this->registerJs('var invite_url = \'' . \Yii::$app->request->hostInfo . '/luodiye/invite?code=' . $user->usercode . '\';', 1);
-$this->registerJsFile('https://res.wx.qq.com/open/js/jweixin-1.0.0.js');
-$this->registerJsFile(ASSETS_BASE_URI . 'promo/1608/js/weixin.js?v=20160805');//加载来源统计记录代码
 
 use common\utils\StringUtils;
+use common\models\adv\Share;
+use common\view\WxshareHelper;
+
+$host = Yii::$app->params['clientOption']['host']['wap'];
+
+$share = new Share([
+    'title' => '注册领50元代金券，温都金服理财，亲测靠谱！',
+    'description' => '温州报业传媒旗下理财平台，国资背景，稳健好收益。',
+    'url' => $host.'luodiye/invite?code='.$user->usercode,
+    'imgUrl' => (ASSETS_BASE_URI === '/' ? $host : ASSETS_BASE_URI).'promo/1608/images/invite/icon.jpg',
+]);
+
+WxshareHelper::registerTo($this, $share);
+$this->registerJs('var invite_url = "'.$share->url.'";', 1);
+
 ?>
 <script type="text/javascript">
     var url = '/user/invite';
