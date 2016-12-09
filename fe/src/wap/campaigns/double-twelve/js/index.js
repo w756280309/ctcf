@@ -2,6 +2,7 @@
  * Created by lw on 2016/12/7.
  */
 $(function () {
+    var flag=false;
     FastClick.attach(document.body);
     initScroll();
     var len = $('.people ul li').length;
@@ -12,6 +13,9 @@ $(function () {
         $('.mask').show();
         var classNmae = $(this).data('value');
         $('.' + classNmae).show();
+        if(classNmae == 'drawgift'){
+            flag=true;
+        }
         // $('html').attr('ontouchmove', 'event.preventDefault()');
        $('body').on('touchmove', eventTarget, false);
     });
@@ -19,6 +23,9 @@ $(function () {
     $('.mask,.closepop').on('click', function () {
         $('.pop').hide();
         $('.mask').hide();
+        if(flag){
+            window.location.reload();
+        }
         // $('html').removeAttr('ontouchmove');
         $('body').unbind('touchmove');
     });
@@ -26,6 +33,9 @@ $(function () {
     $('.step1 a,.step2 a').on('click',function(){
         $('body').animate({"scrollTop":scrollTop+'px'},1000);
     })
+    $('.drawgift').on('click',function(){
+        window.location.reload();
+    });
 });
 
 function lunBo() {
