@@ -15,12 +15,12 @@ use yii\helpers\ArrayHelper;
  * @property integer $endAt
  * @property string $key            活动key, 需要唯一
  * @property string  $promoClass    处理活动的类，包含命名空间,可以直接 new $promoClass
- * @property string  $whiteList     以英文逗号隔开的用户ID字符串
+ * @property string  $whiteList     以英文逗号隔开的用户手机号字符串
  * @property boolean  $isOnline     活动是否可以公开访问
  *
  * 1) migration初始化活动数据，title,startAt,endAt,key,promoClass,isOnline = false;
  * 2) 代码发布到正式环境
- * 3) 更改活动数据，startAt 改为当天时间，将测试用户ID加入whiteList
+ * 3) 更改活动数据，startAt 改为当天时间，将测试用户手机号加入whiteList
  * 4) 测试用户进入活动页面进行测试。
  * 5) 活动正式上线时候将 startAt 改为活动上线时间，isOnLine = true.
  */
@@ -153,15 +153,22 @@ class RankingPromo extends ActiveRecord
      * 判断活动对对指定用户来说是否在进行中
      * @param User|null $user
      * @return bool
+     * @throws \Exception
      */
-    public function isActive(User $user = null) {
+    public function isActive(User $user = null)
+    {
         $time = time();
-        if ($time >= $this->startAt && $time <= $this->endAt) {
-            $whiteList = explode(',', $this->whiteList);
-            if ($this->isOnline || ($user && in_array($user->id, $whiteList))) {
-                return true;
-            }
+        if ($time < $this->startAt) {
+            throw  new \Exception('活动未开始');
         }
-        return false;
+        if ($time > $this->endAt) {
+            throw  new \Exception('活动已结束');
+        }
+
+        $whiteList = explode(',', $this->whiteList);
+        if (!$this->isOnline && (empty($user) || !in_array($user->mobile, $whiteList))) {
+            throw  new \Exception('活动未开始');
+        }
+        return true;
     }
 }

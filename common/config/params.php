@@ -75,6 +75,8 @@ return [
         'coupon_expire' => 105820, //代金券3天后失效
         'register_coupon' => 113105, //注册用户送代金券
         'coupon_reminder' => 113109,//代金券过期提醒
+        'intro_redpacket' => 138631, //大转盘抽奖，未投资用户抽中现金红包时发放说明
+        'roundabout_redpacket' => 138632, //现金红包已发到指定账户上的通知短信
     ],
     'contact_tel' => '400-101-5151',
     'pc_cat' => ['1' => '温盈金', '2' => '温盈宝'],

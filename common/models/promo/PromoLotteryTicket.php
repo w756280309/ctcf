@@ -2,8 +2,10 @@
 
 namespace common\models\promo;
 
+use common\models\user\User;
 use Yii;
 use yii\behaviors\TimestampBehavior;
+use yii\db\ActiveRecord;
 
 /**
  * This is the model class for table "promo_lottery_ticket".
@@ -21,7 +23,7 @@ use yii\behaviors\TimestampBehavior;
  * @property string $source
  * @property int    $promo_id
  */
-class PromoLotteryTicket extends \yii\db\ActiveRecord
+class PromoLotteryTicket extends ActiveRecord
 {
     /**
      * @inheritdoc
@@ -69,5 +71,10 @@ class PromoLotteryTicket extends \yii\db\ActiveRecord
         return [
             TimestampBehavior::class,
         ];
+    }
+
+    public function getUser()
+    {
+        return $this->hasOne(User::class, ['id' => 'user_id']);
     }
 }

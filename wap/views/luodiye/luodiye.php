@@ -38,6 +38,9 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/luodiye.js', ['depends' => WapAsset::c
             <div class="row register-box">
                 <div class="text-box">
                     <input name="regContext" type="hidden" value="m_intro1611">
+                    <?php if (!empty($next)) { ?>
+                        <input name="next" type="hidden" value="<?= urlencode($next) ?>">
+                    <?php } ?>
                     <input id="iphone" name="SignupForm[phone]" class="text-single login-info" maxlength="11" type="tel" placeholder="请输入手机号">
                     <div class="clear"></div>
                 </div>

@@ -2,7 +2,7 @@
 $this->title = '邀请好友';
 
 $this->registerJsFile(ASSETS_BASE_URI . 'js/invite/invite.js?v=2016081801', ['depends' => 'yii\web\JqueryAsset', 'position' => 1]);
-$this->registerCssFile(ASSETS_BASE_URI . 'css/invite/invite.css?v=20160824', ['depends' => 'wap\assets\WapAsset']);
+$this->registerCssFile(ASSETS_BASE_URI . 'css/invite/invite.css?v=20161208', ['depends' => 'wap\assets\WapAsset']);
 $this->registerJs('var cdn = \'' . (ASSETS_BASE_URI === '/' ? \Yii::$app->request->hostInfo . '/' : ASSETS_BASE_URI) . '\';', 1);
 $this->registerJs('var invite_url = \'' . \Yii::$app->request->hostInfo . '/luodiye/invite?code=' . $user->usercode . '\';', 1);
 $this->registerJsFile('https://res.wx.qq.com/open/js/jweixin-1.0.0.js');
@@ -20,8 +20,8 @@ use common\utils\StringUtils;
 <div style="clear: both;"></div>
 <div class="row banner-box">
     <div class="col-xs-12">
-        <img src="<?= ASSETS_BASE_URI ?>images/invite/banner1.png" alt="">
-        <img src="<?= ASSETS_BASE_URI ?>images/invite/banner2.png" alt="">
+        <img src="<?= ASSETS_BASE_URI ?>promo/1608/images/invite/banner6.png" alt="">
+        <img src="<?= ASSETS_BASE_URI ?>promo/1608/images/invite/banner5.png" alt="">
     </div>
 </div>
 <!--invite-box-->
@@ -136,20 +136,20 @@ use common\utils\StringUtils;
 
         <!--活动规则-->
         <div class="rule-box">
-            <div class="inv-title"><b>活动时间：</b>2016年8月4日~2016年9月25日</div>
             <div class="inv-title"><b>活动规则：</b></div>
             <ul>
                 <li>登录温都金服网站，进入“我的账户”；</li>
                 <li>点击“邀请好友”可以看到邀请好友活动，通过微信或者链接进行邀请；</li>
                 <li>当您的小伙伴通过此邀请链接注册并成功投资后，您即可获得邀请好友的奖励；</li>
                 <li>邀请人在邀请好友之前必须在平台投资过，有投资记录才能参与现金返现活动，发放奖励现金时，以"角"为单位取整，采用四舍五入；</li>
+                <li>新手专享标和转让均不参加邀请奖励；</li>
                 <li>严禁恶意刷邀请好友，如有发生，封号处理。</li>
             </ul>
             <div class="inv-title"><b>奖励规则：</b></div>
             <ul>
-                <li>被邀请好友首次单笔投资1万元以上（含1万元），邀请人获得1张50元代金券；</li>
-                <li>被邀请好友首次单笔投资1万元以下（不含1万元），邀请人获得1张30元代金券；</li>
-                <li>邀请人获得被邀请人投资额0.1% 的奖励返现（仅限前三次投资）；</li>
+                <li>被邀请好友首次单笔投资（新手专享和转让除外）1万元以上（含1万元），邀请人获得1张50元代金券；</li>
+                <li>被邀请好友首次单笔投资（新手专享和转让除外）1万元以下（不含1万元），邀请人获得1张30元代金券；</li>
+                <li>邀请人获得被邀请人投资额0.1% 的奖励返现（仅限前三次投资，新手专享和转让除外）；</li>
                 <li>被邀请人注册即可获得50元代金券。</li>
             </ul>
             <div class="inv-title"><b>代金券使用规则：</b></div>

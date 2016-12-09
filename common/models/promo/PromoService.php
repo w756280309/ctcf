@@ -12,11 +12,12 @@ class PromoService
      * 获取对指定用户有效的活动
      * @param User|null $user
      * @return array
+     * @throws \Exception
      */
     private static function getActivePromo(User $user = null)
     {
         $time = time();
-        $promos = RankingPromo::find()->andWhere(['>=', 'endAt', $time])->andWhere('`key` is not null')->andWhere('promoClass is not null')->all();
+        $promos = RankingPromo::find()->andWhere(['>=', 'endAt', $time])->andWhere(['<=', 'startAt', $time])->andWhere('`key` is not null')->andWhere('promoClass is not null')->all();
         $data = [];
         foreach ($promos as $promo) {
             if ($promo->isActive($user)) {
@@ -31,6 +32,7 @@ class PromoService
     /**
      * @param User $user            用户对象
      * @param $ticketSource string  抽奖机会来源
+     * @throws \Exception
      */
     public static function addTicket(User $user, $ticketSource)
     {
@@ -46,6 +48,7 @@ class PromoService
     /**
      * 给被被邀请者送代金券
      * @param User $user
+     * @throws \Exception
      */
     public static function addInviteeCoupon(User $user)
     {
@@ -61,10 +64,11 @@ class PromoService
     /**
      * 标的订单完成之后的活动逻辑
      * @param OnlineOrder $order
+     * @throws \Exception
      */
     public static function doAfterSuccessLoanOrder(OnlineOrder $order)
     {
-        $promos = self::getActivePromo();
+        $promos = self::getActivePromo($order->user);
         foreach ($promos as $promo) {
             $model = new $promo->promoClass($promo);
             if (method_exists($model, 'doAfterSuccessLoanOrder')) {
