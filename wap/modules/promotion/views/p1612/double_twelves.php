@@ -211,7 +211,7 @@ use common\utils\StringUtils;
     <div>
         <img src="" alt="">
     </div>
-    <a href=""></a>
+    <a></a>
 </div>
 <!--中奖列表无礼品-->
 <div class="nodrawgift pop">
