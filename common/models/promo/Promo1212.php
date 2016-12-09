@@ -305,7 +305,11 @@ class Promo1212
      */
     public function sendRedPacket(User $user)
     {
-        $lottery = PromoLotteryTicket::find()->where(['promo_id' => $this->promo->id, 'isDrawn' => true, 'user_id' => $user->id, 'isRewarded' => false])->andWhere(['in', 'reward_id', array_keys(self::getCashConfig())])->one();
+        $lottery = PromoLotteryTicket::find()
+            ->where(['promo_id' => $this->promo->id, 'isDrawn' => true, 'user_id' => $user->id, 'isRewarded' => false])
+            ->andWhere(['in', 'reward_id', array_keys(self::getCashConfig())])
+            ->andWhere(['>=', 'drawAt', time() - 20 * 24 * 60 * 60])
+            ->one();
 
         $moneyRecord = (int) MoneyRecord::find()->where(['uid' => $user->id])->andWhere(['in', 'type', [MoneyRecord::TYPE_ORDER, MoneyRecord::TYPE_CREDIT_NOTE]])->count();
 
