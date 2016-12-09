@@ -2,7 +2,6 @@
  * Created by lw on 2016/12/7.
  */
 $(function () {
-    // var flag=false;
     FastClick.attach(document.body);
     initScroll();
     var len = $('.people ul li').length;
@@ -16,17 +15,15 @@ $(function () {
         if(classNmae == 'drawgift'){
             flag=true;
         }
-        // $('html').attr('ontouchmove', 'event.preventDefault()');
        $('body').on('touchmove', eventTarget, false);
     });
 
     $('.mask,.closepop').on('click', function () {
         $('.pop').hide();
         $('.mask').hide();
-        if(flag){
+        if(isRefresh){
             window.location.href = window.location.href +"?v="+ Math.random()*10;
         }
-        // $('html').removeAttr('ontouchmove');
         $('body').unbind('touchmove');
     });
     var scrollTop = $('header').height() + $('#activereg').height()+5;
