@@ -260,11 +260,11 @@ class Promo1212
         $rewardId = $lottery->reward_id;
         $couponConfig = self::getCouponConfig();
         $cashConfig = self::getCashConfig();
-        $transaction = \Yii::$app->db->beginTransaction();
 
         if (isset($couponConfig[$rewardId]) && !empty($couponConfig[$rewardId])) {
 
             if (!$lottery->isRewarded) {
+                $transaction = \Yii::$app->db->beginTransaction();
                 $couponType = CouponType::findOne(['sn' => $couponConfig[$rewardId]]);
                 try {
                     if (UserCoupon::addUserCoupon($user, $couponType)->save()) {
