@@ -270,7 +270,7 @@ section .accept {
   padding-bottom: 0.4rem;
 }
 footer {
-  margin: 0.26666667rem 0 0.8rem 0;
+  padding: 0.26666667rem 0 0.8rem 0;
   text-align: center;
   font-size: 0.32rem;
   color: #c23918;
