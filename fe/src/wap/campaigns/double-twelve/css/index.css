@@ -341,10 +341,9 @@ footer img {
   margin: 0 auto;
   margin-top: -0.73333333rem;
 }
-.investbtn {
+.investbtn,.loginbtn {
   position: relative;
 }
-
 .login a,
 .nochance a {
   color: #fa8d00;

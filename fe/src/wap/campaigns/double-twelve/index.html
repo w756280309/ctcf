@@ -57,22 +57,8 @@
             background-size: 100% 100%;
         }
     </style>
-    <script>
-        var initScroll = function () {
-            var myScroll;
-            intervalTime = setInterval(function () {
-                var resultContentH = $("#giftBox ul").height();
-                if (resultContentH > 0) {  //判断数据加载完成的条件
-                    clearInterval(intervalTime);
-                    myScroll = new iScroll('giftBox',{
-                        vScrollbar:false
-                    });
-                }
-            }, 1);
-        }
-    </script>
 </head>
-<body onload="initScroll();">
+<body>
 <!--banner-->
 <header>
     <div><span class="activetime">2016.12.12-2016.12.21</span></div>

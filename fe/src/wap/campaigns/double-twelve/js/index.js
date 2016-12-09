@@ -3,7 +3,7 @@
  */
 $(function () {
     FastClick.attach(document.body);
-
+    initScroll();
     var len = $('.people ul li').length;
     if (len > 3) {
         lunBo();
@@ -39,3 +39,15 @@ function eventTarget(event) {
     event.preventDefault();
 }
 
+var initScroll = function () {
+    var myScroll;
+    intervalTime = setInterval(function () {
+        var resultContentH = $("#giftBox ul").height();
+        if (resultContentH > 0) {  //判断数据加载完成的条件
+            clearInterval(intervalTime);
+            myScroll = new iScroll('giftBox',{
+                vScrollbar:false
+            });
+        }
+    }, 1);
+}
