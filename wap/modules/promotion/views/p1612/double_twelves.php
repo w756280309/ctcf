@@ -61,7 +61,7 @@ use common\utils\StringUtils;
 
 <!--banner-->
 <header>
-    <div><span class="activetime">2016.12.12-2016.12.21</span></div>
+    <div><span class="activetime">2016.12.11-2016.12.21</span></div>
     <div></div>
 </header>
 <!--content-->
