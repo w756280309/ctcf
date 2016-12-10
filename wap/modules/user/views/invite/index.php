@@ -1,7 +1,7 @@
 <?php
 $this->title = '邀请好友';
 
-$this->registerJsFile(ASSETS_BASE_URI . 'js/invite/invite.js?v=2016081801', ['depends' => 'yii\web\JqueryAsset', 'position' => 1]);
+$this->registerJsFile(ASSETS_BASE_URI . 'js/invite/invite.js?v=20161210', ['depends' => 'yii\web\JqueryAsset', 'position' => 1]);
 $this->registerCssFile(ASSETS_BASE_URI . 'css/invite/invite.css?v=20161208', ['depends' => 'wap\assets\WapAsset']);
 
 use common\utils\StringUtils;
@@ -11,8 +11,8 @@ use common\view\WxshareHelper;
 $host = Yii::$app->params['clientOption']['host']['wap'];
 
 $share = new Share([
-    'title' => '注册领50元代金券，温都金服理财，亲测靠谱！',
-    'description' => '温州报业传媒旗下理财平台，国资背景，稳健好收益。',
+    'title' => '好友送您50元代金券，温都金服理财，亲测靠谱！',
+    'description' => '新手专享，预期年化收益率10%，注册更有288元红包送！',
     'url' => $host.'luodiye/invite?code='.$user->usercode,
     'imgUrl' => (ASSETS_BASE_URI === '/' ? $host : ASSETS_BASE_URI).'promo/1608/images/invite/icon.jpg',
 ]);

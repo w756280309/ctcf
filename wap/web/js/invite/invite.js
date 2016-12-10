@@ -18,8 +18,8 @@ $(function(){
         var host = window.location.host.toLocaleLowerCase();
         if(host.substr(0,4)==='app.') {
             //分享四要素(标题+描述+链接地址+图标地址)
-            var title = '注册领50元代金券，温都金服理财，亲测靠谱！';
-            var des = '温州报业传媒旗下理财平台，国资背景，稳健好收益。';
+            var title = '好友送您50元代金券，温都金服理财，亲测靠谱！';
+            var des = '新手专享，预期年化收益率10%，注册更有288元红包送！';
             var linkurl = invite_url;
             var thumurl = protocol+'//'+host+'/promo/1608/images/invite/icon.jpg';
             var shareObj = {title : title, des:des,linkurl : linkurl, thumurl : thumurl};
