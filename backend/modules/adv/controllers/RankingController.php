@@ -3,6 +3,7 @@
 namespace backend\modules\adv\controllers;
 
 use backend\controllers\BaseController;
+use common\models\promo\PromoLotteryTicket;
 use wap\modules\promotion\models\RankingPromo;
 use yii\data\ActiveDataProvider;
 use yii\web\NotFoundHttpException;
@@ -56,5 +57,25 @@ class RankingController extends BaseController
         }
         $model->delete();
         return $this->redirect('index');
+    }
+
+    /**
+     * 活动的获奖列表
+     */
+    public function actionAwardList($id)
+    {
+        $promo = RankingPromo::findOne($id);
+        if (empty($promo) || empty($promo->promoClass) || !class_exists($promo->promoClass)) {
+            throw $this->ex404('数据未找到');
+        }
+        $query = PromoLotteryTicket::find()->where(['isDrawn' => true, 'promo_id' => $promo->id])->andWhere('reward_id is not null')->orderBy(['created_at' => SORT_DESC]);
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+
+        return $this->render('award_list', [
+            'promo' => $promo,
+            'dataProvider' => $dataProvider,
+        ]);
     }
 }

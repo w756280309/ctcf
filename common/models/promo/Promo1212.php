@@ -40,17 +40,20 @@ class Promo1212
     }
 
     /**
-     * 根据ticket对象获得对应的奖品配置信息
-     *
-     * @param  object PromoLotteryTicket $lottery
-     *
+     * 获取奖品列表
      * @return array
-     *
-     * @throws \Exception
+     * [
+     *  [
+     *      'awardId' => [
+     *          'name' => 'awardName',//name属性为必须属性
+     *          ……
+     *      ]
+     *  ], //'奖品ID' => ‘奖品信息’,
+     * ]
      */
-    public static function getPrizeMessageConfig(PromoLotteryTicket $lottery)
+    public static function getAwardList()
     {
-        $config = [
+        return [
             1 => ['name' => '5元代金券', 'pic' => FE_BASE_URI.'wap/campaigns/double-twelve/images/coupon_01.png'],
             2 => ['name' => '10元代金券', 'pic' => FE_BASE_URI.'wap/campaigns/double-twelve/images/coupon_02.png'],
             3 => ['name' => '25元代金券', 'pic' => FE_BASE_URI.'wap/campaigns/double-twelve/images/coupon_04.png'],
@@ -65,6 +68,35 @@ class Promo1212
             12 => ['name' => '进口食用油', 'pic' => FE_BASE_URI.'wap/campaigns/double-twelve/images/coupon_08.png'],
             13 => ['name' => '福临门水晶米', 'pic' => FE_BASE_URI.'wap/campaigns/double-twelve/images/coupon_09.png'],
         ];
+    }
+
+    /**
+     * 根据奖品ID获取奖品信息
+     * @param $awardId
+     * @return array
+     * [
+     *  'name' => 'awardName',//name属性为必须属性
+     *   ……
+     * ]
+     */
+    public static function getAward($awardId)
+    {
+        $awardList = self::getAwardList();
+        return isset($awardList[$awardId]) ? $awardList[$awardId] : [];
+    }
+
+    /**
+     * 根据ticket对象获得对应的奖品配置信息
+     *
+     * @param  object PromoLotteryTicket $lottery
+     *
+     * @return array
+     *
+     * @throws \Exception
+     */
+    public static function getPrizeMessageConfig(PromoLotteryTicket $lottery)
+    {
+       $config = self::getAwardList();
 
         if (!isset($config[$lottery->reward_id])) {
             throw new \Exception('没有该奖品信息');
