@@ -5,7 +5,7 @@ $this->title = '项目视频介绍';
 use wap\assets\WapAsset;
 use yii\web\JqueryAsset;
 
-$this->registerCssFile(FE_BASE_URI.'wap/video-list/css/index.css', ['depends' => WapAsset::class, 'position' => 1]);
+$this->registerCssFile(FE_BASE_URI.'wap/video-list/css/zshy.css', ['depends' => WapAsset::class, 'position' => 1]);
 $this->registerCssFile(FE_BASE_URI.'libs/videojs/video-js.min.css', ['position' => 1]);
 $this->registerJsFile(FE_BASE_URI.'libs/lib.flexible2.js', ['depends' => JqueryAsset::class, 'position' => 1]);
 $this->registerJsFile(FE_BASE_URI.'libs/fastclick.js', ['depends' => JqueryAsset::class, 'position' => 1]);
