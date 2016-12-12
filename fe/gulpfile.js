@@ -82,8 +82,8 @@ gulp.task('copy:.htaccess', function () {
                .pipe(gulp.dest(dirs.dist));
 });
 
-gulp.task('copy:zshy.html', function () {
-    return gulp.src(dirs.src + '/zshy.html')
+gulp.task('copy:zshr.html', function () {
+    return gulp.src(dirs.src + '/zshr.html')
                .pipe(plugins.replace(/{{JQUERY_VERSION}}/g, pkg.devDependencies.jquery))
                .pipe(gulp.dest(dirs.dist));
 });
@@ -123,7 +123,7 @@ gulp.task('copy:misc', function () {
         // Exclude the following files
         // (other tasks will handle the copying of these files)
         '!' + dirs.src + '/css/main.css',
-        '!' + dirs.src + '/zshy.html'
+        '!' + dirs.src + '/zshr.html'
 
     ], {
 

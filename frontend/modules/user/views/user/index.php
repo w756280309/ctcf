@@ -1,7 +1,7 @@
 <?php
 $this->title = '账户中心首页';
 
-$this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/zshy.css?v=20160727', ['depends' => 'frontend\assets\FrontAsset']);
+$this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/zshr.css?v=20160727', ['depends' => 'frontend\assets\FrontAsset']);
 $this->registerJsFile(ASSETS_BASE_URI.'js/useraccount/highcharts.js', ['depends' => 'frontend\assets\FrontAsset']);
 $this->registerJsFile(ASSETS_BASE_URI.'js/useraccount/index.js', ['depends' => 'frontend\assets\FrontAsset']);
 

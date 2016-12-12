@@ -13,7 +13,7 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/swiper.min.css?v=20160419', ['depe
 $this->registerJsFile(ASSETS_BASE_URI . 'js/swiper.min.js?v=20160419', ['depends' => 'yii\web\JqueryAsset', 'position' => 1]);
 $this->registerJsFile(ASSETS_BASE_URI . 'js/jquery.classyloader.js', ['depends' => 'yii\web\JqueryAsset', 'position' => 1]);
 $this->registerJsFile(ASSETS_BASE_URI . 'js/index.js?v=20160419', ['depends' => 'yii\web\JqueryAsset', 'position' => 1]);
-$this->registerCssFile(ASSETS_BASE_URI . 'css/zshy.css?v=20160419', ['depends' => 'wap\assets\WapAsset']);  //加载在depends之后
+$this->registerCssFile(ASSETS_BASE_URI . 'css/zshr.css?v=20160419', ['depends' => 'wap\assets\WapAsset']);  //加载在depends之后
 $this->registerCssFile(ASSETS_BASE_URI . 'css/first.css?v=20160509', ['depends' => 'wap\assets\WapAsset']);
 
 AnalyticsHelper::registerTo($this);
