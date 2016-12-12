@@ -91,7 +91,7 @@ class RankingController extends BaseController
         if (empty($promo) || empty($promo->promoClass) || !class_exists($promo->promoClass)) {
             throw $this->ex404('数据未找到');
         }
-        $query = PromoLotteryTicket::find()->where(['isDrawn' => true, 'promo_id' => $promo->id])->andWhere('reward_id is not null')->orderBy(['created_at' => SORT_DESC]);
+        $query = PromoLotteryTicket::find()->where(['isDrawn' => true, 'promo_id' => $promo->id])->andWhere('reward_id is not null')->orderBy(['created_at' => SORT_DESC])->with('user');
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);

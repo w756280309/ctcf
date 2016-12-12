@@ -35,6 +35,19 @@ $this->title = '获奖列表';
                     'layout' => '{items}',
                     'columns' => [
                         [
+                            'header' => '姓名',
+                            'format' => 'html',
+                            'value' => function ($model) {
+                                return '<a href="/user/user/detail?id='.$model->user->id.'">'.$model->user->real_name ?: '---'.'</a>';
+                            }
+                        ],
+                        [
+                            'header' => '手机号',
+                            'value' => function ($model) {
+                                return $model->user->mobile;
+                            }
+                        ],
+                        [
                             'header' => '奖品名称',
                             'content' => function ($model) use($promo) {
                                 $class = $promo->promoClass;
