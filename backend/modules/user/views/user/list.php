@@ -64,7 +64,7 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\we
                                     <input type="text" name='mobile' value="<?= Yii::$app->request->get('mobile') ?>" placeholder="手机号" class="m-wrap span8"/>
                                 </td>
                                 <td>
-                                    <span class="title">未资时长</span>
+                                    <span class="title">未投时长</span>
                                     <input type="text" class="m-wrap span4"  name='noInvestDaysMin' value="<?= Yii::$app->request->get('noInvestDaysMin') ?>"  />
                                     <input type="text" class="m-wrap span4"  name='noInvestDaysMax' value="<?= Yii::$app->request->get('noInvestDaysMax') ?>"  />
                                 </td>

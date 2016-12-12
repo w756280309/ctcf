@@ -42,76 +42,77 @@ class UserSearch extends User
         //过滤手机号
         $query->andFilterWhere(['like', 'user.mobile', trim($this->mobile)]);
         //过滤 未投资时长
-        $noInvestDaysMin = intval(trim($this->noInvestDaysMin));
-        $noInvestDaysMax = intval(trim($this->noInvestDaysMax));
-        if ($noInvestDaysMin > 0 || $noInvestDaysMax > 0) {
+        $noInvestDaysMin = is_numeric($this->noInvestDaysMin) ? intval(trim($this->noInvestDaysMin)) : null;
+        $noInvestDaysMax = is_numeric($this->noInvestDaysMax) ? intval(trim($this->noInvestDaysMax)) : null;
+        if (!is_null($noInvestDaysMax) || !is_null($noInvestDaysMin)) {
             if (!$join_user_info) {
                 $query->leftJoin('user_info', 'user_info.user_id = user.id');
                 $join_user_info = true;
             }
-            if ($noInvestDaysMin > 0) {
+            if (!is_null($noInvestDaysMin)) {
                 $date = date('Y-m-d', strtotime('- ' . $noInvestDaysMin . ' day'));
-                $query->andFilterWhere(['<=', 'user_info.lastInvestDate', $date]);
+                $query->andWhere(['<=', 'user_info.lastInvestDate', $date]);
             }
-            if ($noInvestDaysMax > 0){
+            if (!is_null($noInvestDaysMax)) {
                 $date = date('Y-m-d', strtotime('- ' . $noInvestDaysMax . ' day'));
-                $query->andFilterWhere(['>=', 'user_info.lastInvestDate', $date]);
+                $query->andWhere(['>=', 'user_info.lastInvestDate', $date]);
             }
         }
         //过滤可用余额
-        $balanceMin = floatval(trim($this->balanceMin));
-        $balanceMax = floatval(trim($this->balanceMax));
-        if ($balanceMin > 0 || $balanceMax > 0) {
+        $balanceMin = is_numeric($this->balanceMin) ? floatval(trim($this->balanceMin)) : null;
+        $balanceMax = is_numeric($this->balanceMax) ? floatval(trim($this->balanceMax)) : null;
+        if (!is_null($balanceMin) || !is_null($balanceMax)) {
             if (!$join_user_account) {
                 $query->innerJoin('user_account', 'user.id = user_account.uid');
                 $join_user_account = true;
             }
-            if ($balanceMin > 0) {
-                $query->andFilterWhere(['>=', 'user_account.available_balance', $balanceMin]);
+            if (!is_null($balanceMin)) {
+                $query->andWhere(['>=', 'user_account.available_balance', $balanceMin]);
             }
-            if ($balanceMax > 0) {
-                $query->andFilterWhere(['<=', 'user_account.available_balance', $balanceMax]);
+            if (!is_null($balanceMax)) {
+                $query->andWhere(['<=', 'user_account.available_balance', $balanceMax]);
             }
-
         }
         //过滤投资次数
-        $investCountMin = intval(trim($this->investCountMin));
-        $investCountMax = intval(trim($this->investCountMax));
-        if ($investCountMin > 0 || $investCountMax > 0) {
+        $investCountMin = is_numeric($this->investCountMin) ? intval(trim($this->investCountMin)) : null;
+        $investCountMax = is_numeric($this->investCountMax) ? intval(trim($this->investCountMax)) : null;
+        if (!is_null($investCountMin) || !is_null($investCountMax)) {
             if (!$join_user_info) {
                 $query->leftJoin('user_info', 'user_info.user_id = user.id');
                 $join_user_info = true;
             }
-            if ($investCountMin > 0) {
-                $query->andFilterWhere(['>=', 'user_info.investCount', $investCountMin]);
+            if (!is_null($investCountMin)) {
+                $query->andWhere(['>=', 'user_info.investCount', $investCountMin]);
             }
-            if($investCountMax > 0) {
-                $query->andFilterWhere(['<=', 'user_info.investCount', $investCountMax]);
+            if(!is_null($investCountMax)) {
+                $query->andWhere(['<=', 'user_info.investCount', $investCountMax]);
             }
         }
         //过滤投资总额
-        $investTotalMin = floatval(trim($this->investTotalMin));
-        $investTotalMax = floatval(trim($this->investTotalMax));
-        if ($investTotalMin > 0 || $investTotalMax > 0) {
+        $investTotalMin = is_numeric($this->investTotalMin) ? floatval(trim($this->investTotalMin)) : null;
+        $investTotalMax = is_numeric($this->investTotalMax) ? floatval(trim($this->investTotalMax)) : null;
+        if (!is_null($investTotalMin) || !is_null($investTotalMax)) {
             if (!$join_user_info) {
                 $query->leftJoin('user_info', 'user_info.user_id = user.id');
                 $join_user_info = true;
             }
-            if ($investTotalMin > 0) {
-                $query->andFilterWhere(['>=', 'user_info.investTotal', $investTotalMin]);
+            if (!is_null($investTotalMin)) {
+                $query->andWhere(['>=', 'user_info.investTotal', $investTotalMin]);
             }
-            if($investTotalMax > 0) {
-                $query->andFilterWhere(['<=', 'user_info.investTotal', $investTotalMax]);
+            if(!is_null($investTotalMax)) {
+                $query->andWhere(['<=', 'user_info.investTotal', $investTotalMax]);
             }
         }
         //过滤注册时间
-        $regTimeMin = strtotime(trim($this->regTimeMin));
-        $regTimeMax = strtotime(trim($this->regTimeMax));
-        if ($regTimeMin > 0) {
-            $query->andFilterWhere(['>=', 'user.created_at', $regTimeMin]);
-        }
-        if ($regTimeMax > 0) {
-            $query->andFilterWhere(['<=', 'user.created_at', $regTimeMax]);
+        if (!empty($this->regTimeMin) || !empty($this->regTimeMax)) {
+            $regTimeMin = strtotime(trim($this->regTimeMin));
+            $regTimeMax = strtotime(trim($this->regTimeMax));
+            if ($regTimeMin) {
+                $query->andFilterWhere(['>=', 'user.created_at', $regTimeMin]);
+            }
+            if ($regTimeMax) {
+                $query->andFilterWhere(['<=', 'user.created_at', $regTimeMax]);
+            }
         }
         //过滤注册来源
         $regContext = trim($this->regContext);
@@ -119,9 +120,9 @@ class UserSearch extends User
             $query->andWhere(['user.regContext' => $regContext === 'other' ? '' : $regContext]);
         }
         //过滤代金券
-        $couponAmountMin = intval(trim($this->couponAmountMin));
-        $couponAmountMax = intval(trim($this->couponAmountMax));
-        if ($couponAmountMin > 0 || $couponAmountMax > 0) {
+        $couponAmountMin = is_numeric($this->couponAmountMin) ? intval(trim($this->couponAmountMin)) : null;
+        $couponAmountMax = is_numeric($this->couponAmountMax) ? intval(trim($this->couponAmountMax)) : null;
+        if (!is_null($couponAmountMin) || !is_null($couponAmountMax)) {
             if (!$join_user_coupon) {
                 $query->leftJoin('user_coupon', 'user_coupon.user_id = user.id');
                 $join_user_coupon = true;
@@ -132,10 +133,10 @@ class UserSearch extends User
             }
             $query->andFilterWhere(['user_coupon.isUsed' => 1]);
             $query->groupBy('user.id');
-            if ($couponAmountMin > 0) {
+            if (!is_null($couponAmountMin) ) {
                 $query->andHaving(['>=', 'sum(coupon_type.amount)', $couponAmountMin]);
             }
-            if($couponAmountMax > 0) {
+            if(!is_null($couponAmountMax)) {
                 $query->andHaving(['<=', 'sum(coupon_type.amount)', $couponAmountMax]);
             }
         }
