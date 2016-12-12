@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="__FE_BASE_URI__wap/index/css/index.css?v=1.0364">
     <link rel="stylesheet" href="__FE_BASE_URI__/libs/swiper/swiper.min.css">
     <script src="__FE_BASE_URI__wap/index/js/flex.js"></script>
+    <script src="__FE_BASE_URI__/libs/jquery-1.11.1.min.js"></script>
 </head>
 <body>
 <header>
@@ -37,16 +38,34 @@
     <div class="introduce"><img src="__FE_BASE_URI__wap/index/images/introduce.png" alt=""></div>
     <div class="featured">
         <p class="project">精选项目</p>
-        <ul class="clearfix">
+        <!--一张图片-->
+        <!--<ul class="clearfix onepic">-->
+            <!--<li>-->
+                <!--<a href=""><img src="images/projectone.png" alt=""></a>-->
+            <!--</li>-->
+        <!--</ul>-->
+
+        <!--两张图片-->
+        <ul class="clearfix twopic">
             <li class="lf">
                 <a href=""><img src="__FE_BASE_URI__wap/index/images/bgproject_01.png" alt=""></a>
             </li>
             <li class="rg">
-                <a href=""><img src="__FE_BASE_URI__wap/index/images/bgproject_02.png" alt=""></a>
-                <span class="a-two"></span>
-                <a href=""><img src="__FE_BASE_URI__wap/index/images/bgproject_03.png" alt=""></a>
+                <a href=""><img src="__FE_BASE_URI__wap/index/images/bgproject_04.png" alt=""></a>
             </li>
         </ul>
+
+        <!--三张图片-->
+        <!--<ul class="clearfix threepic">-->
+            <!--<li class="lf">-->
+                <!--<a href=""><img src="images/bgproject_01.png" alt=""></a>-->
+            <!--</li>-->
+            <!--<li class="rg">-->
+                <!--<a href=""><img src="images/bgproject_02.png" alt=""></a>-->
+                <!--<span class="a-two"></span>-->
+                <!--<a href=""><img src="images/bgproject_03.png" alt=""></a>-->
+            <!--</li>-->
+        <!--</ul>-->
     </div>
 </section>
 
@@ -183,7 +202,13 @@
         </div>
     </div>
 </div>
+<div class="mask">
+</div>
 
+<div class="pop">
+    <img src="__FE_BASE_URI__wap/index/images/close.png" alt="">
+    <img src="__FE_BASE_URI__wap/index/images/advantage.png" alt="">
+</div>
 <script src="https://static.wenjf.com/m/js/swiper.min.js"></script>
 <script>
     var mySwiper = new Swiper('.swiper-container', {
@@ -193,7 +218,18 @@
         spaceBetween:20,
         slidesOffsetBefore:20,
 //        slidesOffsetAfter:10,
-    })
+    });
+    $(function(){
+        document.body.addEventListener('touchmove',eventTarget,false);
+        $('.mask,.pop img:eq(0)').on('click',function(){
+            $('.mask').hide();
+            $('.pop').hide();
+            document.body.removeEventListener('touchmove',eventTarget,false);
+        })
+    });
+    function eventTarget(event){
+        event.preventDefault();
+    }
 </script>
 </body>
 </html>
