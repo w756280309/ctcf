@@ -12,23 +12,23 @@ function cloaseLoading(){
     return loadindex;
 }
 
-function newalert(res,msg,reload){
-    if(res){
+function newalert(res, msg, reload)
+{
+    if (res) {
         layer.msg('操作成功', {icon: 1});
-        try{
-            if(reload==1){
-                location.reload()
+        try {
+            if (reload == 1) {
+                location.reload();
             }
-        }catch(err){
-            location.reload()
+        } catch(err) {
+            location.reload();
         }
-    }else{
-        if(msg==''){
-            msg='操作失败';
+    } else {
+        if (msg == '') {
+            msg = '操作失败';
         }
         layer.msg(msg, {icon: 2});
     }
-
 }
 
 var playSum;

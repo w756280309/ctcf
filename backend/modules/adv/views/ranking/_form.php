@@ -1,11 +1,14 @@
 <?php
+
 if ($model->isNewRecord) {
     $this->title = '新建活动';
 } else {
     $this->title = '更新活动';
 }
 $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\web\YiiAsset']);
+
 ?>
+
 <?php $this->beginBlock('blockmain'); ?>
 <div class="container-fluid">
     <div class="span12">
@@ -49,6 +52,13 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\we
             <div class="controls">
                 <?= $form->field($model, 'endAt', ['template' => '{input}', 'inputOptions' => ['autocomplete' => "off", 'class' => 'm-wrap span3 Wdate', 'placeholder' => '选择结束时间', 'onclick' => 'WdatePicker({dateFmt:"yyyy-MM-dd HH:mm:ss"})']])->textInput() ?>
                 <?= $form->field($model, 'endAt', ['template' => '{error}']); ?>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label">活动白名单</label>
+            <div class="controls">
+                <?= $form->field($model, 'whiteList', ['template' => '{input}', 'inputOptions' => ['autocomplete' => "off", 'class' => 'm-wrap span12', 'placeholder' => '活动白名单必须是以英文逗号分隔的手机号，首尾不得加逗号']])->textarea() ?>
+                <?= $form->field($model, 'whiteList', ['template' => '{error}']); ?>
             </div>
         </div>
         <div class="form-actions">

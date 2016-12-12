@@ -1,9 +1,12 @@
 <?php
-use yii\helpers\Html;
 
-$this->title = '活动';
-/* @var $dataProvider yii\data\ActiveDataProvider */
+use yii\helpers\Html;
+use yii\grid\GridView;
+
+$this->title = '活动列表';
+
 ?>
+
 <?php $this->beginBlock('blockmain'); ?>
 <div class="container-fluid">
     <div class="row-fluid">
@@ -34,7 +37,7 @@ $this->title = '活动';
     <div class="row-fluid">
         <div class="span12">
             <div class="portlet-body">
-                <?= \yii\grid\GridView::widget([
+                <?= GridView::widget([
                     'dataProvider' => $dataProvider,
                     'layout' => '{items}',
                     'columns' => [
@@ -64,6 +67,12 @@ $this->title = '活动';
                             'value' => function ($model) {
                                 $html = '<a href="/adv/ranking/update?id=' . $model->id . '" class="btn mini green ajax_op"><i class="icon-edit"></i>编辑</a> |';
                                 $html .= " <button onclick=\"if(confirm('确认删除')){window.location.href='/adv/ranking/delete?id=" . $model->id . "'}\" class=\"btn mini red ajax_op\">删除</button> ";
+
+                                if (!empty($model->promoClass)) {
+                                    $html .= '| <button class="btn mini green ajax_op online_btn" id="'.$model->id.'">'.($model->isOnline ? '下线' : '上线').'</button>';
+                                    $html .= '| <a href="/adv/ranking/award-list?id='.$model->id.'" class="btn mini green ajax_op"></i>查看获奖情况</a>';
+                                }
+
                                 return $html;
                             }
                         ],
@@ -73,4 +82,23 @@ $this->title = '活动';
         </div>
     </div>
 </div>
+
+<script type="text/javascript">
+    $(function () {
+        $('.online_btn').on('click', function () {
+            var _this = $(this);
+            _this.attr('disabled', true);
+            var id = _this.attr('id');
+            var xhr = $.get('online?id='+id);
+
+            xhr.done(function (data) {
+                newalert(!data.code, data.message, 1);
+            })
+
+            xhr.always(function() {
+                _this.attr('disabled', false);
+            });
+        });
+    })
+</script>
 <?php $this->endBlock(); ?>
