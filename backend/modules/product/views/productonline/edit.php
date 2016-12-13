@@ -1,15 +1,16 @@
 <?php
+
 use PayGate\Cfca\CfcaUtils;
 use yii\helpers\ArrayHelper;
 use yii\web\YiiAsset;
 use yii\widgets\ActiveForm;
 
-$this->registerCssFile('/kindeditor/themes/default/default.css', ['depends' => YiiAsset::class, 'position' => 1]);
-$this->registerJsFile('/kindeditor/kindeditor-min.js', ['depends' => YiiAsset::class, 'position' => 1]);
-$this->registerJsFile('/kindeditor/lang/zh_CN.js', ['depends' => YiiAsset::class, 'position' => 1]);
-$this->registerJs('var t = 1;', 1); //在头部加载
 $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => YiiAsset::class]);
-$this->registerJsFile('/js/product.js?v=160803', ['depends' => YiiAsset::class]);
+$this->registerCssFile('/vendor/kindeditor/4.1.11/themes/default/default.css');
+$this->registerCssFile('/vendor/kindeditor/4.1.11/plugins/code/prettify.css');
+$this->registerJsFile('/vendor/kindeditor/4.1.11/kindeditor-all-min.js', ['depends' => 'yii\web\YiiAsset']);
+$this->registerJsFile('/vendor/kindeditor/4.1.11/lang/zh-CN.js', ['depends' => 'yii\web\YiiAsset']);
+$this->registerJsFile('/vendor/kindeditor/4.1.11/plugins/code/prettify.js', ['depends' => 'yii\web\YiiAsset']);
 
 $readonly = $model->online_status ? ['readonly' => 'readonly'] : [];
 
@@ -581,6 +582,27 @@ $is_online = in_array($model->status, [2, 3, 4, 5, 6, 7]);//判断标的是否�
         var $productForm = $('#product_product_form');
         var $submit = $productForm.find('button[type=submit]');
 
+        KindEditor.ready(function(K) {
+            K.create('#company', {
+                cssPath: '/vendor/kindeditor/4.1.11/plugins/code/prettify.css',
+                fileManagerJson: '',
+                uploadJson: '/kindeditor/editor.php?baseurl='+'<?= urlencode(UPLOAD_BASE_URI) ?>',
+                allowFileManager: true,
+                filterMode: false,
+                afterUpload: function(url, data) {
+                    $('#file_id').val($('#file_id').val() + data.id + ',');
+                },
+                afterCreate : function() {
+                    this.sync();
+                },
+                afterBlur:function(){
+                    this.sync();
+                }
+            });
+
+            kindEdit();
+        });
+
         $productForm.submit(function() {
             $submit.attr('disabled', true);
         }).on('afterValidate', function() {
@@ -613,7 +635,6 @@ $is_online = in_array($model->status, [2, 3, 4, 5, 6, 7]);//判断标的是否�
         <?php if ((int)$model->refund_method > 1) { ?>
             $('#onlineproduct-expires').next().html('(个月)');//当编辑项目的还款方式是：除了到期本息之外的任意的还款方式。单位都默认是个月
         <?php } ?>
-        kindEdit();
 
         //是否使用浮动利率设置。如果勾选，浮动利率可以填写。
         var isFlexRate = $('#onlineproduct-isflexrate');
@@ -659,26 +680,24 @@ $is_online = in_array($model->status, [2, 3, 4, 5, 6, 7]);//判断标的是否�
         }
     }
 
-     function kindEdit() {
-        var editor = KindEditor.create('.new_template', {
-                cssPath: '/kindeditor/plugins/code/prettify.css',
-                fileManagerJson: '',
-                uploadJson: '/kindeditor/editor.php',
-                allowFileManager: true,
-                filterMode: false,
-                items: ["source", "|", "preview", "print", "cut", "copy", "paste", "plainpaste", "wordpaste",
-                        "|", "justifyleft", "justifycenter", "justifyright", "justifyfull", "insertorderedlist",
-                        "insertunorderedlist", "indent", "outdent", "clearhtml", "quickformat", "selectall", "|",
-                        "fullscreen", "/", "formatblock", "fontname", "fontsize", "|", "forecolor", "hilitecolor",
-                        "bold", "italic", "underline", "strikethrough", "lineheight", "removeformat", "|", "table"],
-                afterUpload: function(url, data) {
-                    $('#file_id').val($('#file_id').val() + data.id + ',');
-                }
-            });
+    function kindEdit()
+    {
+        KindEditor.create('.new_template', {
+            cssPath: '/vendor/kindeditor/4.1.11/plugins/code/prettify.css',
+            uploadJson: '/kindeditor/editor.php',
+            allowFileManager: true,
+            filterMode: false,
+            items: ["source", "|", "preview", "print", "cut", "copy", "paste", "plainpaste", "wordpaste",
+                    "|", "justifyleft", "justifycenter", "justifyright", "justifyfull", "insertorderedlist",
+                    "insertunorderedlist", "indent", "outdent", "clearhtml", "quickformat", "selectall", "|",
+                    "fullscreen", "/", "formatblock", "fontname", "fontsize", "|", "forecolor", "hilitecolor",
+                    "bold", "italic", "underline", "strikethrough", "lineheight", "removeformat", "|", "table"],
+        });
     }
 
     var flag = 0;
-    function inscontract() {
+    function inscontract()
+    {
         var html = "";
         flag++;
         html =  '<div id=\'ins_con'+flag+'\'>' +

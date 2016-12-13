@@ -1,14 +1,14 @@
 <?php
+
 namespace backend\modules\news\controllers;
 
+use backend\controllers\BaseController;
 use common\models\category\Category;
 use common\models\category\ItemCategory;
+use common\models\news\News;
 use Yii;
 use yii\data\Pagination;
-use backend\controllers\BaseController;
-use common\models\news\News;
 use yii\helpers\ArrayHelper;
-use yii\web\NotFoundHttpException;
 use yii\web\Response;
 use yii\web\UploadedFile;
 
@@ -121,7 +121,7 @@ class NewsController extends BaseController
         if (!empty($id) && ($model = News::findOne($id)) !== null) {
             return $model;
         } else {
-            throw new NotFoundHttpException('The requested page does not exist.');
+            throw $this->ex404();
         }
     }
 
