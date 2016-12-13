@@ -445,11 +445,11 @@ class OrderManager
             $order->campaign_source = Yii::$app->request->cookies->getValue('campaign_source');
         }
         if (!$order->validate()) {
-            return ['code' => PayService::ERROR_MONEY_FORMAT,  'message' => current($order->firstErrors), 'tourl' => '/order/order/ordererror'];
+            return ['code' => PayService::ERROR_MONEY_FORMAT,  'message' => current($order->firstErrors), 'tourl' => '/order/order/result'];
         }
         $ore = $order->save(false);
         if (!$ore) {
-            return ['code' => PayService::ERROR_ORDER_CREATE,  'message' => PayService::getErrorByCode(PayService::ERROR_ORDER_CREATE), 'tourl' => '/order/order/ordererror'];
+            return ['code' => PayService::ERROR_ORDER_CREATE,  'message' => PayService::getErrorByCode(PayService::ERROR_ORDER_CREATE), 'tourl' => '/order/order/result'];
         }
         $transaction = Yii::$app->db->beginTransaction();
         if ($coupon) {
@@ -472,7 +472,7 @@ class OrderManager
                     OrderQueue::initForQueue($order)->save();
                 }
                 $transaction->commit();
-                return ['code' => PayService::ERROR_SUCCESS, 'message' => '', 'tourl' => '/order/order/orderwait?osn='.$order->sn];
+                return ['code' => PayService::ERROR_SUCCESS, 'message' => '', 'tourl' => '/order/order/wait?osn='.$order->sn];
             } catch (\Exception $ex) {
                 $errmsg = $ex->getMessage();
             }
@@ -490,7 +490,7 @@ class OrderManager
                 $transaction->commit();
             }
         }
-        return ['code' => PayService::ERROR_MONEY_FORMAT, 'message' => $errmsg, 'tourl' => '/order/order/ordererror?osn='.$order->sn];
+        return ['code' => PayService::ERROR_MONEY_FORMAT, 'message' => $errmsg, 'tourl' => '/order/order/result?osn='.$order->sn];
     }
 
     public static function getTotalInvestment(Loan $loan, User $user)
