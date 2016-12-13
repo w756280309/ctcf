@@ -445,11 +445,11 @@ class OrderManager
             $order->campaign_source = Yii::$app->request->cookies->getValue('campaign_source');
         }
         if (!$order->validate()) {
-            return ['code' => PayService::ERROR_MONEY_FORMAT,  'message' => current($order->firstErrors), 'tourl' => '/order/order/result'];
+            return ['code' => PayService::ERROR_MONEY_FORMAT,  'message' => current($order->firstErrors)];
         }
         $ore = $order->save(false);
         if (!$ore) {
-            return ['code' => PayService::ERROR_ORDER_CREATE,  'message' => PayService::getErrorByCode(PayService::ERROR_ORDER_CREATE), 'tourl' => '/order/order/result'];
+            return ['code' => PayService::ERROR_ORDER_CREATE,  'message' => PayService::getErrorByCode(PayService::ERROR_ORDER_CREATE)];
         }
         $transaction = Yii::$app->db->beginTransaction();
         if ($coupon) {
@@ -460,9 +460,11 @@ class OrderManager
                 return ['code' => PayService::ERROR_SYSTEM, 'message' => '代金券使用异常'];
             }
         }
+
         //免密逻辑处理
         $res = Yii::$container->get('ump')->orderNopass($order);
         $errmsg = '';
+
         if ($res->isSuccessful()) {
             if (Yii::$app->request->cookies->getValue('campaign_source')) {
                 (new AffiliationManager())->log(Yii::$app->request->cookies->getValue('campaign_source'), $order);
@@ -472,7 +474,12 @@ class OrderManager
                     OrderQueue::initForQueue($order)->save();
                 }
                 $transaction->commit();
-                return ['code' => PayService::ERROR_SUCCESS, 'message' => '', 'tourl' => '/order/order/wait?osn='.$order->sn];
+
+                return [
+                    'code' => PayService::ERROR_SUCCESS,
+                    'message' => '',
+                    'tourl' => '/order/order/wait?osn='.$order->sn
+                ];
             } catch (\Exception $ex) {
                 $errmsg = $ex->getMessage();
             }
@@ -490,7 +497,12 @@ class OrderManager
                 $transaction->commit();
             }
         }
-        return ['code' => PayService::ERROR_MONEY_FORMAT, 'message' => $errmsg, 'tourl' => '/order/order/result?osn='.$order->sn];
+
+        return [
+            'code' => PayService::ERROR_MONEY_FORMAT,
+            'message' => $errmsg,
+            'tourl' => '/order/order/result?status=fail&osn='.$order->sn,
+        ];
     }
 
     public static function getTotalInvestment(Loan $loan, User $user)
