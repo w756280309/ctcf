@@ -62,7 +62,7 @@ use \yii\helpers\Html;
     <ul class="clearfix">
         <?php foreach ($loans as $loan) { ?>
         <li class="lf commonLi">
-            <a class="superscript" href="/deal/deal/detail?sn=<?= $loan->sn ?>">
+            <a <?php if ($loan->is_xs) { ?> class="superscript" <?php } ?> href="/deal/deal/detail?sn=<?= $loan->sn ?>">
                 <div><span><?= $loan->title ?></span></div>
                 <div>
                     <?= LoanHelper::getDealRate($loan) ?>%<?php if (!empty($loan->jiaxi)) { ?><span>+<?= StringUtils::amountFormat2($loan->jiaxi) ?>%</span><?php } ?>
