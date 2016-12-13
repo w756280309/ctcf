@@ -28,9 +28,10 @@ class AdvController extends BaseController
 
         $advInfo = Adv::find()
             ->joinWith('share')
+            ->where(['type' => Adv::TYPE_LUNBO])
             ->andWhere(['del_status' => Adv::DEL_STATUS_SHOW]);
         if (!empty($title)) {
-            $advInfo->andFilterWhere(['like', title, $title]);
+            $advInfo->andFilterWhere(['like', 'title', $title]);
         }
         if ($status == 0 || $status == 1) {
             $advInfo->andFilterWhere(['status' => $status]);
@@ -64,6 +65,7 @@ class AdvController extends BaseController
         }
 
         $share = $model->share ?: new Share();
+        $model->type = Adv::TYPE_LUNBO;
 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             if ($model->showOnPc) {

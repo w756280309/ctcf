@@ -20,6 +20,9 @@ class Adv extends ActiveRecord
     const DEL_STATUS_SHOW = 0;
     const DEL_STATUS_DEL = 1;
 
+    const TYPE_LUNBO = 0;
+    const TYPE_JINGXUAN = 1;
+
     const UPLOAD_PATH = '/upload/adv/';
 
     public static function getStatusList()

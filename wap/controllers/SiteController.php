@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use common\controllers\HelpersTrait;
+use common\models\product\ProductFinder;
 use common\service\SmsService;
 use common\service\LoginService;
 use common\models\adv\Adv;
@@ -101,26 +102,46 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        $ac = 5;
-        $record = Adv::find()->where(['status' => 0, 'del_status' => 0, 'showOnPc' => 0]);
-        if (defined('IN_APP')) {   //App端isDisabledInApp为1时,不显示轮播图
-            $record->andWhere(['isDisabledInApp' => 0]);
+        //理财专区
+        $loans = ProductFinder::queryLoans()->limit(4)->orderBy('xs_status desc, recommendTime desc, sort asc, finish_rate desc, id desc')->limit(4)->all();
+
+        //精选项目与热门活动
+        $queryAdvs = Adv::find()->where(['status' => Adv::STATUS_SHOW, 'del_status' => Adv::DEL_STATUS_SHOW, 'showOnPc' => 0]);
+        $isInApp = defined('IN_APP');
+        if ($isInApp) {
+            $queryAdvs->andWhere(['isDisabledInApp' => 0]);
         }
+        $cqueryAdvs = clone $queryAdvs;
 
-        $adv = $record->limit($ac)->orderBy('show_order asc, id desc')->all();  //修改轮播图显示顺序,先按照show_order升序排列,后按照id降序排列
+        //精选项目
+        //$botiques = $queryAdvs->andWhere(['type' => Adv::TYPE_JINGXUAN])->limit(3)->orderBy('show_order asc, id desc')->all();
 
-        $deal = OnlineProduct::getRecommendLoans(1);
+        //热门活动
+        $hotActs = $cqueryAdvs->andWhere(['type' => Adv::TYPE_LUNBO])->limit(5)->orderBy('show_order asc, id desc')->all();
 
-        //新手专享区展示
-        $xsLoan = OnlineProduct::getXsLoan();
-
+        //公告专区：
         $news = News::find()
             ->where(['status' => News::STATUS_PUBLISH])
             ->orderBy('news_time desc')
             ->limit(3)
             ->all();
 
-        return $this->render('index', ['adv' => $adv, 'deal' => $deal, 'news' => $news, 'xsLoan' => $xsLoan]);
+        return $this->render('new_index', ['loans' => $loans, 'hotActs' => $hotActs, 'news' => $news]);
+    }
+
+    /**
+     * 查询是否是登陆/新手
+     *
+     * @return int
+     */
+    public function actionXs()
+    {
+        if (\Yii::$app->user->isGuest) {
+            return -1;
+        }
+        $user = $this->getAuthedUser();
+
+        return $user->xsCount();
     }
 
     /**

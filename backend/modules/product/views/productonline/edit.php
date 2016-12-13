@@ -486,6 +486,17 @@ $is_online = in_array($model->status, [2, 3, 4, 5, 6, 7]);//判断标的是否�
                     </div>
                 </div>
             </div>
+
+            <div class="span6 ">
+                <div class="control-group">
+                    <label class="control-label">项目标签<span class="notice">(每个标签不超过四个字，且用中文逗号隔开)</span></label>
+                    <div class="controls">
+                        <?=
+                            $form->field($model, 'tags', ['template' => '{input}{error}', 'inputOptions' => ['autocomplete' => 'off', 'placeholder' => '标签列表']])->textInput(['class' => 'm-wrap span12'])
+                        ?>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <h3 class="form-section">项目合同信息</h3>
