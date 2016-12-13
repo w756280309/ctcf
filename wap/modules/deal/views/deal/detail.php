@@ -179,7 +179,7 @@ $this->registerCssFile(ASSETS_BASE_URI.'css/xiangqing.css?v=20161205', ['depends
             <div class="col-xs-10">您已经参与过新手专享体验</div>
             <div class="col-xs-1"></div>
         </div>
-    <?php } else { ?>
+    <?php } elseif($deal->end_date >= time()) { ?>
         <form action="/deal/deal/toorder?sn=<?=$deal->sn . (defined('IN_APP') ? "&token=" . \yii\helpers\Html::encode(Yii::$app->request->get("token")): "") ?>" method="post" id="toorderform" data-to="1">
             <input name="_csrf" type="hidden" id="_csrf" value="<?=Yii::$app->request->csrfToken ?>">
         </form>
@@ -188,7 +188,13 @@ $this->registerCssFile(ASSETS_BASE_URI.'css/xiangqing.css?v=20161205', ['depends
             <div class="col-xs-10">立即认购</div>
             <div class="col-xs-1"></div>
         </div>
-    <?php } ?>
+    <?php } else { ?>
+        <div class="row huankuang">
+            <div class="col-xs-1"></div>
+            <div class="col-xs-10">募集结束</div>
+            <div class="col-xs-1"></div>
+        </div>
+    <?php }?>
 <?php } else { ?>
     <div class="row huankuang">
         <div class="col-xs-1"></div>

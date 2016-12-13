@@ -13,7 +13,7 @@ use common\utils\StringUtils;
                 <div class="col-xs-10 col-sm-10 col-title">
                     <span class="item-tit"><i class="credit-lf"></i><?= $val->title ?></span>
                 </div>
-                <div class="col-xs-2 col-sm-2 col-title"><i class="credit-staus <?= !in_array($val->status, [1, 2]) ? 'credit-staus-over' : '' ?>"><?= Yii::$app->params['deal_status'][$val->status] ?></i></div>
+                <div class="col-xs-2 col-sm-2 col-title"><i class="credit-staus <?= !in_array($val->status, [1, 2]) || $val->end_date < time() ? 'credit-staus-over' : '' ?>"><?= ($val->end_date < time()) ? '募集结束' :Yii::$app->params['deal_status'][$val->status] ?></i></div>
             </div>
             <div class="row credit-all clearfix" >
                 <div class="col-xs-4">

@@ -580,7 +580,7 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
      */
     public function getLoanBalance()
     {
-        if (intval($this->status) === OnlineProduct::STATUS_FOUND) {
+        if ( in_array(intval($this->status), [3 ,5 ,6 ,7]) || $this->end_date < time()) {
             $dealBalance = 0;
         } else if ($this->status >= OnlineProduct::STATUS_NOW) {
             //募集期的取剩余
@@ -657,7 +657,7 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
             $expires = $this->expires;
             $unit = '个月';
         }
-
+        $expires = max($expires, 0);
         return ['value' => $expires, 'unit' => $unit];
     }
 
@@ -707,7 +707,7 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
      * @return int
      */
     public function getProgressForDisplay(){
-        if (in_array($this->status, [3, 5, 6, 7])){
+        if (in_array($this->status, [3, 5, 6, 7]) || $this->end_date < time()){
             return 100;
         } else {
             return intval($this->finish_rate*100);

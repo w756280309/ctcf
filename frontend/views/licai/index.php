@@ -68,18 +68,22 @@ $action = Yii::$app->controller->action->getUniqueId();
                             <div class="clear"></div>
                             <p class="remain-number">可投余额：<?= ($val->status == 1) ? (StringUtils::amountFormat1('{amount}{unit}', $val->money)) : StringUtils::amountFormat2($val->getLoanBalance()).'元' ?></p>
                         </div>
-                        <?php
-                        if (OnlineProduct::STATUS_PRE === $val->status) {
-                            $dates = Yii::$app->functions->getDateDesc($val->start_date);
-                            ?>
-                            <span class="single_right_button"><?= $dates['desc'] . date('H:i', $dates['time']) ?>起售</span>
-                        <?php } elseif (OnlineProduct::STATUS_NOW === $val->status) { ?>
-                            <span class="single_right_button">立即投资</span>
-                        <?php } elseif (OnlineProduct::STATUS_FOUND === $val->status) { ?>
+                        <?php if($val->end_date < time()) { ?>
                             <span class="single_right_button_over">已成立</span>
                         <?php } else { ?>
-                            <span class="single_right_button_over"><?= \Yii::$app->params['deal_status'][$val->status] ?></span>
-                        <?php } ?>
+                            <?php
+                            if (OnlineProduct::STATUS_PRE === $val->status) {
+                                $dates = Yii::$app->functions->getDateDesc($val->start_date);
+                                ?>
+                                <span class="single_right_button"><?= $dates['desc'] . date('H:i', $dates['time']) ?>起售</span>
+                            <?php } elseif (OnlineProduct::STATUS_NOW === $val->status) { ?>
+                                <span class="single_right_button">立即投资</span>
+                            <?php } elseif (OnlineProduct::STATUS_FOUND === $val->status) { ?>
+                                <span class="single_right_button_over">已成立</span>
+                            <?php } else { ?>
+                                <span class="single_right_button_over"><?= \Yii::$app->params['deal_status'][$val->status] ?></span>
+                            <?php } ?>
+                        <?php }?>
                     </div>
                 <?php } else { ?>
                     <div class="single_right">

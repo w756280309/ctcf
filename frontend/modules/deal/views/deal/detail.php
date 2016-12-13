@@ -138,16 +138,12 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/useraccount/chargedeposit.css');
                     <li class="dR-inner-left">项目可投余额：</li>
                     <li class="dR-inner-right">
                         <span><i>
-                                <?php if ($deal->status == OnlineProduct::STATUS_FOUND || $deal->status == OnlineProduct::STATUS_OVER || $deal->status == OnlineProduct::STATUS_HUAN) { ?>
-                                    0元
-                                <?php } else { ?>
-                                <?= ($deal->status == 1) ? (StringUtils::amountFormat1('{amount}{unit}', $deal->money)) : StringUtils::amountFormat2($deal->getLoanBalance()).'元' ?>
-                                <?php }?>
+                                <?= StringUtils::amountFormat2($deal->getLoanBalance())?>元
                             </i></span>
                     </li>
                     <li class="dR-inner-left">我的可用余额：</li>
                     <li class="dR-inner-right"><?= (null === $user) ? '查看余额请【<a onclick="login()" style="cursor: pointer">登录</a>】' : ($user->lendAccount ? StringUtils::amountFormat3($user->lendAccount->available_balance).' 元' : '0 元') ?></li>
-                    <?php if ($deal->status == OnlineProduct::STATUS_NOW) { ?>
+                    <?php if ($deal->status == OnlineProduct::STATUS_NOW && $deal->end_date >= time()) { ?>
                         <li class="dR-inner-left">投资金额(元)：</li>
                         <li class="dR-inner-right"><a style="cursor: pointer" onclick="chongzhi()">去充值</a></li>
                     <?php } ?>
@@ -156,8 +152,8 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/useraccount/chargedeposit.css');
                 <?php if ($deal->status == OnlineProduct::STATUS_NOW) { ?>
                     <?php if (null !== $user && $deal->is_xs && $user->xsCount() >= Yii::$app->params['xs_trade_limit']) { ?>
                         <div class="dR-shouqing">您已经参与过新手专享体验</div>
-                        <div class="dR-btn" onclick="window.location = '/licai/index'">投资其他项目</div>
-                    <?php } else { ?>
+                        <div class="dR-btn" onclick="window.location = '/licai'">投资其他项目</div>
+                    <?php } elseif($deal->end_date >= time()) { ?>
                         <form action="/deal/deal/check?sn=<?= $deal->sn ?>" method="post" id="order_form">
                             <input type="hidden" name="_csrf" value="<?= Yii::$app->request->csrfToken ?>"/>
                             <div class="dR-input">
@@ -215,26 +211,29 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/useraccount/chargedeposit.css');
                                 <input type="submit" class="dR-btn" id="order_submit" value="立即投资"/>
                             </div>
                         </form>
-                    <?php } ?>
+                    <?php } else { ?>
+                        <div class="dR-shouqing">项目已成立</div>
+                        <div class="dR-btn" onclick="window.location = '/licai'">投资其他项目</div>
+                    <?php }?>
                 <?php } elseif ($deal->status == OnlineProduct::STATUS_PRE) { ?>
                     <?php
                         $start = Yii::$app->functions->getDateDesc($deal['start_date']);
                         $deal->start_date = $start['desc'].date('H:i', $start['time']);
                     ?>
                     <div class="dR-shouqing"><?= $deal->start_date ?>起售</div>
-                    <div class="dR-btn" onclick="window.location = '/licai/index'">投资其他项目</div>
+                    <div class="dR-btn" onclick="window.location = '/licai'">投资其他项目</div>
                 <?php } elseif ($deal->status == OnlineProduct::STATUS_FOUND) { ?>
                     <div class="dR-shouqing">项目已成立</div>
-                    <div class="dR-btn" onclick="window.location = '/licai/index'">投资其他项目</div>
+                    <div class="dR-btn" onclick="window.location = '/licai'">投资其他项目</div>
                 <?php } elseif ($deal->status == OnlineProduct::STATUS_FULL) { ?>
                     <div class="dR-shouqing">项目已售罄</div>
-                    <div class="dR-btn" onclick="window.location = '/licai/index'">投资其他项目</div>
+                    <div class="dR-btn" onclick="window.location = '/licai'">投资其他项目</div>
                 <?php } elseif ($deal->status == OnlineProduct::STATUS_OVER) { ?>
                     <div class="dR-shouqing">项目已还清</div>
-                    <div class="dR-btn" onclick="window.location = '/licai/index'">投资其他项目</div>
+                    <div class="dR-btn" onclick="window.location = '/licai'">投资其他项目</div>
                 <?php } elseif ($deal->status == OnlineProduct::STATUS_HUAN) { ?>
                     <div class="dR-shouqing">项目募集完成，收益中...</div>
-                    <div class="dR-btn" onclick="window.location = '/licai/index'">投资其他项目</div>
+                    <div class="dR-btn" onclick="window.location = '/licai'">投资其他项目</div>
                 <?php } ?>
 
                 <p style="padding-bottom: 0.5em; font-size: 12px; color: #bababf;">*理财非存款，产品有风险，投资须谨慎</p>
