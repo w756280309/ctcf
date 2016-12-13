@@ -17,6 +17,7 @@ $this->title = "帮助中心";
                 </div>
                 <div class="kong-width">
                     <div class="row single">
+                        <h1>温都金服平台安全常见问题：</h1><br>
                         <h1>1、为什么在温都金服投资是安全的？</h1>
                         <p class="single-title">（1）对接专业机构产品
                         </p>
