@@ -3,7 +3,7 @@
 namespace app\controllers;
 
 use common\controllers\HelpersTrait;
-use common\models\product\ProductFinder;
+use common\models\product\LoanFinder;
 use common\service\SmsService;
 use common\service\LoginService;
 use common\models\adv\Adv;
@@ -103,7 +103,7 @@ class SiteController extends Controller
     public function actionIndex()
     {
         //理财专区
-        $loans = ProductFinder::queryLoans()->limit(4)->orderBy('xs_status desc, recommendTime desc, sort asc, finish_rate desc, id desc')->limit(4)->all();
+        $loans = LoanFinder::queryLoans()->limit(4)->orderBy('xs_status desc, recommendTime desc, sort asc, finish_rate desc, id desc')->limit(4)->all();
 
         //精选项目与热门活动
         $queryAdvs = Adv::find()->where(['status' => Adv::STATUS_SHOW, 'del_status' => Adv::DEL_STATUS_SHOW, 'showOnPc' => 0]);
@@ -114,7 +114,7 @@ class SiteController extends Controller
         $cqueryAdvs = clone $queryAdvs;
 
         //精选项目
-        //$botiques = $queryAdvs->andWhere(['type' => Adv::TYPE_JINGXUAN])->limit(3)->orderBy('show_order asc, id desc')->all();
+        $botiques = $queryAdvs->andWhere(['type' => Adv::TYPE_JINGXUAN])->limit(3)->orderBy('show_order asc, id desc')->all();
 
         //热门活动
         $hotActs = $cqueryAdvs->andWhere(['type' => Adv::TYPE_LUNBO])->limit(5)->orderBy('show_order asc, id desc')->all();

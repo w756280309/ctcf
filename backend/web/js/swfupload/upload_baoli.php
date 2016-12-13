@@ -18,8 +18,8 @@
 
         $imageSize = getimagesize($_FILES['Filedata']['tmp_name']);
 
-        if ('wap' === $shebei && ($imageSize[1] !== 350 || $imageSize[0] !== 750)) {
-            exit("图片尺寸应为：高350px，宽750px!");
+        if ('wap' === $shebei && ($imageSize[1] !== 190 || $imageSize[0] !== 290)) {
+            exit("图片尺寸应为：高190px，宽290px!");
         }
 
         if ('pc' === $shebei && ($imageSize[1] !== 340 || $imageSize[0] !== 1920)) {

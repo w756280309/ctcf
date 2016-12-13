@@ -7,9 +7,9 @@
     <title>温度金服</title>
     <link rel="stylesheet" href="../libs/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="../common/css/base.css?v=1.0">
-    <link rel="stylesheet" href="css/index.css?v=1.0364">
     <link rel="stylesheet" href="../libs/swiper/swiper.min.css">
-    <script src="js/flex.js"></script>
+    <script src="../libs/lib.flexible.js"></script>
+    <link rel="stylesheet" href="css/index.css?v=1.0364">
     <script src="../libs/jquery-1.11.1.min.js"></script>
 </head>
 <body>
@@ -85,7 +85,7 @@
             </a>
         </li>
         <li class="lf commonLi">
-            <a href="">
+            <a class="superscript" href="">
                 <div><span>南金交--中盛海润民生哈哈哈哈哈哈</span></div>
                 <div>5.5%<span></span></div>
                 <div>预期年化率</div>
@@ -226,6 +226,10 @@
             $('.pop').hide();
             document.body.removeEventListener('touchmove',eventTarget,false);
         })
+        var host = location.host;
+        if(host.split('.')[0] === 'app') {
+            $('footer').css({'margin-bottom':0});
+        }
     });
     function eventTarget(event){
         event.preventDefault();

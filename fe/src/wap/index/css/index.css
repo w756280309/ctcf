@@ -129,6 +129,7 @@ header .loginNewPeople a {
 
 section {
     background-color: #fff;
+    height:8.267rem;
 }
 
 section .introduce {
@@ -218,8 +219,9 @@ section .featured .threepic li a img {
 }
 
 .invest ul li {
-    width: 49.9%;
-    height: 4.4rem;
+    width:50%;
+    box-sizing: border-box;
+    height: 4.45rem;
 }
 
 .invest ul li a {
@@ -228,17 +230,17 @@ section .featured .threepic li a img {
     display: block;
 }
 
-.invest ul li:first-child a {
+.invest ul li:first-child a{
     border-bottom: 1px solid #ddd;
     border-right: 1px solid #ddd;
 }
 
-.invest ul li:nth-of-type(2) {
+.invest ul li:nth-of-type(2) a {
     border-bottom: 1px solid #ddd;
 }
 
-.invest ul li:last-child a {
-    border-left: 1px solid #ddd;
+.invest ul li:nth-of-type(3) a {
+    border-right: 1px solid #ddd;
 }
 
 .commonLi {
@@ -286,8 +288,8 @@ section .featured .threepic li a img {
     text-align: center;
 }
 .commonLi a div:nth-of-type(5) span {
-    padding: 0.078rem 0.12rem 0.055rem 0.12rem;
-    font-size: 14px;
+    padding: 0.04667rem 0.16rem 0.06667rem 0.16rem;
+    font-size: 13px;
     border: 1px solid #0080ff;
     color: #0080ff;
     border-radius: 5px;
@@ -626,3 +628,15 @@ a.shouye1:active {
 .pop img:nth-of-type(2) {
     width:6.6666667rem;
 }
+
+@media (min-width: 1200px){
+    .container {
+         width: 750px;
+    }
+}
+@media (min-width: 992px){
+    .container {
+        width: 750px;
+    }
+}
+

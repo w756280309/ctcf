@@ -10,12 +10,10 @@ use common\view\LoanHelper;
 use \yii\helpers\Html;
 
 ?>
-<link rel="stylesheet" href="<?= FE_BASE_URI ?>/libs/bootstrap/css/bootstrap.min.css">
-<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/base.css?v=1.0">
-<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/index/css/index.css?v=1.0364">
-<link rel="stylesheet" href="<?= FE_BASE_URI ?>/libs/swiper/swiper.min.css">
-<script src="<?= FE_BASE_URI ?>wap/index/js/flex.js"></script>
-<!--<script src="--><?//= FE_BASE_URI ?><!--/libs/jquery-1.11.1.min.js"></script>-->
+<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/base.css?v=2.0">
+<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/index/css/index.css?v=2.0">
+<link rel="stylesheet" href="<?= FE_BASE_URI ?>libs/swiper/swiper.min.css">
+<script src="<?= FE_BASE_URI ?>libs/lib.flexible.js"></script>
 <header>
     <img src="<?= FE_BASE_URI ?>wap/index/images/logo.png" alt="">
     <div class="notLogin hide">
@@ -62,7 +60,7 @@ use \yii\helpers\Html;
     <ul class="clearfix">
         <?php foreach ($loans as $loan) { ?>
         <li class="lf commonLi">
-            <a <?php if ($loan->is_xs) { ?> class="superscript" <?php } ?> href="/deal/deal/detail?sn=<?= $loan->sn ?>">
+            <a <?php if ($loan->is_xs) { ?>class="superscript"<?php } ?> href="/deal/deal/detail?sn=<?= $loan->sn ?>">
                 <div><span><?= $loan->title ?></span></div>
                 <div>
                     <?= LoanHelper::getDealRate($loan) ?>%<?php if (!empty($loan->jiaxi)) { ?><span>+<?= StringUtils::amountFormat2($loan->jiaxi) ?>%</span><?php } ?>
@@ -205,6 +203,10 @@ use \yii\helpers\Html;
         $('.jumpAdv').on('click', function(){
             location.href = '/deal/deal/index';
         });
+        var host = location.host;
+        if(host.split('.')[0] === 'app') {
+            $('footer').css({'margin-bottom':0});
+        }
     });
 
     function checkLoginStatus()

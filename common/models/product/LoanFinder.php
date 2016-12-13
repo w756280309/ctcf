@@ -2,7 +2,7 @@
 
 namespace common\models\product;
 
-class ProductFinder
+class LoanFinder
 {
     public static function queryLoans()
     {
