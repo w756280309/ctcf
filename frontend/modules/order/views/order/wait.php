@@ -1,8 +1,11 @@
 <?php
-$this->title= "订单处理中";
 
-$this->registerCssFile(ASSETS_BASE_URI . 'css/deal/buy.css');
+$this->title= '订单处理中';
+
+$this->registerCssFile(ASSETS_BASE_URI.'css/deal/buy.css');
+
 ?>
+
 <div class="invest-box clearfix">
     <div class="invest-container">
         <div class="invest-container-box invest-success">
@@ -13,6 +16,7 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/deal/buy.css');
         </div>
     </div>
 </div>
+
 <script type="text/javascript">
     var orderSn = '<?= $order->sn ?>';
     if (typeof ga != 'undefined') {
@@ -29,7 +33,7 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/deal/buy.css');
                 'revenue': '<?= $order->order_money ?>',
                 'hitCallback': function() {
                     $.cookie('fin_tid', orderSn);
-                    location.replace("/order/order/ordererror?osn="+orderSn);
+                    location.replace('/order/order/result?status=success&osn='+orderSn);
                 }
             });
 
@@ -40,20 +44,28 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/deal/buy.css');
 
     function ret()
     {
+        var toUrl = '/order/order/result?osn='+orderSn;
+
         $.ajax({
-            url: "/order/order/ordererror?osn=<?= $order->sn ?>",
+            url: toUrl,
             success: function(data) {
                 if (0 !== data.status) {
+                    if (1 === data.status) {
+                        toUrl = toUrl+'&status=success'
+                    } else if (2 === data.status) {
+                        toUrl = toUrl+'&status=fail'
+                    }
+
                     if (typeof ga != 'undefined') {
                         if (1 === data.status) {
                             logTx();
                         }
 
                         setTimeout(function() {
-                            location.replace("/order/order/ordererror?osn="+orderSn);
+                            location.replace(toUrl);
                         }, 1500);
                     } else {
-                        location.replace("/order/order/ordererror?osn="+orderSn);
+                        location.replace(toUrl);
                     }
                 }
             }
@@ -61,7 +73,6 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/deal/buy.css');
     }
 
     var int = setInterval(ret, 1000);
-
     setTimeout(function () {
         clearInterval(int);
         location.replace("/user/user/myorder?type=2");

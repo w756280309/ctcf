@@ -206,23 +206,25 @@ $this->registerCssFile(ASSETS_BASE_URI.'css/xiangqing.css?v=20161205', ['depends
 <?php } ?>
 
 <script>
-    window.onload = function () {
-        var videoDiv = document.getElementById('video');
-        var playImg = document.getElementById('play-img');
-        videoDiv.onclick = function() {
-            if (this.paused) {
-                this.play();
-            } else {
-                this.pause();
+    <?php if ($deal->issuerInfo && $deal->issuerInfo->video) { ?>
+        window.onload = function () {
+            var videoDiv = document.getElementById('video');
+            var playImg = document.getElementById('play-img');
+            videoDiv.onclick = function() {
+                if (this.paused) {
+                    this.play();
+                } else {
+                    this.pause();
+                }
+            }
+            videoDiv.onwaiting = function() {
+                playImg.style.display = 'block';
+            }
+            videoDiv.oncanplay = function() {
+                playImg.style.display = 'none';
             }
         }
-        videoDiv.onwaiting = function() {
-            playImg.style.display = 'block';
-        }
-        videoDiv.oncanplay = function() {
-            playImg.style.display = 'none';
-        }
-    }
+    <?php } ?>
 
     $(function() {
         $('.tabs div').click(function() {

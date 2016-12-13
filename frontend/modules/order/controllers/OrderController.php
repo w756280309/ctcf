@@ -71,22 +71,17 @@ class OrderController extends BaseController
     /**
      * 认购标的中间处理页.
      */
-    public function actionOrderwait($osn)
+    public function actionWait($osn)
     {
         if (empty($osn)) {
             throw $this->ex404();   //判断参数无效时,抛404异常
         }
 
         $order = OnlineOrder::ensureOrder($osn);
-        if (OnlineOrder::STATUS_FALSE !== $order->status) {
-            if (OnlineOrder::STATUS_SUCCESS === $order->status) {
-                return $this->redirect('/info/success?source=touzi&jumpUrl=/user/user/myorder?type=2');
-            } else {
-                return $this->redirect("/info/fail?source=touzi");
-            }
-        }
 
-        return $this->render('wait', ['order' => $order]);
+        return $this->render('wait', [
+            'order' => $order,
+        ]);
     }
 
     /**
@@ -124,9 +119,10 @@ class OrderController extends BaseController
     /**
      * 认购标的结果页
      */
-    public function actionOrdererror($osn)
+    public function actionResult($osn)
     {
         $order = OnlineOrder::ensureOrder($osn);
+
         if (\Yii::$app->request->isAjax) {
             return ['status' => $order->status];
         } else {

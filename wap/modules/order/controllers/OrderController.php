@@ -17,6 +17,7 @@ use yii\helpers\Html;
 class OrderController extends BaseController
 {
     use ContractTrait;
+
     /**
      * 认购页面.
      */
@@ -107,7 +108,7 @@ class OrderController extends BaseController
     /**
      * 认购标的结果页
      */
-    public function actionOrdererror($osn)
+    public function actionResult($osn)
     {
         if (empty($osn)) {
             throw $this->ex404();   //判断参数无效时,抛404异常
@@ -118,17 +119,21 @@ class OrderController extends BaseController
         if (null  !== $order && 1 !== $order->status) {
             $deal = OnlineProduct::findOne($order->online_pid);
         }
-        if (\Yii::$app->request->isAjax) {
+        if (Yii::$app->request->isAjax) {
             return ['status' => $order->status];
         }
 
-        return $this->render('error', ['order' => $order, 'deal' => $deal, 'ret' => (null  !== $order && 1 === $order->status) ? 'success' : 'fail']);
+        return $this->render('error', [
+            'order' => $order,
+            'deal' => $deal,
+            'ret' => (null  !== $order && 1 === $order->status) ? 'success' : 'fail',
+        ]);
     }
 
     /**
      * 认购标的中间处理页
      */
-    public function actionOrderwait($osn)
+    public function actionWait($osn)
     {
         if (empty($osn)) {
             throw $this->ex404();   //判断参数无效时,抛404异常
@@ -136,7 +141,9 @@ class OrderController extends BaseController
 
         $order = OnlineOrder::ensureOrder($osn);
 
-        return $this->render('wait', ['order' => $order]);
+        return $this->render('wait', [
+            'order' => $order,
+        ]);
     }
 
     /**

@@ -30,11 +30,14 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/common.js', ['depends' => 'yii\web\Yii
     </div>
     <div class="col-xs-4"></div>
 </div>
+
 <script type="text/javascript">
     var orderSn = '<?= $order->sn ?>';
+
     if (typeof ga != 'undefined') {
         ga('require', 'ecommerce');
-        function logTx() {
+        function logTx()
+        {
             if ($.cookie('fin_tid') == orderSn) {
                 return;
             }
@@ -44,7 +47,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/common.js', ['depends' => 'yii\web\Yii
                 'revenue': '<?= $order->order_money ?>',
                 'hitCallback': function() {
                     $.cookie('fin_tid', orderSn);
-                    location.replace("/order/order/ordererror?osn="+orderSn);
+                    location.replace("/order/order/result?status=success&osn="+orderSn);
                 }
             });
 
@@ -52,23 +55,30 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/common.js', ['depends' => 'yii\web\Yii
         }
     }
 
-    function ret() {
+    function ret()
+    {
+        var toUrl = '/order/order/result?osn='+orderSn;
         $.ajax({
-            url: "/order/order/ordererror?osn=<?= $order->sn?>",
+            url: toUrl,
             success: function(data) {
                 if (0 !== data.status) {
+                    if (1 === data.status) {
+                        toUrl = toUrl+'&status=success'
+                    } else if (2 === data.status) {
+                        toUrl = toUrl+'&status=fail'
+                    }
+
                     if (typeof ga != 'undefined') {
-                        if (1 == data.status) {
+                        if (1 === data.status) {
                             logTx();
                         }
 
                         setTimeout(function() {
-                            location.replace("/order/order/ordererror?osn="+orderSn);
+                            location.replace(toUrl);
                         }, 1500);
                     } else {
-                        location.replace("/order/order/ordererror?osn="+orderSn);
+                        location.replace(toUrl);
                     }
-
                 }
             }
         });
@@ -77,6 +87,6 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/common.js', ['depends' => 'yii\web\Yii
     var tick = setInterval(ret, 1000);
     setTimeout(function () {
         clearInterval(tick);
-        location.replace("/order/order/ordererror?osn="+orderSn);
+        location.replace("/order/order/result?osn="+orderSn);
     }, 5000);
 </script>
