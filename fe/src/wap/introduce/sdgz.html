@@ -5,8 +5,11 @@
     <title>南金交·中盛海润1号</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <link rel="stylesheet" href="../common/css/base.css">
-    <link rel="stylesheet" href="css/sdgz.css?v=1.2">
+    <link rel="stylesheet" href="../libs/videojs/video-js.min.css">
+    <link rel="stylesheet" href="css/sdgz.css?v=1.3">
     <script src="../libs/flex.js"></script>
+    <script src="../libs/videojs/video.min.js"></script>
+    <script src="../libs/fastclick.js"></script>
 </head>
 <body>
 <header>
@@ -40,7 +43,7 @@
         <h4>视  频  介  绍</h4>
         <p><span><i></i></span></p>
         <div class="videobox">
-            <video  id="media" poster="img/video.png">
+            <video  id="video" class="media video-js vjs-default-skin" controls poster="img/video.png">
                 <source src="http://video.wenjf.com/Act-ss-mp4-ld/ca07ac6b85dd4cba8fed6175369f6f47/sanduxiangmu.mp4" type="video/mp4">
             </video>
             <div id="loading"><img src="img/loading.gif" alt=""></div>
@@ -103,15 +106,16 @@
 </footer>
 <script>
     window.onload = function(){
-        var media = document.getElementById('media');
+        FastClick.attach(document.body);
+        var media = document.getElementById('video');
         var loading = document.getElementById('loading');
         media.onclick = function(){
             if(media.paused){
                 media.play();
-                media.controls = false;
+//                media.controls = false;
             }else {
                 media.pause();
-                media.controls = true;
+//                media.controls = true;
             }
         };
         media.onwaiting = function(){

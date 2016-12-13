@@ -1,3 +1,6 @@
+* {
+  -webkit-tap-highlight-color: transparent;
+}
 body {
   background-color: #efefef;
   margin: 0 auto;
@@ -115,6 +118,7 @@ section .safeguards .guacontent div span {
 }
 section .videointroduce video {
   width: 10rem;
+  height: 5.6rem;
   margin-top: 0.26666667rem;
   margin-left: -0.53333333rem;
 }
