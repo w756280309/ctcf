@@ -50,7 +50,10 @@ section .safeguards p span {
   border-left: 18px solid transparent;
   border-right: 18px solid transparent;
   position: absolute;
+  left: 50%;
   transform: translateX(-18px);
+  -webkit-transform: translateX(-18px);
+  -moz-transform: translateX(-18px);
   z-index: 5;
 }
 section .publisher p span i,
