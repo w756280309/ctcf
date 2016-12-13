@@ -376,28 +376,28 @@ class Perf extends ActiveRecord
     //统计每天回款总金额
     public function getRepayMoney($date)
     {
-        $sql = "SELECT SUM( op.`benxi` ) FROM  `online_repayment_plan` AS op LEFT JOIN online_product AS p ON p.id = op.online_pid WHERE p.isTest =0 AND FROM_UNIXTIME( op.`refund_time` ) =  :date";
+        $sql = "SELECT SUM( op.`benxi` ) FROM  `online_repayment_plan` AS op LEFT JOIN online_product AS p ON p.id = op.online_pid WHERE p.isTest =0 AND op.status IN ( 1, 2 ) AND FROM_UNIXTIME( op.`refund_time` ) =  :date";
         return Yii::$app->db->createCommand($sql,['date' => $date])->queryScalar();
     }
 
     //统计每天回款项目
     public function getRepayLoanCount($date)
     {
-        $sql = "SELECT COUNT( DISTINCT  op.`online_pid` ) FROM  `online_repayment_plan` AS op LEFT JOIN online_product AS p ON p.id = op.online_pid WHERE p.isTest =0 AND FROM_UNIXTIME( op.`refund_time` ) =  :date";
+        $sql = "SELECT COUNT( DISTINCT  op.`online_pid` ) FROM  `online_repayment_plan` AS op LEFT JOIN online_product AS p ON p.id = op.online_pid WHERE p.isTest =0 AND op.status IN ( 1, 2 ) AND FROM_UNIXTIME( op.`refund_time` ) =  :date";
         return Yii::$app->db->createCommand($sql,['date' => $date])->queryScalar();
     }
 
     //统计每天回款用户数
     public function getRepayUserCount($date)
     {
-        $sql = "SELECT COUNT( DISTINCT  op.`uid` ) FROM  `online_repayment_plan` AS op LEFT JOIN online_product AS p ON p.id = op.online_pid WHERE p.isTest =0 AND FROM_UNIXTIME( op.`refund_time` ) =  :date";
+        $sql = "SELECT COUNT( DISTINCT  op.`uid` ) FROM  `online_repayment_plan` AS op LEFT JOIN online_product AS p ON p.id = op.online_pid WHERE p.isTest =0  AND op.status IN ( 1, 2 ) AND FROM_UNIXTIME( op.`refund_time` ) =  :date";
         return Yii::$app->db->createCommand($sql,['date' => $date])->queryScalar();
     }
 
-    //获取每日还款的用户ID
+    //获取每日已经还款的用户ID
     public function getDayRepayUser($date)
     {
-        $sql = "SELECT DISTINCT  op.`uid` FROM  `online_repayment_plan` AS op LEFT JOIN online_product AS p ON p.id = op.online_pid WHERE p.isTest =0 AND FROM_UNIXTIME( op.`refund_time` ) =  :date";
+        $sql = "SELECT DISTINCT  op.`uid` FROM  `online_repayment_plan` AS op LEFT JOIN online_product AS p ON p.id = op.online_pid WHERE p.isTest =0 AND op.status IN ( 1, 2 ) AND FROM_UNIXTIME( op.`refund_time` ) =  :date";
         $data = Yii::$app->db->createCommand($sql,['date' => $date])->queryAll();
         return ArrayHelper::getColumn($data, 'uid');
     }
