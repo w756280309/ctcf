@@ -213,14 +213,10 @@ class Promo1212
 
         if ($totalInvestMent > 0) {
 
-            if ($totalInvestMent >= self::TOTALINVESTMENT_LEVEL_MONEY) {
-                if ($isFirstDraw) {
+            if ($isFirstDraw) {
+                if ($totalInvestMent >= self::TOTALINVESTMENT_LEVEL_MONEY) {
                     $reward_id = mt_rand(self::GIFT_RING_BUKLE, self::GIFT_RICE);
                 } else {
-                    $reward_id = mt_rand(self::COUPON_TEN_YITOU, self::COUPON_FIVEZERO_YITOU);
-                }
-            } else {
-                if ($isFirstDraw) {
                     $pool = array(
                         self::GIFT_RING_BUKLE,
                         self::GIFT_RING_BUKLE,
@@ -229,9 +225,22 @@ class Promo1212
                         self::GIFT_RICE,
                     );
                     $reward_id = $pool[mt_rand(0, 4)];
-                } else {
-                    $reward_id = mt_rand(self::COUPON_TEN_YITOU, self::COUPON_TWOZERO_YITOU);
                 }
+            } else {
+                //对于已投资的用户第二次抽奖的概率改为10000-10，20000-20，50000-50代金券和指环扣各占20%，食用油及大米各占10%
+                $pool = array(
+                    self::COUPON_TEN_YITOU,
+                    self::COUPON_TEN_YITOU,
+                    self::COUPON_TWOZERO_YITOU,
+                    self::COUPON_TWOZERO_YITOU,
+                    self::COUPON_FIVEZERO_YITOU,
+                    self::COUPON_FIVEZERO_YITOU,
+                    self::GIFT_RING_BUKLE,
+                    self::GIFT_RING_BUKLE,
+                    self::GIFT_COOKING_OIL,
+                    self::GIFT_RICE,
+                );
+                $reward_id = $pool[mt_rand(0, 9)];
             }
         } else {
             //未投资情况
