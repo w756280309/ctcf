@@ -57,6 +57,7 @@ class OnlineRepaymentPlan extends \yii\db\ActiveRecord
             [['online_pid', 'order_id', 'qishu', 'uid', 'refund_time', 'status'], 'integer'],
             [['benxi', 'benjin', 'lixi', 'overdue', 'benxi_yue'], 'number'],
             [['sn'], 'string', 'max' => 30],
+            [['actualRefundTime'], 'date', 'type' => 'datetime', 'format' => 'php:Y-m-d H:i:s'],
         ];
     }
 
@@ -82,6 +83,7 @@ class OnlineRepaymentPlan extends \yii\db\ActiveRecord
             'status' => 'Status',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
+            'actualRefundTime' => '实际还款时间',
         ];
     }
 

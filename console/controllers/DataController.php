@@ -5,6 +5,7 @@ namespace console\controllers;
 use common\lib\bchelp\BcRound;
 use common\models\order\OnlineOrder;
 use common\models\order\OnlineRepaymentPlan;
+use common\models\order\OnlineRepaymentRecord;
 use common\models\payment\Repayment;
 use common\models\product\OnlineProduct;
 use common\models\user\UserInfo;
@@ -88,6 +89,29 @@ class DataController extends Controller
                     $rep->refundedAt = date('Y-m-d H:i:s', $v['refund_time']);
                     $rep->update();
                 }
+            }
+        }
+    }
+
+    /**
+     * 更新还款计划的实际还款时间数据(上线时候执行一次)
+     */
+    public function actionUpdateActualRefundTime()
+    {
+        $records = OnlineRepaymentRecord::find()->select(['online_pid', 'order_id', 'qishu', 'uid', 'refund_time'])->where(['status' => [1, 2]])->asArray()->all();
+        foreach ($records as $record) {
+            $plan = OnlineRepaymentPlan::find()
+                ->where('actualRefundTime is null')
+                ->andWhere(['status' => [1, 2]])
+                ->andWhere([
+                    'online_pid' => $record['online_pid'],
+                    'order_id' => $record['order_id'],
+                    'qishu' => $record['qishu'],
+                    'uid' => $record['uid']
+                ])->one();
+            if (!empty($plan)) {
+                $plan->actualRefundTime = date('Y-m-d H:i:s' ,$record['refund_time']);
+                $plan->save(false);
             }
         }
     }

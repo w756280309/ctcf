@@ -152,7 +152,7 @@ class RepaymentController extends BaseController
 
         $deal = OnlineProduct::findOne(['id' => $pid]);
 
-        if (!deal) {
+        if (!$deal) {
             return ['result' => 0, 'message' => '标的信息不存在'];
         }
 
@@ -349,6 +349,7 @@ class RepaymentController extends BaseController
             } else {
                 $order->status = OnlineRepaymentPlan::STATUS_YIHUAN;
             }
+            $order->actualRefundTime = date('Y-m-d H:i:s');//保存实际还款时间
             if (!$order->save()) {
                 $transaction->rollBack();
 

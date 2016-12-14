@@ -76,7 +76,7 @@ $this->title = '获奖列表';
                             }
                         ],
                         [
-                            'header' => '注册渠道',
+                            'header' => '注册分销商',
                             'value' => function ($model) {
                                 return empty($model['name']) ? '---' : $model['name'];
                             }
