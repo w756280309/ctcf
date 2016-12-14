@@ -36,13 +36,15 @@ class PromoInvite12
     public function addInviteeCoupon(User $invitee)
     {
         //被邀请者注册送50元代金券
-        if ($invitee->isInvited($this->promo->startAt, $this->promo->endAt)) {
-            $couponType = CouponType::findOne(['sn' => self::COUPON_50_SN]);
-            try {
-                if ($couponType && $couponType->allowIssue()) {
-                    UserCoupon::addUserCoupon($invitee, $couponType)->save();
+        if ($this->promo->isActive($invitee)) {
+            if ($invitee->isInvited($this->promo->startAt, $this->promo->endAt)) {
+                $couponType = CouponType::findOne(['sn' => self::COUPON_50_SN]);
+                try {
+                    if ($couponType && $couponType->allowIssue()) {
+                        UserCoupon::addUserCoupon($invitee, $couponType)->save();
+                    }
+                } catch (\Exception $ex) {
                 }
-            } catch (\Exception $ex) {
             }
         }
     }
@@ -53,7 +55,9 @@ class PromoInvite12
      */
     public function doAfterSuccessLoanOrder(OnlineOrder $order)
     {
-        $this->dealWithOrder($order);
+       if ($this->promo->isActive($order->user)) {
+           $this->dealWithOrder($order);
+       }
     }
 
     //投资成功之后处理逻辑

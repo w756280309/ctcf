@@ -384,13 +384,15 @@ class Promo1212
     //给指定用户添加抽奖机会
     public function addTicket(User $user, $ticketSource, Request $request = null)
     {
-        switch ($ticketSource) {
-            case 'register'://新用户注册
-                $this->addInviteTicketInternal($user, $request);//给邀请者送抽奖机会
-                break;
-            case 'init'://用户进入抽奖页面
-                $this->addInitTicketInternal($user, $request);//用户进入抽奖页面给抽奖机会
-                break;
+        if ($this->promo->isActive($user)) {
+            switch ($ticketSource) {
+                case 'register'://新用户注册
+                    $this->addInviteTicketInternal($user, $request);//给邀请者送抽奖机会
+                    break;
+                case 'init'://用户进入抽奖页面
+                    $this->addInitTicketInternal($user, $request);//用户进入抽奖页面给抽奖机会
+                    break;
+            }
         }
     }
 

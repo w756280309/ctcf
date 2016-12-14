@@ -10,37 +10,38 @@ class PromoService
 {
     /**
      * 获取对指定用户有效的活动
-     * @param User|null $user
      * @return array
      * @throws \Exception
      */
-    private static function getActivePromo(User $user = null)
+    private static function getActivePromo()
     {
         $time = time();
         $promos = RankingPromo::find()->andWhere(['>=', 'endAt', $time])->andWhere(['<=', 'startAt', $time])->andWhere('`key` is not null')->andWhere('promoClass is not null')->all();
         $data = [];
         foreach ($promos as $promo) {
-            if ($promo->isActive($user)) {
-                if(class_exists($promo->promoClass)) {
-                   $data[] = $promo;
-                }
+            if (class_exists($promo->promoClass)) {
+                $data[] = $promo;
             }
         }
         return $data;
     }
 
     /**
-     * @param User $user            用户对象
+     * @param User $user 用户对象
      * @param $ticketSource string  抽奖机会来源
      * @throws \Exception
      */
     public static function addTicket(User $user, $ticketSource)
     {
-        $promos = self::getActivePromo($user);
+        $promos = self::getActivePromo();
         foreach ($promos as $promo) {
             $model = new $promo->promoClass($promo);
             if (method_exists($model, 'addTicket')) {
-                $model->addTicket($user, $ticketSource, \Yii::$app->request);
+                try {
+                    $model->addTicket($user, $ticketSource, \Yii::$app->request);
+                } catch (\Exception $ex) {
+
+                }
             }
         }
     }
@@ -52,11 +53,15 @@ class PromoService
      */
     public static function addInviteeCoupon(User $user)
     {
-        $promos = self::getActivePromo($user);
+        $promos = self::getActivePromo();
         foreach ($promos as $promo) {
             $model = new $promo->promoClass($promo);
             if (method_exists($model, 'addInviteeCoupon')) {
-                $model->addInviteeCoupon($user);
+                try {
+                    $model->addInviteeCoupon($user);
+                } catch (\Exception $ex) {
+
+                }
             }
         }
     }
@@ -68,11 +73,15 @@ class PromoService
      */
     public static function doAfterSuccessLoanOrder(OnlineOrder $order)
     {
-        $promos = self::getActivePromo($order->user);
+        $promos = self::getActivePromo();
         foreach ($promos as $promo) {
             $model = new $promo->promoClass($promo);
             if (method_exists($model, 'doAfterSuccessLoanOrder')) {
-                $model->doAfterSuccessLoanOrder($order);
+                try {
+                    $model->doAfterSuccessLoanOrder($order);
+                } catch (\Exception $ex) {
+
+                }
             }
         }
     }
