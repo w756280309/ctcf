@@ -35,7 +35,7 @@ use \yii\helpers\Html;
     </div>
 
 </header>
-<section>
+<section class="hide">
     <div class="introduce"><a href="/site/h5?wx_share_key=h5"><img src="<?= FE_BASE_URI ?>wap/index/images/introduce.png" alt=""></a></div>
     <div class="featured">
         <p class="project">精选项目</p>
@@ -170,7 +170,7 @@ use \yii\helpers\Html;
 
 <div class="pop" style="display: none;">
     <img src="<?= FE_BASE_URI ?>wap/index/images/close.png" class="close_splash" alt="">
-    <img src="<?= FE_BASE_URI ?>wap/index/images/advantage.png" class="jumpAdv" alt="">
+    <img src="<?= FE_BASE_URI ?>wap/index/images/kaiping.png" class="jumpAdv" alt="">
 </div>
 <script src="<?= ASSETS_BASE_URI ?>js/swiper.min.js"></script>
 <script>
@@ -188,28 +188,13 @@ use \yii\helpers\Html;
         $('.pop').hide();
         document.body.removeEventListener('touchmove', eventTarget, false);
     }
-    function eventTarget(event){
+
+    function eventTarget(event)
+    {
         event.preventDefault();
     }
-    $(function () {
-        $('.close_splash').on('click', closeAdv);
-        if ($.cookie('splash_show') !== "1") {
-            document.body.addEventListener('touchmove', eventTarget);
-            $.cookie('splash_show', "1");
-            $('.mask').show();
-            $('.pop').show();
-            setTimeout(closeAdv, 4000);
-        }
-        $('.jumpAdv').on('click', function(){
-            location.href = '/deal/deal/index';
-        });
-        var host = location.host;
-        if(host.split('.')[0] === 'app') {
-            $('footer').css({'margin-bottom':0});
-        }
-    });
 
-    function checkLoginStatus()
+    function checkStatus()
     {
         var xhr = $.get('/site/xs');
         xhr.done(function(code) {
@@ -225,7 +210,26 @@ use \yii\helpers\Html;
         });
     }
 
-    checkLoginStatus();
+    $(function () {
+        $('.close_splash').on('click', closeAdv);
+        if ($.cookie('splash_show') !== "1") {
+            document.body.addEventListener('touchmove', eventTarget);
+            $.cookie('splash_show', "1");
+            $('.mask').show();
+            $('.pop').show();
+            setTimeout(closeAdv, 4000);
+        }
+        //判断首页上方
+        checkStatus();
+
+        $('.jumpAdv').on('click', function () {
+            location.href = '/promotion/p1612/double-twelves?wx_share_key=14813409247';
+        });
+        var host = location.host;
+        if(host.split('.')[0] === 'app') {
+            $('footer').css({'margin-bottom':0});
+        }
+    });
 </script>
 </body>
 </html>

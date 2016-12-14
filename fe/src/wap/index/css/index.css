@@ -129,7 +129,6 @@ header .loginNewPeople a {
 
 section {
     background-color: #fff;
-    height:8.267rem;
 }
 
 section .introduce {
@@ -231,16 +230,16 @@ section .featured .threepic li a img {
 }
 
 .invest ul li:first-child a{
-    border-bottom: 1px solid #ddd;
     border-right: 1px solid #ddd;
 }
 
-.invest ul li:nth-of-type(2) a {
-    border-bottom: 1px solid #ddd;
+.invest ul li:last-child a {
+    border-top: 1px solid #ddd;
 }
 
 .invest ul li:nth-of-type(3) a {
     border-right: 1px solid #ddd;
+    border-top: 1px solid #ddd;
 }
 
 .commonLi {
@@ -627,16 +626,5 @@ a.shouye1:active {
 }
 .pop img:nth-of-type(2) {
     width:6.6666667rem;
-}
-
-@media (min-width: 1200px){
-    .container {
-         width: 750px;
-    }
-}
-@media (min-width: 992px){
-    .container {
-        width: 750px;
-    }
 }
 
