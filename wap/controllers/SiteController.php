@@ -103,7 +103,7 @@ class SiteController extends Controller
     public function actionIndex()
     {
         //理财专区
-        $loans = LoanFinder::queryLoans()->limit(4)->orderBy('xs_status desc, recommendTime desc, sort asc, finish_rate desc, id desc')->limit(4)->all();
+        $loans = LoanFinder::queryLoans()->orderBy('xs_status desc, recommendTime desc, sort asc, finish_rate desc, id desc')->limit(4)->all();
 
         //精选项目与热门活动
         $queryAdvs = Adv::find()->where(['status' => Adv::STATUS_SHOW, 'del_status' => Adv::DEL_STATUS_SHOW, 'showOnPc' => 0]);
@@ -111,13 +111,9 @@ class SiteController extends Controller
         if ($isInApp) {
             $queryAdvs->andWhere(['isDisabledInApp' => 0]);
         }
-        $cqueryAdvs = clone $queryAdvs;
-
-        //精选项目
-        $botiques = $queryAdvs->andWhere(['type' => Adv::TYPE_JINGXUAN])->limit(3)->orderBy('show_order asc, id desc')->all();
 
         //热门活动
-        $hotActs = $cqueryAdvs->andWhere(['type' => Adv::TYPE_LUNBO])->limit(5)->orderBy('show_order asc, id desc')->all();
+        $hotActs = $queryAdvs->andWhere(['type' => Adv::TYPE_LUNBO])->orderBy('show_order asc, id desc')->limit(5)->all();
 
         //公告专区：
         $news = News::find()
