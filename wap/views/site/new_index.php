@@ -77,7 +77,7 @@ use \yii\helpers\Html;
                         foreach($tags as $key => $tag) {
                             if ($key < 2) {
                     ?>
-                        <span><?= Html::encode(mb_substr($tag, 0, mb_strlen($tag) < 4 ? mb_strlen($tag) : 4, 'UTF-8')) ?></span>
+                        <span><?= Html::encode(mb_substr($tag, 0, mb_strlen($tag) < 5 ? mb_strlen($tag) : 5, 'UTF-8')) ?></span>
                     <?php
                             }
                         }
