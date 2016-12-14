@@ -89,7 +89,7 @@ class RankingController extends BaseController
     public function actionAwardList($id)
     {
         $promo = RankingPromo::findOne($id);
-        if (empty($promo) || empty($promo->promoClass) || !class_exists($promo->promoClass)) {
+        if (empty($promo) || empty($promo->promoClass) || !class_exists($promo->promoClass) || !method_exists($promo->promoClass, 'getAward')) {
             throw $this->ex404('数据未找到');
         }
         $query = (new Query())

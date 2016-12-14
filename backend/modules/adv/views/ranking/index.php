@@ -68,9 +68,11 @@ $this->title = '活动列表';
                                 $html = '<a href="/adv/ranking/update?id=' . $model->id . '" class="btn mini green ajax_op"><i class="icon-edit"></i>编辑</a> |';
                                 $html .= " <button onclick=\"if(confirm('确认删除')){window.location.href='/adv/ranking/delete?id=" . $model->id . "'}\" class=\"btn mini red ajax_op\">删除</button> ";
 
-                                if (!empty($model->promoClass)) {
+                                if (!empty($model->promoClass) && class_exists($model->promoClass)) {
                                     $html .= '| <button class="btn mini green ajax_op online_btn" id="'.$model->id.'">'.($model->isOnline ? '下线' : '上线').'</button>';
-                                    $html .= '| <a href="/adv/ranking/award-list?id='.$model->id.'" class="btn mini green ajax_op"></i>查看获奖情况</a>';
+                                    if (method_exists($model->promoClass, 'getAward')) {
+                                        $html .= '| <a href="/adv/ranking/award-list?id='.$model->id.'" class="btn mini green ajax_op"></i>查看获奖情况</a>';
+                                    }
                                 }
 
                                 return $html;
