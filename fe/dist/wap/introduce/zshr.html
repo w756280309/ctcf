@@ -5,8 +5,11 @@
     <title>南金交·中盛海润1号</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <link rel="stylesheet" href="__FE_BASE_URI__wap/common/css/base.css">
-    <link rel="stylesheet" href="__FE_BASE_URI__wap/introduce/css/zshy.css">
+    <link rel="stylesheet" href="__FE_BASE_URI__/libs/videojs/video-js.min.css">
+    <link rel="stylesheet" href="__FE_BASE_URI__wap/introduce/css/zshr.css?v=1.2">
     <script src="__FE_BASE_URI__/libs/flex.js"></script>
+    <script src="__FE_BASE_URI__/libs/videojs/video.min.js"></script>
+    <script src="__FE_BASE_URI__/libs/fastclick.js"></script>
 </head>
 <body>
 <header>
@@ -42,7 +45,7 @@
         <h4>视  频  介  绍</h4>
         <p><span><i></i></span></p>
         <div class="videobox">
-            <video  id="media" poster="__FE_BASE_URI__wap/introduce/img/video.png">
+            <video  id="video" class="media video-js vjs-default-skin" controls poster="__FE_BASE_URI__wap/introduce/img/video.png">
                 <source src="http://video.wenjf.com/Act-ss-mp4-ld/fb1949b6c93d49f298d8ff4e8a5a1373/zhongshenghairun.mp4" type="video/mp4">
             </video>
             <div id="loading"><img src="img/loading.gif" alt=""></div>
@@ -85,7 +88,7 @@
             <ul>
                 <li style="width: 100%;">预期年化收益率</li>
                 <li class="lf"  style="width: 60%; padding-left:0.5333rem;">金额</li>
-                <li class="rg" style="padding-right:0.5333rem;">预期利率/年</li>
+                <li class="rg" style="padding-right:0.5333rem; color: #8c8c8c;">预期利率/年</li>
                 <li class="lf"  style="width: 70%; padding-left:0.5333rem;">1万-5万元（不含）</li>
                 <li class="rg rate">7.2%</li>
                 <li class="lf"  style="width: 70%; padding-left:0.5333rem;">5万（含）-20万元（不含）</li>
@@ -106,19 +109,20 @@
         <td class="rg">按季度付息，到期偿还本金及末期利息</td>
     </tr>
 </table>
-    <a href="/deal/deal/index">立即认购</a>
+    <a href="deal/deal/index?t=1.00">立即认购</a>
 </footer>
 <script>
     window.onload = function(){
-        var media = document.getElementById('media');
+        FastClick.attach(document.body);
+        var media = document.getElementById('video');
         var loading = document.getElementById('loading');
         media.onclick = function(){
             if(media.paused){
                 media.play();
-                media.controls = false;
+//                media.controls = false;
             }else {
                 media.pause();
-                media.controls = true;
+//                media.controls = true;
             }
         };
         media.onwaiting = function(){

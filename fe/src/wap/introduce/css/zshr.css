@@ -134,7 +134,6 @@ section .safeguards .guacontent div span {
 section .videointroduce video {
   width: 10rem;
   height: 5.6rem;
-  margin-top: 0.26666667rem;
   margin-left: -0.53333333rem;
 }
 section .safeguards .safecontent h5 {
@@ -202,6 +201,7 @@ footer a {
 }
 .videobox {
   position: relative;
+  margin-top: 0.26666667rem!important;
 }
 #loading {
   width: 0.4rem;
