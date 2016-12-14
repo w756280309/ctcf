@@ -1,4 +1,5 @@
 <?php
+
 use yii\helpers\Html;
 use common\view\AnalyticsHelper;
 use common\utils\StringUtils;
@@ -8,12 +9,14 @@ AnalyticsHelper::registerTo($this);
 
 $this->registerMetaTag([
     'name' => 'keywords',
-    'content' => Yii::$app->params['wap_page_keywords'],
+    'content' => Yii::$app->params['wap_page_keywords'].','.trim($this->extraKeywords, ', '),
 ]);
+
 $this->registerMetaTag([
     'name' => 'description',
     'content' => Yii::$app->params['wap_page_descritpion'],
 ]);
+
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>

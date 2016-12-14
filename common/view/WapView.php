@@ -13,4 +13,5 @@ class WapView extends View
     public $headerNavOn = false;          //导航条显示开关
     public $hideHeaderNav = false;        //隐藏页头导航条
     public $share = null;                 //微信分享对象
+    public $extraKeywords = '';           //附加KEYWORD
 }

@@ -1,6 +1,7 @@
 <?php
 
-$this->title = "帮助中心";
+$this->title = '帮助中心';
+$this->extraKeywords = '平台安全';
 
 ?>
 

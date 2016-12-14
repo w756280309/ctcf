@@ -13,7 +13,7 @@ WxshareHelper::registerTo($this, $this->share);
 
 $this->registerMetaTag([
     'name' => 'keywords',
-    'content' => Yii::$app->params['wap_page_keywords'],
+    'content' => Yii::$app->params['wap_page_keywords'].','.trim($this->extraKeywords, ', '),
 ]);
 $this->registerMetaTag([
     'name' => 'description',

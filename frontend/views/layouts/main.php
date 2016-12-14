@@ -9,12 +9,14 @@ AnalyticsHelper::registerTo($this);
 
 $this->registerMetaTag([
     'name' => 'keywords',
-    'content' => Yii::$app->params['pc_page_keywords'],
+    'content' => Yii::$app->params['pc_page_keywords'].','.trim($this->extraKeywords, ', '),
 ]);
+
 $this->registerMetaTag([
     'name' => 'description',
     'content' => Yii::$app->params['pc_page_desc'],
 ]);
+
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
