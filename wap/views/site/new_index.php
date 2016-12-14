@@ -55,7 +55,7 @@ use \yii\helpers\Html;
 <div class="invest">
     <p class="clearfix">
         <span class="lf">理财专区</span>
-        <a class="rg" href="/deal/deal/index">查看全部产品</a>
+        <a class="rg" href="/deal/deal/index" style="font-size: 15px;">查看全部产品</a>
     </p>
     <ul class="clearfix">
         <?php foreach ($loans as $loan) { ?>
