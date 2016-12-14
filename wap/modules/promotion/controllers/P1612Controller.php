@@ -21,6 +21,7 @@ class P1612Controller extends Controller
     public function actionDoubleTwelves($wx_share_key = null)
     {
         $share = null;
+        $tickets = 0;
         $user = $this->getAuthedUser();
         $promo1212 = $this->promoInit();
         $boardList = $promo1212->getBoardList();
@@ -29,11 +30,13 @@ class P1612Controller extends Controller
             $share = Share::findOne(['shareKey' => $wx_share_key]);
         }
 
-        if (null === $user) {
-            $tickets = 0;
-        } else {
-            $promo1212->addTicket($user, 'init', Yii::$app->request);
-            $tickets = $promo1212->getRestTicketCount($user);
+        if (null !== $user) {
+            try {
+                $promo1212->addTicket($user, 'init', Yii::$app->request);
+                $tickets = $promo1212->getRestTicketCount($user);
+            } catch (\Exception $e) {
+                //DO NOTHING
+            }
         }
 
         return $this->render('double_twelves', [
