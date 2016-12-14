@@ -39,7 +39,7 @@ $this->title = '活动列表';
             <div class="portlet-body">
                 <?= GridView::widget([
                     'dataProvider' => $dataProvider,
-                    'layout' => '{items}',
+                    'layout' => '{items}<div class="pagination"><center>{pager}</center></div>',
                     'columns' => [
                         'id',
                         [

@@ -35,7 +35,7 @@ $this->title = '获奖列表';
             <div class="portlet-body">
                 <?= \yii\grid\GridView::widget([
                     'dataProvider' => $dataProvider,
-                    'layout' => '{items}',
+                    'layout' => '{items}<div class="pagination"><center>{pager}</center></div>',
                     'columns' => [
                         [
                             'header' => '姓名',
