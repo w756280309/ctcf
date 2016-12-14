@@ -186,6 +186,7 @@ footer a {
 footer a:hover,footer a:visited,footer a:active {
   background-color: #f44336;
   color: #fff;
+  text-decoration: none;
 }
 .special ul li {
   font-size: 0.32rem;
