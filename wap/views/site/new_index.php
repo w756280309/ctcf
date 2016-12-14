@@ -37,15 +37,15 @@ use \yii\helpers\Html;
 </header>
 <section>
     <div class="introduce"><a href="/site/h5?wx_share_key=h5"><img src="<?= FE_BASE_URI ?>wap/index/images/introduce.png" alt=""></a></div>
-    <div class="featured">
-        <p class="project hide">精选项目</p>
+    <div class="featured hide">
+        <p class="project">精选项目</p>
         <!--两张图片-->
         <ul class="clearfix twopic">
             <li class="lf">
-                <a href="/deal/deal/index"><img src="<?= FE_BASE_URI ?>wap/index/images/bgproject_01.png" alt=""></a>
+                <a href=""><img src="<?= FE_BASE_URI ?>wap/index/images/bgproject_01.png" alt=""></a>
             </li>
             <li class="rg">
-                <a href="/deal/deal/index"><img src="<?= FE_BASE_URI ?>wap/index/images/bgproject_04.png" alt=""></a>
+                <a href=""><img src="<?= FE_BASE_URI ?>wap/index/images/bgproject_04.png" alt=""></a>
             </li>
         </ul>
     </div>
