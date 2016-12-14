@@ -183,6 +183,10 @@ footer a {
   -webkit-tap-highlight-color: transparent;
   margin-top: 0.4rem;
 }
+footer a:hover,footer a:visited,footer a:active {
+  background-color: #f44336;
+  color: #fff;
+}
 .special ul li {
   font-size: 0.32rem;
   line-height: 0.8rem;
