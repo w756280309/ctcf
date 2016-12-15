@@ -602,6 +602,33 @@ class Client
     }
 
     /**
+     * 4.3.3 标的转账【用于标的撤单】.
+     *
+     * @param OrderTxInterface $ord
+     * @param string $sn
+     *
+     * @return response
+     */
+    public function loanCancelOrder(OrderTxInterface $ord, $sn)
+    {
+        $data = [
+            'service' => 'project_transfer',
+            'sourceV' => 'HTML5',
+            'order_id' => $sn,
+            'mer_date' => date('Ymd', $ord->getTxDate()),
+            'project_id' => $ord->getLoanId(),
+            'serv_type' => '57',
+            'trans_action' => '02',
+            'partic_type' => '01',
+            'partic_acc_type' => '01',
+            'partic_user_id' => $ord->getEpayUserId(),
+            'amount' => $ord->getAmount() * 100,
+        ];
+
+        return $this->doRequest($data);
+    }
+
+    /**
      * 4.4.2 融资方充值申请.
      *
      * @param QpayTxInterface $recharge 充值记录对象

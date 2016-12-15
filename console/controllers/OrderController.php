@@ -6,9 +6,11 @@
  */
 namespace console\controllers;
 
+use common\models\order\OnlineOrder;
 use common\models\order\OrderManager;
 use common\models\order\OrderQueue;
 use yii\console\Controller;
+use Yii;
 
 class OrderController extends Controller
 {
@@ -35,5 +37,20 @@ class OrderController extends Controller
             }
         }
         exit(0);
+    }
+
+    /**
+     * 撤标
+     * @param $id
+     */
+    public function actionCancelOrder($id)
+    {
+        $order = OnlineOrder::findOne($id);
+        try {
+            OrderManager::cancelLoanOrder($order);
+            Yii::trace('撤标成功', 'loan_order');
+        } catch (\Exception $ex) {
+            Yii::trace('订单撤销失败，失败信息：'.$ex->getMessage(), 'loan_order');
+        }
     }
 }

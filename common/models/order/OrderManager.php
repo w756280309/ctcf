@@ -2,6 +2,7 @@
 
 namespace common\models\order;
 
+use common\models\product\OnlineProduct;
 use common\models\promo\InviteRecord;
 use common\models\promo\PromoService;
 use common\models\user\UserInfo;
@@ -509,5 +510,92 @@ class OrderManager
     {
         $total = OnlineOrder::find()->where(['status' => OnlineOrder::STATUS_SUCCESS, "uid" => $user->id, "online_pid" => $loan->id])->sum('order_money');
         return null === $total ? 0 : $total;
+    }
+
+    /**
+     * 撤销标的订单(暂时只支持募集中标的的撤单)
+     * 撤标联动转账传递的order_id 为撤标流水sn
+     * @param \common\models\order\OnlineOrder $order
+     */
+    public static function cancelLoanOrder(OnlineOrder $order)
+    {
+        Yii::trace('正在进行标的订单撤销，订单ID：'.$order->id, 'loan_order');
+        $loan = $order->loan;
+        $user = $order->user;
+        if ($order->status !== OnlineOrder::STATUS_SUCCESS){
+            throw new \Exception('只支持成功订单的撤销');
+        }
+        if (OnlineProduct::STATUS_NOW !== $loan->status) {
+            throw new \Exception('暂只支持募集中的标的的撤销');
+        }
+        $cancelOrderNewSn = MoneyRecord::createSN();
+        //联动转账
+        $umpRes = Yii::$container->get('ump')->loanCancelOrder($order, $cancelOrderNewSn);
+        if (!$umpRes->isSuccessful()) {
+            Yii::trace('撤销订单联动转账失败，失败信息:'.$umpRes->get('ret_msg'), 'loan_order');
+            throw new \Exception('联动标的转账失败');
+        }
+        Yii::trace('标的撤标，已经成功转账', 'loan_order');
+        //todo 之后需要补充撤销记录及状态
+        $transaction = Yii::$app->db->beginTransaction();
+        try {
+            //撤销订单的代金券
+            $userCoupon = UserCoupon::findOne(['order_id' => $order->id, 'user_id' => $user->id]);
+            if (!empty($userCoupon)) {
+                $res = UserCoupon::updateAll(['order_id' => null, 'isUsed' => 0], ['id' => $userCoupon->id]);
+                if ($res === 0) {
+                    throw new \Exception('更新用户代金券失败');
+                }
+            }
+
+            //更新账户信息
+            $account = $user->lendAccount;
+            $bcrond = new BcRound();
+            $account->available_balance = $bcrond->bcround(bcadd($account->available_balance, $order->paymentAmount), 2);    //调整计算精度,防止小数位丢失
+            $account->drawable_balance = $bcrond->bcround(bcadd($account->drawable_balance, $order->paymentAmount), 2);
+            $account->freeze_balance = $bcrond->bcround(bcsub($account->freeze_balance, $order->paymentAmount), 2);
+            $account->out_sum = $bcrond->bcround(bcsub($account->out_sum, $order->paymentAmount), 2);
+            $res = $account->save(false);
+            if (!$res) {
+                throw new \Exception('更新用户账户信息失败,失败信息');
+            }
+            //更新资金流水
+            $moneyRecord = new MoneyRecord();
+            $moneyRecord->account_id = $account->id;
+            $moneyRecord->sn = $cancelOrderNewSn;
+            $moneyRecord->type = MoneyRecord::TYPE_LOAN_CANCEL;
+            $moneyRecord->osn = $order->sn;
+            $moneyRecord->uid = $order->uid;
+            $moneyRecord->balance = $account->available_balance;
+            $moneyRecord->in_money = $order->paymentAmount;
+            $moneyRecord->remark = '撤标操作';
+            $res = $moneyRecord->save();
+            if (!$res) {
+                throw new \Exception('增加撤单流水失败');
+            }
+
+            //更改标的募集比例和实际募集金额
+            $query = Yii::$app->db->createCommand("UPDATE online_product SET funded_money = funded_money - :orderMoney,finish_rate = funded_money / money WHERE id = :loanId")->bindValues(['orderMoney' => $order->order_money, 'loanId' => $loan->id]);
+            $res = $query->execute();
+            if ($res === 0) {
+                throw new \Exception('更新标的募集进度及实际募集金额失败');
+            }
+
+            $order->status = OnlineOrder::STATUS_CANCEL;
+            $res = $order->save(false);
+            if (!$res) {
+                throw new \Exception('更新订单状态失败');
+            }
+
+            //更新用户信息
+            UserInfo::updateUserInfoOfUser($user);
+
+            //todo 撤标之后短信通知
+
+            $transaction->commit();
+        } catch (\Exception $ex) {
+            $transaction->rollBack();
+            throw $ex;
+        }
     }
 }

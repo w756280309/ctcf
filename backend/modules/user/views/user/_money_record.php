@@ -36,7 +36,7 @@
         [
             'label' => '项目名称',
             'value' => function ($record) use ($data) {
-                if (in_array($record->type ,[MoneyRecord::TYPE_ORDER, MoneyRecord::TYPE_HUIKUAN])) {
+                if (in_array($record->type ,[MoneyRecord::TYPE_ORDER, MoneyRecord::TYPE_HUIKUAN, MoneyRecord::TYPE_LOAN_CANCEL])) {
                     if (isset($data[$record->osn])) {
                         return $data[$record->osn]['title'];
                     }

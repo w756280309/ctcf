@@ -69,56 +69,62 @@ class UserInfo extends ActiveRecord
         $users = User::find()->where(['status' => 1])->asArray()->all();
         if ($users) {
             foreach ($users as $user) {
-                $info = UserInfo::find()->where(['user_id' => $user['id']])->one();
-                if (null === $info) {
-                    $info = new UserInfo();
-                    $info->user_id = $user['id'];
-                    $info->isInvested = 0;
-                }
-                //更新用户 是否投资过、成功投资次数、成功投资总额、平均投资金额
-                $data = OnlineOrder::find()
-                    ->select(['SUM(order_money) as s', 'AVG(order_money) as a', 'COUNT(order_money) as c'])
-                    ->where(['uid' => $user['id'], 'status' => 1])
-                    ->asArray()
-                    ->one();
-                if ($data) {
-                    if (intval($data['c']) > 0) {
-                        $info->isInvested = 1;
-                    }
-                    $info->investCount = $data['c'];
-                    $info->averageInvestAmount = $data['a'];
-                    $info->investTotal = $data['s'];
-                }
-                //获取用户首次投资信息
-                $firstData = OnlineOrder::find()
-                    ->select(['order_time', 'order_money'])
-                    ->where(['uid' => $user['id'], 'status' => 1])
-                    ->orderBy(['order_time' => SORT_ASC])
-                    ->limit(1)
-                    ->asArray()
-                    ->one();
-                if ($firstData) {
-                    $info->firstInvestAmount = $firstData['order_money'];
-                    $info->firstInvestDate = date('Y-m-d', $firstData['order_time']);
-                }
-                //获取用户最后一次投资信息
-                $lastData = OnlineOrder::find()
-                    ->select(['order_time', 'order_money'])
-                    ->where(['uid' => $user['id'], 'status' => 1])
-                    ->orderBy(['order_time' => SORT_DESC])
-                    ->limit(1)
-                    ->asArray()
-                    ->one();
-                if ($lastData) {
-                    $info->lastInvestAmount = $lastData['order_money'];
-                    $info->lastInvestDate = date('Y-m-d', $lastData['order_time']);
-                }
-
-                $res = $info->save();
-                if (!$res) {
-                    throw new \Exception(json_encode($info->getErrors()));
-                }
+                self::updateUserInfoOfUser($user);
             }
+        }
+    }
+
+    //初始化制定用户的信息
+    public static function updateUserInfoOfUser($user)
+    {
+        $info = UserInfo::find()->where(['user_id' => $user['id']])->one();
+        if (null === $info) {
+            $info = new UserInfo();
+            $info->user_id = $user['id'];
+            $info->isInvested = 0;
+        }
+        //更新用户 是否投资过、成功投资次数、成功投资总额、平均投资金额
+        $data = OnlineOrder::find()
+            ->select(['SUM(order_money) as s', 'AVG(order_money) as a', 'COUNT(order_money) as c'])
+            ->where(['uid' => $user['id'], 'status' => 1])
+            ->asArray()
+            ->one();
+        if ($data) {
+            if (intval($data['c']) > 0) {
+                $info->isInvested = 1;
+            }
+            $info->investCount = $data['c'];
+            $info->averageInvestAmount = $data['a'];
+            $info->investTotal = $data['s'];
+        }
+        //获取用户首次投资信息
+        $firstData = OnlineOrder::find()
+            ->select(['order_time', 'order_money'])
+            ->where(['uid' => $user['id'], 'status' => 1])
+            ->orderBy(['order_time' => SORT_ASC])
+            ->limit(1)
+            ->asArray()
+            ->one();
+        if ($firstData) {
+            $info->firstInvestAmount = $firstData['order_money'];
+            $info->firstInvestDate = date('Y-m-d', $firstData['order_time']);
+        }
+        //获取用户最后一次投资信息
+        $lastData = OnlineOrder::find()
+            ->select(['order_time', 'order_money'])
+            ->where(['uid' => $user['id'], 'status' => 1])
+            ->orderBy(['order_time' => SORT_DESC])
+            ->limit(1)
+            ->asArray()
+            ->one();
+        if ($lastData) {
+            $info->lastInvestAmount = $lastData['order_money'];
+            $info->lastInvestDate = date('Y-m-d', $lastData['order_time']);
+        }
+
+        $res = $info->save();
+        if (!$res) {
+            throw new \Exception(json_encode($info->getErrors()));
         }
     }
 
