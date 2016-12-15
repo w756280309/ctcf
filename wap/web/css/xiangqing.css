@@ -356,6 +356,7 @@ i,em {
     color: #fff;
     font-size: 18px;
     background: #f34334;
+    z-index: 2;
 }
 .data span {
     margin-top:12px;

@@ -7,7 +7,7 @@ use common\utils\StringUtils;
 use wap\assets\WapAsset;
 use yii\helpers\HtmlPurifier;
 
-$this->registerCssFile(ASSETS_BASE_URI.'css/xiangqing.css?v=20161205', ['depends' => WapAsset::class, 'position' => 1]);
+$this->registerCssFile(ASSETS_BASE_URI.'css/xiangqing.css?v=20161215', ['depends' => WapAsset::class, 'position' => 1]);
 
 ?>
 
