@@ -108,6 +108,9 @@ class UserInfo extends ActiveRecord
         if ($firstData) {
             $info->firstInvestAmount = $firstData['order_money'];
             $info->firstInvestDate = date('Y-m-d', $firstData['order_time']);
+        } else {
+            $info->firstInvestAmount = 0;
+            $info->firstInvestDate = null;
         }
         //获取用户最后一次投资信息
         $lastData = OnlineOrder::find()
@@ -120,6 +123,9 @@ class UserInfo extends ActiveRecord
         if ($lastData) {
             $info->lastInvestAmount = $lastData['order_money'];
             $info->lastInvestDate = date('Y-m-d', $lastData['order_time']);
+        } else {
+            $info->lastInvestAmount = 0;
+            $info->lastInvestDate = null;
         }
 
         $res = $info->save();

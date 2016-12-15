@@ -573,9 +573,9 @@ class OrderManager
             if (!$res) {
                 throw new \Exception('增加撤单流水失败');
             }
-
+            $count = OnlineOrder::find()->where(['online_pid' => $loan->id, 'status' => 1])->count();
             //更改标的募集比例和实际募集金额
-            $query = Yii::$app->db->createCommand("UPDATE online_product SET funded_money = funded_money - :orderMoney,finish_rate = funded_money / money WHERE id = :loanId")->bindValues(['orderMoney' => $order->order_money, 'loanId' => $loan->id]);
+            $query = Yii::$app->db->createCommand("UPDATE online_product SET funded_money = funded_money - :orderMoney,finish_rate = IF(funded_money / money > 0.01, funded_money / money, :minRate) WHERE id = :loanId")->bindValues(['orderMoney' => $order->order_money, 'loanId' => $loan->id, 'minRate' => $count > 1 ? '0.01' : '0']);
             $res = $query->execute();
             if ($res === 0) {
                 throw new \Exception('更新标的募集进度及实际募集金额失败');
