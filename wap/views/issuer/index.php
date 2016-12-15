@@ -210,6 +210,7 @@ $this->title = 1 === $type ? '宁富1号三都国资' : '南金交 · 中盛海�
 <script>
     window.onload = function() {
         FastClick.attach(document.body);
+        $('.container').removeClass('container');
         var media = document.getElementById('video');
         var loading = document.getElementById('loading');
         media.onclick = function() {
