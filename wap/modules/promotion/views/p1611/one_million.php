@@ -30,10 +30,7 @@ $this->share = $share;
                 <li><em>30元</em>代金券<span class="line03"><img src="<?= ASSETS_BASE_URI ?>promo/1611/images/dotted.png" alt=""></span>投资20000元可用</li>
                 <li><em>80元</em>代金券<span class="line04"><img src="<?= ASSETS_BASE_URI ?>promo/1611/images/dotted.png" alt=""></span>投资100000元可用</li>
                 <li><em>150元</em>代金券<span class="line05"><img src="<?= ASSETS_BASE_URI ?>promo/1611/images/dotted.png" alt=""></span>投资200000元可用</li>
-                <li class="special"><em>新客户首次投资再送50元蛋糕券</em>（即日起至12月31日即可领取）；
-                    （注：胜券在握系列超短期产品除外）
-                </li>
-            </ul>
+              </ul>
         </div>
         <div class="gift2">
             <p>二重礼：温都金服客户回馈活动</p>
