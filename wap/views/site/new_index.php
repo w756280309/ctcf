@@ -7,13 +7,14 @@ $this->showBottomNav = true;
 
 use common\utils\StringUtils;
 use common\view\LoanHelper;
-use \yii\helpers\Html;
+use yii\helpers\Html;
 
 ?>
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/base.css?v=2.0">
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/index/css/index.css?v=2.0">
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>libs/swiper/swiper.min.css">
 <script src="<?= FE_BASE_URI ?>libs/lib.flexible.js"></script>
+
 <header>
     <img src="<?= FE_BASE_URI ?>wap/index/images/logo.png" alt="">
     <div class="notLogin hide">
@@ -37,15 +38,23 @@ use \yii\helpers\Html;
 </header>
 <section>
     <div class="introduce"><a href="/site/h5?wx_share_key=h5"><img src="<?= FE_BASE_URI ?>wap/index/images/introduce.png" alt=""></a></div>
-    <div class="featured hide">
+    <div class="featured">
         <p class="project">精选项目</p>
         <!--两张图片-->
         <ul class="clearfix twopic">
             <li class="lf">
-                <a href=""><img src="<?= FE_BASE_URI ?>wap/index/images/bgproject_01.png" alt=""></a>
+                <?php if ('/' === ASSETS_BASE_URI) { ?>
+                    <a href="/issuer?id=1&type=2"><img src="<?= FE_BASE_URI ?>wap/index/images/bgproject_01.png" alt=""></a>
+                <?php } else { ?>
+                    <a href="/issuer?id=5&type=2"><img src="<?= FE_BASE_URI ?>wap/index/images/bgproject_01.png" alt=""></a>
+                <?php } ?>
             </li>
             <li class="rg">
-                <a href=""><img src="<?= FE_BASE_URI ?>wap/index/images/bgproject_04.png" alt=""></a>
+                <?php if ('/' === ASSETS_BASE_URI) { ?>
+                    <a href="/issuer?id=3&type=1"><img src="<?= FE_BASE_URI ?>wap/index/images/bgproject_04.png" alt=""></a>
+                <?php } else { ?>
+                    <a href="/issuer?id=2&type=1"><img src="<?= FE_BASE_URI ?>wap/index/images/bgproject_04.png" alt=""></a>
+                <?php } ?>
             </li>
         </ul>
     </div>
