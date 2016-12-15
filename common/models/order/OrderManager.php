@@ -519,10 +519,10 @@ class OrderManager
      */
     public static function cancelLoanOrder(OnlineOrder $order)
     {
-        Yii::trace('正在进行标的订单撤销，订单ID：'.$order->id, 'loan_order');
+        Yii::trace('正在进行标的订单撤销，订单ID：' . $order->id, 'loan_order');
         $loan = $order->loan;
         $user = $order->user;
-        if ($order->status !== OnlineOrder::STATUS_SUCCESS){
+        if ($order->status !== OnlineOrder::STATUS_SUCCESS) {
             throw new \Exception('只支持成功订单的撤销');
         }
         if (OnlineProduct::STATUS_NOW !== $loan->status) {
@@ -532,7 +532,7 @@ class OrderManager
         //联动转账
         $umpRes = Yii::$container->get('ump')->loanCancelOrder($order, $cancelOrderNewSn);
         if (!$umpRes->isSuccessful()) {
-            Yii::trace('撤销订单联动转账失败，失败信息:'.$umpRes->get('ret_msg'), 'loan_order');
+            Yii::trace('撤销订单联动转账失败，失败信息:' . $umpRes->get('ret_msg'), 'loan_order');
             throw new \Exception('联动标的转账失败');
         }
         Yii::trace('标的撤标，已经成功转账', 'loan_order');
@@ -540,7 +540,7 @@ class OrderManager
         $transaction = Yii::$app->db->beginTransaction();
         try {
             //撤销订单的代金券
-            $userCoupon = UserCoupon::findOne(['order_id' => $order->id, 'user_id' => $user->id]);
+            $userCoupon = UserCoupon::findOne(['order_id' => $order->id, 'user_id' => $user->id, 'isUsed' => 1]);
             if (!empty($userCoupon)) {
                 $res = UserCoupon::updateAll(['order_id' => null, 'isUsed' => 0], ['id' => $userCoupon->id]);
                 if ($res === 0) {

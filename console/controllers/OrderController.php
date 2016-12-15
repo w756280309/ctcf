@@ -50,7 +50,7 @@ class OrderController extends Controller
             OrderManager::cancelLoanOrder($order);
             Yii::trace('撤标成功', 'loan_order');
         } catch (\Exception $ex) {
-            Yii::trace('订单撤销失败，失败信息：'.$ex->getMessage(), 'loan_order');
+            Yii::trace('订单撤销失败，失败信息：' . $ex->getMessage(), 'loan_order');
         }
     }
 }
