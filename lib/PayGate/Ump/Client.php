@@ -2,6 +2,7 @@
 
 namespace PayGate\Ump;
 
+use common\models\order\OnlineOrder;
 use Crypto\CryptoUtils;
 use GuzzleHttp\Client as HttpClient;
 use P2pl\BorrowerInterface;
@@ -604,12 +605,12 @@ class Client
     /**
      * 4.3.3 标的转账【用于标的撤单】.
      *
-     * @param OrderTxInterface $ord
+     * @param OnlineOrder $ord
      * @param string $sn
      *
      * @return response
      */
-    public function loanCancelOrder(OrderTxInterface $ord, $sn)
+    public function loanCancelOrder(OnlineOrder $ord, $sn)
     {
         $data = [
             'service' => 'project_transfer',
@@ -622,7 +623,7 @@ class Client
             'partic_type' => '01',
             'partic_acc_type' => '01',
             'partic_user_id' => $ord->getEpayUserId(),
-            'amount' => $ord->getAmount() * 100,
+            'amount' => $ord->paymentAmount * 100,
         ];
 
         return $this->doRequest($data);

@@ -550,11 +550,10 @@ class OrderManager
 
             //更新账户信息
             $account = $user->lendAccount;
-            $bcrond = new BcRound();
-            $account->available_balance = $bcrond->bcround(bcadd($account->available_balance, $order->paymentAmount), 2);    //调整计算精度,防止小数位丢失
-            $account->drawable_balance = $bcrond->bcround(bcadd($account->drawable_balance, $order->paymentAmount), 2);
-            $account->freeze_balance = $bcrond->bcround(bcsub($account->freeze_balance, $order->paymentAmount), 2);
-            $account->out_sum = $bcrond->bcround(bcsub($account->out_sum, $order->paymentAmount), 2);
+            $account->available_balance = bcadd($account->available_balance, $order->paymentAmount, 2);    //调整计算精度,防止小数位丢失
+            $account->drawable_balance = bcadd($account->drawable_balance, $order->paymentAmount, 2);
+            $account->freeze_balance =bcsub($account->freeze_balance, $order->paymentAmount, 2);
+            $account->out_sum =bcsub($account->out_sum, $order->paymentAmount, 2);
             $res = $account->save(false);
             if (!$res) {
                 throw new \Exception('更新用户账户信息失败,失败信息');
