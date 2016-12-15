@@ -4,6 +4,7 @@ namespace common\models\promo;
 
 use common\models\coupon\CouponType;
 use common\models\coupon\UserCoupon;
+use common\models\order\OnlineOrder;
 use common\models\user\MoneyRecord;
 use common\models\user\User;
 use common\service\AccountService;
@@ -338,9 +339,21 @@ class Promo1212
 
 
     /**
-     * 发红包
+     * 标的订单完成之后的活动逻辑，用于统一调用处理
      *
-     * @param User $user
+     * @param  OnlineOrder $order
+     *
+     * @throws \Exception
+     */
+    public function doAfterSuccessLoanOrder(OnlineOrder $order)
+    {
+        $this->sendRedPacket($order->user);
+    }
+
+    /**
+     * 给指定的人发红包(此方法用于转让的orderqueue符合现金红包发放条件的调用)
+     *
+     * @param  User $user
      *
      * @throws \Exception
      */
