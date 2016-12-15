@@ -44,16 +44,16 @@ use yii\helpers\Html;
         <ul class="clearfix twopic">
             <li class="lf">
                 <?php if ('/' === ASSETS_BASE_URI) { ?>
-                    <a href="/issuer?id=1&type=2"><img src="<?= FE_BASE_URI ?>wap/index/images/bgproject_01.png" alt=""></a>
+                    <a href="/issuer?id=1&type=2"><img src="<?= FE_BASE_URI ?>wap/index/images/bgproject_05.png" alt=""></a>
                 <?php } else { ?>
-                    <a href="/issuer?id=5&type=2"><img src="<?= FE_BASE_URI ?>wap/index/images/bgproject_01.png" alt=""></a>
+                    <a href="/issuer?id=5&type=2"><img src="<?= FE_BASE_URI ?>wap/index/images/bgproject_05.png" alt=""></a>
                 <?php } ?>
             </li>
             <li class="rg">
                 <?php if ('/' === ASSETS_BASE_URI) { ?>
-                    <a href="/issuer?id=3&type=1"><img src="<?= FE_BASE_URI ?>wap/index/images/bgproject_04.png" alt=""></a>
+                    <a href="/issuer?id=3&type=1"><img src="<?= FE_BASE_URI ?>wap/index/images/bgproject_06.png" alt=""></a>
                 <?php } else { ?>
-                    <a href="/issuer?id=2&type=1"><img src="<?= FE_BASE_URI ?>wap/index/images/bgproject_04.png" alt=""></a>
+                    <a href="/issuer?id=2&type=1"><img src="<?= FE_BASE_URI ?>wap/index/images/bgproject_06.png" alt=""></a>
                 <?php } ?>
             </li>
         </ul>
@@ -185,12 +185,11 @@ use yii\helpers\Html;
 <script>
     var mySwiper = new Swiper('.swiper-container', {
         loop:true,
-//        loopedSlides:5,
         slidesPerView: 2.4,//可选选项，自动滑动
         spaceBetween:20,
         slidesOffsetBefore:20,
-//        slidesOffsetAfter:10,
     });
+
     function closeAdv()
     {
         $('.mask').hide();
