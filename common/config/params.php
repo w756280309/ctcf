@@ -96,7 +96,7 @@ return [
         'beian' => '@版权归温都金服开发团队所有',
     ],
     'ump' => [
-        'apiUrl' => 'http://pay.soopay.net/spay/pay/payservice.do',
+        'apiUrl' => 'https://pay.soopay.net/spay/pay/payservice.do',
         'merchant_id' => '7001209',
         'wdjf_key' => __DIR__.'/payment/ump/wdjf_prod.key',
         'ump_cert' => __DIR__.'/payment/ump/ump_prod.crt',
