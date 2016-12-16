@@ -1,8 +1,10 @@
 <?php
+
 use common\models\product\RateSteps;
 use common\models\product\OnlineProduct;
 use common\utils\StringUtils;
 use common\view\LoanHelper;
+use yii\helpers\HtmlPurifier;
 
 $this->title = '项目详情';
 $user = Yii::$app->user->identity;
@@ -10,7 +12,7 @@ $user = Yii::$app->user->identity;
 $this->registerJsFile(ASSETS_BASE_URI . 'js/detail.js');
 $this->registerCssFile(ASSETS_BASE_URI . 'css/deal/buy.css');
 $this->registerCssFile(ASSETS_BASE_URI . 'css/deal/deallist.css?v=161124');
-$this->registerCssFile(ASSETS_BASE_URI . 'css/deal/detail.css?v=161104');
+$this->registerCssFile(ASSETS_BASE_URI . 'css/deal/detail.css?v=161216');
 $this->registerCssFile(ASSETS_BASE_URI . 'css/pagination.css');
 $this->registerCssFile(ASSETS_BASE_URI . 'css/useraccount/chargedeposit.css');
 ?>
@@ -118,7 +120,7 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/useraccount/chargedeposit.css');
             </div>
             <div class="plD-content show">
                 <div class="plD-inner-box">
-                    <?= \yii\helpers\HtmlPurifier::process($deal->description) ?>
+                    <?= HtmlPurifier::process($deal->description) ?>
                 </div>
             </div>
             <div class="plD-content hide" id="order_list"></div>

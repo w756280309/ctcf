@@ -210,6 +210,9 @@ body {
     padding-top: 40px;
     padding-bottom: 20px;
 }
+.plD-inner-box img {
+    width: 100% !important;
+}
 .plD-inner-title {
     font-size: 14px;
     color: #474747;
