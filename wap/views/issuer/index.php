@@ -5,7 +5,7 @@ $this->title = 1 === $type ? '宁富1号三都国资' : '南金交 · 中盛海�
 ?>
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/base.css">
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>libs/videojs/video-js.min.css">
-<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/introduce/css/<?= 1 === $type ? 'sdgz.css' : 'zshr.css' ?>">
+<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/introduce/css/<?= 1 === $type ? 'sdgz.css?v=20161216' : 'zshr.css' ?>">
 <script src="<?= FE_BASE_URI ?>libs/flex.js"></script>
 <script src="<?= FE_BASE_URI ?>libs/videojs/video.min.js"></script>
 <script src="<?= FE_BASE_URI ?>libs/fastclick.js"></script>
@@ -38,7 +38,7 @@ $this->title = 1 === $type ? '宁富1号三都国资' : '南金交 · 中盛海�
                 </div>
             </div>
         </div>
-        <?php if ($loan->issuerInfo && $loan->issuerInfo->video) { ?>
+        <?php if ($issuer->video) { ?>
             <div class="videointroduce">
                 <h4>视  频  介  绍</h4>
                 <p><span><i></i></span></p>
@@ -102,7 +102,9 @@ $this->title = 1 === $type ? '宁富1号三都国资' : '南金交 · 中盛海�
                 <td class="rg" style="line-height: 0.6rem; padding-top: 0.2rem;padding-bottom: 0.2rem;">每自然半年付息一次，到期一次性返<br>还本金及剩余利息</td>
             </tr>
         </table>
-        <a href="/deal/deal/detail?sn=<?= $loan->sn ?>">立即认购</a>
+        <?php if ($loansCount) { ?>
+            <a href="/issuer/to-loan?issuerid=<?= $issuer->id ?>">立即认购</a>
+        <?php } ?>
     </footer>
 <?php } else { ?>
     <header>
@@ -134,7 +136,7 @@ $this->title = 1 === $type ? '宁富1号三都国资' : '南金交 · 中盛海�
                 </div>
             </div>
         </div>
-        <?php if ($loan->issuerInfo && $loan->issuerInfo->video) { ?>
+        <?php if ($issuer->video) { ?>
             <div class="videointroduce">
                 <h4>视  频  介  绍</h4>
                 <p><span><i></i></span></p>
@@ -203,28 +205,35 @@ $this->title = 1 === $type ? '宁富1号三都国资' : '南金交 · 中盛海�
                 <td class="rg">按季度付息，到期偿还本金及末期利息</td>
             </tr>
         </table>
-        <a href="/deal/deal/detail?sn=<?= $loan->sn ?>">立即认购</a>
+
+        <?php if ($loansCount) { ?>
+            <a href="/issuer/to-loan?issuerid=<?= $issuer->id ?>">立即认购</a>
+        <?php } ?>
     </footer>
 <?php } ?>
 
 <script>
-    window.onload = function() {
-        FastClick.attach(document.body);
+    $(function () {
         $('.container').removeClass('container');
-        var media = document.getElementById('video');
-        var loading = document.getElementById('loading');
-        media.onclick = function() {
-            if (media.paused) {
-                media.play();
-            } else {
-                media.pause();
+    })
+    <?php if ($issuer->video) { ?>
+        window.onload = function() {
+            FastClick.attach(document.body);
+            var media = document.getElementById('video');
+            var loading = document.getElementById('loading');
+            media.onclick = function() {
+                if (media.paused) {
+                    media.play();
+                } else {
+                    media.pause();
+                }
+            };
+            media.onwaiting = function() {
+                loading.style.display = 'block';
             }
-        };
-        media.onwaiting = function() {
-            loading.style.display = 'block';
+            media.oncanplay = function() {
+                loading.style.display = 'none';
+            }
         }
-        media.oncanplay = function() {
-            loading.style.display = 'none';
-        }
-    }
+    <?php } ?>
 </script>

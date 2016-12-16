@@ -332,6 +332,7 @@ i,em {
     color: #fff;
     font-size: 18px;
     background: #f8958f;
+    z-index: 2;
 }
 .manbiao {
     position: fixed;

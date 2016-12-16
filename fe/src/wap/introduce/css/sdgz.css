@@ -75,6 +75,10 @@ section .safeguards p span i {
   left: -18px;
   z-index: 10;
 }
+.pubcontent h5 {
+  width:110%;
+  margin-left:-5%;
+}
 section .publisher .pubcontent h5,
 section .guarantor .pubcontent h5,
 section .videointroduce .pubcontent h5,
