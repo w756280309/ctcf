@@ -74,7 +74,7 @@ $this->title = 1 === $type ? '宁富1号三都国资' : '南金交 · 中盛海�
             </tr>
             <tr>
                 <td class="lf">产品期限</td>
-                <td class="rg">1年</td>
+                <td class="rg">2年</td>
             </tr>
             <tr>
                 <td class="lf">认购起点</td>
