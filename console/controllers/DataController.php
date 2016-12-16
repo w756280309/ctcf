@@ -10,6 +10,7 @@ use common\models\order\OnlineRepaymentRecord;
 use common\models\payment\Repayment;
 use common\models\product\OnlineProduct;
 use common\models\user\UserInfo;
+use Ding\DingNotify;
 use yii\console\Controller;
 use Yii;
 
@@ -129,5 +130,24 @@ class DataController extends Controller
         }
         fclose($fp);
         exit();
+    }
+
+    /**
+     * 更新温都金服钉钉用户
+     */
+    public function actionUpdateWdjfDingUser()
+    {
+        $file = Yii::$app->basePath . '/../data/wdjf_ding_users.json';
+        file_put_contents($file, '');
+        $ding = new DingNotify();
+        $data = $ding->getAllUser();
+        $string = "[" . PHP_EOL;
+        foreach ($data as $value) {
+            $string .= "\t" . '{"name":"' . $value['name'] . '","userId":"' . $value['userid'] . '"},' . PHP_EOL;
+        }
+        $string = rtrim($string, ',' . PHP_EOL);
+        $string .= PHP_EOL;
+        $string .= "]" . PHP_EOL;
+        file_put_contents($file, $string, FILE_APPEND);
     }
 }

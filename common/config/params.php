@@ -184,4 +184,5 @@ return [
         'appSecret' => '',
     ],
     'mall_enabled' => false,//积分商城是否打开
+    'ding_notify_list' => [],//钉钉通知名单 实例 [ '用户姓名' => '用户在钉钉的ID',],具体数值在 data/wdjf_ding_users.json 中查
 ];
