@@ -95,4 +95,28 @@ class StringUtilsTest extends YiiAppTestCase
 
         $this->assertEquals($mobile, $res);
     }
+
+    /**
+     * 验证中英文混合的字符串
+     */
+    public function testMixUtf8Strlen()
+    {
+        $string = 'sssss莫荻史阳刘凤君左玉玮肖阿勇ss';
+
+        $len = StringUtils::utf8Strlen($string);
+
+        $this->assertEquals($len, 16.5);
+    }
+
+    /**
+     * 验证纯中文的字符串
+     */
+    public function testCHSUtf8Strlen()
+    {
+        $string = '比昂比昂点点滴滴';
+
+        $len = StringUtils::utf8Strlen($string);
+
+        $this->assertEquals($len, 8);
+    }
 }

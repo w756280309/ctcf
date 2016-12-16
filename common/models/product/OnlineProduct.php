@@ -6,6 +6,7 @@ use common\models\order\OnlineFangkuan;
 use common\models\order\OnlineOrder;
 use common\models\user\MoneyRecord;
 use common\models\user\User;
+use common\utils\StringUtils;
 use P2pl\Borrower;
 use P2pl\LoanInterface;
 use Wcg\DateTime\DT;
@@ -233,6 +234,7 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
             ['paymentDay', 'compare', 'compareValue' => 28, 'operator' => '<=', 'skipOnEmpty' => true],
             [['isTest', 'allowUseCoupon'], 'integer'],
             [['start_money', 'dizeng_money'], 'checkMoney'],
+            ['tags', 'checkTags'],
         ];
     }
 
@@ -252,6 +254,28 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
             }
             if ($this->dizeng_money < 1) {
                 $this->addError('dizeng_money', '递增金额的值必须大于或等于1');
+            }
+        }
+    }
+
+    /**
+     * 检验项目的标签
+     */
+    public function checkTags()
+    {
+        if ($this->tags) {
+            if (preg_match('/^[\x{4e00}-\x{9fa5}a-zA-Z0-9\，]+$/u', $this->tags)) {
+                $tags = explode('，', $this->tags);
+                if (count($tags) > 2) {
+                    $this->addError('tags', '当前标签个数不能超过2个');
+                }
+                foreach ($tags as $num => $tag) {
+                    if (StringUtils::utf8Strlen($tag) > 4) {
+                        $this->addError('tags', '第' . ($num + 1) . '个标签超过四个字');
+                    }
+                }
+            } else {
+                $this->addError('tags', '只支持汉字、字母、数字以及逗号的输入');
             }
         }
     }

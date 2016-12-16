@@ -103,7 +103,7 @@ class ProductonlineController extends BaseController
         $loan->recommendTime = empty($loan->recommendTime) ? 0 : $loan->recommendTime;
         $loan->is_fdate = isset($data['OnlineProduct']['is_fdate']) ? $data['OnlineProduct']['is_fdate'] : 0;
         $refund_method = (int) $loan->refund_method;
-        $loan->tags = str_replace(',', '，', trim($loan->tags));
+        $loan->tags = trim(str_replace(',', '，', trim($loan->tags)), '，');
 
         //非测试标，起投金额、递增金额取整
         if (!$loan->isTest) {
