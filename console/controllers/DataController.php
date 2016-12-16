@@ -3,6 +3,7 @@
 namespace console\controllers;
 
 use common\lib\bchelp\BcRound;
+use common\lib\user\UserStats;
 use common\models\order\OnlineOrder;
 use common\models\order\OnlineRepaymentPlan;
 use common\models\order\OnlineRepaymentRecord;
@@ -114,5 +115,19 @@ class DataController extends Controller
                 $plan->save(false);
             }
         }
+    }
+
+    //导出投资用户信息
+    public function actionExportLenderData()
+    {
+        $allData = UserStats::collectLenderData();
+        $file = './lender_data('.time().').csv';
+        $fp = fopen($file, 'w');
+        fputs($fp, "\xEF\xBB\xBF");//添加BOM头
+        foreach ($allData as $value) {
+            fputcsv($fp, $value);
+        }
+        fclose($fp);
+        exit();
     }
 }
