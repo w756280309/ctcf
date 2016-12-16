@@ -177,9 +177,9 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\we
                         <td><?= $val['org_name'] ?></td>
                 <?php }?>
                         <td><?= date('Y-m-d H:i:s',$val['created_at'])?></td>
-                        <td><?= number_format(($category==User::USER_TYPE_PERSONAL)?($val->lendAccount['available_balance']):($val->borrowAccount['available_balance']),2) ?></td>
+                        <td class="money"><?= number_format(($category==User::USER_TYPE_PERSONAL)?($val->lendAccount['available_balance']):($val->borrowAccount['available_balance']),2) ?></td>
                         <?php if($category==User::USER_TYPE_PERSONAL){?>
-                        <td><?= number_format($val->lendAccount->totalFund, 2)?></td>
+                        <td class="money"><?= number_format($val->lendAccount->totalFund, 2)?></td>
                         <td>
                             <?php
                                 $info = $val->info;
@@ -191,7 +191,7 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\we
                                 echo $days ;
                             ?>
                         </td>
-                        <td>
+                        <td class="money">
                             <?= $val->info ? number_format($val->info->lastInvestAmount, 2) : 0?>
                         </td>
                         <td>

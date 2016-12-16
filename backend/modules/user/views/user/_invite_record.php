@@ -21,19 +21,22 @@
             'label' => '可用余额',
             'value' => function ($record){
                 return number_format($record->invitee->lendAccount->available_balance, 2);
-            }
+            },
+            'contentOptions' => ['class' => 'money'],
         ],
         [
             'label' => '充值总额',
             'value' => function ($record) use ($rechargeData){
                 return isset($rechargeData[$record->invitee_id]) ? number_format($rechargeData[$record->invitee_id]['recharge_sum'], 2) : 0;
-            }
+            },
+            'contentOptions' => ['class' => 'money'],
         ],
         [
             'label' => '标的投资总额',
             'value' => function ($record) use ($loanData){
                 return isset($loanData[$record->invitee_id]) ? number_format($loanData[$record->invitee_id]['loan_sum'], 2) : 0;
-            }
+            },
+            'contentOptions' => ['class' => 'money'],
         ],
         [
             'label' => '注册时间',

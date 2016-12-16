@@ -15,7 +15,8 @@
             'label' => '金额',
             'value' => function ($record) {
                 return number_format($record['fund'], 2);
-            }
+            },
+            'contentOptions' => ['class' => 'money'],
         ],
         [
             'label' => '银行',

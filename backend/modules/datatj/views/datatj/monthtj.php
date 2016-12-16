@@ -44,42 +44,48 @@ use yii\grid\GridView;
                     'label' => '交易额',
                     'value' => function ($data) {
                         return number_format($data['totalInvestment'], 2);
-                    }
+                    },
+                    'contentOptions' => ['class' => 'money'],
                 ],
                 [
                     'attribute' => 'rechargeMoney',
                     'label' => '充值金额',
                     'value' => function ($data) {
                         return number_format($data['rechargeMoney'], 2);
-                    }
+                    },
+                    'contentOptions' => ['class' => 'money'],
                 ],
                 [
                     'attribute' => 'drawAmount',
                     'label' => '提现金额',
                     'value' => function ($data) {
                         return number_format($data['drawAmount'], 2);
-                    }
+                    },
+                    'contentOptions' => ['class' => 'money'],
                 ],
                 [
                     'attribute' => 'rechargeCost',
                     'label' => '充值手续费',
                     'value' => function ($data) {
                         return number_format($data['rechargeCost'], 2);
-                    }
+                    },
+                    'contentOptions' => ['class' => 'money'],
                 ],
                 [
                     'attribute' => 'investmentInWyb',
                     'label' => '温盈宝销售额',
                     'value' => function ($data) {
                         return number_format($data['investmentInWyb'], 2);
-                    }
+                    },
+                    'contentOptions' => ['class' => 'money'],
                 ],
                 [
                     'attribute' => 'investmentInWyj',
                     'label' => '温盈金销售额',
                     'value' => function ($data) {
                         return number_format($data['investmentInWyj'], 2);
-                    }
+                    },
+                    'contentOptions' => ['class' => 'money'],
                 ],
                 [
                     'attribute' => 'reg',

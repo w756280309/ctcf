@@ -119,8 +119,8 @@ $pc_cat = Yii::$app->params['pc_cat'];
                                     }
                                 ?>
                             </td>
-                            <td><?= number_format($val['money'], 2) ?></td>
-                            <td><?= number_format($val['funded_money'], 2) ?></td>
+                            <td class="money"><?= number_format($val['money'], 2) ?></td>
+                            <td class="money"><?= number_format($val['funded_money'], 2) ?></td>
                             <td>
                                 <?= ($val['status'] > 2 && $val['status'] != 4) ? date('Y-m-d H:i:s', $val['full_time']) : '--'?>
                             </td>

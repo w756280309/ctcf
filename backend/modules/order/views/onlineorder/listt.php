@@ -112,13 +112,15 @@ HTML;
             'label' => '投资金额',
             'value' => function ($record){
                 return number_format($record->order_money, 2);
-            }
+            },
+            'contentOptions' => ['class' => 'money'],
         ],
         [
             'label' => '抵扣代金券',
             'value' => function ($record){
                 return number_format($record->couponAmount, 2);
-            }
+            },
+            'contentOptions' => ['class' => 'money'],
         ],
         [
             'label' => '投资时间',

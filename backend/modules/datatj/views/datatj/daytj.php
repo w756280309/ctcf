@@ -41,42 +41,48 @@ use yii\grid\GridView;
                     'label' => '交易额',
                     'value' => function ($data) {
                         return number_format($data['totalInvestment'], 2);
-                    }
+                    },
+                    'contentOptions' => ['class' => 'money'],
                 ],
                 [
                     'attribute' => 'rechargeMoney',
                     'label' => '充值金额',
                     'value' => function ($data) {
                         return number_format($data['rechargeMoney'], 2);
-                    }
+                    },
+                    'contentOptions' => ['class' => 'money'],
                 ],
                 [
                     'attribute' => 'drawAmount',
                     'label' => '提现金额',
                     'value' => function ($data) {
                         return number_format($data['drawAmount'], 2);
-                    }
+                    },
+                    'contentOptions' => ['class' => 'money'],
                 ],
                 [
                     'attribute' => 'rechargeCost',
                     'label' => '充值手续费',
                     'value' => function ($data) {
                         return number_format($data['rechargeCost'], 2);
-                    }
+                    },
+                    'contentOptions' => ['class' => 'money'],
                 ],
                 [
                     'attribute' => 'investmentInWyb',
                     'label' => Yii::$app->params['pc_cat'][2] . '销售额',
                     'value' => function ($data) {
                         return number_format($data['investmentInWyb'], 2);
-                    }
+                    },
+                    'contentOptions' => ['class' => 'money'],
                 ],
                 [
                     'attribute' => 'investmentInWyj',
                     'label' => Yii::$app->params['pc_cat'][1] . '销售额',
                     'value' => function ($data) {
                         return number_format($data['investmentInWyj'], 2);
-                    }
+                    },
+                    'contentOptions' => ['class' => 'money'],
                 ],
                 [
                     'attribute' => 'reg',
@@ -150,7 +156,8 @@ use yii\grid\GridView;
                     'label' => '已回款金额',
                     'value' => function ($data) {
                         return number_format($data['repayMoney'], 2);
-                    }
+                    },
+                    'contentOptions' => ['class' => 'money'],
                 ],
                 [
                     'label' => '已回款用户数',

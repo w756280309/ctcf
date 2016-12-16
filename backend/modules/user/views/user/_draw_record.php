@@ -15,7 +15,8 @@
             'label' => '金额',
             'value' => function ($record) {
                 return number_format($record['money'], 2);
-            }
+            },
+            'contentOptions' => ['class' => 'money'],
         ],
         [
             'label' => '银行',
@@ -27,7 +28,8 @@
             'label' => '手续费',
             'value' => function ($record) {
                 return $record['fee'];
-            }
+            },
+            'contentOptions' => ['class' => 'money'],
         ],
         [
             'label' => '交易时间',

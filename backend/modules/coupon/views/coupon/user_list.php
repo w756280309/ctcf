@@ -27,13 +27,15 @@ use yii\grid\GridView;
             'label' => '面值(元)',
             'value' => function ($data) {
                 return StringUtils::amountFormat2($data->couponType->amount);
-            }
+            },
+            'contentOptions' => ['class' => 'money'],
         ],
         [
             'label' => '起投金额(元)',
             'value' => function ($data) {
                 return StringUtils::amountFormat2($data->couponType->minInvest);
-            }
+            },
+            'contentOptions' => ['class' => 'money'],
         ],
         [
             'label' => '领取时间',

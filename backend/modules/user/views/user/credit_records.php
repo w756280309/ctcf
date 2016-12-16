@@ -20,7 +20,8 @@
             'label' => '投资金额',
             'value' => function ($order){
                 return number_format(bcdiv($order['principal'], 100, 2),2);
-            }
+            },
+            'contentOptions' => ['class' => 'money'],
         ],
         [
             'label' => '投资时间',

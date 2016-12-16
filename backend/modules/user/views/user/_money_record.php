@@ -23,15 +23,22 @@
         ],
         [
             'label' => '金额',
+            'format' => 'html',
             'value' => function ($record) {
-                return number_format(max($record->in_money, $record->out_money), 2);
-            }
+                if ($record->in_money > $record->out_money) {
+                    return '<span class="red">+'.number_format($record->in_money, 2).'</span>';
+                } else {
+                    return '<span class="green">-'.number_format($record->out_money, 2).'</span>';
+                }
+            },
+            'contentOptions' => ['class' => 'money'],
         ],
         [
             'label' => '余额',
             'value' => function ($record) {
                 return number_format($record->balance, 2);
-            }
+            },
+            'contentOptions' => ['class' => 'money'],
         ],
         [
             'label' => '项目名称',

@@ -105,7 +105,7 @@ $bid = (int)Yii::$app->request->get('bid');
                         <td>
                             <?= $order->mobile ?>
                         </td>
-                        <td>
+                        <td class="money">
                             <?= number_format($order->money, 2) ?>
                         </td>
                         <td>

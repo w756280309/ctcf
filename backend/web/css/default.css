@@ -285,3 +285,13 @@ Landscape phone to portrait tablet
     background: #1e1e1e;
   }
 }
+
+.red {
+  color:red;
+}
+.green {
+  color:green;
+}
+.money {
+  text-align: right !important;
+}
