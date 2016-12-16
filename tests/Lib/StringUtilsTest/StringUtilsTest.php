@@ -97,15 +97,15 @@ class StringUtilsTest extends YiiAppTestCase
     }
 
     /**
-     * 验证中英文混合的字符串
+     * 验证纯英文的字符串
      */
     public function testMixUtf8Strlen()
     {
-        $string = 'sssss莫荻史阳刘凤君左玉玮肖阿勇ss';
+        $string = 'ssMMsMMMMss';
 
         $len = StringUtils::utf8Strlen($string);
 
-        $this->assertEquals($len, 16.5);
+        $this->assertEquals($len, 11);
     }
 
     /**
@@ -118,5 +118,29 @@ class StringUtilsTest extends YiiAppTestCase
         $len = StringUtils::utf8Strlen($string);
 
         $this->assertEquals($len, 8);
+    }
+
+    /**
+     * 验证纯数字的字符串
+     */
+    public function testNumberUtf8Strlen()
+    {
+        $string = '1234111111111567830';
+
+        $len = StringUtils::utf8Strlen($string);
+
+        $this->assertEquals($len, 9.5);
+    }
+
+    /**
+     * 验证中英文数字混合的字符串
+     */
+    public function testUtf8Strlen()
+    {
+        $string = '1234哈哈哈哈哈MMss哈56783';
+
+        $len = StringUtils::utf8Strlen($string);
+
+        $this->assertEquals($len, 14.5);
     }
 }

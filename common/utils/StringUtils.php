@@ -118,6 +118,8 @@ class StringUtils
     /**
      * 只支持utf8格式
      * 只支持中文汉字，字母，数字的统计
+     * 英文和汉字一个算一个
+     * 数字两个算一个
      *
      * @param  string $str 待统计长度的字符串
      *
@@ -140,7 +142,7 @@ class StringUtils
 
         $matchLen = count($match[0]);
         for ($i = 0; $i < $matchLen; $i++) {
-            if (preg_match('/^[a-zA-z0-9]$/', $match[0][$i])) {
+            if (preg_match('/^[0-9]$/', $match[0][$i])) {
                 $len += 0.5;
             } else {
                 ++$len;
