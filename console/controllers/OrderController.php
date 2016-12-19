@@ -9,6 +9,7 @@ namespace console\controllers;
 use common\models\order\OnlineOrder;
 use common\models\order\OrderManager;
 use common\models\order\OrderQueue;
+use Ding\DingNotify;
 use yii\console\Controller;
 use Yii;
 
@@ -28,6 +29,14 @@ class OrderController extends Controller
                             OrderManager::confirmOrder($queue->order);
                         }
                     } catch (\Exception $ex) {
+                        //超过5秒订单做钉钉提醒
+                        $order = $queue->order;
+                        if ($order->order_time + 5 < time()) {
+                            $user = $order->user;
+                            if (!empty($user)) {
+                                (new DingNotify('wdjf'))->sendToUsers('用户[' . $user->mobile . ']，于' . date('Y-m-d H:i:s') . ' 进行标的购买操作，操作失败，此订单在队列中超过5秒未被成功处理，订单ID:' . $order->id);
+                            }
+                        }
                         $msg = '标的订单处理：订单号-'.$queue->order->id.';异常信息-'.$ex->getMessage();
                         \Yii::trace($msg, 'loan_order');
                     }

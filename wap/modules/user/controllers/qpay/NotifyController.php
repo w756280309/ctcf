@@ -2,6 +2,8 @@
 
 namespace app\modules\user\controllers\qpay;
 
+use common\models\user\User;
+use Ding\DingNotify;
 use Yii;
 use yii\web\Controller;
 use common\models\user\QpayBinding;
@@ -28,8 +30,8 @@ class NotifyController extends Controller
             unset($data['token']);
         }
         TradeLog::initLog(2, $data, $data['sign'])->save();
+        $bind = QpayBinding::findOne(['binding_sn' => $data['order_id']]);
         if (Yii::$container->get('ump')->verifySign($data) && '0000' === $data['ret_code']) {
-            $bind = QpayBinding::findOne(['binding_sn' => $data['order_id']]);
             if (null !== $bind) {
                 if (QpayBinding::STATUS_INIT === (int)$bind->status) {
                     $bind->status = QpayBinding::STATUS_ACK;//处理中
@@ -47,6 +49,10 @@ class NotifyController extends Controller
                 throw new \yii\web\NotFoundHttpException($data['order_id'] . ':无法找到申请数据');
             }
         } else {
+            $user = User::findOne($bind->uid);
+            if (!empty($user)) {
+                (new DingNotify('wdjf'))->sendToUsers('用户[' . $user->mobile . ']，于' . date('Y-m-d H:i:s') . ' 进行绑卡操作，操作失败，联动绑卡失败，失败信息:' . $data['ret_msg']);
+            }
             return $this->redirect('/user/userbank/accept');
         }
     }

@@ -2,6 +2,8 @@
 
 namespace api\modules\v1\controllers\notify;
 
+use common\models\user\User;
+use Ding\DingNotify;
 use Yii;
 use Exception;
 use yii\web\Controller;
@@ -90,18 +92,22 @@ class DrawController extends Controller
         if (array_key_exists('token', $data)) {
             unset($data['token']);
         }
+        $draw = DrawRecord::findOne(['sn' => $data['order_id']]);
         if (
             Yii::$container->get('ump')->verifySign($data)
             && '0000' === $data['ret_code']
             && 'withdraw_apply_notify' === $data['service']
         ) {
-            $draw = DrawRecord::findOne(['sn' => $data['order_id']]);
             if (DrawRecord::STATUS_ZERO === (int) $draw->status) {
                 return DrawManager::ackDraw($draw);
             } else {
                 throw new Exception($data['order_id'].'状态异常');
             }
         } else {
+            $user = User::findOne($draw->uid);
+            if (!empty($user)) {
+                (new DingNotify('wdjf'))->sendToUsers('用户[' . $user->mobile . ']，于' . date('Y-m-d H:i:s') . ' 进行提现操作，操作失败，联动提现失败，失败信息:' . $data['ret_msg']);
+            }
             throw new Exception($data['order_id'].'处理失败');
         }
     }
