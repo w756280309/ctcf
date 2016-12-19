@@ -260,20 +260,30 @@ class Promo1212
                     $reward_id = $pool[mt_rand(0, 4)];
                 }
             } else {
-                //对于已投资的用户第二次抽奖的概率改为10000-10，20000-20，50000-50代金券和指环扣各占20%，食用油及大米各占10%
+                //对于已投资的用户第二次抽奖的概率改为10000-10，20000-20，50000-50代金券和指环扣各占20%，食用油15%，大米占5%
                 $pool = array(
                     self::COUPON_TEN_YITOU,
                     self::COUPON_TEN_YITOU,
+                    self::COUPON_TEN_YITOU,
+                    self::COUPON_TEN_YITOU,
+                    self::COUPON_TWOZERO_YITOU,
+                    self::COUPON_TWOZERO_YITOU,
                     self::COUPON_TWOZERO_YITOU,
                     self::COUPON_TWOZERO_YITOU,
                     self::COUPON_FIVEZERO_YITOU,
                     self::COUPON_FIVEZERO_YITOU,
+                    self::COUPON_FIVEZERO_YITOU,
+                    self::COUPON_FIVEZERO_YITOU,
+                    self::GIFT_RING_BUKLE,
+                    self::GIFT_RING_BUKLE,
                     self::GIFT_RING_BUKLE,
                     self::GIFT_RING_BUKLE,
                     self::GIFT_COOKING_OIL,
+                    self::GIFT_COOKING_OIL,
+                    self::GIFT_COOKING_OIL,
                     self::GIFT_RICE,
                 );
-                $reward_id = $pool[mt_rand(0, 9)];
+                $reward_id = $pool[mt_rand(0, count($pool) - 1)];
             }
         } else {
             //未投资情况
