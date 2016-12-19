@@ -50,7 +50,8 @@ class DrawcrontabController extends Controller
                 $drawResp = \Yii::$container->get('ump')->getDrawInfo($record);
 
                 if ($drawResp->isSuccessful()) {
-                    if (2 === (int) $drawResp->get('tran_state')) {
+                    //12已冻结、13待解冻、14财务已审核, 2提现成功都可以认为成已受理
+                    if (in_array(intval($drawResp->get('tran_state')), [12, 13, 14, 2])) {
                         $record = DrawManager::ackDraw($record);
                     }
                 } elseif ($drawResp->get('ret_code') === '00131013') {
