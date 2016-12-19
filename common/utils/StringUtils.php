@@ -113,42 +113,4 @@ class StringUtils
     {
         return number_format($val, 2);
     }
-
-
-    /**
-     * 只支持utf8格式
-     * 只支持中文汉字，字母，数字的统计
-     * 英文和汉字一个算一个
-     * 数字两个算一个
-     *
-     * @param  string $str 待统计长度的字符串
-     *
-     * @return number 返回长度
-     * @throws \Exception
-     */
-    public static function utf8Strlen($str)
-    {
-        if (!preg_match('/^[\x{4e00}-\x{9fa5}a-zA-Z0-9]+$/u', $str)) {
-            throw new \Exception('目前只支持汉字、数字、字母');
-        }
-
-        if (preg_match('/^[\x{4e00}-\x{9fa5}]+$/u', $str)) {
-            return function_exists('mb_strlen') ? mb_strlen($str) : strlen($str) / 3;
-        }
-
-        $len = 0;
-        //匹配所有的单元，每个汉字，英文，字母各占一个字节
-        preg_match_all('/./us', $str, $match);
-
-        $matchLen = count($match[0]);
-        for ($i = 0; $i < $matchLen; $i++) {
-            if (preg_match('/^[0-9]$/', $match[0][$i])) {
-                $len += 0.5;
-            } else {
-                ++$len;
-            }
-        }
-
-        return $len;
-    }
 }
