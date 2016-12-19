@@ -44,16 +44,16 @@ use yii\helpers\Html;
         <ul class="clearfix twopic">
             <li class="lf">
                 <?php if ('/' === ASSETS_BASE_URI) { ?>
-                    <a href="/issuer?id=1&type=2"><img src="<?= FE_BASE_URI ?>wap/index/images/bgproject_05.png" alt=""></a>
+                    <a href="/issuer?id=1&type=2"><img src="<?= FE_BASE_URI ?>wap/index/images/sandu.png" alt=""></a>
                 <?php } else { ?>
-                    <a href="/issuer?id=5&type=2"><img src="<?= FE_BASE_URI ?>wap/index/images/bgproject_05.png" alt=""></a>
+                    <a href="/issuer?id=5&type=2"><img src="<?= FE_BASE_URI ?>wap/index/images/sandu.png" alt=""></a>
                 <?php } ?>
             </li>
             <li class="rg">
                 <?php if ('/' === ASSETS_BASE_URI) { ?>
-                    <a href="/issuer?id=3&type=1"><img src="<?= FE_BASE_URI ?>wap/index/images/bgproject_06.png" alt=""></a>
+                    <a href="/issuer?id=3&type=1"><img src="<?= FE_BASE_URI ?>wap/index/images/bgproject_05.png" alt=""></a>
                 <?php } else { ?>
-                    <a href="/issuer?id=2&type=1"><img src="<?= FE_BASE_URI ?>wap/index/images/bgproject_06.png" alt=""></a>
+                    <a href="/issuer?id=2&type=1"><img src="<?= FE_BASE_URI ?>wap/index/images/bgproject_05.png" alt=""></a>
                 <?php } ?>
             </li>
         </ul>
