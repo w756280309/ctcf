@@ -37,7 +37,8 @@
         "paragonie/random_compat": "1.2.0"
     },
     "config": {
-        "process-timeout": 1800
+        "process-timeout": 1800,
+        "secure-http":false
     },
     "extra": {
         "asset-installer-paths": {
