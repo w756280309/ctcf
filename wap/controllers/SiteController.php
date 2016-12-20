@@ -335,7 +335,7 @@ class SiteController extends Controller
                     if (!empty($next) && !defined('IN_APP')) {
                         $tourl = $next;
                     } else {
-                        $tourl = '/';
+                        $tourl = '/?mark=1612';
                     }
 
                     $urls = parse_url($tourl);
