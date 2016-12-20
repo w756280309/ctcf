@@ -86,7 +86,7 @@ $this->registerMetaTag([
         <div class="pos-rel">
             <div class="pos-fixer">
                 <nav>
-                    <li class="first"><a href="/#t=1">首页</a></li>
+                    <li class="first"><a href="/?v=1#t=1">首页</a></li>
                     <li><a href="/site/about">关于我们</a></li>
                     <li><a href="/site/advantage">平台优势</a></li>
                     <li><a href="/site/help">帮助中心</a></li>
@@ -104,7 +104,7 @@ $this->registerMetaTag([
     <div class="row navbar-fixed-bottom footer">
         <div class="col-xs-4 footer-title">
             <div class="footer-inner">
-                <a href="/#t=1" class="shouye1"><span class="shouye"></span>首页</a>
+                <a href="/?v=1#t=1" class="shouye1"><span class="shouye"></span>首页</a>
             </div>
         </div>
         <div class="col-xs-4 footer-title">
@@ -129,4 +129,4 @@ $this->registerMetaTag([
 </body>
 </html>
 <?php $this->endPage() ?>
-    
+
