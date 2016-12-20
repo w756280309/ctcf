@@ -47,7 +47,7 @@ $this->backUrl = false;
 <div class="row" id='bind-close1'>
     <div class="col-xs-4"></div>
     <div class="col-xs-4">
-        <a href="/" class="bind-close1">回到首页</a>
+        <a href="/?mark=1612" class="bind-close1">回到首页</a>
     </div>
     <div class="col-xs-4"></div>
 </div>
