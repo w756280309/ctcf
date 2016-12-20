@@ -266,7 +266,7 @@ class SiteController extends Controller
                 $user->last_login = time();
                 $user->save();
 
-                return ['code' => 0, 'tourl' => '/'];
+                return ['code' => 0, 'tourl' => '/?mark=1612'];
             } else {
                 return ['code' => 1, 'error' => $model->firstErrors];
             }

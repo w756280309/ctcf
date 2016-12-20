@@ -19,7 +19,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/luodiye.js', ['depends' => WapAsset::c
     <div class="row">
         <div class="col-xs-12 col-sm-12">
             <header class="row head-title head-title1">
-                <div class="logo logo1 col-xs-12 col-sm-12"><a href="/"><img src="<?= ASSETS_BASE_URI ?>images/luodiye/logo-new.png" alt="logo"></a></div>
+                <div class="logo logo1 col-xs-12 col-sm-12"><a href="/?mark=1612"><img src="<?= ASSETS_BASE_URI ?>images/luodiye/logo-new.png" alt="logo"></a></div>
                 <div class="logo_tit logo_tit1">温州报业传媒旗下理财平台</div>
             </header>
             <div class="row banner-box">

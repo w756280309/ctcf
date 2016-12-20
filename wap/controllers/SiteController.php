@@ -146,7 +146,7 @@ class SiteController extends Controller
     public function actionLogin($next = null)
     {
         if (!\Yii::$app->user->isGuest) {
-            return $this->goHome();
+            return $this->redirect('/?mark='.time());
         }
 
         $model = new LoginForm();
@@ -239,7 +239,7 @@ class SiteController extends Controller
     {
         \Yii::$app->user->logout();
 
-        return $this->goHome();
+        return $this->redirect('/?mark='.time());
     }
 
     /**
@@ -275,7 +275,7 @@ class SiteController extends Controller
     public function actionResetpass()
     {
         if (!\Yii::$app->user->isGuest) {
-            return $this->goHome();
+            return $this->redirect('/?mark='.time());
         }
 
         $model = new SignupForm();
@@ -305,7 +305,7 @@ class SiteController extends Controller
     public function actionSignup($next = null)
     {
         if (!\Yii::$app->user->isGuest) {
-            return $this->goHome();
+            return $this->redirect('/?mark='.time());
         }
 
         $next = filter_var($next, FILTER_VALIDATE_URL);
@@ -335,7 +335,7 @@ class SiteController extends Controller
                     if (!empty($next) && !defined('IN_APP')) {
                         $tourl = $next;
                     } else {
-                        $tourl = '/';
+                        $tourl = '/?mark=1612';
                     }
 
                     $urls = parse_url($tourl);
