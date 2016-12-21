@@ -106,7 +106,7 @@ class BirthdayCoupon
                     $message = [
                         $user->real_name,
                         180,
-                        \Yii::$app->params['clientOption']['host']['frontend'] . '',
+                        \Yii::$app->params['clientOption']['host']['frontend'] . ' ',
                         \Yii::$app->params['contact_tel'],
                     ];
                     $templateId = \Yii::$app->params['sms']['birthday_coupon'];
