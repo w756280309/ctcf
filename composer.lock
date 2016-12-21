@@ -838,7 +838,7 @@
             "source": {
                 "type": "git",
                 "url": "ssh://vcs@dx.wangcaigu.cn/diffusion/DINGNOTIFY/dingnotify.git",
-                "reference": "5cd0d3da81a939617358686cb61dc532b27a8aeb"
+                "reference": "3c34f36a57adefe127e095507edeb5e9fba0d190"
             },
             "require": {
                 "php": ">=5.5.0"
@@ -859,7 +859,7 @@
                 }
             ],
             "description": "旺财谷钉钉插件",
-            "time": "2016-12-19 07:44:13"
+            "time": "2016-12-21 01:51:11"
         },
         {
             "name": "wcg/libs",

@@ -4,6 +4,8 @@ namespace console\controllers;
 
 use common\models\draw\DrawManager;
 use common\models\user\DrawRecord;
+use common\models\user\User;
+use Ding\DingNotify;
 use yii\console\Controller;
 
 /**
@@ -42,17 +44,23 @@ class DrawcrontabController extends Controller
             ->andWhere(['>', 'created_at', strtotime('-1 week')])
             ->orderBy(['status' => SORT_DESC, 'id' => SORT_DESC])
             ->all();
-
         foreach ($records as $record) {
 
             //只有未审核的并且当前时间超过订单时间15分钟且联动返回成功才处理成审核成功
             if ($record->status === DrawRecord::STATUS_ZERO) {
                 $drawResp = \Yii::$container->get('ump')->getDrawInfo($record);
-
                 if ($drawResp->isSuccessful()) {
+                    $tranState = intval($drawResp->get('tran_state'));
                     //12已冻结、13待解冻、14财务已审核, 2提现成功都可以认为成已受理
-                    if (in_array(intval($drawResp->get('tran_state')), [12, 13, 14, 2])) {
+                    if (in_array($tranState, [12, 13, 14, 2])) {
                         $record = DrawManager::ackDraw($record);
+                    } elseif ($tranState === 3 || $tranState === 5 || $tranState === 15)  {
+                        $user = User::findOne($record->uid);
+                        if (!empty($user)) {
+                            (new DingNotify('wdjf'))->sendToUsers('用户[' . $user->mobile . ']，于' . date('Y-m-d H:i:s', $record->created_at) . ' 进行提现操作，操作失败，联动提现失败，失败信息:' . $drawResp->get('ret_msg'));
+                        }
+                        $record->status = DrawRecord::STATUS_FAIL;
+                        $record->save(false);
                     }
                 } elseif ($drawResp->get('ret_code') === '00131013') {
                     //ret_msg = 本次订单查询操作未明，请稍后再次查询或联系运营人员; 认为联动不存在该订单

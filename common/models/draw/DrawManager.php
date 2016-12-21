@@ -167,7 +167,7 @@ class DrawManager
             } elseif ($tranState === 3 || $tranState === 5 || $tranState === 15) {
                 $user = User::findOne($draw->uid);
                 if (!empty($user)) {
-                    (new DingNotify('wdjf'))->sendToUsers('用户[' . $user->mobile . ']，于' . date('Y-m-d H:i:s') . ' 进行提现操作，操作失败，联动提现失败，失败信息:' . $resp->get('ret_msg'));
+                    (new DingNotify('wdjf'))->sendToUsers('用户[' . $user->mobile . ']，于' . date('Y-m-d H:i:s', $draw->created_at) . ' 进行提现操作，操作失败，联动提现失败，失败信息:' . $resp->get('ret_msg'));
                 }
                 //失败的代码
                 self::cancel($draw, DrawRecord::STATUS_DENY);
