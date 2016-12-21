@@ -1,7 +1,7 @@
 <?php
 $this->title = Yii::$app->params['pc_page_title'];
 
-$this->registerCssFile(ASSETS_BASE_URI.'css/index.css?v=061126', ['depends' => 'frontend\assets\FrontAsset']);
+$this->registerCssFile(ASSETS_BASE_URI.'css/index.css?v=161221', ['depends' => 'frontend\assets\FrontAsset']);
 $this->registerJsFile(ASSETS_BASE_URI.'js/index.js', ['depends' => 'frontend\assets\FrontAsset']);
 
 use common\models\product\OnlineProduct;
@@ -221,7 +221,7 @@ use common\view\LoanHelper;
             <span>帮助中心</span>
             <a href="/helpcenter/operation/" target="_blank">更多&gt;</a>
         </div>
-        <ul class="more-right-bottom">
+        <ul class="more-right-bottom title-ellipsis">
             <li><a href="/helpcenter/operation/" target="_blank">网站流程如何操作？</a></li>
             <li><a href="/helpcenter/security/" target="_blank">为什么在温都金服投资是安全的？</a></li>
             <li><a href="/helpcenter/background/" target="_blank">了解温都金服。</a></li>
@@ -234,7 +234,7 @@ use common\view\LoanHelper;
             <span>最新资讯</span>
             <a href="/news/index?type=info" target="_blank">更多&gt;</a>
         </div>
-        <ul class="more-right-bottom">
+        <ul class="more-right-bottom title-ellipsis">
             <?php foreach ($news as $val) : ?>
                 <li><a href="/news/detail?type=info&id=<?= $val->id ?>" target="_blank"><?= $val->title ?></a></li>
             <?php endforeach; ?>
@@ -265,7 +265,7 @@ use common\view\LoanHelper;
             <span>理财指南</span>
             <a href="/news/index?type=licai" target="_blank">更多&gt;</a>
         </div>
-        <ul class="more-right-bottom">
+        <ul class="more-right-bottom title-ellipsis">
             <?php foreach ($licai as $val) : ?>
                 <li><a href="/news/detail?type=licai&id=<?= $val->id ?>" target="_blank"><?= $val->title ?></a></li>
             <?php endforeach; ?>
@@ -276,7 +276,7 @@ use common\view\LoanHelper;
             <span>投资技巧</span>
             <a href="/news/index?type=touzi" target="_blank">更多&gt;</a>
         </div>
-        <ul class="more-right-bottom">
+        <ul class="more-right-bottom title-ellipsis">
             <?php foreach ($touzi as $val) : ?>
                 <li><a href="/news/detail?type=touzi&id=<?= $val->id ?>" target="_blank"><?= $val->title ?></a></li>
             <?php endforeach; ?>
@@ -285,15 +285,14 @@ use common\view\LoanHelper;
     <div class = "more-box-right">
         <div class = "more-right-top">
             <span>精选项目</span>
-            <a href = " " style="display: none;">更多&gt;
-            </a>
+            <a href = " " style="display: none;">更多&gt;</a>
         </div>
         <ul class="more-right-bottom">
             <li><a href="https://www.wenjf.com/upload/showpic?id=20" target="_blank">南金交 - 中盛海润1号</a>
-                <br><span>中信保评级AAA级企业，政府担保企业1万起投，年化收益8%</span>
+                <p class="issuer-desc">中信保评级AAA级企业，政府担保企业，1万起投，年化收益8%</p>
             </li>
             <li><a href="https://www.wenjf.com/upload/showpic?id=24" target="_blank">宁富一号 - 三都国资</a>
-                <br><span>政府三函支持，AA级担保企业5万起投，年化收益8.8%</span>
+                <p class="issuer-desc">政府三函支持，AA级担保企业，5万起投，年化收益8.8%</p>
             </li>
         </ul>
     </div>

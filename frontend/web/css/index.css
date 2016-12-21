@@ -885,21 +885,22 @@ a.zhaiquan-number:hover {
     color:#99999d;
     list-style-position: inside;
     width: 240px;
+}
+.title-ellipsis li {
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
 }
 .more-right-bottom li a{
-    margin-left: -10px;
     color:#666666
 }
 .more-right-bottom li a:hover {
     color: #6e6e72;
 }
-.more-right-bottom li span {
-    font-size: 10px;
-    width: 200px;
-    margin-left: 20px;
+.more-right-bottom li .issuer-desc {
+    font-size: 12px;
+    margin-top: 0.5em;
+    margin-left: 1em;
 }
 .more-middle {
     width: 100%;
