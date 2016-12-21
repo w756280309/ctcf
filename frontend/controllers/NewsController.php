@@ -84,13 +84,13 @@ class NewsController extends Controller
             $backdata['page'] = $new_type;
         } elseif ('media' === $type) {
             $backdata['title'] = '媒体报道';
-            $backdata['page'] = $new_type;
+            $backdata['page'] = ($pagetype === 2) ? 'notices' : 'media';
         } elseif ('licai' === $type) {
             $backdata['title'] = '理财指南';
-            $backdata['page'] = ($pagetype === 2) ? 'notices' : 'notice';
+            $backdata['page'] = ($pagetype === 2) ? 'infos' : 'info';
         } elseif ('touzi' === $type) {
             $backdata['title'] = '投资技巧';
-            $backdata['page'] = ($pagetype === 2) ? 'notices' : 'notice';
+            $backdata['page'] = ($pagetype === 2) ? 'infos' : 'info';
         } else {
             $backdata['title'] = '网站公告';
             $backdata['page'] = $new_type;

@@ -16,7 +16,7 @@ use common\widgets\Pager;
 
             <div class="information-box">
                 <div class="information-header">
-                    <span class="information-header-font">最新资讯</span>
+                    <span class="information-header-font"><?= $title ?></span>
                 </div>
                 <?php foreach ($model as $val) : ?>
                 <dl class="com_news_01">

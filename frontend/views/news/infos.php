@@ -15,7 +15,7 @@ $this->registerCssFile(ASSETS_BASE_URI.'css/news/informationdetail.css?v=161111'
         <div class="rightcontent">
             <div class="information-box">
                 <div class="information-header">
-                    <span class="information-header-font">最新资讯</span>
+                    <span class="information-header-font"><?= $title ?></span>
                 </div>
                 <div class="news_notice_detail_title"><?= $new->title ?></div>
                 <p class="news_details_time">
