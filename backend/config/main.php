@@ -86,5 +86,8 @@ return [
         'offline' => [
             'class' => 'backend\modules\offline\Module',
         ],
+        'growth' => [
+            'class' => 'backend\modules\growth\Module',
+        ],
     ],
 ];

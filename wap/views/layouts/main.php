@@ -1,20 +1,32 @@
 <?php
 
-use yii\helpers\Html;
-use common\view\AnalyticsHelper;
+use common\models\growth\PageMeta;
 use common\utils\StringUtils;
+use common\view\AnalyticsHelper;
+use yii\helpers\Html;
 
 wap\assets\WapAsset::register($this);
 AnalyticsHelper::registerTo($this);
 
+$meta = PageMeta::getMeta(Yii::$app->request->absoluteUrl);
+
+if (null !== $meta) {
+    $keywords = Html::encode($meta->keywords);
+    $ctitle = Html::encode($meta->title);
+    $description = Html::encode($meta->description);
+} else {
+    $keywords = Yii::$app->params['wap_page_keywords'].','.trim($this->extraKeywords, ', ');
+    $description = Yii::$app->params['wap_page_descritpion'];
+}
+
 $this->registerMetaTag([
     'name' => 'keywords',
-    'content' => Yii::$app->params['wap_page_keywords'].','.trim($this->extraKeywords, ', '),
+    'content' => $keywords,
 ]);
 
 $this->registerMetaTag([
     'name' => 'description',
-    'content' => Yii::$app->params['wap_page_descritpion'],
+    'content' => $description,
 ]);
 
 ?>
@@ -26,7 +38,7 @@ $this->registerMetaTag([
     <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
     <meta name="renderer" content="webkit">
     <meta name="format-detection" content="telephone=no"/>
-    <title><?= Html::encode($this->title) ?></title>
+    <title><?= isset($ctitle) ? $ctitle : Html::encode($this->title) ?></title>
     <?= Html::csrfMetaTags() ?>
     <?php $this->head() ?>
     <script>
