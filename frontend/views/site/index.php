@@ -257,6 +257,50 @@ use common\view\LoanHelper;
 <div style="clear: both"></div>
 <!--more end-->
 
+<!--article list-->
+<div style="clear: both"></div>
+<div class="more-box ">
+    <div class="more-box-left">
+        <div class="more-right-top">
+            <span>理财指南</span>
+            <a href="/news/index?type=licai" target="_blank">更多&gt;</a>
+        </div>
+        <ul class="more-right-bottom">
+            <?php foreach ($licai as $val) : ?>
+                <li><a href="/news/detail?type=licai&id=<?= $val->id ?>" target="_blank"><?= $val->title ?></a></li>
+            <?php endforeach; ?>
+        </ul>
+    </div>
+    <div class="more-box-middle">
+        <div class="more-right-top">
+            <span>投资技巧</span>
+            <a href="/news/index?type=touzi" target="_blank">更多&gt;</a>
+        </div>
+        <ul class="more-right-bottom">
+            <?php foreach ($touzi as $val) : ?>
+                <li><a href="/news/detail?type=touzi&id=<?= $val->id ?>" target="_blank"><?= $val->title ?></a></li>
+            <?php endforeach; ?>
+        </ul>
+    </div>
+    <div class = "more-box-right">
+        <div class = "more-right-top">
+            <span>精选项目</span>
+            <a href = " " style="display: none;">更多&gt;
+            </a>
+        </div>
+        <ul class="more-right-bottom">
+            <li><a href="https://www.wenjf.com/upload/showpic?id=20" target="_blank">南金交 - 中盛海润1号</a>
+                <br><span>中信保评级AAA级企业，政府担保企业1万起投，年化收益8%</span>
+            </li>
+            <li><a href="https://www.wenjf.com/upload/showpic?id=24" target="_blank">宁富一号 - 三都国资</a>
+                <br><span>政府三函支持，AA级担保企业5万起投，年化收益8.8%</span>
+            </li>
+        </ul>
+    </div>
+</div>
+<div style="clear: both"></div>
+<!-- end-->
+
 <!--股东背景 start-->
 <div class="background-box">
     <div class="background-title">股东背景</div>

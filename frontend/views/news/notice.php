@@ -1,6 +1,6 @@
 <?php
 
-$this->title = '网站公告';
+$this->title = $title;
 
 $this->registerCssFile(ASSETS_BASE_URI.'css/pagination.css', ['depends' => 'frontend\assets\FrontAsset']);
 $this->registerCssFile(ASSETS_BASE_URI.'css/news/notice.css?v=161110', ['depends' => 'frontend\assets\FrontAsset']);
@@ -17,7 +17,7 @@ use common\widgets\Pager;
 
         <!-- right start-->
         <div class="right-box rg">
-            <div class="right-header"><span class="title">网站公告</span></div>
+            <div class="right-header"><span class="title"><?= $title ?></span></div>
 
             <div class="notice-box">
                 <?php foreach ($model as $val) : ?>

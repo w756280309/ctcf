@@ -108,6 +108,25 @@ class SiteController extends Controller
             ->limit(5)
             ->all();
 
+        //理财指南
+        $licai = News::find()
+            ->innerJoin($ic, "$n.id = $ic.item_id")
+            ->leftJoin($c, "$ic.category_id = $c.id")
+            ->where(["$n.status" => News::STATUS_PUBLISH, "$c.key" => "licai"])
+            ->orderBy(["$n.news_time" => SORT_DESC, "$n.id" => SORT_DESC])
+            ->limit(5)
+            ->all();
+
+        //投资技巧
+        $touzi = News::find()
+            ->innerJoin($ic, "$n.id = $ic.item_id")
+            ->leftJoin($c, "$ic.category_id = $c.id")
+            ->where(["$n.status" => News::STATUS_PUBLISH, "$c.key" => "touzi"])
+            ->orderBy(["$n.news_time" => SORT_DESC, "$n.id" => SORT_DESC])
+            ->limit(5)
+            ->all();
+
+
         return $this->render('index', [
             'adv' => $adv,
             'loans' => $loans,
@@ -115,6 +134,8 @@ class SiteController extends Controller
             'media' => $media,
             'news' => $news,
             'first_media' => $first_media,
+            'licai' => $licai,
+            'touzi' => $touzi,
         ]);
     }
 

@@ -23,7 +23,7 @@ class NewsController extends Controller
      */
     public function actionIndex($type)
     {
-        if (!in_array($type, ['info', 'media', 'notice'])) {
+        if (!in_array($type, ['info', 'media', 'notice', 'licai', 'touzi'])) {
             throw $this->ex404();
         }
 
@@ -42,12 +42,14 @@ class NewsController extends Controller
         $pages = new Pagination(['totalCount' => $data->count(), 'pageSize' => $pageSize]);
         $model = $data->offset($pages->offset)->limit($pages->limit)->all();
 
-        return $this->render($type, ['model' => $model, 'pages' => $pages, 'type' => $type]);
+        $pagedata = $this->getPage($type,1);
+
+        return $this->render($pagedata['page'], ['model' => $model, 'pages' => $pages, 'type' => $type, 'title' => $pagedata['title']]);
     }
 
     public function actionDetail($id, $type)
     {
-        if (empty($id) || is_int($id) || !in_array($type, ['info', 'media', 'notice'])) {
+        if (empty($id) || is_int($id) || !in_array($type, ['info', 'media', 'notice', 'licai', 'touzi'])) {
             throw $this->ex404();
         }
 
@@ -58,12 +60,42 @@ class NewsController extends Controller
             throw $this->ex404();
         }
 
-        if ('info' === $type) {
-            $render = 'infos';
-        } else {
-            $render = 'notices';
+        $pagedata = $this->getPage($type,2);
+
+        return $this->render($pagedata['page'], ['new' => $new, 'type' => $type, 'title' => $pagedata['title']]);
+    }
+
+    private function getPage($type, $pagetype)
+    {
+        $backdata = array();
+
+        if (empty($type)) {
+            throw $this->ex404();
         }
 
-        return $this->render($render, ['new' => $new, 'type' => $type]);
+        if ($pagetype === 2) {
+            $new_type = $type . 's';
+        } else{
+            $new_type = $type;
+        }
+
+        if ('info' === $type) {
+            $backdata['title'] = '最新资讯';
+            $backdata['page'] = $new_type;
+        } elseif ('media' === $type) {
+            $backdata['title'] = '媒体报道';
+            $backdata['page'] = $new_type;
+        } elseif ('licai' === $type) {
+            $backdata['title'] = '理财指南';
+            $backdata['page'] = ($pagetype === 2) ? 'notices' : 'notice';
+        } elseif ('touzi' === $type) {
+            $backdata['title'] = '投资技巧';
+            $backdata['page'] = ($pagetype === 2) ? 'notices' : 'notice';
+        } else {
+            $backdata['title'] = '网站公告';
+            $backdata['page'] = $new_type;
+        }
+
+        return $backdata;
     }
 }

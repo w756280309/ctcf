@@ -12,8 +12,10 @@ $action = Yii::$app->controller->action->getUniqueId();
         <li class="nav-title"><span>新闻报道</span></li>
         <li class="nav-content">
             <ul>
-                <li class="<?= ('news/index' === $action || 'news/detail' === $action) && "media" === $type ? 'selected' : '' ?>"><a href="/news/index?type=media"><span class="star"></span>媒体报道</a></li>
-                <li class="<?= ('news/index' === $action || 'news/detail' === $action) && "info" == $type ? 'selected' : '' ?>"><a href="/news/index?type=info"><span class="star"></span>最新资讯</a></li>
+                <li class="<?= ('news/index' === $action || 'news/detail' === $action) && 'media' === $type ? 'selected' : '' ?>"><a href="/news/index?type=media"><span class="star"></span>媒体报道</a></li>
+                <li class="<?= ('news/index' === $action || 'news/detail' === $action) && 'info' == $type ? 'selected' : '' ?>"><a href="/news/index?type=info"><span class="star"></span>最新资讯</a></li>
+                <li class="<?= ('news/index' === $action || 'news/detail' === $action) && 'licai' == $type ? 'selected' : '' ?>"><a href="/news/index?type=licai"><span class="star"></span>理财指南</a></li>
+                <li class="<?= ('news/index' === $action || 'news/detail' === $action) && 'touzi' == $type ? 'selected' : '' ?>"><a href="/news/index?type=touzi"><span class="star"></span>投资技巧</a></li>
             </ul>
         </li>
         <li class="nav-title"><span>相关公告</span></li>
