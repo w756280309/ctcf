@@ -124,7 +124,6 @@ class DataController extends Controller
         $allData = UserStats::collectLenderData();
         $path  = Yii::getAlias('@backend').'/web/data/';
         $this->deleteUserDataFromPath($path);//删除历史数据
-
         $file = $path.'lender_data('.date('Y-m-d H:i:s').').csv';
         $fp = fopen($file, 'w');
         fputs($fp, "\xEF\xBB\xBF");//添加BOM头
@@ -138,6 +137,9 @@ class DataController extends Controller
     //删除用户数据相关的历史导出文件
     private function deleteUserDataFromPath($path)
     {
+        if (!file_exists($path)) {
+            mkdir($path);
+        }
         if ( is_dir($path)) {
             $handle = opendir( $path );
             if ($handle) {

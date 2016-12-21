@@ -64,7 +64,6 @@ class BirthdayCoupon
             if (!$user instanceof User) {
                 continue;
             }
-            $translation = \Yii::$app->db->beginTransaction();
             $ticket = PromoLotteryTicket::find()->where([
                 'user_id' => $user->id,
                 'promo_id' => $promo->id,
@@ -74,6 +73,7 @@ class BirthdayCoupon
             if (!empty($ticket)) {
                 continue;
             }
+            $translation = \Yii::$app->db->beginTransaction();
             try {
                 if ($promo->isActive($user)) {
                     foreach ($couponList as $awardId => $coupon) {
@@ -89,7 +89,6 @@ class BirthdayCoupon
                             'promo_id' => $promo->id,
                         ]);
                         if (!$ticket->save(false)) {
-                            $translation->rollBack();
                             throw new \Exception();
                         }
                         //给用户发代金券
@@ -100,7 +99,6 @@ class BirthdayCoupon
                                 throw new \Exception();
                             }
                         } catch (\Exception $ex) {
-                            $translation->rollBack();
                             throw new \Exception($ex->getMessage());
                         }
                     }
@@ -108,13 +106,13 @@ class BirthdayCoupon
                     $message = [
                         $user->real_name,
                         180,
-                        \Yii::$app->params['clientOption']['host']['frontend'],
+                        \Yii::$app->params['clientOption']['host']['frontend'] . '',
                         \Yii::$app->params['contact_tel'],
                     ];
                     $templateId = \Yii::$app->params['sms']['birthday_coupon'];
                     $res = SmsService::send($user->mobile, $templateId, $message, $user);
                     if (!$res) {
-                        $translation->rollBack();
+                        throw new \Exception();
                     }
 
                     $translation->commit();
