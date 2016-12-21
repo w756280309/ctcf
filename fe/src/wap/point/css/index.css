@@ -21,7 +21,9 @@ section .intro {
   font-size: 0.4rem;
   line-height: 0.73333333rem;
   color: #333333;
-  padding: 0.66666667rem 0.58666667rem;
+  padding: 0.66666667rem 0;
+  margin: 0 0.58666667rem;
+  border-bottom: 1px dashed #dddddd;
 }
 section .content {
   padding: 0 1.06666667rem 0 0.4rem;
