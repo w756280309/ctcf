@@ -219,14 +219,14 @@ use yii\helpers\Html;
     }
 
     $(function () {
-        $('.close_splash').on('click', closeAdv);
+        /*$('.close_splash').on('click', closeAdv);
         if ($.cookie('splash_show') !== "20161214") {
             document.body.addEventListener('touchmove', eventTarget);
             $.cookie('splash_show', "20161214");
             $('.mask').show();
             $('.pop').show();
             setTimeout(closeAdv, 4000);
-        }
+        }*/
         //判断首页上方
         checkStatus();
 
