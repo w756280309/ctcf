@@ -120,11 +120,21 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\we
                                             <i class="m-icon-swapright m-icon-white"></i></button>
                                     </div>
                                 </td>
-                                <td colspan="3">
-                                    <div align="right" class="search-btn">
-                                        <a class="btn green btn-block" style="width: 140px;" href="/user/user/lenderstats?<?= http_build_query(Yii::$app->request->get())?>">导出投资会员信息</a>
-                                    </div>
-                                </td>
+                                <?php if (Yii::$app->request->get('search')) { ?>
+                                    <td colspan="3">
+                                        <div align="right" class="search-btn">
+                                            <a class="btn green btn-block" style="width: 140px;" href="/user/user/lenderstats?<?= http_build_query(Yii::$app->request->get())?>">导出筛选用户信息</a>
+                                        </div>
+                                    </td>
+                                <?php } else { ?>
+                                    <?php if ($userDataDownloadUrl) { ?>
+                                        <td colspan="3">
+                                            <div align="right" class="search-btn">
+                                                <a class="btn green btn-block" style="width: 140px;" href="<?= $userDataDownloadUrl?>">导出全部用户信息</a>
+                                            </div>
+                                        </td>
+                                    <?php }?>
+                               <?php }?>
                             </tr>
                         <?php }else{?>
                             <tr>

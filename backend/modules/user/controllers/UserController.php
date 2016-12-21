@@ -33,12 +33,12 @@ class UserController extends BaseController
     {
         $params = array_merge(
             [
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'delete' => ['post'],
+                'verbs' => [
+                    'class' => VerbFilter::className(),
+                    'actions' => [
+                        'delete' => ['post'],
+                    ],
                 ],
-            ],
             ], parent::behaviors()
         );
 
@@ -57,12 +57,30 @@ class UserController extends BaseController
             'pageSize' => 15,
         ]);
         $user = $query->offset($pages->offset)->limit($pages->limit)->orderBy(['user.created_at' => SORT_DESC])->all();
-
+        $userDataDownloadUrl = $this->getUserDataDownLoadUrl();
         return $this->render('list', [
             'model' => $user,
             'pages' => $pages,
             'category' => User::USER_TYPE_PERSONAL,
+            'userDataDownloadUrl' => $userDataDownloadUrl,
         ]);
+    }
+
+    //获取用户信息下载地址
+    private function getUserDataDownLoadUrl()
+    {
+        $path = Yii::getAlias('@backend') . '/web/data';
+        if ($handle = opendir($path)) {
+            while (false !== ($item = readdir($handle))) {
+                if ($item != "." && $item != "..") {
+                    if (false !== strpos($item, 'lender_data')) {
+                        $file = $item;
+                        break;
+                    }
+                }
+            }
+        }
+        return isset($file) ? '/data/' . $file : '';
     }
 
     /**
@@ -72,7 +90,7 @@ class UserController extends BaseController
     {
         $query = User::find()->where(['user.type' => User::USER_TYPE_ORG, 'is_soft_deleted' => 0]);
         $query->with('borrowAccount');
-        $name  = Yii::$app->request->get('name');
+        $name = Yii::$app->request->get('name');
         if (!empty($name)) {
             $query->andFilterWhere(['like', 'org_name', $name]);
         }
@@ -108,7 +126,7 @@ class UserController extends BaseController
     private function dealAjax(User $user)
     {
         $key = Yii::$app->request->get('key');
-        switch ($key){
+        switch ($key) {
             case 'money_record' :
                 return $this->getMoneyRecord($user);
                 break;
@@ -243,7 +261,7 @@ INNER JOIN online_order AS o ON o.sn = r.osn
 INNER JOIN online_product AS p ON o.online_pid = p.id
 WHERE r.type =2
 AND r.id
-IN (".implode(',' ,$recordIds).")")->queryAll();
+IN (" . implode(',', $recordIds) . ")")->queryAll();
             $data = ArrayHelper::index($loanOrderData, 'osn');
             //标的回款
             $repaymentData = Yii::$app->db->createCommand("SELECT r.osn, p.title, p.id
@@ -251,7 +269,7 @@ FROM  `money_record` AS r
 INNER JOIN online_repayment_plan AS rp ON r.osn = rp.sn
 INNER JOIN online_product AS p ON p.id = rp.online_pid
 WHERE r.type =4 AND r.id
-IN (".implode(',' ,$recordIds).")")->queryAll();
+IN (" . implode(',', $recordIds) . ")")->queryAll();
             $data = array_merge($data, ArrayHelper::index($repaymentData, 'osn'));
 
         } else {
@@ -396,7 +414,6 @@ IN (".implode(',' ,$recordIds).")")->queryAll();
     }
 
 
-
     /**
      * 查看指定用户的债权投资明细
      * @param $id
@@ -466,7 +483,8 @@ IN (".implode(',' ,$recordIds).")")->queryAll();
             if ($model->load(Yii::$app->request->post())
                 && $userBank->load(Yii::$app->request->post())
                 && $model->validate()
-                && $userBank->validate()) {
+                && $userBank->validate()
+            ) {
                 if (!empty($model->password_hash)) {
                     $model->setPassword($model->password_hash);
                 } else {
@@ -487,18 +505,18 @@ IN (".implode(',' ,$recordIds).")")->queryAll();
             $model->scenario = 'edit';
             if ($model->load(Yii::$app->request->post()) && $model->validate()) {
                 if ($model->save(false)) {
-                    $this->redirect(array('/user/user/'.($type ? 'listt' : 'listr'), 'type' => $type));
+                    $this->redirect(array('/user/user/' . ($type ? 'listt' : 'listr'), 'type' => $type));
                 }
             }
         }
 
         return $this->render('edit', [
-                'create_usercode' => $model->usercode,
-                'category' => $type,
-                'model' => $model,
-                'epayuser' => $epayuser,
-                'userBank' => $userBank,
-                'bank' => $bank,
+            'create_usercode' => $model->usercode,
+            'category' => $type,
+            'model' => $model,
+            'epayuser' => $epayuser,
+            'userBank' => $userBank,
+            'bank' => $bank,
         ]);
     }
 
@@ -531,7 +549,8 @@ IN (".implode(',' ,$recordIds).")")->queryAll();
             && $userBank->load(Yii::$app->request->post())
             && $model->validate()
             && $epayuser->validate()
-            && $userBank->validate()) {
+            && $userBank->validate()
+        ) {
             $ump = Yii::$container->get('ump');
             $resp = $ump->getMerchantInfo($epayuser->epayUserId);
             if ($resp->isSuccessful()) {
@@ -548,7 +567,7 @@ IN (".implode(',' ,$recordIds).")")->queryAll();
                 if (!$model->save(false)) {
                     $transaction->rollBack();
                     $err = $model->getSingleError();
-                    throw new \Exception($err['attribute'].': '.$err['message']);
+                    throw new \Exception($err['attribute'] . ': ' . $err['message']);
                 }
 
                 $epayuser->appUserId = strval($model->id);
@@ -556,7 +575,7 @@ IN (".implode(',' ,$recordIds).")")->queryAll();
                 if (!$epayuser->save(false)) {
                     $transaction->rollBack();
                     $err = $epayuser->getSingleError();
-                    throw new \Exception($err['attribute'].': '.$err['message']);
+                    throw new \Exception($err['attribute'] . ': ' . $err['message']);
                 }
 
                 //添加一个融资会员的时候，同时生成对应的一条user_account记录
@@ -567,7 +586,7 @@ IN (".implode(',' ,$recordIds).")")->queryAll();
                 if (!$userAccount->save()) {
                     $transaction->rollBack();
                     $err = $userAccount->getSingleError();
-                    throw new \Exception($err['attribute'].': '.$err['message']);
+                    throw new \Exception($err['attribute'] . ': ' . $err['message']);
                 }
 
                 //添加提现银行卡信息
@@ -578,7 +597,7 @@ IN (".implode(',' ,$recordIds).")")->queryAll();
                 if (!$userBank->save(false)) {
                     $transaction->rollBack();
                     $err = $userBank->getSingleError();
-                    throw new \Exception($err['attribute'].': '.$err['message']);
+                    throw new \Exception($err['attribute'] . ': ' . $err['message']);
                 }
 
                 $transaction->commit();
@@ -593,12 +612,12 @@ IN (".implode(',' ,$recordIds).")")->queryAll();
         }
 
         return $this->render('edit', [
-                'create_usercode' => $model->usercode,
-                'category' => 2,
-                'model' => $model,
-                'epayuser' => $epayuser,
-                'userBank' => $userBank,
-                'bank' => $bank,
+            'create_usercode' => $model->usercode,
+            'category' => 2,
+            'model' => $model,
+            'epayuser' => $epayuser,
+            'userBank' => $userBank,
+            'bank' => $bank,
         ]);
     }
 
@@ -607,7 +626,7 @@ IN (".implode(',' ,$recordIds).")")->queryAll();
      */
     public function actionLenderstats()
     {
-        @ini_set('memory_limit','256M');
+        @ini_set('memory_limit', '256M');
         $where = [];
         if (Yii::$app->request->get('search')) {
             $users = (new UserSearch())->search(Yii::$app->request->get())->select('user.id')->asArray()->all();
@@ -640,16 +659,16 @@ IN (".implode(',' ,$recordIds).")")->queryAll();
                 $epayuser = new EpayUser();
                 $info = $epayuser->getUmpAccountStatus($user->epayUser);
                 if (4 === $info['code']) {
-                    $info['message'] = number_format($info['message']/100, 2);
+                    $info['message'] = number_format($info['message'] / 100, 2);
                 }
                 return $info;
-            } catch(\Exception $e) {
-                return ['code' => -1, 'message'=>$e->getMessage()];
+            } catch (\Exception $e) {
+                return ['code' => -1, 'message' => $e->getMessage()];
             }
         }
 
         //返回状态-初始
-        return ['code'=>0, 'message'=>'初始'];
+        return ['code' => 0, 'message' => '初始'];
     }
 
     public function actionDrawStatsCount()
@@ -688,7 +707,7 @@ IN (".implode(',' ,$recordIds).")")->queryAll();
     {
         $u = User::tableName();
         $d = DrawRecord::tableName();
-        return (int) DrawRecord::find()
+        return (int)DrawRecord::find()
             ->select('count(*) as total')
             ->where(["date_format(from_unixtime($d.created_at), '%Y%m')" => date('Ym')])
             ->andWhere(["$u.type" => User::USER_TYPE_PERSONAL])
