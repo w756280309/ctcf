@@ -2,7 +2,7 @@
 
 namespace common\models\growth;
 
-use yii\Helpers\Html;
+use yii\helpers\Html;
 use yii\db\ActiveRecord;
 
 class PageMeta extends ActiveRecord
