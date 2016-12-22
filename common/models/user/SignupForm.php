@@ -136,6 +136,9 @@ class SignupForm extends Model
                 $regFrom = User::REG_FROM_WX;
             }
 
+            //添加注册IP
+            $user->registerIp = Yii::$app->request->getUserIP();
+
             $user->regFrom = $regFrom;
 
             if (!$user->save()) {
