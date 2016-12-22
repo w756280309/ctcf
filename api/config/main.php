@@ -48,6 +48,9 @@ return [
                 'app/share/template' => 'v1/app/share/template',
 
                 'promo/reward/cash' => 'v1/promo/reward/cash',
+
+                'notify/mall/init' => 'v1/notify/mall/init',//积分商场扣除积分接口
+                'notify/mall/result' => 'v1/notify/mall/result',//积分商城通知回调接口
             ],
         ],
     ],

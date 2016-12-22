@@ -2,6 +2,7 @@
 
 namespace common\models\mall;
 
+use common\models\user\User;
 use Yii;
 use yii\behaviors\TimestampBehavior;
 
@@ -12,6 +13,7 @@ use yii\behaviors\TimestampBehavior;
  *
  * @property integer $id
  * @property string $sn             平台订单SN
+ * @property string $type           商品类型【全小写】
  * @property string $orderNum       在兑吧的订单号
  * @property integer $user_id
  * @property integer $points        订单消耗积分
@@ -48,7 +50,7 @@ class PointOrder extends \yii\db\ActiveRecord
             [['user_id', 'points', 'isPaid', 'status', 'createdAt', 'updatedAt'], 'integer'],
             [['orderTime'], 'safe'],
             [['sn'], 'string', 'max' => 32],
-            [['orderNum', 'mallUrl'], 'string', 'max' => 255],
+            [['orderNum', 'mallUrl', 'type'], 'string', 'max' => 255],
         ];
     }
 
@@ -60,6 +62,7 @@ class PointOrder extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'sn' => 'Sn',
+            'type' => 'Type',
             'orderNum' => 'Order Num',
             'user_id' => 'User ID',
             'points' => 'Points',
@@ -77,5 +80,10 @@ class PointOrder extends \yii\db\ActiveRecord
         return [
             TimestampBehavior::className(),
         ];
+    }
+
+    public function getUser()
+    {
+        return $this->hasOne(User::className(), ['id' => 'user_id']);
     }
 }

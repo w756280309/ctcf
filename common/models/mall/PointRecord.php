@@ -24,6 +24,7 @@ class PointRecord extends \yii\db\ActiveRecord
 
     const TYPE_LOAN_ORDER = 'loan_order';   //购买标的
     const TYPE_POINT_ORDER = 'point_order'; //积分兑换
+    const TYPE_POINT_ORDER_FAIL = 'point_order_fail';//积分订单失败退款积分
 
     /**
      * @inheritdoc

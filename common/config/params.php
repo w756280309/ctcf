@@ -181,8 +181,8 @@ return [
     'xs_trade_limit' => 1,//新手专享标投资次数
     'mall_settings' => [
         'url' => 'http://www.duiba.com.cn',
-        'appKey' => '',
-        'appSecret' => '',
+        'app_key' => '',
+        'app_secret' => '',
     ],
     'mall_enabled' => false,//积分商城是否打开
     'ding_notify_list' => [],//钉钉通知名单 实例 [ '用户姓名' => '用户在钉钉的ID',],具体数值在 data/wdjf_ding_users.json 中查

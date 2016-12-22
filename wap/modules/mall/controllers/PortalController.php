@@ -22,10 +22,10 @@ class PortalController extends BaseController
             $thirdPartyConnect->save();
         }
         $url = ThirdPartyConnect::buildCreditAutoLoginRequest(
-            \Yii::$app->params['mall_settings']['appKey'],
-            \Yii::$app->params['mall_settings']['appSecret'],
+            \Yii::$app->params['mall_settings']['app_key'],
+            \Yii::$app->params['mall_settings']['app_secret'],
             $thirdPartyConnect->publicId,
-            10000
+            $user->points
         );
         return $this->redirect($url);
     }
