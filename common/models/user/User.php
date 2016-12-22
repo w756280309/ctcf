@@ -42,6 +42,9 @@ use Zii\Validator\CnMobileValidator;
  * @property int $regFrom   注册来源。0表示未知，1表示wap，2表示wx，3表示app，4表示pc
  * @property int $sort  融资用户排序，默认为0，从大到小排序
  * @property string $regContext 注册页面来源 m 代表WAP端默认注册页 m_intro1611 代表WAP端落地页注册页 pc 代表PC端默认注册页 pc_landing 代表PC端落地页注册页
+ * @property int $points    用户积分
+ * @property int $coins     用户财富值
+ * @property int level      用户等级
  */
 class User extends \yii\db\ActiveRecord implements IdentityInterface, UserInterface
 {
