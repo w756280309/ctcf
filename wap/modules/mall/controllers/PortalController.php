@@ -9,9 +9,6 @@ class PortalController extends BaseController
 {
     public function actionIndex()
     {
-        if (!\Yii::$app->params['mall_enabled']) {
-            throw $this->ex404();
-        }
         $user = $this->getAuthedUser();
         if (empty($user)) {
             throw $this->ex404();

@@ -104,6 +104,15 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/fastclick.js', ['depends' => JqueryAss
     </a>
 
     <div class="clear"></div>
+    <a class="row sm-height border-bottom block" href="/mall/point" >
+        <div class="col-xs-10 left-txt">我的积分</div>
+        <div class="col-xs-1 arrow">
+            <img src="<?= ASSETS_BASE_URI ?>images/arrow.png" alt="右箭头">
+        </div>
+        <div class="col-xs-1"></div>
+    </a>
+
+    <div class="clear"></div>
     <a class="row sm-height border-bottom block" href="/user/invite/" >
         <div class="col-xs-10 left-txt">邀请好友</div>
         <div class="col-xs-1 arrow">
@@ -113,7 +122,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/fastclick.js', ['depends' => JqueryAss
     </a>
 
     <div class="clear"></div>
-    <a class="row sm-height border-bottom block <?= (Yii::$app->params['mall_enabled']) ? '' : 'end-list'?>" href="/user/user/mingxi" >
+    <a class="row sm-height border-bottom block end-list" href="/user/user/mingxi" >
         <div class="col-xs-10 left-txt">交易明细</div>
         <div class="col-xs-1 arrow">
             <img src="<?= ASSETS_BASE_URI ?>images/arrow.png" alt="右箭头">
@@ -121,11 +130,6 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/fastclick.js', ['depends' => JqueryAss
         <div class="col-xs-1"></div>
     </a>
     <div class="clear"></div>
-    <?php if (Yii::$app->params['mall_enabled']) { ?>
-    <a class="row sm-height border-bottom block end-list" href="/mall/portal" >
-        <div class="col-xs-10 left-txt">积分商城</div>
-    </a>
-    <?php }?>
 </div>
 <form></form>
 <!-- 账户中心页 end  -->
