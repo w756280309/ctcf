@@ -1,0 +1,86 @@
+.container-fluid {
+    width: 100%;
+    margin: 0 auto;
+    background-color: #fffaee;
+}
+
+.container-fluid .banner-top {
+    width: 100%;
+    height: 306px;
+    background: url("../../../images/promo/201612/zadan/banner-1.png") center 0 no-repeat;
+}
+
+.container-fluid .banner-bottom {
+    width: 100%;
+    height: 332px;
+    background: url("../../../images/promo/201612/zadan/banner-2.png") center 0 no-repeat;
+    position: relative;
+}
+
+.container-fluid .banner-bottom img {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin-left: -57px;
+    margin-top: -40px;
+    width: 112px;
+    height: 112px;
+}
+
+.container-fluid .award-show {
+    margin: 0 auto;
+    width: 1000px;
+}
+
+.container-fluid .wrap {
+    margin: 0 auto;
+    width: 1000px;
+}
+
+.container-fluid .wrap .award-show {
+    padding: 52px 46px 0;
+}
+
+.container-fluid .wrap .award-show .title-show {
+    margin-bottom: 82px;
+    height: 62px;
+    background: url('../../../images/promo/201607/zadan/show-title.png') center center no-repeat;
+}
+
+.container-fluid .wrap .award-show .show-prize img {
+    margin-bottom: 48px;
+}
+
+.container-fluid .wrap .award-show .txt {
+    margin-left: 156px;
+    padding-bottom: 18px;
+}
+
+.award-show .txt h3 {
+    margin-bottom: 20px;
+    font-size: 36px;
+    color: #7b5601;
+    font-weight: normal;
+}
+
+.award-show .txt p {
+    padding-left: 5px;
+    line-height: 36px;
+    font-size: 18px;
+    color: #7b5601;
+}
+.award-show .txt .link-index{
+    font-size: 24px;
+    color:#7b5601;
+    background-color: #ffd87a;
+    border-radius: 20px;
+    margin: 90px 0 55px 167px;
+    display: block;
+    width: 260px;
+    height:50px;
+    line-height: 50px;
+    text-align: center;
+}
+.award-show .txt .link-index:hover{
+    background-color: #ffc766;
+}

@@ -74,7 +74,8 @@ class QpaynotifyController extends Controller
         if (array_key_exists('token', $data)) {
             unset($data['token']);
         }
-        $epayUser = EpayUser::findOne(['epayUserId' => $data['user_id']]);
+        $recharge = RechargeRecord::findOne(['sn' => $data['order_id']]);
+        $epayUser = EpayUser::findOne(['epayUserId' => $recharge->uid]);
         if (
             Yii::$container->get('ump')->verifySign($data)
             && '0000' === $data['ret_code']
@@ -90,7 +91,7 @@ class QpaynotifyController extends Controller
                 if (null === $epayUser) {
                     throw new Exception($data['user_id'].'此用户不存在');
                 }
-                $recharge = RechargeRecord::findOne(['sn' => $data['order_id']]);
+
                 if ($recharge) {
                     throw new Exception($data['order_id'].'线下充值已成功');
                 }
