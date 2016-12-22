@@ -109,6 +109,22 @@ i,em{
     display: inline-block;
     overflow: hidden;
 }
+.col-tag {
+    padding: 0;
+    margin-top: -4px;
+    margin-bottom: 10px;
+}
+.col-tag span {
+    padding: 0 3px;
+    border: 1px solid #0080ff;
+    border-radius: 5px;
+    color: #0080ff;
+    font-size: 12px;
+    margin-right: 15px;
+    padding-top: 1px;
+    padding-bottom: 1px;
+}
+
 .container .col .col-title .credit-lf {
     color: #ff9800;
     display: inline-block;
@@ -138,7 +154,10 @@ i,em{
     padding: 0;
     margin: 0;
     text-align: center;
-    color:#fe0000;
+    color: #666666;
+}
+.specialcolor {
+    color: #f44336;
 }
 .container .col .credit-all .col-xs-4 .rate-steps {
     font-size: 1.3em;
@@ -205,11 +224,13 @@ i,em{
 .container .col .credit-repay .col-xs-12 {
     padding: 0;
     margin: 0;
+    padding-right: 20px;
 }
-.container .col .credit-repay .col-xs-12 i {
-    margin:9px 5px 0 2px;
+.container .col .credit-repay .col-xs-12 span:before {
+    content: '';
+    margin: 9px 5px 0 2px;
     float: left;
-    width:5px;
+    width: 5px;
     height: 5px;
     background: #f44336;
     display: inline-block;
@@ -222,6 +243,7 @@ i,em{
     line-height: 24px;
     font-size: 12px;
     display: inline-block;
+    float: right;
 }
 .container .cre-list-nums-none {
     padding-top: 100px;

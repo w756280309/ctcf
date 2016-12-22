@@ -1,8 +1,8 @@
 <?php
+
 namespace app\modules\deal\controllers;
 
 use common\controllers\HelpersTrait;
-use common\models\product\Issuer;
 use common\models\product\OnlineProduct;
 use common\models\order\OnlineOrder;
 use common\service\PayService;
@@ -10,6 +10,7 @@ use common\utils\StringUtils;
 use Yii;
 use yii\web\Controller;
 use yii\data\Pagination;
+use yii\web\ServerErrorHttpException;
 
 class DealController extends Controller
 {
@@ -64,7 +65,7 @@ class DealController extends Controller
     public function actionDetail($sn)
     {
         if (empty($sn)) {    //参数无效时,抛出异常
-            throw new \yii\web\ServerErrorHttpException('标的编号不能为空');
+            throw new ServerErrorHttpException('标的编号不能为空');
         }
 
         $deal = $this->findOr404(OnlineProduct::class, [
@@ -86,7 +87,11 @@ class DealController extends Controller
             }
         }
 
-        return $this->render('detail', ['deal' => $deal, 'user' => $user]);
+        return $this->render('detail', [
+            'deal' => $deal,
+            'user' => $user,
+            'allowTransfer' => $deal->allowTransfer(),
+        ]);
     }
 
     /**

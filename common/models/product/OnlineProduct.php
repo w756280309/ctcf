@@ -567,7 +567,13 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
      */
     public static function calcBaseRate($yr, $jiaxi)
     {
-        return null === $jiaxi ? bcmul($yr, 100, 2) : bcsub(bcmul($yr, 100, 2), $jiaxi, 2);
+        if (null === $jiaxi) {
+            $baseRate = bcmul($yr, 100, 2);
+        } else {
+            $baseRate = bcsub(bcmul($yr, 100, 2), $jiaxi, 2);
+        }
+
+        return $baseRate > 0 ? $baseRate : 0;
     }
 
     public function getLoanExpires()
@@ -959,5 +965,26 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
     public function isAmortized()
     {
         return self::REFUND_METHOD_DAOQIBENXI !== intval($this->refund_method);
+    }
+
+    /**
+     * 判断一个标的是否可以转让.
+     *
+     * 1. 分期项目期限超过6个月可转;
+     * 2. 到期本息项目期限超过180天可转;
+     */
+    public function allowTransfer()
+    {
+        if (!$this->isAmortized()) {
+            if ($this->expires <= 180) {
+                return false;
+            }
+        } else {
+            if ($this->expires <= 6) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

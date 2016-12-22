@@ -49,17 +49,22 @@ i,em {
     overflow: hidden;
 }
 .column-title {
-    height:60px;
     border-bottom: 1px dashed #e8e8e8;
-    padding-top: 15px;
+    padding-top: 10px;
     padding-bottom: 10px;
     font-size: 16px;
-    line-height: 60px;
     color: #131313;
 }
-.column-title span{
-    float: left;
-    line-height: 20px;
+.details-tag i {
+    font-size: 12px;
+    background-color: #ffe6e4;
+    color: #f44336;
+    display: inline-block;
+    padding: 0 5px;
+    padding-top: 1px;
+    padding-bottom: 1px;
+    border-radius: 5px;
+    margin-right: 5px;
 }
 .column-title-rg {
     position: absolute;

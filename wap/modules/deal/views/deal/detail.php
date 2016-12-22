@@ -7,13 +7,23 @@ use common\utils\StringUtils;
 use wap\assets\WapAsset;
 use yii\helpers\HtmlPurifier;
 
-$this->registerCssFile(ASSETS_BASE_URI.'css/xiangqing.css?v=20161216', ['depends' => WapAsset::class, 'position' => 1]);
+$this->registerCssFile(ASSETS_BASE_URI.'css/xiangqing.css?v=20161221', ['depends' => WapAsset::class, 'position' => 1]);
 
 ?>
 
 <div class="row column">
     <div class="hidden-xs col-sm-1"></div>
-    <div class="col-xs-12 col-sm-10 column-title"><span><?=$deal->title?></span></div>
+    <div class="col-xs-12 col-sm-10 column-title">
+        <span><?= $deal->title ?></span>
+        <div class="details-tag">
+            <?php if ($allowTransfer) { ?>
+                <i>可转让</i>
+            <?php } ?>
+            <?php if ($deal->allowUseCoupon) { ?>
+                <i>可用券</i>
+            <?php } ?>
+        </div>
+    </div>
     <div class="container">
         <ul class="row column-content <?= $deal->isFlexRate ? 'rate-steps' : '' ?>">
             <li class="col-xs-6">
