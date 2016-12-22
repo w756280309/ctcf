@@ -16,12 +16,13 @@ WxshareHelper::registerTo($this, $share);
             <?= Html::csrfMetaTags() ?>
             <?php $this->head() ?>
             <link rel="stylesheet" href="<?= FE_BASE_URI ?>libs/animate/animate.min.css?v=20161124">
-            <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/campaigns/h5-161114/css/index.css?v=20161129">
+            <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/campaigns/h5-161114/css/index.css?v=20161215">
             <script src="<?= FE_BASE_URI ?>libs/lib.flexible2.js?v=20161124"></script>
             <script src="<?= FE_BASE_URI ?>libs/fastclick.js?v=20161124"></script>
             <script src="<?= FE_BASE_URI ?>libs/pageslider/zepto_modify.js?v=20161124"></script>
             <script src="<?= FE_BASE_URI ?>libs/pageslider/PageSlider.js?v=20161124"></script>
-            <script src="<?= ASSETS_BASE_URI ?>js/js.cookie.js"></script>
+            <script src="<?= FE_BASE_URI ?>res/js/js.cookie.js"></script>
+            <script src="<?= FE_BASE_URI ?>res/js/hmsr.js"></script>
             <script src="<?= ASSETS_BASE_URI ?>js/analytics.js"></script>
             <script>
                 $(document).ready(function() {
@@ -69,14 +70,6 @@ WxshareHelper::registerTo($this, $share);
                         }
                     });
                 }
-
-                $(function () {
-                    var r = new RegExp("(^|&)" + 'hmsr' + "=([^&]*)(&|$)");
-                    var result = window.location.search.substr(1).match(r);
-                    if (result && result[2]) {
-                        var res = Cookies.set('campaign_source', 'result[2]', {expires: 3, path:'/'});
-                    }
-                });
 
                 $(document).on('ajaxSend', function(event, jqXHR, settings) {
                         var match = window.location.search.match(new RegExp('[?&]token=([^&]+)(&|$)'));

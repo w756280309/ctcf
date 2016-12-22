@@ -3,6 +3,7 @@
 namespace wap\assets;
 
 use yii\web\AssetBundle;
+use common\assets\FeAsset;
 
 class WapAsset extends AssetBundle
 {
@@ -14,12 +15,9 @@ class WapAsset extends AssetBundle
     ];
     public $js = [
         'js/common.js?v=20161123',
-        'js/lib.js',
-        'js/jquery.cookie.js',
-        'js/hmsr.js?v=20161019',
     ];
     public $depends = [
-        'yii\web\JqueryAsset',
+        FeAsset::class,
     ];
     public $jsOptions = [
         'position' => 1,

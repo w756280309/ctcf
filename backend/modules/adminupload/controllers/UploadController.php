@@ -2,9 +2,9 @@
 
 namespace backend\modules\adminupload\controllers;
 
-use Yii;
 use backend\controllers\BaseController;
 use common\models\Upload;
+use Yii;
 use yii\web\UploadedFile;
 use yii\data\Pagination;
 
@@ -12,6 +12,9 @@ class UploadController extends BaseController
 {
     private $extensions = ['jpg', 'png'];
 
+    /**
+     * 文件上传功能列表页.
+     */
     public function actionIndex()
     {
         $title = Yii::$app->request->get('title');
@@ -28,22 +31,27 @@ class UploadController extends BaseController
         $pages = new Pagination(['totalCount' => $uploadInfo->count(), 'pageSize' => '10']);
         $model = $uploadInfo->offset($pages->offset)->limit($pages->limit)->orderBy('id desc')->all();
 
-        return $this->render("index", ['model' => $model, 'pages' => $pages, 'title' => $title, 'extension'=>$this->extensions]);
+        return $this->render('index', [
+            'model' => $model,
+            'pages' => $pages,
+            'title' => $title,
+            'extension' => $this->extensions,
+        ]);
     }
 
+    /**
+     * 文件上传功能编辑添加页.
+     */
     public function actionEdit($id = null)
     {
         if (!empty($id)) {
-            $model = Upload::findOne($id);
-            if (null === $model) {
-                throw $this->ex404();
-            }
+            $model = $this->findOr404(Upload::class, $id);
         } else {
             $model = new Upload();
             //去除首次显示错误
             if (!empty(Yii::$app->request->post())) {
                 if (!isset($_FILES['Upload']['tmp_name']['link']) || '' === $_FILES['Upload']['tmp_name']['link']) {
-                    $model->addError("link", "图片不能为空");
+                    $model->addError('link', '图片不能为空');
                 }
             }
         }
@@ -55,13 +63,19 @@ class UploadController extends BaseController
                     unset($model->link);
                 }
                 if ($model->save(false)) {
-                    return $this->redirect("index");
+                    return $this->redirect('index');
                 }
             }
         }
-        return $this->render("edit", ['model'=>$model]);
+
+        return $this->render('edit', [
+            'model' => $model,
+        ]);
     }
 
+    /**
+     * 删除文件.
+     */
     public function actionDelete($id)
     {
         $model = Upload::findOne($id);
@@ -75,7 +89,7 @@ class UploadController extends BaseController
     }
 
     /**
-     * 检查上传图片
+     * 检查上传图片.
      */
     private function uploadImage(Upload $obj)
     {

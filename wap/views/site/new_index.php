@@ -10,7 +10,7 @@ use common\view\LoanHelper;
 use yii\helpers\Html;
 
 ?>
-<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/base.css?v=2.0">
+<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/base.css">
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/index/css/index.css?v=2.0">
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>libs/swiper/swiper.min.css">
 <script src="<?= FE_BASE_URI ?>libs/lib.flexible.js"></script>
@@ -34,7 +34,6 @@ use yii\helpers\Html;
         <p><span>10%</span>预期年化率</p>
         <a href="/deal/deal/index">去投资</a>
     </div>
-
 </header>
 <section>
     <div class="introduce"><a href="/site/h5?wx_share_key=h5"><img src="<?= FE_BASE_URI ?>wap/index/images/introduce.png" alt=""></a></div>
@@ -220,9 +219,9 @@ use yii\helpers\Html;
 
     $(function () {
         /*$('.close_splash').on('click', closeAdv);
-        if ($.cookie('splash_show') !== "20161214") {
+        if (Cookies.get('splash_show') !== '20161214') {
             document.body.addEventListener('touchmove', eventTarget);
-            $.cookie('splash_show', "20161214");
+            Cookies.set('splash_show', '20161214');
             $('.mask').show();
             $('.pop').show();
             setTimeout(closeAdv, 4000);

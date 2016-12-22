@@ -1,14 +1,12 @@
 <?php
 
+use common\assets\FeAsset;
 use common\models\growth\PageMeta;
 use common\view\AnalyticsHelper;
 use common\view\WxshareHelper;
 use yii\helpers\Html;
-use yii\web\JqueryAsset;
 
-$this->registerJsFile(ASSETS_BASE_URI.'js/jquery.cookie.js', ['depends' => JqueryAsset::class, 'position' => 1]);
-$this->registerJsFile(ASSETS_BASE_URI.'js/hmsr.js', ['depends' => JqueryAsset::class, 'position' => 1]);
-
+FeAsset::register($this);
 AnalyticsHelper::registerTo($this);
 WxshareHelper::registerTo($this, $this->share);
 

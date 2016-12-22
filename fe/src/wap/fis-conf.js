@@ -23,7 +23,8 @@ fis.match('**.css', {
     optimizer: fis.plugin('clean-css'),
     //发布到/dist/v2对应的目录下
     release: 'dist/'+assetsRootPath+wapAssetsRootPath+'/$0',
-    url:baseUrl+wapAssetsRootPath+'$0'
+    url:baseUrl+wapAssetsRootPath+'$0',
+    standard: false
 });
 
 // 所有image目录下的.png，.gif文件
@@ -36,6 +37,24 @@ fis.match('**.{png,jpg,gif,jpeg}', {
 
 // libs 下文件
 fis.match('libs/**.*', {
+    //发布到/dist/v2对应的目录下
+    optimizer:null,
+    standard: false,
+    release: 'dist/'+assetsRootPath+'$0',
+    url:baseUrl+'$0'
+});
+
+// common 下文件
+fis.match('common/**.*', {
+    //发布到/dist/v2对应的目录下
+    optimizer:null,
+    standard: false,
+    release: 'dist/'+assetsRootPath+wapAssetsRootPath+'$0',
+    url:baseUrl+'$0'
+});
+
+// libs 下文件
+fis.match('res/**.*', {
     //发布到/dist/v2对应的目录下
     optimizer:null,
     standard: false,

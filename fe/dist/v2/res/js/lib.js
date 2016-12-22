@@ -1,4 +1,5 @@
 var WDJF = {};
+
 /**
  * 为金额添加千分位显示
  * @param double|string amount 金额的数字或字符串
@@ -12,7 +13,12 @@ WDJF.numberFormat = function (amount, stripTrailingZeros) {
         return (new Number(amount).toFixed(2) + '').replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,');
     }
 };
-function accDiv(arg1, arg2) {
+
+/**
+ * 除法运算.
+ */
+function accDiv(arg1, arg2)
+{
     var t1 = 0, t2 = 0, r1, r2;
     try {
         t1 = arg1.toString().split(".")[1].length
@@ -28,7 +34,12 @@ function accDiv(arg1, arg2) {
         return (r1 / r2) * pow(10, t2 - t1);
     }
 }
-function accMul(arg1, arg2) {
+
+/**
+ * 乘法运算.
+ */
+function accMul(arg1, arg2)
+{
     var m = 0, s1 = arg1.toString(), s2 = arg2.toString();
     try {
         m += s1.split(".")[1].length
@@ -40,10 +51,12 @@ function accMul(arg1, arg2) {
     }
     return Number(s1.replace(".", "")) * Number(s2.replace(".", "")) / Math.pow(10, m)
 }
+
 /**
- * 加法运算
+ * 加法运算.
  */
-function accAdd(arg1, arg2) {
+function accAdd(arg1, arg2)
+{
     var r1, r2, m;
     try {
         r1 = arg1.toString().split(".")[1].length
@@ -60,7 +73,7 @@ function accAdd(arg1, arg2) {
 }
 
 /**
- *减法函数
+ * 减法函数.
  */
 function accSub(arg1, arg2)
 {
@@ -81,9 +94,10 @@ function accSub(arg1, arg2)
 }
 
 /**
- * 取模运算
+ * 取模运算.
  */
-function accMod(arg1, arg2) {
+function accMod(arg1, arg2)
+{
     var r1, r2, m, n;
     try {
         r1 = arg1.toString().split(".")[1].length;
@@ -100,8 +114,6 @@ function accMod(arg1, arg2) {
     var r = (((arg1 * m) % (arg2 * m)) / m).toFixed(n);
     return r > 0 ? r : "0";
 }
-
-
 
 function mianmi(url)
 {
@@ -172,4 +184,3 @@ function alertMessage(message, url, reload)
         }
     });
 }
-

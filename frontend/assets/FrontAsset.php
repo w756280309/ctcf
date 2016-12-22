@@ -2,6 +2,7 @@
 
 namespace frontend\assets;
 
+use common\assets\FeAsset;
 use yii\web\AssetBundle;
 
 class FrontAsset extends AssetBundle
@@ -12,12 +13,9 @@ class FrontAsset extends AssetBundle
         'css/base.css',
     ];
     public $js = [
-        'js/lib.js?161123',
-        'js/jquery.cookie.js',
-        'js/hmsr.js?v=20161019',
     ];
     public $depends = [
-        'yii\web\JqueryAsset',
+        FeAsset::class,
     ];
     public $jsOptions = [
         'position' => 1,

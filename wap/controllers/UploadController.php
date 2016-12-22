@@ -3,27 +3,38 @@
 namespace app\controllers;
 
 use common\controllers\HelpersTrait;
+use common\models\adv\Share;
 use common\models\product\Issuer;
 use common\models\Upload;
-use yii;
 use yii\web\Controller;
 
 class UploadController extends Controller
 {
     use HelpersTrait;
 
-    public function actionShowpic($id)
+    /**
+     * 纯图片活动页面.
+     */
+    public function actionShowpic($id, $wx_share_key = null)
     {
-        $this->layout = false;
+        $this->layout = '@app/views/layouts/fe';
+
         if (empty($id) || is_int($id)) {
             throw $this->ex404();
         }
-        $model = Upload::find()->where(['isDeleted' => 0, 'id'=>$id, 'allowHtml'=>1])->one();
-        if (null === $model) {
-            throw $this->ex404();
+
+        $model = $this->findOr404(Upload::class, ['isDeleted' => 0, 'id' => $id, 'allowHtml' => 1]);
+
+        $share = null;
+        if (null !== $wx_share_key) {
+            $share = Share::findOne(['shareKey' => $wx_share_key]);
         }
 
-        return $this->render("@wap/views/showpic.php", ['model'=>$model]);
+
+        return $this->render('showpic', [
+            'model' => $model,
+            'share' => $share,
+        ]);
     }
 
     /**

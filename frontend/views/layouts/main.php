@@ -2,10 +2,10 @@
 
 use common\models\growth\PageMeta;
 use common\view\AnalyticsHelper;
+use frontend\assets\FrontAsset;
 use yii\helpers\Html;
 
-frontend\assets\FrontAsset::register($this);
-
+FrontAsset::register($this);
 AnalyticsHelper::registerTo($this);
 
 $meta = PageMeta::getMeta(Yii::$app->request->absoluteUrl);
@@ -30,6 +30,7 @@ $this->registerMetaTag([
 ]);
 
 ?>
+
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
 <html lang="<?= Yii::$app->language ?>">
