@@ -21,5 +21,8 @@ if (!defined('ASSETS_BASE_URI')) {
 if (!defined('UPLOAD_BASE_URI')) {
     define('UPLOAD_BASE_URI', Yii::$app->params['upload_base_uri']);
 }
+if (!defined('FE_BASE_URI')) {
+    define('FE_BASE_URI', Yii::$app->params['fe_base_uri']);
+}
 require(__DIR__ . '/../../common/config/di.php');//增加di引入，必须放置于此方可调用Yii::$app等
 $application->run();
