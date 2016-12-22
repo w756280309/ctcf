@@ -37,4 +37,12 @@ class PromoController extends BaseController
     {
         return $this->render('@frontend/views/promo/201608/olympic.php');
     }
+
+    /**
+     * 圣诞砸蛋活动页.
+     */
+    public function actionZadan161224()
+    {
+        return $this->render('@frontend/views/promo/201612/zadan.php');
+    }
 }
