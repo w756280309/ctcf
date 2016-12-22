@@ -21,8 +21,8 @@ use yii\behaviors\TimestampBehavior;
  * @property integer $isPaid        是否已经扣除积分
  * @property integer $status        订单状态 0初始，1成功，-1失败，-2撤销,-3未知
  * @property string $mallUrl        兑吧发起订单请求的URL
- * @property integer $createdAt
- * @property integer $updatedAt
+ * @property integer $created_at
+ * @property integer $updated_at
  */
 class PointOrder extends \yii\db\ActiveRecord
 {
@@ -47,7 +47,7 @@ class PointOrder extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['user_id', 'points', 'isPaid', 'status', 'createdAt', 'updatedAt'], 'integer'],
+            [['user_id', 'points', 'isPaid', 'status', 'created_at', 'updated_at'], 'integer'],
             [['orderTime'], 'safe'],
             [['sn'], 'string', 'max' => 32],
             [['orderNum', 'mallUrl', 'type'], 'string', 'max' => 255],
@@ -70,8 +70,8 @@ class PointOrder extends \yii\db\ActiveRecord
             'isPaid' => 'Is Paid',
             'status' => 'Status',
             'mallUrl' => 'Mall Url',
-            'createdAt' => 'Created At',
-            'updatedAt' => 'Updated At',
+            'created_at' => 'Created At',
+            'updated_at' => 'Updated At',
         ];
     }
 
