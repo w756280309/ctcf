@@ -1,4 +1,5 @@
 <?php
+
 $this->title = '转让详情';
 
 use common\utils\StringUtils;
@@ -16,10 +17,12 @@ $nowTime = new \DateTime();
 $endTime = new \DateTime($respData['endTime']);
 $isClosed = $respData['isClosed'] || $nowTime >= $endTime;
 
-$this->registerCssFile(ASSETS_BASE_URI.'css/credit/detail.css?v=20161205', ['depends' => 'wap\assets\WapAsset']);
+$this->registerCssFile(ASSETS_BASE_URI.'css/credit/detail.css?v=20161217', ['depends' => 'wap\assets\WapAsset']);
 $this->registerJs('var remainTime = '.strtotime($isClosed ? 'now' : $respData['endTime']).';', 1);
 $this->registerJsFile(ASSETS_BASE_URI.'js/credit/detail.js?v=161027', ['depends' => 'wap\assets\WapAsset']);
+
 ?>
+
 <div class="row daojishi">
     <div class="col-xs-12">
         <div><!--距离结束：2天7时22分18秒--></div>
@@ -27,7 +30,18 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/credit/detail.js?v=161027', ['depends'
 </div>
 <div class="row column">
     <div class="col-xs-12 column-title">
-        <div>【转让】</div><span><?= $loan->title ?></span>
+        <div class="clearfix">
+            <div>【转让】</div>
+            <span><?= $loan->title ?></span>
+        </div>
+        <?php
+            $config = json_decode($respData['config'], true);
+            $currTradeCount = intval($respData['asset']['tradeCount']);
+
+            if ($config['trade_count_limit'] > $currTradeCount) {
+        ?>
+            <i class="tap">可转让</i>
+        <?php } ?>
     </div>
     <div class="row xuxian">
         <div class="col-xs-12">

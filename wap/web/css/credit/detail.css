@@ -8,7 +8,6 @@
     padding-top: 15px;
     padding-bottom: 10px;
     font-size: 16px;
-    line-height: 60px;
     color: #131313;
 }
 .column-title span{
@@ -16,10 +15,22 @@
     line-height: 20px;
     margin-left: 60px;
 }
-.column-title div {
+.column-title .clearfix {
+    position: relative;
+}
+.column-title .clearfix div {
     position: absolute;
-    left: 16px;
-    top: -5px;
+    left: 0px;
+    top: -2px;
+}
+.tap {
+    font-style: normal;
+    font-size: 12px;
+    background-color: #ffe6e4;
+    color: #f44336;
+    border-radius: 5px;
+    padding: 2px 5px;
+    margin-left: 7px;
 }
 .column-title-rg {
     position: absolute;
