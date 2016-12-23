@@ -35,6 +35,6 @@ use common\utils\StringUtils;
         </li>
     </ul>
 </div>
-<a href="#" class="shoprecord">
+<a href="/mall/portal/record" class="shoprecord">
     兑换记录
 </a>
