@@ -14,6 +14,7 @@ use common\models\order\OnlineRepaymentPlan;
 use common\models\payment\Repayment;
 use common\models\product\Issuer;
 use common\models\product\OnlineProduct;
+use common\models\promo\PromoService;
 use common\models\user\MoneyRecord;
 use common\models\user\User;
 use common\models\user\UserAccount;
@@ -699,6 +700,13 @@ class ProductonlineController extends BaseController
                 //确认计息完成之后将标的添加至保全队列
                 $job = new BaoQuanQueue(['itemId' => $id, 'status' => BaoQuanQueue::STATUS_SUSPEND, 'itemType' => BaoQuanQueue::TYPE_LOAN]);
                 $job->save();
+
+                //确认计息之后给用户赠送积分
+                try {
+                    PromoService::doAfterLoanJixi($model);
+                } catch (\Exception $ex) {
+
+                }
 
                 return ['result' => '1', 'message' => '操作成功'];
             }

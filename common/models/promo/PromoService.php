@@ -3,6 +3,7 @@
 namespace common\models\promo;
 
 use common\models\order\OnlineOrder;
+use common\models\product\OnlineProduct;
 use common\models\user\User;
 use wap\modules\promotion\models\RankingPromo;
 
@@ -79,6 +80,26 @@ class PromoService
             if (method_exists($model, 'doAfterSuccessLoanOrder')) {
                 try {
                     $model->doAfterSuccessLoanOrder($order);
+                } catch (\Exception $ex) {
+
+                }
+            }
+        }
+    }
+
+    /**
+     * 标的确认计息之后的活动统一调用逻辑
+     * @param OnlineOrder $order
+     * @throws \Exception
+     */
+    public static function doAfterLoanJixi(OnlineProduct $loan)
+    {
+        $promos = self::getActivePromo();
+        foreach ($promos as $promo) {
+            $model = new $promo->promoClass($promo);
+            if (method_exists($model, 'doAfterLoanJixi')) {
+                try {
+                    $model->doAfterLoanJixi($loan);
                 } catch (\Exception $ex) {
 
                 }
