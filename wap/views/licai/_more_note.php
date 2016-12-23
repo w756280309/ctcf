@@ -11,8 +11,10 @@ use common\utils\StringUtils;
         $nowTime = new \DateTime();
         $tradedAmount = $note['tradedAmount'];
         $amount = $note['amount'];
+        $isTransfered = $note['isClosed'] || $nowTime >= $endTime;
+
         //转让中状态应对应为：isClosed=false
-        $progress = ($note['isClosed'] || $nowTime >= $endTime) ? 100 : bcdiv(bcmul($tradedAmount, '100'), $amount, 0);
+        $progress = $isTransfered ? 100 : bcdiv(bcmul($tradedAmount, '100'), $amount, 0);
     ?>
     <a class="row col" href="/credit/note/detail?id=<?= $note['id'] ?>">
         <div class="col-xs-12 col-sm-12 col-txt">
@@ -22,7 +24,7 @@ use common\utils\StringUtils;
                 </div>
                 <div class="col-xs-2 col-sm-2 col-title">
                     <?php
-                        if ($note['isClosed'] || $nowTime >= $endTime) {
+                        if ($isTransfered) {
                     ?>
                         <i class="credit-staus credit-staus-over">已转让</i>
                     <?php
@@ -36,7 +38,7 @@ use common\utils\StringUtils;
             </div>
             <div class="row credit-all clearfix" >
                 <div class="col-xs-4">
-                    <span class="rate-steps">
+                    <span class="rate-steps <?= !$isTransfered ? 'specialcolor' : '' ?>">
                         <?=
                             null === $order ? '' : StringUtils::amountFormat2(bcmul($order->yield_rate, 100, 2));
                         ?><i class="col-lu">%</i></span>
