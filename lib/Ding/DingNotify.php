@@ -68,6 +68,9 @@ class DingNotify
         if (empty($user)) {
             $user = \Yii::$app->params['ding_notify_list'];
         }
+        if (empty($user)) {
+            exit();
+        }
         $user = implode('|',$user);
         $content = '[系统通知 '.date('Y-m-d H:i:s').']'. "\n" . $content;
         $text = new Text($content);
