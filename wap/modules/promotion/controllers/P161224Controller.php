@@ -41,19 +41,18 @@ class P161224Controller extends Controller
     {
         $rank = RankingPromo::findOne(['key' => 'promo_golden_egg']);
 
+        $user = $this->getAuthedUser();
+        try {
+            $rank->isActive($user);
+        } catch (\Exception $e) {
+            return ['code' => 102, 'msg' => $e->getMessage()];
+        }
+
         if (\Yii::$app->user->isGuest) {
             return ['code' => 101, 'msg' => '蛋壳太硬了！登录后再砸吧！'];
         }
 
-        try {
-            $user = $this->getAuthedUser();
-            $rank->isActive($user);
-        } catch (\Exception $e) {
-            return ['code' => 101, 'msg' => $e->getMessage()];
-        }
-
         $goldenEgg = new GoldenEgg($rank);
-        $user = $this->getAuthedUser();
         if (0 === $goldenEgg->getRestTicketCount($user)) {
             return ['code' => 102, 'msg' => '没有砸蛋机会了~ 快去投资吧！'];
         }
