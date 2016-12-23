@@ -17,6 +17,7 @@ class MallController extends Controller
     public function actionInit()
     {
         $requestUrl = Yii::$app->request->absoluteUrl;
+        Yii::info('[mall_notify][init_point_order] 兑吧发起扣除积分回调，回调url：' . $requestUrl, 'notify');
         $requestParams = Yii::$app->request->queryParams;
         $appKey = Yii::$app->params['mall_settings']['app_key'];
         $appSecret = Yii::$app->params['mall_settings']['app_secret'];
@@ -69,7 +70,6 @@ class MallController extends Controller
                 'isPaid' => true,
                 'orderTime' => $orderTime,
                 'status' => PointOrder::STATUS_INIT,
-                'mallUrl' => $requestUrl,
             ]);
             $res = $order->save();
             if (!$res) {
@@ -108,6 +108,8 @@ class MallController extends Controller
     //兑吧订单结果通知接口
     public function actionResult()
     {
+        $requestUrl = Yii::$app->request->absoluteUrl;
+        Yii::info('[mall_notify][pint_order_result] 兑吧发起订单结果通知回调，回调url：' . $requestUrl, 'notify');
         $requestParams = Yii::$app->request->queryParams;
         $appKey = Yii::$app->params['mall_settings']['app_key'];
         $appSecret = Yii::$app->params['mall_settings']['app_secret'];

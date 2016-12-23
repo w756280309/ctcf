@@ -20,7 +20,6 @@ use yii\behaviors\TimestampBehavior;
  * @property string $orderTime      订单时间（兑吧请求我们传的时间,订单一律以此为准）
  * @property integer $isPaid        是否已经扣除积分
  * @property integer $status        订单状态 0初始，1成功，-1失败，-2撤销,-3未知
- * @property string $mallUrl        兑吧发起订单请求的URL
  * @property integer $created_at
  * @property integer $updated_at
  */
@@ -50,7 +49,7 @@ class PointOrder extends \yii\db\ActiveRecord
             [['user_id', 'points', 'isPaid', 'status', 'created_at', 'updated_at'], 'integer'],
             [['orderTime'], 'safe'],
             [['sn'], 'string', 'max' => 32],
-            [['orderNum', 'mallUrl', 'type'], 'string', 'max' => 255],
+            [['orderNum', 'type'], 'string', 'max' => 255],
         ];
     }
 
@@ -69,7 +68,6 @@ class PointOrder extends \yii\db\ActiveRecord
             'orderTime' => 'Order Time',
             'isPaid' => 'Is Paid',
             'status' => 'Status',
-            'mallUrl' => 'Mall Url',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];
