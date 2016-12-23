@@ -70,11 +70,20 @@ class ThirdPartyConnect extends ActiveRecord
     *  通过此方法生成的地址，可以让用户免登录，进入积分兑换商城
     */
     public static function buildCreditAutoLoginRequest($appKey,$appSecret,$uid,$credits, $redirect = ""){
-        $url = "http://www.duiba.com.cn/autoLogin/autologin?";
-        $timestamp=time()*1000 . "";
-        $array=array("uid"=>$uid,"credits"=>$credits,"appSecret"=>$appSecret,"appKey"=>$appKey,"timestamp"=>$timestamp);
-        $sign=self::sign($array);
-        $url = $url . "uid=" . $uid . "&credits=" . $credits . "&appKey=" . $appKey . "&timestamp=". $timestamp."&sign=" . $sign ;
+        $url =  rtrim(\Yii::$app->params['mall_settings']['url'], '/'). "/autoLogin/autologin?";
+        $timestamp = time() * 1000 . "";
+        $array = [
+            "uid" => $uid,
+            "credits" => $credits,
+            "appSecret" => $appSecret,
+            "appKey" => $appKey,
+            "timestamp" => $timestamp
+        ];
+        if (!empty($redirect)) {
+            $array['redirect'] = $redirect;
+        }
+        $sign = self::sign($array);
+        $url = $url . "uid=" . $uid . "&credits=" . $credits . "&appKey=" . $appKey . "&timestamp=" . $timestamp . "&sign=" . $sign;
         if (!empty($redirect)) {
             $url .= "&redirect=" . urlencode($redirect);
         }
