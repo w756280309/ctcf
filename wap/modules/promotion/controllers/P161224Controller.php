@@ -59,7 +59,7 @@ class P161224Controller extends Controller
 
         try {
             $lottery = $goldenEgg->draw($user);
-            return array_merge(['code' => 200], $goldenEgg::getAward($lottery->reward_id));
+            return array_merge(['code' => 200], $goldenEgg::getPrize($lottery->reward_id));
         } catch (\Exception $ex) {
             return ['code' => 400, 'msg' => '抽奖失败，请联系客服，客服电话' . \Yii::$app->params['contact_tel']];
         }

@@ -23,7 +23,7 @@ $this->registerJsFile(ASSETS_BASE_URI . 'promo/161224/js/smash-golden-eggs.js', 
     <div class="row banner-box">
         <div class="col-xs-12">
             <img src="<?= ASSETS_BASE_URI ?>promo/161224/images/smash-golden-eggs/banner1.png" alt="">
-            <?php if (date('Y-m-d', $model->startAt) > date('Y-m-d')) { ?>
+            <?php if (date('Y-m-d', $model->startAt) > date('Y-m-d') || !$model->isOnline) { ?>
                 <div class="banner-opportunity">活动未开始</div>
             <?php } elseif (date('Y-m-d', $model->endAt) < date('Y-m-d')) { ?>
                 <div class="banner-opportunity">活动已结束</div>

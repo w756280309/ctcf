@@ -44,6 +44,34 @@ class GoldenEgg
     public static function getAwardList()
     {
         return [
+            self::AWARD_1 => ['name' => '10元代金券', 'couponSn' => self::getCouponConfig(self::AWARD_1)],
+            self::AWARD_2 => ['name' => '50元代金券', 'couponSn' => self::getCouponConfig(self::AWARD_2)],
+            self::AWARD_3 => ['name' => '手机指环扣', 'couponSn' => ''],
+            self::AWARD_4 => ['name' => '食用油', 'couponSn' => ''],
+            self::AWARD_5 => ['name' => '888元大礼包', 'couponSn' => ''],
+            self::AWARD_6 => ['name' => '水晶米', 'couponSn' => ''],
+            self::AWARD_7 => ['name' => '不粘锅', 'couponSn' => ''],
+            self::AWARD_8 => ['name' => '碗筷套装', 'couponSn' => ''],
+        ];
+    }
+
+    //获取某个奖品信息
+    public static function getAward($awardId)
+    {
+        $awardList = self::getAwardList();
+        return isset($awardList[$awardId]) ? $awardList[$awardId] : '';
+    }
+
+    /**
+     * 获取中奖信息
+     *
+     * 用于前台返回
+     *
+     * @return array
+     */
+    public static function getReturnList()
+    {
+        return [
             self::AWARD_1 => ['msg' => '获得10元代金券一张', 'isCoupon' => true],
             self::AWARD_2 => ['msg' => '获得50元代金券一张', 'isCoupon' => true],
             self::AWARD_3 => ['msg' => '获得手机指环扣一个', 'isCoupon' => false],
@@ -55,10 +83,10 @@ class GoldenEgg
         ];
     }
 
-    //获取某个奖品信息
-    public static function getAward($awardId)
+    //获取某个奖品信息-用于前台返回
+    public static function getPrize($awardId)
     {
-        $awardList = self::getAwardList();
+        $awardList = self::getReturnList();
         return isset($awardList[$awardId]) ? $awardList[$awardId] : '';
     }
 
