@@ -7,8 +7,9 @@ use common\utils\StringUtils;
 use wap\assets\WapAsset;
 use yii\helpers\HtmlPurifier;
 
-$this->registerCssFile(ASSETS_BASE_URI.'css/xiangqing.css?v=20161221', ['depends' => WapAsset::class, 'position' => 1]);
-
+$this->registerCssFile(FE_BASE_URI.'libs/videojs/video-js.min.css', ['position' => 1]);
+$this->registerCssFile(ASSETS_BASE_URI.'css/xiangqing.css?v=20161222', ['depends' => WapAsset::class, 'position' => 1]);
+$this->registerJsFile(FE_BASE_URI.'libs/videojs/video.min.js', ['position' => 1]);
 ?>
 
 <div class="row column">
@@ -143,10 +144,10 @@ $this->registerCssFile(ASSETS_BASE_URI.'css/xiangqing.css?v=20161221', ['depends
         </div>
         <p class="video-title col-xs-12 col-sm-12 col-zero"><?= $deal->issuerInfo->mediaTitle ?></p>
         <div id="video-wrap" class="video-wrap col-xs-12 col-sm-12 col-zero">
-            <video id="video" class="video"
+            <video id="video" class="media video-js vjs-default-skin"
                    webkit-playsinline playsinline controls preload="none"
-                   poster="<?= $deal->issuerInfo->videoImg ? UPLOAD_BASE_URI.$deal->issuerInfo->videoImg->uri : '' ?>"
-                   src="<?= $deal->issuerInfo->video->uri ?>">
+                   poster="<?= $deal->issuerInfo->videoImg ? UPLOAD_BASE_URI.$deal->issuerInfo->videoImg->uri : '' ?>">
+                <source src="<?= $deal->issuerInfo->video->uri ?>">
             </video>
         </div>
     </div>
