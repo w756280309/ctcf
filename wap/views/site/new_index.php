@@ -179,7 +179,7 @@ use yii\helpers\Html;
 
 <div class="pop" style="display: none;">
     <img src="<?= FE_BASE_URI ?>wap/index/images/close.png" class="close_splash" alt="">
-    <img src="<?= FE_BASE_URI ?>wap/index/images/kaiping.png" class="jumpAdv" alt="">
+    <img src="<?= ASSETS_BASE_URI ?>images/kp.jpg" class="jumpAdv" alt="">
 </div>
 <script src="<?= ASSETS_BASE_URI ?>js/swiper.min.js"></script>
 <script>
@@ -219,19 +219,19 @@ use yii\helpers\Html;
     }
 
     $(function () {
-        /*$('.close_splash').on('click', closeAdv);
-        if ($.cookie('splash_show') !== "20161214") {
+        $('.close_splash').on('click', closeAdv);
+        if ($.cookie('splash_show') !== '20161223') {
             document.body.addEventListener('touchmove', eventTarget);
-            $.cookie('splash_show', "20161214");
+            $.cookie('splash_show', '20161223');
             $('.mask').show();
             $('.pop').show();
             setTimeout(closeAdv, 4000);
-        }*/
+        }
         //判断首页上方
         checkStatus();
 
         $('.jumpAdv').on('click', function () {
-            location.href = '/promotion/p1612/double-twelves?wx_share_key=14813409247';
+            location.href = '/promotion/p161224';
         });
         var host = location.host;
         if(host.split('.')[0] === 'app') {
