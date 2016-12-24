@@ -378,7 +378,7 @@ class Promo1212
         $moneyRecord = (int) MoneyRecord::find()->where(['uid' => $user->id])->andWhere(['in', 'type', [MoneyRecord::TYPE_ORDER, MoneyRecord::TYPE_CREDIT_NOTE]])->count();
 
         //如果此人参加了该活动且现金红包未发，则该人只有一笔投资或转让的流水，即只发生一笔订单
-        if (null !== $lottery && $moneyRecord === 1) {
+        if (null !== $lottery && $moneyRecord > 0) {
             $db = \Yii::$app->db;
             $transaction = $db->beginTransaction();
             try {
