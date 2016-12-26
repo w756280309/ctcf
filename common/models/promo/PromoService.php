@@ -10,14 +10,13 @@ use wap\modules\promotion\models\RankingPromo;
 class PromoService
 {
     /**
-     * 获取对指定用户有效的活动
+     * 获取对指定用户有效的活动[查找所有活动，活动是否有效在具体调用方法中自行判断]
      * @return array
      * @throws \Exception
      */
     private static function getActivePromo()
     {
-        $time = time();
-        $promos = RankingPromo::find()->andWhere(['>=', 'endAt', $time])->andWhere(['<=', 'startAt', $time])->andWhere('`key` is not null')->andWhere('promoClass is not null')->all();
+        $promos = RankingPromo::find()->where('`key` is not null')->andWhere('promoClass is not null')->all();
         $data = [];
         foreach ($promos as $promo) {
             if (class_exists($promo->promoClass)) {

@@ -24,7 +24,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/clipboard.min.js', ['depends' => 'fron
         </div>
         <div class="footer-five-copyright">Copyright ©温州温都金融信息服务股份有限公司 浙ICP备16003187号-1 浙公网安备 33030202000311号</div>
         <div class="footer-first-ma">
-            <img src="<?= ASSETS_BASE_URI ?>images/ma.png" alt="">
+            <img src="<?= ASSETS_BASE_URI ?>images/ma-new.png" alt="">
             <div>访问手机wap版</div>
         </div>
     </div>

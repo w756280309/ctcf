@@ -9,8 +9,10 @@ use common\models\order\OnlineRepaymentPlan;
 use common\models\order\OnlineRepaymentRecord;
 use common\models\payment\Repayment;
 use common\models\product\OnlineProduct;
+use common\models\user\User;
 use common\models\user\UserInfo;
 use Ding\DingNotify;
+use wap\modules\promotion\models\RankingPromo;
 use yii\console\Controller;
 use Yii;
 
@@ -172,5 +174,24 @@ class DataController extends Controller
         $string .= PHP_EOL;
         $string .= "]" . PHP_EOL;
         file_put_contents($file, $string, FILE_APPEND);
+    }
+
+    //双十二抽奖活动，给用户发红包
+    public function actionPromoAddUserCash($id)
+    {
+        $user = User::findOne($id);
+        if (!empty($user)) {
+            try {
+                $promo = RankingPromo::findOne(['key' => 'promo_12_12_21']);
+                if (class_exists($promo->promoClass)) {
+                    $model = new $promo->promoClass($promo);
+                    if (method_exists($model, 'doAfterSuccessLoanOrder')) {
+                        return $model->doAfterSuccessLoanOrder($user);
+                    }
+                }
+            } catch (\Exception $ex) {
+                echo $ex->getMessage();
+            }
+        }
     }
 }
