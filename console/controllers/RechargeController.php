@@ -3,7 +3,9 @@
 namespace console\controllers;
 
 use common\models\user\RechargeRecord;
+use common\models\user\User;
 use common\service\AccountService;
+use Ding\DingNotify;
 use Yii;
 use yii\console\Controller;
 
@@ -29,6 +31,13 @@ class RechargeController extends Controller
                     $acc_ser->confirmRecharge($rc);
                 } elseif ('3' === $resp->get('tran_state') || '5' === $resp->get('tran_state')) {
                     $rc->status = RechargeRecord::STATUS_FAULT;
+                    $user = User::findOne($rc->uid);
+                    try {
+                        if (!empty($user)) {
+                            (new DingNotify('wdjf'))->sendToUsers('用户[' . $user->mobile . ']，于' . date('Y-m-d H:i:s', $rc->created_at) . ' 进行充值操作，操作失败，联动返回信息：' . $resp->get('ret_msg'));
+                        }
+                    } catch (\Exception $ex) {
+                    }
                 }
             }
 

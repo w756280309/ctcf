@@ -75,7 +75,6 @@ class QpaynotifyController extends Controller
         if (array_key_exists('token', $data)) {
             unset($data['token']);
         }
-        $epayUser = EpayUser::findOne(['epayUserId' => $data['user_id']]);
         if (
             Yii::$container->get('ump')->verifySign($data)
             && '0000' === $data['ret_code']
@@ -88,6 +87,7 @@ class QpaynotifyController extends Controller
                 && array_key_exists('account_id', $data) && null !== $data['account_id']
                 && array_key_exists('mobile_id', $data) && null !== $data['mobile_id']
             ) {
+                $epayUser = EpayUser::findOne(['epayUserId' => $data['user_id']]);
                 if (null === $epayUser) {
                     throw new Exception($data['user_id'].'此用户不存在');
                 }
@@ -127,10 +127,6 @@ class QpaynotifyController extends Controller
                 throw new NotFoundHttpException($data['order_id'].':无法找到申请数据');
             }
         } else {
-            $user = User::findOne($epayUser->appUserId);
-            if (!empty($user)) {
-                (new DingNotify('wdjf'))->sendToUsers('用户[' . $user->mobile . ']，于' . date('Y-m-d H:i:s') . ' 进行快捷充值操作，操作失败，联动充值失败，失败信息:' . $data['ret_msg']);
-            }
             throw new Exception($data['order_id'].'处理失败');
         }
     }
