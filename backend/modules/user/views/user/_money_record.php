@@ -56,6 +56,14 @@
                     ]);
                     $loan = \common\models\product\OnlineProduct::find()->select('title')->where(['id' => $creditNode['loan_id']])->asArray()->one();
                     return $loan['title'];
+                } elseif ($record->type === MoneyRecord::TYPE_CREDIT_HUIKUAN) {
+                    $userAsset = Yii::$container->get('txClient')->get('assets/detail', [
+                        'id' => $record->osn,
+                    ]);
+                    if ($userAsset && $userAsset['loan_id']) {
+                        $loan = \common\models\product\OnlineProduct::find()->select('title')->where(['id' => $userAsset['loan_id']])->asArray()->one();
+                        return $loan['title'];
+                    }
                 }
                 return '';
             }
