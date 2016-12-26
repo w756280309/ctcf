@@ -24,6 +24,7 @@ class LoanOrderPoints
     public function doAfterLoanJixi(OnlineProduct $loan)
     {
         //todo 理财计划目前是使用 allowUseCoupon 判断，但是需要调整
+        $loan->refresh();
         if ($loan->is_jixi && !$loan->is_xs && $loan->allowUseCoupon) {
             $orders = OnlineOrder::find()->where(['online_pid' => $loan->id, 'status' => OnlineOrder::STATUS_SUCCESS])->all();
             foreach ($orders as $order) {
