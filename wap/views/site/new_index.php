@@ -218,6 +218,8 @@ use yii\helpers\Html;
     }
 
     $(function () {
+        /*
+        //开屏图逻辑
         $('.close_splash').on('click', closeAdv);
         if (Cookies.get('splash_show') !== '20161223') {
             document.body.addEventListener('touchmove', eventTarget);
@@ -226,12 +228,15 @@ use yii\helpers\Html;
             $('.pop').show();
             setTimeout(closeAdv, 4000);
         }
-        //判断首页上方
-        checkStatus();
 
         $('.jumpAdv').on('click', function () {
             location.href = '/promotion/p161224';
         });
+        */
+
+        //判断首页上方
+        checkStatus();
+
         var host = location.host;
         if(host.split('.')[0] === 'app') {
             $('footer').css({'margin-bottom':0});
