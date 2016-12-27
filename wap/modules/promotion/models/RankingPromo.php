@@ -2,6 +2,7 @@
 
 namespace wap\modules\promotion\models;
 
+use common\exception\NotActivePromoException;
 use common\models\user\User;
 use yii\db\ActiveRecord;
 use yii\helpers\ArrayHelper;
@@ -155,21 +156,21 @@ class RankingPromo extends ActiveRecord
      * 判断活动对对指定用户来说是否在进行中
      * @param User|null $user
      * @return bool
-     * @throws \Exception
+     * @throws NotActivePromoException
      */
     public function isActive(User $user = null)
     {
         $time = time();
         if ($time < $this->startAt) {
-            throw  new \Exception('活动未开始');
+            throw new NotActivePromoException($this, '活动未开始');
         }
         if ($time > $this->endAt) {
-            throw  new \Exception('活动已结束');
+            throw new NotActivePromoException($this, '活动已结束');
         }
 
         $whiteList = explode(',', $this->whiteList);
         if (!$this->isOnline && (empty($user) || !in_array($user->mobile, $whiteList))) {
-            throw  new \Exception('活动未开始');
+            throw new NotActivePromoException($this, '活动未开始');
         }
         return true;
     }

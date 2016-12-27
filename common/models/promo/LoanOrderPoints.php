@@ -2,6 +2,7 @@
 
 namespace common\models\promo;
 
+use common\exception\NotActivePromoException;
 use common\models\mall\PointRecord;
 use common\models\order\OnlineOrder;
 use common\models\product\OnlineProduct;
@@ -28,7 +29,10 @@ class LoanOrderPoints
         if ($loan->is_jixi && !$loan->is_xs && $loan->allowUseCoupon) {
             $orders = OnlineOrder::find()->where(['online_pid' => $loan->id, 'status' => OnlineOrder::STATUS_SUCCESS])->all();
             foreach ($orders as $order) {
-                $this->addUserPointsWithLoanOrder($order, $loan);
+                try {
+                    $this->addUserPointsWithLoanOrder($order, $loan);
+                } catch (NotActivePromoException $ex) {
+                }
             }
         }
     }
