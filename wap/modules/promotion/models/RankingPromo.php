@@ -164,7 +164,8 @@ class RankingPromo extends ActiveRecord
         if ($time < $this->startAt) {
             throw new NotActivePromoException($this, '活动未开始');
         }
-        if ($time > $this->endAt) {
+
+        if ($this->endAt && $time > $this->endAt) {
             throw new NotActivePromoException($this, '活动已结束');
         }
 
@@ -172,6 +173,7 @@ class RankingPromo extends ActiveRecord
         if (!$this->isOnline && (empty($user) || !in_array($user->mobile, $whiteList))) {
             throw new NotActivePromoException($this, '活动未开始');
         }
+
         return true;
     }
 }
