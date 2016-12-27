@@ -5,7 +5,7 @@ use yii\helpers\Html;
 $this->title = '购买';
 $this->backUrl = '/credit/note/detail?id='.$respData['id'];
 
-$this->registerCssFile(ASSETS_BASE_URI.'css/credit/order.css?v=20161021', ['depends' => 'wap\assets\WapAsset']);
+$this->registerCssFile(ASSETS_BASE_URI.'css/credit/order.css?v=20161226', ['depends' => 'wap\assets\WapAsset']);
 
 use common\utils\StringUtils;
 

@@ -68,13 +68,10 @@ body{
     color: #fff;
     padding-bottom:1rem;
 }
-.first-line{
-    font-size:1rem;
-    line-height:3rem;
+.first-line {
+    font-size: 1rem;
+    line-height: 1.3rem;
     width: 86%;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
 }
 .col{
     padding-left:20px;

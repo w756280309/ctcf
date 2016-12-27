@@ -87,7 +87,6 @@ div.headpic {
 .produce {
     padding-top: 10px;
     padding-bottom:10px;
-    height:135px;
     font-size:12px;
     color:#fff;
     background: #f44336;
@@ -96,12 +95,12 @@ div.headpic {
     height:26px;
     line-height:20px;
 }
-.produce div.first-hang{
-    padding-left:30px;
-    padding-bottom:15px;
-    height:32px;
-    line-height:30px;
-    font-size:13px;
+.produce div.first-hang {
+    padding-left: 30px;
+    padding-bottom: 15px;
+    height: auto;
+    line-height: 20px;
+    font-size: 13px;
 }
 .eye input {
     width:35px;
