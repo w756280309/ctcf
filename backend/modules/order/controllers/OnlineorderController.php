@@ -4,7 +4,6 @@ namespace backend\modules\order\controllers;
 
 use backend\controllers\BaseController;
 use backend\modules\user\core\v1_0\UserAccountBackendCore;
-use common\lib\bchelp\BcRound;
 use common\models\user\User;
 use common\models\order\OnlineOrder;
 use common\models\product\OnlineProduct;
@@ -12,7 +11,6 @@ use common\utils\StringUtils;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\data\Pagination;
-use yii\helpers\ArrayHelper;
 
 class OnlineorderController extends BaseController
 {
@@ -84,7 +82,7 @@ class OnlineorderController extends BaseController
             ->innerJoin($u, "$o.uid = $u.id")
             ->asArray()
             ->all();
-        $str = "编号,真实姓名,手机号,身份证,投资金额（元）,客户年化率（%）,注册时间,投资时间,状态\n";
+        $exportData[] = ["编号", "真实姓名", "手机号", "身份证", "投资金额（元）", "客户年化率（%）", "注册时间", "投资时间", "状态"];
         if (0 !== count($lists)) {
             foreach ($lists as $list) {
                 if ($list['status'] == 0) {
@@ -96,14 +94,20 @@ class OnlineorderController extends BaseController
                 } else {
                     $status = "无效";
                 }
-                $str .= strval($list['sn']) . "\t," . $list['username'] . ',' . $list['mobile'] . "\t," . strval($list['idcard']) . "\t," . $list['order_money'] . ',' . StringUtils::amountFormat2(bcmul($list['yield_rate'], 100, 2)) . ',' . date('Y-m-d H:i:s', $list['regAt']) . "\t," . date('Y-m-d H:i:s', $list['created_at']) . "\t," . "$status \n";
+                $exportData[] = [
+                    strval($list['sn']),
+                    $list['username'],
+                    strval( $list['mobile']),
+                    strval(strval($list['idcard'])),
+                    floatval($list['order_money']),
+                    StringUtils::amountFormat2(bcmul($list['yield_rate'], 100, 2)),
+                    date('Y-m-d H:i:s', $list['regAt']),
+                    date('Y-m-d H:i:s', $list['created_at']),
+                    $status
+                ];
             }
         }
-        $str = iconv('UTF-8', 'GB18030', $str);//转换编码
-
-        header('Content-Disposition: attachment; filename="invest-records'.time().'.csv"');
-        header('Content-Length: ' . strlen($str)); // 内容的字节数
-        echo $str;
+        \Wcg\Csv\Exporter::export($exportData, 'invest-records'.time().'.csv');
     }
 
     /**
