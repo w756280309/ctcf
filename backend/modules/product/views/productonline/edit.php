@@ -483,6 +483,7 @@ $is_online = in_array($model->status, [2, 3, 4, 5, 6, 7]);//判断标的是否�
                     <label class="control-label">新手专享标</label>
                     <div class="controls">
                         <?=  $form->field($model, 'is_xs')->checkbox(array_merge(['autocomplete' => 'on'], $model->online_status ? ['disabled' => 'disabled', 'uncheck' => $model->is_xs] : []))->label(false) ?>
+                        <?=  $form->field($model, 'isLicai')->checkbox(array_merge(['autocomplete' => 'on'], $model->online_status ? ['disabled' => 'disabled', 'uncheck' => $model->isLicai] : []))->label(false) ?>
                     </div>
                 </div>
             </div>

@@ -46,6 +46,7 @@ use yii\behaviors\TimestampBehavior;
  * @property integer $issuer
  * @property int $isTest
  * @property boolean $allUseCoupon 是否允许使用代金券
+ * @property boolean $isLicai 是否为理财计划标识
  */
 class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
 {
@@ -110,7 +111,7 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
             'create' => ['title', 'sn', 'cid', 'money', 'borrow_uid', 'expires', 'expires_show', 'yield_rate', 'start_money', 'borrow_uid', 'fee', 'status',
                 'description', 'refund_method', 'account_name', 'account', 'bank', 'dizeng_money', 'start_date', 'end_date', 'full_time',
                 'is_xs', 'yuqi_faxi', 'order_limit', 'creator_id', 'del_status', 'status', 'isPrivate', 'allowedUids', 'finish_date', 'channel', 'jixi_time', 'sort',
-                'jiaxi', 'kuanxianqi', 'isFlexRate', 'rateSteps', 'issuer', 'issuerSn', 'paymentDay', 'isTest', 'filingAmount', 'allowUseCoupon', 'tags'],
+                'jiaxi', 'kuanxianqi', 'isFlexRate', 'rateSteps', 'issuer', 'issuerSn', 'paymentDay', 'isTest', 'filingAmount', 'allowUseCoupon', 'tags', 'isLicai'],
         ];
     }
 
@@ -413,6 +414,7 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
             'issuer' => '发行方',
             'issuerSn' => '发行方项目编号',
             'allowUseCoupon' => '是否可以使用代金券',
+            'isLicai' => '是否为理财计划标识',
         ];
     }
 
