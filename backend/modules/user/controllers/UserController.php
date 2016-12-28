@@ -75,7 +75,9 @@ class UserController extends BaseController
                 $fileName = substr($file, strrpos($file, '/') + 1);
                 $contentDisposition = HeaderUtils::getContentDispositionHeader($fileName, Yii::$app->request->userAgent);
                 header($contentDisposition);
+                flush();
                 readfile($file);
+                exit();
             }
         }
         echo '等待定时任务导出数据';

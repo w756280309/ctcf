@@ -34,10 +34,11 @@ class IssuerController extends BaseController
             $file = readlink($linkFile);
             if ($file && file_exists($file)) {
                 $fileName = substr($file, strrpos($file, '/') + 1);
-                header("Content-Type: application/vnd.ms-excel");
                 $contentDisposition = HeaderUtils::getContentDispositionHeader($fileName, \Yii::$app->request->userAgent);
                 header($contentDisposition);
+                flush();
                 readfile($file);
+                exit();
             }
         }
         echo '等待定时任务导出数据';
