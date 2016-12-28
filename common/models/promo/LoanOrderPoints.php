@@ -30,15 +30,17 @@ class LoanOrderPoints
             $orders = OnlineOrder::find()->where(['online_pid' => $loan->id, 'status' => OnlineOrder::STATUS_SUCCESS])->all();
             foreach ($orders as $order) {
                 try {
-                    $this->addUserPointsWithLoanOrder($order, $loan);
+                    $this->addUserPointsWithLoanOrder($order);
                 } catch (NotActivePromoException $ex) {
                 }
             }
         }
     }
 
-    //根据标的订单为用户添加积分
-    private function addUserPointsWithLoanOrder(OnlineOrder $order, OnlineProduct $loan)
+    /**
+     * 根据标的订单为用户添加积分.
+     */
+    private function addUserPointsWithLoanOrder(OnlineOrder $order)
     {
         $user = $order->user;
         if ($order->status === OnlineOrder::STATUS_SUCCESS && $this->promo->isActive($user)) {
@@ -50,7 +52,7 @@ class LoanOrderPoints
             if (empty($record)) {
                 $transaction = \Yii::$app->db->beginTransaction();
                 try {
-                    $points = $this->getPointsWithOrder($order, $loan);
+                    $points = $this->getPointsWithOrder($order);
                     $res = \Yii::$app->db->createCommand("UPDATE `user` SET `points` = `points` + :points WHERE `id` = :userId", ['points' => $points, 'userId' => $user->id])->execute();
                     if (!$res) {
                         throw new \Exception('数据保存失败1');
@@ -78,14 +80,11 @@ class LoanOrderPoints
         }
     }
 
-    //根据订单计算用户所得积分
-    private function getPointsWithOrder(OnlineOrder $order, OnlineProduct $loan)
+    /**
+     * 根据订单计算用户所得积分.
+     */
+    private function getPointsWithOrder(OnlineOrder $order)
     {
-        if ($loan->isAmortized()) {
-            $money = $loan->expires / 12 * $order->order_money;
-        } else {
-            $money = $loan->expires / 365 * $order->order_money;
-        }
-        return ceil($money * 6 / 1000);
+        return ceil($order->annualInvestment * 6 / 1000);
     }
 }

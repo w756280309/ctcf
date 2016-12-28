@@ -1,59 +1,64 @@
 <?php
-use yii\widgets\LinkPager;
+
 use common\models\user\User;
+use common\utils\StringUtils;
+use yii\widgets\LinkPager;
+
 $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\web\YiiAsset']);
+
+$isPersonal = $category === User::USER_TYPE_PERSONAL;
+
 ?>
+
 <?php $this->beginBlock('blockmain'); ?>
 <style>
-    .search_form td span {
-
-    }
     .search_form td input {
         margin: 0px;
     }
 </style>
+
 <div class="container-fluid">
     <!-- BEGIN PAGE HEADER-->
     <div class="row-fluid">
         <div class="span12">
             <h3 class="page-title">
                         会员管理 <small>会员管理模块【主要包含投资会员和融资会员的管理】</small>
-                        <?php if($category==User::USER_TYPE_ORG){?>
-                        <a href="/user/user/add" id="sample_editable_1_new" class="btn green" style="float: right;">
-                        <i class="icon-plus"></i> 添加新融资客户
-                        </a>
-                        <?php }?>
+                        <?php if (!$isPersonal) { ?>
+                            <a href="/user/user/add" id="sample_editable_1_new" class="btn green" style="float: right;">
+                                <i class="icon-plus"></i> 添加新融资客户
+                            </a>
+                        <?php } ?>
                 </h3>
             <ul class="breadcrumb">
                     <li>
                         <i class="icon-home"></i>
-                        <a href="/user/user/<?=$category==1?"listt":"listr"?>">会员管理</a>
+                        <a href="/user/user/<?= $isPersonal ? 'listt' : 'listr' ?>">会员管理</a>
                         <i class="icon-angle-right"></i>
                     </li>
-                    <?php if($category==User::USER_TYPE_PERSONAL){?>
+                    <?php if ($isPersonal) { ?>
                         <li>
                             <a href="/user/user/listt">投资会员</a>
                             <i class="icon-angle-right"></i>
                         </li>
-                    <?php }else{?>
+                    <?php } else { ?>
                         <li>
                             <a href="/user/user/listr">融资会员</a>
                             <i class="icon-angle-right"></i>
                         </li>
-                    <?php }?>
-                        <li>
-                            <a href="javascript:void(0);">会员列表</a>
-                        </li>
+                    <?php } ?>
+                    <li>
+                        <a href="javascript:void(0);">会员列表</a>
+                    </li>
             </ul>
         </div>
 
         <!--search start-->
         <div class="portlet-body">
-            <form action="/user/user/<?=$category==1?"listt":"listr"?>" method="get" target="_self">
-                <input type="hidden" name="search" value="user_list"/>
+            <form action="/user/user/<?= $isPersonal ? 'listt' : 'listr' ?>" method="get" target="_self">
+                <input type="hidden" name="search" value="user_list">
                 <table class="table search_form">
                     <tbody>
-                        <?php if($category==User::USER_TYPE_PERSONAL){ ?>
+                        <?php if ($isPersonal) { ?>
                             <tr>
                                 <td>
                                     <span class="title">真实姓名</span>
@@ -160,18 +165,19 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\we
             <table class="table table-striped table-bordered table-advance table-hover">
                 <thead>
                     <tr>
-                <?php if($category==User::USER_TYPE_PERSONAL){?>
+                <?php if ($isPersonal) { ?>
                         <th>手机号</th>
                         <th>真实姓名</th>
-                <?php }else{?>
+                <?php } else { ?>
                         <th>企业名称</th>
-                <?php }?>
+                <?php } ?>
                         <th>注册时间</th>
                         <th>可用余额（元）</th>
-                <?php if($category==User::USER_TYPE_PERSONAL){?>
+                <?php if ($isPersonal) { ?>
                         <th>资产总额</th>
                         <th>未投资时长（天）</th>
                         <th>最后一次购买金额</th>
+                        <th>用户等级</th>
                         <th>联动状态</th>
                 <?php }?>
                         <th><center>操作</center></th>
@@ -180,42 +186,43 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\we
                 <tbody>
                 <?php foreach ($model as $key => $val) : ?>
                     <tr>
-                <?php if($category==User::USER_TYPE_PERSONAL){?>
+                <?php if ($isPersonal) { ?>
                         <td><?= $val['mobile'] ?></td>
                         <td><?= $val['real_name']?'<a href="/user/user/detail?id='.$val['id'].'&type='.$category.'">'.$val['real_name'].'</a>':"---" ?></td>
-                <?php }else{?>
+                <?php } else { ?>
                         <td><?= $val['org_name'] ?></td>
                 <?php }?>
                         <td><?= date('Y-m-d H:i:s',$val['created_at'])?></td>
-                        <td class="money"><?= number_format(($category==User::USER_TYPE_PERSONAL)?($val->lendAccount['available_balance']):($val->borrowAccount['available_balance']),2) ?></td>
-                        <?php if($category==User::USER_TYPE_PERSONAL){?>
-                        <td class="money"><?= number_format($val->lendAccount->totalFund, 2)?></td>
-                        <td>
-                            <?php
-                                $info = $val->info;
-                                if ($info){
-                                    $days = (new \DateTime)->diff(new \DateTime($info->lastInvestDate))->days;
-                                } else {
-                                    $days = 0;
-                                }
-                                echo $days ;
-                            ?>
-                        </td>
-                        <td class="money">
-                            <?= $val->info ? number_format($val->info->lastInvestAmount, 2) : 0?>
-                        </td>
-                        <td>
-                            <button class="btn btn-primary get_order_status" uid="<?= $val['id'] ?>">查询联动状态</button>
-                        </td>
-                        <?php }?>
+                        <td class="money"><?= StringUtils::amountFormat3($isPersonal ? $val->lendAccount['available_balance'] : $val->borrowAccount['available_balance']) ?></td>
+                        <?php if ($isPersonal) { ?>
+                            <td class="money"><?= number_format($val->lendAccount->totalFund, 2)?></td>
+                            <td>
+                                <?php
+                                    $info = $val->info;
+                                    if ($info){
+                                        $days = (new \DateTime)->diff(new \DateTime($info->lastInvestDate))->days;
+                                    } else {
+                                        $days = 0;
+                                    }
+                                    echo $days ;
+                                ?>
+                            </td>
+                            <td class="money">
+                                <?= $val->info ? StringUtils::amountFormat3($val->info->lastInvestAmount) : 0 ?>
+                            </td>
+                            <td>VIP<?= $val->level ?></td>
+                            <td>
+                                <button class="btn btn-primary get_order_status" uid="<?= $val['id'] ?>">查询联动状态</button>
+                            </td>
+                        <?php } ?>
                         <td>
                         <center>
-                             <?php if($category==User::USER_TYPE_PERSONAL){?>
-                                <a href="/user/user/detail?id=<?= $val['id'] ?>&type=<?=$category;?>" class="btn mini green"><i class="icon-edit"></i> 查看用户详情</a>
-                             <?php }else{?>
-                                <a href="/user/user/edit?id=<?= $val['id'] ?>&type=<?=$category;?>" class="btn mini green"><i class="icon-edit"></i> 编辑</a>
-                                <a href="/user/user/detail?id=<?= $val['id'] ?>&type=<?=$category;?>" class="btn mini green"><i class="icon-edit"></i> 查看用户详情</a>
-                            <?php }?>
+                             <?php if($isPersonal) { ?>
+                                <a href="/user/user/detail?id=<?= $val['id'] ?>&type=<?= $category ?>" class="btn mini green"><i class="icon-edit"></i> 查看用户详情</a>
+                             <?php } else { ?>
+                                <a href="/user/user/edit?id=<?= $val['id'] ?>&type=<?= $category ?>" class="btn mini green"><i class="icon-edit"></i> 编辑</a>
+                                <a href="/user/user/detail?id=<?= $val['id'] ?>&type=<?= $category ?>" class="btn mini green"><i class="icon-edit"></i> 查看用户详情</a>
+                            <?php } ?>
                         </center>
                         </td>
                     </tr>
@@ -231,6 +238,7 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\we
         <div class="pagination" style="text-align:center"><?= LinkPager::widget(['pagination' => $pages]); ?></div>
     </div>
 </div>
+
 <script>
     $('.get_order_status').bind('click', function () {
         var csrf = '<?= Yii::$app->request->getCsrfToken(); ?>';

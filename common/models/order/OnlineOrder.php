@@ -329,4 +329,24 @@ class OnlineOrder extends ActiveRecord implements OrderTxInterface
         }
         return $date;
     }
+
+    /**
+     * 根据订单计算年化投资金额.
+     */
+    public function getAnnualInvestment()
+    {
+        if ($this->loan->isAmortized()) {
+            $unit = 'm';    //按月计算
+        } else {
+            $unit = 'd';    //按天计算
+        }
+
+        if ('m' === $unit) {
+            $base = 12;
+        } else {
+            $base = 365;
+        }
+
+        return bcdiv(bcmul($this->order_money, $this->loan->expires, 14), $base, 2);
+    }
 }

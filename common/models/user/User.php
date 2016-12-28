@@ -15,46 +15,51 @@ use P2pl\UserInterface;
 use Yii;
 use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
+use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
+use Zii\Model\ErrorExTrait;
 use Zii\Validator\CnMobileValidator;
 
 /**
  * This is the model class for table "user".
  *
- * @property int $id
- * @property int $type
- * @property string $username
- * @property string $mobile
- * @property string $email
- * @property string $real_name
- * @property string $idcard
- * @property string $org_name
- * @property string $org_code
- * @property string $password_hash
- * @property string $auth_key
- * @property int $status
- * @property int $bank_card_status
- * @property int $email_status
- * @property int $mobile_status
- * @property int $idcard_status
- * @property int $updated_at
- * @property int $created_at
- * @property int $regFrom   注册来源。0表示未知，1表示wap，2表示wx，3表示app，4表示pc
- * @property int $sort  融资用户排序，默认为0，从大到小排序
- * @property string $regContext 注册页面来源 m 代表WAP端默认注册页 m_intro1611 代表WAP端落地页注册页 pc 代表PC端默认注册页 pc_landing 代表PC端落地页注册页
- * @property int $points    用户积分
- * @property int $coins     用户财富值
- * @property int level      用户等级
+ * @property int    id
+ * @property int    type
+ * @property string username
+ * @property string mobile
+ * @property string email
+ * @property string real_name
+ * @property string idcard
+ * @property string org_name
+ * @property string org_code
+ * @property string password_hash
+ * @property string auth_key
+ * @property int    status
+ * @property int    bank_card_status
+ * @property int    email_status
+ * @property int    mobile_status
+ * @property int    idcard_status
+ * @property int    updated_at
+ * @property int    created_at
+ * @property int    regFrom             注册来源。0表示未知，1表示wap，2表示wx，3表示app，4表示pc
+ * @property int    sort                融资用户排序，默认为0，从大到小排序
+ * @property string regContext          注册页面来源 m 代表WAP端默认注册页 m_intro1611 代表WAP端落地页注册页 pc 代表PC端默认注册页 pc_landing 代表PC端落地页注册页
+ * @property int    points              用户积分
+ * @property int    coins               用户财富值
+ * @property int    level               用户等级
+ * @property string annualInvestment    用户累计年化投资额
  */
-class User extends \yii\db\ActiveRecord implements IdentityInterface, UserInterface
+class User extends ActiveRecord implements IdentityInterface, UserInterface
 {
-    use \Zii\Model\ErrorExTrait;
+    use ErrorExTrait;
 
     //会员类型 1：普通会员 ， 2：融资会员
     const USER_TYPE_PERSONAL = 1;
     const USER_TYPE_ORG = 2;
+
     const STATUS_DELETED = 0;
     const STATUS_ACTIVE = 1;
+
     const EXAMIN_STATUS_UNPASS = -1;
     const EXAMIN_STATUS_WAIT = 0;
     const EXAMIN_STATUS_PASS = 1;
@@ -771,5 +776,44 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface, UserInterf
         }
         $inviteRecord = $inviteRecord->one();
         return empty($inviteRecord) ? false : true;
+    }
+
+    /**
+     * 计算用户的财富值.
+     *
+     * @return string 保留整数位(下取整)的用户财富值.
+     */
+    public function getCoins()
+    {
+        return bcdiv($this->annualInvestment, 10000, 0);
+    }
+
+    /**
+     * 计算用户会员等级.
+     *
+     * @return int 用户会员等级,目前是0-7.
+     */
+    public function getLevel()
+    {
+        $level = 0;
+        $coins = $this->coins;
+
+        if ($coins >= 20 && $coins < 50) {
+            $level = 1;
+        } elseif ($coins >= 50 && $coins < 100) {
+            $level = 2;
+        } elseif ($coins >= 100 && $coins < 200) {
+            $level = 3;
+        } elseif ($coins >= 200 && $coins < 500) {
+            $level = 4;
+        } elseif ($coins >= 500 && $coins < 800) {
+            $level = 5;
+        } elseif ($coins >= 800 && $coins < 1500) {
+            $level = 6;
+        } elseif ($coins >= 1500) {
+            $level = 7;
+        }
+
+        return $level;
     }
 }

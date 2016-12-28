@@ -15,6 +15,7 @@ use common\models\payment\Repayment;
 use common\models\product\Issuer;
 use common\models\product\OnlineProduct;
 use common\models\promo\PromoService;
+use common\models\user\CoinsRecord;
 use common\models\user\MoneyRecord;
 use common\models\user\User;
 use common\models\user\UserAccount;
@@ -674,20 +675,20 @@ class ProductonlineController extends BaseController
         $id = Yii::$app->request->post('id');
 
         if ($id) {
-            $model = OnlineProduct::findOne($id);
-            if (empty($model) ||
-              !in_array($model->status, [OnlineProduct::STATUS_NOW, OnlineProduct::STATUS_FULL, OnlineProduct::STATUS_FOUND, OnlineProduct::STATUS_HUAN]) ||
-               empty($model->jixi_time)
+            $loan = OnlineProduct::findOne($id);
+            if (null === $loan ||
+                !in_array($loan->status, [OnlineProduct::STATUS_FULL, OnlineProduct::STATUS_FOUND]) ||
+                empty($loan->jixi_time)
              ) {
                 return ['result' => '0', 'message' => '无法找到该项目,或者项目现阶段不允许开始计息'];
             }
 
             try {
-                $this->initUserAssets($model);
+                $orders = $this->initUserAssets($loan);
             } catch (\Exception $e) {
                 $message = $e->getMessage();
 
-                Yii::trace('项目成立异常,项目ID为'.$model->id.
+                Yii::trace('项目成立异常,项目ID为'.$loan->id.
                     ',错误信息为'.$message.
                     ',操作时间为'.date('Y-m-d H:i:s').
                     ',操作人为'.$this->getAuthedUser()->username);
@@ -695,15 +696,18 @@ class ProductonlineController extends BaseController
                 return ['result' => '0', 'message' => $message];
             }
 
-            $res = OnlineRepaymentPlan::generatePlan($model);
+            $res = OnlineRepaymentPlan::generatePlan($loan);
             if ($res) {
                 //确认计息完成之后将标的添加至保全队列
                 $job = new BaoQuanQueue(['itemId' => $id, 'status' => BaoQuanQueue::STATUS_SUSPEND, 'itemType' => BaoQuanQueue::TYPE_LOAN]);
                 $job->save();
 
+                //确认计息之后更新用户的累计年化投资金额,新手专享,理财计划,以及转让订单除外
+                $this->incrAnnualInvestment($orders, $loan);
+
                 //确认计息之后给用户赠送积分
                 try {
-                    PromoService::doAfterLoanJixi($model);
+                    PromoService::doAfterLoanJixi($loan);
                 } catch (\Exception $ex) {
 
                 }
@@ -717,9 +721,42 @@ class ProductonlineController extends BaseController
         return ['result' => '0', 'message' => 'ID不能为空'];
     }
 
-    private function initUserAssets(OnlineProduct $model)
+    /**
+     * 更新用户累计年化投资金额.
+     *
+     * 1. 新手专享，理财计划，转让产品除外;
+     * 2. 财富值有变动的时候，记录财富值流水;
+     */
+    private function incrAnnualInvestment(array $orders, OnlineProduct $loan)
     {
-        $orders = OnlineOrder::findAll(['online_pid' => $model->id, 'status'  => OnlineOrder::STATUS_SUCCESS]);
+        if (!$loan->is_xs && !$loan->isLicai && !empty($orders)) {    //新手标、转让,以及理财计划标的不计算在内
+            foreach ($orders as $order) {
+                $originalCoins = $order->user->coins;
+                $res = Yii::$app->db->createCommand('update user set annualInvestment = annualInvestment + '.$order->annualInvestment.' where id = '.$order->user->id)->execute();
+
+                if ($res) {
+                    $user = User::findOne($order->user->id);
+                    $currentCoins = $user->coins;
+
+                    if ($originalCoins !== $currentCoins) {
+                        $coins = new CoinsRecord([
+                            'user_id' => $order->user->id,
+                            'order_id' => $order->id,
+                            'incrCoins' => bcsub($currentCoins, $originalCoins, 0),
+                            'finalCoins' => $currentCoins,
+                            'createTime' => date('Y-m-d H:i:s'),
+                        ]);
+
+                        $coins->save();
+                    }
+                }
+            }
+        }
+    }
+
+    private function initUserAssets(OnlineProduct $loan)
+    {
+        $orders = OnlineOrder::findAll(['online_pid' => $loan->id, 'status'  => OnlineOrder::STATUS_SUCCESS]);
 
         if (empty($orders)) {
             throw new \Exception('请求数据不能为空');
@@ -732,7 +769,7 @@ class ProductonlineController extends BaseController
                 'loan_id' => $order->online_pid,
                 'amount' => $order->order_money * 100,
                 'orderTime' => date('Y-m-d H:i:s', $order->created_at),
-                'isTest' => $model->isTest,
+                'isTest' => $loan->isTest,
             ];
         }
 
@@ -748,6 +785,8 @@ class ProductonlineController extends BaseController
                 throw new \Exception('请求记录内容与返回记录内容不符');
             }
         }
+
+        return $orders;
     }
 
     /**

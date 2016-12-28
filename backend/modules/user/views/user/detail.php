@@ -1,8 +1,10 @@
 <?php
+
 use common\utils\StringUtils;
 use yii\web\YiiAsset;
 
 $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => YiiAsset::class]);
+
 $this->title = '用户详情';
 ?>
 
@@ -80,13 +82,13 @@ $this->title = '用户详情';
                     <td><strong>手机号</strong></td>
                     <td><?= $normalUser['mobile'] ?></td>
                     <td><strong>真实姓名</strong></td>
-                    <td><?= $normalUser['real_name'] ?></td>
+                    <td><?= $normalUser['real_name'] ? $normalUser['real_name'] : '---' ?></td>
                 </tr>
                 <tr>
                     <td><strong>身份证号</strong></td>
-                    <td><?= StringUtils::obfsIdCardNo($normalUser['idcard']) ?></td>
+                    <td><?= $normalUser['idcard'] ? StringUtils::obfsIdCardNo($normalUser['idcard']) : '---' ?></td>
                     <td><strong>生日</strong></td>
-                    <td><?= $normalUser->birthday ?></td>
+                    <td><?= $normalUser['idcard'] ? $normalUser->birthday : '---' ?></td>
                     <td><strong>银行卡</strong></td>
                     <td><?= $normalUser->qpay ? substr_replace($normalUser->qpay->card_number, '**** **** **** ', 0, -4) : '未开通' ?></td>
                 </tr>
@@ -151,16 +153,26 @@ $this->title = '用户详情';
                 </tr>
                 <tr>
                     <td><strong>转让最后投资时间</strong></td>
-                    <td><?= $latestCreditOrderTime ?></td>
+                    <td><?= $latestCreditOrderTime ? $latestCreditOrderTime : '---' ?></td>
                     <td><strong>本年度160天及以上项目累计投资额</strong></td>
                     <td><?= StringUtils::amountFormat2($leiji) ?>元</td>
+                    <td><strong>会员积分</strong></td>
+                    <td><?= StringUtils::amountFormat2($normalUser->points) ?></td>
+                </tr>
+                <tr>
+                    <td><strong>会员等级</strong></td>
+                    <td>VIP<?= $normalUser->level ?></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
                 </tr>
             </table>
 
             <div class="detail_font">会员资金详情</div>
             <table class="table table-condensed">
                 <tr>
-                    <td><span>资产总额(元)</span><?= StringUtils::amountFormat2($userAccount->getTotalFund()) ?></td>
+                    <td><span>资产总额（元）</span><?= StringUtils::amountFormat2($userAccount->getTotalFund()) ?></td>
                     <td><span>理财资产（元）</span><?= StringUtils::amountFormat2($userAccount->investment_balance) ?></td>
                     <td><span>冻结资金（元）</span><?= StringUtils::amountFormat2($userAccount->freeze_balance) ?></td>
                     <td><span>可用余额（元）</span><?= StringUtils::amountFormat2($userAccount->available_balance) ?></td>

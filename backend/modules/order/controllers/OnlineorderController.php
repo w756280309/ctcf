@@ -24,7 +24,10 @@ class OnlineorderController extends BaseController
         $username = Yii::$app->request->get('username');
         $mobile = Yii::$app->request->get('mobile');
 
-        $query = OnlineOrder::find()->where(['online_pid' => $id, 'status' => OnlineOrder::STATUS_SUCCESS]);
+        $query = OnlineOrder::find()->where([
+            'online_pid' => $id,
+            'status' => OnlineOrder::STATUS_SUCCESS
+        ]);
         $data = clone $query;
 
         //已筹集金额
@@ -33,7 +36,7 @@ class OnlineorderController extends BaseController
         $biao = OnlineProduct::findOne($id);
         $shengyuKetou = bcsub($biao->money, $moneyTotal, 2);
         //已投资人数
-        $count = $query->groupBy('uid')->count();
+        $count = $query->select('uid')->groupBy('uid')->count();
         //募捐时间
         $time = (time() - ($biao->start_date)); //秒数
         $day = floor($time / (24 * 3600)); //天数
