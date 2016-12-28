@@ -29,7 +29,6 @@ class IssuerController extends BaseController
     {
         $record = $this->getRecord($id);
 
-        header("Content-Type: application/vnd.ms-excel");
         $file_name = $record['issuer']->name . "-" . date('Ymd') . ".xls";
 
         $encoded_filename = str_replace("+", "%20", urlencode($file_name));
