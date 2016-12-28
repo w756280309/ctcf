@@ -702,15 +702,15 @@ class ProductonlineController extends BaseController
                 $job = new BaoQuanQueue(['itemId' => $id, 'status' => BaoQuanQueue::STATUS_SUSPEND, 'itemType' => BaoQuanQueue::TYPE_LOAN]);
                 $job->save();
 
-                //确认计息之后更新用户的累计年化投资金额,新手专享,理财计划,以及转让订单除外
-                $this->incrAnnualInvestment($orders, $loan);
-
                 //确认计息之后给用户赠送积分
                 try {
                     PromoService::doAfterLoanJixi($loan);
                 } catch (\Exception $ex) {
 
                 }
+
+                //确认计息之后更新用户的累计年化投资金额,新手专享,理财计划,以及转让订单除外
+                $this->incrAnnualInvestment($orders, $loan);
 
                 return ['result' => '1', 'message' => '操作成功'];
             }

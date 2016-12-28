@@ -21,12 +21,13 @@ class LoanOrderPoints
         $this->promo = $promo;
     }
 
-    //标的确认计息后统一调用逻辑
+    /**
+     * 标的确认计息后统一调用逻辑.
+     */
     public function doAfterLoanJixi(OnlineProduct $loan)
     {
-        //todo 理财计划目前是使用 allowUseCoupon 判断，但是需要调整
         $loan->refresh();
-        if ($loan->is_jixi && !$loan->is_xs && $loan->allowUseCoupon) {
+        if ($loan->is_jixi && !$loan->is_xs && !$loan->isLicai) {
             $orders = OnlineOrder::find()->where(['online_pid' => $loan->id, 'status' => OnlineOrder::STATUS_SUCCESS])->all();
             foreach ($orders as $order) {
                 try {
@@ -85,6 +86,17 @@ class LoanOrderPoints
      */
     private function getPointsWithOrder(OnlineOrder $order)
     {
-        return ceil($order->annualInvestment * 6 / 1000);
+        switch ($order->user->level) {
+            case 0: $multiple = 1; break;
+            case 1: $multiple = 1.02; break;
+            case 2: $multiple = 1.04; break;
+            case 3: $multiple = 1.06; break;
+            case 4: $multiple = 1.08; break;
+            case 5: $multiple = 1.1; break;
+            case 6: $multiple = 1.12; break;
+            case 7: $multiple = 1.15; break;
+        }
+
+        return ceil($order->annualInvestment * 6 * $multiple / 1000);
     }
 }

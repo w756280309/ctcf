@@ -480,10 +480,9 @@ $is_online = in_array($model->status, [2, 3, 4, 5, 6, 7]);//判断标的是否�
 
             <div class="span6 fix-offset">
                 <div class="control-group">
-                    <label class="control-label">新手专享标</label>
+                    <label class="control-label">新手专享标<span class="notice">(<?= $desc ?>)</span></label>
                     <div class="controls">
                         <?=  $form->field($model, 'is_xs')->checkbox(array_merge(['autocomplete' => 'on'], $model->online_status ? ['disabled' => 'disabled', 'uncheck' => $model->is_xs] : []))->label(false) ?>
-                        <?=  $form->field($model, 'isLicai')->checkbox(array_merge(['autocomplete' => 'on'], $model->online_status ? ['disabled' => 'disabled', 'uncheck' => $model->isLicai] : []))->label(false) ?>
                     </div>
                 </div>
             </div>
@@ -495,6 +494,15 @@ $is_online = in_array($model->status, [2, 3, 4, 5, 6, 7]);//判断标的是否�
                         <?=
                             $form->field($model, 'tags', ['template' => '{input}{error}', 'inputOptions' => ['autocomplete' => 'off', 'placeholder' => '标签列表']])->textInput(['class' => 'm-wrap span12'])
                         ?>
+                    </div>
+                </div>
+            </div>
+
+            <div class="span6 fix-offset">
+                <div class="control-group">
+                    <label class="control-label">理财计划<span class="notice">(<?= $desc ?>)</span></label>
+                    <div class="controls">
+                        <?=  $form->field($model, 'isLicai')->checkbox(array_merge(['autocomplete' => 'on'], $model->online_status ? ['disabled' => 'disabled', 'uncheck' => $model->isLicai] : []))->label(false) ?>
                     </div>
                 </div>
             </div>

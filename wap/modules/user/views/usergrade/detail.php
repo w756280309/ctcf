@@ -48,7 +48,7 @@ $this->title = '特权说明';
                 </tr>
                 <tr style="height: 1.4467rem;">
                     <td valign="top" style="line-height:0.85rem;">积分权利</td>
-                    <td>签到积分、购买积分*1.02倍，生日后7天内积分*1.1倍</td>
+                    <td>购买积分*1.02倍</td>
                 </tr>
                 <tr>
                     <td>专属顾问</td>
@@ -75,7 +75,7 @@ $this->title = '特权说明';
                 </tr>
                 <tr style="height: 1.4467rem;">
                     <td valign="top" style="line-height:0.85rem;">积分权利</td>
-                    <td>签到积分、购买积分*1.04倍，生日后7天内积分*1.2倍</td>
+                    <td>购买积分*1.04倍</td>
                 </tr>
                 <tr>
                     <td>专属顾问</td>
@@ -106,7 +106,7 @@ $this->title = '特权说明';
                 </tr>
                 <tr style="height: 1.4467rem;">
                     <td valign="top" style="line-height:0.85rem;">积分权利</td>
-                    <td>签到积分、购买积分*1.06倍，生日后7天内积分*1.3倍</td>
+                    <td>购买积分*1.06倍</td>
                 </tr>
                 <tr>
                     <td>专属顾问</td>
@@ -137,11 +137,11 @@ $this->title = '特权说明';
                 </tr>
                 <tr style="height: 1.4467rem;">
                     <td valign="top" style="line-height:0.85rem;">积分权利</td>
-                    <td>签到积分、购买积分*1.08倍，生日后7天内积分*1.4倍</td>
+                    <td>购买积分*1.08倍</td>
                 </tr>
                 <tr>
                     <td>专属顾问</td>
-                    <td>微信客服专享物品寄送</td>
+                    <td>微信客服专享、物品寄送</td>
                 </tr>
                 <tr>
                     <td>活动权利</td>
@@ -164,19 +164,19 @@ $this->title = '特权说明';
                 </tr>
                 <tr>
                     <td valign="top">生日特权</td>
-                    <td>生日祝福代金券及生日蛋糕券</td>
+                    <td>生日祝福、代金券及生日蛋糕券</td>
                 </tr>
                 <tr style="height: 1.4467rem;">
                     <td valign="top" style="line-height:0.85rem;">积分权利</td>
-                    <td>签到积分、购买积分*1.1倍，生日后7天内积分*1.5倍</td>
+                    <td>购买积分*1.1倍</td>
                 </tr>
                 <tr>
                     <td>专属顾问</td>
-                    <td>微信客服专享物品寄送</td>
+                    <td>微信客服专享、物品寄送</td>
                 </tr>
                 <tr>
                     <td>活动权利</td>
-                    <td>预约报名活动预留活动名额</td>
+                    <td>预约报名活动、预留活动名额</td>
                 </tr>
                 <tr style="height: 1.4467rem;">
                     <td valign="top" style="line-height:0.85rem;">产品预约</td>
@@ -195,19 +195,19 @@ $this->title = '特权说明';
                 </tr>
                 <tr>
                     <td>生日特权</td>
-                    <td>生日祝福代金券及生日蛋糕券</td>
+                    <td>生日祝福、代金券及生日蛋糕券</td>
                 </tr>
                 <tr style="height: 1.4467rem;">
                     <td valign="top" style="line-height:0.85rem;">积分权利</td>
-                    <td>签到积分、购买积分*1.12倍，生日后7天内积分*1.6倍</td>
+                    <td>购买积分*1.12倍</td>
                 </tr>
                 <tr style="height: 1.4467rem;">
                     <td valign="top" style="line-height:0.85rem;">专属顾问</td>
-                    <td>微信客服专享物品寄送及享受双人上门服务</td>
+                    <td>微信客服专享、物品寄送及享受双人上门服务</td>
                 </tr>
                 <tr>
                     <td>活动权利</td>
-                    <td>预约报名活动预留活动名额</td>
+                    <td>预约报名活动、预留活动名额</td>
                 </tr>
                 <tr style="height: 1.4467rem;">
                     <td valign="top" style="line-height:0.85rem;">产品预约</td>
@@ -226,15 +226,15 @@ $this->title = '特权说明';
                 </tr>
                 <tr>
                     <td>生日特权</td>
-                    <td>生日祝福代金券及生日蛋糕券</td>
+                    <td>生日祝福、代金券及生日蛋糕券</td>
                 </tr>
                 <tr style="height: 1.4467rem;">
                     <td valign="top" style="line-height:0.85rem;">积分权利</td>
-                    <td>签到积分、购买积分*1.15倍，生日后7天内积分*1.7倍</td>
+                    <td>购买积分*1.15倍</td>
                 </tr>
                 <tr style="height: 1.4467rem;">
                     <td valign="top" style="line-height:0.85rem;">专属顾问</td>
-                    <td>微信客服专享物品寄送及享受双人上门服务</td>
+                    <td>微信客服专享、物品寄送及享受双人上门服务</td>
                 </tr>
                 <tr style="height: 1.4467rem;">
                     <td valign="top" style="line-height:0.85rem;">活动权利</td>
@@ -248,6 +248,7 @@ $this->title = '特权说明';
         </li>
     </ul>
 </section>
+
 <script>
     $(function () {
         FastClick.attach(document.body);
@@ -263,5 +264,4 @@ $this->title = '特权说明';
             }
         })
     });
-
 </script>
