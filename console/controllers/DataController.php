@@ -8,6 +8,7 @@ use common\models\order\OnlineOrder;
 use common\models\order\OnlineRepaymentPlan;
 use common\models\order\OnlineRepaymentRecord;
 use common\models\payment\Repayment;
+use common\models\product\Issuer;
 use common\models\product\OnlineProduct;
 use common\models\user\User;
 use common\models\user\UserInfo;
@@ -120,40 +121,55 @@ class DataController extends Controller
         }
     }
 
-    //导出投资用户信息
+    //导出投资用户信息 data/export-lender-data
     public function actionExportLenderData()
     {
         $allData = UserStats::collectLenderData();
         $path  = Yii::getAlias('@backend').'/web/data/';
-        $this->deleteUserDataFromPath($path);//删除历史数据
-        $file = $path.'lender_data('.date('Y-m-d H:i:s').').csv';
+
+        $file = $path.'投资用户信息('.date('Y-m-d H:i:s').').csv';
         $fp = fopen($file, 'w');
         fputs($fp, "\xEF\xBB\xBF");//添加BOM头
         foreach ($allData as $value) {
             fputcsv($fp, $value);
         }
         fclose($fp);
+        $linkFile = $path.'lender_data.csv';
+        if (file_exists($linkFile)) {
+            unlink($linkFile);
+        }
+        symlink($file, $linkFile);
+        $this->deleteUserDataFromPath($path, '投资用户信息');//删除历史数据
         exit();
     }
 
-    //删除用户数据相关的历史导出文件
-    private function deleteUserDataFromPath($path)
+    //删除用户数据相关的历史导出文件,保留最新一个
+    private function deleteUserDataFromPath($path, $fileNamePart)
     {
         if (!file_exists($path)) {
             mkdir($path);
         }
+        $files = [];
         if ( is_dir($path)) {
             $handle = opendir( $path );
             if ($handle) {
                 while ( false !== ( $item = readdir( $handle ) ) ) {
                     if ( $item != "." && $item != ".." ) {
-                        if (false !== strpos($item, 'lender_data')) {
-                            unlink( "$path/$item" );
+                        if (false !== strpos($item, $fileNamePart)) {
+                            $files[] = "$path/$item";
                         }
                     }
                 }
             }
             closedir( $handle );
+        }
+        if(count($files) > 0) {
+            $lastFile = end($files);
+            foreach ($files as $file) {
+                if ($file !== $lastFile) {
+                    unlink($file);
+                }
+            }
         }
     }
 
@@ -193,5 +209,24 @@ class DataController extends Controller
                 echo $ex->getMessage();
             }
         }
+    }
+
+    //立合旺通数据导出（一天时更新一次）data/export-issuer-record
+    public function actionExportIssuerRecord($issuerId = 1)
+    {
+        $issuerId = intval($issuerId);
+        $record = Issuer::getIssuerRecords($issuerId);//获取立合旺通数据
+        $path = Yii::getAlias('@backend') . '/web/data/';
+        $file = $path . '立合旺通-' . date('YmdHis') . '.xls';
+        $fp = fopen($file, 'w');
+        fwrite($fp, $this->renderFile('@backend/modules/datatj/views/issuer/export.php', $record));
+        fclose($fp);
+        $linkFile = $path . 'issuer_' . $issuerId . '.xls';
+        if (file_exists($linkFile)) {
+            unlink($linkFile);
+        }
+        symlink($file, $linkFile);
+        $this->deleteUserDataFromPath($path, '立合旺通');//删除历史数据
+        exit();
     }
 }

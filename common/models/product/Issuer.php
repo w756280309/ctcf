@@ -3,7 +3,11 @@
 namespace common\models\product;
 
 use common\models\media\Media;
+use common\models\order\OnlineRepaymentPlan;
+use common\models\order\OnlineRepaymentRecord;
+use yii\data\Pagination;
 use yii\db\ActiveRecord;
+use yii\web\NotFoundHttpException;
 
 /**
  * 发行方（项目）.
@@ -66,5 +70,52 @@ class Issuer extends ActiveRecord
     public function getVideoImg()
     {
         return $this->hasOne(Media::class, ['id' => 'videoCover_id']);
+    }
+
+    public static function getIssuerRecords($issuerId = 1, $pageNum = 0)
+    {
+        $issuer = self::findOne($issuerId);
+        if (empty($issuer)) {
+            throw new NotFoundHttpException();
+        }
+
+        $query = OnlineProduct::find()
+            ->where(['online_status' => OnlineProduct::STATUS_ONLINE, 'del_status' => OnlineProduct::STATUS_USE, 'issuer' => $issuer->id])
+            ->orderBy(['created_at' => SORT_DESC]);
+        $pages = new Pagination(['totalCount' => $query->count()]);
+        if (empty($pageNum)) {
+            $model = $query->innerJoinWith('borrower')->all();
+        } else {
+            $pages->pageSize = $pageNum;
+            $model = $query->offset($pages->offset)->limit($pages->limit)->all();
+        }
+
+        $plan = [];
+        $refundTime = [];
+        foreach ($model as $key => $val) {
+            if (in_array($val->status, [OnlineProduct::STATUS_HUAN, OnlineProduct::STATUS_OVER])) {
+                $plan[$key] = OnlineRepaymentPlan::find()
+                    ->where(['online_pid' => $val->id])
+                    ->groupBy('online_pid, qishu')
+                    ->select(['totalBenjin' => 'sum(benjin)', 'totalLixi' => 'sum(lixi)', 'refund_time', 'qishu', 'online_pid', 'count' => 'count(*)'])
+                    ->asArray()
+                    ->all();
+
+                foreach ($plan[$key] as $v) {
+                    $data = OnlineRepaymentRecord::find()
+                        ->where(['online_pid' => $val->id, 'qishu' => $v['qishu']])
+                        ->orderBy('refund_time desc')
+                        ->all();
+
+                    if ((int) $v['count'] !== count($data)) {       //每期实际放款时间以当期还清状态下的最后一笔为准,总的实际还款日期以全部还款成功的最后一笔为准
+                        break;
+                    } else {
+                        $refundTime[$key][$v['qishu']] = $data[0]->refund_time;
+                    }
+                }
+            }
+        }
+
+        return ['issuer' => $issuer, 'model' => $model, 'plan' => $plan, 'refundTime' => $refundTime, 'pages' => $pages];
     }
 }

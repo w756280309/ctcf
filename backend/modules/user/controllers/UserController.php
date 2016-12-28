@@ -18,6 +18,7 @@ use common\models\user\UserBanks;
 use common\models\user\RechargeRecord;
 use common\models\user\UserSearch;
 use common\models\user\DrawRecord;
+use Wcg\Http\HeaderUtils;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\data\ArrayDataProvider;
@@ -57,30 +58,27 @@ class UserController extends BaseController
             'pageSize' => 15,
         ]);
         $user = $query->offset($pages->offset)->limit($pages->limit)->orderBy(['user.created_at' => SORT_DESC])->all();
-        $userDataDownloadUrl = $this->getUserDataDownLoadUrl();
         return $this->render('list', [
             'model' => $user,
             'pages' => $pages,
             'category' => User::USER_TYPE_PERSONAL,
-            'userDataDownloadUrl' => $userDataDownloadUrl,
         ]);
     }
 
-    //获取用户信息下载地址
-    private function getUserDataDownLoadUrl()
+    //投资用户信息导出
+    public function actionExport()
     {
-        $path = Yii::getAlias('@backend') . '/web/data';
-        if ($handle = opendir($path)) {
-            while (false !== ($item = readdir($handle))) {
-                if ($item != "." && $item != "..") {
-                    if (false !== strpos($item, 'lender_data')) {
-                        $file = $item;
-                        break;
-                    }
-                }
+        $linkFile = rtrim(\Yii::getAlias('@backend'), '/') . '/web/data/lender_data.csv';
+        if ($linkFile && file_exists($linkFile)) {
+            $file = readlink($linkFile);
+            if ($file && file_exists($file)) {
+                $fileName = substr($file, strrpos($file, '/') + 1);
+                $contentDisposition = HeaderUtils::getContentDispositionHeader($fileName, Yii::$app->request->userAgent);
+                header($contentDisposition);
+                readfile($file);
             }
         }
-        return isset($file) ? '/data/' . $file : '';
+        echo '等待定时任务导出数据';
     }
 
     /**

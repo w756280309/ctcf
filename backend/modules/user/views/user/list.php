@@ -132,13 +132,11 @@ $isPersonal = $category === User::USER_TYPE_PERSONAL;
                                         </div>
                                     </td>
                                 <?php } else { ?>
-                                    <?php if ($userDataDownloadUrl) { ?>
-                                        <td colspan="3">
-                                            <div align="right" class="search-btn">
-                                                <a class="btn green btn-block" style="width: 140px;" href="<?= $userDataDownloadUrl?>">导出全部用户信息</a>
-                                            </div>
-                                        </td>
-                                    <?php }?>
+                                    <td colspan="3">
+                                        <div align="right" class="search-btn">
+                                            <a class="btn green btn-block" style="width: 140px;" href="/user/user/export">导出全部用户信息</a>
+                                        </div>
+                                    </td>
                                <?php }?>
                             </tr>
                         <?php }else{?>
