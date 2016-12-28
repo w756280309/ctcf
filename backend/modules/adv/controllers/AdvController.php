@@ -30,13 +30,17 @@ class AdvController extends BaseController
             ->joinWith('share')
             ->where(['type' => Adv::TYPE_LUNBO])
             ->andWhere(['del_status' => Adv::DEL_STATUS_SHOW]);
+
         if (!empty($title)) {
-            $advInfo->andFilterWhere(['like', 'title', $title]);
+            $advInfo->andFilterWhere(["like", "$ad.title", $title]);
         }
+
         if ($status == 0 || $status == 1) {
             $advInfo->andFilterWhere(['status' => $status]);
         }
+
         $data = $advInfo->orderBy(["$ad.id" => SORT_DESC]);
+
         $pages = new Pagination(['totalCount' => $data->count(), 'pageSize' => '10']);
         $model = $data->offset($pages->offset)->limit($pages->limit)->orderBy('sn desc,status asc')->all();
 
