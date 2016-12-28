@@ -9,12 +9,13 @@ use yii\helpers\HtmlPurifier;
 $this->title = '项目详情';
 $user = Yii::$app->user->identity;
 
-$this->registerJsFile(ASSETS_BASE_URI . 'js/detail.js');
+$this->registerJsFile(ASSETS_BASE_URI . 'js/detail.js?v=161227');
 $this->registerCssFile(ASSETS_BASE_URI . 'css/deal/buy.css');
 $this->registerCssFile(ASSETS_BASE_URI . 'css/deal/deallist.css?v=161124');
-$this->registerCssFile(ASSETS_BASE_URI . 'css/deal/detail.css?v=161216');
+$this->registerCssFile(ASSETS_BASE_URI . 'css/deal/detail.css?v=161218');
 $this->registerCssFile(ASSETS_BASE_URI . 'css/pagination.css');
 $this->registerCssFile(ASSETS_BASE_URI . 'css/useraccount/chargedeposit.css');
+
 ?>
 
 <div class="project-box clearfix">
@@ -70,6 +71,12 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/useraccount/chargedeposit.css');
                     <?php } else { ?>
                         <li>产品到期日:&nbsp;&nbsp;&nbsp;&nbsp;<span><?= date('Y-m-d', $deal->finish_date) ?></span></li>
                     <?php } ?>
+                    <li class="amount">
+                        起投金额:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span><?= StringUtils::amountFormat2($deal->start_money) ?>元</span>
+                    </li>
+                    <li>
+                        递增金额:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span><?= StringUtils::amountFormat2($deal->dizeng_money) ?>元</span>
+                    </li>
                 </ul>
             </div>
 
@@ -159,7 +166,7 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/useraccount/chargedeposit.css');
                         <form action="/deal/deal/check?sn=<?= $deal->sn ?>" method="post" id="order_form">
                             <input type="hidden" name="_csrf" value="<?= Yii::$app->request->csrfToken ?>"/>
                             <div class="dR-input">
-                                <input type="text" class="dR-money" name="money" id="deal_money" autocomplete="off" value="<?= ($money > 0) ? $money : null?>"/>
+                                <input type="text" class="dR-money" name="money" id="deal_money" placeholder="<?= StringUtils::amountFormat2($deal->start_money) ?>元起投，<?= StringUtils::amountFormat2($deal->dizeng_money) ?>元递增" autocomplete="off" value="<?= ($money > 0) ? $money : null?>"/>
                                 <!--输入款提示信息-->
                                 <div class="tishi tishi-dev">
                                     <img class="jiao-left" src="/images/deal/jiao-right.png" alt="">

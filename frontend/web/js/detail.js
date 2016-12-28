@@ -15,10 +15,6 @@ $(function () {
     }
     $('.dR-money').on('click', function () {
         $('.dR-tishi-error ').hide();
-        $('.tishi').show();
-    });
-    $('.dR-money').on('blur', function () {
-        $('.tishi').hide();
     });
     var dRprogress = $('.dR-progress span').attr('data-progress');
     $('.dR-progress span').css({width: dRprogress + '%'});

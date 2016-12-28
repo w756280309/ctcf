@@ -110,7 +110,7 @@ body {
 .pl-bottom {
     width: 586px;
     margin: 0 auto;
-    height: 90px;
+    height: 135px;
     background: #f4f4f7;
     color: #bababf;
 }
@@ -373,7 +373,7 @@ body {
     outline: none;
     color: #6e6e72;
     padding: 0 15px;
-    font-size: 24px;
+    font-size: 20px;
 }
 .tishi-dev {
     display: none;
