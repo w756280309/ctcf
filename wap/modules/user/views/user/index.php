@@ -1,18 +1,20 @@
 <?php
+
 $this->title = '账户中心';
 $this->showBottomNav = true;
 $this->showAvatar = true;
 
-use yii\web\JqueryAsset;
 use common\utils\StringUtils;
+use yii\web\JqueryAsset;
+
 $this->registerJsFile(ASSETS_BASE_URI.'js/fastclick.js', ['depends' => JqueryAsset::class]);
 
 ?>
 <link href="<?= ASSETS_BASE_URI ?>css/informationAndHelp.css" rel="stylesheet">
-<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/setting.css?v=20160803">
+<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/setting.css?v=20161228">
 <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/tip.css?v=20161116">
 <script>
-    $(function(){
+    $(function() {
         $('.footer-inner a').css({color: '#8c8c8c'});
         $('.footer-inner2 a').css({color: '#f44336'});
         $('.footer-inner1 a').css({color: '#8c8c8c'});
@@ -23,6 +25,14 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/fastclick.js', ['depends' => JqueryAss
 </script>
 
 <!--  账户中心页 start-->
+<a href="/user/usergrade">
+    <div class="row member-level-tit">
+        <div class="member-level-lf"></div>
+        <div class="member-level-rg row">
+            <span class="phone-size"><?= StringUtils::obfsMobileNumber($user->mobile) ?></span><img class="img-member-vip" src="<?= FE_BASE_URI ?>wap/memberlevel/img/white-vip-<?= $user->level ?>.png"><i class="treasure-line">｜</i>财富值:<span class="treasure"><?= StringUtils::amountFormat2($user->coins) ?></span>
+        </div>
+    </div>
+</a>
 <div class="row  border-bottom  earning accountcenter">
     <div class="row earn-tit">
         <div class="col-xs-1"></div>
