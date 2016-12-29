@@ -65,7 +65,8 @@ use yii\grid\GridView;
                 ],
                 [
                     'attribute' => 'available_balance',
-                    'label' => '可用余额',
+                    'label' => '可用余额（元）',
+                    'contentOptions' => ['class' => 'money'],
                     'value' => function ($model) {
                         return $model['available_balance'];
                     }
