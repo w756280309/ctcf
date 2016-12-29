@@ -117,8 +117,8 @@ class SiteController extends Controller
 
         //公告专区：
         $news = News::find()
-            ->where(['status' => News::STATUS_PUBLISH])
-            ->orderBy('news_time desc')
+            ->where(['status' => News::STATUS_PUBLISH, 'allowShowInList' => true])
+            ->orderBy(['news_time' => SORT_DESC])
             ->limit(3)
             ->all();
 
