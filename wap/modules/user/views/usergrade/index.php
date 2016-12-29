@@ -19,7 +19,6 @@ for ($x=0; $x<=7; $x++) {
     } else {
         if ($x < 4) {
             $shuzu[$x]['classone'] = 'lf vip';
-
         } else {
             $shuzu[$x]['classone'] = 'rg vip';
         }
@@ -29,29 +28,20 @@ for ($x=0; $x<=7; $x++) {
     }
 }
 
-if (0 === $level) {
-    $coinscha = 20 - $coins;
-    $yuju = '还需' . $coinscha . '财富值成为VIP1';
-} elseif (1 === $level) {
-    $coinscha = 50 - $coins;
-    $yuju = '还需' . $coinscha . '财富值成为VIP2';
-} elseif (2 === $level) {
-    $coinscha = 100 - $coins;
-    $yuju = '还需' . $coinscha . '财富值成为VIP3';
-} elseif (3 === $level) {
-    $coinscha = 200 - $coins;
-    $yuju = '还需' . $coinscha . '财富值成为VIP4';
-} elseif (4 === $level) {
-    $coinscha = 500 - $coins;
-    $yuju = '还需' . $coinscha . '财富值成为VIP5';
-} elseif (5 === $level) {
-    $coinscha = 800 - $coins;
-    $yuju = '还需' . $coinscha . '财富值成为VIP6';
-} elseif (6 === $level) {
-    $coinscha = 1500 - $coins;
-    $yuju = '还需' . $coinscha . '财富值成为VIP7';
-} else {
+$viparray = array(
+    '0' =>  '20',
+    '1' =>  '50',
+    '2' =>  '100',
+    '3' =>  '200',
+    '4' =>  '500',
+    '5' =>  '800',
+    '6' =>  '1500',
+);
+
+if (7 === $level) {
     $yuju = '您已成为VIP7';
+} else {
+    $yuju = '还需' . ($viparray[$level] - $coins) . '财富值成为VIP' . ($level + 1);
 }
 
 ?>
@@ -64,7 +54,7 @@ if (0 === $level) {
 
 <div class="member-level">
     <div class="memberlevel-treasure padd-lf-rg">
-        <h4 class="treasure-title">当前财富值：<?= StringUtils::amountFormat2($user->coins) ?></h4>
+        <h4 class="treasure-title">当前财富值：<?= StringUtils::amountFormat2($coins) ?></h4>
         <div class="memberlevel-vip clearfix">
             <ul class="vip-ul">
                 <li class="<?= $shuzu[0]['classone'] ?> "><img src="<?= FE_BASE_URI ?>wap/memberlevel/img/<?= $shuzu[0]['picone'] ?>-vip-0.png" class="v0" alt="v0"></li>
