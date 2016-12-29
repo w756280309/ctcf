@@ -6,27 +6,28 @@ use common\models\category\Category;
 use common\models\category\ItemCategory;
 use Yii;
 use yii\behaviors\TimestampBehavior;
+use yii\db\ActiveRecord;
 use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "news".
  *
- * @property string $id
- * @property string $title
- * @property string $summary
- * @property string $image
- * @property string $source
- * @property string $category_id
- * @property string $creator_id
- * @property string $status
+ * @property string  $id
+ * @property string  $title
+ * @property string  $summary
+ * @property string  $image
+ * @property string  $source
+ * @property string  $creator_id
+ * @property string  $status
  * @property integer $home_status
- * @property string $sort
- * @property string $body
+ * @property string  $sort
+ * @property string  $body
  * @property integer $news_time
  * @property integer $updated_at
  * @property integer $created_at
+ * @property boolean $allowShowInList 是否在列表中显示
  */
-class News extends \yii\db\ActiveRecord
+class News extends ActiveRecord
 {
     const STATUS_NO_PUBLISH = 0;    //未上线
     const STATUS_PUBLISH = 1;   //上线
@@ -67,7 +68,6 @@ class News extends \yii\db\ActiveRecord
             [['image'], 'string', 'max' => 250],
             [['summary'], 'string', 'max' => 200],
             ['pc_thumb', 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg'],
-            //['pc_thumb', 'file', 'skipOnEmpty' => true, 'maxSize' => 51200, 'tooBig' => '图片大小不能超过50KB'],
         ];
     }
 
@@ -77,7 +77,6 @@ class News extends \yii\db\ActiveRecord
         $model->sort = 0;
         $model->category = [];
         $model->source = '';
-        $model->category_id = 0;
         $model->pc_thumb = '';
         return $model;
     }
@@ -93,7 +92,6 @@ class News extends \yii\db\ActiveRecord
             'child_title' => '新闻副标题',
             'image' => '内容图片',
             'source' => '内容来源',
-            'category_id' => '所属分类',
             'creator_id' => '创建者管理员id',
             'status' => '状态',
             'home_status' => '是否在首页显示',
@@ -161,5 +159,4 @@ class News extends \yii\db\ActiveRecord
         }
         return [];
     }
-
 }

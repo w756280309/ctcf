@@ -4,6 +4,7 @@ namespace common\models\category;
 
 use Yii;
 use yii\behaviors\TimestampBehavior;
+use yii\db\ActiveRecord;
 use yii\helpers\ArrayHelper;
 
 /**
@@ -16,7 +17,7 @@ use yii\helpers\ArrayHelper;
  * @property integer $updated_at
  * @property integer $created_at
  */
-class ItemCategory extends \yii\db\ActiveRecord
+class ItemCategory extends ActiveRecord
 {
 
     public static function tableName()
