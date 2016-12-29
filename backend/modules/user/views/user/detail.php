@@ -162,8 +162,8 @@ $this->title = '用户详情';
                 <tr>
                     <td><strong>会员等级</strong></td>
                     <td>VIP<?= $normalUser->level ?></td>
-                    <td></td>
-                    <td></td>
+                    <td>用户在兑吧ID</td>
+                    <td><?= $normalUser->thirdPartyConnect ? $normalUser->thirdPartyConnect->publicId : '---'?></td>
                     <td></td>
                     <td></td>
                 </tr>

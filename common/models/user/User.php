@@ -3,6 +3,7 @@
 namespace common\models\user;
 
 use common\models\epay\EpayUser;
+use common\models\mall\ThirdPartyConnect;
 use common\models\order\OnlineOrder as Ord;
 use common\models\order\OrderQueue;
 use common\models\order\OnlineRepaymentPlan as RepaymentPlan;
@@ -815,5 +816,10 @@ class User extends ActiveRecord implements IdentityInterface, UserInterface
         }
 
         return $level;
+    }
+
+    public function getThirdPartyConnect()
+    {
+        return $this->hasOne(ThirdPartyConnect::className(), ['user_id' => 'id']);
     }
 }

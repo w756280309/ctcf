@@ -6,6 +6,14 @@ namespace common\models\mall;
 use common\models\user\User;
 use yii\db\ActiveRecord;
 
+/**
+ * @property int        $id
+ * @property string     $publicId       用户的对外ID
+ * @property string     $visitor_id     为统计预留
+ * @property int        $user_id        用户ID
+ * @property string     $thirdPartyUser_id  用户在第三方账户的ID
+ * @property string     $createTime
+ */
 class ThirdPartyConnect extends ActiveRecord
 {
 

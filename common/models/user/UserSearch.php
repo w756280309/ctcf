@@ -22,6 +22,7 @@ class UserSearch extends User
             'regContext',
             'couponAmountMin',
             'couponAmountMax',
+            'publicUserId',
         ];
     }
 
@@ -31,6 +32,7 @@ class UserSearch extends User
         $join_user_account = false;//判断是否已经关联 user_account 表
         $join_user_coupon = false;//判断是否已经关联 user_coupon 表
         $join_coupon_type = false;//判断是否已经关联 coupon_type 表
+        $join_third_party_connect = false; //是否关联 third_party_connect 表
         $query = User::find();
         $this->setAttributes($params, false);
         $query->andFilterWhere([
@@ -139,6 +141,16 @@ class UserSearch extends User
             if(!is_null($couponAmountMax)) {
                 $query->andHaving(['<=', 'sum(coupon_type.amount)', $couponAmountMax]);
             }
+        }
+
+        //兑吧用户ID
+        $publicUserId = trim($this->publicUserId);
+        if (!empty($publicUserId)) {
+            if (!$join_third_party_connect) {
+                $query->leftJoin('third_party_connect', 'user.id = third_party_connect.user_id');
+                $join_third_party_connect = true;
+            }
+            $query->andWhere(['like', 'third_party_connect.publicId', $publicUserId]);
         }
 
         $query->with('lendAccount');

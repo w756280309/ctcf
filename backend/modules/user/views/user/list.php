@@ -114,8 +114,10 @@ $isPersonal = $category === User::USER_TYPE_PERSONAL;
                                     <input type="text" class="m-wrap span4"  name='couponAmountMin' value="<?= Yii::$app->request->get('couponAmountMin') ?>"/>
                                     <input type="text" class="m-wrap span4"  name='couponAmountMax' value="<?= Yii::$app->request->get('couponAmountMax') ?>"/>
                                 </td>
-                                <td></td>
-                                <td></td>
+                                <td colspan="2">
+                                    <span class="title">兑吧用户ID</span>
+                                    <input type="text" class="m-wrap span8"  name='publicUserId' value="<?= Yii::$app->request->get('publicUserId') ?>"/>
+                                </td>
                                 <td></td>
                             </tr>
                             <tr>
