@@ -10,8 +10,8 @@ use yii\console\Controller;
 class DrawNotifyController extends Controller
 {
     private $draw_count = [
-        'small' => 10,
-        'big'   => 40,
+        'small' => 3,
+        'big'   => 5,
     ];   //提现次数
 
     /**
@@ -35,7 +35,7 @@ class DrawNotifyController extends Controller
         $big_limit = (int) $new_query->having(['>=', 'total',  $draw_count['big']])->count();
         if ($small_limit > 0) {
             $notify = new DingNotify('wdjf_customer');
-            $notify->charSentText('当月提现次数到达10次的用户有 【' . $small_limit . '】 人；提现次数到达40次的用户有 【' . $big_limit . '】 人！');
+            $notify->charSentText('当月提现次数到达' . $draw_count['small'] . '次的用户有 【' . $small_limit . '】 人；提现次数到达'. $draw_count['big'] .'次的用户有 【' . $big_limit . '】 人！');
         }
     }
 }

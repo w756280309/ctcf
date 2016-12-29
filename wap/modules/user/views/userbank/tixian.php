@@ -41,7 +41,11 @@ $this->title="提现";
         <div class="row dan" style="padding-top: 1px;">
             <div class="hidden-xs col-sm-1"></div>
             <div class="col-xs-12 col-sm-10" style="padding: 0">
-                <span>(每笔提现收取2元手续费)</span>
+                <?php
+                    $drawFreeLimit = Yii::$app->params['draw_free_limit'];
+                    $restDrawCount = $drawFreeLimit - $user_acount->user->getDrawCount();
+                ?>
+                <span>(每月有<?= $drawFreeLimit ?>次免费发起提现的机会，本月您还有<?= $restDrawCount > 0 ? $restDrawCount : 0 ?>次免费机会，之后每笔收取<?= Yii::$app->params['drawFee'] ?>元手续费)</span>
             </div>
             <div class="hidden-xs col-sm-1"></div>
         </div>

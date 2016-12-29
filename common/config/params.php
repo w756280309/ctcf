@@ -45,7 +45,7 @@ return [
         'cfcaCertPath' => dirname(__DIR__).'/cfca_test/cfca.crt',
     ],
     'drawFee' => 2, //单位元，提现手续费
-    'draw_free_limit' => 50, //提现自然月免手续费限制，若超过50次，则收取手续费
+    'draw_free_limit' => 5, //提现自然月免手续费限制，若超过50次，则收取手续费
     'settlement' => [
         /*结算账号设置 start */
         'bank_id' => '424', //南京银行编号

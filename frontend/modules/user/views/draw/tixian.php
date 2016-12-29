@@ -5,6 +5,10 @@
     $this->registerCssFile('/css/useraccount/chargedeposit.css');
 
     use common\utils\StringUtils;
+
+    $drawFreeLimit = Yii::$app->params['draw_free_limit'];
+    $drawFee = Yii::$app->params['drawFee'];
+    $restDrawCount = $drawFreeLimit - $user_acount->user->getDrawCount();
 ?>
 <div class="bindCard-box">
 <div class="bindCard-header">
@@ -42,7 +46,7 @@
             <div class="link-en">
                 <input type="submit" class="link-charge" value="提现" id="rechargebtn" />
             </div>
-            <p class="fee-info" style="    margin-top: -24px;color: #f44336;    margin-left: 60px;">* 每笔提现收取2元手续费</p>
+            <p class="fee-info" style="margin-top: -24px;color: #f44336;margin-left: 60px;">* 每月有<?= $drawFreeLimit ?>次免费发起提现的机会，本月您还有<?= $restDrawCount > 0 ? $restDrawCount : 0 ?>次免费机会，之后每笔收取<?= $drawFee ?>元手续费</p>
         </form>
         <!------------------已绑卡结束------------------>
     <?php } else { ?>
@@ -64,7 +68,7 @@
     <p class="charge-explain-title">温馨提示：</p>
     <p class="charge-explain-content">身份认证、提现银行卡绑定均设置成功后，才能进行提现；</p>
     <p class="charge-explain-content">工作日内17:00之前申请提现，当日到账；工作日17:00之后申请提现，会在下一个工作日到账。如遇双休日或法定节假日顺延。</p>
-    <p class="charge-explain-content">提现手续费每笔2元，由第三方资金托管平台收取；</p>
+    <p class="charge-explain-content">每月有<?= $drawFreeLimit ?>次免费发起提现的机会，之后每笔收取<?= $drawFee ?>元手续费，由第三方资金托管平台收取；</p>
     <p class="charge-explain-content"> 特殊声明：禁止洗钱、信用卡套现、虚假交易等行为，一经发现并确认，将终止该账户的使用；</p>
     <p class="charge-explain-content">如需咨询请联系客服400-101-5151 (周一至周日8:30-20:00，假日另行告知)。</p>
 </div>

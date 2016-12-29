@@ -673,7 +673,7 @@ IN (" . implode(',', $recordIds) . ")")->queryAll();
 
     public function actionDrawStatsCount()
     {
-        return ['small' => $this->DrawLimitCount(10), 'large' => $this->DrawLimitCount(40)];
+        return ['small' => $this->DrawLimitCount(3), 'large' => $this->DrawLimitCount(5)];
     }
 
     public function actionDrawLimitList($times = 0)

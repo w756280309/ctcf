@@ -39,7 +39,7 @@ $this->title = '首页 - 温都金服后台';
         });
 
         var xhr1 = $.get('/user/user/draw-stats-count', function(data) {
-            $('.draw-notice-item').append('<br>当月提现次数到达10次的用户有<a href="/user/user/draw-limit-list?times=10">'+ data.small +'</a>人；提现次数到达40次的用户有<a href="/user/user/draw-limit-list?times=40">'+ data.large +'</a>人！');
+            $('.draw-notice-item').append('<br>当月提现次数到达3次的用户有<a href="/user/user/draw-limit-list?times=3">'+ data.small +'</a>人；提现次数到达5次的用户有<a href="/user/user/draw-limit-list?times=5">'+ data.large +'</a>人！');
         });
     })
 </script>
