@@ -112,9 +112,11 @@ body {
 }
 .prerogativecontent ul li:nth-of-type(even) table tr {
   border-bottom: 1px solid #e3e3e3;
-  height: 0.85333333rem;
   font-size: 0.32rem;
   color: #999999;
+}
+.prerogativecontent ul li:nth-of-type(even) table tr td {
+  padding:0.2rem 0;
 }
 .prerogativecontent ul li:nth-of-type(even) table tr td:last-child {
   font-size: 0.34666667rem;

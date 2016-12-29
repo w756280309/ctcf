@@ -1,16 +1,17 @@
 <?php
 $this->title = '特权说明';
 ?>
-
 <link rel="stylesheet" href=".<?= FE_BASE_URI ?>wap/common/css/base.css">
-<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/memberlevel/css/member.css?v=1.0">
+<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/memberlevel/css/member.css?v=20161229">
 <script src="<?= FE_BASE_URI ?>libs/lib.flexible3.js"></script>
 <script src="<?= FE_BASE_URI ?>libs/jquery-1.11.1.min.js"></script>
 <script src="<?= FE_BASE_URI ?>libs/fastclick.js"></script>
+
 <header class="obtainheader prerogativeheader">
     <p>会员资格根据购买累计金额核定，如消费金额达到规定标准，就可以获得相应等级的会员资格。</p>
     <p>服务类型：生日特权、积分权利、客服专享、产品预约、活动报名、活动预约、物品寄送、单独挂标、上门服务、活动定制。</p>
 </header>
+
 <section class="prerogativecontent">
     <p>会员特权说明</p>
     <ul>
@@ -29,7 +30,7 @@ $this->title = '特权说明';
                 </tr>
                 <tr>
                     <td>积分权利</td>
-                    <td>签到积分、购买积分</td>
+                    <td>购买积分</td>
                 </tr>
             </table>
         </li>
@@ -46,8 +47,8 @@ $this->title = '特权说明';
                     <td>生日特权</td>
                     <td>生日祝福及代金券</td>
                 </tr>
-                <tr style="height: 1.4467rem;">
-                    <td valign="top" style="line-height:0.85rem;">积分权利</td>
+                <tr>
+                    <td valign="top">积分权利</td>
                     <td>购买积分*1.02倍</td>
                 </tr>
                 <tr>
@@ -73,8 +74,8 @@ $this->title = '特权说明';
                     <td>生日特权</td>
                     <td>生日祝福及代金券</td>
                 </tr>
-                <tr style="height: 1.4467rem;">
-                    <td valign="top" style="line-height:0.85rem;">积分权利</td>
+                <tr>
+                    <td valign="top">积分权利</td>
                     <td>购买积分*1.04倍</td>
                 </tr>
                 <tr>
@@ -104,8 +105,8 @@ $this->title = '特权说明';
                     <td>生日特权</td>
                     <td>生日祝福及代金券</td>
                 </tr>
-                <tr style="height: 1.4467rem;">
-                    <td valign="top" style="line-height:0.85rem;">积分权利</td>
+                <tr>
+                    <td valign="top">积分权利</td>
                     <td>购买积分*1.06倍</td>
                 </tr>
                 <tr>
@@ -135,8 +136,8 @@ $this->title = '特权说明';
                     <td>生日特权</td>
                     <td>生日祝福及代金券</td>
                 </tr>
-                <tr style="height: 1.4467rem;">
-                    <td valign="top" style="line-height:0.85rem;">积分权利</td>
+                <tr>
+                    <td valign="top">积分权利</td>
                     <td>购买积分*1.08倍</td>
                 </tr>
                 <tr>
@@ -147,8 +148,8 @@ $this->title = '特权说明';
                     <td>活动权利</td>
                     <td>预约报名活动</td>
                 </tr>
-                <tr style="height: 1.4467rem;">
-                    <td valign="top" style="line-height:0.85rem;">产品预约</td>
+                <tr>
+                    <td valign="top">产品预约</td>
                     <td>产品预约、单独挂标、次日起息(单笔认购100万以上)</td>
                 </tr>
             </table>
@@ -166,8 +167,8 @@ $this->title = '特权说明';
                     <td valign="top">生日特权</td>
                     <td>生日祝福、代金券及生日蛋糕券</td>
                 </tr>
-                <tr style="height: 1.4467rem;">
-                    <td valign="top" style="line-height:0.85rem;">积分权利</td>
+                <tr>
+                    <td valign="top">积分权利</td>
                     <td>购买积分*1.1倍</td>
                 </tr>
                 <tr>
@@ -178,8 +179,8 @@ $this->title = '特权说明';
                     <td>活动权利</td>
                     <td>预约报名活动、预留活动名额</td>
                 </tr>
-                <tr style="height: 1.4467rem;">
-                    <td valign="top" style="line-height:0.85rem;">产品预约</td>
+                <tr>
+                    <td valign="top">产品预约</td>
                     <td>产品预约、单独挂标、次日起息(单笔认购100万以上)</td>
                 </tr>
             </table>
@@ -197,20 +198,20 @@ $this->title = '特权说明';
                     <td>生日特权</td>
                     <td>生日祝福、代金券及生日蛋糕券</td>
                 </tr>
-                <tr style="height: 1.4467rem;">
-                    <td valign="top" style="line-height:0.85rem;">积分权利</td>
+                <tr>
+                    <td valign="top">积分权利</td>
                     <td>购买积分*1.12倍</td>
                 </tr>
-                <tr style="height: 1.4467rem;">
-                    <td valign="top" style="line-height:0.85rem;">专属顾问</td>
+                <tr>
+                    <td valign="top">专属顾问</td>
                     <td>微信客服专享、物品寄送及享受双人上门服务</td>
                 </tr>
                 <tr>
                     <td>活动权利</td>
                     <td>预约报名活动、预留活动名额</td>
                 </tr>
-                <tr style="height: 1.4467rem;">
-                    <td valign="top" style="line-height:0.85rem;">产品预约</td>
+                <tr>
+                    <td valign="top">产品预约</td>
                     <td>产品预约、单独挂标、次日起息(单笔认购100万以上)</td>
                 </tr>
             </table>
@@ -228,20 +229,20 @@ $this->title = '特权说明';
                     <td>生日特权</td>
                     <td>生日祝福、代金券及生日蛋糕券</td>
                 </tr>
-                <tr style="height: 1.4467rem;">
-                    <td valign="top" style="line-height:0.85rem;">积分权利</td>
+                <tr>
+                    <td valign="top">积分权利</td>
                     <td>购买积分*1.15倍</td>
                 </tr>
-                <tr style="height: 1.4467rem;">
-                    <td valign="top" style="line-height:0.85rem;">专属顾问</td>
+                <tr>
+                    <td valign="top">专属顾问</td>
                     <td>微信客服专享、物品寄送及享受双人上门服务</td>
                 </tr>
-                <tr style="height: 1.4467rem;">
-                    <td valign="top" style="line-height:0.85rem;">活动权利</td>
+                <tr>
+                    <td valign="top">活动权利</td>
                     <td>预约报名活动、预留活动名额、专属定制活动</td>
                 </tr>
-                <tr style="height: 1.4467rem;">
-                    <td valign="top" style="line-height:0.85rem;">产品预约</td>
+                <tr>
+                    <td valign="top">产品预约</td>
                     <td>产品预约、单独挂标、次日起息(单笔认购100万以上)</td>
                 </tr>
             </table>
