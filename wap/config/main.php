@@ -37,7 +37,18 @@ return [
                     'prefix' => function ($message) {
                         return '';//去掉消息返回的[IP address][User ID][Session ID][Severity Level]
                     },
-               ],
+                ],
+                [
+                    'class' => 'yii\log\FileTarget',
+                    'levels' => ['info'],
+                    'categories' => ['notify'],
+                    'logFile' => '@app/runtime/logs/notify/mall/mall_notify'. date('Ym').'.log',
+                    'maxFileSize' => 1024*2,
+                    'logVars' => ['info'],
+                    'prefix' => function ($message) {
+                        return "";//去掉消息返回的[IP address][User ID][Session ID][Severity Level]
+                    }
+                ]
             ],
         ],
         'errorHandler' => [
