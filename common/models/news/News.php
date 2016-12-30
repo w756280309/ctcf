@@ -138,9 +138,9 @@ class News extends ActiveRecord
     public static function getStatusList()
     {
         return array(
-            self::STATUS_NO_PUBLISH => "草稿",
-            self::STATUS_PUBLISH => "发布",
-            self::STATUS_DELETE => "删除",
+            self::STATUS_NO_PUBLISH => '草稿',
+            self::STATUS_PUBLISH => '发布',
+            self::STATUS_DELETE => '删除',
         );
     }
 
