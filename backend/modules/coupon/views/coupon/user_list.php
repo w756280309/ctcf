@@ -29,6 +29,7 @@ use yii\grid\GridView;
                 return StringUtils::amountFormat2($data->couponType->amount);
             },
             'contentOptions' => ['class' => 'money'],
+            'headerOptions' => ['class' => 'money'],
         ],
         [
             'label' => '起投金额(元)',
@@ -36,6 +37,7 @@ use yii\grid\GridView;
                 return StringUtils::amountFormat2($data->couponType->minInvest);
             },
             'contentOptions' => ['class' => 'money'],
+            'headerOptions' => ['class' => 'money'],
         ],
         [
             'label' => '领取时间',

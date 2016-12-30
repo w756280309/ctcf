@@ -114,6 +114,7 @@ HTML;
                 return number_format($record->order_money, 2);
             },
             'contentOptions' => ['class' => 'money'],
+            'headerOptions' => ['class' => 'money'],
         ],
         [
             'label' => '抵扣代金券',
@@ -121,6 +122,7 @@ HTML;
                 return number_format($record->couponAmount, 2);
             },
             'contentOptions' => ['class' => 'money'],
+            'headerOptions' => ['class' => 'money'],
         ],
         [
             'label' => '投资时间',

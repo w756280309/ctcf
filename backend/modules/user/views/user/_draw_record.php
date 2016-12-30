@@ -17,6 +17,7 @@
                 return number_format($record['money'], 2);
             },
             'contentOptions' => ['class' => 'money'],
+            'headerOptions' => ['class' => 'money'],
         ],
         [
             'label' => '银行',
@@ -30,6 +31,7 @@
                 return $record['fee'];
             },
             'contentOptions' => ['class' => 'money'],
+            'headerOptions' => ['class' => 'money'],
         ],
         [
             'label' => '交易时间',

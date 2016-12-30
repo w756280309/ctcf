@@ -17,6 +17,7 @@
                 return number_format($record['fund'], 2);
             },
             'contentOptions' => ['class' => 'money'],
+            'headerOptions' => ['class' => 'money'],
         ],
         [
             'label' => '银行',

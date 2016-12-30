@@ -29,6 +29,7 @@
                 return number_format(bcdiv($record['amount'], 100), 2);
             },
             'contentOptions' => ['class' => 'money'],
+            'headerOptions' => ['class' => 'money'],
         ],
         [
             'label' => '已转让金额',
@@ -36,6 +37,7 @@
                 return number_format(bcdiv($record['tradedAmount'], 100), 2);
             },
             'contentOptions' => ['class' => 'money'],
+            'headerOptions' => ['class' => 'money'],
         ],
         [
             'label' => '状态',

@@ -89,8 +89,8 @@ use yii\widgets\LinkPager;
                                         <thead>
                                             <tr>
                                                 <th>期数</th>
-                                                <th>还款本金（元）</th>
-                                                <th>还款利息（元）</th>
+                                                <th class="money">还款本金（元）</th>
+                                                <th class="money">还款利息（元）</th>
                                                 <th>预计还款时间</th>
                                                 <th>实际还款时间</th>
                                             </tr>
@@ -99,8 +99,8 @@ use yii\widgets\LinkPager;
                                         <?php foreach ($plan[$key] as $val) : ?>
                                             <tr>
                                                 <td><?= $val['qishu'] ?></td>
-                                                <td><?= StringUtils::amountFormat2($val['totalBenjin']) ?></td>
-                                                <td><?= StringUtils::amountFormat2($val['totalLixi']) ?></td>
+                                                <td class="money"><?= StringUtils::amountFormat2($val['totalBenjin']) ?></td>
+                                                <td class="money"><?= StringUtils::amountFormat2($val['totalLixi']) ?></td>
                                                 <td><?= date('Y-m-d', $val['refund_time']) ?></td>
                                                 <td><?= isset($refundTime[$key][$val['qishu']]) ? date('Y-m-d', $refundTime[$key][$val['qishu']]) : '---' ?></td>
                                             </tr>

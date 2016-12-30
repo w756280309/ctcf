@@ -22,6 +22,7 @@
                 return number_format(bcdiv($order['principal'], 100, 2),2);
             },
             'contentOptions' => ['class' => 'money'],
+            'headerOptions' => ['class' => 'money'],
         ],
         [
             'label' => '投资时间',
