@@ -13,10 +13,10 @@ class CodeController extends Controller
     private $goods_nums = 20;
     private $goods_config = [
         1 => [
-            '0022:20000-20' => '积分兑换20元代金券',
-            '0022:50000-50' => '积分兑换50元代金券',
-            '0022:100000-120' => '积分兑换120元代金券',
-            '0022:200000-180' => '积分兑换180元代金券',
+            '0022:20000-20' => '20元面值代金券',
+            '0022:50000-50' => '50元面值代金券',
+            '0022:100000-120' => '120元面值代金券',
+            '0022:200000-180' => '180元面值代金券',
         ],
         2 => [
             'oil_900' => '金龙鱼食用油900ml',
@@ -31,12 +31,14 @@ class CodeController extends Controller
             'xiaomi_usb' => '小米USB插线板',
             'xiaomi' => '小米手环',
             'chongdianbao' => '罗马仕充电宝10000毫安',
+            'code_test' => '兑换码-测试',
         ],
     ];
 
     /*
      * 定时任务生成兑换码
      * 针对于兑换码过期时间设置为2017-12-31 23:59:59
+     *
      */
     public function actionInsertrecords()
     {
@@ -55,6 +57,17 @@ class CodeController extends Controller
                     $goodsType->sn = $sn;
                     $goodsType->name = $name;
                     if ($goodsType->save()) {
+                        if ($sn === 'code_test') {
+                            $code = new Code();
+                            $code->code = $this->createRandomStr();
+                            $code->expiresAt = $expiresAt;
+                            $code->createdAt = $createdAt;
+                            $code->goodsType_sn = '0022:1000-10';
+                            $code->goodsType = 1;
+                            $code->save();
+                            $nums = 1;
+                        }
+
                         for ($j = 0; $j < $nums; $j++) {
                             $code = new Code();
                             $code->code = $this->createRandomStr();
@@ -64,6 +77,7 @@ class CodeController extends Controller
                             $code->goodsType = $k;
                             $code->save();
                         }
+
                     }
                 }
             }
