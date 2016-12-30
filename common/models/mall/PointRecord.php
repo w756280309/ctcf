@@ -3,6 +3,7 @@
 namespace common\models\mall;
 
 use Yii;
+use yii\db\ActiveRecord;
 
 /**
  * 积分流水表
@@ -18,8 +19,9 @@ use Yii;
  * @property integer $decr_points       减少积分
  * @property integer $final_points      变动后剩余积分
  * @property string $recordTime         流水时间
+ * @property integer $userLevel         用户等级
  */
-class PointRecord extends \yii\db\ActiveRecord
+class PointRecord extends ActiveRecord
 {
 
     const TYPE_LOAN_ORDER = 'loan_order';   //购买标的

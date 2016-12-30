@@ -54,6 +54,7 @@ class LoanOrderPoints
                 $transaction = \Yii::$app->db->beginTransaction();
                 try {
                     $points = $this->getPointsWithOrder($order);
+                    $level = $order->user->level;
                     $res = \Yii::$app->db->createCommand("UPDATE `user` SET `points` = `points` + :points WHERE `id` = :userId", ['points' => $points, 'userId' => $user->id])->execute();
                     if (!$res) {
                         throw new \Exception('数据保存失败1');
@@ -68,6 +69,7 @@ class LoanOrderPoints
                         'incr_points' => $points,
                         'final_points' => $finalPoints,
                         'recordTime' => date('Y-m-d H:i:s'),
+                        'userLevel' => $level,
                     ]);
                     $res = $record->save();
                     if (!$res) {
