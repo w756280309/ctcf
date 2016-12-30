@@ -4,6 +4,7 @@ namespace common\service;
 
 use common\models\coupon\UserCoupon;
 use common\models\product\OnlineProduct;
+use common\utils\StringUtils;
 use Exception;
 
 /**
@@ -229,7 +230,10 @@ class PayService
                 $v = bcdiv($money, $this->cdeal->dizeng_money);
                 $varr = explode('.', $v);
                 if ((bccomp($varr[1], 0)) > 0 &&  bcsub($orderbalance, $money) * 1 != 0) {
-                    return ['code' => self::ERROR_DIZENG,  'message' => $this->cdeal->start_money.'元起投,'.$this->cdeal->dizeng_money.'元递增'];
+                    return [
+                        'code' => self::ERROR_DIZENG,
+                        'message' => StringUtils::amountFormat2($this->cdeal->start_money).'元起投，'.StringUtils::amountFormat2($this->cdeal->dizeng_money).'元递增',
+                    ];
                 } elseif ($lastAmount != 0 && bcdiv($lastAmount, $this->cdeal->start_money) * 1 < 1) {
                     return ['code' => self::ERROR_MONEY_LAST,  'message' => self::getErrorByCode(self::ERROR_MONEY_LAST)];
                 }

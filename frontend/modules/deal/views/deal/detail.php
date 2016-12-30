@@ -166,7 +166,7 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/useraccount/chargedeposit.css');
                         <form action="/deal/deal/check?sn=<?= $deal->sn ?>" method="post" id="order_form">
                             <input type="hidden" name="_csrf" value="<?= Yii::$app->request->csrfToken ?>"/>
                             <div class="dR-input">
-                                <input type="text" class="dR-money" name="money" id="deal_money" placeholder="<?= StringUtils::amountFormat2($deal->start_money) ?>元起投，<?= StringUtils::amountFormat2($deal->dizeng_money) ?>元递增" autocomplete="off" value="<?= ($money > 0) ? $money : null?>"/>
+                                <input type="text" class="dR-money" name="money" id="deal_money" placeholder="<?= StringUtils::amountFormat1('{amount}{unit}', $deal->start_money) ?>起投，<?= StringUtils::amountFormat1('{amount}{unit}', $deal->dizeng_money) ?>递增" autocomplete="off" value="<?= ($money > 0) ? $money : null?>"/>
                                 <!--输入款提示信息-->
                                 <div class="tishi tishi-dev">
                                     <img class="jiao-left" src="/images/deal/jiao-right.png" alt="">
