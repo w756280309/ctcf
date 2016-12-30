@@ -142,11 +142,10 @@ class DrawManager
         $resp = \Yii::$container->get('ump')->getDrawInfo($draw);
 
         if ($resp->isSuccessful()) {
-            $bc = new BcRound();
             $tranState = (int) $resp->get('tran_state');
             if (2 === $tranState) {
                 $transaction = Yii::$app->db->beginTransaction();
-                $money = bcadd($draw->money, $draw->fee);
+                $money = bcadd($draw->money, $draw->fee, 2);
                 $userAccount = UserAccount::find()->where('uid = '.$draw->uid)->one();
                 $draw->status = DrawRecord::STATUS_SUCCESS;
 
@@ -157,7 +156,7 @@ class DrawManager
                 $momeyRecord->account_id = $userAccount->id;
                 $momeyRecord->type = MoneyRecord::TYPE_DRAW_SUCCESS;
                 $momeyRecord->balance = $userAccount->available_balance;
-                $momeyRecord->out_money = $bc->bcround($money, 2);
+                $momeyRecord->out_money = $money;
 
                 if ($draw->save(false) && $momeyRecord->save(false) && $userAccount->save(false)) {
                     $transaction->commit();
