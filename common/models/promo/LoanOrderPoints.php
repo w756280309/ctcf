@@ -99,6 +99,8 @@ class LoanOrderPoints
             case 7: $multiple = 1.15; break;
         }
 
-        return ceil(bcdiv(bcmul(bcmul($order->annualInvestment, 6, 14), $multiple, 14), 1000, 1));
+        $points = ceil(bcdiv(bcmul(bcmul($order->annualInvestment, 6, 14), $multiple, 14), 1000, 2));
+
+        return $points <= 0 ? 1 : $points;
     }
 }
