@@ -27,6 +27,7 @@ use yii\grid\GridView;
             </ul>
         </div>
     </div>
+
     <div class="portlet-body">
         <?= GridView::widget([
             'dataProvider' => $dataProvider,
@@ -43,6 +44,7 @@ use yii\grid\GridView;
                         return number_format($data['totalInvestment'], 2);
                     },
                     'contentOptions' => ['class' => 'money'],
+                    'headerOptions' => ['class' => 'money'],
                 ],
                 [
                     'attribute' => 'rechargeMoney',
@@ -51,6 +53,7 @@ use yii\grid\GridView;
                         return number_format($data['rechargeMoney'], 2);
                     },
                     'contentOptions' => ['class' => 'money'],
+                    'headerOptions' => ['class' => 'money'],
                 ],
                 [
                     'attribute' => 'drawAmount',
@@ -59,6 +62,7 @@ use yii\grid\GridView;
                         return number_format($data['drawAmount'], 2);
                     },
                     'contentOptions' => ['class' => 'money'],
+                    'headerOptions' => ['class' => 'money'],
                 ],
                 [
                     'attribute' => 'rechargeCost',
@@ -67,6 +71,7 @@ use yii\grid\GridView;
                         return number_format($data['rechargeCost'], 2);
                     },
                     'contentOptions' => ['class' => 'money'],
+                    'headerOptions' => ['class' => 'money'],
                 ],
                 [
                     'attribute' => 'investmentInWyb',
@@ -75,6 +80,7 @@ use yii\grid\GridView;
                         return number_format($data['investmentInWyb'], 2);
                     },
                     'contentOptions' => ['class' => 'money'],
+                    'headerOptions' => ['class' => 'money'],
                 ],
                 [
                     'attribute' => 'investmentInWyj',
@@ -83,6 +89,7 @@ use yii\grid\GridView;
                         return number_format($data['investmentInWyj'], 2);
                     },
                     'contentOptions' => ['class' => 'money'],
+                    'headerOptions' => ['class' => 'money'],
                 ],
                 [
                     'attribute' => 'reg',
@@ -158,6 +165,7 @@ use yii\grid\GridView;
                         return number_format($data['repayMoney'], 2);
                     },
                     'contentOptions' => ['class' => 'money'],
+                    'headerOptions' => ['class' => 'money'],
                 ],
                 [
                     'label' => '已回款用户数',

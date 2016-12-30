@@ -80,7 +80,7 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => YiiAsse
                         <th>会员ID</th>
                         <th>手机号</th>
                         <th>真实姓名</th>
-                        <th>提现金额（元）</th>
+                        <th class="money">提现金额（元）</th>
                         <th>申请时间</th>
                         <th>状态</th>
                         <th>联动状态</th>
@@ -92,7 +92,7 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => YiiAsse
                             <td><?= $res[$val['uid']]['usercode'] ?></td>
                             <td><?= $res[$val['uid']]['mobile'] ?></td>
                             <td><a href="/user/user/detail?id=<?=$val['uid'] ?>"><?= $res[$val['uid']]['real_name'] ?></a></td>
-                            <td><?= $val['money'] ?></td>
+                            <td class="money"><?= $val['money'] ?></td>
                             <td><?= date('Y-m-d H:i:s', $val['created_at']) ?></td>
                             <td><?= Yii::$app->params['draw_status'][$val['status']] ?></td>
                             <td><button class="btn btn-primary get_order_status" drawid="<?= $val['id'] ?>">查询流水在联动状态</button></td>

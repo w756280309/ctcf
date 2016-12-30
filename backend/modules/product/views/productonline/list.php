@@ -89,8 +89,8 @@ $pc_cat = Yii::$app->params['pc_cat'];
                         <th>项目类型</th>
                         <th>期限</th>
                         <th>利率（%）</th>
-                        <th>募集金额（元）</th>
-                        <th>实际募集金额（元）</th>
+                        <th class="money">募集金额（元）</th>
+                        <th class="money">实际募集金额（元）</th>
                         <th>满标时间</th>
                         <th>起息时间</th>
                         <th>状态</th>

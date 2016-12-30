@@ -32,6 +32,7 @@
                 }
             },
             'contentOptions' => ['class' => 'money'],
+            'headerOptions' => ['class' => 'money'],
         ],
         [
             'label' => '余额',
@@ -39,6 +40,7 @@
                 return number_format($record->balance, 2);
             },
             'contentOptions' => ['class' => 'money'],
+            'headerOptions' => ['class' => 'money'],
         ],
         [
             'label' => '项目名称',
@@ -86,4 +88,5 @@
         })
     })
 </script>
+
 

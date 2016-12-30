@@ -62,7 +62,9 @@ use yii\helpers\Html;
                     'label' => '投资金额（元）',
                     'value' => function ($data) {
                         return number_format($data['m'], 2);
-                    }
+                    },
+                    'contentOptions' => ['class' => 'money'],
+                    'headerOptions' => ['class' => 'money'],
                 ],
             ],
             'tableOptions' => ['class' => 'table table-striped table-bordered table-advance table-hover']

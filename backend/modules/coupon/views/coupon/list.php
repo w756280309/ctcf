@@ -60,8 +60,8 @@ use yii\widgets\LinkPager;
                     <tr>
                         <th>序号</th>
                         <th>名称</th>
-                        <th>面值</th>
-                        <th>起投金额</th>
+                        <th class="money">面值</th>
+                        <th class="money">起投金额</th>
                         <th>有效期</th>
                         <th>发放时间</th>
                         <th><center>操作</center></th>
@@ -72,8 +72,8 @@ use yii\widgets\LinkPager;
                     <tr>
                         <td><?= ++$key ?></td>
                         <td><?= $val->name ?></td>
-                        <td class="text-align-rg"><?= StringUtils::amountFormat2($val->amount) ?>元</td>
-                        <td class="text-align-rg"><?= StringUtils::amountFormat2($val->minInvest) ?>元</td>
+                        <td class="money"><?= StringUtils::amountFormat2($val->amount) ?>元</td>
+                        <td class="money"><?= StringUtils::amountFormat2($val->minInvest) ?>元</td>
                         <td><?= empty($val->expiresInDays) ? $val->useEndDate : $val->expiresInDays.'天' ?></td>
                         <td><?= empty($val->issueStartDate) ? '---' : $val->issueStartDate.' - '.$val->issueEndDate ?></td>
                         <td>

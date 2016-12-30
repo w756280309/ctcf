@@ -172,11 +172,11 @@ $isPersonal = $category === User::USER_TYPE_PERSONAL;
                         <th>企业名称</th>
                 <?php } ?>
                         <th>注册时间</th>
-                        <th>可用余额（元）</th>
+                        <th class="money">可用余额（元）</th>
                 <?php if ($isPersonal) { ?>
-                        <th>资产总额</th>
+                        <th class="money">资产总额</th>
                         <th>未投资时长（天）</th>
-                        <th>最后一次购买金额</th>
+                        <th class="money">最后一次购买金额</th>
                         <th>用户等级</th>
                         <th>联动状态</th>
                 <?php }?>

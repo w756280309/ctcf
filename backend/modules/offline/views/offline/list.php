@@ -82,7 +82,7 @@ $bid = (int)Yii::$app->request->get('bid');
                     <th>产品名称</th>
                     <th>客户姓名</th>
                     <th>联系电话</th>
-                    <th>认购金额（万元）</th>
+                    <th class="money">认购金额（万元）</th>
                     <th>认购日期</th>
                     <th>操作</th>
                 </tr>

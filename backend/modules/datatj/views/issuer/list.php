@@ -33,10 +33,10 @@ use yii\widgets\LinkPager;
                         <th>项目名称</th>
                         <th>项目编号</th>
                         <th>项目状态</th>
-                        <th>实际募集金额</th>
+                        <th class="money">实际募集金额</th>
                         <th>起息日</th>
-                        <th>还款本金</th>
-                        <th>还款利息</th>
+                        <th class="money">还款本金</th>
+                        <th class="money">还款利息</th>
                         <th>预计还款时间</th>
                         <th>实际还款时间</th>
                         <th>查看还款详情</th>
@@ -48,10 +48,10 @@ use yii\widgets\LinkPager;
                             <td><?= $val->title ?></td>
                             <td><?= $val->issuerSn ?></td>
                             <td><?= \Yii::$app->params['deal_status'][$val->status] ?></td>
-                            <td class="text-align-rg"><?= StringUtils::amountFormat2($val->funded_money) ?>元</td>
+                            <td class="money"><?= StringUtils::amountFormat2($val->funded_money) ?>元</td>
                             <td><?= empty($val->jixi_time) ? '---' : date('Y-m-d', $val->jixi_time) ?></td>
-                            <td class="text-align-rg"><?= isset($plan[$key]) ? StringUtils::amountFormat2(array_sum(ArrayHelper::getColumn($plan[$key], 'totalBenjin'))).'元' : '---' ?></td>
-                            <td class="text-align-rg"><?= isset($plan[$key]) ? StringUtils::amountFormat2(array_sum(ArrayHelper::getColumn($plan[$key], 'totalLixi'))).'元' : '---' ?></td>
+                            <td class="money"><?= isset($plan[$key]) ? StringUtils::amountFormat2(array_sum(ArrayHelper::getColumn($plan[$key], 'totalBenjin'))).'元' : '---' ?></td>
+                            <td class="money"><?= isset($plan[$key]) ? StringUtils::amountFormat2(array_sum(ArrayHelper::getColumn($plan[$key], 'totalLixi'))).'元' : '---' ?></td>
                             <td>
                                 <?php
                                     if (isset($plan[$key])) {
