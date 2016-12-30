@@ -44,7 +44,8 @@ body {
   padding-top: .25rem;
 }
 .member-level .memberlevel-treasure .memberlevel-vip .vip-ul {
-  width: 100%;
+  margin: 0 auto;
+  width: 8.773334rem;
 }
 .member-level .memberlevel-treasure .memberlevel-vip .vip-ul .vip {
   width: 1.01333333rem;
@@ -72,7 +73,7 @@ body {
   box-sizing: border-box;
 }
 .member-level .memberlevel-treasure .memberlevel-vip .vip-ul .line {
-  margin: 0.32rem 0 0 0;
+  margin: 0.315rem 0 0 0;
   width: 1.57333333rem;
   height: 1px;
   background: #fff;
@@ -85,10 +86,6 @@ body {
   width: 1px;
   height: 0.4rem;
   background: #fff;
-}
-.member-level .memberlevel-treasure .memberlevel-vip .vip-ul .marg-rg {
-  width: 0.24666rem!important;
-  height: 0.66666667rem;
 }
 .member-level .membellevel-prerogative {
   width: 100%;

@@ -47,7 +47,7 @@ if (7 === $level) {
 ?>
 
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/base.css">
-<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/memberlevel/css/index.css?v=1.11">
+<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/memberlevel/css/index.css?v=1.18">
 <script src="<?= FE_BASE_URI ?>libs/lib.flexible3.js"></script>
 <script src="<?= FE_BASE_URI ?>libs/jquery-1.11.1.min.js"></script>
 <script src="<?= FE_BASE_URI ?>libs/fastclick.js"></script>
@@ -65,7 +65,6 @@ if (7 === $level) {
                 <li class="lf line"></li>
                 <li class="<?= $shuzu[3]['classone'] ?> "><img src="<?= FE_BASE_URI ?>wap/memberlevel/img/<?= $shuzu[3]['picone'] ?>-vip-3.png" class="v3" alt="v3"></li>
                 <li class="lf vertical-line"></li>
-                <li class="marg-rg"></li>
                 <li class="<?= $shuzu[4]['classone'] ?> "><img src="<?= FE_BASE_URI ?>wap/memberlevel/img/<?= $shuzu[4]['picone'] ?>-vip-4.png" class="v4" alt="v4"></li>
                 <li class="rg line"></li>
                 <li class="<?= $shuzu[5]['classone'] ?> "><img src="<?= FE_BASE_URI ?>wap/memberlevel/img/<?= $shuzu[5]['picone'] ?>-vip-5.png" class="v5" alt="v5"></li>
