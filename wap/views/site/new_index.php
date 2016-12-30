@@ -11,7 +11,7 @@ use yii\helpers\Html;
 
 ?>
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/base.css?v=2.0">
-<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/index/css/index.css?v=2.0">
+<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/index/css/index.css?v=20161229">
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>libs/swiper/swiper.min.css">
 <script src="<?= FE_BASE_URI ?>libs/lib.flexible.js"></script>
 

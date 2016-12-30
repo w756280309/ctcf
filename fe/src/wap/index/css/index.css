@@ -621,10 +621,11 @@ a.shouye1:active {
 .pop img:nth-of-type(1) {
     width:0.76rem;
     position: absolute;
-    top:-14.5%;
+    top:-11.5%;
     right:0;
 }
 .pop img:nth-of-type(2) {
-    width:6.6666667rem;
+    width:8rem;
+    height:10.66667rem;
 }
 
