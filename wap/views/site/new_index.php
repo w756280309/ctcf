@@ -41,22 +41,25 @@ use yii\helpers\Html;
     <div class="featured">
         <p class="project">精选项目</p>
         <!--两张图片-->
-        <ul class="clearfix twopic">
+        <p class="text-align-ct">
+            <?php if ('/' === ASSETS_BASE_URI) { ?>
+                <a href="/issuer?id=3&type=1"><img src="/images/sd_201612.jpg?v=20161230" alt="" width="100%"></a>
+            <?php } else { ?>
+                <a href="/issuer?id=2&type=1"><img src="/images/sd_201612.jpg?v=20161230" alt=""  width="100%"></a>
+            <?php } ?>
+        </p>
+        <!--<ul class="clearfix twopic">
             <li class="lf">
-                <?php if ('/' === ASSETS_BASE_URI) { ?>
-                    <a href="/issuer?id=3&type=1"><img src="<?= FE_BASE_URI ?>wap/index/images/sandu.png" alt=""></a>
-                <?php } else { ?>
-                    <a href="/issuer?id=2&type=1"><img src="<?= FE_BASE_URI ?>wap/index/images/sandu.png" alt=""></a>
-                <?php } ?>
+
             </li>
             <li class="rg">
-                <?php if ('/' === ASSETS_BASE_URI) { ?>
-                    <a href="/issuer?id=1&type=2"><img src="<?= FE_BASE_URI ?>wap/index/images/bgproject_05.png" alt=""></a>
-                <?php } else { ?>
-                    <a href="/issuer?id=5&type=2"><img src="<?= FE_BASE_URI ?>wap/index/images/bgproject_05.png" alt=""></a>
-                <?php } ?>
+                <?php /*if ('/' === ASSETS_BASE_URI) { */?>
+                    <a href="/issuer?id=1&type=2"><img src="<?/*= FE_BASE_URI */?>wap/index/images/bgproject_05.png" alt=""></a>
+                <?php /*} else { */?>
+                    <a href="/issuer?id=5&type=2"><img src="<?/*= FE_BASE_URI */?>wap/index/images/bgproject_05.png" alt=""></a>
+                <?php /*} */?>
             </li>
-        </ul>
+        </ul>-->
     </div>
 </section>
 
