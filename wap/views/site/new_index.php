@@ -181,7 +181,7 @@ use yii\helpers\Html;
 
 <div class="pop" style="display: none;">
     <img src="<?= FE_BASE_URI ?>wap/index/images/close.png" class="close_splash" alt="">
-    <img src="<?= ASSETS_BASE_URI ?>images/kp.jpg" class="jumpAdv" alt="">
+    <img src="<?= ASSETS_BASE_URI ?>images/index/kaipin/161230.jpg" class="jumpAdv" alt="">
 </div>
 <script src="<?= ASSETS_BASE_URI ?>js/swiper.min.js"></script>
 <script>
@@ -221,21 +221,19 @@ use yii\helpers\Html;
     }
 
     $(function () {
-        /*
         //开屏图逻辑
         $('.close_splash').on('click', closeAdv);
-        if (Cookies.get('splash_show') !== '20161223') {
+        if (Cookies.get('splash_show') !== '20161230') {
             document.body.addEventListener('touchmove', eventTarget);
-            Cookies.set('splash_show', '20161223');
+            Cookies.set('splash_show', '20161230');
             $('.mask').show();
             $('.pop').show();
             setTimeout(closeAdv, 4000);
         }
 
         $('.jumpAdv').on('click', function () {
-            location.href = '/promotion/p161224';
+            location.href = '/upload/showpic?id=29';
         });
-        */
 
         //判断首页上方
         checkStatus();
