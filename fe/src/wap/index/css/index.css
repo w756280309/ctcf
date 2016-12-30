@@ -202,9 +202,9 @@ section .featured .threepic li a img {
 }
 
 .invest p {
-    height: 0.96rem;
+    height:  1.0933333rem;
     padding: 0 0.53333333rem;
-    line-height: 0.96rem;
+    line-height:  1.0933333rem;
     border-bottom: 1px solid #ddd;
     font-size: 15px;
     background: url("../images/arrow.png") no-repeat 95% center;
