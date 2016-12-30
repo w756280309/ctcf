@@ -65,12 +65,11 @@ class NewsController extends BaseController
     }
 
 
+    /**
+     * 资讯添加/编辑.
+     */
     public function actionEdit($id = null)
     {
-        //所有文章分类
-        $categories = Category::getTree(News::CATEGORY_TYPE_ARTICLE, 3);
-        //状态
-        $_statusList = News::getStatusList();
         if ($id) {
             $model = $this->findModel($id);
             $model->news_time = date('Y-m-d H:i:s', $model->news_time);
@@ -94,16 +93,34 @@ class NewsController extends BaseController
                 if (null === $model->pc_thumb) {
                     unset($model->pc_thumb);
                 }
+
+                $model = $this->updateAllowShowInList($model);
+
                 if ($model->save(false)) {
                     return $this->redirect(['index']);
                 }
             }
         }
 
-        return $this->render('edit', ['model' => $model,
-            'status' => $_statusList,
-            'categories' => $categories,
+        return $this->render('edit', [
+            'model' => $model,
+            'status' => News::getStatusList(),
+            'categories' => Category::getTree(News::CATEGORY_TYPE_ARTICLE, 3),   //所有文章分类
         ]);
+    }
+
+    /**
+     * 后台编辑资讯的时候，如果分类是“理财指南”或“投资技巧”，则前台不显示.
+     */
+    private function updateAllowShowInList(News $news)
+    {
+        $category = Category::find()
+            ->where(['name' => ['理财指南', '投资技巧']])
+            ->column();
+
+        $news->allowShowInList = empty(array_intersect($category, $news->category));
+
+        return $news;
     }
 
     public function actionDelete($id)
