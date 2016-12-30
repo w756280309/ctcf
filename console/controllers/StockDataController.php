@@ -37,18 +37,24 @@ class StockDataController extends Controller
 
         $orders = Ord::findAll(['status' => Ord::STATUS_SUCCESS, 'online_pid' => $loans]);    //筛选成功的订单
 
-        $transcation = Yii::$app->db->getTransaction();
+        $transaction = Yii::$app->db->beginTransaction();
 
         try {
             foreach ($orders as $order) {
-                $res = Yii::$app->db->createCommand('update user set annualInvestment = annualInvestment + '.$order->annualInvestment.' where id = '.$order->user->id)->execute();
+                $annualInvestment = $order->annualInvestment;
 
-                if (!$res) {
-                    throw new \Exception('更新用户累计年化投资金额失败');
+                if ($annualInvestment > 0) {
+                    $res = Yii::$app->db->createCommand('update user set annualInvestment = annualInvestment + '.$annualInvestment.' where id = '.$order->user->id)->execute();
+
+                    if (!$res) {
+                        throw new \Exception('更新用户累计年化投资金额失败');
+                    }
                 }
             }
+
+            $transaction->commit();
         } catch (\Exception $e) {
-            $transcation->rollBack();
+            $transaction->rollBack();
 
             die($e->getMessage());
         }

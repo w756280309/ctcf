@@ -9,6 +9,7 @@ use common\models\product\OnlineProduct as Loan;
 use common\models\order\OnlineRepaymentPlan as Plan;
 use common\models\order\OrderManager;
 use common\service\BankService;
+use wap\modules\promotion\models\RankingPromo;
 use Yii;
 use yii\data\Pagination;
 
@@ -20,11 +21,23 @@ class UserController extends BaseController
     public function actionIndex()
     {
         $user = $this->getAuthedUser();
-        $ua = $this->getAuthedUser()->lendAccount;
+        $ua = $user->lendAccount;
+        $pointPromo = RankingPromo::findOne(['key' => 'loan_order_points']);
+
+        try {
+            $showPointsArea = $pointPromo->isActive($user);
+        } catch (\Exception $e) {
+            $showPointsArea = false;
+        }
 
         $data = BankService::checkKuaijie($user);
 
-        return $this->render('index', ['ua' => $ua, 'user' => $user, 'data' => $data]);
+        return $this->render('index', [
+            'ua' => $ua,
+            'user' => $user,
+            'data' => $data,
+            'showPointsArea' => $showPointsArea,
+        ]);
     }
 
     /**

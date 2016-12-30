@@ -24,16 +24,19 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/fastclick.js', ['depends' => JqueryAss
 </script>
 
 <!--  账户中心页 start-->
-<a href="/user/usergrade">
-    <div class="row member-level-tit">
-        <div class="member-level-lf"></div>
-        <div class="member-level-rg row">
-            <span class="phone-size"><?= StringUtils::obfsMobileNumber($user->mobile) ?></span>
-            <img class="img-member-vip" src="<?= FE_BASE_URI ?>wap/memberlevel/img/white-vip-<?= $user->level ?>.png">
-            <i class="treasure-line">｜</i>财富值:<span class="treasure"><?= StringUtils::amountFormat2($user->coins) ?></span>
+<?php if ($showPointsArea) { //积分活动生效时显示,或白名单用户登录时显示 ?>
+    <a href="/user/usergrade">
+        <div class="row member-level-tit">
+            <div class="member-level-lf"></div>
+            <div class="member-level-rg row">
+                <span class="phone-size"><?= StringUtils::obfsMobileNumber($user->mobile) ?></span>
+                <img class="img-member-vip" src="<?= FE_BASE_URI ?>wap/memberlevel/img/white-vip-<?= $user->level ?>.png">
+                <i class="treasure-line">｜</i>财富值:<span class="treasure"><?= StringUtils::amountFormat2($user->coins) ?></span>
+            </div>
         </div>
-    </div>
-</a>
+    </a>
+<?php } ?>
+
 <div class="row  border-bottom  earning accountcenter">
     <div class="row earn-tit">
         <div class="col-xs-1"></div>
@@ -114,14 +117,16 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/fastclick.js', ['depends' => JqueryAss
         <div class="col-xs-1"></div>
     </a>
 
-    <div class="clear"></div>
-    <a class="row sm-height border-bottom block" href="/mall/point" >
-        <div class="col-xs-10 left-txt">我的积分</div>
-        <div class="col-xs-1 arrow">
-            <img src="<?= ASSETS_BASE_URI ?>images/arrow.png" alt="右箭头">
-        </div>
-        <div class="col-xs-1"></div>
-    </a>
+    <?php if ($showPointsArea) { ?>
+        <div class="clear"></div>
+        <a class="row sm-height border-bottom block" href="/mall/point" >
+            <div class="col-xs-10 left-txt">我的积分</div>
+            <div class="col-xs-1 arrow">
+                <img src="<?= ASSETS_BASE_URI ?>images/arrow.png" alt="右箭头">
+            </div>
+            <div class="col-xs-1"></div>
+        </a>
+    <?php } ?>
 
     <div class="clear"></div>
     <a class="row sm-height border-bottom block" href="/user/invite/" >

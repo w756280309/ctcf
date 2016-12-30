@@ -83,7 +83,7 @@ use yii\helpers\Html;
                 <div>
                     <?php
                         foreach($tags as $key => $tag) {
-                            if ($key < 2) {
+                            if ($key < 2 && !empty($tag)) {
                     ?>
                         <span><?= Html::encode($tag) ?></span>
                     <?php
