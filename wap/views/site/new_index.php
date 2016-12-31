@@ -223,12 +223,12 @@ use yii\helpers\Html;
     $(function () {
         //开屏图逻辑
         $('.close_splash').on('click', closeAdv);
-        if (Cookies.get('splash_show') !== '20161230') {
+        if (Cookies.get('splash_show') !== '20161231') {
             document.body.addEventListener('touchmove', eventTarget);
-            Cookies.set('splash_show', '20161230');
+            Cookies.set('splash_show', '20161231');
             $('.mask').show();
             $('.pop').show();
-            setTimeout(closeAdv, 4000);
+            setTimeout(closeAdv, 6000);
         }
 
         $('.jumpAdv').on('click', function () {
