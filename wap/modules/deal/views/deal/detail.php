@@ -23,6 +23,9 @@ $this->registerJsFile(FE_BASE_URI.'libs/videojs/video.min.js', ['position' => 1]
             <?php if ($deal->allowUseCoupon) { ?>
                 <i>可用券</i>
             <?php } ?>
+            <?php if ($pointsMultiple > 1) { ?>
+                <i><?= $pointsMultiple ?>倍积分</i>
+            <?php }?>
         </div>
     </div>
     <div class="container">

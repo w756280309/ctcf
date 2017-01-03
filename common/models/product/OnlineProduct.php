@@ -989,4 +989,19 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
 
         return true;
     }
+
+    /**
+     * 获取当前标的的积分倍数
+     * 注：目前只有发行方为“北京北大高科技产业投资有限公司”的标的积分加倍
+     * return int
+     */
+    public function getPointsMultiple()
+    {
+        $issuer = $this->issuerInfo;
+        $multiple = 1;
+        if (!empty($issuer) && trim($issuer->name) === '北京北大高科技产业投资有限公司') {
+            $multiple = 2;
+        }
+        return $multiple;
+    }
 }
