@@ -50,7 +50,7 @@ use yii\helpers\Html;
                 <a href="/issuer?id=3&type=3"><img src="<?= ASSETS_BASE_URI ?>images/bdgk.png" alt=""  width="100%"></a>
             </li>
             <li class="rg">
-                <a href="/issuer?id=2&type=1"><img src="<?= FE_BASE_URI ?>wap/index/images/bgproject_06.png" alt=""></a>
+                <a href="/issuer?id=2&type=1"><img src="<?= FE_BASE_URI ?>wap/index/images/sandu.png" alt=""></a>
             </li>
         </ul>
     </div>
