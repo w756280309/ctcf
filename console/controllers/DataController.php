@@ -229,4 +229,75 @@ class DataController extends Controller
         $this->deleteUserDataFromPath($path, '立合旺通');//删除历史数据
         exit();
     }
+
+    //导出每个用户投资每个标的|转让的数据 data/export-user161230
+    public function actionExportUser161230()
+    {
+        $sql = "SELECT u.id AS user_id, u.real_name AS name, u.mobile AS mobile, u.idcard AS idcard, p.id AS loan_id, p.title title, FROM_UNIXTIME( p.finish_date ) AS finish_date, SUM( rp.benjin ) AS benjin, SUM( rp.lixi ) AS all_lixi, MAX( o.yield_rate ) AS rate
+FROM online_repayment_plan AS rp
+INNER JOIN user AS u ON rp.uid = u.id
+INNER JOIN online_product AS p ON rp.online_pid = p.id
+INNER JOIN online_order AS o ON rp.order_id = o.id
+WHERE u.type =1
+AND o.status =1
+GROUP BY u.id, rp.online_pid
+ORDER BY u.real_name ASC , rp.online_pid ASC ";
+        $data = Yii::$app->db->createCommand($sql)->queryAll();
+        foreach ($data as $item) {
+            $result[$item['user_id']][$item['loan_id']] = [
+                'name' => $item['name'],
+                'mobile' => strval($item['mobile']) . "\t",
+                'idcard' => strval($item['idcard']) . "\t",
+                'title' => $item['title'],
+                'finish_date' => $item['finish_date'],
+                'rate' => floatval($item['rate']) * 100,
+                'benjin' => floatval($item['benjin']),
+                'all_lixi' => floatval($item['all_lixi']),
+            ];
+        }
+
+        //已还
+        $sql = "SELECT rp.uid AS user_id, rp.online_pid AS loan_id, SUM( rp.lixi ) AS y_lixi
+FROM online_repayment_plan AS rp
+WHERE rp.status
+IN ( 1, 2 ) 
+GROUP BY rp.uid, rp.online_Pid";
+        $data = Yii::$app->db->createCommand($sql)->queryAll();
+        foreach ($data as $item) {
+            if (isset($result[$item['user_id']][$item['loan_id']])) {
+                $result[$item['user_id']][$item['loan_id']]['y_lixi'] = floatval($item['y_lixi']);
+            }
+        }
+        //未还
+        $sql = "SELECT rp.uid AS user_id, rp.online_pid AS loan_id, SUM( rp.lixi ) AS n_lixi
+FROM online_repayment_plan AS rp
+WHERE rp.status = 0 
+GROUP BY rp.uid, rp.online_Pid";
+        $data = Yii::$app->db->createCommand($sql)->queryAll();
+        foreach ($data as $item) {
+            if (isset($result[$item['user_id']][$item['loan_id']])) {
+                $result[$item['user_id']][$item['loan_id']]['n_lixi'] = floatval($item['n_lixi']);
+            }
+        }
+        $file = 'user_loan_data' . date('YmdHis') . '.csv';
+        header('Content-Disposition: attachment; filename="' . $file . '"');
+        $out = fopen($file, 'w');
+
+        fputs($out, "\xEF\xBB\xBF");//添加BOM头
+        fputcsv($out, ['姓名', '手机号', '身份证号', '标的标题', '截止日期', '利率(%)', '投资金额', '总利息', '已还利息', '未还利息']);
+        if (!empty($result)) {
+            foreach ($result as $user_id => $userData) {
+                if (!empty($userData) and  is_array($userData)) {
+                    foreach ($userData as $loan_id => $loanData) {
+                        if (!empty($loanData) && is_array($loanData)) {
+                            fputcsv($out, $loanData);
+                        }
+                    }
+                }
+            }
+        }
+
+        fclose($out);
+        exit();
+    }
 }
