@@ -404,13 +404,13 @@ class RepaymentController extends BaseController
             $transaction->commit();
         }
 
-        $_repaymentrecord = OnlineRepaymentRecord::find()->where(['online_pid' => $pid, 'status' => [OnlineRepaymentRecord::STATUS_DID, OnlineRepaymentRecord::STATUS_BEFORE]])->groupBy('uid');
+        $_repaymentrecord = OnlineRepaymentRecord::find()->where(['online_pid' => $pid, 'status' => [OnlineRepaymentRecord::STATUS_DID, OnlineRepaymentRecord::STATUS_BEFORE]])->andWhere(['qishu' => $qishu])->groupBy('uid');
         $data = $_repaymentrecord->select('uid')->all();
         $product = OnlineProduct::findOne($pid);
 
         foreach ($data as $val) {
             $user = User::findOne($val->uid);
-            $data_arr = $_repaymentrecord->having(['uid' => $val['uid']])->select('sum(benjin) as benjin, sum(lixi) as lixi')->andWhere(['qishu' => $qishu])->createCommand()->queryAll();
+            $data_arr = $_repaymentrecord->having(['uid' => $val['uid']])->select('sum(benjin) as benjin, sum(lixi) as lixi')->createCommand()->queryAll();
 
             if (OnlineProduct::REFUND_METHOD_DAOQIBENXI === $product->refund_method) {
                 $templateId = Yii::$app->params['sms']['daoqibenxi'];
