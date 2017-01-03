@@ -29,8 +29,6 @@ use common\models\payment\PaymentLog;
  */
 class RepaymentController extends BaseController
 {
-    public $layout = 'frame';
-
     public function init()
     {
         parent::init();
