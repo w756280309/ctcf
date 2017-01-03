@@ -1,12 +1,25 @@
 <?php
 
-use yii\helpers\Html;
+use common\models\adminuser\Auth;
 use common\models\AuthSys;
+use yii\helpers\Html;
 
 $menus = AuthSys::getMenus();
-?>
-<?php $this->beginPage() ?>
+$action = Yii::$app->controller->action->getUniqueId();
 
+$actioninfo = Auth::find()
+    ->where(['path' => $action])
+    ->asArray()
+    ->all();
+
+$leftLinkArray = Auth::find()
+    ->where([
+        'order_code' => $actioninfo[0]['order_code'],
+        'level'     =>  '2',
+    ])
+    ->asArray()
+    ->all();
+?>
 
 <!DOCTYPE html>
 <!--[if IE 8]> <html lang="en" class="ie8"> <![endif]-->
@@ -114,7 +127,23 @@ $menus = AuthSys::getMenus();
         <div class="page-container row-fluid">
             <!-- BEGIN HORIZONTAL MENU PAGE SIDEBAR1 -->
             <div class="page-sidebar nav-collapse collapse">
-                    <?= $this->blocks['block1eft'] ?>
+                <ul class="page-sidebar-menu hidden-phone hidden-tablet">
+                    <li>
+                        <div class="sidebar-toggler hidden-phone"></div>
+                    </li>
+                    <li class="open">
+                        <a href="javascript:;">
+                            <i class="icon-th-list"></i>
+                            <span class="t"><?= ('frame/index' === $action) ? '管理首页' : '菜单列表' ?></span>
+                            <span class="arrow "></span>
+                        </a>
+                        <ul class="sub-menu" style="display: block">
+                            <?php foreach ($leftLinkArray as $val){ ?>
+                                <li><a href="/<?=$val['path']?>" target="_self"><?=$val['auth_name']?></a></li>
+                            <?php } ?>
+                        </ul>
+                    </li>
+                </ul>
             </div>
             <!-- END BEGIN HORIZONTAL MENU PAGE SIDEBAR -->
 

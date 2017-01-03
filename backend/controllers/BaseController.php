@@ -14,7 +14,7 @@ use yii\filters\AccessControl;
 
 class BaseController extends Controller
 {
-    public $layout = 'frame';
+    public $layout = '@app/views/layouts/frame';
     public $alert = 0; //是否提示
     protected $toUrl = ''; //是否成功后跳转
     protected $msg = '操作成功'; //提示内容
