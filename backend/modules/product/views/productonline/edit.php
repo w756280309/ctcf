@@ -506,6 +506,14 @@ $is_online = in_array($model->status, [2, 3, 4, 5, 6, 7]);//判断标的是否�
                     </div>
                 </div>
             </div>
+            <div class="span6">
+                <div class="control-group">
+                    <label class="control-label">积分倍数<span class="notice">(<?= $desc ?>)</span></label>
+                    <div class="controls">
+                        <?=  $form->field($model, 'pointsMultiple')->textInput(array_merge(['autocomplete' => 'off', 'value' => $model->pointsMultiple, 'class' => 'm-wrap span2'], $model->online_status ? ['disabled' => 'disabled'] : []))->label(false) ?>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <h3 class="form-section">项目合同信息</h3>

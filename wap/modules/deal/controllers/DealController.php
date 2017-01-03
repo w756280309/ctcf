@@ -91,7 +91,7 @@ class DealController extends Controller
             'deal' => $deal,
             'user' => $user,
             'allowTransfer' => $deal->allowTransfer(),
-            'pointsMultiple' => $deal->getPointsMultiple(),
+            'pointsMultiple' => $deal->pointsMultiple,
         ]);
     }
 

@@ -47,6 +47,7 @@ use yii\behaviors\TimestampBehavior;
  * @property int $isTest
  * @property boolean $allUseCoupon 是否允许使用代金券
  * @property boolean $isLicai 是否为理财计划标识
+ * @property int     $pointsMultiple    积分倍数
  */
 class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
 {
@@ -111,7 +112,7 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
             'create' => ['title', 'sn', 'cid', 'money', 'borrow_uid', 'expires', 'expires_show', 'yield_rate', 'start_money', 'borrow_uid', 'fee', 'status',
                 'description', 'refund_method', 'account_name', 'account', 'bank', 'dizeng_money', 'start_date', 'end_date', 'full_time',
                 'is_xs', 'yuqi_faxi', 'order_limit', 'creator_id', 'del_status', 'status', 'isPrivate', 'allowedUids', 'finish_date', 'channel', 'jixi_time', 'sort',
-                'jiaxi', 'kuanxianqi', 'isFlexRate', 'rateSteps', 'issuer', 'issuerSn', 'paymentDay', 'isTest', 'filingAmount', 'allowUseCoupon', 'tags', 'isLicai'],
+                'jiaxi', 'kuanxianqi', 'isFlexRate', 'rateSteps', 'issuer', 'issuerSn', 'paymentDay', 'isTest', 'filingAmount', 'allowUseCoupon', 'tags', 'isLicai', 'pointsMultiple'],
         ];
     }
 
@@ -192,7 +193,7 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
             },  'whenClient' => "function (attribute, value) {
                 return $('#onlineproduct-is_fdate').parent().hasClass('checked');
             }"],
-            [['cid', 'is_xs', 'borrow_uid', 'refund_method', 'expires', 'full_time', 'del_status', 'status', 'order_limit', 'creator_id'], 'integer'],
+            [['cid', 'is_xs', 'borrow_uid', 'refund_method', 'expires', 'full_time', 'del_status', 'status', 'order_limit', 'creator_id', 'pointsMultiple'], 'integer'],
             [['yield_rate', 'fee', 'money', 'start_money', 'dizeng_money', 'yuqi_faxi', 'jiaxi'], 'number'],
             [['isPrivate', 'kuanxianqi'], 'integer'],
             ['isPrivate', 'default', 'value' => 0],
@@ -960,6 +961,7 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
             'yuqi_faxi' => 0,
             'allowUseCoupon' => true,
             'paymentDay' => 20,
+            'pointsMultiple' => 1,
         ]);
     }
 
@@ -988,20 +990,5 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
         }
 
         return true;
-    }
-
-    /**
-     * 获取当前标的的积分倍数
-     * 注：目前只有发行方为“北京北大高科技产业投资有限公司”的标的积分加倍
-     * return int
-     */
-    public function getPointsMultiple()
-    {
-        $issuer = $this->issuerInfo;
-        $multiple = 1;
-        if (!empty($issuer) && trim($issuer->name) === '北京北大高科技产业投资有限公司') {
-            $multiple = 2;
-        }
-        return $multiple;
     }
 }

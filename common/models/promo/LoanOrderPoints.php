@@ -121,6 +121,6 @@ class LoanOrderPoints
         }
 
         $points = ceil(bcdiv(bcmul(bcmul($order->annualInvestment, 6, 14), $multiple, 14), 1000, 2));
-        return max(1, $points) * $loan->getPointsMultiple();
+        return max(1, $points) * $loan->pointsMultiple;
     }
 }
