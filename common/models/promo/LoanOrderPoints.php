@@ -31,7 +31,7 @@ class LoanOrderPoints
             $orders = OnlineOrder::find()->where(['online_pid' => $loan->id, 'status' => OnlineOrder::STATUS_SUCCESS])->all();
             foreach ($orders as $order) {
                 try {
-                    $this->addUserPointsWithLoanOrder($order);
+                    $this->addUserPointsWithLoanOrder($order, $loan);
                 } catch (NotActivePromoException $ex) {
                 }
             }
@@ -41,7 +41,7 @@ class LoanOrderPoints
     /**
      * 根据标的订单为用户添加积分.
      */
-    private function addUserPointsWithLoanOrder(OnlineOrder $order)
+    private function addUserPointsWithLoanOrder(OnlineOrder $order, OnlineProduct $loan)
     {
         $user = $order->user;
         if ($order->status === OnlineOrder::STATUS_SUCCESS && $this->promo->isActive($user)) {
@@ -53,7 +53,7 @@ class LoanOrderPoints
             if (empty($record)) {
                 $transaction = \Yii::$app->db->beginTransaction();
                 try {
-                    $points = $this->getPointsWithOrder($order);
+                    $points = $this->getPointsWithOrder($order, $loan);
                     $level = $order->user->level;
                     $res = \Yii::$app->db->createCommand("UPDATE `user` SET `points` = `points` + :points WHERE `id` = :userId", ['points' => $points, 'userId' => $user->id])->execute();
                     if (!$res) {
@@ -84,23 +84,43 @@ class LoanOrderPoints
     }
 
     /**
-     * 根据订单计算用户所得积分.
+     * 根据订单计算用户所得积分
+     * @param OnlineOrder $order
+     * @param OnlineProduct $loan
+     * return int
      */
-    private function getPointsWithOrder(OnlineOrder $order)
+    private function getPointsWithOrder(OnlineOrder $order, OnlineProduct $loan)
     {
         switch ($order->user->level) {
-            case 0: $multiple = 1; break;
-            case 1: $multiple = 1.02; break;
-            case 2: $multiple = 1.04; break;
-            case 3: $multiple = 1.06; break;
-            case 4: $multiple = 1.08; break;
-            case 5: $multiple = 1.1; break;
-            case 6: $multiple = 1.12; break;
-            case 7: $multiple = 1.15; break;
+            case 0:
+                $multiple = 1;
+                break;
+            case 1:
+                $multiple = 1.02;
+                break;
+            case 2:
+                $multiple = 1.04;
+                break;
+            case 3:
+                $multiple = 1.06;
+                break;
+            case 4:
+                $multiple = 1.08;
+                break;
+            case 5:
+                $multiple = 1.1;
+                break;
+            case 6:
+                $multiple = 1.12;
+                break;
+            case 7:
+                $multiple = 1.15;
+                break;
+            default :
+                $multiple = 1;
         }
 
         $points = ceil(bcdiv(bcmul(bcmul($order->annualInvestment, 6, 14), $multiple, 14), 1000, 2));
-
-        return $points <= 0 ? 1 : $points;
+        return max(1, $points) * $loan->getPointsMultiple();
     }
 }
