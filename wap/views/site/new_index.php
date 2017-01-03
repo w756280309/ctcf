@@ -42,27 +42,15 @@ use yii\helpers\Html;
         <!--两张图片-->
         <!--
             <p class="text-align-ct">
-                <?php //if ('/' === ASSETS_BASE_URI) { ?>
-                    <a href="/issuer?id=3&type=1"><img src="/images/sd_201612.jpg?v=20161230" alt="" width="100%"></a>
-                <?php //} else { ?>
-                    <a href="/issuer?id=2&type=1"><img src="/images/sd_201612.jpg?v=20161230" alt=""  width="100%"></a>
-                <?php //} ?>
+                <a href="/issuer?id=2&type=1"><img src="/images/sd_201612.jpg?v=20161230" alt=""  width="100%"></a>
             </p>
         -->
         <ul class="clearfix twopic">
             <li class="lf">
-                <?php if ('/' === ASSETS_BASE_URI) { ?>
-                    <a href="/issuer?id=4&type=3"><img src="<?= ASSETS_BASE_URI ?>images/bdgk.png" alt="" width="100%"></a>
-                <?php } else { ?>
-                    <a href="/issuer?id=3&type=3"><img src="<?= ASSETS_BASE_URI ?>images/bdgk.png" alt=""  width="100%"></a>
-                <?php } ?>
+                <a href="/issuer?id=3&type=3"><img src="<?= ASSETS_BASE_URI ?>images/bdgk.png" alt=""  width="100%"></a>
             </li>
             <li class="rg">
-                <?php if ('/' === ASSETS_BASE_URI) { ?>
-                    <a href="/issuer?id=3&type=1"><img src="<?= FE_BASE_URI ?>wap/index/images/bgproject_04.png" alt=""></a>
-                <?php } else { ?>
-                    <a href="/issuer?id=2&type=1"><img src="<?= FE_BASE_URI ?>wap/index/images/bgproject_04.png" alt=""></a>
-                <?php } ?>
+                <a href="/issuer?id=2&type=1"><img src="<?= FE_BASE_URI ?>wap/index/images/bgproject_06.png" alt=""></a>
             </li>
         </ul>
     </div>
