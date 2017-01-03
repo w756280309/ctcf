@@ -1,11 +1,24 @@
 <?php
 
-$this->title = 1 === $type ? '宁富1号三都国资' : '南金交 · 中盛海润1号';
+switch ($type) {
+    case 1:
+        $this->title = '宁富1号三都国资';
+        $cssFile = 'sdgz.css?v=20161216';
+        break;
+    case 2:
+        $this->title = '南金交 · 中盛海润1号';
+        $cssFile = 'zshr.css';
+        break;
+    case 3:
+        $this->title = '宁富17号北大高科';
+        $cssFile = 'bdgk.css';
+        break;
+}
 
 ?>
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/base.css">
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>libs/videojs/video-js.min.css">
-<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/introduce/css/<?= 1 === $type ? 'sdgz.css?v=20161216' : 'zshr.css' ?>">
+<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/introduce/css/<?= $cssFile ?>">
 <script src="<?= FE_BASE_URI ?>libs/flex.js"></script>
 <script src="<?= FE_BASE_URI ?>libs/videojs/video.min.js"></script>
 <script src="<?= FE_BASE_URI ?>libs/fastclick.js"></script>
@@ -106,7 +119,7 @@ $this->title = 1 === $type ? '宁富1号三都国资' : '南金交 · 中盛海�
             <a href="/issuer/to-loan?issuerid=<?= $issuer->id ?>">立即认购</a>
         <?php } ?>
     </footer>
-<?php } else { ?>
+<?php } elseif (2 === $type) { ?>
     <header>
         <img src="<?= FE_BASE_URI ?>wap/introduce/img/banner_01.png" alt="">
         <img src="<?= FE_BASE_URI ?>wap/introduce/img/banner_02.png" alt="">
@@ -210,6 +223,120 @@ $this->title = 1 === $type ? '宁富1号三都国资' : '南金交 · 中盛海�
             <a href="/issuer/to-loan?issuerid=<?= $issuer->id ?>">立即认购</a>
         <?php } ?>
     </footer>
+<?php } elseif (3 === $type) { ?>
+    <header>
+        <img src="<?= FE_BASE_URI ?>wap/introduce/img/banner_05.png" alt="">
+        <img src="<?= FE_BASE_URI ?>wap/introduce/img/banner_06.png" alt="">
+    </header>
+    <section>
+        <div class="publisher pub-special">
+            <h4>产  品  亮  点</h4>
+            <p><span><i></i></span></p>
+            <div class="pubcontent">
+                <h5>北大青鸟集团</h5>
+                <div>
+                    <span>北大青鸟集团成立于1992年11月1日，是北京大学下属大型高科技企业集团，国有控股企业集团。北大青鸟集团源于国家支持的计算机软件重大科技攻关项目“青鸟工程”，是“青鸟工程”科技成果的转化机制。在“青鸟工程”的基础上，北大青鸟集团面向行业，推动科研成果向市场产品转化，秉承“以人才为根本，以技术为核心，以产品为依托”的经营方针，为中国信息化建设和中国软件行业腾飞不断开拓。</span>
+                    <span>北大青鸟集团紧密依托北京大学优良、丰富的资源，以创新求发展，目前已形成包括IT（及制造业）、教育、文化传媒、地产、新能源、旅游、金融在内的七大产业，旗下拥有数十家企业，员工近万余名，资金雄厚，业务范围遍及全国20多个主要城市，资本运营力度较大、投资回报较为显著。</span>
+                </div>
+            </div>
+        </div>
+        <div class="guarantor">
+            <h4>还  款  来  源</h4>
+            <p><span><i></i></span></p>
+            <div class="guacontent">
+                <h5>两大还款来源</h5>
+                <div>
+                    <img src="<?= FE_BASE_URI ?>wap/introduce/img/moneyfrom_01.png" alt="">
+                    <img src="<?= FE_BASE_URI ?>wap/introduce/img/moneyfrom_02.png" alt="">
+                </div>
+            </div>
+        </div>
+        <div class="publisher">
+            <h4>增  信  措  施</h4>
+            <p><span><i></i></span></p>
+            <div class="pubcontent">
+                <h5>校办企业国企担保</h5>
+                <div>
+                    <span>北京北大科技实业发展中心向发行人出具《担保函》，约定为本定向融资工具本金及利息的到期偿付提供全额无条件不可撤销的连带责任保证担保。保证范围为本定向融资工具的本金及投资收益，以及违约金、损害赔偿金、实现债权的费用和其他应支付的费用；保证期间为本定向融资工具存续期及本定向融资工具到期日起二年。</span>
+                </div>
+            </div>
+        </div>
+        <div class="publisher">
+            <h4>发  行  人</h4>
+            <p><span><i></i></span></p>
+            <div class="pubcontent">
+                <h5>北京北大高科技产业投资有限公司</h5>
+                <div>
+                    <span>北京北大高科技产业投资有限公司是由广州北大青鸟商用信息系统有限公司、北京东方国兴科技发展有限公司、北京北大博雅投资有限公司共同出资组建的有限责任公司。</span>
+                    <span>注册资本7.8亿公司是一家依托北京大学和北大青鸟集团从事教育产业、计算机及制造业、旅游产业及金融产业专业投资和主动管理的企业。</span>
+                    <span>截止 2015年12月，总资产63亿，有效净资产26.53亿。</span>
+                </div>
+            </div>
+        </div>
+        <div class="publisher">
+            <h4>担  保  方</h4>
+            <p><span><i></i></span></p>
+            <div class="pubcontent">
+                <h5>北京北大科技实业发展中心</h5>
+                <div>
+                    <span>北京北大科技实业发展中心（以下简称北大科实）是于1995年经北京大学批准组建的国有高科技集团，唯一股东为北京大学。是北大青鸟集团旗下新能源高科技领域的龙头企业。</span>
+                    <span>近年来，北大科实充分发挥自身产业优势和北大青鸟集团的集成优势， 2007年以来，资产规模增长107倍,营业收入增长921倍，利润增长76倍，国有资产保值增值水平在北京大学的企业中位居前列。</span>
+                </div>
+            </div>
+        </div>
+        <div class="safeguards">
+            <h4>保  障  措  施</h4>
+            <p><span><i></i></span></p>
+            <div class="safecontent">
+                <h5>多种保障加码  安全兑付无忧</h5>
+            </div>
+        </div>
+    </section>
+    <footer>
+        <table>
+            <tr>
+                <td class="lf">发行人</td>
+                <td class="rg">北京北大高科技产业投资有限公司</td>
+            </tr>
+            <tr>
+                <td class="lf">备案登记机构</td>
+                <td class="rg">南京金融资产交易中心有限公司</td>
+            </tr>
+            <tr>
+                <td class="lf">产品金额</td>
+                <td class="rg">总计20000万元，可分期募集</td>
+            </tr>
+            <tr>
+                <td class="lf">产品期限</td>
+                <td class="rg">12个月</td>
+            </tr>
+            <tr>
+                <td class="lf">认购起点</td>
+                <td class="rg">5万元起购，按1万元递增</td>
+            </tr>
+            <tr>
+                <td class="lf">预期年化收益率</td>
+                <td class="rg" style="color: #0080ff;">7.2%/年</td>
+            </tr>
+            <tr>
+                <td class="lf">起息日</td>
+                <td class="rg">T+5个自然日</td>
+            </tr>
+            <tr>
+                <td class="lf" style="line-height: 1rem;">收益分配</td>
+                <td class="rg" style="line-height: 0.6rem; padding-top: 0.2rem;padding-bottom: 0.2rem;text-align: right;">每自然半年度付息，到期偿还本金<br>及末期利息</td>
+            </tr>
+        </table>
+        <?php if ($loansCount) { ?>
+            <a href="/issuer/to-loan?issuerid=<?= $issuer->id ?>">立即认购</a>
+        <?php } ?>
+    </footer>
+
+    <script>
+        window.onload = function() {
+            FastClick.attach(document.body);
+        }
+    </script>
 <?php } ?>
 
 <script>

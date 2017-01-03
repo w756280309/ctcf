@@ -17,12 +17,12 @@ class IssuerController extends Controller
      * 1. 如果发行方没有对应的标的,则按钮不显示;
      *
      * @param int $id 发行方ID.
-     * @param int $type 标志静态页面渲染内容,1代表宁富1号三都国资定向融资工具,2代表南金交·中盛海润1号 临时代码,今后统一为从后台读取内容
+     * @param int $type 标志静态页面渲染内容,1代表宁富1号三都国资定向融资工具,2代表南金交·中盛海润1号,3代表北大高科 临时代码,今后统一为从后台读取内容
      */
     public function actionIndex($id, $type = 1)
     {
         $type = intval($type);
-        if (!in_array($type, [1, 2])) {
+        if (!in_array($type, [1, 2, 3])) {
             $type = 1;
         }
 
