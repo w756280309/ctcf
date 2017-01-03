@@ -38,7 +38,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/common.js', ['depends' => 'yii\web\Yii
         ga('require', 'ecommerce');
         function logTx()
         {
-            if ($.cookie('fin_tid') == orderSn) {
+            if (Cookies.get('fin_tid') == orderSn) {
                 return;
             }
 
@@ -46,7 +46,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/common.js', ['depends' => 'yii\web\Yii
                 'id': orderSn,
                 'revenue': '<?= $order->order_money ?>',
                 'hitCallback': function() {
-                    $.cookie('fin_tid', orderSn);
+                    Cookies.set('fin_tid', orderSn);
                     location.replace("/order/order/result?status=success&osn="+orderSn);
                 }
             });

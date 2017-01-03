@@ -24,7 +24,7 @@ $this->registerCssFile(ASSETS_BASE_URI.'css/deal/buy.css');
 
         function logTx()
         {
-            if ($.cookie('fin_tid') === orderSn) {
+            if (Cookies.get('fin_tid') === orderSn) {
                 return;
             }
 
@@ -32,7 +32,7 @@ $this->registerCssFile(ASSETS_BASE_URI.'css/deal/buy.css');
                 'id': orderSn,
                 'revenue': '<?= $order->order_money ?>',
                 'hitCallback': function() {
-                    $.cookie('fin_tid', orderSn);
+                    Cookies.set('fin_tid', orderSn);
                     location.replace('/order/order/result?status=success&osn='+orderSn);
                 }
             });
