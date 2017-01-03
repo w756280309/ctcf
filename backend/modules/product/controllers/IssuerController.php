@@ -11,8 +11,6 @@ use yii\web\UploadedFile;
 
 class IssuerController extends BaseController
 {
-    public $layout = '@backend/modules/coupon/views/layouts/frame';
-
     /**
      * 发行方列表页.
      *
