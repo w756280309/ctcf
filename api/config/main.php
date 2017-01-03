@@ -71,6 +71,8 @@ return [
 
                 'notify/mall/init' => 'v1/notify/mall/init',//积分商场扣除积分接口
                 'notify/mall/result' => 'v1/notify/mall/result',//积分商城通知回调接口
+
+                'app/splashes' => 'v1/app/splash/show',//app闪屏页查询接口
             ],
         ],
     ],
