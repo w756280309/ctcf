@@ -135,41 +135,33 @@ class DataController extends Controller
         }
         fclose($fp);
         $linkFile = $path.'lender_data.csv';
-        if (file_exists($linkFile)) {
+        if (false !== is_link($linkFile)) {
             unlink($linkFile);
         }
         symlink($file, $linkFile);
-        $this->deleteUserDataFromPath($path, '投资用户信息');//删除历史数据
+        $this->deleteUserDataFromPath($path, '投资用户信息', $file);//删除历史数据
         exit();
     }
 
-    //删除用户数据相关的历史导出文件,保留最新一个
-    private function deleteUserDataFromPath($path, $fileNamePart)
+    //删除包含指定指定文件名的文件,保留指定文件
+    private function deleteUserDataFromPath($path, $fileNamePart, $file)
     {
         if (!file_exists($path)) {
             mkdir($path);
         }
-        $files = [];
         if ( is_dir($path)) {
             $handle = opendir( $path );
             if ($handle) {
                 while ( false !== ( $item = readdir( $handle ) ) ) {
                     if ( $item != "." && $item != ".." ) {
-                        if (false !== strpos($item, $fileNamePart)) {
-                            $files[] = "$path/$item";
+                        $newFIle = rtrim($path, "/") . "/$item";
+                        if (false !== strpos($item, $fileNamePart) && $newFIle !== $file) {
+                            unlink($newFIle);
                         }
                     }
                 }
             }
             closedir( $handle );
-        }
-        if(count($files) > 0) {
-            $lastFile = end($files);
-            foreach ($files as $file) {
-                if ($file !== $lastFile) {
-                    unlink($file);
-                }
-            }
         }
     }
 
@@ -222,11 +214,11 @@ class DataController extends Controller
         fwrite($fp, $this->renderFile('@backend/modules/datatj/views/issuer/export.php', $record));
         fclose($fp);
         $linkFile = $path . 'issuer_' . $issuerId . '.xls';
-        if (file_exists($linkFile)) {
+        if (false !== is_link($linkFile) ) {
             unlink($linkFile);
         }
         symlink($file, $linkFile);
-        $this->deleteUserDataFromPath($path, '立合旺通');//删除历史数据
+        $this->deleteUserDataFromPath($path, '立合旺通', $file);//删除历史数据
         exit();
     }
 
