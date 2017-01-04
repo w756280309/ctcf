@@ -16,6 +16,7 @@ $leftLinkArray = Auth::find()
     ->where([
         'order_code' => $actioninfo[0]['order_code'],
         'level'     =>  '2',
+        'status'    =>  '1',
     ])
     ->asArray()
     ->all();
