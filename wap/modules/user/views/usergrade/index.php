@@ -97,7 +97,7 @@ if (7 === $level) {
         <div class="prerogative rg-prerogative rg">
             <img src="<?= FE_BASE_URI ?>wap/memberlevel/img/<?= $shuzu[0]['pictwo'] ?>-integration.png" alt="积分权利">
             <h4 class="prerogative-title">积分权利</h4>
-            <p class="details">购买积分</p>
+            <p class="details">投资获得积分</p>
         </div>
     </div>
 
@@ -111,7 +111,7 @@ if (7 === $level) {
         <div class="prerogative rg-prerogative rg">
             <img src="<?= FE_BASE_URI ?>wap/memberlevel/img/<?= $shuzu[1]['pictwo'] ?>-integration.png" alt="积分权利">
             <h4 class="prerogative-title">积分权利</h4>
-            <p class="details">购买积分*1.02倍</p>
+            <p class="details">投资获得积分*1.02倍</p>
         </div>
         <div class="prerogative lf-prerogative lf">
             <img src="<?= FE_BASE_URI ?>wap/memberlevel/img/<?= $shuzu[1]['pictwo'] ?>-customer-service.png" alt="专属顾问">
@@ -135,7 +135,7 @@ if (7 === $level) {
         <div class="prerogative rg-prerogative rg">
             <img src="<?= FE_BASE_URI ?>wap/memberlevel/img/<?= $shuzu[2]['pictwo'] ?>-integration.png" alt="积分权利">
             <h4 class="prerogative-title">积分权利</h4>
-            <p class="details">购买积分*1.04倍</p>
+            <p class="details">投资获得积分*1.04倍</p>
         </div>
         <div class="prerogative lf-prerogative lf">
             <img src="<?= FE_BASE_URI ?>wap/memberlevel/img/<?= $shuzu[2]['pictwo'] ?>-customer-service.png" alt="专属顾问">
@@ -166,7 +166,7 @@ if (7 === $level) {
         <div class="prerogative rg-prerogative rg">
             <img src="<?= FE_BASE_URI ?>wap/memberlevel/img/<?= $shuzu[3]['pictwo'] ?>-integration.png" alt="积分权利">
             <h4 class="prerogative-title">积分权利</h4>
-            <p class="details">购买积分*1.06倍</p>
+            <p class="details">投资获得积分*1.06倍</p>
         </div>
         <div class="prerogative lf-prerogative lf">
             <img src="<?= FE_BASE_URI ?>wap/memberlevel/img/<?= $shuzu[3]['pictwo'] ?>-customer-service.png" alt="专属顾问">
@@ -197,7 +197,7 @@ if (7 === $level) {
         <div class="prerogative rg-prerogative rg">
             <img src="<?= FE_BASE_URI ?>wap/memberlevel/img/<?= $shuzu[4]['pictwo'] ?>-integration.png" alt="积分权利">
             <h4 class="prerogative-title">积分权利</h4>
-            <p class="details">购买积分*1.08倍</p>
+            <p class="details">投资获得积分*1.08倍</p>
         </div>
         <div class="prerogative lf-prerogative lf">
             <img src="<?= FE_BASE_URI ?>wap/memberlevel/img/<?= $shuzu[4]['pictwo'] ?>-customer-service.png" alt="专属顾问">
@@ -228,7 +228,7 @@ if (7 === $level) {
         <div class="prerogative rg-prerogative rg">
             <img src="<?= FE_BASE_URI ?>wap/memberlevel/img/<?= $shuzu[5]['pictwo'] ?>-integration.png" alt="积分权利">
             <h4 class="prerogative-title">积分权利</h4>
-            <p class="details">购买积分*1.1倍</p>
+            <p class="details">投资获得积分*1.1倍</p>
         </div>
         <div class="prerogative lf-prerogative lf">
             <img src="<?= FE_BASE_URI ?>wap/memberlevel/img/<?= $shuzu[5]['pictwo'] ?>-customer-service.png" alt="专属顾问">
@@ -259,7 +259,7 @@ if (7 === $level) {
         <div class="prerogative rg-prerogative rg">
             <img src="<?= FE_BASE_URI ?>wap/memberlevel/img/<?= $shuzu[6]['pictwo'] ?>-integration.png" alt="积分权利">
             <h4 class="prerogative-title">积分权利</h4>
-            <p class="details">购买积分*1.12倍</p>
+            <p class="details">投资获得积分*1.12倍</p>
         </div>
         <div class="prerogative lf-prerogative lf">
             <img src="<?= FE_BASE_URI ?>wap/memberlevel/img/<?= $shuzu[6]['pictwo'] ?>-customer-service.png" alt="专属顾问">
@@ -290,7 +290,7 @@ if (7 === $level) {
         <div class="prerogative rg-prerogative rg">
             <img src="<?= FE_BASE_URI ?>wap/memberlevel/img/<?= $shuzu[7]['pictwo'] ?>-integration.png" alt="积分权利">
             <h4 class="prerogative-title">积分权利</h4>
-            <p class="details">购买积分*1.15倍</p>
+            <p class="details">投资获得积分*1.15倍</p>
         </div>
         <div class="prerogative lf-prerogative lf">
             <img src="<?= FE_BASE_URI ?>wap/memberlevel/img/<?= $shuzu[7]['pictwo'] ?>-customer-service.png" alt="专属顾问">
@@ -312,24 +312,22 @@ if (7 === $level) {
     </div>
 </div>
 
-
 <script>
-$(function(){
+$(function() {
     FastClick.attach(document.body);
-    $('.vip-ul .vip').on('click',function(){
+    $('.vip-ul .vip').on('click', function() {
         var index = $('.vip-ul .vip').index(this);
 
-        for(var i=0;i<= $('.vip-ul .vip').length; i++ ){
-            if( i!=index ) {
+        for(var i = 0; i <= $('.vip-ul .vip').length; i++) {
+            if(i != index) {
                 $('.memberlevel-prerogative').eq(i).hide();
                 $('.vip-ul .vip').eq(i).removeClass('vip-other');
             }
         }
 
-               $('.memberlevel-prerogative').eq(index).show();
-               $('.vip-ul .vip').eq(index).addClass('vip-other');
-           });
-
+        $('.memberlevel-prerogative').eq(index).show();
+        $('.vip-ul .vip').eq(index).addClass('vip-other');
+    });
 });
 </script>
 

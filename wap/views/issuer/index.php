@@ -288,7 +288,7 @@ switch ($type) {
             <h4>保  障  措  施</h4>
             <p><span><i></i></span></p>
             <div class="safecontent">
-                <h5>多种保障加码  安全兑付无忧</h5>
+                <h5>多重保障加码  安心兑付无忧</h5>
             </div>
         </div>
     </section>
