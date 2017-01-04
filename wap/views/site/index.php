@@ -1,4 +1,5 @@
 <?php
+
 $this->title = '温都金服';
 $this->params['breadcrumbs'][] = $this->title;
 $this->hideHeaderNav = true;
@@ -15,6 +16,7 @@ $this->registerCssFile(ASSETS_BASE_URI.'css/kaipin.css?=20161104', ['depends' =>
 $this->registerJsFile(ASSETS_BASE_URI.'js/swiper.min.js', ['depends' => JqueryAsset::class, 'position' => 1]);
 $this->registerJsFile(ASSETS_BASE_URI.'js/lib.flexible/lib.flexible.js', ['depends' => JqueryAsset::class, 'position' => 1]);
 $this->registerJsFile(ASSETS_BASE_URI.'js/index.js?v=20161021', ['depends' => JqueryAsset::class]);
+
 ?>
 
 <div class="mask" id="mask_kaiping" style="position: fixed; z-index: 2000; display: none;"></div>
@@ -236,9 +238,9 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/index.js?v=20161021', ['depends' => Jq
         $('html').removeAttr('ontouchmove');
     }
     $(function() {
-        if ($.cookie('splash_show') !== "1") {
+        if (Cookies.get('splash_show') !== '1') {
             $('html').attr('ontouchmove','event.preventDefault()');
-            $.cookie('splash_show', "1");
+            Cookies.set('splash_show', '1');
             $('#mask_kaiping').show();
             $('#mask_kaiping,.tail').show();
             setTimeout(closeAdv, 4000);
