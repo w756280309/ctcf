@@ -37,7 +37,7 @@ class DealController extends Controller
         $pages = new Pagination(['totalCount' => $count, 'pageSize' => $size]);
 
         $deals = $query->offset($pages->offset)->limit($pages->limit)
-            ->orderBy('xs_status desc, recommendTime desc, sort asc, finish_rate desc, id desc')
+            ->orderBy('xs_status desc, recommendTime desc, sort asc, finish_rate desc, finish_date desc, id desc')
             ->all();
 
         $tp = ceil($count / $size);

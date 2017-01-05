@@ -29,7 +29,7 @@ class LicaiController extends Controller
 
         $pages = new Pagination(['totalCount' => $data->count(), 'pageSize' => '10']);
 
-        $loans = $data->orderBy('xs_status desc, recommendTime desc, sort asc, finish_rate desc, id desc')
+        $loans = $data->orderBy('xs_status desc, recommendTime desc, sort asc, finish_rate desc, finish_date desc, id desc')
             ->offset($pages->offset)
             ->limit($pages->limit)
             ->all();
