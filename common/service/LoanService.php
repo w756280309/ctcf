@@ -66,6 +66,7 @@ class LoanService
      */
     public static function updateLoanState(OnlineProduct $deal, $state)
     {
+        $state = (int) $state ;
         if (!array_key_exists($state, Yii::$app->params['deal_status'])) {
             throw new Exception('无法匹配的标的类型');
         }
@@ -73,15 +74,19 @@ class LoanService
         switch ($state) {
             case 1://预告期的标的要修改联动一侧标的为开标状态
                 $umpLoanState = 0;
+                $sort = OnlineProduct::SORT_PRE;
                 break;
             case 2://募集中的标的要修改联动一侧标的为投资中状态
                 $umpLoanState = 1;
+                $sort = OnlineProduct::SORT_NOW;
                 break;
             case 5://还款中的标的要修改联动一侧标的为还款中状态
                 $umpLoanState = 2;
+                $sort = OnlineProduct::SORT_HKZ;
                 break;
             case 6://已还清的标的要修改联动一侧标的为已还款状态
                 $umpLoanState = 3;
+                $sort = OnlineProduct::SORT_YHK;
                 break;
         }
 
@@ -93,9 +98,9 @@ class LoanService
         }
         $loanval = [
             'status' => $state,
-            'sort' => OnlineProduct::STATUS_FOUND === (int) $state ? OnlineProduct::SORT_FOUND : $state * 10,
+            'sort' => isset($sort) ? $sort : 0,
         ];
-        if (OnlineProduct::STATUS_FOUND === (int) $state || OnlineProduct::STATUS_FULL === (int) $state) {
+        if (OnlineProduct::STATUS_FOUND === $state || OnlineProduct::STATUS_FULL === $state) {
             $loanval['full_time'] = time();
         }
         OnlineProduct::updateAll($loanval, ['id' => $deal->id]);

@@ -284,7 +284,7 @@ class RepaymentController extends BaseController
             }
 
             if (empty($sum_benxi_yue)) {
-                $updateData = ['status' => OnlineProduct::STATUS_OVER, 'sort' => 60];
+                $updateData = ['status' => OnlineProduct::STATUS_OVER, 'sort' => OnlineProduct::SORT_YHK];
                 try {
                     $log = AdminLog::initNew(['tableName' => OnlineProduct::tableName(), 'primaryKey' => $pid], Yii::$app->user, $updateData);
                     $log->save();
