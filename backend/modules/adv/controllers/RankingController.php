@@ -4,7 +4,6 @@ namespace backend\modules\adv\controllers;
 
 use backend\controllers\BaseController;
 use common\models\adminuser\AdminLog;
-use common\models\promo\PromoLotteryTicket;
 use wap\modules\promotion\models\RankingPromo;
 use Yii;
 use yii\data\ActiveDataProvider;
@@ -37,10 +36,12 @@ class RankingController extends BaseController
     {
         $model = new RankingPromo();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            AdminLog::initNew($model)->save(false);
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            if ($model->save(false)) {
+                AdminLog::initNew($model)->save(false);
 
-            return $this->redirect('index');
+                return $this->redirect('index');
+            }
         }
 
         return $this->render('_form', [
@@ -55,13 +56,12 @@ class RankingController extends BaseController
     {
         $model = $this->findOr404(RankingPromo::class, $id);
 
-        $model->startAt = date('Y-m-d H:i:s', $model->startAt);
-        $model->endAt = date('Y-m-d H:i:s', $model->endAt);
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            if ($model->save(false)) {
+                AdminLog::initNew($model)->save(false);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            AdminLog::initNew($model)->save(false);
-
-            return $this->redirect('index');
+                return $this->redirect('index');
+            }
         }
 
         return $this->render('_form', [

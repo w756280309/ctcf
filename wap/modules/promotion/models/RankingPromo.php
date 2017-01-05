@@ -35,12 +35,12 @@ class RankingPromo extends ActiveRecord
     public function rules()
     {
         return [
-            [['title', 'startAt', 'endAt'], 'required'],
+            [['title', 'startAt'], 'required'],
             [['startAt', 'endAt', 'key'], 'string'],
             [['title'], 'string', 'max' => 50],
             ['whiteList', 'string', 'max' => 255],
             ['whiteList', 'match', 'pattern' => '/^1[34578]\d{9}((,)1[34578]\d{9})*$/', 'message' => '{attribute}必须是以英文逗号分隔的手机号，首尾不得加逗号'],
-            ['endAt', 'compare', 'compareAttribute' => 'startAt', 'operator' => '>'],
+            ['endAt', 'compare', 'compareAttribute' => 'startAt', 'operator' => '>', 'skipOnEmpty' => true],
             [['promoClass', 'whiteList'], 'string', 'max' => 255],
             ['isOnline', 'boolean'],
         ];
@@ -175,5 +175,15 @@ class RankingPromo extends ActiveRecord
         }
 
         return true;
+    }
+
+    public function getStartTime()
+    {
+        return date('Y-m-d H:i:s', $this->startAt);
+    }
+
+    public function getEndTime()
+    {
+        return $this->endAt ? date('Y-m-d H:i:s', $this->endAt) : '';
     }
 }

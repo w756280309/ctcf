@@ -58,7 +58,7 @@ $this->title = '活动列表';
                         [
                             'attribute' => 'endAt',
                             'value' => function ($model) {
-                                return date('Y-m-d H:i:s', $model->endAt);
+                                return $model->endAt ? date('Y-m-d H:i:s', $model->endAt) : '长期';
                             }
                         ],
                         [
