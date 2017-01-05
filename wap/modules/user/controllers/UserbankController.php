@@ -19,51 +19,6 @@ use common\models\bank\BankCardUpdate;
 class UserbankController extends BaseController
 {
     /**
-     * 实名认证表单页.
-     */
-    public function actionIdcardrz()
-    {
-        $cond = 0 | BankService::IDCARDRZ_VALIDATE_Y;
-        $data = BankService::check($this->getAuthedUser(), $cond);
-        if ($data['code'] == 1) {
-            if (Yii::$app->request->isAjax) {
-                return $data;
-            } else {
-                return $this->render('idcardrz', $data);
-            }
-        }
-
-        $model = $this->getAuthedUser();
-        $model->scenario = 'idcardrz';
-        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            $umpService = new UmpService();
-            try {
-                $umpService->register($model);
-
-                return ['tourl' => '/user/userbank/rzres?ret=success', 'code' => 0, 'message' => '您已成功开户'];
-            } catch (\Exception $ex) {
-                (new DingNotify('wdjf'))->sendToUsers('用户[' . $model->mobile . ']，于' . date('Y-m-d H:i:s') . ' 进行开户操作，操作失败，联动开户失败，失败信息:' . $ex->getMessage());
-                return [
-                    'code' => 1,
-                    'message' => 1 === $ex->getCode() ? $ex->getMessage() : '系统繁忙，请稍后重试！',
-                ];
-            }
-        }
-
-        if ($model->getErrors()) {
-            $err = $model->getSingleError();
-
-            return ['code' => 1, 'message' => $err['message']];
-        }
-
-        return $this->render('idcardrz', [
-            'code' => 0,
-            'message' => '',
-            'tourl' => '',
-        ]);
-    }
-
-    /**
      * 绑定银行卡表单页.
      */
     public function actionBindbank()

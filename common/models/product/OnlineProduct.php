@@ -416,6 +416,7 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
             'issuerSn' => '发行方项目编号',
             'allowUseCoupon' => '是否可以使用代金券',
             'isLicai' => '是否为理财计划标识',
+            'pointsMultiple' => '积分倍数',
         ];
     }
 

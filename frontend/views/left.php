@@ -36,7 +36,7 @@ $action = Yii::$app->controller->action->getUniqueId();
                     'user/userbank/xiane',
                 ]) ? 'selected' : '' ?> mycard"><a href="/user/userbank/mybankcard"><span class="star"></span>我的银行卡</a></li>
                 <li class="<?= 'user/securitycenter/index' === $action ? 'selected' : '' ?>"><a href="/user/securitycenter/"><span class="star"></span>安全中心</a></li>
-                <li class="account <?= 'user/userbank/idcardrz' === $action ? 'selected' : '' ?>"><a href="/user/userbank/identity"><span class="star"></span>资金托管账户</a></li>
+                <li class="account <?= 'user/identity' === $action ? 'selected' : '' ?>"><a href="/user/userbank/identity"><span class="star"></span>资金托管账户</a></li>
             </ul>
         </li>
     </ul>

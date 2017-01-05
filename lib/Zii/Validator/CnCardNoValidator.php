@@ -5,7 +5,7 @@ namespace Zii\Validator;
 use yii\validators\Validator;
 
 /**
- * 大陆手机号码格式校验
+ * 大陆银行卡号码格式校验
  */
 class CnCardNoValidator extends Validator
 {

@@ -6,7 +6,7 @@ $this->title="开通资金托管账户";
 
     <div style="height: 10px"></div>
     <!--交易密码-->
-    <form method="post" class="cmxform" id="form" action="/user/userbank/idcardrz" data-to="1">
+    <form method="post" class="cmxform" id="form" action="/user/identity" data-to="1">
         <input name="_csrf" type="hidden" id="_csrf" value="<?= Yii::$app->request->csrfToken ?>">
         <div class="row kahao">
             <div class="hidden-xs col-sm-1"></div>

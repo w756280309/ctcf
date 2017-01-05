@@ -233,7 +233,7 @@ $isClosed = $respData['isClosed'] || $nowTime >= $endTime;
                         login();
                     } else if ('/user/qpay/binding/umpmianmi' == data.tourl) {
                         mianmi('/user/qpay/binding/umpmianmi?from=' + currentUrl);
-                    } else if ('/user/userbank/idcardrz' == data.tourl) {
+                    } else if ('/user/identity' == data.tourl) {
                         location.href = '/user/userbank/identity?from=' + currentUrl;
                     } else {
                         if (data.tourl) {

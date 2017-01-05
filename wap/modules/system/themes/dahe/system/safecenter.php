@@ -29,7 +29,7 @@ $this->backUrl = '/system/system/setting';
     <div class="col-xs-5 safe-lf"><?= (null !== $user && $user->idcard) ? substr_replace($user->idcard,'***',5,-2) : "" ?></div>
     <div class="col-xs-3 arrow">
         <?php if(!$user){ ?>
-        <a href="/user/userbank/idcardrz">去认证</a>
+        <a href="/user/identity">去认证</a>
         <?php } ?>
     </div>
 </div>

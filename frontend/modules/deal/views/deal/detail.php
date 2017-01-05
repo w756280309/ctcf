@@ -358,7 +358,7 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/useraccount/chargedeposit.css');
                 } else {
                     $('.dR-tishi-error ').show();
                     //未免密不提示、不跳转，直接弹框
-                    if('/user/qpay/binding/umpmianmi' != data.tourl && '/user/userbank/idcardrz' != data.tourl){
+                    if('/user/qpay/binding/umpmianmi' != data.tourl && '/user/identity' != data.tourl){
                         $('.dR-tishi-error .err_message').html(data.message);
                     }
                 }
@@ -368,7 +368,7 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/useraccount/chargedeposit.css');
                     login();
                 } else if ('/user/qpay/binding/umpmianmi' == data.tourl) {
                     mianmi('/user/qpay/binding/umpmianmi?from=' + currentUrl);
-                } else if ('/user/userbank/idcardrz' == data.tourl) {
+                } else if ('/user/identity' == data.tourl) {
                     window.location.href = '/user/userbank/identity?from=' + currentUrl;
                 } else {
                     if (data.tourl) {

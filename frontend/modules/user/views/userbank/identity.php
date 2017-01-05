@@ -27,7 +27,7 @@ if ($to_url === '/user/recharge/init') {
     </div>
     <div class="charge-content">
         <span>开通联动优势资金托管账户，享资金安全保障</span>
-        <a style="cursor: pointer;" onclick="location.href='/user/userbank/idcardrz'">立即开通</a>
+        <a style="cursor: pointer;" onclick="location.href='/user/identity'">立即开通</a>
         <div class="clear"></div>
     </div>
 </div>

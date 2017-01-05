@@ -58,46 +58,6 @@ class UserbankController extends BaseController
    }
 
     /**
-     * 实名认证表单页.
-     */
-    public function actionIdcardrz()
-    {
-        $cond = 0 | BankService::IDCARDRZ_VALIDATE_Y;
-        $data = BankService::check($this->getAuthedUser(), $cond);
-        if ($data['code'] == 1) {
-            if (Yii::$app->request->isPost) {
-                return $data;
-            } else {
-                return $this->redirect('/user/user/index');
-            }
-        }
-        if (Yii::$app->request->isPost) {
-            $model = $this->getAuthedUser();
-            $model->scenario = 'idcardrz';
-            if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-                $umpService = new \common\service\UmpService();
-                try {
-                    $umpService->register($model);
-
-                    return ['tourl' => '/info/success?source=tuoguan', 'code' => 0, 'message' => '您已成功开户'];
-                } catch (\Exception $ex) {
-                    (new DingNotify('wdjf'))->sendToUsers('用户[' . $model->mobile . ']，于' . date('Y-m-d H:i:s') . ' 进行开户操作，操作失败，联动开户失败，失败信息:' . $ex->getMessage());
-                    return [
-                        'code' => 1,
-                        'message' => 1 === $ex->getCode() ? $ex->getMessage() : '系统繁忙，请稍后重试！',
-                    ];
-                }
-            } else {
-                $err = $model->getSingleError();
-
-                return ['code' => 1, 'message' => $err['message']];
-            }
-        } else {
-            return $this->render('idcardrz');
-        }
-    }
-
-    /**
      * 绑定银行卡.
      * 先决条件:
      * 1. 实名认证

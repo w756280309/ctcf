@@ -30,6 +30,13 @@ if (!defined('FE_BASE_URI')) {
 if (!defined('IN_APP') && false !== strpos(Yii::$app->request->hostInfo,'//app.')) {
     define('IN_APP', true);
 }
+if (!defined('CLIENT_TYPE')) {
+    if (defined('IN_APP') && IN_APP) {
+        define('CLIENT_TYPE', 'app');
+    } else {
+        define('CLIENT_TYPE', 'wap');
+    }
+}
 
 require(__DIR__ . '/../../common/config/di.php');
 $application->run();

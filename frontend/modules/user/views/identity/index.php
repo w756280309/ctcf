@@ -66,7 +66,7 @@ $this->title = '开户';
                 allowSub = false;
                 $('.deposit-content-link').html('开通中...');
 
-                $.post('/user/userbank/idcardrz', {
+                $.post('/user/identity/verify', {
                     'User[real_name]': name.val(),
                     'User[idcard]': idcard.val(),
                     '_csrf': '<?= Yii::$app->request->csrfToken?>'

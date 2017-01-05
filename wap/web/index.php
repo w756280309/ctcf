@@ -28,6 +28,13 @@ if (!defined('FE_BASE_URI')) {
 if (!defined('IN_APP') && false !== strpos(Yii::$app->request->hostInfo,'//app.')) {
     define('IN_APP', true);
 }
+if (!defined('CLIENT_TYPE')) {
+    if (defined('IN_APP') && IN_APP) {
+        define('CLIENT_TYPE', 'app');
+    } else {
+        define('CLIENT_TYPE', 'wap');
+    }
+}
 
 require(__DIR__ . '/../../common/config/di.php');//增加di引入，必须放置于此方可调用Yii::$app等
 $application->run();

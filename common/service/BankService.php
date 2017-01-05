@@ -39,7 +39,7 @@ class BankService
     /**
      * 验证快捷支付流程.
      * @param object $user 用户对象
-     * @param $cond 查询条件
+     * @param int $cond 查询条件
      */
     public static function check($user, $cond)
     {
@@ -48,7 +48,7 @@ class BankService
         }
 
         if (($cond & self::IDCARDRZ_VALIDATE_N) && $user->idcard_status == User::IDCARD_STATUS_WAIT) {
-            return ['tourl' => '/user/userbank/idcardrz', 'code' => 1, 'message' => '您还没有开通第三方资金托管账户，请前往开通'];
+            return ['tourl' => '/user/identity', 'code' => 1, 'message' => '您还没有开通第三方资金托管账户，请前往开通'];
         }
 
         if (($cond & self::MIANMI_VALIDATE) && $user->mianmiStatus == 0) {

@@ -73,6 +73,11 @@ $this->title="绑定银行卡";
 
     <input id="qpay-binding-sn" name="QpayBinding[binding_sn]" type="hidden" />
 </form>
+
+<div class="row"  style="margin-top: 30px;text-align: center;font-size: 14px;">
+    <p>资金原卡进出，100%安全有保障</p>
+    <p>客服热线：<a class="contact-tel" href="tel:<?= Yii::$app->params['contact_tel'] ?>"><?= Yii::$app->params['contact_tel'] ?></a> (8:30~20:00)</p>
+</div>
 <!-- 卡号弹出框 start  -->
 <div class="error-info">您输入的卡号有误</div>
 <!-- 开好弹出框 end  -->

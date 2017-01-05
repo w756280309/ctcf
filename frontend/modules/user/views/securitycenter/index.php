@@ -40,7 +40,7 @@ foreach (['useraccount/safecenter.css'] as $cssFile) {
                     <i class="blue"></i><span>已认证</span>
                     <?php else: ?>
                     <i class="red"></i><span>未认证</span>
-                    <i class=""></i><a href="/user/userbank/idcardrz" class="bunding renzheng">立即认证</a>
+                    <i class=""></i><a href="/user/identity" class="bunding renzheng">立即认证</a>
                     <?php endif; ?>
                     <!-- 已认证-->
                 </div>
@@ -166,7 +166,7 @@ foreach (['useraccount/safecenter.css'] as $cssFile) {
                     <i class=""></i><a href="javascript:;" class="join">修改</a>
                     <?php else: ?>
                     <i class="red"></i><span>未设置</span>
-                    <i class=""></i><a href="/user/userbank/idcardrz" class="bunding">开户</a>
+                    <i class=""></i><a href="/user/identity" class="bunding">开户</a>
                     <?php endif; ?>
                 </div>
             </div>

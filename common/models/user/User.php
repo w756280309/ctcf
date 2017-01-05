@@ -72,7 +72,7 @@ class User extends ActiveRecord implements IdentityInterface, UserInterface
     const MOBILE_STATUS_PASS = 1;
     const IDCARD_STATUS_UNPASS = -1;
     const IDCARD_STATUS_WAIT = 0;
-    const IDCARD_STATUS_PASS = 1;
+    const IDCARD_STATUS_PASS = 1;//开户通过
     const KUAIJIE_STATUS_Y = 1;
     const KUAIJIE_STATUS_N = 0;
     const IDCARD_EXAMIN_COUNT = 3;
@@ -584,11 +584,12 @@ class User extends ActiveRecord implements IdentityInterface, UserInterface
     }
 
     /**
-     * 获取是否是实名认证
+     * 获取是否已实名认证
+     * @return boolean
      */
     public function isIdVerified()
     {
-        return (self::IDCARD_STATUS_PASS === $this->idcard_status) ? true : false;
+        return self::IDCARD_STATUS_PASS === $this->idcard_status;
     }
 
     /**
@@ -821,5 +822,44 @@ class User extends ActiveRecord implements IdentityInterface, UserInterface
     public function getThirdPartyConnect()
     {
         return $this->hasOne(ThirdPartyConnect::className(), ['user_id' => 'id']);
+    }
+
+    //用户开户逻辑
+    public function setIdentity(UserIdentity $identity)
+    {
+        $this->real_name = Yii::$app->functions->removeWhitespace($identity->real_name);//去除所有空格
+        $this->idcard = $identity->idcard;
+        $resp = Yii::$container->get('ump')->register($this);
+
+        if (!$resp->isSuccessful()) {
+            throw new \Exception($resp->get('ret_code') . '：' . $resp->get('ret_msg'), 1);
+        }
+        Yii::info('开户联动返回日志 ump_log user_identify user_id: ' . $this->id . '; ret_code:' . $resp->get('ret_code') . ';ret_msg:' . $resp->get('ret_msg'), 'umplog');
+        $transaction = Yii::$app->db->beginTransaction();
+        try {
+            $epayUser = new EpayUser([
+                'appUserId' => $this->getUserId(),
+                'clientIp' => ip2long(Yii::$app->request->userIP),
+                'regDate' => $resp->get('reg_date'),
+                'createTime' => date('Y-m-d H:i:s'),
+                'epayUserId' => $resp->get('user_id'),
+                'accountNo' => $resp->get('account_id'),
+                'epayId' => 1,
+            ]);
+
+            if (!$epayUser->save(false)) {
+                throw new \Exception('开户失败', 1);
+            }
+
+            $this->idcard_status = User::IDCARD_STATUS_PASS;
+            if (!$this->save(false)) {
+                throw new \Exception('开户失败', 1);
+            }
+            Yii::info('用户信息变更日志 开户成功 table:user;attribute:idcard_status;value:' . $this->idcard_status . ';user_id:' . $this->id, 'user_log');
+            $transaction->commit();
+        } catch (\Exception $ex) {
+            $transaction->rollBack();
+            throw new \Exception($ex->getMessage(), $ex->getCode());
+        }
     }
 }
