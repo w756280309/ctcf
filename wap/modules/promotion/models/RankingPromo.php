@@ -66,7 +66,7 @@ class RankingPromo extends ActiveRecord
             if (is_string($this->startAt)) {
                 $this->startAt = strtotime($this->startAt);
             }
-            if (is_string($this->endAt)) {
+            if ($this->endAt && is_string($this->endAt)) {
                 $this->endAt = strtotime($this->endAt);
             }
             return true;
@@ -179,11 +179,11 @@ class RankingPromo extends ActiveRecord
 
     public function getStartTime()
     {
-        return date('Y-m-d H:i:s', $this->startAt);
+        return $this->startAt ? date('Y-m-d H:i:s', $this->startAt) : null;
     }
 
     public function getEndTime()
     {
-        return $this->endAt ? date('Y-m-d H:i:s', $this->endAt) : '';
+        return $this->endAt ? date('Y-m-d H:i:s', $this->endAt) : null;
     }
 }
