@@ -2,6 +2,7 @@
 
 namespace common\models\code;
 
+use common\models\user\User;
 use yii\db\ActiveRecord;
 
 class Code extends ActiveRecord
@@ -34,5 +35,21 @@ class Code extends ActiveRecord
             'goodsType_sn' => '商品sn',
             'goodsType' => '商品类型', //type=1代金券 type=2实体商品
         ];
+    }
+
+    public function getUser()
+    {
+        return $this->hasOne(User::className(), ['id' => 'user_id']);
+    }
+
+    public static function createCode()
+    {
+        $code = '';
+        $str = "BCEFGHJKMPQRTVWXY2346789";
+        $length = strlen($str) - 1;
+        for ( $i = 0; $i < 16; $i++ ) {
+            $code .= substr($str, mt_rand(0, $length), 1);
+        }
+        return $code;
     }
 }
