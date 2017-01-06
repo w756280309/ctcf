@@ -30,7 +30,6 @@ class SplashController extends Controller
                 'img_750x1334' => $baseDir . 'images/shanping/img_750x1334.png',
                 'img_1242x2208' => $baseDir . 'images/shanping/img_1242x2208.png',
                 'img_1080x1920' => $baseDir . 'images/shanping/img_1080x1920.png', //安卓端
-                'url' => '',
                 'title' => '温都金服启动页',
             ],
         ];
