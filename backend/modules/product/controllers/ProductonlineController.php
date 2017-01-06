@@ -25,6 +25,7 @@ use P2pl\Borrower;
 use Yii;
 use yii\data\Pagination;
 use yii\web\Cookie;
+use yii\data\ArrayDataProvider;
 
 class ProductonlineController extends BaseController
 {
@@ -906,5 +907,77 @@ class ProductonlineController extends BaseController
         }
 
         return ['code' => 1, 'message' => '操作成功'];
+    }
+
+    /**
+     * 转让列表一级页面,发起转让
+     */
+    public function actionSponsoredtransfer($page = 1)
+    {
+        $notes = [];
+        $totalCount = 0;
+        $pageSize = 10;
+
+        $txClient = Yii::$container->get('txClient');
+        $response = $txClient->get('credit-note/list', ['page' => $page, 'page_size' => $pageSize, 'sort' => '-createTime']);
+
+        if (null !== $response) {
+            $notes = $response['data'];
+            $totalCount = $response['total_count'];
+            $pageSize = $response['page_size'];
+
+            foreach ($notes as $key => $note) {
+                $notes[$key]['user'] = User::findOne($note['user_id']);
+                $notes[$key]['loan'] = OnlineProduct::findOne($note['loan_id']);
+            }
+        }
+
+        $dataProvider = new ArrayDataProvider([
+            'allModels' => $notes,
+            'pagination' => [
+                'pageSize' => $pageSize,
+            ],
+        ]);
+
+        $pages = new Pagination(['totalCount' => $totalCount, 'pageSize' => $pageSize]);
+        return $this->render('transferlist', ['dataProvider' => $dataProvider, 'pages' => $pages]);
+    }
+
+    /**
+     * 转让列表二级页面,购买转让
+     */
+    public function actionBuytransfer($page = 1)
+    {
+        $note_id = Yii::$app->request->get('loan_id');
+        $notes = [];
+        $totalCount = 0;
+        $pageSize = 10;
+
+        $response = Yii::$container->get('txClient')->get('credit-order/list', [
+            'id' => $note_id,
+            'page' => $page,
+            'page_size' => $pageSize,
+        ]);
+
+        if (null !== $response) {
+            $notes = $response['data'];
+            $totalCount = $response['totalCount'];
+            $pageSize = $response['pageSize'];
+
+            foreach ($notes as $key => $note) {
+                $userinfo = User::findOne($note['user_id']);
+                $notes[$key]['user'] = $userinfo;
+            }
+        }
+
+        $dataProvider = new ArrayDataProvider([
+            'allModels' => $notes,
+            'pagination' => [
+                'pageSize' => $pageSize,
+            ],
+        ]);
+
+        $pages = new Pagination(['totalCount' => $totalCount, 'pageSize' => $pageSize]);
+        return $this->render('buytransfer', ['dataProvider' => $dataProvider, 'pages' => $pages]);
     }
 }
