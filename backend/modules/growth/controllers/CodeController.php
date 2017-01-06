@@ -25,13 +25,26 @@ class CodeController extends BaseController
     }
 
     /**
-     * 插入并导出txt
+     * 下载中间页
      */
-    public function actionCreate()
+    public function actionRefer()
     {
         $id = trim(Yii::$app->request->post('gid'));
         $num = Yii::$app->request->post('num');
         $expiresAt = Yii::$app->request->post('expiresAt');
+
+        return $this->render('export', ['id' => $id, 'num' => $num, 'expiresAt' => $expiresAt]);
+    }
+
+
+    /**
+     * 生成并导出txt
+     */
+    public function actionCreate()
+    {
+        $id = trim(Yii::$app->request->get('gid'));
+        $num = Yii::$app->request->get('num');
+        $expiresAt = Yii::$app->request->get('expiresAt');
         $codes = [];
         $goods = GoodsType::findOne($id);
 
@@ -58,6 +71,7 @@ class CodeController extends BaseController
         }
     }
 
+
     /**
      * 导出txt,数据量较小可暂时不考虑导出的内存影响
      */
@@ -65,10 +79,12 @@ class CodeController extends BaseController
     {
         $str = '';
         $fileName .= date('Ymd');
+        $br = substr(strtoupper(PHP_OS), 0, 3) === 'WIN' ? "\r\n" : PHP_EOL;
         foreach ($codes as $code) {
-            $str .= $code . PHP_EOL;
+            $str .= $code . $br;
         }
-        header("Content-Type: application/octet-stream");
+
+        header('Content-Type: application/octet-stream');
         header('Content-Disposition: attachment; filename="'.$fileName.'.txt"');
         echo $str;
         exit;

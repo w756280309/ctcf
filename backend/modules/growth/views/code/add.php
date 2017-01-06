@@ -33,7 +33,7 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\we
         <?php
         $form = ActiveForm::begin([
             'id' => 'add-code',
-            'action' => '/growth/code/create',
+            'action' => '/growth/code/refer',
             'options' => [
                 'class' => 'form-horizontal form-bordered form-label-stripped',
                 'enctype' => 'multipart/form-data',
@@ -67,7 +67,7 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\we
                 </div>
             </div>
             <div class="form-actions">
-                <button type="submit" class="btn blue sub-btn"><i class="icon-ok"></i> 提交并导出 </button>&nbsp;&nbsp;&nbsp;
+                <button type="submit" class="btn blue sub-btn"><i class="icon-ok"></i> 提交 </button>&nbsp;&nbsp;&nbsp;
                 <a href="/growth/code/goods-list" class="btn">取消</a>
             </div>
         </div>
@@ -77,22 +77,23 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\we
 <script>
     $(function() {
         $('#add-code').submit(function () {
-            var num = $('.code-num').val();
+            var num = parseInt($('.code-num').val());
             var goodsName = $('.goods-name').val();
             var expiresAt = $('.expiresAt').val();
             if ('' === goodsName) {
                 layer.msg('请选择兑换码对应的商品名称', {icon: 2});
                 return false;
             }
-            if ('' === num || num > 10000) {
-                layer.msg('兑换码的数量不能为空且一次不能导出超过10000条', {icon: 2});
+
+            if (isNaN(num) || num <= 0 || num > 10000) {
+                layer.msg('兑换码的数量必须大于0且一次不能导出超过10000条', {icon: 2});
                 return false;
             }
             if ('' === expiresAt) {
                 layer.msg('请选择兑换码的截止时间', {icon: 2});
                 return false;
             }
-            $('.code-num').val(parseInt(num));
+            $('.code-num').val(num);
         })
     })
 </script>
