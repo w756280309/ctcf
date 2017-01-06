@@ -1,11 +1,14 @@
 <?php
 
+$this->title = '产品列表';
+
 use common\models\product\RateSteps;
 use common\utils\StringUtils;
 use yii\widgets\LinkPager;
 use yii\helpers\Html;
 
 $pc_cat = Yii::$app->params['pc_cat'];
+
 ?>
 
 <?php $this->beginBlock('blockmain'); ?>

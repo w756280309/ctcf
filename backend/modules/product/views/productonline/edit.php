@@ -1,5 +1,7 @@
 <?php
 
+$this->title = '标的'.($model->id ? '编辑' : '添加');
+
 use PayGate\Cfca\CfcaUtils;
 use yii\helpers\ArrayHelper;
 use yii\web\YiiAsset;
@@ -13,6 +15,7 @@ $this->registerJsFile('/vendor/kindeditor/4.1.11/lang/zh-CN.js', ['depends' => '
 $this->registerJsFile('/vendor/kindeditor/4.1.11/plugins/code/prettify.js', ['depends' => 'yii\web\YiiAsset']);
 
 $readonly = $model->online_status ? ['readonly' => 'readonly'] : [];
+$disabled = $model->online_status ? ['disabled' => 'disabled'] : [];
 
 $desc = '*项目上线后此内容不可修改';
 
@@ -74,7 +77,6 @@ $tpl2 = <<<TPL
 </div>
 TPL;
 
-$is_online = in_array($model->status, [2, 3, 4, 5, 6, 7]);//判断标的是否已经上线
 ?>
 
 <?php $this->beginBlock('blockmain'); ?>
@@ -143,21 +145,22 @@ $is_online = in_array($model->status, [2, 3, 4, 5, 6, 7]);//判断标的是否�
             </div>
             <div class="span6 ">
                 <div class="control-group">
-                        <label class="control-label">还款方式</label>
-                        <div class="controls">
-                            <?php
-                            $refund_input_option = ['autocomplete' => 'off', 'class' => 'chosen-with-diselect span6 refund_method', 'onchange' => 'changeRefmet(this)'];
-                            if ($is_online) {
-                                $refund_input_option = array_merge($refund_input_option, ['disabled' => 'disabled']);
-                            }
-                            ?>
-                            <?=
-                            $form->field($model, 'refund_method', [
-                                'template' => '{input}{error}',
-                                'inputOptions' => $refund_input_option,
-                                ])->dropDownList(['' => "--选择--"] + Yii::$app->params['refund_method'])
-                            ?>
-                        </div>
+                    <label class="control-label">还款方式</label>
+                    <div class="controls">
+                    <?php
+                        $refund_input_option = array_merge([
+                            'autocomplete' => 'off',
+                            'class' => 'chosen-with-diselect span6 refund_method',
+                            'onchange' => 'changeRefmet(this)',
+                        ], $disabled);
+                    ?>
+                    <?=
+                        $form->field($model, 'refund_method', [
+                            'template' => '{input}{error}',
+                            'inputOptions' => $refund_input_option,
+                            ])->dropDownList(['' => '--选择--'] + Yii::$app->params['refund_method'])
+                    ?>
+                    </div>
                 </div>
             </div>
         </div>
@@ -167,15 +170,16 @@ $is_online = in_array($model->status, [2, 3, 4, 5, 6, 7]);//判断标的是否�
                 <div class="control-group">
                     <label class="control-label">项目利率</label>
                     <div class="controls">
-                        <?=
+                    <?=
                         $form->field($model, 'yield_rate', [
                             'template' => '<div class="input-append">{input}<span class="add-on">%</span> </div>{error}',
                             'inputOptions' => [
                                 'autocomplete' => 'off',
                                 'placeholder' => '项目利率',
+                                'class' => 'm-wrap span12',
                             ]
-                        ])->textInput(['class' => 'm-wrap span12'])
-                        ?>
+                        ])->textInput($readonly)
+                    ?>
                     </div>
                 </div>
             </div>
@@ -184,9 +188,16 @@ $is_online = in_array($model->status, [2, 3, 4, 5, 6, 7]);//判断标的是否�
                 <div class="control-group">
                     <label class="control-label">项目期限</label>
                     <div class="controls">
-                        <?=
-                        $form->field($model, 'expires', ['template' => '<div class="input-append">{input}<span class="add-on">(天)</span></div>{error}', 'inputOptions' => ['autocomplete' => 'off', 'placeholder' => '项目期限']])->textInput(['class' => 'm-wrap span12 expires'])
-                        ?>
+                    <?=
+                        $form->field($model, 'expires', [
+                            'template' => '<div class="input-append">{input}<span class="add-on">(天)</span></div>{error}',
+                            'inputOptions' => [
+                                'autocomplete' => 'off',
+                                'placeholder' => '项目期限',
+                                'class' => 'm-wrap span12 expires',
+                            ]
+                        ])->textInput($readonly)
+                    ?>
                     </div>
                 </div>
             </div>
@@ -209,16 +220,16 @@ $is_online = in_array($model->status, [2, 3, 4, 5, 6, 7]);//判断标的是否�
                 <div class="control-group">
                     <label class="control-label">募集金额<span class="notice">(<?= $desc ?>)</span></label>
                     <div class="controls">
-                        <?php
-                        if ($is_online) {
-                            $money_input_options = ['disabled' => 'disabled'];
-                        } else {
-                            $money_input_options = [];
-                        }
-                        ?>
-                        <?=
-                        $form->field($model, 'money', ['template' => '<div class="input-prepend input-append"><span class="add-on">￥</span>{input}<span class="add-on">元</span> </div>{error}', 'inputOptions' => ['autocomplete' => 'off', 'placeholder' => '募集金额', 'class' => 'm-wrap span12']])->textInput($money_input_options)
-                        ?>
+                    <?=
+                        $form->field($model, 'money', [
+                            'template' => '<div class="input-prepend input-append"><span class="add-on">￥</span>{input}<span class="add-on">元</span> </div>{error}',
+                            'inputOptions' => [
+                                'autocomplete' => 'off',
+                                'placeholder' => '募集金额',
+                                'class' => 'm-wrap span12',
+                            ]
+                        ])->textInput($disabled)
+                    ?>
                     </div>
                 </div>
             </div>
@@ -230,13 +241,13 @@ $is_online = in_array($model->status, [2, 3, 4, 5, 6, 7]);//判断标的是否�
                 <div class="control-group">
                     <label class="control-label">募集开始时间<span class="notice">(<?= $desc ?>)</span></label>
                     <div class="controls">
-                        <?php
-                            $start_date_input_option = ['autocomplete' => 'off', 'placeholder' => '募集开始时间'];
-                            if ($is_online) {
-                                $start_date_input_option = array_merge($start_date_input_option, ['disabled' => 'disabled']);
-                            }
-                        ?>
-                        <?=
+                    <?php
+                        $start_date_input_option = array_merge([
+                            'autocomplete' => 'off',
+                            'placeholder' => '募集开始时间',
+                        ], $disabled);
+                    ?>
+                    <?=
                         $form->field($model, 'start_date', [
                             'template' => '<div class="input-append date form_datetime">{input}<span class="add-on" onclick="WdatePicker({el:\'onlineproduct-start_date\',dateFmt:\'yyyy-MM-dd HH:mm\',minDate:\''.date('Y-m-d').'\'});"><i class="icon-calendar"></i></span></div>{error}',
                             'inputOptions' => $start_date_input_option
@@ -244,8 +255,8 @@ $is_online = in_array($model->status, [2, 3, 4, 5, 6, 7]);//判断标的是否�
                                 'class' => 'm-wrap span12',
                                 'value' => $model->start_date ? date('Y-m-d H:i', $model->start_date) : '',
                                 'onclick' => 'WdatePicker({dateFmt:"yyyy-MM-dd HH:mm",minDate:\''.date('Y-m-d').'\'});'
-                                ])
-                        ?>
+                            ])
+                    ?>
                     </div>
                 </div>
             </div>
@@ -277,47 +288,54 @@ $is_online = in_array($model->status, [2, 3, 4, 5, 6, 7]);//判断标的是否�
                         <?= $form->field($model, 'finish_date', ['template'=>'{input}'])->hiddenInput(['value' => 0, 'id' => 'finish_date_hide'])->label(false)?>
                         <?php
                             $fd_input_option = ['autocomplete' => 'off', 'placeholder' => '产品到期日'];
-                            if (!$model->is_fdate || $is_online){
+                            if (!$model->is_fdate || !empty($readonly)) {
                                 $fd_input_option = array_merge($fd_input_option, ['readonly' => 'readonly']);
                             }
                         ?>
                         <?=
-                        $form->field($model, 'finish_date', [
-                            'template' => '<div class="input-append date form_datetime">{input}<span class="add-on" onclick="if ($(\'#onlineproduct-finish_date\').attr(\'readonly\')) {return false;}WdatePicker({el:\'onlineproduct-finish_date\',dateFmt:\'yyyy-MM-dd HH:mm\',minDate:\''.date('Y-m-d').'\'});"><i class="icon-calendar"></i></span></div>{error}',
-                            'inputOptions' => $fd_input_option
+                            $form->field($model, 'finish_date', [
+                                'template' => '<div class="input-append date form_datetime">{input}<span class="add-on" onclick="if ($(\'#onlineproduct-finish_date\').attr(\'readonly\')) {return false;}WdatePicker({el:\'onlineproduct-finish_date\',dateFmt:\'yyyy-MM-dd HH:mm\',minDate:\''.date('Y-m-d').'\'});"><i class="icon-calendar"></i></span></div>{error}',
+                                'inputOptions' => $fd_input_option,
                             ])->textInput([
                                 'class' => 'm-wrap span12',
                                 'value' =>  $model->finish_date ? date('Y-m-d H:i', $model->finish_date) : '',
-                                'onclick' => 'if ($(this).attr("readonly")) {return false;}WdatePicker({dateFmt:"yyyy-MM-dd HH:mm",minDate:\''.date('Y-m-d').'\'});'
-                                ])
+                                'onclick' => 'if ($(this).attr("readonly")) {return false;}WdatePicker({dateFmt:"yyyy-MM-dd HH:mm",minDate:\''.date('Y-m-d').'\'});',
+                            ])
                         ?>
                         <?php
-                        $fd_input_option = [];
-                        if ($is_online) {
-                            $fd_input_option = array_merge($fd_input_option, ['disabled' => 'disabled', 'uncheck' => $model->is_fdate]);
-                        }
+                            $fd_input_option = [];
+                            if (!empty($disabled)) {
+                                $fd_input_option = array_merge($disabled, ['uncheck' => $model->is_fdate]);
+                            }
                         ?>
                         <?=
-                        $form->field($model, 'is_fdate', ['template' => '{input}', 'inputOptions' => ['autocomplete' => 'on']])->checkbox($fd_input_option);
+                            $form->field($model, 'is_fdate', [
+                                'template' => '{input}',
+                                'inputOptions' => [
+                                    'autocomplete' => 'on',
+                                ],
+                            ])->checkbox($fd_input_option)
                         ?>
                     </div>
                 </div>
             </div>
 
-              <div class="span6 ">
+            <div class="span6 ">
                 <div class="control-group">
                     <label class="control-label">项目宽限期</label>
                     <div class="controls">
-                        <?php
+                    <?php
                         $fd_input_option = ['autocomplete' => 'off', 'placeholder' => '默认0天'];
-                        if (!$model->is_fdate || $is_online){
+                        if (!$model->is_fdate || !empty($readonly)) {
                             $fd_input_option = array_merge($fd_input_option, ['readonly' => 'readonly']);
                         }
-                        ?>
-                        <?= $form->field($model, 'kuanxianqi', ['template'=>'{input}'])->hiddenInput(['value' => 0, 'id' => 'kuanxianqi_hide'])->label(false)?>
-                        <?=
+                    ?>
+                    <?=
+                        $form->field($model, 'kuanxianqi', ['template' => '{input}'])->hiddenInput(['value' => 0, 'id' => 'kuanxianqi_hide'])->label(false)
+                    ?>
+                    <?=
                         $form->field($model, 'kuanxianqi', ['template' => '<div class="input-append">{input}<span class="add-on">(天)</span></div>{error}', 'inputOptions' => $fd_input_option])->textInput(['class' => 'm-wrap span6'])
-                        ?>
+                    ?>
                     </div>
                 </div>
             </div>
@@ -328,13 +346,16 @@ $is_online = in_array($model->status, [2, 3, 4, 5, 6, 7]);//判断标的是否�
                     <label class="control-label">融资用户<span class="notice">(<?= $desc ?>)</span></label>
                     <div class="controls">
                         <?php
-                            $borrow_uid_input_option = ['autocomplete' => 'off', 'class' => 'chosen-with-diselect span6'];
-                            if ($is_online) {
-                                $borrow_uid_input_option = array_merge($borrow_uid_input_option, ['disabled' => 'disabled']);
-                            }
+                            $borrow_uid_input_option = array_merge([
+                                'autocomplete' => 'off',
+                                'class' => 'chosen-with-diselect span6',
+                            ], $disabled);
                         ?>
                         <?=
-                        $form->field($model, 'borrow_uid', ['template' => '{input}{error}', 'inputOptions' => $borrow_uid_input_option])->dropDownList($rongziInfo, [0 => '--请选择--'])
+                            $form->field($model, 'borrow_uid', [
+                                'template' => '{input}{error}',
+                                'inputOptions' => $borrow_uid_input_option,
+                            ])->dropDownList($rongziInfo, [0 => '--请选择--'])
                         ?>
                     </div>
                 </div>
@@ -423,9 +444,22 @@ $is_online = in_array($model->status, [2, 3, 4, 5, 6, 7]);//判断标的是否�
                 <div class="control-group">
                     <label class="control-label">浮动利率</label>
                     <div class="controls">
-                        <?= $form->field($model, 'rateSteps', ['template' => '<div class="input-append">{input}</div>', 'inputOptions'=>['placeholder'=>'浮动利率','maxlength'=>true]])->textarea(['rows'=>'5','cols'=>'250']) ?>
-                        <?= $form->field($model, 'rateSteps', ['template' => '{error}']); ?>
-                        <?=  $form->field($model, 'isFlexRate')->checkbox(['autocomplete' => 'on'])?>
+                    <?=
+                        $form->field($model, 'rateSteps', [
+                            'template' => '<div class="input-append">{input}</div>',
+                            'inputOptions' => [
+                                'placeholder' => '浮动利率',
+                                'maxlength' => true,
+                            ]
+                        ])->textarea(array_merge(['rows'=>'5','cols'=>'250'], $readonly)) ?>
+                    <?= $form->field($model, 'rateSteps', ['template' => '{error}']) ?>
+                    <?php
+                        $rateStepsInput = ['autocomplete' => 'on'];
+                        if (!empty($disabled)) {
+                            $rateStepsInput = array_merge($rateStepsInput, $disabled, ['uncheck' => $model->isFlexRate]);
+                        }
+                    ?>
+                    <?= $form->field($model, 'isFlexRate')->checkbox($rateStepsInput) ?>
                     </div>
                 </div>
             </div>
