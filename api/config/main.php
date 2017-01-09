@@ -50,6 +50,7 @@ return [
                 'rest/ordtx/<type:\d+>/<id:\d+>/ump' => 'v1/rest/ordertx/ump',
                 'rest/lenderstats' => 'v1/rest/lender-stats/export',
                 'rest/lenderstats_export' => 'v1/rest/lender-stats/new-export',
+                'rest/settle/<type:\d+>/<date:\d+>' => 'v1/rest/settle/show',
 
                 'pos/notify' => 'v1/pos/notify',
 
