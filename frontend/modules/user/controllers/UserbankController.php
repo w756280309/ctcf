@@ -8,7 +8,6 @@ use common\models\bank\QpayConfig;
 use common\models\user\QpayBinding;
 use common\models\user\UserAccount;
 use common\service\BankService;
-use Ding\DingNotify;
 use frontend\controllers\BaseController;
 use Yii;
 use yii\filters\AccessControl;
@@ -35,13 +34,14 @@ class UserbankController extends BaseController
    /**
     * 未开户进入页面.
     *
-    * 记录来源url(转让详情页/理财标的详情页)，用来跳回到详情页
+    * 记录来源url(转让详情页/理财标的详情页)，用来跳回到详情页.
     */
    public function actionIdentity()
    {
        //检查是否开户
        $cond = 0 | BankService::IDCARDRZ_VALIDATE_N;
        $data = BankService::check($this->getAuthedUser(), $cond);
+
        if ($data['code']) {
            $from = Yii::$app->request->get('from');
            if ($from && filter_var($from, FILTER_VALIDATE_URL)) {
