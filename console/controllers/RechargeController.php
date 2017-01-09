@@ -29,12 +29,12 @@ class RechargeController extends Controller
             if ($resp->isSuccessful()) {
                 if ('2' === $resp->get('tran_state')) {
                     $acc_ser->confirmRecharge($rc);
-                } elseif ('3' === $resp->get('tran_state') || '5' === $resp->get('tran_state')) {
+                } elseif ('3' === $resp->get('tran_state')) {
                     $rc->status = RechargeRecord::STATUS_FAULT;
                     $user = User::findOne($rc->uid);
                     try {
                         if (!empty($user)) {
-                            (new DingNotify('wdjf'))->sendToUsers('用户[' . $user->mobile . ']，于' . date('Y-m-d H:i:s', $rc->created_at) . ' 进行充值操作，操作失败，联动返回信息：' . $resp->get('ret_msg'));
+                            (new DingNotify('wdjf'))->sendToUsers('用户[' . $user->mobile . ']，于' . date('Y-m-d H:i:s', $rc->created_at) . ' 进行充值操作，操作失败，订单sn '.$rc->sn.'；联动返回状态：tran_state '. $resp->get('tran_state'));
                         }
                     } catch (\Exception $ex) {
                     }
