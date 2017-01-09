@@ -980,4 +980,36 @@ class ProductonlineController extends BaseController
         $pages = new Pagination(['totalCount' => $totalCount, 'pageSize' => $pageSize]);
         return $this->render('buytransfer', ['dataProvider' => $dataProvider, 'pages' => $pages]);
     }
+
+    /**
+     * 隐藏标的.
+     *
+     * 1. 将对应标的改为定向标;
+     * 2. 权限控制;
+     * 3. 实际募集金额为零时,才允许修改;
+     */
+    public function actionHideLoan($id)
+    {
+        if (empty($id)) {
+            throw $this->ex404();
+        }
+
+        $loan = $this->findOr404(OnlineProduct::class, $id);
+
+        if (1 === bccomp($loan->funded_money, 0, 2)) {
+            return [
+                'code' => 1,
+                'message' => '当前标的实际募集金额不为0,无法修改!',
+            ];
+        }
+
+        $loan->isPrivate = true;
+
+        $res = $loan->save(false);
+
+        return [
+            'code' => intval(!res),
+            'message' => $res ? '操作成功' : '操作失败',
+        ];
+    }
 }
