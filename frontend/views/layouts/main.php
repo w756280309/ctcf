@@ -39,6 +39,7 @@ $this->registerMetaTag([
         <title><?= isset($ctitle) ? $ctitle : Html::encode($this->title).' - 温都金服' ?></title>
         <?php $this->head() ?>
         <meta name="baidu-site-verification" content="7YkufMc2UW" />
+        <meta name="sogou_site_verification" content="2hsKBLBEiz" />
         <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
     </head>
 
