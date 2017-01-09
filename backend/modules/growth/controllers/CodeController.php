@@ -79,7 +79,7 @@ class CodeController extends BaseController
     {
         $str = '';
         $fileName .= date('Ymd');
-        $br = substr(strtoupper(PHP_OS), 0, 3) === 'WIN' ? "\r\n" : PHP_EOL;
+        $br = preg_match('/win/i', $_SERVER['HTTP_USER_AGENT']) ? "\r\n" : PHP_EOL;
         foreach ($codes as $code) {
             $str .= $code . $br;
         }
