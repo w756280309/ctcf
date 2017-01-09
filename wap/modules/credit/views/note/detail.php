@@ -38,7 +38,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/credit/detail.js?v=161027', ['depends'
             $config = json_decode($respData['config'], true);
             $currTradeCount = intval($respData['asset']['tradeCount']);
 
-            if ($config['trade_count_limit'] > $currTradeCount) {
+            if ($config['trade_count_limit'] > ++$currTradeCount) {
         ?>
             <i class="tap">可转让</i>
         <?php } ?>
