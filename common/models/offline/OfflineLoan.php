@@ -10,8 +10,9 @@ class OfflineLoan extends ActiveRecord
     public function rules()
     {
         return [
-            ['title', 'required'],
+            [['title', 'expires', 'unit'], 'required'],
             ['title', 'string', 'max' => 255],
+            ['unit', 'string', 'max' => 20],
         ];
     }
 
@@ -20,6 +21,8 @@ class OfflineLoan extends ActiveRecord
         return [
             'id' => 'ID',
             'title' => '产品名称',
+            'expires' => '产品期限',
+            'unit' => '期限单位',
         ];
     }
 

@@ -78,12 +78,17 @@ $bid = (int)Yii::$app->request->get('bid');
                 <thead>
                 <tr>
                     <th>序号</th>
-                    <th>分销商</th>
+                    <th>网点</th>
                     <th>产品名称</th>
+                    <th>产品期限</th>
                     <th>客户姓名</th>
+                    <th>证件号</th>
                     <th>联系电话</th>
-                    <th class="money">认购金额（万元）</th>
+                    <th>开户行名称</th>
+                    <th>银行卡账号</th>
+                    <th class="money">认购金额（万）</th>
                     <th>认购日期</th>
+                    <th>起息日期</th>
                     <th>操作</th>
                 </tr>
                 </thead>
@@ -100,10 +105,22 @@ $bid = (int)Yii::$app->request->get('bid');
                             <?= $order->loan->title ?>
                         </td>
                         <td>
+                            <?= $order->loan->expires . $order->loan->unit ?>
+                        </td>
+                        <td>
                             <?= $order->realName ?>
                         </td>
                         <td>
+                            <?= $order->idCard ?>
+                        </td>
+                        <td>
                             <?= $order->mobile ?>
+                        </td>
+                        <td>
+                            <?= $order->accBankName ?>
+                        </td>
+                        <td>
+                            <?= $order->bankCardNo ?>
                         </td>
                         <td class="money">
                             <?= number_format($order->money, 2) ?>
@@ -112,6 +129,9 @@ $bid = (int)Yii::$app->request->get('bid');
                             <?= $order->orderDate ?>
                         </td>
                         <td>
+                            <?= $order->valueDate ?>
+                        </td>
+                        <td width="7%">
                             <a href="javascript:del('/offline/offline/delete','<?= $order->id ?>')" class="btn mini red ajax_op">
                                 <i class="icon-minus-sign"></i>删除
                             </a>

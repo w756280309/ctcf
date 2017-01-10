@@ -8,6 +8,7 @@ use common\models\offline\OfflineOrder;
 use common\models\affiliation\Affiliator;
 use common\models\offline\OfflineLoan;
 use common\models\offline\ImportForm;
+use common\models\offline\OfflineUser;
 use Yii;
 use yii\data\Pagination;
 use PHPExcel_Reader_Excel2007;
@@ -40,21 +41,24 @@ class OfflineController extends BaseController
                 $model->addError('excel', $ex->getMessage());
             }
 
-            $transaction = Yii::$app->db->beginTransaction();
+            $db = Yii::$app->db;
+            $transaction = $db->beginTransaction();
             if (!$model->hasErrors()) {
                 try {
                     foreach ($arr as $key => $order) {
-                        if ($key < 3) {
+                        //省略第一行
+                        if ($key < 1) {
                             continue;
                         }
                         //判断某一行皆为空时,跳过该行
-                        if (empty($order[0]) && empty($order[1]) && empty($order[2]) && empty($order[3]) && empty($order[4]) && empty($order[5])) {
+                        if (empty(array_filter($order))) {
                             continue;
                         }
 
+                        //初始化model，寻找行号，使用batchInsert插入
                         $neworder = $this->initModel($order);
                         if ($neworder->validate()) {
-                            $neworder->save();
+                            $rows[] = $neworder->attributes;
                         } else {
                             $error_index = $key + 1;
                             if ($neworder->hasErrors('affiliator_id')) {
@@ -63,12 +67,14 @@ class OfflineController extends BaseController
                             throw new \Exception('文件内容有错,行号' . $error_index);
                         }
                     }
+                    $db->createCommand()->batchInsert(OfflineOrder::tableName(), $neworder->attributes(), $rows)->execute();
                     $transaction->commit();
                     return $this->redirect('list');
                 } catch (\Exception $ex) {
                     $model->addError('excel', $ex->getMessage());
                     $transaction->rollBack();
                 }
+                //删除临时文件
                 @unlink($filepath);
             }
         }
@@ -131,10 +137,12 @@ class OfflineController extends BaseController
         if ($row > $max_read_line) {
             throw new \Exception('该excel文件行数超出' . $max_read_line . '行');
         }
-        //将F行日期转为php的'Y-m-d'
-        $d = 'F' . $row;
+        //将J,K行日期转为php的'Y-m-d'
+        $j = 'J' . $row;
+        $k = 'K' . $row;
         //excel在‘2016/7/12’识别该列时，日期格式的保持不变，非日期格式的识别为'07-12-06'，或者识别成float(42258),使用下面的是都可以转换成'2016-07-12'
-        $currentSheet->getStyle("F1:$d")->getNumberFormat()->setFormatCode('yyyy-mm-dd');
+        $currentSheet->getStyle("J1:$j")->getNumberFormat()->setFormatCode('yyyy-mm-dd');
+        $currentSheet->getStyle("K1:$k")->getNumberFormat()->setFormatCode('yyyy-mm-dd');
         $content = $currentSheet->toArray('', true, true);
         return $content;
     }
@@ -147,6 +155,7 @@ class OfflineController extends BaseController
      */
     private function initModel($order)
     {
+        //过滤掉所有的空格
         $order = array_map(function ($val) {
             return Yii::$app->functions->removeWhitespace($val);
         }, $order);
@@ -154,6 +163,7 @@ class OfflineController extends BaseController
         $model = new OfflineOrder();
         $affiliator = Affiliator::find()->where(['name' => $order[0]])->one();
         $loan = OfflineLoan::find()->where(['title' => $order[1]])->one();
+        $user = OfflineUser::find()->where(['idCard' => $order[4]])->one();
         $affiliator_id = null;
         if (null !== $affiliator) {
             $affiliator_id = $affiliator->id;
@@ -161,17 +171,42 @@ class OfflineController extends BaseController
         if (null !== $loan) {
             $loan_id = $loan->id;
         } else {
-            $newloan = new OfflineLoan();
-            $newloan->title = $order[1];
-            $newloan->save();
-            $loan_id = $newloan->id;
+            $newLoan = new OfflineLoan();
+            $newLoan->title = $order[1];
+            $newLoan->expires = (int) $order[2];
+            $newLoan->unit = str_replace($newLoan->expires, '', $order[2]);
+            $newLoan->save();
+            $loan_id = $newLoan->id;
         }
+
+        //todo -更新积分
+        if (null !== $user) {
+            $user_id = $user->id;
+            //手机号应是始终为最后导入的那个
+            if ($user->mobile !== $order[5]) {
+                $user->mobile = $order[5];
+                $user->save();
+            }
+        } else {
+            $newUser = new OfflineUser();
+            $newUser->realName = $order[3];
+            $newUser->idCard = $order[4];
+            $newUser->mobile = $order[5];
+            $newUser->save();
+            $user_id = $newUser->id;
+        }
+
         $model->affiliator_id = $affiliator_id;
         $model->loan_id = $loan_id;
-        $model->realName = $order[2];
-        $model->mobile = $order[3];
-        $model->money = $order[4];
-        $model->orderDate = $order[5];
+        $model->user_id = $user_id;
+        $model->realName = $order[3];
+        $model->idCard = $order[4];
+        $model->mobile = $order[5];
+        $model->accBankName = $order[6];
+        $model->bankCardNo = $order[7];
+        $model->money = $order[8];
+        $model->orderDate = $order[9];
+        $model->valueDate = $order[10];
         $model->created_at = time();
         $model->isDeleted = false;
         return $model;
@@ -198,6 +233,7 @@ class OfflineController extends BaseController
                 ];
             }
             if ($model->save()) {
+                //todo -扣除积分和财富值(应考虑积分流水扣除)
                 return ['code' => 1, 'message' => '删除成功'];
             }
         }

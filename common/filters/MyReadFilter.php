@@ -11,7 +11,7 @@ class MyReadFilter implements PHPExcel_Reader_IReadFilter
     public function readCell($column, $row, $worksheetName = '') {
         //  Read rows 1 to 1000 and columns A to F only
         if ($row >= 1 && $row <= static::MAX_READ_LINE) {
-            if (in_array($column, range('A', 'F'))) {
+            if (in_array($column, range('A', 'K'))) {
                 return true;
             }
         }

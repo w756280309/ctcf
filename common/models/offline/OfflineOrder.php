@@ -4,19 +4,19 @@ namespace common\models\offline;
 
 use yii\db\ActiveRecord;
 use common\models\affiliation\Affiliator;
-use common\models\offline\OfflineLoan;
 
 class OfflineOrder extends ActiveRecord
 {
     public function rules()
     {
         return [
-            [['affiliator_id', 'loan_id', 'realName', 'mobile', 'money', 'orderDate', 'created_at'], 'required'],
-            [['affiliator_id', 'loan_id', 'created_at'], 'integer'],
+            [['affiliator_id', 'loan_id', 'realName', 'mobile', 'money', 'orderDate', 'created_at', 'user_id', 'idCard', 'accBankName', 'bankCardNo', 'valueDate'], 'required'],
+            [['user_id', 'affiliator_id', 'loan_id', 'created_at'], 'integer'],
             ['realName', 'string', 'max' => 50],
             ['mobile', 'string', 'max' => 20],
+            [['idCard', 'bankCardNo'], 'string', 'max' => 30],
             ['money', 'number'],
-            ['orderDate', 'safe'],
+            [['orderDate', 'valueDate'], 'safe'],
         ];
     }
 
@@ -25,6 +25,7 @@ class OfflineOrder extends ActiveRecord
         return [
             'id' => 'ID',
             'affiliator_id' => '分销商ID',
+            'user_id' => '用户ID',
             'loan_id' => '线下产品ID',
             'realName' => '姓名',
             'mobile' => '联系电话',
@@ -32,6 +33,10 @@ class OfflineOrder extends ActiveRecord
             'orderDate' => '订单日期',
             'created_at' => '创建时间',
             'isDeleted' => '是否删除',
+            'idCard' => '身份证号',
+            'accBankName' => '开户行名称',
+            'bankCardNo' => '银行卡号',
+            'valueDate' => '起息日',
         ];
     }
 
