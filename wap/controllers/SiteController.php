@@ -99,30 +99,83 @@ class SiteController extends Controller
 
     /**
      * WAP端首页展示.
+     *
+     * 1. 理财专区和新手专区只显示预告期或募集中项目,没有就不显示;
      */
     public function actionIndex()
     {
+        $cond = [OnlineProduct::STATUS_PRE, OnlineProduct::STATUS_NOW];
+
+        //新手专区
+        $xs = LoanFinder::queryLoans()
+            ->andWhere([
+                'is_xs' => true,
+                'status' => $cond,
+            ])
+            ->orderBy([
+                'xs_status' => SORT_DESC,
+                'recommendTime' => SORT_DESC,
+                'sort' => SORT_ASC,
+                'finish_rate' => SORT_DESC,
+                'id' => SORT_DESC,
+            ])
+            ->one();
+
         //理财专区
-        $loans = LoanFinder::queryLoans()->orderBy('xs_status desc, recommendTime desc, sort asc, finish_rate desc, id desc')->limit(4)->all();
+        $loans = OnlineProduct::find()
+            ->where([
+                'isPrivate' => 0,
+                'del_status' => OnlineProduct::STATUS_USE,
+                'online_status' => OnlineProduct::STATUS_ONLINE,
+                'is_xs' => false,
+                'status' => $cond,
+            ])
+            ->orderBy([
+                'recommendTime' => SORT_DESC,
+                'sort' => SORT_ASC,
+                'finish_rate' => SORT_DESC,
+                'id' => SORT_DESC,
+            ])
+            ->limit(2)
+            ->all();
 
         //精选项目与热门活动
-        $queryAdvs = Adv::find()->where(['status' => Adv::STATUS_SHOW, 'del_status' => Adv::DEL_STATUS_SHOW, 'showOnPc' => 0]);
-        $isInApp = defined('IN_APP');
-        if ($isInApp) {
+        $queryAdvs = Adv::find()
+            ->where([
+                'status' => Adv::STATUS_SHOW,
+                'del_status' => Adv::DEL_STATUS_SHOW,
+                'showOnPc' => 0,
+            ]);
+
+        if (defined('IN_APP')) {
             $queryAdvs->andWhere(['isDisabledInApp' => 0]);
         }
 
         //热门活动
-        $hotActs = $queryAdvs->andWhere(['type' => Adv::TYPE_LUNBO])->orderBy('show_order asc, id desc')->limit(5)->all();
+        $hotActs = $queryAdvs->andWhere(['type' => Adv::TYPE_LUNBO])
+            ->orderBy([
+                'show_order' => SORT_ASC,
+                'id' => SORT_DESC,
+            ])
+            ->limit(5)
+            ->all();
 
-        //公告专区：
+        //公告专区
         $news = News::find()
-            ->where(['status' => News::STATUS_PUBLISH, 'allowShowInList' => true])
+            ->where([
+                'status' => News::STATUS_PUBLISH,
+                'allowShowInList' => true,
+            ])
             ->orderBy(['news_time' => SORT_DESC])
             ->limit(3)
             ->all();
 
-        return $this->render('new_index', ['loans' => $loans, 'hotActs' => $hotActs, 'news' => $news]);
+        return $this->render('index170109', [
+            'xs' => $xs,
+            'loans' => $loans,
+            'hotActs' => $hotActs,
+            'news' => $news,
+        ]);
     }
 
     /**

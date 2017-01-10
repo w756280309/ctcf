@@ -38,90 +38,163 @@ a:active {
     outline: none;
     color: #999999;
 }
-
-header {
+.banner {
+    width:100%;
+    height:4.66667rem;
+}
+.banner a {
+    display: block;
+}
+.banner a img {
+    width:100%;
+    height:100%;
+}
+.login {
     width: 100%;
-    height: 3.8rem;
-    padding-top: 0.4rem;
-    border-bottom: 1px solid #dddddd;
-    background: #ffffff url("../images/bglogo.png") no-repeat left -10px;
-    background-size: 100% 100%;
+    padding:0.4rem 0;
+}
+.login a {
+    display: block;
+    width:3.733333rem;
+    height:1.04rem;
+    background-color: #f1453d;
+    color: #f1453d;
+    line-height:1.04rem;
+    text-align: center;
+    border:1px solid #f1453d ;
+    border-radius: 5px;
+}
+.login a:first-child {
+    color: #fff;
+    margin-left:0.8rem ;
+}
+.login a:last-child {
+    background-color: #fff;
+    border:1px solid #f1453d ;
+    margin-right:0.8rem ;
+}
+.showMore {
+    border-top: 1px solid #eee;
+    background-color: #fff;
+}
+.showMore p.clearfix {
+    padding:0 0.533333rem;
+    height:0.853333rem;
+    line-height:0.853333rem;
+    border-bottom: 1px solid #ddd;
+}
+.showMore p span {
+    color: #666666;
+}
+.showMore div {
+    padding-left: 4%;
+}
+.showMore div a {
+    text-align: center;
+    display: block;
+    width:24%;
+    padding:0.4rem 0 0.2rem 0;
+}
+.showMore div a img {
+    width:0.8rem;
+}
+.showMore div a p {
+    line-height: 0.8rem;
+}
+
+.newnorm {
+    margin-top: 0.2666667rem;
+    background-color: #fff;
     text-align: center;
 }
-
-header img:first-child {
-    width: 2.236rem;
-    height: .52rem;
+.newnorm p.newnormtitle {
+    text-align: left;
+    padding:0 0.533333rem;
+    color: #000;
+    line-height: 1.0933333rem;
+    border-bottom: 1px solid #ddd;
 }
-
-header .notLogin {
-    height: 2.77333333rem;
-}
-
-header .notLogin p {
-    height: 1.73333333rem;
-    font-size: 15px;
-    line-height: 1.73333333rem;
-}
-
-header .notLogin p span {
-    font-size: 16px;
-    color: #f44336;
-}
-
-header .notLogin a {
-    display: inline-block;
-    width: 3.06666667rem;
-    height: 0.93333333rem;
-    border: 1px solid #f44336;
+.newnorm p.newnormtitle span {
+    border:1px solid #1683fb;
+    color: #1683fb;
+    padding:0.08rem 0.133333rem;
     border-radius: 5px;
-    line-height: 0.93333333rem;
-    font-size: 17px;
-    color: #f44336;
+}
+.newnorm p.newnormtitle span:first-child {
+    margin: 0 0.26666667rem 0 0.5333333rem ;
 }
 
-header .notLogin a:last-child {
-    background-color: #f44336;
+.newnorm a p:first-child {
+    padding:0 0.533333rem;
+    line-height: 1.2rem;
+    color: #333333;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+}
+.newnorm a p:nth-of-type(2) {
+    line-height: 1.6rem;
+    color: #f1453d;
+}
+.newnorm a p:nth-of-type(2) em{
+    position: relative;
+}
+.newnorm a p:nth-of-type(2) em span {
+    position: absolute;
+    top:-0.5rem;
+}
+.newnorm a p:nth-of-type(3) {
+    margin-top: -0.3rem;
+    margin-bottom: 0.5333333rem;
+    color: #aaa;
+}
+.newnorm a ul.clearfix {
+    padding:0 0.533333rem;
+    border-top: 1px dashed #ddd;
+    line-height: 1.04rem;
+}
+.newnorm a ul.clearfix li {
+    width: 35%;
+    color: #666666;
+}
+.newnorm a ul.clearfix li:nth-of-type(2) {
+    width: 38%;
+}
+.newnorm a ul.clearfix li:nth-of-type(3) {
+    width: 27%;
+}
+.newnorm a ul.clearfix li img {
+    vertical-align: middle;
+}
+.icon5 {
+    width:0.4666667rem;
+}
+.icon6 {
+    width:0.455553rem;
+}
+.icon7 {
+    width:0.36rem;
+}
+
+.newnorm a ul.clearfix li:nth-of-type(4) {
+    background-color: #f1453d;
     color: #fff;
-    margin-left: 1.2rem;
-}
-
-header .login,
-header .loginNewPeople {
-    height: 2.37333333rem;
-    padding-top: 0.4rem;
-}
-
-header .login p:first-child,
-header .loginNewPeople p:first-child {
-    color: #414141;
-    font-size: 15px;
-}
-
-header .login p:nth-of-type(2),
-header .loginNewPeople p:nth-of-type(2) {
-    line-height: 0.93333333rem;
-    color: #eac468;
-    font-size: 15px;
-}
-
-header .login p:nth-of-type(2) span,
-header .loginNewPeople p:nth-of-type(2) span {
-    font-size: 18px;
-}
-
-header .login a,
-header .loginNewPeople a {
-    display: inline-block;
-    width: 3.06666667rem;
-    height: 0.93333333rem;
-    border: 1px solid #f44336;
+    text-align: center;
+    line-height: 1.2rem;
+    margin-bottom:0.4rem;
+    width:100%;
     border-radius: 5px;
-    line-height: 0.93333333rem;
-    font-size: 17px;
-    color: #fff;
-    background-color: #f44336;
 }
+.comred {
+    color: #f1453d;
+}
+
+
+
+
+
+
 
 .hide {
     display: none;
@@ -129,6 +202,7 @@ header .loginNewPeople a {
 
 section {
     background-color: #fff;
+    margin-top: 0.266667rem;
 }
 
 section .introduce {
@@ -146,7 +220,6 @@ section .featured {
     /*height: 4.8rem;*/
 }
 section .featured .project {
-    font-size: 15px;
     color: #333;
     margin-bottom: 0.26666667rem;
 }
@@ -196,151 +269,108 @@ section .featured .threepic li a img {
 }
 
 .invest {
-    background-color: #fff;
     margin-top: 0.26666667rem;
     color: #333;
 }
 
-.invest p {
+.invest p.clearfix {
     height:  1.0933333rem;
     padding: 0 0.53333333rem;
     line-height:  1.0933333rem;
     border-bottom: 1px solid #ddd;
-    font-size: 15px;
     background: url("../images/arrow.png") no-repeat 95% center;
     background-size: 0.16rem 0.26666667rem;
+    background-color: #fff;
 }
 
 .invest p a {
     color: #999999;
     padding-right: 0.16rem;
-    font-size: 12px;
 }
-
 .invest ul li {
-    width:50%;
-    box-sizing: border-box;
-    height: 4.45rem;
+    padding: 0 0.53333333rem;
+    margin-bottom: 0.133333rem;
+    background-color: #fff;
 }
-
-.invest ul li a {
-    width: 100%;
-    height: 100%;
-    display: block;
-}
-
-.invest ul li:first-child a{
-    border-right: 1px solid #ddd;
-}
-
-.invest ul li:last-child a {
-    border-top: 1px solid #ddd;
-}
-
-.invest ul li:nth-of-type(3) a {
-    border-right: 1px solid #ddd;
-    border-top: 1px solid #ddd;
-}
-
-.commonLi {
-    text-align: center;
-}
-
-.commonLi a div:nth-of-type(1) {
-    font-size: 14px;
-    color: #444444;
-}
-
-.commonLi a div:nth-of-type(1) span {
-    display: inline-block;
-    width: 3.73333333rem;
+.invest ul li a .supertitle {
+    width:100%;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    line-height: 1.06666667rem;
+    color: #444444;
+    line-height: 1.173333rem;
 }
-
-.commonLi a div:nth-of-type(2) {
-    color: #f44336;
-    font-size: 20px;
-    line-height: 0.8rem;
-    margin-top: -0.1rem;
+.superscript .superctn div {
+    width:50%;
 }
-
-.commonLi a div:nth-of-type(2) span {
-    font-size: 15px;
-    line-height: 15px;
+.superscript .superctn div:first-child .f24 {
+    color: #f1453d;
+    line-height: 0.733333rem;
+    position: relative;
 }
-
-.commonLi a div:nth-of-type(3) {
+.superscript .superctn div:first-child .f24 i {
+    position: absolute;
+    top: -0.2rem;
+    right:-0.7rem;
+}
+.superscript .superctn div:first-child .f14 {
     color: #999999;
-    font-size: 12px;
+    line-height: 0.8rem;
+}
+.superscript .superctn div:last-child .months {
+    color: #999999;
+    line-height: 0.733333rem;
+}
+.superscript .superctn div:last-child .months span {
+    color: #333333;
+}
+.superscript .superctn div:last-child .money span {
+    color: #333333;
+}
+.superscript .superctn div:last-child .money {
+    color: #999999;
+    line-height: 0.8rem;
 }
 
-.commonLi a div:nth-of-type(4) {
-    color: #666666;
-    font-size: 14px;
-    line-height: 1.2rem;
-    text-align: center;
+.progessline {
+    line-height: 0.44rem;
+    color: #f1453d;
 }
-.commonLi a div:nth-of-type(5) {
-    text-align: center;
+.progess {
+    position: relative;
+    width:86.56%;
+    border-top: 3px solid #ddd;
+    margin-top: 0.2rem;
 }
-.commonLi a div:nth-of-type(5) span {
-    padding: 0.04667rem 0.16rem 0.06667rem 0.16rem;
-    font-size: 13px;
-    border: 1px solid #0080ff;
-    color: #0080ff;
+.progess span {
+    position: absolute;
+    top:-3px;
+    left:0;
+    border-top: 3px solid #f1453d;
+}
+.tags {
+    line-height: 1.04rem;
+}
+.tags span {
+    border:1px solid #1683fb;
+    color: #1683fb;
+    padding:0.08rem 0.133333rem;
     border-radius: 5px;
-    display: inline-block;
+}
+.tags span:first-child {
+    margin-right: 0.4rem;
 }
 
-.commonLi a div:nth-of-type(5) span:nth-of-type(2) {
-    margin-left: 0.26666667rem;
-}
 
-.superscript {
-    background: url("../images/superscript.png") no-repeat right top;
-    background-size: 1.06666667rem 1.06666667rem;
-}
 
-.activity {
-    height: 3.46666667rem;
-    margin-top: 0.26666667rem;
-    background-color: #fff;
-    padding-bottom: 0.26666667rem;
-    font-size: 15px;
-}
 
-.activity p {
-    line-height: 0.93333333rem;
-    padding-left: 0.53333333rem;
-}
 
-.activity .swiper-container {
-    height: 2.65rem;
-}
 
-.activity .swiper-container .swiper-wrapper {
-    height: 100%;
-}
 
-.activity .swiper-container .swiper-wrapper .swiper-slide {
-    width: 2.90rem;
-    /*height: 1.91rem;*/
-    height: 100%;
-}
 
-.activity .swiper-container .swiper-wrapper .swiper-slide a {
-    display: block;
-    width: 100%;
-    height: 100%;
-}
 
-.activity .swiper-container .swiper-wrapper .swiper-slide a img {
-    width: 100%;
-    height: 100%;
-}
+
+
 
 .notices {
     margin-top: 0.26666667rem;
@@ -354,11 +384,9 @@ section .featured .threepic li a img {
     border-bottom: 1px solid #ddd;
     background: url("../images/arrow.png") no-repeat 95% center;
     background-size: 0.16rem 0.26666667rem;
-    font-size: 15px;
 }
 
 .notices ul li:nth-of-type(1) a {
-    font-size: 12px;
     padding: 0 0 0 1rem;
 }
 
@@ -376,7 +404,6 @@ section .featured .threepic li a img {
 
 .notices .list a {
     color: #999999;
-    font-size: 14px;
     display: block;
     width: 100%;
     height: 100%;
@@ -397,7 +424,6 @@ section .featured .threepic li a img {
     height: 0.93333333rem;
     line-height: 0.93333333rem;
     color: #333;
-    font-size: 15px;
     margin-top: 0.13333333rem;
 }
 
@@ -427,7 +453,6 @@ section .featured .threepic li a img {
     height: 0.93333333rem;
     line-height: 0.93333333rem;
     color: #333;
-    font-size: 15px;
     margin-top: 10px;
 }
 
@@ -450,14 +475,12 @@ section .featured .threepic li a img {
 }
 
 .platformList div:nth-child(2) {
-    font-size: 15px;
     color: #333;
     line-height: 0.66666667rem;
     margin-top: 0.13333333rem;
 }
 
 .platformList div:last-child {
-    font-size: 14px;
     color: #666666;
 }
 
@@ -480,12 +503,25 @@ section .featured .threepic li a img {
     border-bottom: 1px solid #ddd;
 }
 
+.total {
+    line-height: 1.2rem;
+    color: #999999;
+    padding: 0 0.53333333rem;
+    background-color: #fff;
+    margin-top: 0.2666667rem;
+}
+.total span {
+    color: #606060;
+}
+
+
+
+
 .address {
     height: 1.36rem;
     padding: 0.46666667rem;
     background-color: #fff;
     color: #666666;
-    font-size: 14px;
     margin-top: 0.26666667rem;
     text-align: center;
 }
@@ -508,7 +544,7 @@ footer {
     font-size: 11px;
     line-height: 0.84rem;
     text-align: center;
-    margin-bottom: 50px;
+    margin-bottom: 1.33333333rem;
 }
 footer span {
     margin: 0 .02rem 0.08rem .02rem;
@@ -521,10 +557,17 @@ footer span {
     margin: 0 auto;
 }
 
-.footer {
-    height: 50px;
+
+
+
+
+/*底部导航栏修改开始*/
+
+.nav-footer {
+    height: 1.33333333rem;
     background: #fff;
-    box-shadow: 0 2px 5px #888888;
+    border-top: 1px solid #c6c6c6;
+    /*box-shadow: 0 2px 5px #888888;*/
 }
 
 .footer .footer-title {
@@ -532,77 +575,42 @@ footer span {
     padding-right: 0;
 }
 
-.footer-title {
+.nav-footer-title {
     float: left;
-    height: 100%;
+    padding-top: 0.1333333rem;
+    width:33.33%;
     text-align: center;
 }
-
-.footer-inner,
-.footer-inner1,
-.footer-inner2 {
-    font-size: 14px;
-}
-
-.footer-inner {
+.nav-footer-title a {
     display: block;
-    width: 30px;
-    height: 100%;
-    margin: 0 auto;
-    cursor: pointer;
+}
+.nav-footer-title p {
+    line-height: 0.53333333rem;
+}
+.nav-footer-inner img {
+    width:0.6133333rem;
+}
+.nav-footer-inner1 img {
+    width:0.533333333rem;
+}
+.nav-footer-inner2 img {
+    width:0.56rem;
 }
 
-.footer-title .shouye {
-    display: block;
-    width: 30px;
-    height: 30px;
-    margin: 0 auto;
-    background: url(../images/footer2.png) no-repeat -145px -57px;
-    background-size: 200px;
-    font-size: 18px;
-}
 
-a.shouye1:hover,
-a.shouye1:visited,
-a.shouye1:active {
-    color: #f44336;
-}
 
-.footer-inner1 {
-    display: block;
-    width: 30px;
-    height: 100%;
-    margin: 0 auto;
-    cursor: pointer;
-}
 
-.footer-title .licai {
-    display: block;
-    width: 30px;
-    height: 30px;
-    margin: 0 auto;
-    background: url(../images/footer2.png) no-repeat -113px -3px;
-    background-size: 200px;
-    font-size: 18px;
-}
 
-.footer-inner2 {
-    display: block;
-    width: 30px;
-    height: 100%;
-    margin: 0 auto;
-    cursor: pointer;
-}
 
-.footer-title .zhanghu {
-    display: block;
-    width: 30px;
-    height: 30px;
-    margin: 0 auto;
-    background: url(../images/footer2.png) no-repeat -81px -3px;
-    background-size: 200px;
-    font-size: 18px;
+
+
+
+
+.pitched {
+    color: #f1443d;
 }
+/*底部导航栏修改结束*/
+
 
 .mask {
     z-index: 10000;
@@ -629,3 +637,20 @@ a.shouye1:active {
     height:10.66667rem;
 }
 
+.swiper-pagination-bullet {
+    width:0.13333333rem;
+    height: 0.13333333rem;
+}
+.swiper-pagination-bullet-active {
+    background: #fff;
+}
+
+/*小屏手机样式适应*/
+@media screen and (min-width:321px)  {
+    .tags .rg {
+        font-size: 0.3733333rem!important;
+    }
+    .total ul {
+        font-size: 0.3733333rem!important;
+    }
+}
