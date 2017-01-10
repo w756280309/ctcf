@@ -2,6 +2,8 @@
 
 namespace common\lib\user;
 
+use common\models\affiliation\Affiliator;
+use common\models\affiliation\UserAffiliation;
 use common\models\user\User;
 use common\models\user\UserBanks;
 use common\models\user\RechargeRecord;
@@ -10,6 +12,8 @@ use common\models\order\OnlineOrder;
 use common\models\user\UserAccount;
 use common\models\user\UserInfo;
 use common\utils\StringUtils;
+use Wcg\Http\HeaderUtils;
+use yii\helpers\ArrayHelper;
 
 /**
  * 用户统计.
@@ -28,6 +32,7 @@ class UserStats
                 '姓名',
                 '联系方式',
                 '身份证号',
+                '分销商',
                 '是否开户(1 开户 0 未开户)',
                 '是否开通免密(1 开通 0 未开通)',
                 '是否绑卡(1 绑卡 0 未绑卡)',
@@ -62,27 +67,42 @@ class UserStats
         if (0 === count($model)) {
             return $data;
         }
+        $userIds = ArrayHelper::getColumn($model, 'id');
 
         $recharge = RechargeRecord::find()
             ->select("sum(fund) as rtotalFund, count(id) as rtotalNum, uid")
             ->where(['status' => RechargeRecord::STATUS_YES])
+            ->andWhere(['in', 'uid', $userIds])
             ->groupBy("uid")
             ->asArray()
             ->all();
+        $recharge = ArrayHelper::index($recharge, 'uid');
 
         $draw = DrawRecord::find()
             ->select("sum(money) as dtotalFund, count(id) as dtotalNum, uid")
             ->where(['status' => [DrawRecord::STATUS_SUCCESS, DrawRecord::STATUS_EXAMINED]])
+            ->andWhere(['in', 'uid', $userIds])
             ->groupBy("uid")
             ->asArray()
             ->all();
+        $draw = ArrayHelper::index($draw, 'uid');
 
         $order = OnlineOrder::find()
             ->select("sum(order_money) as ototalFund, count(id) as ototalNum, uid")
             ->where(['status' => OnlineOrder::STATUS_SUCCESS])
+            ->andWhere(['in', 'uid', $userIds])
             ->groupBy("uid")
             ->asArray()
             ->all();
+        $order = ArrayHelper::index($order, 'uid');
+
+        $affiliation = UserAffiliation::find()
+            ->select(['user_id', 'affiliator.name'])
+            ->leftJoin('affiliator', 'user_affiliation.affiliator_id = affiliator.id')
+            ->where(['in', 'user_id', $userIds])
+            ->asArray()
+            ->all();
+        $affiliation = ArrayHelper::index($affiliation, 'user_id');
 
         foreach ($model as $key => $val) {
             $data[$key]['id'] = $val['id'];
@@ -90,6 +110,12 @@ class UserStats
             $data[$key]['name'] = $val['real_name'];
             $data[$key]['mobile'] = $val['mobile'] . "\t";   //手机号后面加入tab键,防止excel表格打开时,显示为科学计数法
             $data[$key]['idcard'] = $val['idcard'] ? substr($val['idcard'], 0, 14) . '****' : '';    //隐藏身份证号信息,显示前14位
+            if (isset($affiliation[$val['id']])) {
+                $data[$key]['affiliation'] = $affiliation[$val['id']]['name'];
+            } else {
+                $data[$key]['affiliation'] = '官网';
+            }
+
             $data[$key]['idcard_status'] = $val['idcard_status'];
             $data[$key]['mianmiStatus'] = $val['mianmiStatus'];
 
@@ -101,37 +127,28 @@ class UserStats
 
             $data[$key]['available_balance'] = $val['available_balance'];
 
-            $data[$key]['rtotalFund'] = 0;
-            $data[$key]['rtotalNum'] = 0;
-            if (1 === (int)$val['idcard_status'] && $recharge) {
-                foreach ($recharge as $v) {
-                    if ($val['id'] == $v['uid']) {
-                        $data[$key]['rtotalFund'] = $v['rtotalFund'];
-                        $data[$key]['rtotalNum'] = $v['rtotalNum'];
-                    }
-                }
+            if (isset($recharge[$val['id']])) {
+                $data[$key]['rtotalFund'] = $recharge[$val['id']]['rtotalFund'];
+                $data[$key]['rtotalNum'] = $recharge[$val['id']]['rtotalNum'];
+            } else {
+                $data[$key]['rtotalFund'] = 0;
+                $data[$key]['rtotalNum'] = 0;
             }
 
-            $data[$key]['dtotalFund'] = 0;
-            $data[$key]['dtotalNum'] = 0;
-            if (null !== $val['bid'] && $draw) {
-                foreach ($draw as $v) {
-                    if ($val['id'] === $v['uid']) {
-                        $data[$key]['dtotalFund'] = $v['dtotalFund'];
-                        $data[$key]['dtotalNum'] = $v['dtotalNum'];
-                    }
-                }
+            if(isset($draw[$val['id']])) {
+                $data[$key]['dtotalFund'] = $draw[$val['id']]['dtotalFund'];
+                $data[$key]['dtotalNum'] = $draw[$val['id']]['dtotalNum'];
+            } else {
+                $data[$key]['dtotalFund'] = 0;
+                $data[$key]['dtotalNum'] = 0;
             }
 
-            $data[$key]['ototalFund'] = 0;
-            $data[$key]['ototalNum'] = 0;
-            if ($order) {
-                foreach ($order as $v) {
-                    if ($val['id'] === $v['uid']) {
-                        $data[$key]['ototalFund'] = $v['ototalFund'];
-                        $data[$key]['ototalNum'] = $v['ototalNum'];
-                    }
-                }
+            if (isset($order[$val['id']])) {
+                $data[$key]['ototalFund'] = $order[$val['id']]['ototalFund'];
+                $data[$key]['ototalNum'] = $order[$val['id']]['ototalNum'];
+            } else {
+                $data[$key]['ototalFund'] = 0;
+                $data[$key]['ototalNum'] = 0;
             }
 
             $data[$key]['firstInvestAmount'] = floatval($val['firstInvestAmount']);
@@ -150,11 +167,13 @@ class UserStats
             throw new \yii\web\NotFoundHttpException('The data is null');
         }
 
-        header('Content-Disposition: attachment; filename="statistics.csv"');
+        header(HeaderUtils::getContentDispositionHeader('statistics.csv', \Yii::$app->request->userAgent));
+        $out = fopen('php://output', 'w');
+        fputs($out, "\xEF\xBB\xBF");//添加BOM头
         foreach ($data as $val) {
-            $record = implode(',', $val) . "\n";
-            $record = iconv('UTF-8', 'GB18030', $record);//转换编码
-            echo $record;
+            fputcsv($out, $val);
         }
+        fclose($out);
+        exit();
     }
 }
