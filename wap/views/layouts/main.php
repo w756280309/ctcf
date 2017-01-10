@@ -38,6 +38,7 @@ $this->registerMetaTag([
     <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
     <meta name="renderer" content="webkit">
     <meta name="format-detection" content="telephone=no"/>
+    <meta name="shenma-site-verification" content="faa08424292fd6a2abdc7a6e040e498c_1484034405">
     <title><?= isset($ctitle) ? $ctitle : Html::encode($this->title) ?></title>
     <?= Html::csrfMetaTags() ?>
     <?php $this->head() ?>
