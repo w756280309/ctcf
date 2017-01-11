@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use common\controllers\HelpersTrait;
+use common\models\payment\Repayment;
 use common\models\product\LoanFinder;
 use common\service\SmsService;
 use common\service\LoginService;
@@ -179,9 +180,9 @@ class SiteController extends Controller
     }
 
     /**
-     * 查询是否是登陆/新手
+     * 查询是否是登陆/新手.
      *
-     * @return int
+     * @return int -1 表示没有登录, 0 表示新手, 大于等于1 表示投过新手标
      */
     public function actionXs()
     {
@@ -191,6 +192,50 @@ class SiteController extends Controller
         $user = $this->getAuthedUser();
 
         return $user->xsCount();
+    }
+
+    /**
+     * 首页统计项.
+     *
+     * 1. 统计募集规模;
+     * 2. 统计累计兑付;
+     * 3. 统计兑付利息;
+     *
+     * 以上都是数据都是同时包含线上与线下数据的
+     *
+     * 4. 添加缓存机制,时间为10分钟;
+     */
+    public function actionStatsForIndex()
+    {
+        $cache = Yii::$app->cache;
+        $key = 'index_stats';
+
+        if (!$cache->get($key)) {
+            $totalTradeAmount = OnlineProduct::find()
+                ->where([
+                    'del_status' => false,
+                    'online_status' => true,
+                    'isTest' => false,
+                ])
+                ->andWhere(['>', 'status', OnlineProduct::STATUS_PRE])
+                ->sum('funded_money');
+
+            $plan = Repayment::find()
+                ->where(['isRefunded' => true])
+                ->select("sum(amount) as totalAmount, sum(interest) as totalInterest")
+                ->asArray()
+                ->one();
+
+            $statsData = [
+                'totalTradeAmount' => bcadd($totalTradeAmount, 397888000, 2),
+                'totalRefundAmount' => bcadd($plan['totalAmount'], bcadd(232260000, 18396900, 2), 2),
+                'totalRefundInterest' => bcadd($plan['totalInterest'], 18396900, 2),
+            ];
+
+            $cache->set($key, $statsData, 600);   //缓存十分钟
+        }
+
+        return $cache->get($key);
     }
 
     /**

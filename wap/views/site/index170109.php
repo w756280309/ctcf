@@ -35,8 +35,8 @@ use yii\helpers\Html;
     </div>
 
     <div class="showMore">
-        <p class="clearfix hide">
-            <span class="f12 lf">募集规模88,888.88万元</span>
+        <p class="clearfix">
+            <span class="f12 lf" id="totalTradeAmount">募集规模<i></i>万元</span>
             <span class="f12 rg">历史兑付率100%</span>
         </p>
         <div class="clearfix">
@@ -75,7 +75,7 @@ use yii\helpers\Html;
             </p>
             <?php $ex = $xs->getDuration() ?>
             <?php if (!$xs->isFlexRate && !$xs->jiaxi) { ?>
-                <a href="/deal/deal">
+                <a href="/deal/deal/index">
                     <p class="f15"><?= $xs->title ?></p>
                     <p class="f45"><?= LoanHelper::getDealRate($xs) ?><i class="f25">%</i></p>
                     <p class="f12">预期年化率</p>
@@ -88,7 +88,7 @@ use yii\helpers\Html;
                 </a>
             <?php } else { ?>
                 <!--加息-->
-                <a href="/deal/deal">
+                <a href="/deal/deal/index">
                     <p class="f15"><?= $xs->title ?></p>
                     <p class="f30"><em><?= LoanHelper::getDealRate($xs) ?><i class="f20">%</i><?php if (!empty($xs->jiaxi)) { ?><span class="f15">+<?= StringUtils::amountFormat2($xs->jiaxi) ?>%</span><?php } ?></em></p>
                     <p class="f12">预期年化率</p>
@@ -141,7 +141,7 @@ use yii\helpers\Html;
         <div class="invest">
             <p class="clearfix">
                 <span class="lf f15">理财专区</span>
-                <a class="rg f12" href="/deal/deal">查看全部产品</a>
+                <a class="rg f12" href="/deal/deal/index">查看全部产品</a>
             </p>
             <ul>
             <?php foreach ($loans as $loan) { ?>
@@ -241,10 +241,10 @@ use yii\helpers\Html;
         </ul>
     </div>
 
-    <div class="total hide">
-        <ul class="f14 clearfix">
-            <li class="lf">累计兑付<span>3333,333.33</span>万元</li>
-            <li class="rg">带来<span>33,333.33</span>万元收益</li>
+    <div class="total">
+        <ul class="f13 clearfix">
+            <li class="lf" id="totalRefundAmount">累计兑付<span></span>万元</li>
+            <li class="rg" id="totalRefundInterest">带来<span></span>万元收益</li>
         </ul>
     </div>
 
@@ -255,23 +255,25 @@ use yii\helpers\Html;
 
     <footer class="f11"><span></span>温州报业传媒旗下理财平台<span></span></footer>
 
-    <div class="navbar-fixed-bottom nav-footer">
-        <div class="nav-footer-title">
-            <div class="nav-footer-inner">
-                <a href="/#t=1" class="f14"><img src="<?= FE_BASE_URI ?>wap/index/images/nav-footer_01.png" alt=""><p class="pitched">首页</p></a>
+    <?php if (!defined('IN_APP')) { ?>
+        <div class="navbar-fixed-bottom nav-footer">
+            <div class="nav-footer-title">
+                <div class="nav-footer-inner">
+                    <a href="/#t=1" class="f14"><img src="<?= FE_BASE_URI ?>wap/index/images/nav-footer_01.png" alt=""><p class="pitched">首页</p></a>
+                </div>
+            </div>
+            <div class="nav-footer-title">
+                <div class="nav-footer-inner1">
+                    <a href="/deal/deal/index" class="f14"><img src="<?= FE_BASE_URI ?>wap/index/images/nav-footer_02.png" alt=""><p>理财</p></a>
+                </div>
+            </div>
+            <div class="nav-footer-title">
+                <div class="nav-footer-inner2">
+                    <a href="<?= Yii::$app->user->isGuest ? '/site/login' : '/user/user' ?>"  class="f14"><img src="<?= FE_BASE_URI ?>wap/index/images/nav-footer_03.png" alt=""><p>账户</p></a>
+                </div>
             </div>
         </div>
-        <div class="nav-footer-title">
-            <div class="nav-footer-inner1">
-                <a href="/deal/deal/index" class="f14"><img src="<?= FE_BASE_URI ?>wap/index/images/nav-footer_02.png" alt=""><p>理财</p></a>
-            </div>
-        </div>
-        <div class="nav-footer-title">
-            <div class="nav-footer-inner2">
-                <a href="<?= Yii::$app->user->isGuest ? '/site/login' : '/user/user' ?>"  class="f14"><img src="<?= FE_BASE_URI ?>wap/index/images/nav-footer_03.png" alt=""><p>账户</p></a>
-            </div>
-        </div>
-    </div>
+    <?php } ?>
 </div>
 
 <div class="mask hide">
@@ -327,7 +329,14 @@ use yii\helpers\Html;
         }
 
         $('.jumpAdv').on('click', function () {
-            location.href = '/deal/deal';
+            location.href = '/deal/deal/index';
+        });
+
+        //统计数据
+        $.get('/site/stats-for-index', function (data) {
+            $('#totalTradeAmount i').html(WDJF.numberFormat(accDiv(data.totalTradeAmount, 10000), 0));
+            $('#totalRefundAmount span').html(WDJF.numberFormat(accDiv(data.totalRefundAmount, 10000), 0));
+            $('#totalRefundInterest span').html(WDJF.numberFormat(accDiv(data.totalRefundInterest, 10000), 0));
         });
 
         //判断首页上方
