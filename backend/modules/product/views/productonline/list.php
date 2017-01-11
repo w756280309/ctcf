@@ -134,8 +134,8 @@ $pc_cat = Yii::$app->params['pc_cat'];
                             <td>
                                 <a href="/product/productonline/show?id=<?= $val['id'] ?>" class="btn mini green"><i class="icon-edit"></i> 查看</a>
                                 | <a href="/product/productonline/edit?id=<?= $val['id'] ?>" class="btn mini green"><i class="icon-edit"></i> 编辑</a>
-                                <?php if (!$val['isPrivate'] && $val['funded_money'] <= 0) { ?>
-                                    | <a href="javascript:hideLoan('<?= $val['id'] ?>')" class="btn mini red"><i class="icon-minus-sign"></i> 隐藏</a>
+                                <?php if ($val['online_status'] && !$val['isPrivate'] && $val['funded_money'] <= 0) { ?>
+                                    | <a href="javascript:hideLoan('<?= $val['id'] ?>', '<?= $val['title'] ?>')" class="btn mini red"><i class="icon-minus-sign"></i> 隐藏</a>
                                 <?php } ?>
                                 <?php if ($val['status'] < 2) { ?>
                                     | <a href="javascript:del('/product/productonline/del','<?= $val['id'] ?>')" class="btn mini red ajax_op" op="status" data-index="<?= $val['status'] ?>" index="<?= $val['id'] ?>"><i class="icon-minus-sign"></i>删除</a>
@@ -272,9 +272,9 @@ $pc_cat = Yii::$app->params['pc_cat'];
         })
     }
 
-    function hideLoan(pid)
+    function hideLoan(pid, name)
     {
-        layer.confirm('是否要隐藏该项目？', {title: '隐藏项目', btn: ['确定', '取消']}, function() {
+        layer.confirm('是否要隐藏'+name+'项目？', {title: '隐藏项目', btn: ['确定', '取消']}, function() {
             openLoading();  //打开loading
             $.get('/product/productonline/hide-loan', {id: pid}, function(data) {
                 cloaseLoading();    //关闭loading
