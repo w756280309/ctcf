@@ -80,10 +80,6 @@ class ProductonlineController extends BaseController
             throw new \Exception('合同名称错误,第一份合同应该录入认购协议');
         }
 
-        if (false === strpos($param['title'][1], '风险揭示书')) {
-            throw new \Exception('合同名称错误,第二份合同应该录入风险揭示书');
-        }
-
         foreach ($param['title'] as $key => $title) {
             if (empty($title)) {
                 throw new \Exception('合同名称不能为空');
