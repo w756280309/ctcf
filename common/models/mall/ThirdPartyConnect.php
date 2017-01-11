@@ -88,12 +88,12 @@ class ThirdPartyConnect extends ActiveRecord
             "timestamp" => $timestamp
         ];
         if (!empty($redirect)) {
-            $array['redirect'] = urlencode($redirect);
+            $array['redirect'] = $redirect;//必须是没有经过encode的值
         }
         $sign = self::sign($array);
         $url = $url . "uid=" . $uid . "&credits=" . $credits . "&appKey=" . $appKey . "&timestamp=" . $timestamp . "&sign=" . $sign;
         if (!empty($redirect)) {
-            $url .= "&redirect=" . urlencode($redirect);
+            $url .= "&redirect=" . urlencode($redirect);//必须是经过encode的值
         }
         return $url;
     }
