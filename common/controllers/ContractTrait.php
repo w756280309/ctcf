@@ -331,8 +331,6 @@ trait ContractTrait
         foreach ($model as $k => $val) {
             if ($k === 0) {
                 $title = '认购合同';
-            } elseif ($k === 1) {
-                $title = '风险提示书';
             } else {
                 $title = Yii::$app->functions->cut_str($val['name'], 5, 0, '**');
             }

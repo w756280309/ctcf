@@ -563,8 +563,8 @@ TPL;
                     'content' => $ctmodel[0]['content'],
                 ]);
                 echo CfcaUtils::renderXml($tpl, [
-                    'contentName' => '风险揭示书标题',
-                    'contentDetail' => '风险揭示书内容',
+                    'contentName' => '合同标题',
+                    'contentDetail' => '合同内容',
                     'name' => $ctmodel[1]['name'],
                     'content' => $ctmodel[1]['content'],
                 ]);
@@ -586,8 +586,8 @@ TPL;
                     'content' => $con_content_arr[0],
                 ]);
                 echo CfcaUtils::renderXml($tpl, [
-                    'contentName' => '风险揭示书标题',
-                    'contentDetail' => '风险揭示书内容',
+                    'contentName' => '合同标题',
+                    'contentDetail' => '合同内容',
                     'name' => $con_name_arr[1],
                     'content' => $con_content_arr[1],
                 ]);
