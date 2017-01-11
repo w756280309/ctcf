@@ -141,8 +141,6 @@ trait ContractTrait
         foreach ($loanTemplates as $key => $loanTemplate) {
             if ($key === 0) {
                 $title = '认购合同';
-            } elseif ($key === 1) {
-                $title = '风险提示书';
             } else {
                 $title = Yii::$app->functions->cut_str($loanTemplate->name, 5, 0, '**');
             }
