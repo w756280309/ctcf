@@ -108,7 +108,7 @@ class UserStats
             $data[$key]['id'] = $val['id'];
             $data[$key]['created_at'] = date('Y-m-d H:i:s', $val['created_at']);
             $data[$key]['name'] = $val['real_name'];
-            $data[$key]['mobile'] = $val['mobile'] . "\t";   //手机号后面加入tab键,防止excel表格打开时,显示为科学计数法
+            $data[$key]['mobile'] = $val['mobile'];   //手机号后面加入tab键,防止excel表格打开时,显示为科学计数法
             $data[$key]['idcard'] = $val['idcard'] ? substr($val['idcard'], 0, 14) . '****' : '';    //隐藏身份证号信息,显示前14位
             if (isset($affiliation[$val['id']])) {
                 $data[$key]['affiliation'] = $affiliation[$val['id']]['name'];
@@ -116,8 +116,8 @@ class UserStats
                 $data[$key]['affiliation'] = '官网';
             }
 
-            $data[$key]['idcard_status'] = $val['idcard_status'];
-            $data[$key]['mianmiStatus'] = $val['mianmiStatus'];
+            $data[$key]['idcard_status'] = intval($val['idcard_status']);
+            $data[$key]['mianmiStatus'] = intval($val['mianmiStatus']);
 
             if (null === $val['bid']) {
                 $data[$key]['bid'] = 0;
@@ -125,27 +125,27 @@ class UserStats
                 $data[$key]['bid'] = 1;
             }
 
-            $data[$key]['available_balance'] = $val['available_balance'];
+            $data[$key]['available_balance'] = floatval($val['available_balance']);
 
             if (isset($recharge[$val['id']])) {
-                $data[$key]['rtotalFund'] = $recharge[$val['id']]['rtotalFund'];
-                $data[$key]['rtotalNum'] = $recharge[$val['id']]['rtotalNum'];
+                $data[$key]['rtotalFund'] = floatval($recharge[$val['id']]['rtotalFund']);
+                $data[$key]['rtotalNum'] = floatval($recharge[$val['id']]['rtotalNum']);
             } else {
                 $data[$key]['rtotalFund'] = 0;
                 $data[$key]['rtotalNum'] = 0;
             }
 
             if(isset($draw[$val['id']])) {
-                $data[$key]['dtotalFund'] = $draw[$val['id']]['dtotalFund'];
-                $data[$key]['dtotalNum'] = $draw[$val['id']]['dtotalNum'];
+                $data[$key]['dtotalFund'] = floatval($draw[$val['id']]['dtotalFund']);
+                $data[$key]['dtotalNum'] = floatval($draw[$val['id']]['dtotalNum']);
             } else {
                 $data[$key]['dtotalFund'] = 0;
                 $data[$key]['dtotalNum'] = 0;
             }
 
             if (isset($order[$val['id']])) {
-                $data[$key]['ototalFund'] = $order[$val['id']]['ototalFund'];
-                $data[$key]['ototalNum'] = $order[$val['id']]['ototalNum'];
+                $data[$key]['ototalFund'] = floatval($order[$val['id']]['ototalFund']);
+                $data[$key]['ototalNum'] = floatval($order[$val['id']]['ototalNum']);
             } else {
                 $data[$key]['ototalFund'] = 0;
                 $data[$key]['ototalNum'] = 0;
@@ -167,13 +167,27 @@ class UserStats
             throw new \yii\web\NotFoundHttpException('The data is null');
         }
 
-        header(HeaderUtils::getContentDispositionHeader('statistics.csv', \Yii::$app->request->userAgent));
-        $out = fopen('php://output', 'w');
-        fputs($out, "\xEF\xBB\xBF");//添加BOM头
-        foreach ($data as $val) {
-            fputcsv($out, $val);
+        $objPHPExcel = new \PHPExcel();
+        $currentColumn = 1;
+        foreach ($data as $row) {
+            if (is_array($row)) {
+                $currentCell = 'A';
+                foreach ($row as $value) {
+                    if (is_string($value)) {
+                        $objPHPExcel->getActiveSheet()->setCellValueExplicit($currentCell.$currentColumn, $value);
+                    } else {
+                        $objPHPExcel->getActiveSheet()->setCellValue($currentCell.$currentColumn, $value);
+                    }
+                    ++$currentCell;
+                }
+            }
+            ++$currentColumn;
         }
-        fclose($out);
+
+        header(HeaderUtils::getContentDispositionHeader('投资用户信息('.date('Y-m-d H:i:s').').xls', \Yii::$app->request->userAgent));
+
+        $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+        $objWriter->save('php://output');
         exit();
     }
 }

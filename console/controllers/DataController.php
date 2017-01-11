@@ -127,13 +127,26 @@ class DataController extends Controller
         $allData = UserStats::collectLenderData();
         $path  = Yii::getAlias('@backend').'/web/data/';
 
-        $file = $path.'投资用户信息('.date('Y-m-d H:i:s').').csv';
-        $fp = fopen($file, 'w');
-        fputs($fp, "\xEF\xBB\xBF");//添加BOM头
-        foreach ($allData as $value) {
-            fputcsv($fp, $value);
+        $file = $path.'投资用户信息('.date('Y-m-d H:i:s').').xls';
+        $objPHPExcel = new \PHPExcel();
+        $currentColumn = 1;
+        foreach ($allData as $row) {
+            if (is_array($row)) {
+                $currentCell = 'A';
+                foreach ($row as $value) {
+                    if (is_string($value)) {
+                        $objPHPExcel->getActiveSheet()->setCellValueExplicit($currentCell.$currentColumn, $value);
+                    } else {
+                        $objPHPExcel->getActiveSheet()->setCellValue($currentCell.$currentColumn, $value);
+                    }
+                    ++$currentCell;
+                }
+            }
+            ++$currentColumn;
         }
-        fclose($fp);
+        $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+        $objWriter->save($file);
+
         $linkFile = $path.'lender_data.csv';
         if (false !== is_link($linkFile)) {
             unlink($linkFile);
