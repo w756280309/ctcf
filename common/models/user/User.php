@@ -18,7 +18,9 @@ use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
+use \Zii\Model\CoinsTrait;
 use Zii\Model\ErrorExTrait;
+use \Zii\Model\LevelTrait;
 use Zii\Validator\CnMobileValidator;
 
 /**
@@ -52,7 +54,9 @@ use Zii\Validator\CnMobileValidator;
  */
 class User extends ActiveRecord implements IdentityInterface, UserInterface
 {
+    use CoinsTrait;
     use ErrorExTrait;
+    use LevelTrait;
 
     //会员类型 1：普通会员 ， 2：融资会员
     const USER_TYPE_PERSONAL = 1;
@@ -778,45 +782,6 @@ class User extends ActiveRecord implements IdentityInterface, UserInterface
         }
         $inviteRecord = $inviteRecord->one();
         return empty($inviteRecord) ? false : true;
-    }
-
-    /**
-     * 计算用户的财富值.
-     *
-     * @return string 保留整数位(下取整)的用户财富值.
-     */
-    public function getCoins()
-    {
-        return bcdiv($this->annualInvestment, 10000, 0);
-    }
-
-    /**
-     * 计算用户会员等级.
-     *
-     * @return int 用户会员等级,目前是0-7.
-     */
-    public function getLevel()
-    {
-        $level = 0;
-        $coins = $this->coins;
-
-        if ($coins >= 20 && $coins < 50) {
-            $level = 1;
-        } elseif ($coins >= 50 && $coins < 100) {
-            $level = 2;
-        } elseif ($coins >= 100 && $coins < 200) {
-            $level = 3;
-        } elseif ($coins >= 200 && $coins < 500) {
-            $level = 4;
-        } elseif ($coins >= 500 && $coins < 800) {
-            $level = 5;
-        } elseif ($coins >= 800 && $coins < 1500) {
-            $level = 6;
-        } elseif ($coins >= 1500) {
-            $level = 7;
-        }
-
-        return $level;
     }
 
     public function getThirdPartyConnect()

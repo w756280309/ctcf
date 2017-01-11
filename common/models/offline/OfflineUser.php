@@ -3,9 +3,14 @@
 namespace common\models\offline;
 
 use yii\db\ActiveRecord;
+use \Zii\Model\CoinsTrait;
+use \Zii\Model\LevelTrait;
 
 class OfflineUser extends ActiveRecord
 {
+    use CoinsTrait;
+    use LevelTrait;
+
     public function rules()
     {
         return [
