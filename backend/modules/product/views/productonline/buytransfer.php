@@ -5,7 +5,11 @@ use yii\grid\GridView;
 use yii\widgets\LinkPager;
 
 ?>
-
+    <style>
+        .left {
+            text-align: left !important;
+        }
+    </style>
 <?php $this->beginBlock('blockmain'); ?>
     <div class="container-fluid">
     <!-- BEGIN PAGE HEADER-->
@@ -33,8 +37,9 @@ use yii\widgets\LinkPager;
             'columns' => [
                 [
                     'label' => '姓名',
+                    'format' => 'html',
                     'value' => function ($data) {
-                        return $data['user']->real_name;
+                        return '<a href="/user/user/detail?id=' . $data['user_id'] . '&type=1">' . $data['user']->real_name . '</a>';
                     },
                 ],
                 [
@@ -42,13 +47,13 @@ use yii\widgets\LinkPager;
                     'value' => function ($data) {
                         return $data['user']->mobile;
                     },
-                    'contentOptions' => ['class' => 'money'],
-                    'headerOptions' => ['class' => 'money'],
+                    'contentOptions' => ['class' => 'left'],
+                    'headerOptions' => ['class' => 'left'],
                 ],
                 [
                     'label' => '投资金额',
                     'value' => function ($data) {
-                        return StringUtils::amountFormat3($data['amount']);
+                        return StringUtils::amountFormat3(bcdiv($data['amount'], 100));
                     },
                     'contentOptions' => ['class' => 'money'],
                     'headerOptions' => ['class' => 'money'],
@@ -58,8 +63,8 @@ use yii\widgets\LinkPager;
                     'value' => function ($data) {
                         return $data['settleTime'];
                     },
-                    'contentOptions' => ['class' => 'money'],
-                    'headerOptions' => ['class' => 'money'],
+                    'contentOptions' => ['class' => 'left'],
+                    'headerOptions' => ['class' => 'left'],
                 ],
             ],
             'tableOptions' => ['class' => 'table table-striped table-bordered table-advance table-hover']
