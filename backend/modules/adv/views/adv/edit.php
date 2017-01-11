@@ -2,12 +2,15 @@
 
 use yii\widgets\ActiveForm;
 
+$this->title = '轮播图添加/编辑';
+
 $this->registerJs("var t=0;", 1); //在头部加载  0:adv 1:product
 $this->registerJsFile('/js/swfupload/swfupload.js', ['depends' => 'yii\web\YiiAsset']);
 $this->registerJsFile('/js/swfupload/handlers.js', ['depends' => 'yii\web\YiiAsset']);
-?>
-<?php $this->beginBlock('blockmain'); ?>
 
+?>
+
+<?php $this->beginBlock('blockmain'); ?>
 <div class="container-fluid">
     <!-- BEGIN PAGE HEADER-->
     <div class="row-fluid">
@@ -92,7 +95,7 @@ $this->registerJsFile('/js/swfupload/handlers.js', ['depends' => 'yii\web\YiiAss
                 </div>
                 <div class="controls">
                     <span style="color:red">
-                        <span id="notice">图片大小不超过2M，只限于jpg格式图片，并且大小限定为：高190px，宽290px</span>
+                        <span id="notice">图片大小不超过2M，只限于jpg格式图片，并且大小限定为：高350px，宽750px</span>
                         <?= $form->field($model, 'image', ['template' => '{error}']) ?>
                     </span>
                 </div>

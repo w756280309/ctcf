@@ -1,5 +1,6 @@
 <?php
 
+use common\utils\StringUtils;
 use yii\widgets\LinkPager;
 use yii\helpers\Html;
 
@@ -7,6 +8,7 @@ $this->title = '线下数据';
 $bid = (int)Yii::$app->request->get('bid');
 
 ?>
+
 <?php $this->beginBlock('blockmain'); ?>
 <div class="container-fluid">
     <!-- BEGIN PAGE HEADER-->
@@ -32,7 +34,14 @@ $bid = (int)Yii::$app->request->get('bid');
                 <table class="table">
                     <tbody>
                     <tr style="text-align: right">
-                        <td colspan="7" style="text-align: right"><a href="/offline/offline/add" class="btn blue btn-block" style="width: 100px;display: inline-block;">录入新数据</a></td>
+                        <td>募集规模</td>
+                        <td><?= StringUtils::amountFormat2($stats->tradedAmount) ?>元</td>
+                        <td>兑付本金</td>
+                        <td><?= StringUtils::amountFormat2($stats->refundedPrincipal) ?>元</td>
+                        <td>兑付利息</td>
+                        <td><?= StringUtils::amountFormat2($stats->refundedInterest) ?>元</td>
+                        <td class="span2"><a href="/offline/offline/edit-stats" class="btn green btn-block">编辑统计项</a></td>
+                        <td class="span1"><a href="/offline/offline/add" class="btn green btn-block">导入新数据</a></td>
                     </tr>
                     <tr>
                         <td colspan="3">
@@ -47,7 +56,7 @@ $bid = (int)Yii::$app->request->get('bid');
                             <span class="title" style="display: inline-block;line-height:27px;">姓&nbsp;名</span>
                             <input style="margin-left:5px;" type="text" name="realName" value="<?= Html::encode(Yii::$app->request->get('realName')) ?>" placeholder="请输入姓名">
                         </td>
-                        <td colspan="3">
+                        <td colspan="4">
                             <span class="title" style="display: inline-block;line-height:27px;">产品名称</span>
                             <input style="margin-left:5px;" type="text" name="title" value="<?= Html::encode(Yii::$app->request->get('title')) ?>" placeholder="请输入产品名称">
                             <br>

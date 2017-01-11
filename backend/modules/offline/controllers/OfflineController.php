@@ -8,12 +8,11 @@ use common\models\offline\OfflineOrder;
 use common\models\affiliation\Affiliator;
 use common\models\offline\OfflineLoan;
 use common\models\offline\ImportForm;
+use common\models\offline\OfflineStats;
 use common\models\offline\OfflineUser;
+use common\filters\MyReadFilter;
 use Yii;
 use yii\data\Pagination;
-use PHPExcel_Reader_Excel2007;
-use PHPExcel_Reader_Excel5;
-use common\filters\MyReadFilter;
 
 class OfflineController extends BaseController
 {
@@ -108,7 +107,15 @@ class OfflineController extends BaseController
         $orders = $order->offset($pages->offset)->limit($pages->limit)->orderBy(["$o.id" => SORT_DESC])->all();
         $totalmoney = $order->sum('money');
 
-        return $this->render('list', ['branches' => $branches, 'orders' => $orders, 'totalmoney' => $totalmoney, 'pages' => $pages]);
+        $stats = OfflineStats::findOne(1);
+
+        return $this->render('list', [
+            'branches' => $branches,
+            'orders' => $orders,
+            'totalmoney' => $totalmoney,
+            'pages' => $pages,
+            'stats' => $stats,
+        ]);
     }
 
     /**
@@ -239,5 +246,40 @@ class OfflineController extends BaseController
         }
 
         return ['code' => 0, 'message' => '删除失败'];
+    }
+
+    /**
+     * 编辑线下数据统计项.
+     *
+     * 1. 包括募集规模, 兑付本金, 兑付利息;
+     * 2. 以上三项必须都有值且大于零;
+     */
+    public function actionEditStats()
+    {
+        $stats = $this->findOr404(OfflineStats::class, 1);
+
+        if ($stats->load(Yii::$app->request->post()) && $stats->validate()) {
+            if ($stats->tradedAmount <= 0) {
+                $stats->addError('tradedAmount', '募集规模必须大于0');
+            }
+
+            if ($stats->refundedPrincipal <= 0) {
+                $stats->addError('refundedPrincipal', '兑付本金必须大于0');
+            }
+
+            if ($stats->refundedInterest <= 0) {
+                $stats->addError('refundedInterest', '兑付利息必须大于0');
+            }
+
+            $stats->updateTime = date('Y-m-d H:i:s');
+
+            if (!$stats->hasErrors() && $stats->save(false)) {
+                AdminLog::initNew($stats)->save(false);
+
+                return $this->redirect('list');
+            }
+        }
+
+        return $this->render('edit_stats', ['stats' => $stats]);
     }
 }

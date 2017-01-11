@@ -49,7 +49,7 @@ use yii\widgets\ActiveForm;
                     </td>
                     <td>
                         <button id="post-excel" class="btn blue" style="width: 60px;display: inline-block;">提交</button>
-                        <input type="reset" value="取消" class="btn white" style="width: 60px;display: inline-block" />
+                        <a href="list" class="btn">取消</a>
                     </td>
                 </tr>
             </table>

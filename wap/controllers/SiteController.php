@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use common\controllers\HelpersTrait;
+use common\models\offline\OfflineStats;
 use common\models\payment\Repayment;
 use common\models\product\LoanFinder;
 use common\service\SmsService;
@@ -226,10 +227,22 @@ class SiteController extends Controller
                 ->asArray()
                 ->one();
 
+            $offlineStats = OfflineStats::findOne(1);
+
+            $tradedAmount = 0;
+            $refundedPrincipal = 0;
+            $refundedInterest = 0;
+
+            if (null !== $offlineStats) {
+                $tradedAmount = $offlineStats->tradedAmount;
+                $refundedPrincipal = $offlineStats->refundedPrincipal;
+                $refundedInterest = $offlineStats->refundedInterest;
+            }
+
             $statsData = [
-                'totalTradeAmount' => bcadd($totalTradeAmount, 397888000, 2),
-                'totalRefundAmount' => bcadd($plan['totalAmount'], bcadd(232260000, 18396900, 2), 2),
-                'totalRefundInterest' => bcadd($plan['totalInterest'], 18396900, 2),
+                'totalTradeAmount' => bcadd($totalTradeAmount, $tradedAmount, 2),
+                'totalRefundAmount' => bcadd($plan['totalAmount'], bcadd($refundedPrincipal, $refundedInterest, 2), 2),
+                'totalRefundInterest' => bcadd($plan['totalInterest'], $refundedInterest, 2),
             ];
 
             $cache->set($key, $statsData, 600);   //缓存十分钟
