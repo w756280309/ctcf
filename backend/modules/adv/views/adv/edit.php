@@ -260,7 +260,7 @@ $this->registerJsFile('/js/swfupload/handlers.js', ['depends' => 'yii\web\YiiAss
             return 'pc';
         } else {
             $('#app').show();
-            $('#notice').html('图片大小不超过2M，只限于jpg格式图片，并且大小限定为：高190px，宽290px');
+            $('#notice').html('图片大小不超过2M，只限于jpg格式图片，并且大小限定为：高350px，宽750px');
 
             return 'wap';
         }

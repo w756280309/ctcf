@@ -166,9 +166,11 @@ a:active {
 }
 .newnorm a ul.clearfix li img {
     vertical-align: middle;
+    margin-top: -0.1rem;
 }
 .icon5 {
     width:0.4666667rem;
+    margin-top: -0.02rem!important;
 }
 .icon6 {
     width:0.455553rem;
@@ -187,7 +189,7 @@ a:active {
     border-radius: 5px;
 }
 .comred {
-    color: #f1453d;
+    color: #f1453d!important;
 }
 
 
@@ -354,7 +356,7 @@ section .featured .threepic li a img {
 .tags span {
     border:1px solid #1683fb;
     color: #1683fb;
-    padding:0.08rem 0.133333rem;
+    padding:0.0888888rem 0.133333rem;
     border-radius: 5px;
 }
 .tags span:first-child {
@@ -585,7 +587,7 @@ footer span {
     display: block;
 }
 .nav-footer-title p {
-    line-height: 0.53333333rem;
+    line-height: 0.7rem;
 }
 .nav-footer-inner img {
     width:0.6133333rem;
@@ -646,7 +648,7 @@ footer span {
 }
 
 /*小屏手机样式适应*/
-@media screen and (min-width:321px)  {
+@media screen and (max-width:321px)  {
     .tags .rg {
         font-size: 0.3733333rem!important;
     }

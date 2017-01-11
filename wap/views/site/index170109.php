@@ -11,7 +11,7 @@ use yii\helpers\Html;
 ?>
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/base.css">
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/comfont.css">
-<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/index/css/index.css?v=20170109">
+<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/index/css/index.css?v=20170111-v">
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>libs/swiper/swiper.min.css">
 <script src="<?= FE_BASE_URI ?>libs/lib.flexible3.js"></script>
 <script src="<?= FE_BASE_URI ?>libs/fastclick.js"></script>
@@ -81,7 +81,7 @@ use yii\helpers\Html;
                     <p class="f12">预期年化率</p>
                     <ul class="clearfix">
                         <li class="f14 lf text-align-lf"><img class="icon5" src="<?= FE_BASE_URI ?>wap/index/images/icon_05.png" alt=""> <?= StringUtils::amountFormat2($xs->start_money) ?>元起投</li>
-                        <li class="f14 lf comred"><img class="icon6" src="<?= FE_BASE_URI ?>wap/index/images/icon_06.png" alt=""> <?= $ex['value'].$ex['unit'] ?>理财期限</li>
+                        <li class="f14 lf comred"><img class="icon6" src="<?= FE_BASE_URI ?>wap/index/images/icon_06.png" alt=""> <?= $ex['value'].$ex['unit'] ?>期限</li>
                         <li class="f14 lf text-align-rg"><img class="icon7" src="<?= FE_BASE_URI ?>wap/index/images/icon_07.png" alt=""> 限购一万</li>
                         <li class="f18 lf">去理财</li>
                     </ul>
@@ -94,7 +94,7 @@ use yii\helpers\Html;
                     <p class="f12">预期年化率</p>
                     <ul class="clearfix">
                         <li class="f14 lf text-align-lf"><img class="icon5" src="<?= FE_BASE_URI ?>wap/index/images/icon_05.png" alt=""> <?= StringUtils::amountFormat2($xs->start_money) ?>元起投</li>
-                        <li class="f14 lf comred"><img class="icon6" src="<?= FE_BASE_URI ?>wap/index/images/icon_06.png" alt=""> <?= $ex['value'].$ex['unit'] ?>理财期限</li>
+                        <li class="f14 lf comred"><img class="icon6" src="<?= FE_BASE_URI ?>wap/index/images/icon_06.png" alt=""> <?= $ex['value'].$ex['unit'] ?>期限</li>
                         <li class="f14 lf text-align-rg"><img class="icon7" src="<?= FE_BASE_URI ?>wap/index/images/icon_07.png" alt=""> 限购一万</li>
                         <li class="f18 lf">去理财</li>
                     </ul>
@@ -167,7 +167,7 @@ use yii\helpers\Html;
                         </div>
                         <div class="tags clearfix">
                             <?php if (null !== $loan->tags) { ?>
-                            <p class="lf f13">
+                            <p class="lf f12">
                             <?php
                                 $tags = explode('，', $loan->tags);
                                 foreach($tags as $key => $tag) {
@@ -192,7 +192,7 @@ use yii\helpers\Html;
             <ul>
                 <li><span class="lf f15">公告专区</span><a href="/news" class="rg f12">更多</a></li>
                 <?php foreach ($news as $key => $new) { ?>
-                    <li class="list"><a class="f14" href="/news/detail?id=<?= $new->id ?>"><?= $new->title ?></a></li>
+                    <li class="list"><a class="f14" href="/news/detail?id=<?= $new->id ?>&v=<?= time() ?>"><?= $new->title ?></a></li>
                 <?php } ?>
             </ul>
         </div>
