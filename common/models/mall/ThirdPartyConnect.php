@@ -88,7 +88,7 @@ class ThirdPartyConnect extends ActiveRecord
             "timestamp" => $timestamp
         ];
         if (!empty($redirect)) {
-            $array['redirect'] = $redirect;
+            $array['redirect'] = urlencode($redirect);
         }
         $sign = self::sign($array);
         $url = $url . "uid=" . $uid . "&credits=" . $credits . "&appKey=" . $appKey . "&timestamp=" . $timestamp . "&sign=" . $sign;
