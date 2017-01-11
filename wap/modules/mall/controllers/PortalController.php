@@ -10,13 +10,24 @@ class PortalController extends Controller
 {
     use HelpersTrait;
 
+    //积分商城首页
+    public function actionIndex()
+    {
+        $this->login();
+    }
+
     /**
      * 进入积分商城,可以游客进入
      * @param string $dbredirect    兑吧商城内部地址（兑吧默认参数名）
      */
-    public function actionIndex($dbredirect = '')
+    public function actionGuest($dbredirect = '')
     {
-        $this->login($dbredirect, true);
+        if (defined('IN_APP') && IN_APP) {
+            //APP不能以游客身份进入积分商城，跳转到登录页(暂时)
+            return $this->redirect('/site/login');
+        } else {
+            $this->login($dbredirect, true);
+        }
     }
 
     //转跳到兑吧的兑换记录
