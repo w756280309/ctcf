@@ -267,6 +267,10 @@ class SiteController extends Controller
             if (in_array($from, ['/site/signup', '/site/login'])) {
                 $from = '/';
             }
+            //如果来自外站，登录成功之后跳到首页
+            if (Yii::$app->request->fromOutSite) {
+                $from = '/';
+            }
         } else {
             $from = $next;
         }
