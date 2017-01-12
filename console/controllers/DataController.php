@@ -152,11 +152,6 @@ class DataController extends Controller
         $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
         $objWriter->save($file);
 
-        $linkFile = $path.'lender_data.csv';
-        if (false !== is_link($linkFile)) {
-            unlink($linkFile);
-        }
-        symlink($file, $linkFile);
         $this->deleteUserDataFromPath($path, '投资用户信息', $file);//删除历史数据
         exit();
     }
@@ -231,11 +226,7 @@ class DataController extends Controller
         $fp = fopen($file, 'w');
         fwrite($fp, $this->renderFile('@backend/modules/datatj/views/issuer/export.php', $record));
         fclose($fp);
-        $linkFile = $path . 'issuer_' . $issuerId . '.xls';
-        if (false !== is_link($linkFile) ) {
-            unlink($linkFile);
-        }
-        symlink($file, $linkFile);
+
         $this->deleteUserDataFromPath($path, '立合旺通', $file);//删除历史数据
         exit();
     }
