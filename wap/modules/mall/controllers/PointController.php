@@ -33,6 +33,7 @@ class PointController extends BaseController
     {
         $query = PointRecord::find()
             ->where(['user_id' => $this->getAuthedUser()->id])
+            ->andWhere(['isOffline' => false])
             ->orderBy(['id' => SORT_DESC]);
 
         $pg = \Yii::$container->get('paginator')->paginate($query, $page, $size);

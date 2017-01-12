@@ -1,5 +1,6 @@
 <?php
 
+use common\utils\StringUtils;
 use yii\widgets\LinkPager;
 
 $this->title = '线下会员列表';
@@ -50,8 +51,8 @@ $this->title = '线下会员列表';
                 <?php foreach ($users as $user) : ?>
                     <tr>
                         <td><?= $user->mobile ?></td>
-                        <td><?= $user->realName ?></td>
-                        <td><?= $user->idCard ?></td>
+                        <td><a href="/user/offline/detail?id=<?= $user->id ?>"><?= $user->realName ?></a></td>
+                        <td><?= StringUtils::obfsIdCardNo($user->idCard) ?></td>
                         <td>
                             <center>
                                 <a href="/user/offline/detail?id=<?= $user->id ?>" class="btn mini green"><i class="icon-edit"></i> 查看用户详情</a>

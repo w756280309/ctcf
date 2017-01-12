@@ -25,6 +25,8 @@ class OfflineUser extends ActiveRecord
             'realName' => '客户姓名',
             'idCard' => '身份证号码',
             'mobile' => '客户手机号',
+            'point' => '用户积分',
+            'annualInvestment' => '用户累计年化投资额',
         ];
     }
 }

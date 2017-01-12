@@ -49,4 +49,23 @@ class OfflineOrder extends ActiveRecord
     {
         return $this->hasOne(OfflineLoan::className(), ['id' => 'loan_id']);
     }
+
+    public function getUser()
+    {
+        return $this->hasOne(OfflineUser::className(), ['id' => 'user_id']);
+    }
+
+    /**
+     * 根据订单计算年化投资金额.
+     */
+    public function getAnnualInvestment()
+    {
+        if (strpos($this->loan->unit, '天') !== false) {
+            $base = 365;
+        } else {
+            $base = 12;
+        }
+
+        return bcdiv(bcmul($this->money * 10000, $this->loan->expires, 14), $base, 2);
+    }
 }

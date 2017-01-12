@@ -6,7 +6,19 @@ $this->title = '线下会员详情';
 ?>
 
 <?php $this->beginBlock('blockmain'); ?>
-
+<style>
+    .detail_font{
+        width: 200px;
+        margin-bottom: 15px;
+        font-family: 微软雅黑;
+        font-weight: bold;
+        font-size: 15px;
+        color: blue;
+    }
+    #list_nav li {
+        cursor: pointer;
+    }
+</style>
 <div class="container-fluid">
     <!-- BEGIN PAGE HEADER-->
     <div class="row-fluid">
@@ -17,11 +29,11 @@ $this->title = '线下会员详情';
             <ul class="breadcrumb">
                 <li>
                     <i class="icon-home"></i>
-                    <a href="/user/offline/user">会员管理</a>
+                    <a href="/user/offline/list">会员管理</a>
                     <i class="icon-angle-right"></i>
                 </li>
                 <li>
-                    <a href="/user/offline/user">线下会员列表</a>
+                    <a href="/user/offline/list">线下会员列表</a>
                     <i class="icon-angle-right"></i>
                 </li>
                 <li>
@@ -51,6 +63,28 @@ $this->title = '线下会员详情';
                 </tr>
             </table>
         </div>
+        <div>
+            <div>
+                <ul class="nav nav-tabs nav-pills" role="tablist" id="list_nav">
+                    <li role="presentation" class="point_record_nav active"><a>积分明细</a></li>
+                </ul>
+            </div>
+            <div class="container-fluid"  id="list">
+                <div class="list_detail" id="point_record_list"></div>
+            </div>
+        </div>
     </div>
 </div>
+<script>
+    function getPointRecord(href)
+    {
+        $.get(href, function(data) {
+            if (data) {
+                $('#point_record_list').html(data);
+            }
+        })
+    }
+
+    getPointRecord('/user/offline/points?id=<?= $user->id?>');
+</script>
 <?php $this->endBlock(); ?>

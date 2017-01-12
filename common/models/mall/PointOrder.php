@@ -22,6 +22,8 @@ use yii\behaviors\TimestampBehavior;
  * @property integer $status        订单状态 0初始，1成功，-1失败，-2撤销,-3未知
  * @property integer $created_at
  * @property integer $updated_at
+ * @property integer $isOffline      是否为线下
+ * @property string  $offGoodsName   线下商品名称
  */
 class PointOrder extends \yii\db\ActiveRecord
 {
@@ -70,6 +72,8 @@ class PointOrder extends \yii\db\ActiveRecord
             'status' => 'Status',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
+            'isOffline' => 'isOffline',
+            'offGoodsName' => 'offGoodsName',
         ];
     }
 

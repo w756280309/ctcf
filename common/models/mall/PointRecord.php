@@ -11,15 +11,17 @@ use yii\db\ActiveRecord;
  * This is the model class for table "point_record".
  *
  * @property integer $id
- * @property string $sn
+ * @property string  $sn
  * @property integer $user_id
- * @property string $ref_type           导致积分变动的类型：购买标的、积分兑换……
+ * @property string  $ref_type          导致积分变动的类型：购买标的、积分兑换……
  * @property integer $ref_id            导致积分变动的对应记录ID
  * @property integer $incr_points       增加积分
  * @property integer $decr_points       减少积分
  * @property integer $final_points      变动后剩余积分
- * @property string $recordTime         流水时间
+ * @property string  $recordTime        流水时间
  * @property integer $userLevel         用户等级
+ * @proprety boolean $isOffline         是否线下
+ * @proprety string  $offGoodsName      线下商品名称
  */
 class PointRecord extends ActiveRecord
 {
@@ -27,6 +29,9 @@ class PointRecord extends ActiveRecord
     const TYPE_LOAN_ORDER = 'loan_order';   //购买标的
     const TYPE_POINT_ORDER = 'point_order'; //积分兑换
     const TYPE_POINT_ORDER_FAIL = 'point_order_fail';//积分订单失败退款积分
+    const TYPE_OFFLINE_BUY_ORDER = 'offline_loan_order'; //线下购买标的
+    const TYPE_OFFLINE_POINT_ORDER = 'offline_point_order'; //线下积分兑换
+    const TYPE_OFFLINE_ORDER_DELETE = 'offline_order_delete'; //线下订单删除扣减积分
 
     /**
      * @inheritdoc
@@ -63,6 +68,40 @@ class PointRecord extends ActiveRecord
             'decr_points' => 'Decr Points',
             'final_points' => 'Final Points',
             'recordTime' => 'Record Time',
+            'isOffline' => 'isOffline',
+            'offGoodsName' => 'offGoodsName',
+        ];
+    }
+
+    /**
+     * 获得积分流水类型名称
+     *
+     * @return array
+     */
+    public static function getTypeName($type)
+    {
+        $name = [
+            self::TYPE_LOAN_ORDER => '购买标的',
+            self::TYPE_POINT_ORDER => '积分兑换',
+            self::TYPE_POINT_ORDER_FAIL => '积分订单失败退款',
+            self::TYPE_OFFLINE_BUY_ORDER => '线下购买标的',
+            self::TYPE_OFFLINE_POINT_ORDER => '线下积分兑换',
+            self::TYPE_OFFLINE_ORDER_DELETE => '线下订单删除扣减积分',
+        ];
+        return isset($name[$type]) ? $name[$type] : '';
+    }
+
+    /**
+     * 获得所有扣除积分的操作类型
+     *
+     * @return array
+     */
+    public static function getDecrType()
+    {
+        return [
+            self::TYPE_POINT_ORDER,
+            self::TYPE_OFFLINE_POINT_ORDER,
+            self::TYPE_OFFLINE_ORDER_DELETE,
         ];
     }
 }

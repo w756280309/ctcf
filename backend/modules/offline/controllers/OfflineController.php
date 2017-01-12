@@ -9,10 +9,15 @@ use common\models\affiliation\Affiliator;
 use common\models\offline\OfflineLoan;
 use common\models\offline\ImportForm;
 use common\models\offline\OfflineStats;
+use common\models\offline\OfflinePointManager;
 use common\models\offline\OfflineUser;
 use common\filters\MyReadFilter;
 use Yii;
 use yii\data\Pagination;
+use PHPExcel_Reader_Excel2007;
+use PHPExcel_Reader_Excel5;
+use common\models\mall\PointRecord;
+use common\models\user\CoinsRecord;
 
 class OfflineController extends BaseController
 {
@@ -57,7 +62,11 @@ class OfflineController extends BaseController
                         //初始化model，寻找行号，使用batchInsert插入
                         $neworder = $this->initModel($order);
                         if ($neworder->validate()) {
-                            $rows[] = $neworder->attributes;
+                            $neworder->save();
+                            //更新积分和累计年化投资额
+                            $pointManager = new OfflinePointManager();
+                            $pointManager->updatePoints($neworder, PointRecord::TYPE_OFFLINE_BUY_ORDER);
+                            $this->updateAnnualInvestment($neworder, PointRecord::TYPE_OFFLINE_BUY_ORDER);
                         } else {
                             $error_index = $key + 1;
                             if ($neworder->hasErrors('affiliator_id')) {
@@ -66,7 +75,6 @@ class OfflineController extends BaseController
                             throw new \Exception('文件内容有错,行号' . $error_index);
                         }
                     }
-                    $db->createCommand()->batchInsert(OfflineOrder::tableName(), $neworder->attributes(), $rows)->execute();
                     $transaction->commit();
                     return $this->redirect('list');
                 } catch (\Exception $ex) {
@@ -182,11 +190,11 @@ class OfflineController extends BaseController
             $newLoan->title = $order[1];
             $newLoan->expires = (int) $order[2];
             $newLoan->unit = str_replace($newLoan->expires, '', $order[2]);
+
             $newLoan->save();
             $loan_id = $newLoan->id;
         }
 
-        //todo -更新积分
         if (null !== $user) {
             $user_id = $user->id;
             //手机号应是始终为最后导入的那个
@@ -195,12 +203,12 @@ class OfflineController extends BaseController
                 $user->save();
             }
         } else {
-            $newUser = new OfflineUser();
-            $newUser->realName = $order[3];
-            $newUser->idCard = $order[4];
-            $newUser->mobile = $order[5];
-            $newUser->save();
-            $user_id = $newUser->id;
+            $user = new OfflineUser();
+            $user->realName = $order[3];
+            $user->idCard = $order[4];
+            $user->mobile = $order[5];
+            $user->save();
+            $user_id = $user->id;
         }
 
         $model->affiliator_id = $affiliator_id;
@@ -227,21 +235,22 @@ class OfflineController extends BaseController
         $id = Yii::$app->request->post('id');
 
         if ($id) {
-            $model = OfflineOrder::findOne($id);
-            $model->isDeleted = true;
-            //修改标的修改记录
+            $order = OfflineOrder::findOne($id);
+            $transaction = Yii::$app->db->beginTransaction();
             try {
-                $log = AdminLog::initNew($model);
-                $log->save();
-            } catch (\Exception $e) {
-                return [
-                    'result' => 0,
-                    'message' => '线下数据删除操作日志记录失败',
-                ];
-            }
-            if ($model->save()) {
-                //todo -扣除积分和财富值(应考虑积分流水扣除)
-                return ['code' => 1, 'message' => '删除成功'];
+                $order->isDeleted = true;
+                //修改标的修改记录
+                $log = AdminLog::initNew($order);
+                if ($order->save() && $log->save(false)) {
+                    $pointManager = new OfflinePointManager();
+                    $pointManager->updatePoints($order, PointRecord::TYPE_OFFLINE_ORDER_DELETE);
+                    $this->updateAnnualInvestment($order, PointRecord::TYPE_OFFLINE_ORDER_DELETE);
+                    $transaction->commit();
+                    return ['code' => 1, 'message' => '删除成功'];
+                }
+            } catch (\Exception $ex) {
+                $transaction->rollBack();
+                return ['code' => 0, 'message' => $ex->getMessage()];
             }
         }
 
@@ -281,5 +290,33 @@ class OfflineController extends BaseController
         }
 
         return $this->render('edit_stats', ['stats' => $stats]);
+    }
+
+    /**
+     * 根据订单和类型更新累计年化收益额同时记录财富值流水
+     */
+    private function updateAnnualInvestment(OfflineOrder $order, $type)
+    {
+        $originalCoins = $order->user->coins;
+        $annualInvestment = $type === PointRecord::TYPE_OFFLINE_ORDER_DELETE ? 0 - $order->annualInvestment : $order->annualInvestment;
+        $res = Yii::$app->db->createCommand('update offline_user set annualInvestment = annualInvestment + '.$annualInvestment.' where id = '.$order->user->id)->execute();
+
+        if ($res) {
+            $user = OfflineUser::findOne($order->user->id);
+            $currentCoins = $user->coins;
+
+            if ($originalCoins !== $currentCoins) {
+                $coins = new CoinsRecord([
+                    'user_id' => $order->user->id,
+                    'order_id' => $order->id,
+                    'incrCoins' => bcsub($currentCoins, $originalCoins, 0),
+                    'finalCoins' => $currentCoins,
+                    'createTime' => date('Y-m-d H:i:s'),
+                    'isOffline' => true,
+                ]);
+
+                $coins->save();
+            }
+        }
     }
 }

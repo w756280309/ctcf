@@ -14,6 +14,7 @@ use yii\db\ActiveRecord;
  * @property integer $incrCoins     财富值增量
  * @property integer $finalCoins    财富值总和
  * @property string  $createTime    创建时间
+ * @property boolean $isOffline     是否线下
  */
 class CoinsRecord extends ActiveRecord
 {
