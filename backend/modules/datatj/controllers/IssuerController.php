@@ -28,19 +28,21 @@ class IssuerController extends BaseController
      */
     public function actionExport($id)
     {
-        $id = intval($id);
-        $linkFile = rtrim(\Yii::getAlias('@backend'), '/') . '/web/data/issuer_' . $id . '.xls';
-        if ($linkFile && file_exists($linkFile)) {
-            $file = readlink($linkFile);
-            if ($file && file_exists($file)) {
-                $fileName = substr($file, strrpos($file, '/') + 1);
-                $contentDisposition = HeaderUtils::getContentDispositionHeader($fileName, \Yii::$app->request->userAgent);
-                header($contentDisposition);
-                flush();
-                readfile($file);
-                exit();
+        $path  = \Yii::getAlias('@backend').'/web/data/';
+        if ( is_dir($path)) {
+            $handle = opendir( $path );
+            if ($handle) {
+                while ( false !== ( $item = readdir( $handle ) ) ) {
+                    if ( $item != "." && $item != ".." ) {
+                        if (false !== strpos($item, '立合旺通') ) {
+                            return $this->redirect('/data/'.$item);
+                        }
+                    }
+                }
             }
+            closedir( $handle );
         }
         echo '等待定时任务导出数据';
+        exit;
     }
 }

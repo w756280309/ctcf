@@ -68,19 +68,22 @@ class UserController extends BaseController
     //投资用户信息导出
     public function actionExport()
     {
-        $linkFile = rtrim(\Yii::getAlias('@backend'), '/') . '/web/data/lender_data.csv';
-        if ($linkFile && file_exists($linkFile)) {
-            $file = readlink($linkFile);
-            if ($file && file_exists($file)) {
-                $fileName = substr($file, strrpos($file, '/') + 1);
-                $contentDisposition = HeaderUtils::getContentDispositionHeader($fileName, Yii::$app->request->userAgent);
-                header($contentDisposition);
-                ob_clean();
-                readfile($file);
-                exit();
+        $path  = Yii::getAlias('@backend').'/web/data/';
+        if ( is_dir($path)) {
+            $handle = opendir( $path );
+            if ($handle) {
+                while ( false !== ( $item = readdir( $handle ) ) ) {
+                    if ( $item != "." && $item != ".." ) {
+                        if (false !== strpos($item, '投资用户信息') ) {
+                            return $this->redirect('/data/'.$item);
+                        }
+                    }
+                }
             }
+            closedir( $handle );
         }
         echo '等待定时任务导出数据';
+        exit;
     }
 
     /**
