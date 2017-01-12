@@ -141,7 +141,7 @@ use yii\helpers\Html;
         <div class="invest">
             <p class="clearfix">
                 <span class="lf f15">理财专区</span>
-                <a class="rg f12" href="/deal/deal/index">查看全部产品</a>
+                <a class="rg f15" href="/deal/deal/index">查看全部产品</a>
             </p>
             <ul>
             <?php foreach ($loans as $loan) { ?>
