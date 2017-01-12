@@ -281,7 +281,7 @@ use yii\helpers\Html;
 
 <div class="pop hide">
     <img src="<?= FE_BASE_URI ?>wap/index/images/close.png" class="close_splash" alt="">
-    <img src="<?= FE_BASE_URI ?>wap/index/images/advantage.png" class="jumpAdv" alt="">
+    <img src="<?= ASSETS_BASE_URI ?>images/index/kaipin/170109.jpg" class="jumpAdv" alt="">
 </div>
 
 <script>
