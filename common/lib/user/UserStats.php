@@ -169,6 +169,7 @@ class UserStats
 
         $objPHPExcel = new \PHPExcel();
         $currentColumn = 1;
+        $currentCell = 'A';
         foreach ($data as $row) {
             if (is_array($row)) {
                 $currentCell = 'A';
@@ -183,10 +184,12 @@ class UserStats
             }
             ++$currentColumn;
         }
-
-        header(HeaderUtils::getContentDispositionHeader('投资用户信息('.date('Y-m-d H:i:s').').xls', \Yii::$app->request->userAgent));
-
-        $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+        foreach (range('A', $currentCell) as $columnId) {
+            $objPHPExcel->getActiveSheet()->getColumnDimension($columnId)->setAutoSize(true);
+        }
+        header(HeaderUtils::getContentDispositionHeader('投资用户信息('.date('Y-m-d H:i:s').').xlsx', \Yii::$app->request->userAgent));
+        ob_clean();
+        $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
         $objWriter->save('php://output');
         exit();
     }

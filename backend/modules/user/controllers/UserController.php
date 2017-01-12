@@ -75,7 +75,7 @@ class UserController extends BaseController
                 $fileName = substr($file, strrpos($file, '/') + 1);
                 $contentDisposition = HeaderUtils::getContentDispositionHeader($fileName, Yii::$app->request->userAgent);
                 header($contentDisposition);
-                flush();
+                ob_clean();
                 readfile($file);
                 exit();
             }

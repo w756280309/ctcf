@@ -127,9 +127,10 @@ class DataController extends Controller
         $allData = UserStats::collectLenderData();
         $path  = Yii::getAlias('@backend').'/web/data/';
 
-        $file = $path.'投资用户信息('.date('Y-m-d H:i:s').').xls';
+        $file = $path.'投资用户信息('.date('Y-m-d H:i:s').').xlsx';
         $objPHPExcel = new \PHPExcel();
         $currentColumn = 1;
+        $currentCell= 'A';
         foreach ($allData as $row) {
             if (is_array($row)) {
                 $currentCell = 'A';
@@ -144,7 +145,11 @@ class DataController extends Controller
             }
             ++$currentColumn;
         }
-        $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+        foreach (range('A', $currentCell) as $columnId) {
+            $objPHPExcel->getActiveSheet()->getColumnDimension($columnId)->setAutoSize(true);
+        }
+
+        $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
         $objWriter->save($file);
 
         $linkFile = $path.'lender_data.csv';
