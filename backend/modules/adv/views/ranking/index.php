@@ -50,15 +50,12 @@ $this->title = '活动列表';
                             'contentOptions' => ['style' => 'width:40%;']
                         ],
                         [
-                            'attribute' => 'startAt',
-                            'value' => function ($model) {
-                                return date('Y-m-d H:i:s', $model->startAt);
-                            }
+                            'attribute' => 'startTime',
                         ],
                         [
-                            'attribute' => 'endAt',
+                            'attribute' => 'endTime',
                             'value' => function ($model) {
-                                return $model->endAt ? date('Y-m-d H:i:s', $model->endAt) : '长期';
+                                return $model->endTime ? $model->endTime : '长期';
                             }
                         ],
                         [

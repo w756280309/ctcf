@@ -37,7 +37,7 @@ class PromoInvite12
     {
         //被邀请者注册送50元代金券
         if ($this->promo->isActive($invitee)) {
-            if ($invitee->isInvited($this->promo->startAt, $this->promo->endAt)) {
+            if ($invitee->isInvited($this->promo->startTime, $this->promo->endTime)) {
                 $couponType = CouponType::findOne(['sn' => self::COUPON_50_SN]);
                 try {
                     if ($couponType && $couponType->allowIssue()) {
@@ -67,10 +67,13 @@ class PromoInvite12
         $user = $order->user;
         $loan = $order->loan;
         if (intval($order->status) === 1 && $promo->isActive($user) && !$loan->is_xs) {
+            $promoStartTime = strtotime($promo->startTime);
+            $promoEndTime = strtotime($promo->endTime);
+
             //判断是不是被邀请者
             $invite = InviteRecord::find()
                 ->where(['invitee_id' => $order->uid])
-                ->andWhere(['between', 'created_at', $promo->startAt, $promo->endAt])
+                ->andWhere(['between', 'created_at', $promoStartTime, $promoEndTime])
                 ->count();
             if ($invite > 0) {
                 //获取被邀请者活动期间前三次投资订单id
@@ -78,7 +81,7 @@ class PromoInvite12
                     ->select('online_order.id')
                     ->innerJoin(OnlineProduct::tableName(), 'online_order.online_pid=online_product.id')
                     ->where(['online_order.uid' => $order->uid, 'online_order.status' => 1])
-                    ->andWhere(['between', 'online_order.order_time', $promo->startAt, $promo->endAt])
+                    ->andWhere(['between', 'online_order.order_time', $promoStartTime, $promoEndTime])
                     ->andWhere(['online_product.is_xs' => 0])
                     ->orderBy(['online_order.order_time' => SORT_ASC])
                     ->limit(3)

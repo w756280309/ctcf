@@ -42,8 +42,7 @@ class RankingPromoOfflineSale extends ActiveRecord
         if (null === $ranking) {
             $this->addError('rankingPromoOfflineSale_id', '指定活动不存在');
         }
-        $time = strtotime($this->investedAt);
-        if ($time < $ranking->startAt || ($ranking->endAt && $time > $ranking->endAt)) {
+        if ($this->investedAt < $ranking->startTime || ($ranking->endTime && $this->investedAt > $ranking->endTime)) {
             $this->addError('investedAt', '投资时间不在活动时间内');
         }
     }

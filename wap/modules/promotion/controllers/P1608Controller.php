@@ -35,7 +35,7 @@ class P1608Controller extends Controller
         if (5 === $res) {
             $log = Promo0809Log::find()
                 ->where(['user_id' => $this->getAuthedUser()->id])
-                ->andWhere(['between', 'createdAt', date('Y-m-d', $promo->startAt), date('Y-m-d', $promo->endAt)])
+                ->andWhere(['between', 'createdAt', substr($promo->startTime, 0, 10), substr($promo->endTime, 0, 10)])
                 ->one();
         } else {
             $log = null;
@@ -70,13 +70,13 @@ class P1608Controller extends Controller
 
     private function getOlympicPromoRes(RankingPromo $promo)
     {
-        $now = time();
+        $now = date('Y-m-d H:i:s');
 
-        if ($promo->startAt > $now) {
+        if ($promo->startTime > $now) {
             return 6;    //活动还未开始
         }
 
-        if ($promo->endAt < $now) {
+        if ($promo->endTime < $now) {
             return 7;   //活动已结束
         }
 
@@ -88,7 +88,7 @@ class P1608Controller extends Controller
 
         $logCount = Promo0809Log::find()
             ->where(['user_id' => $user->id])
-            ->andWhere(['between', 'createdAt', date('Y-m-d', $promo->startAt), date('Y-m-d', $promo->endAt)])
+            ->andWhere(['between', 'createdAt', substr($promo->startTime, 0, 10), substr($promo->endTime, 0, 10)])
             ->count();
 
         if ($logCount) {
@@ -97,7 +97,7 @@ class P1608Controller extends Controller
 
         $beforeOrdCount = OnlineOrder::find()
             ->where(['uid' => $user->id, 'status' => OnlineOrder::STATUS_SUCCESS])
-            ->andWhere(['<', 'order_time', $promo->startAt])
+            ->andWhere(['<', 'order_time', strtotime($promo->startTime)])
             ->count();
 
         if ($beforeOrdCount) {
@@ -106,7 +106,7 @@ class P1608Controller extends Controller
 
         $ordCount = OnlineOrder::find()
             ->where(['uid' => $user->id, 'status' => OnlineOrder::STATUS_SUCCESS])
-            ->andWhere(['between', 'order_time', $promo->startAt, $promo->endAt])
+            ->andWhere(['between', 'order_time', strtotime($promo->startTime), strtotime($promo->endTime)])
             ->andWhere(['>=', 'order_money', 10000])
             ->count();
 

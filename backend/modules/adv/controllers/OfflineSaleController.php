@@ -32,7 +32,7 @@ class OfflineSaleController extends BaseController
     public function actionCreate()
     {
         $model = new RankingPromoOfflineSale();
-        $ranking = RankingPromo::find()->where(['>=', 'endAt', time()])->orderBy(['id' => SORT_DESC])->all();
+        $ranking = RankingPromo::find()->where(['>=', 'endTime', date('Y-m-d H:i:s')])->orderBy(['id' => SORT_DESC])->all();
         if (0 === count($ranking)) {
             \Yii::$app->session->setFlash('error', '请先添加未过期活动,再为活动录入投资记录。<a href="/adv/ranking/create">添加活动</a>');
             return $this->redirect('index');
@@ -57,7 +57,7 @@ class OfflineSaleController extends BaseController
         if (null === $model) {
             throw new NotFoundHttpException();
         }
-        $ranking = RankingPromo::find()->where(['>=', 'endAt', time()])->orderBy(['id' => SORT_DESC])->all();
+        $ranking = RankingPromo::find()->where(['>=', 'endTime', date('Y-m-d H:i:s')])->orderBy(['id' => SORT_DESC])->all();
         if (0 === count($ranking)) {
             \Yii::$app->session->setFlash('error', '请先添加未过期活动,再为活动录入投资记录。<a href="/adv/ranking/create">添加活动</a>');
             return $this->redirect('index');

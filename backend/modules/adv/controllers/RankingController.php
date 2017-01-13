@@ -16,7 +16,11 @@ class RankingController extends BaseController
      */
     public function actionIndex()
     {
-        $query = RankingPromo::find()->orderBy(['endAt' => SORT_DESC, 'id' => SORT_DESC]);
+        $query = RankingPromo::find()
+            ->orderBy([
+                'endTime' => SORT_DESC,
+                'id' => SORT_DESC,
+            ]);
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,

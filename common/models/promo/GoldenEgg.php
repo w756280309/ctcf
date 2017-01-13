@@ -140,7 +140,7 @@ class GoldenEgg
                     'uid' => $user->id,
                     'status' => OnlineOrder::STATUS_SUCCESS,
                 ])
-                ->andWhere(['>', 'order_time', $promo->startAt])
+                ->andWhere(['>', 'order_time', strtotime($promo->startTime)])
                 ->sum('order_money');
             $tickets = (int)PromoLotteryTicket::find()
                 ->where([

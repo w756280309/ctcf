@@ -18,9 +18,9 @@ use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
-use \Zii\Model\CoinsTrait;
+use Zii\Model\CoinsTrait;
 use Zii\Model\ErrorExTrait;
-use \Zii\Model\LevelTrait;
+use Zii\Model\LevelTrait;
 use Zii\Validator\CnMobileValidator;
 
 /**
@@ -768,17 +768,18 @@ class User extends ActiveRecord implements IdentityInterface, UserInterface
 
     /**
      * 判断用户是否在某段时间内被邀请的
-     * @param null $startAt 开始时间戳
-     * @param null $endAt   结束时间戳
+     * @param string $startTime 开始时间
+     * @param string $endTime   结束时间
      * @return bool
      */
-    public function isInvited($startAt = null, $endAt = null){
+    public function isInvited($startTime = null, $endTime = null)
+    {
         $inviteRecord = InviteRecord::find()->where(['invitee_id' => $this->id]);
-        if ($startAt) {
-            $inviteRecord = $inviteRecord->andWhere(['>=', 'created_at', intval( $startAt)]);
+        if ($startTime) {
+            $inviteRecord = $inviteRecord->andWhere(['>=', 'created_at', strtotime($startTime)]);
         }
-        if ($endAt) {
-            $inviteRecord = $inviteRecord->andWhere(['<=', 'created_at', intval( $endAt)]);
+        if ($startTime) {
+            $inviteRecord = $inviteRecord->andWhere(['<=', 'created_at', strtotime($endTime)]);
         }
         $inviteRecord = $inviteRecord->one();
         return empty($inviteRecord) ? false : true;

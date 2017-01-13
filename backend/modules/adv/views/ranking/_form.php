@@ -5,6 +5,7 @@ if ($model->isNewRecord) {
 } else {
     $this->title = '更新活动';
 }
+
 $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\web\YiiAsset']);
 
 ?>
@@ -43,31 +44,29 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\we
         <div class="control-group">
             <label class="control-label">开始时间</label>
             <div class="controls">
-                <?= $form->field($model, 'startAt', [
+                <?= $form->field($model, 'startTime', [
                     'template' => '{input}',
                     'inputOptions' => [
                         'autocomplete' => 'off',
                         'class' => 'm-wrap span3 Wdate',
                         'placeholder' => '选择开始时间',
                         'onclick' => 'WdatePicker({dateFmt: \'yyyy-MM-dd HH:mm:ss\'})',
-                        'value' => $model->startTime,
                     ]])->textInput() ?>
-                <?= $form->field($model, 'startAt', ['template' => '{error}']); ?>
+                <?= $form->field($model, 'startTime', ['template' => '{error}']); ?>
             </div>
         </div>
         <div class="control-group">
             <label class="control-label">结束时间</label>
             <div class="controls">
-                <?= $form->field($model, 'endAt', [
+                <?= $form->field($model, 'endTime', [
                     'template' => '{input}',
                     'inputOptions' => [
                         'autocomplete' => 'off',
                         'class' => 'm-wrap span3 Wdate',
                         'placeholder' => '选择结束时间',
                         'onclick' => 'WdatePicker({dateFmt: \'yyyy-MM-dd HH:mm:ss\'})',
-                        'value' => $model->endTime,
                     ]])->textInput() ?>
-                <?= $form->field($model, 'endAt', ['template' => '{error}']); ?>
+                <?= $form->field($model, 'endTime', ['template' => '{error}']); ?>
             </div>
         </div>
         <div class="control-group">
@@ -84,5 +83,4 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\we
         <?php $form->end() ?>
     </div>
 </div>
-
 <?php $this->endBlock(); ?>

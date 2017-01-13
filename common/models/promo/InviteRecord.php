@@ -68,7 +68,7 @@ class InviteRecord extends ActiveRecord
         $res = [];
         $dates = [];
         foreach ($promos as $promo) {
-            $dates[] = ['start' => $promo->startAt, 'end' => $promo->endAt];
+            $dates[] = ['start' => strtotime($promo->startTime), 'end' => strtotime($promo->endTime)];
         }
         $inviteRecords = InviteRecord::find()->select(['invitee_id', 'created_at'])->where(['user_id' => $user->id])->orderBy(['created_at' => SORT_DESC])->asArray()->all();
         foreach ($inviteRecords as $record) {

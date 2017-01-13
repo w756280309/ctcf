@@ -148,7 +148,7 @@ class SiteController extends Controller
         $key = 'topList';
 
         if (!$cache->get($key)) {
-            $rank = new RankingPromo(['startAt' => 0, 'endAt' => 9999999999]);
+            $rank = new RankingPromo(['startTime' => '2015-1-1']);
             $topList = $rank->getOnline();
 
             $cache->set($key, $topList, 600);   //缓存十分钟

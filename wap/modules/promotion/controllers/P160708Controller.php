@@ -31,7 +31,7 @@ class P160708Controller extends Controller
             //初始化用户机会
             $promo = new Promo160707($model);
 
-            if (date('Y-m-d') >= date('Y-m-d', $promo->startAt) && date('Y-m-d') <= date('Y-m-d', $promo->endAt)) {
+            if (date('Y-m-d') >= substr($promo->startTime, 0, 10) && date('Y-m-d') <= substr($promo->endTime, 0, 10)) {
                 $promo->initTicket($this->getAuthedUser());
             }
 
@@ -50,11 +50,11 @@ class P160708Controller extends Controller
     {
         $rank = $this->findOr404(RankingPromo::class, ['key' => self::PROMOKEY]);
 
-        if (date('Y-m-d', $rank->startAt) > date('Y-m-d')) {
+        if (substr($rank->startTime, 0, 10) > date('Y-m-d')) {
             return ['code' => 102, 'msg' => '活动还未开始！'];
         }
 
-        if (date('Y-m-d', $rank->endAt) < date('Y-m-d')) {
+        if (substr($rank->endTime, 0, 10) < date('Y-m-d')) {
             return ['code' => 102, 'msg' => '活动已结束！'];
         }
 

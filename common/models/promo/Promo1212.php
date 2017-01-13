@@ -445,11 +445,16 @@ class Promo1212
     private function addInviteTicketInternal(User $newUser, Request $request = null)
     {
         //获取邀请当前用户的人
-        $inviteRecord = InviteRecord::find()->where(['invitee_id' => $newUser->id])->andWhere(['>=', 'created_at', $this->promo->startAt])->one();
+        $promoStartTime = strtotime($this->promo->startTime);
+        $inviteRecord = InviteRecord::find()
+            ->where(['invitee_id' => $newUser->id])
+            ->andWhere(['>=', 'created_at', $promoStartTime])
+            ->one();
+
         if (!empty($inviteRecord)) {
             $inviterId = $inviteRecord->user_id;
             //获取邀请者在活动期间邀请人数
-            $inviteCount = (int)InviteRecord::find()->where(['user_id' => $inviterId])->andWhere(['>=', 'created_at', $this->promo->startAt])->count();
+            $inviteCount = (int)InviteRecord::find()->where(['user_id' => $inviterId])->andWhere(['>=', 'created_at', $promoStartTime])->count();
             //获取当前用户因为邀请被赠送的抽奖机会
             $ticketCount = (int)PromoLotteryTicket::find()->where(['user_id' => $inviterId, 'source' => 'invite', 'promo_id' => $this->promo->id])->count();
             //用户第一次邀请，给一次抽奖机会

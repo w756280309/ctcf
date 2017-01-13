@@ -40,10 +40,10 @@ class Promo160707
 
     public function __construct(Promo $promo)
     {
-        if ($promo->key && $promo->startAt && $promo->endAt) {
+        if ($promo->key && $promo->startTime && $promo->endTime) {
             $this->promo_key = $promo->key;
-            $this->startAt = $promo->startAt;
-            $this->endAt = $promo->endAt;
+            $this->startAt = strtotime($promo->startTime);
+            $this->endAt = strtotime($promo->endTime);
         } else {
             throw new NotFoundHttpException();
         }
