@@ -22,7 +22,9 @@ use yii\helpers\Html;
         <div class="banner swiper-container">
             <div class="swiper-wrapper">
             <?php foreach($hotActs as $act) { ?>
-                <a class="swiper-slide" href="<?= $act->getLinkUrl() ?>"><img src="<?= UPLOAD_BASE_URI ?>upload/adv/<?= $act->image ?>" alt=""></a>
+                <a class="swiper-slide" href="<?= $act->getLinkUrl() ?>">
+                    <img src="<?= UPLOAD_BASE_URI ?>upload/adv/<?= $act->image ?>" alt="">
+                </a>
             <?php } ?>
             </div>
             <div class="swiper-pagination"></div>
@@ -48,7 +50,7 @@ use yii\helpers\Html;
                 <img src="<?= FE_BASE_URI ?>wap/index/images/icon_02.png" alt="">
                 <p>邀请好友</p>
             </a>
-            <a class="f13 lf" href="/mall/portal">
+            <a class="f13 lf" href="/mall/portal/guest<?= (Yii::$app->request->get('token') && defined('IN_APP')) ? '?token='.Yii::$app->request->get('token') : ''?>">
                 <img src="<?= FE_BASE_URI ?>wap/index/images/icon_03.png" alt="">
                 <p>积分商城</p>
             </a>
