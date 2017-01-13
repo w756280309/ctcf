@@ -173,22 +173,34 @@ class Adv extends ActiveRecord
         return $this->hasOne(Share::className(), ['id' => 'share_id']);
     }
 
-    //获取添加分享参数的链接地址
+    //获取banner图链接
     public function getLinkUrl()
     {
         $link = $this->link;
         $parseUrl = parse_url($link);
         $shareKey = $this->share ? $this->share->shareKey : '';
-        if ($shareKey) {
-            if (isset($parseUrl['query'])) {
-                $link = rtrim($link, '&');
-                $link .= '&wx_share_key=' . $shareKey;
-            } else {
-                $link = rtrim($link, '?');
-                $link = rtrim($link, '/');
-                $link .= '?wx_share_key=' . $shareKey;
-            }
+        $token = \Yii::$app->request->get('token');
+        $queryData = isset($parseUrl['query']) ? explode('&', $parseUrl['query']) : [];
+        $params = [];
+        foreach ($queryData as $item) {
+            list($key, $value) = explode('=', $item);
+            $params[$key] = $value;
         }
-        return $link;
+        if ($token && defined('IN_APP')) {
+            $params['token'] = $token;
+        }
+        if ($shareKey) {
+            $params['wx_share_key'] = $shareKey;
+        }
+
+        $link = '';
+        if (isset($parseUrl['scheme'])) {
+            $link .= $parseUrl['scheme'] . '://';
+        }
+        if (isset($parseUrl['host'])) {
+            $link .= $parseUrl['host'];
+        }
+
+        return $link . $parseUrl['path'] . '?' . http_build_query($params);
     }
 }

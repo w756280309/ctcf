@@ -22,12 +22,12 @@ class PortalController extends Controller
      */
     public function actionGuest($dbredirect = '')
     {
+        $allowGuest = true;
         if (defined('IN_APP') && IN_APP) {
             //APP不能以游客身份进入积分商城，跳转到登录页(暂时)
-            return $this->redirect('/site/login');
-        } else {
-            $this->login($dbredirect, true);
+            $allowGuest = false;
         }
+        $this->login($dbredirect, $allowGuest);
     }
 
     //转跳到兑吧的兑换记录
@@ -63,7 +63,7 @@ class PortalController extends Controller
             \Yii::$app->params['mall_settings']['app_secret'],
             empty($thirdPartyConnect) ? 'not_login' : $thirdPartyConnect->publicId,
             empty($user) ? 0 : $user->points,
-            $dbredirect
+            urldecode($dbredirect)
         );
         return $this->redirect($url);
     }
