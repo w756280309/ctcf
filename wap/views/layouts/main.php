@@ -98,7 +98,7 @@ $this->registerMetaTag([
         <div class="pos-rel">
             <div class="pos-fixer">
                 <nav>
-                    <li class="first"><a href="/?v=1#t=1">首页</a></li>
+                    <li class="first"><a href="<?= defined('IN_APP') ? '/' : '/?v=1#t=1' ?>">首页</a></li>
                     <li><a href="/site/about">关于我们</a></li>
                     <li><a href="/site/advantage">平台优势</a></li>
                     <li><a href="/site/help">帮助中心</a></li>
@@ -137,8 +137,6 @@ $this->registerMetaTag([
     <?php } } ?>
 </div>
 <?php $this->endBody() ?>
-
 </body>
 </html>
 <?php $this->endPage() ?>
-
