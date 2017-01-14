@@ -92,6 +92,15 @@
 [data-dpr="3"] .f20 {
   font-size: 60px;
 }
+.f22 {
+  font-size: 22px;
+}
+[data-dpr="2"] .f22 {
+  font-size: 44px;
+}
+[data-dpr="3"] .f22 {
+  font-size: 66px;
+}
 .f23 {
   font-size: 23px;
 }
@@ -181,6 +190,12 @@
   }
   .f20 {
     font-size: 40px;
+  }
+  .f22 {
+    font-size: 44px;
+  }
+  .f24 {
+    font-size: 48px;
   }
   .f30 {
     font-size: 60px;

@@ -470,3 +470,10 @@ a.contact-tel {
 a.contact-tel:hover {
     color: #f44336;
 }
+a:hover,a:visited,a:active {
+    text-decoration: none;
+}
+
+dt {
+    font-weight: normal;
+}

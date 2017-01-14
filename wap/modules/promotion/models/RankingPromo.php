@@ -195,18 +195,24 @@ class RankingPromo extends ActiveRecord
      */
     public function isActive(User $user = null, $time = null)
     {
-
         if (empty($time)) {
-            $dateTime = date('Y-m-d H:i:s');
+            $dateTime = new \DateTime();
         } else {
-            $dateTime = date('Y-m-d H:i:s', $time);
+            $dateTime = new \DateTime(date('Y-m-d H:i:s', $time));
         }
-        if ($dateTime < $this->startTime) {
+
+        $startTime = new \DateTime($this->startTime);
+
+        if ($dateTime < $startTime) {
             throw new NotActivePromoException($this, '活动未开始');
         }
 
-        if ($this->endTime && $dateTime > $this->endTime) {
-            throw new NotActivePromoException($this, '活动已结束');
+        if ($this->endTime) {
+            $endTime = new \DateTime($this->endTime);
+
+            if ($dateTime > $endTime) {
+                throw new NotActivePromoException($this, '活动已结束');
+            }
         }
 
         $whiteList = explode(',', $this->whiteList);

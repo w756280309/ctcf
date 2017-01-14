@@ -102,10 +102,12 @@ class SignupForm extends Model
 
     /**
      * 注册用户主函数.
+     *
+     * 1.新增注册来源标记码, m_movie1701(首次投资送观影券活动落地页);
      */
     public function signup($regFrom = User::REG_FROM_OTHER, $regContext)
     {
-        if (!in_array($regContext, ['m', 'm_intro1611', 'pc', 'pc_landing'])) {
+        if (!in_array($regContext, ['m', 'm_intro1611', 'm_movie1701', 'pc', 'pc_landing'])) {
             return false;
         }
 
