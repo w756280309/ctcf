@@ -22,6 +22,7 @@ use yii\db\ActiveRecord;
  * @property integer $userLevel         用户等级
  * @proprety boolean $isOffline         是否线下
  * @proprety string  $offGoodsName      线下商品名称
+ * @property string  $remark            发放积分的描述
  */
 class PointRecord extends ActiveRecord
 {
@@ -32,6 +33,7 @@ class PointRecord extends ActiveRecord
     const TYPE_OFFLINE_BUY_ORDER = 'offline_loan_order'; //线下购买标的
     const TYPE_OFFLINE_POINT_ORDER = 'offline_point_order'; //线下积分兑换
     const TYPE_OFFLINE_ORDER_DELETE = 'offline_order_delete'; //线下订单删除扣减积分
+    const TYPE_POINT_FA_FANG = 'point_fa_fang'; //积分发放
 
     /**
      * @inheritdoc
@@ -50,6 +52,7 @@ class PointRecord extends ActiveRecord
             [['user_id', 'ref_id', 'incr_points', 'decr_points', 'final_points'], 'integer'],
             [['recordTime'], 'safe'],
             [['sn', 'ref_type'], 'string', 'max' => 32],
+            [['remark'], 'string', 'max' => 6],
         ];
     }
 
@@ -64,12 +67,13 @@ class PointRecord extends ActiveRecord
             'user_id' => 'User ID',
             'ref_type' => 'Ref Type',
             'ref_id' => 'Ref ID',
-            'incr_points' => 'Incr Points',
+            'incr_points' => '积分数额',
             'decr_points' => 'Decr Points',
             'final_points' => 'Final Points',
             'recordTime' => 'Record Time',
             'isOffline' => 'isOffline',
             'offGoodsName' => 'offGoodsName',
+            'remark' => '发放积分描述',
         ];
     }
 
@@ -87,6 +91,7 @@ class PointRecord extends ActiveRecord
             self::TYPE_OFFLINE_BUY_ORDER => '线下购买标的',
             self::TYPE_OFFLINE_POINT_ORDER => '线下积分兑换',
             self::TYPE_OFFLINE_ORDER_DELETE => '线下订单删除扣减积分',
+            self::TYPE_POINT_FA_FANG => '积分发放',
         ];
         return isset($name[$type]) ? $name[$type] : '';
     }
