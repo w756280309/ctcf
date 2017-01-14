@@ -58,6 +58,12 @@ use yii\grid\GridView;
                 },
             ],
             [
+                'label' => '发放积分描述',
+                'value' => function ($record) {
+                    return $record['remark'];
+                },
+            ],
+            [
                 'label' => '交易时间',
                 'value' => function ($record) {
                     return $record['recordTime'];
