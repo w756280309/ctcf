@@ -45,8 +45,8 @@ class PointController extends BaseController
             $PointRecord->addError('remark', '请填写发放积分描述!');
             return false;
         }
-        if (empty($PointRecord->incr_points)) {
-            $PointRecord->addError('incr_points', '请填写积分数额!');
+        if ($PointRecord->incr_points <= 0) {
+            $PointRecord->addError('incr_points', '请填写正整数的积分数额!');
             return false;
         }
         return true;
