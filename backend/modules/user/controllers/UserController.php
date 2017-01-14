@@ -7,10 +7,12 @@ use common\lib\user\UserStats;
 use common\models\affiliation\UserAffiliation;
 use common\models\bank\Bank;
 use common\models\epay\EpayUser;
+use common\models\mall\PointRecord;
 use common\models\order\OnlineOrder;
 use common\models\product\OnlineProduct;
 use backend\modules\user\core\v1_0\UserAccountBackendCore;
 use common\models\promo\InviteRecord;
+use common\models\user\CoinsRecord;
 use common\models\user\MoneyRecord;
 use common\models\user\User;
 use common\models\user\UserAccount;
@@ -44,6 +46,86 @@ class UserController extends BaseController
         );
 
         return $params;
+    }
+
+    /**
+     * 积分明细.
+     */
+    public function actionPointList($userId)
+    {
+        $user = $this->findOr404(User::class, $userId);
+
+        $query = PointRecord::find()
+            ->where([
+                'user_id' => $userId,
+                'isOffline' => false,
+            ])
+            ->orderBy(['id' => SORT_DESC]);
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => [
+                'pageSize' => 10,
+            ],
+        ]);
+
+        $orderIds = [];
+        $orders = [];
+
+        foreach ($dataProvider->models as $model) {
+            if (PointRecord::TYPE_LOAN_ORDER === $model->ref_type) {
+                $orderIds[] = $model->ref_id;
+            }
+        }
+
+        if (!empty($orderIds)) {
+            $o = OnlineOrder::tableName();
+
+            $orders = OnlineOrder::find()
+                ->joinWith('loan')
+                ->where(["$o.id" => $orderIds])
+                ->indexBy('id')
+                ->all();
+        }
+
+        $this->layout = false;
+
+        return $this->render('_point_list', [
+            'dataProvider' => $dataProvider,
+            'orders' => $orders,
+            'user' => $user,
+        ]);
+    }
+
+    /**
+     * 财富值明细.
+     */
+    public function actionCoinList($userId, $isOffline = 0)
+    {
+        if (!in_array($isOffline, [0, 1])) {
+            throw $this->ex404();
+        }
+
+        $query = CoinsRecord::find()
+            ->where([
+                'user_id' => $userId,
+                'isOffline' => $isOffline,
+            ])
+            ->orderBy(['id' => SORT_DESC]);
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => [
+                'pageSize' => 10,
+            ],
+        ]);
+
+        $this->layout = false;
+
+        return $this->render('_coin_list', [
+            'dataProvider' => $dataProvider,
+            'isOffline' => $isOffline,
+        ]);
     }
 
     /**

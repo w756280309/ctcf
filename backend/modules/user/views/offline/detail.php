@@ -66,24 +66,41 @@ $this->title = '线下会员详情';
         <div>
             <div>
                 <ul class="nav nav-tabs nav-pills" role="tablist" id="list_nav">
-                    <li role="presentation" class="point_record_nav active"><a>积分明细</a></li>
+                    <li role="presentation" class="point_record_nav active"><a href="javascript:getPointRecord('/user/offline/points?id=<?= $user->id?>', this)">积分明细</a></li>
+                    <li role="presentation" class="point_record_nav"><a href="javascript:getCoinRecord('/user/user/coin-list?userId=<?= $user->id ?>&isOffline=1', this)">财富值明细</a></li>
                 </ul>
             </div>
             <div class="container-fluid"  id="list">
-                <div class="list_detail" id="point_record_list"></div>
+                <div class="list_detail"></div>
             </div>
         </div>
     </div>
 </div>
 <script>
-    function getPointRecord(href)
+    function getPointRecord(href, obj)
     {
         $.get(href, function(data) {
             if (data) {
-                $('#point_record_list').html(data);
+                $('#list div').html(data);
             }
         })
     }
+
+    function getCoinRecord(href, obj) {
+        $.get(href, function (data) {
+            if (data) {
+                $('#list div').html(data);
+            }
+        })
+    }
+
+    $('#list_nav li').click(function () {
+        var index = $("#list_nav li").index(this);
+        if(!$(this).hasClass('active')) {
+            $('#list_nav li').removeClass('active');
+            $(this).addClass('active');
+        }
+    });
 
     getPointRecord('/user/offline/points?id=<?= $user->id?>');
 </script>

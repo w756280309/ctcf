@@ -3,41 +3,15 @@
 use common\utils\StringUtils;
 use yii\web\YiiAsset;
 
+$this->title = '会员详情';
+
 $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => YiiAsset::class]);
 
-$this->title = '用户详情';
 ?>
 
 <?php $this->beginBlock('blockmain'); ?>
-
 <style type="text/css">
-    .breadcrumb_detail {
-        font-size: 14px;
-        padding: 8px 15px;
-        margin: 0 5px 20px;
-        list-style: none;
-        -webkit-border-radius: 4px;
-        -moz-border-radius: 4px;
-        border-radius: 4px;
-    }
-    .breadcrumb_detail>li {
-        width: 300px;
-        display: inline-block;
-        *display: inline;
-        text-shadow: 0 1px 0 #fff;
-        *zoom: 1;
-        margin-bottom: 10px;
-    }
-    .breadcrumb_detail>li>span {
-        width: 120px;
-        font-weight: bold;
-        margin: 0 20px;
-        display: inline-block;
-        *display: inline;
-        text-shadow: 0 1px 0 #fff;
-        *zoom: 1;
-    }
-    .detail_font{
+    .detail_font {
         width: 200px;
         margin-bottom: 15px;
         font-family: 微软雅黑;
@@ -206,6 +180,8 @@ $this->title = '用户详情';
                     <li role="presentation" class="credit_note_nav"><a>转让卖出明细</a></li>
                     <li role="presentation" class="bind_nav"><a>绑卡明细</a></li>
                     <li role="presentation" class="coupon_nav"><a>代金券明细</a></li>
+                    <li role="presentation" class="points"><a>积分明细</a></li>
+                    <li role="presentation" class="coins"><a>财富值明细</a></li>
                     <li role="presentation" class="invite_nav"><a>关系详情</a></li>
                 </ul>
             </div>
@@ -218,6 +194,8 @@ $this->title = '用户详情';
                 <div class="list_detail" id="credit_note_list"></div>
                 <div class="list_detail" id="bind_card_list"></div>
                 <div class="list_detail" id="coupon_list"></div>
+                <div class="list_detail" id="point_list"></div>
+                <div class="list_detail" id="coin_list"></div>
                 <div class="list_detail" id="invite_list"></div>
             </div>
         </div>
@@ -234,62 +212,96 @@ $this->title = '用户详情';
         })
     }
 
-    function getBindList(href) {
+    function getBindList(href)
+    {
         $.get(href, function(data) {
             if (data) {
                 $('#bind_card_list').html(data);
             }
         })
     }
-    function getCouponList(href) {
+
+    function getCouponList(href)
+    {
         $.get(href, function(data) {
             if (data) {
                 $('#coupon_list').html(data);
             }
         })
     }
-    function getInviteList(href) {
+
+    function getInviteList(href)
+    {
         $.get(href, function(data) {
             if (data) {
                 $('#invite_list').html(data);
             }
         })
     }
-    function getRechargeList(href) {
+
+    function getRechargeList(href)
+    {
         $.get(href, function(data) {
             if (data) {
                 $('#recharge_list').html(data);
             }
         })
     }
-    function getDrawList(href) {
+
+    function getDrawList(href)
+    {
         $.get(href, function(data) {
             if (data) {
                 $('#draw_list').html(data);
             }
         })
     }
-    function getLoanOrderList(href) {
+
+    function getLoanOrderList(href)
+    {
         $.get(href, function(data) {
             if (data) {
                 $('#loan_order_list').html(data);
             }
         })
     }
-    function getCreditOrderList(href) {
+
+    function getCreditOrderList(href)
+    {
         $.get(href, function(data) {
             if (data) {
                 $('#credit_order_list').html(data);
             }
         })
     }
-    function getCreditNoteList(href) {
+
+    function getCreditNoteList(href)
+    {
         $.get(href, function(data) {
             if (data) {
                 $('#credit_note_list').html(data);
             }
         })
     }
+
+    function getPointList(href)
+    {
+        $.get(href, function(data) {
+            if (data) {
+                $('#point_list').html(data);
+            }
+        })
+    }
+
+    function getCoinList(href)
+    {
+        $.get(href, function(data) {
+            if (data) {
+                $('#coin_list').html(data);
+            }
+        })
+    }
+
     getMoneyRecord('/user/user/detail?id=<?= $normalUser->id?>&key=money_record');
 
     $('#list_nav li').click(function () {
@@ -299,6 +311,18 @@ $this->title = '用户详情';
             $(this).addClass('active');
             $('#list .list_detail').hide();
             $('#list .list_detail').eq(index).show();
+        }
+    });
+
+    $('.points').click(function () {
+        if (!$('#point_list').html()) {
+            getPointList('/user/user/point-list?userId=<?= $normalUser->id ?>');
+        }
+    });
+
+    $('.coins').click(function () {
+        if (!$('#coin_list').html()) {
+            getCoinList('/user/user/coin-list?userId=<?= $normalUser->id ?>');
         }
     });
 

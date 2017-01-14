@@ -2,6 +2,8 @@
 
 namespace common\models\user;
 
+use common\models\offline\OfflineOrder;
+use common\models\order\OnlineOrder;
 use Yii;
 use yii\db\ActiveRecord;
 
@@ -18,4 +20,19 @@ use yii\db\ActiveRecord;
  */
 class CoinsRecord extends ActiveRecord
 {
+    /**
+     * 获取线上对应的订单信息.
+     */
+    public function getOnlineOrder()
+    {
+        return $this->hasOne(OnlineOrder::class, ['id' => 'order_id']);
+    }
+
+    /**
+     * 获取线下对应的订单信息.
+     */
+    public function getOfflineOrder()
+    {
+        return $this->hasOne(OfflineOrder::class, ['id' => 'order_id']);
+    }
 }
