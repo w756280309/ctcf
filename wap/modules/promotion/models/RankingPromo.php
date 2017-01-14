@@ -189,12 +189,18 @@ class RankingPromo extends ActiveRecord
     /**
      * 判断活动对对指定用户来说是否在进行中
      * @param User|null $user
+     * @param  int|null $time
      * @return bool
      * @throws NotActivePromoException
      */
-    public function isActive(User $user = null)
+    public function isActive(User $user = null, $time = null)
     {
-        $dateTime = date('Y-m-d H:i:s');
+
+        if (empty($time)) {
+            $dateTime = date('Y-m-d H:i:s');
+        } else {
+            $dateTime = date('Y-m-d H:i:s', $time);
+        }
         if ($dateTime < $this->startTime) {
             throw new NotActivePromoException($this, '活动未开始');
         }

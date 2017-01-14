@@ -34,6 +34,7 @@ class PointRecord extends ActiveRecord
     const TYPE_OFFLINE_POINT_ORDER = 'offline_point_order'; //线下积分兑换
     const TYPE_OFFLINE_ORDER_DELETE = 'offline_order_delete'; //线下订单删除扣减积分
     const TYPE_POINT_FA_FANG = 'point_fa_fang'; //积分发放
+    const TYPE_FIRST_LOAN_ORDER_POINTS_1 = 'first_order_1';//首次投资送积分,活动 FirstOrderPoints
 
     /**
      * @inheritdoc

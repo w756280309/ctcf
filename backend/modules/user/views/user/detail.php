@@ -167,6 +167,18 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => YiiAsse
                     <td><span>转让投资总计（元）</span><?= empty($creditTotalAmount) ? '0.00' : $creditTotalAmount ?></td>
                 </tr>
             </table>
+
+            <!-- 补发首投积分，春节活动，活动之后删除代码 -->
+            <?php if ($needAddPoints) { ?>
+            <div class="detail_font">用户操作</div>
+            <table class="table table-condensed">
+                <tr>
+                    <td>
+                        <button class="btn btn-primary" id="add_user_points">给用户补发春节首投积分</button>
+                    </td>
+                </tr>
+            </table>
+            <?php }?>
         </div>
 
         <div>
@@ -203,6 +215,29 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => YiiAsse
 </div>
 
 <script>
+    //补发首投积分，春节活动，活动之后删除代码
+    $('#add_user_points').click(function () {
+        var _this = $(this);
+        _this.attr('disabled', true);
+        var request = $.ajax({
+            url: '/user/user/detail?id=<?= $normalUser->id?>&key=add_points',
+            method: 'POST'
+        });
+        request.done(function (data) {
+            if (data.success) {
+                alert(data.message);
+                location.reload();
+            } else {
+                alert(data.message);
+                _this.removeAttr('disabled');
+            }
+        });
+        request.fail(function () {
+            _this.removeAttr('disabled');
+        })
+    });
+
+
     function getMoneyRecord(href)
     {
         $.get(href, function(data) {

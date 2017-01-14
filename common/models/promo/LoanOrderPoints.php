@@ -44,7 +44,7 @@ class LoanOrderPoints
     private function addUserPointsWithLoanOrder(OnlineOrder $order, OnlineProduct $loan)
     {
         $user = $order->user;
-        if ($order->status === OnlineOrder::STATUS_SUCCESS && $this->promo->isActive($user)) {
+        if ($order->status === OnlineOrder::STATUS_SUCCESS && $this->promo->isActive($user, $order->order_time)) {
             $record = PointRecord::find()->where([
                 'user_id' => $user->id,
                 'ref_type' => PointRecord::TYPE_LOAN_ORDER,

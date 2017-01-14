@@ -20,6 +20,7 @@ use common\models\user\UserBanks;
 use common\models\user\RechargeRecord;
 use common\models\user\UserSearch;
 use common\models\user\DrawRecord;
+use wap\modules\promotion\models\RankingPromo;
 use Wcg\Http\HeaderUtils;
 use Yii;
 use yii\data\ActiveDataProvider;
@@ -227,10 +228,40 @@ class UserController extends BaseController
             case 'credit_note':
                 return $this->getCreditNote($user);
                 break;
+            case 'add_points':
+                return $this->addPoints($user);//补发首投积分，春节活动，活动之后删除代码
             default :
                 break;
         }
         return [];
+    }
+
+    //补发首投积分，春节活动，活动之后删除代码
+    public function addPoints(User $user)
+    {
+        $promo = RankingPromo::findOne(['key' => 'first_order_point']);
+        $success = false;
+        $message = '不满足条件';
+        if (!empty($promo)) {
+            $promoModel = new $promo->promoClass($promo);
+            $firstOrder = OnlineOrder::find()->where(['uid' => $user->id, 'status' => OnlineOrder::STATUS_SUCCESS])->andWhere(['>=', 'order_time', strtotime($promo->startTime)])->andWhere(['<=', 'order_time', strtotime($promo->endTime)])->orderBy(['order_time' => SORT_ASC])->one();
+            if (!empty($firstOrder)) {
+                try {
+                    if ($promo->isActive($user, $firstOrder->order_time) && !$promoModel->hasAwarded($user)) {
+                        if ($promoModel->addUserPoints($firstOrder)) {
+                            $success = true;
+                            $message = '用户首投积分赠送成功';
+                        }
+                    }
+                } catch (\Exception $ex) {
+                    $message = $ex->getMessage();
+                }
+            }
+        }
+        return [
+            'success' => $success,
+            'message' => $message,
+        ];
     }
 
     /**
@@ -477,6 +508,23 @@ IN (" . implode(',', $recordIds) . ")")->queryAll();
             'with' => 'transfer_count,transfer_sum',
         ]);
 
+        //补发首投积分，春节活动，活动之后删除代码
+        $needAddPoints = false;
+        $promo = RankingPromo::findOne(['key' => 'first_order_point']);
+        if (!empty($promo)) {
+            $promoModel = new $promo->promoClass($promo);
+            $firstOrder = OnlineOrder::find()->where(['uid' => $user->id, 'status' => OnlineOrder::STATUS_SUCCESS])->andWhere(['>=', 'order_time', strtotime($promo->startTime)])->andWhere(['<=', 'order_time', strtotime($promo->endTime)])->orderBy(['order_time' => SORT_ASC])->one();
+            if (!empty($firstOrder)) {
+                try {
+                    if ($promo->isActive($user, $firstOrder->order_time) && !$promoModel->hasAwarded($user)) {
+                        $needAddPoints = true;
+                    }
+                } catch (\Exception $ex) {
+
+                }
+            }
+        }
+
         return $this->render('detail', [
             'czTime' => $rcMax,
             'czNum' => $recharge['count'],
@@ -495,6 +543,7 @@ IN (" . implode(',', $recordIds) . ")")->queryAll();
             'transferCount' => $noteData['transferCount'],
             'transferSum' => bcdiv($noteData['transferSum'], 100, 2),
             'userAccount' => $ua,
+            'needAddPoints' => $needAddPoints,//需要赠送抽奖机会，春节活动，活动之后删除代码
         ]);
     }
 
