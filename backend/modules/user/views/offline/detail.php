@@ -3,11 +3,12 @@
 use common\utils\StringUtils;
 
 $this->title = '线下会员详情';
+
 ?>
 
 <?php $this->beginBlock('blockmain'); ?>
 <style>
-    .detail_font{
+    .detail_font {
         width: 200px;
         margin-bottom: 15px;
         font-family: 微软雅黑;
@@ -19,6 +20,7 @@ $this->title = '线下会员详情';
         cursor: pointer;
     }
 </style>
+
 <div class="container-fluid">
     <!-- BEGIN PAGE HEADER-->
     <div class="row-fluid">
@@ -66,30 +68,32 @@ $this->title = '线下会员详情';
         <div>
             <div>
                 <ul class="nav nav-tabs nav-pills" role="tablist" id="list_nav">
-                    <li role="presentation" class="point_record_nav active"><a href="javascript:getPointRecord('/user/offline/points?id=<?= $user->id?>', this)">积分明细</a></li>
-                    <li role="presentation" class="point_record_nav"><a href="javascript:getCoinRecord('/user/user/coin-list?userId=<?= $user->id ?>&isOffline=1', this)">财富值明细</a></li>
+                    <li role="presentation" class="point_record_nav active"><a href="javascript:getPointList('/user/offline/points?id=<?= $user->id?>')">积分明细</a></li>
+                    <li role="presentation" class="point_record_nav"><a href="javascript:getCoinList('/user/user/coin-list?userId=<?= $user->id ?>&isOffline=1')">财富值明细</a></li>
                 </ul>
             </div>
             <div class="container-fluid"  id="list">
-                <div class="list_detail"></div>
+                <div class="list_detail" id="list_detail"></div>
             </div>
         </div>
     </div>
 </div>
+
 <script>
-    function getPointRecord(href, obj)
+    function getPointList(href)
     {
         $.get(href, function(data) {
             if (data) {
-                $('#list div').html(data);
+                $('#list_detail').html(data);
             }
         })
     }
 
-    function getCoinRecord(href, obj) {
+    function getCoinList(href)
+    {
         $.get(href, function (data) {
             if (data) {
-                $('#list div').html(data);
+                $('#list_detail').html(data);
             }
         })
     }
@@ -102,6 +106,6 @@ $this->title = '线下会员详情';
         }
     });
 
-    getPointRecord('/user/offline/points?id=<?= $user->id?>');
+    getPointList('/user/offline/points?id=<?= $user->id?>');
 </script>
 <?php $this->endBlock(); ?>

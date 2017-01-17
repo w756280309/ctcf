@@ -21,13 +21,15 @@ GridView::widget([
                 }
 
                 return $loanName;
-            }
+            },
+            'contentOptions' => ['class' => 'span6'],
+            'headerOptions' => ['class' => 'span6'],
         ],
         [
             'label' => $isOffline ? '订单ID' : '订单流水',
             'value' => function($data) use ($isOffline) {
                 return $isOffline ? $data->offlineOrder->id : $data->onlineOrder->sn;
-            }
+            },
         ],
         [
             'label' => '财富值增量',
@@ -49,7 +51,7 @@ GridView::widget([
             'label' => '创建时间',
             'value' => function($data) {
                 return $data->createTime;
-            }
+            },
         ],
     ],
 ])
@@ -59,7 +61,7 @@ GridView::widget([
     $(function() {
         $('.coin_page ul li').on('click', 'a', function(e) {
             e.preventDefault();
-            getPointList($(this).attr('href'));
+            getCoinList($(this).attr('href'));
         })
     })
 </script>

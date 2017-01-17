@@ -54,13 +54,15 @@ use yii\grid\GridView;
             [
                 'label' => '商品名称',
                 'value' => function ($record) {
-                    return $record['offGoodsName'];
+                    return $record['offGoodsName'] ? $record['offGoodsName'] : '---';
                 },
+                'contentOptions' => ['class' => 'span4'],
+                'headerOptions' => ['class' => 'span4'],
             ],
             [
                 'label' => '发放积分描述',
                 'value' => function ($record) {
-                    return $record['remark'];
+                    return $record['remark'] ? $record['remark'] : '---';
                 },
             ],
             [
@@ -77,7 +79,7 @@ use yii\grid\GridView;
     $(function() {
         $('.point_record_pager ul li').on('click', 'a', function(e) {
             e.preventDefault();
-            getPointRecord($(this).attr('href'));
+            getPointList($(this).attr('href'));
         });
     })
 </script>

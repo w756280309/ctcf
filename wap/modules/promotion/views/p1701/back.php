@@ -3,14 +3,9 @@
 $this->title = '注册成功';
 
 //跳转规则,根据登录用户ID的奇偶来判断,奇数跳转首页,偶数跳转我的理财;没有登录也跳转到首页;
-if ($user) {
-    if ($user->id % 2) {
-        $toUrl = '/';
-    } else {
-        $toUrl = '/deal/deal/index';
-    }
-} else {
-    $toUrl = '/';
+$toUrl = '/';
+if ($user && !($user->id % 2)) {
+    $toUrl = '/deal/deal/index';
 }
 
 ?>
