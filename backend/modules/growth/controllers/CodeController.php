@@ -185,7 +185,7 @@ class CodeController extends BaseController
         $query = (new Query())
             ->select("$g.name, count($c.id) as total, $c.goodsType, $g.createdAt, $g.sn")
             ->from($g)
-            ->innerJoin($c, "$c.goodsType_sn = $g.sn");
+            ->leftJoin($c, "$c.goodsType_sn = $g.sn");
 
         $query->orderBy(["$g.createdAt" => SORT_DESC])->groupBy('sn');
         $pages = new Pagination(['totalCount' => $query->count(), 'pageSize' => '10']);
