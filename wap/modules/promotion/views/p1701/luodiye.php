@@ -81,10 +81,10 @@ use yii\captcha\Captcha;
                     <span class="f12" style="line-height:0.56rem;">工作时间：8:30~20:00</span>
                 </p>
             </div>
-            <div class="f12 netaddress">官网地址：<a href="https://www.wenjf.com">www.wenjf.com</a></div>
+            <div class="f12 netaddress">官网地址：<a href="<?= defined('IN_APP') ? '/' : 'https://www.wenjf.com' ?>">www.wenjf.com</a></div>
             <div class="f12 address clearfix"><p class="lf">公司地址：</p><p class="specialp lf">温州市鹿城区飞霞南路657号保丰大楼四层</p></div>
             </dt>
-            <dd class="erweima f11"><img  src="<?= FE_BASE_URI ?>wap/luodiye/images/erweima.png" alt=""><p>微信公众号</p></dd>
+            <dd class="erweima f11"><img src="<?= FE_BASE_URI ?>wap/luodiye/images/erweima.png" alt=""><p>微信公众号</p></dd>
         </dl>
         <p class="f11">*理财非存款，产品有风险，投资须谨慎</p>
     </div>

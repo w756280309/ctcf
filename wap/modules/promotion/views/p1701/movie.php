@@ -95,7 +95,7 @@ $this->share = $share;
             <p class="f15">股东背景</p>
             <ul>
                 <li></li>
-                <li><img  data-original="<?= FE_BASE_URI ?>wap/luodiye/images/shareholde_01.png" alt=""><img  data-original="<?= FE_BASE_URI ?>wap/luodiye/images/shareholde_02.png" alt=""></li>
+                <li><img data-original="<?= FE_BASE_URI ?>wap/luodiye/images/shareholde_01.png" alt=""><img  data-original="<?= FE_BASE_URI ?>wap/luodiye/images/shareholde_02.png" alt=""></li>
             </ul>
         </div>
 
@@ -105,28 +105,28 @@ $this->share = $share;
                 <li></li>
                 <li class="lf platformList">
                     <div class="platformListFirst">
-                        <img  data-original="<?= FE_BASE_URI ?>wap/luodiye/images/platform_01.png" alt="">
+                        <img data-original="<?= FE_BASE_URI ?>wap/luodiye/images/platform_01.png" alt="">
                         <div class="f15">国资背景</div>
                         <div class="f14">温州报业传媒旗下</div>
                     </div>
                 </li>
                 <li class="lf platformList">
                     <div class="platformListSecond">
-                        <img  data-original="<?= FE_BASE_URI ?>wap/luodiye/images/platform_02.png" style="width: 1.1rem;" alt="">
+                        <img data-original="<?= FE_BASE_URI ?>wap/luodiye/images/platform_02.png" style="width: 1.1rem;" alt="">
                         <div class="f15">资金稳妥</div>
                         <div class="f14">第三方资金托管</div>
                     </div>
                 </li>
                 <li class="lf platformList">
                     <div>
-                        <img  data-original="<?= FE_BASE_URI ?>wap/luodiye/images/platform_03.png" alt="">
+                        <img data-original="<?= FE_BASE_URI ?>wap/luodiye/images/platform_03.png" alt="">
                         <div class="f15">收益稳健</div>
                         <div class="f14">预期收益5.5~9%</div>
                     </div>
                 </li>
                 <li class="lf platformList">
                     <div class="platformListLast">
-                        <img  data-original="<?= FE_BASE_URI ?>wap/luodiye/images/platform_04.png" alt="">
+                        <img data-original="<?= FE_BASE_URI ?>wap/luodiye/images/platform_04.png" alt="">
                         <div class="f15">产品优质</div>
                         <div class="f14">国企、政信类产品</div>
                     </div>
@@ -138,13 +138,13 @@ $this->share = $share;
     <div class="leader">
         <span class="reasonone f15">03  本地服务方便快捷</span>
         <dl class="clearfix">
-            <dt class="lf"><img  data-original="<?= FE_BASE_URI ?>wap/luodiye/images/leader_01.png" alt=""></dt>
+            <dt class="lf"><img data-original="<?= FE_BASE_URI ?>wap/luodiye/images/leader_01.png" alt=""></dt>
             <dd class="lf" style="margin-top: -0.17rem;font-size: 0.4rem;">
                 温都金服服务中心位于温州市鹿城区飞霞南路保丰大楼一楼温州都市报分类业务处。
             </dd>
         </dl>
         <dl class="clearfix">
-            <dt class="lf"><img  data-original="<?= FE_BASE_URI ?>wap/luodiye/images/leader_02.png" alt=""></dt>
+            <dt class="lf"><img data-original="<?= FE_BASE_URI ?>wap/luodiye/images/leader_02.png" alt=""></dt>
             <dd class="lf" style="margin-top: 0.2rem;font-size: 0.4rem;">
                 四楼办公区，宽敞明亮，为客户提供更多的咨询、线下活动、积分兑换等服务。
             </dd>
@@ -185,7 +185,7 @@ $this->share = $share;
                     <span class="f12" style="line-height:0.56rem;">工作时间：8:30~20:00</span>
                 </p>
             </div>
-            <div class="f12 netaddress">官网地址：<a href="https://www.wenjf.com">www.wenjf.com</a></div>
+            <div class="f12 netaddress">官网地址：<a href="<?= defined('IN_APP') ? '/' : 'https://www.wenjf.com' ?>">www.wenjf.com</a></div>
             <div class="f12 address clearfix"><p class="lf">公司地址：</p><p class="specialp lf">温州市鹿城区飞霞南路657号保丰大楼四层</p></div>
             </dt>
             <dd class="erweima f11"><img  data-original="<?= FE_BASE_URI ?>wap/luodiye/images/erweima.png" alt=""><p>微信公众号</p></dd>
@@ -203,30 +203,38 @@ $this->share = $share;
         $('.inputphone input').on('keyup',function() {
             var num = moduleFn.clearNonum($('.inputphone input'))
         });
+
+        var allowClick = true;
         $('.phonenum a').on('click',function() {
             var e = e || window.event;
             e.preventDefault();
+
+            if (!allowClick) {
+                return;
+            }
+
+            allowClick = false;
+
             var phonenum =  $('.inputphone input').val();
             if (phonenum.length < 11) {
-                toastCenter('请输入正确的手机号');
+                toastCenter('请输入正确的手机号', function () {
+                    allowClick = true;
+                });
                 return;
             } else {
                 if (moduleFn.check.mobile(phonenum)) {
                     var xhr = $.get('/promotion/p1701/validate-mobile?mobile='+phonenum);
-                    var $this = $(this);
 
-                    $this.attr('disabled', true);
                     xhr.done(function(data) {
-                        console.log(data);
                         var toUrl = data.toUrl;
 
                         if (data.code) {
                             toastCenter(data.message, function() {
-                                $this.attr('disabled', false);
-
                                 if ('' !== toUrl) {
                                     location.href = toUrl;
                                 }
+
+                                allowClick = true;
                             });
                         } else {
                             location.href = toUrl;
@@ -235,10 +243,12 @@ $this->share = $share;
 
                     xhr.fail(function () {
                         toastCenter('系统繁忙,请稍后重试!', function() {
-                            $this.attr('disabled', false);
+                            allowClick = true;
                         });
                     })
                 } else {
+                    allowClick = true;
+
                     return false;
                 }
             }
