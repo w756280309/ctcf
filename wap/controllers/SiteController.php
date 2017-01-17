@@ -308,7 +308,7 @@ class SiteController extends Controller
                 }
 
                 $params = http_build_query($output);
-                return ['code' => 0, 'message' => '登录成功', 'tourl' => $urls['path'].(empty($params) ? '' : '?'.$params)];
+                return ['code' => 0, 'message' => '登录成功', 'tourl' => (isset($urls['path']) ? $urls['path'] : '/').(empty($params) ? '' : '?'.$params)];
             }
         }
 
