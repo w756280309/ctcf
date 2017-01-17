@@ -7,14 +7,14 @@ use yii\captcha\Captcha;
 
 ?>
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>libs/bootstrap/css/bootstrap.min.css">
-<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/base.css?v=1.4">
+<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/base.css?v=1.5">
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/comfont.css?v=1.0">
-<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/luodiye/css/register.css?v=1.2">
+<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/luodiye/css/register.css?v=20170117">
 <script  src="<?= FE_BASE_URI ?>libs/lib.flexible3.js"></script>
 <script  src="<?= FE_BASE_URI ?>libs/jquery-1.11.1.min.js"></script>
 <script  src="<?= FE_BASE_URI ?>libs/fastclick.js"></script>
 <script src="<?= ASSETS_BASE_URI ?>js/common.js"></script>
-<script src="<?= FE_BASE_URI ?>wap/luodiye/js/luodiye.js"></script>
+<script src="<?= FE_BASE_URI ?>wap/luodiye/js/luodiye.js?v=20170117"></script>
 
 <div class="container flex-content">
     <?php if (!defined('IN_APP')) { ?>
@@ -27,9 +27,9 @@ use yii\captcha\Captcha;
     <?php } ?>
 
     <div class="banner">
-        <img  src="<?= FE_BASE_URI ?>wap/luodiye/images/banner_01.png" alt="">
-        <img  src="<?= FE_BASE_URI ?>wap/luodiye/images/banner_02.png" alt="">
-        <img  src="<?= FE_BASE_URI ?>wap/luodiye/images/banner_03.png" alt="">
+        <img  src="<?= FE_BASE_URI ?>wap/luodiye/images/banner_04.png" alt="">
+        <img  src="<?= FE_BASE_URI ?>wap/luodiye/images/banner_05.png" alt="">
+        <img  src="<?= FE_BASE_URI ?>wap/luodiye/images/banner_06.png" alt="">
     </div>
 
     <div class="formcheck f15">
@@ -56,7 +56,7 @@ use yii\captcha\Captcha;
                 ?>
             </div>
             <div class="phonecode">
-                <input id="yanzhengma" type="tel" name="SignupForm[sms]" maxlength="6" placeholder="请输入短信验证码" AUTOCOMPLETE="off"><span id="yzm">获取验证码</span>
+                <input id="yanzhengma" type="tel" name="SignupForm[sms]" maxlength="6" placeholder="请输入短信验证码" AUTOCOMPLETE="off"><input type="button" value="获取验证码" id="yzm">
             </div>
             <div class="password">
                 <input id="pass" type="password" name="SignupForm[password]" maxlength="20" placeholder="请输入6到20位的密码" AUTOCOMPLETE="off">

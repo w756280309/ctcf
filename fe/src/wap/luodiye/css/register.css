@@ -68,7 +68,7 @@
 .formcheck .phonecode {
   position: relative;
 }
-.formcheck .phonecode span {
+.formcheck .phonecode #yzm {
   width: 2.53333333rem;
   height: 1.0666667rem;
   display: block;
@@ -80,6 +80,10 @@
   position: absolute;
   top: -0.10666667rem;
   right: -3.26666667rem;
+  text-indent: 0;
+  border: none;
+  outline: none;
+  padding: 0;
 }
 .formcheck .password {
   width: 100%;
@@ -187,5 +191,5 @@
 .yzm-disabled {
   color:#fabab5!important;
   background:#fff!important;
-  border:1px solid #fabab5;
+  border:1px solid #fabab5!important;
 }

@@ -77,10 +77,11 @@ function signup()
                     }
                 });
             } else if ('undefined' !== typeof data.message) {
-                toastCenter(data.message);
+                toastCenter(data.message,function(){
+                    $('#signup-btn').attr('disabled', false);
+                });
             }
         }
-        $('#signup-btn').attr('disabled', false);
     });
 
     xhr.fail(function () {
@@ -90,15 +91,6 @@ function signup()
 
 $(function () {
     FastClick.attach(document.body);
-
-    //获取上一页面传过来的phonenum
-    function getParameter(name) {
-        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
-        var r = window.location.search.substr(1).match(reg);
-        if (r != null) return unescape(r[2]);
-        return null;
-    };
-    // $('#iphone').val(getParameter('phonenum'));//页面传参放开
 
     $('.field-captchaform-captchacode').css('float', 'left');
     $('.content-picture').on('click', function () {
@@ -174,10 +166,10 @@ $(function () {
             window.clearInterval(InterValObj);//停止计时器
             $('#yzm').removeAttr('disabled');//启用按钮
             $('#yzm').removeClass('yzm-disabled');
-            $('#yzm').text('重新发送');
+            $('#yzm').val('重新发送');
         } else {
             curCount--;
-            $('#yzm').text(curCount + 's后重发');
+            $('#yzm').val(curCount + 's后重发');
         }
     }
 
@@ -186,7 +178,7 @@ $(function () {
         curCount = count;
         $('#yzm').addClass('yzm-disabled');
         $('#yzm').attr('disabled', 'true');
-        $('#yzm').text(curCount + 's后重发');
+        $('#yzm').val(curCount + 's后重发');
         InterValObj = window.setInterval(SetRemainTime, 1000); //启动计时器，1秒执行一次
     }
 });
