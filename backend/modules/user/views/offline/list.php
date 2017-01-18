@@ -38,12 +38,35 @@ $this->title = '线下会员列表';
 
         <!--search start-->
         <div class="portlet-body">
+            <form action="/user/offline/list" method="get" target="_self">
+                <table class="table search_form">
+                    <tbody>
+                    <tr>
+                        <td>
+                            <span class="title">真实姓名</span>
+                            <input type="text" name='name' value="<?= trim(Yii::$app->request->get('name')) ?>" placeholder="真实姓名" class="m-wrap span4"/>
+                        </td>
+                        <td>
+                            <span class="title">手机号码</span>
+                            <input type="text" name='mobile' value="<?= trim(Yii::$app->request->get('mobile')) ?>" placeholder="手机号" class="m-wrap span8"/>
+                        </td>
+                        <td width="50%">
+                            <div align="right" class="search-btn">
+                                <button type='submit' class="btn blue btn-block button-search">搜索
+                                    <i class="m-icon-swapright m-icon-white"></i></button>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </form>
             <table class="table table-striped table-bordered table-advance table-hover">
                 <thead>
                 <tr>
                     <th>手机号</th>
                     <th>真实姓名</th>
                     <th>证件号</th>
+                    <th>用户等级</th>
                     <th><center>操作</center></th>
                 </tr>
                 </thead>
@@ -53,6 +76,7 @@ $this->title = '线下会员列表';
                         <td><?= $user->mobile ?></td>
                         <td><a href="/user/offline/detail?id=<?= $user->id ?>"><?= $user->realName ?></a></td>
                         <td><?= StringUtils::obfsIdCardNo($user->idCard) ?></td>
+                        <td>VIP<?= $user->getLevel() ?></td>
                         <td>
                             <center>
                                 <a href="/user/offline/detail?id=<?= $user->id ?>" class="btn mini green"><i class="icon-edit"></i> 查看用户详情</a>

@@ -135,11 +135,11 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => YiiAsse
                 </tr>
                 <tr>
                     <td><strong>会员等级</strong></td>
-                    <td>VIP<?= $normalUser->level ?></td>
-                    <td>用户在兑吧ID</td>
+                    <td>VIP<?= $normalUser->getLevel() ?></td>
+                    <td><strong>用户在兑吧ID</strong></td>
                     <td><?= $normalUser->thirdPartyConnect ? $normalUser->thirdPartyConnect->publicId : '---'?></td>
-                    <td></td>
-                    <td></td>
+                    <td><strong>会员财富值</strong></td>
+                    <td><?= $normalUser->getCoins() ?></td>
                 </tr>
             </table>
 

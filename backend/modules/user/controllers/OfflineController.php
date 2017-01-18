@@ -19,7 +19,18 @@ class OfflineController extends BaseController
      */
     public function actionList()
     {
+        $attributes = Yii::$app->request->get();
+        $realName = trim($attributes['name']);
+        $mobile = trim($attributes['mobile']);
+
         $query = OfflineUser::find();
+        if ($realName) {
+            $query->andFilterWhere(['like', 'realName', $realName]);
+        }
+        if ($mobile) {
+            $query->andFilterWhere(['like', 'mobile', $mobile]);
+        }
+
         $pages = new Pagination([
             'totalCount' => $query->count(),
             'pageSize' => 15,
