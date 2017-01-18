@@ -12,12 +12,12 @@ use common\models\offline\OfflineStats;
 use common\models\offline\OfflinePointManager;
 use common\models\offline\OfflineUser;
 use common\filters\MyReadFilter;
+use common\models\offline\OfflineUserManager;
 use Yii;
 use yii\data\Pagination;
 use PHPExcel_Reader_Excel2007;
 use PHPExcel_Reader_Excel5;
 use common\models\mall\PointRecord;
-use common\models\user\CoinsRecord;
 
 class OfflineController extends BaseController
 {
@@ -63,10 +63,10 @@ class OfflineController extends BaseController
                         $neworder = $this->initModel($order);
                         if ($neworder->validate()) {
                             $neworder->save();
-                            //更新积分和累计年化投资额
-                            $pointManager = new OfflinePointManager();
-                            $pointManager->updatePoints($neworder, PointRecord::TYPE_OFFLINE_BUY_ORDER);
-                            $this->updateAnnualInvestment($neworder, PointRecord::TYPE_OFFLINE_BUY_ORDER);
+                            if ($neworder->valueDate) {
+                                //更新积分和累计年化投资额
+                                $this->updatePointsAndAnnual($neworder, PointRecord::TYPE_OFFLINE_BUY_ORDER);
+                            }
                         } else {
                             $error_index = $key + 1;
                             if ($neworder->hasErrors('affiliator_id')) {
@@ -242,9 +242,8 @@ class OfflineController extends BaseController
                 //修改标的修改记录
                 $log = AdminLog::initNew($order);
                 if ($order->save() && $log->save(false)) {
-                    $pointManager = new OfflinePointManager();
-                    $pointManager->updatePoints($order, PointRecord::TYPE_OFFLINE_ORDER_DELETE);
-                    $this->updateAnnualInvestment($order, PointRecord::TYPE_OFFLINE_ORDER_DELETE);
+                    //更新积分和累计年化投资额
+                    $this->updatePointsAndAnnual($order, PointRecord::TYPE_OFFLINE_ORDER_DELETE);
                     $transaction->commit();
                     return ['code' => 1, 'message' => '删除成功'];
                 }
@@ -293,30 +292,50 @@ class OfflineController extends BaseController
     }
 
     /**
-     * 根据订单和类型更新累计年化收益额同时记录财富值流水
+     * 确认起息日
      */
-    private function updateAnnualInvestment(OfflineOrder $order, $type)
+    public function actionConfirm($id)
     {
-        $originalCoins = $order->user->coins;
-        $annualInvestment = $type === PointRecord::TYPE_OFFLINE_ORDER_DELETE ? 0 - $order->annualInvestment : $order->annualInvestment;
-        $res = Yii::$app->db->createCommand('update offline_user set annualInvestment = annualInvestment + '.$annualInvestment.' where id = '.$order->user->id)->execute();
-
-        if ($res) {
-            $user = OfflineUser::findOne($order->user->id);
-            $currentCoins = $user->coins;
-
-            if ($originalCoins !== $currentCoins) {
-                $coins = new CoinsRecord([
-                    'user_id' => $order->user->id,
-                    'order_id' => $order->id,
-                    'incrCoins' => bcsub($currentCoins, $originalCoins, 0),
-                    'finalCoins' => $currentCoins,
-                    'createTime' => date('Y-m-d H:i:s'),
-                    'isOffline' => true,
-                ]);
-
-                $coins->save();
+        $this->layout = false;
+        $refresh = false;
+        if (empty($id) || null === ($model = OfflineOrder::findOne($id))) {
+            throw $this->ex404();
+        }
+        if (!empty($model->valueDate)) {
+            $model->addError('valueDate', '已有起息日期，不能再次确认');
+        }
+        if ($model->isDeleted) {
+            $model->addError('valueDate', '该条线下订单已删除');
+        }
+        $model->scenario = 'confirm';
+        if ($model->load(Yii::$app->request->post())) {
+            if (empty($model->valueDate)) {
+                $model->addError('valueDate', '起息日期不能为空');
+            }
+            if (empty($model->getErrors())) {
+                $transaction = Yii::$app->db->beginTransaction();
+                try {
+                    $model->save();
+                    $refresh = true;
+                    $this->updatePointsAndAnnual($model, PointRecord::TYPE_OFFLINE_BUY_ORDER);
+                    $transaction->commit();
+                } catch (\Exception $ex) {
+                    $transaction->rollBack();
+                }
             }
         }
+
+        return $this->render('jixi', ['model' => $model, 'refresh' => $refresh]);
+    }
+
+    /**
+     * 根据订单和类型更新积分和累计年化投资
+     */
+    private function updatePointsAndAnnual($order, $type)
+    {
+        $pointManager = new OfflinePointManager();
+        $pointManager->updatePoints($order, $type);
+        $offlineUserManager = new OfflineUserManager();
+        $offlineUserManager->updateAnnualInvestment($order);
     }
 }

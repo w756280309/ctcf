@@ -2,6 +2,8 @@
 
 namespace common\models\mall;
 
+use common\models\offline\OfflineUser;
+use common\utils\TxUtils;
 use Yii;
 use yii\db\ActiveRecord;
 
@@ -110,5 +112,24 @@ class PointRecord extends ActiveRecord
             self::TYPE_OFFLINE_POINT_ORDER,
             self::TYPE_OFFLINE_ORDER_DELETE,
         ];
+    }
+
+    /**
+     * 根据订单对象初始化线下积分订单
+     */
+    public static function initOfflineRecord($order, $type)
+    {
+        $user = $order instanceof PointOrder ? OfflineUser::findOne($order->user_id) : $order->user;
+        return new self([
+            'sn' => TxUtils::generateSn('OFF'),
+            'user_id' => $order->user_id,
+            'ref_type' => $type,
+            'ref_id' => $order->id,
+            'final_points' => $user->points,
+            'recordTime' => date('Y-m-d H:i:s'),
+            'isOffline' => true,
+            'offGoodsName' => isset($order->offGoodsName) ? $order->offGoodsName : $order->loan->title,
+            'userLevel' => $user->level,
+        ]);
     }
 }

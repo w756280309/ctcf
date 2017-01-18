@@ -3,7 +3,6 @@
 namespace common\models\offline;
 
 use common\models\mall\PointRecord;
-use common\utils\TxUtils;
 
 class OfflinePointManager
 {
@@ -16,7 +15,7 @@ class OfflinePointManager
      */
     public function updatePoints($order, $type)
     {
-        $user = OfflineUser::findOne($order->user_id);
+        $user = $order->user;
         $record = PointRecord::find()->where([
             'user_id' => $user->id,
             'ref_type' => $type,
@@ -24,32 +23,13 @@ class OfflinePointManager
             'isOffline' => true,
         ])->one();
         if (empty($record)) {
-            if ($type === PointRecord::TYPE_OFFLINE_POINT_ORDER) {
-                $points = $order->points;
-            } else {
-                $points = max(1, ceil(bcdiv(bcmul($order->annualInvestment, 6, 14), 1000, 2)));
-            }
-            if (in_array($type, PointRecord::getDecrType())) {
-                $points = 0 - $points;
-            }
-            $level = $order->user->level;
+            $points = $this->getOrderPoints($order, $type);
             $res = \Yii::$app->db->createCommand("UPDATE `offline_user` SET `points` = `points` + :points WHERE `id` = :userId", ['points' => $points, 'userId' => $user->id])->execute();
             if (!$res) {
                 throw new \Exception('积分更新失败');
             }
             $user->refresh();
-            $finalPoints = $user->points;
-            $record = new PointRecord([
-                'sn' => TxUtils::generateSn('OFF'),
-                'user_id' => $user->id,
-                'ref_type' => $type,
-                'ref_id' => $order->id,
-                'final_points' => $finalPoints,
-                'recordTime' => date('Y-m-d H:i:s'),
-                'userLevel' => $level,
-                'isOffline' => true,
-                'offGoodsName' => isset($order->offGoodsName) ? $order->offGoodsName : $order->loan->title,
-            ]);
+            $record = PointRecord::initOfflineRecord($order, $type);
             if ($points > 0) {
                 $record->incr_points = $points;
             } else {
@@ -60,5 +40,27 @@ class OfflinePointManager
                 throw new \Exception('积分流水更新失败');
             }
         }
+    }
+
+    /**
+     * 根据订单对象和对应的积分流水类型获得该笔订单的积分
+     *
+     * @param  order  $order 订单
+     * @param  string $type  积分流水类型
+     *
+     * @return int    订单积分
+     */
+    private function getOrderPoints($order, $type)
+    {
+        if ($type === PointRecord::TYPE_OFFLINE_POINT_ORDER) {
+            $points = $order->points;
+        } else {
+            $points = max(1, ceil(bcdiv(bcmul($order->annualInvestment, 6, 14), 1000, 2)));
+        }
+        if (in_array($type, PointRecord::getDecrType())) {
+            $points = 0 - $points;
+        }
+
+        return (int) $points;
     }
 }

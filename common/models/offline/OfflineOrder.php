@@ -7,10 +7,18 @@ use common\models\affiliation\Affiliator;
 
 class OfflineOrder extends ActiveRecord
 {
+    public function scenarios()
+    {
+        return [
+            'confirm' => ['valueDate'],
+            'default' => ['affiliator_id', 'loan_id', 'realName', 'mobile', 'money', 'orderDate', 'created_at', 'user_id', 'idCard', 'accBankName', 'bankCardNo'],
+        ];
+    }
+
     public function rules()
     {
         return [
-            [['affiliator_id', 'loan_id', 'realName', 'mobile', 'money', 'orderDate', 'created_at', 'user_id', 'idCard', 'accBankName', 'bankCardNo', 'valueDate'], 'required'],
+            [['affiliator_id', 'loan_id', 'realName', 'mobile', 'money', 'orderDate', 'created_at', 'user_id', 'idCard', 'accBankName', 'bankCardNo'], 'required'],
             [['user_id', 'affiliator_id', 'loan_id', 'created_at'], 'integer'],
             ['realName', 'string', 'max' => 50],
             ['mobile', 'string', 'max' => 20],

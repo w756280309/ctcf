@@ -117,7 +117,7 @@ $bid = (int)Yii::$app->request->get('bid');
                             <?= $order->loan->expires . $order->loan->unit ?>
                         </td>
                         <td>
-                            <?= $order->realName ?>
+                            <a href="/user/offline/detail?id=<?= $order->user->id ?>"><?= $order->realName ?></a>
                         </td>
                         <td>
                             <?= $order->idCard ?>
@@ -138,12 +138,19 @@ $bid = (int)Yii::$app->request->get('bid');
                             <?= $order->orderDate ?>
                         </td>
                         <td>
-                            <?= $order->valueDate ?>
+                            <?= null === $order->valueDate ? '--' : $order->valueDate ?>
                         </td>
-                        <td width="7%">
+                        <td width="10%">
+                            <?php if (null === $order->valueDate) { ?>
+                                <a href="javascript:void(0)" onclick="openwin('/offline/offline/confirm?id=<?= $order->id ?>', 500, 300)" class="btn mini green">
+                                    <i class="icon-minus-sign"></i>确认起息日
+                                </a>
+                                <br />
+                            <?php } ?>
                             <a href="javascript:del('/offline/offline/delete','<?= $order->id ?>')" class="btn mini red ajax_op">
                                 <i class="icon-minus-sign"></i>删除
                             </a>
+
                         </td>
                     </tr>
                 <?php endforeach; ?>

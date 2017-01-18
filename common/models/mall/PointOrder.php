@@ -2,6 +2,7 @@
 
 namespace common\models\mall;
 
+use common\models\offline\OfflineUser;
 use common\models\user\User;
 use Yii;
 use yii\behaviors\TimestampBehavior;
@@ -86,6 +87,7 @@ class PointOrder extends \yii\db\ActiveRecord
 
     public function getUser()
     {
-        return $this->hasOne(User::className(), ['id' => 'user_id']);
+        $class = $this->isOffline ? OfflineUser::className() : User::className();
+        return $this->hasOne($class, ['id' => 'user_id']);
     }
 }
