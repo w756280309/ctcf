@@ -12,6 +12,9 @@ $this->title = '商品列表';
         <div class="span12">
             <h3 class="page-title">
                 兑换码管理 <small>运营模块</small>
+                <a href="/growth/code/add" id="sample_editable_1_new" class="btn green" style="float: right;">
+                    添加兑换码 <i class="icon-plus"></i>
+                </a>
             </h3>
             <ul class="breadcrumb">
                 <li>
@@ -28,14 +31,29 @@ $this->title = '商品列表';
                 </li>
             </ul>
         </div>
+        <!--search start-->
         <div class="portlet-body">
-            <table class="table">
-                <tbody>
-                    <tr>
-                        <td colspan="4" style="text-align: right;"><a href="/growth/code/add" class="btn blue" style="width: 100px;">添加兑换码</a></td>
-                    </tr>
-                </tbody>
-            </table>
+            <form action="/growth/code/list" method="get" target="_self">
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <td><span class="title">兑换码</span></td>
+                            <td>
+                                <input type="text" class="m-wrap" style="margin-bottom: 0px" id="title" name='code'
+                                       value="" placeholder="请输入兑换码"/>
+                            </td>
+                            <td>
+                                <div class="search-btn" align="right">
+                                    <button type='submit' class="btn blue btn-block button-search">搜索 <i class="m-icon-swapright m-icon-white"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </form>
+        </div>
+        <!--search end -->
+        <div class="portlet-body">
             <table class="table table-striped table-bordered table-advance table-hover">
                 <thead>
                 <tr>

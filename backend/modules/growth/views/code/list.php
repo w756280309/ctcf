@@ -28,6 +28,36 @@ $this->title = '兑换码列表';
                 </li>
             </ul>
         </div>
+        <!--search start-->
+        <div class="portlet-body">
+            <form action="/growth/code/list" method="get" target="_self">
+                <table class="table">
+                    <tbody>
+                    <tr>
+                        <td><span class="title">兑换码</span></td>
+                        <td>
+                            <input type="text" class="m-wrap" style="margin-bottom: 0px" id="title" name='code'
+                                   value="" placeholder="请输入兑换码"/>
+                        </td>
+                        <td>
+                            <div class="search-btn" align="right">
+                                <button type='submit' class="btn blue btn-block button-search">搜索 <i class="m-icon-swapright m-icon-white"></i></button>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </form>
+        </div>
+        <!--search end -->
+        <div class="portlet-body">
+            <table class="table table-condensed">
+                <tr>
+                    <td><strong>商品名称</strong></td>
+                    <td><?= $goods->name ?></td>
+                </tr>
+            </table>
+        </div>
         <div class="portlet-body">
             <table class="table table-striped table-bordered table-advance table-hover">
                 <thead>

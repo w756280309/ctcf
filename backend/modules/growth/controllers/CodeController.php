@@ -124,13 +124,19 @@ class CodeController extends BaseController
     /**
      * 查看兑换码列表
      */
-    public function actionList($sn)
+    public function actionList($sn = '', $code = '')
     {
-        $query = Code::find()->where(['goodsType_sn' => $sn])->orderBy(['isUsed' => SORT_ASC]);
+        //页面的搜索功能
+        if (empty($sn) && empty($code)) {
+            echo "<script>alert('请输入兑换码!');location.href='/growth/code/goods-list';</script>";exit;
+        }
+        $query = Code::find()->where($code ? ['code' => $code] : ['goodsType_sn' => $sn])->orderBy(['isUsed' => SORT_ASC]);
+        $sn = $code ? Code::findOne(['code' => $code])->goodsType_sn : $sn;
         $pages = new Pagination(['totalCount' => $query->count(), 'pageSize' => '10']);
         $model = $query->offset($pages->offset)->limit($pages->limit)->all();
+        $goods = GoodsType::findOne(['sn' => $sn]);
 
-        return $this->render('list', ['model' => $model, 'pages' => $pages]);
+        return $this->render('list', ['model' => $model, 'pages' => $pages,'goods' => $goods]);
     }
 
     /**
