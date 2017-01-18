@@ -4,6 +4,7 @@ namespace backend\modules\user\controllers;
 
 use backend\controllers\BaseController;
 use common\lib\user\UserStats;
+use common\models\adminuser\AdminLog;
 use common\models\affiliation\UserAffiliation;
 use common\models\bank\Bank;
 use common\models\epay\EpayUser;
@@ -245,12 +246,21 @@ class UserController extends BaseController
         if (!empty($promo)) {
             $promoModel = new $promo->promoClass($promo);
             $firstOrder = OnlineOrder::find()->where(['uid' => $user->id, 'status' => OnlineOrder::STATUS_SUCCESS])->andWhere(['>=', 'order_time', strtotime($promo->startTime)])->andWhere(['<=', 'order_time', strtotime($promo->endTime)])->orderBy(['order_time' => SORT_ASC])->one();
-            if (!empty($firstOrder)) {
+            if (!is_null($firstOrder)) {
                 try {
-                    if ($promo->isActive($user, $firstOrder->order_time) && !$promoModel->hasAwarded($user)) {
+                    $loan = $firstOrder->loan;
+                    if (
+                        !is_null($loan)
+                        && $loan->is_jixi
+                        && $promo->isActive($user, $firstOrder->order_time)
+                        && !$promoModel->hasAwarded($user)
+                    ) {
                         if ($promoModel->addUserPoints($firstOrder)) {
                             $success = true;
                             $message = '用户首投积分赠送成功';
+                            $user->refresh();
+                            $log = AdminLog::initNew(['tableName' => 'user', 'primaryKey' => $user->id], Yii::$app->user, ['points' => $user->points]);
+                            $log->save();
                         }
                     }
                 } catch (\Exception $ex) {
@@ -514,9 +524,15 @@ IN (" . implode(',', $recordIds) . ")")->queryAll();
         if (!empty($promo)) {
             $promoModel = new $promo->promoClass($promo);
             $firstOrder = OnlineOrder::find()->where(['uid' => $user->id, 'status' => OnlineOrder::STATUS_SUCCESS])->andWhere(['>=', 'order_time', strtotime($promo->startTime)])->andWhere(['<=', 'order_time', strtotime($promo->endTime)])->orderBy(['order_time' => SORT_ASC])->one();
-            if (!empty($firstOrder)) {
+            if (!is_null($firstOrder)) {
                 try {
-                    if ($promo->isActive($user, $firstOrder->order_time) && !$promoModel->hasAwarded($user)) {
+                    $loan = $firstOrder->loan;
+                    if (
+                        !is_null($loan)
+                        && $loan->is_jixi
+                        && $promo->isActive($user, $firstOrder->order_time)
+                        && !$promoModel->hasAwarded($user)
+                    ) {
                         $needAddPoints = true;
                     }
                 } catch (\Exception $ex) {

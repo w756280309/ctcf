@@ -62,7 +62,7 @@ class FirstOrderPoints
             'user_id' => $user->id,
             'ref_type' => PointRecord::TYPE_FIRST_LOAN_ORDER_POINTS_1,//首次投资送积分
         ]);
-        return $record ? true : false;
+        return !is_null($record);
     }
 
     //根据用户首次投资订单给用户送积分
