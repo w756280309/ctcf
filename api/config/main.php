@@ -74,6 +74,8 @@ return [
                 'notify/mall/result' => 'v1/notify/mall/result',//积分商城通知回调接口
 
                 'app/splashes' => 'v1/app/splash/show',//app闪屏页查询接口
+
+                'go/<key>' => 'source/referral-link/go',//分销商链接地址转跳
             ],
         ],
     ],
@@ -81,6 +83,9 @@ return [
         'v1' => [
             'class' => 'api\\modules\\v1\\Module',
         ],
+        'source' => [
+            'class' => 'Wcg\\Growth\\Integration\\Yii2Module\\Module',
+        ]
     ],
     'params' => $params,
     'language' => 'zh-CN',
