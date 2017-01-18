@@ -128,7 +128,7 @@ class CodeController extends BaseController
     {
         //页面的搜索功能
         if (empty($sn) && empty($code)) {
-            echo "<script>alert('请输入兑换码!');location.href='/growth/code/goods-list';</script>";exit;
+            throw $this->ex404();
         }
         $query = Code::find()->where($code ? ['code' => $code] : ['goodsType_sn' => $sn])->orderBy(['isUsed' => SORT_ASC]);
         $sn = $code ? Code::findOne(['code' => $code])->goodsType_sn : $sn;

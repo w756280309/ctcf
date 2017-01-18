@@ -87,4 +87,14 @@ $this->title = '商品列表';
         </div>
     </div>
 </div>
+    <script>
+        $(function() {
+            $('.search-btn').bind('click', function () {
+                if ('' === $('#title').val()) {
+                    layer.msg('请填写兑换码', {icon: 2});
+                    return false;
+                }
+            });
+        });
+    </script>
 <?php $this->endBlock(); ?>
