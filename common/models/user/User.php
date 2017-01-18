@@ -828,4 +828,17 @@ class User extends ActiveRecord implements IdentityInterface, UserInterface
             throw new \Exception($ex->getMessage(), $ex->getCode());
         }
     }
+
+    /**
+     * 获得线上投资榜单的前$limit名的用户信息(投资开始日期到现在)
+     *
+     * @param  string $startDate 投资开始日期
+     * @param  int    $limit     条数
+     *
+     * @return array
+     */
+    public static function getTopList($startDate, $limit = 5)
+    {
+        return \Yii::$container->get('txClient')->get('user/top-list', ['startDate' => $startDate, 'limit' => $limit]);
+    }
 }

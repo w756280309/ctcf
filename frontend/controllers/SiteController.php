@@ -8,6 +8,7 @@ use common\models\category\ItemCategory;
 use common\models\category\Category;
 use common\models\log\LoginLog;
 use common\models\news\News;
+use common\models\offline\OfflineUser;
 use common\models\product\OnlineProduct;
 use common\models\user\CaptchaForm;
 use common\models\user\LoginForm;
@@ -17,6 +18,7 @@ use common\service\LoginService;
 use common\service\SmsService;
 use wap\modules\promotion\models\RankingPromo;
 use Yii;
+use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
@@ -148,10 +150,11 @@ class SiteController extends Controller
         $key = 'topList';
 
         if (!$cache->get($key)) {
-            $rank = new RankingPromo(['startTime' => '2015-1-1']);
-            $topList = $rank->getOnline();
-
-            $cache->set($key, $topList, 600);   //缓存十分钟
+            $RankOnline = User::getTopList('2016-04-19');
+            $RankOffline = OfflineUser::getTopList();
+            $topList = ArrayHelper::merge($RankOnline, $RankOffline);
+            ArrayHelper::multisort($topList, 'totalInvest', SORT_DESC);
+            $cache->set($key, array_slice($topList, 0, 5), 600);   //缓存十分钟
         }
 
         $this->layout = false;
