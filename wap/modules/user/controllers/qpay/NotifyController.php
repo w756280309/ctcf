@@ -2,14 +2,15 @@
 
 namespace app\modules\user\controllers\qpay;
 
-use common\models\user\User;
 use Ding\DingNotify;
+use common\models\TradeLog;
+use common\models\user\QpayBinding;
+use common\models\user\User;
+use common\models\user\UserBanks;
 use Yii;
 use yii\web\Controller;
-use common\models\user\QpayBinding;
-use common\models\user\UserBanks;
 use yii\helpers\ArrayHelper;
-use common\models\TradeLog;
+use yii\web\NotFoundHttpException;
 
 /**
  * 绑卡回调控制器4.2
@@ -26,35 +27,40 @@ class NotifyController extends Controller
     public function actionFrontend()
     {
         $data = Yii::$app->request->get();
+        $isSuccess = false;
+
         if (array_key_exists('token', $data)) {
             unset($data['token']);
         }
+
         TradeLog::initLog(2, $data, $data['sign'])->save();
+
         $bind = QpayBinding::findOne(['binding_sn' => $data['order_id']]);
+
+        if (null === $bind) {
+            throw new NotFoundHttpException($data['order_id'].':无法找到申请数据');
+        }
+
         if (Yii::$container->get('ump')->verifySign($data) && '0000' === $data['ret_code']) {
-            if (null !== $bind) {
-                if (QpayBinding::STATUS_INIT === (int)$bind->status) {
-                    $bind->status = QpayBinding::STATUS_ACK;//处理中
-                    if ($bind->save(false)) {
-                        return $this->redirect('/user/userbank/accept?ret=success');
-                    } else {
-                        return $this->redirect('/user/userbank/accept');
-                    }
-                } else if(QpayBinding::STATUS_ACK === (int)$bind->status) {
-                    return $this->redirect('/user/userbank/accept?ret=success');
-                } else {
-                    return $this->redirect('/user/userbank/accept');
-                }
-            } else {
-                throw new \yii\web\NotFoundHttpException($data['order_id'] . ':无法找到申请数据');
+            switch ($bind->status) {
+                case QpayBinding::STATUS_INIT :
+                    $bind->status = QpayBinding::STATUS_ACK;    //处理中
+                    $isSuccess = $bind->save(false);
+                    break;
+                case QpayBinding::STATUS_ACK :
+                case QpayBinding::STATUS_SUCCESS :
+                    $isSuccess = true;
+                    break;
             }
         } else {
             $user = User::findOne($bind->uid);
-            if (!empty($user)) {
-                (new DingNotify('wdjf'))->sendToUsers('用户[' . $user->mobile . ']，于' . date('Y-m-d H:i:s') . ' 进行绑卡操作，操作失败，联动绑卡失败，失败信息:' . $data['ret_msg']);
+            if (null !== $user) {
+                (new DingNotify('wdjf'))->sendToUsers('用户['.$user->mobile.']，于'.date('Y-m-d H:i:s').' 进行绑卡操作，操作失败，联动绑卡失败，失败信息:'.$data['ret_msg']);
             }
-            return $this->redirect('/user/userbank/accept');
         }
+
+        $toUrl = $isSuccess ? '/user/userbank/accept?ret=success' : '/user/userbank/accept';
+        return $this->redirect($toUrl);
     }
 
     /**
@@ -90,7 +96,7 @@ class NotifyController extends Controller
                     $bind->save(false);
                     $err = '0000';
                 }
-                
+
                 $content = Yii::$container->get('ump')->buildQuery([
                     'order_id' => $data['order_id'],
                     'mer_date' => $data['mer_date'],
@@ -102,7 +108,7 @@ class NotifyController extends Controller
                 throw new \Exception('无法找到记录');
             }
         }
-        
+
     }
 
     public static function processing(QpayBinding $bind)
@@ -110,7 +116,7 @@ class NotifyController extends Controller
         if(QpayBinding::STATUS_SUCCESS === (int)$bind->status || QpayBinding::STATUS_FAIL === (int)$bind->status) {
             return true;
         }
-        
+
         if (null === UserBanks::findOne(['binding_sn' => $bind->binding_sn])) {
             $bind->status = QpayBinding::STATUS_SUCCESS;
             $data = ArrayHelper::toArray($bind);
