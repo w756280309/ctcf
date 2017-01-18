@@ -81,13 +81,14 @@ class PointRecord extends ActiveRecord
     /**
      * 获得积分流水类型名称
      *
-     * @return array
+     * @return string
      */
     public static function getTypeName($type)
     {
         $name = [
             self::TYPE_LOAN_ORDER => '购买标的',
             self::TYPE_POINT_ORDER => '积分兑换',
+            self::TYPE_FIRST_LOAN_ORDER_POINTS_1 => '首投奖励',
             self::TYPE_POINT_ORDER_FAIL => '积分订单失败退款',
             self::TYPE_OFFLINE_BUY_ORDER => '线下购买标的',
             self::TYPE_OFFLINE_POINT_ORDER => '线下积分兑换',

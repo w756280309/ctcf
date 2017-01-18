@@ -34,7 +34,7 @@ use yii\grid\GridView;
             [
                 'label' => '项目名称',
                 'value' => function($data) use ($orders) {
-                    return PointRecord::TYPE_LOAN_ORDER === $data->ref_type && isset($orders[$data->ref_id]) ? $orders[$data->ref_id]->loan->title : '---';
+                    return  in_array($data->ref_type, [PointRecord::TYPE_LOAN_ORDER, PointRecord::TYPE_FIRST_LOAN_ORDER_POINTS_1])  && isset($orders[$data->ref_id]) ? $orders[$data->ref_id]->loan->title : '---';
                 }
             ],
             [

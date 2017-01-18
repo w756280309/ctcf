@@ -75,7 +75,7 @@ class UserController extends BaseController
         $orders = [];
 
         foreach ($dataProvider->models as $model) {
-            if (PointRecord::TYPE_LOAN_ORDER === $model->ref_type) {
+            if (in_array($model->ref_type, [PointRecord::TYPE_LOAN_ORDER, PointRecord::TYPE_FIRST_LOAN_ORDER_POINTS_1])) {
                 $orderIds[] = $model->ref_id;
             }
         }
