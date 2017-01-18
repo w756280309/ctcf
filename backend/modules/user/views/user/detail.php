@@ -218,23 +218,26 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => YiiAsse
     //补发首投积分，春节活动，活动之后删除代码
     $('#add_user_points').click(function () {
         var _this = $(this);
-        _this.attr('disabled', true);
-        var request = $.ajax({
-            url: '/user/user/detail?id=<?= $normalUser->id?>&key=add_points',
-            method: 'POST'
-        });
-        request.done(function (data) {
-            if (data.success) {
-                alert(data.message);
-                location.reload();
-            } else {
-                alert(data.message);
+        var r = confirm("是否给此用户(<?= $normalUser->mobile?>)补发首次投资积分？");
+        if (r) {
+            _this.attr('disabled', true);
+            var request = $.ajax({
+                url: '/user/user/detail?id=<?= $normalUser->id?>&key=add_points',
+                method: 'POST'
+            });
+            request.done(function (data) {
+                if (data.success) {
+                    alert(data.message);
+                    location.reload();
+                } else {
+                    alert(data.message);
+                    _this.removeAttr('disabled');
+                }
+            });
+            request.fail(function () {
                 _this.removeAttr('disabled');
-            }
-        });
-        request.fail(function () {
-            _this.removeAttr('disabled');
-        })
+            })
+        }
     });
 
 

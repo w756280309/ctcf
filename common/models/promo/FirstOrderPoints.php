@@ -29,30 +29,48 @@ class FirstOrderPoints
         if ($loan->is_jixi) {
             $orders = OnlineOrder::find()->where(['online_pid' => $loan->id, 'status' => OnlineOrder::STATUS_SUCCESS])->all();
             foreach ($orders as $order) {
-                try {
-                    $this->addUserPointsWithLoanOrder($order);
-                } catch (NotActivePromoException $ex) {
+                if ($this->canSendPoint($order)) {
+                    $this->addUserPoints($order);
                 }
             }
         }
     }
 
-    private function addUserPointsWithLoanOrder(OnlineOrder $order)
+    /**
+     * 判断是否可以给用户发首投积分
+     * @param OnlineOrder $order
+     * @return bool
+     */
+    public function canSendPoint(OnlineOrder $order)
     {
-        $user = $order->user;
-        if ($order->status === OnlineOrder::STATUS_SUCCESS && $this->promo->isActive($user, $order->order_time)) {
-            //活动前没有投资
-            $orderCount = OnlineOrder::find()->where(['uid' => $user->id, 'status' => OnlineOrder::STATUS_SUCCESS])->andWhere(['<', 'order_time', strtotime($this->promo->startTime)])->count();
-            if ($orderCount > 0) {
-                return;
+        try {
+            $user = $order->user;
+            $loan = $order->loan;
+            if (
+                $order->status === OnlineOrder::STATUS_SUCCESS
+                && !is_null($loan)
+                && $loan->is_jixi
+                && $this->promo->isActive($user, $order->order_time)
+            ) {
+                //活动前没有投资
+                $oldOrder = OnlineOrder::find()->where(['uid' => $user->id, 'status' => OnlineOrder::STATUS_SUCCESS])->andWhere(['<', 'order_time', strtotime($this->promo->startTime)])->one();
+                if (!is_null($oldOrder)) {
+                    return false;
+                }
+                //活动期间首次投资
+                $firstOrder = OnlineOrder::find()->where(['uid' => $user->id, 'status' => OnlineOrder::STATUS_SUCCESS])->andWhere(['>=', 'order_time', strtotime($this->promo->startTime)])->andWhere(['<=', 'order_time', strtotime($this->promo->endTime)])->orderBy(['order_time' => SORT_ASC])->one();
+                if (is_null($firstOrder) || $firstOrder->id !== $order->id) {
+                    return false;
+                }
+
+                if ($this->hasAwarded($user)) {
+                    return false;
+                }
+                return true;
             }
-            //活动期间首次投资
-            $firstOrder = OnlineOrder::find()->where(['uid' => $user->id, 'status' => OnlineOrder::STATUS_SUCCESS])->andWhere(['>=', 'order_time', strtotime($this->promo->startTime)])->andWhere(['<=', 'order_time', strtotime($this->promo->endTime)])->orderBy(['order_time' => SORT_ASC])->one();
-            if (empty($firstOrder) || $firstOrder->id !== $order->id) {
-                return;
-            }
-            $this->addUserPoints($order);
+        } catch (\Exception $ex) {
         }
+        return false;
     }
 
     //判断用户是否已经发过首投积分

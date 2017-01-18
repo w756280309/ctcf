@@ -243,29 +243,19 @@ class UserController extends BaseController
         $promo = RankingPromo::findOne(['key' => 'first_order_point']);
         $success = false;
         $message = '不满足条件';
-        if (!empty($promo)) {
+        if (!is_null($promo)) {
             $promoModel = new $promo->promoClass($promo);
             $firstOrder = OnlineOrder::find()->where(['uid' => $user->id, 'status' => OnlineOrder::STATUS_SUCCESS])->andWhere(['>=', 'order_time', strtotime($promo->startTime)])->andWhere(['<=', 'order_time', strtotime($promo->endTime)])->orderBy(['order_time' => SORT_ASC])->one();
-            if (!is_null($firstOrder)) {
-                try {
-                    $loan = $firstOrder->loan;
-                    if (
-                        !is_null($loan)
-                        && $loan->is_jixi
-                        && $promo->isActive($user, $firstOrder->order_time)
-                        && !$promoModel->hasAwarded($user)
-                    ) {
-                        if ($promoModel->addUserPoints($firstOrder)) {
-                            $success = true;
-                            $message = '用户首投积分赠送成功';
-                            $user->refresh();
-                            $log = AdminLog::initNew(['tableName' => 'user', 'primaryKey' => $user->id], Yii::$app->user, ['points' => $user->points]);
-                            $log->save();
-                        }
-                    }
-                } catch (\Exception $ex) {
-                    $message = $ex->getMessage();
-                }
+            if (
+                !is_null($firstOrder)
+                && $promoModel->canSendPoint($firstOrder)
+                && $promoModel->addUserPoints($firstOrder)
+            ) {
+                $success = true;
+                $message = '用户首投积分赠送成功';
+                $user->refresh();
+                $log = AdminLog::initNew(['tableName' => 'user', 'primaryKey' => $user->id], Yii::$app->user, ['points' => $user->points]);
+                $log->save();
             }
         }
         return [
@@ -521,23 +511,14 @@ IN (" . implode(',', $recordIds) . ")")->queryAll();
         //补发首投积分，春节活动，活动之后删除代码
         $needAddPoints = false;
         $promo = RankingPromo::findOne(['key' => 'first_order_point']);
-        if (!empty($promo)) {
+        if (!is_null($promo)) {
             $promoModel = new $promo->promoClass($promo);
             $firstOrder = OnlineOrder::find()->where(['uid' => $user->id, 'status' => OnlineOrder::STATUS_SUCCESS])->andWhere(['>=', 'order_time', strtotime($promo->startTime)])->andWhere(['<=', 'order_time', strtotime($promo->endTime)])->orderBy(['order_time' => SORT_ASC])->one();
-            if (!is_null($firstOrder)) {
-                try {
-                    $loan = $firstOrder->loan;
-                    if (
-                        !is_null($loan)
-                        && $loan->is_jixi
-                        && $promo->isActive($user, $firstOrder->order_time)
-                        && !$promoModel->hasAwarded($user)
-                    ) {
-                        $needAddPoints = true;
-                    }
-                } catch (\Exception $ex) {
-
-                }
+            if (
+                !is_null($firstOrder)
+                && $promoModel->canSendPoint($firstOrder)
+            ) {
+                $needAddPoints = true;
             }
         }
 
