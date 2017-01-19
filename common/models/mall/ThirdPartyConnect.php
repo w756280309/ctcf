@@ -31,6 +31,38 @@ class ThirdPartyConnect extends ActiveRecord
         ];
     }
 
+
+    /**
+     * 获取兑吧免密登录地址
+     * @param string $dbredirect 兑吧商城内部地址（兑吧默认参数名）
+     * @param bool $allowGuest 是否允许游客访问
+     * @return string
+     */
+    public static function generateLoginUrl($dbredirect = '', $allowGuest = false)
+    {
+        $user = \Yii::$app->user->identity;
+        if (!is_null($user)) {
+            $thirdPartyConnect = self::findOne(['user_id' => $user->getId()]);
+            if (is_null($thirdPartyConnect)) {
+                $thirdPartyConnect = self::initnew($user);
+                $thirdPartyConnect->save();
+            }
+        } else {
+            if (!$allowGuest) {
+                return '/site/login';
+            }
+        }
+
+        $url = ThirdPartyConnect::buildCreditAutoLoginRequest(
+            \Yii::$app->params['mall_settings']['app_key'],
+            \Yii::$app->params['mall_settings']['app_secret'],
+            empty($thirdPartyConnect) ? 'not_login' : $thirdPartyConnect->publicId,
+            is_null($user) ? 0 : $user->points,
+            urldecode($dbredirect)
+        );
+        return $url;
+    }
+
     public static function initNew(User $user)
     {
         $model = new ThirdPartyConnect();
