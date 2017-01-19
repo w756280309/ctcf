@@ -9,8 +9,6 @@ use yii\web\Request;
  * 自定义Request对象
  * Class WebRequest
  * @package common\components
- * @property bool $fromApp          判断请求是否来自App
- * @property bool $fromOutSite      是否从站外地址进入网站
  */
 class WebRequest extends Request
 {
@@ -19,7 +17,7 @@ class WebRequest extends Request
      * 判断是否从站外地址跳到本站
      * @return bool
      */
-    public function getFromOutSite()
+    public function isFromOutSite()
     {
         if ($this->referrer) {
             $hosts = [
@@ -39,10 +37,29 @@ class WebRequest extends Request
     }
 
     /**
+     * 判断是否来自信任站点
+     * @return bool
+     */
+    public function isFromTrustSite()
+    {
+        if ($this->referrer) {
+            $hosts = [
+                'activity.m.duiba.com.cn',//兑吧活动
+                'www.duiba.com.cn',//兑吧商城
+            ];
+
+            $referHost = parse_url($this->referrer, PHP_URL_HOST);
+            return in_array($referHost, $hosts);
+        }
+
+        return false;
+    }
+
+    /**
      * 判断是否来自APP的请求
      * @return bool
      */
-    public function getFromApp()
+    public function isFromApp()
     {
         return boolval(strpos($this->hostInfo, '//app.'));
     }

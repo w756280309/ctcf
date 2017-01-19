@@ -268,7 +268,7 @@ class SiteController extends Controller
                 $from = '/';
             }
             //如果来自外站，登录成功之后跳到首页
-            if (Yii::$app->request->fromOutSite) {
+            if (!Yii::$app->request->isFromTrustSite() && Yii::$app->request->isFromOutSite()) {
                 $from = '/';
             }
         } else {
