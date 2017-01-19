@@ -11,7 +11,7 @@ use yii\helpers\Html;
 ?>
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/base.css">
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/comfont.css">
-<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/index/css/index.css?v=20170111-v">
+<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/index/css/index.css?v=20170119">
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>libs/swiper/swiper.min.css">
 <script src="<?= FE_BASE_URI ?>libs/lib.flexible3.js"></script>
 <script src="<?= FE_BASE_URI ?>libs/fastclick.js"></script>
@@ -288,8 +288,10 @@ use yii\helpers\Html;
 
 <script>
     var mySwiper = new Swiper('.swiper-container', {
-        loop:true,
-        pagination : '.swiper-pagination',
+        autoplay: 4000,
+        autoplayDisableOnInteraction: false,
+        loop: true,
+        pagination: '.swiper-pagination',
     });
 
     function closeAdv()
