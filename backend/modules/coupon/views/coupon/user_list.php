@@ -53,15 +53,18 @@ use yii\grid\GridView;
         ],
         [
             'label' => '使用状态',
+            'format' => 'html',
             'value' => function ($data) {
                 if ($data->isUsed) {
-                    return '已使用';
+                    $status = '<font color="#35aa47">已使用</font>';
+                    return $status;
                 } elseif (date('Y-m-d') > $data->expiryDate) {
-                    return '已过期';
+                    $status = '<font color="#d84a38">已过期</font>';
+                    return $status;
                 } else {
                     return '未使用';
                 }
-            }
+            },
         ],
     ],
 ])
