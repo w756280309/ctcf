@@ -1,0 +1,194 @@
+.header {
+  padding: 0.33333333rem 0.53333333rem;
+  background: linear-gradient(top, #dd1321, #ea431b);
+  background: -webkit-linear-gradient(top, #dd1321, #ea431b);
+  background: -moz-linear-gradient(top, #dd1321, #ea431b);
+  background: -o-linear-gradient(top, #dd1321, #ea431b);
+  background: -ms-linear-gradient(top, #dd1321, #ea431b);
+  background-image: -moz-linear-gradient(top, #dd1321, #ea431b);
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #dd1321), color-stop(1, #ea431b));
+  color: #fff;
+}
+.header li.f16 img {
+  width: 0.58666667rem;
+  height: 0.58666667rem;
+  vertical-align: middle;
+  line-height: 0.66666667rem;
+  margin-right: 0.13333333rem;
+}
+.header li.f13 {
+  width: 1.76rem;
+  line-height: 0.64rem;
+  border: 1px solid #fff;
+  border-radius: 5px;
+  text-align: center;
+}
+.header li.f13 a {
+  display: block;
+  width: 100%;
+  height: 100%;
+  color: #fff;
+}
+.banner img {
+  display: block;
+  width: 100%;
+}
+.formcheck {
+  padding: 0.2rem 0.93333333rem 0.13333333rem;
+  background-color: #fff;
+  text-indent: 0.5em;
+  color: #b5b5b6;
+}
+.formcheck .phonenum {
+  color: #666666;
+}
+.formcheck .phonenum,
+.formcheck .piccode,
+.formcheck .phonecode {
+  width: 60%;
+  border-bottom: 1px solid #ddd;
+  padding: 0.2rem 0;
+}
+.formcheck .piccode,
+.formcheck .phonecode,
+.formcheck .password {
+  margin-top: 0.33333333rem;
+  color: #b5b5b6;
+}
+.formcheck .piccode {
+  position: relative;
+}
+.formcheck .piccode img.varify-img {
+  width: 2.53333333rem;
+  position: absolute;
+  top: -0.10666667rem;
+  right: -3.26666667rem;
+}
+.formcheck .phonecode {
+  position: relative;
+}
+.formcheck .phonecode #yzm {
+  width: 2.53333333rem;
+  height: 1.0666667rem;
+  display: block;
+  background-color: #f1453d;
+  line-height: 1.0666667rem;
+  text-align: center;
+  color: #fff;
+  border-radius: 5px;
+  position: absolute;
+  top: -0.10666667rem;
+  right: -3.26666667rem;
+  text-indent: 0;
+  border: none;
+  outline: none;
+  padding: 0;
+}
+.formcheck .password {
+  width: 100%;
+  border-bottom: 1px solid #ddd;
+  padding: 0.2rem 0;
+  margin-bottom: 0.6rem;
+  position: relative;
+}
+.formcheck .password img {
+  width: 0.85333333rem;
+  position: absolute;
+  right: 1rem;
+  top: 0rem;
+}
+.formcheck .contract {
+  line-height: 1.13333333rem;
+  font-size: 0.4rem;
+}
+.formcheck .contract input {
+  width: initial;
+  position: relative;
+  top: 0.06rem;
+  width: 0.4rem;
+  height: 0.4rem;
+}
+.formcheck .contract a {
+  color: #595757;
+}
+.formcheck .register {
+  width: 100%;
+  height: 0.93333333rem;
+  text-align: center;
+  color: #fff;
+  background-color: #f1453d;
+  border: none;
+  border-radius: 5px;
+  outline: none;
+}
+.formcheck p.f15 {
+  color: #b5b5b6;
+  text-align: center;
+  line-height: 1.22666667rem;
+}
+.formcheck p.f15 a {
+  color: #f1453d;
+}
+.bottomside {
+  padding: 0.26666667rem 0.53333333rem;
+  color: #999999;
+  text-align: center;
+}
+.bottomside p.botintro {
+  line-height: 0.88rem;
+}
+.bottomside dl {
+  position: relative;
+  margin-bottom: 0.61333333rem;
+}
+.bottomside dl dt {
+  position: relative;
+  z-index: 10;
+  text-align: left;
+}
+.bottomside dl dt img {
+  width: 0.8rem;
+  height: 0.8rem;
+  margin-top: 0.15rem;
+  margin-right: 0.26667rem;
+}
+.bottomside dl dt .netaddress {
+  margin-top: 0.33333333rem;
+  color: #666666;
+  line-height: 0.62666667rem;
+}
+.bottomside dl dt .netaddress a {
+  color: #0098e0;
+}
+.bottomside dl dt .address {
+  color: #666666;
+}
+.bottomside dl dt .address p:last-child {
+  width: 4.26666667rem;
+}
+.bottomside dl dt p a {
+  color: #333333;
+}
+.bottomside dl dt p span {
+  display: block;
+  color: #666;
+}
+.bottomside dl dd.f11 {
+  position: absolute;
+  z-index: 100;
+  top: 0.17333333rem;
+  right: 0;
+  color: #333333;
+}
+.bottomside dl dd.f11 img {
+  width: 2.21333333rem;
+  height: 2.21333333rem;
+}
+.bottomside dl dd.f11 p {
+  margin-top: 0.21333333rem;
+}
+.yzm-disabled {
+  color:#fabab5!important;
+  background:#fff!important;
+  border:1px solid #fabab5!important;
+}
