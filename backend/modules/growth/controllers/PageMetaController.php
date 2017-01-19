@@ -6,7 +6,6 @@ use backend\controllers\BaseController;
 use common\models\growth\PageMeta;
 use Yii;
 use yii\data\Pagination;
-use yii\helpers\Html;
 
 class PageMetaController extends BaseController
 {
@@ -65,13 +64,8 @@ class PageMetaController extends BaseController
 
     private function exchangeMeta(PageMeta $meta)
     {
-        $meta->url = trim(Html::encode($meta->url), '?');
-        $meta->url = trim($meta->url, '\/');
+        $meta->url = trim(trim($meta->url, '?'), '\/');
         $meta->href = $meta->url;
-        if (false !== strpos($meta->url, '?')) {
-            $metaArr = explode('?', $meta->url);
-            $meta->url = $metaArr[0];
-        }
 
         return $meta;
     }

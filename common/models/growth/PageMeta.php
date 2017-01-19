@@ -2,8 +2,8 @@
 
 namespace common\models\growth;
 
-use yii\helpers\Html;
 use yii\db\ActiveRecord;
+use yii\web\Request;
 
 class PageMeta extends ActiveRecord
 {
@@ -34,18 +34,21 @@ class PageMeta extends ActiveRecord
     /**
      * 根据url获得Meta信息
      *
-     * @param $url
+     * @param  Request     $request Request对象
      *
      * @return null|static
      */
-    public static function getMeta($url)
+    public static function getMeta(Request $request)
     {
-        $url = trim(Html::encode($url), '?');
-        $url = trim($url, '\/');
-        if (false !== strpos($url, '?')) {
-            $urlArr = explode('?', $url);
-            $url = $urlArr[0];
+        $url = $request->absoluteUrl;
+        $url = trim(trim($url, '?'), '\/');
+        //先尝试全部匹配是否能找到meta信息
+        if (null !== ($pageMeta = PageMeta::findOne(['url' => $url]))) {
+            return $pageMeta;
         }
-        return PageMeta::findOne(['url' => $url]);
+        //去掉query后是否能找到meta信息
+        $relativeUrl = trim(trim($request->hostInfo . '/' . $request->getPathInfo(), '?'), '\/');
+
+        return PageMeta::findOne(['url' => $relativeUrl]);
     }
 }

@@ -8,7 +8,7 @@ use yii\helpers\Html;
 wap\assets\WapAsset::register($this);
 AnalyticsHelper::registerTo($this);
 
-$meta = PageMeta::getMeta(Yii::$app->request->absoluteUrl);
+$meta = PageMeta::getMeta(Yii::$app->request);
 
 if (null !== $meta) {
     $keywords = Html::encode($meta->keywords);

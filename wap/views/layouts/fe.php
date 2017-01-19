@@ -10,7 +10,7 @@ FeAsset::register($this);
 AnalyticsHelper::registerTo($this);
 WxshareHelper::registerTo($this, $this->share);
 
-$meta = PageMeta::getMeta(Yii::$app->request->absoluteUrl);
+$meta = PageMeta::getMeta(Yii::$app->request);
 
 if (null !== $meta) {
     $keywords = Html::encode($meta->keywords);
