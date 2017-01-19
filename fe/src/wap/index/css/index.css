@@ -644,7 +644,7 @@ footer span {
     height: 0.13333333rem;
 }
 .swiper-pagination-bullet-active {
-    background: #fff;
+    background: #fff!important;
 }
 
 /*小屏手机样式适应*/
