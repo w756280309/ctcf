@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use common\controllers\HelpersTrait;
+use common\models\mall\ThirdPartyConnect;
 use common\models\offline\OfflineStats;
 use common\models\payment\Repayment;
 use common\models\product\LoanFinder;
@@ -263,14 +264,21 @@ class SiteController extends Controller
         $model = new LoginForm();
 
         if (empty($next) || !filter_var($next, FILTER_VALIDATE_URL)) {
-            $from = Yii::$app->functions->dealurl(Yii::$app->request->referrer);
-            if (in_array($from, ['/site/signup', '/site/login'])) {
+            $from = Yii::$app->request->referrer;
+            if (
+                !Yii::$app->request->isFromOutSite()
+                && in_array(parse_url($from, PHP_URL_PATH), ['/site/signup', '/site/login'])
+            ) {
                 $from = '/';
             }
             //如果来自外站，登录成功之后跳到首页
-            if (!Yii::$app->request->isFromTrustSite() && Yii::$app->request->isFromOutSite()) {
+            if (
+                !Yii::$app->request->isFromTrustSite()
+                && Yii::$app->request->isFromOutSite()
+            ) {
                 $from = '/';
             }
+
         } else {
             $from = $next;
         }
@@ -294,21 +302,31 @@ class SiteController extends Controller
                     $tourl = Yii::$app->getUser()->getReturnUrl();
                 }
 
-                $output = array();
-                $urls = parse_url($tourl);
-
-                if (isset($urls['query'])) {
-                    parse_str($urls['query'], $output);
-                }
                 if (defined('IN_APP')) {
+                    $output = array();
+                    $urls = parse_url($tourl);
+
+                    if (isset($urls['query'])) {
+                        parse_str($urls['query'], $output);
+                    }
                     $accessToken = AccessToken::initToken($this->getAuthedUser());
                     $accessToken->save();
                     $output['token'] = $accessToken->token;
                     $output['expire'] = $accessToken->expireTime;
+                    $tourl = current(explode('?', $tourl)) . '?' . http_build_query($output);
                 }
-
-                $params = http_build_query($output);
-                return ['code' => 0, 'message' => '登录成功', 'tourl' => (isset($urls['path']) ? $urls['path'] : '/').(empty($params) ? '' : '?'.$params)];
+                //如果是兑吧，跳转到兑吧页面
+                if (in_array(parse_url($tourl, PHP_URL_HOST), [
+                    'activity.m.duiba.com.cn',//兑吧活动
+                    'www.duiba.com.cn',//兑吧商城
+                ])) {
+                    $tourl = ThirdPartyConnect::generateLoginUrl($tourl);
+                }
+                return [
+                    'code' => 0,
+                    'message' => '登录成功',
+                    'tourl' => $tourl
+                ];
             }
         }
 
