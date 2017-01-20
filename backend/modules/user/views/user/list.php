@@ -212,7 +212,7 @@ $isPersonal = $category === User::USER_TYPE_PERSONAL;
                                 <?= $val->info ? StringUtils::amountFormat3($val->info->lastInvestAmount) : 0 ?>
                             </td>
                             <td>VIP<?= $val->level ?></td>
-                            <td><?= $val->regContext ?></td>
+                            <td><?= $val->regContext ? $val->regContext : '---' ?></td>
                             <td>
                                 <button class="btn btn-primary get_order_status" uid="<?= $val['id'] ?>">查询联动状态</button>
                             </td>

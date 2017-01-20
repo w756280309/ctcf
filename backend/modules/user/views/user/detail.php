@@ -143,7 +143,7 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => YiiAsse
                 </tr>
                 <tr>
                     <td><strong>注册位置</strong></td>
-                    <td><?= $normalUser['regContext'] ?></td>
+                    <td><?= $normalUser['regContext'] ? $normalUser['regContext'] : '---' ?></td>
                 </tr>
             </table>
 
