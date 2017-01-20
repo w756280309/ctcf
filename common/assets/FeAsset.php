@@ -14,7 +14,7 @@ class FeAsset extends AssetBundle
     public $js = [
         'res/js/lib.js',
         'res/js/js.cookie.js',
-        'res/js/hmsr.js',
+        'res/js/hmsr.js?v=20170119',
     ];
     public $depends = [
         JqueryAsset::class,
