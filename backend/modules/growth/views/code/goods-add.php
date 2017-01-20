@@ -60,7 +60,7 @@ $this->title = '添加商品';
                 <div class="controls">
                     <a href="/coupon/coupon/add" id="sample_editable_1_new" class="btn blue" style="float: right;">
                         添加代金券<i class="icon-plus"></i></a>
-                    <?= $form->field($goodsType, 'sn', ['template' => '{input}', 'inputOptions' => ['autocomplete' => "off", 'class' => 'm-wrap']])->dropDownList($model) ?>
+                    <?= $form->field($goodsType, 'sn', ['template' => '{input}', 'inputOptions' => ['autocomplete' => "off", 'class' => 'm-wrap span5']])->dropDownList($model) ?>
                     <?= $form->field($goodsType, 'sn', ['template' => '{error}']); ?>
                 </div>
             </div>

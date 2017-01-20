@@ -8,6 +8,7 @@ use common\models\code\Code;
 use common\models\coupon\CouponType;
 use common\models\code\GoodsType;
 use common\models\user\User;
+use common\utils\StringUtils;
 use common\utils\TxUtils;
 use Yii;
 use yii\data\Pagination;
@@ -209,11 +210,15 @@ class CodeController extends BaseController
     {
         $goodsType = new GoodsType();
         if ($goodsType->load(Yii::$app->request->post())
-            && $goodsType->validate()
-            && $this->validateGoodstype($goodsType)
-            && $this->tianJia($goodsType)
         ) {
-            $this->redirect('/growth/code/goods-list');
+            if (2 === (int)$goodsType->type) {
+                $goodsType->sn = TxUtils::generateSn('SP');
+            }
+            if ($goodsType->validate()
+                && $this->validateGoodstype($goodsType)
+                && $this->tianJia($goodsType)) {
+                $this->redirect('/growth/code/goods-list');
+            }
         }
         $nowDate = date('Y-m-d');
         $query = CouponType::find()
@@ -224,7 +229,7 @@ class CodeController extends BaseController
 
         $model = ['' => '--请选择--'];
         foreach ($data as $key => $val) {
-            $model[$key] = $val['name'];
+            $model[$val['id']] = $val['name'].'  面值:'.StringUtils::amountFormat2($val['amount']).'元  起投金额:'.StringUtils::amountFormat2($val['minInvest']).'元';
         }
         return $this->render('goods-add', ['goodsType' => $goodsType, 'model' => $model]);
     }
@@ -243,7 +248,6 @@ class CodeController extends BaseController
 
     private function tianJia(GoodsType $goodsType)
     {
-        $goodsType->sn = (1 === (int)$goodsType->type) ? $goodsType->sn : TxUtils::generateSn('SP');
         $goodsType->createdAt = date("Y-m-d H:i:s");
         $goodsType->save(false);
 
