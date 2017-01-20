@@ -22,7 +22,7 @@ WxshareHelper::registerTo($this, $share);
             <script src="<?= FE_BASE_URI ?>libs/pageslider/zepto_modify.js?v=20161124"></script>
             <script src="<?= FE_BASE_URI ?>libs/pageslider/PageSlider.js?v=20161124"></script>
             <script src="<?= FE_BASE_URI ?>res/js/js.cookie.js"></script>
-            <script src="<?= FE_BASE_URI ?>res/js/hmsr.js"></script>
+            <script src="<?= FE_BASE_URI ?>res/js/hmsr.js?v=20170120"></script>
             <script src="<?= ASSETS_BASE_URI ?>js/analytics.js"></script>
             <script>
                 $(document).ready(function() {
