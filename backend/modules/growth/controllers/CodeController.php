@@ -5,8 +5,10 @@ namespace backend\modules\growth\controllers;
 use backend\controllers\BaseController;
 use common\models\adminuser\AdminLog;
 use common\models\code\Code;
+use common\models\coupon\CouponType;
 use common\models\code\GoodsType;
 use common\models\user\User;
+use common\utils\TxUtils;
 use Yii;
 use yii\data\Pagination;
 use yii\db\Query;
@@ -198,5 +200,53 @@ class CodeController extends BaseController
         $model = $query->offset($pages->offset)->limit($pages->limit)->all();
 
         return $this->render('goods-list', ['model' => $model, 'pages' => $pages]);
+    }
+
+    /**
+     * 添加商品
+     */
+    public function actionGoodsAdd()
+    {
+        $goodsType = new GoodsType();
+        if ($goodsType->load(Yii::$app->request->post())
+            && $goodsType->validate()
+            && $this->validateGoodstype($goodsType)
+            && $this->tianJia($goodsType)
+        ) {
+            $this->redirect('/growth/code/goods-list');
+        }
+        $nowDate = date('Y-m-d');
+        $query = CouponType::find()
+            ->where(['<=', 'issueStartDate', $nowDate])
+            ->andWhere(['>=', 'issueEndDate', $nowDate])
+            ->andWhere(['isDisabled' => 0, 'isAudited' => 1]);
+        $data = $query->orderBy('id desc')->all();
+
+        $model = ['' => '--请选择--'];
+        foreach ($data as $key => $val) {
+            $model[$key] = $val['name'];
+        }
+        return $this->render('goods-add', ['goodsType' => $goodsType, 'model' => $model]);
+    }
+
+    /**
+     * 验证添加信息.
+     */
+    private function validateGoodstype($goodsType)
+    {
+        if ((1 === (int)$goodsType->type) && empty($goodsType->sn)) {
+            $goodsType->addError('sn', '请选择代金券!');
+            return false;
+        }
+        return true;
+    }
+
+    private function tianJia(GoodsType $goodsType)
+    {
+        $goodsType->sn = (1 === (int)$goodsType->type) ? $goodsType->sn : TxUtils::generateSn('SP');
+        $goodsType->createdAt = date("Y-m-d H:i:s");
+        $goodsType->save(false);
+
+        return true;
     }
 }

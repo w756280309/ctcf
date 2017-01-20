@@ -15,6 +15,9 @@ $this->title = '商品列表';
                 <a href="/growth/code/add" id="sample_editable_1_new" class="btn green" style="float: right;">
                     添加兑换码 <i class="icon-plus"></i>
                 </a>
+                <a href="/growth/code/goods-add" id="sample_editable_1_new" class="btn blue" style="float: right;">
+                    添加商品 <i class="icon-plus"></i>
+                </a>
             </h3>
             <ul class="breadcrumb">
                 <li>

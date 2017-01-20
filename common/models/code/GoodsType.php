@@ -10,8 +10,8 @@ class GoodsType extends ActiveRecord
     {
         return [
             [['sn', 'name'], 'string'],
-            [['sn', 'name'], 'required'],
-            ['sn', 'unique', 'message' => '商品类型应唯一'],
+            ['name', 'required'],
+            ['sn', 'unique', 'message' => '此代金券已经被商品添加！'],
             ['type', 'integer'],
             ['createdAt', 'safe'],
         ];
