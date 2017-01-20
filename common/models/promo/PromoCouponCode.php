@@ -40,7 +40,7 @@ class PromoCouponCode
         try {
             if ($model->save()) {
                 //发放1张代金券
-                $coupon_type = CouponType::findOne(['sn' => $model->goodsType_sn]);
+                $coupon_type = CouponType::findOne(['id' => $model->goodsType_sn]);
                 if (UserCoupon::addUserCoupon($user, $coupon_type)->save()) {
                     $transaction->commit();
                     return ['code' => 0, 'message' => '兑换成功', 'data' => intval($coupon_type->amount) . '元代金券'];

@@ -3,6 +3,7 @@
 namespace console\controllers;
 
 use common\models\code\GoodsType;
+use common\models\coupon\CouponType;
 use Yii;
 use yii\console\Controller;
 use common\models\code\Code;
@@ -100,5 +101,39 @@ class CodeController extends Controller
             $code .= substr($str, mt_rand(0, $length), 1);
         }
         return $code;
+    }
+
+    /**
+     * 修复兑换码表及商品表的对应代金券的sn，将值由代金券类型（coupon_type）的sn，改为代金券类型的id
+     */
+    public function actionRepair()
+    {
+        $goods = GoodsType::find()
+            ->where(['type' => 1])
+            ->andWhere(['in', 'sn', [
+                '0022:20000-20',
+                '0022:50000-50',
+                '0022:100000-120',
+                '0022:200000-180',
+            ]])->all();
+
+        $affected = [];
+        $transaction = \Yii::$app->db->beginTransaction();
+        try {
+            foreach ($goods as $good) {
+                $originSn = $good->sn;
+                $good->sn = CouponType::find()->select('id')->where(['sn' => $originSn])->scalar();
+                if ($good->save()) {
+                    $affected[$originSn] = Code::updateAll(['goodsType_sn' => $good->sn], ['goodsType_sn' => $originSn]);
+                }
+            }
+            $transaction->commit();
+        } catch (\Exception $ex) {
+            $transaction->rollBack();
+            echo $ex->getMessage();
+            exit;
+        }
+
+        var_dump($affected);
     }
 }

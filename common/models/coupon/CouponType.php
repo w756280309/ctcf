@@ -7,23 +7,23 @@ use yii\behaviors\TimestampBehavior;
 /**
  * This is the model class for table "coupon_type".
  *
- * @property integer $id
- * @property string $sn
- * @property string $name
- * @property string $amount
- * @property string $minInvest
- * @property string $useStartDate
- * @property string $useEndDate
- * @property string $issueStartDate
- * @property string $issueEndDate
- * @property integer $isDisabled
- * @property integer $created_at
- * @property integer $updated_at
- * @property integer $expiresInDays
- * @property integer $customerType
- * @property string $loanCategories
- * @property integer $allowCollect
- * @property integer $isAudited
+ * @property integer      $id
+ * @property null|string  $sn             sn（0010:50000-90（序号：起投金额和面值））
+ * @property string       $name           名称
+ * @property string       $amount         面值
+ * @property string       $minInvest      起投金额
+ * @property null|string  $useStartDate   有效开始日期
+ * @property null|string  $useEndDate     有效结束日期
+ * @property string       $issueStartDate 发放开始日期
+ * @property string       $issueEndDate   发放结束日期
+ * @property boolean      $isDisabled     是否有效
+ * @property integer      $created_at     记录创建时间
+ * @property integer      $updated_at     记录修改时间
+ * @property null|integer $expiresInDays  有效天数
+ * @property null|integer $customerType   发放用户类型（NULL为全部用户1为未投资用户）
+ * @property string       $loanCategories 项目类型（NULL为全部1为温盈金2为温盈宝）
+ * @property null|boolean $allowCollect   是否允许用户领取（false不允许true为允许）
+ * @property boolean      $isAudited      是否审核(默认false未审核true已审核)
  */
 class CouponType extends \yii\db\ActiveRecord
 {
