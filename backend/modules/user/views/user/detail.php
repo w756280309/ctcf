@@ -141,6 +141,10 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => YiiAsse
                     <td><strong>会员财富值</strong></td>
                     <td><?= $normalUser->getCoins() ?></td>
                 </tr>
+                <tr>
+                    <td><strong>注册位置</strong></td>
+                    <td><?= $normalUser['regContext'] ?></td>
+                </tr>
             </table>
 
             <div class="detail_font">会员资金详情</div>
