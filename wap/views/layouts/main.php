@@ -75,10 +75,12 @@ $this->registerMetaTag([
             <?php } else { ?>
                 <div class="row title-box nav-height">
                     <div class="col-xs-2 back">
-                        <?php if (false === $this->backUrl) {
-                        } else { ?>
-                            <img src="<?= ASSETS_BASE_URI ?>images/back.png" alt=""
-                                 onclick="<?= (null === $this->backUrl) ? 'history.go(-1)' : "window.location.href='$this->backUrl'" ?>"/>
+                        <?php if ($this->backUrl) { ?>
+                            <img src="<?= ASSETS_BASE_URI ?>images/back.png" alt="" onclick="location.href='<?= $this->backUrl ?>'">
+                        <?php } elseif ($this->replaceUrl) { ?>
+                            <img src="<?= ASSETS_BASE_URI ?>images/back.png" alt="" onclick="location.replace('<?= $this->replaceUrl ?>')">
+                        <?php } else { ?>
+                            <img src="<?= ASSETS_BASE_URI ?>images/back.png" alt="" onclick="history.go(-1)">
                         <?php } ?>
                     </div>
                     <div class="col-xs-8 title"><?= Html::encode($this->title) ?></div>

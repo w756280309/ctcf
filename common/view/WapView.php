@@ -14,4 +14,5 @@ class WapView extends View
     public $hideHeaderNav = false;        //隐藏页头导航条
     public $share = null;                 //微信分享对象
     public $extraKeywords = '';           //附加KEYWORD
+    public $replaceUrl = null;            //通过replace的方式后退跳转
 }

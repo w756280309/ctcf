@@ -109,12 +109,14 @@ class CouponController extends BaseController
      */
     private function validCoupon($user, $money = null)
     {
+        $uc = UserCoupon::tableName();
+
         return UserCoupon::validList($user, $money)
             ->orderBy([
                 'expiryDate' => SORT_ASC,
                 'amount' => SORT_DESC,
                 'minInvest' => SORT_ASC,
-                'id' => SORT_DESC,
+                "$uc.id" => SORT_DESC,
             ]);
     }
 
