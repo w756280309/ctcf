@@ -178,6 +178,7 @@ $isPersonal = $category === User::USER_TYPE_PERSONAL;
                         <th>未投资时长（天）</th>
                         <th class="money">最后一次购买金额</th>
                         <th>用户等级</th>
+                        <th>注册位置</th>
                         <th>联动状态</th>
                 <?php }?>
                         <th><center>操作</center></th>
@@ -211,6 +212,7 @@ $isPersonal = $category === User::USER_TYPE_PERSONAL;
                                 <?= $val->info ? StringUtils::amountFormat3($val->info->lastInvestAmount) : 0 ?>
                             </td>
                             <td>VIP<?= $val->level ?></td>
+                            <td><?= $val->regContext ?></td>
                             <td>
                                 <button class="btn btn-primary get_order_status" uid="<?= $val['id'] ?>">查询联动状态</button>
                             </td>
