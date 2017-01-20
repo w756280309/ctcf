@@ -73,13 +73,11 @@ class P1701Controller extends Controller
                     ]);
 
                     if (null !== $user) {
-                        if ($this->isTraded($user)) {
-                            $toUrl = '/site/login?next='.urlencode(Yii::$app->request->hostInfo);
+                        $toUrl = '/site/login?next='.urlencode(Yii::$app->request->hostInfo);
 
+                        if ($this->isTraded($user)) {
                             throw new \Exception('您已经投资过了，可登录查看其他活动');
                         } else {
-                            $toUrl = '/site/login';
-
                             throw new \Exception('您已注册，登录后投资即可获得奖励');
                         }
                     }
