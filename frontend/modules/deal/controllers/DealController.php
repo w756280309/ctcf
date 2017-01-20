@@ -2,7 +2,6 @@
 
 namespace frontend\modules\deal\controllers;
 
-use common\models\coupon\CouponType;
 use common\models\coupon\UserCoupon;
 use common\models\order\OnlineOrder;
 use common\models\product\OnlineProduct;
@@ -25,9 +24,12 @@ class DealController extends BaseController
             'del_status' => OnlineProduct::STATUS_USE,
             'sn' => $sn,
         ]);
+
+        $user = $this->getAuthedUser();
+
         //未登录或者登录了，但不是定向用户的情况下，报404
         if ($deal->isPrivate) {
-            if (Yii::$app->user->isGuest) {
+            if (null === $user) {
                 throw $this->ex404('未登录用户不能查看定向标');
             } else {
                 $user_ids = explode(',', $deal->allowedUids);
@@ -36,26 +38,73 @@ class DealController extends BaseController
                 }
             }
         }
+
         //获取可用代金券
-        if (!Yii::$app->user->isGuest) {
-            $ct = CouponType::tableName();
-            $data = UserCoupon::find()
-                ->innerJoinWith('couponType')
-                ->where(['isUsed' => 0, 'user_id' => $this->getAuthedUser()->id, "$ct.isDisabled" => 0])
-                ->andFilterWhere(['>=', "expiryDate", date('Y-m-d')])
-                ->orderBy("expiryDate, amount desc, minInvest")
-                ->all();
-        } else {
-            $data = [];
+        $coupons = [];
+        if ($user) {
+            $coupons = $this->userCoupon($user);
         }
+
         //获取session中购买数据
         $detail_data = Yii::$app->session['detail_' . $sn . '_data'];
+
+        $money = 0;
+        if ($detail_data['money'] > 0) {
+            $money = $detail_data['money'];
+        }
+
+        $userCouponId = 0;
+        if ($detail_data['coupon_id'] > 0) {
+            $userCouponId = (int) $detail_data['coupon_id'];
+        } elseif (!empty($coupons)) {
+            $userCouponId = reset($coupons)->id;
+        }
+
         return $this->render('detail', [
             'deal' => $deal,
-            'data' => $data,
-            'money' => ($detail_data['money'] > 0) ? $detail_data['money'] : 0,
-            'coupon_id' => ($detail_data['coupon_id'] > 0) ? intval($detail_data['coupon_id']) : 0,
+            'coupons' => $coupons,
+            'user' => $user,
+            'money' => $money,
+            'coupon_id' => $userCouponId,
         ]);
+    }
+
+    /**
+     * 根据输入的金额自动获取代金券.
+     */
+    public function actionValidForLoan()
+    {
+        $request = array_replace([
+            'sn' => null,
+            'money' => null,
+        ], Yii::$app->request->get());
+
+        if (empty($request['sn']) || !preg_match('/^[A-Za-z0-9]+$/', $request['sn'])) {
+            throw $this->ex404();
+        }
+
+        if (empty($request['money']) || !preg_match('/^[0-9|.]+$/', $request['money'])) {
+            $request['money'] = null;
+        }
+
+        $this->findOr404(OnlineProduct::class, ['sn' => $request['sn']]);
+
+        $coupons = $this->userCoupon($this->getAuthedUser(), $request['money']);
+
+        if (empty($coupons)) {
+            $backArr = [
+                'code' => 1,
+                'message' => '没有可用代金券',
+            ];
+        } else {
+            $backArr = [
+                'code' => 0,
+                'message' => '查询成功',
+                'couponId' => reset($coupons)->id,
+            ];
+        }
+
+        return $backArr;
     }
 
     /**
@@ -84,8 +133,18 @@ class DealController extends BaseController
         if (empty($sn)) {
             throw $this->ex404();   //判断参数无效时,抛404异常
         }
-        $money = \Yii::$app->request->post('money');
-        $coupon_id = \Yii::$app->request->post('couponId');
+
+        $money = Yii::$app->request->post('money');
+        $coupon_id = Yii::$app->request->post('couponId');
+        $couponConfirm = Yii::$app->request->post('couponConfirm');
+        $user = $this->getAuthedUser();
+
+        $validCoupons = $this->userCoupon($user);
+
+        if (!empty($validCoupons) && '1' !== $couponConfirm) {
+            return ['code' => 1, 'message' => '代金券确认码不能为空', 'couponId' => $coupon_id];
+        }
+
         $coupon = null;
         if ($coupon_id) {
             $coupon = UserCoupon::findOne($coupon_id);
@@ -94,12 +153,13 @@ class DealController extends BaseController
             }
         }
         //未登录时候保存购买数据
-        if (Yii::$app->user->isGuest) {
+        if (null === $user) {
             Yii::$app->session['detail_' . $sn . '_data'] = ['money' => $money];
             return ['code' => 1, 'message' => '请登录', 'tourl' => '/site/login'];
         }
+
         $pay = new PayService(PayService::REQUEST_AJAX);
-        $ret = $pay->checkAllowPay($this->getAuthedUser(), $sn, $money, $coupon, 'pc');
+        $ret = $pay->checkAllowPay($user, $sn, $money, $coupon, 'pc');
         if ($ret['code'] != PayService::ERROR_SUCCESS) {
             return $ret;
         }
@@ -163,5 +223,21 @@ class DealController extends BaseController
             return ['res' => false, 'rate' => false];
         }
         return ['res' => false, 'rate' => false];
+    }
+
+    /**
+     * 获取用户可用的代金券.
+     */
+    private function userCoupon($user, $money = null)
+    {
+
+        return UserCoupon::validList($user, $money)
+            ->indexBy('id')
+            ->orderBy([
+                'expiryDate' => SORT_ASC,
+                'amount' => SORT_DESC,
+                'minInvest' => SORT_ASC,
+                'id' => SORT_DESC,
+            ])->all();
     }
 }

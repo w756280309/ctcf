@@ -7,18 +7,19 @@ use common\models\product\OnlineProduct as Loan;
 use common\models\user\User;
 use Exception;
 use yii\behaviors\TimestampBehavior;
+use yii\db\ActiveRecord;
 
 /**
  * This is the model class for table "user_coupon".
  *
  * @property int $id
- * @property int $couponType_id
- * @property int $user_id
- * @property int $order_id
- * @property int $isUsed
- * @property int $created_at
+ * @property int $couponType_id 代金券类型ID
+ * @property int $user_id       用户ID
+ * @property int $order_id      订单ID
+ * @property int $isUsed        是否使用
+ * @property int $created_at    创建时间
  */
-class UserCoupon extends \yii\db\ActiveRecord
+class UserCoupon extends ActiveRecord
 {
     /**
      * {@inheritdoc}
@@ -79,6 +80,32 @@ class UserCoupon extends \yii\db\ActiveRecord
     public function getCouponType()
     {
         return $this->hasOne(CouponType::className(), ['id' => 'couponType_id']);
+    }
+
+    /**
+     * 可用代金券列表.
+     *
+     * @param User $user               用户对象
+     * @param string|float|int $money  金额
+     *
+     * @return UserCoupon
+     */
+    public static function validList(User $user, $money = null)
+    {
+        $query = self::find()
+            ->innerJoinWith('couponType')
+            ->where([
+                'isUsed' => false,
+                'isDisabled' => false,
+                'user_id' => $user->id,
+            ])
+            ->andWhere(['>=', 'expiryDate', date('Y-m-d')]);
+
+        if (!empty($money)) {
+            $query->andWhere(['<=', 'minInvest', $money]);
+        }
+
+        return $query;
     }
 
     /**

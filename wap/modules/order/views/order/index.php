@@ -7,6 +7,8 @@ use common\view\LoanHelper;
 use wap\assets\WapAsset;
 use yii\web\YiiAsset;
 
+$validCouponCount = count($coupons);
+
 $yr = $deal->yield_rate;
 $qixian = $deal->getDuration()['value'];
 $retmet = $deal->refund_method;
@@ -18,10 +20,11 @@ $this->registerJs(<<<JS
     var retmet = "$retmet";
     var sn = "$sn";
     var isFlexRate = Boolean("$isFlexRate");
+    var validCouponCount = $validCouponCount;
 JS
     , 1);
 
-$this->registerJsFile(ASSETS_BASE_URI.'js/order.js?v=20160908', ['depends' => YiiAsset::class]);
+$this->registerJsFile(ASSETS_BASE_URI.'js/order.js?v=20170119-vv', ['depends' => YiiAsset::class]);
 $this->registerCssFile(ASSETS_BASE_URI.'css/setting.css?v=20170103', ['depends' => WapAsset::class]);
 
 ?>
@@ -36,11 +39,11 @@ $this->registerCssFile(ASSETS_BASE_URI.'css/setting.css?v=20170103', ['depends' 
         <?php $ex = $deal->getDuration() ?><?= $ex['value'] ?><?= $ex['unit'] ?>
         <?php if (!empty($deal->kuanxianqi)) { ?>(含宽限期<?=$deal->kuanxianqi?>天)<?php } ?></div>
     <div class="col-xs-4 text-align-ct">可投余额</div>
-    <div class="col-xs-8 text-align-lf col"><?= StringUtils::amountFormat3($param['order_balance']) ?>元</div>
+    <div class="col-xs-8 text-align-lf col"><?= StringUtils::amountFormat3($deal->getLoanBalance()) ?>元</div>
 </div>
 <div class="row surplus margin-top">
     <div class="col-xs-4 text-align-ct">可用金额</div>
-    <div class="col-xs-5 safe-lf text-align-lf"><?= StringUtils::amountFormat3($param['my_balance']) ?>元</div>
+    <div class="col-xs-5 safe-lf text-align-lf"><?= StringUtils::amountFormat3($user->lendAccount->available_balance) ?>元</div>
     <div class="col-xs-3 safe-txt text-align-ct"><a href="/user/userbank/recharge?from=<?= urlencode('/order/order?sn='.$deal->sn)?>">去充值</a></div>
 </div>
 <form action="/order/order/doorder?sn=<?= $deal->sn ?>" method="post" id="orderform" data-to="1">
@@ -52,20 +55,16 @@ $this->registerCssFile(ASSETS_BASE_URI.'css/setting.css?v=20170103', ['depends' 
     </div>
 
     <?php if ($deal->allowUseCoupon) { ?>
-        <div class="row sm-height border-bottom">
-            <?php if (empty($couponId)) { ?>
-                <div class="col-xs-4 safe-txt text-align-ct">使用代金券</div>
-                <?php if (empty($coupon)) { ?>
-                <div class="col-xs-8 safe-txt">无可用</div>
-                <?php } else { ?>
-                <div class="col-xs-8 safe-txt" onclick="toCoupon()"><span class="notice">请选择</span></div>
-                <?php } ?>
+        <input name="couponConfirm" id="couponConfirm" type="text" value="" hidden="hidden">
+        <div class="row sm-height border-bottom" id="coupon">
+            <?php if ($validCouponCount) { ?>
+                <?php
+                    $coupon = isset($coupons[$userCouponId]) ? $coupons[$userCouponId] : current($coupons);
+                    echo $this->renderFile('@app/modules/user/views/coupon/_valid_coupon.php', ['coupon' => $coupon]);
+                ?>
             <?php } else { ?>
-                <div class="col-xs-4 safe-txt text-align-ct">代金券抵扣</div>
-                <div class="col-xs-5 safe-txt" onclick="toCoupon()"><?= $coupon->couponType->amount ?>元</div>
-                <div class="col-xs-3 safe-txt text-align-ct" onclick="resetCoupon()">清除</div>
-                <input name="couponId" id="couponId" type="text" value="<?= $coupon->id ?>" hidden="hidden">
-                <input name="couponMoney" id="couponMoney" type="text" value="<?= $coupon->couponType->amount ?>" hidden="hidden">
+                <div class="col-xs-4 safe-txt text-align-ct">使用代金券</div>
+                <div class="col-xs-8 safe-txt">无可用</div>
             <?php } ?>
         </div>
     <?php } ?>
@@ -82,7 +81,7 @@ $this->registerCssFile(ASSETS_BASE_URI.'css/setting.css?v=20170103', ['depends' 
     <div class="row login-sign-btn ht">
         <div class="col-xs-3"></div>
         <div class="col-xs-6 text-align-ct">
-            <input id="buybtn" class="btn-common btn-normal" type="submit" style="background: #F2F2F2;" value="购买">
+            <input id="buybtn" class="btn-common btn-normal" type="button" style="background: #F2F2F2;" value="购买">
         </div>
         <div class="col-xs-3"></div>
     </div>
@@ -91,31 +90,36 @@ $this->registerCssFile(ASSETS_BASE_URI.'css/setting.css?v=20170103', ['depends' 
     </div>
 </form>
 
-<!-- 遮罩层 start  -->
-<div class="mask"></div>
-<!-- 遮罩层 end  -->
-<!-- 输入弹出框 start  -->
-<div class="succeed-info hidden">
-    <div class="col-xs-12"><img src="<?= ASSETS_BASE_URI ?>images/succeed.png" alt="对钩"> </div>
-    <div class="col-xs-12">购买成功</div>
+<div id="mask" class="mask"></div>
+<div id="info" class="bing-info">
+    <div class="bing-tishi">提示</div>
+    <p></p>
+    <div class="bind-btn">
+        <span class="bind-xian x-cancel">取消</span>
+        <span class="x-confirm">确定</span>
+    </div>
 </div>
-<!-- 输入弹出框 end  -->
-<!-- 购买页 end  -->
 
-<script type="text/javascript">
-    function toCoupon()
-    {
-        var money = $('#money').val();
-        var url = '/user/coupon/valid?sn=<?= $deal->sn ?>&money='+money;
+<?php if ($deal->allowUseCoupon && $validCouponCount) { ?>
+    <script type="text/javascript">
+        function toCoupon() {
+            var money = $('#money').val();
+            location.replace('/user/coupon/valid?sn=<?= $deal->sn ?>&money='+money);
+        }
 
-        location.href = url;
-    }
+        function resetCoupon() {
+            var html = '<div class="col-xs-4 safe-txt text-align-ct">使用代金券</div><div class="col-xs-8 safe-txt" onclick="toCoupon()"><span class="notice">请选择</span></div>';
+            $('#coupon').html(html);
+        }
 
-    function resetCoupon()
-    {
-        var money = $('#money').val();
-        var url = '/order/order?sn=<?= $deal->sn ?>&money='+money;
+        $(function () {
+            $('#money').on('keyup', function () {
+                var money = $('#money').val();
 
-        location.replace(url);
-    }
-</script>
+                $.get('/user/coupon/valid-for-loan?sn=<?= $deal->sn ?>&money='+money, function (data) {
+                    $('#coupon').html(data);
+                });
+            });
+        })
+    </script>
+<?php } ?>

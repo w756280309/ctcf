@@ -4,7 +4,6 @@ namespace app\modules\order\controllers;
 
 use app\controllers\BaseController;
 use common\controllers\ContractTrait;
-use common\models\coupon\CouponType;
 use common\models\coupon\UserCoupon;
 use common\models\order\OnlineOrder;
 use common\models\order\OrderManager;
@@ -24,49 +23,49 @@ class OrderController extends BaseController
     public function actionIndex()
     {
         $request = array_replace([
-                'sn' => null,
-                'money' => null,
-                'couponId' => null,
-            ], Yii::$app->request->get());
+            'sn' => null,
+            'money' => null,
+            'userCouponId' => null,
+        ], Yii::$app->request->get());
 
         if (empty($request['sn']) || !preg_match('/^[A-Za-z0-9]+$/', $request['sn'])) {
             throw $this->ex404();
         }
 
-        if (!empty($request['money']) && !preg_match('/^[0-9|.]+$/', $request['money'])) {
-            throw $this->ex404();
+        if (empty($request['money']) || !preg_match('/^[0-9|.]+$/', $request['money'])) {
+            $request['money'] = null;
         }
 
-        if (!empty($request['couponId']) && !preg_match('/^[0-9]+$/', $request['couponId'])) {
-            throw $this->ex404();
+        if (empty($request['userCouponId']) || !preg_match('/^[0-9]+$/', $request['userCouponId'])) {
+            $request['userCouponId'] = null;
         }
 
         $deal = $this->findOr404(OnlineProduct::class, ['sn' => $request['sn']]);
-
         $user = $this->getAuthedUser();
-        $ua = $user->lendAccount;    //获取用户的账户信息
-        $param['order_balance'] = $deal->getLoanBalance(); //获取标的可投余额;
-        $param['my_balance'] = $ua->available_balance; //用户账户余额;
-
-        $ct = CouponType::tableName();
-        $uc = UserCoupon::tableName();
-
-        $coupon = UserCoupon::find()
-            ->innerJoin($ct, "couponType_id = $ct.id")
-            ->where(['isUsed' => 0, 'order_id' => null, 'coupon_type.isDisabled' => 0, 'user_id' => $this->getAuthedUser()->id])
-            ->andFilterWhere(['>=', 'expiryDate', date('Y-m-d')]);
-
-        if (!empty($request['couponId'])) {
-            $coupon->andWhere(["$uc.id" => $request['couponId']]);
-        }
+        $coupons = $this->userCoupon($user);
 
         return $this->render('index', [
-                'deal' => $deal,
-                'param' => $param,
-                'coupon' => $coupon->one(),
-                'money' => $request['money'],
-                'couponId' => $request['couponId'],
-            ]);
+            'deal' => $deal,
+            'user' => $user,
+            'coupons' => $coupons,
+            'userCouponId' => $request['userCouponId'],
+            'money' => $request['money'],
+        ]);
+    }
+
+    /**
+     * 获取用户可用的代金券.
+     */
+    private function userCoupon($user)
+    {
+        return UserCoupon::validList($user)
+            ->indexBy('id')
+            ->orderBy([
+                'expiryDate' => SORT_ASC,
+                'amount' => SORT_DESC,
+                'minInvest' => SORT_ASC,
+                'id' => SORT_DESC,
+            ])->all();
     }
 
     /**
@@ -78,11 +77,20 @@ class OrderController extends BaseController
             throw $this->ex404();   //判断参数无效时,抛404异常
         }
 
-        $money = \Yii::$app->request->post('money');
-        $coupon_id = \Yii::$app->request->post('couponId');
+        $money = Yii::$app->request->post('money');
+        $userCouponId = Yii::$app->request->post('couponId');
+        $couponConfirm = Yii::$app->request->post('couponConfirm');
+
+        $user = $this->getAuthedUser();
+        $validCoupons = $this->userCoupon($user);
+
+        if (!empty($validCoupons) && '1' !== $couponConfirm) {
+            return ['code' => 1, 'message' => '代金券确认码不能为空', 'couponId' => $userCouponId];
+        }
+
         $coupon = null;
-        if ($coupon_id) {
-            $coupon = UserCoupon::findOne($coupon_id);
+        if (!empty($userCouponId)) {
+            $coupon = UserCoupon::findOne($userCouponId);
             if (null === $coupon) {
                 return ['code' => 1,  'message' => '无效的代金券'];
             }

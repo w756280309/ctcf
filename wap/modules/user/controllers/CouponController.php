@@ -7,6 +7,7 @@ use common\models\coupon\CouponType;
 use common\models\coupon\UserCoupon;
 use common\models\product\OnlineProduct;
 use common\utils\StringUtils;
+use Yii;
 use yii\data\Pagination;
 
 class CouponController extends BaseController
@@ -49,56 +50,91 @@ class CouponController extends BaseController
     }
 
     /**
-     * 可用代金券.
+     * 可用代金券列表.
      */
     public function actionValid($page = 1, $size = 10)
     {
-        $ct = CouponType::tableName();
-        $uc = UserCoupon::tableName();
+        $request = $this->validateParams(Yii::$app->request->get());
+        $query = $this->validCoupon($this->getAuthedUser());
 
+        $pg = Yii::$container->get('paginator')->paginate($query, $page, $size);
+        $coupons = $query
+            ->offset($pg->offset)
+            ->limit($pg->limit)
+            ->all();
+
+        $tp = $pg->getPageCount();
+        $code = ($page > $tp) ? 1 : 0;
+        $message = ($page > $tp) ? '数据错误' : '消息返回';
+
+        $header = ['header' => $pg->jsonSerialize()];
+        $backArr = [
+            'coupons' => $coupons,
+            'sn' => $request['sn'],
+            'money' => $request['money'],
+        ];
+
+        if (Yii::$app->request->isAjax) {
+            $this->layout = false;
+            $html = $this->render('_valid_list', $backArr);
+
+            return [
+                'header' => $pg->jsonSerialize(),
+                'html' => $html,
+                'code' => $code,
+                'message' => $message,
+            ];
+        }
+
+        return $this->render('valid_list', array_merge($backArr, $header));
+    }
+
+    /**
+     * 根据输入的金额自动获取代金券.
+     */
+    public function actionValidForLoan()
+    {
+        $request = $this->validateParams(Yii::$app->request->get());
+
+        $coupon = $this->validCoupon($this->getAuthedUser(), $request['money'])->one();
+        $this->layout = false;
+
+        return $this->render('_valid_coupon', ['coupon' => $coupon]);
+    }
+
+    /**
+     * 查询可用代金券.
+     *
+     * 1. 排序规则为到期时间的升序,金额的降序,起投金额的升序,ID的降序;
+     */
+    private function validCoupon($user, $money = null)
+    {
+        return UserCoupon::validList($user, $money)
+            ->orderBy([
+                'expiryDate' => SORT_ASC,
+                'amount' => SORT_DESC,
+                'minInvest' => SORT_ASC,
+                'id' => SORT_DESC,
+            ]);
+    }
+
+    private function validateParams($get)
+    {
         $request = array_replace([
-                'sn' => null,
-                'money' => null,
-            ], \Yii::$app->request->get());
+            'sn' => null,
+            'money' => null,
+        ], $get);
 
         if (empty($request['sn']) || !preg_match('/^[A-Za-z0-9]+$/', $request['sn'])) {
             throw $this->ex404();
         }
 
-        if (!empty($request['money']) && !preg_match('/^[0-9|.]+$/', $request['money'])) {
-            throw $this->ex404();
+        if (empty($request['money']) || !preg_match('/^[0-9|.]+$/', $request['money'])) {
+            $request['money'] = null;
         }
 
         $this->findOr404(OnlineProduct::class, ['sn' => $request['sn']]);
 
-        $data = UserCoupon::find()
-            ->select("$ct.name, $ct.amount, $ct.minInvest, $uc.id uid, order_id, isUsed, expiryDate")
-            ->innerJoin($ct, "couponType_id = $ct.id")
-            ->where(['isUsed' => 0, 'isDisabled' => 0, 'user_id' => $this->getAuthedUser()->id])
-            ->andFilterWhere(['>=', 'expiryDate', date('Y-m-d')])
-            ->orderBy('expiryDate, amount desc, minInvest');
-
-        $pg = \Yii::$container->get('paginator')->paginate($data, $page, $size);
-        $coupon = $pg->getItems();
-
-        foreach ($coupon as $key => $val) {
-            $coupon[$key]['minInvestDesc'] = StringUtils::amountFormat1('{amount}{unit}', $val['minInvest']);
-        }
-
-        $tp = $pg->getPageCount();
-        $code = ($page > $tp) ? 1 : 0;
-
-        if (\Yii::$app->request->isAjax) {
-            $message = ($page > $tp) ? '数据错误' : '消息返回';
-
-            return ['header' => $pg, 'data' => $coupon, 'code' => $code, 'message' => $message];
-        }
-
-        return $this->render('valid_list', [
-                'coupon' => $coupon,
-                'sn' => $request['sn'],
-                'money' => $request['money'],
-                'header' => $pg->jsonSerialize(),
-            ]);
+        return $request;
     }
 }

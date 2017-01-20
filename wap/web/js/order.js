@@ -4,37 +4,28 @@
 var csrf;
 $(function () {
     csrf = $("meta[name=csrf-token]").attr('content');
-    var $buy = $('#buybtn');
-    var $form = $('#orderform');
-    $form.on('submit', function (e) {
-        e.preventDefault();
 
-        if ($('#money').val() == '') {
-            toast('投资金额不能为空');
-            return false;
+    $('#buybtn').on('click', function () {
+        if ('' === $('#money').val()) {
+            toastCenter('投资金额不能为空');
+            return;
         }
 
-        $buy.attr('disabled', true);
-        $buy.val('购买中...');
-        var vals = $("#orderform").serialize();
+        if (validCouponCount) {
+            openPopup();
+        } else {
+            order();
+        }
+    });
 
-        var xhr = $.post($("#orderform").attr("action"), vals, function (data) {
-            if (data.code == 0) {
-                //toast('投标成功');
-            } else {
-                toast(data.message);
-            }
-            if (data.tourl != undefined) {
-                setTimeout(function () {
-                    location.replace(data.tourl);
-                }, 1000);
-            }
-        });
+    $('.x-cancel').on('click', function () {
+        $('#mask').hide();
+        $('#info').hide();
+    });
 
-        xhr.always(function () {
-            $buy.attr('disabled', false);
-            $buy.val("购买");
-        });
+    $('.x-confirm').on('click', function () {
+        $('#couponConfirm').val('1');
+        order();
     });
 
     $('#money').on('keyup', function () {
@@ -43,6 +34,63 @@ $(function () {
 
     profit($("#money"));
 });
+
+function order() {
+    var $buy = $('#buybtn');
+    var $form = $('#orderform');
+
+    $buy.attr('disabled', true);
+    $buy.val('购买中...');
+
+    $('#mask').hide();
+    $('#info').hide();
+
+    var vals = $form.serialize();
+    var xhr = $.post($form.attr("action"), vals, function (data) {
+        if (data.code) {
+            if ('代金券确认码不能为空' === data.message) {
+                var couponId = $('#couponId').val();
+
+                if (data.couponId !== couponId) {
+                    resetCoupon();
+                } else {
+                    openPopup();
+                }
+
+                return;
+            }
+
+            toastCenter(data.message);
+        }
+
+        if (data.tourl != undefined) {
+            setTimeout(function () {
+                location.replace(data.tourl);
+            }, 1000);
+        }
+    });
+
+    xhr.always(function () {
+        $buy.attr('disabled', false);
+        $buy.val("购买");
+    });
+}
+
+function openPopup() {
+    var couponId = $('#couponId').val();
+    var couponMoney = $('#couponMoney').val();
+    var message = '';
+
+    if ('undefined' !== typeof couponId) {
+        message = '您有'+validCouponCount+'张代金券可用，将使用'+WDJF.numberFormat(couponMoney, true)+'元代金券一张，点击确定立即投资';
+    } else {
+        message = '您有'+validCouponCount+'张代金券可用，本次未使用代金券抵扣，点击确定立即投资';
+    }
+
+    $('#info p').html(message);
+    $('#mask').show();
+    $('#info').show();
+}
 
 function profit($this)
 {

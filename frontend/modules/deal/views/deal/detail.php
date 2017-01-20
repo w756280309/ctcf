@@ -7,12 +7,11 @@ use common\view\LoanHelper;
 use yii\helpers\HtmlPurifier;
 
 $this->title = '项目详情';
-$user = Yii::$app->user->identity;
 
 $this->registerJsFile(ASSETS_BASE_URI . 'js/detail.js?v=161227');
 $this->registerCssFile(ASSETS_BASE_URI . 'css/deal/buy.css');
 $this->registerCssFile(ASSETS_BASE_URI . 'css/deal/deallist.css?v=161124');
-$this->registerCssFile(ASSETS_BASE_URI . 'css/deal/detail.css?v=161218');
+$this->registerCssFile(ASSETS_BASE_URI . 'css/deal/detail.css?v=170120');
 $this->registerCssFile(ASSETS_BASE_URI . 'css/pagination.css');
 $this->registerCssFile(ASSETS_BASE_URI . 'css/useraccount/chargedeposit.css');
 
@@ -30,7 +29,7 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/useraccount/chargedeposit.css');
                             <span class="pl-middle-inner">
                                 <?= LoanHelper::getDealRate($deal) ?><i>%</i>
                                 <em class="pl-m-add">
-                                    <?php if (!empty($deal->jiaxi)) { ?>+<?= doubleval($deal->jiaxi) ?>%<?php } ?>
+                                    <?php if (!empty($deal->jiaxi)) { ?>+<?= StringUtils::amountFormat2($deal->jiaxi) ?>%<?php } ?>
                                 </em>
                             </span>
                             <p>预期年化收益率</p>
@@ -185,39 +184,43 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/useraccount/chargedeposit.css');
                                 <li class="dR-inner-right"><span><i id="expect_profit">0.00</i></span>元</li>
                             </ul>
 
-                            <?php if (count($data) > 0 && $deal->allowUseCoupon) { ?>
+                            <?php $couponCount = count($coupons); ?>
+                            <?php if ($couponCount > 0 && $deal->allowUseCoupon) { ?>
                                 <!--待选代金券-->
                                 <ul class="dR-down clearfix">
-                                    <li class="dR-down-left"  id="coupon_title"><img class="dR-add" src="/images/deal/add.png" alt="">选择一张代金券<i id="coupon_count"><?= count($data) ?></i></li>
+                                    <li class="dR-down-left"  id="coupon_title">
+                                        <img class="dR-add" src="/images/deal/add.png" alt="">选择一张代金券<i id="coupon_count"><?= $couponCount ?></i>
+                                    </li>
                                     <li class="dR-down-right"><img src="/images/deal/down.png" alt=""></li>
                                 </ul>
                                 <!--代金券选择-->
                                 <div class="dR-quan" id="valid_coupon_list">
                                     <input type="hidden" name="couponId" class="hide_coupon" value="<?= $coupon_id ?>">
+                                    <input type="hidden" name="couponConfirm" id="couponConfirm" value="">
                                     <ul>
-                                        <?php foreach ($data as $v) { ?>
-                                            <li class="quan-false<?php if ($v->id === $coupon_id) { ?> picked-box<?php } ?>" cid="<?= $v->id ?>">
-                                                <div class="quan-left">
-                                                    <span>￥</span><?= number_format($v->couponType->amount) ?>
+                                        <?php foreach ($coupons as $coupon) { ?>
+                                            <li class="quan-false<?php if ($coupon->id === $coupon_id) { ?> picked-box<?php } ?>" cid="<?= $coupon->id ?>">
+                                                <?php $couponMoney = StringUtils::amountFormat2($coupon->couponType->amount); ?>
+                                                <div class="quan-left" id="C<?= $coupon->id ?>" money="<?= $couponMoney ?>">
+                                                    <span>￥</span><?= $couponMoney ?>
                                                 </div>
                                                 <div class="quan-right">
                                                     <div class="quan-right-content">
-                                                        <div><?= $v->couponType->name ?></div>
-                                                        <p>
-                                                            单笔投资满<?= StringUtils::amountFormat1('{amount}{unit}', $v->couponType->minInvest) ?>可用</p>
-                                                        <p  class="coupon_name" style="display: none"> 单笔投资满<?= StringUtils::amountFormat1('{amount}{unit}', $v->couponType->minInvest) ?>可抵扣<?= $v->couponType->amount ?>元</p>
+                                                        <div><?= $coupon->couponType->name ?></div>
+                                                        <p>单笔投资满<?= StringUtils::amountFormat1('{amount}{unit}', $coupon->couponType->minInvest) ?>可用</p>
+                                                        <p class="coupon_name" style="display: none"> 单笔投资满<?= StringUtils::amountFormat1('{amount}{unit}', $coupon->couponType->minInvest) ?>可抵扣<?= $coupon->couponType->amount ?>元</p>
                                                         <p>新手标、转让不可用</p>
-                                                        <p>有效期至<?= $v->expiryDate ?></p>
+                                                        <p>有效期至<?= $coupon->expiryDate ?></p>
                                                     </div>
                                                 </div>
-                                                <img class="quan-true <?php if ($v->id === $coupon_id) { ?>show<?php } ?>" src="/images/deal/quan-true.png" alt="">
+                                                <img class="quan-true <?php if ($coupon->id === $coupon_id) { ?>show<?php } ?>" src="/images/deal/quan-true.png" alt="">
                                             </li>
                                         <?php } ?>
                                     </ul>
                                 </div>
                             <?php } ?>
                             <div>
-                                <input type="submit" class="dR-btn" id="order_submit" value="立即投资"/>
+                                <input type="button" class="dR-btn" id="order_submit" value="立即投资"/>
                             </div>
                         </form>
                     <?php } else { ?>
@@ -251,6 +254,20 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/useraccount/chargedeposit.css');
     </div>
 </div>
 
+<!--mask弹框-->
+<div class="mask"></div>
+<!--确认弹框-->
+<div class="confirmBox">
+    <div class="confirmBox-title">提示</div>
+    <div class="confirmBox-top">
+        <p></p>
+    </div>
+    <div class="confirmBox-bottom">
+        <div class="confirmBox-left" onclick="subClose()">关闭</div>
+        <div class="confirmBox-right" onclick="subConfirm()">确认</div>
+    </div>
+</div>
+
 <script>
     $(function () {
         $('#tip').hover(function () {
@@ -271,7 +288,6 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/useraccount/chargedeposit.css');
         if (coupon_id > 0) {
             if ($('.picked-box') && $('.picked-box').length > 0) {
                 $('#coupon_title').html($('.picked-box').find('.coupon_name').text());
-                $("#valid_coupon_list").show();
             }
         }
 
@@ -291,15 +307,14 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/useraccount/chargedeposit.css');
                 $(this).find('.quan-true').show().end().siblings().find('.quan-true').hide();
                 $('#coupon_title').html($(this).find('.coupon_name').text());
             } else {
-                $('.hide_coupon').val('');
-                $(this).removeClass('picked-box').find('.quan-true').hide();
-                $('#coupon_title').html('<img class="dR-add" src="/images/deal/add.png" alt="">选择一张代金券<i id="coupon_count"><?= count($data)?></i>');
+                resetCoupon();
             }
-
         });
         //获取预期收益
         $('#deal_money').keyup(function () {
+            validForLoan();
             profit($(this));
+
             var val = $(this).val();
             if (false == $.isNumeric(val) || ' ' == val.substring(val.length - 1, val.length)) {
                 $(this).val(val.substring(0, val.length - 1));
@@ -309,6 +324,8 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/useraccount/chargedeposit.css');
         var guest = <?= intval(Yii::$app->user->isGuest)?>;//登录状态
         var rest = <?= ($deal->status == 1) ? 0 : floatval($deal->getLoanBalance())?>;
         var start = <?= $deal->start_money ?>;
+        var startMoney = <?= StringUtils::amountFormat2($deal->start_money) ?>;
+
         $('#deal_money').blur(function () {
             if (guest == 1){
                 return false;
@@ -319,75 +336,139 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/useraccount/chargedeposit.css');
                 if (rest >= start) {
                     if (money < start) {
                         $('.dR-tishi-error ').show();
-                        $('.dR-tishi-error .err_message').html('投资金额小于起投金额（<?= rtrim(rtrim(number_format($deal->start_money, 2), '0'), '.') ?>元）');
+                        $('.dR-tishi-error .err_message').html('投资金额小于起投金额（'+startMoney+'元）');
                         return false;
                     }
                 }
             }
         });
+
         //提交表单
-        var buy = $('#order_submit');
-        var form = $('#order_form');
-        form.on('submit', function (e) {
-            e.preventDefault();
+        $('#order_submit').on('click', function () {
             var money = $('#deal_money').val();
             var log = <?= Yii::$app->user->isGuest ? 0 : 1 ?>;
+            var validCouponCount = <?= $couponCount ?>;
 
             if (log == 0) {
                 login();
+
                 return false;
             }
+
             if (money > 0) {
                 if (rest >= start) {
                     if (money < start) {
                         $('.dR-tishi-error ').show();
-                        $('.dR-tishi-error .err_message').html('投资金额小于起投金额（<?= rtrim(rtrim(number_format($deal->start_money, 2), '0'), '.') ?>元）');
+                        $('.dR-tishi-error .err_message').html('投资金额小于起投金额（'+startMoney+'元）');
+
                         return false;
                     }
                 }
             } else {
                 $('.dR-tishi-error ').show();
                 $('.dR-tishi-error .err_message').html('投资金额不能为空');
+
                 return false;
             }
-            buy.attr('disabled', true);
-            var vals = form.serialize();
-            var xhr = $.post(form.attr("action"), vals, function (data) {
-                if (data.code == 0 && data.tourl) {
-                    location.href = data.tourl;
-                } else {
-                    $('.dR-tishi-error ').show();
-                    //未免密不提示、不跳转，直接弹框
-                    if('/user/qpay/binding/umpmianmi' != data.tourl && '/user/identity' != data.tourl){
-                        $('.dR-tishi-error .err_message').html(data.message);
-                    }
-                }
-                var currentUrl = encodeURIComponent(location.href);
-                if ('/site/login' == data.tourl) {
-                    //获取登录信息
-                    login();
-                } else if ('/user/qpay/binding/umpmianmi' == data.tourl) {
-                    mianmi('/user/qpay/binding/umpmianmi?from=' + currentUrl);
-                } else if ('/user/identity' == data.tourl) {
-                    window.location.href = '/user/userbank/identity?from=' + currentUrl;
-                } else {
-                    if (data.tourl) {
-                        location.href = data.tourl;
-                    }
-                }
-            });
-            xhr.always(function () {
-                buy.attr('disabled', false);
-                buy.val("立即投资");
-            });
 
-            xhr.fail(function () {
+            if (validCouponCount) {
+                openPopup();
+            } else {
+                order();
+            }
+        });
+    });
+
+    function order() {
+        var buy = $('#order_submit');
+        var form = $('#order_form');
+        var vals = form.serialize();
+
+        buy.attr('disabled', true);
+
+        var xhr = $.post(form.attr("action"), vals, function (data) {
+            if (data.code == 0 && data.tourl) {
+                location.href = data.tourl;
+            } else {
                 $('.dR-tishi-error ').show();
-                $('.dR-tishi-error .err_message').html('系统繁忙，请稍后重试！');
-            });
+                //未免密不提示、不跳转，直接弹框
+                if('/user/qpay/binding/umpmianmi' != data.tourl && '/user/identity' != data.tourl){
+                    $('.dR-tishi-error .err_message').html(data.message);
+                }
+            }
+            var currentUrl = encodeURIComponent(location.href);
+            if ('/site/login' == data.tourl) {
+                //获取登录信息
+                login();
+            } else if ('/user/qpay/binding/umpmianmi' == data.tourl) {
+                mianmi('/user/qpay/binding/umpmianmi?from=' + currentUrl);
+            } else if ('/user/identity' == data.tourl) {
+                window.location.href = '/user/userbank/identity?from=' + currentUrl;
+            } else {
+                if (data.tourl) {
+                    location.href = data.tourl;
+                }
+            }
+
+            if ('代金券确认码不能为空' === data.message) {
+                var couponId = $('.hide_coupon').val();
+
+                if (data.couponId != couponId) {
+                    resetCoupon();
+                } else {
+                    openPopup();
+                }
+
+                return;
+            }
+        });
+        xhr.always(function () {
+            buy.attr('disabled', false);
+            buy.val("立即投资");
         });
 
-    });
+        xhr.fail(function () {
+            $('.dR-tishi-error ').show();
+            $('.dR-tishi-error .err_message').html('系统繁忙，请稍后重试！');
+        });
+    }
+
+    function resetCoupon() {
+        $('.hide_coupon').val('');
+        $('#valid_coupon_list li').removeClass('picked-box').find('.quan-true').hide();
+        $('#coupon_title').html('<img class="dR-add" src="/images/deal/add.png" alt="">选择一张代金券<i id="coupon_count"><?= $couponCount ?></i>');
+    }
+
+    function openPopup() {
+        var validCouponCount = '<?= $couponCount ?>';
+        var couponId = $('.hide_coupon').val();
+        var couponMoney = $('#C'+couponId).attr('money');
+        var message = '';
+
+        if ('' !== couponId) {
+            message = '您有'+validCouponCount+'张代金券可用，将使用'+couponMoney+'元代金券一张，点击确定立即投资';
+        } else {
+            message = '您有'+validCouponCount+'张代金券可用，本次未使用代金券抵扣，点击确定立即投资';
+        }
+
+        $('.confirmBox-top p').html(message);
+        $('.mask').show();
+        $('.confirmBox').show();
+    }
+
+    function subConfirm() {
+        subClose();
+
+        $('#couponConfirm').val('1');
+        order();
+        $('#couponConfirm').val('');
+    }
+
+    function subClose() {
+        $('.mask').hide();
+        $('.confirmBox').hide();
+    }
+
     //处理ajax登录
     function login() {
         document.documentElement.style.overflow = 'hidden';   //禁用页面上下滚动效果
@@ -399,11 +480,10 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/useraccount/chargedeposit.css');
         } else {
             //加载登录页面
             getLoginHtml();
-
         }
     }
 
-    function chongzhi(){
+    function chongzhi() {
         var guest = <?= intval(Yii::$app->user->isGuest)?>;
         if (guest) {
             login();
@@ -411,6 +491,7 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/useraccount/chargedeposit.css');
             location.href = '/user/recharge/init';
         }
     }
+
     //获取登录页面
     function getLoginHtml() {
         $.ajax({
@@ -478,5 +559,21 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/useraccount/chargedeposit.css');
                 $('#expect_profit').html(WDJF.numberFormat(accDiv(accMul(accMul(money, yr), qixian), 12), false));
             }
         }
+    }
+
+    function validForLoan() {
+        var money = $('#deal_money').val();
+
+        $.get('/deal/deal/valid-for-loan?sn=<?= $deal->sn ?>&money='+money, function (data) {
+            if (0 === data.code) {
+                $('.hide_coupon').val(data.couponId);
+                $('#C'+data.couponId).parent().addClass('picked-box').siblings().removeClass('picked-box');
+                $('#C'+data.couponId).parent().find('.quan-true').show().end().siblings().find('.quan-true').hide();
+                $('#coupon_title').html($(this).find('.coupon_name').text());
+                $('#coupon_title').html($('#C'+data.couponId).next().find('.coupon_name').text());
+            } else {
+                resetCoupon();
+            }
+        });
     }
 </script>
