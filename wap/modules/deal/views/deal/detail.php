@@ -8,7 +8,7 @@ use wap\assets\WapAsset;
 use yii\helpers\HtmlPurifier;
 
 $this->registerCssFile(FE_BASE_URI.'libs/videojs/video-js.min.css', ['position' => 1]);
-$this->registerCssFile(ASSETS_BASE_URI.'css/xiangqing.css?v=20161222', ['depends' => WapAsset::class, 'position' => 1]);
+$this->registerCssFile(ASSETS_BASE_URI.'css/xiangqing.css?v=20170120', ['depends' => WapAsset::class, 'position' => 1]);
 $this->registerJsFile(FE_BASE_URI.'libs/videojs/video.min.js', ['position' => 1]);
 ?>
 

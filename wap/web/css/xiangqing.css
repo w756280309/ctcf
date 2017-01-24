@@ -330,6 +330,7 @@ i,em {
     bottom: 0;
     padding: 0;
     width: 100%;
+    max-width: 1170px;
     height: 40px;
     text-align: center;
     line-height: 40px;
@@ -354,6 +355,7 @@ i,em {
     position: fixed;
     bottom: 0;
     width: 100%;
+    max-width: 1170px;
     padding: 0;
     height: 40px;
     text-align: center;
