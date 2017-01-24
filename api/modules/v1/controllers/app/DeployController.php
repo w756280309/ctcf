@@ -25,7 +25,7 @@ class DeployController extends Controller
             ];
         }
 
-        if ($versionCode >= 3) {
+        if ($versionCode >= 4) {
             $content = [
                 'old_updatetype' => 1,
                 'updatedesc' => null,  //新版本更新说明
@@ -36,10 +36,10 @@ class DeployController extends Controller
         } else {
             $content = [
                 'old_updatetype' => 2,  //旧版本更新类型
-                'updatedesc' => '优化转让功能体验，新增活动分享功能，修复bug',  //新版本更新说明
-                'versioncode' => '3',   //新版本版本号
-                'versionname' => '1.2', //新版本版本名称
-                'downloadurl' => ('ios' === $clienttype) ? 'https://itunes.apple.com/us/app/wen-dou-jin-fu/id1107540109?mt=8' : 'http://dapp.wenjf.com/wjf_v1.2.apk',   //新版本下载地址
+                'updatedesc' => '优化APP体验，修复bug',  //新版本更新说明
+                'versioncode' => '4',   //新版本版本号
+                'versionname' => '1.3', //新版本版本名称
+                'downloadurl' => ('ios' === $clienttype) ? 'https://itunes.apple.com/us/app/wen-dou-jin-fu/id1107540109?mt=8' : 'http://dapp.wenjf.com/wjf_v1.3.apk',   //新版本下载地址
             ];
         }
 
