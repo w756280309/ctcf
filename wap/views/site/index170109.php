@@ -118,7 +118,7 @@ use yii\helpers\Html;
             <!--两张图片-->
             <ul class="clearfix twopic">
                 <li class="lf">
-                    <a href="/issuer?id=3&type=3"><img src="<?= ASSETS_BASE_URI ?>images/bdgk.png" alt=""></a>
+		            <a href="/issuer?id=5&type=2"><img src="<?= FE_BASE_URI ?>wap/index/images/bgproject_05.png" alt=""></a>
                 </li>
                 <li class="rg">
                     <a href="/issuer?id=2&type=1"><img src="<?= FE_BASE_URI ?>wap/index/images/sandu.png" alt=""></a>
@@ -323,6 +323,7 @@ use yii\helpers\Html;
         FastClick.attach(document.body);
 
         //开屏图逻辑
+        /*
         $('.close_splash').on('click', closeAdv);
         if (Cookies.get('splash_show') !== '20170109') {
             document.body.addEventListener('touchmove', eventTarget);
@@ -335,6 +336,7 @@ use yii\helpers\Html;
         $('.jumpAdv').on('click', function () {
             location.href = '/deal/deal/index';
         });
+        */
 
         //统计数据
         $.get('/site/stats-for-index', function (data) {
