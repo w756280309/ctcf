@@ -130,28 +130,21 @@ class DealController extends BaseController
      */
     public function actionCheck($sn)
     {
-        if (empty($sn)) {
-            throw $this->ex404();   //判断参数无效时,抛404异常
-        }
+        $deal = $this->findOr404(OnlineProduct::class, ['sn' => $sn]);
 
         $money = Yii::$app->request->post('money');
-        $coupon_id = Yii::$app->request->post('couponId');
+        $couponId = Yii::$app->request->post('couponId');
         $couponConfirm = Yii::$app->request->post('couponConfirm');
         $user = $this->getAuthedUser();
 
-        $validCoupons = $this->userCoupon($user);
-
-        if (!empty($validCoupons) && '1' !== $couponConfirm) {
-            return ['code' => 1, 'message' => '代金券确认码不能为空', 'couponId' => $coupon_id];
-        }
-
         $coupon = null;
-        if ($coupon_id) {
-            $coupon = UserCoupon::findOne($coupon_id);
+        if ($deal->allowUseCoupon && $couponId) {
+            $coupon = UserCoupon::findOne($couponId);
             if (null === $coupon) {
                 return ['code' => 1, 'message' => '无效的代金券'];
             }
         }
+
         //未登录时候保存购买数据
         if (null === $user) {
             Yii::$app->session['detail_' . $sn . '_data'] = ['money' => $money];
@@ -163,9 +156,26 @@ class DealController extends BaseController
         if ($ret['code'] != PayService::ERROR_SUCCESS) {
             return $ret;
         }
+
+        if ($deal->allowUseCoupon) {
+            $validCoupons = $this->userCoupon($user);
+
+            if (!empty($validCoupons) && '1' !== $couponConfirm) {
+                return ['code' => 1, 'message' => '代金券确认码不能为空'];
+            }
+        }
+
         //已登录时候保存购买数据
-        Yii::$app->session['detail_' . $sn . '_data'] = ['money' => $money, 'coupon_id' => $coupon_id];
-        return ['code' => 0, 'message' => '', 'tourl' => '/deal/deal/confirm?sn=' . $sn . '&money=' . $money . '&coupon_id=' . $coupon_id];
+        Yii::$app->session['detail_'.$sn.'_data'] = [
+            'money' => $money,
+            'coupon_id' => $couponId,
+        ];
+
+        return [
+            'code' => 0,
+            'message' => '',
+            'tourl' => '/deal/deal/confirm?sn='.$sn.'&money='.$money.'&coupon_id='.$couponId,
+        ];
     }
 
     /**

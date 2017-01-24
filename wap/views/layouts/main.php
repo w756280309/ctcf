@@ -75,7 +75,9 @@ $this->registerMetaTag([
             <?php } else { ?>
                 <div class="row title-box nav-height">
                     <div class="col-xs-2 back">
-                        <?php if ($this->backUrl) { ?>
+                        <?php if (false === $this->backUrl) { ?>
+                            <!-- 不显示箭头 -->
+                        <?php } elseif ($this->backUrl) { ?>
                             <img src="<?= ASSETS_BASE_URI ?>images/back.png" alt="" onclick="location.href='<?= $this->backUrl ?>'">
                         <?php } elseif ($this->replaceUrl) { ?>
                             <img src="<?= ASSETS_BASE_URI ?>images/back.png" alt="" onclick="location.replace('<?= $this->replaceUrl ?>')">

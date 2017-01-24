@@ -24,7 +24,7 @@ $this->registerJs(<<<JS
 JS
     , 1);
 
-$this->registerJsFile(ASSETS_BASE_URI.'js/order.js?v=20170119-vv', ['depends' => YiiAsset::class]);
+$this->registerJsFile(ASSETS_BASE_URI.'js/order.js?v=20170120-v', ['depends' => YiiAsset::class]);
 $this->registerCssFile(ASSETS_BASE_URI.'css/setting.css?v=20170103', ['depends' => WapAsset::class]);
 
 ?>
@@ -110,6 +110,8 @@ $this->registerCssFile(ASSETS_BASE_URI.'css/setting.css?v=20170103', ['depends' 
         function resetCoupon() {
             var html = '<div class="col-xs-4 safe-txt text-align-ct">使用代金券</div><div class="col-xs-8 safe-txt" onclick="toCoupon()"><span class="notice">请选择</span></div>';
             $('#coupon').html(html);
+
+            profit($('#money'));
         }
 
         $(function () {

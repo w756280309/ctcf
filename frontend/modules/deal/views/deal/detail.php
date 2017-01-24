@@ -284,7 +284,7 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/useraccount/chargedeposit.css');
         });
 
         //回退时保持选中状态，并保持代金券单笔投资限额提示信息
-        var coupon_id = <?= $coupon_id ?>;
+        var coupon_id = '<?= $coupon_id ?>';
         if (coupon_id > 0) {
             if ($('.picked-box') && $('.picked-box').length > 0) {
                 $('#coupon_title').html($('.picked-box').find('.coupon_name').text());
@@ -321,10 +321,10 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/useraccount/chargedeposit.css');
             }
         });
 
-        var guest = <?= intval(Yii::$app->user->isGuest)?>;//登录状态
+        var guest = <?= intval(Yii::$app->user->isGuest) ?>;//登录状态
         var rest = <?= ($deal->status == 1) ? 0 : floatval($deal->getLoanBalance())?>;
         var start = <?= $deal->start_money ?>;
-        var startMoney = <?= StringUtils::amountFormat2($deal->start_money) ?>;
+        var startMoney = '<?= StringUtils::amountFormat2($deal->start_money) ?>';
 
         $('#deal_money').blur(function () {
             if (guest == 1){
@@ -347,7 +347,6 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/useraccount/chargedeposit.css');
         $('#order_submit').on('click', function () {
             var money = $('#deal_money').val();
             var log = <?= Yii::$app->user->isGuest ? 0 : 1 ?>;
-            var validCouponCount = <?= $couponCount ?>;
 
             if (log == 0) {
                 login();
@@ -371,11 +370,7 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/useraccount/chargedeposit.css');
                 return false;
             }
 
-            if (validCouponCount) {
-                openPopup();
-            } else {
-                order();
-            }
+            order();
         });
     });
 

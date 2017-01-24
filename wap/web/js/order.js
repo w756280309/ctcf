@@ -11,11 +11,7 @@ $(function () {
             return;
         }
 
-        if (validCouponCount) {
-            openPopup();
-        } else {
-            order();
-        }
+        order();
     });
 
     $('.x-cancel').on('click', function () {
@@ -26,6 +22,7 @@ $(function () {
     $('.x-confirm').on('click', function () {
         $('#couponConfirm').val('1');
         order();
+        $('#couponConfirm').val('');
     });
 
     $('#money').on('keyup', function () {
@@ -49,14 +46,7 @@ function order() {
     var xhr = $.post($form.attr("action"), vals, function (data) {
         if (data.code) {
             if ('代金券确认码不能为空' === data.message) {
-                var couponId = $('#couponId').val();
-
-                if (data.couponId !== couponId) {
-                    resetCoupon();
-                } else {
-                    openPopup();
-                }
-
+                openPopup();
                 return;
             }
 
