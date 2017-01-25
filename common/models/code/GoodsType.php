@@ -9,8 +9,9 @@ class GoodsType extends ActiveRecord
     public function rules()
     {
         return [
-            [['sn', 'name'], 'string'],
+            ['sn', 'string'],
             ['name', 'required'],
+            ['name', 'string', 'max' => 15],
             ['sn', 'unique', 'message' => '此代金券已经被商品添加！'],
             ['type', 'integer'],
             ['createdAt', 'safe'],
