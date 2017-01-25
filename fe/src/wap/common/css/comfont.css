@@ -1,6 +1,6 @@
 .flex-content {
   margin: 0 auto;
-  width: 10rem;
+  max-width: 10rem;
 }
 .f10 {
   font-size: 10px;
@@ -82,6 +82,15 @@
 }
 [data-dpr="3"] .f18 {
   font-size: 54px;
+}
+.f19 {
+  font-size: 19px;
+}
+[data-dpr="2"] .f19 {
+  font-size: 38px;
+}
+[data-dpr="3"] .f19 {
+  font-size: 57px;
 }
 .f20 {
   font-size: 20px;

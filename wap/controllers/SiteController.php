@@ -13,6 +13,7 @@ use common\models\adv\Adv;
 use common\models\adv\Share;
 use common\models\affiliation\Affiliator;
 use common\models\affiliation\AffiliateCampaign;
+use common\models\affiliation\UserAffiliation;
 use common\models\app\AccessToken;
 use common\models\bank\EbankConfig;
 use common\models\bank\QpayConfig;
@@ -468,7 +469,7 @@ class SiteController extends Controller
                     if (!empty($next) && !defined('IN_APP')) {
                         $tourl = $next;
                     } else {
-                        $tourl = '/?mark=1612';
+                        $tourl = '/site/reg-success';
                     }
 
                     $urls = parse_url($tourl);
@@ -500,6 +501,49 @@ class SiteController extends Controller
             'model' => $captcha,
             'next' => $next,
         ]);
+    }
+
+    /**
+     * 注册成功页
+     */
+    public function actionRegSuccess()
+    {
+        //如果是游客，跳转到首页
+        if (Yii::$app->user->isGuest) {
+            return $this->redirect('/?mark='.time());
+        }
+        return $this->render('registerSucc');
+    }
+
+    /**
+     * 注册成功后添加分销商
+     *
+     * @return bool
+     */
+    public function actionAddAffiliator()
+    {
+        if (Yii::$app->user->isGuest) {
+            return false;
+        }
+        $userId = $this->getAuthedUser()->getId();
+        $id = (int) Yii::$app->request->get('id');
+
+        $affiliator = Affiliator::findOne($id);
+        $userAff = UserAffiliation::findOne(['user_id' => $userId]);
+        $realUserAff = null !== $userAff ? $userAff : new UserAffiliation();
+        if ($id <= 0 && null !== $realUserAff) {
+            return (bool) $realUserAff->findOne(['user_id' => $userId])->delete();
+        }
+        if (null === $affiliator) {
+            return false;
+        }
+
+        $realUserAff->trackCode = AffiliateCampaign::find()->select('trackCode')->where(['affiliator_id' => $id])->scalar();
+        $realUserAff->affiliator_id = $id;
+        $realUserAff->user_id = $userId;
+
+        return $realUserAff->save();
+
     }
 
     public function actionSession()

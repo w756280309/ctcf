@@ -1,0 +1,62 @@
+body {
+  background-color: #fff;
+  text-align: center;
+  color: #666666;
+}
+.registertop {
+  background-color: #f44336;
+  color: #fff;
+  line-height: 1.2rem;
+}
+.registermildle {
+  padding-top: 1.86666667rem;
+}
+.registermildle img {
+  width: 1.92rem;
+}
+.registermildle p {
+  line-height: 1.25333333rem;
+}
+.registerlist {
+  color: #000;
+  padding-left: 1.6rem;
+  padding-right: 1.2rem;
+  text-align: left;
+}
+.registerlist li:last-child {
+  line-height: 0.93333333rem;
+}
+.registerlist li:first-child {
+  margin-top: 0.46666667rem;
+  margin-bottom: 0.2rem;
+}
+.registerselect {
+  margin: 0.8rem 0 0.6rem 0;
+}
+.registerselect select {
+  appearance: none;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  background: url("../images/pointer.png") no-repeat scroll 95% center transparent;
+  background-size: 0.33333333rem 0.17333333rem;
+  padding-right: 0.50666667rem;
+  padding-left: 0.13333333rem;
+  padding-bottom: 0.03rem;
+}
+.registerselect select::-ms-expand {
+  display: none;
+}
+.open {
+  margin: 0 0.93333333rem;
+  display: block;
+  height: 0.93333333rem;
+  line-height: 0.93333333rem;
+  background-color: #f44336;
+  border-radius: 5px;
+  color: #fff;
+}
+.stroll {
+  line-height: 1.2rem;
+  color: #0080ff;
+  text-decoration: underline;
+}
