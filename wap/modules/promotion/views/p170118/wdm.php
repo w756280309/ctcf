@@ -9,7 +9,6 @@ $this->share = $share;
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/comfont.css?v=20170119">
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/wendumao/css/index.css?v=20170119">
 <script  src="<?= FE_BASE_URI ?>libs/lib.flexible3.js"></script>
-<script  src="<?= FE_BASE_URI ?>libs/jquery-1.11.1.min.js"></script>
 <script  src="<?= FE_BASE_URI ?>libs/fastclick.js"></script>
 <script src="<?= ASSETS_BASE_URI ?>js/common.js"></script>
 <script  src="<?= FE_BASE_URI ?>libs/jquery.lazyload.min.js"></script>
@@ -204,8 +203,7 @@ $this->share = $share;
         });
 
         var allowClick = true;
-        $('.phonenum a').on('click',function() {
-            var e = e || window.event;
+        $('.phonenum a').on('click',function(e) {
             e.preventDefault();
 
             if (!allowClick) {
