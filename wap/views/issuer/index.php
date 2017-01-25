@@ -26,7 +26,7 @@ switch ($type) {
 <?php if (1 === $type) { ?>
     <header>
         <img src="<?= FE_BASE_URI ?>wap/introduce/img/banner_03.png" alt="">
-        <img src="<?= FE_BASE_URI ?>wap/introduce/img/banner_04.png" alt="">
+        <img src="<?= FE_BASE_URI ?>wap/introduce/img/banner_04_new.png" alt="">
     </header>
     <section>
         <div class="publisher">
