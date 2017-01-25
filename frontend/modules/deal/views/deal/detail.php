@@ -220,7 +220,7 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/useraccount/chargedeposit.css');
                                 </div>
                             <?php } ?>
                             <div>
-                                <input type="button" class="dR-btn" id="order_submit" value="立即投资"/>
+                                <input type="submit" class="dR-btn" id="order_submit" value="立即投资"/>
                             </div>
                         </form>
                     <?php } else { ?>
@@ -344,7 +344,9 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/useraccount/chargedeposit.css');
         });
 
         //提交表单
-        $('#order_submit').on('click', function () {
+        $('#order_form').on('submit', function (e) {
+            e.preventDefault();
+
             var money = $('#deal_money').val();
             var log = <?= Yii::$app->user->isGuest ? 0 : 1 ?>;
 

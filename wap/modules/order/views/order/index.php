@@ -24,7 +24,7 @@ $this->registerJs(<<<JS
 JS
     , 1);
 
-$this->registerJsFile(ASSETS_BASE_URI.'js/order.js?v=20170120-v', ['depends' => YiiAsset::class]);
+$this->registerJsFile(ASSETS_BASE_URI.'js/order.js?v=20170125', ['depends' => YiiAsset::class]);
 $this->registerCssFile(ASSETS_BASE_URI.'css/setting.css?v=20170103', ['depends' => WapAsset::class]);
 
 ?>
@@ -81,7 +81,7 @@ $this->registerCssFile(ASSETS_BASE_URI.'css/setting.css?v=20170103', ['depends' 
     <div class="row login-sign-btn ht">
         <div class="col-xs-3"></div>
         <div class="col-xs-6 text-align-ct">
-            <input id="buybtn" class="btn-common btn-normal" type="button" style="background: #F2F2F2;" value="购买">
+            <input id="buybtn" class="btn-common btn-normal" type="submit" style="background: #F2F2F2;" value="购买">
         </div>
         <div class="col-xs-3"></div>
     </div>

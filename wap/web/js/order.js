@@ -5,7 +5,9 @@ var csrf;
 $(function () {
     csrf = $("meta[name=csrf-token]").attr('content');
 
-    $('#buybtn').on('click', function () {
+    $('#orderform').on('submit', function (e) {
+        e.preventDefault();
+
         if ('' === $('#money').val()) {
             toastCenter('投资金额不能为空');
             return;
