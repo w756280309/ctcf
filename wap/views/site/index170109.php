@@ -38,7 +38,7 @@ use yii\helpers\Html;
 
     <div class="showMore">
         <p class="clearfix">
-            <span class="f12 lf" id="totalTradeAmount">募集规模<i></i>万元</span>
+            <span class="f12 lf" id="totalTradeAmount">交易额<i></i>万元</span>
             <span class="f12 rg">历史兑付率100%</span>
         </p>
         <div class="clearfix">
