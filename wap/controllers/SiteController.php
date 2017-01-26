@@ -466,7 +466,7 @@ class SiteController extends Controller
                     $user->last_login = time();
                     $user->save();
 
-                    if (!empty($next) && !defined('IN_APP')) {
+                    if (!empty($next)) {
                         $tourl = $next;
                     } else {
                         $tourl = '/site/reg-success';
