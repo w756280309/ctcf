@@ -7,7 +7,7 @@ class m170126_080032_insert_promo_table extends Migration
     public function up()
     {
         $this->insert('promo', [
-            'title' => '首次投资送电影票',
+            'title' => '太空展套票',
             'startTime' => '2017-01-26 0:0:0',
             'endTime' => '2017-03-10 23:59:59',
             'key' => 'promo_space',
