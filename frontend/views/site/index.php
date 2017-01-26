@@ -294,7 +294,7 @@ use common\view\LoanHelper;
                 <p class="issuer-desc">中信保评级AAA级企业，政府担保企业，1万起投，年化收益8%</p>
             </li>
             <li><a href="https://www.wenjf.com/upload/showpic?id=24" target="_blank">宁富一号 - 三都国资</a>
-                <p class="issuer-desc">政府三函支持，AA级担保企业，5万起投，年化收益8.8%</p>
+                <p class="issuer-desc">政府支持，AA级担保企业，5万起投，年化收益8.8%</p>
             </li>
         </ul>
     </div>
