@@ -283,7 +283,7 @@ use yii\helpers\Html;
 
 <div class="pop hide">
     <img src="<?= FE_BASE_URI ?>wap/index/images/close.png" class="close_splash" alt="">
-    <img src="<?= ASSETS_BASE_URI ?>images/index/kaipin/170109.jpg" class="jumpAdv" alt="">
+    <img src="<?= ASSETS_BASE_URI ?>images/index/kaipin/aha_1b.png" class="jumpAdv" alt="">
 </div>
 
 <script>
@@ -323,11 +323,10 @@ use yii\helpers\Html;
         FastClick.attach(document.body);
 
         //开屏图逻辑
-        /*
         $('.close_splash').on('click', closeAdv);
-        if (Cookies.get('splash_show') !== '20170109') {
+        if (Cookies.get('splash_show') !== '20170126') {
             document.body.addEventListener('touchmove', eventTarget);
-            Cookies.set('splash_show', '20170109');
+            Cookies.set('splash_show', '20170126');
             $('.mask').removeClass('hide');
             $('.pop').removeClass('hide');
             setTimeout(closeAdv, 6000);
@@ -336,7 +335,6 @@ use yii\helpers\Html;
         $('.jumpAdv').on('click', function () {
             location.href = '/deal/deal/index';
         });
-        */
 
         //统计数据
         $.get('/site/stats-for-index', function (data) {
