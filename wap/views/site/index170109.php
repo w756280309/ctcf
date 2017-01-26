@@ -38,7 +38,7 @@ use yii\helpers\Html;
 
     <div class="showMore">
         <p class="clearfix">
-            <span class="f12 lf" id="totalTradeAmount">交易额<i></i>万元</span>
+            <span class="f12 lf" id="totalTradeAmount">交易额<i></i>亿元</span>
             <span class="f12 rg">历史兑付率100%</span>
         </p>
         <div class="clearfix">
@@ -340,7 +340,7 @@ use yii\helpers\Html;
 
         //统计数据
         $.get('/site/stats-for-index', function (data) {
-            $('#totalTradeAmount i').html(WDJF.numberFormat(accDiv(data.totalTradeAmount, 10000), 0));
+            $('#totalTradeAmount i').html(WDJF.numberFormat(accDiv(data.totalTradeAmount, 100000000), 0));
             $('#totalRefundAmount span').html(WDJF.numberFormat(accDiv(data.totalRefundAmount, 10000), 0));
             $('#totalRefundInterest span').html(WDJF.numberFormat(accDiv(data.totalRefundInterest, 10000), 0));
         });
