@@ -60,7 +60,7 @@ $this->registerCssFile(ASSETS_BASE_URI.'css/setting.css?v=20170103', ['depends' 
             <?php if ($validCouponCount) { ?>
                 <?php
                     $coupon = isset($coupons[$userCouponId]) ? $coupons[$userCouponId] : current($coupons);
-                    echo $this->renderFile('@app/modules/user/views/coupon/_valid_coupon.php', ['coupon' => $coupon]);
+                    echo $this->renderFile('@app/modules/user/views/coupon/_valid_coupon.php', ['coupon' => 0 === $userCouponId ? null : $coupon]);
                 ?>
             <?php } else { ?>
                 <div class="col-xs-4 safe-txt text-align-ct">使用代金券</div>
@@ -112,27 +112,17 @@ $this->registerCssFile(ASSETS_BASE_URI.'css/setting.css?v=20170103', ['depends' 
             $('#coupon').html(html);
 
             profit($('#money'));
-        }
-
-        function validCouponForLoan() {
-            var money = $('#money').val();
-
-            $.get('/user/coupon/valid-for-loan?sn=<?= $deal->sn ?>&money='+money, function (data) {
-                $('#coupon').html(data);
-            });
+            $.get('/user/coupon/del-coupon?sn=<?= $deal->sn ?>');
         }
 
         $(function () {
-            var $money = $('#money');
-            var userCouponId = '<?= $userCouponId ?>';
+            $('#money').on('keyup', function () {
+                var money = $(this).val();
 
-            $money.on('keyup', function () {
-                validCouponForLoan();
+                $.get('/user/coupon/valid-for-loan?sn=<?= $deal->sn ?>&money='+money, function (data) {
+                    $('#coupon').html(data);
+                });
             });
-
-            if ('' === userCouponId && '' !== $money.val()) {
-                validCouponForLoan();
-            }
         })
     </script>
 <?php } ?>

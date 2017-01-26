@@ -48,6 +48,11 @@ class OrderController extends BaseController
             $coupons = $this->userCoupon($user);
         }
 
+        $session = Yii::$app->session->get('loan_'.$deal->sn.'_coupon');
+        if (isset($session['couponId'])) {
+            $request['userCouponId'] = $session['couponId'];
+        }
+
         return $this->render('index', [
             'deal' => $deal,
             'user' => $user,
@@ -118,6 +123,8 @@ class OrderController extends BaseController
         if ($this->fromWx()) {
             $investFrom  = OnlineOrder::INVEST_FROM_WX;
         }
+
+        Yii::$app->session->destroySession('loan_'.$deal->sn.'_coupon');
 
         return $orderManager->createOrder($sn, $money,  $user->id, $coupon, $investFrom);
     }

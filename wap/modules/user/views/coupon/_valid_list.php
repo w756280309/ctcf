@@ -6,7 +6,7 @@ use common\utils\StringUtils;
 
 <?php foreach ($coupons as $coupon) : ?>
     <div class="box">
-        <div class="row coupon_num" onclick="location.replace('/order/order?sn=<?= $sn ?>&money=<?= $money ?>&userCouponId=<?= $coupon->id ?>')">
+        <div class="row coupon_num" onclick="toOrder($(this))" sn="<?= $sn ?>" money="<?= $money ?>" userCouponId="<?= $coupon->id ?>">
             <img src="<?= ASSETS_BASE_URI ?>images/ok_ticket.png" alt="券">
             <div class="row pos_box">
                 <div class="col-xs-2"></div>
@@ -36,3 +36,14 @@ use common\utils\StringUtils;
         </div>
     </div>
 <?php endforeach; ?>
+
+<script>
+    function toOrder($this) {
+        var sn = $this.attr('sn');
+        var money = $this.attr('money');
+        var userCouponId = $this.attr('userCouponId');
+
+        $.get('/user/coupon/add-coupon-session?sn='+sn+'&couponId='+userCouponId);
+        location.replace('/order/order?sn='+sn+'&money='+money+'&userCouponId='+userCouponId);
+    }
+</script>

@@ -9,10 +9,12 @@ $this->title = '温度金服注册成功页面';
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/comfont.css?v=1.0">
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/register/css/registerSucc.css?v=1.0">
 <script src="<?= FE_BASE_URI ?>libs/lib.flexible3.js"></script>
-<script src="<?= FE_BASE_URI ?>libs/jquery-1.11.1.min.js"></script>
 <script src="<?= FE_BASE_URI ?>libs/fastclick.js"></script>
+
 <div class="container flex-content">
-    <div class="registertop f19">注册成功</div>
+    <?php if (!defined('IN_APP')) { ?>
+        <div class="registertop f19">注册成功</div>
+    <?php } ?>
     <div class="registermildle f17">
         <img src="<?= FE_BASE_URI ?>wap/register/images/tick_01.png" alt="">
         <p>恭喜你注册成功！</p>

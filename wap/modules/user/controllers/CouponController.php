@@ -97,9 +97,46 @@ class CouponController extends BaseController
         $request = $this->validateParams(Yii::$app->request->get());
 
         $coupon = $this->validCoupon($this->getAuthedUser(), $request['money'])->one();
+        if ($coupon) {
+            $this->actionAddCouponSession($request['sn'], $coupon->id);
+        }
+
         $this->layout = false;
 
         return $this->render('_valid_coupon', ['coupon' => $coupon]);
+    }
+
+    /**
+     * 将对应的代金券ID存入session当中.
+     */
+    public function actionAddCouponSession($sn, $couponId)
+    {
+        if ($this->validateLoanWithCoupon($sn, $couponId)) {
+            Yii::$app->session->set('loan_'.$sn.'_coupon', ['couponId' => $couponId]);
+        }
+    }
+
+    /**
+     * 清空代金券操作.
+     */
+    public function actionDelCoupon($sn)
+    {
+        if ($this->validateLoanWithCoupon($sn, 0)) {
+            Yii::$app->session->set('loan_'.$sn.'_coupon', ['couponId' => 0]);
+        }
+    }
+
+    private function validateLoanWithCoupon($sn, $couponId)
+    {
+        if (empty($sn) || !preg_match('/^[A-Za-z0-9]+$/', $sn)) {
+            throw $this->ex404();
+        }
+
+        if (!preg_match('/^[0-9]+$/', $couponId)) {
+            throw $this->ex404();
+        }
+
+        return OnlineProduct::findOne(['sn' => $sn]);
     }
 
     /**
