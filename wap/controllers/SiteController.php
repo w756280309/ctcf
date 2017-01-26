@@ -508,11 +508,21 @@ class SiteController extends Controller
      */
     public function actionRegSuccess()
     {
+        $user = $this->getAuthedUser();
+
         //如果是游客，跳转到首页
-        if (Yii::$app->user->isGuest) {
+        if (null === $user) {
             return $this->redirect('/?mark='.time());
         }
-        return $this->render('registerSucc');
+
+        $affiliationId = 0;
+        $userAffiliation = UserAffiliation::findOne(['user_id' => $user->id]);
+
+        if (null !== $userAffiliation) {
+            $affiliationId = $userAffiliation->affiliator_id;
+        }
+
+        return $this->render('registerSucc', ['affiliationId' => $affiliationId]);
     }
 
     /**

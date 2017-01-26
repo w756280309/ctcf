@@ -24,13 +24,21 @@ $this->title = '温度金服注册成功页面';
     <div class="registerselect f15">
         <span>推荐媒体:</span>
         <select name="channel" id="channel" style="max-width:3.1rem;">
-            <option value="0">官方</option>
-            <option value="11">温州都市报</option>
-            <option value="3">衢州日报</option>
-            <option value="2">瑞安日报</option>
-            <option value="20">金华广电</option>
-            <option value="13">长兴传媒集团</option>
-            <option value="5">舟山日报</option>
+            <?php
+                $affArr = [
+                    0 => '官方',
+                    11 => '温州都市报',
+                    3 => '衢州日报',
+                    2 => '瑞安日报',
+                    20 => '金华广电',
+                    13 => '长兴传媒集团',
+                    5 => '舟山日报',
+                ];
+            ?>
+
+            <?php foreach ($affArr as $key => $val) { ?>
+                <option value="<?= $key ?>" <?= $key === $affiliationId ? 'selected' : '' ?>><?= $val ?></option>
+            <?php } ?>
         </select>
         <input type="hidden" class="lastChannel" name="lastChannel" value="-1">
     </div>
