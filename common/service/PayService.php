@@ -223,7 +223,7 @@ class PayService
             }
             //若可投金额大于起投金额
             if (bcdiv($money, $this->cdeal->start_money) * 1 < 1) {
-                return ['code' => self::ERROR_LESS_START_MONEY,  'message' => self::getErrorByCode(self::ERROR_LESS_START_MONEY).'('.$this->cdeal->start_money.'元)'];
+                return ['code' => self::ERROR_LESS_START_MONEY,  'message' => self::getErrorByCode(self::ERROR_LESS_START_MONEY).'('.StringUtils::amountFormat2($this->cdeal->start_money).'元)'];
             } elseif (bcdiv($orderbalance, $money) * 1 < 1) { //可投金额除以投标金额，如果是小于1的数字，代表超额投资
                 return ['code' => self::ERROR_MONEY_MUCH,  'message' => self::getErrorByCode(self::ERROR_MONEY_MUCH)];
             } elseif ($this->cdeal->dizeng_money / 1) {

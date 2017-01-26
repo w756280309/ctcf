@@ -42,7 +42,11 @@ class OrderController extends BaseController
 
         $deal = $this->findOr404(OnlineProduct::class, ['sn' => $request['sn']]);
         $user = $this->getAuthedUser();
-        $coupons = $this->userCoupon($user);
+        $coupons = [];
+
+        if ($deal->allowUseCoupon) {
+            $coupons = $this->userCoupon($user);
+        }
 
         return $this->render('index', [
             'deal' => $deal,
@@ -99,7 +103,7 @@ class OrderController extends BaseController
             $validCoupons = $this->userCoupon($user);
 
             if (!empty($validCoupons) && '1' !== $couponConfirm) {
-                return ['code' => 1, 'message' => '代金券确认码不能为空'];
+                return ['code' => 1, 'message' => '', 'confirm' => 1];
             }
         }
 

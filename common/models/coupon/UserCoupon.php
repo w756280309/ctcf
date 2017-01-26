@@ -5,6 +5,7 @@ namespace common\models\coupon;
 use common\models\order\OnlineOrder;
 use common\models\product\OnlineProduct as Loan;
 use common\models\user\User;
+use common\utils\StringUtils;
 use Exception;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
@@ -141,7 +142,7 @@ class UserCoupon extends ActiveRecord
         }
 
         if (bccomp($coupon->couponType->minInvest, $money, 2) > 0) {
-            throw new Exception('代金券最低投资'.rtrim(rtrim($coupon->couponType->minInvest, '0'), '.').'元可用');
+            throw new Exception('代金券最低投资'.StringUtils::amountFormat2($coupon->couponType->minInvest).'元可用');
         }
 
         return $coupon;

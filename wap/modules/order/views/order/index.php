@@ -24,7 +24,7 @@ $this->registerJs(<<<JS
 JS
     , 1);
 
-$this->registerJsFile(ASSETS_BASE_URI.'js/order.js?v=20170125', ['depends' => YiiAsset::class]);
+$this->registerJsFile(ASSETS_BASE_URI.'js/order.js?v=20170125-v', ['depends' => YiiAsset::class]);
 $this->registerCssFile(ASSETS_BASE_URI.'css/setting.css?v=20170103', ['depends' => WapAsset::class]);
 
 ?>
@@ -114,14 +114,25 @@ $this->registerCssFile(ASSETS_BASE_URI.'css/setting.css?v=20170103', ['depends' 
             profit($('#money'));
         }
 
-        $(function () {
-            $('#money').on('keyup', function () {
-                var money = $('#money').val();
+        function validCouponForLoan() {
+            var money = $('#money').val();
 
-                $.get('/user/coupon/valid-for-loan?sn=<?= $deal->sn ?>&money='+money, function (data) {
-                    $('#coupon').html(data);
-                });
+            $.get('/user/coupon/valid-for-loan?sn=<?= $deal->sn ?>&money='+money, function (data) {
+                $('#coupon').html(data);
             });
+        }
+
+        $(function () {
+            var $money = $('#money');
+            var userCouponId = '<?= $userCouponId ?>';
+
+            $money.on('keyup', function () {
+                validCouponForLoan();
+            });
+
+            if ('' === userCouponId && '' !== $money.val()) {
+                validCouponForLoan();
+            }
         })
     </script>
 <?php } ?>

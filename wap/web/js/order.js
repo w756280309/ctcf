@@ -2,6 +2,7 @@
  * Created by lcl on 2015/11/16.
  */
 var csrf;
+
 $(function () {
     csrf = $("meta[name=csrf-token]").attr('content');
 
@@ -47,7 +48,7 @@ function order() {
     var vals = $form.serialize();
     var xhr = $.post($form.attr("action"), vals, function (data) {
         if (data.code) {
-            if ('代金券确认码不能为空' === data.message) {
+            if ('undefined' !== typeof data.confirm && 1 === data.confirm) {
                 openPopup();
                 return;
             }

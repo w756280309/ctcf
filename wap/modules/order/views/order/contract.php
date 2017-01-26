@@ -1,5 +1,6 @@
 <?php
-$this->title="合同说明";
+
+$this->title = '合同说明';
 
 use wap\assets\WapAsset;
 

@@ -41,21 +41,24 @@ class DealController extends BaseController
 
         //获取可用代金券
         $coupons = [];
-        if ($user) {
+        $money = 0;
+        $userCouponId = 0;
+        $formConfirm = 0;
+
+        if ($deal->allowUseCoupon && $user) {
             $coupons = $this->userCoupon($user);
         }
 
         //获取session中购买数据
-        $detail_data = Yii::$app->session['detail_' . $sn . '_data'];
+        $detail_data = Yii::$app->session['detail_'.$sn.'_data'];
 
-        $money = 0;
         if ($detail_data['money'] > 0) {
             $money = $detail_data['money'];
         }
 
-        $userCouponId = 0;
         if ($detail_data['coupon_id'] > 0) {
             $userCouponId = (int) $detail_data['coupon_id'];
+            $formConfirm = 1;
         } elseif (!empty($coupons)) {
             $userCouponId = reset($coupons)->id;
         }
@@ -66,6 +69,7 @@ class DealController extends BaseController
             'user' => $user,
             'money' => $money,
             'coupon_id' => $userCouponId,
+            'fromConfirm' => $formConfirm,
         ]);
     }
 
@@ -87,22 +91,30 @@ class DealController extends BaseController
             $request['money'] = null;
         }
 
-        $this->findOr404(OnlineProduct::class, ['sn' => $request['sn']]);
+        $deal = $this->findOr404(OnlineProduct::class, ['sn' => $request['sn']]);
 
-        $coupons = $this->userCoupon($this->getAuthedUser(), $request['money']);
+        if ($deal->allowUseCoupon) {
+            $coupons = $this->userCoupon($this->getAuthedUser(), $request['money']);
 
-        if (empty($coupons)) {
-            $backArr = [
-                'code' => 1,
-                'message' => '没有可用代金券',
-            ];
+            if (empty($coupons)) {
+                $backArr = [
+                    'code' => 1,
+                    'message' => '没有可用代金券',
+                ];
+            } else {
+                $backArr = [
+                    'code' => 0,
+                    'message' => '查询成功',
+                    'couponId' => reset($coupons)->id,
+                ];
+            }
         } else {
             $backArr = [
-                'code' => 0,
-                'message' => '查询成功',
-                'couponId' => reset($coupons)->id,
+                'code' => 1,
+                'message' => '当前标的不允许使用代金券',
             ];
         }
+
 
         return $backArr;
     }
@@ -161,7 +173,7 @@ class DealController extends BaseController
             $validCoupons = $this->userCoupon($user);
 
             if (!empty($validCoupons) && '1' !== $couponConfirm) {
-                return ['code' => 1, 'message' => '代金券确认码不能为空'];
+                return ['code' => 1, 'message' => '', 'confirm' => 1];
             }
         }
 

@@ -277,19 +277,11 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/useraccount/chargedeposit.css');
         });
 
         //宽限期
-        $('#kuanxian_tip').mouseover(function(){
+        $('#kuanxian_tip').mouseover(function() {
             $('#kuanxian_message').fadeIn();
-        }).mouseleave(function(){
+        }).mouseleave(function() {
             $('#kuanxian_message').fadeOut();
         });
-
-        //回退时保持选中状态，并保持代金券单笔投资限额提示信息
-        var coupon_id = '<?= $coupon_id ?>';
-        if (coupon_id > 0) {
-            if ($('.picked-box') && $('.picked-box').length > 0) {
-                $('#coupon_title').html($('.picked-box').find('.coupon_name').text());
-            }
-        }
 
         //获取投资记录
         getOrderList('/deal/deal/order-list?pid=<?=$deal->id?>');
@@ -298,48 +290,13 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/useraccount/chargedeposit.css');
             getOrderList($(this).attr('href'));
         });
 
-        var money = $(this).val();
-        //代金券选择
-        $('#valid_coupon_list li').bind('click', function () {
-            if (!$(this).hasClass('picked-box')) {
-                $('.hide_coupon').val($(this).attr('cid'));
-                $(this).addClass('picked-box').siblings().removeClass('picked-box');
-                $(this).find('.quan-true').show().end().siblings().find('.quan-true').hide();
-                $('#coupon_title').html($(this).find('.coupon_name').text());
-            } else {
-                resetCoupon();
-            }
-        });
         //获取预期收益
         $('#deal_money').keyup(function () {
-            validForLoan();
             profit($(this));
 
             var val = $(this).val();
             if (false == $.isNumeric(val) || ' ' == val.substring(val.length - 1, val.length)) {
                 $(this).val(val.substring(0, val.length - 1));
-            }
-        });
-
-        var guest = <?= intval(Yii::$app->user->isGuest) ?>;//登录状态
-        var rest = <?= ($deal->status == 1) ? 0 : floatval($deal->getLoanBalance())?>;
-        var start = <?= $deal->start_money ?>;
-        var startMoney = '<?= StringUtils::amountFormat2($deal->start_money) ?>';
-
-        $('#deal_money').blur(function () {
-            if (guest == 1){
-                return false;
-            }
-            //判断起投金额
-            var money = $(this).val();
-            if (money) {
-                if (rest >= start) {
-                    if (money < start) {
-                        $('.dR-tishi-error ').show();
-                        $('.dR-tishi-error .err_message').html('投资金额小于起投金额（'+startMoney+'元）');
-                        return false;
-                    }
-                }
             }
         });
 
@@ -356,16 +313,7 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/useraccount/chargedeposit.css');
                 return false;
             }
 
-            if (money > 0) {
-                if (rest >= start) {
-                    if (money < start) {
-                        $('.dR-tishi-error ').show();
-                        $('.dR-tishi-error .err_message').html('投资金额小于起投金额（'+startMoney+'元）');
-
-                        return false;
-                    }
-                }
-            } else {
+            if ('' === money) {
                 $('.dR-tishi-error ').show();
                 $('.dR-tishi-error .err_message').html('投资金额不能为空');
 
@@ -407,18 +355,11 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/useraccount/chargedeposit.css');
                 }
             }
 
-            if ('代金券确认码不能为空' === data.message) {
-                var couponId = $('.hide_coupon').val();
-
-                if (data.couponId != couponId) {
-                    resetCoupon();
-                } else {
-                    openPopup();
-                }
-
-                return;
+            if ('undefined' !== typeof data.confirm && 1 === data.confirm) {
+                openPopup();
             }
         });
+
         xhr.always(function () {
             buy.attr('disabled', false);
             buy.val("立即投资");
@@ -428,42 +369,6 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/useraccount/chargedeposit.css');
             $('.dR-tishi-error ').show();
             $('.dR-tishi-error .err_message').html('系统繁忙，请稍后重试！');
         });
-    }
-
-    function resetCoupon() {
-        $('.hide_coupon').val('');
-        $('#valid_coupon_list li').removeClass('picked-box').find('.quan-true').hide();
-        $('#coupon_title').html('<img class="dR-add" src="/images/deal/add.png" alt="">选择一张代金券<i id="coupon_count"><?= $couponCount ?></i>');
-    }
-
-    function openPopup() {
-        var validCouponCount = '<?= $couponCount ?>';
-        var couponId = $('.hide_coupon').val();
-        var couponMoney = $('#C'+couponId).attr('money');
-        var message = '';
-
-        if ('' !== couponId) {
-            message = '您有'+validCouponCount+'张代金券可用，将使用'+couponMoney+'元代金券一张，点击确定立即投资';
-        } else {
-            message = '您有'+validCouponCount+'张代金券可用，本次未使用代金券抵扣，点击确定立即投资';
-        }
-
-        $('.confirmBox-top p').html(message);
-        $('.mask').show();
-        $('.confirmBox').show();
-    }
-
-    function subConfirm() {
-        subClose();
-
-        $('#couponConfirm').val('1');
-        order();
-        $('#couponConfirm').val('');
-    }
-
-    function subClose() {
-        $('.mask').hide();
-        $('.confirmBox').hide();
     }
 
     //处理ajax登录
@@ -481,7 +386,7 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/useraccount/chargedeposit.css');
     }
 
     function chongzhi() {
-        var guest = <?= intval(Yii::$app->user->isGuest)?>;
+        var guest = <?= intval(Yii::$app->user->isGuest) ?>;
         if (guest) {
             login();
         } else {
@@ -508,8 +413,7 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/useraccount/chargedeposit.css');
     }
 
     //获取投标记录
-    function getOrderList(url)
-    {
+    function getOrderList(url) {
         $.ajax({
             beforeSend: function (req) {
                 req.setRequestHeader("Accept", "text/html");
@@ -558,6 +462,77 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/useraccount/chargedeposit.css');
         }
     }
 
+    <?php if ($couponCount > 0 && $deal->allowUseCoupon) { ?>
+    $(function () {
+        //回退时保持选中状态，并保持代金券单笔投资限额提示信息
+        var coupon_id = '<?= $coupon_id ?>';
+        if (coupon_id > 0) {
+            if ($('.picked-box') && $('.picked-box').length > 0) {
+                $('#coupon_title').html($('.picked-box').find('.coupon_name').text());
+            }
+        }
+
+        //代金券选择
+        $('#valid_coupon_list li').bind('click', function () {
+            if (!$(this).hasClass('picked-box')) {
+                $('.hide_coupon').val($(this).attr('cid'));
+                $(this).addClass('picked-box').siblings().removeClass('picked-box');
+                $(this).find('.quan-true').show().end().siblings().find('.quan-true').hide();
+                $('#coupon_title').html($(this).find('.coupon_name').text());
+            } else {
+                resetCoupon();
+            }
+        });
+
+        //获取有效代金券
+        $('#deal_money').keyup(function () {
+            validForLoan();
+        });
+
+        var money = <?= $money ?>;
+        var fromConfirm = <?= $fromConfirm ?>;
+
+        if (0 === fromConfirm && money > 0) {
+            validForLoan();
+        }
+    });
+
+    function resetCoupon() {
+        $('.hide_coupon').val('');
+        $('#valid_coupon_list li').removeClass('picked-box').find('.quan-true').hide();
+        $('#coupon_title').html('<img class="dR-add" src="/images/deal/add.png" alt="">选择一张代金券<i id="coupon_count"><?= $couponCount ?></i>');
+    }
+
+    function openPopup() {
+        var validCouponCount = '<?= $couponCount ?>';
+        var couponId = $('.hide_coupon').val();
+        var couponMoney = $('#C'+couponId).attr('money');
+        var message = '';
+
+        if ('' !== couponId) {
+            message = '您有'+validCouponCount+'张代金券可用，将使用'+couponMoney+'元代金券一张，点击确定立即投资';
+        } else {
+            message = '您有'+validCouponCount+'张代金券可用，本次未使用代金券抵扣，点击确定立即投资';
+        }
+
+        $('.confirmBox-top p').html(message);
+        $('.mask').show();
+        $('.confirmBox').show();
+    }
+
+    function subConfirm() {
+        subClose();
+
+        $('#couponConfirm').val('1');
+        order();
+        $('#couponConfirm').val('');
+    }
+
+    function subClose() {
+        $('.mask').hide();
+        $('.confirmBox').hide();
+    }
+
     function validForLoan() {
         var money = $('#deal_money').val();
 
@@ -573,4 +548,5 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/useraccount/chargedeposit.css');
             }
         });
     }
+    <?php } ?>
 </script>
