@@ -210,8 +210,7 @@ $this->share = $share;
         });
 
         var allowClick = true;
-        $('.phonenum a').on('click',function() {
-            var e = e || window.event;
+        $('.phonenum a').on('click',function(e) {
             e.preventDefault();
 
             if (!allowClick) {
