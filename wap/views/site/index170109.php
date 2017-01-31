@@ -323,6 +323,7 @@ use yii\helpers\Html;
         FastClick.attach(document.body);
 
         //开屏图逻辑
+        /*
         $('.close_splash').on('click', closeAdv);
         if (Cookies.get('splash_show') !== '20170126') {
             document.body.addEventListener('touchmove', eventTarget);
@@ -335,6 +336,7 @@ use yii\helpers\Html;
         $('.jumpAdv').on('click', function () {
             location.href = '/deal/deal/index';
         });
+        */
 
         //统计数据
         $.get('/site/stats-for-index', function (data) {
