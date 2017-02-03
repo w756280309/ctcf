@@ -48,6 +48,12 @@ GridView::widget([
             'headerOptions' => ['class' => 'money'],
         ],
         [
+            'label' => $isOffline ? '认购日期' : '认购时间',
+            'value' => function($data) use ($isOffline) {
+                return $isOffline ? $data->offlineOrder->orderDate : date('Y-m-d H:i:s', $data->onlineOrder->created_at);
+            },
+        ],
+        [
             'label' => '创建时间',
             'value' => function($data) {
                 return $data->createTime;

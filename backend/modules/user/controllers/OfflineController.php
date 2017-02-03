@@ -5,6 +5,7 @@ namespace backend\modules\user\controllers;
 use backend\controllers\BaseController;
 use common\models\mall\PointOrder;
 use common\models\mall\PointRecord;
+use common\models\offline\OfflineOrder;
 use common\models\offline\OfflinePointManager;
 use common\models\offline\OfflineUser;
 use common\utils\TxUtils;
@@ -58,7 +59,7 @@ class OfflineController extends BaseController
      */
     public function actionPoints($id)
     {
-        $query = PointRecord::find()->where(['user_id' => $id, 'isOffline' => true])->orderBy(['id' => SORT_DESC]);
+        $query = PointRecord::find()->where(['user_id' => $id, 'isOffline' => true])->orderBy(['recordTime' => SORT_DESC]);
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -67,7 +68,23 @@ class OfflineController extends BaseController
             ],
         ]);
 
-        return $this->renderFile('@backend/modules/user/views/offline/_point_record.php', ['dataProvider' => $dataProvider, 'id' => $id]);
+        $orderIds = [];
+        $orders = [];
+
+        foreach ($dataProvider->models as $model) {
+            if (PointRecord::TYPE_OFFLINE_BUY_ORDER === $model->ref_type) {
+                $orderIds[] = $model->ref_id;
+            }
+        }
+
+        if (!empty($orderIds)) {
+            $orders = OfflineOrder::find()
+                ->where(['id' => $orderIds])
+                ->indexBy('id')
+                ->all();
+        }
+
+        return $this->renderFile('@backend/modules/user/views/offline/_point_record.php', ['dataProvider' => $dataProvider, 'id' => $id, 'orders' => $orders]);
     }
 
     /**

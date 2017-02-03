@@ -66,7 +66,13 @@ use yii\grid\GridView;
                 },
             ],
             [
-                'label' => '交易时间',
+                'label' => '认购日期',
+                'value' => function ($record) use ($orders) {
+                    return PointRecord::TYPE_OFFLINE_BUY_ORDER === $record->ref_type && isset($orders[$record->ref_id]) ? $orders[$record->ref_id]->orderDate : '---';
+                }
+            ],
+            [
+                'label' => '创建时间',
                 'value' => function ($record) {
                     return $record['recordTime'];
                 }

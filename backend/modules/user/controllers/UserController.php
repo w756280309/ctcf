@@ -113,7 +113,7 @@ class UserController extends BaseController
                 'user_id' => $userId,
                 'isOffline' => $isOffline,
             ])
-            ->orderBy(['id' => SORT_DESC]);
+            ->orderBy(['createTime' => SORT_DESC]);
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
