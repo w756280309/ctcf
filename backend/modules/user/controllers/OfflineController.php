@@ -59,7 +59,7 @@ class OfflineController extends BaseController
      */
     public function actionPoints($id)
     {
-        $query = PointRecord::find()->where(['user_id' => $id, 'isOffline' => true])->orderBy(['recordTime' => SORT_DESC]);
+        $query = PointRecord::find()->where(['user_id' => $id, 'isOffline' => true])->orderBy(['recordTime' => SORT_DESC, 'id' => SORT_DESC]);
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,

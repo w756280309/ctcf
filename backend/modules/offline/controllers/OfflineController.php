@@ -333,8 +333,11 @@ class OfflineController extends BaseController
      */
     private function updatePointsAndAnnual($order, $type)
     {
-        $pointManager = new OfflinePointManager();
-        $pointManager->updatePoints($order, $type);
+        //只有2017年的数据导入及删除才更改积分
+        if (strtotime($order->orderDate) >= strtotime('2017-01-01')) {
+            $pointManager = new OfflinePointManager();
+            $pointManager->updatePoints($order, $type);
+        }
         $offlineUserManager = new OfflineUserManager();
         $offlineUserManager->updateAnnualInvestment($order);
     }
