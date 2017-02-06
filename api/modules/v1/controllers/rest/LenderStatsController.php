@@ -18,7 +18,7 @@ class LenderStatsController extends Controller
     public function actionExport()
     {
         $data = UserStats::collectLenderData();
-        UserStats::createCsvFile($data);
+        UserStats::exportAsXlsx($data);
     }
 
     /**

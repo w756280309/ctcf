@@ -167,11 +167,20 @@ FROM perf WHERE DATE_FORMAT(bizDate,'%Y-%m') < DATE_FORMAT(NOW(),'%Y-%m')  GROUP
         }
     }
 
-    public function actionList($type, $field, $date, $result = 0)
+    /**
+     * 根据待筛选类型、数据项、日期获取筛选到的用户ID
+     * @param string $type  筛选类型，day:日筛选，month:月筛选
+     * @param string $field 筛选项
+     * @param string $date  日期字符串   YYYY-mm-dd|YYYY-mm
+     * @return array
+     * @throws NotFoundHttpException
+     */
+    private function getUserIdsByDataField($type, $field, $date)
     {
         if (!in_array($type, ['day', 'month'])) {
             throw new NotFoundHttpException('type 参数错误');
         }
+        $ids = [];
         $perf = new Perf();
         $fun = 'getDay' . ucfirst($field);
         if ('day' === $type) {
@@ -192,6 +201,13 @@ FROM perf WHERE DATE_FORMAT(bizDate,'%Y-%m') < DATE_FORMAT(NOW(),'%Y-%m')  GROUP
             }
             $ids = array_unique($ids);
         }
+        return $ids;
+    }
+
+    public function actionList($type, $field, $date, $result = 0)
+    {
+        $ids = $this->getUserIdsByDataField($type, $field, $date);
+
         $query = User::find()->where(['type' => 1])->andWhere(['in', 'id', $ids]);
         $pages = new Pagination(['totalCount' => $query->count(), 'pageSize' => 20]);
         $query = $query->orderBy(['id' => SORT_DESC])->offset($pages->offset)->limit($pages->limit);
@@ -210,31 +226,10 @@ FROM perf WHERE DATE_FORMAT(bizDate,'%Y-%m') < DATE_FORMAT(NOW(),'%Y-%m')  GROUP
 
     public function actionListExport($type, $field, $date)
     {
-        if (!in_array($type, ['day', 'month'])) {
-            throw new NotFoundHttpException('type 参数错误');
-        }
-        $perf = new Perf();
-        $fun = 'getDay' . ucfirst($field);
-        if ('day' === $type) {
-            if (!in_array($field, ['investor', 'newRegisterAndInvestor', 'newInvestor', 'investAndLogin', 'notInvestAndLogin', 'repayUser'])) {
-                throw new NotFoundHttpException("日统计的 field 参数目前只支持 'investor', 'newRegisterAndInvestor', 'newInvestor', 'investAndLogin', 'notInvestAndLogin', 'repayUser'");
-            }
-            $ids = $perf->{$fun}($date);
-        } else {
-            if (!in_array($field, ['investor', 'newRegisterAndInvestor', 'newInvestor'])) {
-                throw new NotFoundHttpException("月统计的 field 参数目前只支持 'investor', 'newRegisterAndInvestor', 'newInvestor', 'investAndLogin', 'notInvestAndLogin'");
-            }
-            $num = date('t', strtotime($date));
-            $ids = [];
-            for ($i = 1; $i <= $num; $i++) {
-                $newDate = $date . '-' . str_pad($i, 2, '0', STR_PAD_LEFT);
-                $res = $perf->{$fun}($newDate);
-                $ids = array_merge($ids, $res);
-            }
-            $ids = array_unique($ids);
-        }
+        $ids = $this->getUserIdsByDataField($type, $field, $date);
+
         $data = UserStats::collectLenderData(['in', '`user`.id', $ids]);
-        UserStats::createCsvFile($data);
+        UserStats::exportAsXlsx($data);
     }
 
     //统计分销商的 注册人数、购买人数、购买金额

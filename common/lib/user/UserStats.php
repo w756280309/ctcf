@@ -159,18 +159,21 @@ class UserStats
     }
 
     /**
-     * 生成csv导出文件
+     * 根据要到处的数据生成PHPExcel对象
+     * @param $exportData         array   需要导出的数据，二维数组，包含标题，如果数据项是字符串类型，导出后单元格为文本格式
+     * @return \PHPExcel
+     * @throws \yii\web\NotFoundHttpException
      */
-    public static function createCsvFile(array $data)
+    public static function initPhpExcelObject(array  $exportData)
     {
-        if (empty($data)) {
+        if (empty($exportData)) {
             throw new \yii\web\NotFoundHttpException('The data is null');
         }
 
         $objPHPExcel = new \PHPExcel();
         $currentColumn = 1;
         $currentCell = 'A';
-        foreach ($data as $row) {
+        foreach ($exportData as $row) {
             if (is_array($row)) {
                 $currentCell = 'A';
                 foreach ($row as $value) {
@@ -187,7 +190,21 @@ class UserStats
         foreach (range('A', $currentCell) as $columnId) {
             $objPHPExcel->getActiveSheet()->getColumnDimension($columnId)->setAutoSize(true);
         }
-        header(HeaderUtils::getContentDispositionHeader('投资用户信息('.date('Y-m-d H:i:s').').xlsx', \Yii::$app->request->userAgent));
+        return $objPHPExcel;
+    }
+
+    /**
+     * 导出成xlsx文件
+     * @param $exportData         array   需要导出的数据，二维数组，包含标题，如果数据项是字符串类型，导出后单元格为文本格式
+     * @param $fileName     string  导出的文件名字,扩展名为xlsx , 如 “投资用户信息.xlsx”
+     */
+    public static function exportAsXlsx(array $exportData, $fileName = '')
+    {
+        $objPHPExcel = self::initPhpExcelObject($exportData);
+        if (empty($fileName)) {
+            $fileName = '投资用户信息('.date('Y-m-d H:i:s').').xlsx';
+        }
+        header(HeaderUtils::getContentDispositionHeader($fileName, \Yii::$app->request->userAgent));
         ob_clean();
         $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
         $objWriter->save('php://output');

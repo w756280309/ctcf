@@ -4,6 +4,7 @@ namespace backend\modules\order\controllers;
 
 use backend\controllers\BaseController;
 use backend\modules\user\core\v1_0\UserAccountBackendCore;
+use common\lib\user\UserStats;
 use common\models\user\User;
 use common\models\order\OnlineOrder;
 use common\models\product\OnlineProduct;
@@ -73,10 +74,7 @@ class OnlineorderController extends BaseController
      */
     public function actionExport($id)
     {
-        if (empty($id)) {
-            throw $this->ex404();   //参数无效时,抛出404异常
-        }
-
+        $loan = $this->findOr404(OnlineProduct::className(), $id);
         $u = User::tableName();
         $o = OnlineOrder::tableName();
         $lists = OnlineOrder::find()
@@ -110,7 +108,7 @@ class OnlineorderController extends BaseController
                 ];
             }
         }
-        \Wcg\Csv\Exporter::export($exportData, 'invest-records'.time().'.csv');
+        UserStats::exportAsXlsx($exportData, $loan->title.'投资记录('.date('Y-m-d H:i:s').').xlsx');
     }
 
     /**

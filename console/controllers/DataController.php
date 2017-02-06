@@ -12,6 +12,8 @@ use common\models\product\Issuer;
 use common\models\product\OnlineProduct;
 use common\models\user\User;
 use common\models\user\UserInfo;
+use common\utils\StringUtils;
+use common\view\LoanHelper;
 use Ding\DingNotify;
 use wap\modules\promotion\models\RankingPromo;
 use yii\console\Controller;
@@ -128,27 +130,8 @@ class DataController extends Controller
         $path  = Yii::getAlias('@backend').'/web/data/';
 
         $file = $path.'投资用户信息('.date('Y-m-d H:i:s').').xlsx';
-        $objPHPExcel = new \PHPExcel();
-        $currentColumn = 1;
-        $currentCell= 'A';
-        foreach ($allData as $row) {
-            if (is_array($row)) {
-                $currentCell = 'A';
-                foreach ($row as $value) {
-                    if (is_string($value)) {
-                        $objPHPExcel->getActiveSheet()->setCellValueExplicit($currentCell.$currentColumn, $value);
-                    } else {
-                        $objPHPExcel->getActiveSheet()->setCellValue($currentCell.$currentColumn, $value);
-                    }
-                    ++$currentCell;
-                }
-            }
-            ++$currentColumn;
-        }
-        foreach (range('A', $currentCell) as $columnId) {
-            $objPHPExcel->getActiveSheet()->getColumnDimension($columnId)->setAutoSize(true);
-        }
 
+        $objPHPExcel = UserStats::initPhpExcelObject($allData);
         $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
         $objWriter->save($file);
 
@@ -220,12 +203,63 @@ class DataController extends Controller
     public function actionExportIssuerRecord($issuerId = 1)
     {
         $issuerId = intval($issuerId);
-        $record = Issuer::getIssuerRecords($issuerId);//获取立合旺通数据
+        $issuerData = Issuer::getIssuerRecords($issuerId);//获取立合旺通数据
         $path = Yii::getAlias('@backend') . '/web/data/';
         $file = $path . '立合旺通-' . date('YmdHis') . '.xls';
-        $fp = fopen($file, 'w');
-        fwrite($fp, $this->renderFile('@backend/modules/datatj/views/issuer/export.php', $record));
-        fclose($fp);
+        $exportData[] = ['期数', '融资方', '发行方', '项目名称', '项目编号', '项目状态', '备案金额（元）', '募集金额（元）', '实际募集金额（元）', '年化收益率（%）', '开始融资时间', '满标时间', '起息日', '还款本金', '还款利息', '预计还款时间', '实际还款时间'];
+        $records = $issuerData['model'];
+        $issuer = $issuerData['issuer'];
+        $repaymentPlan = $issuerData['plan'];
+        $refundTime = $issuerData['refundTime'];
+        foreach ($records as $key => $loan) {
+            if (isset($repaymentPlan[$key])) {
+                foreach ($repaymentPlan[$key] as $repayment) {
+                    $exportData[] = [
+                        $repayment['qishu'],
+                        $loan->borrower->org_name,
+                        $issuer->name,
+                        $loan->title,
+                        $loan->issuerSn,
+                        \Yii::$app->params['deal_status'][$loan->status],
+                        StringUtils::amountFormat2($loan->filingAmount),
+                        StringUtils::amountFormat2($loan->money),
+                        StringUtils::amountFormat2($loan->funded_money),
+                        LoanHelper::getDealRate($loan) . ($loan->jiaxi ? '+' . StringUtils::amountFormat2($loan->jiaxi) : ''),
+                        empty($loan->start_date) ? '---' : date('Y-m-d', $loan->start_date),
+                        empty($loan->full_time) ? '---' : date('Y-m-d', $loan->full_time),
+                        empty($loan->jixi_time) ? '---' : date('Y-m-d', $loan->jixi_time),
+                        $repayment['totalBenjin'],
+                        $repayment['totalLixi'],
+                        date('Y-m-d', $repayment['refund_time']),
+                        isset($refundTime[$key][$repayment['qishu']]) ? date('Y-m-d', $refundTime[$key][$repayment['qishu']]) : '---'
+                    ];
+                }
+            } else {
+                $exportData[] = [
+                    '---',
+                    $loan->borrower->org_name,
+                    $issuer->name,
+                    $loan->title,
+                    $loan->issuerSn,
+                    \Yii::$app->params['deal_status'][$loan->status],
+                    StringUtils::amountFormat2($loan->filingAmount),
+                    StringUtils::amountFormat2($loan->money),
+                    StringUtils::amountFormat2($loan->funded_money),
+                    LoanHelper::getDealRate($loan) . ($loan->jiaxi ? '+' . StringUtils::amountFormat2($loan->jiaxi) : ''),
+                    empty($loan->start_date) ? '---' : date('Y-m-d', $loan->start_date),
+                    empty($loan->full_time) ? '---' : date('Y-m-d', $loan->full_time),
+                    empty($loan->jixi_time) ? '---' : date('Y-m-d', $loan->jixi_time),
+                    '---',
+                    '---',
+                    '---',
+                    '---'
+                ];
+            }
+        }
+
+        $objPHPExcel = UserStats::initPhpExcelObject($exportData);
+        $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+        $objWriter->save($file);
 
         $this->deleteUserDataFromPath($path, '立合旺通', $file);//删除历史数据
         exit();

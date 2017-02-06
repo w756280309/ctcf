@@ -766,7 +766,7 @@ IN (" . implode(',', $recordIds) . ")")->queryAll();
             }
         }
         $data = UserStats::collectLenderData($where);
-        UserStats::createCsvFile($data);
+        UserStats::exportAsXlsx($data);
     }
 
     /**
