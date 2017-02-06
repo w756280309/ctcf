@@ -24,6 +24,12 @@ class UserbankController extends BaseController
         return $this->redirect('/user/bank');
     }
 
+    //Android和iOS的账户中心的原生代码，等APP更新时候重新更新地址，之后此临时转跳可以删除
+    public function actionMycard()
+    {
+        return $this->redirect('/user/bank/card');
+    }
+
     /**
      * 修改交易密码表单页.
      */
