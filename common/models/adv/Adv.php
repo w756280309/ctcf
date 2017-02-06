@@ -21,7 +21,11 @@ class Adv extends ActiveRecord
     const DEL_STATUS_DEL = 1;
 
     const TYPE_LUNBO = 0;
-    const TYPE_JINGXUAN = 1;
+    const TYPE_KAIPING = 1;
+
+    //1轮播 2首页开屏
+    const POS_ID_LUNBO = 1;
+    const POS_ID_KAIPING = 2;
 
     const UPLOAD_PATH = '/upload/adv/';
 
@@ -54,6 +58,7 @@ class Adv extends ActiveRecord
         return [
             'update' => ['id', 'sn', 'title', 'pos_id', 'image', 'show_order', 'link', 'description', 'del_status', 'isDisabledInApp', 'showOnPc', 'canShare'],
             'create' => ['pos_id', 'sn', 'title', 'image', 'show_order', 'link', 'description', 'del_status', 'isDisabledInApp', 'showOnPc', 'canShare'],
+            'kaiping' => ['id', 'sn', 'title', 'pos_id', 'image', 'show_order', 'status', 'link', 'description', 'del_status', 'isDisabledInApp', 'showOnPc', 'canShare'],
         ];
     }
 
@@ -78,6 +83,15 @@ class Adv extends ActiveRecord
             [['image', 'description'], 'required', 'on' => ['create', 'update']],
             ['status', 'default', 'value' => self::STATUS_SHOW, 'on' => ['create']],
             ['del_status', 'default', 'value' => self::DEL_STATUS_SHOW, 'on' => ['create']],
+            ['image', 'image', 'skipOnEmpty' => true, 'maxHeight' => 800, 'overHeight' => '{attribute}的高度应为800px', 'on' => ['kaiping']],
+            ['image', 'image', 'skipOnEmpty' => true, 'minHeight' => 800, 'underHeight' => '{attribute}的高度应为800px', 'on' => ['kaiping']],
+            ['image', 'image', 'skipOnEmpty' => true, 'maxWidth' => 600, 'overWidth' => '{attribute}的宽度应为600px', 'on' => ['kaiping']],
+            ['image', 'image', 'skipOnEmpty' => true, 'minWidth' => 600, 'underWidth' => '{attribute}的宽度应为600px', 'on' => ['kaiping']],
+            ['image', 'file', 'skipOnEmpty' => true, 'maxSize' => 1048576, 'tooBig' => '图片大小不能超过1M', 'on' => ['kaiping']],
+            ['link', 'string', 'on' => ['kaiping']],
+            ['link', 'match', 'pattern' => '/^[a-zA-Z0-9.:\/?&=_-]+$/', 'message' => '{attribute}不应包含特殊字符,如中文等', 'on' => ['kaiping']],
+            ['show_order', 'integer', 'on' => ['kaiping']],
+            ['title', 'string', 'max' => 15, 'on' => ['kaiping']],
         ];
     }
 
@@ -92,7 +106,7 @@ class Adv extends ActiveRecord
             'description' => '描述',
             'image' => '图片',
             'pos_id' => '位置id',
-            'status' => '是否显示',
+            'status' => '',
             'isDisabledInApp' => '',
             'showOnPc' => '',
             'link' => '链接',
@@ -101,6 +115,7 @@ class Adv extends ActiveRecord
             'updated_at' => '更新时间',
             'created_at' => '添加时间',
             'canShare'  => '页面可分享',
+            'show_order'  => '显示顺序',
         ];
     }
 
@@ -123,7 +138,7 @@ class Adv extends ActiveRecord
             'width' => $pos->width,
             'height' => $pos->height,
             'adv' => $adv_list,
-                );
+        );
     }
 
     /**

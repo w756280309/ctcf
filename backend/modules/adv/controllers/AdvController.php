@@ -8,6 +8,7 @@ use common\models\adv\Share;
 use Yii;
 use yii\data\Pagination;
 use yii\web\Response;
+use yii\web\UploadedFile;
 
 class AdvController extends BaseController
 {
@@ -76,14 +77,14 @@ class AdvController extends BaseController
                 $model->isDisabledInApp = 0;
             }
             if (
-            (
-                ! $model->showOnPc
-                && $model->canShare
-                && $share->load(Yii::$app->request->post())
-                && $share->validate()
-            )
-            || !$model->canShare
-            || $model->showOnPc
+                (
+                    ! $model->showOnPc
+                    && $model->canShare
+                    && $share->load(Yii::$app->request->post())
+                    && $share->validate()
+                )
+                || !$model->canShare
+                || $model->showOnPc
             ) {
                 if ($model->canShare && !$model->showOnPc) {
                     if (false === strpos($share->url, 'wx_share_key')) {      //后台自动添加分享key
@@ -193,17 +194,89 @@ class AdvController extends BaseController
      */
     public function actionImgdel($id = null, $img = null)
     {
-         if (!empty($id)) {
-             Adv::deleteAll(['id' => $id]);
-         }
+        if (!empty($id)) {
+            Adv::deleteAll(['id' => $id]);
+        }
 
-         $dr = $_SERVER['DOCUMENT_ROOT'];
-         $f = $dr.'/upload/adv/'.$img;
-         if (file_exists($f)) {
-             unlink($f);
-         }
+        $dr = $_SERVER['DOCUMENT_ROOT'];
+        $f = $dr.'/upload/adv/'.$img;
+        if (file_exists($f)) {
+            unlink($f);
+        }
 
-         echo json_encode(1);
-         exit;
-     }
+        echo json_encode(1);
+        exit;
+    }
+
+    /**
+     * 开屏图列表
+     */
+    public function actionKaipingList()
+    {
+        $pageSize = 10;
+        $query = Adv::find()
+            ->where(['type' => Adv::TYPE_KAIPING])
+            ->andWhere(['del_status' => Adv::DEL_STATUS_SHOW])
+            ->andWhere(['pos_id' => Adv::POS_ID_KAIPING]);
+        $pages = new Pagination(['totalCount' => $query->count(), 'pageSize' => $pageSize]);
+        $model = $query->offset($pages->offset)->limit($pages->limit)->orderBy('id desc')->all();
+
+        return $this->render('kaiping-list', ['model' => $model, 'pages' => $pages]);
+    }
+
+    /**
+     * 开屏图添加，编辑
+     */
+    public function actionKaipingEdit($id = null)
+    {
+        $adv = $id ? $this->findOr404(Adv::class, $id) : new Adv();
+        $adv->scenario = 'kaiping';
+        if ($adv->load(Yii::$app->request->post()) && $adv->validate()) {
+            if ($adv->show_order < 0) {
+                $adv->addError('show_order', '显示顺序不能为负数!');
+                return $this->render('kaiping-edit', ['adv' => $adv]);
+            }
+            if (!$id) {
+                $adv->creator_id = $this->getAuthedUser()->id;
+                $adv->sn = Adv::create_code();
+                $adv->pos_id = Adv::POS_ID_KAIPING;
+                $adv->type = Adv::TYPE_KAIPING;
+                $adv->created_at = time();
+            }
+            $adv->updated_at = time();
+            $result = $this->uploadImage($adv);
+            if (empty($result) && !$id) {
+                $adv->addError('image', '图片不能为空');
+                return $this->render('kaiping-edit', ['adv' => $adv]);
+            }
+            if (null === $adv->image) {
+                unset($adv->image);
+            }
+            if ($adv->save(false)) {
+                return $this->redirect('/adv/adv/kaiping-list');
+            }
+        }
+        return $this->render('kaiping-edit', ['adv' => $adv]);
+    }
+
+    /**
+     * 本地上传图片
+     */
+    private function uploadImage(Adv $adv)
+    {
+        $adv->image = UploadedFile::getInstance($adv, 'image');
+        if (empty($adv->image)) {
+            return false;
+        }
+        $path = Yii::getAlias('@backend').'/web/upload/adv';
+        if (!file_exists($path)) {
+            mkdir($path);
+        }
+        if ($adv->image) {
+            $picPath = 'upload/adv/kaiping'.time().rand(100000, 999999).'.'.$adv->image->extension;
+            $adv->image->saveAs($picPath);
+            $adv->image = $picPath;
+        }
+        return true;
+    }
 }
