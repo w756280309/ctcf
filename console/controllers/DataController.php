@@ -205,7 +205,7 @@ class DataController extends Controller
         $issuerId = intval($issuerId);
         $issuerData = Issuer::getIssuerRecords($issuerId);//获取立合旺通数据
         $path = Yii::getAlias('@backend') . '/web/data/';
-        $file = $path . '立合旺通-' . date('YmdHis') . '.xls';
+        $file = $path . '立合旺通-' . date('YmdHis') . '.xlsx';
         $exportData[] = ['期数', '融资方', '发行方', '项目名称', '项目编号', '项目状态', '备案金额（元）', '募集金额（元）', '实际募集金额（元）', '年化收益率（%）', '开始融资时间', '满标时间', '起息日', '还款本金', '还款利息', '预计还款时间', '实际还款时间'];
         $records = $issuerData['model'];
         $issuer = $issuerData['issuer'];
