@@ -9,10 +9,24 @@ use common\service\BankService;
 use common\models\bank\BankManager;
 use common\utils\TxUtils;
 use common\models\bank\EbankConfig;
+use yii\filters\AccessControl;
 
 class RechargeController extends BaseController
 {
-
+    public function behaviors()
+    {
+        return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                ],
+            ],
+        ];
+    }
     /**
      * 充值
      */

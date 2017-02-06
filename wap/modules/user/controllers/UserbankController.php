@@ -18,6 +18,12 @@ use common\models\bank\BankCardUpdate;
 
 class UserbankController extends BaseController
 {
+    //Android和iOS的账户中心的原生代码，等APP更新时候重新更新地址，之后此临时转跳可以删除
+    public function actionBindbank()
+    {
+        return $this->redirect('/user/bank');
+    }
+
     /**
      * 修改交易密码表单页.
      */

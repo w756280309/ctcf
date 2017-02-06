@@ -29,6 +29,30 @@ return [
                         return "";//去掉消息返回的[IP address][User ID][Session ID][Severity Level]
                     }
                 ],
+                //联动日志记录
+                [
+                    'class' => 'yii\log\FileTarget',
+                    'levels' => ['info'],
+                    'categories' => ['umplog'],
+                    'logFile' => '@app/runtime/logs/ump/ump'.date('Ymd').'.log',
+                    'maxFileSize' => 1024 * 2,
+                    'logVars' => ['trace'],
+                    'prefix' => function ($message) {
+                        return '';//去掉消息返回的[IP address][User ID][Session ID][Severity Level]
+                    },
+                ],
+                //用户信息变更日志
+                [
+                    'class' => 'yii\log\FileTarget',
+                    'levels' => ['info'],
+                    'categories' => ['user_log'],
+                    'logFile' => '@app/runtime/logs/user/user_status'.date('Ymd').'.log',
+                    'maxFileSize' => 1024 * 2,
+                    'logVars' => ['trace'],
+                    'prefix' => function ($message) {
+                        return '';//去掉消息返回的[IP address][User ID][Session ID][Severity Level]
+                    },
+                ],
             ],
         ],
         'user' => [

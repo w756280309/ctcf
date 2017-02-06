@@ -32,11 +32,14 @@ class UpdatecardController extends Controller
         ) {
             Yii::info('换卡前台回调 ump_log user_bank_update_front_notify user_id: ' . $user->id . ';cardNo:.' . $model->cardNo . ';mobile:' . $user->mobile . '; ret_code:' . $data['ret_code'] . ';ret_msg:' . $data['ret_msg'], 'umplog');
 
-            if (BankCardUpdate::STATUS_PENDING === $model->status) {
-                $model->status = BankCardUpdate::STATUS_ACCEPT;
-                $model->save();
+            if (in_array($model->status, [BankCardUpdate::STATUS_ACCEPT, BankCardUpdate::STATUS_PENDING, BankCardUpdate::STATUS_SUCCESS])) {
+                if ($model->status === BankCardUpdate::STATUS_PENDING) {
+                    $model->status = BankCardUpdate::STATUS_ACCEPT;
+                    $model->save();
+                    Yii::info('用户信息变更日志 换卡 变更表:bank_card_update;变更属性:' . (json_encode(['status' => BankCardUpdate::STATUS_ACCEPT])) . ';user_id:' . $user->id . ';mobile:' . $user->mobile . ';变更依据:联动ret_code ' . $data['ret_code'] . ';联动返回信息:' . json_encode($data), 'user_log');
+                }
+
                 $isSucc = true;
-                Yii::info('用户信息变更日志 换卡 变更表:bank_card_update;变更属性:' . (json_encode(['status' => BankCardUpdate::STATUS_ACCEPT])) . ';user_id:' . $user->id . ';mobile:' . $user->mobile . ';变更依据:联动ret_code ' . $data['ret_code'] . ';联动返回信息:' . json_encode($data), 'user_log');
             }
         }
 

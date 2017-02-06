@@ -8,9 +8,25 @@ use common\service\BankService;
 use common\models\user\DrawRecord;
 use common\models\draw\DrawException;
 use common\models\draw\DrawManager;
+use yii\filters\AccessControl;
 
 class DrawController extends BaseController
 {
+    public function behaviors()
+    {
+        return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                ],
+            ],
+        ];
+    }
+
     /**
      * 提现申请表单页.
      */

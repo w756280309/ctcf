@@ -41,3 +41,5 @@ tests/_config-local.php
 backend/web/vendor/kindeditor/4.1.11/attached/
 
 backend/web/data/
+
+backend/web/upload/
