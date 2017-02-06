@@ -31,9 +31,9 @@ use yii\captcha\Captcha;
     <?php } ?>
 
     <div class="banner luodiyebanner">
-        <img  src="<?= FE_BASE_URI ?>wap/luodiye/images/space1.jpg" alt="">
-        <img  src="<?= FE_BASE_URI ?>wap/luodiye/images/space2.jpg" alt="">
-        <img  src="<?= FE_BASE_URI ?>wap/luodiye/images/space3.jpg" alt="">
+        <img  src="<?= FE_BASE_URI ?>wap/luodiye/images/space4.png" alt="">
+        <img  src="<?= FE_BASE_URI ?>wap/luodiye/images/space5.png" alt="">
+        <img  src="<?= FE_BASE_URI ?>wap/luodiye/images/space6.png" alt="">
     </div>
 
     <div class="formcheck f15">
