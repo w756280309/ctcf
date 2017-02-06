@@ -19,35 +19,6 @@ use common\models\bank\BankCardUpdate;
 class UserbankController extends BaseController
 {
     /**
-     * 绑定银行卡表单页.
-     */
-    public function actionBindbank()
-    {
-        $cond = 0 | BankService::IDCARDRZ_VALIDATE_N | BankService::MIANMI_VALIDATE | BankService::BINDBANK_VALIDATE_Y;
-        $data = BankService::check($this->getAuthedUser(), $cond);
-        if ($data['code'] == 1) {
-            if (Yii::$app->request->isAjax) {
-                return $data;
-            } else {
-                $arr = array();
-
-                return $this->render('bindbank', ['banklist' => $arr, 'data' => $data]);
-            }
-        }
-
-        $banks = BankManager::getQpayBanks();
-
-        return $this->render('bindbank', [
-            'banklist' => $banks,
-            'data' => [
-                'code' => 0,
-                'message' => '',
-                'tourl' => '',
-            ],
-        ]);
-    }
-
-    /**
      * 修改交易密码表单页.
      */
     public function actionEditbuspass()
@@ -179,14 +150,6 @@ class UserbankController extends BaseController
     }
 
     /**
-     * 检查银行卡号，返回开户行名称.
-     */
-    public function actionCheckbank()
-    {
-        return BankService::checkBankcard(Yii::$app->request->post('card'));
-    }
-
-    /**
      * 银行限额显示.
      */
     public function actionBankxiane()
@@ -243,30 +206,6 @@ class UserbankController extends BaseController
     }
 
     /**
-     * 我的银行卡页面.
-     */
-    public function actionMycard()
-    {
-        $user = $this->getAuthedUser();
-
-        $data = BankService::checkKuaijie($user);
-        if (1 === $data['code']) {
-            return $this->goHome();
-        }
-
-        $userBank = $user->qpay;
-        $bankcardUpdate = BankCardUpdate::find()
-            ->where(['oldSn' => $userBank->binding_sn, 'uid' => $user->id])
-            ->orderBy('id desc')->one();
-
-        if (null !== $bankcardUpdate && BankCardUpdate::STATUS_ACCEPT !== $bankcardUpdate->status) {
-            $bankcardUpdate = null;
-        }
-
-        return $this->render('mycard', ['userBank' => $userBank, 'bankcardUpdate' => $bankcardUpdate]);
-    }
-
-    /**
      * 换卡申请页面.
      */
     public function actionUpdatecard()
@@ -275,7 +214,7 @@ class UserbankController extends BaseController
 
         $data = BankService::checkKuaijie($user);
         if (1 === $data['code']) {
-            return $this->goHome();
+            return $this->redirect('/user/bank/card');
         }
 
         $userBank = $user->qpay;
@@ -284,7 +223,7 @@ class UserbankController extends BaseController
             ->orderBy('id desc')->one();
 
         if (null !== $bankcardUpdate && BankCardUpdate::STATUS_ACCEPT === $bankcardUpdate->status) {
-            return $this->redirect('/user/userbank/mycard');
+            return $this->redirect('/user/bank/card');
         }
 
         $banks = BankManager::getQpayBanks();

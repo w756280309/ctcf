@@ -11,9 +11,12 @@ use common\models\draw\DrawManager;
 
 class DrawController extends BaseController
 {
-
-    public function beforeAction($action)
+    /**
+     * 提现申请表单页.
+     */
+    public function actionTixian()
     {
+        $this->layout = 'main';
         if (Yii::$app->controller->action->id == 'tixian') {
             //记录目标url
             Yii::$app->session->set('to_url', '/user/draw/tixian');
@@ -23,18 +26,11 @@ class DrawController extends BaseController
         $cond = 0 | BankService::IDCARDRZ_VALIDATE_N;
         $data = BankService::check($this->user, $cond);
         if (1 === $data['code']) {
-            return $this->redirect('/user/userbank/identity');
+            return $this->render('@frontend/modules/user/views/userbank/identity.php', [
+                'title' => '提现',
+            ]);
         }
 
-        return parent::beforeAction($action);
-    }
-
-    /**
-     * 提现申请表单页.
-     */
-    public function actionTixian()
-    {
-        $this->layout = 'main';
 
         $user = $this->getAuthedUser();
         $uid = $user->id;

@@ -13,6 +13,7 @@ use common\service\BankService;
 use Ding\DingNotify;
 use yii\base\Action;
 
+//实名认证表单提交公共action
 class IdentityVerifyAction extends Action
 {
     public function run()

@@ -34,13 +34,18 @@ $action = Yii::$app->controller->action->getUniqueId();
         <li class="nav-content">
             <ul>
                 <li class="<?= in_array($action, [
-                    'user/userbank/mybankcard',
-                    'user/userbank/bindcard',
-                    'user/userbank/updatecard',
+                    'user/bank/card',
+                    'user/bank/index',
+                    'user/bank/update',
                     'user/userbank/xiane',
-                ]) ? 'selected' : '' ?> mycard"><a href="/user/userbank/mybankcard"><span class="star"></span>我的银行卡</a></li>
-                <li class="<?= 'user/securitycenter/index' === $action ? 'selected' : '' ?>"><a href="/user/securitycenter/"><span class="star"></span>安全中心</a></li>
-                <li class="account <?= 'user/identity' === $action ? 'selected' : '' ?>"><a href="/user/userbank/identity?from=<?= urlencode(Yii::$app->request->hostInfo.'/user/user') ?>"><span class="star"></span>资金托管账户</a></li>
+                ]) ? 'selected' : '' ?> mycard"><a href="/user/bank/card"><span class="star"></span>我的银行卡</a></li>
+                <li class="<?= in_array($action, [
+                    'user/securitycenter/index',
+                ])   ? 'selected' : '' ?>"><a href="/user/securitycenter/"><span class="star"></span>安全中心</a></li>
+                <li class="account <?= in_array($action, [
+                    'user/identity/index',
+                    'user/userbank/identity'
+                ]) ? 'selected' : '' ?>"><a href="/user/userbank/identity?from=<?= urlencode(Yii::$app->request->hostInfo.'/user/user') ?>"><span class="star"></span>资金托管账户</a></li>
             </ul>
         </li>
     </ul>

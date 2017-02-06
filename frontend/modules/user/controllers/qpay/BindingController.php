@@ -2,11 +2,8 @@
 
 namespace frontend\modules\user\controllers\qpay;
 
-use common\models\bank\BankManager;
-use common\models\bank\QpayConfig;
-use common\models\user\QpayBinding as QpayAcct;
-use common\models\user\UserBanks;
-use common\utils\TxUtils;
+use common\action\user\BankVerifyAction;
+use common\action\user\PayAgreementAction;
 use frontend\controllers\BaseController;
 use Yii;
 use yii\base\Model;
@@ -29,80 +26,10 @@ class BindingController extends BaseController
         ];
     }
 
-    /**
-     * 绑卡申请处理.
-     */
-    public function actionVerify()
+    public function actions()
     {
-        // 已验证的数据
-        $safe = [
-            'realName' => $this->getAuthedUser()->real_name,
-            'idNo' => $this->getAuthedUser()->idcard,
+        return [
+            'umpmianmi' => PayAgreementAction::className(),//免密
         ];
-
-        $acct_model = new QpayAcct();
-        $acct_model->uid = $this->getAuthedUser()->id;
-        $acct_model->account = $safe['realName'];
-        $acct_model->account_type = QpayAcct::PERSONAL_ACCOUNT;
-
-        if ($acct_model->load(Yii::$app->request->post()) && $acct_model->validate()) {
-            try {
-                //对于绑卡时候如果没有找到要过滤掉异常
-                $bin = BankManager::getBankFromCardNo($acct_model->card_number);
-                if (!BankManager::isDebitCard($bin)) {
-                    return $this->createErrorResponse('该操作只支持借记卡');
-                }
-
-                if ((int) $bin->bankId !== (int) $acct_model->bank_id) {
-                    return $this->createErrorResponse('请选择银行卡对应的银行');
-                }
-            } catch (\Exception $ex) {
-            }
-
-            $qpay = QpayConfig::findOne($acct_model->bank_id);
-            if (null === $qpay || 1 === (int) $qpay->isDisabled) {
-                return $this->createErrorResponse('抱歉不支持当前选择的银行');
-            }
-            $acct_model->binding_sn = TxUtils::generateSn('B');
-            $acct_model->epayUserId = $this->getAuthedUser()->epayUser->epayUserId;
-            $acct_model->save();
-            $next = Yii::$container->get('ump')->enableQpay($acct_model, 'pc');//获取跳转页面
-            return [
-                'next' => $next,
-            ];
-        }
-
-        return $this->createErrorResponse($acct_model);
-    }
-
-    /**
-     * 免密进入跳转到联动的页面
-     *
-     * 记录来源url(转让详情页/理财标的详情页)，用来跳回到详情页
-     */
-    public function actionUmpmianmi()
-    {
-        $from = Yii::$app->request->get('from');
-        if ($from && filter_var($from, FILTER_VALIDATE_URL)) {
-            Yii::$app->session->set('to_url', $from);
-        }
-        return $this->redirect(Yii::$container->get('ump')->openmianmi($this->getAuthedUser()->epayUser->epayUserId, 'pc'));
-    }
-
-    private function createErrorResponse($modelOrMessage = null)
-    {
-        Yii::$app->response->statusCode = 400;
-        $message = null;
-
-        if (is_string($modelOrMessage)) {
-            $message = $modelOrMessage;
-        } elseif (
-            $modelOrMessage instanceof Model
-            && $modelOrMessage->hasErrors()
-        ) {
-            $message = current($modelOrMessage->getFirstErrors());
-        }
-
-        return ['message' => $message];
     }
 }

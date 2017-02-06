@@ -3,6 +3,7 @@
 namespace common\controllers;
 
 use Yii;
+use yii\base\Model;
 use yii\web\NotFoundHttpException;
 
 trait HelpersTrait
@@ -72,5 +73,27 @@ trait HelpersTrait
     public function fromWx()
     {
         return $_SERVER["HTTP_USER_AGENT"] && false !== strpos($_SERVER["HTTP_USER_AGENT"], 'MicroMessenger');
+    }
+
+    /**
+     * 根据字符串或者Model对象返回错误信息
+     * @param null|string|Model $modelOrMessage
+     * @return array
+     */
+    public function createErrorResponse($modelOrMessage = null)
+    {
+        Yii::$app->response->statusCode = 400;
+        $message = null;
+
+        if (is_string($modelOrMessage)) {
+            $message = $modelOrMessage;
+        } elseif (
+            $modelOrMessage instanceof Model
+            && $modelOrMessage->hasErrors()
+        ) {
+            $message = current($modelOrMessage->getFirstErrors());
+        }
+
+        return ['message' => $message];
     }
 }

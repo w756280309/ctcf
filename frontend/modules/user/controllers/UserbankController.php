@@ -32,7 +32,7 @@ class UserbankController extends BaseController
     }
 
    /**
-    * 未开户进入页面.
+    * 资金托管账户.
     *
     * 记录来源url(转让详情页/理财标的详情页)，用来跳回到详情页.
     */
@@ -47,7 +47,9 @@ class UserbankController extends BaseController
            if ($from && filter_var($from, FILTER_VALIDATE_URL)) {
                Yii::$app->session->set('to_url', $from);
            }
-           return $this->render('identity');
+           return $this->render('identity', [
+               'title' => '资金托管账户',
+           ]);
        } else {
            Yii::$app->session->set('to_url', '/user/userbank/identity');
 
@@ -56,43 +58,6 @@ class UserbankController extends BaseController
            ]);
        }
    }
-
-    /**
-     * 绑定银行卡.
-     * 先决条件:
-     * 1. 实名认证
-     * 2. 开通免密
-     * 3. 未绑卡
-     */
-    public function actionBindbank()
-    {
-        //检查是否已绑卡
-        $cond = 0 | BankService::BINDBANK_VALIDATE_Y;
-        $data = BankService::check($this->getAuthedUser(), $cond);
-        if ($data['code']) {
-            return $this->redirect('/user/userbank/mybankcard');
-        }
-
-        //检查是否开户
-        $cond = 0 | BankService::IDCARDRZ_VALIDATE_N;
-        $data = BankService::check($this->getAuthedUser(), $cond);
-        if ($data['code']) {
-            Yii::$app->session->set('to_url', '/user/userbank/mybankcard');
-
-            return $this->redirect('/user/userbank/identity');
-        }
-
-        //检查是否开通免密
-        $cond = 0 | BankService::MIANMI_VALIDATE;
-        $data = BankService::check($this->user, $cond);
-
-        $banks = BankManager::getQpayBanks();
-
-        return $this->render('bindbank', [
-            'banklist' => $banks,
-            'data' => $data,
-        ]);
-    }
 
     /**
      * 快捷支付.
@@ -105,7 +70,9 @@ class UserbankController extends BaseController
         $cond = 0 | BankService::IDCARDRZ_VALIDATE_N;
         $data = BankService::check($this->getAuthedUser(), $cond);
         if ($data['code']) {
-            return $this->redirect('/user/userbank/identity');
+            return $this->render('identity', [
+                'title' => '快捷充值',
+            ]);
         }
         $user = $this->getAuthedUser();
         $uid = $user->id;
@@ -129,44 +96,6 @@ class UserbankController extends BaseController
         ]);
     }
 
-    /**
-     * 我的银行卡
-     */
-    public function actionMybankcard()
-    {
-        //检查是否开户
-        $cond = 0 | BankService::IDCARDRZ_VALIDATE_N;
-        $data = BankService::check($this->getAuthedUser(), $cond);
-        if ($data['code']) {
-            Yii::$app->session->set('to_url', '/user/userbank/mybankcard');
-
-            return $this->redirect('/user/userbank/identity');
-        }
-
-        //检查是否开通免密
-        $cond = 0 | BankService::MIANMI_VALIDATE;
-        $data = BankService::check($this->user, $cond);
-
-        $user = $this->getAuthedUser();
-        $user_bank = $user->qpay;
-        $binding = null;
-        $bankcardUpdate = null;
-
-        if ($user_bank) {
-            $bankcardUpdate = BankCardUpdate::find()
-                ->where(['oldSn' => $user_bank->binding_sn, 'uid' => $user->id])
-                ->orderBy('id desc')->one();
-        } else {
-            $binding = QpayBinding::findOne(['uid' => $user->id, 'status' => QpayBinding::STATUS_ACK]);
-        }
-
-        return $this->render('mybank', [
-            'user_bank' => $user_bank,
-            'data' => $data,
-            'binding' => $binding,
-            'bankcardUpdate' => $bankcardUpdate,
-        ]);
-    }
 
     /**
      * 更换银行卡.
@@ -177,7 +106,7 @@ class UserbankController extends BaseController
 
         $data = BankService::checkKuaijie($user);
         if ($data['code']) {
-            return $this->redirect('/user/userbank/mybankcard');
+            return $this->redirect('/user/bank/card');
         }
 
         $userBank = $user->qpay;
@@ -186,7 +115,7 @@ class UserbankController extends BaseController
             ->orderBy('id desc')->one();
 
         if ($bankcardUpdate && BankCardUpdate::STATUS_ACCEPT === $bankcardUpdate->status) {
-            return $this->redirect('/user/userbank/mybankcard');
+            return $this->redirect('/user/bank/card');
         }
 
         $banks = BankManager::getQpayBanks();
@@ -203,14 +132,6 @@ class UserbankController extends BaseController
         $qpayBanks = QpayConfig::find()->all();
 
         return $this->render('xiane', ['qpay' => $qpayBanks]);
-    }
-
-    /**
-     * 检查银行卡号，返回开户行名称.
-     */
-    public function actionCheckbank($card)
-    {
-        return BankService::checkBankcard($card);
     }
 
     /**

@@ -1,16 +1,17 @@
 <?php
-$this->title = '绑定银行卡';
+$this->title = '更换银行卡';
 
+$this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/usercenter.css', ['depends' => 'frontend\assets\FrontAsset']);
 $this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/bindcard.css', ['depends' => 'frontend\assets\FrontAsset']);
-$this->registerJsFile(ASSETS_BASE_URI.'js/useraccount/bindcard.js?v=20160711', ['depends' => 'frontend\assets\FrontAsset']);
-$this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/chargedeposit.css');
+$this->registerJsFile(ASSETS_BASE_URI.'js/useraccount/bindcard.js?v=20170109', ['depends' => 'frontend\assets\FrontAsset']);
+$this->registerCssFile('/css/useraccount/chargedeposit.css');
 ?>
 
 <div class="bindCard-box">
     <div class="bindCard-header">
         <div class="bindCard-header-icon"></div>
         <!--绑卡换卡标题后台控制-->
-        <span class="bindCard-header-font">绑定银行卡</span>
+        <span class="bindCard-header-font">更换银行卡</span>
     </div>
     <div class="bind-middle">
         <div class="bind-limit"><img src="<?= ASSETS_BASE_URI ?>images/useraccount/tip-red.png" alt=""><a href="/user/userbank/xiane" target="_blank">限额提醒</a></div>
@@ -27,28 +28,28 @@ $this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/chargedeposit.css');
             </div>
         </div>
 
-        <form id="form" method="post" action="/user/qpay/binding/verify">
+        <form id="form" method="post" action="/user/bank/update-verify">
         <div class="bind-info">
             <div class="bind-kaihu">卡号</div>
             <div class="bind-input">
                 <input name="_csrf" type="hidden" id="_csrf" value="<?= Yii::$app->request->csrfToken ?>">
-                <input id="card_no" type="tel" name='QpayBinding[card_number]' placeholder="请输入银行卡号">
-                <input id="bank_id" type="hidden" name='QpayBinding[bank_id]'>
-                <input id="bank_name" type="hidden" name='QpayBinding[bank_name]'>
+                <input id="card_no" type="tel" name='BankCardUpdate[cardNo]' placeholder="请输入银行卡号">
+                <input id="bank_id" type="hidden" name='BankCardUpdate[bankId]'>
+                <input id="bank_name" type="hidden" name='BankCardUpdate[bankName]'>
                 <br>
                 <p class="error-ins error" id="error"></p>
-                <p class="error-ins">提示：绑定银行卡为快捷卡，将作为唯一充值、提现银行卡</p>
+                <p class="error-ins">提示：换卡请先咨询客服热线<?= Yii::$app->params['contact_tel'] ?></p>
             </div>
         </div>
-        <input class="bind-btn" type="submit" value="绑定">
+        <input class="bind-btn" type="submit" value="更换">
         </form>
     </div>
     <div class="charge-explain">
         <p class="charge-explain-title">温馨提示：</p>
-        <p class="charge-explain-content">1、绑定银行卡为快捷卡，绑定后将默认为快捷充值卡和取现卡，如需修改，可申请更换银行卡；</p>
-        <p class="charge-explain-content">2、暂不支持设置多张快捷支付卡；</p>
-        <p class="charge-explain-content">3、绑定的银行卡必须为本人身份证办理；</p>
-        <p class="charge-explain-content">4、绑定快捷卡后，不影响使用本人其他银行卡或他人银行卡代充值。</p>
+        <p class="charge-explain-content">1、若您的账户余额为0且没有在途资金，系统将在半小时以内自动审核换卡；否则需拨打客服热线<?= \Yii::$app->params['contact_tel'] ?>提交相关资料，提交资料后，进行2-5天的人工审核换卡；</p>
+        <p class="charge-explain-content">2、换卡申请期间不影响充值和提现；</p>
+        <p class="charge-explain-content">3、绑定的银行卡必须为本人身份证办理。</p>
+        <p class="charge-explain-content">注：在途资金指有投资回款或提现冻结金额。</p>
     </div>
 </div>
 <!--选择银行卡-->
@@ -63,9 +64,5 @@ $this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/chargedeposit.css');
     <div class="bankIcon-btn">确定</div>
 </div>
 <script>
-    $('.mycard').addClass('selected');
-    var m = <?= $data['code'] ?>;
-    if (m == 1) {
-        mianmi();
-    }
+    var m = 0;
 </script>

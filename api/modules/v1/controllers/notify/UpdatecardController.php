@@ -2,9 +2,10 @@
 
 namespace api\modules\v1\controllers\notify;
 
-use common\models\bank\BankCardManager;
 use common\models\bank\BankCardUpdate;
 use common\models\TradeLog;
+use common\models\user\User;
+use Yii;
 use yii\web\Controller;
 
 class UpdatecardController extends Controller
@@ -19,17 +20,24 @@ class UpdatecardController extends Controller
         $isSucc = false;
 
         TradeLog::initLog(2, $data, $data['sign'])->save();    //记录交易日志信息
-
-        if (\Yii::$container->get('ump')->verifySign($data)
+        $model = BankCardUpdate::findOne(['sn' => $data['order_id']]);
+        if (!is_null($model)) {
+            $user = User::findOne($model->uid);
+        }
+        if (
+            !is_null($user)
+            && \Yii::$container->get('ump')->verifySign($data)
             && 'mer_bind_card_apply_notify' === $data['service']
-            && '0000' === $data['ret_code']) {
-            $model = BankCardUpdate::findOne(['sn' => $data['order_id']]);
+            && '0000' === $data['ret_code']
+        ) {
+            Yii::info('换卡前台回调 ump_log user_bank_update_front_notify user_id: ' . $user->id . ';cardNo:.' . $model->cardNo . ';mobile:' . $user->mobile . '; ret_code:' . $data['ret_code'] . ';ret_msg:' . $data['ret_msg'], 'umplog');
+
             if (BankCardUpdate::STATUS_PENDING === $model->status) {
                 $model->status = BankCardUpdate::STATUS_ACCEPT;
                 $model->save();
+                $isSucc = true;
+                Yii::info('用户信息变更日志 换卡 变更表:bank_card_update;变更属性:' . (json_encode(['status' => BankCardUpdate::STATUS_ACCEPT])) . ';user_id:' . $user->id . ';mobile:' . $user->mobile . ';变更依据:联动ret_code ' . $data['ret_code'] . ';联动返回信息:' . json_encode($data), 'user_log');
             }
-
-            $isSucc = true;
         }
 
         $backUrl = $this->getBackUrl($channel, $isSucc);
@@ -47,18 +55,25 @@ class UpdatecardController extends Controller
 
         $this->layout = false;
         $err = '0000';
-        $errmsg = 'no error';
 
         TradeLog::initLog(2, $data, $data['sign'])->save();  //记录交易日志
-
+        $model = BankCardUpdate::findOne(['sn' => $data['order_id']]);
+        if (is_null($model)) {
+            throw new \Exception('无法找到记录');
+        }
+        $user = User::findOne($model->uid);
+        if (is_null($user)) {
+            throw new \Exception('无法找到记录');
+        }
+        Yii::info('换卡后台通知 ump_log user_bank_update_back_notify user_id: ' . $user->id . ';cardNo:.' . $model->cardNo . ';mobile:' . $user->mobile . '; ret_code:' . $data['ret_code'] . ';ret_msg:' . $data['ret_msg'], 'umplog');
         if (\Yii::$container->get('ump')->verifySign($data)) {
             if ('mer_bind_card_apply_notify' === $data['service']) {    //换卡申请后台通知
                 $isSucc = false;
                 if ('0000' === $data['ret_code']) {
-                    $model = BankCardUpdate::findOne(['sn' => $data['order_id']]);
                     if (BankCardUpdate::STATUS_PENDING === $model->status) {
                         $model->status = BankCardUpdate::STATUS_ACCEPT;
                         $model->save();
+                        Yii::info('用户信息变更日志 换卡 变更表:bank_card_update;变更属性:' . (json_encode(['status' => BankCardUpdate::STATUS_ACCEPT])) . ';user_id:' . $user->id . ';mobile:' . $user->mobile . ';变更依据:联动ret_code ' . $data['ret_code'] . ';联动返回信息:' . json_encode($data), 'user_log');
                     }
 
                     $isSucc = true;
@@ -68,40 +83,22 @@ class UpdatecardController extends Controller
 
                 return $this->redirect($backUrl);
             } elseif ('mer_bind_card_notify' === $data['service']) {    //换卡结果后台通知
-                $model = BankCardUpdate::findOne(['sn' => $data['order_id']]);
-                if (null === $model) {
-                    $err = '00009999';
-                    $errmsg = '记录未找到';
+                if ('0000' === $data['ret_code']) {
+                    $res = $user->updateCard($model, $data);
+                    if (!$res) {
+                        $err = '00009999';
+                    }
                 } else {
-                    if ('0000' === $data['ret_code']) {
-                        $model->status = BankCardUpdate::STATUS_SUCCESS;    //更新换卡申请表记录状态
-                        if (!$model->save()) {
-                            $err = '00009999';
-                            $errmsg = '数据库更新失败';
-                        } else {
-                            $bankCardMgr = new BankCardManager();
-                            try {
-                                $newCard = $bankCardMgr->confirmUpdate($model); // 返回新卡的记录
-                            } catch (\Exception $e) {
-                                $err = '00009999';
-                                $errmsg = $e.getMessage();
-                            }
-                        }
-                    } else {
-                        $model->status = BankCardUpdate::STATUS_FAIL;
-                        if (!$model->save()) {
-                            $err = '00009999';
-                            $errmsg = '数据库更新失败';
-                        }
+                    $model->status = BankCardUpdate::STATUS_FAIL;
+                    if (!$model->save()) {
+                        $err = '00009999';
                     }
                 }
             } else {
                 $err = '00009999';
-                $errmsg = '接口名称错误';
             }
         } else {
             $err = '00009999';
-            $errmsg = '验证签名失败';
         }
 
         $content = \Yii::$container->get('ump')->buildQuery([
@@ -135,10 +132,10 @@ class UpdatecardController extends Controller
         if ('pc' === $channel) {
             $host = \Yii::$app->params['clientOption']['host']['frontend'];
             if ($isSucc) {
-                return $host.'info/success?source=huanka&jumpUrl=/user/userbank/mybankcard';
+                return $host . 'info/success?source=huanka&jumpUrl=/user/bank/card';
             }
 
-            return $host.'info/fail?source=huanka';
+            return $host . 'info/fail?source=huanka';
         }
 
         if ('app' === $channel) {
@@ -148,9 +145,9 @@ class UpdatecardController extends Controller
         }
 
         if ($isSucc) {
-            return $host.'user/userbank/updatecardnotify?ret=success';
+            return $host . 'user/userbank/updatecardnotify?ret=success';
         }
 
-        return $host.'user/userbank/updatecardnotify';
+        return $host . 'user/userbank/updatecardnotify';
     }
 }

@@ -1,37 +1,26 @@
 <?php
-namespace frontend\modules\user\controllers\qpay;
+/**
+ * Created by ShiYang.
+ * Date: 17-1-9
+ * Time: 上午11:06
+ */
+
+namespace common\action\user;
+
 
 use common\models\bank\BankCardUpdate;
 use common\models\bank\BankManager;
 use common\models\bank\QpayConfig;
 use common\utils\TxUtils;
-use frontend\controllers\BaseController;
 use Yii;
-use yii\filters\AccessControl;
+use yii\base\Action;
 
-class BankcardupdateController extends BaseController
+//换卡表单提交页面
+class BankUpdateVerifyAction extends Action
 {
-    public function behaviors()
+    public function run()
     {
-        return [
-            'access' => [
-                'class' => AccessControl::className(),
-                'rules' => [
-                    [
-                        'allow' => true,
-                        'roles' => ['@'],
-                    ],
-                ],
-            ],
-        ];
-    }
-
-    /**
-     * 处理换卡申请请求
-     */
-    public function actionInit()
-    {
-        $user = $this->getAuthedUser();
+        $user = $this->controller->getAuthedUser();
         $bank = $user->qpay;
 
         $model = new BankCardUpdate([
@@ -54,44 +43,23 @@ class BankcardupdateController extends BaseController
                 if (!BankManager::isDebitCard($bin)) {
                     return $this->createErrorResponse('该操作只支持借记卡');
                 }
-                if ((int) $bin->bankId !== (int) $model->bankId) {
+                if ((int)$bin->bankId !== (int)$model->bankId) {
                     return $this->createErrorResponse('请选择银行卡对应的银行');
                 }
-            } catch (\Exception $ex) {}
+            } catch (\Exception $ex) {
+            }
 
             $qpay = QpayConfig::findOne($model->bankId);
-            if (null === $qpay || 1 === (int) $qpay->isDisabled) {
+            if (null === $qpay || 1 === (int)$qpay->isDisabled) {
                 return $this->createErrorResponse('抱歉，不支持当前选择的银行');
             }
 
             if ($model->save(false)) {
-                $next = \Yii::$container->get('ump')->changeQpay($model, 'pc');
+                $next = \Yii::$container->get('ump')->changeQpay($model, CLIENT_TYPE);
                 return ['next' => $next];
             }
         }
 
         return $this->createErrorResponse($model);
-    }
-
-    /**
-     * 错误信息返回函数
-     */
-    private function createErrorResponse($modelOrMessage)
-    {
-        Yii::$app->response->statusCode = 400;
-        $message = null;
-
-        if (is_string($modelOrMessage)) {
-            $message = $modelOrMessage;
-        } elseif (
-            $modelOrMessage instanceof Model
-            && $modelOrMessage->hasErrors()
-        ) {
-            $message = current($modelOrMessage->getFirstErrors());
-        }
-
-        return [
-            'message' => $message,
-        ];
     }
 }

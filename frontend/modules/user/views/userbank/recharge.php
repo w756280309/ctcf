@@ -78,7 +78,7 @@ use common\utils\StringUtils;
         <span class="single-left">银行卡</span>
         <a class="single-div">
         <span class="add-icon"></span>
-        <span class="link-font" onclick="location.href='/user/userbank/bindbank'">点击绑定银行卡</span>
+        <span class="link-font" onclick="location.href='/user/bank'">点击绑定银行卡</span>
         </a>
         <a class="clear"></a>
         </div>

@@ -3,7 +3,7 @@ $this->title="绑定银行卡";
 ?>
 <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/bind.css?v=20160406"/>
 <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/swiper.min.css"/>
-<script src="<?= ASSETS_BASE_URI ?>js/qpay.js?v=20160419001"></script>
+<script src="<?= ASSETS_BASE_URI ?>js/qpay.js?v=20170109"></script>
 <script src="<?= ASSETS_BASE_URI ?>js/swiper.min.js"></script>
 <script src="<?= ASSETS_BASE_URI ?>js/bind.js"></script>
 
@@ -36,7 +36,7 @@ $this->title="绑定银行卡";
     <div class="col-xs-2"></div>
 </div>
 
-<form method="post" class="cmxform" id="form" action="/user/qpay/binding/verify" data-to="1">
+<form method="post" class="cmxform" id="form" action="/user/bank/verify" data-to="1">
     <input name="_csrf" type="hidden" id="_csrf" value="<?= Yii::$app->request->csrfToken ?>">
     <div class="row kahao">
         <div class="col-xs-3 xian">卡号</div>
@@ -116,7 +116,7 @@ $this->title="绑定银行卡";
                 return false;
             }
 
-            $.post("/user/userbank/checkbank", {card: card_no, _csrf:csrf}, function (result) {
+            $.post("/user/bank/check", {card: card_no, _csrf:csrf}, function (result) {
                 if(result.code!=0) {
                     alert(result.message);
                     return;

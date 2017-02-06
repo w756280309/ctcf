@@ -21,7 +21,7 @@ $this->backUrl = '/system/system/safecenter';
 <?php if (empty($bankcardUpdate)) { ?>
 <div class="row">
     <div class="col-xs-3"></div>
-    <div class="col-xs-6 apply-exchange-en"><a class="apply-exchange" href="/user/userbank/updatecard">申请换卡</a></div>
+    <div class="col-xs-6 apply-exchange-en"><a class="apply-exchange" href="/user/bank/update">申请换卡</a></div>
     <div class="col-xs-3"></div>
 </div>
 <?php } else { ?>

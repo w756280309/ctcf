@@ -61,23 +61,4 @@ class QrechargeController extends BaseController
 
         return $this->createErrorResponse($rec_model->getSingleError()['message']);
     }
-
-    private function createErrorResponse($modelOrMessage = null)
-    {
-        Yii::$app->response->statusCode = 400;
-        $message = null;
-
-        if (is_string($modelOrMessage)) {
-            $message = $modelOrMessage;
-        } elseif (
-            $modelOrMessage instanceof Model
-            && $modelOrMessage->hasErrors()
-        ) {
-            $message = current($modelOrMessage->getFirstErrors());
-        }
-
-        return [
-            'message' => $message,
-        ];
-    }
 }

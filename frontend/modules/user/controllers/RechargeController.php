@@ -12,22 +12,6 @@ use common\models\bank\EbankConfig;
 
 class RechargeController extends BaseController
 {
-    public function beforeAction($action)
-    {
-        if (Yii::$app->controller->action->id == 'init') {
-            //记录转跳url
-            Yii::$app->session->set('to_url', '/user/recharge/init');
-        }
-
-        //检查是否开户
-        $cond = 0 | BankService::IDCARDRZ_VALIDATE_N;
-        $data = BankService::check($this->user, $cond);
-        if (1 === $data['code']) {
-            return $this->redirect('/user/userbank/identity');
-        }
-
-        return parent::beforeAction($action);
-    }
 
     /**
      * 充值
@@ -35,6 +19,17 @@ class RechargeController extends BaseController
     public function actionInit()
     {
         $this->layout = 'main';
+        Yii::$app->session->set('to_url', '/user/recharge/init');
+
+        //检查是否开户
+        $cond = 0 | BankService::IDCARDRZ_VALIDATE_N;
+        $data = BankService::check($this->user, $cond);
+        if (1 === $data['code']) {
+            return $this->render('@frontend/modules/user/views/userbank/identity.php', [
+                'title' => '充值',
+            ]);
+        }
+
         $bank = BankManager::getEbank('personal');
 
         $recharge = new RechargeRecord();
@@ -57,10 +52,18 @@ class RechargeController extends BaseController
     }
 
     /**
-     * 充值申请.
+     * 充值表单提交一面
      */
     public function actionApply()
     {
+
+        //检查是否开户
+        $cond = 0 | BankService::IDCARDRZ_VALIDATE_N;
+        $data = BankService::check($this->user, $cond);
+        if (1 === $data['code']) {
+            return $this->redirect('/user/userbank/identity');
+        }
+
         $bank_id = Yii::$app->request->post('bankid');
         $pay_type = Yii::$app->request->post('pay_type');   //目前只支持网银充值 2
 

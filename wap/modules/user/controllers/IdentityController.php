@@ -17,11 +17,11 @@ class IdentityController extends BaseController
     public function actions()
     {
         return[
-            'verify' => IdentityVerifyAction::className(),
+            'verify' => IdentityVerifyAction::className(),//开户表单提交页面
         ];
     }
 
-    //为开户的开户页面
+    //开户页面
     public function actionIndex()
     {
         $data = BankService::check($this->getAuthedUser(), BankService::IDCARDRZ_VALIDATE_Y);

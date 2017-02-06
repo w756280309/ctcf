@@ -88,7 +88,7 @@ foreach (['useraccount/safecenter.css'] as $cssFile) {
                     <!-- 未认证-->
                     <?php if (null === $user->qpay): ?>
                     <i class="red"></i><span>未绑定</span>
-                    <a href="/user/userbank/mybankcard" class="bunding">绑定</a>
+                    <a href="/user/bank/card" class="bunding">绑定</a>
                     <?php else: ?>
                     <!-- 已认证-->
                     <i class="blue"></i><span>已绑定</span>

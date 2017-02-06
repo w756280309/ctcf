@@ -30,7 +30,7 @@ use common\models\bank\BankCardUpdate;
                 <?php if ($bankcardUpdate && BankCardUpdate::STATUS_ACCEPT === $bankcardUpdate->status) { ?>
                     <span class="link-changeCard">换卡申请中</span>
                 <?php } else { ?>
-                    <a href="/user/userbank/updatecard" class="link-changeCard">申请更换银行卡</a>
+                    <a href="/user/bank/update" class="link-changeCard">申请更换银行卡</a>
                 <?php } ?>
                 <div class="clear"></div>
                 <div class="link-en">
@@ -94,7 +94,7 @@ use common\models\bank\BankCardUpdate;
         if (code) {
             location.reload();
         } else {
-            location.href = "/user/userbank/bindbank";
+            location.href = "/user/bank";
         }
     }
 </script>

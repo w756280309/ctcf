@@ -50,6 +50,7 @@ $(function() {
 
     $('#card_no').blur(function() {
         var card_no = $(this).val();
+        var csrf = $('#_csrf').val();
         if (card_no === '') {
             $('.bind-card').hide();
             $('.bind-check').show();
@@ -59,7 +60,7 @@ $(function() {
             return false;
         }
 
-        $.get("/user/userbank/checkbank", {card: card_no}, function(result) {
+        $.post("/user/bank/check", {card: card_no, _csrf : csrf}, function(result) {
             if (result.code !== 0) {
                 $('.bind-card').hide();
                 $('.bind-check').show();
@@ -153,7 +154,7 @@ function subForm()
         if (url && !w) {
             location.href = url;
         } else if (url && w) {
-            alertMessage('请在新打开的联动优势页面进行绑卡，绑卡完成前不要关闭该窗口。', '/user/userbank/mybankcard');
+            alertMessage('请在新打开的联动优势页面进行绑卡，绑卡完成前不要关闭该窗口。', '/user/bank/card');
         }
     });
 

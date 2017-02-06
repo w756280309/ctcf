@@ -2,6 +2,7 @@
 
 namespace common\models\user;
 
+use common\models\bank\BankCardUpdate;
 use common\models\epay\EpayUser;
 use common\models\mall\ThirdPartyConnect;
 use common\models\order\OnlineOrder as Ord;
@@ -17,6 +18,7 @@ use Yii;
 use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
+use yii\helpers\ArrayHelper;
 use yii\web\IdentityInterface;
 use Zii\Model\CoinsTrait;
 use Zii\Model\ErrorExTrait;
@@ -797,10 +799,12 @@ class User extends ActiveRecord implements IdentityInterface, UserInterface
         $this->idcard = $identity->idcard;
         $resp = Yii::$container->get('ump')->register($this);
 
+        Yii::info('开户联动返回日志 ump_log user_identify user_id: ' . $this->id . ';real_name:.' . $this->real_name . ';idcard:' . $this->idcard . ';mobile:' . $this->mobile . '; ret_code:' . $resp->get('ret_code') . ';ret_msg:' . $resp->get('ret_msg'), 'umplog');
+
         if (!$resp->isSuccessful()) {
             throw new \Exception($resp->get('ret_code') . '：' . $resp->get('ret_msg'), 1);
         }
-        Yii::info('开户联动返回日志 ump_log user_identify user_id: ' . $this->id . '; ret_code:' . $resp->get('ret_code') . ';ret_msg:' . $resp->get('ret_msg'), 'umplog');
+
         $transaction = Yii::$app->db->beginTransaction();
         try {
             $epayUser = new EpayUser([
@@ -821,13 +825,14 @@ class User extends ActiveRecord implements IdentityInterface, UserInterface
             if (!$this->save(false)) {
                 throw new \Exception('开户失败', 1);
             }
-            Yii::info('用户信息变更日志 开户成功 table:user;attribute:idcard_status;value:' . $this->idcard_status . ';user_id:' . $this->id, 'user_log');
+            Yii::info('用户信息变更日志 开户 变更表:user;变更属性:' . (json_encode(['idcard_status' => $this->idcard_status, 'real_name' => $this->real_name, 'idcard' => $this->idcard])) . ';user_id:' . $this->id . ';mobile:' . $this->mobile . ';变更依据:联动ret_code ' . $resp->get('ret_code') . ';联动返回信息:' . json_encode($resp->toArray()), 'user_log');
             $transaction->commit();
         } catch (\Exception $ex) {
             $transaction->rollBack();
             throw new \Exception($ex->getMessage(), $ex->getCode());
         }
     }
+
 
     /**
      * 获得线上投资榜单的前$limit名的用户信息(投资开始日期到现在)
@@ -840,5 +845,83 @@ class User extends ActiveRecord implements IdentityInterface, UserInterface
     public static function getTopList($startDate, $limit = 5)
     {
         return \Yii::$container->get('txClient')->get('user/top-list', ['startDate' => $startDate, 'limit' => $limit]);
+    }
+    //用户绑卡逻辑
+    public function bindCard(QpayBinding $bind, array $responseData)
+    {
+        if (in_array($bind->status, [QpayBinding::STATUS_SUCCESS, QpayBinding::STATUS_FAIL])) {
+            return true;
+        }
+
+        $bank = UserBanks::findOne(['binding_sn' => $bind->binding_sn]);
+        if (is_null($bank)) {
+            $transaction = Yii::$app->db->beginTransaction();
+            try {
+                $bind->status = QpayBinding::STATUS_SUCCESS;
+                if (!$bind->save()) {
+                    throw new \Exception();
+                }
+                $data = ArrayHelper::toArray($bind);
+                unset($data['id']);
+                unset($data['status']);
+                $userBanks = new UserBanks($data);
+                $userBanks->setScenario('step_first');
+
+                if (!$userBanks->save()) {
+                    throw new \Exception();
+                }
+                $transaction->commit();
+                Yii::info('用户信息变更日志 绑卡成功 变更表:user_bank;变更属性:' . (json_encode($data)) . ';user_id:' . $this->id . ';mobile:' . $this->mobile . ';变更依据:联动ret_code ' . $responseData['ret_code'] . ';联动返回信息:' . json_encode($responseData), 'user_log');
+                return true;
+            } catch (\Exception $ex) {
+                $transaction->rollBack();
+            }
+        }
+        return false;
+    }
+
+    //用户换卡
+    public function updateCard(BankCardUpdate $model, array $responseData)
+    {
+        if (in_array($model->status, [BankCardUpdate::STATUS_SUCCESS, BankCardUpdate::STATUS_FAIL])) {
+            return true;
+        }
+        $oldSn = $model->oldSn;
+        $userBank = UserBank::find()->where(['binding_sn' => $oldSn])->one();
+        //没有找到旧卡
+        if (is_null($userBank)) {
+            return false;
+        }
+
+        // 根据换卡记录，找到旧卡，删除旧卡，添加新卡
+        $transaction = \Yii::$app->db->beginTransaction();
+        try {
+            $model->status = BankCardUpdate::STATUS_SUCCESS;    //更新换卡申请表记录状态
+            if (!$model->save()){
+                throw new \Exception('数据更改失败');
+            }
+
+            $userBank->delete();
+            $bank = new UserBank([
+                'binding_sn' => $model->sn,
+                'uid' => $model->uid,
+                'epayUserId' => $model->epayUserId,
+                'bank_id' => $model->bankId,
+                'bank_name' => $model->bankName,
+                'account' => $model->cardHolder,
+                'card_number' => $model->cardNo,
+                'account_type' => '11',
+            ]);
+            $res = $bank->save(false);
+            if (!$res) {
+                throw new \Exception('数据更改失败');
+            }
+            $transaction->commit();
+            Yii::info('用户信息变更日志 换卡成功 变更表:user_bank;变更属性:' . (json_encode($bank->attributes)) . ';user_id:' . $this->id . ';mobile:' . $this->mobile . ';变更依据:联动ret_code ' . $responseData['ret_code'] . ';联动返回信息:' . json_encode($responseData), 'user_log');
+            return true;
+        } catch (\Exception $e) {
+            $transaction->rollBack();
+        }
+        return false;
     }
 }

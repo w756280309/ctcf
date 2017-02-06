@@ -31,7 +31,7 @@ $this->backUrl = '/system/system/setting';
     </div>
 </div>
 <?php if($user_bank) { ?>
-    <a class="row sm-height border-bottom visit" style="display: block;" href="<?= null !== $user->qpay ? '/user/userbank/mycard' : 'javascript:void(0)' ?>">
+    <a class="row sm-height border-bottom visit" style="display: block;" href="<?= null !== $user->qpay ? '/user/bank/card' : 'javascript:void(0)' ?>">
         <div class="col-xs-4 safe-txt  text-align-lf">银行卡</div>
         <div class="col-xs-2 safe-lf"><?= $user_bank->card_number ? substr_replace($user_bank->card_number, '*****', 3, -2) : '' ?></div>
         <?php if (null === $user->qpay && $user_bank) { ?>
@@ -49,7 +49,7 @@ $this->backUrl = '/system/system/setting';
         <div class="col-xs-2 safe-lf col"></div>
         <div class="col-xs-3 safe-lf"></div>
         <div class="col-xs-3 arrow">
-            <a href="/user/userbank/bindbank">去绑定</a>
+            <a href="/user/bank">去绑定</a>
         </div>
     </div>
 <?php } ?>

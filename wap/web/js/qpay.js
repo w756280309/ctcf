@@ -43,7 +43,7 @@ $(function () {
         }
         $form.data('submitting', true);
         var xhr = $.post(
-                '/user/qpay/binding/verify',
+                '/user/bank/verify',
                 $form.serialize()
                 );
 

@@ -64,7 +64,7 @@ class BankService
         if (($cond & self::BINDBANK_VALIDATE_N) && empty($user_bank)) {
             $qpaystatus = self::getQpayStatus($user);
             if (User::QPAY_NONE === $qpaystatus) {
-                return ['tourl' => '/user/userbank/bindbank', 'code' => 1, 'message' => '您还未绑定银行卡，请先去绑定'];
+                return ['tourl' => '/user/bank', 'code' => 1, 'message' => '您还未绑定银行卡，请先去绑定'];
             } else if (User::QPAY_PENDING === $qpaystatus) {
                 return ['code' => 1, 'message' => '您的绑卡请求正在处理中,请先去转转吧'];
             }
