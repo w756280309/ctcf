@@ -16,6 +16,7 @@ class UpdatecardController extends Controller
     public function actionFrontend()
     {
         $data = \Yii::$app->request->get();
+        Yii::info('[ump_notify] [update_bank_card] 绑卡前台回跳 frontend request_url:'.Yii::$app->request->hostInfo.'?'.http_build_query($data), 'notify');
         $channel = $this->getChannel($data);
         $isSucc = false;
 
@@ -44,7 +45,7 @@ class UpdatecardController extends Controller
         }
 
         $backUrl = $this->getBackUrl($channel, $isSucc);
-
+        Yii::info('[ump_notify][update_bank_card] frontend redirect_url:'.$backUrl, 'notify');
         return $this->redirect($backUrl);
     }
 

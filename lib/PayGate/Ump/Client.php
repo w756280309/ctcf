@@ -204,12 +204,12 @@ class Client
      * @param QpayBindInterface $bind
      * @return string
      */
-    public function changeQpay(QpayBindInterface $bind, $channel = null)
+    public function changeQpay(QpayBindInterface $bind, $channel = null, $token = null)
     {
         $data = [
             'service' => 'ptp_mer_replace_card',
-            'ret_url' => $this->clientOption['host']['api'] . "notify/updatecard/frontend",
-            'notify_url' => $this->clientOption['host']['api'] . "notify/updatecard/backend",
+            'ret_url' => $this->clientOption['host']['api'] . "notify/updatecard/frontend". (empty($token) ? '' : '?token=' . $token),
+            'notify_url' => $this->clientOption['host']['api'] . "notify/updatecard/backend". (empty($token) ? '' : '?token=' . $token),
             'order_id' => $bind->getTxSn(),
             'mer_date' => $bind->getTxDate(),
             'user_id' => $bind->getEpayUserId(),
