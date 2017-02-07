@@ -22,7 +22,7 @@ return [
                     'class' => 'yii\log\FileTarget',
                     'levels' => ['info'],
                     'categories' => ['notify'],
-                    'logFile' => '@app/runtime/logs/notify/mall/mall_notify'. date('Ym').'.log',
+                    'logFile' => '@app/runtime/logs/notify/notify'. date('Ym').'.log',
                     'maxFileSize' => 1024*2,
                     'logVars' => ['info'],
                     'prefix' => function ($message) {

@@ -55,7 +55,7 @@ class BankUpdateVerifyAction extends Action
             }
 
             if ($model->save(false)) {
-                $next = \Yii::$container->get('ump')->changeQpay($model, CLIENT_TYPE);
+                $next = \Yii::$container->get('ump')->changeQpay($model, CLIENT_TYPE, Yii::$app->request->get('token'));
                 return ['next' => $next];
             }
         }
