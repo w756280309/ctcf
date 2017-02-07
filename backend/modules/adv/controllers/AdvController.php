@@ -216,8 +216,7 @@ class AdvController extends BaseController
         $pageSize = 10;
         $query = Adv::find()
             ->where(['type' => Adv::TYPE_KAIPING])
-            ->andWhere(['del_status' => Adv::DEL_STATUS_SHOW])
-            ->andWhere(['pos_id' => Adv::POS_ID_KAIPING]);
+            ->andWhere(['del_status' => Adv::DEL_STATUS_SHOW]);
         $pages = new Pagination(['totalCount' => $query->count(), 'pageSize' => $pageSize]);
         $model = $query->offset($pages->offset)->limit($pages->limit)->orderBy('id desc')->all();
 
@@ -239,10 +238,11 @@ class AdvController extends BaseController
             if (!$id) {
                 $adv->creator_id = $this->getAuthedUser()->id;
                 $adv->sn = Adv::create_code();
-                $adv->pos_id = Adv::POS_ID_KAIPING;
                 $adv->type = Adv::TYPE_KAIPING;
                 $adv->created_at = time();
+                $adv->show_order = empty($adv->show_order) ? 0 : $adv->show_order;
             }
+            $adv->isDisabledInApp = (1 === (int)$adv->showOnPc) ? 1 : 0;
             $adv->updated_at = time();
             $result = $this->uploadImage($adv);
             if (empty($result) && !$id) {
@@ -256,6 +256,7 @@ class AdvController extends BaseController
                 return $this->redirect('/adv/adv/kaiping-list');
             }
         }
+        $adv->show_order = empty($adv->show_order) ? 0 : $adv->show_order;
         return $this->render('kaiping-edit', ['adv' => $adv]);
     }
 

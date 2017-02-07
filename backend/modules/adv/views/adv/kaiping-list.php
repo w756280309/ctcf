@@ -54,7 +54,7 @@ use yii\widgets\LinkPager;
                         <td><?= $val['title'] ?></td>
                         <td><?= $val['status'] ? '下线' : '上线' ?></td>
                         <td><input style="width:20px;height: 10px" type="text" name="show_order" readonly="true" value="<?= NULL === $val['show_order'] ? '---' : $val['show_order'] ?>"></td>
-                        <td><?= $val['showOnPc'] ? (1 === $val['showOnPc'] ? 'PC端' : 'WAP端') : '移动端'; ?></td>
+                        <td><?= !empty($val['showOnPc']) ? 'PC端' : '移动端' ?></td>
                         <td style="text-align: center">
                             <a href="/adv/adv/kaiping-edit?id=<?= $val->id ?>" class="btn mini green ajax_op" op="status" data-index="<?= $val['status'] ?>" index="<?= $val['id'] ?>"><i class="icon-edit"></i>编辑
                             </a>

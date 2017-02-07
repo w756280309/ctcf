@@ -278,13 +278,15 @@ use yii\helpers\Html;
     <?php } ?>
 </div>
 
+<?php if (!empty($kaiPing->image)) { ?>
 <div class="mask hide">
 </div>
 
 <div class="pop hide">
     <img src="<?= FE_BASE_URI ?>wap/index/images/close.png" class="close_splash" alt="">
-    <img src="<?= ASSETS_BASE_URI ?>images/index/kaipin/aha_1b.png" class="jumpAdv" alt="">
+    <img src="<?= UPLOAD_BASE_URI ?><?= $kaiPing->image ?>" class="jumpAdv" onclick="window.location.href='<?= $kaiPing->link ?>'" alt="">
 </div>
+<?php } ?>
 
 <script>
     var mySwiper = new Swiper('.swiper-container', {
@@ -321,22 +323,15 @@ use yii\helpers\Html;
 
     $(function () {
         FastClick.attach(document.body);
-
         //开屏图逻辑
-        /*
         $('.close_splash').on('click', closeAdv);
-        if (Cookies.get('splash_show') !== '20170126') {
+        if (Cookies.get('splash_show') !== '20170129') {    //测试时先让他一直出来
             document.body.addEventListener('touchmove', eventTarget);
             Cookies.set('splash_show', '20170126');
             $('.mask').removeClass('hide');
             $('.pop').removeClass('hide');
             setTimeout(closeAdv, 6000);
         }
-
-        $('.jumpAdv').on('click', function () {
-            location.href = '/deal/deal/index';
-        });
-        */
 
         //统计数据
         $.get('/site/stats-for-index', function (data) {

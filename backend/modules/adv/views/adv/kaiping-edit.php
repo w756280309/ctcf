@@ -52,8 +52,15 @@ $this->title = '首页开屏图添加/编辑';
                 <div class="control-group">
                     <label class="control-label">显示设备</label>
                     <div class="controls">
-                        <?= $form->field($adv, 'showOnPc', ['template' => '{input}', 'inputOptions' => ['id' => 'shebei']])->dropDownList([0 => '移动端显示', 1 => 'PC端显示',2 => 'WAP端显示']) ?>
+                        <?= $form->field($adv, 'showOnPc', ['template' => '{input}', 'inputOptions' => ['id' => 'shebei']])->dropDownList([0 => '移动端显示', 1 => 'PC端显示']) ?>
                         <?= $form->field($adv, 'showOnPc', ['template' => '{error}']) ?>
+                    </div>
+                </div>
+                <div class="control-group" id="app">
+                    <label class="control-label">APP端不显示</label>
+                    <div class="controls">
+                        <?= $form->field($adv, 'isDisabledInApp', ['template' => '{input}', 'inputOptions' => ['id' => 'isDisabledInApp']])->checkBox(['autocomplete' => "on"]) ?>
+                        <?= $form->field($adv, 'isDisabledInApp', ['template' => '{error}']) ?>
                     </div>
                 </div>
                 <div class="control-group">
@@ -91,4 +98,22 @@ $this->title = '首页开屏图添加/编辑';
             </div>
         </div>
     </div>
+    <script type="text/javascript">
+        $(function() {
+            var v = $('#shebei').val();
+            if ('1' === v) {
+                $('#app').hide();
+            } else {
+                $('#app').show();
+            }
+        });
+        $('#shebei').on('change', function() {
+            var v = $('#shebei').val();
+            if ('1' === v) {
+                $('#app').hide();
+            } else {
+                $('#app').show();
+            }
+        });
+    </script>
 <?php $this->endBlock(); ?>

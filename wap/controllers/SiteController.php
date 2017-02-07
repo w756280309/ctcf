@@ -174,11 +174,23 @@ class SiteController extends Controller
             ->limit(3)
             ->all();
 
+        //开屏图
+        $queryKaiping = Adv::find()
+            ->where([
+                'status' => Adv::STATUS_SHOW,
+                'del_status' => Adv::DEL_STATUS_SHOW,
+                'type' => Adv::TYPE_KAIPING,
+                'showOnPc' => 0,
+            ])
+            ->orderBy(['show_order' => SORT_ASC, 'updated_at' => SORT_DESC,])
+            ->one();
+
         return $this->render('index170109', [
             'xs' => $xs,
             'loans' => $loans,
             'hotActs' => $hotActs,
             'news' => $news,
+            'kaiPing' => $queryKaiping,
         ]);
     }
 
