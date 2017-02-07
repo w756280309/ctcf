@@ -23,16 +23,9 @@ class FirstOrderPoints
         $this->promo = $promo;
     }
 
-    public function doAfterLoanJixi(OnlineProduct $loan)
-    {
-        $loan->refresh();
-        if ($loan->is_jixi) {
-            $orders = OnlineOrder::find()->where(['online_pid' => $loan->id, 'status' => OnlineOrder::STATUS_SUCCESS])->all();
-            foreach ($orders as $order) {
-                if ($this->canSendPoint($order)) {
-                    $this->addUserPoints($order);
-                }
-            }
+    public function doAfterSuccessLoanOrder(OnlineOrder $order){
+        if ($this->canSendPoint($order)) {
+            $this->addUserPoints($order);
         }
     }
 
@@ -45,11 +38,8 @@ class FirstOrderPoints
     {
         try {
             $user = $order->user;
-            $loan = $order->loan;
             if (
                 $order->status === OnlineOrder::STATUS_SUCCESS
-                && !is_null($loan)
-                && $loan->is_jixi
                 && $this->promo->isActive($user, $order->order_time)
             ) {
                 //活动前没有投资

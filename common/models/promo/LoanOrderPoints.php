@@ -21,65 +21,66 @@ class LoanOrderPoints
         $this->promo = $promo;
     }
 
-    /**
-     * 标的确认计息后统一调用逻辑.
-     */
-    public function doAfterLoanJixi(OnlineProduct $loan)
+    public function doAfterSuccessLoanOrder(OnlineOrder $order){
+        if ($this->canSendPoint($order)) {
+            $this->addUserPointsWithLoanOrder($order);
+        }
+    }
+
+    public function canSendPoint(OnlineOrder $order)
     {
-        $loan->refresh();
-        if ($loan->is_jixi && !$loan->is_xs && !$loan->isLicai) {
-            $orders = OnlineOrder::find()->where(['online_pid' => $loan->id, 'status' => OnlineOrder::STATUS_SUCCESS])->all();
-            foreach ($orders as $order) {
-                try {
-                    $this->addUserPointsWithLoanOrder($order, $loan);
-                } catch (NotActivePromoException $ex) {
+        $user = $order->user;
+        try {
+            if ($order->status === OnlineOrder::STATUS_SUCCESS && $this->promo->isActive($user, $order->order_time)) {
+                $record = PointRecord::find()->where([
+                    'user_id' => $user->id,
+                    'ref_type' => PointRecord::TYPE_LOAN_ORDER,
+                    'ref_id' => $order->id
+                ])->one();
+                if (is_null($record)) {
+                    return true;
                 }
             }
+        } catch (\Exception $ex) {
+
         }
+        return false;
     }
 
     /**
      * 根据标的订单为用户添加积分.
      */
-    private function addUserPointsWithLoanOrder(OnlineOrder $order, OnlineProduct $loan)
+    private function addUserPointsWithLoanOrder(OnlineOrder $order)
     {
         $user = $order->user;
-        if ($order->status === OnlineOrder::STATUS_SUCCESS && $this->promo->isActive($user, $order->order_time)) {
-            $record = PointRecord::find()->where([
+        $loan = $order->loan;
+        $transaction = \Yii::$app->db->beginTransaction();
+        try {
+            $points = $this->getPointsWithOrder($order, $loan);
+            $level = $order->user->level;
+            $res = \Yii::$app->db->createCommand("UPDATE `user` SET `points` = `points` + :points WHERE `id` = :userId", ['points' => $points, 'userId' => $user->id])->execute();
+            if (!$res) {
+                throw new \Exception('数据保存失败1');
+            }
+            $user->refresh();
+            $finalPoints = $user->points;
+            $record = new PointRecord([
+                'sn' => TxUtils::generateSn('PR'),
                 'user_id' => $user->id,
                 'ref_type' => PointRecord::TYPE_LOAN_ORDER,
-                'ref_id' => $order->id
-            ])->one();
-            if (empty($record)) {
-                $transaction = \Yii::$app->db->beginTransaction();
-                try {
-                    $points = $this->getPointsWithOrder($order, $loan);
-                    $level = $order->user->level;
-                    $res = \Yii::$app->db->createCommand("UPDATE `user` SET `points` = `points` + :points WHERE `id` = :userId", ['points' => $points, 'userId' => $user->id])->execute();
-                    if (!$res) {
-                        throw new \Exception('数据保存失败1');
-                    }
-                    $user->refresh();
-                    $finalPoints = $user->points;
-                    $record = new PointRecord([
-                        'sn' => TxUtils::generateSn('PR'),
-                        'user_id' => $user->id,
-                        'ref_type' => PointRecord::TYPE_LOAN_ORDER,
-                        'ref_id' => $order->id,
-                        'incr_points' => $points,
-                        'final_points' => $finalPoints,
-                        'recordTime' => date('Y-m-d H:i:s'),
-                        'userLevel' => $level,
-                    ]);
-                    $res = $record->save();
-                    if (!$res) {
-                        throw new \Exception('数据保存失败2');
-                    }
-                    $transaction->commit();
-                } catch (\Exception $ex) {
-                    $transaction->rollBack();
-                }
+                'ref_id' => $order->id,
+                'incr_points' => $points,
+                'final_points' => $finalPoints,
+                'recordTime' => date('Y-m-d H:i:s'),
+                'userLevel' => $level,
+            ]);
+            $res = $record->save();
+            if (!$res) {
+                throw new \Exception('数据保存失败2');
             }
+            $transaction->commit();
+        } catch (\Exception $ex) {
+            $transaction->rollBack();
         }
     }
 
