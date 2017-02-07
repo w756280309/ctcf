@@ -228,8 +228,8 @@ class DataController extends Controller
                         empty($loan->start_date) ? '---' : date('Y-m-d', $loan->start_date),
                         empty($loan->full_time) ? '---' : date('Y-m-d', $loan->full_time),
                         empty($loan->jixi_time) ? '---' : date('Y-m-d', $loan->jixi_time),
-                        $repayment['totalBenjin'],
-                        $repayment['totalLixi'],
+                        floatval($repayment['totalBenjin']),
+                        floatval($repayment['totalLixi']),
                         date('Y-m-d', $repayment['refund_time']),
                         isset($refundTime[$key][$repayment['qishu']]) ? date('Y-m-d', $refundTime[$key][$repayment['qishu']]) : '---'
                     ];
