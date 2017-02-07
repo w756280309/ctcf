@@ -21,7 +21,13 @@ class AccountService
      */
     public function confirmRecharge(RechargeRecord $recharge)
     {
-        if (RechargeRecord::STATUS_NO !== $recharge->status) {
+        //充值记录状态为成功，不做处理
+        if (RechargeRecord::STATUS_YES === $recharge->status) {
+            return true;
+        }
+        //充值记录状态不为成功，可能是未处理，可能是失败，但是联动可能将失败状态改为成功，所以都要做处理。
+        $record = MoneyRecord::findOne(['osn' => $recharge->sn]);
+        if (!is_null($record)) {
             return true;
         }
 
@@ -54,7 +60,6 @@ class AccountService
         }
 
         //录入user_acount记录
-        $user_acount->uid = $user_acount->uid;
         $user_acount->account_balance = $bc->bcround(bcadd($user_acount->account_balance, $recharge->fund), 2);
         $user_acount->available_balance = $bc->bcround(bcadd($user_acount->available_balance, $recharge->fund), 2);
         $user_acount->in_sum = $bc->bcround(bcadd($user_acount->in_sum, $recharge->fund), 2);

@@ -61,6 +61,20 @@
                 return '<a class="btn btn-primary get_order_status" sn="'.$record['sn'].'">查询流水在联动状态</a>';
             }
         ],
+        [
+            'label' => '充值结果修复',
+            'format' => 'raw',
+            'value' => function ($record) {
+                //只修复3天内的充值订单
+                if (
+                    $record['created_at'] >= strtotime('-3 day')
+                    && (int)$record['status'] !== \common\models\user\RechargeRecord::STATUS_YES
+                ) {
+                    return '<button class="btn btn-default repair_data" data="'.$record['sn'].'">修复</button>';
+                }
+                return '';
+            }
+        ],
     ],
 ])
 ?>
@@ -84,6 +98,33 @@
                         newalert(0, data.message);
                     }
                 });
+            }
+        });
+
+        //点击修复数据
+        $('.repair_data').bind('click', function () {
+            var _this = $(this);
+            var sn = _this.attr('data');
+            if (sn) {
+                var confirm =  window.confirm('只有系统充值失败且联动充值成功时，才需要修复数据，确认修复吗?');
+                if (confirm) {
+                    _this.attr('disabled', true);
+                    var request = $.ajax({
+                        url: '/user/rechargerecord/repair-data?sn=' + sn,
+                        method: "POST",
+                        data: {_csrf: "<?= Yii::$app->request->csrfToken?>"}
+                    });
+                    request.done(function (data) {
+                        alert(data.message);
+                        if (data.success) {
+                            location.reload();
+                        }
+                        _this.removeAttr('disabled');
+                    });
+                    request.fail(function (data) {
+                        _this.removeAttr('disabled');
+                    });
+                }
             }
         });
     })

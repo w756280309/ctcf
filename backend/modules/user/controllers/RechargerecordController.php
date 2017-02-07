@@ -11,6 +11,7 @@ use common\models\user\RechargeRecord;
 use common\models\user\User;
 use common\models\user\UserAccount;
 use common\models\user\UserBanks;
+use common\service\AccountService;
 use Yii;
 use yii\data\Pagination;
 use yii\log\FileTarget;
@@ -205,5 +206,44 @@ class RechargerecordController extends BaseController
         $log->messages[] = ['test', 2, 'application', $time]; //第二个值 1 error 2 warning
 
         $log->export();
+    }
+
+    //修复充值数据
+    public function actionRepairData($sn)
+    {
+        $record = RechargeRecord::find()->where(['sn' => $sn])->one();
+        $status = intval($record->status);
+        if (is_null($record)) {
+            return ['success' => false, 'message' => '没有找到充值记录'];
+        }
+        if ($status === RechargeRecord::STATUS_YES) {
+            return ['success' => false, 'message' => '成功记录不需要修复'];
+        }
+        if ($record->created_at < strtotime('-3 day')) {
+            return ['success' => false, 'message' => '只能修复3天内的订单'];
+        }
+        $moneyRecord = MoneyRecord::find()->where(['osn' => $sn])->one();
+        if (!is_null($moneyRecord)) {
+            return ['success' => false, 'message' => '成功记录不需要修复'];
+        }
+        $res = Yii::$container->get('ump')->getRechargeInfo($sn, $record->created_at);
+        if ($res->isSuccessful()) {
+            $tran_state = intval($res->get('tran_state'));
+            if ($tran_state === 2) {
+                $res = (new AccountService())->confirmRecharge($record);
+                if ($res) {
+                    return ['success' => true, 'message' => '成功修复数据'];
+                } else {
+                    return ['success' => false, 'message' => '数据修复失败'];
+                }
+            }
+            {
+                $return_message = [0 => '初始', 2 => '成功', 3 => '失败', 4 => '不明', 5 => '交易关闭'];
+                if (key_exists($tran_state, $return_message)) {
+                    return ['success' => false, 'message' => '联动状态：' . $return_message[$tran_state]];
+                }
+            }
+        }
+        return ['success' => false, 'message' => '联动状态异常'];
     }
 }
