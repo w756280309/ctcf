@@ -23,6 +23,19 @@ class FirstOrderPoints
         $this->promo = $promo;
     }
 
+    public function doAfterLoanJixi(OnlineProduct $loan)
+    {
+        $loan->refresh();
+        if ($loan->is_jixi) {
+            $orders = OnlineOrder::find()->where(['online_pid' => $loan->id, 'status' => OnlineOrder::STATUS_SUCCESS])->all();
+            foreach ($orders as $order) {
+                if ($this->canSendPoint($order)) {
+                    $this->addUserPoints($order);
+                }
+            }
+        }
+    }
+
     public function doAfterSuccessLoanOrder(OnlineOrder $order){
         if ($this->canSendPoint($order)) {
             $this->addUserPoints($order);

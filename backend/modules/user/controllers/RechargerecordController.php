@@ -219,8 +219,8 @@ class RechargerecordController extends BaseController
         if ($status === RechargeRecord::STATUS_YES) {
             return ['success' => false, 'message' => '成功记录不需要修复'];
         }
-        if ($record->created_at < strtotime('-3 day')) {
-            return ['success' => false, 'message' => '只能修复3天内的订单'];
+        if ($record->created_at < strtotime('-10 day')) {
+            return ['success' => false, 'message' => '只能修复10天内的订单'];
         }
         $moneyRecord = MoneyRecord::find()->where(['osn' => $sn])->one();
         if (!is_null($moneyRecord)) {
@@ -236,8 +236,7 @@ class RechargerecordController extends BaseController
                 } else {
                     return ['success' => false, 'message' => '数据修复失败'];
                 }
-            }
-            {
+            } else {
                 $return_message = [0 => '初始', 2 => '成功', 3 => '失败', 4 => '不明', 5 => '交易关闭'];
                 if (key_exists($tran_state, $return_message)) {
                     return ['success' => false, 'message' => '联动状态：' . $return_message[$tran_state]];

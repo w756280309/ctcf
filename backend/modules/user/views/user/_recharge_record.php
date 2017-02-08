@@ -67,7 +67,7 @@
             'value' => function ($record) {
                 //只修复3天内的充值订单
                 if (
-                    $record['created_at'] >= strtotime('-3 day')
+                    $record['created_at'] >= strtotime('-10 day')
                     && (int)$record['status'] !== \common\models\user\RechargeRecord::STATUS_YES
                 ) {
                     return '<button class="btn btn-default repair_data" data="'.$record['sn'].'">修复</button>';
