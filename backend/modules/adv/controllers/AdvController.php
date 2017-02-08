@@ -242,7 +242,6 @@ class AdvController extends BaseController
                 $adv->created_at = time();
                 $adv->show_order = empty($adv->show_order) ? 0 : $adv->show_order;
             }
-            $adv->isDisabledInApp = (1 === (int)$adv->showOnPc) ? 1 : 0;
             $adv->updated_at = time();
             $result = $this->uploadImage($adv);
             if (empty($result) && !$id) {

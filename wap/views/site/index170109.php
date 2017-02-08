@@ -324,14 +324,17 @@ use yii\helpers\Html;
     $(function () {
         FastClick.attach(document.body);
         //开屏图逻辑
-        $('.close_splash').on('click', closeAdv);
-        if (Cookies.get('splash_show') !== '20170129') {    //测试时先让他一直出来
-            document.body.addEventListener('touchmove', eventTarget);
-            Cookies.set('splash_show', '20170126');
-            $('.mask').removeClass('hide');
-            $('.pop').removeClass('hide');
-            setTimeout(closeAdv, 6000);
-        }
+        <?php if (!empty($kaiPing->image)) { ?>
+            $('.close_splash').on('click', closeAdv);
+            var guiZe = '<?= $kaiPing->image ?>';
+            if (Cookies.get('splash_show') !== guiZe) {
+                document.body.addEventListener('touchmove', eventTarget);
+                Cookies.set('splash_show', guiZe);
+                $('.mask').removeClass('hide');
+                $('.pop').removeClass('hide');
+                setTimeout(closeAdv, 6000);
+            }
+        <?php } ?>
 
         //统计数据
         $.get('/site/stats-for-index', function (data) {

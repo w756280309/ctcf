@@ -70,7 +70,7 @@ class SiteController extends Controller
     {
         //轮播图展示
         $adv = Adv::find()
-            ->where(['status' => 0, 'del_status' => 0, 'showOnPc' => 1])
+            ->where(['status' => 0, 'del_status' => 0, 'showOnPc' => 1, 'type' => Adv::TYPE_LUNBO])
             ->limit(5)
             ->orderBy('show_order asc, id desc')
             ->all();
