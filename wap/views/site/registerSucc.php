@@ -17,7 +17,7 @@ $this->title = '温度金服注册成功页面';
     <?php } ?>
     <div class="registermildle f17">
         <img src="<?= FE_BASE_URI ?>wap/register/images/tick_01.png" alt="">
-        <p>恭喜你注册成功！</p>
+        <p>恭喜您注册成功！</p>
     </div>
     <ul class="registerlist f15">
         <li>• 288元代金券已经发放至您的账户中心</li>
@@ -35,6 +35,7 @@ $this->title = '温度金服注册成功页面';
                     20 => '金华广电',
                     13 => '长兴传媒集团',
                     5 => '舟山日报',
+                    52 => '建德广播电视台',
                 ];
             ?>
 
