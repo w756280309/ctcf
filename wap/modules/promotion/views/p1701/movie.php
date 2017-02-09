@@ -7,7 +7,7 @@ $this->share = $share;
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>libs/bootstrap/css/bootstrap.min.css">
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/base.css?v=1.5">
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/comfont.css?v=1.0">
-<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/luodiye/css/index.css?v=2.6">
+<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/luodiye/css/index.css?v=2.7">
 <script  src="<?= FE_BASE_URI ?>libs/lib.flexible3.js"></script>
 <script  src="<?= FE_BASE_URI ?>libs/fastclick.js"></script>
 <script src="<?= ASSETS_BASE_URI ?>js/common.js"></script>
@@ -25,9 +25,9 @@ $this->share = $share;
     <?php } ?>
 
     <div class="banner">
-        <img src="<?= FE_BASE_URI ?>wap/luodiye/images/banner_07.png" alt="">
-        <img src="<?= FE_BASE_URI ?>wap/luodiye/images/banner_08.png" alt="">
-        <img src="<?= FE_BASE_URI ?>wap/luodiye/images/banner_09.png" alt="">
+        <img src="<?= FE_BASE_URI ?>wap/luodiye/images/valentine_01.png" alt="">
+        <img src="<?= FE_BASE_URI ?>wap/luodiye/images/valentine_02.png" alt="">
+        <img src="<?= FE_BASE_URI ?>wap/luodiye/images/valentine_03.png" alt="">
     </div>
     <div class="phonenum">
         <div class="inputphone"><input class="f15" type="tel" placeholder="请输入手机号" maxlength="11"></div>
