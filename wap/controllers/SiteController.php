@@ -143,20 +143,18 @@ class SiteController extends Controller
             ->limit(2)
             ->all();
 
-        //精选项目与热门活动
-        $queryAdvs = Adv::find()
-            ->where([
-                'status' => Adv::STATUS_SHOW,
-                'del_status' => Adv::DEL_STATUS_SHOW,
-                'showOnPc' => 0,
-            ]);
-
-        if (defined('IN_APP')) {
-            $queryAdvs->andWhere(['isDisabledInApp' => 0]);
-        }
+        //开屏图
+        $queryKaiping = $this->advQuery()
+            ->andWhere(['type' => Adv::TYPE_KAIPING])
+            ->orderBy([
+                'show_order' => SORT_ASC,
+                'updated_at' => SORT_DESC,
+            ])
+            ->one();
 
         //热门活动
-        $hotActs = $queryAdvs->andWhere(['type' => Adv::TYPE_LUNBO])
+        $hotActs = $this->advQuery()
+            ->andWhere(['type' => Adv::TYPE_LUNBO])
             ->orderBy([
                 'show_order' => SORT_ASC,
                 'id' => SORT_DESC,
@@ -174,17 +172,6 @@ class SiteController extends Controller
             ->limit(3)
             ->all();
 
-        //开屏图
-        $queryKaiping = Adv::find()
-            ->where([
-                'status' => Adv::STATUS_SHOW,
-                'del_status' => Adv::DEL_STATUS_SHOW,
-                'type' => Adv::TYPE_KAIPING,
-                'showOnPc' => 0,
-            ])
-            ->orderBy(['show_order' => SORT_ASC, 'updated_at' => SORT_DESC,])
-            ->one();
-
         return $this->render('index170109', [
             'xs' => $xs,
             'loans' => $loans,
@@ -192,6 +179,22 @@ class SiteController extends Controller
             'news' => $news,
             'kaiPing' => $queryKaiping,
         ]);
+    }
+
+    private function advQuery()
+    {
+        $advQuery = Adv::find()
+            ->where([
+                'status' => Adv::STATUS_SHOW,
+                'del_status' => Adv::DEL_STATUS_SHOW,
+                'showOnPc' => 0,
+            ]);
+
+        if (defined('IN_APP')) {
+            $advQuery->andWhere(['isDisabledInApp' => 0]);
+        }
+
+        return $advQuery;
     }
 
     /**
