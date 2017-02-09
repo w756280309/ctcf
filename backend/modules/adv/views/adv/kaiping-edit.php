@@ -49,17 +49,10 @@ $this->title = '首页开屏图添加/编辑';
                         <?= $form->field($adv, 'title', ['template' => '{error}']) ?>
                     </div>
                 </div>
-                <div class="control-group">
-                    <label class="control-label">显示设备</label>
-                    <div class="controls">
-                        <?= $form->field($adv, 'showOnPc', ['template' => '{input}', 'inputOptions' => ['id' => 'shebei']])->dropDownList([0 => '移动端显示', 1 => 'PC端显示']) ?>
-                        <?= $form->field($adv, 'showOnPc', ['template' => '{error}']) ?>
-                    </div>
-                </div>
                 <div class="control-group" id="app">
                     <label class="control-label">APP端不显示</label>
                     <div class="controls">
-                        <?= $form->field($adv, 'isDisabledInApp', ['template' => '{input}', 'inputOptions' => ['id' => 'isDisabledInApp']])->checkBox(['autocomplete' => "on"]) ?>
+                        <?= $form->field($adv, 'isDisabledInApp', ['template' => '{input}<span class="notice">*目前上传图片均为移动端(包括WAP和APP)</span>', 'inputOptions' => ['id' => 'isDisabledInApp']])->checkBox(['autocomplete' => "on"]) ?>
                         <?= $form->field($adv, 'isDisabledInApp', ['template' => '{error}']) ?>
                     </div>
                 </div>

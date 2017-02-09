@@ -278,7 +278,9 @@ use yii\helpers\Html;
     <?php } ?>
 </div>
 
-<?php if (!empty($kaiPing->image)) { ?>
+<?php if (!empty($kaiPing->image)) {
+    if (!$kaiPing->isDisabledInApp && defined('IN_APP') || !defined('IN_APP'))
+ { ?>
 <div class="mask hide">
 </div>
 
@@ -286,7 +288,7 @@ use yii\helpers\Html;
     <img src="<?= FE_BASE_URI ?>wap/index/images/close.png" class="close_splash" alt="">
     <img src="<?= UPLOAD_BASE_URI ?><?= $kaiPing->image ?>" class="jumpAdv" onclick="window.location.href='<?= $kaiPing->link ?>'" alt="">
 </div>
-<?php } ?>
+<?php }} ?>
 
 <script>
     var mySwiper = new Swiper('.swiper-container', {
@@ -324,7 +326,9 @@ use yii\helpers\Html;
     $(function () {
         FastClick.attach(document.body);
         //开屏图逻辑
-        <?php if (!empty($kaiPing->image)) { ?>
+        <?php if (!empty($kaiPing->image)) {
+        if (!$kaiPing->isDisabledInApp && defined('IN_APP') || !defined('IN_APP'))
+        { ?>
             $('.close_splash').on('click', closeAdv);
             var guiZe = '<?= $kaiPing->image ?>';
             if (Cookies.get('splash_show') !== guiZe) {
@@ -334,7 +338,7 @@ use yii\helpers\Html;
                 $('.pop').removeClass('hide');
                 setTimeout(closeAdv, 6000);
             }
-        <?php } ?>
+        <?php }} ?>
 
         //统计数据
         $.get('/site/stats-for-index', function (data) {
