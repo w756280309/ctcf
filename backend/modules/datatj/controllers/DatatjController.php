@@ -232,16 +232,17 @@ FROM perf WHERE DATE_FORMAT(bizDate,'%Y-%m') < DATE_FORMAT(NOW(),'%Y-%m')  GROUP
         UserStats::exportAsXlsx($data);
     }
 
-    //统计分销商的 注册人数、购买人数、购买金额
-    public function actionAffiliation()
+    /**
+     * 分销商数据统计(注册人数、购买人数、购买金额).
+     *
+     * 1. 可以根据输入的时间区间做统计;
+     */
+    public function actionAffiliation($start = null, $end = null)
     {
-        $sql = "SELECT a.id, a.name, COUNT(DISTINCT u.id) AS uc, COUNT(DISTINCT o.`uid`) AS oc, SUM(o.`order_money`) AS m
-FROM affiliator AS a
-LEFT JOIN user_affiliation AS ua ON a.id = ua.`affiliator_id`
-LEFT JOIN `user` AS u ON u.id = ua.`user_id`  AND u.type = 1
-LEFT JOIN online_order AS o ON o.`uid` = ua.`user_id` AND o.status = 1
-GROUP BY a.id;";
-        $data = Yii::$app->db->createCommand($sql)->queryAll();
+        $start = $start ? strtotime($start) : null;
+        $end = $end ? strtotime($end.' 23:59:59') : null;
+
+        $data = $this->affiliationStats($start, $end);
         $dataProvider = new ArrayDataProvider([
             'allModels' => $data,
         ]);
@@ -249,31 +250,81 @@ GROUP BY a.id;";
             'totalCount' => count($data),
         ]);
         return $this->render('affiliation', [
-           'dataProvider' => $dataProvider,
-            'pages' => $pages
+            'dataProvider' => $dataProvider,
+            'pages' => $pages,
+            'start' => $start,
+            'end' => $end,
         ]);
     }
 
-    //统计分销商的 注册人数、购买人数、购买金额 导出
-    public function actionAffiliationExport()
+    /**
+     * 分销商数据统计导出(注册人数、购买人数、购买金额).
+     *
+     * 1. 可以根据输入的时间区间做统计;
+     */
+    public function actionAffiliationExport($start, $end)
     {
-        $sql = "SELECT a.id, a.name, COUNT(DISTINCT u.id) AS uc, COUNT(DISTINCT o.`uid`) AS oc, SUM(o.`order_money`) AS m
-FROM affiliator AS a
-LEFT JOIN user_affiliation AS ua ON a.id = ua.`affiliator_id`
-LEFT JOIN `user` AS u ON u.id = ua.`user_id`  AND u.type = 1
-LEFT JOIN online_order AS o ON o.`uid` = ua.`user_id` AND o.status = 1
-GROUP BY a.id;";
-        $data = Yii::$app->db->createCommand($sql)->queryAll();
+        if (!preg_match('/^[0-9]+$/', $start)) {
+            $start = null;
+        }
+
+        if (!preg_match('/^[0-9]+$/', $end)) {
+            $end = null;
+        }
+
+        $data = $this->affiliationStats($start, $end);
+
         $record = implode(',', ['ID', '分销商名称', '注册人数（人）', '投资人数（人）', '投资金额（元）']) . "\n";
         foreach ($data as $v) {
             $array = [$v['id'], Html::encode($v['name']), intval($v['uc']), intval($v['oc']), floatval($v['m'])];
             $record .= implode(',', $array) . "\n";
         }
         if (null !== $record) {
+            $fileName = 'day-count(';
+
+            if ($start) {
+                $fileName .= date('Y-m-d', $start);
+            }
+
+            if ($end) {
+                $fileName .= '到'.date('Y-m-d', $end);
+            } else {
+                $fileName .= '到'.date('Y-m-d');
+            }
+
+            $fileName .= ').csv';
+
             $record = iconv('UTF-8', 'GB18030', $record);//转换编码
-            header('Content-Disposition: attachment; filename="day-count(' . date('Y-m-d') . ').csv"');
+            header('Content-Disposition: attachment; filename="'.$fileName.'"');
             header('Content-Length: ' . strlen($record)); // 内容的字节数
             echo $record;
         }
+    }
+
+    /**
+     * 根据订单日期区间查询分销商统计数据.
+     */
+    private function affiliationStats($start, $end)
+    {
+        $userCond = "u.id = ua.`user_id` AND u.type = 1";
+        $orderCond = "o.`uid` = ua.`user_id` AND o.status = 1";
+
+        if ($start) {
+            $userCond .= " AND u.created_at >= $start";
+            $orderCond .= " AND o.created_at >= $start";
+        }
+
+        if ($end) {
+            $userCond .= " AND u.created_at <= $end";
+            $orderCond .= " AND o.created_at <= $end";
+        }
+
+        $sql = "SELECT a.id, a.name, COUNT(DISTINCT u.id) AS uc, COUNT(DISTINCT o.`uid`) AS oc, SUM(o.`order_money`) AS m
+FROM affiliator AS a
+LEFT JOIN user_affiliation AS ua ON a.id = ua.`affiliator_id`
+LEFT JOIN `user` AS u ON ".$userCond."
+LEFT JOIN online_order AS o ON ".$orderCond." GROUP BY a.id;";
+
+        return Yii::$app->db->createCommand($sql)->queryAll();
     }
 }

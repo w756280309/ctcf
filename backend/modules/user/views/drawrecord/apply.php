@@ -1,11 +1,11 @@
 <?php
 
 use common\models\user\User;
-use common\models\user\DrawRecord;
 use yii\web\YiiAsset;
 use yii\widgets\LinkPager;
 
 $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => YiiAsset::class]);
+
 ?>
 <?php $this->beginBlock('blockmain'); ?>
 <div class="container-fluid">
