@@ -290,11 +290,11 @@ use common\view\LoanHelper;
             <a href = " " style="display: none;">更多&gt;</a>
         </div>
         <ul class="more-right-bottom">
-            <li><a href="https://www.wenjf.com/upload/showpic?id=20" target="_blank">南金交 - 中盛海润1号</a>
-                <p class="issuer-desc">中信保评级AAA级企业，政府担保企业，1万起投，年化收益8%</p>
+            <li><a href="https://www.wenjf.com/upload/showpic?id=30" target="_blank">宁富17号 - 北大高科</a>
+                <p class="issuer-desc">知名国企，担保稳健，5万起投，预期年化收益率7.2%</p>
             </li>
-            <li><a href="https://www.wenjf.com/upload/showpic?id=24" target="_blank">宁富一号 - 三都国资</a>
-                <p class="issuer-desc">政府支持，AA级担保企业，5万起投，年化收益8.8%</p>
+            <li><a href="https://www.wenjf.com/upload/showpic?id=24" target="_blank">宁富1号 - 三都国资</a>
+                <p class="issuer-desc">政府支持，AA级担保企业，5万起投，预期年化收益率8.8%</p>
             </li>
         </ul>
     </div>
