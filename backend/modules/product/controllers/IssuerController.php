@@ -31,7 +31,7 @@ class IssuerController extends BaseController
     public function actionAdd()
     {
         $issuer = new Issuer();
-
+        $issuer->scenario = Issuer::SCENARIO_JICHU;
         if ($issuer->load(Yii::$app->request->post())
             && $issuer->validate()
             && $this->validateIssuer($issuer)
@@ -49,7 +49,7 @@ class IssuerController extends BaseController
     public function actionEdit($id)
     {
         $issuer = $this->findOr404(Issuer::class, $id);
-
+        $issuer->scenario = Issuer::SCENARIO_JICHU;
         if (!empty($issuer->video_id)) {
             $video = Media::findOne($issuer->video_id);
 

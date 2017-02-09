@@ -8,6 +8,7 @@ use common\models\order\OnlineRepaymentRecord;
 use yii\data\Pagination;
 use yii\db\ActiveRecord;
 use yii\web\NotFoundHttpException;
+use yii\web\UploadedFile;
 
 /**
  * 发行方（项目）.
@@ -17,28 +18,63 @@ use yii\web\NotFoundHttpException;
  * @property string $mediaTitle     视频名称
  * @property int    $video_id       视频对应的mediaID
  * @property int    $videoCover_id  视频示例图对应的mediaID
+ * @property int    $big_pic        精选项目大图对应的mediaID
+ * @property int    $mid_pic        精选项目中图对应的mediaID
+ * @property int    $small_pic      精选项目小图对应的mediaID
+ * @property boolean   $isShow      首页是否显示图片
+ * @property int    $sort           精选项目图片显示顺序
+ * @property string $path           图片跳转地址
  */
 class Issuer extends ActiveRecord
 {
     public $videoUrl;   //存放发行方对应的视频地址
     public $imgUrl;     //存放发行方对应的图片地址
 
+    const SCENARIO_JICHU = 'faXingfang';
+    const SCENARIO_KUOZHAN = 'jingXuan';
+
+    public function scenarios()
+    {
+        return [
+            self::SCENARIO_JICHU => ['name', 'mediaTitle', 'videoUrl', 'imgUrl', 'isShow', 'sort'],
+            self::SCENARIO_KUOZHAN => ['name', 'big_pic', 'mid_pic', 'small_pic', 'isShow', 'sort', 'path'],
+        ];
+    }
+
     /**
      * {@inheritdoc}
      */
     public function rules()
     {
+
         return [
-            ['name', 'required'],
-            [['name', 'mediaTitle'], 'string'],
-            [['name', 'mediaTitle'], 'trim'],
-            ['videoUrl', 'url'],
-            ['videoUrl', 'match', 'pattern' => '/^[a-zA-Z0-9.:\/_-]+$/', 'message' => '{attribute}不应包含特殊字符,如中文等'],   //链接可以包含数字,字母,和一些特殊字符,如.:/_-
-            ['imgUrl', 'image', 'skipOnEmpty' => true, 'extensions' => 'png, jpg'],
-            ['imgUrl', 'image', 'skipOnEmpty' => true, 'maxHeight' => 420, 'overHeight' => '{attribute}的高度应为420px'],
-            ['imgUrl', 'image', 'skipOnEmpty' => true, 'minHeight' => 420, 'underHeight' => '{attribute}的高度应为420px'],
-            ['imgUrl', 'image', 'skipOnEmpty' => true, 'maxWidth' => 750, 'overWidth' => '{attribute}的宽度应为750px'],
-            ['imgUrl', 'image', 'skipOnEmpty' => true, 'minWidth' => 750, 'underWidth' => '{attribute}的宽度应为750px'],
+            ['name', 'required', 'on' => self::SCENARIO_JICHU],
+            [['name', 'mediaTitle'], 'string', 'on' => [self::SCENARIO_JICHU, self::SCENARIO_KUOZHAN]],
+            [['name', 'mediaTitle'], 'trim', 'on' => [self::SCENARIO_JICHU, self::SCENARIO_KUOZHAN]],
+            ['videoUrl', 'url', 'on' => self::SCENARIO_JICHU],
+            ['videoUrl', 'match', 'pattern' => '/^[a-zA-Z0-9.:\/_-]+$/', 'message' => '{attribute}不应包含特殊字符,如中文等', 'on' => self::SCENARIO_JICHU],   //链接可以包含数字,字母,和一些特殊字符,如.:/_-
+            ['imgUrl', 'image', 'skipOnEmpty' => true, 'extensions' => 'png, jpg', 'on' => self::SCENARIO_JICHU],
+            ['imgUrl', 'image', 'skipOnEmpty' => true, 'maxHeight' => 420, 'overHeight' => '{attribute}的高度应为420px', 'on' => self::SCENARIO_JICHU],
+            ['imgUrl', 'image', 'skipOnEmpty' => true, 'minHeight' => 420, 'underHeight' => '{attribute}的高度应为420px', 'on' => self::SCENARIO_JICHU],
+            ['imgUrl', 'image', 'skipOnEmpty' => true, 'maxWidth' => 750, 'overWidth' => '{attribute}的宽度应为750px', 'on' => self::SCENARIO_JICHU],
+            ['imgUrl', 'image', 'skipOnEmpty' => true, 'minWidth' => 750, 'underWidth' => '{attribute}的宽度应为750px', 'on' => self::SCENARIO_JICHU],
+            ['big_pic', 'image', 'maxHeight' => 310, 'overHeight' => '{attribute}的高度应为310px', 'on' => self::SCENARIO_KUOZHAN],
+            ['big_pic', 'image', 'minHeight' => 310, 'underHeight' => '{attribute}的高度应为310px', 'on' => self::SCENARIO_KUOZHAN],
+            ['big_pic', 'image', 'maxWidth' => 670, 'overWidth' => '{attribute}的宽度应为670px', 'on' => self::SCENARIO_KUOZHAN],
+            ['big_pic', 'image', 'minWidth' => 670, 'underWidth' => '{attribute}的宽度应为670px', 'on' => self::SCENARIO_KUOZHAN],
+            ['mid_pic', 'image', 'maxHeight' => 310, 'overHeight' => '{attribute}的高度应为310px', 'on' => self::SCENARIO_KUOZHAN],
+            ['mid_pic', 'image', 'minHeight' => 310, 'underHeight' => '{attribute}的高度应为310px', 'on' => self::SCENARIO_KUOZHAN],
+            ['mid_pic', 'image', 'maxWidth' => 370, 'overWidth' => '{attribute}的宽度应为370px', 'on' => self::SCENARIO_KUOZHAN],
+            ['mid_pic', 'image', 'minWidth' => 370, 'underWidth' => '{attribute}的宽度应为370px', 'on' => self::SCENARIO_KUOZHAN],
+            ['small_pic', 'image', 'maxHeight' => 150, 'overHeight' => '{attribute}的高度应为150px', 'on' => self::SCENARIO_KUOZHAN],
+            ['small_pic', 'image', 'minHeight' => 150, 'underHeight' => '{attribute}的高度应为150px', 'on' => self::SCENARIO_KUOZHAN],
+            ['small_pic', 'image', 'maxWidth' => 286, 'overWidth' => '{attribute}的宽度应为286px', 'on' => self::SCENARIO_KUOZHAN],
+            ['small_pic', 'image', 'minWidth' => 286, 'underWidth' => '{attribute}的宽度应为286px', 'on' => self::SCENARIO_KUOZHAN],
+            ['isShow', 'default',  'value' => 0, 'on' => [self::SCENARIO_JICHU, self::SCENARIO_KUOZHAN]],
+            ['sort', 'integer', 'on' => [self::SCENARIO_JICHU, self::SCENARIO_KUOZHAN]],
+            ['path', 'string', 'on' => self::SCENARIO_KUOZHAN],
+            ['path', 'match', 'pattern' => '/^[a-zA-Z0-9.:\/?&=_-]+$/', 'message' => '{attribute}不应包含特殊字符,如中文等', 'on' => self::SCENARIO_KUOZHAN],
+            [['small_pic', 'mid_pic', 'big_pic'], 'checkPic', 'skipOnEmpty' => false, 'skipOnError' => false, 'on' => self::SCENARIO_KUOZHAN],
         ];
     }
 
@@ -53,7 +89,20 @@ class Issuer extends ActiveRecord
             'mediaTitle' => '视频名称',
             'videoUrl' => '视频地址',
             'imgUrl' => '视频示例图',
+            'big_pic' => '首页精选项目大图',
+            'mid_pic' => '首页精选项目中图',
+            'small_pic' => '首页精选项目小图',
+            'isShow' => '首页显示',
+            'sort' => '排序',
+            'path' => '图片跳转地址',
         ];
+    }
+
+    public function checkPic($attribute, $params)
+    {
+        if (null === $this->$attribute && !isset(UploadedFile::getInstance($this, $attribute)->name)) {
+            $this->addError($attribute, '请上传图片');
+        }
     }
 
     /**
