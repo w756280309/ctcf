@@ -278,7 +278,7 @@ use yii\helpers\Html;
     <?php } ?>
 </div>
 
-<?php if (!empty($kaiPing->image)) {
+<?php if (null !== $kaiPing) {
     if (!$kaiPing->isDisabledInApp && defined('IN_APP') || !defined('IN_APP'))
  { ?>
 <div class="mask hide">
@@ -326,7 +326,7 @@ use yii\helpers\Html;
     $(function () {
         FastClick.attach(document.body);
         //开屏图逻辑
-        <?php if (!empty($kaiPing->image)) {
+        <?php if (null !== $kaiPing) {
         if (!$kaiPing->isDisabledInApp && defined('IN_APP') || !defined('IN_APP'))
         { ?>
             $('.close_splash').on('click', closeAdv);
