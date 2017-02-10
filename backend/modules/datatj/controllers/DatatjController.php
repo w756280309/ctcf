@@ -274,7 +274,7 @@ FROM perf WHERE DATE_FORMAT(bizDate,'%Y-%m') < DATE_FORMAT(NOW(),'%Y-%m')  GROUP
 
         $data = $this->affiliationStats($start, $end);
 
-        $record = implode(',', ['ID', '分销商名称', '注册人数（人）', '投资人数（人）', '投资金额（元）']) . "\n";
+        $record = implode(',', ['分销商ID', '分销商名称', '注册人数（人）', '投资人数（人）', '投资金额（元）']) . "\n";
         foreach ($data as $v) {
             $array = [$v['id'], Html::encode($v['name']), intval($v['uc']), intval($v['oc']), floatval($v['m'])];
             $record .= implode(',', $array) . "\n";

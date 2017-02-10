@@ -48,7 +48,7 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => YiiAsse
                     <td>
                         <input type="text" placeholder="开始日期" value="<?= $start ? date('Y-m-d', $start) : '' ?>" autocomplete="off"
                                name="start" id="start" class="m-wrap span4"
-                               onclick="WdatePicker({dateFmt: 'yyyy-MM-dd', maxDate: '#F{$dp.$D(\'end\')}'})">
+                               onclick="WdatePicker({dateFmt: 'yyyy-MM-dd', maxDate: '#F{$dp.$D(\'end\') || \'%y-%M-%d\'}'})">
                          ---
                         <input type="text" placeholder="结束日期" value="<?= $end ? date('Y-m-d', $end) : '' ?>" autocomplete="off"
                                name="end" id="end" class="m-wrap span4"
