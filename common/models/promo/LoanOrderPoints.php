@@ -21,19 +21,6 @@ class LoanOrderPoints
         $this->promo = $promo;
     }
 
-    public function doAfterLoanJixi(OnlineProduct $loan)
-    {
-        $loan->refresh();
-        if ($loan->is_jixi && !$loan->is_xs && !$loan->isLicai) {
-            $orders = OnlineOrder::find()->where(['online_pid' => $loan->id, 'status' => OnlineOrder::STATUS_SUCCESS])->all();
-            foreach ($orders as $order) {
-                if ($this->canSendPoint($order)) {
-                    $this->addUserPointsWithLoanOrder($order);
-                }
-            }
-        }
-    }
-
     public function doAfterSuccessLoanOrder(OnlineOrder $order){
         if ($this->canSendPoint($order)) {
             $this->addUserPointsWithLoanOrder($order);
