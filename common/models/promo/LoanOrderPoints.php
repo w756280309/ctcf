@@ -10,7 +10,7 @@ use common\utils\TxUtils;
 use wap\modules\promotion\models\RankingPromo;
 
 /**
- * 购买标的送积分活动
+ * 购买标的送积分活动:loan_order_points
  */
 class LoanOrderPoints
 {
@@ -53,7 +53,7 @@ class LoanOrderPoints
     /**
      * 根据标的订单为用户添加积分.
      */
-    private function addUserPointsWithLoanOrder(OnlineOrder $order)
+    public function addUserPointsWithLoanOrder(OnlineOrder $order)
     {
         $user = $order->user;
         $loan = $order->loan;

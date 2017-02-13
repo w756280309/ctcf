@@ -10,7 +10,7 @@ use common\utils\TxUtils;
 use wap\modules\promotion\models\RankingPromo;
 
 /**
- * 首次投资送积分活动
+ * 首次投资送积分活动: key => first_order_point
  */
 class FirstOrderPoints
 {
