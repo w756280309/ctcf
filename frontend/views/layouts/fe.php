@@ -40,6 +40,11 @@ $this->registerMetaTag([
         <?php $this->head() ?>
         <meta name="baidu-site-verification" content="7YkufMc2UW" />
         <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+        <script type="text/javascript">
+            $(function () {
+                hmsr();
+            })
+        </script>
     </head>
 
     <body>

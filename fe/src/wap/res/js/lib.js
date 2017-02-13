@@ -184,3 +184,21 @@ function alertMessage(message, url, reload)
         }
     });
 }
+
+function hmsr() {
+    var r = new RegExp("(^|&)" + 'hmsr' + "=([^&]*)(&|$)");
+    var result = window.location.search.substr(1).match(r);
+    if (result && result[2]) {
+        var res = Cookies.set('campaign_source', result[2], {expires: 3, path: '/'});
+    }
+}
+
+function addToken() {
+    $(document).ajaxSend(function(event, jqXHR, settings) {
+        var match = window.location.search.match(new RegExp('[?&]token=([^&]+)(&|$)'));
+        if (match) {
+            var val = decodeURIComponent(match[1].replace(/\+/g, " "));
+            settings.url = settings.url+(settings.url.indexOf('?') >= 0 ? '&' : '?')+'token='+encodeURIComponent(val);
+        }
+    });
+}

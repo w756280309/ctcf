@@ -1,8 +1,12 @@
 <?php
-use yii\helpers\Html;
+
+use common\view\AnalyticsHelper;
 use common\view\WxshareHelper;
+use yii\helpers\Html;
 
 WxshareHelper::registerTo($this, $share);
+AnalyticsHelper::registerTo($this);
+
 ?>
 
 <?php $this->beginPage() ?>
@@ -22,8 +26,6 @@ WxshareHelper::registerTo($this, $share);
             <script src="<?= FE_BASE_URI ?>libs/pageslider/zepto_modify.js?v=20161124"></script>
             <script src="<?= FE_BASE_URI ?>libs/pageslider/PageSlider.js?v=20161124"></script>
             <script src="<?= FE_BASE_URI ?>res/js/js.cookie.js"></script>
-            <script src="<?= FE_BASE_URI ?>res/js/hmsr.js?v=20170120"></script>
-            <script src="<?= ASSETS_BASE_URI ?>js/analytics.js"></script>
             <script>
                 $(document).ready(function() {
                     FastClick.attach( document.body );
@@ -43,6 +45,12 @@ WxshareHelper::registerTo($this, $share);
                             pageslideInit();
                         }, 3000);
                     }, false);
+
+                    var r = new RegExp("(^|&)" + 'hmsr' + "=([^&]*)(&|$)");
+                    var result = window.location.search.substr(1).match(r);
+                    if (result && result[2]) {
+                        var res = Cookies.set('campaign_source', result[2], {expires: 3, path: '/'});
+                    }
                 });
 
                 function pageslideInit()

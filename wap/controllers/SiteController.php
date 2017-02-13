@@ -183,6 +183,8 @@ class SiteController extends Controller
             ->limit(3)
             ->all();
 
+        $this->layout = 'fe';
+
         return $this->render('index170109', [
             'xs' => $xs,
             'loans' => $loans,

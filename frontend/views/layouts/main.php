@@ -41,6 +41,11 @@ $this->registerMetaTag([
         <meta name="baidu-site-verification" content="7YkufMc2UW" />
         <meta name="sogou_site_verification" content="2hsKBLBEiz" />
         <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+        <script type="text/javascript">
+            $(function () {
+                hmsr();
+            })
+        </script>
     </head>
 
     <body>

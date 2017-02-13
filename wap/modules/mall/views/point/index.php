@@ -5,7 +5,7 @@ $this->title = '我的积分';
 use common\utils\StringUtils;
 
 ?>
-<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/base.css">
+<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/wenjfbase.css">
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/point/css/index.css">
 <script src="<?= FE_BASE_URI ?>libs/lib.flexible3.js"></script>
 
