@@ -48,7 +48,7 @@ $this->title = '发行方管理';
                                 <td><?= $issuer->name ?></td>
                                 <td><?= empty($issuer->mediaTitle) ? '---' : $issuer->mediaTitle ?></td>
                                 <td><?= $issuer->isShow ? '是' : '否' ?></td>
-                                <td><?= $issuer->sort ? $issuer->sort : '无' ?></td>
+                                <td><?= null !== $issuer->sort ? $issuer->sort : '无' ?></td>
                                 <td>
                                     <center>
                                         <a href="/product/issuer/edit?id=<?= $issuer->id ?>" class="btn mini green"><i class="icon-edit"></i>编辑</a>
