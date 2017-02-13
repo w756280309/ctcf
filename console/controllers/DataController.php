@@ -364,6 +364,10 @@ FROM online_repayment_plan WHERE DATE_FORMAT( FROM_UNIXTIME( created_at ) ,  '%Y
         return true;
     }
 
+    /**
+     * 补发首投积分和普通积分
+     * @param $order_id
+     */
     public function addPoints($order_id) {
         $order = OnlineOrder::findOne($order_id);
         if (is_null($order)) {
