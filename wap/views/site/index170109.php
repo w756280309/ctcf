@@ -105,39 +105,56 @@ use yii\helpers\Html;
         </div>
     <?php } ?>
 
-    <section>
-        <div class="featured">
-            <p class="project f15">精选项目</p>
-            <!--一张图片-->
-            <!--<ul class="clearfix onepic">-->
-            <!--<li>-->
-            <!--<a href=""><img src="images/projectone.png" alt=""></a>-->
-            <!--</li>-->
-            <!--</ul>-->
-
-            <!--两张图片-->
-            <ul class="clearfix twopic">
-                <li class="lf">
-		            <a href="/issuer?id=3&type=3"><img src="<?= FE_BASE_URI ?>wap/index/images/bdgk.png" alt=""></a>
-                </li>
-                <li class="rg">
-                    <a href="/issuer?id=2&type=1"><img src="<?= FE_BASE_URI ?>wap/index/images/sandu_new.png" alt=""></a>
-                </li>
-            </ul>
-
-            <!--三张图片-->
-            <!--<ul class="clearfix threepic">-->
-            <!--<li class="lf">-->
-            <!--<a href=""><img src="images/bgproject_01.png" alt=""></a>-->
-            <!--</li>-->
-            <!--<li class="rg">-->
-            <!--<a href=""><img src="images/bgproject_02.png" alt=""></a>-->
-            <!--<span class="a-two"></span>-->
-            <!--<a href=""><img src="images/bgproject_03.png" alt=""></a>-->
-            <!--</li>-->
-            <!--</ul>-->
-        </div>
-    </section>
+    <?php if (!empty($issuers)) { ?>
+        <?php
+            $num = count($issuers);
+            foreach ($issuers as $k => $issuer) {
+                ${'issuer'.$k} = $issuer;
+                ${'medias'.$k} = $issuer->getMedias();
+            }
+        ?>
+        <section>
+            <div class="featured">
+                <p class="project f15">精选项目</p>
+                <!--一张图片-->
+                <?php if (1 === $num) { ?>
+                <?php if (null !== $medias0['big']) { ?>
+                    <ul class="clearfix onepic">
+                        <li>
+                            <a href="<?= Html::encode($issuer0->path) ?>"><img src="<?= Html::encode(UPLOAD_BASE_URI.$medias0['big']->uri) ?>" alt=""></a>
+                        </li>
+                    </ul>
+                <?php } ?>
+                <!--两张图片-->
+                <?php } elseif (2 === $num) { ?>
+                <?php if (null !== $medias0['mid'] && null !== $medias1['mid']) { ?>
+                <ul class="clearfix twopic">
+                    <li class="lf">
+                        <a href="<?= Html::encode($issuer0->path) ?>"><img src="<?= Html::encode(UPLOAD_BASE_URI.$medias0['mid']->uri) ?>" alt=""></a>
+                    </li>
+                    <li class="rg">
+                        <a href="<?= Html::encode($issuer1->path) ?>"><img src="<?= Html::encode(UPLOAD_BASE_URI.$medias1['mid']->uri) ?>" alt=""></a>
+                    </li>
+                </ul>
+                <?php } ?>
+                <!--三张图片-->
+                <?php } elseif (3 === $num) { ?>
+                <?php if (null !== $medias0['mid'] && null !== $medias1['small'] && null !== $medias2['small']) { ?>
+                    <ul class="clearfix threepic">
+                        <li class="lf">
+                            <a href="<?= Html::encode($issuer0->path) ?>"><img src="<?= Html::encode(UPLOAD_BASE_URI.$medias0['mid']->uri) ?>" alt=""></a>
+                        </li>
+                        <li class="rg">
+                            <a href="<?= Html::encode($issuer1->path) ?>"><img src="<?= Html::encode(UPLOAD_BASE_URI.$medias1['small']->uri) ?>" alt=""></a>
+                            <span class="a-two"></span>
+                            <a href="<?= Html::encode($issuer2->path) ?>"><img src="<?= Html::encode(UPLOAD_BASE_URI.$medias2['small']->uri) ?>" alt=""></a>
+                        </li>
+                    </ul>
+                <?php } ?>
+                <?php } ?>
+            </div>
+        </section>
+    <?php } ?>
 
     <?php if (!empty($loans)) { ?>
         <div class="invest">

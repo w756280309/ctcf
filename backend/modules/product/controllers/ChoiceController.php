@@ -24,10 +24,9 @@ class ChoiceController extends BaseController
             //将未上传图片的且原先存在图片的保存到数组中
             array_filter(['big_pic', 'mid_pic', 'small_pic'], function ($name) use ($issuer, &$tuPian) {
                 if (!isset(UploadedFile::getInstance($issuer, $name)->name) && null !== $issuer->oldAttributes[$name]) {
-                    $tuPian[] = $issuer->$name;
+                    $tuPian[$name] = $issuer->$name;
                 }
             });
-            //初始化issuer
             $issuer->load(Yii::$app->request->post());
             //上传并保存
             if ($this->choice($issuer, $tuPian)) {
@@ -36,6 +35,7 @@ class ChoiceController extends BaseController
         }
         return $this->render('edit', ['issuer' => $issuer]);
     }
+
 
     /**
      * 添加编辑精选项目图片.
@@ -103,9 +103,9 @@ class ChoiceController extends BaseController
             $issuer->isShow = $_POST['Issuer']['isShow'];
             $issuer->sort = $_POST['Issuer']['sort'];
             $issuer->path = $_POST['Issuer']['path'];
-            $issuer->big_pic = empty($_FILES['Issuer']['name']['big_pic']) ? $tuPian[0] : $mediaImg[0]->id;
-            $issuer->mid_pic = empty($_FILES['Issuer']['name']['mid_pic']) ? $tuPian[1] : $mediaImg[1]->id;
-            $issuer->small_pic = empty($_FILES['Issuer']['name']['small_pic']) ? $tuPian[2] : $mediaImg[2]->id;
+            $issuer->big_pic = !isset(UploadedFile::getInstance($issuer, 'big_pic')->name) ? $tuPian['big_pic'] : $mediaImg[0]->id;
+            $issuer->mid_pic = !isset(UploadedFile::getInstance($issuer, 'mid_pic')->name) ? $tuPian['mid_pic'] : $mediaImg[1]->id;
+            $issuer->small_pic = !isset(UploadedFile::getInstance($issuer, 'small_pic')->name) ? $tuPian['small_pic'] : $mediaImg[2]->id;
 
             $issuer->update(false);
             $transaction->commit();

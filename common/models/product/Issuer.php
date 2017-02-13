@@ -46,7 +46,6 @@ class Issuer extends ActiveRecord
      */
     public function rules()
     {
-
         return [
             ['name', 'required', 'on' => self::SCENARIO_JICHU],
             [['name', 'mediaTitle'], 'string', 'on' => [self::SCENARIO_JICHU, self::SCENARIO_KUOZHAN]],
@@ -58,6 +57,7 @@ class Issuer extends ActiveRecord
             ['imgUrl', 'image', 'skipOnEmpty' => true, 'minHeight' => 420, 'underHeight' => '{attribute}的高度应为420px', 'on' => self::SCENARIO_JICHU],
             ['imgUrl', 'image', 'skipOnEmpty' => true, 'maxWidth' => 750, 'overWidth' => '{attribute}的宽度应为750px', 'on' => self::SCENARIO_JICHU],
             ['imgUrl', 'image', 'skipOnEmpty' => true, 'minWidth' => 750, 'underWidth' => '{attribute}的宽度应为750px', 'on' => self::SCENARIO_JICHU],
+            [['big_pic', 'mid_pic', 'small_pic'], 'image', 'extensions' => 'png, jpg', 'on' => self::SCENARIO_KUOZHAN],
             ['big_pic', 'image', 'maxHeight' => 310, 'overHeight' => '{attribute}的高度应为310px', 'on' => self::SCENARIO_KUOZHAN],
             ['big_pic', 'image', 'minHeight' => 310, 'underHeight' => '{attribute}的高度应为310px', 'on' => self::SCENARIO_KUOZHAN],
             ['big_pic', 'image', 'maxWidth' => 670, 'overWidth' => '{attribute}的宽度应为670px', 'on' => self::SCENARIO_KUOZHAN],
@@ -111,6 +111,18 @@ class Issuer extends ActiveRecord
     public function getVideo()
     {
         return $this->hasOne(Media::class, ['id' => 'video_id']);
+    }
+
+    /**
+     * 获得发行方的Media信息，大中小图片
+     */
+    public function getMedias()
+    {
+        return [
+            'big' => Media::findOne($this->big_pic),
+            'mid' => Media::findOne($this->mid_pic),
+            'small' => Media::findOne($this->small_pic),
+        ];
     }
 
     /**
