@@ -1,86 +1,97 @@
+<?php
+
+use common\models\user\RechargeRecord;
+use yii\grid\GridView;
+
+?>
+
 <?=
-\yii\grid\GridView::widget([
-    'id' => 'grid_view_recharge',
-    'dataProvider' => $dataProvider,
-    'layout' => '{items} <center><div class="pagination recharge_pager">{pager}</div></center>',
-    'tableOptions' => ['class' => 'recharge_record_list table table-hover table-striped'],
-    'columns' => [
-        [
-            'label' => '流水号',
-            'value' => function ($record) {
-                return $record['sn'];
-            }
-        ],
-        [
-            'label' => '金额',
-            'value' => function ($record) {
-                return number_format($record['fund'], 2);
-            },
-            'contentOptions' => ['class' => 'money'],
-            'headerOptions' => ['class' => 'money'],
-        ],
-        [
-            'label' => '银行',
-            'value' => function ($record) use ($banks) {
-                if ($record['pay_type'] == \common\models\user\RechargeRecord::PAY_TYPE_NET) {
-                    return isset($banks[$record['bank_id']]) ? $banks[$record['bank_id']]['bankName'] : '---';
-                } else {
+    GridView::widget([
+        'id' => 'grid_view_recharge',
+        'dataProvider' => $dataProvider,
+        'layout' => '{items} <center><div class="pagination recharge_pager">{pager}</div></center>',
+        'tableOptions' => ['class' => 'recharge_record_list table table-hover table-striped'],
+        'columns' => [
+            [
+                'label' => '流水号',
+                'value' => function ($record) {
+                    return $record['sn'];
+                }
+            ],
+            [
+                'label' => '金额',
+                'value' => function ($record) {
+                    return number_format($record['fund'], 2);
+                },
+                'contentOptions' => ['class' => 'money'],
+                'headerOptions' => ['class' => 'money'],
+            ],
+            [
+                'label' => '银行',
+                'value' => function ($record) use ($banks) {
+                    $payType = (int) $record['pay_type'];
+
+                    if (RechargeRecord::PAY_TYPE_NET === $payType) {
+                        return isset($banks[$record['bank_id']]) ? $banks[$record['bank_id']]['bankName'] : '---';
+                    }
+
                     return $record['bank_name'];
                 }
+            ],
+            [
+                'label' => '交易时间',
+                'value' => function ($record) {
+                    return date('Y-m-d H:i:s',$record['created_at']);
+                }
+            ],
+            [
+                'label' => '状态',
+                'value' => function ($record) {
+                    if (0 == $record['status']) {
+                        $desc = "充值未处理";
+                    } elseif (1 == $record['status']) {
+                        $desc = "充值成功";
+                    } else {
+                        $desc = "充值失败";
+                    }
 
-            }
-        ],
-        [
-            'label' => '交易时间',
-            'value' => function ($record) {
-                return date('Y-m-d H:i:s',$record['created_at']);
-            }
-        ],
-        [
-            'label' => '状态',
-            'value' => function ($record) {
-                if (0 == $record['status']) {
-                    $desc = "充值未处理";
-                } elseif (1 == $record['status']) {
-                    $desc = "充值成功";
-                } else {
-                    $desc = "充值失败";
+                    if (3 == $record['pay_type']) {
+                        return $desc."-线下pos";
+                    } else {
+                        return $desc."-线上充值";
+                    }
                 }
+            ],
+            [
+                'label' => '联动状态',
+                'format' => 'raw',
+                'value' => function ($record) {
+                    return '<a class="btn btn-primary get_order_status" sn="'.$record['sn'].'">查询流水在联动状态</a>';
+                }
+            ],
+            [
+                'label' => '充值结果修复',
+                'format' => 'raw',
+                'value' => function ($record) {
+                    $rechargeStatus = (int) $record['status'];
 
-                if (3 == $record['pay_type']) {
-                    return $desc."-线下pos";
-                } else {
-                    return $desc."-线上充值";
+                    //只修复10天内的充值订单
+                    if (
+                        $record['created_at'] >= strtotime('-10 day')
+                        && RechargeRecord::STATUS_FAULT === $rechargeStatus
+                    ) {
+                        return '<button class="btn btn-default repair_data" style="display: none;" id="'.$record['sn'].'" data="'.$record['sn'].'">修复</button>';
+                    }
+
+                    return '';
                 }
-            }
+            ],
         ],
-        [
-            'label' => '联动状态',
-            'format' => 'raw',
-            'value' => function ($record) {
-                return '<a class="btn btn-primary get_order_status" sn="'.$record['sn'].'">查询流水在联动状态</a>';
-            }
-        ],
-        [
-            'label' => '充值结果修复',
-            'format' => 'raw',
-            'value' => function ($record) {
-                //只修复3天内的充值订单
-                if (
-                    $record['created_at'] >= strtotime('-10 day')
-                    && (int)$record['status'] !== \common\models\user\RechargeRecord::STATUS_YES
-                ) {
-                    return '<button class="btn btn-default repair_data" data="'.$record['sn'].'">修复</button>';
-                }
-                return '';
-            }
-        ],
-    ],
-])
+    ])
 ?>
 
 <script>
-    $(function(){
+    $(function() {
         $('.recharge_pager ul li').on('click', 'a', function(e) {
             e.preventDefault();
             getRechargeList($(this).attr('href'));
@@ -94,6 +105,10 @@
                 $.get('/user/rechargerecord/get-order-status?sn=' + sn, function (data) {
                     if (data.code) {
                         _this.parent().html(data.message);
+
+                        if ('成功' === data.message) {
+                            $('#'+sn).show();
+                        }
                     } else {
                         newalert(0, data.message);
                     }
