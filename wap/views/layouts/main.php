@@ -42,16 +42,11 @@ $this->registerMetaTag([
     <title><?= isset($ctitle) ? $ctitle : Html::encode($this->title) ?></title>
     <?= Html::csrfMetaTags() ?>
     <?php $this->head() ?>
-    <script>
-    $(function() {
-        $(document).ajaxSend(function(event, jqXHR, settings) {
-            var match = window.location.search.match(new RegExp('[?&]token=([^&]+)(&|$)'));
-            if (match) {
-                var val = decodeURIComponent(match[1].replace(/\+/g, " "));
-                settings.url = settings.url+(settings.url.indexOf('?') >= 0 ? '&' : '?')+'token='+encodeURIComponent(val);
-            }
+    <script type="text/javascript">
+        $(function () {
+            hmsr();
+            addToken();
         });
-    });
     </script>
 </head>
 <body>

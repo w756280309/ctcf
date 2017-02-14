@@ -7,8 +7,7 @@ use yii\captcha\Captcha;
 
 ?>
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>libs/bootstrap/css/bootstrap.min.css">
-<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/base.css?v=1.5">
-<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/comfont.css?v=1.0">
+<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/wenjfbase.css?v=1.5">
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/luodiye/css/register.css?v=20170117">
 <script  src="<?= FE_BASE_URI ?>libs/lib.flexible3.js"></script>
 <script  src="<?= FE_BASE_URI ?>libs/jquery-1.11.1.min.js"></script>

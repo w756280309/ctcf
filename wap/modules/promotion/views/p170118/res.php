@@ -10,8 +10,7 @@ if ($user && !($user->id % 2)) {
 
 ?>
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>libs/bootstrap/css/bootstrap.min.css">
-<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/base.css">
-<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/comfont.css">
+<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/wenjfbase.css">
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/wendumao/css/registerSucc.css">
 <script  src="<?= FE_BASE_URI ?>libs/lib.flexible3.js"></script>
 <script  src="<?= FE_BASE_URI ?>libs/jquery-1.11.1.min.js"></script>

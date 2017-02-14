@@ -19,6 +19,7 @@ use common\models\bank\EbankConfig;
 use common\models\bank\QpayConfig;
 use common\models\bank\Bank;
 use common\models\log\LoginLog;
+use common\models\product\Issuer;
 use common\models\product\OnlineProduct;
 use common\models\news\News;
 use common\models\user\SignupForm;
@@ -143,6 +144,16 @@ class SiteController extends Controller
             ->limit(2)
             ->all();
 
+        //精选项目管理
+        $issuers = Issuer::find()
+            ->where(['isShow' => true])
+            ->andWhere(['!=', 'big_pic', 'null'])
+            ->andWhere(['!=', 'mid_pic', 'null'])
+            ->andWhere(['!=', 'small_pic', 'null'])
+            ->orderBy(['sort' => SORT_ASC])
+            ->limit(3)
+            ->all();
+
         //开屏图
         $queryKaiping = $this->advQuery()
             ->andWhere(['type' => Adv::TYPE_KAIPING])
@@ -172,9 +183,12 @@ class SiteController extends Controller
             ->limit(3)
             ->all();
 
+        $this->layout = 'fe';
+
         return $this->render('index170109', [
             'xs' => $xs,
             'loans' => $loans,
+            'issuers' => $issuers,
             'hotActs' => $hotActs,
             'news' => $news,
             'kaiPing' => $queryKaiping,

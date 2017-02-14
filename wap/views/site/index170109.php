@@ -9,23 +9,23 @@ use common\view\LoanHelper;
 use yii\helpers\Html;
 
 ?>
-<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/base.css?v=1.0">
-<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/comfont.css">
-<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/index/css/index.css?v=20170119">
+<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/wenjfbase.css?v=1.0">
+<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/index/css/index.css?v=20170213">
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>libs/swiper/swiper.min.css">
 <script src="<?= FE_BASE_URI ?>libs/lib.flexible3.js"></script>
 <script src="<?= FE_BASE_URI ?>libs/fastclick.js"></script>
+<script  src="<?= FE_BASE_URI ?>libs/jquery.lazyload.min.js"></script>
 <script src="<?= ASSETS_BASE_URI ?>js/swiper.min.js"></script>
 
 <div class="container flex-content">
     <?php if (!empty($hotActs)) { ?>
         <div class="banner swiper-container">
             <div class="swiper-wrapper">
-            <?php foreach($hotActs as $act) { ?>
-                <a class="swiper-slide" href="<?= $act->getLinkUrl() ?>">
-                    <img src="<?= UPLOAD_BASE_URI ?>upload/adv/<?= $act->image ?>" alt="">
-                </a>
-            <?php } ?>
+                <?php foreach($hotActs as $act) { ?>
+                    <a class="swiper-slide" href="<?= $act->getLinkUrl() ?>">
+                        <img src="<?= UPLOAD_BASE_URI ?>upload/adv/<?= $act->image ?>" alt="">
+                    </a>
+                <?php } ?>
             </div>
             <div class="swiper-pagination"></div>
         </div>
@@ -64,7 +64,7 @@ use yii\helpers\Html;
     <?php if ($xs) { ?>
         <div class="newnorm hide" id="loginNewPeople">
             <p class="newnormtitle f15">新手专享
-            <?php
+                <?php
                 if (null !== $xs->tags) {
                     $tags = explode('，', $xs->tags);
                     foreach($tags as $key => $tag) {
@@ -73,7 +73,7 @@ use yii\helpers\Html;
                         }
                     }
                 }
-            ?>
+                ?>
             </p>
             <?php $ex = $xs->getDuration() ?>
             <?php if (!$xs->isFlexRate && !$xs->jiaxi) { ?>
@@ -82,9 +82,9 @@ use yii\helpers\Html;
                     <p class="f45"><?= LoanHelper::getDealRate($xs) ?><i class="f25">%</i></p>
                     <p class="f12">预期年化率</p>
                     <ul class="clearfix">
-                        <li class="f14 lf text-align-lf"><img class="icon5" src="<?= FE_BASE_URI ?>wap/index/images/icon_05.png" alt=""> <?= StringUtils::amountFormat2($xs->start_money) ?>元起投</li>
-                        <li class="f14 lf comred"><img class="icon6" src="<?= FE_BASE_URI ?>wap/index/images/icon_06.png" alt=""> <?= $ex['value'].$ex['unit'] ?>期限</li>
-                        <li class="f14 lf text-align-rg"><img class="icon7" src="<?= FE_BASE_URI ?>wap/index/images/icon_07.png" alt=""> 限购一万</li>
+                        <li class="f14 lf text-align-lf"><img class="icon5" data-original="<?= FE_BASE_URI ?>wap/index/images/icon_05.png" alt=""> <?= StringUtils::amountFormat2($xs->start_money) ?>元起投</li>
+                        <li class="f14 lf comred"><img class="icon6" data-original="<?= FE_BASE_URI ?>wap/index/images/icon_06.png" alt=""> <?= $ex['value'].$ex['unit'] ?>期限</li>
+                        <li class="f14 lf text-align-rg"><img class="icon7" data-original="<?= FE_BASE_URI ?>wap/index/images/icon_07.png" alt=""> 限购一万</li>
                         <li class="f18 lf">去理财</li>
                     </ul>
                 </a>
@@ -105,39 +105,56 @@ use yii\helpers\Html;
         </div>
     <?php } ?>
 
-    <section>
-        <div class="featured">
-            <p class="project f15">精选项目</p>
-            <!--一张图片-->
-            <!--<ul class="clearfix onepic">-->
-            <!--<li>-->
-            <!--<a href=""><img src="images/projectone.png" alt=""></a>-->
-            <!--</li>-->
-            <!--</ul>-->
-
-            <!--两张图片-->
-            <ul class="clearfix twopic">
-                <li class="lf">
-		            <a href="/issuer?id=3&type=3"><img src="<?= FE_BASE_URI ?>wap/index/images/bdgk.png" alt=""></a>
-                </li>
-                <li class="rg">
-                    <a href="/issuer?id=2&type=1"><img src="<?= FE_BASE_URI ?>wap/index/images/sandu_new.png" alt=""></a>
-                </li>
-            </ul>
-
-            <!--三张图片-->
-            <!--<ul class="clearfix threepic">-->
-            <!--<li class="lf">-->
-            <!--<a href=""><img src="images/bgproject_01.png" alt=""></a>-->
-            <!--</li>-->
-            <!--<li class="rg">-->
-            <!--<a href=""><img src="images/bgproject_02.png" alt=""></a>-->
-            <!--<span class="a-two"></span>-->
-            <!--<a href=""><img src="images/bgproject_03.png" alt=""></a>-->
-            <!--</li>-->
-            <!--</ul>-->
-        </div>
-    </section>
+    <?php if (!empty($issuers)) { ?>
+        <?php
+            $num = count($issuers);
+            foreach ($issuers as $k => $issuer) {
+                ${'issuer'.$k} = $issuer;
+                ${'medias'.$k} = $issuer->getMedias();
+            }
+        ?>
+        <section>
+            <div class="featured">
+                <p class="project f15">精选项目</p>
+                <!--一张图片-->
+                <?php if (1 === $num) { ?>
+                <?php if (null !== $medias0['big']) { ?>
+                    <ul class="clearfix onepic">
+                        <li>
+                            <a href="<?= Html::encode($issuer0->path) ?>"><img src="<?= Html::encode(UPLOAD_BASE_URI.$medias0['big']->uri) ?>" alt=""></a>
+                        </li>
+                    </ul>
+                <?php } ?>
+                <!--两张图片-->
+                <?php } elseif (2 === $num) { ?>
+                <?php if (null !== $medias0['mid'] && null !== $medias1['mid']) { ?>
+                <ul class="clearfix twopic">
+                    <li class="lf">
+                        <a href="<?= Html::encode($issuer0->path) ?>"><img src="<?= Html::encode(UPLOAD_BASE_URI.$medias0['mid']->uri) ?>" alt=""></a>
+                    </li>
+                    <li class="rg">
+                        <a href="<?= Html::encode($issuer1->path) ?>"><img src="<?= Html::encode(UPLOAD_BASE_URI.$medias1['mid']->uri) ?>" alt=""></a>
+                    </li>
+                </ul>
+                <?php } ?>
+                <!--三张图片-->
+                <?php } elseif (3 === $num) { ?>
+                <?php if (null !== $medias0['mid'] && null !== $medias1['small'] && null !== $medias2['small']) { ?>
+                    <ul class="clearfix threepic">
+                        <li class="lf">
+                            <a href="<?= Html::encode($issuer0->path) ?>"><img src="<?= Html::encode(UPLOAD_BASE_URI.$medias0['mid']->uri) ?>" alt=""></a>
+                        </li>
+                        <li class="rg">
+                            <a href="<?= Html::encode($issuer1->path) ?>"><img src="<?= Html::encode(UPLOAD_BASE_URI.$medias1['small']->uri) ?>" alt=""></a>
+                            <span class="a-two"></span>
+                            <a href="<?= Html::encode($issuer2->path) ?>"><img src="<?= Html::encode(UPLOAD_BASE_URI.$medias2['small']->uri) ?>" alt=""></a>
+                        </li>
+                    </ul>
+                <?php } ?>
+                <?php } ?>
+            </div>
+        </section>
+    <?php } ?>
 
     <?php if (!empty($loans)) { ?>
         <div class="invest">
@@ -146,45 +163,45 @@ use yii\helpers\Html;
                 <a class="rg f15" href="/deal/deal/index">查看全部产品</a>
             </p>
             <ul>
-            <?php foreach ($loans as $loan) { ?>
-                <?php $ex = $loan->getDuration() ?>
-                <li>
-                    <a class="superscript" href="/deal/deal/detail?sn=<?= $loan->sn ?>">
-                        <div class="f14 supertitle"><?= $loan->title ?></div>
-                        <div class="superctn clearfix">
-                            <div class="lf">
-                                <p><em class="f24"><?= LoanHelper::getDealRate($loan) ?><span class="f15">%</span><?php if (!empty($loan->jiaxi)) { ?><i class="f12">+<?= StringUtils::amountFormat2($loan->jiaxi) ?>%</i><?php } ?></em></p>
-                                <p class="f14">预期年化率</p>
+                <?php foreach ($loans as $loan) { ?>
+                    <?php $ex = $loan->getDuration() ?>
+                    <li>
+                        <a class="superscript" href="/deal/deal/detail?sn=<?= $loan->sn ?>">
+                            <div class="f14 supertitle"><?= $loan->title ?></div>
+                            <div class="superctn clearfix">
+                                <div class="lf">
+                                    <p><em class="f24"><?= LoanHelper::getDealRate($loan) ?><span class="f15">%</span><?php if (!empty($loan->jiaxi)) { ?><i class="f12">+<?= StringUtils::amountFormat2($loan->jiaxi) ?>%</i><?php } ?></em></p>
+                                    <p class="f14">预期年化率</p>
+                                </div>
+                                <div class="lf">
+                                    <p class="f14 months"><span class="f16"><?= $ex['value'] ?></span><?= $ex['unit'] ?></p>
+                                    <p class="f14 money"><span class="f16"><?= StringUtils::amountFormat2($loan->start_money) ?></span>元起投</p>
+                                </div>
                             </div>
-                            <div class="lf">
-                                <p class="f14 months"><span class="f16"><?= $ex['value'] ?></span><?= $ex['unit'] ?></p>
-                                <p class="f14 money"><span class="f16"><?= StringUtils::amountFormat2($loan->start_money) ?></span>元起投</p>
+                            <div class="progessline clearfix">
+                                <div class="progess lf">
+                                    <span style="width: <?= $loan->getProgressForDisplay() ?>%;"></span>
+                                </div>
+                                <i class="rg f14"><?= $loan->getProgressForDisplay() ?>%</i>
                             </div>
-                        </div>
-                        <div class="progessline clearfix">
-                            <div class="progess lf">
-                                <span style="width: <?= $loan->getProgressForDisplay() ?>%;"></span>
+                            <div class="tags clearfix">
+                                <?php if (null !== $loan->tags) { ?>
+                                    <p class="lf f12">
+                                        <?php
+                                        $tags = explode('，', $loan->tags);
+                                        foreach($tags as $key => $tag) {
+                                            if ($key < 2 && !empty($tag)) {
+                                                echo '<span>'.Html::encode($tag).'</span>';
+                                            }
+                                        }
+                                        ?>
+                                    </p>
+                                <?php } ?>
+                                <p class="rg f14"><?= Yii::$app->params['refund_method'][$loan->refund_method] ?></p>
                             </div>
-                            <i class="rg f14"><?= $loan->getProgressForDisplay() ?>%</i>
-                        </div>
-                        <div class="tags clearfix">
-                            <?php if (null !== $loan->tags) { ?>
-                            <p class="lf f12">
-                            <?php
-                                $tags = explode('，', $loan->tags);
-                                foreach($tags as $key => $tag) {
-                                    if ($key < 2 && !empty($tag)) {
-                                        echo '<span>'.Html::encode($tag).'</span>';
-                                    }
-                                }
-                            ?>
-                            </p>
-                            <?php } ?>
-                            <p class="rg f14"><?= Yii::$app->params['refund_method'][$loan->refund_method] ?></p>
-                        </div>
-                    </a>
-                </li>
-            <?php } ?>
+                        </a>
+                    </li>
+                <?php } ?>
             </ul>
         </div>
     <?php } ?>
@@ -204,7 +221,7 @@ use yii\helpers\Html;
         <p class="f15">股东背景</p>
         <ul>
             <li></li>
-            <li><img src="<?= FE_BASE_URI ?>wap/index/images/shareholde_01.png" alt=""><img src="<?= FE_BASE_URI ?>wap/index/images/shareholde_02.png" alt=""></li>
+            <li><img data-original="<?= FE_BASE_URI ?>wap/index/images/shareholde_01.png" alt=""><img data-original="<?= FE_BASE_URI ?>wap/index/images/shareholde_02.png" alt=""></li>
         </ul>
     </div>
 
@@ -214,28 +231,28 @@ use yii\helpers\Html;
             <li></li>
             <li class="lf platformList">
                 <div class="platformListFirst">
-                    <img src="<?= FE_BASE_URI ?>wap/index/images/platform_01.png" alt="">
+                    <img data-original="<?= FE_BASE_URI ?>wap/index/images/platform_01.png" alt="">
                     <div class="f15">国资背景</div>
                     <div class="f14">温州报业传媒旗下</div>
                 </div>
             </li>
             <li class="lf platformList">
                 <div class="platformListSecond">
-                    <img src="<?= FE_BASE_URI ?>wap/index/images/platform_02.png" style="width: 1.1rem;" alt="">
+                    <img data-original="<?= FE_BASE_URI ?>wap/index/images/platform_02.png" style="width: 1.1rem;" alt="">
                     <div class="f15">资金稳妥</div>
                     <div class="f14">第三方资金托管</div>
                 </div>
             </li>
             <li class="lf platformList">
                 <div>
-                    <img src="<?= FE_BASE_URI ?>wap/index/images/platform_03.png" alt="">
+                    <img data-original="<?= FE_BASE_URI ?>wap/index/images/platform_03.png" alt="">
                     <div class="f15">收益稳健</div>
                     <div class="f14">预期收益5.5~9%</div>
                 </div>
             </li>
             <li class="lf platformList">
                 <div class="platformListLast">
-                    <img src="<?= FE_BASE_URI ?>wap/index/images/platform_04.png" alt="">
+                    <img data-original="<?= FE_BASE_URI ?>wap/index/images/platform_04.png" alt="">
                     <div class="f15">产品优质</div>
                     <div class="f14">国企、政信类产品</div>
                 </div>
@@ -251,7 +268,7 @@ use yii\helpers\Html;
     </div>
 
     <div class="address">
-        <a class="f14" href="tel:400-101-5151"><img src="<?= FE_BASE_URI ?>wap/index/images/phone.png" alt="">400-101-5151</a>
+        <a class="f14" href="tel:400-101-5151"><img data-original="<?= FE_BASE_URI ?>wap/index/images/phone.png" alt="">400-101-5151</a>
         <p class="f14">温州市鹿城区飞霞南路657号保丰大楼四层</p>
     </div>
 
@@ -283,7 +300,7 @@ use yii\helpers\Html;
 
     <div class="pop hide">
         <img src="<?= FE_BASE_URI ?>wap/index/images/close.png" class="close_splash" alt="">
-        <img src="<?= UPLOAD_BASE_URI ?><?= $kaiPing->image ?>" class="jumpAdv" onclick="window.location.href='<?= $kaiPing->link ?>'" alt="">
+        <img src="<?= UPLOAD_BASE_URI ?><?= $kaiPing->image ?>" onclick="window.location.href='<?= $kaiPing->link ?>'" alt="">
     </div>
 <?php } ?>
 
@@ -322,6 +339,10 @@ use yii\helpers\Html;
 
     $(function () {
         FastClick.attach(document.body);
+
+        $("img").lazyload({
+            threshold: 200
+        });
 
         <?php if (null !== $kaiPing) { ?>
             //开屏图逻辑

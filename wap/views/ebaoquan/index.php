@@ -24,16 +24,11 @@ AnalyticsHelper::registerTo($this);
         <?php $this->head() ?>
         <link href="/promo/1605/yibaoquan/css/index.css?v=&lt;?php echo time() ?&gt;" rel="stylesheet">
         <script src="/promo/1605/choujiang/js/520.js"></script>
-        <script>
-            $(function() {
-                $(document).ajaxSend(function(event, jqXHR, settings) {
-                    var match = window.location.search.match(new RegExp('[?&]token=([^&]+)(&|$)'));
-                    if (match) {
-                        var val = decodeURIComponent(match[1].replace(/\+/g, " "));
-                        settings.url = settings.url+(settings.url.indexOf('?') >= 0 ? '&' : '?')+'token='+encodeURIComponent(val);
-                    }
-                });
-            });
+        <script type="text/javascript">
+            $(function () {
+                hmsr();
+                addToken();
+            })
         </script>
     </head>
 

@@ -1,7 +1,7 @@
 <?php
 $this->title = '特权说明';
 ?>
-<link rel="stylesheet" href=".<?= FE_BASE_URI ?>wap/common/css/base.css">
+<link rel="stylesheet" href=".<?= FE_BASE_URI ?>wap/common/css/wenjfbase.css">
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/memberlevel/css/member.css?v=20161229">
 <script src="<?= FE_BASE_URI ?>libs/lib.flexible3.js"></script>
 <script src="<?= FE_BASE_URI ?>libs/jquery-1.11.1.min.js"></script>
