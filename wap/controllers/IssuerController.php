@@ -15,24 +15,25 @@ class IssuerController extends Controller
      * 发行方介绍页.
      *
      * 1. 如果发行方没有对应的标的,则按钮不显示;
+     * 2. 如果非这四个发行方，统一抛404;
+     *    2   =>   宁富1号三都投资
+     *    3   =>   宁富17号北大高科
+     *    5   =>   南金交中盛海润
+     *   10   =>   南金交宁富20号中科建
      *
-     * @param int $id 发行方ID.
-     * @param int $type 标志静态页面渲染内容,1代表宁富1号三都国资定向融资工具,2代表南金交·中盛海润1号,3代表北大高科 临时代码,今后统一为从后台读取内容
+     * @param int $id 发行方ID
      */
-    public function actionIndex($id, $type = 1)
+    public function actionIndex($id)
     {
-        $type = intval($type);
-        if (!in_array($type, [1, 2, 3])) {
-            $type = 1;
+        if (!in_array($id, [2, 3, 5, 10])) {
+            throw $this->ex404();
         }
-
         $issuer = $this->findOr404(Issuer::class, $id);
         $loansCount = $this->loanQuery($issuer->id)
             ->count();
 
         return $this->render('index', [
             'issuer' => $issuer,
-            'type' => $type,
             'loansCount' => intval($loansCount),
         ]);
     }
