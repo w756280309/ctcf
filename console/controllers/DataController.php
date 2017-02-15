@@ -368,20 +368,20 @@ FROM online_repayment_plan WHERE DATE_FORMAT( FROM_UNIXTIME( created_at ) ,  '%Y
      * 补发首投积分和普通积分
      * @param $order_id
      */
-    public function addPoints($order_id) {
+    public function actionAddPoints($order_id) {
         $order = OnlineOrder::findOne($order_id);
         if (is_null($order)) {
             return;
         }
         //首投送积分活动
-        $promo1 = RankingPromo::find()->where(['sn' => 'first_order_point'])->one();
+        $promo1 = RankingPromo::find()->where(['key' => 'first_order_point'])->one();
         if (!is_null($promo1)) {
             $model1 = new FirstOrderPoints($promo1);
             if ($model1->canSendPoint($order)) {
                 $model1->addUserPoints($order);
             }
         }
-        $promo2 = RankingPromo::find()->where(['sn' => 'loan_order_points'])->one();
+        $promo2 = RankingPromo::find()->where(['key' => 'loan_order_points'])->one();
         if (!is_null($promo2)) {
             $model2 = new LoanOrderPoints($promo2);
             if ($model2->canSendPoint($order)) {
