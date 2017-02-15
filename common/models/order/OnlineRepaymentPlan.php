@@ -298,4 +298,9 @@ class OnlineRepaymentPlan extends \yii\db\ActiveRecord
 
         return $res;
     }
+
+    public function getLoan()
+    {
+        return $this->hasOne(OnlineProduct::className(), ['id' => 'online_pid']);
+    }
 }

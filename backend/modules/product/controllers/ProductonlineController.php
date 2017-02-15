@@ -452,6 +452,10 @@ class ProductonlineController extends BaseController
             ->addSelect(['product_status' => "(case $op.`status` when 4 then 7 when 7 then 4 else $op.`status` end)"])
             ->joinWith('fangkuan')
             ->where(['del_status' => 0]);
+        //筛选标的sn
+        if (!empty($request['sn'])) {
+            $data->andWhere(['like', "$op.sn", trim($request['sn'])]);
+        }
         if ($request['name']) {
             $data->andFilterWhere(['like', 'title', $request['name']]);
         }
