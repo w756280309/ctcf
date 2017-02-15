@@ -98,8 +98,8 @@ class OnlineorderController extends BaseController
                 $exportData[] = [
                     strval($list['sn']),
                     $list['username'],
-                    strval( $list['mobile']),
-                    strval(strval($list['idcard'])),
+                    floatval($list['mobile']),
+                    $list['idcard'] ? substr($list['idcard'], 0, 14) . '****' : '',
                     floatval($list['order_money']),
                     StringUtils::amountFormat2(bcmul($list['yield_rate'], 100, 2)),
                     date('Y-m-d H:i:s', $list['regAt']),

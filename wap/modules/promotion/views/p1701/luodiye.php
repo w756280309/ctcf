@@ -10,7 +10,6 @@ use yii\captcha\Captcha;
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/wenjfbase.css?v=1.5">
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/luodiye/css/register.css?v=20170117">
 <script  src="<?= FE_BASE_URI ?>libs/lib.flexible3.js"></script>
-<script  src="<?= FE_BASE_URI ?>libs/jquery-1.11.1.min.js"></script>
 <script  src="<?= FE_BASE_URI ?>libs/fastclick.js"></script>
 <script src="<?= ASSETS_BASE_URI ?>js/common.js"></script>
 <script src="<?= FE_BASE_URI ?>wap/luodiye/js/luodiye.js?v=20170117"></script>
@@ -26,9 +25,9 @@ use yii\captcha\Captcha;
     <?php } ?>
 
     <div class="banner">
-        <img  src="<?= FE_BASE_URI ?>wap/luodiye/images/valentine_01.png" alt="">
-        <img  src="<?= FE_BASE_URI ?>wap/luodiye/images/valentine_02.png" alt="">
-        <img  src="<?= FE_BASE_URI ?>wap/luodiye/images/valentine_03.png" alt="">
+        <img  src="<?= FE_BASE_URI ?>wap/luodiye/images/banner_07.png" alt="">
+        <img  src="<?= FE_BASE_URI ?>wap/luodiye/images/banner_08.png" alt="">
+        <img  src="<?= FE_BASE_URI ?>wap/luodiye/images/banner_09.png" alt="">
     </div>
 
     <div class="formcheck f15">

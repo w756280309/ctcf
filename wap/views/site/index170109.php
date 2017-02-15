@@ -82,9 +82,9 @@ use yii\helpers\Html;
                     <p class="f45"><?= LoanHelper::getDealRate($xs) ?><i class="f25">%</i></p>
                     <p class="f12">预期年化率</p>
                     <ul class="clearfix">
-                        <li class="f14 lf text-align-lf"><img class="icon5" data-original="<?= FE_BASE_URI ?>wap/index/images/icon_05.png" alt=""> <?= StringUtils::amountFormat2($xs->start_money) ?>元起投</li>
-                        <li class="f14 lf comred"><img class="icon6" data-original="<?= FE_BASE_URI ?>wap/index/images/icon_06.png" alt=""> <?= $ex['value'].$ex['unit'] ?>期限</li>
-                        <li class="f14 lf text-align-rg"><img class="icon7" data-original="<?= FE_BASE_URI ?>wap/index/images/icon_07.png" alt=""> 限购一万</li>
+                        <li class="f14 lf text-align-lf"><img class="icon5" src="<?= FE_BASE_URI ?>wap/index/images/icon_05.png" alt=""> <?= StringUtils::amountFormat2($xs->start_money) ?>元起投</li>
+                        <li class="f14 lf comred"><img class="icon6" src="<?= FE_BASE_URI ?>wap/index/images/icon_06.png" alt=""> <?= $ex['value'].$ex['unit'] ?>期限</li>
+                        <li class="f14 lf text-align-rg"><img class="icon7" src="<?= FE_BASE_URI ?>wap/index/images/icon_07.png" alt=""> 限购一万</li>
                         <li class="f18 lf">去理财</li>
                     </ul>
                 </a>

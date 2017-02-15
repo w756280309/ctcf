@@ -108,7 +108,7 @@ class UserStats
             $data[$key]['id'] = $val['id'];
             $data[$key]['created_at'] = date('Y-m-d H:i:s', $val['created_at']);
             $data[$key]['name'] = $val['real_name'];
-            $data[$key]['mobile'] = $val['mobile'];   //手机号后面加入tab键,防止excel表格打开时,显示为科学计数法
+            $data[$key]['mobile'] = floatval($val['mobile']);
             $data[$key]['idcard'] = $val['idcard'] ? substr($val['idcard'], 0, 14) . '****' : '';    //隐藏身份证号信息,显示前14位
             if (isset($affiliation[$val['id']])) {
                 $data[$key]['affiliation'] = $affiliation[$val['id']]['name'];
