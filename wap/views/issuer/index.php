@@ -15,7 +15,7 @@ switch ($issuerId) {
         $cssFile = 'bdgk.css';
         break;
     case 10:
-        $this->title = '南京金交 · 宁富20号中科建';
+        $this->title = '宁富20号中科建';
         $cssFile = 'zkj.css';
         break;
 }
