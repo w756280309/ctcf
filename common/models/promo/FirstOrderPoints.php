@@ -10,7 +10,7 @@ use common\utils\TxUtils;
 use wap\modules\promotion\models\RankingPromo;
 
 /**
- * 首次投资送积分活动
+ * 首次投资送积分活动: key => first_order_point
  */
 class FirstOrderPoints
 {
@@ -21,19 +21,6 @@ class FirstOrderPoints
     public function __construct(RankingPromo $promo)
     {
         $this->promo = $promo;
-    }
-
-    public function doAfterLoanJixi(OnlineProduct $loan)
-    {
-        $loan->refresh();
-        if ($loan->is_jixi) {
-            $orders = OnlineOrder::find()->where(['online_pid' => $loan->id, 'status' => OnlineOrder::STATUS_SUCCESS])->all();
-            foreach ($orders as $order) {
-                if ($this->canSendPoint($order)) {
-                    $this->addUserPoints($order);
-                }
-            }
-        }
     }
 
     public function doAfterSuccessLoanOrder(OnlineOrder $order){
