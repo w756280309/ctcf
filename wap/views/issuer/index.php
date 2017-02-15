@@ -344,8 +344,8 @@ switch ($issuerId) {
     </script>
 <?php } elseif (10 === $issuerId) { ?>
     <header>
-        <img src="<?= FE_BASE_URI ?>wap/introduce/img/banner_07.png" alt="">
-        <img src="<?= FE_BASE_URI ?>wap/introduce/img/banner_08.png" alt="">
+        <img src="<?= FE_BASE_URI ?>wap/introduce/img/banner_09.png" alt="">
+        <img src="<?= FE_BASE_URI ?>wap/introduce/img/banner_10.png" alt="">
     </header>
     <section>
         <div class="publisher pub-special">
