@@ -47,6 +47,7 @@ class RepaymentPlanSearch extends OnlineRepaymentPlan
         $query = OnlineRepaymentPlan::find()
             ->innerJoin($loanTable, "$loanTable.id = $planTable.online_pid")
             ->where("$planTable.refund_time > 0")//测试脏数据
+            ->andWhere(["$planTable.isTest" => false])
         ;
         $this->setAttributes($params, false);
 

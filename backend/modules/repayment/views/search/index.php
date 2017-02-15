@@ -77,7 +77,7 @@ $this->title = '回款查询';
         <div class="span12">
             <table>
                 <tr><td>当前待回款项目数:<?= $noPaidLoanCount ?></td><td>待回款金额:<?= number_format($noPaidMoney, 2) ?></td></tr>
-                <tr><td>当前已汇款项目数:<?= $paidLoanCount ?></td><td>已回款金额:<?= number_format($paidMoney, 2) ?></td></tr>
+                <tr><td>当前已回款项目数:<?= $paidLoanCount ?></td><td>已回款金额:<?= number_format($paidMoney, 2) ?></td></tr>
             </table>
         </div>
         <div class="span12"></div>
