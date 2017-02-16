@@ -78,7 +78,7 @@ class RepaymentSearch extends Repayment
             $query->andWhere(['<=', "$payTable.amount", $this->refundMoneyEnd]);
         }
 
-        $query->orderBy(["$payTable.dueDate" => SORT_ASC]);
+        $query->orderBy(["if($payTable.isRefunded, $payTable.refundedAt, $payTable.dueDate)" => SORT_ASC, "$payTable.id" => SORT_ASC]);
         return $query;
     }
 }
