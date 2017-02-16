@@ -102,25 +102,9 @@ class SignupForm extends Model
 
     /**
      * 注册用户主函数.
-     *
-     * 1.新增注册来源标记码, m_movie1701(首次投资送观影券活动落地页);
-     * 2.新增注册来源标记码, m_space1701(首次投资送太空展套票活动落地页);
-     * 3.新增注册来源标记码, m_wdm1701(温都猫活动落地页);
      */
     public function signup($regFrom = User::REG_FROM_OTHER, $regContext)
     {
-        if (!in_array($regContext, [
-            'm',
-            'm_intro1611',
-            'm_movie1701',
-            'pc',
-            'pc_landing',
-            'm_space1701',
-            'm_wdm1701',
-        ])) {
-            return false;
-        }
-
         if ($this->validate()) {
             $transaction = Yii::$app->db->beginTransaction();
             $user = new User([

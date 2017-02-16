@@ -78,6 +78,12 @@ return [
         'cache' => [
             'class' => 'yii\caching\FileCache',
         ],
+        'urlManager' => [
+            'rules' => [
+                'promotion/<key>' => 'promotion/promo',
+                'promotion/<key>/luodiye' => 'promotion/promo/luodiye',
+            ],
+        ],
     ],
     'modules' => [
         'deal' => [
