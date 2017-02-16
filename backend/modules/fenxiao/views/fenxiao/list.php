@@ -33,6 +33,7 @@ use yii\widgets\LinkPager;
                 <thead>
                     <tr>
                         <th>分销商名称</th>
+                        <th>推荐媒体</th>
                         <th><center>操作</center></th>
                     </tr>
                 </thead>
@@ -40,6 +41,10 @@ use yii\widgets\LinkPager;
                 <?php foreach ($model as $key => $val) : ?>
                     <tr>
                         <td><?= $val['name'] ?></td>
+                        <td>
+                            <?php if(!empty($val->affiliator) && $val->affiliator->isRecommend ) {?>
+                                <i class="icon-ok green" style="color: green;"></i>
+                            <?php }?>
                         <td>
                             <center>
                                 <a href="/fenxiao/fenxiao/edit?id=<?= $val['id'] ?>" class="btn mini green"><i class="icon-edit"></i> 编辑</a>

@@ -36,6 +36,7 @@ class FenxiaoController extends BaseController
 
                 $aff = new Affiliator([
                     'name' => $model->affName,
+                    'isRecommend' => $model->isRecommend,
                 ]);
 
                 if (!empty($model->imageFile)) {
@@ -100,6 +101,7 @@ class FenxiaoController extends BaseController
             'loginName' => $admin->loginName,
             'affName' => $admin->name,
             'affCode' => $affCam->trackCode,
+            'isRecommend' => $aff->isRecommend,
         ]);
 
         $old = clone $model;
@@ -123,6 +125,7 @@ class FenxiaoController extends BaseController
                 }
 
                 $aff->name = $model->affName;
+                $aff->isRecommend = $model->isRecommend;
                 if (!empty($model->imageFile)) {
                     $aff->picPath = $model->imageFile;
                 }

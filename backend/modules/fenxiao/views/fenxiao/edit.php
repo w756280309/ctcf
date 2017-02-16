@@ -82,6 +82,14 @@ $this->title = ($desc = empty($admin) ? "添加" : "编辑").'分销商';
                 <?php } ?>
             </div>
 
+            <div class="control-group">
+                <label class="control-label">推荐媒体(注册成功页展示)</label>
+                <div class="controls">
+                    <?= $form->field($model, 'isRecommend', ['template' => '{input}', 'inputOptions' => [ 'class' => 'm-wrap span12']])->checkbox() ?>
+                    <?= $form->field($model, 'isRecommend', ['template' => '{error}']) ?>
+                </div>
+            </div>
+
             <div class="form-actions">
                 <button type="submit" class="btn blue"><i class="icon-ok"></i> 提交</button>
                 <a href="list" class="btn">取消</a>

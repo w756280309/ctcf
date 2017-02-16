@@ -32,6 +32,7 @@ use wap\modules\promotion\models\Promo160520Log;
 use Yii;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
+use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 
 /**
@@ -551,7 +552,14 @@ class SiteController extends Controller
             $affiliationId = $userAffiliation->affiliator_id;
         }
 
-        return $this->render('registerSucc', ['affiliationId' => $affiliationId]);
+        $recommendAff = Affiliator::find()->where(['isRecommend' => true])->all();
+        $affArr = ArrayHelper::map($recommendAff, 'id', 'name');
+        $affArr = ArrayHelper::merge([0 => '官方'], $affArr);
+
+        return $this->render('registerSucc', [
+            'affiliationId' => $affiliationId,
+            'affArr' => $affArr,
+        ]);
     }
 
     /**
