@@ -14,9 +14,9 @@ class RepaymentSearch extends Repayment
             'loanTitle',
             'refundTimeStart',
             'refundTimeEnd',
-            'loanStatus',
             'refundMoneyStart',
             'refundMoneyEnd',
+            'isRefunded',
         ];
     }
 
@@ -26,9 +26,9 @@ class RepaymentSearch extends Repayment
             'loanTitle' => '项目名称',
             'refundTimeStart' => '回款开始时间',
             'refundTimeEnd' => '回款结束时间',
-            'loanStatus' => '标的状态',
             'refundMoneyStart' => '最小回款金额',
             'refundMoneyEnd' => '最大回款金额',
+            'isRefunded' => '回款状态',
         ];
     }
 
@@ -54,10 +54,23 @@ class RepaymentSearch extends Repayment
             $this->loanTitle = trim($this->loanTitle);
             $query->andWhere(['like', "$loanTable.title", $this->loanTitle]);
         }
+
+        //标的状态筛选
+        if ($this->isRefunded >= 0) {
+            $this->isRefunded = boolval($this->isRefunded);
+            $query->andWhere(["$payTable.isRefunded" => $this->isRefunded]);
+        }
+
         //还款时间筛选
         $this->refundTimeStart = empty($this->refundTimeStart) ? date('Y-m-01') : trim($this->refundTimeStart);
         $this->refundTimeEnd = empty($this->refundTimeEnd) ? (date('Y-m-') . date('t')) : trim($this->refundTimeEnd);
-        $query->andWhere(['between', "$payTable.dueDate", $this->refundTimeStart, $this->refundTimeEnd]);
+        if ($this->isRefunded === true) {
+            $query->andWhere(['between', "$payTable.refundedAt", $this->refundTimeStart, $this->refundTimeEnd]);
+        } elseif($this->isRefunded === false) {
+            $query->andWhere(['between', "$payTable.dueDate", $this->refundTimeStart, $this->refundTimeEnd]);
+        }
+
+
         //还款金额筛选
         if (!empty($this->refundMoneyStart) && $this->refundMoneyStart > 0) {
             $this->refundMoneyStart = floatval(trim($this->refundMoneyStart));
@@ -66,14 +79,6 @@ class RepaymentSearch extends Repayment
         if (!empty($this->refundMoneyEnd) && $this->refundMoneyEnd > 0) {
             $this->refundMoneyEnd = floatval(trim($this->refundMoneyEnd));
             $query->andWhere(['<=', "$payTable.amount", $this->refundMoneyEnd]);
-        }
-        //标的状态筛选
-        if (!empty($this->loanStatus)) {
-            $this->loanStatus = intval($this->loanStatus);
-            $query->andWhere(["$loanTable.status" => $this->loanStatus]);
-        } else {
-            //测试脏数据
-            $query->andWhere(['in', "$loanTable.status", [OnlineProduct::STATUS_HUAN, OnlineProduct::STATUS_OVER]]);
         }
 
         $query->orderBy(["$payTable.dueDate" => SORT_ASC]);
