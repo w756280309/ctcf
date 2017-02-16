@@ -6,7 +6,7 @@ namespace backend\modules\repayment\controllers;
 use backend\controllers\BaseController;
 use common\lib\user\UserStats;
 use common\models\order\OnlineRepaymentPlan;
-use common\models\payment\RepaymentPlanSearch;
+use common\models\payment\RepaymentSearch;
 use common\models\product\OnlineProduct as Plan;
 use yii\data\ActiveDataProvider;
 use Yii;
@@ -17,18 +17,18 @@ class SearchController extends BaseController
 {
     public function actionIndex()
     {
-        $searchModel = new RepaymentPlanSearch();
+        $searchModel = new RepaymentSearch();
         $query = $searchModel->search(\Yii::$app->request->get());
         //待回款数据
         $noPaidQuery = clone  $query;
-        $noPaidData = $noPaidQuery->andWhere(["online_repayment_plan.status" => OnlineRepaymentPlan::STATUS_WEIHUAN])->select('online_repayment_plan.benxi')->asArray()->all();
-        $noPaidLoanCount = count($noPaidData);
-        $noPaidMoney = array_sum(array_column($noPaidData, 'benxi'));
+        $noPaidData = $noPaidQuery->andWhere(["repayment.isRefunded" => false])->select('repayment.amount, repayment.loan_id')->asArray()->all();
+        $noPaidLoanCount = count(array_unique(array_column($noPaidData, 'loan_id')));
+        $noPaidMoney = array_sum(array_column($noPaidData, 'amount'));
         //已回款数据
         $paidQuery = clone $query;
-        $paidData = $paidQuery->andWhere(['in', "online_repayment_plan.status", [OnlineRepaymentPlan::STATUS_YIHUAN, OnlineRepaymentPlan::STATUS_TIQIAM]])->select('online_repayment_plan.benxi')->asArray()->all();
-        $paidLoanCount = count($paidData);
-        $paidMoney = array_sum(array_column($paidData, 'benxi'));
+        $paidData = $paidQuery->andWhere(["repayment.isRefunded" => true])->select('repayment.amount, repayment.loan_id')->asArray()->all();
+        $paidLoanCount = count(array_unique(array_column($paidData, 'loan_id')));
+        $paidMoney = array_sum(array_column($paidData, 'amount'));
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -63,7 +63,7 @@ class SearchController extends BaseController
             '回款金额',
             '标的状态',
         ];
-        $searchModel = new RepaymentPlanSearch();
+        $searchModel = new RepaymentSearch();
         $query = $searchModel->search(\Yii::$app->request->get());
         $allData = $query->all();
         foreach ($allData as $plan) {
@@ -82,9 +82,9 @@ class SearchController extends BaseController
                 date('Y-m-d', $loan->jixi_time),
                 date('Y-m-d', $loan->finish_date),
                 $loan->kuanxianqi . '天',
-                $plan->qishu,
-                date('Y-m-d', $plan->refund_time),
-                floatval($plan->benxi),
+                $plan->term,
+                $plan->dueDate,
+                floatval($plan->amount),
                 isset($status[$loan->status]) ? $status[$loan->status] : '',
             ];
         }

@@ -147,19 +147,19 @@ $this->title = '回款查询';
                         [
                             'header' => '回款期数',
                             'value' => function ($model) {
-                                return $model->qishu;
+                                return $model->term;
                             }
                         ],
                         [
                             'header' => '回款时间',
                             'value' => function ($model) {
-                                return date('Y-m-d', $model->refund_time);
+                                return $model->dueDate;
                             }
                         ],
                         [
                             'header' => '回款金额',
                             'value' => function ($model) {
-                                return number_format($model->benxi, 2);
+                                return number_format($model->amount, 2);
                             }
                         ],
                         [

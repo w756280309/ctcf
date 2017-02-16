@@ -3,12 +3,10 @@
 namespace common\models\payment;
 
 
-use common\models\order\OnlineRepaymentPlan;
 use common\models\product\OnlineProduct;
-use yii\base\Model;
 use yii\db\Query;
 
-class RepaymentPlanSearch extends OnlineRepaymentPlan
+class RepaymentSearch extends Repayment
 {
     public function attributes()
     {
@@ -42,12 +40,12 @@ class RepaymentPlanSearch extends OnlineRepaymentPlan
     public function search($params)
     {
         $loanTable = OnlineProduct::tableName();
-        $planTable = OnlineRepaymentPlan::tableName();
+        $payTable = Repayment::tableName();
 
-        $query = OnlineRepaymentPlan::find()
-            ->innerJoin($loanTable, "$loanTable.id = $planTable.online_pid")
-            ->where("$planTable.refund_time > 0")//测试脏数据
-            ->andWhere(["$planTable.isTest" => false])
+        $query = Repayment::find()
+            ->innerJoin($loanTable, "$loanTable.id = $payTable.loan_id")
+            ->where("$payTable.amount > 0")//测试脏数据
+            ->andWhere(["$loanTable.isTest" => false])
         ;
         $this->setAttributes($params, false);
 
@@ -59,15 +57,15 @@ class RepaymentPlanSearch extends OnlineRepaymentPlan
         //还款时间筛选
         $this->refundTimeStart = empty($this->refundTimeStart) ? date('Y-m-01') : trim($this->refundTimeStart);
         $this->refundTimeEnd = empty($this->refundTimeEnd) ? (date('Y-m-') . date('t')) : trim($this->refundTimeEnd);
-        $query->andWhere(['between', "$planTable.refund_time", strtotime($this->refundTimeStart), strtotime($this->refundTimeEnd)]);
+        $query->andWhere(['between', "$payTable.dueDate", $this->refundTimeStart, $this->refundTimeEnd]);
         //还款金额筛选
         if (!empty($this->refundMoneyStart) && $this->refundMoneyStart > 0) {
             $this->refundMoneyStart = floatval(trim($this->refundMoneyStart));
-            $query->andWhere(['>=', "$planTable.benxi", $this->refundMoneyStart]);
+            $query->andWhere(['>=', "$payTable.amount", $this->refundMoneyStart]);
         }
         if (!empty($this->refundMoneyEnd) && $this->refundMoneyEnd > 0) {
             $this->refundMoneyEnd = floatval(trim($this->refundMoneyEnd));
-            $query->andWhere(['<=', "$planTable.benxi", $this->refundMoneyEnd]);
+            $query->andWhere(['<=', "$payTable.amount", $this->refundMoneyEnd]);
         }
         //标的状态筛选
         if (!empty($this->loanStatus)) {
@@ -78,7 +76,7 @@ class RepaymentPlanSearch extends OnlineRepaymentPlan
             $query->andWhere(['in', "$loanTable.status", [OnlineProduct::STATUS_HUAN, OnlineProduct::STATUS_OVER]]);
         }
 
-        $query->groupBy(["$planTable.online_pid", "$planTable.qishu"])->orderBy(["$planTable.refund_time" => SORT_ASC]);
+        $query->orderBy(["$payTable.dueDate" => SORT_ASC]);
         return $query;
     }
 }

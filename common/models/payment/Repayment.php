@@ -2,6 +2,7 @@
 
 namespace common\models\payment;
 
+use common\models\product\OnlineProduct;
 use yii\db\ActiveRecord;
 
 /**
@@ -50,5 +51,10 @@ class Repayment extends ActiveRecord
             'isRefunded' => '是否回款',
             'refundedAt' => '回款时间',
         ];
+    }
+
+    public function getLoan()
+    {
+        return $this->hasOne(OnlineProduct::className(), ['id' => 'loan_id']);
     }
 }
