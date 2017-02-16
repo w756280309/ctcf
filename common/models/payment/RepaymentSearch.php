@@ -65,13 +65,7 @@ class RepaymentSearch extends Repayment
         //还款时间筛选
         $this->refundTimeStart = empty($this->refundTimeStart) ? date('Y-m-01') : trim($this->refundTimeStart);
         $this->refundTimeEnd = empty($this->refundTimeEnd) ? (date('Y-m-') . date('t')) : trim($this->refundTimeEnd);
-        if ($this->isRefunded === true) {
-            $query->andWhere(['between', "$payTable.refundedAt", $this->refundTimeStart, $this->refundTimeEnd]);
-        } elseif($this->isRefunded === false) {
-            $query->andWhere(['between', "$payTable.dueDate", $this->refundTimeStart, $this->refundTimeEnd]);
-        } else {
-            $query->andWhere(['between', "if($payTable.isRefunded, $payTable.refundedAt, $payTable.dueDate)", $this->refundTimeStart, $this->refundTimeEnd]);
-        }
+        $query->andWhere(['between', "if($payTable.isRefunded, $payTable.refundedAt, $payTable.dueDate)", $this->refundTimeStart, $this->refundTimeEnd]);
 
 
         //还款金额筛选
