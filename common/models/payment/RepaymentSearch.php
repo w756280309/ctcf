@@ -46,6 +46,7 @@ class RepaymentSearch extends Repayment
             ->innerJoin($loanTable, "$loanTable.id = $payTable.loan_id")
             ->where("$payTable.amount > 0")//测试脏数据
             ->andWhere(["$loanTable.isTest" => false])
+            ->andWhere(["in", "$loanTable.status", [5, 6]])
         ;
         $this->setAttributes($params, false);
 
@@ -68,6 +69,8 @@ class RepaymentSearch extends Repayment
             $query->andWhere(['between', "$payTable.refundedAt", $this->refundTimeStart, $this->refundTimeEnd]);
         } elseif($this->isRefunded === false) {
             $query->andWhere(['between', "$payTable.dueDate", $this->refundTimeStart, $this->refundTimeEnd]);
+        } else {
+            $query->andWhere(['between', "if($payTable.isRefunded, $payTable.refundedAt, $payTable.dueDate)", $this->refundTimeStart, $this->refundTimeEnd]);
         }
 
 
