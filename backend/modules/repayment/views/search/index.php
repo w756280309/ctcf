@@ -58,7 +58,7 @@ $this->title = '回款查询';
                             <span class="title">回款状态</span>
                             <select name="isRefunded" id=""  class="m-wrap span6">
                                 <option value="-1">全部</option>
-                                <option value="0" <?= (intval($searchModel->isRefunded ) === 0)? 'selected' : ''?> >待回款</option>
+                                <option value="0" <?= (!is_null($searchModel->isRefunded) && intval($searchModel->isRefunded) === 0)? 'selected' : ''?> >待回款</option>
                                 <option value="1" <?= (intval($searchModel->isRefunded) === 1)  ? 'selected' : ''?> >已回款</option>
                             </select>
                         </td>
