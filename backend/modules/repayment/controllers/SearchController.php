@@ -61,7 +61,7 @@ class SearchController extends BaseController
             '回款期数',
             '回款时间',
             '回款金额',
-            '标的状态',
+            '回款状态',
         ];
         $searchModel = new RepaymentSearch();
         $query = $searchModel->search(\Yii::$app->request->get());
@@ -85,7 +85,7 @@ class SearchController extends BaseController
                 $plan->term,
                 $plan->dueDate,
                 floatval($plan->amount),
-                isset($status[$loan->status]) ? $status[$loan->status] : '',
+                $plan->isRefunded ? '已回款' : '未回款',
             ];
         }
 

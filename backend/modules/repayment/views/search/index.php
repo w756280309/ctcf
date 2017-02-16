@@ -58,8 +58,8 @@ $this->title = '回款查询';
                             <span class="title">项目状态</span>
                             <select name="loanStatus" id=""  class="m-wrap span6">
                                 <option value="0">全部</option>
-                                <option value="5" <?= intval($searchModel->loanStatus) === 5 ? 'selected' : ''?> >收益中</option>
-                                <option value="6" <?= intval($searchModel->loanStatus) === 6 ? 'selected' : ''?> >已还清</option>
+                                <option value="5" <?= intval($searchModel->loanStatus) === 5 ? 'selected' : ''?> >未回款</option>
+                                <option value="6" <?= intval($searchModel->loanStatus) === 6 ? 'selected' : ''?> >已回款</option>
                             </select>
                         </td>
                         <td>
@@ -163,10 +163,13 @@ $this->title = '回款查询';
                             }
                         ],
                         [
-                            'header' => '标的状态',
+                            'header' => '回款状态',
                             'value' => function ($model) {
-                                $status = Yii::$app->params['deal_status'];
-                                return isset($status[$model->loan->status]) ? $status[$model->loan->status] : '';
+                                if ($model->isRefunded) {
+                                    return '已回款';
+                                } else {
+                                    return '未回款';
+                                }
                             }
                         ],
                     ]
