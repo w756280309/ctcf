@@ -11,6 +11,7 @@ use yii\db\ActiveRecord;
  * @property integer $id
  * @property integer $promo_id
  * @property string $mobile
+ * @property string $ip
  * @property string $createTime
  */
 class PromoMobile extends ActiveRecord
@@ -32,7 +33,7 @@ class PromoMobile extends ActiveRecord
             [['promo_id', 'mobile', 'createTime'], 'required'],
             [['promo_id'], 'integer'],
             [['createTime'], 'safe'],
-            [['mobile'], 'string', 'max' => 255],
+            [['mobile', 'ip'], 'string', 'max' => 255],
         ];
     }
 }

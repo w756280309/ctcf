@@ -69,6 +69,7 @@ class PromoController extends Controller
                 (new PromoMobile([
                     'promo_id' => $promo->id,
                     'mobile' => $mobile,
+                    'ip' => Yii::$app->request->userIP,
                     'createTime' => date('Y-m-d H:i:s'),
                 ]))->save();     //跳转落地注册页之前,记录用户手机号
             }
