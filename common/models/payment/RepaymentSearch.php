@@ -54,6 +54,7 @@ class RepaymentSearch extends Repayment
             $this->loanTitle = trim($this->loanTitle);
             $query->andWhere(['like', "$loanTable.title", $this->loanTitle]);
         }
+
         //标的状态筛选
         if (!is_null($this->isRefunded) && $this->isRefunded >= 0) {
             $this->isRefunded = boolval($this->isRefunded);
