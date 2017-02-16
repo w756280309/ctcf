@@ -58,7 +58,7 @@ class SearchController extends BaseController
             '起息日',
             '到期日',
             '宽限期',
-            '回款期数',
+            '当前期数',
             '回款时间',
             '回款金额',
             '回款状态',

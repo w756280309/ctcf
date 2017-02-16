@@ -55,11 +55,11 @@ $this->title = '回款查询';
                     </tr>
                     <tr>
                         <td>
-                            <span class="title">项目状态</span>
-                            <select name="loanStatus" id=""  class="m-wrap span6">
-                                <option value="0">全部</option>
-                                <option value="5" <?= intval($searchModel->loanStatus) === 5 ? 'selected' : ''?> >未回款</option>
-                                <option value="6" <?= intval($searchModel->loanStatus) === 6 ? 'selected' : ''?> >已回款</option>
+                            <span class="title">回款状态</span>
+                            <select name="isRefunded" id=""  class="m-wrap span6">
+                                <option value="-1">全部</option>
+                                <option value="0" <?= (intval($searchModel->isRefunded ) === 0)? 'selected' : ''?> >未回款</option>
+                                <option value="1" <?= (intval($searchModel->isRefunded) === 1)  ? 'selected' : ''?> >已回款</option>
                             </select>
                         </td>
                         <td>
@@ -145,7 +145,7 @@ $this->title = '回款查询';
                             }
                         ],
                         [
-                            'header' => '回款期数',
+                            'header' => '当前期数',
                             'value' => function ($model) {
                                 return $model->term;
                             }

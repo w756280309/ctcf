@@ -14,9 +14,9 @@ class RepaymentSearch extends Repayment
             'loanTitle',
             'refundTimeStart',
             'refundTimeEnd',
-            'loanStatus',
             'refundMoneyStart',
             'refundMoneyEnd',
+            'isRefunded',
         ];
     }
 
@@ -26,9 +26,9 @@ class RepaymentSearch extends Repayment
             'loanTitle' => '项目名称',
             'refundTimeStart' => '回款开始时间',
             'refundTimeEnd' => '回款结束时间',
-            'loanStatus' => '标的状态',
             'refundMoneyStart' => '最小回款金额',
             'refundMoneyEnd' => '最大回款金额',
+            'isRefunded' => '回款状态',
         ];
     }
 
@@ -68,12 +68,9 @@ class RepaymentSearch extends Repayment
             $query->andWhere(['<=', "$payTable.amount", $this->refundMoneyEnd]);
         }
         //标的状态筛选
-        if (!empty($this->loanStatus)) {
-            $this->loanStatus = intval($this->loanStatus);
-            $query->andWhere(["$loanTable.status" => $this->loanStatus]);
-        } else {
-            //测试脏数据
-            $query->andWhere(['in', "$loanTable.status", [OnlineProduct::STATUS_HUAN, OnlineProduct::STATUS_OVER]]);
+        if ($this->isRefunded >= 0) {
+            $this->isRefunded = boolval($this->isRefunded);
+            $query->andWhere(["$payTable.isRefunded" => $this->isRefunded]);
         }
 
         $query->orderBy(["$payTable.dueDate" => SORT_ASC]);
