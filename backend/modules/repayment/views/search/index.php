@@ -145,7 +145,7 @@ $this->title = '回款查询';
                             }
                         ],
                         [
-                            'header' => '当前期数',
+                            'header' => '回款期数',
                             'value' => function ($model) {
                                 return $model->term;
                             }
