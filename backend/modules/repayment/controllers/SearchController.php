@@ -83,9 +83,9 @@ class SearchController extends BaseController
                 date('Y-m-d', $loan->finish_date),
                 $loan->kuanxianqi . '天',
                 $plan->term,
-                $plan->dueDate,
+                $plan->isRefunded ?  date('Y-m-d', strtotime($plan->refundedAt)) : $plan->dueDate,
                 floatval($plan->amount),
-                $plan->isRefunded ? '已回款' : '未回款',
+                $plan->isRefunded ? '已回款' : '待回款',
             ];
         }
 
