@@ -66,12 +66,7 @@ class PromoController extends Controller
             $promoMobile = PromoMobile::findOne(['promo_id' => $promo->id, 'mobile' => $mobile]);
 
             if (null === $promoMobile) {
-                (new PromoMobile([
-                    'promo_id' => $promo->id,
-                    'mobile' => $mobile,
-                    'ip' => Yii::$app->request->userIP,
-                    'createTime' => date('Y-m-d H:i:s'),
-                ]))->save();     //跳转落地注册页之前,记录用户手机号
+                PromoMobile::initNew($promo->id, $mobile)->save();     //跳转落地注册页之前,记录用户手机号
             }
 
             $back = [

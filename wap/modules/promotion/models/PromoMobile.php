@@ -36,4 +36,14 @@ class PromoMobile extends ActiveRecord
             [['mobile', 'ip'], 'string', 'max' => 255],
         ];
     }
+
+    public static function initNew($promoId, $mobile)
+    {
+        return new self([
+            'promo_id' => $promoId,
+            'mobile' => $mobile,
+            'ip' => Yii::$app->request->userIP,
+            'createTime' => date('Y-m-d H:i:s'),
+        ]);
+    }
 }

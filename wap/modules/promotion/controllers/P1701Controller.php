@@ -7,6 +7,7 @@ use common\models\adv\Share;
 use common\models\order\OnlineOrder;
 use common\models\user\CaptchaForm;
 use common\models\user\User;
+use wap\modules\promotion\models\PromoMobile;
 use wap\modules\promotion\models\RankingPromo;
 use Yii;
 use yii\web\Controller;
@@ -88,6 +89,12 @@ class P1701Controller extends Controller
         }
 
         Yii::$app->session->set('movie_mobile', $mobile);
+
+        $promoMobile = PromoMobile::findOne(['promo_id' => $promo->id, 'mobile' => $mobile]);
+
+        if (null === $promoMobile) {
+            PromoMobile::initNew($promo->id, $mobile)->save();     //跳转落地注册页之前,记录用户手机号
+        }
 
         return ['code' => 0, 'message' => '成功', 'toUrl' => '/promotion/p1701/luodiye'];
     }
