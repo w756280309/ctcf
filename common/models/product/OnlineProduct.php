@@ -973,6 +973,36 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
     }
 
     /**
+     * 返回截止至该还款日应该计息的天数
+     * 仅限于已经计息的到期本息项目使用且还款日处于起息日至到期日(不包含该天)之间
+     * 调用方式：
+     * if (!$deal->isAmortized()
+     *     && false !== strtotime($repayDate)
+     *     && deal->is_jixi
+     *     && $repayDate >= date('Y-m-d', $deal->jixi_time)
+     *     && $repayDate < date('Y-m-d', $deal->finish_date)
+     * ) {
+     *      $days = $deal->getHoldingDays($repayDate);
+     * }
+     *
+     * @param  string $repayDate
+     *
+     * @return int    $days
+     */
+    public function getHoldingDays($repayDate)
+    {
+        $qixiDateTime = new \DateTime(date('Y-m-d', $this->jixi_time));
+        if ($this->isInGracePeriod()) {
+            $days = (int) (new \DateTime($repayDate))->diff($qixiDateTime)->days;//计算当前时间到计息日期的天数
+        } else {
+            $graceFirstDay = date('Y-m-d', strtotime('- ' . $this->kuanxianqi . ' day', $this->finish_date));
+            $days = (int) (new \DateTime($graceFirstDay))->diff($qixiDateTime)->days;
+        }
+
+        return $days;
+    }
+
+    /**
      * 判断一个标的是否可以转让.
      *
      * 1. 分期项目期限超过6个月可转;

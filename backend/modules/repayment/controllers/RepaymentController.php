@@ -63,8 +63,9 @@ class RepaymentController extends BaseController
         bcscale(14);
         $bcround = new BcRound();
         $qimodel = null;
-        $isInGracePeriod = $deal->isInGracePeriod();//判断当前标的是否处于宽限期
-        $days = (new \DateTime())->diff(new \DateTime(date('Y-m-d', $deal->jixi_time)))->days;//计算当前时间到计息日期的天数
+        $today = date('Y-m-d');
+        $days = $deal->getHoldingDays($today);//计算当前时间到计息日期的天数
+        $isRefreshCalcLiXi = $this->isRefreshCalcLiXi($deal, $today);
         foreach ($model as $val) {
             $qishu = intval($val['qishu']);
             //判断当前是否已经还过款
@@ -74,9 +75,9 @@ class RepaymentController extends BaseController
             }
             //当没有还过款时候才从新计算利息
             $payed = $repayment->isRefunded;
-            if ($isInGracePeriod) {
+            if ($isRefreshCalcLiXi) {
                 if (!$payed) {
-                    $val['lixi'] = $bcround->bcround(bcdiv(bcmul($days, $val['lixi']), $deal->expires), 2);//宽限期的还款计划的利息是用原有还款计划的利息计算得到的
+                    $val['lixi'] = $bcround->bcround(bcdiv(bcmul($days, $val['lixi']), $deal->expires), 2);
                     $val['lixi'] = max($val['lixi'], 0.01);
                     $val['benxi'] = bcadd($val['lixi'], $val['benjin']);
                 }
@@ -98,8 +99,21 @@ class RepaymentController extends BaseController
             'total_bx' => $bcround->bcround($total_bx, 2),
             'deal' => $deal,
             'model' => $qimodel,
-            'isInGracePeriod' => $isInGracePeriod,
+            'isRefreshCalcLiXi' => $isRefreshCalcLiXi,
         ]);
+    }
+
+    //是否需要重新计息
+    private function isRefreshCalcLiXi(OnlineProduct $deal, $repayDate)
+    {
+        if (!$deal->isAmortized()
+            && $deal->is_jixi
+            && $repayDate >= date('Y-m-d', $deal->jixi_time)
+            && $repayDate < date('Y-m-d', $deal->finish_date)
+        ) {
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -189,8 +203,9 @@ class RepaymentController extends BaseController
             return ['result' => 0, 'message' => '还款信息不存在'];
         }
 
-        $isInGracePeriod = $deal->isInGracePeriod();//判断当前标的是否是在宽限期中
-        $days = (new \DateTime())->diff(new \DateTime(date('Y-m-d', $deal->jixi_time)))->days;//计算当前时间到计息日期的天数
+        $today = date('Y-m-d');
+        $days = $deal->getHoldingDays($today);
+        $isRefreshCalcLiXi = $this->isRefreshCalcLiXi($deal, $today);
 
         //融资人需要扣除的金额计算
         $totalFund = 0;
@@ -199,7 +214,7 @@ class RepaymentController extends BaseController
 
         foreach ($orders as $val) {
             //如果在宽限期中，并且没有进行过还款操作，重新计算利息
-            if ($isInGracePeriod && !$repayment->isRepaid) {
+            if ($isRefreshCalcLiXi && !$repayment->isRepaid) {
                 $val->lixi = max(0.01, $bcround->bcround(bcdiv(bcmul($days, $val->lixi), $deal->expires), 2));//更新还款计划的利息
                 $val->benxi = bcadd($val->benjin, $val->lixi);//更新还款计划的本息
                 $val->refund_time = time();//更新还款计划的还款时间
@@ -237,7 +252,7 @@ class RepaymentController extends BaseController
         if (OnlineProduct::STATUS_HUAN === $deal->status && !$repayment->isRepaid) {
             $transaction = Yii::$app->db->beginTransaction();
             //如果是在宽限期内
-            if ($isInGracePeriod) {
+            if ($isRefreshCalcLiXi) {
                 //更新还款计划
                 foreach ($orders as $val) {
                     $res = $val->save(false);
@@ -329,7 +344,7 @@ class RepaymentController extends BaseController
             $record->benxi = $order['benxi'];
             $record->benjin = $order['benjin'];
             $record->benxi_yue = $sum_benxi_yue;
-            if ($isInGracePeriod) {
+            if ($isRefreshCalcLiXi) {
                 $record->status = OnlineRepaymentRecord::STATUS_BEFORE;
             } else {
                 $record->status = OnlineRepaymentRecord::STATUS_DID;
@@ -342,7 +357,7 @@ class RepaymentController extends BaseController
 
                 return ['result' => 0, 'message' => '还款失败，记录失败'];
             }
-            if ($isInGracePeriod) {
+            if ($isRefreshCalcLiXi) {
                 $order->status = OnlineRepaymentPlan::STATUS_TIQIAM;
             } else {
                 $order->status = OnlineRepaymentPlan::STATUS_YIHUAN;

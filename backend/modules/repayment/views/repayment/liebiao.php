@@ -74,15 +74,18 @@ $bc = new BcRound();
             </table>
         </div>
         <?php foreach ($model as $qk => $qi) : ?>
-            <?php $payed = $qi[count($qi) - 1]['payed'];?>
+            <?php
+                $payed = $qi[count($qi) - 1]['payed'];
+                $isShowToday = !$payed && $isRefreshCalcLiXi;
+            ?>
         <div class="portlet-body">
             <table class="list">
                 <thead><th class="list">第<?= $qk ?>期:</th></thead>
                 <tr>
                     <td class="list">
-                        <?= (!$payed && $isInGracePeriod) ? '(今日还款)' : ''?>本期应还时间：<?= (!$payed && $isInGracePeriod) ? date('Y-m-d') : date('Y-m-d', $qi[count($qi) - 1]['refund_time']) ?><br>
-                        <?= (!$payed && $isInGracePeriod) ? '(今日还款)' : ''?>本期应还款本金：<?= $bc->bcround(array_sum(array_column($qi, 'benjin')), 2)  ?>（元）&emsp;
-                        <?= (!$payed && $isInGracePeriod) ? '(今日还款)' : ''?>本期应还款利息：<?= $bc->bcround(array_sum(array_column($qi, 'lixi')), 2)  ?>（元）
+                        <?= $isShowToday ? '(今日还款)' : ''?>本期应还时间：<?= $isShowToday ? date('Y-m-d') : date('Y-m-d', $qi[count($qi) - 1]['refund_time']) ?><br>
+                        <?= $isShowToday ? '(今日还款)' : ''?>本期应还款本金：<?= $bc->bcround(array_sum(array_column($qi, 'benjin')), 2)  ?>（元）&emsp;
+                        <?= $isShowToday ? '(今日还款)' : ''?>本期应还款利息：<?= $bc->bcround(array_sum(array_column($qi, 'lixi')), 2)  ?>（元）
                         <img src="/image/you.png" class="jiantou<?= $qk ?>" onclick="tableShow('.jiantou<?= $qk ?>')" data="<?= $qk ?>" alt="" style="position: absolute; right: 30px; height:20px; width: 20px;">
                     </td>
                 </tr>
