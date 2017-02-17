@@ -61,3 +61,6 @@ p.f12 a {
 .flex-content {
   padding-bottom: 0.66666667rem;
 }
+a.go-deal {
+  color: #000 !important;
+}

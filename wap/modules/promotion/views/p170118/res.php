@@ -11,7 +11,7 @@ if ($user && !($user->id % 2)) {
 ?>
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>libs/bootstrap/css/bootstrap.min.css">
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/wenjfbase.css">
-<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/wendumao/css/registerSucc.css">
+<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/wendumao/css/registerSucc.css?v=20170213">
 <script  src="<?= FE_BASE_URI ?>libs/lib.flexible3.js"></script>
 <script  src="<?= FE_BASE_URI ?>libs/jquery-1.11.1.min.js"></script>
 <script  src="<?= FE_BASE_URI ?>libs/fastclick.js"></script>
@@ -24,7 +24,7 @@ if ($user && !($user->id % 2)) {
     </div>
     <ul class="liststep f16">
         <li><span class="f24 lf">1</span>注册成功</li>
-        <li><span class="f24 lf">2</span>首次投资1000元即可获得积分</li>
+        <li><a class="go-deal" href="<?= $toUrl ?>"><span class="f24 lf">2</span>首次投资1000元即可获得积分</a></li>
         <li><span class="f24 lf">3</span>前往积分商城兑换温都猫充值卡</li>
     </ul>
 
