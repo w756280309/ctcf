@@ -239,6 +239,7 @@ $config = json_decode($promo->config, true);
                             });
                         } else {
                             location.href = toUrl;
+                            allowClick = true;
                         }
                     });
 

@@ -80,6 +80,8 @@ return [
         ],
         'urlManager' => [
             'rules' => [
+                'promotion/p1701/luodiye' => 'promotion/p1701/luodiye',
+                'promotion/p170126/luodiye' => 'promotion/p170126/luodiye',
                 'promotion/<key>' => 'promotion/promo',
                 'promotion/<key>/luodiye' => 'promotion/promo/luodiye',
             ],
