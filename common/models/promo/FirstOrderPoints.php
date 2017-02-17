@@ -48,7 +48,11 @@ class FirstOrderPoints
                     return false;
                 }
                 //活动期间首次投资
-                $firstOrder = OnlineOrder::find()->where(['uid' => $user->id, 'status' => OnlineOrder::STATUS_SUCCESS])->andWhere(['>=', 'order_time', strtotime($this->promo->startTime)])->andWhere(['<=', 'order_time', strtotime($this->promo->endTime)])->orderBy(['order_time' => SORT_ASC])->one();
+                $query = OnlineOrder::find()->where(['uid' => $user->id, 'status' => OnlineOrder::STATUS_SUCCESS])->andWhere(['>=', 'order_time', strtotime($this->promo->startTime)]);
+                if (!empty($this->promo->endTime)) {
+                    $query = $query->andWhere(['<=', 'order_time', strtotime($this->promo->endTime)]);
+                }
+                $firstOrder = $query->orderBy(['order_time' => SORT_ASC])->one();
                 if (is_null($firstOrder) || $firstOrder->id !== $order->id) {
                     return false;
                 }

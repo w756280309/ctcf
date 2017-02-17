@@ -338,20 +338,15 @@ GROUP BY rp.uid, rp.online_Pid";
         exit();
     }
 
-    //为2017-02-09计息但是没有赠送首投积分的用户补发积分 data/sent-points
-    public function actionSentPoints($run = false)
+    //为2017-02-17日投资没有给积分用户补发首投积分 data/send-points
+    public function actionSendPoints($run = false)
     {
         $promo = RankingPromo::find()->where(['key' => 'first_order_point'])->one();
         if (is_null($promo)) {
             return false;
         }
         $model = new $promo->promoClass($promo);
-        $pid = Yii::$app->db->createCommand("SELECT DISTINCT online_pid
-FROM online_repayment_plan WHERE DATE_FORMAT( FROM_UNIXTIME( created_at ) ,  '%Y-%m-%d' ) =  '2017-02-09'")->queryAll();
-        if (empty($pid)) {
-            return false;
-        }
-        $orders = OnlineOrder::find()->where(['online_pid' => $pid, 'status' => OnlineOrder::STATUS_SUCCESS])->all();
+        $orders = OnlineOrder::find()->where(['status' => OnlineOrder::STATUS_SUCCESS])->andWhere(['between', 'created_at', strtotime('2017-02-17'), time()])->all();
         foreach ($orders as $order) {
             if ($model->canSendPoint($order)) {
                 if ($run) {
