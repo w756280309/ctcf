@@ -2,48 +2,35 @@
 
 namespace backend\modules\repayment\controllers;
 
-use common\models\adminuser\AdminLog;
-use common\models\payment\Repayment;
-use Yii;
-use common\models\order\OnlineRepaymentRecord;
-use common\models\product\OnlineProduct;
 use backend\controllers\BaseController;
-use yii\web\Response;
-use common\models\order\OnlineRepaymentPlan;
-use common\models\user\MoneyRecord;
-use common\models\user\UserAccount;
+use backend\modules\order\controllers\OnlinefangkuanController;
 use common\lib\bchelp\BcRound;
+use common\lib\err\Err;
+use common\models\adminuser\AdminLog;
+use common\models\epay\EpayUser;
+use common\models\payment\Repayment;
+use common\models\product\OnlineProduct;
+use common\models\order\OnlineRepaymentRecord;
+use common\models\order\OnlineRepaymentPlan;
 use common\models\order\OnlineFangkuan;
+use common\models\payment\PaymentLog;
+use common\models\user\MoneyRecord;
 use common\models\user\User;
+use common\models\user\UserAccount;
 use common\service\LoanService;
 use common\service\SmsService;
-use backend\modules\order\controllers\OnlinefangkuanController;
-use common\models\epay\EpayUser;
 use common\utils\TxUtils;
-use yii\web\NotFoundHttpException;
-use common\models\payment\PaymentLog;
+use Yii;
 
-
-/**
- * OrderController implements the CRUD actions for OfflineOrder model.
- */
 class RepaymentController extends BaseController
 {
-    public function init()
-    {
-        parent::init();
-        if (Yii::$app->request->isAjax) {
-            Yii::$app->response->format = Response::FORMAT_JSON;
-        }
-    }
-
     /**
      * 还款计划详情页.
      */
     public function actionIndex($pid)
     {
         if (empty($pid)) {
-            throw new NotFoundHttpException();     //参数无效,抛出404异常
+            throw $this->ex404();     //参数无效,抛出404异常
         }
 
         $deal = OnlineProduct::find()->where(['id' => $pid])->one();
@@ -54,7 +41,7 @@ class RepaymentController extends BaseController
                 ->where(['orp.online_pid' => $pid])->all();
 
         if (null === $deal || empty($model)) {
-            throw new NotFoundHttpException();     //对象为空时,抛出404异常
+            throw $this->ex404();     //对象为空时,抛出404异常
         }
 
         $total_bj = 0;
@@ -121,8 +108,6 @@ class RepaymentController extends BaseController
      */
     public function actionDorepayment()
     {
-        Yii::$app->response->format = Response::FORMAT_JSON;
-
         if (!Yii::$app->request->isPost) {
             return [
                 'result' => 0,
@@ -480,87 +465,159 @@ class RepaymentController extends BaseController
         ];
     }
 
-    //放款操作
+    /**
+     * 是否可以放款.
+     */
+    private function allowFk(OnlineProduct $loan)
+    {
+        return in_array($loan->status, [
+            OnlineProduct::STATUS_FULL,
+            OnlineProduct::STATUS_FOUND,
+            OnlineProduct::STATUS_HUAN,
+        ]);
+    }
+
+    /**
+     * 判断放款记录的状态.
+     */
+    private function validateFkStatus(OnlineFangkuan $fk)
+    {
+        $err = '';
+
+        switch ($fk->status) {
+            case OnlineFangkuan::STATUS_EXAMINED:
+            case OnlineFangkuan::STATUS_FANGKUAN:
+            case OnlineFangkuan::STATUS_TIXIAN_FAIL:
+                break;
+            case OnlineFangkuan::STATUS_TIXIAN_SUCC:
+                $err = '放款金额已汇入借款人账户';
+                break;
+            case OnlineFangkuan::STATUS_TIXIAN_APPLY:
+                $err = '放款金额正在汇款中';
+                break;
+            default:
+                $err = '放款操作必须是审核通过的';
+        }
+
+        return $err;
+    }
+
+    /**
+     * 标的放款.
+     */
     public function actionFk()
     {
         $pid = Yii::$app->request->post('pid');
+
+        if (empty($pid)) {
+            return ['res' => 0, 'msg' => $this->code('000001').'参数异常'];
+        }
+
         $product = OnlineProduct::findOne($pid);
         $fk = OnlineFangkuan::findOne(['online_product_id' => $pid]);
-        if (!in_array($product->status, [OnlineProduct::STATUS_FULL, OnlineProduct::STATUS_FOUND, OnlineProduct::STATUS_HUAN])) {
-            return ['res' => 0, 'msg' => '标的状态异常，当前状态码：'.$product->status];
+
+        if (null === $product || null === $fk) {
+            return ['res' => 0, 'msg' => $this->code('000002').'找不到对应的标的或放款记录'];
         }
-        bcscale(14);
-        $bcround = new BcRound();
-        if (OnlineFangkuan::STATUS_EXAMINED === (int) $fk->status) {
-            $payLog = PaymentLog::findOne(['loan_id' => $pid]);
-            //当不允许访问联动时候，默认联动测处理成功
+
+        if (!$this->allowFk($product)) {
+            return ['res' => 0, 'msg' => $this->code('000004').'标的状态异常，当前状态码：'.$product->status];
+        }
+
+        $fkError = $this->validateFkStatus($fk);
+
+        if ($fkError) {
+            return ['res' => 0, 'msg' => $this->code('000005').$fkError];
+        }
+
+        try {
+            $this->loanToMer($fk, $product);  //标的放款
+        } catch (\Exception $e) {
+            $code = $e->getCode() ? $this->code($e->getCode()) : '';
+
+            return ['res' => 0, 'msg' => $code.$e->getMessage()];
+        }
+
+        $drawBack = OnlinefangkuanController::actionInit($pid);
+
+        return [
+            'res' => $drawBack['res'],
+            'msg' => $drawBack['res'] ? '放款成功' : $drawBack['msg'],
+        ];
+    }
+
+    /**
+     * 标的账户放款到融资用户账户.
+     */
+    private function loanToMer(OnlineFangkuan $fk, OnlineProduct $product)
+    {
+        if (OnlineFangkuan::STATUS_EXAMINED === $fk->status) {
+            $payLog = PaymentLog::findOne(['loan_id' => $product->id]);
+
+            //当不允许访问联动时候，默认联动处理成功
             if ($payLog && Yii::$app->params['ump_uat']) {
                 $ret = Yii::$container->get('ump')->merOrder($payLog);
                 if (!$ret->isSuccessful()) {
-                    return ['res' => 0, 'msg' => '联动一侧：'.$ret->get('ret_msg')];
+                    throw new \Exception('联动一侧：'.$ret->get('ret_msg'));
                 }
             }
+
             $transaction = Yii::$app->db->beginTransaction();
+
             try {
                 LoanService::updateLoanState($product, OnlineProduct::STATUS_HUAN);
-            } catch (\Exception $ex) {
-                $transaction->rollBack();
 
-                return ['res' => 0, 'msg' => $ex->getMessage()];
-            }
+                $res = Yii::$app->db->createCommand("UPDATE `user_account` SET `account_balance` = `account_balance` + :money, `available_balance` = `available_balance` + :money, `drawable_balance` = `drawable_balance` + :money, `in_sum` = `in_sum` + :money WHERE `uid` = :uid and `type` = :userType", [
+                    'money' => $product->funded_money,
+                    'uid' => $product->borrow_uid,
+                    'userType' => UserAccount::TYPE_BORROW,
+                ])->execute();
 
-            $ua = UserAccount::findOne(['uid' => $product->borrow_uid, 'type' => UserAccount::TYPE_BORROW]);
-            $ua->account_balance = $bcround->bcround(bcadd($ua->account_balance, $product->funded_money), 2);
-            $ua->available_balance = $bcround->bcround(bcadd($ua->available_balance, $product->funded_money), 2);
-            $ua->drawable_balance = $bcround->bcround(bcadd($ua->drawable_balance, $product->funded_money), 2);
-            $ua->in_sum = $bcround->bcround(bcadd($ua->in_sum, $product->funded_money), 2);
-            if (!$ua->save()) {
-                $transaction->rollBack();
-
-                return ['res' => 0, 'msg' => '更新用户融资账户异常'];
-            }
-            OnlineFangkuan::updateAll(['status' => OnlineFangkuan::STATUS_FANGKUAN], ['online_product_id' => $pid]); //将所有放款批次变为已经放款
-            $mre_model = new MoneyRecord();
-            $mre_model->type = MoneyRecord::TYPE_FANGKUAN;
-            $mre_model->sn = MoneyRecord::createSN();
-            $mre_model->osn = $fk->sn;
-            $mre_model->account_id = $ua->id;
-            $mre_model->uid = $product->borrow_uid;
-            $mre_model->in_money = $product->funded_money;
-            $mre_model->remark = '已放款';
-            $mre_model->balance = $ua->available_balance;
-            if (!$mre_model->save()) {
-                $transaction->rollBack();
-
-                return ['res' => 0, 'msg' => '资金记录失败'];
-            }
-            //当不允许访问联动时候，默认联动测处理成功
-            if (Yii::$app->params['ump_uat']) {
-                $resp = Yii::$container->get('ump')->loanTransferToMer($fk);
-                if (!$resp->isSuccessful()) {
-                    $transaction->rollBack();
-                    return ['res' => 0, 'msg' => '联动一侧：'.$resp->get('ret_msg')];
+                if (!$res) {
+                    throw new \Exception('更新融资账户异常', '000003');
                 }
+
+                $updateFangkuan = OnlineFangkuan::updateAll(['status' => OnlineFangkuan::STATUS_FANGKUAN], ['online_product_id' => $product->id]); //将所有放款批次变为已经放款
+
+                if (!$updateFangkuan) {
+                    throw new \Exception('更新放款批次异常', '000003');
+                }
+
+                $ua = UserAccount::findOne(['uid' => $product->borrow_uid, 'type' => UserAccount::TYPE_BORROW]);
+                $moneyRecord = new MoneyRecord([
+                    'type' => MoneyRecord::TYPE_FANGKUAN,
+                    'sn' => MoneyRecord::createSN(),
+                    'osn' => $fk->sn,
+                    'account_id' => $ua->id,
+                    'uid' => $product->borrow_uid,
+                    'in_money' => $product->funded_money,
+                    'remark' => '已放款',
+                    'balance' => $ua->available_balance,
+                ]);
+
+                if (!$moneyRecord->save()) {
+                    throw new \Exception('资金流水记录异常', '000003');
+                }
+
+                //当不允许访问联动时候，默认联动处理成功
+                if (Yii::$app->params['ump_uat']) {
+                    $resp = Yii::$container->get('ump')->loanTransferToMer($fk);
+                    if (!$resp->isSuccessful()) {
+                        throw new \Exception('联动一侧：'.$resp->get('ret_msg'));
+                    }
+                }
+
+                $transaction->commit();
+            } catch (\Exception $e) {
+                $transaction->rollBack();
+
+                throw $e;
             }
-            $transaction->commit();
-        } elseif (OnlineFangkuan::STATUS_FANGKUAN === (int) $fk->status) {
-            //放款未执行提现的
-            //如果执行此步骤，将会执行提现,提现申请成功会修改放款状态为受理中STATUS_TIXIAN_APPLY
-        } elseif (OnlineFangkuan::STATUS_TIXIAN_SUCC === (int) $fk->status) {
-            return ['res' => 0, 'msg' => '放款金额已汇入借款人账户'];
-        } elseif (OnlineFangkuan::STATUS_TIXIAN_APPLY === (int) $fk->status) {
-            return ['res' => 0, 'msg' => '放款金额正在汇款中'];
-        } else {
-            return ['res' => 0, 'msg' => '放款操作必须是审核通过的'];
         }
-        $res = OnlinefangkuanController::actionInit($pid);
-        if (1 === $res['res']) {
-            return [
-                 'res' => 1,
-                 'msg' => '放款成功',
-             ];
-        } else {
-            return $res;
-        }
+    }
+
+    private function code($code)
+    {
+        return '['.Err::code($code).']';
     }
 }

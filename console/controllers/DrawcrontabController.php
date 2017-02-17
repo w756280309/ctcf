@@ -3,6 +3,7 @@
 namespace console\controllers;
 
 use common\models\draw\DrawManager;
+use common\models\order\OnlineFangkuan;
 use common\models\user\DrawRecord;
 use common\models\user\User;
 use Ding\DingNotify;
@@ -44,8 +45,8 @@ class DrawcrontabController extends Controller
             ->andWhere(['>', 'created_at', strtotime('-1 week')])
             ->orderBy(['status' => SORT_DESC, 'id' => SORT_DESC])
             ->all();
-        foreach ($records as $record) {
 
+        foreach ($records as $record) {
             //只有未审核的并且当前时间超过订单时间15分钟且联动返回成功才处理成审核成功
             if ($record->status === DrawRecord::STATUS_ZERO) {
                 $drawResp = \Yii::$container->get('ump')->getDrawInfo($record);
@@ -91,6 +92,8 @@ class DrawcrontabController extends Controller
             $record->lastCronCheckTime = time();
             $record->checkCount += 1;
             $record->save(false);
+
+            $this->updateFkStatus($record);   //修改放款记录的状态,成功或失败
         }
     }
 
@@ -104,5 +107,32 @@ class DrawcrontabController extends Controller
     private function getNextCheckTime($lastCheckTime, $count)
     {
         return (int) $lastCheckTime + 5 * pow(2, $count) * 60;
+    }
+
+    /**
+     * 如果是融资会员提现,需要根据对应的提现状态,修改对应的放款记录状态.
+     */
+    private function updateFkStatus(DrawRecord $draw)
+    {
+        switch ($draw->status) {
+            case DrawRecord::STATUS_SUCCESS:
+                $status = OnlineFangkuan::STATUS_TIXIAN_SUCC;
+                break;
+            case DrawRecord::STATUS_FAIL:
+            case DrawRecord::STATUS_DENY:
+                $status = OnlineFangkuan::STATUS_TIXIAN_FAIL;
+                break;
+            default:
+                $status = null;
+        }
+
+        if (null !== $status && User::USER_TYPE_ORG === $draw->user->type) {
+            $fk = OnlineFangkuan::findOne(['sn' => $draw->orderSn]);
+
+            if (null !== $fk) {
+                $fk->status = $status;
+                $fk->save(false);
+            }
+        }
     }
 }

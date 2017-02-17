@@ -3,7 +3,9 @@
 namespace console\controllers;
 
 use common\models\product\OnlineProduct as Loan;
+use common\models\order\OnlineFangkuan;
 use common\models\order\OnlineOrder as Ord;
+use common\models\user\DrawRecord;
 use Yii;
 use yii\console\Controller;
 
@@ -60,5 +62,30 @@ class StockDataController extends Controller
         }
 
         exit('用户累计年化投资金额更新成功!');
+    }
+
+    /**
+     * 同步历史放款记录.
+     */
+    public function actionLendingStatus()
+    {
+        $draws = DrawRecord::find()
+            ->where(['like', 'orderSn', 'FK'])
+            ->andWhere(['status' => [DrawRecord::STATUS_SUCCESS, DrawRecord::STATUS_FAIL, DrawRecord::STATUS_DENY]])
+            ->all();
+
+        foreach ($draws as $draw) {
+            $lending = OnlineFangkuan::findOne(['sn' => $draw->orderSn]);
+
+            if (null !== $lending) {
+                if (DrawRecord::STATUS_SUCCESS === $draw->status) {
+                    $lending->status = OnlineFangkuan::STATUS_TIXIAN_SUCC;
+                } else {
+                    $lending->status = OnlineFangkuan::STATUS_TIXIAN_FAIL;
+                }
+
+                $lending->save(false);
+            }
+        }
     }
 }

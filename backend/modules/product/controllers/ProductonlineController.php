@@ -352,37 +352,9 @@ class ProductonlineController extends BaseController
     }
 
     /**
-     * 删除.（未使用）
-     *
-     * @param type $id
-     * @param type $page
-     *
-     * @return type
+     * 批量删除标的.(暂时未用到)
      */
-    public function actionDelete()
-    {
-        if (!Yii::$app->request->isPost) {
-            return [
-                'result' => 0,
-                'message' => '非法请求',
-            ];
-        }
-        $id = Yii::$app->request->post('id');
-        $model = $id ? OnlineProduct::findOne($id) : new OnlineProduct();
-        if ($model->status > 1) {
-            return [
-                'result' => 0,
-                'message' => '不允许删除',
-            ];
-        }
-        $model->del_status = 1;
-        $model->scenario = 'del';
-        $model->save();
-
-        return ['result' => 1, 'message' => '成功'];
-    }
-
-    public function actionDelmore($ids = null)
+    public function actionDelmore($ids)
     {
         if (empty($ids)) {
             throw $this->ex404();     //参数无效,抛出404异常
@@ -404,8 +376,6 @@ class ProductonlineController extends BaseController
 
     /**
      * 撤标.
-     *
-     * @param type $id
      */
     public function actionCancel($id)
     {
@@ -556,13 +526,6 @@ class ProductonlineController extends BaseController
                 ->all();
 
         return $this->render('detail', ['info' => $query, 'totalMoney' => $totalMoney]);
-    }
-
-    //搜索
-    public function actionSearch()
-    {
-        $result = Yii::$app->request->get();
-        var_dump($result);
     }
 
     /**

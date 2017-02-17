@@ -2,6 +2,7 @@
 
 $this->title = '产品列表';
 
+use common\models\order\OnlineFangkuan;
 use common\models\product\RateSteps;
 use common\utils\StringUtils;
 use yii\widgets\LinkPager;
@@ -146,10 +147,10 @@ $pc_cat = Yii::$app->params['pc_cat'];
                                 <?php if ($val['online_status'] == 1 && $val['status'] > 1) { ?>
                                     | <a href="/order/onlineorder/list?id=<?= $val['id'] ?>" class="btn mini green"><i class="icon-edit"></i> 投标记录</a>
                                 <?php } ?>
-                                <?php if (($val['status'] == 5 || $val['status'] == 6) && $val->fangkuan->status !== '3') { ?>
+                                <?php if ($val->fangkuan && OnlineFangkuan::STATUS_TIXIAN_SUCC === $val->fangkuan->status) { ?>
                                     | <a href="/repayment/repayment?pid=<?= $val['id'] ?>" class="btn mini green"><i class="icon-edit"></i> 还款</a>
                                 <?php } ?>
-                                <?php if (($val['fk_examin_time']) > 0 && ($val['status'] == 3 || $val['status'] == 7 || $val->fangkuan->status === '3') && 1 === (int) $val['is_jixi']) { ?>
+                                <?php if ($val['fk_examin_time'] && in_array($val->fangkuan->status, [OnlineFangkuan::STATUS_EXAMINED, OnlineFangkuan::STATUS_FANGKUAN, OnlineFangkuan::STATUS_TIXIAN_FAIL])) { ?>
                                     | <a href="javascript:fk('<?= $val['id'] ?>');" class="btn mini green"><i class="icon-edit"></i> 放款</a>
                                 <?php } ?>
                                 <?php if ($val['online_status'] == 1 && (in_array($val['status'], [3, 5, 7])) && $val['is_jixi'] == 0) { ?>
@@ -217,16 +218,25 @@ $pc_cat = Yii::$app->params['pc_cat'];
         });
     })
 
+    /**
+     * 请求后台放款逻辑.
+     */
     function fk(pid)
     {
-        var csrftoken= '<?= Yii::$app->request->getCsrfToken(); ?>';
+        var csrftoken= '<?= Yii::$app->request->getCsrfToken() ?>';
         if (confirm('确认放款吗？')) {
             openLoading();
-            $.post('/repayment/repayment/fk', {pid:pid, _csrf:csrftoken}, function(data) {
+            var xhr = $.post('/repayment/repayment/fk', {pid: pid, _csrf: csrftoken}, function(data) {
                 alert(data.msg);
                 if (1 === data.res) {
                     location.reload();
                 }
+                cloaseLoading();
+            });
+
+            xhr.error(function () {
+                alert('系统繁忙,请稍后重试!');
+                location.reload();
                 cloaseLoading();
             });
         }

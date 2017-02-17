@@ -2,15 +2,16 @@
 
 namespace backend\modules\order\controllers;
 
-use Yii;
-use common\models\user\User;
-use common\models\product\OnlineProduct;
 use backend\controllers\BaseController;
-use common\models\order\OnlineFangkuan;
-use backend\modules\order\service\FkService;
 use backend\modules\order\core\FkCore;
-use common\models\user\UserAccount;
+use backend\modules\order\service\FkService;
+use common\lib\err\Err;
 use common\models\draw\DrawManager;
+use common\models\order\OnlineFangkuan;
+use common\models\product\OnlineProduct;
+use common\models\user\User;
+use common\models\user\UserAccount;
+use Yii;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
 
@@ -40,18 +41,18 @@ class OnlinefangkuanController extends BaseController
      */
     public function actionCheckfk()
     {
-        Yii::$app->response->format = Response::FORMAT_JSON;
-        bcscale(14);
-        $fkservice = new FkService();
         $pid = Yii::$app->request->post('pid');
         $status = Yii::$app->request->post('status');
-        $fs = $fkservice->examinFk($pid, Yii::$app->user->id);
+
+        $fkservice = new FkService();
+        $fs = $fkservice->examinFk($pid, $this->admin_id);
+
         if ($fs !== true) {
             return $fs;
         }
 
         $fkcore = new FkCore();
-        $ret = $fkcore->createFk(Yii::$app->user->id, $pid, $status);
+        $ret = $fkcore->createFk($this->admin_id, $pid, $status);
 
         return $ret;
     }
@@ -62,56 +63,81 @@ class OnlinefangkuanController extends BaseController
     public static function actionInit($pid)
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
+
         if (empty($pid)) {
             throw new NotFoundHttpException();  //参数无效时,返回404错误
         }
 
         $onlineProduct = OnlineProduct::findOne($pid);
-
         if (!$onlineProduct) {
-            return ['res' => 0, 'msg' => '标的信息不存在'];
+            return ['res' => 0, 'msg' => self::code('000002').'标的信息不存在'];
         }
 
         $onlineFangkuan = OnlineFangkuan::findOne(['online_product_id' => $pid]);
-
         if (!$onlineFangkuan) {
-            return ['res' => 0, 'msg' => '放款记录不存在'];
+            return ['res' => 0, 'msg' => self::code('000002').'放款记录不存在'];
         }
 
-        if (OnlineFangkuan::STATUS_FANGKUAN !== $onlineFangkuan->status) {
-            return ['res' => 0, 'msg' => '当前放款状态不允许提现操作'];
+        if (!self::allowDraw($onlineFangkuan)) {
+            return ['res' => 0, 'msg' => self::code('000006').'当前放款状态不允许提现操作'];
         }
 
         $account = UserAccount::findOne(['uid' => $onlineFangkuan->uid, 'type' => UserAccount::TYPE_BORROW]);
         if (!$account) {
-            return ['res' => 0, 'msg' => 'The borrower account info is not existed.'];
+            return ['res' => 0, 'msg' => self::code('000002').'融资用户账户信息不存在'];
         }
 
-        //融资方放款,不收取手续费
-        $draw = DrawManager::initDraw($account, $onlineFangkuan->order_money);
-        if (!$draw) {
-            return ['res' => 0, 'msg' => '提现申请失败'];
-        }
+        $transaction = Yii::$app->db->beginTransaction();
 
-        $draw->orderSn = $onlineFangkuan->sn;
-        if (!$draw->save()) {
-            return ['res' => 0, 'msg' => '写入放款流水失败'];
-        }
-
-        $ump = Yii::$container->get('ump');
-        //当不允许访问联动时候，默认联动测处理成功
-        if (Yii::$app->params['ump_uat']) {
-            $resp = $ump->orgDrawApply($draw);
-            if (!$resp->isSuccessful()) {
-                return ['res' => 0, 'msg' => $resp->get('ret_code') . $resp->get('ret_msg')];
+        try {
+            //融资方放款,不收取手续费
+            $draw = DrawManager::initDraw($account, $onlineFangkuan->order_money);
+            if (!$draw) {
+                throw new \Exception('提现申请失败', '000003');
             }
-        }
-        DrawManager::ackDraw($draw);
-        $onlineFangkuan->status = OnlineFangkuan::STATUS_TIXIAN_APPLY;
-        if (!$onlineFangkuan->save()) {
-            return ['res' => 0, 'msg' => '修改放款审核状态失败'];
+
+            $draw->orderSn = $onlineFangkuan->sn;
+            if (!$draw->save()) {
+                throw new \Exception('写入放款流水失败', '000003');
+            }
+
+            $ump = Yii::$container->get('ump');
+            //当不允许访问联动时候，默认联动测处理成功
+            if (Yii::$app->params['ump_uat']) {
+                $resp = $ump->orgDrawApply($draw);
+                if (!$resp->isSuccessful()) {
+                    throw new \Exception($resp->get('ret_code').$resp->get('ret_msg'));
+                }
+            }
+
+            $onlineFangkuan->status = OnlineFangkuan::STATUS_TIXIAN_APPLY;
+            if (!$onlineFangkuan->save()) {
+                throw new \Exception('修改放款审核状态失败', '000003');
+            }
+
+            DrawManager::ackDraw($draw);
+
+            $transaction->commit();
+        } catch (\Exception $e) {
+            $transaction->rollBack();
+            $code = $e->getCode() ? self::code($e->getCode()) : '';
+
+            return ['res' => 0, 'msg' => $code.$e->getMessage()];
         }
 
         return ['res' => 1, 'msg' => '提现申请成功'];
+    }
+
+    private static function allowDraw(OnlineFangkuan $fangkuan)
+    {
+        return in_array($fangkuan->status, [
+            OnlineFangkuan::STATUS_FANGKUAN,
+            OnlineFangkuan::STATUS_TIXIAN_FAIL,
+        ]);
+    }
+
+    private static function code($code)
+    {
+        return '['.Err::code($code).']';
     }
 }

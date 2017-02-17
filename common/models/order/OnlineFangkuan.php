@@ -2,9 +2,11 @@
 
 namespace common\models\order;
 
-use yii\behaviors\TimestampBehavior;
 use common\models\product\OnlineProduct;
 use common\models\user\User;
+use P2pl\LoanFkInterface;
+use yii\behaviors\TimestampBehavior;
+use yii\db\ActiveRecord;
 
 /**
  * This is the model class for table "online_fangkuan".
@@ -19,15 +21,16 @@ use common\models\user\User;
  * @property string $create_at
  * @property string $updated_at
  */
-class OnlineFangkuan extends \yii\db\ActiveRecord implements \P2pl\LoanFkInterface
+class OnlineFangkuan extends ActiveRecord implements LoanFkInterface
 {
     use \Zii\Model\ErrorExTrait;
 
-    const STATUS_EXAMINED = 1;//审核通过
-    const STATUS_DENY = 2;//审核不通过
-    const STATUS_FANGKUAN = 3;//放款
-    const STATUS_TIXIAN_APPLY = 4;//提现申请发出
-    const STATUS_TIXIAN_SUCC = 5;//提现成功
+    const STATUS_EXAMINED = 1;      //审核通过
+    const STATUS_DENY = 2;          //审核不通过
+    const STATUS_FANGKUAN = 3;      //放款
+    const STATUS_TIXIAN_APPLY = 4;  //提现申请发出
+    const STATUS_TIXIAN_SUCC = 5;   //提现成功
+    const STATUS_TIXIAN_FAIL = 6;   //提现失败
 
     public static function createSN($pre = 'fk')
     {
