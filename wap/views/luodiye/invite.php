@@ -27,6 +27,7 @@ if ($isLuodiye) {
 }
 
 ?>
+
 <div class="row transform-box">
     <div class="col-xs-12 transform-front-box">
         <div class="logo-back">
@@ -34,8 +35,8 @@ if ($isLuodiye) {
         </div>
         <div class="front-font">
             <?php if ($isLuodiye) { ?>
-                <p>送你一个红包</p>
-                <p>快打开看看！</p>
+                <p>新手标288元红包等你拿</p>
+                <p>预期年化收益率10%</p>
             <?php } else { ?>
                 <p>好友邀请送好礼</p>
                 <p>快来领取吧！</p>
