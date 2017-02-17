@@ -86,6 +86,15 @@ return [
                 'promotion/<key>/luodiye' => 'promotion/promo/luodiye',
             ],
         ],
+        'assetManager' => [
+            'bundles' => [
+                'yii\web\JqueryAsset' => [
+                    'js' => [
+                        'jquery.min.js',
+                    ],
+                ],
+            ],
+        ],
     ],
     'modules' => [
         'deal' => [
