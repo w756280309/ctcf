@@ -1,7 +1,6 @@
 <?php
 
 use common\models\growth\PageMeta;
-use common\utils\StringUtils;
 use common\view\AnalyticsHelper;
 use yii\helpers\Html;
 
@@ -46,6 +45,14 @@ $this->registerMetaTag([
         $(function () {
             hmsr();
             addToken();
+
+            <?php if (!defined('IN_APP')) { ?>
+                $(document).ajaxError(function(event, jqXHR) {
+                    if (400 === jqXHR.status && '当前用户已锁定' === jqXHR.responseJSON.message) {
+                        window.location.href = jqXHR.responseJSON.tourl;
+                    }
+                });
+            <?php } ?>
         });
     </script>
 </head>

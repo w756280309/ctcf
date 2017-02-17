@@ -98,6 +98,9 @@ class SiteController extends Controller
         }
     }
 
+    /**
+     * 用户冻结页面.
+     */
     public function actionUsererror()
     {
         return $this->render('usererror');
