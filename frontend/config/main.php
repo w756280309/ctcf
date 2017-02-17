@@ -62,6 +62,15 @@ return [
         'view' => [
             'class' => 'common\view\WapView',
         ],
+        'assetManager' => [
+            'bundles' => [
+                'yii\web\JqueryAsset' => [
+                    'js' => [
+                        '/js/jquery-1.12.4.min.js',
+                    ],
+                ],
+            ],
+        ],
     ],
     'modules' => [
         'user' => [
