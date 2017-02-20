@@ -24,9 +24,7 @@ $this->share = $share;
     <?php } ?>
 
     <div class="banner">
-        <img src="<?= FE_BASE_URI ?>wap/luodiye/images/banner_07.png" alt="">
-        <img src="<?= FE_BASE_URI ?>wap/luodiye/images/banner_08.png" alt="">
-        <img src="<?= FE_BASE_URI ?>wap/luodiye/images/banner_09.png" alt="">
+        <img src="https://static.wenjf.com/upload/link/link1487318400276495.png" alt="">
     </div>
     <div class="phonenum">
         <div class="inputphone"><input class="f15" type="tel" placeholder="请输入手机号" maxlength="11"></div>
