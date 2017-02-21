@@ -1289,3 +1289,10 @@ footer span {
         font-size: 0.3733333rem!important;
     }
 }
+
+.icp {
+    padding: 10px 20px;
+}
+.icp img {
+    width: 100%;
+}
