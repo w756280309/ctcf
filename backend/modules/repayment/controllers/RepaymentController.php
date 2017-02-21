@@ -66,7 +66,7 @@ class RepaymentController extends BaseController
                 if (!$payed) {
                     $val['lixi'] = $bcround->bcround(bcdiv(bcmul($days, $val['lixi']), $deal->expires), 2);
                     $val['lixi'] = max($val['lixi'], 0.01);
-                    $val['benxi'] = bcadd($val['lixi'], $val['benjin']);
+                    $val['benxi'] = bcadd($val['lixi'], $val['benjin'], 2);
                 }
             }
             $val['payed'] = $payed ? true : false;
@@ -86,7 +86,7 @@ class RepaymentController extends BaseController
             'total_bx' => $bcround->bcround($total_bx, 2),
             'deal' => $deal,
             'model' => $qimodel,
-            'isRefreshCalcLiXi' => $isRefreshCalcLiXi,
+            'isInGracePeriod' => $deal->isInGracePeriod(),
         ]);
     }
 

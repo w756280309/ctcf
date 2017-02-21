@@ -76,7 +76,7 @@ $bc = new BcRound();
         <?php foreach ($model as $qk => $qi) : ?>
             <?php
                 $payed = $qi[count($qi) - 1]['payed'];
-                $isShowToday = !$payed && $isRefreshCalcLiXi;
+                $isShowToday = !$payed && $isInGracePeriod;
             ?>
         <div class="portlet-body">
             <table class="list">
