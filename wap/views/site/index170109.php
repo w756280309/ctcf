@@ -10,7 +10,7 @@ use yii\helpers\Html;
 
 ?>
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/wenjfbase.css?v=1.0">
-<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/index/css/index.css?v=20170213">
+<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/index/css/index.css?v=20170221-v">
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>libs/swiper/swiper.min.css">
 <script src="<?= FE_BASE_URI ?>libs/lib.flexible3.js"></script>
 <script src="<?= FE_BASE_URI ?>libs/fastclick.js"></script>
@@ -258,6 +258,10 @@ use yii\helpers\Html;
                 </div>
             </li>
         </ul>
+    </div>
+
+    <div class="platform icp">
+        <a href="https://www.wenjf.com/news/detail?type=info&id=383" alt=""><img data-original="<?= ASSETS_BASE_URI ?>images/icp.png" alt=""></a>
     </div>
 
     <div class="total">
