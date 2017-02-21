@@ -261,7 +261,7 @@ use yii\helpers\Html;
     </div>
 
     <div class="platform icp">
-        <a href="https://www.wenjf.com/news/detail?type=info&id=383" alt=""><img data-original="<?= ASSETS_BASE_URI ?>images/icp.png" alt=""></a>
+        <a href="/news/detail?type=info&id=383" alt=""><img data-original="<?= ASSETS_BASE_URI ?>images/icp.png" alt=""></a>
     </div>
 
     <div class="total">
