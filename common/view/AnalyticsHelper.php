@@ -8,25 +8,28 @@ class AnalyticsHelper
 {
     public static function registerTo($viewObj)
     {
-        if (!\Yii::$app->params['enable_analytics']) {
+        if (!\Yii::$app->params['analytics_enabled']) {
             return;
         }
 
-        $baiduKey = \Yii::$app->params['baidu_tongji_key'];
-        $gaId = \Yii::$app->params['ga_tracking_id'];
-        $growingioId = \Yii::$app->params['analytics_vendor_growingio_account_id'];
-        if (empty($baiduKey) || empty($gaId) || empty($growingioId)) {
+        $pkId = \Yii::$app->params['analytics_pk_id'];
+        $gaId = \Yii::$app->params['analytics_ga_id'];
+        $gioId = \Yii::$app->params['analytics_gio_id'];
+        if (empty($pkId) || empty($gaId) || empty($gioId)) {
             return;
         }
 
         $_js = <<<JS
-var _hmt = _hmt || [];
-(function() {
-  var hm = document.createElement("script");
-  hm.src = "//hm.baidu.com/hm.js?$baiduKey";
-  var s = document.getElementsByTagName("script")[0];
-  s.parentNode.insertBefore(hm, s);
-})();
+  var _paq = _paq || [];
+  _paq.push(['trackPageView']);
+  _paq.push(['enableLinkTracking']);
+  (function() {
+    var u="//d.wendujf.com/";
+    _paq.push(['setTrackerUrl', u+'piwik.php']);
+    _paq.push(['setSiteId', '$pkId']);
+    var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+    g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'d.js'; s.parentNode.insertBefore(g,s);
+  })();
 
 (function(i, s, o, g, r, a, m) {
     i['GoogleAnalyticsObject'] = r;
@@ -44,7 +47,7 @@ ga('send', 'pageview');
 var _vds = _vds || [];
 window._vds = _vds;
 (function(){
-    _vds.push(['setAccountId', '$growingioId']);
+    _vds.push(['setAccountId', '$gioId']);
     (function() {
         var vds = document.createElement('script');
         vds.type='text/javascript';
