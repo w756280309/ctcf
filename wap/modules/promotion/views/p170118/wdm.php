@@ -24,9 +24,7 @@ $this->share = $share;
     <?php } ?>
 
     <div class="banner">
-        <img  src="<?= FE_BASE_URI ?>wap/wendumao/images/banner_01.png" alt="">
-        <img  src="<?= FE_BASE_URI ?>wap/wendumao/images/banner_02.png" alt="">
-        <img  src="<?= FE_BASE_URI ?>wap/wendumao/images/banner_03.png" alt="">
+        <img  src="https://static.wenjf.com/upload/link/link1487732228339227.png" alt="">
     </div>
     <div class="phonenum">
         <div class="inputphone"><input class="f15" type="tel" placeholder="请输入手机号" maxlength="11"></div>
@@ -35,11 +33,11 @@ $this->share = $share;
     <div class="regular">
         <ul class="f15">
             <li>活动规则：</li>
-            <li>1.注册送288元红包;</li>
-            <li>2.首次投资，送积分1400分，可兑换温都猫充值卡70元;</li>
-            <li>3.首次投资5万以上，送积分3500分，可兑换温都猫充值卡175元;</li>
-            <li>4.温都猫充值卡限量1000张，先到先得，兑完为止；</li>
-            <li>5.如发现一人注册多个账户、刷单等恶意行为，温都金服有权取消活动资格。</li>
+            <li>1.新用户专享，注册就送288元现金红包；</li>
+            <li>2.首次投资，送1400积分，可兑换<b>温都猫充值卡</b><font style="color: red;">70</font>元；<br>首次投资5万元以上，送3500积分，可兑换<b>温都猫充值卡</b><font style="color: red;">175</font>元；</li>
+            <li>3.温都猫充值卡限量1000张，先兑先得，兑完为止；</li>
+            <li>4.每人只能注册一个账户，如有刷单等恶意行为，温都金服有权取消其活动资格；</li>
+            <li>5.法律许可范围内，温都金服保留变更、调整、终止本活动的权利，并对活动规则保留最终解释权。</li>
             <li class="f12 statement">*购买转让产品不参与活动</li>
         </ul>
     </div>

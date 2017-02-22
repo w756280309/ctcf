@@ -26,9 +26,7 @@ use yii\captcha\Captcha;
     <?php } ?>
 
     <div class="banner">
-        <img  src="<?= FE_BASE_URI ?>wap/wendumao/images/banner_01.png" alt="">
-        <img  src="<?= FE_BASE_URI ?>wap/wendumao/images/banner_02.png" alt="">
-        <img  src="<?= FE_BASE_URI ?>wap/wendumao/images/banner_03.png" alt="">
+        <img  src="https://static.wenjf.com/upload/link/link1487732228339227.png" alt="">
     </div>
 
     <div class="formcheck f15">
