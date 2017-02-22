@@ -36,6 +36,7 @@ class P170126Controller extends Controller
 
         return $this->render('space', [
             'share' => $share,
+            'promo' => $promo,
         ]);
     }
 
@@ -108,12 +109,19 @@ class P170126Controller extends Controller
             return $this->redirect('/?mark='.time());
         }
 
+        $promo = $this->spacePromo();
+
+        if (null === $promo) {
+            throw $this->ex404('活动不存在');
+        }
+
         $captcha = new CaptchaForm();
         $mobile = Yii::$app->session->get('space_mobile');
 
         return $this->render('luodiye', [
             'captcha' => $captcha,
             'mobile' => $mobile,
+            'promo' => $promo,
         ]);
     }
 

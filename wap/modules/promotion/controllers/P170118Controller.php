@@ -35,6 +35,7 @@ class P170118Controller extends Controller
 
         return $this->render('wdm', [
             'share' => $share,
+            'promo' => $promo,
         ]);
     }
 
@@ -107,12 +108,19 @@ class P170118Controller extends Controller
             return $this->redirect('/?mark=' . time());
         }
 
+        $promo = $this->moviePromo();
+
+        if (null === $promo) {
+            throw $this->ex404('活动不存在');
+        }
+
         $captcha = new CaptchaForm();
         $mobile = Yii::$app->session->get('movie_mobile');
 
         return $this->render('register', [
             'captcha' => $captcha,
             'mobile' => $mobile,
+            'promo' => $promo,
         ]);
     }
 

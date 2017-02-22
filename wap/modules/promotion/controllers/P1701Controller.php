@@ -35,6 +35,7 @@ class P1701Controller extends Controller
         }
 
         return $this->render('movie', [
+            'promo' => $promo,
             'share' => $share,
         ]);
     }
@@ -108,12 +109,19 @@ class P1701Controller extends Controller
             return $this->redirect('/?mark=' . time());
         }
 
+        $promo = $this->moviePromo();
+
+        if (null === $promo) {
+            throw $this->ex404('活动不存在');
+        }
+
         $captcha = new CaptchaForm();
         $mobile = Yii::$app->session->get('movie_mobile');
 
         return $this->render('luodiye', [
             'captcha' => $captcha,
             'mobile' => $mobile,
+            'promo' => $promo,
         ]);
     }
 

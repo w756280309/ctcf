@@ -1,6 +1,7 @@
 <?php
 
 $this->title = '首次投资送观影券';
+$config = json_decode($promo->config, true);
 
 use yii\bootstrap\ActiveForm;
 use yii\captcha\Captcha;
@@ -24,9 +25,11 @@ use yii\captcha\Captcha;
         </div>
     <?php } ?>
 
-    <div class="banner">
-        <img src="https://static.wenjf.com/upload/link/link1487318400276495.png" alt="">
-    </div>
+    <?php if (isset($config['image'])) { ?>
+        <div class="banner">
+            <img  src="<?= $config['image'] ?>" alt="">
+        </div>
+    <?php } ?>
 
     <div class="formcheck f15">
         <?php $next = Yii::$app->request->hostInfo.'/promotion/p1701/back'; ?>

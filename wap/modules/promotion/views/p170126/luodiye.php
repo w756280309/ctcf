@@ -1,6 +1,7 @@
 <?php
 
 $this->title = '首次投资送太空展套票';
+$config = json_decode($promo->config, true);
 
 use yii\bootstrap\ActiveForm;
 use yii\captcha\Captcha;
@@ -29,11 +30,11 @@ use yii\captcha\Captcha;
         </div>
     <?php } ?>
 
-    <div class="banner luodiyebanner">
-        <img  src="<?= FE_BASE_URI ?>wap/luodiye/images/space4.png" alt="">
-        <img  src="<?= FE_BASE_URI ?>wap/luodiye/images/space5.png" alt="">
-        <img  src="<?= FE_BASE_URI ?>wap/luodiye/images/space6.png" alt="">
-    </div>
+    <?php if (isset($config['image'])) { ?>
+        <div class="banner luodiyebanner">
+            <img  src="<?= $config['image'] ?>" alt="">
+        </div>
+    <?php } ?>
 
     <div class="formcheck f15">
         <?php $next = Yii::$app->request->hostInfo.'/promotion/p170126/back'; ?>

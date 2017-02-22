@@ -2,6 +2,7 @@
 
 $this->title = '首次投资送太空展套票';
 $this->share = $share;
+$config = json_decode($promo->config, true);
 
 ?>
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>libs/bootstrap/css/bootstrap.min.css">
@@ -28,27 +29,28 @@ $this->share = $share;
         </div>
     <?php } ?>
 
-    <div class="banner spacebanner">
-        <img src="<?= FE_BASE_URI ?>wap/luodiye/images/space4.png" alt="">
-        <img src="<?= FE_BASE_URI ?>wap/luodiye/images/space5.png" alt="">
-        <img src="<?= FE_BASE_URI ?>wap/luodiye/images/space6.png" alt="">
-    </div>
+    <?php if (isset($config['image'])) { ?>
+        <div class="banner spacebanner">
+            <img src="<?= $config['image'] ?>" alt="">
+        </div>
+    <?php } ?>
+
     <div class="phonenum">
         <div class="inputphone"><input class="f15" type="tel" placeholder="请输入手机号" maxlength="11"></div>
         <a class="f22">马上领取</a>
     </div>
-    <div class="regular">
-        <ul class="f15">
-            <li>活动规则：</li>
-            <li>1.注册送288元红包；</li>
-            <li>2.2017年1月26日起首次投资，送积分1400分，可兑换星际嘉年华亲子套票一份；</li>
-            <li>3.2017年1月26日起首次投资5万以上，送积分3500分，可以在积分商城兑换其他产品；</li>
-            <li>4.星际嘉年华亲子套票领取地址：温州市鹿城区飞霞南路657号保丰大楼四层；</li>
-            <li>5.活动时间：1月26日至3月10日；</li>
-            <li>6.如发现一人注册多个账户、刷单等恶意行为，温都金服有权取消活动资格。</li>
-            <li class="f12 statement">*购买转让产品不参与活动</li>
-        </ul>
-    </div>
+
+    <?php if (isset($config['rules'])) { ?>
+        <div class="regular">
+            <ul class="f15">
+                <li>活动规则：</li>
+                <?php foreach ($config['rules'] as $key => $rule) { ?>
+                    <li><?= $key + 1 ?>.<?= $rule ?></li>
+                <?php } ?>
+                <li class="f12 statement">*购买转让产品不参与活动</li>
+            </ul>
+        </div>
+    <?php } ?>
 
     <div class="gift">
         <p class="f18 "><img  data-original="<?= FE_BASE_URI ?>wap/luodiye/images/icon_01.png" alt=""> 积分商城，更多好礼等你拿 <img  data-original="<?= FE_BASE_URI ?>wap/luodiye/images/icon_01.png" alt=""></p>

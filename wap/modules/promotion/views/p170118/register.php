@@ -1,6 +1,7 @@
 <?php
 
 $this->title = '温都猫';
+$config = json_decode($promo->config, true);
 
 use yii\bootstrap\ActiveForm;
 use yii\captcha\Captcha;
@@ -10,7 +11,6 @@ use yii\captcha\Captcha;
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/wenjfbase.css?v=20170119">
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/wendumao/css/register.css?v=20170119">
 <script  src="<?= FE_BASE_URI ?>libs/lib.flexible3.js?v=20170119"></script>
-<script  src="<?= FE_BASE_URI ?>libs/jquery-1.11.1.min.js?v=20170119"></script>
 <script  src="<?= FE_BASE_URI ?>libs/fastclick.js?v=20170119"></script>
 <script src="<?= ASSETS_BASE_URI ?>js/common.js?v=20170119"></script>
 <script src="<?= FE_BASE_URI ?>wap/wendumao/js/luodiye.js?v=20170119"></script>
@@ -25,11 +25,11 @@ use yii\captcha\Captcha;
         </div>
     <?php } ?>
 
-    <div class="banner">
-        <img  src="<?= FE_BASE_URI ?>wap/wendumao/images/banner_01.png" alt="">
-        <img  src="<?= FE_BASE_URI ?>wap/wendumao/images/banner_02.png" alt="">
-        <img  src="<?= FE_BASE_URI ?>wap/wendumao/images/banner_03.png" alt="">
-    </div>
+    <?php if (isset($config['image'])) { ?>
+        <div class="banner">
+            <img  src="<?= $config['image'] ?>" alt="">
+        </div>
+    <?php } ?>
 
     <div class="formcheck f15">
         <?php $next = Yii::$app->request->hostInfo.'/promotion/p170118/res'; ?>
