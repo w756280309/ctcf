@@ -12,7 +12,7 @@ $this->registerCssFile(FE_BASE_URI . "libs/swiper/swiper.min.css");
 $this->registerCss(file_get_contents(__DIR__.'/../../../fe/dist/v2/wap/index/css/index.css'));
 
 $this->registerJsFile(FE_BASE_URI . 'libs/lib.flexible3.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
-$this->registerJsFile(FE_BASE_URI . 'res/js/lib.js?v=20170216', ['depends' => [\yii\web\JqueryAsset::className()]]);
+
 $this->registerJsFile(FE_BASE_URI . 'res/js/js.cookie.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
 $this->registerJsFile(FE_BASE_URI . 'libs/fastclick.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
 $this->registerJsFile(FE_BASE_URI . 'libs/jquery.lazyload.min.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
@@ -355,8 +355,10 @@ $this->registerJsFile(ASSETS_BASE_URI . 'js/swiper.min.js', ['depends' => [\yii\
         ?>
 
     </script>
-<?php $this->registerJs(<<<JSFILE
+<?php
+$this->registerJs(<<<JSFILE
     $(function (){
+        addToken();
         FastClick.attach(document.body);
         
         $("img").lazyload({
