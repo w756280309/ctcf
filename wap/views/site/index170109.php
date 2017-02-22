@@ -27,7 +27,7 @@ $this->registerJsFile(ASSETS_BASE_URI . 'js/swiper.min.js', ['depends' => [\yii\
                     if (isset($firstHotAdv) && !is_null($firstHotAdv->media)) {
                         ?>
                         <a class="swiper-slide" href="<?= $firstHotAdv->getLinkUrl() ?>">
-                            <img src="<?= UPLOAD_BASE_URI ?>upload/adv/<?= $firstHotAdv->media->uri ?>" alt="">
+                            <img src="<?= UPLOAD_BASE_URI . $firstHotAdv->media->uri ?>" alt="">
                         </a>
                         <?php
                     }
@@ -348,7 +348,7 @@ $this->registerJsFile(ASSETS_BASE_URI . 'js/swiper.min.js', ['depends' => [\yii\
         <?php foreach($hotActs as $act) {
             if (!is_null($act->media)) {
         ?>
-                <a class="swiper-slide" href="<?= $act->getLinkUrl() ?>"><img src="<?= UPLOAD_BASE_URI ?>upload/adv/<?= $act->media->uri ?>" alt=""> </a>
+                <a class="swiper-slide" href="<?= $act->getLinkUrl() ?>"><img src="<?= UPLOAD_BASE_URI . $act->media->uri ?>" alt=""> </a>
         <?php
             }
         }
@@ -363,6 +363,7 @@ $this->registerJsFile(ASSETS_BASE_URI . 'js/swiper.min.js', ['depends' => [\yii\
             threshold: 200
         });
         //开屏图
+        $('.close_splash').on('click', closeAdv);
         if (guiZe) {
             if (Cookies.get('splash_show') !== guiZe) {
                 document.body.addEventListener('touchmove', eventTarget);
