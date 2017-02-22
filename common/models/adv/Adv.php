@@ -114,7 +114,8 @@ class Adv extends ActiveRecord
             [['show_order', 'isDisabledInApp', 'showOnPc'], 'integer'],
             ['show_order', 'compare', 'compareValue' => 0, 'operator' => '>=', 'message' => '{attribute}不能为负数'],
             ['title', 'string', 'max' => 15],
-            [['share_id', 'canShare'], 'integer'],
+            ['share_id', 'integer'],
+            ['canShare', 'boolean'],
         ];
     }
 
