@@ -16,9 +16,11 @@ use common\view\LoanHelper;
     <div id="banner-box">
         <!--banner 图-->
         <div class="banner-box">
-            <?php foreach ($adv as $val) : ?>
-                <div class="banner" style="background-image: url('<?= UPLOAD_BASE_URI ?>/upload/adv/<?= $val->image ?>');"><a href="<?= $val->link ?>" target="_blank"></a></div>
-            <?php endforeach; ?>
+            <?php foreach ($adv as $val) { ?>
+                <?php if ($val->media) { ?>
+                    <div class="banner" style="background-image: url('<?= UPLOAD_BASE_URI.$val->media->uri ?>');"><a href="<?= $val->link ?>" target="_blank"></a></div>
+                <?php } ?>
+            <?php } ?>
         </div>
         <!--选项卡-->
         <div class="banner-bottom">

@@ -1,8 +1,12 @@
 <?php
+
+use common\models\adv\Adv;
 use yii\widgets\ActiveForm;
 
 $this->title = '首页开屏图添加/编辑';
+
 ?>
+
 <?php $this->beginBlock('blockmain'); ?>
     <div class="container-fluid">
         <!-- BEGIN PAGE HEADER-->
@@ -27,15 +31,19 @@ $this->title = '首页开屏图添加/编辑';
                 </ul>
             </div>
             <div class="portlet-body form">
-                <?php $form = ActiveForm::begin([
-                    'id' => 'adv_form',
-                    'action' => "/adv/adv/kaiping-edit?id=".$adv->id,
-                    'options' => [
-                        'class' => 'form-horizontal form-bordered form-label-stripped',
-                        'enctype' => 'multipart/form-data'
-                    ]
-                ]);
+                <?php
+                    $form = ActiveForm::begin([
+                        'id' => 'adv_form',
+                        'action' => "/adv/adv/kaiping-edit?id=".$adv->id,
+                        'options' => [
+                            'class' => 'form-horizontal form-bordered form-label-stripped',
+                            'enctype' => 'multipart/form-data',
+                        ]
+                    ]);
                 ?>
+                <?= $form->field($adv, 'type')->label(false)->hiddenInput(['id' => 'advType', 'value' => Adv::TYPE_KAIPING]) ?>
+                <?= $form->field($adv, 'showOnPc')->label(false)->hiddenInput(['id' => 'showOnPc', 'value' => 0]) ?>
+
                 <?php if ($adv->id) { ?>
                     <div class="control-group">
                         <label class="control-label">序号</label>
@@ -59,12 +67,12 @@ $this->title = '首页开屏图添加/编辑';
                 <div class="control-group">
                     <label class="control-label">首页开屏图</label>
                     <div class="controls">
-                        <?= $form->field($adv, 'image', ['template' => '{input}<span class="notice">*图片上传格式必须为PNG或JPG，尺寸限定为：宽600px，高800px，图片大小不超过1M</span>'])->fileInput() ?>
-                        <?= $form->field($adv, 'image', ['template' => '{error}']) ?>
+                        <?= $form->field($adv, 'imageUri', ['template' => '{input}<span class="notice">*图片上传格式必须为PNG或JPG，尺寸限定为：宽600px，高800px，图片大小不超过1M</span>'])->fileInput() ?>
+                        <?= $form->field($adv, 'imageUri', ['template' => '{error}']) ?>
                     </div>
-                    <?php if (!empty($adv->image)) { ?>
-                        <div class="controls">
-                            <img src="<?= '/'.$adv->image ?>" alt="首页开屏图"/>
+                    <?php if (!empty($adv->media)) { ?>
+                        <div class="controls" id="notePic">
+                            <img src="<?= '/'.$adv->media->uri ?>" alt="首页开屏图">
                         </div>
                     <?php } ?>
                 </div>
@@ -91,22 +99,12 @@ $this->title = '首页开屏图添加/编辑';
             </div>
         </div>
     </div>
+
     <script type="text/javascript">
-        $(function() {
-            var v = $('#shebei').val();
-            if ('1' === v) {
-                $('#app').hide();
-            } else {
-                $('#app').show();
-            }
-        });
-        $('#shebei').on('change', function() {
-            var v = $('#shebei').val();
-            if ('1' === v) {
-                $('#app').hide();
-            } else {
-                $('#app').show();
-            }
+        $(function () {
+            $('#adv-image').on('click', function () {
+                $('#notePic').html('');
+            });
         });
     </script>
 <?php $this->endBlock(); ?>

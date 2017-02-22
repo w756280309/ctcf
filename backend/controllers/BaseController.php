@@ -1,14 +1,9 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: xmac
- * Date: 15-3-19
- * Time: 下午3:51.
- */
+
 namespace backend\controllers;
 
 use common\controllers\HelpersTrait;
-use Yii;
+use common\filters\AdminAcesssControl;
 use yii\web\Controller;
 use yii\filters\AccessControl;
 
@@ -27,10 +22,14 @@ class BaseController extends Controller
     public function init()
     {
         error_reporting(E_ALL ^ E_NOTICE);
-        $this->admin_id = Yii::$app->user->id;
-        $this->admin_name = Yii::$app->user->identity->username;
+
+        $user = $this->getAuthedUser();
+        $this->admin_id = $user->id;
+        $this->admin_name = $user->username;
+
         parent::init();
     }
+
     public function behaviors()
     {
         return [
@@ -48,7 +47,7 @@ class BaseController extends Controller
                     ],
                 ],
             ],
-            \common\filters\AdminAcesssControl::className(),
+            AdminAcesssControl::className(),
         ];
     }
 

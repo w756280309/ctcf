@@ -1,12 +1,9 @@
 <?php
 
+use common\models\adv\Adv;
 use yii\widgets\ActiveForm;
 
 $this->title = '轮播图添加/编辑';
-
-$this->registerJs("var t=0;", 1); //在头部加载  0:adv 1:product
-$this->registerJsFile('/js/swfupload/swfupload.js', ['depends' => 'yii\web\YiiAsset']);
-$this->registerJsFile('/js/swfupload/handlers.js', ['depends' => 'yii\web\YiiAsset']);
 
 ?>
 
@@ -39,8 +36,19 @@ $this->registerJsFile('/js/swfupload/handlers.js', ['depends' => 'yii\web\YiiAss
         </div>
 
         <div class="portlet-body form">
-            <?php $form = ActiveForm::begin(['id' => 'adv_form', 'action' => "/adv/adv/edit?id=".$model->id, 'options' => ['class' => 'form-horizontal form-bordered form-label-stripped']]); ?>
-                <?php if ($model->id) { ?>
+            <?php
+                $form = ActiveForm::begin([
+                    'id' => 'adv_form',
+                    'action' => "/adv/adv/edit?id=".$model->id,
+                    'options' => [
+                        'class' => 'form-horizontal form-bordered form-label-stripped',
+                        'enctype' => 'multipart/form-data',
+                    ]
+                ]);
+            ?>
+            <?= $form->field($model, 'type')->label(false)->hiddenInput(['id' => 'advType', 'value' => Adv::TYPE_LUNBO]) ?>
+
+            <?php if ($model->id) { ?>
                 <div class="control-group">
                     <label class="control-label">序号</label>
                     <div class="controls"><?= $model->sn ?></div>
@@ -66,7 +74,7 @@ $this->registerJsFile('/js/swfupload/handlers.js', ['depends' => 'yii\web\YiiAss
             <div class="control-group">
                 <label class="control-label">显示设备</label>
                 <div class="controls">
-                    <?= $form->field($model, 'showOnPc', ['template' => '{input}', 'inputOptions' => ['id' => 'shebei']])->dropDownList([0 => '移动端显示', 1 => 'PC端显示']) ?>
+                    <?= $form->field($model, 'showOnPc', ['template' => '{input}', 'inputOptions' => ['id' => 'showOnPc']])->dropDownList([0 => '移动端显示', 1 => 'PC端显示']) ?>
                     <?= $form->field($model, 'showOnPc', ['template' => '{error}']) ?>
                 </div>
             </div>
@@ -82,23 +90,19 @@ $this->registerJsFile('/js/swfupload/handlers.js', ['depends' => 'yii\web\YiiAss
             <div class="control-group">
                 <label class="control-label">上传图片</label>
                 <div class="controls">
-                    <?= $form->field($model, 'image', ['template' => '{input}'])->hiddenInput() ?>
-                    <div style="width: 180px; height: 18px; border: solid 1px #7FAAFF; background-color: #C5D9FF; padding: 2px;">
-                        <span id="spanButtonPlaceholder_baoli"></span>
-                    </div>
-                    <div id="divFileProgressContainer_baoli" style="height: 10px; display:none"></div>
-                    <div id='thumbnails_baoli'>
-                        <?php if ($model->id) { ?>
-                            <img src="/upload/adv/<?= $model->image ?>" style="margin: 5px; vertical-align: middle; width: 100px; height: 100px; opacity: 1;">
-                        <?php } ?>
-                    </div>
+                    <?=
+                        $form->field($model, 'imageUri', [
+                            'template' => '{input}<span class="notice" id="notice">*图片大小不超过200k，格式可以为jpg或png，并且大小限定为：高350px，宽750px</span>',
+                        ])
+                        ->fileInput()
+                    ?>
+                    <?= $form->field($model, 'imageUri', ['template' => '{error}']) ?>
                 </div>
-                <div class="controls">
-                    <span style="color:red">
-                        <span id="notice">图片大小不超过2M，只限于jpg格式图片，并且大小限定为：高350px，宽750px</span>
-                        <?= $form->field($model, 'image', ['template' => '{error}']) ?>
-                    </span>
-                </div>
+                <?php if (!$model->hasErrors() && !empty($model->media)) { ?>
+                    <div class="controls" id="notePic">
+                        <img src="/<?= $model->media->uri ?>" alt="首页开屏图">
+                    </div>
+                <?php } ?>
             </div>
 
             <div class="control-group">
@@ -156,63 +160,6 @@ $this->registerJsFile('/js/swfupload/handlers.js', ['depends' => 'yii\web\YiiAss
 </div>
 
 <script type="text/javascript">
-    var swfu;
-    var swfu_baoli;
-    var swfu_gongguan;
-    window.onload = function()
-    {
-        swfu_baoli = new SWFUpload({
-            // Backend Settings
-            upload_url: "/js/swfupload/upload_baoli.php?type=adv&shebei=<?= $model->showOnPc ? 'pc' : 'wap' ?>",
-            post_params: {"PHPSESSID": "<?= rand(time(), time() + time()) ?>"},
-            file_size_limit: "2 MB",
-            file_types: "*.jpg;",
-            file_types_description: "JPG Images;",
-            file_upload_limit: 1,
-            swfupload_preload_handler: preLoad,
-            swfupload_load_failed_handler: loadFailed,
-            file_queue_error_handler: fileQueueError,
-            file_dialog_complete_handler: fileDialogComplete,
-            upload_progress_handler: uploadProgress,
-            upload_error_handler: uploadError,
-            upload_success_handler: uploadSuccess,
-            upload_complete_handler: uploadComplete,
-            button_image_url: "/js/swfupload/SmallSpyGlassWithTransperancy_17x18.png",
-            button_placeholder_id: "spanButtonPlaceholder_baoli",
-            button_width: 180,
-            button_height: 18,
-            button_text: '<span class="button">选择图片 <span class="buttonSmall">(2 MB Max)</span></span>',
-            button_text_style: '.button { font-family: Helvetica, Arial, sans-serif; font-size: 12pt; } .buttonSmall { font-size: 10pt; }',
-            button_text_top_padding: 0,
-            button_text_left_padding: 18,
-            button_window_mode: SWFUpload.WINDOW_MODE.TRANSPARENT,
-            button_cursor: SWFUpload.CURSOR.HAND,
-            flash_url: "/js/swfupload/swfupload.swf",
-            flash9_url: "/js/swfupload/swfupload_fp9.swf",
-            custom_settings:
-            {
-                upload_target: "divFileProgressContainer_baoli",
-            },
-            debug: false
-        });
-    };
-
-    function delimg(id, img, obj)
-    {
-        var status = confirm("是否确定删除！");
-        if (status)
-        {
-            $.get("/adv/adv/imgdel", {img: img, id: id}, function(data)
-            {
-                if (data)
-                {
-                    del();
-                    alert("成功删除");
-                }
-            });
-        }
-    }
-
     $(function() {
         $('.ajax_button').click(function() {
             vals = $("#adv_form").serialize();
@@ -222,21 +169,15 @@ $this->registerJsFile('/js/swfupload/handlers.js', ['depends' => 'yii\web\YiiAss
             });
         });
 
+        $('#adv-image').on('click', function () {
+            $('#notePic').html('');
+        });
+
         notice();
 
-        $('#shebei').on('change', function() {
-            var deviceName = notice();
-            swfu_baoli.setUploadURL("/js/swfupload/upload_baoli.php?type=adv&shebei="+deviceName);
-            del();
-            if ($(this).val() == 1) {
-                $('#share_select').hide();
-                $('#share_block').hide();
-            } else {
-                $('#share_select').show();
-                if ($('#adv-canshare').attr('checked') == 'checked') {
-                    $('#share_block').show();
-                }
-            }
+        $('#showOnPc').on('change', function() {
+            notice();
+            $('#notePic').html('');
         });
 
         $('#adv-canshare').change(function(){
@@ -250,29 +191,16 @@ $this->registerJsFile('/js/swfupload/handlers.js', ['depends' => 'yii\web\YiiAss
 
     function notice()
     {
-        var v = $('#shebei').val();
+        var v = $('#showOnPc').val();
 
         if ('1' === v) {
             $('#app').hide();
             $('#isDisabledInApp').val('');
-            $('#notice').html('图片大小不超过2M，只限于jpg格式图片，并且大小限定为：高340px，宽1920px');
-
-            return 'pc';
+            $('#notice').html('图片大小不超过2M，格式可以为jpg或png，并且大小限定为：高340px，宽1920px');
         } else {
             $('#app').show();
-            $('#notice').html('图片大小不超过2M，只限于jpg格式图片，并且大小限定为：高350px，宽750px');
-
-            return 'wap';
+            $('#notice').html('图片大小不超过200k，格式可以为jpg或png，并且大小限定为：高350px，宽750px');
         }
-    }
-
-    function del()
-    {
-        var stats = swfu_baoli.getStats();
-        stats.successful_uploads--;
-        swfu_baoli.setStats(stats);
-        $('#thumbnails_baoli').find('img').detach();
-        $('#adv-image').val('');
     }
 </script>
 <?php $this->endBlock(); ?>

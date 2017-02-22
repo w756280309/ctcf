@@ -2,15 +2,16 @@
 
 namespace common\models\adv;
 
-use yii\behaviors\TimestampBehavior;
+use common\models\media\Media;
 use yii\db\ActiveRecord;
 
 /**
- * This is the model class for table "adv_pos".
+ * This is the model class for table "adv".
  */
 class Adv extends ActiveRecord
 {
     public $canShare = false;
+    public $imageUri = null;
 
     //0显示，1隐藏
     const STATUS_SHOW = 0;
@@ -22,10 +23,6 @@ class Adv extends ActiveRecord
 
     const TYPE_LUNBO = 0;
     const TYPE_KAIPING = 1;
-
-    //1轮播 2首页开屏
-    const POS_ID_LUNBO = 1;
-    const POS_ID_KAIPING = 2;
 
     const UPLOAD_PATH = '/upload/adv/';
 
@@ -53,25 +50,6 @@ class Adv extends ActiveRecord
         return 'adv';
     }
 
-    public function scenarios()
-    {
-        return [
-            'update' => ['id', 'sn', 'title', 'pos_id', 'image', 'show_order', 'link', 'description', 'del_status', 'isDisabledInApp', 'showOnPc', 'canShare'],
-            'create' => ['pos_id', 'sn', 'title', 'image', 'show_order', 'link', 'description', 'del_status', 'isDisabledInApp', 'showOnPc', 'canShare'],
-            'kaiping' => ['id', 'sn', 'title', 'pos_id', 'image', 'show_order', 'status', 'link', 'description', 'del_status', 'isDisabledInApp', 'showOnPc', 'canShare'],
-        ];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function behaviors()
-    {
-        return [
-            TimestampBehavior::className(),
-        ];
-    }
-
     /**
      * {@inheritdoc}
      */
@@ -79,19 +57,64 @@ class Adv extends ActiveRecord
     {
         return [
             ['title', 'required'],
-            ['showOnPc', 'default', 'value' => 0],
-            [['image', 'description'], 'required', 'on' => ['create', 'update']],
-            ['status', 'default', 'value' => self::STATUS_SHOW, 'on' => ['create']],
-            ['del_status', 'default', 'value' => self::DEL_STATUS_SHOW, 'on' => ['create']],
-            ['image', 'image', 'skipOnEmpty' => true, 'maxHeight' => 800, 'overHeight' => '{attribute}的高度应为800px', 'on' => ['kaiping']],
-            ['image', 'image', 'skipOnEmpty' => true, 'minHeight' => 800, 'underHeight' => '{attribute}的高度应为800px', 'on' => ['kaiping']],
-            ['image', 'image', 'skipOnEmpty' => true, 'maxWidth' => 600, 'overWidth' => '{attribute}的宽度应为600px', 'on' => ['kaiping']],
-            ['image', 'image', 'skipOnEmpty' => true, 'minWidth' => 600, 'underWidth' => '{attribute}的宽度应为600px', 'on' => ['kaiping']],
-            ['image', 'file', 'skipOnEmpty' => true, 'maxSize' => 1048576, 'tooBig' => '图片大小不能超过1M', 'on' => ['kaiping']],
-            ['link', 'string', 'on' => ['kaiping']],
-            ['link', 'match', 'pattern' => '/^[a-zA-Z0-9.:\/?&=_-]+$/', 'message' => '{attribute}不应包含特殊字符,如中文等', 'on' => ['kaiping']],
-            ['show_order', 'integer', 'on' => ['kaiping']],
-            ['title', 'string', 'max' => 15, 'on' => ['kaiping']],
+            ['imageUri', 'image', 'extensions' => 'png, jpg'],
+            [
+                'imageUri',
+                'image',
+                'maxHeight' => 800,
+                'overHeight' => '{attribute}的高度应为800px',
+                'minHeight' => 800,
+                'underHeight' => '{attribute}的高度应为800px',
+                'maxWidth' => 600,
+                'overWidth' => '{attribute}的宽度应为600px',
+                'minWidth' => 600,
+                'underWidth' => '{attribute}的宽度应为600px',
+                'maxSize' => 1048576,
+                'tooBig' => '图片大小不能超过1M',
+                'whenClient' => "function (attribute, value) {
+                    return '1' === $('#advType').val();
+                }",
+            ],
+            [
+                'imageUri',
+                'image',
+                'maxHeight' => 340,
+                'overHeight' => '{attribute}的高度应为340px',
+                'minHeight' => 340,
+                'underHeight' => '{attribute}的高度应为340px',
+                'maxWidth' => 1920,
+                'overWidth' => '{attribute}的宽度应为1920px',
+                'minWidth' => 1920,
+                'underWidth' => '{attribute}的宽度应为1920px',
+                'maxSize' => 2097152,
+                'tooBig' => '图片大小不能超过2M',
+                'whenClient' => "function (attribute, value) {
+                    return '0' === $('#advType').val() && '1' === $('#showOnPc').val();
+                }",
+            ],
+            [
+                'imageUri',
+                'image',
+                'maxHeight' => 350,
+                'overHeight' => '{attribute}的高度应为350px',
+                'minHeight' => 350,
+                'underHeight' => '{attribute}的高度应为350px',
+                'maxWidth' => 750,
+                'overWidth' => '{attribute}的宽度应为750px',
+                'minWidth' => 750,
+                'underWidth' => '{attribute}的宽度应为750px',
+                'maxSize' => 204800,
+                'tooBig' => '图片大小不能超过200k',
+                'whenClient' => "function (attribute, value) {
+                    return '0' === $('#advType').val() && '0' === $('#showOnPc').val();
+                }",
+            ],
+            [['link', 'description'], 'string'],
+            ['link', 'match', 'pattern' => '/^[a-zA-Z0-9.:\/?&=_-]+$/', 'message' => '{attribute}不应包含特殊字符,如中文等'],
+            [['show_order', 'isDisabledInApp', 'showOnPc'], 'integer'],
+            ['show_order', 'compare', 'compareValue' => 0, 'operator' => '>=', 'message' => '{attribute}不能为负数'],
+            ['title', 'string', 'max' => 15],
+            [['share_id', 'canShare'], 'integer'],
         ];
     }
 
@@ -104,11 +127,10 @@ class Adv extends ActiveRecord
             'id' => 'ID',
             'title' => '标题',
             'description' => '描述',
-            'image' => '图片',
-            'pos_id' => '位置id',
+            'imageUri' => '图片',
             'status' => '',
-            'isDisabledInApp' => '',
-            'showOnPc' => '',
+            'isDisabledInApp' => '不在APP上显示',
+            'showOnPc' => '在PC端显示',
             'link' => '链接',
             'del_status' => '是否删除',
             'creator_id' => '创建者管理员id',
@@ -117,28 +139,6 @@ class Adv extends ActiveRecord
             'canShare'  => '页面可分享',
             'show_order'  => '显示顺序',
         ];
-    }
-
-    public function getPosAdv($code = null)
-    {
-        $pos = AdvPos::findOne(['code' => $code, 'del_status' => AdvPos::DEL_STATUS_SHOW]);
-        if (empty($pos)) {
-            return array();
-        }
-        $adv = self::find()->OrderBy(['id' => SORT_DESC])->select(['image', 'link', 'description'])->andWhere(['pos_id' => $pos->id, 'status' => self::STATUS_SHOW, 'del_status' => self::DEL_STATUS_SHOW])->limit($pos->number)->all();
-        $adv_list = array();
-        foreach ($adv as $key => $val) {
-            $adv_list[$key]['image'] = self::UPLOAD_PATH.$val->image;
-            $adv_list[$key]['link'] = $val->link;
-            $adv_list[$key]['description'] = $val->description;
-        }
-
-        return array(
-            'number' => $pos->number,
-            'width' => $pos->width,
-            'height' => $pos->height,
-            'adv' => $adv_list,
-        );
     }
 
     /**
@@ -188,6 +188,11 @@ class Adv extends ActiveRecord
         return $this->hasOne(Share::className(), ['id' => 'share_id']);
     }
 
+    public function getMedia()
+    {
+        return $this->hasOne(Media::className(), ['id' => 'media_id']);
+    }
+
     //获取banner图链接
     public function getLinkUrl()
     {
@@ -217,5 +222,18 @@ class Adv extends ActiveRecord
         }
 
         return $link . $parseUrl['path'] . '?' . http_build_query($params);
+    }
+
+    public static function initNew($adminId, $type)
+    {
+        return new self([
+            'sn' => self::create_code(),
+            'type' => $type,
+            'creator_id' => $adminId,
+            'status' => self::STATUS_HIDDEN,
+            'del_status' => self::DEL_STATUS_SHOW,
+            'showOnPc' => false,
+            'created_at' => time(),
+        ]);
     }
 }

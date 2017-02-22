@@ -1,9 +1,10 @@
 <?php
+
 use yii\widgets\LinkPager;
 
 ?>
-<?php $this->beginBlock('blockmain'); ?>
 
+<?php $this->beginBlock('blockmain'); ?>
 <div class="container-fluid">
     <!-- BEGIN PAGE HEADER-->
     <div class="row-fluid">
@@ -64,8 +65,8 @@ use yii\widgets\LinkPager;
                 </tbody>
             </table>
             <div style="height: 40px">
-                <button class="btn green btn-block btn-block-line-on" h='/adv/adv/lineoff' style="width: 100px; float: left"><i class="icon-edit"></i>上线</button>
-                <button class="btn green btn-block btn-block-line-on offline" h='/adv/adv/lineon' style="width: 100px; float: left; margin-top: 0px; margin-left: 10px"><i class="icon-edit"></i>下线</button>
+                <button class="btn green btn-block btn-block-line-on" h='/adv/adv/lineon' style="width: 100px; float: left"><i class="icon-edit"></i>上线</button>
+                <button class="btn green btn-block btn-block-line-on offline" h='/adv/adv/lineoff' style="width: 100px; float: left; margin-top: 0px; margin-left: 10px"><i class="icon-edit"></i>下线</button>
             </div>
             <div class="pagination" style="text-align:center;"><?=  LinkPager::widget(['pagination' => $pages]); ?></div>
         </div>

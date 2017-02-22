@@ -22,9 +22,11 @@ use yii\helpers\Html;
         <div class="banner swiper-container">
             <div class="swiper-wrapper">
                 <?php foreach($hotActs as $act) { ?>
-                    <a class="swiper-slide" href="<?= $act->getLinkUrl() ?>">
-                        <img src="<?= UPLOAD_BASE_URI ?>upload/adv/<?= $act->image ?>" alt="">
-                    </a>
+                    <?php if ($act->media) { ?>
+                        <a class="swiper-slide" href="<?= $act->getLinkUrl() ?>">
+                            <img src="<?= UPLOAD_BASE_URI.$act->media->uri ?>" alt="">
+                        </a>
+                    <?php } ?>
                 <?php } ?>
             </div>
             <div class="swiper-pagination"></div>
@@ -299,12 +301,12 @@ use yii\helpers\Html;
     <?php } ?>
 </div>
 
-<?php if (null !== $kaiPing) { ?>
+<?php if (null !== $kaiPing && $kaiPing->media) { ?>
     <div class="mask hide"></div>
 
     <div class="pop hide">
         <img src="<?= FE_BASE_URI ?>wap/index/images/close.png" class="close_splash" alt="">
-        <img src="<?= UPLOAD_BASE_URI ?><?= $kaiPing->image ?>" onclick="window.location.href='<?= $kaiPing->link ?>'" alt="">
+        <img src="<?= UPLOAD_BASE_URI.$kaiPing->media->uri ?>" onclick="window.location.href='<?= $kaiPing->link ?>'" alt="">
     </div>
 <?php } ?>
 
@@ -348,10 +350,10 @@ use yii\helpers\Html;
             threshold: 200
         });
 
-        <?php if (null !== $kaiPing) { ?>
+        <?php if (null !== $kaiPing && $kaiPing->media) { ?>
             //开屏图逻辑
             $('.close_splash').on('click', closeAdv);
-            var guiZe = '<?= $kaiPing->image ?>';
+            var guiZe = '<?= $kaiPing->media->uri ?>';
             if (Cookies.get('splash_show') !== guiZe) {
                 document.body.addEventListener('touchmove', eventTarget);
                 Cookies.set('splash_show', guiZe);
