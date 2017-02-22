@@ -47,19 +47,30 @@ use yii\grid\GridView;
             [
                 'label' => '状态',
                 'value' => function ($record) {
-                    if (0 == $record['status']) {
-                        $desc = "充值未处理";
-                    } elseif (1 == $record['status']) {
-                        $desc = "充值成功";
-                    } else {
-                        $desc = "充值失败";
+                    switch ($record['status']) {
+                        case RechargeRecord::SETTLE_NO:
+                            $desc = "充值未处理";
+                            break;
+                        case RechargeRecord::STATUS_YES:
+                            $desc = "充值成功";
+                            break;
+                        default:
+                            $desc = "充值失败";
                     }
 
-                    if (3 == $record['pay_type']) {
-                        return $desc."-线下pos";
-                    } else {
-                        return $desc."-线上充值";
+                    switch ($record['pay_type']) {
+                        case RechargeRecord::PAY_TYPE_POS:
+                            $desc .= '-线下pos';
+                            break;
+                        case RechargeRecord::PAY_TYPE_NET:
+                            $desc .= '-网银充值';
+                            break;
+                        case RechargeRecord::PAY_TYPE_QUICK:
+                            $desc .= '-快捷充值';
+                            break;
                     }
+
+                    return $desc;
                 }
             ],
             [

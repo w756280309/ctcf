@@ -1,20 +1,24 @@
 <?php
-use yii\widgets\LinkPager;
+
+use common\models\user\RechargeRecord;
 use common\models\user\User;
+use common\utils\StringUtils;
+use yii\web\YiiAsset;
+use yii\widgets\LinkPager;
 
-$this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\web\YiiAsset']);
+$this->title = '融资会员充值流水明细';
+$this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => YiiAsset::class]);
 $type = (int) $type;
+
 ?>
+
 <?php $this->beginBlock('blockmain'); ?>
-
 <div class="container-fluid">
-
     <!-- BEGIN PAGE HEADER-->
-
     <div class="row-fluid">
         <div class="span12">
             <h3 class="page-title">
-                        会员管理 <small>会员充值管理模块【主要包含投资会员的充值明细管理】</small>
+                会员管理 <small>会员充值管理模块【主要包含投资会员的充值明细管理】</small>
             </h3>
             <ul class="breadcrumb">
                     <li>
@@ -77,7 +81,6 @@ $type = (int) $type;
             </table>
         </div>
 
-
         <!--search start-->
         <div class="portlet-body">
             <form action="/user/rechargerecord/detail" method="get" target="_self">
@@ -116,9 +119,7 @@ $type = (int) $type;
                 </table>
             </form>
         </div>
-
         <!--search end -->
-
 
         <div class="portlet-body">
             <table class="table table-striped table-bordered table-advance table-hover">
@@ -126,13 +127,9 @@ $type = (int) $type;
                     <tr>
                         <th>流水号</th>
                         <th>充值金额（元）</th>
-                        <?php
-                            if (2 === $type) {
-                        ?>
-                                <th>充值前可用余额（元）</th>
-                        <?php
-                            }
-                        ?>
+                        <?php if (2 === $type) { ?>
+                            <th>充值前可用余额（元）</th>
+                        <?php } ?>
                         <th>银行</th>
                         <th>充值时间</th>
                         <th>状态</th>
@@ -143,37 +140,40 @@ $type = (int) $type;
                 <?php foreach ($model as $key => $val) : ?>
                     <tr>
                         <td><?= $val['sn'] ?></td>
-                        <td><?= number_format($val['fund'], 2) ?></td>
-                        <?php
-                            if (2 === $type) {
-                        ?>
-                                <td>
-                                    <?php
-                                        if (!empty($val['balance'])) {
-                                            echo number_format($val['balance'], 2);
-                                        }
-                                    ?>
-                                </td>
-                        <?php
-                            }
-                        ?>
+                        <td class="text-align-rg"><?= StringUtils::amountFormat3($val['fund']) ?></td>
+                        <?php if (2 === $type) { ?>
+                            <td class="text-align-rg">
+                                <?= StringUtils::amountFormat3($val['balance']) ?>
+                            </td>
+                        <?php } ?>
                         <td><?= $val['bank_name'] ?></td>
-                        <td><?= date('Y-m-d H:i',$val['created_at'])?></td>
+                        <td><?= date('Y-m-d H:i:s', $val['created_at']) ?></td>
                         <td>
                             <?php
-                                    if (0 === (int) $val['status']) {
+                                switch ($val['status']) {
+                                    case RechargeRecord::SETTLE_NO:
                                         $desc = "充值未处理";
-                                    } elseif (1 === (int) $val['status']) {
+                                        break;
+                                    case RechargeRecord::STATUS_YES:
                                         $desc = "充值成功";
-                                    } else {
+                                        break;
+                                    default:
                                         $desc = "充值失败";
-                                    }
+                                }
 
-                                    if (3 === (int) $val['pay_type']) {
-                                        echo $desc."-线下pos";
-                                    } else {
-                                        echo $desc."-线上充值";
-                                    }
+                                switch ($val['pay_type']) {
+                                    case RechargeRecord::PAY_TYPE_POS:
+                                        $desc .= '-线下pos';
+                                        break;
+                                    case RechargeRecord::PAY_TYPE_NET:
+                                        $desc .= '-网银充值';
+                                        break;
+                                    case RechargeRecord::PAY_TYPE_QUICK:
+                                        $desc .= '-快捷充值';
+                                        break;
+                                }
+
+                                echo $desc;
                              ?>
                         <td>
                             <button class="btn btn-primary get_order_status" sn="<?= $val['sn'] ?>">查询流水在联动状态</button>
