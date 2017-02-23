@@ -110,7 +110,7 @@ class Adv extends ActiveRecord
                 }",
             ],
             [['link', 'description'], 'string'],
-            ['link', 'match', 'pattern' => '/^[a-zA-Z0-9.:\/?&=_-]+$/', 'message' => '{attribute}不应包含特殊字符,如中文等'],
+            ['link', 'match', 'pattern' => '/^[a-zA-Z0-9.:\/?%&=_-]+$/', 'message' => '{attribute}不应包含特殊字符,如中文等'],
             [['show_order', 'isDisabledInApp', 'showOnPc'], 'integer'],
             ['show_order', 'compare', 'compareValue' => 0, 'operator' => '>=', 'message' => '{attribute}不能为负数'],
             ['title', 'string', 'max' => 15],
