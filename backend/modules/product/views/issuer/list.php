@@ -14,6 +14,9 @@ $this->title = '发行方管理';
                     <a href="/product/issuer/add" class="btn green float-right">
                         <i class="icon-plus"></i> 添加发行方
                     </a>
+                    <a href="/product/jing-xuan/list" class="btn blue" style="float: right;">
+                        精选项目介绍页列表
+                    </a>
                 </h3>
                 <ul class="breadcrumb">
                     <li>
@@ -29,6 +32,7 @@ $this->title = '发行方管理';
                         <a href="javascript:void(0);">发行方列表</a>
                     </li>
                 </ul>
+
             </div>
 
             <div class="portlet-body">

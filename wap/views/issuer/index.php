@@ -16,7 +16,7 @@ switch ($issuerId) {
         break;
     case 10:
         $this->title = '宁富20号中科建';
-        $cssFile = 'zkj.css';
+        $cssFile = 'zkj.css?v=1.2';
         break;
 }
 
@@ -376,8 +376,29 @@ switch ($issuerId) {
             <div class="guacontent">
                 <h5>两大还款来源</h5>
                 <div>
-                    <img src="<?= FE_BASE_URI ?>wap/introduce/img/moneyfrom_05.png" alt="">
-                    <img src="<?= FE_BASE_URI ?>wap/introduce/img/moneyfrom_04.png" alt="">
+                    <!--可编辑的还款框模板-->
+                    <dl class="clearfix editorKuang">
+                        <dt class="lf">1</dt>
+                        <dd class="rg">
+                            <i></i>
+                            <em></em>
+                            <div>第一还款来源</div>
+                            <p class="Ectn">
+                                中科建飞经营性收入(主要为五大房地产项目销售回笼、租金收入)
+                            </p>
+                        </dd>
+                    </dl>
+                    <dl class="clearfix editorKuang">
+                        <dt class="lf">2</dt>
+                        <dd class="rg">
+                            <i></i>
+                            <em></em>
+                            <div>第二还款来源</div>
+                            <p class="Ectn">
+                                中科建设开发总公司连带责任担保
+                            </p>
+                        </dd>
+                    </dl>
                 </div>
             </div>
         </div>
