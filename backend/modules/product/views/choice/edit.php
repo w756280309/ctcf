@@ -66,7 +66,7 @@ $smallPic = Media::findOne($tupian->small_pic);
             </div>
 
             <div class="control-group">
-                <label class="control-label">首页显示</label>
+                <label class="control-label">WAP首页显示</label>
                 <div class="controls">
                     <?= $form->field($issuer, 'isShow', ['template' => '{input}'])->checkBox(['autocomplete'=>"on"]) ?>
 
@@ -74,15 +74,15 @@ $smallPic = Media::findOne($tupian->small_pic);
             </div>
 
             <div class="control-group">
-                <label class="control-label">图片跳转地址</label>
+                <label class="control-label">WAP图片跳转地址</label>
                 <div class="controls">
-                    <?= $form->field($issuer, 'path', ['template' => '{input}', 'inputOptions' => ['autocomplete' => 'off', 'class' => 'span12', 'placeholder' => '图片跳转地址']])->textInput() ?>
+                    <?= $form->field($issuer, 'path', ['template' => '{input}', 'inputOptions' => ['autocomplete' => 'off', 'class' => 'span4', 'placeholder' => '图片跳转地址']])->textInput() ?>
                     <?= $form->field($issuer, 'path', ['template' => '{error}']) ?>
                 </div>
             </div>
 
             <div class="control-group">
-                <label class="control-label">首页精选项目大图</label>
+                <label class="control-label">WAP首页精选项目大图</label>
                 <div class="controls">
                     <?= $form->field($issuer, 'big_pic', ['template' => '{input}<span class="notice">*图片上传格式必须为PNG或JPG，尺寸限定为：宽670px，高310px</span>'])->fileInput() ?>
                     <?= $form->field($issuer, 'big_pic', ['template' => '{error}']) ?>
@@ -95,7 +95,7 @@ $smallPic = Media::findOne($tupian->small_pic);
             </div>
 
             <div class="control-group">
-                <label class="control-label">首页精选项目中图</label>
+                <label class="control-label">WAP首页精选项目中图</label>
                 <div class="controls">
                     <?= $form->field($issuer, 'mid_pic', ['template' => '{input}<span class="notice">*图片上传格式必须为PNG或JPG，尺寸限定为：宽370px，高310px</span>'])->fileInput() ?>
                     <?= $form->field($issuer, 'mid_pic', ['template' => '{error}']) ?>
@@ -108,7 +108,7 @@ $smallPic = Media::findOne($tupian->small_pic);
             </div>
 
             <div class="control-group">
-                <label class="control-label">首页精选项目小图</label>
+                <label class="control-label">WAP首页精选项目小图</label>
                 <div class="controls">
                     <?= $form->field($issuer, 'small_pic', ['template' => '{input}<span class="notice">*图片上传格式必须为PNG或JPG，尺寸限定为：宽286px，高150px</span>'])->fileInput() ?>
                     <?= $form->field($issuer, 'small_pic', ['template' => '{error}']) ?>
@@ -118,6 +118,37 @@ $smallPic = Media::findOne($tupian->small_pic);
                         <img src="<?= '/'.$smallPic->uri ?>" alt="首页精选项目小图"/>
                     </div>
                 <?php } ?>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label">PC端显示</label>
+                <div class="controls">
+                    <?= $form->field($issuer, 'allowShowOnPc', ['template' => '{input}'])->checkBox(['autocomplete'=>"on"]) ?>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label">PC端标题</label>
+                <div class="controls">
+                    <?= $form->field($issuer, 'pcTitle', ['template' => '{input}', 'inputOptions' => ['autocomplete' => 'off', 'placeholder' => '请填写PC端标题', 'class' => 'span4']])->textInput() ?>
+                    <?= $form->field($issuer, 'pcTitle', ['template' => '{error}']) ?>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label">PC端内容</label>
+                <div class="controls">
+                    <?= $form->field($issuer, 'pcDescription', ['template' => '{input}', 'inputOptions' => ['autocomplete' => 'off', 'placeholder' => '请填写PC端内容', 'class' => 'span4']])->textarea(['rows' => 3])  ?>
+                    <?= $form->field($issuer, 'pcDescription', ['template' => '{error}']) ?>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label">PC端跳转地址</label>
+                <div class="controls">
+                    <?= $form->field($issuer, 'pcLink', ['template' => '{input}', 'inputOptions' => ['autocomplete' => 'off', 'class' => 'span4', 'placeholder' => '请填写PC端图片跳转地址']])->textInput() ?>
+                    <?= $form->field($issuer, 'pcLink', ['template' => '{error}']) ?>
+                </div>
             </div>
 
             <div class="form-actions">

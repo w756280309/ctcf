@@ -38,6 +38,7 @@ $this->title = '发行方管理';
                         <th class="span4">发行方名称</th>
                         <th>视频名称</th>
                         <th>是否首页显示</th>
+                        <th>是否PC端显示</th>
                         <th>排序值</th>
                         <th><center>操作</center></th>
                     </tr>
@@ -48,6 +49,7 @@ $this->title = '发行方管理';
                                 <td><?= $issuer->name ?></td>
                                 <td><?= empty($issuer->mediaTitle) ? '---' : $issuer->mediaTitle ?></td>
                                 <td><?= $issuer->isShow ? '是' : '否' ?></td>
+                                <td><?= $issuer->allowShowOnPc ? '是' : '否' ?></td>
                                 <td><?= null !== $issuer->sort ? $issuer->sort : '无' ?></td>
                                 <td>
                                     <center>

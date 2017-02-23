@@ -36,7 +36,6 @@ class ChoiceController extends BaseController
         return $this->render('edit', ['issuer' => $issuer]);
     }
 
-
     /**
      * 添加编辑精选项目图片.
      */
