@@ -15,6 +15,7 @@ use common\models\promo\LoanOrderPoints;
 use common\models\user\User;
 use common\models\user\UserInfo;
 use common\utils\StringUtils;
+use common\utils\TxUtils;
 use common\view\LoanHelper;
 use Ding\DingNotify;
 use wap\modules\promotion\models\RankingPromo;
@@ -383,5 +384,33 @@ GROUP BY rp.uid, rp.online_Pid";
                 $model2->addUserPointsWithLoanOrder($order);
             }
         }
+    }
+
+    //平台账号向企业账号转账
+    public function actionTransfer($run = false)
+    {
+        //$epayUserId = '7601209';//测试环境融资方ID
+        $epayUserId = '7301209';//立合旺通 在联动正式环境账号
+        $ump = Yii::$container->get('ump');
+        //商户信息
+        $ret = $ump->getMerchantInfo($epayUserId);
+        $banance1 = $ret->get('balance');
+        echo '转账前账户余额：'.$banance1.PHP_EOL;
+
+        if ($run) {
+            $amount = 0.01;//默认转让0.01元
+            $time = time();
+            $sn = TxUtils::generateSn('TR');
+            $ret = $ump->orgTransfer($sn, $epayUserId, $amount, $time);
+            var_dump($ret);
+        }
+
+        //商户信息
+        $ret = $ump->getMerchantInfo($epayUserId);
+        $balance2 = $ret->get('balance');
+        echo '账户余额：'.$balance2.PHP_EOL;
+
+        echo PHP_EOL . '变动金额:' . (bcsub($banance1 , $balance2)) . '分' . PHP_EOL;
+
     }
 }
