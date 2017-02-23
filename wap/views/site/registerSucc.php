@@ -32,7 +32,7 @@ $this->title = '温度金服注册成功页面';
         <input type="hidden" class="lastChannel" name="lastChannel" value="-1">
     </div>
     <a class="f16 open" href="/user/identity">立即开通</a>
-    <a class="f16 stroll" href="/?mark=170120">先去逛逛</a>
+    <a class="f16 stroll" href="/?_mark=170120">先去逛逛</a>
 </div>
 <script>
     $(function(){

@@ -143,6 +143,10 @@ $this->params['breadcrumbs'][] = $this->title;
             if (data.code) {
                 if ('undefined' !== typeof data.tourl) {
                     toast(data.message, function() {
+                        if ('undefined' !== typeof _paq) {
+                            _paq.push(['trackEvent', 'user', 'reg']);
+                        }
+
                         if ('undefined' !== typeof ga) {
                             ga('send', {
                                 hitType: 'event',
