@@ -42,6 +42,14 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/common.js', ['depends' => 'yii\web\Yii
                 return;
             }
 
+            if ('undefined' !== typeof _paq) {
+                _paq.push([
+                    'trackEcommerceOrder',
+                    orderSn,
+                    '<?= $order->order_money ?>'
+                ]);
+            }
+
             ga('ecommerce:addTransaction', {
                 'id': orderSn,
                 'revenue': '<?= $order->order_money ?>',
