@@ -106,7 +106,7 @@ class P170126Controller extends Controller
     public function actionLuodiye()
     {
         if (!Yii::$app->user->isGuest) {
-            return $this->redirect('/?mark='.time());
+            return $this->redirect('/?_mark='.time());
         }
 
         $promo = $this->spacePromo();

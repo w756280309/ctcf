@@ -85,7 +85,7 @@ class PromoController extends Controller
     public function actionLuodiye($key)
     {
         if (!Yii::$app->user->isGuest) {
-            return $this->redirect('/?mark=' . time());
+            return $this->redirect('/?_mark=' . time());
         }
 
         $captcha = new CaptchaForm();
