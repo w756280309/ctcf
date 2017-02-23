@@ -105,7 +105,7 @@ class P170118Controller extends Controller
     public function actionRegister()
     {
         if (!Yii::$app->user->isGuest) {
-            return $this->redirect('/?mark=' . time());
+            return $this->redirect('/?_mark=' . time());
         }
 
         $promo = $this->moviePromo();
