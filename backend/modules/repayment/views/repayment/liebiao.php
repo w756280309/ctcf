@@ -73,17 +73,34 @@ $bc = new BcRound();
                     </tr>
             </table>
         </div>
-        <?php foreach ($model as $qk => $qi) : ?>
+
+        <?php
+            $graceFirstDay = date('Y-m-d', strtotime('- ' . $deal->kuanxianqi . ' day', $deal->finish_date));
+            $isBeforeGracePeriod = date('Y-m-d') < $graceFirstDay && $deal->kuanxianqi > 0;
+            $today = date('Y-m-d');
+            foreach ($model as $qk => $qi) :
+        ?>
             <?php
                 $payed = $qi[count($qi) - 1]['payed'];
                 $isShowToday = !$payed && $isInGracePeriod;
+                $isShowPeriod = !$payed && $isBeforeGracePeriod;
             ?>
         <div class="portlet-body">
             <table class="list">
                 <thead><th class="list">第<?= $qk ?>期:</th></thead>
                 <tr>
                     <td class="list">
-                        <?= $isShowToday ? '(今日还款)' : ''?>本期应还时间：<?= $isShowToday ? date('Y-m-d') : date('Y-m-d', $qi[count($qi) - 1]['refund_time']) ?><br>
+                        <?= $isShowToday ? '(今日还款)' : ''?>本期应还时间：
+                        <?php
+                            if ($isShowToday) {
+                                echo $today;
+                            } elseif ($isShowPeriod) {
+                                echo $graceFirstDay . ' 到 ' . date('Y-m-d', $deal->finish_date);
+                            } else {
+                                echo date('Y-m-d', $qi[count($qi) - 1]['refund_time']);
+                            }
+                        ?>
+                        <br>
                         <?= $isShowToday ? '(今日还款)' : ''?>本期应还款本金：<?= $bc->bcround(array_sum(array_column($qi, 'benjin')), 2)  ?>（元）&emsp;
                         <?= $isShowToday ? '(今日还款)' : ''?>本期应还款利息：<?= $bc->bcround(array_sum(array_column($qi, 'lixi')), 2)  ?>（元）
                         <img src="/image/you.png" class="jiantou<?= $qk ?>" onclick="tableShow('.jiantou<?= $qk ?>')" data="<?= $qk ?>" alt="" style="position: absolute; right: 30px; height:20px; width: 20px;">
