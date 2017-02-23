@@ -115,6 +115,26 @@ extract(unserialize($jxPage->content));
     </div>
     <?php } ?>
 
+    <?php if ($issuer->video) { ?>
+        <div class="publisher">
+            <h4>视  频  介  绍</h4>
+            <p><span><i></i></span></p>
+            <style>
+                .publisher #video {
+                     width: 10rem;
+                     height: 5.6rem;
+                     margin-left: -.53333333rem;
+                }
+            </style>
+            <div class="videobox">
+                <video id="video" class="media video-js vjs-default-skin" controls poster="<?= $issuer->videoImg ? UPLOAD_BASE_URI.$issuer->videoImg->uri : '' ?>">
+                    <source src="<?= $issuer->video->uri ?>" type="video/mp4">
+                </video>
+                <div id="loading"><img src="<?= FE_BASE_URI ?>wap/introduce/img/loading.gif" alt=""></div>
+            </div>
+        </div>
+    <?php } ?>
+
     <?php if (!empty(array_filter($bzcs))) { ?>
     <div class="safeguards">
         <h4>保  障  措  施</h4>
@@ -149,7 +169,7 @@ extract(unserialize($jxPage->content));
             <?php if (!empty($list['content'])) { ?>
                 <tr>
                     <td class="lf" <?php if ('收益分配' === $list['ft']) { ?>style="line-height: 1rem;"<?php } ?>><?= trim($list['ft']) ?></td>
-                    <td class="rg" <?php if ('收益分配' === $list['ft']) { ?>style="line-height: 0.6rem; padding-top: 0.2rem;padding-bottom: 0.2rem;text-align: right;"<?php } ?>><?= trim($list['content']) ?></td>
+                    <td class="rg <?php if ('0' === $syl && '预期年化收益率' === $list['ft']) { ?>rate<?php } ?>" <?php if ('收益分配' === $list['ft']) { ?>style="line-height: 0.6rem; padding-top: 0.2rem;padding-bottom: 0.2rem;text-align: right;"<?php } ?>><?= trim($list['content']) ?></td>
                 </tr>
             <?php } ?>
             <?php if ('1' === $syl && '预期年化收益率' === $list['ft']) { ?>
