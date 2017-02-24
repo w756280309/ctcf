@@ -295,9 +295,11 @@ use yii\helpers\Html;
         <?php if (null !== $jingxuan) { ?>
         <ul class="more-right-bottom">
             <?php foreach ($jingxuan as $jx) { ?>
-            <li style="width: 75%">
-                <a style="display: block;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;" href="<?= Html::encode($jx->pcLink) ?>" target="_blank"><?= $jx->pcTitle ?></a>
-                <p style="overflow: hidden;text-overflow: ellipsis;display: -webkit-box;-webkit-box-orient: vertical;-webkit-line-clamp: 2;" class="issuer-desc"><?= $jx->pcDescription ?></p>
+            <li style="width: 75%;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;">
+                <a href="<?= Html::encode($jx->pcLink) ?>" target="_blank"><?= $jx->pcTitle ?></a>
+            </li>
+            <li style="width: 75%;list-style: none;">
+                <p style="overflow: hidden;height: 36px;font-size: 12px;margin-top: 0.5em;margin-left: 1em;" class="issuer-desc"><?= $jx->pcDescription ?></p>
             </li>
             <?php } ?>
         </ul>
