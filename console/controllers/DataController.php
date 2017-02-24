@@ -386,31 +386,49 @@ GROUP BY rp.uid, rp.online_Pid";
         }
     }
 
-    //平台账号向企业账号转账
-    public function actionTransfer($run = false)
+    /**
+     * 将平台账户资金转给立合旺通银行卡
+     * 使用说明：
+     * 1. 测试 php yii data/transfer 查看立合旺通金额
+     * 2. 转一笔0.01元 php yii data/transfer 1
+     * 3. 转指定金额 php yii data/transfer 1 $amount
+     *
+     * 南京交充值到平台账户，然后平台账户转让到立合旺通，立合旺通再提现到银行卡。
+     * @param bool $run 是否转账
+     */
+    public function actionTransfer($run = false, $amount = 0.01)
     {
+        $amount = max(floatval($amount), 0);
         //$epayUserId = '7601209';//测试环境融资方ID
         $epayUserId = '7301209';//立合旺通 在联动正式环境账号
         $ump = Yii::$container->get('ump');
         //商户信息
         $ret = $ump->getMerchantInfo($epayUserId);
         $banance1 = $ret->get('balance');
-        echo '转账前账户余额：'.$banance1.PHP_EOL;
+        $this->stdout('转账前账户余额：' . $banance1 . PHP_EOL);
 
         if ($run) {
-            $amount = 0.01;//默认转让0.01元
             $time = time();
             $sn = TxUtils::generateSn('TR');
             $ret = $ump->orgTransfer($sn, $epayUserId, $amount, $time);
-            var_dump($ret);
+            if ($ret->isSuccessful()) {
+                //转账成功
+                $sn = TxUtils::generateSn('DRAW');
+                $time = time();
+                $ret = $ump->orgDraw($sn, $epayUserId, $amount, $time);
+                if ($ret->isSuccessful()) {
+                    var_dump($ret->toArray());
+                } else {
+                    $this->stdout('提现失败，联动返回信息：' . $ret->get('ret_msg') . PHP_EOL);
+                }
+            } else {
+                $this->stdout('转账失败，联动返回信息：' . $ret->get('ret_msg') . PHP_EOL);
+            }
         }
 
         //商户信息
         $ret = $ump->getMerchantInfo($epayUserId);
         $balance2 = $ret->get('balance');
-        echo '账户余额：'.$balance2.PHP_EOL;
-
-        echo PHP_EOL . '变动金额:' . (bcsub($banance1 , $balance2)) . '分' . PHP_EOL;
-
+        $this->stdout('账户余额：' . $balance2 . PHP_EOL);
     }
 }
