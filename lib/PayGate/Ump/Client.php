@@ -705,7 +705,7 @@ class Client
      */
     public function orgDrawApply(WithdrawalInterface $draw)
     {
-        $this->orgDraw($draw->getTxSn(), $draw->getEpayUserId(), $draw->getAmount(), $draw->getTxDate());
+        return $this->orgDraw($draw->getTxSn(), $draw->getEpayUserId(), $draw->getAmount(), $draw->getTxDate());
     }
 
     //融资用户提现
