@@ -87,6 +87,8 @@ $this->title = ($isEdit ? '编辑' : '添加') . ' 精选项目介绍页';
                                     <br>
                                     <img src="/<?= $content['pic'] ?>" alt="顶部图片"/>
                                 <?php } ?>
+                                <span class="notice">*图片上传格式必须为PNG或JPG，宽度限定为：750px</span>
+                                <?= $form->field($model, 'content', ['template' => '{error}']) ?>
                             </td>
                         </tr>
                         <?php

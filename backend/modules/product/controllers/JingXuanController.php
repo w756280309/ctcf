@@ -40,16 +40,7 @@ class JingXuanController extends BaseController
         $model = new JxPage();
         $jxPagePost = Yii::$app->request->post();
         if (!empty($jxPagePost)) {
-            //针对于顶部图片的处理
-            $jxPagePost['JxPage']['content']['pic'] = null;
-            if (isset(UploadedFile::getInstance($model, 'pic')->name)) {
-                $uploadedFile = UploadedFile::getInstance($model, 'pic');
-                $uploadPath = $this->upload($uploadedFile);
-                if (false !== $uploadPath) {
-                    $jxPagePost['JxPage']['content']['pic'] = $uploadPath;
-                }
-            }
-            $jxPagePost['JxPage']['content'] = serialize($jxPagePost['JxPage']['content']);
+            $jxPagePost = $this->dealPic($model, $jxPagePost);
             if ($model->load($jxPagePost) && $model->validate()) {
                 $model->createTime = date('Y-m-d H:i:s');
                 $model->admin_id = Yii::$app->user->id;
@@ -78,21 +69,12 @@ class JingXuanController extends BaseController
         $content = unserialize($model->content);
         $jxPagePost = Yii::$app->request->post();
         if (!empty($jxPagePost)) {
-            //针对于顶部图片的处理
-            $jxPagePost['JxPage']['content']['pic'] = null;
-            if (isset(UploadedFile::getInstance($model, 'pic')->name)) {
-                $uploadedFile = UploadedFile::getInstance($model, 'pic');
-                $uploadPath = $this->upload($uploadedFile);
-                if (false !== $uploadPath) {
-                    $jxPagePost['JxPage']['content']['pic'] = $uploadPath;
-                }
-            } else {
-                $jxPagePost['JxPage']['content']['pic'] = $content['pic'];
-            }
-            $jxPagePost['JxPage']['content'] = serialize($jxPagePost['JxPage']['content']);
-            if ($model->load($jxPagePost) && $model->validate()) {
-                if ($model->save()) {
-                    return $this->redirect('list');
+            $jxPagePost = $this->dealPic($model, $jxPagePost);
+            if (!$model->hasErrors()) {
+                if ($model->load($jxPagePost) && $model->validate()) {
+                    if ($model->save()) {
+                        return $this->redirect('list');
+                    }
                 }
             }
         }
@@ -125,5 +107,43 @@ class JingXuanController extends BaseController
         }
 
         return false;
+    }
+
+    /**
+     * 处理页面顶部图片逻辑
+     */
+    private function dealPic($model, $jxPagePost)
+    {
+        $jxPagePost['JxPage']['content']['pic'] = null;
+        $isEdit = null !== $model->id;
+        if ($isEdit) {
+            $content = unserialize($model->content);
+            $jxPagePost['JxPage']['content']['pic'] = $content['pic'];
+        }
+
+        if (isset(UploadedFile::getInstance($model, 'pic')->name)) {
+            $uploadedFile = UploadedFile::getInstance($model, 'pic');
+            $imageInfo = getimagesize($uploadedFile->tempName);
+            $validate = true;
+            if (!in_array($imageInfo['mime'], ['image/png', 'image/jpeg'])) {
+                $model->addError('content', '图片的格式应为jpg，png');
+                $validate = false;
+            }
+            if (750 !== $imageInfo[0]) {
+                $model->addError('content', '上传图片的宽度应为750px');
+                $validate = false;
+            }
+            if ($validate) {
+                $uploadPath = $this->upload($uploadedFile);
+                if (false === $uploadPath) {
+                    $model->addError('content', '图片上传失败');
+                }
+
+                $jxPagePost['JxPage']['content']['pic'] = $uploadPath;
+            }
+        }
+        $jxPagePost['JxPage']['content'] = serialize($jxPagePost['JxPage']['content']);
+
+        return $jxPagePost;
     }
 }

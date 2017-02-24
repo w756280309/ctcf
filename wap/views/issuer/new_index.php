@@ -32,7 +32,7 @@ extract(unserialize($jxPage->content));
             <?php if (!empty($zy['ft']) || !empty($zy['content'])) { ?>
                 <div class="pubcontent">
                     <?php if (!empty($zy['ft'])) { ?>
-                        <h5><?= trim($zy['ft']) ?></h5>
+                        <h5 style="width: 103%;margin-left: -1.5%;"><?= trim($zy['ft']) ?></h5>
                     <?php } ?>
                     <?php
                         if (!empty($zy['content'])) {
@@ -166,13 +166,17 @@ extract(unserialize($jxPage->content));
     <?php if (!empty(array_filter($cpys))) { ?>
     <table>
         <?php foreach ($cpys as $k => $list) { ?>
-            <?php if (!empty($list['content'])) { ?>
+            <?php
+                if (!empty($list['content'])) {
+                    $flag = '收益分配' === $list['ft'] || '发行人' === $list['ft'];
+                    $isSy = '预期年化收益率' === $list['ft'];
+            ?>
                 <tr>
-                    <td class="lf" <?php if ('收益分配' === $list['ft']) { ?>style="line-height: 1rem;"<?php } ?>><?= trim($list['ft']) ?></td>
-                    <td class="rg <?php if ('0' === $syl && '预期年化收益率' === $list['ft']) { ?>rate<?php } ?>" <?php if ('收益分配' === $list['ft']) { ?>style="line-height: 0.6rem; padding-top: 0.2rem;padding-bottom: 0.2rem;text-align: right;"<?php } ?>><?= trim($list['content']) ?></td>
+                    <td class="lf" <?php if ($flag) { ?>style="line-height: 1rem;"<?php } ?>><?= trim($list['ft']) ?></td>
+                    <td class="rg" <?php if ($flag) { ?>style="line-height: 0.6rem; padding-top: 0.2rem;padding-bottom: 0.2rem;text-align: right;width:75%;" <?php } elseif ($isSy) { ?> style="color: #0080ff;"<?php } ?>><?= trim($list['content']) ?></td>
                 </tr>
             <?php } ?>
-            <?php if ('1' === $syl && '预期年化收益率' === $list['ft']) { ?>
+            <?php if ('1' === $syl && $isSy) { ?>
                 <?php if (!empty(array_filter($jieti))) { ?>
                 <tr>
                     <td class="special">
