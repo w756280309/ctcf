@@ -705,13 +705,19 @@ class Client
      */
     public function orgDrawApply(WithdrawalInterface $draw)
     {
+        $this->orgDraw($draw->getTxSn(), $draw->getEpayUserId(), $draw->getAmount(), $draw->getTxDate());
+    }
+
+    //融资用户提现
+    public function orgDraw($sn, $epayUserId, $amount, $time)
+    {
         $data = [
             'service' => 'mer_withdrawals',
             'notify_url' => $this->hostInfo . "/order/drawnotify/notify",
-            'order_id' => $draw->getTxSn(),
-            'mer_date' => date('Ymd', $draw->getTxDate()), //商户生成订单的日期，格式YYYYMMDD
-            'withdraw_mer_id' => $draw->getEpayUserId(),
-            'amount' => $draw->getAmount() * 100, //单位为分
+            'order_id' => $sn,
+            'mer_date' => date('Ymd', $time), //商户生成订单的日期，格式YYYYMMDD
+            'withdraw_mer_id' => $epayUserId,
+            'amount' => $amount * 100, //单位为分
             'com_amt_type' => '2',    //手续费由温都金服平台承担
         ];
 
