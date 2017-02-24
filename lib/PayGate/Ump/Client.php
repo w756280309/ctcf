@@ -851,6 +851,29 @@ class Client
     }
 
     /**
+     * 普通无密转账，向企业转账
+     * @param $sn
+     * @param $epayUserId
+     * @param $amount
+     * @param $time
+     * @return Response
+     */
+    public function orgTransfer($sn, $epayUserId, $amount, $time)
+    {
+        $data = [
+            'service' => 'transfer',
+            'order_id' => $sn,
+            'mer_date' => date('Ymd', $time),
+            'partic_user_id' => $epayUserId,
+            'partic_acc_type' => '02',//对公，向企业转账
+            'trans_action' => '02',//p2p平台向企业转账
+            'amount' => $amount * 100,
+        ];
+
+        return $this->doRequest($data);
+    }
+
+    /**
      * 生成流水串号.
      *
      * @param type $prefix
