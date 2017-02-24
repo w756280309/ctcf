@@ -50,11 +50,12 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/common.js', ['depends' => 'yii\web\Yii
                 ]);
             }
 
+            Cookies.set('fin_tid', orderSn);
+
             ga('ecommerce:addTransaction', {
                 'id': orderSn,
                 'revenue': '<?= $order->order_money ?>',
                 'hitCallback': function() {
-                    Cookies.set('fin_tid', orderSn);
                     location.replace("/order/order/result?status=success&osn="+orderSn);
                 }
             });

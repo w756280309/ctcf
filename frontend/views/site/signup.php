@@ -2,7 +2,7 @@
 $this->title = '注册';
 
 $this->registerCssFile(ASSETS_BASE_URI.'css/register/register.css', ['depends' => 'frontend\assets\FrontAsset']);
-$this->registerJsFile(ASSETS_BASE_URI.'js/register/register.js?v=20160712', ['depends' => 'frontend\assets\FrontAsset']);
+$this->registerJsFile(ASSETS_BASE_URI.'js/register/register.js?v=20170224', ['depends' => 'frontend\assets\FrontAsset']);
 
 use yii\bootstrap\ActiveForm;
 use yii\captcha\Captcha;

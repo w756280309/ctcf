@@ -145,7 +145,9 @@ return [
 
     // Web统计
     'analytics_enabled' => false,
-    'analytics_pk_id' => '', // piwik ID
+    'analytics_pk_wap_id' => '', // piwik ID
+    'analytics_pk_app_id' => '', // piwik ID
+    'analytics_pk_pc_id' => '', // piwik ID
     'analytics_ga_id' => '',  // GA跟踪ID
     'analytics_gio_id' => '', // growingio统计key
 

@@ -28,11 +28,20 @@ $this->registerCssFile(ASSETS_BASE_URI.'css/deal/buy.css');
                 return;
             }
 
+            if ('undefined' !== typeof _paq) {
+                _paq.push([
+                    'trackEcommerceOrder',
+                    orderSn,
+                    '<?= $order->order_money ?>'
+                ]);
+            }
+
+            Cookies.set('fin_tid', orderSn);
+
             ga('ecommerce:addTransaction', {
                 'id': orderSn,
                 'revenue': '<?= $order->order_money ?>',
                 'hitCallback': function() {
-                    Cookies.set('fin_tid', orderSn);
                     location.replace('/order/order/result?status=success&osn='+orderSn);
                 }
             });

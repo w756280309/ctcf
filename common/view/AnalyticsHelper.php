@@ -12,12 +12,12 @@ class AnalyticsHelper
             return;
         }
 
-        $pkId = \Yii::$app->params['analytics_pk_id'];
+        $pkId = '';
+        if (defined('CLIENT_TYPE') && in_array(CLIENT_TYPE, ['wap', 'app', 'pc'])) {
+            $pkId = \Yii::$app->params['analytics_pk_'.CLIENT_TYPE.'_id'];
+        }
         $gaId = \Yii::$app->params['analytics_ga_id'];
         $gioId = \Yii::$app->params['analytics_gio_id'];
-        if (empty($pkId) || empty($gaId) || empty($gioId)) {
-            return;
-        }
 
         $_js = <<<JS
   var _paq = _paq || [];
