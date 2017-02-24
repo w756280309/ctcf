@@ -4,7 +4,9 @@ namespace console\controllers;
 
 use common\lib\bchelp\BcRound;
 use common\lib\user\UserStats;
+use common\models\draw\DrawManager;
 use common\models\order\OnlineOrder;
+use common\models\order\OnlineFangkuan;
 use common\models\order\OnlineRepaymentPlan;
 use common\models\order\OnlineRepaymentRecord;
 use common\models\payment\Repayment;
@@ -13,6 +15,7 @@ use common\models\product\OnlineProduct;
 use common\models\promo\FirstOrderPoints;
 use common\models\promo\LoanOrderPoints;
 use common\models\user\User;
+use common\models\user\UserAccount;
 use common\models\user\UserInfo;
 use common\utils\StringUtils;
 use common\utils\TxUtils;
@@ -430,5 +433,80 @@ GROUP BY rp.uid, rp.online_Pid";
         $ret = $ump->getMerchantInfo($epayUserId);
         $balance2 = $ret->get('balance');
         $this->stdout('账户余额：' . $balance2 . PHP_EOL);
+    }
+
+    /**
+     * 修复标的"南金交--宁富20号中科建三期2号"的本地提现记录.
+     *
+     * 联动成功,但是本地提现记录缺失.
+     */
+    public function actionDraw($pid = 1812)
+    {
+        $onlineProduct = OnlineProduct::findOne($pid);
+        if (!$onlineProduct) {
+            $this->stdout('标的信息不存在');
+
+            return Controller::EXIT_CODE_ERROR;
+        }
+
+        $onlineFangkuan = OnlineFangkuan::findOne(['online_product_id' => $pid]);
+        if (!$onlineFangkuan) {
+            $this->stdout('放款记录不存在');
+
+            return Controller::EXIT_CODE_ERROR;
+        }
+
+        if (!$this->allowDraw($onlineFangkuan)) {
+            $this->stdout('当前放款状态不允许提现操作');
+
+            return Controller::EXIT_CODE_ERROR;
+        }
+
+        $account = UserAccount::findOne(['uid' => $onlineFangkuan->uid, 'type' => UserAccount::TYPE_BORROW]);
+        if (!$account) {
+            $this->stdout('融资用户账户信息不存在');
+
+            return Controller::EXIT_CODE_ERROR;
+        }
+
+        $transaction = Yii::$app->db->beginTransaction();
+
+        try {
+            //融资方放款,不收取手续费
+            $draw = DrawManager::initDraw($account, $onlineFangkuan->order_money);
+            if (!$draw) {
+                throw new \Exception('提现申请失败', '000003');
+            }
+
+            $draw->orderSn = $onlineFangkuan->sn;
+            if (!$draw->save()) {
+                throw new \Exception('写入放款流水失败', '000003');
+            }
+
+            $onlineFangkuan->status = OnlineFangkuan::STATUS_TIXIAN_APPLY;
+            if (!$onlineFangkuan->save()) {
+                throw new \Exception('修改放款审核状态失败', '000003');
+            }
+
+            DrawManager::ackDraw($draw);
+
+            $transaction->commit();
+        } catch (\Exception $e) {
+            $transaction->rollBack();
+            $this->stdout($e->getMessage());
+
+            return Controller::EXIT_CODE_ERROR;
+        }
+
+        $this->stdout('放款成功!');
+        return Controller::EXIT_CODE_NORMAL;
+    }
+
+    private function allowDraw(OnlineFangkuan $fangkuan)
+    {
+        return in_array($fangkuan->status, [
+            OnlineFangkuan::STATUS_FANGKUAN,
+            OnlineFangkuan::STATUS_TIXIAN_FAIL,
+        ]);
     }
 }
