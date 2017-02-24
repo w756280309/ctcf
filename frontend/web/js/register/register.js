@@ -219,6 +219,10 @@ function signup()
 
     xhr.done(function(data) {
         if (!data.code) {
+            if ('undefined' !== typeof _paq) {
+                _paq.push(['trackEvent', 'user', 'reg']);
+            }
+
             if ('undefined' !== typeof ga) {
                 ga('send', {
                     hitType: 'event',
