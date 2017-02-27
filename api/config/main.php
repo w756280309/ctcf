@@ -68,7 +68,7 @@ return [
                 'rest/accounts' => 'v1/rest/account/list',
                 'rest/borrowers' => 'v1/rest/borrower/list',
                 'rest/borrowers/<id:\d+>' => 'v1/rest/borrower/get',
-                'rest/borrowers/<id:\d+>/ump' => 'v1/rest/borrower/ump',
+                'rest/borrowers/ump/' => 'v1/rest/borrower/ump',//查看商户在联动账户信息　可以使用　$userId 也可以使用　$umpId
                 'rest/lenders/<id:\d+>' => 'v1/rest/lender/get',
                 'rest/lenders/<id:\d+>/ump' => 'v1/rest/lender/ump',
                 'rest/ordtx/<type:\d+>/<id:\d+>/ump' => 'v1/rest/ordertx/ump',

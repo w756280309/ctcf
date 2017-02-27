@@ -880,6 +880,29 @@ class Client
     }
 
     /**
+     * 普通无密转账，企业转账到p2p平台
+     * @param $sn
+     * @param $epayUserId
+     * @param $amount
+     * @param $time
+     * @return Response
+     */
+    public function platformTransfer($sn, $epayUserId, $amount, $time)
+    {
+        $data = [
+            'service' => 'transfer',
+            'order_id' => $sn,
+            'mer_date' => date('Ymd', $time),
+            'partic_user_id' => $epayUserId,
+            'partic_acc_type' => '02',//对公，向企业转账
+            'trans_action' => '01',//企业 向 p2p平台 转账
+            'amount' => $amount * 100,
+        ];
+
+        return $this->doRequest($data);
+    }
+
+    /**
      * 生成流水串号.
      *
      * @param type $prefix

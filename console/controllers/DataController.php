@@ -397,42 +397,91 @@ GROUP BY rp.uid, rp.online_Pid";
      * 3. 转指定金额 php yii data/transfer 1 $amount
      *
      * 南京交充值到平台账户，然后平台账户转让到立合旺通，立合旺通再提现到银行卡。
-     * @param bool $run 是否转账
+     * @param  bool $run 是否转账
+     * @param  float $amount 需要转账金额
+     * @param  bool $fromTransfer 是否进行转账方转账
+     * @param  bool $toTransfer 是否进行收款方转账
+     * @param  bool $draw 是否进行收款方提现
      */
-    public function actionTransfer($run = false, $amount = 0.01)
+    public function actionTransfer($run = false, $amount = 0.01, $fromTransfer = true, $toTransfer = true, $draw = true)
     {
         $amount = max(floatval($amount), 0);
-        //$epayUserId = '7601209';//测试环境融资方ID
-        $epayUserId = '7301209';//立合旺通 在联动正式环境账号
+        //$fromUserId = '7601209';//测试环境 转账方用户在联动ID
+        //$toUserId = '7601209';//测试环境 收款方用户在联动账户ID
+        $fromUserId = '7302209';//正式环境 转账方（南京交）在联动ID
+        $toUserId = '7301209';//正式环境 收款方 （立合旺通）在联动ID
+        $platformUserId = Yii::$app->params['ump']['merchant_id'];//平台在联动账户
         $ump = Yii::$container->get('ump');
-        //商户信息
-        $ret = $ump->getMerchantInfo($epayUserId);
-        $banance1 = $ret->get('balance');
-        $this->stdout('转账前账户余额：' . $banance1 . PHP_EOL);
+        //平台信息
+        $ret = $ump->getMerchantInfo($platformUserId);
+        $this->stdout('平台账户余额：' . $ret->get('balance') . PHP_EOL);
+        //转账方信息
+        $ret = $ump->getMerchantInfo($fromUserId);
+        $this->stdout('转账方账户余额：' . $ret->get('balance') . PHP_EOL);
+        //收款方信息
+        $ret = $ump->getMerchantInfo($toUserId);
+        $this->stdout('收款方账户余额：' . $ret->get('balance') . PHP_EOL);
+
 
         if ($run) {
-            $time = time();
-            $sn = TxUtils::generateSn('TR');
-            $ret = $ump->orgTransfer($sn, $epayUserId, $amount, $time);
-            if ($ret->isSuccessful()) {
-                //转账成功
+            if ($fromTransfer) {
+                //转账方 转账到 温都账户
+                $this->stdout('正在进行 转账方 转账到 温都账户' . PHP_EOL);
+                $time = time();
+                $sn = TxUtils::generateSn('TR');
+                $ret = $ump->platformTransfer($sn, $fromUserId, $amount, $time);
+                if ($ret->isSuccessful()) {
+                    //平台信息
+                    $ret = $ump->getMerchantInfo($platformUserId);
+                    $this->stdout('平台账户余额：' . $ret->get('balance') . PHP_EOL);
+                    //转账方信息
+                    $ret = $ump->getMerchantInfo($fromUserId);
+                    $this->stdout('转账方账户余额：' . $ret->get('balance') . PHP_EOL);
+
+                    $this->stdout('转账方 转账成功' . PHP_EOL);
+
+                } else {
+                    $this->stdout('转账方 转账失败，联动返回信息：' . $ret->get('ret_msg') . PHP_EOL);
+                }
+            }
+            if ($toTransfer) {
+                //温都账户 转账到 收款方账户
+                $this->stdout('正在进行 温都账户 转账到 收款方账户' . PHP_EOL);
+                $time = time();
+                $sn = TxUtils::generateSn('TR');
+                $ret = $ump->orgTransfer($sn, $toUserId, $amount, $time);
+                if ($ret->isSuccessful()) {
+                    //平台信息
+                    $ret = $ump->getMerchantInfo($platformUserId);
+                    $this->stdout('平台账户余额：' . $ret->get('balance') . PHP_EOL);
+                    //收款方信息
+                    $ret = $ump->getMerchantInfo($toUserId);
+                    $this->stdout('收款方账户余额：' . $ret->get('balance') . PHP_EOL);
+
+                    $this->stdout('收款方 转账成功' . PHP_EOL);
+
+                } else {
+                    $this->stdout('收款方 转账失败，联动返回信息：' . $ret->get('ret_msg') . PHP_EOL);
+                }
+            }
+            if ($draw) {
+                //收款方提现
+                $this->stdout('正在进行 收款方提现' . PHP_EOL);
                 $sn = TxUtils::generateSn('DRAW');
                 $time = time();
-                $ret = $ump->orgDraw($sn, $epayUserId, $amount, $time);
+                $ret = $ump->orgDraw($sn, $toUserId, $amount, $time);
                 if ($ret->isSuccessful()) {
                     var_dump($ret->toArray());
-                } else {
-                    $this->stdout('提现失败，联动返回信息：' . $ret->get('ret_msg') . PHP_EOL);
-                }
-            } else {
-                $this->stdout('转账失败，联动返回信息：' . $ret->get('ret_msg') . PHP_EOL);
-            }
-        }
 
-        //商户信息
-        $ret = $ump->getMerchantInfo($epayUserId);
-        $balance2 = $ret->get('balance');
-        $this->stdout('账户余额：' . $balance2 . PHP_EOL);
+                    //收款方账户信息
+                    $ret = $ump->getMerchantInfo($toUserId);
+                    $this->stdout('商户账户余额：' . $ret->get('balance') . PHP_EOL);
+                } else {
+                    $this->stdout('收款方提现失败，联动返回信息：' . $ret->get('ret_msg') . PHP_EOL);
+                }
+            }
+
+        }
     }
 
     /**

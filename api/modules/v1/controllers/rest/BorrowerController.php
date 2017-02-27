@@ -25,11 +25,18 @@ class BorrowerController extends Controller
         return $this->ensureBorrower($id);
     }
 
-    public function actionUmp($id)
+    public function actionUmp($userId = null, $umpId = null)
     {
-        $borrower = $this->ensureBorrower($id);
+        if (empty($umpId) && !empty($userId)) {
+            $borrower = $this->ensureBorrower($userId);
+            $epayUserId = $borrower->epayUser->epayUserId;
+        } elseif(empty($umpId) && empty($id)) {
+            return [];
+        } else {
+            $epayUserId = $umpId;
+        }
 
-        $resp = \Yii::$container->get('ump')->getMerchantInfo($borrower->epayUser->epayUserId);
+        $resp = \Yii::$container->get('ump')->getMerchantInfo($epayUserId);
 
         return [
             'mer_id' => $resp->get('query_mer_id'),
