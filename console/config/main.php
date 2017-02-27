@@ -82,14 +82,8 @@ return [
             'host'=> "127.0.0.1", // default host
             'port'=>11300, //default port
             'connectTimeout'=> 1,
-            'sleep' => false, // or int for usleep after every job 
+            'sleep' => false, // or int for usleep after every job
         ],
     ],
     'params' => $params,
-    'controllerMap' => [
-        'worker'=>[
-            'class' => 'app\commands\WorkerController',
-        ]
- 
-    ],
 ];
