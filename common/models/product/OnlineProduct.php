@@ -751,8 +751,9 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
         }
     }
 
-    public function getFangkuan(){
-        return $this->hasOne(OnlineFangkuan::class,['online_product_id'=> 'id']);
+    public function getFangkuan()
+    {
+        return $this->hasOne(OnlineFangkuan::class, ['online_product_id' => 'id']);
     }
 
     /**
@@ -1021,5 +1022,24 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
         }
 
         return true;
+    }
+
+    /**
+     * 是否允许标的还款.
+     */
+    public function allowRepayment()
+    {
+        if (
+            $this->fangkuan
+            && in_array($this->fangkuan->status, [
+                OnlineFangkuan::STATUS_FANGKUAN,
+                OnlineFangkuan::STATUS_TIXIAN_APPLY,
+                OnlineFangkuan::STATUS_TIXIAN_SUCC,
+            ])
+        ) {
+            return true;
+        }
+
+        return false;
     }
 }

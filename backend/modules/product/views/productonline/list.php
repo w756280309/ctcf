@@ -147,7 +147,7 @@ $pc_cat = Yii::$app->params['pc_cat'];
                                 <?php if ($val['online_status'] == 1 && $val['status'] > 1) { ?>
                                     | <a href="/order/onlineorder/list?id=<?= $val['id'] ?>" class="btn mini green"><i class="icon-edit"></i> 投标记录</a>
                                 <?php } ?>
-                                <?php if ($val->fangkuan && OnlineFangkuan::STATUS_TIXIAN_SUCC === $val->fangkuan->status) { ?>
+                                <?php if ($val->allowRepayment()) { ?>
                                     | <a href="/repayment/repayment?pid=<?= $val['id'] ?>" class="btn mini green"><i class="icon-edit"></i> 还款</a>
                                 <?php } ?>
                                 <?php if ($val['fk_examin_time'] && in_array($val->fangkuan->status, [OnlineFangkuan::STATUS_EXAMINED, OnlineFangkuan::STATUS_FANGKUAN, OnlineFangkuan::STATUS_TIXIAN_FAIL])) { ?>
