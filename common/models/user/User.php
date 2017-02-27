@@ -6,6 +6,7 @@ use common\models\bank\BankCardUpdate;
 use common\models\epay\EpayUser;
 use common\models\mall\ThirdPartyConnect;
 use common\models\order\OnlineOrder as Ord;
+use common\models\order\OnlineOrder;
 use common\models\order\OrderQueue;
 use common\models\order\OnlineRepaymentPlan as RepaymentPlan;
 use common\models\product\OnlineProduct;
@@ -846,6 +847,7 @@ class User extends ActiveRecord implements IdentityInterface, UserInterface
     {
         return \Yii::$container->get('txClient')->get('user/top-list', ['startDate' => $startDate, 'limit' => $limit]);
     }
+
     //用户绑卡逻辑
     public function bindCard(QpayBinding $bind, array $responseData)
     {
@@ -880,7 +882,9 @@ class User extends ActiveRecord implements IdentityInterface, UserInterface
         return false;
     }
 
-    //用户换卡
+    /**
+     * 用户换卡.
+     */
     public function updateCard(BankCardUpdate $model, array $responseData)
     {
         if (in_array($model->status, [BankCardUpdate::STATUS_SUCCESS, BankCardUpdate::STATUS_FAIL])) {
@@ -923,5 +927,21 @@ class User extends ActiveRecord implements IdentityInterface, UserInterface
             $transaction->rollBack();
         }
         return false;
+    }
+
+    /**
+     * 获取用户投资过标的数量(投资失败的不算在内).
+     */
+    public function orderCount()
+    {
+        return (int) OnlineOrder::find()
+            ->where([
+                'status' => [
+                    OnlineOrder::STATUS_FALSE,
+                    OnlineOrder::STATUS_SUCCESS,
+                ],
+                'uid' => $this->id,
+            ])
+            ->count('DISTINCT(online_pid)');
     }
 }

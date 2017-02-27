@@ -37,7 +37,7 @@ class Issuer extends ActiveRecord
     {
         return [
             self::SCENARIO_JICHU => ['name', 'mediaTitle', 'videoUrl', 'imgUrl', 'isShow', 'sort'],
-            self::SCENARIO_KUOZHAN => ['name', 'big_pic', 'mid_pic', 'small_pic', 'isShow', 'sort', 'path'],
+            self::SCENARIO_KUOZHAN => ['name', 'big_pic', 'mid_pic', 'small_pic', 'isShow', 'sort', 'path', 'allowShowOnPc', 'pcTitle', 'pcDescription', 'pcLink'],
         ];
     }
 
@@ -73,8 +73,14 @@ class Issuer extends ActiveRecord
             ['isShow', 'default',  'value' => 0, 'on' => [self::SCENARIO_JICHU, self::SCENARIO_KUOZHAN]],
             ['sort', 'integer', 'on' => [self::SCENARIO_JICHU, self::SCENARIO_KUOZHAN]],
             ['path', 'string', 'on' => self::SCENARIO_KUOZHAN],
-            ['path', 'match', 'pattern' => '/^[a-zA-Z0-9.:\/?&=_-]+$/', 'message' => '{attribute}不应包含特殊字符,如中文等', 'on' => self::SCENARIO_KUOZHAN],
+            [['path', 'pcLink'], 'match', 'pattern' => '/^[a-zA-Z0-9.:\/?&=_-]+$/', 'message' => '{attribute}不应包含特殊字符,如中文等', 'on' => self::SCENARIO_KUOZHAN],
             [['small_pic', 'mid_pic', 'big_pic'], 'checkPic', 'skipOnEmpty' => false, 'skipOnError' => false, 'on' => self::SCENARIO_KUOZHAN],
+            ['allowShowOnPc', 'default',  'value' => 0, 'on' => [self::SCENARIO_JICHU, self::SCENARIO_KUOZHAN]],
+            [['pcTitle', 'pcDescription', 'pcLink'], 'required', 'when' => function ($model) {
+                return 1 === $model->allowShowOnPc;}, 'whenClient' => "function (attribute, value) {
+                return $('#issuer-allowshowonpc').parent().hasClass('checked');
+            }", 'on' => self::SCENARIO_KUOZHAN],
+            ['pcLink', 'string', 'on' => self::SCENARIO_KUOZHAN],
         ];
     }
 
@@ -95,6 +101,10 @@ class Issuer extends ActiveRecord
             'isShow' => '首页显示',
             'sort' => '排序',
             'path' => '图片跳转地址',
+            'allowShowOnPc' => 'PC端显示',
+            'pcTitle' => 'PC端标题',
+            'pcDescription' => 'PC端内容',
+            'pcLink' => 'PC端跳转地址',
         ];
     }
 

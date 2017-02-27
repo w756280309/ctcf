@@ -8,6 +8,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/index.js', ['depends' => 'frontend\ass
 use common\models\product\OnlineProduct;
 use common\utils\StringUtils;
 use common\view\LoanHelper;
+use yii\helpers\Html;
 
 ?>
 
@@ -291,14 +292,18 @@ use common\view\LoanHelper;
             <span>精选项目</span>
             <a href = " " style="display: none;">更多&gt;</a>
         </div>
+        <?php if (null !== $jingxuan) { ?>
         <ul class="more-right-bottom">
-            <li><a href="https://www.wenjf.com/upload/showpic?id=30" target="_blank">宁富17号 - 北大高科</a>
-                <p class="issuer-desc">知名国企，担保稳健，5万起投，预期年化收益率7.2%</p>
+            <?php foreach ($jingxuan as $jx) { ?>
+            <li style="width: 75%;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;">
+                <a href="<?= Html::encode($jx->pcLink) ?>" target="_blank"><?= $jx->pcTitle ?></a>
             </li>
-            <li><a href="https://www.wenjf.com/upload/showpic?id=24" target="_blank">宁富1号 - 三都国资</a>
-                <p class="issuer-desc">政府支持，AA级担保企业，5万起投，预期年化收益率8.8%</p>
+            <li style="width: 75%;list-style: none;">
+                <p style="overflow: hidden;height: 36px;font-size: 12px;margin-top: 0.5em;margin-left: 1em;" class="issuer-desc"><?= $jx->pcDescription ?></p>
             </li>
+            <?php } ?>
         </ul>
+        <?php } ?>
     </div>
 </div>
 <div style="clear: both"></div>

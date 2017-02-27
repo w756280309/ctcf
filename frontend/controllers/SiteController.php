@@ -9,6 +9,7 @@ use common\models\category\Category;
 use common\models\log\LoginLog;
 use common\models\news\News;
 use common\models\offline\OfflineUser;
+use common\models\product\Issuer;
 use common\models\product\OnlineProduct;
 use common\models\user\CaptchaForm;
 use common\models\user\LoginForm;
@@ -16,7 +17,6 @@ use common\models\user\SignupForm;
 use common\models\user\User;
 use common\service\LoginService;
 use common\service\SmsService;
-use wap\modules\promotion\models\RankingPromo;
 use Yii;
 use yii\helpers\ArrayHelper;
 use yii\web\Controller;
@@ -128,6 +128,12 @@ class SiteController extends Controller
             ->limit(5)
             ->all();
 
+        //精选项目
+        $jingxuan = Issuer::find()
+            ->where(['allowShowOnPc' => true])
+            ->orderBy(['sort' => SORT_ASC])
+            ->limit(2)
+            ->all();
 
         return $this->render('index', [
             'adv' => $adv,
@@ -138,6 +144,7 @@ class SiteController extends Controller
             'first_media' => $first_media,
             'licai' => $licai,
             'touzi' => $touzi,
+            'jingxuan' => $jingxuan,
         ]);
     }
 

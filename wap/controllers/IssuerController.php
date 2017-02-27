@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use common\controllers\HelpersTrait;
 use common\models\product\Issuer;
+use common\models\product\JxPage;
 use common\models\product\OnlineProduct;
 use yii\web\Controller;
 
@@ -20,21 +21,32 @@ class IssuerController extends Controller
      *    3   =>   宁富17号北大高科
      *    5   =>   南金交中盛海润
      *   10   =>   南金交宁富20号中科建
+     * 3. 如果上述四个发行方存在项目配置页，则优先以项目配置页显示
      *
      * @param int $id 发行方ID
      */
     public function actionIndex($id)
     {
-        if (!in_array($id, [2, 3, 5, 10])) {
-            throw $this->ex404();
+        if (null === ($jxPage = JxPage::find()->where(['issuerId' => $id])->one())) {
+            if (!in_array($id, [2, 3, 5, 10])) {
+                throw $this->ex404();
+            }
         }
+
         $issuer = $this->findOr404(Issuer::class, $id);
         $loansCount = $this->loanQuery($issuer->id)
             ->count();
 
-        return $this->render('index', [
+        if (in_array($id, [2, 3, 5, 10]) && null === $jxPage) {
+            return $this->render('index', [
+                'issuer' => $issuer,
+                'loansCount' => intval($loansCount),
+            ]);
+        }
+        return $this->render('new_index', [
             'issuer' => $issuer,
             'loansCount' => intval($loansCount),
+            'jxPage' => $jxPage,
         ]);
     }
 

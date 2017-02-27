@@ -8,6 +8,7 @@ use common\models\coupon\CouponType;
 use common\models\coupon\UserCoupon;
 use common\models\promo\InviteRecord;
 use common\models\promo\PromoService;
+use common\models\sms\SmsConfig;
 use common\service\SmsService;
 use Yii;
 use yii\base\Model;
@@ -191,14 +192,12 @@ class SignupForm extends Model
             }
 
             if ($issuedCoupon) {
-                $message = [
-                    'http://dwz.cn/43x1YL',
-                    Yii::$app->params['contact_tel'],
-                ];
+                $templateId = '155661';
+                $smsConfig = SmsConfig::findOne(['template_id' => $templateId]);
 
-                $templateId = Yii::$app->params['sms']['register_coupon'];
-
-                SmsService::send($user->mobile, $templateId, $message, $user);
+                if ($smsConfig) {
+                    SmsService::send($user->mobile, $templateId, $smsConfig->getConfig(), $user);
+                }
             }
 
             $transaction->commit();

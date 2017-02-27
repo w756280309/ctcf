@@ -113,6 +113,7 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
+        $this->layout = 'normal';
         $cond = [OnlineProduct::STATUS_PRE, OnlineProduct::STATUS_NOW];
 
         //新手专区
@@ -187,7 +188,6 @@ class SiteController extends Controller
             ->limit(3)
             ->all();
 
-        $this->layout = 'fe';
 
         return $this->render('index170109', [
             'xs' => $xs,
