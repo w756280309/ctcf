@@ -15,9 +15,12 @@ use common\models\product\OnlineProduct;
 use common\models\promo\FirstOrderPoints;
 use common\models\promo\InviteRecord;
 use common\models\promo\LoanOrderPoints;
+use common\models\sms\SmsMessage;
+use common\models\sms\SmsTable;
 use common\models\user\User;
 use common\models\user\UserAccount;
 use common\models\user\UserInfo;
+use common\utils\SecurityUtils;
 use common\utils\StringUtils;
 use common\utils\TxUtils;
 use common\view\LoanHelper;
@@ -604,4 +607,43 @@ GROUP BY rp.uid, rp.online_Pid";
             }
         }
     }
+
+
+    //初始化温都金服用户信息加密key php yii data/init-key
+    public function actionInitKey()
+    {
+        $randomKey = Yii::$app->security->generateRandomString(255);
+        $file = Yii::$app->params['wdjf_security_key'];
+        if (file_exists($file)) {
+            $this->stdout('加密文件已经存在');
+        } else {
+            file_put_contents($file, $randomKey);
+        }
+    }
+
+    //初始化用户加密手机号 php yii data/update-safe-mobile
+    public function actionUpdateSafeMobile()
+    {
+        //更新user表
+        $users = User::find()->where(['safeMobile' => null])->all();
+        foreach ($users as $user) {
+            $user->safeMobile = SecurityUtils::encrypt($user->mobile);
+            $user->save(false);
+        }
+        //更新sms表
+        $sms = SmsTable::find()->where(['safeMobile' => null])->all();
+        foreach ($sms as $val) {
+            $val->safeMobile = SecurityUtils::encrypt($val->mobile);
+            $val->save(false);
+        }
+
+        //更新sms_message表
+        $message = SmsMessage::find()->where(['safeMobile' => null])->all();
+        foreach ($message as $val) {
+            $val->safeMobile = SecurityUtils::encrypt($val->mobile);
+            $val->save(false);
+        }
+    }
+    
+
 }

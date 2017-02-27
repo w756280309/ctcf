@@ -5,6 +5,7 @@ namespace common\service;
 use common\models\sms\SmsTable;
 use common\models\sms\SmsMessage;
 use common\models\user\User;
+use common\utils\SecurityUtils;
 use Yii;
 
 /**
@@ -46,11 +47,12 @@ class SmsService
         }
 
         $time = time();
-        $sms = SmsTable::find()->where(['mobile' => $phone, 'status' => SmsTable::STATUS_UNUSE])->andFilterWhere(['>=', 'end_time', $time])->orderBy('id desc')->one();
+        $sms = SmsTable::find()->where(['safeMobile' => SecurityUtils::encrypt($phone), 'status' => SmsTable::STATUS_UNUSE])->andFilterWhere(['>=', 'end_time', $time])->orderBy('id desc')->one();
         $model = new SmsTable([
             'code' => $sms ? ($sms->code) : (Yii::$app->functions->createRandomStr()),
             'type' => $type,
             'mobile' => $phone,
+            'safeMobile' => SecurityUtils::encrypt($phone),
         ]);
 
         $model->time_len = 5;
@@ -86,9 +88,9 @@ class SmsService
                 $sms = new SmsMessage([
                     'template_id' => $template_id,
                     'mobile' => $model->mobile,
+                    'safeMobile' => $model->safeMobile,
                     'message' => json_encode($message),
                 ]);
-
                 try {
                     $res = \Yii::$container->get('sms')->send($sms);
                     if ($res) {
@@ -116,7 +118,7 @@ class SmsService
      */
     public static function validateSmscode($phone, $smscode)
     {
-        $model = SmsTable::find()->where(['mobile' => $phone, 'status' => SmsTable::STATUS_UNUSE])->orderBy('id desc')->one();
+        $model = SmsTable::find()->where(['safeMobile' => SecurityUtils::encrypt($phone), 'status' => SmsTable::STATUS_UNUSE])->orderBy('id desc')->one();
         if (empty($model)) {
             return ['code' => 1, 'message' => '短信验证码输入错误'];
         }
@@ -137,7 +139,7 @@ class SmsService
      */
     public static function editSms($phone)
     {
-        SmsTable::updateAll(['status' => SmsTable::STATUS_USE], ['mobile' => $phone, 'status' => SmsTable::STATUS_UNUSE]);
+        SmsTable::updateAll(['status' => SmsTable::STATUS_USE], ['safeMobile' => SecurityUtils::encrypt($phone), 'status' => SmsTable::STATUS_UNUSE]);
     }
 
     /**
@@ -149,6 +151,7 @@ class SmsService
             'template_id' => $templateId,
             'uid' => $user ? $user->id : 0,
             'mobile' => $mobile,
+            'safeMobile' => SecurityUtils::encrypt($mobile),
             'message' => json_encode($data),
             'level' => $level,
         ]);

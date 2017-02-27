@@ -54,6 +54,8 @@ use Zii\Validator\CnMobileValidator;
  * @property int    coins               用户财富值
  * @property int    level               用户等级
  * @property string annualInvestment    用户累计年化投资额
+ * @property string safeMobile          加密后的手机号
+ * @property string safeIdCard          加密后的身份证
  */
 class User extends ActiveRecord implements IdentityInterface, UserInterface
 {
@@ -213,7 +215,7 @@ class User extends ActiveRecord implements IdentityInterface, UserInterface
             ],
             'edit' => ['id', 'type', 'username', 'mobile', 'email', 'real_name', 'idcard', 'org_name', 'org_code', 'status', 'auth_key', 'user_pass', 'in_time', 'cat_id', 'law_master', 'law_master_idcard', 'law_mobile', 'shui_code', 'business_licence', 'tel', 'passwordLastUpdatedTime',
             ],
-            'signup' => ['type', 'modile', 'password_hash', 'auth_key', 'usercode', 'regContext'],
+            'signup' => ['type', 'modile', 'password_hash', 'auth_key', 'usercode', 'regContext', 'safeMobile'],
             'idcardrz' => ['real_name', 'idcard', 'idcard_status'],
             'editpass' => ['password_hash', 'trade_pwd', 'auth_key'],
             'login' => ['last_login'],
@@ -263,6 +265,7 @@ class User extends ActiveRecord implements IdentityInterface, UserInterface
             [['business_licence', 'shui_code'], 'match', 'pattern' => '/\d+/', 'message' => '格式不正确，应为纯数字格式', 'on' => ['add', 'edit']],
             [['org_name'], 'required'],
             [['passwordLastUpdatedTime'], 'safe'],
+            [['safeMobile', 'safeIdCard'], 'string'],
         ];
     }
 

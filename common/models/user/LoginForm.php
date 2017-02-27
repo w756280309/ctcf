@@ -2,6 +2,7 @@
 
 namespace common\models\user;
 
+use common\utils\SecurityUtils;
 use Yii;
 use yii\base\Model;
 use Zii\Validator\CnMobileValidator;
@@ -82,7 +83,7 @@ class LoginForm extends Model
     {
         if (false === $this->_user) {
             if (User::USER_TYPE_PERSONAL === $userType) {
-                $this->_user = User::findOne(['mobile' => $this->phone, 'type' => $userType]);
+                $this->_user = User::findOne(['safeMobile' => SecurityUtils::encrypt($this->phone), 'type' => $userType]);
             } elseif (User::USER_TYPE_ORG === $userType) {
                 $this->_user = User::findOne(['username' => $this->username, 'type' => $userType]);
             }

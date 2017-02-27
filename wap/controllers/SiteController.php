@@ -27,6 +27,7 @@ use common\models\user\LoginForm;
 use common\models\user\EditpassForm;
 use common\models\user\User;
 use common\models\user\CaptchaForm;
+use common\utils\SecurityUtils;
 use wap\modules\promotion\models\Promo160520;
 use wap\modules\promotion\models\Promo160520Log;
 use Yii;
@@ -485,10 +486,6 @@ class SiteController extends Controller
 
         if ($model->load($data) && Yii::$app->request->isAjax) {
             if ($user = $model->signup(User::REG_FROM_WAP, $data['regContext'])) {
-                $promo160520log = Promo160520Log::findOne(['mobile' => $user->mobile]);
-                if ($promo160520log) {
-                    Promo160520::insertCoupon($user, $promo160520log->prizeId);
-                }
 
                 $isLoggedin = defined('IN_APP')
                     ? Yii::$app->user->setIdentity($user) || true
@@ -629,7 +626,8 @@ class SiteController extends Controller
         }
 
         if (1 === (int) $type) {
-            $user = User::findOne(['mobile' => $phone]);
+            //使用加密后的手机号去验证是否重复
+            $user = User::findOne(['safeMobile' => SecurityUtils::encrypt($phone)]);
             if (null !== $user) {
                 return ['code' => 1, 'message' => '此手机号已经注册'];
             }

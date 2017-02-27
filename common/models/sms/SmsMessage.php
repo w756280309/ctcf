@@ -2,6 +2,7 @@
 
 namespace common\models\sms;
 
+use common\utils\SecurityUtils;
 use yii\behaviors\TimestampBehavior;
 use common\models\user\User;
 
@@ -42,6 +43,7 @@ class SmsMessage extends \yii\db\ActiveRecord
             [['uid', 'template_id', 'mobile', 'message'], 'required'],
             ['status', 'default', 'value' => 0],
             ['level', 'default', 'value' => self::LEVEL_LOW],
+            ['safeMobile', 'string'],
         ];
     }
 
@@ -70,6 +72,7 @@ class SmsMessage extends \yii\db\ActiveRecord
                 'uid' => $user->id,
                 'template_id' => $template_id,
                 'mobile' => $user->mobile,
+                'safeMobile' => SecurityUtils::encrypt($user->mobile),
                 'level' => $level,
                 'message' => json_encode($message),
             ]);

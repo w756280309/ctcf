@@ -10,6 +10,7 @@ use common\models\promo\InviteRecord;
 use common\models\promo\PromoService;
 use common\models\sms\SmsConfig;
 use common\service\SmsService;
+use common\utils\SecurityUtils;
 use Yii;
 use yii\base\Model;
 use Zii\Validator\CnMobileValidator;
@@ -58,7 +59,7 @@ class SignupForm extends Model
     public function checkPhoneUnique($attribute, $params)
     {
         $num = $this->$attribute;
-        $re = User::findOne(['mobile' => $num]);
+        $re = User::findOne(['safeMobile' => SecurityUtils::encrypt($num)]);
 
         if ($this->reset_flag) {
             if (empty($re)) {
@@ -115,6 +116,7 @@ class SignupForm extends Model
                 'username' => '',
                 'law_mobile' => '',
                 'regContext' => $regContext,
+                'safeMobile' => SecurityUtils::encrypt($this->phone),
             ]);
 
             $user->scenario = 'signup';
@@ -196,12 +198,12 @@ class SignupForm extends Model
                 $smsConfig = SmsConfig::findOne(['template_id' => $templateId]);
 
                 if ($smsConfig) {
-                    SmsService::send($user->mobile, $templateId, $smsConfig->getConfig(), $user);
+                    SmsService::send(SecurityUtils::decrypt($user->safeMobile), $templateId, $smsConfig->getConfig(), $user);
                 }
             }
 
             $transaction->commit();
-            SmsService::editSms($user->mobile);
+            SmsService::editSms(SecurityUtils::decrypt($user->safeMobile));
             if (Yii::$app->request->cookies->getValue('campaign_source')) {
                 (new AffiliationManager())->log(Yii::$app->request->cookies->getValue('campaign_source'), $user);
             }
@@ -231,7 +233,7 @@ class SignupForm extends Model
             $model->scenario = 'editpass';
             $model->setPassword($this->password);
             $res = $model->save();
-            SmsService::editSms($model->mobile);
+            SmsService::editSms(SecurityUtils::decrypt($model->mobile));
 
             return $res;
         } else {

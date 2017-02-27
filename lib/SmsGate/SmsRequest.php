@@ -4,6 +4,7 @@ namespace SmsGate;
 
 use common\models\Sms;
 use common\models\sms\SmsMessage;
+use common\utils\SecurityUtils;
 
 /**
  * 短信接口类
@@ -24,7 +25,7 @@ class SmsRequest
     {
         $sms = new Sms();
         $msg_arr = json_decode($message->message, false);
-        $data = $sms->sendTemplateSMS($message->mobile, $msg_arr, $message->template_id);
+        $data = $sms->sendTemplateSMS(SecurityUtils::decrypt($message->safeMobile), $msg_arr, $message->template_id);
         $statusCode = (string) $data->statusCode;
         if ('000000' === $statusCode) {
             return true;
