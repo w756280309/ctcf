@@ -13,6 +13,7 @@ use common\models\payment\Repayment;
 use common\models\product\Issuer;
 use common\models\product\OnlineProduct;
 use common\models\promo\FirstOrderPoints;
+use common\models\promo\InviteRecord;
 use common\models\promo\LoanOrderPoints;
 use common\models\user\User;
 use common\models\user\UserAccount;
@@ -557,5 +558,50 @@ GROUP BY rp.uid, rp.online_Pid";
             OnlineFangkuan::STATUS_FANGKUAN,
             OnlineFangkuan::STATUS_TIXIAN_FAIL,
         ]);
+    }
+
+    /**
+     * 补邀请关系
+     * 实例：php yii data/add-invite 334 589200  （邀请者334,被邀请者589200）
+     * 注意：
+     * 1. 之后邀请者和被邀请者没有邀请关系的时候才能补邀请关系
+     * 2. 取被邀请者前三次订单补发奖励（无法判断奖励是否已发放，只能依赖与“没有邀请关系的用户已经没有发邀请奖励”）
+     * @param $user_id      int     邀请者ID
+     * @param $invitee_id   int     被邀请者ID
+     */
+    public function actionAddInvite($user_id, $invitee_id){
+        if (empty($user_id) || empty($invitee_id)) {
+            return;
+        }
+        $user = User::findOne($user_id);
+        $invitee = User::findOne($invitee_id);
+        if (is_null($user) || is_null($invitee)) {
+            return;
+        }
+
+        $record = InviteRecord::find()->where(['user_id' => $user_id, 'invitee_id' => $invitee_id])->one();
+        if (!is_null($record)) {
+            return;
+        }
+
+        $promo = RankingPromo::findOne(['key' => 'promo_invite_12']);
+        if (!is_null($promo) && !empty($promo->promoClass)) {
+            $model = new $promo->promoClass($promo);
+            if (!empty($model)) {
+                $inviteRecord = new InviteRecord([
+                    'user_id' => $user_id,
+                    'invitee_id' => $invitee_id,
+                ]);
+                if (!$inviteRecord->save()) {
+                    return;
+                }
+                //被邀请者前三次记录
+                $orders = OnlineOrder::find()->where(['status' => 1, 'uid' => $invitee_id])->orderBy(['created_at' => SORT_DESC])->limit(3)->all();
+                foreach ($orders as $order) {
+                    //发奖励
+                    $model->doAfterSuccessLoanOrder($order);
+                }
+            }
+        }
     }
 }

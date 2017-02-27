@@ -21,7 +21,7 @@ class BankBackNotifyAction extends Action
         $this->controller->layout = false;
         $err = '00009999';
         $data = Yii::$app->request->get();
-        if (IN_APP && array_key_exists('token', $data)) {
+        if (defined('IN_APP') && array_key_exists('token', $data)) {
             unset($data['token']);
         }
         TradeLog::initLog(2, $data, $data['sign'])->save();

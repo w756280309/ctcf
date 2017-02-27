@@ -20,7 +20,7 @@ class BankFrontNotifyAction extends Action
     public function run()
     {
         $data = Yii::$app->request->get();
-        if (IN_APP && array_key_exists('token', $data)) {
+        if (defined('IN_APP') && array_key_exists('token', $data)) {
             unset($data['token']);
         }
         TradeLog::initLog(2, $data, $data['sign'])->save();
