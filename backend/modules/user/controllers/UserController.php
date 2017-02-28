@@ -3,8 +3,8 @@
 namespace backend\modules\user\controllers;
 
 use backend\controllers\BaseController;
+use common\lib\err\Err;
 use common\lib\user\UserStats;
-use common\models\adminuser\AdminLog;
 use common\models\affiliation\UserAffiliation;
 use common\models\bank\Bank;
 use common\models\epay\EpayUser;
@@ -22,7 +22,6 @@ use common\models\user\RechargeRecord;
 use common\models\user\UserSearch;
 use common\models\user\DrawRecord;
 use wap\modules\promotion\models\RankingPromo;
-use Wcg\Http\HeaderUtils;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\data\ArrayDataProvider;
@@ -210,6 +209,108 @@ class UserController extends BaseController
         }
     }
 
+    /**
+     * 给邀请人补充邀请关系.
+     */
+    public function actionAddInvite($userId, $mobile = null)
+    {
+        $user = $this->findOr404(User::class, $userId);
+        $invitee = null;
+
+        if (!empty($mobile)) {
+            $this->time = 2;
+            $this->alert = 2;
+            $this->msg = '';
+
+            if ($mobile === $user->mobile) {
+                $this->msg = '【'.Err::code('000008').'】被邀请人不能是本人';
+            } else {
+                $invitee = User::findOne(['mobile' => $mobile, 'type' => User::USER_TYPE_PERSONAL]);
+
+                if (is_null($invitee)) {
+                    $this->msg = '【'.Err::code('000002').'】被邀请人还没有注册';
+                }
+            }
+
+            if (Yii::$app->request->isAjax) {
+                if ($this->msg) {
+                    $back = ['code' => 1, 'message' => $this->msg];
+                } else {
+                    $back = ['code' => 0, 'mobile' => $invitee->mobile, 'realName' => $invitee->real_name];
+                }
+
+                return $back;
+            }
+
+            if ('' === $this->msg) {
+                try {
+                    $this->addInvite($user, $invitee);
+                    $this->alert = 1;
+                    $this->msg = '操作成功';
+                    $this->toUrl = '/user/user/detail?id='.$user->id.'&type=1';
+                } catch (\Exception $e) {
+                    $this->msg = $e->getMessage();
+                }
+            }
+        }
+
+        return $this->render('add_invite', [
+            'user' => $user,
+            'invitee' => $invitee,
+        ]);
+    }
+
+    /**
+     * 补邀请关系.
+     *
+     * 注意：
+     * 1. 只有邀请者和被邀请者没有邀请关系的时候才能补邀请关系;
+     * 2. 取被邀请者前三次订单补发奖励（无法判断奖励是否已发放，只能依赖于“没有邀请关系的用户没有发邀请奖励”来判断）;
+     */
+    private function addInvite($user, $invitee)
+    {
+        $record = InviteRecord::findOne([
+            'user_id' => $user->id,
+            'invitee_id' => $invitee->id,
+        ]);
+
+        if (!is_null($record)) {
+            throw new \Exception('【'.Err::code('000007').'】邀请关系已存在');
+        }
+
+        $promo = RankingPromo::findOne(['key' => 'promo_invite_12']);
+        if (!is_null($promo) && !empty($promo->promoClass)) {
+            $model = new $promo->promoClass($promo);
+            if (!empty($model)) {
+                $inviteRecord = new InviteRecord([
+                    'user_id' => $user->id,
+                    'invitee_id' => $invitee->id,
+                ]);
+                if (!$inviteRecord->save()) {
+                    throw new \Exception('【'.Err::code('000003').'】邀请记录添加失败');
+                }
+
+                $model->addInviteeCoupon($invitee);  //给被邀请人发放代金券奖励
+
+                //被邀请者前三次记录
+                $orders = OnlineOrder::find()->where([
+                    'status' => OnlineOrder::STATUS_SUCCESS,
+                    'uid' => $invitee->id,
+                ])
+                ->orderBy([
+                    'created_at' => SORT_DESC,
+                ])
+                ->limit(3)
+                ->all();
+
+                foreach ($orders as $order) {
+                    //发奖励
+                    $model->doAfterSuccessLoanOrder($order);
+                }
+            }
+        }
+    }
+
     private function dealAjax(User $user)
     {
         $key = Yii::$app->request->get('key');
@@ -322,6 +423,7 @@ class UserController extends BaseController
             'dataProvider' => $dataProvider,
             'rechargeData' => $rechargeData,
             'loanData' => $loanData,
+            'user' => $user,
         ]);
     }
 
