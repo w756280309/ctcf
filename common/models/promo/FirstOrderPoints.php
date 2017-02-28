@@ -47,6 +47,7 @@ class FirstOrderPoints
                 if (!is_null($oldOrder)) {
                     return false;
                 }
+
                 //活动期间首次投资
                 $query = OnlineOrder::find()->where(['uid' => $user->id, 'status' => OnlineOrder::STATUS_SUCCESS])->andWhere(['>=', 'order_time', strtotime($this->promo->startTime)]);
                 if (!empty($this->promo->endTime)) {
@@ -54,6 +55,11 @@ class FirstOrderPoints
                 }
                 $firstOrder = $query->orderBy(['order_time' => SORT_ASC])->one();
                 if (is_null($firstOrder) || $firstOrder->id !== $order->id) {
+                    return false;
+                }
+
+                //活动期间首次投资而且是O2O渠道注册用户
+                if ($user->isO2oRegister()) {
                     return false;
                 }
 

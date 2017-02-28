@@ -15,6 +15,7 @@ use common\models\user\RechargeRecord as Recharge;
 use common\models\user\DrawRecord as Draw;
 use P2pl\Borrower;
 use P2pl\UserInterface;
+use Wcg\Growth\Integration\Yii2Module\Model\ReferralSource;
 use Yii;
 use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
@@ -946,5 +947,15 @@ class User extends ActiveRecord implements IdentityInterface, UserInterface
                 'uid' => $this->id,
             ])
             ->count('DISTINCT(online_pid)');
+    }
+
+    /**
+     * 判断当前用户是否为o2o渠道注册用户
+     *
+     * @return bool
+     */
+    public function isO2oRegister()
+    {
+        return null !== ReferralSource::find()->where(['isO2O' => true, 'source' => $this->campaign_source])->one();
     }
 }
