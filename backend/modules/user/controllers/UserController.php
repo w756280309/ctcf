@@ -264,18 +264,17 @@ class UserController extends BaseController
      * 补邀请关系.
      *
      * 注意：
-     * 1. 只有邀请者和被邀请者没有邀请关系的时候才能补邀请关系;
+     * 1. 只有邀请者和被邀请者都没有邀请关系的时候才能补邀请关系;
      * 2. 取被邀请者前三次订单补发奖励（无法判断奖励是否已发放，只能依赖于“没有邀请关系的用户没有发邀请奖励”来判断）;
      */
     private function addInvite($user, $invitee)
     {
-        $record = InviteRecord::findOne([
-            'user_id' => $user->id,
-            'invitee_id' => $invitee->id,
-        ]);
+        if (InviteRecord::inviteCount($user->id) > 0) {
+            throw new \Exception('【'.Err::code('000007').'】邀请人邀请关系已存在');
+        }
 
-        if (!is_null($record)) {
-            throw new \Exception('【'.Err::code('000007').'】邀请关系已存在');
+        if (InviteRecord::inviteCount($invitee->id) > 0) {
+            throw new \Exception('【'.Err::code('000007').'】被邀请人邀请关系已存在');
         }
 
         $promo = RankingPromo::findOne(['key' => 'promo_invite_12']);

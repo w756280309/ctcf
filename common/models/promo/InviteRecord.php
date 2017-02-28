@@ -119,4 +119,25 @@ class InviteRecord extends ActiveRecord
     {
         return $this->hasOne(User::className(), ['id' => 'invitee_id']);
     }
+
+    /**
+     * 获取邀请记录的总条数.
+     *
+     * @param string | int $userId 用户ID
+     *
+     * @return int
+     */
+    public static function inviteCount($userId)
+    {
+        $count = self::find()
+            ->where([
+                'user_id' => $userId,
+            ])
+            ->orWhere([
+                'invitee_id' => $userId,
+            ])
+            ->count();
+
+        return intval($count);
+    }
 }
