@@ -435,6 +435,11 @@ GROUP BY rp.uid, rp.online_Pid";
                 $sn = TxUtils::generateSn('TR');
                 $ret = $ump->platformTransfer($sn, $fromUserId, $amount, $time);
                 if ($ret->isSuccessful()) {
+                    //更改温都数据库
+                    $sql = "update user_account set available_balance = available_balance - :amount where uid = ( select appUserId from EpayUser where epayUserId = :epayUserId )";
+                    $res = Yii::$app->db->createCommand($sql, ['amount' => $amount, 'epayUserId' => $fromUserId])->execute();
+                    $this->stdout('转账方温都数据库更新：' . ($res ? '成功' : '失败') . PHP_EOL);
+
                     //平台信息
                     $ret = $ump->getMerchantInfo($platformUserId);
                     $this->stdout('平台账户余额：' . $ret->get('balance') . PHP_EOL);
