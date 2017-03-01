@@ -121,22 +121,17 @@ class InviteRecord extends ActiveRecord
     }
 
     /**
-     * 获取邀请记录的总条数.
+     * 获取用户被邀请次数.
      *
      * @param string | int $userId 用户ID
      *
      * @return int
      */
-    public static function inviteCount($userId)
+    public static function inviteeCount($userId)
     {
-        $count = self::find()
-            ->where([
-                'user_id' => $userId,
-            ])
-            ->orWhere([
-                'invitee_id' => $userId,
-            ])
-            ->count();
+        $count = self::find()->where([
+            'invitee_id' => $userId,
+        ])->count();
 
         return intval($count);
     }
