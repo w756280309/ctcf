@@ -296,16 +296,14 @@ class UserController extends BaseController
 
                 $model->addInviteeCoupon($invitee);  //给被邀请人发放代金券奖励
 
-                //被邀请者前三次记录
-                $orders = OnlineOrder::find()->where([
-                    'status' => OnlineOrder::STATUS_SUCCESS,
-                    'uid' => $invitee->id,
-                ])
-                ->orderBy([
-                    'id' => SORT_ASC,
-                ])
-                ->limit(3)
-                ->all();
+                //被邀请者前三次正式标投资记录
+                $orders = OnlineOrder::find()
+                    ->leftJoin('online_product', 'online_order.online_pid = online_product.id')
+                    ->where(['online_order.status' => OnlineOrder::STATUS_SUCCESS, 'online_order.uid' => $invitee->id])
+                    ->andWhere(['online_product.is_xs' => 0])
+                    ->orderBy(['online_order.id' => SORT_ASC])
+                    ->limit(3)
+                    ->all();
                 foreach ($orders as $order) {
                     //发奖励
                     $model->doAfterSuccessLoanOrder($order);

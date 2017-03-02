@@ -6,7 +6,6 @@ namespace common\models\promo;
 use common\models\coupon\CouponType;
 use common\models\coupon\UserCoupon;
 use common\models\order\OnlineOrder;
-use common\models\product\OnlineProduct;
 use common\models\user\User;
 use common\service\AccountService;
 use common\service\SmsService;
@@ -84,11 +83,13 @@ class PromoInvite12
             }
             $invite = $invite->count();
             if ($invite > 0) {
-                //获取被邀请者前三次投资订单id
+                //获取被邀请者前三次正式标投资订单id
                 $orderData = OnlineOrder::find()
-                    ->select('id')
-                    ->where(['uid' => $order->uid, 'online_order.status' => 1])
-                    ->orderBy(['id' => SORT_ASC])
+                    ->select('online_order.id')
+                    ->leftJoin('online_product', 'online_order.online_pid = online_product.id')
+                    ->where(['online_order.uid' => $order->uid, 'online_order.status' => 1])
+                    ->andWhere(['online_product.is_xs' => 0])
+                    ->orderBy(['online_order.id' => SORT_ASC])
                     ->limit(3)
                     ->all();
                 $orderIds = ArrayHelper::getColumn($orderData, 'id');

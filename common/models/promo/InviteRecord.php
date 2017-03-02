@@ -7,7 +7,6 @@ use common\models\user\User;
 use wap\modules\promotion\models\RankingPromo;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
-use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "invite_record".
@@ -82,8 +81,13 @@ class InviteRecord extends ActiveRecord
                     $record['created_at'] >= $date['start']
                     && (empty($date['end']) || $record['created_at'] <= $date['end'])
                 ) {
-                    //获取被邀请者首次投资
-                    $firstOrder = OnlineOrder::find()->where(['uid' => $invitee['id'], 'status' => 1])->orderBy(['id' => SORT_ASC])->one();
+                    //获取被邀请者首次正式标投资
+                    $firstOrder = OnlineOrder::find()
+                        ->leftJoin('online_product', 'online_order.online_pid = online_product.id')
+                        ->where(['online_order.uid' => $invitee['id'], 'online_order.status' => 1])
+                        ->andWhere(['online_product.is_xs' => 0])
+                        ->orderBy(['online_order.id' => SORT_ASC])
+                        ->one();
                     $loan = is_null($firstOrder) ? null : $firstOrder->loan;
                     if (
                         !is_null($loan)
