@@ -602,5 +602,5 @@ GROUP BY rp.uid, rp.online_Pid";
             $val->save(false);
         }
     }
-    
+
 }

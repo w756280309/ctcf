@@ -90,7 +90,6 @@ class PromoInvite12
                     ->where(['uid' => $order->uid, 'online_order.status' => 1])
                     ->orderBy(['id' => SORT_ASC])
                     ->limit(3)
-                    ->asArray()
                     ->all();
                 $orderIds = ArrayHelper::getColumn($orderData, 'id');
                 //获取邀请者

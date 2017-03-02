@@ -302,7 +302,7 @@ class UserController extends BaseController
                     'uid' => $invitee->id,
                 ])
                 ->orderBy([
-                    'created_at' => SORT_ASC,
+                    'id' => SORT_ASC,
                 ])
                 ->limit(3)
                 ->all();
