@@ -13,7 +13,6 @@ use common\models\payment\Repayment;
 use common\models\product\Issuer;
 use common\models\product\OnlineProduct;
 use common\models\promo\FirstOrderPoints;
-use common\models\promo\InviteRecord;
 use common\models\promo\LoanOrderPoints;
 use common\models\sms\SmsMessage;
 use common\models\sms\SmsTable;
@@ -568,67 +567,6 @@ GROUP BY rp.uid, rp.online_Pid";
         ]);
     }
 
-    /**
-     * 补邀请关系.
-     *
-     * 实例：php yii data/add-invite 334 589200  （邀请者334,被邀请者589200）
-     * 注意：
-     * 1. 只有被邀请者没有被其他人邀请过且被邀请者没有邀请过邀请人的时候才能补邀请关系;
-     * 2. 取被邀请者前三次订单补发奖励（无法判断奖励是否已发放，只能依赖于“没有邀请关系的用户没有发邀请奖励”）;
-     *
-     * @param $user_id      int     邀请者ID
-     * @param $invitee_id   int     被邀请者ID
-     */
-    public function actionAddInvite($user_id, $invitee_id)
-    {
-        if (empty($user_id) || empty($invitee_id)) {
-            return;
-        }
-
-        $user = User::findOne($user_id);
-        $invitee = User::findOne($invitee_id);
-        if (is_null($user) || is_null($invitee)) {
-            return;
-        }
-
-        $record = InviteRecord::findOne([
-            'user_id' => $invitee->id,
-            'invitee_id' => $user->id,
-        ]);
-
-        if (!is_null($record)) {
-            return;
-        }
-
-        if (InviteRecord::inviteeCount($invitee->id) > 0) {
-            return;
-        }
-
-        $promo = RankingPromo::findOne(['key' => 'promo_invite_12']);
-        if (!is_null($promo) && !empty($promo->promoClass)) {
-            $model = new $promo->promoClass($promo);
-            if (!empty($model)) {
-                $inviteRecord = new InviteRecord([
-                    'user_id' => $user_id,
-                    'invitee_id' => $invitee_id,
-                ]);
-                if (!$inviteRecord->save()) {
-                    return;
-                }
-
-                $model->addInviteeCoupon($invitee);  //给被邀请人发放代金券奖励
-
-                //被邀请者前三次记录
-                $orders = OnlineOrder::find()->where(['status' => 1, 'uid' => $invitee_id])->orderBy(['created_at' => SORT_DESC])->limit(3)->all();
-                foreach ($orders as $order) {
-                    //发奖励
-                    $model->doAfterSuccessLoanOrder($order);
-                }
-            }
-        }
-    }
-
-
     //初始化温都金服用户信息加密key php yii data/init-key
     public function actionInitKey()
     {
@@ -664,6 +602,5 @@ GROUP BY rp.uid, rp.online_Pid";
             $val->save(false);
         }
     }
-
-
+    
 }

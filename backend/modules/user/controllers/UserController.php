@@ -302,11 +302,10 @@ class UserController extends BaseController
                     'uid' => $invitee->id,
                 ])
                 ->orderBy([
-                    'created_at' => SORT_DESC,
+                    'created_at' => SORT_ASC,
                 ])
                 ->limit(3)
                 ->all();
-
                 foreach ($orders as $order) {
                     //发奖励
                     $model->doAfterSuccessLoanOrder($order);

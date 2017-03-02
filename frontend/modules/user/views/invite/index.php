@@ -82,7 +82,7 @@ use common\utils\StringUtils;
         <div class="count">
             <div class="block"><span>邀请人数:</span><i><?= count($model) ?></i>个</div>
             <div class="block"><span>代金券奖励:</span><i><?= StringUtils::amountFormat2(array_sum(array_column($model, 'coupon'))) ?></i>元</div>
-            <div class="block"><span>现金红包奖励:</span><i><?= StringUtils::amountFormat3(array_sum(array_column($model, 'cash'))) ?></i>元</div>
+            <div class="block"><span>现金红包奖励:</span><i><?= StringUtils::amountFormat3($cash) ?></i>元</div>
             <div style="clear: both"></div>
         </div>
         <div class="page-title">

@@ -37,7 +37,7 @@ use common\widgets\Pager;
                                 <?= $desc[$key]['desc'] ?>
                             </a>
                         <?php } elseif ($val->type === MoneyRecord::TYPE_CASH_GIFT) { ?>
-                            <p>幸运双十二活动抽奖获得</p>
+                            <p>现金红包</p>
                         <?php
                             } elseif (in_array ($val->type,
                                 [

@@ -68,7 +68,7 @@ class InviteRecord extends ActiveRecord
         $res = [];
         $dates = [];
         foreach ($promos as $promo) {
-            $dates[] = ['start' => strtotime($promo->startTime), 'end' => strtotime($promo->endTime)];
+            $dates[] = ['start' => strtotime($promo->startTime), 'end' => empty($promo->endTime) ? '' : strtotime($promo->endTime)];
         }
         $inviteRecords = InviteRecord::find()->select(['invitee_id', 'created_at'])->where(['user_id' => $user->id])->orderBy(['created_at' => SORT_DESC])->asArray()->all();
         foreach ($inviteRecords as $record) {
@@ -77,36 +77,31 @@ class InviteRecord extends ActiveRecord
                 continue;
             }
             $coupon =0;
-            $cash = 0.00;
             foreach ($dates as $date) {
-                if ($record['created_at'] >= $date['start'] && $record['created_at'] <= $date['end']) {
-                    $orderData = OnlineOrder::find()
-                        ->select(['online_order.id', 'online_order.order_money'])
-                        ->innerJoin('online_product', 'online_order.online_pid=online_product.id')
-                        ->where(['online_order.uid' => $invitee['id'], 'online_order.status' => 1])
-                        ->andWhere(['between', 'online_order.order_time', $date['start'], $date['end']])
-                        ->andWhere(['online_product.is_xs' => 0])
-                        ->orderBy(['online_order.order_time' => SORT_ASC])
-                        ->limit(3)
-                        ->asArray()
-                        ->all();
-
-                    //邀请者因为此被邀请者得到的代金券金额
-                    if (count($orderData) > 0) {
-                        $firstMoney = $orderData[0]['order_money'];
+                if (
+                    $record['created_at'] >= $date['start']
+                    && (empty($date['end']) || $record['created_at'] <= $date['end'])
+                ) {
+                    //获取被邀请者首次投资
+                    $firstOrder = OnlineOrder::find()->where(['uid' => $invitee['id'], 'status' => 1])->orderBy(['id' => SORT_ASC])->one();
+                    $loan = is_null($firstOrder) ? null : $firstOrder->loan;
+                    if (
+                        !is_null($loan)
+                        && $firstOrder->order_time >= $date['start']
+                        && (empty($date['end']) || $firstOrder->order_time <= $date['end'])
+                        && !$loan->is_xs
+                    ) {
+                        $firstMoney = $firstOrder->order_money;
                         if ($firstMoney < 10000) {
                             $coupon = 30;
                         } else {
                             $coupon = 50;
                         }
-                        //邀请者因为此被邀请者得到的现金红包
-                        $money = ArrayHelper::getColumn($orderData, 'order_money');
-                        $cash = bcdiv(array_sum($money), 1000, 2);
                     }
                     break;
                 }
             }
-            $res[] = ['name' =>$invitee['real_name'], 'mobile' => $invitee['mobile'], 'day' => date('Y-m-d', $record['created_at']), 'coupon' => $coupon, 'cash' => $cash];
+            $res[] = ['name' =>$invitee['real_name'], 'mobile' => $invitee['mobile'], 'day' => date('Y-m-d', $invitee['created_at']), 'coupon' => $coupon];
         }
         return $res;
     }

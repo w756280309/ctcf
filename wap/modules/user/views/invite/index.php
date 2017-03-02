@@ -113,7 +113,7 @@ $this->registerJs('var invite_url = "'.$share->url.'";', 1);
         <div class="inv-title">邀请越多好友，奖励越多，最高奖励无上限</div>
         <ul class="middle-inner clearfix">
             <li>邀请人数：<span><?= count($model) ?></span>个 <i>代金券奖励：<span><?= StringUtils::amountFormat2(array_sum(array_column($model, 'coupon'))) ?></span>元</i></li>
-            <li>现金红包奖励：<span><?= StringUtils::amountFormat3(array_sum(array_column($model, 'cash'))) ?></span>元</li>
+            <li>现金红包奖励：<span><?= StringUtils::amountFormat3($cash) ?></span>元</li>
         </ul>
     </div>
 </div>
@@ -134,7 +134,6 @@ $this->registerJs('var invite_url = "'.$share->url.'";', 1);
                     <th>姓名</th>
                     <th>注册日期</th>
                     <th>代金券(元)</th>
-                    <th>现金红包(元)</th>
                 </tr>
                 <?= $this->renderFile('@wap/modules/user/views/invite/list.php',['data' => $data])?>
                 <tr class="load"></tr>

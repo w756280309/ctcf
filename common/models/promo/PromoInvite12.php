@@ -44,10 +44,12 @@ class PromoInvite12
                         UserCoupon::addUserCoupon($invitee, $couponType)->save();
                     }
                 } catch (\Exception $ex) {
+                    throw new \Exception('被邀请者注册代金券发放失败');
                 }
             }
         }
     }
+
 
     /**
      * 用户投资成功之后处理逻辑
@@ -64,27 +66,31 @@ class PromoInvite12
     private function dealWithOrder(OnlineOrder $order)
     {
         $promo = $this->promo;
-        $user = $order->user;
         $loan = $order->loan;
-        if (intval($order->status) === 1 && $promo->isActive($user) && !$loan->is_xs) {
-            $promoStartTime = strtotime($promo->startTime);
-            $promoEndTime = strtotime($promo->endTime);
-
-            //判断是不是被邀请者
+        $promoStartTime = strtotime($promo->startTime);
+        $promoEndTime = empty($promo->endTime) ? '' : strtotime($promo->endTime);
+        if (
+            intval($order->status) === 1
+            && $order->order_time >= $promoStartTime
+            && (empty($promoEndTime) || $order->order_time <= $promoEndTime)
+            && !$loan->is_xs
+        ) {
+            //判断是不是在活动期间被邀请
             $invite = InviteRecord::find()
                 ->where(['invitee_id' => $order->uid])
-                ->andWhere(['between', 'created_at', $promoStartTime, $promoEndTime])
-                ->count();
+                ->andWhere(['>=', 'created_at', $promoStartTime]);
+            if (!empty($promoEndTime)) {
+                $invite = $invite->andWhere(['<=', 'created_at', $promoEndTime]);
+            }
+            $invite = $invite->count();
             if ($invite > 0) {
-                //获取被邀请者活动期间前三次投资订单id
+                //获取被邀请者前三次投资订单id
                 $orderData = OnlineOrder::find()
-                    ->select('online_order.id')
-                    ->innerJoin(OnlineProduct::tableName(), 'online_order.online_pid=online_product.id')
-                    ->where(['online_order.uid' => $order->uid, 'online_order.status' => 1])
-                    ->andWhere(['between', 'online_order.order_time', $promoStartTime, $promoEndTime])
-                    ->andWhere(['online_product.is_xs' => 0])
-                    ->orderBy(['online_order.order_time' => SORT_ASC])
+                    ->select('id')
+                    ->where(['uid' => $order->uid, 'online_order.status' => 1])
+                    ->orderBy(['id' => SORT_ASC])
                     ->limit(3)
+                    ->asArray()
                     ->all();
                 $orderIds = ArrayHelper::getColumn($orderData, 'id');
                 //获取邀请者
@@ -92,7 +98,7 @@ class PromoInvite12
                     ->innerJoin('invite_record', 'user.id = invite_record.user_id')
                     ->where(['invite_record.invitee_id' => $order->uid])
                     ->one();
-                if (count($orderIds) > 0 && $user) {
+                if (count($orderIds) > 0 && !is_null($user)) {
                     $mess = '';
                     //首次投资给邀请者发代金券
                     if ($orderIds[0] === $order->id) {
@@ -131,7 +137,6 @@ class PromoInvite12
                             $order->mobile,
                             $mess,
                         ];
-
                         SmsService::send($user->mobile, $templateId, $message, $user);
                     }
                 }

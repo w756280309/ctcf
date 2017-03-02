@@ -9,7 +9,6 @@ use common\widgets\Pager;
         <th width="135">手机号</th>
         <th width="135">注册日期</th>
         <th width="135">代金券(元)</th>
-        <th width="135">现金红包(元)</th>
     </tr>
     <?php if (!empty($data)) : $count = 0; ?>
         <?php foreach ($data as $val) : ++$count; ?>
@@ -18,7 +17,6 @@ use common\widgets\Pager;
                 <td><?= StringUtils::obfsMobileNumber($val['mobile']) ?></td>
                 <td><?= $val['day'] ?></td>
                 <td><?= $val['coupon'] ?></td>
-                <td><?= StringUtils::amountFormat3($val['cash']) ?></td>
             </tr>
         <?php endforeach; ?>
     <?php endif; ?>
