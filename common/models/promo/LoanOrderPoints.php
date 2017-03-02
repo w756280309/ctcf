@@ -30,10 +30,12 @@ class LoanOrderPoints
     public function canSendPoint(OnlineOrder $order)
     {
         $user = $order->user;
+        $loan = $order->loan;
         try {
             if (
                 $order->status === OnlineOrder::STATUS_SUCCESS
                 && $this->promo->isActive($user, $order->order_time)
+                && !$loan->is_xs
             ) {
                 $record = PointRecord::find()->where([
                     'user_id' => $user->id,
