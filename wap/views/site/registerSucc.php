@@ -1,7 +1,7 @@
 <?php
 
 $this->hideHeaderNav = true;
-$this->title = '温度金服注册成功页面';
+$this->title = '温都金服注册成功页面';
 
 ?>
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>libs/bootstrap/css/bootstrap.min.css">
