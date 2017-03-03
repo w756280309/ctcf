@@ -43,6 +43,7 @@ class AccountService
             $transaction->rollBack();
             return false;
         }
+        $user_acount->refresh();
         //添加交易流水
         $money_record = new MoneyRecord([
             'sn' => MoneyRecord::createSN(),
@@ -60,10 +61,9 @@ class AccountService
         }
 
         //录入user_acount记录
-        $user_acount->account_balance = $bc->bcround(bcadd($user_acount->account_balance, $recharge->fund), 2);
-        $user_acount->available_balance = $bc->bcround(bcadd($user_acount->available_balance, $recharge->fund), 2);
-        $user_acount->in_sum = $bc->bcround(bcadd($user_acount->in_sum, $recharge->fund), 2);
-        if (!$user_acount->save()) {
+        $sql = "update user_account set account_balance = account_balance + :amount, available_balance = available_balance + :amount, in_sum = in_sum + :amount where id = :accountId";
+        $res = Yii::$app->db->createCommand($sql, ['amount' => $recharge->fund, 'accountId' => $user_acount->id])->execute();
+        if (!$res) {
             $transaction->rollBack();
             return false;
         }
