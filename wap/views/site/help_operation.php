@@ -78,7 +78,7 @@ use common\utils\StringUtils;
     <div class="kong-width">
         <div class="row single">
             <p class="single-tuchu">1、可以绑定哪些银行卡？
-            <p>可以绑定工商银行、农业银行、建设银行、中国银行、华夏银行、邮储银行、浦发银行、交通银行、民生银行、广发银行、中信银行、光大银行、兴业银行、招商银行、平安银行等银行卡。
+            <p>可以绑定工商银行、农业银行、建设银行、中国银行、浦发银行、交通银行、民生银行、广发银行、中信银行、光大银行、兴业银行、招商银行、平安银行等银行卡。
 
             <p class="single-tuchu">2、如何绑定银行卡？
             <p>用户登录后，进入【账户】->【提现】或【充值】，根据操作提示，选择绑定的银行卡类型完成银行卡设置。
@@ -123,7 +123,7 @@ use common\utils\StringUtils;
             <p class="single-tuchu">5、如何更换绑定的银行卡？
             <p>用户登录后，进入“我的账户”－>“安全中心”－>“我的银行卡”－>点击“更换银行卡”，在换卡申请页面，根据“换卡提醒”进行相关操作，完成更换银行卡的申请。在办理换卡过程中，如有疑问请拨打客服热线<a class="contact-tel" href="tel:<?= Yii::$app->params['contact_tel'] ?>"><?= Yii::$app->params['contact_tel'] ?></a>。
             <p class="single-tuchu">6、换卡申请提交后，多久可以换卡成功？
-            <p>若您的账户余额为0且没有在途资金，系统将在半小时以内自动审核换卡；否则需拨打客服热线<a class="contact-tel" href="tel:<?= Yii::$app->params['contact_tel'] ?>"><?= Yii::$app->params['contact_tel'] ?></a>提交相关资料，提交资料后，进行2-5天的人工审核换卡；在途资金指有投资回款或提现冻结金额。换卡申请期间不影响充值和提现。
+            <p>若您的账户余额为0且没有在途资金，系统将在一小时以内自动审核换卡；否则需拨打客服热线<a class="contact-tel" href="tel:<?= Yii::$app->params['contact_tel'] ?>"><?= Yii::$app->params['contact_tel'] ?></a>提交相关资料，提交资料后，进行2-5天的人工审核换卡；在途资金指有投资回款或提现冻结金额。换卡申请期间不影响充值和提现。
             <p class="single-tuchu">7、换卡申请都需要提交哪些资料？
             <p>（1）用户手持身份证照片正反面，显示本人脸和手臂，图片应能看清身份证号、人像；
             <p>（2）用户手持原卡、新卡正反面照片，显示本人脸和手臂，图片应能看清银行卡卡号；
@@ -166,7 +166,7 @@ use common\utils\StringUtils;
             <p>用户登录后，进入【我的账户】->【提现】->点击“提现”按钮，按照提示完成提现操作。
 
             <p class="single-tuchu">10、提现是否有限额？
-            <p>没有限额，用户“可用余额”均可提现。
+            <p>提现每日最高100万，超过100万需要临时提升限额或分多日提现，如需提升限额请联系客服，电话<a class="contact-tel" href="tel:<?= Yii::$app->params['contact_tel'] ?>"><?= Yii::$app->params['contact_tel'] ?></a>。
 
             <p class="single-tuchu">11、提现多久可以到账？
             <p>工作日内17:00之前申请提现，当日到账；
@@ -174,7 +174,7 @@ use common\utils\StringUtils;
             <p>如遇双休日或法定节假日顺延。
 
             <p class="single-tuchu">12、提现手续费怎么收取？
-            <p>每笔2元，按笔收取。此为第三方资金托管平台联动优势收取。
+            <p>每人每月有5次免费发起提现申请的机会，超过5次按2元每笔收取，此为第三方资金托管平台联动优势收取。
         </div>
     </div>
 </div>
