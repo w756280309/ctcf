@@ -1,0 +1,244 @@
+body {
+  background-color: #f7f7f7;
+}
+.topTitle {
+  background-color: #f44336;
+  text-align: center;
+  color: #fff;
+  line-height: 1.2rem;
+  position: relative;
+  top: 0;
+  left: 0;
+}
+.goback {
+  height:0.7rem;
+  position: absolute;
+  top: 0.25rem;
+  left: 0.26666667rem;
+}
+.topTitle a {
+  display: block;
+  position: absolute;
+  top: 0;
+  right: 0.26666667rem;
+}
+.topTitle a img {
+  width: 0.58666667rem;
+}
+.stepShow {
+  color: #ff7d73;
+  padding: 0.66666667rem 0;
+}
+.stepShow ul.stepNum {
+  padding: 0 1.06666667rem 0 1.4rem;
+}
+.stepShow ul.stepNum li.f15 {
+  width: 0.48rem;
+  height: 0.48rem;
+  line-height: 0.48rem;
+  color: #ff7d73;
+  text-align: center;
+  -webkit-border-radius: 100%;
+  -moz-border-radius: 100%;
+  border-radius: 100%;
+  border: 1px solid #ff7d73;
+  -webkit-box-sizing: content-box;
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
+}
+.stepShow ul.stepNum li.line {
+  width: 2.82666667rem;
+  margin: 0.22666667rem 0.06666667rem 0;
+  border-top: 2px solid #ff7d73;
+}
+.stepShow ul.stepIntro {
+  line-height: 0.74666667rem;
+  padding: 0 0.53333333rem;
+  text-align: center;
+}
+.stepShow ul.stepIntro li:nth-of-type(2) {
+  display: inline;
+  margin-left: -0.6rem;
+}
+form {
+  margin: 0 0.26666667rem;
+  background-color: #fff;
+}
+form div.name {
+  border-bottom: 1px solid #ddd;
+}
+form div {
+  line-height: 1.46666667rem;
+  margin: 0 0.26666667rem;
+}
+form div label {
+  width: 2.26666667rem;
+  color: #333333;
+}
+form div input {
+  display: block;
+  height: 1.48rem;
+  line-height:1.48rem\9;
+  line-height: normal;
+  width: 6.66666667rem;
+  color: #999999;
+}
+form div input::-webkit-input-placeholder {
+  line-height: 1.25em;
+}
+.instant {
+  display: block;
+  margin: 1.66666667rem 0.53333333rem 0.2rem;
+  color: #fff;
+  background-color: #f1453d;
+  line-height: 1.2rem;
+  text-align: center;
+  border-radius: 0.13333333rem;
+  outline: none;
+}
+.tipsCtn {
+  line-height: 0.53333333rem;
+  color: #666;
+  padding: 0 0.49333333rem;
+  font-size: 0.28rem;
+}
+.stepok {
+  width: 0.48rem;
+  background-color: transparent;
+  display: block;
+}
+.stepNow {
+  background-color: #ff7d73;
+  color: #fff!important;
+}
+.noBorder {
+  border: none!important;
+}
+.message {
+  padding: 0.6rem 0 0.4rem 0;
+}
+.message p.f15 {
+  text-align: center;
+  color: #333;
+  line-height: 0.86666667rem;
+}
+.icon {
+  width: 0.45333333rem;
+}
+.limitMoney {
+  padding: 0 0.53333333rem;
+  line-height: 0.8rem;
+  text-align: right;
+}
+.limitMoney a {
+  color: #1683fb;
+}
+.limitMoney a img {
+  width: 0.37333333rem;
+  margin-top: -0.1rem;
+}
+.instantSpecial {
+  margin-top: 0.86666667rem;
+}
+.mask {
+  height: 100%;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9;
+  /*根据实际情况设定*/
+  background-color: rgba(0, 0, 0, 0.8);
+  display: none;
+}
+/*对于弹框的fixed定位问题兼容写法*/
+.pomp {
+  width: 70%;
+  max-width: 7rem;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 10;
+  /*根据实际情况设定*/
+  background-color: #e7eaf1;
+  transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -50%);
+  -moz-transform: translate(-50%, -50%);
+  padding: 1.06666667rem 3%;
+  border-radius: 0.35rem;
+  height: 9.6rem;
+  overflow: hidden;
+  display: none;
+}
+.pomp .closePomp {
+  width: 0.46666667rem;
+  position: absolute;
+  top: 0.2rem;
+  right: 0.2rem;
+}
+.pomp #wrapper {
+  height: 7.6rem;
+  width: 100%;
+  position: relative;
+  top: 0;
+  left: 0;
+}
+.pomp #wrapper ul {
+  width: 100%;
+  transform-origin: 0px 0px 0px;
+  -webkit-transform-origin: 0px 0px 0px;
+  -moz-transform-origin: 0px 0px 0px;
+}
+.pomp #wrapper ul li {
+  padding-left: 0.26666667rem;
+  height: 0.93333333rem;
+  margin-bottom: 0.4rem;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+  color: #8c8c8c;
+}
+.pomp #wrapper ul li img {
+  width: 0.66666667rem;
+}
+.bgImg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+#bank_id_img {
+  width: 0.53333333rem;
+  display: none;
+  margin-top: 0.5rem;
+}
+.changeWidth {
+  width: 5.666667rem;
+}
+.error-info {
+  height:auto;
+}
+.error-info div {
+  height:auto;
+
+}
+.bing-info {
+  -webkit-border-radius:0.13333rem;
+  -moz-border-radius:0.13333rem;
+  border-radius:0.13333rem;
+  font-size: 0.35rem;
+  width:7rem;
+}
+.bing-tishi {
+  margin-top: 0.26667rem;
+}
+.bing-info p {
+  font-size: inherit;
+  margin: 0.26667rem auto;
+}
+.bind-btn span.x-cancel {
+  border-right:1px solid #a0a0a0;
+}
+.bind-btn span {
+  padding:0.26667rem 0;
+}

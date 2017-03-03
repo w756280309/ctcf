@@ -142,7 +142,7 @@ class NoteController extends Controller
         }
 
         //检查是否开通资金托管与免密
-        $cond = 0 | BankService::IDCARDRZ_VALIDATE_N | BankService::MIANMI_VALIDATE | BankService::BINDBANK_VALIDATE_N;
+        $cond = 0 | BankService::IDCARDRZ_VALIDATE_N | BankService::MIANMI_VALIDATE_N | BankService::BINDBANK_VALIDATE_N;
         $checkResult = BankService::check($user, $cond);
 
         return $checkResult;

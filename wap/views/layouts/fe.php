@@ -38,7 +38,9 @@ $this->registerMetaTag([
 <html>
     <head>
         <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+        <?php if ($this->showViewport) { ?>
+            <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+        <?php } ?>
         <meta name="renderer" content="webkit">
         <meta name="format-detection" content="telephone=no"/>
         <title><?= isset($ctitle) ? $ctitle : Html::encode($this->title) ?></title>

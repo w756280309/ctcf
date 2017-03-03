@@ -2,9 +2,9 @@
 
 namespace common\service;
 
+use common\models\bank\BankManager;
 use common\models\user\User;
 use common\models\user\QpayBinding;
-use common\models\bank\BankManager;
 
 /**
  * Desc 主要用于充值提现流程规则的校验
@@ -15,14 +15,15 @@ use common\models\bank\BankManager;
  */
 class BankService
 {
-    const IDCARDRZ_VALIDATE_Y = 1;  //pow(2,0)   验证实名认证已经完成的情况
-    const IDCARDRZ_VALIDATE_N = 2;  //pow(2,1)   验证实名认证未完成的情况
-    const BINDBANK_VALIDATE_Y = 4;  //pow(2,2)   验证绑定银行卡成功的情况
-    const BINDBANK_VALIDATE_N = 8;  //pow(2,3)   验证未绑定银行卡的情况
-    const CHARGEPWD_VALIDATE_N = 16;  //pow(2,4)   验证交易密码未设定的情况
-    const CHARGEPWD_VALIDATE_Y = 32;  //pow(2,5)   验证交易密码已设定的情况
-    const EDITBANK_VALIDATE = 64;     //pow(2,6)   验证是否需要完善银行信息
-    const MIANMI_VALIDATE = 128;     //pow(2,6)   验证是否开通免密协议
+    const IDCARDRZ_VALIDATE_Y = 1;      //pow(2,0)   验证实名认证已经完成的情况
+    const IDCARDRZ_VALIDATE_N = 2;      //pow(2,1)   验证实名认证未完成的情况
+    const BINDBANK_VALIDATE_Y = 4;      //pow(2,2)   验证绑定银行卡成功的情况
+    const BINDBANK_VALIDATE_N = 8;      //pow(2,3)   验证未绑定银行卡的情况
+    const CHARGEPWD_VALIDATE_N = 16;    //pow(2,4)   验证交易密码未设定的情况
+    const CHARGEPWD_VALIDATE_Y = 32;    //pow(2,5)   验证交易密码已设定的情况
+    const EDITBANK_VALIDATE = 64;       //pow(2,6)   验证是否需要完善银行信息
+    const MIANMI_VALIDATE_N = 128;      //pow(2,6)   验证没有开通免密支付的情况
+    const MIANMI_VALIDATE_Y = 256;      //pow(2,7)   验证已经开通免密支付的情况
 
     /*调用实例
      *     $cond = 0 | BankService::IDCARDRZ_VALIDATE_N | BankService::BINDBANK_VALIDATE_N | BankService::CHARGEPWD_VALIDATE;
@@ -38,39 +39,76 @@ class BankService
 
     /**
      * 验证快捷支付流程.
-     * @param object $user 用户对象
+     *
+     * @param User $user 用户对象
      * @param int $cond 查询条件
      */
     public static function check($user, $cond)
     {
         if (($cond & self::IDCARDRZ_VALIDATE_Y) && $user->idcard_status == User::IDCARD_STATUS_PASS) {
-            return ['tourl' => '/user/user', 'code' => 1, 'message' => '您已经在平台开户,请勿重复开户'];
+            return [
+                'tourl' => '/user/user',
+                'code' => 1,
+                'message' => '您已经在平台开户,请勿重复开户',
+            ];
         }
 
         if (($cond & self::IDCARDRZ_VALIDATE_N) && $user->idcard_status == User::IDCARD_STATUS_WAIT) {
-            return ['tourl' => '/user/identity', 'code' => 1, 'message' => '您还没有开通第三方资金托管账户，请前往开通'];
+            return [
+                'tourl' => '/user/identity',
+                'code' => 1,
+                'message' => '您还没有开通第三方资金托管账户，请前往开通',
+            ];
         }
 
-        if (($cond & self::MIANMI_VALIDATE) && $user->mianmiStatus == 0) {
-            return ['tourl' => '/user/qpay/binding/umpmianmi', 'code' => 1, 'message' => '您还没有开通免密支付，请前往开通'];
+        if (($cond & self::MIANMI_VALIDATE_N) && !$user->mianmiStatus) {
+            return [
+                'tourl' => (defined('CLIENT_TYPE') && 'pc' === CLIENT_TYPE) ? '/user/qpay/binding/umpmianmi' : '/user/user/mianmi',
+                'code' => 1,
+                'message' => '您还没有开通免密支付功能，请前往开通',
+            ];
+        }
+
+        if (($cond & self::MIANMI_VALIDATE_Y) && $user->mianmiStatus) {
+            return [
+                'tourl' => '/user/bank',
+                'code' => 1,
+                'message' => '您已经开通免密支付功能，请勿重复操作',
+            ];
         }
 
         $user_bank = $user->qpay;
         if (($cond & self::BINDBANK_VALIDATE_Y) && !empty($user_bank)) {
-            return ['tourl' => '/user/user', 'code' => 1, 'message' => '您已经成功绑定过银行卡'];
+            return [
+                'tourl' => '/user/user',
+                'code' => 1,
+                'message' => '您已经成功绑定过银行卡',
+            ];
         }
 
-        //此段路放置于最后
+        //此段落放置于最后
         if (($cond & self::BINDBANK_VALIDATE_N) && empty($user_bank)) {
             $qpaystatus = self::getQpayStatus($user);
             if (User::QPAY_NONE === $qpaystatus) {
-                return ['tourl' => '/user/bank', 'code' => 1, 'message' => '您还未绑定银行卡，请先去绑定'];
-            } else if (User::QPAY_PENDING === $qpaystatus) {
-                return ['code' => 1, 'message' => '您的绑卡请求正在处理中,请先去转转吧'];
+                return [
+                    'tourl' => '/user/bank',
+                    'code' => 1,
+                    'message' => '您还未绑定银行卡，请先去绑定',
+                ];
+            } elseif (User::QPAY_PENDING === $qpaystatus) {
+                return [
+                    'tourl' => null,
+                    'code' => 1,
+                    'message' => '您的绑卡请求正在处理中,请先去转转吧',
+                ];
             }
         }
 
-        return ['code' => 0, 'message' => null, 'tourl' => null];
+        return [
+            'code' => 0,
+            'message' => null,
+            'tourl' => null,
+        ];
     }
 
     /**
@@ -117,7 +155,7 @@ class BankService
      */
     public static function checkKuaijie($user)
     {
-        $cond = 0 | self::IDCARDRZ_VALIDATE_N | self::MIANMI_VALIDATE | self::BINDBANK_VALIDATE_N;//删除| self::CHARGEPWD_VALIDATE_N验证交易密码判断
+        $cond = 0 | self::IDCARDRZ_VALIDATE_N | self::MIANMI_VALIDATE_N | self::BINDBANK_VALIDATE_N;//删除| self::CHARGEPWD_VALIDATE_N验证交易密码判断
         return self::check($user, $cond);
     }
 }

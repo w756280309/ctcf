@@ -7,7 +7,6 @@
 
 namespace common\action\user;
 
-
 use common\models\user\UserIdentity;
 use common\service\BankService;
 use Ding\DingNotify;
@@ -31,8 +30,9 @@ class IdentityVerifyAction extends Action
                     if (CLIENT_TYPE === 'pc') {
                         $toUrl = '/info/success?source=tuoguan';
                     } else {
-                        $toUrl = '/user/userbank/rzres?ret=success';
+                        $toUrl = '/user/user/mianmi';
                     }
+
                     return [
                         'tourl' => $toUrl,
                         'code' => 0,

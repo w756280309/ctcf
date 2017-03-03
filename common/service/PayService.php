@@ -123,7 +123,7 @@ class PayService
             return ['code' => self::ERROR_ID_SET,  'message' => '账户已被冻结', 'tourl' => '/site/usererror'];
         }
 
-        $cond = 0 | BankService::IDCARDRZ_VALIDATE_N | BankService::MIANMI_VALIDATE;
+        $cond = 0 | BankService::IDCARDRZ_VALIDATE_N | BankService::MIANMI_VALIDATE_N;
 
         if ('wap' === $channel) {
             $cond |= BankService::BINDBANK_VALIDATE_N;

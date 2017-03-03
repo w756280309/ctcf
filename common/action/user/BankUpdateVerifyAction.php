@@ -34,24 +34,24 @@ class BankUpdateVerifyAction extends Action
 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             if ($bank->card_number === $model->cardNo) {
-                return $this->createErrorResponse('您已绑定该银行卡');
+                return $this->controller->createErrorResponse('您已绑定该银行卡');
             }
 
             //对于换卡时候如果没有找到要过滤掉异常
             try {
                 $bin = BankManager::getBankFromCardNo($model->cardNo);
                 if (!BankManager::isDebitCard($bin)) {
-                    return $this->createErrorResponse('该操作只支持借记卡');
+                    return $this->controller->createErrorResponse('该操作只支持借记卡');
                 }
                 if ((int)$bin->bankId !== (int)$model->bankId) {
-                    return $this->createErrorResponse('请选择银行卡对应的银行');
+                    return $this->controller->createErrorResponse('请选择银行卡对应的银行');
                 }
             } catch (\Exception $ex) {
             }
 
             $qpay = QpayConfig::findOne($model->bankId);
             if (null === $qpay || 1 === (int)$qpay->isDisabled) {
-                return $this->createErrorResponse('抱歉，不支持当前选择的银行');
+                return $this->controller->createErrorResponse('抱歉，不支持当前选择的银行');
             }
 
             if ($model->save(false)) {
@@ -60,6 +60,6 @@ class BankUpdateVerifyAction extends Action
             }
         }
 
-        return $this->createErrorResponse($model);
+        return $this->controller->createErrorResponse($model);
     }
 }

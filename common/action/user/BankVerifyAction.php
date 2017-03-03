@@ -8,7 +8,6 @@
 
 namespace common\action\user;
 
-
 use common\models\bank\BankManager;
 use common\models\bank\QpayConfig;
 use common\models\user\QpayBinding;
@@ -41,17 +40,17 @@ class BankVerifyAction extends Action
                 //对于绑卡时候如果没有找到要过滤掉异常
                 $bin = BankManager::getBankFromCardNo($acct_model->card_number);
                 if (!BankManager::isDebitCard($bin)) {
-                    return $this->createErrorResponse('该操作只支持借记卡');
+                    return $this->controller->createErrorResponse('该操作只支持借记卡');
                 }
                 if ((int) $bin->bankId !== (int) $acct_model->bank_id) {
-                    return $this->createErrorResponse('请选择银行卡对应的银行');
+                    return $this->controller->createErrorResponse('请选择银行卡对应的银行');
                 }
             } catch (\Exception $ex) {
             }
 
             $qpay = QpayConfig::findOne($acct_model->bank_id);
             if (null === $qpay || 1 === (int) $qpay->isDisabled) {
-                return $this->createErrorResponse('抱歉不支持当前选择的银行');
+                return $this->controller->createErrorResponse('抱歉不支持当前选择的银行');
             }
             $acct_model->binding_sn = TxUtils::generateSn('B');
             $acct_model->epayUserId = $user->epayUser->epayUserId;
@@ -62,6 +61,6 @@ class BankVerifyAction extends Action
             ];
         }
 
-        return $this->createErrorResponse($acct_model);
+        return $this->controller->createErrorResponse($acct_model);
     }
 }

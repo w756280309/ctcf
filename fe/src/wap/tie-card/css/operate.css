@@ -1,0 +1,48 @@
+body {
+  background-color: #fff;
+  text-align: center;
+}
+.topTitle {
+  background-color: #f44336;
+  color: #fff;
+  line-height: 1.2rem;
+}
+.sucImg {
+  margin: 1.86666667rem auto 0;
+  display: block;
+  width: 1.92rem;
+}
+.sucMes {
+  line-height: 1.24rem;
+  color: #666;
+}
+.message {
+  margin: 0.93333333rem 0 0.26666667rem 0;
+  line-height: 0.74666667rem;
+  color: #333;
+}
+.instant {
+  display: block;
+  margin: 0 0.53333333rem;
+  color: #fff;
+  background-color: #f1453d;
+  line-height: 1.2rem;
+  text-align: center;
+  border-radius: 0.13333333rem;
+}
+.red {
+  color: #f1453d;
+}
+.mg-110 {
+  margin-top: 1.46666667rem;
+}
+.color-6 {
+  color: #666;
+  line-height: 0.70666667rem;
+}
+.color-blue {
+  color: #1683fb;
+}
+.mg-17 {
+  margin-top: 0.22666667rem;
+}

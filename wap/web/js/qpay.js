@@ -1,19 +1,19 @@
 function validateBinding() {
-    if ($.trim($('#card_no').val()) == '') {
-        toast('银行卡号不能为空');
+    if ('' === $.trim($('#card_no').val())) {
+        toastCenter('银行卡号不能为空');
         return false;
     }
     var reg = /^[0-9]{16,19}$/;
     if (!reg.test($.trim($('#card_no').val()))) {
-        toast('你输入的银行卡号有误');
+        toastCenter('你输入的银行卡号有误');
         return false;
     }
-    if ($('#bank_name').val() == '') {
-        toast('开户行不能为空');
+    if ('' === $('#bank_name').val()) {
+        toastCenter('开户行不能为空');
         return false;
     }
-    if ($('#phone').val() == '') {
-        toast('手机号码不能为空');
+    if ('' === $('#phone').val()) {
+        toastCenter('手机号码不能为空');
         return false;
     }
     return true;
@@ -48,7 +48,7 @@ $(function () {
                 );
 
         xhr.done(function (data) {
-            toast('转入联动优势进行绑卡操作');
+            toastCenter('转入联动优势进行绑卡操作');
             setTimeout(function () {
                 window.location.href = data.next;
             }, 1500);
@@ -59,7 +59,7 @@ $(function () {
                     ? jqXHR.responseJSON.message
                     : '未知错误，请刷新重试或联系客服';
 
-            toast(errMsg);
+            toastCenter(errMsg);
         });
 
         xhr.always(function () {

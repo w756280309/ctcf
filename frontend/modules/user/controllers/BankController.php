@@ -71,7 +71,7 @@ class BankController extends BaseController
         }
 
         //检查是否开通免密
-        $cond = 0 | BankService::MIANMI_VALIDATE;
+        $cond = 0 | BankService::MIANMI_VALIDATE_N;
         $data = BankService::check($this->user, $cond);
 
         $banks = BankManager::getQpayBanks();
@@ -95,7 +95,7 @@ class BankController extends BaseController
         }
 
         //检查是否开通免密
-        $cond = 0 | BankService::MIANMI_VALIDATE;
+        $cond = 0 | BankService::MIANMI_VALIDATE_N;
         $data = BankService::check($this->user, $cond);
 
         $user = $this->getAuthedUser();

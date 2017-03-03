@@ -21,10 +21,14 @@ class IdentityController extends BaseController
         ];
     }
 
-    //开户页面
+    /**
+     * 开户页面.
+     */
     public function actionIndex()
     {
+        $this->layout = '@app/views/layouts/fe';
         $data = BankService::check($this->getAuthedUser(), BankService::IDCARDRZ_VALIDATE_Y);
+
         return $this->render('index', $data);
     }
 }

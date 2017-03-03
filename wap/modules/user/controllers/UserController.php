@@ -223,4 +223,16 @@ class UserController extends BaseController
             'fromTransfer' => $fromTransfer,
         ]);
     }
+
+    /**
+     * 开通免密支付功能.
+     */
+    public function actionMianmi()
+    {
+        $this->layout = '@app/views/layouts/fe';
+
+        $data = BankService::check($this->getAuthedUser(), BankService::IDCARDRZ_VALIDATE_N | BankService::MIANMI_VALIDATE_Y);
+
+        return $this->render('mianmi', $data);
+    }
 }

@@ -29,12 +29,17 @@ class BankController extends BaseController
         ];
     }
 
-    //绑定银行卡页面
+    /**
+     * 绑定银行卡页面.
+     */
     public function actionIndex()
     {
-        $cond = 0 | BankService::IDCARDRZ_VALIDATE_N | BankService::MIANMI_VALIDATE | BankService::BINDBANK_VALIDATE_Y;
+        $this->layout = '@app/views/layouts/fe';
+
+        $cond = 0 | BankService::IDCARDRZ_VALIDATE_N | BankService::MIANMI_VALIDATE_N | BankService::BINDBANK_VALIDATE_Y;
         $data = BankService::check($this->getAuthedUser(), $cond);
         $banks = BankManager::getQpayBanks();
+
         return $this->render('index', [
             'banklist' => $banks,
             'data' => $data,

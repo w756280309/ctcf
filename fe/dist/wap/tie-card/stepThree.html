@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>开通资金托管账户</title>
+    <link rel="stylesheet" href="__FE_BASE_URI__/common/css/wenjfbase.css?v=1.0">
+    <link rel="stylesheet" href="__FE_BASE_URI__wap/tie-card/css/step.css?v=2.4">
+    <script src="__FE_BASE_URI__/libs/lib.flexible3.js"></script>
+    <script src="__FE_BASE_URI__/libs/jquery-1.11.1.min.js"></script>
+    <script src="__FE_BASE_URI__/libs/fastclick.js"></script>
+    <script src="__FE_BASE_URI__/libs/iscroll.js"></script>
+</head>
+<body>
+<div class="flex-content">
+    <div class="topTitle f18">
+        <img class="goback" src="__FE_BASE_URI__wap/tie-card/img/back.png" alt="" onclick="history.go(-1)">
+        <div>开通资金托管账户</div>
+        <a class="rg" href="tel:400-101-5151"><img src="__FE_BASE_URI__wap/tie-card/img/phone.png" alt=""></a>
+    </div>
+
+    <div class="stepShow">
+        <ul class="clearfix stepNum">
+            <li class="lf f15 noBorder"><img class="stepok" src="__FE_BASE_URI__wap/tie-card/img/ok.png" alt=""></li>
+            <li class="lf line"></li>
+            <li class="lf f15 noBorder"><img class="stepok" src="__FE_BASE_URI__wap/tie-card/img/ok.png" alt=""></li>
+            <li class="lf line"></li>
+            <li class="lf f15 stepNow">3</li>
+        </ul>
+        <ul class="clearfix f12 stepIntro">
+            <li class="lf">开通资金托管账户</li>
+            <li>开通免密服务</li>
+            <li class="rg">绑定银行卡</li>
+        </ul>
+    </div>
+
+    <form action="">
+        <div class="name clearfix" style="position: relative;">
+            <label for="bank_id" class="f15 lf">开户银行</label>
+            <img id="bank_id_img" class="lf" src="" alt="">
+            <input type="text" id="bank_id" class="lf f14" placeholder="请选择开户银行" readonly>
+            <img src="__FE_BASE_URI__wap/tie-card/img/jiantou.png" style="position: absolute;top: 0.4rem;right: 0; width: 0.506667rem;" alt="">
+        </div>
+        <div class="creidtCard clearfix">
+            <label for="card_no" class="f15 lf">储蓄卡号</label>
+            <input type="tel" id="card_no" onkeyup="this.value=this.value.replace(/\D/g,'');" class="lf f14" placeholder="请输入银行储蓄卡卡号">
+        </div>
+    </form>
+    <p class="f13 limitMoney"><a href="https://m.wenjf.com/user/userbank/bankxiane"><img src="__FE_BASE_URI__wap/tie-card/img/icon_02.png" alt=""> 限额提醒</a></p>
+
+    <a class="instant instantSpecial f18" href="">绑 卡</a>
+
+    <div class="f12">
+        <p class="tipsCtn">*绑定的银行卡必须为本人身份证办理</p>
+        <p class="tipsCtn">*绑定的银行卡将作为唯一充值\提现卡</p>
+        <p class="tipsCtn">*同卡进出防止盗刷风险</p>
+    </div>
+
+
+    <div class="mask closePomp"></div>
+    <div class="pomp f14">
+        <img class="bgImg" src="__FE_BASE_URI__wap/tie-card/img/mask.png" alt="">
+        <img class="closePomp" src="__FE_BASE_URI__wap/tie-card/img/close.png" alt="">
+        <div id="wrapper">
+            <ul>
+                <li><img src="__FE_BASE_URI__wap/tie-card/img/102.png" alt=""> 工商银行</li>
+                <li><img src="__FE_BASE_URI__wap/tie-card/img/102.png" alt=""> 建设银行</li>
+                <li><img src="__FE_BASE_URI__wap/tie-card/img/102.png" alt=""> 农业银行</li>
+                <li><img src="__FE_BASE_URI__wap/tie-card/img/102.png" alt=""> 招商银行</li>
+                <li><img src="__FE_BASE_URI__wap/tie-card/img/102.png" alt=""> 中国银行</li>
+                <li><img src="__FE_BASE_URI__wap/tie-card/img/102.png" alt=""> 工商银行</li>
+                <li><img src="__FE_BASE_URI__wap/tie-card/img/102.png" alt=""> 建设银行</li>
+                <li><img src="__FE_BASE_URI__wap/tie-card/img/102.png" alt=""> 农业银行</li>
+                <li><img src="__FE_BASE_URI__wap/tie-card/img/102.png" alt=""> 招商银行</li>
+                <li><img src="__FE_BASE_URI__wap/tie-card/img/102.png" alt=""> 中国银行</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<script>
+    $(function(){
+        FastClick.attach(document.body);
+        $('.closePomp').on('click',function(e){
+            e.stopPropagation();
+            $('.closePomp').hide();
+            $('.pomp').hide();
+        });
+        var myScroll = new iScroll('wrapper',{
+            vScrollbar:false,
+            hScrollbar:false
+        });
+        $("#bank_id").on("click",function(){
+            $('.closePomp').show();
+            $('.pomp').show();
+            myScroll.refresh();//点击后初始化iscroll
+        });
+        $("#wrapper ul li").on("click",function(){
+            $("#bank_id_img").attr({"src":$(this).children()[0].src}).show();
+            $("#bank_id").val($(this).text()).addClass("changeWidth");
+            $('.closePomp').hide();
+            $('.pomp').hide();
+        });
+    })
+</script>
+</body>
+</html>

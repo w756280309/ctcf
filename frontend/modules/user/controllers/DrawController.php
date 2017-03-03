@@ -53,7 +53,7 @@ class DrawController extends BaseController
 
         $user_acount = $user->lendAccount;
         $user_bank = $user->qpay;
-        
+
         if(Yii::$app->request->isPost) {
             $draw = new DrawRecord();
             $draw->uid = $uid;
@@ -86,7 +86,7 @@ class DrawController extends BaseController
             }
         } else {
             //检查是否开通免密
-            $cond = 0 | BankService::MIANMI_VALIDATE;
+            $cond = 0 | BankService::MIANMI_VALIDATE_N;
             $data = BankService::check($this->user, $cond);
             return $this->render('tixian', [
                 'user_bank' => $user_bank,

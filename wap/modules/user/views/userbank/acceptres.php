@@ -1,68 +1,50 @@
 <?php
+
 use yii\helpers\Html;
 
-$this->title="绑卡受理结果";
-$this->backUrl = false;
+$this->title = 'success' === $ret ? '绑卡成功' : '绑卡失败';
+$this->showViewport = false;
 
-$this->registerJsFile('', ['depends' => 'yii\web\YiiAsset','position' => 1]);
 ?>
+<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/wenjfbase.css">
+<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/tie-card/css/operate.css">
+<script src="<?= FE_BASE_URI ?>/libs/lib.flexible3.js"></script>
+<script src="<?= FE_BASE_URI ?>wap/common/js/pop.js?v=2"></script>
 
-<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/setting.css">
+<div class="flex-content">
+    <div class="topTitle f19">
+        <div><?= Html::encode($this->title) ?></div>
+    </div>
 
-<div class="row" id='bind-box'>
-    <div class="col-xs-12">
-        <?php if ('success' === $ret) { ?>
-        <div>绑卡提交申请成功</div>
-        <?php } else { ?>
-        <div>绑卡提交申请失败</div>
-        <?php } ?>
-    </div>
+    <?php if ('success' === $ret) { ?>
+        <img class="sucImg" src="<?= FE_BASE_URI ?>wap/tie-card/img/success.png" alt="">
+        <p class="sucMes f17">绑卡申请提交成功</p>
+        <div class="message">
+            <p class="f15">充值后即可进行投资</p>
+            <p class="f15">体验超短期新手专享标，预期年化率<span class="red">10%</span></p>
+        </div>
+        <a class="instant f18" href="/user/userbank/recharge">去 充 值</a>
+    <?php } else { ?>
+        <img class="sucImg" src="<?= FE_BASE_URI ?>wap/tie-card/img/fail.png" alt="">
+        <p class="sucMes f17">绑卡申请提交失败</p>
+        <a class="instant f18 mg-110" href="javascript:history(-1)">重 新 绑 卡</a>
+        <p class="f13 color-6 mg-17">遇到问题，请联系客服</p>
+        <p class="f13 color-6">客服电话：<a class="color-blue f15" href="tel:<?= Yii::$app->params['contact_tel'] ?>"><?= Yii::$app->params['contact_tel'] ?></a></p>
+    <?php } ?>
 </div>
-<div class="row" id='bind-true'>
-    <div class="col-xs-12">
-        <?php if ('success' === $ret) { ?>
-        <img src="<?= ASSETS_BASE_URI ?>images/bind-true.png" alt="">
-        <?php } else { ?>
-        <img src="<?= ASSETS_BASE_URI ?>images/bind-false.png" alt="">
-        <?php } ?>
-    </div>
-</div>
-<div class="row daojishi">
-     <div class="col-xs-12">
-        <?php if ('success' === $ret) { ?>
-        <div><span>5秒</span>后前往关闭页面</div>
-        <?php } else { ?>
-        <div>请联系客服: <a class="contact-tel" href="tel:<?= Yii::$app->params['contact_tel'] ?>"><?= Yii::$app->params['contact_tel'] ?></a></div>
-        <?php } ?>
-     </div>
-</div>
-<?php if ('success' === $ret) { ?>
-<div class="row" id='bind-close1'>
-    <div class="col-xs-4"></div>
-    <div class="col-xs-4">
-        <a href="/user/user" class="bind-close1">立即关闭</a>
-    </div>
-    <div class="col-xs-4"></div>
-</div>
-<script>
-    $(function(){
-        var num=5;
-        var t=setInterval(function(){
-            num--;
-            $('.daojishi .col-xs-12 span').html(num+'秒');
-            if(num==0){
-                clearInterval(t);
-                location.href = '/user/user';
-            }
-        },1000);
+
+<script type="text/javascript">
+    $(function() {
+        var err = '<?= $data['code'] ?>';
+        var mess = '<?= $data['message'] ?>';
+        var tourl = '<?= $data['tourl'] ?>';
+        if ('1' === err) {
+            toastCenter(mess, function () {
+                if ('' !== tourl) {
+                    location.href = tourl;
+                }
+            });
+            return;
+        }
     })
 </script>
-<?php } else { ?>
-<div class="row" id='bind-close1'>
-    <div class="col-xs-4"></div>
-    <div class="col-xs-4">
-        <a href="/user/user" class="bind-close1">返回账户</a>
-    </div>
-    <div class="col-xs-4"></div>
-</div>
-<?php } ?>

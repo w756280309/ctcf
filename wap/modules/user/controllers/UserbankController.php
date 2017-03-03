@@ -2,19 +2,18 @@
 
 namespace app\modules\user\controllers;
 
-use Ding\DingNotify;
-use Yii;
 use app\controllers\BaseController;
 use common\models\user\DrawRecord;
 use common\models\user\UserAccount;
 use common\models\user\UserBanks;
-use common\service\BankService;
-use common\service\UmpService;
 use common\models\draw\DrawManager;
 use common\models\draw\DrawException;
 use common\models\bank\BankManager;
 use common\models\bank\QpayConfig;
 use common\models\bank\BankCardUpdate;
+use common\service\BankService;
+use common\service\UmpService;
+use Yii;
 
 class UserbankController extends BaseController
 {
@@ -178,7 +177,11 @@ class UserbankController extends BaseController
      */
     public function actionAccept($ret = 'error')
     {
-        return $this->render('acceptres', ['ret' => $ret]);
+        $this->layout = '@app/views/layouts/fe';
+
+        $data = BankService::checkKuaijie($this->getAuthedUser());
+
+        return $this->render('acceptres', ['ret' => $ret, 'data' => $data]);
     }
 
     /**
@@ -205,16 +208,6 @@ class UserbankController extends BaseController
     public function actionDrawres($ret = 'error')
     {
         return $this->render('drawres', ['ret' => $ret]);
-    }
-
-    /**
-     * 开户结果页.
-     *
-     * @param type $ret
-     */
-    public function actionRzres($ret = 'error')
-    {
-        return $this->render('rzres', ['ret' => $ret]);
     }
 
     /**
