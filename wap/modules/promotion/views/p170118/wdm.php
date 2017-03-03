@@ -1,6 +1,6 @@
 <?php
 
-$this->title = '温度金服落地页';
+$this->title = '温都金服落地页';
 $this->share = $share;
 $config = json_decode($promo->config, true);
 
