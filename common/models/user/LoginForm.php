@@ -44,13 +44,12 @@ class LoginForm extends Model
             ['password', 'required', 'message' => '密码不能为空'],
             ['verifyCode', 'required', 'message' => '图形验证码不能为空', 'on' => ['org_login', 'org_verifycode']],
             ['verifyCode', 'string', 'length' => 4, 'message' => '验证码长度必须为4位', 'on' => ['org_login', 'org_verifycode']],
-            ['verifyCode', 'captcha', 'on' => ['org_login', 'verifycode', 'org_verifycode']],
+            ['verifyCode', 'captcha', 'message' => '验证码不正确', 'on' => ['org_login', 'verifycode', 'org_verifycode']],
             ['phone', 'string', 'length' => 11, 'message' => '手机号长度必须为11位数字'],
             ['phone', CnMobileValidator::className()],
             [
                 ['username', 'password'],
                 'string',
-                'length' => [6, 20],
             ],
             //企业账号格式 不能是纯数字，或是纯字母
             ['username', 'match', 'pattern' => '/(?!^\d+$)(?!^[a-zA-Z]+$)^[0-9a-zA-Z]{6,20}$/', 'message' => '企业账号必须为数字和字母的组合'],
@@ -112,7 +111,7 @@ class LoginForm extends Model
         }
 
         if (!$this->_user->validatePassword($this->password)) {
-            $this->addError('password', '密码不正确');
+            $this->addError('password', '手机号或密码不正确');
 
             return false;
         }

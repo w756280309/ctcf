@@ -110,11 +110,6 @@ $this->title = '登录';
                 $(this).addClass("error-border");
                 return false;
             }
-            if (6 > $(this).val().length) {
-                errorInput($(".password-box .popUp"), '密码长度最少6位');
-                $(this).addClass("error-border");
-                return false;
-            }
             $(".password-box .popUp").html('');
             $(this).removeClass("error-border");
         });

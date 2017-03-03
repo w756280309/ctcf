@@ -63,10 +63,10 @@ class SiteController extends Controller
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                'logout' => ['post', 'get'],
+                    'logout' => ['post', 'get'],
                 ],
             ],
-             'requestbehavior' => [
+            'requestbehavior' => [
                 'class' => 'common\components\RequestBehavior',
             ],
         ];
@@ -371,15 +371,10 @@ class SiteController extends Controller
             $login->logFailure(Yii::$app->request, $model->phone, LoginLog::TYPE_WAP);
         }
 
-        $is_flag = $is_flag ? $is_flag : $login->isCaptchaRequired(Yii::$app->request, $model->phone, 10 * 60, 3);
-
+        $is_flag = $login->isCaptchaRequired(Yii::$app->request, $model->phone, 10 * 60, 3);
         if ($model->getErrors()) {
             $message = $model->firstErrors;
-            if ($is_flag) {
-                return ['tourl' => '/site/login', 'code' => 1, 'message' => current($message)];
-            }
-
-            return ['code' => 1, 'message' => current($message)];
+            return ['code' => 1, 'message' => current($message), 'requiresCaptcha' => $is_flag];
         }
 
         $hmsr = Yii::$app->request->get('hmsr');
@@ -669,18 +664,18 @@ class SiteController extends Controller
             $b = Bank::tableName();
 
             $ebank = (new \yii\db\Query())
-                   ->select("$e.*, $b.bankName")
-                   ->from($e)
-                   ->leftJoin($b, "$e.bankId = $b.id")
-                   ->where(["$e.typePersonal" => 1, 'isDisabled' => 0])
-                   ->all();
+                ->select("$e.*, $b.bankName")
+                ->from($e)
+                ->leftJoin($b, "$e.bankId = $b.id")
+                ->where(["$e.typePersonal" => 1, 'isDisabled' => 0])
+                ->all();
 
             $qpay = (new \yii\db\Query())
-                   ->select("$q.*, $b.bankName")
-                   ->from($q)
-                   ->leftJoin($b, "$q.bankId = $b.id")
-                   ->where(['isDisabled' => 0])
-                   ->all();
+                ->select("$q.*, $b.bankName")
+                ->from($q)
+                ->leftJoin($b, "$q.bankId = $b.id")
+                ->where(['isDisabled' => 0])
+                ->all();
 
             return $this->render('help_operation', ['ebank' => $ebank, 'qpay' => $qpay]);
         }
