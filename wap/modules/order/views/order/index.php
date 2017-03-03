@@ -127,4 +127,12 @@ $this->registerCssFile(ASSETS_BASE_URI.'css/setting.css?v=20170103', ['depends' 
             });
         })
     </script>
+<?php } else { ?>
+    <script type="text/javascript">
+        $(function () {
+            $('#money').on('keyup', function () {
+                profit($(this));
+            });
+        })
+    </script>
 <?php } ?>

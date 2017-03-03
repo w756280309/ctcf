@@ -2,17 +2,15 @@
 
 namespace app\modules\user\controllers\qpay;
 
-use common\models\user\User;
-use Ding\DingNotify;
-use Yii;
 use Exception;
-use yii\web\NotFoundHttpException;
-use yii\web\Controller;
 use common\models\user\RechargeRecord;
-use common\service\AccountService;
 use common\models\TradeLog;
 use common\models\epay\EpayUser;
 use common\models\user\UserAccount;
+use common\service\AccountService;
+use Yii;
+use yii\web\Controller;
+use yii\web\NotFoundHttpException;
 
 /**
  * 绑卡回调控制器4.2.
