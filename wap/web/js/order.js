@@ -28,10 +28,6 @@ $(function () {
         $('#couponConfirm').val('');
     });
 
-    $('#money').on('keyup', function () {
-        profit($(this));
-    });
-
     profit($("#money"));
 });
 

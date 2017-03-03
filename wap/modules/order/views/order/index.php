@@ -24,7 +24,7 @@ $this->registerJs(<<<JS
 JS
     , 1);
 
-$this->registerJsFile(ASSETS_BASE_URI.'js/order.js?v=20170125-v', ['depends' => YiiAsset::class]);
+$this->registerJsFile(ASSETS_BASE_URI.'js/order.js?v=20170301', ['depends' => YiiAsset::class]);
 $this->registerCssFile(ASSETS_BASE_URI.'css/setting.css?v=20170103', ['depends' => WapAsset::class]);
 
 ?>
@@ -121,6 +121,8 @@ $this->registerCssFile(ASSETS_BASE_URI.'css/setting.css?v=20170103', ['depends' 
 
                 $.get('/user/coupon/valid-for-loan?sn=<?= $deal->sn ?>&money='+money, function (data) {
                     $('#coupon').html(data);
+
+                    profit($('#money'));
                 });
             });
         })
