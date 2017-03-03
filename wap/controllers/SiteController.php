@@ -118,7 +118,7 @@ class SiteController extends Controller
         $cond = [OnlineProduct::STATUS_PRE, OnlineProduct::STATUS_NOW];
 
         //新手专区
-        $xs = LoanFinder::queryLoans()
+        $xs = LoanFinder::queryPublicLoans()
             ->andWhere([
                 'is_xs' => true,
                 'status' => $cond,

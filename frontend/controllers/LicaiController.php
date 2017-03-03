@@ -4,6 +4,7 @@ namespace frontend\controllers;
 
 use common\controllers\HelpersTrait;
 use common\models\order\OnlineOrder;
+use common\models\product\LoanFinder;
 use common\models\product\OnlineProduct;
 use Yii;
 use yii\data\Pagination;
@@ -18,18 +19,11 @@ class LicaiController extends Controller
      */
     public function actionIndex()
     {
-        $data = OnlineProduct::find()
-            ->select('*')
-            ->addSelect(['xs_status' => 'if(is_xs = 1 && status < 3, 1, 0)'])
-            ->where([
-                'isPrivate' => 0,
-                'del_status' => OnlineProduct::STATUS_USE,
-                'online_status' => OnlineProduct::STATUS_ONLINE
-            ]);
+        $data = LoanFinder::queryPublicLoans();
 
         $pages = new Pagination(['totalCount' => $data->count(), 'pageSize' => '10']);
 
-        $loans = $data->orderBy('xs_status desc, recommendTime desc, sort asc, finish_rate desc, finish_date desc, id desc')
+        $loans = $data->orderBy('xs_status desc, recommendTime desc, sort asc, finish_rate desc, isJiaxi asc, finish_date desc, id desc')
             ->offset($pages->offset)
             ->limit($pages->limit)
             ->all();
