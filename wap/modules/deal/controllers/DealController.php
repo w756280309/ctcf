@@ -3,6 +3,7 @@
 namespace app\modules\deal\controllers;
 
 use common\controllers\HelpersTrait;
+use common\models\product\LoanFinder;
 use common\models\product\OnlineProduct;
 use common\models\order\OnlineOrder;
 use common\service\PayService;
@@ -23,21 +24,15 @@ class DealController extends Controller
     {
         $size = 5;
 
-        $query = OnlineProduct::find()
-            ->select('*')
-            ->addSelect(['xs_status' => 'if(is_xs = 1 && status < 3, 1, 0)'])
-            ->where([
-                'isPrivate' => 0,
-                'del_status' => OnlineProduct::STATUS_USE,
-                'online_status' => OnlineProduct::STATUS_ONLINE
-            ]);
+        $query = LoanFinder::queryPublicLoans();
 
         $count = $query->count();
 
         $pages = new Pagination(['totalCount' => $count, 'pageSize' => $size]);
 
-        $deals = $query->offset($pages->offset)->limit($pages->limit)
-            ->orderBy('xs_status desc, recommendTime desc, sort asc, finish_rate desc, finish_date desc, id desc')
+        $deals = $query->orderBy('xs_status desc, recommendTime desc, sort asc, finish_rate desc, isJiaxi asc, finish_date desc, id desc')
+            ->offset($pages->offset)
+            ->limit($pages->limit)
             ->all();
 
         $tp = ceil($count / $size);
