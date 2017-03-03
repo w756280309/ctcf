@@ -393,13 +393,13 @@ GROUP BY rp.uid, rp.online_Pid";
     }
 
     /**
-     * 将平台账户资金转给立合旺通银行卡
+     * 将平台账户资金转给[收款人]银行卡
      * 使用说明：
-     * 1. 测试 php yii data/transfer 查看立合旺通金额
+     * 1. 测试 php yii data/transfer 查看[收款人]金额
      * 2. 转一笔0.01元 php yii data/transfer 1
      * 3. 转指定金额 php yii data/transfer 1 $amount
      *
-     * 南京交充值到平台账户，然后平台账户转让到立合旺通，立合旺通再提现到银行卡。
+     * 南京交充值到平台账户，然后平台账户转让到[收款人]，[收款人]再提现到银行卡。
      * @param  bool $run 是否转账
      * @param  float $amount 需要转账金额
      * @param  bool $fromTransfer 是否进行转账方转账
@@ -412,7 +412,8 @@ GROUP BY rp.uid, rp.online_Pid";
         //$fromUserId = '7601209';//测试环境 转账方用户在联动ID
         //$toUserId = '7601209';//测试环境 收款方用户在联动账户ID
         $fromUserId = '7302209';//正式环境 转账方（南京交）在联动ID
-        $toUserId = '7301209';//正式环境 收款方 （立合旺通）在联动ID
+        //$toUserId = '7301209';//正式环境 收款方 （立合旺通）在联动ID  转账流程已测试 正式转账已成功
+        $toUserId = '7303209';//正式环境 收款方 （居莫愁）在联动ID
         $platformUserId = Yii::$app->params['ump']['merchant_id'];//平台在联动账户
         $ump = Yii::$container->get('ump');
         //平台信息
