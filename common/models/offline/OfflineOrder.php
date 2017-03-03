@@ -37,7 +37,7 @@ class OfflineOrder extends ActiveRecord
             'loan_id' => '线下产品ID',
             'realName' => '姓名',
             'mobile' => '联系电话',
-            'money' => '购买金额',
+            'money' => '购买金额',//以万元为单位
             'orderDate' => '订单日期',
             'created_at' => '创建时间',
             'isDeleted' => '是否删除',

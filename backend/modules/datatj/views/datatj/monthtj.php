@@ -37,14 +37,32 @@ use yii\grid\GridView;
                     'attribute' => 'bizDate',
                     'label' => '日期',
                     'value' => function ($data) {
-                        return date('Y-m', strtotime($data['bizDate']));
+                        return $data['bizDate'];
                     }
                 ],
                 [
                     'attribute' => 'totalInvestment',
-                    'label' => '交易额',
+                    'label' => '总交易额',
                     'value' => function ($data) {
                         return number_format($data['totalInvestment'], 2);
+                    },
+                    'contentOptions' => ['class' => 'money'],
+                    'headerOptions' => ['class' => 'money'],
+                ],
+                [
+                    'attribute' => 'onlineInvestment',
+                    'label' => '线上交易额',
+                    'value' => function ($data) {
+                        return number_format($data['onlineInvestment'], 2);
+                    },
+                    'contentOptions' => ['class' => 'money'],
+                    'headerOptions' => ['class' => 'money'],
+                ],
+                [
+                    'attribute' => 'offlineInvestment',
+                    'label' => '线下交易金额',
+                    'value' => function ($data) {
+                        return number_format($data['offlineInvestment'], 2);
                     },
                     'contentOptions' => ['class' => 'money'],
                     'headerOptions' => ['class' => 'money'],

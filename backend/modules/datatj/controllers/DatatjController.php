@@ -25,11 +25,11 @@ class DatatjController extends BaseController
     {
         $count_time = Perf::getLastTime();
         //统计累计数据，不含今日
-        $total = Yii::$app->db->createCommand('SELECT SUM(totalInvestment) AS totalTotalInve, SUM(rechargeCost) AS totalRechargeCost, SUM(reg) AS totalReg,SUM(idVerified) AS totalIdVerified,SUM(successFound) AS totalSuccessFound,sum(qpayEnabled) as totalQpayEnabled, sum(newRegisterAndInvestor) as newRegisterAndInvestor, sum(newInvestor) as newInvestor, sum(investmentInWyb) as totalInvestmentInWyb, sum(investmentInWyj) as totalInvestmentInWyj FROM perf WHERE DATE_FORMAT(bizDate,\'%Y-%m-%d\') < DATE_FORMAT(NOW(),\'%Y-%m-%d\')')->queryOne();
+        $total = Yii::$app->db->createCommand('SELECT SUM(onlineInvestment) as onlineInvestment, SUM(offlineInvestment) as offlineInvestment, SUM(totalInvestment) AS totalTotalInve, SUM(rechargeCost) AS totalRechargeCost, SUM(reg) AS totalReg,SUM(idVerified) AS totalIdVerified,SUM(successFound) AS totalSuccessFound,sum(qpayEnabled) as totalQpayEnabled, sum(newRegisterAndInvestor) as newRegisterAndInvestor, sum(newInvestor) as newInvestor, sum(investmentInWyb) as totalInvestmentInWyb, sum(investmentInWyj) as totalInvestmentInWyj FROM perf WHERE DATE_FORMAT(bizDate,\'%Y-%m-%d\') < DATE_FORMAT(NOW(),\'%Y-%m-%d\')')->queryOne();
         //今日统计数据
         $today = Perf::getTodayCount();
         //本月统计,不包含今天数据
-        $month = Yii::$app->db->createCommand("SELECT SUM(totalInvestment) AS monthTotalInvestment,SUM(successFound) AS monthSuccessFound FROM perf WHERE DATE_FORMAT(bizDate,'%Y-%m-%d') < DATE_FORMAT(NOW(),'%Y-%m-%d') AND DATE_FORMAT(bizDate,'%Y-%m')=DATE_FORMAT(NOW(),'%Y-%m')")->queryOne();
+        $month = Yii::$app->db->createCommand("SELECT SUM(onlineInvestment) as onlineInvestment, SUM(offlineInvestment) as offlineInvestment, SUM(totalInvestment) AS monthTotalInvestment,SUM(successFound) AS monthSuccessFound FROM perf WHERE DATE_FORMAT(bizDate,'%Y-%m-%d') < DATE_FORMAT(NOW(),'%Y-%m-%d') AND DATE_FORMAT(bizDate,'%Y-%m')=DATE_FORMAT(NOW(),'%Y-%m')")->queryOne();
         //贷后余额、平台可用余额
         $remainMoney = Perf::getRemainMoney();
         $usableMoney = Perf::getUsableMoney();
@@ -44,7 +44,9 @@ class DatatjController extends BaseController
         $investorData = Yii::$app->db->createCommand("SELECT COUNT(DISTINCT uid) AS c ,SUM(o.order_money) AS m ,o.investFrom AS f FROM online_order AS o INNER JOIN online_product AS p ON o.online_pid = p.id WHERE o.status = 1 AND p.isTest = 0
  GROUP BY f ORDER BY f ASC")->queryAll();//不同来源的购买人数、购买金额
         return $this->render('huizongtj', [
-            'totalTotalInve' => $total['totalTotalInve'] + $today['totalInvestment'],//平台累计交易额
+            'totalOnlineInve' => $total['onlineInvestment'] + $today['onlineInvestment'],//线上累计投资金额
+            'totalOfflineInve' => $total['offlineInvestment'] + $today['offlineInvestment'],//线下累计投资金额
+            'totalTotalInve' => $total['totalTotalInve'] + $today['totalInvestment'],//平台累计交易额 线上+线下
             'totalRechargeCost' => $total['totalRechargeCost'] + $today['rechargeCost'],//累计充值手续费
             'totalReg' => $total['totalReg'] + $today['reg'],//累计注册用户
             'totalIdVerified' => $total['totalIdVerified'] + $today['idVerified'],//累计实名认证
@@ -54,7 +56,7 @@ class DatatjController extends BaseController
             'totalInvestmentInWyb' => $total['totalInvestmentInWyb'] + $today['investmentInWyb'],//温盈宝累计销售额
             'totalInvestmentInWyj' => $total['totalInvestmentInWyj'] + $today['investmentInWyj'],//温盈金累计销售额
             'countDate' => date('Y年m月d日 H:i', $count_time),
-            'todayTotalInve' => $today['totalInvestment'],//今日交易额
+            'todayOnlineInvestment' => $today['onlineInvestment'],//今日线上交易额
             'toadyRechargeCost' => $today['rechargeCost'],//今日充值手续费
             'todayRechargeMoney' => $today['rechargeMoney'],//今日充值金额
             'todayDraw' => $today['draw'],//今日体现
@@ -68,7 +70,9 @@ class DatatjController extends BaseController
             'newRegisterAndInvestor' => $today['newRegisterAndInvestor'],//今日注册今日投资人数
             'investAndLogin' => $today['investAndLogin'],//今日已投用户登录数
             'notInvestAndLogin' => $today['notInvestAndLogin'],//今日未投用户登录数
-            'monthTotalInvestment' => $month['monthTotalInvestment'] + $today['totalInvestment'],//本月交易额
+            'monthOnlineInvestment' => $month['onlineInvestment'] + $today['onlineInvestment'],//本月交易额 线上
+            'monthOfflineInvestment' => $month['offlineInvestment'] + $today['offlineInvestment'],//本月交易额 线下
+            'monthTotalInvestment' => $month['monthTotalInvestment'] + $today['totalInvestment'],//本月交易额 线上 + 线下
             'monthSuccessFound' => $month['monthSuccessFound'] + $today['successFound'],//本月融资项目
             'remainMoney' => $remainMoney,//贷后余额
             'usableMoney' => $usableMoney,//可用余额
@@ -87,7 +91,7 @@ class DatatjController extends BaseController
         //获取当月数据
         $month = Perf::getThisMonthCount();
         //历史数据，不包含当月
-        $sql = "SELECT bizDate, SUM(totalInvestment) AS totalInvestment,SUM(rechargeMoney) AS rechargeMoney,SUM(drawAmount) AS drawAmount,SUM(rechargeCost) AS rechargeCost ,SUM(reg) AS reg,SUM(idVerified) AS idVerified,SUM(successFound) AS successFound, SUM(qpayEnabled) AS qpayEnabled, SUM(investor) AS investor, SUM(newRegisterAndInvestor) AS newRegisterAndInvestor, SUM(newInvestor) AS newInvestor,SUM(investmentInWyb) AS investmentInWyb, SUM(investmentInWyj) AS investmentInWyj
+        $sql = "SELECT DATE_FORMAT(bizDate,'%Y-%m') as bizDate, SUM(totalInvestment) AS totalInvestment, SUM(onlineInvestment) AS onlineInvestment,SUM(offlineInvestment) AS offlineInvestment,SUM(rechargeMoney) AS rechargeMoney,SUM(drawAmount) AS drawAmount,SUM(rechargeCost) AS rechargeCost ,SUM(reg) AS reg,SUM(idVerified) AS idVerified,SUM(successFound) AS successFound, SUM(qpayEnabled) AS qpayEnabled, SUM(investor) AS investor, SUM(newRegisterAndInvestor) AS newRegisterAndInvestor, SUM(newInvestor) AS newInvestor,SUM(investmentInWyb) AS investmentInWyb, SUM(investmentInWyj) AS investmentInWyj
 FROM perf WHERE DATE_FORMAT(bizDate,'%Y-%m') < DATE_FORMAT(NOW(),'%Y-%m')  GROUP BY DATE_FORMAT(bizDate,'%Y-%m') ORDER BY DATE_FORMAT(bizDate,'%Y-%m') DESC";
         $data = Yii::$app->db->createCommand($sql)->queryAll();
         $allData = array_merge([$month], $data);
@@ -131,9 +135,9 @@ FROM perf WHERE DATE_FORMAT(bizDate,'%Y-%m') < DATE_FORMAT(NOW(),'%Y-%m')  GROUP
         $history = Perf::find()->where(['<', 'bizDate', date('Y-m-d')])->orderBy(['bizDate' => SORT_DESC])->asArray()->all();
         $today = Perf::getTodayCount();
         $allData = array_merge([$today], $history);
-        $record = implode(',', ['日期', '交易额', '充值金额', '提现金额', '充值手续费', Yii::$app->params['pc_cat'][2] . '销售额', Yii::$app->params['pc_cat'][1] . '销售额', '注册用户', '实名认证', '绑卡用户数', '投资人数', '当日注册当日投资人数', '新增投资人数', '已投用户登录数', '未投用户登录数', '融资项目']) . "\n";
+        $record = implode(',', ['日期', '交易总额', '线上交易额', '线下交易额', '充值金额', '提现金额', '充值手续费', Yii::$app->params['pc_cat'][2] . '销售额', Yii::$app->params['pc_cat'][1] . '销售额', '注册用户', '实名认证', '绑卡用户数', '投资人数', '当日注册当日投资人数', '新增投资人数', '已投用户登录数', '未投用户登录数', '融资项目']) . "\n";
         foreach ($allData as $k => $data) {
-            $array = [$data['bizDate'], floatval($data['totalInvestment']), floatval($data['rechargeMoney']), floatval($data['drawAmount']), floatval($data['rechargeCost']), floatval($data['investmentInWyb']), floatval($data['investmentInWyj']), intval($data['reg']), intval($data['idVerified']), intval($data['qpayEnabled']), intval($data['investor']), intval($data['newRegisterAndInvestor']), intval($data['newInvestor']), intval($data['investAndLogin']), intval($data['notInvestAndLogin']), intval($data['successFound'])];
+            $array = [$data['bizDate'], floatval($data['totalInvestment']), floatval($data['onlineInvestment']), floatval($data['offlineInvestment']), floatval($data['rechargeMoney']), floatval($data['drawAmount']), floatval($data['rechargeCost']), floatval($data['investmentInWyb']), floatval($data['investmentInWyj']), intval($data['reg']), intval($data['idVerified']), intval($data['qpayEnabled']), intval($data['investor']), intval($data['newRegisterAndInvestor']), intval($data['newInvestor']), intval($data['investAndLogin']), intval($data['notInvestAndLogin']), intval($data['successFound'])];
             $record .= implode(',', $array) . "\n";
         }
         if (null !== $record) {
@@ -150,13 +154,13 @@ FROM perf WHERE DATE_FORMAT(bizDate,'%Y-%m') < DATE_FORMAT(NOW(),'%Y-%m')  GROUP
         //获取当月数据
         $month = Perf::getThisMonthCount();
         //历史数据，不包含当月
-        $sql = "SELECT bizDate, SUM(totalInvestment) AS totalInvestment,SUM(rechargeMoney) AS rechargeMoney,SUM(drawAmount) AS drawAmount,SUM(rechargeCost) AS rechargeCost ,SUM(reg) AS reg,SUM(idVerified) AS idVerified,SUM(successFound) AS successFound, SUM(qpayEnabled) AS qpayEnabled, SUM(investor) AS investor, SUM(newRegisterAndInvestor) AS newRegisterAndInvestor, SUM(newInvestor) AS newInvestor,SUM(investmentInWyb) AS investmentInWyb, SUM(investmentInWyj) AS investmentInWyj
+        $sql = "SELECT DATE_FORMAT(bizDate,'%Y-%m')  as bizDate, SUM(totalInvestment) AS totalInvestment, SUM(onlineInvestment) AS onlineInvestment, SUM(offlineInvestment) AS offlineInvestment,SUM(rechargeMoney) AS rechargeMoney,SUM(drawAmount) AS drawAmount,SUM(rechargeCost) AS rechargeCost ,SUM(reg) AS reg,SUM(idVerified) AS idVerified,SUM(successFound) AS successFound, SUM(qpayEnabled) AS qpayEnabled, SUM(investor) AS investor, SUM(newRegisterAndInvestor) AS newRegisterAndInvestor, SUM(newInvestor) AS newInvestor,SUM(investmentInWyb) AS investmentInWyb, SUM(investmentInWyj) AS investmentInWyj
 FROM perf WHERE DATE_FORMAT(bizDate,'%Y-%m') < DATE_FORMAT(NOW(),'%Y-%m')  GROUP BY DATE_FORMAT(bizDate,'%Y-%m') ORDER BY DATE_FORMAT(bizDate,'%Y-%m') DESC";
         $history = Yii::$app->db->createCommand($sql)->queryAll();
         $allData = array_merge([$month], $history);
-        $record = implode("\t" . ',', ['日期', '交易额', '充值金额', '提现金额', '充值手续费', Yii::$app->params['pc_cat'][2] . '销售额', Yii::$app->params['pc_cat'][1] . '销售额', '注册用户', '实名认证', '绑卡用户数', '投资人数', '当日注册当日投资人数', '新增投资人数', '融资项目']) . "\n";
+        $record = implode("\t" . ',', ['日期', '交易总额', '线上交易额', '线下交易额', '充值金额', '提现金额', '充值手续费', Yii::$app->params['pc_cat'][2] . '销售额', Yii::$app->params['pc_cat'][1] . '销售额', '注册用户', '实名认证', '绑卡用户数', '投资人数', '当日注册当日投资人数', '新增投资人数', '融资项目']) . "\n";
         foreach ($allData as $k => $data) {
-            $array = [date('Y-m', strtotime($data['bizDate'])), floatval($data['totalInvestment']), floatval($data['rechargeMoney']), floatval($data['drawAmount']), floatval($data['rechargeCost']), floatval($data['investmentInWyb']), floatval($data['investmentInWyj']), intval($data['reg']), intval($data['idVerified']), intval($data['qpayEnabled']), intval($data['investor']), intval($data['newRegisterAndInvestor']), intval($data['newInvestor']), intval($data['successFound'])];
+            $array = [$data['bizDate'], floatval($data['totalInvestment']), floatval($data['onlineInvestment']), floatval($data['offlineInvestment']), floatval($data['rechargeMoney']), floatval($data['drawAmount']), floatval($data['rechargeCost']), floatval($data['investmentInWyb']), floatval($data['investmentInWyj']), intval($data['reg']), intval($data['idVerified']), intval($data['qpayEnabled']), intval($data['investor']), intval($data['newRegisterAndInvestor']), intval($data['newInvestor']), intval($data['successFound'])];
             $record .= implode(',', $array) . "\n";
         }
         if (null !== $record) {

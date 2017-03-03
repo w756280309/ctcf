@@ -27,8 +27,16 @@ CSS
     </div>
     <div class="row-fluid">
         <div class="span4">平台累计交易额：<span style="color: red;"><?= number_format($totalTotalInve, 2) ?></span> 元</div>
-        <div class="span4">本月交易额：<?= number_format($monthTotalInvestment, 2) ?>元</div>
-        <div class="span4">今日交易额：<?= number_format($todayTotalInve, 2) ?>元</div>
+        <div class="span4">线上累计交易额：<?= number_format($totalOnlineInve, 2) ?>元</div>
+        <div class="span4">线下累计交易额：<?= number_format($totalOfflineInve, 2) ?>元</div>
+    </div>
+    <div class="row-fluid">
+        <div class="span4">本月交易额：<span style="color: red;"><?= number_format($monthTotalInvestment, 2) ?></span> 元</div>
+        <div class="span4">线上本月交易额：<?= number_format($monthOnlineInvestment, 2) ?>元</div>
+        <div class="span4">线下本月交易额：<?= number_format($monthOfflineInvestment, 2) ?>元</div>
+    </div>
+    <div class="row-fluid">
+        <div class="span12">今日交线上易额：<?= number_format($todayOnlineInvestment, 2) ?>元</div>
     </div>
     <div class="row-fluid">
         <div class="span4">温盈宝累计销售额：<?= number_format($totalInvestmentInWyb, 2) ?> 元</div>

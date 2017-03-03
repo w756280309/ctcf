@@ -28,7 +28,9 @@ use yii\helpers\ArrayHelper;
  * @property string $drawAmount 提现
  * @property string $investmentInWyj    温盈金
  * @property string $investmentInWyb    温盈宝
- * @property string $totalInvestment    投资金额
+ * @property string $onlineInvestment    线上投资金额
+ * @property string $offlineInvestment    线下投资金额
+ * @property string $totalInvestment    总投资金额
  * @property integer $successFound    融资项目
  * @property string $remainMoney    贷后余额
  * @property string $usableMoney    可用余额
@@ -164,12 +166,27 @@ class Perf extends ActiveRecord
             ->queryScalar();
     }
 
-    //投资金额
-    public function getTotalInvestment($date)
+    //线上交易额
+    public function getOnlineInvestment($date)
     {
+
         return Yii::$app->db->createCommand('select sum(o.order_money) from online_order o INNER JOIN online_product AS p ON o.`online_pid` = p.`id` where o.status=1 AND p.isTest = 0 and DATE(FROM_UNIXTIME(o.created_at))=:date')
             ->bindValue('date', $date, \PDO::PARAM_STR)
             ->queryScalar();
+    }
+
+    //线下交易额(以元为单位)
+    public function getOfflineInvestment($date)
+    {
+        return Yii::$app->db->createCommand('SELECT SUM( money ) * 10000 FROM offline_order WHERE orderDate =:date')
+            ->bindValue('date', $date, \PDO::PARAM_STR)
+            ->queryScalar();
+    }
+
+    //线上+线下累计投资金额
+    public function getTotalInvestment($date)
+    {
+        return bcadd($this->getOnlineInvestment($date), $this->getOfflineInvestment($date), 2);
     }
 
     //融资项目,成立及之后的项目，status [5,6,7],项目成立时间按照 full_time
@@ -275,7 +292,7 @@ class Perf extends ActiveRecord
         $today = [];
         $model = new Perf();
         $today['bizDate'] = $startDate;
-        $funList = ['reg', 'idVerified', 'qpayEnabled', 'investor', 'newRegisterAndInvestor', 'newInvestor', 'chargeViaPos', 'chargeViaEpay', 'drawAmount', 'investmentInWyj', 'investmentInWyb', 'totalInvestment', 'successFound', 'rechargeMoney', 'rechargeCost', 'draw', 'investAndLogin', 'notInvestAndLogin', 'repayMoney', 'repayLoanCount', 'repayUserCount'];
+        $funList = ['reg', 'idVerified', 'qpayEnabled', 'investor', 'newRegisterAndInvestor', 'newInvestor', 'chargeViaPos', 'chargeViaEpay', 'drawAmount', 'investmentInWyj', 'investmentInWyb', 'onlineInvestment', 'offlineInvestment', 'totalInvestment', 'successFound', 'rechargeMoney', 'rechargeCost', 'draw', 'investAndLogin', 'notInvestAndLogin', 'repayMoney', 'repayLoanCount', 'repayUserCount'];
         foreach ($funList as $field) {
             $method = 'get' . ucfirst($field);
             $model->$field = $model->{$method}($startDate);
@@ -288,12 +305,14 @@ class Perf extends ActiveRecord
     public static function getThisMonthCount()
     {
         //当月数据，排除当天
-        $month = Yii::$app->db->createCommand("SELECT bizDate, SUM(totalInvestment) AS totalInvestment,SUM(rechargeMoney) AS rechargeMoney,SUM(drawAmount) AS drawAmount,SUM(rechargeCost) AS rechargeCost ,SUM(reg) AS reg,SUM(idVerified) AS idVerified,SUM(successFound) AS successFound, SUM(qpayEnabled) AS qpayEnabled, SUM(investor) AS investor, SUM(newRegisterAndInvestor) AS newRegisterAndInvestor,  SUM(newInvestor) AS newInvestor,SUM(investmentInWyb) AS investmentInWyb, SUM(investmentInWyj) AS investmentInWyj FROM perf WHERE DATE_FORMAT(bizDate,'%Y-%m-%d') < DATE_FORMAT(NOW(),'%Y-%m-%d') AND DATE_FORMAT(bizDate,'%Y-%m')=DATE_FORMAT(NOW(),'%Y-%m')")->queryOne();
+        $month = Yii::$app->db->createCommand("SELECT DATE_FORMAT(bizDate,'%Y-%m') as bizDate, SUM(totalInvestment) AS totalInvestment, SUM(onlineInvestment) AS onlineInvestment,SUM(offlineInvestment) AS offlineInvestment, SUM(rechargeMoney) AS rechargeMoney,SUM(drawAmount) AS drawAmount,SUM(rechargeCost) AS rechargeCost ,SUM(reg) AS reg,SUM(idVerified) AS idVerified,SUM(successFound) AS successFound, SUM(qpayEnabled) AS qpayEnabled, SUM(investor) AS investor, SUM(newRegisterAndInvestor) AS newRegisterAndInvestor,  SUM(newInvestor) AS newInvestor,SUM(investmentInWyb) AS investmentInWyb, SUM(investmentInWyj) AS investmentInWyj FROM perf WHERE DATE_FORMAT(bizDate,'%Y-%m-%d') < DATE_FORMAT(NOW(),'%Y-%m-%d') AND DATE_FORMAT(bizDate,'%Y-%m')=DATE_FORMAT(NOW(),'%Y-%m') GROUP BY DATE_FORMAT(bizDate,'%Y-%m')")->queryOne();
         //当天数据
         $today = Perf::getTodayCount();
         //获取当月实时数据
         $month['bizDate'] = $month['bizDate']?:$today['bizDate'];
         $month['totalInvestment'] = $month['totalInvestment'] + $today['totalInvestment'];
+        $month['onlineInvestment'] = $month['onlineInvestment'] + $today['onlineInvestment'];
+        $month['offlineInvestment'] = $month['offlineInvestment'] + $today['offlineInvestment'];
         $month['rechargeMoney'] = $month['rechargeMoney'] + $today['rechargeMoney'];
         $month['drawAmount'] = $month['drawAmount'] + $today['drawAmount'];
         $month['rechargeCost'] = $month['rechargeCost'] + $today['rechargeCost'];
