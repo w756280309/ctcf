@@ -97,6 +97,8 @@ use common\utils\StringUtils;
 
         <!-- 活动规则 -->
         <div class="active-box rule hide">
+            <p><span>活动开始时间：2016年12月10日</span></p>
+            <br/>
             <p><span>活动规则：</span></p>
             <p>1. 登录温都金服网站，进入“我的账户”；</p>
             <p>2. 点击“邀请好友”可以看到邀请好友活动，通过微信或者链接进行邀请；</p>

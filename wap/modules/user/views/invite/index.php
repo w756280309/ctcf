@@ -146,6 +146,7 @@ $this->registerJs('var invite_url = "'.$share->url.'";', 1);
 
         <!--活动规则-->
         <div class="rule-box">
+            <div class="inv-title"><b>活动开始时间：2016年12月10日</b></div>
             <div class="inv-title"><b>活动规则：</b></div>
             <ul>
                 <li>登录温都金服网站，进入“我的账户”；</li>
