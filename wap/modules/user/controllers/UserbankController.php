@@ -79,8 +79,12 @@ class UserbankController extends BaseController
 
         //检查用户是否完成快捷支付
         $data = BankService::checkKuaijie($user);
-        if ($data['code'] == 1 && \Yii::$app->request->isAjax) {
-            return ['next' => $data['tourl']];
+        if (1 === $data['code'] && \Yii::$app->request->isAjax) {
+            return [
+                'code' => $data['code'],
+                'message' => $data['message'],
+                'next' => $data['tourl']
+            ];
         }
 
         $user_bank = UserBanks::find()->where(['uid' => $user->id])->select('id,binding_sn,bank_id,bank_name,card_number')->one();
@@ -95,7 +99,12 @@ class UserbankController extends BaseController
             \Yii::$app->session['recharge_back_url'] = $to;
         }
 
-        return $this->render('recharge', ['user_bank' => $user_bank, 'user_acount' => $user_acount, 'data' => $data, 'bank' => $bank]);
+        return $this->render('recharge', [
+            'user_bank' => $user_bank,
+            'user_acount' => $user_acount,
+            'data' => $data,
+            'bank' => $bank,
+        ]);
     }
 
     /**
@@ -179,9 +188,7 @@ class UserbankController extends BaseController
     {
         $this->layout = '@app/views/layouts/fe';
 
-        $data = BankService::checkKuaijie($this->getAuthedUser());
-
-        return $this->render('acceptres', ['ret' => $ret, 'data' => $data]);
+        return $this->render('acceptres', ['ret' => $ret]);
     }
 
     /**

@@ -17,7 +17,7 @@ $this->showViewport = false;
 <div class="flex-content">
     <?php if (!defined('IN_APP')) { ?>
         <div class="topTitle f18">
-            <img class="goback" src="<?= FE_BASE_URI ?>wap/tie-card/img/back.png" alt="" onclick="history.go(-1)">
+            <img class="goback" src="<?= FE_BASE_URI ?>wap/tie-card/img/back.png" alt="" onclick="window.location.href='/user/user'">
             <div><?= Html::encode($this->title) ?></div>
             <a class="rg" href="tel:<?= Yii::$app->params['contact_tel'] ?>"><img src="<?= FE_BASE_URI ?>wap/tie-card/img/phone.png" alt=""></a>
         </div>
@@ -46,7 +46,7 @@ $this->showViewport = false;
             <input type="text" id="bank_show" class="lf f14" placeholder="请选择开户银行" readonly>
             <input id="bank_id" type="hidden" name="QpayBinding[bank_id]">
             <input id="bank_name" type="hidden" name="QpayBinding[bank_name]">
-            <img src="<?= FE_BASE_URI ?>wap/tie-card/img/jiantou.png" style="position: absolute;top: 0.4rem;right: 0; width: 0.506667rem;" alt="">
+            <img class="tieCard" src="<?= FE_BASE_URI ?>wap/tie-card/img/jiantou.png" style="position: absolute;top: 0.4rem;right: 0; width: 0.506667rem;" alt="">
         </div>
         <div class="creidtCard clearfix">
             <label for="card_no" class="f15 lf">储蓄卡号</label>
@@ -117,7 +117,7 @@ $this->showViewport = false;
             hScrollbar:false
         });
 
-        $("#bank_show").on("click",function() {
+        $("#bank_show,.tieCard").on("click",function() {
             $('.closePomp').show();
             $('.pomp').show();
             myScroll.refresh();//点击后初始化iscroll
