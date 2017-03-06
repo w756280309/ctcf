@@ -178,7 +178,7 @@ class Perf extends ActiveRecord
     //线下交易额(以元为单位)
     public function getOfflineInvestment($date)
     {
-        return Yii::$app->db->createCommand('SELECT SUM( money ) * 10000 FROM offline_order WHERE orderDate =:date')
+        return Yii::$app->db->createCommand('SELECT SUM( money ) * 10000 FROM offline_order WHERE orderDate =:date AND `isDeleted` = 0')
             ->bindValue('date', $date, \PDO::PARAM_STR)
             ->queryScalar();
     }
