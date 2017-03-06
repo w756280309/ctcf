@@ -13,10 +13,12 @@ $backUrl = 'success' === $ret ? '/user/user' : '/user/bank';
 <script src="<?= FE_BASE_URI ?>wap/common/js/pop.js?v=2"></script>
 
 <div class="flex-content">
-    <div class="topTitle f19">
-        <img class="goback" src="<?= FE_BASE_URI ?>wap/tie-card/img/back.png" alt="" onclick="window.location.href='<?= $backUrl ?>'">
-        <div><?= Html::encode($this->title) ?></div>
-    </div>
+    <?php if (!defined('IN_APP')) { ?>
+        <div class="topTitle f19">
+            <img class="goback" src="<?= FE_BASE_URI ?>wap/tie-card/img/back.png" alt="" onclick="window.location.href='<?= $backUrl ?>'">
+            <div><?= Html::encode($this->title) ?></div>
+        </div>
+    <?php } ?>
 
     <?php if ('success' === $ret) { ?>
         <img class="sucImg" src="<?= FE_BASE_URI ?>wap/tie-card/img/success.png" alt="">

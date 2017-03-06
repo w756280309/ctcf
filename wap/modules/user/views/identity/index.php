@@ -93,23 +93,33 @@ $(function() {
    }
 
    csrf = $("meta[name=csrf-token]").attr('content');
+   allowClick = true;
 
-   $('#idcardbtn').bind('click',function() {
-        subForm();
+   $('#idcardbtn').on('click', function(e) {
+       e.preventDefault();
+
+       subForm();
    });
 
 })
 
 function subForm()
 {
+    if (!allowClick) {
+        return false;
+    }
+
+    allowClick = false;
+    $('#idcardbtn').html('开 通 中...');
+
     if(!validateForm()) {
-       return false;
+        allowClick = true;
+        $('#idcardbtn').html('立 即 开 通');
+
+        return false;
     }
 
     var $form = $('#form');
-    $('#idcardbtn').attr('disabled', true);
-    $('#idcardbtn').val('开通中...');
-
     var xhr = $.post(
         $form.attr('action'),
         $form.serialize()
@@ -129,8 +139,8 @@ function subForm()
     });
 
     xhr.always(function() {
-        $('#idcardbtn').val('开 通');
-        $('#idcardbtn').attr('disabled', false);
+        allowClick = true;
+        $('#idcardbtn').html('立 即 开 通');
     });
 
     xhr.fail(function(jqXHR) {

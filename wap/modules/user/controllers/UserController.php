@@ -30,14 +30,25 @@ class UserController extends BaseController
             $showPointsArea = false;
         }
 
-        $data = BankService::checkKuaijie($user);
-
         return $this->render('index', [
             'ua' => $ua,
             'user' => $user,
-            'data' => $data,
             'showPointsArea' => $showPointsArea,
         ]);
+    }
+
+    /**
+     * 获取开通快捷支付功能状态.
+     */
+    public function actionCheckKuaijie()
+    {
+        if (!Yii::$app->request->isAjax) {
+            throw $this->ex404();
+        }
+
+        $user = $this->getAuthedUser();
+
+        return BankService::checkKuaijie($user);
     }
 
     /**

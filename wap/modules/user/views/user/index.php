@@ -151,38 +151,46 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/fastclick.js', ['depends' => JqueryAss
 <!-- 账户中心页 end  -->
 
 <script type="text/javascript">
-    var err = '<?= isset($data['code']) ? $data['code'] : '' ?>';
-    var mess = '<?= isset($data['message']) ? $data['message'] : '' ?>';
-    var tourl = '<?= isset($data['tourl']) ? $data['tourl'] : '' ?>';
-
     function tixian()
     {
-        if (err === '1') {
-            $('.account div').eq(0).css('background', '#e8eaf0');
-            toast(mess, function() {
-                $('.account div').eq(0).css('background', '#fff');
-                if (tourl !== '') {
-                    location.href = tourl;
-                }
-            });
-        } else {
-            location.href='/user/userbank/tixian';
-        }
+        var xhr = $.get('/user/user/check-kuaijie', function (data) {
+            if (data.code) {
+                $('.account div').eq(0).css('background', '#e8eaf0');
+                toastCenter(data.message, function() {
+                    $('.account div').eq(0).css('background', '#fff');
+                    if (data.tourl) {
+                        location.href = data.tourl;
+                    }
+                });
+            } else {
+                location.href='/user/userbank/tixian';
+            }
+        });
+
+        xhr.fail(function () {
+            toastCenter('系统繁忙,请稍后重试!');
+        });
     }
 
     function recharge()
     {
-        if(err === '1') {
-            $('.account div').eq(1).css('background', '#e8eaf0');
-            toast(mess, function() {
-                $('.account div').eq(1).css('background', '#fff');
-                if (tourl !== '') {
-                    location.href = tourl;
-                }
-            });
-        } else {
-            location.href='/user/userbank/recharge';
-        }
+        var xhr = $.get('/user/user/check-kuaijie', function (data) {
+            if (data.code) {
+                $('.account div').eq(1).css('background', '#e8eaf0');
+                toastCenter(data.message, function() {
+                    $('.account div').eq(1).css('background', '#fff');
+                    if (data.tourl) {
+                        location.href = data.tourl;
+                    }
+                });
+            } else {
+                location.href='/user/userbank/recharge';
+            }
+        });
+
+        xhr.fail(function () {
+            toastCenter('系统繁忙,请稍后重试!');
+        });
     }
 
     $(function() {
@@ -208,5 +216,4 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/fastclick.js', ['depends' => JqueryAss
             }
         });
     });
-
 </script>

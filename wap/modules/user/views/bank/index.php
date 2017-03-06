@@ -12,7 +12,7 @@ $this->showViewport = false;
 <script src="<?= FE_BASE_URI ?>libs/fastclick.js"></script>
 <script src="<?= FE_BASE_URI ?>libs/iscroll.js"></script>
 <script src="<?= FE_BASE_URI ?>wap/common/js/pop.js?v=2"></script>
-<script src="<?= ASSETS_BASE_URI ?>js/qpay.js?v=20170302"></script>
+<script src="<?= ASSETS_BASE_URI ?>js/qpay.js?v=20170306"></script>
 
 <div class="flex-content">
     <?php if (!defined('IN_APP')) { ?>

@@ -5,7 +5,7 @@ function validateBinding() {
     }
     var reg = /^[0-9]{16,19}$/;
     if (!reg.test($.trim($('#card_no').val()))) {
-        toastCenter('你输入的银行卡号有误');
+        toastCenter('您输入的银行卡号有误');
         return false;
     }
     if ('' === $('#bank_name').val()) {
