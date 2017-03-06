@@ -956,6 +956,6 @@ class User extends ActiveRecord implements IdentityInterface, UserInterface
      */
     public function isO2oRegister()
     {
-        return null !== ReferralSource::find()->where(['isO2O' => true, 'source' => $this->campaign_source])->one();
+        return null !== $this->campaign_source && null !== ReferralSource::find()->where(['isO2O' => true, 'source' => $this->campaign_source])->one();
     }
 }
