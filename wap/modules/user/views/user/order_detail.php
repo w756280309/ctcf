@@ -8,10 +8,12 @@ if ($fromTransfer) {
 use common\models\product\RateSteps;
 use common\models\order\OnlineRepaymentPlan;
 use common\utils\StringUtils;
+use borrower\assets\WapAsset;
+use yii\web\JqueryAsset;
 
 $this->registerJsFile(ASSETS_BASE_URI .'js/fastclick.js', ['position' => 1]);
-$this->registerJsFile(ASSETS_BASE_URI .'js/touzixiangqing.js?v=20160926', ['depends' => 'yii\web\JqueryAsset', 'position' => 1]);
-$this->registerCssFile(ASSETS_BASE_URI .'css/touzixiangqing.css?v=20161024', ['depends' => 'wap\assets\WapAsset']);
+$this->registerJsFile(ASSETS_BASE_URI .'js/touzixiangqing.js?v=20170306', ['depends' => JqueryAsset::class, 'position' => 1]);
+$this->registerCssFile(ASSETS_BASE_URI .'css/touzixiangqing.css?v=20170306', ['depends' => WapAsset::class]);
 ?>
 
 <div class="container">
