@@ -5,6 +5,7 @@ use yii\captcha\Captcha;
 
 $this->title = '注册';
 $this->params['breadcrumbs'][] = $this->title;
+
 ?>
 <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/loginsign.css">
 
@@ -142,20 +143,12 @@ $this->params['breadcrumbs'][] = $this->title;
         xhr.done(function(data) {
             if (data.code) {
                 if ('undefined' !== typeof data.tourl) {
-                    toast(data.message, function() {
+                    toastCenter(data.message, function() {
                         if ('undefined' !== typeof _paq) {
-                            _paq.push(['trackEvent', 'user', 'reg']);
-                        }
+                            _paq.push(['trackEvent', 'user', 'reg', null, null, function () {
+                                location.href = data.tourl;
+                            }]);
 
-                        if ('undefined' !== typeof ga) {
-                            ga('send', {
-                                hitType: 'event',
-                                eventCategory: 'reg',
-                                eventAction: 'm',
-                                hitCallback: function() {
-                                    location.href = data.tourl;
-                                }
-                            });
                             setTimeout(function() {
                                 location.href = data.tourl;
                             }, 1500);
@@ -164,7 +157,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         }
                     });
                 } else if ('undefined' !== typeof data.message) {
-                    toast(data.message);
+                    toastCenter(data.message);
                 }
             }
 

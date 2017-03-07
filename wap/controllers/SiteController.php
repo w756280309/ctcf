@@ -28,8 +28,6 @@ use common\models\user\EditpassForm;
 use common\models\user\User;
 use common\models\user\CaptchaForm;
 use common\utils\SecurityUtils;
-use wap\modules\promotion\models\Promo160520;
-use wap\modules\promotion\models\Promo160520Log;
 use Yii;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;

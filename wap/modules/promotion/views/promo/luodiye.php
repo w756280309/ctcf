@@ -13,7 +13,7 @@ use yii\captcha\Captcha;
 <script  src="<?= FE_BASE_URI ?>libs/lib.flexible3.js"></script>
 <script  src="<?= FE_BASE_URI ?>libs/fastclick.js"></script>
 <script src="<?= ASSETS_BASE_URI ?>js/common.js"></script>
-<script src="<?= FE_BASE_URI ?>wap/luodiye/js/luodiye.js?v=20170117"></script>
+<script src="<?= FE_BASE_URI ?>wap/luodiye/js/luodiye.js?v=20170307"></script>
 
 <div class="container flex-content">
     <?php if (!defined('IN_APP')) { ?>

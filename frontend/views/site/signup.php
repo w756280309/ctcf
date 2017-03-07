@@ -1,11 +1,14 @@
 <?php
-$this->title = '注册';
 
-$this->registerCssFile(ASSETS_BASE_URI.'css/register/register.css', ['depends' => 'frontend\assets\FrontAsset']);
-$this->registerJsFile(ASSETS_BASE_URI.'js/register/register.js?v=20170224', ['depends' => 'frontend\assets\FrontAsset']);
-
+use frontend\assets\FrontAsset;
 use yii\bootstrap\ActiveForm;
 use yii\captcha\Captcha;
+
+$this->title = '注册';
+
+$this->registerCssFile(ASSETS_BASE_URI.'css/register/register.css', ['depends' => FrontAsset::class]);
+$this->registerJsFile(ASSETS_BASE_URI.'js/register/register.js?v=20170307', ['depends' => FrontAsset::class]);
+
 ?>
 
 <div class="register-box">

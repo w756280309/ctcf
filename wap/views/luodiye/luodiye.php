@@ -12,7 +12,7 @@ $inApp = defined('IN_APP');
 $this->registerCssFile(ASSETS_BASE_URI.'css/first.css', ['depends' => WapAsset::class]);
 $this->registerCssFile(ASSETS_BASE_URI.'css/luodiye/luodiye.css?v=161117-1', ['depends' => WapAsset::class]);
 $this->registerJsFile(ASSETS_BASE_URI.'js/fastclick.js', ['depends' => WapAsset::class]);
-$this->registerJsFile(ASSETS_BASE_URI.'js/luodiye.js', ['depends' => WapAsset::class]);
+$this->registerJsFile(ASSETS_BASE_URI.'js/luodiye.js?v=20170307', ['depends' => WapAsset::class]);
 ?>
 
 <div class="container">
