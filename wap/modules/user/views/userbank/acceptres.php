@@ -46,7 +46,7 @@ $backUrl = 'success' === $ret ? '/user/user' : '/user/bank';
                 $.get(toUrl, function (data) {
                     if (data.code) {
                         toastCenter(data.message, function () {
-                            if ('undefined' !== typeof data.next) {
+                            if ('undefined' !== typeof data.next && data.next) {
                                 location.href = data.next;
                             }
                         });
