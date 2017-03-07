@@ -1,25 +1,27 @@
 <?php
+
 $this->title = "系统设置";
 $this->backUrl = '/user/user';
 
+$mobile = $model->mobile;
 $muri = ASSETS_BASE_URI;
 ?>
-<link rel="stylesheet" href="<?=$muri ?>css/setting.css">
+<link rel="stylesheet" href="<?= $muri ?>css/setting.css">
 
 <div class="row">
     <div class="row bg-height border-bottom">
         <div class="col-xs-4 left-txt">用户头像</div>
         <div class="col-xs-6 ">
-            ID:<?= $model->mobile ?>
+            ID:<?= $mobile ?>
         </div>
         <div class="col-xs-2 headpic">
-            <img class="headpic-img-box" src="<?=$muri ?>images/headpic.png" width="40px" hieght="40px" alt="头像">
+            <img class="headpic-img-box" src="<?= $muri ?>images/headpic.png" width="40px" hieght="40px" alt="头像">
         </div>
     </div>
     <div class="row sm-height border-bottom">
         <div class="col-xs-4 left-txt">绑定手机</div>
         <div class="col-xs-2"></div>
-        <div class="col-xs-5 left-txt"><?= substr_replace($model->mobile,'****',3,-4) ?></div>
+        <div class="col-xs-5 left-txt"><?= substr_replace($mobile,'****',3,-4) ?></div>
         <div class="hidden-xs col-sm-1 "></div>
     </div>
     <a class="row sm-height border-bottom margin-top block" href="/system/system/safecenter">

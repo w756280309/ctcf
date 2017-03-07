@@ -9,6 +9,7 @@ namespace common\action\user;
 
 use common\models\user\UserIdentity;
 use common\service\BankService;
+use common\utils\SecurityUtils;
 use Ding\DingNotify;
 use yii\base\Action;
 
@@ -39,7 +40,7 @@ class IdentityVerifyAction extends Action
                         'message' => '您已成功开户'
                     ];
                 } catch (\Exception $ex) {
-                    (new DingNotify('wdjf'))->sendToUsers('用户[' . $user->mobile . ']，于' . date('Y-m-d H:i:s') . ' 进行开户操作，操作失败，联动开户失败，' . $ex->getMessage());
+                    (new DingNotify('wdjf'))->sendToUsers('用户[' . SecurityUtils::decrypt($user->safeMobile) . ']，于' . date('Y-m-d H:i:s') . ' 进行开户操作，操作失败，联动开户失败，' . $ex->getMessage());
                     return [
                         'code' => 1,
                         'message' => 1 === $ex->getCode() ? $ex->getMessage() : '系统繁忙，请稍后重试！',

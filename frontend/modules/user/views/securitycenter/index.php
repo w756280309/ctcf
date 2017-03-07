@@ -1,5 +1,6 @@
 <?php
 
+use common\utils\SecurityUtils;
 use common\utils\StringUtils;
 use yii\bootstrap\ActiveForm;
 use yii\captcha\Captcha;
@@ -9,6 +10,7 @@ $this->title = '安全中心';
 foreach (['useraccount/safecenter.css'] as $cssFile) {
     $this->registerCssFile(ASSETS_BASE_URI.'css/'.$cssFile, ['depends' => 'frontend\assets\FrontAsset']);
 }
+$mobile = StringUtils::obfsMobileNumber($user->mobile);
 
 ?>
 
@@ -19,7 +21,7 @@ foreach (['useraccount/safecenter.css'] as $cssFile) {
     </div>
 
     <div class="safecenter-content">
-        <p class="safecenter-tel">您好，<?= StringUtils::obfsMobileNumber($user->mobile) ?></p>
+        <p class="safecenter-tel">您好，<?= $mobile ?></p>
         <!--  实名认证 -->
         <div class="safecenter-content-info">
             <div class="info-box">
@@ -32,7 +34,12 @@ foreach (['useraccount/safecenter.css'] as $cssFile) {
                 </div>
                 <div class="info info-person">
                     <!-- 未认证-->
-                    <?php if ($user->isIdVerified()): ?><p><?= $user->real_name ?>&nbsp;&nbsp;身份证号：<?= substr($user->idcard, 0, 4) ?>****&nbsp;&nbsp;****<?= substr($user->idcard, -4, 4) ?></p><?php endif; ?>
+                    <?php if ($user->isIdVerified()): ?>
+                        <p><?= $user->real_name ?>&nbsp;&nbsp;身份证号：
+                            <?php $idCard = SecurityUtils::decrypt($user->safeIdCard); ?>
+                            <?= substr($idCard, 0, 4) ?>****&nbsp;&nbsp;****<?= substr($idCard, -4, 4) ?>
+                        </p>
+                    <?php endif; ?>
                 </div>
                 <div class="info-btn">
                     <!-- 未认证-->
@@ -60,7 +67,7 @@ foreach (['useraccount/safecenter.css'] as $cssFile) {
                 </div>
                 <div class="info info-person">
                     <!-- 已认证-->
-                    <p><?= StringUtils::obfsMobileNumber($user->mobile) ?></p>
+                    <p><?= $mobile ?></p>
                 </div>
                 <div class="info-btn">
                     <!-- 已认证-->

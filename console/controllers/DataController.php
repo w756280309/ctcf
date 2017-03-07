@@ -604,4 +604,20 @@ GROUP BY rp.uid, rp.online_Pid";
         }
     }
 
+    /**
+     * 历史数据-初始化身份证号及生日字段（目前系统的用户皆为18位身份证号）
+     */
+    public function actionUpdateIdentity()
+    {
+        //更新user表 加密的身份证号/生日字段
+        $users = User::find()
+            ->where(['safeIdCard' => null])
+            ->andWhere(['is not', 'idcard', null])
+            ->all();
+        foreach ($users as $user) {
+            $user->safeIdCard = SecurityUtils::encrypt(trim($user->idcard));
+            $user->birthdate = substr(trim($user->idcard), 6, 8);
+            $user->save(false);
+        }
+    }
 }

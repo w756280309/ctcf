@@ -1,6 +1,9 @@
 <?php
+
 $this->title = "安全中心";
 $this->backUrl = '/system/system/setting';
+use common\utils\SecurityUtils;
+
 ?>
 <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/setting.css?v=20160613">
 
@@ -23,7 +26,7 @@ $this->backUrl = '/system/system/setting';
 </a>
 <div class="row sm-height border-bottom margin-top">
     <div class="col-xs-4 safe-txt  text-align-lf">实名验证</div>
-    <div class="col-xs-5 safe-lf"><?= $user->idcard ? substr_replace($user->idcard, '***', 5, -2) : '' ?></div>
+    <div class="col-xs-5 safe-lf"><?= null !== $user->safeIdCard ? substr_replace(SecurityUtils::decrypt($user->safeIdCard), '***', 5, -2) : '' ?></div>
     <div class="col-xs-3 arrow">
         <?php if(!$user->idcard_status) { ?>
             <a href="/user/identity">去认证</a>

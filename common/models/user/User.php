@@ -13,6 +13,7 @@ use common\models\product\OnlineProduct;
 use common\models\promo\InviteRecord;
 use common\models\user\RechargeRecord as Recharge;
 use common\models\user\DrawRecord as Draw;
+use common\utils\SecurityUtils;
 use P2pl\Borrower;
 use P2pl\UserInterface;
 use Wcg\Growth\Integration\Yii2Module\Model\ReferralSource;
@@ -51,12 +52,14 @@ use Zii\Validator\CnMobileValidator;
  * @property int    regFrom             注册来源。0表示未知，1表示wap，2表示wx，3表示app，4表示pc
  * @property int    sort                融资用户排序，默认为0，从大到小排序
  * @property string regContext          注册页面来源 m 代表WAP端默认注册页 m_intro1611 代表WAP端落地页注册页 pc 代表PC端默认注册页 pc_landing 代表PC端落地页注册页
+ * @property string registerIp          用户注册IP
  * @property int    points              用户积分
  * @property int    coins               用户财富值
  * @property int    level               用户等级
  * @property string annualInvestment    用户累计年化投资额
  * @property string safeMobile          加密后的手机号
- * @property string safeIdCard          加密后的身份证
+ * @property string safeIdCard          加密后的身份证(目前身份证号系统只支持18位)
+ * @property string birthdate           生日，形如19920101
  */
 class User extends ActiveRecord implements IdentityInterface, UserInterface
 {
@@ -266,7 +269,7 @@ class User extends ActiveRecord implements IdentityInterface, UserInterface
             [['business_licence', 'shui_code'], 'match', 'pattern' => '/\d+/', 'message' => '格式不正确，应为纯数字格式', 'on' => ['add', 'edit']],
             [['org_name'], 'required'],
             [['passwordLastUpdatedTime'], 'safe'],
-            [['safeMobile', 'safeIdCard'], 'string'],
+            [['safeMobile', 'safeIdCard', 'birthdate'], 'string'],
         ];
     }
 
@@ -344,6 +347,13 @@ class User extends ActiveRecord implements IdentityInterface, UserInterface
             'trade_pwd' => '交易密码', 'old_trade' => '原交易密码',
             'new_trade' => '新交易密码', 'new_trade_confirm' => '确认交易密码',
             'regContext' => '页面注册来源',
+            'registerIp' => '用户注册IP',
+            'points' => '用户积分',
+            'level' => '用户等级',
+            'annualInvestment' => '用户累计年化投资额',
+            'safeMobile' => '加密手机号',
+            'safeIdCard' => '加密身份证号',
+            'birthdate' => '生日',
         ];
     }
 
@@ -641,12 +651,12 @@ class User extends ActiveRecord implements IdentityInterface, UserInterface
 
     public function getIdNo()
     {
-        return $this->idcard;
+        return SecurityUtils::decrypt($this->safeIdCard);
     }
 
     public function getMobile()
     {
-        return $this->mobile;
+        return SecurityUtils::decrypt($this->safeMobile);
     }
 
     public function getEpayUserId()
@@ -802,9 +812,12 @@ class User extends ActiveRecord implements IdentityInterface, UserInterface
     {
         $this->real_name = Yii::$app->functions->removeWhitespace($identity->real_name);//去除所有空格
         $this->idcard = $identity->idcard;
+        $this->safeIdCard = SecurityUtils::encrypt($identity->idcard);
+        $this->birthdate = substr($identity->idcard, 6, 8);
+        $mobile = SecurityUtils::decrypt($this->safeMobile);
         $resp = Yii::$container->get('ump')->register($this);
 
-        Yii::info('开户联动返回日志 ump_log user_identify user_id: ' . $this->id . ';real_name:.' . $this->real_name . ';idcard:' . $this->idcard . ';mobile:' . $this->mobile . '; ret_code:' . $resp->get('ret_code') . ';ret_msg:' . $resp->get('ret_msg'), 'umplog');
+        Yii::info('开户联动返回日志 ump_log user_identify user_id: ' . $this->id . ';real_name:.' . $this->real_name . ';idcard:' . $identity->idcard . ';mobile:' . $mobile . '; ret_code:' . $resp->get('ret_code') . ';ret_msg:' . $resp->get('ret_msg'), 'umplog');
 
         if (!$resp->isSuccessful()) {
             throw new \Exception($resp->get('ret_code') . '：' . $resp->get('ret_msg'), 1);
@@ -830,7 +843,7 @@ class User extends ActiveRecord implements IdentityInterface, UserInterface
             if (!$this->save(false)) {
                 throw new \Exception('开户失败', 1);
             }
-            Yii::info('用户信息变更日志 开户 变更表:user;变更属性:' . (json_encode(['idcard_status' => $this->idcard_status, 'real_name' => $this->real_name, 'idcard' => $this->idcard])) . ';user_id:' . $this->id . ';mobile:' . $this->mobile . ';变更依据:联动ret_code ' . $resp->get('ret_code') . ';联动返回信息:' . json_encode($resp->toArray()), 'user_log');
+            Yii::info('用户信息变更日志 开户 变更表:user;变更属性:' . (json_encode(['idcard_status' => $this->idcard_status, 'real_name' => $this->real_name, 'idcard' => $identity->idcard])) . ';user_id:' . $this->id . ';mobile:' . $mobile . ';变更依据:联动ret_code ' . $resp->get('ret_code') . ';联动返回信息:' . json_encode($resp->toArray()), 'user_log');
             $transaction->commit();
         } catch (\Exception $ex) {
             $transaction->rollBack();
