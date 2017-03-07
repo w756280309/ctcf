@@ -813,7 +813,7 @@ class User extends ActiveRecord implements IdentityInterface, UserInterface
         $this->real_name = Yii::$app->functions->removeWhitespace($identity->real_name);//去除所有空格
         $this->idcard = $identity->idcard;
         $this->safeIdCard = SecurityUtils::encrypt($identity->idcard);
-        $this->birthdate = substr($identity->idcard, 6, 8);
+        $this->birthdate = date('Y-m-d', strtotime(substr($identity->idcard, 6, 8)));
         $mobile = SecurityUtils::decrypt($this->safeMobile);
         $resp = Yii::$container->get('ump')->register($this);
 

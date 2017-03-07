@@ -616,7 +616,7 @@ GROUP BY rp.uid, rp.online_Pid";
             ->all();
         foreach ($users as $user) {
             $user->safeIdCard = SecurityUtils::encrypt(trim($user->idcard));
-            $user->birthdate = substr(trim($user->idcard), 6, 8);
+            $user->birthdate = date('Y-m-d', strtotime(substr($user->idcard, 6, 8)));
             $user->save(false);
         }
     }
