@@ -46,6 +46,7 @@ class RepaymentController extends BaseController
 
         $total_bj = 0;
         $total_lixi = 0;
+        $total_origin_lixi = 0;
         $total_bx = 0;
         bcscale(14);
         $bcround = new BcRound();
@@ -60,6 +61,8 @@ class RepaymentController extends BaseController
             if (!$repayment) {
                 return ['result' => 0, 'message' => '还款信息不存在'];
             }
+            $total_origin_lixi = bcadd($total_origin_lixi, $val['lixi']);
+            $val['origin_lixi'] = max($val['lixi'], 0.01);
             //当没有还过款时候才从新计算利息
             $payed = $repayment->isRefunded;
             if ($isRefreshCalcLiXi) {
@@ -84,6 +87,7 @@ class RepaymentController extends BaseController
             'yhbj' => $bcround->bcround($total_bj, 2),
             'yhlixi' => $bcround->bcround($total_lixi, 2),
             'total_bx' => $bcround->bcround($total_bx, 2),
+            'total_origin_lixi' => $bcround->bcround($total_origin_lixi, 2),
             'deal' => $deal,
             'model' => $qimodel,
             'isInGracePeriod' => $deal->isInGracePeriod(),
