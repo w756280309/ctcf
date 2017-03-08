@@ -7,17 +7,18 @@ $this->hideHeaderNav = true;
 use common\utils\StringUtils;
 use common\view\LoanHelper;
 use yii\helpers\Html;
+use yii\web\JqueryAsset;
 
 $this->registerCssFile(FE_BASE_URI . "libs/swiper/swiper.min.css");
 $this->registerCss(file_get_contents(__DIR__.'/../../../fe/dist/v2/wap/index/css/index.css'));
+$this->registerJsFile(FE_BASE_URI . 'libs/lib.flexible3.js', ['depends' => JqueryAsset::class]);
+$this->registerJsFile(FE_BASE_URI . 'res/js/js.cookie.js', ['depends' => JqueryAsset::class]);
+$this->registerJsFile(FE_BASE_URI . 'libs/fastclick.js', ['depends' => JqueryAsset::class]);
+$this->registerJsFile(FE_BASE_URI . 'libs/jquery.lazyload.min.js', ['depends' => JqueryAsset::class]);
+$this->registerJsFile(ASSETS_BASE_URI . 'js/swiper.min.js', ['depends' => JqueryAsset::class]);
 
-$this->registerJsFile(FE_BASE_URI . 'libs/lib.flexible3.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
-
-$this->registerJsFile(FE_BASE_URI . 'res/js/js.cookie.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
-$this->registerJsFile(FE_BASE_URI . 'libs/fastclick.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
-$this->registerJsFile(FE_BASE_URI . 'libs/jquery.lazyload.min.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
-$this->registerJsFile(ASSETS_BASE_URI . 'js/swiper.min.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
 ?>
+
     <div class="container flex-content">
         <?php if (!empty($hotActs)) { ?>
             <div class="banner swiper-container">
@@ -285,20 +286,20 @@ $this->registerJsFile(ASSETS_BASE_URI . 'js/swiper.min.js', ['depends' => [\yii\
         <footer class="f11"><span></span>温州报业传媒旗下理财平台<span></span></footer>
 
         <?php if (!defined('IN_APP')) { ?>
-            <div class="navbar-fixed-bottom nav-footer">
-                <div class="nav-footer-title">
-                    <div class="nav-footer-inner">
-                        <a href="/#t=1" class="f14"><img src="<?= FE_BASE_URI ?>wap/index/images/nav-footer_01.png" alt=""><p class="pitched">首页</p></a>
+            <div class="navbar-fixed-bottom footer">
+                <div class="footer-title">
+                    <div class="footer-inner">
+                        <a href="/#t=1" class="shouye1 nav-bar special-bar"><span class="shouye"></span>首页</a>
                     </div>
                 </div>
-                <div class="nav-footer-title">
-                    <div class="nav-footer-inner1">
-                        <a href="/deal/deal/index" class="f14"><img src="<?= FE_BASE_URI ?>wap/index/images/nav-footer_02.png" alt=""><p>理财</p></a>
+                <div class="footer-title">
+                    <div class="footer-inner1">
+                        <a href="/deal/deal/index" class="nav-bar"><span class="licai"></span>理财</a>
                     </div>
                 </div>
-                <div class="nav-footer-title">
-                    <div class="nav-footer-inner2">
-                        <a href="<?= Yii::$app->user->isGuest ? '/site/login' : '/user/user' ?>"  class="f14"><img src="<?= FE_BASE_URI ?>wap/index/images/nav-footer_03.png" alt=""><p>账户</p></a>
+                <div class="footer-title">
+                    <div class="footer-inner2">
+                        <a class="nav-bar" href="<?= Yii::$app->user->isGuest ? '/site/login' : '/user/user' ?>"><span class="zhanghu"></span>账户</a>
                     </div>
                 </div>
             </div>
@@ -315,7 +316,6 @@ $this->registerJsFile(ASSETS_BASE_URI . 'js/swiper.min.js', ['depends' => [\yii\
 <?php } ?>
 
     <script>
-
         function closeAdv()
         {
             $('.mask').addClass('hide');
@@ -341,7 +341,6 @@ $this->registerJsFile(ASSETS_BASE_URI . 'js/swiper.min.js', ['depends' => [\yii\
             });
         }
 
-
         var guiZe = '<?= (empty($kaiPing) || empty($kaiPing->media)) ? '' : $kaiPing->media->uri ?>';
     </script>
     <script type="text/template" id="banner_text">
@@ -353,7 +352,6 @@ $this->registerJsFile(ASSETS_BASE_URI . 'js/swiper.min.js', ['depends' => [\yii\
             }
         }
         ?>
-
     </script>
 <?php
 $this->registerJs(<<<JSFILE

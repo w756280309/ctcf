@@ -824,7 +824,7 @@ footer {
     font-size: 11px;
     line-height: 0.84rem;
     text-align: center;
-    margin-bottom: 1.33333333rem;
+    margin-bottom: 50px;
 }
 footer span {
     margin: 0 .02rem 0.08rem .02rem;
@@ -836,47 +836,6 @@ footer span {
 .row {
     margin: 0 auto;
 }
-
-/*底部导航栏修改开始*/
-
-.nav-footer {
-    height: 1.33333333rem;
-    background: #fff;
-    border-top: 1px solid #c6c6c6;
-    /*box-shadow: 0 2px 5px #888888;*/
-}
-
-.footer .footer-title {
-    padding-left: 0;
-    padding-right: 0;
-}
-
-.nav-footer-title {
-    float: left;
-    padding-top: 0.1333333rem;
-    width:33.33%;
-    text-align: center;
-}
-.nav-footer-title a {
-    display: block;
-}
-.nav-footer-title p {
-    line-height: 0.7rem;
-}
-.nav-footer-inner img {
-    width:0.6133333rem;
-}
-.nav-footer-inner1 img {
-    width:0.533333333rem;
-}
-.nav-footer-inner2 img {
-    width:0.56rem;
-}
-
-.pitched {
-    color: #f1443d;
-}
-/*底部导航栏修改结束*/
 
 .pop {
     position: fixed;
@@ -929,4 +888,77 @@ footer span {
 }
 .icp img {
     width: 100%;
+}
+/*footer*/
+.footer {
+    height: 50px;
+    background: #fff;
+    box-shadow: 0 2px 5px #888888;
+}
+.footer-title {
+    width:33.3333333%;
+    float: left;
+    height: 100%;
+    text-align: center;
+}
+.footer-inner{
+    display: block;
+    width: 30px;
+    height: 100%;
+    margin: 0 auto;
+    cursor: pointer;
+}
+.footer-inner1{
+    display: block;
+    width: 30px;
+    height: 100%;
+    margin: 0 auto;
+    cursor: pointer;
+}
+.footer-inner2{
+    display: block;
+    width: 30px;
+    height: 100%;
+    margin: 0 auto;
+    cursor: pointer;
+}
+.footer-title .shouye {
+    display: block;
+    width: 30px;
+    height: 30px;
+    margin: 0 auto;
+    background: url("../images/footer2.png") no-repeat -145px -57px;
+    background-size: 200px;
+    font-size: 18px;
+}
+.shouye1{
+    color: #f44336;
+}
+.footer-title .licai {
+    display: block;
+    width: 30px;
+    height: 30px;
+    margin: 0 auto;
+    background: url("../images/footer2.png") no-repeat -113px -3px;
+    background-size: 200px;
+    font-size: 18px;
+}
+.footer-title .zhanghu {
+    display: block;
+    width: 30px;
+    height: 30px;
+    margin: 0 auto;
+    background: url("../images/footer2.png") no-repeat -81px -3px;
+    background-size: 200px;
+    font-size: 18px;
+}
+.footer-title span img {
+    width: 26px;
+}
+.nav-bar {
+    font-size: 14px;
+    line-height: 1.5;
+}
+.special-bar {
+    color: rgb(244, 67, 54);
 }
