@@ -115,6 +115,11 @@ class CouponController extends Controller
                 continue;
             }
 
+            //O2O渠道注册的用户不发送首投送积分的短信
+            if ($user->isO2oRegister()) {
+                continue;
+            }
+
             //发送短信
             $sms = SmsMessage::initSms($user, $smsConfig->getConfig(), $templateId);
 
