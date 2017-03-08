@@ -645,13 +645,15 @@ GROUP BY rp.uid, rp.online_Pid";
             FROM (
             SELECT COUNT( id ) AS ordertimes, SUM( order_money ) AS totalmoney, uid
             FROM online_order
-            GROUP BY uid
-            HAVING uid NOT 
+            WHERE uid NOT 
             IN (
             SELECT DISTINCT uid
             FROM online_order
             WHERE investFrom =3
+            AND STATUS =1
             )
+            AND STATUS =1
+            GROUP BY uid
             )t
             WHERE t.ordertimes >=2
             OR t.totalmoney >=50000;
