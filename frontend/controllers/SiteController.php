@@ -160,7 +160,13 @@ class SiteController extends Controller
             $RankOnline = User::getTopList('2016-04-19');
             $RankOffline = OfflineUser::getTopList();
             $topList = ArrayHelper::merge($RankOnline, $RankOffline);
-            ArrayHelper::multisort($topList, 'totalInvest', SORT_DESC);
+
+            if (null === $topList) {
+                $topList = [];
+            } else {
+                ArrayHelper::multisort($topList, 'totalInvest', SORT_DESC);
+            }
+
             $cache->set($key, array_slice($topList, 0, 5), 600);   //缓存十分钟
         }
 
