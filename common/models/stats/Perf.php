@@ -45,6 +45,14 @@ use yii\helpers\ArrayHelper;
  * @property double  $repayMoney          回款金额
  * @property int     $repayLoanCount      回款项目数
  * @property int     $repayUserCount      回款人数
+ * @property int    $licaiNewInvCount   理财计划新增投资人数
+ * @property double $licaiNewInvSum     理财计划新增投资用户的投资金额
+ * @property int    $licaiInvCount      理财计划的总投资人数
+ * @property double $licaiInvSum        理财计划的总投资金额
+ * @property int    $xsNewInvCount      新手标的新增投资人数
+ * @property double $xsNewInvSum        新手标的新增投资用户的投资金额
+ * @property int    $xsInvCount         新手标的总投资人数
+ * @property double $xsInvSum           新手标的总投资金额
  */
 class Perf extends ActiveRecord
 {
@@ -161,6 +169,171 @@ AND DATE( FROM_UNIXTIME( o.created_at ) ) =  :date";
             return Yii::$app->db->createCommand($sql, ['date' => $date])->queryScalar();
         }
     }
+
+    //理财计划（胜券在握）新增投资人数（包括当日注册当日投资和非当日注册当日投资的，投资胜券在握前未投资过的）
+    public function getLicaiNewInvCount($date)
+    {
+        $sql = "SELECT COUNT(DISTINCT o.uid)
+FROM online_order AS o
+INNER JOIN user AS u ON o.uid = u.id
+INNER JOIN online_product AS p ON o.online_pid = p.id
+WHERE o.status =1
+AND p.isTest =0
+AND u.type = 1
+AND DATE( FROM_UNIXTIME( o.created_at ) ) = :date
+AND o.uid NOT IN (
+SELECT DISTINCT o.uid
+FROM online_order AS o
+INNER JOIN user AS u ON o.uid = u.id
+INNER JOIN online_product AS p ON o.online_pid = p.id
+WHERE o.status =1
+AND p.isTest =0
+AND u.type = 1
+AND DATE( FROM_UNIXTIME( o.created_at ) ) <  :date
+)
+AND p.isLicai = 1
+";
+        return Yii::$app->db->createCommand($sql, ['date' => $date])->queryScalar();
+    }
+    //理财计划（胜券在握）新增用户的投资金额
+    public function getLicaiNewInvSum($date)
+    {
+        $sql = "SELECT SUM(o.order_money)
+FROM online_order AS o
+INNER JOIN user AS u ON o.uid = u.id
+INNER JOIN online_product AS p ON o.online_pid = p.id
+WHERE o.status =1
+AND p.isTest =0
+AND u.type = 1
+AND DATE( FROM_UNIXTIME( o.created_at ) ) = :date
+AND o.uid NOT IN (
+SELECT DISTINCT o.uid
+FROM online_order AS o
+INNER JOIN user AS u ON o.uid = u.id
+INNER JOIN online_product AS p ON o.online_pid = p.id
+WHERE o.status =1
+AND p.isTest =0
+AND u.type = 1
+AND DATE( FROM_UNIXTIME( o.created_at ) ) <  :date
+)
+AND p.isLicai = 1
+";
+        return Yii::$app->db->createCommand($sql, ['date' => $date])->queryScalar();
+    }
+
+    //理财计划（胜券在握）当日总投人数
+    public function getLicaiInvCount($date)
+    {
+        $sql = "SELECT COUNT(DISTINCT o.uid)
+FROM online_order AS o
+INNER JOIN user AS u ON o.uid = u.id
+INNER JOIN online_product AS p ON o.online_pid = p.id
+WHERE o.status =1
+AND p.isTest =0
+AND u.type = 1
+AND DATE( FROM_UNIXTIME( o.created_at ) ) = :date
+AND p.isLicai = 1
+";
+        return Yii::$app->db->createCommand($sql, ['date' => $date])->queryScalar();
+    }
+    //理财计划（胜券在握）当日总投资金额
+    public function getLicaiInvSum($date)
+    {
+        $sql = "SELECT SUM(o.order_money)
+FROM online_order AS o
+INNER JOIN user AS u ON o.uid = u.id
+INNER JOIN online_product AS p ON o.online_pid = p.id
+WHERE o.status =1
+AND p.isTest =0
+AND u.type = 1
+AND DATE( FROM_UNIXTIME( o.created_at ) ) = :date
+AND p.isLicai = 1
+";
+        return Yii::$app->db->createCommand($sql, ['date' => $date])->queryScalar();
+    }
+
+    //新手标新增投资人数（包括当日注册当日投资和非当日注册当日投资的，投资新手标前未投资过的）
+    public function getXsNewInvCount($date)
+    {
+        $sql = "SELECT COUNT(DISTINCT o.uid)
+FROM online_order AS o
+INNER JOIN user AS u ON o.uid = u.id
+INNER JOIN online_product AS p ON o.online_pid = p.id
+WHERE o.status =1
+AND p.isTest =0
+AND u.type = 1
+AND DATE( FROM_UNIXTIME( o.created_at ) ) = :date
+AND o.uid NOT IN (
+SELECT DISTINCT o.uid
+FROM online_order AS o
+INNER JOIN user AS u ON o.uid = u.id
+INNER JOIN online_product AS p ON o.online_pid = p.id
+WHERE o.status =1
+AND p.isTest =0
+AND u.type = 1
+AND DATE( FROM_UNIXTIME( o.created_at ) ) <  :date
+)
+AND p.is_xs = 1
+";
+        return Yii::$app->db->createCommand($sql, ['date' => $date])->queryScalar();
+    }
+    //新手标新增用户的投资金额
+    public function getXsNewInvSum($date)
+    {
+        $sql = "SELECT SUM(o.order_money)
+FROM online_order AS o
+INNER JOIN user AS u ON o.uid = u.id
+INNER JOIN online_product AS p ON o.online_pid = p.id
+WHERE o.status =1
+AND p.isTest =0
+AND u.type = 1
+AND DATE( FROM_UNIXTIME( o.created_at ) ) = :date
+AND o.uid NOT IN (
+SELECT DISTINCT o.uid
+FROM online_order AS o
+INNER JOIN user AS u ON o.uid = u.id
+INNER JOIN online_product AS p ON o.online_pid = p.id
+WHERE o.status =1
+AND p.isTest =0
+AND u.type = 1
+AND DATE( FROM_UNIXTIME( o.created_at ) ) <  :date
+)
+AND p.is_xs = 1
+";
+        return Yii::$app->db->createCommand($sql, ['date' => $date])->queryScalar();
+    }
+
+    //新手标当日总投人数
+    public function getXsInvCount($date)
+    {
+        $sql = "SELECT COUNT(DISTINCT o.uid)
+FROM online_order AS o
+INNER JOIN user AS u ON o.uid = u.id
+INNER JOIN online_product AS p ON o.online_pid = p.id
+WHERE o.status =1
+AND p.isTest =0
+AND u.type = 1
+AND DATE( FROM_UNIXTIME( o.created_at ) ) = :date
+AND p.is_xs = 1
+";
+        return Yii::$app->db->createCommand($sql, ['date' => $date])->queryScalar();
+    }
+    //新手标当日总投资金额
+    public function getXsInvSum($date)
+    {
+        $sql = "SELECT SUM(o.order_money)
+FROM online_order AS o
+INNER JOIN user AS u ON o.uid = u.id
+INNER JOIN online_product AS p ON o.online_pid = p.id
+WHERE o.status =1
+AND p.isTest =0
+AND u.type = 1
+AND DATE( FROM_UNIXTIME( o.created_at ) ) = :date
+AND p.is_xs = 1
+";
+        return Yii::$app->db->createCommand($sql, ['date' => $date])->queryScalar();
+    }
+
 
     //POS充值
     public function getChargeViaPos($date)
@@ -328,7 +501,7 @@ AND DATE( FROM_UNIXTIME( o.created_at ) ) =  :date";
         $today = [];
         $model = new Perf();
         $today['bizDate'] = $startDate;
-        $funList = ['reg', 'idVerified', 'qpayEnabled', 'investor', 'newRegisterAndInvestor', 'newInvestor', 'newRegAndNewInveAmount', 'preRegAndNewInveAmount', 'chargeViaPos', 'chargeViaEpay', 'drawAmount', 'investmentInWyj', 'investmentInWyb', 'onlineInvestment', 'offlineInvestment', 'totalInvestment', 'successFound', 'rechargeMoney', 'rechargeCost', 'draw', 'investAndLogin', 'notInvestAndLogin', 'repayMoney', 'repayLoanCount', 'repayUserCount'];
+        $funList = ['reg', 'idVerified', 'qpayEnabled', 'investor', 'newRegisterAndInvestor', 'newInvestor', 'newRegAndNewInveAmount', 'preRegAndNewInveAmount', 'chargeViaPos', 'chargeViaEpay', 'drawAmount', 'investmentInWyj', 'investmentInWyb', 'onlineInvestment', 'offlineInvestment', 'totalInvestment', 'successFound', 'rechargeMoney', 'rechargeCost', 'draw', 'investAndLogin', 'notInvestAndLogin', 'repayMoney', 'repayLoanCount', 'repayUserCount', 'licaiNewInvCount', 'licaiNewInvSum', 'licaiInvCount', 'licaiInvSum', 'xsNewInvCount', 'xsNewInvSum', 'xsInvCount', 'xsInvSum'];
         foreach ($funList as $field) {
             $method = 'get' . ucfirst($field);
             $model->$field = $model->{$method}($startDate);
@@ -341,7 +514,34 @@ AND DATE( FROM_UNIXTIME( o.created_at ) ) =  :date";
     public static function getThisMonthCount()
     {
         //当月数据，排除当天
-        $month = Yii::$app->db->createCommand("SELECT DATE_FORMAT(bizDate,'%Y-%m') as bizDate, SUM(totalInvestment) AS totalInvestment, SUM(onlineInvestment) AS onlineInvestment,SUM(offlineInvestment) AS offlineInvestment, SUM(rechargeMoney) AS rechargeMoney,SUM(drawAmount) AS drawAmount,SUM(rechargeCost) AS rechargeCost ,SUM(reg) AS reg,SUM(idVerified) AS idVerified,SUM(successFound) AS successFound, SUM(qpayEnabled) AS qpayEnabled, SUM(investor) AS investor, SUM(newRegisterAndInvestor) AS newRegisterAndInvestor,  SUM(newInvestor) AS newInvestor, SUM(newRegAndNewInveAmount) AS newRegAndNewInveAmount,  SUM(preRegAndNewInveAmount) AS preRegAndNewInveAmount,SUM(investmentInWyb) AS investmentInWyb, SUM(investmentInWyj) AS investmentInWyj FROM perf WHERE DATE_FORMAT(bizDate,'%Y-%m-%d') < DATE_FORMAT(NOW(),'%Y-%m-%d') AND DATE_FORMAT(bizDate,'%Y-%m')=DATE_FORMAT(NOW(),'%Y-%m') GROUP BY DATE_FORMAT(bizDate,'%Y-%m')")->queryOne();
+        $month = Yii::$app->db->createCommand("
+SELECT DATE_FORMAT(bizDate,'%Y-%m') as bizDate,
+SUM(totalInvestment) AS totalInvestment,
+SUM(onlineInvestment) AS onlineInvestment,
+SUM(offlineInvestment) AS offlineInvestment,
+SUM(rechargeMoney) AS rechargeMoney,
+SUM(drawAmount) AS drawAmount,
+SUM(rechargeCost) AS rechargeCost,
+SUM(reg) AS reg,
+SUM(idVerified) AS idVerified,
+SUM(successFound) AS successFound,
+SUM(qpayEnabled) AS qpayEnabled,
+SUM(investor) AS investor,
+SUM(newRegisterAndInvestor) AS newRegisterAndInvestor,
+SUM(newInvestor) AS newInvestor,
+SUM(newRegAndNewInveAmount) AS newRegAndNewInveAmount,
+SUM(preRegAndNewInveAmount) AS preRegAndNewInveAmount,
+SUM(investmentInWyb) AS investmentInWyb,
+SUM(investmentInWyj) AS investmentInWyj,
+SUM(licaiNewInvCount) AS licaiNewInvCount,
+SUM(licaiNewInvSum) AS licaiNewInvSum,
+SUM(licaiInvCount) AS licaiInvCount,
+SUM(licaiInvSum) AS licaiInvSum,
+SUM(xsNewInvCount) AS xsNewInvCount,
+SUM(xsNewInvSum) AS xsNewInvSum,
+SUM(xsInvCount) AS xsInvCount,
+SUM(xsInvSum) AS xsInvSum
+FROM perf WHERE DATE_FORMAT(bizDate,'%Y-%m-%d') < DATE_FORMAT(NOW(),'%Y-%m-%d') AND DATE_FORMAT(bizDate,'%Y-%m')=DATE_FORMAT(NOW(),'%Y-%m') GROUP BY DATE_FORMAT(bizDate,'%Y-%m')")->queryOne();
         //当天数据
         $today = Perf::getTodayCount();
         //获取当月实时数据
@@ -363,6 +563,14 @@ AND DATE( FROM_UNIXTIME( o.created_at ) ) =  :date";
         $month['preRegAndNewInveAmount'] = $month['preRegAndNewInveAmount'] + $today['preRegAndNewInveAmount'];
         $month['investmentInWyb'] = $month['investmentInWyb'] + $today['investmentInWyb'];
         $month['investmentInWyj'] = $month['investmentInWyj'] + $today['investmentInWyj'];
+        $month['licaiNewInvCount'] = $month['licaiNewInvCount'] + $today['licaiNewInvCount'];
+        $month['licaiNewInvSum'] = $month['licaiNewInvSum'] + $today['licaiNewInvSum'];
+        $month['licaiInvCount'] = $month['licaiInvCount'] + $today['licaiInvCount'];
+        $month['licaiInvSum'] = $month['licaiInvSum'] + $today['licaiInvSum'];
+        $month['xsNewInvCount'] = $month['xsNewInvCount'] + $today['xsNewInvCount'];
+        $month['xsNewInvSum'] = $month['xsNewInvSum'] + $today['xsNewInvSum'];
+        $month['xsInvCount'] = $month['xsInvCount'] + $today['xsInvCount'];
+        $month['xsInvSum'] = $month['xsInvSum'] + $today['xsInvSum'];
         return $month;
     }
 

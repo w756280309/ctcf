@@ -135,9 +135,67 @@ FROM perf WHERE DATE_FORMAT(bizDate,'%Y-%m') < DATE_FORMAT(NOW(),'%Y-%m')  GROUP
         $history = Perf::find()->where(['<', 'bizDate', date('Y-m-d')])->orderBy(['bizDate' => SORT_DESC])->asArray()->all();
         $today = Perf::getTodayCount();
         $allData = array_merge([$today], $history);
-        $record = implode(',', ['日期', '交易总额', '线上交易额', '线下交易额', '充值金额', '提现金额', '充值手续费', Yii::$app->params['pc_cat'][2] . '销售额', Yii::$app->params['pc_cat'][1] . '销售额', '注册用户', '实名认证', '绑卡用户数', '投资人数', '当日注册当日投资人数', '新增投资人数', '当日注册当日投资金额', '非当日注册当日投资金额', '已投用户登录数', '未投用户登录数', '融资项目']) . "\n";
+        $record = implode(',', [
+                '日期',
+                '交易总额',
+                '线上交易额',
+                '线下交易额',
+                '充值金额',
+                '提现金额',
+                '充值手续费',
+                Yii::$app->params['pc_cat'][2] . '销售额',
+                Yii::$app->params['pc_cat'][1] . '销售额',
+                '注册用户',
+                '实名认证',
+                '绑卡用户数',
+                '投资人数',
+                '当日注册当日投资人数',
+                '新增投资人数',
+                '当日注册当日投资金额',
+                '非当日注册当日投资金额',
+                '已投用户登录数',
+                '未投用户登录数',
+                '融资项目',
+                '理财计划新增投资人数',
+                '理财计划新增投资用户的投资金额',
+                '理财计划总投资人数',
+                '理财计划总投资金额',
+                '新手标新增投资人数',
+                '新手标新增用户的投资金额',
+                '新手标总投资人数',
+                '新手标总投资金额',
+            ]) . "\n";
         foreach ($allData as $k => $data) {
-            $array = [$data['bizDate'], floatval($data['totalInvestment']), floatval($data['onlineInvestment']), floatval($data['offlineInvestment']), floatval($data['rechargeMoney']), floatval($data['drawAmount']), floatval($data['rechargeCost']), floatval($data['investmentInWyb']), floatval($data['investmentInWyj']), intval($data['reg']), intval($data['idVerified']), intval($data['qpayEnabled']), intval($data['investor']), intval($data['newRegisterAndInvestor']), intval($data['newInvestor']), floatval($data['newRegAndNewInveAmount']), floatval($data['preRegAndNewInveAmount']), intval($data['investAndLogin']), intval($data['notInvestAndLogin']), intval($data['successFound'])];
+            $array = [
+                $data['bizDate'],
+                floatval($data['totalInvestment']),
+                floatval($data['onlineInvestment']),
+                floatval($data['offlineInvestment']),
+                floatval($data['rechargeMoney']),
+                floatval($data['drawAmount']),
+                floatval($data['rechargeCost']),
+                floatval($data['investmentInWyb']),
+                floatval($data['investmentInWyj']),
+                intval($data['reg']),
+                intval($data['idVerified']),
+                intval($data['qpayEnabled']),
+                intval($data['investor']),
+                intval($data['newRegisterAndInvestor']),
+                intval($data['newInvestor']),
+                floatval($data['newRegAndNewInveAmount']),
+                floatval($data['preRegAndNewInveAmount']),
+                intval($data['investAndLogin']),
+                intval($data['notInvestAndLogin']),
+                intval($data['successFound']),
+                intval($data['licaiNewInvCount']),
+                floatval($data['licaiNewInvSum']),
+                intval($data['licaiInvCount']),
+                floatval($data['licaiInvSum']),
+                intval($data['xsNewInvCount']),
+                floatval($data['xsNewInvSum']),
+                intval($data['xsInvCount']),
+                floatval($data['xsInvSum']),
+            ];
             $record .= implode(',', $array) . "\n";
         }
         if (null !== $record) {
@@ -154,13 +212,92 @@ FROM perf WHERE DATE_FORMAT(bizDate,'%Y-%m') < DATE_FORMAT(NOW(),'%Y-%m')  GROUP
         //获取当月数据
         $month = Perf::getThisMonthCount();
         //历史数据，不包含当月
-        $sql = "SELECT DATE_FORMAT(bizDate,'%Y-%m')  as bizDate, SUM(totalInvestment) AS totalInvestment, SUM(onlineInvestment) AS onlineInvestment, SUM(offlineInvestment) AS offlineInvestment,SUM(rechargeMoney) AS rechargeMoney,SUM(drawAmount) AS drawAmount,SUM(rechargeCost) AS rechargeCost ,SUM(reg) AS reg,SUM(idVerified) AS idVerified,SUM(successFound) AS successFound, SUM(qpayEnabled) AS qpayEnabled, SUM(investor) AS investor, SUM(newRegisterAndInvestor) AS newRegisterAndInvestor, SUM(newInvestor) AS newInvestor, SUM(newRegAndNewInveAmount) AS newRegAndNewInveAmount,  SUM(preRegAndNewInveAmount) AS preRegAndNewInveAmount, SUM(investmentInWyb) AS investmentInWyb, SUM(investmentInWyj) AS investmentInWyj
+        $sql = "SELECT DATE_FORMAT(bizDate,'%Y-%m') as bizDate,
+SUM(totalInvestment) AS totalInvestment,
+SUM(onlineInvestment) AS onlineInvestment,
+SUM(offlineInvestment) AS offlineInvestment,
+SUM(rechargeMoney) AS rechargeMoney,
+SUM(drawAmount) AS drawAmount,
+SUM(rechargeCost) AS rechargeCost,
+SUM(reg) AS reg,
+SUM(idVerified) AS idVerified,
+SUM(successFound) AS successFound,
+SUM(qpayEnabled) AS qpayEnabled,
+SUM(investor) AS investor,
+SUM(newRegisterAndInvestor) AS newRegisterAndInvestor,
+SUM(newInvestor) AS newInvestor,
+SUM(newRegAndNewInveAmount) AS newRegAndNewInveAmount,
+SUM(preRegAndNewInveAmount) AS preRegAndNewInveAmount,
+SUM(investmentInWyb) AS investmentInWyb,
+SUM(investmentInWyj) AS investmentInWyj,
+SUM(licaiNewInvCount) AS licaiNewInvCount,
+SUM(licaiNewInvSum) AS licaiNewInvSum,
+SUM(licaiInvCount) AS licaiInvCount,
+SUM(licaiInvSum) AS licaiInvSum,
+SUM(xsNewInvCount) AS xsNewInvCount,
+SUM(xsNewInvSum) AS xsNewInvSum,
+SUM(xsInvCount) AS xsInvCount,
+SUM(xsInvSum) AS xsInvSum
 FROM perf WHERE DATE_FORMAT(bizDate,'%Y-%m') < DATE_FORMAT(NOW(),'%Y-%m')  GROUP BY DATE_FORMAT(bizDate,'%Y-%m') ORDER BY DATE_FORMAT(bizDate,'%Y-%m') DESC";
         $history = Yii::$app->db->createCommand($sql)->queryAll();
         $allData = array_merge([$month], $history);
-        $record = implode(',', ['日期', '交易总额', '线上交易额', '线下交易额', '充值金额', '提现金额', '充值手续费', Yii::$app->params['pc_cat'][2] . '销售额', Yii::$app->params['pc_cat'][1] . '销售额', '注册用户', '实名认证', '绑卡用户数', '投资人数', '当日注册当日投资人数', '新增投资人数', '当日注册当日投资金额', '非当日注册当日投资金额', '融资项目']) . "\n";
+        $record = implode(',', [
+                '日期',
+                '交易总额',
+                '线上交易额',
+                '线下交易额',
+                '充值金额',
+                '提现金额',
+                '充值手续费',
+                Yii::$app->params['pc_cat'][2] . '销售额',
+                Yii::$app->params['pc_cat'][1] . '销售额',
+                '注册用户',
+                '实名认证',
+                '绑卡用户数',
+                '投资人数',
+                '当日注册当日投资人数',
+                '新增投资人数',
+                '当日注册当日投资金额',
+                '非当日注册当日投资金额',
+                '融资项目',
+                '理财计划新增投资人数',
+                '理财计划新增投资用户的投资金额',
+                '理财计划总投资人数',
+                '理财计划总投资金额',
+                '新手标新增投资人数',
+                '新手标新增用户的投资金额',
+                '新手标总投资人数',
+                '新手标总投资金额',
+            ]) . "\n";
         foreach ($allData as $k => $data) {
-            $array = [$data['bizDate'], floatval($data['totalInvestment']), floatval($data['onlineInvestment']), floatval($data['offlineInvestment']), floatval($data['rechargeMoney']), floatval($data['drawAmount']), floatval($data['rechargeCost']), floatval($data['investmentInWyb']), floatval($data['investmentInWyj']), intval($data['reg']), intval($data['idVerified']), intval($data['qpayEnabled']), intval($data['investor']), intval($data['newRegisterAndInvestor']), intval($data['newInvestor']), floatval($data['newRegAndNewInveAmount']), floatval($data['preRegAndNewInveAmount']), intval($data['successFound'])];
+            $array = [
+                $data['bizDate'],
+                floatval($data['totalInvestment']),
+                floatval($data['onlineInvestment']),
+                floatval($data['offlineInvestment']),
+                floatval($data['rechargeMoney']),
+                floatval($data['drawAmount']),
+                floatval($data['rechargeCost']),
+                floatval($data['investmentInWyb']),
+                floatval($data['investmentInWyj']),
+                intval($data['reg']),
+                intval($data['idVerified']),
+                intval($data['qpayEnabled']),
+                intval($data['investor']),
+                intval($data['newRegisterAndInvestor']),
+                intval($data['newInvestor']),
+                floatval($data['newRegAndNewInveAmount']),
+                floatval($data['preRegAndNewInveAmount']),
+                intval($data['successFound']),
+                intval($data['licaiNewInvCount']),
+                floatval($data['licaiNewInvSum']),
+                intval($data['licaiInvCount']),
+                floatval($data['licaiInvSum']),
+                intval($data['xsNewInvCount']),
+                floatval($data['xsNewInvSum']),
+                intval($data['xsInvCount']),
+                floatval($data['xsInvSum']),
+            ];
             $record .= implode(',', $array) . "\n";
         }
         if (null !== $record) {
