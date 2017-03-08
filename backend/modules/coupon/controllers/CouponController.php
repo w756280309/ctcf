@@ -21,6 +21,7 @@ class CouponController extends BaseController
             'sn' => null,
             'isDisabled' => 0,
             'isAudited' => 0,
+            'isAppOnly' => 0,
         ]);
 
         if ($model->load(Yii::$app->request->post()) && $model->validate() && $this->preprocess($model)) {

@@ -106,6 +106,10 @@ class UserCoupon extends ActiveRecord
             $query->andWhere(['<=', 'minInvest', $money]);
         }
 
+        if (!defined('IN_APP')) {   //不是APP不能显示APP投资红包
+            $query->andWhere(['isAppOnly' => false]);
+        }
+
         return $query;
     }
 
@@ -123,6 +127,10 @@ class UserCoupon extends ActiveRecord
      */
     public static function checkAllowUse(UserCoupon $coupon, $money, User $user = null, Loan $loan = null)
     {
+        if (!defined('IN_APP') && $coupon->couponType->isAppOnly) {
+            throw new \Exception('该代金券只能在APP中使用');
+        }
+
         if (null !== $loan && !$loan->allowUseCoupon) {
             throw new Exception('该项目不允许使用代金券');
         }

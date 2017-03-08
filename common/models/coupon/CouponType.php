@@ -22,6 +22,7 @@ use yii\behaviors\TimestampBehavior;
  * @property null|integer $expiresInDays  有效天数
  * @property null|integer $customerType   发放用户类型（NULL为全部用户1为未投资用户）
  * @property string       $loanCategories 项目类型（NULL为全部1为温盈金2为温盈宝）
+ * @property boolean      $isAppOnly      只能在APP中使用
  * @property null|boolean $allowCollect   是否允许用户领取（false不允许true为允许）
  * @property boolean      $isAudited      是否审核(默认false未审核true已审核)
  */
@@ -36,7 +37,7 @@ class CouponType extends \yii\db\ActiveRecord
             [['name', 'amount', 'minInvest', 'issueStartDate', 'issueEndDate'], 'required'],
             [['amount', 'minInvest'], 'number'],
             [['useStartDate', 'useEndDate', 'issueStartDate', 'issueEndDate'], 'safe'],
-            [['isDisabled', 'created_at', 'updated_at', 'expiresInDays', 'customerType', 'allowCollect'], 'integer'],
+            [['isDisabled', 'created_at', 'updated_at', 'expiresInDays', 'customerType', 'allowCollect', 'isAppOnly'], 'integer'],
             [['name'], 'string', 'max' => 255],
             [['loanCategories'], 'string', 'max' => 30],
             [['sn'], 'unique']
@@ -74,6 +75,7 @@ class CouponType extends \yii\db\ActiveRecord
             'expiresInDays' => '有效天数',
             'customerType' => '发放用户类型',
             'loanCategories' => '项目类型',
+            'isAppOnly' => '只能在APP中使用',
             'allowCollect' => '是否允许用户领取',
             'isAudited' => '是否审核',
         ];

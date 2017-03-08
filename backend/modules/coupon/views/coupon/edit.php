@@ -1,10 +1,13 @@
 <?php
+
+use yii\web\YiiAsset;
 use yii\widgets\ActiveForm;
 
-$this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\web\YiiAsset']);
-?>
-<?php $this->beginBlock('blockmain'); ?>
+$this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => YiiAsset::class]);
 
+?>
+
+<?php $this->beginBlock('blockmain'); ?>
 <div class="container-fluid">
     <div class="row-fluid">
         <div class="span12">
@@ -27,10 +30,12 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\we
             </ul>
         </div>
 
-        <?php $form = ActiveForm::begin([
-            'action' => empty($model->id) ? "/coupon/coupon/add" : "/coupon/coupon/edit?id=$model->id",
-            'options' => ['class' => 'form-horizontal form-bordered form-label-stripped']
-            ]); ?>
+        <?php
+            $form = ActiveForm::begin([
+                'action' => empty($model->id) ? "/coupon/coupon/add" : "/coupon/coupon/edit?id=$model->id",
+                'options' => ['class' => 'form-horizontal form-bordered form-label-stripped']
+            ]);
+        ?>
         <div class="portlet-body form">
             <div class="control-group">
                 <label class="control-label">代金券名称</label>
@@ -119,6 +124,15 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\we
                 <div class="controls">
                     <?=
                         $form->field($model, 'customerType', ['template' => '{input}{error}', 'inputOptions' => ['autocomplete' => 'off', 'class' => 'chosen-with-diselect span4']])->dropDownList(['' => '所有用户', 1 => '未投资用户'])
+                    ?>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label">只能在APP中使用</label>
+                <div class="controls">
+                    <?=
+                        $form->field($model, 'isAppOnly', ['template' => '<div class="input-append">{input}</div>{error}'])->checkbox()
                     ?>
                 </div>
             </div>

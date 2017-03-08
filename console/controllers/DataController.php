@@ -4,6 +4,8 @@ namespace console\controllers;
 
 use common\lib\bchelp\BcRound;
 use common\lib\user\UserStats;
+use common\models\coupon\CouponType;
+use common\models\coupon\UserCoupon;
 use common\models\draw\DrawManager;
 use common\models\order\OnlineOrder;
 use common\models\order\OnlineFangkuan;
@@ -27,6 +29,7 @@ use Ding\DingNotify;
 use wap\modules\promotion\models\RankingPromo;
 use yii\console\Controller;
 use Yii;
+use yii\helpers\ArrayHelper;
 
 class DataController extends Controller
 {
@@ -619,5 +622,63 @@ GROUP BY rp.uid, rp.online_Pid";
             $user->birthdate = date('Y-m-d', strtotime(substr($user->idcard, 6, 8)));
             $user->save(false);
         }
+    }
+
+    /**
+     * 给投资次数2次及以上或累计投资金额5万及以上，且未使用APP投资的用户发放APP投资红包.
+     *
+     * 1. 该console只运行一次;
+     * 2. 针对当前所有注册客户;
+     */
+    public function actionAppCoupon()
+    {
+        $couponType = CouponType::findOne(['sn' => '0023:10000-10']);
+
+        if (null === $couponType) {
+            echo 'APP投资红包信息不存在';
+
+            return self::EXIT_CODE_ERROR;
+        }
+
+        $sql = <<<COUPON
+            SELECT uid 
+            FROM (
+            SELECT COUNT( id ) AS ordertimes, SUM( order_money ) AS totalmoney, uid
+            FROM online_order
+            GROUP BY uid
+            HAVING uid NOT 
+            IN (
+            SELECT DISTINCT uid
+            FROM online_order
+            WHERE investFrom =3
+            )
+            )t
+            WHERE t.ordertimes >=2
+            OR t.totalmoney >=50000;
+COUPON;
+
+        $data = Yii::$app->db->createCommand($sql)->queryAll();
+        $uids = ArrayHelper::getColumn($data, 'uid');
+        $count = 0;
+
+        foreach ($uids as $uid) {
+            $user = User::findOne($uid);
+
+            if ($user) {
+                try {
+                    $userCoupon = UserCoupon::addUserCoupon($user, $couponType);
+
+                    if ($userCoupon->save()) {
+                        ++$count;
+                    }
+                } catch (\Exception $e) {
+                    echo $user->mobile.'发放失败, 原因: '.$e->getMessage();
+                }
+            }
+        }
+
+        echo '总共发放了APP投资红包'.$count.'张';
+
+        return self::EXIT_CODE_NORMAL;
     }
 }
