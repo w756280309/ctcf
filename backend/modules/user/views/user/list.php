@@ -22,33 +22,33 @@ $isPersonal = $category === User::USER_TYPE_PERSONAL;
     <div class="row-fluid">
         <div class="span12">
             <h3 class="page-title">
-                        会员管理 <small>会员管理模块【主要包含投资会员和融资会员的管理】</small>
-                        <?php if (!$isPersonal) { ?>
-                            <a href="/user/user/add" id="sample_editable_1_new" class="btn green" style="float: right;">
-                                <i class="icon-plus"></i> 添加新融资客户
-                            </a>
-                        <?php } ?>
-                </h3>
+                会员管理 <small>会员管理模块【主要包含投资会员和融资会员的管理】</small>
+                <?php if (!$isPersonal) { ?>
+                    <a href="/user/user/add" id="sample_editable_1_new" class="btn green" style="float: right;">
+                        <i class="icon-plus"></i> 添加新融资客户
+                    </a>
+                <?php } ?>
+            </h3>
             <ul class="breadcrumb">
+                <li>
+                    <i class="icon-home"></i>
+                    <a href="/user/user/<?= $isPersonal ? 'listt' : 'listr' ?>">会员管理</a>
+                    <i class="icon-angle-right"></i>
+                </li>
+                <?php if ($isPersonal) { ?>
                     <li>
-                        <i class="icon-home"></i>
-                        <a href="/user/user/<?= $isPersonal ? 'listt' : 'listr' ?>">会员管理</a>
+                        <a href="/user/user/listt">投资会员</a>
                         <i class="icon-angle-right"></i>
                     </li>
-                    <?php if ($isPersonal) { ?>
-                        <li>
-                            <a href="/user/user/listt">投资会员</a>
-                            <i class="icon-angle-right"></i>
-                        </li>
-                    <?php } else { ?>
-                        <li>
-                            <a href="/user/user/listr">融资会员</a>
-                            <i class="icon-angle-right"></i>
-                        </li>
-                    <?php } ?>
+                <?php } else { ?>
                     <li>
-                        <a href="javascript:void(0);">会员列表</a>
+                        <a href="/user/user/listr">融资会员</a>
+                        <i class="icon-angle-right"></i>
                     </li>
+                <?php } ?>
+                <li>
+                    <a href="javascript:void(0);">会员列表</a>
+                </li>
             </ul>
         </div>
 
@@ -141,7 +141,7 @@ $isPersonal = $category === User::USER_TYPE_PERSONAL;
                                     </td>
                                <?php }?>
                             </tr>
-                        <?php }else{?>
+                        <?php } else { ?>
                             <tr>
                                 <td>
                                     <span class="title">企业名称</span>
@@ -154,7 +154,7 @@ $isPersonal = $category === User::USER_TYPE_PERSONAL;
                                     </div>
                                 </td>
                             </tr>
-                        <?php }?>
+                        <?php } ?>
                     </tbody>
                 </table>
             </form>
@@ -189,7 +189,7 @@ $isPersonal = $category === User::USER_TYPE_PERSONAL;
                     <tr>
                 <?php if ($isPersonal) { ?>
                         <td><?= $val['mobile'] ?></td>
-                        <td><?= $val['real_name']?'<a href="/user/user/detail?id='.$val['id'].'&type='.$category.'">'.$val['real_name'].'</a>':"---" ?></td>
+                        <td><?= $val['real_name'] ? '<a href="/user/user/detail?id='.$val['id'].'">'.$val['real_name'].'</a>' : '---' ?></td>
                 <?php } else { ?>
                         <td><?= $val['org_name'] ?></td>
                 <?php }?>
@@ -220,10 +220,10 @@ $isPersonal = $category === User::USER_TYPE_PERSONAL;
                         <td>
                         <center>
                              <?php if($isPersonal) { ?>
-                                <a href="/user/user/detail?id=<?= $val['id'] ?>&type=<?= $category ?>" class="btn mini green"><i class="icon-edit"></i> 查看用户详情</a>
+                                <a href="/user/user/detail?id=<?= $val['id'] ?>" class="btn mini green"><i class="icon-edit"></i> 查看用户详情</a>
                              <?php } else { ?>
                                 <a href="/user/user/edit?id=<?= $val['id'] ?>&type=<?= $category ?>" class="btn mini green"><i class="icon-edit"></i> 编辑</a>
-                                <a href="/user/user/detail?id=<?= $val['id'] ?>&type=<?= $category ?>" class="btn mini green"><i class="icon-edit"></i> 查看用户详情</a>
+                                <a href="/user/user/detail?id=<?= $val['id'] ?>" class="btn mini green"><i class="icon-edit"></i> 查看用户详情</a>
                             <?php } ?>
                         </center>
                         </td>

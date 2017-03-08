@@ -21,6 +21,7 @@ use common\models\user\UserBanks;
 use common\models\user\RechargeRecord;
 use common\models\user\UserSearch;
 use common\models\user\DrawRecord;
+use common\utils\StringUtils;
 use wap\modules\promotion\models\RankingPromo;
 use Yii;
 use yii\data\ActiveDataProvider;
@@ -809,6 +810,21 @@ IN (" . implode(',', $recordIds) . ")")->queryAll();
             'userBank' => $userBank,
             'bank' => $bank,
         ]);
+    }
+
+    /**
+     * 查询融资用户在联动的账户余额.
+     */
+    public function actionUmpOrgAccount($id)
+    {
+        $orgUser = $this->findOr404(User::class, ['id' => $id, 'type' => User::USER_TYPE_ORG]);
+        $epayUserId = $orgUser->epayUser->epayUserId;
+
+        $resp = \Yii::$container->get('ump')->getMerchantInfo($epayUserId);
+
+        return [
+            'balance' => StringUtils::amountFormat3(bcdiv($resp->get('balance'), 100, 2)),
+        ];
     }
 
     /**

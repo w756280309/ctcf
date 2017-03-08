@@ -16,6 +16,9 @@ return [
     'language' => 'zh-CN',
     'homeurl' => '/site/index/',
     'components' => [
+        'view' => [
+            'class' => 'common\view\BackendView',
+        ],
         'user' => [
             'identityClass' => 'common\models\adminuser\Admin',
             'enableAutoLogin' => true,

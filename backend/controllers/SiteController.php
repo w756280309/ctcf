@@ -1,16 +1,14 @@
 <?php
+
 namespace backend\controllers;
 
-use Yii;
 use common\models\LoginForm;
+use Yii;
 
-/**
- * Site controller
- */
-class SiteController extends  \backend\controllers\BaseController
+class SiteController extends BaseController
 {
-
     public $layout = 'frame';
+
     /**
      * @inheritdoc
      */
@@ -60,8 +58,6 @@ class SiteController extends  \backend\controllers\BaseController
 
     public function actionAboutme()
     {
-
-
         if (\Yii::$app->user->isGuest) {
             return $this->goHome();
         }

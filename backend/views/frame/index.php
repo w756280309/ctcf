@@ -1,5 +1,8 @@
 <?php
+
 $this->title = '首页 - 温都金服后台';
+$this->loadAuthJs = false;
+
 ?>
 
 <?php $this->beginBlock('block1eft'); ?>
@@ -32,8 +35,9 @@ $this->title = '首页 - 温都金服后台';
         </div>
     </div>
 </div>
+
 <script>
-    $(function(){
+    $(function() {
         var xhr = $.get('/product/productonline/hk-stats-count', function(data) {
             $('.hk-notice-item').html('7天内有<a href="/product/productonline/list?days=7">'+ data.week +'</a>个项目等待还款；当天有<a href="/product/productonline/list?days=1">'+ data.today +'</a>个项目等待还款！');
         });
@@ -44,4 +48,3 @@ $this->title = '首页 - 温都金服后台';
     })
 </script>
 <?php $this->endBlock(); ?>
-

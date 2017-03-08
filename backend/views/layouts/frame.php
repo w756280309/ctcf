@@ -21,6 +21,7 @@ $leftLinkArray = Auth::find()
     ->asArray()
     ->all();
 ?>
+
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
 <!--[if IE 8]> <html lang="en" class="ie8"> <![endif]-->
@@ -42,39 +43,35 @@ $leftLinkArray = Auth::find()
         <link href="/css/default.css" rel="stylesheet" type="text/css" id="style_color"/>
         <link href="/css/uniform.default.css" rel="stylesheet" type="text/css"/>
         <script src="/js/jquery-1.10.1.min.js" type="text/javascript"></script>
-
         <script type="text/javascript" src="/js/layer/layer.min.js"></script>
         <script type="text/javascript" src="/js/layer/extend/layer.ext.js"></script>
         <script type="text/javascript" src="/js/showres.js"></script>
         <script type="text/javascript" src="/js/JPlaceholder.js"></script>
 
-        <?php if ('/' !== \Yii::$app->request->url) { ?>
-            <script type="text/javascript" src="/js/ajax.js"></script>
-        <?php } ?>
-
         <style type="text/css">
-            .portlet-body .title{
+            .portlet-body .title {
                 height: 34px;
                 line-height: 34px;
                 vertical-align: middle;
                 font-size: 14px;
             }
-            .has-error .help-block{
+            .has-error .help-block {
                 color: red;
             }
-            .form-group div.radio label{
+            .form-group div.radio label {
                 width:400px;
             }
 
-            <?php if (Yii::$app->params['ui_nav_bgcolor_hex']): ?>
+            <?php if (Yii::$app->params['ui_nav_bgcolor_hex']) { ?>
                 .header .navbar-inner {
                     background-color: <?= Yii::$app->params['ui_nav_bgcolor_hex'] ?> !important;
                 }
                 .navbar-inverse .nav>li>a {
                     color: #fff;
                 }
-            <?php endif; ?>
+            <?php } ?>
         </style>
+
         <script type="text/javascript">
             $(function() {
                 $('form .radio').each(function(k, o) {
@@ -154,32 +151,33 @@ $leftLinkArray = Auth::find()
             </div>
             <!-- END PAGE -->
 	</div>
-<?php $this->endBody() ?>
-        <!-- END FOOTER -->
-        <!-- BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time) -->
-        <!-- BEGIN CORE PLUGINS -->
-
-
-        <script src="/js/jquery-migrate-1.2.1.min.js" type="text/javascript"></script>
-        <!-- IMPORTANT! Load jquery-ui-1.10.1.custom.min.js before bootstrap.min.js to fix bootstrap tooltip conflict with jquery ui tooltip -->
-        <script src="/js/jquery-ui-1.10.1.custom.min.js" type="text/javascript"></script>
-        <script src="/js/bootstrap.min.js" type="text/javascript"></script>
-        <!--[if lt IE 9]>
-        <script src="/js/excanvas.min.js"></script>
-        <script src="/js/respond.min.js"></script>
-        <![endif]-->
-        <script src="/js/jquery.slimscroll.min.js" type="text/javascript"></script>
-        <script src="/js/jquery.blockui.min.js" type="text/javascript"></script>
-        <script src="/js/jquery.cookie.min.js" type="text/javascript"></script>
-        <script src="/js/jquery.uniform.min.js" type="text/javascript" ></script>
-        <!-- END CORE PLUGINS -->
-        <script src="/js/app.js"></script>
-        <script>
-            jQuery(document).ready(function() {
-                App.init();
-            });
-        </script>
-        <!-- END JAVASCRIPTS -->
+    <?php $this->endBody() ?>
+    <!-- END FOOTER -->
+    <!-- BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time) -->
+    <!-- BEGIN CORE PLUGINS -->
+    <script src="/js/jquery-migrate-1.2.1.min.js" type="text/javascript"></script>
+    <!-- IMPORTANT! Load jquery-ui-1.10.1.custom.min.js before bootstrap.min.js to fix bootstrap tooltip conflict with jquery ui tooltip -->
+    <script src="/js/jquery-ui-1.10.1.custom.min.js" type="text/javascript"></script>
+    <script src="/js/bootstrap.min.js" type="text/javascript"></script>
+    <!--[if lt IE 9]>
+    <script src="/js/excanvas.min.js"></script>
+    <script src="/js/respond.min.js"></script>
+    <![endif]-->
+    <script src="/js/jquery.slimscroll.min.js" type="text/javascript"></script>
+    <script src="/js/jquery.blockui.min.js" type="text/javascript"></script>
+    <script src="/js/jquery.cookie.min.js" type="text/javascript"></script>
+    <script src="/js/jquery.uniform.min.js" type="text/javascript" ></script>
+    <!-- END CORE PLUGINS -->
+    <script src="/js/app.js"></script>
+    <script>
+        jQuery(document).ready(function() {
+            App.init();
+        });
+    </script>
+    <!-- END JAVASCRIPTS -->
+    <?php if ($this->loadAuthJs) { ?>
+        <script type="text/javascript" src="/js/ajax.js"></script>
+    <?php } ?>
     </body>
 </html>
 <?php $this->endPage() ?>

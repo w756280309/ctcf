@@ -1,17 +1,17 @@
 <?php
-/* @var $this yii\web\View */
+
 $this->title = '后台管理系统';
+
 ?>
+
 <?= $this->blocks['block1eft'] ?>
 <?php $this->beginBlock('blockmain'); ?>
 <div class="container-fluid">
     <div class="row-fluid">
-
         <div class="span12">
-            
-                <h3 class="page-title">
-                        欢迎使用后台管理系统
-                </h3>
+            <h3 class="page-title">
+                欢迎使用后台管理系统
+            </h3>
         </div>
         <table width="100%" border="0" cellspacing="0" cellpadding="0">
             <tr>
@@ -36,5 +36,4 @@ $this->title = '后台管理系统';
         </table>
     </div>
 </div>
-
 <?php $this->endBlock(); ?>
