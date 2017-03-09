@@ -9,6 +9,7 @@ use common\models\user\CaptchaForm;
 use common\models\user\User;
 use wap\modules\promotion\models\PromoMobile;
 use wap\modules\promotion\models\RankingPromo;
+use Wcg\Growth\Integration\Yii2Module\Model\ReferralSource;
 use Yii;
 use yii\web\Controller;
 
@@ -34,9 +35,13 @@ class PromoController extends Controller
             $share = Share::findOne(['shareKey' => $wx_share_key]);
         }
 
+        $source = Yii::$app->request->get('utm_source');
+        $referralSource = !empty($source) ? ReferralSource::find()->where(['source' => $source, 'isO2O' => true])->one() : null;
+
         return $this->render('index', [
             'promo' => $promo,
             'share' => $share,
+            'isO2O' => null !== $referralSource,
         ]);
     }
 

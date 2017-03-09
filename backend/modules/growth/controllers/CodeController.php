@@ -22,7 +22,7 @@ class CodeController extends BaseController
      */
     public function actionAdd()
     {
-        $goods = GoodsType::find()->all();
+        $goods = GoodsType::find()->where(['in', 'type', [1, 2]])->all();
 
         return $this->render('add', ['goods' => $goods]);
     }
@@ -38,7 +38,6 @@ class CodeController extends BaseController
 
         return $this->render('export', ['id' => $id, 'num' => $num, 'expiresAt' => $expiresAt]);
     }
-
 
     /**
      * 生成并导出txt
@@ -194,7 +193,8 @@ class CodeController extends BaseController
         $query = (new Query())
             ->select("$g.name, count($c.id) as total, $c.goodsType, $g.createdAt, $g.sn")
             ->from($g)
-            ->leftJoin($c, "$c.goodsType_sn = $g.sn");
+            ->leftJoin($c, "$c.goodsType_sn = $g.sn")
+            ->where(['in', "$g.type", [1, 2]]);
 
         $query->orderBy(["$g.createdAt" => SORT_DESC])->groupBy('sn');
         $pages = new Pagination(['totalCount' => $query->count(), 'pageSize' => '10']);

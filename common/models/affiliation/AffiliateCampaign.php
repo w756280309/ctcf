@@ -11,4 +11,8 @@ use yii\db\ActiveRecord;
  */
 class AffiliateCampaign extends ActiveRecord
 {
+    public function getAffiliator()
+    {
+        return $this->hasOne(Affiliator::className(), ['id' => 'affiliator_id']);
+    }
 }

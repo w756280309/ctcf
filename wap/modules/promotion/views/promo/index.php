@@ -47,6 +47,7 @@ $config = json_decode($promo->config, true);
         </div>
     <?php } ?>
 
+    <?php if (!$isO2O) { ?>
     <div class="gift">
         <p class="f18 "><img  data-original="<?= FE_BASE_URI ?>wap/luodiye/images/icon_01.png" alt=""> 积分商城，更多好礼等你拿 <img  data-original="<?= FE_BASE_URI ?>wap/luodiye/images/icon_01.png" alt=""></p>
         <ul class="clearfix">
@@ -56,6 +57,7 @@ $config = json_decode($promo->config, true);
             <li class="lf"><img  data-original="<?= FE_BASE_URI ?>wap/luodiye/images/gift_04.png" alt=""></li>
         </ul>
     </div>
+    <?php } ?>
 
     <div class="choosereason">
         <p class="f18 "><img  data-original="<?= FE_BASE_URI ?>wap/luodiye/images/icon_01.png" alt=""> 为什么选择国资平台-温都金服 <img  data-original="<?= FE_BASE_URI ?>wap/luodiye/images/icon_01.png" alt=""></p>
@@ -161,7 +163,6 @@ $config = json_decode($promo->config, true);
             <li><img  data-original="<?= FE_BASE_URI ?>wap/luodiye/images/media_04.png" alt=""></li>
         </ul>
     </div>
-
 
     <div class="active">
         <span class="reasonone f15" style="margin-bottom: 0.4rem;">05  会员活动丰富</span>

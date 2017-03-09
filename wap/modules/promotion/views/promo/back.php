@@ -23,8 +23,12 @@ if ($user && !($user->id % 2)) {
     </div>
     <ul class="liststep f16">
         <li><span class="f24 lf">1</span>注册成功</li>
-        <li><span class="f24 lf"><a class="go-deal" href="<?= $toUrl ?>">2</span>首次投资1000元即可获得积分</a></li>
-        <li><span class="f24 lf">3</span>前往积分商城兑换</li>
+        <?php if ($user->isO2oRegister()) { ?>
+            <li><span class="f24 lf"><a class="go-deal" href="<?= $toUrl ?>">2</span>首次投资1000元即可获得</a></li>
+        <?php } else { ?>
+            <li><span class="f24 lf"><a class="go-deal" href="<?= $toUrl ?>">2</span>首次投资1000元即可获得积分</a></li>
+            <li><span class="f24 lf">3</span>前往积分商城兑换</li>
+        <?php } ?>
     </ul>
 
     <a class="f15 invest" href="<?= $toUrl ?>">去理财</a>
