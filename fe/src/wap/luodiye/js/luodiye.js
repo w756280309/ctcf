@@ -60,16 +60,12 @@ function signup()
         if (data.code) {
             if ('undefined' !== typeof data.tourl) {
                 toastCenter(data.message, function () {
-                    if ('undefined' !== typeof ga) {
-                        ga('send', {
-                            hitType: 'event',
-                            eventCategory: 'reg',
-                            eventAction: 'm',
-                            hitCallback: function () {
-                                location.href = data.tourl;
-                            }
-                        });
-                        setTimeout(function () {
+                    if ('undefined' !== typeof _paq) {
+                        _paq.push(['trackEvent', 'user', 'reg', null, null, function () {
+                            location.href = data.tourl;
+                        }]);
+
+                        setTimeout(function() {
                             location.href = data.tourl;
                         }, 1500);
                     } else {
@@ -77,7 +73,7 @@ function signup()
                     }
                 });
             } else if ('undefined' !== typeof data.message) {
-                toastCenter(data.message,function(){
+                toastCenter(data.message, function () {
                     $('#signup-btn').attr('disabled', false);
                 });
             }

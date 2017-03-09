@@ -12,7 +12,8 @@ $inApp = defined('IN_APP');
 $this->registerCssFile(ASSETS_BASE_URI.'css/first.css', ['depends' => WapAsset::class]);
 $this->registerCssFile(ASSETS_BASE_URI.'css/luodiye/luodiye.css?v=161117-1', ['depends' => WapAsset::class]);
 $this->registerJsFile(ASSETS_BASE_URI.'js/fastclick.js', ['depends' => WapAsset::class]);
-$this->registerJsFile(ASSETS_BASE_URI.'js/luodiye.js?v=20170307', ['depends' => WapAsset::class]);
+$this->registerJsFile(FE_BASE_URI.'wap/luodiye/js/luodiye.js?v=20170309', ['depends' => WapAsset::class]);
+
 ?>
 
 <div class="container">
@@ -62,7 +63,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/luodiye.js?v=20170307', ['depends' => 
                 </div>
                 <div class="text-box password-box">
                     <input id="pass" class="login-info text-single" name="SignupForm[password]" maxlength="16" type="password" placeholder="请输入6到16位的密码" AUTOCOMPLETE="off">
-                    <a class="eye-choose login-eye">
+                    <a class="eye-choose login-eye password">
                         <img width="26" height="20" alt="eye-close" src="<?= ASSETS_BASE_URI ?>images/eye-close.png">
                     </a>
                     <div class="clear"></div>
