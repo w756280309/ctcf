@@ -72,10 +72,12 @@ $this->loadAuthJs = false;
 
             <div class="detail_font">会员资金详情</div>
             <ul class="breadcrumb_detail">
+                <li><span>账户余额（元）</span><?= StringUtils::amountFormat3($userYuE) ?></li>
                 <li><span>已还款金额（元）</span><?= StringUtils::amountFormat3($ret['yihuan']) ?></li>
                 <li><span>待还款金额（元）</span><?= StringUtils::amountFormat3($ret['wait']) ?></li>
-                <li><span>账户余额（元）</span><?= StringUtils::amountFormat3($userYuE) ?></li>
-                <li id="ump"><span>联动账户余额（元）</span><i></i></li>
+            </ul>
+            <ul class="breadcrumb_detail">
+                <li id="ump"><span>联动账户余额（元）</span><label></label></li>
             </ul>
             <ul class="breadcrumb_detail">
                 <li><span>充值次数（次）</span><?= $czNum ?></li>
@@ -115,17 +117,18 @@ $this->loadAuthJs = false;
         font-size: 16px;
     }
 </style>
+
 <script type="text/javascript">
     $(function () {
         var orgUserId = '<?= $orgUser->id ?>';
         var xhr = $.get('/user/user/ump-org-account?id='+orgUserId, function (data) {
             if ('undefined' !== data.balance) {
-                $('#ump i').html(data.balance);
+                $('#ump label').html(data.balance);
             }
         });
 
         xhr.fail(function () {
-            $('#ump i').html('无权限查看此项数据');
+            $('#ump label').html('无权限查看此项数据');
         });
     })
 </script>
