@@ -1,4 +1,13 @@
 /*comfont字体样式*/
+.f9 {
+    font-size: 9px;
+}
+[data-dpr="2"] .f9 {
+    font-size: 18px;
+}
+[data-dpr="3"] .f9 {
+    font-size: 27px;
+}
 .f10 {
     font-size: 10px;
 }
@@ -164,6 +173,9 @@
 }
 
 @media (min-width: 751px){
+    .f9 {
+        font-size: 18px;
+    }
     .f10 {
         font-size: 20px;
     }
