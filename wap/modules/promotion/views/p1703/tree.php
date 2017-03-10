@@ -1,7 +1,6 @@
 <?php
 
 $this->title = '共植友谊树好礼拿不停';
-$this->showViewport = false;
 
 ?>
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/wenjfbase.css?v=1.0">
@@ -32,11 +31,11 @@ $this->showViewport = false;
     <div class="treeContent">
         <dl>
             <dt class="f15 comMargin">活动简介</dt>
-            <dd class="f10">3月11日—3月17日植树节期间，温都金服发起『共植友谊“树”，好礼拿不停，邀好友得金币』活动，邀请好友注册、投资除获得代金券及现金红包外，达到指定标准更将获得足金鸡年生肖金币等黄金豪礼。</dd>
+            <dd class="f15">3月11日—3月17日植树节期间，温都金服发起『共植友谊“树”，好礼拿不停，邀好友得金币』活动，邀请好友注册、投资除获得代金券及现金红包外，达到指定标准更将获得足金鸡年生肖金币等黄金豪礼。</dd>
         </dl>
         <dl>
             <dt class="f15">参与规则</dt>
-            <dd class="f10">好友在活动期间注册成为温都金服用户，种下一颗投资理财的种子。在未来1年的时间内，好友累计年化投资达到一定金额，我们将送给您以下超值豪礼！</dd>
+            <dd class="f15">好友在活动期间注册成为温都金服用户，种下一颗投资理财的种子。在未来1年的时间内，好友累计年化投资达到一定金额，我们将送给您以下超值豪礼！</dd>
         </dl>
 
         <table class="tablebox" cellpadding="0" cellspacing="0">
@@ -62,13 +61,13 @@ $this->showViewport = false;
                 <td class="f12">1000积分，<br>可兑换金龙鱼玉米油 4L</td>
             </tr>
         </table>
-        <p class="tips f9 text-align-rg">*注：如遇礼品停售、缺货等情况，将提供同类等值礼品</p>
+        <p class="tips f10 text-align-rg">*注：如遇礼品停售、缺货等情况，将提供同类等值礼品</p>
 
-        <p class="f10 regular">日常活动<span class="comweight">“邀请好友来挣钱，大把红包轻松拿”</span>正常进行中，活动规则不变</p>
+        <p class="f15 regular">日常活动<span class="comweight">“邀请好友来挣钱，大把红包轻松拿”</span>正常进行中，活动规则不变</p>
 
         <ul class="regular-detail">
-            <li class="f10 comweight">邀请人奖励：</li>
-            <li class="f10">（1）注册投资得投资代金券</li>
+            <li class="f15 comweight">邀请人奖励：</li>
+            <li class="f15">（1）注册投资得投资代金券</li>
         </ul>
 
         <table class="tablebox tableboxspecial" cellpadding="0" cellspacing="0">
@@ -91,20 +90,20 @@ $this->showViewport = false;
             </tr>
         </table>
         <ul class="regular-detail">
-            <li class="f10">（2）现金红包</li>
-            <li class="f10">好友前3次投资额0.1%的返现奖励</li>
-            <li class="f10 comweight">被邀请人奖励：</li>
-            <li class="f10">（1）注册即得50元投资代金券+288元红包；</li>
-            <li class="f10">（2）首次投资1000元，送1400积分，可兑换价值70元的沃尔玛购物卡。</li>
+            <li class="f15">（2）现金红包</li>
+            <li class="f15">好友前3次投资额0.1%的返现奖励</li>
+            <li class="f15 comweight">被邀请人奖励：</li>
+            <li class="f15">（1）注册即得50元投资代金券+288元红包；</li>
+            <li class="f15">（2）首次投资1000元，送1400积分，可兑换价值70元的沃尔玛购物卡。</li>
         </ul>
-        <p class="tips f9 text-align-rg" style="line-height: normal;width: 92%;">*被邀请人投资产品不包含新手专享和转让产品，具体内容详见“活动规则”</p>
+        <p class="tips f10 text-align-rg" style="line-height: normal;width: 92%;">*被邀请人投资产品不包含新手专享和转让产品，详见“活动规则”</p>
         <dl>
             <dt class="f15 giftsSend">礼品发放事宜</dt>
-            <dd class="f10">被邀请人累计年化投资金额达到上述标准，工作人员会在3个工作日内联系邀请人确认礼品、积分发放事宜。为保证顺利领取礼品，请保持通讯畅通。</dd>
+            <dd class="f15">被邀请人累计年化投资金额达到上述标准，工作人员会在3个工作日内联系邀请人确认礼品、积分发放事宜。为保证顺利领取礼品，请保持通讯畅通。</dd>
         </dl>
         <dl>
             <dt class="f15 activeStyle">活动参与方式</dt>
-            <dd class="f10">点击“邀请好友”将活动信息分享到微信好友、朋友圈等社交媒体，好友点击链接即可参与活动。</dd>
+            <dd class="f15">点击“邀请好友”将活动信息分享到微信好友、朋友圈等社交媒体，好友点击链接即可参与活动。</dd>
         </dl>
     </div>
 
