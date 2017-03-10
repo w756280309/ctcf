@@ -35,14 +35,24 @@ $config = json_decode($promo->config, true);
         <a class="f22">马上领取</a>
     </div>
 
-    <?php if (isset($config['rules'])) { ?>
+    <?php if (isset($config['rules']) && !empty($config['rules'])) { ?>
         <div class="regular">
             <ul class="f15">
                 <li>活动规则：</li>
                 <?php foreach ($config['rules'] as $key => $rule) { ?>
                     <li><?= $key + 1 ?>.<?= $rule ?></li>
                 <?php } ?>
-                <li class="f12 statement">*购买转让产品不参与活动</li>
+                <li class="f12 statement" style="margin-bottom: 8px;">*购买转让产品不参与活动</li>
+                <?php if (isset($config['useRules']) && !empty($config['useRules'])) { ?>
+                    <?php if (isset($config['useRules']['title']) && !empty($config['useRules']['title'])) { ?>
+                        <li style="color: #666;line-height: 0.82666667rem;"><?= $config['useRules']['title'] ?></li>
+                    <?php } ?>
+                    <?php if (isset($config['useRules']['content']) && !empty($config['useRules']['content'])) { ?>
+                        <?php foreach ($config['useRules']['content'] as $lineNo => $useRule) { ?>
+                            <li><?= $lineNo + 1 ?>.<?= $useRule ?></li>
+                        <?php } ?>
+                    <?php } ?>
+                <?php }?>
             </ul>
         </div>
     <?php } ?>

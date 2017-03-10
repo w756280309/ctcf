@@ -175,14 +175,15 @@ class PromoCorp
      */
     private function getUsefulCard(User $user, $config)
     {
+        $logInfo = '，user_id：' . $user->id . '，promo_id：' . $this->promo->id . '，promo_title：' . $this->promo->title . '，referral_source：' . $user->campaign_source;
         $trackCode = isset($config->trackCode) && !empty($config->trackCode) ? $config->trackCode : [];
         if (empty($trackCode) || !in_array($user->campaign_source, $trackCode)) {
-            Yii::info('O2O error:请指定正确的合作商渠道', 'user_log');
+            Yii::info('O2O error：请指定正确的合作商渠道' . $logInfo, 'user_log');
             return false;
         }
 
         if (!isset($config->goodsSn) || empty($config->goodsSn)) {
-            Yii::info('O2O error:请指定活动发送的商品', 'user_log');
+            Yii::info('O2O error：请指定活动发送的商品' . $logInfo, 'user_log');
             return false;
         }
 
@@ -190,7 +191,7 @@ class PromoCorp
             ->where(['sn' => $config->goodsSn])
             ->one();
         if (null === $goodsType) {
-            Yii::info('O2O error:找不到活动发送的商品' . $config->goodsSn, 'user_log');
+            Yii::info('O2O error：找不到活动发送的商品' . $config->goodsSn . $logInfo, 'user_log');
             return false;
         }
 
@@ -200,7 +201,7 @@ class PromoCorp
             ->andWhere(['user_id' => null])
             ->one();
         if (null === $card) {
-            Yii::info('O2O error:没有可用的券码', 'user_log');
+            Yii::info('O2O error：没有可用的券码' . $logInfo, 'user_log');
             return false;
         }
 
