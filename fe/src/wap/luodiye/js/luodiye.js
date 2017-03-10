@@ -1,46 +1,53 @@
 function validateForm()
 {
-    if ($('#iphone').val() === '') {
+    var phone = $('#iphone').val();
+
+    if ('' === phone) {
         return '手机号不能为空';
     }
 
-    var tel = $('#iphone').val();
-    reg = /^0?1[3|4|5|6|7|8][0-9]\d{8}$/;
-    if (!reg.test(tel)) {
+    var reg = /^0?1[3|4|5|6|7|8][0-9]\d{8}$/;
+    if (!reg.test(phone)) {
         return '手机号格式错误';
     }
 
-    if ($('#captchaform-captchacode').val() === '') {
+    var captchacode = $('#captchaform-captchacode').val();
+
+    if ('' === captchacode) {
         return '图形验证码不能为空';
     }
 
-    if ($('#captchaform-captchacode').val().length !== 4) {
+    if (4 !== captchacode.length) {
         return '图形验证码必须为4位字符';
     }
 
-    if ($('#yanzhengma').val() === '') {
+    var yzm = $('#yanzhengma').val();
+
+    if ('' === yzm) {
         return '短信验证码不能为空';
     }
 
-    if ($('#yanzhengma').val().length !== 6) {
+    if (6 !== yzm.length) {
         return '手机验证码必须为6位字符';
     }
 
-    if ($('#pass').val() === '') {
+    var pass = $('#pass').val();
+
+    if ('' === pass) {
         return '密码不能为空';
     }
 
-    if ($('#pass').val().length < 6) {
+    if (pass.length < 6) {
         return '密码长度最少6位';
     }
 
     var reg = /[a-zA-Z]/;
     var reg2 = /[0-9]/;
-    if (!(-1 === $('#pass').val().indexOf(' ') && reg.test($('#pass').val()) && reg2.test($('#pass').val()))) {
+    if (!(-1 === pass.indexOf(' ') && reg.test(pass) && reg2.test(pass))) {
         return '请至少输入字母与数字组合';
     }
 
-    if ($('#xieyi').attr('checked') !== 'checked') {
+    if ('checked' !== $('#xieyi').attr('checked')) {
         return '请查看网站服务协议';
     }
 
