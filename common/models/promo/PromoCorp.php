@@ -196,6 +196,8 @@ class PromoCorp
 
         $card = VirtualCard::find()
             ->where(['goodsType_id' => $goodsType->id])
+            ->andWhere(['isPull' => false])
+            ->andWhere(['user_id' => null])
             ->one();
         if (null === $card) {
             Yii::info('O2O error:没有可用的券码', 'user_log');
