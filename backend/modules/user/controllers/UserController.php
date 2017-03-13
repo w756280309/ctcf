@@ -5,6 +5,7 @@ namespace backend\modules\user\controllers;
 use backend\controllers\BaseController;
 use common\lib\err\Err;
 use common\lib\user\UserStats;
+use common\models\affiliation\Affiliator;
 use common\models\affiliation\UserAffiliation;
 use common\models\bank\Bank;
 use common\models\epay\EpayUser;
@@ -135,17 +136,33 @@ class UserController extends BaseController
      */
     public function actionListt()
     {
+        $request = $this->validateRequest(Yii::$app->request->get());
+
         $userSearch = new UserSearch();
-        $query = $userSearch->search(Yii::$app->request->get());
+        $query = $userSearch->search($request);
+
         $pages = new Pagination([
             'totalCount' => $query->count(),
             'pageSize' => 15,
         ]);
+
         $user = $query->offset($pages->offset)->limit($pages->limit)->orderBy(['user.created_at' => SORT_DESC])->all();
+
+        $affiliators = UserAffiliation::find()
+            ->innerJoinWith('affiliator')
+            ->where(['user_id' => ArrayHelper::getColumn($user, 'id')])
+            ->indexBy('user_id')
+            ->all();
+
+        $affList = Affiliator::find()->all();
+
         return $this->render('list', [
             'model' => $user,
             'pages' => $pages,
             'category' => User::USER_TYPE_PERSONAL,
+            'request' => $request,
+            'affiliators' => $affiliators,
+            'affList' => $affList,
         ]);
     }
 
@@ -175,12 +192,19 @@ class UserController extends BaseController
      */
     public function actionListr()
     {
-        $query = User::find()->where(['user.type' => User::USER_TYPE_ORG, 'is_soft_deleted' => 0]);
-        $query->with('borrowAccount');
-        $name = Yii::$app->request->get('name');
-        if (!empty($name)) {
-            $query->andFilterWhere(['like', 'org_name', $name]);
+        $request = $this->validateRequest(Yii::$app->request->get());
+
+        $query = User::find()
+            ->with('borrowAccount')
+            ->where([
+                'user.type' => User::USER_TYPE_ORG,
+                'is_soft_deleted' => 0,
+            ]);
+
+        if (isset($request['name']) && !empty($request['name'])) {
+            $query->andFilterWhere(['like', 'org_name', $request['name']]);
         }
+
         $pages = new Pagination(['totalCount' => $query->count(), 'pageSize' => '15']);
         $model = $query->offset($pages->offset)->limit($pages->limit)->orderBy('created_at desc')->all();
 
@@ -188,7 +212,19 @@ class UserController extends BaseController
             'model' => $model,
             'category' => User::USER_TYPE_ORG,
             'pages' => $pages,
+            'request' => $request,
         ]);
+    }
+
+    private function validateRequest($request)
+    {
+        $res = [];
+
+        foreach ($request as $key => $val) {
+            $res[$key] = strip_tags($val);
+        }
+
+        return $res;
     }
 
     /**

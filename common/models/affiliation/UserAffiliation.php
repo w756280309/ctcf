@@ -2,7 +2,6 @@
 
 namespace common\models\affiliation;
 
-use common\models\affiliation\Affiliator;
 use yii\db\ActiveRecord;
 
 /**

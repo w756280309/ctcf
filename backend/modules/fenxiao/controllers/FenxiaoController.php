@@ -157,7 +157,7 @@ class FenxiaoController extends BaseController
      */
     public function actionList()
     {
-        $query = Admin::find()->orderBy("id desc");
+        $query = Admin::find();
 
         $pages = new Pagination(['totalCount' => $query->count(), 'pageSize' => '15']);
         $model = $query->offset($pages->offset)->limit($pages->limit)->orderBy('id desc')->all();

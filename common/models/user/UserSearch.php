@@ -2,6 +2,9 @@
 
 namespace common\models\user;
 
+use common\models\affiliation\UserAffiliation;
+use yii\helpers\ArrayHelper;
+
 class UserSearch extends User
 {
     public function attributes()
@@ -154,7 +157,18 @@ class UserSearch extends User
         }
 
         $query->with('lendAccount');
+
+        if (isset($params['affiliator_name']) && !empty($params['affiliator_name'])) {
+            $aff = UserAffiliation::find()
+                ->innerJoinWith('affiliator')
+                ->where(['like', 'name', $params['affiliator_name']])
+                ->select('user_id')
+                ->all();
+
+            $uids = ArrayHelper::getColumn($aff, 'user_id');
+            $query->andWhere(['id' => $uids]);
+        }
+
         return $query;
     }
-
 }
