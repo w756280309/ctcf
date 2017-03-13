@@ -795,7 +795,7 @@ class User extends ActiveRecord implements IdentityInterface, UserInterface
         if ($startTime) {
             $inviteRecord = $inviteRecord->andWhere(['>=', 'created_at', strtotime($startTime)]);
         }
-        if ($startTime) {
+        if ($endTime) {
             $inviteRecord = $inviteRecord->andWhere(['<=', 'created_at', strtotime($endTime)]);
         }
         $inviteRecord = $inviteRecord->one();

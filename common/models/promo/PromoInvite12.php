@@ -56,7 +56,7 @@ class PromoInvite12
      */
     public function doAfterSuccessLoanOrder(OnlineOrder $order)
     {
-       if ($this->promo->isActive($order->user)) {
+       if ($this->promo->isActive($order->user, $order->order_time)) {
            $this->dealWithOrder($order);
        }
     }

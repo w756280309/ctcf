@@ -35,6 +35,7 @@ class BirthdayCoupon
 
     public function getAwardUserList()
     {
+        //todo 有直接使用身份证， 需要调整
         $users = User::find()->where(['type' => 1])->andWhere(['like', 'idcard', date('md')])->all();
         $day = date('m-d');
         $data = [];
@@ -64,6 +65,7 @@ class BirthdayCoupon
             if (!$user instanceof User) {
                 continue;
             }
+            //判断是否已经给奖励机会
             $ticket = PromoLotteryTicket::find()->where([
                 'user_id' => $user->id,
                 'promo_id' => $promo->id,
@@ -92,14 +94,10 @@ class BirthdayCoupon
                             throw new \Exception();
                         }
                         //给用户发代金券
-                        try {
-                            $userCoupon = UserCoupon::addUserCoupon($user, $coupon);
-                            $res = $userCoupon->save(false);
-                            if (!$res) {
-                                throw new \Exception();
-                            }
-                        } catch (\Exception $ex) {
-                            throw new \Exception($ex->getMessage());
+                        $userCoupon = UserCoupon::addUserCoupon($user, $coupon);
+                        $res = $userCoupon->save(false);
+                        if (!$res) {
+                            throw new \Exception('代金券发送失败');
                         }
                     }
                     //发短信

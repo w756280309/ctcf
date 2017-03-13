@@ -31,6 +31,7 @@ class FirstOrderPoints
 
     /**
      * 判断是否可以给用户发首投积分
+     * 注意：O2O活动首投不送积分
      * @param OnlineOrder $order
      * @return bool
      */

@@ -13,8 +13,8 @@ use yii\helpers\ArrayHelper;
  *
  * @property integer $id
  * @property string  $title        活动标题
- * @property string  $startTime    活动开始时间
- * @property string  $endTime      活动结束时间
+ * @property string  $startTime    活动开始时间(Y-m-d)
+ * @property string  $endTime      活动结束时间(Y-m-d)
  * @property string  $key          活动key, 需要唯一
  * @property string  $promoClass   处理活动的类，包含命名空间,可以直接 new $promoClass
  * @property string  $whiteList    以英文逗号隔开的用户手机号字符串
@@ -187,7 +187,7 @@ class RankingPromo extends ActiveRecord
     }
 
     /**
-     * 判断活动对对指定用户来说是否在进行中
+     * 判断活动对对指定用户来说是否在进行中(支持长期活动)
      * @param User|null $user
      * @param  int|null $time
      * @return bool

@@ -11,6 +11,7 @@ use wap\modules\promotion\models\RankingPromo;
 
 /**
  * 购买标的送积分活动:loan_order_points
+ * 新手标不送积分
  */
 class LoanOrderPoints
 {
