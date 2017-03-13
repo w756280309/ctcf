@@ -83,6 +83,14 @@ class UserCoupon extends ActiveRecord
         return $this->hasOne(CouponType::className(), ['id' => 'couponType_id']);
     }
 
+    /*
+     * 获取关联用户信息，取月度代金券用户手机号码
+     *
+     * */
+    public function getUser(){
+        return  $this->hasOne(User::className(),['id' => 'user_id']);
+    }
+
     /**
      * 可用代金券列表.
      *

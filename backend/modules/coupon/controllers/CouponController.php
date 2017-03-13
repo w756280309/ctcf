@@ -5,7 +5,10 @@ namespace backend\modules\coupon\controllers;
 use backend\controllers\BaseController;
 use common\models\coupon\CouponType;
 use common\models\coupon\UserCoupon;
+use common\models\order\OnlineOrder;
 use common\models\user\User;
+use common\lib\user\UserStats;
+use common\utils\SecurityUtils;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\data\Pagination;
@@ -103,6 +106,93 @@ class CouponController extends BaseController
         $model = $query->offset($pages->offset)->limit($pages->limit)->orderBy('id desc')->all();
 
         return $this->render('list', ['model' => $model, 'name' => $name, 'pages' => $pages]);
+    }
+
+    /**
+     * 根据时间查询产生列表数据
+     *
+     */
+    public function actionMonthList()
+    {
+        $listTime = $this->getListTime(Yii::$app->request->get());
+        $listTimeStr = $listTime['str'];
+        $listTimeEnd = $listTime['end'];
+        $query = $this->getData(Yii::$app->request->get());
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => [
+                'pageSize' => 15,
+            ]
+        ]);
+        return $this->render('month_list', [
+            'listTimeStr' =>$listTimeStr,
+            'listTimeEnd' =>$listTimeEnd,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+
+    /**
+     * 根据时间查询月代金券数据，列表显示导出数据
+     */
+    public function actionExport()
+    {
+        $listTime = $this->getListTime(Yii::$app->request->get());
+        $query = $this->getData(Yii::$app->request->get());
+        $exportData[] = [
+            '用户名称',
+            '用户手机号',
+            '单张代金券使用金额',
+            '单张代金券使用时间',
+        ];
+        $allData  =  $query->all();
+        foreach ($allData as  $v ){
+            $user = $v->user;
+            $exportData[] =[
+                isset($user->real_name) ? $user->real_name : '',
+                isset($user->safeMobile) ? SecurityUtils::decrypt($user->safeMobile) : '',
+                isset($v->couponType->amount) ? $v->couponType->amount : '',
+                date('Y-m-d H:i:s',$v->order->created_at),
+            ];
+        }
+        $exporName = '月度代金券'.date('md',strtotime($listTime['str'])).'-'.date('md',strtotime($listTime['end'])).'.xlsx';
+        UserStats::exportAsXlsx($exportData, $exporName);
+    }
+
+    /**
+     * 返回查询出的月度代金券数据对象
+     */
+    private function getData()
+    {
+        $listTime = $this->getListTime(Yii::$app->request->get());
+        $UserCouponTbale = UserCoupon::tableName();
+        $OnlineOrderTable = OnlineOrder::tableName();
+        $query = UserCoupon::find()
+            ->innerJoinWith('couponType')
+            ->innerJoinWith('order')
+            ->innerJoinWith('user')
+            ->where("$UserCouponTbale.isUsed = 1")
+            ->andWhere(["$OnlineOrderTable.status" => 1])
+            ->andWhere(['>=', "date(from_unixtime($OnlineOrderTable.created_at))", $listTime['str']])
+            ->andWhere(['<=', "date(from_unixtime($OnlineOrderTable.created_at))", $listTime['end']]);
+        return $query;
+    }
+
+    /**
+     * 返回处理开始结束时间，判断时间并交换时间大小顺序
+     */
+    private function getListTime()
+    {
+        $listTime = [];
+        if(Yii::$app->request->get('listTimeStr') && Yii::$app->request->get('listTimeEnd')){
+            $str = strtotime(Yii::$app->request->get('listTimeStr'));
+            $end = strtotime(Yii::$app->request->get('listTimeEnd'));
+            $listTime['str'] = $end > $str ? Yii::$app->request->get('listTimeStr') : Yii::$app->request->get('listTimeEnd');
+            $listTime['end'] = $end > $str ? Yii::$app->request->get('listTimeEnd') : Yii::$app->request->get('listTimeStr');
+        } else {
+            $listTime['str'] = date('Y-m-01', strtotime('-1 month'));
+            $listTime['end'] = date('Y-m-t', strtotime('-1 month'));
+        }
+        return $listTime;
     }
 
     /**
