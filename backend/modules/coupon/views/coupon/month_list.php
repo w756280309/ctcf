@@ -63,14 +63,19 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\we
                     'columns' => [
                         [
                             'header' => '用户名称',
+                            'format' => 'html',
                             'value' => function ($model) {
-                                return isset($model->user->real_name) ? $model->user->real_name : '';
+                                if ($model->user->real_name) {
+                                    return '<a href="/user/user/detail?id='.($model->user->id).'">'.$model->user->real_name.'</a>';
+                                } else {
+                                    return '---';
+                                }
                             }
                         ],
                         [
                             'header' => '用户手机号',
                             'value' => function ($model) {
-                                return isset($model->user->safeMobile) ? SecurityUtils::decrypt($model->user->safeMobile) : '';
+                                return isset($model->user->safeMobile) ? SecurityUtils::decrypt($model->user->safeMobile) : '---';
                             }
                         ],
                         [
@@ -80,7 +85,7 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\we
                             ],
                             'header' => '单张代金券使用金额',
                             'value' => function ($model) {
-                                return isset($model->couponType->amount) ? $model->couponType->amount : '';
+                                return isset($model->couponType->amount) ? $model->couponType->amount : '---';
                             },
                             'options' => ['float' => 'right']
 

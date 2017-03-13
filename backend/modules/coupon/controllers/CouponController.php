@@ -148,13 +148,13 @@ class CouponController extends BaseController
         foreach ($allData as  $v ){
             $user = $v->user;
             $exportData[] =[
-                isset($user->real_name) ? $user->real_name : '',
-                isset($user->safeMobile) ? SecurityUtils::decrypt($user->safeMobile) : '',
-                isset($v->couponType->amount) ? $v->couponType->amount : '',
+                isset($user->real_name) ? $user->real_name : '---',
+                isset($user->safeMobile) ? SecurityUtils::decrypt($user->safeMobile) : '---',
+                isset($v->couponType->amount) ? floatval($v->couponType->amount) : '---',
                 date('Y-m-d H:i:s',$v->order->created_at),
             ];
         }
-        $exporName = '月度代金券'.date('md',strtotime($listTime['str'])).'-'.date('md',strtotime($listTime['end'])).'.xlsx';
+        $exporName = '月度代金券'.date('Ymd',strtotime($listTime['str'])).'-'.date('Ymd',strtotime($listTime['end'])).'.xlsx';
         UserStats::exportAsXlsx($exportData, $exporName);
     }
 
@@ -173,7 +173,8 @@ class CouponController extends BaseController
             ->where("$UserCouponTbale.isUsed = 1")
             ->andWhere(["$OnlineOrderTable.status" => 1])
             ->andWhere(['>=', "date(from_unixtime($OnlineOrderTable.created_at))", $listTime['str']])
-            ->andWhere(['<=', "date(from_unixtime($OnlineOrderTable.created_at))", $listTime['end']]);
+            ->andWhere(['<=', "date(from_unixtime($OnlineOrderTable.created_at))", $listTime['end']])
+            ->orderBy("$OnlineOrderTable.created_at desc");
         return $query;
     }
 
