@@ -1,13 +1,16 @@
 <?php
-$this->title = '我的代金券';
-
-$this->registerCssFile(ASSETS_BASE_URI.'css/pagination.css', ['depends' => 'frontend\assets\FrontAsset']);
-$this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/mycoupon.css?v=161024', ['depends' => 'frontend\assets\FrontAsset']);
-$this->registerJsFile(ASSETS_BASE_URI.'js/JPlaceholder.js', ['depends' => 'frontend\assets\FrontAsset']);
-$this->registerJsFile(ASSETS_BASE_URI.'js/useraccount/couponcode.js', ['depends' => 'frontend\assets\FrontAsset']);
 
 use common\utils\StringUtils;
 use common\widgets\Pager;
+use frontend\assets\FrontAsset;
+
+$this->title = '我的代金券';
+
+$this->registerCssFile(ASSETS_BASE_URI.'css/pagination.css', ['depends' => FrontAsset::class]);
+$this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/mycoupon.css?v=161024', ['depends' => FrontAsset::class]);
+$this->registerJsFile(ASSETS_BASE_URI.'js/JPlaceholder.js', ['depends' => FrontAsset::class]);
+$this->registerJsFile(ASSETS_BASE_URI.'js/useraccount/couponcode.js', ['depends' => FrontAsset::class]);
+
 ?>
 
 <div class="myCoupon-box">
@@ -26,8 +29,8 @@ use common\widgets\Pager;
             <tr>
                 <th width="150">名称</th>
                 <th width="120" class="text-align-lf">面值（元）</th>
-                <th width="300" class="text-align-lf">使用规则</th>
-                <th width="210" class="text-align-lf">使用期限</th>
+                <th width="360" class="text-align-lf">使用规则</th>
+                <th width="200" class="text-align-lf">使用期限</th>
                 <th width="80" class="text-align-lf">状态</th>
             </tr>
             <?php foreach ($model as $key => $val) : ?>
@@ -43,7 +46,9 @@ use common\widgets\Pager;
                     <td>
                         单笔投资满<?= StringUtils::amountFormat1('{amount}{unit}', $val->couponType->minInvest) ?>可用；
                         <?php
-                            if (empty($val->couponType->loanCategories)) {
+                            if ($val->couponType->loanExpires) {
+                                echo '期限满'.$val->couponType->loanExpires.'天可用(除转让)';
+                            } elseif (empty($val->couponType->loanCategories)) {
                                 echo '新手标、转让不可用';
                             } else {
                                 $arr = array_filter(explode(',', $val->couponType->loanCategories));

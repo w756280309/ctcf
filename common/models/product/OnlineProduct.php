@@ -1,4 +1,5 @@
 <?php
+
 namespace common\models\product;
 
 use common\lib\product\ProductProcessor;
@@ -328,7 +329,15 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
      */
     public function getSpanDays()
     {
-        return 0 === $this->finish_date ? $this->expires : \Yii::$app->functions->timediff(strtotime(date('Y-m-d', $this->start_date)), strtotime(date('Y-m-d', $this->finish_date)))['day'];
+        if (self::REFUND_METHOD_DAOQIBENXI === $this->refund_method) {
+            $days = $this->expires;
+        } else {
+            $startDate = date('Y-m-d', $this->start_date);
+
+            $days = Yii::$app->functions->timediff(strtotime($startDate), strtotime($startDate.' + '.$this->expires.' months'))['day'];
+        }
+
+        return $days;
     }
 
     /**

@@ -28,7 +28,7 @@ class CouponController extends BaseController
         $count = $query->count();
         $pages = new Pagination(['totalCount' => $count, 'pageSize' => '10']);
         $model = $query
-            ->select("$c.amount, $c.name, $c.minInvest, if($uc.isUsed, bin(0), $uc.expiryDate < date(now())) as isExpired, $uc.expiryDate, $uc.isUsed, $uc.couponType_id")
+            ->select("$c.loanExpires, $c.amount, $c.name, $c.minInvest, if($uc.isUsed, bin(0), $uc.expiryDate < date(now())) as isExpired, $uc.expiryDate, $uc.isUsed, $uc.couponType_id")
             ->offset($pages->offset)
             ->limit($pages->limit)
             ->orderBy("isExpired, isUsed, $uc.expiryDate, amount desc, minInvest")
