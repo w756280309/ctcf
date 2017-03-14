@@ -43,11 +43,20 @@ $this->registerJsFile(ASSETS_BASE_URI . 'js/swiper.min.js', ['depends' => Jquery
             <a class="f15 rg" href="/site/signup">注册</a>
         </div>
 
+        <div class="cash-box">
+            <p class="f15 volume-of-trad" id="totalTradeAmount">平台累计交易额：<i></i><span>亿元</span></p>
+            <p class="f13 cash-rate"><i class="cash-icon"></i>历史兑付率100%</p>
+
+            <div class="total">
+                <ul class="f14 clearfix">
+                    <li class="lf" id="totalRefundAmount">累计兑付<span></span>万元</li>
+                    <li class="rg" id="totalRefundInterest">带来<span></span>万元收益</li>
+                    <i></i>
+                </ul>
+            </div>
+        </div>
+
         <div class="showMore">
-            <p class="clearfix">
-                <span class="f12 lf" id="totalTradeAmount">交易额<i></i>亿元</span>
-                <span class="f12 rg">历史兑付率100%</span>
-            </p>
             <div class="clearfix">
                 <a class="f13 lf" href="/site/h5?wx_share_key=h5">
                     <img src="<?= FE_BASE_URI ?>wap/index/images/icon_01.png" alt="">
@@ -267,16 +276,9 @@ $this->registerJsFile(ASSETS_BASE_URI . 'js/swiper.min.js', ['depends' => Jquery
             </ul>
         </div>
 
-    <div class="platform icp">
-        <a href="/news/detail?type=info&id=383" alt=""><img data-original="<?= ASSETS_BASE_URI ?>images/icp.png" alt=""></a>
-    </div>
-
-    <div class="total">
-        <ul class="f13 clearfix">
-            <li class="lf" id="totalRefundAmount">累计兑付<span></span>万元</li>
-            <li class="rg" id="totalRefundInterest">带来<span></span>万元收益</li>
-        </ul>
-    </div>
+        <div class="platform icp">
+            <a href="/news/detail?type=info&id=383" alt=""><img data-original="<?= ASSETS_BASE_URI ?>images/icp.png" alt=""></a>
+        </div>
 
         <div class="address">
             <a class="f14" href="tel:400-101-5151"><img data-original="<?= FE_BASE_URI ?>wap/index/images/phone.png" alt="">400-101-5151</a>

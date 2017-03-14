@@ -372,21 +372,72 @@ a:active {
     border:1px solid #f1453d ;
     margin-right:0.8rem ;
 }
-.showMore {
-    border-top: 1px solid #eee;
+.cash-box {
     background-color: #fff;
+    border-top: 1px solid #ddd;
 }
-.showMore p.clearfix {
-    padding:0 0.533333rem;
-    height:0.853333rem;
-    line-height:0.853333rem;
+.cash-box .volume-of-trad {
+    padding-top: 8px;
+    line-height: 0.82666667rem;
+    text-align: center;
+}
+.cash-box .cash-rate {
+    padding-bottom: 8px;
+    line-height: 0.74666667rem;
+    text-align: center;
+    color: #666666;
     border-bottom: 1px solid #ddd;
 }
-.showMore p span {
+.cash-box .cash-rate .cash-icon {
+    display: inline-block;
+    margin-top: 0.135rem;
+    margin-right: .1rem;
+    width: 0.42666667rem;
+    height: 0.42666667rem;
+    vertical-align: top;
+    background: url("../images/cash-icon.png") no-repeat 0 0;
+    background-size: contain;
+}
+.cash-box p span {
     color: #666666;
+}
+.cash-box .total {
+    color: #999999;
+    padding: .4rem 0.53333333rem;
+    background-color: #fff;
+}
+.cash-box .total span {
+    color: #606060;
+}
+.cash-box .total ul {
+    position: relative;
+}
+.cash-box .total ul li {
+    width: 50%;
+    height: 0.42666667rem;
+    line-height: 0.42666667rem;
+    text-align: center;
+}
+.cash-box .total ul li:nth-of-type(1) {
+     text-align: left
+}
+.cash-box .total ul li:nth-of-type(2) {
+    text-align: right
+}
+.cash-box .total ul i {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    width: 1px;
+    height: 0.42666667rem;
+    border-right: 1px solid #ddd;
+}
+.showMore {
+    margin-top: 0.2666667rem;
 }
 .showMore div {
     padding-left: 4%;
+    background-color: #fff;
 }
 .showMore div a {
     text-align: center;
@@ -572,9 +623,8 @@ section .featured .threepic li a img {
     padding: 0 0.53333333rem;
     line-height:  1.0933333rem;
     border-bottom: 1px solid #ddd;
-    background: url("../images/arrow.png") no-repeat 95% center;
+    background:#fff url("../images/arrow.png") no-repeat 95% center;
     background-size: 0.16rem 0.26666667rem;
-    background-color: #fff;
 }
 
 .invest p a {
@@ -784,17 +834,6 @@ section .featured .threepic li a img {
     width: 100%;
     height: 100%;
     border-bottom: 1px solid #ddd;
-}
-
-.total {
-    line-height: 1.2rem;
-    color: #999999;
-    padding: 0 0.53333333rem;
-    background-color: #fff;
-    margin-top: 0.2666667rem;
-}
-.total span {
-    color: #606060;
 }
 
 .address {

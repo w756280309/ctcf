@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
     <link rel="stylesheet" href="../common/css/wenjfbase.css"> <!-- 后端fe.php下引入（公共）-->
     <link rel="stylesheet" href="../libs/swiper/swiper.min.css">
-    <link rel="stylesheet" href="css/index.css?v=1.0368">
+    <link rel="stylesheet" href="css/index.css?v=1.03741">
     <script src="../libs/lib.flexible3.js"></script> <!-- 后端fe.php下引入（公共）-->
     <script src="../libs/jquery-1.11.1.min.js"></script> <!-- 后端fe.php下引入（公共）-->
     <script src="../libs/fastclick.js"></script> <!-- 后端fe.php下引入（公共）-->
@@ -29,11 +29,19 @@
         <a class="f15 rg" href="">注册</a>
     </div>
 
+    <div class="cash-box">
+        <p class="f15 volume-of-trad">平台累计交易额：12.84<span>亿元</span></p>
+        <p class="f13 cash-rate"><i class="cash-icon"></i>历史兑付率100%</p>
+
+        <div class="total">
+            <ul class="f14 clearfix">
+                <li class="lf">累计兑付<span>333,333.33</span>万元</li>
+                <li class="rg">带来<span>33,333.33</span>万元收益</li>
+                <i></i>
+            </ul>
+        </div>
+    </div>
     <div class="showMore">
-        <p class="clearfix">
-            <span class="f12 lf">募集规模88,888.88万元</span>
-            <span class="f12 rg">历史兑付率100%</span>
-        </p>
         <div class="clearfix">
             <a class="f13 lf">
                 <img src="images/icon_01.png" alt="">
@@ -224,13 +232,6 @@
     </ul>
 </div>
 
-    <div class="total">
-        <ul class="f14 clearfix">
-            <li class="lf">累计兑付<span>3333,333.33</span>万元</li>
-            <li class="rg">带来<span>33,333.33</span>万元收益</li>
-        </ul>
-    </div>
-
 <div class="address">
     <a class="f14" href="tel:400-101-5151"><img data-original="images/phone.png" alt="">400-101-5151</a>
     <p class="f14">温州市鹿城区飞霞南路657号保丰大楼四层</p>
@@ -264,12 +265,12 @@
         $("img").lazyload({
             threshold : 200
         });
-        document.body.addEventListener('touchmove',eventTarget,false);
-        $('.mask,.pop img:eq(0)').on('click',function(){
-            $('.mask').hide();
-            $('.pop').hide();
-            document.body.removeEventListener('touchmove',eventTarget,false);
-        })
+//        document.body.addEventListener('touchmove',eventTarget,false);
+//        $('.mask,.pop img:eq(0)').on('click',function(){
+//            $('.mask').hide();
+//            $('.pop').hide();
+//            document.body.removeEventListener('touchmove',eventTarget,false);
+//        })
         var host = location.host;
         if(host.split('.')[0] === 'app') {
             $('footer').css({'margin-bottom':0});
@@ -282,7 +283,7 @@
         autoplay : 4000,
         autoplayDisableOnInteraction:false,
         loop:true,
-        pagination : '.swiper-pagination',
+        pagination : '.swiper-pagination'
     });
 </script>
 </div>
