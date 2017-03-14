@@ -27,4 +27,20 @@ class P1703Controller extends Controller
             'share' => $share,
         ]);
     }
+
+    /**
+     * 315活动.
+     */
+    public function actionP315($wx_share_key = null)
+    {
+        $share = null;
+
+        if (!empty($wx_share_key)) {
+            $share = Share::findOne(['shareKey' => $wx_share_key]);
+        }
+
+        return $this->render('p315', [
+            'share' => $share,
+        ]);
+    }
 }
