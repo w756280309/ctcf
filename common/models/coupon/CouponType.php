@@ -25,6 +25,7 @@ use yii\behaviors\TimestampBehavior;
  * @property boolean      $isAppOnly      只能在APP中使用
  * @property null|boolean $allowCollect   是否允许用户领取（false不允许true为允许）
  * @property boolean      $isAudited      是否审核(默认false未审核true已审核)
+ * @property integer      $loanExpires    项目满X天及以上可用
  */
 class CouponType extends \yii\db\ActiveRecord
 {
@@ -37,7 +38,7 @@ class CouponType extends \yii\db\ActiveRecord
             [['name', 'amount', 'minInvest', 'issueStartDate', 'issueEndDate'], 'required'],
             [['amount', 'minInvest'], 'number'],
             [['useStartDate', 'useEndDate', 'issueStartDate', 'issueEndDate'], 'safe'],
-            [['isDisabled', 'created_at', 'updated_at', 'expiresInDays', 'customerType', 'allowCollect', 'isAppOnly'], 'integer'],
+            [['isDisabled', 'created_at', 'updated_at', 'expiresInDays', 'customerType', 'allowCollect', 'isAppOnly', 'loanExpires'], 'integer'],
             [['name'], 'string', 'max' => 255],
             [['loanCategories'], 'string', 'max' => 30],
             [['sn'], 'unique']
@@ -78,6 +79,7 @@ class CouponType extends \yii\db\ActiveRecord
             'isAppOnly' => '只能在APP中使用',
             'allowCollect' => '是否允许用户领取',
             'isAudited' => '是否审核',
+            'loanExpires' => '项目期限',
         ];
     }
 

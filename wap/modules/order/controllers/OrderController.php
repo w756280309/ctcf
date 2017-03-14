@@ -45,7 +45,7 @@ class OrderController extends BaseController
         $coupons = [];
 
         if ($deal->allowUseCoupon) {
-            $coupons = $this->userCoupon($user);
+            $coupons = UserCoupon::fetchValid($user, null, $deal);
         }
 
         $session = Yii::$app->session->get('loan_'.$deal->sn.'_coupon');
@@ -60,21 +60,6 @@ class OrderController extends BaseController
             'userCouponId' => $request['userCouponId'],
             'money' => $request['money'],
         ]);
-    }
-
-    /**
-     * 获取用户可用的代金券.
-     */
-    private function userCoupon($user)
-    {
-        return UserCoupon::validList($user)
-            ->indexBy('id')
-            ->orderBy([
-                'expiryDate' => SORT_ASC,
-                'amount' => SORT_DESC,
-                'minInvest' => SORT_ASC,
-                'id' => SORT_DESC,
-            ])->all();
     }
 
     /**
@@ -105,7 +90,7 @@ class OrderController extends BaseController
         }
 
         if ($deal->allowUseCoupon) {
-            $validCoupons = $this->userCoupon($user);
+            $validCoupons = UserCoupon::fetchValid($user, null, $deal);
 
             if (!empty($validCoupons) && '1' !== $couponConfirm) {
                 return ['code' => 1, 'message' => '', 'confirm' => 1];

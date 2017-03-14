@@ -8,6 +8,7 @@ use common\models\coupon\UserCoupon;
 use common\models\product\OnlineProduct;
 use common\utils\StringUtils;
 use Yii;
+use yii\data\ArrayDataProvider;
 use yii\data\Pagination;
 
 class CouponController extends BaseController
@@ -55,19 +56,31 @@ class CouponController extends BaseController
     public function actionValid($page = 1, $size = 10)
     {
         $request = $this->validateParams(Yii::$app->request->get());
-        $query = $this->validCoupon($this->getAuthedUser());
+        $loan = $this->findOr404(OnlineProduct::class, ['sn' => $request['sn']]);
 
-        $pg = Yii::$container->get('paginator')->paginate($query, $page, $size);
-        $coupons = $query
-            ->offset($pg->offset)
-            ->limit($pg->limit)
-            ->all();
+        $validCoupons = UserCoupon::fetchValid($this->getAuthedUser(), null, $loan);
 
-        $tp = $pg->getPageCount();
+        $dataProvider = new ArrayDataProvider([
+            'allModels' => $validCoupons,
+            'pagination' => [
+                'pageSize' => $size,
+            ],
+        ]);
+
+        $pages = new Pagination(['totalCount' => $dataProvider->totalCount, 'pageSize' => $size]);
+        $coupons = $dataProvider->models;
+
+        $tp = $pages->pageCount;
         $code = ($page > $tp) ? 1 : 0;
         $message = ($page > $tp) ? '数据错误' : '消息返回';
 
-        $header = ['header' => $pg->jsonSerialize()];
+        $header = [
+            'count' => $pages->totalCount,
+            'size' => $pages->pageSize,
+            'tp' => $tp,
+            'cp' => $pages->page + 1,
+        ];
+
         $backArr = [
             'coupons' => $coupons,
             'sn' => $request['sn'],
@@ -79,14 +92,14 @@ class CouponController extends BaseController
             $html = $this->render('_valid_list', $backArr);
 
             return [
-                'header' => $pg->jsonSerialize(),
+                'header' => $header,
                 'html' => $html,
                 'code' => $code,
                 'message' => $message,
             ];
         }
 
-        return $this->render('valid_list', array_merge($backArr, $header));
+        return $this->render('valid_list', array_merge($backArr, ['header' => $header]));
     }
 
     /**
@@ -94,10 +107,13 @@ class CouponController extends BaseController
      */
     public function actionValidForLoan()
     {
+        $coupon = null;
         $request = $this->validateParams(Yii::$app->request->get());
+        $loan = $this->findOr404(OnlineProduct::class, ['sn' => $request['sn']]);
 
-        $coupon = $this->validCoupon($this->getAuthedUser(), $request['money'])->one();
-        if ($coupon) {
+        $coupons = UserCoupon::fetchValid($this->getAuthedUser(), $request['money'], $loan);
+        if ($coupons) {
+            $coupon = reset($coupons);
             $this->actionAddCouponSession($request['sn'], $coupon->id);
         }
 
@@ -139,24 +155,6 @@ class CouponController extends BaseController
         return OnlineProduct::findOne(['sn' => $sn]);
     }
 
-    /**
-     * 查询可用代金券.
-     *
-     * 1. 排序规则为到期时间的升序,金额的降序,起投金额的升序,ID的降序;
-     */
-    private function validCoupon($user, $money = null)
-    {
-        $uc = UserCoupon::tableName();
-
-        return UserCoupon::validList($user, $money)
-            ->orderBy([
-                'expiryDate' => SORT_ASC,
-                'amount' => SORT_DESC,
-                'minInvest' => SORT_ASC,
-                "$uc.id" => SORT_DESC,
-            ]);
-    }
-
     private function validateParams($get)
     {
         $request = array_replace([
@@ -171,8 +169,6 @@ class CouponController extends BaseController
         if (empty($request['money']) || !preg_match('/^[0-9|.]+$/', $request['money'])) {
             $request['money'] = null;
         }
-
-        $this->findOr404(OnlineProduct::class, ['sn' => $request['sn']]);
 
         return $request;
     }

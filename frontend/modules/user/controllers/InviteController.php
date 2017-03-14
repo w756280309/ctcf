@@ -4,7 +4,6 @@ namespace frontend\modules\user\controllers;
 
 use common\models\promo\InviteRecord;
 use common\models\user\MoneyRecord;
-use common\utils\TxUtils;
 use frontend\controllers\BaseController;
 use wap\modules\promotion\models\RankingPromo;
 use Yii;

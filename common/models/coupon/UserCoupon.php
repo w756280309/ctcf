@@ -94,12 +94,13 @@ class UserCoupon extends ActiveRecord
     /**
      * 可用代金券列表.
      *
-     * @param User $user               用户对象
-     * @param string|float|int $money  金额
+     * @param User       $user    用户对象
+     * @param string|int $money   金额
+     * @param Loan       $loan    标的对象
      *
-     * @return UserCoupon
+     * @return array|UserCoupon[]
      */
-    public static function validList(User $user, $money = null)
+    public static function fetchValid(User $user, $money = null, Loan $loan = null)
     {
         $query = self::find()
             ->innerJoinWith('couponType')
@@ -118,7 +119,18 @@ class UserCoupon extends ActiveRecord
             $query->andWhere(['isAppOnly' => false]);
         }
 
-        return $query;
+        if ($loan) {
+            $query->andWhere("loanExpires is null or loanExpires <= ".$loan->getSpanDays());
+        }
+
+        return $query
+            ->indexBy('id')
+            ->orderBy([
+                'expiryDate' => SORT_ASC,
+                'amount' => SORT_DESC,
+                'minInvest' => SORT_ASC,
+                'id' => SORT_DESC,
+            ])->all();
     }
 
     /**
@@ -139,8 +151,14 @@ class UserCoupon extends ActiveRecord
             throw new \Exception('该代金券只能在APP中使用');
         }
 
-        if (null !== $loan && !$loan->allowUseCoupon) {
-            throw new Exception('该项目不允许使用代金券');
+        if ($loan) {
+            if (!$loan->allowUseCoupon) {
+                throw new Exception('该项目不允许使用代金券');
+            }
+
+            if ($coupon->couponType->loanExpires && $coupon->couponType->loanExpires > $loan->getSpanDays()) {
+                throw new Exception('该项目不允许使用此代金券');
+            }
         }
 
         if ($coupon->isUsed) {

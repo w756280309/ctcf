@@ -93,6 +93,15 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => YiiAsse
             </div>
 
             <div class="control-group">
+                <label class="control-label">项目期限<br>（项目满X天及以上可用）</label>
+                <div class="controls">
+                    <?=
+                        $form->field($model, 'loanExpires', ['template' => '<div class="input-append">{input}<span class="add-on">天</span></div>{error}', 'inputOptions' => ['autocomplete' => 'off', 'placeholder' => '项目期限']])->textInput(['class' => 'm-wrap span12'])
+                    ?>
+                </div>
+            </div>
+
+            <div class="control-group">
                 <label class="control-label">发放时间</label>
                 <div class="controls">
                     <?=

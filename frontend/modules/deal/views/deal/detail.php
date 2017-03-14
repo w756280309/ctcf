@@ -8,12 +8,12 @@ use yii\helpers\HtmlPurifier;
 
 $this->title = '项目详情';
 
-$this->registerJsFile(ASSETS_BASE_URI . 'js/detail.js?v=161227');
-$this->registerCssFile(ASSETS_BASE_URI . 'css/deal/buy.css');
-$this->registerCssFile(ASSETS_BASE_URI . 'css/deal/deallist.css?v=161124');
-$this->registerCssFile(ASSETS_BASE_URI . 'css/deal/detail.css?v=170120');
-$this->registerCssFile(ASSETS_BASE_URI . 'css/pagination.css');
-$this->registerCssFile(ASSETS_BASE_URI . 'css/useraccount/chargedeposit.css');
+$this->registerJsFile(ASSETS_BASE_URI.'js/detail.js?v=161227');
+$this->registerCssFile(ASSETS_BASE_URI.'css/deal/buy.css');
+$this->registerCssFile(ASSETS_BASE_URI.'css/deal/deallist.css?v=161124');
+$this->registerCssFile(ASSETS_BASE_URI.'css/deal/detail.css?v=170313');
+$this->registerCssFile(ASSETS_BASE_URI.'css/pagination.css');
+$this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/chargedeposit.css');
 
 ?>
 
@@ -209,7 +209,9 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/useraccount/chargedeposit.css');
                                                         <div><?= $coupon->couponType->name ?></div>
                                                         <p>单笔投资满<?= StringUtils::amountFormat1('{amount}{unit}', $coupon->couponType->minInvest) ?>可用</p>
                                                         <p class="coupon_name" style="display: none"> 单笔投资满<?= StringUtils::amountFormat1('{amount}{unit}', $coupon->couponType->minInvest) ?>可抵扣<?= $coupon->couponType->amount ?>元</p>
-                                                        <p>新手标、转让不可用</p>
+                                                        <p>
+                                                            <?= $coupon->couponType->loanExpires ? '期限满'.$coupon->couponType->loanExpires.'天可用(除转让)' : '新手标、转让不可用' ?>
+                                                        </p>
                                                         <p>有效期至<?= $coupon->expiryDate ?></p>
                                                     </div>
                                                 </div>

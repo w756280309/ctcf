@@ -46,7 +46,7 @@ class DealController extends BaseController
         $formConfirm = 0;
 
         if ($deal->allowUseCoupon && $user) {
-            $coupons = $this->userCoupon($user);
+            $coupons = UserCoupon::fetchValid($user, null, $deal);
         }
 
         //获取session中购买数据
@@ -94,7 +94,7 @@ class DealController extends BaseController
         $deal = $this->findOr404(OnlineProduct::class, ['sn' => $request['sn']]);
 
         if ($deal->allowUseCoupon) {
-            $coupons = $this->userCoupon($this->getAuthedUser(), $request['money']);
+            $coupons = UserCoupon::fetchValid($this->getAuthedUser(), $request['money'], $deal);
 
             if (empty($coupons)) {
                 $backArr = [
@@ -170,7 +170,7 @@ class DealController extends BaseController
         }
 
         if ($deal->allowUseCoupon) {
-            $validCoupons = $this->userCoupon($user);
+            $validCoupons = UserCoupon::fetchValid($user, null, $deal);
 
             if (!empty($validCoupons) && '1' !== $couponConfirm) {
                 return ['code' => 1, 'message' => '', 'confirm' => 1];
@@ -245,21 +245,5 @@ class DealController extends BaseController
             return ['res' => false, 'rate' => false];
         }
         return ['res' => false, 'rate' => false];
-    }
-
-    /**
-     * 获取用户可用的代金券.
-     */
-    private function userCoupon($user, $money = null)
-    {
-
-        return UserCoupon::validList($user, $money)
-            ->indexBy('id')
-            ->orderBy([
-                'expiryDate' => SORT_ASC,
-                'amount' => SORT_DESC,
-                'minInvest' => SORT_ASC,
-                'id' => SORT_DESC,
-            ])->all();
     }
 }

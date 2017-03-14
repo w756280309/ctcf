@@ -21,7 +21,9 @@ use common\utils\StringUtils;
                     </div>
                     <div class="d_height"></div>
                     <div class="c_height">
-                        <p  class="condition1">新手标、转让不可用</p>
+                        <p  class="condition1">
+                            <?= $coupon->couponType->loanExpires ? '期限满'.$coupon->couponType->loanExpires.'天可用(除转让)' : '新手标、转让不可用' ?>
+                        </p>
                     </div>
                 </div>
             </div>
