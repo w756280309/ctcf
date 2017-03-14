@@ -99,6 +99,7 @@ class OnlineFangkuan extends ActiveRecord implements LoanFkInterface
     {
         return $this->sn;
     }
+
     public function getTxDate()
     {
         return time();
@@ -108,6 +109,7 @@ class OnlineFangkuan extends ActiveRecord implements LoanFkInterface
     {
         return $this->online_product_id;
     }
+
     public function getAmount()
     {
         return $this->order_money;

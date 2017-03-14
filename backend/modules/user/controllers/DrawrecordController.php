@@ -3,40 +3,36 @@
 namespace backend\modules\user\controllers;
 
 use backend\controllers\BaseController;
-use common\lib\bchelp\BcRound;
+use common\models\order\OnlineFangkuan;
+use common\models\product\OnlineProduct;
 use common\models\user\DrawRecord;
 use common\models\user\User;
-use common\models\bank\Bank;
 use Yii;
 use yii\data\Pagination;
+use yii\helpers\ArrayHelper;
 
 class DrawrecordController extends BaseController
 {
     /**
-     * 提现流水明细
+     * 融资方提现流水明细.
      */
-    public function actionDetail($id, $type)
+    public function actionDetail($id)
     {
-        if (empty($id) || !in_array($type, [1, 2])) {
+        if (empty($id)) {
             throw $this->ex404();     //参数无效,抛出404异常
         }
 
         $user = $this->findOr404(User::class, $id);
-        $type = intval($type);
+        $isOrg = $user->isOrgUser();
 
         //提现明细页面的搜索功能
         $status = intval(Yii::$app->request->get('status'));
         $time = Yii::$app->request->get('time');
 
-        $b = Bank::tableName();
-        $d = DrawRecord::tableName();
-
         $query = DrawRecord::find()
-            ->leftJoin($b, "$d.bank_id = $b.id")
-            ->select("$d.*, $b.bankName")
             ->where(['uid' => $id]);
 
-        if ($type === User::USER_TYPE_PERSONAL && $status > 0) {
+        if (!$isOrg && $status > 0) {
             $query->andWhere(['status' => $status - 1]);
         }
 
@@ -47,29 +43,49 @@ class DrawrecordController extends BaseController
 
         //正常显示详情页
         $pages = new Pagination(['totalCount' => $query->count(), 'pageSize' => '10']);
-        $model = $query->offset($pages->offset)->limit($pages->limit)->orderBy('id desc')->asArray()->all();
+        $model = $query
+            ->offset($pages->offset)
+            ->limit($pages->limit)
+            ->orderBy(['id' => SORT_DESC])
+            ->all();
+
+        $fangkuan = null;
+
+        if ($isOrg) {
+            $l = OnlineProduct::tableName();
+            $f = OnlineFangkuan::tableName();
+
+            $fangkuan = OnlineFangkuan::find()
+                ->leftJoin($l, "$f.online_product_id = $l.id")
+                ->where(["$f.sn" => ArrayHelper::getColumn($model, 'orderSn')])
+                ->indexBy('sn')
+                ->select("$l.title, $f.*")
+                ->asArray()
+                ->all();
+        }
 
         $moneyTotal = 0;  //提现总额
         $successNum = 0;  //成功笔数
         $failureNum = 0;  //失败笔数
-        $numdata = DrawRecord::find()->where(['uid' => $id])->select('money,status')->asArray()->all();
-        $bc = new BcRound();
-        bcscale(14);
+
+        $numdata = DrawRecord::find()
+            ->where(['uid' => $id])
+            ->all();
+
         foreach ($numdata as $data) {
-            if ($data['status'] == DrawRecord::STATUS_SUCCESS) {
-                $moneyTotal = bcadd($moneyTotal, $data['money']);
+            if (DrawRecord::STATUS_SUCCESS === $data->status) {
+                $moneyTotal = bcadd($moneyTotal, $data->money, 2);
                 ++$successNum;
-            } elseif ($data['status'] == DrawRecord::STATUS_FAIL) {
+            } elseif (DrawRecord::STATUS_FAIL === $data->status) {
                 ++$failureNum;
             }
         }
-        $moneyTotal = $bc->bcround($moneyTotal, 2);
 
         return $this->render('list', [
-            'type' => $type,
             'status' => $status,
             'time' => $time,
             'model' => $model,
+            'fangkuan' => $fangkuan,
             'pages' => $pages,
             'user' => $user,
             'moneyTotal' => $moneyTotal,

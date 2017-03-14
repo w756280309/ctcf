@@ -10,51 +10,53 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => YiiAsse
 
 $drawStatus = Yii::$app->params['draw_status'];
 $time = Html::encode($time);
-?>
-<?php $this->beginBlock('blockmain'); ?>
+$isOrg = $user->isOrgUser();
 
+?>
+
+<?php $this->beginBlock('blockmain'); ?>
 <div class="container-fluid">
     <!-- BEGIN PAGE HEADER-->
     <div class="row-fluid">
         <div class="span12">
             <h3 class="page-title">
-                        会员管理 <small>会员提现管理模块【主要包含投资会员的提现明细管理】</small>
+                会员管理 <small>会员提现管理模块【主要包含投资会员的提现明细管理】</small>
             </h3>
             <ul class="breadcrumb">
+                <li>
+                    <i class="icon-home"></i>
+                    <a href="/user/user/<?= $isOrg ? 'listr' : 'listt' ?>">会员管理</a>
+                    <i class="icon-angle-right"></i>
+                </li>
+                 <?php if (!$isOrg) { ?>
                     <li>
-                        <i class="icon-home"></i>
-                        <a href="/user/user/<?= $type === User::USER_TYPE_ORG ? 'listr' : 'listt' ?>">会员管理</a>
+                        <a href="/user/user/listt">投资会员</a>
                         <i class="icon-angle-right"></i>
                     </li>
-                     <?php if($type === User::USER_TYPE_PERSONAL) { ?>
+                <?php } else { ?>
                     <li>
-                            <a href="/user/user/listt">投资会员</a>
-                            <i class="icon-angle-right"></i>
-                        </li>
-                    <?php }else{?>
-                        <li>
-                            <a href="/user/user/listr">融资会员</a>
-                            <i class="icon-angle-right"></i>
-                        </li>
-                    <?php }?>
-                    <li>
-                        <a href="/user/user/<?= $type === 2 ? 'listr' : 'listt' ?>">会员列表</a>
+                        <a href="/user/user/listr">融资会员</a>
                         <i class="icon-angle-right"></i>
                     </li>
-                    <li>
-                        <a href="/user/user/detail?id=<?= $user->id ?>&type=<?= $type ?>">会员详情</a>
-                        <i class="icon-angle-right"></i>
-                    </li>
-                    <li>
-                        <a href="javascript:void(0);">提现流水明细</a>
-                    </li>
+                <?php } ?>
+                <li>
+                    <a href="/user/user/<?= $isOrg ? 'listr' : 'listt' ?>">会员列表</a>
+                    <i class="icon-angle-right"></i>
+                </li>
+                <li>
+                    <a href="/user/user/detail?id=<?= $user->id ?>">会员详情</a>
+                    <i class="icon-angle-right"></i>
+                </li>
+                <li>
+                    <a href="javascript:void(0);">提现流水明细</a>
+                </li>
             </ul>
         </div>
 
          <div class="portlet-body">
             <table class="table">
                 <tr>
-                    <?php if($type === User::USER_TYPE_PERSONAL) { ?>
+                    <?php if(!$isOrg) { ?>
                         <td>
                             <span class="title">用户名：<?= $user->real_name ?></span>
                         </td>
@@ -85,8 +87,7 @@ $time = Html::encode($time);
                     <tbody>
                         <tr>
                         <input type="hidden" name="id" value="<?= $user->id ?>">
-                        <input type="hidden" name="type" value="<?= $type ?>">
-                        <?php if($type == User::USER_TYPE_PERSONAL){?>
+                        <?php if (!$isOrg) { ?>
                             <td>
                                 <span class="title" >状态</span>
                             </td>
@@ -98,7 +99,7 @@ $time = Html::encode($time);
                                     <?php endforeach; ?>
                                 </select>
                             </td>
-                            <?php }?>
+                        <?php } ?>
                             <td><span class="title">提现时间</span></td>
                             <td>
                                 <input type="text" value="<?= $time ?>" name="time" onclick='WdatePicker({dateFmt: "yyyy-MM-dd", maxDate: "<?=  date('Y-m-d') ?>"});'>
@@ -120,6 +121,9 @@ $time = Html::encode($time);
                 <thead>
                     <tr>
                         <th>流水号</th>
+                        <?php if ($isOrg) { ?>
+                            <th>所属项目名称</th>
+                        <?php } ?>
                         <th>提现金额（元）</th>
                         <th>银行</th>
                         <th>提现时间</th>
@@ -130,12 +134,22 @@ $time = Html::encode($time);
                 <tbody>
                 <?php foreach ($model as $key => $val) : ?>
                     <tr>
-                        <td><?= $val['sn'] ?></td>
-                        <td><?= StringUtils::amountFormat2($val['money']) ?></td>
-                        <td><?= $val['bankName'] ?></td>
-                        <td><?= date('Y-m-d H:i:s',$val['created_at'])?></td>
-                        <td><?= $drawStatus[$val['status']] ?></td>
-                        <td><button class="btn btn-primary get_order_status" drawid="<?= $val['id'] ?>">查询流水在联动状态</button></td>
+                        <td><?= $val->sn ?></td>
+                        <?php if ($isOrg) { ?>
+                            <td>
+                                <?php if (isset($fangkuan[$val->orderSn])) { ?>
+                                    <a href="/product/productonline/list?name=<?= $fangkuan[$val->orderSn]['title'] ?>&isTest=0">
+                                    <?= $fangkuan[$val->orderSn]['title'] ?>
+                                <?php } else { ?>
+                                    ---
+                                <?php } ?>
+                            </td>
+                        <?php } ?>
+                        <td><?= StringUtils::amountFormat2($val->money) ?></td>
+                        <td><?= $val->bank_name ?></td>
+                        <td><?= date('Y-m-d H:i:s',$val->created_at)?></td>
+                        <td><?= $drawStatus[$val->status] ?></td>
+                        <td><button class="btn btn-primary get_order_status" drawid="<?= $val->id ?>">查询流水在联动状态</button></td>
                     </tr>
                     <?php endforeach; ?>
                 </tbody>
@@ -165,4 +179,3 @@ $time = Html::encode($time);
     })
 </script>
 <?php $this->endBlock(); ?>
-
