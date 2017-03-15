@@ -13,7 +13,9 @@ use common\models\offline\OfflinePointManager;
 use common\models\offline\OfflineUser;
 use common\filters\MyReadFilter;
 use common\models\offline\OfflineUserManager;
+use common\models\order\OnlineOrder;
 use Yii;
+use yii\data\ActiveDataProvider;
 use yii\data\Pagination;
 use PHPExcel_Reader_Excel2007;
 use PHPExcel_Reader_Excel5;
@@ -254,6 +256,43 @@ class OfflineController extends BaseController
         }
 
         return ['code' => 0, 'message' => '删除失败'];
+    }
+
+    /**
+     * 根据id/身份证号 编辑客户姓名/联系电话/开户行名称/银行卡号
+     */
+    public function actionEdit()
+    {
+        $request = Yii::$app->request->get();
+        $ol = OfflineLoan::tableName();
+        $o = OfflineOrder::tableName();
+        $order = OfflineOrder::find()->innerJoinWith('loan')->where(["$o.isDeleted" => false]);
+        if (isset($request['id'])) {
+            $order->andWhere(["$o.id" => $request['id']]);
+        }
+        $model = $order->one();
+        return $this->render('edit',[
+            'model' => $model,
+        ]);
+    }
+
+    /**
+     * 更新线下数据客户信息
+     */
+    public function actionUpdate()
+    {
+        if(!Yii::$app->request->isPost){
+            return $this->redirect(['list']);
+        }
+        $post = Yii::$app->request->post();
+        $order = $this->findOr404(OfflineOrder::class, $post['OfflineOrder']['id']);
+        if($order->load(Yii::$app->request->post()) && $order->validate()){
+            $sign = $order->save();
+            return $this->redirect(['list']);
+        } else {
+            return $this->redirect(['edit','id'=>$post['OfflineOrder']['id']]);
+        }
+
     }
 
     /**

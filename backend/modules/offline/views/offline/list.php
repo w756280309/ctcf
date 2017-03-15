@@ -147,10 +147,12 @@ $bid = (int)Yii::$app->request->get('bid');
                                 </a>
                                 <br />
                             <?php } ?>
+                            <a href="/offline/offline/edit?id=<?= $order->id ?>" class="btn mini green ajax_op">
+                                <i class="icon-edit"></i>编辑
+                            </a>
                             <a href="javascript:del('/offline/offline/delete','<?= $order->id ?>')" class="btn mini red ajax_op">
                                 <i class="icon-minus-sign"></i>删除
                             </a>
-
                         </td>
                     </tr>
                 <?php endforeach; ?>
