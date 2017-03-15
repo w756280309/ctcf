@@ -16,6 +16,7 @@ class CardController extends Controller
     private $affiliatorName = '意克咖啡'; //合作商名称
     private $trackCode = 'yikecoffee'; //渠道码
     private $noSecert = true; //是否生成密码开关
+    private $isO2O = true;
 
     /**
      * 添加合作商及合作商渠道
@@ -37,6 +38,9 @@ class CardController extends Controller
         try{
             $affiliator = new Affiliator();
             $affiliator->name = $AffiliatorName;
+            if ($this->isO2O) {
+                $affiliator->isO2O = true;
+            }
             if($affiliator->save()) {
                 $campaign = new AffiliateCampaign();
                 $campaign->trackCode = null === $trackCode ? $this->trackCode : $trackCode;
@@ -83,6 +87,7 @@ class CardController extends Controller
             }
             $card->createTime = date('Y-m-d H:i:s');
             $card->goodsType_id = $goods->id;
+            $card->affiliator_id = $goods->affiliator_id;
             $card->save();
         }
         $finialNum = VirtualCard::find()->count();

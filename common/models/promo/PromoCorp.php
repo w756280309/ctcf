@@ -49,8 +49,13 @@ class PromoCorp
                 $isSend = $this->sendSms($user, $card);
                 if ($isSend) {
                     //发送短信成功，更新virtual_card的相关字段
-                    $card->isPull = true;
+                    $goods = $card->goods;
                     $card->pullTime = date('Y-m-d H:i:s');
+                    if (null !== $goods->effectDays) {
+                        $card->expiredTime = date('Y-m-d', strtotime('+30 days')) . ' 23:59:59';
+                    }
+                    $card->affiliator_id = $goods->affiliator_id;
+                    $card->isPull = true;
                     $card->user_id = $user->id;
                     $card->save();
                 }
@@ -150,8 +155,9 @@ class PromoCorp
         if (null !== $card->secret) {
             $cardInfo .= "密码{$card->secret}，";
         }
-        if ('yikecoffee' === $user->campaign_source) {
-            $cardInfo .= '有效期30天';
+        $effectDays = $card->goods->effectDays;
+        if (null !== $effectDays) {
+            $cardInfo .= "有效期{$effectDays}天";
         }
 
         $message = [

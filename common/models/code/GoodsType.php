@@ -13,7 +13,7 @@ class GoodsType extends ActiveRecord
             ['name', 'required'],
             ['name', 'string', 'max' => 15],
             ['sn', 'unique', 'message' => '此代金券已经被商品添加！'],
-            ['type', 'integer'],
+            [['type', 'effectDays', 'affiliator_id'], 'integer'],
             ['createdAt', 'safe'],
         ];
     }
@@ -26,6 +26,8 @@ class GoodsType extends ActiveRecord
             'sn' => '商品sn',
             'type' => '商品类型',
             'createdAt' => '创建时间',
+            'effectDays' => '有效期天数',
+            'affiliator_id' => '合作方ID',
         ];
     }
 
