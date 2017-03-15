@@ -52,7 +52,7 @@ class PromoCorp
                     $goods = $card->goods;
                     $card->pullTime = date('Y-m-d H:i:s');
                     if (null !== $goods->effectDays) {
-                        $card->expiredTime = date('Y-m-d', strtotime('+30 days')) . ' 23:59:59';
+                        $card->expiredTime = date('Y-m-d', strtotime('+'. $goods->effectDays .' days')) . ' 23:59:59';
                     }
                     $card->affiliator_id = $goods->affiliator_id;
                     $card->isPull = true;
