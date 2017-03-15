@@ -15,12 +15,14 @@ use common\models\payment\Repayment;
 use common\models\product\Issuer;
 use common\models\product\OnlineProduct;
 use common\models\promo\FirstOrderPoints;
+use common\models\promo\InviteRecord;
 use common\models\promo\LoanOrderPoints;
 use common\models\sms\SmsMessage;
 use common\models\sms\SmsTable;
 use common\models\user\User;
 use common\models\user\UserAccount;
 use common\models\user\UserInfo;
+use common\service\AccountService;
 use common\utils\SecurityUtils;
 use common\utils\StringUtils;
 use common\utils\TxUtils;
@@ -682,5 +684,35 @@ COUPON;
         echo '总共发放了APP投资红包'.$count.'张';
 
         return self::EXIT_CODE_NORMAL;
+    }
+
+    //给邀请者补发投资红包 php yii data/pay-cash
+    public function actionPayCash($orderId)
+    {
+        $order = OnlineOrder::findOne($orderId);
+        if (!is_null($order)) {
+            $inviteRecord = InviteRecord::findOne(['invitee_id' => $order->uid]);
+            if (!is_null($inviteRecord)) {
+                $count = OnlineOrder::find()->where(['uid' => $inviteRecord->user_id, 'status' => 1])->count();
+                $count = intval($count);
+                if ($count > 0) {
+                    $money = round($order->order_money / 1000, 1);
+                    echo '为ID为 '.$inviteRecord->user_id.' 的用户补发红包 '. $money . ' 元'. PHP_EOL;
+                    $res = $this->sendUserCash($inviteRecord->user_id, $money);
+                    var_dump($res);
+                }
+            }
+        }
+    }
+
+    //给用户发红包
+    private function sendUserCash($userId, $money)
+    {
+        $user = User::findOne($userId);
+        if (!is_null($user)) {
+            $money = max(floatval($money), 0.01);
+            return AccountService::userTransfer($user, $money);
+        }
+        return false;
     }
 }
