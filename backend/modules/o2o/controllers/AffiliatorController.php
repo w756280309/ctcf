@@ -23,16 +23,17 @@ class AffiliatorController extends BaseController
         if (!empty($name)) {
             $query->andWhere(['like', "$a.name", $name]);
         }
-        $affs = $query->groupBy("$a.id")
-            ->asArray()
-            ->all();
+        $query->groupBy("$a.id");
+        $cquery = clone $query;
+        $pages = new Pagination([
+            'totalCount' => $cquery->count(),
+            'pageSize' => 10,
+        ]);
+        $affs = $query->offset($pages->offset)->limit($pages->limit)->asArray()->all();
         $dataProvider = new ArrayDataProvider([
             'allModels' => $affs,
         ]);
-        $pages = new Pagination([
-            'totalCount' => count($affs),
-            'pageSize' => 10,
-        ]);
+
         return $this->render('list', [
             'dataProvider' => $dataProvider,
             'pages' => $pages,

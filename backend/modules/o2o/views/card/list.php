@@ -102,8 +102,9 @@ use common\utils\SecurityUtils;
                             ],
                             [
                                 'header' => '客户手机号',
+                                'format' => 'html',
                                 'value' => function ($model) {
-                                    return isset($model->user_id) ? SecurityUtils::decrypt($model->user->safeMobile) : '--';
+                                    return isset($model->user_id) ? '<a href="/user/user/detail?id=' . $model->user->id . '">' . SecurityUtils::decrypt($model->user->safeMobile) . '</a>' : '--';
                                 },
                             ],
                             [

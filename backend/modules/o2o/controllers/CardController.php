@@ -32,6 +32,7 @@ class CardController extends BaseController
             ->joinWith('user')
             ->select('*')
             ->addSelect('expiredTime > CURTIME() as isExpired')
+            ->addSelect('(isPull = 1 and (expiredTime = null or expiredTime <= CURTIME())) as isSend')
             ->where(["$g.type" => 3, "$v.affiliator_id" => $params['affId']]);
 
         if (isset($params['goodsType_name']) && !empty($params['goodsType_name'])) {
@@ -54,6 +55,7 @@ class CardController extends BaseController
                 case 1:
                     $query->andWhere(['isPull' => true, 'isUsed' => false]);
                     $query->andFilterWhere(['>', 'expiredTime', date('Y-m-d H:i:s')]);
+                    $query->orWhere(['isPull' => true, 'isUsed' => false, 'expiredTime' => null]);
                     break;
                 case 2:
                     $query->andWhere(['isUsed' => true]);
@@ -66,7 +68,8 @@ class CardController extends BaseController
         }
         $query->orderBy([
             'isPull' => SORT_ASC,
-            'isUsed' => SORT_ASC,
+            'isSend' => SORT_ASC,
+            'isUsed' => SORT_DESC,
             'isExpired' => SORT_DESC,
         ]);
 
