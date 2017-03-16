@@ -59,7 +59,7 @@ return [
             'identityClass' => 'common\\models\\user\\User',
         ],
         'urlManager' => [
-            'enableStrictParsing' => true,
+            'enableStrictParsing' => false,
             'rules' => [
                 'rest/recharges' => 'v1/rest/recharge/list',
                 'rest/loans' => 'v1/rest/loan/list',
@@ -93,9 +93,6 @@ return [
                 'app/share/template' => 'v1/app/share/template',
 
                 'promo/reward/cash' => 'v1/promo/reward/cash',
-
-                'notify/mall/init' => 'v1/notify/mall/init',//积分商场扣除积分接口
-                'notify/mall/result' => 'v1/notify/mall/result',//积分商城通知回调接口
 
                 'app/splashes' => 'v1/app/splash/show',//app闪屏页查询接口
 

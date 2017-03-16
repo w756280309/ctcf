@@ -16,6 +16,9 @@ foreach ($points as $point) {
     } elseif (PointRecord::TYPE_POINT_FA_FANG === $point['ref_type']) {
         $message = $point['remark'];
         $isIn = true;
+    } elseif(PointRecord::TYPE_MALL_INCREASE === $point['ref_type']) {
+        $message = $point['remark'];
+        $isIn = true;
     } else {
         $isIn = false;
         $message = '兑换商品';
