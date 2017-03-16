@@ -92,5 +92,8 @@ return [
         'growth' => [
             'class' => 'backend\modules\growth\Module',
         ],
+        'o2o' => [
+            'class' => 'backend\modules\o2o\Module',
+        ],
     ],
 ];

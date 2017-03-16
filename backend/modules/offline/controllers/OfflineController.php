@@ -137,7 +137,7 @@ class OfflineController extends BaseController
      */
     private function readExcelToArray($filePath)
     {
-        $filterSubset = new MyReadFilter();
+        $filterSubset = new MyReadFilter(range('A', 'K'));
         $PHPReader = new \PHPExcel_Reader_Excel2007(); // Reader很关键，用来读excel文件
         if (!$PHPReader->canRead($filePath)) { // 这里是用Reader尝试去读文件，07不行用05，05不行就报错。
             $PHPReader = new \PHPExcel_Reader_Excel5();

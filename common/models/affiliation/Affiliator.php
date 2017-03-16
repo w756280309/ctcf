@@ -2,6 +2,7 @@
 
 namespace common\models\affiliation;
 
+use common\models\code\GoodsType;
 use yii\db\ActiveRecord;
 
 /**
@@ -11,4 +12,8 @@ use yii\db\ActiveRecord;
  */
 class Affiliator extends ActiveRecord
 {
+    public function getGoods()
+    {
+        return $this->hasMany(GoodsType::className(), ['affiliator_id' => 'id']);
+    }
 }

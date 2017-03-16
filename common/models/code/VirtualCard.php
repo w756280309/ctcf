@@ -1,6 +1,7 @@
 <?php
 namespace common\models\code;
 
+use common\models\user\User;
 use yii\db\ActiveRecord;
 
 class VirtualCard extends ActiveRecord
@@ -8,10 +9,12 @@ class VirtualCard extends ActiveRecord
     public function rules()
     {
         return [
-            [['serial', 'goodsType_id'], 'required'],
-            [['serial', 'secret'], 'unique'],
-            [['isPull', 'isUsed', 'user_id', 'affiliator_id'], 'integer'],
-            [['pullTime', 'usedTime', 'createTime', 'expiredTime'], 'safe'],
+            ['serial', 'required', 'message' => '请填写兑换码'],
+            ['goodsType_id', 'required'],
+            [['serial', 'secret'], 'match', 'pattern' => '/^([0-9a-z]+)*$/i', 'message' => '{attribute}必须是字母与数字的组合'],
+            [['serial', 'secret'], 'unique', 'message' => '兑换码及密码应唯一'],
+            [['isPull', 'isUsed', 'user_id'], 'integer'],
+            [['pullTime', 'usedTime', 'createTime'], 'safe'],
         ];
     }
 
@@ -37,5 +40,37 @@ class VirtualCard extends ActiveRecord
     public function getGoods()
     {
         return $this->hasOne(GoodsType::className(), ['id' => 'goodsType_id']);
+    }
+
+    public function getUser()
+    {
+        return $this->hasOne(User::className(), ['id' => 'user_id']);
+    }
+
+    public function getStatusLabel()
+    {
+        $label = '--';
+        $goods = $this->goods;
+        $isExpired = false;
+        if ($this->isUsed) {
+            $label = '已使用';
+        } else {
+            if (null !== $this->expiredTime) {
+                if ($this->expiredTime < date('Y-m-d H:i:s')) {
+                    $isExpired = true;
+                }
+            }
+            if (!$this->isPull) {
+                $label = '未发放';
+            } else {
+                if ($isExpired) {
+                    $label = '已过期';
+                } else {
+                    $label = '已发放';
+                }
+            }
+        }
+
+        return $label;
     }
 }
