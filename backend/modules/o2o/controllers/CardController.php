@@ -49,18 +49,24 @@ class CardController extends BaseController
 
         if (isset($params['status']) && !empty($params['status'])) {
             switch ($params['status']) {
-                case 0:
+                case 1:
                     $query->andWhere(['isPull' => false]);
                     break;
-                case 1:
+                case 2:
                     $query->andWhere(['isPull' => true, 'isUsed' => false]);
                     $query->andFilterWhere(['>', 'expiredTime', date('Y-m-d H:i:s')]);
-                    $query->orWhere(['isPull' => true, 'isUsed' => false, 'expiredTime' => null]);
-                    break;
-                case 2:
-                    $query->andWhere(['isUsed' => true]);
+                    $query->orWhere([
+                        'isPull' => true,
+                        'isUsed' => false,
+                        'expiredTime' => null,
+                        "$g.type" => 3,
+                        "$v.affiliator_id" => $params['affId'],
+                    ]);
                     break;
                 case 3:
+                    $query->andWhere(['isUsed' => true]);
+                    break;
+                case 4:
                     $query->andWhere(['isPull' => true, 'isUsed' => false]);
                     $query->andFilterWhere(['<', 'expiredTime', date('Y-m-d H:i:s')]);
                     break;
@@ -71,6 +77,7 @@ class CardController extends BaseController
             'isSend' => SORT_ASC,
             'isUsed' => SORT_DESC,
             'isExpired' => SORT_DESC,
+            "$v.id" => SORT_DESC,
         ]);
 
         return $query;
@@ -82,6 +89,10 @@ class CardController extends BaseController
     public function actionList()
     {
         $search = \Yii::$app->request->get();
+        $affiliator = Affiliator::findOne($search['affId']);
+        if (null === $affiliator) {
+            throw $this->ex404('商家不存在');
+        }
         $query = $this->getCardListQuery($search);
 
         $dataProvider = new ActiveDataProvider([
@@ -90,7 +101,8 @@ class CardController extends BaseController
                 'pageSize' => 10,
             ]
         ]);
-        return $this->render('list', ['dataProvider' => $dataProvider, 'request' => $search]);
+
+        return $this->render('list', ['dataProvider' => $dataProvider, 'request' => $search, 'affiliatorName' => $affiliator->name]);
     }
 
     /**

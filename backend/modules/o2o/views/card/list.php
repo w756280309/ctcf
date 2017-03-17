@@ -52,32 +52,37 @@ use common\utils\SecurityUtils;
                             </td>
                             <td>
                                 <span class="title">状态</span>
+                                <?php
+                                $statusArr = [1 => '未发放', 2 => '已发放', 3 => '已使用', 4 => '已过期'];
+                                $requestStatus = (int) $request['status'];
+                                ?>
                                 <select name="status" class="m-wrap span8">
                                     <option value="">请选择</option>
-                                    <option value="0" <?php if ('0' === $request['status']) { ?> selected="selected"<?php } ?>>未发放</option>
-                                    <option value="1" <?php if ('1' === $request['status']) { ?> selected="selected"<?php } ?>>已发放</option>
-                                    <option value="2" <?php if ('2' === $request['status']) { ?> selected="selected"<?php } ?>>已使用</option>
-                                    <option value="3" <?php if ('3' === $request['status']) { ?> selected="selected"<?php } ?>>已过期</option>
+                                    <?php foreach ($statusArr as $status => $label) { ?>
+                                        <option value="<?= $status ?>" <?php if ($status === $requestStatus) { ?> selected="selected"<?php } ?>><?= $label ?></option>
+                                    <?php } ?>
                                 </select>
                             </td>
                         </tr>
                         <tr>
                             <td>
                                 <div align="left" class="search-btn">
-                                    <button type='submit' class="btn blue btn-block button-search">查询
-                                        <i class="m-icon-swapright m-icon-white"></i></button>
+                                    <a class="btn green btn-block" style="width: 140px;" href="/o2o/card/export?<?= http_build_query(Yii::$app->request->get())?>">导出筛选结果</a>
                                 </div>
                             </td>
                             <td colspan="3">
-                                <div align="right" class="search-btn">
-                                    <a class="btn green btn-block" style="width: 140px;" href="/o2o/card/export?<?= http_build_query(Yii::$app->request->get())?>">导出筛选结果</a>
+                                <div align="right">
+                                    <button type='submit' class="btn blue btn-block button-search">查询
+                                        <i class="m-icon-swapright m-icon-white"></i></button>
                                 </div>
                             </td>
                         </tr>
                     </table>
                 </form>
             </div>
-            <!--根据时间查询数据 end-->
+            <!-- 查询 end-->
+
+            <p style="font-size: 14px;">商家名称：<?= $affiliatorName ?></p>
 
             <!--数据项包含 用户名称、用户手机号、单张代金券使用金额、单张代金券使用时间-->
             <div class="portlet-body">
