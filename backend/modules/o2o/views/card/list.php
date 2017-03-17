@@ -27,7 +27,7 @@ use common\utils\SecurityUtils;
                         <i class="icon-angle-right"></i>
                     </li>
                     <li>
-                        <a href="/o2o/card/list?affId=<?= $request['id'] ?>">兑换码列表</a>
+                        <a href="/o2o/card/list?affId=<?= $request['affId'] ?>">兑换码列表</a>
                     </li>
                 </ul>
             </div>
