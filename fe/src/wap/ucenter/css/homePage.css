@@ -1,0 +1,220 @@
+body {
+  background-color: #f2f2f2;
+}
+.top_one {
+  width: 100%;
+  height: 4.50666667rem;
+  background: url("../images/bg_top2.png") no-repeat;
+  background-size: contain;
+}
+.top_one .award {
+  height: 0.64rem;
+  line-height: 0.64rem;
+  color: #fff;
+  text-align: center;
+  margin-bottom: 0.96rem;
+}
+.top_one .buttons {
+  padding: 0 0.84rem;
+}
+.top_one .buttons .button {
+  display: inline-block;
+  width: 3.36rem;
+  height: 0.84rem;
+  line-height: 0.84rem;
+  color: #fff;
+  border: 1px solid #fff;
+  border-radius: 8px;
+  text-align: center;
+}
+.top_one .user_imf {
+  padding-left: 0.48rem;
+  color: #fff;
+  height: 0.48rem;
+  line-height: 0.48rem;
+  margin-bottom: 1.12rem;
+}
+.top_one .user_imf .user_tel {
+  margin-right: 0.16rem;
+}
+.top_one .user_imf .user_level {
+  display: inline-block;
+  width: 0.8rem; /*45 */
+  height: 0.5rem; /*29*/
+  line-height: 0.38666667rem;
+  text-align: center;
+  padding-top: 4px;
+  margin-right: 0.16rem;
+  background: url("../images/bg_level.png") repeat-x;
+  background-size: cover;
+  color: #f25f57;
+  position: relative;
+  top:-2px;
+}
+.top_one .user_imf .user_level img {
+  width: 0.35rem;
+  height: 0.25rem;
+}
+.top_one .property {
+  text-align: center;
+}
+.top_one .property .number {
+  width: 50%;
+  line-height: 0.90666667rem;
+}
+.top_one .property .number .property_word {
+  height: 0.74666667rem;
+  line-height: 0.74666667rem;
+  color: #faa696;
+}
+.top_one .property .number .property_number {
+  height: 0.85333333rem;
+  line-height: 0.85333333rem;
+  color: #fff;
+  font-weight: 500;
+}
+.top_one .property li:first-child {
+  border-right: 1px solid #fcbaab;
+}
+.remain {
+  width: 100%;
+  height: 1.78666667rem;
+  line-height: 1.78666667rem;
+  padding: 0.4rem 0.4rem 0 0.50666667rem;
+  background-color: #fff;
+}
+.remain .lf .remain_num {
+  height: 0.64rem;
+  line-height: 0.64rem;
+  color: #ff0000;
+}
+.remain .lf .remain_word {
+  margin-top: 0.06666667rem;
+  height: 0.32rem;
+  line-height: 0.32rem;
+  color: #333;
+}
+.remain .rg .remain_button {
+  display: block;
+  width: 1.93333333rem;
+  height: 0.89333333rem;
+  line-height: 0.89333333rem;
+  text-align: center;
+  color: #fff;
+  background-color: #fd8a57;
+  border-radius: 0.13333333rem;
+  margin-left: 0.46666667rem;
+}
+.youihui {
+  width: 100%;
+  height: 2.57333333rem;
+  padding: 0.37333333rem 0.72rem;
+}
+.youihui .my_youhui {
+  position: relative;
+  display: inline-block;
+  width: 3.92rem;
+  height: 1.76rem;
+  line-height: 1.76rem;
+  border: 1px solid #f15f56;
+  border-radius: 10px;
+  background-color: #fff;
+}
+.youihui .my_youhui .line_one {
+  color: #f15f56;
+  height: 0.4rem;
+  line-height: 1.35rem;
+  margin-left: 1.05333333rem;
+}
+.youihui .my_youhui .line_two {
+  height: 0.32rem;
+  margin-left: 1.05333333rem;
+}
+.youihui .youhui1 {
+  padding-left: 0.17333333rem;
+}
+.youihui .youhui1 img {
+  position: absolute;
+  top: 0.44rem;
+  width: 0.8rem;
+  height: 0.98666667rem;
+}
+.youihui .youhui1 .youhui_content {
+  display: inline-block;
+  color: #858585;
+}
+.youihui .youhui2 {
+  padding-left: 0.4rem;
+}
+.youihui .youhui2 img {
+  position: absolute;
+  top: 0.48rem;
+  width: 0.81333333rem;
+  height: 0.84rem;
+}
+.youihui .youhui2 .youhui_content {
+  display: inline-block;
+  color: #858585;
+}
+.options {
+  padding: 0 0.4rem;
+  background-color: #fff;
+  border-bottom: 1px solid #dedede;
+}
+.options .ops {
+  width: 100%;
+  height: 1.22666667rem;
+  line-height: 1.22666667rem;
+  border-bottom: 1px solid #dedede;
+}
+.options .ops .lf {
+  height: 0.50666667rem;
+  line-height: 0.50666667rem;
+  padding-left: 0.69333333rem;
+  position: relative;
+  top: 0.33333333rem;
+  color: #333;
+  background: url("../images/shapes.png") no-repeat;
+  background-size: 0.4rem 2.53333333rem;
+}
+.options .ops .lf img {
+  vertical-align: middle;
+  margin-right: 0.29333333rem;
+}
+.options .ops .rg img {
+  vertical-align: middle;
+  margin-left: 0.133rem;
+}
+.out_ops {
+  width: 100%;
+  height: 1.22666667rem;
+  line-height: 1.22666667rem;
+  margin-top: 0.18666667rem;
+  padding: 0 0.4rem;
+  background-color: #fff;
+  border-bottom: 1px solid #dedede;
+}
+.out_ops .lf {
+  color: #333;
+  height: 0.50666667rem;
+  line-height: 0.50666667rem;
+  padding-left: 0.69333333rem;
+  position: relative;
+  top: 0.33333333rem;
+  background: url("../images/shapes.png") no-repeat;
+  background-size: 0.4rem 2.53333333rem;
+}
+.out_ops .lf img {
+  vertical-align: middle;
+  margin-right: 0.29333333rem;
+}
+.out_ops .rg img {
+  vertical-align: middle;
+}
+.customer_service {
+  color: #999;
+  text-align: center;
+}
+.customer_service:first-of-type {
+  margin-top: 0.64rem;
+}

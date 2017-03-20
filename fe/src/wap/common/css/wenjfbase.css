@@ -143,6 +143,15 @@
 [data-dpr="3"] .f25 {
     font-size: 75px;
 }
+.f27 {
+    font-size: 27px;
+}
+[data-dpr="2"] .f27 {
+    font-size: 54px;
+}
+[data-dpr="3"] .f27 {
+    font-size: 81px;
+}
 .f30 {
     font-size: 30px;
 }
@@ -214,6 +223,9 @@
     }
     .f24 {
         font-size: 48px;
+    }
+    .f27 {
+        font-size: 54px;
     }
     .f30 {
         font-size: 60px;

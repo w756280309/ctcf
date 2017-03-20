@@ -81,13 +81,19 @@ class UserController extends BaseController
      *
      * 1.一页显示5条记录;
      */
-    public function actionMyorder($type = 1, $page = 1)
+    public function actionMyorder($type = 1, $page = 1, $back_url = null)
     {
         $type = intval($type);
         $pageSize = 5;
 
         if (!in_array($type, [1, 2, 3])) {
             $type = 1;
+        }
+
+        if ($back_url && !filter_var($back_url, FILTER_VALIDATE_URL)) {
+            $backUrl = null;
+        } else {
+            $backUrl = Yii::$app->functions->dealurl($back_url);
         }
 
         $user = $this->getAuthedUser();
@@ -147,7 +153,12 @@ class UserController extends BaseController
             return ['header' => $header, 'html' => $html, 'code' => $code, 'message' => $message];
         }
 
-        return $this->render('order', ['model' => $model, 'type' => $type, 'pages' => $pages]);
+        return $this->render('order', [
+            'model' => $model,
+            'type' => $type,
+            'pages' => $pages,
+            'backUrl' => $backUrl,
+        ]);
     }
 
     /**
@@ -245,5 +256,75 @@ class UserController extends BaseController
         $data = BankService::check($this->getAuthedUser(), BankService::IDCARDRZ_VALIDATE_N | BankService::MIANMI_VALIDATE_Y);
 
         return $this->render('mianmi', $data);
+    }
+
+    /**
+     * 资产总览页面.
+     */
+    public function actionAssets()
+    {
+        $this->layout = '@app/views/layouts/fe';
+
+        return $this->render('assets', [
+            'user' => $this->getAuthedUser(),
+        ]);
+    }
+
+    /**
+     * 我的收益页面.
+     *
+     * 1. 每次输出最近的10条回款记录;
+     */
+    public function actionProfit($page = 1, $size = 10)
+    {
+        $this->layout = '@app/views/layouts/fe';
+        $p = Plan::tableName();
+
+        $query = Plan::find()
+            ->innerJoinWith('loan')
+            ->where(['uid' => $this->getAuthedUser()->id])
+            ->andWhere(["$p.status" => Plan::STATUS_YIHUAN]);
+
+        $pages = new Pagination(['totalCount' => $query->count(), 'pageSize' => $size]);
+        $profits = $query
+            ->offset($pages->offset)
+            ->limit($pages->limit)
+            ->orderBy([
+                'actualRefundTime' => SORT_DESC,
+                'refund_time' => SORT_DESC,
+            ])
+            ->all();
+
+        $tp = $pages->pageCount;
+        $code = ($page > $tp) ? 1 : 0;
+        $message = ($page > $tp) ? '数据错误' : '消息返回';
+
+        $header = [
+            'count' => $pages->totalCount,
+            'size' => $pages->pageSize,
+            'tp' => $tp,
+            'cp' => $pages->page + 1,
+        ];
+
+        $backArr = [
+            'profits' => $profits,
+        ];
+
+        if (Yii::$app->request->isAjax) {
+            $this->layout = false;
+            $html = $this->render('_profit', $backArr);
+
+            return [
+                'header' => $header,
+                'html' => $html,
+                'code' => $code,
+                'message' => $message,
+            ];
+        }
+
+        return $this->render('profit', array_merge($backArr, [
+            'header' => $header,
+            'user' => $this->getAuthedUser(),
+        ]));
     }
 }

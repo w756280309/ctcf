@@ -1,0 +1,137 @@
+<head>
+    <meta charset="UTF-8">
+    <title>账户中心首页</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0,minimum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="../common/css/wenjfbase.css">
+    <link rel="stylesheet" href="css/homePage.css">
+    <script src="../libs/fastclick.js"></script>
+    <script src="../libs/lib.flexible3.js"></script>
+    <script src="../libs/jquery-1.11.1.min.js"></script>
+</head>
+<body>
+<div class="top_one flex-content">
+    <!--未登录状态下的顶部-->
+    <div id="statu_one" style="padding-top: 1.173rem">
+        <p class="award f24">注册就送<span class="f27" style="font-weight: 500;">288元</span>专享红包</p>
+        <div class="buttons">
+            <a href="#" class="button f17 lf">注 册</a>
+            <a href="#" class="button f17 rg">登 录</a>
+        </div>
+    </div>
+    <!--登录状态下的顶部-->
+    <div id="statu_two" style="padding-top:0.373rem;display: none">
+        <p class="user_imf">
+            <span class="user_tel f18">133******45</span>
+            <span class="user_level">
+                <img src="images/shape_level3.png">
+            </span>
+            <span class="user_caifu f12">财富值：100</span>
+        </p>
+        <ul class="property clearfix">
+            <li class="number lf">
+                <a href="#">
+                    <p class="property_word f15">资产总额 (元)</p>
+                    <p class="property_number f24" id="zonge">100,000.00</p>
+                </a>
+            </li>
+            <li class="number lf">
+                <a href="#">
+                    <p class="property_word f15">累计收益 (元)</p>
+                    <p class="property_number f24" id="shouyi">100,000.00</p>
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
+<!--登录状态下显示-->
+<div class="remain flex-content" style="display: none">
+    <div class="lf">
+        <p class="remain_num f24" id="keyong">200.00</p>
+        <p class="remain_word f12">可用余额（元）</p>
+    </div>
+    <div class="rg f15">
+        <a href="#" class="remain_button rg">提现</a>
+        <a href="#" class="remain_button rg">充值</a>
+    </div>
+</div>
+<div class="youihui flex-content">
+    <a href="#" class="my_youhui lf youhui1">
+        <img src="images/coupon.png" alt="">
+        <div class="youhui_content f12">
+            <p class="line_one f24">1,000</p>
+            <p class="line_two">我的代金券 (元)</p>
+        </div>
+    </a>
+    <a href="#" class="my_youhui rg youhui2">
+        <img src="images/coins.png" alt="">
+        <div class="youhui_content f12">
+            <p class="line_one f24">10000</p>
+            <p class="line_two">我的积分</p>
+        </div>
+    </a>
+</div>
+<ul class="options flex-content f15">
+    <li class="ops clearfix">
+        <a href="#" class="clearfix">
+            <div class="lf"style="background-position: 0 0">我的理财</div>
+            <div class="rg">
+                <span class="f15" style="color: #ff0000">1,000</span><img src="images/pointer.png" alt="" style="width: 0.253rem;height:0.293rem;">
+            </div>
+        </a>
+    </li>
+    <li class="ops clearfix">
+        <a href="#" class="clearfix">
+            <div class="lf" style="background-position: 0 -0.506rem">交易明细</div>
+            <div class="rg">
+                &nbsp;<img src="images/pointer.png" alt="" style="width: 0.253rem;height:0.293rem;">
+            </div>
+        </a>
+    </li>
+    <li class="ops clearfix" style="border: none">
+        <a href="#" class="clearfix">
+            <div class="lf" style="background-position: 0 -1.012rem">我的转让</div>
+            <div class="rg">
+                &nbsp;<img src="images/pointer.png" alt="" style="width: 0.253rem;height:0.293rem;">
+            </div>
+        </a>
+    </li>
+</ul>
+<div class="out_ops flex-content">
+    <a href="#">
+        <div class="lf f15" style="background-position: 0 -1.518rem">邀请好友</div>
+        <div class="rg f15">
+            &nbsp;<img src="images/pointer.png" alt="" style="width: 0.253rem;height:0.293rem;">
+        </div>
+    </a>
+</div>
+<div class="out_ops flex-content">
+    <div class="lf f15" style="background-position: 0 -2.03rem">帮助中心</div>
+    <div class="rg f15">
+        &nbsp;<img src="images/pointer.png" alt="" style="width: 0.253rem;height:0.293rem;">
+    </div>
+</div>
+<a href="tel://400-101-5151">
+    <p class="customer_service f15">客服电话：400-101-5151</p>
+    <p class="customer_service f15">（8:30-20:00）</p>
+</a>
+<script>
+    $(function () {
+        FastClick.attach(document.body);
+        if(document.body.clientWidth<330 && $('#zonge').html().length>13){
+            $('#zonge,#shouyi').removeClass('f24').addClass('f20');
+        }
+        if(document.body.clientWidth<330 && $('#shouyi').html().length>13){
+            $('#shouyi,#zonge').removeClass('f24').addClass('f20');
+        }
+        if(document.body.clientWidth<330 && $('#keyong').html().length>10){
+            $('#keyong').removeClass('f24').addClass('f20');
+        }
+        if(document.body.clientWidth<330 && $('#daijin').html().length>6){
+            $('#daijin,#jifen').removeClass('f24').addClass('f20');
+        }
+        if(document.body.clientWidth<330 && $('#jifen').html().length>6){
+            $('#daijin,#jifen').removeClass('f24').addClass('f20');
+        }
+    })
+</script>
+</body>

@@ -29,3 +29,20 @@
     border-radius: 5px;
     text-align: center;
 }
+
+.topTitle {
+    position: relative;
+    background-color: #f44336;
+    text-align: center;
+    color: #fff;
+    line-height: 52px;
+}
+.goback {
+    height: 0.6rem;
+    position: absolute;
+    top: 50%;
+    -webkit-transform: translateY(-50%);
+    -moz-transform: translateY(-50%);
+    transform: translateY(-50%);
+    left: 5%;
+}
