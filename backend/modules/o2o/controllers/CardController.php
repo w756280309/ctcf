@@ -21,7 +21,7 @@ class CardController extends BaseController
         }
         $params = array_replace([
             'goodsType_name' => null,
-            'card' => null,
+            'serial' => null,
             'pullDate' => null,
             'status' => null,
         ], $params);
@@ -35,6 +35,30 @@ class CardController extends BaseController
             ->addSelect('(isPull = 1 and (expiredTime = null or expiredTime <= CURTIME())) as isSend')
             ->where(["$g.type" => 3, "$v.affiliator_id" => $params['affId']]);
 
+        if (isset($params['status']) && !empty($params['status'])) {
+            switch ($params['status']) {
+                case 1:
+                    $query->andWhere(['isPull' => false]);
+                    break;
+                case 2:
+                    $query->andFilterWhere(['>', 'expiredTime', date('Y-m-d H:i:s')]);
+                    $query->orWhere([
+                        'expiredTime' => null,
+                        "$g.type" => 3,
+                        "$v.affiliator_id" => $params['affId'],
+                    ]);
+                    $query->andWhere(['isPull' => true, 'isUsed' => false]);
+                    break;
+                case 3:
+                    $query->andWhere(['isUsed' => true]);
+                    break;
+                case 4:
+                    $query->andWhere(['isPull' => true, 'isUsed' => false]);
+                    $query->andFilterWhere(['<', 'expiredTime', date('Y-m-d H:i:s')]);
+                    break;
+            }
+        }
+
         if (isset($params['goodsType_name']) && !empty($params['goodsType_name'])) {
             $query->andWhere(['like', "$g.name", $params['goodsType_name']]);
         }
@@ -47,31 +71,6 @@ class CardController extends BaseController
             $query->andWhere(['date(pullTime)' => $params['pullDate']]);
         }
 
-        if (isset($params['status']) && !empty($params['status'])) {
-            switch ($params['status']) {
-                case 1:
-                    $query->andWhere(['isPull' => false]);
-                    break;
-                case 2:
-                    $query->andWhere(['isPull' => true, 'isUsed' => false]);
-                    $query->andFilterWhere(['>', 'expiredTime', date('Y-m-d H:i:s')]);
-                    $query->orWhere([
-                        'isPull' => true,
-                        'isUsed' => false,
-                        'expiredTime' => null,
-                        "$g.type" => 3,
-                        "$v.affiliator_id" => $params['affId'],
-                    ]);
-                    break;
-                case 3:
-                    $query->andWhere(['isUsed' => true]);
-                    break;
-                case 4:
-                    $query->andWhere(['isPull' => true, 'isUsed' => false]);
-                    $query->andFilterWhere(['<', 'expiredTime', date('Y-m-d H:i:s')]);
-                    break;
-            }
-        }
         $query->orderBy([
             'isPull' => SORT_ASC,
             'isSend' => SORT_ASC,
