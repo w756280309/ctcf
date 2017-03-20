@@ -14,10 +14,13 @@ foreach ($points as $point) {
         $message = '首投奖励';
         $isIn = true;
     } elseif (PointRecord::TYPE_POINT_FA_FANG === $point['ref_type']) {
-        $message = $point['remark'];
+        $message = \yii\helpers\Html::encode($point['remark']);
         $isIn = true;
     } elseif(PointRecord::TYPE_MALL_INCREASE === $point['ref_type']) {
-        $message = $point['remark'];
+        $message = \yii\helpers\Html::encode($point['remark']);
+        $isIn = true;
+    } elseif(PointRecord::TYPE_BACKEND_BATCH === $point['ref_type']) {
+        $message = empty($point['remark']) ? '投资奖励' : \yii\helpers\Html::encode($point['remark']);
         $isIn = true;
     } else {
         $isIn = false;

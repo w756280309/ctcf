@@ -36,7 +36,7 @@ $this->title = '回款查询';
         </div>
     </div>
     <div class="row-fluid">
-        <div class="span12">
+        <div class="portlet-body">
             <form action="?" method="get">
                 <table class="table search_form">
                     <tr>
@@ -74,111 +74,109 @@ $this->title = '回款查询';
                 </table>
             </form>
         </div>
-        <div class="span12">
+        <div class="portlet-body">
             <table>
                 <tr><td>当前待回款项目数:<?= $noPaidLoanCount ?></td><td>待回款金额:<?= number_format($noPaidMoney, 2) ?></td></tr>
                 <tr><td>当前已回款项目数:<?= $paidLoanCount ?></td><td>已回款金额:<?= number_format($paidMoney, 2) ?></td></tr>
             </table>
         </div>
-        <div class="span12"></div>
-        <div class="span12">
-            <div class="portlet-body">
-                <?= \yii\grid\GridView::widget([
-                    'dataProvider' => $dataProvider,
-                    'layout' => '{summary}{items}<div class="pagination"><center>{pager}</center></div>',
-                    'columns' => [
-                        [
-                            'header' => '序号',
-                            'value' => function ($model) {
-                                return $model->loan->sn;
+        <div class="portlet-body">
+            <?= \yii\grid\GridView::widget([
+                'dataProvider' => $dataProvider,
+                'layout' => '{summary}{items}<div class="pagination"><center>{pager}</center></div>',
+                'tableOptions' => ['class' => 'table table-striped table-bordered table-advance table-hover'],
+                'columns' => [
+                    [
+                        'header' => '序号',
+                        'value' => function ($model) {
+                            return $model->loan->sn;
+                        }
+                    ],
+                    [
+                        'header' => '项目名称',
+                        'format' => 'raw',
+                        'value' => function ($model) {
+                            return '<a href="/product/productonline/list?sn='.urlencode($model->loan->sn).'">'.$model->loan->title.'</a>';
+                        }
+                    ],
+                    [
+                        'header' => '项目类型',
+                        'value' => function ($model) {
+                            $types = Yii::$app->params['pc_cat'];
+                            return isset($types[$model->loan->cid]) ? $types[$model->loan->cid] : '';
+                        }
+                    ],
+                    [
+                        'header' => '期限',
+                        'value' => function ($model) {
+                            $type = intval($model->loan->refund_method);
+                            return $model->loan->expires . ($type === Plan::REFUND_METHOD_DAOQIBENXI ? '天' : '月');
+                        }
+                    ],
+                    [
+                        'header' => '利率',
+                        'value' => function ($model) {
+                            return \common\view\LoanHelper::getDealRate($model->loan) . ($model->loan->jiaxi ? '+' . \common\utils\StringUtils::amountFormat2($model->loan->jiaxi) : '');
+                        }
+                    ],
+                    [
+                        'header' => '实际募集金额',
+                        'value' => function ($model) {
+                            return number_format($model->loan->funded_money, 2);
+                        }
+                    ],
+                    [
+                        'header' => '起息日',
+                        'value' => function ($model) {
+                            return date('Y-m-d', $model->loan->jixi_time);
+                        }
+                    ],
+                    [
+                        'header' => '到期日',
+                        'value' => function ($model) {
+                            return date('Y-m-d', $model->loan->finish_date);
+                        }
+                    ],
+                    [
+                        'header' => '宽限期',
+                        'value' => function ($model) {
+                            return $model->loan->kuanxianqi . '天';
+                        }
+                    ],
+                    [
+                        'header' => '回款期数',
+                        'value' => function ($model) {
+                            return $model->term;
+                        }
+                    ],
+                    [
+                        'header' => '回款时间',
+                        'value' => function ($model) {
+                            if ($model->isRefunded) {
+                                return date('Y-m-d', strtotime($model->refundedAt));
+                            } else {
+                                return $model->dueDate;
                             }
-                        ],
-                        [
-                            'header' => '项目名称',
-                            'format' => 'raw',
-                            'value' => function ($model) {
-                                return '<a href="/product/productonline/list?sn='.urlencode($model->loan->sn).'">'.$model->loan->title.'</a>';
+                        }
+                    ],
+                    [
+                        'header' => '回款金额',
+                        'value' => function ($model) {
+                            return number_format($model->amount, 2);
+                        }
+                    ],
+                    [
+                        'header' => '回款状态',
+                        'value' => function ($model) {
+                            if ($model->isRefunded) {
+                                return '已回款';
+                            } else {
+                                return '待回款';
                             }
-                        ],
-                        [
-                            'header' => '项目类型',
-                            'value' => function ($model) {
-                                $types = Yii::$app->params['pc_cat'];
-                                return isset($types[$model->loan->cid]) ? $types[$model->loan->cid] : '';
-                            }
-                        ],
-                        [
-                            'header' => '期限',
-                            'value' => function ($model) {
-                                $type = intval($model->loan->refund_method);
-                                return $model->loan->expires . ($type === Plan::REFUND_METHOD_DAOQIBENXI ? '天' : '月');
-                            }
-                        ],
-                        [
-                            'header' => '利率',
-                            'value' => function ($model) {
-                                return \common\view\LoanHelper::getDealRate($model->loan) . ($model->loan->jiaxi ? '+' . \common\utils\StringUtils::amountFormat2($model->loan->jiaxi) : '');
-                            }
-                        ],
-                        [
-                            'header' => '实际募集金额',
-                            'value' => function ($model) {
-                                return number_format($model->loan->funded_money, 2);
-                            }
-                        ],
-                        [
-                            'header' => '起息日',
-                            'value' => function ($model) {
-                                return date('Y-m-d', $model->loan->jixi_time);
-                            }
-                        ],
-                        [
-                            'header' => '到期日',
-                            'value' => function ($model) {
-                                return date('Y-m-d', $model->loan->finish_date);
-                            }
-                        ],
-                        [
-                            'header' => '宽限期',
-                            'value' => function ($model) {
-                                return $model->loan->kuanxianqi . '天';
-                            }
-                        ],
-                        [
-                            'header' => '回款期数',
-                            'value' => function ($model) {
-                                return $model->term;
-                            }
-                        ],
-                        [
-                            'header' => '回款时间',
-                            'value' => function ($model) {
-                                if ($model->isRefunded) {
-                                    return date('Y-m-d', strtotime($model->refundedAt));
-                                } else {
-                                    return $model->dueDate;
-                                }
-                            }
-                        ],
-                        [
-                            'header' => '回款金额',
-                            'value' => function ($model) {
-                                return number_format($model->amount, 2);
-                            }
-                        ],
-                        [
-                            'header' => '回款状态',
-                            'value' => function ($model) {
-                                if ($model->isRefunded) {
-                                    return '已回款';
-                                } else {
-                                    return '待回款';
-                                }
-                            }
-                        ],
-                    ]
-                ]) ?>
-            </div>
+                        }
+                    ],
+                ]
+            ]) ?>
         </div>
     </div>
 </div>

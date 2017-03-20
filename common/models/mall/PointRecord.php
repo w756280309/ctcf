@@ -39,6 +39,7 @@ class PointRecord extends ActiveRecord
     const TYPE_FIRST_LOAN_ORDER_POINTS_1 = 'first_order_1';//首次投资送积分,活动 FirstOrderPoints
     const TYPE_OFFLINE_ORDER_POINT_CANCEL = 'offline_order_point_cancel';//线下投资订单积分撤销
     const TYPE_MALL_INCREASE = 'mall_increase';//积分商城获得
+    const TYPE_BACKEND_BATCH = 'point_batch';//后台批量发放
 
     /**
      * @inheritdoc
@@ -100,6 +101,7 @@ class PointRecord extends ActiveRecord
             self::TYPE_POINT_FA_FANG => '积分发放',
             self::TYPE_OFFLINE_ORDER_POINT_CANCEL => '16年投资撤销积分',
             self::TYPE_MALL_INCREASE => '积分商城获得',
+            self::TYPE_BACKEND_BATCH => '后台批量发放',
         ];
         return isset($name[$type]) ? $name[$type] : '';
     }
