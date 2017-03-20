@@ -30,7 +30,7 @@ class CardController extends BaseController
         $query = VirtualCard::find()
             ->innerJoinWith('goods')
             ->joinWith('user')
-            ->select('*')
+            ->select("$v.*")
             ->addSelect('expiredTime > CURTIME() as isExpired')
             ->addSelect('(isPull = 1 and (expiredTime = null or expiredTime <= CURTIME())) as isSend')
             ->where(["$g.type" => 3, "$v.affiliator_id" => $params['affId']]);
