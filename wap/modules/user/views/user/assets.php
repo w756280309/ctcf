@@ -107,7 +107,9 @@ $currentUrl = Yii::$app->request->absoluteUrl;
             },
             tooltip: {
                 trigger: 'item',
-                formatter: "{b}: {c}"
+                formatter: function (params, ticket, callback) {
+                    return params.name+'：'+WDJF.numberFormat(params.value, true);
+                }
             },
             series: [
                 {

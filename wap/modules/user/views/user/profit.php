@@ -3,7 +3,7 @@
 use common\utils\StringUtils;
 use yii\helpers\Html;
 
-$this->title = '我的收益';
+$this->title = '资产总览';
 
 ?>
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/wenjfbase.css">
@@ -33,7 +33,7 @@ $this->title = '我的收益';
     <ul class="income">
         <li class="f12 line-H32">累计收益(元)</li>
         <li class="f30 allIncome comRed"><?= StringUtils::amountFormat3($user->getProfit()) ?></li>
-        <li class="f12 line-H32">累计资产(元)</li>
+        <li class="f12 line-H32">累计投资(元)</li>
         <li class="f15 comRed"><?= StringUtils::amountFormat3($user->getTotalInvestment()) ?></li>
     </ul>
 
