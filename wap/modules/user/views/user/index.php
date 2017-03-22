@@ -3,161 +3,205 @@ use yii\web\JqueryAsset;
 use common\utils\StringUtils;
 
 $this->title = '账户中心';
-$this->showBottomNav = true;
-$this->showAvatar = true;
-
-$this->registerJsFile(ASSETS_BASE_URI.'js/fastclick.js', ['depends' => JqueryAsset::class]);
-
 ?>
-<link href="<?= ASSETS_BASE_URI ?>css/informationAndHelp.css" rel="stylesheet">
-<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/setting.css?v=20161229">
-<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/tip.css?v=20161116">
-<script>
-    $(function() {
-        $('.footer-inner a').css({color: '#8c8c8c'});
-        $('.footer-inner2 a').css({color: '#f44336'});
-        $('.footer-inner1 a').css({color: '#8c8c8c'});
-        $('.footer-inner1 .licai').css({background: 'url("<?= ASSETS_BASE_URI ?>images/footer2.png") no-repeat -113px -3px',backgroundSize: '200px'});
-        $('.footer-inner2 .zhanghu').css({background: 'url("<?= ASSETS_BASE_URI ?>images/footer2.png") no-repeat -81px -57px',backgroundSize: '200px'});
-        $('.footer-inner .shouye').css({background: 'url("<?= ASSETS_BASE_URI ?>images/footer2.png") no-repeat -145px -3px',backgroundSize: '200px'});
-    })
-</script>
+<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/activeComHeader.css">
+<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/wenjfbase.css">
+<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/ucenter/css/homePage.css">
+<script src="<?= FE_BASE_URI ?>libs/fastclick.js"></script>
+<script src="<?= FE_BASE_URI ?>libs/lib.flexible3.js"></script>
 
-<!--  账户中心页 start-->
-<?php if ($showPointsArea) { //积分活动生效时显示,或白名单用户登录时显示 ?>
-    <a href="/user/usergrade">
-        <div class="row member-level-tit">
-            <div class="member-level-lf"></div>
-            <div class="member-level-rg row">
-                <span class="phone-size"><?= StringUtils::obfsMobileNumber($user->mobile) ?></span>
-                <img class="img-member-vip" src="<?= FE_BASE_URI ?>wap/memberlevel/img/white-vip-<?= $user->level ?>.png">
-                <i class="treasure-line">｜</i>财富值:<span class="treasure"><?= StringUtils::amountFormat2($user->coins) ?></span>
-            </div>
-        </div>
-    </a>
+<?php if (!defined('IN_APP')) { ?>
+    <div class="UtopTitle f18 flex-content">
+        账户中心
+        <a class="f14" href="/system/system/setting">设置</a>
+    </div>
 <?php } ?>
 
-<div class="row  border-bottom  earning accountcenter">
-    <div class="row earn-tit">
-        <div class="col-xs-1"></div>
-        <div class="col-xs-5 col">资产总额 （元）</div>
-        <div class="col-xs-6"></div>
-    </div>
-    <div class="row earn-num1">
-        <div class="col-xs-1"></div>
-        <div class="col-xs-7 col"><?= StringUtils::amountFormat3($ua->getTotalFund()) ?></div>
-        <div class="col-xs-3"></div>
-    </div>
-    <div class="row accountcenter-center-left">
-        <div class="col-xs-1"></div>
-        <div class="col-xs-5">理财资产（元）</div>
-        <div class="col-xs-6 dj-tip-refer" style="position: relative;">
-            冻结资金（元）
-            <img class="common_img sm-height_tips_img" src="<?= ASSETS_BASE_URI ?>images/credit/icon_instruction.png" style="width: 16px" alt="">
-            <p class="sm-height_tips">
-                <img src="<?= ASSETS_BASE_URI ?>images/credit/triangle.png" alt="">
-                <span>投资资金在项目未满标时锁定的金额</span>
-            </p>
+<?php if (!\Yii::$app->user->isGuest) { ?>
+    <!--登录状态下的顶部-->
+    <div class="top_one flex-content">
+        <div id="statu_two" style="padding-top:0.373rem">
+            <!--  账户中心页 start-->
+            <?php if ($showPointsArea) { //积分活动生效时显示,或白名单用户登录时显示 ?>
+                <a href="/user/usergrade">
+                    <p class="user_imf">
+                        <span class="user_tel f18"><?= StringUtils::obfsMobileNumber($user->mobile) ?></span>
+                        <span class="user_level">
+                            <img src="<?= FE_BASE_URI ?>wap/ucenter/images/shape_level<?= $user->level ?>.png">
+                        </span>
+                        <span class="user_caifu f12">财富值：<?= StringUtils::amountFormat2($user->coins) ?></span>
+                    </p>
+                </a>
+            <?php } ?>
+            <ul class="property clearfix">
+                <li class="number lf">
+                    <a href="/user/user/assets">
+                        <p class="property_word f15">资产总额 (元)</p>
+                        <p class="property_number f24" id="zonge"><?= isset($ua) ? StringUtils::amountFormat3($ua->getTotalFund()) : '' ?></p>
+                    </a>
+                </li>
+                <li class="number lf">
+                    <a href="/user/user/profit">
+                        <p class="property_word f15">累计收益 (元)</p>
+                        <p class="property_number f24" id="shouyi"><?= isset($user) ? StringUtils::amountFormat3($user->getProfit()) : '' ?></p>
+                    </a>
+                </li>
+            </ul>
         </div>
+    </div>
+    <!--登录状态下显示-->
+    <div class="remain flex-content">
+        <div class="lf">
+            <p class="remain_num f24" id="keyong"><?= StringUtils::amountFormat3($ua->available_balance) ?></p>
+            <p class="remain_word f12">可用余额（元）</p>
+        </div>
+        <div class="rg f15">
+            <a href="javascript:void(0);" class="remain_button rg" onclick="tixian()">提现</a>
+            <a href="javascript:void(0);" class="remain_button rg" onclick="recharge()">充值</a>
+        </div>
+    </div>
+    <div class="youihui flex-content clearfix">
+        <a href="/user/coupon/list" class="my_youhui lf youhui1">
+            <img src="<?= FE_BASE_URI ?>wap/ucenter/images/coupon.png" alt="">
+            <div class="youhui_content f12">
+                <p class="line_one f24" id="daijin"><?= isset($sumCoupon) ? StringUtils::amountFormat2($sumCoupon) : '0' ?></p>
+                <p class="line_two">我的代金券 (元)</p>
+            </div>
+        </a>
+        <a href="/mall/point" class="my_youhui rg youhui2">
+            <img src="<?= FE_BASE_URI ?>wap/ucenter/images/coins.png" alt="">
+            <div class="youhui_content f12">
+                <p class="line_one f24" id="jifen"><?= isset($user->points) ? StringUtils::amountFormat2($user->points) : '0' ?></p>
+                <p class="line_two">我的积分</p>
+            </div>
+        </a>
+    </div>
+<?php } else { ?>
+    <!--未登录状态下的顶部-->
+    <div class="top_one flex-content">
+        <div id="statu_one" style="padding-top: 1.173rem;">
+            <p class="award f24">注册就送<span class="f27" style="font-weight: 500;">288元</span>专享红包</p>
+            <div class="buttons">
+                <a href="/site/signup" class="button f17 lf">注 册</a>
+                <a href="/site/login?next=<?= urlencode(Yii::$app->request->hostInfo . '/user/user') ?>" class="button f17 rg">登 录</a>
+            </div>
+        </div>
+    </div>
+    <div class="youihui flex-content clearfix">
+        <a href="/user/coupon/list" class="my_youhui lf youhui1">
+            <img src="<?= FE_BASE_URI ?>wap/ucenter/images/coupon.png" alt="">
+            <div class="youhui_content f12">
+                <p class="line_one">我的代金券</p>
+            </div>
+        </a>
+        <a href="/mall/point" class="my_youhui rg youhui2">
+            <img src="<?= FE_BASE_URI ?>wap/ucenter/images/coins.png" alt="">
+            <div class="youhui_content f12">
+                <p class="line_one">我的积分</p>
+            </div>
+        </a>
+    </div>
+<?php } ?>
 
-    </div>
-    <div class="row accountcenter-center-right">
-        <div class="col-xs-1"></div>
-        <div class="col-xs-5"><?= StringUtils::amountFormat3($ua->investment_balance) ?></div>
-        <div class="col-xs-6"><?= StringUtils::amountFormat3($ua->freeze_balance) ?></div>
-    </div>
-    <br>
-    <div class="row accountcenter-center-left">
-        <div class="col-xs-1"></div>
-        <div class="col-xs-5">累计投资（元）</div>
-        <div class="col-xs-6">累计收益（元）</div>
-    </div>
-    <div class="row accountcenter-center-right">
-        <div class="col-xs-1"></div>
-        <div class="col-xs-5"><?= StringUtils::amountFormat3($user->getTotalInvestment()) ?></div>
-        <div class="col-xs-6"><?= StringUtils::amountFormat3($user->getProfit()) ?></div>
-    </div>
-</div>
-<div class="row accountcenter-other">
-    <div class="row border-bottom accountcenter-bottom">
-        <div class="col-xs-1"></div>
-        <div class="col-xs-5">
-                <p>可用余额（元）</p>
-                <p class="unmber_remain"><?= StringUtils::amountFormat3($ua->available_balance) ?></p>
-        </div>
-        <div class="col-xs-3 addcash" onclick="recharge()">充值</div>
-        <div class="col-xs-3 rg-line drawcash" onclick="tixian()">提现</div>
-    </div>
-    <div class="clear"></div>
-    <a class="row sm-height border-bottom margin-top block" href="/user/user/myorder" >
-        <div class="col-xs-10 left-txt">我的理财</div>
-        <div class="col-xs-1 arrow">
-            <img src="<?= ASSETS_BASE_URI ?>images/arrow.png" alt="右箭头">
-        </div>
-        <div class="col-xs-1"></div>
-    </a>
-
+<ul class="options flex-content f15">
+    <li class="ops clearfix">
+        <a href="/user/user/myorder" class="clearfix">
+            <div class="lf"style="background-position: 0 0">我的理财</div>
+            <div class="rg">
+                <span class="f15" style="color: #ff0000"><?= isset($ua) ? StringUtils::amountFormat2(bcadd($ua->freeze_balance, $ua->investment_balance, 2))  : '' ?></span><?= isset($ua) ? '元'  : '' ?>
+                <img src="<?= FE_BASE_URI ?>wap/ucenter/images/pointer.png" alt="" style="width: 0.253rem;height:0.293rem;">
+            </div>
+        </a>
+    </li>
+    <li class="ops clearfix">
+        <a href="/user/user/mingxi" class="clearfix">
+            <div class="lf" style="background-position: 0 -0.506rem">交易明细</div>
+            <div class="rg">
+                &nbsp;<img src="<?= FE_BASE_URI ?>wap/ucenter/images/pointer.png" alt="" style="width: 0.253rem;height:0.293rem;">
+            </div>
+        </a>
+    </li>
     <?php if (Yii::$app->params['feature_credit_note_on']) {  ?>
-        <div class="clear"></div>
-        <a class="row sm-height border-bottom block" href="/credit/trade/assets" >
-            <div class="col-xs-10 left-txt">我的转让</div>
-            <div class="col-xs-1 arrow">
-                <img src="<?= ASSETS_BASE_URI ?>images/arrow.png" alt="右箭头">
-            </div>
-            <div class="col-xs-1"></div>
-        </a>
+        <li class="ops clearfix" style="border: none">
+            <a href="/credit/trade/assets" class="clearfix">
+                <div class="lf" style="background-position: 0 -1.012rem">我的转让</div>
+                <div class="rg">
+                    &nbsp;<img src="<?= FE_BASE_URI ?>wap/ucenter/images/pointer.png" alt="" style="width: 0.253rem;height:0.293rem;">
+                </div>
+            </a>
+        </li>
     <?php } ?>
 
-    <div class="clear"></div>
-    <a class="row sm-height border-bottom block" href="/user/coupon/list" >
-        <div class="col-xs-10 left-txt">我的代金券</div>
-        <div class="col-xs-1 arrow">
-            <img src="<?= ASSETS_BASE_URI ?>images/arrow.png" alt="右箭头">
-        </div>
-        <div class="col-xs-1"></div>
-    </a>
-
-    <?php if ($showPointsArea) { ?>
-        <div class="clear"></div>
-        <a class="row sm-height border-bottom block" href="/mall/point" >
-            <div class="col-xs-10 left-txt">我的积分</div>
-            <div class="col-xs-1 arrow">
-                <img src="<?= ASSETS_BASE_URI ?>images/arrow.png" alt="右箭头">
-            </div>
-            <div class="col-xs-1"></div>
-        </a>
-    <?php } ?>
-
-    <div class="clear"></div>
-    <a class="row sm-height border-bottom block" href="/user/invite/" >
-        <div class="col-xs-10 left-txt">邀请好友</div>
-        <div class="col-xs-1 arrow">
-            <img src="<?= ASSETS_BASE_URI ?>images/arrow.png" alt="右箭头">
-        </div>
-        <div class="col-xs-1"></div>
-    </a>
-
-    <div class="clear"></div>
-    <a class="row sm-height border-bottom block end-list" href="/user/user/mingxi" >
-        <div class="col-xs-10 left-txt">交易明细</div>
-        <div class="col-xs-1 arrow">
-            <img src="<?= ASSETS_BASE_URI ?>images/arrow.png" alt="右箭头">
-        </div>
-        <div class="col-xs-1"></div>
-    </a>
-    <div class="clear"></div>
+</ul>
+<a href="/user/invite">
+<div class="out_ops flex-content">
+    <div class="lf f15" style="background-position: 0 -1.518rem">邀请好友</div>
+    <div class="rg f15">
+        &nbsp;<img src="<?= FE_BASE_URI ?>wap/ucenter/images/pointer.png" alt="" style="width: 0.253rem;height:0.293rem;">
+    </div>
 </div>
-<form></form>
-<!-- 账户中心页 end  -->
+</a>
+<a href="/site/help">
+    <div class="out_ops flex-content">
+        <div class="lf f15" style="background-position: 0 -2.03rem">帮助中心</div>
+        <div class="rg f15">
+            &nbsp;<img src="<?= FE_BASE_URI ?>wap/ucenter/images/pointer.png" alt="" style="width: 0.253rem;height:0.293rem;">
+        </div>
+    </div>
+</a>
+<a href="tel://<?= Yii::$app->params['contact_tel'] ?>">
+    <p class="customer_service f15">客服电话：<?= Yii::$app->params['contact_tel'] ?></p>
+    <p class="customer_service f15">（8:30-20:00）</p>
+</a>
+
+<!--footer-->
+<?php if (!defined('IN_APP')) { ?>
+    <div style="height: 50px;"></div>
+    <div class="navbar-fixed-bottom footer flex-content">
+        <div class="footer-title">
+            <div class="footer-inner">
+                <a href="/?v=1#t=1" class="nav-bar"><span class="shouye"></span>首页</a>
+            </div>
+        </div>
+        <div class="footer-title">
+            <div class="footer-inner">
+                <a href="/deal/deal/index" class="nav-bar"><span class="licai"></span>理财</a>
+            </div>
+        </div>
+        <div class="footer-title">
+            <div class="footer-inner">
+                <a class="nav-bar special-bar" href="/user/user" style="color: #f44336"><span class="zhanghu"></span>账户</a>
+            </div>
+        </div>
+    </div>
+<?php } ?>
 
 <script type="text/javascript">
+    $(function () {
+        FastClick.attach(document.body);
+        if(document.body.clientWidth<376 && $('#zonge').html().length>13){
+            $('#zonge,#shouyi').removeClass('f24').addClass('f20');
+        }
+        if(document.body.clientWidth<376 && $('#shouyi').html().length>13){
+            $('#shouyi,#zonge').removeClass('f24').addClass('f20');
+        }
+        if(document.body.clientWidth<376 && $('#keyong').html().length>10){
+            $('#keyong').removeClass('f24').addClass('f20');
+        }
+        if(document.body.clientWidth<376 && $('#daijin').html().length>6){
+            $('#daijin,#jifen').removeClass('f24').addClass('f20');
+        }
+        if(document.body.clientWidth<376 && $('#jifen').html().length>6){
+            console.log(123)
+            $('#daijin,#jifen').removeClass('f24').addClass('f20');
+        }
+    })
+
     function tixian()
     {
         var xhr = $.get('/user/user/check-kuaijie', function (data) {
             if (data.code) {
-                $('.account div').eq(0).css('background', '#e8eaf0');
                 toastCenter(data.message, function() {
-                    $('.account div').eq(0).css('background', '#fff');
                     if (data.tourl) {
                         location.href = data.tourl;
                     }
@@ -176,9 +220,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/fastclick.js', ['depends' => JqueryAss
     {
         var xhr = $.get('/user/user/check-kuaijie', function (data) {
             if (data.code) {
-                $('.account div').eq(1).css('background', '#e8eaf0');
                 toastCenter(data.message, function() {
-                    $('.account div').eq(1).css('background', '#fff');
                     if (data.tourl) {
                         location.href = data.tourl;
                     }
@@ -192,28 +234,5 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/fastclick.js', ['depends' => JqueryAss
             toastCenter('系统繁忙,请稍后重试!');
         });
     }
-
-    $(function() {
-        FastClick.attach(document.body);
-        var flag = 0;
-
-        $('.accountcenter-center-left').on('click', '.dj-tip-refer', function(event) {
-            var event = event || window.event;
-            if (!flag) {
-                $('.sm-height_tips').show();
-                flag = 1;
-            } else {
-                $('.sm-height_tips').hide();
-                flag = 0;
-            }
-            event.stopPropagation();
-        })
-
-        $('html').on('click', 'body', function() {
-            if (flag) {
-                $('.sm-height_tips').hide();
-                flag = 0;
-            }
-        });
-    });
 </script>
+

@@ -132,11 +132,7 @@ $this->registerMetaTag([
         </div>
         <div class="col-xs-4 footer-title">
             <div class="footer-inner2">
-                <?php if (!\Yii::$app->user->isGuest) { ?>
                 <a href="/user/user"><span class="zhanghu"></span>账户</a>
-                <?php } else { ?>
-                <a href="/site/login"><span class="zhanghu"></span>账户</a>
-                <?php } ?>
             </div>
         </div>
     </div>

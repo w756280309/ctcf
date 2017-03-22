@@ -3,6 +3,7 @@
 namespace app\modules\user\controllers;
 
 use app\controllers\BaseController;
+use common\models\coupon\UserCoupon;
 use common\models\user\MoneyRecord;
 use common\models\order\OnlineOrder as Ord;
 use common\models\product\OnlineProduct as Loan;
@@ -12,25 +13,51 @@ use common\service\BankService;
 use wap\modules\promotion\models\RankingPromo;
 use Yii;
 use yii\data\Pagination;
+use yii\filters\AccessControl;
+use yii\helpers\ArrayHelper;
 
 class UserController extends BaseController
 {
+    public function behaviors()
+    {
+        return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'roles' => ['@'], //登录用户退出
+                    ],
+                ],
+                'except' => [
+                    'index',
+                ],
+            ],
+        ];
+    }
+
     /**
      * 账户中心页
      */
     public function actionIndex()
     {
+        $this->layout = '@app/views/layouts/fe';
+        if (Yii::$app->user->isGuest){
+            return $this->render('index');
+        }
         $user = $this->getAuthedUser();
         $ua = $user->lendAccount;
         $pointPromo = RankingPromo::findOne(['key' => 'loan_order_points']);
+        //代金券总值
+        $sumCoupon = UserCoupon::findCouponInUse($user,date('Y-m-d'))->sum('amount');
 
         try {
             $showPointsArea = $pointPromo->isActive($user);
         } catch (\Exception $e) {
             $showPointsArea = false;
         }
-
         return $this->render('index', [
+            'sumCoupon' => $sumCoupon,
             'ua' => $ua,
             'user' => $user,
             'showPointsArea' => $showPointsArea,

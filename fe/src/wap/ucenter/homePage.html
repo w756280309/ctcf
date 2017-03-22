@@ -2,6 +2,7 @@
     <meta charset="UTF-8">
     <title>账户中心首页</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0,minimum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="../common/css/activeComHeader.css">
     <link rel="stylesheet" href="../common/css/wenjfbase.css">
     <link rel="stylesheet" href="css/homePage.css">
     <script src="../libs/jquery-1.11.1.min.js"></script>
@@ -9,9 +10,13 @@
     <script src="../libs/lib.flexible3.js"></script>
 </head>
 <body>
+<div class="UtopTitle f18 flex-content">
+    账户中心
+    <a class="f14" href="#">设置</a>
+</div>
 <div class="top_one flex-content">
     <!--未登录状态下的顶部-->
-    <div id="statu_one" style="padding-top: 1.173rem;display: none">
+    <div  class="clearfix" id="statu_one" style="padding-top: 1.173rem;display: none">
         <p class="award f24">注册就送<span class="f27" style="font-weight: 500;">288元</span>专享红包</p>
         <div class="buttons">
             <a href="#" class="button f17 lf">注 册</a>
@@ -19,7 +24,7 @@
         </div>
     </div>
     <!--登录状态下的顶部-->
-    <div id="statu_two" style="padding-top:0.373rem">
+    <div class="clearfix" id="statu_two" style="padding-top:0.373rem">
         <p class="user_imf">
             <span class="user_tel f18">133******45</span>
             <span class="user_level">
@@ -54,7 +59,7 @@
         <a href="#" class="remain_button rg">充值</a>
     </div>
 </div>
-<div class="youihui flex-content">
+<div class="youihui flex-content clearfix">
     <a href="#" class="my_youhui lf youhui1">
         <img src="images/coupon.png" alt="">
         <div class="youhui_content f12">
@@ -114,7 +119,24 @@
     <p class="customer_service f15">客服电话：400-101-5151</p>
     <p class="customer_service f15">（8:30-20:00）</p>
 </a>
-
+<div style="height: 50px;"></div>
+<div class="navbar-fixed-bottom footer flex-content">
+    <div class="footer-title">
+        <div class="footer-inner">
+            <a href="#" class="shouye1 nav-bar"><span class="shouye"></span>首页</a>
+        </div>
+    </div>
+    <div class="footer-title">
+        <div class="footer-inner">
+            <a href="#" class="nav-bar"><span class="licai"></span>理财</a>
+        </div>
+    </div>
+    <div class="footer-title">
+        <div class="footer-inner">
+            <a class="nav-bar special-bar" href="#" style="color: #f44336"><span class="zhanghu"></span>账户</a>
+        </div>
+    </div>
+</div>
 <script>
     $(function () {
         FastClick.attach(document.body);
