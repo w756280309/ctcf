@@ -20,8 +20,9 @@ class UserController extends BaseController
     public function behaviors()
     {
         $except = [];
+        $uCenterFlag = Yii::$app->params['new_ucenter_on'];
 
-        if (!defined('IN_APP')) {
+        if (!defined('IN_APP') || $uCenterFlag) {
             $except = [
                 'except' => [
                     'index',
@@ -48,8 +49,9 @@ class UserController extends BaseController
     public function actionIndex()
     {
         $inApp = defined('IN_APP');
+        $uCenterFlag = Yii::$app->params['new_ucenter_on'];
 
-        if (!$inApp) {
+        if (!$inApp || $uCenterFlag) {
             $this->layout = '@app/views/layouts/fe';
             if (Yii::$app->user->isGuest){
                 return $this->render('index');
@@ -67,12 +69,12 @@ class UserController extends BaseController
         }
 
         $sumCoupon = 0;
-        if (!$inApp) {
+        if (!$inApp || $uCenterFlag) {
             //代金券总值
             $sumCoupon = UserCoupon::findCouponInUse($user,date('Y-m-d'))->sum('amount');
         }
 
-        return $this->render($inApp ? 'index_yuan' : 'index', [
+        return $this->render(!$inApp || $uCenterFlag ? 'index' : 'index_yuan', [
             'sumCoupon' => $sumCoupon,
             'ua' => $ua,
             'user' => $user,
