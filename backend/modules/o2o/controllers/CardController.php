@@ -71,6 +71,19 @@ class CardController extends BaseController
             $query->andWhere(['date(pullTime)' => $params['pullDate']]);
         }
 
+        if (isset($params['reserveStatus']) && !empty($params['reserveStatus'])) {
+            switch ($params['reserveStatus']) {
+                case 1:
+                    $query->andWhere(['isReserved' => true]);
+                    break;
+                case 2:
+                    $query->andWhere(['isReserved' => false]);
+                    break;
+                default:
+                    break;
+            }
+        }
+
         $query->orderBy([
             'isPull' => SORT_ASC,
             'isSend' => SORT_ASC,
@@ -146,8 +159,10 @@ class CardController extends BaseController
         if (empty($goods)) {
             return $this->redirect(['card/list', 'affId' => $affId]);
         }
+        $isReserved = 0;
         $infoPost = \Yii::$app->request->post();
         if (!empty($infoPost['flag'])) {
+            $isReserved = (int) $infoPost['isReserved'];
             $filename = $_FILES['ImportForm']['name']['excel'];
             if (!isset($filename) || empty($filename)) {
                 $model->addError('excel', '未选择文件');
@@ -179,6 +194,7 @@ class CardController extends BaseController
                         $newCard->createTime = date('Y-m-d H:i:s');
                         $newCard->affiliator_id = $affId;
                         $newCard->serial = trim($data[0]);
+                        $newCard->isReserved = $isReserved;
                         if (!empty(trim($data[1]))) {
                             $newCard->secret = trim($data[1]);
                         }
@@ -206,7 +222,7 @@ class CardController extends BaseController
                 @unlink($filepath);
             }
         }
-        return $this->render('supplement', ['model' => $model, 'affId' => $affId, 'goods' => $goods]);
+        return $this->render('supplement', ['model' => $model, 'affId' => $affId, 'goods' => $goods, 'isReserved' => $isReserved]);
     }
 
     /**

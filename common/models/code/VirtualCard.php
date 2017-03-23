@@ -47,13 +47,25 @@ class VirtualCard extends ActiveRecord
         return $this->hasOne(User::className(), ['id' => 'user_id']);
     }
 
-    public function getStatusLabel()
+    /**
+     * 根据当前VitrualCard获得该兑换码的状态
+     * 目前O2O商家管理-兑换码列表在使用
+     * code   label
+     * 1      未发放
+     * 2      已发放
+     * 3      已使用
+     * 4      已过期
+     *
+     * @return array ['code' => '', status => '']
+     */
+    public function getStatus()
     {
-        $label = '--';
-        $goods = $this->goods;
+        $label = null;
+        $code = null;
         $isExpired = false;
         if ($this->isUsed) {
             $label = '已使用';
+            $code = 3;
         } else {
             if (null !== $this->expiredTime) {
                 if ($this->expiredTime < date('Y-m-d H:i:s')) {
@@ -62,15 +74,18 @@ class VirtualCard extends ActiveRecord
             }
             if (!$this->isPull) {
                 $label = '未发放';
+                $code = 1;
             } else {
                 if ($isExpired) {
                     $label = '已过期';
+                    $code = 4;
                 } else {
                     $label = '已发放';
+                    $code = 2;
                 }
             }
         }
 
-        return $label;
+        return ['code' => $code, 'label' => $label];
     }
 }

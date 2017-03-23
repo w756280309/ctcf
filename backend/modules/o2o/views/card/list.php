@@ -55,6 +55,8 @@ use common\utils\SecurityUtils;
                                 <?php
                                 $statusArr = [1 => '未发放', 2 => '已发放', 3 => '已使用', 4 => '已过期'];
                                 $requestStatus = (int) $request['status'];
+                                $reservedArr = [1 => '是', 2 => '否'];
+                                $reserveStatus = (int) $request['reserveStatus'];
                                 ?>
                                 <select name="status" class="m-wrap span8">
                                     <option value="">请选择</option>
@@ -63,6 +65,18 @@ use common\utils\SecurityUtils;
                                     <?php } ?>
                                 </select>
                             </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span class="title">积分商城预留</span>
+                                <select name="reserveStatus" class="m-wrap span4">
+                                    <option value="">请选择</option>
+                                    <?php foreach ($reservedArr as $status => $label) { ?>
+                                        <option value="<?= $status ?>" <?php if ($status === $reserveStatus) { ?> selected="selected"<?php } ?>><?= $label ?></option>
+                                    <?php } ?>
+                                </select>
+                            </td>
+                            <td colspan="3"></td>
                         </tr>
                         <tr>
                             <td>
@@ -109,6 +123,10 @@ use common\utils\SecurityUtils;
                                 'header' => '客户手机号',
                                 'format' => 'html',
                                 'value' => function ($model) {
+                                    $status = $model->getStatus();
+                                    if (1 === $status['code'] && $model->isReserved) {
+                                        return '<a href="/o2o/card/pull?id=' . $model->id . '" class="btn mini green"><i class="icon-edit"></i>补充领取人</a>';
+                                    }
                                     return isset($model->user_id) ? '<a href="/user/user/detail?id=' . $model->user->id . '">' . SecurityUtils::decrypt($model->user->safeMobile) . '</a>' : '--';
                                 },
                             ],
@@ -127,7 +145,8 @@ use common\utils\SecurityUtils;
                             [
                                 'header' => '状态',
                                 'value' => function ($model) {
-                                    return $model->getStatusLabel();
+                                    $status = $model->getStatus();
+                                    return $status['label'];
                                 }
                             ],
                         ]
