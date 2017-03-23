@@ -38,9 +38,9 @@ body {
 }
 .top_one .user_imf .user_level {
   display: inline-block;
-  width: 0.8rem; /*45 */
+  width: 0.76rem; /*45 */
   height: 0.5rem; /*29*/
-  line-height: 0.38666667rem;
+  line-height: 0.1rem;
   text-align: center;
   padding-top: 4px;
   margin-right: 0.16rem;
@@ -53,6 +53,8 @@ body {
 .top_one .user_imf .user_level img {
   width: 0.35rem;
   height: 0.25rem;
+  position: relative;
+  top:-1px;
 }
 .top_one .property {
   text-align: center;

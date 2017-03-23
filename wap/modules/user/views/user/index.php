@@ -1,12 +1,13 @@
 <?php
-use yii\web\JqueryAsset;
+
 use common\utils\StringUtils;
 
 $this->title = '账户中心';
+
 ?>
-<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/activeComHeader.css">
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/wenjfbase.css">
-<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/ucenter/css/homePage.css">
+<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/activeComHeader.css?v=20170323">
+<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/ucenter/css/homePage.css?v=20170323">
 <script src="<?= FE_BASE_URI ?>libs/fastclick.js"></script>
 <script src="<?= FE_BASE_URI ?>libs/lib.flexible3.js"></script>
 
@@ -60,22 +61,7 @@ $this->title = '账户中心';
             <a href="javascript:void(0);" class="remain_button rg" onclick="recharge()">充值</a>
         </div>
     </div>
-    <div class="youihui flex-content clearfix">
-        <a href="/user/coupon/list" class="my_youhui lf youhui1">
-            <img src="<?= FE_BASE_URI ?>wap/ucenter/images/coupon.png" alt="">
-            <div class="youhui_content f12">
-                <p class="line_one f24" id="daijin"><?= isset($sumCoupon) ? StringUtils::amountFormat2($sumCoupon) : '0' ?></p>
-                <p class="line_two">我的代金券 (元)</p>
-            </div>
-        </a>
-        <a href="/mall/point" class="my_youhui rg youhui2">
-            <img src="<?= FE_BASE_URI ?>wap/ucenter/images/coins.png" alt="">
-            <div class="youhui_content f12">
-                <p class="line_one f24" id="jifen"><?= isset($user->points) ? StringUtils::amountFormat2($user->points) : '0' ?></p>
-                <p class="line_two">我的积分</p>
-            </div>
-        </a>
-    </div>
+
 <?php } else { ?>
     <!--未登录状态下的顶部-->
     <div class="top_one flex-content">
@@ -87,21 +73,27 @@ $this->title = '账户中心';
             </div>
         </div>
     </div>
-    <div class="youihui flex-content clearfix">
-        <a href="/user/coupon/list" class="my_youhui lf youhui1">
-            <img src="<?= FE_BASE_URI ?>wap/ucenter/images/coupon.png" alt="">
-            <div class="youhui_content f12">
-                <p class="line_one">我的代金券</p>
-            </div>
-        </a>
-        <a href="/mall/point" class="my_youhui rg youhui2">
-            <img src="<?= FE_BASE_URI ?>wap/ucenter/images/coins.png" alt="">
-            <div class="youhui_content f12">
-                <p class="line_one">我的积分</p>
-            </div>
-        </a>
-    </div>
 <?php } ?>
+<div class="youihui flex-content clearfix">
+    <a href="/user/coupon/list" class="my_youhui lf youhui1">
+        <img src="<?= FE_BASE_URI ?>wap/ucenter/images/coupon.png" alt="">
+        <div class="youhui_content f12">
+            <?php if (!\Yii::$app->user->isGuest) { ?>
+                <p class="line_one f24" id="daijin"><?= isset($sumCoupon) ? StringUtils::amountFormat2($sumCoupon) : '0' ?></p>
+            <?php } ?>
+            <p class="line_two">我的代金券 (元)</p>
+        </div>
+    </a>
+    <a href="/mall/point" class="my_youhui rg youhui2">
+        <img src="<?= FE_BASE_URI ?>wap/ucenter/images/coins.png" alt="">
+        <div class="youhui_content f12">
+            <?php if (!\Yii::$app->user->isGuest) { ?>
+                <p class="line_one f24" id="jifen"><?= isset($user->points) ? StringUtils::amountFormat2($user->points) : '0' ?></p>
+            <?php } ?>
+            <p class="line_two">我的积分</p>
+        </div>
+    </a>
+</div>
 
 <ul class="options flex-content f15">
     <li class="ops clearfix">
@@ -179,20 +171,19 @@ $this->title = '账户中心';
 <script type="text/javascript">
     $(function () {
         FastClick.attach(document.body);
-        if(document.body.clientWidth<376 && $('#zonge').html().length>13){
+        if(document.body.clientWidth<330 && String($('#zonge').html()).length>13){
             $('#zonge,#shouyi').removeClass('f24').addClass('f20');
         }
-        if(document.body.clientWidth<376 && $('#shouyi').html().length>13){
+        if(document.body.clientWidth<330 && String($('#shouyi').html()).length>13){
             $('#shouyi,#zonge').removeClass('f24').addClass('f20');
         }
-        if(document.body.clientWidth<376 && $('#keyong').html().length>10){
+        if(document.body.clientWidth<330 && String($('#keyong').html()).length>10){
             $('#keyong').removeClass('f24').addClass('f20');
         }
-        if(document.body.clientWidth<376 && $('#daijin').html().length>6){
+        if(document.body.clientWidth<330 && String($('#daijin').html()).length>6){
             $('#daijin,#jifen').removeClass('f24').addClass('f20');
         }
-        if(document.body.clientWidth<376 && $('#jifen').html().length>6){
-            console.log(123)
+        if(document.body.clientWidth<330 && String($('#jifen').html()).length>6){
             $('#daijin,#jifen').removeClass('f24').addClass('f20');
         }
     })

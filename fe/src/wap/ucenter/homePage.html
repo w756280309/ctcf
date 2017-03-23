@@ -25,13 +25,16 @@
     </div>
     <!--登录状态下的顶部-->
     <div class="clearfix" id="statu_two" style="padding-top:0.373rem">
-        <p class="user_imf">
-            <span class="user_tel f18">133******45</span>
-            <span class="user_level">
+        <a href="#">
+            <p class="user_imf">
+                <span class="user_tel f18">133******45</span>
+                <span class="user_level">
                 <img src="images/shape_level3.png">
             </span>
-            <span class="user_caifu f12">财富值：100</span>
-        </p>
+                <span class="user_caifu f12">财富值：100</span>
+            </p>
+        </a>
+
         <ul class="property clearfix">
             <li class="number lf">
                 <a href="#">
@@ -123,7 +126,7 @@
 <div class="navbar-fixed-bottom footer flex-content">
     <div class="footer-title">
         <div class="footer-inner">
-            <a href="#" class="shouye1 nav-bar"><span class="shouye"></span>首页</a>
+            <a href="#" class="nav-bar"><span class="shouye"></span>首页</a>
         </div>
     </div>
     <div class="footer-title">
@@ -140,19 +143,19 @@
 <script>
     $(function () {
         FastClick.attach(document.body);
-        if(document.body.clientWidth<330 && $('#zonge').html().length>13){
+        if(document.body.clientWidth<330 && String($('#zonge').html()).length>13){
             $('#zonge,#shouyi').removeClass('f24').addClass('f20');
         }
-        if(document.body.clientWidth<330 && $('#shouyi').html().length>13){
+        if(document.body.clientWidth<330 && String($('#shouyi').html()).length>13){
             $('#shouyi,#zonge').removeClass('f24').addClass('f20');
         }
-        if(document.body.clientWidth<330 && $('#keyong').html().length>10){
+        if(document.body.clientWidth<330 && String($('#keyong').html()).length>10){
             $('#keyong').removeClass('f24').addClass('f20');
         }
-        if(document.body.clientWidth<330 && $('#daijin').html().length>6){
+        if(document.body.clientWidth<330 && String($('#daijin').html()).length>6){
             $('#daijin,#jifen').removeClass('f24').addClass('f20');
         }
-        if(document.body.clientWidth<330 && $('#jifen').html().length>6){
+        if(document.body.clientWidth<330 && String($('#jifen').html()).length>6){
             $('#daijin,#jifen').removeClass('f24').addClass('f20');
         }
     })
