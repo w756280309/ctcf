@@ -54,6 +54,13 @@ use yii\widgets\ActiveForm;
                     </div>
                 </div>
                 <div class="control-group">
+                    <label class="control-label">积分商城预留</label>
+                    <div class="controls">
+                        <input type="checkbox" name="isReserved" value="1" <?php if($isReserved) { ?>checked="checked"<?php } ?>>
+                        <span style="font-size: 14px;">若勾选表示为积分商城预留的兑换码</span>
+                    </div>
+                </div>
+                <div class="control-group">
                     <label class="control-label">上传Excel表格</label>
                     <div class="controls">
                         <?= $form->field($model, 'excel', ['template' => '{input}'])->fileInput() ?>
