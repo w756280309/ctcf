@@ -14,14 +14,23 @@ use wap\modules\promotion\models\RankingPromo;
 use Yii;
 use yii\data\Pagination;
 use yii\filters\AccessControl;
-use yii\helpers\ArrayHelper;
 
 class UserController extends BaseController
 {
     public function behaviors()
     {
+        $except = [];
+
+        if (!defined('IN_APP')) {
+            $except = [
+                'except' => [
+                    'index',
+                ],
+            ];
+        }
+
         return [
-            'access' => [
+            'access' => array_merge([
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
@@ -29,10 +38,7 @@ class UserController extends BaseController
                         'roles' => ['@'], //登录用户退出
                     ],
                 ],
-                'except' => [
-                    'index',
-                ],
-            ],
+            ], $except),
         ];
     }
 
@@ -41,22 +47,32 @@ class UserController extends BaseController
      */
     public function actionIndex()
     {
-        $this->layout = '@app/views/layouts/fe';
-        if (Yii::$app->user->isGuest){
-            return $this->render('index');
+        $inApp = defined('IN_APP');
+
+        if (!$inApp) {
+            $this->layout = '@app/views/layouts/fe';
+            if (Yii::$app->user->isGuest){
+                return $this->render('index');
+            }
         }
+
         $user = $this->getAuthedUser();
         $ua = $user->lendAccount;
         $pointPromo = RankingPromo::findOne(['key' => 'loan_order_points']);
-        //代金券总值
-        $sumCoupon = UserCoupon::findCouponInUse($user,date('Y-m-d'))->sum('amount');
 
         try {
             $showPointsArea = $pointPromo->isActive($user);
         } catch (\Exception $e) {
             $showPointsArea = false;
         }
-        return $this->render('index', [
+
+        $sumCoupon = 0;
+        if (!$inApp) {
+            //代金券总值
+            $sumCoupon = UserCoupon::findCouponInUse($user,date('Y-m-d'))->sum('amount');
+        }
+
+        return $this->render($inApp ? 'index_yuan' : 'index', [
             'sumCoupon' => $sumCoupon,
             'ua' => $ua,
             'user' => $user,

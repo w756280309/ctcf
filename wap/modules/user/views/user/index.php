@@ -10,6 +10,7 @@ $this->title = '账户中心';
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/ucenter/css/homePage.css?v=20170323">
 <script src="<?= FE_BASE_URI ?>libs/fastclick.js"></script>
 <script src="<?= FE_BASE_URI ?>libs/lib.flexible3.js"></script>
+<script src="<?= ASSETS_BASE_URI ?>js/common.js"></script>
 
 <?php if (!defined('IN_APP')) { ?>
     <div class="UtopTitle f18 flex-content">
@@ -171,19 +172,19 @@ $this->title = '账户中心';
 <script type="text/javascript">
     $(function () {
         FastClick.attach(document.body);
-        if(document.body.clientWidth<330 && String($('#zonge').html()).length>13){
+        if(document.body.clientWidth<376 && String($('#zonge').html()).length>13){
             $('#zonge,#shouyi').removeClass('f24').addClass('f20');
         }
-        if(document.body.clientWidth<330 && String($('#shouyi').html()).length>13){
+        if(document.body.clientWidth<376 && String($('#shouyi').html()).length>13){
             $('#shouyi,#zonge').removeClass('f24').addClass('f20');
         }
-        if(document.body.clientWidth<330 && String($('#keyong').html()).length>10){
+        if(document.body.clientWidth<376 && String($('#keyong').html()).length>10){
             $('#keyong').removeClass('f24').addClass('f20');
         }
-        if(document.body.clientWidth<330 && String($('#daijin').html()).length>6){
+        if(document.body.clientWidth<376 && String($('#daijin').html()).length>6){
             $('#daijin,#jifen').removeClass('f24').addClass('f20');
         }
-        if(document.body.clientWidth<330 && String($('#jifen').html()).length>6){
+        if(document.body.clientWidth<376 && String($('#jifen').html()).length>6){
             $('#daijin,#jifen').removeClass('f24').addClass('f20');
         }
     })

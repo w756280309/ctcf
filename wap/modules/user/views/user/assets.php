@@ -149,9 +149,7 @@ $currentUrl = Yii::$app->request->absoluteUrl;
                             show: false
                         }
                     },
-                    data:[
-                        {value:3000, name:'总资金'}
-                    ]
+                    data: [3000000, 1]
                 }
             ]
         };
