@@ -1,10 +1,7 @@
 <?php
 
 $this->title = '补充领取人';
-use Yii;
 use yii\widgets\ActiveForm;
-
-
 ?>
 
 <?php $this->beginBlock('blockmain'); ?>
@@ -53,14 +50,14 @@ use yii\widgets\ActiveForm;
                         <label class="control-label">兑换码</label>
                         <div class="controls">
                             <input type="hidden" name="id" value="<?= $id ?>">
-                            <input type="hidden" name="_csrf" value="<?= Yii::$app->request->csrfToken ?>">
+                            <input type="hidden" name="_csrf" value="<?= \Yii::$app->request->csrfToken ?>">
                             <input type="text" name ="serial" autocomplete="off" class="m-wrap span4" value="<?= $serial ?>" readonly>
                         </div>
                     </div>
                     <div class="control-group">
                         <label class="control-label">手机号</label>
                         <div class="controls">
-                            <input type="text" autocomplete="off" name="mobile" class="m-wrap span4">
+                            <input type="tel" autocomplete="off" name="mobile" class="m-wrap span4" maxlength="11">
                         </div>
                     </div>
 
