@@ -71,7 +71,7 @@ class UserController extends BaseController
         $sumCoupon = 0;
         if (!$inApp || $uCenterFlag) {
             //代金券总值
-            $sumCoupon = UserCoupon::findCouponInUse($user,date('Y-m-d'))->sum('amount');
+            $sumCoupon = UserCoupon::findCouponInUse($user->id,date('Y-m-d'))->sum('amount');
         }
 
         return $this->render(!$inApp || $uCenterFlag ? 'index' : 'index_yuan', [
