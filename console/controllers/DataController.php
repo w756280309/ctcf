@@ -715,4 +715,47 @@ COUPON;
         }
         return false;
     }
+
+    /**
+     * 给投资2次及以上超过一个月（包括30天及以上）未投资的用户发放周末红包.
+     *
+     * 1. 该console只运行一次;
+     */
+    public function actionWeekCoupon($couponId = 68, $orderNum = 2, $days = 30)
+    {
+        $couponType = CouponType::findOne($couponId);
+
+        if (null === $couponType) {
+            echo "周末红包信息不存在\n";
+
+            return self::EXIT_CODE_ERROR;
+        }
+
+        $u = User::tableName();
+        $ui = UserInfo::tableName();
+
+        $users = User::find()
+            ->innerJoin($ui, "$u.id = $ui.user_id")
+            ->where(['>=', 'investCount', $orderNum])
+            ->andWhere(['<', 'lastInvestDate', date('Y-m-d', strtotime('today - '.$days.' days'))])
+            ->all();
+
+        $count = 0;
+
+        foreach ($users as $user) {
+            try {
+                $userCoupon = UserCoupon::addUserCoupon($user, $couponType);
+
+                if ($userCoupon->save()) {
+                    ++$count;
+                }
+            } catch (\Exception $e) {
+                echo $user->mobile.'发放失败, 原因: '.$e->getMessage();
+            }
+        }
+
+        echo "总共发放了周末红包".$count."张\n";
+
+        return self::EXIT_CODE_NORMAL;
+    }
 }
