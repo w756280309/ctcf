@@ -166,13 +166,14 @@ class CardController extends BaseController
             $affId = $vCard->affiliator_id;
             $serial = $vCard->serial;
             if($vCard->isPull){
+                Yii::$app->session->setFlash('info','兑换券已被发放！');
                 return $this->redirect(['list','affId' => $affId,'serial' => $vCard->serial]);
             }
+
             return $this->render('pull', [
                 'affId' => $affId,
                 'id' => $id,
                 'serial' => $serial,
-                'pullStatus' => 0,
                 'model' => $model,
             ]);
         }
@@ -195,16 +196,16 @@ class CardController extends BaseController
             $serial = $vCard->serial;
             //用户不存在
             if (is_null($user)){
-                Yii::$app->session->setFlash("用户不存在！");
+                Yii::$app->session->setFlash('info','用户不存在！');
                 return $this->render('pull', [
                     'affId' => $affId,
                     'id' => $id,
                     'serial' => $serial,
-                    'pullStatus' => 1,
                 ]);
             }
             //兑换码已发放
             if($vCard->isPull){
+                Yii::$app->session->setFlash('info','兑换券已被发放！');
                 return $this->redirect(['list','affId' => $affId,'serial' => $serial]);
             } else {
                 $vCard->user_id = $user->id;
@@ -236,6 +237,7 @@ class CardController extends BaseController
                 }
 
             }
+            Yii::$app->session->setFlash('info','兑换券发放失败！');
             return $this->redirect(['list', 'affId' => $affId, 'serial' => $vCard->serial]);
         }
         //throw $this->ex404('兑换码不存在');

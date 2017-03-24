@@ -34,6 +34,12 @@ use common\utils\SecurityUtils;
 
             <!-- 查询 start-->
             <div class="portlet-body">
+                <?php if (\Yii::$app->session->hasFlash('info')) {?>
+                    <div class="alert alert-danger alert-dismissible" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close" style="background-image: none!important;"><span aria-hidden="true">&times;</span></button>
+                        <strong><?= \Yii::$app->session->getFlash('info') ?></strong>
+                    </div>
+                <?php }?>
                 <form action="/o2o/card/list" method="get">
                     <input type="hidden" name="affId" value="<?= $request['affId'] ?>">
                     <table class="table search_form">

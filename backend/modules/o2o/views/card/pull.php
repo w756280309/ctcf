@@ -31,16 +31,10 @@ use yii\widgets\ActiveForm;
                 </ul>
             </div>
             <div class="portlet-body form">
-                <?php if ($pullStatus == 1) {?>
-                    <div class="alert alert-warning alert-dismissible" role="alert">
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"></button>
-                        用户不存在！
-                    </div>
-                <?php }?>
-                <?php if ($pullStatus == 3) {?>
-                    <div class="alert alert-warning alert-dismissible" role="alert">
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"></button>
-                        兑换券发放失败！
+                <?php if (\Yii::$app->session->hasFlash('info')) {?>
+                    <div class="alert alert-danger alert-dismissible" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close" style="background-image: none!important;"><span aria-hidden="true">&times;</span></button>
+                        <strong><?= \Yii::$app->session->getFlash('info') ?></strong>
                     </div>
                 <?php }?>
 
