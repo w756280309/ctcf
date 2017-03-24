@@ -9,8 +9,11 @@ use common\models\affiliation\Affiliator;
 use common\models\code\GoodsType;
 use common\models\code\VirtualCard;
 use common\models\offline\ImportForm;
+use common\models\user\User;
+use common\service\SmsService;
 use common\utils\SecurityUtils;
 use yii\data\ActiveDataProvider;
+use Yii;
 
 class CardController extends BaseController
 {
@@ -145,6 +148,97 @@ class CardController extends BaseController
         }
         $name = 'O2O兑换码列表' . time() . rand(1000, 9999) .'.xlsx';
         UserStats::exportAsXlsx($exportData, $name);
+    }
+
+    /**
+     * 发放预留兑换码
+     */
+    public function actionPull()
+    {
+        if (Yii::$app->request->isGet){
+            $id = Yii::$app->request->get('id');
+            $model = new User();
+            //判断兑换券是否被发放 若是直接返回
+            $vCard = VirtualCard::findOne(['id' => $id]);
+            if (null === $vCard) {
+                throw $this->ex404('兑换码不存在');
+            }
+            $affId = $vCard->affiliator_id;
+            $serial = $vCard->serial;
+            if($vCard->isPull){
+                return $this->redirect(['list','affId' => $affId,'serial' => $vCard->serial]);
+            }
+            return $this->render('pull', [
+                'affId' => $affId,
+                'id' => $id,
+                'serial' => $serial,
+                'pullStatus' => 0,
+                'model' => $model,
+            ]);
+        }
+        throw $this->ex404('兑换码不存在');
+    }
+
+    /**
+     * 更新补充领取人操作
+     */
+    public function actionUpdate()
+    {
+        if (Yii::$app->request->isPost){
+            $post = Yii::$app->request->post();
+            $id = $post['id'];
+            $mobile = $post['mobile'];
+            $mobile_encrypt = SecurityUtils::encrypt($mobile);
+            $user = User::findOne(['safeMobile'=>$mobile_encrypt]);
+            $vCard = VirtualCard::findOne(['id' => $id]);
+            $affId = $vCard->affiliator_id;
+            $serial = $vCard->serial;
+            //用户不存在
+            if (is_null($user)){
+                Yii::$app->session->setFlash("用户不存在！");
+                return $this->render('pull', [
+                    'affId' => $affId,
+                    'id' => $id,
+                    'serial' => $serial,
+                    'pullStatus' => 1,
+                ]);
+            }
+            //兑换码已发放
+            if($vCard->isPull){
+                return $this->redirect(['list','affId' => $affId,'serial' => $serial]);
+            } else {
+                $vCard->user_id = $user->id;
+                $vCard->isPull = 1;
+                $vCard->pullTime = date('Y-m-d H:i:s');
+                if ($vCard->save()){
+                    //短信发送
+                    $templateId = 158404;
+                    $cardInfo = $vCard->serial;
+                    if (null !== $vCard->secret) {
+                        $cardInfo .= "，密码{$vCard->secret}";
+                    }
+                    $effectDays = $vCard->goods->effectDays;
+                    if (null !== $effectDays) {
+                        $cardInfo .= "，有效期{$effectDays}天";
+                    }
+                    $affiliator = Affiliator::findOne($vCard->affiliator_id);
+
+                    $message = [
+                        $vCard->goods->name,
+                        $cardInfo,
+                        $affiliator->name,
+                        '',
+                        Yii::$app->params['contact_tel'],
+                    ];
+
+                    SmsService::send($mobile, $templateId, $message, $user);
+                    return $this->redirect(['list', 'affId' => $affId, 'serial' => $serial]);
+                }
+
+            }
+            return $this->redirect(['list', 'affId' => $affId, 'serial' => $vCard->serial]);
+        }
+        //throw $this->ex404('兑换码不存在');
     }
 
     /**
