@@ -11,7 +11,7 @@ use yii\web\JqueryAsset;
 
 $this->registerCssFile(FE_BASE_URI . "libs/swiper/swiper.min.css");
 $this->registerCss(file_get_contents(__DIR__.'/../../../fe/dist/v2/wap/index/css/index.css'));
-$this->registerJsFile(FE_BASE_URI . 'libs/lib.flexible3.js', ['depends' => JqueryAsset::class]);
+$this->registerJsFile(FE_BASE_URI . 'libs/lib.flexible3.js', ['depends' => JqueryAsset::class, 'position' => 1]);
 $this->registerJsFile(FE_BASE_URI . 'res/js/js.cookie.js', ['depends' => JqueryAsset::class]);
 $this->registerJsFile(FE_BASE_URI . 'libs/fastclick.js', ['depends' => JqueryAsset::class]);
 $this->registerJsFile(FE_BASE_URI . 'libs/jquery.lazyload.min.js', ['depends' => JqueryAsset::class]);

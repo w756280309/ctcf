@@ -337,6 +337,13 @@ a:active {
     outline: none;
     color: #999999;
 }
+a.special-bar:hover,
+a.special-bar:visited,
+a.special-bar:active {
+    text-decoration: none;
+    outline: none;
+    color: #f44336;
+}
 .banner {
     width:100%;
     height:4.66667rem;
