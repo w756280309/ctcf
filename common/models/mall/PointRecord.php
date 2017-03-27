@@ -2,6 +2,7 @@
 
 namespace common\models\mall;
 
+use common\models\order\OnlineOrder;
 use common\models\offline\OfflineUser;
 use common\utils\TxUtils;
 use Yii;
@@ -137,5 +138,24 @@ class PointRecord extends ActiveRecord
             'offGoodsName' => isset($order->offGoodsName) ? $order->offGoodsName : $order->loan->title,
             'userLevel' => $user->level,
         ]);
+    }
+
+    /**
+     * 购买标的或首投送积分时,返回相关订单信息.
+     */
+    public function fetchOrder()
+    {
+        $order = null;
+
+        if (in_array($this->ref_type, [self::TYPE_LOAN_ORDER, self::TYPE_FIRST_LOAN_ORDER_POINTS_1])) {
+            $o = OnlineOrder::tableName();
+
+            $order = OnlineOrder::find()
+                ->joinWith('loan')
+                ->where(["$o.id" => $this->ref_id])
+                ->one();
+        }
+
+        return $order;
     }
 }

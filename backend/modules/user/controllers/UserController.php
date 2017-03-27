@@ -3,6 +3,7 @@
 namespace backend\modules\user\controllers;
 
 use backend\controllers\BaseController;
+use backend\modules\user\core\v1_0\UserAccountBackendCore;
 use common\lib\err\Err;
 use common\lib\user\UserStats;
 use common\models\affiliation\Affiliator;
@@ -12,7 +13,6 @@ use common\models\epay\EpayUser;
 use common\models\mall\PointRecord;
 use common\models\order\OnlineOrder;
 use common\models\product\OnlineProduct;
-use backend\modules\user\core\v1_0\UserAccountBackendCore;
 use common\models\promo\InviteRecord;
 use common\models\user\CoinsRecord;
 use common\models\user\MoneyRecord;

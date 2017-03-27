@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>我的积分</title>
+    <link rel="stylesheet" href="__FE_BASE_URI__/common/css/base.css">
+    <link rel="stylesheet" href="__FE_BASE_URI__pc/my_point/css/index.css">
+    <script src="__FE_BASE_URI__/libs/jquery-1.11.1.min.js"></script>
+</head>
+<body>
+<div class="my_point">
+    <ul class="my_point_top">
+        <li class="top_left">
+            <span class="point_now">当前积分</span>
+            <p class="point_number">1000</p>
+            <a href="#" class="point_rules">
+                <!--<img src="images/point_rulse.png" alt="">-->
+                <span class="i_pot">i</span>
+                积分规则</a>
+            <i class="border"></i>
+        </li>
+        <li class="top_right">
+            <img src="__FE_BASE_URI__pc/my_point/images/wechat_img2.png" alt="">
+            <ul>
+                <li class="rule_content">PC端暂不支持兑换商品</li>
+                <li class="rule_content">如需兑换请用手机扫描左侧二维码</li>
+                <li class="rule_content">进入移动端"我的积分"进行兑换</li>
+            </ul>
+        </li>
+    </ul>
+    <div class="my_point_body">
+        <div class="detail_title">
+            <img src="__FE_BASE_URI__pc/my_point/images/detail_title.png" alt="">积分明细
+        </div>
+        <div class="detail_head">
+            <div class="head1 lf">类型</div>
+            <div class="head2 lf">时间</div>
+            <div class="head3 lf">投资积分</div>
+            <div class="head4 lf">当前积分</div>
+            <div class="head5 lf">详情</div>
+        </div>
+        <ul class="detail_content">
+            <li class="items">
+                <div class="head1 lf">投资获得</div>
+                <div class="head2 lf">2017-3-20 5:30</div>
+                <div class="head3 lf point_a">+40</div>
+                <div class="head4 lf">100</div>
+                <div class="head5 lf"><a href="#">南金交10号</a></div>
+            </li>
+            <li class="items">
+                <div class="head1 lf">兑换商品</div>
+                <div class="head2 lf">2017-3-20 5:30</div>
+                <div class="head3 lf point_b">-40</div>
+                <div class="head4 lf">100</div>
+                <div class="head5 lf">流水号：79965198422222222222222222325698</div>
+            </li>
+            <li class="items">
+                <div class="head1 lf">投资获得</div>
+                <div class="head2 lf">2017-3-20 5:30</div>
+                <div class="head3 lf point_a">+40</div>
+                <div class="head4 lf">100</div>
+                <div class="head5 lf"><a href="#">南金交10号</a></div>
+            </li>
+            <li class="items">
+                <div class="head1 lf">投资获得</div>
+                <div class="head2 lf">2017-3-20 5:30</div>
+                <div class="head3 lf point_a">+40</div>
+                <div class="head4 lf">100</div>
+                <div class="head5 lf"><a href="#">南金交10号</a></div>
+            </li>
+            <li class="items">
+                <div class="head1 lf">兑换商品</div>
+                <div class="head2 lf">2017-3-20 5:30</div>
+                <div class="head3 lf point_b">-40</div>
+                <div class="head4 lf">100</div>
+                <div class="head5 lf">流水号：PR1703151505114141702537</div>
+            </li>
+        </ul>
+    </div>
+</div>
+<script>
+    window.onload = function () {
+        var ul = document.getElementsByClassName('detail_content')[0];
+        var chilArr = ul.childNodes;
+        var arr = [];
+        for(var i=0;i<chilArr.length;i++){
+            if(chilArr[i].nodeType == 1){
+                arr.push(chilArr[i]);
+            }
+        }
+        for(var i=0;i<arr.length;i++){
+            if(i%2 != 0){
+                arr[i].style.background = '#efeff3';
+            }
+        }
+
+        var li_length = $('.detail_content').children().length;
+        if(li_length == 0){
+            $('.detail_content').css('height','295px').append('<p>暂无积分明细</p>')
+        }
+    }
+</script>
+</body>
+</html>

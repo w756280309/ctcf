@@ -79,6 +79,9 @@ return [
         'deal' => [
             'class' => 'frontend\modules\deal\Module',
         ],
+        'mall' => [
+            'class' => 'frontend\modules\mall\Module',
+        ],
         'order' => [
             'class' => 'frontend\modules\order\Module',
         ],
