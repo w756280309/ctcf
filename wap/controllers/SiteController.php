@@ -215,7 +215,7 @@ class SiteController extends Controller
     }
 
     /**
-     * 查询是否是登陆/新手.
+     * 查询是否是登录/新手.
      *
      * @return int -1 表示没有登录, 0 表示新手, 大于等于1 表示投过新手标
      */
