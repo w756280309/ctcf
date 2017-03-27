@@ -2,7 +2,7 @@
 
 namespace backend\modules\growth\controllers;
 
-
+use backend\actions\ExcelPreviewAction;
 use backend\controllers\BaseController;
 use common\models\growth\PointsBatch;
 use common\models\mall\PointRecord;
@@ -16,53 +16,32 @@ use yii\web\UploadedFile;
 
 class PointsController extends BaseController
 {
+    public function actions()
+    {
+        return [
+            'preview' => [
+                'class' => ExcelPreviewAction::className(),
+                'modelClass' => PointsBatch::className(),
+                'maxCol' => 'D',
+                'attributes' => ['mobile', 'isOnline', 'points', 'desc'],
+                'backUrl' => '/growth/points/init',
+            ]
+        ];
+    }
+
     //导入
     public function actionInit()
     {
         if (\Yii::$app->request->isPost) {
             $upload = UploadedFile::getInstanceByName('pointsFile');
             if (!is_null($upload) && !$upload->getHasError()) {
-                $data = ExcelUtils::readExcelToArray($upload->tempName, 'D');
                 $batchSn = rand(1, 1000) . time() . rand(1, 1000);
-                $time = date('Y-m-d H:i:s');
-                $successCount = 0;
-                foreach ($data as $value) {
-                    if (is_array($value)) {
-                        list($mobile, $isOnline, $points, $desc) = $value;
-                        $points = intval($points);
-                        if (!empty($mobile) && !is_null($isOnline) && $points > 0) {
-                            $isOnline = boolval($isOnline);
-                            $safeMobile = SecurityUtils::encrypt($mobile);
-                            if ($isOnline) {
-                                $user = User::findOne(['safeMobile' => $safeMobile]);
-                                if (is_null($user)) {
-                                    continue;
-                                }
-                            } else {
-                                $user = OfflineUser::findOne(['mobile' => $mobile]);
-                                if (is_null($user)) {
-                                    continue;
-                                }
-                            }
-
-                            $model = new PointsBatch([
-                                'batchSn' => $batchSn,
-                                'createTime' => $time,
-                                'isOnline' => $isOnline,
-                                'publicMobile' => $mobile,
-                                'safeMobile' => $safeMobile,
-                                'points' => $points,
-                                'desc' => $desc,
-                                'status' => 0,
-                            ]);
-                            $res = $model->save();
-                            if ($res) {
-                                $successCount++;
-                            }
-                        }
-                    }
+                $dir = __DIR__ . '/../../../runtime/tmp';
+                if (!file_exists($dir)) {
+                    mkdir($dir);
                 }
-                if ($successCount > 0) {
+                $res = $upload->saveAs($dir . '/' . $batchSn, true);
+                if ($res) {
                     return $this->redirect('/growth/points/preview?batchSn=' . $batchSn);
                 }
             }
@@ -72,8 +51,62 @@ class PointsController extends BaseController
         return $this->render('init');
     }
 
-    //预览
-    public function actionPreview($batchSn)
+    //添加数据
+    public function actionAdd($batchSn)
+    {
+        $file = __DIR__ . '/../../../runtime/tmp' . '/' . $batchSn;
+        if (!file_exists($file)) {
+            return $this->redirect('/growth/points/init');
+        }
+        $data = ExcelUtils::readExcelToArray($file, 'D');
+        $time = date('Y-m-d H:i:s');
+        $successCount = 0;
+        foreach ($data as $value) {
+            if (is_array($value)) {
+                list($mobile, $isOnline, $points, $desc) = $value;
+                $points = intval($points);
+                if (!empty($mobile) && !is_null($isOnline) && $points > 0) {
+                    $isOnline = boolval($isOnline);
+                    $safeMobile = SecurityUtils::encrypt($mobile);
+                    if ($isOnline) {
+                        $user = User::findOne(['safeMobile' => $safeMobile]);
+                        if (is_null($user)) {
+                            continue;
+                        }
+                    } else {
+                        $user = OfflineUser::findOne(['mobile' => $mobile]);
+                        if (is_null($user)) {
+                            continue;
+                        }
+                    }
+
+                    $model = new PointsBatch([
+                        'batchSn' => $batchSn,
+                        'createTime' => $time,
+                        'isOnline' => $isOnline,
+                        'publicMobile' => $mobile,
+                        'safeMobile' => $safeMobile,
+                        'points' => $points,
+                        'desc' => $desc,
+                        'status' => 0,
+                        'user_id' => $user->id,
+                    ]);
+                    $res = $model->save();
+                    if ($res) {
+                        $successCount++;
+                    }
+                }
+            }
+        }
+        unlink($file);
+        if ($successCount > 0) {
+            return $this->redirect('/growth/points/list?batchSn=' . $batchSn);
+        }
+        return $this->redirect('/growth/points/init');
+    }
+
+    //列表
+    public function actionList($batchSn)
     {
         if (empty($batchSn)) {
             return $this->redirect('/growth/points/init');
@@ -86,7 +119,7 @@ class PointsController extends BaseController
             ]
         ]);
         $notSendCount = PointsBatch::find()->where(['batchSn' => $batchSn, 'status' => 0])->count();
-        return $this->render('preview', [
+        return $this->render('list', [
             'dataProvider' => $dataProvider,
             'notSendCount' => $notSendCount,
         ]);
@@ -126,6 +159,6 @@ class PointsController extends BaseController
             }
         }
 
-        return $this->redirect('/growth/points/preview?batchSn=' . $batchSn);
+        return $this->redirect('/growth/points/list?batchSn=' . $batchSn);
     }
 }

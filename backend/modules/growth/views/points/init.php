@@ -1,6 +1,6 @@
 <?php
 
-$this->title = '积分记录导入';
+$this->title = '积分批量导入';
 use yii\widgets\ActiveForm;
 
 ?>
@@ -19,7 +19,7 @@ use yii\widgets\ActiveForm;
                     <i class="icon-angle-right"></i>
                 </li>
                 <li>
-                    <a href="javascript:void(0);">积分记录导入</a>
+                    <a href="javascript:void(0);">积分批量导入</a>
                 </li>
             </ul>
         </div>
@@ -52,7 +52,7 @@ use yii\widgets\ActiveForm;
             <h4>请选择文件并导入</h4>
             <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data', 'class' => 'form-group' ,'id' => 'import_form']]); ?>
             <?= \yii\helpers\Html::fileInput('pointsFile', null, ['class' => 'form-control'])?>
-            <?= \yii\helpers\Html::submitButton('导入待发积分记录', ['class' => 'btn btn-default', 'id' => 'submit_btn'])?>
+            <?= \yii\helpers\Html::submitButton('预览', ['class' => 'btn btn-default', 'id' => 'submit_btn'])?>
             <?php $form->end(); ?>
         </div>
     </div>

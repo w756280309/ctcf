@@ -12,86 +12,58 @@ $this->title = '批量添加积分预览';
             <ul class="breadcrumb">
                 <li>
                     <i class="icon-home"></i>
-                    <a href="/adv/adv">回款查询</a>
+                    <a href="/adv/adv">运营管理</a>
                     <i class="icon-angle-right"></i>
                 </li>
                 <li>
-                    <a href="/growth/points/init">积分记录导入</a>
+                    <a href="/growth/points/init">积分批量导入</a>
                     <i class="icon-angle-right"></i>
                 </li>
                 <li>
-                    <a href="javascript:void(0);">积分批量发放记录预览</a>
+                    <a href="javascript:void(0);">导入记录预览</a>
                 </li>
             </ul>
         </div>
     </div>
     <div class="row-fluid">
-        <?php if($notSendCount > 0) {?>
-            <table class="table">
-                <tr>
-                    <td>有<?= $notSendCount?>条记录待发放</td>
+        <?php if($failCount > 0) {?>
+            <div class="alert alert-danger" role="alert">
+                有<?= $failCount?>条异常数据，建议修改Excel后重新上传!
+            </div>
+        <?php }?>
+        <table class="table">
+            <tr>
+                <td>总记录数: <?= $totalCount?></td>
+                <td>异常记录数: <?= $failCount?></td>
+                <td>正常记录数: <?= $successCount?></td>
+                <?php if ($successCount > 0) {?>
                     <td>
-                        <?php $form = \yii\widgets\ActiveForm::begin(['action' => '/growth/points/confirm?batchSn='.Yii::$app->request->get('batchSn'), 'options' => ['class' => 'form-group', 'id' => 'form']]); ?>
-                        <?=  \yii\helpers\Html::submitButton('批量发放', ['id' => 'send_points', 'class' => 'btn btn-default'])?>
+                        <?php $form = \yii\widgets\ActiveForm::begin(['action' => '/growth/points/add?batchSn='.$batchSn, 'options' => ['class' => 'form-group', 'id' => 'add_form']]); ?>
+                        <?=  \yii\helpers\Html::submitButton('确认导入['.$successCount.']', ['id' => 'add_record', 'class' => 'btn btn-primary blue'])?>
                         <?php $form->end(); ?>
                     </td>
-                </tr>
-            </table>
-        <?php }?>
-        <div class="portlet-body">
-            <?= \yii\grid\GridView::widget([
-                'dataProvider' => $dataProvider,
-                'layout' => '{summary}{items}<div class="pagination"><center>{pager}</center></div>',
-                'tableOptions' => ['class' => 'table table-striped table-bordered table-advance table-hover'],
-                'columns' => [
-                    [
-                        'header' => '手机号',
-                        'value' => function ($model) {
-                            return $model->publicMobile;
-                        }
-                    ],
-                    [
-                        'header' => '用户',
-                        'value' => function ($model) {
-                            return $model->isOnline ? '线上用户' : '线下用户';
-                        }
-                    ],
-                    [
-                        'header' => '积分',
-                        'value' => function ($model) {
-                            return $model->points;
-                        }
-                    ],
-                    [
-                        'header' => '简介',
-                        'value' => function ($model) {
-                            return $model->desc ?: '---';
-                        }
-                    ],
-                    [
-                        'header' => '状态',
-                        'value' => function ($model) {
-                            if ($model->status === 2) {
-                                return '发放失败';
-                            } elseif ($model->status === 1) {
-                                return '成功';
-                            } else {
-                                return '待发放';
-                            }
-                        }
-                    ],
-                ]
-            ]) ?>
-        </div>
+                <?php }?>
+                <?php if ($failCount > 0) { ?>
+                    <td>
+                        <a href="/growth/points/init" class="btn">返回修改数据</a>
+                    </td>
+                <?php }?>
+            </tr>
+        </table>
+        <?= $this->renderFile('@backend/modules/growth/views/points/_excel_preview.php', [
+            'dataProvider' => $dataProvider,
+            'attributes' => $attributes,
+        ])?>
+        <script>
+            $('#add_record').click(function(e){
+                e.preventDefault();
+                if (confirm('确认导入所有正常记录[<?= $successCount?>]?')) {
+                    $(this).attr('disabled', true);
+                    $('#add_form').submit();
+                }
+            });
+        </script>
     </div>
 </div>
-<script>
-    $('#send_points').click(function(e){
-        e.preventDefault();
-        if (confirm('确认为所有待发放记录发放积分？')) {
-            $(this).attr('disabled', true);
-            $('#form').submit();
-        }
-    });
-</script>
+
 <?php $this->endBlock(); ?>
