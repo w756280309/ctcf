@@ -33,6 +33,10 @@ body {
   line-height: 0.48rem;
   margin-bottom: 1.12rem;
 }
+.top_one .user_imf .user_caifu{
+  position: relative;
+  bottom: 2px;
+}
 .top_one .user_imf .user_tel {
   margin-right: 0.16rem;
 }
@@ -110,10 +114,9 @@ body {
 }
 .youihui .my_youhui {
   position: relative;
-  display: inline-block;
+  display: table;
   width: 3.92rem;
   height: 1.76rem;
-  line-height: 1.76rem;
   border: 1px solid #f15f56;
   border-radius: 10px;
   background-color: #fff;
@@ -121,12 +124,16 @@ body {
 .youihui .my_youhui .line_one {
   color: #f15f56;
   height: 0.4rem;
-  line-height: 1.35rem;
+  line-height: 0.4rem;
+  margin-top:0.4rem;
   margin-left: 1.05333333rem;
+  margin-bottom:-0.5rem;
 }
 .youihui .my_youhui .line_two {
   height: 0.32rem;
+  line-height: 0.32rem;
   margin-left: 1.05333333rem;
+  margin-top:0.73333rem;
 }
 .youihui .youhui1 {
   padding-left: 0.17333333rem;
@@ -138,7 +145,7 @@ body {
   height: 0.98666667rem;
 }
 .youihui .youhui1 .youhui_content {
-  display: inline-block;
+  display: table;
   color: #858585;
 }
 .youihui .youhui2 {
@@ -151,7 +158,7 @@ body {
   height: 0.84rem;
 }
 .youihui .youhui2 .youhui_content {
-  display: inline-block;
+  display: table;
   color: #858585;
 }
 .options {
