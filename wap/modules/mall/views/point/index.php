@@ -1,8 +1,10 @@
 <?php
 
-$this->title = '我的积分';
-
 use common\utils\StringUtils;
+
+$this->title = '我的积分';
+$backUrl = \Yii::$app->request->referrer;
+$this->backUrl = $backUrl ? $backUrl : '/?_mark='.time();
 
 ?>
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/wenjfbase.css">
