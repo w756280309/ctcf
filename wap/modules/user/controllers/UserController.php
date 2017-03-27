@@ -26,6 +26,7 @@ class UserController extends BaseController
             $except = [
                 'except' => [
                     'index',
+                    'is-login',
                 ],
             ];
         }
@@ -58,6 +59,27 @@ class UserController extends BaseController
             }
         }
 
+        return $this->render(!$inApp || $uCenterFlag ? 'index' : 'index_yuan', $this->index());
+    }
+
+    /**
+     * 异步加载账户中心相关数据.
+     */
+    public function actionIsLogin()
+    {
+        $backArr = Yii::$app->user->isGuest ? [] : $this->index();
+        $this->layout = false;
+
+        $html = $this->render('_index', $backArr);
+
+        return [
+            'html' => $html,
+            'sumLicai' => isset($backArr['sumLicai']) ? $backArr['sumLicai'] : '',
+        ];
+    }
+
+    private function index()
+    {
         $user = $this->getAuthedUser();
         $ua = $user->lendAccount;
         $pointPromo = RankingPromo::findOne(['key' => 'loan_order_points']);
@@ -69,17 +91,20 @@ class UserController extends BaseController
         }
 
         $sumCoupon = 0;
-        if (!$inApp || $uCenterFlag) {
+        $sumLicai = 0;
+        if (!defined('IN_APP') || Yii::$app->params['new_ucenter_on']) {
             //代金券总值
-            $sumCoupon = UserCoupon::findCouponInUse($user->id,date('Y-m-d'))->sum('amount');
+            $sumCoupon = UserCoupon::findCouponInUse($user->id, date('Y-m-d'))->sum('amount');
+            $sumLicai = bcadd($ua->freeze_balance, $ua->investment_balance, 2);
         }
 
-        return $this->render(!$inApp || $uCenterFlag ? 'index' : 'index_yuan', [
+        return [
             'sumCoupon' => $sumCoupon,
             'ua' => $ua,
             'user' => $user,
             'showPointsArea' => $showPointsArea,
-        ]);
+            'sumLicai' => $sumLicai,
+        ];
     }
 
     /**
