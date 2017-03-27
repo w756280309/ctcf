@@ -24,4 +24,13 @@ class BaseController extends Controller
             ],
         ];
     }
+
+    public function beforeAction($action)
+    {
+        if (!\Yii::$app->request->referrer) {
+            \Yii::$app->view->backUrl = '/';
+        }
+
+        return parent::beforeAction($action);
+    }
 }

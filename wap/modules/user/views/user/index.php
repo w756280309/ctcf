@@ -83,7 +83,7 @@ $this->title = '账户中心';
         </div>
     </div>
 </a>
-<a href="tel://<?= Yii::$app->params['contact_tel'] ?>">
+<a href="tel:<?= Yii::$app->params['contact_tel'] ?>">
     <p class="customer_service f15">客服电话：<?= Yii::$app->params['contact_tel'] ?></p>
     <p class="customer_service f15">（8:30-20:00）</p>
 </a>
