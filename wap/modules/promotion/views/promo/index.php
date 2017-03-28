@@ -57,7 +57,7 @@ $config = json_decode($promo->config, true);
         </div>
     <?php } ?>
 
-    <?php if (!$isO2O) { ?>
+    <?php if (!$promo->isO2O) { ?>
     <div class="gift">
         <p class="f18 "><img  data-original="<?= FE_BASE_URI ?>wap/luodiye/images/icon_01.png" alt=""> 积分商城，更多好礼等你拿 <img  data-original="<?= FE_BASE_URI ?>wap/luodiye/images/icon_01.png" alt=""></p>
         <ul class="clearfix">

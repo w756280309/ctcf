@@ -2,61 +2,16 @@
 
 namespace console\controllers;
 
-use common\models\affiliation\AffiliateCampaign;
-use common\models\affiliation\Affiliator;
 use common\models\code\GoodsType;
 use common\models\code\VirtualCard;
-use Yii;
 use yii\console\Controller;
 
 class CardController extends Controller
 {
     private $number = 300; //默认生成券码的数量
-    private $goodsSn = 'yikecoffee'; //渠道商品
-    private $affiliatorName = '意克咖啡'; //合作商名称
-    private $trackCode = 'yikecoffee'; //渠道码
+    private $goodsSn = 'quchaqu'; //商品
     private $noSecert = true; //是否生成密码开关
-    private $isO2O = true;
-
-    /**
-     * 添加合作商及合作商渠道
-     *
-     * @param null|string $name      合作商名称
-     * @param null|string $trackCode 渠道码
-     *
-     * @return int
-     */
-    public function actionAddAffiliator($name = null, $trackCode = null)
-    {
-        $AffiliatorName = null === $name ? $this->affiliatorName : $name;
-        if (null !== Affiliator::find()->where(['name' => $AffiliatorName])->one()) {
-            $this->stdout('合作商已存在');
-            return 1;
-        }
-        $db = Yii::$app->db;
-        $transaction = $db->beginTransaction();
-        try{
-            $affiliator = new Affiliator();
-            $affiliator->name = $AffiliatorName;
-            if ($this->isO2O) {
-                $affiliator->isO2O = true;
-            }
-            if($affiliator->save()) {
-                $campaign = new AffiliateCampaign();
-                $campaign->trackCode = null === $trackCode ? $this->trackCode : $trackCode;
-                $campaign->affiliator_id = $affiliator->id;
-                if ($campaign->save()) {
-                    $transaction->commit();
-                    $this->stdout('插入合作商和渠道码成功');
-                    return 0;
-                }
-            }
-        } catch (\Exception $ex) {
-            $transaction->rollBack();
-            $this->stdout('添加合作商及渠道信息失败');
-            return 1;
-        }
-    }
+    private $isReserved = false; //是否为积分商城预留
 
     /**
      * 生成指定商品指定数量的券码
@@ -88,6 +43,7 @@ class CardController extends Controller
             $card->createTime = date('Y-m-d H:i:s');
             $card->goodsType_id = $goods->id;
             $card->affiliator_id = $goods->affiliator_id;
+            $card->isReserved = $this->isReserved;
             $card->save();
         }
         $finialNum = VirtualCard::find()->count();

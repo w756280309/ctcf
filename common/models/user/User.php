@@ -16,7 +16,7 @@ use common\models\user\DrawRecord as Draw;
 use common\utils\SecurityUtils;
 use P2pl\Borrower;
 use P2pl\UserInterface;
-use Wcg\Growth\Integration\Yii2Module\Model\ReferralSource;
+use wap\modules\promotion\models\RankingPromo;
 use Yii;
 use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
@@ -60,6 +60,7 @@ use Zii\Validator\CnMobileValidator;
  * @property string safeMobile          加密后的手机号
  * @property string safeIdCard          加密后的身份证(目前身份证号系统只支持18位)
  * @property string birthdate           生日，形如19920101
+ * @property int    promoId             注册参与的活动ID
  */
 class User extends ActiveRecord implements IdentityInterface, UserInterface
 {
@@ -219,7 +220,7 @@ class User extends ActiveRecord implements IdentityInterface, UserInterface
             ],
             'edit' => ['id', 'type', 'username', 'mobile', 'email', 'real_name', 'idcard', 'org_name', 'org_code', 'status', 'auth_key', 'user_pass', 'in_time', 'cat_id', 'law_master', 'law_master_idcard', 'law_mobile', 'shui_code', 'business_licence', 'tel', 'passwordLastUpdatedTime',
             ],
-            'signup' => ['type', 'modile', 'password_hash', 'auth_key', 'usercode', 'regContext', 'safeMobile'],
+            'signup' => ['type', 'mobile', 'password_hash', 'auth_key', 'usercode', 'regContext', 'safeMobile'],
             'idcardrz' => ['real_name', 'idcard', 'idcard_status'],
             'editpass' => ['password_hash', 'trade_pwd', 'auth_key'],
             'login' => ['last_login'],
@@ -354,6 +355,7 @@ class User extends ActiveRecord implements IdentityInterface, UserInterface
             'safeMobile' => '加密手机号',
             'safeIdCard' => '加密身份证号',
             'birthdate' => '生日',
+            'promoId' => '注册参与的活动ID',
         ];
     }
 
@@ -963,12 +965,12 @@ class User extends ActiveRecord implements IdentityInterface, UserInterface
     }
 
     /**
-     * 判断当前用户是否为o2o渠道注册用户
+     * 判断当前用户是否为o2o活动注册用户
      *
      * @return bool
      */
     public function isO2oRegister()
     {
-        return null !== $this->campaign_source && null !== ReferralSource::find()->where(['isO2O' => true, 'source' => $this->campaign_source])->one();
+        return null !== $this->promoId && null !== RankingPromo::find()->where(['isO2O' => true, 'id' => $this->promoId])->one();
     }
 }

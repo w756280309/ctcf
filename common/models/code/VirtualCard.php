@@ -13,7 +13,7 @@ class VirtualCard extends ActiveRecord
             ['goodsType_id', 'required'],
             [['serial', 'secret'], 'match', 'pattern' => '/^([0-9a-z]+)*$/i', 'message' => '{attribute}必须是字母与数字的组合'],
             [['serial', 'secret'], 'unique', 'message' => '兑换码及密码应唯一'],
-            [['isPull', 'isUsed', 'user_id'], 'integer'],
+            [['isPull', 'isUsed', 'user_id', 'isReserved'], 'integer'],
             [['pullTime', 'usedTime', 'createTime'], 'safe'],
         ];
     }
@@ -34,6 +34,7 @@ class VirtualCard extends ActiveRecord
             'affiliator_id' => '商家ID',
             'expiredTime' => '过期时间',
             'usedMobile' => '使用者手机号',
+            'isReserved' => '积分商城预留',
         ];
     }
 

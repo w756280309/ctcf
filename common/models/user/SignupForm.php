@@ -103,9 +103,15 @@ class SignupForm extends Model
     }
 
     /**
-     * 注册用户主函数.
+     * 注册主函数，返回false/User(登陆成功后)
+     *
+     * @param integer      $regFrom    注册来源0未知、1wap、2微信、3app、4pc
+     * @param string       $regContext 注册位置
+     * @param null|integer $promoId    注册参与的活动ID
+     *
+     * @return boolean|User
      */
-    public function signup($regFrom = User::REG_FROM_OTHER, $regContext)
+    public function signup($regFrom = User::REG_FROM_OTHER, $regContext, $promoId = null)
     {
         if ($this->validate()) {
             $transaction = Yii::$app->db->beginTransaction();
@@ -137,8 +143,10 @@ class SignupForm extends Model
 
             //添加注册IP
             $user->registerIp = Yii::$app->request->getUserIP();
-
+            //添加注册来源
             $user->regFrom = $regFrom;
+            //添加活动ID
+            $user->promoId = $promoId;
 
             if (!$user->save()) {
                 $transaction->rollBack();
@@ -224,7 +232,9 @@ class SignupForm extends Model
     }
 
     /**
-     * 找回密码主函数.
+     * 找回密码主函数
+     *
+     * @return boolean
      */
     public function resetpass()
     {

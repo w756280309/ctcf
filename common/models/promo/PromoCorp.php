@@ -1,7 +1,7 @@
 <?php
 namespace common\models\promo;
 
-use common\models\affiliation\AffiliateCampaign;
+use common\models\affiliation\Affiliator;
 use common\models\code\GoodsType;
 use common\models\code\VirtualCard;
 use common\models\order\OnlineOrder;
@@ -21,7 +21,6 @@ use Yii;
  * config => [
  *     'image' => '带CDN的绝对地址',
  *     'rules' => [],
- *     'trackCode' => [], //渠道码
  *     'goodsSn' => '', //商品sn
  * ]
  */
@@ -76,6 +75,9 @@ class PromoCorp
     {
         try {
             $user = $order->user;
+            if (empty($user->promoId) || $user->promoId !== $this->promo->id) {
+                return false;
+            }
             if ($order->order_money < 1000) {
                 return false;
             }
@@ -99,10 +101,6 @@ class PromoCorp
                     return false;
                 }
 
-                //不是O2O注册用户
-                if (!$user->isO2oRegister()) {
-                    return false;
-                }
                 return true;
             }
         } catch (\Exception $ex) {
@@ -126,6 +124,7 @@ class PromoCorp
         $card = VirtualCard::find()
             ->where(['goodsType_id' => $goodsType->id, 'user_id' => $user->id])
             ->andWhere(['isPull' => true])
+            ->andWhere(['isReserved' => false])
             ->one();
         if (null !== $card) {
             return true;
@@ -143,19 +142,14 @@ class PromoCorp
      */
     public function sendSms(User $user, VirtualCard $card)
     {
-        $affiliatorCampaign = AffiliateCampaign::find()
-            ->where(['trackCode' => $user->campaign_source])
-            ->one();
-        if (null === $affiliatorCampaign) {
-            return false;
-        }
-
+        $goods = $card->goods;
+        $affiliator = Affiliator::findOne($goods->affiliator_id);
         $templateId = 158404;
         $cardInfo = $card->serial . '，';
         if (null !== $card->secret) {
             $cardInfo .= "密码{$card->secret}，";
         }
-        $effectDays = $card->goods->effectDays;
+        $effectDays = $goods->effectDays;
         if (null !== $effectDays) {
             $cardInfo .= "有效期{$effectDays}天";
         }
@@ -163,7 +157,7 @@ class PromoCorp
         $message = [
             $card->goods->name,
             $cardInfo,
-            $affiliatorCampaign->affiliator->name,
+            $affiliator->name,
             $this->promo->title,
             Yii::$app->params['contact_tel'],
         ];
@@ -182,9 +176,8 @@ class PromoCorp
     private function getUsefulCard(User $user, $config)
     {
         $logInfo = '，user_id：' . $user->id . '，promo_id：' . $this->promo->id . '，promo_title：' . $this->promo->title . '，referral_source：' . $user->campaign_source;
-        $trackCode = isset($config->trackCode) && !empty($config->trackCode) ? $config->trackCode : [];
-        if (empty($trackCode) || !in_array($user->campaign_source, $trackCode)) {
-            Yii::info('O2O error：请指定正确的合作商渠道' . $logInfo, 'user_log');
+        if (empty($user->promoId) || $user->promoId !== $this->promo->id) {
+            Yii::info('O2O error：未参与此活动' . $logInfo, 'user_log');
             return false;
         }
 
@@ -201,10 +194,16 @@ class PromoCorp
             return false;
         }
 
+        if (empty($goodsType->affiliator_id) || null === ($affiliator = Affiliator::findOne($goodsType->affiliator_id))) {
+            Yii::info('O2O error：找不到提供商品的商家' . $goodsType->affiliator_id . $logInfo, 'user_log');
+            return false;
+        }
+
         $card = VirtualCard::find()
             ->where(['goodsType_id' => $goodsType->id])
             ->andWhere(['isPull' => false])
             ->andWhere(['user_id' => null])
+            ->andWhere(['isReserved' => false])
             ->one();
         if (null === $card) {
             Yii::info('O2O error：没有可用的券码' . $logInfo, 'user_log');

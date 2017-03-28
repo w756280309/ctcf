@@ -19,6 +19,7 @@ use yii\helpers\ArrayHelper;
  * @property string  $promoClass   处理活动的类，包含命名空间,可以直接 new $promoClass
  * @property string  $whiteList    以英文逗号隔开的用户手机号字符串
  * @property boolean $isOnline     活动是否可以公开访问
+ * @property bolean $isO2O        活动是否为O2O
  *
  * 1) migration初始化活动数据，title,startTime,endTime,key,promoClass,isOnline = false;
  * 2) 代码发布到正式环境
@@ -58,6 +59,7 @@ class RankingPromo extends ActiveRecord
             'promoClass' => '活动处理类',
             'whiteList' => '白名单',
             'isOnline' => '活动是否上线',
+            'isO2O' => '活动是否为O2O',
         ];
     }
 

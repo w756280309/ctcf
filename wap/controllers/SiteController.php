@@ -478,9 +478,12 @@ class SiteController extends Controller
         if (!isset($data['regContext']) || empty($data['regContext'])) {
             $data['regContext'] = 'm';
         }
+        if (!isset($data['promoId']) || empty($data['promoId'])) {
+            $data['promoId'] = null;
+        }
 
         if ($model->load($data) && Yii::$app->request->isAjax) {
-            if ($user = $model->signup(User::REG_FROM_WAP, $data['regContext'])) {
+            if ($user = $model->signup(User::REG_FROM_WAP, $data['regContext'], $data['promoId'])) {
 
                 $isLoggedin = defined('IN_APP')
                     ? Yii::$app->user->setIdentity($user) || true

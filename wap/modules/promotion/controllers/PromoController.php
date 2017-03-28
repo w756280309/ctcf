@@ -35,13 +35,9 @@ class PromoController extends Controller
             $share = Share::findOne(['shareKey' => $wx_share_key]);
         }
 
-        $source = Yii::$app->request->get('utm_source');
-        $referralSource = !empty($source) ? ReferralSource::find()->where(['source' => $source, 'isO2O' => true])->one() : null;
-
         return $this->render('index', [
             'promo' => $promo,
             'share' => $share,
-            'isO2O' => null !== $referralSource,
         ]);
     }
 
