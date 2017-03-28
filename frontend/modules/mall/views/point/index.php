@@ -108,8 +108,8 @@ $this->registerCssFile(ASSETS_BASE_URI.'css/pagination.css', ['depends' => Front
         }
 
         var li_length = $('.detail_content').children().length;
-        if(li_length == 0){
-            $('.detail_content').css('height','295px').append('<p>暂无积分明细</p>')
+        if(li_length == 0) {
+            $('.detail_content').css('height','295px').append('<p style="font-size: 18px;">暂无积分明细</p>');
         }
     }
 </script>
