@@ -352,6 +352,8 @@ class SiteController extends Controller
                 if (in_array(parse_url($tourl, PHP_URL_HOST), [
                     'activity.m.duiba.com.cn',//兑吧活动
                     'www.duiba.com.cn',//兑吧商城
+                    'home.m.duiba.com.cn',//兑吧首页
+                    'goods.m.duiba.com.cn',//兑吧商品页面
                 ])) {
                     $tourl = ThirdPartyConnect::generateLoginUrl($tourl);
                 }
