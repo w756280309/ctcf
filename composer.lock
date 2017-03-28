@@ -914,10 +914,12 @@
             "source": {
                 "type": "git",
                 "url": "ssh://vcs@dx.wangcaigu.cn/diffusion/WCGLIBS/wcg-libs.git",
-                "reference": "04f40c1acb7a60fc486e9f78e817e4fd226ce1ef"
+                "reference": "edd437a890d824bc8cdece1a8e0b058b341a8f5f"
             },
             "require": {
-                "php": ">=5.5.0"
+                "php": ">=5.5.0",
+                "phpoffice/phpexcel": "1.8.1",
+                "yiisoft/yii2": ">=2.0.6"
             },
             "type": "library",
             "autoload": {
@@ -925,12 +927,17 @@
                     "Wcg\\": "src/"
                 }
             },
+            "autoload-dev": {
+                "psr-4": {
+                    "WcgTests\\": "tests/WcgTests/"
+                }
+            },
             "license": [
                 "proprietary"
             ],
             "description": "工具库",
             "homepage": "http://dx.wangcaigu.cn/diffusion/WCGLIBS/",
-            "time": "2017-02-27 05:55:40"
+            "time": "2017-03-28 04:59:52"
         },
         {
             "name": "yiisoft/yii2",
@@ -1481,7 +1488,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kherge-abandoned/php-json/zipball/60c696c9370a1e5136816ca557c17f82a6fa83f1",
+                "url": "https://api.github.com/repos/kherge-php/json/zipball/60c696c9370a1e5136816ca557c17f82a6fa83f1",
                 "reference": "60c696c9370a1e5136816ca557c17f82a6fa83f1",
                 "shasum": ""
             },
