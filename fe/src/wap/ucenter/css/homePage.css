@@ -100,7 +100,7 @@ body {
 }
 .remain .rg .remain_button {
   display: block;
-  width: 1.93333333rem;
+  width: 40%;
   height: 0.89333333rem;
   line-height: 0.89333333rem;
   text-align: center;
@@ -114,8 +114,8 @@ body {
 }
 .youihui .my_youhui {
   position: relative;
-  display: table;
-  width: 3.92rem;
+  width: 46%;
+  overflow: hidden;
   height: 1.76rem;
   border: 1px solid #f15f56;
   border-radius: 10px;
