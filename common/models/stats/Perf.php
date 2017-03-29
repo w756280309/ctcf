@@ -4,6 +4,9 @@ namespace common\models\stats;
 
 use common\models\coupon\CouponType;
 use common\models\coupon\UserCoupon;
+use common\models\offline\OfflineStats;
+use common\models\payment\Repayment;
+use common\models\product\OnlineProduct;
 use yii\db\ActiveRecord;
 use Yii;
 use yii\helpers\ArrayHelper;
@@ -665,5 +668,48 @@ FROM perf WHERE DATE_FORMAT(bizDate,'%Y-%m-%d') < DATE_FORMAT(NOW(),'%Y-%m-%d') 
         $sql = "SELECT DISTINCT  op.`uid` FROM  `online_repayment_plan` AS op LEFT JOIN online_product AS p ON p.id = op.online_pid WHERE p.isTest =0 AND op.status IN ( 1, 2 ) AND DATE_FORMAT( op.`actualRefundTime` ,  '%Y-%m-%d' ) =  :date";
         $data = Yii::$app->db->createCommand($sql,['date' => $date])->queryAll();
         return ArrayHelper::getColumn($data, 'uid');
+    }
+
+
+    /**
+     * 获取首页相关统计
+     * @return array
+     */
+    public static function getStatsForIndex()
+    {
+        $totalTradeAmount = OnlineProduct::find()
+            ->where([
+                'del_status' => false,
+                'online_status' => true,
+                'isTest' => false,
+            ])
+            ->andWhere(['>', 'status', OnlineProduct::STATUS_PRE])
+            ->sum('funded_money');
+
+        $plan = Repayment::find()
+            ->where(['isRefunded' => true])
+            ->select("sum(amount) as totalAmount, sum(interest) as totalInterest")
+            ->asArray()
+            ->one();
+
+        $offlineStats = OfflineStats::findOne(1);
+
+        $tradedAmount = 0;
+        $refundedPrincipal = 0;
+        $refundedInterest = 0;
+
+        if (null !== $offlineStats) {
+            $tradedAmount = $offlineStats->tradedAmount;
+            $refundedPrincipal = $offlineStats->refundedPrincipal;
+            $refundedInterest = $offlineStats->refundedInterest;
+        }
+
+        $statsData = [
+            'totalTradeAmount' => bcadd($totalTradeAmount, $tradedAmount, 2),//平台累计交易额
+            'totalRefundAmount' => bcadd($plan['totalAmount'], bcadd($refundedPrincipal, $refundedInterest, 2), 2),//累计兑付金额
+            'totalRefundInterest' => bcadd($plan['totalInterest'], $refundedInterest, 2),//累计带来收益
+        ];
+
+        return $statsData;
     }
 }

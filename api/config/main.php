@@ -58,6 +58,9 @@ return [
         'user' => [
             'identityClass' => 'common\\models\\user\\User',
         ],
+        'cache' => [
+            'class' => 'yii\caching\FileCache',
+        ],
         'urlManager' => [
             'enableStrictParsing' => false,
             'rules' => [
@@ -99,10 +102,16 @@ return [
                 'go/<key>' => 'source/referral-link/go',//分销商链接地址转跳
             ],
         ],
+        'errorHandler' => [
+            'errorAction' => 'v2/site/error',
+        ],
     ],
     'modules' => [
         'v1' => [
             'class' => 'api\\modules\\v1\\Module',
+        ],
+        'v2' => [
+            'class' => 'api\\modules\\v2\\Module',
         ],
         'source' => [
             'class' => 'Wcg\\Growth\\Integration\\Yii2Module\\Module',

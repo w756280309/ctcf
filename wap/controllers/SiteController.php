@@ -7,6 +7,7 @@ use common\models\mall\ThirdPartyConnect;
 use common\models\offline\OfflineStats;
 use common\models\payment\Repayment;
 use common\models\product\LoanFinder;
+use common\models\stats\Perf;
 use common\service\SmsService;
 use common\service\LoginService;
 use common\models\adv\Adv;
@@ -246,38 +247,7 @@ class SiteController extends Controller
         $key = 'index_stats';
 
         if (!$cache->get($key)) {
-            $totalTradeAmount = OnlineProduct::find()
-                ->where([
-                    'del_status' => false,
-                    'online_status' => true,
-                    'isTest' => false,
-                ])
-                ->andWhere(['>', 'status', OnlineProduct::STATUS_PRE])
-                ->sum('funded_money');
-
-            $plan = Repayment::find()
-                ->where(['isRefunded' => true])
-                ->select("sum(amount) as totalAmount, sum(interest) as totalInterest")
-                ->asArray()
-                ->one();
-
-            $offlineStats = OfflineStats::findOne(1);
-
-            $tradedAmount = 0;
-            $refundedPrincipal = 0;
-            $refundedInterest = 0;
-
-            if (null !== $offlineStats) {
-                $tradedAmount = $offlineStats->tradedAmount;
-                $refundedPrincipal = $offlineStats->refundedPrincipal;
-                $refundedInterest = $offlineStats->refundedInterest;
-            }
-
-            $statsData = [
-                'totalTradeAmount' => bcadd($totalTradeAmount, $tradedAmount, 2),
-                'totalRefundAmount' => bcadd($plan['totalAmount'], bcadd($refundedPrincipal, $refundedInterest, 2), 2),
-                'totalRefundInterest' => bcadd($plan['totalInterest'], $refundedInterest, 2),
-            ];
+            $statsData = Perf::getStatsForIndex();
 
             $cache->set($key, $statsData, 600);   //缓存十分钟
         }
