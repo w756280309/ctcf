@@ -148,6 +148,9 @@ CSS
         <div class="span4">平台今日融资项目数：<?= intval($todaySuccessFound) ?>个</div>
     </div>
     <div class="row-fluid">
+        <div class="span4">平台累计已还清项目数：<?= intval($onlineProPay) ?>个</div>
+    </div>
+    <div class="row-fluid">
         <h3>代金券统计</h3>
     </div>
     <div class="row-fluid">

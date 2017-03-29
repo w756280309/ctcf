@@ -4,6 +4,7 @@ namespace backend\modules\datatj\controllers;
 
 use backend\controllers\BaseController;
 use common\lib\user\UserStats;
+use common\models\product\OnlineProduct;
 use common\models\stats\Perf;
 use common\models\user\User;
 use yii\bootstrap\Html;
@@ -40,6 +41,9 @@ class DatatjController extends BaseController
         $registerData = Yii::$app->db->createCommand("SELECT COUNT(*) AS c,regFrom AS f FROM `user` WHERE `type` = 1  GROUP BY f ORDER BY f ASC")->queryAll();//不同来源的注册数
         $investorData = Yii::$app->db->createCommand("SELECT COUNT(DISTINCT uid) AS c ,SUM(o.order_money) AS m ,o.investFrom AS f FROM online_order AS o INNER JOIN online_product AS p ON o.online_pid = p.id WHERE o.status = 1 AND p.isTest = 0
  GROUP BY f ORDER BY f ASC")->queryAll();//不同来源的购买人数、购买金额
+
+        //平台累计已还清项目数
+        $onlineProPay = OnlineProduct::find()->where(['status' => 6, 'isTest' => false, 'del_status' => false])->count();
         return $this->render('huizongtj', [
             'totalOnlineInve' => $total['onlineInvestment'] + $today['onlineInvestment'],//线上累计投资金额
             'totalOfflineInve' => $total['offlineInvestment'] + $today['offlineInvestment'],//线下累计投资金额
@@ -78,6 +82,7 @@ class DatatjController extends BaseController
             'totalCoupon' => $totalCoupon,//已发放代金券
             'registerData' => $registerData,//不同来源的注册数
             'investorData' => $investorData,//不同来源的购买人数、购买金额
+            'onlineProPay' => $onlineProPay,//平台累计已还清项目数
         ]);
     }
 
