@@ -19,7 +19,12 @@ $this->registerJsFile(ASSETS_BASE_URI . 'js/swiper.min.js', ['depends' => Jquery
 
 ?>
 
-    <div class="container flex-content">
+    <div class="container flex-content relative">
+        <!--  签到   -->
+        <a class="signature" href="/user/checkin">
+            <img src="<?= FE_BASE_URI ?>wap/index/images/signature.png" alt="签到抽奖">
+        </a>
+
         <?php if (!empty($hotActs)) { ?>
             <div class="banner swiper-container">
                 <div class="swiper-wrapper" id="index_banner">

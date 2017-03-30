@@ -1,0 +1,35 @@
+body {
+  background-color: #fff;
+}
+.jilu-qd .item-qd {
+  border-bottom: 1px solid #ddd;
+  height: 1.33333333rem;
+  line-height: 1.33333333rem;
+  padding: 0 0.53333333rem 0 0.533rem;
+  color: #666;
+}
+.jilu-qd .item-qd::before{
+  content: '·';
+  color: #ff781b;
+  font-size: 1.2rem;
+  width:0.4rem;
+  float: left;
+}
+.jilu-qd .item-qd .org {
+  color: #f44336;
+}
+#pullUp {
+  background: #fff;
+  height: 0.88rem;
+  line-height: 0.88rem;
+  padding: 0.06666667rem 0.13333333rem;
+  border-bottom: 1px solid #ccc;
+  font-weight: bold;
+  color: #888;
+  text-align: center;
+}
+.no_jilu{
+  color: #666;
+  text-align: center;
+  margin-top:50%;
+}

@@ -1,0 +1,163 @@
+body {
+  background-color: #ddd;
+}
+.head_part {
+  height: 3.56rem;
+  background: url("../images/top_bg.png") no-repeat;
+  background-size: contain;
+  position: relative;
+}
+.head_part .jilu_link {
+  position: absolute;
+  display: block;
+  width: 1.92rem;
+  height: 0.613rem;
+  line-height: 0.64rem;
+  top: 0.346rem;
+  right: 0.266rem;
+  background-color: #ff8f71;
+  color: #fff;
+  text-align: center;
+  border-radius: 0.266rem;
+}
+.schedule_box {
+  background-color: #fff;
+  position: relative;
+  padding-top: 1.24rem;
+  padding-bottom: 1.546rem;
+}
+.schedule_box .schedule_bar {
+  width: 100%;
+  height: 0.3rem;
+  border-top: 1px solid #ff5031;
+  border-bottom: 1px solid #ff5031;
+}
+.schedule_box .schedule_bar .lf {
+  display: block;
+  height: 100%;
+}
+.schedule_box .schedule_bar .jindu_one {
+  background-color: #fb4733;
+  width: 0.9333rem;
+  border-right: 1px solid #fff;
+}
+.schedule_box .schedule_bar .jindu_two {
+  width: 40%;
+  background: linear-gradient(to right, #fb4733, #ff782e);
+  border-top-right-radius: 9px;
+  border-bottom-right-radius: 9px;
+}
+.schedule_box .days {
+  display: inline-block;
+  background: url("../images/day_bg.png") no-repeat;
+  background-size: contain;
+  width: 0.8rem;
+  height: 0.75rem;
+  position: absolute;
+  top: 1.8rem;
+  color: #ff782e;
+  text-align: center;
+  padding-top:0.27rem;
+}
+.schedule_box .yuans {
+  width: 0.826rem;
+  height: 1rem;
+  position: absolute;
+  top: 0.24rem;
+}
+.schedule_box .sticker {
+  position: absolute;
+  display: block;
+  width: 1px;
+  height: 0.3rem;
+  background-color: #fff;
+  top: 1.253rem;
+  z-index: 100;
+}
+.schedule_box .jieduan1 {
+  left: 2.32rem;
+}
+.schedule_box .jieduan2 {
+  left: 4.4rem;
+}
+.schedule_box .jieduan3 {
+  right:3%;
+}
+.qiandao_button {
+  width: 100%;
+  height: 1.6rem;
+  background-color: #fff;
+  text-align: center;
+}
+.qiandao_button .qiandao_btn {
+  display: block;
+  height: 1.0666rem;
+  line-height: 1.0666rem;
+  width: 4.56rem;
+  margin: 0 auto;
+  text-align: center;
+  color: #fff;
+}
+.qiandao_button .btn1 {
+  background: url("../images/btn_1.png") no-repeat;
+  background-size: contain;
+}
+.qiandao_button .btn2 {
+  background: url("../images/btn_2.png") no-repeat;
+  background-size: contain;
+}
+.rule_box {
+  margin-top: 0.2667rem;
+  background-color: #fff;
+  padding-bottom: 0.573rem;
+}
+.rule_box .rule_title {
+  text-align: center;
+  color: #333;
+  padding-top: 0.533rem;
+}
+.rule_box img {
+  display: block;
+  width: 9.36rem;
+  height: 0.306rem;
+  margin: 0 auto;
+}
+.rule_box .rule_content {
+  padding-left: 0.533rem;
+  padding-right: 0.533rem;
+  color: #666;
+  padding-bottom: 0.826rem;
+}
+.rule_box .rule_content li {
+  line-height: 0.67rem;
+  margin-top: 0.32rem;
+  list-style-type: decimal;
+  margin-left: 0.533rem;
+}
+.rule_box .djq_deadline {
+  color: #666;
+  margin-top: 0.533rem;
+  padding-left: 0.533rem;
+}
+.rule_box table {
+  width: 8.93rem;
+  margin: 0.4rem auto 0;
+  padding-bottom: 0.533rem;
+  border-collapse: collapse;
+}
+.rule_box table tr th {
+  color: #333;
+}
+.rule_box table tr td {
+  color: #666;
+}
+.rule_box table tr td .org {
+  color: #f1453d;
+}
+.rule_box table tr td,
+.rule_box table tr th {
+  height: 0.8rem;
+  line-height: 0.8rem;
+  border: 1px solid #999;
+  text-align: center;
+}

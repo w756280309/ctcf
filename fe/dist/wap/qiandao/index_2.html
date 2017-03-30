@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>签到记录</title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+    <link rel="stylesheet" href="__FE_BASE_URI__/common/css/wenjfbase.css">
+    <link rel="stylesheet" href="__FE_BASE_URI__/common/css/activeComHeader.css">
+    <link rel="stylesheet" href="__FE_BASE_URI__wap/qiandao/css/index_2.css">
+    <script src="__FE_BASE_URI__/libs/lib.flexible3.js"></script>
+    <script src="__FE_BASE_URI__/libs/jquery-1.11.1.min.js"></script>
+</head>
+<body>
+<div class="flex-content">
+    <div class="topTitle f18">
+        <img class="goback lf" src="__FE_BASE_URI__wap/qiandao/images/back.png" alt="" onclick="history.go(-1)">
+        签到记录
+    </div>
+    <ul class="jilu-qd f15">
+        <li class="item-qd">
+            2017-01-01 09:09:09
+            <span class="rg"><span class="org">+5</span>积分</span>
+        </li>
+        <li class="item-qd">
+            2017-01-01 09:09:09
+            <span class="rg"><span class="org">+5</span>积分</span>
+        </li>
+        <li class="item-qd">
+            2017-01-01 09:09:09
+            <span class="rg"><span class="org">+5</span>积分</span>
+        </li>
+        <li class="item-qd">
+            2017-01-01 09:09:09
+            <span class="rg"><span class="org">+5</span>积分</span>
+        </li>
+        <li class="item-qd">
+            2017-01-01 09:09:09
+            <span class="rg"><span class="org">+5</span>积分</span>
+        </li>
+        <li class="item-qd">
+            2017-01-01 09:09:09
+            <span class="rg"><span class="org">+5</span>积分</span>
+        </li>
+        <li class="item-qd">
+            2017-01-01 09:09:09
+            <span class="rg"><span class="org">+5</span>积分</span>
+        </li>
+        <li class="item-qd">
+            2017-01-01 09:09:09
+            <span class="rg"><span class="org">+5</span>积分</span>
+        </li>
+        <li class="item-qd">
+            2017-01-01 09:09:09
+            <span class="rg"><span class="org">+5</span>积分</span>
+        </li>
+        <li class="item-qd">
+            2017-01-01 09:09:09
+            <span class="rg"><span class="org">+5</span>积分</span>
+        </li>
+        <li class="item-qd">
+            2017-01-01 09:09:09
+            <span class="rg"><span class="org">+5</span>积分</span>
+        </li>
+        <li class="item-qd">
+            2017-01-01 09:09:09
+            <span class="rg"><span class="org">+5</span>积分</span>
+        </li>
+        <li class="item-qd">
+            2017-01-01 09:09:09
+            <span class="rg"><span class="org">+5</span>积分</span>
+        </li>
+        <li class="item-qd">
+            2017-01-01 09:09:09
+            <span class="rg"><span class="org">+5</span>积分</span>
+        </li>
+    </ul>
+    <div id="pullUp">
+        <span class="pullUpLabel f15">加载更多...</span>
+    </div>
+</div>
+<script type="text/javascript">
+    var flag = true ;
+    //自动加载分页数据
+    $(window).scroll(function () {
+        //当内容滚动到底部时加载新的内容
+        if ($(this).scrollTop() + $(window).height() + 20 >= $(document).height() && $(this).scrollTop() > 20) {
+            //当前要加载的页码
+            getPageList();
+        }
+    });
+    function getPageList(){
+        if(flag===true){
+            //模拟ajax请求
+            flag=false;
+            var i,html='';
+            $("#pullUp").show();
+            setTimeout(function(){
+                for(i=0 ; i<10 ; i++){
+                    html += '<li class="item-qd">2017-01-01 09:09:09 <span class="rg"><span class="org">+5</span>积分</span> </li>';
+                }
+                $(".jilu-qd").append(html);
+                flag=true;
+            },100);
+        }
+    }
+    $(function () {
+        //无签到记录情况
+        var jilu_length = $('.jilu-qd').children().length;
+        if(jilu_length < 1){
+            $("#pullUp").hide();
+            $('.jilu-qd').append('<p class="f20 no_jilu">暂无签到记录</p>')
+        }
+    })
+</script>
+</body>
+</html>
