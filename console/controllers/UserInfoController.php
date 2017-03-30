@@ -14,7 +14,7 @@ class UserInfoController extends Controller
     {
         $db = Yii::$app->db;
         $userCount = User::find()->count();
-        $userInfoCount = User::find()->count();
+        $userInfoCount = UserInfo::find()->count();
 
         if ($userInfoCount !== $userCount) {
             $userInfo = UserInfo::find()->select('user_id')->column();

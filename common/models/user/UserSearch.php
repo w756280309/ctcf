@@ -117,7 +117,7 @@ class UserSearch extends User
         //过滤注册时间
         if (!empty($this->regTimeMin) || !empty($this->regTimeMax)) {
             $regTimeMin = strtotime(trim($this->regTimeMin));
-            $regTimeMax = strtotime(trim($this->regTimeMax));
+            $regTimeMax = strtotime(trim($this->regTimeMax) . ' 23:59:59');
             if ($regTimeMin) {
                 $query->andFilterWhere(['>=', 'user.created_at', $regTimeMin]);
             }
@@ -189,7 +189,7 @@ class UserSearch extends User
         //过滤投资时间段（该时间段内有投资记录）
         if (!empty($this->investTimeMin) || !empty($this->investTimeMax)) {
             $investTimeMin = strtotime(trim($this->investTimeMin));
-            $investTimeMax = strtotime(trim($this->investTimeMax));
+            $investTimeMax = strtotime(trim($this->investTimeMax) . ' 23:59:59');
             $queryOrder = OnlineOrder::find()->select('uid')->where(['status' => OnlineOrder::STATUS_SUCCESS]);
             if ($investTimeMin) {
                 $queryOrder->andFilterWhere(['>=', 'created_at', $investTimeMin]);
