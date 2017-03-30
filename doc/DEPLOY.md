@@ -2,6 +2,14 @@
 
 COMPOSER_CACHE_DIR=/data/composer-cache composer install --no-dev --prefer-dist -o
 
+需要的扩展：
+
+bcmath、mbstring、xml、opcache、gd、curl、mcrypt
+
+注意事项：
+
+7.1提示mcrypt弃用
+
 以下未维护，暂不参考：
 
 定时任务部署
