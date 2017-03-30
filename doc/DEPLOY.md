@@ -1,3 +1,9 @@
+恢复vendor（慢）：
+
+COMPOSER_CACHE_DIR=/data/composer-cache composer install --no-dev --prefer-dist -o
+
+以下未维护，暂不参考：
+
 定时任务部署
 *1.定时短信 ./yii smscrontab/send
 2.定时标的上线 ./yii dealcrontab/now
