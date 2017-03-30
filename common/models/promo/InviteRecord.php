@@ -120,6 +120,14 @@ class InviteRecord extends ActiveRecord
     }
 
     /**
+     * 获取邀请者
+     */
+    public function getUser()
+    {
+        return $this->hasOne(User::className(), ['id' => 'user_id']);
+    }
+
+    /**
      * 获取用户被邀请次数.
      *
      * @param string | int $userId 用户ID

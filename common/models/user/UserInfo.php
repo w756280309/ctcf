@@ -3,22 +3,22 @@
 namespace common\models\user;
 
 use common\models\order\OnlineOrder;
-use Yii;
 use yii\db\ActiveRecord;
 
 /**
  * This is the model class for table "user_info".
  *
  * @property integer $id
- * @property integer $user_id
- * @property integer $isInvested
- * @property integer $investCount
- * @property string $investTotal
- * @property string $firstInvestDate
- * @property string $lastInvestDate
- * @property string $firstInvestAmount
- * @property string $lastInvestAmount
- * @property string $averageInvestAmount
+ * @property integer $user_id             用户ID
+ * @property integer $isInvested          是否投资过
+ * @property integer $investCount         成功投资次数
+ * @property string  $investTotal         累计投资金额
+ * @property string  $firstInvestDate     第一次投资时间
+ * @property string  $lastInvestDate      最后一次投资时间
+ * @property string  $firstInvestAmount   第一次投资金额
+ * @property string  $lastInvestAmount    最后一次投资金额
+ * @property string  $averageInvestAmount 平均投资金额
+ * @property boolean $isAffiliator        是否为被邀请人
  */
 class UserInfo extends ActiveRecord
 {
@@ -36,7 +36,7 @@ class UserInfo extends ActiveRecord
     public function rules()
     {
         return [
-            [['user_id', 'isInvested', 'investCount'], 'integer'],
+            [['user_id', 'isInvested', 'investCount', 'isAffiliator'], 'integer'],
             [['investTotal', 'firstInvestAmount', 'lastInvestAmount', 'averageInvestAmount'], 'number'],
             [['firstInvestDate', 'lastInvestDate'], 'safe'],
             [['user_id'], 'required'],
@@ -60,6 +60,7 @@ class UserInfo extends ActiveRecord
             'firstInvestAmount' => '第一次投资金额',
             'lastInvestAmount' => '最后一次投资金额',
             'averageInvestAmount' => '平均投资金额',
+            'isAffiliator' => '是否为被邀请人',
         ];
     }
 

@@ -165,6 +165,7 @@ class SignupForm extends Model
             }
 
             //邀请好友
+            $isAffiliator = false;
             $inviteCode = Yii::$app->session->get('inviteCode');
             if ($inviteCode) {
                 $u = User::findOne(['usercode' => $inviteCode]);
@@ -178,7 +179,19 @@ class SignupForm extends Model
                         $transaction->rollBack();
                         return false;
                     }
+
+                    $isAffiliator = true;
                 }
+            }
+
+            //初始化UserInfo
+            $userInfo = new UserInfo([
+                'user_id' => $user->id,
+                'isAffiliator' => $isAffiliator,
+            ]);
+            if (!$userInfo->save()) {
+                $transaction->rollBack();
+                return false;
             }
 
             //注册即送代金券

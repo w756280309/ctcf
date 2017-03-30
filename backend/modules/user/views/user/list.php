@@ -83,6 +83,7 @@ $isPersonal = $category === User::USER_TYPE_PERSONAL;
                                         <option <?= $regContext === 'm_intro1611' ? 'selected' : '' ?> value="m_intro1611">wap落地页注册</option>
                                         <option <?= $regContext === 'pc' ? 'selected' : '' ?> value="pc">pc注册</option>
                                         <option <?= $regContext === 'pc_landing' ? 'selected' : '' ?> value="pc_landing">pc落地页注册</option>
+                                        <option <?= $regContext === 'promo' ? 'selected' : '' ?> value="promo">活动落地页注册</option>
                                         <option <?= $regContext === 'other' ? 'selected' : '' ?> value="other">未知</option>
                                     </select>
                                 </td>
@@ -131,6 +132,18 @@ $isPersonal = $category === User::USER_TYPE_PERSONAL;
                             </tr>
                             <tr>
                                 <td>
+                                    <span class="title">被邀请人</span>
+                                    <input type="checkbox" name="isAffiliator" value="1" <?php if($request['isAffiliator']) { ?>checked="checked"<?php } ?>>
+                                </td>
+                                <td colspan="2">
+                                    <span class="title">投资时间</span>
+                                    <input type="text" class="m-wrap span4"  name='investTimeMin' value="<?= Html::encode($request['investTimeMin']) ?>"  onclick="WdatePicker()">
+                                    <input type="text" class="m-wrap span4"  name='investTimeMax' value="<?= Html::encode($request['investTimeMax']) ?>"  onclick="WdatePicker()">
+                                </td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>
                                     <div align="left" class="search-btn">
                                         <button type='submit' class="btn blue btn-block button-search">搜索
                                             <i class="m-icon-swapright m-icon-white"></i></button>
@@ -174,23 +187,24 @@ $isPersonal = $category === User::USER_TYPE_PERSONAL;
             <table class="table table-striped table-bordered table-advance table-hover">
                 <thead>
                     <tr>
-                <?php if ($isPersonal) { ?>
+                    <?php if ($isPersonal) { ?>
                         <th>手机号</th>
                         <th>真实姓名</th>
-                <?php } else { ?>
+                    <?php } else { ?>
                         <th>企业名称</th>
-                <?php } ?>
+                    <?php } ?>
                         <th>注册时间</th>
                         <th class="money">可用余额（元）</th>
-                <?php if ($isPersonal) { ?>
+                    <?php if ($isPersonal) { ?>
                         <th class="money">资产总额</th>
                         <th>未投资时长（天）</th>
                         <th class="money">最后一次购买金额</th>
+                        <th class="money">投资总额</th>
                         <th>用户等级</th>
                         <th>所属分销商</th>
                         <th>注册位置</th>
                         <th>联动状态</th>
-                <?php }?>
+                    <?php }?>
                         <th><center>操作</center></th>
                     </tr>
                 </thead>
@@ -215,11 +229,14 @@ $isPersonal = $category === User::USER_TYPE_PERSONAL;
                                     } else {
                                         $days = 0;
                                     }
-                                    echo $days ;
+                                    echo $days;
                                 ?>
                             </td>
                             <td class="money">
                                 <?= $val->info ? StringUtils::amountFormat3($val->info->lastInvestAmount) : 0 ?>
+                            </td>
+                            <td class="money">
+                                <?= $val->info ? StringUtils::amountFormat3($val->info->investTotal) : 0 ?>
                             </td>
                             <td>VIP<?= $val->level ?></td>
                             <td><?= isset($affiliators[$val->id]) ? $affiliators[$val->id]->affiliator->name : '---' ?></td>

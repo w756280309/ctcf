@@ -973,4 +973,18 @@ class User extends ActiveRecord implements IdentityInterface, UserInterface
     {
         return null !== $this->promoId && null !== RankingPromo::find()->where(['isO2O' => true, 'id' => $this->promoId])->one();
     }
+
+    /**
+     * 获取邀请人
+     */
+    public function fetchInviter()
+    {
+        $user = null;
+        $inviteRecord = InviteRecord::findOne(['invitee_id' => $this->id]);
+        if (null !== $inviteRecord) {
+            $user = User::findOne($inviteRecord->user_id);
+        }
+
+        return $user;
+    }
 }

@@ -3,6 +3,7 @@
 namespace common\models\user;
 
 use common\models\affiliation\UserAffiliation;
+use common\models\order\OnlineOrder;
 use yii\helpers\ArrayHelper;
 
 class UserSearch extends User
@@ -26,6 +27,9 @@ class UserSearch extends User
             'couponAmountMin',
             'couponAmountMax',
             'publicUserId',
+            'investTimeMin',
+            'investTimeMax',
+            'isAffiliator',
         ];
     }
 
@@ -36,6 +40,8 @@ class UserSearch extends User
         $join_user_coupon = false;//判断是否已经关联 user_coupon 表
         $join_coupon_type = false;//判断是否已经关联 coupon_type 表
         $join_third_party_connect = false; //是否关联 third_party_connect 表
+        $uids = []; //最终需要筛选的user_id集合
+        $get_user_ids = false;
         $query = User::find();
         $this->setAttributes($params, false);
         $query->andFilterWhere([
@@ -158,6 +164,7 @@ class UserSearch extends User
 
         $query->with('lendAccount');
 
+        //过滤分销商
         if (isset($params['affiliator_name']) && !empty($params['affiliator_name'])) {
             $aff = UserAffiliation::find()
                 ->innerJoinWith('affiliator')
@@ -166,7 +173,43 @@ class UserSearch extends User
                 ->all();
 
             $uids = ArrayHelper::getColumn($aff, 'user_id');
-            $query->andWhere(['id' => $uids]);
+            $get_user_ids = true;
+        }
+
+        //过滤是否为被邀请人
+        $isAffiliator = boolval($this->isAffiliator);
+        if ($isAffiliator) {
+            if (!$join_user_info) {
+                $query->leftJoin('user_info', 'user_info.user_id = user.id');
+                $join_user_info = true;
+            }
+            $query->andWhere(['user_info.isAffiliator' => $isAffiliator]);
+        }
+
+        //过滤投资时间段（该时间段内有投资记录）
+        if (!empty($this->investTimeMin) || !empty($this->investTimeMax)) {
+            $investTimeMin = strtotime(trim($this->investTimeMin));
+            $investTimeMax = strtotime(trim($this->investTimeMax));
+            $queryOrder = OnlineOrder::find()->select('uid')->where(['status' => OnlineOrder::STATUS_SUCCESS]);
+            if ($investTimeMin) {
+                $queryOrder->andFilterWhere(['>=', 'created_at', $investTimeMin]);
+            }
+            if ($investTimeMax) {
+                $queryOrder->andFilterWhere(['<=', 'created_at', $investTimeMax]);
+            }
+            $orderUsers = $queryOrder->groupBy('uid')->all();
+            $orderUids = ArrayHelper::getColumn($orderUsers, 'uid');
+            if (!empty($uids)) {
+                if (!empty($orderUids)) {
+                    $uids = array_intersect($uids, $orderUids);
+                }
+            } else {
+                $uids = $orderUids;
+            }
+            $get_user_ids = true;
+        }
+        if ($get_user_ids) {
+            $query->andWhere(['user.id' => $uids]);
         }
 
         return $query;

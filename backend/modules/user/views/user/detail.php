@@ -144,6 +144,15 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => YiiAsse
                 <tr>
                     <td><strong>注册位置</strong></td>
                     <td><?= $normalUser['regContext'] ? $normalUser['regContext'] : '---' ?></td>
+                    <?php $inviter = $normalUser->fetchInviter() ?>
+                    <td><strong>邀请人姓名</strong></td>
+                    <td>
+                        <?= null !== $inviter ? '<a href="/user/user/detail?id=' . $inviter->id . '">' . $inviter->real_name . '</a>' : '---' ?>
+                    </td>
+                    <td><strong>邀请人手机号</strong></td>
+                    <td>
+                        <?= null !== $inviter ? '<a href="/user/user/detail?id=' . $inviter->id . '">' . $inviter->mobile . '</a>' : '---' ?>
+                    </td>
                 </tr>
             </table>
 

@@ -438,7 +438,7 @@ class UserController extends BaseController
      */
     private function getInviteRecord(User $user)
     {
-        $query = InviteRecord::find()->where(['user_id' => $user->id])->orderBy(['created_at' => SORT_DESC]);
+        $query = InviteRecord::find()->where(['user_id' => $user->id])->orWhere(['invitee_id' => $user->id])->orderBy(['created_at' => SORT_DESC]);
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
             'pagination' => [
@@ -446,15 +446,25 @@ class UserController extends BaseController
             ],
         ]);
         $records = $dataProvider->getModels();
+        $rechargeData = [];
+        $loanData = [];
+        $userData = [];
         if (count($records) > 0) {
-            $ids = ArrayHelper::getColumn($records, 'invitee_id');
+            $ids = [];
+            foreach ($records as $record) {
+                if ($record->user_id === $user->id) {
+                    $ids[] = $record->invitee_id;
+                    $userData[$record->id] = $record->invitee;
+                } else {
+                    $ids[] = $record->user_id;
+                    $userData[$record->id] = $record->user;
+                }
+            }
+
             $rechargeData = RechargeRecord::find()->select(['uid', 'sum(fund) as recharge_sum'])->where(['in', 'uid', $ids])->andWhere(['status' => RechargeRecord::STATUS_YES])->groupBy('uid')->asArray()->all();
             $rechargeData = ArrayHelper::index($rechargeData, 'uid');
             $loanData = OnlineOrder::find()->select(['uid', 'sum(order_money) as loan_sum'])->where(['in', 'uid', $ids])->andWhere(['status' => OnlineOrder::STATUS_SUCCESS])->groupBy('uid')->asArray()->all();
             $loanData = ArrayHelper::index($loanData, 'uid');
-        } else {
-            $rechargeData = [];
-            $loanData = [];
         }
 
         return $this->renderFile('@backend/modules/user/views/user/_invite_record.php', [
@@ -462,6 +472,7 @@ class UserController extends BaseController
             'rechargeData' => $rechargeData,
             'loanData' => $loanData,
             'user' => $user,
+            'userData' => $userData,
         ]);
     }
 
