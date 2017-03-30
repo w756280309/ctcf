@@ -196,7 +196,13 @@ class ThirdPartyConnect extends ActiveRecord
         if(!$verify){
             throw new \Exception("sign verify fail");
         }
-        $ret=array("appKey"=>$request_array["appKey"],"credits"=>$request_array["credits"],"timestamp"=>$request_array["timestamp"],"description"=>$request_array["description"],"orderNum"=>$request_array["orderNum"]);
+        $ret=array(
+            "appKey"=>$request_array["appKey"],
+            "credits"=>$request_array["credits"],
+            "timestamp"=>$request_array["timestamp"],
+            "description"=>isset($request_array["description"]) ? $request_array["description"]:'',
+            "orderNum"=>$request_array["orderNum"]
+        );
         return $ret;
     }
     /*
