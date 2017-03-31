@@ -36,7 +36,8 @@ class UserInfo extends ActiveRecord
     public function rules()
     {
         return [
-            [['user_id', 'isInvested', 'investCount', 'isAffiliator'], 'integer'],
+            [['user_id', 'isInvested', 'investCount'], 'integer'],
+            ['isAffiliator', 'boolean'],
             [['investTotal', 'firstInvestAmount', 'lastInvestAmount', 'averageInvestAmount'], 'number'],
             [['firstInvestDate', 'lastInvestDate'], 'safe'],
             [['user_id'], 'required'],

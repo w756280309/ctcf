@@ -9,6 +9,25 @@ use yii\grid\GridView;
         补充邀请关系
     </a>
 </div>
+<div class="portlet-body">
+    <?php
+        $inviter = $user->fetchInviter();
+        $isInvited = null !== $inviter;
+    ?>
+    <table class="table">
+        <tr>
+            <td>
+                <strong>邀请人姓名：</strong>
+                <?= $isInvited ? '<a href="/user/user/detail?id=' . $inviter->id . '">' . $inviter->real_name . '</a>' : '----' ?>
+            </td>
+            <td>
+                <strong>邀请人手机号：</strong>
+                <?= $isInvited ? '<a href="/user/user/detail?id=' . $inviter->id . '">' . $inviter->mobile . '</a>' : '----' ?>
+            </td>
+            <td width="40%"></td>
+        </tr>
+    </table>
+</div>
 <?=
     GridView::widget([
         'id' => 'grid_view_invite',
@@ -17,64 +36,53 @@ use yii\grid\GridView;
         'tableOptions' => ['class' => 'invite_record_list table table-hover table-striped'],
         'columns' => [
             [
-                'label' => '邀请关系',
-                'value' => function ($record) use ($user) {
-                    if ($record->user_id === $user->id) {
-                        return '已邀好友';
-                    }
-                    return '邀请人';
-                }
-            ],
-            [
                 'label' => '姓名',
                 'format' => 'html',
-                'value' => function ($record) use ($userData) {
-                    return '<a href="/user/user/detail?id='.$userData[$record->id]->id.'">'.($userData[$record->id]->real_name ?: '---').'</a>';
+                'value' => function ($record) {
+                    return '<a href="/user/user/detail?id='.$record->invitee_id.'">'.($record->invitee->real_name ?: '---').'</a>';
                 }
             ],
             [
                 'label' => '手机号',
-                'value' => function ($record) use ($userData) {
-                    return $userData[$record->id]->mobile;
+                'value' => function ($record) {
+                    return $record->invitee->mobile;
                 }
             ],
             [
                 'label' => '可用余额',
-                'value' => function ($record) use ($userData) {
-                    return number_format($userData[$record->id]->lendAccount->available_balance, 2);
+                'value' => function ($record) {
+                    return number_format($record->invitee->lendAccount->available_balance, 2);
                 },
                 'contentOptions' => ['class' => 'money'],
                 'headerOptions' => ['class' => 'money'],
             ],
             [
                 'label' => '充值总额',
-                'value' => function ($record) use ($rechargeData, $userData) {
-                    $user = $userData[$record->id];
-                    return isset($rechargeData[$user->id]) ? number_format($rechargeData[$user->id]['recharge_sum'], 2) : 0;
+                'value' => function ($record) use ($rechargeData) {
+                    return isset($rechargeData[$record->invitee_id]) ? number_format($rechargeData[$record->invitee_id]['recharge_sum'], 2) : 0;
                 },
                 'contentOptions' => ['class' => 'money'],
                 'headerOptions' => ['class' => 'money'],
             ],
             [
                 'label' => '标的投资总额',
-                'value' => function ($record) use ($loanData, $userData) {
-                    $userId = $userData[$record->id]->id;
-                    return isset($loanData[$userId]) ? number_format($loanData[$userId]['loan_sum'], 2) : 0;
+                'value' => function ($record) use ($loanData) {
+                    return isset($loanData[$record->invitee_id]) ? number_format($loanData[$record->invitee_id]['loan_sum'], 2) : 0;
                 },
                 'contentOptions' => ['class' => 'money'],
                 'headerOptions' => ['class' => 'money'],
             ],
             [
                 'label' => '注册时间',
-                'value' => function ($record) use ($userData) {
-                    return date('Y-m-d H:i:s', $userData[$record->id]->created_at);
+                'value' => function ($record) {
+                    return date('Y-m-d H:i:s', $record->invitee->created_at);
                 }
             ],
             [
                 'label' => '操作',
                 'format' => 'html',
-                'value' => function ($record) use ($userData) {
-                    return '<a href="/user/user/detail?id='.$userData[$record->id]->id.'">查看详情</a>';
+                'value' => function ($record) {
+                    return '<a href="/user/user/detail?id='.$record->invitee_id.'">查看详情</a>';
                 }
             ],
         ],
