@@ -342,7 +342,10 @@ $this->registerJsFile(ASSETS_BASE_URI . 'js/swiper.min.js', ['depends' => Jquery
                 if (code === -1) {
                     $('#login').removeClass('hide');
                     $('#loginNewPeople').removeClass('hide');
-                } else if (code === 0) {
+                } else {
+                    $('.relative .signature').css('top','5.2rem');
+                }
+                if (code === 0) {
                     $('#loginNewPeople').removeClass('hide');
                 }
             });
