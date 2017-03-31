@@ -5,6 +5,7 @@ namespace api\modules\v1\controllers\app;
 use api\modules\v1\controllers\Controller;
 use common\models\app\AccessToken;
 use common\models\bank\BankCardUpdate;
+use common\models\user\QpayBinding;
 
 /**
  * App相关api接口.
@@ -45,10 +46,9 @@ class UserController extends Controller
 
         $bank = $user->qpay;
         $cardUpdateFlag = false;
+        $cardBindFlag = false;
 
         if (null !== $bank) {
-            $bankCard = substr_replace($bank->card_number, '*****', 3, -2);
-
             $bankcardUpdate = BankCardUpdate::find()
                 ->where(['oldSn' => $bank->binding_sn, 'uid' => $user->id])
                 ->orderBy('id desc')->one();
@@ -57,8 +57,14 @@ class UserController extends Controller
                 $cardUpdateFlag = true;
             }
         } else {
-            $bankCard = null;
+            $bank = QpayBinding::findOne(['uid' => $user->id, 'status' => QpayBinding::STATUS_ACK]);
+
+            if ($bank) {
+                $cardBindFlag = true;
+            }
         }
+
+        $bankCard = $bank ? substr_replace($bank->card_number, '*****', 3, -2) : null;
 
         $ua = $user->lendAccount;
         if (null === $ua) {
@@ -84,6 +90,7 @@ class UserController extends Controller
                     'mobile' => substr_replace($user->mobile, '***', 3, -4),
                     'idcard' => empty($user->idcard) ? null : substr_replace($user->idcard, '***', 5, -2),
                     'bankcard' => $bankCard,
+                    'bankcard_bind_pending' => $cardBindFlag,
                     'bankcard_update_pending' => $cardUpdateFlag,
                 ],
             ],
