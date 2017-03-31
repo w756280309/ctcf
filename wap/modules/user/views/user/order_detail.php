@@ -84,6 +84,10 @@ $this->registerCssFile(ASSETS_BASE_URI .'css/touzixiangqing.css?v=20170306', ['d
                     <div class="information-content-right"><?= StringUtils::amountFormat2($deal->order_money) ?>元</div>
                 </li>
                 <li>
+                    <div class="information-content-left">认购日期</div>
+                    <div class="information-content-right"><?= (null !== $deal->created_at) ? date('Y-m-d', $deal->created_at) : '---' ?></div>
+                </li>
+                <li>
                     <div class="information-content-left">募集进度</div>
                     <div class="information-content-right"><?= $product->getProgressForDisplay()?>%</div>
                 </li>
@@ -95,6 +99,14 @@ $this->registerCssFile(ASSETS_BASE_URI .'css/touzixiangqing.css?v=20170306', ['d
                 <li>
                     <div class="information-content-left">本金</div>
                     <div class="information-content-right"><?= StringUtils::amountFormat2(bcdiv($asset['amount'], 100 , 2)) ?>元</div>
+                </li>
+                <li>
+                    <div class="information-content-left">认购日期</div>
+                    <div class="information-content-right"><?= (null !== $deal->created_at) ? date('Y-m-d', $deal->created_at) : '---' ?></div>
+                </li>
+                <li>
+                    <div class="information-content-left">起息日期</div>
+                    <div class="information-content-right"><?= (null !== $product->jixi_time) ? date('Y-m-d', $product->jixi_time) : '---' ?></div>
                 </li>
                 <li>
                     <div class="information-content-left">预期收益</div>
@@ -114,6 +126,14 @@ $this->registerCssFile(ASSETS_BASE_URI .'css/touzixiangqing.css?v=20170306', ['d
                 <li>
                     <div class="information-content-left">本金</div>
                     <div class="information-content-right"><?= StringUtils::amountFormat2($asset ? bcdiv($asset['amount'], 100 , 2) : $deal->order_money) ?>元</div>
+                </li>
+                <li>
+                    <div class="information-content-left">认购日期</div>
+                    <div class="information-content-right"><?= (null !== $deal->created_at) ? date('Y-m-d', $deal->created_at) : '---' ?></div>
+                </li>
+                <li>
+                    <div class="information-content-left">起息日期</div>
+                    <div class="information-content-right"><?= (null !== $product->jixi_time) ? date('Y-m-d', $product->jixi_time) : '---' ?></div>
                 </li>
                 <li>
                     <div class="information-content-left">预期收益</div>
