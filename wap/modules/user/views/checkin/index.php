@@ -7,7 +7,7 @@ $hostInfo = \Yii::$app->request->hostInfo;
 ?>
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/wenjfbase.css">
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/activeComHeader.css">
-<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/qiandao/css/index.css">
+<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/qiandao/css/index.css?v=20170331">
 <script src="<?= FE_BASE_URI ?>libs/lib.flexible3.js"></script>
 
 <div class="flex-content">
@@ -91,7 +91,7 @@ $hostInfo = \Yii::$app->request->hostInfo;
             $('.schedule_bar .jindu_two').css({'width':90.6+'%','border-radius':0});
         } else {
             $('.schedule_bar .jindu_two').css('width', function () {
-                return parseInt(jindu-1) * 3.1 + '%';
+                return parseInt(jindu-1) * 3 + '%';
             });
         }
 

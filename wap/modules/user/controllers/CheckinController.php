@@ -14,7 +14,7 @@ class CheckinController extends BaseController
 
     public function behaviors()
     {
-        return [
+        $access = [
             'access' => [
                 'class' => AccessControl::className(),
                 'rules' => [
@@ -23,11 +23,16 @@ class CheckinController extends BaseController
                         'roles' => ['@'], //登录用户退出
                     ],
                 ],
-                'except' => [
-                    'index',
-                ],
             ],
         ];
+
+        if (!defined('IN_APP')) {
+            $access['access']['except'] = [
+                'index',
+            ];
+        }
+
+        return $access;
     }
 
     /**
