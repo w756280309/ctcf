@@ -1019,7 +1019,7 @@ footer span {
     margin-top: -0.69333333em;
     width: 1.36rem;
     height: 1.38666666rem;
-    z-index: 99999999;
+    z-index: 99999;
     cursor: pointer;
 }
 .relative .signature img {

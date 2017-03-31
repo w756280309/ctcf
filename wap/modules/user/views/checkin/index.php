@@ -2,7 +2,7 @@
 
 $this->title = '签到得积分';
 
-$pageUrl = urlencode(\Yii::$app->request->hostInfo.'/user/checkin');
+$hostInfo = \Yii::$app->request->hostInfo;
 
 ?>
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/wenjfbase.css">
@@ -18,7 +18,7 @@ $pageUrl = urlencode(\Yii::$app->request->hostInfo.'/user/checkin');
         </div>
     <?php } ?>
     <div class="head_part">
-        <a href="<?= $user ? '/user/checkin/list' : '/site/login?next='.$pageUrl ?>" class="jilu_link f12">签到记录</a>
+        <a href="<?= $user ? '/user/checkin/list' : '/site/login?next='.urlencode($hostInfo.'/user/checkin/list') ?>" class="jilu_link f12">签到记录</a>
     </div>
     <div class="schedule_box">
         <span class="sticker" style="left: 2.7rem"></span>
@@ -40,7 +40,7 @@ $pageUrl = urlencode(\Yii::$app->request->hostInfo.'/user/checkin');
         <?php if ($checkInToday) { ?>
             <a href="javascript:void(0)" class="qiandao_btn btn2">已签到</a>
         <?php } else { ?>
-            <a href="<?= $user ? '/mall/portal/guest' : '/site/login?next='.$pageUrl ?>" class="qiandao_btn btn1">快点我签到吧~</a>
+            <a href="<?= $user ? '/mall/portal/guest' : '/site/login?next='.urlencode($hostInfo.'/user/checkin') ?>" class="qiandao_btn btn1">快点我签到吧~</a>
         <?php } ?>
     </div>
     <div class="rule_box">

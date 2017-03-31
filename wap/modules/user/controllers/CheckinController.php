@@ -68,11 +68,13 @@ class CheckinController extends BaseController
                 ++$checkInDays;
             }
 
-            $cycle = $checkInDays % $cycleDays;    //余数不为零的,取余数作为连续签到天数;余数为零时,取周期天数作为连续签到天数;
-            if ($cycle) {
-                $checkInDays = $cycle;
-            } else {
-                $checkInDays = $cycleDays;
+            if ($checkInDays) {
+                $cycle = $checkInDays % $cycleDays;    //余数不为零的,取余数作为连续签到天数;余数为零时,取周期天数作为连续签到天数;
+                if ($cycle) {
+                    $checkInDays = $cycle;
+                } else {
+                    $checkInDays = $cycleDays;
+                }
             }
         }
 
