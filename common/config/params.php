@@ -189,6 +189,4 @@ return [
     ],
     'ding_notify_list' => [],//钉钉通知名单 实例 [ '用户姓名' => '用户在钉钉的ID',],具体数值在 data/wdjf_ding_users.json 中查
     'wdjf_security_key' => __DIR__ . '/payment/security/wdjf_prod.key',//温都金服用户信息加密使用的key保存文件名
-
-    'new_ucenter_on' => false,    //新版账户中心是否显示开关
 ];

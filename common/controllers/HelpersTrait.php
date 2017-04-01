@@ -76,6 +76,17 @@ trait   HelpersTrait
     }
 
     /**
+     * 返回APP版本号.
+     */
+    public function getAppVersion()
+    {
+        $version = array_filter(explode('/', $_SERVER['HTTP_USER_AGENT']));
+        $versionCode = array_pop($version);
+
+        return floatval($versionCode);
+    }
+
+    /**
      * 根据字符串或者Model对象返回错误信息
      * @param null|string|Model $modelOrMessage
      * @return array
