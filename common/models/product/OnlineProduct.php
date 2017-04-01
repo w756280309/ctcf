@@ -237,6 +237,7 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
             [['isTest', 'allowUseCoupon'], 'integer'],
             [['start_money', 'dizeng_money'], 'checkMoney'],
             ['tags', 'checkTags'],
+            ['title', 'trim'],  //去掉项目名称两边多余的空格
         ];
     }
 
