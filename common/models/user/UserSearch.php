@@ -3,6 +3,7 @@
 namespace common\models\user;
 
 use common\models\affiliation\UserAffiliation;
+use common\utils\SecurityUtils;
 use common\models\order\OnlineOrder;
 use yii\helpers\ArrayHelper;
 
@@ -50,8 +51,12 @@ class UserSearch extends User
         ]);
         //过滤姓名
         $query->andFilterWhere(['like', 'user.real_name', trim($this->name)]);
-        //过滤手机号
-        $query->andFilterWhere(['like', 'user.mobile', trim($this->mobile)]);
+        //过滤手机号 手机号长度小于11 搜索mobile（mobile字段小于11位原样保存）
+        if (strlen(trim($this->mobile)) < 11){
+            $query->andFilterWhere(['like', 'user.mobile', trim($this->mobile)]);
+        } else {
+            $query->andFilterWhere(['user.safeMobile'=>SecurityUtils::encrypt(trim($this->mobile))]);
+        }
         //过滤 未投资时长
         $noInvestDaysMin = is_numeric($this->noInvestDaysMin) ? intval(trim($this->noInvestDaysMin)) : null;
         $noInvestDaysMax = is_numeric($this->noInvestDaysMax) ? intval(trim($this->noInvestDaysMax)) : null;

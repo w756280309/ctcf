@@ -7,6 +7,7 @@ use common\models\order\OnlineFangkuan;
 use common\models\product\OnlineProduct;
 use common\models\user\DrawRecord;
 use common\models\user\User;
+use common\utils\SecurityUtils;
 use Yii;
 use yii\data\Pagination;
 use yii\helpers\ArrayHelper;
@@ -146,7 +147,11 @@ class DrawrecordController extends BaseController
             $query->andFilterWhere(['like', 'real_name', $request['name']]);
         }
         if (!empty($request['mobile'])) {
-            $query->andFilterWhere(['like', 'mobile', $request['mobile']]);
+            if (strlen(trim($request['mobile'])) < 11){
+                $query->andFilterWhere(['like', 'mobile', trim($request['mobile'])]);
+            } else {
+                $query->andFilterWhere(['safeMobile'=>SecurityUtils::encrypt(trim($request['mobile']))]);
+            }
         }
 
         $tzUser = $query->andWhere('type=1')->asArray()->all();

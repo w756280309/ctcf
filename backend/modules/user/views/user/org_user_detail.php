@@ -1,5 +1,6 @@
 <?php
 
+use common\utils\SecurityUtils;
 use common\utils\StringUtils;
 
 $this->title = '融资会员详情';
@@ -58,7 +59,7 @@ $this->loadAuthJs = false;
             <ul class="breadcrumb_detail">
                 <li><span>姓名</span><?=$orgUser['real_name']?></li>
                 <li><span>身份证号</span><?= StringUtils::obfsIdCardNo($orgUser['idcard']) ?></li>
-                <li><span>联系电话</span><?=$orgUser['mobile']?></li>
+                <li><span>联系电话</span><?= SecurityUtils::decrypt($orgUser['safeMobile']) ?></li>
             </ul>
             <ul class="breadcrumb_detail">
                 <li><span class="huibai">企业证照</span></li>
