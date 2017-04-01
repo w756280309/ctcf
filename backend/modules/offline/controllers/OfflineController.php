@@ -291,6 +291,7 @@ class OfflineController extends BaseController
         $order = $this->findOr404(OfflineOrder::class, $post['OfflineOrder']['id']);
         if($order->load(Yii::$app->request->post()) && $order->validate()){
             $sign = $order->save();
+            Yii::$app->session->setFlash('info','修改成功！');
             return $this->redirect(['list']);
         } else {
             return $this->redirect(['edit','id'=>$post['OfflineOrder']['id']]);
