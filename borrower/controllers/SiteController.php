@@ -84,17 +84,10 @@ class SiteController extends Controller
         }
 
         $model = new LoginForm();
+        $login = new LoginService();
 
-        $is_flag = Yii::$app->request->post('is_flag');    //是否需要校验图形验证码标志位
-        if ($is_flag && !is_bool($is_flag)) {
-            $is_flag = true;
-        }
-
-        if ($is_flag) {
-            $model->scenario = 'org_verifycode';
-        } else {
-            $model->scenario = 'org_login';
-        }
+        $showCaptcha = $login->isCaptchaRequired(Yii::$app->request->post('phone'));    //是否需要校验图形验证码标志位
+        $model->scenario = $showCaptcha ? 'org_verifycode' : 'org_login';
 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             $user = User::findOne(['username' => $model->username, 'type' => User::USER_TYPE_ORG]);
@@ -107,17 +100,15 @@ class SiteController extends Controller
             }
         }
 
-        $login = new LoginService();
-
         if ($model->getErrors('password')) {
-            $login->logFailure(Yii::$app->request, $model->username, LoginLog::TYPE_PC);
+            $login->logFailure($model->username, LoginLog::TYPE_PC);
         }
 
-        $is_flag = $is_flag ? $is_flag : $login->isCaptchaRequired(Yii::$app->request, $model->phone, 30 * 60, 5);
+        $showCaptcha = $login->isCaptchaRequired($model->phone);
 
         return $this->render('login', [
-                'model' => $model,
-                'is_flag' => $is_flag,
+            'model' => $model,
+            'showCaptcha' => $showCaptcha,
         ]);
     }
 
