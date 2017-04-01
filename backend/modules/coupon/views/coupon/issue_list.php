@@ -1,10 +1,12 @@
 <?php
-$this->title = '发放代金券';
 
 use common\utils\StringUtils;
 use yii\helpers\Html;
 
+$this->title = '发放代金券';
+
 $user_id = Html::encode($uid);
+
 ?>
 
 <!DOCTYPE html>
@@ -116,4 +118,3 @@ $user_id = Html::encode($uid);
         </div>
     </body>
 </html>
-

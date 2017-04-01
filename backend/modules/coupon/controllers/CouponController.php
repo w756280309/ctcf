@@ -208,6 +208,7 @@ class CouponController extends BaseController
 
         $query = UserCoupon::find()
             ->innerJoinWith('couponType')
+            ->joinWith('admin')
             ->where(['user_id' => $uid])
             ->orderBy(["$u.created_at" => SORT_DESC]);
 
@@ -263,7 +264,12 @@ class CouponController extends BaseController
 
         if ($coupon->allowIssue()) {
             try {
-                if (UserCoupon::addUserCoupon($user, $coupon)->save()) {
+                $userCoupon = UserCoupon::addUserCoupon($user, $coupon);
+
+                $userCoupon->admin_id = $this->admin_id;
+                $userCoupon->ip = Yii::$app->request->getUserIP();
+
+                if ($userCoupon->save()) {
                     $res = 0;
                     $mess = '发券成功';
                 }

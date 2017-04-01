@@ -2,6 +2,7 @@
 
 namespace common\models\coupon;
 
+use common\models\adminuser\Admin;
 use common\models\order\OnlineOrder;
 use common\models\product\OnlineProduct as Loan;
 use common\models\user\User;
@@ -13,12 +14,14 @@ use yii\db\ActiveRecord;
 /**
  * This is the model class for table "user_coupon".
  *
- * @property int $id
- * @property int $couponType_id 代金券类型ID
- * @property int $user_id       用户ID
- * @property int $order_id      订单ID
- * @property int $isUsed        是否使用
- * @property int $created_at    创建时间
+ * @property int    $id
+ * @property int    $couponType_id 代金券类型ID
+ * @property int    $user_id       用户ID
+ * @property int    $order_id      订单ID
+ * @property int    $admin_id      发券管理员ID
+ * @property string $ip            发券管理员操作IP
+ * @property int    $isUsed        是否使用
+ * @property int    $created_at    创建时间
  */
 class UserCoupon extends ActiveRecord
 {
@@ -241,5 +244,13 @@ class UserCoupon extends ActiveRecord
             'expiryDate' => $expiryDate,
         ]);
         return $model;
+    }
+
+    /**
+     * 获取对应的操作管理员信息.
+     */
+    public function getAdmin()
+    {
+        return $this->hasOne(Admin::class, ['id' => 'admin_id']);
     }
 }
