@@ -11,6 +11,7 @@ use common\models\affiliation\UserAffiliation;
 use common\models\bank\Bank;
 use common\models\epay\EpayUser;
 use common\models\mall\PointRecord;
+use common\models\offline\OfflineUser;
 use common\models\order\OnlineOrder;
 use common\models\product\OnlineProduct;
 use common\models\promo\InviteRecord;
@@ -22,6 +23,7 @@ use common\models\user\UserBanks;
 use common\models\user\RechargeRecord;
 use common\models\user\UserSearch;
 use common\models\user\DrawRecord;
+use common\utils\SecurityUtils;
 use common\utils\StringUtils;
 use wap\modules\promotion\models\RankingPromo;
 use Yii;
@@ -359,6 +361,8 @@ class UserController extends BaseController
             case 'invite_record':
                 return $this->getInviteRecord($user);
                 break;
+            case 'offline_user' :
+                return $this->getOfflineUser($user);
             case 'recharge_record':
                 return $this->getRechargeRecord($user);
                 break;
@@ -460,6 +464,23 @@ class UserController extends BaseController
             'dataProvider' => $dataProvider,
             'rechargeData' => $rechargeData,
             'loanData' => $loanData,
+            'user' => $user,
+        ]);
+    }
+    /**
+     * 获取会员详情页-用户线下会员列表
+     */
+    private function getOfflineUser(User $user)
+    {
+        $query = OfflineUser::find()->where(['idCard' => SecurityUtils::decrypt($user->safeIdCard)])->orderBy('id desc');
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => [
+                'pageSize' => 10,
+            ],
+        ]);
+        return $this->renderFile('@backend/modules/user/views/user/_offline_user.php', [
+            'dataProvider' => $dataProvider,
             'user' => $user,
         ]);
     }

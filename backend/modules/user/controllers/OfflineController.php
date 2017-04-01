@@ -3,15 +3,20 @@
 namespace backend\modules\user\controllers;
 
 use backend\controllers\BaseController;
+use common\models\affiliation\Affiliator;
+use common\models\affiliation\UserAffiliation;
 use common\models\mall\PointOrder;
 use common\models\mall\PointRecord;
 use common\models\offline\OfflineOrder;
 use common\models\offline\OfflinePointManager;
 use common\models\offline\OfflineUser;
+use common\models\user\User;
+use common\utils\SecurityUtils;
 use common\utils\TxUtils;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\data\Pagination;
+use yii\helpers\ArrayHelper;
 
 class OfflineController extends BaseController
 {
@@ -85,6 +90,27 @@ class OfflineController extends BaseController
         }
 
         return $this->renderFile('@backend/modules/user/views/offline/_point_record.php', ['dataProvider' => $dataProvider, 'id' => $id, 'orders' => $orders]);
+    }
+
+    /*
+     * 线下会员详情页-线上会员列表
+     * */
+    public function actionOnlineUser($id)
+    {
+        $offUser = $this->findOr404(OfflineUser::class, $id);
+        $query = User::find()->where(['safeIdCard' => SecurityUtils::encrypt($offUser->idCard)]);
+        $user = $query->orderBy(['user.created_at' => SORT_DESC])->all();
+
+        $affiliators = UserAffiliation::find()
+            ->innerJoinWith('affiliator')
+            ->where(['user_id' => ArrayHelper::getColumn($user, 'id')])
+            ->indexBy('user_id')
+            ->all();
+        return $this->renderFile('@backend/modules/user/views/user/_online_user.php', [
+            'model' => $user,
+            'category' => User::USER_TYPE_PERSONAL,
+            'affiliators' => $affiliators,
+        ]);
     }
 
     /**
