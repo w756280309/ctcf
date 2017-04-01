@@ -20,9 +20,9 @@ class UserController extends BaseController
     public function behaviors()
     {
         $except = [];
-        $uCenterFlag = Yii::$app->params['new_ucenter_on'];
+        $appVersionCode = $this->getAppVersion();
 
-        if (!defined('IN_APP') || $uCenterFlag) {
+        if (!defined('IN_APP') || $appVersionCode >= 1.5) {
             $except = [
                 'except' => [
                     'index',
@@ -50,16 +50,19 @@ class UserController extends BaseController
     public function actionIndex()
     {
         $inApp = defined('IN_APP');
-        $uCenterFlag = Yii::$app->params['new_ucenter_on'];
+        $appVersionCode = $this->getAppVersion();
+        $view = 'index';
 
-        if (!$inApp || $uCenterFlag) {
+        if (!$inApp || $appVersionCode >= 1.5) {
             $this->layout = '@app/views/layouts/fe';
             if (Yii::$app->user->isGuest){
-                return $this->render('index');
+                return $this->render($view);
             }
+        } else {
+            $view = 'index_yuan';
         }
 
-        return $this->render(!$inApp || $uCenterFlag ? 'index' : 'index_yuan', $this->index());
+        return $this->render($view, $this->index());
     }
 
     /**
