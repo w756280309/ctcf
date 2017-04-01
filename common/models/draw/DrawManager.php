@@ -10,6 +10,7 @@ use common\models\user\MoneyRecord;
 use common\lib\bchelp\BcRound;
 use common\models\user\UserAccount;
 use common\service\SmsService;
+use common\utils\SecurityUtils;
 
 /**
  * draw form.
@@ -42,7 +43,6 @@ class DrawManager
         $draw->identification_type = $ubank->account_type;
         $draw->identification_number = $user->idcard;
         $draw->user_bank_id = $ubank->id;
-        $draw->mobile = $user->mobile;
         $draw->status = DrawRecord::STATUS_ZERO;
         if ($draw->validate() && $draw->save(false)) {
             return $draw;
@@ -118,7 +118,7 @@ class DrawManager
         $message = [$user->real_name,  date('Y-m-d H:i', $draw->created_at), $draw->money, 'T+1', Yii::$app->params['contact_tel']];
         $templateId = Yii::$app->params['sms']['tixian_apply'];
 
-        SmsService::send($user->mobile, $templateId, $message, $user);
+        SmsService::send(SecurityUtils::decrypt($user->safeMobile), $templateId, $message, $user);
 
         $transaction->commit();
 
@@ -166,7 +166,7 @@ class DrawManager
             } elseif ($tranState === 3 || $tranState === 5 || $tranState === 15) {
                 $user = User::findOne($draw->uid);
                 if (!empty($user)) {
-                    (new DingNotify('wdjf'))->sendToUsers('用户[' . $user->mobile . ']，于' . date('Y-m-d H:i:s', $draw->created_at) . ' 进行提现操作，操作失败，联动提现失败，失败信息:' . $resp->get('ret_msg'));
+                    (new DingNotify('wdjf'))->sendToUsers('用户[' . SecurityUtils::decrypt($user->safeMobile) . ']，于' . date('Y-m-d H:i:s', $draw->created_at) . ' 进行提现操作，操作失败，联动提现失败，失败信息:' . $resp->get('ret_msg'));
                 }
                 //失败的代码
                 self::cancel($draw, DrawRecord::STATUS_DENY);
