@@ -6,6 +6,15 @@ use yii\db\ActiveRecord;
 use \Zii\Model\CoinsTrait;
 use \Zii\Model\LevelTrait;
 
+/**
+ * This is the model class for table "offline_user".
+ *
+ * @property integer $id
+ * @property integer $realName         客户姓名
+ * @property integer $idCard           身份证号码
+ * @property integer $mobile           客户手机号
+ * @property string  $annualInvestment 用户累计年化投资额
+ */
 class OfflineUser extends ActiveRecord
 {
     use CoinsTrait;

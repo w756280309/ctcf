@@ -3,8 +3,15 @@
 namespace common\models\offline;
 
 use yii\db\ActiveRecord;
-use common\models\offline\OfflineOrder;
 
+/**
+ * This is the model class for table "offline_loan".
+ *
+ * @property integer $id
+ * @property string  $title   标的名称
+ * @property string  $expires 项目期限
+ * @property string  $unit    期限单位:天/月
+ */
 class OfflineLoan extends ActiveRecord
 {
     public function rules()

@@ -9,8 +9,9 @@ class OfflinePointManager
     /**
      * 根据订单对象更新对应用户的积分和积分流水
      *
-     * @param  order        $order 订单
-     * @param  string       $type  积分类型
+     * @param  object $order 订单
+     * @param  string $type  积分类型
+     *
      * @throws \Exception
      */
     public function updatePoints($order, $type)
@@ -45,7 +46,7 @@ class OfflinePointManager
     /**
      * 根据订单对象和对应的积分流水类型获得该笔订单的积分
      *
-     * @param  order  $order 订单
+     * @param  object $order 订单
      * @param  string $type  积分流水类型
      *
      * @return int    订单积分
