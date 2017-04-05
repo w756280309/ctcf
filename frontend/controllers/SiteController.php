@@ -60,6 +60,8 @@ class SiteController extends Controller
                 'class' => 'common\captcha\CaptchaAction',
                 'minLength' => 4, 'maxLength' => 4,
             ],
+            'reg-success' => 'common\action\user\RegSuccessAction',       //注册成功页
+            'add-affiliator' => 'common\action\user\AddAffiliatorAction', //注册成功后添加分销商
         ];
     }
 
@@ -299,7 +301,7 @@ class SiteController extends Controller
                 $user->last_login = time();
                 $user->save();
 
-                return ['code' => 0, 'tourl' => '/?mark=1612'];
+                return ['code' => 0, 'tourl' => '/site/reg-success'];
             } else {
                 return ['code' => 1, 'error' => $model->firstErrors];
             }
