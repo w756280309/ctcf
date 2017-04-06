@@ -199,7 +199,7 @@ use yii\grid\GridView;
                     }
                 ],
             ],
-            'tableOptions' => ['class' => 'table table-striped table-bordered table-advance table-hover']
+            'tableOptions' => ['class' => 'table table-striped table-bordered table-advance table-hover', 'style' => 'background-color: #fff']
         ]) ?>
         <div class="pagination" style="text-align:center;clear: both">
             <?= \yii\widgets\LinkPager::widget(['pagination' => $pages]); ?>
