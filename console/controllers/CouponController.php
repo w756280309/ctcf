@@ -10,6 +10,7 @@ use common\models\sms\SmsMessage;
 use common\models\coupon\UserCoupon;
 use common\models\user\User;
 use common\models\coupon\CouponType;
+use common\utils\SecurityUtils;
 use common\utils\StringUtils;
 use Yii;
 use yii\console\Controller;
@@ -33,34 +34,30 @@ class CouponController extends Controller
         $expiryDate = date('Y-m-d', strtotime('+' . ($expireDay - 1) . 'days'));
 
         $userCoupons = UserCoupon::find()
-            ->select("user_id, $u.mobile, $ct.amount")
+            ->select("user_id, $u.safeMobile, $ct.amount")
             ->innerJoin($ct, "couponType_id = $ct.id")
             ->innerJoin($u, "user_id = $u.id")
             ->where(['isUsed' => 0, "$ct.isDisabled" => 0, 'expiryDate' => $expiryDate])
             ->orderBy(['user_id' => SORT_DESC, 'amount' => SORT_DESC])
             ->asArray()
             ->all();
+
+        $transaction = Yii::$app->db->beginTransaction();
         try {
-            $transaction = Yii::$app->db->beginTransaction();
             if (!empty($userCoupons)) {
                 $lastUserId = 0;
                 $count = 0;
                 foreach ($userCoupons as $userCoupon) {
                     $user_id = $userCoupon['user_id'];
-                    if ($user_id !== $lastUserId) {
+                    if (($user_id !== $lastUserId) && (null !== $userCoupon->user)) {
                         $message = [
                             StringUtils::amountFormat2($userCoupon['amount']) . '元',
                             'https://m.wenjf.com/',
                             $contactTel,
                         ];
 
-                        $sms = new SmsMessage([
-                            'template_id' => '155508',
-                            'level' => SmsMessage::LEVEL_LOW,
-                        ]);
-                        $sms->uid = $user_id;
-                        $sms->mobile = $userCoupon['mobile'];
-                        $sms->message = json_encode($message);
+                        //发送短信
+                        $sms = SmsMessage::initSms($userCoupon->user, $message, 155508);
                         if (!$sms->save()) {
                             throw new \Exception('本条插入失败，数据记录为' . json_encode($sms->getAttributes()));
                         }
