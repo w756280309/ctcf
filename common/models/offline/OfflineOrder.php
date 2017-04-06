@@ -25,6 +25,7 @@ use common\models\affiliation\Affiliator;
  */
 class OfflineOrder extends ActiveRecord
 {
+    public $realName;
     public function scenarios()
     {
         return [
