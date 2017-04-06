@@ -5,7 +5,7 @@ $this->title = '签到记录';
 ?>
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/wenjfbase.css">
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/activeComHeader.css">
-<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/qiandao/css/index_2.css">
+<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/qiandao/css/index_2.css?v=20170401">
 <script src="<?= FE_BASE_URI ?>/libs/lib.flexible3.js"></script>
 <script type="text/javascript">
     var url = '/user/checkin/list';

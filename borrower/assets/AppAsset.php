@@ -3,6 +3,7 @@
 namespace borrower\assets;
 
 use yii\web\AssetBundle;
+use yii\web\JqueryAsset;
 
 class AppAsset extends AssetBundle
 {
@@ -14,6 +15,6 @@ class AppAsset extends AssetBundle
         'vendor/bootstrap/dist/js/bootstrap.min.js',
     ];
     public $depends = [
-        'yii\web\JqueryAsset',
+        JqueryAsset::class,
     ];
 }

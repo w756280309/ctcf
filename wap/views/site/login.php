@@ -1,8 +1,10 @@
 <?php
+
 use yii\bootstrap\ActiveForm;
 use yii\captcha\Captcha;
 
 $this->title = '登录';
+
 ?>
 <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/loginsign.css?v=20160531">
 
@@ -15,25 +17,27 @@ $this->title = '登录';
 <div class="row kongxi">
     <?php $form = ActiveForm::begin(['id' => 'login', 'action' => "/site/login", 'options' => ['data-to'=>'1']]); ?>
     <input name="from" type="hidden" value="<?= $from ?>">
-    <input id="iphone" class="login-info" name="LoginForm[phone]" maxlength="11" type="tel" placeholder="请输入手机号" AUTOCOMPLETE="off" >
+    <input id="iphone" class="login-info" name="LoginForm[phone]" maxlength="11" type="tel" placeholder="请输入手机号" autocomplete="off" >
 
     <div class="row sm-height">
         <div class="col">
-            <input id="pass" class="login-info" name="LoginForm[password]" maxlength="20" type="password" placeholder="请输入密码" AUTOCOMPLETE="off" />
+            <input id="pass" class="login-info" name="LoginForm[password]" maxlength="20" type="password" placeholder="请输入密码" autocomplete="off" />
         </div>
     </div>
 
-    <div class="verify-div-box row sm-height border-bottom <?= $is_flag ? 'show' : 'hide' ?>">
+    <div class="verify-div-box row sm-height border-bottom <?= $showCaptcha ? 'show' : 'hide' ?>">
         <div class="col-xs-8 col">
-            <input name="is_flag" type="hidden" value="<?= $is_flag ?>">
             <input class="login-info" type="text" id="verifycode" placeholder="请输入验证码" name="LoginForm[verifyCode]" maxlength="4" >
         </div>
         <div class="col-xs-4 yz-code text-align-rg col" style="height:51px;background: #fff; overflow: hidden;" >
-            <?= $form->field($model, 'verifyCode', ['inputOptions' => ['style' => 'height: 40px']])
-                ->label(false)->widget(Captcha::className(), [
-                    'template' => '{image}',
-                    'captchaAction' => '/site/captcha'
-                ]) ?>
+            <?=
+                $form->field($model, 'verifyCode', ['inputOptions' => ['style' => 'height: 40px']])
+                    ->label(false)
+                    ->widget(Captcha::className(), [
+                        'template' => '{image}',
+                        'captchaAction' => '/site/captcha',
+                    ])
+            ?>
         </div>
     </div>
 
@@ -57,7 +61,7 @@ $this->title = '登录';
 
 <script>
     var csrf;
-    var is_flag = '<?= $is_flag ?>';
+    var showCaptcha = '<?= $showCaptcha ?>';
 
     function verifyCode() {
         if ('' === $('#verifycode').val()) {
@@ -72,7 +76,8 @@ $this->title = '登录';
         }
         return true;
     }
-    $(function(){
+
+    $(function() {
         csrf = $('meta[name=csrf-token]').attr('content');
 
         $('#login-btn').on('click',function () {
@@ -95,7 +100,7 @@ $this->title = '登录';
                 return false;
             }
 
-            if (is_flag || $("input[name='is_flag']").val()) {
+            if (showCaptcha) {
                 var isVerified = verifyCode();
                 if (!isVerified) {
                     return false;
@@ -107,7 +112,6 @@ $this->title = '登录';
                     if ($('.verify-div-box').hasClass('hide')) {
                         $('.verify-div-box').removeClass('hide');
                     }
-                    $("input[name='is_flag']").val(true);
                     $('#loginform-verifycode-image').attr('src', '/site/captcha?' + Math.random());
                 }
             });

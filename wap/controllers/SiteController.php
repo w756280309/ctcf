@@ -4,8 +4,6 @@ namespace app\controllers;
 
 use common\controllers\HelpersTrait;
 use common\models\mall\ThirdPartyConnect;
-use common\models\offline\OfflineStats;
-use common\models\payment\Repayment;
 use common\models\product\LoanFinder;
 use common\models\stats\Perf;
 use common\service\SmsService;
@@ -14,7 +12,6 @@ use common\models\adv\Adv;
 use common\models\adv\Share;
 use common\models\affiliation\Affiliator;
 use common\models\affiliation\AffiliateCampaign;
-use common\models\affiliation\UserAffiliation;
 use common\models\app\AccessToken;
 use common\models\bank\EbankConfig;
 use common\models\bank\QpayConfig;
@@ -32,12 +29,8 @@ use common\utils\SecurityUtils;
 use Yii;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
-use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 
-/**
- * Site controller.
- */
 class SiteController extends Controller
 {
     use HelpersTrait;
@@ -85,6 +78,8 @@ class SiteController extends Controller
                 'minLength' => 4,
                 'maxLength' => 4,
             ],
+            'reg-success' => 'common\action\user\RegSuccessAction',       //注册成功页
+            'add-affiliator' => 'common\action\user\AddAffiliatorAction', //注册成功后添加分销商
         ];
     }
 
@@ -264,8 +259,6 @@ class SiteController extends Controller
             return $this->redirect('/?mark='.time());
         }
 
-        $model = new LoginForm();
-
         if (empty($next) || !filter_var($next, FILTER_VALIDATE_URL)) {
             $from = Yii::$app->request->referrer;
             if (
@@ -286,16 +279,12 @@ class SiteController extends Controller
             $from = $next;
         }
 
-        $is_flag = Yii::$app->request->post('is_flag');    //是否需要校验图形验证码标志位
-        if ($is_flag && !is_bool($is_flag)) {
-            $is_flag = true;
-        }
+        $model = new LoginForm();
+        $login = new LoginService();
 
-        if ($is_flag) {
-            $model->scenario = 'verifycode';
-        } else {
-            $model->scenario = 'login';
-        }
+        $showCaptcha = $login->isCaptchaRequired(Yii::$app->request->post('phone'));    //是否需要校验图形验证码标志位
+        $model->scenario = $showCaptcha ? 'verifycode' : 'login';
+
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             $post_from = Yii::$app->request->post('from');
             if ($model->login(User::USER_TYPE_PERSONAL, defined('IN_APP'))) {
@@ -335,16 +324,14 @@ class SiteController extends Controller
             }
         }
 
-        $login = new LoginService();
-
         if ($model->getErrors('password') || $model->getErrors('phone')) {
-            $login->logFailure(Yii::$app->request, $model->phone, LoginLog::TYPE_WAP);
+            $login->logFailure($model->phone, LoginLog::TYPE_WAP);
         }
 
-        $is_flag = $login->isCaptchaRequired(Yii::$app->request, $model->phone, 10 * 60, 3);
+        $showCaptcha = $login->isCaptchaRequired($model->phone);
         if ($model->getErrors()) {
             $message = $model->firstErrors;
-            return ['code' => 1, 'message' => current($message), 'requiresCaptcha' => $is_flag];
+            return ['code' => 1, 'message' => current($message), 'requiresCaptcha' => $showCaptcha];
         }
 
         $hmsr = Yii::$app->request->get('hmsr');
@@ -360,7 +347,7 @@ class SiteController extends Controller
         return $this->render('login', [
             'model' => $model,
             'from' => $from,
-            'is_flag' => $is_flag,
+            'showCaptcha' => $showCaptcha,
             'aff' => $aff,
         ]);
     }
@@ -499,66 +486,6 @@ class SiteController extends Controller
             'model' => $captcha,
             'next' => $next,
         ]);
-    }
-
-    /**
-     * 注册成功页
-     */
-    public function actionRegSuccess()
-    {
-        $user = $this->getAuthedUser();
-
-        //如果是游客，跳转到首页
-        if (null === $user) {
-            return $this->redirect('/?mark='.time());
-        }
-
-        $affiliationId = 0;
-        $userAffiliation = UserAffiliation::findOne(['user_id' => $user->id]);
-
-        if (null !== $userAffiliation) {
-            $affiliationId = $userAffiliation->affiliator_id;
-        }
-
-        $recommendAff = Affiliator::find()->where(['isRecommend' => true])->all();
-        $affArr = ArrayHelper::map($recommendAff, 'id', 'name');
-        $affArr = ArrayHelper::merge([0 => '官方'], $affArr);
-
-        return $this->render('registerSucc', [
-            'affiliationId' => $affiliationId,
-            'affArr' => $affArr,
-        ]);
-    }
-
-    /**
-     * 注册成功后添加分销商
-     *
-     * @return bool
-     */
-    public function actionAddAffiliator()
-    {
-        if (Yii::$app->user->isGuest) {
-            return false;
-        }
-        $userId = $this->getAuthedUser()->getId();
-        $id = (int) Yii::$app->request->get('id');
-
-        $affiliator = Affiliator::findOne($id);
-        $userAff = UserAffiliation::findOne(['user_id' => $userId]);
-        $realUserAff = null !== $userAff ? $userAff : new UserAffiliation();
-        if ($id <= 0 && null !== $realUserAff) {
-            return (bool) $realUserAff->findOne(['user_id' => $userId])->delete();
-        }
-        if (null === $affiliator) {
-            return false;
-        }
-
-        $realUserAff->trackCode = AffiliateCampaign::find()->select('trackCode')->where(['affiliator_id' => $id])->scalar();
-        $realUserAff->affiliator_id = $id;
-        $realUserAff->user_id = $userId;
-
-        return $realUserAff->save();
-
     }
 
     public function actionSession()

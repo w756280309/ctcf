@@ -1,5 +1,7 @@
 <?php
+
 $this->title = '登录';
+
 ?>
 <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/login/login.css">
 <script src="<?= ASSETS_BASE_URI ?>js/login/login.js"></script>
@@ -30,7 +32,6 @@ $this->title = '登录';
 
                         <div class="verity-box verity-box_none">
                             <label>图形验证码</label>
-                            <input type="hidden" name="is_flag" type="hidden" value="true">
                             <input type="text" id="verity" maxlength="4" placeholder="请输入图形验证码" autocomplete="off" name="LoginForm[verifyCode]">
                             <img src="/site/captcha" class="verity-img" alt="">
                             <div style="clear: both"></div>
@@ -50,7 +51,6 @@ $this->title = '登录';
                             </div>
                         </div>
                     </div>
-                    <input type="hidden" name="is_flag" value="<?= $requiresCaptcha ?>">
                     <input type="hidden" name="next" value="<?= $next ?>">
                     <input type="button" class="login-btn" id="login-btn" value="立即登录">
                     <div class="resign-btn">没有账号？<a class="resign" href="/site/signup">免费注册</a></div>
@@ -62,10 +62,9 @@ $this->title = '登录';
 <div class="clear"></div>
 
 <script>
-    var csrf;
-    var requiresCaptcha = '<?= $requiresCaptcha ? 1 : 0 ?>';
+    var requiresCaptcha = '<?= $requiresCaptcha ?>';
     var error_status = false;
-    $("input").bind('keypress', function(e) {
+    $("input").on('keypress', function(e) {
         if (e.keyCode === 13) {
             $('#login-btn').click();
         }
@@ -73,7 +72,7 @@ $this->title = '登录';
 
     $(function() {
         checkCookie();
-        if ('0' != requiresCaptcha) {
+        if (requiresCaptcha) {
             $(".verity-box").show();
             $("#verity").attr("tabindex", "3")
             $("input[name='remember']").attr("tabindex", 4);
@@ -83,11 +82,11 @@ $this->title = '登录';
             obj.html(content);
         }
 
-        $(".verity-img").bind("click", function(){
+        $(".verity-img").on("click", function() {
             $(this).attr("src", "/site/captcha?"+Math.random());
         });
 
-        $("#phone").bind("blur", function(){
+        $("#phone").on("blur", function() {
             if('' == $(this).val()){
                 errorInput($(".phone-box .popUp"), '手机号不能为空');
                 $(this).addClass("error-border");
@@ -104,7 +103,7 @@ $this->title = '登录';
             $(this).removeClass("error-border");
         });
 
-        $("#password").bind("blur", function(){
+        $("#password").on("blur", function() {
             if ('' == $(this).val()) {
                 errorInput($(".password-box .popUp"), '密码不能为空');
                 $(this).addClass("error-border");
@@ -114,8 +113,8 @@ $this->title = '登录';
             $(this).removeClass("error-border");
         });
 
-        if ('1' == requiresCaptcha) {
-            $("#verity").bind("blur", function(){
+        if (requiresCaptcha) {
+            $("#verity").on("blur", function() {
                 if ('' == $(this).val()) {
                     errorInput($(".verity-box .popUp"), '验证码不能为空');
                     $(this).addClass("error-border");
@@ -149,7 +148,7 @@ $this->title = '登录';
                 return false;
             }
 
-            if ('1' == requiresCaptcha) {
+            if (requiresCaptcha) {
                 $("#verity").trigger("blur");
                 if (error_status) {
                     error_status = false;
@@ -171,8 +170,7 @@ $this->title = '登录';
                 } else if (data.code > 0) {
                     if (data.requiresCaptcha) {
                         $(".verity-box").show();
-                        $("input[name='is_flag']").val(true);
-                        $("#verity").attr("tabindex", "3")
+                        $("#verity").attr("tabindex", "3");
                         $("input[name='remember']").attr("tabindex", 4);
                         $(".verity-img").attr("src", "/site/captcha?"+Math.random());
                     }
@@ -190,15 +188,15 @@ $this->title = '登录';
 
         function getCookie(c_name)
         {
-            if (document.cookie.length>0)
+            if (document.cookie.length > 0)
             {
-                c_start=document.cookie.indexOf(c_name + "=")
-                if (c_start!=-1)
+                c_start=document.cookie.indexOf(c_name + "=");
+                if (c_start != -1)
                 {
-                    c_start=c_start + c_name.length+1
-                    c_end=document.cookie.indexOf(";",c_start)
-                    if (c_end==-1) c_end=document.cookie.length
-                    return unescape(document.cookie.substring(c_start,c_end))
+                    c_start = c_start + c_name.length + 1;
+                    c_end=document.cookie.indexOf(";",c_start);
+                    if (c_end==-1) c_end=document.cookie.length;
+                    return unescape(document.cookie.substring(c_start,c_end));
                 }
             }
             return ""
@@ -206,7 +204,7 @@ $this->title = '登录';
 
         function checkCookie()
         {
-            userphone = getCookie('userphone')
+            userphone = getCookie('userphone');
             if (userphone != null && userphone != "") {
                 $("#phone").val(userphone);
             }

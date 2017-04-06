@@ -70,6 +70,9 @@ $this->title = '线下会员详情';
                 <ul class="nav nav-tabs nav-pills" role="tablist" id="list_nav">
                     <li role="presentation" class="point_record_nav active"><a href="javascript:getPointList('/user/offline/points?id=<?= $user->id?>')">积分明细</a></li>
                     <li role="presentation" class="point_record_nav"><a href="javascript:getCoinList('/user/user/coin-list?userId=<?= $user->id ?>&isOffline=1')">财富值明细</a></li>
+                    <li role="presentation" class="point_record_nav">
+                        <a href="javascript:getOnlineList('/user/offline/online-user?id=<?= $user->id ?>')">线上会员</a>
+                    </li>
                 </ul>
             </div>
             <div class="container-fluid"  id="list">
@@ -98,6 +101,15 @@ $this->title = '线下会员详情';
         })
     }
 
+    function getOnlineList(href)
+    {
+        $.get(href, function(data) {
+            if (data) {
+                $('#list_detail').html(data);
+            }
+        })
+    }
+
     $('#list_nav li').click(function () {
         var index = $("#list_nav li").index(this);
         if(!$(this).hasClass('active')) {
@@ -105,7 +117,6 @@ $this->title = '线下会员详情';
             $(this).addClass('active');
         }
     });
-
     getPointList('/user/offline/points?id=<?= $user->id?>');
 </script>
 <?php $this->endBlock(); ?>

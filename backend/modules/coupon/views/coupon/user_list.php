@@ -66,6 +66,13 @@ use yii\grid\GridView;
                 }
             },
         ],
+        [
+            'label' => '发券操作员',
+            'format' => 'html',
+            'value' => function ($data) {
+                return $data->admin_id ? $data->admin->real_name : '---';
+            },
+        ],
     ],
 ])
 ?>

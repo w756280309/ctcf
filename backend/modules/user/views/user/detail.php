@@ -1,5 +1,6 @@
 <?php
 
+use common\utils\SecurityUtils;
 use common\utils\StringUtils;
 use yii\web\YiiAsset;
 
@@ -54,7 +55,7 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => YiiAsse
                     <td><strong>会员ID</strong></td>
                     <td><?= $normalUser['usercode'] ?></td>
                     <td><strong>手机号</strong></td>
-                    <td><?= $normalUser['mobile'] ?></td>
+                    <td><?= SecurityUtils::decrypt($normalUser['safeMobile']) ?></td>
                     <td><strong>真实姓名</strong></td>
                     <td><?= $normalUser['real_name'] ? $normalUser['real_name'] : '---' ?></td>
                 </tr>
@@ -187,6 +188,7 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => YiiAsse
                     <li role="presentation" class="points"><a>积分明细</a></li>
                     <li role="presentation" class="coins"><a>财富值明细</a></li>
                     <li role="presentation" class="invite_nav"><a>关系详情</a></li>
+                    <li role="presentation" class="offline_nav"><a>线下会员</a></li>
                 </ul>
             </div>
             <div class="container-fluid"  id="list">
@@ -201,6 +203,7 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => YiiAsse
                 <div class="list_detail" id="point_list"></div>
                 <div class="list_detail" id="coin_list"></div>
                 <div class="list_detail" id="invite_list"></div>
+                <div class="list_detail" id="offline_user"></div>
             </div>
         </div>
     </div>
@@ -239,6 +242,16 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => YiiAsse
         $.get(href, function(data) {
             if (data) {
                 $('#invite_list').html(data);
+            }
+        })
+    }
+
+    function getOfflineUser(href)
+    {
+        $.get(href, function(data) {
+            if (data) {
+                $('#offline_user').html(data);
+                $('#offline_user').html(data);
             }
         })
     }
@@ -345,6 +358,12 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => YiiAsse
     $('.invite_nav').click(function(){
         if (!$('#invite_list').html()) {
             getInviteList('/user/user/detail?id=<?= $normalUser->id?>&key=invite_record')
+        }
+    });
+
+    $('.offline_nav').click(function(){
+        if (!$('#offline_user').html()) {
+            getOfflineUser('/user/user/detail?id=<?= $normalUser->id?>&key=offline_user')
         }
     });
 

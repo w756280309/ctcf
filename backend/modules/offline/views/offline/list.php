@@ -30,6 +30,12 @@ $bid = (int)Yii::$app->request->get('bid');
         </div>
         <!--search start-->
         <div class="portlet-body">
+            <?php if (\Yii::$app->session->hasFlash('info')) {?>
+                <div class="alert alert-success alert-dismissible" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close" style="background-image: none!important;"><span aria-hidden="true">&times;</span></button>
+                    <strong><?= \Yii::$app->session->getFlash('info') ?></strong>
+                </div>
+            <?php }?>
             <form action="/offline/offline/list" method="get" target="_self">
                 <table class="table">
                     <tbody>

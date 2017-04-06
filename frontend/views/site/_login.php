@@ -39,11 +39,10 @@
             <span class="loginUp-btn" id="login_submit_button">立即登录</span>
             <div class="resign-btn">没有账号？<a class="resign" href="/site/signup">免费注册</a></div>
         </div>
-        <input type="hidden" name="is_flag" value="<?= $requiresCaptcha ?>">
     </form>
 </div>
 <script>
-    var requiresCaptcha = <?= $requiresCaptcha ? 1 : 0 ?>;
+    var requiresCaptcha = '<?= $requiresCaptcha ?>';
     var mobile = $('#phone');
     var password = $('#password');
     var verity = $('#verity');

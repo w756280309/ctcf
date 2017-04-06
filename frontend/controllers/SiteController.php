@@ -60,6 +60,8 @@ class SiteController extends Controller
                 'class' => 'common\captcha\CaptchaAction',
                 'minLength' => 4, 'maxLength' => 4,
             ],
+            'reg-success' => 'common\action\user\RegSuccessAction',       //注册成功页
+            'add-affiliator' => 'common\action\user\AddAffiliatorAction', //注册成功后添加分销商
         ];
     }
 
@@ -187,7 +189,7 @@ class SiteController extends Controller
         }
 
         $login = new LoginService();
-        $requiresCaptcha = $login->isCaptchaRequired(Yii::$app->request, '', 30 * 60, 5);
+        $requiresCaptcha = $login->isCaptchaRequired();
 
         return $this->render('login', [
             'requiresCaptcha' => $requiresCaptcha,
@@ -215,21 +217,17 @@ class SiteController extends Controller
     {
         $model = new LoginForm();
         $login = new LoginService();
-        $is_flag = \Yii::$app->request->post('is_flag');
-        if ($is_flag) {
-            $model->scenario = 'verifycode';
-        } else {
-            $model->scenario = 'login';
-        }
+
+        $showCaptcha = $login->isCaptchaRequired(Yii::$app->request->post('phone'));    //是否需要校验图形验证码标志位
+        $model->scenario = $showCaptcha ? 'verifycode' : 'login';
 
         if ($model->load(Yii::$app->request->post()) && $model->validate() && $model->login(User::USER_TYPE_PERSONAL)) {
-            if ('yes' == \Yii::$app->request->post('agree')) {
+            if ('yes' === Yii::$app->request->post('agree')) {
                 setcookie('userphone', $model->phone, time() + 365 * 86400, '/');
-            } elseif ('no' == \Yii::$app->request->post('agree')) {
+            } elseif ('no' === Yii::$app->request->post('agree')) {
                 setcookie('userphone', '', time() - 3600, '/');
             }
-            $is_flag = $login->isCaptchaRequired(Yii::$app->request, $model->phone, 30 * 60, 5);
-            $next = \Yii::$app->request->post('next');
+            $next = Yii::$app->request->post('next');
 
             if (filter_var($next, FILTER_VALIDATE_URL)) {
                 $toUrl = $next;
@@ -237,12 +235,12 @@ class SiteController extends Controller
                 $toUrl = \Yii::$app->request->hostInfo;
             }
 
-            return ['code' => 0, 'message' => '登录成功', 'tourl' => $toUrl, 'requiresCaptcha' => $is_flag, 'key' => ''];
+            return ['code' => 0, 'message' => '登录成功', 'tourl' => $toUrl, 'key' => ''];
         }
 
         if ($model->getErrors()) {
             if ($model->getErrors('password') || $model->getErrors('phone')) {
-                $login->logFailure(Yii::$app->request, $model->phone, LoginLog::TYPE_PC);
+                $login->logFailure($model->phone, LoginLog::TYPE_PC);
             }
 
             $message = $model->firstErrors;
@@ -263,9 +261,9 @@ class SiteController extends Controller
                 $code = 3;
                 $message = current($message);
             }
-            $is_flag = $login->isCaptchaRequired(Yii::$app->request, $model->phone, 30 * 60, 5);
+            $showCaptcha = $login->isCaptchaRequired($model->phone);
 
-            return ['requiresCaptcha' => $is_flag, 'tourl' => '', 'code' => $code, 'message' => $message];
+            return ['requiresCaptcha' => $showCaptcha, 'tourl' => '', 'code' => $code, 'message' => $message];
         }
     }
 
@@ -303,7 +301,7 @@ class SiteController extends Controller
                 $user->last_login = time();
                 $user->save();
 
-                return ['code' => 0, 'tourl' => '/?mark=1612'];
+                return ['code' => 0, 'tourl' => '/site/reg-success'];
             } else {
                 return ['code' => 1, 'error' => $model->firstErrors];
             }
@@ -362,7 +360,7 @@ class SiteController extends Controller
     public function actionLoginForm()
     {
         $login = new LoginService();
-        $requiresCaptcha = $login->isCaptchaRequired(Yii::$app->request, '', 30 * 60, 5);
+        $requiresCaptcha = $login->isCaptchaRequired();
 
         return $this->renderFile('@frontend/views/site/_login.php', [
             'requiresCaptcha' => $requiresCaptcha,

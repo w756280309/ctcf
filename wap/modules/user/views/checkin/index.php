@@ -7,7 +7,7 @@ $hostInfo = \Yii::$app->request->hostInfo;
 ?>
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/wenjfbase.css">
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/activeComHeader.css">
-<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/qiandao/css/index.css?v=20170331">
+<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/qiandao/css/index.css?v=20170401">
 <script src="<?= FE_BASE_URI ?>libs/lib.flexible3.js"></script>
 
 <div class="flex-content">
@@ -43,17 +43,20 @@ $hostInfo = \Yii::$app->request->hostInfo;
             <a href="<?= $user ? '/mall/portal/guest' : '/site/login?next='.urlencode($hostInfo.'/user/checkin') ?>" class="qiandao_btn btn1">快点我签到吧~</a>
         <?php } ?>
     </div>
-    <div class="rule_box">
+    <div class="rule_box" style="padding-top: 0.5rem;">
+        <p class="rule_top f15">热烈庆祝“签到”功能上线！</p>
+        <p class="rule_top f15">每天签到2积分，4月签到积分直升2.5倍起！</p>
+        <p class="rule_top f15">连续签到可得代金券！</p>
         <p class="rule_title f15">签到规则</p>
         <img src="<?= FE_BASE_URI ?>wap/qiandao/images/xingxing.png" alt="">
         <ul class="rule_content f13">
             <li>您每天可以签到1次；</li>
-            <li>第1至第7天，每次签到获得5积分；</li>
+            <li>第1至第7天，每次签到获得5积分（直升2.5倍）；</li>
             <li>连续签到7天，额外送10元代金券；</li>
-            <li>第8天起，每次签到，获得8积分；</li>
+            <li>第8天起，每次签到，获得8积分（直升4倍）；</li>
             <li>连续签到14天，送20元代金券；</li>
             <li>连续签到30天，送50元代金券；</li>
-            <li>本活动为周期性连续签到，连续30天签到后，进去下一签到周期；</li>
+            <li>本活动为周期性连续签到，连续30天签到后，进入下一签到周期；</li>
             <li>签到中断后，则重新从第1天开始计算。</li>
         </ul>
         <p class="rule_title f15" style="padding: 0;">代金券使用规则</p>

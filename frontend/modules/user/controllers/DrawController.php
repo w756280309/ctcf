@@ -78,10 +78,8 @@ class DrawController extends BaseController
                     $draw->addError('money', $ex->getMessage());
                 }
             }
-
             if ($draw->getErrors()) {
                 $message = $draw->firstErrors;
-
                 return ['code' => 1, 'message' => current($message)];
             }
         } else {
