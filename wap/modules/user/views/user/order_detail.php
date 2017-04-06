@@ -8,7 +8,7 @@ if ($fromTransfer) {
 use common\models\product\RateSteps;
 use common\models\order\OnlineRepaymentPlan;
 use common\utils\StringUtils;
-use borrower\assets\WapAsset;
+use wap\assets\WapAsset;
 use yii\web\JqueryAsset;
 
 $this->registerJsFile(ASSETS_BASE_URI .'js/fastclick.js', ['position' => 1]);
