@@ -29,6 +29,14 @@ JS;
             $_js .= <<<JS
 _paq.push(['setUserId', '$authedUserId']);
 JS;
+
+            $authedUser = Yii::$app->user->identity;
+            if (null !== $authedUser) {
+                $isLender = $authedUser->getUserIsInvested() ? 'yes': 'no';
+                $_js .= <<<JS
+_paq.push(['setCustomDimension', 1, '$isLender']);
+JS;
+            }
         }
 
         $_js .= <<<JS
