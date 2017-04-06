@@ -10,6 +10,7 @@ namespace common\action\user;
 use common\models\queue\QueueTask;
 use common\models\user\UserIdentity;
 use common\service\BankService;
+
 use yii\base\Action;
 
 //实名认证表单提交公共action

@@ -17,7 +17,9 @@ use common\models\user\SignupForm;
 use common\models\user\User;
 use common\service\LoginService;
 use common\service\SmsService;
+use common\utils\SecurityUtils;
 use Yii;
+use yii\base\Security;
 use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
@@ -249,7 +251,7 @@ class SiteController extends Controller
                 $code = 1;
                 $message = '手机号或密码错误';
                 if ($model->isUserExist()) {
-                    $user= User::findOne(['mobile' => $model->phone]);
+                    $user= User::findOne(['safeMobile' => SecurityUtils::encrypt($model->phone)]);
                     if (null !== $user && $user->isLocked()) {
                         $message = '该用户已被锁定';
                     }
@@ -387,7 +389,7 @@ class SiteController extends Controller
             return ['code' => 1, 'message' => '图形验证码输入错误'];
         }
 
-        $user = User::findOne(['mobile' => $phone]);
+        $user = User::findOne(['safeMobile' => SecurityUtils::encrypt($phone)]);
         if (1 === $type && null !== $user) {
             return ['code' => 1, 'key' => 'phone', 'message' => '该手机号码已经注册'];
         }

@@ -39,12 +39,12 @@ class BankFrontNotifyAction extends Action
         if (is_null($user)) {
             throw new NotFoundHttpException('无法找到用户');
         }
-        Yii::info('绑卡前台回跳 ump_log user_bank_front_notify user_id: ' . $user->id . ';cardNo:.' . $bind->card_number . ';mobile:' . $user->mobile . '; ret_code:' . $data['ret_code'] . ';ret_msg:' . $data['ret_msg'], 'umplog');
+        Yii::info('绑卡前台回跳 ump_log user_bank_front_notify user_id: ' . $user->id . ';cardNo:.' . $bind->card_number .  '; ret_code:' . $data['ret_code'] . ';ret_msg:' . $data['ret_msg'], 'umplog');
         if (Yii::$container->get('ump')->verifySign($data) && '0000' === $data['ret_code']) {
             if (QpayBinding::STATUS_INIT === $bind->status) {
                 $bind->status = QpayBinding::STATUS_ACK;//处理中
                 if ($bind->save(false)) {
-                    Yii::info('用户信息变更日志 绑卡 变更表:qpaybinding;变更属性:' . (json_encode(['status' => $bind->status])) . ';user_id:' . $user->id . ';mobile:' . $user->mobile . ';变更依据:联动ret_code ' . $data['ret_code'] . ';联动返回信息:' . json_encode($data), 'user_log');
+                    Yii::info('用户信息变更日志 绑卡 变更表:qpaybinding;变更属性:' . (json_encode(['status' => $bind->status])) . ';user_id:' . $user->id .  ';变更依据:联动ret_code ' . $data['ret_code'] . ';联动返回信息:' . json_encode($data), 'user_log');
                     $redirectUrl = $successUrl;
                 } else {
                     $redirectUrl = $errorUrl;

@@ -6,6 +6,7 @@ use common\models\product\OnlineProduct;
 use common\models\promo\InviteRecord;
 use common\models\promo\PromoService;
 use common\models\user\UserInfo;
+use common\utils\SecurityUtils;
 use Ding\DingNotify;
 use Yii;
 use Exception;
@@ -373,7 +374,7 @@ class OrderManager
         ];
 
         $templateId = Yii::$app->params['sms']['toubiao'];
-        SmsService::send($user->mobile, $templateId, $message, $user);
+        SmsService::send(SecurityUtils::decrypt($user->safeMobile), $templateId, $message, $user);
 
         $transaction->commit();
 

@@ -6,6 +6,7 @@ use common\models\coupon\CouponType;
 use common\models\coupon\UserCoupon;
 use common\models\user\User;
 use common\service\SmsService;
+use common\utils\SecurityUtils;
 use wap\modules\promotion\models\RankingPromo;
 
 /**
@@ -108,7 +109,7 @@ class BirthdayCoupon
                         \Yii::$app->params['contact_tel'],
                     ];
                     $templateId = \Yii::$app->params['sms']['birthday_coupon'];
-                    $res = SmsService::send($user->mobile, $templateId, $message, $user);
+                    $res = SmsService::send(SecurityUtils::decrypt($user->safeMobile), $templateId, $message, $user);
                     if (!$res) {
                         throw new \Exception();
                     }
