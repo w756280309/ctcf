@@ -114,7 +114,7 @@ $bid = (int)Yii::$app->request->get('bid');
                             <?= $order->id ?>
                         </td>
                         <td>
-                            <?= $order->affliator->name ?>
+                            <?= $order->user->realName ?>
                         </td>
                         <td>
                             <?= $order->loan->title ?>

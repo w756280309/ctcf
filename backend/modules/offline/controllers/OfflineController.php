@@ -273,6 +273,7 @@ class OfflineController extends BaseController
             $order->andWhere(["$o.id" => $request['id']]);
         }
         $model = $order->one();
+        $model->setScenario('edit');
         $model->realName = $model->user->realName;
         return $this->render('edit',[
             'model' => $model,
