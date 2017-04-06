@@ -2,6 +2,7 @@
 
 namespace common\view;
 
+use Yii;
 use yii\web\View;
 
 class AnalyticsHelper
@@ -11,7 +12,7 @@ class AnalyticsHelper
         if (!\Yii::$app->params['analytics_enabled']) {
             return;
         }
-
+//var_dump(Yii::$app->user->id);exit;
         $pkId = '';
         if (defined('CLIENT_TYPE') && in_array(CLIENT_TYPE, ['wap', 'app', 'pc'])) {
             $pkId = \Yii::$app->params['analytics_pk_'.CLIENT_TYPE.'_id'];
@@ -20,7 +21,17 @@ class AnalyticsHelper
         $gioId = \Yii::$app->params['analytics_gio_id'];
 
         $_js = <<<JS
-  var _paq = _paq || [];
+var _paq = _paq || [];
+JS;
+
+        $authedUserId = Yii::$app->user->id;
+        if (null !== $authedUserId) {
+            $_js .= <<<JS
+_paq.push(['setUserId', '$authedUserId']);
+JS;
+        }
+
+        $_js .= <<<JS
   _paq.push(['trackPageView']);
   _paq.push(['enableLinkTracking']);
   (function() {
