@@ -256,7 +256,7 @@ class SiteController extends Controller
     public function actionLogin($next = null)
     {
         if (!\Yii::$app->user->isGuest) {
-            return $this->redirect('/?mark='.time());
+            return $this->redirect('/?_mark='.time());
         }
 
         if (empty($next) || !filter_var($next, FILTER_VALIDATE_URL)) {
@@ -359,7 +359,7 @@ class SiteController extends Controller
     {
         \Yii::$app->user->logout();
 
-        return $this->redirect('/?mark='.time());
+        return $this->redirect('/?_mark='.time());
     }
 
     /**
@@ -395,7 +395,7 @@ class SiteController extends Controller
     public function actionResetpass()
     {
         if (!\Yii::$app->user->isGuest) {
-            return $this->redirect('/?mark='.time());
+            return $this->redirect('/?_mark='.time());
         }
 
         $model = new SignupForm();
@@ -425,7 +425,7 @@ class SiteController extends Controller
     public function actionSignup($next = null)
     {
         if (!\Yii::$app->user->isGuest) {
-            return $this->redirect('/?mark='.time());
+            return $this->redirect('/?_mark='.time());
         }
 
         $next = filter_var($next, FILTER_VALIDATE_URL);

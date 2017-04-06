@@ -19,7 +19,7 @@ class LuodiyeController extends Controller
     public function actionSignup($next = null)
     {
         if (!Yii::$app->user->isGuest) {
-            return $this->redirect('/?mark=' . time());
+            return $this->redirect('/?_mark=' . time());
         }
         $captcha = new CaptchaForm();
 
