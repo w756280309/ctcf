@@ -43,8 +43,8 @@ class SmasheggController extends Controller
             } catch (\Exception $e) {
                 //DO NOTHING
             }
+            $userDraws = $promoClass->getRewardList($user);
         }
-        $userDraws = $promoClass->getRewardList($user);
 
         return $this->render('index', [
             'promo' => $promo,
