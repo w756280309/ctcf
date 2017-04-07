@@ -10,19 +10,22 @@ foreach ($points as $point) {
     if (PointRecord::TYPE_LOAN_ORDER === $point['ref_type']) {
         $message = '投资获得';
         $isIn = true;
-    } elseif  (PointRecord::TYPE_FIRST_LOAN_ORDER_POINTS_1 === $point['ref_type']) {
+    } elseif (PointRecord::TYPE_FIRST_LOAN_ORDER_POINTS_1 === $point['ref_type']) {
         $message = '首投奖励';
         $isIn = true;
     } elseif (PointRecord::TYPE_POINT_FA_FANG === $point['ref_type']) {
         $message = \yii\helpers\Html::encode($point['remark']);
         $isIn = true;
-    } elseif(PointRecord::TYPE_MALL_INCREASE === $point['ref_type']) {
+    } elseif (PointRecord::TYPE_MALL_INCREASE === $point['ref_type']) {
         $message = \yii\helpers\Html::encode($point['remark']);
         $isIn = true;
-    } elseif(PointRecord::TYPE_BACKEND_BATCH === $point['ref_type']) {
+    } elseif (PointRecord::TYPE_BACKEND_BATCH === $point['ref_type']) {
         $message = empty($point['remark']) ? '投资奖励' : \yii\helpers\Html::encode($point['remark']);
         $isIn = true;
-    } else {
+    } elseif (PointRecord::TYPE_PROMO === $point['ref_type']) {
+        $message = '活动获得';
+        $isIn = true;
+    }else {
         $isIn = false;
         $message = '兑换商品';
     }
