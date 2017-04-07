@@ -31,13 +31,15 @@ $(function () {
         $('.close-img').on('click', function () {
             $('.login-box').removeClass('login-box1').hide();
             $('.mark-box').fadeOut();
+            $('body').unbind('touchmove');
+            refreshPage();
         });
         // 关闭无奖品列表弹窗
         $('.close-nogift').on('click', function () {
             $('.nogift-box').removeClass('nogift-box1').hide();
-            refreshPage();
             $('.mark-box').fadeOut();
             $('body').unbind('touchmove');
+            refreshPage();
         });
         // 关闭奖品列表弹窗
         $('.close-prize').on('click', function () {
@@ -53,10 +55,14 @@ $(function () {
             $('.login-box').removeClass('login-box1').hide();
             $('.card-box').removeClass('card-box1').hide();
             $('.mark-box').hide();
+            $('body').unbind('touchmove');
+            refreshPage();
         });
         $('.close-card').on('click', function () {
             $('.card-box').removeClass('card-box1').hide();
             $('.mark-box').fadeOut();
+            $('body').unbind('touchmove');
+            refreshPage();
         });
 
     });
