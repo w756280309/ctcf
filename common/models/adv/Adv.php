@@ -207,11 +207,11 @@ class Adv extends ActiveRecord
             list($key, $value) = explode('=', $item);
             $params[$key] = $value;
         }
-        if ($token && defined('IN_APP')) {
-            $params['token'] = $token;
-        }
         if ($shareKey) {
             $params['wx_share_key'] = $shareKey;
+        }
+        if ($token && defined('IN_APP')) {
+            $params['token'] = $token;
         }
 
         $link = '';

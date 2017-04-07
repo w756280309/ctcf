@@ -8,7 +8,7 @@ $this->title = '砸金蛋赢大奖';
 <div class="container-fluid">
     <div class="banner-top"></div>
     <div class="banner-bottom">
-        <img src="<?= FE_BASE_URI ?>pc/campaigns/golden-egg/img/ma.png" alt="二维码">
+        <img src="<?= FE_BASE_URI ?>pc/campaigns/golden-egg/img/ma2.png" alt="二维码">
     </div>
     <div class="wrap">
         <div class="award-show">

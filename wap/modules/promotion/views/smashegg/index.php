@@ -12,13 +12,13 @@ $loginUrl = '/site/login?next='.urlencode(Yii::$app->request->absoluteUrl);
 <script src="<?= FE_BASE_URI ?>libs/lib.flexible3.js"></script>
 <script src="<?= FE_BASE_URI ?>libs/fastclick.js"></script>
 <script src="<?= FE_BASE_URI ?>libs/iscroll.js"></script>
-<script src="<?= FE_BASE_URI ?>wap/campaigns/golden-egg/js/index.js"></script>
+<script src="<?= FE_BASE_URI ?>wap/campaigns/golden-egg/js/index.js?v=1"></script>
 
 <div style="display: none">
     <img src="<?= FE_BASE_URI ?>wap/campaigns/golden-egg/images/weitu.png" alt="" width="100%"/>
 </div>
 <div class="container">
-    <a href="#" class="my_prize"></a>
+    <a href="javascript:void(0);" class="my_prize"></a>
     <!--banner-box-->
     <div class="row banner-box">
         <div class="col-xs-12">
@@ -283,6 +283,7 @@ $loginUrl = '/site/login?next='.urlencode(Yii::$app->request->absoluteUrl);
                                     $('.login-inner').html(data.msg);
                                     $('.login-img img').attr({src: cdn+'wap/campaigns/golden-egg/images/nologin.png'});
                                     $('.mark-box').fadeIn();
+                                    $('body').on('touchmove', eventTarget, false);
                                     $('.login-box').show();
                                     setTimeout(function () {
                                         $('.login-box').addClass('login-box1');
@@ -293,6 +294,7 @@ $loginUrl = '/site/login?next='.urlencode(Yii::$app->request->absoluteUrl);
                                     $('.login-inner').html(data.msg);
                                     $('.login-img img').attr({src: cdn+'wap/campaigns/golden-egg/images/noChange.png'});
                                     $('.mark-box').fadeIn();
+                                    $('body').on('touchmove', eventTarget, false);
                                     $('.login-box').show();
                                     setTimeout(function () {
                                         $('.login-box').addClass('login-box1');
@@ -302,6 +304,7 @@ $loginUrl = '/site/login?next='.urlencode(Yii::$app->request->absoluteUrl);
                                 } else if (data.code == 200) {
                                     $('.card-title').html('获得'+data.name);
                                     $('.mark-box').fadeIn();
+                                    $('body').on('touchmove', eventTarget, false);
                                     $('.card-box').show();
                                     setTimeout(function () {
                                         $('.card-box').addClass('card-box1');

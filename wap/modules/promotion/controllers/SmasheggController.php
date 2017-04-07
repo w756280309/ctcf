@@ -40,10 +40,10 @@ class SmasheggController extends Controller
 
                 $promoClass->addTicket($user, 'init', Yii::$app->request);
                 $restTicket = $promoClass->getRestTicketCount($user);
-                $userDraws = $promoClass->getRewardList($user);
             } catch (\Exception $e) {
                 //DO NOTHING
             }
+            $userDraws = $promoClass->getRewardList($user);
         }
 
         return $this->render('index', [
@@ -89,7 +89,7 @@ class SmasheggController extends Controller
             }
 
             $lottery = $promoClass->draw($user);
-            $draw = $promoClass->getAward($lottery->reward_id);
+            $draw = $promoClass::getAward($lottery->reward_id);
 
             return [
                 'code' => 200,
