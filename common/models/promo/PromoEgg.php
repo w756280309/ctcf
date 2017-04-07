@@ -34,18 +34,23 @@ class PromoEgg
     }
 
     //获取活动奖品列表
-    public function getAwardList()
+    public static function getAwardList()
     {
-        return Reward::find()
-            ->where(['promo_id' => $this->promo->id])
-            ->indexBy('id')
-            ->all();
+        $list = [];
+        $promo = RankingPromo::findOne(['key' => 'promo_070410_egg']);
+        if (null !== $promo) {
+            $list = Reward::find()
+                ->where(['promo_id' => $promo->id])
+                ->indexBy('id')
+                ->all();
+        }
+        return $list;
     }
 
     //获取某个奖品信息
-    public function getAward($awardId)
+    public static function getAward($awardId)
     {
-        $awardList = $this->getAwardList();
+        $awardList = self::getAwardList();
         return isset($awardList[$awardId]) ? $awardList[$awardId] : '';
     }
 
@@ -58,18 +63,19 @@ class PromoEgg
      */
     public static function getPoolConfig($type)
     {
+        $config = [];
         if (1 === $type) {
-            return [
+            $config = [
                 'point10' => 1,
             ];
         } elseif (2 === $type) {
-            return [
+            $config = [
                 'toothpaste' => 0.45,
                 'point100' => 0.5,
                 'NERice' => 0.05,
             ];
         } elseif (3 === $type) {
-            return [
+            $config = [
                 'iphone7s' => 0.0001,
                 'mini4' => 0.0001,
                 'jdEcard' => 0.001,
@@ -81,7 +87,7 @@ class PromoEgg
                 'NERice' => 0.2,
             ];
         } else if (4 === $type) {
-            return [
+            $config = [
                 'dsnCup' => 0.1,
                 'woema50' => 0.15,
                 'yanmai' => 0.15,
@@ -91,13 +97,14 @@ class PromoEgg
             ];
         }
 
-        return [];
+        return $config;
     }
 
     /**
      * 根据概率配置数组生成指定奖品的奖池
      */
-    private function createPool(array $gailv) {
+    private function createPool(array $gailv)
+    {
         $pool = [];
         $base = 10000;
         foreach ($gailv as $sn => $gv) {
@@ -224,6 +231,7 @@ class PromoEgg
                     'user_id' => $user->id,
                     'source' => self::SOURCE_ORDER,
                     'promo_id' => $this->promo->id,
+                    'ip' => $user->registerIp,
                 ]);
                 $ticket->save();
             }
@@ -236,38 +244,62 @@ class PromoEgg
     public function draw(User $user)
     {
         $promo = $this->promo;
-
+        //判断抽奖机会
         $lottery = PromoLotteryTicket::find()->where(['user_id' => $user->id, 'isDrawn' => false, 'promo_id' => $promo->id])->one();
-
         if (null === $lottery) {
             throw new \Exception('没有抽奖机会了');
         }
 
+        //获得当前可用奖池并抽奖得到奖品sn
         $config = [
             'userIsInvested' => $user->getUserIsInvested(),
             'isDrawn' => $this->isFirstDraw($user),
             'isDrawOnce' => $this->isDrawOnce($user),
         ];
-
         $pool = $this->getPoolByConfig($config);
         $zuobiao = count($pool) - 1;
         $number = mt_rand(0, $zuobiao);
         $rewardSn = $pool[$number];
+
+        //获得奖品信息
         $reward = Reward::findOne(['sn' => $rewardSn]);
-        $lottery->reward_id = $reward->id;
-        $lottery->isDrawn = true;
-        $lottery->drawAt = time();
-        if ($lottery->save()) {
-            try {
-                if ($this->reward($user, $lottery)) {
-                    return $lottery;
-                }
-            } catch(\Exception $ex) {
-                throw new \Exception('发奖失败，请联系客服，客服电话' . \Yii::$app->params['contact_tel']);
+
+        //更新抽奖记录Ticket
+        $db = \Yii::$app->db;
+        $transaction = $db->beginTransaction();
+        try {
+            $sql = "select id from promo_lottery_ticket where user_id = {$user->id} and isDrawn = false limit 1 for update";
+            $id = $db->createCommand($sql)->queryScalar();
+            if (false === $id || null === $id) {
+                throw new \Exception('没有抽奖机会了');
             }
+            $db->createCommand("update promo_lottery_ticket set isDrawn=:isDrawn,drawAt=:drawAt,reward_id=:rewardId where id = :id and isDrawn=:isDrawnFalse", [
+                'isDrawn' => true,
+                'drawAt' => time(),
+                'rewardId' => $reward->id,
+                'id' => $id,
+                'isDrawnFalse' => false,
+            ])->execute();
+            $transaction->commit();
+        } catch (\Exception $ex) {
+            $transaction->rollBack();
+            throw new \Exception($ex->getMessage());
         }
 
-        throw new \Exception($lottery->getFirstError());
+        //获得中奖记录
+        $lottery = PromoLotteryTicket::findOne($id);
+        if (null === $lottery) {
+            throw new \Exception('发奖失败，未找到中奖记录');
+        }
+
+        //发奖
+        try {
+            if ($this->reward($user, $lottery)) {
+                return $lottery;
+            }
+        } catch(\Exception $ex) {
+            throw new \Exception('发奖失败，请联系客服，客服电话' . \Yii::$app->params['contact_tel']);
+        }
     }
 
     /**
@@ -339,7 +371,7 @@ class PromoEgg
      */
     public function getRewardList(User $user)
     {
-        return PromoLotteryTicket::find()->where(['user_id' => $user->id, 'isDrawn' => true, 'promo_id' => $this->promo->id])->all();
+        return PromoLotteryTicket::find()->where(['user_id' => $user->id, 'isDrawn' => true, 'promo_id' => $this->promo->id])->orderBy(['drawAt' => SORT_DESC])->all();
     }
 
     /**
