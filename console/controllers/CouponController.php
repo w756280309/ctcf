@@ -29,33 +29,28 @@ class CouponController extends Controller
     {
         $u = User::tableName();
         $ct = CouponType::tableName();
-
         $contactTel = \Yii::$app->params['contact_tel'];
         $expiryDate = date('Y-m-d', strtotime('+' . ($expireDay - 1) . 'days'));
 
         $userCoupons = UserCoupon::find()
-            ->select("user_id, $u.safeMobile, $ct.amount")
             ->innerJoin($ct, "couponType_id = $ct.id")
             ->innerJoin($u, "user_id = $u.id")
             ->where(['isUsed' => 0, "$ct.isDisabled" => 0, 'expiryDate' => $expiryDate])
             ->orderBy(['user_id' => SORT_DESC, 'amount' => SORT_DESC])
-            ->asArray()
             ->all();
-
         $transaction = Yii::$app->db->beginTransaction();
         try {
             if (!empty($userCoupons)) {
                 $lastUserId = 0;
                 $count = 0;
                 foreach ($userCoupons as $userCoupon) {
-                    $user_id = $userCoupon['user_id'];
-                    if (($user_id !== $lastUserId) && (null !== $userCoupon->user)) {
+                    $user_id = $userCoupon->user->id;
+                    if ($user_id !== $lastUserId) {
                         $message = [
-                            StringUtils::amountFormat2($userCoupon['amount']) . '元',
+                            StringUtils::amountFormat2($userCoupon->couponType->amount) . '元',
                             'https://m.wenjf.com/',
                             $contactTel,
                         ];
-
                         //发送短信
                         $sms = SmsMessage::initSms($userCoupon->user, $message, 155508);
                         if (!$sms->save()) {
@@ -72,9 +67,7 @@ class CouponController extends Controller
 
                 return Controller::EXIT_CODE_NORMAL;
             }
-
             $this->stdout('当前没有需要代金券过期提醒的用户!', Console::BG_YELLOW);
-
             return Controller::EXIT_CODE_ERROR;
         } catch(\Exception $ex) {
             $transaction->rollBack();
