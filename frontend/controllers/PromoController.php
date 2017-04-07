@@ -45,4 +45,12 @@ class PromoController extends BaseController
     {
         return $this->render('@frontend/views/promo/201612/zadan.php');
     }
+
+    /**
+     * 15亿限时砸金蛋活动页.
+     */
+    public function actionSmashEgg()
+    {
+        return $this->render('@frontend/views/promo/201704/egg.php');
+    }
 }

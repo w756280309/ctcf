@@ -77,4 +77,9 @@ class PromoLotteryTicket extends ActiveRecord
     {
         return $this->hasOne(User::class, ['id' => 'user_id']);
     }
+
+    public function getReward()
+    {
+        return $this->hasOne(Reward::class, ['id' => 'reward_id']);
+    }
 }
