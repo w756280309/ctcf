@@ -82,6 +82,7 @@ return [
             'rules' => [
                 'promotion/p1701/luodiye' => 'promotion/p1701/luodiye',
                 'promotion/p170126/luodiye' => 'promotion/p170126/luodiye',
+                'promotion/smashegg' => 'promotion/smashegg',
                 'promotion/<key>' => 'promotion/promo',
                 'promotion/<key>/luodiye' => 'promotion/promo/luodiye',
             ],

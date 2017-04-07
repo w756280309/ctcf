@@ -255,6 +255,11 @@ class PageController extends BaseController
         $introduceScope['address'] = '温州市鹿城区飞霞南路657号保丰大楼四层';
         $introduceScope['productPlatform'] = '温州报业传媒旗下理财平台';
 
+        //首页签到悬浮框入口
+        $campaign = [
+            'url' => FE_BASE_URI.'wap/index/images/signature.png',
+            'jumpUrl' => $appHost . '/user/checkin',
+        ];
 
         \Yii::$app->response->format = Response::FORMAT_JSON;
 
@@ -265,6 +270,7 @@ class PageController extends BaseController
             'financialScope' => $financialScope,
             'noticeScope' => $noticeScope,
             'introduceScope' => $introduceScope,
+            'campaign' => $campaign,
         ];
 
     }

@@ -98,7 +98,8 @@ class OfflineController extends BaseController
         $request = Yii::$app->request->get();
         $ol = OfflineLoan::tableName();
         $o = OfflineOrder::tableName();
-        $order = OfflineOrder::find()->innerJoinWith('loan')->where(["$o.isDeleted" => false]);
+        $u = OfflineUser::tableName();
+        $order = OfflineOrder::find()->innerJoinWith('loan')->innerJoinWith('user')->where(["$o.isDeleted" => false]);
         if (isset($request['bid']) && $request['bid'] > 0) {
             $order->andWhere(["$o.affiliator_id" => $request['bid']]);
         }
@@ -106,7 +107,7 @@ class OfflineController extends BaseController
             $order->andFilterWhere(['like', "$ol.title", $request['title']]);
         }
         if (isset($request['realName']) && !empty($request['realName'])) {
-            $order->andFilterWhere(['like', "$o.realName", $request['realName']]);
+            $order->andFilterWhere(['like', "$u.realName", $request['realName']]);
         }
         if (isset($request['mobile']) && !empty($request['mobile'])) {
             $order->andFilterWhere(['like', "$o.mobile", $request['mobile']]);
@@ -216,7 +217,6 @@ class OfflineController extends BaseController
         $model->affiliator_id = $affiliator_id;
         $model->loan_id = $loan_id;
         $model->user_id = $user_id;
-        $model->realName = $order[3];
         $model->idCard = $order[4];
         $model->mobile = $order[5];
         $model->accBankName = $order[6];
@@ -267,13 +267,14 @@ class OfflineController extends BaseController
     public function actionEdit()
     {
         $request = Yii::$app->request->get();
-        $ol = OfflineLoan::tableName();
         $o = OfflineOrder::tableName();
         $order = OfflineOrder::find()->innerJoinWith('loan')->where(["$o.isDeleted" => false]);
         if (isset($request['id'])) {
             $order->andWhere(["$o.id" => $request['id']]);
         }
         $model = $order->one();
+        $model->setScenario('edit');
+        $model->realName = $model->user->realName;
         return $this->render('edit',[
             'model' => $model,
         ]);
@@ -284,19 +285,37 @@ class OfflineController extends BaseController
      */
     public function actionUpdate()
     {
-        if(!Yii::$app->request->isPost){
+        if (!Yii::$app->request->isPost) {
             return $this->redirect(['list']);
         }
         $post = Yii::$app->request->post();
+        $transaction = Yii::$app->db->beginTransaction ();
         $order = $this->findOr404(OfflineOrder::class, $post['OfflineOrder']['id']);
-        if($order->load(Yii::$app->request->post()) && $order->validate()){
-            $sign = $order->save();
-            Yii::$app->session->setFlash('info','修改成功！');
-            return $this->redirect(['list']);
-        } else {
+        $offUser = $this->findOr404(OfflineUser::class,['idCard' => $order->idCard]);
+        try {
+
+            if ($order->load($post) && $order->validate()) {
+                $res = $order->save();
+                if (!$order->save()) {
+                    throw new \Exception('用户信息更新失败!');
+                }
+            }
+            //更新offlineUser表realName/mobile
+            $offUser->realName =  $post['OfflineOrder']['realName'];
+            if(isset($post['checkM']) && $post['checkM']){
+                $offUser->mobile = $post['OfflineOrder']['mobile'];
+            }
+            if (!$offUser->save()) {
+                throw new \Exception('用户真实姓名信息更新失败!');
+            }
+            $transaction->commit();
+        } catch ( \Exception $e ) {
+            $transaction->rollback ();
+            Yii::$app->session->setFlash('info','修改失败！');
             return $this->redirect(['edit','id'=>$post['OfflineOrder']['id']]);
         }
-
+        Yii::$app->session->setFlash('info','修改成功！');
+        return $this->redirect(['list']);
     }
 
     /**

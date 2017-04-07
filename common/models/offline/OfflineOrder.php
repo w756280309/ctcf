@@ -25,20 +25,22 @@ use common\models\affiliation\Affiliator;
  */
 class OfflineOrder extends ActiveRecord
 {
+    public $realName;
     public function scenarios()
     {
         return [
             'confirm' => ['valueDate'],
-            'default' => ['affiliator_id', 'loan_id', 'realName', 'mobile', 'money', 'orderDate', 'created_at', 'user_id', 'idCard', 'accBankName', 'bankCardNo'],
+            'edit' => ['realName', 'accBankName', 'bankCardNo','mobile'],
+            'default' => ['affiliator_id', 'loan_id',  'mobile', 'money', 'orderDate', 'created_at', 'user_id', 'idCard', 'accBankName', 'bankCardNo'],
         ];
     }
 
     public function rules()
     {
         return [
-            [['affiliator_id', 'loan_id', 'realName', 'mobile', 'money', 'orderDate', 'created_at', 'user_id', 'idCard', 'accBankName', 'bankCardNo'], 'required'],
+            [['affiliator_id', 'loan_id', 'mobile', 'money', 'orderDate', 'created_at', 'user_id', 'idCard', 'accBankName', 'bankCardNo'], 'required'],
             [['user_id', 'affiliator_id', 'loan_id', 'created_at'], 'integer'],
-            ['realName', 'string', 'max' => 50],
+            [['realName', 'accBankName', 'bankCardNo','mobile'], 'required', 'on' => 'edit'],
             ['mobile', 'string', 'max' => 20],
             [['idCard', 'bankCardNo'], 'string', 'max' => 30],
             ['money', 'number'],

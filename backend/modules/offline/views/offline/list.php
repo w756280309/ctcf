@@ -114,7 +114,7 @@ $bid = (int)Yii::$app->request->get('bid');
                             <?= $order->id ?>
                         </td>
                         <td>
-                            <?= $order->affliator->name ?>
+                            <?= $order->user->realName ?>
                         </td>
                         <td>
                             <?= $order->loan->title ?>
@@ -123,7 +123,7 @@ $bid = (int)Yii::$app->request->get('bid');
                             <?= $order->loan->expires . $order->loan->unit ?>
                         </td>
                         <td>
-                            <a href="/user/offline/detail?id=<?= $order->user->id ?>"><?= $order->realName ?></a>
+                            <a href="/user/offline/detail?id=<?= $order->user->id ?>"><?= $order->user->realName ?></a>
                         </td>
                         <td>
                             <?= $order->idCard ?>

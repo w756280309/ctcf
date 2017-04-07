@@ -19,6 +19,7 @@ use common\models\user\User;
 use common\models\user\UserAccount;
 use common\service\LoanService;
 use common\service\SmsService;
+use common\utils\SecurityUtils;
 use common\utils\TxUtils;
 use Yii;
 
@@ -444,7 +445,7 @@ class RepaymentController extends BaseController
                 ];
             }
 
-            SmsService::send($user->mobile, $templateId, $message, $user);
+            SmsService::send(SecurityUtils::decrypt($user->safeMobile), $templateId, $message, $user);
         }
 
         if (empty($sum_benxi_yue)) {

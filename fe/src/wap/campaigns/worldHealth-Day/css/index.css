@@ -1,0 +1,45 @@
+.flex-content {
+    background: #cfde6e;
+}
+.banner img {
+    width: 100%;
+    height: 2.04rem;
+}
+.rule {
+    padding: 0.56rem 0 0;
+    background: -webkit-linear-gradient(top, #d0df71 56%, #e7efc1);
+    background: linear-gradient(to bottom, #d0df71 56%, #e7efc1);
+}
+.rule ol {
+    margin: 0 0.53333333rem;
+    padding-left: .5rem;
+}
+.rule ol li {
+    margin-bottom: 0.26666667rem;
+    line-height: 0.61333333rem;
+    list-style-type: decimal;
+    color: #628626;
+}
+.rule .bottom-img {
+    width: 100%;
+    height: 1.86666667rem;
+    background: url("../images/bottom-img.png") no-repeat center 0;
+    -webkit-filter: blur(1px);
+            filter: blur(1px);
+    background-size: contain;
+}
+.rule .a-invest {
+    margin: 0.26666667rem 0.53333333rem;
+    display: inline-block;
+    width: 8.93333334rem;
+    height: 1.2rem;
+    line-height: 1.2rem;
+    text-align: center;
+    color: #fff;
+    background: #ff862d;
+    border-radius: 0.13333333rem;
+}
+.rule .ownership {
+    color: #628626;
+    text-align: center;
+}

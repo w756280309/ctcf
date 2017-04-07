@@ -819,7 +819,7 @@ class User extends ActiveRecord implements IdentityInterface, UserInterface
         $mobile = SecurityUtils::decrypt($this->safeMobile);
         $resp = Yii::$container->get('ump')->register($this);
 
-        Yii::info('开户联动返回日志 ump_log user_identify user_id: ' . $this->id . ';real_name:.' . $this->real_name . ';idcard:' . $identity->idcard . ';mobile:' . $mobile . '; ret_code:' . $resp->get('ret_code') . ';ret_msg:' . $resp->get('ret_msg'), 'umplog');
+        Yii::info('开户联动返回日志 ump_log user_identify user_id: ' . $this->id . ';real_name:.' . $this->real_name . ';idcard:' . $identity->idcard .  '; ret_code:' . $resp->get('ret_code') . ';ret_msg:' . $resp->get('ret_msg'), 'umplog');
 
         if (!$resp->isSuccessful()) {
             throw new \Exception($resp->get('ret_code') . '：' . $resp->get('ret_msg'), 1);
@@ -845,7 +845,7 @@ class User extends ActiveRecord implements IdentityInterface, UserInterface
             if (!$this->save(false)) {
                 throw new \Exception('开户失败', 1);
             }
-            Yii::info('用户信息变更日志 开户 变更表:user;变更属性:' . (json_encode(['idcard_status' => $this->idcard_status, 'real_name' => $this->real_name, 'idcard' => $identity->idcard])) . ';user_id:' . $this->id . ';mobile:' . $mobile . ';变更依据:联动ret_code ' . $resp->get('ret_code') . ';联动返回信息:' . json_encode($resp->toArray()), 'user_log');
+            Yii::info('用户信息变更日志 开户 变更表:user;变更属性:' . (json_encode(['idcard_status' => $this->idcard_status, 'real_name' => $this->real_name, 'idcard' => $identity->idcard])) . ';user_id:' . $this->id .  ';变更依据:联动ret_code ' . $resp->get('ret_code') . ';联动返回信息:' . json_encode($resp->toArray()), 'user_log');
             $transaction->commit();
         } catch (\Exception $ex) {
             $transaction->rollBack();
@@ -892,7 +892,7 @@ class User extends ActiveRecord implements IdentityInterface, UserInterface
                     throw new \Exception();
                 }
                 $transaction->commit();
-                Yii::info('用户信息变更日志 绑卡成功 变更表:user_bank;变更属性:' . (json_encode($data)) . ';user_id:' . $this->id . ';mobile:' . $this->mobile . ';变更依据:联动ret_code ' . $responseData['ret_code'] . ';联动返回信息:' . json_encode($responseData), 'user_log');
+                Yii::info('用户信息变更日志 绑卡成功 变更表:user_bank;变更属性:' . (json_encode($data)) . ';user_id:' . $this->id .  ';变更依据:联动ret_code ' . $responseData['ret_code'] . ';联动返回信息:' . json_encode($responseData), 'user_log');
                 return true;
             } catch (\Exception $ex) {
                 $transaction->rollBack();
@@ -940,7 +940,7 @@ class User extends ActiveRecord implements IdentityInterface, UserInterface
                 throw new \Exception('数据更改失败');
             }
             $transaction->commit();
-            Yii::info('用户信息变更日志 换卡成功 变更表:user_bank;变更属性:' . (json_encode($bank->attributes)) . ';user_id:' . $this->id . ';mobile:' . $this->mobile . ';变更依据:联动ret_code ' . $responseData['ret_code'] . ';联动返回信息:' . json_encode($responseData), 'user_log');
+            Yii::info('用户信息变更日志 换卡成功 变更表:user_bank;变更属性:' . (json_encode($bank->attributes)) . ';user_id:' . $this->id .  ';变更依据:联动ret_code ' . $responseData['ret_code'] . ';联动返回信息:' . json_encode($responseData), 'user_log');
             return true;
         } catch (\Exception $e) {
             $transaction->rollBack();

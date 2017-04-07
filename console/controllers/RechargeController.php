@@ -2,10 +2,10 @@
 
 namespace console\controllers;
 
+use common\models\queue\QueueTask;
 use common\models\user\RechargeRecord;
 use common\models\user\User;
 use common\service\AccountService;
-use Ding\DingNotify;
 use Yii;
 use yii\console\Controller;
 
@@ -32,11 +32,14 @@ class RechargeController extends Controller
                 } elseif ('3' === $resp->get('tran_state')) {
                     $rc->status = RechargeRecord::STATUS_FAULT;
                     $user = User::findOne($rc->uid);
-                    try {
-                        if (!empty($user)) {
-                            (new DingNotify('wdjf'))->sendToUsers('用户[' . $user->mobile . ']，于' . date('Y-m-d H:i:s', $rc->created_at) . ' 进行充值操作，操作失败，订单sn '.$rc->sn.'；联动返回状态：tran_state '. $resp->get('tran_state'));
-                        }
-                    } catch (\Exception $ex) {
+                    if (!is_null($user)) {
+                        $command = 'queue/recharge-notify '. base64_encode(json_encode([
+                                'userId' => $user->id,
+                                'rechargeSn' => $rc->sn,
+                                'message' => 'ret_stats:'.$resp->get('tran_state').';ret_msg:'.$resp->get('ret_msg'),
+                                'dateTime' => date('Y-m-d H:i:s', $rc->created_at),
+                            ]));
+                        \Yii::$container->get('db_queue')->push(QueueTask::createNewTask('recharge_fail_notify', $command));
                     }
                 }
             }

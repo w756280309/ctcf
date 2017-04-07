@@ -69,13 +69,13 @@ class DingNotify
             $user = \Yii::$app->params['ding_notify_list'];
         }
         if (empty($user)) {
-            return ;
+            return false;
         }
         $user = implode('|',$user);
         $content = '[系统通知 '.date('Y-m-d H:i:s').']'. "\n" . $content;
         $text = new Text($content);
         $client = $this->_client;
-        $client->companyMessageSend($text, $user);
+        return $client->companyMessageSend($text, $user);
     }
 
     /**

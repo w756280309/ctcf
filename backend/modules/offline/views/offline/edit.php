@@ -31,7 +31,12 @@ use yii\widgets\ActiveForm;
         </div>
 
         <div class="portlet-body form">
-
+            <?php if (\Yii::$app->session->hasFlash('info')) {?>
+                <div class="alert alert-danger alert-dismissible" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close" style="background-image: none!important;"><span aria-hidden="true">&times;</span></button>
+                    <strong><?= \Yii::$app->session->getFlash('info') ?></strong>
+                </div>
+            <?php }?>
             <!-- BEGIN FORM-->
             <?php $form = ActiveForm::begin([
                 'id' => 'import_form',
@@ -43,7 +48,7 @@ use yii\widgets\ActiveForm;
             <div class="control-group">
                 <label class="control-label">客户姓名</label>
                 <div class="controls">
-                    <?= $form->field($model, 'realName', ['template' => '{input}', 'inputOptions' => ['autocomplete' => "off", 'class' => 'm-wrap span4', 'placeholder' => '']])->textInput() ?>
+                    <?= $form->field($model, 'realName', ['template' => '{input}', 'inputOptions' => ['autocomplete' => "off", 'class' => 'm-wrap span4']])->textInput() ?>
                     <?= $form->field($model, 'realName', ['template' => '{error}']); ?>
                 </div>
             </div>
@@ -52,7 +57,13 @@ use yii\widgets\ActiveForm;
                 <div class="controls">
                     <?= $form->field($model, 'mobile', ['template' => '{input}', 'inputOptions' => ['autocomplete' => "off", 'class' => 'm-wrap span4', 'placeholder' => '']])->textInput() ?>
                     <?= $form->field($model, 'mobile', ['template' => '{error}']); ?>
+                    <div class="checkbox">
+                        <label style="color: green">
+                            <input type="checkbox" name="checkM" value="1">是否更新到会员账户详情
+                        </label>
+                    </div>
                 </div>
+
             </div>
             <div class="control-group">
                 <label class="control-label">开户行名称</label>

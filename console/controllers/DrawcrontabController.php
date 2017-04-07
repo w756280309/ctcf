@@ -58,7 +58,7 @@ class DrawcrontabController extends Controller
                     } elseif ($tranState === 3 || $tranState === 5 || $tranState === 15)  {
                         $user = User::findOne($record->uid);
                         if (!empty($user)) {
-                            (new DingNotify('wdjf'))->sendToUsers('用户[' . $user->mobile . ']，于' . date('Y-m-d H:i:s', $record->created_at) . ' 进行提现操作，sn '.$record->sn.'，提现失败，联动提现失败，联动返回状态:' . $drawResp->get('tran_state'));
+                            (new DingNotify('wdjf'))->sendToUsers('用户[' . $user->id . ']，于' . date('Y-m-d H:i:s', $record->created_at) . ' 进行提现操作，sn '.$record->sn.'，提现失败，联动提现失败，联动返回状态:' . $drawResp->get('tran_state'));
                         }
                         $record->status = DrawRecord::STATUS_FAIL;
                         $record->save(false);

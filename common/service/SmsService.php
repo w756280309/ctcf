@@ -6,6 +6,7 @@ use common\models\sms\SmsTable;
 use common\models\sms\SmsMessage;
 use common\models\user\User;
 use common\utils\SecurityUtils;
+use common\utils\StringUtils;
 use Yii;
 
 /**
@@ -51,7 +52,7 @@ class SmsService
         $model = new SmsTable([
             'code' => $sms ? ($sms->code) : (Yii::$app->functions->createRandomStr()),
             'type' => $type,
-            'mobile' => $phone,
+            'mobile' => StringUtils::obfsMobileNumber($phone),
             'safeMobile' => SecurityUtils::encrypt($phone),
         ]);
 
@@ -65,7 +66,7 @@ class SmsService
 
         if ($model->save()) {
             $smsWhiteList = Yii::$app->params['sms_white_list'];
-            if ($mockSms && !in_array($model->mobile, $smsWhiteList)) {
+            if ($mockSms && !in_array(SecurityUtils::decrypt($model->safeMobile), $smsWhiteList)) {
                 return ['code' => 0, 'message' => ''];
             }
 
@@ -87,7 +88,7 @@ class SmsService
             if (!empty($message)) {
                 $sms = new SmsMessage([
                     'template_id' => $template_id,
-                    'mobile' => $model->mobile,
+                    'mobile' => $model->mobile, //model中mobile字段已经处理为隐藏手机号
                     'safeMobile' => $model->safeMobile,
                     'message' => json_encode($message),
                 ]);
@@ -150,7 +151,7 @@ class SmsService
         $smsMessage = new SmsMessage([
             'template_id' => $templateId,
             'uid' => $user ? $user->id : 0,
-            'mobile' => $mobile,
+            'mobile' => StringUtils::obfsMobileNumber($mobile),//隐藏手机号4-9位
             'safeMobile' => SecurityUtils::encrypt($mobile),
             'message' => json_encode($data),
             'level' => $level,

@@ -13,3 +13,4 @@
 ]);
 \Yii::$container->set('sms', 'SmsGate\\SmsRequest');
 \Yii::$container->set('txClient', 'Tx\\TxClient');
+Yii::$container->set('db_queue', 'Queue\\DbQueue');

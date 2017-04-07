@@ -9,6 +9,7 @@ use common\models\order\OnlineOrder;
 use common\models\user\User;
 use common\service\AccountService;
 use common\service\SmsService;
+use common\utils\SecurityUtils;
 use wap\modules\promotion\models\RankingPromo;
 use yii\helpers\ArrayHelper;
 
@@ -137,7 +138,7 @@ class PromoInvite12
                             $order->mobile,
                             $mess,
                         ];
-                        SmsService::send($user->mobile, $templateId, $message, $user);
+                        SmsService::send(SecurityUtils::decrypt($user->safeMobile), $templateId, $message, $user);
                     }
                 }
             }

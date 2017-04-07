@@ -9,6 +9,7 @@ use common\models\user\MoneyRecord;
 use common\models\user\User;
 use common\service\AccountService;
 use common\service\SmsService;
+use common\utils\SecurityUtils;
 use wap\modules\promotion\models\RankingPromo;
 use yii\web\Request;
 
@@ -339,7 +340,7 @@ class Promo1212
                 $cash,
                 \Yii::$app->params['contact_tel'],
             ];
-            SmsService::send($user->mobile, $templateId, $message, $user);
+            SmsService::send(SecurityUtils::decrypt($user->safeMobile), $templateId, $message, $user);
 
             return true;
         }
@@ -408,7 +409,7 @@ class Promo1212
                     $cash,
                     \Yii::$app->params['clientOption']['host']['wap'],
                 ];
-                SmsService::send($user->mobile, $templateId, $message, $user);
+                SmsService::send(SecurityUtils::decrypt($user->safeMobile), $templateId, $message, $user);
             }
         }
     }
