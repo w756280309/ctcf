@@ -1,6 +1,7 @@
 <?php
 
 $this->title = '砸金蛋赢大奖';
+$this->headerNavOn = true;
 $this->share = $share;
 
 $loginUrl = '/site/login?next='.urlencode(Yii::$app->request->absoluteUrl);
@@ -183,7 +184,7 @@ $loginUrl = '/site/login?next='.urlencode(Yii::$app->request->absoluteUrl);
             <ul class="prize-part2">
                 <?php foreach ($userDraws as $userDraw) { ?>
                     <li>
-                        <div class="pic lf" style="background: url('<?= FE_BASE_URI.$userDraw->reward->path ?>') center center no-repeat;background-size: contain;"></div>
+                        <div class="pic lf" style="background: url('<?= FE_BASE_URI.$userDraw->reward->path ?>') center center no-repeat; background-size: <?= 'COUPON' === $userDraw->reward->ref_type ? '1.5rem 0.88rem' : 'contain' ?>;"></div>
                         <p class="prize-name"><?= $userDraw->reward->name ?></p>
                         <p class="prize-time"><?= date('Y-m-d H:i:s', $userDraw->drawAt) ?></p>
                     </li>
