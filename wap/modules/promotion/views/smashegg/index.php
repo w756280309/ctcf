@@ -126,8 +126,8 @@ $loginUrl = '/site/login?next='.urlencode(Yii::$app->request->absoluteUrl);
                         </li>
                         <li>
                             <div>
-                                <img src="<?= FE_BASE_URI ?>wap/campaigns/golden-egg/images/prize-9.png" alt="">
-                                <p class="f11">东北黑香米</p>
+                                <img src="<?= FE_BASE_URI ?>wap/campaigns/golden-egg/images/prize-9.png?v=1" alt="" style="width: 90%">
+                                <p class="f11">20元代金券</p>
                             </div>
                         </li>
                     </ul>
@@ -137,9 +137,9 @@ $loginUrl = '/site/login?next='.urlencode(Yii::$app->request->absoluteUrl);
             <div class="ruler-box">
                 <div class="ruler-title f15" style="margin-bottom: 0.173rem">活动规则：</div>
                 <ul class="f12">
-                    <li>活动期间所有注册用户均可获得1次砸蛋机会；</li>
-                    <li>活动期间用户每投资2万元（不含转让产品），可获得1次砸蛋机会，上不封顶；</li>
-                    <li>活动时间2017年4月10日-4月12日，过期未使用的砸蛋机会将失效；</li>
+                    <li>活动期间所有注册用户均可获赠1次砸蛋机会；</li>
+                    <li>活动期间用户每投资3万元（不含转让产品），可获得1次砸蛋机会，上不封顶；</li>
+                    <li>活动时间2017年4月10日-4月13日，过期未使用的砸蛋机会将失效；</li>
                     <li>在活动页面右上角“我的奖品”中可以查看已获得的奖品；</li>
                     <li>活动结束后7个工作日内，工作人员将与您联系确认领取奖品相关事宜，请保持通讯畅通。</li>
                 </ul>
@@ -274,8 +274,9 @@ $loginUrl = '/site/login?next='.urlencode(Yii::$app->request->absoluteUrl);
                                 // 温都金服逻辑:   data.code: 101  未登录
                                 //                          102   没有砸蛋机会
                                 //                          200   中奖了
-                                //                          data.type == POINT 积分
-                                //                          data.type == PIKU  实物
+                                //                          data.type == POINT  积分
+                                //                          data.type == COUPON 代金券
+                                //                          data.type == PIKU   实物
                                 //                          400   程序出错
 
                                 //请按照上方逻辑,调整温都金服显示
@@ -314,6 +315,11 @@ $loginUrl = '/site/login?next='.urlencode(Yii::$app->request->absoluteUrl);
                                         $('.card-title').css({top: '46%'});
                                         $('.card-content').hide();
                                         $('.card-btn').attr({href: '/mall/point/list'});
+                                    } else if ('COUPON' == data.type) { //获取代金券
+                                        $('.card-btn span').html('查看奖品');
+                                        $('.card-title').css({top: '46%'});
+                                        $('.card-content').hide();
+                                        $('.card-btn').attr({href: '/user/coupon/list'});
                                     } else { //获取实物
                                         $('.card-btn span').html('确认');
                                         $('.card-btn span').on('click', function () {

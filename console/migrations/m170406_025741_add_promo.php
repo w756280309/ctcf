@@ -12,7 +12,7 @@ class m170406_025741_add_promo extends Migration
             'promoClass' => 'common\models\promo\PromoEgg',
             'isOnline' => true,
             'startTime' => '2017-04-10 00:00:00',
-            'endTime' => '2017-04-12 23:59:59',
+            'endTime' => '2017-04-13 23:59:59',
         ]);
     }
 
