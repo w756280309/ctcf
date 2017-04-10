@@ -1,6 +1,8 @@
 <?php
 
 namespace common\models\promo;
+use common\models\coupon\CouponType;
+use common\models\coupon\UserCoupon;
 use common\models\mall\PointRecord;
 use common\models\order\OnlineOrder;
 use common\models\user\User;
@@ -12,7 +14,7 @@ use yii\web\Request;
 class PromoEgg
 {
     public $promo;
-    private $orderMoneyLimit = 20000;//累计订单金额超过此金额之后发送机会
+    private $orderMoneyLimit = 30000;//累计订单金额超过此金额之后发送机会
     const SOURCE_INIT = 'init'; //每人一次的机会
     const SOURCE_ORDER = 'order'; //购买
 
@@ -70,30 +72,30 @@ class PromoEgg
             ];
         } elseif (2 === $type) {
             $config = [
-                'toothpaste' => 0.45,
-                'point100' => 0.5,
-                'NERice' => 0.05,
+                'point50' => 0.25,
+                'coupon20' => 0.75,
             ];
         } elseif (3 === $type) {
+
             $config = [
                 'iphone7s' => 0.0001,
                 'mini4' => 0.0001,
                 'jdEcard' => 0.001,
-                'dsnCup' => 0.1,
-                'woema50' => 0.15,
-                'yanmai' => 0.1488,
-                'toothpaste' => 0.2,
-                'point100' => 0.2,
-                'NERice' => 0.2,
+                'dsnCup' => 0.08,
+                'woema50' => 0.12,
+                'yanmai' => 0.1988,
+                'toothpaste' => 0.25,
+                'point50' => 0.25,
+                'coupon20' => 0.1,
             ];
         } else if (4 === $type) {
             $config = [
-                'dsnCup' => 0.1,
-                'woema50' => 0.15,
-                'yanmai' => 0.15,
-                'toothpaste' => 0.2,
-                'point100' => 0.2,
-                'NERice' => 0.2,
+                'dsnCup' => 0.08,
+                'woema50' => 0.12,
+                'yanmai' => 0.2,
+                'toothpaste' => 0.25,
+                'point50' => 0.25,
+                'coupon20' => 0.1,
             ];
         }
 
@@ -316,43 +318,57 @@ class PromoEgg
         $transaction = $db->beginTransaction();
         try {
             //分两部分:减库存和更新ticket
-            $sql = "select * from reward where id = {$reward->id} and `limit` > 0 FOR UPDATE";
-            $updateData = $db->createCommand($sql)->queryOne();
+            $sql = "select * from reward where id = :id and `limit` > 0 FOR UPDATE";
+            $updateData = $db->createCommand($sql, ['id' => $reward->id])->queryOne();
 
             if (false !== $updateData) {
-                $sqlUpdate = "update reward set `limit` = `limit` - 1 where id = {$reward->id}";
-                $db->createCommand($sqlUpdate)->execute();
-                if (Reward::TYPE_POINT === $reward->ref_type) {
-                    $point = $reward->ref_amount;
-                    $pointSql = "update user set points = points + {$point} where id = {$user->id}";
-                    $num = $db->createCommand($pointSql)->execute();
-                    if ($num <= 0) {
-                        $transaction->rollBack();
-                    }
-                    $user->refresh();
-                    $pointRecord = new PointRecord([
-                        'user_id' => $user->id,
-                        'sn' => TxUtils::generateSn('PROMO'),
-                        'final_points' => $user->points,
-                        'recordTime' => date('Y-m-d H:i:s'),
-                        'ref_type' => PointRecord::TYPE_PROMO,
-                        'ref_id' => $lottery->id,
-                        'incr_points' => $point,
-                        'userLevel' => $user->getLevel(),
-                        'remark' => '活动获得',
-                    ]);
-                    $pointRecord->save(false);
-                }
+                $sqlUpdate = "update reward set `limit` = `limit` - 1 where id = :id ";
+                $db->createCommand($sqlUpdate, ['id' => $reward->id])->execute();
             } else {
-                $newReward = Reward::findOne(['sn' => 'NERice']);
-                $sql1 = "update reward set `limit` = `limit` - 1 where id = {$newReward->id}";
-                $riceRes = $db->createCommand($sql1)->execute();
+                $reward = Reward::findOne(['sn' => 'coupon20']);
+                $sql1 = "update reward set `limit` = `limit` - 1 where id = :rewardId";
+                $riceRes = $db->createCommand($sql1, ['rewardId' => $reward->id])->execute();
                 if ($riceRes <= 0) {
                     throw new \Exception('发奖失败');
                 }
-                $lottery->reward_id = $newReward->id;
+                $lottery->reward_id = $reward->id;
+            }
+            //如果是实物奖品只需要更改库存的奖品的数量就可以了
+            if (Reward::TYPE_PIKU === $reward->ref_type) {
+                $transaction->commit();
+                return true;
             }
 
+            if (Reward::TYPE_POINT === $reward->ref_type) {
+                $point = $reward->ref_amount;
+                $pointSql = "update user set points = points + :points where id = :userId";
+                $num = $db->createCommand($pointSql, [
+                    'points' => $point,
+                    'userId' => $user->id,
+                ])->execute();
+                if ($num <= 0) {
+                    $transaction->rollBack();
+                }
+                $user->refresh();
+                $pointRecord = new PointRecord([
+                    'user_id' => $user->id,
+                    'sn' => TxUtils::generateSn('PROMO'),
+                    'final_points' => $user->points,
+                    'recordTime' => date('Y-m-d H:i:s'),
+                    'ref_type' => PointRecord::TYPE_PROMO,
+                    'ref_id' => $lottery->id,
+                    'incr_points' => $point,
+                    'userLevel' => $user->getLevel(),
+                    'remark' => '活动获得',
+                ]);
+                $pointRecord->save(false);
+            }
+            if (Reward::TYPE_COUPON === $reward->ref_type) {
+                if (empty($reward->ref_id) || null === ($couponType = CouponType::findOne($reward->ref_id))) {
+                    throw new \Exception('发奖失败，未找到指定的代金券类型');
+                }
+                UserCoupon::addUserCoupon($user, $couponType)->save(false);
+            }
             $lottery->rewardedAt = time();
             $lottery->isRewarded = true;
             $lottery->save();
