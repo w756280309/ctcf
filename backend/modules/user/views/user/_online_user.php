@@ -67,7 +67,7 @@ $isPersonal = $category === User::USER_TYPE_PERSONAL;
                         <a href="/user/user/detail?id=<?= $val['id'] ?>" ><span class="label label-success"><i class="icon-edit"></i> 查看用户详情</span></a>
                      <?php } else { ?>
                         <a href="/user/user/edit?id=<?= $val['id'] ?>&type=<?= $category ?>" ><span class="label label-success"><i class="icon-edit"></i> 编辑</span></a>
-                        <a href="/user/user/detail?id=<?= $val['id'] ?>" class="btn mini green"><span class="label label-success"><i class="icon-edit"></i> 查看用户详情</span></a>
+                        <a href="/user/user/detail?id=<?= $val['id'] ?>" ><span class="label label-success"><i class="icon-edit"></i> 查看用户详情</span></a>
                     <?php } ?>
                 </center>
                 </td>

@@ -184,7 +184,7 @@ $isPersonal = $category === User::USER_TYPE_PERSONAL;
 
         <!--search end -->
         <!--会员列表-->
-        <?= $this->renderFile('@backend/modules/user/views/user/_online_user.php', ['model' => $model, 'category' => User::USER_TYPE_PERSONAL, 'affiliators' => $affiliators ]); ?>
+        <?= $this->renderFile('@backend/modules/user/views/user/_online_user.php', ['model' => $model, 'category' => $category, 'affiliators' => $affiliators]); ?>
         <!--分页-->
         <div class="pagination" style="text-align:center"><?= LinkPager::widget(['pagination' => $pages]); ?></div>
     </div>
