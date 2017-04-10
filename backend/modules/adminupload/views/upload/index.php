@@ -6,13 +6,14 @@ $this->title = '文件列表';
 $this->registerJsFile('/js/clipboard.min.js', ['depends' => 'yii\web\YiiAsset']);
 
 ?>
+
 <?php $this->beginBlock('blockmain'); ?>
 <div class="container-fluid">
     <!-- BEGIN PAGE HEADER-->
     <div class="row-fluid">
         <div class="span12">
             <h3 class="page-title">
-资讯管理
+                资讯管理
                 <small>运营模块</small>
             </h3>
             <ul class="breadcrumb">
@@ -74,7 +75,7 @@ $this->registerJsFile('/js/clipboard.min.js', ['depends' => 'yii\web\YiiAsset'])
                 <tr>
                     <th style="text-align: center">文件名</th>
                     <th style="text-align: center">文件类型</th>
-                    <th style="text-align: center">文件地址</th>
+                    <th style="text-align: left;">文件地址</th>
                     <th style="text-align: center">操作</th>
                 </tr>
                 </thead>
@@ -91,23 +92,23 @@ $this->registerJsFile('/js/clipboard.min.js', ['depends' => 'yii\web\YiiAsset'])
                                 }
                             ?>
                         </td>
-                        <td style="text-align: center">
+                        <td>
                             <?php
                                 if ($val->allowHtml) {
                                     echo "upload/showpic?id=$val->id";
                                 } else {
-                                    echo $val->link;
+                                    echo UPLOAD_BASE_URI.$val->link;
                                 }
                             ?>
                         </td>
                         <td style="text-align: center">
-                            <a href="Javascript:void(0)" data-clipboard-text="<?php if ($val->allowHtml) { echo "upload/showpic?id=$val->id"; } else { echo $val->link; } ?>" class="btn mini purple copy-buttons"><i
-                                    class="icon-edit"></i> 复制链接</a>
+                            <a href="Javascript:void(0)" data-clipboard-text="<?= $val->allowHtml ? "upload/showpic?id=$val->id" : UPLOAD_BASE_URI.$val->link ?>" class="btn mini purple copy-buttons"><i
+                                class="icon-edit"></i> 复制链接</a>
                             <a href="/adminupload/upload/edit?id=<?= $val['id'] ?>" class="btn mini purple"><i
-                                    class="icon-edit"></i> 编辑</a>
+                                class="icon-edit"></i> 编辑</a>
                             <a href="/adminupload/upload/delete?id=<?= $val['id'] ?>"
-                               onclick="javascript:return confirm('文件删除后，链接将失效，确认删除？');" class="btn mini black"><i
-                                    class="icon-trash"></i> 删除</a>
+                                onclick="javascript:return confirm('文件删除后，链接将失效，确认删除？');" class="btn mini black"><i
+                                class="icon-trash"></i> 删除</a>
                         </td>
                     </tr>
                 <?php endforeach; ?>
