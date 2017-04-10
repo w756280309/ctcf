@@ -1,4 +1,5 @@
 <?php
+
 use common\view\AnalyticsHelper;
 use yii\helpers\Html;
 
@@ -10,6 +11,7 @@ if (!\Yii::$app->user->isGuest) {
     $this->registerJsFile('https://res.wx.qq.com/open/js/jweixin-1.0.0.js');
     $this->registerJsFile(ASSETS_BASE_URI . 'promo/1608/js/weixin.js?v=20160805');//加载来源统计记录代码
 }
+
 ?>
 <?php $this->beginPage() ?>
 <!doctype html>
@@ -24,7 +26,7 @@ if (!\Yii::$app->user->isGuest) {
     <?php $this->head() ?>
     <link href="<?= ASSETS_BASE_URI ?>css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>promo/1608/css/inviteactive.css">
-    <script src="<?= ASSETS_BASE_URI ?>js/jquery.js"></script>
+    <script src="<?= ASSETS_BASE_URI ?>js/jquery.min.js"></script>
     <script>
         $(function() {
             $(document).ajaxSend(function(event, jqXHR, settings) {
