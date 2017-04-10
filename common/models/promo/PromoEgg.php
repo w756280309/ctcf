@@ -275,12 +275,11 @@ class PromoEgg
             if (false === $id || null === $id) {
                 throw new \Exception('没有抽奖机会了');
             }
-            $db->createCommand("update promo_lottery_ticket set isDrawn=:isDrawn,drawAt=:drawAt,reward_id=:rewardId where id = :id and isDrawn=:isDrawnFalse", [
+            $db->createCommand("update promo_lottery_ticket set isDrawn=:isDrawn,drawAt=:drawAt,reward_id=:rewardId where id = :id", [
                 'isDrawn' => true,
                 'drawAt' => time(),
                 'rewardId' => $reward->id,
                 'id' => $id,
-                'isDrawnFalse' => false,
             ])->execute();
             $transaction->commit();
         } catch (\Exception $ex) {
