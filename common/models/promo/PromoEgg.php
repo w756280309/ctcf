@@ -270,7 +270,7 @@ class PromoEgg
         $db = \Yii::$app->db;
         $transaction = $db->beginTransaction();
         try {
-            $sql = "select id from promo_lottery_ticket where user_id = {$user->id} and isDrawn = false limit 1 for update";
+            $sql = "select id from promo_lottery_ticket where promo_id = {$promo->id} and user_id = {$user->id} and isDrawn = false limit 1 for update";
             $id = $db->createCommand($sql)->queryScalar();
             if (false === $id || null === $id) {
                 throw new \Exception('没有抽奖机会了');
