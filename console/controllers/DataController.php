@@ -19,6 +19,7 @@ use common\models\promo\InviteRecord;
 use common\models\promo\LoanOrderPoints;
 use common\models\sms\SmsMessage;
 use common\models\sms\SmsTable;
+use common\models\user\CoinsRecord;
 use common\models\user\User;
 use common\models\user\UserAccount;
 use common\models\user\UserInfo;
@@ -758,4 +759,75 @@ COUPON;
 
         return self::EXIT_CODE_NORMAL;
     }
+
+
+    /**
+     * 标的重复计息，财富值重复
+     *
+     *
+    SELECT *
+    FROM  `coins_record`
+    WHERE user_id
+    IN (
+
+    SELECT DISTINCT uid
+    FROM online_order
+    WHERE online_pid =2267
+    )
+    AND DATE_FORMAT( createTime,  '%Y-%m-%d' ) =  '2017-03-31'
+    ORDER BY  `coins_record`.`order_id` ASC
+     */
+    public function actionUpdateCoins()
+    {
+        $ids = [9256, 9257, 9258, 9259, 9260, 9261, 9262, 9263, 9264, 9265];
+        $user_ids = [11521, 783, 3018, 10422, 9948, 1785, 10728];
+
+        $coinsRecords = CoinsRecord::find()->where(['in', 'id', $ids])->orderBy(['id' => SORT_ASC])->all();
+        if (count($coinsRecords) == 10) {
+            $transaction = Yii::$app->db->beginTransaction();
+            try {
+                foreach ($coinsRecords as $coinsRecord) {
+                    $data = [
+                        'coinsRecord_id' => $coinsRecord->id,
+                        'user_id' => $coinsRecord->user_id,
+                        'coins' => $coinsRecord->incrCoins,
+                    ];
+                    echo 'coinsRecord_id: ' . $data['coinsRecord_id'] . ' | ' . 'user_id: ' . $data['user_id'] . ' | ' . 'coins: ' . $data['coins'] . PHP_EOL;
+                    if (!in_array($data['user_id'], $user_ids)) {
+                        throw new \Exception($coinsRecord->id . '的用户不在修复名单中');
+                    }
+
+                    $sql = "delete from coins_record where id = :coinsRecord_id and user_id = :user_id and isOffline = 0";
+                    $res = Yii::$app->db->createCommand($sql, [
+                        'coinsRecord_id' => $data['coinsRecord_id'],
+                        'user_id' => $data['user_id'],
+                    ])->execute();
+                    if (!$res) {
+                        throw new \Exception($coinsRecord->id . '删除旧数据失败');
+                    }
+
+                    $sql = "update `coins_record` set `finalCoins` = `finalCoins` - :coins WHERE id > :coinsRecord_id and user_id = :user_id  and isOffline = 0;";
+                    Yii::$app->db->createCommand($sql, [
+                        'coins' => $data['coins'],
+                        'coinsRecord_id' => $data['coinsRecord_id'],
+                        'user_id' => $data['user_id'],
+                    ])->execute();
+
+                    $sql = "update user set annualInvestment = annualInvestment - :coins  where id = :user_id";
+                    $res = Yii::$app->db->createCommand($sql, [
+                        'coins' => $data['coins'],
+                        'user_id' => $data['user_id'],
+                    ])->execute();
+                    if (!$res) {
+                        throw new \Exception($coinsRecord->id . '更新用户累计年华投资金额失败');
+                    }
+                }
+                $transaction->commit();
+            } catch (\Exception $e) {
+                $transaction->rollBack();
+                echo $e->getMessage() . PHP_EOL;
+            }
+        }
+    }
+
 }
