@@ -582,7 +582,7 @@ class User extends ActiveRecord implements IdentityInterface, UserInterface
     public function getLendAccount()
     {
         return $this->hasOne(UserAccount::className(), ['uid' => 'id'])
-                ->where(['type' => UserAccount::TYPE_LEND]);
+                ->where(['user_account.type' => UserAccount::TYPE_LEND]);
     }
 
     /**
@@ -593,7 +593,7 @@ class User extends ActiveRecord implements IdentityInterface, UserInterface
     public function getBorrowAccount()
     {
         return $this->hasOne(UserAccount::className(), ['uid' => 'id'])
-                ->where(['type' => UserAccount::TYPE_BORROW]);
+                ->where(['user_account.type' => UserAccount::TYPE_BORROW]);
     }
 
     /**
