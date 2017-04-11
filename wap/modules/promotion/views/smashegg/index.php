@@ -79,7 +79,7 @@ $loginUrl = '/site/login?next='.urlencode(Yii::$app->request->absoluteUrl);
                         <li>
                             <div>
                                 <img src="<?= FE_BASE_URI ?>wap/campaigns/golden-egg/images/prize-1.jpg" alt="">
-                                <p class="f11">iPhone 7 Plus</p>
+                                <p class="f11">苹果手机</p>
                             </div>
                         </li>
                         <li>
