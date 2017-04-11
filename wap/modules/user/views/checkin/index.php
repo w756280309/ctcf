@@ -80,6 +80,7 @@ $hostInfo = \Yii::$app->request->hostInfo;
                 <td><span class="org">50元</span>代金券</td>
             </tr>
         </table>
+        <p class="djq_deadline f13"><a href="http://a.app.qq.com/o/simple.jsp?pkgname=com.wz.wenjf">使用APP签到更方便，点击<font color="#0080ff">立即下载</font></a></p>
     </div>
 </div>
 

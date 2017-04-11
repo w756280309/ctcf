@@ -5,7 +5,7 @@ use frontend\assets\FrontAsset;
 $this->title = '积分规则';
 
 $this->registerCssFile(FE_BASE_URI.'pc/common/css/base.css', ['depends' => FrontAsset::class]);
-$this->registerCssFile(FE_BASE_URI.'pc/my_point/css/index_2.css', ['depends' => FrontAsset::class]);
+$this->registerCssFile(FE_BASE_URI.'pc/my_point/css/index_2.css?v=20170411', ['depends' => FrontAsset::class]);
 
 ?>
 
@@ -18,10 +18,13 @@ $this->registerCssFile(FE_BASE_URI.'pc/my_point/css/index_2.css', ['depends' => 
                 <img src="<?= FE_BASE_URI ?>pc/my_point/images/ruleicon_1.png" alt="">怎么获得积分
             </p>
             <ul class="box_content">
+                <li>认购理财产品：</li>
                 <li>认购温都金服理财产品（新手专享标、理财计划、转让的项目不参加）均会产生积分：</li>
                 <li>1. 当理财年化金额达到1000元可累计6分，即积分=年化投资金额*6/1000，不足1积分的按1积分计算；</li>
-                <li>2. 当投资的理财产品成立后，相应的积分将会实时打入您的积分账户中；</li>
+                <li>2. 投资理财产品后，相应的积分将会打入您的积分账户中；</li>
                 <li>3. 年化投资额是根据您投资项目的期限来计算的，年化投资额=投资金额*项目期限/365。</li>
+                <li>签到得积分：</li>
+                <li>在温都金服移动端首页点击“签到有礼”进入签到页面完成每日签到任务，或直接进入“积分商城”自动签到即可获得签到积分。</li>
             </ul>
         </div>
         <div class="item_box">
