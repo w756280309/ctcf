@@ -151,12 +151,17 @@ class OnlineRepaymentPlan extends \yii\db\ActiveRecord
         } catch (\Exception $e) {
             $transaction->rollBack();
         }
-        OnlineProduct::updateAll($up, ['id' => $loan->id]);//修改已经计息
+        $res =  OnlineProduct::updateAll($up, ['id' => $loan->id]);//修改已经计息
+        if (!$res) {
+            $transaction->rollBack();
+            return false;
+        }
         $username = '';
         $repayment = [];
         $templateId = Yii::$app->params['sms']['manbiao'];
 
         foreach ($orders as $ord) {
+            $needToSendSms = false;//是否需要发送短信
             //获取每个订单的还款金额详情
             $res_money = self::calcBenxi($ord);
             if ($res_money) {
@@ -188,10 +193,11 @@ class OnlineRepaymentPlan extends \yii\db\ActiveRecord
                     $totalPrincipal = isset($repayment[$term]['principal']) ? bcadd($repayment[$term]['principal'], $principal) : $principal;
                     $totalInterest = isset($repayment[$term]['interest']) ? bcadd($repayment[$term]['interest'], $interest) : $interest;
                     $repayment[$term] = ['amount' => $totalAmount, 'principal' => $totalPrincipal, 'interest' => $totalInterest, 'dueDate' => $v[0]];
+                    $needToSendSms = true;
                 }
             }
 
-            if ($username != $ord->username) {
+            if ($username != $ord->username && $needToSendSms) {
                 $message = [
                     $ord->username,
                     $loan->title,
@@ -203,6 +209,12 @@ class OnlineRepaymentPlan extends \yii\db\ActiveRecord
             }
             $username = $ord->username;
         }
+
+        if (empty($repayment)) {
+            $transaction->rollBack();
+            return false;
+        }
+
         foreach ($repayment as $key => $val) {
             $rep = new Repayment([
                 'loan_id' => $loan->id,
@@ -212,7 +224,10 @@ class OnlineRepaymentPlan extends \yii\db\ActiveRecord
                 'principal' => $val['principal'],
                 'interest' => $val['interest'],
             ]);
-            $rep->save();
+            if (!$rep->save()) {
+                $transaction->rollBack();
+                return false;
+            }
         }
         $transaction->commit();
         return true;

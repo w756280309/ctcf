@@ -640,28 +640,30 @@ class ProductonlineController extends BaseController
 
         if ($id) {
             $loan = OnlineProduct::findOne($id);
-            if (null === $loan ||
-                !in_array($loan->status, [OnlineProduct::STATUS_FULL, OnlineProduct::STATUS_FOUND]) ||
-                empty($loan->jixi_time)
+            if (null === $loan
+                || !in_array($loan->status, [OnlineProduct::STATUS_FULL, OnlineProduct::STATUS_FOUND])
+                || empty($loan->jixi_time)
+                || $loan->is_jixi
              ) {
                 return ['result' => '0', 'message' => '无法找到该项目,或者项目现阶段不允许开始计息'];
             }
 
-            try {
-                $orders = $this->initUserAssets($loan);
-            } catch (\Exception $e) {
-                $message = $e->getMessage();
-
-                Yii::trace('项目成立异常,项目ID为'.$loan->id.
-                    ',错误信息为'.$message.
-                    ',操作时间为'.date('Y-m-d H:i:s').
-                    ',操作人为'.$this->getAuthedUser()->username);
-
-                return ['result' => '0', 'message' => $message];
-            }
-
             $res = OnlineRepaymentPlan::generatePlan($loan);
             if ($res) {
+                //确认计息之后同步用户资产
+                try {
+                    $orders = $this->initUserAssets($loan);
+                } catch (\Exception $e) {
+                    $message = $e->getMessage();
+
+                    Yii::trace('项目成立异常,项目ID为'.$loan->id.
+                        ',错误信息为'.$message.
+                        ',操作时间为'.date('Y-m-d H:i:s').
+                        ',操作人为'.$this->getAuthedUser()->username);
+
+                    return ['result' => '0', 'message' => $message];
+                }
+
                 //确认计息完成之后将标的添加至保全队列
                 $job = new BaoQuanQueue(['itemId' => $id, 'status' => BaoQuanQueue::STATUS_SUSPEND, 'itemType' => BaoQuanQueue::TYPE_LOAN]);
                 $job->save();
