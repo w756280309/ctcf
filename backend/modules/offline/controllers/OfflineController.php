@@ -115,9 +115,8 @@ class OfflineController extends BaseController
 
         $branches = Affiliator::find()->all();
         $pages = new Pagination(['totalCount' => $order->count(), 'pageSize' => 10]);
-        $orders = $order->offset($pages->offset)->limit($pages->limit)->orderBy(["$o.id" => SORT_DESC])->all();
         $totalmoney = $order->sum('money');
-
+        $orders = $order->offset($pages->offset)->limit($pages->limit)->orderBy(["$o.id" => SORT_DESC])->all();
         $stats = OfflineStats::findOne(1);
 
         return $this->render('list', [
