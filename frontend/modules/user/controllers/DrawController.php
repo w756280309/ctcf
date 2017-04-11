@@ -61,6 +61,9 @@ class DrawController extends BaseController
                 try {
                     $drawFee = $user->getDrawCount() >= Yii::$app->params['draw_free_limit'] ? Yii::$app->params['drawFee'] : 0;
                     $drawres = DrawManager::initDraw($user_acount, $draw->money, $drawFee);
+                    if (!$drawres->save()) {
+                        throw new \Exception('提现申请失败', '000003');
+                    }
                     $option = array();
                     if (null != Yii::$app->request->get('token')) {
                         $option['app_token'] = Yii::$app->request->get('token');

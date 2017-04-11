@@ -92,7 +92,7 @@ class OnlinefangkuanController extends BaseController
         try {
             //融资方放款,不收取手续费
             $draw = DrawManager::initDraw($account, $onlineFangkuan->order_money);
-            if (!$draw) {
+            if (!$draw->save()) {
                 throw new \Exception('提现申请失败', '000003');
             }
 

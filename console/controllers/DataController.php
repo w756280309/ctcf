@@ -7,6 +7,7 @@ use common\lib\user\UserStats;
 use common\models\coupon\CouponType;
 use common\models\coupon\UserCoupon;
 use common\models\draw\DrawManager;
+use common\models\epay\EpayUser;
 use common\models\order\OnlineOrder;
 use common\models\order\OnlineFangkuan;
 use common\models\order\OnlineRepaymentPlan;
@@ -19,6 +20,7 @@ use common\models\promo\InviteRecord;
 use common\models\promo\LoanOrderPoints;
 use common\models\sms\SmsMessage;
 use common\models\sms\SmsTable;
+use common\models\user\DrawRecord;
 use common\models\user\User;
 use common\models\user\UserAccount;
 use common\models\user\UserInfo;
@@ -398,37 +400,63 @@ GROUP BY rp.uid, rp.online_Pid";
     }
 
     /**
-     * 将平台账户资金转给[收款人]银行卡
+     * 将转账方资金转给收款人并为收款人提现
      * 使用说明：
-     * 1. 测试 php yii data/transfer 查看[收款人]金额
+     * 1. php yii data/transfer 查看转账方、温都账户、收款方金额, 不尽兴任何实际操作
      * 2. 转一笔0.01元 php yii data/transfer 1
      * 3. 转指定金额 php yii data/transfer 1 $amount
+     * 4. 可以使用 $from 和 $to 参数控制转账方和收款方, 默认转账方是南京交收款方是居莫愁
+     * 5. 可以使用 $fromTransfer 参数控制时候进行 转账方转账给温都
+     * 6. 可以使用 $toTransfer 参数控制是否进行温都转账给收款方
+     * 7. 可以使用 $draw 参数控制是否发起收款方提现
      *
-     * 南京交充值到平台账户，然后平台账户转让到[收款人]，[收款人]再提现到银行卡。
-     * @param  bool $run 是否转账
-     * @param  float $amount 需要转账金额
-     * @param  bool $fromTransfer 是否进行转账方转账
-     * @param  bool $toTransfer 是否进行收款方转账
-     * @param  bool $draw 是否进行收款方提现
+     * @param  bool     $run            是否转账
+     * @param  float    $amount         待转金额
+     * @param  string   $from           转账方
+     * @param  string   $to             收款方
+     * @param  bool     $fromTransfer   是否进行转账方转账给温都账户
+     * @param  bool     $toTransfer     是否进行温都账户转账给收款方
+     * @param  bool     $draw           是否进行收款方提现
      */
-    public function actionTransfer($run = false, $amount = 0.01, $fromTransfer = true, $toTransfer = true, $draw = true)
+    public function actionTransfer($run = false, $amount = 0.01, $from = 'njj', $to = 'jmc', $fromTransfer = true, $toTransfer = true, $draw = true)
     {
         $amount = max(floatval($amount), 0);
-        //$fromUserId = '7601209';//测试环境 转账方用户在联动ID
-        //$toUserId = '7601209';//测试环境 收款方用户在联动账户ID
-        $fromUserId = '7302209';//正式环境 转账方（南京交）在联动ID
-        //$toUserId = '7301209';//正式环境 收款方 （立合旺通）在联动ID  转账流程已测试 正式转账已成功
-        $toUserId = '7303209';//正式环境 收款方 （居莫愁）在联动ID
+        $isTest = false;//测试环境
+
+
+        if ($isTest) {
+            $ePayUserIdList = [
+                'njj' => '7601209',//测试环境只有一个账号
+                'lhwt' => '7601209',//测试环境只有一个账号
+                'jmc' => '7601209',//测试环境只有一个账号
+            ];
+        } else {
+            $ePayUserIdList = [
+                'njj' => '7302209',//正式环境（南京交）在联动ID
+                'lhwt' => '7301209',//正式环境（立合旺通）在联动ID  转账流程已测试 正式转账已成功
+                'jmc' => '7303209',//正式环境（居莫愁）在联动ID
+            ];
+        }
+
+
+        $fromEPayUser = EpayUser::findOne(['epayUserId' => $ePayUserIdList[$from]]);//转账方联动账户
+        $toEPayUser = EpayUser::findOne(['epayUserId' => $ePayUserIdList[$to]]);//收款方联动账户
+        if (is_null($fromEPayUser) || is_null($toEPayUser)) {
+            throw new \Exception('没有找到转账企业');
+        }
+        $toUserAccount = UserAccount::findOne(['uid' => $toEPayUser->appUserId]);
+
+
         $platformUserId = Yii::$app->params['ump']['merchant_id'];//平台在联动账户
         $ump = Yii::$container->get('ump');
         //平台信息
         $ret = $ump->getMerchantInfo($platformUserId);
-        $this->stdout('平台账户余额：' . $ret->get('balance') . PHP_EOL);
+        $this->stdout('平台(温都)账户余额：' . $ret->get('balance') . PHP_EOL);
         //转账方信息
-        $ret = $ump->getMerchantInfo($fromUserId);
+        $ret = $ump->getMerchantInfo($fromEPayUser->epayUserId);
         $this->stdout('转账方账户余额：' . $ret->get('balance') . PHP_EOL);
         //收款方信息
-        $ret = $ump->getMerchantInfo($toUserId);
+        $ret = $ump->getMerchantInfo($toEPayUser->epayUserId);
         $this->stdout('收款方账户余额：' . $ret->get('balance') . PHP_EOL);
 
 
@@ -438,19 +466,23 @@ GROUP BY rp.uid, rp.online_Pid";
                 $this->stdout('正在进行 转账方 转账到 温都账户' . PHP_EOL);
                 $time = time();
                 $sn = TxUtils::generateSn('TR');
-                $ret = $ump->platformTransfer($sn, $fromUserId, $amount, $time);
+                $ret = $ump->platformTransfer($sn, $fromEPayUser->epayUserId, $amount, $time);
                 if ($ret->isSuccessful()) {
                     //更改温都数据库
                     $sql = "update user_account set available_balance = available_balance - :amount where uid = ( select appUserId from EpayUser where epayUserId = :epayUserId )";
-                    $res = Yii::$app->db->createCommand($sql, ['amount' => $amount, 'epayUserId' => $fromUserId])->execute();
-                    $this->stdout('转账方温都数据库更新：' . ($res ? '成功' : '失败') . PHP_EOL);
+                    $res = Yii::$app->db->createCommand($sql, [
+                        'amount' => $amount,
+                        'epayUserId' => $fromEPayUser->epayUserId,
+                    ])->execute();
+                    $this->stdout('温都数据库转账方数据更新：' . ($res ? '成功' : '失败') . PHP_EOL);
 
-                    //平台信息
-                    $ret = $ump->getMerchantInfo($platformUserId);
-                    $this->stdout('平台账户余额：' . $ret->get('balance') . PHP_EOL);
-                    //转账方信息
-                    $ret = $ump->getMerchantInfo($fromUserId);
+                    //转账方联动信息
+                    $ret = $ump->getMerchantInfo($fromEPayUser->epayUserId);
                     $this->stdout('转账方账户余额：' . $ret->get('balance') . PHP_EOL);
+                    //温都联动信息
+                    $ret = $ump->getMerchantInfo($platformUserId);
+                    $this->stdout('温都账户余额：' . $ret->get('balance') . PHP_EOL);
+
 
                     $this->stdout('转账方 转账成功' . PHP_EOL);
 
@@ -463,13 +495,13 @@ GROUP BY rp.uid, rp.online_Pid";
                 $this->stdout('正在进行 温都账户 转账到 收款方账户' . PHP_EOL);
                 $time = time();
                 $sn = TxUtils::generateSn('TR');
-                $ret = $ump->orgTransfer($sn, $toUserId, $amount, $time);
+                $ret = $ump->orgTransfer($sn, $toEPayUser->epayUserId, $amount, $time);
                 if ($ret->isSuccessful()) {
                     //平台信息
                     $ret = $ump->getMerchantInfo($platformUserId);
                     $this->stdout('平台账户余额：' . $ret->get('balance') . PHP_EOL);
                     //收款方信息
-                    $ret = $ump->getMerchantInfo($toUserId);
+                    $ret = $ump->getMerchantInfo($toEPayUser->epayUserId);
                     $this->stdout('收款方账户余额：' . $ret->get('balance') . PHP_EOL);
 
                     $this->stdout('收款方 转账成功' . PHP_EOL);
@@ -483,16 +515,29 @@ GROUP BY rp.uid, rp.online_Pid";
                 $this->stdout('正在进行 收款方提现' . PHP_EOL);
                 $sn = TxUtils::generateSn('DRAW');
                 $time = time();
-                $ret = $ump->orgDraw($sn, $toUserId, $amount, $time);
-                if ($ret->isSuccessful()) {
-                    var_dump($ret->toArray());
 
-                    //收款方账户信息
-                    $ret = $ump->getMerchantInfo($toUserId);
-                    $this->stdout('商户账户余额：' . $ret->get('balance') . PHP_EOL);
-                } else {
-                    $this->stdout('收款方提现失败，联动返回信息：' . $ret->get('ret_msg') . PHP_EOL);
+                //插入提现记录
+                $draw = DrawManager::initDraw($toUserAccount, $amount, Yii::$app->params['drawFee']);
+                $draw->status = DrawRecord::STATUS_SUCCESS;
+                $res = $draw->save();
+                if ($res) {
+                    $this->stdout('插入收款方提现记录' . PHP_EOL);
+                    $ret = $ump->orgDraw($sn, $toEPayUser->epayUserId, $amount, $time);
+                    if ($ret->isSuccessful()) {
+                        var_dump($ret->toArray());
+
+                        //收款方账户信息
+                        $ret = $ump->getMerchantInfo($toEPayUser->epayUserId);
+                        $this->stdout('商户账户余额：' . $ret->get('balance') . PHP_EOL);
+                        $this->stdout('收款方 提现成功' . PHP_EOL);
+                    } else {
+                        $this->stdout('收款方提现失败，联动返回信息：' . $ret->get('ret_msg') . PHP_EOL);
+                        $draw->status = DrawRecord::STATUS_FAIL;
+                        $draw->save();
+                        $this->stdout('将收款方提现记录改为失败' . PHP_EOL);
+                    }
                 }
+
             }
 
         }
@@ -537,7 +582,7 @@ GROUP BY rp.uid, rp.online_Pid";
         try {
             //融资方放款,不收取手续费
             $draw = DrawManager::initDraw($account, $onlineFangkuan->order_money);
-            if (!$draw) {
+            if (!$draw->save()) {
                 throw new \Exception('提现申请失败', '000003');
             }
 
