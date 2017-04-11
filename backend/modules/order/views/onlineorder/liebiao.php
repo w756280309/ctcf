@@ -96,6 +96,7 @@
                         <th>注册时间</th>
                         <th>投资时间</th>
                         <th>状态</th>
+                        <th>是否首次投资项</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -122,6 +123,7 @@
                                 }
                             ?>
                         </td>
+                        <td style="text-align: center"><?= $order->isFirstInvestment() ? '是' : '否';?></td>
                     </tr>
                     <?php endforeach; ?>   
                 </tbody>

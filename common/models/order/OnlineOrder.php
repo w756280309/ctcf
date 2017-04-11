@@ -349,4 +349,19 @@ class OnlineOrder extends ActiveRecord implements OrderTxInterface
 
         return bcdiv(bcmul($this->order_money, $this->loan->expires, 14), $base, 2);
     }
+
+    /**
+     * 根据订单sn判断该订单是否为所属用户的首次投资订单
+     */
+    public function isFirstInvestment()
+    {
+        if ($this->getIsNewRecord()) {
+            throw new \Exception('the record should be inserted when calling!');
+        }
+        $order = OnlineOrder::find()->where(['uid' => $this->uid, 'status' => 1])->orderBy(['order_time' => SORT_ASC, 'id' => SORT_ASC])->one();
+        if (null === $order) {
+            return false;
+        }
+        return $this->sn === $order->sn;
+    }
 }
