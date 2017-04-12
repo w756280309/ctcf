@@ -518,7 +518,7 @@ GROUP BY rp.uid, rp.online_Pid";
                 $time = time();
 
                 //插入提现记录
-                $draw = DrawManager::initDraw($toUserAccount, $amount, Yii::$app->params['drawFee']);
+                $draw = DrawManager::initNew($toUserAccount, $amount, Yii::$app->params['drawFee']);
                 $draw->status = DrawRecord::STATUS_SUCCESS;
                 $res = $draw->save();
                 if ($res) {

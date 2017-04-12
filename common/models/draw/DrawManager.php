@@ -28,6 +28,19 @@ class DrawManager
     public static function initDraw(UserAccount $account, $money, $fee = 0)
     {
         $money = DrawRecord::getDrawableMoney($account, $money, $fee);
+
+        return self::initNew($account, $money, $fee);
+    }
+
+    /**
+     * 初始化提现记录
+     * @param UserAccount $account
+     * @param $money
+     * @param int $fee
+     * @return DrawRecord
+     */
+    public static function initNew(UserAccount $account, $money, $fee = 0)
+    {
         $user = $account->user;
         $ubank = $user->qpay;
         $draw = new DrawRecord();
