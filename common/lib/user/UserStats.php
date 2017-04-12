@@ -67,7 +67,7 @@ class UserStats
         if (!empty($where)) {
             $model = $model->andWhere($where);
         }
-        $model = $model->all();
+        $model = $model->orderBy(['id' => SORT_ASC])->all();
         if (0 === count($model)) {
             return $data;
         }
@@ -118,7 +118,7 @@ class UserStats
             $data[$key]['affiliation'] = isset($affiliation[$userId]) ? $affiliation[$userId]['name'] : '官网';
             $data[$key]['idcard_status'] = intval($user->idcard_status);
             $data[$key]['mianmiStatus'] = intval($user->mianmiStatus);
-            $data[$key]['bid'] = isset($user->qpay);
+            $data[$key]['bid'] = isset($user->qpay) ? 1 : 0;
             $data[$key]['available_balance'] = $user->lendAccount ? floatval($user->lendAccount->available_balance) : 0;
             $data[$key]['rtotalFund'] = isset($recharge[$userId]) ? floatval($recharge[$userId]['rtotalFund']) : 0;
             $data[$key]['rtotalNum'] = isset($recharge[$userId]) ? floatval($recharge[$userId]['rtotalNum']) : 0;
