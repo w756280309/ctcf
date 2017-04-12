@@ -139,7 +139,6 @@ class UserController extends BaseController
     public function actionListt()
     {
         $request = $this->validateRequest(Yii::$app->request->get());
-
         $userSearch = new UserSearch();
         $query = $userSearch->search($request);
 

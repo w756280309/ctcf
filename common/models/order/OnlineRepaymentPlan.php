@@ -204,7 +204,7 @@ class OnlineRepaymentPlan extends \yii\db\ActiveRecord
                     date('Y-m-d', $loan->jixi_time),
                     Yii::$app->params['contact_tel'],
                 ];
-
+                //todo online_order 线上订单暂未处理
                 SmsService::send($ord->mobile, $templateId, $message, $ord->user);
             }
             $username = $ord->username;
