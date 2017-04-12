@@ -1,4 +1,8 @@
 <?php
+
+use common\models\coupon\CouponType;
+use common\models\coupon\UserCoupon;
+use common\utils\StringUtils;
 use yii\helpers\Html;
 use yii\widgets\LinkPager;
 
@@ -28,6 +32,58 @@ $now_date = date('Y-m-d');
                     </li>
             </ul>
         </div>
+
+        <?php
+            $couponType = CouponType::findOne($coupon_id);
+            if (null !== $couponType) {
+        ?>
+            <div class="portlet-body">
+                <table class="table" style="margin-bottom: 0px;">
+                    <?php
+                        $attributes = [
+                            'name',
+                            'amount',
+                            'minInvest',
+                        ];
+                    ?>
+                    <tr>
+                        <?php
+                            $c = count($attributes);
+                            for ($i = 0; $i < $c; $i++) {
+                                $attributeName = $attributes[$i];
+                        ?>
+                                <td class="title">
+                                    <?= $couponType->getAttributeLabel($attributeName) ?>：<?= $i < 1 ? $couponType->{$attributeName} : StringUtils::amountFormat2($couponType->{$attributeName}) . '元' ?>
+                                </td>
+                        <?php
+                            }
+                        ?>
+                        <td></td>
+                    </tr>
+                    <?php
+                        $statusArr = [
+                            '总数量',
+                            'valid' => '未使用',
+                            'used' => '已使用',
+                            'expired' => '已过期',
+                        ];
+                    ?>
+                    <tr>
+                        <?php
+                            foreach ($statusArr as $stats => $label) {
+                        ?>
+                            <td class="title">
+                                <?= $label ?>：<?= UserCoupon::findCouponByConfig($coupon_id, !empty($stats) ? $stats : null)->count() ?>
+                            </td>
+                        <?php
+                            }
+                        ?>
+                    </tr>
+                </table>
+            </div>
+        <?php
+            }
+        ?>
 
         <!--search start-->
         <div class="portlet-body">
