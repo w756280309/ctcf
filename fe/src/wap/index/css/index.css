@@ -708,6 +708,12 @@ section .featured .threepic li a img {
     padding:0.0888888rem 0.133333rem;
     border-radius: 5px;
 }
+.tags .red{
+    color: #f44336;border-color: #f44336;
+}
+.red-tag {
+    color: #f44336!important;border-color: #f44336!important;
+}
 .tags span:first-child {
     margin-right: 0.4rem;
 }
