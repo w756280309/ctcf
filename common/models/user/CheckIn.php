@@ -117,7 +117,11 @@ class CheckIn extends \yii\db\ActiveRecord
             ]);
             if (!is_null($lastRecord)) {
                 $record->lastCheckDate = $lastRecord->checkDate;
-                $record->streak = ($lastRecord->streak + 1) % $streakReset;
+                if ($lastRecord->streak >= 30) {
+                    $record->streak = ($lastRecord->streak + 1) % $streakReset;
+                } else {
+                    $record->streak = $lastRecord->streak + 1;
+                }
             } else {
                 $record->streak = 1;
             }
