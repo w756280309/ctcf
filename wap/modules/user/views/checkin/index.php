@@ -9,6 +9,7 @@ $hostInfo = \Yii::$app->request->hostInfo;
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/activeComHeader.css">
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/qiandao/css/index.css?v=20170401">
 <script src="<?= FE_BASE_URI ?>libs/lib.flexible3.js"></script>
+<script src="<?= ASSETS_BASE_URI ?>js/common.js"></script>
 
 <div class="flex-content">
     <?php if (!defined('IN_APP')) { ?>
@@ -39,8 +40,10 @@ $hostInfo = \Yii::$app->request->hostInfo;
     <div class="qiandao_button f16">
         <?php if ($checkInToday) { ?>
             <a href="javascript:void(0)" class="qiandao_btn btn2">已签到</a>
+        <?php } elseif ($user) { ?>
+            <a href="javascript:void(0)" class="qiandao_btn btn1" id="checkin_btn">快点我签到吧~</a>
         <?php } else { ?>
-            <a href="<?= $user ? '/mall/portal/guest' : '/site/login?next='.urlencode($hostInfo.'/user/checkin') ?>" class="qiandao_btn btn1">快点我签到吧~</a>
+            <a href="/site/login?next=<?= urlencode($hostInfo.'/user/checkin') ?>" class="qiandao_btn btn1">快点我签到吧~</a>
         <?php } ?>
     </div>
     <div class="rule_box" style="padding-top: 0.5rem;">
@@ -87,9 +90,7 @@ $hostInfo = \Yii::$app->request->hostInfo;
 </div>
 
 <script>
-    $(function () {
-        var jindu = '<?= $checkInDays ?>';
-
+    function progressBar(jindu) {
         if (jindu == 0) {
             $('.jindu_one').hide();
             $('.schedule_bar .jindu_two').hide();
@@ -100,7 +101,44 @@ $hostInfo = \Yii::$app->request->hostInfo;
                 return parseInt(jindu-1) * 3 + '%';
             });
         }
+    }
+
+    $(function () {
+        progressBar('<?= $checkInDays ?>');
+
+        var allowClick = true;
+        $('#checkin_btn').on('click', function() {
+            if (!allowClick) {
+                 return;
+            }
+
+            allowClick = false;
+
+            var xhr = $.get('/user/checkin/check', function(data) {
+                var streak = data.streak;
+                var reward = '';
+
+                if (data.points) {
+                    reward += data.points+'积分';
+                }
+
+                if (data.coupon) {
+                    reward += reward ? '和'+data.coupon : data.coupon;
+                }
+
+                var msg = '您已连续签到'+streak+'天, 获得'+reward;
+
+                toastCenter(msg, function () {
+                    window.location.href = '<?= $hostInfo ?>'+'/user/checkin?_mark='+'<?= time() ?>';
+                });
+            });
+
+            xhr.fail(function(e) {
+                allowClick = true;
+                toastCenter('系统繁忙, 请稍后重试!');
+            });
+        });
 
         forceReload_V2();
-    })
+    });
 </script>

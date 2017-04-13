@@ -3,7 +3,8 @@
 namespace app\modules\user\controllers;
 
 use app\controllers\BaseController;
-use common\models\mall\PointOrder;
+use common\models\mall\PointRecord;
+use common\models\user\CheckIn;
 use common\models\user\User;
 use Yii;
 use yii\filters\AccessControl;
@@ -44,41 +45,22 @@ class CheckinController extends BaseController
         $pointOrders = null;
         $checkInToday = false;
         $checkInDays = 0;
-        $cycleDays = 30;
 
         if ($user) {
-            $pointOrders = $this->pointOrders($user)
-                ->all();
+            $today = date('Y-m-d');
+            $yesterday = date('Y-m-d', strtotime('yesterday'));
 
-            $num = 0;
-            foreach ($pointOrders as $key => $pointOrder) {
-                $orderTime = substr($pointOrders[$key]['orderTime'], 0, 10);
-                $day = date('Y-m-d', strtotime('today - '.$num++.' days'));
+            $check = CheckIn::find()
+                ->where(['user_id' => $user->id])
+                ->orderBy(['checkDate' => SORT_DESC])
+                ->one();
 
-                if (0 === $key) {
-                    if ($day === $orderTime) {
-                        ++$checkInDays;
-                        $checkInToday = true;
-
-                        continue;
-                    }
-
-                    $day = date('Y-m-d', strtotime('today - '.$num++.' days'));
-                }
-
-                if ($orderTime !== $day) {
-                    break;
-                }
-
-                ++$checkInDays;
-            }
-
-            if ($checkInDays) {
-                $cycle = $checkInDays % $cycleDays;    //余数不为零的,取余数作为连续签到天数;余数为零时,取周期天数作为连续签到天数;
-                if ($cycle) {
-                    $checkInDays = $cycle;
-                } else {
-                    $checkInDays = $cycleDays;
+            if ($check) {
+                if ($today === $check->checkDate) {
+                    $checkInToday = true;
+                    $checkInDays = $check->streak;
+                } elseif ($yesterday === $check->checkDate) {
+                    $checkInDays = $check->streak;
                 }
             }
         }
@@ -88,6 +70,21 @@ class CheckinController extends BaseController
             'checkInDays' => $checkInDays,
             'checkInToday' => $checkInToday,
         ]);
+    }
+
+    /**
+     * 签到.
+     */
+    public function actionCheck()
+    {
+        $user = $this->getAuthedUser();
+        $check = CheckIn::check($user, date('Y-m-d'));
+
+        return [
+            'streak' => $check->streak,
+            'points' => $check->points,
+            'coupon' => $check->couponType ? $check->couponType->name : '',
+        ];
     }
 
     /**
@@ -124,18 +121,13 @@ class CheckinController extends BaseController
 
     private function pointOrders(User $user)
     {
-        $query = PointOrder::find()
+        $query = PointRecord::find()
             ->where([
                 'user_id' => $user->id,
-                'isPaid' => true,
-                'status' => PointOrder::STATUS_SUCCESS,
+                'ref_type' => PointRecord::TYPE_CHECK_IN,
                 'isOffline' => false,
-                'type' => [
-                    'report',
-                    'sign',
-                ],
             ])
-            ->orderBy(['orderTime' => SORT_DESC]);
+            ->orderBy(['recordTime' => SORT_DESC]);
 
         return $query;
     }
