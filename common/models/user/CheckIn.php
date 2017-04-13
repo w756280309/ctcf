@@ -60,7 +60,6 @@ class CheckIn extends \yii\db\ActiveRecord
         ];
     }
 
-
     public static function getAward(CheckIn $checkIn)
     {
         $streak = $checkIn->streak;//当次签到的连续签到次数
@@ -92,7 +91,6 @@ class CheckIn extends \yii\db\ActiveRecord
         ];
     }
 
-
     /**
      * 用户签到并发放奖励
      *
@@ -100,7 +98,7 @@ class CheckIn extends \yii\db\ActiveRecord
      * @param \DateTime $dateTime 签到日期
      * @param int $streakReset 重置阀值
      * @param bool $needAward 是否要发奖
-     * @return false|CheckIn
+     * @return null|CheckIn
      */
     public static function check(User $user, \DateTime $dateTime, $streakReset = 30, $needAward = true)
     {
@@ -161,13 +159,11 @@ class CheckIn extends \yii\db\ActiveRecord
                 $record->couponType = $couponType;
             }
 
-
             $transaction->commit();
             return $record;
         } catch (\Exception $e) {
             $transaction->rollBack();
-            return false;
+            return null;
         }
-
     }
 }
