@@ -9,7 +9,7 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/loginsign.css">
 <script  src="<?= FE_BASE_URI ?>libs/fastclick.js"></script>
-<script src="<?= FE_BASE_URI ?>wap/luodiye/js/luodiye.js?v=20170413"></script>
+<script src="<?= FE_BASE_URI ?>wap/luodiye/js/luodiye.js?v=20170413-v"></script>
 
 <div class="row kongxi">
     <?php
