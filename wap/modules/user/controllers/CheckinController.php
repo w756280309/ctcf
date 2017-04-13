@@ -78,7 +78,7 @@ class CheckinController extends BaseController
     public function actionCheck()
     {
         $user = $this->getAuthedUser();
-        $check = CheckIn::check($user, date('Y-m-d'));
+        $check = CheckIn::check($user, (new \DateTime()));
 
         return [
             'streak' => $check->streak,

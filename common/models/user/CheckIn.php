@@ -97,14 +97,14 @@ class CheckIn extends \yii\db\ActiveRecord
      * 用户签到并发放奖励
      *
      * @param User $user
-     * @param string $date 签到日期
+     * @param \DateTime $dateTime 签到日期
      * @param int $streakReset 重置阀值
      * @param bool $needAward 是否要发奖
      * @return false|CheckIn
      */
-    public static function check(User $user, $date, $streakReset = 30, $needAward = true)
+    public static function check(User $user, \DateTime $dateTime, $streakReset = 30, $needAward = true)
     {
-        $lastDate = date('Y-m-d', strtotime('-1 day', strtotime($date)));
+        $lastDate = $dateTime->sub(new \DateInterval('P1D'))->format('Y-m-d');
         $lastRecord = CheckIn::find()->where(['user_id' => $user->id, 'checkDate' => $lastDate])->one();
 
         $transaction = Yii::$app->db->beginTransaction();
@@ -112,7 +112,7 @@ class CheckIn extends \yii\db\ActiveRecord
             //保存签到记录
             $record = new CheckIn([
                 'user_id' => $user->id,
-                'checkDate' => $date,
+                'checkDate' => $dateTime->format('Y-m-d'),
                 'createTime' => date('Y-m-d H:i:s'),
             ]);
             if (!is_null($lastRecord)) {
@@ -142,7 +142,7 @@ class CheckIn extends \yii\db\ActiveRecord
                     'ref_id' => $record->id,
                     'incr_points' => $award['points']
                 ]);
-                $res = PointsService::addUserPoints($pointRecord, false, $user);
+                $res = PointsService::addUserPoints($pointRecord, false, $user, $dateTime->format('Y-m-d H:i:s'));
 
                 if (!$res) {
                     throw new \Exception('积分发放失败');
