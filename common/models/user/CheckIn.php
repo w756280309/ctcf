@@ -104,7 +104,8 @@ class CheckIn extends \yii\db\ActiveRecord
      */
     public static function check(User $user, \DateTime $dateTime, $streakReset = 30, $needAward = true)
     {
-        $lastDate = $dateTime->sub(new \DateInterval('P1D'))->format('Y-m-d');
+        $lastDateTime = clone $dateTime;
+        $lastDate = $lastDateTime->sub(new \DateInterval('P1D'))->format('Y-m-d');
         $lastRecord = CheckIn::find()->where(['user_id' => $user->id, 'checkDate' => $lastDate])->one();
 
         $transaction = Yii::$app->db->beginTransaction();
