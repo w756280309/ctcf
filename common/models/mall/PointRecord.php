@@ -42,6 +42,8 @@ class PointRecord extends ActiveRecord
     const TYPE_MALL_INCREASE = 'mall_increase';//积分商城获得
     const TYPE_BACKEND_BATCH = 'point_batch';//后台批量发放
     const TYPE_PROMO = 'promo'; //活动获得
+    const TYPE_CHECK_IN = 'check_in';//签到获取
+
 
     /**
      * @inheritdoc
