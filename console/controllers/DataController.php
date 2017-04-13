@@ -8,6 +8,7 @@ use common\models\coupon\CouponType;
 use common\models\coupon\UserCoupon;
 use common\models\draw\DrawManager;
 use common\models\epay\EpayUser;
+use common\models\mall\ThirdPartyConnect;
 use common\models\order\OnlineOrder;
 use common\models\order\OnlineFangkuan;
 use common\models\order\OnlineRepaymentPlan;
@@ -873,6 +874,25 @@ COUPON;
                 echo $e->getMessage() . PHP_EOL;
             }
         }
+    }
+
+    public function actionMallLogin()
+    {
+        $user = User::findOne(['mobile' => '18310722679']);
+        $thirdPartyConnect = ThirdPartyConnect::findOne(['user_id' => $user->id]);
+        if (is_null($thirdPartyConnect)) {
+            $thirdPartyConnect = ThirdPartyConnect::initNew($user);
+            $thirdPartyConnect->save();
+        }
+
+        $url = ThirdPartyConnect::buildCreditAutoLoginRequest(
+            \Yii::$app->params['mall_settings']['app_key'],
+            \Yii::$app->params['mall_settings']['app_secret'],
+            empty($thirdPartyConnect) ? 'not_login' : $thirdPartyConnect->publicId,
+            is_null($user) ? 0 : $user->points,
+            urldecode('')
+        );
+        echo $url . PHP_EOL;
     }
 
 }
