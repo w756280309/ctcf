@@ -174,6 +174,7 @@ class NotifyController extends Controller
     //兑吧发起增加积分请求
     public function actionIncrease()
     {
+        exit(1);
         $requestUrl = Yii::$app->request->absoluteUrl;
         Yii::info('[mall_notify][increase_point_order] 兑吧发起增加积分请求，请求url：' . $requestUrl, 'notify');
         $requestParams = Yii::$app->request->queryParams;
