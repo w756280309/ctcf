@@ -83,24 +83,27 @@ class UserCoupon extends ActiveRecord
     }
 
     /**
-     * 获取相关订单信息.
+     * 获取关联订单信息.
      */
     public function getOrder()
     {
         return $this->hasOne(OnlineOrder::className(), ['id' => 'order_id']);
     }
 
+    /**
+     * 获取关联代金券类型信息
+     */
     public function getCouponType()
     {
         return $this->hasOne(CouponType::className(), ['id' => 'couponType_id']);
     }
 
-    /*
-     * 获取关联用户信息，取月度代金券用户手机号码
-     *
-     * */
-    public function getUser(){
-        return  $this->hasOne(User::className(),['id' => 'user_id']);
+    /**
+     * 获取关联用户信息
+     */
+    public function getUser()
+    {
+        return $this->hasOne(User::className(),['id' => 'user_id']);
     }
 
     /**
