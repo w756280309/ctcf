@@ -47,6 +47,7 @@ class PointsService
                 }
                 $sn = TxUtils::generateSn('PR');
                 $table = 'user';
+                $pointRecord->userLevel = $user->level;
             }
             //更新对应的用户表里的points字段
             $sql = 'update ' . $table . ' set points = points + :points where id = :userId';

@@ -19,6 +19,9 @@ foreach ($points as $point) {
     } elseif (PointRecord::TYPE_MALL_INCREASE === $point['ref_type']) {
         $message = \yii\helpers\Html::encode($point['remark']);
         $isIn = true;
+    } elseif(PointRecord::TYPE_CHECK_IN === $point['ref_type']) {
+        $message = '签到获得';
+        $isIn = true;
     } elseif (PointRecord::TYPE_BACKEND_BATCH === $point['ref_type']) {
         $message = empty($point['remark']) ? '投资奖励' : \yii\helpers\Html::encode($point['remark']);
         $isIn = true;
