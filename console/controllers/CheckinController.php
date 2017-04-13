@@ -36,7 +36,7 @@ Class CheckinController extends Controller
                     $num++;
                     $lastUserId = $user->id;
                 }
-                CheckIn::check($user, date('Y-m-d', strtotime($pointRecord['recordTime'])), 30, false);
+                CheckIn::check($user, (new \DateTime($pointRecord['recordTime'])), 30, false);
             }
         }
 
@@ -44,7 +44,7 @@ Class CheckinController extends Controller
         return self::EXIT_CODE_NORMAL;
     }
 
-    public function actionSupplement($curDate = '2017-04-13')
+    public function actionSupplement()
     {
         $query = User::find()
             ->where(['type' => User::USER_TYPE_PERSONAL])
@@ -54,11 +54,11 @@ Class CheckinController extends Controller
         $users = $query->all();
 
         foreach ($users as $user) {
-            CheckIn::check($user, $curDate);
+            CheckIn::check($user, (new \DateTime()));
         }
 
         $finalNum = 0;
-        $finalNum = Checkin::find()->count();
+        $finalNum = CheckIn::find()->count();
 
         $this->stdout($num === $finalNum);
         return self::EXIT_CODE_NORMAL;
