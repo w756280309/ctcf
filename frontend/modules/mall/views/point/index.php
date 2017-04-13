@@ -66,6 +66,10 @@ $this->registerCssFile(ASSETS_BASE_URI.'css/pagination.css', ['depends' => Front
                             $message = empty($point->remark) ? '投资奖励' : $point->remark;
                             $isIn = true;
                             break;
+                        case PointRecord::TYPE_CHECK_IN:
+                            $isIn = true;
+                            $message = '签到获得';
+                            break;
                         case PointRecord::TYPE_PROMO:
                             $message = '活动获得';
                             $isIn = true;
