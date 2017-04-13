@@ -44,7 +44,7 @@ class ThirdPartyConnect extends ActiveRecord
         if (!is_null($user)) {
             $thirdPartyConnect = self::findOne(['user_id' => $user->getId()]);
             if (is_null($thirdPartyConnect)) {
-                $thirdPartyConnect = self::initnew($user);
+                $thirdPartyConnect = self::initNew($user);
                 $thirdPartyConnect->save();
             }
         } else {
