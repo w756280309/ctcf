@@ -80,11 +80,21 @@ class CheckinController extends BaseController
         $user = $this->getAuthedUser();
         $check = CheckIn::check($user, (new \DateTime()));
 
-        return [
-            'streak' => $check->streak,
-            'points' => $check->points,
-            'coupon' => $check->couponType ? $check->couponType->name : '',
-        ];
+        if ($check) {
+            $res = [
+                'streak' => $check->streak,
+                'points' => $check->points,
+                'coupon' => $check->couponType ? $check->couponType->name : '',
+            ];
+        } else {
+            Yii::$app->response->statusCode = '400';
+
+            $res = [
+                'message' => '签到失败, 请稍后重试!',
+            ];
+        }
+
+        return $res;
     }
 
     /**

@@ -133,9 +133,13 @@ $hostInfo = \Yii::$app->request->hostInfo;
                 });
             });
 
-            xhr.fail(function(e) {
+            xhr.fail(function(jqXHR) {
+                var msg = jqXHR.status == 400 && jqXHR.responseJSON && jqXHR.responseJSON.message
+                    ? jqXHR.responseJSON.message
+                    : '系统繁忙，请稍后重试！';
+
                 allowClick = true;
-                toastCenter('系统繁忙, 请稍后重试!');
+                toastCenter(msg);
             });
         });
 
