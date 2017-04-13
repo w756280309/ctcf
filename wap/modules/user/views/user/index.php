@@ -20,6 +20,10 @@ $this->title = '账户中心';
 <div id="login">
     <div class="top_one flex-content"></div>
 
+    <?php if (!\Yii::$app->user->isGuest) { ?>
+        <div class="remain flex-content"></div>
+    <?php } ?>
+
     <div class="youihui flex-content clearfix">
         <a href="/user/coupon/list" class="my_youhui lf youhui1">
             <img src="<?= FE_BASE_URI ?>wap/ucenter/images/coupon.png" alt="">
