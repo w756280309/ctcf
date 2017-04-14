@@ -60,7 +60,7 @@ class CheckinController extends BaseController
                     $checkInToday = true;
                     $checkInDays = $check->streak;
                 } elseif ($yesterday === $check->checkDate) {
-                    $checkInDays = 30 === $check->streak ? 0 : $check->checkDate;   //昨天签到满30天的,且今天未签到的,前端连续签到次数显示为0
+                    $checkInDays = 30 === $check->streak ? 0 : $check->streak;   //昨天签到满30天的,且今天未签到的,前端连续签到次数显示为0
                 }
             }
         }
