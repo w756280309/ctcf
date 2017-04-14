@@ -12,7 +12,7 @@ $this->headerNavOn = true;
 
 <div class="flex-content">
     <div class="pointsBanner">
-        <img src="<?= FE_BASE_URI ?>wap/campaigns/double-points/img/banner.png" alt="">
+        <img src="<?= FE_BASE_URI ?>wap/campaigns/double-points/img/banner_01.png" alt="">
     </div>
     <div class="pointsGifts">
         <div class="pointsRegular">
@@ -20,7 +20,7 @@ $this->headerNavOn = true;
             <ul>
                 <li>1.本次活动面向所有温都金服注册用户；</li>
                 <li>2.活动期间制定投资项目「 <i class="pointsRed">金瓯永筑</i> 」(附带标志<img class="pointsRed-border" src="<?= FE_BASE_URI ?>wap/campaigns/double-points/img/docuble.png" alt=""> 的产品 )，所获得的积分翻倍！</li>
-                <li>3.活动时间2017年4月15日-4月16日。</li>
+                <li>3.活动时间2017年4月14日-4月16日。</li>
             </ul>
         </div>
         <div class="pointsIntroduce">
