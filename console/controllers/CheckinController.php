@@ -63,4 +63,148 @@ Class CheckinController extends Controller
         $this->stdout($num === $finalNum);
         return self::EXIT_CODE_NORMAL;
     }
+
+    //部分用户在我们修复数据时候进行签到，导致连续签到数据及签到积分数据错误 2017-04-13
+    public function actionRepair()
+    {
+        $userIds = [1112, 9096, 972, 3843, 2453, 3034, 3797, 9501,8823,10797];//2017-04-13 出问题用户
+        $checkRecord = CheckIn::find()
+            ->where(['in','user_id', $userIds])
+            ->andWhere(['checkDate' => '2017-04-13'])
+            ->orderBy(['id' => SORT_ASC])
+            ->all();
+
+        $transaction = \Yii::$app->db->beginTransaction();
+        try {
+            foreach ($checkRecord as $check) {
+                $userId = $check->user_id;
+                $this->stdout("正在修复用户{$userId}的数据". PHP_EOL);
+                //判断用户是否在2017-04-12签到
+                $lastCheck = CheckIn::find()->where([
+                    'user_id' => $userId, 'checkDate' => '2017-04-12',
+                ])->one();
+                if (is_null($lastCheck)) {
+                    $this->stdout('没有找到2017-04-12签到记录， 说明2017-04-13是第一次签到，数据无需修复'. PHP_EOL);
+                    continue;
+                }
+
+                //找到用户13号积分流水数据 (当用户已经有积分流水时候，再次点击签到会出现两条记录)
+                $pointRecords = PointRecord::find()
+                    ->where([
+                        'user_id' => $userId,
+                        'date(recordTime)' => '2017-04-13',
+                        'ref_type' => 'check_in',
+                    ])->orderBy(['id' => SORT_ASC])->all();
+                $count = count($pointRecords);
+
+                $this->stdout("找到用户{$userId} {$count}条13号签到积分流水". PHP_EOL);
+                if (empty($pointRecords)) {
+                    continue;
+                }
+
+                //修复13号数据
+                $check->streak = $lastCheck->streak + 1;//没有超过30天数据
+                $check->lastCheckDate = $lastCheck->checkDate;
+                if (!$check->save()) {
+                    throw new \Exception("修复用户{$userId} 13号签到记录错误");
+                }
+                $this->stdout("更新用户{$userId} 13号签到记录信息". PHP_EOL);
+
+                $award = CheckIn::getAward($check);
+                $realPoints = $award['points'];//应该增加的积分
+                $pointRecord = $pointRecords[0];
+                $pointRecordId = $pointRecord->id;//13号第一条签到流水ID
+                $finalPoints = $pointRecord->final_points;//13号第一条签到流水时候用户的最终积分
+                $userPointsChange = 0;//用户积分变动值
+                $points = $pointRecord->incr_points;//13好实际增加积分
+                $this->stdout("用户{$userId} 13号应得签到积分{$realPoints}, 实际得到{$points}". PHP_EOL);
+//修复第一条流水
+                if ($realPoints > $points) {//正常应得积分只会大于等于第一条积分流水的积分
+                    $userPointsChange = $realPoints - $points;
+                    $finalPoints = $pointRecord->final_points + $userPointsChange;
+                    $pointRecord->incr_points = $realPoints;
+                    $pointRecord->final_points = $finalPoints;
+                    if (!$pointRecord->save()) {
+                        throw new \Exception("修复用户{$userId} 13号积分流水时候出错");
+                    }
+                    $this->stdout("更新用户{$userId} 13号第一条签到流水". PHP_EOL);
+                }
+
+                //删除当天重复流水
+                if ($count > 1) {
+                    for ($i = 1; $i < $count; $i++) {
+                        $pointRecord = $pointRecords[$i];
+                        $userPointsChange = $userPointsChange - $pointRecord->incr_points;
+                        if(!$pointRecord->delete()) {
+                            throw new \Exception("删除用户{$userId} 13号第".($i +1)."条签到流水失败");
+                        }
+                        $this->stdout("删除用户{$userId} 13号第".($i +1)."条签到流水, 当条流水积分{$pointRecord->incr_points}". PHP_EOL);
+                    }
+                }
+
+                //修复14号数据
+                //判断用户14号是否签到
+                $nextCheck = CheckIn::find()->where([
+                    'user_id' => $userId, 'checkDate' => '2017-04-14',
+                ])->one();
+                if (!is_null($nextCheck)) {
+                    $this->stdout("用户{$userId} 14号进行了签到". PHP_EOL);
+                    $nextCheck->lastCheckDate = $check->checkDate;
+                    $nextCheck->streak = $check->streak + 1;
+                    if (!$nextCheck->save()) {
+                        throw new \Exception("修复用户{$userId} 14号签到记录错误");
+                    }
+                    $this->stdout("修复用户{$userId} 14号签到记录". PHP_EOL);
+                    $pointRecord = PointRecord::findOne([
+                        'user_id' => $userId,
+                        'date(recordTime)' => '2017-04-14',
+                        'ref_type' => 'check_in',
+                    ]);
+                    if (is_null($pointRecord)) {
+                        throw new \Exception("用户{$userId} 14号签到后没有找到积分流水");
+                    }
+                    $award = CheckIn::getAward($nextCheck);
+                    $this->stdout("用户{$userId} 14号签到应得积分{$award['points']}, 实际给了{$pointRecord->incr_points}". PHP_EOL);
+                    if ($award['points'] > $pointRecord->incr_points) {
+                        $userPointsChange += $award['points'] - $pointRecord->incr_points;
+                        $pointRecord->incr_points = $award['points'];
+                        if (!$pointRecord->save()) {
+                            throw new \Exception("更新用户{$userId} 第14号积分流水失败");
+                        }
+                        $this->stdout("修复用户{$userId} 14号签到积分流水". PHP_EOL);
+                    }
+                }
+
+                //修改13号第一条签到流水之后流水的final_points
+                $otherPointRecords = PointRecord::find()->where(['user_id' => $userId])->andWhere(['>', 'id', $pointRecordId])->all();
+                foreach ($otherPointRecords as $pointRecord) {
+                    $finalPoints = $finalPoints + $pointRecord->incr_points - $pointRecord->decr_points;
+                    if ($finalPoints != $pointRecord->final_points) {
+                        if (!$pointRecord->save()) {
+                            throw new \Exception("修复用户{$userId} ID为{$pointRecord->id}的final_points失败");
+                        }
+                        $this->stdout("修复用户{$userId} 积分流水{$pointRecord->id} 的final_points". PHP_EOL);
+                    }
+                }
+
+                //更新用户最终积分
+                $user = User::findOne($userId);
+                if ($user->points + $userPointsChange != $finalPoints) {
+                    throw new \Exception("用户{$userId}当前积分是{$user->points}, 变动积分是{$userPointsChange}, 根据积分流水推到出的最终积分是{$finalPoints}");
+                }
+                $this->stdout("修复用户{$userId} 最终积分{$finalPoints}". PHP_EOL);
+                $user->points = $finalPoints;
+                if(!$user->save(false)) {
+                    throw new \Exception("更新用户{$userId}积分失败");
+                }
+
+                $this->stdout(PHP_EOL . PHP_EOL);
+            }
+
+            $transaction->commit();
+        } catch (\Exception $ex) {
+            $transaction->rollBack();
+            $this->stdout("修复错误：错误信息" . $ex->getMessage(). PHP_EOL);
+        }
+    }
 }

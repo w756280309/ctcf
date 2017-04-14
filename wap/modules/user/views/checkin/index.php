@@ -123,7 +123,9 @@ $hostInfo = \Yii::$app->request->hostInfo;
                 }
 
                 if (data.coupon) {
-                    reward += reward ? '和'+data.coupon : data.coupon;
+                    var coupon = WDJF.numberFormat(data.coupon, true);
+                    reward += reward ? '和'+coupon : coupon;
+                    reward += '元代金券';
                 }
 
                 var msg = '您已连续签到'+streak+'天, 获得'+reward;

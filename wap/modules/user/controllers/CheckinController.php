@@ -60,7 +60,7 @@ class CheckinController extends BaseController
                     $checkInToday = true;
                     $checkInDays = $check->streak;
                 } elseif ($yesterday === $check->checkDate) {
-                    $checkInDays = $check->streak;
+                    $checkInDays = 30 === $check->streak ? 0 : $check->checkDate;   //昨天签到满30天的,且今天未签到的,前端连续签到次数显示为0
                 }
             }
         }
@@ -84,10 +84,10 @@ class CheckinController extends BaseController
             $res = [
                 'streak' => $check->streak,
                 'points' => $check->points,
-                'coupon' => $check->couponType ? $check->couponType->name : '',
+                'coupon' => $check->couponType ? $check->couponType->amount : 0,
             ];
         } else {
-            Yii::$app->response->statusCode = '400';
+            Yii::$app->response->statusCode = 400;
 
             $res = [
                 'message' => '签到失败, 请稍后重试!',
