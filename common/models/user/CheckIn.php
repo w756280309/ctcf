@@ -20,7 +20,6 @@ use Yii;
  */
 class CheckIn extends \yii\db\ActiveRecord
 {
-
     public $points;//本次签到获取的积分
     public $couponType;//本次签到赠送的代金券
 
