@@ -932,9 +932,6 @@ class Client
                 'allow_redirects' => false,
                 'connect_timeout' => 30,
                 'timeout' => 30,
-                'curl.options' => [
-                    CURLOPT_SSLVERSION => CURL_SSLVERSION_TLSv1_2,
-                ],
             ]);
         }
 
