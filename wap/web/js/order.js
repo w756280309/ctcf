@@ -53,9 +53,7 @@ function order() {
         }
 
         if (data.tourl != undefined) {
-            setTimeout(function () {
-                location.replace(data.tourl);
-            }, 1000);
+            location.replace(data.tourl);
         }
     });
 
