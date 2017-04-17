@@ -444,7 +444,9 @@ $this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/chargedeposit.css');
             money = 0;
         }
 
-        if (!money) {
+        if (money <= 0) {
+            $('#expect_profit').html('0.00');
+
             return;
         }
 

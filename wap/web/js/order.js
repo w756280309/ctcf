@@ -88,7 +88,10 @@ function profit($this)
         money = 0;
     }
 
-    if (!money) {
+    if (money <= 0) {
+        $('.shijizhifu').html('0.00元');
+        $('.yuqishouyi').html('0.00元');
+
         return;
     }
 
