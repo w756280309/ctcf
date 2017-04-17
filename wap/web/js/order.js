@@ -82,9 +82,14 @@ function openPopup() {
 function profit($this)
 {
     var money = $this.val();
+
     money = money.replace(/^[^0-9]+/, '');
     if(!$.isNumeric(money)) {
         money = 0;
+    }
+
+    if (!money) {
+        return;
     }
 
     var couponMoney = $('#couponMoney').val();

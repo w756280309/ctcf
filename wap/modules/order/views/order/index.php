@@ -1,11 +1,11 @@
 <?php
 
-$this->title = '购买';
-
 use common\utils\StringUtils;
 use common\view\LoanHelper;
 use wap\assets\WapAsset;
 use yii\web\YiiAsset;
+
+$this->title = '购买';
 
 $validCouponCount = count($coupons);
 
@@ -24,7 +24,7 @@ $this->registerJs(<<<JS
 JS
     , 1);
 
-$this->registerJsFile(ASSETS_BASE_URI.'js/order.js?v=20170301', ['depends' => YiiAsset::class]);
+$this->registerJsFile(ASSETS_BASE_URI.'js/order.js?v=20170417', ['depends' => YiiAsset::class]);
 $this->registerCssFile(ASSETS_BASE_URI.'css/setting.css?v=20170103', ['depends' => WapAsset::class]);
 
 ?>
@@ -34,12 +34,16 @@ $this->registerCssFile(ASSETS_BASE_URI.'css/setting.css?v=20170103', ['depends' 
     <div class="col-xs-12 text-align-lf first-hang"><?=$deal->title?></div>
     <div class="col-xs-4 text-align-ct">预期年化收益</div>
     <div class="col-xs-8 text-align-lf col"><?= LoanHelper::getDealRate($deal) ?>%<?php if (!empty($deal->jiaxi)) { ?>+<?= $deal->jiaxi ?>%<?php } ?></div>
-    <div class="col-xs-4 text-align-ct">项目</div>
+    <div class="col-xs-4 text-align-ct">项目期限</div>
     <div class="col-xs-8 text-align-lf col">
         <?php $ex = $deal->getDuration() ?><?= $ex['value'] ?><?= $ex['unit'] ?>
         <?php if (!empty($deal->kuanxianqi)) { ?>(含宽限期<?=$deal->kuanxianqi?>天)<?php } ?></div>
     <div class="col-xs-4 text-align-ct">可投余额</div>
     <div class="col-xs-8 text-align-lf col"><?= StringUtils::amountFormat3($deal->getLoanBalance()) ?>元</div>
+    <div class="col-xs-4 text-align-ct">起投金额</div>
+    <div class="col-xs-8 text-align-lf col"><?= StringUtils::amountFormat3($deal->start_money) ?>元</div>
+    <div class="col-xs-4 text-align-ct">递增金额</div>
+    <div class="col-xs-8 text-align-lf col"><?= StringUtils::amountFormat3($deal->dizeng_money) ?>元</div>
 </div>
 <div class="row surplus margin-top">
     <div class="col-xs-4 text-align-ct">可用金额</div>
@@ -119,11 +123,13 @@ $this->registerCssFile(ASSETS_BASE_URI.'css/setting.css?v=20170103', ['depends' 
             $('#money').on('keyup', function () {
                 var money = $(this).val();
 
-                $.get('/user/coupon/valid-for-loan?sn=<?= $deal->sn ?>&money='+money, function (data) {
-                    $('#coupon').html(data);
+                if (money > 0) {
+                    $.get('/user/coupon/valid-for-loan?sn=<?= $deal->sn ?>&money='+money, function (data) {
+                        $('#coupon').html(data);
 
-                    profit($('#money'));
-                });
+                        profit($('#money'));
+                    });
+                }
             });
         })
     </script>
