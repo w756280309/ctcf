@@ -1,5 +1,6 @@
 <?php
 
+use common\utils\SecurityUtils;
 use yii\widgets\ActiveForm;
 
 $this->title = '补充邀请关系';
@@ -43,7 +44,7 @@ $this->title = '补充邀请关系';
             <div class="control-group">
                 <label class="control-label">邀请人手机号码</label>
                 <div class="controls">
-                    <?= $user->mobile ?>
+                    <?= SecurityUtils::decrypt($user->safeMobile) ?>
                 </div>
             </div>
 
@@ -59,7 +60,7 @@ $this->title = '补充邀请关系';
             <div class="control-group">
                 <label class="control-label">被邀请人手机号码</label>
                 <div class="controls">
-                    <input name="mobile" id="mobile" autocomplete="off" placeholder="请输入被邀请人手机号码" maxlength="11" type="text" value="<?= $invitee ? $invitee->mobile : '' ?>">
+                    <input name="mobile" id="mobile" autocomplete="off" placeholder="请输入被邀请人手机号码" maxlength="11" type="text" value="<?= $invitee ? SecurityUtils::decrypt($invitee->safeMobile) : '' ?>">
                 </div>
             </div>
 
@@ -73,7 +74,7 @@ $this->title = '补充邀请关系';
     <script type="text/javascript">
         $(function () {
             var $form = $('#form');
-            var userMobile = '<?= $user->mobile ?>';
+            var userMobile = '<?= SecurityUtils::decrypt($user->safeMobile) ?>';
             var userName = '<?= $user->real_name ?>';
 
             $('#button').on('click', function () {

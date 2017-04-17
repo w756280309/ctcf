@@ -1,7 +1,8 @@
 <?php
 
-    use yii\widgets\LinkPager;
-    use common\utils\StringUtils;
+use common\utils\SecurityUtils;
+use common\utils\StringUtils;
+use yii\widgets\LinkPager;
 
     $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\web\YiiAsset']);
 
@@ -47,7 +48,6 @@
                             <span class="title">已投资人数：<?= $renshu ?></span></td>
                         <td>
                             <span class="title">募捐时间：<?= $mujuanTime ?></span></td>
-                        </td>
                     </tr>
             </table>
         </div>
@@ -104,7 +104,7 @@
                     <tr>
                         <td><?= $order->sn ?></td>
                         <td><?= $order->username ?></td>                   
-                        <td><?= $order->mobile ?></td>                   
+                        <td><?= SecurityUtils::decrypt($order->user->safeMobile) ?></td>
                         <td><?= $order->order_money ?></td>
                         <td><?= StringUtils::amountFormat2(bcmul($order->yield_rate, 100, 2)); ?></td>
                         <td><?= date('Y-m-d H:i:s', $order->user->created_at) ?></td>

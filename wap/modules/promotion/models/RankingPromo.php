@@ -5,6 +5,7 @@ namespace wap\modules\promotion\models;
 use common\exception\NotActivePromoException;
 use common\models\order\OnlineOrder;
 use common\models\user\User;
+use common\utils\SecurityUtils;
 use yii\db\ActiveRecord;
 use yii\helpers\ArrayHelper;
 
@@ -100,22 +101,28 @@ class RankingPromo extends ActiveRecord
         //排除在线下且在线上前十用户
         $mobile = array_diff(ArrayHelper::getColumn($offline, 'mobile'), ArrayHelper::getColumn($online, 'mobile'));
         $data = [];
-
+        $safeMobile = [];
+        foreach ($mobile as $v) {
+            $safeMobile[] = SecurityUtils::encrypt($v);
+        }
         if (count($offline) > 0) {
+            $ol = OnlineOrder::tableName();
+            $u = User::tableName();
             $query = OnlineOrder::find()
-                ->select('mobile ,SUM(order_money) AS totalInvest, MAX(order_time) AS time')
+                ->innerJoin('user' , "$u.id = $ol.uid")
+                ->select("$u.mobile ,SUM($ol.order_money) AS totalInvest, MAX($ol.order_time) AS time")
                 ->where([
-                    'status' => OnlineOrder::STATUS_SUCCESS,
-                    'mobile' => $mobile,
+                    "$ol.status" => OnlineOrder::STATUS_SUCCESS,
+                    "$u.safeMobile" => $safeMobile,
                 ]);
 
             if (empty($this->endTime)) {
-                $query->andWhere(['>=', 'created_at', strtotime($this->startTime)]);
+                $query->andWhere(['>=', "$ol.created_at", strtotime($this->startTime)]);
             } else {
-                $query->andWhere(['between', 'created_at', strtotime($this->startTime), strtotime($this->endTime)]);
+                $query->andWhere(['between', "$ol.created_at", strtotime($this->startTime), strtotime($this->endTime)]);
             }
 
-            $data = $query->groupBy('mobile')
+            $data = $query->groupBy("$ol.uid")
                 ->orderBy(['totalInvest' => SORT_DESC])
                 ->limit(10)
                 ->asArray()
@@ -133,17 +140,20 @@ class RankingPromo extends ActiveRecord
      */
     public function getOnline()
     {
+        $ol = OnlineOrder::tableName();
+        $u = User::tableName();
         $query = OnlineOrder::find()
-            ->select('mobile ,SUM(order_money) AS totalInvest, MAX(order_time) AS time')
-            ->where(['status' => OnlineOrder::STATUS_SUCCESS]);
+            ->innerJoin('user' , "$u.id = $ol.uid")
+            ->select("$u.mobile ,SUM($ol.order_money) AS totalInvest, MAX($ol.order_time) AS time")
+            ->where(["$ol.status" => OnlineOrder::STATUS_SUCCESS]);
 
         if (empty($this->endTime)) {
-            $query->andWhere(['>=', 'created_at', strtotime($this->startTime)]);
+            $query->andWhere(['>=', "$ol.created_at", strtotime($this->startTime)]);
         } else {
-            $query->andWhere(['between', 'created_at', strtotime($this->startTime), strtotime($this->endTime)]);
+            $query->andWhere(['between', "$ol.created_at", strtotime($this->startTime), strtotime($this->endTime)]);
         }
 
-        $data = $query->groupBy('mobile')
+        $data = $query->groupBy("$ol.uid")
             ->orderBy(['totalInvest' => SORT_DESC])
             ->limit(10)
             ->asArray()

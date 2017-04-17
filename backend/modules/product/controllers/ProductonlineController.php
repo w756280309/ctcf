@@ -507,28 +507,6 @@ class ProductonlineController extends BaseController
     }
 
     /**
-     * 贷款的详细信息.
-     */
-    public function actionDetail()
-    {
-        //联表查出表前的记录。包括：已募集金额 **元 剩余可投金额：*元 已投资人数：**人 剩余时间：1天15小时6分
-        $totalMoney = (new \Yii\db\Query())
-                ->select('sum(order_money) as money')
-                ->from('online_order')
-                ->groupBy('online_pid')
-                ->all();
-
-        //联表查询出表格内容，联的是online_order 和user 共计两张表
-        $query = (new \yii\db\Query())
-                ->select('o.id,real_name,mobile,order_money,order_time,o.status')
-                ->from(['online_order o'])
-                ->innerJoin('user u', 'o.uid = u.id')
-                ->all();
-
-        return $this->render('detail', ['info' => $query, 'totalMoney' => $totalMoney]);
-    }
-
-    /**
      * 标的删除.
      */
     public function actionDel()

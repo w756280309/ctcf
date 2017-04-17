@@ -260,10 +260,10 @@ class UserController extends BaseController
             $this->alert = 2;
             $this->msg = '';
 
-            if ($mobile === $user->mobile) {
+            if ($mobile === SecurityUtils::decrypt($user->safeMobile)) {
                 $this->msg = '【'.Err::code('000008').'】被邀请人不能是本人';
             } else {
-                $invitee = User::findOne(['mobile' => $mobile, 'type' => User::USER_TYPE_PERSONAL]);
+                $invitee = User::findOne(['safeMobile' => SecurityUtils::encrypt($mobile), 'type' => User::USER_TYPE_PERSONAL]);
 
                 if (is_null($invitee)) {
                     $this->msg = '【'.Err::code('000002').'】被邀请人还没有注册';
