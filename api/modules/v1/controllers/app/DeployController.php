@@ -34,23 +34,23 @@ class DeployController extends Controller
         ];
 
         if ('ios' === $clienttype) {
-            if ($versionCode < 4) {
+            if ($versionCode < 6) {
                 $content = [
                     'old_updatetype' => 2,  //旧版本更新类型
-                    'updatedesc' => '优化APP体验，修复bug',  //新版本更新说明
-                    'versioncode' => '4',   //新版本版本号
-                    'versionname' => '1.3', //新版本版本名称
+                    'updatedesc' => '优化了账户中心；新增签到功能，签到得积分',  //新版本更新说明
+                    'versioncode' => '6',   //新版本版本号
+                    'versionname' => '1.5', //新版本版本名称
                     'downloadurl' => 'https://itunes.apple.com/us/app/wen-dou-jin-fu/id1107540109?mt=8',   //新版本下载地址
                 ];
             }
         } else {
-            if ($versionCode < 5) {
+            if ($versionCode < 6) {
                 $content = [
                     'old_updatetype' => 2,  //旧版本更新类型
-                    'updatedesc' => '优化app兼容性',  //新版本更新说明
-                    'versioncode' => '5',   //新版本版本号
-                    'versionname' => '1.4', //新版本版本名称
-                    'downloadurl' => 'http://dapp.wenjf.com/wjf_v1.4.apk',   //新版本下载地址
+                    'updatedesc' => '优化了账户中心；新增签到功能，签到得积分',  //新版本更新说明
+                    'versioncode' => '6',   //新版本版本号
+                    'versionname' => '1.5', //新版本版本名称
+                    'downloadurl' => 'http://dapp.wenjf.com/wjf_v1.5.apk',   //新版本下载地址
                 ];
             }
         }
