@@ -26,9 +26,13 @@ class OnlineorderController extends BaseController
         $username = Yii::$app->request->get('username');
         $mobile = Yii::$app->request->get('mobile');
 
-        $query = OnlineOrder::find()->where([
-            'online_pid' => $id,
-            'status' => OnlineOrder::STATUS_SUCCESS
+        $u = User::tableName();
+        $ol = OnlineOrder::tableName();
+        $query = OnlineOrder::find()
+            ->innerJoin('user' , "$u.id = $ol.uid")
+            ->where([
+            "$ol.online_pid" => $id,
+            "$ol.status" => OnlineOrder::STATUS_SUCCESS
         ]);
         $data = clone $query;
 
@@ -47,11 +51,11 @@ class OnlineorderController extends BaseController
         $mujuanTime = '    '.$day.'   天   '.$hour.'   小时   '.$mintus.'   分';
 
         if (!empty($username)) {
-            $data->andFilterWhere(['like', 'username', $username]);
+            $data->andFilterWhere(['like', "$ol.username", $username]);
         }
 
         if (!empty($mobile)) {
-            $data->andFilterWhere(['like', 'mobile', $mobile]);
+            $data->andFilterWhere(['like', "$u.safeMobile", SecurityUtils::encrypt($mobile)]);
         }
 
         //正常显示详情页

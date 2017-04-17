@@ -4,6 +4,7 @@ namespace common\models\order;
 
 use common\models\adminuser\AdminLog;
 use common\models\payment\Repayment;
+use common\utils\SecurityUtils;
 use yii\behaviors\TimestampBehavior;
 use common\models\product\OnlineProduct;
 use common\lib\product\ProductProcessor;
@@ -204,8 +205,7 @@ class OnlineRepaymentPlan extends \yii\db\ActiveRecord
                     date('Y-m-d', $loan->jixi_time),
                     Yii::$app->params['contact_tel'],
                 ];
-                //todo online_order 线上订单暂未处理
-                SmsService::send($ord->mobile, $templateId, $message, $ord->user);
+                SmsService::send(SecurityUtils::decrypt($ord->user->safeMobile), $templateId, $message, $ord->user);
             }
             $username = $ord->username;
         }

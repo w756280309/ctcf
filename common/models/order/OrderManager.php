@@ -430,7 +430,6 @@ class OrderManager
         $order->refund_method = $model->refund_method;
         $order->yield_rate = $model->yield_rate;
         $order->expires = $model->expires;
-        //$order->mobile = $user->mobile;
         $order->username = $user->real_name;
 
         if ($coupon) {
