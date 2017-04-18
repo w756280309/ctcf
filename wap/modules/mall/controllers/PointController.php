@@ -81,7 +81,7 @@ class PointController extends BaseController
                 || $user->id !== $voucher->user_id
                 || $voucher->isRedeemed
             ) {
-                throw new \Exception('没有领奖机会了');
+                throw new \Exception('兑换失败');
             }
 
             $voucher->redeemIp = Yii::$app->request->getUserIP();
