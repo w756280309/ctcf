@@ -45,4 +45,12 @@ class GoodsType extends ActiveRecord
     {
         return 'GIFT' . date('YmdHis') . rand(1000, 9999);
     }
+
+    //根据ｓｎ获取商品
+    public static function fetchOne($goodsTypeSn)
+    {
+        //todo $goodsTypeSn 是否拼接
+        return GoodsType::findOne(['sn' => $goodsTypeSn]);
+
+    }
 }
