@@ -12,6 +12,8 @@ class GoodsType extends ActiveRecord
     const TYPE_GOODS = 2;
     const TYPE_VIRTUAL_CARD = 3;
 
+    const REF_TYPE_MALL_ORDER = 'ref_type_mall_order';
+
     public function rules()
     {
         return [

@@ -93,12 +93,8 @@ class NotifyController extends Controller
             //插入Voucher
             $goodsTypeSn = $result['itemCode'];
             if (!empty($goodsTypeSn)) {
-                $goodsType = GoodsType::fetchOne($goodsTypeSn);
-                if (!is_null($goodsType)) {
-                    $refData = ['ref_type' => 'mall_order' ,'ref_id' => $order->id];
-                    $voucher = Voucher::initNew($goodsType, $user, $refData);//todo 最终确认初始化voucher方法之后需要调整
-                    $voucher->save();
-                }
+                $voucher = GoodsType::issuerVoucher($goodsTypeSn, $user, ['type' => GoodsType::REF_TYPE_MALL_ORDER, 'id' => $order->id]);
+                $voucher->save();
             }
 
             $translation->commit();
