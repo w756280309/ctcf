@@ -106,8 +106,30 @@ class PointController extends BaseController
      */
     public function actionPrize($id)
     {
-        $voucher = $this->findOr404(Voucher::class, $id);
+        $voucher = Voucher::findOne($id);
 
-        return ['code' => 0, 'message' => '兑换成功'];
+        try {
+            $user = $this->getAuthedUser();
+            if (
+                is_null($voucher)
+                || $user->id !== $voucher->user_id
+                || $voucher->isRedeemed
+            ) {
+                throw new \Exception('兑换失败');
+            }
+
+            $voucher->redeemIp = Yii::$app->request->getUserIP();
+            Voucher::redeem($voucher);
+
+            return [
+                'code' => 0,
+                'message' => '兑换成功',
+            ];
+        } catch (\Exception $e) {
+            return [
+                'code' => 1,
+                'message' => $e->getMessage(),
+            ];
+        }
     }
 }

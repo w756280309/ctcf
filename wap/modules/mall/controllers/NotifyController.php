@@ -2,6 +2,8 @@
 
 namespace wap\modules\mall\controllers;
 
+use common\models\code\GoodsType;
+use common\models\code\Voucher;
 use common\models\mall\PointOrder;
 use common\models\mall\PointRecord;
 use common\models\mall\ThirdPartyConnect;
@@ -88,6 +90,17 @@ class NotifyController extends Controller
             if (!$res) {
                 throw new \Exception('系统繁忙');
             }
+            //插入Voucher
+            $goodsTypeSn = $result['itemCode'];
+            if (!empty($goodsTypeSn)) {
+                $goodsType = GoodsType::fetchOne($goodsTypeSn);
+                if (!is_null($goodsType)) {
+                    $refData = ['ref_type' => 'mall_order' ,'ref_id' => $order->id];
+                    $voucher = Voucher::initNew($goodsType, $user, $refData);//todo 最终确认初始化voucher方法之后需要调整
+                    $voucher->save();
+                }
+            }
+
             $translation->commit();
             return [
                 'status' => 'ok',
@@ -160,6 +173,12 @@ class NotifyController extends Controller
                 $res = $order->save();
                 if (!$res) {
                     throw new \Exception('系统繁忙');
+                }
+
+                //回滚Voucher
+                $voucher = Voucher::findOne(['ref_type' => 'mall_order', 'ref_id' => $order->id]);
+                if(!is_null($voucher)) {
+                    Voucher::rollback($voucher);
                 }
             }
             $translation->commit();
