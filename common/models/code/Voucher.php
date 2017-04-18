@@ -53,7 +53,7 @@ class Voucher extends ActiveRecord
     {
         $transaction = \Yii::$app->db->beginTransaction();
         try {
-            //todo 减少　GoodsType 的库存，　目前代金券不涉及库存
+            //todo 增加　GoodsType 的库存，目前代金券不涉及库存
 
             if ($voucher->isRedeemed) {
                 //todo 当奖励已经被领取时候需要有撤销奖励相关逻辑, 此方法目前只有　温都扣积分成功但是兑吧扣积分失败　之后回调温都系统，才会调用，并且温都扣积分时候没有发奖励
