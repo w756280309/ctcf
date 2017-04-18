@@ -61,6 +61,8 @@ class PointController extends BaseController
      */
     public function actionPrizeList()
     {
+        $this->layout = '@app/views/layouts/fe';
+
         return $this->render('prize_list');
     }
 
