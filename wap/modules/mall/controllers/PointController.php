@@ -55,4 +55,20 @@ class PointController extends BaseController
             'header' => $pg->jsonSerialize(),
         ]);
     }
+
+    /**
+     * 兑换记录.
+     */
+    public function actionPrizeList()
+    {
+        return $this->render('prize_list');
+    }
+
+    /**
+     * 兑换代金券.
+     */
+    public function actionPrize()
+    {
+        return ['code' => 0, 'message' => '兑换成功'];
+    }
 }
