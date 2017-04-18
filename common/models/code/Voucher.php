@@ -36,4 +36,9 @@ class Voucher extends ActiveRecord
             'createTime' => '创建时间',
         ];
     }
+
+    public function getGoodsType()
+    {
+        return $this->hasOne(GoodsType::class, ['sn' => 'goodsType_sn']);
+    }
 }

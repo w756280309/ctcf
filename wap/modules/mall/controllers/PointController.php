@@ -3,6 +3,7 @@
 namespace wap\modules\mall\controllers;
 
 use app\controllers\BaseController;
+use common\models\code\Voucher;
 use common\models\mall\PointRecord;
 use Yii;
 
@@ -58,19 +59,55 @@ class PointController extends BaseController
 
     /**
      * 兑换记录.
+     *
+     * 1. 每页显示十条记录;
+     * 2. 排序按照先未领取状态后领取状态来排,后按照记录的创建时间的倒序来排;
      */
-    public function actionPrizeList()
+    public function actionPrizeList($page = 1, $size = 10)
     {
+        $query = Voucher::find()
+            ->joinWith('goodsType')
+            ->where([
+                'user_id' => $this->getAuthedUser()->id,
+            ])->orderBy([
+                'isRedeemed' => SORT_ASC,
+                'createTime' => SORT_DESC,
+            ]);
+
+        $pg = Yii::$container->get('paginator')->paginate($query, $page, $size);
+        $vouchers = $pg->getItems();
+
+        $tp = $pg->getPageCount();
+        $code = ($page > $tp) ? 1 : 0;
+        $message = ($page > $tp) ? '数据错误' : '消息返回';
+
+        if (Yii::$app->request->isAjax) {
+            $this->layout = false;
+            $html = $this->render('_prize_list', ['vouchers' => $vouchers]);
+
+            return [
+                'header' => $pg->jsonSerialize(),
+                'html' => $html,
+                'code' => $code,
+                'message' => $message,
+            ];
+        }
+
         $this->layout = '@app/views/layouts/fe';
 
-        return $this->render('prize_list');
+        return $this->render('prize_list', [
+            'vouchers' => $vouchers,
+            'header' => $pg->jsonSerialize(),
+        ]);
     }
 
     /**
      * 兑换代金券.
      */
-    public function actionPrize()
+    public function actionPrize($id)
     {
+        $voucher = $this->findOr404(Voucher::class, $id);
+
         return ['code' => 0, 'message' => '兑换成功'];
     }
 }

@@ -9,33 +9,29 @@ $this->title = '兑换记录';
 <script src="<?= FE_BASE_URI ?>libs/lib.flexible3.js"></script>
 <script src="<?= FE_BASE_URI ?>libs/zepto.min.js"></script>
 <script src="<?= ASSETS_BASE_URI ?>js/common.js"></script>
+<script type="text/javascript">
+    var url = '/mall/point/prize-list';
+    var tp = '<?= $header['tp'] ?>';
+</script>
+<script src="<?= ASSETS_BASE_URI ?>js/page.js"></script>
 
 <div class="flex-content">
-    <div class="topTitle f18">
-        <img class="goback lf" src="<?= FE_BASE_URI ?>wap/tie-card/img/back.png" alt="" onclick="history.go(-1)">
-        兑换记录
-    </div>
+    <?php if (!defined('IN_APP')) { ?>
+        <div class="topTitle f18">
+            <img class="goback lf" src="<?= FE_BASE_URI ?>wap/tie-card/img/back.png" alt="" onclick="history.go(-1)">
+            兑换记录
+        </div>
+    <?php } ?>
+
     <div class="exchange-record">
-        <ul id="exchange-list">
-            <li class="clearfix" data-index="1">
-                <div class="lf"><p>20元面值代金券</p><p>2016-12-11  12:39:03</p></div>
-                <span class="lf"><i>25</i>积分</span>
-                <button class="rg eschanging">领取</button>
-            </li>
-            <li class="clearfix" data-index="2">
-                <div class="lf"><p>20元面值代金券</p><p>2016-12-11  12:39:03</p></div>
-                <span class="lf"><i>25</i>积分</span>
-                <button class="rg eschanging">领取</button>
-            </li>
-            <li class="clearfix" data-index="3">
-                <div class="lf"><p>20元面值代金券</p><p>2016-12-11  12:39:03</p></div>
-                <span class="lf"><i>25</i>积分</span>
-                <button class="rg eschanged">已领取</button>
-            </li>
-        </ul>
-    </div>
-    <div id="pullUp">
-        <span class="pullUpLabel f15">加载更多...</span>
+        <?php if (!empty($vouchers)) { ?>
+            <ul id="exchange-list">
+                <?= $this->render('_prize_list', ['vouchers' => $vouchers]) ?>
+                <div class="load"></div>
+            </ul>
+        <?php } else { ?>
+            <div class="nodata" style="display: block;">暂无数据</div>
+        <?php } ?>
     </div>
 </div>
 
