@@ -3,7 +3,6 @@
 namespace app\modules\deal\controllers;
 
 use common\controllers\HelpersTrait;
-use common\models\code\Voucher;
 use common\models\product\LoanFinder;
 use common\models\product\OnlineProduct;
 use common\models\order\OnlineOrder;
@@ -123,39 +122,5 @@ class DealController extends Controller
         $ret = $pay->toCart($this->getAuthedUser(), $sn);
 
         return $ret;
-    }
-
-    /**
-     * 根据Voucher领奖逻辑
-     * todo 当action定好之后需要重新调整
-     * @param $id
-     */
-    public function actionAward($id)
-    {
-        $voucher = Voucher::findOne($id);
-
-        try {
-            $user = $this->getAuthedUser();
-            if (
-                is_null($voucher)
-                || $user->id !== $voucher->user_id
-                || $voucher->isRedeemed
-            ) {
-                throw new \Exception('没有领奖机会了');
-            }
-
-            $voucher->redeemIp = Yii::$app->request->getUserIP();
-            Voucher::redeem($voucher);
-
-            return [
-                'success' => true,
-                'msg' => '领取成功',//todo 文案待讨论
-            ];
-        }catch (\Exception $e) {
-            return [
-                'success' => false,
-                'msg' => $e->getMessage(),
-            ];
-        }
     }
 }

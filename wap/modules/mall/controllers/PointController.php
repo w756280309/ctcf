@@ -3,6 +3,7 @@
 namespace wap\modules\mall\controllers;
 
 use app\controllers\BaseController;
+use common\models\code\Voucher;
 use common\models\mall\PointRecord;
 use Yii;
 
@@ -69,8 +70,32 @@ class PointController extends BaseController
     /**
      * 兑换代金券.
      */
-    public function actionPrize()
+    public function actionPrize($id)
     {
-        return ['code' => 0, 'message' => '兑换成功'];
+        $voucher = Voucher::findOne($id);
+
+        try {
+            $user = $this->getAuthedUser();
+            if (
+                is_null($voucher)
+                || $user->id !== $voucher->user_id
+                || $voucher->isRedeemed
+            ) {
+                throw new \Exception('没有领奖机会了');
+            }
+
+            $voucher->redeemIp = Yii::$app->request->getUserIP();
+            Voucher::redeem($voucher);
+
+            return [
+                'code' => 0,
+                'msg' => '兑换成功',
+            ];
+        }catch (\Exception $e) {
+            return [
+                'code' => 1,
+                'msg' => $e->getMessage(),
+            ];
+        }
     }
 }
