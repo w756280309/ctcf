@@ -28,6 +28,8 @@ class GoodsType extends ActiveRecord
             'createdAt' => '创建时间',
             'effectDays' => '有效期天数',
             'affiliator_id' => '合作方ID',
+            'isSkuEnabled' => '是否开启SKU',
+            'stock' => '库存数量',
         ];
     }
 
