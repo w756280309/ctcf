@@ -108,7 +108,7 @@ class Voucher extends ActiveRecord
                 if (null === $couponType) {
                     throw new \Exception('发送失败，未找到合适的代金券');
                 }
-                UserCoupon::addUserCoupon($user, $couponType);
+                UserCoupon::addUserCoupon($user, $couponType)->save();
             }
             //todo elseif 库存及卡密的奖励发放
 
@@ -129,7 +129,7 @@ class Voucher extends ActiveRecord
      *
      * @param GoodsType $goodsType 商品
      * @param User      $user      用户
-     * @param array     $ref       关联信息 ['ref_type' => '', 'ref_id' => '']
+     * @param array     $ref       关联信息 ['type' => '', 'id' => '']
      *
      * @return Voucher
      */
@@ -137,8 +137,8 @@ class Voucher extends ActiveRecord
     {
         return new self([
             'goodsType_sn' => $goodsType->sn,
-            'ref_type' => isset($ref['ref_type']) ? $ref['ref_id'] : null,
-            'ref_id' => isset($ref['ref_id']) ? $ref['ref_id'] : null,
+            'ref_type' => isset($ref['type']) ? $ref['type'] : null,
+            'ref_id' => isset($ref['id']) ? $ref['id'] : null,
             'user_id' => $user->id,
             'isRedeemed' => false,
             'createTime' => date('Y-m-d H:i:s'),
