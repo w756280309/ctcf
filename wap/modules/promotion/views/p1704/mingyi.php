@@ -40,7 +40,7 @@ $this->headerNavOn = true;
             <td class="text-align-ct">400</td>
         </tr>
     </table>
-    <ol class="f13" start="5">
+    <ol class="f13" start="4">
         <li class="rules">本次活动奖品将于3个工作日内以积分形式发放，用户可以进入积分商城进行兑换。</li>
     </ol>
     <div class="part_three">
