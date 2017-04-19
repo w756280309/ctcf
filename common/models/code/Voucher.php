@@ -137,8 +137,8 @@ class Voucher extends ActiveRecord
     {
         return new self([
             'goodsType_sn' => $goodsType->sn,
-            'ref_type' => isset($ref['ref_type']) ? $ref['ref_id'] : null,
-            'ref_id' => isset($ref['ref_id']) ? $ref['ref_id'] : null,
+            'ref_type' => isset($ref['type']) ? $ref['id'] : null,
+            'ref_id' => isset($ref['id']) ? $ref['id'] : null,
             'user_id' => $user->id,
             'isRedeemed' => false,
             'createTime' => date('Y-m-d H:i:s'),

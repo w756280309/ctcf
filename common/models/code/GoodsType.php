@@ -54,19 +54,27 @@ class GoodsType extends ActiveRecord
         return 'GIFT' . date('YmdHis') . rand(1000, 9999);
     }
 
-    //根据ｓｎ获取商品
-    public static function fetchOne($goodsTypeSn)
+    /**
+     * 根据sn获得商品
+     *
+     * @param string $sn 商品编号
+     *
+     * @return null|GoodsType
+     */
+    public static function fetchOneBySn($sn)
     {
-        //todo $goodsTypeSn 是否拼接
-        return GoodsType::findOne(['sn' => $goodsTypeSn]);
+        //传送给兑吧的商品sn添加了'duiba_'，故在此做过滤处理
+        $sn = str_replace('duiba_', '', $sn);
+
+        return empty($sn) ? null : GoodsType::findOne(['sn' => $sn]);
     }
 
     /**
-     * 获得可以传递给兑吧的sn
+     * 获得以兑吧为前缀的sn
      */
-    public function getSnForDuiBa()
+    public static function getSnForDuiBa($sn)
     {
-        return self::TYPE_COUPON === $this->type ? 'duiba_' . $this->sn : $this->sn;
+        return 'duiba_' . $sn;
     }
 
     /**
@@ -81,7 +89,7 @@ class GoodsType extends ActiveRecord
      */
     public static function issuerVoucher($sn, User $user, $ref = null)
     {
-        $goodsType = GoodsType::findOne(['sn' => $sn]);
+        $goodsType = GoodsType::fetchOneBySn(['sn' => $sn]);
 
         //判断商品是否存在
         if (null === $goodsType) {
