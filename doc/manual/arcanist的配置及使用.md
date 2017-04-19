@@ -68,6 +68,8 @@ arc diff --create #新建一个diff,如果该分支已经发过diff,但是又想
 arc diff --update D123 #更新一个diff, D123为diff的版本号,此命令适用于修改一个已经存在的diff文件
 arc diff origin/master #此命令试用于从远端拉取一个已经存在的分支,然后直接发diff的情况, master是当前分支的父分支
 arc patch D123 #此命令可以将远端的diff patch到本地,所做的操作,就是将远端的diff拉取到本地,并新建一个分支,我们可以基于这个分支做一些操作
+arc patch D2210 --nobranch #此命令与上一个命令类似,但是不同的是将diff patch到当前的分支
+arc land --onto master #此命令可以将diff发布到线上的某个分支
 ```
  5. diff 命令执行后,进入编辑diff页面,这个时候,我们需要输入如下信息,保存退出,然后会自动提交,如下:
  ```

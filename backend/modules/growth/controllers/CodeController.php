@@ -191,14 +191,14 @@ class CodeController extends BaseController
         $c = Code::tableName();
         $g = GoodsType::tableName();
         $query = (new Query())
-            ->select("$g.name, count($c.id) as total, $c.goodsType, $g.createdAt, $g.sn")
+            ->select("$g.name, count($c.id) as total, $c.goodsType, $g.createdAt, $g.sn, $g.type")
             ->from($g)
             ->leftJoin($c, "$c.goodsType_sn = $g.sn")
-            ->where(['in', "$g.type", [1, 2]]);
+            ->where(['in', "$g.type", [1, 2]])
+            ->groupBy('sn');
 
-        $query->orderBy(["$g.createdAt" => SORT_DESC])->groupBy('sn');
         $pages = new Pagination(['totalCount' => $query->count(), 'pageSize' => '10']);
-        $model = $query->offset($pages->offset)->limit($pages->limit)->all();
+        $model = $query->orderBy(["$g.createdAt" => SORT_DESC, "$g.id" => SORT_DESC])->offset($pages->offset)->limit($pages->limit)->all();
 
         return $this->render('goods-list', ['model' => $model, 'pages' => $pages]);
     }
