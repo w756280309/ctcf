@@ -93,7 +93,7 @@ class NotifyController extends Controller
             //插入Voucher
             $goodsTypeSn = $result['itemCode'];
             if (!empty($goodsTypeSn)) {
-                $voucher = GoodsType::issuerVoucher($goodsTypeSn, $user, ['type' => GoodsType::REF_TYPE_MALL_ORDER, 'id' => $order->id]);
+                $voucher = GoodsType::issueVoucher($goodsTypeSn, $user, ['type' => GoodsType::REF_TYPE_MALL_ORDER, 'id' => $order->id]);
                 $voucher->save();
             }
 

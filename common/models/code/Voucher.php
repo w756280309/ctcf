@@ -83,21 +83,26 @@ class Voucher extends ActiveRecord
             throw new \Exception('本订单奖励已被领取');
         }
 
-        //检查此订单是否重复发放了
-        if ($voucher->ref_id && $voucher->ref_type) {
-            $vou = Voucher::find()
-                ->where(['ref_type' => $voucher->ref_type])
-                ->andWhere(['ref_id' => $voucher->ref_id])
-                ->andWhere(['isRedeemed' => true])
-                ->one();
-            if (null !== $vou) {
-                throw new \Exception('同一订单奖励已被领取后，无法再次领取');
-            }
-        }
-
         $db = Yii::$app->db;
         $transaction = $db->beginTransaction();
         try {
+            //尝试更新voucher的状态，若更新失败，直接抛异常
+            $sql = 'update voucher set isRedeemed = :isRedeemed,redeemTime = :redeemTime,redeemIp = :redeemIp where id = :id and isRedeemed = :isRedeemedFalse';
+            $affected_rows = $db->createCommand($sql, [
+                'isRedeemed' => true,
+                'redeemTime' => date('Y-m-d H:i:s'),
+                'redeemIp' => $voucher->redeemIp,
+                'id' => $voucher->id,
+                'isRedeemedFalse' => false,
+            ])->execute();
+
+            if (!$affected_rows) {
+                throw new \Exception('发奖失败');
+            }
+
+            //更新当前voucher信息
+            $voucher->refresh();
+
             //获得用户信息和商品信息
             $goodsType = $voucher->goodsType;
             $user = $voucher->user;
@@ -112,9 +117,6 @@ class Voucher extends ActiveRecord
             }
             //todo elseif 库存及卡密的奖励发放
 
-            $voucher->isRedeemed = true;
-            $voucher->redeemTime = date('Y-m-d H:i:s');
-            $voucher->save();
             $transaction->commit();
 
             return $voucher;

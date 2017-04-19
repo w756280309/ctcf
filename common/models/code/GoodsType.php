@@ -74,6 +74,7 @@ class GoodsType extends ActiveRecord
      */
     public static function getSnForDuiBa($sn)
     {
+        //todo 此方法为临时方法，正确调用方式$voucher->getSnForDuiBa();
         return 'duiba_' . $sn;
     }
 
@@ -87,7 +88,7 @@ class GoodsType extends ActiveRecord
      * @return Voucher
      * @throws \Exception
      */
-    public static function issuerVoucher($sn, User $user, $ref = null)
+    public static function issueVoucher($sn, User $user, $ref = null)
     {
         $goodsType = GoodsType::fetchOneBySn(['sn' => $sn]);
 
