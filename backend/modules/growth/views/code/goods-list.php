@@ -1,5 +1,6 @@
 <?php
 
+use common\models\code\GoodsType;
 use yii\helpers\Html;
 use yii\widgets\LinkPager;
 
@@ -61,6 +62,7 @@ $this->title = '商品列表';
                 <thead>
                 <tr>
                     <th class="valign-middle">商品名称</th>
+                    <th class="valign-middle">商品编号</th>
                     <th class="valign-middle">兑换码数量</th>
                     <th class="valign-middle">创建时间</th>
                     <th style="width: 30%" class="valign-middle"><center>操作</center></th>
@@ -70,6 +72,9 @@ $this->title = '商品列表';
                 <?php foreach ($model as $good) : ?>
                     <tr>
                         <td class="valign-middle"><?= Html::encode($good['name']) ?></td>
+                        <th class="valign-middle">
+                            <?= (int) $good['type'] === GoodsType::TYPE_COUPON ? GoodsType::getSnForDuiBa($good['sn']) : $good['sn'] ?>
+                        </th>
                         <td class="valign-middle"><?= $good['total'] ?></td>
                         <td class="valign-middle"><?= $good['createdAt'] ?></td>
                         <td class="valign-middle">
