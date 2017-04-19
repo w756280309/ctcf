@@ -202,7 +202,8 @@ class ThirdPartyConnect extends ActiveRecord
             "timestamp"=>$request_array["timestamp"],
             "description"=>isset($request_array["description"]) ? $request_array["description"]:'',
             "orderNum"=>$request_array["orderNum"],
-            'itemCode' => isset($request_array["itemCode"]) ? $request_array["itemCode"] : null,
+            'params' => isset($request_array["params"]) ? $request_array["params"] : null,
+            'developBizId' => isset($request_array["developBizId"]) ? $request_array["developBizId"] : null,
         );
         return $ret;
     }
