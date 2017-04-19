@@ -198,7 +198,7 @@ class ThirdPartyConnect extends ActiveRecord
         }
         $ret=array(
             "appKey"=>$request_array["appKey"],
-            "credits"=>$request_array["credits"],
+            "credits"=>isset($request_array["credits"]) ? $request_array["credits"] : null,
             "timestamp"=>$request_array["timestamp"],
             "description"=>isset($request_array["description"]) ? $request_array["description"]:'',
             "orderNum"=>$request_array["orderNum"],
