@@ -1,0 +1,63 @@
+.flex-content {
+  background-color: #e7e097;
+}
+.flex-content .part_one {
+  height: 4.69333333rem;
+  background: url("../img/part_one.jpg") no-repeat;
+  background-size: contain;
+}
+.flex-content .part_two {
+  height: 7.88rem;
+  background: url("../img/part_two.jpg") no-repeat;
+  background-size: contain;
+}
+.flex-content ol {
+  padding: 0.42666667rem 1.10666667rem 0.37333333rem 1.44rem;
+  list-style-type: decimal;
+}
+.flex-content ol .rules {
+  list-style-type: decimal;
+  line-height: 0.64rem;
+  color: #590b0b;
+}
+.flex-content ol .rules .hong {
+  color: #c3070c;
+}
+.flex-content ol .rules .cu {
+  font-weight: 700;
+}
+.flex-content .biaoge {
+  margin: 0 auto;
+  background-color: #f5f3d5;
+  color: #d70000;
+  width: 8.61333333rem;
+  border-radius: 0.13333333rem;
+}
+.flex-content .biaoge tr {
+  height: 1.2rem;
+}
+.flex-content .biaoge tr td {
+  border-bottom: 1px solid #d70000;
+}
+.flex-content .biaoge tr .frst {
+  padding-left:0.18rem;
+}
+.flex-content .biaoge tr:first-child {
+  height: 0.92rem;
+}
+.flex-content .biaoge tr:last-child td {
+  border: none;
+}
+.flex-content .part_three {
+  height: 4.16rem;
+  background: url("../img/part_three.jpg") no-repeat;
+  background-size: contain;
+}
+.flex-content .part_three a {
+  display: block;
+  width: 3.2rem;
+  height: 0.94666667rem;
+  margin: 0 auto;
+  background: url("../img/button_licai.png") no-repeat;
+  background-size: contain;
+}
