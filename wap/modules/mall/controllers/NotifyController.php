@@ -206,7 +206,7 @@ class NotifyController extends Controller
             if (empty($user)) {
                 throw new \Exception('不是温都会员');
             }
-            $order = PointOrder::findOne(['orderNum' => $orderNum, 'id' => $developBizId]);
+            $order = PointOrder::findOne(['orderNum' => $orderNum, 'sn' => $developBizId]);
             if (is_null($order)) {
                 throw new \Exception('订单不存在');
             }
@@ -221,7 +221,7 @@ class NotifyController extends Controller
                 'supplierBizId' => $voucher->id,
             ];
         } catch (\Exception $ex) {
-            Yii::info('[mall_notify][init_point_order] 兑吧发起虚拟商品充值回调，回调失败：' . $ex->getMessage(), 'notify');
+            Yii::info('[mall_notify][voucher_recharge] 兑吧发起虚拟商品充值回调，回调失败：' . $ex->getMessage(), 'notify');
             $translation->rollBack();
             return [
                 'status' => 'fail',
