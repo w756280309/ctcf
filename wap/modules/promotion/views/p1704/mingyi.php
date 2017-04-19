@@ -16,11 +16,11 @@ $this->headerNavOn = true;
     <ol class="f13">
         <li class="rules">活动时间：2017年4月20日-2017年4月25日；</li>
         <li class="rules">本次活动面向所有温都金服注册用户；</li>
-        <li class="rules">活动期间<span class="cu hong">累计投资</span>（不含转让产品）达到指定额度，即可获得相应礼品；</li>
+        <li class="rules">活动期间<span class="cu hong">累计年化投资</span>（不含转让产品）达到指定额度，即可获得相应礼品；</li>
     </ol>
     <table class="biaoge f12" cellpadding="0" cellspacing="0">
         <tr>
-            <td class="text-align-ct">累计投资年化金额（元）</td>
+            <td class="text-align-ct">累计年化投资金额（元）</td>
             <td class="text-align-ct">礼品</td>
             <td class="text-align-ct">对应积分</td>
         </tr>
