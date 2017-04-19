@@ -27,7 +27,8 @@
         "bower-asset/jquery": "1.12.*",
         "wcg/libs": "dev-master",
         "paragonie/random_compat": "1.2.0",
-        "symfony/process":">=3.2"
+        "symfony/process":">=3.2",
+        "yiisoft/yii2-redis": "^2.0"
     },
     "require-dev": {
         "yiisoft/yii2-codeception": "*",

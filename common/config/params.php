@@ -189,4 +189,10 @@ return [
     ],
     'ding_notify_list' => [],//钉钉通知名单 实例 [ '用户姓名' => '用户在钉钉的ID',],具体数值在 data/wdjf_ding_users.json 中查
     'wdjf_security_key' => __DIR__ . '/payment/security/wdjf_prod.key',//温都金服用户信息加密使用的key保存文件名
+
+    // Redis
+    'redis_session_host' => 'r-bp1cc58258c8bdf4.redis.rds.aliyuncs.com',
+    'redis_session_port' => 6379,
+    'redis_session_pass' => null,
+    'redis_session_db' => 1, // 设为1避免误写
 ];
