@@ -57,6 +57,7 @@ class OnlineorderController extends BaseController
         if (!empty($mobile)) {
             $data->andFilterWhere(['like', "$u.safeMobile", SecurityUtils::encrypt($mobile)]);
         }
+        $data = $data->orderBy(['id' => SORT_DESC]);
         $dataProvider = new ActiveDataProvider([
             'query' => $data,
             'pagination' => [
