@@ -39,7 +39,6 @@ class BaoQuanQueue extends ActiveRecord
             [['itemId'], 'required'],
             [['itemId', 'created_at', 'updated_at', 'status'], 'integer'],
             [['itemType'], 'string'],
-            [['itemId'], 'unique']
         ];
     }
 
