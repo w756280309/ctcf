@@ -51,3 +51,7 @@ cdn已经上线，具体信息如下：
 - pc站的图片与css,js访问方式如下： http://static.wenjf.com/pc/js/common.js
 - 后台上传的图片访问地址为： http://static.wenjf.com/upload/adv/c636f7c79be7672c44b5535504fe686d.jpg
 - 活动页面的访问方式： http://static.wenjf.com/promo
+
+# 会话/session/登录状态/redis
+
+redis配置文件位置：项目目录/common/config/session-local.php
