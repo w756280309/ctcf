@@ -807,6 +807,110 @@ COUPON;
         return self::EXIT_CODE_NORMAL;
     }
 
+    /**
+     * 给注册50天以上，未投资的用户发放新人专享红包.
+     *
+     * 1. 该console只运行一次;
+     */
+    public function actionCouponForNew($couponIds = [73, 74], $days = 50)
+    {
+        $couponTypes = CouponType::findAll(['id' => $couponIds]);
+
+        if (count($couponTypes) !== count($couponIds)) {
+            echo "包含未知的红包信息\n";
+
+            return self::EXIT_CODE_ERROR;
+        }
+
+        $u = User::tableName();
+        $ui = UserInfo::tableName();
+
+        $users = User::find()
+            ->innerJoin($ui, "$u.id = $ui.user_id")
+            ->where([
+                "$ui.investCount" => 0,
+                "$u.status" => User::STATUS_ACTIVE,
+                "$u.type" => User::USER_TYPE_PERSONAL,
+            ])
+            ->andWhere(["<", "$u.created_at", strtotime("today - ".$days." days")])
+            ->all();
+
+        $count = 0;
+
+        foreach ($users as $user) {
+            foreach ($couponTypes as $couponType) {
+                try {
+                    $userCoupon = UserCoupon::addUserCoupon($user, $couponType);
+
+                    if ($userCoupon->save(false)) {
+                        ++$count;
+                    }
+                } catch (\Exception $e) {
+                    echo $user->mobile."发放失败, 原因: ".$e->getMessage()."\n";
+                }
+            }
+        }
+
+        echo "总共给用户发放了".$count."张代金券\n";
+
+        return self::EXIT_CODE_NORMAL;
+    }
+
+    /**
+     * 1. 给截至2017-04-19仅投资一次, 且投资金额>=10000元的用户发放20元投资奖励红包;
+     * 2. 给截至2017-04-19仅投资一次, 且投资金额<10000元的用户发放5元投资奖励红包;
+     * 3. 给截至2017-04-19投资两次, 且投资金额>=10000元的用户发放20元投资奖励红包;
+     * 4. 给截至2017-04-19投资两次, 且投资金额<10000元的用户发放5元投资奖励红包;
+     *
+     * PS: 该console只运行一次;
+     */
+    public function actionCouponForUser()
+    {
+        $couponTypes = CouponType::find()
+            ->where(['id' => [76, 75]])
+            ->indexBy('id')
+            ->all();
+
+        if (2 !== count($couponTypes)) {
+            echo "包含未知的红包信息\n";
+
+            return self::EXIT_CODE_ERROR;
+        }
+
+        $users = User::find()
+            ->joinWith('info')
+            ->andWhere(['between', 'investCount', 1, 2])
+            ->andWhere(['<=', 'lastInvestDate', '2017-04-19'])
+            ->all();
+
+        $couponType20 = 0;
+        $couponType05 = 0;
+
+        foreach ($users as $user) {
+            try {
+                if (bccomp($user->info->investTotal, 10000, 2) >= 0) {
+                    $userCoupon = UserCoupon::addUserCoupon($user, $couponTypes[76]);
+
+                    if ($userCoupon->save(false)) {
+                        ++$couponType20;
+                    }
+                } else {
+                    $userCoupon = UserCoupon::addUserCoupon($user, $couponTypes[75]);
+
+                    if ($userCoupon->save(false)) {
+                        ++$couponType05;
+                    }
+                }
+            } catch (\Exception $e) {
+                echo $user->mobile."发放失败, 原因: ".$e->getMessage()."\n";
+            }
+        }
+
+        echo "总共发放了20元投资奖励红包".$couponType20."张\n";
+        echo "总共发放了5元投资奖励红包".$couponType05."张\n";
+
+        return self::EXIT_CODE_NORMAL;
+    }
 
     /**
      * 标的重复计息，财富值重复
