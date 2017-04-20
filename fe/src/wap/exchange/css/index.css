@@ -1,7 +1,13 @@
 body {
-  background-color: #fff;
+    background-color: #fff;
 }
-
+.tips {
+    padding:0.3rem 0.53333333rem;
+    font-size: 0.37333333rem;
+    background-color: #e7eaf1;
+    display: block;
+    color: #007aff;
+}
 .exchange-record ul li {
   height: 2rem;
   width: 100%;
@@ -9,6 +15,7 @@ body {
   border-bottom: 1px solid #ddd;
   text-align: center;
   overflow: hidden;
+    background-color: #fff;
 }
 
 .exchange-record ul li div.lf {
@@ -46,9 +53,9 @@ body {
 
 .exchange-record ul li button.rg {
   display: block;
-  width: 1.6rem;
+  width: 1.8rem;
   height: 0.8rem;
-  font-size: 0.4rem;
+  font-size: 0.35rem;
   color: #fff;
   border-radius: 0.13333333rem;
   margin-top: 0.6rem;
