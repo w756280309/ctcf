@@ -26,6 +26,7 @@ php-cs-fixer.phar
 
 params-local.php
 main-local.php
+session-local.php
 
 /*/web/log.php
 
