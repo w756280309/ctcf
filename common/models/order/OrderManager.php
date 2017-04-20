@@ -365,6 +365,11 @@ class OrderManager
             OnlineOrder::updateAll(["yield_rate" => $rate], ["online_pid" => $loan->id, "uid" => $user->id, "status" => OnlineOrder::STATUS_SUCCESS]);
         }
 
+        //投标之后添加保全
+        $job = new BaoQuanQueue(['itemId' => $order->id, 'status' => BaoQuanQueue::STATUS_SUSPEND, 'itemType' => BaoQuanQueue::TYPE_LOAN_ORDER]);
+        $job->save();
+
+
         //投标成功，向用户发送短信
         $message = [
             $user->real_name,

@@ -9,6 +9,7 @@ use common\models\coupon\UserCoupon;
 use common\models\draw\DrawManager;
 use common\models\epay\EpayUser;
 use common\models\mall\ThirdPartyConnect;
+use common\models\order\BaoQuanQueue;
 use common\models\order\OnlineOrder;
 use common\models\order\OnlineFangkuan;
 use common\models\order\OnlineRepaymentPlan;
@@ -893,6 +894,38 @@ COUPON;
             urldecode('')
         );
         echo $url . PHP_EOL;
+    }
+
+    /**
+     * 更新未计息标的的保全队列
+     * php yii data/baoquan 1
+     */
+    public function actionBaoquan($run = false)
+    {
+        $orderTable = OnlineOrder::tableName();
+        $loanTable = OnlineProduct::tableName();
+        $orders = OnlineOrder::find()
+            ->innerJoin(OnlineProduct::tableName(), "$orderTable.online_pid = $loanTable.id")
+            ->where(['in', "$loanTable.status", [OnlineProduct::STATUS_NOW, OnlineProduct::STATUS_FULL, OnlineProduct::STATUS_FOUND]])
+            ->andWhere(["$orderTable.status" => OnlineOrder::STATUS_SUCCESS])
+            ->all();
+        $this->stdout('总共找到　'. count($orders) . ' 条未计息的成功订单' . PHP_EOL);
+        $successCount = $errorCount = 0;
+        if (!$run) {
+            exit(1);
+        }
+        foreach ($orders as $order) {
+            //投标之后添加保全
+            $job = new BaoQuanQueue(['itemId' => $order->id, 'status' => BaoQuanQueue::STATUS_SUSPEND, 'itemType' => BaoQuanQueue::TYPE_LOAN_ORDER]);
+            if ($job->save()) {
+                $this->stdout('订单'. $order->id.'　添加保全队列'.PHP_EOL);
+                $successCount ++;
+            } else {
+                $this->stdout('订单'. $order->id.'　失败'.PHP_EOL);
+                $errorCount ++;
+            }
+        }
+        $this->stdout("成功数 {$successCount}, 失败数 {$errorCount}".PHP_EOL);
     }
 
 }
