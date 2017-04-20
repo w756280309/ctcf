@@ -132,7 +132,7 @@ class NotifyController extends Controller
         }
         $translation = Yii::$app->db->beginTransaction();
         try {
-            if ($res) {
+            if ($res === 'true') {
                 $order->status = PointOrder::STATUS_SUCCESS;
                 $res = $order->save();
                 if (!$res) {
