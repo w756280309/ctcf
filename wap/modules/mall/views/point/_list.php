@@ -30,7 +30,7 @@ foreach ($points as $point) {
         $isIn = true;
     } elseif(PointRecord::TYPE_POINT_ORDER_FAIL === $point['ref_type']) {
         $message = '兑换失败';
-        $isIn = false;
+        $isIn = true;
     } else {
         $isIn = false;
         $message = '兑换商品';
