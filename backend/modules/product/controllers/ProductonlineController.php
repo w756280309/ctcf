@@ -8,7 +8,6 @@ use common\lib\product\ProductProcessor;
 use common\models\adminuser\AdminLog;
 use common\models\booking\BookingLog;
 use common\models\contract\ContractTemplate;
-use common\models\order\BaoQuanQueue;
 use common\models\order\OnlineOrder;
 use common\models\order\OnlineRepaymentPlan;
 use common\models\payment\Repayment;
@@ -641,10 +640,6 @@ class ProductonlineController extends BaseController
 
                     return ['result' => '0', 'message' => $message];
                 }
-
-                //确认计息完成之后将标的添加至保全队列
-                $job = new BaoQuanQueue(['itemId' => $id, 'status' => BaoQuanQueue::STATUS_SUSPEND, 'itemType' => BaoQuanQueue::TYPE_LOAN]);
-                $job->save();
 
                 //确认计息之后给用户赠送积分
                 try {

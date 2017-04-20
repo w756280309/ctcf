@@ -7,6 +7,7 @@ use common\models\product\OnlineProduct;
 use common\models\user\MoneyRecord;
 use common\models\user\UserAccount;
 use common\models\user\User;
+use EBaoQuan\Client;
 use P2pl\OrderTxInterface;
 use Yii;
 use yii\behaviors\TimestampBehavior;
@@ -45,6 +46,8 @@ class OnlineOrder extends ActiveRecord implements OrderTxInterface
     public $order_return;
     public $drawpwd;
     private $_user = false;
+
+    private $baoquanＤownloadLink;//保全合同下载链接
 
     /**
      * {@inheritdoc}
@@ -363,5 +366,22 @@ class OnlineOrder extends ActiveRecord implements OrderTxInterface
             return false;
         }
         return $this->sn === $order->sn;
+    }
+
+    //获取保全合同下载链接
+    public function getBaoquanDownloadLink()
+    {
+        if (is_null($this->baoquanＤownloadLink)) {
+            $baoQuan = EbaoQuan::find()->where([
+                'itemType' => EbaoQuan::ITEM_TYPE_LOAN_ORDER,
+                'type' => EbaoQuan::TYPE_LOAN,
+                'success' => 1,
+                'uid' => $this->uid,
+                'itemId' => $this->id,
+            ])->one();
+
+            $this->baoquanＤownloadLink = is_null($baoQuan) ? null : Client::contractFileDownload($baoQuan);
+        }
+        return $this->baoquanＤownloadLink;
     }
 }

@@ -57,19 +57,21 @@ class OnlineorderController extends BaseController
         if (!empty($mobile)) {
             $data->andFilterWhere(['like', "$u.safeMobile", SecurityUtils::encrypt($mobile)]);
         }
-
-        //正常显示详情页
-        $pages = new Pagination(['totalCount' => $data->count(), 'pageSize' => '10']);
-        $model = $data->offset($pages->offset)->limit($pages->limit)->orderBy('id desc')->all();
+        $dataProvider = new ActiveDataProvider([
+            'query' => $data,
+            'pagination' => [
+                'pageSize' => 15,
+            ]
+        ]);
 
         return $this->render('liebiao', [
-                    'model' => $model,
-                    'pages' => $pages,
-                    'moneyTotal' => $moneyTotal,
-                    'shengyuKetou' => $shengyuKetou,
-                    'renshu' => $count,
-                    'mujuanTime' => $mujuanTime,
-                    'id' => $id,
+            'dataProvider' => $dataProvider,
+            'moneyTotal' => $moneyTotal,
+            'shengyuKetou' => $shengyuKetou,
+            'renshu' => $count,
+            'mujuanTime' => $mujuanTime,
+            'id' => $id,
+            'loan' => $biao,
         ]);
     }
 
