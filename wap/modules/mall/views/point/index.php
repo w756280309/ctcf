@@ -37,7 +37,7 @@ $this->backUrl = $backUrl ? $backUrl : '/?_mark='.time();
         </li>
     </ul>
 </div>
-<!--<a href="/mall/point/prize-list" class="shoprecord">-->
-<a href="/mall/portal/record" class="shoprecord">
+<a href="/mall/point/prize-list" class="shoprecord">
+<!--<a href="/mall/portal/record" class="shoprecord">-->
     兑换记录
 </a>

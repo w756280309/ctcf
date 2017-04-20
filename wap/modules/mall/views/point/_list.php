@@ -28,7 +28,10 @@ foreach ($points as $point) {
     } elseif (PointRecord::TYPE_PROMO === $point['ref_type']) {
         $message = '活动获得';
         $isIn = true;
-    }else {
+    } elseif(PointRecord::TYPE_POINT_ORDER_FAIL === $point['ref_type']) {
+        $message = '兑换失败';
+        $isIn = false;
+    } else {
         $isIn = false;
         $message = '兑换商品';
     }
