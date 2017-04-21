@@ -10,6 +10,8 @@ class Code extends ActiveRecord
     const TYPE_COUPON = 1;
     const TYPE_GOODS = 2;
 
+    const REF_TYPE_HISTORY_CODE = 'virtual_card.code';
+
     public function rules()
     {
         return [
