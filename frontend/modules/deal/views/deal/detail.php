@@ -11,7 +11,7 @@ $this->title = '项目详情';
 $this->registerJsFile(ASSETS_BASE_URI.'js/detail.js?v=161227');
 $this->registerCssFile(ASSETS_BASE_URI.'css/deal/buy.css');
 $this->registerCssFile(ASSETS_BASE_URI.'css/deal/deallist.css?v=161124');
-$this->registerCssFile(ASSETS_BASE_URI.'css/deal/detail.css?v=170313');
+$this->registerCssFile(ASSETS_BASE_URI.'css/deal/detail.css?v=170414');
 $this->registerCssFile(ASSETS_BASE_URI.'css/pagination.css');
 $this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/chargedeposit.css');
 
@@ -257,7 +257,7 @@ $this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/chargedeposit.css');
 </div>
 
 <!--mask弹框-->
-<div class="mask"></div>
+<div class="detail-mask"></div>
 <!--确认弹框-->
 <div class="confirmBox">
     <div class="confirmBox-title">提示</div>
