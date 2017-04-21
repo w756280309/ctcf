@@ -76,7 +76,6 @@ $this->registerJsFile('/vendor/kindeditor/4.1.11/plugins/code/prettify.js', ['de
 
             <div class="form-actions">
                 <button type="button" class="btn blue" id="submit_btn"><i class="icon-ok"></i> 提交</button>
-                <>
                 <a href="/offline/offline/loanlist" class="btn">取消</a>
             </div>
             <?php $form->end(); ?>

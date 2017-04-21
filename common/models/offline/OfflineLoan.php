@@ -48,7 +48,7 @@ class OfflineLoan extends ActiveRecord
             'title' => '产品名称',
             'expires' => '产品期限',
             'unit' => '期限单位',
-            'sn' => '序号',
+            'sn' => '标的序号',
             'yield_rate' => '利率',
             'jixi_time' => '起息日',
             'finish_date' => '到期日',

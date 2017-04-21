@@ -47,7 +47,7 @@ $status = Yii::$app->request->get('status');
     'tableOptions' => ['class' => 'loan_order_list table table-hover table-striped'],
     'columns' => [
         [
-            'label' => !$user instanceof OfflineUser ? '流水号' : '标的sn',
+            'label' => !$user instanceof OfflineUser ? '流水号' : '标的序号',
             'value' => function ($record){
 
                 return !$record instanceof OfflineOrder ? $record->sn : $record->loan->sn;
