@@ -78,6 +78,11 @@ class OfflineOrder extends ActiveRecord
         return $this->hasOne(OfflineLoan::className(), ['id' => 'loan_id']);
     }
 
+    public function getOrder_money()
+    {
+        return $this->money;
+    }
+
     public function getUser()
     {
         return $this->hasOne(OfflineUser::className(), ['id' => 'user_id']);

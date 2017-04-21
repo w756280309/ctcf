@@ -60,4 +60,14 @@ class OfflineUser extends ActiveRecord
             ->asArray()
             ->all();
     }
+    /**
+     * 获取线下用户
+     */
+    public function getInvestment_balance()
+    {
+        $investment_balance = OfflineOrder::find()
+            ->where(['user_id' => $this->id , 'isDeleted' => false])
+            ->sum('money');
+        return $investment_balance;
+    }
 }

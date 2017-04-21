@@ -60,6 +60,25 @@ class OfflineController extends BaseController
     }
 
     /**
+     * 线下标的投资明细
+     */
+    public function actionOrders($id)
+    {
+        $query = OfflineOrder::find()->where(['user_id' => $id, 'isDeleted' => false])->orderBy(['orderDate' => SORT_DESC, 'id' => SORT_DESC]);
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => [
+                'pageSize' => 10,
+            ],
+        ]);
+        $user = $this->findOr404(OfflineUser::class , $id);
+        return $this->renderFile('@backend/modules/order/views/onlineorder/listt.php', [
+            'dataProvider' => $dataProvider,
+            'user' => $user,
+        ]);
+    }
+
+    /**
      * 线下会员详情页-积分流水
      */
     public function actionPoints($id)
