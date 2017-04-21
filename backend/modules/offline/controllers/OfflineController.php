@@ -186,7 +186,7 @@ class OfflineController extends BaseController
         $model = new OfflineOrder();
         $affiliator = Affiliator::find()->where(['name' => $order[0]])->one();
         $loan = OfflineLoan::find()->where(['sn' => $order[2]])->one();
-        $user = OfflineUser::find()->where(['idCard' => $order[4]])->one();
+        $user = OfflineUser::find()->where(['idCard' => $order[5]])->one();
         $affiliator_id = null;
         if (null !== $affiliator) {
             $affiliator_id = $affiliator->id;
