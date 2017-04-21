@@ -7,7 +7,7 @@ $hostInfo = \Yii::$app->request->hostInfo;
 ?>
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/wenjfbase.css">
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/activeComHeader.css">
-<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/qiandao/css/index.css?v=20170401">
+<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/qiandao/css/index.css?v=201704021">
 <script src="<?= FE_BASE_URI ?>libs/lib.flexible3.js"></script>
 <script src="<?= ASSETS_BASE_URI ?>js/common.js"></script>
 
@@ -89,6 +89,15 @@ $hostInfo = \Yii::$app->request->hostInfo;
     </div>
 </div>
 
+<!--添加签到蒙层-->
+<div class="mask"></div>
+<div class="pomp">
+    <img src="<?= FE_BASE_URI ?>wap/qiandao/images/pomp-header.png" alt="">
+    <p class="pomp-time"><i></i>您已连续签到<span></span>天<i></i></p>
+    <p class="pomp-points">获得<span id="pomp-point"></span>积分<i id="pomp-coupon"></i></p>
+    <a href="javascript:void(0);">确认</a>
+</div>
+
 <script>
     function progressBar(jindu) {
         if (jindu == 0) {
@@ -115,24 +124,13 @@ $hostInfo = \Yii::$app->request->hostInfo;
             allowClick = false;
 
             var xhr = $.get('/user/checkin/check', function(data) {
-                var streak = data.streak;
-                var reward = '';
-
-                if (data.points) {
-                    reward += data.points+'积分';
-                }
-
+                $('.pomp-time span').html(data.streak);
+                $('#pomp-point').html(data.points);
                 if (data.coupon) {
-                    var coupon = WDJF.numberFormat(data.coupon, true);
-                    reward += reward ? '和'+coupon : coupon;
-                    reward += '元代金券';
+                    $('#pomp-coupon').html('和<span>'+WDJF.numberFormat(data.coupon, true)+'</span>元代金券');
                 }
-
-                var msg = '您已连续签到'+streak+'天, 获得'+reward;
-
-                toastCenter(msg, function () {
-                    window.location.href = '<?= $hostInfo ?>'+'/user/checkin?_mark='+'<?= time() ?>';
-                });
+                WDJF.touchmove(false);
+                $('.mask, .pomp').show();
             });
 
             xhr.fail(function(jqXHR) {
@@ -144,7 +142,15 @@ $hostInfo = \Yii::$app->request->hostInfo;
                 toastCenter(msg);
             });
         });
-
+        /*添加点击刷新页面*/
+        $('.pomp').on('click', function(event) {
+            event.stopPropagation();
+        });
+        $('.pomp a, .mask').on('click', function(event) {
+            event.stopPropagation();
+            WDJF.touchmove(true);
+            window.location.href = '<?= $hostInfo ?>'+'/user/checkin?_mark='+'<?= time() ?>';
+        });
         forceReload_V2();
     });
 </script>

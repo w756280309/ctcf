@@ -1,6 +1,9 @@
 body {
   background-color: #ddd;
 }
+i {
+  font-style: normal;
+}
 .head_part {
   height: 3.56rem;
   background: url("../images/top_bg.png") no-repeat;
@@ -171,4 +174,77 @@ body {
   padding-left:0.533rem;
   padding-right:0.533rem;
   color: #666;
+}
+.mask {
+  display: none;
+}
+.pomp {
+  width:6.4rem;
+  height:5.28rem;
+  position: fixed;
+  top:50%;
+  left:50%;
+  display: none;
+  -webkit-border-radius:0.26666667rem;
+  -moz-border-radius:0.26666667rem;
+  border-radius:0.26666667rem;
+  z-index: 1000001;/*根据实际情况设定*/
+  background-color: #fff;
+  transform: translate(-50% ,-50%);
+  -webkit-transform: translate(-50% ,-50%);
+  -moz-transform: translate(-50% ,-50%);
+  /*弹框内部样式的添加*/
+  text-align: center;
+  padding:0.9333333rem 0.666667rem 0;
+}
+.pomp img{
+  width:7.3866667rem;
+  position: absolute;
+  top:-0.45rem;
+  left:-0.49333333rem;
+}
+.pomp-time {
+  line-height: 1.5rem;
+  color: #b9622b;
+  font-size: 0.4rem;
+  position: relative;
+}
+.pomp-time i:first-child {
+  content: '';
+  width:0.85333333rem;
+  background-color: #b9622b;
+  height:1px;
+  display: block;
+  position: absolute;
+  top: 0.72rem;
+  left:0;
+}
+.pomp-time i:last-child {
+  content: '';
+  width:0.85333333rem;
+  background-color: #b9622b;
+  height:1px;
+  display: block;
+  position: absolute;
+  top: 0.72rem;
+  right: 0;
+}
+.pomp-points {
+  color: #666666;
+  font-size: 0.4rem;
+}
+.pomp-points span {
+  font-size: 0.64rem;
+  color: #f44336;
+}
+.pomp a {
+  width:100%;
+  line-height: 0.9333333rem;
+  background-color: #f44336;
+  text-align: center;
+  color: #fff;
+  display: block;
+  margin: 0.4533333rem auto 0;
+  font-size: 0.4533333rem;
+  border-radius: 0.1333333333rem;
 }
