@@ -47,7 +47,7 @@ $status = Yii::$app->request->get('status');
     'tableOptions' => ['class' => 'loan_order_list table table-hover table-striped'],
     'columns' => [
         [
-            'label' => '流水号',
+            'label' => !$user instanceof OfflineUser ? '流水号' : '标的sn',
             'value' => function ($record){
 
                 return !$record instanceof OfflineOrder ? $record->sn : $record->loan->sn;
@@ -124,7 +124,7 @@ HTML;
             }
         ],
         [
-            'label' => '投资金额',
+            'label' => !$user instanceof OfflineUser ? '投资金额' : '投资金额(万)',
             'value' => function ($record){
                 return isset($record->order_money) ? number_format($record->order_money, 2) :$record->order_money();
             },

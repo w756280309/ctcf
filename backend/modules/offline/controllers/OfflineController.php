@@ -61,7 +61,6 @@ class OfflineController extends BaseController
                         if (empty(array_filter($order))) {
                             continue;
                         }
-
                         //初始化model，寻找行号，使用batchInsert插入
                         $neworder = $this->initModel($order);
 
@@ -74,7 +73,7 @@ class OfflineController extends BaseController
                         } else {
                             $error_index = $key + 1;
                             if ($neworder->hasErrors('loan_id')) {
-                                throw new \Exception('EXcel表中SN未找到对应标的,行号' . $error_index . ',请在后台添加标的' . $order[1]);
+                                throw new \Exception('Excel表中SN未找到对应标的,行号' . $error_index . ',请在后台添加标的: ' . $order[2]);
                             }
                             if ($neworder->hasErrors('affiliator_id')) {
                                 throw new \Exception('文件内容有错,行号' . $error_index . ',请在后台添加分销商' . $order[0]);
@@ -163,11 +162,11 @@ class OfflineController extends BaseController
             throw new \Exception('该excel文件行数超出' . $max_read_line . '行');
         }
         //将J,K行日期转为php的'Y-m-d'
-        $j = 'J' . $row;
         $k = 'K' . $row;
+        $l = 'L' . $row;
         //excel在‘2016/7/12’识别该列时，日期格式的保持不变，非日期格式的识别为'07-12-06'，或者识别成float(42258),使用下面的是都可以转换成'2016-07-12'
-        $currentSheet->getStyle("J1:$j")->getNumberFormat()->setFormatCode('yyyy-mm-dd');
         $currentSheet->getStyle("K1:$k")->getNumberFormat()->setFormatCode('yyyy-mm-dd');
+        $currentSheet->getStyle("L1:$l")->getNumberFormat()->setFormatCode('yyyy-mm-dd');
         $content = $currentSheet->toArray('', true, true);
         return $content;
     }
@@ -186,7 +185,7 @@ class OfflineController extends BaseController
         }, $order);
         $model = new OfflineOrder();
         $affiliator = Affiliator::find()->where(['name' => $order[0]])->one();
-        $loan = OfflineLoan::find()->where(['sn' => $order[1]])->one();
+        $loan = OfflineLoan::find()->where(['sn' => $order[2]])->one();
         $user = OfflineUser::find()->where(['idCard' => $order[4]])->one();
         $affiliator_id = null;
         if (null !== $affiliator) {
@@ -196,21 +195,21 @@ class OfflineController extends BaseController
         if (null !== $loan) {
             $loan_id = $loan->id;
         } else {
-            $model->addError('loan_id', 'EXcel表中SN未找到对应标的');
+            $model->addError('loan_id', 'Excel表中SN未找到对应标的');
         }
 
         if (null !== $user) {
             $user_id = $user->id;
             //手机号应是始终为最后导入的那个
-            if ($user->mobile !== $order[5]) {
-                $user->mobile = $order[5];
+            if ($user->mobile !== $order[6]) {
+                $user->mobile = $order[6];
                 $user->save();
             }
         } else {
             $user = new OfflineUser();
-            $user->realName = $order[3];
-            $user->idCard = $order[4];
-            $user->mobile = $order[5];
+            $user->realName = $order[4];
+            $user->idCard = $order[5];
+            $user->mobile = $order[6];
             $user->save();
             $user_id = $user->id;
         }
@@ -218,13 +217,13 @@ class OfflineController extends BaseController
         $model->affiliator_id = $affiliator_id;
         $model->loan_id = $loan_id;
         $model->user_id = $user_id;
-        $model->idCard = $order[4];
-        $model->mobile = $order[5];
-        $model->accBankName = $order[6];
-        $model->bankCardNo = $order[7];
-        $model->money = $order[8];
-        $model->orderDate = $order[9];
-        $model->valueDate = $order[10];
+        $model->idCard = $order[5];
+        $model->mobile = $order[6];
+        $model->accBankName = $order[7];
+        $model->bankCardNo = $order[8];
+        $model->money = $order[9];
+        $model->orderDate = $order[10];
+        $model->valueDate = $order[11];
         $model->created_at = time();
         $model->isDeleted = false;
         return $model;
@@ -476,6 +475,7 @@ class OfflineController extends BaseController
         if ($request['id']) {
             $query->andFilterWhere(['id' => $request['id']]);
         }
+        $query->orderBy(['id' => SORT_DESC, 'sn' => SORT_DESC]);
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
             'pagination' => [

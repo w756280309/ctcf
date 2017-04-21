@@ -29,9 +29,10 @@ class OfflineLoan extends ActiveRecord
         return [
             ['sn','unique','message'=>'编号已占用'],
             ['sn', 'string', 'max' => 32],
-            [['sn', 'title', 'expires', 'unit'], 'required'],
+            [['sn', 'title', 'expires', 'unit' ,'yield_rate'], 'required'],
             ['jixi_time','required', 'on' => ['confirm', 'edit']],
             ['title', 'string', 'max' => 255],
+            ['expires','number'],
             ['finish_date', 'string', 'max' => 255],
             ['yield_rate', 'string', 'max' => 255],
             ['jixi_time', 'string', 'max' => 255],

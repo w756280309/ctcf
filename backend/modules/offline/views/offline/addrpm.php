@@ -48,6 +48,7 @@ $this->registerJsFile('/vendor/kindeditor/4.1.11/plugins/code/prettify.js', ['de
                 'method' => 'post',
                 'options' => ['class' => 'form-horizontal form-bordered form-label-stripped']
             ]); ?>
+            <div class="control-group"></div>
             <div class="control-group">
                 <label class="control-label">分期期数</label>
                 <div class="controls">
@@ -69,12 +70,14 @@ $this->registerJsFile('/vendor/kindeditor/4.1.11/plugins/code/prettify.js', ['de
                         'value' => $dueDate ? $dueDate : '',
                     ])
                     ?>
+                    <span class="red">输入的日期以英文逗号隔开 "," 例如  2017-05-01,2017-06-01,2017-07-01</span>
                 </div>
             </div>
 
             <div class="form-actions">
                 <button type="button" class="btn blue" id="submit_btn"><i class="icon-ok"></i> 提交</button>
-                <a href="/offline/offline/loanlist?>" class="btn">取消</a>
+                <>
+                <a href="/offline/offline/loanlist" class="btn">取消</a>
             </div>
             <?php $form->end(); ?>
             <!-- END FORM-->

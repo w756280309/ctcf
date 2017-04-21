@@ -75,7 +75,7 @@ $this->registerJsFile('/vendor/kindeditor/4.1.11/plugins/code/prettify.js', ['de
             <div class="control-group">
                 <label class="control-label">期限单位</label>
                 <div class="controls">
-                    <?= $form->field($model, 'unit',['template' => '{input}', 'inputOptions' => ['autocomplete' => "off", 'class' => 'm-wrap span4', 'placeholder' => '']])->dropDownList(['天'=>'天','个月'=>'个月','年'=>'年'],['prompt'=>'请选择','style'=>'width:120px']) ?>
+                    <?= $form->field($model, 'unit',['template' => '{input}', 'inputOptions' => ['autocomplete' => "off", 'class' => 'm-wrap span4', 'placeholder' => '']])->dropDownList(['天'=>'天','个月'=>'个月'],['prompt'=>'请选择','style'=>'width:120px']) ?>
                     <?= $form->field($model, 'unit', ['template' => '{error}']); ?>
                 </div>
             </div>
