@@ -3,23 +3,20 @@
 namespace Queue;
 
 
+use common\models\queue\Job;
 use common\models\queue\QueueTask;
 
 /**
  * 数据库队列
- *
- * 注意：
- * 1. 队列的command命令带参数，参数需要使用base64编码。如需要用yii的queue/identity-notify 命令处理开户失败通知消息， 那么 command = "queue/identity-notify ".base64_encode(json_encode(['realName' => '姓名', 'idCard' => '身份证', 'userId' => '用户ID', 'message' => '错误消息']))
- *
  *
  * Class DbQueue
  * @package Queue
  */
 class DbQueue
 {
-    public function push(QueueTask $queueTask)
+    public function pub(Job $job)
     {
-        return $queueTask->save();
+        return (QueueTask::initNew($job))->save(false);
     }
 
     //获取需要运行的队列

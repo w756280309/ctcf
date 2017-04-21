@@ -13,7 +13,6 @@ class RechargeController extends Controller
 {
     public function actionCheck()
     {
-        // TODO 先查联动的记录
         $records = RechargeRecord::find()
             ->where(['lastCronCheckTime' => null])
             ->orWhere(['<', 'lastCronCheckTime', time() - 5 * 60])   //查询间隔为五分钟
@@ -31,16 +30,6 @@ class RechargeController extends Controller
                     $acc_ser->confirmRecharge($rc);
                 } elseif ('3' === $resp->get('tran_state')) {
                     $rc->status = RechargeRecord::STATUS_FAULT;
-                    $user = User::findOne($rc->uid);
-                    if (!is_null($user)) {
-                        $command = 'queue/recharge-notify '. base64_encode(json_encode([
-                                'userId' => $user->id,
-                                'rechargeSn' => $rc->sn,
-                                'message' => 'ret_stats:'.$resp->get('tran_state').';ret_msg:'.$resp->get('ret_msg'),
-                                'dateTime' => date('Y-m-d H:i:s', $rc->created_at),
-                            ]));
-                        \Yii::$container->get('db_queue')->push(QueueTask::createNewTask('recharge_fail_notify', $command));
-                    }
                 }
             }
 

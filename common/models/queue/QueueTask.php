@@ -10,9 +10,8 @@ use Yii;
  * This is the model class for table "queue_task".
  *
  * @property integer    $id
- * @property string     $sn             每个消息核心参数(时间取毫秒)进行哈希，保证没有重复消息
- * @property string     $topic          消息标签
- * @property string     $command        消息指令, 如果需要参数，要带参数，如 "php yii math/add 1 1"
+ * @property string     $runnable       job名称，默认存类名
+ * @property string     $params         参数，默认存json
  * @property integer    $status         0，等待运行;1，处理中；2，处理失败；9，处理成功
  * @property integer    $weight         权重，默认1
  * @property integer    $runCount       已处理次数
@@ -29,8 +28,6 @@ class QueueTask extends \yii\db\ActiveRecord
     const STATUS_FAIL = 2;      //处理失败
     const STATUS_SUCCESS = 9;   //处理成功
 
-
-
     /**
      * @inheritdoc
      */
@@ -39,53 +36,17 @@ class QueueTask extends \yii\db\ActiveRecord
         return 'queue_task';
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function rules()
-    {
-        return [
-            [['status', 'weight', 'runCount', 'runLimit'], 'integer'],
-            [['lastRunTime', 'createTime', 'finishTime', 'nextRunTime'], 'safe'],
-            [['sn'], 'string', 'max' => 255],
-            [['command'], 'string'],
-            [['topic'], 'string', 'max' => 32],
-            ['sn', 'unique'],
-        ];
-    }
-
-    public static function createNewTask($topic, $command, $runLimit = 20, $weight = 1)
+    public static function initNew(Job $job, $runLimit = 1, $weight = 1)
     {
         $queueTask = new self([
-            'topic' => $topic,
-            'command' => $command,
+            'runnable' => get_class($job),
+            'params' => json_encode($job->getParams()),
             'weight' => $weight,
             'createTime' => date('Y-m-d H:i:s'),
             'status' => self::STATUS_PENDING,
             'runLimit' => $runLimit,
         ]);
-        $queueTask->sn = md5(json_encode([
-            'time' => microtime(true),
-            'topic' => $queueTask->topic,
-            'command' => $queueTask->command,
-            'createTime' => $queueTask->createTime,
-        ]));
 
         return $queueTask;
-    }
-
-    public function getTopic()
-    {
-        return $this->getAttribute('topic');
-    }
-
-    public function getCommand()
-    {
-        return $this->getAttribute('command');
-    }
-
-    public function getSn()
-    {
-        return $this->getAttribute('sn');
     }
 }

@@ -40,14 +40,6 @@ class IdentityVerifyAction extends Action
                         'message' => '您已成功开户'
                     ];
                 } catch (\Exception $ex) {
-                    $command = 'queue/identity-notify '. base64_encode(json_encode([
-                            'userId' => $user->id,
-                            'idCard' => $model->idcard,
-                            'realName' => $model->real_name,
-                            'message' => $ex->getMessage(),
-                            'dateTime' => date('Y-m-d H:i:s'),
-                        ]));
-                    \Yii::$container->get('db_queue')->push(QueueTask::createNewTask('identity_fail_notify', $command));
                     return [
                         'code' => 1,
                         'message' => 1 === $ex->getCode() ? $ex->getMessage() : '系统繁忙，请稍后重试！',
