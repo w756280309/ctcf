@@ -231,12 +231,10 @@ function addToken() {
 }
 
 function forceReload_V2() {
-    if(navigator.userAgent.indexOf('Safari') > -1) {
-        window.addEventListener('pageshow', function (event) {
-            if(event.persisted) {
-                document.body.style.display = 'none';
-                window.location.reload();
-            }
-        });
-    }
+    window.addEventListener('pageshow', function (event) {
+        if(event.persisted) {
+            document.body.style.display = 'none';
+            window.location.reload();
+        }
+    });
 }
