@@ -419,7 +419,6 @@ class ProductonlineController extends BaseController
             ->addSelect(['isrecommended' => 'if(`online_status`=1 && `isPrivate`=0, `recommendTime`, 0)'])
             ->addSelect(['effect_jixi_time' => 'if(`is_jixi`=1, `jixi_time`, 0)'])
             ->addSelect(['product_status' => "(case $op.`status` when 4 then 7 when 7 then 4 else $op.`status` end)"])
-            ->joinWith('fangkuan')
             ->where(['del_status' => 0]);
         //筛选标的sn
         if (!empty($request['sn'])) {
