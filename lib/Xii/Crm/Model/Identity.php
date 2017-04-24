@@ -6,28 +6,28 @@ namespace Xii\Crm\Model;
 use yii\db\ActiveRecord;
 
 /**
- * Class Contact
+ * Class Identity
  * @package Xii\Crm\Model
  *
  * @property int    $id
  * @property int    $account_id
  * @property int    $creator_id
- * @property string $type   电话类型 mobile手机号 landline 固话
- * @property string $obfsNumber 混淆后的号码
- * @property string $encryptedNumber    加密后的手机号
  * @property string $createTime         创建时间
  * @property string $updateTime         更新时间
+ * @property string $birthDate          生日
+ * @property string $birthYear          出生年份
+ * @property string $gender             性别 null;f:女性;m:男性
+ * @property string $obfsName           混淆后的姓名
+ * @property string $encryptedName      加密后的姓名
+ * @property string $obfsIdNo           混淆后的身份证
+ * @property string $encryptedIdNo      加密后的身份证
+ *
  */
-class Contact extends ActiveRecord
+class Identity extends ActiveRecord
 {
-    const TYPE_MOBILE = 'mobile';
-    const TYPE_LANDLINE = 'landline';
-
-    public $number;
-
     public static function tableName()
     {
-        return 'crm_contact';
+        return 'crm_identity';
     }
 
     public function behaviors()
@@ -36,14 +36,6 @@ class Contact extends ActiveRecord
             'datetime' => [
                 'class' => DateTimeBehavior::class,
             ],
-        ];
-    }
-
-    public function attributeLabels()
-    {
-        return [
-            'type' => '账号类型',
-            'number' => '号码',
         ];
     }
 }
