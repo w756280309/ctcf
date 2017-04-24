@@ -140,9 +140,9 @@ HTML;
             'headerOptions' => ['class' => 'money'],
         ],
         [
-            'label' => '投资时间',
+            'label' => !$user instanceof OfflineUser ? '投资时间' : '认购日期',
             'value' => function ($record){
-                return date('Y-m-d H:i:s', $record->created_at);
+                return $record->getOrderDate();
             }
         ],
         [

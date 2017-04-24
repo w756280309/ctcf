@@ -83,6 +83,14 @@ class OfflineOrder extends ActiveRecord
         return $this->money;
     }
 
+    /**
+     * 获取认购日期
+     */
+    public function getOrderDate()
+    {
+        return $this->orderDate;
+    }
+
     public function getUser()
     {
         return $this->hasOne(OfflineUser::className(), ['id' => 'user_id']);
