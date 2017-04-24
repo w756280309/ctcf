@@ -95,5 +95,8 @@ return [
         'o2o' => [
             'class' => 'backend\modules\o2o\Module',
         ],
+        'crm' => [
+            'class' => 'Xii\Crm\Module',
+        ],
     ],
 ];
