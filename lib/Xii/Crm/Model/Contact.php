@@ -3,6 +3,7 @@
 namespace Xii\Crm\Model;
 
 
+use common\utils\SecurityUtils;
 use yii\db\ActiveRecord;
 
 /**
@@ -45,5 +46,14 @@ class Contact extends ActiveRecord
             'type' => '账号类型',
             'number' => '号码',
         ];
+    }
+
+    public function getNumber()
+    {
+        if (!$this->number) {
+            $this->number = SecurityUtils::decrypt($this->encryptedNumber);
+        }
+
+        return $this->number;
     }
 }
