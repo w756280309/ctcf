@@ -1,6 +1,6 @@
 <?php
 
-namespace Xii\Command;
+namespace Xii\Crm\Command;
 
 use common\models\user\User;
 use Xii\Crm\Model\Account;
