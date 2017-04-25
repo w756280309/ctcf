@@ -8,6 +8,7 @@ use common\utils\SecurityUtils;
 use common\utils\StringUtils;
 use Xii\Crm\Model\Account;
 use Xii\Crm\Model\Contact;
+use Xii\Crm\Model\Identity;
 use Xii\Crm\Model\IdentityForm;
 use yii\filters\AccessControl;
 use yii\web\Controller;
@@ -33,7 +34,6 @@ class IdentityController extends Controller
     public function actionCreate()
     {
         $model = new IdentityForm();
-        $model->numberType = Contact::TYPE_MOBILE;
 
         if ($model->load(\Yii::$app->request->post()) && $model->validate()) {
             $contact = Contact::fetchOneByNumber($model->number);
@@ -54,7 +54,7 @@ class IdentityController extends Controller
                     if ($model->numberType === Contact::TYPE_MOBILE) {
                         $obfsNumber = StringUtils::obfsMobileNumber($model->number);
                     } else {
-                        $obfsNumber = substr_replace($model->number, '****', strpos($model->number, '-') + 3, 4);
+                        $obfsNumber = StringUtils::obfsLandlineNumber($model->number);
                     }
 
                     $contact = new Contact([
@@ -68,6 +68,14 @@ class IdentityController extends Controller
 
                     $account->primaryContact_id = $contact->id;
                     $account->save(false);
+
+                    $identity = new Identity([
+                        'account_id' => $account->id,
+                        'creator_id' => $account->creator_id,
+                        'obfsName' => StringUtils::obfsName($model->name),
+                        'encryptedName' => SecurityUtils::encrypt($model->name),
+                    ]);
+                    $identity->save(false);
 
                     $transaction->commit();
 

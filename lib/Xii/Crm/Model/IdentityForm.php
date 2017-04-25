@@ -31,6 +31,22 @@ class IdentityForm extends Model
         ];
     }
 
+    public function beforeValidate()
+    {
+        if (
+            preg_match('/^\d{8}$/', $this->number)
+            || preg_match('/^\d{7}$/', $this->number)
+        ) {
+            $this->numberType = Contact::TYPE_LANDLINE;
+            $this->number = '0577-'.$this->number;
+        } elseif(substr($this->number, 0, 1) === '0') {
+            $this->numberType = Contact::TYPE_LANDLINE;
+        } else {
+            $this->numberType = Contact::TYPE_MOBILE;
+        }
+        return parent::beforeValidate();
+    }
+
     public function validateName($attribute, $params)
     {
         if (!preg_match('/^[\x{4e00}-\x{9fa5}]+$/u', $this->name)) {
@@ -42,13 +58,8 @@ class IdentityForm extends Model
     {
         if($this->numberType === Contact::TYPE_LANDLINE) {
             if (
-                preg_match('/^\d{8}$/', $this->number)
-                || preg_match('/^\d{7}$/', $this->number)
-            ) {
-                $this->number = '0577-'.$this->number;
-            }
-            if (
                 !preg_match('/^\d{3}-\d{8}$/', $this->number)
+                && !preg_match('/^\d{3}-\d{7}$/', $this->number)
                 && !preg_match('/^\d{4}-\d{8}$/', $this->number)
                 && !preg_match('/^\d{4}-\d{7}$/', $this->number)
             ) {
@@ -61,7 +72,6 @@ class IdentityForm extends Model
     {
         return [
             'name'  => '姓名',
-            'numberType' => '号码类型',
             'number' => '号码',
             'content' => '备注',
         ];

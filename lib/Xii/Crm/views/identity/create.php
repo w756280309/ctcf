@@ -12,7 +12,6 @@ $this->params['breadcrumbs'][] = ['label' => '潜客登记', 'url' => '/crm/iden
 <div class="row">
     <?php $form = \yii\widgets\ActiveForm::begin(['options' => ['id' => 'identity_form']]) ?>
     <?= $form->field($model, 'name')->textInput() ?>
-    <?= $form->field($model, 'numberType')->radioList(Contact::getTypeLabels()) ?>
     <?= $form->field($model, 'number')->textInput()->hint('手机号(188******12)或带区号的固话(0577-12****12)') ?>
     <?= \yii\helpers\Html::submitButton('添加', ['class' => 'btn btn-primary', 'id' => 'identity_submit']) ?>
 
