@@ -61,6 +61,21 @@ class P1704Controller extends Controller
     }
 
     /**
+     * 月末投资满额送礼
+     */
+    public function actionSongli($wx_share_key = null)
+    {
+        $share = null;
+
+        if (!empty($wx_share_key)) {
+            $share = Share::findOne(['shareKey' => $wx_share_key]);
+        }
+
+        return $this->render('songli', [
+            'share' => $share,
+        ]);
+    }
+    /**
      * 积分双倍金瓯永筑活动.
      */
     public function actionDoubleJinou($wx_share_key = null)

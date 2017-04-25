@@ -1,0 +1,105 @@
+.flex-content {
+  background-color: #86b740;
+}
+
+.flex-content .banner img {
+  width: 100%;
+}
+
+.flex-content .rule {
+  background: url("../img/banner_04.png") no-repeat;
+  background-size: 100% 100%;
+}
+
+.flex-content .rule ul {
+  padding: 0.13333333rem 0.53333333rem 0.8rem;
+  color: #333333;
+  font-size: 0.34666667rem;
+}
+
+.flex-content .gifts-box {
+  padding: 0 0.26666667rem;
+  background: -webkit-linear-gradient(to bottom, #a8cc5f 0, #86b740 100%);
+  background: -moz-linear-gradient(to bottom, #a8cc5f 0, #86b740 100%);
+  background: -ms-linear-gradient(to bottom, #a8cc5f 0, #86b740 100%);
+  background: -o-linear-gradient(to bottom, #a8cc5f 0, #86b740 100%);
+  background: linear-gradient(to bottom, #a8cc5f 0, #86b740 100%);
+  background-image: -moz-linear-gradient(top, #a8cc5f, #86b740);
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #a8cc5f), color-stop(1, #86b740));
+}
+
+.flex-content .gifts-box .gifts {
+  padding: 1rem 0.66666667rem 0.93333333rem;
+  background: url("../img/gifts.png") no-repeat;
+  background-size: 100% 100%;
+}
+
+.flex-content .gifts-box .gifts table {
+  background-color: #f0ffd2;
+  text-align: center;
+  border-collapse: collapse;
+}
+
+.flex-content .gifts-box .gifts table tr td:first-child {
+  padding: 0.2rem;
+}
+
+.flex-content .gifts-box .gifts table tr {
+  height: 1rem;
+}
+
+.flex-content .gifts-box .gifts table tr td {
+  border: 2px solid #86b740;
+  font-size: 0.34666667rem;
+  color: #333;
+}
+
+.flex-content .gifts-box .gifts table tr td:first-child {
+  width: 35%;
+}
+
+.flex-content .gifts-box .gifts table tr td:last-child {
+  width: 65%;
+}
+
+.flex-content .gifts-box .gifts p {
+  padding-top: 0.26666667rem;
+  color: #333;
+  font-size: 0.34666667rem;
+}
+
+.flex-content .gifts-box .gifts p:before {
+  content: '';
+  background: url("../img/star.png") center center no-repeat;
+  background-size: 0.24rem 0.24rem;
+  display: inline-block;
+  width: 0.24rem;
+  height: 0.24rem;
+}
+
+.flex-content .gifts-box .gifts table tr td.orange {
+  color: #ff7f00;
+}
+
+a.invest {
+  display: block;
+}
+
+a.invest img {
+  display: block;
+  margin: 0 auto;
+  width: 4.13333333rem;
+}
+
+.tips {
+  color: #fff;
+  font-size: 0.35rem;
+  transform: scale(0.7);
+  -webkit-transform: scale(0.7);
+  -moz-transform: scale(0.7);
+  line-height: 1rem;
+  width: 130%;
+  overflow: hidden;
+  margin-left: -15%;
+  text-align: center;
+}
