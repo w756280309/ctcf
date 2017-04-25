@@ -56,4 +56,19 @@ class Contact extends ActiveRecord
 
         return $this->number;
     }
+
+    public static function getTypeLabels()
+    {
+        return [
+            self::TYPE_MOBILE => '手机号',
+            self::TYPE_LANDLINE => '座机',
+        ];
+    }
+
+    public static function fetchOneByNumber($number)
+    {
+        return Contact::findOne(['encryptedNumber' => SecurityUtils::encrypt($number)]);
+    }
+
+
 }

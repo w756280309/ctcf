@@ -21,6 +21,9 @@ use yii\db\ActiveRecord;
  */
 class Activity extends ActiveRecord
 {
+    const TYPE_PHONE_CALL = 'phone_call';
+    const TYPE_NOTE = 'note';
+
     public static function tableName()
     {
         return 'crm_activity';
