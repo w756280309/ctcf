@@ -857,6 +857,99 @@ COUPON;
     }
 
     /**
+     *  发放新手红包 288
+     */
+    public function actionCouponFor288($couponIds = [35,36,37,38,39])
+    {
+        $couponTypes = CouponType::findAll(['id' => $couponIds]);
+
+        if (count($couponTypes) !== count($couponIds)) {
+            echo "包含未知的红包信息\n";
+
+            return self::EXIT_CODE_ERROR;
+        }
+        //获取用户id数组
+        $arr = include_once('sendSms.php');
+        $u = User::tableName();
+        $ui = UserInfo::tableName();
+
+        $query = User::find()
+            ->innerJoin($ui, "$u.id = $ui.user_id")
+            ->andWhere(["in", "$u.mobile", $arr]);
+        $users = $query->all();
+
+        $count = 0;
+
+        foreach ($users as $user) {
+            foreach ($couponTypes as $couponType) {
+                try {
+                    $userCoupon = UserCoupon::addUserCoupon($user, $couponType);
+
+                    if ($userCoupon->save(false)) {
+                        ++$count;
+                    }
+                } catch (\Exception $e) {
+                    echo $user->mobile."发放失败, 原因: ".$e->getMessage()."\n";
+                }
+            }
+        }
+
+        echo "总共给用户发放了".$count."张代金券\n";
+
+        return self::EXIT_CODE_NORMAL;
+    }
+
+    /**
+     *  发放新手红包 68
+     */
+    public function actionCouponFor68($couponIds = [73, 74], $days = 50)
+    {
+        $couponTypes = CouponType::findAll(['id' => $couponIds]);
+
+        if (count($couponTypes) !== count($couponIds)) {
+            echo "包含未知的红包信息\n";
+
+            return self::EXIT_CODE_ERROR;
+        }
+
+        $u = User::tableName();
+        $ui = UserInfo::tableName();
+        //获取用户id数组
+        $arr = include_once('sendSms.php');
+
+        $query = User::find()
+            ->innerJoin($ui, "$u.id = $ui.user_id")
+            ->where([
+                "$ui.investCount" => 0,
+                "$u.status" => User::STATUS_ACTIVE,
+                "$u.type" => User::USER_TYPE_PERSONAL,
+            ])
+            ->andWhere(["<", "$u.created_at", strtotime("today - ".$days." days")])
+            ->andWhere(["not in", "$u.mobile", $arr]);
+        $users = $query->all();
+
+        $count = 0;
+
+        foreach ($users as $user) {
+            foreach ($couponTypes as $couponType) {
+                try {
+                    $userCoupon = UserCoupon::addUserCoupon($user, $couponType);
+
+                    if ($userCoupon->save(false)) {
+                        ++$count;
+                    }
+                } catch (\Exception $e) {
+                    echo $user->mobile."发放失败, 原因: ".$e->getMessage()."\n";
+                }
+            }
+        }
+
+        echo "总共给用户发放了".$count."张代金券\n";
+
+        return self::EXIT_CODE_NORMAL;
+    }
+
+    /**
      * 1. 给截至2017-04-19仅投资一次, 且投资金额>=10000元的用户发放20元投资奖励红包;
      * 2. 给截至2017-04-19仅投资一次, 且投资金额<10000元的用户发放5元投资奖励红包;
      * 3. 给截至2017-04-19投资两次, 且投资金额>=10000元的用户发放20元投资奖励红包;
