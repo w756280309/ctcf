@@ -38,4 +38,35 @@ class Identity extends ActiveRecord
             ],
         ];
     }
+
+    /**
+     * 获得crm的姓名
+     *
+     * todo 临时代码-混淆姓名的字段不存在，先返回原名
+     */
+    public function getCrmName()
+    {
+        return $this->obfsName;
+    }
+
+    /**
+     * 获得crm的gender
+     */
+    public function getCrmGender()
+    {
+        return $this->gender;
+    }
+
+    /**
+     * 获得crm的年龄
+     */
+    public function getCrmAge()
+    {
+        $age = null;
+        if ($this->birthYear) {
+            $age = date('Y') - (int) $this->birthYear;
+        }
+
+        return $age;
+    }
 }

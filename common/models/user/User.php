@@ -987,4 +987,45 @@ class User extends ActiveRecord implements IdentityInterface, UserInterface
 
         return $user;
     }
+
+    /**
+     * 获得crm的姓名
+     *
+     * todo 临时代码-混淆姓名的字段不存在，先返回原名
+     */
+    public function getCrmName()
+    {
+        return $this->real_name;
+    }
+
+    /**
+     * 获得crm的gender
+     */
+    public function getCrmGender()
+    {
+        $gender = null;
+        if ($this->idcard) {
+            $num = intval(substr($this->idcard, -2, 1));
+            if ($num % 2 === 1) {
+                $gender = 'm';
+            } else {
+                $gender =  'f';
+            }
+        }
+
+        return $gender;
+    }
+
+    /**
+     * 获得crm的年龄
+     */
+    public function getCrmAge()
+    {
+        $age = null;
+        if ($this->birthdate) {
+            $age = date('Y') - (int) substr($this->birthdate, 0, 4);
+        }
+
+        return $age;
+    }
 }

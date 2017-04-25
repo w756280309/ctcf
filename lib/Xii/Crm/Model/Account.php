@@ -2,7 +2,7 @@
 
 namespace Xii\Crm\Model;
 
-
+use common\models\user\User;
 use yii\db\ActiveRecord;
 
 /**
@@ -33,5 +33,20 @@ class Account extends ActiveRecord
                 'class' => DateTimeBehavior::class,
             ],
         ];
+    }
+
+    public function getIdentity()
+    {
+        $identity = User::findOne([
+            'crmAccount_id' => $this->id,
+        ]);
+
+        if (null === $identity) {
+            $identity = Identity::findOne([
+                'account_id' => $this->id,
+            ]);
+        }
+
+        return $identity;
     }
 }
