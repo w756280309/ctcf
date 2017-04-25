@@ -38,10 +38,18 @@ class AccountController extends Controller
         $data = [];
         foreach ($records as $record) {
             $identity = $record->getIdentity();
+            if (null === $identity) {
+                $data[$record->id] = [];
+                continue;
+            }
             if ($identity instanceof User || $identity instanceof Identity) {
                 $data[$record->id]['gender'] = $identity->getCrmGender();
                 $data[$record->id]['name'] = $identity->getCrmName();
                 $data[$record->id]['age'] = $identity->getCrmAge();
+                $contactMobile = Contact::findContactByAccountId($record->id)->andWhere(['type' => Contact::TYPE_MOBILE])->one();
+                $contactLandline = Contact::findContactByAccountId($record->id)->andWhere(['type' => Contact::TYPE_LANDLINE])->one();
+                $data[$record->id]['mobile'] = isset($contactMobile) ? $contactMobile->obfsNumber : null;
+                $data[$record->id]['landline'] = isset($contactLandline) ? $contactLandline->obfsNumber : null;
             }
             if ($identity instanceof User) {
                 $data[$record->id]['mobile'] = '*' . substr($identity->mobile, -4);
@@ -54,13 +62,6 @@ class AccountController extends Controller
                     $data[$record->id]['availableBalance'] = $identity->lendAccount->available_balance;
                     $data[$record->id]['investmentBalance'] = $identity->lendAccount->investment_balance;
                 }
-            } elseif ($identity instanceof Identity) {
-                $contactMobile = $identity->fetchContact(Contact::TYPE_MOBILE)->one();
-                $contactLandline = $identity->fetchContact(Contact::TYPE_LANDLINE)->one();
-                $data[$record->id]['mobile'] = isset($contactMobile->obfsNumber) ? $contactMobile->obfsNumber : null;
-                $data[$record->id]['landline'] = isset($contactLandline->obfsNumber) ? $contactLandline->obfsNumber : null;
-            } else {
-                $data[$record->id] = [];
             }
         }
 

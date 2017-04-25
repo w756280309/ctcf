@@ -70,5 +70,8 @@ class Contact extends ActiveRecord
         return Contact::findOne(['encryptedNumber' => SecurityUtils::encrypt($number)]);
     }
 
-
+    public static function findContactByAccountId($accountId)
+    {
+        return Contact::find()->where(['account_id' => $accountId]);
+    }
 }

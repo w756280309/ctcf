@@ -39,13 +39,6 @@ class Identity extends ActiveRecord
         ];
     }
 
-    public function fetchContact($type)
-    {
-        return Contact::find()
-            ->where(['account_id' => $this->account_id])
-            ->andWhere(['type' => $type]);
-    }
-
     /**
      * 获得crm的姓名
      *
