@@ -45,6 +45,7 @@ class AccountController extends Controller
             }
             if ($identity instanceof User) {
                 $data[$record->id]['mobile'] = '*' . substr($identity->mobile, -4);
+                $data[$record->id]['annualInvestment'] = $identity->annualInvestment;
                 if (isset($identity->info)) {
                     $data[$record->id]['investCount'] = $identity->info->investCount;
                     $data[$record->id]['investTotal'] = $identity->info->investTotal;
@@ -53,15 +54,16 @@ class AccountController extends Controller
                     $data[$record->id]['availableBalance'] = $identity->lendAccount->available_balance;
                     $data[$record->id]['investmentBalance'] = $identity->lendAccount->investment_balance;
                 }
-            } elseif($identity instanceof Identity) {
+            } elseif ($identity instanceof Identity) {
                 $contactMobile = $identity->fetchContact(Contact::TYPE_MOBILE)->one();
                 $contactLandline = $identity->fetchContact(Contact::TYPE_LANDLINE)->one();
                 $data[$record->id]['mobile'] = isset($contactMobile->obfsNumber) ? $contactMobile->obfsNumber : null;
-                $data[$record->id]['landline'] = isset($contactLandline->obfsNumber) ? $contactMobile->obfsNumber : null;
+                $data[$record->id]['landline'] = isset($contactLandline->obfsNumber) ? $contactLandline->obfsNumber : null;
             } else {
                 $data[$record->id] = [];
             }
         }
+
         return $this->render('index', ['dataProvider' => $dataProvider, 'data' => $data]);
     }
 }

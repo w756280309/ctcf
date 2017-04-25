@@ -30,13 +30,13 @@ use yii\grid\GridView;
             ],
             [
                 'attribute' => '年龄',
-                'value' => function ($model) {
+                'value' => function ($model) use ($data) {
                     return isset($data[$model->id]['age']) ? $data[$model->id]['age'] : '--';
                 }
             ],
             [
                 'attribute' => '性别',
-                'value' => function ($model) {
+                'value' => function ($model) use ($data) {
                     return isset($data[$model->id]['gender']) ? $data[$model->id]['gender'] : '--';
                 }
             ],
