@@ -4,7 +4,7 @@ use Xii\Crm\Model\Contact;
 
 $this->title = '潜客登记';
 
-$this->params['breadcrumbs'][] = ['label' => '潜客列表', 'url' => '/crm/identity'];
+$this->params['breadcrumbs'][] = ['label' => '客户列表', 'url' => '/crm/account'];
 $this->params['breadcrumbs'][] = ['label' => '潜客登记', 'url' => '/crm/identity/create'];
 
 ?>

@@ -6,6 +6,9 @@ $this->params['breadcrumbs'][] = ['label' => '客户列表', 'url' => '/crm/acco
 use yii\grid\GridView;
 ?>
 <div class="row">
+    <a href="/crm/identity/create" class="btn btn-primary">录入潜客</a>
+</div>
+<div class="row">
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'layout' => '{summary}{items}<div class="pagination" style="text-align:center; clear: both;">{pager}</div>',
@@ -18,14 +21,16 @@ use yii\grid\GridView;
             ],
             [
                 'attribute' => '手机',
+                'format' => 'html',
                 'value' => function ($model) use ($data) {
-                    return isset($data[$model->id]['mobile']) ? $data[$model->id]['mobile'] : '--';
+                    return '<a href="/crm/activity/index?accountId='.$model->id.'">' . (isset($data[$model->id]['mobile']) ? $data[$model->id]['mobile'] : '--') . '</a>';
                 }
             ],
             [
                 'attribute' => '固定电话',
+                'format' => 'html',
                 'value' => function ($model) use ($data) {
-                    return isset($data[$model->id]['landline']) ? $data[$model->id]['landline'] : '--';
+                    return '<a href="/crm/activity/index?accountId='.$model->id.'">' . (isset($data[$model->id]['landline']) ? $data[$model->id]['landline'] : '--') . '</a>';
                 }
             ],
             [

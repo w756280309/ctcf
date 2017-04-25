@@ -37,4 +37,12 @@ class Activity extends ActiveRecord
             ],
         ];
     }
+
+    public function attributeLabels()
+    {
+        return [
+            'createTime' => '创建时间',
+            'content' => '内容',
+        ];
+    }
 }

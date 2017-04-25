@@ -26,7 +26,8 @@ NavBar::begin([
     ],
 ]);
 $menuItems = [
-    ['label' => '账户', 'url' => ['/crm/account']],
+    ['label' => '客户列表', 'url' => ['/crm/account']],
+    ['label' => '录入潜客', 'url' => ['/crm/identity/create']],
 ];
 echo Nav::widget([
     'options' => ['class' => 'navbar-nav navbar-right'],
@@ -34,17 +35,14 @@ echo Nav::widget([
 ]);
 NavBar::end();
 ?>
-<div class="wrap">
-
-    <div class="container">
-        <div class="row">
-            <?= Breadcrumbs::widget([
-                'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
-                'homeLink' => ['label' => '首页', 'url' => '/crm/account'],
-            ]) ?>
-        </div>
-        <?= $content ?>
+<div class="container">
+    <div class="row">
+        <?= Breadcrumbs::widget([
+            'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
+            'homeLink' => ['label' => '首页', 'url' => '/crm/account'],
+        ]) ?>
     </div>
+    <?= $content ?>
 </div>
 
 <?php $this->endBody() ?>

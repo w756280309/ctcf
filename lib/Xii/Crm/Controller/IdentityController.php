@@ -29,11 +29,7 @@ class IdentityController extends Controller
         ];
     }
 
-    public function actionIndex()
-    {
-
-    }
-
+    //添加游客
     public function actionCreate()
     {
         $model = new IdentityForm();
@@ -75,7 +71,7 @@ class IdentityController extends Controller
 
                     $transaction->commit();
 
-                    return $this->redirect('/crm/identity');
+                    return $this->redirect('/crm/account');
                 } catch (\Exception $e) {
                     $transaction->rollBack();
                     $model->addError('number', $e->getMessage());

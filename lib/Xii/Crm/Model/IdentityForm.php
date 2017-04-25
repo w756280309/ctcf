@@ -6,6 +6,7 @@ namespace Xii\Crm\Model;
 use yii\base\Model;
 use Zii\Validator\CnMobileValidator;
 
+//游客登记表单
 class IdentityForm extends Model
 {
 
@@ -40,12 +41,16 @@ class IdentityForm extends Model
     public function validateNumber($attribute, $params)
     {
         if($this->numberType === Contact::TYPE_LANDLINE) {
-            if (preg_match('/^\d{8}$/', $this->number)) {
+            if (
+                preg_match('/^\d{8}$/', $this->number)
+                || preg_match('/^\d{7}$/', $this->number)
+            ) {
                 $this->number = '0577-'.$this->number;
             }
             if (
                 !preg_match('/^\d{3}-\d{8}$/', $this->number)
                 && !preg_match('/^\d{4}-\d{8}$/', $this->number)
+                && !preg_match('/^\d{4}-\d{7}$/', $this->number)
             ) {
                 $this->addError($attribute, '座机格式不正确');
             }

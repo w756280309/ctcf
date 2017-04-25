@@ -49,4 +49,9 @@ class Account extends ActiveRecord
 
         return $identity;
     }
+
+    public function getPrimaryContact()
+    {
+        return $this->hasOne(Contact::className(), ['id' => 'primaryContact_id']);
+    }
 }
