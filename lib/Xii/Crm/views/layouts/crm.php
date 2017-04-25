@@ -55,12 +55,10 @@ echo Dropdown::widget([
 NavBar::end();
 ?>
 <div class="container">
-    <div class="row">
-        <?= Breadcrumbs::widget([
-            'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
-            'homeLink' => ['label' => '首页', 'url' => '/crm/account'],
-        ]) ?>
-    </div>
+    <?= Breadcrumbs::widget([
+        'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
+        'homeLink' => ['label' => '首页', 'url' => '/crm/account'],
+    ]) ?>
     <?= $content ?>
 </div>
 

@@ -6,40 +6,30 @@ use yii\helpers\Html;
 $this->title = '客户列表';
 
 $this->registerCss("
-#xc-account-search label {
-    margin-right: 0.5em;
-}
-#xc-account-search .form-group {
-    margin-right: 1em;
-}
-#xc-account-list {
-    margin-top: 1em;
-}
+
 ");
 
 $this->params['breadcrumbs'][] = ['label' => '客户列表', 'url' => '/crm/account'];
 ?>
-<div class="row">
-    <form id="xc-account-search" class="form-inline" action="/crm/account/index" method="get" target="_self">
-        <div class="form-group">
-            <label for="">类型</label>
-            <select class="form-control" name="isConverted">
-                <option value="">全部</option>
-                <option value="true" <?= $isConverted ? 'selected="selected"' : '' ?>>注册用户</option>
-                <option value="false" <?= false === $isConverted && '' !== $isConverted ? 'selected="selected"' : '' ?>>潜在客户</option>
-            </select>
-        </div>
-        <div class="form-group" style="margin-left: 1em;">
-            <label for="">手机</label>
-            <input class="form-control" type="text" name="mobile" value="<?= Html::encode(trim(Yii::$app->request->get('mobile'))) ?>">
-        </div>
-        <div class="form-group" style="margin-left: 1em;">
-            <label for="">固定电话</label>
-            <input class="form-control" type="text" name="landline" value="<?= Html::encode(trim(Yii::$app->request->get('landline'))) ?>">
-        </div>
-        <button type='submit' class="btn btn-primary"><span class="glyphicon glyphicon-search"></span> 搜索</button>
-    </form>
-</div>
+<form id="xc-account-search" class="form-inline" action="/crm/account/index" method="get" target="_self">
+    <div class="form-group">
+        <label for="">类型</label>
+        <select class="form-control" name="isConverted">
+            <option value="">全部</option>
+            <option value="true" <?= $isConverted ? 'selected="selected"' : '' ?>>注册用户</option>
+            <option value="false" <?= false === $isConverted && '' !== $isConverted ? 'selected="selected"' : '' ?>>潜在客户</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="">手机</label>
+        <input class="form-control" type="text" name="mobile" value="<?= Html::encode(trim(Yii::$app->request->get('mobile'))) ?>">
+    </div>
+    <div class="form-group">
+        <label for="">固定电话</label>
+        <input class="form-control" type="text" name="landline" value="<?= Html::encode(trim(Yii::$app->request->get('landline'))) ?>">
+    </div>
+    <button type='submit' class="btn btn-primary"><span class="glyphicon glyphicon-search"></span> 搜索</button>
+</form>
 <div class="row">
     <?= GridView::widget([
         'options' => [
