@@ -38,18 +38,14 @@ class IdentityController extends Controller
         foreach ($users as $user) {
             $transaction = $db->beginTransaction();
             try {
-                //写入Contact
+                //写入目标用户
                 $account = new Account();
                 $account->isConverted = true;
                 $account->type = Account::TYPE_PERSON;
-                if (!$account->save(false)) {
-                    throw new \Exception('目标用户写入失败');
-                }
+                $account->save(false);
                 //更新目标用户关联ID
                 $user->crmAccount_id = $account->id;
-                if (!$user->save(false)) {
-                    throw new \Exception('目标用户关联关系写入失败');
-                }
+                $user->save(false);
                 //添加联系方式
                 $contact = new Contact();
                 $contact->account_id = $account->id;
@@ -57,19 +53,15 @@ class IdentityController extends Controller
                 //obfsNumber为*最后四位
                 $contact->obfsNumber = '*' . substr($user->mobile, -4);
                 $contact->encryptedNumber = $user->safeMobile;
-                if (!$contact->save(false)) {
-                    throw new \Exception('目标用户联系方式写入失败');
-                }
+                $contact->save(false);
                 //更新目标用户与联系方式的关联
                 $account->primaryContact_id = $account->id;
-                if (!$account->save(false)) {
-                    throw new \Exception('目标用户与联系方式关联关系写入失败');
-                }
+                $account->save(false);
                 $transaction->commit();
                 $num++;
             } catch (\Exception $ex) {
                 $transaction->rollBack();
-                echo $user->id . PHP_EOL;
+                echo $user->id . '同步目标用户失败' . PHP_EOL;
                 continue;
             }
         }
