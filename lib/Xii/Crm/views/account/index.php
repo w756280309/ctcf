@@ -1,45 +1,50 @@
 <?php
 
-$this->title = '客户列表';
-$this->params['breadcrumbs'][] = ['label' => '客户列表', 'url' => '/crm/account'];
-
 use yii\grid\GridView;
 use yii\helpers\Html;
+
+$this->title = '客户列表';
+
+$this->registerCss("
+#xc-account-search label {
+    margin-right: 0.5em;
+}
+#xc-account-search .form-group {
+    margin-right: 1em;
+}
+#xc-account-list {
+    margin-top: 1em;
+}
+");
+
+$this->params['breadcrumbs'][] = ['label' => '客户列表', 'url' => '/crm/account'];
 ?>
 <div class="row">
-    <a href="/crm/identity/create" class="btn btn-primary">录入潜客</a>
-    <form action="/crm/account/index" method="get" target="_self">
-        <table class="table">
-            <tbody>
-            <tr>
-                <td>
-                    <label for="">客户</label>
-                    <select name="isConverted" class="m-wrap span8">
-                        <option value="">未选择</option>
-                        <option value="true" <?= $isConverted ? 'selected="selected"' : '' ?>>注册用户</option>
-                        <option value="false" <?= false === $isConverted && '' !== $isConverted ? 'selected="selected"' : '' ?>>潜在客户</option>
-                    </select>
-                </td>
-                <td>
-                    <label for="">手机</label>
-                    <input type="text" name="mobile" value="<?= Html::encode(trim(Yii::$app->request->get('mobile'))) ?>">
-                </td>
-                <td>
-                    <label for="">固定电话</label>
-                    <input type="text" name="landline" value="<?= Html::encode(trim(Yii::$app->request->get('landline'))) ?>">
-                </td>
-                <td>
-                    <div class="search-btn" align="right">
-                        <button type='submit' class="btn blue btn-block button-search">搜索 <i class="m-icon-swapright m-icon-white"></i></button>
-                    </div>
-                </td>
-            </tr>
-            </tbody>
-        </table>
+    <form id="xc-account-search" class="form-inline" action="/crm/account/index" method="get" target="_self">
+        <div class="form-group">
+            <label for="">类型</label>
+            <select class="form-control" name="isConverted">
+                <option value="">全部</option>
+                <option value="true" <?= $isConverted ? 'selected="selected"' : '' ?>>注册用户</option>
+                <option value="false" <?= false === $isConverted && '' !== $isConverted ? 'selected="selected"' : '' ?>>潜在客户</option>
+            </select>
+        </div>
+        <div class="form-group" style="margin-left: 1em;">
+            <label for="">手机</label>
+            <input class="form-control" type="text" name="mobile" value="<?= Html::encode(trim(Yii::$app->request->get('mobile'))) ?>">
+        </div>
+        <div class="form-group" style="margin-left: 1em;">
+            <label for="">固定电话</label>
+            <input class="form-control" type="text" name="landline" value="<?= Html::encode(trim(Yii::$app->request->get('landline'))) ?>">
+        </div>
+        <button type='submit' class="btn btn-primary"><span class="glyphicon glyphicon-search"></span> 搜索</button>
     </form>
 </div>
 <div class="row">
     <?= GridView::widget([
+        'options' => [
+            'id' => 'xc-account-list',
+        ],
         'dataProvider' => $dataProvider,
         'layout' => '{summary}{items}<div class="pagination" style="text-align:center; clear: both;">{pager}</div>',
         'columns' => [
@@ -104,6 +109,13 @@ use yii\helpers\Html;
                 'value' => function ($model) use ($data) {
                     return isset($data[$model->id]['availableBalance']) ? $data[$model->id]['availableBalance'] : '0.00';
                 }
+            ],
+            [
+                'label' => '操作',
+                'format' => 'html',
+                'value' => function ($model) {
+                    return '<a href="/crm/activity/index?accountId='.$model->id.'">查看</a>';
+                },
             ],
         ]
     ]) ?>
