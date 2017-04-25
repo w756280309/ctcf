@@ -5,7 +5,7 @@ namespace Xii\Crm\Controller;
 
 use yii\web\Controller;
 
-class ContractController extends Controller
+class ContactController extends Controller
 {
     public function actionAdd()
     {
