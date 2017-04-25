@@ -110,6 +110,13 @@ $this->params['breadcrumbs'][] = ['label' => '客户列表', 'url' => '/crm/acco
                     return isset($data[$model->id]['availableBalance']) ? $data[$model->id]['availableBalance'] : '0.00';
                 }
             ],
+            [
+                'label' => '操作',
+                'format' => 'html',
+                'value' => function ($model) {
+                    return '<a href="/crm/activity/index?accountId='.$model->id.'">查看</a>';
+                },
+            ],
         ]
     ]) ?>
 </div>
