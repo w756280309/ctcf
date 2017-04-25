@@ -105,6 +105,7 @@ $leftLinkArray = Auth::find()
                     </a>
 
                     <ul class="nav pull-right">
+                        <li><a href="/crm/account/" target="_blank">CRM</a></li>
                         <li class="dropdown user">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                 <span class="username"><?= Yii::$app->user->getIdentity()->username ?></span>
