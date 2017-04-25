@@ -124,7 +124,7 @@ i,em{
     padding-top: 1px;
     padding-bottom: 1px;
 }
-
+.col-tag  .red{color: #f44336;border-color: #f44336;}
 .container .col .col-title .credit-lf {
     color: #ff9800;
     display: inline-block;

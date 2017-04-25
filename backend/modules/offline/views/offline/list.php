@@ -95,6 +95,7 @@ $bid = (int)Yii::$app->request->get('bid');
                     <th>序号</th>
                     <th>网点</th>
                     <th>产品名称</th>
+                    <th>标的序号</th>
                     <th>产品期限</th>
                     <th>客户姓名</th>
                     <th>证件号</th>
@@ -114,10 +115,13 @@ $bid = (int)Yii::$app->request->get('bid');
                             <?= $order->id ?>
                         </td>
                         <td>
-                            <?= $order->user->realName ?>
+                            <?= $order->affliator->name ?>
                         </td>
                         <td>
-                            <?= $order->loan->title ?>
+                            <a href="/offline/offline/loanlist?id=<?= $order->loan_id ?>"/><?= $order->loan->title ?></a>
+                        </td>
+                        <td>
+                            <a href="/offline/offline/loanlist?id=<?= $order->loan_id ?>"/><?= $order->loan->sn ?></a>
                         </td>
                         <td>
                             <?= $order->loan->expires . $order->loan->unit ?>

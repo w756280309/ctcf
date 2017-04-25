@@ -3,6 +3,7 @@
 namespace common\models\promo;
 
 use common\models\code\Code;
+use common\models\code\GoodsType;
 use common\models\coupon\CouponType;
 use common\models\coupon\UserCoupon;
 use common\models\user\User;
@@ -33,18 +34,40 @@ class PromoCouponCode
             //返回兑换码已过期
             return ['code' => 1, 'message' => '兑换码已过期', 'data' => ''];
         }
-        $model->user_id = $user_id;
-        $model->isUsed = 1;
-        $model->usedAt = date('Y-m-d H:i:s');
-        $transaction = Yii::$app->db->beginTransaction();
+
+        $db = Yii::$app->db;
+        $transaction = $db->beginTransaction();
         try {
-            if ($model->save()) {
-                //发放1张代金券
-                $coupon_type = CouponType::findOne(['id' => $model->goodsType_sn]);
-                if (UserCoupon::addUserCoupon($user, $coupon_type)->save()) {
-                    $transaction->commit();
-                    return ['code' => 0, 'message' => '兑换成功', 'data' => intval($coupon_type->amount) . '元代金券'];
-                }
+            $sql = 'update code set user_id = :user_id,isUsed = :isUsed,usedAt = :usedAt where id = :id and isUsed = false';
+            $affectRows = $db->createCommand($sql, [
+                'user_id' => $user_id,
+                'isUsed' => true,
+                'usedAt' => date('Y-m-d H:i:s'),
+                'id' => $model->id,
+            ])->execute();
+            if ($affectRows <= 0) {
+                throw new \Exception('该兑换码已兑换');
+            }
+
+            //重新更新Code
+            $model->refresh();
+            //发放1张代金券
+            $coupon_type = CouponType::findOne(['id' => $model->goodsType_sn]);
+            if (UserCoupon::addUserCoupon($user, $coupon_type)->save()) {
+
+                //获得一个代发放的voucher
+                $voucher = GoodsType::issueVoucher($model->goodsType_sn, $user, [
+                    'type' => Code::REF_TYPE_HISTORY_CODE,
+                    'id' => $model->id,
+                ]);
+                //若兑换成功，则表示领取成功
+                $voucher->isRedeemed = true;
+                $voucher->redeemTime = date('Y-m-d H:i:s');
+                $voucher->redeemIp = Yii::$app->request->getUserIP();
+                $voucher->save();
+
+                $transaction->commit();
+                return ['code' => 0, 'message' => '兑换成功', 'data' => intval($coupon_type->amount) . '元代金券'];
             }
         } catch (\Exception $ex) {
             $code = $ex->getCode();

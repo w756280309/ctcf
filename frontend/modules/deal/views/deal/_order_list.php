@@ -12,7 +12,7 @@
             <?php foreach($data as $k=>$v) { ?>
                 <tr style="<?= ($k%2 != 0) ? "background: rgb(239, 239, 243);":"" ?>">
                     <td class="piD-th1 piD-left"><span><?= $pages->totalCount - $pages->offset - $k ?></span></td>
-                    <td class="piD-th1 piD-left"><span><?= \common\utils\StringUtils::obfsMobileNumber($v->mobile) ?></span></td>
+                    <td class="piD-th1 piD-left"><span><?= $v->user ? \common\utils\StringUtils::obfsMobileNumber($v->user->mobile) : "---" ?></span></td>
                     <td class="piD-th1 piD-left" style="width: 200px;"><span><?= date('Y-m-d', $v->order_time) . ' ' . date('H:i:s', $v->order_time) ?></span></td>
                     <td class="piD-th4 piD-right"><span><?= rtrim(rtrim(number_format($v->order_money, 2), '0'), '.') ?></span></td>
                     <td class="piD-th1 piD-left"><span><img src="/images/deal/plD-right.png" alt=""></span></td>

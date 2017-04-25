@@ -1,37 +1,44 @@
 <?php
 use common\models\product\OnlineProduct;
+use common\models\offline\OfflineOrder;
+use common\models\offline\OfflineUser;
 use common\models\order\OnlineOrder;
-
 $status = Yii::$app->request->get('status');
 ?>
+<?php if (!$user instanceof OfflineUser) { ?>
 <div class="portlet-body">
-            <table class="table">
-                <tr>
-                    <td>
-                        <span class="title">状态</span>
-                        <select name="status" id="loan_order_form_type" m-wrap span6>
-                            <option value="">---全部---</option>
-                            <option value="1" <?= ($status === '1') ?  "selected='selected'" : ""?> >投标成功</option>
-                            <option value="0" <?= ($status === '0') ?  "selected='selected'" : ""?> >投标失败</option>
-                            <option value="2" <?= ($status === '2') ?  "selected='selected'" : ""?> >撤标</option>
-                        </select>
-                    </td>
-                    <td>
-                        <span class="title">开始时间</span>
-                        <input id="loan_order_form_start" type="text" value="<?= Yii::$app->request->get('start') ?>" name = "start" onclick='WdatePicker();' class="m-wrap span8"/>
-                    </td>
-                    <td>
-                        <span class="title">结束时间</span>
-                        <input id="loan_order_form_end" type="text" value="<?= Yii::$app->request->get('end') ?>" name = "end" onclick='WdatePicker();' class="m-wrap span8"/>
-                    </td>
-                    <td>
-                        <div align="right" class="search-btn">
-                            <button  class="btn blue btn-block loan_order_search" style="width: 100px;">搜索 <i class="m-icon-swapright m-icon-white"></i></button>
-                        </div>
-                    </td>
-                </tr>
-            </table>
-        </div>
+
+    <table class="table">
+        <tr>
+            <td>
+                <span class="title">状态</span>
+                <select name="status" id="loan_order_form_type" m-wrap span6>
+                    <option value="">---全部---</option>
+                    <option value="1" <?= ($status === '1') ? "selected='selected'" : "" ?> >投标成功</option>
+                    <option value="0" <?= ($status === '0') ? "selected='selected'" : "" ?> >投标失败</option>
+                    <option value="2" <?= ($status === '2') ? "selected='selected'" : "" ?> >撤标</option>
+                </select>
+            </td>
+            <td>
+                <span class="title">开始时间</span>
+                <input id="loan_order_form_start" type="text" value="<?= Yii::$app->request->get('start') ?>"
+                       name="start" onclick='WdatePicker();' class="m-wrap span8"/>
+            </td>
+            <td>
+                <span class="title">结束时间</span>
+                <input id="loan_order_form_end" type="text" value="<?= Yii::$app->request->get('end') ?>" name="end"
+                       onclick='WdatePicker();' class="m-wrap span8"/>
+            </td>
+            <td>
+                <div align="right" class="search-btn">
+                    <button class="btn blue btn-block loan_order_search" style="width: 100px;">搜索 <i
+                                class="m-icon-swapright m-icon-white"></i></button>
+                </div>
+            </td>
+        </tr>
+    </table>
+</div>
+<?php } ?>
         <!--search end -->
 <?= \yii\grid\GridView::widget([
     'id' => 'grid_view_loan_order',
@@ -40,26 +47,30 @@ $status = Yii::$app->request->get('status');
     'tableOptions' => ['class' => 'loan_order_list table table-hover table-striped'],
     'columns' => [
         [
-            'label' => '流水号',
+            'label' => !$user instanceof OfflineUser ? '流水号' : '标的序号',
             'value' => function ($record){
-                return $record->sn;
+
+                return !$record instanceof OfflineOrder ? $record->sn : $record->loan->sn;
             }
         ],
         [
             'label' => '项目名称',
             'format' => 'raw',
             'value' => function ($record){
+                $offline = !$record instanceof OfflineOrder;
                 $loan = $record->loan;
                 $title = $loan->title;
-                $startDate = $loan->jixi_time ? date('Y-m-d', $loan->jixi_time) : '---';
-                $endDate = $loan->finish_date ? date('Y-m-d', $loan->finish_date) : '---';
-                $expires = $loan->isAmortized() ? $loan->expires . '月' : $loan->expires . '天';
-                $loanRate = \common\view\LoanHelper::getDealRate($loan).'%';
+                $startDate = $loan->jixi_time ? ($offline ? date('Y-m-d', $loan->jixi_time) : $loan->jixi_time) : '---';
+                $endDate = $loan->finish_date ? ($offline ? date('Y-m-d', $loan->finish_date) : $loan->finish_date) : '---';
+                $expires = $offline ? ($loan->isAmortized() ? $loan->expires . '月' : $loan->expires . '天') :
+                    ($loan->expires . $loan->unit);
+                $loanRate = $offline ? \common\view\LoanHelper::getDealRate($loan).'%': $loan->yield_rate;
                 if (!empty($loan->jiaxi)) {
                     $loanRate = $loanRate.'+'.\common\utils\StringUtils::amountFormat2($loan->jiaxi).'%';
                 }
-                $refundMethod = Yii::$app->params['refund_method'][$loan->refund_method];
-                $detailUrl = rtrim(Yii::$app->params['clientOption']['host']['frontend'], '/') . '/deal/deal/detail?sn='.$loan->sn;
+                $refundMethod = $offline ? Yii::$app->params['refund_method'][$loan->refund_method] : '---';
+                $detailUrl = $offline ? rtrim(Yii::$app->params['clientOption']['host']['frontend'], '/') . '/deal/deal/detail?sn='.$loan->sn :
+                    rtrim(Yii::$app->params['clientOption']['host']['backend'], '/') . '/offline/offline/loanlist?sn='.$loan->sn;
 
                 $html = <<<HTML
 <button type="button" class="btn btn-primary loan_title">
@@ -86,32 +97,36 @@ HTML;
         [
             'label' => '购买渠道',
             'value' => function ($record){
-                switch ($record->investFrom) {
-                    case OnlineOrder::INVEST_FROM_WAP:
-                        $res = 'WAP投资';
-                        break;
-                    case OnlineOrder::INVEST_FROM_WX:
-                        $res = '微信投资';
-                        break;
-                    case OnlineOrder::INVEST_FROM_PC:
-                        $res = 'PC投资';
-                        break;
-                    case OnlineOrder::INVEST_FROM_APP:
-                        $res = 'APP投资';
-                        break;
-                    case OnlineOrder::INVEST_FROM_OTHER:
-                        $res = '未知来源';
-                        break;
-                    default :
-                        $res = '未知来源';
+                if (!$record instanceof OfflineOrder) {
+                    switch ($record->investFrom) {
+                        case OnlineOrder::INVEST_FROM_WAP:
+                            $res = 'WAP投资';
+                            break;
+                        case OnlineOrder::INVEST_FROM_WX:
+                            $res = '微信投资';
+                            break;
+                        case OnlineOrder::INVEST_FROM_PC:
+                            $res = 'PC投资';
+                            break;
+                        case OnlineOrder::INVEST_FROM_APP:
+                            $res = 'APP投资';
+                            break;
+                        case OnlineOrder::INVEST_FROM_OTHER:
+                            $res = '未知来源';
+                            break;
+                        default :
+                            $res = '未知来源';
+                    }
+                } else {
+                    $res = '线下标的';
                 }
                 return $res;
             }
         ],
         [
-            'label' => '投资金额',
+            'label' => !$user instanceof OfflineUser ? '投资金额' : '投资金额(万)',
             'value' => function ($record){
-                return number_format($record->order_money, 2);
+                return isset($record->order_money) ? number_format($record->order_money, 2) :$record->order_money();
             },
             'contentOptions' => ['class' => 'money'],
             'headerOptions' => ['class' => 'money'],
@@ -119,7 +134,7 @@ HTML;
         [
             'label' => '抵扣代金券',
             'value' => function ($record){
-                return number_format($record->couponAmount, 2);
+                return isset($record->couponAmount) ? number_format($record->couponAmount, 2) : '---';
             },
             'contentOptions' => ['class' => 'money'],
             'headerOptions' => ['class' => 'money'],
@@ -133,18 +148,24 @@ HTML;
         [
             'label' => '标的状态',
             'value' => function ($record){
-                return Yii::$app->params['deal_status'][$record->loan->status];
+                return isset($record->loan->status) ? Yii::$app->params['deal_status'][$record->loan->status] : '---';
             }
         ],
         [
             'label' => '订单状态',
             'value' => function ($record){
-                if ($record->status === 0){
-                    $res = '投标失败';
-                } elseif ($record->status === 1) {
-                    $res = '投标成功';
-                } elseif ($record->status === 2) {
-                    $res = '撤标';
+                if (!$record instanceof OfflineOrder) {
+                    if (isset($record->status)) {
+                        if ($record->status === 0){
+                            $res = '投标失败';
+                        } elseif ($record->status === 1) {
+                            $res = '投标成功';
+                        } elseif ($record->status === 2) {
+                            $res = '撤标';
+                        } else {
+                            $res = '---';
+                        }
+                    }
                 } else {
                     $res = '---';
                 }

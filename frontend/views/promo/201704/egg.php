@@ -14,7 +14,7 @@ $this->title = '砸金蛋赢大奖';
         <div class="award-show">
             <div class="title-show"></div>
             <div class="show-prize">
-                <img src="<?= FE_BASE_URI ?>pc/campaigns/golden-egg/img/award-one_01.png" width="909" alt="">
+                <img src="<?= FE_BASE_URI ?>pc/campaigns/golden-egg/img/award-one_02.png" width="909" alt="">
                 <img src="<?= FE_BASE_URI ?>pc/campaigns/golden-egg/img/award-two_03.png" width="909" alt="">
             </div>
             <div class="txt">

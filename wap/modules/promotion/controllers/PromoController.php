@@ -35,7 +35,7 @@ class PromoController extends Controller
             $share = Share::findOne(['shareKey' => $wx_share_key]);
         }
 
-        return $this->render('index', [
+        return $this->render('wrm170210' === $promo->key ? 'index_wrm' : 'index', [
             'promo' => $promo,
             'share' => $share,
         ]);

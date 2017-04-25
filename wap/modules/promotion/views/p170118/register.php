@@ -12,8 +12,8 @@ use yii\captcha\Captcha;
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/wendumao/css/register.css?v=20170119">
 <script  src="<?= FE_BASE_URI ?>libs/lib.flexible3.js?v=20170119"></script>
 <script  src="<?= FE_BASE_URI ?>libs/fastclick.js?v=20170119"></script>
-<script src="<?= ASSETS_BASE_URI ?>js/common.js?v=20170119"></script>
-<script src="<?= FE_BASE_URI ?>wap/luodiye/js/luodiye.js?v=20170310"></script>
+<script src="<?= ASSETS_BASE_URI ?>js/common.js?v=20170413"></script>
+<script src="<?= FE_BASE_URI ?>wap/luodiye/js/luodiye.js?v=20170413-v"></script>
 
 <div class="container flex-content">
     <?php if (!defined('IN_APP')) { ?>

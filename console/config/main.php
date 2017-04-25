@@ -97,5 +97,8 @@ return [
             'sleep' => false, // or int for usleep after every job
         ],
     ],
+    'modules' => [
+        'crm' => 'Xii\Crm\Module',
+    ],
     'params' => $params,
 ];

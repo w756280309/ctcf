@@ -12,7 +12,6 @@ return [
     'basePath' => dirname(__DIR__),
     'controllerNamespace' => 'backend\controllers',
     'bootstrap' => ['log'],
-    'modules' => [],
     'language' => 'zh-CN',
     'homeurl' => '/site/index/',
     'components' => [
@@ -39,6 +38,15 @@ return [
         ],
         'errorHandler' => [
             'errorAction' => 'site/error',
+        ],
+        'assetManager'=>[
+            'bundles' => [
+                'yii\web\JqueryAsset' => [
+                    'jsOptions' => [
+                        'position' => \yii\web\View::POS_HEAD,
+                    ]
+                ]
+            ]
         ],
     ],
     'as requestBehavior' => [
@@ -94,6 +102,9 @@ return [
         ],
         'o2o' => [
             'class' => 'backend\modules\o2o\Module',
+        ],
+        'crm' => [
+            'class' => 'Xii\Crm\Module',
         ],
     ],
 ];

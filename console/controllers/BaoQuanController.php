@@ -20,7 +20,8 @@ class BaoQuanController extends Controller
 {
     use ContractTrait;
 
-    //根据保全队列批量添加保全[确认计息时候将普通标的的订单进行保全]
+
+    //标的订单保全
     public function actionIndex()
     {
         //保全开关
@@ -29,29 +30,39 @@ class BaoQuanController extends Controller
             $this->stdout("缺少配置参数：enable_ebaoquan；或者enable_ebaoquan 被配置为false 。\n", Console::BOLD);
             return 0;
         }
+        $cmdLock = new FileLock(\Yii::getAlias('@lock'), 'bao_quan_credit_order', 120);
+        if (!$cmdLock->acquire()) {
+            exit;
+        }
 
-        $queues = BaoQuanQueue::find()->where(['status' => BaoQuanQueue::STATUS_SUSPEND, 'itemType' => BaoQuanQueue::TYPE_LOAN])->orderBy(['id' => SORT_ASC])->limit(20)->all();
+        $queues = BaoQuanQueue::find()
+            ->where(['status' => BaoQuanQueue::STATUS_SUSPEND, 'itemType' => BaoQuanQueue::TYPE_LOAN_ORDER])
+            ->orderBy(['id' => SORT_ASC])
+            ->limit(10)
+            ->orderBy(['id' => SORT_ASC])
+            ->all();
         if (count($queues) > 0) {
             $this->dealLoanOrderBaoQuan($queues);
-        } else {
-            sleep(3);
         }
+
+        $cmdLock->release();
     }
 
     private function dealLoanOrderBaoQuan($queues)
     {
         foreach ($queues as $queue) {
-            $proId = $queue['itemId'];
-            $product = OnlineProduct::findOne($proId);
-            if (null !== $product) {
-                try {
-                    Client::createBq($product);
-                    $queue->status = BaoQuanQueue::STATUS_SUCCESS;//处理成功
-                    $queue->save(false);
-                } catch (Exception $e) {
-                    $queue->status = BaoQuanQueue::STATUS_FAILED;//处理失败
-                    $queue->save(false);
-                }
+            $order = OnlineOrder::findOne(['status' => OnlineOrder::STATUS_SUCCESS, 'id' => $queue->itemId]);
+            if(is_null($order)) {
+                \Yii::trace('标的订单保全失败，订单ID:'.$queue->itemId.';没有找到订单或此订单状态不是1', 'bao_quan');
+                continue;
+            }
+            try {
+                Client::baoQuanLoanOrder($order);
+                $queue->status = BaoQuanQueue::STATUS_SUCCESS;//处理成功
+                $queue->save(false);
+            } catch (Exception $e) {
+                $queue->status = BaoQuanQueue::STATUS_FAILED;//处理失败
+                $queue->save(false);
             }
         }
     }
@@ -198,7 +209,7 @@ class BaoQuanController extends Controller
         }
 
         //处理普通标的失败保全
-        $queues = BaoQuanQueue::find()->where(['status' => BaoQuanQueue::STATUS_FAILED, 'itemType' => BaoQuanQueue::TYPE_LOAN])->orderBy(['id' => SORT_ASC])->limit(20)->all();
+        $queues = BaoQuanQueue::find()->where(['status' => BaoQuanQueue::STATUS_FAILED, 'itemType' => BaoQuanQueue::TYPE_LOAN_ORDER])->orderBy(['id' => SORT_ASC])->limit(20)->all();
         if (count($queues) > 0) {
             $this->dealLoanOrderBaoQuan($queues);
         }

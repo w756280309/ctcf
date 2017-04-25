@@ -80,6 +80,8 @@ function signup()
                     }
                 });
             } else if ('undefined' !== typeof data.message) {
+                piwik(data.message);
+
                 toastCenter(data.message, function () {
                     $('#signup-btn').attr('disabled', false);
                 });
@@ -88,8 +90,15 @@ function signup()
     });
 
     xhr.fail(function () {
+        piwik('网络繁忙, 请稍后重试!');
         $('#signup-btn').attr('disabled', false);
     });
+}
+
+function piwik(msg) {
+    if (msg && 'undefined' !== typeof _paq) {
+        _paq.push(['trackEvent', 'user', 'reg-error', msg]);
+    }
 }
 
 $(function () {
@@ -113,9 +122,11 @@ $(function () {
         e.preventDefault();
         $('#signup-btn').attr('disabled', true);
 
-        var mess = validateForm();
-        if ('' !== mess) {
-            toastCenter(mess, function () {
+        var msg = validateForm();
+        if ('' !== msg) {
+            piwik(msg);
+
+            toastCenter(msg, function () {
                 $('#signup-btn').attr('disabled', false);
             });
 
@@ -150,16 +161,25 @@ $(function () {
     var curCount;//当前剩余秒数
     var count = 60; //间隔函数，1秒执行
     $('#yzm').on('click', function () {
-        if ($('#captchaform-captchacode').val() === '') {
-            toastCenter('图形验证码不能为空');
+        msg = '';
+
+        if ('' === $('#captchaform-captchacode').val()) {
+            msg = '图形验证码不能为空';
+        } else if (4 !== $('#captchaform-captchacode').val().length) {
+            msg = '图形验证码必须为4位字符';
+        }
+
+        if ('' !== msg) {
+            piwik(msg);
+            toastCenter(msg);
+
             return false;
         }
-        if ($('#captchaform-captchacode').val().length !== 4) {
-            toastCenter('图形验证码必须为4位字符');
-            return false;
-        }
+
         createSms('#iphone', 1, '#captchaform-captchacode', function () {
             fun_timedown();
+        }, function (data) {
+            piwik(data.message);
         });
     });
 

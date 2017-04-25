@@ -222,19 +222,24 @@ function alertTrueVal(val, trued) {
     });
 }
 
-function createSms(phoneId, type, captchaCodeId, fun)
+function createSms(phoneId, type, captchaCodeId, trued, failed)
 {
     var phone = $(phoneId).val();
     var captchaCode = $(captchaCodeId).val();
 
     var csrf = $("meta[name=csrf-token]").attr('content');
-    $.post("/site/createsmscode", {type: type, phone: phone, captchaCode: captchaCode, _csrf: csrf}, function (result) {
-        if (result.code == 0) {
-            if (typeof fun !== 'undefined') {
-                fun();
+    $.post("/site/createsmscode", {type: type, phone: phone, captchaCode: captchaCode, _csrf: csrf}, function(data) {
+        if (data.code == 0) {
+            if ('undefined' !== typeof trued) {
+                trued();
             }
         } else {
-            toastCenter(result.message);
+            toastCenter(data.message);
+
+            if ('undefined' !== typeof failed) {
+                failed(data);
+            }
+
             $("#captchaform-captchacode-image").click();
         }
     });

@@ -1,6 +1,11 @@
 <?php
+
+use common\models\coupon\CouponType;
+use common\models\coupon\UserCoupon;
+use common\utils\StringUtils;
+use common\utils\SecurityUtils;
+use yii\grid\GridView;
 use yii\helpers\Html;
-use yii\widgets\LinkPager;
 
 $status = Html::encode($status);
 $now_date = date('Y-m-d');
@@ -28,6 +33,58 @@ $now_date = date('Y-m-d');
                     </li>
             </ul>
         </div>
+
+        <?php
+            $couponType = CouponType::findOne($coupon_id);
+            if (null !== $couponType) {
+        ?>
+            <div class="portlet-body">
+                <table class="table" style="margin-bottom: 0px;">
+                    <?php
+                        $attributes = [
+                            'name',
+                            'amount',
+                            'minInvest',
+                        ];
+                    ?>
+                    <tr>
+                        <?php
+                            $c = count($attributes);
+                            for ($i = 0; $i < $c; $i++) {
+                                $attributeName = $attributes[$i];
+                        ?>
+                                <td class="title">
+                                    <?= $couponType->getAttributeLabel($attributeName) ?>：<?= $i < 1 ? $couponType->{$attributeName} : StringUtils::amountFormat2($couponType->{$attributeName}) . '元' ?>
+                                </td>
+                        <?php
+                            }
+                        ?>
+                        <td></td>
+                    </tr>
+                    <?php
+                        $statusArr = [
+                            '总数量',
+                            'valid' => '未使用',
+                            'used' => '已使用',
+                            'expired' => '已过期',
+                        ];
+                    ?>
+                    <tr>
+                        <?php
+                            foreach ($statusArr as $stats => $label) {
+                        ?>
+                            <td class="title">
+                                <?= $label ?>：<?= UserCoupon::findCouponByConfig($coupon_id, !empty($stats) ? $stats : null)->count() ?>
+                            </td>
+                        <?php
+                            }
+                        ?>
+                    </tr>
+                </table>
+            </div>
+        <?php
+            }
+        ?>
 
         <!--search start-->
         <div class="portlet-body">
@@ -74,45 +131,64 @@ $now_date = date('Y-m-d');
             </form>
         </div>
         <!--search end -->
-
         <div class="portlet-body">
-            <table class="table table-striped table-bordered table-advance table-hover">
-                <thead>
-                    <tr>
-                        <th>序号</th>
-                        <th>用户手机号</th>
-                        <th>真实姓名</th>
-                        <th>注册时间</th>
-                        <th>领取时间</th>
-                        <th>使用状态</th>
-                    </tr>
-                </thead>
-                <tbody>
-                <?php foreach ($model as $key => $val) : ?>
-                    <tr>
-                        <td><?= ++$key ?></td>
-                        <td><?= $val['mobile'] ?></td>
-                        <td><a href="/user/user/detail?id=<?= $val['id']?>"><?= empty($val['real_name']) ? '---' : $val['real_name'] ?></a></td>
-                        <td><?= date('Y-m-d H:i:s', $val['created_at']) ?></td>
-                        <td><?= date('Y-m-d H:i:s', $val['collectDateTime']) ?></td>
-                        <td>
-                            <?php
-                                if ($val['isUsed']) {
-                                    echo '已使用';
-                                } else if ($now_date > $val['expiryDate']) {
-                                    echo '已过期';
-                                } else {
-                                    echo '未使用';
+            <div class="portlet-body">
+                <?=
+                    GridView::widget([
+                        'dataProvider' => $dataProvider,
+                        'layout' => '{summary}{items}<div class="pagination"><center>{pager}</center></div>',
+                        'columns' => [
+                            [
+                                'header' => '用户手机号',
+                                'value' => function ($coupon) {
+                                    return isset($coupon->user->safeMobile) ? SecurityUtils::decrypt($coupon->user->safeMobile) : '---';
                                 }
-                            ?>
-                        </td>
-                    </tr>
-                <?php endforeach; ?>
-                </tbody>
-            </table>
+                            ],
+                            [
+                                'header' => '真实姓名',
+                                'format' => 'html',
+                                'value' => function ($coupon) {
+                                    if (isset($coupon->user->real_name)) {
+                                        return '<a href="/user/user/detail?id='.($coupon->user->id).'">'.$coupon->user->real_name.'</a>';
+                                    }
+
+                                    return '----';
+                                }
+                            ],
+                            [
+                                'header' => '注册时间',
+                                'value' => function ($coupon) {
+                                    return isset($coupon->user->created_at) ? date('Y-m-d H:i:s', $coupon->user->created_at) : '---';
+                                },
+                            ],
+                            [
+                                'header' => '领取时间',
+                                'value' => function ($coupon) {
+                                    return date("Y-m-d H:i:s", $coupon->created_at);
+                                }
+                            ],
+                            [
+                                'header' => '使用状态',
+                                'value' => function ($coupon) {
+                                    $label = '----';
+                                    if ($coupon->isUsed) {
+                                        $label = '已使用';
+                                    } else {
+                                        if ($coupon->expiryDate < date('Y-m-d')) {
+                                            $label = '已过期';
+                                        } else {
+                                            $label = '未使用';
+                                        }
+                                    }
+
+                                    return $label;
+                                }
+                            ],
+                        ],
+                    ]);
+                ?>
+            </div>
         </div>
-        <!--分页-->
-        <div class="pagination text-align-ct"><?= LinkPager::widget(['pagination' => $pages]); ?></div>
     </div>
 </div>
 <?php $this->endBlock(); ?>

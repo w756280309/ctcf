@@ -86,10 +86,15 @@ $this->registerJsFile(ASSETS_BASE_URI . 'js/swiper.min.js', ['depends' => Jquery
             <div class="newnorm hide" id="loginNewPeople">
                 <p class="newnormtitle f15">新手专享
                     <?php
+                    $num = 2;
+                    if ($xs->pointsMultiple > 1) {
+                        echo '<span class="f12 red-tag">积分' . Html::encode($xs->pointsMultiple) . '倍</span>';
+                        $num = 1;
+                    }
                     if (null !== $xs->tags) {
                         $tags = explode('，', $xs->tags);
                         foreach($tags as $key => $tag) {
-                            if ($key < 2 && !empty($tag)) {
+                            if ($key < $num && !empty($tag)) {
                                 echo '<span class="f12">'.Html::encode($tag).'</span>';
                             }
                         }
@@ -209,13 +214,22 @@ $this->registerJsFile(ASSETS_BASE_URI . 'js/swiper.min.js', ['depends' => Jquery
                                     <?php if (null !== $loan->tags) { ?>
                                         <p class="lf f12">
                                             <?php
-                                            $tags = explode('，', $loan->tags);
-                                            foreach($tags as $key => $tag) {
-                                                if ($key < 2 && !empty($tag)) {
-                                                    echo '<span>'.Html::encode($tag).'</span>';
+                                                $tags = explode('，', $loan->tags);
+                                                $num = 2;
+                                                if ($loan->pointsMultiple > 1) {
+                                                    echo '<span class="red">积分' . Html::encode($loan->pointsMultiple) . '倍</span>';
+                                                    $num = 1;
                                                 }
-                                            }
+                                                foreach($tags as $key => $tag) {
+                                                    if ($key < $num && !empty($tag)) {
+                                                        echo '<span>' . Html::encode($tag) . '</span>';
+                                                    }
+                                                }
                                             ?>
+                                        </p>
+                                    <?php } elseif ($loan->pointsMultiple > 1) { ?>
+                                        <p class="lf f12">
+                                            <?='<span class="red">积分' . Html::encode($loan->pointsMultiple) . '倍</span>';?>
                                         </p>
                                     <?php } ?>
                                     <p class="rg f14"><?= Yii::$app->params['refund_method'][$loan->refund_method] ?></p>

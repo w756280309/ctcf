@@ -3,6 +3,7 @@
 use common\models\product\OnlineProduct;
 use common\utils\StringUtils;
 use common\view\LoanHelper;
+use yii\helpers\Html;
 
 ?>
 
@@ -18,14 +19,20 @@ use common\view\LoanHelper;
                     <span class="item-tit"><i class="credit-lf"></i><?= $deal->title ?></span>
                 </div>
                 <div class="col-xs-2 col-sm-2 col-title"><i class="credit-staus <?= $isActive ? 'credit-staus-over' : '' ?>"><?= ($deal->end_date < time() && in_array($deal->status, [1, 2])) ? '募集结束' : Yii::$app->params['deal_status'][$deal->status] ?></i></div>
+
                 <?php if (!empty($deal->tags)) { ?>
                     <div class="col-xs-12 col-sm-12 col-tag">
+                        <?= $deal->pointsMultiple > 1 ? "<span class='red'>积分" . Html::encode($deal->pointsMultiple) . "倍</span>" : "" ?>
                         <?php
                             $tags = explode('，', $deal->tags);
                             foreach ($tags as $tag) {
                         ?>
                             <span><?= $tag ?></span>
                         <?php } ?>
+                    </div>
+                <?php } elseif ($deal->pointsMultiple > 1) { ?>
+                    <div class="col-xs-12 col-sm-12 col-tag">
+                        <span class="red">积分<?= Html::encode($deal->pointsMultiple); ?>倍</span>
                     </div>
                 <?php } ?>
             </div>

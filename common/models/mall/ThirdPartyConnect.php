@@ -44,7 +44,7 @@ class ThirdPartyConnect extends ActiveRecord
         if (!is_null($user)) {
             $thirdPartyConnect = self::findOne(['user_id' => $user->getId()]);
             if (is_null($thirdPartyConnect)) {
-                $thirdPartyConnect = self::initnew($user);
+                $thirdPartyConnect = self::initNew($user);
                 $thirdPartyConnect->save();
             }
         } else {
@@ -198,10 +198,12 @@ class ThirdPartyConnect extends ActiveRecord
         }
         $ret=array(
             "appKey"=>$request_array["appKey"],
-            "credits"=>$request_array["credits"],
+            "credits"=>isset($request_array["credits"]) ? $request_array["credits"] : null,
             "timestamp"=>$request_array["timestamp"],
             "description"=>isset($request_array["description"]) ? $request_array["description"]:'',
-            "orderNum"=>$request_array["orderNum"]
+            "orderNum"=>$request_array["orderNum"],
+            'params' => isset($request_array["params"]) ? $request_array["params"] : null,
+            'developBizId' => isset($request_array["developBizId"]) ? $request_array["developBizId"] : null,
         );
         return $ret;
     }

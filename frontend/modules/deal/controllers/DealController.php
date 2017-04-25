@@ -6,6 +6,7 @@ use common\models\coupon\UserCoupon;
 use common\models\order\OnlineOrder;
 use common\models\product\OnlineProduct;
 use common\models\product\RateSteps;
+use common\models\user\User;
 use common\service\PayService;
 use frontend\controllers\BaseController;
 use Yii;
@@ -125,7 +126,12 @@ class DealController extends BaseController
     public function actionOrderList($pid)
     {
         $this->findOr404(OnlineProduct::className(), ['id' => $pid]);
-        $query = OnlineOrder::find()->where(['online_pid' => $pid, 'status' => 1])->select('mobile,order_time,order_money')->orderBy("id desc");
+        $ol = OnlineOrder::tableName();
+        $u = User::tableName();
+        $query = OnlineOrder::find()
+            ->innerJoin('user',"$u.id = $ol.uid")
+            ->where(["$ol.online_pid" => $pid, "$ol.status" => 1])
+            ->orderBy("$ol.id desc");
         $pages = new Pagination([
             'totalCount' => $query->count(),
             'pageSize' => 10

@@ -2,6 +2,7 @@
 
 namespace wap\modules\mall\controllers;
 
+use common\models\code\GoodsType;
 use common\models\mall\PointOrder;
 use common\models\mall\PointRecord;
 use common\models\mall\ThirdPartyConnect;
@@ -88,6 +89,7 @@ class NotifyController extends Controller
             if (!$res) {
                 throw new \Exception('系统繁忙');
             }
+
             $translation->commit();
             return [
                 'status' => 'ok',
@@ -130,7 +132,7 @@ class NotifyController extends Controller
         }
         $translation = Yii::$app->db->beginTransaction();
         try {
-            if ($res) {
+            if ($res === 'true') {
                 $order->status = PointOrder::STATUS_SUCCESS;
                 $res = $order->save();
                 if (!$res) {
@@ -171,9 +173,68 @@ class NotifyController extends Controller
         }
     }
 
+    //兑吧发起虚拟商品充值请求
+    public function actionRecharge()
+    {
+        $requestUrl = Yii::$app->request->absoluteUrl;
+        Yii::info('[mall_notify][voucher_recharge] 兑吧请求虚拟商品充值接口，回调url：' . $requestUrl, 'notify');
+        $requestParams = Yii::$app->request->queryParams;
+        $appKey = Yii::$app->params['mall_settings']['app_key'];
+        $appSecret = Yii::$app->params['mall_settings']['app_secret'];
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $translation = Yii::$app->db->beginTransaction();
+        try {
+            $result = ThirdPartyConnect::parseCreditConsume($appKey, $appSecret, $requestParams);
+            $orderNum = $result['orderNum'];
+            $publicId = $requestParams['uid'];
+            $goodsTypeSn = $result['params'];
+            $developBizId = $result['developBizId'];
+            if (
+                empty($orderNum)
+                || empty($developBizId)
+                || empty($publicId)
+                || empty($goodsTypeSn)
+            ) {
+                throw new \Exception('参数错误');
+            }
+            $thirdPartyConnect = ThirdPartyConnect::findOne(['publicId' => $publicId]);
+            if (empty($thirdPartyConnect)) {
+                throw new \Exception('不是温都会员');
+            }
+            $userId = $thirdPartyConnect->user_id;
+            $user = User::findOne($userId);
+            if (empty($user)) {
+                throw new \Exception('不是温都会员');
+            }
+            $order = PointOrder::findOne(['orderNum' => $orderNum, 'sn' => $developBizId]);
+            if (is_null($order)) {
+                throw new \Exception('订单不存在');
+            }
+            //插入Voucher
+            $voucher = GoodsType::issueVoucher($goodsTypeSn, $user, ['type' => GoodsType::REF_TYPE_MALL_ORDER, 'id' => $order->id]);
+            $voucher->save();
+
+            $translation->commit();
+            return [
+                'status' => 'success',
+                'credits' => $user->points,
+                'supplierBizId' => $voucher->id,
+            ];
+        } catch (\Exception $ex) {
+            Yii::info('[mall_notify][voucher_recharge] 兑吧发起虚拟商品充值回调，回调失败：' . $ex->getMessage(), 'notify');
+            $translation->rollBack();
+            return [
+                'status' => 'fail',
+                'errorMessage' => $ex->getMessage(),
+                'supplierBizId' => '',
+            ];
+        }
+    }
+
     //兑吧发起增加积分请求
     public function actionIncrease()
     {
+        exit(1);
         $requestUrl = Yii::$app->request->absoluteUrl;
         Yii::info('[mall_notify][increase_point_order] 兑吧发起增加积分请求，请求url：' . $requestUrl, 'notify');
         $requestParams = Yii::$app->request->queryParams;

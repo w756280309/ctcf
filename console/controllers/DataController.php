@@ -7,6 +7,9 @@ use common\lib\user\UserStats;
 use common\models\coupon\CouponType;
 use common\models\coupon\UserCoupon;
 use common\models\draw\DrawManager;
+use common\models\epay\EpayUser;
+use common\models\mall\ThirdPartyConnect;
+use common\models\order\BaoQuanQueue;
 use common\models\order\OnlineOrder;
 use common\models\order\OnlineFangkuan;
 use common\models\order\OnlineRepaymentPlan;
@@ -19,6 +22,8 @@ use common\models\promo\InviteRecord;
 use common\models\promo\LoanOrderPoints;
 use common\models\sms\SmsMessage;
 use common\models\sms\SmsTable;
+use common\models\user\DrawRecord;
+use common\models\user\CoinsRecord;
 use common\models\user\User;
 use common\models\user\UserAccount;
 use common\models\user\UserInfo;
@@ -309,7 +314,7 @@ ORDER BY u.real_name ASC , rp.online_pid ASC ";
         $sql = "SELECT rp.uid AS user_id, rp.online_pid AS loan_id, SUM( rp.lixi ) AS y_lixi
 FROM online_repayment_plan AS rp
 WHERE rp.status
-IN ( 1, 2 ) 
+IN ( 1, 2 )
 GROUP BY rp.uid, rp.online_Pid";
         $data = Yii::$app->db->createCommand($sql)->queryAll();
         foreach ($data as $item) {
@@ -320,7 +325,7 @@ GROUP BY rp.uid, rp.online_Pid";
         //未还
         $sql = "SELECT rp.uid AS user_id, rp.online_pid AS loan_id, SUM( rp.lixi ) AS n_lixi
 FROM online_repayment_plan AS rp
-WHERE rp.status = 0 
+WHERE rp.status = 0
 GROUP BY rp.uid, rp.online_Pid";
         $data = Yii::$app->db->createCommand($sql)->queryAll();
         foreach ($data as $item) {
@@ -398,37 +403,63 @@ GROUP BY rp.uid, rp.online_Pid";
     }
 
     /**
-     * 将平台账户资金转给[收款人]银行卡
+     * 将转账方资金转给收款人并为收款人提现
      * 使用说明：
-     * 1. 测试 php yii data/transfer 查看[收款人]金额
+     * 1. php yii data/transfer 查看转账方、温都账户、收款方金额, 不尽兴任何实际操作
      * 2. 转一笔0.01元 php yii data/transfer 1
      * 3. 转指定金额 php yii data/transfer 1 $amount
+     * 4. 可以使用 $from 和 $to 参数控制转账方和收款方, 默认转账方是南京交收款方是居莫愁
+     * 5. 可以使用 $fromTransfer 参数控制时候进行 转账方转账给温都
+     * 6. 可以使用 $toTransfer 参数控制是否进行温都转账给收款方
+     * 7. 可以使用 $draw 参数控制是否发起收款方提现
      *
-     * 南京交充值到平台账户，然后平台账户转让到[收款人]，[收款人]再提现到银行卡。
-     * @param  bool $run 是否转账
-     * @param  float $amount 需要转账金额
-     * @param  bool $fromTransfer 是否进行转账方转账
-     * @param  bool $toTransfer 是否进行收款方转账
-     * @param  bool $draw 是否进行收款方提现
+     * @param  bool     $run            是否转账
+     * @param  float    $amount         待转金额
+     * @param  string   $from           转账方
+     * @param  string   $to             收款方
+     * @param  bool     $fromTransfer   是否进行转账方转账给温都账户
+     * @param  bool     $toTransfer     是否进行温都账户转账给收款方
+     * @param  bool     $draw           是否进行收款方提现
      */
-    public function actionTransfer($run = false, $amount = 0.01, $fromTransfer = true, $toTransfer = true, $draw = true)
+    public function actionTransfer($run = false, $amount = 0.01, $from = 'njj', $to = 'jmc', $fromTransfer = true, $toTransfer = true, $draw = true)
     {
         $amount = max(floatval($amount), 0);
-        //$fromUserId = '7601209';//测试环境 转账方用户在联动ID
-        //$toUserId = '7601209';//测试环境 收款方用户在联动账户ID
-        $fromUserId = '7302209';//正式环境 转账方（南京交）在联动ID
-        //$toUserId = '7301209';//正式环境 收款方 （立合旺通）在联动ID  转账流程已测试 正式转账已成功
-        $toUserId = '7303209';//正式环境 收款方 （居莫愁）在联动ID
+        $isTest = false;//测试环境
+
+
+        if ($isTest) {
+            $ePayUserIdList = [
+                'njj' => '7601209',//测试环境只有一个账号
+                'lhwt' => '7601209',//测试环境只有一个账号
+                'jmc' => '7601209',//测试环境只有一个账号
+            ];
+        } else {
+            $ePayUserIdList = [
+                'njj' => '7302209',//正式环境（南京交）在联动ID
+                'lhwt' => '7301209',//正式环境（立合旺通）在联动ID  转账流程已测试 正式转账已成功
+                'jmc' => '7303209',//正式环境（居莫愁）在联动ID
+            ];
+        }
+
+
+        $fromEPayUser = EpayUser::findOne(['epayUserId' => $ePayUserIdList[$from]]);//转账方联动账户
+        $toEPayUser = EpayUser::findOne(['epayUserId' => $ePayUserIdList[$to]]);//收款方联动账户
+        if (is_null($fromEPayUser) || is_null($toEPayUser)) {
+            throw new \Exception('没有找到转账企业');
+        }
+        $toUserAccount = UserAccount::findOne(['uid' => $toEPayUser->appUserId]);
+
+
         $platformUserId = Yii::$app->params['ump']['merchant_id'];//平台在联动账户
         $ump = Yii::$container->get('ump');
         //平台信息
         $ret = $ump->getMerchantInfo($platformUserId);
-        $this->stdout('平台账户余额：' . $ret->get('balance') . PHP_EOL);
+        $this->stdout('平台(温都)账户余额：' . $ret->get('balance') . PHP_EOL);
         //转账方信息
-        $ret = $ump->getMerchantInfo($fromUserId);
+        $ret = $ump->getMerchantInfo($fromEPayUser->epayUserId);
         $this->stdout('转账方账户余额：' . $ret->get('balance') . PHP_EOL);
         //收款方信息
-        $ret = $ump->getMerchantInfo($toUserId);
+        $ret = $ump->getMerchantInfo($toEPayUser->epayUserId);
         $this->stdout('收款方账户余额：' . $ret->get('balance') . PHP_EOL);
 
 
@@ -438,19 +469,23 @@ GROUP BY rp.uid, rp.online_Pid";
                 $this->stdout('正在进行 转账方 转账到 温都账户' . PHP_EOL);
                 $time = time();
                 $sn = TxUtils::generateSn('TR');
-                $ret = $ump->platformTransfer($sn, $fromUserId, $amount, $time);
+                $ret = $ump->platformTransfer($sn, $fromEPayUser->epayUserId, $amount, $time);
                 if ($ret->isSuccessful()) {
                     //更改温都数据库
                     $sql = "update user_account set available_balance = available_balance - :amount where uid = ( select appUserId from EpayUser where epayUserId = :epayUserId )";
-                    $res = Yii::$app->db->createCommand($sql, ['amount' => $amount, 'epayUserId' => $fromUserId])->execute();
-                    $this->stdout('转账方温都数据库更新：' . ($res ? '成功' : '失败') . PHP_EOL);
+                    $res = Yii::$app->db->createCommand($sql, [
+                        'amount' => $amount,
+                        'epayUserId' => $fromEPayUser->epayUserId,
+                    ])->execute();
+                    $this->stdout('温都数据库转账方数据更新：' . ($res ? '成功' : '失败') . PHP_EOL);
 
-                    //平台信息
-                    $ret = $ump->getMerchantInfo($platformUserId);
-                    $this->stdout('平台账户余额：' . $ret->get('balance') . PHP_EOL);
-                    //转账方信息
-                    $ret = $ump->getMerchantInfo($fromUserId);
+                    //转账方联动信息
+                    $ret = $ump->getMerchantInfo($fromEPayUser->epayUserId);
                     $this->stdout('转账方账户余额：' . $ret->get('balance') . PHP_EOL);
+                    //温都联动信息
+                    $ret = $ump->getMerchantInfo($platformUserId);
+                    $this->stdout('温都账户余额：' . $ret->get('balance') . PHP_EOL);
+
 
                     $this->stdout('转账方 转账成功' . PHP_EOL);
 
@@ -463,13 +498,13 @@ GROUP BY rp.uid, rp.online_Pid";
                 $this->stdout('正在进行 温都账户 转账到 收款方账户' . PHP_EOL);
                 $time = time();
                 $sn = TxUtils::generateSn('TR');
-                $ret = $ump->orgTransfer($sn, $toUserId, $amount, $time);
+                $ret = $ump->orgTransfer($sn, $toEPayUser->epayUserId, $amount, $time);
                 if ($ret->isSuccessful()) {
                     //平台信息
                     $ret = $ump->getMerchantInfo($platformUserId);
                     $this->stdout('平台账户余额：' . $ret->get('balance') . PHP_EOL);
                     //收款方信息
-                    $ret = $ump->getMerchantInfo($toUserId);
+                    $ret = $ump->getMerchantInfo($toEPayUser->epayUserId);
                     $this->stdout('收款方账户余额：' . $ret->get('balance') . PHP_EOL);
 
                     $this->stdout('收款方 转账成功' . PHP_EOL);
@@ -483,16 +518,29 @@ GROUP BY rp.uid, rp.online_Pid";
                 $this->stdout('正在进行 收款方提现' . PHP_EOL);
                 $sn = TxUtils::generateSn('DRAW');
                 $time = time();
-                $ret = $ump->orgDraw($sn, $toUserId, $amount, $time);
-                if ($ret->isSuccessful()) {
-                    var_dump($ret->toArray());
 
-                    //收款方账户信息
-                    $ret = $ump->getMerchantInfo($toUserId);
-                    $this->stdout('商户账户余额：' . $ret->get('balance') . PHP_EOL);
-                } else {
-                    $this->stdout('收款方提现失败，联动返回信息：' . $ret->get('ret_msg') . PHP_EOL);
+                //插入提现记录
+                $draw = DrawManager::initNew($toUserAccount, $amount, Yii::$app->params['drawFee']);
+                $draw->status = DrawRecord::STATUS_SUCCESS;
+                $res = $draw->save();
+                if ($res) {
+                    $this->stdout('插入收款方提现记录' . PHP_EOL);
+                    $ret = $ump->orgDraw($sn, $toEPayUser->epayUserId, $amount, $time);
+                    if ($ret->isSuccessful()) {
+                        var_dump($ret->toArray());
+
+                        //收款方账户信息
+                        $ret = $ump->getMerchantInfo($toEPayUser->epayUserId);
+                        $this->stdout('商户账户余额：' . $ret->get('balance') . PHP_EOL);
+                        $this->stdout('收款方 提现成功' . PHP_EOL);
+                    } else {
+                        $this->stdout('收款方提现失败，联动返回信息：' . $ret->get('ret_msg') . PHP_EOL);
+                        $draw->status = DrawRecord::STATUS_FAIL;
+                        $draw->save();
+                        $this->stdout('将收款方提现记录改为失败' . PHP_EOL);
+                    }
                 }
+
             }
 
         }
@@ -537,7 +585,7 @@ GROUP BY rp.uid, rp.online_Pid";
         try {
             //融资方放款,不收取手续费
             $draw = DrawManager::initDraw($account, $onlineFangkuan->order_money);
-            if (!$draw) {
+            if (!$draw->save()) {
                 throw new \Exception('提现申请失败', '000003');
             }
 
@@ -643,11 +691,11 @@ GROUP BY rp.uid, rp.online_Pid";
         }
 
         $sql = <<<COUPON
-            SELECT uid 
+            SELECT uid
             FROM (
             SELECT COUNT( id ) AS ordertimes, SUM( order_money ) AS totalmoney, uid
             FROM online_order
-            WHERE uid NOT 
+            WHERE uid NOT
             IN (
             SELECT DISTINCT uid
             FROM online_order
@@ -758,4 +806,230 @@ COUPON;
 
         return self::EXIT_CODE_NORMAL;
     }
+
+    /**
+     * 给注册50天以上，未投资的用户发放新人专享红包.
+     *
+     * 1. 该console只运行一次;
+     */
+    public function actionCouponForNew($couponIds = [73, 74], $days = 50)
+    {
+        $couponTypes = CouponType::findAll(['id' => $couponIds]);
+
+        if (count($couponTypes) !== count($couponIds)) {
+            echo "包含未知的红包信息\n";
+
+            return self::EXIT_CODE_ERROR;
+        }
+
+        $u = User::tableName();
+        $ui = UserInfo::tableName();
+
+        $users = User::find()
+            ->innerJoin($ui, "$u.id = $ui.user_id")
+            ->where([
+                "$ui.investCount" => 0,
+                "$u.status" => User::STATUS_ACTIVE,
+                "$u.type" => User::USER_TYPE_PERSONAL,
+            ])
+            ->andWhere(["<", "$u.created_at", strtotime("today - ".$days." days")])
+            ->all();
+
+        $count = 0;
+
+        foreach ($users as $user) {
+            foreach ($couponTypes as $couponType) {
+                try {
+                    $userCoupon = UserCoupon::addUserCoupon($user, $couponType);
+
+                    if ($userCoupon->save(false)) {
+                        ++$count;
+                    }
+                } catch (\Exception $e) {
+                    echo $user->mobile."发放失败, 原因: ".$e->getMessage()."\n";
+                }
+            }
+        }
+
+        echo "总共给用户发放了".$count."张代金券\n";
+
+        return self::EXIT_CODE_NORMAL;
+    }
+
+    /**
+     * 1. 给截至2017-04-19仅投资一次, 且投资金额>=10000元的用户发放20元投资奖励红包;
+     * 2. 给截至2017-04-19仅投资一次, 且投资金额<10000元的用户发放5元投资奖励红包;
+     * 3. 给截至2017-04-19投资两次, 且投资金额>=10000元的用户发放20元投资奖励红包;
+     * 4. 给截至2017-04-19投资两次, 且投资金额<10000元的用户发放5元投资奖励红包;
+     *
+     * PS: 该console只运行一次;
+     */
+    public function actionCouponForUser()
+    {
+        $couponTypes = CouponType::find()
+            ->where(['id' => [76, 75]])
+            ->indexBy('id')
+            ->all();
+
+        if (2 !== count($couponTypes)) {
+            echo "包含未知的红包信息\n";
+
+            return self::EXIT_CODE_ERROR;
+        }
+
+        $users = User::find()
+            ->joinWith('info')
+            ->andWhere(['between', 'investCount', 1, 2])
+            ->andWhere(['<=', 'lastInvestDate', '2017-04-19'])
+            ->all();
+
+        $couponType20 = 0;
+        $couponType05 = 0;
+
+        foreach ($users as $user) {
+            try {
+                if (bccomp($user->info->investTotal, 10000, 2) >= 0) {
+                    $userCoupon = UserCoupon::addUserCoupon($user, $couponTypes[76]);
+
+                    if ($userCoupon->save(false)) {
+                        ++$couponType20;
+                    }
+                } else {
+                    $userCoupon = UserCoupon::addUserCoupon($user, $couponTypes[75]);
+
+                    if ($userCoupon->save(false)) {
+                        ++$couponType05;
+                    }
+                }
+            } catch (\Exception $e) {
+                echo $user->mobile."发放失败, 原因: ".$e->getMessage()."\n";
+            }
+        }
+
+        echo "总共发放了20元投资奖励红包".$couponType20."张\n";
+        echo "总共发放了5元投资奖励红包".$couponType05."张\n";
+
+        return self::EXIT_CODE_NORMAL;
+    }
+
+    /**
+     * 标的重复计息，财富值重复
+     *
+     *
+    SELECT *
+    FROM  `coins_record`
+    WHERE user_id
+    IN (
+
+    SELECT DISTINCT uid
+    FROM online_order
+    WHERE online_pid =2267
+    )
+    AND DATE_FORMAT( createTime,  '%Y-%m-%d' ) =  '2017-03-31'
+    ORDER BY  `coins_record`.`order_id` ASC
+     */
+    public function actionUpdateCoins()
+    {
+        $ids = [9256, 9257, 9258, 9259, 9260, 9261, 9262, 9263, 9264, 9265];
+        $user_ids = [11521, 783, 3018, 10422, 9948, 1785, 10728];
+
+        $coinsRecords = CoinsRecord::find()->where(['in', 'id', $ids])->orderBy(['id' => SORT_ASC])->all();
+        if (count($coinsRecords) == 10) {
+            $transaction = Yii::$app->db->beginTransaction();
+            try {
+                foreach ($coinsRecords as $coinsRecord) {
+                    $data = [
+                        'coinsRecord_id' => $coinsRecord->id,
+                        'user_id' => $coinsRecord->user_id,
+                        'coins' => $coinsRecord->incrCoins,
+                    ];
+                    echo 'coinsRecord_id: ' . $data['coinsRecord_id'] . ' | ' . 'user_id: ' . $data['user_id'] . ' | ' . 'coins: ' . $data['coins'] . PHP_EOL;
+                    if (!in_array($data['user_id'], $user_ids)) {
+                        throw new \Exception($coinsRecord->id . '的用户不在修复名单中');
+                    }
+
+                    $sql = "delete from coins_record where id = :coinsRecord_id and user_id = :user_id and isOffline = 0";
+                    $res = Yii::$app->db->createCommand($sql, [
+                        'coinsRecord_id' => $data['coinsRecord_id'],
+                        'user_id' => $data['user_id'],
+                    ])->execute();
+                    if (!$res) {
+                        throw new \Exception($coinsRecord->id . '删除旧数据失败');
+                    }
+
+                    $sql = "update `coins_record` set `finalCoins` = `finalCoins` - :coins WHERE id > :coinsRecord_id and user_id = :user_id  and isOffline = 0;";
+                    Yii::$app->db->createCommand($sql, [
+                        'coins' => $data['coins'],
+                        'coinsRecord_id' => $data['coinsRecord_id'],
+                        'user_id' => $data['user_id'],
+                    ])->execute();
+
+                    $sql = "update user set annualInvestment = annualInvestment - :coins  where id = :user_id";
+                    $res = Yii::$app->db->createCommand($sql, [
+                        'coins' => $data['coins'],
+                        'user_id' => $data['user_id'],
+                    ])->execute();
+                    if (!$res) {
+                        throw new \Exception($coinsRecord->id . '更新用户累计年华投资金额失败');
+                    }
+                }
+                $transaction->commit();
+            } catch (\Exception $e) {
+                $transaction->rollBack();
+                echo $e->getMessage() . PHP_EOL;
+            }
+        }
+    }
+
+    public function actionMallLogin()
+    {
+        $user = User::findOne(['mobile' => '18310722679']);
+        $thirdPartyConnect = ThirdPartyConnect::findOne(['user_id' => $user->id]);
+        if (is_null($thirdPartyConnect)) {
+            $thirdPartyConnect = ThirdPartyConnect::initNew($user);
+            $thirdPartyConnect->save();
+        }
+
+        $url = ThirdPartyConnect::buildCreditAutoLoginRequest(
+            \Yii::$app->params['mall_settings']['app_key'],
+            \Yii::$app->params['mall_settings']['app_secret'],
+            empty($thirdPartyConnect) ? 'not_login' : $thirdPartyConnect->publicId,
+            is_null($user) ? 0 : $user->points,
+            urldecode('')
+        );
+        echo $url . PHP_EOL;
+    }
+
+    /**
+     * 更新未计息标的的保全队列
+     * php yii data/baoquan 1
+     */
+    public function actionBaoquan($run = false)
+    {
+        $orderTable = OnlineOrder::tableName();
+        $loanTable = OnlineProduct::tableName();
+        $orders = OnlineOrder::find()
+            ->innerJoin(OnlineProduct::tableName(), "$orderTable.online_pid = $loanTable.id")
+            ->where(['in', "$loanTable.status", [OnlineProduct::STATUS_NOW, OnlineProduct::STATUS_FULL, OnlineProduct::STATUS_FOUND]])
+            ->andWhere(["$orderTable.status" => OnlineOrder::STATUS_SUCCESS])
+            ->all();
+        $this->stdout('总共找到　'. count($orders) . ' 条未计息的成功订单' . PHP_EOL);
+        $successCount = $errorCount = 0;
+        if (!$run) {
+            exit(1);
+        }
+        foreach ($orders as $order) {
+            //投标之后添加保全
+            $job = new BaoQuanQueue(['itemId' => $order->id, 'status' => BaoQuanQueue::STATUS_SUSPEND, 'itemType' => BaoQuanQueue::TYPE_LOAN_ORDER]);
+            if ($job->save()) {
+                $this->stdout('订单'. $order->id.'　添加保全队列'.PHP_EOL);
+                $successCount ++;
+            } else {
+                $this->stdout('订单'. $order->id.'　失败'.PHP_EOL);
+                $errorCount ++;
+            }
+        }
+        $this->stdout("成功数 {$successCount}, 失败数 {$errorCount}".PHP_EOL);
+    }
+
 }

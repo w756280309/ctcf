@@ -8,7 +8,6 @@ use common\lib\product\ProductProcessor;
 use common\models\adminuser\AdminLog;
 use common\models\booking\BookingLog;
 use common\models\contract\ContractTemplate;
-use common\models\order\BaoQuanQueue;
 use common\models\order\OnlineOrder;
 use common\models\order\OnlineRepaymentPlan;
 use common\models\payment\Repayment;
@@ -420,7 +419,6 @@ class ProductonlineController extends BaseController
             ->addSelect(['isrecommended' => 'if(`online_status`=1 && `isPrivate`=0, `recommendTime`, 0)'])
             ->addSelect(['effect_jixi_time' => 'if(`is_jixi`=1, `jixi_time`, 0)'])
             ->addSelect(['product_status' => "(case $op.`status` when 4 then 7 when 7 then 4 else $op.`status` end)"])
-            ->joinWith('fangkuan')
             ->where(['del_status' => 0]);
         //筛选标的sn
         if (!empty($request['sn'])) {
@@ -504,28 +502,6 @@ class ProductonlineController extends BaseController
             ->all();
 
         return array_unique(array_column($model, 'loan_id'));
-    }
-
-    /**
-     * 贷款的详细信息.
-     */
-    public function actionDetail()
-    {
-        //联表查出表前的记录。包括：已募集金额 **元 剩余可投金额：*元 已投资人数：**人 剩余时间：1天15小时6分
-        $totalMoney = (new \Yii\db\Query())
-                ->select('sum(order_money) as money')
-                ->from('online_order')
-                ->groupBy('online_pid')
-                ->all();
-
-        //联表查询出表格内容，联的是online_order 和user 共计两张表
-        $query = (new \yii\db\Query())
-                ->select('o.id,real_name,mobile,order_money,order_time,o.status')
-                ->from(['online_order o'])
-                ->innerJoin('user u', 'o.uid = u.id')
-                ->all();
-
-        return $this->render('detail', ['info' => $query, 'totalMoney' => $totalMoney]);
     }
 
     /**
@@ -640,31 +616,29 @@ class ProductonlineController extends BaseController
 
         if ($id) {
             $loan = OnlineProduct::findOne($id);
-            if (null === $loan ||
-                !in_array($loan->status, [OnlineProduct::STATUS_FULL, OnlineProduct::STATUS_FOUND]) ||
-                empty($loan->jixi_time)
+            if (null === $loan
+                || !in_array($loan->status, [OnlineProduct::STATUS_FULL, OnlineProduct::STATUS_FOUND])
+                || empty($loan->jixi_time)
+                || $loan->is_jixi
              ) {
                 return ['result' => '0', 'message' => '无法找到该项目,或者项目现阶段不允许开始计息'];
             }
 
-            try {
-                $orders = $this->initUserAssets($loan);
-            } catch (\Exception $e) {
-                $message = $e->getMessage();
-
-                Yii::trace('项目成立异常,项目ID为'.$loan->id.
-                    ',错误信息为'.$message.
-                    ',操作时间为'.date('Y-m-d H:i:s').
-                    ',操作人为'.$this->getAuthedUser()->username);
-
-                return ['result' => '0', 'message' => $message];
-            }
-
             $res = OnlineRepaymentPlan::generatePlan($loan);
             if ($res) {
-                //确认计息完成之后将标的添加至保全队列
-                $job = new BaoQuanQueue(['itemId' => $id, 'status' => BaoQuanQueue::STATUS_SUSPEND, 'itemType' => BaoQuanQueue::TYPE_LOAN]);
-                $job->save();
+                //确认计息之后同步用户资产
+                try {
+                    $orders = $this->initUserAssets($loan);
+                } catch (\Exception $e) {
+                    $message = $e->getMessage();
+
+                    Yii::trace('项目成立异常,项目ID为'.$loan->id.
+                        ',错误信息为'.$message.
+                        ',操作时间为'.date('Y-m-d H:i:s').
+                        ',操作人为'.$this->getAuthedUser()->username);
+
+                    return ['result' => '0', 'message' => $message];
+                }
 
                 //确认计息之后给用户赠送积分
                 try {

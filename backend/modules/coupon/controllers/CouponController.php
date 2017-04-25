@@ -319,27 +319,31 @@ class CouponController extends BaseController
         $uc = UserCoupon::tableName();
         $u = User::tableName();
 
-        $query = (new \yii\db\Query())
-            ->from($uc)
+        $query = UserCoupon::find()
             ->innerJoin($u, "$uc.user_id = $u.id")
-            ->where(["$uc.couponType_id" => $id])
-            ->select("$u.*, $uc.created_at as collectDateTime, $uc.isUsed, $uc.expiryDate");
+            ->where(["$uc.couponType_id" => $id]);
 
         if (!empty($status)) {
             if ('a' === $status) {
-                $query->andWhere(["$uc.isUsed" => 0]);
+                $query->andWhere(["$uc.isUsed" => false]);
                 $query->andWhere(['>=', "$uc.expiryDate", date('Y-m-d')]);
             } elseif ('b' === $status) {
-                $query->andWhere(["$uc.isUsed" => 1]);
+                $query->andWhere(["$uc.isUsed" => true]);
             } elseif ('c' === $status) {
-                $query->andWhere(["$uc.isUsed" => 0]);
+                $query->andWhere(["$uc.isUsed" => false]);
                 $query->andWhere(['<', "$uc.expiryDate", date('Y-m-d')]);
             }
         }
 
-        $pages = new Pagination(['totalCount' => $query->count(), 'pageSize' => '15']);
-        $model = $query->offset($pages->offset)->limit($pages->limit)->orderBy('id desc')->all();
+        $query->orderBy(["$uc.created_at" => SORT_DESC]);
 
-        return $this->render('owner_list', ['model' => $model, 'coupon_id' => $id, 'status' => $status, 'pages' => $pages]);
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => [
+                'pageSize' => 15,
+            ]
+        ]);
+
+        return $this->render('owner_list', ['coupon_id' => $id, 'status' => $status, 'dataProvider' => $dataProvider]);
     }
 }

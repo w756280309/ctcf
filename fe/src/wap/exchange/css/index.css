@@ -1,0 +1,82 @@
+body {
+    background-color: #fff;
+}
+.tips {
+    padding:0.3rem 0.53333333rem;
+    font-size: 0.37333333rem;
+    background-color: #e7eaf1;
+    display: block;
+    color: #007aff;
+}
+.exchange-record ul li {
+  height: 2rem;
+  width: 100%;
+  padding: 0 0.53333333rem;
+  border-bottom: 1px solid #ddd;
+  text-align: center;
+  overflow: hidden;
+    background-color: #fff;
+}
+
+.exchange-record ul li div.lf {
+  padding: 0.44rem 0;
+}
+
+.exchange-record ul li div.lf p:first-child {
+  color: #666;
+  font-size: 0.4rem;
+  text-align: left;
+  width: 4rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.exchange-record ul li div.lf p:last-child {
+  color: #999999;
+  font-size: 0.34666667rem;
+  text-align: left;
+  margin-top: 0.06666667rem;
+}
+
+.exchange-record ul li span.lf {
+  line-height: 2rem;
+  font-size: 0.4rem;
+  color: #666;
+  margin-left: 0.8rem;
+}
+
+.exchange-record ul li span.lf i {
+  color: #f1453d;
+  font-style: normal;
+}
+
+.exchange-record ul li button.rg {
+  display: block;
+  width: 1.8rem;
+  height: 0.8rem;
+  font-size: 0.35rem;
+  color: #fff;
+  border-radius: 0.13333333rem;
+  margin-top: 0.6rem;
+  outline: none;
+  border: none;
+}
+
+.eschanging {
+  background-color: #f1453d;
+}
+
+.eschanged {
+  background-color: #aaaaaa;
+}
+
+#pullUp {
+  background: #fff;
+  height: 0.88rem;
+  line-height: 0.88rem;
+  padding: 0.06666667rem 0.13333333rem;
+  font-weight: bold;
+  color: #888;
+  text-align: center;
+}

@@ -8,6 +8,7 @@ use common\models\offline\OfflineOrder;
 use common\models\affiliation\Affiliator;
 use common\models\offline\OfflineLoan;
 use common\models\offline\ImportForm;
+use common\models\offline\OfflineRepayment;
 use common\models\offline\OfflineStats;
 use common\models\offline\OfflinePointManager;
 use common\models\offline\OfflineUser;
@@ -60,9 +61,9 @@ class OfflineController extends BaseController
                         if (empty(array_filter($order))) {
                             continue;
                         }
-
                         //初始化model，寻找行号，使用batchInsert插入
                         $neworder = $this->initModel($order);
+
                         if ($neworder->validate()) {
                             $neworder->save();
                             if ($neworder->valueDate) {
@@ -71,6 +72,9 @@ class OfflineController extends BaseController
                             }
                         } else {
                             $error_index = $key + 1;
+                            if ($neworder->hasErrors('loan_id')) {
+                                throw new \Exception('Excel表中SN未找到对应标的,行号' . $error_index . ',请在后台添加标的: ' . $order[2]);
+                            }
                             if ($neworder->hasErrors('affiliator_id')) {
                                 throw new \Exception('文件内容有错,行号' . $error_index . ',请在后台添加分销商' . $order[0]);
                             }
@@ -112,12 +116,14 @@ class OfflineController extends BaseController
         if (isset($request['mobile']) && !empty($request['mobile'])) {
             $order->andFilterWhere(['like', "$o.mobile", $request['mobile']]);
         }
+        if (isset($request['loan_id']) && !empty($request['loan_id'])) {
+            $order->andFilterWhere(["$o.loan_id" => $request['loan_id']]);
+        }
 
         $branches = Affiliator::find()->all();
         $pages = new Pagination(['totalCount' => $order->count(), 'pageSize' => 10]);
-        $orders = $order->offset($pages->offset)->limit($pages->limit)->orderBy(["$o.id" => SORT_DESC])->all();
         $totalmoney = $order->sum('money');
-
+        $orders = $order->offset($pages->offset)->limit($pages->limit)->orderBy(["$o.id" => SORT_DESC])->all();
         $stats = OfflineStats::findOne(1);
 
         return $this->render('list', [
@@ -138,7 +144,7 @@ class OfflineController extends BaseController
      */
     private function readExcelToArray($filePath)
     {
-        $filterSubset = new MyReadFilter(range('A', 'K'));
+        $filterSubset = new MyReadFilter(range('A', 'L'));
         $PHPReader = new \PHPExcel_Reader_Excel2007(); // Reader很关键，用来读excel文件
         if (!$PHPReader->canRead($filePath)) { // 这里是用Reader尝试去读文件，07不行用05，05不行就报错。
             $PHPReader = new \PHPExcel_Reader_Excel5();
@@ -156,11 +162,11 @@ class OfflineController extends BaseController
             throw new \Exception('该excel文件行数超出' . $max_read_line . '行');
         }
         //将J,K行日期转为php的'Y-m-d'
-        $j = 'J' . $row;
         $k = 'K' . $row;
+        $l = 'L' . $row;
         //excel在‘2016/7/12’识别该列时，日期格式的保持不变，非日期格式的识别为'07-12-06'，或者识别成float(42258),使用下面的是都可以转换成'2016-07-12'
-        $currentSheet->getStyle("J1:$j")->getNumberFormat()->setFormatCode('yyyy-mm-dd');
         $currentSheet->getStyle("K1:$k")->getNumberFormat()->setFormatCode('yyyy-mm-dd');
+        $currentSheet->getStyle("L1:$l")->getNumberFormat()->setFormatCode('yyyy-mm-dd');
         $content = $currentSheet->toArray('', true, true);
         return $content;
     }
@@ -177,39 +183,33 @@ class OfflineController extends BaseController
         $order = array_map(function ($val) {
             return Yii::$app->functions->removeWhitespace($val);
         }, $order);
-
         $model = new OfflineOrder();
         $affiliator = Affiliator::find()->where(['name' => $order[0]])->one();
-        $loan = OfflineLoan::find()->where(['title' => $order[1]])->one();
-        $user = OfflineUser::find()->where(['idCard' => $order[4]])->one();
+        $loan = OfflineLoan::find()->where(['sn' => $order[2]])->one();
+        $user = OfflineUser::find()->where(['idCard' => $order[5]])->one();
         $affiliator_id = null;
         if (null !== $affiliator) {
             $affiliator_id = $affiliator->id;
         }
+
         if (null !== $loan) {
             $loan_id = $loan->id;
         } else {
-            $newLoan = new OfflineLoan();
-            $newLoan->title = $order[1];
-            $newLoan->expires = (int) $order[2];
-            $newLoan->unit = str_replace($newLoan->expires, '', $order[2]);
-
-            $newLoan->save();
-            $loan_id = $newLoan->id;
+            $model->addError('loan_id', 'Excel表中SN未找到对应标的');
         }
 
         if (null !== $user) {
             $user_id = $user->id;
             //手机号应是始终为最后导入的那个
-            if ($user->mobile !== $order[5]) {
-                $user->mobile = $order[5];
+            if ($user->mobile !== $order[6]) {
+                $user->mobile = $order[6];
                 $user->save();
             }
         } else {
             $user = new OfflineUser();
-            $user->realName = $order[3];
-            $user->idCard = $order[4];
-            $user->mobile = $order[5];
+            $user->realName = $order[4];
+            $user->idCard = $order[5];
+            $user->mobile = $order[6];
             $user->save();
             $user_id = $user->id;
         }
@@ -217,13 +217,13 @@ class OfflineController extends BaseController
         $model->affiliator_id = $affiliator_id;
         $model->loan_id = $loan_id;
         $model->user_id = $user_id;
-        $model->idCard = $order[4];
-        $model->mobile = $order[5];
-        $model->accBankName = $order[6];
-        $model->bankCardNo = $order[7];
-        $model->money = $order[8];
-        $model->orderDate = $order[9];
-        $model->valueDate = $order[10];
+        $model->idCard = $order[5];
+        $model->mobile = $order[6];
+        $model->accBankName = $order[7];
+        $model->bankCardNo = $order[8];
+        $model->money = $order[9];
+        $model->orderDate = $order[10];
+        $model->valueDate = $order[11];
         $model->created_at = time();
         $model->isDeleted = false;
         return $model;
@@ -273,7 +273,7 @@ class OfflineController extends BaseController
             $order->andWhere(["$o.id" => $request['id']]);
         }
         $model = $order->one();
-        $model->setScenario('edit');
+        //$model->setScenario('edit');
         $model->realName = $model->user->realName;
         return $this->render('edit',[
             'model' => $model,
@@ -391,6 +391,59 @@ class OfflineController extends BaseController
     }
 
     /**
+     * 标的统一计息 offline_order表 已经计息的不再计息 value_date is null
+     */
+
+    public function actionLoanConfirm($id)
+    {
+        $this->layout = false;
+        $refresh = false;
+        $ofl = OfflineLoan::tableName();
+        $ofo = OfflineOrder::tableName();
+        if (empty($id)) {
+            throw $this->ex404();
+        }
+        $model = OfflineLoan::find()->innerJoinWith('order')
+            ->where(["$ofl.id" => $id , "$ofo.isDeleted" => false])
+            ->one();
+        if (null === $model) {
+            $model = OfflineLoan::find()->where(["$ofl.id" => $id])->one();
+        }
+        if (!empty($model->jixi_time)) {
+            $model->addError('jixi_time', '已有起息日期，不能再次确认');
+        }
+        //更新标的表 jixi_time
+        $model->scenario = 'confirm';
+        $post = Yii::$app->request->post();
+        if ($model->load($post)) {
+            if (empty($model->jixi_time)) {
+                $model->addError('jixi_time', '起息日期不能为空');
+            }
+            if (empty($model->getErrors())) {
+                $model->save();
+                $transaction = Yii::$app->db->beginTransaction();
+                if (null !== $model->order) {
+                    try {
+                        $refresh = true;
+                        foreach ($model->order as $order) {
+                            $order->scenario = 'confirm';
+                            if (empty($order->valueDate)) {
+                                $order->valueDate = $post['OfflineLoan']['jixi_time'];
+                                $order->save();
+                                $this->updatePointsAndAnnual($order, PointRecord::TYPE_OFFLINE_BUY_ORDER);
+                            }
+                        }
+                        $transaction->commit();
+                    } catch (\Exception $ex) {
+                        $transaction->rollBack();
+                    }
+                }
+            }
+        }
+
+        return $this->render('loanjixi', ['model' => $model, 'refresh' => $refresh]);
+    }
+    /**
      * 根据订单和类型更新积分和累计年化投资
      */
     private function updatePointsAndAnnual($order, $type)
@@ -403,4 +456,178 @@ class OfflineController extends BaseController
         $offlineUserManager = new OfflineUserManager();
         $offlineUserManager->updateAnnualInvestment($order);
     }
+
+    /**
+     * 标的列表
+     */
+    public function actionLoanlist()
+    {
+        $model = new OfflineLoan();
+        $request = Yii::$app->request->get();
+        $query = OfflineLoan::find();
+        //筛选标的sn
+        if (!empty($request['sn'])) {
+            $query->andWhere(['like', 'sn', trim($request['sn'])]);
+        }
+        if ($request['title']) {
+            $query->andFilterWhere(['like', 'title', $request['title']]);
+        }
+        if ($request['id']) {
+            $query->andFilterWhere(['id' => $request['id']]);
+        }
+        $query->orderBy(['id' => SORT_DESC, 'sn' => SORT_DESC]);
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => [
+                'pageSize' => 15,
+            ]
+        ]);
+        return $this->render('loanlist' , [
+            'model' => $model,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+    /**
+     * 新增标的
+     */
+    public function actionAddloan()
+    {
+        $model = new OfflineLoan();
+        if ($id = Yii::$app->request->get('id')) {
+            $model = $this->findOr404(OfflineLoan::className() , $id);
+        }
+        if (Yii::$app->request->isPost) {
+            $post = Yii::$app->request->post();
+            if ($post['OfflineLoan']['id']) {
+                $model = OfflineLoan::findOne($post['OfflineLoan']['id']);
+            }
+
+            if ($model->load($post) && $model->save()) {
+                return $this->redirect('loanlist');
+            }
+        }
+        return $this->render('addloan' , [
+            'model' => $model,
+        ]);
+    }
+
+    /**
+     * 编辑标的
+     */
+    public function actionEditloan()
+    {
+        $model = new OfflineLoan();
+
+        if ($id = Yii::$app->request->get('id')) {
+            $model = $this->findOr404(OfflineLoan::className() , $id);
+        }
+        $model->scenario = 'edit';
+        if (Yii::$app->request->isPost) {
+            $post = Yii::$app->request->post();
+            if ($post['OfflineLoan']['id']) {
+                $model = OfflineLoan::findOne($post['OfflineLoan']['id']);
+            }
+
+            if ($model->load($post) && $model->save()) {
+                return $this->redirect('loanlist');
+            }
+        }
+        return $this->render('editloan' , [
+            'model' => $model,
+        ]);
+    }
+
+    /**
+     * 标的分期列表
+     */
+    public function actionRepayment($id)
+    {
+        $request = Yii::$app->request->get();
+        $query = OfflineRepayment::find()->innerJoinWith('loan')->where(['loan_id' => $request['id']])->orderBy('title asc,dueDate asc');
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => [
+                'pageSize' => 20,
+            ],
+        ]);
+        return $this->render('repayment' , [
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+
+    /**
+     * 增加分期
+     */
+    public function actionAddrpm()
+    {
+        $model = new OfflineRepayment();
+        $loan_id = Yii::$app->request->get('loan_id');
+        $id = Yii::$app->request->get('id');
+
+        if ($id) {
+            $model = OfflineRepayment::findOne($id);
+            $loan_id = $model->loan_id;
+            $offrpms = OfflineRepayment::find()->where(['loan_id' => $loan_id])->all();
+            $dueDate = null;
+            foreach ($offrpms as $offrpm) {
+                if (is_null($dueDate)) {
+                    $dueDate = $offrpm->dueDate;
+                } else {
+                    $dueDate .= ',' . $offrpm->dueDate;
+                }
+            }
+            return $this->render('addrpm',[
+                'model' => $model,
+                'loan_id' => $loan_id,
+                'dueDate' => $dueDate,
+            ]);
+        }
+
+        if (Yii::$app->request->isPost) {
+            $post = Yii::$app->request->post();
+            $loan_id = $post['OfflineRepayment']['loan_id'];
+            $arr = explode(',',$post['OfflineRepayment']['dueDate']);
+
+            array_multisort($arr,SORT_ASC);
+
+            if ($post['OfflineRepayment']['term'] != sizeof($arr) && null !== $arr) {
+                //日期个数与分期数量不符
+                $model->addError('term', '日期个数与分期期数不符');
+                //Yii::$app->session->setFlash('info' , "日期个数与分期期数不符");
+                return $this->render('addrpm',[
+                    'model' => $model,
+                    'loan_id' => $loan_id,
+                ]);
+            }
+            $transaction = Yii::$app->db->beginTransaction();
+            try {
+                if (OfflineRepayment::find()->where(['loan_id' => $loan_id])->count() && null !== $arr) {
+                    $model = OfflineRepayment::deleteAll(['loan_id' => $loan_id]);
+                }
+                foreach ($arr as $k => $v) {
+                    $model = new OfflineRepayment();
+                    if ($post['OfflineRepayment']['term'] == sizeof($arr)) {
+                        $loan = OfflineLoan::findOne($loan_id);
+                        $loan->finish_date = $v;
+                        $loan->save(false);
+                    }
+                    $model->loan_id = $loan_id;
+                    $model->term = $post['OfflineRepayment']['term'];
+                    $model->dueDate = $v;
+                    $model->save(false);
+                }
+                $transaction->commit();
+            } catch (\Exception $ex) {
+                $transaction->rollBack();
+            }
+            return $this->redirect(['repayment' , 'id'=>$loan_id]);
+        }
+
+        return $this->render('addrpm',[
+            'model' => $model,
+            'loan_id' => $loan_id,
+        ]);
+    }
+
+
 }

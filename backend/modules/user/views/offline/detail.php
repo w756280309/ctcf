@@ -65,10 +65,19 @@ $this->title = '线下会员详情';
                 </tr>
             </table>
         </div>
+        <div class="detail_font">会员资金详情</div>
+        <table class="table table-condensed">
+            <tr>
+                <td><span>理财资产（万元）</span><?= StringUtils::amountFormat2($user->investment_balance) ?></td>
+                <td></td>
+            </tr>
+
+        </table>
         <div>
             <div>
                 <ul class="nav nav-tabs nav-pills" role="tablist" id="list_nav">
-                    <li role="presentation" class="point_record_nav active"><a href="javascript:getPointList('/user/offline/points?id=<?= $user->id?>')">积分明细</a></li>
+                    <li role="presentation" class="point_record_nav active"><a href="javascript:getLoanOrderList('/user/offline/orders?id=<?= $user->id?>')">标的投资明细</a></li>
+                    <li role="presentation" class="point_record_nav"><a href="javascript:getPointList('/user/offline/points?id=<?= $user->id?>')">积分明细</a></li>
                     <li role="presentation" class="point_record_nav"><a href="javascript:getCoinList('/user/user/coin-list?userId=<?= $user->id ?>&isOffline=1')">财富值明细</a></li>
                     <li role="presentation" class="point_record_nav">
                         <a href="javascript:getOnlineList('/user/offline/online-user?id=<?= $user->id ?>')">线上会员</a>
@@ -83,6 +92,15 @@ $this->title = '线下会员详情';
 </div>
 
 <script>
+    function getLoanOrderList(href)
+    {
+        $.get(href, function(data) {
+            if (data) {
+                $('#list_detail').html(data);
+            }
+        })
+    }
+
     function getPointList(href)
     {
         $.get(href, function(data) {
@@ -117,6 +135,7 @@ $this->title = '线下会员详情';
             $(this).addClass('active');
         }
     });
-    getPointList('/user/offline/points?id=<?= $user->id?>');
+    //默认第一个显示
+    getLoanOrderList('/user/offline/orders?id=<?= $user->id?>');
 </script>
 <?php $this->endBlock(); ?>

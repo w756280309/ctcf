@@ -90,8 +90,10 @@ return [
         'assetManager' => [
             'bundles' => [
                 'yii\web\JqueryAsset' => [
+                    'basePath' => '@webroot',
+                    'baseUrl' => $params['m_assets_base_uri'],
                     'js' => [
-                        'jquery.min.js',
+                        'js/jquery.min.js',
                     ],
                 ],
             ],

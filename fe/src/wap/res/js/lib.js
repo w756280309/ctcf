@@ -14,6 +14,23 @@ WDJF.numberFormat = function (amount, stripTrailingZeros) {
     }
 };
 
+function eventTarget(event) {
+    event.preventDefault();
+}
+
+/**
+ * 禁用或启动页面上下滑动效果.
+ *
+ * @param boolean allow 是否允许页面上下滑动.
+ */
+WDJF.touchmove = function (allow) {
+    if ('boolean' !== typeof allow) {
+        allow = true;
+    }
+
+    $('body').on('touchmove', eventTarget, allow);
+};
+
 /**
  * 除法运算.
  */
@@ -214,12 +231,10 @@ function addToken() {
 }
 
 function forceReload_V2() {
-    if(navigator.userAgent.indexOf('Safari') > -1) {
-        window.addEventListener('pageshow', function (event) {
-            if(event.persisted) {
-                document.body.style.display = 'none';
-                window.location.reload();
-            }
-        });
-    }
+    window.addEventListener('pageshow', function (event) {
+        if(event.persisted) {
+            document.body.style.display = 'none';
+            window.location.reload();
+        }
+    });
 }

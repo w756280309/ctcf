@@ -256,7 +256,7 @@ class SignupForm extends Model
             $model->scenario = 'editpass';
             $model->setPassword($this->password);
             $res = $model->save();
-            SmsService::editSms(SecurityUtils::decrypt($model->mobile));
+            SmsService::editSms(SecurityUtils::decrypt($model->safeMobile));
 
             return $res;
         } else {

@@ -1,9 +1,11 @@
 <?php
 $this->title = '代金券列表';
 
+use common\models\coupon\UserCoupon;
 use common\utils\StringUtils;
 use yii\helpers\Html;
 use yii\widgets\LinkPager;
+
 ?>
 <?php $this->beginBlock('blockmain'); ?>
 
@@ -64,6 +66,8 @@ use yii\widgets\LinkPager;
                         <th class="money">起投金额</th>
                         <th>有效期</th>
                         <th>发放时间</th>
+                        <th>发放数量</th>
+                        <th>已使用数</th>
                         <th><center>操作</center></th>
                     </tr>
                 </thead>
@@ -76,6 +80,16 @@ use yii\widgets\LinkPager;
                         <td class="money"><?= StringUtils::amountFormat2($val->minInvest) ?>元</td>
                         <td><?= empty($val->expiresInDays) ? $val->useEndDate : $val->expiresInDays.'天' ?></td>
                         <td><?= empty($val->issueStartDate) ? '---' : $val->issueStartDate.' - '.$val->issueEndDate ?></td>
+                        <td>
+                            <?=
+                                UserCoupon::findCouponByConfig($val->id)->count();
+                            ?>
+                        </td>
+                        <td>
+                            <?=
+                                UserCoupon::findCouponByConfig($val->id, UserCoupon::STATUS_USED)->count();
+                            ?>
+                        </td>
                         <td>
                             <center>
                                 <?php if (!$val->isAudited) { ?>

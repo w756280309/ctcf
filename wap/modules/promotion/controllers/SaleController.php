@@ -25,6 +25,7 @@ class SaleController extends Controller
         }
         $cache = \Yii::$app->cache;
         $key = ['promo', 'ranking', $id,];
+
         if ($cache->exists($key)) {
             return ['code' => true, 'data' => $cache->get($key)];
         }
@@ -36,7 +37,7 @@ class SaleController extends Controller
         $online = $ranking->online;
         //合并三次排名，重新排名
         $rankingUser = array_merge_recursive($online, $offline, $both);
-        //相同手机号进行合并
+        //相同手机号进行合并 这个排名活动了相同手机号的合并数据不准确 主要业务是处理online_order业务
         $rankingUser = $ranking->getMergeMobile($rankingUser);
         //排序
         usort($rankingUser, [RankingPromo::class, 'rankingSort']);

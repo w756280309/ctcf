@@ -21,9 +21,10 @@ class PointsService
      * @param PointRecord       $pointRecord  包含ref_type、incr_points的PointRecord
      * @param bool $isOffline   $isOffline     必须和$user类型对应
      * @param User|OfflineUser  $user
+     * @param string            $dateTime       积分流水时间
      * @return bool
      */
-    public static function addUserPoints(PointRecord $pointRecord, $isOffline, $user)
+    public static function addUserPoints(PointRecord $pointRecord, $isOffline, $user, $dateTime = null)
     {
         $transaction = Yii::$app->db->beginTransaction();
         try {
@@ -47,6 +48,7 @@ class PointsService
                 }
                 $sn = TxUtils::generateSn('PR');
                 $table = 'user';
+                $pointRecord->userLevel = $user->level;
             }
             //更新对应的用户表里的points字段
             $sql = 'update ' . $table . ' set points = points + :points where id = :userId';
@@ -59,7 +61,7 @@ class PointsService
             $pointRecord->user_id = $user->id;
             $pointRecord->sn = $sn;
             $pointRecord->final_points = $user->points;
-            $pointRecord->recordTime = date("Y-m-d H:i:s");
+            $pointRecord->recordTime = empty($dateTime) ? date("Y-m-d H:i:s") : $dateTime;
             $pointRecord->isOffline = $isOffline;
             $res = $pointRecord->save(false);
             if (!$res) {

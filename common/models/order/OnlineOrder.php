@@ -7,6 +7,7 @@ use common\models\product\OnlineProduct;
 use common\models\user\MoneyRecord;
 use common\models\user\UserAccount;
 use common\models\user\User;
+use EBaoQuan\Client;
 use P2pl\OrderTxInterface;
 use Yii;
 use yii\behaviors\TimestampBehavior;
@@ -45,6 +46,8 @@ class OnlineOrder extends ActiveRecord implements OrderTxInterface
     public $order_return;
     public $drawpwd;
     private $_user = false;
+
+    private $baoquanＤownloadLink;//保全合同下载链接
 
     /**
      * {@inheritdoc}
@@ -348,5 +351,37 @@ class OnlineOrder extends ActiveRecord implements OrderTxInterface
         }
 
         return bcdiv(bcmul($this->order_money, $this->loan->expires, 14), $base, 2);
+    }
+
+    /**
+     * 根据订单sn判断该订单是否为所属用户的首次投资订单
+     */
+    public function isFirstInvestment()
+    {
+        if ($this->getIsNewRecord()) {
+            throw new \Exception('the record should be inserted when calling!');
+        }
+        $order = OnlineOrder::find()->where(['uid' => $this->uid, 'status' => 1])->orderBy(['order_time' => SORT_ASC, 'id' => SORT_ASC])->one();
+        if (null === $order) {
+            return false;
+        }
+        return $this->sn === $order->sn;
+    }
+
+    //获取保全合同下载链接
+    public function getBaoquanDownloadLink()
+    {
+        if (is_null($this->baoquanＤownloadLink)) {
+            $baoQuan = EbaoQuan::find()->where([
+                'itemType' => EbaoQuan::ITEM_TYPE_LOAN_ORDER,
+                'type' => EbaoQuan::TYPE_LOAN,
+                'success' => 1,
+                'uid' => $this->uid,
+                'itemId' => $this->id,
+            ])->one();
+
+            $this->baoquanＤownloadLink = is_null($baoQuan) ? null : Client::contractFileDownload($baoQuan);
+        }
+        return $this->baoquanＤownloadLink;
     }
 }

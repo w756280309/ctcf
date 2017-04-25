@@ -24,7 +24,7 @@ $this->registerJsFile(FE_BASE_URI.'libs/videojs/video.min.js', ['position' => 1]
                 <i>可用券</i>
             <?php } ?>
             <?php if ($pointsMultiple > 1) { ?>
-                <i><?= $pointsMultiple ?>倍积分</i>
+                <i>积分<?= $pointsMultiple ?>倍</i>
             <?php }?>
         </div>
     </div>

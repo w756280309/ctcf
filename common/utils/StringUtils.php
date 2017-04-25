@@ -46,6 +46,17 @@ class StringUtils
     }
 
     /**
+     * 混淆座机号码(带区号, 区号和号码之间用"-"隔开)
+     * todo CRM处使用，混淆规则需要再确认
+     * @param $number
+     * @return string
+     */
+    public static function obfsLandlineNumber($number)
+    {
+        return substr_replace($number, '****', strpos($number, '-') + 3, 4);
+    }
+
+    /**
      * 隐藏姓名部分信息,四个字的隐藏前两个字,其他的隐藏前一个字
      * @param string $name 字符串格式的姓名
      * @return string 隐藏后的姓名字符串

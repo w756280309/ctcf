@@ -16,7 +16,6 @@ $this->loadAuthJs = false;
             <span class="title">管理首页</span>
             <span class="arrow "></span>
         </a>
-
     </li>
 </ul>
 <?php $this->endBlock(); ?>
@@ -28,23 +27,38 @@ $this->loadAuthJs = false;
             <h3 class="page-title">
                 欢迎使用后台管理系统
             </h3>
-            <h4 class="hk-notice hk-notice-item">
-            </h4>
-            <h4 class="hk-notice draw-notice-item">
-            </h4>
+            <h4 class="hk-notice hk-notice-item"></h4>
+            <h4 class="hk-notice draw-notice-item"></h4>
+            <h4 class="hk-notice bankupdate-notice-item"></h4>
         </div>
     </div>
 </div>
 
 <script>
     $(function() {
-        var xhr = $.get('/product/productonline/hk-stats-count', function(data) {
+        $.get('/product/productonline/hk-stats-count', function(data) {
             $('.hk-notice-item').html('7天内有<a href="/product/productonline/list?days=7">'+ data.week +'</a>个项目等待还款；当天有<a href="/product/productonline/list?days=1">'+ data.today +'</a>个项目等待还款！');
         });
 
-        var xhr1 = $.get('/user/user/draw-stats-count', function(data) {
+        $.get('/user/user/draw-stats-count', function(data) {
             $('.draw-notice-item').append('<br>当月提现次数到达3次的用户有<a href="/user/user/draw-limit-list?times=3">'+ data.small +'</a>人；提现次数到达5次的用户有<a href="/user/user/draw-limit-list?times=5">'+ data.large +'</a>人！');
         });
-    })
+
+        $.get('/datatj/bank/count-for-update', function(data) {
+            var noticeClass = '';
+
+            if (0 === data) {
+                noticeClass = 'notice-font';
+            }
+
+            $('.bankupdate-notice-item').append('<br>截止当前有<a href="/datatj/bank/update-list" class="'+noticeClass+'">'+data+'</a>条超过14天的换卡记录需要处理！');
+        });
+    });
 </script>
+
+<style type="text/css">
+    a.notice-font {
+        color: #000 !important;
+    }
+</style>
 <?php $this->endBlock(); ?>

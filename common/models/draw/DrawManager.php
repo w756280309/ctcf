@@ -20,13 +20,27 @@ class DrawManager
     /**
      * 创建一个提现申请.
      *
-     * @param type $account
-     * @param type $money
-     * @param type $fee
+     * @param UserAccount $account
+     * @param float $money
+     * @param float $fee
+     * @return DrawRecord
      */
     public static function initDraw(UserAccount $account, $money, $fee = 0)
     {
         $money = DrawRecord::getDrawableMoney($account, $money, $fee);
+
+        return self::initNew($account, $money, $fee);
+    }
+
+    /**
+     * 初始化提现记录
+     * @param UserAccount $account
+     * @param $money
+     * @param int $fee
+     * @return DrawRecord
+     */
+    public static function initNew(UserAccount $account, $money, $fee = 0)
+    {
         $user = $account->user;
         $ubank = $user->qpay;
         $draw = new DrawRecord();
@@ -44,11 +58,7 @@ class DrawManager
         $draw->identification_number = $user->idcard;
         $draw->user_bank_id = $ubank->id;
         $draw->status = DrawRecord::STATUS_ZERO;
-        if ($draw->validate() && $draw->save(false)) {
-            return $draw;
-        } else {
-            throw new \Exception('提现申请失败');
-        }
+        return $draw;
     }
 
     /**

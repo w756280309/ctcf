@@ -7,8 +7,9 @@ $hostInfo = \Yii::$app->request->hostInfo;
 ?>
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/wenjfbase.css">
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/activeComHeader.css">
-<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/qiandao/css/index.css?v=20170401">
+<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/qiandao/css/index.css?v=201704021">
 <script src="<?= FE_BASE_URI ?>libs/lib.flexible3.js"></script>
+<script src="<?= ASSETS_BASE_URI ?>js/common.js"></script>
 
 <div class="flex-content">
     <?php if (!defined('IN_APP')) { ?>
@@ -39,8 +40,10 @@ $hostInfo = \Yii::$app->request->hostInfo;
     <div class="qiandao_button f16">
         <?php if ($checkInToday) { ?>
             <a href="javascript:void(0)" class="qiandao_btn btn2">已签到</a>
+        <?php } elseif ($user) { ?>
+            <a href="javascript:void(0)" class="qiandao_btn btn1" id="checkin_btn">快点我签到吧~</a>
         <?php } else { ?>
-            <a href="<?= $user ? '/mall/portal/guest' : '/site/login?next='.urlencode($hostInfo.'/user/checkin') ?>" class="qiandao_btn btn1">快点我签到吧~</a>
+            <a href="/site/login?next=<?= urlencode($hostInfo.'/user/checkin') ?>" class="qiandao_btn btn1">快点我签到吧~</a>
         <?php } ?>
     </div>
     <div class="rule_box" style="padding-top: 0.5rem;">
@@ -80,13 +83,23 @@ $hostInfo = \Yii::$app->request->hostInfo;
                 <td><span class="org">50元</span>代金券</td>
             </tr>
         </table>
+        <?php if (!defined('IN_APP')) { ?>
+            <p class="djq_deadline f13"><a href="http://a.app.qq.com/o/simple.jsp?pkgname=com.wz.wenjf">使用APP签到更方便，点击<font color="#0080ff">立即下载</font></a></p>
+        <?php } ?>
     </div>
 </div>
 
-<script>
-    $(function () {
-        var jindu = '<?= $checkInDays ?>';
+<!--添加签到蒙层-->
+<div class="mask"></div>
+<div class="pomp">
+    <img src="<?= FE_BASE_URI ?>wap/qiandao/images/pomp-header.png" alt="">
+    <p class="pomp-time"><i></i>您已连续签到<span></span>天<i></i></p>
+    <p class="pomp-points">获得<span id="pomp-point"></span>积分<i id="pomp-coupon"></i></p>
+    <a href="javascript:void(0);">确认</a>
+</div>
 
+<script>
+    function progressBar(jindu) {
         if (jindu == 0) {
             $('.jindu_one').hide();
             $('.schedule_bar .jindu_two').hide();
@@ -97,7 +110,47 @@ $hostInfo = \Yii::$app->request->hostInfo;
                 return parseInt(jindu-1) * 3 + '%';
             });
         }
+    }
 
+    $(function () {
+        progressBar('<?= $checkInDays ?>');
+
+        var allowClick = true;
+        $('#checkin_btn').on('click', function() {
+            if (!allowClick) {
+                 return;
+            }
+
+            allowClick = false;
+
+            var xhr = $.get('/user/checkin/check', function(data) {
+                $('.pomp-time span').html(data.streak);
+                $('#pomp-point').html(data.points);
+                if (data.coupon) {
+                    $('#pomp-coupon').html('和<span>'+WDJF.numberFormat(data.coupon, true)+'</span>元代金券');
+                }
+                WDJF.touchmove(false);
+                $('.mask, .pomp').show();
+            });
+
+            xhr.fail(function(jqXHR) {
+                var msg = jqXHR.status == 400 && jqXHR.responseJSON && jqXHR.responseJSON.message
+                    ? jqXHR.responseJSON.message
+                    : '系统繁忙，请稍后重试！';
+
+                allowClick = true;
+                toastCenter(msg);
+            });
+        });
+        /*添加点击刷新页面*/
+        $('.pomp').on('click', function(event) {
+            event.stopPropagation();
+        });
+        $('.pomp a, .mask').on('click', function(event) {
+            event.stopPropagation();
+            WDJF.touchmove(true);
+            window.location.href = '<?= $hostInfo ?>'+'/user/checkin?_mark='+'<?= time() ?>';
+        });
         forceReload_V2();
-    })
+    });
 </script>

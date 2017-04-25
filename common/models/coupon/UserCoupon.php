@@ -22,9 +22,15 @@ use yii\db\ActiveRecord;
  * @property string $ip            发券管理员操作IP
  * @property int    $isUsed        是否使用
  * @property int    $created_at    创建时间
+ * @property string $expiryDate    截止日期
  */
 class UserCoupon extends ActiveRecord
 {
+
+    const STATUS_EXPIRED = 'expired'; //已过期
+    const STATUS_VALID = 'valid'; //有效
+    const STATUS_USED = 'used'; //已使用
+
     /**
      * {@inheritdoc}
      */
@@ -70,28 +76,34 @@ class UserCoupon extends ActiveRecord
             'order_id' => '订单ID',
             'isUsed' => '是否使用',
             'created_at' => '创建时间',
+            'admin_id' => '管理员ID',
+            'ip' => '管理员IP',
+            'expiryDate' => '截止日期',
         ];
     }
 
     /**
-     * 获取相关订单信息.
+     * 获取关联订单信息.
      */
     public function getOrder()
     {
         return $this->hasOne(OnlineOrder::className(), ['id' => 'order_id']);
     }
 
+    /**
+     * 获取关联代金券类型信息
+     */
     public function getCouponType()
     {
         return $this->hasOne(CouponType::className(), ['id' => 'couponType_id']);
     }
 
-    /*
-     * 获取关联用户信息，取月度代金券用户手机号码
-     *
-     * */
-    public function getUser(){
-        return  $this->hasOne(User::className(),['id' => 'user_id']);
+    /**
+     * 获取关联用户信息
+     */
+    public function getUser()
+    {
+        return $this->hasOne(User::className(),['id' => 'user_id']);
     }
 
     /**
@@ -252,5 +264,37 @@ class UserCoupon extends ActiveRecord
     public function getAdmin()
     {
         return $this->hasOne(Admin::class, ['id' => 'admin_id']);
+    }
+
+    /**
+     * 根据代金券的类型ID和状态获得对应的Query
+     *
+     * @param int         $couponTypeId 代金券类型ID
+     * @param null|string $status       代金券状态(若为null或者不在定义的常量状态范围内，默认为全部)
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public static function findCouponByConfig($couponTypeId, $status = null)
+    {
+        $uc = UserCoupon::tableName();
+        $ct = CouponType::tableName();
+        $query = UserCoupon::find()
+            ->innerJoinWith('couponType')
+            ->where(["$uc.couponType_id" => $couponTypeId])
+            ->andWhere(["$ct.isDisabled" => false]);
+
+        if (null !== $status) {
+            if ($status === self::STATUS_EXPIRED) {
+                $query->andWhere(["$uc.isUsed" => false]);
+                $query->andWhere(['<', "$uc.expiryDate", date('Y-m-d')]);
+            } elseif ($status === self::STATUS_USED) {
+                $query->andWhere(["$uc.isUsed" => true]);
+            } elseif ($status === self::STATUS_VALID) {
+                $query->andWhere(["$uc.isUsed" => false]);
+                $query->andWhere(['>=', "$uc.expiryDate", date('Y-m-d')]);
+            }
+        }
+
+        return $query;
     }
 }

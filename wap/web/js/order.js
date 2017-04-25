@@ -53,9 +53,7 @@ function order() {
         }
 
         if (data.tourl != undefined) {
-            setTimeout(function () {
-                location.replace(data.tourl);
-            }, 1000);
+            location.replace(data.tourl);
         }
     });
 
@@ -84,9 +82,17 @@ function openPopup() {
 function profit($this)
 {
     var money = $this.val();
+
     money = money.replace(/^[^0-9]+/, '');
     if(!$.isNumeric(money)) {
         money = 0;
+    }
+
+    if (money <= 0) {
+        $('.shijizhifu').html('0.00元');
+        $('.yuqishouyi').html('0.00元');
+
+        return;
     }
 
     var couponMoney = $('#couponMoney').val();

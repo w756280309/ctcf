@@ -757,7 +757,12 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
         if (in_array($this->status, [3, 5, 6, 7]) || $this->end_date < time()){
             return 100;
         } else {
-            return intval($this->finish_rate*100);
+            $finishRate = round(bcdiv($this->funded_money, $this->money, 14), 2);
+            if ($this->funded_money > 0 && $this->funded_money < $this->money) {
+                $finishRate = max($finishRate, 0.01);
+                $finishRate = min($finishRate, 0.99);
+            }
+            return $finishRate * 100;
         }
     }
 

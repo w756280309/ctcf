@@ -11,7 +11,7 @@ $this->title = '项目详情';
 $this->registerJsFile(ASSETS_BASE_URI.'js/detail.js?v=161227');
 $this->registerCssFile(ASSETS_BASE_URI.'css/deal/buy.css');
 $this->registerCssFile(ASSETS_BASE_URI.'css/deal/deallist.css?v=161124');
-$this->registerCssFile(ASSETS_BASE_URI.'css/deal/detail.css?v=170313');
+$this->registerCssFile(ASSETS_BASE_URI.'css/deal/detail.css?v=170414');
 $this->registerCssFile(ASSETS_BASE_URI.'css/pagination.css');
 $this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/chargedeposit.css');
 
@@ -257,7 +257,7 @@ $this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/chargedeposit.css');
 </div>
 
 <!--mask弹框-->
-<div class="mask"></div>
+<div class="detail-mask"></div>
 <!--确认弹框-->
 <div class="confirmBox">
     <div class="confirmBox-title">提示</div>
@@ -438,10 +438,18 @@ $this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/chargedeposit.css');
         var isFlexRate = <?= $deal->isFlexRate ?>;
         var csrf = "<?= Yii::$app->request->csrfToken ?>";
         var money = $this.val();
+
         money = money.replace(/^[^0-9]+/, '');
         if (!$.isNumeric(money)) {
             money = 0;
         }
+
+        if (money <= 0) {
+            $('#expect_profit').html('0.00');
+
+            return;
+        }
+
         if (isFlexRate) {
             $.post('/deal/deal/rate', {'sn': sn, '_csrf': csrf, 'amount': money}, function (data) {
                 if (true === data.res) {
@@ -465,90 +473,92 @@ $this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/chargedeposit.css');
     }
 
     <?php if ($couponCount > 0 && $deal->allowUseCoupon) { ?>
-    $(function () {
-        //回退时保持选中状态，并保持代金券单笔投资限额提示信息
-        var coupon_id = '<?= $coupon_id ?>';
-        if (coupon_id > 0) {
-            if ($('.picked-box') && $('.picked-box').length > 0) {
-                $('#coupon_title').html($('.picked-box').find('.coupon_name').text());
+        $(function () {
+            //回退时保持选中状态，并保持代金券单笔投资限额提示信息
+            var coupon_id = '<?= $coupon_id ?>';
+            if (coupon_id > 0) {
+                if ($('.picked-box') && $('.picked-box').length > 0) {
+                    $('#coupon_title').html($('.picked-box').find('.coupon_name').text());
+                }
             }
+
+            //代金券选择
+            $('#valid_coupon_list li').bind('click', function () {
+                if (!$(this).hasClass('picked-box')) {
+                    $('.hide_coupon').val($(this).attr('cid'));
+                    $(this).addClass('picked-box').siblings().removeClass('picked-box');
+                    $(this).find('.quan-true').show().end().siblings().find('.quan-true').hide();
+                    $('#coupon_title').html($(this).find('.coupon_name').text());
+                } else {
+                    resetCoupon();
+                }
+            });
+
+            //获取有效代金券
+            $('#deal_money').keyup(function () {
+                validForLoan();
+            });
+
+            var money = <?= $money ?>;
+            var fromConfirm = <?= $fromConfirm ?>;
+
+            if (0 === fromConfirm && money > 0) {
+                validForLoan();
+            }
+        });
+
+        function resetCoupon() {
+            $('.hide_coupon').val('');
+            $('#valid_coupon_list li').removeClass('picked-box').find('.quan-true').hide();
+            $('#coupon_title').html('<img class="dR-add" src="/images/deal/add.png" alt="">选择一张代金券<i id="coupon_count"><?= $couponCount ?></i>');
         }
 
-        //代金券选择
-        $('#valid_coupon_list li').bind('click', function () {
-            if (!$(this).hasClass('picked-box')) {
-                $('.hide_coupon').val($(this).attr('cid'));
-                $(this).addClass('picked-box').siblings().removeClass('picked-box');
-                $(this).find('.quan-true').show().end().siblings().find('.quan-true').hide();
-                $('#coupon_title').html($(this).find('.coupon_name').text());
+        function openPopup() {
+            var validCouponCount = '<?= $couponCount ?>';
+            var couponId = $('.hide_coupon').val();
+            var couponMoney = $('#C'+couponId).attr('money');
+            var message = '';
+
+            if ('' !== couponId) {
+                message = '您有'+validCouponCount+'张代金券可用，将使用'+couponMoney+'元代金券一张，点击确定立即投资';
             } else {
-                resetCoupon();
+                message = '您有'+validCouponCount+'张代金券可用，本次未使用代金券抵扣，点击确定立即投资';
             }
-        });
 
-        //获取有效代金券
-        $('#deal_money').keyup(function () {
-            validForLoan();
-        });
-
-        var money = <?= $money ?>;
-        var fromConfirm = <?= $fromConfirm ?>;
-
-        if (0 === fromConfirm && money > 0) {
-            validForLoan();
-        }
-    });
-
-    function resetCoupon() {
-        $('.hide_coupon').val('');
-        $('#valid_coupon_list li').removeClass('picked-box').find('.quan-true').hide();
-        $('#coupon_title').html('<img class="dR-add" src="/images/deal/add.png" alt="">选择一张代金券<i id="coupon_count"><?= $couponCount ?></i>');
-    }
-
-    function openPopup() {
-        var validCouponCount = '<?= $couponCount ?>';
-        var couponId = $('.hide_coupon').val();
-        var couponMoney = $('#C'+couponId).attr('money');
-        var message = '';
-
-        if ('' !== couponId) {
-            message = '您有'+validCouponCount+'张代金券可用，将使用'+couponMoney+'元代金券一张，点击确定立即投资';
-        } else {
-            message = '您有'+validCouponCount+'张代金券可用，本次未使用代金券抵扣，点击确定立即投资';
+            $('.confirmBox-top p').html(message);
+            $('.mask').show();
+            $('.confirmBox').show();
         }
 
-        $('.confirmBox-top p').html(message);
-        $('.mask').show();
-        $('.confirmBox').show();
-    }
+        function subConfirm() {
+            subClose();
 
-    function subConfirm() {
-        subClose();
+            $('#couponConfirm').val('1');
+            order();
+            $('#couponConfirm').val('');
+        }
 
-        $('#couponConfirm').val('1');
-        order();
-        $('#couponConfirm').val('');
-    }
+        function subClose() {
+            $('.mask').hide();
+            $('.confirmBox').hide();
+        }
 
-    function subClose() {
-        $('.mask').hide();
-        $('.confirmBox').hide();
-    }
+        function validForLoan() {
+            var money = $('#deal_money').val();
 
-    function validForLoan() {
-        var money = $('#deal_money').val();
-
-        $.get('/deal/deal/valid-for-loan?sn=<?= $deal->sn ?>&money='+money, function (data) {
-            if (0 === data.code) {
-                $('.hide_coupon').val(data.couponId);
-                $('#C'+data.couponId).parent().addClass('picked-box').siblings().removeClass('picked-box');
-                $('#C'+data.couponId).parent().find('.quan-true').show().end().siblings().find('.quan-true').hide();
-                $('#coupon_title').html($(this).find('.coupon_name').text());
-                $('#coupon_title').html($('#C'+data.couponId).next().find('.coupon_name').text());
-            } else {
-                resetCoupon();
+            if (money > 0) {
+                $.get('/deal/deal/valid-for-loan?sn=<?= $deal->sn ?>&money='+money, function (data) {
+                    if (0 === data.code) {
+                        $('.hide_coupon').val(data.couponId);
+                        $('#C'+data.couponId).parent().addClass('picked-box').siblings().removeClass('picked-box');
+                        $('#C'+data.couponId).parent().find('.quan-true').show().end().siblings().find('.quan-true').hide();
+                        $('#coupon_title').html($(this).find('.coupon_name').text());
+                        $('#coupon_title').html($('#C'+data.couponId).next().find('.coupon_name').text());
+                    } else {
+                        resetCoupon();
+                    }
+                });
             }
-        });
-    }
+        }
     <?php } ?>
 </script>

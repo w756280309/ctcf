@@ -4,6 +4,7 @@ namespace common\lib\user;
 
 use common\models\affiliation\Affiliator;
 use common\models\affiliation\UserAffiliation;
+use common\models\mall\ThirdPartyConnect;
 use common\models\user\User;
 use common\models\user\UserBanks;
 use common\models\user\RechargeRecord;
@@ -11,6 +12,7 @@ use common\models\user\DrawRecord;
 use common\models\order\OnlineOrder;
 use common\models\user\UserAccount;
 use common\models\user\UserInfo;
+use common\utils\SecurityUtils;
 use common\utils\StringUtils;
 use Wcg\Http\HeaderUtils;
 use yii\helpers\ArrayHelper;
@@ -45,25 +47,27 @@ class UserStats
                 '投资成功次数(次)',
                 '首次购买金额(元)',
                 '理财资产(元)',
+                '性别',
+                '生日',
+                '年龄',
+                '注册位置',
+                '注册渠道',
+                '首投时间',
+                '当前积分',
+                '会员等级',
+                '兑吧ID',
             ],
         ];
 
-        $u = User::tableName();
-        $b = UserBanks::tableName();
-        $a = UserAccount::tableName();
-        $info = UserInfo::tableName();
-
-        $model = (new \yii\db\Query)
-            ->select("$u.*, $b.id as bid, $a.available_balance, $info.firstInvestAmount as firstInvestAmount, $a.investment_balance as investmentBalance")
-            ->from($u)
-            ->leftJoin($b, "$u.id = $b.uid")
-            ->leftJoin($a, "$u.id = $a.uid")
-            ->leftJoin($info, "$info.user_id = $u.id")
-            ->where(["$u.type" => User::USER_TYPE_PERSONAL]);
+        $model = User::find()
+            ->joinWith('qpay')
+            ->joinWith('lendAccount')
+            ->joinWith('info')
+            ->joinWith('thirdPartyConnect');
         if (!empty($where)) {
             $model = $model->andWhere($where);
         }
-        $model = $model->all();
+        $model = $model->orderBy(['id' => SORT_ASC])->all();
         if (0 === count($model)) {
             return $data;
         }
@@ -104,57 +108,55 @@ class UserStats
             ->all();
         $affiliation = ArrayHelper::index($affiliation, 'user_id');
 
-        foreach ($model as $key => $val) {
-            $data[$key]['id'] = $val['id'];
-            $data[$key]['created_at'] = date('Y-m-d H:i:s', $val['created_at']);
-            $data[$key]['name'] = $val['real_name'];
-            $data[$key]['mobile'] = floatval($val['mobile']);
-            $data[$key]['idcard'] = $val['idcard'] ? substr($val['idcard'], 0, 14) . '****' : '';    //隐藏身份证号信息,显示前14位
-            if (isset($affiliation[$val['id']])) {
-                $data[$key]['affiliation'] = $affiliation[$val['id']]['name'];
+        foreach ($model as $key => $user) {
+            $userId = $user->id;
+            $data[$key]['id'] = intval($userId);
+            $data[$key]['created_at'] = date('Y-m-d H:i:s', $user->created_at);
+            $data[$key]['name'] = $user->real_name;
+            $data[$key]['mobile'] = floatval(SecurityUtils::decrypt($user->safeMobile));
+            $data[$key]['idcard'] = $user->idcard ? substr($user->idcard, 0, 14) . '****' : '';    //todo 隐藏身份证号信息,显示前14位
+            $data[$key]['affiliation'] = isset($affiliation[$userId]) ? $affiliation[$userId]['name'] : '官网';
+            $data[$key]['idcard_status'] = intval($user->idcard_status);
+            $data[$key]['mianmiStatus'] = intval($user->mianmiStatus);
+            $data[$key]['bid'] = isset($user->qpay) ? 1 : 0;
+            $data[$key]['available_balance'] = $user->lendAccount ? floatval($user->lendAccount->available_balance) : 0;
+            $data[$key]['rtotalFund'] = isset($recharge[$userId]) ? floatval($recharge[$userId]['rtotalFund']) : 0;
+            $data[$key]['rtotalNum'] = isset($recharge[$userId]) ? floatval($recharge[$userId]['rtotalNum']) : 0;
+            $data[$key]['dtotalFund'] = isset($draw[$userId]) ? floatval($draw[$userId]['dtotalFund']) : 0;
+            $data[$key]['dtotalNum'] = isset($draw[$userId]) ? floatval($draw[$userId]['dtotalNum']) : 0;
+            $data[$key]['ototalFund'] = isset($order[$userId]) ? floatval($order[$userId]['ototalFund']) : 0;
+            $data[$key]['ototalNum'] = isset($order[$userId]) ? floatval($order[$userId]['ototalNum']) : 0;
+            $data[$key]['firstInvestAmount'] = $user->info ? floatval($user->info->firstInvestAmount) : 0;
+            $data[$key]['investment_balance'] = $user->lendAccount ? floatval($user->lendAccount->investment_balance) : 0;
+            $gender = $user->getGender();
+            if ($gender === 'male') {
+                $sex = '男性';
+            } elseif ($gender === 'female') {
+                $sex = '女性';
             } else {
-                $data[$key]['affiliation'] = '官网';
+                $sex = '---';
             }
-
-            $data[$key]['idcard_status'] = intval($val['idcard_status']);
-            $data[$key]['mianmiStatus'] = intval($val['mianmiStatus']);
-
-            if (null === $val['bid']) {
-                $data[$key]['bid'] = 0;
+            $data[$key]['sex'] = $sex;
+            $data[$key]['birthday'] = $user->getBirthday();
+            $data[$key]['age'] = $user->idcard ? $age = date('Y') - substr($user->idcard, 6, 4) : 0;
+            $data[$key]['regContext'] = $user->regContext;
+            if ($user->regFrom === 1) {
+                $regFrom = 'wap注册';
+            } elseif ($user->regFrom === 2) {
+                $regFrom = '微信注册';
+            } elseif ($user->regFrom === 3) {
+                $regFrom = 'app注册';
+            } elseif ($user->regFrom === 4) {
+                $regFrom = 'pc注册';
             } else {
-                $data[$key]['bid'] = 1;
+                $regFrom = '未知来源注册';
             }
-
-            $data[$key]['available_balance'] = floatval($val['available_balance']);
-
-            if (isset($recharge[$val['id']])) {
-                $data[$key]['rtotalFund'] = floatval($recharge[$val['id']]['rtotalFund']);
-                $data[$key]['rtotalNum'] = floatval($recharge[$val['id']]['rtotalNum']);
-            } else {
-                $data[$key]['rtotalFund'] = 0;
-                $data[$key]['rtotalNum'] = 0;
-            }
-
-            if(isset($draw[$val['id']])) {
-                $data[$key]['dtotalFund'] = floatval($draw[$val['id']]['dtotalFund']);
-                $data[$key]['dtotalNum'] = floatval($draw[$val['id']]['dtotalNum']);
-            } else {
-                $data[$key]['dtotalFund'] = 0;
-                $data[$key]['dtotalNum'] = 0;
-            }
-
-            if (isset($order[$val['id']])) {
-                $data[$key]['ototalFund'] = floatval($order[$val['id']]['ototalFund']);
-                $data[$key]['ototalNum'] = floatval($order[$val['id']]['ototalNum']);
-            } else {
-                $data[$key]['ototalFund'] = 0;
-                $data[$key]['ototalNum'] = 0;
-            }
-
-            $data[$key]['firstInvestAmount'] = floatval($val['firstInvestAmount']);
-            $data[$key]['investmentBalance'] = floatval($val['investmentBalance']);
+            $data[$key]['regFrom'] = $regFrom;
+            $data[$key]['firstInvestDate'] = $user->info ? $user->info->firstInvestDate : '';
+            $data[$key]['points'] = intval($user->points);
+            $data[$key]['level'] = $user->getLevel();
+            $data[$key]['publicId'] = $user->thirdPartyConnect ? $user->thirdPartyConnect->publicId : '';
         }
-
         return $data;
     }
 

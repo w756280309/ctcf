@@ -18,7 +18,8 @@ class m170410_022458_add_coupon extends Migration
             'created_at' => time(),
             'updated_at' => time(),
             'expiresInDays' => 30,
-            'isAudited' => 1,
+            'isAudited' => true,
+            'isAppOnly' => false,
         ]);
     }
 

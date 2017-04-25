@@ -1,5 +1,5 @@
 <?php
-
+use common\utils\SecurityUtils;
 use yii\grid\GridView;
 
 ?>
@@ -22,7 +22,7 @@ use yii\grid\GridView;
             </td>
             <td>
                 <strong>邀请人手机号：</strong>
-                <?= $isInvited ? '<a href="/user/user/detail?id=' . $inviter->id . '">' . $inviter->mobile . '</a>' : '----' ?>
+                <?= $isInvited ? '<a href="/user/user/detail?id=' . $inviter->id . '">' . SecurityUtils::decrypt($inviter->safeMobile) . '</a>' : '----' ?>
             </td>
             <td width="40%"></td>
         </tr>
@@ -45,7 +45,7 @@ use yii\grid\GridView;
             [
                 'label' => '手机号',
                 'value' => function ($record) {
-                    return $record->invitee->mobile;
+                    return SecurityUtils::decrypt($record->invitee->safeMobile);
                 }
             ],
             [

@@ -6,6 +6,7 @@ use common\controllers\HelpersTrait;
 use common\models\product\LoanFinder;
 use common\models\product\OnlineProduct;
 use common\models\order\OnlineOrder;
+use common\models\user\User;
 use common\service\PayService;
 use common\utils\StringUtils;
 use Yii;
@@ -100,8 +101,9 @@ class DealController extends Controller
         if (empty($pid)) {
             return ['orders' => [], 'code' => 1, 'message' => 'pid参数不能为空'];
         }
-
-        $data = OnlineOrder::find()->where(['online_pid' => $pid, 'status' => 1])->select('mobile,order_time time,order_money money')->orderBy("id desc")->asArray()->all();
+        $u = User::tableName();
+        $o = OnlineOrder::tableName();
+        $data = OnlineOrder::find()->innerJoin('user', "$u.id = $o.uid")->select("$u.mobile,order_time time,order_money money")->where(['online_pid' => $pid, "$o.status" => 1])->orderBy("$o.id desc")->asArray()->all();
         foreach ($data as $key => $dat) {
             $data[$key]['mobile'] = StringUtils::obfsMobileNumber($dat['mobile']);
             $data[$key]['time'] = date('Y-m-d', $dat['time']);

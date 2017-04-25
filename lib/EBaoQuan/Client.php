@@ -31,54 +31,43 @@ use org_mapu_themis_rop_model\ContractStatusGetRequest as ContractStatusGetReque
 
 class Client
 {
-    /**
-     * 新建保全
-     * @param OnlineProduct $onlineProduct
-     * @throws Exception
-     * @throws NotFoundHttpException
-     */
-    public static function createBq(OnlineProduct $onlineProduct)
+    //标的订单保全
+    public static function baoQuanLoanOrder(OnlineOrder $order)
     {
-        //查看所有成功订单
-        $orders = OnlineOrder::find()->where(['status' => 1, 'online_pid' => $onlineProduct->id])->orderBy(['order_time' => SORT_DESC])->all();
-        //查看合同模板
-        $agreements = ContractTemplate::find()->select(['pid', 'name', 'content'])->where(['pid' => $onlineProduct->id])->asArray()->all();
-        if (count($orders) > 0 && count($agreements) > 0) {
-            foreach ($orders as $order) {
-                $user = User::findOne($order['uid']);
-                if (!$user) {
-                    throw new NotFoundHttpException('the user of order not found');
-                }
-                try {
-                    $content = '';
-                    foreach ($agreements as $k => $v) {
-                        //用订单填充合同模板
-                        $c = $v['content'];
-                        if ($c) {
-                            //获取合同模板
-                            $c = self::handleContent($k, $c, $order);
-                            $content = $content . $c . ' <br/><br/><hr/><br/><br/>';
-                        }
+        $loan = $order->loan;
+        $user = $order->user;
+        $agreements = ContractTemplate::find()->select(['pid', 'name', 'content'])->where(['pid' => $order->online_pid])->asArray()->all();
+        if (count($agreements) > 0) {
+            try {
+                $content = '';
+                foreach ($agreements as $k => $v) {
+                    //用订单填充合同模板
+                    $c = $v['content'];
+                    if ($c) {
+                        //获取合同模板
+                        $c = self::handleContent($k, $c, $order);
+                        $content = $content . $c . ' <br/><br/><hr/><br/><br/>';
                     }
-                    //多份合同合并成一份
-                    $content = rtrim($content, '<br/><br/><hr/><br/><br/>');
-                   // $url = file_get_contents(dirname(__DIR__).'/../lib/EBaoQuan/jinjiao_data_url');
-                    //$content .= '<img style="position: fixed;top:50px;right:170px;" src="'.$url.'"/>'; 保全签章
-                    //生成PDF
-                    $file = self::createPdf($content, $order->sn);
-                    if (file_exists($file)) {
-                        //生成保全
-                        $responseJson = self::contractFileCreate($file, $user, $order->order_money, $onlineProduct->title);
-                        self::addBaoQuan($responseJson, EbaoQuan::TYPE_LOAN, $order->id, EbaoQuan::ITEM_TYPE_LOAN_ORDER, $onlineProduct->title, $user->id);
-                        unlink($file);
-                    }
-                } catch (Exception $e) {
-                    \Yii::trace('确认计息时进行保全，标的ID:'.$onlineProduct->id.';保全失败,失败订单ID:'.$order->id.';失败信息'.$e->getMessage(), 'bao_quan');
-                    throw $e;
                 }
+                //多份合同合并成一份
+                $content = rtrim($content, '<br/><br/><hr/><br/><br/>');
+                // $url = file_get_contents(dirname(__DIR__).'/../lib/EBaoQuan/jinjiao_data_url');
+                //$content .= '<img style="position: fixed;top:50px;right:170px;" src="'.$url.'"/>'; 保全签章
+                //生成PDF
+                $file = self::createPdf($content, $order->sn);
+                if (file_exists($file)) {
+                    //生成保全
+                    $responseJson = self::contractFileCreate($file, $user, $order->order_money, $loan->title);
+                    self::addBaoQuan($responseJson, EbaoQuan::TYPE_LOAN, $order->id, EbaoQuan::ITEM_TYPE_LOAN_ORDER, $loan->title, $user->id);
+                    unlink($file);
+                }
+            } catch (Exception $e) {
+                \Yii::trace('标的订单保全失败，订单ID:'.$order->id.';保全失败,失败信息'.$e->getMessage(), 'bao_quan');
+                throw $e;
             }
         }
     }
+
 
     /**
      * 债权保全（买方标的合同和买方转让合同）

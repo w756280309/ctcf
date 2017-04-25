@@ -31,6 +31,12 @@ $this->registerMetaTag([
     'content' => $description,
 ]);
 
+$showHeaderNav = $this->headerNavOn && !defined('IN_APP');
+
+if ($showHeaderNav) {
+    $this->registerCssFile(FE_BASE_URI.'wap/common/css/activeComHeader.css', ['depends' => FeAsset::class]);
+}
+
 ?>
 
 <?php $this->beginPage(); ?>
@@ -55,6 +61,15 @@ $this->registerMetaTag([
     </head>
     <body>
         <?php $this->beginBody(); ?>
+            <?php if ($showHeaderNav) { ?>
+                <div class="header">
+                    <ul class="clearfix">
+                        <li class="lf f16"><img src="<?= FE_BASE_URI ?>wap/wendumao/images/logo.png" alt="">温都金服 · 国资平台</li>
+                        <li class="rg f13"><a class="" href="/?_mark=<?= time() ?>">返回首页</a></li>
+                    </ul>
+                </div>
+            <?php } ?>
+
             <?= $content ?>
         <?php $this->endBody(); ?>
     </body>

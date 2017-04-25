@@ -95,7 +95,10 @@ class UserController extends BaseController
 
         $sumCoupon = 0;
         $sumLicai = 0;
-        if (!defined('IN_APP') || Yii::$app->params['new_ucenter_on']) {
+        $inApp = defined('IN_APP');
+        $appVersionCode = $this->getAppVersion();
+
+        if (!$inApp || $appVersionCode >= 1.5) {
             //代金券总值
             $sumCoupon = UserCoupon::findCouponInUse($user->id, date('Y-m-d'))->sum('amount');
             $sumLicai = bcadd($ua->freeze_balance, $ua->investment_balance, 2);

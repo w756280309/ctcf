@@ -1,10 +1,10 @@
 <?php
 
-    use yii\widgets\LinkPager;
-    use common\utils\StringUtils;
+use common\utils\SecurityUtils;
+use common\utils\StringUtils;
 
     $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\web\YiiAsset']);
-
+    $this->title = '投资记录';
 ?>
 <?php $this->beginBlock('blockmain'); ?>
 
@@ -38,6 +38,9 @@
             <table class="table">
                     <tr>
                         <td>
+                             <span class="title">标的名称：<?= $loan->title?></span>
+                        </td>
+                        <td>
                             <span class="title">已募集金额：<?= $moneyTotal ? $moneyTotal : 0 ?>元</span>
                         </td>
                         <td>
@@ -47,7 +50,6 @@
                             <span class="title">已投资人数：<?= $renshu ?></span></td>
                         <td>
                             <span class="title">募捐时间：<?= $mujuanTime ?></span></td>
-                        </td>
                     </tr>
             </table>
         </div>
@@ -55,7 +57,7 @@
         
         <!--search start-->
         <div class="portlet-body">
-            <form action="/order/onlineorder/list?id=<?= $model->online_pid ?>" method="get" target="_self">
+            <form action="/order/onlineorder/list?id=<?= $loan->id ?>" method="get" target="_self">
                 <table class="table">
                     <input type="hidden" name="id" value="<?= Yii::$app->request->get('id') ?>"
                     <tbody>
@@ -83,52 +85,92 @@
         </div>
         
         <!--search end -->
-        
         <div class="portlet-body">
-            <table class="table table-striped table-bordered table-advance table-hover">
-                <thead>
-                    <tr>
-                        <th>序号</th>
-                        <th>真实姓名</th>
-                        <th>手机号</th>
-                        <th>投资金额（元）</th>
-                        <th>客户年化率（%）</th>
-                        <th>注册时间</th>
-                        <th>投资时间</th>
-                        <th>状态</th>
-                    </tr>
-                </thead>
-                <tbody>
-                <?php foreach ($model as $key => $order) : ?>
-                    <tr>
-                        <td><?= $order->sn ?></td>
-                        <td><?= $order->username ?></td>                   
-                        <td><?= $order->mobile ?></td>                   
-                        <td><?= $order->order_money ?></td>
-                        <td><?= StringUtils::amountFormat2(bcmul($order->yield_rate, 100, 2)); ?></td>
-                        <td><?= date('Y-m-d H:i:s', $order->user->created_at) ?></td>
-                        <td><?= date('Y-m-d H:i:s', $order->created_at) ?></td>
-                        <td>
-                            <?php
-                                $status = (int) $order->status;
-                                if (0 === $status) {
-                                    echo "投标失败";
-                                } elseif (1 === $status) {
-                                    echo "投标成功";
-                                } elseif (2 === $status) {
-                                    echo "撤标";
-                                } else {
-                                    echo "无效";
-                                }
-                            ?>
-                        </td>
-                    </tr>
-                    <?php endforeach; ?>   
-                </tbody>
-            </table>
+            <?= \yii\grid\GridView::widget([
+                'dataProvider' => $dataProvider,
+                'layout' => '{summary}{items}<div class="pagination"><center>{pager}</center></div>',
+                'tableOptions' => ['class' => 'table table-striped table-bordered table-advance table-hover'],
+                'columns' => [
+                    [
+                        'header' => '序号',
+                        'value' => function ($order) {
+                            return $order->sn;
+                        }
+                    ],
+                    [
+                        'header' => '真实姓名',
+                        'value' => function ($order) {
+                            return $order->username;
+                        }
+                    ],
+                    [
+                        'header' => '手机号',
+                        'value' => function ($order) {
+                            return SecurityUtils::decrypt($order->user->safeMobile);
+                        }
+                    ],
+                    [
+                        'header' => '投资金额（元）',
+                        'value' => function ($order) {
+                            return number_format($order->order_money , 2);
+                        },
+                        'contentOptions' => ['class' => 'money'],
+                        'headerOptions' => ['class' => 'money'],
+                    ],
+                    [
+                        'header' => '客户年化率（%）',
+                        'value' => function ($order) {
+                            return StringUtils::amountFormat2(bcmul($order->yield_rate, 100, 2));
+                        }
+                    ],
+                    [
+                        'header' => '注册时间',
+                        'value' => function ($order) {
+                            return date('Y-m-d H:i:s', $order->user->created_at);
+                        }
+                    ],
+                    [
+                        'header' => '投资时间',
+                        'value' => function ($order) {
+                            return date('Y-m-d H:i:s', $order->created_at);
+                        }
+                    ],
+                    [
+                        'header' => '状态',
+                        'value' => function ($order) {
+                            $status = (int) $order->status;
+                            if (0 === $status) {
+                                $msg = "投标失败";
+                            } elseif (1 === $status) {
+                                $msg =  "投标成功";
+                            } elseif (2 === $status) {
+                                $msg =  "撤标";
+                            } else {
+                                $msg =  "无效";
+                            }
+                            return $msg;
+                        }
+                    ],
+                    [
+                        'header' => '是否首次投资项',
+                        'value' => function ($order) {
+                            return $order->isFirstInvestment() ? '是' : '否';
+                        }
+                    ],
+                    [
+                        'header' => '保全合同',
+                        'format' => 'raw',
+                        'value' => function ($order) {
+                            if($order->getBaoquanDownloadLink()) {
+                                return "<a href=".$order->getBaoquanDownloadLink()." target='_blank'>下载</a>";
+                            }else {
+                                return '---';
+                            }
+                        }
+                    ],
+                ]
+            ]) ?>
         </div>
-        <!--分页-->
-        <div class="pagination" style="text-align:center"><?= LinkPager::widget(['pagination' => $pages]); ?></div> 
     </div>
                                     
 </div>

@@ -153,11 +153,12 @@ class PayService
             return ['code' => self::ERROR_SYSTEM,  'message' => '该项目为定向标投资项目，您未获得投资资格'];
         }
 
-        $resp = \Yii::$container->get('ump')->getLoanInfo($deal->id);
+        // XXX 暂时取消对联动一侧标的状态的检查
+        /*$resp = \Yii::$container->get('ump')->getLoanInfo($deal->id);
         if (!$resp->isSuccessful() && '1' !== $resp->get('project_state')) {
             //查询失败，或者标的状态不为投资中
             return ['code' => self::ERROR_SYSTEM,  'message' => '联动一侧标的状态异常'];
-        }
+        }*/
 
         return true;
     }
