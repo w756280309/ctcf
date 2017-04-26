@@ -75,28 +75,52 @@ class AccountController extends Controller
         $records = $dataProvider->getModels();
         $data = [];
         foreach ($records as $record) {
-            $identity = $record->getIdentity();
+            $ext = [
+                'mobile' => null,
+                'landline' => null,
+                'gender' => null,
+                'name' => null,
+                'age' => null,
+                'annualInvestment' => null,
+                'investTotal' => null,
+                'investCount' => 0,
+                'availableBalance' => null,
+                'investmentBalance' => null,
+            ];
+
             $contactMobile = Contact::findContactByAccountId($record->id)->andWhere(['type' => Contact::TYPE_MOBILE])->one();
+            if (null !== $contactMobile) {
+                $ext['mobile'] = $contactMobile->obfsNumber;
+            }
+
             $contactLandline = Contact::findContactByAccountId($record->id)->andWhere(['type' => Contact::TYPE_LANDLINE])->one();
-            $data[$record->id]['mobile'] = isset($contactMobile) ? $contactMobile->obfsNumber : null;
-            $data[$record->id]['landline'] = isset($contactLandline) ? $contactLandline->obfsNumber : null;
-            if ($identity instanceof User || $identity instanceof Identity) {
-                $data[$record->id]['gender'] = $identity->getCrmGender();
-                $data[$record->id]['name'] = $identity->getCrmName();
-                $data[$record->id]['age'] = $identity->getCrmAge();
+            if (null !== $contactLandline) {
+                $ext['landline'] = $contactLandline->obfsNumber;
             }
-            if ($identity instanceof User) {
-                $data[$record->id]['mobile'] = '*' . substr($identity->mobile, -4);
-                $data[$record->id]['annualInvestment'] = $identity->annualInvestment;
-                if (isset($identity->info)) {
-                    $data[$record->id]['investCount'] = $identity->info->investCount;
-                    $data[$record->id]['investTotal'] = $identity->info->investTotal;
-                }
-                if (isset($identity->lendAccount)) {
-                    $data[$record->id]['availableBalance'] = $identity->lendAccount->available_balance;
-                    $data[$record->id]['investmentBalance'] = $identity->lendAccount->investment_balance;
+
+            $identity = $record->getIdentity();
+            if (null !== $identity) {
+                $ext['gender'] = $identity->getCrmGender();
+                $ext['name'] = $identity->getCrmName();
+                $ext['age'] = $identity->getCrmAge();
+
+                if ($identity instanceof User) {
+                    $ext['mobile'] = '*' . substr($identity->mobile, -4);
+                    $ext['annualInvestment'] = $identity->annualInvestment;
+
+                    if (isset($identity->info)) {
+                        $ext['investCount'] = $identity->info->investCount;
+                        $ext['investTotal'] = $identity->info->investTotal;
+                    }
+
+                    if (isset($identity->lendAccount)) {
+                        $ext['availableBalance'] = $identity->lendAccount->available_balance;
+                        $ext['investmentBalance'] = $identity->lendAccount->investment_balance;
+                    }
                 }
             }
+
+            $data[$record->id] = $ext;
         }
 
 
