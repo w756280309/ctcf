@@ -2,12 +2,15 @@
 
 use yii\grid\GridView;
 use yii\helpers\Html;
+use Zii\Asset\Tablesaw\TablesawAsset;
 
 $this->title = '客户列表';
 
 $this->registerCss("
 
 ");
+
+TablesawAsset::register($this);
 
 $this->params['breadcrumbs'][] = ['label' => '客户列表', 'url' => '/crm/account'];
 ?>
@@ -30,75 +33,90 @@ $this->params['breadcrumbs'][] = ['label' => '客户列表', 'url' => '/crm/acco
     </div>
     <button type='submit' class="btn btn-primary"><span class="glyphicon glyphicon-search"></span> 搜索</button>
 </form>
+
 <div class="row">
     <?= GridView::widget([
+        'dataProvider' => $dataProvider,
         'options' => [
             'id' => 'xc-account-list',
         ],
-        'dataProvider' => $dataProvider,
-        'layout' => '{summary}{items}<div class="pagination" style="text-align:center; clear: both;">{pager}</div>',
+        'tableOptions' => [
+            'data-tablesaw-mode-switch' => true,
+            'data-tablesaw-mode' => 'swipe',
+        ],
+        'layout' => '{summary}{items}<div class="pagination">{pager}</div>',
+        'formatter' => [
+            'class' => 'Xii\\Crm\\TextFu\\Formatter',
+        ],
         'columns' => [
             [
                 'attribute' => '姓名',
+                'format' => 'xii:empty-nice',
                 'value' => function ($model) use ($data) {
-                    return isset($data[$model->id]['name']) ? $data[$model->id]['name'] : '--';
-                }
+                    return $data[$model->id]['name'];
+                },
             ],
             [
                 'attribute' => '手机',
-                'format' => 'html',
+                'format' => 'xii:empty-nice',
                 'value' => function ($model) use ($data) {
-                    return '<a href="/crm/activity/index?accountId='.$model->id.'">' . (isset($data[$model->id]['mobile']) ? $data[$model->id]['mobile'] : '--') . '</a>';
-                }
+                    return $data[$model->id]['mobile'];
+                },
             ],
             [
                 'attribute' => '固定电话',
-                'format' => 'html',
+                'format' => 'xii:empty-nice',
                 'value' => function ($model) use ($data) {
-                    return '<a href="/crm/activity/index?accountId='.$model->id.'">' . (isset($data[$model->id]['landline']) ? $data[$model->id]['landline'] : '--') . '</a>';
-                }
+                    return $data[$model->id]['landline'];
+                },
             ],
             [
                 'attribute' => '年龄',
+                'format' => 'xii:empty-nice',
                 'value' => function ($model) use ($data) {
-                    return isset($data[$model->id]['age']) ? $data[$model->id]['age'] : '--';
-                }
+                    return $data[$model->id]['age'];
+                },
             ],
             [
                 'attribute' => '性别',
+                'format' => 'xii:empty-nice',
                 'value' => function ($model) use ($data) {
-                    return isset($data[$model->id]['gender']) ? $data[$model->id]['gender'] : '--';
-                }
+                    return $data[$model->id]['gender'];
+                },
             ],
             [
                 'attribute' => '投资次数',
                 'value' => function ($model) use ($data) {
-                    return isset($data[$model->id]['investCount']) ? $data[$model->id]['investCount'] : '0';
-                }
+                    return $data[$model->id]['investCount'];
+                },
             ],
             [
                 'attribute' => '累计投资金额',
+                'format' => 'xii:money',
                 'value' => function ($model) use ($data) {
-                    return isset($data[$model->id]['investTotal']) ? $data[$model->id]['investTotal'] : '0.00';
-                }
+                    return $data[$model->id]['investTotal'];
+                },
             ],
             [
                 'attribute' => '累计年化金额',
+                'format' => 'xii:money',
                 'value' => function ($model) use ($data) {
-                    return isset($data[$model->id]['annualInvestment']) ? $data[$model->id]['annualInvestment'] : '0.00';
-                }
+                    return $data[$model->id]['annualInvestment'];
+                },
             ],
             [
                 'attribute' => '理财资产',
+                'format' => 'xii:money',
                 'value' => function ($model) use ($data) {
-                    return isset($data[$model->id]['investmentBalance']) ? $data[$model->id]['investmentBalance'] : '0.00';
-                }
+                    return $data[$model->id]['investmentBalance'];
+                },
             ],
             [
                 'attribute' => '账户余额',
+                'format' => 'xii:money',
                 'value' => function ($model) use ($data) {
-                    return isset($data[$model->id]['availableBalance']) ? $data[$model->id]['availableBalance'] : '0.00';
-                }
+                    return $data[$model->id]['availableBalance'];
+                },
             ],
             [
                 'label' => '操作',
