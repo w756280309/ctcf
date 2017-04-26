@@ -17,8 +17,10 @@ class Formatter extends BaseFormatter
 
         if (self::XII_FORMAT_MONEY === $format) {
             if (empty($value)) {
-                $value = '<div style="text-align: right;">0.00</div>';
+                $value = '0.00';
             }
+
+            $value = sprintf('<div style="text-align: right;">%s</div>', $value);
         } elseif (self::XII_FORMAT_EMPTY_NICE === $format) {
             if (empty($value)) {
                 $value = '--';
