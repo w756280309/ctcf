@@ -28,30 +28,24 @@ NavBar::begin([
 
 $controllerUniqId = \Yii::$app->controller->getUniqueId();
 
-$menuItems = [
+$moduleMenu = [
     ['label' => '客户', 'url' => ['/crm/account'], 'active' => $controllerUniqId === 'crm/account'],
 ];
 
 echo Nav::widget([
     'options' => ['class' => 'navbar-nav'],
-    'items' => $menuItems,
+    'items' => $moduleMenu,
 ]);
-?>
-<ul class="nav navbar-nav navbar-right">
-    <li class="dropdown">
-        <a href="#" data-toggle="dropdown" class="dropdown-toggle">
-            <span class="glyphicon glyphicon-plus"></span> 添加 <b class="caret"></b>
-        </a>
-<?php
-echo Dropdown::widget([
-    'items' => [
-        ['label' => '潜客', 'url' => ['/crm/identity/create']],
-    ],
+
+$shortcutMenu = [
+    ['label' => '登记潜客', 'url' => ['/crm/identity/create']],
+];
+
+echo Nav::widget([
+    'options' => ['class' => 'navbar-nav navbar-right'],
+    'items' => $shortcutMenu,
 ]);
-?>
-    </li>
-</ul>
-<?php
+
 NavBar::end();
 ?>
 <div class="container">
