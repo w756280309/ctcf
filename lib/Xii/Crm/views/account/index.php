@@ -7,7 +7,9 @@ use Zii\Asset\Tablesaw\TablesawAsset;
 $this->title = '客户列表';
 
 $this->registerCss("
-
+tr {
+    word-break: keep-all;
+}
 ");
 
 TablesawAsset::register($this);
@@ -51,6 +53,9 @@ $this->params['breadcrumbs'][] = ['label' => '客户列表', 'url' => '/crm/acco
         'columns' => [
             [
                 'attribute' => '姓名',
+                'headerOptions' => [
+                    'data-tablesaw-priority' => 'persist',
+                ],
                 'format' => 'xii:empty-nice',
                 'value' => function ($model) use ($data) {
                     return $data[$model->id]['name'];
