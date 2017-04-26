@@ -7,7 +7,10 @@ use Zii\Asset\Tablesaw\TablesawAsset;
 $this->title = '客户列表';
 
 $this->registerCss("
-tr {
+#xc-account-list table {
+    width: 100%;
+}
+#xc-account-list th {
     word-break: keep-all;
 }
 ");
@@ -36,15 +39,17 @@ $this->params['breadcrumbs'][] = ['label' => '客户列表', 'url' => '/crm/acco
     <button type='submit' class="btn btn-primary"><span class="glyphicon glyphicon-search"></span> 搜索</button>
 </form>
 
-<div class="row">
+<div style="overflow-x: hidden; margin-top: 1em;">
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'options' => [
             'id' => 'xc-account-list',
         ],
         'tableOptions' => [
+            'class' => 'tablesaw',
             'data-tablesaw-mode-switch' => true,
-            'data-tablesaw-mode' => 'swipe',
+            'data-tablesaw-mode' => 'stack',
+            'data-tablesaw-mode-exclude' => 'columntoggle',
         ],
         'layout' => '{summary}{items}<div class="pagination">{pager}</div>',
         'formatter' => [
@@ -96,14 +101,21 @@ $this->params['breadcrumbs'][] = ['label' => '客户列表', 'url' => '/crm/acco
                 },
             ],
             [
-                'attribute' => '累计投资金额',
+                'attribute' => '累计投资',
+                'headerOptions' => [
+                    'style' => 'text-align: right;',
+                    'scope' => 'col',
+                ],
                 'format' => 'xii:money',
                 'value' => function ($model) use ($data) {
                     return $data[$model->id]['investTotal'];
                 },
             ],
             [
-                'attribute' => '累计年化金额',
+                'attribute' => '累计年化',
+                'headerOptions' => [
+                    'style' => 'text-align: right;',
+                ],
                 'format' => 'xii:money',
                 'value' => function ($model) use ($data) {
                     return $data[$model->id]['annualInvestment'];
@@ -111,6 +123,9 @@ $this->params['breadcrumbs'][] = ['label' => '客户列表', 'url' => '/crm/acco
             ],
             [
                 'attribute' => '理财资产',
+                'headerOptions' => [
+                    'style' => 'text-align: right;',
+                ],
                 'format' => 'xii:money',
                 'value' => function ($model) use ($data) {
                     return $data[$model->id]['investmentBalance'];
@@ -118,6 +133,9 @@ $this->params['breadcrumbs'][] = ['label' => '客户列表', 'url' => '/crm/acco
             ],
             [
                 'attribute' => '账户余额',
+                'headerOptions' => [
+                    'style' => 'text-align: right;',
+                ],
                 'format' => 'xii:money',
                 'value' => function ($model) use ($data) {
                     return $data[$model->id]['availableBalance'];
