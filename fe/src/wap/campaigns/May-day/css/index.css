@@ -1,0 +1,55 @@
+.flex-content .box-one {
+  width: 100%;
+  height: 6.66666667rem;
+  background: url("../images/mayday_one.jpg") no-repeat;
+  background-size: contain;
+}
+.flex-content .box-two {
+  position: relative;
+  width: 100%;
+  height: 5.48rem;
+  background-color: #ffe7a4;
+}
+.flex-content .box-two .rule {
+  box-sizing: content-box;
+  width: 7.84rem;
+  line-height: 0.50666667rem;
+  padding: 0.32rem 1.09333333rem 0;
+  color: #000;
+  font-size: 0.37333333rem;
+}
+.flex-content .box-two .link-one {
+  position: absolute;
+  top: 1.57333333rem;
+  left: 50%;
+  margin-left: -2.49333333rem;
+  display: block;
+  width: 4.98666667rem;
+  height: 3.32rem;
+  background: url("../images/mayday_link1.png") no-repeat;
+  background-size: contain;
+}
+.flex-content .box-three {
+  position: relative;
+  width: 100%;
+  height: 10.13333333rem;
+  background: url("../images/mayday_two.png") no-repeat;
+  background-size: contain;
+}
+.flex-content .box-three .link-two {
+  position: absolute;
+  top: 1.25333333rem;
+  left: 50%;
+  margin-left: -4.2rem;
+  display: block;
+  width: 8.41333333rem;
+  height: 8.41333333rem;
+  background: url("../images/mayday_link2.png") no-repeat;
+  background-size: contain;
+}
+.flex-content .box-four {
+  width: 100%;
+  height: 5.12rem;
+  background: url("../images/mayday_three.jpg") no-repeat;
+  background-size: contain;
+}

@@ -90,4 +90,19 @@ class P1704Controller extends Controller
             'share' => $share,
         ]);
     }
+    /**
+     * 五一活动
+     */
+    public function actionMayDay($wx_share_key = null)
+    {
+        $share = null;
+
+        if (!empty($wx_share_key)) {
+            $share = Share::findOne(['shareKey' => $wx_share_key]);
+        }
+
+        return $this->render('mayday', [
+            'share' => $share,
+        ]);
+    }
 }
