@@ -41,15 +41,15 @@ class RechargerecordController extends BaseController
             $query = (new \yii\db\Query)    //连表查询,获取充值记录银行名称
                 ->select("$r.*, $u.bank_name")
                 ->from($r)
-                ->leftJoin($u, "$r.bank_id = $u.id")
+                ->innerJoin($u, "$r.bank_id = $u.id")
                 ->where(["$r.uid" => $id]);
         } else {
             $m = MoneyRecord::tableName();
             $query = (new \yii\db\Query)    //连表查询,获取充值记录银行名称
                 ->select("$r.*, $u.bank_name, ($m.balance - $m.in_money) balance")
                 ->from($r)
-                ->leftJoin($u, "$r.bank_id = $u.id")
-                ->leftJoin($m, "$m.osn = $r.sn")
+                ->innerJoin($u, "$r.bank_id = $u.id")
+                ->innerJoin($m, "$m.osn = $r.sn")
                 ->where(["$r.uid" => $id]);
         }
 
