@@ -18,7 +18,7 @@ class Module extends BaseModule
 
         //指定console的命名空间
         if (Yii::$app instanceof \yii\console\Application) {
-            $this->controllerNamespace = 'Xii\Command';
+            $this->controllerNamespace = 'Xii\Crm\Command';
         }
     }
 }
