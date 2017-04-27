@@ -162,4 +162,24 @@ class UserInfo extends ActiveRecord
             $info->save();
         }
     }
+
+    /**
+     * 计算某个人一段时间内的累计年化金额
+     *
+     * @param int    $userOrId  user表ID
+     * @param string $startDate 开始日期
+     * @param string $endDate   结束日期
+     *
+     * @return int
+     */
+    public static function calcAnnualInvest($userOrId, $startDate, $endDate)
+    {
+        $db = \Yii::$app->db;
+        $sql = "select sum(truncate((if(p.refund_method > 1, o.order_money*p.expires/12, o.order_money*p.expires/365)), 2)) as annual from online_order o inner join online_product p on o.online_pid = p.id inner join user u on u.id = o.uid where date(from_unixtime(o.order_time)) >= :startDate and date(from_unixtime(o.order_time)) <= :endDate and o.status = 1 and o.uid = :userId";
+        return (int) $db->createCommand($sql, [
+            'userId' => $userOrId,
+            'startDate' => $startDate,
+            'endDate' => $endDate,
+        ])->queryScalar();
+    }
 }

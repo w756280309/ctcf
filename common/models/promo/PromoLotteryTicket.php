@@ -82,4 +82,9 @@ class PromoLotteryTicket extends ActiveRecord
     {
         return $this->hasOne(Reward::class, ['id' => 'reward_id']);
     }
+
+    public static function findLotteryByPromoId($promoId)
+    {
+        return PromoLotteryTicket::find()->where(['promo_id' => $promoId]);
+    }
 }
