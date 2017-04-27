@@ -11,6 +11,7 @@ use common\models\order\OrderQueue;
 use common\models\order\OnlineRepaymentPlan as RepaymentPlan;
 use common\models\product\OnlineProduct;
 use common\models\promo\InviteRecord;
+use common\models\promo\PromoService;
 use common\models\user\RechargeRecord as Recharge;
 use common\models\user\DrawRecord as Draw;
 use common\utils\SecurityUtils;
@@ -893,6 +894,11 @@ class User extends ActiveRecord implements IdentityInterface, UserInterface
                 }
                 $transaction->commit();
                 Yii::info('用户信息变更日志 绑卡成功 变更表:user_bank;变更属性:' . (json_encode($data)) . ';user_id:' . $this->id .  ';变更依据:联动ret_code ' . $responseData['ret_code'] . ';联动返回信息:' . json_encode($responseData), 'user_log');
+                //绑卡完成之后活动统一处理逻辑
+                try {
+                    PromoService::doAfterBindCard($this);
+                } catch (\Exception $ex) {
+                }
                 return true;
             } catch (\Exception $ex) {
                 $transaction->rollBack();

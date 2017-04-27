@@ -105,4 +105,24 @@ class PromoService
             }
         }
     }
+
+    /**
+     * 绑卡后统一调用逻辑
+     * @param User $user
+     * @throws \Exception
+     */
+    public static function doAfterBindCard(User $user)
+    {
+        $promos = self::getActivePromo();
+        foreach ($promos as $promo) {
+            $model = new $promo->promoClass($promo);
+            if (method_exists($model, 'doAfterBindCard')) {
+                try {
+                    $model->doAfterBindCard($user);
+                } catch (\Exception $ex) {
+
+                }
+            }
+        }
+    }
 }
