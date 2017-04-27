@@ -3,7 +3,16 @@
 $this->title = '温都金服一周年瓜分百万礼品';
 $this->share = $share;
 $this->headerNavOn = true;
-
+$act1 = date('Y-m-d') >= '2017-04-29' && date('Y-m-d') <= '2017-05-01' ? true : false;
+$act2 = date('Y-m-d') >= '2017-05-04' && date('Y-m-d') <= '2017-05-07' ? true : false;
+$act3 = date('Y-m-d') >= '2017-05-10' && date('Y-m-d') <= '2017-05-14' ? true : false;
+$act4 = date('Y-m-d') >= '2017-05-15' && date('Y-m-d') <= '2017-05-19' ? true : false;
+$act5 = date('Y-m-d') >= '2017-05-20' && date('Y-m-d') <= '2017-05-31' ? true : false;
+$url1 = '/promotion/p1705/may-day';
+$url2 = '/promotion/p1705/youth-day';
+$url3 = '/promotion/p1705/mother-day';
+$url4 = '/promotion/p1705/year-day';
+$url5 = '/promotion/p1705/520-day';
 ?>
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/wenjfbase.css?v=1.0">
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/campaigns/active20170424/css/index.css?v=1.1">
@@ -19,7 +28,7 @@ $this->headerNavOn = true;
         <?php
             if (Yii::$app->user->isGuest) {
         ?>
-                <span class="xunzhang">我的勋章：未登录</span>
+                <span class="xunzhang">我的勋章：<a href="/site/login" style="color: #fff">未登录</a></span>
         <?php
             } else {
         ?>
@@ -45,22 +54,22 @@ $this->headerNavOn = true;
     </div>
     <div class="part-bottom">
         <div class="part-bottom-one">
-            <a class="wuyi-link">
-                <img class="wuyi gray" src="<?= FE_BASE_URI ?>wap/campaigns/anniversary/images/pic-wuyi.png" alt="" style="top: 1.44rem;right:0.533rem ">
+            <a class="wuyi-link" <?= $act1 ? "href=$url1" : ''?>>
+                <img class="wuyi <?= $act1 ? '' : 'gray'?>" src="<?= FE_BASE_URI ?>wap/campaigns/anniversary/images/pic-wuyi.png" alt="" style="top: 1.44rem;right:0.533rem ">
             </a>
-            <a class="wusi-link">
-                <img class="wusi gray" src="<?= FE_BASE_URI ?>wap/campaigns/anniversary/images/pic-wusi.png" alt="" style="bottom:0.9rem;left: 0.533rem;">
+            <a class="wusi-link" <?= $act2 ? "href=$url2" : ''?>>
+                <img class="wusi <?= $act2 ? '' : 'gray'?>" src="<?= FE_BASE_URI ?>wap/campaigns/anniversary/images/pic-wusi.png" alt="" style="bottom:0.9rem;left: 0.533rem;">
             </a>
         </div>
         <div class="part-bottom-two">
-            <a class="muqin-link">
-                <img class="muqin gray" src="<?= FE_BASE_URI ?>wap/campaigns/anniversary/images/pic-muqin.png" alt="" style="top: 0.2133rem;right:0.64rem;">
+            <a class="muqin-link" <?= $act3 ? "href=$url3" : ''?>>
+                <img class="muqin <?= $act3 ? '' : 'gray'?>" src="<?= FE_BASE_URI ?>wap/campaigns/anniversary/images/pic-muqin.png" alt="" style="top: 0.2133rem;right:0.64rem;">
             </a>
-            <a class="zhounian-link">
-                <img class="zhounian gray" src="<?= FE_BASE_URI ?>wap/campaigns/anniversary/images/pic-zhounian.png" alt="" style="left:1.333rem;top: 4.133rem;">
+            <a class="zhounian-link" <?= $act4 ? "href=$url4" : ''?>>
+                <img class="zhounian <?= $act4 ? '' : 'gray'?>" src="<?= FE_BASE_URI ?>wap/campaigns/anniversary/images/pic-zhounian.png" alt="" style="left:1.333rem;top: 4.133rem;">
             </a>
-            <a class="coins-link">
-                <img class="coins gray" src="<?= FE_BASE_URI ?>wap/campaigns/anniversary/images/pic_coins.png" alt="" style="left:2.75rem;bottom: 0;">
+            <a class="coins-link" <?= $act5 ? "href=$url5" : ''?>>
+                <img class="coins <?= $act5 ? '' : 'gray'?>" src="<?= FE_BASE_URI ?>wap/campaigns/anniversary/images/pic_coins.png" alt="" style="left:2.75rem;bottom: 0;">
             </a>
         </div>
         <div class="part-bottom-buttons">
@@ -69,46 +78,4 @@ $this->headerNavOn = true;
         </div>
     </div>
 </div>
-<script>
-    var nowDate = (new Date()).valueOf();
-    //五一节活动时间节点
-    var wuyiBegin = (new Date("2017-04-29 00:00:00")).valueOf();
-    var wuyiOver = (new Date("2017-05-01 23:59:59")).valueOf();
-    //青年节活动时间节点
-    var wusiBegin = (new Date("2017-05-04 00:00:00")).valueOf();
-    var wusiOver = (new Date("2017-05-07 23:59:59")).valueOf();
-    //母亲节活动时间节点
-    var muqinBegin = (new Date("2017-05-10 00:00:00")).valueOf();
-    var muqinOver = (new Date("2017-05-14 23:59:59")).valueOf();
-    //周年庆活动时间节点
-    var zhounianBegin = (new Date("2017-05-15 00:00:00")).valueOf();
-    var zhounianOver = (new Date("2017-05-19 23:59:59")).valueOf();
-    //520
-    var wu20Begin = (new Date("2017-05-20 00:00:00")).valueOf();
-    var wu20Over = (new Date("2017-05-20 23:59:59")).valueOf();
-    //五一
-    if(nowDate >= wuyiBegin && nowDate < wuyiOver){
-        $('.wuyi').removeClass('gray');
-        $('.wuyi-link').attr('href','/promotion/p1705/may-day')
-    }
-    //五四
-    if(nowDate >= wusiBegin && nowDate < wusiOver){
-        $('.wusi').removeClass('gray');
-        $('.wusi-link').attr('href','/promotion/p1705/youth-day')
-    }
-    //母亲
-    if(nowDate >= muqinBegin && nowDate < muqinOver){
-        $('.muqin').removeClass('gray');
-        $('.muqin-link').attr('href','/promotion/p1705/mother-day')
-    }
-    //周年庆
-    if(nowDate >= zhounianBegin && nowDate < zhounianOver){
-        $('.zhounian').removeClass('gray');
-        $('.zhounian-link').attr('href','/promotion/p1705/year-day')
-    }
-    //520
-    if(nowDate >= wu20Begin && nowDate < wu20Over){
-        $('.coins').removeClass('gray');
-        $('.coins-link').attr('href','/promotion/p1705/520-day')
-    }
-</script>
+

@@ -47,7 +47,7 @@ $taps = date('Y-m-d') >= '2017-05-01' && date('Y-m-d') <= '2017-05-31' ? true : 
         <?php } ?>
     </div>
     <div class="rule_box" style="padding-top: 0.5rem;">
-        <p class="rule_top f15">热烈庆祝温都金服成立一周年！</p>
+        <p class="rule_top f15">热烈庆祝<?= $taps ? '温都金服成立一周年！' : '“签到”功能上线！' ?></p>
         <p class="rule_top f15">每天签到2积分，<?= $taps ? '5月签到积分直升3倍起！' : '4月签到积分直升2.5倍起！' ?></p>
         <p class="rule_top f15">连续签到可得代金券！</p>
         <p class="rule_title f15">签到规则</p>
