@@ -1,5 +1,6 @@
 <?php
     use yii\helpers\Html;
+    use Xii\Crm\Model\Activity;
 
 $this->title = '客服记录';
 
@@ -15,7 +16,7 @@ $this->params['breadcrumbs'][] = ['label' => '客服记录', 'url' => '/crm/acti
                <div class="col-md-6">
                    <dl class="dl-horizontal" style="margin-top: 1em;">
                        <dt>默认联系方式</dt>
-                       <dd><?= !is_null($account->primaryContact) ? \yii\helpers\Html::encode($account->primaryContact->getNumber()) : '---'?></dd>
+                       <dd><?= !is_null($account->primaryContact) ? Html::encode($account->primaryContact->getNumber()) : '---'?></dd>
                    </dl>
                    <dl class="dl-horizontal" style="margin-top: 1em;">
                        <dt>姓名</dt>
@@ -34,7 +35,7 @@ $this->params['breadcrumbs'][] = ['label' => '客服记录', 'url' => '/crm/acti
                 <div class="col-md-6">
                     <div class="panel-body">
                         <?php $form = \yii\widgets\ActiveForm::begin(['options' => ['id' => 'note_form']]) ?>
-                        <?= $form->field($model, 'content')->textarea() ?>
+                        <?= $form->field($model, 'summary')->textarea() ?>
                         <?= \yii\helpers\Html::submitButton('添加', ['class' => 'btn btn-primary', 'id' => 'note_submit']) ?>
                         <?php $form->end() ?>
                     </div>
@@ -54,22 +55,33 @@ $this->params['breadcrumbs'][] = ['label' => '客服记录', 'url' => '/crm/acti
                     'dataProvider' => $dataProvider,
                     'layout' => '{summary}{items}<div class="pagination"><center>{pager}</center></div>',
                     'tableOptions' => ['class' => 'table table-striped table-bordered table-advance table-hover'],
+                    'formatter' => [
+                        'class' => 'Xii\\Crm\\TextFu\\Formatter',
+                    ],
                     'columns'  => [
                         [
                             'label' => '类型',
-                            'format' => 'html',
                             'value' => function ($model) {
-                                if ($model->type === \Xii\Crm\Model\Activity::TYPE_PHONE_CALL) {
-                                    return '<span class="glyphicon glyphicon-headphones"></span>';
-                                } elseif($model->type === \Xii\Crm\Model\Activity::TYPE_NOTE) {
-                                    return '<span class="glyphicon glyphicon-bookmark"></span>';
+                                if ($model->type === Activity::TYPE_PHONE_CALL) {
+                                    return '电话接听';
+                                } elseif($model->type === Activity::TYPE_NOTE) {
+                                    return '备注';
+                                } elseif($model->type === Activity::TYPE_RECEPTION) {
+                                    return '门店记录';
                                 } else {
                                     return '---';
                                 }
                             }
                         ],
                         'createTime',
-                        'content',
+                        [
+                            'label' => '内容',
+                            'format' => 'xii:empty-nice',
+                            'value' => function ($model) {
+                                return $model->content;
+                            },
+                        ],
+                        'summary',
                     ]
                 ])?>
 

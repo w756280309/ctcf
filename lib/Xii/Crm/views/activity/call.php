@@ -1,56 +1,58 @@
 <?php
     use yii\helpers\Html;
-    use Xii\Crm\Model\PhoneCall;
+    use Xii\Crm\Model\Engagement;
 
-    $this->title = '添加客服记录';
+    $this->title = '登记客服记录';
     $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\web\YiiAsset']);
 
 ?>
 <div class="row">
     <?php $form = \yii\widgets\ActiveForm::begin(['options' => ['id' => 'phone_call_form']])?>
-    <div class="col-md-6">
+    <div class="col-md-12">
         <div class="panel panel-default">
-            <div class="panel-heading">基本信息</div>
+            <div class="panel-heading">客服详情</div>
             <div class="panel-body">
                 <div class="col-md-12">
-                    <div class="col-md-6">
-                        <?= $form->field($phoneCall, 'number')->textInput(['id' => 'call_number'])?>
+                    <div class="col-md-4">
+                        <?= $form->field($engagement, 'number')->textInput(['id' => 'call_number'])?>
                     </div>
-                    <div class="col-md-6">
-                        <?= $form->field($phoneCall, 'callerName')->textInput(['id' => 'call_name']) ?>
+                    <div class="col-md-4">
+                        <?= $form->field($engagement, 'callerName')->textInput(['id' => 'call_name']) ?>
+                    </div>
+                    <div class="col-md-4">
+                        <?= $form->field($engagement, 'gender')->radioList([Engagement::GENDER_MALE => '男性', Engagement::GENDER_FEMALE => '女性'])?>
                     </div>
                 </div>
                 <div class="col-md-12">
-                    <div class="col-md-6">
-                        <?= $form->field($phoneCall, 'gender')->radioList([PhoneCall::GENDER_MALE => '男性', PhoneCall::GENDER_FEMALE => '女性'])?>
+                    <div class="col-md-4">
+                        <?= $form->field($engagement, 'callTime')->textInput(["onclick" => "WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})"])?>
                     </div>
+                    <div class="col-md-4">
+                        <?= $form->field($engagement, 'duration')->textInput()?>
+                    </div>
+                    <div class="col-md-4">
+                        <?= $form->field($engagement, 'direction')->radioList(Engagement::getDirectionLabels())?>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="col-md-8">
+                        <?= $form->field($engagement, 'content')->textarea()?>
+                    </div>
+                    <div class="col-md-4">
+                        <?= $form->field($engagement, 'summary')->textarea()?>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="col-md-4"></div>
+                    <div class="col-md-4">
+                        <?= Html::submitButton('添加', ['class' => 'btn btn-primary  btn-lg btn-block', 'id' => 'phone_call_submit'])?>
+                    </div>
+                    <div class="col-md-4"></div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="col-md-6">
-        <div class="panel panel-default">
-            <div class="panel-heading">记录详情</div>
-            <div class="panel-body">
-                <div class="col-md-4">
-                    <?= $form->field($phoneCall, 'direction')->radioList(\Xii\Crm\Model\PhoneCall::getDirectionLabels())?>
-                </div>
 
-                <div class="col-md-4">
-                    <?= $form->field($phoneCall, 'duration')->textInput()?>
-                </div>
-                <div class="col-md-6">
-                    <?= $form->field($phoneCall, 'callTime')->textInput(["onclick" => "WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})"])?>
-                </div>
-                <div class="col-md-12">
-                    <?= $form->field($phoneCall, 'content')->textarea()?>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-6">
-        <?= Html::submitButton('添加', ['class' => 'btn btn-primary  btn-lg btn-block', 'id' => 'phone_call_submit'])?>
-    </div>
     <?php $form->end()?>
 
 </div>

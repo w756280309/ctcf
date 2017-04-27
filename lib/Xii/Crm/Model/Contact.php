@@ -70,6 +70,9 @@ class Contact extends ActiveRecord
 
     public static function fetchOneByNumber($number)
     {
+        if (empty($number)) {
+            return null;
+        }
         if (
             preg_match('/^\d{8}$/', $number)
             || preg_match('/^\d{7}$/', $number)
