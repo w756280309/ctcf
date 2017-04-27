@@ -3,6 +3,8 @@
 namespace Xii\Crm\Model;
 
 
+use common\utils\SecurityUtils;
+use common\utils\StringUtils;
 use yii\db\ActiveRecord;
 
 /**
@@ -22,9 +24,13 @@ use yii\db\ActiveRecord;
  * @property string $obfsIdNo           混淆后的身份证
  * @property string $encryptedIdNo      加密后的身份证
  *
+ * @property string $name               姓名
+ *
  */
 class Identity extends ActiveRecord
 {
+    public $name;
+
     public static function tableName()
     {
         return 'crm_identity';
@@ -68,5 +74,21 @@ class Identity extends ActiveRecord
         }
 
         return $age;
+    }
+
+    public function getName()
+    {
+        if (is_null($this->name)) {
+             $this->name = SecurityUtils::decrypt($this->encryptedName);
+        }
+
+        return $this->name;
+    }
+
+    public function setName($name)
+    {
+        $this->name = $name;
+        $this->obfsName = StringUtils::obfsName($name);
+        $this->encryptedName = SecurityUtils::encrypt($name);
     }
 }

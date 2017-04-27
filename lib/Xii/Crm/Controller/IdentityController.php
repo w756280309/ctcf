@@ -5,7 +5,6 @@ namespace Xii\Crm\Controller;
 
 use common\models\user\User;
 use common\utils\SecurityUtils;
-use common\utils\StringUtils;
 use Xii\Crm\Model\Account;
 use Xii\Crm\Model\Contact;
 use Xii\Crm\Model\Identity;
@@ -51,19 +50,10 @@ class IdentityController extends Controller
                     ]);
                     $account->save(false);
 
-                    if ($model->numberType === Contact::TYPE_MOBILE) {
-                        $obfsNumber = StringUtils::obfsMobileNumber($model->number);
-                    } else {
-                        $obfsNumber = StringUtils::obfsLandlineNumber($model->number);
-                    }
+                    $contact = $model->contact;
+                    $contact->account_id = $account->id;
+                    $contact->creator_id = $account->creator_id;
 
-                    $contact = new Contact([
-                        'account_id' => $account->id,
-                        'creator_id' => $account->creator_id,
-                        'type' => $model->numberType,
-                        'obfsNumber' => $obfsNumber,
-                        'encryptedNumber' => SecurityUtils::encrypt($model->number),
-                    ]);
                     $contact->save(false);
 
                     $account->primaryContact_id = $contact->id;
@@ -72,9 +62,8 @@ class IdentityController extends Controller
                     $identity = new Identity([
                         'account_id' => $account->id,
                         'creator_id' => $account->creator_id,
-                        'obfsName' => StringUtils::obfsName($model->name),
-                        'encryptedName' => SecurityUtils::encrypt($model->name),
                     ]);
+                    $identity->setName($model->name);
                     $identity->save(false);
 
                     $transaction->commit();
