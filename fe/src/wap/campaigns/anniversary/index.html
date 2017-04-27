@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="../../common/css/wenjfbase.css">
+    <link rel="stylesheet" href="css/index.css">
+    <script src="../../libs/jquery-1.11.1.min.js"></script>
+    <script src="../../libs/lib.flexible3.js"></script>
+    <script src="../../libs/fastclick.js"></script>
+</head>
+<body>
+<div class="flex-content">
+    <div class="part-one">
+        <span class="xunzhang">我的勋章：<span class="num">5</span> 枚</span>
+        <!--<span class="xunzhang">我的勋章：未登录</span>-->
+    </div>
+    <div class="part-two"></div>
+    <div class="part-three">
+        <div class="rules-box">
+            <p class="rules-title">活动规则</p>
+            <ul class="rules-content">
+                <li>活动时间2017年4月29日-5月20日；</li>
+                <li>活动期间投资任意金额（不含新手标及转让产品），即可获得周年庆勋章1枚；</li>
+                <li>活动期间每邀请1位好友注册绑卡，可获得1枚勋章（最多3枚）；</li>
+                <li>周年庆勋章可于5月20日当天兑换现金红包，最高520元。</li>
+            </ul>
+        </div>
+    </div>
+    <div class="part-four">
+        <a href="#" class="button-qiandao"></a>
+    </div>
+    <div class="part-bottom">
+        <div class="part-bottom-one">
+            <a class="wuyi-link">
+                <img class="wuyi gray" src="images/pic-wuyi.png" alt="" style="top: 1.44rem;right:0.533rem ">
+            </a>
+            <a class="wusi-link">
+                <img class="wusi gray" src="images/pic-wusi.png" alt="" style="bottom:0.9rem;left: 0.533rem;">
+            </a>
+        </div>
+        <div class="part-bottom-two">
+            <a class="muqin-link">
+                <img class="muqin gray" src="images/pic-muqin.png" alt="" style="top: 0.2133rem;right:0.64rem;">
+            </a>
+            <a class="zhounian-link">
+                <img class="zhounian gray" src="images/pic-zhounian.png" alt="" style="left:1.333rem;top: 4.133rem;">
+            </a>
+            <a class="coins-link">
+                <img class="coins gray" src="images/pic_coins.png" alt="" style="left:2.75rem;bottom: 0;">
+            </a>
+        </div>
+        <div class="part-bottom-buttons">
+            <a href="#" class="invest" style="left:0.426rem;bottom: 0.333rem;"></a>
+            <a href="#" class="invite" style="right:1.2rem;bottom: 0.5rem;"></a>
+        </div>
+    </div>
+</div>
+<script>
+    var nowDate = (new Date()).valueOf();
+    //五一
+    if(nowDate >= 1493395200000 && nowDate < 1493654399000){
+        $('.wuyi').removeClass('gray');
+        $('.wuyi-link').attr('href','/promotion/p1704/may-day')
+    }
+    //五四
+    if(nowDate >= 1493827200000 && nowDate < 1494172799000){
+        $('.wusi').removeClass('gray');
+        $('.wusi-link').attr('href','/promotion/p1705/younth-day')
+    }
+    //母亲
+    if(nowDate >= 1494345600000 && nowDate < 1494777599000){
+        $('.muqin').removeClass('gray');
+        $('.muqin-link').attr('href','/promotion/p1705/mother-day')
+    }
+    //周年庆
+    if(nowDate >= 1494777600000 && nowDate < 1495209599000){
+        $('.zhounian').removeClass('gray');
+        $('.zhounian-link').attr('href','/promotion/p1705/year-day')
+    }
+    //520
+    if(nowDate >= 1495209600000 && nowDate < 1495295999000){
+        $('.coins').removeClass('gray');
+        $('.coins-link').attr('href','/promotion/p1705/520-day')
+    }
+</script>
+</body>
+</html>
