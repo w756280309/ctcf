@@ -135,7 +135,7 @@ class PromoInvite12
                     if ($mess) {
                         $templateId = \Yii::$app->params['sms']['invite_bonus'];
                         $message = [
-                            SecurityUtils::decrypt($user->safeMobile),
+                            $order->user->getMobile(),//被邀请者的手机号
                             $mess,
                         ];
                         SmsService::send(SecurityUtils::decrypt($user->safeMobile), $templateId, $message, $user);
