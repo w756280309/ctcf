@@ -18,7 +18,7 @@ class VerifyController extends Controller
     //免密查询
     public function actionMianmi()
     {
-        $users = User::find()->where(['idcard_status' => User::IDCARD_STATUS_PASS, 'mianmiStatus' => 0])->all();
+        $users = User::find()->where(['idcard_status' => User::IDCARD_STATUS_PASS, 'mianmiStatus' => 0])->andWhere(['>', 'created_at', strtotime('-7 day')])->limit(3)->all();
         foreach ($users as $user) {
             $resp = Yii::$container->get('ump')->getUserInfo($user->epayUser->epayUserId);
             $rparr = $resp->toArray();
@@ -40,7 +40,7 @@ class VerifyController extends Controller
 
         $update = BankCardUpdate::find()
             ->where(['status' => [BankCardUpdate::STATUS_ACCEPT, BankCardUpdate::STATUS_PENDING]])
-            ->andWhere(['>', 'created_at', strtotime('-60 days')])
+            ->andWhere(['>', 'created_at', strtotime('-90 days')])
             ->all();
         $datas = ArrayHelper::merge($qpay, $update);
         foreach ($datas as $dat) {
