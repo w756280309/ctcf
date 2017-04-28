@@ -14,16 +14,18 @@ class RechargeController extends Controller
     public function actionCheck()
     {
         $records = RechargeRecord::find()
-            ->where(['lastCronCheckTime' => null])
-            ->orWhere(['<', 'lastCronCheckTime', time() - 5 * 60])   //查询间隔为五分钟
-            ->andWhere(['status' => RechargeRecord::STATUS_NO])
+            ->where(['status' => RechargeRecord::STATUS_NO])
             ->andWhere(['>', 'created_at', strtotime('-3 day')])
-            ->orderBy(['id' => SORT_DESC])
+            ->orderBy(['lastCronCheckTime' => SORT_ASC])
+            ->limit(3)
             ->all();
 
         $acc_ser = new AccountService();
 
         foreach ($records as $rc) {
+            $rc->lastCronCheckTime = time();
+            $rc->save(false);
+
             $resp = Yii::$container->get('ump')->getRechargeInfo($rc->sn, $rc->created_at);
             if ($resp->isSuccessful()) {
                 if ('2' === $resp->get('tran_state')) {
@@ -33,7 +35,6 @@ class RechargeController extends Controller
                 }
             }
 
-            $rc->lastCronCheckTime = time();
             $rc->save(false);
         }
     }

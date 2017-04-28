@@ -68,7 +68,7 @@ $this->title = '线下会员详情';
         <div class="detail_font">会员资金详情</div>
         <table class="table table-condensed">
             <tr>
-                <td><span>理财资产（万元）</span><?= StringUtils::amountFormat2($user->investment_balance) ?></td>
+                <td><span>理财资产（万元）</span>  <?= StringUtils::amountFormat2($user->investment_balance) ?></td>
                 <td></td>
             </tr>
 

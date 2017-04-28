@@ -262,6 +262,14 @@ class OnlineOrder extends ActiveRecord implements OrderTxInterface
     }
 
     /**
+     * 获取投资时间
+     */
+    public function getOrderDate()
+    {
+        return date('Y-m-d H:i:s', $this->created_at);
+    }
+
+    /**
      * 根据订单号或者对象返回订单.
      *
      * @param 订单号或者订单对象

@@ -7,12 +7,24 @@ use yii\base\Model;
 use Zii\Validator\CnMobileValidator;
 
 //游客登记表单
+
+/**
+ * Class IdentityForm
+ * @package Xii\Crm\Model
+ *
+ * @property string     $numberType
+ * @property string     $name
+ * @property string     $number
+ * @property Contact    $contact
+ */
 class IdentityForm extends Model
 {
 
     public $numberType;
     public $name;
     public $number;
+
+    public $contact;
 
     public function rules()
     {
@@ -33,17 +45,10 @@ class IdentityForm extends Model
 
     public function beforeValidate()
     {
-        if (
-            preg_match('/^\d{8}$/', $this->number)
-            || preg_match('/^\d{7}$/', $this->number)
-        ) {
-            $this->numberType = Contact::TYPE_LANDLINE;
-            $this->number = '0577-'.$this->number;
-        } elseif(substr($this->number, 0, 1) === '0') {
-            $this->numberType = Contact::TYPE_LANDLINE;
-        } else {
-            $this->numberType = Contact::TYPE_MOBILE;
-        }
+        $this->contact = Contact::initNew($this->number);
+        $this->numberType = $this->contact->type;
+        $this->number = $this->contact->number;
+
         return parent::beforeValidate();
     }
 

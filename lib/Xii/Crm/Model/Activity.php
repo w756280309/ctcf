@@ -21,8 +21,9 @@ use yii\db\ActiveRecord;
  */
 class Activity extends ActiveRecord
 {
-    const TYPE_PHONE_CALL = 'phone_call';
-    const TYPE_NOTE = 'note';
+    const TYPE_PHONE_CALL = 'phone_call';//电话咨询
+    const TYPE_NOTE = 'note';//备注
+    const TYPE_RECEPTION = 'reception';//门店接待
 
     public static function tableName()
     {
@@ -43,6 +44,7 @@ class Activity extends ActiveRecord
         return [
             'createTime' => '创建时间',
             'content' => '内容',
+            'summary' => '备注',
         ];
     }
 }

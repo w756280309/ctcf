@@ -39,6 +39,7 @@ echo Nav::widget([
 
 $shortcutMenu = [
     ['label' => '登记潜客', 'url' => ['/crm/identity/create']],
+    ['label' => '登记客服记录', 'url' => ['/crm/activity/call']],
 ];
 
 echo Nav::widget([

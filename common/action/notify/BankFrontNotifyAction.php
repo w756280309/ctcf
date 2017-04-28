@@ -39,7 +39,7 @@ class BankFrontNotifyAction extends Action
         if (is_null($user)) {
             throw new NotFoundHttpException('无法找到用户');
         }
-        Yii::info('绑卡前台回跳 ump_log user_bank_front_notify user_id: ' . $user->id . ';cardNo:.' . $bind->card_number .  '; ret_code:' . $data['ret_code'] . ';ret_msg:' . $data['ret_msg'], 'umplog');
+        Yii::info('绑卡前台回跳 ump_log user_bank_front_notify user_id: ' . $user->id . ';cardNo:.' . $bind->card_number .  '; ret_code:' . $data['ret_code'], 'umplog');
         if (Yii::$container->get('ump')->verifySign($data) && '0000' === $data['ret_code']) {
             if (QpayBinding::STATUS_INIT === $bind->status) {
                 $bind->status = QpayBinding::STATUS_ACK;//处理中

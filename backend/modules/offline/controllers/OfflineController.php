@@ -593,7 +593,6 @@ class OfflineController extends BaseController
             if ($post['OfflineRepayment']['term'] != sizeof($arr) && null !== $arr) {
                 //日期个数与分期数量不符
                 $model->addError('term', '日期个数与分期期数不符');
-                //Yii::$app->session->setFlash('info' , "日期个数与分期期数不符");
                 return $this->render('addrpm',[
                     'model' => $model,
                     'loan_id' => $loan_id,

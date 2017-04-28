@@ -3,7 +3,7 @@
 $this->title = '签到得积分';
 
 $hostInfo = \Yii::$app->request->hostInfo;
-
+$taps = date('Y-m-d') >= '2017-05-01' && date('Y-m-d') <= '2017-05-31' ? true : false;
 ?>
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/wenjfbase.css">
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/activeComHeader.css">
@@ -47,14 +47,14 @@ $hostInfo = \Yii::$app->request->hostInfo;
         <?php } ?>
     </div>
     <div class="rule_box" style="padding-top: 0.5rem;">
-        <p class="rule_top f15">热烈庆祝“签到”功能上线！</p>
-        <p class="rule_top f15">每天签到2积分，4月签到积分直升2.5倍起！</p>
+        <p class="rule_top f15">热烈庆祝<?= $taps ? '温都金服成立一周年！' : '“签到”功能上线！' ?></p>
+        <p class="rule_top f15">每天签到2积分，<?= $taps ? '5月签到积分直升3倍起！' : '4月签到积分直升2.5倍起！' ?></p>
         <p class="rule_top f15">连续签到可得代金券！</p>
         <p class="rule_title f15">签到规则</p>
         <img src="<?= FE_BASE_URI ?>wap/qiandao/images/xingxing.png" alt="">
         <ul class="rule_content f13">
             <li>您每天可以签到1次；</li>
-            <li>第1至第7天，每次签到获得5积分（直升2.5倍）；</li>
+            <li>第1至第7天，每次签到获得5积分（直升<?= $taps ? '3' : '2.5' ?>倍）；</li>
             <li>连续签到7天，额外送10元代金券；</li>
             <li>第8天起，每次签到，获得8积分（直升4倍）；</li>
             <li>连续签到14天，送20元代金券；</li>

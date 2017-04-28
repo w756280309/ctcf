@@ -33,7 +33,7 @@ class BankBackNotifyAction extends Action
         if (is_null($user)) {
             throw new \Exception('无法找到记录');
         }
-        Yii::info('绑卡后台通知 ump_log user_bank_back_notify user_id: ' . $user->id . ';cardNo:.' . $bind->card_number .  '; ret_code:' . $data['ret_code'] . ';ret_msg:' . $data['ret_msg'], 'umplog');
+        Yii::info('绑卡后台通知 ump_log user_bank_back_notify user_id: ' . $user->id . ';cardNo:.' . $bind->card_number .  '; ret_code:', 'umplog');
         if (
             Yii::$container->get('ump')->verifySign($data)
             && 'mer_bind_card_notify' === $data['service']

@@ -8,21 +8,21 @@ use yii\base\Model;
 //客户备注表单
 class ActivityNoteForm extends Model
 {
-    public $content;
+    public $summary;
 
     public function rules()
     {
         return [
-            ['content', 'required'],
-            ['content', 'trim'],
-            ['content', 'string'],
+            ['summary', 'required'],
+            ['summary', 'trim'],
+            ['summary', 'string'],
         ];
     }
 
     public function attributeLabels()
     {
         return [
-            'content' => '备注',
+            'summary' => '备注',
         ];
     }
 }

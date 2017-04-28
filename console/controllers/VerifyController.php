@@ -18,7 +18,7 @@ class VerifyController extends Controller
     //免密查询
     public function actionMianmi()
     {
-        $users = User::find()->where(['idcard_status' => User::IDCARD_STATUS_PASS, 'mianmiStatus' => 0])->all();
+        $users = User::find()->where(['idcard_status' => User::IDCARD_STATUS_PASS, 'mianmiStatus' => 0])->andWhere(['>', 'created_at', strtotime('-7 day')])->limit(3)->all();
         foreach ($users as $user) {
             $resp = Yii::$container->get('ump')->getUserInfo($user->epayUser->epayUserId);
             $rparr = $resp->toArray();
@@ -32,8 +32,16 @@ class VerifyController extends Controller
     //绑卡\换卡查询
     public function actionBindcard()
     {
-        $qpay = QpayBinding::find()->where(['status' => [QpayBinding::STATUS_ACK, QpayBinding::STATUS_INIT]])->andWhere(['>', 'created_at', strtotime('-1 day')])->all();
-        $update = BankCardUpdate::find()->where(['status' => [BankCardUpdate::STATUS_ACCEPT, BankCardUpdate::STATUS_PENDING]])->andWhere(['>', 'created_at', strtotime('-60 days')])->all();
+        $qpay = QpayBinding::find()
+            ->where(['status' => [QpayBinding::STATUS_ACK, QpayBinding::STATUS_INIT]])
+            ->andWhere(['>', 'created_at', strtotime('-1 day')])
+            ->andWhere(['<', 'created_at', time() - 10 * 60])
+            ->all();
+
+        $update = BankCardUpdate::find()
+            ->where(['status' => [BankCardUpdate::STATUS_ACCEPT, BankCardUpdate::STATUS_PENDING]])
+            ->andWhere(['>', 'created_at', strtotime('-90 days')])
+            ->all();
         $datas = ArrayHelper::merge($qpay, $update);
         foreach ($datas as $dat) {
             $resp = Yii::$container->get('ump')->getBindingTx($dat);

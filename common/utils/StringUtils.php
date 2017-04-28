@@ -34,7 +34,7 @@ class StringUtils
      */
     public static function obfsMobileNumber($mobileNumber)
     {
-        if (empty($mobileNumber) || !is_string($mobileNumber)) {   //验证手机号的有效性,包括值和格式
+        if (empty($mobileNumber)) {  //验证手机号的有效性,包括值和格式
             return '';
         }
 

@@ -26,6 +26,13 @@ class DateTimeBehavior extends AttributeBehavior
     protected function getValue($event)
     {
         if (null === $this->value) {
+            if (
+                $event->name === BaseActiveRecord::EVENT_BEFORE_INSERT
+                && null !== $event->sender->getAttribute($this->createTimeAttribute)
+            ) {
+                return $event->sender->getAttribute($this->createTimeAttribute);
+            }
+
             return date('Y-m-d H:i:s');
         }
 
