@@ -87,16 +87,30 @@ class Contact extends ActiveRecord
         return Contact::find()->where(['account_id' => $accountId]);
     }
 
-    public static function initNew($number) {
-        $contact = new Contact();
-
+    //格式化电话号码
+    public static function formatNumber($number)
+    {
         if (
             preg_match('/^\d{8}$/', $number)
             || preg_match('/^\d{7}$/', $number)
         ) {
-            $contact->type = Contact::TYPE_LANDLINE;
             $number = '0577-'.$number;
         } elseif(substr($number, 0, 1) === '0') {
+            //兼容区号和号码之间没有分隔符的数据
+            if (
+                '0577' === substr($number, 0, 4)
+                && '0577-' !== substr($number, 0, 5)
+            ) {
+                $number = '0577-' . substr($number, 4);
+            }
+        }
+        return $number;
+    }
+
+    public static function initNew($number) {
+        $contact = new Contact();
+        $number = self::formatNumber($number);
+        if(substr($number, 0, 1) === '0') {
             $contact->type = Contact::TYPE_LANDLINE;
         } else {
             $contact->type = Contact::TYPE_MOBILE;

@@ -25,13 +25,10 @@ use Zii\Validator\CnMobileValidator;
  * @property string $content            内容
  * @property string $summary            备注
  * @property string $reception          接待者
+ * @property string $type               备注类型
  *
  * @property int $duration              通话时长(分)
  * @property string $number             电话
- * @property string $numberType         电话类型
- * @property Contact $contact           联系方式
- * @property string $activityType       备注类型
- * @property Account $account           Account
  */
 class Engagement extends ActiveRecord
 {
@@ -43,10 +40,6 @@ class Engagement extends ActiveRecord
 
     public $duration;
     public $number;
-    public $numberType;
-    public $contact;
-    public $activityType;
-    public $account;
 
     public function rules()
     {
@@ -55,12 +48,8 @@ class Engagement extends ActiveRecord
             ['callTime', 'date', 'format' => 'php:Y-m-d H:i:s'],
             [['content', 'callerName', 'summary'], 'trim'],
             ['duration', 'number'],
-            ['number', CnMobileValidator::className(), 'when' => function ($model) {
-                return $model->numberType === Contact::TYPE_MOBILE;
-            }],
-            ['number', 'validateNumber', 'when' => function ($model) {
-                return $model->numberType === Contact::TYPE_LANDLINE;
-            }],
+            ['type', 'safe'],
+            ['number', 'validateNumber'],
             ['callerName', 'match', 'pattern' => '/^[\x{4e00}-\x{9fa5}]{1,6}$/u'],
             ['direction', 'in', 'range' => [self::TYPE_IN, self::TYPE_OUT]],
         ];
@@ -68,15 +57,14 @@ class Engagement extends ActiveRecord
 
     public function validateNumber($attribute, $params)
     {
-        if ($this->numberType === Contact::TYPE_LANDLINE) {
-            if (
-                !preg_match('/^\d{3}-\d{8}$/', $this->number)
-                && !preg_match('/^\d{3}-\d{7}$/', $this->number)
-                && !preg_match('/^\d{4}-\d{8}$/', $this->number)
-                && !preg_match('/^\d{4}-\d{7}$/', $this->number)
-            ) {
-                $this->addError($attribute, '座机格式不正确');
-            }
+        if (
+            !preg_match('/^\d{3}-\d{8}$/', $this->number)
+            && !preg_match('/^\d{3}-\d{7}$/', $this->number)
+            && !preg_match('/^\d{4}-\d{8}$/', $this->number)
+            && !preg_match('/^\d{4}-\d{7}$/', $this->number)
+            && !preg_match('/^1[34578]\d{9}$/', $this->number)
+        ) {
+            $this->addError($attribute, '电话号码格式不合法');
         }
     }
 
@@ -85,9 +73,7 @@ class Engagement extends ActiveRecord
         if (empty($this->durationSeconds) && !empty($this->duration)) {
             $this->durationSeconds = bcmul($this->duration, 60);
         }
-        $this->contact = Contact::initNew($this->number);
-        $this->numberType = $this->contact->type;
-        $this->number = $this->contact->number;
+        $this->number = Contact::formatNumber($this->number);
 
         return parent::beforeValidate();
     }
@@ -128,38 +114,7 @@ class Engagement extends ActiveRecord
         ];
     }
 
-    private function addAccount()
-    {
-        $account = new Account([
-            'creator_id' => $this->creator_id,
-            'type' => Account::TYPE_PERSON,
-            'isConverted' => false,
-        ]);
-        $account->save(false);
-
-        $this->account = $account;
-        $this->account_id = $account->id;
-    }
-
-    private function updateAccount()
-    {
-        if (!is_null($this->contact_id)) {
-            $this->account->primaryContact_id = $this->contact_id;
-            $this->account->save(false);
-        }
-    }
-
-    private function addContact()
-    {
-        if (!is_null($this->contact)) {
-            $this->contact->account_id = $this->account_id;
-            $this->contact->creator_id = $this->creator_id;
-            $this->contact->save(false);
-            $this->contact_id = $this->contact->id;
-        }
-    }
-
-    private function addIdentity()
+    public function setIdentity()
     {
         if (!empty($this->callerName)) {
             $identity = new Identity([
@@ -171,12 +126,12 @@ class Engagement extends ActiveRecord
         }
     }
 
-    private function addActivity()
+    public function setActivity()
     {
         $activity = new Activity([
             'account_id' => $this->account_id,
             'creator_id' => $this->creator_id,
-            'type' => $this->activityType,
+            'type' => $this->type,
             'content' => $this->content,
             'summary' => $this->summary,
             'createTime' => $this->callTime,
@@ -184,43 +139,26 @@ class Engagement extends ActiveRecord
         $activity->save(false);
     }
 
-
-    /**
-     * 添加电话记录
-     *
-     * @return bool
-     */
-    public function addCall()
+    public function setContact(Contact $contact)
     {
-        $transaction = \Yii::$app->db->beginTransaction();
-        try {
-            $contact = Contact::fetchOneByNumber($this->number);
-            if (is_null($contact)) {
-                $this->addAccount();
+        if (is_null($contact->id)) {
+            $account = new Account([
+                'creator_id' => $this->creator_id,
+                'type' => Account::TYPE_PERSON,
+                'isConverted' => false,
+            ]);
+            $account->save(false);
 
-                $this->addContact();
+            $contact->account_id = $account->id;
+            $contact->creator_id = $this->creator_id;
+            $contact->save(false);
 
-                $this->updateAccount();
-
-               $this->addIdentity();
-
-            } else {
-                $this->account_id = $contact->account_id;
-                $this->contact_id = $contact->id;
-            }
-            //保存Engagement
-            $this->recp_id = $this->creator_id;
-            $this->save(false);
-
-            $this->addActivity();
-
-            $transaction->commit();
-            return true;
-        } catch (\Exception $e) {
-            $transaction->rollBack();
-            $this->addError('number', $e->getMessage());
-            return false;
+            $account->primaryContact_id = $contact->id;
+            $account->save(false);
         }
+
+        $this->account_id = $contact->account_id;
+        $this->contact_id = $contact->id;
     }
 
 }

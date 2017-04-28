@@ -116,15 +116,33 @@ class ActivityController extends Controller
             'direction' => Engagement::TYPE_IN,
             'gender' =>Engagement::GENDER_MALE,
             'creator_id' => \Yii::$app->getUser()->getIdentity()->getId(),
-            'activityType' => Activity::TYPE_PHONE_CALL,
+            'type' => Activity::TYPE_PHONE_CALL,
         ]);
+        $engagement->recp_id = $engagement->creator_id;
 
         if (
             $engagement->load(\Yii::$app->request->post())
             && $engagement->validate()
-            && $engagement->addCall()
         ) {
-            return $this->redirect('/crm/activity/index?accountId=' . $engagement->account_id);
+            $transaction = \Yii::$app->db->beginTransaction();
+            try {
+                $contact = Contact::fetchOneByNumber($engagement->number);
+                if (is_null($contact)) {
+                    $contact = Contact::initNew($engagement->number);
+                }
+
+                $engagement->setContact($contact);
+                $engagement->setIdentity();
+                $engagement->setActivity();
+                $engagement->save(false);
+
+
+                $transaction->commit();
+                return $this->redirect('/crm/activity/index?accountId=' . $engagement->account_id);
+            } catch (\Exception $e) {
+                $transaction->rollBack();
+                $engagement->addError('number', $e->getMessage());
+            }
         }
 
         return $this->render('call', [

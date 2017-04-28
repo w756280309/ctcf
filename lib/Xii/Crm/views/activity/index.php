@@ -63,11 +63,11 @@ $this->params['breadcrumbs'][] = ['label' => '客服记录', 'url' => '/crm/acti
                             'label' => '类型',
                             'value' => function ($model) {
                                 if ($model->type === Activity::TYPE_PHONE_CALL) {
-                                    return '电话接听';
+                                    return '客服电话';
                                 } elseif($model->type === Activity::TYPE_NOTE) {
                                     return '备注';
                                 } elseif($model->type === Activity::TYPE_RECEPTION) {
-                                    return '门店记录';
+                                    return '门店接待';
                                 } else {
                                     return '---';
                                 }
