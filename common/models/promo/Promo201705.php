@@ -85,7 +85,6 @@ class Promo201705
      * 抽奖
      *
      * @param User $user
-     *
      * @return PromoLotteryTicket
      * @throws \Exception
      */
@@ -100,6 +99,12 @@ class Promo201705
     public function doAfterSuccessLoanOrder(OnlineOrder $order)
     {
         $user = $order->user;
+        if (
+            $order->status !== OnlineOrder::STATUS_SUCCESS
+            || !$this->promo->isActive($user, $order->order_time)
+        ) {
+            return;
+        }
         $loan = $order->loan;
         $kinds = [self::SOURCE_INIT, self::SOURCE_ORDER];
         foreach ($kinds as $source) {
@@ -137,28 +142,33 @@ class Promo201705
      */
     public function doAfterBindCard(User $user)
     {
-        if ($user->isInvited($this->promo->startTime, $this->promo->endTime)) {
-            $extraPromo = $this->getActivePromo(self::SOURCE_INVITE, date('Y-m-d H:i:s', $user->created_at));
-            if ($extraPromo) {
-                $source = self::getTicketSource($extraPromo);
-                if ('' === $source) {
-                    throw new \Exception('未获得正确的ticket来源');
-                }
-                $ticketLimit = (int) $extraPromo['limit'];
-                $record = InviteRecord::find()
-                    ->where(['invitee_id' => $user->id])
-                    ->one();
-                if (null !== $record) {
-                    $user = User::findOne($record->user_id);
-                    if (null !== $user) {
-                        $ticketCount = (int) PromoLotteryTicket::findLotteryByPromoId($this->promo->id)
-                            ->andWhere(['source' => $source])
-                            ->andWhere(['user_id' => $user->id])
-                            ->count();
-                        if ($ticketCount < $ticketLimit) {
-                            $this->initTicket($user, $source)->save();
-                        }
-                    }
+        if (!$this->promo->isActive($user)) {
+            return;
+        }
+        if (!$user->isInvited($this->promo->startTime, $this->promo->endTime)) {
+            return;
+        }
+        $extraPromo = $this->getActivePromo(self::SOURCE_INVITE, date('Y-m-d H:i:s', $user->created_at));
+        if (empty($extraPromo)) {
+            return;
+        }
+        $source = self::getTicketSource($extraPromo);
+        if ('' === $source) {
+            return;
+        }
+        $ticketLimit = (int) $extraPromo['limit'];
+        $record = InviteRecord::find()
+            ->where(['invitee_id' => $user->id])
+            ->one();
+        if (null !== $record) {
+            $user = User::findOne($record->user_id);
+            if (null !== $user) {
+                $ticketCount = (int) PromoLotteryTicket::findLotteryByPromoId($this->promo->id)
+                    ->andWhere(['source' => $source])
+                    ->andWhere(['user_id' => $user->id])
+                    ->count();
+                if ($ticketCount < $ticketLimit) {
+                    $this->initTicket($user, $source)->save();
                 }
             }
         }
