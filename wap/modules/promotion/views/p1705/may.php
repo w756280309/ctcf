@@ -8,11 +8,12 @@ $act2 = date('Y-m-d') >= '2017-05-04' && date('Y-m-d') <= '2017-05-07' ? true : 
 $act3 = date('Y-m-d') >= '2017-05-10' && date('Y-m-d') <= '2017-05-14' ? true : false;
 $act4 = date('Y-m-d') >= '2017-05-15' && date('Y-m-d') <= '2017-05-19' ? true : false;
 $act5 = date('Y-m-d') >= '2017-05-20' && date('Y-m-d') <= '2017-05-31' ? true : false;
-$url1 = '/promotion/p1705/may-day';
-$url2 = '/promotion/p1705/youth-day';
-$url3 = '/promotion/p1705/mother-day';
-$url4 = '/promotion/p1705/year-day';
-$url5 = '/promotion/p1705/520-day';
+//到达活动日期后，添加url，并保留
+$url1 = date('Y-m-d') >= '2017-04-29' ? '/promotion/p1705/may-day' : '';
+$url2 = date('Y-m-d') >= '2017-05-04' ? '/promotion/p1705/youth-day' : '';
+$url3 = date('Y-m-d') >= '2017-05-10' ? '/promotion/p1705/mother-day' : '';
+$url4 = date('Y-m-d') >= '2017-05-15' ? '/promotion/p1705/year-day' : '';
+$url5 = date('Y-m-d') >= '2017-05-20' ? '/promotion/p1705/520-day' : '';
 ?>
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/wenjfbase.css?v=1.0">
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/campaigns/active20170424/css/index.css?v=1.1">
@@ -54,21 +55,21 @@ $url5 = '/promotion/p1705/520-day';
     </div>
     <div class="part-bottom">
         <div class="part-bottom-one">
-            <a class="wuyi-link" <?= $act1 ? "href=$url1" : ''?>>
+            <a class="wuyi-link" <?= $url1 ? "href=$url1" : ''?>>
                 <img class="wuyi <?= $act1 ? '' : 'gray'?>" src="<?= FE_BASE_URI ?>wap/campaigns/anniversary/images/pic-wuyi.png" alt="" style="top: 1.44rem;right:0.533rem ">
             </a>
-            <a class="wusi-link" <?= $act2 ? "href=$url2" : ''?>>
+            <a class="wusi-link" <?= $url2 ? "href=$url2" : ''?>>
                 <img class="wusi <?= $act2 ? '' : 'gray'?>" src="<?= FE_BASE_URI ?>wap/campaigns/anniversary/images/pic-wusi.png" alt="" style="bottom:0.9rem;left: 0.533rem;">
             </a>
         </div>
         <div class="part-bottom-two">
-            <a class="muqin-link" <?= $act3 ? "href=$url3" : ''?>>
+            <a class="muqin-link" <?= $url3 ? "href=$url3" : ''?>>
                 <img class="muqin <?= $act3 ? '' : 'gray'?>" src="<?= FE_BASE_URI ?>wap/campaigns/anniversary/images/pic-muqin.png" alt="" style="top: 0.2133rem;right:0.64rem;">
             </a>
-            <a class="zhounian-link" <?= $act4 ? "href=$url4" : ''?>>
+            <a class="zhounian-link" <?= $url4 ? "href=$url4" : ''?>>
                 <img class="zhounian <?= $act4 ? '' : 'gray'?>" src="<?= FE_BASE_URI ?>wap/campaigns/anniversary/images/pic-zhounian.png" alt="" style="left:1.333rem;top: 4.133rem;">
             </a>
-            <a class="coins-link" <?= $act5 ? "href=$url5" : ''?>>
+            <a class="coins-link" <?= $url5 ? "href=$url5" : ''?>>
                 <img class="coins <?= $act5 ? '' : 'gray'?>" src="<?= FE_BASE_URI ?>wap/campaigns/anniversary/images/pic_coins.png" alt="" style="left:2.75rem;bottom: 0;">
             </a>
         </div>
