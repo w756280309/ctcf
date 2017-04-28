@@ -3,17 +3,42 @@
 $this->title = '温都金服一周年瓜分百万礼品';
 $this->share = $share;
 $this->headerNavOn = true;
-$act1 = date('Y-m-d') >= '2017-04-29' && date('Y-m-d') <= '2017-05-01' ? true : false;
-$act2 = date('Y-m-d') >= '2017-05-04' && date('Y-m-d') <= '2017-05-07' ? true : false;
-$act3 = date('Y-m-d') >= '2017-05-10' && date('Y-m-d') <= '2017-05-14' ? true : false;
-$act4 = date('Y-m-d') >= '2017-05-15' && date('Y-m-d') <= '2017-05-19' ? true : false;
-$act5 = date('Y-m-d') >= '2017-05-20' && date('Y-m-d') <= '2017-05-31' ? true : false;
+use common\view\WxshareHelper;
+use common\models\adv\Share;
+
+$act1 = date('Y-m-d') >= '2017-04-29' && date('Y-m-d') <= '2017-05-01';
+$act2 = date('Y-m-d') >= '2017-05-04' && date('Y-m-d') <= '2017-05-07';
+$act3 = date('Y-m-d') >= '2017-05-10' && date('Y-m-d') <= '2017-05-14';
+$act4 = date('Y-m-d') >= '2017-05-15' && date('Y-m-d') <= '2017-05-19';
+$act5 = date('Y-m-d') >= '2017-05-20' && date('Y-m-d') <= '2017-05-31';
 //到达活动日期后，添加url，并保留
-$url1 = date('Y-m-d') >= '2017-04-29' ? '/promotion/p1705/may-day' : '';
-$url2 = date('Y-m-d') >= '2017-05-04' ? '/promotion/p1705/youth-day' : '';
-$url3 = date('Y-m-d') >= '2017-05-10' ? '/promotion/p1705/mother-day' : '';
-$url4 = date('Y-m-d') >= '2017-05-15' ? '/promotion/p1705/year-day' : '';
-$url5 = date('Y-m-d') >= '2017-05-20' ? '/promotion/p1705/520-day' : '';
+$url1 = date('Y-m-d') >= '2017-04-29' ? '/promotion/p1705/may-day' : null;
+$url2 = date('Y-m-d') >= '2017-05-04' ? '/promotion/p1705/youth-day' : null;
+$url3 = date('Y-m-d') >= '2017-05-10' ? '/promotion/p1705/mother-day' : null;
+$url4 = date('Y-m-d') >= '2017-05-15' ? '/promotion/p1705/year-day' : null;
+$url5 = date('Y-m-d') >= '2017-05-20' ? '/promotion/p1705/520-day' : null;
+
+$host = Yii::$app->params['clientOption']['host']['wap'];
+//if share is null just get a new one
+if (!$share) {
+    $share = new Share([
+        'title' => '温都金服一周年瓜分百万礼品！',
+        'description' => '5月狂欢季 瓜分百万元礼品',
+        'url' => $host.'/promotion/p1705/may',
+        'imgUrl' => (ASSETS_BASE_URI === '/' ? $host : ASSETS_BASE_URI).'promo/1608/images/invite/icon.jpg',
+    ]);
+}
+WxshareHelper::registerTo($this, $share);
+$this->registerJs('
+         var invite_url = "'.$share->url.'";
+         var invite_des = "'.$share->description.'";
+         var invite_title = "'.$share->title.'";
+         var invite_imgUrl = "'.$share->imgUrl.'";
+    ', 1);
+$this->registerJsFile(ASSETS_BASE_URI . 'js/invite/may-invite.js?v=201704281', ['depends' => 'yii\web\JqueryAsset', 'position' => 1]);
+$this->registerCssFile(ASSETS_BASE_URI . 'css/invite/may-invite.css?v=20170428', ['depends' => 'wap\assets\WapAsset']);
+
+
 ?>
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/wenjfbase.css?v=1.0">
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/campaigns/active20170424/css/index.css?v=1.1">
@@ -23,6 +48,7 @@ $url5 = date('Y-m-d') >= '2017-05-20' ? '/promotion/p1705/520-day' : '';
 <script src="<?= FE_BASE_URI ?>libs/jquery-1.11.1.min.js"></script>
 <script src="<?= FE_BASE_URI ?>libs/lib.flexible3.js"></script>
 <script src="<?= FE_BASE_URI ?>libs/fastclick.js"></script>
+
 
 <div class="flex-content">
     <div class="part-one">
@@ -74,9 +100,14 @@ $url5 = date('Y-m-d') >= '2017-05-20' ? '/promotion/p1705/520-day' : '';
             </a>
         </div>
         <div class="part-bottom-buttons">
-            <a href="/user/invite" class="invest" style="left:0.426rem;bottom: 0.333rem;"></a>
+            <a class="invest invite-btn" id="invest" style="left:0.426rem;bottom: 0.333rem;"></a>
             <a href="/deal/deal/index" class="invite" style="right:1.2rem;bottom: 0.5rem;"></a>
         </div>
     </div>
+</div>
+<!--share-box-->
+<div class="mark-box"></div>
+<div class="share-box">
+    <img src="<?= ASSETS_BASE_URI ?>images/invite/share.png" alt="">
 </div>
 

@@ -33,6 +33,7 @@ class P1705Controller extends Controller
             $promo201705 = new Promo201705($promo);
             $xunzhang = $promo201705->getRestTicketCount($user);
         }
+
         return $this->render('may', [
             'share' => $share,
             'xunzhang' => $xunzhang,
