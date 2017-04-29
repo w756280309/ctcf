@@ -16,7 +16,7 @@ $this->headerNavOn = true;
         <a class="link-one" href="/deal/deal/index"></a>
     </div>
     <div class="box-three">
-        <a class="link-two" href="https://m.wenjf.com/mall/portal/guest?dbredirect=https%3A%2F%2Factivity.m.duiba.com.cn%2Fnewtools%2Findex%3Fid%3D2162509%26dblanding%3Dhttps%253A%252F%252Factivity.m.duiba.com.cn%252FactivityShare%252FgetActivityShareInfo%253FoperatingActivityId%253D2162509"></a>
+    <a class="link-two" href="<?= Yii::$app->request->hostInfo ?>/mall/portal/guest?dbredirect=https%3A%2F%2Factivity.m.duiba.com.cn%2Fnewtools%2Findex%3Fid%3D2162509%26dblanding%3Dhttps%253A%252F%252Factivity.m.duiba.com.cn%252FactivityShare%252FgetActivityShareInfo%253FoperatingActivityId%253D2162509"></a>
     </div>
     <div class="box-four"></div>
 </div>
