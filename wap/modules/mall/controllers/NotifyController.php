@@ -185,13 +185,13 @@ class NotifyController extends Controller
         $translation = Yii::$app->db->beginTransaction();
         try {
             $result = ThirdPartyConnect::parseCreditConsume($appKey, $appSecret, $requestParams);
-            $orderNum = $result['orderNum'];
+            //$orderNum = $result['orderNum'];
             $publicId = $requestParams['uid'];
             $goodsTypeSn = $result['params'];
             $developBizId = $result['developBizId'];
             if (
-                empty($orderNum)
-                || empty($developBizId)
+                //empty($orderNum)
+                empty($developBizId)
                 || empty($publicId)
                 || empty($goodsTypeSn)
             ) {
@@ -206,7 +206,7 @@ class NotifyController extends Controller
             if (empty($user)) {
                 throw new \Exception('不是温都会员');
             }
-            $order = PointOrder::findOne(['orderNum' => $orderNum, 'sn' => $developBizId]);
+            $order = PointOrder::findOne(['sn' => $developBizId]);
             if (is_null($order)) {
                 throw new \Exception('订单不存在');
             }
