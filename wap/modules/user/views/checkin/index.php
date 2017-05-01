@@ -54,7 +54,7 @@ $taps = date('Y-m-d') >= '2017-05-01' && date('Y-m-d') <= '2017-05-31' ? true : 
         <img src="<?= FE_BASE_URI ?>wap/qiandao/images/xingxing.png" alt="">
         <ul class="rule_content f13">
             <li>您每天可以签到1次；</li>
-            <li>第1至第7天，每次签到获得5积分（直升<?= $taps ? '3' : '2.5' ?>倍）；</li>
+            <li>第1至第7天，每次签到获得6积分（直升<?= $taps ? '3' : '2.5' ?>倍）；</li>
             <li>连续签到7天，额外送10元代金券；</li>
             <li>第8天起，每次签到，获得8积分（直升4倍）；</li>
             <li>连续签到14天，送20元代金券；</li>
