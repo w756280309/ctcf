@@ -4,10 +4,9 @@ namespace Xii\Crm\Model;
 
 
 use yii\db\ActiveRecord;
-use Zii\Validator\CnMobileValidator;
 
 /**
- * Class Engagement
+ * Class PhoneCall
  * @package Xii\Crm\Model
  *
  * @property int    $id
@@ -23,14 +22,13 @@ use Zii\Validator\CnMobileValidator;
  * @property string $callerName         客户称呼
  * @property string $gender             性别
  * @property string $content            内容
- * @property string $summary            备注
+ * @property string $comment            备注
  * @property string $reception          接待者
- * @property string $type               备注类型
  *
  * @property int $duration              通话时长(分)
  * @property string $number             电话
  */
-class Engagement extends ActiveRecord
+class PhoneCall extends ActiveRecord
 {
     const TYPE_IN = 'inbound';//呼入
     const TYPE_OUT = 'outbound';//呼出
@@ -46,9 +44,8 @@ class Engagement extends ActiveRecord
         return [
             [['number', 'callTime', 'content', 'direction', 'gender'], 'required'],
             ['callTime', 'date', 'format' => 'php:Y-m-d H:i:s'],
-            [['content', 'callerName', 'summary'], 'trim'],
+            [['content', 'callerName', 'comment'], 'trim'],
             ['duration', 'number'],
-            ['type', 'safe'],
             ['number', 'validateNumber'],
             ['callerName', 'match', 'pattern' => '/^[\x{4e00}-\x{9fa5}]{1,6}$/u'],
             ['direction', 'in', 'range' => [self::TYPE_IN, self::TYPE_OUT]],
@@ -80,7 +77,7 @@ class Engagement extends ActiveRecord
 
     public static function tableName()
     {
-        return 'crm_engagement';
+        return 'crm_phone_call';
     }
 
     public function behaviors()
@@ -102,7 +99,7 @@ class Engagement extends ActiveRecord
             'callTime' => '通话开始时间',
             'direction' => '呼入方向',
             'gender' => '性别',
-            'summary' => '备注',
+            'comment' => '评论',
         ];
     }
 
@@ -131,10 +128,9 @@ class Engagement extends ActiveRecord
         $activity = new Activity([
             'account_id' => $this->account_id,
             'creator_id' => $this->creator_id,
-            'type' => $this->type,
-            'content' => $this->content,
-            'summary' => $this->summary,
             'createTime' => $this->callTime,
+            'ref_type' => Activity::TYPE_PHONE_CALL,
+            'ref_id' => $this->id,
         ]);
         $activity->save(false);
     }

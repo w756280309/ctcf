@@ -1,6 +1,6 @@
 <?php
     use yii\helpers\Html;
-    use Xii\Crm\Model\Engagement;
+    use Xii\Crm\Model\PhoneCall;
 
     $this->title = '登记客服记录';
     $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\web\YiiAsset']);
@@ -14,32 +14,32 @@
             <div class="panel-body">
                 <div class="col-md-12">
                     <div class="col-md-4">
-                        <?= $form->field($engagement, 'number')->textInput(['id' => 'call_number'])?>
+                        <?= $form->field($phoneCall, 'number')->textInput(['id' => 'call_number'])?>
                     </div>
                     <div class="col-md-4">
-                        <?= $form->field($engagement, 'callerName')->textInput(['id' => 'call_name']) ?>
+                        <?= $form->field($phoneCall, 'callerName')->textInput(['id' => 'call_name']) ?>
                     </div>
                     <div class="col-md-4">
-                        <?= $form->field($engagement, 'gender')->radioList([Engagement::GENDER_MALE => '男性', Engagement::GENDER_FEMALE => '女性'])?>
+                        <?= $form->field($phoneCall, 'gender')->radioList([PhoneCall::GENDER_MALE => '男性', PhoneCall::GENDER_FEMALE => '女性'])?>
                     </div>
                 </div>
                 <div class="col-md-12">
                     <div class="col-md-4">
-                        <?= $form->field($engagement, 'callTime')->textInput(["onclick" => "WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})"])?>
+                        <?= $form->field($phoneCall, 'callTime')->textInput(["onclick" => "WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})"])?>
                     </div>
                     <div class="col-md-4">
-                        <?= $form->field($engagement, 'duration')->textInput()?>
+                        <?= $form->field($phoneCall, 'duration')->textInput()?>
                     </div>
                     <div class="col-md-4">
-                        <?= $form->field($engagement, 'direction')->radioList(Engagement::getDirectionLabels())?>
+                        <?= $form->field($phoneCall, 'direction')->radioList(PhoneCall::getDirectionLabels())?>
                     </div>
                 </div>
                 <div class="col-md-12">
                     <div class="col-md-8">
-                        <?= $form->field($engagement, 'content')->textarea()?>
+                        <?= $form->field($phoneCall, 'content')->textarea()?>
                     </div>
                     <div class="col-md-4">
-                        <?= $form->field($engagement, 'summary')->textarea()?>
+                        <?= $form->field($phoneCall, 'comment')->textarea()?>
                     </div>
                 </div>
                 <div class="col-md-12">

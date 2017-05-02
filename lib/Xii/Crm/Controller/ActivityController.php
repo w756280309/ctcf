@@ -9,6 +9,8 @@ use Xii\Crm\Model\ActivityNoteForm;
 use Xii\Crm\Model\Contact;
 use Xii\Crm\Model\Identity;
 use Xii\Crm\Model\Engagement;
+use Xii\Crm\Model\Note;
+use Xii\Crm\Model\PhoneCall;
 use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
 use yii\web\Controller;
@@ -35,7 +37,7 @@ class ActivityController extends Controller
      * 客服记录
      *
      * 1. 能够展示客服记录(activity表)，每页15条记录
-     * 2. 能够为用户添加备注
+     * 2. 能够为用户添加备注，Note表
      * 3. 添加完之后任然返回该客服记录表
      * 4. 客服记录按照创建时间倒叙
      */
@@ -45,7 +47,12 @@ class ActivityController extends Controller
         if (is_null($account)) {
             return $this->redirect('/crm/account');
         }
-        $query = Activity::find()->where(['account_id' => $account->id])->orderBy(['createTime' => SORT_DESC]);
+        $query = Activity::find()
+            ->where(['account_id' => $account->id])
+            ->andWhere(['ref_type' => Activity::getRefTypeList()])
+            ->andWhere('`ref_id` is not null')
+            ->orderBy(['createTime' => SORT_DESC])
+        ;
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
             'sort' => false,
@@ -54,18 +61,29 @@ class ActivityController extends Controller
             ]
         ]);
 
-        $model = new ActivityNoteForm();
+        $model = new Note();
         if ($model->load(\Yii::$app->request->post()) && $model->validate()) {
+            $transaction = \Yii::$app->db->beginTransaction();
             try {
+                $model->setAttributes([
+                    'account_id' => $account->id,
+                    'creator_id' => \Yii::$app->user->getIdentity()->getId(),
+                ], false);
+                $model->save(false);
+
                 $activity = new Activity([
                     'account_id' => $account->id,
                     'creator_id' => \Yii::$app->user->getIdentity()->getId(),
-                    'type' => Activity::TYPE_NOTE,
-                    'summary' => $model->summary,
+                    'ref_type' => Activity::TYPE_NOTE,
+                    'ref_id' => $model->id,
                 ]);
                 $activity->save(false);
+
+                $transaction->commit();
                 return $this->redirect('/crm/activity/index?accountId=' . $accountId);
             } catch (\Exception $e) {
+                $transaction->rollBack();
+                \Yii::error($e->getMessage());
                 $model->addError('contact', $e->getMessage());
             }
         }
@@ -111,42 +129,41 @@ class ActivityController extends Controller
      */
     public function actionCall()
     {
-        $engagement = new Engagement([
+        $phoneCall = new PhoneCall([
             'callTime' => date('Y-m-d H:i:s'),
-            'direction' => Engagement::TYPE_IN,
-            'gender' =>Engagement::GENDER_MALE,
+            'direction' => PhoneCall::TYPE_IN,
+            'gender' => PhoneCall::GENDER_MALE,
             'creator_id' => \Yii::$app->getUser()->getIdentity()->getId(),
-            'type' => Activity::TYPE_PHONE_CALL,
         ]);
-        $engagement->recp_id = $engagement->creator_id;
+        $phoneCall->recp_id = $phoneCall->creator_id;
 
         if (
-            $engagement->load(\Yii::$app->request->post())
-            && $engagement->validate()
+            $phoneCall->load(\Yii::$app->request->post())
+            && $phoneCall->validate()
         ) {
             $transaction = \Yii::$app->db->beginTransaction();
             try {
-                $contact = Contact::fetchOneByNumber($engagement->number);
+                $contact = Contact::fetchOneByNumber($phoneCall->number);
                 if (is_null($contact)) {
-                    $contact = Contact::initNew($engagement->number);
+                    $contact = Contact::initNew($phoneCall->number);
                 }
 
-                $engagement->setContact($contact);
-                $engagement->setIdentity();
-                $engagement->setActivity();
-                $engagement->save(false);
-
+                $phoneCall->setContact($contact);
+                $phoneCall->setIdentity();
+                $phoneCall->save(false);
+                $phoneCall->setActivity();
 
                 $transaction->commit();
-                return $this->redirect('/crm/activity/index?accountId=' . $engagement->account_id);
+                return $this->redirect('/crm/activity/index?accountId=' . $phoneCall->account_id);
             } catch (\Exception $e) {
                 $transaction->rollBack();
-                $engagement->addError('number', $e->getMessage());
+                \Yii::error($e->getMessage());
+                $phoneCall->addError('number', $e->getMessage());
             }
         }
 
         return $this->render('call', [
-            'engagement' => $engagement,
+            'phoneCall' => $phoneCall,
         ]);
     }
 }
