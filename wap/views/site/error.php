@@ -1,16 +1,14 @@
 <?php
-
 use yii\helpers\Html;
 
 /* @var $this yii\web\View */
 /* @var $name string */
 /* @var $message string */
 /* @var $exception Exception */
-$this->registerMetaTag([
-    'HTTP-EQUIV' => 'REFRESH',
-    'CONTENT' => "5 ; URL=/",
-]);
-$this->title = $name;
+$this->title = "找不到页面";
+if(null === Yii::$app->request->referrer) {
+    $this->backUrl = '/';
+}
 $this->registerCss("
     html, .container{
         background-color: #fff;
@@ -47,17 +45,5 @@ $this->registerCss("
 <script src="<?= FE_BASE_URI ?>libs/lib.flexible3.js"></script>
 <div class="flex-content">
     <img src="<?= FE_BASE_URI ?>wap/page-404/images/pic_404.png" alt="">
-    <p>亲爱的用户,您访问的页面不存在或已失效</p>
-    <p>该页将在 <span id='setouttime'>5</span>秒后自动跳转!</p>
     <a class="link-404 f17" href="/">返回首页</a>
-
 </div>
-<script type="text/javascript">
-    self.setInterval("countdown()",1000);
-    function countdown(){
-        var t;
-        t = document.getElementById("setouttime").innerHTML;
-        t > 0 ? t-- : t;
-        document.getElementById("setouttime").innerHTML=t;
-    }
-</script>
