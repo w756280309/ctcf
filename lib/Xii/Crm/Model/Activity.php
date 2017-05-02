@@ -14,16 +14,23 @@ use yii\db\ActiveRecord;
  * @property int    $creator_id
  * @property string $createTime         创建时间
  * @property string $updateTime         更新时间
- * @property string $type               类型　phone_call/note
- * @property string $summary            概括
- * @property string $content            详细描述
- * @property string $comment            评论
+ * @property string $ref_type
+ * @property int    $ref_id
  */
 class Activity extends ActiveRecord
 {
     const TYPE_PHONE_CALL = 'phone_call';//电话咨询
     const TYPE_NOTE = 'note';//备注
-    const TYPE_RECEPTION = 'reception';//门店接待
+    const TYPE_BRANCH_VISIT = 'branch_visit';//门店接待
+
+    public static function getRefTypeList()
+    {
+        return [
+            self::TYPE_NOTE,
+            self::TYPE_PHONE_CALL,
+            self::TYPE_BRANCH_VISIT,
+        ];
+    }
 
     public static function tableName()
     {
@@ -39,12 +46,22 @@ class Activity extends ActiveRecord
         ];
     }
 
-    public function attributeLabels()
+    public function getRefObj()
     {
-        return [
-            'createTime' => '创建时间',
-            'content' => '内容',
-            'summary' => '备注',
-        ];
+        switch ($this->ref_type) {
+            case Activity::TYPE_NOTE:
+                $obj = Note::findOne($this->ref_id);
+                break;
+            case Activity::TYPE_PHONE_CALL:
+                $obj = PhoneCall::findOne($this->ref_id);
+                break;
+            case Activity::TYPE_BRANCH_VISIT:
+                $obj = BranchVisit::findOne($this->ref_id);
+                break;
+            default:
+                $obj = null;
+        }
+
+        return $obj;
     }
 }

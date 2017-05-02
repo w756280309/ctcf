@@ -1,6 +1,10 @@
 <?php
-    use yii\helpers\Html;
-    use Xii\Crm\Model\Activity;
+
+use Xii\Crm\Model\Activity;
+use Xii\Crm\Model\Note;
+use Xii\Crm\Model\PhoneCall;
+use Xii\Crm\Model\Visit;
+use yii\helpers\Html;
 
 $this->title = '客服记录';
 
@@ -35,7 +39,7 @@ $this->params['breadcrumbs'][] = ['label' => '客服记录', 'url' => '/crm/acti
                 <div class="col-md-6">
                     <div class="panel-body">
                         <?php $form = \yii\widgets\ActiveForm::begin(['options' => ['id' => 'note_form']]) ?>
-                        <?= $form->field($model, 'summary')->textarea() ?>
+                        <?= $form->field($model, 'content')->textarea() ?>
                         <?= \yii\helpers\Html::submitButton('添加', ['class' => 'btn btn-primary', 'id' => 'note_submit']) ?>
                         <?php $form->end() ?>
                     </div>
@@ -61,16 +65,19 @@ $this->params['breadcrumbs'][] = ['label' => '客服记录', 'url' => '/crm/acti
                     'columns'  => [
                         [
                             'label' => '类型',
+                            'format' => 'xii:empty-nice',
                             'value' => function ($model) {
-                                if ($model->type === Activity::TYPE_PHONE_CALL) {
-                                    return '客服电话';
-                                } elseif($model->type === Activity::TYPE_NOTE) {
-                                    return '备注';
-                                } elseif($model->type === Activity::TYPE_RECEPTION) {
-                                    return '门店接待';
-                                } else {
-                                    return '---';
+                                switch ($model->ref_type) {
+                                    case Activity::TYPE_NOTE:
+                                        $name = '备注';break;
+                                    case Activity::TYPE_PHONE_CALL:
+                                        $name = '电话';break;
+                                    case Activity::TYPE_BRANCH_VISIT:
+                                        $name = '门店';break;
+                                    default:
+                                        $name = null;
                                 }
+                                return  $name;
                             }
                         ],
                         'createTime',
@@ -78,10 +85,23 @@ $this->params['breadcrumbs'][] = ['label' => '客服记录', 'url' => '/crm/acti
                             'label' => '内容',
                             'format' => 'xii:empty-nice',
                             'value' => function ($model) {
-                                return $model->content;
+                                $obj = $model->getRefObj();
+                                if (is_null($obj)) {
+                                    return null;
+                                }
+                                if ($model->ref_type === Activity::TYPE_NOTE) {
+                                    return $obj->content;
+                                } elseif(in_array($model->ref_type, [Activity::TYPE_PHONE_CALL, Activity::TYPE_BRANCH_VISIT])) {
+                                     if(empty($obj->content)) {
+                                         return $obj->comment;
+                                     } else {
+                                         return $obj->content . '<hr/>' . $obj->comment;
+                                     }
+                                } else {
+                                    return null;
+                                }
                             },
                         ],
-                        'summary',
                     ]
                 ])?>
 
