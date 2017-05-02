@@ -6,11 +6,10 @@ use common\models\order\OnlineOrder;
 use common\models\payment\Repayment;
 use common\models\product\OnlineProduct;
 use common\models\sms\SmsConfig;
-use common\models\sms\SmsMessage;
 use common\models\coupon\UserCoupon;
 use common\models\user\User;
 use common\models\coupon\CouponType;
-use common\utils\SecurityUtils;
+use common\service\SmsService;
 use common\utils\StringUtils;
 use Yii;
 use yii\console\Controller;
@@ -51,11 +50,10 @@ class CouponController extends Controller
                             'https://m.wenjf.com/',
                             $contactTel,
                         ];
+
                         //发送短信
-                        $sms = SmsMessage::initSms($userCoupon->user, $message, 155508);
-                        if (!$sms->save()) {
-                            throw new \Exception('本条插入失败，数据记录为' . json_encode($sms->getAttributes()));
-                        }
+                        SmsService::send($userCoupon->user->getMobile(), 155508, $message, $userCoupon->user);
+
                         $count++;
                         $lastUserId = $user_id;
                     } else {
@@ -111,11 +109,8 @@ class CouponController extends Controller
             }
 
             //发送短信
-            $sms = SmsMessage::initSms($user, $smsConfig->getConfig(), $templateId);
-
-            if ($sms->save(false)) {
-                ++$count;
-            }
+            SmsService::send($user->getMobile(), $templateId, $smsConfig->getConfig(), $user);
+            ++$count;
         }
 
         $this->stdout('共给'.$count.'位用户发送了短信!', Console::BG_YELLOW);
@@ -176,11 +171,8 @@ class CouponController extends Controller
             }
 
             //发送短信
-            $sms = SmsMessage::initSms($user, $smsConfig->getConfig(), $templateId);
-
-            if ($sms->save(false)) {
-                ++$count;
-            }
+            SmsService::send($user->getMobile(), $templateId, $smsConfig->getConfig(), $user);
+            ++$count;
         }
 
         $this->stdout('共给'.$count.'位用户发送了短信!', Console::BG_YELLOW);
