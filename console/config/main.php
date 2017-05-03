@@ -98,7 +98,7 @@ return [
         ],
     ],
     'modules' => [
-        'crm' => 'Xii\Crm\Module',
+        'crm' => 'Wcg\Xii\Crm\Module',
     ],
     'params' => $params,
 ];

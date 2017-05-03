@@ -104,7 +104,7 @@ return [
             'class' => 'backend\modules\o2o\Module',
         ],
         'crm' => [
-            'class' => 'Xii\Crm\Module',
+            'class' => 'Wcg\Xii\Crm\Module',
         ],
     ],
 ];
