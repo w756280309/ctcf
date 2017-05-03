@@ -9,6 +9,7 @@ $this->title = "找不到页面";
 if(null === Yii::$app->request->referrer) {
     $this->backUrl = '/';
 }
+$this->showIndexBottomNav = false;
 $this->registerCss("
     html, .container{
         background-color: #fff;
