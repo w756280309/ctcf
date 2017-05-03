@@ -57,7 +57,7 @@ $url5 = date('Y-m-d') >= '2017-05-20' ? '/promotion/p1705/520-day' : null;
     <div class="part-bottom">
         <div class="part-bottom-one">
             <a class="wuyi-link" <?= $url1 ? "href=$url1" : ''?>>
-                <img class="wuyi <?= $act1 ? '' : 'gray'?>" src="<?= FE_BASE_URI ?>wap/campaigns/anniversary/images/pic-wuyi.png" alt="" style="top: 1.44rem;right:0.533rem ">
+                <img class="wuyi <?= $act1 ? '' : 'gray'?>" src="<?= FE_BASE_URI ?>wap/campaigns/anniversary/images/pic-wuyi-1.png" alt="" style="top: 1.44rem;right:0.533rem ">
             </a>
             <a class="wusi-link" <?= $url2 ? "href=$url2" : ''?>>
                 <img class="wusi <?= $act2 ? '' : 'gray'?>" src="<?= FE_BASE_URI ?>wap/campaigns/anniversary/images/pic-wusi.png" alt="" style="bottom:0.9rem;left: 0.533rem;">
