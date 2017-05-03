@@ -41,29 +41,6 @@ class P1705Controller extends Controller
     }
 
     /**
-     * 5月青年节活动
-     */
-    public function actionYouthDay($wx_share_key = null)
-    {
-        $share = null;
-
-        if (!empty($wx_share_key)) {
-            $share = Share::findOne(['shareKey' => $wx_share_key]);
-        }
-        $xunzhang = 0;//确认
-        if (!Yii::$app->user->isGuest) {
-            $user = User::findOne(Yii::$app->user->id);
-            $promo = RankingPromo::findOne(['key' => 'promo_201705']);
-            $promo201705 = new Promo201705($promo);
-            $xunzhang = $promo201705->getRestTicketCount($user);
-        }
-        return $this->render('may', [
-            'share' => $share,
-            'xunzhang' => $xunzhang,
-        ]);
-    }
-
-    /**
      * 母亲节活动
      */
     public function actionMotherDay($wx_share_key = null)
@@ -144,6 +121,22 @@ class P1705Controller extends Controller
         }
 
         return $this->render('mayday', [
+            'share' => $share,
+        ]);
+    }
+
+    /**
+     * 五四活动.
+     */
+    public function actionYouthDay($wx_share_key = null)
+    {
+        $share = null;
+
+        if (!empty($wx_share_key)) {
+            $share = Share::findOne(['shareKey' => $wx_share_key]);
+        }
+
+        return $this->render('youth_day', [
             'share' => $share,
         ]);
     }
