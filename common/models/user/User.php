@@ -15,6 +15,7 @@ use common\models\promo\PromoService;
 use common\models\user\RechargeRecord as Recharge;
 use common\models\user\DrawRecord as Draw;
 use common\utils\SecurityUtils;
+use common\utils\StringUtils;
 use P2pl\Borrower;
 use P2pl\UserInterface;
 use wap\modules\promotion\models\RankingPromo;
@@ -996,12 +997,10 @@ class User extends ActiveRecord implements IdentityInterface, UserInterface
 
     /**
      * 获得crm的姓名
-     *
-     * todo 临时代码-混淆姓名的字段不存在，先返回原名
      */
     public function getCrmName()
     {
-        return $this->real_name;
+        return StringUtils::obfsName($this->real_name);
     }
 
     /**
@@ -1033,5 +1032,14 @@ class User extends ActiveRecord implements IdentityInterface, UserInterface
         }
 
         return $age;
+    }
+
+    /**
+     * 获取用户真实姓名
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->real_name;
     }
 }
