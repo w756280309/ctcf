@@ -250,7 +250,7 @@ $config = json_decode($promo->config, true);
         $('.bind-btn').on('click', function () {
             if (validateMobile()) {
                 $('.pop').removeClass('show').addClass('hide');
-                $('body').on('touchmove', eventTarget, true);
+                $('body').off('touchmove');
             }
         });
     }

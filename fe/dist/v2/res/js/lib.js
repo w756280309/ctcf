@@ -28,7 +28,11 @@ WDJF.touchmove = function (allow) {
         allow = true;
     }
 
-    $('body').on('touchmove', eventTarget, allow);
+    if (allow) {
+        $('body').off('touchmove');
+    } else {
+        $('body').on('touchmove', eventTarget, false);
+    }
 };
 
 /**
