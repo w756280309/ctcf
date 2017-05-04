@@ -3,6 +3,7 @@
 namespace common\models\promo;
 
 use common\models\user\User;
+use wap\modules\promotion\models\RankingPromo;
 use Yii;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
@@ -22,6 +23,8 @@ use yii\db\ActiveRecord;
  * @property string $ip
  * @property string $source
  * @property int    $promo_id
+ * @property int    $joinSequence  //参加活动序列
+ * @property string $duobaoCode    //夺宝码
  */
 class PromoLotteryTicket extends ActiveRecord
 {
@@ -86,5 +89,15 @@ class PromoLotteryTicket extends ActiveRecord
     public static function findLotteryByPromoId($promoId)
     {
         return PromoLotteryTicket::find()->where(['promo_id' => $promoId]);
+    }
+
+    public static function initNew(User $user, RankingPromo $promo, $source = null)
+    {
+        return new self([
+            'user_id' => $user->id,
+            'source' => $source,
+            'promo_id' => $promo->id,
+            'ip' => Yii::$app->request->getUserIP(),
+        ]);
     }
 }
