@@ -5,9 +5,11 @@ namespace wap\modules\promotion\controllers;
 use common\controllers\HelpersTrait;
 use common\models\adv\Share;
 use common\models\promo\Promo201705;
+use common\models\promo\PromoLotteryTicket;
 use common\models\user\CaptchaForm;
 use common\models\user\User;
 use common\models\promo\DuoBao;
+use common\service\BankService;
 use common\utils\SecurityUtils;
 use wap\modules\promotion\models\PromoMobile;
 use wap\modules\promotion\models\RankingPromo;
@@ -157,7 +159,9 @@ class P1705Controller extends Controller
         $user = null;
         $isJoinWith = null;
         $source = null;
-
+        $top10 = null; //最新参加活动的10个用户
+        $isBind = null;//新用户帮卡为1；否则为null 用于提示弹窗
+        $duobaoCode = null;//夺宝码
         if (!empty($wx_share_key)) {
             $share = Share::findOne(['shareKey' => $wx_share_key]);
         }
@@ -167,6 +171,12 @@ class P1705Controller extends Controller
         $num =$promoAtfr->totalTicketCount();
         //计算参与进度  如果总人数不为0 岁计算参与进度 例如 97 页面显示结果97%
         $jindu = ceil($num/($numall/100));
+
+        //获取最近参加的10个用户记录 如果记录<10 则null
+        if ($num >= 10) {
+            $PromoLotteryQuery = PromoLotteryTicket::find()->where(['promo_id' =>$promo->id])->limit(10)->orderBy('id desc')->all();
+        }
+
 
         //活动结束
         if ($num >= $numall || !$promo->isActive()) {
@@ -180,21 +190,24 @@ class P1705Controller extends Controller
             $source = $promoAtfr->source($user);
             //用户是否参与活动
             $isJoinWith = $promoAtfr->isJoinWith($user);
+
+            //夺宝码展示
+            $duobaoCode = PromoLotteryTicket::find()->where(['promo_id' =>$promo->id , 'user_id' =>$user->id])->one();
+
             //点击参与活动按钮 ajax
             if (Yii::$app->request->isAjax) {
                 //判断是否为老客
                 if ($source == 'inviter') {
+                    //是否已经参与活动
                     $code = $isJoinWith ? 1 : 2 ; //参与 1 未参与 2
                     $message = $isJoinWith ? "已参与" : "未参与";
                     $toUrl = $isJoinWith ? '/' : '/user/invite';
+                    $yaoqingBind = true;
+                    if (!$isJoinWith) {
+                        //没有参与活动的如果邀请列表已经开户
+                        $promoAtfr->addTicketForUser($user);
+                    }
                 }
-
-                if ($source == 'new_user') {
-                    $code = 3;
-                    $message = "已参与";
-                    $toUrl = '/user/identity';
-                }
-
                 $back = [
                     'code' => $code,
                     'message' => $message,
@@ -203,6 +216,14 @@ class P1705Controller extends Controller
 
                return $back;
             }
+
+            if ($source != 'inviter') {
+               //新用户是否帮卡
+                $cond = 0 | BankService::IDCARDRZ_VALIDATE_N;
+                $isBind = BankService::check($user, $cond);
+
+            }
+
         }
         return $this->render('duobao', [
             'share' => $share,
@@ -212,6 +233,9 @@ class P1705Controller extends Controller
             'user' => $user,
             'isJoinWith' => $isJoinWith,
             'source' => $source,
+            'top10' => $top10,
+            'isBind' => $isBind,
+            'duobaoCode' => $duobaoCode,//对象
         ]);
 
     }
@@ -255,44 +279,55 @@ class P1705Controller extends Controller
 
         //已经登录用户不显示弹框
         if (Yii::$app->user->isGuest) {
-
             if (empty($mobile)) {
-                $message = '手机号不能为空';
-            } else {
-                $user = User::findOne(['safeMobile' => SecurityUtils::encrypt($mobile)]);
-
-                if (null !== $user) {
-                    //确认登录后跳转至活动页面
-                    $toUrl = '/site/login';
-                    if ($promoAtfr->isJoinWith($user)) {
-                        $code = 1;
-                        $message = '您已经参与该活动了';
-                    } else {
-                        $code = 2;
-                        $message = '您已登录,投资即可获得奖励';
-                    }
-
-                } else {
-
-                    Yii::$app->session->set('duobao_mobile', $mobile);
-
-                    $promoMobile = PromoMobile::findOne(['promo_id' => $promo->id, 'mobile' => $mobile]);
-
-                    if (null === $promoMobile) {
-                        PromoMobile::initNew($promo->id, $mobile)->save();     //跳转落地注册页之前,记录用户手机号
-                    }
-                    $code = 3;
-                    $message = '未注册用户';
-                    $toUrl = '/promotion/p1705/signups';
-                }
+                $back = [
+                    'code' => 0,
+                    'message' => '手机号不能为空',
+                    'toUrl' => '/',
+                ];
+                return $back;
             }
 
+            //判断是否为浙江手机号
+            $isZJ = 1;
+            if (!$isZJ) {
+                $back = [
+                    'code' => 0,
+                    'message' => '本次活动只限浙江用户参加',
+                    'toUrl' => '/',
+                ];
+                return $back;
+            }
 
-        } else {
-            //已经登录用户
-            $code = 4;
-            $message = '已经登录用户';
-            $toUrl = '/';
+            $user = User::findOne(['safeMobile' => SecurityUtils::encrypt($mobile)]);
+            Yii::$app->session->set('duobao_mobile', $mobile);
+
+            if (null !== $user) {
+                /*//用户是否帮卡
+                $cond = 0 | BankService::IDCARDRZ_VALIDATE_N;
+                $isBind = BankService::check($user, $cond);*/
+                if ($promoAtfr->source($user) == "inviter") {
+                    $code = 1;
+                    $message = '未登录老用户';
+                    $toUrl = '/site/login?next="/promotion/p1705/duobao"';
+                } else {
+                    $code = 1;
+                    $message = '未登录新用户';
+                    $toUrl = '/site/login?next="/promotion/p1705/duobao"';
+                }
+
+            } else {
+
+                $promoMobile = PromoMobile::findOne(['promo_id' => $promo->id, 'mobile' => $mobile]);
+
+                if (null === $promoMobile) {
+                    PromoMobile::initNew($promo->id, $mobile)->save();     //跳转落地注册页之前,记录用户手机号
+                }
+                $code = 2;
+                $message = '未注册用户';
+                $toUrl = '/promotion/p1705/signup';
+            }
+
         }
 
         $back = [
