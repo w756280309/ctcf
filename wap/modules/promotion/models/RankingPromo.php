@@ -213,23 +213,47 @@ class RankingPromo extends ActiveRecord
             $dateTime = new \DateTime(date('Y-m-d H:i:s', $time));
         }
 
+        try {
+            $this->inPromoTime($dateTime);
+        } catch (\Exception $e) {
+            $code = $e->getCode();
+
+            if (1 === $code) {
+                $message = '活动未开始';
+            } elseif (2 === $code) {
+                $message = '活动已结束';
+            } else {
+                $message = $e->getMessage();
+            }
+
+            throw new NotActivePromoException($this, $message, $code);
+        }
+
+        $whiteList = explode(',', $this->whiteList);
+        if (!$this->isOnline && (empty($user) || !in_array($user->mobile, $whiteList))) {
+            throw new NotActivePromoException($this, '活动未开始', 1);
+        }
+
+        return true;
+    }
+
+    /**
+     * 判断一个时间点是否在活动中.
+     */
+    public function inPromoTime(\DateTime $dateTime)
+    {
         $startTime = new \DateTime($this->startTime);
 
         if ($dateTime < $startTime) {
-            throw new NotActivePromoException($this, '活动未开始');
+            throw new NotActivePromoException($this, '当前时间在活动开始之前', 1);
         }
 
         if ($this->endTime) {
             $endTime = new \DateTime($this->endTime);
 
             if ($dateTime > $endTime) {
-                throw new NotActivePromoException($this, '活动已结束');
+                throw new NotActivePromoException($this, '当前时间在活动结束之后', 2);
             }
-        }
-
-        $whiteList = explode(',', $this->whiteList);
-        if (!$this->isOnline && (empty($user) || !in_array($user->mobile, $whiteList))) {
-            throw new NotActivePromoException($this, '活动未开始');
         }
 
         return true;
