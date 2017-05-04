@@ -1042,4 +1042,9 @@ class User extends ActiveRecord implements IdentityInterface, UserInterface
     {
         return $this->real_name;
     }
+
+    public static function fetchByMobile($mobile)
+    {
+        return User::findOne(['safeMobile' => SecurityUtils::encrypt($mobile)]);
+    }
 }

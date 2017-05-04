@@ -2,6 +2,7 @@
 
 namespace common\models\adminuser;
 
+use Wcg\Xii\Crm\Model\AdminInterface;
 use Yii;
 use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
@@ -20,7 +21,7 @@ use yii\web\IdentityInterface;
  * @property int $updated_at
  * @property int $created_at
  */
-class Admin extends \yii\db\ActiveRecord implements IdentityInterface
+class Admin extends \yii\db\ActiveRecord implements IdentityInterface, AdminInterface
 {
     const STATUS_DELETED = 0;
     const STATUS_ACTIVE = 1;
