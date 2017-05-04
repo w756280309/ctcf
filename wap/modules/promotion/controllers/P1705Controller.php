@@ -162,6 +162,8 @@ class P1705Controller extends Controller
         $top10 = null; //最新参加活动的10个用户
         $isBind = null;//新用户帮卡为1；否则为null 用于提示弹窗
         $duobaoCode = null;//夺宝码
+        $isZJ = null; //已登陆用户浙江手机号 已登陆用户且手机号为非浙江，直接触发弹窗信息
+
         if (!empty($wx_share_key)) {
             $share = Share::findOne(['shareKey' => $wx_share_key]);
         }
@@ -179,9 +181,7 @@ class P1705Controller extends Controller
 
 
         //活动结束
-        if ($num >= $numall || !$promo->isActive()) {
-            $isEnd = true;
-        }
+        $isEnd = $promoAtfr->promoTime();
 
         if (!Yii::$app->user->isGuest){
             $back = [];
@@ -194,8 +194,11 @@ class P1705Controller extends Controller
             //夺宝码展示
             $duobaoCode = PromoLotteryTicket::find()->where(['promo_id' =>$promo->id , 'user_id' =>$user->id])->one();
 
+            //判断手机号是否为浙江号码
+            $isZJ = $promoAtfr->isZhejiangMobile(SecurityUtils::decrypt($user->safeMobile));//调用左队长的方法
             //点击参与活动按钮 ajax
             if (Yii::$app->request->isAjax) {
+
                 //判断是否为老客
                 if ($source == 'inviter') {
                     //是否已经参与活动
@@ -224,6 +227,15 @@ class P1705Controller extends Controller
 
             }
 
+        } else {
+            if (Yii::$app->request->isAjax) {
+                $mobile = Yii::$app->session->get('duobao_mobile');
+                if (Yii::$app->session->hasFlash('duobao_inviter')) {
+                    Yii::$app->session->setfash('duobao_mobile_signup', $mobile);
+                }
+
+
+            }
         }
         return $this->render('duobao', [
             'share' => $share,
@@ -236,6 +248,7 @@ class P1705Controller extends Controller
             'top10' => $top10,
             'isBind' => $isBind,
             'duobaoCode' => $duobaoCode,//对象
+            'isZJ' => $isZJ,
         ]);
 
     }
@@ -289,7 +302,7 @@ class P1705Controller extends Controller
             }
 
             //判断是否为浙江手机号
-            $isZJ = 1;
+            $isZJ = $promoAtfr->isZhejiangMobile($mobile);
             if (!$isZJ) {
                 $back = [
                     'code' => 0,
@@ -301,6 +314,7 @@ class P1705Controller extends Controller
 
             $user = User::findOne(['safeMobile' => SecurityUtils::encrypt($mobile)]);
             Yii::$app->session->set('duobao_mobile', $mobile);
+
 
             if (null !== $user) {
                 /*//用户是否帮卡
@@ -326,7 +340,9 @@ class P1705Controller extends Controller
                 $code = 2;
                 $message = '未注册用户';
                 $toUrl = '/promotion/p1705/signup';
+                Yii::$app->session->setFlash('duobao_inviter', $mobile);
             }
+
 
         }
 
