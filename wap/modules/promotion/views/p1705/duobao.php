@@ -211,9 +211,8 @@ $next = Yii::$app->request->hostInfo.'/promotion/p1705/duobao';
             });
 
             xhr.fail(function () {
-                toastCenter('系统繁忙,请稍后重试!', function() {
-                    allowClick = true;
-                });
+                note('系统繁忙,请稍后重试!');
+                allowClick = true;
             });
         });
     });
