@@ -19,6 +19,7 @@ use common\models\bank\Bank;
 use common\models\log\LoginLog;
 use common\models\product\Issuer;
 use common\models\product\OnlineProduct;
+use common\models\promo\DuoBao;
 use common\models\news\News;
 use common\models\user\SignupForm;
 use common\models\user\LoginForm;
@@ -26,6 +27,7 @@ use common\models\user\EditpassForm;
 use common\models\user\User;
 use common\models\user\CaptchaForm;
 use common\utils\SecurityUtils;
+use wap\modules\promotion\models\RankingPromo;
 use Yii;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
@@ -469,6 +471,17 @@ class SiteController extends Controller
                         if (isset($urls['query'])) {
                             $tourl .= '&'.$urls['query'];
                         }
+                    }
+
+                    //如果存在duobao_mobile 则注册的用户增加抽奖机会
+                    if (Yii::$app->session->hasFlash('duobao_mobile_signup')) {
+                        $promo = RankingPromo::findOne(['key' => 'promo_201705']);
+                        $promoAtfr = new DuoBao($promo);
+                        $user = $this->getAuthedUser();
+                        if (SecurityUtils::decrypt($user->safeMobile) == Yii::$app->session->getFlash('duobao_mobile_signup')) {
+                            $promoAtfr->addTicketForUser($this->getAuthedUser());
+                        }
+
                     }
 
                     return ['code' => 1, 'message' => '注册成功', 'tourl' => $tourl];
