@@ -164,7 +164,6 @@ class P1705Controller extends Controller
         $joinTicket = null;
         $source = null;
         $isBind = null;//新用户帮卡为1；否则为null 用于提示弹窗
-        $duobaoCode = null;//夺宝码
         $isZJ = null; //已登录用户浙江手机号 已登录用户且手机号为非浙江，直接触发弹窗信息
 
         $promo = RankingPromo::findOne(['key' => 'duobao0504']);
@@ -200,9 +199,6 @@ class P1705Controller extends Controller
                 'user_id' => $user->id,
                 'promo_id' => $promo->id,
             ]);
-
-            //夺宝码展示
-            $duobaoCode = PromoLotteryTicket::find()->where(['promo_id' => $promo->id, 'user_id' => $user->id])->one();
 
             //判断手机号是否为浙江号码
             $isZJ = $promoAtfr->isZhejiangMobile(SecurityUtils::decrypt($user->safeMobile));//调用左队长的方法
@@ -280,11 +276,9 @@ class P1705Controller extends Controller
             'jindu' => $jindu,
             'promo' => $promo,
             'promoTime' => $promoTime,
-            'user' => $user,
             'isJoinWith' => $isJoinWith,
             'source' => $source,
             'isBind' => $isBind,
-            'duobaoCode' => $duobaoCode,//对象
             'isZJ' => $isZJ,
             'promoLotteryQuery' => $promoLotteryQuery,
             'totalTicketCount' => $num,

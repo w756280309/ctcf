@@ -481,7 +481,6 @@ class SiteController extends Controller
                         if (SecurityUtils::decrypt($user->safeMobile) == Yii::$app->session->getFlash('duobao_mobile_signup')) {
                             $promoAtfr->addTicketForUser($user);
                         }
-
                     }
 
                     return ['code' => 1, 'message' => '注册成功', 'tourl' => $tourl];

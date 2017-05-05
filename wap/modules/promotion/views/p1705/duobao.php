@@ -214,18 +214,6 @@ $next = Yii::$app->request->hostInfo.'/promotion/p1705/duobao';
         });
     });
 
-    function carousel() {
-        var liH = 0.8;
-        var ts = setInterval(function () {
-            $(".listBox li").eq(0).animate({"margin-top": "-" + liH + "rem"}, 1000, function () {
-                $(this).css({"margin-top": 0});
-                $(this).appendTo($(this).parent());
-            });
-        }, 2000);
-    };
-
-    carousel();
-
     function mobileFail() {
         $('.noChange,.mask').show();
         $('body').on('touchmove', eventTarget, false);
