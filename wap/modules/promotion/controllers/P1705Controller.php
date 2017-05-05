@@ -260,29 +260,18 @@ class P1705Controller extends Controller
                 if (Yii::$app->session->hasFlash('duobao_new')) {
                     Yii::$app->session->setFlash('duobao_mobile_signup', $mobile);
 
-                    return ['toUrl' => '/promotion/p1705/signup'];
+                    $back = [
+                        'code' => 0,
+                        'toUrl' => '/promotion/p1705/signup',
+                    ];
                 } else {
-                    $user = User::findOne(['safeMobile' => SecurityUtils::encrypt($mobile)]);
-                    $source = $promoAtfr->source($user);
-
-                    if ('new_user' === $source) {
-                        $next = Yii::$app->request->hostInfo . '/promotion/p1705/duobao';
-                        $code = 1;
-                        $message = '未登录新用户';
-                        $toUrl = '/site/login?next=' . urlencode($next);
-                    } else {
-
-                        $next = Yii::$app->request->hostInfo . '/promotion/p1705/duobao';
-                        $code = 1;
-                        $message = '未登录老用户';
-                        $toUrl = '/site/login?next=' . urlencode($next);
-                    }
-                    return [
-                        'code' => $code,
-                        'message' => $message,
-                        'toUrl' => $toUrl,
+                    $back = [
+                        'code' => 5,
+                        'message' => '未登录',
                     ];
                 }
+
+                return $back;
             }
         }
 

@@ -196,7 +196,13 @@ $next = Yii::$app->request->hostInfo.'/promotion/p1705/duobao';
                 console.log(data);
 
                 if (0 === data.code) {
-                    location.href='<?= Yii::$app->request->absoluteUrl ?>';
+                    var toUrl = '<?= Yii::$app->request->absoluteUrl ?>';
+
+                    if ('undefined' !== typeof data.toUrl && '' !== data.toUrl) {
+                        toUrl = data.toUrl;
+                    }
+
+                    location.replace(toUrl);
                 } else if (1 === data.code) {
                     note('活动未开始');
                 } else if (2 === data.code) {
