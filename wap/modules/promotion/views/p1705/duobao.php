@@ -184,8 +184,6 @@ $next = Yii::$app->request->hostInfo.'/promotion/p1705/duobao';
             allowClick = false;
 
             xhr.done(function(data) {
-                console.log(data);
-
                 if (0 === data.code) {
                     var toUrl = '<?= Yii::$app->request->absoluteUrl ?>';
 
