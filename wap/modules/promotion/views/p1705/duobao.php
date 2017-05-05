@@ -34,11 +34,6 @@ $next = Yii::$app->request->hostInfo.'/promotion/p1705/duobao';
             <?php } else { ?>
                 <button class="join-btn">参与夺宝</button>
             <?php } ?>
-
-<!--            <button class="join1">参与夺宝</button>-->
-<!--            <button class="join2">参与夺宝</button>-->
-<!--            <button class="join3">参与夺宝</button>-->
-
         </div>
     </div>
     <div class="rule">
@@ -121,8 +116,6 @@ $next = Yii::$app->request->hostInfo.'/promotion/p1705/duobao';
         var isBind = '<?= $isBind ?>';
         var isJoinWith = '<?= $isJoinWith ?>';
 
-        console.log(isBind);
-
         if (isGuest) {
             if ('1' === promoTime) {
                 note('活动未开始');
@@ -154,8 +147,6 @@ $next = Yii::$app->request->hostInfo.'/promotion/p1705/duobao';
             }
 
             if (validateMobile()) {
-                $('.pop').removeClass('show').addClass('hide');
-                $('body').off('touchmove');
                 allowClick = false;
 
                 var key = '<?= $promo->key ?>';
@@ -211,6 +202,8 @@ $next = Yii::$app->request->hostInfo.'/promotion/p1705/duobao';
                     mobileFail();
                 } else if (4 === data.code) {
                     invite();
+                } else if (5 === data.code) {
+                    login();
                 }
 
                 allowClick = true;
