@@ -87,13 +87,22 @@ $this->headerNavOn = true;
             <!--老用户显示邀请好友-->
             <?php
             //用户已经登录
-            if ($user->created_at > time()) {
+            if ('new_user' !== $source) {
             ?>
 
                 <p class="attention">老用户：判断老用户是否参与该活动；提示您已经参与该活动</p>
-                <a href="/user/invite" class="button-invest"><?= 1 == 1 ? "邀请好友" : "继续邀请好友" ?></a>
 
-            <?php } else {?>
+                <?php if (!$isZJ) { ?>
+                     <a>非浙江号,弹框</a>
+                <?php } else { ?>
+                    <a href="/user/invite" class="button-invest">邀请好友</a>
+                <?php } ?>
+
+                <?php if ('inviter' === $source) { ?>
+                    <a href="javascript:void(0)" onclick="subForm();">参与</a>
+                <?php } ?>
+
+            <?php } else { ?>
 
                 <p class="attention">
                     新用户：<?= 1 == 1 ? "已经参与活动" : "为参与活动" ?>
@@ -103,7 +112,7 @@ $this->headerNavOn = true;
 
             <?php }?>
         <?php } else { ?>
-            <a href="/promotion/p1705/luodiye" class="button-invest">注册</a>
+            <a href="javascript:void(0)" onclick="subForm();">注册</a>
         <?php }?>
       </div>
 
@@ -142,11 +151,43 @@ $this->headerNavOn = true;
     function alertTrueVal() {
         $('.pop').removeClass('hide').addClass('show');
         $('body').on('touchmove', eventTarget, false);
-        console.log(22)
         $('.bind-btn').on('click', function () {
             if (validateMobile()) {
                 $('.pop').removeClass('show').addClass('hide');
-                $('body').on('touchmove', eventTarget, true);
+                $('body').off('touchmove');
+
+                var key = '<?= $promo->key ?>';
+                var phonenum =  $('#mobile').val();
+                var xhr = $.get('/promotion/p1705/validate-mobile?key='+key+'&mobile='+phonenum);
+
+                xhr.done(function(data) {
+                    console.log(data);
+
+//                    if ('undefined' !== typeof data.toUrl) {
+//                        location.href = data.toUrl;
+//                    }
+//
+//                    return;
+
+                    if (data.code) {
+                        toastCenter(data.message, function() {
+                            if ('' !== toUrl) {
+                                location.href = toUrl;
+                            }
+
+                            allowClick = true;
+                        });
+                    } else {
+                        location.href = toUrl;
+                        allowClick = true;
+                    }
+                });
+
+                xhr.fail(function () {
+                    toastCenter('系统繁忙,请稍后重试!', function() {
+                        allowClick = true;
+                    });
+                })
             }
         });
     }
@@ -161,11 +202,11 @@ $this->headerNavOn = true;
             var num = moduleFn.clearNonum($(this));
         });
 
-        alertTrueVal();
+       alertTrueVal();
 
         var allowClick = true;
         var key = '<?= $promo->key ?>';
-        $('.phonenum a').on('click',function(e) {
+        $('a.phonenum').on('click',function(e) {
             e.preventDefault();
 
             if (!allowClick) {
@@ -180,7 +221,7 @@ $this->headerNavOn = true;
             }
 
             var phonenum =  $('#mobile').val();
-            var xhr = $.get('/promotion/promo/validate-mobile?key='+key+'&mobile='+phonenum);
+            var xhr = $.get('/promotion/p1705/duobao');
 
             xhr.done(function(data) {
                 var toUrl = data.toUrl;
@@ -206,4 +247,33 @@ $this->headerNavOn = true;
             })
         })
     });
+
+    function subForm() {
+        var xhr = $.get('/promotion/p1705/duobao');
+
+        xhr.done(function(data) {
+            console.log(data);
+
+            var toUrl = data.toUrl;
+
+            if (data.code) {
+                toastCenter(data.message, function() {
+                    if ('' !== toUrl) {
+                        location.href = toUrl;
+                    }
+
+                    allowClick = true;
+                });
+            } else {
+                location.href = toUrl;
+                allowClick = true;
+            }
+        });
+
+        xhr.fail(function () {
+            toastCenter('系统繁忙,请稍后重试!', function() {
+                allowClick = true;
+            });
+        })
+    }
 </script>
