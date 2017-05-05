@@ -30,7 +30,7 @@ $next = Yii::$app->request->hostInfo.'/promotion/p1705/duobao';
             <div class="totalNum clearfix"><span class="lf">总需2000人</span><span class="rg">剩余<i><?= 2000 - $totalTicketCount ?></i></span></div>
 
             <?php if ($isLogin && $isJoinWith && $joinTicket) { ?>
-                <button class="join joined">夺宝码：<?= 10000000 + $joinTicket->duobaoCode ?></button>
+                <button class="join joined">夺宝码：<?= 1000000 + $joinTicket->duobaoCode ?></button>
             <?php } else { ?>
                 <button class="join-btn">参与夺宝</button>
             <?php } ?>
