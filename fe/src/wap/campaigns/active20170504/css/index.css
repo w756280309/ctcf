@@ -1,0 +1,249 @@
+body {
+  background-color: #21004a;
+}
+
+img {
+  display: block;
+}
+
+.banner img {
+  width: 100%;
+}
+
+.gift {
+  padding: 0 0.25333333rem;
+}
+
+.gift h5 {
+  font-size: 0.4rem;
+  color: #fff;
+  line-height: 0.77333333rem;
+  text-align: center;
+  margin-bottom: 0.10666667rem;
+}
+
+.gift img {
+  width: 100%;
+}
+
+.gift .progress {
+  background-color: #170034;
+  padding: 0.42666667rem 0.29333333rem 0.66666667rem 0.42666667rem;
+}
+
+.gift .progress .progressTotal {
+  background-color: #000;
+  position: relative;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 0.13333333rem;
+  border-radius: 0.13333333rem;
+}
+
+.gift .progress .progressTotal .progressLine {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 0.13333333rem;
+  border-radius: 0.13333333rem;
+  background-color: #00e6ff;
+}
+
+.gift .progress .progressRate {
+  color: #938d9c;
+  font-size: 0.32rem;
+  line-height: 0.77333333rem;
+  padding-bottom: 0.08rem;
+  border-bottom: 2px solid #2d1949;
+}
+
+.gift .progress .progressRate span {
+  color: #ab07d1;
+}
+
+.gift .progress .totalNum {
+  height: 0.96rem;
+}
+
+.gift .progress .totalNum span {
+  color: #938d9c;
+  font-size: 0.29333333rem;
+  line-height: 1.04rem;
+}
+
+.gift .progress .totalNum span i {
+  font-style: normal;
+  color: #ab07d1;
+}
+
+.gift .progress button {
+  text-align: center;
+  line-height: 0.97333333rem;
+  width: 8.93333333rem;
+  height: 0.97333333rem;
+  -webkit-border-radius: 0.06666667rem;
+  -moz-border-radius: 0.06666667rem;
+  border-radius: 0.06666667rem;
+  background-color: #ab07d0;
+  border: none;
+  outline: none;
+  color: #fff;
+  font-size: 0.4rem;
+}
+
+.rule {
+  padding: 0 0.24rem;
+}
+
+.rule img {
+  width: 4.53333333rem;
+  margin: 0.53333333rem auto 0.4rem;
+}
+
+.rule ul.rules li {
+  color: #c08dfe;
+  font-size: 0.37333333rem;
+  line-height: 0.64rem;
+  padding: 0 0.13333333rem 0 0.26666667rem;
+}
+
+.rule ul.regular {
+  margin-top: 0.6rem;
+  width: 100%;
+  -webkit-border-radius: 0.06666667rem;
+  -moz-border-radius: 0.06666667rem;
+  border-radius: 0.06666667rem;
+  background-color: #4c2699;
+  -webkit-box-shadow: 0.06666667rem 0.12rem 0.24rem rgba(23, 0, 52, 0.35);
+  -moz-box-shadow: 0.06666667rem 0.12rem 0.24rem rgba(23, 0, 52, 0.35);
+  box-shadow: 0.06666667rem 0.12rem 0.24rem rgba(23, 0, 52, 0.35);
+  box-sizing: border-box;
+  padding: 0.26666667rem 0.26666667rem 0.66666667rem;
+}
+
+.rule ul.regular li {
+  color: #fff;
+  font-size: 0.34666667rem;
+  line-height: 0.58666667rem;
+}
+
+.tips {
+  color: #c08dfe;
+  font-size: 0.26666667rem;
+  line-height: 0.46666667rem;
+  margin: 0.4rem 0 0.66666667rem;
+}
+
+.gift .progress button.joined {
+  background-color: #727272;
+}
+
+.userList {
+  background: url("../img/userScroll.png") transparent top center no-repeat;
+  background-size: 100% 100%;
+  height: 9.77333333rem;
+  width: 7.93333333rem;
+  margin: 0.66666667rem auto 0;
+  box-sizing: border-box;
+  padding: 1.4rem 1rem 0.66666667rem;
+}
+
+.userList .listBox {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.userList ul li {
+  font-size: 0.32rem;
+  margin-bottom: 0.46666667rem;
+  line-height: 1;
+  height: 0.32rem;
+}
+
+.userList ul li span:first-child {
+  color: #be06be;
+}
+
+.userList ul li span:last-child {
+  color: #333333;
+}
+
+.mask {
+  display: none;
+}
+
+.pomp {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -50%);
+  -moz-transform: translate(-50%, -50%);
+  width: 7.22666667rem;
+  -webkit-border-radius: 0.26666667rem;
+  -moz-border-radius: 0.26666667rem;
+  border-radius: 0.26666667rem;
+  background-color: #f0e5f8;
+  z-index: 100001;
+  padding: 0.33333333rem 1.06666667rem;
+  border: 0.10666667rem solid #9a15c6;
+}
+
+.pomp img {
+  width: 3.65333333rem;
+  margin: 0 auto 0.4rem;
+}
+
+.pomp img.close {
+  width: 0.61333333rem;
+  position: absolute;
+  top: -1.06666667rem;
+  right: 0;
+}
+
+.pomp p {
+  color: #333333;
+  font-size: 0.4rem;
+  text-align: center;
+  line-height: 0.53333333rem;
+}
+
+.pomp a {
+  display: block;
+  height: 1.21333333rem;
+  width: 3.06666667rem;
+  background: url("../img/btn.png") center no-repeat;
+  background-size: 100% 100%;
+  line-height: 1.06666667rem;
+  margin: 0.33333333rem auto 0;
+  color: #fff;
+  text-align: center;
+  font-size: 0.48rem;
+}
+
+#mobile {
+  border: solid #8c8c8c 1px;
+  padding: 0.2rem 0.2rem;
+  line-height: 0.5rem;
+}
+
+.bing-tishi {
+  font-size: 0.26666667rem;
+}
+
+.show {
+  display: block;
+}
+
+.bing-info {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -50%);
+  -moz-transform: translate(-50%, -50%);
+}
