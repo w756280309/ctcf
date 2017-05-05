@@ -296,11 +296,10 @@ class P1705Controller extends Controller
     /**
      * 注册落地页.
      */
-
     public function actionSignup()
     {
         if (!Yii::$app->user->isGuest) {
-            return $this->redirect('/?_mark=' . time());
+            return $this->redirect('/?_mark='.time());
         }
         $promo = RankingPromo::findOne(['key' => 'duobao0504']);
 
