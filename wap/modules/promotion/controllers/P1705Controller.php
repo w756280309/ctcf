@@ -173,7 +173,7 @@ class P1705Controller extends Controller
         $num = $promoAtfr->totalTicketCount();
 
         //计算参与进度  如果总人数不为0 岁计算参与进度 例如 97 页面显示结果97%
-        $jindu = ceil($num * 100 / $numall);
+        $jindu = $num == $numall ? 100 : min(ceil($num * 100 / $numall) , 99);
 
         //获取最近参加的10个用户记录 如果记录<10 则null
         $promoLotteryQuery = [];
