@@ -1,132 +1,265 @@
 <?php
 
-use yii\bootstrap\ActiveForm;
-use yii\captcha\Captcha;
-$this->title = '抽奖活动';
+use common\utils\SecurityUtils;
+use common\utils\StringUtils;
+
+$this->title = '0元夺宝送iPhone7';
 $this->share = $share;
 $this->headerNavOn = true;
 
+$isLogin = !\Yii::$app->user->isGuest;
+$next = Yii::$app->request->hostInfo.'/promotion/p1705/duobao';
+
 ?>
-
-
-<link rel="stylesheet" href="<?= FE_BASE_URI ?>libs/bootstrap/css/bootstrap.min.css">
-<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/wenjfbase.css?v=20170412">
-<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/luodiye/css/index.css?v=2.7">
-<script  src="<?= FE_BASE_URI ?>libs/lib.flexible3.js"></script>
+<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/wenjfbase.css?v=1.0">
+<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/campaigns/active20170504/css/index.css?v=1.1">
+<script src="<?= FE_BASE_URI ?>libs/lib.flexible3.js"></script>
 <script  src="<?= FE_BASE_URI ?>libs/fastclick.js"></script>
-<script src="<?= ASSETS_BASE_URI ?>js/common.js"></script>
-<script  src="<?= FE_BASE_URI ?>libs/jquery.lazyload.min.js"></script>
 <script src="<?= FE_BASE_URI ?>wap/common/js/com.js"></script>
 
-
-<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/wenjfbase.css">
-<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/campaigns/Youth-day/css/index.css">
-<script src="<?= FE_BASE_URI ?>libs/lib.flexible3.js"></script>
-<style>
-    #mobile {
-        border: solid #8c8c8c 1px;
-        padding: 0.2rem 0.2rem;
-        line-height: 0.5rem;
-    }
-</style>
-
 <div class="flex-content">
-    <div class="part-one"></div>
-    <div class="part-three">
-        <img src="<?= FE_BASE_URI ?>wap/campaigns/Youth-day/images/rules.png" alt="">
-        <div class="rules-box">
-            <ol class="rules-content">
-                <?php
-                if (!Yii::$app->user->isGuest) {
-                ?>
-                    <li>用户已登录：<?= $user->isIdVerified() ? "已经认证" : "未认证"?>；</li>
-                <?php }?>
-                <li>活动进度：<?= $jindu?>%；</li>
-                <li>活动时间：2017年5月4日-2017年5月7日；</li>
-                <li>本次活动面向所有温都金服注册用户；</li>
-                <li>活动期间累计年化投资（不含转让产品）达到指定额度，即可获得相应礼品；</li>
-            </ol>
+    <div class="banner">
+        <img src="<?= FE_BASE_URI ?>wap/campaigns/active20170504/img/banner.png" alt="图">
+    </div>
+    <div class="gift">
+        <h5>奖品：iPhone7 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;数量：1部</h5>
+        <img src="<?= FE_BASE_URI ?>wap/campaigns/active20170504/img/phone.png" alt="">
+        <div class="progress">
+            <p class="progressTotal"><span class="progressLine" style="width: <?= $jindu ?>%;"></span></p>
+            <p class="progressRate">揭晓进度<span><?= $jindu ?>%</span></p>
+            <div class="totalNum clearfix"><span class="lf">总需2000人</span><span class="rg">剩余<i><?= 2000 - $totalTicketCount ?></i></span></div>
 
-            <ul class="prize-content">
-                <li>
-                    <div class="prize-value lf">累计年化金额（元）</div>
-                    <div class="prize-name lf">礼品</div>
-                    <div class="prize-point lf">对应积分</div>
-                </li>
-                <li>
-                    <div class="prize-value lf">1,540,000</div>
-                    <div class="prize-name lf">携程礼品卡1500元</div>
-                    <div class="prize-point lf">30000</div>
-                </li>
-                <li>
-                    <div class="prize-value lf">540,000</div>
-                    <div class="prize-name lf">亚马逊kindle平板</div>
-                    <div class="prize-point lf">10580</div>
-                </li>
-                <li>
-                    <div class="prize-value lf">54,000</div>
-                    <div class="prize-name lf">酷畅运动水杯</div>
-                    <div class="prize-point lf">980</div>
-                </li>
-                <li>
-                    <div class="prize-value lf">20,000</div>
-                    <div class="prize-name lf">苹果安卓二合一数据线</div>
-                    <div class="prize-point lf">198</div>
-                </li>
-            </ul>
-            <ol class="rules-content" start="4" style="margin-top: 0.373rem;">
-                <li>本次活动奖品将于3个工作日内以积分形式发放，用户可以进入积分商城进行兑换。</li>
-            </ol>
+            <?php if ($isLogin && $isJoinWith && $joinTicket) { ?>
+                <button class="join joined">夺宝码：<?= 10000000 + $joinTicket->duobaoCode ?></button>
+            <?php } else { ?>
+                <button class="join-btn">参与夺宝</button>
+            <?php } ?>
+
+<!--            <button class="join1">参与夺宝</button>-->
+<!--            <button class="join2">参与夺宝</button>-->
+<!--            <button class="join3">参与夺宝</button>-->
+
         </div>
     </div>
-    <div class="part-four">
-        <?php
-        //用户已经登录
-        if (!Yii::$app->user->isGuest) {
-        ?>
-            <!--老用户显示邀请好友-->
-            <?php
-            //用户已经登录
-            if ('new_user' !== $source) {
-            ?>
+    <div class="rule">
+        <img src="<?= FE_BASE_URI ?>wap/campaigns/active20170504/img/rule.png" alt="">
+        <ul class="rules">
+            <li>1、本次活动仅限浙江手机号段用户参与；</li>
+            <li>2、活动期间新注册用户可以获得参与机会，老用户成功邀请好友后也可以获得参与机会；</li>
+            <li>3、本次活动限额2000名，满额后将不能参与，活动结束前未满额将取消开奖；</li>
+            <li>4、本次活动所有未中奖用户将于开奖当日获赠神秘礼包1份；</li>
+            <li>5、领取活动奖品需要实名认证并绑定银行卡；</li>
+            <li>6、活动时间2017年5月6日-5月15日，开奖时间为2017年5月17日中午12点。</li>
+        </ul>
+        <ul class="regular">
+            <li>计算规则如下：</li>
+            <li>1、参与用户随机获得1个夺宝码（1000001-1002000）；</li>
+            <li>2、选择最近10位参与用户的参与时间之和，加上第2017056期双色球号码，然后进行求余：【最近10位参与用户的参与时间之和+双色球号码】% 2000（参与人数），得到余数；</li>
+            <li>3、中奖号码=余数+1000001。</li>
+        </ul>
+    </div>
 
-                <p class="attention">老用户：判断老用户是否参与该活动；提示您已经参与该活动</p>
-
-                <?php if (!$isZJ) { ?>
-                     <a>非浙江号,弹框</a>
-                <?php } else { ?>
-                    <a href="/user/invite" class="button-invest">邀请好友</a>
+    <?php if (!empty($promoLotteryQuery)) { ?>
+        <div class="userList">
+            <ul class="listBox">
+                <?php foreach ($promoLotteryQuery as $query) { ?>
+                    <li class="clearfix">
+                        <span class="lf"><?= StringUtils::obfsMobileNumber(SecurityUtils::decrypt($query->user->safeMobile)) ?></span>
+                        <span class="rg"><?= date('n-d', $query->created_at) ?> &nbsp;&nbsp;&nbsp;&nbsp;<?= date('H:i:s', $query->created_at) ?></span>
+                    </li>
                 <?php } ?>
+            </ul>
+        </div>
+    <?php } ?>
 
-                <?php if ('inviter' === $source) { ?>
-                    <a href="javascript:void(0)" onclick="subForm();">参与</a>
-                <?php } ?>
-
-            <?php } else { ?>
-
-                <p class="attention">
-                    新用户：<?= 1 == 1 ? "已经参与活动" : "为参与活动" ?>
-                    <br/>判断新用户是否参与该活动；
-                    <?= $user->isIdVerified() ? "已经认证" : "未认证"?>
-                </p>
-
-            <?php }?>
-        <?php } else { ?>
-            <a href="javascript:void(0)" onclick="subForm();">注册</a>
-        <?php }?>
-      </div>
-
-</div>
-<!--抽奖手机号-->
-<div class="mask pop hide"></div>
-<div class="bing-info pop hide" style="top: 30%;">
-    <div class="bing-tishi">请输入领取的手机号码</div>
-    <p class="tishi-p" style="margin: 20px auto !important;"><input class="f15" type="tel" maxlength="11" id="mobile"><span style="color: red;"></span></p>
-    <div class="bind-btn"><span class="true">确定</span></div>
+    <p class="text-align-ct tips">本次活动最终解释权归温都金服所有<br>
+        理财非存款 产品有风险 投资须谨慎
+    </p>
+    <div class="mask"></div>
+    <div class="pomp note">
+        <img class="close" src="<?= FE_BASE_URI ?>wap/campaigns/active20170504/img/close.png" alt="">
+        <p>活动未开始</p>
+    </div>
+    <div class="pomp noChange">
+        <img class="close" src="<?= FE_BASE_URI ?>wap/campaigns/active20170504/img/close.png" alt="">
+        <img style="width: 3.653333rem;" src="<?= FE_BASE_URI ?>wap/campaigns/active20170504/img/no-change.png" alt="">
+        <p>您的手机号段没有夺宝资格去看看其他活动吧！</p>
+    </div>
+    <div class="pomp login">
+        <img class="close" src="<?= FE_BASE_URI ?>wap/campaigns/active20170504/img/close.png" alt="">
+        <img style="width: 1.3466667rem;" src="<?= FE_BASE_URI ?>wap/campaigns/active20170504/img/login.png" alt="">
+        <p>您还没有登录哦<br>快去登录获得夺宝机会吧！</p>
+        <a href="/site/login?next=<?= urlencode($next) ?>">去登录</a>
+    </div>
+    <div class="pomp address">
+        <img class="close" src="<?= FE_BASE_URI ?>wap/campaigns/active20170504/img/close.png" alt="">
+        <img style="width: 1.3466667rem;" src="<?= FE_BASE_URI ?>wap/campaigns/active20170504/img/address.png" alt="">
+        <p>完善个人信息<br>就有机会拿走大奖了哦！</p>
+        <a href="/user/bank">去完善</a>
+    </div>
+    <div class="pomp invite">
+        <img class="close" src="<?= FE_BASE_URI ?>wap/campaigns/active20170504/img/close.png" alt="">
+        <img style="width: 4.2533333rem;" src="<?= FE_BASE_URI ?>wap/campaigns/active20170504/img/invite.png" alt="">
+        <p>您还没有参与机会<br>快去邀请好友吧！</p>
+        <a href="/user/invite">去邀请</a>
+    </div>
+    <div class="bing-info pop">
+        <div class="bing-tishi">请输入领取的手机号码</div>
+        <p class="tishi-p" style="margin: 20px auto !important;">
+            <input class="f15" type="tel" maxlength="11" id="mobile">
+            <span style="color: red;"></span>
+        </p>
+        <div class="bind-btn"><span class="true">确定</span></div>
+    </div>
 </div>
 <script>
-    function eventTarget(event) {
-        event.preventDefault();
+    $(function () {
+        FastClick.attach(document.body);
+
+        var isGuest = '<?= !$isLogin ?>';
+        var promoTime = '<?= $promoTime ?>';
+        var isBind = '<?= $isBind ?>';
+        var isJoinWith = '<?= $isJoinWith ?>';
+
+        console.log(isBind);
+
+        if (isGuest) {
+            if ('1' === promoTime) {
+                note('活动未开始');
+            } else if ('3' === promoTime) {
+                note('活动已结束');
+            } else {
+                mobilePop();
+            }
+        } else {
+            if (isJoinWith && !isBind) {
+                bind();
+            }
+        }
+
+        $('#mobile').on('keyup',function() {
+            var num = moduleFn.clearNonum($(this));
+        });
+
+        $(".close").on("click",function() {
+            $(".pomp,.mask,.pop").hide();
+            $('body').off('touchmove');
+        });
+
+        var allowClick = true;
+
+        $(".bind-btn").on("click",function() {
+            if (!allowClick) {
+                return;
+            }
+
+            if (validateMobile()) {
+                $('.pop').removeClass('show').addClass('hide');
+                $('body').off('touchmove');
+                allowClick = false;
+
+                var key = '<?= $promo->key ?>';
+                var phonenum =  $('#mobile').val();
+                var xhr = $.get('/promotion/p1705/validate-mobile?key='+key+'&mobile='+phonenum);
+
+                xhr.done(function(data) {
+                    if (data.code) {
+                        if ('undefined' !== typeof data.message && '' !== data.message) {
+                            $('.tishi-p span').html(data.message);
+                        }
+                    } else {
+                        $(".pomp,.mask,.pop").hide();
+                        $('body').off('touchmove');
+                    }
+
+                    allowClick = true;
+                });
+
+                xhr.fail(function () {
+                    note('系统繁忙,请稍后重试!');
+                    allowClick = true;
+                })
+            }
+        });
+
+        $(".join-btn").on("click", function(e) {
+            e.preventDefault();
+
+            if (!allowClick) {
+                return;
+            }
+
+            var xhr = $.get('/promotion/p1705/duobao');
+            allowClick = false;
+
+            xhr.done(function(data) {
+                console.log(data);
+
+                if (0 === data.code) {
+                    location.href='<?= Yii::$app->request->absoluteUrl ?>';
+                } else if (1 === data.code) {
+                    note('活动未开始');
+                } else if (2 === data.code) {
+                    note('活动已结束');
+                } else if (3 === data.code) {
+                    mobileFail();
+                } else if (4 === data.code) {
+                    invite();
+                }
+
+                allowClick = true;
+            });
+
+            xhr.fail(function () {
+                toastCenter('系统繁忙,请稍后重试!', function() {
+                    allowClick = true;
+                });
+            });
+        });
+    });
+
+    function carousel() {
+        var liH = 0.8;
+        var ts = setInterval(function () {
+            $(".listBox li").eq(0).animate({"margin-top": "-" + liH + "rem"}, 1000, function () {
+                $(this).css({"margin-top": 0});
+                $(this).appendTo($(this).parent());
+            });
+        }, 2000);
+    };
+
+    carousel();
+
+    function mobileFail() {
+        $('.noChange,.mask').show();
+        $('body').on('touchmove', eventTarget, false);
+    }
+
+    function login() {
+        $('.login,.mask').show();
+        $('body').on('touchmove', eventTarget, false);
+    }
+
+    function invite() {
+        $('.invite,.mask').show();
+        $('body').on('touchmove', eventTarget, false);
+    }
+
+    function bind() {
+        $('.address,.mask').show();
+        $('body').on('touchmove', eventTarget, false);
+    }
+
+    function note(msg) {
+        $('.note p').html(msg);
+        $('.note, .mask').show();
+        $('body').on('touchmove', eventTarget, false);
+    }
+
+    function mobilePop() {
+        $('.bing-info,.mask').show();
+        $('body,html').scrollTop(0);
+        $('body').on('touchmove', eventTarget, false);
     }
 
     function validateMobile() {
@@ -145,135 +278,5 @@ $this->headerNavOn = true;
         }
 
         return true;
-    }
-
-    //只有确定按钮的弹窗
-    function alertTrueVal() {
-        $('.pop').removeClass('hide').addClass('show');
-        $('body').on('touchmove', eventTarget, false);
-        $('.bind-btn').on('click', function () {
-            if (validateMobile()) {
-                $('.pop').removeClass('show').addClass('hide');
-                $('body').off('touchmove');
-
-                var key = '<?= $promo->key ?>';
-                var phonenum =  $('#mobile').val();
-                var xhr = $.get('/promotion/p1705/validate-mobile?key='+key+'&mobile='+phonenum);
-
-                xhr.done(function(data) {
-                    console.log(data);
-
-//                    if ('undefined' !== typeof data.toUrl) {
-//                        location.href = data.toUrl;
-//                    }
-//
-//                    return;
-
-                    if (data.code) {
-                        toastCenter(data.message, function() {
-                            if ('' !== toUrl) {
-                                location.href = toUrl;
-                            }
-
-                            allowClick = true;
-                        });
-                    } else {
-                        location.href = toUrl;
-                        allowClick = true;
-                    }
-                });
-
-                xhr.fail(function () {
-                    toastCenter('系统繁忙,请稍后重试!', function() {
-                        allowClick = true;
-                    });
-                })
-            }
-        });
-    }
-
-    $(function() {
-        FastClick.attach(document.body);
-        $("img").lazyload({
-            threshold : 200
-        });
-
-        $('#mobile').on('keyup',function() {
-            var num = moduleFn.clearNonum($(this));
-        });
-
-       alertTrueVal();
-
-        var allowClick = true;
-        var key = '<?= $promo->key ?>';
-        $('a.phonenum').on('click',function(e) {
-            e.preventDefault();
-
-            if (!allowClick) {
-                return;
-            }
-
-            allowClick = false;
-
-            if (!validateMobile()) {
-                allowClick = true;
-                return;
-            }
-
-            var phonenum =  $('#mobile').val();
-            var xhr = $.get('/promotion/p1705/duobao');
-
-            xhr.done(function(data) {
-                var toUrl = data.toUrl;
-
-                if (data.code) {
-                    toastCenter(data.message, function() {
-                        if ('' !== toUrl) {
-                            location.href = toUrl;
-                        }
-
-                        allowClick = true;
-                    });
-                } else {
-                    location.href = toUrl;
-                    allowClick = true;
-                }
-            });
-
-            xhr.fail(function () {
-                toastCenter('系统繁忙,请稍后重试!', function() {
-                    allowClick = true;
-                });
-            })
-        })
-    });
-
-    function subForm() {
-        var xhr = $.get('/promotion/p1705/duobao');
-
-        xhr.done(function(data) {
-            console.log(data);
-
-            var toUrl = data.toUrl;
-
-            if (data.code) {
-                toastCenter(data.message, function() {
-                    if ('' !== toUrl) {
-                        location.href = toUrl;
-                    }
-
-                    allowClick = true;
-                });
-            } else {
-                location.href = toUrl;
-                allowClick = true;
-            }
-        });
-
-        xhr.fail(function () {
-            toastCenter('系统繁忙,请稍后重试!', function() {
-                allowClick = true;
-            });
-        })
     }
 </script>

@@ -70,7 +70,7 @@ class DuoBao
     {
         $sequence = PromoSequence::find()->one();
 
-        return $sequence->id < self::TOTAL_JOINER_COUNT ?: self::TOTAL_JOINER_COUNT;
+        return $sequence->id < self::TOTAL_JOINER_COUNT ? $sequence->id : self::TOTAL_JOINER_COUNT;
     }
 
     /**
