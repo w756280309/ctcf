@@ -201,9 +201,6 @@ class P1705Controller extends Controller
                 'promo_id' => $promo->id,
             ]);
 
-            //夺宝码展示
-            $duobaoCode = PromoLotteryTicket::find()->where(['promo_id' => $promo->id, 'user_id' => $user->id])->one();
-
             //判断手机号是否为浙江号码
             $isZJ = $promoAtfr->isZhejiangMobile(SecurityUtils::decrypt($user->safeMobile));//调用左队长的方法
 
@@ -280,11 +277,9 @@ class P1705Controller extends Controller
             'jindu' => $jindu,
             'promo' => $promo,
             'promoTime' => $promoTime,
-            'user' => $user,
             'isJoinWith' => $isJoinWith,
             'source' => $source,
             'isBind' => $isBind,
-            'duobaoCode' => $duobaoCode,//对象
             'isZJ' => $isZJ,
             'promoLotteryQuery' => $promoLotteryQuery,
             'totalTicketCount' => $num,
