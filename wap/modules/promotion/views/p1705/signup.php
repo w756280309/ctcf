@@ -39,7 +39,8 @@ use yii\captcha\Captcha;
     <div class="formcheck f15">
         <?php $next = Yii::$app->request->hostInfo.'/promotion/p1705/duobao'; ?>
         <?php $form = ActiveForm::begin(['id' => 'signup_form', 'action' => '/site/signup?next='.urlencode($next)]); ?>
-            <input name="regContext" type="hidden" value="m_space1701">
+            <input name="regContext" type="hidden" value="promo">
+            <input name="promoId" type="hidden" value="<?= $promo->id ?>">
             <div class="phonenum">
                 <input id="iphone" name="SignupForm[phone]" type="tel" value="<?= $mobile ?>" maxlength="11" placeholder="请输入手机号">
             </div>

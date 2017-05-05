@@ -45,7 +45,7 @@ class DuoBao
                         throw new \Exception('参与人员已满额');
                     }
 
-                    $duobaoCodeArr = require(__DIR__.'duobao_code.php');
+                    $duobaoCodeArr = require(__DIR__.'/duobao_code.php');
                     $ticket = PromoLotteryTicket::initNew($user, $this->promo, $source);
                     $ticket->joinSequence = $sequence;
                     $ticket->duobaoCode = $duobaoCodeArr[$sequence-1];
@@ -70,7 +70,7 @@ class DuoBao
     {
         $sequence = PromoSequence::find()->one();
 
-        return $sequence->id < self::TOTAL_JOINER_COUNT ?: self::TOTAL_JOINER_COUNT;
+        return $sequence->id < self::TOTAL_JOINER_COUNT ? $sequence->id : self::TOTAL_JOINER_COUNT;
     }
 
     /**

@@ -475,13 +475,12 @@ class SiteController extends Controller
 
                     //如果存在duobao_mobile 则注册的用户增加抽奖机会
                     if (Yii::$app->session->hasFlash('duobao_mobile_signup')) {
-                        $promo = RankingPromo::findOne(['key' => 'promo_201705']);
+                        $promo = RankingPromo::findOne(['key' => 'duobao0504']);
                         $promoAtfr = new DuoBao($promo);
                         $user = $this->getAuthedUser();
                         if (SecurityUtils::decrypt($user->safeMobile) == Yii::$app->session->getFlash('duobao_mobile_signup')) {
-                            $promoAtfr->addTicketForUser($this->getAuthedUser());
+                            $promoAtfr->addTicketForUser($user);
                         }
-
                     }
 
                     return ['code' => 1, 'message' => '注册成功', 'tourl' => $tourl];

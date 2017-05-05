@@ -10,6 +10,7 @@
     color: #fff;
 }
 .header li.f16 img {
+    display: inline-block;
     width: .58666667rem;
     height: .58666667rem;
     vertical-align: middle;

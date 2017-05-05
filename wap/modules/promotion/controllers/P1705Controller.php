@@ -153,117 +153,149 @@ class P1705Controller extends Controller
     public function actionDuobao($wx_share_key = null)
     {
         $share = null;
-        //活动总人数
-        $numall = 2000;
-        $isEnd = false;
-        $user = null;
-        $isJoinWith = null;
-        $source = null;
-        $top10 = null; //最新参加活动的10个用户
-        $isBind = null;//新用户帮卡为1；否则为null 用于提示弹窗
-        $duobaoCode = null;//夺宝码
-        $isZJ = null; //已登陆用户浙江手机号 已登陆用户且手机号为非浙江，直接触发弹窗信息
-
         if (!empty($wx_share_key)) {
             $share = Share::findOne(['shareKey' => $wx_share_key]);
         }
-        $promo = RankingPromo::findOne(['key' => 'promo_201705']);
+
+        //活动总人数
+        $numall = DuoBao::TOTAL_JOINER_COUNT;
+        $user = null;
+        $isJoinWith = null;
+        $joinTicket = null;
+        $source = null;
+        $isBind = null;//新用户帮卡为1；否则为null 用于提示弹窗
+        $isZJ = null; //已登录用户浙江手机号 已登录用户且手机号为非浙江，直接触发弹窗信息
+
+        $promo = RankingPromo::findOne(['key' => 'duobao0504']);
         $promoAtfr = new DuoBao($promo);
+
         //获取参与人数
-        $num =$promoAtfr->totalTicketCount();
+        $num = $promoAtfr->totalTicketCount();
+
         //计算参与进度  如果总人数不为0 岁计算参与进度 例如 97 页面显示结果97%
-        $jindu = ceil($num/($numall/100));
+        $jindu = $num == $numall ? 100 : min(ceil($num * 100 / $numall) , 99);
 
         //获取最近参加的10个用户记录 如果记录<10 则null
+        $promoLotteryQuery = [];
         if ($num >= 10) {
-            $PromoLotteryQuery = PromoLotteryTicket::find()->where(['promo_id' =>$promo->id])->limit(10)->orderBy('id desc')->all();
+            $promoLotteryQuery = PromoLotteryTicket::find()
+                ->innerJoinWith('user')
+                ->where(['promo_id' => $promo->id])
+                ->limit(10)
+                ->orderBy('id desc')
+                ->all();
         }
 
+        //判断活动时间,1未开始,2活动中,3已结束
+        $promoTime = $promoAtfr->promoTime();
 
-        //活动结束
-        $isEnd = $promoAtfr->promoTime();
-
-        if (!Yii::$app->user->isGuest){
-            $back = [];
+        if (!Yii::$app->user->isGuest) {
             $user = $this->getAuthedUser();
             //获取用户类别
             $source = $promoAtfr->source($user);
             //用户是否参与活动
             $isJoinWith = $promoAtfr->isJoinWith($user);
-
-            //夺宝码展示
-            $duobaoCode = PromoLotteryTicket::find()->where(['promo_id' =>$promo->id , 'user_id' =>$user->id])->one();
+            $joinTicket = PromoLotteryTicket::findOne([
+                'user_id' => $user->id,
+                'promo_id' => $promo->id,
+            ]);
 
             //判断手机号是否为浙江号码
             $isZJ = $promoAtfr->isZhejiangMobile(SecurityUtils::decrypt($user->safeMobile));//调用左队长的方法
+
+            //校验新老用户是否绑卡
+            $cond = 0 | BankService::BINDBANK_VALIDATE_N;
+            $backService = BankService::check($user, $cond);
+            $isBind = true;
+
+            if ($backService['code']) {
+                $isBind = false;
+            }
+
             //点击参与活动按钮 ajax
             if (Yii::$app->request->isAjax) {
-
-                //判断是否为老客
-                if ($source == 'inviter') {
-                    //是否已经参与活动
-                    $code = $isJoinWith ? 1 : 2 ; //参与 1 未参与 2
-                    $message = $isJoinWith ? "已参与" : "未参与";
-                    $toUrl = $isJoinWith ? '/' : '/user/invite';
-                    $yaoqingBind = true;
+                if (1 === $promoTime) {
+                    $code = 1;
+                    $message = '活动未开始';
+                } elseif (3 === $promoTime) {
+                    $code = 2;
+                    $message = '活动已结束';
+                } elseif (!$isZJ) {
+                    $code = 3;
+                    $message = '手机号不是浙江地区的';
+                } elseif ('new_user' === $source) {
                     if (!$isJoinWith) {
-                        //没有参与活动的如果邀请列表已经开户
                         $promoAtfr->addTicketForUser($user);
                     }
+
+                    $code = 0;
+                    $message = '给活动期间注册的新用户发放抽奖记录';
+                } elseif ('inviter' === $source) {
+                    if (!$isJoinWith) {
+                        $promoAtfr->addTicketForUser($user);
+                    }
+
+                    $code = 0;
+                    $message = '给已经邀请过的老用户发放抽奖记录';
+                } else {
+                    $code = 4;
+                    $message = '老用户未邀请';
                 }
+
                 $back = [
                     'code' => $code,
                     'message' => $message,
-                    'toUrl' => $toUrl,
                 ];
 
-               return $back;
+                return $back;
             }
-
-            if ($source != 'inviter') {
-               //新用户是否帮卡
-                $cond = 0 | BankService::IDCARDRZ_VALIDATE_N;
-                $isBind = BankService::check($user, $cond);
-
-            }
-
         } else {
             if (Yii::$app->request->isAjax) {
                 $mobile = Yii::$app->session->get('duobao_mobile');
-                if (Yii::$app->session->hasFlash('duobao_inviter')) {
-                    Yii::$app->session->setfash('duobao_mobile_signup', $mobile);
+
+                if (Yii::$app->session->hasFlash('duobao_new')) {
+                    Yii::$app->session->setFlash('duobao_mobile_signup', $mobile);
+
+                    $back = [
+                        'code' => 0,
+                        'toUrl' => '/promotion/p1705/signup',
+                    ];
+                } else {
+                    $back = [
+                        'code' => 5,
+                        'message' => '未登录',
+                    ];
                 }
 
-
+                return $back;
             }
         }
+
         return $this->render('duobao', [
             'share' => $share,
             'jindu' => $jindu,
             'promo' => $promo,
-            'isEnd' => $isEnd,
-            'user' => $user,
+            'promoTime' => $promoTime,
             'isJoinWith' => $isJoinWith,
             'source' => $source,
-            'top10' => $top10,
             'isBind' => $isBind,
-            'duobaoCode' => $duobaoCode,//对象
             'isZJ' => $isZJ,
+            'promoLotteryQuery' => $promoLotteryQuery,
+            'totalTicketCount' => $num,
+            'joinTicket' => $joinTicket,
         ]);
-
     }
 
 
     /**
      * 注册落地页.
      */
-
     public function actionSignup()
     {
         if (!Yii::$app->user->isGuest) {
             return $this->redirect('/?_mark='.time());
         }
-        $promo = RankingPromo::findOne(['key' => 'promo_201705']);
+        $promo = RankingPromo::findOne(['key' => 'duobao0504']);
 
         if (null === $promo) {
             throw $this->ex404('活动不存在');
@@ -282,77 +314,50 @@ class P1705Controller extends Controller
      */
     public function actionValidateMobile($key, $mobile)
     {
-        $message = '';
-        $toUrl = '';
-        $code = '';
-        $back = [];
-        $promo = $this->findOr404(RankingPromo::class, ['key' => $key]);
-
-        $promoAtfr = new DuoBao($promo);
-
-        //已经登录用户不显示弹框
-        if (Yii::$app->user->isGuest) {
-            if (empty($mobile)) {
-                $back = [
-                    'code' => 0,
-                    'message' => '手机号不能为空',
-                    'toUrl' => '/',
-                ];
-                return $back;
-            }
-
-            //判断是否为浙江手机号
-            $isZJ = $promoAtfr->isZhejiangMobile($mobile);
-            if (!$isZJ) {
-                $back = [
-                    'code' => 0,
-                    'message' => '本次活动只限浙江用户参加',
-                    'toUrl' => '/',
-                ];
-                return $back;
-            }
-
-            $user = User::findOne(['safeMobile' => SecurityUtils::encrypt($mobile)]);
-            Yii::$app->session->set('duobao_mobile', $mobile);
-
-
-            if (null !== $user) {
-                /*//用户是否帮卡
-                $cond = 0 | BankService::IDCARDRZ_VALIDATE_N;
-                $isBind = BankService::check($user, $cond);*/
-                if ($promoAtfr->source($user) == "inviter") {
-                    $code = 1;
-                    $message = '未登录老用户';
-                    $toUrl = '/site/login?next="/promotion/p1705/duobao"';
-                } else {
-                    $code = 1;
-                    $message = '未登录新用户';
-                    $toUrl = '/site/login?next="/promotion/p1705/duobao"';
-                }
-
-            } else {
-
-                $promoMobile = PromoMobile::findOne(['promo_id' => $promo->id, 'mobile' => $mobile]);
-
-                if (null === $promoMobile) {
-                    PromoMobile::initNew($promo->id, $mobile)->save();     //跳转落地注册页之前,记录用户手机号
-                }
-                $code = 2;
-                $message = '未注册用户';
-                $toUrl = '/promotion/p1705/signup';
-                Yii::$app->session->setFlash('duobao_inviter', $mobile);
-            }
-
-
+        if (!Yii::$app->user->isGuest) {
+            return [
+                'code' => 1,
+                'message' => '',
+            ];
         }
 
-        $back = [
-            'code' => $code,
-            'message' => $message,
-            'toUrl' => $toUrl,
+        $promo = $this->findOr404(RankingPromo::class, ['key' => $key]);
+        $promoAtfr = new DuoBao($promo);
+
+        if (empty($mobile)) {
+            return [
+                'code' => 1,
+                'message' => '手机号不能为空',
+            ];
+        }
+
+        //判断是否为浙江手机号
+        $isZJ = $promoAtfr->isZhejiangMobile($mobile);
+        if (!$isZJ) {
+            $back = [
+                'code' => 1,
+                'message' => '本次活动只限浙江用户参加',
+            ];
+
+            return $back;
+        }
+
+        $user = User::findOne(['safeMobile' => SecurityUtils::encrypt($mobile)]);
+        Yii::$app->session->set('duobao_mobile', $mobile);
+
+        if (null === $user) {
+            $promoMobile = PromoMobile::findOne(['promo_id' => $promo->id, 'mobile' => $mobile]);
+
+            if (null === $promoMobile) {
+                PromoMobile::initNew($promo->id, $mobile)->save();     //跳转落地注册页之前,记录用户手机号
+            }
+
+            Yii::$app->session->setFlash('duobao_new', $mobile);
+        }
+
+        return [
+            'code' => 0,
+            'message' => '校验手机号成功',
         ];
-        return $back;
     }
-
-
 }
