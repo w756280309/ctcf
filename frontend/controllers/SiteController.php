@@ -11,6 +11,7 @@ use common\models\news\News;
 use common\models\offline\OfflineUser;
 use common\models\product\Issuer;
 use common\models\product\OnlineProduct;
+use common\models\stats\Perf;
 use common\models\user\CaptchaForm;
 use common\models\user\LoginForm;
 use common\models\user\SignupForm;
@@ -150,6 +151,32 @@ class SiteController extends Controller
             'touzi' => $touzi,
             'jingxuan' => $jingxuan,
         ]);
+    }
+
+
+    /**
+     * 首页统计项.
+     *
+     * 1. 统计募集规模;
+     * 2. 统计累计兑付;
+     * 3. 统计兑付利息;
+     *
+     * 以上都是数据都是同时包含线上与线下数据的
+     *
+     * 4. 添加缓存机制,时间为10分钟;
+     */
+    public function actionStatsForIndex()
+    {
+        $cache = Yii::$app->cache;
+        $key = 'pc_index_stats';
+
+        if (!$cache->get($key)) {
+            $statsData = Perf::getStatsForIndex();
+
+            $cache->set($key, $statsData, 600);   //缓存十分钟
+        }
+
+        return $cache->get($key);
     }
 
     /**

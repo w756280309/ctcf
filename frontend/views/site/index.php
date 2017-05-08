@@ -2,14 +2,25 @@
 
 $this->title = Yii::$app->params['pc_page_title'];
 
-$this->registerCssFile(ASSETS_BASE_URI.'css/index.css?v=161221', ['depends' => 'frontend\assets\FrontAsset']);
+$this->registerCssFile(ASSETS_BASE_URI.'css/index.css?v=170508', ['depends' => 'frontend\assets\FrontAsset']);
 $this->registerJsFile(ASSETS_BASE_URI.'js/index.js', ['depends' => 'frontend\assets\FrontAsset']);
 
 use common\models\product\OnlineProduct;
 use common\utils\StringUtils;
 use common\view\LoanHelper;
 use yii\helpers\Html;
-
+$this->registerJs(<<<JSFILE
+    $(function (){
+        //统计数据
+        $.get('/site/stats-for-index', function (data) {
+            $('#totalTradeAmount i').html(WDJF.numberFormat(accDiv(data.totalTradeAmount, 100000000), 0));
+            $('#totalRefundAmount i').html(WDJF.numberFormat(accDiv(data.totalRefundAmount, 10000), 0));
+            $('#totalRefundInterest i').html(WDJF.numberFormat(accDiv(data.totalRefundInterest, 10000), 0));
+        });
+       
+    })
+JSFILE
+)
 ?>
 
 <!--banner start-->
@@ -89,9 +100,32 @@ use yii\helpers\Html;
     </div>
 <?php } ?>
 <!--理财公告-->
+<!--交易总额-->
+<div id="turnover-box">
+    <ul class="turnover-box">
+        <li class="turnover-data lf">
+            <p class="turnover-data-number" id="totalTradeAmount"><i></i> <span>亿元</span></p>
+            <p class="turnover-data-name">平台累计交易额</p>
+        </li>
+        <li class="turnover-data lf">
+            <p class="turnover-data-number" id="totalRefundAmount"><i></i> <span>万元</span></p>
+            <p class="turnover-data-name">累计兑付</p>
+        </li>
+        <li class="turnover-data lf">
+            <p class="turnover-data-number" id="totalRefundInterest"><i></i> <span>万元</span></p>
+            <p class="turnover-data-name">带来收益</p>
+        </li>
+        <li class="turnover-data rg">
+            <p class="turnover-data-number">100 <span>%</span></p>
+            <p class="turnover-data-name">历史兑付率</p>
+        </li>
+    </ul>
+</div>
+<!--交易总额-->
 
 <!--chengji start-->
 <div class="chengji-box">
+
     <div class="chengji-left">
         <div class="chengji-left-bottom">
             <span>平台优势</span>
@@ -384,3 +418,4 @@ use yii\helpers\Html;
         checkLoginStatus();
     })
 </script>
+

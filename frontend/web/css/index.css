@@ -1021,3 +1021,47 @@ a.zhaiquan-number:hover {
     background: url("../images/newhandVip.png");
     z-index: 100000;
 }
+
+/*首页交易额统计*/
+#turnover-box{
+    height: 122px;
+    width: 100%;
+    min-width:1057px;
+    background-color: #fff;
+}
+#turnover-box .turnover-box{
+    width: 1000px;
+    height: 100%;
+    margin:0 auto;
+    text-align: center;
+}
+#turnover-box .turnover-box .turnover-data{
+    width:256px;
+    height: 100%;
+}
+#turnover-box .turnover-box .turnover-data:first-child{
+    width:259px;
+    height: 100%;
+}
+#turnover-box .turnover-box .turnover-data .turnover-data-number{
+    height: 22px;
+    line-height: 22px;
+    margin-top:30px;
+    font-size: 22px;
+    color: #f74538;
+}
+#turnover-box .turnover-box .turnover-data .turnover-data-number span{
+    font-size: 17px;
+    color: #666;
+}
+#turnover-box .turnover-box .turnover-data .turnover-data-name{
+    height: 14px;
+    line-height: 14px;
+    margin-top: 17px;
+    font-size: 14px;
+    color: #999;
+}
+#turnover-box .turnover-box .turnover-data.rg{
+    width:229px;
+    height: 100%;
+}
