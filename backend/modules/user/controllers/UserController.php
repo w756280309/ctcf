@@ -66,6 +66,10 @@ class UserController extends BaseController
                 'isOffline' => false,
             ])
             ->orderBy(['id' => SORT_DESC]);
+        $ref_type = Yii::$app->request->get('ref_type');
+        if ($ref_type != null) {
+            $query->andWhere(['ref_type' => $ref_type]);
+        }
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -76,6 +80,9 @@ class UserController extends BaseController
 
         $orderIds = [];
         $orders = [];
+        $type_sql = "SELECT distinct(`ref_type`) FROM `point_record`";
+        $db = Yii::$app->db;
+        $type = $db->createCommand($type_sql)->queryAll();
 
         foreach ($dataProvider->models as $model) {
             if (in_array($model->ref_type, [PointRecord::TYPE_LOAN_ORDER, PointRecord::TYPE_FIRST_LOAN_ORDER_POINTS_1])) {
@@ -99,6 +106,7 @@ class UserController extends BaseController
             'dataProvider' => $dataProvider,
             'orders' => $orders,
             'user' => $user,
+            'types' => $type,
         ]);
     }
 

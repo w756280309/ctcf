@@ -12,6 +12,31 @@ use yii\grid\GridView;
         发放积分
     </a>
 </div>
+<div class="portlet-body">
+
+    <table class="table">
+        <tr>
+            <td>
+                <span class="title">交易类型</span>
+                <select name="ref_type" id="point_search_form_type" m-wrap span6>
+                    <option value="">---全部---</option>
+                    <?php
+                    var_dump($types);
+                        foreach ($types as $type) {
+                    ?>
+                    <option value="<?= $type['ref_type'] ?>" <?= ($type === $type['ref_type']) ? "selected='selected'" : "" ?> ><?= PointRecord::getTypeName($type['ref_type']) ?></option>
+                    <?php } ?>
+                </select>
+            </td>
+            <td>
+                <div align="right" class="search-btn">
+                    <button class="btn blue btn-block point_search" style="width: 100px;">搜索 <i
+                                class="m-icon-swapright m-icon-white"></i></button>
+                </div>
+            </td>
+        </tr>
+    </table>
+</div>
 
 <?=
     GridView::widget([
@@ -85,6 +110,10 @@ use yii\grid\GridView;
         $('.point_page ul li').on('click', 'a', function(e) {
             e.preventDefault();
             getPointList($(this).attr('href'));
-        })
+        });
+        $('.point_search').on('click', function(){
+            var ref_type = $('#point_search_form_type').val();
+            getPointList('/user/user/point-list?userId=<?= $user->id ?>&ref_type='+ref_type);
+        });
     })
 </script>

@@ -83,7 +83,12 @@ class OfflineController extends BaseController
      */
     public function actionPoints($id)
     {
+        $user = $this->findOr404(OfflineUser::class, $id);
         $query = PointRecord::find()->where(['user_id' => $id, 'isOffline' => true])->orderBy(['recordTime' => SORT_DESC, 'id' => SORT_DESC]);
+        $ref_type = Yii::$app->request->get('ref_type');
+        if ($ref_type != null) {
+            $query->andWhere(['ref_type' => $ref_type]);
+        }
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -94,7 +99,9 @@ class OfflineController extends BaseController
 
         $orderIds = [];
         $orders = [];
-
+        $type_sql = "SELECT distinct(`ref_type`) FROM `point_record`";
+        $db = Yii::$app->db;
+        $type = $db->createCommand($type_sql)->queryAll();
         foreach ($dataProvider->models as $model) {
             if (PointRecord::TYPE_OFFLINE_BUY_ORDER === $model->ref_type) {
                 $orderIds[] = $model->ref_id;
@@ -108,7 +115,13 @@ class OfflineController extends BaseController
                 ->all();
         }
 
-        return $this->renderFile('@backend/modules/user/views/offline/_point_record.php', ['dataProvider' => $dataProvider, 'id' => $id, 'orders' => $orders]);
+        return $this->renderFile('@backend/modules/user/views/offline/_point_record.php', [
+            'dataProvider' => $dataProvider,
+            'id' => $id,
+            'orders' => $orders,
+            'types' => $type,
+            'user' => $user,
+        ]);
     }
 
     /*
