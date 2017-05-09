@@ -8,6 +8,10 @@ return [
         'cache' => [
             'class' => 'yii\caching\FileCache',
         ],
+        'db_cache' => [
+            'class' => 'yii\caching\DbCache',
+            'cacheTable' => 'cache_entry',
+        ],
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,

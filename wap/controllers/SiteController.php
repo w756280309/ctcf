@@ -240,7 +240,7 @@ class SiteController extends Controller
      */
     public function actionStatsForIndex()
     {
-        $cache = Yii::$app->cache;
+        $cache = Yii::$app->db_cache;
         $key = 'index_stats';
 
         if (!$cache->get($key)) {

@@ -78,6 +78,10 @@ return [
         'cache' => [
             'class' => 'yii\caching\FileCache',
         ],
+        'db_cache' => [
+            'class' => 'yii\caching\DbCache',
+            'cacheTable' => 'cache_entry',
+        ],
         'urlManager' => [
             'rules' => [
                 'promotion/p1701/luodiye' => 'promotion/p1701/luodiye',
