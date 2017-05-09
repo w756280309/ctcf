@@ -100,4 +100,12 @@ class PromoLotteryTicket extends ActiveRecord
             'ip' => Yii::$app->request->getUserIP(),
         ]);
     }
+
+    /**
+     * 获取完整的七位夺宝码
+     */
+    public function getCode()
+    {
+        return 1000000 + $this->duobaoCode;
+    }
 }
