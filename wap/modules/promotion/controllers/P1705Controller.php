@@ -56,16 +56,9 @@ class P1705Controller extends Controller
         if (!empty($wx_share_key)) {
             $share = Share::findOne(['shareKey' => $wx_share_key]);
         }
-        $xunzhang = 0;//确认
-        if (!Yii::$app->user->isGuest) {
-            $user = User::findOne(Yii::$app->user->id);
-            $promo = RankingPromo::findOne(['key' => 'promo_201705']);
-            $promo201705 = new Promo201705($promo);
-            $xunzhang = $promo201705->getRestTicketCount($user);
-        }
-        return $this->render('may', [
+
+        return $this->render('mother_day', [
             'share' => $share,
-            'xunzhang' => $xunzhang,
         ]);
     }
 
