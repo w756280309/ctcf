@@ -178,15 +178,15 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => YiiAsse
             <div>
                 <ul class="nav nav-tabs nav-pills" role="tablist" id="list_nav">
                     <li role="presentation" class="money_record_nav active"><a>资金流水</a></li>
-                    <li role="presentation" class="recharge_nav"><a>充值流水明细</a></li>
-                    <li role="presentation" class="draw_nav"><a>提现流水明细</a></li>
-                    <li role="presentation" class="loan_order_nav"><a>标的投资明细</a></li>
-                    <li role="presentation" class="credit_order_nav"><a>转让买入明细</a></li>
-                    <li role="presentation" class="credit_note_nav"><a>转让卖出明细</a></li>
-                    <li role="presentation" class="bind_nav"><a>绑卡明细</a></li>
-                    <li role="presentation" class="coupon_nav"><a>代金券明细</a></li>
-                    <li role="presentation" class="points"><a>积分明细</a></li>
-                    <li role="presentation" class="coins"><a>财富值明细</a></li>
+                    <li role="presentation" class="recharge_nav"><a>充值流水</a></li>
+                    <li role="presentation" class="draw_nav"><a>提现流水</a></li>
+                    <li role="presentation" class="loan_order_nav"><a>标的投资</a></li>
+                    <li role="presentation" class="credit_order_nav"><a>转让买入</a></li>
+                    <li role="presentation" class="credit_note_nav"><a>转让卖出</a></li>
+                    <li role="presentation" class="bind_nav"><a>绑卡</a></li>
+                    <li role="presentation" class="coupon_nav"><a>代金券</a></li>
+                    <li role="presentation" class="points"><a>积分</a></li>
+                    <li role="presentation" class="coins"><a>财富值</a></li>
                     <li role="presentation" class="invite_nav"><a>关系详情</a></li>
                     <li role="presentation" class="offline_nav"><a>线下会员</a></li>
                 </ul>

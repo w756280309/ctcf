@@ -1,7 +1,32 @@
 <?php
     use common\models\user\MoneyRecord;
 ?>
+<div class="portlet-body">
 
+    <table class="table">
+        <tr>
+            <td>
+                <span class="title">状态</span>
+                <select name="status" id="money_record_form_type" m-wrap span6>
+                    <option value="">---全部---</option>
+                    <option value="0" <?= ($status === '0') ? "selected='selected'" : "" ?> >充值</option>
+                    <option value="1" <?= ($status === '1') ? "selected='selected'" : "" ?> >提现申请</option>
+                    <option value="100" <?= ($status === '100') ? "selected='selected'" : "" ?> >提现申请失败</option>
+                    <option value="101" <?= ($status === '101') ? "selected='selected'" : "" ?> >提现成功</option>
+                    <option value="102" <?= ($status === '102') ? "selected='selected'" : "" ?> >提现失败</option>
+                    <option value="4" <?= ($status === '4') ? "selected='selected'" : "" ?> >回款</option>
+                    <option value="2" <?= ($status === '2') ? "selected='selected'" : "" ?> >投资</option>
+                </select>
+            </td>
+            <td>
+                <div align="right" class="search-btn">
+                    <button class="btn blue btn-block loan_order_search" style="width: 100px;">搜索 <i
+                                class="m-icon-swapright m-icon-white"></i></button>
+                </div>
+            </td>
+        </tr>
+    </table>
+</div>
 <?=
 \yii\grid\GridView::widget([
     'id' => 'grid_view_money_record',
@@ -85,8 +110,13 @@
         $('.money_record_pager ul li').on('click', 'a', function(e) {
             e.preventDefault();
             getMoneyRecord($(this).attr('href'));
-        })
+        });
+        $('.loan_order_search').on('click', function(){
+            var status = $('#money_record_form_type').val();
+            getMoneyRecord('/user/user/detail?id=<?= $normalUser->id?>&key=money_record&status='+status);
+        });
     })
+
 </script>
 
 

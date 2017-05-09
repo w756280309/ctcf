@@ -76,9 +76,9 @@ $this->title = '线下会员详情';
         <div>
             <div>
                 <ul class="nav nav-tabs nav-pills" role="tablist" id="list_nav">
-                    <li role="presentation" class="point_record_nav active"><a href="javascript:getLoanOrderList('/user/offline/orders?id=<?= $user->id?>')">标的投资明细</a></li>
-                    <li role="presentation" class="point_record_nav"><a href="javascript:getPointList('/user/offline/points?id=<?= $user->id?>')">积分明细</a></li>
-                    <li role="presentation" class="point_record_nav"><a href="javascript:getCoinList('/user/user/coin-list?userId=<?= $user->id ?>&isOffline=1')">财富值明细</a></li>
+                    <li role="presentation" class="point_record_nav active"><a href="javascript:getLoanOrderList('/user/offline/orders?id=<?= $user->id?>')">标的投资</a></li>
+                    <li role="presentation" class="point_record_nav"><a href="javascript:getPointList('/user/offline/points?id=<?= $user->id?>')">积分</a></li>
+                    <li role="presentation" class="point_record_nav"><a href="javascript:getCoinList('/user/user/coin-list?userId=<?= $user->id ?>&isOffline=1')">财富值</a></li>
                     <li role="presentation" class="point_record_nav">
                         <a href="javascript:getOnlineList('/user/offline/online-user?id=<?= $user->id ?>')">线上会员</a>
                     </li>

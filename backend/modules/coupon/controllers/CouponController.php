@@ -205,12 +205,20 @@ class CouponController extends BaseController
     {
         $user = $this->findOr404(User::class, $uid);
         $u = UserCoupon::tableName();
-
+        $isUsed = Yii::$app->request->get('isUsed');
         $query = UserCoupon::find()
             ->innerJoinWith('couponType')
             ->joinWith('admin')
-            ->where(['user_id' => $uid])
-            ->orderBy(["$u.created_at" => SORT_DESC]);
+            ->where(['user_id' => $uid]);
+        if ($isUsed == 2) {
+            $query->andWhere(['isUsed' => 1]);
+        } elseif ($isUsed == 1) {
+            $query->andWhere(['isUsed' => 0])->andWhere(['>' , 'expiryDate' , date('Y-m-d')]);
+        } elseif ($isUsed == 3) {
+            $query->andWhere(['isUsed' => 0])->andWhere(['<' , 'expiryDate' , date('Y-m-d')]);
+        }
+        $query->orderBy(["$u.created_at" => SORT_DESC]);
+
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -219,7 +227,10 @@ class CouponController extends BaseController
             ],
         ]);
 
-        return $this->renderFile('@backend/modules/coupon/views/coupon/user_list.php', ['dataProvider' => $dataProvider, 'user' => $user]);
+        $sumCoupon = UserCoupon::findCouponInUse($user->id , date('Y-m-d'))->sum('amount');
+        $CouponUsed = UserCoupon::findCouponUsed($user->id)->sum('amount');
+
+        return $this->renderFile('@backend/modules/coupon/views/coupon/user_list.php', ['dataProvider' => $dataProvider, 'user' => $user, 'sumCoupon' => $sumCoupon, 'CouponUsed' =>$CouponUsed]);
     }
 
     /**

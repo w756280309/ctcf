@@ -123,6 +123,21 @@ class UserCoupon extends ActiveRecord
     }
 
     /**
+     * 获取用户已使用代金券
+     */
+    public static function findCouponUsed($uid)
+    {
+        $query = UserCoupon::find()
+            ->innerJoinWith('couponType')
+            ->where([
+                'user_id' => $uid,
+                'isDisabled' => false,
+                'isUsed' => 1,
+            ]);
+        return $query;
+    }
+
+    /**
      * 可用代金券列表.
      *
      * @param User       $user    用户对象

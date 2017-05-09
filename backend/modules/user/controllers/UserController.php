@@ -234,6 +234,7 @@ class UserController extends BaseController
     public function actionDetail($id)
     {
         $user = User::findOne($id);
+        $status = Yii::$app->request->get('status');
         if (empty($user)) {
             throw $this->ex404();     //参数无效,抛出404异常
         }
@@ -489,7 +490,12 @@ class UserController extends BaseController
      */
     private function getMoneyRecord(User $user)
     {
-        $query = MoneyRecord::find()->where(['uid' => $user->id])->orderBy(['created_at' => SORT_DESC]);
+        $status = Yii::$app->request->get('status');
+        $query = MoneyRecord::find()->where(['uid' => $user->id]);
+        if ($status != null) {
+            $query->andWhere(['type' => $status]);
+        }
+        $query->orderBy(['created_at' => SORT_DESC]);
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
             'pagination' => [
@@ -526,6 +532,7 @@ IN (" . implode(',', $recordIds) . ")")->queryAll();
             'recordTypes' => $recordTypes,
             'data' => $data,
             'dataProvider' => $dataProvider,
+            'normalUser' => $user,
         ]);
     }
 

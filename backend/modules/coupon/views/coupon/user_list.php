@@ -6,6 +6,32 @@ use yii\grid\GridView;
     <a class="btn green" href="javascript:openwin('/coupon/coupon/allow-issue-list?uid=<?= $user->id ?>' , 800, 400)">
         发放代金券
     </a>
+
+</div>
+<div class="portlet-body">
+
+    <table class="table">
+        <tr>
+            <td>
+                <span>可用金额(元)：<?= isset($sumCoupon) ? StringUtils::amountFormat2($sumCoupon) : '0' ?></span> <span>&nbsp &nbsp &nbsp已用金额(元)：<?= isset($CouponUsed) ? StringUtils::amountFormat2($CouponUsed) : '0' ?></span>
+            </td>
+            <td>
+                <span class="title">状态</span>
+                <select name="isUsed" id="coupon_search_form_type" m-wrap span6>
+                    <option value="">---全部---</option>
+                    <option value="1" <?= ($isUsed === '1') ? "selected='selected'" : "" ?> >未使用</option>
+                    <option value="2" <?= ($isUsed === '2') ? "selected='selected'" : "" ?> >已使用</option>
+                    <option value="3" <?= ($isUsed === '3') ? "selected='selected'" : "" ?> >已过期</option>
+                </select>
+            </td>
+            <td>
+                <div align="right" class="search-btn">
+                    <button class="btn blue btn-block coupon_search" style="width: 100px;">搜索 <i
+                                class="m-icon-swapright m-icon-white"></i></button>
+                </div>
+            </td>
+        </tr>
+    </table>
 </div>
 <?= GridView::widget([
     'id' => 'grid_view_coupon',
@@ -77,10 +103,16 @@ use yii\grid\GridView;
 ])
 ?>
 <script>
+
     $(function(){
         $('.coupon_pager ul li').on('click', 'a', function(e) {
             e.preventDefault();
             getCouponList($(this).attr('href'));
-        })
+        });
+        $('.coupon_search').on('click', function(){
+            var isUsed = $('#coupon_search_form_type').val();
+            getCouponList('/coupon/coupon/list-for-user?uid=<?= $user->id?>&isUsed='+isUsed);
+        });
     })
 </script>
+
