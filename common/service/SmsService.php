@@ -2,11 +2,11 @@
 
 namespace common\service;
 
+use common\models\Sms;
 use common\models\sms\SmsTable;
 use common\models\sms\SmsMessage;
 use common\models\user\User;
 use common\utils\SecurityUtils;
-use common\utils\StringUtils;
 use Yii;
 
 /**
@@ -64,46 +64,50 @@ class SmsService
         }
 
         if ($model->save()) {
-            $smsWhiteList = Yii::$app->params['sms_white_list'];
-            if ($mockSms && !in_array(SecurityUtils::decrypt($model->safeMobile), $smsWhiteList)) {
+            if (!self::canSend($phone)) {
                 return ['code' => 0, 'message' => ''];
             }
 
             $message = [];
-            $template_id = null;
+            $templateId = null;
+
             if (1 === $type) {
                 $message = [
                     $model->code,
                     $model->time_len,
                 ];
-                $template_id = Yii::$app->params['sms']['yzm'];
+                $templateId = Yii::$app->params['sms']['yzm'];
             } elseif (2 === $type) {
                 $message = [
                     $model->code,
                 ];
-                $template_id = Yii::$app->params['sms']['forget'];
+                $templateId = Yii::$app->params['sms']['forget'];
             }
 
             if (!empty($message)) {
-                $sms = new SmsMessage([
-                    'template_id' => $template_id,
-                    'safeMobile' => $model->safeMobile,
-                    'message' => json_encode($message),
-                ]);
+                $code = 0;
+                $msg = '';
+
                 try {
-                    $res = \Yii::$container->get('sms')->send($sms);
-                    if ($res) {
-                        return ['code' => 0, 'message' => ''];
+                    if (self::sendNow($phone, $templateId, $message)) {
+                        $user = new User([
+                            'id' => 0,
+                            'safeMobile' => SecurityUtils::encrypt($phone),
+                        ]);
+
+                        $smsMessage = SmsMessage::initSms($user, $message, $templateId);
+                        $smsMessage->status = SmsMessage::STATUS_SENT;
+                        $smsMessage->save(false);
                     }
                 } catch (\Exception $ex) {
-                    if ('160040' === $ex->getMessage()) {
-                        return ['code' => 1, 'message' => '手机号接收短信达到数量限制，请稍候重试'];
-                    } elseif ('160038' === $ex->getMessage()) {
-                        return ['code' => 1, 'message' => '短信发送请求过于频繁，请稍候重试'];
-                    } else {
-                        return ['code' => 1, 'message' => '短信发送失败'];
-                    }
+                    $code = 1;
+                    $msg = $ex->getMessage();
                 }
+
+                return [
+                    'code' => $code,
+                    'message' => $msg,
+                ];
             }
         }
 
@@ -146,19 +150,60 @@ class SmsService
      */
     public static function send($mobile, $templateId, array $data = [], User $user = null, $level = SmsMessage::LEVEL_MIDDLE)
     {
-        $smsMessage = new SmsMessage([
-            'template_id' => $templateId,
-            'uid' => $user ? $user->id : 0,
-            'safeMobile' => SecurityUtils::encrypt($mobile),
-            'message' => json_encode($data),
-            'level' => $level,
-        ]);
+        if (null === $user) {
+            $user = new User([
+                'id' => 0,
+                'safeMobile' => SecurityUtils::encrypt($mobile),
+            ]);
+        }
 
-        $smsWhiteList = Yii::$app->params['sms_white_list'];
-        if (Yii::$app->params['mock_sms'] && !in_array($mobile, $smsWhiteList)) {
+        $smsMessage = SmsMessage::initSms($user, $data, $templateId, $level);
+
+        if (!self::canSend($mobile)) {
             $smsMessage->status = SmsMessage::STATUS_SENT;
         }
 
-        return $smsMessage->save();
+        return $smsMessage->save(false);
+    }
+
+    /**
+     * 即时发送短信.
+     */
+    public static function sendNow($mobile, $templateId, array $data = [], User $user = null, $level = SmsMessage::LEVEL_MIDDLE)
+    {
+        if (self::canSend($mobile) && !empty($data)) {
+            $sms = new Sms();
+            $data = $sms->sendTemplateSMS($mobile, $data, $templateId);
+            $statusCode = (string) $data->statusCode;
+
+            if ('000000' !== $statusCode) {
+                switch ($statusCode) {
+                    case '160040':
+                        $msg = '手机号接收短信达到数量限制，请稍候重试';
+                        break;
+                    case '160038':
+                        $msg = '短信发送请求过于频繁，请稍候重试';
+                        break;
+                    default:
+                        $msg = '短信发送失败';
+                }
+
+                throw new \Exception($msg, $statusCode);
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * 判断一个手机号是否需要实际发送短信.
+     *
+     * @param string $mobile 明文手机号
+     */
+    private static function canSend($mobile)
+    {
+        $smsWhiteList = Yii::$app->params['sms_white_list'];
+
+        return !(Yii::$app->params['mock_sms'] && !in_array($mobile, $smsWhiteList));
     }
 }

@@ -3,6 +3,8 @@
 namespace console\controllers;
 
 use common\models\sms\SmsMessage;
+use common\service\SmsService;
+use common\utils\SecurityUtils;
 use yii\console\Controller;
 
 /**
@@ -32,15 +34,20 @@ class SmscrontabController extends Controller
                 $start = time();
                 $messages = SmsMessage::find()->where(['status' => SmsMessage::STATUS_WAIT])->limit($limit)->orderBy('level asc,id desc')->all();
                 foreach ($messages as $msg) {
+                    $result = '000000';
                     $notice = '';
+
                     try {
-                        $result = \Yii::$container->get('sms')->send($msg);
+                        SmsService::sendNow(SecurityUtils::decrypt($msg->safeMobile), $msg->template_id, json_decode($msg->message));
                         $msg->status = SmsMessage::STATUS_SENT;
                     } catch (\Exception $ex) {
-                        $result = $notice = $ex->getMessage();
+                        $result = $ex->getCode();
+                        $notice = $ex->getMessage();
                         $msg->status = SmsMessage::STATUS_FAIL;
                     }
+
                     $ures = $msg->save(false);
+
                     $msg_str = 'ID:'.$msg->id.'; message:'.$msg->message.'; 响应码:'.$result.'; 操作结果:'.$ures.'; 消息返回:'.$notice;
                     \Yii::trace($msg_str, 'sms'); //消息格式Timestamp [IP address][User ID][Session ID][Severity Level][Category] Message Text
                 }

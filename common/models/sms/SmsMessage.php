@@ -68,12 +68,13 @@ class SmsMessage extends \yii\db\ActiveRecord
     public static function initSms(User $user, array $message, $template_id, $level = self::LEVEL_MIDDLE)
     {
         $smsmsg = new self([
-                'uid' => $user->id,
-                'template_id' => $template_id,
-                'safeMobile' => $user->safeMobile,
-                'level' => $level,
-                'message' => json_encode($message),
-            ]);
+            'uid' => $user->id,
+            'template_id' => $template_id,
+            'safeMobile' => $user->safeMobile,
+            'level' => $level,
+            'message' => json_encode($message),
+        ]);
+
         return $smsmsg;
     }
 }
