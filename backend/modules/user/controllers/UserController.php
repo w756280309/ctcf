@@ -26,6 +26,7 @@ use common\models\user\DrawRecord;
 use common\utils\SecurityUtils;
 use common\utils\StringUtils;
 use wap\modules\promotion\models\RankingPromo;
+use Wcg\Http\HeaderUtils;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\data\ArrayDataProvider;
@@ -178,14 +179,17 @@ class UserController extends BaseController
     //投资用户信息导出
     public function actionExport()
     {
-        $path  = Yii::getAlias('@backend').'/web/data/';
+        $path  = rtrim(Yii::$app->params['backend_tmp_share_path'], '/');
         if ( is_dir($path)) {
             $handle = opendir( $path );
             if ($handle) {
                 while ( false !== ( $item = readdir( $handle ) ) ) {
                     if ( $item != "." && $item != ".." ) {
                         if (false !== strpos($item, '投资用户信息') ) {
-                            return $this->redirect('/data/'.$item);
+                            $fileName = $path . '/'. $item;
+                            header(HeaderUtils::getContentDispositionHeader($item, \Yii::$app->request->userAgent));
+                            readfile($fileName);
+                            exit();
                         }
                     }
                 }

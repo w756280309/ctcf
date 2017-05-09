@@ -2,12 +2,8 @@
 namespace backend\modules\datatj\controllers;
 
 use backend\controllers\BaseController;
-use common\models\order\OnlineRepaymentPlan;
-use common\models\order\OnlineRepaymentRecord;
 use common\models\product\Issuer;
-use common\models\product\OnlineProduct;
 use Wcg\Http\HeaderUtils;
-use yii\data\Pagination;
 
 class IssuerController extends BaseController
 {
@@ -28,14 +24,17 @@ class IssuerController extends BaseController
      */
     public function actionExport($id)
     {
-        $path  = \Yii::getAlias('@backend').'/web/data/';
+        $path  = rtrim(\Yii::$app->params['backend_tmp_share_path'], '/');
         if ( is_dir($path)) {
             $handle = opendir( $path );
             if ($handle) {
                 while ( false !== ( $item = readdir( $handle ) ) ) {
                     if ( $item != "." && $item != ".." ) {
                         if (false !== strpos($item, '立合旺通') ) {
-                            return $this->redirect('/data/'.$item);
+                            $fileName = $path . '/'. $item;
+                            header(HeaderUtils::getContentDispositionHeader($item, \Yii::$app->request->userAgent));
+                            readfile($fileName);
+                            exit();
                         }
                     }
                 }
