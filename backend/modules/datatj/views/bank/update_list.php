@@ -18,8 +18,8 @@ $this->registerJsFile('/js/clipboard.min.js', ['depends' => 'yii\web\YiiAsset'])
                 </h4>
                 <ul class="breadcrumb" style="line-height: 1.5rem;">
                     <li class="span12">PS：</li>
-                    <li>1. 联动优势对于换卡记录的处理，一般20天，系统会自动设置为过期，有时也会出错，出现状态不更新的情况； </li>
-                    <li>2. 对于换卡记录为处理中的记录，除了同步我方数据外，还需我方客服向联动提交取消换卡申请邮件，邮件标题格式为"7001209+温都金服+取消XXX换卡申请"、内容格式为"XXX+XXX手机号，此用户取消换卡申请"，发送给shenhe@umpay.com，抄送p2p-op@umpay.com； </li>
+                    <li>1. 联动优势对于换卡记录的处理，一般超过20天，系统会默认为过期，可以再次提交换卡申请，但是不会更新记录的状态，查询接口返回的依然为处理中； </li>
+                    <li>2. 对于换卡记录在20天以内的且联动状态为处理中的记录，除了同步我方数据外，还需我方客服向联动提交取消换卡申请邮件，邮件标题格式为"7001209+温都金服+取消XXX换卡申请"、内容格式为"XXX+XXX手机号，此用户取消换卡申请"，发送给shenhe@umpay.com，抄送p2p-op@umpay.com； </li>
                 </ul>
             </div>
         </div>
