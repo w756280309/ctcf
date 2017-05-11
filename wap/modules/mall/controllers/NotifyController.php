@@ -216,7 +216,7 @@ class NotifyController extends Controller
 
             //插入Voucher
             $voucher = GoodsType::issueVoucher($goodsTypeSn, $user, $refData, $orderNum);
-            $voucher->save();
+            $voucher->save(false);
 
             $translation->commit();
             return [

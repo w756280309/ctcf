@@ -20,7 +20,7 @@ class Voucher extends ActiveRecord
     public function rules()
     {
         return [
-            [['goodsType_sn', 'user_id', 'ref_type', 'ref_id'], 'required'],
+            [['goodsType_sn', 'user_id'], 'required'],
             [['goodsType_sn', 'redeemIp'], 'string'],
             [['card_id', 'promo_id', 'user_id'], 'integer'],
             ['isRedeemed', 'boolean'],
