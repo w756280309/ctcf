@@ -31,6 +31,14 @@ class AdminController extends BaseController
     public function actionList()
     {
         $data = Admin::find();
+        $username = trim(Yii::$app->request->get('username'));
+        $real_name = trim(Yii::$app->request->get('real_name'));
+        if ($username) {
+            $data->andWhere(['like', 'username', $username]);
+        }
+        if ($real_name) {
+            $data->andWhere(['like', 'real_name', $real_name]);
+        }
         $pages = new Pagination(['totalCount' => $data->count(), 'pageSize' => '10']);
         $model = $data->offset($pages->offset)->limit($pages->limit)->all();
 

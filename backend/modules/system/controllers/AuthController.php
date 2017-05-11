@@ -16,6 +16,10 @@ class AuthController extends \backend\controllers\BaseController
     public function actionList()
     {
         $data = Auth::find();
+        $path =  ltrim(trim(Yii::$app->request->get('path')) , '\/');
+        if ($path) {
+            $data->andWhere(['like', 'path', $path]);
+        }
         $pages = new Pagination(['totalCount' => $data->count(), 'pageSize' => '15']);
         $model = $data->offset($pages->offset)->limit($pages->limit)->orderBy('order_code asc')->asArray()->all();
 

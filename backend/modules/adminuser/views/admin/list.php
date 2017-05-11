@@ -37,20 +37,42 @@ use common\models\AuthSys;
                         </li>    
                 </ul>
         </div>
-        
-    <!--search end -->
+
+
+        <!--search start-->
         <div class="portlet-body">
-                <table class="table table-striped table-bordered table-advance table-hover">
-			<thead>
-                                <tr>
-                                        <th>ID</th>
-                                        <th>管理员用户名</th>
-                                        <th>管理员姓名</th>
-                                        <th>管理员Email</th>
-                                        <th style="text-align: center">操作</th>
-                                </tr>
-                        </thead>
-                        <tbody>
+            <form action="/adminuser/admin/list" method="get" target="_self" id="loanFilter">
+                <table class="table">
+                    <tbody>
+                    <tr>
+                        <td><span class="title">管理员用户名</span></td>
+                        <td><input  type="text" class="m-wrap span4 " style="margin-bottom: 0px;width:200px" name='username' value="<?= Yii::$app->request->get('username') ?>" /></td>
+                        <td><span class="title">管理员姓名</span></td>
+                        <td><input  type="text" class="m-wrap span6" style="margin-bottom: 0px;width:200px" name='real_name' value="<?= Yii::$app->request->get('real_name') ?>" /></td>
+                        <td>
+                            <div align="right" style="margin-right: 20px">
+                                <input type="button"  class="btn" value="重置" style="width: 60px;" onclick="location='/adminuser/admin/list'"/>
+                                <button type='submit' class="btn blue" style="width: 100px;">查询 <i class="m-icon-swapright m-icon-white"></i></button>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </form>
+        </div>
+        <!--search end -->
+        <div class="portlet-body">
+            <table class="table table-striped table-bordered table-advance table-hover">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>管理员用户名</th>
+                        <th>管理员姓名</th>
+                        <th>管理员Email</th>
+                        <th style="text-align: center">操作</th>
+                    </tr>
+                </thead>
+                <tbody>
 			<?php
 			foreach ($model as $key => $val) {
 				?>
@@ -101,7 +123,8 @@ use common\models\AuthSys;
             });
             return false;
         });
+
     });
-</script> 
+</script>
 <?php $this->endBlock(); ?>
 

@@ -42,7 +42,27 @@ $menus = AuthSys::getMenus('S1001000');
                         </li>    
                 </ul>
         </div>
-        
+
+        <!--search start-->
+        <div class="portlet-body">
+            <form action="/system/auth/list" method="get" target="_self" id="loanFilter">
+                <table class="table">
+                    <tbody>
+                    <tr>
+                        <td><span class="title">相对地址</span></td>
+                        <td><input  type="text" class="m-wrap span4 " style="margin-bottom: 0px;width:300px" name='path' value="<?= Yii::$app->request->get('path') ?>" /></td>
+
+                        <td>
+                            <div align="right" style="margin-right: 20px">
+                                <input type="button"  class="btn" value="重置" style="width: 60px;" onclick="location='/system/auth/list'"/>
+                                <button type='submit' class="btn blue" style="width: 100px;">查询 <i class="m-icon-swapright m-icon-white"></i></button>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </form>
+        </div>
         <!--search end -->
         <div class="portlet-body">
                 <table class="table table-striped table-bordered table-advance table-hover">
@@ -113,5 +133,5 @@ $menus = AuthSys::getMenus('S1001000');
             });
         });
     });
-</script> 
+</script>
 <?php $this->endBlock(); ?>
