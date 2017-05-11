@@ -456,12 +456,14 @@ AND p.is_xs = 1
     //获取已投用户登录
     public function getInvestAndLogin($date)
     {
-        if (is_null($this->loanOrderUids)) {
-            $sql = "select distinct uid from online_order as o where o.status = 1";
-            $res = Yii::$app->db->createCommand($sql)->queryAll();
-            $this->loanOrderUids = array_column($res, 'uid');
+        if (is_null($this->loanOrderUids) || !isset($this->loanOrderUids[$date])) {
+            $sql = "select distinct uid from online_order as o where o.status = 1 and date(from_unixtime(o.order_time)) <= :date";
+            $res = Yii::$app->db->createCommand($sql, [
+                'date' => $date,
+            ])->queryAll();
+            $this->loanOrderUids[$date] = array_column($res, 'uid');
         }
-        $orderUids = $this->loanOrderUids ;
+        $orderUids = $this->loanOrderUids[$date];
         if (is_null($this->visitorUids) || !isset($this->visitorUids[$date])) {
             $this->visitorUids[$date] = Piwik::getVisitorId($date);
         }
@@ -474,12 +476,14 @@ AND p.is_xs = 1
     //获取未投有用户登录
     public function getNotInvestAndLogin($date)
     {
-        if (is_null($this->loanOrderUids)) {
-            $sql = "select distinct uid from online_order as o where o.status = 1";
-            $res = Yii::$app->db->createCommand($sql)->queryAll();
-            $this->loanOrderUids = array_column($res, 'uid');
+        if (is_null($this->loanOrderUids) || !isset($this->loanOrderUids[$date])) {
+            $sql = "select distinct uid from online_order as o where o.status = 1 and date(from_unixtime(o.order_time)) <= :date";
+            $res = Yii::$app->db->createCommand($sql, [
+                'date' => $date,
+            ])->queryAll();
+            $this->loanOrderUids[$date] = array_column($res, 'uid');
         }
-        $orderUids = $this->loanOrderUids ;
+        $orderUids = $this->loanOrderUids[$date];
         if (is_null($this->visitorUids) || !isset($this->visitorUids[$date])) {
             $this->visitorUids[$date] = Piwik::getVisitorId($date);
         }
