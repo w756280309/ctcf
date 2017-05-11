@@ -9,10 +9,20 @@ use common\models\stats\Perf;
 
 class CountController extends Controller
 {
-    //每小时更新
-    public function actionIndex()
+    /**
+     * 更新统计中间数据
+     * 注意:默认只更新最近7天数据(需要统计线下数据，线下数据可能录入不及时，预留几天)
+     *
+     * @param bool $allUpdate 是否需要全局更新
+     */
+    public function actionIndex($allUpdate = false)
     {
-        $startDate = Perf::getStartDate();
+        if ($allUpdate) {
+            $startDate = Perf::getStartDate();
+        } else {
+            $startDate = date('Y-m-d', strtotime('-7 day'));
+        }
+
         $date = date('Y-m-d');
         $time = time();
         //每次更新从第一条用户数据时间到今天的所有数据

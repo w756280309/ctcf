@@ -59,6 +59,9 @@ use yii\helpers\ArrayHelper;
  */
 class Perf extends ActiveRecord
 {
+    private $loanOrderUids;
+    private $visitorUids;
+
     //获取统计开始时间
     public static function getStartDate()
     {
@@ -453,15 +456,36 @@ AND p.is_xs = 1
     //获取已投用户登录
     public function getInvestAndLogin($date)
     {
-        $sql = "SELECT COUNT(id) FROM `user` WHERE `type` = 1 AND DATE(FROM_UNIXTIME(last_login)) = :date AND id  IN (SELECT DISTINCT o.uid FROM online_order AS o INNER JOIN online_product AS p ON o.`online_pid` = p.`id` WHERE o.`status` = 1 AND p.isTest = 0)";
-        return Yii::$app->db->createCommand($sql, ['date' => $date])->queryScalar();
+        if (is_null($this->loanOrderUids)) {
+            $sql = "select distinct uid from online_order as o where o.status = 1";
+            $res = Yii::$app->db->createCommand($sql)->queryAll();
+            $this->loanOrderUids = array_column($res, 'uid');
+        }
+        $orderUids = $this->loanOrderUids ;
+        if (is_null($this->visitorUids) || !isset($this->visitorUids[$date])) {
+            $this->visitorUids[$date] = Piwik::getVisitorId($date);
+        }
+        $visitorIds = $this->visitorUids[$date];
+
+        return count(array_intersect($visitorIds, $orderUids));
+
     }
 
     //获取未投有用户登录
     public function getNotInvestAndLogin($date)
     {
-        $sql = "SELECT COUNT(id) FROM `user` WHERE `type` = 1 AND DATE(FROM_UNIXTIME(last_login)) = :date AND id NOT IN (SELECT DISTINCT o.uid FROM online_order AS o INNER JOIN online_product AS p ON o.`online_pid` = p.`id`  WHERE o.`status` = 1 AND p.isTest = 0)";
-        return Yii::$app->db->createCommand($sql, ['date' => $date])->queryScalar();
+        if (is_null($this->loanOrderUids)) {
+            $sql = "select distinct uid from online_order as o where o.status = 1";
+            $res = Yii::$app->db->createCommand($sql)->queryAll();
+            $this->loanOrderUids = array_column($res, 'uid');
+        }
+        $orderUids = $this->loanOrderUids ;
+        if (is_null($this->visitorUids) || !isset($this->visitorUids[$date])) {
+            $this->visitorUids[$date] = Piwik::getVisitorId($date);
+        }
+        $visitorIds = $this->visitorUids[$date];
+
+        return count(array_diff($visitorIds, $orderUids));
     }
 
     //获取代金券
