@@ -52,6 +52,8 @@ class UserStats
                 '年龄',
                 '注册位置',
                 '注册渠道',
+                '注册IP',
+                '注册IP位置',
                 '首投时间',
                 '当前积分',
                 '会员等级',
@@ -152,6 +154,8 @@ class UserStats
                 $regFrom = '未知来源注册';
             }
             $data[$key]['regFrom'] = $regFrom;
+            $data[$key]['registerIp'] = $user->registerIp ? $user->registerIp : '---';
+            $data[$key]['regLocation'] = $user->regLocation ? $user->regLocation : '---';
             $data[$key]['firstInvestDate'] = $user->info ? $user->info->firstInvestDate : '';
             $data[$key]['points'] = intval($user->points);
             $data[$key]['level'] = $user->getLevel();

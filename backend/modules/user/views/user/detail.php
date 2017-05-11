@@ -145,6 +145,11 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => YiiAsse
                 <tr>
                     <td><strong>注册位置</strong></td>
                     <td><?= $normalUser['regContext'] ? $normalUser['regContext'] : '---' ?></td>
+                    <td><strong>注册IP位置</strong></td>
+                    <td>
+                        <?= $normalUser['regLocation'] ? $normalUser['regLocation'] : '---' ?>&nbsp;&nbsp;&nbsp;
+                        <a href="/user/user/update-reg-location?user_id=<?= $normalUser->id ?>">修改</a>
+                    </td>
                 </tr>
             </table>
 
@@ -378,16 +383,19 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => YiiAsse
             getDrawList('/user/user/detail?id=<?= $normalUser->id?>&key=draw_record')
         }
     });
+
     $('.loan_order_nav').click(function(){
         if (!$('#loan_order_list').html()) {
             getLoanOrderList('/order/onlineorder/detailt?id=<?= $normalUser->id?>')
         }
     });
+
     $('.credit_order_nav').click(function(){
         if (!$('#credit_order_list').html()) {
             getCreditOrderList('/user/user/credit-records?id=<?= $normalUser->id?>')
         }
     });
+
     $('.credit_note_nav').click(function(){
         if (!$('#credit_note_list').html()) {
             getCreditNoteList('/user/user/detail?id=<?= $normalUser->id?>&key=credit_note')

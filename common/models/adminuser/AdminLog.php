@@ -62,7 +62,7 @@ class AdminLog extends ActiveRecord
     /**
      * 实例化日志对象
      * @param ActiveRecord|array $object    ActiveRecord及其子类对象或包含tableName、primaryKey的数组
-     * @param User $user  当前后台登陆用户
+     * @param User $user  当前后台登录用户
      * @param array $changedAttributes  变更属性数组
      * @return AdminLog
      * @throws \Exception
@@ -95,7 +95,7 @@ class AdminLog extends ActiveRecord
             $ip = Yii::$app->request->getUserIP();
             $user = $user ?: Yii::$app->user;
             if ($user->isGuest) {
-                throw new \Exception('操作标的必须登陆');
+                throw new \Exception('操作标的必须登录');
             }
             $admin_id = $user->identity->getId();
         }

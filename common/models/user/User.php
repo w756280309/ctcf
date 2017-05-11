@@ -63,6 +63,7 @@ use Zii\Validator\CnMobileValidator;
  * @property string safeIdCard          加密后的身份证(目前身份证号系统只支持18位)
  * @property string birthdate           生日，形如19920101
  * @property int    promoId             注册参与的活动ID
+ * @property string regLocation         注册IP位置
  */
 class User extends ActiveRecord implements IdentityInterface, UserInterface
 {
@@ -227,6 +228,7 @@ class User extends ActiveRecord implements IdentityInterface, UserInterface
             'editpass' => ['password_hash', 'trade_pwd', 'auth_key'],
             'login' => ['last_login'],
             'kuaijie' => ['kuaijie_status'],
+            'updateRegLocation' => ['regLocation'],
         ];
     }
 
@@ -273,6 +275,8 @@ class User extends ActiveRecord implements IdentityInterface, UserInterface
             [['org_name'], 'required'],
             [['passwordLastUpdatedTime'], 'safe'],
             [['safeMobile', 'safeIdCard', 'birthdate'], 'string'],
+            ['regLocation', 'required', 'on' => 'updateRegLocation'],
+            ['regLocation', 'string', 'on' => 'updateRegLocation'],
         ];
     }
 
@@ -358,6 +362,7 @@ class User extends ActiveRecord implements IdentityInterface, UserInterface
             'safeIdCard' => '加密身份证号',
             'birthdate' => '生日',
             'promoId' => '注册参与的活动ID',
+            'regLocation' => '注册IP位置信息',
         ];
     }
 

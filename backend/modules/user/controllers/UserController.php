@@ -6,6 +6,7 @@ use backend\controllers\BaseController;
 use backend\modules\user\core\v1_0\UserAccountBackendCore;
 use common\lib\err\Err;
 use common\lib\user\UserStats;
+use common\models\adminuser\AdminLog;
 use common\models\affiliation\Affiliator;
 use common\models\affiliation\UserAffiliation;
 use common\models\bank\Bank;
@@ -982,6 +983,24 @@ IN (" . implode(',', $recordIds) . ")")->queryAll();
         return $this->render('draw_list', ['dataProvider' => $dataProvider, 'pages' => $pages]);
     }
 
+    /**
+     * 更改user.regLocation.
+     */
+    public function actionUpdateRegLocation($user_id)
+    {
+        $user = $this->findOr404(User::class, $user_id);
+        $user->scenario = 'updateRegLocation';
+
+        if ($user->load(Yii::$app->request->post()) && $user->validate()) {
+            $user->save(false);
+
+            AdminLog::initNew($user)->save(false);
+
+            return $this->redirect('/user/user/detail?id='.$user->id);
+        }
+
+        return $this->render('update_reg_location', ['user' => $user]);
+    }
 
     private function DrawLimitCount($drawTimes)
     {
