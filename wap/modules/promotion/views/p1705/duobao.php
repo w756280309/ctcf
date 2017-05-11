@@ -57,9 +57,27 @@ $next = Yii::$app->request->hostInfo.'/promotion/p1705/duobao';
     <?php if (!empty($promoLotteryQuery)) { ?>
         <div class="userList">
             <ul class="listBox">
-                <?php foreach ($promoLotteryQuery as $query) { ?>
-                    <li class="clearfix">
-                        <span class="lf"><?= StringUtils::obfsMobileNumber(SecurityUtils::decrypt($query->user->safeMobile)) ?></span>
+                <?php
+                $mobile = [
+                    '0' => '138******',
+                    '1' => '136******',
+                    '2' => '130******'
+                ];
+                foreach ($promoLotteryQuery as $query) { ?>
+                <li class="clearfix">
+
+                    <?php
+
+                        if ($query->source == "fake") {
+                            $crc32_id = crc32($query->id);
+                    ?>
+                        <span class="lf"><?= $mobile[substr($crc32_id, 0, 4)%3] . substr($crc32_id, 0, 2)?></span>
+                    <?php
+                        } else {
+                    ?>
+                        <span class="lf"><?= StringUtils::obfsMobileNumber($query->user->getMobile()) ?></span>
+                    <?php  } ?>
+
                         <span class="rg"><?= date('n-d', $query->created_at) ?> &nbsp;&nbsp;&nbsp;&nbsp;<?= date('H:i:s', $query->created_at) ?></span>
                     </li>
                 <?php } ?>

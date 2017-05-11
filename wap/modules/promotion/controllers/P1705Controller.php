@@ -171,8 +171,10 @@ class P1705Controller extends Controller
         //获取最近参加的10个用户记录 如果记录<10 则null
         $promoLotteryQuery = [];
         if ($num >= 10) {
+            $p = PromoLotteryTicket::tableName();
+            $u = User::tableName();
             $promoLotteryQuery = PromoLotteryTicket::find()
-                ->innerJoinWith('user')
+                ->leftJoin('user', "$p.user_id = $u.id")
                 ->where(['promo_id' => $promo->id])
                 ->limit(10)
                 ->orderBy('id desc')

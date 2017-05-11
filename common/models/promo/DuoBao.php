@@ -176,7 +176,7 @@ class DuoBao
         return $code;
     }
 
-    private function joinSequence()
+    public function joinSequence()
     {
         $db = Yii::$app->db;
 
