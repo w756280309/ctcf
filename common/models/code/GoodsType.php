@@ -83,12 +83,13 @@ class GoodsType extends ActiveRecord
      *
      * @param string     $sn
      * @param User       $user
-     * @param null|array $ref
+     * @param null|array $ref   ['id', 'type']
+     * @param string     $orderNum      兑吧订单号
      *
      * @return Voucher
      * @throws \Exception
      */
-    public static function issueVoucher($sn, User $user, $ref = null)
+    public static function issueVoucher($sn, User $user, $ref = null, $orderNum = null)
     {
         $goodsType = GoodsType::fetchOneBySn(['sn' => $sn]);
 
@@ -97,20 +98,28 @@ class GoodsType extends ActiveRecord
             throw new \Exception('商品不存在');
         }
 
-        //检测是否为已发过的voucher
-        if (null !== $ref) {
+        if (is_null($ref)) {
+            if (is_null($orderNum)) {
+                throw new \Exception('当ref为空时候orderNum不能为空');
+            }
+            $voucher = Voucher::findOne(['orderNum' => $orderNum]);
+            if (!is_null($voucher)) {
+                throw new \Exception('该订单(orderNum='.$orderNum.')已存在，不能重复发放');
+            }
+        } else {
             $voucher = Voucher::find()
                 ->where(['ref_type' => $ref['type']])
                 ->andWhere(['ref_id' => $ref['id']])
                 ->one();
             if (null !== $voucher) {
-                throw new \Exception('该订单已存在，不能重复发放');
+                throw new \Exception("该订单(ref_type={$ref['type']}, ref_id={$ref['id']})已存在，不能重复发放");
             }
         }
+
         //todo elseif 使用库存和卡密的判断
 
         //初始化一条Voucher
-        $voucher = Voucher::initNew($goodsType, $user, $ref);
+        $voucher = Voucher::initNew($goodsType, $user, $ref, $orderNum);
 
         return $voucher;
     }

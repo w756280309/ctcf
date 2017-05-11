@@ -185,13 +185,12 @@ class NotifyController extends Controller
         $translation = Yii::$app->db->beginTransaction();
         try {
             $result = ThirdPartyConnect::parseCreditConsume($appKey, $appSecret, $requestParams);
-            //$orderNum = $result['orderNum'];
+            $orderNum = $result['orderNum'];
             $publicId = $requestParams['uid'];
             $goodsTypeSn = $result['params'];
             $developBizId = $result['developBizId'];
             if (
-                //empty($orderNum)
-                empty($developBizId)
+                empty($orderNum)
                 || empty($publicId)
                 || empty($goodsTypeSn)
             ) {
@@ -206,12 +205,17 @@ class NotifyController extends Controller
             if (empty($user)) {
                 throw new \Exception('不是温都会员');
             }
-            $order = PointOrder::findOne(['sn' => $developBizId]);
-            if (is_null($order)) {
-                throw new \Exception('订单不存在');
+
+            $refData = null;
+            if (!empty($developBizId)) {
+                $order = PointOrder::findOne(['sn' => $developBizId]);
+                if (!is_null($order)) {
+                    $refData = ['type' => GoodsType::REF_TYPE_MALL_ORDER, 'id' => $order->id];
+                }
             }
+
             //插入Voucher
-            $voucher = GoodsType::issueVoucher($goodsTypeSn, $user, ['type' => GoodsType::REF_TYPE_MALL_ORDER, 'id' => $order->id]);
+            $voucher = GoodsType::issueVoucher($goodsTypeSn, $user, $refData, $orderNum);
             $voucher->save();
 
             $translation->commit();

@@ -10,6 +10,8 @@ use yii\db\ActiveRecord;
 
 /**
  * Class Voucher
+ *
+ * @property string     $orderNum       兑吧订单ID, 是虚拟商品充值ID, 和扣除积分的orderNum 没有关系
  */
 class Voucher extends ActiveRecord
 {
@@ -40,6 +42,7 @@ class Voucher extends ActiveRecord
             'redeemTime' => '领奖时间',
             'redeemIp' => '领取人IP',
             'createTime' => '创建时间',
+            'orderNum' => '兑吧订单号',
         ];
     }
 
@@ -132,13 +135,15 @@ class Voucher extends ActiveRecord
      * @param GoodsType $goodsType 商品
      * @param User      $user      用户
      * @param array     $ref       关联信息 ['type' => '', 'id' => '']
+     * @param string    $orderNum   兑吧订单号
      *
      * @return Voucher
      */
-    public static function initNew(GoodsType $goodsType, User $user, $ref)
+    public static function initNew(GoodsType $goodsType, User $user, $ref, $orderNum = null)
     {
         return new self([
             'goodsType_sn' => $goodsType->sn,
+            'orderNum' => $orderNum,
             'ref_type' => isset($ref['type']) ? $ref['type'] : null,
             'ref_id' => isset($ref['id']) ? $ref['id'] : null,
             'user_id' => $user->id,
