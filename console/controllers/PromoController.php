@@ -47,7 +47,7 @@ class PromoController extends Controller
      */
     public function actionAddVirtualNum()
     {
-        $startTime = '2017-05-10';
+        $startTime = '2017-05-11';
         $endTime = '2017-05-12';
         $promo = RankingPromo::findOne(['key' => 'duobao0504']);
         if ($promo) {
@@ -123,6 +123,68 @@ class PromoController extends Controller
 
         echo "\n本次虚拟的个数：";
         echo $num;
+        echo "\n";
+    }
+
+    /**
+     * 仅用于0元夺宝活动增加虚拟参与人数
+     * 运行时间 5.13-5.14 8点-23点
+     * 5分钟运行一次 随机增加1-6条记录
+     * 每条记录随机间隔10-50s
+     * $totalTicketNum 输入总虚拟抽奖人数
+     * 赵瑞璞要求虚拟到1605
+     */
+    public function actionAddFakeNum ($totalTicketNum) {
+        $promo = RankingPromo::findOne(['key' => 'duobao0504']);
+        if ($promo) {
+            //判断活动是否上线
+            if ($promo->isOnline) {
+                $date = date('Y-m-d');
+                if ($date < $promo->startTime) {
+                    return false;
+                }
+                if (!empty($promo->endTime) && $date > $promo->endTime) {
+                    return false;
+                }
+            }
+            $promoAtfr = new DuoBao($promo);
+            //总的抽奖数
+            $totalTicket = $promoAtfr->totalTicketCount();
+            if ($totalTicket >= $totalTicketNum) {
+                echo "已经达到设定抽奖人数上限";
+                echo "\n";
+                return false;
+            }
+            $connection = Yii::$app->db;
+            $addNum = random_int(1 , 6);
+            $num = $sequence = 0;
+            for ($i = 1; $i <= $addNum; $i ++) {
+                $transaction = $connection->beginTransaction();
+                try {
+                    //更新sequence
+                    $sequence = $promoAtfr->joinSequence();
+                    if ($sequence > $promoAtfr::TOTAL_JOINER_COUNT || $sequence > $totalTicketNum) {
+                        throw new \Exception('参与人员已满额或者虚拟抽奖数达到上限');
+                    }
+                    //插入ticket
+                    $ticket = new PromoLotteryTicket();
+                    $ticket->user_id = '0';
+                    $ticket->source = 'fake';
+                    $ticket->promo_id = $promo->id;
+                    $ticket->joinSequence = $sequence;
+                    $ticket->save(false);
+                    $num++;
+                    $transaction->commit();
+                } catch (\Exception $e) {
+                    $transaction->rollBack();
+                    exit($e->getMessage());
+                }
+                //解决活动页面注册时间显示接近的问题
+                sleep(random_int(10 , 50));
+            }
+            echo "\n本次虚拟的个数：";
+            echo $num;
+        }
         echo "\n";
     }
 }
