@@ -113,6 +113,17 @@ class PointRecord extends ActiveRecord
     }
 
     /**
+     * 获取积分数值，使用金额显示样式二:
+     * 增加积分显示 + 数值
+     * 减少积分显示 - 数值
+     * @return int
+     */
+    public function getDelta()
+    {
+        return (int)($this->incr_points > 0 ? $this->incr_points : -1 * $this->decr_points);
+    }
+
+    /**
      * 获得所有扣除积分的操作类型
      *
      * @return array

@@ -47,42 +47,10 @@ $this->registerCssFile(ASSETS_BASE_URI.'css/pagination.css', ['depends' => Front
 
         <ul class="detail_content">
             <?php foreach ($points as $point) { ?>
-                <?php
-                    switch ($point->ref_type) {
-                        case PointRecord::TYPE_LOAN_ORDER:
-                            $message = '投资获得';
-                            $isIn = true;
-                            break;
-                        case PointRecord::TYPE_FIRST_LOAN_ORDER_POINTS_1:
-                            $message = '首投奖励';
-                            $isIn = true;
-                            break;
-                        case PointRecord::TYPE_POINT_FA_FANG:
-                        case PointRecord::TYPE_MALL_INCREASE:
-                            $message = $point->remark;
-                            $isIn = true;
-                            break;
-                        case PointRecord::TYPE_BACKEND_BATCH:
-                            $message = empty($point->remark) ? '投资奖励' : $point->remark;
-                            $isIn = true;
-                            break;
-                        case PointRecord::TYPE_CHECK_IN:
-                            $isIn = true;
-                            $message = '签到获得';
-                            break;
-                        case PointRecord::TYPE_PROMO:
-                            $message = '活动获得';
-                            $isIn = true;
-                            break;
-                        default:
-                            $message = '兑换商品';
-                            $isIn = false;
-                    }
-                ?>
                 <li class="items">
-                    <div class="head1 lf"><?= $message ?></div>
+                    <div class="head1 lf"><?= $point->getTypeName($point->ref_type) ?></div>
                     <div class="head2 lf"><?= $point->recordTime ?></div>
-                    <div class="head3 lf <?= $isIn ? 'point_a' : 'point_b' ?>"><?= $isIn ? ('+'.StringUtils::amountFormat2($point->incr_points)) : ('-'.StringUtils::amountFormat2($point->decr_points)) ?></div>
+                    <div class="head3 lf <?= $point->decr_points ? 'point_b' : 'point_a' ?>"><?= $point->getDelta() > 0 ? '+' . $point->getDelta() : $point->getDelta() ?></div>
                     <div class="head4 lf"><?= StringUtils::amountFormat2($point->final_points) ?></div>
                     <div class="head5 lf">
                         <?php $order = $point->fetchOrder(); ?>

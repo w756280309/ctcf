@@ -36,14 +36,15 @@ class PointController extends BaseController
             ->where(['user_id' => $this->getAuthedUser()->id])
             ->andWhere(['isOffline' => false])
             ->orderBy(['id' => SORT_DESC]);
-
         $pg = \Yii::$container->get('paginator')->paginate($query, $page, $size);
-        $points = $pg->getItems();
-
+        $points = $query
+            ->limit($pg->limit)
+            ->offset($pg->offset)
+            ->orderBy(['id' => SORT_DESC])
+            ->all();
         $tp = $pg->getPageCount();
         $code = ($page > $tp) ? 1 : 0;
         $message = ($page > $tp) ? '数据错误' : '消息返回';
-
         if (Yii::$app->request->isAjax) {
             $this->layout = false;
             $html = $this->render('_list', ['points' => $points]);
