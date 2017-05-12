@@ -27,25 +27,23 @@
         "bower-asset/jquery": "1.12.*",
         "wcg/libs": "dev-master",
         "paragonie/random_compat": "1.2.0",
-        "symfony/process":">=3.2",
+        "symfony/process":"3.*",
         "yiisoft/yii2-redis": "^2.0"
     },
     "require-dev": {
-        "yiisoft/yii2-codeception": "*",
         "yiisoft/yii2-debug": "*",
         "yiisoft/yii2-gii": "*",
         "yiisoft/yii2-faker": "*",
-        "apigen/apigen": "^4.1",
-        "nikic/php-parser": "2.0.0"
+        "phpro/grumphp": "0.11.5"
     },
     "config": {
         "process-timeout": 1800,
-        "secure-http":false
-    },
-    "extra": {
-        "asset-installer-paths": {
-            "npm-asset-library": "vendor/npm",
-            "bower-asset-library": "vendor/bower"
+        "secure-http": false,
+        "fxp-asset": {
+            "installer-paths": {
+                "npm-asset-library": "vendor/npm",
+                "bower-asset-library": "vendor/bower"
+            }
         }
     },
     "repositories":[
