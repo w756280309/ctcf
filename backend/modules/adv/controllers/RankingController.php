@@ -4,6 +4,9 @@ namespace backend\modules\adv\controllers;
 
 use backend\controllers\BaseController;
 use common\models\adminuser\AdminLog;
+use common\models\promo\DuoBao;
+use common\models\promo\PromoLotteryTicket;
+use common\models\user\User;
 use wap\modules\promotion\models\RankingPromo;
 use Yii;
 use yii\data\ActiveDataProvider;
@@ -173,5 +176,56 @@ class RankingController extends BaseController
             'code' => $code ? 0 : 1,
             'message' => $code ? '操作成功' : '操作失败',
         ];
+    }
+
+    /**
+     * 0元夺宝增加参与活动人数
+     * TODO 可删除，临时代码
+     */
+    public function actionAddFake()
+    {
+        $promo = $this->findOr404(RankingPromo::class, ['key' => 'duobao0504']);
+        $promoAtfr = new DuoBao($promo);
+        ///判断活动时间,1未开始,2活动中,3已结束
+        if ($promoAtfr->promoTime() != 2) {
+            Yii::$app->session->setFlash('info', '不再活动时间范围内！');
+        }
+        //参与记录
+        $p = PromoLotteryTicket::tableName();
+        $u = User::tableName();
+        $promoLottery = PromoLotteryTicket::find()
+            ->leftJoin('user', "$p.user_id = $u.id")
+            ->where(['promo_id' => $promo->id])
+            ->limit(10)
+            ->orderBy('created_at desc')
+            ->all();
+        if (Yii::$app->request->isPost) {
+            $connection = Yii::$app->db;
+            $transaction = $connection->beginTransaction();
+            try {
+                //更新sequence
+                $sequence = $promoAtfr->joinSequence();
+                if ($sequence > $promoAtfr::TOTAL_JOINER_COUNT) {
+                    throw new \Exception('参与人员已满额或者虚拟抽奖数达到上限');
+                }
+                //插入ticket
+                $ticket = new PromoLotteryTicket();
+                $ticket->user_id = '0';
+                $ticket->source = 'fake';
+                $ticket->promo_id = $promo->id;
+                $ticket->joinSequence = $sequence;
+                if ($ticket->save(false)) {
+                    Yii::$app->session->setFlash('info', '成功增加1条记录');
+                }
+                $transaction->commit();
+            } catch (\Exception $e) {
+                $transaction->rollBack();
+                exit($e->getMessage());
+            }
+        }
+
+        return $this->render('addfake', [
+            'promoLottery' => $promoLottery,
+        ]);
     }
 }

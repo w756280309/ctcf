@@ -177,7 +177,7 @@ class P1705Controller extends Controller
                 ->leftJoin('user', "$p.user_id = $u.id")
                 ->where(['promo_id' => $promo->id])
                 ->limit(10)
-                ->orderBy('id desc')
+                ->orderBy('created_at desc')
                 ->all();
         }
 
