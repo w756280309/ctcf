@@ -22,9 +22,7 @@ class CountController extends Controller
         } else {
             $startDate = date('Y-m-d', strtotime('-7 day'));
         }
-        $startDate = '2017-04-10';
-        $date = '2017-04-15';
-        //$date = date('Y-m-d');
+        $date = date('Y-m-d');
         $time = time();
         //每次更新从第一条用户数据时间到今天的所有数据
         while ($startDate < $date) {
