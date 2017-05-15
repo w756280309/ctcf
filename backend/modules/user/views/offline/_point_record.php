@@ -24,10 +24,13 @@ use yii\grid\GridView;
                 <select name="ref_type" id="point_search_form_type" m-wrap span6>
                     <option value="">---全部---</option>
                     <?php
-                    foreach ($types as $type) {
-                        ?>
-                        <option value="<?= $type['ref_type'] ?>" <?= ($type === $type['ref_type']) ? "selected='selected'" : "" ?> ><?= PointRecord::getTypeName($type['ref_type']) ?></option>
-                    <?php } ?>
+                        $types = ['offline_loan_order', 'offline_point_order', 'offline_order_delete', 'offline_order_point_cancel'];
+                        foreach ($types as $type) {
+                    ?>
+                        <option value="<?= $type ?>" <?= ($type === $ref_type) ? "selected='selected'" : "" ?> >
+                            <?= PointRecord::getTypeName($type) ?>
+                        </option>
+                     <?php } ?>
                 </select>
             </td>
             <td>

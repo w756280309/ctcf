@@ -6,15 +6,15 @@ use yii\grid\GridView;
     <a class="btn green" href="javascript:openwin('/coupon/coupon/allow-issue-list?uid=<?= $user->id ?>' , 800, 400)">
         发放代金券
     </a>
+    <span style="padding-left: 20px;">可用金额(元)：<?= isset($sumCoupon) ? StringUtils::amountFormat2($sumCoupon) : '0' ?></span>
+    <span style="padding-left: 20px;">已用金额(元)：<?= isset($CouponUsed) ? StringUtils::amountFormat2($CouponUsed) : '0' ?></span>
 
 </div>
 <div class="portlet-body">
 
     <table class="table">
         <tr>
-            <td>
-                <span>可用金额(元)：<?= isset($sumCoupon) ? StringUtils::amountFormat2($sumCoupon) : '0' ?></span> <span>&nbsp &nbsp &nbsp已用金额(元)：<?= isset($CouponUsed) ? StringUtils::amountFormat2($CouponUsed) : '0' ?></span>
-            </td>
+
             <td>
                 <span class="title">状态</span>
                 <select name="isUsed" id="coupon_search_form_type" m-wrap span6>

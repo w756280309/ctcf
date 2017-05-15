@@ -230,7 +230,13 @@ class CouponController extends BaseController
         $sumCoupon = UserCoupon::findCouponInUse($user->id , date('Y-m-d'))->sum('amount');
         $CouponUsed = UserCoupon::findCouponUsed($user->id)->sum('amount');
 
-        return $this->renderFile('@backend/modules/coupon/views/coupon/user_list.php', ['dataProvider' => $dataProvider, 'user' => $user, 'sumCoupon' => $sumCoupon, 'CouponUsed' =>$CouponUsed]);
+        return $this->renderFile('@backend/modules/coupon/views/coupon/user_list.php', [
+            'dataProvider' => $dataProvider,
+            'user' => $user,
+            'sumCoupon' => $sumCoupon,
+            'CouponUsed' => $CouponUsed,
+            'isUsed' => $isUsed,
+        ]);
     }
 
     /**

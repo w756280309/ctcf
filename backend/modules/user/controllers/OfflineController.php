@@ -89,25 +89,19 @@ class OfflineController extends BaseController
         if ($ref_type != null) {
             $query->andWhere(['ref_type' => $ref_type]);
         }
-
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
             'pagination' => [
                 'pageSize' => 10,
             ],
         ]);
-
         $orderIds = [];
         $orders = [];
-        $type_sql = "SELECT distinct(`ref_type`) FROM `point_record`";
-        $db = Yii::$app->db;
-        $type = $db->createCommand($type_sql)->queryAll();
         foreach ($dataProvider->models as $model) {
             if (PointRecord::TYPE_OFFLINE_BUY_ORDER === $model->ref_type) {
                 $orderIds[] = $model->ref_id;
             }
         }
-
         if (!empty($orderIds)) {
             $orders = OfflineOrder::find()
                 ->where(['id' => $orderIds])
@@ -119,8 +113,8 @@ class OfflineController extends BaseController
             'dataProvider' => $dataProvider,
             'id' => $id,
             'orders' => $orders,
-            'types' => $type,
             'user' => $user,
+            'ref_type' => $ref_type,
         ]);
     }
 
