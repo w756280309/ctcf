@@ -13,7 +13,7 @@ $act5 = date('Y-m-d') >= '2017-05-20' && date('Y-m-d') <= '2017-05-31';
 $url1 = date('Y-m-d') >= '2017-04-29' ? '/promotion/p1705/may-day' : null;
 $url2 = date('Y-m-d') >= '2017-05-04' ? '/promotion/p1705/youth-day' : null;
 $url3 = date('Y-m-d') >= '2017-05-10' ? '/promotion/p1705/mother-day' : null;
-$url4 = date('Y-m-d') >= '2017-05-15' ? '/promotion/p1705/year-day' : null;
+$url4 = date('Y-m-d') >= '2017-05-15' ? '/mall/portal/guest?dbredirect=https%3A%2F%2Factivity.m.duiba.com.cn%2Fquestion%2Findex%3Fid%3D2155353%26dblanding%3Dhttps%253A%252F%252Factivity.m.duiba.com.cn%252FactivityShare%252FgetActivityShareInfo%253FoperatingActivityId%253D2155353' : null;
 $url5 = date('Y-m-d') >= '2017-05-20' ? '/promotion/p1705/520-day' : null;
 
 ?>
