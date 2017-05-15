@@ -133,8 +133,20 @@ class PromoController extends Controller
      * 每条记录随机间隔10-50s
      * $totalTicketNum 输入总虚拟抽奖人数
      * 赵瑞璞要求虚拟到1605
+     * ----------------------------
+     * 方法修改
+     * 输入数据验证int
+     * 运行时间今日15号4-9点
+     * 每条记录随机间隔10-40s
+     * $totalTicketNum 输入总虚拟抽奖人数
+     * 不做额外校验
      */
     public function actionAddFakeNum ($totalTicketNum) {
+        if (!is_numeric($totalTicketNum)) {
+            echo "请输入一个数字";
+            echo "\n";
+            return false;
+        }
         $promo = RankingPromo::findOne(['key' => 'duobao0504']);
         if ($promo) {
             //判断活动是否上线
@@ -156,7 +168,7 @@ class PromoController extends Controller
                 return false;
             }
             $connection = Yii::$app->db;
-            $addNum = random_int(1 , 6);
+            $addNum = random_int(1 , 8);
             $num = $sequence = 0;
             for ($i = 1; $i <= $addNum; $i ++) {
                 $transaction = $connection->beginTransaction();
@@ -180,7 +192,7 @@ class PromoController extends Controller
                     exit($e->getMessage());
                 }
                 //解决活动页面注册时间显示接近的问题
-                sleep(random_int(10 , 50));
+                sleep(random_int(10 , 30));
             }
             echo "\n本次虚拟的个数：";
             echo $num;
