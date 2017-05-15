@@ -56,6 +56,7 @@ use yii\helpers\ArrayHelper;
  * @property double $xsNewInvSum        新手标的新增投资用户的投资金额
  * @property int    $xsInvCount         新手标的总投资人数
  * @property double $xsInvSum           新手标的总投资金额
+ * @property int    $checkIn            签到人数
  */
 class Perf extends ActiveRecord
 {
@@ -532,7 +533,7 @@ AND p.is_xs = 1
         $today = [];
         $model = new Perf();
         $today['bizDate'] = $startDate;
-        $funList = ['reg', 'idVerified', 'qpayEnabled', 'investor', 'newRegisterAndInvestor', 'newInvestor', 'newRegAndNewInveAmount', 'preRegAndNewInveAmount', 'chargeViaPos', 'chargeViaEpay', 'drawAmount', 'investmentInWyj', 'investmentInWyb', 'onlineInvestment', 'offlineInvestment', 'totalInvestment', 'successFound', 'rechargeMoney', 'rechargeCost', 'draw', 'investAndLogin', 'notInvestAndLogin', 'repayMoney', 'repayLoanCount', 'repayUserCount', 'licaiNewInvCount', 'licaiNewInvSum', 'licaiInvCount', 'licaiInvSum', 'xsNewInvCount', 'xsNewInvSum', 'xsInvCount', 'xsInvSum'];
+        $funList = ['reg', 'idVerified', 'qpayEnabled', 'investor', 'newRegisterAndInvestor', 'newInvestor', 'newRegAndNewInveAmount', 'preRegAndNewInveAmount', 'chargeViaPos', 'chargeViaEpay', 'drawAmount', 'investmentInWyj', 'investmentInWyb', 'onlineInvestment', 'offlineInvestment', 'totalInvestment', 'successFound', 'rechargeMoney', 'rechargeCost', 'draw', 'investAndLogin', 'notInvestAndLogin', 'repayMoney', 'repayLoanCount', 'repayUserCount', 'licaiNewInvCount', 'licaiNewInvSum', 'licaiInvCount', 'licaiInvSum', 'xsNewInvCount', 'xsNewInvSum', 'xsInvCount', 'xsInvSum', 'checkIn'];
         foreach ($funList as $field) {
             $method = 'get' . ucfirst($field);
             $model->$field = $model->{$method}($startDate);
@@ -571,7 +572,8 @@ SUM(licaiInvSum) AS licaiInvSum,
 SUM(xsNewInvCount) AS xsNewInvCount,
 SUM(xsNewInvSum) AS xsNewInvSum,
 SUM(xsInvCount) AS xsInvCount,
-SUM(xsInvSum) AS xsInvSum
+SUM(xsInvSum) AS xsInvSum,
+SUM(checkIn) as checkIn
 FROM perf WHERE DATE_FORMAT(bizDate,'%Y-%m-%d') < DATE_FORMAT(NOW(),'%Y-%m-%d') AND DATE_FORMAT(bizDate,'%Y-%m')=DATE_FORMAT(NOW(),'%Y-%m') GROUP BY DATE_FORMAT(bizDate,'%Y-%m')")->queryOne();
         //当天数据
         $today = Perf::getTodayCount();
@@ -602,6 +604,7 @@ FROM perf WHERE DATE_FORMAT(bizDate,'%Y-%m-%d') < DATE_FORMAT(NOW(),'%Y-%m-%d') 
         $month['xsNewInvSum'] = $month['xsNewInvSum'] + $today['xsNewInvSum'];
         $month['xsInvCount'] = $month['xsInvCount'] + $today['xsInvCount'];
         $month['xsInvSum'] = $month['xsInvSum'] + $today['xsInvSum'];
+        $month['checkIn'] = $month['checkIn'] + $today['checkIn'];
         return $month;
     }
 
@@ -739,5 +742,12 @@ FROM perf WHERE DATE_FORMAT(bizDate,'%Y-%m-%d') < DATE_FORMAT(NOW(),'%Y-%m-%d') 
         ];
 
         return $statsData;
+    }
+
+    //统计签到人数
+    public function getCheckIn($date)
+    {
+        $sql = "select count(distinct user_id) from check_in where checkDate = :date";
+        return Yii::$app->db->createCommand($sql, ['date' => $date])->queryScalar();
     }
 }

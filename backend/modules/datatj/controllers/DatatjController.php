@@ -157,6 +157,7 @@ FROM perf WHERE DATE_FORMAT(bizDate,'%Y-%m') < DATE_FORMAT(NOW(),'%Y-%m')  GROUP
                 '非当日注册当日投资金额',
                 '已投用户登录数',
                 '未投用户登录数',
+                '签到用户数',
                 '融资项目',
                 '理财计划新增投资人数',
                 '理财计划新增投资用户的投资金额',
@@ -188,6 +189,7 @@ FROM perf WHERE DATE_FORMAT(bizDate,'%Y-%m') < DATE_FORMAT(NOW(),'%Y-%m')  GROUP
                 floatval($data['preRegAndNewInveAmount']),
                 intval($data['investAndLogin']),
                 intval($data['notInvestAndLogin']),
+                intval($data['checkIn']),
                 intval($data['successFound']),
                 intval($data['licaiNewInvCount']),
                 floatval($data['licaiNewInvSum']),
@@ -239,7 +241,8 @@ SUM(licaiInvSum) AS licaiInvSum,
 SUM(xsNewInvCount) AS xsNewInvCount,
 SUM(xsNewInvSum) AS xsNewInvSum,
 SUM(xsInvCount) AS xsInvCount,
-SUM(xsInvSum) AS xsInvSum
+SUM(xsInvSum) AS xsInvSum,
+SUM(checkIn) as checkIn
 FROM perf WHERE DATE_FORMAT(bizDate,'%Y-%m') < DATE_FORMAT(NOW(),'%Y-%m')  GROUP BY DATE_FORMAT(bizDate,'%Y-%m') ORDER BY DATE_FORMAT(bizDate,'%Y-%m') DESC";
         $history = Yii::$app->db->createCommand($sql)->queryAll();
         $allData = array_merge([$month], $history);
@@ -255,6 +258,7 @@ FROM perf WHERE DATE_FORMAT(bizDate,'%Y-%m') < DATE_FORMAT(NOW(),'%Y-%m')  GROUP
                 Yii::$app->params['pc_cat'][1] . '销售额',
                 '注册用户',
                 '实名认证',
+                '签到人次',
                 '绑卡用户数',
                 '投资人数',
                 '当日注册当日投资人数',
@@ -284,6 +288,7 @@ FROM perf WHERE DATE_FORMAT(bizDate,'%Y-%m') < DATE_FORMAT(NOW(),'%Y-%m')  GROUP
                 floatval($data['investmentInWyj']),
                 intval($data['reg']),
                 intval($data['idVerified']),
+                intval($data['checkIn']),
                 intval($data['qpayEnabled']),
                 intval($data['investor']),
                 intval($data['newRegisterAndInvestor']),
