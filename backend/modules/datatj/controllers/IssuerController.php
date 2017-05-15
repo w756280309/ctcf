@@ -25,21 +25,12 @@ class IssuerController extends BaseController
     public function actionExport($id)
     {
         $path  = rtrim(\Yii::$app->params['backend_tmp_share_path'], '/');
-        if ( is_dir($path)) {
-            $handle = opendir( $path );
-            if ($handle) {
-                while ( false !== ( $item = readdir( $handle ) ) ) {
-                    if ( $item != "." && $item != ".." ) {
-                        if (false !== strpos($item, '立合旺通') ) {
-                            $fileName = $path . '/'. $item;
-                            header(HeaderUtils::getContentDispositionHeader($item, \Yii::$app->request->userAgent));
-                            readfile($fileName);
-                            exit();
-                        }
-                    }
-                }
-            }
-            closedir( $handle );
+        $fileName = 'lihewangtong.xlsx';
+        $file = $path . '/'.$fileName;
+        if (file_exists($file)) {
+            return \Yii::$app->response->xSendFile('/downloads/' . $fileName, $fileName, [
+                'xHeader' => 'X-Accel-Redirect',
+            ]);
         }
         echo '等待定时任务导出数据';
         exit;
