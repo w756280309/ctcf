@@ -192,7 +192,7 @@ class PromoController extends Controller
                     exit($e->getMessage());
                 }
                 //解决活动页面注册时间显示接近的问题
-                sleep(random_int(10 , 37));
+                sleep(random_int(10 , 30));
             }
             echo "\n本次虚拟的个数：";
             echo $num;
