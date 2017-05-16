@@ -11,9 +11,17 @@ img {
 }
 
 .gift {
+  position: relative;
   padding: 0 0.25333333rem;
 }
 
+.gift .guoqi{
+  position: absolute;
+  width:2.066rem;
+  right:0;
+  top:4%;
+  z-index: 100;
+}
 .gift h5 {
   font-size: 0.4rem;
   color: #fff;
@@ -24,6 +32,55 @@ img {
 
 .gift img {
   width: 100%;
+}
+
+.gift .gift-show{
+  position: relative;
+  width: 100%;
+  height:4.9rem;
+  background: url("../img/gift-show.png") no-repeat;
+  background-size: contain;
+}
+
+.gift .gift-show .box{
+  position: absolute;
+  font-size: 0.26666667rem;
+  text-align: center;
+}
+.gift .gift-show .luck-num{
+  width:3.38666667rem;
+  position: absolute;
+  top: 18%;
+  left:32%;
+  font-size: 0.65rem;
+  text-align: center;
+  color: #f61616;
+}
+.gift .gift-show .box .number{
+  color: #fff;
+}
+.gift .gift-show .box .word{
+  color: #aaa;
+}
+.gift .gift-show .static-box{
+  top: 33%;
+  right: 13%;
+  width:1.37333333rem;
+}
+.gift .gift-show .sum-box{
+  top: 64%;
+  right: 62%;
+  width:2.84rem;
+}
+.gift .gift-show .color-box{
+  top: 64%;
+  right: 30%;
+  width:2.8rem;
+}
+.gift .gift-show .people-box{
+  top: 64%;
+  right: 8%;
+  width:1.4rem;
 }
 
 .gift .progress {
