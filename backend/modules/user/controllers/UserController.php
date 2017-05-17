@@ -61,7 +61,6 @@ class UserController extends BaseController
     public function actionPointList($userId)
     {
         $user = $this->findOr404(User::class, $userId);
-
         $query = PointRecord::find()
             ->where([
                 'user_id' => $userId,
@@ -72,26 +71,19 @@ class UserController extends BaseController
         if ($ref_type != null) {
             $query->andWhere(['ref_type' => $ref_type]);
         }
-
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
             'pagination' => [
                 'pageSize' => 10,
             ],
         ]);
-
         $orderIds = [];
         $orders = [];
-        $type_sql = "SELECT distinct(`ref_type`) FROM `point_record`";
-        $db = Yii::$app->db;
-        $type = $db->createCommand($type_sql)->queryAll();
-
         foreach ($dataProvider->models as $model) {
             if (in_array($model->ref_type, [PointRecord::TYPE_LOAN_ORDER, PointRecord::TYPE_FIRST_LOAN_ORDER_POINTS_1])) {
                 $orderIds[] = $model->ref_id;
             }
         }
-
         if (!empty($orderIds)) {
             $o = OnlineOrder::tableName();
 
@@ -101,14 +93,13 @@ class UserController extends BaseController
                 ->indexBy('id')
                 ->all();
         }
-
         $this->layout = false;
 
         return $this->render('_point_list', [
             'dataProvider' => $dataProvider,
             'orders' => $orders,
             'user' => $user,
-            'types' => $type,
+            'ref_type' => $ref_type,
         ]);
     }
 
@@ -181,21 +172,11 @@ class UserController extends BaseController
     public function actionExport()
     {
         $path  = rtrim(Yii::$app->params['backend_tmp_share_path'], '/');
-        if ( is_dir($path)) {
-            $handle = opendir( $path );
-            if ($handle) {
-                while ( false !== ( $item = readdir( $handle ) ) ) {
-                    if ( $item != "." && $item != ".." ) {
-                        if (false !== strpos($item, '投资用户信息') ) {
-                            $fileName = $path . '/'. $item;
-                            header(HeaderUtils::getContentDispositionHeader($item, \Yii::$app->request->userAgent));
-                            readfile($fileName);
-                            exit();
-                        }
-                    }
-                }
-            }
-            closedir( $handle );
+        $fileName = 'all_investor_user.xlsx';
+        if (file_exists($path . '/' . $fileName)) {
+            return Yii::$app->response->xSendFile('/downloads/' . $fileName, $fileName, [
+                'xHeader' => 'X-Accel-Redirect',
+            ]);
         }
         echo '等待定时任务导出数据';
         exit;
@@ -546,6 +527,7 @@ IN (" . implode(',', $recordIds) . ")")->queryAll();
             'data' => $data,
             'dataProvider' => $dataProvider,
             'normalUser' => $user,
+            'status' => $status,
         ]);
     }
 

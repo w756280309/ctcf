@@ -26,38 +26,15 @@ class DataController extends Controller
     public function actionExportLenderData()
     {
         $allData = UserStats::collectLenderData();
-        $path  = rtrim(Yii::$app->params['backend_tmp_share_path'], '/');
-
-        $file = $path . '/'.'投资用户信息('.date('Y-m-d H:i:s').').xlsx';
-
+        $path = rtrim(Yii::$app->params['backend_tmp_share_path'], '/');
+        $file = $path . '/all_investor_user.xlsx';
+        if (file_exists($file)) {
+            unlink($file);
+        }
         $objPHPExcel = UserStats::initPhpExcelObject($allData);
         $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
         $objWriter->save($file);
-
-        $this->deleteUserDataFromPath($path, '投资用户信息', $file);//删除历史数据
         exit();
-    }
-
-    //删除包含指定指定文件名的文件,保留指定文件
-    private function deleteUserDataFromPath($path, $fileNamePart, $file)
-    {
-        if (!file_exists($path)) {
-            mkdir($path);
-        }
-        if ( is_dir($path)) {
-            $handle = opendir( $path );
-            if ($handle) {
-                while ( false !== ( $item = readdir( $handle ) ) ) {
-                    if ( $item != "." && $item != ".." ) {
-                        $newFIle = rtrim($path, "/") . "/$item";
-                        if (false !== strpos($item, $fileNamePart) && $newFIle !== $file) {
-                            unlink($newFIle);
-                        }
-                    }
-                }
-            }
-            closedir( $handle );
-        }
     }
 
     //立合旺通数据导出（一天时更新一次）data/export-issuer-record
@@ -65,8 +42,11 @@ class DataController extends Controller
     {
         $issuerId = intval($issuerId);
         $issuerData = Issuer::getIssuerRecords($issuerId);//获取立合旺通数据
-        $path  = rtrim(Yii::$app->params['backend_tmp_share_path'], '/');
-        $file = $path . '/' . '立合旺通-' . date('YmdHis') . '.xlsx';
+        $path = rtrim(Yii::$app->params['backend_tmp_share_path'], '/');
+        $file = $path . '/lihewangtong.xlsx';
+        if (file_exists($file)) {
+            unlink($file);
+        }
         $exportData[] = ['期数', '融资方', '发行方', '项目名称', '项目编号', '项目状态', '备案金额（元）', '募集金额（元）', '实际募集金额（元）', '年化收益率（%）', '开始融资时间', '满标时间', '起息日', '还款本金', '还款利息', '预计还款时间', '实际还款时间'];
         $records = $issuerData['model'];
         $issuer = $issuerData['issuer'];
@@ -121,8 +101,6 @@ class DataController extends Controller
         $objPHPExcel = UserStats::initPhpExcelObject($exportData);
         $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
         $objWriter->save($file);
-
-        $this->deleteUserDataFromPath($path, '立合旺通', $file);//删除历史数据
         exit();
     }
 

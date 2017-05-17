@@ -1052,4 +1052,32 @@ class User extends ActiveRecord implements IdentityInterface, UserInterface
     {
         return User::findOne(['safeMobile' => SecurityUtils::encrypt($mobile)]);
     }
+
+    /**
+     * @param array $location 具体格式如下：
+     * [
+     *    'country' => '中国',
+     *    'country_id' => '86',
+     *    'region' => '北京市',
+     *    'city' => '北京市',
+     * ]
+     */
+    public function setRegLocation(array $location)
+    {
+        $msg = '';
+        if (isset($location['country_id']) && 'IANA' === $location['country_id']) {
+            $msg = '未知';
+        } else {
+            if (isset($location['country']) && !empty($location['country'])) {
+                $msg .= $location['country'];
+            }
+            if (isset($location['region']) && !empty($location['region'])) {
+                $msg .= '/'.$location['region'];
+            }
+            if (isset($location['city']) && !empty($location['city'])) {
+                $msg .= '/'.$location['city'];
+            }
+        }
+        $this->regLocation = $msg ?: '未知';
+    }
 }

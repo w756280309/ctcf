@@ -22,7 +22,6 @@ class CountController extends Controller
         } else {
             $startDate = date('Y-m-d', strtotime('-7 day'));
         }
-
         $date = date('Y-m-d');
         $time = time();
         //每次更新从第一条用户数据时间到今天的所有数据
@@ -34,7 +33,7 @@ class CountController extends Controller
             }
             $model->bizDate = $startDate;
             $model->created_at = $time;
-            $funList = ['reg', 'idVerified', 'qpayEnabled', 'investor', 'newRegisterAndInvestor', 'newInvestor', 'newRegAndNewInveAmount', 'preRegAndNewInveAmount', 'chargeViaPos', 'chargeViaEpay', 'drawAmount', 'investmentInWyj', 'investmentInWyb', 'onlineInvestment', 'offlineInvestment', 'totalInvestment', 'successFound', 'rechargeMoney', 'rechargeCost', 'draw', 'investAndLogin', 'notInvestAndLogin', 'repayMoney', 'repayLoanCount', 'repayUserCount', 'licaiNewInvCount', 'licaiNewInvSum', 'licaiInvCount', 'licaiInvSum', 'xsNewInvCount', 'xsNewInvSum', 'xsInvCount', 'xsInvSum'];
+            $funList = ['reg', 'idVerified', 'qpayEnabled', 'investor', 'newRegisterAndInvestor', 'newInvestor', 'newRegAndNewInveAmount', 'preRegAndNewInveAmount', 'chargeViaPos', 'chargeViaEpay', 'drawAmount', 'investmentInWyj', 'investmentInWyb', 'onlineInvestment', 'offlineInvestment', 'totalInvestment', 'successFound', 'rechargeMoney', 'rechargeCost', 'draw', 'investAndLogin', 'notInvestAndLogin', 'repayMoney', 'repayLoanCount', 'repayUserCount', 'licaiNewInvCount', 'licaiNewInvSum', 'licaiInvCount', 'licaiInvSum', 'xsNewInvCount', 'xsNewInvSum', 'xsInvCount', 'xsInvSum', 'checkIn'];
             foreach ($funList as $field) {
                 $method = 'get' . ucfirst($field);
                 $model->{$field} = $model->{$method}($startDate);

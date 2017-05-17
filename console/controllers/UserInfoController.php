@@ -78,12 +78,7 @@ class UserInfoController extends Controller
                 $resp = json_decode($request->getBody()->getContents(), true);
 
                 if (0 === $resp['code']) {
-                    if ('IANA' === $resp['data']['country_id']) {
-                        $user->regLocation = '未知';
-                    } else {
-                        $user->regLocation = $resp['data']['country'].'/'.$resp['data']['region'].'/'.$resp['data']['city'];
-                    }
-
+                    $user->setRegLocation($resp['data']);
                     $user->save(false);
                 }
             } catch (\Exception $e) {

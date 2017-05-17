@@ -171,6 +171,12 @@ use yii\grid\GridView;
                     }
                 ],
                 [
+                    'label' => '签到用户数',
+                    'value' => function ($data) {
+                        return intval($data['checkIn']);
+                    }
+                ],
+                [
                     'attribute' => 'successFound',
                     'label' => '融资项目',
                     'value' => function ($data) {
