@@ -4,6 +4,7 @@ namespace wap\modules\promotion\controllers;
 
 use common\controllers\HelpersTrait;
 use common\models\adv\Share;
+use common\models\promo\Promo170520;
 use common\models\promo\Promo201705;
 use common\models\promo\PromoLotteryTicket;
 use common\models\user\CaptchaForm;
@@ -68,21 +69,60 @@ class P1705Controller extends Controller
     public function action520Day($wx_share_key = null)
     {
         $share = null;
-
         if (!empty($wx_share_key)) {
             $share = Share::findOne(['shareKey' => $wx_share_key]);
         }
-        $xunzhang = 0;//确认
-        if (!Yii::$app->user->isGuest) {
-            $user = User::findOne(Yii::$app->user->id);
-            $promo = RankingPromo::findOne(['key' => 'promo_201705']);
-            $promo201705 = new Promo201705($promo);
-            $xunzhang = $promo201705->getRestTicketCount($user);
+        $promo = $this->findOr404(RankingPromo::class, ['key' => 'promo_170520']);
+        $user = $this->getAuthedUser();
+        $tickets = 0;
+        $drawList = [];
+        $promoClass = new Promo170520($promo);
+        if ($user) {
+            $tickets = $promoClass->getRestTicketCount($user);
+            $drawList = $promoClass->getRewardedList($user);
         }
-        return $this->render('may', [
+
+        return $this->render('520_day', [
             'share' => $share,
-            'xunzhang' => $xunzhang,
+            'tickets' => $tickets,
+            'drawList' => $drawList,
+            'user' => $user,
         ]);
+    }
+
+    /**
+     * 5.20活动抽奖.
+     */
+    public function actionDraw520()
+    {
+        $user = $this->getAuthedUser();
+
+        if (null === $user) {
+            $url = urlencode(Yii::$app->request->hostInfo.'/promotion/p1705/520-day');
+
+            return $this->redirect('/site/login?next='.$url);
+        }
+
+        $promo = $this->findOr404(RankingPromo::class, ['key' => 'promo_170520']);
+        $promoClass = new Promo170520($promo);
+
+        try {
+            $draw = $promoClass->draw($user);
+        } catch (\Exception $e) {
+            Yii::trace('520活动抽奖失败, 失败原因:'.$e->getMessage().', 用户: '.$user->id);
+
+            Yii::$app->response->statusCode = '400';
+
+            return [
+                'code' => 1,
+                'message' => $e->getMessage(),
+            ];
+        }
+
+        return [
+            'code' => 0,
+            'drawAmount' => $draw->reward->ref_amount,
+        ];
     }
 
     /**

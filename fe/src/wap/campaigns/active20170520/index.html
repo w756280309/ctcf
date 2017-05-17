@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>520温都金服周年庆</title>
+    <link rel="stylesheet" href="../../common/css/wenjfbase.css">
+    <link rel="stylesheet" href="css/index.css">
+    <script src="../../libs/jquery-1.11.1.min.js"></script>
+    <script src="../../libs/lib.flexible3.js"></script>
+    <script src="../../libs/fastclick.js"></script>
+</head>
+<body>
+<div class="flex-content">
+    <img class="client-img" src="images/banner.png" alt="banner">
+    <img class="client-img title-01" src="images/title-01.png" alt="title-01">
+    <p class="title-01-text">温都金服周年庆特别版理财项目<br/>外企航服定向融资工具，限时加息<span>0.5%</span></p>
+    <p class="box">国企+央企双担保<br/>原预期年化收益7.4%-8.0%，再加<span>0.5%</span></p>
+    <a class="invest" href="">去投资</a>
+    <img class="client-img" src="images/title-02.png" alt="title-02">
+    <p class="invest-txt">5月20日当天，投资任意理财项目（不含转让产品），所获积分提升为原来的5倍。</p>
+    <img class="client-img invest-client" src="images/table.png" alt="table">
+    <a class="invest invest-02" href="">去理财</a>
+    <img class="client-img" src="images/title-03.png" alt="title-03">
+    <p class="invest-txt">1枚勋章可以兑换1个现金红包，最高520元！<br/>现金直接进入您的理财账户，快来试试手气吧！</p>
+    <div class="box-red-packet">
+        <img class="client-img" src="images/red-packet.png" alt="红包">
+        <a class="my-red-packet" ></a>
+        <span class="num" >0</span>
+        <a class="prize" >兑红包</a>
+    </div>
+    <img class="client-img task" src="images/task.png" alt="task">
+    <p class="tips">本次活动最终解释权归温都金服所有<br/>理财非存款 产品有风险 投资须谨慎</p>
+    <a class="btn-01" style="width: 4rem; display: inline-block">无红包</a>
+    <!-- 遮罩 -->
+    <div class="mask"></div>
+
+    <!-- 勋章不足 -->
+    <div class="flip short-prize">
+        <a class="close" href="javascript:;"></a>
+        <img src="images/prize-icon.png" alt="">
+        <p>您的勋章数量不足<br/>快去理财赚取5倍积分吧！</p>
+        <a class="btn" href="">赚积分</a>
+    </div>
+    <!-- 无红包 -->
+    <div class="flip no-prize">
+        <a class="close" href="javascript:;"></a>
+        <p>sorry！您还没有红包！<br/>请使用勋章兑换红包！</p>
+    </div>
+    <!-- 红包 -->
+    <div class="flip red-packet-prize">
+        <a class="red-packet-btn" href="javascript:;"><img width='100%' src="images/chai-red-packet.png" alt=""></a>
+    </div>
+    <!-- 拆红包 -->
+    <div class="flip money-prize">
+        <a class="close money-close" href="javascript:;"></a>
+        <span class="money">520</span>
+    </div>
+    <!-- 中奖记录 -->
+    <div class="flip my-record">
+        <a class="close" href="javascript:;"></a>
+        <p>我的红包</p>
+        <ul class="list">
+            <li><i class="packet-money">520元</i><span>2017-05-20</span><i>18:27:02</i></li>
+            <li><i class="packet-money">0.88元</i><span>2017-05-20</span><i>18:27:02</i></li>
+            <li><i class="packet-money">1.88元</i><span>2017-05-20</span><i>18:27:02</i></li>
+            <li><i class="packet-money">0.01元</i><span>2017-05-20</span><i>18:27:02</i></li>
+            <li><i class="packet-money">150元</i><span>2017-05-20</span><i>18:27:02</i></li>
+            <li><i class="packet-money">150元</i><span>2017-05-20</span><i>18:27:02</i></li>
+            <li><i class="packet-money">150元</i><span>2017-05-20</span><i>18:27:02</i></li>
+            <li><i class="packet-money">150元</i><span>2017-05-20</span><i>18:27:02</i></li>
+            <li><i class="packet-money">150元</i><span>2017-05-20</span><i>18:27:02</i></li>
+        </ul>
+    </div>
+
+
+</div>
+<script>
+$(function(){
+    // 我的红包
+    $('.my-red-packet').on('click',function(){
+        $('.my-record').show();
+        $('.mask').show();
+        $('body').on('touchmove', eventTarget, false);
+    });
+
+    // 兑红包
+    $('.prize').on('click',function(){
+        $('.mask').show();
+        $('body').on('touchmove', eventTarget, false);
+        // 勋章不够
+        if ($('.red-packet-btn img').hasClass('clickFlag')) {
+            $('.short-prize').fadeIn(200);
+            return false;
+        }
+        $('.red-packet-prize').show();
+    });
+
+    // 拆红包
+    $('.red-packet-prize').on('click',function(){
+        var reaPacket = $('.red-packet-btn img');
+        if (reaPacket.hasClass('clickFlag')) {
+            return false;
+        }
+        reaPacket.addClass('transform-start');
+        reaPacket.addClass('clickFlag');
+        setTimeout(function () {
+            $('.red-packet-prize').fadeOut(200);
+            $('.money-prize').fadeIn(200);
+            reaPacket.removeClass('transform-start');
+        }, 500);
+    });
+
+    function eventTarget(event) {
+        event.preventDefault();
+    }
+
+    $('.short-prize .close').on('click',function(){
+        $('.short-prize').hide();
+        $('.mask').hide();
+        $('body').off('touchmove');
+    });
+    $('.no-prize .close').on('click',function(){
+        $('.no-prize').hide();
+        $('.mask').hide();
+        $('body').off('touchmove');
+    });
+    $('.money-prize .close').on('click',function(){
+        $('.money-prize').hide();
+        $('.mask').hide();
+        $('body').off('touchmove');
+    });
+    $('.my-record .close').on('click',function(){
+        $('.my-record').hide();
+        $('.mask').hide();
+        $('body').off('touchmove');
+    });
+
+    // 勋章不够
+    $('.btn-01').on('click',function(){
+        $('.no-prize').show();
+        $('.mask').show();
+        $('body').on('touchmove', eventTarget, false);
+    });
+
+
+
+});
+</script>
+</body>
+</html>

@@ -71,6 +71,8 @@ class StringUtilsTest extends YiiAppTestCase
 
     /**
      * 验证当手机号为空或不是字符串格式时,隐藏功能函数是否功能正常
+     *
+     * @expectedException \Exception
      */
     public function testInvalidMobile()
     {

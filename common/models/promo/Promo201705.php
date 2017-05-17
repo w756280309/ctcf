@@ -70,30 +70,6 @@ class Promo201705
     }
 
     /**
-     * 获得奖池数组
-     *
-     * reward表可以添加中奖概率字段
-     *
-     * return array
-     */
-    public function getPool()
-    {
-        return [];
-    }
-
-    /**
-     * 抽奖
-     *
-     * @param User $user
-     * @return PromoLotteryTicket
-     * @throws \Exception
-     */
-    public function draw(User $user)
-    {
-        return new PromoLotteryTicket();
-    }
-
-    /**
      * 订单完成之后统一调用逻辑
      */
     public function doAfterSuccessLoanOrder(OnlineOrder $order)
@@ -207,7 +183,7 @@ class Promo201705
     /**
      * 获得某个奖品信息(后台活动中奖记录)
      *
-     * @param $awardId
+     * @param int $awardId 不需额外校验
      *
      * @return array
      *

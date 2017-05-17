@@ -108,7 +108,7 @@ class AccountService
         //更改用户账户资金
         $bcround = new BcRound();
         $account->account_balance = $bcround->bcround(bcadd($account->account_balance, $money), 2);
-        $account->available_balance = $bcround->bcround(bcadd($account->available_balance, $money), 2);
+        $account->available_balance = $bcround->bcround(bcadd($account->available_balance, $money, 2), 2);
         $account->drawable_balance = $bcround->bcround(bcadd($account->drawable_balance, $money), 2);
         $account->in_sum = $bcround->bcround(bcadd($account->in_sum, $money), 2);
         if (!$account->save()) {
