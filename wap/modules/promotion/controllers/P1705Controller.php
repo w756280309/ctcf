@@ -12,6 +12,7 @@ use common\models\user\User;
 use common\models\promo\DuoBao;
 use common\service\BankService;
 use common\utils\SecurityUtils;
+use common\utils\StringUtils;
 use wap\modules\promotion\models\PromoMobile;
 use wap\modules\promotion\models\RankingPromo;
 use Yii;
@@ -74,6 +75,12 @@ class P1705Controller extends Controller
         }
         $promo = $this->findOr404(RankingPromo::class, ['key' => 'promo_170520']);
         $user = $this->getAuthedUser();
+        $promoStatus = null;
+        try {
+            $promo->isActive($user);
+        } catch (\Exception $e) {
+            $promoStatus = $e->getCode();
+        }
         $tickets = 0;
         $drawList = [];
         $promoClass = new Promo170520($promo);
@@ -87,6 +94,7 @@ class P1705Controller extends Controller
             'tickets' => $tickets,
             'drawList' => $drawList,
             'user' => $user,
+            'promoStatus' => $promoStatus,
         ]);
     }
 
@@ -96,33 +104,30 @@ class P1705Controller extends Controller
     public function actionDraw520()
     {
         $user = $this->getAuthedUser();
-
         if (null === $user) {
             $url = urlencode(Yii::$app->request->hostInfo.'/promotion/p1705/520-day');
 
             return $this->redirect('/site/login?next='.$url);
         }
-
         $promo = $this->findOr404(RankingPromo::class, ['key' => 'promo_170520']);
         $promoClass = new Promo170520($promo);
-
+        $back = null;
         try {
             $draw = $promoClass->draw($user);
+            $back = [
+                'code' => 0,
+                'drawAmount' => StringUtils::amountFormat2($draw->reward->ref_amount),
+            ];
         } catch (\Exception $e) {
             Yii::trace('520活动抽奖失败, 失败原因:'.$e->getMessage().', 用户: '.$user->id);
-
-            Yii::$app->response->statusCode = '400';
-
-            return [
+            Yii::$app->response->statusCode = 400;
+            $back = [
                 'code' => 1,
                 'message' => $e->getMessage(),
             ];
         }
 
-        return [
-            'code' => 0,
-            'drawAmount' => $draw->reward->ref_amount,
-        ];
+        return $back;
     }
 
     /**

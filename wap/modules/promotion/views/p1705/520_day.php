@@ -13,7 +13,6 @@ $loginUrl = '/site/login?next='.urlencode(Yii::$app->request->absoluteUrl);
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/campaigns/active20170520/css/index.css">
 <script src="<?= FE_BASE_URI ?>libs/lib.flexible3.js"></script>
 <script src="<?= FE_BASE_URI ?>libs/fastclick.js"></script>
-<script src="<?= ASSETS_BASE_URI ?>js/common.js"></script>
 
 <div class="flex-content">
     <img class="client-img" src="<?= FE_BASE_URI ?>wap/campaigns/active20170520/images/banner.png" alt="banner">
@@ -35,7 +34,9 @@ $loginUrl = '/site/login?next='.urlencode(Yii::$app->request->absoluteUrl);
             <a class="my-red-packet"></a>
         <?php endif; ?>
         <span class="num" ><?= $tickets ?></span>
-        <?php if (null === $user) : ?>
+        <?php if ($promoStatus) : ?>
+            <a class="prize invalid" style="background-color: gray;"><?= 1 === $promoStatus ? '活动未开始' : '活动已结束' ?></a>
+        <?php elseif (null === $user) : ?>
             <a class="prize" href="<?= $loginUrl ?>">兑红包</a>
         <?php else: ?>
             <a class="prize">兑红包</a>
@@ -54,14 +55,6 @@ $loginUrl = '/site/login?next='.urlencode(Yii::$app->request->absoluteUrl);
         <p>您的勋章数量不足<br/>快去理财赚取5倍积分吧！</p>
         <a class="btn" href="/deal/deal/index">赚积分</a>
     </div>
-
-    <?php if (empty($drawList)) : ?>
-        <!-- 无红包 -->
-        <div class="flip no-prize draw-list">
-            <a class="close" href="javascript:;"></a>
-            <p>Sorry！您还没有红包！<br/>请使用勋章兑换红包！</p>
-        </div>
-    <?php endif; ?>
 
     <!-- 红包 -->
     <div class="flip red-packet-prize">
@@ -87,14 +80,23 @@ $loginUrl = '/site/login?next='.urlencode(Yii::$app->request->absoluteUrl);
                 <?php endforeach; ?>
             </ul>
         </div>
+    <?php else: ?>
+        <!-- 无红包 -->
+        <div class="flip no-prize draw-list">
+            <a class="close" href="javascript:;"></a>
+            <p>Sorry！您还没有红包！<br/>请使用勋章兑换红包！</p>
+        </div>
     <?php endif; ?>
 </div>
 
 <?php if ($user) : ?>
     <script>
         $(function() {
+            FastClick.attach(document.body);
+            forceReload_V2();
+
             // 我的红包
-            $('.my-red-packet').on('click',function(){
+            $('.my-red-packet').on('click',function() {
                 $('.draw-list').show();
                 $('.mask').show();
                 $('body').on('touchmove', eventTarget, false);
@@ -102,6 +104,11 @@ $loginUrl = '/site/login?next='.urlencode(Yii::$app->request->absoluteUrl);
 
             // 兑红包
             $('.prize').on('click',function() {
+                var invalid = $(this).hasClass('invalid');
+                if (invalid) {
+                    return;
+                }
+
                 $('.mask').show();
                 $('body').on('touchmove', eventTarget, false);
                 // 勋章不够
@@ -117,8 +124,14 @@ $loginUrl = '/site/login?next='.urlencode(Yii::$app->request->absoluteUrl);
             $('.red-packet-prize').on('click',function() {
                 var reaPacket = $('.red-packet-btn img');
                 if (reaPacket.hasClass('clickFlag')) {
-                    return false;
+                    return;
                 }
+
+                var invalid = $('.prize').hasClass('invalid');
+                if (invalid) {
+                    return;
+                }
+
                 reaPacket.addClass('transform-start');
                 reaPacket.addClass('clickFlag');
 
@@ -145,44 +158,37 @@ $loginUrl = '/site/login?next='.urlencode(Yii::$app->request->absoluteUrl);
                 });
 
                 xhr.fail(function(jqXHR) {
-                    if (400 === jqXHR.status) {
-                        toastCenter('网络异常，请刷新重试！');
-                    }
-
+                    reaPacket.removeClass('transform-start');
+                    $('body').off('touchmove');
+                    alert('网络异常，请刷新重试！');
+                    location.href = '';
                     allowClick = true;
                 });
             });
 
-            $('.short-prize .close').on('click',function(){
+            $('.short-prize .close').on('click',function() {
                 $('.short-prize').hide();
                 $('.mask').hide();
                 $('body').off('touchmove');
             });
 
-            $('.no-prize .close').on('click',function(){
+            $('.no-prize .close').on('click',function() {
                 $('.no-prize').hide();
                 $('.mask').hide();
                 $('body').off('touchmove');
             });
 
-            $('.money-prize .close').on('click',function(){
+            $('.money-prize .close').on('click',function() {
                 $('.money-prize').hide();
                 $('.mask').hide();
                 location.href = '';
                 $('body').off('touchmove');
             });
 
-            $('.my-record .close').on('click',function(){
+            $('.my-record .close').on('click',function() {
                 $('.my-record').hide();
                 $('.mask').hide();
                 $('body').off('touchmove');
-            });
-
-            // 勋章不够
-            $('.btn-01').on('click',function(){
-                $('.no-prize').show();
-                $('.mask').show();
-                $('body').on('touchmove', eventTarget, false);
             });
         });
     </script>

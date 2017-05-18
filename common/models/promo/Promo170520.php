@@ -272,6 +272,7 @@ class Promo170520
             ->where(['promo_id' => self::getPromo()->id])
             ->andWhere(['user_id' => $user->id])
             ->andWhere(['isRewarded' => true])
+            ->orderBy('drawAt desc')
             ->all();
     }
 }
