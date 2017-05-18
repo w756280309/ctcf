@@ -20,7 +20,7 @@ $isLogin = !\Yii::$app->user->isGuest;
     <div class="gift">
         <h5>奖品：iPhone7 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;数量：1部</h5>
         <img class="guoqi" src="<?= FE_BASE_URI ?>wap/campaigns/active20170504/img/guoqi.png" alt="">
-        <img src="<?= FE_BASE_URI ?>wap/campaigns/active20170504/img/phone.png" alt="">
+        <img src="<?= FE_BASE_URI ?>wap/campaigns/active20170504/img/gift.png" alt="">
         <div class="progress">
             <p class="progressTotal"><span class="progressLine" style="width: <?= $jindu ?>%;"></span></p>
             <p class="progressRate">揭晓进度<span><?= $jindu ?>%</span></p>
@@ -39,7 +39,7 @@ $isLogin = !\Yii::$app->user->isGuest;
             <li>1、本次活动仅限浙江手机号段用户参与；</li>
             <li>2、活动期间新注册用户可以获得参与机会，老用户成功邀请好友后也可以获得参与机会；</li>
             <li>3、本次活动限额2000名，满额后将不能参与，活动结束前未满额将取消开奖；</li>
-            <li>4、本次活动所有未中奖用户将于开奖当日获赠神秘礼包1份；</li>
+            <li>4、本次活动所有未中奖用户将于开奖当日获赠神秘礼包1份（不同面值代金券共3张，可至“账户”-“我的代金券”中查看）；</li>
             <li>5、领取活动奖品需要实名认证并绑定银行卡；</li>
             <li>6、活动时间2017年5月6日-5月15日，开奖时间为2017年5月17日中午12点。</li>
         </ul>
