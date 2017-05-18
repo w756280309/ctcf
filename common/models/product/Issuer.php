@@ -168,7 +168,7 @@ class Issuer extends ActiveRecord
                 $plan[$key] = OnlineRepaymentPlan::find()
                     ->where(['online_pid' => $val->id])
                     ->groupBy('online_pid, qishu')
-                    ->select(['totalBenjin' => 'sum(benjin)', 'totalLixi' => 'sum(lixi)', 'refund_time' => 'sum(refund_time)', 'qishu', 'online_pid', 'count' => 'count(*)'])
+                    ->select(['totalBenjin' => 'sum(benjin)', 'totalLixi' => 'sum(lixi)', 'refund_time' => 'max(refund_time)', 'qishu', 'online_pid', 'count' => 'count(*)'])
                     ->asArray()
                     ->all();
 
