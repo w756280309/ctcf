@@ -382,7 +382,7 @@ class P1705Controller extends Controller
     /**
      * 慈善活动.
      */
-    public function actionCharity()
+    public function actionCharity($wx_share_key = null)
     {
         $share = null;
 
@@ -406,5 +406,21 @@ class P1705Controller extends Controller
         $loan = OnlineProduct::fetchSpecial(['like', 'tags', '慈善专属']);
 
         return $this->redirect(null === $loan ? '/deal/deal' : '/deal/deal/detail?sn='.$loan->sn);
+    }
+
+    /**
+     * 端午节活动.
+     */
+    public function actionDuanwu($wx_share_key = null)
+    {
+        $share = null;
+
+        if (!empty($wx_share_key)) {
+            $share = Share::findOne(['shareKey' => $wx_share_key]);
+        }
+
+        return $this->render('duanwu', [
+            'share' => $share,
+        ]);
     }
 }
