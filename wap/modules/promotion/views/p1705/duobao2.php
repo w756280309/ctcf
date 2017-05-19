@@ -49,7 +49,7 @@ $next = Yii::$app->request->hostInfo.'/promotion/p1705/duobao2';
     </div>
     <div class="gift">
         <h5>奖品：苹果手表／扫地机器人／京东E卡 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;数量：1份</h5>
-        <img src="<?= FE_BASE_URI ?>wap/campaigns/active20170504/img/gift_02.png" alt="">
+        <img src="<?= FE_BASE_URI ?>wap/campaigns/active20170504/img/gift_03.png" alt="">
         <div class="progress">
             <p class="progressTotal"><span class="progressLine" style="width: <?= $jindu ?>%;"></span></p>
             <p class="progressRate">揭晓进度<span><?= $jindu ?>%</span></p>
