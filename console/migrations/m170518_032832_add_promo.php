@@ -9,7 +9,7 @@ class m170518_032832_add_promo extends Migration
         $this->insert('promo', [
             'title' => '第二期0元夺宝',
             'startTime' => '2017-05-22 00:00:00',
-            'endTime' => '2017-05-27 23:59:59',
+            'endTime' => '2017-05-29 23:59:59',
             'key' => 'duo_bao_0522',
             'promoClass' => 'common\models\promo\DuoBao',
             'isOnline' => false,

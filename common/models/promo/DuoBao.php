@@ -69,7 +69,9 @@ class DuoBao
     public function totalTicketCount()
     {
         $sequence = PromoSequence::find()->one();
-
+        if (is_null($sequence)) {
+            return 0;
+        }
         return $sequence->id < self::TOTAL_JOINER_COUNT ? $sequence->id : self::TOTAL_JOINER_COUNT;
     }
 

@@ -37,7 +37,7 @@ use yii\captcha\Captcha;
     <?php } ?>
 
     <div class="formcheck f15">
-        <?php $next = Yii::$app->request->hostInfo.'/promotion/p1705/duobao'; ?>
+        <?php $next = Yii::$app->request->hostInfo.'/promotion/p1705/duobao2'; ?>
         <?php $form = ActiveForm::begin(['id' => 'signup_form', 'action' => '/site/signup?next='.urlencode($next)]); ?>
             <input name="regContext" type="hidden" value="promo">
             <input name="promoId" type="hidden" value="<?= $promo->id ?>">
