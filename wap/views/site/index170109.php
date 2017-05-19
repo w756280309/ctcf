@@ -72,7 +72,19 @@ $this->registerJsFile(ASSETS_BASE_URI . 'js/swiper.min.js', ['depends' => Jquery
                         <p class="word">温州市慈善总会<span class="space"></span>温州都市报分会<br/>设立<span class="space2"></span><i class="red-txt">"温都金服慈善公益基金"</i></p>
                     </div>
                 </div>
-                <div class="cishan-bottom">
+                <div class="charity-bottom">
+                    <p><img src="<?= FE_BASE_URI ?>wap/index/images/heart.png" alt=""><span>您的每一笔投资，都有一份爱的奉献</span><img src="<?= FE_BASE_URI ?>wap/index/images/heart.png" alt=""></p>
+                </div>
+            </div>
+        <?php else: ?>
+            <div class="charity-box">
+                <div class="charity-top-txt clearfix">
+                    <div class="charity-content-top">
+                        <p class="word">520慈善基金</p>
+                        <p class="word-txt">正式成立</p>
+                    </div>
+                </div>
+                <div class="charity-bottom">
                     <p><img src="<?= FE_BASE_URI ?>wap/index/images/heart.png" alt=""><span>您的每一笔投资，都有一份爱的奉献</span><img src="<?= FE_BASE_URI ?>wap/index/images/heart.png" alt=""></p>
                 </div>
             </div>

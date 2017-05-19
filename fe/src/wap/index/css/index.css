@@ -453,6 +453,27 @@ a.special-bar:active {
     width: 4.48rem;
     height:1.2rem;
 }
+.charity-box .charity-top-txt {
+    margin: 0 0.5rem;
+    border-bottom:1px solid #ddd;
+}
+.charity-box .charity-top-txt .charity-content-top {
+    padding: .4rem 0 0.37333333rem;
+    text-align: center;
+}
+.charity-box .charity-top-txt .charity-content-top .word {
+    height: .4rem;
+    line-height: .4rem;
+    color: #f1453d;
+    font-size: .4rem;
+}
+.charity-box .charity-top-txt .charity-content-top .word-txt {
+    padding-top: 0.22666667rem;
+    height: 0.34666667rem;
+    line-height: 0.34666667rem;
+    color: #333;
+    font-size: 0.34666667rem;
+}
 .charity-box .charity-top .charity-content-lf {
     text-align: left;
     border-right: 1px solid #ddd;
