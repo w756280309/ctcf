@@ -1,0 +1,127 @@
+body {
+  background: #f0f0f0;
+}
+
+.flex-content .banner {
+  width: 10rem;
+  height: 4.66666667rem;
+}
+
+.flex-content .banner img {
+  width: 100%;
+  display: block;
+}
+
+.flex-content .tag {
+  height: 2.90666667rem;
+  width: 100%;
+  overflow: hidden;
+}
+
+.flex-content .tag img {
+  display: block;
+  width: 7.45333333rem;
+  margin: 0.46666667rem auto 0.26666667rem;
+}
+
+.flex-content .ctn .comIntro .title {
+  width: 100%;
+  height: 1.21333333rem;
+  background: url("../img/title-bg.png") center top no-repeat;
+  background-size: 9.72rem 1.21333333rem;
+  line-height: 0.8rem;
+  font-size: 0.48rem;
+  z-index: 1;
+  position: relative;
+  top: 0;
+  left: 0;
+}
+
+.flex-content .ctn .comIntro img {
+  display: block;
+  width: 100%;
+  margin-top: -0.53333333rem;
+}
+
+.flex-content .ctn .comIntro:first-child {
+  height: 7.42666667rem;
+}
+
+.flex-content .ctn .comIntro:nth-child(2),
+.flex-content .ctn .comIntro:nth-child(3) {
+  margin-top: 0.66666667rem;
+}
+
+.flex-content .ctn .comIntro:nth-child(4) {
+  margin-top: 0.53333333rem;
+}
+
+.flex-content .ctn .source {
+  width: 100%;
+  height: 5.46666667rem;
+  background: url("../img/bg_01.png") no-repeat;
+  background-size: 100% 100%;
+  margin-top: -0.53333333rem;
+}
+
+.flex-content .ctn .source ul {
+  width: 7.06666667rem;
+  padding: 0.66666667rem 0 0 0.66666667rem;
+}
+
+.flex-content .ctn .object {
+  width: 100%;
+  height: 4.94666667rem;
+  background: url("../img/bg_02.png") no-repeat;
+  background-size: 100% 100%;
+  margin-top: -0.53333333rem;
+}
+
+.flex-content .ctn .object ul {
+  width: 9.10666667rem;
+  padding: 0.8rem 0 0 3.86666667rem;
+}
+
+.flex-content .ctn .management {
+  width: 100%;
+  background: #fff;
+  height: 6.69333333rem;
+  background-size: 100% 100%;
+  margin-top: -0.53333333rem;
+  box-shadow: 0 3px 6px #d2d2d2;
+}
+
+.flex-content .ctn .management ul {
+  width: 8.73333333rem;
+  padding: 0.93333333rem 0 0 1.46666667rem;
+}
+
+ul.comFont {
+  color: #e14f56;
+  font-size: 0.37333333rem;
+  line-height: 0.64rem;
+  text-align: justify;
+}
+
+a.btn {
+  width: 6.82666667rem;
+  height: 0.93333333rem;
+  line-height: 0.93333333rem;
+  display: block;
+  text-align: center;
+  color: #fff;
+  font-size: 0.4rem;
+  margin: 0.53333333rem auto 0.26666667rem;
+  -webkit-border-radius: 0.13333333rem;
+  -moz-border-radius: 0.13333333rem;
+  border-radius: 0.13333333rem;
+  background-color: #e14f56;
+}
+
+.tips {
+  margin-bottom: 0.6rem;
+  text-align: center;
+  color: #e14f56;
+  font-size: 0.32rem;
+  line-height: 0.48rem;
+}

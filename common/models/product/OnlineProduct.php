@@ -1057,4 +1057,47 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
 
         return false;
     }
+
+    /**
+     * 获取一个特定的非定向标的的正式标.
+     *
+     * 1. 优先获取募集中项目且募集比例高的项目;
+     * 2. 如果没有募集中项目,就按照标的ID倒序排列, 取最新的一个;
+     */
+    public static function fetchSpecial(array $cond = [])
+    {
+        $loan = self::findSpecial($cond)
+            ->andWhere(['status' => OnlineProduct::STATUS_NOW])
+            ->andWhere(['<', 'finish_rate', 1])
+            ->orderBy(['finish_rate' => SORT_DESC, 'id' => SORT_DESC])
+            ->one();
+
+        if (null === $loan) {
+            $loan = self::findSpecial($cond)
+                ->orderBy(['id' => SORT_DESC])
+                ->one();
+        }
+
+        return $loan;
+    }
+
+    /**
+     * 根据指定条件获取一个非定向标的的正式标Query.
+     */
+    public static function findSpecial(array $cond = [])
+    {
+         $query = self::find()
+             ->where([
+                'online_status' => true,
+                'del_status' => false,
+                'isPrivate' => false,
+                'isTest' => false,
+            ]);
+
+        if (!empty($cond)) {
+            $query->andWhere($cond);
+        }
+
+        return $query;
+    }
 }

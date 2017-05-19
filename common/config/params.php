@@ -190,4 +190,5 @@ return [
     'ding_notify_list' => [],//钉钉通知名单 实例 [ '用户姓名' => '用户在钉钉的ID',],具体数值在 data/wdjf_ding_users.json 中查
     'wdjf_security_key' => __DIR__ . '/payment/security/wdjf_prod.key',//温都金服用户信息加密使用的key保存文件名
     'backend_tmp_share_path' => '/home/wjf/nfs',//后台和工作机共享目录, 存放临时文件, 会配置文件清理机制
+    'showCharityAmount' => false,  //首页是否显示慈善合计金额标志位
 ];

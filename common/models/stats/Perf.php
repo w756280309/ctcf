@@ -735,10 +735,18 @@ FROM perf WHERE DATE_FORMAT(bizDate,'%Y-%m-%d') < DATE_FORMAT(NOW(),'%Y-%m-%d') 
             $refundedInterest = $offlineStats->refundedInterest;
         }
 
+        $totalFundedAmount = OnlineProduct::find()
+            ->where(['>', 'status', 1])
+            ->andWhere(['like', 'tags', '慈善专属'])
+            ->sum('funded_money');
+
+        $totalCharityAount = bcdiv($totalFundedAmount, 10000, 2);    //暂时只计算投资慈善项目计算所得的金额
+
         $statsData = [
             'totalTradeAmount' => bcadd($totalTradeAmount, $tradedAmount, 2),//平台累计交易额
             'totalRefundAmount' => bcadd($plan['totalAmount'], bcadd($refundedPrincipal, $refundedInterest, 2), 2),//累计兑付金额
             'totalRefundInterest' => bcadd($plan['totalInterest'], $refundedInterest, 2),//累计带来收益
+            'totalCharityAount' => $totalCharityAount,
         ];
 
         return $statsData;

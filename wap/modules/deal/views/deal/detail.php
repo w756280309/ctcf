@@ -1,5 +1,4 @@
 <?php
-$this->title = '项目详情';
 
 use common\models\product\RateSteps;
 use common\view\LoanHelper;
@@ -7,9 +6,12 @@ use common\utils\StringUtils;
 use wap\assets\WapAsset;
 use yii\helpers\HtmlPurifier;
 
+$this->title = '项目详情';
+
 $this->registerCssFile(FE_BASE_URI.'libs/videojs/video-js.min.css', ['position' => 1]);
 $this->registerCssFile(ASSETS_BASE_URI.'css/xiangqing.css?v=20170120', ['depends' => WapAsset::class, 'position' => 1]);
 $this->registerJsFile(FE_BASE_URI.'libs/videojs/video.min.js', ['position' => 1]);
+
 ?>
 
 <div class="row column">
@@ -26,6 +28,9 @@ $this->registerJsFile(FE_BASE_URI.'libs/videojs/video.min.js', ['position' => 1]
             <?php if ($pointsMultiple > 1) { ?>
                 <i>积分<?= $pointsMultiple ?>倍</i>
             <?php }?>
+            <?php if ($deal->tags && array_search('慈善专属', explode('，', $deal->tags))) { ?>
+                <i>慈善专属</i>
+            <?php } ?>
         </div>
     </div>
     <div class="container">

@@ -439,6 +439,74 @@ a.special-bar:active {
     height: 0.42666667rem;
     border-right: 1px solid #ddd;
 }
+.charity-box{
+    width: 100%;
+    margin-top: 0.2666667rem;
+    background-color: #fff;
+}
+.charity-box .charity-top{
+    margin: 0 0.5rem;
+    padding:0.42666667rem 0 0.34666667rem;
+    border-bottom:1px solid #ddd;
+}
+.charity-box .charity-top .charity-content {
+    width: 4.48rem;
+    height:1.2rem;
+}
+.charity-box .charity-top .charity-content-lf {
+    text-align: left;
+    border-right: 1px solid #ddd;
+    box-sizing: border-box;
+}
+.charity-box .charity-top .charity-content-rg {
+    text-align: right;
+}
+.charity-box .charity-top .charity-content-rg .space {
+    width: .07rem;
+    display: inline-block;
+}
+.charity-box .charity-top .charity-content-rg .space2 {
+    width: .14rem;
+    display: inline-block;
+}
+.charity-box .charity-top .charity-content .word{
+    height: 0.4rem;
+    line-height: 0.4rem;
+    color: #666;
+    font-size: 0.4rem;
+}
+.charity-box .charity-top .charity-content .number{
+    height: 0.8rem;
+    line-height: 0.8rem;
+    font-size: 0.56rem;
+    color: #f1453d;
+}
+.charity-box .charity-top .charity-content-rg .word {
+    margin-top: 0.1rem;
+    line-height: 0.5rem;
+    font-size: 0.3rem;
+}
+.charity-box .charity-top .charity-content-rg .red-txt {
+    font-style: normal;
+    font-size: .31rem;
+    color: #f1453d;
+}
+.charity-box .charity-bottom{
+    width: 100%;
+    height:1.26666667rem;
+    line-height:1.26666667rem;
+}
+.charity-box .charity-bottom p{
+    font-size: 0.32rem;
+    text-align: center;
+    color: #f44336;
+}
+.charity-box .charity-bottom p span{margin:0 0.18666667rem}
+.charity-box .charity-bottom p img{
+    width:0.26666667rem;
+    position: relative;
+    top:-2px;
+}
 .showMore {
     margin-top: 0.2666667rem;
 }

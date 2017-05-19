@@ -61,6 +61,23 @@ $this->registerJsFile(ASSETS_BASE_URI . 'js/swiper.min.js', ['depends' => Jquery
             </div>
         </div>
 
+        <?php if (\Yii::$app->params['showCharityAmount']) : ?>
+            <div class="charity-box">
+                <div class="charity-top clearfix">
+                    <div class="charity-content charity-content-lf lf">
+                        <p class="word">平台累计捐赠：</p>
+                        <p class="number" id="totalCharityAount"></p>
+                    </div>
+                    <div class="charity-content charity-content-rg rg">
+                        <p class="word">温州市慈善总会<span class="space"></span>温州都市报分会<br/>设立<span class="space2"></span><i class="red-txt">"温都金服慈善公益基金"</i></p>
+                    </div>
+                </div>
+                <div class="cishan-bottom">
+                    <p><img src="<?= FE_BASE_URI ?>wap/index/images/heart.png" alt=""><span>您的每一笔投资，都有一份爱的奉献</span><img src="<?= FE_BASE_URI ?>wap/index/images/heart.png" alt=""></p>
+                </div>
+            </div>
+        <?php endif; ?>
+
         <div class="showMore">
             <div class="clearfix">
                 <a class="f13 lf" href="/site/h5?wx_share_key=h5">
@@ -85,21 +102,7 @@ $this->registerJsFile(ASSETS_BASE_URI . 'js/swiper.min.js', ['depends' => Jquery
         <?php if ($xs) { ?>
             <div class="newnorm hide" id="loginNewPeople">
                 <p class="newnormtitle f15">新手专享
-                    <?php
-                    $num = 2;
-                    if ($xs->pointsMultiple > 1) {
-                        echo '<span class="f12 red-tag">积分' . Html::encode($xs->pointsMultiple) . '倍</span>';
-                        $num = 1;
-                    }
-                    if (null !== $xs->tags) {
-                        $tags = explode('，', $xs->tags);
-                        foreach($tags as $key => $tag) {
-                            if ($key < $num && !empty($tag)) {
-                                echo '<span class="f12">'.Html::encode($tag).'</span>';
-                            }
-                        }
-                    }
-                    ?>
+                    <?= $this->render('tags', ['loan' => $xs]) ?>
                 </p>
                 <?php $ex = $xs->getDuration() ?>
                 <?php if (!$xs->isFlexRate && !$xs->jiaxi) { ?>
@@ -133,11 +136,11 @@ $this->registerJsFile(ASSETS_BASE_URI . 'js/swiper.min.js', ['depends' => Jquery
 
         <?php if (!empty($issuers)) { ?>
             <?php
-            $num = count($issuers);
-            foreach ($issuers as $k => $issuer) {
-                ${'issuer'.$k} = $issuer;
-                ${'medias'.$k} = $issuer->getMedias();
-            }
+                $num = count($issuers);
+                foreach ($issuers as $k => $issuer) {
+                    ${'issuer'.$k} = $issuer;
+                    ${'medias'.$k} = $issuer->getMedias();
+                }
             ?>
             <section>
                 <div class="featured">
@@ -213,19 +216,7 @@ $this->registerJsFile(ASSETS_BASE_URI . 'js/swiper.min.js', ['depends' => Jquery
                                 <div class="tags clearfix">
                                     <?php if (null !== $loan->tags) { ?>
                                         <p class="lf f12">
-                                            <?php
-                                                $tags = explode('，', $loan->tags);
-                                                $num = 2;
-                                                if ($loan->pointsMultiple > 1) {
-                                                    echo '<span class="red">积分' . Html::encode($loan->pointsMultiple) . '倍</span>';
-                                                    $num = 1;
-                                                }
-                                                foreach($tags as $key => $tag) {
-                                                    if ($key < $num && !empty($tag)) {
-                                                        echo '<span>' . Html::encode($tag) . '</span>';
-                                                    }
-                                                }
-                                            ?>
+                                            <?= $this->render('tags', ['loan' => $loan]) ?>
                                         </p>
                                     <?php } elseif ($loan->pointsMultiple > 1) { ?>
                                         <p class="lf f12">
@@ -402,6 +393,10 @@ $this->registerJs(<<<JSFILE
             $('#totalTradeAmount i').html(WDJF.numberFormat(accDiv(data.totalTradeAmount, 100000000), 0));
             $('#totalRefundAmount span').html(WDJF.numberFormat(accDiv(data.totalRefundAmount, 10000), 0));
             $('#totalRefundInterest span').html(WDJF.numberFormat(accDiv(data.totalRefundInterest, 10000), 0));
+            
+            if ($('#totalCharityAount').length > 0) {
+                $('#totalCharityAount').html(WDJF.numberFormat(data.totalCharityAount, 0)+'元'); 
+            }
         });
         //判断首页上方登录状态
         checkStatus();
