@@ -1,5 +1,5 @@
 <?php
-$this->registerCssFile(ASSETS_BASE_URI.'css/footer.css', ['depends' => 'frontend\assets\FrontAsset']);
+$this->registerCssFile(ASSETS_BASE_URI.'css/footer.css?v=20170519', ['depends' => 'frontend\assets\FrontAsset']);
 $this->registerJsFile(ASSETS_BASE_URI.'js/clipboard.min.js', ['depends' => 'frontend\assets\FrontAsset']);
 ?>
 
