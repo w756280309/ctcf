@@ -12,7 +12,7 @@ class DuoBao
     const SOURCE_NEW_USER = 'new_user';
     const SOURCE_INVITER = 'inviter';
 
-    const TOTAL_JOINER_COUNT = 2000;
+    const TOTAL_JOINER_COUNT = 1000;
 
     public $promo;
 
@@ -157,7 +157,7 @@ class DuoBao
     {
         $code = 2;
 
-        if ($this->totalTicketCount() < 2000) {
+        if ($this->totalTicketCount() < 1000) {
             try {
                 $this->promo->isActive();
             } catch (\Exception $e) {

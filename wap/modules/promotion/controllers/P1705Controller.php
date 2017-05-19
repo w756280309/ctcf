@@ -162,10 +162,8 @@ class P1705Controller extends Controller
         ]);
     }
 
-    /**
-     * 周五上线活动 0元夺宝
-     */
-    public function actionDuobao($wx_share_key = null)
+    //第二期 0元夺宝活动
+    public function actionDuobao2($wx_share_key = null)
     {
         $share = null;
         if (!empty($wx_share_key)) {
@@ -181,7 +179,7 @@ class P1705Controller extends Controller
         $isBind = null;//新用户帮卡为1；否则为null 用于提示弹窗
         $isZJ = null; //已登录用户浙江手机号 已登录用户且手机号为非浙江，直接触发弹窗信息
 
-        $promo = RankingPromo::findOne(['key' => 'duobao0504']);
+        $promo = RankingPromo::findOne(['key' => 'duo_bao_0522']);
         $promoAtfr = new DuoBao($promo);
 
         //获取参与人数
@@ -288,7 +286,7 @@ class P1705Controller extends Controller
             }
         }
 
-        return $this->render('duobao', [
+        return $this->render('duobao2', [
             'share' => $share,
             'jindu' => $jindu,
             'promo' => $promo,
@@ -312,7 +310,7 @@ class P1705Controller extends Controller
         if (!Yii::$app->user->isGuest) {
             return $this->redirect('/?_mark='.time());
         }
-        $promo = RankingPromo::findOne(['key' => 'duobao0504']);
+        $promo = RankingPromo::findOne(['key' => 'duo_bao_0522']);
 
         if (null === $promo) {
             throw $this->ex404('活动不存在');
