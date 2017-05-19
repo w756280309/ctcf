@@ -3,7 +3,7 @@
 use common\utils\SecurityUtils;
 use common\utils\StringUtils;
 
-$this->title = '0元夺宝送iPhone7';
+$this->title = '0元夺宝送好礼';
 $this->share = $share;
 $this->headerNavOn = true;
 
@@ -16,14 +16,40 @@ $next = Yii::$app->request->hostInfo.'/promotion/p1705/duobao2';
 <script src="<?= FE_BASE_URI ?>libs/lib.flexible3.js"></script>
 <script  src="<?= FE_BASE_URI ?>libs/fastclick.js"></script>
 <script src="<?= FE_BASE_URI ?>wap/common/js/com.js"></script>
+<style>
+    .gift h5 {
+        font-size: 0.32rem;
+    }
+    ul.rules li.addTable {
+        color: #fff;
+        font-size: 0.32rem;
+    }
+    ul.rules li.addTable table {
+        width: 100%;
+        line-height: 0.84rem;
+        margin-top: 0.4rem;
+        border-collapse: collapse;
+    }
+    ul.rules li.addTable p {
+        color: #c08dfe;
+        line-height: 0.586666667rem;
+        margin: 0.1333333rem 0 0.266666667rem;
+    }
+    ul.rules li.addTable table tr:first-child {
+        background-color: #49178b;
+    }
+    ul.rules li.addTable table tr td {
+        padding-left:0.44rem;
+    }
+</style>
 
 <div class="flex-content">
     <div class="banner">
-        <img src="<?= FE_BASE_URI ?>wap/campaigns/active20170504/img/banner.png" alt="图">
+        <img src="<?= FE_BASE_URI ?>wap/campaigns/active20170504/img/banner_02.png" alt="图">
     </div>
     <div class="gift">
-        <h5>奖品：iPhone7 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;数量：1部</h5>
-        <img src="<?= FE_BASE_URI ?>wap/campaigns/active20170504/img/phone.png" alt="">
+        <h5>奖品：苹果手表／扫地机器人／京东E卡 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;数量：1份</h5>
+        <img src="<?= FE_BASE_URI ?>wap/campaigns/active20170504/img/gift_02.png" alt="">
         <div class="progress">
             <p class="progressTotal"><span class="progressLine" style="width: <?= $jindu ?>%;"></span></p>
             <p class="progressRate">揭晓进度<span><?= $jindu ?>%</span></p>
@@ -41,15 +67,39 @@ $next = Yii::$app->request->hostInfo.'/promotion/p1705/duobao2';
         <ul class="rules">
             <li>1、本次活动仅限浙江手机号段用户参与；</li>
             <li>2、活动期间新注册用户可以获得参与机会，老用户成功邀请好友后也可以获得参与机会；</li>
-            <li>3、本次活动限额1000名，满额后将不能参与，活动结束前未满额将取消开奖；</li>
-            <li>4、本次活动所有未中奖用户将于开奖当日获赠神秘礼包1份；</li>
-            <li>5、领取活动奖品需要实名认证并绑定银行卡；</li>
-            <li>6、活动时间2017年5月22日-5月27日，开奖时间为2017年5月29日中午12点。</li>
+            <li>3、本次活动限额1000名，参与人数每达到一定数量，夺宝奖品将提升至对应档次。参与人数及对应奖品如下；</li>
+            <li class="addTable">
+                <table cellspacing="0" cellpadding="0">
+                    <tr>
+                        <td>总参与人数</td>
+                        <td>对应奖品</td>
+                        <td>价值（元）</td>
+                    </tr>
+                    <tr style="border-bottom:1px solid #644d81;">
+                        <td>200</td>
+                        <td>京东E卡500元面值</td>
+                        <td>500</td>
+                    </tr>
+                    <tr style="border-bottom:1px solid #644d81;">
+                        <td>500</td>
+                        <td>艾罗伯特扫地机器人</td>
+                        <td>1699</td>
+                    </tr>
+                    <tr>
+                        <td>1000</td>
+                        <td>苹果手表Sport Series 2</td>
+                        <td>2888</td>
+                    </tr>
+                </table>
+                <p>比如：本次活动有600位用户成功参与，最终将从这600位参与用户中抽取1位，获得扫地机器人1台。</p>
+            </li>
+            <li>4、领取活动奖品需要实名认证并绑定银行卡；</li>
+            <li>5、活动时间2017年5月22日-5月29日，开奖时间为2017年5月31日中午12点。</li>
         </ul>
         <ul class="regular">
             <li>计算规则如下：</li>
             <li>1、参与用户随机获得1个夺宝码（1000001-1001000）；</li>
-            <li>2、选择最近10位参与用户的参与时间之和，加上第2017056期双色球号码，然后进行求余：【最近10位参与用户的参与时间之和+双色球号码】% 1000（参与人数），得到余数；</li>
+            <li>2、选择最近10位参与用户的参与时间之和，加上第2017062期双色球号码，然后进行求余：【最近10位参与用户的参与时间之和+双色球号码】% 1000（参与人数），得到余数；</li>
             <li>3、中奖号码=余数+1000001。</li>
         </ul>
     </div>
