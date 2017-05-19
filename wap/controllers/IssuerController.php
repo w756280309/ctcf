@@ -34,7 +34,7 @@ class IssuerController extends Controller
         }
 
         $issuer = $this->findOr404(Issuer::class, $id);
-        $loansCount = $this->loanQuery($issuer->id)
+        $loansCount = OnlineProduct::findSpecial(['issuer' => $issuer->id])
             ->count();
 
         if (in_array($id, [2, 3, 5, 10]) && null === $jxPage) {
@@ -64,29 +64,10 @@ class IssuerController extends Controller
             return $this->redirect('/deal/deal');
         }
 
-        $loan = $this->loanQuery($issuerid)
-            ->andWhere(['status' => OnlineProduct::STATUS_NOW])
-            ->andWhere(['<', 'finish_rate', 1])
-            ->orderBy(['finish_rate' => SORT_DESC, 'id' => SORT_DESC])
-            ->one();
-
-        if (null === $loan) {
-            $loan = $this->loanQuery($issuerid)
-                ->orderBy(['id' => SORT_DESC])
-                ->one();
-        }
+        $loan = OnlineProduct::fetchSpecial([
+            'issuer' => $issuerid,
+        ]);
 
         return $this->redirect(null === $loan ? '/deal/deal' : '/deal/deal/detail?sn='.$loan->sn);
-    }
-
-    private function loanQuery($issuerId)
-    {
-        return OnlineProduct::find()->where([
-            'issuer' => $issuerId,
-            'online_status' => true,
-            'del_status' => false,
-            'isPrivate' => false,
-            'isTest' => false,
-        ]);
     }
 }

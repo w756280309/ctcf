@@ -253,7 +253,7 @@ class SiteController extends Controller
     }
 
     /**
-     * 用户登陆表单页.
+     * 用户登录表单页.
      */
     public function actionLogin($next = null)
     {
@@ -355,7 +355,7 @@ class SiteController extends Controller
     }
 
     /**
-     * 注销登陆状态
+     * 注销登录状态
      */
     public function actionLogout()
     {
@@ -365,7 +365,7 @@ class SiteController extends Controller
     }
 
     /**
-     * 修改登陆密码表单页.
+     * 修改登录密码表单页.
      */
     public function actionEditpass()
     {
@@ -379,7 +379,7 @@ class SiteController extends Controller
             if ($model->edituserpass()) {
                 \Yii::$app->user->logout();
 
-                return ['code' => 0, 'message' => '修改登陆密码成功,如有其他操作需重新登陆'];
+                return ['code' => 0, 'message' => '修改登录密码成功,如有其他操作需重新登录'];
             }
         }
         if ($model->getErrors()) {

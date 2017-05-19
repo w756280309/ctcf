@@ -20,21 +20,11 @@ use yii\helpers\Html;
                 </div>
                 <div class="col-xs-2 col-sm-2 col-title"><i class="credit-staus <?= $isActive ? 'credit-staus-over' : '' ?>"><?= ($deal->end_date < time() && in_array($deal->status, [1, 2])) ? '募集结束' : Yii::$app->params['deal_status'][$deal->status] ?></i></div>
 
-                <?php if (!empty($deal->tags)) { ?>
+                <?php if (!empty($deal->tags) || $deal->pointsMultiple > 1) : ?>
                     <div class="col-xs-12 col-sm-12 col-tag">
-                        <?= $deal->pointsMultiple > 1 ? "<span class='red'>积分" . Html::encode($deal->pointsMultiple) . "倍</span>" : "" ?>
-                        <?php
-                            $tags = explode('，', $deal->tags);
-                            foreach ($tags as $tag) {
-                        ?>
-                            <span><?= $tag ?></span>
-                        <?php } ?>
+                        <?= $this->renderFile("@app/views/site/tags.php", ['loan' => $deal]) ?>
                     </div>
-                <?php } elseif ($deal->pointsMultiple > 1) { ?>
-                    <div class="col-xs-12 col-sm-12 col-tag">
-                        <span class="red">积分<?= Html::encode($deal->pointsMultiple); ?>倍</span>
-                    </div>
-                <?php } ?>
+                <?php endif; ?>
             </div>
             <div class="row credit-all clearfix" >
                 <div class="col-xs-4">

@@ -4,6 +4,7 @@ namespace wap\modules\promotion\controllers;
 
 use common\controllers\HelpersTrait;
 use common\models\adv\Share;
+use common\models\product\OnlineProduct;
 use common\models\promo\Promo170520;
 use common\models\promo\Promo201705;
 use common\models\promo\PromoLotteryTicket;
@@ -374,5 +375,50 @@ class P1705Controller extends Controller
             'code' => 0,
             'message' => '校验手机号成功',
         ];
+    }
+
+    /**
+     * 慈善活动.
+     */
+    public function actionCharity($wx_share_key = null)
+    {
+        $share = null;
+
+        if (!empty($wx_share_key)) {
+            $share = Share::findOne(['shareKey' => $wx_share_key]);
+        }
+
+        return $this->render('charity', [
+            'share' => $share,
+        ]);
+    }
+
+    /**
+     * 跳转到特定标的详情页.
+     *
+     * 优先跳转到慈善专属募集中项目且募集比例高的项目;
+     * 如果没有募集中项目,就跳转到慈善专属项目对应的ID倒序排列,取最新的一个;
+     */
+    public function actionToLoanDetail()
+    {
+        $loan = OnlineProduct::fetchSpecial(['like', 'tags', '慈善专属']);
+
+        return $this->redirect(null === $loan ? '/deal/deal' : '/deal/deal/detail?sn='.$loan->sn);
+    }
+
+    /**
+     * 端午节活动.
+     */
+    public function actionDuanwu($wx_share_key = null)
+    {
+        $share = null;
+
+        if (!empty($wx_share_key)) {
+            $share = Share::findOne(['shareKey' => $wx_share_key]);
+        }
+
+        return $this->render('duanwu', [
+            'share' => $share,
+        ]);
     }
 }
