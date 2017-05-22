@@ -45,9 +45,6 @@ use Zii\Validator\CnMobileValidator;
  * @property string password_hash
  * @property string auth_key
  * @property int    status
- * @property int    bank_card_status
- * @property int    email_status
- * @property int    mobile_status
  * @property int    idcard_status
  * @property int    updated_at
  * @property int    created_at
@@ -78,21 +75,11 @@ class User extends ActiveRecord implements IdentityInterface, UserInterface
     const STATUS_DELETED = 0;
     const STATUS_ACTIVE = 1;
 
-    const EXAMIN_STATUS_UNPASS = -1;
-    const EXAMIN_STATUS_WAIT = 0;
-    const EXAMIN_STATUS_PASS = 1;
-    const EMAIL_STATUS_UNPASS = -1;
-    const EMAIL_STATUS_WAIT = 0;
-    const EMAIL_STATUS_PASS = 1;
-    const MOBILE_STATUS_UNPASS = -1;
-    const MOBILE_STATUS_WAIT = 0;
-    const MOBILE_STATUS_PASS = 1;
     const IDCARD_STATUS_UNPASS = -1;
     const IDCARD_STATUS_WAIT = 0;
     const IDCARD_STATUS_PASS = 1;//开户通过
     const KUAIJIE_STATUS_Y = 1;
     const KUAIJIE_STATUS_N = 0;
-    const IDCARD_EXAMIN_COUNT = 3;
 
     const QPAY_NONE = 0;//未绑卡
     const QPAY_ENABLED = 1;//已经绑卡
@@ -103,21 +90,6 @@ class User extends ActiveRecord implements IdentityInterface, UserInterface
     const REG_FROM_APP = 3;//app注册
     const REG_FROM_PC = 4;//pc注册
     const REG_FROM_OTHER = 0;//未知
-
-
-    public static function examinStatus($key = null)
-    {
-        $arr = array(
-            self::EXAMIN_STATUS_UNPASS => '未通过',
-            self::EXAMIN_STATUS_WAIT => '待审核',
-            self::EXAMIN_STATUS_PASS => '审核通过',
-        );
-        if (!is_null($key)) {
-            return $arr[$key];
-        }
-
-        return $arr;
-    }
 
     /**
      * 生成用户编号非渠道.
@@ -219,9 +191,9 @@ class User extends ActiveRecord implements IdentityInterface, UserInterface
     public function scenarios()
     {
         return [
-            'add' => ['type', 'username', 'password_hash', 'usercode', 'mobile', 'email', 'real_name', 'idcard', 'org_name', 'org_code', 'status', 'auth_key', 'user_pass', 'in_time', 'cat_id', 'law_master', 'law_master_idcard', 'law_mobile', 'shui_code', 'business_licence', 'tel', "mianmiStatus"
+            'add' => ['type', 'username', 'password_hash', 'usercode', 'mobile', 'email', 'real_name', 'idcard', 'org_name', 'org_code', 'status', 'auth_key', 'user_pass', 'law_master', 'law_master_idcard', 'law_mobile', 'shui_code', 'business_licence', 'tel', "mianmiStatus"
             ],
-            'edit' => ['id', 'type', 'username', 'mobile', 'email', 'real_name', 'idcard', 'org_name', 'org_code', 'status', 'auth_key', 'user_pass', 'in_time', 'cat_id', 'law_master', 'law_master_idcard', 'law_mobile', 'shui_code', 'business_licence', 'tel', 'passwordLastUpdatedTime',
+            'edit' => ['id', 'type', 'username', 'mobile', 'email', 'real_name', 'idcard', 'org_name', 'org_code', 'status', 'auth_key', 'user_pass', 'law_master', 'law_master_idcard', 'law_mobile', 'shui_code', 'business_licence', 'tel', 'passwordLastUpdatedTime',
             ],
             'signup' => ['type', 'mobile', 'password_hash', 'auth_key', 'usercode', 'regContext', 'safeMobile'],
             'idcardrz' => ['real_name', 'idcard', 'idcard_status'],
@@ -257,8 +229,8 @@ class User extends ActiveRecord implements IdentityInterface, UserInterface
             [['real_name'], 'string', 'max' => 50, 'on' => 'idcardrz'],
             [['idcard'], 'string', 'length' => 18, 'on' => 'idcardrz'],
             [['idcard', 'law_master_idcard'], 'checkIdNumber'],
-            [['idcard_status', 'email_status', 'mobile_status', "mianmiStatus"], 'default', 'value' => 0],
-            [['mobile', 'new_mobile'], CnMobileValidator::className()],
+            [['idcard_status', 'mianmiStatus'], 'default', 'value' => 0],
+            [['mobile'], CnMobileValidator::className()],
             [['mobile'], 'string', 'max' => 11],
             [['usercode'], 'unique', 'message' => '会员编号已占用'],
             [['email'], 'unique', 'message' => 'Email已占用'],
@@ -322,37 +294,26 @@ class User extends ActiveRecord implements IdentityInterface, UserInterface
             'usercode' => '会员编号',
             'mobile' => '联系手机号',
             'email' => 'Email',
-            'cat_id' => '会员分类',
             'real_name' => '姓名',
             'idcard' => '身份证号',
             'law_master' => '企业法人姓名',
             'law_master_idcard' => '企业法人身份证',
             'org_name' => '机构名称',
             'org_code' => '组织机构代码证号',
-            'in_time' => '入会时间',
             'tel' => '办公电话',
             'business_licence' => '营业执照号',
             'shui_code' => '税务登记证号',
-            'org_url' => '机构网址',
             'password_hash' => '用户密码hash',
-            'f_trade_pwd' => '交易密码',
-            'confirm_trade_pwd' => '确认交易密码',
             'auth_key' => 'cookie权限认证key',
             'status' => '会员状态 ', //0-锁定 1-正常
-            'idcard_examin_count' => '身份证审核次数',
             'updated_at' => '注册时间',
             'created_at' => '更新时间',
             'user_pass' => '会员密码',
             'verifyCode' => '验证码',
-            'new_mobile' => '手机号',
             'password' => '密码',
             'password_confirm' => '确认密码',
             'sms_code' => '短信验证码',
             'agree' => '',
-            'old_password' => '原密码', 'new_password' => '新密码', 'new_confirm_password' => '确认密码',
-            'f_pwd' => '重置密码', 'c_f_pwd' => '确认密码',
-            'trade_pwd' => '交易密码', 'old_trade' => '原交易密码',
-            'new_trade' => '新交易密码', 'new_trade_confirm' => '确认交易密码',
             'regContext' => '页面注册来源',
             'registerIp' => '用户注册IP',
             'points' => '用户积分',
