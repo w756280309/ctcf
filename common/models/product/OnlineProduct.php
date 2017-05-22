@@ -49,6 +49,7 @@ use yii\behaviors\TimestampBehavior;
  * @property boolean $allUseCoupon 是否允许使用代金券
  * @property boolean $isLicai 是否为理财计划标识
  * @property int     $pointsMultiple    积分倍数
+ * @property bool    $allowTransfer     是否允许转让
  */
 class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
 {
@@ -78,6 +79,7 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
     const REFUND_METHOD_NATURE_QUARTER = 7;//按自然季度付息，到期本息
     const REFUND_METHOD_NATURE_HALF_YEAR = 8;//按自然半年付息，到期本息
     const REFUND_METHOD_NATURE_YEAR = 9;//按自然年付息，到期本息
+    const REFUND_METHOD_DEBX = 10;//按月付本，等额本息
 
     /*定义错误级别*/
     const ERROR_SUCCESS = 100;
@@ -113,7 +115,7 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
             'create' => ['title', 'sn', 'cid', 'money', 'borrow_uid', 'expires', 'expires_show', 'yield_rate', 'start_money', 'borrow_uid', 'fee', 'status',
                 'description', 'refund_method', 'account_name', 'account', 'bank', 'dizeng_money', 'start_date', 'end_date', 'full_time',
                 'is_xs', 'yuqi_faxi', 'order_limit', 'creator_id', 'del_status', 'status', 'isPrivate', 'allowedUids', 'finish_date', 'channel', 'jixi_time', 'sort',
-                'jiaxi', 'kuanxianqi', 'isFlexRate', 'rateSteps', 'issuer', 'issuerSn', 'paymentDay', 'isTest', 'filingAmount', 'allowUseCoupon', 'tags', 'isLicai', 'pointsMultiple'],
+                'jiaxi', 'kuanxianqi', 'isFlexRate', 'rateSteps', 'issuer', 'issuerSn', 'paymentDay', 'isTest', 'filingAmount', 'allowUseCoupon', 'tags', 'isLicai', 'pointsMultiple', 'allowTransfer'],
         ];
     }
 
@@ -238,6 +240,7 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
             [['start_money', 'dizeng_money'], 'checkMoney'],
             ['tags', 'checkTags'],
             ['title', 'trim'],  //去掉项目名称两边多余的空格
+            ['allowTransfer', 'boolean'],
         ];
     }
 
@@ -427,6 +430,7 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
             'allowUseCoupon' => '是否可以使用代金券',
             'isLicai' => '是否为理财计划标识',
             'pointsMultiple' => '积分倍数',
+            'allowTransfer' => '允许转让',
         ];
     }
 
@@ -801,7 +805,7 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
         }
         //枚举所有还款方式
         //$num 表示期数 $total 表示 每期多少月
-        if ($method === 2 || $method === 6) {
+        if ($method === 2 || $method === 6 || $method === 10) {
             $num = $expires;
             $total = 1;
         } elseif ($method === 3 || $method === 7) {
@@ -818,7 +822,7 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
         $paymentDays = [];
         if ($method === 1) {
             $paymentDays[] = date('Y-m-d', $finish_time);
-        } elseif (in_array($method, [2, 3, 4, 5])) {
+        } elseif (in_array($method, [2, 3, 4, 5, 10])) {
             //最后一次还款日期为计算出的 项目截止日期
             for ($i = 1; $i < $num; $i++) {
                 //获取当期还款日期
@@ -1023,15 +1027,19 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
      *
      * 1. 分期项目期限超过6个月可转;
      * 2. 到期本息项目期限超过180天可转;
+     * 3. 标的本身是否允许转让
      */
     public function allowTransfer()
     {
+        if (!$this->allowTransfer) {
+            return false;
+        }
         if (!$this->isAmortized()) {
-            if ($this->expires <= 180) {
+            if ($this->expires <= Yii::$app->params['credit_trade']['loan_daoqi_limit']) {
                 return false;
             }
         } else {
-            if ($this->expires <= 6) {
+            if ($this->expires <= Yii::$app->params['credit_trade']['loan_fenqi_limit']) {
                 return false;
             }
         }

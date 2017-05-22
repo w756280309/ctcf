@@ -162,6 +162,7 @@ class ProductonlineController extends BaseController
     {
         $model = OnlineProduct::initNew();
         $model->scenario = 'create';
+        $model->allowTransfer = true;
 
         $con_name_arr = Yii::$app->request->post('name');
         $con_content_arr = Yii::$app->request->post('content');
@@ -425,7 +426,7 @@ class ProductonlineController extends BaseController
             $data->andWhere(['like', "$op.sn", trim($request['sn'])]);
         }
         if ($request['name']) {
-            $data->andFilterWhere(['like', 'title', $request['name']]);
+            $data->andFilterWhere(['like', 'title', trim($request['name'])]);
         }
         if ($request['status'] == '0') {
             $data->andWhere(['online_status' => $request['status']]);
@@ -708,6 +709,7 @@ class ProductonlineController extends BaseController
                 'amount' => $order->order_money * 100,
                 'orderTime' => date('Y-m-d H:i:s', $order->created_at),
                 'isTest' => $loan->isTest,
+                'allowTransfer' => $loan->allowTransfer(),
             ];
         }
 

@@ -548,6 +548,15 @@ TPL;
                     </div>
                 </div>
             </div>
+
+            <div class="span6  fix-offset">
+                <div class="control-group">
+                    <label class="control-label">允许转让</label>
+                    <div class="controls">
+                        <?=  $form->field($model, 'allowTransfer')->checkbox($model->online_status ? ['disabled' => true, 'uncheck' => $model->allowTransfer] : [])->label(false)?>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <h3 class="form-section">项目合同信息</h3>

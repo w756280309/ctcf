@@ -304,4 +304,22 @@ class OnlineRepaymentPlanTest extends YiiAppTestCase
             ['2016-09-19', 1, '0.01'],
         ], OnlineRepaymentPlan::calcBenxi($ord));
     }
+
+    //测试等额本息
+    public function testDebx()
+    {
+        $loan = new OnlineProduct([
+            'refund_method' => OnlineProduct::REFUND_METHOD_DEBX,//还款方式，等额本息
+            'jixi_time' => strtotime('2017-04-01'),//计息日期
+            'expires' => 2,//项目期限
+        ]);
+        $order = $this->getOrderMock($loan);
+        $order->order_money = 1000;
+        $order->yield_rate = 0.02;
+
+        $this->assertEquals([
+            ['2017-05-01', '499.58', '1.67'],//['还款日', '应还本金', '应还利息'],
+            ['2017-06-01', '500.42', '0.83'],
+        ], OnlineRepaymentPlan::calcBenxi($order));
+    }
 }
