@@ -88,24 +88,33 @@ $this->registerJsFile(FE_BASE_URI.'libs/videojs/video.min.js', ['position' => 1]
         <?php } else { ?>
             <div class="m3">产品到期日：<span><?= date('Y-m-d',$deal->finish_date) ?></span></div>
         <?php } ?>
-        <?php if ($deal->isNatureRefundMethod()) { ?>
-            <div class="m4">还款方式：
-                <span><?= Yii::$app->params['refund_method'][$deal->refund_method]?></span>
+
+        <?php
+            $refundMethodDescription = '';
+            $refundMethodTitle = Yii::$app->params['refund_method'][$deal->refund_method];
+            if ($deal->isNatureRefundMethod()) {
+                $refundMethodDescription = '付息时间固定日期，按自然月在每个月还款，按自然季度是3、6、9、12月还款，按自然半年是6、12月还款，按自然年是12月还款';
+            }
+            if (\common\models\product\OnlineProduct::REFUND_METHOD_DEBX === $deal->refund_method) {
+                $refundMethodDescription = '每月还款金额为部分本金和部分收益之和，各月还款金额相等';
+            }
+        ?>
+        <div class="m4">还款方式：
+            <span><?= Yii::$app->params['refund_method'][$deal->refund_method]?></span>
+            <?php if(!empty($refundMethodDescription)) { ?>
                 <img src="<?= ASSETS_BASE_URI ?>images/credit/tip.png" alt="">
-            </div>
+            <?php }?>
+        </div>
+        <?php if(!empty($refundMethodDescription)) { ?>
             <div class="row" id='chart-box' hidden="true">
                 <div class="col-xs-12">
                     <div>
                         <img src="<?= ASSETS_BASE_URI ?>images/credit/jiao.png" alt="">
-                        付息时间固定日期，按自然月在每个月还款，按自然季度是3、6、9、12月还款，按自然半年是6、12月还款，按自然年是12月还款
+                        <?= $refundMethodDescription?>
                     </div>
                 </div>
             </div>
-        <?php } else { ?>
-            <div class="m4">还款方式：
-                <span><?= Yii::$app->params['refund_method'][$deal->refund_method]?></span>
-            </div>
-        <?php } ?>
+        <?php }?>
         <?php if (!empty($deal->kuanxianqi)) { ?>
             <p class="notice">融资方可提前<?= $deal->kuanxianqi ?>天内任一天还款，客户收益按实际天数计息。</p>
         <?php } ?>
