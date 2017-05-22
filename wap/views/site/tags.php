@@ -22,8 +22,8 @@ if (null !== $loan->tags) {
     }
 
     if ($tagsCount > 0) {
-        foreach($tags as $key => $tag) {
-            if ($key < $tagsCount && !empty($tag)) {
+        foreach($tags as $tag) {
+            if ($tagsCount-- > 0 && !empty($tag)) {
                 echo '<span>'.Html::encode($tag).'</span>';
             }
         }

@@ -28,7 +28,7 @@ $this->registerJsFile(FE_BASE_URI.'libs/videojs/video.min.js', ['position' => 1]
             <?php if ($pointsMultiple > 1) { ?>
                 <i>积分<?= $pointsMultiple ?>倍</i>
             <?php }?>
-            <?php if ($deal->tags && array_search('慈善专属', explode('，', $deal->tags))) { ?>
+            <?php if ($deal->tags && false !== array_search('慈善专属', explode('，', $deal->tags))) { ?>
                 <i>慈善专属</i>
             <?php } ?>
         </div>
