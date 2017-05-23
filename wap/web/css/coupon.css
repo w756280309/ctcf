@@ -11,8 +11,13 @@
     background: url("../images/bg_none.png") no-repeat center 35%;
     background-size: 30% auto;
 }
-.box {
+a.box {
     margin-bottom: 30px;
+    color: rgb(255, 255, 255);
+    display: block;
+}
+a.box:hover,a.box:visited {
+    color: rgb(255, 255, 255);
 }
 .coupon_num {
     margin:0 auto;
@@ -46,7 +51,7 @@
     left:0;
     top:0;
     width:100%;
-    height:100px;
+    height: 42px;
 }
 .a_height {
     width:100%;
@@ -89,11 +94,28 @@
     padding-left: 5%;
     height: 100px;
 }
+.over-use {
+    float: right;
+    padding-right: 6px;
+    text-align: right;
+    line-height:42px;
+}
 .no-use {
     float: right;
     padding-right: 6px;
     text-align: right;
     line-height:42px;
+}
+.no-use .go-use-coucpon {
+    display: inline-block;
+    margin-top: 8px;
+    padding: 0 10px;
+    height: 26px;
+    line-height: 26px;
+    color: #fff;
+    background: #f44336;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
 }
 .over_img{
     position: absolute;

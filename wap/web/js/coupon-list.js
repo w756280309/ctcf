@@ -31,24 +31,32 @@ $(function(){
                             if (data.data.length > 0) {
                                 var html = "";
                                 $.each(data.data, function (i, item) {
-                                    var $desc = '未使用';
+                                    var $desc = '去使用';
                                     var $div = '';
                                     var $image = 'ok_ticket';
-
+                                    var $todeal = null;
                                     if (parseInt(item.isUsed) > 0) {
                                         $desc = '已使用';
                                         $div = '<div class="row over_img over_user_img"></div>';
                                         $image = 'over_ticket';
+                                        $todeal = false;
                                     } else {
                                         if (parseInt(item.isExpired) > 0) {
                                             $desc = '已过期';
                                             $div = '<div class="row over_img over_time_img"></div>';
                                             $image = 'over_ticket';
+                                            $todeal = false;
+                                        } else {
+                                            $todeal = true;
                                         }
                                     }
 
-                                    html += '<div class="box">' +
-                                            '<div class="row coupon_num">' +
+                                    if ($todeal) {
+                                        html += '<a class="box" href="/deal/deal/index">';
+                                    } else {
+                                        html += '<a class="box" href="javascript:;">';
+                                    }
+                                    html += '<div class="row coupon_num">' +
                                             '<img src="/images/'+ $image +'.png" alt="券">' +
                                             '<div class="row pos_box">' +
                                             '<div class="col-xs-2"></div>' +
@@ -69,9 +77,13 @@ $(function(){
                                             '<div class="row gray_time">' +
                                             '<img src="/images/coupon_img.png" alt="底图">' +
                                             '<div class="row pos_box">' +
-                                            '<div class="col-xs-8 ticket_time">有效期至'+ item.expiryDate +'</div>' +
-                                            '<div class="col-xs-4 no-use">'+ $desc +'</div>' +
-                                            '</div></div></div>';
+                                            '<div class="col-xs-8 ticket_time">有效期至'+ item.expiryDate +'</div>';
+                                    if ($todeal) {
+                                        html += '<div class="col-xs-4 no-use"><span class="go-use-coucpon">'+ $desc +'</span></div>';
+                                    } else {
+                                        html += '<div class="col-xs-4 over-use">'+ $desc +'</div>';
+                                    }
+                                    html += '</div></div></a>';
                                 });
 
                                 $('.load').before(html);

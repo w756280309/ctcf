@@ -6,8 +6,8 @@ use yii\web\YiiAsset;
 
 $this->title = '我的代金券';
 
-$this->registerCssFile(ASSETS_BASE_URI.'css/coupon.css?v=20150801', ['depends' => WapAsset::class]);
-$this->registerJsFile(ASSETS_BASE_URI.'js/coupon-list.js?v=20150708', ['depends' => YiiAsset::class, 'position' => 1]);
+$this->registerCssFile(ASSETS_BASE_URI.'css/coupon.css?v=2017052202', ['depends' => WapAsset::class]);
+$this->registerJsFile(ASSETS_BASE_URI.'js/coupon-list.js?v=20170522', ['depends' => YiiAsset::class, 'position' => 1]);
 $this->registerJsFile(ASSETS_BASE_URI.'js/couponcode.js', ['depends' => WapAsset::class]);
 $this->registerJs('var tp='.$header->pageCount.';', 1);
 
@@ -19,23 +19,28 @@ $this->registerJs('var tp='.$header->pageCount.';', 1);
 <?php if (!empty($model)) { ?>
     <div class="container coupon">
         <?php
+            $todeal = null;
             foreach ($model as $val) :
-                $desc = '未使用';
+                $desc = '去使用';
                 $div = '';
                 $image = 'ok_ticket';
                 if ($val['isUsed']) {
                     $desc = '已使用';
                     $div = '<div class="row over_img over_user_img"></div>';
                     $image = 'over_ticket';
+                    $todeal = false;
                 } else {
                     if (date('Y-m-d') > $val['expiryDate']) {
                         $desc = '已过期';
                         $div = '<div class="row over_img over_time_img"></div>';
                         $image = 'over_ticket';
+                        $todeal = false;
+                    } else {
+                        $todeal = true;
                     }
                 }
         ?>
-        <div class="box">
+        <a class="box" href="<?= $todeal ? '/deal/deal/index' : 'javascript:;'?>">
             <div class="row coupon_num">
                 <img src="<?= ASSETS_BASE_URI ?>images/<?= $image ?>.png" alt="券">
                 <div class="row pos_box">
@@ -64,10 +69,12 @@ $this->registerJs('var tp='.$header->pageCount.';', 1);
                 <img src="<?= ASSETS_BASE_URI ?>images/coupon_img.png" alt="底图">
                 <div class="row pos_box">
                     <div class="col-xs-8 ticket_time">有效期至<?= $val['expiryDate'] ?></div>
-                    <div class="col-xs-4 no-use"><?= $desc ?></div>
+                    <div class='col-xs-4 <?= $todeal ? 'no-use' : 'over-use'?>'>
+                        <?= $todeal ? "<span class='go-use-coucpon'> $desc </span>" : $desc ?>
+                    </div>
                 </div>
             </div>
-        </div>
+        </a>
         <?php endforeach; ?>
         <div class="load"></div>
     </div>
