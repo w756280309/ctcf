@@ -9,7 +9,7 @@ use yii\helpers\HtmlPurifier;
 $this->title = '项目详情';
 
 $this->registerCssFile(FE_BASE_URI.'libs/videojs/video-js.min.css', ['position' => 1]);
-$this->registerCssFile(ASSETS_BASE_URI.'css/xiangqing.css?v=20170120', ['depends' => WapAsset::class, 'position' => 1]);
+$this->registerCssFile(ASSETS_BASE_URI.'css/xiangqing.css?v=20170523', ['depends' => WapAsset::class, 'position' => 1]);
 $this->registerJsFile(FE_BASE_URI.'libs/videojs/video.min.js', ['position' => 1]);
 
 ?>
@@ -337,5 +337,6 @@ $this->registerJsFile(FE_BASE_URI.'libs/videojs/video.min.js', ['position' => 1]
     // 新的
     $('.m4 img').on('click',function(){
         $('#chart-box').stop(true,false).fadeToggle();
+        $('#chart-box .col-xs-12 img').css({left:$(this).context.offsetLeft-16+"px"});
     })
 </script>
