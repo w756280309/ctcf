@@ -6,7 +6,7 @@ use yii\web\YiiAsset;
 
 $this->title = '我的代金券';
 
-$this->registerCssFile(ASSETS_BASE_URI.'css/coupon.css?v=2017052202', ['depends' => WapAsset::class]);
+$this->registerCssFile(ASSETS_BASE_URI.'css/coupon.css?v=2017052203', ['depends' => WapAsset::class]);
 $this->registerJsFile(ASSETS_BASE_URI.'js/coupon-list.js?v=20170522', ['depends' => YiiAsset::class, 'position' => 1]);
 $this->registerJsFile(ASSETS_BASE_URI.'js/couponcode.js', ['depends' => WapAsset::class]);
 $this->registerJs('var tp='.$header->pageCount.';', 1);

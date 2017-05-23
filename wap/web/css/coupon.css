@@ -11,12 +11,12 @@
     background: url("../images/bg_none.png") no-repeat center 35%;
     background-size: 30% auto;
 }
-a.box {
+.box {
     margin-bottom: 30px;
     color: rgb(255, 255, 255);
     display: block;
 }
-a.box:hover,a.box:visited {
+.box:hover,.box:visited {
     color: rgb(255, 255, 255);
 }
 .coupon_num {
