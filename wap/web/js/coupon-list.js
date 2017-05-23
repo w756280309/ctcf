@@ -6,6 +6,7 @@ $(function(){
     var currentPage = 2;
     var totalPage = tp;
     var stop = true;
+    var $isApp = isApp;
     //自动加载分页数据
     $(window).scroll(function () {
         //当内容滚动到底部时加载新的内容
@@ -32,6 +33,9 @@ $(function(){
                                 var html = "";
                                 $.each(data.data, function (i, item) {
                                     var $desc = '去使用';
+                                    if (!$isApp) {
+                                        $desc = '未使用';
+                                    }
                                     var $div = '';
                                     var $image = 'ok_ticket';
                                     var $todeal = null;
@@ -50,11 +54,14 @@ $(function(){
                                             $todeal = true;
                                         }
                                     }
-
-                                    if ($todeal) {
-                                        html += '<a class="box" href="/deal/deal/index">';
+                                    if ($isApp) {
+                                        if ($todeal) {
+                                            html += '<a class="box" href="/deal/deal/index">';
+                                        } else {
+                                            html += '<a class="box" href="javascript:;">';
+                                        }
                                     } else {
-                                        html += '<a class="box" href="javascript:;">';
+                                        html += '<div class="box">';
                                     }
                                     html += '<div class="row coupon_num">' +
                                             '<img src="/images/'+ $image +'.png" alt="券">' +
@@ -78,12 +85,22 @@ $(function(){
                                             '<img src="/images/coupon_img.png" alt="底图">' +
                                             '<div class="row pos_box">' +
                                             '<div class="col-xs-8 ticket_time">有效期至'+ item.expiryDate +'</div>';
-                                    if ($todeal) {
-                                        html += '<div class="col-xs-4 no-use"><span class="go-use-coucpon">'+ $desc +'</span></div>';
+
+                                    if ($isApp) {
+                                        if ($todeal) {
+                                            html += '<div class="col-xs-4 no-use"><span class="go-use-coucpon">'+ $desc +'</span></div>';
+                                        } else {
+                                            html += '<div class="col-xs-4 over-use">'+ $desc +'</div>';
+                                        }
                                     } else {
                                         html += '<div class="col-xs-4 over-use">'+ $desc +'</div>';
                                     }
-                                    html += '</div></div></a>';
+                                    html += '</div></div>';
+                                    if ($isApp) {
+                                        html += '</a>';
+                                    } else {
+                                        html += '</div>';
+                                    }
                                 });
 
                                 $('.load').before(html);
