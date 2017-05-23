@@ -131,6 +131,9 @@ class ProductonlineController extends BaseController
         if (!$loan->isNatureRefundMethod()) {  //当标的还款方式不为按自然时间付息的方式时,固定日期置为null
             $loan->paymentDay = null;
         }
+        if ($refund_method === OnlineProduct::REFUND_METHOD_DEBX) {//等额本息强制不允许转让
+            $loan->allowTransfer = false;
+        }
 
         return $loan;
     }
