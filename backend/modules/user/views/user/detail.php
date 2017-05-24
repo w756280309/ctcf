@@ -88,7 +88,7 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => YiiAsse
                         $campaignSource = trim($normalUser['campaign_source']);
                         if ('walmart1702' === $campaignSource) {
                             echo '沃尔玛';
-                        } else if (null === $campaignSource) {
+                        } else if ('' === $campaignSource) {
                             echo '---';
                         } else {
                             echo $campaignSource;
