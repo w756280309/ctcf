@@ -166,9 +166,9 @@ $this->registerCssFile(ASSETS_BASE_URI .'css/touzixiangqing.css?v=20170306', ['d
             <div class="row" id="repayment-content">
                 <div class="col-xs-12">
                     <ul class="repayment-content">
-                        <?php foreach($plan as $key => $val) : ++$key; $benjin = (int) $val['benjin']; ?>
+                        <?php foreach($plan as $key => $val) : ++$key; ?>
                             <?php $hasRepaid = in_array($val['status'], [OnlineRepaymentPlan::STATUS_YIHUAN, OnlineRepaymentPlan::STATUS_TIQIAM]);?>
-                            <?php if (0 !== $benjin) { ?>
+                            <?php if ($val['benjin'] > 0) { ?>
                                 <li>
                                     <div>第<?= $key ?>期</div>
                                     <div><?= date('Y.m.d', $val['refund_time']) ?></div>
