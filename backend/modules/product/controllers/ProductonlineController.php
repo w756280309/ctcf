@@ -422,8 +422,8 @@ class ProductonlineController extends BaseController
             ->addSelect(['xs_status' => "if(`is_xs` = 1 && $op.`status` < 3, 1, 0)"])
             ->addSelect(['isrecommended' => 'if(`online_status`=1 && `isPrivate`=0, `recommendTime`, 0)'])
             ->addSelect(['effect_jixi_time' => 'if(`is_jixi`=1, `jixi_time`, 0)'])
-            ->addSelect(['product_status' => "(case $op.`status` when 4 then 7 when 7 then 4 else $op.`status` end)"])
-            ->where(['del_status' => 0]);
+            ->addSelect(['product_status' => "(case $op.`status` when 4 then 7 when 7 then 4 else $op.`status` end)"]);
+
         //筛选标的sn
         if (!empty($request['sn'])) {
             $data->andWhere(['like', "$op.sn", trim($request['sn'])]);
@@ -436,6 +436,18 @@ class ProductonlineController extends BaseController
         } elseif ($request['status']) {
             $data->andWhere(['online_status' => OnlineProduct::STATUS_ONLINE, "$op.status" => $request['status']]);
         }
+
+        $isHide = false;
+        if (isset($request['isHide']) && $request['isHide']) {
+            $data->andWhere([
+                'del_status' => OnlineProduct::STATUS_DEL,
+                'status' => OnlineProduct::STATUS_FOUND,
+            ]);
+            $isHide = true;
+        } else {
+            $data->andWhere(['del_status' => OnlineProduct::STATUS_USE]);
+        }
+
         //根据是否测试标进行过滤
         if (isset($request['isTest'])) {
             $isTest = $request['isTest'];
@@ -469,6 +481,7 @@ class ProductonlineController extends BaseController
             'status' => $status,
             'days' => $days,
             'isTest' => $isTest,
+            'isHide' => $isHide,
         ]);
     }
 
@@ -924,11 +937,11 @@ class ProductonlineController extends BaseController
     }
 
     /**
-     * 隐藏标的.
+     * 隐藏/还原标的.
      *
-     * 1. 将对应标的改为定向标;
+     * 1. 修改对应标的的del_status字段;
      * 2. 权限控制;
-     * 3. 实际募集金额为零时,才允许修改;
+     * 3. 实际募集金额为零且标的状态为募集提前结束时,才允许修改;
      */
     public function actionHideLoan($id)
     {
@@ -937,17 +950,24 @@ class ProductonlineController extends BaseController
         }
 
         $loan = $this->findOr404(OnlineProduct::class, $id);
+        $msg = null;
 
         if (1 === bccomp($loan->funded_money, 0, 2)) {
+            $msg = '当前标的实际募集金额不为0，无法修改！';
+        } elseif (OnlineProduct::STATUS_FOUND !== $loan->status) {
+            $msg = '当前标的状态不为募集提前结束，无法修改！';
+        }
+
+        if ($msg) {
             return [
                 'code' => 1,
-                'message' => '当前标的实际募集金额不为0,无法修改!',
+                'message' => $msg,
             ];
         }
 
-        $loan->isPrivate = true;
-
+        $loan->del_status = !$loan->del_status;
         $res = $loan->save(false);
+        AdminLog::initNew($loan)->save(false);
 
         return [
             'code' => intval(!res),

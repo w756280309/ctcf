@@ -66,8 +66,14 @@ $pc_cat = Yii::$app->params['pc_cat'];
                     </td>
                     <td>
                         <select class="m-wrap" name="isTest" id="isTest" style="width: 80px;">
-                            <option value="0" <?= $isTest ? '' : 'selected'?> >正式标</option>
-                            <option value="1" <?= $isTest ? 'selected' : ''?>>测试标</option>
+                            <option value="0" <?= $isTest ? '' : 'selected'?>>正式标</option>
+                            <option value="1" <?= $isTest ? 'selected' : '' ?>>测试标</option>
+                        </select>
+                    </td>
+                    <td>
+                        <select class="m-wrap" name="isHide">
+                            <option value="0" <?= $isHide ? '' : 'selected'?>>显示可见标的列表</option>
+                            <option value="1" <?= $isHide ? 'selected' : '' ?>>显示隐藏标的列表</option>
                         </select>
                     </td>
                     <td>
@@ -135,38 +141,42 @@ $pc_cat = Yii::$app->params['pc_cat'];
                             <td>
                                 <a href="/product/productonline/show?id=<?= $val['id'] ?>" class="btn mini green"><i class="icon-edit"></i> 查看</a>
                                 | <a href="/product/productonline/edit?id=<?= $val['id'] ?>" class="btn mini green"><i class="icon-edit"></i> 编辑</a>
-                                <?php if ($val['online_status'] && !$val['isPrivate'] && $val['funded_money'] <= 0) { ?>
-                                    | <a href="javascript:hideLoan('<?= $val['id'] ?>', '<?= $val['title'] ?>')" class="btn mini red"><i class="icon-minus-sign"></i> 隐藏</a>
-                                <?php } ?>
-                                <?php if ($val['status'] < 2) { ?>
-                                    | <a href="javascript:del('/product/productonline/del','<?= $val['id'] ?>')" class="btn mini red ajax_op" op="status" data-index="<?= $val['status'] ?>" index="<?= $val['id'] ?>"><i class="icon-minus-sign"></i>删除</a>
-                                <?php } ?>
-                                <?php if ($val['online_status'] == 1 && ($val['status'] == 3 || $val['status'] == 7) && empty($val['fk_examin_time']) && 1 === (int) $val['is_jixi']) { ?>
-                                    | <a href="javascript:openwin('/order/onlinefangkuan/examinfk?pid=<?= $val['id'] ?>',800,400)" class="btn mini green"><i class="icon-edit"></i> 放款审核</a>
-                                <?php } ?>
-                                <?php if ($val['online_status'] == 1 && $val['status'] > 1) { ?>
-                                    | <a href="/order/onlineorder/list?id=<?= $val['id'] ?>" class="btn mini green"><i class="icon-edit"></i> 投标记录</a>
-                                <?php } ?>
-                                <?php if ($val->allowRepayment()) { ?>
-                                    | <a href="/repayment/repayment?pid=<?= $val['id'] ?>" class="btn mini green"><i class="icon-edit"></i> 还款</a>
-                                <?php } ?>
-                                <?php if ($val['fk_examin_time'] && in_array($val->fangkuan->status, [OnlineFangkuan::STATUS_EXAMINED, OnlineFangkuan::STATUS_FANGKUAN, OnlineFangkuan::STATUS_TIXIAN_FAIL])) { ?>
-                                    | <a href="javascript:fk('<?= $val['id'] ?>');" class="btn mini green"><i class="icon-edit"></i> 放款</a>
-                                <?php } ?>
-                                <?php if ($val['online_status'] == 1 && (in_array($val['status'], [3, 5, 7])) && $val['is_jixi'] == 0) { ?>
-                                    | <a href="javascript:void(0)" onclick="openwin('/product/productonline/jixi?product_id=<?= $val['id'] ?>',500,300)" class="btn mini green"><i class="icon-edit"></i> 计息</a>
-                                    | <a href="javascript:corfirmJixi('<?= $val['id'] ?>');" class="btn mini green"><i class="icon-edit"></i> 确认计息</a>
-                                <?php } ?>
-                                <?php if ($val['online_status'] == 1 && $val['status'] == 2) { ?>
-                                    | <a href="javascript:endproduct('<?= $val['id'] ?>')" class="btn mini green"><i class="icon-edit"></i> 结束项目</a>
-                                <?php } ?>
-                                <?php if (!empty($val['online_status']) && empty($val['isPrivate'])) {
-                                    if (empty($val['recommendTime'])) {
-                                ?>
-                                        <a href="javascript:recommend('<?= $val['id'] ?>')" class="btn mini green"><i class="icon-edit"></i> 推荐</a>
-                                    <?php } else { ?>
-                                        <a href="javascript:recommend('<?= $val['id'] ?>')" class="btn mini red"><i class="icon-minus-sign"></i> 取消推荐</a>
-                                <?php }} ?>
+                                <?php if ($isHide) : ?>
+                                    | <a href="javascript:hideLoan('<?= $val->id ?>', '<?= $val->title ?>')" class="btn mini red"><i class="icon-minus-sign"></i> 还原</a>
+                                <?php else : ?>
+                                    <?php if ($val->online_status && $val->funded_money <= 0) { ?>
+                                        | <a href="javascript:hideLoan('<?= $val->id ?>', '<?= $val->title ?>')" class="btn mini red"><i class="icon-minus-sign"></i> 隐藏</a>
+                                    <?php } ?>
+                                    <?php if ($val['status'] < 2) { ?>
+                                        | <a href="javascript:del('/product/productonline/del','<?= $val['id'] ?>')" class="btn mini red ajax_op" op="status" data-index="<?= $val['status'] ?>" index="<?= $val['id'] ?>"><i class="icon-minus-sign"></i>删除</a>
+                                    <?php } ?>
+                                    <?php if ($val['online_status'] == 1 && ($val['status'] == 3 || $val['status'] == 7) && empty($val['fk_examin_time']) && 1 === (int) $val['is_jixi']) { ?>
+                                        | <a href="javascript:openwin('/order/onlinefangkuan/examinfk?pid=<?= $val['id'] ?>',800,400)" class="btn mini green"><i class="icon-edit"></i> 放款审核</a>
+                                    <?php } ?>
+                                    <?php if ($val['online_status'] == 1 && $val['status'] > 1) { ?>
+                                        | <a href="/order/onlineorder/list?id=<?= $val['id'] ?>" class="btn mini green"><i class="icon-edit"></i> 投标记录</a>
+                                    <?php } ?>
+                                    <?php if ($val->allowRepayment()) { ?>
+                                        | <a href="/repayment/repayment?pid=<?= $val['id'] ?>" class="btn mini green"><i class="icon-edit"></i> 还款</a>
+                                    <?php } ?>
+                                    <?php if ($val['fk_examin_time'] && in_array($val->fangkuan->status, [OnlineFangkuan::STATUS_EXAMINED, OnlineFangkuan::STATUS_FANGKUAN, OnlineFangkuan::STATUS_TIXIAN_FAIL])) { ?>
+                                        | <a href="javascript:fk('<?= $val['id'] ?>');" class="btn mini green"><i class="icon-edit"></i> 放款</a>
+                                    <?php } ?>
+                                    <?php if ($val['online_status'] == 1 && (in_array($val['status'], [3, 5, 7])) && $val['is_jixi'] == 0) { ?>
+                                        | <a href="javascript:void(0)" onclick="openwin('/product/productonline/jixi?product_id=<?= $val['id'] ?>',500,300)" class="btn mini green"><i class="icon-edit"></i> 计息</a>
+                                        | <a href="javascript:corfirmJixi('<?= $val['id'] ?>');" class="btn mini green"><i class="icon-edit"></i> 确认计息</a>
+                                    <?php } ?>
+                                    <?php if ($val['online_status'] == 1 && $val['status'] == 2) { ?>
+                                        | <a href="javascript:endproduct('<?= $val['id'] ?>')" class="btn mini green"><i class="icon-edit"></i> 结束项目</a>
+                                    <?php } ?>
+                                    <?php if (!empty($val['online_status']) && empty($val['isPrivate'])) {
+                                        if (empty($val['recommendTime'])) {
+                                    ?>
+                                            <a href="javascript:recommend('<?= $val['id'] ?>')" class="btn mini green"><i class="icon-edit"></i> 推荐</a>
+                                        <?php } else { ?>
+                                            <a href="javascript:recommend('<?= $val['id'] ?>')" class="btn mini red"><i class="icon-minus-sign"></i> 取消推荐</a>
+                                    <?php }} ?>
+                                <?php endif; ?>
                             </td>
                         </tr>
                         <?php endforeach; ?>
@@ -284,7 +294,8 @@ $pc_cat = Yii::$app->params['pc_cat'];
 
     function hideLoan(pid, name)
     {
-        layer.confirm('是否要隐藏'+name+'项目？', {title: '隐藏项目', btn: ['确定', '取消']}, function() {
+        var type = '<?= $isHide ? '还原' : '隐藏' ?>';
+        layer.confirm('是否要'+type+'<font style="color: red;">'+name+'</font>项目？', {title: type+'项目', btn: ['确定', '取消']}, function() {
             openLoading();  //打开loading
             $.get('/product/productonline/hide-loan', {id: pid}, function(data) {
                 cloaseLoading();    //关闭loading
