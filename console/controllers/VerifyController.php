@@ -40,10 +40,23 @@ class VerifyController extends Controller
 
         $update = BankCardUpdate::find()
             ->where(['status' => [BankCardUpdate::STATUS_ACCEPT, BankCardUpdate::STATUS_PENDING]])
-            ->andWhere(['>', 'created_at', strtotime('-90 days')])
+            ->orderBy(['created_at' => SORT_DESC])
             ->all();
         $datas = ArrayHelper::merge($qpay, $update);
+        $expireAt = strtotime('today -20 days');
+
         foreach ($datas as $dat) {
+            if ($dat instanceof BankCardUpdate
+                && $dat->created_at < $expireAt
+                && BankCardUpdate::STATUS_ACCEPT === $dat->status
+            ) {
+                BankCardUpdate::updateAll(['status' => BankCardUpdate::STATUS_FAIL], ['id' => $dat->id]);
+                $msg = '用户['.$dat->user->id.']，于'.date('Y-m-d H:i:s', $dat->created_at).' 进行【换卡】操作，操作失败，卡号 '.$dat->cardNo.'，失败原因，定时任务处理状态为处理中并且申请期限超过20天的换卡记录为失败';
+                Yii::info($msg, 'user_log');
+
+                continue;
+            }
+
             $resp = Yii::$container->get('ump')->getBindingTx($dat);
             if ($resp->isSuccessful()) {
                 $user = $dat->user;
