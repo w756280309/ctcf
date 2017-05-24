@@ -82,6 +82,7 @@ function openPopup() {
 function profit($this)
 {
     var money = $this.val();
+    retmet = parseInt(retmet);
 
     money = money.replace(/^[^0-9]+/, '');
     if(!$.isNumeric(money)) {
@@ -115,17 +116,52 @@ function profit($this)
             } else {
                 rate = yr;
             }
-            if(1 == parseInt(retmet)) {
-                $('.yuqishouyi').html(WDJF.numberFormat(accDiv(accMul(accMul(money, rate), qixian), 365), false) + "元");
-            } else {
-                $('.yuqishouyi').html(WDJF.numberFormat(accDiv(accMul(accMul(money, rate), qixian), 12), false) + "元");
-            }
+            displayProfit(money, rate, qixian, retmet);
         });
     } else {
-        if(1 == parseInt(retmet)) {
-            $('.yuqishouyi').html(WDJF.numberFormat(accDiv(accMul(accMul(money, yr), qixian), 365), false) + "元");
-        } else {
-            $('.yuqishouyi').html(WDJF.numberFormat(accDiv(accMul(accMul(money, yr), qixian), 12), false) + "元");
-        }
+        displayProfit(money, yr, qixian, retmet);
     }
+}
+
+function displayProfit(money, rate, expire, refundMethod)
+{
+    if (refundMethod === 1) {
+        expireProfit = accDiv(accMul(accMul(money, rate), expire), 365);
+    } else if(refundMethod === 10) {
+        var monthRate = accDiv(rate, 12);
+        expireProfit = accSub(
+            accMul(
+                accDiv(
+                    accMul(
+                        accMul(
+                            money
+                            , monthRate
+                        )
+                        , Math.pow(
+                            accAdd(
+                                1
+                                , monthRate
+                            )
+                            , expire
+                        )
+                    ), accSub(
+                        Math.pow(
+                            accAdd(
+                                1
+                                , monthRate
+                            )
+                            , expire
+                        )
+                        , 1
+                    )
+                )
+                , expire
+            )
+            , money
+        );
+        console.log(expireProfit);
+    } else {
+        expireProfit = accDiv(accMul(accMul(money, rate), expire), 12);
+    }
+    $('.yuqishouyi').html(WDJF.numberFormat(expireProfit, false) + "元");
 }

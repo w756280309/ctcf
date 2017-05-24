@@ -433,7 +433,7 @@ $this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/chargedeposit.css');
     function profit($this) {
         var yr = "<?= $deal->yield_rate ?>";
         var qixian = "<?= $deal->getDuration()['value'] ?>";
-        var retmet = "<?= $deal->refund_method ?>";
+        var retmet = <?= $deal->refund_method ?>;
         var sn = "<?= $deal->sn ?>";
         var isFlexRate = <?= $deal->isFlexRate ?>;
         var csrf = "<?= Yii::$app->request->csrfToken ?>";
@@ -457,19 +457,53 @@ $this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/chargedeposit.css');
                 } else {
                     rate = yr;
                 }
-                if (1 == parseInt(retmet)) {
-                    $('#expect_profit').html(WDJF.numberFormat(accDiv(accMul(accMul(money, rate), qixian), 365), false));
-                } else {
-                    $('#expect_profit').html(WDJF.numberFormat(accDiv(accMul(accMul(money, rate), qixian), 12), false));
-                }
+                displayProfit(money, rate, qixian, retmet);
             });
         } else {
-            if (1 == parseInt(retmet)) {
-                $('#expect_profit').html(WDJF.numberFormat(accDiv(accMul(accMul(money, yr), qixian), 365), false));
-            } else {
-                $('#expect_profit').html(WDJF.numberFormat(accDiv(accMul(accMul(money, yr), qixian), 12), false));
-            }
+            displayProfit(money, yr, qixian, retmet);
         }
+    }
+
+    function displayProfit(money, rate, expire, refundMethod)
+    {
+        if (refundMethod === 1) {
+            expireProfit = accDiv(accMul(accMul(money, rate), expire), 365);
+        } else if(refundMethod === 10) {
+            var monthRate = accDiv(rate, 12);
+            expireProfit = accSub(
+                accMul(
+                    accDiv(
+                        accMul(
+                            accMul(
+                                money
+                                , monthRate
+                            )
+                            , Math.pow(
+                                accAdd(
+                                    1
+                                    , monthRate
+                                )
+                                , expire
+                            )
+                        ), accSub(
+                            Math.pow(
+                                accAdd(
+                                    1
+                                    , monthRate
+                                )
+                                , expire
+                            )
+                            , 1
+                        )
+                    )
+                    , expire
+                )
+                , money
+            );
+        } else {
+            expireProfit = accDiv(accMul(accMul(money, rate), expire), 12);
+        }
+        $('#expect_profit').html(WDJF.numberFormat(expireProfit, false));
     }
 
     <?php if ($couponCount > 0 && $deal->allowUseCoupon) { ?>
