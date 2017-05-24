@@ -3,7 +3,7 @@
 $this->title = '可用代金券';
 $this->replaceUrl = Yii::$app->request->referrer;
 
-$this->registerCssFile(ASSETS_BASE_URI . 'css/coupon.css?v=20150520', ['depends' => 'wap\assets\WapAsset']);
+$this->registerCssFile(ASSETS_BASE_URI . 'css/coupon.css?v=20170522', ['depends' => 'wap\assets\WapAsset']);
 
 ?>
 <script type="text/javascript">
