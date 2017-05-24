@@ -416,6 +416,7 @@ class RepaymentController extends BaseController
             $data_arr = $_repaymentrecord->having(['uid' => $val['uid']])->select('sum(benjin) as benjin, sum(lixi) as lixi')->createCommand()->queryAll();
 
             if (OnlineProduct::REFUND_METHOD_DAOQIBENXI === $product->refund_method) {
+                //到期本息
                 $templateId = Yii::$app->params['sms']['daoqibenxi'];
                 $message = [
                     $user->real_name,
@@ -425,6 +426,7 @@ class RepaymentController extends BaseController
                     Yii::$app->params['contact_tel'],
                 ];
             } elseif (0 === $sum_benxi_yue) {
+                //分期最后一期
                 $templateId = Yii::$app->params['sms']['lfenqihuikuan'];
                 $message = [
                     $user->real_name,
@@ -434,7 +436,19 @@ class RepaymentController extends BaseController
                     $data_arr[0]['lixi'],
                     Yii::$app->params['contact_tel'],
                 ];
+            } elseif(OnlineProduct::REFUND_METHOD_DEBX === $product->refund_method) {
+                //等额本息不是最后一期
+                $templateId = Yii::$app->params['sms']['debx_repay'];
+                $message = [
+                    $user->real_name,
+                    $product->title,
+                    $qishu,
+                    $data_arr[0]['benjin'],
+                    $data_arr[0]['lixi'],
+                    Yii::$app->params['contact_tel'],
+                ];
             } else {
+                //分期(不是等额本息)不是最后一期
                 $templateId = Yii::$app->params['sms']['fenqihuikuan'];
                 $message = [
                     $user->real_name,
