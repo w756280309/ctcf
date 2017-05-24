@@ -64,59 +64,57 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => YiiAsse
                     <td><?= $normalUser['idcard'] ? StringUtils::obfsIdCardNo($normalUser['idcard']) : '---' ?></td>
                     <td><strong>生日</strong></td>
                     <td><?= $normalUser['idcard'] ? $normalUser->birthday : '---' ?></td>
-                    <td><strong>银行卡</strong></td>
-                    <td><?= $normalUser->qpay ? substr_replace($normalUser->qpay->card_number, '**** **** **** ', 0, -4) : '未开通' ?></td>
+                    <td><strong>性别</strong></td>
+                    <td>
+                        <?php
+                        $gender = $normalUser->getGender();
+                        if ($gender === 'male') {
+                            echo '男性';
+                        } elseif ($gender === 'female') {
+                            echo '女性';
+                        } else {
+                            echo '---';
+                        }
+                        ?>
+                    </td>
                 </tr>
                 <tr>
                     <td><strong>分销商</strong></td>
                     <td><?= $userAff ? $userAff->affiliator->name : '官方' ?>&nbsp;&nbsp;&nbsp;<a href="javascript:openwin('/fenxiao/fenxiao/get-aff-info?uid=<?= $normalUser->id ?>' , 500, 300)">修改</a></td>
-                    <td><strong>实名认证</strong></td>
-                    <td>
-                        <?php
-                            if ($normalUser['idcard_status'] == '-1') {
-                                echo '未通过';
-                            } elseif ($normalUser['idcard_status'] == '1') {
-                                echo '验证通过';
-                            } else {
-                                echo '未验证';
-                            }
-                        ?>
-                    </td>
-                    <td><strong>性别</strong></td>
-                    <td>
-                        <?php
-                            $gender = $normalUser->getGender();
-                            if ($gender === 'male') {
-                                echo '男性';
-                            } elseif ($gender === 'female') {
-                                echo '女性';
-                            } else {
-                                echo '---';
-                            }
-                        ?>
-                    </td>
-                </tr>
-                <tr>
-                    <td><strong>免密支付</strong></td>
-                    <td><?= $normalUser['mianmiStatus'] ? '已开通' : '未开通' ?></td>
                     <td><strong>注册渠道</strong></td>
                     <td>
                         <?php
-                            if ($normalUser['regFrom'] === 1) {
-                                echo 'wap注册';
-                            } elseif ($normalUser['regFrom'] === 2) {
-                                echo '微信注册';
-                            } elseif ($normalUser['regFrom'] === 3) {
-                                echo 'app注册';
-                            } elseif ($normalUser['regFrom'] === 4) {
-                                echo 'pc注册';
-                            } else {
-                                echo '未知来源注册';
-                            }
+                        //todo 临时代码-应通过翻译项翻译
+                        $campaignSource = trim($normalUser['campaign_source']);
+                        if ('walmart1702' === $campaignSource) {
+                            echo '沃尔玛';
+                        } else if (null === $campaignSource) {
+                            echo '---';
+                        } else {
+                            echo $campaignSource;
+                        }
                         ?>
                     </td>
                     <td><strong>注册时间</strong></td>
                     <td><?= date('Y-m-d H:i:s', $normalUser['created_at']) ?></td>
+                </tr>
+                <tr>
+                    <td><strong>实名认证</strong></td>
+                    <td>
+                        <?php
+                        if ($normalUser['idcard_status'] == '-1') {
+                            echo '未通过';
+                        } elseif ($normalUser['idcard_status'] == '1') {
+                            echo '验证通过';
+                        } else {
+                            echo '未验证';
+                        }
+                        ?>
+                    </td>
+                    <td><strong>免密支付</strong></td>
+                    <td><?= $normalUser['mianmiStatus'] ? '已开通' : '未开通' ?></td>
+                    <td><strong>银行卡</strong></td>
+                    <td><?= $normalUser->qpay ? substr_replace($normalUser->qpay->card_number, '**** **** **** ', 0, -4) : '未开通' ?></td>
                 </tr>
                 <tr>
                     <td><strong>充值时间</strong></td>
@@ -143,6 +141,22 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => YiiAsse
                     <td><?= $normalUser->getCoins() ?></td>
                 </tr>
                 <tr>
+                    <td><strong>注册端</strong></td>
+                    <td>
+                        <?php
+                        if ($normalUser['regFrom'] === 1) {
+                            echo 'wap注册';
+                        } elseif ($normalUser['regFrom'] === 2) {
+                            echo '微信注册';
+                        } elseif ($normalUser['regFrom'] === 3) {
+                            echo 'app注册';
+                        } elseif ($normalUser['regFrom'] === 4) {
+                            echo 'pc注册';
+                        } else {
+                            echo '未知来源注册';
+                        }
+                        ?>
+                    </td>
                     <td><strong>注册位置</strong></td>
                     <td><?= $normalUser['regContext'] ? $normalUser['regContext'] : '---' ?></td>
                     <td><strong>注册IP位置</strong></td>
