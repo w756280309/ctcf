@@ -77,19 +77,17 @@ $this->registerJsFile(ASSETS_BASE_URI . 'js/swiper.min.js', ['depends' => Jquery
                 </div>
             </div>
         <?php else: ?>
-            <?php if (date('Y-m-d H:i:s') >= '2017-05-20 00:00:00') :  //添加临时控制前端模块显示代码,5月22日删除 ?>
-                <div class="charity-box">
-                    <div class="charity-top-txt clearfix">
-                        <div class="charity-content-top">
-                            <p class="word">520慈善基金</p>
-                            <p class="word-txt">正式成立</p>
-                        </div>
-                    </div>
-                    <div class="charity-bottom">
-                        <p><img src="<?= FE_BASE_URI ?>wap/index/images/heart.png" alt=""><span>您的每一笔投资，都有一份爱的奉献</span><img src="<?= FE_BASE_URI ?>wap/index/images/heart.png" alt=""></p>
+            <div class="charity-box">
+                <div class="charity-top-txt clearfix">
+                    <div class="charity-content-top">
+                        <p class="word">520慈善基金</p>
+                        <p class="word-txt">正式成立</p>
                     </div>
                 </div>
-            <?php endif; ?>
+                <div class="charity-bottom">
+                    <p><img src="<?= FE_BASE_URI ?>wap/index/images/heart.png" alt=""><span>您的每一笔投资，都有一份爱的奉献</span><img src="<?= FE_BASE_URI ?>wap/index/images/heart.png" alt=""></p>
+                </div>
+            </div>
         <?php endif; ?>
 
         <div class="showMore">
