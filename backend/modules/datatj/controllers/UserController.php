@@ -150,6 +150,8 @@ Order;
             return null;
         }
 
+        $uids = implode(',', $uids);
+
         $repaymentSql = <<<REPAYMENT
             SELECT op.uid AS user_id, SUM( TRUNCATE( (
             IF( p.refund_method >1, op.benxi * p.expires /12, op.benxi * p.expires /365 )), 2 )
@@ -157,14 +159,13 @@ Order;
             FROM online_repayment_plan op
             INNER JOIN online_product p ON op.online_pid = p.id
             WHERE op.status in (1, 2)
-            AND op.uid in (:orderUids)
+            AND op.uid in ($uids)
             AND DATE_FORMAT( op.actualRefundTime , '%Y-%m') = :month
             GROUP BY op.uid
 REPAYMENT;
 
         $repaymentAnnual = Yii::$app->db->createCommand($repaymentSql, [
             'month' => $month,
-            'orderUids' => implode(',', $uids),
         ])->queryAll();
 
         return $repaymentAnnual;

@@ -35,9 +35,6 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => YiiAsse
             <div class="span12">
                 <ul class="breadcrumb">
                     <li class="span4">PS：年化金额 = sum（投资金额 * 产品期限 / 365天或12个月）</li>
-                    <li>老客复投金额（总）：0元</li>
-                    <li>老客新增金额（总）：0元</li>
-                    <li>新客新增金额（总）：0元</li>
                 </ul>
             </div>
         </div>
