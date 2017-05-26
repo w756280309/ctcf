@@ -19,9 +19,41 @@ class ExportController extends BaseController
         $this->exportConfig = [
             'repayment_expire_interest' => [
                 'key' => 'repayment_expire_interest',//每个导出类型的唯一标示, 不可为空
-                'title' => '到期|付息还款数据',//导出类型的标题，不可为空
-                'content' => '统计指定日期回款的 到期名单和付息名单',//导出类型的说明，不可为空
-                'sql' => "SELECT u.real_name AS '姓名', u.mobile AS '手机号', o.order_money AS '投资金额', o.yield_rate AS '利率', p.title AS '标的标题', IF( DATE( FROM_UNIXTIME( r.`refund_time` ) ) = DATE( FROM_UNIXTIME( p.`finish_date` ) ) , '到期', '付息' ) AS'到期|付息', r.benjin AS '还款本金', r.lixi AS '还款利息', r.benxi AS '还款本息', DATE( FROM_UNIXTIME( r.`refund_time` ) ) AS '还款时间'
+                'title' => '指定日期还款数据',//导出类型的标题，不可为空
+                'content' => '统计指定日期回款数据',//导出类型的说明，不可为空
+                'sql' => "SELECT u.real_name AS '姓名',
+u.mobile AS '手机号',
+o.order_money AS '投资金额',
+o.yield_rate AS '利率',
+p.title AS '标的标题',
+CASE p.refund_method
+WHEN 1
+THEN  '到期本息'
+WHEN 2
+THEN  '按月付息，到期本息'
+WHEN 3
+THEN  '按季付息，到期本息'
+WHEN 4
+THEN  '按半年付息，到期本息'
+WHEN 5
+THEN  '按年付息，到期本息'
+WHEN 6
+THEN  '按自然月付息，到期本息'
+WHEN 7
+THEN  '按自然季度付息，到期本息'
+WHEN 8
+THEN  '按自然半年付息，到期本息'
+WHEN 9
+THEN  '按自然年付息，到期本息'
+WHEN 10
+THEN  '等额本息'
+END AS  '还款方式',
+if(p.status = 5, '还款中', '已还清') as '标的状态',
+date(from_unixtime(p.finish_date)) as '标的截止日期',
+ r.benjin AS '还款本金',
+ r.lixi AS '还款利息',
+ r.benxi AS '还款本息',
+DATE(r.`actualRefundTime`) AS '实际还款时间'
 FROM `online_repayment_plan` AS r
 INNER JOIN user AS u ON r.uid = u.id
 INNER JOIN online_product AS p ON p.id = r.online_pid
@@ -34,7 +66,7 @@ AND r.status
 IN ( 1, 2 ) 
 AND date(r.`actualRefundTime`) = :repaymentDate
 AND o.status =1
-ORDER BY DATE( FROM_UNIXTIME( r.`refund_time` ) ) = DATE( FROM_UNIXTIME( p.`finish_date` ) ) DESC , u.id ASC , p.id ASC",//导出的sql模板, 使用预处理方式调用, 不可为空
+ORDER BY p.id asc ,r.uid asc",//导出的sql模板, 使用预处理方式调用, 不可为空
                 'params' => [//如果没有必要参数, 可以为null, 但是必须是isset
                     'repaymentDate' => [//参数列表， key 是参数名， 不可为空
                         'name' => 'repaymentDate',//参数名
@@ -44,8 +76,8 @@ ORDER BY DATE( FROM_UNIXTIME( r.`refund_time` ) ) = DATE( FROM_UNIXTIME( p.`fini
                         'isRequired' => true,//是否必要参数, 默认都是必要参数
                     ],
                 ],
-                'itemLabels' => ['姓名', '手机号', '投资金额', '利率', '标的名称', '到期|付息', '还款本金', '还款利息', '还款本息', '还款时间'],//统计的数据项，不可为空
-                'itemType' => ['string', 'int', 'float', 'float', 'string', 'string', 'float', 'float', 'float', 'date'],
+                'itemLabels' => ['姓名', '手机号', '投资金额', '利率', '标的名称', '还款方式', '标的状态', '标的截止日期', '还款本金', '还款利息', '还款本息', '实际还款时间'],//统计的数据项，不可为空
+                'itemType' => ['string', 'int', 'float', 'float', 'string', 'string', 'string', 'string','float', 'float', 'float', 'date'],
             ],
             'last_ten_day_draw' => [
                 'key' => 'last_ten_day_draw',
