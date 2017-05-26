@@ -106,5 +106,8 @@ return [
         'crm' => [
             'class' => 'Wcg\Xii\Crm\Module',
         ],
+        'source' => [
+            'class' => 'Wcg\Growth\Integration\Yii2Module\Module',
+        ],
     ],
 ];
