@@ -11,7 +11,8 @@ class WorkerCommand extends Action
     const PROCESS_CHECK_SPACE = 300000;//子进程状态查询间隔, 单位为microseconds
     const PROCESS_INTERVAL = 2000;//进程开启间隔时间, 单位为microseconds
     const MAX_PROCESS_COUNT = 10;//最大子进程数量
-    const MAIN_PROCESS_MIN_RUNNING_TIME = 3600;//主进程最低运行时间, 单位为秒
+    const MAIN_PROCESS_MIN_RUNNING_TIME = 3600;//主进程最低运行时间, 单位为秒 3600
+    const MAIN_PROCESS_MAX_RUNNING_TIME = 7200;//主进程最多运行时间，单位为秒，超过之后不再接收新任务 7200
 
 
     private $queue;//队列服务
@@ -29,6 +30,8 @@ class WorkerCommand extends Action
     private $processList = [];//当前运行着的进程
     private $runningProcessCount = 0;//运行着的进程数量
 
+    private $stopSignal = false;//收到退出信号
+
     public function beforeRun()
     {
         \Yii::info('开始运行队列主进程', 'queue');
@@ -40,6 +43,7 @@ class WorkerCommand extends Action
 
     public function run()
     {
+        $this->setSignalHandler();
         //判断主进程是否应该运行
         while ($this->needToRun()) {
             //启动所有子进程
@@ -54,6 +58,32 @@ class WorkerCommand extends Action
         }
 
         exit(0);
+    }
+
+    private function signalHandler($signalNo)
+    {
+        switch ($signalNo) {
+            case SIGTERM:
+                // 处理kill
+                $this->stopSignal = true;
+                break;
+            case SIGHUP:
+                //处理SIGHUP信号
+                break;
+            case SIGINT:
+                //处理ctrl+c
+                $this->stopSignal = true;
+                break;
+            default:
+        }
+    }
+
+    private function setSignalHandler()
+    {
+        declare(ticks = 1);
+        pcntl_signal(SIGTERM, [$this, "signalHandler"]);
+        pcntl_signal(SIGHUP, [$this, "signalHandler"]);
+        pcntl_signal(SIGINT, [$this, "signalHandler"]);
     }
 
     //更新运行着的消息列表
@@ -80,9 +110,30 @@ class WorkerCommand extends Action
         \Yii::info('判断主进程是否应该继续运行', 'queue');
         $runningTime = time() - $this->mainProcessStartAt;
         \Yii::info('当前有[' . $this->runningProcessCount . ']个子进程正在运行;主进程已经运行[' . $runningTime . ']秒.', 'queue');
-        $this->updateTaskList();//更新需要处理的消息列表
-        //有任务或者没达到最低运行时间
-        return !empty($this->taskList) || $runningTime <= self::MAIN_PROCESS_MIN_RUNNING_TIME;
+        if (
+            $runningTime <= self::MAIN_PROCESS_MAX_RUNNING_TIME//超过主进程最大运行时间之后就不再接收新任务
+            && !$this->stopSignal//收到结束信号后不再接收新任务
+        ) {
+            $this->updateTaskList();//更新需要处理的消息列表
+        }
+        if ($runningTime > self::MAIN_PROCESS_MAX_RUNNING_TIME) {
+            \Yii::info('主进程运行超过最大运行时间[' . self::MAIN_PROCESS_MAX_RUNNING_TIME . ']秒, 不再接收新任务.', 'queue');
+        }
+        if ($this->stopSignal) {
+            \Yii::info('收到结束信号, 不再接收新任务.', 'queue');
+        }
+
+        if (
+            !empty($this->taskList) //工作队列不为空
+            || (
+                $runningTime <= self::MAIN_PROCESS_MIN_RUNNING_TIME //没达到最低运行时间
+                && !$this->stopSignal//没有收到结束信号
+            )
+        ) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     //运行所有需要运行的子进程

@@ -18,4 +18,9 @@ abstract class Job
     {
         return $this->params;
     }
+
+    public function getParam($key)
+    {
+        return isset($this->params[$key]) ? $this->params[$key] : null;
+    }
 }
