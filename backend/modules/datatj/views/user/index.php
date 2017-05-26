@@ -3,8 +3,11 @@
 use common\utils\StringUtils;
 use yii\grid\GridView;
 use yii\helpers\Html;
+use yii\web\YiiAsset;
 
 $this->title = '复投新增数据统计';
+
+$this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => YiiAsset::class]);
 
 ?>
 
@@ -31,10 +34,58 @@ $this->title = '复投新增数据统计';
         <div class="row-fluid">
             <div class="span12">
                 <ul class="breadcrumb">
-                    <li>PS：年化金额 = sum（投资金额 * 产品期限 / 365天或12个月）</li>
+                    <li class="span4">PS：年化金额 = sum（投资金额 * 产品期限 / 365天或12个月）</li>
+                    <li>老客复投金额（总）：0元</li>
+                    <li>老客新增金额（总）：0元</li>
+                    <li>新客新增金额（总）：0元</li>
                 </ul>
             </div>
         </div>
+
+        <!--search start-->
+        <div class="portlet-body">
+            <form action="" method="get" target="_self">
+                <table class="table">
+                    <tr>
+                        <td>
+                            <span class="title">统计月份</span>
+                        </td>
+                        <td>
+                            <input type="text" placeholder="统计月份" value="<?= Html::encode($month) ?>"
+                                autocomplete="off"
+                                name="month" class="m-wrap span4"
+                                onclick="WdatePicker({dateFmt: 'yyyy-MM', maxDate: '%y-{%M-1}'})">
+                        </td>
+                        <td>
+                            <span class="title">网点</span>
+                        </td>
+                        <td>
+                            <select class="m-wrap" name="aff_id">
+                                <option value="">--请选择--</option>
+                                <option value="-1" <?= -1 === $affId ? 'selected' : '' ?>>官方</option>
+                                <?php foreach ($affs as $key => $aff) : ?>
+                                    <option value="<?= $key ?>" <?= $key === $affId ? 'selected' : '' ?>><?= $aff['name'] ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </td>
+                        <td>
+                            <span class="title">客户类型</span>
+                        </td>
+                        <td>
+                            <select class="m-wrap" name="user_type">
+                                <option value="" <?= null === $userType ? 'selected' : '' ?>>--请选择--</option>
+                                <option value="1" <?= 1 === $userType ? 'selected' : '' ?> >新客</option>
+                                <option value="2" <?= 2 === $userType ? 'selected' : '' ?>>老客</option>
+                            </select>
+                        </td>
+                        <td align="right" class="span2">
+                            <button type='submit' class="btn blue btn-block">搜索 <i class="m-icon-swapright m-icon-white"></i></button>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+        <!--search end -->
 
         <div class="portlet-body">
             <?=
@@ -70,7 +121,7 @@ $this->title = '复投新增数据统计';
                             },
                         ],
                         [
-                            'label' => '老客复投金额',
+                            'label' => '老客复投金额（元）',
                             'value' => function ($data) use ($orderAnnual, $repaymentAnnual, $month) {
                                 $msg = '---';
 
@@ -87,7 +138,7 @@ $this->title = '复投新增数据统计';
                             'headerOptions' => ['class' => 'money'],
                         ],
                         [
-                            'label' => '老客新增金额',
+                            'label' => '老客新增金额（元）',
                             'value' => function ($data) use ($orderAnnual, $repaymentAnnual, $month) {
                                 $msg = '---';
 
@@ -105,7 +156,7 @@ $this->title = '复投新增数据统计';
                             'headerOptions' => ['class' => 'money'],
                         ],
                         [
-                            'label' => '新客新增金额',
+                            'label' => '新客新增金额（元）',
                             'value' => function ($data) use ($orderAnnual, $repaymentAnnual, $month) {
                                 $msg = '---';
 
