@@ -2,6 +2,7 @@
 
 namespace frontend\modules\deal\controllers;
 
+use common\action\loan\ExpectProfitLoan;
 use common\models\coupon\UserCoupon;
 use common\models\order\OnlineOrder;
 use common\models\product\OnlineProduct;
@@ -15,6 +16,13 @@ use yii\helpers\Html;
 
 class DealController extends BaseController
 {
+    public function actions()
+    {
+        return [
+            'interest' => ExpectProfitLoan::className(),//服务端计算购买标的的预期收益
+        ];
+    }
+
     /**
      * 项目详情页面
      */

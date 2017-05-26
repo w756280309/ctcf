@@ -108,60 +108,11 @@ function profit($this)
         $('.shijizhifu').html(WDJF.numberFormat(money, false) + "元");
     }
 
-    if(isFlexRate) {
-        $.post('/order/order/rate', {'sn': sn, '_csrf': csrf, 'amount': money}, function(data)
-        {
-            if(true === data.res) {
-                rate = data.rate;
-            } else {
-                rate = yr;
-            }
-            displayProfit(money, rate, qixian, retmet);
-        });
-    } else {
-        displayProfit(money, yr, qixian, retmet);
-    }
-}
-
-function displayProfit(money, rate, expire, refundMethod)
-{
-    if (refundMethod === 1) {
-        expireProfit = accDiv(accMul(accMul(money, rate), expire), 365);
-    } else if(refundMethod === 10) {
-        var monthRate = accDiv(rate, 12);
-        expireProfit = accSub(
-            accMul(
-                accDiv(
-                    accMul(
-                        accMul(
-                            money
-                            , monthRate
-                        )
-                        , Math.pow(
-                            accAdd(
-                                1
-                                , monthRate
-                            )
-                            , expire
-                        )
-                    ), accSub(
-                        Math.pow(
-                            accAdd(
-                                1
-                                , monthRate
-                            )
-                            , expire
-                        )
-                        , 1
-                    )
-                )
-                , expire
-            )
-            , money
-        );
-        console.log(expireProfit);
-    } else {
-        expireProfit = accDiv(accMul(accMul(money, rate), expire), 12);
-    }
-    $('.yuqishouyi').html(WDJF.numberFormat(expireProfit, false) + "元");
+    $.post('/order/order/interest', {'sn': sn, '_csrf': csrf, 'amount': money}, function (data) {
+        if (data && data.code === 0 && data.interest) {
+            $('.yuqishouyi').html(WDJF.numberFormat(data.interest, false) + "元");
+        } else {
+            $('.yuqishouyi').html("0.00元");
+        }
+    });
 }

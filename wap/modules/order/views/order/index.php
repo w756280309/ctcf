@@ -24,7 +24,7 @@ $this->registerJs(<<<JS
 JS
     , 1);
 
-$this->registerJsFile(ASSETS_BASE_URI.'js/order.js?v=20170523-v', ['depends' => YiiAsset::class]);
+$this->registerJsFile(ASSETS_BASE_URI.'js/order.js?v=20170526-v', ['depends' => YiiAsset::class]);
 $this->registerCssFile(ASSETS_BASE_URI.'css/setting.css?v=20170103', ['depends' => WapAsset::class]);
 
 ?>

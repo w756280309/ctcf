@@ -3,19 +3,25 @@
 namespace app\modules\order\controllers;
 
 use app\controllers\BaseController;
+use common\action\loan\ExpectProfitLoan;
 use common\controllers\ContractTrait;
 use common\models\coupon\UserCoupon;
 use common\models\order\OnlineOrder;
 use common\models\order\OrderManager;
 use common\models\product\OnlineProduct;
-use common\models\product\RateSteps;
 use common\service\PayService;
 use Yii;
-use yii\helpers\Html;
 
 class OrderController extends BaseController
 {
     use ContractTrait;
+
+    public function actions()
+    {
+        return [
+            'interest' => ExpectProfitLoan::className(),//服务端计算购买标的的预期收益
+        ];
+    }
 
     /**
      * 认购页面.
@@ -213,31 +219,5 @@ class OrderController extends BaseController
             'note_id' => $note_id,
             'id' => $id,
         ]);
-    }
-
-    /**
-     * 根据投资金额和产品利率阶梯获取订单的利率
-     * @return array
-     */
-    public function actionRate()
-    {
-        if (Yii::$app->request->isPost) {
-            $sn = Html::encode(Yii::$app->request->post('sn'));
-            $amount = Html::encode(Yii::$app->request->post('amount'));
-            $product = OnlineProduct::find()->where(['sn' => $sn])->one();
-            if ($product && $amount) {
-                if (1 === $product->isFlexRate && !empty($product->rateSteps)) {
-                    $config = RateSteps::parse($product->rateSteps);
-                    if (!empty($config)) {
-                        $rate = RateSteps::getRateForAmount($config, $amount);
-                        if (false !== $rate) {
-                            return ['res' => true, 'rate' => $rate / 100];
-                        }
-                    }
-                }
-            }
-            return ['res' => false, 'rate' => false];
-        }
-        return ['res' => false, 'rate' => false];
     }
 }

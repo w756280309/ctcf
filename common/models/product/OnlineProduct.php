@@ -10,6 +10,7 @@ use common\models\user\User;
 use P2pl\Borrower;
 use P2pl\LoanInterface;
 use Wcg\DateTime\DT;
+use Wcg\Interest\Builder;
 use Yii;
 use yii\base\Exception;
 use yii\behaviors\TimestampBehavior;
@@ -1107,5 +1108,60 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
         }
 
         return $query;
+    }
+
+    /**
+     * 计算预期收益
+     * 注:
+     *  1. 等额本息使用旺财谷计算逻辑，利息是使用四舍五入法
+     *  2. 其余还款方式的计算结果都是舍去法计算
+     *
+     * @param $money        string      投资金额
+     * @param $refundMethod int         还款方式
+     * @param $expires      int         项目期限，到期本息项目期限单位为天，其他类型还款方式项目期限为月
+     * @param $rate         string      利率(实际购买利率)
+     *
+     * @return string
+     */
+    public static function calcExpectProfit($money, $refundMethod, $expires, $rate)
+    {
+        if ($refundMethod === OnlineProduct::REFUND_METHOD_DAOQIBENXI) {
+            $expectProfit = bcdiv(
+                bcmul(
+                    bcmul(
+                        $money
+                        , $rate
+                        , 14
+                    )
+                    , $expires
+                    , 14
+                )
+                , 365
+                , 2
+            );
+        } elseif ($refundMethod === OnlineProduct::REFUND_METHOD_DEBX) {
+            $repayPlan = Builder::create(Builder::TYPE_DEBX)
+                ->setStartDate(new DT(date('Y-m-d')))
+                ->setMonth($expires)
+                ->setRate($rate)
+                ->build($money);
+            $expectProfit = $repayPlan->getInterest();
+        } else {
+            $expectProfit = bcdiv(
+                bcmul(
+                    bcmul(
+                        $money
+                        , $rate
+                        , 14
+                    )
+                    , $expires
+                    , 14
+                )
+                , 12
+                , 2
+            );
+        }
+
+        return $expectProfit;
     }
 }

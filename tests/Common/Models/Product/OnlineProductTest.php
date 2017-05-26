@@ -294,4 +294,25 @@ class OnlineProductTest extends YiiAppTestCase
         $res = $loan->getPaymentDates();
         $this->assertEquals($res, ['2016-10-06', '2017-01-06', '2017-04-06']);
     }
+
+    //测试预期收益数据供给期
+    public function exceptProfitProvider()
+    {
+        return [
+            [5000, 10, 2, 0.06, 37.53],
+            [1000, 1, 7, 0.10, 1.91],
+            [1000, 8, 24, 0.08, 160.00],
+        ];
+    }
+
+    /**
+     * 测试预期
+     *
+     * @dataProvider exceptProfitProvider
+     */
+    public function testExpectProfit($money, $refundMethod, $expires, $rate, $profit)
+    {
+        $expectProfit = OnlineProduct::calcExpectProfit($money, $refundMethod, $expires, $rate);
+        $this->assertEquals($profit, $expectProfit);
+    }
 }

@@ -450,61 +450,15 @@ $this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/chargedeposit.css');
             return;
         }
 
-        if (isFlexRate) {
-            $.post('/deal/deal/rate', {'sn': sn, '_csrf': csrf, 'amount': money}, function (data) {
-                if (true === data.res) {
-                    rate = data.rate;
-                } else {
-                    rate = yr;
-                }
-                displayProfit(money, rate, qixian, retmet);
-            });
-        } else {
-            displayProfit(money, yr, qixian, retmet);
-        }
+        $.post('/deal/deal/interest', {'sn': sn, '_csrf': csrf, 'amount': money}, function (data) {
+            if (data && data.code === 0 && data.interest) {
+                $('#expect_profit').html(WDJF.numberFormat(data.interest, false));
+            } else {
+                $('#expect_profit').html("0.00");
+            }
+        });
     }
 
-    function displayProfit(money, rate, expire, refundMethod)
-    {
-        if (refundMethod === 1) {
-            expireProfit = accDiv(accMul(accMul(money, rate), expire), 365);
-        } else if(refundMethod === 10) {
-            var monthRate = accDiv(rate, 12);
-            expireProfit = accSub(
-                accMul(
-                    accDiv(
-                        accMul(
-                            accMul(
-                                money
-                                , monthRate
-                            )
-                            , Math.pow(
-                                accAdd(
-                                    1
-                                    , monthRate
-                                )
-                                , expire
-                            )
-                        ), accSub(
-                            Math.pow(
-                                accAdd(
-                                    1
-                                    , monthRate
-                                )
-                                , expire
-                            )
-                            , 1
-                        )
-                    )
-                    , expire
-                )
-                , money
-            );
-        } else {
-            expireProfit = accDiv(accMul(accMul(money, rate), expire), 12);
-        }
-        $('#expect_profit').html(WDJF.numberFormat(expireProfit, false));
-    }
 
     <?php if ($couponCount > 0 && $deal->allowUseCoupon) { ?>
         $(function () {
