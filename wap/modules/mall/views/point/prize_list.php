@@ -40,7 +40,7 @@ $this->title = '兑换记录';
    $(function () {
        var allowClick = true;
 
-       $('#exchange-list li .eschanging').on('click', function () {
+       $('#exchange-list').on('click', '.eschanging', function () {
            if (!allowClick) {
                return;
            }
