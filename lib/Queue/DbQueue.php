@@ -16,7 +16,8 @@ class DbQueue
 {
     public function pub(Job $job)
     {
-        return (QueueTask::initNew($job))->save(false);
+        $model = QueueTask::initNew($job);
+        return $model->save(false);
     }
 
     //获取需要运行的队列
