@@ -97,7 +97,8 @@ class UserController extends BaseController
             ]);
         }
 
-        $users = $userQuery->orderBy(["$u.id" => SORT_DESC])
+        $users = $userQuery
+            ->orderBy(["$u.id" => SORT_DESC])
             ->all();
 
         $dataProvider = new ArrayDataProvider([
@@ -106,14 +107,56 @@ class UserController extends BaseController
 
         return $this->render('index', [
             'dataProvider' => $dataProvider,
-            'repaymentAnnual' => $repaymentAnnual,
-            'orderAnnual' => $orderAnnual,
-            'affiliators' => $affiliators,
+            'userData' => $this->dataProcess($users, $month, $repaymentAnnual, $orderAnnual, $affiliators),
             'affs' => $affs,
             'month' => $month,
             'affId' => $affId,
             'userType' => $userType,
         ]);
+    }
+
+    /**
+     * 处理数据.
+     *
+     * 1. 计算每个老客用户在指定月份的老客复投金额、老客新增金额;
+     * 2. 计算每个新客用户在指定月份的新客新增金额;
+     * 3. 根据搜索出来的数据集合,计算老客复投金额、老客新增金额、新客新增金额总计;
+     */
+    public function dataProcess($users, $month, $repaymentAnnual, $orderAnnual, $affiliators)
+    {
+        $totalNewGrowAmount = 0;
+        $totalOldGrowAmount = 0;
+        $totalOldRepeatAmount = 0;
+        $data = [];
+
+        foreach ($users as $user) {
+            //计算新客新增金额或老客新增金额
+            $oa = isset($orderAnnual[$user->id]) ? $orderAnnual[$user->id]['annual'] : 0;
+            $ra = isset($repaymentAnnual[$user->id]) ? $repaymentAnnual[$user->id]['annual'] : 0;
+            $amount = bcsub($oa, $ra, 2);
+            $amount = $amount > 0 ? $amount : 0;
+
+            if (substr($user->info->firstInvestDate, 0, 7) === $month) {
+                $data[$user->id]['user_type'] = '新客';
+                $data[$user->id]['new_grow_amount'] = $amount;
+                $totalNewGrowAmount = bcadd($totalNewGrowAmount, $amount, 14);
+            } else {
+                $data[$user->id]['user_type'] = '老客';
+                $data[$user->id]['old_grow_amount'] = $amount;
+                $data[$user->id]['old_repeat_amount'] = min($oa, $ra);   //计算老客复投金额
+                $totalOldGrowAmount = bcadd($totalOldGrowAmount, $amount, 14);
+                $totalOldRepeatAmount = bcadd($totalOldRepeatAmount, $data[$user->id]['old_repeat_amount'], 14);
+            }
+
+            $data[$user->id]['affiliator'] = isset($affiliators[$user->id]) ? $affiliators[$user->id]->affiliator->name : '官方';
+        }
+
+        return [
+            'total_new_grow_amount' => $totalNewGrowAmount,    //新客新增金额总计
+            'total_old_grow_amount' => $totalOldGrowAmount,    //老客新增金额总计
+            'total_old_repeat_amount' => $totalOldRepeatAmount,  //老客复投金额总计
+            'data' => $data,
+        ];
     }
 
     /**

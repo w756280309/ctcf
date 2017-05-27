@@ -34,7 +34,10 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => YiiAsse
         <div class="row-fluid">
             <div class="span12">
                 <ul class="breadcrumb">
-                    <li class="span4">PS：年化金额 = sum（投资金额 * 产品期限 / 365天或12个月）</li>
+                    <li>PS：年化金额 = sum（投资金额 * 产品期限 / 365天或12个月）</li>
+                    <li style="padding-left: 50px;">老客复投金额（总）：<?= StringUtils::amountFormat3($userData['total_old_repeat_amount']) ?>元</li>
+                    <li style="padding-left: 50px;">老客新增金额（总）：<?= StringUtils::amountFormat3($userData['total_old_grow_amount']) ?>元</li>
+                    <li style="padding-left: 50px;">新客新增金额（总）：<?= StringUtils::amountFormat3($userData['total_new_grow_amount']) ?>元</li>
                 </ul>
             </div>
         </div>
@@ -50,7 +53,7 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => YiiAsse
                         <td>
                             <input type="text" placeholder="统计月份" value="<?= Html::encode($month) ?>"
                                 autocomplete="off"
-                                name="month" class="m-wrap span4"
+                                name="month" class="m-wrap"
                                 onclick="WdatePicker({dateFmt: 'yyyy-MM', maxDate: '%y-{%M-1}'})">
                         </td>
                         <td>
@@ -92,16 +95,14 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => YiiAsse
                     'columns' => [
                         [
                             'label' => '网点',
-                            'value' => function ($data) use ($affiliators) {
-                                $affiliator = isset($affiliators[$data->id]) ? $affiliators[$data->id]->affiliator->name : '官方';
-
-                                return Html::encode($affiliator);
+                            'value' => function ($data) use ($userData) {
+                                return Html::encode($userData['data'][$data->id]['affiliator']);
                             }
                         ],
                         [
                             'label' => '客户类型',
-                            'value' => function ($data) use ($month) {
-                                return substr($data->info->firstInvestDate, 0, 7) === $month ? '新客' : '老客';
+                            'value' => function ($data) use ($userData) {
+                                return Html::encode($userData['data'][$data->id]['user_type']);
                             }
                         ],
                         [
@@ -119,53 +120,24 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => YiiAsse
                         ],
                         [
                             'label' => '老客复投金额（元）',
-                            'value' => function ($data) use ($orderAnnual, $repaymentAnnual, $month) {
-                                $msg = '---';
-
-                                if (substr($data->info->firstInvestDate, 0, 7) !== $month) {
-                                    $oa = isset($orderAnnual[$data->id]) ? $orderAnnual[$data->id]['annual'] : 0;
-                                    $ra = isset($repaymentAnnual[$data->id]) ? $repaymentAnnual[$data->id]['annual'] : 0;
-                                    $amount = min($oa, $ra);
-                                    $msg = Stringutils::amountFormat2($amount);
-                                }
-
-                                return $msg;
+                            'value' => function ($data) use ($userData) {
+                                return isset($userData['data'][$data->id]['old_repeat_amount']) ? StringUtils::amountFormat3($userData['data'][$data->id]['old_repeat_amount']) : '---';
                             },
                             'contentOptions' => ['class' => 'money'],
                             'headerOptions' => ['class' => 'money'],
                         ],
                         [
                             'label' => '老客新增金额（元）',
-                            'value' => function ($data) use ($orderAnnual, $repaymentAnnual, $month) {
-                                $msg = '---';
-
-                                if (substr($data->info->firstInvestDate, 0, 7) !== $month) {
-                                    $oa = isset($orderAnnual[$data->id]) ? $orderAnnual[$data->id]['annual'] : 0;
-                                    $ra = isset($repaymentAnnual[$data->id]) ? $repaymentAnnual[$data->id]['annual'] : 0;
-                                    $amount = bcsub($oa, $ra, 2);
-                                    $amount = $amount > 0 ? $amount : 0;
-                                    $msg = Stringutils::amountFormat2($amount);
-                                }
-
-                                return $msg;
+                            'value' => function ($data) use ($userData) {
+                                return isset($userData['data'][$data->id]['old_grow_amount']) ? StringUtils::amountFormat3($userData['data'][$data->id]['old_grow_amount']) : '---';
                             },
                             'contentOptions' => ['class' => 'money'],
                             'headerOptions' => ['class' => 'money'],
                         ],
                         [
                             'label' => '新客新增金额（元）',
-                            'value' => function ($data) use ($orderAnnual, $repaymentAnnual, $month) {
-                                $msg = '---';
-
-                                if (substr($data->info->firstInvestDate, 0, 7) === $month) {
-                                    $oa = isset($orderAnnual[$data->id]) ? $orderAnnual[$data->id]['annual'] : 0;
-                                    $ra = isset($repaymentAnnual[$data->id]) ? $repaymentAnnual[$data->id]['annual'] : 0;
-                                    $amount = bcsub($oa, $ra, 2);
-                                    $amount = $amount > 0 ? $amount : 0;
-                                    $msg = Stringutils::amountFormat2($amount);
-                                }
-
-                                return $msg;
+                            'value' => function ($data) use ($userData) {
+                                return isset($userData['data'][$data->id]['new_grow_amount']) ? StringUtils::amountFormat3($userData['data'][$data->id]['new_grow_amount']) : '---';
                             },
                             'contentOptions' => ['class' => 'money'],
                             'headerOptions' => ['class' => 'money'],
