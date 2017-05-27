@@ -14,7 +14,7 @@ class CampaignSource
      */
     public static function getRegistration($campaignSource)
     {
-        return User::find(['campaign_source' => $campaignSource])->count();
+        return User::find()->where(['campaign_source' => $campaignSource])->count();
     }
     /**
      * 统计指定渠道订单人数
@@ -23,7 +23,7 @@ class CampaignSource
      */
     public static function getInvestors($campaignSource)
     {
-        return OnlineOrder::find(['campaign_source' => $campaignSource])->count();
+        return OnlineOrder::find()->where(['campaign_source' => $campaignSource, 'status' => OnlineOrder::STATUS_SUCCESS])->count();
     }
     /**
      * 统计指定渠道订单金额
@@ -32,6 +32,7 @@ class CampaignSource
      */
     public static function getInvestment($campaignSource)
     {
-        return OnlineOrder::find(['campaign_source' => $campaignSource])->sum('order_money');
+        $orderMoney = OnlineOrder::find()->where(['campaign_source' => $campaignSource, 'status' => OnlineOrder::STATUS_SUCCESS])->sum('order_money');
+        return null !== $orderMoney ? $orderMoney : 0;
     }
 }
