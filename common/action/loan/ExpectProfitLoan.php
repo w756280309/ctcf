@@ -29,6 +29,8 @@ class ExpectProfitLoan extends Action
             if ($amount <= 0) {
                 throw new \Exception('投资金额异常');
             }
+            $duration = $product->getDuration();
+            $expires = $duration['value'];
             $realRate = null;
             if (1 === $product->isFlexRate && !empty($product->rateSteps)) {
                 $config = RateSteps::parse($product->rateSteps);
@@ -43,7 +45,7 @@ class ExpectProfitLoan extends Action
                 $realRate = $product->yield_rate;
             }
 
-            $expectProfit = OnlineProduct::calcExpectProfit($amount, $product->refund_method, $product->expires, $realRate);
+            $expectProfit = OnlineProduct::calcExpectProfit($amount, $product->refund_method, $expires, $realRate);
             return [
                 'code' => 0,
                 'interest' => $expectProfit,
