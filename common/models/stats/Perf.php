@@ -4,6 +4,7 @@ namespace common\models\stats;
 
 use common\models\coupon\CouponType;
 use common\models\coupon\UserCoupon;
+use common\models\growth\AppMeta;
 use common\models\offline\OfflineStats;
 use common\models\payment\Repayment;
 use common\models\product\OnlineProduct;
@@ -741,12 +742,13 @@ FROM perf WHERE DATE_FORMAT(bizDate,'%Y-%m-%d') < DATE_FORMAT(NOW(),'%Y-%m-%d') 
             ->sum('funded_money');
 
         $totalCharityAount = bcdiv($totalFundedAmount, 10000, 2);    //暂时只计算投资慈善项目计算所得的金额
-
+        $donationTotal = AppMeta::getValue('donation_total');
+        $donationTotal = is_numeric($donationTotal) ? $donationTotal : 0; //获取应用信息自愿捐赠金额
         $statsData = [
             'totalTradeAmount' => bcadd($totalTradeAmount, $tradedAmount, 2),//平台累计交易额
             'totalRefundAmount' => bcadd($plan['totalAmount'], bcadd($refundedPrincipal, $refundedInterest, 2), 2),//累计兑付金额
             'totalRefundInterest' => bcadd($plan['totalInterest'], $refundedInterest, 2),//累计带来收益
-            'totalCharityAount' => $totalCharityAount,
+            'totalCharityAount' => bcadd($totalCharityAount, $donationTotal, 2),
         ];
 
         return $statsData;
