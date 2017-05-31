@@ -10,7 +10,7 @@ $this->title = '导出类型选择';
     <div class="row-fluid">
         <div class="span12">
             <h3 class="page-title">
-                兑换码管理 <small>运营模块</small>
+                数据导出 <small>运营模块</small>
             </h3>
             <ul class="breadcrumb">
                 <li>

@@ -9,7 +9,7 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\we
     <div class="row-fluid">
         <div class="span12">
             <h3 class="page-title">
-                兑换码管理 <small>运营模块</small>
+                数据导出 <small>运营模块</small>
             </h3>
             <ul class="breadcrumb">
                 <li>
@@ -30,13 +30,8 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\we
              <?= $exportModel['title']?>下载 <a href="/growth/export/download?sn=<?= $sn?>" target="_blank"><?= $sn . '.xlsx'?></a>
         <?php } else { ?>
             <div class="span12 alert alert-info">
-                后台程序正在下载数据
+                后台程序正在下载数据, 请稍后刷新页面
             </div>
-            <script>
-                setInterval(function(){
-                    window.location.reload();
-                }, 3000);
-            </script>
         <?php }?>
     </div>
 </div>

@@ -125,13 +125,13 @@ ORDER BY DATE( FROM_UNIXTIME( d.created_at ) ) DESC , d.uid ASC ",
             $safeParams = [];
             $isVerified = true;
             if (!empty($exportModel['params'])) {
-                foreach (\Yii::$app->request->post() as $key => $value) {
-                    if (isset($exportModel['params'][$key])) {
-                        if ($exportModel['params'][$key]['isRequired'] && empty($value)) {
+                foreach (\Yii::$app->request->post() as $param => $value) {
+                    if (isset($exportModel['params'][$param])) {
+                        if ($exportModel['params'][$param]['isRequired'] && empty($value)) {
                             $isVerified = false;
                             //todo 增加其他验证条件
                         } else {
-                            $safeParams[$key] = $value;
+                            $safeParams[$param] = $value;
                         }
                     }
                 }
