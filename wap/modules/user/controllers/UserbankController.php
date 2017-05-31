@@ -61,6 +61,10 @@ class UserbankController extends BaseController
 
         if ($resp->isSuccessful()) {
             return ['code' => 0, 'message' => '重置后的密码已经发送到您的手机'];
+        } elseif ($resp->get('ret_code') === '00060031') {
+            \Yii::trace('【重置交易密码】'.$this->getAuthedUser()->idcard.':'.$resp->get('ret_code').':'.$resp->get('ret_msg'), 'umplog');
+
+            return ['code' => 1, 'message' => '您的联动账户已被锁定，请联系客服'];
         } else {
             \Yii::trace('【重置交易密码】'.$this->getAuthedUser()->idcard.':'.$resp->get('ret_code').':'.$resp->get('ret_msg'), 'umplog');
 
