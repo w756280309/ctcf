@@ -68,9 +68,9 @@ class CheckIn extends \yii\db\ActiveRecord
 
         if ($streak >= 1 && $streak <= 7) {
             //5月活动期间积分倍率为3倍
-            $points = date('Y-m-d') >= '2017-05-01' && date('Y-m-d') <= '2017-05-31' ? 6 : 5;
+            $points = date('Y-m-d') >= '2017-05-01' && date('Y-m-d') <= '2017-05-31' ? 6 : 2;
         } elseif ($streak >= 8 && $streak <= 30) {
-            $points = 8;
+            $points = date('Y-m-d') >= '2017-05-01' && date('Y-m-d') <= '2017-05-31' ? 8 : 5;
         }
 
         switch ($streak) {
