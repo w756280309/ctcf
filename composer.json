@@ -34,7 +34,8 @@
         "yiisoft/yii2-debug": "*",
         "yiisoft/yii2-gii": "*",
         "yiisoft/yii2-faker": "*",
-        "phpro/grumphp": "0.11.5"
+        "phpro/grumphp": "0.11.5",
+        "squizlabs/php_codesniffer": "^3.0"
     },
     "config": {
         "process-timeout": 1800,
