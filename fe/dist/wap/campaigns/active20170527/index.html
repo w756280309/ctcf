@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>新用户专享活动</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0,minimum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="__FE_BASE_URI__/common/css/wenjfbase.css">
+    <link rel="stylesheet" href="__FE_BASE_URI__wap/campaigns/active20170527/css/index.css">
+    <link rel="stylesheet" href="__FE_BASE_URI__/common/css/popover.css">
+    <script src="__FE_BASE_URI__/libs/lib.flexible3.js"></script>
+    <script src="__FE_BASE_URI__/libs/zepto.min.js"></script>
+    <script src="__FE_BASE_URI__/libs/fastclick.js"></script>
+    <script src="__FE_BASE_URI__/common/js/weixin-share-tips.js"></script>
+    <script src="__FE_BASE_URI__/common/js/popover.js"></script>
+    <script src="__FE_BASE_URI__wap/campaigns/active20170527/js/index.js"></script>
+</head>
+<body>
+<div class="flex-content">
+    <div class="top-part">
+        <div class="my-progress">接力进度：<span>未开始</span></div>
+        <div class="my-prize">【我的奖品】</div>
+    </div>
+    <div class="middle-part" id="prz_pool">
+        <table id="prize_pool" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <td class="lottery-unit lottery-unit-0"><img class="active" src="__FE_BASE_URI__wap/campaigns/active20170527/images/prize_1.png"
+                                                             alt=""></td>
+                <td class="lottery-unit lottery-unit-1"><img src="__FE_BASE_URI__wap/campaigns/active20170527/images/prize_2.png" alt="">
+                </td>
+                <td class="lottery-unit lottery-unit-2"><img src="__FE_BASE_URI__wap/campaigns/active20170527/images/prize_3.png" alt="">
+                </td>
+            </tr>
+            <tr>
+                <td class="lottery-unit lottery-unit-7"><img src="__FE_BASE_URI__wap/campaigns/active20170527/images/prize_8.png" alt="">
+                </td>
+                <td>
+                    <img class="prz_btn" id="choujiang-btn" src="__FE_BASE_URI__wap/campaigns/active20170527/images/button_start.png" alt="">
+                    <!--按钮状态通过后台判断-->
+                    <!--<img class="prz_btn" src="images/button_over.png" alt="">-->
+                    <!--<img class="prz_btn wap-share-btn" src="images/button_again.png" alt="">-->
+                </td>
+                <td class="lottery-unit lottery-unit-3"><img src="__FE_BASE_URI__wap/campaigns/active20170527/images/prize_4.png" alt="">
+                </td>
+            </tr>
+            <tr>
+                <td class="lottery-unit lottery-unit-6"><img src="__FE_BASE_URI__wap/campaigns/active20170527/images/prize_7.png" alt="">
+                </td>
+                <td class="lottery-unit lottery-unit-5"><img src="__FE_BASE_URI__wap/campaigns/active20170527/images/prize_6.png" alt="">
+                </td>
+                <td class="lottery-unit lottery-unit-4"><img src="__FE_BASE_URI__wap/campaigns/active20170527/images/prize_5.png" alt="">
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="bottom-part">
+        <img src="__FE_BASE_URI__wap/campaigns/active20170527/images/rules_title.png" alt="" class="rules-title">
+        <ol class="rules-box">
+            <li>活动期间新注册用户可以免费获得 1 次抽奖机会;</li>
+            <li>抽奖机会用完后,点击“好友接力 再抽一次”按钮,邀请 3 位好友点击助力,即可再获得 1 次抽奖机会(最多 1 次);</li>
+            <li>领取活动奖品需要实名认证并绑定银行卡,奖品将于 3 个工作日内发放;</li>
+            <li>活动时间2017年6月3日-6月9日。</li>
+        </ol>
+        <p class="remind" style="margin-top: 1rem;">本次活动最终解释权归温都金服所有</p>
+        <p class="remind">所有活动及奖品与苹果公司无关</p>
+    </div>
+    <div class='mask-list' style="display: none"></div>
+    <div class="myprize-list" style="display: none">
+        <img src="__FE_BASE_URI__wap/campaigns/active20170527/images/pop_close.png" alt="" class="close-prize">
+        <img src="__FE_BASE_URI__wap/campaigns/active20170527/images/img_prizelist.png" alt="" class="prizelist-title">
+        <ul class="prizelist-content">
+            <!--此处需要后台遍历出中间记录（最多2条）-->
+            <li>
+                <div class="pic pic1 lf"></div>
+                <p class="prize-name">iPhone 7 Plus 128G</p>
+                <p class="prize-time">2017-04-12 15:30:00</p>
+            </li>
+            <li>
+                <div class="pic pic2 lf"></div>
+                <p class="prize-name">iPhone 7 Plus 128G</p>
+                <p class="prize-time">2017-04-12 15:30:00</p>
+            </li>
+        </ul>
+    </div>
+</div>
+<script type="text/javascript">
+  var award = function () {};
+  $(function () {
+    //初始化抽奖部分
+    lottery.init('prz_pool');
+    //点击进行抽奖
+    $("#prize_pool #choujiang-btn").click(function(){
+      if(click) {
+        return false;
+      }
+      else{
+        //调用接口 改变lottery.jiangpin来决定最终哪个奖品 改变award函数来决定函数的回掉
+        lottery.speed=100;
+        roll();
+        click=true;
+        return false;
+      }
+    });
+
+    //获奖情况弹窗
+    $('.my-progress').on('click',function () {
+        /*options配置可选参数  callback配置成功回调值可以是  空（如果为空则要配置btn_href：链接地址） "close",和成功回调函数*/
+      var module = poptpl.popComponent({
+        btnMsg : "好友助力 再抽一次",
+        popTopHasImg : true,
+        popTopImg : "images/img_gongxi.png",
+        popMiddleHasDiv : true,
+        popMiddleColor : "#fb5a1f",
+        contentMsg:"<span style='font-size: 0.56rem'>恭喜您!</span><br>获得<span style='color: #fc281c'>100元京东卡</span>一张"
+      },'close');
+    });
+
+    //仅限新用户弹窗
+    $('.lottery-unit-0').on('click',function () {
+      var module = poptpl.popComponent({
+        btnMsg : "确定",
+        popMiddleHasDiv : true,
+        popMiddleColor : "#fb5a1f",
+        contentMsg:"本活动仅限新用户参与哦!<br>快去参加其他活动吧!"
+      },'close');
+    });
+
+    //提示新用户去注册
+    $('.lottery-unit-1').on('click',function () {
+      var module = poptpl.popComponent({
+        btnMsg : "去注册",
+        popTopHasImg : true,
+        popTopImg : "images/img_register.png",
+        btnHref:"https:www.baidu.com",
+        popMiddleHasDiv : true,
+        popMiddleColor : "#fb5a1f",
+        contentMsg:"注册完就可以免费抽奖了哦!"
+      });
+    });
+
+    //无奖品
+    $('.lottery-unit-2').on('click',function () {
+      var module = poptpl.popComponent({
+        popBtmHas :false,
+        popTopHasImg : true,
+        popTopImg : "images/img_nogift.png",
+        popMiddleHasDiv : true,
+        popMiddleColor : "#fb5a1f",
+        contentMsg:"您还未获得任何奖品!"
+      });
+    });
+  });
+</script>
+</body>
+</html>

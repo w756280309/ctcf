@@ -9,6 +9,7 @@ class Reward extends ActiveRecord
     const TYPE_PIKU = 'PIKU'; //实物奖品
     const TYPE_POINT = 'POINT'; //积分
     const TYPE_COUPON = 'COUPON'; //代金券
+    const TYPE_RED_PACKET = 'RED_PACKET'; //红包
 
     public function rules()
     {
