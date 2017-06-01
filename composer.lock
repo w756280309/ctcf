@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "68caa47f4b5dbc1415d432be78a39881",
-    "content-hash": "d2a80270cca1ecaefaaa7d51b8e78732",
+    "hash": "1245ca9f61610f323db6815bd5dbbcf7",
+    "content-hash": "2194620cc99b3043706515d6f240d223",
     "packages": [
         {
             "name": "bower-asset/bootstrap",
@@ -939,7 +939,7 @@
             "source": {
                 "type": "git",
                 "url": "ssh://vcs@dx.wangcaigu.cn/diffusion/WCGLIBS/wcg-libs.git",
-                "reference": "e728e0d654706258029f4868a2200e90751d4d57"
+                "reference": "933109cade28fc36dc74e78c90f922738619137f"
             },
             "require": {
                 "php": ">=5.5.0",
@@ -963,7 +963,7 @@
             ],
             "description": "工具库",
             "homepage": "http://dx.wangcaigu.cn/diffusion/WCGLIBS/",
-            "time": "2017-05-12 00:59:48"
+            "time": "2017-06-01 07:39:01"
         },
         {
             "name": "yiisoft/yii2",

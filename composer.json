@@ -48,7 +48,7 @@
         }
     },
     "repositories":[
-        { "type": "vcs", "url": "ssh://vcs@dx.wangcaigu.cn/diffusion/DINGNOTIFY/dingnotify.git" },
-        { "type": "composer", "url": "http://pkg.wendujf.com/" }
+        { "type": "vcs", "url": "ssh://vcs@dx.wangcaigu.cn/diffusion/WCGLIBS/wcg-libs.git" },
+        { "type": "vcs", "url": "ssh://vcs@dx.wangcaigu.cn/diffusion/DINGNOTIFY/dingnotify.git" }
     ]
 }
