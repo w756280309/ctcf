@@ -166,6 +166,8 @@ class DrawController extends Controller
                 //没有临时码及未申请授权，需要去微信申请
                 $this->redirect($url);
             }
+        } else {
+            $openId = Yii::$app->session->get('openId');
         }
 
         $callout = null;
