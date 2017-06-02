@@ -23,8 +23,10 @@ class TransferController extends Controller
         $transfers = Transfer::find()
             ->where(['status' => Transfer::STATUS_INIT])
             ->andWhere(['>', 'amount', 0])
-            ->limit(10)
-            ->orderBy(['id' => 'SORT_ASC'])
+            ->orderBy([
+                'lastCronCheckTime' => SORT_ASC,
+                'id' => SORT_ASC,
+            ])->limit(10)
             ->all();
         if (!$transfers) {
             usleep(3000000);
@@ -32,6 +34,9 @@ class TransferController extends Controller
         }
         $connection = Yii::$app->db;
         foreach ($transfers as $transfer) {
+            //无论发放成功失败与否，都写入上次执行时间
+            $transfer->lastCronCheckTime = time();
+            $transfer->save(false);
             $user = null;
             $user = User::findOne($transfer->user_id);
             $amount = $transfer->amount;
@@ -40,9 +45,9 @@ class TransferController extends Controller
                 try {
                     //给用户发指定金额
                     if (AccountService::userTransfer($user, $amount)) {
-                        $transfer->status = $transfer::STATUS_SUCCESS;
+                        $transfer->status = Transfer::STATUS_SUCCESS;
                     } else {
-                        $transfer->status = $transfer::STATUS_FAIL;
+                        $transfer->status = Transfer::STATUS_FAIL;
                     }
                     $transfer->updateTime = date('Y-m-d H:i:s');
                     $transfer->save(false);
