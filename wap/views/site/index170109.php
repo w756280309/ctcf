@@ -93,19 +93,19 @@ $this->registerJsFile(ASSETS_BASE_URI . 'js/swiper.min.js', ['depends' => Jquery
         <div class="showMore">
             <div class="clearfix">
                 <a class="f13 lf" href="/site/h5?wx_share_key=h5">
-                    <img src="<?= FE_BASE_URI ?>wap/index/images/icon_1.png" alt="">
+                    <img src="<?= FE_BASE_URI ?>wap/index/images/icon_01.png" alt="">
                     <p>平台介绍</p>
                 </a>
                 <a class="f13 lf" href="/user/invite">
-                    <img src="<?= FE_BASE_URI ?>wap/index/images/icon_2.png" alt="">
+                    <img src="<?= FE_BASE_URI ?>wap/index/images/icon_02.png" alt="">
                     <p>邀请好友</p>
                 </a>
                 <a class="f13 lf" href="/mall/portal/guest<?= (Yii::$app->request->get('token') && defined('IN_APP')) ? '?token='.Yii::$app->request->get('token') : ''?>">
-                    <img src="<?= FE_BASE_URI ?>wap/index/images/icon_3.png" alt="">
+                    <img src="<?= FE_BASE_URI ?>wap/index/images/icon_03.png" alt="">
                     <p>积分商城</p>
                 </a>
                 <a class="f13 lf" href="/news">
-                    <img src="<?= FE_BASE_URI ?>wap/index/images/icon_4.png" alt="">
+                    <img src="<?= FE_BASE_URI ?>wap/index/images/icon_04.png" alt="">
                     <p>官网公告</p>
                 </a>
             </div>
