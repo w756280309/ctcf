@@ -6,7 +6,7 @@ use Yii;
 use yii\base\Model;
 use yii\web\NotFoundHttpException;
 
-trait   HelpersTrait
+trait HelpersTrait
 {
     public function render($view, $params = [])
     {

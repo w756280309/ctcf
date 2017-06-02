@@ -6,7 +6,7 @@ function weiXinShareTips(Obj){
     var html =
          '<div class="mark-box" style="display: none;position: fixed;left: 0;bottom:0;width: 100%;height: 100%;background: #000;opacity: 0.6;z-index: 11;" ></div>'
         +'<div class="share-box" style="display: none;position: fixed;left: 0;bottom:0;width: 100%;height: 100%;z-index: 12;text-align: right;">'
-            +'<img class="share-box-img" style="float: right;width: 80%;" src="../../common/img/share.png" alt="">'
+            +'<img class="share-box-img" style="float: right;width: 80%;" src="/images/share.png" alt="">'
         +'</div>';
 
     //  判断域名为微信

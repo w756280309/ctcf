@@ -1,19 +1,29 @@
 <?php
 
+use common\models\adv\Share;
+use common\utils\StringUtils;
+
 $this->title = '新用户专享活动';
-$this->share = $share;
 $this->headerNavOn = true;
+$this->share = new Share([
+    'title' => '您的好友邀请您为Ta助力，点击一键帮助',
+    'description' => '庆祝温都金服交易额突破20亿，新人免费抽豪礼！',
+    'imgUrl' => 'https://static.wenjf.com/upload/link/link1496370756253332.png',
+    'url' => Yii::$app->request->absoluteUrl,
+]);
 
 ?>
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/wenjfbase.css">
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/campaigns/active20170527/css/share.css?v=1.0">
+<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/popover.css">
 <script src="<?= FE_BASE_URI ?>libs/lib.flexible3.js"></script>
 <script src="<?= FE_BASE_URI ?>libs/fastclick.js"></script>
+<script src="<?= FE_BASE_URI ?>wap/common/js/popover.js"></script>
 
 <div class="flex-content">
     <div class="shareBanner">
         <img src="<?= FE_BASE_URI ?>wap/campaigns/active20170527/images/share_banner.png" alt="">
-        <div class="skewTitle">您的好友138****3874正在温都金服抽奖,<br>邀请您接力</div>
+        <div class="skewTitle">您的好友<?= StringUtils::obfsMobileNumber($user->getMobile()) ?>正在温都金服抽奖,<br>邀请您接力</div>
     </div>
     <div class="content">
         <div class="showTitle">奖品展示</div>
@@ -24,7 +34,7 @@ $this->headerNavOn = true;
         </div>
         <div class="relay clearfix">
             <img class="relayDo lf" src="<?= FE_BASE_URI ?>wap/campaigns/active20170527/images/share_do.png" alt="">
-            <a class="rg" href="">
+            <a class="rg" href="/promotion/draw/">
                 <img src="<?= FE_BASE_URI ?>wap/campaigns/active20170527/images/share_weDo.png" alt="">
             </a>
         </div>
@@ -96,9 +106,123 @@ $this->headerNavOn = true;
 
 <script>
     $(function() {
-        $(".relayDo").on("click",function(){
-            $(".progress ul li").eq(0).addClass("process");
-            $(".progress ul li").eq(1).addClass("process");
+        FastClick.attach(document.body);
+
+        <?php if (1 === $promoStatus) : ?>
+            notice('活动未开始');
+        <?php elseif (2 === $promoStatus) : ?>
+            notice('活动已结束');
+        <?php elseif (!$isWx) : ?>
+            notice('请在微信上打开此页面参加好友助力');
+        <?php endif; ?>
+
+        <?php if ($callout) : ?>
+            var responderCount = '<?= $callout->responderCount ?>';
+
+            if (1 == responderCount) {
+                $(".progress ul li").eq(0).addClass("process");
+            } else if (2 == responderCount) {
+                $(".progress ul li").eq(0).addClass("process");
+                $(".progress ul li").eq(1).addClass("process");
+                $(".progress ul li").eq(2).addClass("process");
+            } else if (responderCount >= 3) {
+                $(".progress ul li").eq(0).addClass("process");
+                $(".progress ul li").eq(1).addClass("process");
+                $(".progress ul li").eq(2).addClass("process");
+                $(".progress ul li").eq(3).addClass("process");
+                $(".progress ul li").eq(4).addClass("process");
+            }
+        <?php endif; ?>
+
+        var allowClick = true;
+
+        $(".relayDo").on("click",function(e) {
+            e.preventDefault;
+
+            if (!allowClick) {
+                return false;
+            }
+
+            var calloutId = '<?= $callout ? $callout->id : '' ?>';
+            var code = '<?= $user->usercode ?>';
+            var xhr = $.get('/promotion/draw/support', {callout_id: calloutId, code: code});
+            allowClick = false;
+
+            xhr.done(function(data) {
+                if (data.code === 0) {
+                    var responderCount = data.data.responderCount;
+
+                    var module = poptpl.popComponent({
+                        btnMsg : "确定",
+                        popMiddleHasDiv : true,
+                        popMiddleColor : "#fb5a1f",
+                        contentMsg: '接力成功',
+                        afterPop: function () {
+                            location.href = '';
+                        }
+                    }, 'close');
+
+                    if (1 == responderCount) {
+                        $(".progress ul li").eq(0).addClass("process");
+                    } else if (2 == responderCount) {
+                        $(".progress ul li").eq(1).addClass("process");
+                        $(".progress ul li").eq(2).addClass("process");
+                    } else if (responderCount >= 3) {
+                        $(".progress ul li").eq(3).addClass("process");
+                        $(".progress ul li").eq(4).addClass("process");
+                    }
+                }
+
+                allowClick = true;
+            });
+
+            xhr.fail(function(jqXHR) {
+                if (400 === jqXHR.status && jqXHR.responseText) {
+                    var resp = $.parseJSON(jqXHR.responseText);
+                    if (1 === resp.code || 2 === resp.code) {
+                        notice(resp.message);
+                    } else if (3 === resp.code) {
+                        notice('请在微信上打开此页面参加好友助力活动');
+                    } else if (4 === resp.code) {
+                        var module = poptpl.popComponent({
+                            btnMsg: "确定",
+                            popMiddleHasDiv: true,
+                            popMiddleColor: "#fb5a1f",
+                            contentMsg: '网络异常，请刷新重试！',
+                            afterPop: function () {
+                                location.href = '';
+                            }
+                        }, 'close');
+                    } else if (8 === resp.code) {
+                        var module = poptpl.popComponent({
+                            btnMsg : "我也要玩",
+                            btnHref: "/promotion/draw/",
+                            popMiddleHasDiv : true,
+                            popMiddleColor : "#fb5a1f",
+                            contentMsg: '哇哦，您的好友已完成接力！'
+                        }, 'close');
+                    } else if (9 === resp.code) {
+                        notice('活动已结束');
+                    } else if (10 === resp.code) {
+                        notice('您已接力成功');
+                    } else {
+                        notice('系统繁忙，请稍后重试！');
+                    }
+                } else {
+                    notice('系统繁忙，请稍后重试！');
+                }
+
+                allowClick = true;
+            });
         })
     })
+
+    function notice(msg) {
+        var module = poptpl.popComponent({
+            btnMsg : "确定",
+            popMiddleHasDiv : true,
+            popMiddleColor : "#fb5a1f",
+            contentMsg: msg
+        }, 'close');
+    }
 </script>

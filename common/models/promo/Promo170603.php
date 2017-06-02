@@ -24,22 +24,39 @@ class Promo170603
 
     public function addTicket(User $user, $ticketSource)
     {
-        //判断当前用户是否参加了活动
+        //判断当前用户是否参加了活动（有截止时间判断）
         $this->promo->isActive($user);
 
+        //判断ticket来源
         if (!in_array($ticketSource, [self::SOURCE_REGISTER, self::SOURCE_CALLOUT])) {
             throw new \Exception('未知的ticket来源');
         }
 
+        //判断来源为召集的是否应该添加抽奖机会
+        if (self::SOURCE_CALLOUT === $ticketSource) {
+            $callout = Callout::find()
+                ->where(['user_id' => $user->id])
+                ->andWhere(['promo_id' => $this->promo->id])
+                ->one();
+
+            //没有发起召集或者召集响应人数<3，直接返回false
+            if (null === $callout || (isset($callout) && $callout->responderCount < 3)) {
+                throw new \Exception('未发起召集或召集相响应人数不足');
+            }
+        }
+
+        //判断是否存在对应来源的抽奖机会，若存在，不应添加抽奖机会
         $ticketCount = (int) PromoLotteryTicket::findLotteryByPromoId($this->promo->id)
             ->andWhere(['user_id' => $user->id])
             ->andWhere(['source' => $ticketSource])
             ->count();
 
+        //判断是否存在ticket
         if ($ticketCount > 0) {
             throw new \Exception('已添加过抽奖机会');
         }
 
+        //添加抽奖机会
         PromoLotteryTicket::initNew($user, $this->promo, $ticketSource)->save();
     }
 
@@ -326,7 +343,7 @@ class Promo170603
         return PromoLotteryTicket::find()
             ->where(['promo_id' => $this->promo->id])
             ->andWhere(['user_id' => $user->id])
-            ->andWhere(['isRewarded' => true])
+            ->andWhere(['isDrawn' => true])
             ->orderBy('drawAt desc')
             ->all();
     }

@@ -108,6 +108,11 @@ return [
             'max' => 1000000000,
         ],
     ],
+    //todo-待添加
+    'weixin' => [
+        'appId' => '',
+        'appSecret' => '',
+    ],
     'm_assets_base_uri' => 'https://static.wenjf.com/m/',
     'pc_assets_base_uri' => 'https://static.wenjf.com/pc/',
     'upload_base_uri' => 'https://static.wenjf.com/',

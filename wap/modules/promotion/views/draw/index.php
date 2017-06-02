@@ -1,8 +1,18 @@
 <?php
 
+use common\models\adv\Share;
+
 $this->title = '新用户专享活动';
-$this->share = $share;
+$hostInfo = Yii::$app->request->hostInfo;
+$calloutUser = Yii::$app->session->get('calloutUser');
+$this->share = new Share([
+    'title' => '新人免费抽奖，iPhone7、苹果手表不限量！',
+    'description' => '庆祝温都金服交易额突破20亿，海量好礼等你来！',
+    'imgUrl' => 'https://static.wenjf.com/upload/link/link1496370729342200.png',
+    'url' => null === $user || ($user && $user->id !== $calloutUser) || ($callout && $callout->responderCount >= 3) ? Yii::$app->request->absoluteUrl : $hostInfo.'/promotion/draw/share?ucode='.$user->usercode,
+]);
 $this->headerNavOn = true;
+$currentUrl = urlencode(Yii::$app->request->absoluteUrl);
 
 ?>
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/wenjfbase.css">
@@ -17,7 +27,21 @@ $this->headerNavOn = true;
 
 <div class="flex-content">
     <div class="top-part">
-        <div class="my-progress">接力进度：<span>未开始</span></div>
+        <div class="my-progress">接力进度：
+            <span>
+                <?php
+                    if ($callout) {
+                        if ($callout->responderCount >= 3) {
+                            echo '已完成';
+                        } else {
+                            echo $callout->responderCount.'人';
+                        }
+                    } else {
+                        echo '未开始';
+                    }
+                ?>
+            </span>
+        </div>
         <div class="my-prize">【我的奖品】</div>
     </div>
 
@@ -38,7 +62,7 @@ $this->headerNavOn = true;
                 <td class="lottery-unit lottery-unit-7"><img src="<?= FE_BASE_URI ?>wap/campaigns/active20170527/images/prize_8.png" alt="">
                 </td>
                 <td>
-                    <?php if (null === $user || ($user && $restTicketCount > 0)) : ?>
+                    <?php if (null === $user || ($user && $restTicketCount > 0) || ($user && 0 === $ticketCount)) : ?>
                         <img class="prz_btn" id="choujiang-btn" src="<?= FE_BASE_URI ?>wap/campaigns/active20170527/images/button_start.png" alt="">
                     <?php elseif ($user && 0 === $restTicketCount && $ticketCount >= 2) : ?>
                         <img class="prz_btn" src="<?= FE_BASE_URI ?>wap/campaigns/active20170527/images/button_over.png" alt="">
@@ -51,12 +75,9 @@ $this->headerNavOn = true;
                 </td>
             </tr>
             <tr>
-                <td class="lottery-unit lottery-unit-6"><img src="<?= FE_BASE_URI ?>wap/campaigns/active20170527/images/prize_7.png" alt="">
-                </td>
-                <td class="lottery-unit lottery-unit-5"><img src="<?= FE_BASE_URI ?>wap/campaigns/active20170527/images/prize_6.png" alt="">
-                </td>
-                <td class="lottery-unit lottery-unit-4"><img src="<?= FE_BASE_URI ?>wap/campaigns/active20170527/images/prize_5.png" alt="">
-                </td>
+                <td class="lottery-unit lottery-unit-6"><img src="<?= FE_BASE_URI ?>wap/campaigns/active20170527/images/prize_7.png" alt=""></td>
+                <td class="lottery-unit lottery-unit-5"><img src="<?= FE_BASE_URI ?>wap/campaigns/active20170527/images/prize_6.png" alt=""></td>
+                <td class="lottery-unit lottery-unit-4"><img src="<?= FE_BASE_URI ?>wap/campaigns/active20170527/images/prize_5.png" alt=""></td>
             </tr>
         </table>
     </div>
@@ -66,7 +87,8 @@ $this->headerNavOn = true;
         <ol class="rules-box">
             <li>活动期间新注册用户可以免费获得 1 次抽奖机会;</li>
             <li>抽奖机会用完后,点击“好友接力 再抽一次”按钮,邀请 3 位好友点击助力,即可再获得 1 次抽奖机会(最多 1 次);</li>
-            <li>领取活动奖品需要实名认证并绑定银行卡,奖品将于 3 个工作日内发放;</li>
+            <li>现金红包将于实名认证并绑定银行卡后直接发放到账户余额；</li>
+            <li>活动结束后3个工作日内，工作人员将与您联系确认实物奖品领取相关事宜，请保持通讯畅通；</li>
             <li>活动时间2017年6月3日-6月9日。</li>
         </ol>
         <p class="remind" style="margin-top: 1rem;">本次活动最终解释权归温都金服所有</p>
@@ -122,7 +144,7 @@ $this->headerNavOn = true;
                     roll();
                     award = function () {
                         var module = poptpl.popComponent({
-                            btnMsg : "好友助力 再抽一次",          //文案得改
+                            btnMsg : 'register' !== data.data.drawSource ? '好友助力 再抽一次' : '确定',          //文案得改
                             popTopHasImg : true,
                             popTopImg: "<?= FE_BASE_URI ?>wap/campaigns/active20170527/images/img_gongxi.png",
                             popMiddleHasDiv : true,
@@ -148,7 +170,7 @@ $this->headerNavOn = true;
                             btnMsg : "去注册",
                             popTopHasImg : true,
                             popTopImg : "<?= FE_BASE_URI ?>wap/campaigns/active20170527/images/img_register.png",
-                            btnHref: "/site/signup?next=<?= urlencode(Yii::$app->request->absoluteUrl) ?>",
+                            btnHref: "/site/signup?next=<?= $currentUrl ?>",
                             popMiddleHasDiv : true,
                             popMiddleColor : "#fb5a1f",
                             contentMsg: "注册完就可以免费抽奖了哦!"
@@ -168,21 +190,35 @@ $this->headerNavOn = true;
 
         //奖品列表
         $('.my-prize').on('click',function () {
-            if ($('.prizelist-content').find('li').length > 0) {
-                $('.myprize-list').show();
-                $('.mask-list').show();
-                $('body').css('overflow','hidden').on('touchmove', poptpl.eventTarget, false);
-            } else {
-                var module = poptpl.popComponent({
-                    popBtmHas :false,
-                    popTopHasImg : true,
-                    popTopImg : "<?= FE_BASE_URI ?>wap/campaigns/active20170527/images/img_nogift.png",
-                    popMiddleHasDiv : true,
-                    popMiddleColor : "#fb5a1f",
-                    contentMsg:"您还未获得任何奖品!"
-                });
-            }
+            <?php if ($user) : ?>
+                if ($('.prizelist-content').find('li').length > 0) {
+                    $('.myprize-list').show();
+                    $('.mask-list').show();
+                    $('body').css('overflow','hidden').on('touchmove', poptpl.eventTarget, false);
+                } else {
+                    var module = poptpl.popComponent({
+                        popBtmHas :false,
+                        popTopHasImg : true,
+                        popTopImg : "<?= FE_BASE_URI ?>wap/campaigns/active20170527/images/img_nogift.png",
+                        popMiddleHasDiv : true,
+                        popMiddleColor : "#fb5a1f",
+                        contentMsg:"您还未获得任何奖品!"
+                    });
+                }
+            <?php else : ?>
+                location.href = '/site/login?next=<?= $currentUrl ?>';
+            <?php endif; ?>
         });
+
+        if(navigator.userAgent.indexOf('MicroMessenger') > -1 ) {
+            weiXinShareTips($('.wap-share-btn'));
+        } else {
+            $('.wap-share-btn').on('click', function (e) {
+                e.preventDefault;
+
+                notice('浏览器用户请关注温都金服微信公众号“wendujinfu”，在“新手活动”-“拼手气”中参与本次活动。');
+            });
+        }
     });
 
     function notice(msg) {

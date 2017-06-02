@@ -2,6 +2,7 @@
 
 namespace common\models\promo;
 
+use common\models\user\User;
 use yii\db\ActiveRecord;
 
 class Callout extends ActiveRecord
@@ -21,5 +22,16 @@ class Callout extends ActiveRecord
             'promo_id' => '参与活动ID',
             'createTime' => '创建时间',
         ];
+    }
+
+    public static function initNew(User $user, \DateTime $endTime, $promo_id)
+    {
+        return new self([
+            'promo_id' => $promo_id,
+            'endTime' => $endTime->format('Y-m-d H:i:s'),
+            'responderCount' => 0,
+            'user_id' => $user->id,
+            'createTime' => date('Y-m-d H:i:s'),
+        ]);
     }
 }

@@ -102,7 +102,7 @@ var poptpl = {
         $('body').append(html).on('touchmove', poptpl.eventTarget, false);
         setTimeout(function(){
             $('.pop').show();
-        },80)
+        }, 150)
     },
     confirmBtn : function(){
         $('body').off('click');

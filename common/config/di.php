@@ -13,3 +13,7 @@
 ]);
 \Yii::$container->set('txClient', 'Tx\\TxClient');
 Yii::$container->set('db_queue', 'Queue\\DbQueue');
+\Yii::$container->set('wxClient', 'WeiXin\\Client', [
+    \Yii::$app->params['weixin']['appId'],
+    \Yii::$app->params['weixin']['appSecret'],
+]);

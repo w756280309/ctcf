@@ -16,4 +16,14 @@ class CalloutResponder extends ActiveRecord
             'createTime' => '创建时间',
         ];
     }
+
+    public static function initNew($openId, Callout $callout)
+    {
+        return new self([
+            'ip' => \Yii::$app->request->getUserIP(),
+            'openid' => $openId,
+            'callout_id' => $callout->id,
+            'createTime' => date('Y-m-d H:i:s'),
+        ]);
+    }
 }

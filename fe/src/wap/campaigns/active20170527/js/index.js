@@ -69,7 +69,6 @@ var click=false;
 
 $(function () {
   FastClick.attach(document.body);
-  weiXinShareTips($('.wap-share-btn'));
 
   $('.close-prize').on('click',function () {
     $('.myprize-list').hide();
