@@ -24,10 +24,9 @@ class DrawController extends Controller
     /**
      * 活动落地页.
      */
-    public function actionIndex($wx_share_key = null)
+    public function actionIndex()
     {
         $promo = $this->promo($this->promoKey);
-        $share = $this->share($wx_share_key);
         $user = $this->getAuthedUser();
 
         $callout = null;
@@ -60,7 +59,6 @@ class DrawController extends Controller
 
         return $this->render('index', [
             'promo' => $promo,
-            'share' => $share,
             'drawList' => $drawList,
             'ticketCount' => $ticketCount,
             'restTicketCount' => $restTicketCount,
@@ -157,7 +155,7 @@ class DrawController extends Controller
             $code = Yii::$app->request->get('code');
             //判断是否有临时码及记录是否申请授权
             //若有，获得open_id，并存储到session中
-            if ($code && Yii::$app->session->has('isApplied')) {
+            if ($code) {
                 try {
                     $response = $wxClient->getGrant($code);
                 } catch (\Exception $ex) {
@@ -166,10 +164,7 @@ class DrawController extends Controller
                 $openId = isset($response['resource_owner_id']) ? $response['resource_owner_id'] : '';
             } else {
                 //没有临时码及未申请授权，需要去微信申请
-                if (!$code && !Yii::$app->session->has('isApplied')) {
-                    Yii::$app->session->set('isApplied', true);
-                    $this->redirect($url);
-                }
+                $this->redirect($url);
             }
         }
 
@@ -261,6 +256,14 @@ class DrawController extends Controller
         $user = User::findOne(['usercode' => $code]);
         if (null === $user) {
             return $this->msg400(6, '召集人不存在');
+        }
+
+        //判断召集者是否给自己助力了
+        if (Yii::$app->session->has('calloutUser')) {
+            $userId = Yii::$app->session->get('calloutUser');
+            if ($userId === $user->id) {
+                return $this->msg400(12, '召集人不能给自己助力');
+            }
         }
 
         $callout = Callout::find()

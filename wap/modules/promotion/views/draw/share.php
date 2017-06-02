@@ -204,7 +204,9 @@ $this->share = new Share([
                     } else if (9 === resp.code) {
                         notice('活动已结束');
                     } else if (10 === resp.code) {
-                        notice('您已接力成功');
+                        notice('您已成功接力');
+                    } else if (12 === resp.code) {
+                        notice('自己不能为自己助力，快请好友帮忙吧！');
                     } else {
                         notice('系统繁忙，请稍后重试！');
                     }

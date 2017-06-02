@@ -49,7 +49,14 @@ class WeixinController extends Controller
             return $weiAuth;
         }
 
-        $token = $this->get('https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid='. $weiAuth->appId .'&secret=a1168f2164fdb691cc0483ebbda3fee4');
+        $appId = Yii::$app->params['weixin']['appId'];
+        $appSecret = Yii::$app->params['weixin']['appSecret'];
+
+        if (empty($appId) || empty($appSecret)) {
+            throw new \Exception();
+        }
+
+        $token = $this->get('https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid='.$appId.'&secret='.$appSecret);
         $accessToken = json_decode($token, true);
         $ticket = $this->get('https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token='. $accessToken['access_token'] .'&type=jsapi');
         $jsapiTicket = json_decode($ticket, true);

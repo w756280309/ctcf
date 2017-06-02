@@ -222,7 +222,7 @@ class Adv extends ActiveRecord
             $link .= $parseUrl['host'];
         }
 
-        return $link . $parseUrl['path'] . '?' . http_build_query($params);
+        return trim($link.$parseUrl['path'].'?'.http_build_query($params), '?');
     }
 
     public static function initNew($adminId, $type)

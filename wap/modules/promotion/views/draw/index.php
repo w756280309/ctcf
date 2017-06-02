@@ -4,15 +4,15 @@ use common\models\adv\Share;
 
 $this->title = '新用户专享活动';
 $hostInfo = Yii::$app->request->hostInfo;
+$currentUrl = Yii::$app->request->absoluteUrl;
 $calloutUser = Yii::$app->session->get('calloutUser');
 $this->share = new Share([
     'title' => '新人免费抽奖，iPhone7、苹果手表不限量！',
     'description' => '庆祝温都金服交易额突破20亿，海量好礼等你来！',
     'imgUrl' => 'https://static.wenjf.com/upload/link/link1496370729342200.png',
-    'url' => null === $user || ($user && $user->id !== $calloutUser) || ($callout && $callout->responderCount >= 3) ? Yii::$app->request->absoluteUrl : $hostInfo.'/promotion/draw/share?ucode='.$user->usercode,
+    'url' => null === $user || ($user && $calloutUser && $user->id !== $calloutUser) || ($callout && $callout->responderCount >= 3) ? $currentUrl : $hostInfo.'/promotion/draw/share?ucode='.$user->usercode,
 ]);
 $this->headerNavOn = true;
-$currentUrl = urlencode(Yii::$app->request->absoluteUrl);
 
 ?>
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/wenjfbase.css">
@@ -144,7 +144,7 @@ $currentUrl = urlencode(Yii::$app->request->absoluteUrl);
                     roll();
                     award = function () {
                         var module = poptpl.popComponent({
-                            btnMsg : 'register' !== data.data.drawSource ? '好友助力 再抽一次' : '确定',          //文案得改
+                            btnMsg : 'register' === data.data.drawSource ? '好友助力 再抽一次' : '确定',          //文案得改
                             popTopHasImg : true,
                             popTopImg: "<?= FE_BASE_URI ?>wap/campaigns/active20170527/images/img_gongxi.png",
                             popMiddleHasDiv : true,
@@ -152,12 +152,11 @@ $currentUrl = urlencode(Yii::$app->request->absoluteUrl);
                             contentMsg: "<span style='font-size: 0.56rem'>恭喜您!</span><br>获得<span style='color: #fc281c'>"+data.data.drawName+"</span>",
                             afterPop: function () {
                                 location.href = '';
+                                allowClick = true;
                             }
                         }, 'close');
                     };
                 }
-
-                allowClick = true;
             });
 
             xhr.fail(function(jqXHR) {
@@ -170,7 +169,7 @@ $currentUrl = urlencode(Yii::$app->request->absoluteUrl);
                             btnMsg : "去注册",
                             popTopHasImg : true,
                             popTopImg : "<?= FE_BASE_URI ?>wap/campaigns/active20170527/images/img_register.png",
-                            btnHref: "/site/signup?next=<?= $currentUrl ?>",
+                            btnHref: "/site/signup?next=<?= urlencode($currentUrl) ?>",
                             popMiddleHasDiv : true,
                             popMiddleColor : "#fb5a1f",
                             contentMsg: "注册完就可以免费抽奖了哦!"
@@ -206,7 +205,7 @@ $currentUrl = urlencode(Yii::$app->request->absoluteUrl);
                     });
                 }
             <?php else : ?>
-                location.href = '/site/login?next=<?= $currentUrl ?>';
+                location.href = '/site/login?next=<?= urlencode($currentUrl) ?>';
             <?php endif; ?>
         });
 
