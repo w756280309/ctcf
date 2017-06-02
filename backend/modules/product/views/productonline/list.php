@@ -103,6 +103,7 @@ $pc_cat = Yii::$app->params['pc_cat'];
                         <th class="money">实际募集金额（元）</th>
                         <th>满标时间</th>
                         <th>起息时间</th>
+                        <th>放款时间</th>
                         <th>状态</th>
                         <th><center>操作</center></th>
                     </tr>
@@ -136,6 +137,9 @@ $pc_cat = Yii::$app->params['pc_cat'];
                             </td>
                             <td>
                                 <?= !empty($val['jixi_time']) ? date('Y-m-d', $val['jixi_time']) : '--'?>
+                            </td>
+                            <td>
+                                <?= !empty($val['fk_examin_time']) ? date('Y-m-d', $val['fk_examin_time']) : '--'?>
                             </td>
                             <td><?= $val['online_status'] ? $status[$val['status']] : '未上线' ?></td>
                             <td>
