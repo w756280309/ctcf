@@ -28,7 +28,7 @@ $this->share = new Share([
     <div class="content">
         <div class="showTitle">奖品展示</div>
         <div class="gifts clearfix">
-            <img class="lf" src="<?= FE_BASE_URI ?>wap/campaigns/active20170527/images/shareGift_01.png" alt="">
+            <img class="lf" src="<?= FE_BASE_URI ?>wap/campaigns/active20170527/images/shareGift_01_new.png" alt="">
             <img class="lf" src="<?= FE_BASE_URI ?>wap/campaigns/active20170527/images/shareGift_02.png" alt="">
             <img class="rg" src="<?= FE_BASE_URI ?>wap/campaigns/active20170527/images/shareGift_03.png" alt="">
         </div>

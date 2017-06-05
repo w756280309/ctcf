@@ -7,7 +7,7 @@ $hostInfo = Yii::$app->request->hostInfo;
 $currentUrl = Yii::$app->request->absoluteUrl;
 $calloutUser = Yii::$app->session->get('calloutUser');
 $this->share = new Share([
-    'title' => '新人免费抽奖，iPhone7、苹果手表不限量！',
+    'title' => '新人免费抽奖，苹果手机、苹果手表不限量！',
     'description' => '庆祝温都金服交易额突破20亿，海量好礼等你来！',
     'imgUrl' => 'https://static.wenjf.com/upload/link/link1496370729342200.png',
     'url' => null === $user || ($user && $calloutUser && $user->id !== $calloutUser) || ($callout && $callout->responderCount >= 3) ? $currentUrl : $hostInfo.'/promotion/draw/share?ucode='.$user->usercode,
@@ -16,7 +16,7 @@ $this->headerNavOn = true;
 
 ?>
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/wenjfbase.css">
-<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/campaigns/active20170527/css/index.css">
+<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/campaigns/active20170527/css/index.css?v=1">
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/popover.css">
 <script src="<?= FE_BASE_URI ?>libs/lib.flexible3.js"></script>
 <script src="<?= FE_BASE_URI ?>libs/zepto.min.js"></script>
@@ -52,7 +52,7 @@ $this->headerNavOn = true;
                     <img class="active" src="<?= FE_BASE_URI ?>wap/campaigns/active20170527/images/prize_1.png" alt="">
                 </td>
                 <td class="lottery-unit lottery-unit-1">
-                    <img src="<?= FE_BASE_URI ?>wap/campaigns/active20170527/images/prize_2.png" alt="">
+                    <img src="<?= FE_BASE_URI ?>wap/campaigns/active20170527/images/prize_2_new.png" alt="">
                 </td>
                 <td class="lottery-unit lottery-unit-2">
                     <img src="<?= FE_BASE_URI ?>wap/campaigns/active20170527/images/prize_3.png" alt="">
