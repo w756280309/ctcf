@@ -1,5 +1,6 @@
 <?php
 
+use common\models\growth\Referral;
 use common\utils\SecurityUtils;
 use common\utils\StringUtils;
 use yii\web\YiiAsset;
@@ -84,14 +85,11 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => YiiAsse
                     <td><strong>注册渠道</strong></td>
                     <td>
                         <?php
-                        //todo 临时代码-应通过翻译项翻译
                         $campaignSource = trim($normalUser['campaign_source']);
-                        if ('walmart1702' === $campaignSource) {
-                            echo '沃尔玛';
-                        } else if ('' === $campaignSource) {
-                            echo '---';
+                        if ($campaignSource) {
+                            echo Referral::getName($campaignSource) ? Referral::getName($campaignSource). "($campaignSource)" : '---';
                         } else {
-                            echo $campaignSource;
+                            echo '---';
                         }
                         ?>
                     </td>
