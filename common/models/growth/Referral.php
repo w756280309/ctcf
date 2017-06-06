@@ -3,10 +3,16 @@
 namespace common\models\growth;
 
 use yii\db\ActiveRecord;
-use yii\web\Request;
+use yii\behaviors\TimestampBehavior;
 
 class Referral extends ActiveRecord
 {
+    public function behaviors()
+    {
+        return [
+            TimestampBehavior::className(),
+        ];
+    }
     public function rules()
     {
         return [
@@ -14,6 +20,7 @@ class Referral extends ActiveRecord
             ['code', 'required', 'message' => '渠道码不能为空'],
             ['code', 'unique', 'message' => '渠道码应唯一'],
             [['name', 'code'], 'string'],
+            [['created_at', 'updated_at'], 'integer'],
         ];
     }
 
@@ -24,7 +31,7 @@ class Referral extends ActiveRecord
             'name' => '名称',
             'code' => '渠道码',
             'created_at' => '创建时间',
-            'update_at' => '更新时间',
+            'updated_at' => '更新时间',
         ];
     }
 

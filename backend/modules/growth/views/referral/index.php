@@ -17,7 +17,7 @@ $this->title = '渠道管理';
             <div class="span12">
                 <h3 class="page-title">
                      运营管理<small> 渠道管理</small>
-                    <a href="add" class="btn green float-right">
+                    <a href="/growth/referral/add" class="btn green float-right">
                         <i class="icon-plus"></i> 新增渠道
                     </a>
                 </h3>
@@ -34,7 +34,7 @@ $this->title = '渠道管理';
             </div>
             <!--search start-->
             <div class="portlet-body">
-                <form action="/growth/referral" method="get" target="_self" id="loanFilter">
+                <form action="/growth/referral/index" method="get" target="_self" id="loanFilter">
                     <table class="table">
                         <tbody>
                         <tr>

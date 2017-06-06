@@ -16,6 +16,12 @@ class ReferralController extends BaseController
     public function actionIndex()
     {
         $request = Yii::$app->request->get();
+        if ($request['name']) {
+            $request['name'] = trim($request['name']);
+        }
+        if ($request['code']) {
+            $request['code'] = trim($request['code']);
+        }
         $query = Referral::find()->orderBy(['id' => SORT_DESC]);
         if ($request['name']) {
             $query->andFilterWhere(['like', 'name', $request['name']]);
