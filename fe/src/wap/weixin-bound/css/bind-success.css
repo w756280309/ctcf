@@ -1,0 +1,34 @@
+body {
+  background-color: #f7f7f7;
+}
+.flex-content .picture {
+  display: block;
+  width: 1.92rem;
+  margin: 1.86666667rem auto 0.4rem;
+}
+.flex-content .remind {
+  height: 0.48rem;
+  line-height: 0.48rem;
+  font-size: 0.48rem;
+  color: #666;
+  text-align: center;
+  margin-bottom: 2.37333333rem;
+}
+.flex-content .detail {
+  color: #333;
+  font-size: 0.4rem;
+  line-height: 0.74666667rem;
+  text-align: center;
+}
+.flex-content .queren {
+  display: block;
+  width: 8.93333333rem;
+  height: 1.18666667rem;
+  line-height: 1.18666667rem;
+  margin: 0.54666667rem auto 0.4rem;
+  border-radius: 8px;
+  /*background-color: #f44336;*/
+  font-size: 0.48rem;
+  /*color: #fff;*/
+  text-align: center;
+}

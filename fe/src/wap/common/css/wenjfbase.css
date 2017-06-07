@@ -310,6 +310,11 @@ body{
     color:#8c8c8c;
     background:#e7eaf1;
 }
+body.new{
+    font:14px/1.5 'Microsoft YaHei', Helvetica, Arial, sans-serif;
+    color:#8c8c8c;
+    background:#efefef;
+}
 .position {
     position: relative;
     top:0;
@@ -387,6 +392,15 @@ body{
     font-size:18px;
     text-align: center;
     border-radius: 18px;
+}
+.btn-big{
+    display: block;
+    width: 8.93333333rem;
+    height: 1.18666667rem;
+    line-height: 1.18666667rem;
+    border-radius: 8px;
+    font-size: 0.48rem;
+    text-align: center;
 }
 .btn-normal {
     color: #f44336;

@@ -1,0 +1,45 @@
+body {
+  background-color: #f7f7f7;
+}
+.flex-content .picture {
+  display: block;
+  width: 2.08rem;
+  margin: 1.06666667rem auto 0.53333333rem;
+}
+.flex-content .remind {
+  height: 0.8rem;
+  line-height: 0.8rem;
+  padding-left: 0.53333333rem;
+  font-size: 0.45333333rem;
+  color: #666;
+  text-align: left;
+}
+.flex-content .detail {
+  height: 0.74666667rem;
+  line-height: 0.74666667rem;
+  font-size: 0.4rem;
+  color: #333;
+  text-align: center;
+}
+.flex-content .queren {
+  display: block;
+  width: 8.93333333rem;
+  height: 1.18666667rem;
+  line-height: 1.18666667rem;
+  margin: 0.54666667rem auto 0.4rem;
+  border-radius: 8px;
+  background-color: #f44336;
+  font-size: 0.48rem;
+  color: #fff;
+  text-align: center;
+}
+.flex-content .tel {
+  height: 0.34666667rem;
+  line-height: 0.34666667rem;
+  color: #666;
+  font-size: 0.34666667rem;
+  text-align: center;
+}
+.flex-content .tel a {
+  color: #1683fb;
+}

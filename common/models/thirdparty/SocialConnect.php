@@ -41,11 +41,21 @@ class SocialConnect extends ActiveRecord
             ->where(['resourceOwner_id' => $ownerId])
             ->andWhere(['provider_type' => $type])
             ->one();
+
         if (null !== $connect) {
             if ($connect->user_id !== $user->id) {
-                throw new \Exception('已绑定其他用户');
+                throw new \Exception('您已绑定其他账号');
             }
-            throw new \Exception('您已绑定，无需再次绑定');
+            throw new \Exception('您已绑定此账号');
+        }
+
+        $connect = SocialConnect::find()
+            ->where(['user_id' => $user->id])
+            ->andWhere(['provider_type' => $type])
+            ->one();
+
+        if (null !== $connect) {
+            throw new \Exception('该账号已被其他微信号绑定，如需绑定，请在其他微信号上进行解绑');
         }
 
         $transaction = Yii::$app->db->beginTransaction();
@@ -78,7 +88,7 @@ class SocialConnect extends ActiveRecord
         $connect = SocialConnect::findOne([
             'user_id' => $userId,
             'resourceOwner_id' => $ownerId,
-            'type' => $type,
+            'provider_type' => $type,
         ]);
         if (null === $connect) {
             throw new \Exception('未找到对应的绑定关系');
