@@ -13,7 +13,7 @@ class m170606_024921_social_connect extends Migration
             'provider_type' => $this->string(20),
             'createTime' => $this->dateTime(),
         ]);
-        $this->createIndex('unique_owner', ['resourceOwner_id', 'provider_type'], true);
+        $this->createIndex('unique_owner', 'social_connect', ['resourceOwner_id', 'provider_type'], true);
     }
 
     public function down()
