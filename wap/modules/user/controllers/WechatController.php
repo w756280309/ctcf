@@ -6,6 +6,7 @@ use common\controllers\HelpersTrait;
 use common\models\thirdparty\SocialConnect;
 use common\models\user\LoginForm;
 use common\models\user\User;
+use common\utils\SecurityUtils;
 use Yii;
 use yii\web\Controller;
 
@@ -32,44 +33,47 @@ class WechatController extends Controller
      */
     public function actionDoBind()
     {
-        $isLogin = true;
-        $user = $this->getAuthedUser();
-
-        try {
-            $this->validate($user);
-        } catch (\Exception $e) {
-            if (2 !== $e->getCode()) {
-                return $this->msg400($e->getMessage());
-            } else {
-                $isLogin = false;
-            }
+        if (!$this->fromWx()) {
+            return $this->msg400('链接失效，请在微信中打开此页面');
         }
 
-        $request = Yii::$app->request->post();
-
-        if ($isLogin && $request['mobile'] !== $user->getMobile()) {
-            return $this->msg400('当前登录手机号与输入的手机号不相符');
+        if (!Yii::$app->session->has('resourceOwnerId')) {
+            return $this->msg400('信息获取失败，请退出重试');
         }
 
         $loginForm = new LoginForm();
         $loginForm->setScenario('login');
-        $loginForm->phone = $request['mobile'];
-        $loginForm->password = $request['password'];
+        $loginForm->phone = Yii::$app->request->post('mobile');
+        $loginForm->password = Yii::$app->request->post('password');
 
-        if ($loginForm->validate() && $loginForm->login(User::USER_TYPE_PERSONAL)) {
-            if (!$isLogin) {
-                $user = $this->getAuthedUser();
+        if ($loginForm->validate()) {
+            $user = User::findOne([
+                'safeMobile' => SecurityUtils::encrypt($loginForm->phone),
+                'type' => User::USER_TYPE_PERSONAL,
+            ]);
+
+            if (null === $user) {
+                return $this->msg400('该手机号还没有注册');
+            }
+
+            if (User::STATUS_DELETED === $user->status) {
+                return $this->msg400('该用户已被锁定');
+            }
+
+            if (!$user->validatePassword($loginForm->password)) {
+                return $this->msg400('手机号或密码不正确');
             }
 
             $openId = Yii::$app->session->get('resourceOwnerId');
 
             try {
                 SocialConnect::bind($user, $openId, SocialConnect::PROVIDER_TYPE_WECHAT);
-            } catch (\Exception $e) {
-                if (!$isLogin) {
-                    Yii::$app->user->logout();
-                }
 
+                if (Yii::$app->user->login($user)) {
+                    $user->last_login = time();
+                    $user->save(false);
+                }
+            } catch (\Exception $e) {
                 return $this->msg400($e->getMessage());
             }
         }
@@ -101,9 +105,7 @@ class WechatController extends Controller
     {
         $user = $this->getAuthedUser();
 
-        try {
-            $this->validate($user);
-        } catch (\Exception $e) {
+        if (null !== $this->unbindValidate($user)) {
             return $this->goHome();
         }
 
@@ -130,9 +132,13 @@ class WechatController extends Controller
     public function actionDoUnbind()
     {
         $user = $this->getAuthedUser();
+        $msg = $this->unbindValidate($user);
+
+        if (null !== $msg) {
+            return $this->msg400($msg);
+        }
 
         try {
-            $this->validate($user);
             $openId = Yii::$app->session->get('resourceOwnerId');
 
             $res = SocialConnect::unbind($user->id, $openId, SocialConnect::PROVIDER_TYPE_WECHAT);
@@ -158,19 +164,21 @@ class WechatController extends Controller
         return $this->render('unbind_success');
     }
 
-    private function validate($user)
+    private function unbindValidate($user)
     {
         if (!$this->fromWx()) {
-            throw new \Exception('链接失效，请在微信中打开此页面', 1);
+            return '链接失效，请在微信中打开此页面';
         }
 
         if (null === $user) {
-            throw new \Exception('您当前未登录，请登录后重试', 2);
+            return '您当前未登录，请登录后重试';
         }
 
         if (!Yii::$app->session->has('resourceOwnerId')) {
-            throw new \Exception('信息获取失败，请退出重试', 3);
+            return '信息获取失败，请退出重试';
         }
+
+        return null;
     }
 
     private function msg400($msg)

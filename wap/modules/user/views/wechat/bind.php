@@ -20,7 +20,7 @@ $this->title = '温都金服_绑定服务号';
         <div class="form-box">
             <div class="input-box">
                 <label for="phone" class="lf">手机号码</label>
-                <input type="number" class="phone lf" maxlength="11" id="mobile" name="mobile" placeholder="请输入已注册的手机号" value="<?= $user ? $user->getMobile() : '' ?>">
+                <input type="phone" class="phone lf" maxlength="11" id="mobile" name="mobile" placeholder="请输入已注册的手机号" value="<?= $user ? $user->getMobile() : '' ?>">
             </div>
             <div class="input-box">
                 <label for="password" class="lf">登录密码</label>

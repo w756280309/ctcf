@@ -37,6 +37,10 @@ class SocialConnect extends ActiveRecord
      */
     public static function bind(User $user, $ownerId, $type)
     {
+        if (!$user || !$ownerId || !$type) {
+            throw new \Exception('缺少参数');
+        }
+
         $connect = SocialConnect::find()
             ->where(['resourceOwner_id' => $ownerId])
             ->andWhere(['provider_type' => $type])
