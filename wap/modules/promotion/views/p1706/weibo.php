@@ -11,7 +11,7 @@ $this->headerNavOn = true;
 
 <div class="flex-content">
     <img src="<?= FE_BASE_URI ?>wap/campaigns/marketing-weibo/images/bg_banner.jpg" alt="" class="top-banner">
-    <img src="<?= FE_BASE_URI ?>wap/campaigns/marketing-weibo/images/code/2.png" alt="" class="pic-group">    //二维码图片修改位置,名字的数字递增即可
+    <img src="<?= FE_BASE_URI ?>wap/campaigns/marketing-weibo/images/code/2.png" alt="" class="pic-group">    <!-- 二维码图片修改位置,名字的数字递增即可 -->
     <p class="remind">*本福利由温都金服提供</p>
     <p class="remind">温都金服，市民身边的财富管家。</p>
     <p class="remind">由温州报业传媒集团成立的互联网金融平台，提供安</p>

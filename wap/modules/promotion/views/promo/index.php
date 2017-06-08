@@ -232,38 +232,39 @@ $config = json_decode($promo->config, true);
                 toastCenter('请输入正确的手机号', function () {
                     allowClick = true;
                 });
+
+                return;
+            } else if (!moduleFn.check.mobile(phonenum)) {
+                toastCenter('手机号格式不正确', function () {
+                    allowClick = true;
+                });
+
                 return;
             } else {
-                if (moduleFn.check.mobile(phonenum)) {
-                    var xhr = $.get('/promotion/promo/validate-mobile?key='+key+'&mobile='+phonenum);
+                var xhr = $.get('/promotion/promo/validate-mobile?key='+key+'&mobile='+phonenum);
 
-                    xhr.done(function(data) {
-                        var toUrl = data.toUrl;
+                xhr.done(function(data) {
+                    var toUrl = data.toUrl;
 
-                        if (data.code) {
-                            toastCenter(data.message, function() {
-                                if ('' !== toUrl) {
-                                    location.href = toUrl;
-                                }
+                    if (data.code) {
+                        toastCenter(data.message, function() {
+                            if ('' !== toUrl) {
+                                location.href = toUrl;
+                            }
 
-                                allowClick = true;
-                            });
-                        } else {
-                            location.href = toUrl;
-                            allowClick = true;
-                        }
-                    });
-
-                    xhr.fail(function () {
-                        toastCenter('系统繁忙,请稍后重试!', function() {
                             allowClick = true;
                         });
-                    })
-                } else {
-                    allowClick = true;
+                    } else {
+                        location.href = toUrl;
+                        allowClick = true;
+                    }
+                });
 
-                    return false;
-                }
+                xhr.fail(function () {
+                    toastCenter('系统繁忙,请稍后重试!', function() {
+                        allowClick = true;
+                    });
+                })
             }
         })
     });
