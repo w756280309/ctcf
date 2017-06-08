@@ -9,7 +9,6 @@ use common\models\user\CaptchaForm;
 use common\models\user\User;
 use wap\modules\promotion\models\PromoMobile;
 use wap\modules\promotion\models\RankingPromo;
-use Wcg\Growth\Integration\Yii2Module\Model\ReferralSource;
 use Yii;
 use yii\web\Controller;
 
@@ -35,7 +34,7 @@ class PromoController extends Controller
             $share = Share::findOne(['shareKey' => $wx_share_key]);
         }
 
-        return $this->render('wrm170210' === $promo->key ? 'index_wrm' : 'index', [
+        return $this->render('wrm170210' === $promo->key && !$this->fromWx() ? 'index_wrm' : 'index', [
             'promo' => $promo,
             'share' => $share,
         ]);
