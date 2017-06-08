@@ -256,4 +256,22 @@ class Admin extends \yii\db\ActiveRecord implements IdentityInterface, AdminInte
 
         return false;
     }
+
+    /**
+     * 根据role_sn获得对应群组的后台用户信息
+     *
+     * @param $roleSn
+     *
+     * @return array|\yii\db\ActiveRecord[]
+     */
+    public static function findByRoleSn($roleSn)
+    {
+        $r = Role::tableName();
+        $a = Admin::tableName();
+        return Admin::find()
+            ->innerJoin($r, "$r.sn = $a.role_sn")
+            ->where(["$a.status" => self::STATUS_ACTIVE])
+            ->andWhere(["$a.role_sn" => $roleSn])
+            ->all();
+    }
 }
