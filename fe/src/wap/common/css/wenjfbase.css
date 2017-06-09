@@ -696,7 +696,12 @@ a.contact-tel:hover {
 a:hover,a:visited,a:active {
     text-decoration: none;
 }
-
 dt {
     font-weight: normal;
+}
+.hide {
+    display: none !important;
+}
+.show {
+    display: block !important;
 }

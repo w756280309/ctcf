@@ -3,9 +3,11 @@
 namespace app\modules\user\controllers;
 
 use common\controllers\HelpersTrait;
+use common\models\log\LoginLog;
 use common\models\thirdparty\SocialConnect;
 use common\models\user\LoginForm;
 use common\models\user\User;
+use common\service\LoginService;
 use common\utils\SecurityUtils;
 use Yii;
 use yii\web\Controller;
@@ -22,9 +24,15 @@ class WechatController extends Controller
     public function actionBind()
     {
         $user = $this->getAuthedUser();
+        $loginForm = new LoginForm();
+        $loginService = new LoginService();
+
+        $showCaptcha = $loginService->isCaptchaRequired();    //是否需要校验图形验证码标志位
 
         return $this->render('bind', [
             'user' => $user,
+            'loginForm' => $loginForm,
+            'showCaptcha' => $showCaptcha,
         ]);
     }
 
@@ -33,18 +41,28 @@ class WechatController extends Controller
      */
     public function actionDoBind()
     {
+        $loginForm = new LoginForm();
+
+        $loginForm->phone = Yii::$app->request->post('mobile');
+        $loginForm->password = Yii::$app->request->post('password');
+
+        $loginService = new LoginService();
+        $showCaptcha = $loginService->isCaptchaRequired($loginForm->phone);    //是否需要校验图形验证码标志位
+
         if (!$this->fromWx()) {
-            return $this->msg400('链接失效，请在微信中打开此页面');
+            return $this->msg400('链接失效，请在微信中打开此页面', ['showCaptcha' => $showCaptcha]);
         }
 
         if (!Yii::$app->session->has('resourceOwnerId')) {
-            return $this->msg400('信息获取失败，请退出重试');
+            return $this->msg400('信息获取失败，请退出重试', ['showCaptcha' => $showCaptcha]);
         }
 
-        $loginForm = new LoginForm();
-        $loginForm->setScenario('login');
-        $loginForm->phone = Yii::$app->request->post('mobile');
-        $loginForm->password = Yii::$app->request->post('password');
+        if ($showCaptcha) {
+            $loginForm->setScenario('verifycode');
+            $loginForm->verifyCode = Yii::$app->request->post('verifyCode');
+        } else {
+            $loginForm->setScenario('login');
+        }
 
         if ($loginForm->validate()) {
             $user = User::findOne([
@@ -52,16 +70,25 @@ class WechatController extends Controller
                 'type' => User::USER_TYPE_PERSONAL,
             ]);
 
+            $msg = null;
+
             if (null === $user) {
-                return $this->msg400('该手机号还没有注册');
+                $msg = '该手机号还没有注册';
             }
 
             if (User::STATUS_DELETED === $user->status) {
-                return $this->msg400('该用户已被锁定');
+                $msg = '该用户已被锁定';
             }
 
             if (!$user->validatePassword($loginForm->password)) {
-                return $this->msg400('手机号或密码不正确');
+                $msg = '手机号或密码不正确';
+            }
+
+            if (null !== $msg) {
+                $loginService->logFailure($loginForm->phone, LoginLog::TYPE_WAP);
+                $showCaptcha = $loginService->isCaptchaRequired($loginForm->phone);
+
+                return $this->msg400($msg, ['showCaptcha' => $showCaptcha]);
             }
 
             $openId = Yii::$app->session->get('resourceOwnerId');
@@ -74,14 +101,14 @@ class WechatController extends Controller
                     $user->save(false);
                 }
             } catch (\Exception $e) {
-                return $this->msg400($e->getMessage());
+                return $this->msg400($e->getMessage(), ['showCaptcha' => $showCaptcha]);
             }
         }
 
         if ($loginForm->getErrors()) {
             $message = $loginForm->firstErrors;
 
-            return $this->msg400(current($message));
+            return $this->msg400(current($message), ['showCaptcha' => $showCaptcha]);
         }
 
         return [
@@ -161,6 +188,10 @@ class WechatController extends Controller
      */
     public function actionUnbindSuccess()
     {
+        if (!$this->fromWx()) {
+            return $this->goHome();
+        }
+
         return $this->render('unbind_success');
     }
 
@@ -181,13 +212,14 @@ class WechatController extends Controller
         return null;
     }
 
-    private function msg400($msg)
+    private function msg400($msg, $data = [])
     {
         Yii::$app->response->statusCode = 400;
 
         return [
             'code' => 1,
             'message' => $msg,
+            'data' => $data,
         ];
     }
 }

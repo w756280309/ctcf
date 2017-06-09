@@ -1,10 +1,13 @@
 <?php
 
+use yii\bootstrap\ActiveForm;
+use yii\captcha\Captcha;
+
 $this->title = '温都金服_绑定服务号';
 
 ?>
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/wenjfbase.css">
-<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/weixin-bound/css/bind.css?v=1">
+<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/weixin-bound/css/bind.css?v=8">
 <script src="<?= FE_BASE_URI ?>libs/lib.flexible3.js"></script>
 <script src="<?= ASSETS_BASE_URI ?>js/common.js"></script>
 
@@ -15,7 +18,13 @@ $this->title = '温都金服_绑定服务号';
         <p class="p2">实时接收交易信息、计息、福利提醒。</p>
         <img src="<?= FE_BASE_URI ?>wap/weixin-bound/images/weixin_bind.png" alt="">
     </div>
-    <form id="form" action="/user/wechat/do-bind" method="post">
+
+    <?php
+        $form = ActiveForm::begin([
+                'id' => 'form',
+                'action' => '/user/wechat/do-bind',
+            ]);
+    ?>
         <input name="_csrf" type="hidden" value="<?= Yii::$app->request->csrfToken ?>">
         <div class="form-box">
             <div class="input-box">
@@ -27,8 +36,22 @@ $this->title = '温都金服_绑定服务号';
                 <input type="password" class="password lf" name="password" id="password" placeholder="请输入登录密码">
                 <span class="yincang"></span>
             </div>
+            <div class="input-box verifyCode hide">
+                <label class="lf">图形验证码</label>
+                <input class="lf" type="text" id="verifycode" placeholder="请输入验证码" name="verifyCode" maxlength="4" style="margin-left: 0.4rem; width: 35%;">
+                <div class="rg">
+                    <?=
+                        $form->field($loginForm, 'verifyCode', ['inputOptions' => ['style' => 'height: 59px']])
+                            ->label(false)
+                            ->widget(Captcha::className(), [
+                                'template' => '{image}',
+                                'captchaAction' => '/site/captcha',
+                            ])
+                    ?>
+                </div>
+            </div>
         </div>
-    </form>
+    <?php ActiveForm::end(); ?>
     <a href="javascript:void(0)" class="btn-press queren">立 即 绑 定</a>
     <p class="tel">客服电话：<a href="tel://400-101-5151">400-101-5151</a></p>
 </div>
@@ -46,6 +69,11 @@ $this->title = '温都金服_绑定服务号';
         });
 
         var allowClick = true;
+        var showCaptcha = '<?= $showCaptcha ?>';
+
+        if (showCaptcha) {
+            $('.verifyCode').removeClass('hide');
+        }
 
         $('.queren').on('click', function (e) {
             e.preventDefault;
@@ -57,6 +85,11 @@ $this->title = '温都金服_绑定服务号';
             if (!validateMobile()) {
                 allowClick = true;
                 return;
+            }
+
+            if (showCaptcha && !verifyCode()) {
+                allowClick = true;
+                return false;
             }
 
             var xhr = $.post('/user/wechat/do-bind', $('#form').serialize());
@@ -76,6 +109,11 @@ $this->title = '温都金服_绑定服务号';
                 if (400 === jqXHR.status && jqXHR.responseText) {
                     var resp = $.parseJSON(jqXHR.responseText);
 
+                    if (resp.data.showCaptcha) {
+                        $('.verifyCode').removeClass('hide');
+                        $('#loginform-verifycode-image').click();
+                    }
+
                     toastCenter(resp.message, function () {
                         if ('信息获取失败，请退出重试' === resp.message) {
                             location.href = '';
@@ -86,6 +124,7 @@ $this->title = '温都金服_绑定服务号';
                 } else {
                     toastCenter('系统繁忙，请稍后重试！', function () {
                         allowClick = true;
+                        $('#loginform-verifycode-image').click();
                     });
                 }
             });
@@ -108,6 +147,24 @@ $this->title = '温都金服_绑定服务号';
 
         if ('' === $('#password').val()) {
             toastCenter('密码不能为空');
+            return false;
+        }
+
+        return true;
+    }
+
+    function verifyCode() {
+        var verifyCode = $('#verifycode').val();
+
+        if ('' === verifyCode) {
+            toastCenter('验证码不能为空');
+
+            return false;
+        }
+
+        if (4 !== verifyCode.length) {
+            toastCenter('验证码长度必须为4位');
+
             return false;
         }
 

@@ -12,5 +12,5 @@ $this->title = '温都金服_解除成功';
     <p class="remind">您已成功解除绑定</p>
     <p class="detail">交易信息及计息提醒、福利提醒将不再</p>
     <p class="detail">通过微信推送，您可登录官网或在APP中查看</p>
-    <a href="/" class="queren">去 首 页</a>
+    <a href="javacript:void(0)" onclick="WeixinJSBridge.invoke('closeWindow');" class="queren">确 认</a>
 </div>
