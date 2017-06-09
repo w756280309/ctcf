@@ -95,6 +95,36 @@ ORDER BY DATE( FROM_UNIXTIME( d.created_at ) ) DESC , d.uid ASC ",
                 'itemLabels' => ['手机号', '姓名', '累计成功提现金额', '提现发起日期'],
                 'itemType' => ['int', 'string', 'float', 'date'],
             ],
+            'stats_custormer_service_bound' => [
+                'key' => 'stats_custormer_service_bound',
+                'title' => '客服呼入呼出量',
+                'content' => '统计客服呼入呼出量',
+                'sql' => "select ad.real_name AS '客服姓名', SUM(if(pc.direction='inbound', 1, 0)) AS '呼入量', SUM(if(pc.direction='outbound', 1, 0)) AS '呼出量' 
+from crm_phone_call AS pc 
+left join admin AS ad on pc.recp_id = ad.id 
+where
+    date(pc.createTime) <= :endDate
+    and date(pc.createTime) >= :startDate
+GROUP BY pc.recp_id",
+                'params' => [//如果没有必要参数, 可以为null, 但是必须是isset
+                    'startDate' => [//参数列表， key 是参数名， 不可为空
+                        'name' => 'startDate',//参数名
+                        'type' => 'date',//参数的数据类型
+                        'value' => date('Y-m-d', strtotime('-1 month')),//参数的默认值
+                        'title' => '开始日期',//参数标题
+                        'isRequired' => true,//是否必要参数, 默认都是必要参数
+                    ],
+                    'endDate' => [//参数列表， key 是参数名， 不可为空
+                        'name' => 'endDate',//参数名
+                        'type' => 'date',//参数的数据类型
+                        'value' => date('Y-m-d', strtotime('-1 day')),//参数的默认值
+                        'title' => '结束日期',//参数标题
+                        'isRequired' => true,//是否必要参数, 默认都是必要参数
+                    ],
+                ],
+                'itemLabels' => ['客服姓名', '呼入量', '呼出量'],
+                'itemType' => ['string', 'int', 'int'],
+            ],
         ];
         parent::init();
     }
