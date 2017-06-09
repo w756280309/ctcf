@@ -30,8 +30,7 @@ class GetOpenIdBehavior extends Behavior
         //将open_id存储在session的resourceOwnerId字段
         //获取方式为Yii::$app->session->get('resourceOwnerId');
         $wxClient = Yii::$container->get('wxClient');
-        if (!Yii::$app->session->has('resourceOwnerId') && empty($state)) {
-            $url = $wxClient->getAuthorizationUrl(Yii::$app->request->absoluteUrl, 'snsapi_userinfo', time());
+        if (!Yii::$app->session->has('resourceOwnerId')) {
             if ($code && $state) {
                 try {
                     $response = $wxClient->getGrant($code);
@@ -40,6 +39,7 @@ class GetOpenIdBehavior extends Behavior
                     throw $ex;
                 }
             } else {
+                $url = $wxClient->getAuthorizationUrl(Yii::$app->request->absoluteUrl, 'snsapi_userinfo', time());
                 return Yii::$app->controller->redirect($url);
             }
         }
