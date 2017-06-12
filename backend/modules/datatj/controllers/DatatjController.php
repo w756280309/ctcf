@@ -12,6 +12,7 @@ use yii\data\ActiveDataProvider;
 use yii\data\ArrayDataProvider;
 use yii\data\Pagination;
 use Yii;
+use yii\helpers\ArrayHelper;
 use yii\web\NotFoundHttpException;
 
 class DatatjController extends BaseController
@@ -167,6 +168,9 @@ FROM perf WHERE DATE_FORMAT(bizDate,'%Y-%m') < DATE_FORMAT(NOW(),'%Y-%m')  GROUP
                 '新手标新增用户的投资金额',
                 '新手标总投资人数',
                 '新手标总投资金额',
+                '实际回款金额',
+                '实际回款项目数',
+                '实际回款人数',
             ]) . "\n";
         foreach ($allData as $k => $data) {
             $array = [
@@ -199,6 +203,9 @@ FROM perf WHERE DATE_FORMAT(bizDate,'%Y-%m') < DATE_FORMAT(NOW(),'%Y-%m')  GROUP
                 floatval($data['xsNewInvSum']),
                 intval($data['xsInvCount']),
                 floatval($data['xsInvSum']),
+                floatval($data['repayMoney']),
+                intval($data['repayLoanCount']),
+                intval($data['repayUserCount']),
             ];
             $record .= implode(',', $array) . "\n";
         }
@@ -213,6 +220,9 @@ FROM perf WHERE DATE_FORMAT(bizDate,'%Y-%m') < DATE_FORMAT(NOW(),'%Y-%m')  GROUP
     //月数据导出
     public function actionMonthExport()
     {
+        //每月回款人数
+        $repayData = Perf::getMonthRepayUserCount();
+        $repayData = ArrayHelper::index($repayData, 'm');
         //获取当月数据
         $month = Perf::getThisMonthCount();
         //历史数据，不包含当月
@@ -242,7 +252,9 @@ SUM(xsNewInvCount) AS xsNewInvCount,
 SUM(xsNewInvSum) AS xsNewInvSum,
 SUM(xsInvCount) AS xsInvCount,
 SUM(xsInvSum) AS xsInvSum,
-SUM(checkIn) as checkIn
+SUM(checkIn) as checkIn,
+SUM(repayMoney) as repayMoney,
+SUM(repayLoanCount) as repayLoanCount
 FROM perf WHERE DATE_FORMAT(bizDate,'%Y-%m') < DATE_FORMAT(NOW(),'%Y-%m')  GROUP BY DATE_FORMAT(bizDate,'%Y-%m') ORDER BY DATE_FORMAT(bizDate,'%Y-%m') DESC";
         $history = Yii::$app->db->createCommand($sql)->queryAll();
         $allData = array_merge([$month], $history);
@@ -274,6 +286,9 @@ FROM perf WHERE DATE_FORMAT(bizDate,'%Y-%m') < DATE_FORMAT(NOW(),'%Y-%m')  GROUP
                 '新手标新增用户的投资金额',
                 '新手标总投资人数',
                 '新手标总投资金额',
+                '实际回款金额',
+                '实际回款项目数',
+                '实际回款人数',
             ]) . "\n";
         foreach ($allData as $k => $data) {
             $array = [
@@ -304,6 +319,9 @@ FROM perf WHERE DATE_FORMAT(bizDate,'%Y-%m') < DATE_FORMAT(NOW(),'%Y-%m')  GROUP
                 floatval($data['xsNewInvSum']),
                 intval($data['xsInvCount']),
                 floatval($data['xsInvSum']),
+                floatval($data['repayMoney']),
+                intval($data['repayLoanCount']),
+                isset($repayData[$data['bizDate']]) ? $repayData[$data['bizDate']]['c'] : 0,
             ];
             $record .= implode(',', $array) . "\n";
         }
