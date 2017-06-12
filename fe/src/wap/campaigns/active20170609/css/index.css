@@ -1,0 +1,58 @@
+.flex-content {
+  font-size: 0.34666667rem;
+  line-height: 0.53333333rem;
+  color: #4a2b2a;
+}
+.flex-content .banner-box {
+  width: 100%;
+  height: 4.66666667rem;
+  background: url("../images/bg_banner.jpg") no-repeat;
+  background-size: contain;
+}
+.flex-content .gift-box {
+  width: 100%;
+  height: 7.42666667rem;
+  background: url("../images/bg_gift.jpg") no-repeat;
+  background-size: contain;
+}
+.flex-content .rules-box {
+  position: relative;
+  width: 100%;
+  height: 10.29333333rem;
+  padding: 1.73333333rem 1rem 0 1.65333333rem;
+  background: url("../images/bg_rules.jpg") no-repeat;
+  background-size: contain;
+}
+.flex-content .rules-box .rope {
+  position: absolute;
+  left: 50%;
+  top: 39%;
+  width: 8.06666667rem;
+  margin-left: -4.03333333rem;
+}
+.flex-content .rules-box .rules-list li {
+  list-style-type: decimal;
+}
+.flex-content .bottom-box {
+  position: relative;
+  width: 100%;
+  height: 7.76rem;
+  padding: 1.1rem 1.13333333rem 0;
+  background: url("../images/bg_bottom.jpg") no-repeat;
+  background-size: contain;
+}
+.flex-content .bottom-box .go-invest {
+  display: block;
+  width: 4.05333333rem;
+  height: 1.28rem;
+  margin: 1.26666667rem auto 0;
+  background: url("../images/btn_invest.png") no-repeat;
+  background-size: contain;
+}
+.flex-content .bottom-box .rope {
+  position: absolute;
+  left: 50%;
+  top: -6%;
+  width: 8.06666667rem;
+  margin-left: -4.03333333rem;
+}

@@ -28,4 +28,20 @@ class P1706Controller extends Controller
             'share' => $share,
         ]);
     }
+
+    /**
+     * 父亲节活动.
+     */
+    public function actionFathersDay($wx_share_key = null)
+    {
+        $share = null;
+
+        if (!empty($wx_share_key)) {
+            $share = Share::findOne(['shareKey' => $wx_share_key]);
+        }
+
+        return $this->render('fathers_day', [
+            'share' => $share,
+        ]);
+    }
 }
