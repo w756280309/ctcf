@@ -7,9 +7,6 @@ use Yii;
 use yii\base\Model;
 use Zii\Validator\CnMobileValidator;
 
-/**
- * Login form.
- */
 class LoginForm extends Model
 {
     public $phone;
@@ -18,7 +15,7 @@ class LoginForm extends Model
     public $verifyCode;
     public $rememberMe = true;
 
-    private $_user = false;
+    private $user = false;
 
     /**
      * {@inheritdoc}
@@ -42,9 +39,18 @@ class LoginForm extends Model
             ['phone', 'required', 'message' => '手机号码不能为空', 'on' => ['login', 'verifycode']],
             ['username', 'required', 'message' => '企业账号不能为空', 'on' => ['org_login', 'org_verifycode']],
             ['password', 'required', 'message' => '密码不能为空'],
-            ['verifyCode', 'required', 'message' => '图形验证码不能为空', 'on' => ['org_login', 'org_verifycode']],
-            ['verifyCode', 'string', 'length' => 4, 'message' => '验证码长度必须为4位', 'on' => ['org_login', 'org_verifycode']],
-            ['verifyCode', 'captcha', 'message' => '验证码不正确', 'on' => ['org_login', 'verifycode', 'org_verifycode']],
+            ['verifyCode', 'required', 'message' => '验证码不能为空', 'on' => ['verifycode', 'org_verifycode']],
+            [
+                'verifyCode',
+                'string',
+                'length' => 4,
+                'message' => '验证码长度必须为4位',
+                'on' => [
+                    'verifycode',
+                    'org_verifycode',
+                ]
+            ],
+            ['verifyCode', 'captcha', 'message' => '验证码不正确', 'on' => ['verifycode', 'org_verifycode']],
             ['phone', 'string', 'length' => 11, 'message' => '手机号长度必须为11位数字'],
             ['phone', CnMobileValidator::className()],
             [
@@ -52,7 +58,12 @@ class LoginForm extends Model
                 'string',
             ],
             //企业账号格式 不能是纯数字，或是纯字母
-            ['username', 'match', 'pattern' => '/(?!^\d+$)(?!^[a-zA-Z]+$)^[0-9a-zA-Z]{6,20}$/', 'message' => '企业账号必须为数字和字母的组合'],
+            [
+                'username',
+                'match',
+                'pattern' => '/(?!^\d+$)(?!^[a-zA-Z]+$)^[0-9a-zA-Z]{6,20}$/',
+                'message' => '企业账号必须为数字和字母的组合',
+            ],
             // rememberMe must be a boolean value
             ['rememberMe', 'boolean'],
         ];
@@ -80,15 +91,18 @@ class LoginForm extends Model
      */
     public function login($userType, $isInApp = false)
     {
-        if (false === $this->_user) {
+        if (false === $this->user) {
             if (User::USER_TYPE_PERSONAL === $userType) {
-                $this->_user = User::findOne(['safeMobile' => SecurityUtils::encrypt($this->phone), 'type' => $userType]);
+                $this->user = User::findOne([
+                    'safeMobile' => SecurityUtils::encrypt($this->phone),
+                    'type' => $userType,
+                ]);
             } elseif (User::USER_TYPE_ORG === $userType) {
-                $this->_user = User::findOne(['username' => $this->username, 'type' => $userType]);
+                $this->user = User::findOne(['username' => $this->username, 'type' => $userType]);
             }
         }
 
-        if (!$this->_user) {
+        if (!$this->user) {
             if (User::USER_TYPE_PERSONAL === $userType) {
                 $this->addError('phone', '该手机号还没有注册');
 
@@ -98,7 +112,7 @@ class LoginForm extends Model
 
                 return false;
             }
-        } elseif (User::STATUS_DELETED === $this->_user->status) {
+        } elseif (User::STATUS_DELETED === $this->user->status) {
             if (User::USER_TYPE_PERSONAL === $userType) {
                 $this->addError('phone', '该用户已被锁定');
 
@@ -110,32 +124,33 @@ class LoginForm extends Model
             }
         }
 
-        if (!$this->_user->validatePassword($this->password)) {
+        if (!$this->user->validatePassword($this->password)) {
             $this->addError('password', '手机号或密码不正确');
 
             return false;
         }
 
         $isLoggedIn = $isInApp
-            ? Yii::$app->user->setIdentity($this->_user) || true
-            : Yii::$app->user->login($this->_user, $this->rememberMe ? 3600 : 0);
+            ? Yii::$app->user->setIdentity($this->user) || true
+            : Yii::$app->user->login($this->user, $this->rememberMe ? 3600 : 0);
 
         if ($isLoggedIn) {
-            $this->_user->scenario = 'login';
-            $this->_user->last_login = time();
+            $this->user->scenario = 'login';
+            $this->user->last_login = time();
 
-            return $this->_user->save();
+            return $this->user->save();
         }
 
         return false;
     }
 
     /**
-     * 用于判断用户是否存在
+     * 用于判断用户是否存在.
      *
      * @return bool
      */
-    public function isUserExist() {
-        return false !== $this->_user;
+    public function isUserExist()
+    {
+        return false !== $this->user;
     }
 }

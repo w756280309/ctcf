@@ -76,11 +76,11 @@ class WechatController extends Controller
                 $msg = '该手机号还没有注册';
             }
 
-            if (User::STATUS_DELETED === $user->status) {
+            if ($user && User::STATUS_DELETED === $user->status) {
                 $msg = '该用户已被锁定';
             }
 
-            if (!$user->validatePassword($loginForm->password)) {
+            if ($user && !$user->validatePassword($loginForm->password)) {
                 $msg = '手机号或密码不正确';
             }
 
