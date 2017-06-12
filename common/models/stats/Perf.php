@@ -608,6 +608,8 @@ FROM perf WHERE DATE_FORMAT(bizDate,'%Y-%m-%d') < DATE_FORMAT(NOW(),'%Y-%m-%d') 
         $month['xsInvCount'] = $month['xsInvCount'] + $today['xsInvCount'];
         $month['xsInvSum'] = $month['xsInvSum'] + $today['xsInvSum'];
         $month['checkIn'] = $month['checkIn'] + $today['checkIn'];
+        $month['repayMoney'] = $month['repayMoney'] + $today['repayMoney'];
+        $month['repayLoanCount'] = $month['repayLoanCount'] + $today['repayLoanCount'];
         return $month;
     }
 
