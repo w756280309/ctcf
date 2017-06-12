@@ -574,7 +574,9 @@ SUM(xsNewInvCount) AS xsNewInvCount,
 SUM(xsNewInvSum) AS xsNewInvSum,
 SUM(xsInvCount) AS xsInvCount,
 SUM(xsInvSum) AS xsInvSum,
-SUM(checkIn) as checkIn
+SUM(checkIn) as checkIn,
+SUM(repayMoney) as repayMoney,
+SUM(repayLoanCount) as repayLoanCount
 FROM perf WHERE DATE_FORMAT(bizDate,'%Y-%m-%d') < DATE_FORMAT(NOW(),'%Y-%m-%d') AND DATE_FORMAT(bizDate,'%Y-%m')=DATE_FORMAT(NOW(),'%Y-%m') GROUP BY DATE_FORMAT(bizDate,'%Y-%m')")->queryOne();
         //当天数据
         $today = Perf::getTodayCount();
@@ -759,5 +761,12 @@ FROM perf WHERE DATE_FORMAT(bizDate,'%Y-%m-%d') < DATE_FORMAT(NOW(),'%Y-%m-%d') 
     {
         $sql = "select count(distinct user_id) from check_in where checkDate = :date";
         return Yii::$app->db->createCommand($sql, ['date' => $date])->queryScalar();
+    }
+
+    //统计每月还款用户数
+    public static function getMonthRepayUserCount()
+    {
+        $sql = "SELECT date_format(op.actualRefundTime, '%Y-%m') as m,count(distinct op.uid) as c FROM `online_repayment_plan` as op left join online_product as p on p.id = op.online_pid where p.isTest = 0 and op.status in (1,2) and op.actualRefundTime is not null group by m";
+        return Yii::$app->db->createCommand($sql)->queryAll();
     }
 }
