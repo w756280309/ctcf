@@ -49,7 +49,7 @@ class LoanHelper
             if ($loan->kuanxianqi > $expires * 0.5) {
                 return '融资方可提前还款，客户收益按实际天数计息。';
             } else {
-                return '融资方可提前' . $expires . '天内任一天还款，客户收益按实际天数计息。';
+                return '融资方可提前' . $loan->kuanxianqi . '天内任一天还款，客户收益按实际天数计息。';
             }
         }
 
