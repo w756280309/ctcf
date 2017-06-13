@@ -79,8 +79,11 @@ $this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/chargedeposit.css');
                 </ul>
             </div>
 
-            <?php if (!empty($deal->kuanxianqi)) { ?>
-                <p class="grace-period">融资方可提前<?= $deal->kuanxianqi ?>天内任一天还款，客户收益按实际天数计息。</p>
+            <?php
+                $graceDaysDescription = LoanHelper::getGraceDaysDescription($deal);
+            ?>
+            <?php if (!empty($graceDaysDescription)) { ?>
+                <p class="grace-period"><?= $graceDaysDescription?></p>
             <?php } ?>
 
             <?php if ($deal->is_xs) { ?>

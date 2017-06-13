@@ -76,8 +76,11 @@ $isClosed = $respData['isClosed'] || $nowTime >= $endTime;
                 </ul>
             </div>
             <!--  下面这句 只在特定情况下,显示-->
-            <?php if (!empty($loan->kuanxianqi)) { ?>
-                <div class="credit-tips clear">融资方可提前<?= $loan->kuanxianqi ?>天内任一天还款，客户收益按实际天数计息。</div>
+            <?php
+            $graceDaysDescription = \common\view\LoanHelper::getGraceDaysDescription($loan);
+            ?>
+            <?php if (!empty($graceDaysDescription)) { ?>
+                <div class="credit-tips clear"><?= $graceDaysDescription?></div>
             <?php } ?>
         </div>
 

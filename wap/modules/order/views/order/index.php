@@ -37,7 +37,7 @@ $this->registerCssFile(ASSETS_BASE_URI.'css/setting.css?v=20170103', ['depends' 
     <div class="col-xs-4 text-align-ct">项目期限</div>
     <div class="col-xs-8 text-align-lf col">
         <?php $ex = $deal->getDuration() ?><?= $ex['value'] ?><?= $ex['unit'] ?>
-        <?php if (!empty($deal->kuanxianqi)) { ?>(含宽限期<?=$deal->kuanxianqi?>天)<?php } ?></div>
+    </div>
     <div class="col-xs-4 text-align-ct">可投余额</div>
     <div class="col-xs-8 text-align-lf col"><?= StringUtils::amountFormat3($deal->getLoanBalance()) ?>元</div>
     <div class="col-xs-4 text-align-ct">起投金额</div>

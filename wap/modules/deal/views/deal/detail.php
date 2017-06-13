@@ -115,8 +115,11 @@ $this->registerJsFile(FE_BASE_URI.'libs/videojs/video.min.js', ['position' => 1]
                 </div>
             </div>
         <?php }?>
-        <?php if (!empty($deal->kuanxianqi)) { ?>
-            <p class="notice">融资方可提前<?= $deal->kuanxianqi ?>天内任一天还款，客户收益按实际天数计息。</p>
+        <?php
+            $graceDaysDescription = LoanHelper::getGraceDaysDescription($deal);
+        ?>
+        <?php if (!empty($graceDaysDescription)) { ?>
+            <p class="notice"><?= $graceDaysDescription?></p>
         <?php } ?>
     </div>
 </div>

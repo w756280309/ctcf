@@ -32,4 +32,27 @@ class LoanHelper
 
         return StringUtils::amountFormat2($baseRate).'～'.StringUtils::amountFormat2($topRate);
     }
+
+    /**
+     * 获取标的宽限期描述信息
+     * @param OnlineProduct $loan
+     * @return string
+     */
+    public static function getGraceDaysDescription(OnlineProduct $loan)
+    {
+        if ($loan->finish_date
+            && $loan->kuanxianqi > 0
+            && $loan->refund_method === OnlineProduct::REFUND_METHOD_DAOQIBENXI
+        ) {
+            $duration = $loan->getDuration();
+            $expires = $duration['value'];
+            if ($loan->kuanxianqi > $expires * 0.5) {
+                return '融资方可提前还款，客户收益按实际天数计息。';
+            } else {
+                return '融资方可提前' . $expires . '天内任一天还款，客户收益按实际天数计息。';
+            }
+        }
+
+        return '';
+    }
 }

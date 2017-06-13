@@ -112,8 +112,11 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/credit/detail.js?v=161027', ['depends'
                 <span><?= Yii::$app->params['refund_method'][$loan->refund_method] ?></span>
             </div>
         <?php } ?>
-        <?php if (!empty($loan->kuanxianqi)) { ?>
-            <div style="padding-right: 12px;">融资方可提前<?= $loan->kuanxianqi ?>天内任一天还款，客户收益按实际天数计息。</div>
+        <?php
+            $graceDaysDescription = \common\view\LoanHelper::getGraceDaysDescription($loan);
+        ?>
+        <?php if (!empty($graceDaysDescription)) { ?>
+            <div style="padding-right: 12px;"><?= $graceDaysDescription?></div>
         <?php } ?>
     </div>
 </div>
