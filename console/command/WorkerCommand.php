@@ -2,7 +2,6 @@
 
 namespace console\command;
 
-
 use Symfony\Component\Process\Process;
 use yii\base\Action;
 
@@ -109,22 +108,20 @@ class WorkerCommand extends Action
     {
         \Yii::info('判断主进程是否应该继续运行', 'queue');
         $runningTime = time() - $this->mainProcessStartAt;
-        \Yii::info('当前有[' . $this->runningProcessCount . ']个子进程正在运行;主进程已经运行[' . $runningTime . ']秒.', 'queue');
-        if (
-            $runningTime <= self::MAIN_PROCESS_MAX_RUNNING_TIME//超过主进程最大运行时间之后就不再接收新任务
+        \Yii::info('当前有['.$this->runningProcessCount.']个子进程正在运行;主进程已经运行['.$runningTime.']秒.', 'queue');
+        if ($runningTime <= self::MAIN_PROCESS_MAX_RUNNING_TIME//超过主进程最大运行时间之后就不再接收新任务
             && !$this->stopSignal//收到结束信号后不再接收新任务
         ) {
             $this->updateTaskList();//更新需要处理的消息列表
         }
         if ($runningTime > self::MAIN_PROCESS_MAX_RUNNING_TIME) {
-            \Yii::info('主进程运行超过最大运行时间[' . self::MAIN_PROCESS_MAX_RUNNING_TIME . ']秒, 不再接收新任务.', 'queue');
+            \Yii::info('主进程运行超过最大运行时间['.self::MAIN_PROCESS_MAX_RUNNING_TIME.']秒, 不再接收新任务.', 'queue');
         }
         if ($this->stopSignal) {
             \Yii::info('收到结束信号, 不再接收新任务.', 'queue');
         }
 
-        if (
-            !empty($this->taskList) //工作队列不为空
+        if (!empty($this->taskList) //工作队列不为空
             || (
                 $runningTime <= self::MAIN_PROCESS_MIN_RUNNING_TIME //没达到最低运行时间
                 && !$this->stopSignal//没有收到结束信号
@@ -193,10 +190,13 @@ class WorkerCommand extends Action
             $this->totalSuccessProcessCount++;//增加总运行成功进程数
         } else {
             if ($task->runCount < $task->runLimit) {
-                \Yii::info('num为[' . $num . ']的子进程运行失败，但是只运行了' . $task->runCount . '次，最多可运行' . $task->runLimit . '此，此消息将继续运行, 下次运行时间为' . $task->nextRunTime, 'queue');
+                $msg = 'num为['.$num.']的子进程运行失败，但是只运行了'.$task->runCount.'次，最多可运行'.$task->runLimit;
+                $msg .= '次，此消息将继续运行, 下次运行时间为'.$task->nextRunTime;
+                \Yii::info($msg, 'queue');
                 $this->queue->markPending($task);
             } else {
-                \Yii::info('num为[' . $num . ']的子进程运行失败，运行了' . $task->runCount . '次，最多可运行' . $task->runLimit . '此', 'queue');
+                $msg = 'num为['.$num.']的子进程运行失败，运行了'.$task->runCount.'次，最多可运行'.$task->runLimit.'次';
+                \Yii::info($msg, 'queue');
                 $this->queue->markFail($task);
                 $this->totalFailProcessCount++;//增加总运行失败进程数
             }

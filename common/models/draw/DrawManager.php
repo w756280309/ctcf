@@ -2,19 +2,18 @@
 
 namespace common\models\draw;
 
+use common\models\message\DrawMessage;
 use common\models\user\User;
-use Ding\DingNotify;
-use Yii;
 use common\models\user\DrawRecord;
 use common\models\user\MoneyRecord;
 use common\lib\bchelp\BcRound;
 use common\models\user\UserAccount;
 use common\service\SmsService;
 use common\utils\SecurityUtils;
+use Ding\DingNotify;
+use Lhjx\Noty\Noty;
+use Yii;
 
-/**
- * draw form.
- */
 class DrawManager
 {
     /**
@@ -89,7 +88,8 @@ class DrawManager
         $bc = new BcRound();
         bcscale(14);
         $account->available_balance = $bc->bcround(bcsub($account->available_balance, $draw->money), 2);
-        $account->account_balance = $bc->bcround(bcsub($account->account_balance, $draw->money), 2);//提现受理成功之后账户余额要减去提现金额
+        //提现受理成功之后账户余额要减去提现金额
+        $account->account_balance = $bc->bcround(bcsub($account->account_balance, $draw->money), 2);
         $money_record = new MoneyRecord();
         $money_record->sn = MoneyRecord::createSN();
         $money_record->type = MoneyRecord::TYPE_DRAW;
@@ -100,7 +100,8 @@ class DrawManager
         $money_record->out_money = $draw->money;
 
         $account->available_balance = $bc->bcround(bcsub($account->available_balance, $fee), 2);
-        $account->account_balance = $bc->bcround(bcsub($account->account_balance, $fee), 2);//160309提现受理成功之后账户余额要减去手续费
+        //160309提现受理成功之后账户余额要减去手续费
+        $account->account_balance = $bc->bcround(bcsub($account->account_balance, $fee), 2);
         if (!$money_record->save()) {
             $transaction->rollBack();
             throw new DrawException('提现申请失败');
@@ -122,7 +123,8 @@ class DrawManager
 
         //录入user_acount记录
         //$account->available_balance = $account->available_balance;//多余的赋值，上边已经计算过了
-        //$account->freeze_balance = $bc->bcround(bcadd($account->freeze_balance, bcadd($draw->money, $fee)), 2);160309提现受理成功之后不冻结，
+        //$account->freeze_balance = $bc->bcround(bcadd($account->freeze_balance, bcadd($draw->money, $fee)), 2);
+        //160309提现受理成功之后不冻结，
         $account->out_sum = $bc->bcround(bcadd($account->out_sum, bcadd($draw->money, $fee)), 2);
 
         if (!$account->save()) {
@@ -130,7 +132,14 @@ class DrawManager
             throw new DrawException('提现申请失败');
         }
 
-        $message = [$user->real_name,  date('Y-m-d H:i', $draw->created_at), $draw->money, 'T+1', Yii::$app->params['contact_tel']];
+        $message = [
+            $user->real_name,
+            date('Y-m-d H:i', $draw->created_at),
+            $draw->money,
+            'T+1',
+            Yii::$app->params['contact_tel'],
+        ];
+
         $templateId = Yii::$app->params['sms']['tixian_apply'];
 
         SmsService::send(SecurityUtils::decrypt($user->safeMobile), $templateId, $message, $user);
@@ -181,10 +190,17 @@ class DrawManager
             } elseif ($tranState === 3 || $tranState === 5 || $tranState === 15) {
                 $user = User::findOne($draw->uid);
                 if (!empty($user)) {
-                    (new DingNotify('wdjf'))->sendToUsers('用户[' . $user->id . ']，于' . date('Y-m-d H:i:s', $draw->created_at) . ' 进行提现操作，操作失败，联动提现失败，失败信息:' . $resp->get('ret_msg'));
+                    $msg = '用户['.$user->id.']，于'.date('Y-m-d H:i:s', $draw->created_at);
+                    $msg .= ' 进行提现操作，操作失败，联动提现失败，失败信息:'.$resp->get('ret_msg');
+
+                    (new DingNotify('wdjf'))->sendToUsers($msg);
                 }
                 //失败的代码
                 self::cancel($draw, DrawRecord::STATUS_DENY);
+            }
+            if (DrawRecord::STATUS_SUCCESS === $draw->status) {
+                //如果提现成功，将对应的消息写入task
+                Noty::send(new DrawMessage($draw));
             }
         }
     }

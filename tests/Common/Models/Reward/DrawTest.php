@@ -57,7 +57,7 @@ class DrawTest extends YiiAppTestCase
     }
 
     /**
-     * 测试奖池概率相加和应小于等于1
+     * 测试奖池概率相加和应小于等于1分
      */
     public function testValueRangeTwo()
     {
@@ -69,6 +69,9 @@ class DrawTest extends YiiAppTestCase
         $this->assertEquals(false, Reward::draw($pool));
     }
 
+    /**
+     * 由于最小概率的精确度为0.0001，则验证最小的抽奖次数应为10000次
+     */
     public function testDraw10000()
     {
         $pool = [
@@ -95,7 +98,7 @@ class DrawTest extends YiiAppTestCase
     /**
      * 大量次数下，概率为0的key不应存在且次数没有缺项
      */
-    public function testDraw100000()
+    /*public function testDraw100000()
     {
         $pool = [
             'packet_0.66' => '0.5',
@@ -107,7 +110,7 @@ class DrawTest extends YiiAppTestCase
 
         $this->assertEquals(100000, array_sum($resStats));
         $this->assertEquals(true, !isset($resStats['packet_0']));
-    }
+    }*/
 
     private function drawResultBytimes($times, $poolSetting)
     {

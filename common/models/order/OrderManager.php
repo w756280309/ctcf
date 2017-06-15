@@ -2,27 +2,26 @@
 
 namespace common\models\order;
 
+use common\models\message\OrderMessage;
 use common\models\product\OnlineProduct;
-use common\models\promo\InviteRecord;
 use common\models\promo\PromoService;
 use common\models\user\UserInfo;
-use common\utils\SecurityUtils;
-use Ding\DingNotify;
-use Yii;
-use Exception;
-use common\utils\TxUtils;
-use yii\helpers\ArrayHelper;
 use common\models\product\OnlineProduct as Loan;
 use common\lib\bchelp\BcRound;
 use common\models\user\MoneyRecord;
 use common\models\user\User;
-use common\service\PayService;
-use common\service\SmsService;
-use common\models\order\OnlineOrder;
-use common\models\order\OrderQueue;
 use common\models\product\RateSteps;
 use common\models\affiliation\AffiliationManager;
 use common\models\coupon\UserCoupon;
+use common\service\PayService;
+use common\service\SmsService;
+use common\utils\TxUtils;
+use common\utils\SecurityUtils;
+use Ding\DingNotify;
+use Exception;
+use Lhjx\Noty\Noty;
+use Yii;
+use yii\helpers\ArrayHelper;
 
 /**
  * 订单manager.
@@ -403,6 +402,8 @@ class OrderManager
             \Yii::trace($msg, 'loan_order');
         }
 
+        //发送微信推送消息,写入queue_task
+        Noty::send(new OrderMessage($order));
 
         return true;
     }
@@ -455,7 +456,10 @@ class OrderManager
         }
         $ore = $order->save(false);
         if (!$ore) {
-            return ['code' => PayService::ERROR_ORDER_CREATE,  'message' => PayService::getErrorByCode(PayService::ERROR_ORDER_CREATE)];
+            return [
+                'code' => PayService::ERROR_ORDER_CREATE,
+                'message' => PayService::getErrorByCode(PayService::ERROR_ORDER_CREATE),
+            ];
         }
         $transaction = Yii::$app->db->beginTransaction();
         if ($coupon) {
@@ -513,7 +517,13 @@ class OrderManager
 
     public static function getTotalInvestment(Loan $loan, User $user)
     {
-        $total = OnlineOrder::find()->where(['status' => OnlineOrder::STATUS_SUCCESS, "uid" => $user->id, "online_pid" => $loan->id])->sum('order_money');
+        $total = OnlineOrder::find()
+            ->where([
+                'status' => OnlineOrder::STATUS_SUCCESS,
+                'uid' => $user->id,
+                'online_pid' => $loan->id,
+            ])
+            ->sum('order_money');
         return null === $total ? 0 : $total;
     }
 
@@ -555,7 +565,8 @@ class OrderManager
 
             //更新账户信息
             $account = $user->lendAccount;
-            $account->available_balance = bcadd($account->available_balance, $order->paymentAmount, 2);    //调整计算精度,防止小数位丢失
+            //调整计算精度,防止小数位丢失
+            $account->available_balance = bcadd($account->available_balance, $order->paymentAmount, 2);
             $account->drawable_balance = bcadd($account->drawable_balance, $order->paymentAmount, 2);
             $account->freeze_balance =bcsub($account->freeze_balance, $order->paymentAmount, 2);
             $account->out_sum =bcsub($account->out_sum, $order->paymentAmount, 2);

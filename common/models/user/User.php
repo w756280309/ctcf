@@ -12,6 +12,7 @@ use common\models\order\OnlineRepaymentPlan as RepaymentPlan;
 use common\models\product\OnlineProduct;
 use common\models\promo\InviteRecord;
 use common\models\promo\PromoService;
+use common\models\thirdparty\SocialConnect;
 use common\models\user\RechargeRecord as Recharge;
 use common\models\user\DrawRecord as Draw;
 use common\utils\SecurityUtils;
@@ -1040,5 +1041,11 @@ class User extends ActiveRecord implements IdentityInterface, UserInterface
             }
         }
         $this->regLocation = $msg ?: '未知';
+    }
+
+    public function getSocialConnect()
+    {
+        return $this->hasOne(SocialConnect::className(), ['user_id' => 'id'])
+            ->where(['social_connect.provider_type' => SocialConnect::PROVIDER_TYPE_WECHAT]);
     }
 }

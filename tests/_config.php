@@ -1,5 +1,8 @@
 <?php
-
+$params = array_merge(
+    require(__DIR__ . '/../common/config/params.php'),
+    require(__DIR__ . '/../common/config/params-local.php')
+);
 return [
     'timeZone' => 'Asia/Shanghai',
     'class' => 'yii\\web\\Application',
@@ -14,4 +17,5 @@ return [
             'charset' => 'utf8',
         ],
     ],
+    'params' => $params,
 ];
