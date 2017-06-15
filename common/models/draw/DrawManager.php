@@ -74,11 +74,16 @@ class DrawManager
         $account = $user->type == 1 ? $user->lendAccount : $user->borrowAccount;
         $transaction = Yii::$app->db->beginTransaction();
 
-        $draw->status = DrawRecord::STATUS_EXAMINED;
-        if (!$draw->save(false)) {
+        $sql = "update draw_record set `status` = :drawStatus where `sn` = :drawSn and `status` = " . DrawRecord::STATUS_ZERO;
+        $affectedRows = Yii::$app->db->createCommand($sql, [
+            'drawStatus' => DrawRecord::STATUS_EXAMINED,
+            'drawSn' => $draw->sn,
+        ])->execute();
+        if ($affectedRows < 1) {
             $transaction->rollBack();
             throw new DrawException('审核受理失败');
         }
+        $draw->status = DrawRecord::STATUS_EXAMINED;
 
         //录入money_record记录
         $bc = new BcRound();
