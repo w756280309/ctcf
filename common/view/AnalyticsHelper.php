@@ -22,6 +22,11 @@ class AnalyticsHelper
 
         $_js = <<<JS
 var _paq = _paq || [];
+_paq.push(['setDomains', [
+'mp.weixinbridge.com',
+'open.weixin.qq.com',
+'pay.soopay.net'
+]]);
 JS;
 
         $authedUserId = Yii::$app->user->id;
