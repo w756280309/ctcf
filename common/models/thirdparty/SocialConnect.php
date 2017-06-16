@@ -84,7 +84,7 @@ class SocialConnect extends ActiveRecord
      * @return bool
      * @throws \Exception
      */
-    public static function unConnect($userId, $openId, $type)
+    public static function disconnect($userId, $openId, $type)
     {
         if (!$userId || !$openId || !$type) {
             throw new \Exception('缺少参数');

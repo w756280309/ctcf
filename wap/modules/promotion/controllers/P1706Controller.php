@@ -44,4 +44,20 @@ class P1706Controller extends Controller
             'share' => $share,
         ]);
     }
+
+    /**
+     * 微信绑定送积分.
+     */
+    public function actionWechatConnect($wx_share_key = null)
+    {
+        $share = null;
+
+        if (!empty($wx_share_key)) {
+            $share = Share::findOne(['shareKey' => $wx_share_key]);
+        }
+
+        return $this->render('wechat_connect', [
+            'share' => $share,
+        ]);
+    }
 }

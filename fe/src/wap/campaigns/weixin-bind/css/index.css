@@ -1,0 +1,71 @@
+.flex-content .top-part {
+  width: 100%;
+  height: 4.88rem;
+  background: url("../images/top_banner.png") no-repeat;
+  background-size: contain;
+}
+.flex-content .middle-part {
+  width: 100%;
+  padding: 0.56rem 0 ;
+  background: url("../images/bg_pic.png") bottom center no-repeat, #ffe536;
+  background-size: contain;
+  color: #8b1aff;
+  font-size: 0.4rem;
+}
+.flex-content .middle-part .title-pic {
+  display: block;
+  width: 4.08rem;
+  margin: 0 auto 0.56rem;
+}
+.flex-content .middle-part .erweima {
+  width: 3.33333333rem;
+  margin-left: 0.53333333rem;
+  margin-right: 0.3rem;
+}
+.flex-content .middle-part .step-list {
+  float: right;
+}
+.flex-content .middle-part .step-list li {
+  line-height: 0.8rem;
+}
+.flex-content .middle-part .step-show {
+  display: block;
+  width: 100%;
+  height: 2.14666667rem;
+  margin-top: 0.66666667rem;
+}
+.flex-content .middle-part .word-prize {
+  display: block;
+  width: 6.4rem;
+  height: 0.6667rem;
+  margin:0.82666rem auto;
+}
+.flex-content .bottom-part {
+  width: 100%;
+  padding: 0.33333333rem 0 0.53333333rem;
+  background-color: #ffc800;
+  color: #000;
+  font-size: 0.38rem;
+}
+.flex-content .bottom-part .title-pic {
+  display: block;
+  width: 4.61333333rem;
+  margin: 0 auto 0.50666667rem;
+}
+.flex-content .bottom-part .benifit-list{
+  margin-left:1.06666667rem;
+}
+.flex-content .bottom-part .benifit-list li {
+  line-height: 0.8rem;
+  list-style-type: decimal;
+}
+.flex-content .bottom-part .gobind {
+  display: block;
+  width: 7.50666667rem;
+  margin: 0.66666667rem auto 0.8rem;
+}
+.flex-content .bottom-part .remind {
+  font-size: 0.29333333rem;
+  color: #c57180;
+  text-align: center;
+}

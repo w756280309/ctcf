@@ -4,6 +4,7 @@ namespace common\models\mall;
 
 use common\models\order\OnlineOrder;
 use common\models\offline\OfflineUser;
+use common\models\user\User;
 use common\utils\TxUtils;
 use Yii;
 use yii\db\ActiveRecord;
@@ -109,7 +110,7 @@ class PointRecord extends ActiveRecord
             self::TYPE_BACKEND_BATCH => '后台批量发放',
             self::TYPE_PROMO => '活动获得',
             self::TYPE_CHECK_IN => '签到获得',
-            self::TYPE_WECHAT_CONNECT => '绑定奖励',
+            self::TYPE_WECHAT_CONNECT => '绑定账户奖励',
         ];
         return isset($name[$type]) ? $name[$type] : '';
     }
@@ -175,5 +176,10 @@ class PointRecord extends ActiveRecord
         }
 
         return $order;
+    }
+
+    public function getUser()
+    {
+        return $this->hasOne(User::class, ['id' => 'user_id']);
     }
 }

@@ -5,12 +5,14 @@ namespace app\modules\user\controllers;
 use common\controllers\HelpersTrait;
 use common\models\log\LoginLog;
 use common\models\mall\PointRecord;
+use common\models\message\PointMessage;
 use common\models\thirdparty\SocialConnect;
 use common\models\user\LoginForm;
 use common\models\user\User;
 use common\service\LoginService;
 use common\service\PointsService;
 use common\utils\SecurityUtils;
+use Lhjx\Noty\Noty;
 use Yii;
 use yii\web\Controller;
 
@@ -120,14 +122,34 @@ class WechatController extends Controller
         ]);
 
         if (!is_null($social)) {
-            //绑定成功,发放10积分
-            $pointRecord = new PointRecord([
+            $pointRecord = PointRecord::findOne([
                 'ref_type' => PointRecord::TYPE_WECHAT_CONNECT,
-                'ref_id' => $social->id,
-                'incr_points' => 10,
+                'user_id' => $user->id,
             ]);
 
-            PointsService::addUserPoints($pointRecord, false, $user);
+            if (is_null($pointRecord)) {
+                //绑定成功,发放10积分
+                $pointRecord = new PointRecord([
+                    'ref_type' => PointRecord::TYPE_WECHAT_CONNECT,
+                    'ref_id' => $social->id,
+                    'incr_points' => 10,
+                ]);
+
+                $res = PointsService::addUserPoints($pointRecord, false, $user);
+
+                if ($res) {
+                    $pointRecord = PointRecord::findOne([
+                        'ref_type' => PointRecord::TYPE_WECHAT_CONNECT,
+                        'ref_id' => $social->id,
+                        'incr_points' => 10,
+                        'user_id' => $user->id,
+                    ]);
+
+                    if ($pointRecord) {
+                        Noty::send(new PointMessage($pointRecord));
+                    }
+                }
+            }
         }
 
         return [
@@ -181,7 +203,7 @@ class WechatController extends Controller
         try {
             $openId = Yii::$app->session->get('resourceOwnerId');
 
-            $res = SocialConnect::unConnect($user->id, $openId, SocialConnect::PROVIDER_TYPE_WECHAT);
+            $res = SocialConnect::disconnect($user->id, $openId, SocialConnect::PROVIDER_TYPE_WECHAT);
 
             if (!$res) {
                 throw new \Exception('解绑失败');
