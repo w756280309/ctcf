@@ -8,7 +8,7 @@ use common\models\transfer\Transfer;
 use common\models\user\User;
 use wap\modules\promotion\models\RankingPromo;
 
-class Promo170603
+class Promo170617
 {
     public $promo;
     private $promoConfig;
@@ -257,7 +257,7 @@ class Promo170603
     public static function getAwardList()
     {
         $list = [];
-        $promo = RankingPromo::findOne(['key' => 'promo_170603']);
+        $promo = RankingPromo::findOne(['key' => 'promo_170617']);
         if (null !== $promo) {
             $list = Reward::find()
                 ->where(['promo_id' => $promo->id])

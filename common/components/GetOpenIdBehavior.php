@@ -37,6 +37,7 @@ class GetOpenIdBehavior extends Behavior
         if (!$isWx || Yii::$app->request->isAjax) {
             return false;
         }
+
         $code = Yii::$app->request->get('code');
         $state = Yii::$app->request->get('state');
 

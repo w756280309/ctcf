@@ -21,10 +21,11 @@ class Callout extends ActiveRecord
             'responderCount' => '响应次数',
             'promo_id' => '参与活动ID',
             'createTime' => '创建时间',
+            'callerOpenId' => '召集第三方ID',
         ];
     }
 
-    public static function initNew(User $user, \DateTime $endTime, $promo_id)
+    public static function initNew(User $user, \DateTime $endTime, $promo_id, $callerOpenId = null)
     {
         return new self([
             'promo_id' => $promo_id,
@@ -32,6 +33,7 @@ class Callout extends ActiveRecord
             'responderCount' => 0,
             'user_id' => $user->id,
             'createTime' => date('Y-m-d H:i:s'),
+            'callerOpenId' => $callerOpenId,
         ]);
     }
 }
