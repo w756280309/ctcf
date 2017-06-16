@@ -33,6 +33,9 @@ class WechatMessageJob extends Job
         $redis = new \Redis();
         $params = Yii::$app->params['redis_config'];
         $redis->connect($params['hostname'], $params['port']);
+        if ($params['password']) {
+            $redis->auth($params['password']);
+        }
         $cache->setRedis($redis);
         $app->access_token->setCache($cache);
         $app->notice

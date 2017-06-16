@@ -15,11 +15,11 @@ class SocialConnect extends ActiveRecord
         return 'social_connect';
     }
 
-    public static function initNew(User $user, $ownerId, $type)
+    public static function initNew(User $user, $openId, $type)
     {
         return new self([
             'user_id' => $user->id,
-            'resourceOwner_id' => $ownerId,
+            'resourceOwner_id' => $openId,
             'provider_type' => $type,
             'createTime' => date('Y-m-d H:i:s'),
         ]);
@@ -29,20 +29,20 @@ class SocialConnect extends ActiveRecord
      * 用户绑定某种类型的第三方ID
      *
      * @param User   $user      用户对象
-     * @param int    $ownerId   第三方ID
+     * @param int    $openId   第三方ID
      * @param string $type      类型
      *
      * @return bool
      * @throws \Exception
      */
-    public static function bind(User $user, $ownerId, $type)
+    public static function connect(User $user, $openId, $type)
     {
-        if (!$user || !$ownerId || !$type) {
+        if (!$user || !$openId || !$type) {
             throw new \Exception('缺少参数');
         }
 
         $connect = SocialConnect::find()
-            ->where(['resourceOwner_id' => $ownerId])
+            ->where(['resourceOwner_id' => $openId])
             ->andWhere(['provider_type' => $type])
             ->one();
 
@@ -64,7 +64,7 @@ class SocialConnect extends ActiveRecord
 
         $transaction = Yii::$app->db->beginTransaction();
         try {
-            $newConnect = self::initNew($user, $ownerId, $type);
+            $newConnect = self::initNew($user, $openId, $type);
             $newConnect->save(false);
             SocialConnectLog::initNew($newConnect, 'bind')->save(false);
             $transaction->commit();
@@ -78,20 +78,20 @@ class SocialConnect extends ActiveRecord
      * 解绑用户与某种类型的第三方ID的关联
      *
      * @param int    $userId    用户ID
-     * @param int    $ownerId   第三方ID
+     * @param int    $openId   第三方ID
      * @param string $type      类型
      *
      * @return bool
      * @throws \Exception
      */
-    public static function unbind($userId, $ownerId, $type)
+    public static function unConnect($userId, $openId, $type)
     {
-        if (!$userId || !$ownerId || !$type) {
+        if (!$userId || !$openId || !$type) {
             throw new \Exception('缺少参数');
         }
         $connect = SocialConnect::findOne([
             'user_id' => $userId,
-            'resourceOwner_id' => $ownerId,
+            'resourceOwner_id' => $openId,
             'provider_type' => $type,
         ]);
         if (null === $connect) {
@@ -121,5 +121,19 @@ class SocialConnect extends ActiveRecord
             'provider_type' => '类型',
             'createTime' => '创建时间',
         ];
+    }
+
+    /**
+     * 判断一个指定用户有没有绑定指定设备.
+     */
+    public function isConnected(User $user, $openId, $type)
+    {
+        $socialConnect = self::findOne([
+            'user_id' => $user->id,
+            'provider_type' => $type,
+            'resourceOwner_id' => $openId,
+        ]);
+
+        return !is_null($socialConnect);
     }
 }

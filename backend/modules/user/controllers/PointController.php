@@ -10,7 +10,6 @@ use common\models\user\User;
 use common\utils\TxUtils;
 use Yii;
 
-
 class PointController extends BaseController
 {
     /**

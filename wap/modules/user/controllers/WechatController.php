@@ -4,10 +4,12 @@ namespace app\modules\user\controllers;
 
 use common\controllers\HelpersTrait;
 use common\models\log\LoginLog;
+use common\models\mall\PointRecord;
 use common\models\thirdparty\SocialConnect;
 use common\models\user\LoginForm;
 use common\models\user\User;
 use common\service\LoginService;
+use common\service\PointsService;
 use common\utils\SecurityUtils;
 use Yii;
 use yii\web\Controller;
@@ -94,7 +96,7 @@ class WechatController extends Controller
             $openId = Yii::$app->session->get('resourceOwnerId');
 
             try {
-                SocialConnect::bind($user, $openId, SocialConnect::PROVIDER_TYPE_WECHAT);
+                SocialConnect::connect($user, $openId, SocialConnect::PROVIDER_TYPE_WECHAT);
 
                 if (Yii::$app->user->login($user)) {
                     $user->last_login = time();
@@ -109,6 +111,23 @@ class WechatController extends Controller
             $message = $loginForm->firstErrors;
 
             return $this->msg400(current($message), ['showCaptcha' => $showCaptcha]);
+        }
+
+        $social = SocialConnect::findOne([
+            'user_id' => $user->id,
+            'provider_type' => SocialConnect::PROVIDER_TYPE_WECHAT,
+            'resourceOwner_id' => $openId,
+        ]);
+
+        if (!is_null($social)) {
+            //绑定成功,发放10积分
+            $pointRecord = new PointRecord([
+                'ref_type' => PointRecord::TYPE_WECHAT_CONNECT,
+                'ref_id' => $social->id,
+                'incr_points' => 10,
+            ]);
+
+            PointsService::addUserPoints($pointRecord, false, $user);
         }
 
         return [
@@ -138,13 +157,7 @@ class WechatController extends Controller
 
         $openId = Yii::$app->session->get('resourceOwnerId');
 
-        $socialConnect = SocialConnect::findOne([
-            'user_id' => $user->id,
-            'resourceOwner_id' => $openId,
-            'provider_type' => SocialConnect::PROVIDER_TYPE_WECHAT,
-        ]);
-
-        if (null === $socialConnect) {
+        if (!(new SocialConnect())->isConnected($user, $openId, SocialConnect::PROVIDER_TYPE_WECHAT)) {
             return $this->goHome();
         }
 
@@ -168,7 +181,7 @@ class WechatController extends Controller
         try {
             $openId = Yii::$app->session->get('resourceOwnerId');
 
-            $res = SocialConnect::unbind($user->id, $openId, SocialConnect::PROVIDER_TYPE_WECHAT);
+            $res = SocialConnect::unConnect($user->id, $openId, SocialConnect::PROVIDER_TYPE_WECHAT);
 
             if (!$res) {
                 throw new \Exception('解绑失败');

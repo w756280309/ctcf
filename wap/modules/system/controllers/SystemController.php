@@ -3,9 +3,10 @@
 namespace app\modules\system\controllers;
 
 use app\controllers\BaseController;
+use common\models\thirdparty\SocialConnect;
 use common\models\user\User;
 use common\models\user\QpayBinding;
-use common\service\BankService;
+use Yii;
 
 class SystemController extends BaseController
 {
@@ -22,7 +23,7 @@ class SystemController extends BaseController
     }
 
     /**
-     * 账户中心
+     * 安全中心
      */
     public function actionSafecenter()
     {
@@ -34,6 +35,20 @@ class SystemController extends BaseController
             $user_bank = QpayBinding::findOne(['uid' => $user->id, 'status' => QpayBinding::STATUS_ACK]);
         }
 
-        return $this->render('safecenter', ['user' => $user, 'user_bank' => $user_bank]);
+        $closeWin = false;
+
+        if ($this->fromWx() && Yii::$app->session->has('resourceOwnerId')) {
+            $openId = Yii::$app->session->get('resourceOwnerId');
+
+            if ((new SocialConnect())->isConnected($user, $openId, SocialConnect::PROVIDER_TYPE_WECHAT)) {
+                $closeWin = true;
+            }
+        }
+
+        return $this->render('safecenter', [
+            'user' => $user,
+            'user_bank' => $user_bank,
+            'closeWin' => $closeWin,
+        ]);
     }
 }
