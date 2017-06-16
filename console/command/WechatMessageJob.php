@@ -15,7 +15,7 @@ class WechatMessageJob extends Job
         $linkUrl = $this->getParam('linkUrl');
         $templateId = $this->getParam('templateId');
         $openId = $this->getParam('openId');
-        if (null === $openId || empty($data) || !in_array($openId, Yii::$app->params['white_open_id'])) {
+        if (null === $openId || empty($data) || (Yii::$app->params['mock_wechat_msg'] && !in_array($openId, Yii::$app->params['white_open_id']))) {
             return false;
         }
 
