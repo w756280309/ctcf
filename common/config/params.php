@@ -203,4 +203,5 @@ return [
     'draw_message_template_id' => 'eMnJo8ZdS3UaADDJDoeyi_HqvgZft04_4mMTFw5hZsY',  //微信提现成功消息模板ID
     'order_message_template_id' => '96YFmA0x8p1hYpeGG3rkq6AVjPPnKokFYASLwxao0xQ', //微信交易成功消息模板ID(非正式)
     'wx.msg_tpl.draw_success' => 'f4KfVJdqIA8Bqu480kY5m_X3GGf57MUZnNIfMMmVgxg',  //微信绑定成功送积分消息模板
+    'white_open_id' => [],
 ];
