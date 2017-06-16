@@ -403,6 +403,9 @@ class OrderManager
         }
 
         //发送微信推送消息,写入queue_task
+        if ($loan->isFlexRate) {
+            $order->yield_rate = $rate;
+        }
         Noty::send(new OrderMessage($order));
 
         return true;
