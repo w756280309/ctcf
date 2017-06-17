@@ -28,6 +28,9 @@ class WechatController extends Controller
     public function actionBind()
     {
         $user = $this->getAuthedUser();
+        if (null !== $user) {
+            return $this->redirect('/?_mark=' . time());
+        }
         $loginForm = new LoginForm();
         $loginService = new LoginService();
 
