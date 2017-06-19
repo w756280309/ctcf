@@ -590,7 +590,7 @@ class Client
             'order_id' => $ord->getTxSn(),
             'mer_date' => date('Ymd', $ord->getTxDate()),
             'project_id' => $ord->getLoanId(),
-            'serv_type' => '51',
+            'serv_type' => '57',
             'trans_action' => '02',
             'partic_type' => '01',
             'partic_acc_type' => '01',
