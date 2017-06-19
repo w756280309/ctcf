@@ -147,7 +147,7 @@ $this->headerNavOn = true;
             xhr.fail(function(jqXHR) {
                 if (400 === jqXHR.status && jqXHR.responseText) {
                     var resp = $.parseJSON(jqXHR.responseText);
-                    if (1 === resp.code || 2 === resp.code) {
+                    if (1 === resp.code || 2 === resp.code || 6 === resp.code) {
                         notice(resp.message);
                     } else if (3 === resp.code) {
                         var module = poptpl.popComponent({

@@ -24,8 +24,8 @@ class Promo170617
 
     public function addTicket(User $user, $ticketSource)
     {
-        //判断当前用户是否参加了活动（有截止时间判断）
-        $this->promo->isActive($user);
+        //判断当前用户是否参加了活动（有截止时间判断）,用注册时间判断更精确
+        $this->promo->isActive($user, $user->created_at);
 
         //判断ticket来源
         if (!in_array($ticketSource, [self::SOURCE_REGISTER, self::SOURCE_CALLOUT])) {

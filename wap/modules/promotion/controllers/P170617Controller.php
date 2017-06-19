@@ -103,8 +103,15 @@ class P170617Controller extends Controller
             return $this->msg400(4, '本活动仅限新用户参与哦!快去参加其他活动吧!');
         }
 
-        //用户抽奖
+        //new Promo
         $promoClass = new Promo170603($promo);
+
+        //判断用户的抽奖机会已用完
+        $restTicketCount = $promoClass->getRestTicketCount($user);
+        if (0 === $restTicketCount) {
+            return $this->msg400(6, '您没有抽奖机会了!');
+        }
+
         try {
             $draw = $promoClass->draw($user);
         } catch (\Exception $e) {
