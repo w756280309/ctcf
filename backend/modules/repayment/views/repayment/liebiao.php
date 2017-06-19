@@ -122,6 +122,7 @@ $bc = new BcRound();
                                 <tr>
                                     <th>序号</th>
                                     <th>期数</th>
+                                    <th>用户ID</th>
                                     <th>真实姓名</th>
                                     <th>手机号</th>
                                     <th>应还款本金（元）</th>
@@ -134,6 +135,7 @@ $bc = new BcRound();
                                 <tr>
                                     <td><?= $key + 1 ?></td>
                                     <td><?= $val['qishu'] ?></td>
+                                    <td><?= $val['uid'] ?></td>
                                     <td><?= $val['real_name'] ?></td>
                                     <td><?= $val['mobile'] ?></td>
                                     <td style="text-align: right; padding-right: 70px"><?= $val['benjin'] ?></td>
