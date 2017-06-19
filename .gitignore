@@ -46,3 +46,6 @@ backend/web/data/
 backend/web/upload/
 
 /*/web/upload
+
+params-local.php.bk
+main-local.php.bk
