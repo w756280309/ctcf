@@ -60,4 +60,20 @@ class P1706Controller extends Controller
             'share' => $share,
         ]);
     }
+
+    /**
+     * 双倍积分活动.
+     */
+    public function actionDoublePoints($wx_share_key = null)
+    {
+        $share = null;
+
+        if (!empty($wx_share_key)) {
+            $share = Share::findOne(['shareKey' => $wx_share_key]);
+        }
+
+        return $this->render('double_points', [
+            'share' => $share,
+        ]);
+    }
 }

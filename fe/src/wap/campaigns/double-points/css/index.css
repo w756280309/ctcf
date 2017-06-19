@@ -21,7 +21,8 @@ i {
   position: absolute;
   top: 2.34666667rem;
   left: 0;
-  padding-top: 3.36rem;
+  padding-top: 3.05rem;
+  z-index: -1;
 }
 
 .pointsGifts .pointsRegular {
@@ -31,12 +32,9 @@ i {
   padding: 0 0.29333333rem;
 }
 
-.pointsGifts .pointsRegular img.regularImg {
-  width: 2.05333333rem;
-  position: absolute;
-  top: -1rem;
-  left: 50%;
-  margin-left: -1.02666667rem;
+.pointsGifts .pointsRegular img {
+  width:9.333333333rem;
+  height:5.533333333rem;
 }
 
 .pointsGifts .pointsRegular ul {
@@ -58,12 +56,16 @@ i {
   width: 100%;
 }
 
-.inviteFriends img {
+.inviteFriends {
   width: 4.13333333rem;
   display: block;
   margin: 0 auto 1rem;
   position: relative;
   top: 10.86666667rem;
+}
+
+.inviteFriends img {
+  width: 100%;
 }
 
 .pointsRed {
