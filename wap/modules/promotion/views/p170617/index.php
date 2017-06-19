@@ -5,7 +5,8 @@ use common\models\adv\Share;
 $this->title = '新手抽奖送礼';
 $hostInfo = Yii::$app->request->hostInfo;
 $currentUrl = Yii::$app->request->absoluteUrl;
-$shareZhuli = null !== $user && null !== $callout;
+$isRewardFinished = 0 === $restTicketCount && $ticketCount >= 2;
+$shareZhuli = null !== $user && null !== $callout && !$isRewardFinished;
 $this->share = new Share([
     'title' => '新人免费抽奖，苹果手机、苹果手表不限量！',
     'description' => '庆祝温都金服交易额突破20亿，海量好礼等你来！',
@@ -48,7 +49,7 @@ $this->headerNavOn = true;
                 <td>
                     <?php if (null === $user || ($user && $restTicketCount > 0) || ($user && 0 === $ticketCount)) : ?>
                         <img class="prz_btn" id="choujiang-btn" src="<?= FE_BASE_URI ?>wap/campaigns/active20170527/images/button_start.png" alt="">
-                    <?php elseif ($user && 0 === $restTicketCount && $ticketCount >= 2) : ?>
+                    <?php elseif ($user && $isRewardFinished) : ?>
                         <img class="prz_btn" src="<?= FE_BASE_URI ?>wap/campaigns/active20170527/images/button_over.png" alt="">
                     <?php else : ?>
                         <img class="prz_btn wap-share-btn" src="<?= FE_BASE_URI ?>wap/campaigns/active20170527/images/button_again.png" alt="">
