@@ -5,8 +5,8 @@ use common\models\adv\Share;
 $this->title = '新手抽奖送礼';
 $hostInfo = Yii::$app->request->hostInfo;
 $currentUrl = Yii::$app->request->absoluteUrl;
-$isRewardFinished = 0 === $restTicketCount && $ticketCount >= 2;
-$shareZhuli = null !== $user && null !== $callout && !$isRewardFinished;
+$isRewardFinished = 0 === $restTicketCount && $ticketCount > 1;
+$shareZhuli = null !== $user && null !== $callout && $callout->responderCount < 1;
 $this->share = new Share([
     'title' => '新人免费抽奖，苹果手机、苹果手表不限量！',
     'description' => '庆祝温都金服交易额突破20亿，海量好礼等你来！',
