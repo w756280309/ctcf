@@ -3,13 +3,24 @@
 namespace common\models\transfer;
 
 use common\models\user\User;
+use common\utils\TxUtils;
 use yii\db\ActiveRecord;
 
+/**
+ * Class Transfer
+ * @package common\models\transfer
+ *
+ * @property integer    $user_id
+ * @property float      $amount
+ * @property string     $status
+ * @property string     $sn
+ */
 class Transfer extends ActiveRecord
 {
     const STATUS_INIT = 'init';//初始状态
     const STATUS_SUCCESS = 'success';//发送成功
     const STATUS_FAIL = 'fail';//发送失败
+    const STATUS_PENDING = 'pending';//处理中
 
     /**
      * tableName
@@ -29,6 +40,7 @@ class Transfer extends ActiveRecord
             ['amount', 'number'],
             [['status'], 'string', 'max' => 10],
             [['metadata'], 'string', 'max' => 500],
+            [['sn'], 'string'],
         ];
     }
 
@@ -66,6 +78,7 @@ class Transfer extends ActiveRecord
             'createTime' => date('Y-m-d H:i:s'),
             'amount' => $amount,
             'status' => $status,
+            'sn'=>TxUtils::generateSn('Tr'),
         ]);
 
         return $transfer;

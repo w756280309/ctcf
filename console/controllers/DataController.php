@@ -11,10 +11,12 @@ use common\models\product\OnlineProduct;
 use common\models\promo\FirstOrderPoints;
 use common\models\promo\InviteRecord;
 use common\models\promo\LoanOrderPoints;
+use common\models\transfer\Transfer;
 use common\models\user\User;
 use common\models\user\UserAccount;
 use common\service\AccountService;
 use common\utils\StringUtils;
+use common\utils\TxUtils;
 use common\view\LoanHelper;
 use wap\modules\promotion\models\RankingPromo;
 use yii\console\Controller;
@@ -304,5 +306,28 @@ GROUP BY rp.uid, rp.online_Pid";
             return AccountService::userTransfer($user, $money);
         }
         return false;
+    }
+
+    /**
+     * 为 sn 是 null 的 transfer 添加 sn
+     * php yii data/add-sn
+     *
+     * 临时代码，时用完删除，2017-06-19
+     */
+    public function actionAddSn()
+    {
+        $transfers = Transfer::find()->where(['sn' => null, 'status' => Transfer::STATUS_INIT])->all();
+        $count = count($transfers);
+        $this->stdout("用{$count}条记录待处理 \n");
+        $count=0;
+        /**
+         * @var Transfer $transfer
+         */
+        foreach ($transfers as $transfer) {
+            $transfer->sn = TxUtils::generateSn('Tr');
+            $transfer->save(false);
+            $count++;
+        }
+        $this->stdout("成功处理{$count}条 \n");
     }
 }

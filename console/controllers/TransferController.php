@@ -2,6 +2,7 @@
 
 namespace console\controllers;
 
+use common\models\epay\EpayUser;
 use common\models\transfer\Transfer;
 use common\models\user\User;
 use common\service\AccountService;
@@ -19,44 +20,61 @@ class TransferController extends Controller
      * 如果没有符合的记录，则usleep（3000000）
      * 方法名称需要确认
      */
-    public function actionQueue() {
+    public function actionQueue()
+    {
+        $transferTable = Transfer::tableName();
+        $epayUserTable = EpayUser::tableName();
+
         $transfers = Transfer::find()
-            ->where(['status' => Transfer::STATUS_INIT])
-            ->andWhere(['>', 'amount', 0])
+            ->innerJoin("$epayUserTable", "$epayUserTable.appUserId = $transferTable.user_id")
+            ->where(["$transferTable.status" => Transfer::STATUS_INIT])
+            ->andWhere(['>', "$transferTable.amount", 0])
             ->orderBy([
-                'lastCronCheckTime' => SORT_ASC,
-                'id' => SORT_ASC,
+                "$transferTable.lastCronCheckTime" => SORT_ASC,
+                "$transferTable.id" => SORT_ASC,
             ])->limit(10)
             ->all();
         if (!$transfers) {
             usleep(3000000);
             return self::EXIT_CODE_NORMAL;
         }
-        $connection = Yii::$app->db;
+        /**
+         * @var Transfer $transfer
+         */
         foreach ($transfers as $transfer) {
             //无论发放成功失败与否，都写入上次执行时间
-            $transfer->lastCronCheckTime = time();
-            $transfer->save(false);
-            $user = null;
-            $user = User::findOne($transfer->user_id);
-            $amount = $transfer->amount;
-            if (null !== $user) {
-                $transaction = $connection->beginTransaction();
-                try {
-                    //给用户发指定金额
-                    if (AccountService::userTransfer($user, $amount)) {
-                        $transfer->status = Transfer::STATUS_SUCCESS;
-                    } else {
-                        $transfer->status = Transfer::STATUS_FAIL;
-                    }
-                    $transfer->updateTime = date('Y-m-d H:i:s');
-                    $transfer->save(false);
-                    usleep(100000);
-                    $transaction->commit();
-                } catch (\Exception $e) {
-                    $transaction->rollBack();
-                }
+            $sql = "update $transferTable set lastCronCheckTime = :time, `status` = :status where id = :transferId and user_id = :userId and `status` = '" . Transfer::STATUS_INIT . "'";
+            $affectedRows = Yii::$app->db->createCommand($sql, [
+                'time' => time(),
+                'status' => Transfer::STATUS_PENDING,
+                'transferId' => $transfer->id,
+                'userId' => $transfer->user_id,
+            ])->execute();
+            if ($affectedRows !== 1) {
+                continue;
             }
+            $user = User::findOne($transfer->user_id);
+            if (is_null($user)) {
+                continue;
+            }
+            $message = '';
+            try {
+                //给用户发指定金额
+                if (AccountService::userTransfer($user, $transfer->amount, $transfer->sn)) {
+                    $transfer->status = Transfer::STATUS_SUCCESS;
+                } else {
+                    $transfer->status = Transfer::STATUS_FAIL;
+                }
+
+            } catch (\Exception $e) {
+                $transfer->status = Transfer::STATUS_FAIL;
+                $message = $e->getMessage();
+            }
+            $status = ($transfer->status === Transfer::STATUS_SUCCESS) ? "成功" : "失败";
+            Yii::info("[transfer_queue][user_transfer] 红包队列[{$transfer->id}] 用户[{$user->id}] 转账{$transfer->amount} 元, 状态: " . $status . ', 信息: '. $message, 'queue');
+            $transfer->updateTime = date('Y-m-d H:i:s');
+            $transfer->save(false);
+            usleep(100000);
         }
         usleep(500000);
     }
