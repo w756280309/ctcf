@@ -16,7 +16,7 @@ $this->headerNavOn = true;
     </div>
     <div class="pointsGifts">
         <div class="pointsRegular">
-            <img src="<?= FE_BASE_URI ?>wap/campaigns/double-points/img/introduce_02.png?v=170620" alt="">
+            <img src="<?= FE_BASE_URI ?>wap/campaigns/double-points/img/introduce_03.png?v=170620" alt="">
         </div>
         <div class="pointsIntroduce">
             <img src="<?= FE_BASE_URI ?>wap/campaigns/double-points/img/introduce_01.png" alt="">
