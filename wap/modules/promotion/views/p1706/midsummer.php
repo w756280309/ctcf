@@ -109,6 +109,7 @@ $currentUrl = Yii::$app->request->absoluteUrl;
                             notice('系统繁忙，请稍后重试！');
                         }
                         allowClick = true;
+                        requireJump = true;
                     });
                 },1800)
             });
