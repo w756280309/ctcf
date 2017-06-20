@@ -97,19 +97,19 @@ $currentUrl = Yii::$app->request->absoluteUrl;
                         if (400 === jqXHR.status && jqXHR.responseText) {
                             var resp = $.parseJSON(jqXHR.responseText);
                             $('.open-it').removeClass('rotate');
+                            allowClick = true;
                             if (1 === resp.code || 2 === resp.code) {
                                 notice(resp.message);
                             } else if (3 === resp.code) {
                                 $('.no-hongbao,.mask').show();
                                 $('body').on('touchmove', eventTarget, false);
+                                location.href = '/promotion/p1706/midsummer?_mark=' + Math.random() * 10000;
                             } else {
                                 notice('系统繁忙，请稍后重试！');
                             }
                         } else {
                             notice('系统繁忙，请稍后重试！');
                         }
-                        allowClick = true;
-                        requireJump = true;
                     });
                 },1800)
             });
@@ -151,7 +151,7 @@ $currentUrl = Yii::$app->request->absoluteUrl;
             $('.have-hongbao,.no-hongbao,.get-hongbao,.mask').hide();
             $('body').off('touchmove');
             if (requireJump) {
-                location.href = '/promotion/p1706/midsummer?mark=' + Math.random() * 10000;
+                location.href = '/promotion/p1706/midsummer?_mark=' + Math.random() * 10000;
             }
         });
         function notice(msg) {
@@ -164,7 +164,10 @@ $currentUrl = Yii::$app->request->absoluteUrl;
                 popBorder:'0.10666667rem solid #5f925a',
                 popBackground:'#e7ffe5',
                 closeUrl:feBaseUrl + 'wap/campaigns/xiazhi/images/btn_off.png',
-                contentMsg: msg
+                contentMsg: msg,
+                afterPop: function () {
+                    location.href = '/promotion/p1706/midsummer?_mark=' + Math.random() * 10000;
+                }
             },'close');
         }
     })
