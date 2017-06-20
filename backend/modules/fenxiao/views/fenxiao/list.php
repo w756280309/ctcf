@@ -7,9 +7,9 @@ use yii\widgets\LinkPager;
     <div class="row-fluid">
         <div class="span12">
             <h3 class="page-title">
-                渠道管理 <small>运营模块</small>
+                分销商管理 <small>运营模块</small>
                 <a href="/fenxiao/fenxiao/add" id="sample_editable_1_new" class="btn green" style="float: right;">
-                    <i class="icon-plus"></i> 添加渠道用户
+                    <i class="icon-plus"></i> 添加分销商用户
                 </a>
             </h3>
             <ul class="breadcrumb">
@@ -19,11 +19,11 @@ use yii\widgets\LinkPager;
                         <i class="icon-angle-right"></i>
                     </li>
                     <li>
-                        <a href="/fenxiao/fenxiao/list">渠道管理</a>
+                        <a href="/fenxiao/fenxiao/list">分销商管理</a>
                         <i class="icon-angle-right"></i>
                     </li>
                     <li>
-                        <a href="javascript:void(0);">渠道列表</a>
+                        <a href="javascript:void(0);">分销商列表</a>
                     </li>
             </ul>
         </div>
@@ -42,12 +42,13 @@ use yii\widgets\LinkPager;
                     <tr>
                         <td><?= $val['name'] ?></td>
                         <td>
-                            <?php if(!empty($val->affiliator) && $val->affiliator->isRecommend ) {?>
+                            <?php if (!empty($val->affiliator) && $val->affiliator->isRecommend) { ?>
                                 <i class="icon-ok green" style="color: green;"></i>
                             <?php }?>
                         <td>
                             <center>
-                                <a href="/fenxiao/fenxiao/edit?id=<?= $val['id'] ?>" class="btn mini green"><i class="icon-edit"></i> 编辑</a>
+                                <a href="/fenxiao/fenxiao/edit?id=<?= $val['id'] ?>" class="btn mini green">
+                                    <i class="icon-edit"></i> 编辑</a>
                             </center>
                         </td>
                     </tr>
