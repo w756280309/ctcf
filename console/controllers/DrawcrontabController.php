@@ -34,7 +34,7 @@ class DrawcrontabController extends Controller
             ->andWhere(['in', 'status', [DrawRecord::STATUS_ZERO, DrawRecord::STATUS_EXAMINED]])
             ->andWhere(['case status when ' . DrawRecord::STATUS_ZERO . ' then (created_at < ' . $quarterAgo . ') when '. DrawRecord::STATUS_EXAMINED .' then (created_at < ' . $currentAt . ') end' => true])
             ->andWhere(['>', 'created_at', strtotime('-1 week')])
-            ->orderBy(['status' => SORT_DESC, 'lastCronCheckTime' => SORT_ASC])
+            ->orderBy(['lastCronCheckTime' => SORT_ASC])
             ->limit(3)
             ->all();
 
