@@ -254,11 +254,6 @@
     box-sizing: border-box;
 }
 
-.flex-content {
-    margin: 0 auto;
-    max-width: 10rem;
-}
-
 .clearfix:after {
     content: "";
     display: block;
@@ -309,7 +304,18 @@ body{
     font:14px/1.5 'Microsoft YaHei', Helvetica, Arial, sans-serif;
     color:#8c8c8c;
     background:#e7eaf1;
+    max-width: 750px;
+    overflow-x: hidden;
+    margin: 0 auto;
+    min-width:320px;
 }
+[data-dpr="2"] body {
+    max-width: 750px;
+}
+[data-dpr="3"] body {
+    max-width: 1250px;
+}
+
 body.new{
     font:14px/1.5 'Microsoft YaHei', Helvetica, Arial, sans-serif;
     color:#8c8c8c;
