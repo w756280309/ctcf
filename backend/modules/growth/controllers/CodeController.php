@@ -119,7 +119,14 @@ class CodeController extends BaseController
                 'code' => Code::createCode(),
             ];
         }
-        $db->createCommand()->batchInsert('code', ['goodsType_sn', 'goodsType', 'createdAt', 'expiresAt', 'code'], $codes)->execute();
+        $db->createCommand()->batchInsert('code', [
+            'goodsType_sn',
+            'goodsType',
+            'createdAt',
+            'expiresAt',
+            'code',
+        ], $codes)->execute();
+
         return ArrayHelper::getColumn($codes, 'code');
     }
 
@@ -132,13 +139,28 @@ class CodeController extends BaseController
         if (empty($sn) && empty($code)) {
             throw $this->ex404();
         }
-        $query = Code::find()->where($code ? ['code' => $code] : ['goodsType_sn' => $sn])->orderBy(['isUsed' => SORT_ASC]);
+
+        $query = Code::find()
+            ->where($code ? ['code' => $code] : ['goodsType_sn' => $sn])
+            ->orderBy([
+                'isUsed' => SORT_ASC,
+            ]);
         $sn = $code ? Code::findOne(['code' => $code])->goodsType_sn : $sn;
-        $pages = new Pagination(['totalCount' => $query->count(), 'pageSize' => '10']);
-        $model = $query->offset($pages->offset)->limit($pages->limit)->all();
+        $pages = new Pagination([
+            'totalCount' => $query->count(),
+            'pageSize' => '10',
+        ]);
+        $model = $query
+            ->offset($pages->offset)
+            ->limit($pages->limit)
+            ->all();
         $goods = GoodsType::findOne(['sn' => $sn]);
 
-        return $this->render('list', ['model' => $model, 'pages' => $pages,'goods' => $goods]);
+        return $this->render('list', [
+            'model' => $model,
+            'pages' => $pages,
+            'goods' => $goods,
+        ]);
     }
 
     /**
@@ -194,13 +216,38 @@ class CodeController extends BaseController
             ->select("$g.name, count($c.id) as total, $c.goodsType, $g.createdAt, $g.sn, $g.type")
             ->from($g)
             ->leftJoin($c, "$c.goodsType_sn = $g.sn")
-            ->where(['in', "$g.type", [1, 2]])
-            ->groupBy('sn');
+            ->where(['in', "$g.type", [1, 2]]);
+
+        $request = Yii::$app->request->get();
+
+        if (isset($request['goods_name']) && !empty($request['goods_name'])) {
+            $query->andWhere(["like", "$g.name", $request["goods_name"]]);
+        }
+
+        if (isset($request['code']) && !empty($request['code'])) {
+            $codeQuery = Code::find()
+                ->where(['code' => $request['code']])
+                ->select('goodsType_sn');
+
+            $query->andWhere(["$g.sn" => $codeQuery]);
+        }
+
+        $query->groupBy('sn');
 
         $pages = new Pagination(['totalCount' => $query->count(), 'pageSize' => '10']);
-        $model = $query->orderBy(["$g.createdAt" => SORT_DESC, "$g.id" => SORT_DESC])->offset($pages->offset)->limit($pages->limit)->all();
+        $model = $query->orderBy([
+                "$g.createdAt" => SORT_DESC,
+                "$g.id" => SORT_DESC,
+            ])
+            ->offset($pages->offset)
+            ->limit($pages->limit)
+            ->all();
 
-        return $this->render('goods-list', ['model' => $model, 'pages' => $pages]);
+        return $this->render('goods-list', [
+            'model' => $model,
+            'pages' => $pages,
+            'request' => $request,
+        ]);
     }
 
     /**
@@ -229,7 +276,8 @@ class CodeController extends BaseController
 
         $model = ['' => '--请选择--'];
         foreach ($data as $key => $val) {
-            $model[$val['id']] = $val['name'].'  面值:'.StringUtils::amountFormat2($val['amount']).'元  起投金额:'.StringUtils::amountFormat2($val['minInvest']).'元';
+            $model[$val['id']] = $val['name'].'  面值:'.StringUtils::amountFormat2($val['amount']);
+            $model[$val['id']] .= '元  起投金额:'.StringUtils::amountFormat2($val['minInvest']).'元';
         }
         return $this->render('goods-add', ['goodsType' => $goodsType, 'model' => $model]);
     }

@@ -5,6 +5,7 @@ use yii\helpers\Html;
 use yii\widgets\LinkPager;
 
 $this->title = '商品列表';
+
 ?>
 
 <?php $this->beginBlock('blockmain'); ?>
@@ -37,18 +38,28 @@ $this->title = '商品列表';
         </div>
         <!--search start-->
         <div class="portlet-body">
-            <form action="/growth/code/list" method="get" target="_self">
+            <form action="" id="search_form" method="get" target="_self">
                 <table class="table">
                     <tbody>
                         <tr>
+                            <td><span class="title">商品名称</span></td>
+                            <td>
+                                <input type="text" class="m-wrap" style="margin-bottom: 0px"
+                                    id="goods_name" name='goods_name'
+                               value="<?= isset($request['goods_name']) ? Html::encode($request['goods_name']) : '' ?>"
+                                    placeholder="请输入商品名称">
+                            </td>
                             <td><span class="title">兑换码</span></td>
                             <td>
-                                <input type="text" class="m-wrap" style="margin-bottom: 0px" id="title" name='code'
-                                       value="" placeholder="请输入兑换码"/>
+                                <input type="text" class="m-wrap" style="margin-bottom: 0px"
+                                   id="code" name='code'
+                                   value="<?= isset($request['code']) ? Html::encode($request['code']) : '' ?>"
+                                   placeholder="请输入兑换码">
                             </td>
                             <td>
                                 <div class="search-btn" align="right">
-                                    <button type='submit' class="btn blue btn-block button-search">搜索 <i class="m-icon-swapright m-icon-white"></i></button>
+                                    <button type='submit' class="btn blue btn-block button-search">搜索
+                                        <i class="m-icon-swapright m-icon-white"></i></button>
                                 </div>
                             </td>
                         </tr>
@@ -73,36 +84,53 @@ $this->title = '商品列表';
                     <tr>
                         <td class="valign-middle"><?= Html::encode($good['name']) ?></td>
                         <th class="valign-middle">
-                            <?= (int) $good['type'] === GoodsType::TYPE_COUPON ? GoodsType::getSnForDuiBa($good['sn']) : $good['sn'] ?>
+        <?= (int) $good['type'] === GoodsType::TYPE_COUPON ? GoodsType::getSnForDuiBa($good['sn']) : $good['sn'] ?>
                         </th>
                         <td class="valign-middle"><?= $good['total'] ?></td>
                         <td class="valign-middle"><?= $good['createdAt'] ?></td>
                         <td class="valign-middle">
                             <center>
-                                <a href="/growth/code/list?sn=<?= $good['sn'] ?>" class="btn mini green"><i class="icon-edit"></i>查看兑换码列表</a>
+                                <a href="/growth/code/list?sn=<?= $good['sn'] ?>" class="btn mini green">
+                                    <i class="icon-edit"></i>查看兑换码列表</a>
                                 <?php if ($good['total'] > 0) { ?>
-                                <a href="/growth/code/export-all?sn=<?= $good['sn'] ?>" class="btn mini green"  style="display: none;"><i class="icon-edit"></i>导出兑换码TXT</a>
+                                <a href="/growth/code/export-all?sn=<?= $good['sn'] ?>"
+                                   class="btn mini green"  style="display: none;">
+                                    <i class="icon-edit"></i>导出兑换码TXT</a>
                                 <?php } ?>
                             </center>
                         </td>
                     </tr>
                 <?php endforeach; ?>
+                <?php if (empty($model)) : ?>
+                    <tr>
+                        <td>暂无数据.</td>
+                    </tr>
+                <?php endif; ?>
                 </tbody>
             </table>
         </div>
-        <div class="pagination" style="text-align:center;clear: both">
+        <div class="pagination" style="text-align:center;">
             <?= LinkPager::widget(['pagination' => $pages]); ?>
         </div>
     </div>
 </div>
-    <script>
-        $(function() {
-            $('.search-btn').bind('click', function () {
-                if ('' === $('#title').val()) {
-                    layer.msg('请填写兑换码', {icon: 2});
-                    return false;
-                }
-            });
+
+<script>
+    $(function() {
+        $('.search-btn').bind('click', function (e) {
+            e.preventDefault();
+
+            var code = $('#code').val();
+            var goodsName = $('#goods_name').val();
+
+            var action = '';
+            if ('' === goodsName && '' !== code) {
+                action = '/growth/code/list';
+            }
+
+            $('#search_form').attr('action', action);
+            $('#search_form').submit();
         });
-    </script>
+    });
+</script>
 <?php $this->endBlock(); ?>

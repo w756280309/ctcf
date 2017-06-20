@@ -3,7 +3,6 @@
 namespace common\models\code;
 
 use common\models\user\User;
-use Yii;
 use yii\db\ActiveRecord;
 
 class GoodsType extends ActiveRecord
