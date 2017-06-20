@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0,minimum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="__FE_BASE_URI__/common/css/wenjfbase.css">
+    <link rel="stylesheet" href="__FE_BASE_URI__wap/campaigns/xiazhi/css/index.css">
+    <script src="__FE_BASE_URI__/libs/lib.flexible3.js"></script>
+    <script src="__FE_BASE_URI__/libs/jquery-1.11.1.min.js"></script>
+</head>
+<body>
+<div class="flex-content">
+    <div class="top-part"></div>
+    <div class="middle-part"></div>
+    <div class="bottom-part">
+        <p class="rules">活动期间，累计年化投资每达到10万元，</p>
+        <p class="rules">即可获得1个随机现金红包，最多可获得3个！</p>
+        <p class="rules">现金奖励将直接发放到账户余额。</p>
+        <div class="hongbao">
+            <p class="shuliang">拥有<span>3</span>个</p>
+            <div class="open-it">拆</div>
+        </div>
+        <div class="show-hongbao">我的红包</div>
+        <a href="#" class="go-invest">去理财</a>
+        <p class="remind">本次活动最终解释权归温都金服所有</p>
+        <p class="remind">理财非存款 产品有风险 投资须谨慎</p>
+    </div>
+    <div class="mask"></div>
+    <div class="have-hongbao">
+        <p class="have-hongbao-title">我的红包</p>
+        <ul class="have-hongbao-list">
+            <li>
+                <span class="hongbao-number lf">1.66元</span>
+                <span class="hongbao-date rg">2017-05-20 18:33</span>
+            </li>
+            <li>
+                <span class="hongbao-number lf">1.66元</span>
+                <span class="hongbao-date rg">2017-05-20 18:33</span>
+            </li>
+            <li>
+                <span class="hongbao-number lf">1.66元</span>
+                <span class="hongbao-date rg">2017-05-20 18:33</span>
+            </li>
+        </ul>
+        <img src="__FE_BASE_URI__wap/campaigns/xiazhi/images/btn_off.png" alt="" class="btn-off">
+    </div>
+    <div class="no-hongbao">
+        <div class="tanhao">!</div>
+        <p class="no-hongbao-content">您还没有红包哦</p>
+        <p class="no-hongbao-content">快去投资吧！</p>
+        <a href="#" class="go-invest">去理财</a>
+        <img src="__FE_BASE_URI__wap/campaigns/xiazhi/images/btn_off.png" alt="" class="btn-off">
+    </div>
+    <div class="get-hongbao">
+        <p class="get-hongbao-number"><span>10</span>&nbsp;&nbsp;元</p>
+        <p class="get-hongbao-remind">现金已进入账户余额</p>
+        <img src="__FE_BASE_URI__wap/campaigns/xiazhi/images/btn_off2.png" alt="" class="btn-off">
+    </div>
+</div>
+</body>
+<script>
+  function eventTarget (event) {
+    var event = event || window.event;
+    event.preventDefault();
+  }
+    $(function () {
+      //如果有拆红包的机会
+      $('.open-it').on('click',function () {
+        $(this).addClass('rotate');
+        setTimeout(function () {
+          $('.get-hongbao,.mask').show();
+          $('body').on('touchmove', eventTarget, false);
+          $('.open-it').removeClass('rotate');
+        },1800)
+      });
+      //如果有红包记录
+      $('.show-hongbao').on('click',function () {
+        $('.have-hongbao,.mask').show();
+        $('body').on('touchmove', eventTarget, false);
+      });
+      //如果没有红包记录
+//      $('.show-hongbao').on('click',function () {
+//        $('.no-hongbao,.mask').show();
+//        $('body').on('touchmove', eventTarget, false);
+//      });
+      $('.mask,.btn-off').on('click',function () {
+        $('.have-hongbao,.no-hongbao,.get-hongbao,.mask').hide();
+        $('body').off('touchmove');
+      })
+    })
+</script>
+</html>

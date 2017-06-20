@@ -1,0 +1,299 @@
+.flex-content {
+  position: relative;
+  background-color: #fff;
+}
+.flex-content .mask {
+  display: none;
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: #000;
+  opacity: 0.5;
+  filter: alpha(opacity=60);
+  z-index: 100;
+}
+.flex-content .top-part {
+  width: 100%;
+  height: 4.66666667rem;
+  background: url("../images/bg_top.png") no-repeat;
+  background-size: contain;
+}
+.flex-content .middle-part {
+  width: 100%;
+  height: 14.53333333rem;
+  background: url("../images/bg_middle.png") no-repeat;
+  background-size: contain;
+}
+.flex-content .bottom-part {
+  width: 100%;
+  padding: 0.26666667rem 0 0.64rem;
+}
+.flex-content .bottom-part .rules {
+  line-height: 0.53333333rem;
+  font-size: 0.37333333rem;
+  color: #ffa57b;
+  text-align: center;
+}
+.flex-content .bottom-part .hongbao {
+  position: relative;
+  width: 3.08rem;
+  height: 3.97333333rem;
+  margin: 0.64rem auto 0.36rem;
+  padding-top: 0.93333333rem;
+  background: url("../images/hongbao.png") no-repeat;
+  background-size: contain;
+}
+.flex-content .bottom-part .hongbao .shuliang {
+  font-size: 0.45333333rem;
+  color: #fff;
+  text-align: center;
+}
+.flex-content .bottom-part .hongbao .shuliang span {
+  font-size: 0.66666667rem;
+}
+.flex-content .bottom-part .hongbao .open-it {
+  position: absolute;
+  left: 1.02666667rem;
+  bottom: 0.66666667rem;
+  width: 1.02666667rem;
+  height: 1.02666667rem;
+  line-height: 1.02666667rem;
+  border-radius: 50%;
+  text-align: center;
+  font-size: 0.6rem;
+  color: #e22918;
+  background-color: #fdca2e;
+}
+.flex-content .bottom-part .hongbao .rotate {
+  animation: mymove 2s infinite;
+  -webkit-animation: mymove 2s infinite;
+  -moz-animation: mymove 2s infinite;
+  -o-animation: mymove 2s infinite;
+  -ms-animation: mymove 2s infinite;
+}
+.flex-content .bottom-part .show-hongbao {
+  width: 2.89333333rem;
+  height: 0.66666667rem;
+  margin: 0 auto 0.53333333rem;
+  line-height: 0.66666667rem;
+  border-radius: 0.29333333rem;
+  color: #fff;
+  background-color: #e32918;
+  font-size: 0.34666667rem;
+  text-align: center;
+}
+.flex-content .bottom-part .go-invest{
+  display: block;
+  width:6.82666rem;
+  height:0.92rem;
+  line-height:0.92rem;
+  margin: 0.76rem auto 0.3733rem;
+  color: #fff;
+  border-radius: 0.106rem;
+  font-size: 0.4rem;
+  background-color: #5f925a;
+  text-align: center;
+}
+.flex-content .bottom-part .remind {
+  font-size: 0.26666667rem;
+  line-height: 0.34666667rem;
+  color: #6a9d65;
+  text-align: center;
+}
+.flex-content .have-hongbao {
+  display: none;
+  z-index: 1000;
+  position: fixed;
+  top: 44%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -moz-transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  -o-transform: translate(-50%, -50%);
+  width: 7.01333333rem;
+  height: 4.24rem;
+  padding-top: 0.32rem;
+  border: 8px solid #61955c;
+  border-radius: 0.21333333rem;
+  background-color: #e7ffe5;
+  box-sizing: content-box;
+}
+.flex-content .have-hongbao .btn-off {
+  position: relative;
+  right: -94%;
+  bottom: 40%;
+  display: block;
+  width: 0.61333333rem;
+  height: 0.61333333rem;
+}
+.flex-content .have-hongbao .have-hongbao-title {
+  height: 0.42666667rem;
+  line-height: 0.42666667rem;
+  font-size: 0.42666667rem;
+  color: #ffa57b;
+  text-align: center;
+}
+.flex-content .have-hongbao .have-hongbao-list {
+  margin-top: 0.32rem;
+}
+.flex-content .have-hongbao .have-hongbao-list li {
+  width: 6.52rem;
+  height: 0.86666667rem;
+  line-height: 0.86666667rem;
+  margin: 0 auto;
+  border-bottom: 1px solid #cfe5ce;
+}
+.flex-content .have-hongbao .have-hongbao-list li .hongbao-number {
+  font-size: 0.37333333rem;
+  color: #ffa57b;
+}
+.flex-content .have-hongbao .have-hongbao-list li .hongbao-date {
+  font-size: 0.32rem;
+  color: #999;
+}
+.flex-content .have-hongbao .btn-off {
+  position: fixed;
+  right: 0;
+  top: 30%;
+  display: block;
+  width: 0.61333333rem;
+  height: 0.61333333rem;
+}
+.flex-content .no-hongbao {
+  display: none;
+  z-index: 1000;
+  position: fixed;
+  top: 44%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -moz-transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  -o-transform: translate(-50%, -50%);
+  width: 7.01333333rem;
+  height: 5.04rem;
+  padding-top: 0.5rem;
+  border: 8px solid #61955c;
+  border-radius: 0.21333333rem;
+  background-color: #e7ffe5;
+}
+.flex-content .no-hongbao .tanhao {
+  width: 0.86666667rem;
+  height: 0.86666667rem;
+  line-height: 0.86666667rem;
+  margin: 0 auto 0.4rem;
+  border: 2px solid #eb494c;
+  border-radius: 50%;
+  font-size: 0.6rem;
+  text-align: center;
+  background-color: #e7ffe5;
+  color: #eb494c;
+}
+.flex-content .no-hongbao .no-hongbao-content {
+  font-size: 0.45333333rem;
+  line-height: 0.53333333rem;
+  text-align: center;
+  color: #333;
+}
+.flex-content .no-hongbao .go-invest {
+  display: block;
+  width: 2.96rem;
+  height: 1.14666667rem;
+  line-height: 1.14666667rem;
+  margin: 0.37333333rem auto 0;
+  border-radius: 0.53333333rem;
+  text-align: center;
+  font-size: 0.45333333rem;
+  color: #fff;
+  background-color: #61955c;
+}
+.flex-content .no-hongbao .btn-off {
+  position: relative;
+  right: -94%;
+  bottom: 130%;
+  display: block;
+  width: 0.61333333rem;
+  height: 0.61333333rem;
+}
+.flex-content .get-hongbao {
+  display: none;
+  z-index: 1000;
+  position: fixed;
+  top: 44%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -moz-transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  -o-transform: translate(-50%, -50%);
+  width: 4.93333333rem;
+  height: 6.2rem;
+  padding-top: 0.9rem;
+  background: url("../images/bg_hongbao.png") no-repeat;
+  background-size: contain;
+}
+.flex-content .get-hongbao .get-hongbao-number {
+  color: #e33032;
+  text-align: center;
+  font-size: 0.58666667rem;
+  margin-bottom: 1.64rem;
+}
+.flex-content .get-hongbao .get-hongbao-number span {
+  font-size: 1.12rem;
+}
+.flex-content .get-hongbao .get-hongbao-remind {
+  color: #fff;
+  font-size: 0.4rem;
+  text-align: center;
+}
+.flex-content .get-hongbao .btn-off {
+  position: relative;
+  right: -94%;
+  bottom: 105%;
+  display: block;
+  width: 0.61333333rem;
+  height: 0.61333333rem;
+}
+@keyframes mymove {
+  from {
+    transform: rotateY(0deg);
+  }
+  to {
+    transform: rotateY(360deg);
+  }
+}
+@-webkit-keyframes mymove {
+  from {
+    -webkit-transform: rotateY(0deg);
+  }
+  to {
+    -webkit-transform: rotateY(360deg);
+  }
+}
+@-moz-keyframes mymove {
+  from {
+    -moz-transform: rotateY(0deg);
+  }
+  to {
+    -moz-transform: rotateY(360deg);
+  }
+}
+@-o-keyframes mymove {
+  from {
+    -o-transform: rotateY(0deg);
+  }
+  to {
+    -o-transform: rotateY(360deg);
+  }
+}
+@-ms-keyframes mymove {
+  from {
+    -ms-transform: rotateY(0deg);
+  }
+  to {
+    -ms-transform: rotateY(360deg);
+  }
+}

@@ -97,7 +97,6 @@ class PromoLotteryTicket extends ActiveRecord
             'user_id' => $user->id,
             'source' => $source,
             'promo_id' => $promo->id,
-            'ip' => Yii::$app->request->getUserIP(),
         ]);
     }
 
