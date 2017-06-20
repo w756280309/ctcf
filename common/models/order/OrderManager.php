@@ -339,7 +339,7 @@ class OrderManager
             }
             $update['finish_rate'] = $finish_rate;
         }
-        if ($loan->finish_rate < 0.9 && $update['finish_rate'] >= 0.9) {
+        if ($loan->finish_rate < 0.85 && $update['finish_rate'] >= 0.85) {
             $loanFullAndNotify = true ;
         }
         $res = Loan::updateAll($update, ['id' => $loan->id]);
