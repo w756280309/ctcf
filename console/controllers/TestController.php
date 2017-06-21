@@ -1,6 +1,7 @@
 <?php
 namespace console\controllers;
 
+use common\models\user\MoneyRecord;
 use yii\console\Controller;
 
 /**
@@ -184,5 +185,44 @@ ORDER BY p.id ASC , rp.order_id ASC , IF( rp.asset_id, rp.asset_id, rp.uid ) ASC
         fclose($errorFp);
         fclose($fp);
         return self::EXIT_CODE_NORMAL;
+    }
+
+    /**
+     * 修复南金交资金流水
+     * 开发于 2017-06-20 临时代码  php yii test/money-record
+     */
+    public function actionMoneyRecord($run = false)
+    {
+        $moneyRecords = MoneyRecord::find()
+            ->where(['uid' => 53])
+            ->andWhere(['>=', 'created_at', strtotime('2017-06-20')])
+            ->orderBy(['created_at' => SORT_ASC])
+            ->all();
+        $lastBalance = null;
+        foreach ($moneyRecords as $moneyRecord) {
+            /**
+             * @var MoneyRecord $moneyRecord
+             */
+            if (is_null($lastBalance)) {
+                $lastBalance = $moneyRecord->balance;
+                continue;
+            }
+            $change = bcsub($moneyRecord->in_money, $moneyRecord->out_money, 2);
+            $exceptBalance = bcadd($lastBalance, $change, 2);
+            $diff = bcsub($exceptBalance, $moneyRecord->balance, 2);
+
+
+            if ($run) {
+                $moneyRecord->balance = $exceptBalance;
+                $moneyRecord->save(false);
+                if (bccomp($diff, 0, 2) != 0) {
+                    $this->stdout("ID: {$moneyRecord->id} | created_at: {$moneyRecord->created_at} | type: {$moneyRecord->type} | 上次资金: {$lastBalance} | 变动金额: {$change} | 现有金额: {$moneyRecord->balance} | 期望金额: {$exceptBalance} | 异常: {$diff} \n");
+                }
+            } elSE {
+                $this->stdout("ID: {$moneyRecord->id} | created_at: {$moneyRecord->created_at} | type: {$moneyRecord->type} | 上次资金: {$lastBalance} | 变动金额: {$change} | 现有金额: {$moneyRecord->balance} | 期望金额: {$exceptBalance} | 异常: {$diff} \n");
+            }
+
+            $lastBalance = $moneyRecord->balance;
+        }
     }
 }
