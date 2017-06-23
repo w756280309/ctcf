@@ -7,7 +7,7 @@ $taps = date('Y-m-d') >= '2017-05-01' && date('Y-m-d') <= '2017-05-31';
 ?>
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/wenjfbase.css">
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/activeComHeader.css">
-<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/qiandao/css/index.css?v=201704021">
+<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/qiandao/css/index.css?v=20170623">
 <script src="<?= FE_BASE_URI ?>libs/lib.flexible3.js"></script>
 <script src="<?= ASSETS_BASE_URI ?>js/common.js"></script>
 
@@ -95,6 +95,10 @@ $taps = date('Y-m-d') >= '2017-05-01' && date('Y-m-d') <= '2017-05-31';
     <img src="<?= FE_BASE_URI ?>wap/qiandao/images/pomp-header.png" alt="">
     <p class="pomp-time"><i></i>您已连续签到<span></span>天<i></i></p>
     <p class="pomp-points">获得<span id="pomp-point"></span>积分<i id="pomp-coupon"></i></p>
+    <div class="boundWeixin">
+        <p>绑定微信额外送10积分啦！</p>
+        <p>关注温都金服微信公账号，<br>点击“绑定账户”即可</p>
+    </div>
     <a href="javascript:void(0);">确认</a>
 </div>
 

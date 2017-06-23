@@ -180,7 +180,6 @@ i {
 }
 .pomp {
   width:6.4rem;
-  height:5.28rem;
   position: fixed;
   top:50%;
   left:50%;
@@ -195,7 +194,7 @@ i {
   -moz-transform: translate(-50% ,-50%);
   /*弹框内部样式的添加*/
   text-align: center;
-  padding:0.9333333rem 0.666667rem 0;
+  padding:0.9333333rem 0.666667rem 0.76rem;
 }
 .pomp img{
   width:7.3866667rem;
@@ -247,4 +246,20 @@ i {
   margin: 0.4533333rem auto 0;
   font-size: 0.4533333rem;
   border-radius: 0.1333333333rem;
+}
+.boundWeixin {
+    margin-top: 0.33333333rem;
+
+}
+.boundWeixin p:first-child {
+  color: #f44336;
+  line-height: 0.866667rem;
+  font-size: 0.3733333rem;
+  text-align: center;
+}
+.boundWeixin p:last-child {
+  color: #666666;
+  line-height: 0.4rem;
+  font-size: 0.32rem;
+  text-align: center;
 }
