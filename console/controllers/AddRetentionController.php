@@ -17,7 +17,7 @@ class AddRetentionController extends Controller
 
         $orderUids = $this->orderSucc($stamp);   //获取30天及以内成功投资的用户ID集合.
         $repaymentUids = $this->repaymentSucc($stamp);   //获取最后一笔项目到期还款时间在30天以前的用户ID集合.
-        $retentionUids = $this->retentionExist($stamp);  //获取30天及以内已经被标志位流失的用户ID集合.
+        $retentionUids = $this->retentionExist();  //获取已经被标志为流失的用户ID集合.
 
         $uids = array_diff($repaymentUids, $orderUids, $retentionUids);
 
@@ -60,15 +60,12 @@ class AddRetentionController extends Controller
     }
 
     /**
-     * 获得指定时刻到当前查询时刻这段时间内已经存在retention记录的用户的ID集合.
+     * 获得已经存在retention记录的用户的ID集合.
      */
-    private function retentionExist($stamp)
+    private function retentionExist()
     {
-        $date = date('Y-m-d H:i:s', $stamp);
-
         $retentions = Retention::find()
             ->where(['tactic_id' => [1, 2, 3]])
-            ->andWhere(['>=', 'createTime', $date])
             ->distinct('user_id')
             ->select('user_id')
             ->all();
