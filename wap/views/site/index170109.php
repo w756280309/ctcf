@@ -53,7 +53,7 @@ $this->registerJsFile(ASSETS_BASE_URI . 'js/swiper.min.js', ['depends' => Jquery
             <p class="f13 cash-rate"><i class="cash-icon"></i>历史兑付率100%</p>
 
             <div class="total">
-                <ul class="f14 clearfix">
+                <ul class="f13 clearfix">
                     <li class="lf" id="totalRefundAmount">累计兑付<span></span>万元</li>
                     <li class="rg" id="totalRefundInterest">带来<span></span>万元收益</li>
                     <i></i>
@@ -113,7 +113,7 @@ $this->registerJsFile(ASSETS_BASE_URI . 'js/swiper.min.js', ['depends' => Jquery
 
         <?php if ($xs) { ?>
             <div class="newnorm hide" id="loginNewPeople">
-                <p class="newnormtitle f15">新手专享
+                <p class="newnormtitle f12">新手专享
                     <?= $this->render('tags', ['loan' => $xs]) ?>
                 </p>
                 <?php $ex = $xs->getDuration() ?>
