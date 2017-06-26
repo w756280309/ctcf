@@ -15,6 +15,15 @@ use common\lib\bchelp\BcRound;
 use common\service\SmsService;
 use Yii;
 
+/**
+ * 还款计划
+ * @property int        $qishu
+ * @property float      $benjin
+ * @property float      $lixi
+ * @property int        $refund_time
+ * @property int        $status
+ * @property int        $asset_id
+ */
 class OnlineRepaymentPlan extends \yii\db\ActiveRecord
 {
     const STATUS_WEIHUAN = 0;//0、未还
@@ -132,9 +141,9 @@ class OnlineRepaymentPlan extends \yii\db\ActiveRecord
         if (0 === $loan->finish_date) {
             $finish_date = null;
             if (OnlineProduct::REFUND_METHOD_DAOQIBENXI === (int) $loan->refund_method) {
-                 $finish_date = $pp->LoanTerms('d1', date('Y-m-d', $loan->jixi_time), $loan->expires);
+                $finish_date = $pp->LoanTerms('d1', date('Y-m-d', $loan->jixi_time), $loan->expires);
             } else {
-                 $finish_date = date("Y-m-d", $pp->calcRetDate($loan->expires, $loan->jixi_time));//如果由于29,30,31造成的跨月的要回归到上一个月最后一天
+                $finish_date = date("Y-m-d", $pp->calcRetDate($loan->expires, $loan->jixi_time));//如果由于29,30,31造成的跨月的要回归到上一个月最后一天
             }
             if (null !== $finish_date) {
                 $up['finish_date'] = strtotime($finish_date);
@@ -249,6 +258,9 @@ class OnlineRepaymentPlan extends \yii\db\ActiveRecord
         if (!$ord || !$ord->loan) {
             throw new \Exception();
         }
+        /**
+         * @var OnlineProduct $loan
+         */
         $loan = $ord->loan;
         $paymentDates = $loan->getPaymentDates();
         if (empty($paymentDates)) {
@@ -333,6 +345,23 @@ class OnlineRepaymentPlan extends \yii\db\ActiveRecord
                 $val,    //还款日期
                 $principal,   //还款本金
                 $interest,    //还款利息
+            ];
+        }
+
+        //按自然年计息项目，如果最后两期在一个月，且标的是自定义还款，合并标的最后两期还款计划
+        $term = count($res);
+        if ($loan->refund_method === OnlineProduct::REFUND_METHOD_NATURE_YEAR
+            && $loan->isCustomRepayment
+            && $term >= 2
+            && (new \DateTime($res[$term - 1][0]))->format('Y-m') === (new \DateTime($res[$term - 2][0]))->format('Y-m')
+        ) {
+            $lastTermData = $res[$term-1];//最后一期数据
+            $exceptMergeData = $res[$term-2];//倒数第二期，需要合并到最后一期
+            array_pop($res);
+            $res[$term - 2] = [
+                $lastTermData[0],
+                bcadd($lastTermData[1], $exceptMergeData[1], 2),
+                bcadd($lastTermData[2], $exceptMergeData[2], 2)
             ];
         }
 

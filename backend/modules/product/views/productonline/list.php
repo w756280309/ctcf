@@ -109,6 +109,11 @@ $pc_cat = Yii::$app->params['pc_cat'];
                     </tr>
                 </thead>
                 <tbody>
+                    <?php
+                    /**
+                     * @var \common\models\product\OnlineProduct $val
+                     */
+                    ?>
                     <?php foreach ($models as $key => $val) : ?>
                         <tr>
                             <td>
@@ -168,7 +173,12 @@ $pc_cat = Yii::$app->params['pc_cat'];
                                     <?php } ?>
                                     <?php if ($val['online_status'] == 1 && (in_array($val['status'], [3, 5, 7])) && $val['is_jixi'] == 0) { ?>
                                         | <a href="javascript:void(0)" onclick="openwin('/product/productonline/jixi?product_id=<?= $val['id'] ?>',500,300)" class="btn mini green"><i class="icon-edit"></i> 计息</a>
-                                        | <a href="javascript:corfirmJixi('<?= $val['id'] ?>');" class="btn mini green"><i class="icon-edit"></i> 确认计息</a>
+                                        <?php if($val->isCustomRepayment && !empty($val->jixi_time) && !$val->isJixiExamined) { ?>
+                                            | <a href="/product/productonline/jixi-examined?id=<?= $val->id?>"  class="btn mini green">计息审核</a>
+                                        <?php }?>
+                                        <?php if($val->isJixiExamined) {?>
+                                            | <a href="javascript:corfirmJixi('<?= $val['id'] ?>');" class="btn mini green"><i class="icon-edit"></i> 确认计息</a>
+                                        <?php }?>
                                     <?php } ?>
                                     <?php if ($val['online_status'] == 1 && $val['status'] == 2) { ?>
                                         | <a href="javascript:endproduct('<?= $val['id'] ?>')" class="btn mini green"><i class="icon-edit"></i> 结束项目</a>

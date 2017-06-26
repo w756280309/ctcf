@@ -134,6 +134,10 @@ class ProductonlineController extends BaseController
         if ($refund_method === OnlineProduct::REFUND_METHOD_DEBX) {//等额本息强制不允许转让
             $loan->allowTransfer = false;
         }
+        if ($loan->isCustomRepayment) {
+            $loan->allowTransfer = false;//自定义还款不允许转让
+            $loan->isJixiExamined = false;//自定义还款需要计息审核
+        }
 
         return $loan;
     }
@@ -640,6 +644,9 @@ class ProductonlineController extends BaseController
              ) {
                 return ['result' => '0', 'message' => '无法找到该项目,或者项目现阶段不允许开始计息'];
             }
+            if ($loan->isCustomRepayment && !$loan->isJixiExamined) {
+                return ['result' => '0', 'message' => '自定义还款必须进行计息审核操作'];
+            }
 
             $res = OnlineRepaymentPlan::generatePlan($loan);
             if ($res) {
@@ -674,6 +681,56 @@ class ProductonlineController extends BaseController
         }
 
         return ['result' => '0', 'message' => 'ID不能为空'];
+    }
+
+    /**
+     * 计息审核
+     *
+     * @param $id
+     * @return string
+     */
+    public function actionJixiExamined($id)
+    {
+        /**
+         * @var OnlineProduct $loan
+         */
+        $loan = $this->findOr404(OnlineProduct::className(), [
+            'id' => $id,
+            'isJixiExamined' => false,
+        ]);
+        if (Yii::$app->request->isPost) {
+            $loan->isJixiExamined = true;
+            $loan->save(false);
+            return $this->redirect('/product/productonline/list');
+        }
+        $orders = OnlineOrder::find()->where(['status' => OnlineOrder::STATUS_SUCCESS, 'online_pid' => $loan->id])->all();
+        $repayment = [];
+        foreach ($orders as $order) {
+            /**
+             * @var OnlineOrder $order
+             */
+            $data = OnlineRepaymentPlan::calcBenxi($order);
+            foreach ($data as $key => $value) {
+                $term = $key + 1;
+                $repayment[$term]['repaymentDate'] = $value[0];
+                $repayment[$term]['term'] = $term;
+                $repayment[$term]['totalPrincipal'] = isset($repayment[$term]['totalPrincipal']) ? $repayment[$term]['totalPrincipal'] : 0;
+                $repayment[$term]['totalInterest'] = isset($repayment[$term]['totalInterest']) ? $repayment[$term]['totalInterest'] : 0;
+                $repayment[$term]['totalPrincipal'] = bcadd($repayment[$term]['totalPrincipal'], $value[1], 2);
+                $repayment[$term]['totalInterest'] = bcadd($repayment[$term]['totalInterest'], $value[2], 2);
+                $repayment[$term]['orderData'][] = [
+                    'userId' => $order->uid,
+                    'orderMoney' => $order->order_money,
+                    'rate' => $order->yield_rate,
+                    'principal' => $value[1],
+                    'interest' => $value[2],
+                ];
+            }
+        }
+        return $this->render('jixi_examined', [
+            'loan' => $loan,
+            'repayment' => $repayment,
+        ]);
     }
 
     /**

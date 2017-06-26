@@ -27,6 +27,7 @@ use yii\db\ActiveRecord;
  * @property string updated_at
  * @property int    investFrom      投资来源 0表示未知，1表示wap，2表示wx，3表示app，4表示pc
  * @property string couponAmount    代金券使用金额
+ * @property float  $yield_rate     实际利率
  */
 class OnlineOrder extends ActiveRecord implements OrderTxInterface
 {

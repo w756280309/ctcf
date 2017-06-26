@@ -51,6 +51,11 @@ use yii\behaviors\TimestampBehavior;
  * @property boolean $isLicai 是否为理财计划标识
  * @property int     $pointsMultiple    积分倍数
  * @property bool    $allowTransfer     是否允许转让
+ * @property bool    $isCustomRepayment     是否是自定义还款
+ * @property bool    $isJixiExamined        计息是否通过审核(当标的是自定义还款时候需要计息审核)
+ * @property string  $jixi_time     计息日期
+ * @property string  $funded_money  实际募集金额
+ * @property string  $finish_date   截止日
  */
 class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
 {
@@ -116,7 +121,7 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
             'create' => ['title', 'sn', 'cid', 'money', 'borrow_uid', 'expires', 'expires_show', 'yield_rate', 'start_money', 'borrow_uid', 'fee', 'status',
                 'description', 'refund_method', 'account_name', 'account', 'bank', 'dizeng_money', 'start_date', 'end_date', 'full_time',
                 'is_xs', 'yuqi_faxi', 'order_limit', 'creator_id', 'del_status', 'status', 'isPrivate', 'allowedUids', 'finish_date', 'channel', 'jixi_time', 'sort',
-                'jiaxi', 'kuanxianqi', 'isFlexRate', 'rateSteps', 'issuer', 'issuerSn', 'paymentDay', 'isTest', 'filingAmount', 'allowUseCoupon', 'tags', 'isLicai', 'pointsMultiple', 'allowTransfer'],
+                'jiaxi', 'kuanxianqi', 'isFlexRate', 'rateSteps', 'issuer', 'issuerSn', 'paymentDay', 'isTest', 'filingAmount', 'allowUseCoupon', 'tags', 'isLicai', 'pointsMultiple', 'allowTransfer', 'isCustomRepayment'],
         ];
     }
 
@@ -432,6 +437,7 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
             'isLicai' => '是否为理财计划标识',
             'pointsMultiple' => '积分倍数',
             'allowTransfer' => '允许转让',
+            'isCustomRepayment' => '是否是自定义还款',
         ];
     }
 
@@ -1163,5 +1169,21 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
         }
 
         return $expectProfit;
+    }
+
+    //获取标的截止日
+    public function getEndDate()
+    {
+        if (empty($this->finish_date)) {
+            $pp = new ProductProcessor();
+            if (!$this->isAmortized()) {
+                $endDate = $pp->LoanTerms('d1', date('Y-m-d', $this->jixi_time), $this->expires);
+            } else {
+                $endDate = date("Y-m-d", $pp->calcRetDate($this->expires, $this->jixi_time));//如果由于29,30,31造成的跨月的要回归到上一个月最后一天
+            }
+        } else {
+            $endDate = date('Y-m-d', $this->finish_date);
+        }
+        return $endDate;
     }
 }
