@@ -5,6 +5,15 @@ namespace common\models\sms;
 use yii\behaviors\TimestampBehavior;
 use common\models\user\User;
 
+/**
+ * Class SmsMessage
+ * @package common\models\sms
+ *
+ * @property int    $template_id
+ * @property string $message
+ * @property int    $uid
+ * @property int    $created_at
+ */
 class SmsMessage extends \yii\db\ActiveRecord
 {
     const STATUS_WAIT = 0;

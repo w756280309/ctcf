@@ -2,6 +2,10 @@
 namespace console\controllers;
 
 use common\models\user\MoneyRecord;
+use common\models\promo\Award;
+use common\models\sms\SmsMessage;
+use common\models\user\User;
+use wap\modules\promotion\models\RankingPromo;
 use yii\console\Controller;
 
 /**
@@ -224,5 +228,62 @@ ORDER BY p.id ASC , rp.order_id ASC , IF( rp.asset_id, rp.asset_id, rp.uid ) ASC
 
             $lastBalance = $moneyRecord->balance;
         }
+    }
+    
+    /*
+     * 同步用户历史邀请好友奖励
+     *
+     * 2017-06-26 日开发，用完可删除 php yii test/invite-award
+     *
+     * 正式环境 1880 条，查看时间 2017-06-21 13:17
+     *
+     * @param bool $run
+     */
+    public function actionInviteAward($run = false)
+    {
+        $smsData = SmsMessage::find()->where(['template_id' => '105818'])->all();
+        $count = count($smsData);
+        $this->stdout("待处理 {$count} 条数据 \n");
+        $promo = RankingPromo::find()->where(['key' => 'promo_invite_12'])->one();
+        if (is_null($promo)) {
+            throw new \Exception('没有找到活动数据');
+        }
+        $errorCount = 0;
+        foreach ($smsData as $sms) {
+            /**
+             * @var SmsMessage $sms
+             */
+            $user = User::findOne($sms->uid);
+            $message = json_decode($sms->message, true);
+            preg_match_all("/(\d+)元代金券/", $message[1], $match);
+            $couponAmount = empty($match[1]) ? 0 : $match[1][0];
+            preg_match_all("/(\d+(\.\d+)?)元现金红包/", $message[1], $match);
+            $cashAmount = empty($match[1]) ? 0 : $match[1][0];
+            if (empty($couponAmount) && empty($cashAmount)) {
+                $this->stdout("用户 {$sms->uid} 获奖 {$message[1]} 数据异常 \n");
+                $errorCount++;
+            }
+
+            if ($run) {
+                if (!empty($couponAmount)) {
+                    $award = Award::initNew($user, $promo);
+                    $award->createTime = date('Y-m-d H:i:s', $sms->created_at);
+                    $award->amount = $couponAmount;
+                    $award->ref_type = Award::TYPE_COUPON;
+                    $award->save(false);
+                }
+
+                if (!empty($cashAmount)) {
+                    $award = Award::initNew($user, $promo);
+                    $award->createTime = date('Y-m-d H:i:s', $sms->created_at);
+                    $award->amount = $cashAmount;
+                    $award->ref_type = Award::TYPE_CASH;
+                    $award->save(false);
+                }
+            } else {
+                $this->stdout("短信ID {$sms->id} 用户[{$user->id}] 由被邀请者{$message[0]} 获得： {$message[1]} \n");
+            }
+        }
+        $this->stdout("失败数据 {$errorCount} \n");
     }
 }

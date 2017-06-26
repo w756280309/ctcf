@@ -101,44 +101,75 @@ class PromoInvite12
                     ->one();
                 if (count($orderIds) > 0 && !is_null($user)) {
                     $mess = '';
+                    $couponAmount = 0;
+                    $cashAmount = 0 ;
+                    $userCouponId = null;
+                    $moneyRecordId = null;
                     //首次投资给邀请者发代金券
-                    if ($orderIds[0] === $order->id) {
-                        if ($order->order_money < 10000) {
-                            //发放30元代金券
-                            $coupon = CouponType::find()->where(['sn' => self::COUPON_30_SN])->one();
-                            if ($coupon && $coupon->allowIssue()) {
-                                $userCoupon = UserCoupon::addUserCoupon($user, $coupon);
-                                $userCoupon->save();
-                                $mess = '30元代金券';
-                            }
-                        } else {
-                            //发放50元代金券
-                            $coupon = CouponType::find()->where(['sn' => self::COUPON_50_SN])->one();
-                            if ($coupon && $coupon->allowIssue()) {
-                                $userCoupon = UserCoupon::addUserCoupon($user, $coupon);
-                                $userCoupon->save();
-                                $mess = '50元代金券';
+                    $transaction = \Yii::$app->db->beginTransaction();
+                    try {
+                        if ($orderIds[0] === $order->id) {
+                            if ($order->order_money < 10000) {
+                                //发放30元代金券
+                                $coupon = CouponType::find()->where(['sn' => self::COUPON_30_SN])->one();
+                                if ($coupon && $coupon->allowIssue()) {
+                                    $userCoupon = UserCoupon::addUserCoupon($user, $coupon);
+                                    $userCoupon->save();
+                                    $mess = '30元代金券';
+                                    $couponAmount = 30;
+                                    $userCouponId = $userCoupon->id;
+                                }
+                            } else {
+                                //发放50元代金券
+                                $coupon = CouponType::find()->where(['sn' => self::COUPON_50_SN])->one();
+                                if ($coupon && $coupon->allowIssue()) {
+                                    $userCoupon = UserCoupon::addUserCoupon($user, $coupon);
+                                    $userCoupon->save();
+                                    $mess = '50元代金券';
+                                    $couponAmount = 50;
+                                    $userCouponId = $userCoupon->id;
+                                }
                             }
                         }
-                    }
-                    //前三次投资给邀请者发现金红包
-                    if (in_array($order->id, $orderIds)) {
-                        $money = round($order->order_money / 1000, 1);
-                        //判断邀请者是否有过投资
-                        $record = OnlineOrder::find()->where(['status' => 1, 'uid' => $user->id])->count();
-                        if ($money > 0 && $record > 0) {
-                            AccountService::userTransfer($user, $money);
-                            $mess = $mess ? $mess . '和' . $money . '元现金红包' : $money . '元现金红包';
+                        //前三次投资给邀请者发现金红包
+                        if (in_array($order->id, $orderIds)) {
+                            $money = round($order->order_money / 1000, 1);
+                            //判断邀请者是否有过投资
+                            $record = OnlineOrder::find()->where(['status' => 1, 'uid' => $user->id])->count();
+                            if ($money > 0 && $record > 0) {
+                                $moneyRecord = AccountService::userTransfer($user, $money);
+                                if ($moneyRecord) {
+                                    $mess = $mess ? $mess . '和' . $money . '元现金红包' : $money . '元现金红包';
+                                    $cashAmount = $money;
+                                    $moneyRecordId = $moneyRecord->id;
+                                }
+                            }
                         }
-                    }
-                    //发短信
-                    if ($mess) {
-                        $templateId = \Yii::$app->params['sms']['invite_bonus'];
-                        $message = [
-                            $order->user->getMobile(),//被邀请者的手机号
-                            $mess,
-                        ];
-                        SmsService::send(SecurityUtils::decrypt($user->safeMobile), $templateId, $message, $user);
+                        //写发奖记录
+                        if (!empty($couponAmount) && !empty($userCouponId) && isset($userCoupon)) {
+                            $award = Award::couponAward($user, $promo, $userCoupon);
+                            $award->save(false);
+                        }
+                        if (!empty($cashAmount) && !empty($moneyRecordId) && isset($moneyRecord)) {
+                            $award = Award::cashAward($user, $promo, $moneyRecord);
+                            $award->save(false);
+                        }
+
+                        //发短信
+                        if ($mess) {
+                            $templateId = \Yii::$app->params['sms']['invite_bonus'];
+                            $message = [
+                                $order->user->getMobile(),//被邀请者的手机号
+                                $mess,
+                            ];
+                            SmsService::send(SecurityUtils::decrypt($user->safeMobile), $templateId, $message, $user);
+                        }
+
+                        $transaction->commit();
+                        \Yii::info("[user_invite] 用户[{$user->id}] 邀请好友投资，订单ID {$order->id}，获取奖励 $mess", 'user_log');
+                    } catch (\Exception $e) {
+                        $transaction->rollBack();
+                        \Yii::info("[user_invite_error] 用户[{$user->id}] 邀请好友投资，订单ID {$order->id}，获取奖励 $mess，处理失败，失败信息： {$e->getMessage()}", 'user_log');
                     }
                 }
             }

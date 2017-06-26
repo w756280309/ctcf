@@ -97,7 +97,7 @@ class AccountService
      * @param User $user
      * @param float $money
      * @param string $orderSn
-     * @return bool
+     * @return bool|MoneyRecord
      * @throws \Exception
      */
     public static function userTransfer(User $user, $money, $orderSn = '')
@@ -174,7 +174,7 @@ class AccountService
             $log->save(false);
 
             $transaction->commit();
-            return true;
+            return $moneyRecord;
         } catch (\Exception $e) {
             $transaction->rollBack();
             Yii::info("[user_transfer][exception]用户 {$user->id} 现金转账失败，转账金额 {$money} 元，失败信息 :{$e->getMessage()} ", 'user_log');
