@@ -96,6 +96,9 @@ return [
             'connectTimeout'=> 1,
             'sleep' => false, // or int for usleep after every job
         ],
+        'mutex' => [
+            'class' => 'yii\mutex\FileMutex'
+        ],
     ],
     'modules' => [
         'crm' => 'Wcg\Xii\Crm\Module',
