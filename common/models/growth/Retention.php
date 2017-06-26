@@ -21,6 +21,7 @@ class Retention extends ActiveRecord
     const STATUS_INIT = 'init';
     const STATUS_FAIL = 'failed';
     const STATUS_START = 'started';
+    const STATUS_CANCEL = 'canceled';
 
     /**
      * @inheritdoc

@@ -7,6 +7,7 @@ use common\models\coupon\UserCoupon;
 use common\models\growth\Retention;
 use common\models\stats\Perf;
 use common\models\user\User;
+use common\models\user\UserInfo;
 use common\service\SmsService;
 use common\utils\SecurityUtils;
 use Wcg\Growth\Integration\Yii2Module\Model\ReferralSource;
@@ -39,6 +40,19 @@ class RetentionController extends Controller
                 'id' => $retention->id,
             ])->execute();
             if ($affectedRows > 0) {
+                //判断如果今天存在订单，则不再发送短信
+                $userInfo = UserInfo::find()
+                    ->where(['lastInvestDate' => date('Y-m-d')])
+                    ->andWhere(['user_id' => $retention->user_id])
+                    ->one();
+                if (null !== $userInfo) {
+                    $sql = "update retention set status = :status where id = :id";
+                    $db->createCommand($sql, [
+                        'id' => $retention->id,
+                        'status' => Retention::STATUS_CANCEL,
+                    ])->execute();
+                    continue;
+                }
                 $couponConfig = $this->getCouponConfig($retention->tactic_id);
                 try {
                     if (!empty($couponConfig)) {
