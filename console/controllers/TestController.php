@@ -17,9 +17,9 @@ use yii\console\Controller;
 class TestController extends Controller
 {
     /**
-     * [临时代码] 修复“ 南金交--宁富65号”系列标的还款数据
+     * [临时代码] 修复 “南金交--双担保国企北大青鸟集团项目” 系列标的还款数据
      *
-     * 2017-06-15日开发，用完删除 test/repair-repayment
+     * 2017-06-26 日开发，用完删除 php yii test/repair-repayment
      *
      * 使用说明
      * 1. 预览检测出问题的还款数据 , 数据保存到 /tmp/repayment.csv
@@ -39,7 +39,7 @@ WHERE DATEDIFF( DATE( FROM_UNIXTIME( p.finish_date ) ) , DATE( FROM_UNIXTIME( p.
 AND p.refund_method >2
 AND p.isTest =0
 AND p.status IN ( 5, 6 ) 
-AND p.title LIKE  '%南金交--宁富65号%'
+AND p.title LIKE  '%南金交--双担保国企北大青鸟集团项目%'
 ORDER BY p.id ASC , rp.order_id ASC , IF( rp.asset_id, rp.asset_id, rp.uid ) ASC , rp.qishu ASC ";
         $repaymentData = \Yii::$app->db->createCommand($sql)->queryAll();
         $transferOrderIds = [];//转让的订单
@@ -173,7 +173,6 @@ ORDER BY p.id ASC , rp.order_id ASC , IF( rp.asset_id, rp.asset_id, rp.uid ) ASC
                     }
                     fputcsv($successFp, $logData);
                     $groupCount--;
-                    $this->stdout("成功, 剩余{$groupCount}条");
                     $transaction->commit();
                 } catch (\Exception $e) {
                     $this->stderr("{$lastRepayment['id']} 更新失败, 失败信息: {$e->getMessage()}  \n");
