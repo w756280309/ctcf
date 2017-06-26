@@ -7,7 +7,7 @@ $taps = date('Y-m-d') >= '2017-05-01' && date('Y-m-d') <= '2017-05-31';
 ?>
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/wenjfbase.css">
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/activeComHeader.css">
-<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/qiandao/css/index.css?v=201704021">
+<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/qiandao/css/index.css?v=20170623">
 <script src="<?= FE_BASE_URI ?>libs/lib.flexible3.js"></script>
 <script src="<?= ASSETS_BASE_URI ?>js/common.js"></script>
 
@@ -48,6 +48,7 @@ $taps = date('Y-m-d') >= '2017-05-01' && date('Y-m-d') <= '2017-05-31';
     </div>
     <div class="rule_box" style="padding-top: 0.5rem;">
         <?= $taps ? '<p class="rule_top f15">热烈庆祝温都金服成立一周年！</p>' : '' ?>
+        <p class="rule_top f15" style="color: #f44336;">关注温都金服公众号（wendujinfu），绑定账户送积分啦！</p>
         <p class="rule_top f15">每天签到2积分，<?= $taps ? '5月签到积分直升3倍起！' : '7天后增至5积分。' ?></p>
         <p class="rule_top f15">连续签到可得代金券！</p>
         <p class="rule_title f15">签到规则</p>
@@ -95,6 +96,10 @@ $taps = date('Y-m-d') >= '2017-05-01' && date('Y-m-d') <= '2017-05-31';
     <img src="<?= FE_BASE_URI ?>wap/qiandao/images/pomp-header.png" alt="">
     <p class="pomp-time"><i></i>您已连续签到<span></span>天<i></i></p>
     <p class="pomp-points">获得<span id="pomp-point"></span>积分<i id="pomp-coupon"></i></p>
+    <div class="boundWeixin">
+        <p>绑定微信额外送10积分啦！</p>
+        <p>关注温都金服微信公账号，<br>点击“绑定账户”即可</p>
+    </div>
     <a href="javascript:void(0);">确认</a>
 </div>
 

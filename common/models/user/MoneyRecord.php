@@ -17,8 +17,9 @@ use yii\behaviors\TimestampBehavior;
  * @property string $in_money
  * @property string $out_money
  * @property string $remark
- * @property string $create_at
+ * @property string $created_at
  * @property string $updated_at
+ * @property string $balance
  */
 class MoneyRecord extends \yii\db\ActiveRecord
 {
