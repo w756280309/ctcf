@@ -348,12 +348,12 @@ class OnlineRepaymentPlan extends \yii\db\ActiveRecord
             ];
         }
 
-        //按自然年计息项目，如果最后两期在一个月，且标的是自定义还款，合并标的最后两期还款计划
+        //按自然年计息、自定义还款标的,当标的的实际还款日 大于 项目期限/12 时候合并最后两期
         $term = count($res);
         if ($loan->refund_method === OnlineProduct::REFUND_METHOD_NATURE_YEAR
             && $loan->isCustomRepayment
             && $term >= 2
-            && (new \DateTime($res[$term - 1][0]))->format('Y-m') === (new \DateTime($res[$term - 2][0]))->format('Y-m')
+            && $term > ceil($loan->expires/12)
         ) {
             $lastTermData = $res[$term-1];//最后一期数据
             $exceptMergeData = $res[$term-2];//倒数第二期，需要合并到最后一期
