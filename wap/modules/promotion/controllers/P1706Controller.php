@@ -165,4 +165,25 @@ class P1706Controller extends Controller
             'data' => $data,
         ];
     }
+
+    /**
+     * 积分抽奖送好礼活动
+     */
+    public function actionPointsDraw($redirect, $wx_share_key = null)
+    {
+        if (!$this->fromWx()) {
+            $domain = Yii::$app->params['clientOption']['host']['wap'];
+            return $this->redirect($domain.'mall/portal/guest?dbredirect='.$redirect);
+        }
+
+        $share = null;
+        if (!empty($wx_share_key)) {
+            $share = Share::findOne(['shareKey' => $wx_share_key]);
+        }
+
+        return $this->render('@wap/views/site/app_download.php', [
+            'share' => $share,
+            'title' => '积分抽奖送礼',
+        ]);
+    }
 }
