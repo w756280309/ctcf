@@ -42,12 +42,12 @@ class PointMessageTest extends SocialMessage
         $pointMessage = new PointMessage($point);
         $this->assertEquals([
             [
-                'first' => ['恭喜您成功绑定账户，获得10积分奖励！', 'black'],
-                'keyword1' => [10, 'black'],
-                'keyword2' => ['绑定账户奖励', 'black'],
+                'first' => ['恭喜您成功绑定账户，获得10积分奖励！', '#000000'],
+                'keyword1' => [10, '#000000'],
+                'keyword2' => ['绑定账户奖励', '#000000'],
             ],
             null,
-            \Yii::$app->params['wx.msg_tpl.draw_success'],
+            \Yii::$app->params['wx.msg_tpl.add_points_for_connect_wx'],
             'onjmAv8LRKCNXPvuCt1_huYfiqTg',
         ], [
             $pointMessage->getData(),

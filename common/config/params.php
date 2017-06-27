@@ -200,9 +200,9 @@ return [
     'wdjf_security_key' => __DIR__ . '/payment/security/wdjf_prod.key',//温都金服用户信息加密使用的key保存文件名
     'backend_tmp_share_path' => '/home/wjf/nfs',//后台和工作机共享目录, 存放临时文件, 会配置文件清理机制
     'showCharityAmount' => false,  //首页是否显示慈善合计金额标志位
-    'draw_message_template_id' => 'eMnJo8ZdS3UaADDJDoeyi_HqvgZft04_4mMTFw5hZsY',  //微信提现成功消息模板ID
-    'order_message_template_id' => '96YFmA0x8p1hYpeGG3rkq6AVjPPnKokFYASLwxao0xQ', //微信交易成功消息模板ID(非正式)
-    'wx.msg_tpl.draw_success' => 'f4KfVJdqIA8Bqu480kY5m_X3GGf57MUZnNIfMMmVgxg',  //微信绑定成功送积分消息模板
+    'wx.msg_tpl.draw_success' => 'eMnJo8ZdS3UaADDJDoeyi_HqvgZft04_4mMTFw5hZsY',  //微信提现成功消息模板ID
+    'wx.msg_tpl.order_success' => '96YFmA0x8p1hYpeGG3rkq6AVjPPnKokFYASLwxao0xQ', //微信交易成功消息模板ID(非正式)
+    'wx.msg_tpl.add_points_for_connect_wx' => 'f4KfVJdqIA8Bqu480kY5m_X3GGf57MUZnNIfMMmVgxg',  //微信绑定成功送积分消息模板
     'white_open_id' => [],
     'mock_wechat_msg' => false,
 ];

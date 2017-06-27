@@ -22,6 +22,6 @@ class DrawMessage extends WechatMessage
             'remark' => ['如有疑问请致电：400-101-5151进行咨询。', '#000000'],
         ];
         $this->user = $drawRecord->user;
-        $this->templateId = Yii::$app->params['draw_message_template_id'];
+        $this->templateId = Yii::$app->params['wx.msg_tpl.draw_success'];
     }
 }

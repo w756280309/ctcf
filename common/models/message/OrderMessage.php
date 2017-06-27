@@ -44,6 +44,7 @@ class OrderMessage extends WechatMessage
         ];
         $this->user = $order->user;
         $this->linkUrl = Yii::$app->params['clientOption']['host']['wap'].'deal/deal/detail?sn='.$loan->sn;
-        $this->templateId = Yii::$app->params['order_message_template_id'];
+        $this->linkUrl .= '&utm_campaign=wxmp_notify&utm_source=wxmp_wdjf&utm_content=order_success';
+        $this->templateId = Yii::$app->params['wx.msg_tpl.order_success'];
     }
 }
