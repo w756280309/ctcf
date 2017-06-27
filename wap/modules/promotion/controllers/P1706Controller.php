@@ -172,8 +172,7 @@ class P1706Controller extends Controller
     public function actionPointsDraw($redirect, $wx_share_key = null)
     {
         if (!$this->fromWx()) {
-            $domain = Yii::$app->params['clientOption']['host']['wap'];
-            return $this->redirect($domain.'mall/portal/guest?dbredirect='.$redirect);
+            return $this->redirect('/mall/portal/guest?dbredirect='.$redirect);
         }
 
         $share = null;
