@@ -20,6 +20,6 @@ class PointMessage extends WechatMessage
             'keyword2' => [PointRecord::getTypeName($record->ref_type), '#000000'],
         ];
         $this->user = $record->user;
-        $this->templateId = Yii::$app->params['wx.msg_tpl.draw_success'];
+        $this->templateId = Yii::$app->params['wx.msg_tpl.add_points_for_connect_wx'];
     }
 }

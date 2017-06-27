@@ -43,13 +43,13 @@ class DrawMessageTest extends SocialMessage
         $drawMessage = new DrawMessage($drawRecord);
         $this->assertEquals([
             [
-                'first' => ['尊敬的客户，您申请的提现成功，资金已到达银行卡，请注意查看。', 'black'],
-                'keyword1' => ['2017-06-09 17:11:23', 'black'],
-                'keyword2' => ['1,000.00元', 'black'],
-                'remark' => ['如有疑问请致电：400-101-5151进行咨询。', 'black'],
+                'first' => ['尊敬的客户，您申请的提现成功，资金已到达银行卡，请注意查看。', '#000000'],
+                'keyword1' => ['2017-06-09 17:11:23', '#000000'],
+                'keyword2' => ['1,000.00元', '#000000'],
+                'remark' => ['如有疑问请致电：400-101-5151进行咨询。', '#000000'],
             ],
             null,
-            \Yii::$app->params['draw_message_template_id'],
+            \Yii::$app->params['wx.msg_tpl.draw_success'],
             'onjmAv8LRKCNXPvuCt1_huYfiqTg',
         ], [
             $drawMessage->getData(),
