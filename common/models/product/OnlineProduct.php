@@ -56,6 +56,7 @@ use yii\behaviors\TimestampBehavior;
  * @property string  $jixi_time     计息日期
  * @property string  $funded_money  实际募集金额
  * @property string  $finish_date   截止日
+ * @property bool    $is_jixi
  */
 class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
 {
@@ -1185,5 +1186,11 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
             $endDate = date('Y-m-d', $this->finish_date);
         }
         return $endDate;
+    }
+
+    public function getSuccessOrders()
+    {
+        return $this->hasMany(OnlineOrder::className(), ['online_pid' => 'id'])
+            ->andFilterWhere(['online_order.status' => OnlineOrder::STATUS_SUCCESS]);
     }
 }

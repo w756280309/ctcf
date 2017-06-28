@@ -5,6 +5,9 @@ namespace console\controllers;
 use common\models\draw\DrawManager;
 use common\models\epay\EpayUser;
 use common\models\mall\ThirdPartyConnect;
+use common\models\order\OnlineRepaymentPlan;
+use common\models\payment\Repayment;
+use common\models\product\OnlineProduct;
 use common\models\user\DrawRecord;
 use common\models\user\User;
 use common\models\user\UserAccount;
@@ -215,5 +218,81 @@ class ToolController extends Controller
             urldecode('')
         );
         echo $url . PHP_EOL;
+    }
+
+    /**
+     * 工具脚本：为标的重新计息 php yii tool/regenerate-repayment
+     * 注：暂时不支持已经还过款的标的、暂时不支持已经转让的标的
+     *
+     * @param $loanId
+     * @param bool $run
+     */
+    public function actionRegenerateRepayment($loanId, $run = false)
+    {
+        /**
+         * @var OnlineProduct $loan
+         */
+        $loan = OnlineProduct::find()
+            ->where(['id' => $loanId])
+            ->andWhere(['in', 'status', [2,3,5,7]])
+            ->andWhere('jixi_time is not null')
+            ->andWhere(['is_jixi' => true])
+            ->one();
+        if(is_null($loan)) {
+            throw new \Exception('没有找到符合条件标的');
+        }
+
+        $plan = OnlineRepaymentPlan::find()
+            ->where(['online_pid' => $loan->id])
+            ->andWhere(['in', 'status', [1, 2]])
+            ->one();
+        if (!is_null($plan)) {
+            throw new \Exception('暂时不支持已经还过款的标的');
+        }
+        $plan = OnlineRepaymentPlan::find()
+            ->where(['online_pid' => $loan->id])
+            ->andWhere('asset_id is not null')
+            ->one();
+        if (!is_null($plan)) {
+            throw new \Exception('暂时不支持已经转让的标的');
+        }
+        $this->stdout("标的状态正常，可以进行重新计息操作 \n");
+        $plans = OnlineRepaymentPlan::find()->where(['online_pid' => $loan->id])->all();
+        $repayments = Repayment::find()->where(['loan_id' => $loan->id])->all();
+        $plansCount = count($plans);
+        $repaymentsCount = count($repayments);
+        $this->stdout("即将删除 online_repayment_plan 记录条数为 {$plansCount} 条， 即将删除 repayment 记录条数为 {$repaymentsCount} 条 \n");
+
+        if ($run) {
+            $deletePlanCount = 0;
+            $deleteRepaymentCount = 0;
+            /**
+             * @var OnlineRepaymentPlan $plan
+             * @var Repayment   $repayment
+             */
+            foreach ($plans as $plan) {
+                file_put_contents('/tmp/online_product_'.$loan->id.'_plan_old.txt', json_encode($plan->attributes()) . "\n", FILE_APPEND);
+                $plan->delete();
+                $deletePlanCount++ ;
+            }
+            $this->stdout("成功删除 online_repayment_plan 条数 $deletePlanCount \n");
+            foreach ($repayments as $repayment) {
+                file_put_contents('/tmp/online_product_'.$loan->id.'_repayment_old.txt', json_encode($repayment->attributes()) . "\n", FILE_APPEND);
+                $repayment->delete();
+                $deleteRepaymentCount++;
+            }
+            $this->stdout("成功删除 repayment 条数 $deleteRepaymentCount \n");
+
+
+            OnlineRepaymentPlan::saveRepayment($loan);
+
+            $this->stdout("新还款数据更新成功 \n");
+
+            $plans = OnlineRepaymentPlan::find()->where(['online_pid' => $loan->id])->all();
+            $repayments = Repayment::find()->where(['loan_id' => $loan->id])->all();
+            $plansCount = count($plans);
+            $repaymentsCount = count($repayments);
+            $this->stdout("更新后 online_repayment_plan 记录条数为 {$plansCount} 条，  repayment 记录条数为 {$repaymentsCount} 条 \n");
+        }
     }
 }

@@ -4,6 +4,7 @@ namespace common\models\order;
 
 use common\models\adminuser\AdminLog;
 use common\models\payment\Repayment;
+use common\models\user\User;
 use common\utils\SecurityUtils;
 use Wcg\DateTime\DT;
 use Wcg\Interest\Builder;
@@ -128,121 +129,135 @@ class OnlineRepaymentPlan extends \yii\db\ActiveRecord
         }
     }
 
-    public static function generatePlan(OnlineProduct $loan)
+    //保存 online_repayment_plan 和 repayment
+    public static function saveRepayment(OnlineProduct $loan)
     {
-        $pp = new ProductProcessor();
-        bcscale(14);
-        $bc = new BcRound();
-        //获取所有订单
-        $orders = OnlineOrder::find()->where(['online_pid' => $loan->id, 'status' => OnlineOrder::STATUS_SUCCESS])->all();
-
+        $orders = $loan->successOrders;
+        if (empty($orders)) {
+            throw new \Exception('没有找到成功订单');
+        }
+        $repaymentData = [];
         $transaction = Yii::$app->db->beginTransaction();
+        try {
+            foreach ($orders as $order) {
+                /**
+                 * @var  OnlineOrder $order
+                 */
+                $amountData = self::calcBenxi($order);
+                if (empty($amountData)) {
+                    throw new \Exception('还款数据不能为空');
+                }
+                foreach ($amountData as $key => $value) {
+                    $term = $key + 1;
+                    //判断还款计划是否存在
+                    $plan = OnlineRepaymentPlan::find()
+                        ->where(['order_id' => $order->id, 'uid' => $order->uid, 'qishu' => $term])
+                        ->one();
+                    if (!is_null($plan)) {
+                        continue;
+                    }
+                    $amount = bcadd($value[1], $value[2], 2);
+                    $planPrepareData = [
+                        'qishu' => $term,
+                        'benxi' => $amount,
+                        'benjin' => $value[1],
+                        'lixi' => $value[2],
+                        'refund_time' => strtotime($value[0]),
+                    ];
+                    $plan = self::initPlan($order, $planPrepareData);
+                    $plan->save(false);
+                    $repaymentData[$term] = [
+                        'amount' => isset($repayment[$term]['amount']) ? bcadd($repayment[$term]['amount'], $amount, 2) : $amount,
+                        'principal' => isset($repayment[$term]['principal']) ? bcadd($repayment[$term]['principal'], $value[1], 2) : $value[1],
+                        'interest' => isset($repayment[$term]['interest']) ? bcadd($repayment[$term]['interest'], $value[2], 2) : $value[2],
+                        'dueDate' => $value[0],
+                    ];
+                }
+            }
+            if (empty($repaymentData)) {
+                throw new \Exception('标的还款数据不能为空');
+            }
+            foreach ($repaymentData as $term => $data) {
+                $rep = new Repayment([
+                    'loan_id' => $loan->id,
+                    'term' => $term,
+                    'dueDate' => $data['dueDate'],
+                    'amount' => $data['amount'],
+                    'principal' => $data['principal'],
+                    'interest' => $data['interest'],
+                ]);
+                $rep->save(false);
+            }
+
+            $transaction->commit();
+        } catch (\Exception $e) {
+            $transaction->rollBack();
+            throw $e;
+        }
+    }
+
+    private static function updateLoanWileConfirmInterest(OnlineProduct $loan)
+    {
         $up['is_jixi'] = 1;
-        if (0 === $loan->finish_date) {
-            $finish_date = null;
-            if (OnlineProduct::REFUND_METHOD_DAOQIBENXI === (int) $loan->refund_method) {
-                $finish_date = $pp->LoanTerms('d1', date('Y-m-d', $loan->jixi_time), $loan->expires);
-            } else {
-                $finish_date = date("Y-m-d", $pp->calcRetDate($loan->expires, $loan->jixi_time));//如果由于29,30,31造成的跨月的要回归到上一个月最后一天
-            }
-            if (null !== $finish_date) {
-                $up['finish_date'] = strtotime($finish_date);
-                $loan->finish_date = $up['finish_date'];
-            }
+        if (empty($loan->finish_date)) {
+            $endDate = $loan->getEndDate();
+            $up['finish_date'] = strtotime($endDate);
+            $loan->finish_date = $up['finish_date'];
         } else {
             //有截止日期时候，项目期限=截止日期 - 起息日期 + 1
-            if (OnlineProduct::REFUND_METHOD_DAOQIBENXI === (int) $loan->refund_method) {
-                $expires = (new \DateTime(date('Y-m-d', $loan->finish_date)))->diff((new \DateTime(date('Y-m-d',$loan->jixi_time))))->days;
+            if (OnlineProduct::REFUND_METHOD_DAOQIBENXI === (int)$loan->refund_method) {
+                $expires = (new \DateTime(date('Y-m-d', $loan->finish_date)))->diff((new \DateTime(date('Y-m-d', $loan->jixi_time))))->days;
                 $loan->expires = $expires;
                 $up['expires'] = $expires;
             }
         }
         //记录标的日志
-        try {
-            $log = AdminLog::initNew(['tableName' => OnlineProduct::tableName(), 'primaryKey' => $loan->id], Yii::$app->user, $up);
-            $log->save();
-        } catch (\Exception $e) {
-            $transaction->rollBack();
+        $log = AdminLog::initNew(['tableName' => OnlineProduct::tableName(), 'primaryKey' => $loan->id], Yii::$app->user, $up);
+        $log->save(false);
+        $affectRows = OnlineProduct::updateAll($up, ['id' => $loan->id]);//修改已经计息
+        if ($affectRows < 1) {
+            throw new \Exception('更改标的数据失败');
         }
-        $res =  OnlineProduct::updateAll($up, ['id' => $loan->id]);//修改已经计息
-        if (!$res) {
-            $transaction->rollBack();
-            return false;
-        }
-        $username = '';
-        $repayment = [];
+        return $loan;
+    }
+
+    public static function generatePlan(OnlineProduct $loan)
+    {
+        //获取所有订单
+        $orders = $loan->successOrders;
         $templateId = Yii::$app->params['sms']['manbiao'];
+        $userIds = [];
+        $transaction = Yii::$app->db->beginTransaction();
+        try {
+            $loan = self::updateLoanWileConfirmInterest($loan);
+            self::saveRepayment($loan);
 
-        foreach ($orders as $ord) {
-            $needToSendSms = false;//是否需要发送短信
-            //获取每个订单的还款金额详情
-            $res_money = self::calcBenxi($ord);
-            if ($res_money) {
-                foreach ($res_money as $k => $v) {
-                    $term = $k + 1;
-                    $amount = $bc->bcround(bcadd($v[1], $v[2]), 2);
-                    $principal = $bc->bcround($v[1], 2);
-                    $interest = $bc->bcround($v[2], 2);
-                    //判断指定还款计划没有被生成过
-                    $plan = OnlineRepaymentPlan::findOne(['order_id' => $ord->id, 'qishu' => $term]);
-                    if ($plan) {
-                        continue;
-                    }
-                    //生成还款计划
-                    $initplan = [
-                        'qishu' => $term,
-                        'benxi' => $amount,
-                        'benjin' => $principal,
-                        'lixi' => $interest,
-                        'refund_time' => strtotime($v[0]),
-                    ];
-                    $plan = self::initPlan($ord, $initplan);
-                    if (!$plan->save()) {
-                        $transaction->rollBack();
-                        return false;
-                    }
-                    //统计还款数据
-                    $totalAmount = isset($repayment[$term]['amount']) ? bcadd($repayment[$term]['amount'], $amount) : $amount;
-                    $totalPrincipal = isset($repayment[$term]['principal']) ? bcadd($repayment[$term]['principal'], $principal) : $principal;
-                    $totalInterest = isset($repayment[$term]['interest']) ? bcadd($repayment[$term]['interest'], $interest) : $interest;
-                    $repayment[$term] = ['amount' => $totalAmount, 'principal' => $totalPrincipal, 'interest' => $totalInterest, 'dueDate' => $v[0]];
-                    $needToSendSms = true;
-                }
-            }
-
-            if ($username != $ord->username && $needToSendSms) {
+            foreach ($orders as $order) {
+                /**
+                 * @var OnlineOrder $order
+                 * @var User $user
+                 */
+                $user = $order->user;
                 $message = [
-                    $ord->username,
+                    $user->getName(),
                     $loan->title,
                     date('Y-m-d', $loan->jixi_time),
                     Yii::$app->params['contact_tel'],
                 ];
-                SmsService::send(SecurityUtils::decrypt($ord->user->safeMobile), $templateId, $message, $ord->user);
+                //已经发过短信的用户不重复发送短信
+                if (in_array($order->uid, $userIds)) {
+                    continue;
+                }
+                SmsService::send($user->getMobile(), $templateId, $message, $user);
+                $userIds[] = $order->uid;
             }
-            $username = $ord->username;
-        }
 
-        if (empty($repayment)) {
+            $transaction->commit();
+            return true;
+        } catch (\Exception $e) {
             $transaction->rollBack();
             return false;
         }
-
-        foreach ($repayment as $key => $val) {
-            $rep = new Repayment([
-                'loan_id' => $loan->id,
-                'term' => $key,
-                'dueDate' => $val['dueDate'],
-                'amount' => $val['amount'],
-                'principal' => $val['principal'],
-                'interest' => $val['interest'],
-            ]);
-            if (!$rep->save()) {
-                $transaction->rollBack();
-                return false;
-            }
-        }
-        $transaction->commit();
-        return true;
     }
 
     /**
