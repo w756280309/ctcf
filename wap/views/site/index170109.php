@@ -65,11 +65,11 @@ $this->registerJsFile(ASSETS_BASE_URI . 'js/swiper.min.js', ['depends' => Jquery
             <div class="charity-box">
                 <div class="charity-top clearfix">
                     <div class="charity-content charity-content-lf lf">
-                        <p class="word">平台累计捐赠：</p>
-                        <p class="number" id="totalCharityAount"></p>
+                        <p class="word f15">平台累计捐赠：</p>
+                        <p class="number f20" id="totalCharityAount"></p>
                     </div>
                     <div class="charity-content charity-content-rg rg">
-                        <p class="word">温州市慈善总会<span class="space"></span>温州都市报分会<br/>设立<span class="space2"></span><i class="red-txt">"温都金服慈善公益基金"</i></p>
+                        <p class="word f12">温州市慈善总会&nbsp;&nbsp;温州都市报分会设立<i class="red-txt">"温都金服慈善公益基金"</i></p>
                     </div>
                 </div>
                 <div class="charity-bottom">

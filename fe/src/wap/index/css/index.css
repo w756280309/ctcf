@@ -457,8 +457,7 @@ a.special-bar:active {
     border-bottom:1px solid #ddd;
 }
 .charity-box .charity-top .charity-content {
-    width: 4.48rem;
-    height:1.2rem;
+    width: 49%;
 }
 .charity-box .charity-top-txt {
     margin: 0 0.5rem;
@@ -484,35 +483,23 @@ a.special-bar:active {
 .charity-box .charity-top .charity-content-lf {
     text-align: left;
     border-right: 1px solid #ddd;
-    box-sizing: border-box;
 }
 .charity-box .charity-top .charity-content-rg {
     text-align: right;
-}
-.charity-box .charity-top .charity-content-rg .space {
-    width: .07rem;
-    display: inline-block;
-}
-.charity-box .charity-top .charity-content-rg .space2 {
-    width: .14rem;
-    display: inline-block;
+    width:50%;
 }
 .charity-box .charity-top .charity-content .word{
     height: 0.4rem;
     line-height: 0.4rem;
     color: #666;
-    font-size: 0.4rem;
 }
 .charity-box .charity-top .charity-content .number{
-    height: 0.8rem;
     line-height: 0.8rem;
-    font-size: 0.56rem;
     color: #f1453d;
 }
 .charity-box .charity-top .charity-content-rg .word {
     margin-top: 0.1rem;
     line-height: 0.5rem;
-    font-size: 0.3rem;
 }
 .charity-box .charity-top .charity-content-rg .red-txt {
     font-style: normal;
@@ -1051,21 +1038,18 @@ footer span {
 }
 .footer-inner{
     display: block;
-    width: 30px;
     height: 100%;
     margin: 0 auto;
     cursor: pointer;
 }
 .footer-inner1{
     display: block;
-    width: 30px;
     height: 100%;
     margin: 0 auto;
     cursor: pointer;
 }
 .footer-inner2{
     display: block;
-    width: 30px;
     height: 100%;
     margin: 0 auto;
     cursor: pointer;
