@@ -130,8 +130,12 @@ $this->registerCssFile(ASSETS_BASE_URI.'css/setting.css?v=20170103', ['depends' 
             var money = $('#money').val();
             var couponCount = '<?= count($coupons) ?>';
 
-            if (money > 0 && '0' === couponCount) {
-                getValidCoupon(money);
+            if (money > 0) {
+                if ('0' === couponCount) {
+                    getValidCoupon(money);
+                }
+            } else {
+                resetCoupon();
             }
 
             $('#money').on('keyup', function () {
