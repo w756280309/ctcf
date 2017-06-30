@@ -37,7 +37,7 @@ class FkCore
         $total = 0;
         $coupon_amount = 0;
         foreach ($orders as $val) {
-            if ($val['userCoupon_id']) {
+            if ($val['couponAmount'] > 0) {
                 $coupon_amount = bcadd($coupon_amount, $val['couponAmount']);
             }
             $total = bcadd($total, $val['order_money']);

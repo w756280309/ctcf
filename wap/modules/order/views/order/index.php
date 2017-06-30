@@ -7,7 +7,7 @@ use yii\web\YiiAsset;
 
 $this->title = '购买';
 
-$validCouponCount = count($coupons);
+$validCouponCount = count($validCoupons);
 
 $yr = $deal->yield_rate;
 $qixian = $deal->getDuration()['value'];
@@ -62,10 +62,7 @@ $this->registerCssFile(ASSETS_BASE_URI.'css/setting.css?v=20170103', ['depends' 
         <input name="couponConfirm" id="couponConfirm" type="text" value="" hidden="hidden">
         <div class="row sm-height border-bottom" id="coupon">
             <?php if ($validCouponCount) { ?>
-                <?php
-                    $coupon = isset($coupons[$userCouponId]) ? $coupons[$userCouponId] : current($coupons);
-                    echo $this->renderFile('@app/modules/user/views/coupon/_valid_coupon.php', ['coupon' => 0 === $userCouponId ? null : $coupon]);
-                ?>
+                <?= $this->renderFile('@app/modules/user/views/coupon/_valid_coupon.php', ['coupons' => $coupons]) ?>
             <?php } else { ?>
                 <div class="col-xs-4 safe-txt text-align-ct">使用代金券</div>
                 <div class="col-xs-8 safe-txt">无可用</div>
@@ -119,16 +116,27 @@ $this->registerCssFile(ASSETS_BASE_URI.'css/setting.css?v=20170103', ['depends' 
             $.get('/user/coupon/del-coupon?sn=<?= $deal->sn ?>');
         }
 
+        function getValidCoupon(money) {
+            var xhr = $.get('/user/coupon/valid-for-loan?sn=<?= $deal->sn ?>&money='+money, function (data) {
+                $('#coupon').html(data);
+
+                profit($('#money'));
+            });
+        }
+
         $(function () {
+            var money = $('#money').val();
+            var couponCount = '<?= count($coupons) ?>';
+
+            if (money > 0 && '0' === couponCount) {
+                getValidCoupon(money);
+            }
+
             $('#money').on('keyup', function () {
                 var money = $(this).val();
 
                 if (money > 0) {
-                    $.get('/user/coupon/valid-for-loan?sn=<?= $deal->sn ?>&money='+money, function (data) {
-                        $('#coupon').html(data);
-
-                        profit($('#money'));
-                    });
+                    getValidCoupon(money);
                 } else {
                     profit($('#money'));
                 }

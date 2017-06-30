@@ -157,35 +157,40 @@ class DealController extends BaseController
     public function actionCheck($sn)
     {
         $deal = $this->findOr404(OnlineProduct::class, ['sn' => $sn]);
-
         $money = Yii::$app->request->post('money');
         $couponId = Yii::$app->request->post('couponId');
         $couponConfirm = Yii::$app->request->post('couponConfirm');
-        $user = $this->getAuthedUser();
-
+        $couponMoney = 0;
         $coupon = null;
-        if ($deal->allowUseCoupon && $couponId) {
-            $coupon = UserCoupon::findOne($couponId);
-            if (null === $coupon) {
-                return ['code' => 1, 'message' => '无效的代金券'];
-            }
-        }
+        $user = $this->getAuthedUser();
 
         //未登录时候保存购买数据
         if (null === $user) {
             Yii::$app->session['detail_' . $sn . '_data'] = ['money' => $money];
             return ['code' => 1, 'message' => '请登录', 'tourl' => '/site/login'];
         }
+        if ($deal->allowUseCoupon && $couponId) {
+            $coupon = UserCoupon::findOne($couponId);
+            $couponType = $coupon->couponType;
+            try {
+                if (null === $coupon || null === $couponType) {
+                    throw new \Exception('无效的代金券');
+                }
+                UserCoupon::checkAllowUse($coupon, $money, $user, $deal);
+            } catch (\Exception $ex) {
+                return ['code' => 1, 'message' => $ex->getMessage()];
+            }
+            $couponMoney = $couponType->amount;
+        }
 
         $pay = new PayService(PayService::REQUEST_AJAX);
-        $ret = $pay->checkAllowPay($user, $sn, $money, $coupon, 'pc');
+        $ret = $pay->checkAllowPay($user, $sn, $money, $couponMoney, 'pc');
         if ($ret['code'] != PayService::ERROR_SUCCESS) {
             return $ret;
         }
 
         if ($deal->allowUseCoupon) {
             $validCoupons = UserCoupon::fetchValid($user, null, $deal);
-
             if (!empty($validCoupons) && '1' !== $couponConfirm) {
                 return ['code' => 1, 'message' => '', 'confirm' => 1];
             }

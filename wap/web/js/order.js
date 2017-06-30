@@ -64,12 +64,12 @@ function order() {
 }
 
 function openPopup() {
-    var couponId = $('#couponId').val();
-    var couponMoney = $('#couponMoney').val();
+    var count = $('#selectedCouponCount').val();
+    var amount = $('#selectedCouponAmount').val();
     var message = '';
 
-    if ('undefined' !== typeof couponId) {
-        message = '您有'+validCouponCount+'张代金券可用，将使用'+WDJF.numberFormat(couponMoney, true)+'元代金券一张，点击确定立即投资';
+    if ('undefined' !== typeof count) {
+        message = '您有'+validCouponCount+'张代金券可用，目前已选择'+count+'张代金券可抵扣'+WDJF.numberFormat(amount, true)+'元投资';
     } else {
         message = '您有'+validCouponCount+'张代金券可用，本次未使用代金券抵扣，点击确定立即投资';
     }

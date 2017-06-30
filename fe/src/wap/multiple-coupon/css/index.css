@@ -1,0 +1,119 @@
+body {
+  background-color: #ededed;
+}
+.flex-content .topTitle {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  max-width: 10rem;
+}
+.flex-content .coupon-remind {
+  line-height: 1.04rem;
+  margin-top: 1.65rem;
+  font-size: 0.34666667rem;
+  color: #9b9b9b;
+  text-align: center;
+}
+.flex-content .coupon-remind span {
+  color: #333;
+}
+.flex-content .coupon-list {
+  width: 100%;
+  padding: 0 0.2rem 1.6rem;
+}
+.flex-content .coupon-list .coupons {
+  width: 9.57333333rem;
+  height: 3.41333333rem;
+  padding: 0 0.2rem;
+}
+.flex-content .coupon-list .coupons .coupon-lf {
+  width: 2.77333333rem;
+  height: 3.04rem;
+  padding-top: 0.74666667rem;
+  text-align: center;
+}
+.flex-content .coupon-list .coupons .coupon-lf .coupon-number {
+  height: 0.8rem;
+  line-height: 0.8rem;
+  font-size: 0.46666667rem;
+}
+.flex-content .coupon-list .coupons .coupon-lf .coupon-number .coupon-shu {
+  font-size: 0.77333333rem;
+  font-weight: bolder;
+}
+.flex-content .coupon-list .coupons .coupon-lf .coupon-condition {
+  height: 0.32rem;
+  line-height: 0.32rem;
+  margin-top: 0.42666667rem;
+  font-size: 0.32rem;
+}
+.flex-content .coupon-list .coupons .coupon-rg {
+  width: 6.4rem;
+  height: 3.04rem;
+  padding-left: 0.44rem;
+  padding-top: 0.4rem;
+}
+.flex-content .coupon-list .coupons .coupon-rg .coupon-title {
+  height: 0.4rem;
+  line-height: 0.4rem;
+  font-size: 0.4rem;
+  font-weight: bolder;
+}
+.flex-content .coupon-list .coupons .coupon-rg .coupon-limited {
+  height: 0.32rem;
+  line-height: 0.32rem;
+  font-size: 0.32rem;
+  margin-top: 0.76rem;
+}
+.flex-content .coupon-list .coupons .coupon-rg .coupon-date {
+  height: 0.34666667rem;
+  line-height: 0.34666667rem;
+  font-size: 0.34666667rem;
+  margin-top: 0.44rem;
+}
+.flex-content .coupon-list .coupons-off {
+  background: url("../images/coupon_1.png") no-repeat;
+  background-size: contain;
+}
+.flex-content .coupon-list .coupons-off .coupon-lf .coupon-number {
+  color: #fa3e5d;
+}
+.flex-content .coupon-list .coupons-off .coupon-lf .coupon-condition {
+  color: #000;
+}
+.flex-content .coupon-list .coupons-off .coupon-rg {
+  color: #000;
+}
+.flex-content .coupon-list .coupons-on {
+  background: url("../images/coupon_2.png") no-repeat;
+  background-size: contain;
+}
+.flex-content .coupon-list .coupons-on .coupon-lf {
+  color: #fff;
+}
+.flex-content .coupon-list .coupons-on .coupon-rg {
+  color: #fff;
+}
+.flex-content .coupon-button {
+  position: fixed;
+  bottom: 0;
+  display: block;
+  width: 100%;
+  max-width: 10rem;
+  height: 1.30666667rem;
+  color: #fff;
+  background-color: #f44336;
+  text-align: center;
+}
+.flex-content .coupon-button .btn-line1 {
+  height: 0.4rem;
+  line-height: 0.4rem;
+  margin-top: 0.24rem;
+  font-size: 0.4rem;
+}
+.flex-content .coupon-button .btn-line2 {
+  height: 0.34666667rem;
+  line-height: 0.34666667rem;
+  margin-top: 0.12rem;
+  font-size: 0.34666667rem;
+}

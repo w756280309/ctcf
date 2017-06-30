@@ -2,6 +2,7 @@
 
 namespace common\models\order;
 
+use common\models\coupon\CouponType;
 use common\models\message\OrderMessage;
 use common\models\product\OnlineProduct;
 use common\models\promo\PromoService;
@@ -272,11 +273,6 @@ class OrderManager
         }
         $bcrond = new BcRound();
         $loan = Loan::findOne($order->online_pid);
-
-        $coupon = UserCoupon::findOne(['order_id' => $order->id]);
-        if ($coupon && $coupon->id !== intval($order->userCoupon_id)) {
-            throw new Exception("代金券使用异常");
-        }
         $user = $order->user;
         $ua = $user->type === User::USER_TYPE_PERSONAL ? $user->lendAccount : false;//当前限制投资人进行投资
 
@@ -414,100 +410,116 @@ class OrderManager
     /**
      * 创建用户标的订单.
      */
-    public function createOrder($sn = null, $price = null, $uid = null, UserCoupon $coupon = null, $investFrom = 0)
+    public function createOrder($sn = null, $price = null, $couponIds = [], $uid = null, $investFrom = 0)
     {
-        if (empty($sn)) {
-            return ['code' => PayService::ERROR_LAW, 'message' => '缺少参数'];   //参数为空,抛出错误信息
-        }
+        //生成本地订单
+        try {
+            if (empty($sn)) {
+                throw new \Exception('缺少参数', PayService::ERROR_LAW);
+            }
 
-        $model = Loan::findOne(['sn' => $sn]);
-        if (null === $model) {
-            return ['code' => PayService::ERROR_SYSTEM, 'message' => '找不到标的信息'];   //对象为空,抛出错误信息
-        }
+            $model = Loan::findOne(['sn' => $sn]);
+            if (null === $model) {
+                throw new \Exception('找不到标的信息', PayService::ERROR_SYSTEM);
+            }
 
-        $user = User::findOne($uid);
-        $order = new OnlineOrder();
-        $order->investFrom = $investFrom;
-        $order->order_money = $price;
-        $order->uid = $uid;
-        $time = time();
-        bcscale(14);
+            $user = User::findOne($uid);
+            if (null === $user) {
+                throw new \Exception('找不到用户信息', PayService::ERROR_SYSTEM);
+            }
 
-        $order->sn = OnlineOrder::createSN();
-        $order->online_pid = $model->id;
-        $order->order_time = $time;
-        $order->refund_method = $model->refund_method;
-        $order->yield_rate = $model->yield_rate;
-        $order->expires = $model->expires;
-        $order->username = $user->real_name;
-
-        if ($coupon) {
-            $order->userCoupon_id = $coupon->id;
-            $order->couponAmount = $coupon->couponType->amount;
-            $order->paymentAmount = bcsub($price, $order->couponAmount, 2);
-        } else {
-            $order->userCoupon_id = 0;
-            $order->couponAmount = 0;
+            $order = new OnlineOrder();
+            $source = Yii::$app->request->cookies->getValue('campaign_source');
+            $order->investFrom = $investFrom;
+            $order->order_money = $price;
+            $order->uid = $uid;
+            $order->sn = OnlineOrder::createSN();
+            $order->online_pid = $model->id;
+            $order->order_time = time();
+            $order->refund_method = $model->refund_method;
+            $order->yield_rate = $model->yield_rate;
+            $order->expires = $model->expires;
+            $order->username = $user->real_name;
             $order->paymentAmount = $price;
-        }
-
-        if (Yii::$app->request->cookies->getValue('campaign_source')) {
-            $order->campaign_source = Yii::$app->request->cookies->getValue('campaign_source');
-        }
-        if (!$order->validate()) {
-            return ['code' => PayService::ERROR_MONEY_FORMAT,  'message' => current($order->firstErrors)];
-        }
-        $ore = $order->save(false);
-        if (!$ore) {
+            $order->couponAmount = '0.00';
+            if (null !== $source) {
+                $order->campaign_source = $source;
+                (new AffiliationManager())->log($source, $order);
+            }
+            if (!$order->validate()) {
+                throw new \Exception(current($order->firstErrors), PayService::ERROR_MONEY_FORMAT);
+            }
+            $order->save(false);
+        } catch (\Exception $ex) {
             return [
-                'code' => PayService::ERROR_ORDER_CREATE,
-                'message' => PayService::getErrorByCode(PayService::ERROR_ORDER_CREATE),
+                'code' => is_int($ex->getCode()) ? $ex->getCode() : PayService::ERROR_ORDER_CREATE,
+                'message' => $ex->getMessage(),
             ];
         }
-        $transaction = Yii::$app->db->beginTransaction();
-        if ($coupon) {
-            $coupon->order_id = $order->id;
-            $coupon->isUsed = 1;
-            if (!$coupon->save(false)) {
+
+        //代金券绑定 todo 可讨论此处是否可封装
+        $couponAmount = 0;
+        if (!empty($couponIds)) {
+            $db = Yii::$app->db;
+            $transaction = $db->beginTransaction();
+            //循环带状态order_id=null,isUsed=false，单个update
+            try {
+                foreach ($couponIds as $id) {
+                    $sql = "update user_coupon set isUsed = :isUsed,order_id = :orderId where order_id is null and isUsed = false and id = :id";
+                    $affectedRows = $db->createCommand($sql, [
+                        'isUsed' => true,
+                        'orderId' => $order->id,
+                        'id' => $id,
+                    ])->execute();
+                    if (!$affectedRows) {
+                        throw new \Exception('代金券使用异常！');
+                    }
+                    $userCoupon = UserCoupon::findOne($id);
+                    $amount = $userCoupon->couponType->amount;
+                    $couponAmount = bcadd($couponAmount, $amount, 2);
+                }
+                $order->couponAmount = $couponAmount;
+                $order->paymentAmount = bcsub($order->order_money, $couponAmount, 2);
+                $order->save(false);
+                $transaction->commit();
+
+            } catch (\Exception $ex) {
                 $transaction->rollBack();
-                return ['code' => PayService::ERROR_SYSTEM, 'message' => '代金券使用异常'];
+                return [
+                    'code' => PayService::ERROR_ORDER_CREATE,
+                    'message' => '代金券使用异常！',
+                ];
             }
         }
 
-        //免密逻辑处理
-        $res = Yii::$container->get('ump')->orderNopass($order);
+        //请求联动，免密逻辑处理
         $errmsg = '';
-
-        if ($res->isSuccessful()) {
-            if (Yii::$app->request->cookies->getValue('campaign_source')) {
-                (new AffiliationManager())->log(Yii::$app->request->cookies->getValue('campaign_source'), $order);
-            }
-            try {
+        $flag = false;
+        try {
+            $res = Yii::$container->get('ump')->orderNopass($order);
+            if ($res->isSuccessful()) {
                 if (null === OrderQueue::findOne(['orderSn' => $order->sn])) {
                     OrderQueue::initForQueue($order)->save();
                 }
-                $transaction->commit();
-
                 return [
                     'code' => PayService::ERROR_SUCCESS,
                     'message' => '',
                     'tourl' => '/order/order/wait?osn='.$order->sn
                 ];
-            } catch (\Exception $ex) {
-                $errmsg = $ex->getMessage();
+            } else {
+                $errmsg = $res->get('ret_msg');
+                $flag = true;
             }
-        } else {
-            $errmsg = $res->get('ret_msg');
+        } catch (\Exception $ex) {
+            $flag = true;
         }
 
-        if ($coupon) {
-            $coupon->order_id = null;
-            $coupon->isUsed = 0;
-            if (!$coupon->save(false)) {
-                $transaction->rollBack();
-                $errmsg = "代金券退回异常";
-            } else {
-                $transaction->commit();
+        //代金券退回
+        if ($flag && !empty($couponIds)) {
+            try {
+                UserCoupon::unuseCoupon($order);
+            } catch (\Exception $ex) {
+                $errmsg = '代金券退回异常';
             }
         }
 
