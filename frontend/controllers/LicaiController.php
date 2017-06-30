@@ -26,7 +26,7 @@ class LicaiController extends Controller
         $loans = $data->orderBy([
             'xs_status' => SORT_DESC,
             'recommendTime' => SORT_DESC,
-            'sort' => SORT_DESC,
+            'sort' => SORT_ASC,
             'raiseDays' => SORT_DESC,
             'finish_rate' => SORT_DESC,
             'raiseSn' => SORT_DESC,
