@@ -23,10 +23,17 @@ class LicaiController extends Controller
 
         $pages = new Pagination(['totalCount' => $data->count(), 'pageSize' => '10']);
 
-        $loans = $data->orderBy('xs_status desc, recommendTime desc, sort asc, finish_rate desc, isJiaxi asc, finish_date desc, id desc')
-            ->offset($pages->offset)
-            ->limit($pages->limit)
-            ->all();
+        $loans = $data->orderBy([
+            'xs_status' => SORT_DESC,
+            'recommendTime' => SORT_DESC,
+            'sort' => SORT_DESC,
+            'raiseDays' => SORT_DESC,
+            'finish_rate' => SORT_DESC,
+            'raiseSn' => SORT_DESC,
+            'isJiaxi' => SORT_ASC,
+            'finish_date' => SORT_DESC,
+            'id' => SORT_DESC,
+        ])->offset($pages->offset)->limit($pages->limit)->all();
 
         return $this->render('index', ['loans' => $loans, 'pages' => $pages]);
     }

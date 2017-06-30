@@ -15,6 +15,8 @@ class LoanFinder
             ->select('*')
             ->addSelect(['xs_status' => 'if(is_xs = 1 && status < 3, 1, 0)'])
             ->addSelect(['isJiaxi' => 'if(jiaxi > 0 && status = 6, 1, 0)'])
+            ->addSelect(['raiseDays' => 'if (status = 2, if(refund_method = 1, expires, expires * 30), 0)'])
+            ->addSelect(['raiseSn' => 'if (status = 2, id, 0)'])
             ->where([
                 'isPrivate' => 0,
                 'del_status' => OnlineProduct::STATUS_USE,

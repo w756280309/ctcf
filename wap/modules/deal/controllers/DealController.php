@@ -24,21 +24,23 @@ class DealController extends Controller
     public function actionIndex($page = 1)
     {
         $size = 5;
-
         $query = LoanFinder::queryPublicLoans();
-
         $count = $query->count();
-
         $pages = new Pagination(['totalCount' => $count, 'pageSize' => $size]);
-
-        $deals = $query->orderBy('xs_status desc, recommendTime desc, sort asc, finish_rate desc, isJiaxi asc, finish_date desc, id desc')
-            ->offset($pages->offset)
-            ->limit($pages->limit)
-            ->all();
+        $deals = $query->orderBy([
+            'xs_status' => SORT_DESC,
+            'recommendTime' => SORT_DESC,
+            'sort' => SORT_DESC,
+            'raiseDays' => SORT_DESC,
+            'finish_rate' => SORT_DESC,
+            'raiseSn' => SORT_DESC,
+            'isJiaxi' => SORT_ASC,
+            'finish_date' => SORT_DESC,
+            'id' => SORT_DESC,
+        ])->offset($pages->offset)->limit($pages->limit)->all();
 
         $tp = ceil($count / $size);
         $code = ($page > $tp) ? 1 : 0;
-
         $header = [
             'count' => intval($count),
             'size' => $size,
