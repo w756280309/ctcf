@@ -53,7 +53,7 @@ class OrderController extends BaseController
                     ->select('amount')
                     ->asArray()
                     ->all();
-            } else {
+            } elseif (!empty($validCoupons)) {
                 $coupon = current($validCoupons);
                 $coupons[] = ['amount' => $coupon->couponType->amount];
 
@@ -93,7 +93,7 @@ class OrderController extends BaseController
                 foreach ($userCouponIds as $couponId) {
                     $coupon = UserCoupon::findOne($couponId);
                     $couponType = $coupon->couponType;
-                    if (null === $couponType || null === $coupon) {
+                    if (null === $coupon || null === $couponType) {
                         throw new \Exception('未找到代金券！');
                     }
                     UserCoupon::checkAllowUse($coupon, $checkMoney, $user, $deal);
