@@ -138,6 +138,7 @@ class ProductonlineController extends BaseController
         }
         if ($loan->isCustomRepayment) {
             $loan->isJixiExamined = false;//自定义还款需要计息审核
+            $loan->allowTransfer = false;//自定义还款不支持转让
         }
 
         return $loan;
