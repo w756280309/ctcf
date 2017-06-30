@@ -131,11 +131,12 @@ class ProductonlineController extends BaseController
         if (!$loan->isNatureRefundMethod()) {  //当标的还款方式不为按自然时间付息的方式时,固定日期置为null
             $loan->paymentDay = null;
         }
+        $loan->allowTransfer = true;
+        $loan->isJixiExamined = true;
         if ($refund_method === OnlineProduct::REFUND_METHOD_DEBX) {//等额本息强制不允许转让
             $loan->allowTransfer = false;
         }
         if ($loan->isCustomRepayment) {
-            $loan->allowTransfer = false;//自定义还款不允许转让
             $loan->isJixiExamined = false;//自定义还款需要计息审核
         }
 
