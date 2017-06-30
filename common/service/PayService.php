@@ -166,7 +166,7 @@ class PayService
     /**
      * 验证是否允许支付.
      */
-    public function checkAllowPay($user, $sn = null, $money = null, $coupon = null, $channel = null)
+    public function checkAllowPay($user, $sn = null, $money = null, $couponMoney = 0, $channel = null)
     {
         if (empty($channel)) {
             $channel = 'wap';
@@ -186,17 +186,6 @@ class PayService
         }
         if (!preg_match('/^[0-9]+(\.[0-9]+)?$/', $money)) {
             return ['code' => self::ERROR_MONEY_FORMAT,  'message' => self::getErrorByCode(self::ERROR_MONEY_FORMAT)];
-        }
-
-        //代金券检验
-        $couponMoney = 0;
-        if ($coupon) {
-            $couponMoney = $coupon->couponType->amount;
-            try {
-                UserCoupon::checkAllowUse($coupon, $money, $user, $this->cdeal);
-            } catch (Exception $ex) {
-                return ['code' => 1,  'message' => $ex->getMessage()];
-            }
         }
 
         //当前标的是新手标且该用户新手标投资成功或订单队列存在未处理订单(不包括超投撤销的订单)

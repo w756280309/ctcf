@@ -222,7 +222,7 @@ class UserCoupon extends ActiveRecord
         }
 
         if (bccomp($coupon->couponType->minInvest, $money, 2) > 0) {
-            throw new Exception('代金券最低投资'.StringUtils::amountFormat2($coupon->couponType->minInvest).'元可用');
+            throw new Exception('代金券最低投资'.StringUtils::amountFormat2($coupon->couponType->minInvest).'元可用', 1);
         }
 
         return $coupon;
@@ -230,17 +230,32 @@ class UserCoupon extends ActiveRecord
 
     public static function unuseCoupon(OnlineOrder $ord)
     {
-        if ($ord->userCoupon_id) {
-            $coupon = UserCoupon::findOne($ord->userCoupon_id);
-            if (null === $coupon) {
-                throw new \Exception('无法找到代金券');
-            } elseif (!$coupon->isUsed || $coupon->order_id !== $ord->id) {
-                throw new \Exception('代金券使用异常');
+        $coupons = $ord->coupon;
+        if (!empty($coupons)) {
+            $db = \Yii::$app->db;
+            $transaction = $db->beginTransaction();
+            try {
+                $user = $ord->user;
+                $sql = "update user_coupon set order_id=:orderId,isUsed=:isUsed where isUsed=true and user_id =:userId and order_id=:curOrderId";
+                $affectedRows = $db->createCommand($sql, [
+                    'orderId' => null,
+                    'isUsed' => false,
+                    'userId' => $user->id,
+                    'curOrderId' => $ord->id,
+                ])->execute();
+                if (!$affectedRows) {
+                    throw new \Exception('代金券退回异常！');
+                }
+                $ord->couponAmount = '0.00';
+                $ord->save(false);
+            } catch (\Exception $ex) {
+                $transaction->rollBack();
+                throw $ex;
             }
-            $coupon->order_id = null;
-            $coupon->isUsed = 0;
-            return $coupon->save(false);
+            $transaction->commit();
+            return true;
         }
+
         return true;
     }
 

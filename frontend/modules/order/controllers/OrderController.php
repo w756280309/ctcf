@@ -6,6 +6,7 @@ use common\controllers\ContractTrait;
 use common\models\coupon\UserCoupon;
 use common\models\order\OnlineOrder;
 use common\models\order\OrderManager;
+use common\models\product\OnlineProduct;
 use common\service\PayService;
 use frontend\controllers\BaseController;
 use Yii;
@@ -36,22 +37,32 @@ class OrderController extends BaseController
      */
     public function actionDoorder($sn)
     {
-        if (empty($sn)) {
+        if (empty($sn) || (null === ($deal = OnlineProduct::findOne(['sn' => $sn])))) {
             throw $this->ex404();   //判断参数无效时,抛404异常
         }
         $money = \Yii::$app->request->post('money');
         $coupon_id = \Yii::$app->request->post('couponId');
         $coupon = null;
+        $couponIds = [];
+        $couponMoney = 0;
+        $user = $this->getAuthedUser();
         if ($coupon_id) {
             $coupon = UserCoupon::findOne($coupon_id);
-            if (null === $coupon) {
-                return ['code' => 1, 'message' => '无效的代金券'];
+            $couponType = $coupon->couponType;
+            try {
+                if (null === $coupon || null === $couponType) {
+                    throw new \Exception('无效的代金券');
+                }
+                UserCoupon::checkAllowUse($coupon, $money, $user, $deal);
+            } catch (\Exception $ex) {
+                return ['code' => 1, 'message' => $ex->getMessage()];
             }
+            array_push($couponIds, $coupon_id);
+            $couponMoney = $couponType->amount;
         }
 
-        $user = $this->getAuthedUser();
         $pay = new PayService(PayService::REQUEST_AJAX);
-        $ret = $pay->checkAllowPay($user, $sn, $money, $coupon, 'pc');
+        $ret = $pay->checkAllowPay($user, $sn, $money, $couponMoney, 'pc');
         if ($ret['code'] != PayService::ERROR_SUCCESS) {
             return $ret;
         }
@@ -65,7 +76,7 @@ class OrderController extends BaseController
         if ($this->fromWx()) {
             $investFrom = OnlineOrder::INVEST_FROM_WX;
         }
-        return $orderManager->createOrder($sn, $money, $user->id, $coupon, $investFrom);
+        return $orderManager->createOrder($sn, $money, $couponIds, $user->id, $investFrom);
     }
 
     /**

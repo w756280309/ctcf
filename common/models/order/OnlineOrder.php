@@ -2,6 +2,7 @@
 
 namespace common\models\order;
 
+use common\models\coupon\UserCoupon;
 use common\models\epay\EpayUser;
 use common\models\product\OnlineProduct;
 use common\models\user\MoneyRecord;
@@ -87,7 +88,7 @@ class OnlineOrder extends ActiveRecord implements OrderTxInterface
             [['order_money'], 'required'],
             ['drawpwd', 'trim'],
             ['drawpwd', 'validatePassword'],
-            [['online_pid', 'order_time', 'uid', 'status', 'userCoupon_id', 'investFrom'], 'integer'],
+            [['online_pid', 'order_time', 'uid', 'status', 'investFrom'], 'integer'],
             [['order_money', 'couponAmount', 'paymentAmount'], 'number'],
             [['sn'], 'string', 'max' => 30],
             [['campaign_source'], 'string', 'max' => 50],
@@ -392,5 +393,10 @@ class OnlineOrder extends ActiveRecord implements OrderTxInterface
             $this->baoquanＤownloadLink = is_null($baoQuan) ? null : Client::contractFileDownload($baoQuan);
         }
         return $this->baoquanＤownloadLink;
+    }
+
+    public function getCoupon()
+    {
+        return $this->hasMany(UserCoupon::className(), ['order_id' => 'id']);
     }
 }

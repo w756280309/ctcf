@@ -5,6 +5,7 @@ namespace app\modules\order\controllers;
 use app\controllers\BaseController;
 use common\action\loan\ExpectProfitLoan;
 use common\controllers\ContractTrait;
+use common\models\coupon\CouponType;
 use common\models\coupon\UserCoupon;
 use common\models\order\OnlineOrder;
 use common\models\order\OrderManager;
@@ -26,45 +27,46 @@ class OrderController extends BaseController
     /**
      * 认购页面.
      */
-    public function actionIndex()
+    public function actionIndex($sn)
     {
-        $request = array_replace([
-            'sn' => null,
-            'money' => null,
-            'userCouponId' => null,
-        ], Yii::$app->request->get());
-
-        if (empty($request['sn']) || !preg_match('/^[A-Za-z0-9]+$/', $request['sn'])) {
+        if (!preg_match('/^[A-Za-z0-9]+$/', $sn)) {
             throw $this->ex404();
         }
 
-        if (empty($request['money']) || !preg_match('/^[0-9|.]+$/', $request['money'])) {
-            $request['money'] = null;
-        }
-
-        if (empty($request['userCouponId']) || !preg_match('/^[0-9]+$/', $request['userCouponId'])) {
-            $request['userCouponId'] = null;
-        }
-
-        $deal = $this->findOr404(OnlineProduct::class, ['sn' => $request['sn']]);
+        $deal = $this->findOr404(OnlineProduct::class, ['sn' => $sn]);
         $user = $this->getAuthedUser();
+        $money = Yii::$app->session->getFlash('order_money');
         $coupons = [];
+        $validCoupons = [];
 
         if ($deal->allowUseCoupon) {
-            $coupons = UserCoupon::fetchValid($user, null, $deal);
-        }
+            $validCoupons = UserCoupon::fetchValid($user, null, $deal);
 
-        $session = Yii::$app->session->get('loan_'.$deal->sn.'_coupon');
-        if (isset($session['couponId'])) {
-            $request['userCouponId'] = $session['couponId'];
+            if (Yii::$app->session->has('loan_'.$deal->sn.'_coupon')) {
+                $c = CouponType::tableName();
+                $uc = UserCoupon::tableName();
+                $session = Yii::$app->session->get('loan_'.$deal->sn.'_coupon');
+
+                $coupons = UserCoupon::find()
+                    ->innerJoin($c, "$c.id = $uc.couponType_id")
+                    ->where(["$uc.id" => $session['couponId']])
+                    ->select('amount')
+                    ->asArray()
+                    ->all();
+            } else {
+                $coupon = current($validCoupons);
+                $coupons[] = ['amount' => $coupon->couponType->amount];
+
+                Yii::$app->session->set('loan_'.$deal->sn.'_coupon', ['couponId' => [$coupon->id]]);
+            }
         }
 
         return $this->render('index', [
             'deal' => $deal,
             'user' => $user,
             'coupons' => $coupons,
-            'userCouponId' => $request['userCouponId'],
-            'money' => $request['money'],
+            'validCoupons' => $validCoupons,
+            'money' => $money,
         ]);
     }
 
@@ -74,23 +76,32 @@ class OrderController extends BaseController
     public function actionDoorder($sn)
     {
         $deal = $this->findOr404(OnlineProduct::class, ['sn' => $sn]);
-
         $money = Yii::$app->request->post('money');
-        $userCouponId = Yii::$app->request->post('couponId');
+        $session = Yii::$app->session->get('loan_'.$deal->sn.'_coupon');
+        $userCouponIds = isset($session['couponId']) ? $session['couponId'] : [];
         $couponConfirm = Yii::$app->request->post('couponConfirm');
-
         $user = $this->getAuthedUser();
+        $pay = new PayService(PayService::REQUEST_AJAX);
 
-        $coupon = null;
-        if ($deal->allowUseCoupon && !empty($userCouponId)) {
-            $coupon = UserCoupon::findOne($userCouponId);
-            if (null === $coupon) {
-                return ['code' => 1,  'message' => '无效的代金券'];
+        //检验代金券的使用
+        $couponMoney = 0;
+        try {
+            $checkMoney = $money;
+            foreach ($userCouponIds as $couponId) {
+                $coupon = UserCoupon::findOne($couponId);
+                $couponType = $coupon->couponType;
+                if (null === $couponType || null === $coupon) {
+                    throw new \Exception('未找到代金券！');
+                }
+                UserCoupon::checkAllowUse($coupon, $checkMoney, $user, $deal);
+                $couponMoney = bcadd($couponMoney, $couponType->amount, 2);
+                $checkMoney = bcsub($checkMoney, $couponType->minInvest, 2);
             }
+        } catch (\Exception $ex) {
+            return ['code' => 1,  'message' => $ex->getMessage()];
         }
 
-        $pay = new PayService(PayService::REQUEST_AJAX);
-        $ret = $pay->checkAllowPay($user, $sn, $money, $coupon);
+        $ret = $pay->checkAllowPay($user, $sn, $money, $couponMoney);
         if ($ret['code'] != PayService::ERROR_SUCCESS) {
             return $ret;
         }
@@ -106,18 +117,17 @@ class OrderController extends BaseController
         $orderManager = new OrderManager();
         //记录订单来源
         $investFrom = OnlineOrder::INVEST_FROM_WAP;
-
         if (defined('IN_APP') && IN_APP) {
             $investFrom = OnlineOrder::INVEST_FROM_APP;
         }
-
         if ($this->fromWx()) {
             $investFrom  = OnlineOrder::INVEST_FROM_WX;
         }
 
-        Yii::$app->session->destroySession('loan_'.$deal->sn.'_coupon');
+        //删除选中的session
+        Yii::$app->session->remove('loan_'.$deal->sn.'_coupon');
 
-        return $orderManager->createOrder($sn, $money,  $user->id, $coupon, $investFrom);
+        return $orderManager->createOrder($sn, $money, $userCouponIds, $user->id, $investFrom);
     }
 
     /**
