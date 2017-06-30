@@ -37,6 +37,7 @@ class OrderController extends BaseController
         $user = $this->getAuthedUser();
         $money = Yii::$app->session->getFlash('order_money');
         $coupons = [];
+        $validCoupons = [];
 
         if ($deal->allowUseCoupon) {
             $validCoupons = UserCoupon::fetchValid($user, null, $deal);

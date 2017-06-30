@@ -3,7 +3,7 @@
 use common\utils\StringUtils;
 
 $this->title = '可用代金券';
-$replaceUrl = Yii::$app->request->referrer;
+$replaceUrl = \Yii::$app->request->referrer;
 
 ?>
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/wenjfbase.css">
@@ -18,10 +18,12 @@ $replaceUrl = Yii::$app->request->referrer;
 <script src="<?= ASSETS_BASE_URI ?>js/page.js"></script>
 
 <div class="flex-content">
-    <div class="topTitle f18">
-        <img class="goback lf" src="<?= FE_BASE_URI ?>wap/multiple-coupon/images/back.png" alt="" onclick="location.replace('<?= $replaceUrl ?>')">
-        选择代金券
-    </div>
+    <?php if (!defined('IN_APP')) : ?>
+        <div class="topTitle f18">
+            <img class="goback lf" src="<?= FE_BASE_URI ?>wap/multiple-coupon/images/back.png" alt="" onclick="location.replace('<?= $replaceUrl ?>')">
+            可用代金券
+        </div>
+    <?php endif; ?>
 
     <?php if (!empty($selectedCoupon)) : ?>
         <p class="coupon-remind coupon-remind1">已选<span class="coupon-remind-number"><?= $couponCount ?></span>张代金券，可抵扣<span
@@ -34,7 +36,12 @@ $replaceUrl = Yii::$app->request->referrer;
         <?= $this->render('_valid_list', ['coupons' => $coupons, 'sn' => $sn, 'selectedCoupon' => $selectedCoupon]) ?>
         <div class="load"></div>
     </ul>
-    <a href="javascript:void(0)" onclick="location.replace('<?= $replaceUrl ?>')" class="coupon-button">
+
+    <?php if (defined('IN_APP')) : ?>
+        <a href="javascript:void(0)" onclick="history.go(-1)" class="coupon-button">
+    <?php else : ?>
+        <a href="javascript:void(0)" onclick="location.replace('<?= $replaceUrl ?>')" class="coupon-button">
+    <?php endif; ?>
         <p class="btn-line1">确认选择</p>
         <p class="btn-line2">（已选<?= $couponCount ?>张，可抵扣<?= StringUtils::amountFormat2($couponMoney) ?>元投资）</p>
     </a>
