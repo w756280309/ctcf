@@ -5,6 +5,8 @@ use common\utils\StringUtils;
 $this->title = '可用代金券';
 $replaceUrl = \Yii::$app->request->referrer;
 
+$inApp = defined('IN_APP');
+
 ?>
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/wenjfbase.css">
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/activeComHeader.css">
@@ -17,40 +19,34 @@ $replaceUrl = \Yii::$app->request->referrer;
 </script>
 <script src="<?= ASSETS_BASE_URI ?>js/page.js"></script>
 
-<div class="topTitle f18">
-    <img class="goback lf" src="<?= FE_BASE_URI ?>wap/multiple-coupon/images/back.png" alt="" onclick="location.replace('<?= $replaceUrl ?>')">
-    选择代金券
-</div>
-<div class="flex-content">
-    <?php if (!defined('IN_APP')) : ?>
-        <div class="topTitle f18">
-            <img class="goback lf" src="<?= FE_BASE_URI ?>wap/multiple-coupon/images/back.png" alt="" onclick="location.replace('<?= $replaceUrl ?>')">
-            可用代金券
-        </div>
-    <?php endif; ?>
+<?php if (!$inApp) : ?>
+    <div class="topTitle f18">
+        <img class="goback lf" src="<?= FE_BASE_URI ?>wap/multiple-coupon/images/back.png" alt="" onclick="location.replace('<?= $replaceUrl ?>')">
+        可用代金券
+    </div>
+<?php endif; ?>
 
-    <?php if (!empty($selectedCoupon)) : ?>
-        <p class="coupon-remind coupon-remind1">已选<span class="coupon-remind-number"><?= $couponCount ?></span>张代金券，可抵扣<span
-            class="coupon-remind-sum"><?= StringUtils::amountFormat2($couponMoney) ?></span>元投资</p>
-    <?php else : ?>
-        <p class="coupon-remind coupon-remind1">可选多张代金券</p>
-    <?php endif; ?>
+<div class="flex-content">
+    <p class="coupon-remind coupon-remind1" style="<?= $inApp ? 'margin-top: 0;' : '' ?>">
+        <?php if (!empty($selectedCoupon)) : ?>
+            已选<span class="coupon-remind-number"><?= $couponCount ?></span>张代金券，可抵扣<span
+                class="coupon-remind-sum"><?= StringUtils::amountFormat2($couponMoney) ?></span>元投资
+        <?php else : ?>
+            可选多张代金券
+        <?php endif; ?>
+    </p>
 
     <ul class="coupon-list">
         <?= $this->render('_valid_list', ['coupons' => $coupons, 'sn' => $sn, 'selectedCoupon' => $selectedCoupon]) ?>
         <div class="load"></div>
     </ul>
-
-    <?php if (defined('IN_APP')) : ?>
-        <a href="javascript:void(0)" onclick="history.go(-1)" class="coupon-button">
-    <?php else : ?>
-        <a href="javascript:void(0)" onclick="location.replace('<?= $replaceUrl ?>')" class="coupon-button">
-    <?php endif; ?>
-        <p class="btn-line1">确认选择</p>
-        <p class="btn-line2">（已选<?= $couponCount ?>张，可抵扣<?= StringUtils::amountFormat2($couponMoney) ?>元投资）</p>
-    </a>
 </div>
-<a href="javascript:void(0)" onclick="location.replace('<?= $replaceUrl ?>')" class="coupon-button">
+
+<?php if ($inApp) : ?>
+    <a href="javascript:void(0)" onclick="history.go(-1)" class="coupon-button">
+<?php else : ?>
+    <a href="javascript:void(0)" onclick="location.replace('<?= $replaceUrl ?>')" class="coupon-button">
+<?php endif; ?>
     <p class="btn-line1">确认选择</p>
     <p class="btn-line2">（已选<?= $couponCount ?>张，可抵扣<?= StringUtils::amountFormat2($couponMoney) ?>元投资）</p>
 </a>
