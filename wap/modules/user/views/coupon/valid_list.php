@@ -43,7 +43,7 @@ $inApp = defined('IN_APP');
 </div>
 
 <?php if ($inApp) : ?>
-    <a href="javascript:void(0)" onclick="history.go(-1)" class="coupon-button">
+    <a href="javascript:void(0)" onclick="history.go(-1);" class="coupon-button">
 <?php else : ?>
     <a href="javascript:void(0)" onclick="location.replace('<?= $replaceUrl ?>')" class="coupon-button">
 <?php endif; ?>

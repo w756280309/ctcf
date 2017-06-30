@@ -125,6 +125,8 @@ $this->registerCssFile(ASSETS_BASE_URI.'css/setting.css?v=20170103', ['depends' 
         }
 
         $(function () {
+            forceReload_V2();
+
             var money = $('#money').val();
             var couponCount = '<?= count($coupons) ?>';
 
