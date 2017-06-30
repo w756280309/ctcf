@@ -8,7 +8,7 @@ $replaceUrl = \Yii::$app->request->referrer;
 ?>
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/wenjfbase.css">
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/activeComHeader.css">
-<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/multiple-coupon/css/index.css">
+<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/multiple-coupon/css/index.css?v=1">
 <script src="<?= FE_BASE_URI ?>libs/lib.flexible3.js"></script>
 <script src="<?= ASSETS_BASE_URI ?>js/common.js"></script>
 <script type="text/javascript">
@@ -17,6 +17,10 @@ $replaceUrl = \Yii::$app->request->referrer;
 </script>
 <script src="<?= ASSETS_BASE_URI ?>js/page.js"></script>
 
+<div class="topTitle f18">
+    <img class="goback lf" src="<?= FE_BASE_URI ?>wap/multiple-coupon/images/back.png" alt="" onclick="location.replace('<?= $replaceUrl ?>')">
+    选择代金券
+</div>
 <div class="flex-content">
     <?php if (!defined('IN_APP')) : ?>
         <div class="topTitle f18">
@@ -46,6 +50,10 @@ $replaceUrl = \Yii::$app->request->referrer;
         <p class="btn-line2">（已选<?= $couponCount ?>张，可抵扣<?= StringUtils::amountFormat2($couponMoney) ?>元投资）</p>
     </a>
 </div>
+<a href="javascript:void(0)" onclick="location.replace('<?= $replaceUrl ?>')" class="coupon-button">
+    <p class="btn-line1">确认选择</p>
+    <p class="btn-line2">（已选<?= $couponCount ?>张，可抵扣<?= StringUtils::amountFormat2($couponMoney) ?>元投资）</p>
+</a>
 
 <script type="text/javascript">
     var allowClick = true;

@@ -1,11 +1,11 @@
 body {
   background-color: #ededed;
+  width: 100%;
 }
-.flex-content .topTitle {
+.topTitle {
   position: fixed;
   top: 0;
   width: 100%;
-  max-width: 10rem;
 }
 .flex-content .coupon-remind {
   line-height: 1.04rem;
@@ -25,6 +25,7 @@ body {
   width: 9.57333333rem;
   height: 3.41333333rem;
   padding: 0 0.2rem;
+  margin:0 auto;
 }
 .flex-content .coupon-list .coupons .coupon-lf {
   width: 2.77333333rem;
@@ -94,24 +95,23 @@ body {
 .flex-content .coupon-list .coupons-on .coupon-rg {
   color: #fff;
 }
-.flex-content .coupon-button {
+.coupon-button {
   position: fixed;
   bottom: 0;
   display: block;
   width: 100%;
-  max-width: 10rem;
   height: 1.30666667rem;
   color: #fff;
   background-color: #f44336;
   text-align: center;
 }
-.flex-content .coupon-button .btn-line1 {
+.coupon-button .btn-line1 {
   height: 0.4rem;
   line-height: 0.4rem;
   margin-top: 0.24rem;
   font-size: 0.4rem;
 }
-.flex-content .coupon-button .btn-line2 {
+.coupon-button .btn-line2 {
   height: 0.34666667rem;
   line-height: 0.34666667rem;
   margin-top: 0.12rem;

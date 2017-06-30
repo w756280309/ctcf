@@ -14,7 +14,7 @@ use yii\helpers\ArrayHelper;
         $amountArr = ArrayHelper::getColumn($coupons, 'amount');
         $totalAmount = array_sum($amountArr);
     ?>
-    <div class="col-xs-5 safe-txt" onclick="toCoupon()"><?= StringUtils::amountFormat2($totalAmount) ?>元（共<?= $count ?>张）</div>
+    <div class="col-xs-5 safe-txt" onclick="toCoupon()" style="padding: 0 0 0 15px;"><?= StringUtils::amountFormat2($totalAmount) ?>元（共<?= $count ?>张）</div>
     <div class="col-xs-3 safe-txt text-align-ct" onclick="resetCoupon()">清除</div>
     <input id="selectedCouponCount" type="hidden" value="<?= $count ?>">
     <input id="selectedCouponAmount" type="hidden" value="<?= $totalAmount ?>">

@@ -11,11 +11,11 @@
     <script src="__FE_BASE_URI__/libs/jquery-1.11.1.min.js"></script>
 </head>
 <body>
+<div class="topTitle f18">
+    <img class="goback lf" src="__FE_BASE_URI__wap/multiple-coupon/images/back.png" alt="" onclick="history.go(-1)">
+    选择代金券
+</div>
 <div class="flex-content">
-    <div class="topTitle f18">
-        <img class="goback lf" src="__FE_BASE_URI__wap/multiple-coupon/images/back.png" alt="" onclick="history.go(-1)">
-        选择代金券
-    </div>
     <p class="coupon-remind coupon-remind1">已选<span class="coupon-remind-number">1</span>张代金券，可抵扣<span
             class="coupon-remind-sum">100</span>元投资</p>
     <!--如果未选任何代金券，显示下面这行，选中了显示上边-->
@@ -88,11 +88,11 @@
             </div>
         </li>
     </ul>
-    <a href="#" class="coupon-button">
-        <p class="btn-line1">确认选择</p>
-        <p class="btn-line2">（已选1张，可抵扣100元投资）</p>
-    </a>
 </div>
+<a href="#" class="coupon-button">
+    <p class="btn-line1">确认选择</p>
+    <p class="btn-line2">（已选1张，可抵扣100元投资）</p>
+</a>
 
 <script>
   $(function () {
