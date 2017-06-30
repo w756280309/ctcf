@@ -87,15 +87,19 @@ class OrderController extends BaseController
         $couponMoney = 0;
         try {
             $checkMoney = $money;
-            foreach ($userCouponIds as $couponId) {
-                $coupon = UserCoupon::findOne($couponId);
-                $couponType = $coupon->couponType;
-                if (null === $couponType || null === $coupon) {
-                    throw new \Exception('未找到代金券！');
+
+            if (is_array($userCouponIds)) {
+                $userCouponIds = array_filter($userCouponIds);
+                foreach ($userCouponIds as $couponId) {
+                    $coupon = UserCoupon::findOne($couponId);
+                    $couponType = $coupon->couponType;
+                    if (null === $couponType || null === $coupon) {
+                        throw new \Exception('未找到代金券！');
+                    }
+                    UserCoupon::checkAllowUse($coupon, $checkMoney, $user, $deal);
+                    $couponMoney = bcadd($couponMoney, $couponType->amount, 2);
+                    $checkMoney = bcsub($checkMoney, $couponType->minInvest, 2);
                 }
-                UserCoupon::checkAllowUse($coupon, $checkMoney, $user, $deal);
-                $couponMoney = bcadd($couponMoney, $couponType->amount, 2);
-                $checkMoney = bcsub($checkMoney, $couponType->minInvest, 2);
             }
         } catch (\Exception $ex) {
             return ['code' => 1,  'message' => $ex->getMessage()];
