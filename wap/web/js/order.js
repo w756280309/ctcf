@@ -96,7 +96,7 @@ function profit($this)
         return;
     }
 
-    var couponMoney = $('#couponMoney').val();
+    var couponMoney = $('#selectedCouponAmount').val();
     if ('undefined' !== typeof couponMoney) {
         couponMoney = couponMoney.replace(/^[^0-9]+/, '');
         if(!$.isNumeric(couponMoney)) {
