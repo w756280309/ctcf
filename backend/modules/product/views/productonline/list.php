@@ -120,7 +120,14 @@ $pc_cat = Yii::$app->params['pc_cat'];
                                  <input class="choice" type='checkbox' name='choose[]' value='<?= $val['id'] ?>'>
                             </td>
                             <td><?= $val['sn'] ?></td>
-                            <td><?= $val['title'] ?></td>
+                            <td>
+                                <?= $val['title'] ?>
+                                <?php if (null !== $val['internalTitle']) { ?>
+                                    <span style="color: #949494;">
+                                        （<?= $val['internalTitle'] ?>）
+                                    </span>
+                                <?php } ?>
+                            </td>
                             <td><?= $pc_cat[$val['cid']] ?></td>
                             <td>
                                 <?php $ex = $val->getDuration() ?>

@@ -133,6 +133,18 @@ TPL;
             </div>
         </div>
         <div class="row-fluid">
+            <div class="span12 ">
+                <div class="control-group">
+                    <label class="control-label">项目副标题</label>
+                    <div class="controls">
+                        <?=
+                        $form->field($model, 'internalTitle', ['template' => '{input}{error}', 'inputOptions' => ['autocomplete' => 'off', 'placeholder' => '项目副标题（30字以内）', 'class' => 'm-wrap span12']])->textInput()
+                        ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row-fluid">
             <div class="span6 ">
                 <div class="control-group">
                     <label class="control-label">项目类型</label>

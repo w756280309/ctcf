@@ -391,7 +391,12 @@ class OrderManager
         try {
             if ($loanFullAndNotify) {
                 $notify = new DingNotify('wdjf');
-                $notify->charSentText('标的 [' . $loan->title . '] 募集进度为 ' . $update['finish_rate'] . ', 请及时处理');
+                $referFront = '标的 [' . $loan->title . ']';
+                if (null !== $loan->internalTitle) {
+                    $referFront .= '（' . $loan->internalTitle . '）';
+                }
+                $refer = $referFront .  ' 募集进度为 ' . $update['finish_rate'] . ', 请及时处理';
+                $notify->charSentText($refer);
             }
         } catch (\Exception $ex) {
             $msg = '标的订单处理-满标钉钉提醒：订单号-'.$order->id.';异常信息-'.$ex->getMessage();

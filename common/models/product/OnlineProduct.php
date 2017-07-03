@@ -57,6 +57,7 @@ use yii\behaviors\TimestampBehavior;
  * @property string  $funded_money  实际募集金额
  * @property string  $finish_date   截止日
  * @property bool    $is_jixi
+ * @property string  $internalTitle 副标题（仅供内部使用）
  */
 class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
 {
@@ -122,7 +123,7 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
             'create' => ['title', 'sn', 'cid', 'money', 'borrow_uid', 'expires', 'expires_show', 'yield_rate', 'start_money', 'borrow_uid', 'fee', 'status',
                 'description', 'refund_method', 'account_name', 'account', 'bank', 'dizeng_money', 'start_date', 'end_date', 'full_time',
                 'is_xs', 'yuqi_faxi', 'order_limit', 'creator_id', 'del_status', 'status', 'isPrivate', 'allowedUids', 'finish_date', 'channel', 'jixi_time', 'sort',
-                'jiaxi', 'kuanxianqi', 'isFlexRate', 'rateSteps', 'issuer', 'issuerSn', 'paymentDay', 'isTest', 'filingAmount', 'allowUseCoupon', 'tags', 'isLicai', 'pointsMultiple', 'allowTransfer', 'isCustomRepayment'],
+                'jiaxi', 'kuanxianqi', 'isFlexRate', 'rateSteps', 'issuer', 'issuerSn', 'paymentDay', 'isTest', 'filingAmount', 'allowUseCoupon', 'tags', 'isLicai', 'pointsMultiple', 'allowTransfer', 'isCustomRepayment', 'internalTitle'],
         ];
     }
 
@@ -246,8 +247,9 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
             [['isTest', 'allowUseCoupon'], 'integer'],
             [['start_money', 'dizeng_money'], 'checkMoney'],
             ['tags', 'checkTags'],
-            ['title', 'trim'],  //去掉项目名称两边多余的空格
+            [['title', 'internalTitle'], 'trim'],  //去掉项目名称及项目副标题两边多余的空格
             ['allowTransfer', 'boolean'],
+            ['internalTitle', 'string', 'max' => 30],
         ];
     }
 
@@ -439,6 +441,7 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
             'pointsMultiple' => '积分倍数',
             'allowTransfer' => '允许转让',
             'isCustomRepayment' => '是否是自定义还款',
+            'internalTitle' => '项目副标题',
         ];
     }
 
