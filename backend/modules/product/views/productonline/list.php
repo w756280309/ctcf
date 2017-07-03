@@ -122,7 +122,7 @@ $pc_cat = Yii::$app->params['pc_cat'];
                             <td><?= $val['sn'] ?></td>
                             <td>
                                 <?= $val['title'] ?>
-                                <?php if (null !== $val['internalTitle']) { ?>
+                                <?php if (!empty($val['internalTitle'])) { ?>
                                     <span style="color: #949494;">
                                         （<?= $val['internalTitle'] ?>）
                                     </span>

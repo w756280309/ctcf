@@ -392,7 +392,7 @@ class OrderManager
             if ($loanFullAndNotify) {
                 $notify = new DingNotify('wdjf');
                 $referFront = '标的 [' . $loan->title . ']';
-                if (null !== $loan->internalTitle) {
+                if (!empty($loan->internalTitle)) {
                     $referFront .= '（' . $loan->internalTitle . '）';
                 }
                 $refer = $referFront .  ' 募集进度为 ' . $update['finish_rate'] . ', 请及时处理';
