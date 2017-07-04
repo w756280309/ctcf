@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="../../common/css/wenjfbase.css">
+    <link rel="stylesheet" href="../../common/css/popover.css">
+    <link rel="stylesheet" href="css/index.css?v=1.051">
+    <script src="../../libs/lib.flexible3.js"></script>
+    <script src="../../libs/zepto.min.js"></script>
+    <script src="../../libs/fastclick.js"></script>
+    <script src="../../common/js/weixin-share-tips.js"></script>
+    <script src="../../common/js/popover.js"></script>
+</head>
+<body>
+<div class="flex-content">
+    <img src="images/banner.png" alt="" class="banner">
+
+    <!-- 抽奖 -->
+    <div class="draw-module">
+        <div class="draw-module-top">
+            <a href="javascript:void(0);" class="my-prize">我的奖品>></a>
+            <p class="draw-rule">活动期间成功邀请好友注册并实名认证，即可获得一次抽奖机会哦（最多1次）！</p>
+        </div>
+        <div class="draw-module-bottom">
+            <img src="images/draw-prize-01.png" alt="">
+            <ul class="prize-top clearfix">
+                <li>代金券</li>
+                <li>现金红包</li>
+                <li>积分</li>
+                <li>勺筷礼盒</li>
+            </ul>
+            <img src="images/draw-prize-02.png" alt="">
+            <ul class="prize-bottom clearfix">
+                <li>空气加湿器</li>
+                <li>超市卡</li>
+                <li>苹果手表</li>
+                <li>苹果手机</li>
+            </ul>
+        </div>
+
+        <!-- 按钮 -->
+        <a href="javascript:void(0);" class="btn btn-invite">邀请好友</a>
+        <a href="javascript:void(0);" class="btn btn-draw">点击抽奖</a>
+    </div>
+    <!-- 邀请 -->
+    <div class="invite-box">
+        <h4><span>已邀请投资：<i>3</i>位</span></h4>
+        <ul>
+            <li>活动期间，成功邀请</li>
+            <li>2位好友注册并投资，送<span>28元</span>现金红包;</li>
+            <li>5位好友注册并投资，送<span>88元</span>现金红包;</li>
+            <li>10位好友注册并投资，送<span>188元</span>现金红包!</li>
+            <li>红包奖励可叠加！</li>
+            <li>比如：邀请10位好友注册并投资，即可获得28+88+188=304元现金红包!</li>
+        </ul>
+        <p class="tip">温馨提示：被邀请人在活动期间完成注册，邀请人才能获得奖励哦！完成每档任务后，现金红包将自动发放到邀请人的账户中。</p>
+    </div>
+
+    <!-- 送现金 -->
+    <div class="cash-box">
+        <h4></h4>
+        <ul>
+            <li>邀请人可以获得被邀请人前三笔投资<span>0.1%</span>的返现奖励哦！</li>
+            <li>比如：被邀请人前三笔累积投资<span>50万元</span>，邀请人可以获得<span>500元</span>现金奖励！</li>
+            <li class="tips">温馨提示：邀请好友前必须在温都金服平台投资过，才能获得奖励哦！</li>
+        </ul>
+        <a href="javascript:void(0);" class="get-cash">领走现金</a>
+        <p>本次活动最终解释权归温都金服所有</p>
+        <p>所有活动及奖品与苹果公司无关</p>
+    </div>
+</div>
+<script>
+    $(function() {
+        // 1.弹框内显示：去登录
+        $('.btn-invite').on('click',function() {
+            var module = poptpl.popComponent({
+                closeHas : true,
+                closeUrl : "images/pop_close.png",
+                btnMsg : "去登录",
+                popTopHasImg : true,
+                popTopImg : "images/reminder-icon.png",
+                popTopHasDiv : false,
+                popMiddleHasDiv : true,
+                popMiddleColor : "#fb5a1f",
+                popBackground : "#e1f8ff",
+                popBorder: "0.10666667rem solid #82cee7",
+                popBtmBackground : "#82cee7",
+                popBtmFontSize : ".48rem",
+                contentMsg:"<span style='display:inline-block;padding-bottom:.37rem;font-size: 0.4rem;color: #333;'>您还没有登录哦！</span>",
+                btnHref : "http://mfront.wenjf.cn:9009/site/login"
+            },'close');
+        });
+
+        // 2.弹框内显示：去邀请
+        $('.btn-draw').on('click',function() {
+            var module = poptpl.popComponent({
+                closeHas : true,
+                closeUrl : "images/pop_close.png",
+                btnMsg : "去邀请",
+                popTopHasImg : true,
+                popTopImg : "images/reminder-icon.png",
+                popTopHasDiv : false,
+                popMiddleHasDiv : true,
+                popMiddleColor : "#fb5a1f",
+                popBackground : "#e1f8ff",
+                popBorder: "0.10666667rem solid #82cee7",
+                popBtmBackground : "#82cee7",
+                popBtmFontSize : ".48rem",
+                contentMsg:"<span style='display:inline-block;padding-bottom:.37rem;font-size: 0.4rem;color: #333;'>您还没有成功邀请好友哦！</span>",
+                btnHref : "http://mfront.wenjf.cn:9009/user/invite"
+            },'close');
+        });
+
+        // 3.弹框内显示：去邀请
+        $('.get-cash').on('click',function () {
+            var module = poptpl.popComponent({
+                closeHas : true,
+                closeUrl : "images/pop_close.png",
+                btnMsg : "去邀请",
+                popTopHasImg : true,
+                popTopImg : "images/reminder-icon.png",
+                popTopHasDiv : false,
+                popMiddleHasDiv : true,
+                popMiddleColor : "#fb5a1f",
+                popBackground : "#e1f8ff",
+                popBorder: "0.10666667rem solid #82cee7",
+                popBtmBackground : "#82cee7",
+                popBtmFontSize : ".48rem",
+                contentMsg:"<span style='font-size: 0.4rem;color: #333;'>您还没有获得奖品<br>快去邀请好友吧！</span>",
+                btnHref : "http://mfront.wenjf.cn:9009/user/invite"
+            },'close');
+        });
+
+        // 4.弹框内显示：继续邀请
+        $('.my-prize').on('click',function () {
+            var module = poptpl.popComponent({
+                closeHas : true,
+                closeUrl : "images/pop_close.png",
+                popTopHasDiv : true,
+                title: '恭喜您获得勺筷组合！',
+                popTopColor : "#ff4040",
+                popTopFontSize : "0.4rem",
+                popTopHasImg : true,
+                popTopImg : "images/pop-prize.png",
+                popMiddleHasDiv : true,
+                popMiddleColor : "#fb5a1f",
+                popBackground : "#e1f8ff",
+                popBorder: "0.10666667rem solid #82cee7",
+                popBtmBackground : "#82cee7",
+                popBtmFontSize : ".48rem",
+                contentMsg:"<span style='font-size: 0.4rem;color: #333;line-height: .4rem!important;'>邀请好友投资<br>还能获得大量现金奖励哦！</span>",
+                btnHref : "http://mfront.wenjf.cn:9009/user/invite",
+                btnMsg : "继续邀请"
+            },'close');
+        });
+    })
+</script>
+</body>
+</html>
