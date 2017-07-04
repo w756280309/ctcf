@@ -140,43 +140,48 @@ class DrawrecordController extends BaseController
      */
     public function actionApply()
     {
-        $query = User::find();
         $request = Yii::$app->request->get();
+        $mobile = trim($request['mobile']);
+        $name = trim($request['name']);
+        $requireName = !empty($name);
+        $requireMobile = !empty($mobile);
+        $startTime = $request['starttime'];
+        $endTime = $request['endtime'];
+        $startAt = strtotime($startTime);
+        $endAt = strtotime($endTime);
 
-        if (!empty($request['name'])) {
-            $query->andFilterWhere(['like', 'real_name', $request['name']]);
-        }
-        if (!empty($request['mobile'])) {
-            if (strlen(trim($request['mobile'])) < 11){
-                $query->andFilterWhere(['like', 'mobile', trim($request['mobile'])]);
-            } else {
-                $query->andFilterWhere(['safeMobile'=>SecurityUtils::encrypt(trim($request['mobile']))]);
+        $draw = DrawRecord::find();
+        $d = DrawRecord::tableName();
+        if ($requireName || $requireMobile) {
+            $u = User::tableName();
+            $draw->innerJoin('user', "$u.id = $d.uid");
+            if ($requireName) {
+                $draw->andFilterWhere(['like', "$u.real_name", $name]);
+            }
+            if ($requireMobile) {
+                if (strlen($mobile) < 11){
+                    $draw->andFilterWhere(['like', "$u.mobile", $mobile]);
+                } else {
+                    $draw->andFilterWhere(['safeMobile'=>SecurityUtils::encrypt($mobile)]);
+                }
             }
         }
 
-        $tzUser = $query->andWhere('type=1')->asArray()->all();
-        $res = [];
-        foreach ($tzUser as $k => $v) {
-            $res[$v['id']] = $v;
+        if ($startTime && false !== $startAt) {
+            $draw->andFilterWhere(['>=', "$d.created_at", $startAt]);
         }
-        $arr = [];
-        foreach ($tzUser as $k => $v) {
-            $arr[] = $v['id'];
-        }
-
-        $draw = DrawRecord::find()->where(['in', 'uid', $arr]);
-        if (!empty($request['starttime'])) {
-            $draw->andFilterWhere(['>=', 'created_at', strtotime($request['starttime'])]);
-        }
-        if (!empty($request['endtime'])) {
-            $draw->andFilterWhere(['<=', 'created_at', strtotime($request['endtime']) + 24 * 60 * 60]);
+        if ($endTime && false !== $endAt) {
+            $draw->andFilterWhere(['<=', "$d.created_at", $endAt + 24 * 60 * 60]);
         }
 
         $pages = new Pagination(['totalCount' => $draw->count(), 'pageSize' => '10']);
-        $model = $draw->offset($pages->offset)->limit($pages->limit)->orderBy('created_at DESC')->all();
+        $model = $draw->offset($pages->offset)
+            ->limit($pages->limit)
+            ->orderBy([
+                "$d.created_at" => SORT_DESC,
+            ])->all();
 
         return $this->render('apply', [
-            'res' => $res,
             'model' => $model,
             'category' => 1,
             'pages' => $pages,

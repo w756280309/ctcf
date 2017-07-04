@@ -58,9 +58,9 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => YiiAsse
                                 <span class="title">提现申请时间</span>
                             </td>
                             <td colspan="3">
-                                <input type="text" placeholder="开始时间" value="<?=$request['starttime']?>" name="starttime" class="m-wrap span4" style="width: 300px;" onclick='WdatePicker({dateFmt:"yyyy-MM-dd",maxDate:"<?=  date("Y-m-d")?>"});'/>
+                                <input type="text" placeholder="开始时间" value="<?= $request['starttime'] ?>" name="starttime" class="m-wrap span4" style="width: 300px;" onclick='WdatePicker({dateFmt:"yyyy-MM-dd",maxDate:"<?=  date("Y-m-d")?>"});'/>
                                 ---
-                                <input type="text" placeholder="结束时间" value="<?=$request['endtime']?>" name="endtime" class="m-wrap span4" style="width: 300px;" onclick='WdatePicker({dateFmt:"yyyy-MM-dd",maxDate:"<?=  date("Y-m-d")?>"});'/>
+                                <input type="text" placeholder="结束时间" value="<?= $request['endtime'] ?>" name="endtime" class="m-wrap span4" style="width: 300px;" onclick='WdatePicker({dateFmt:"yyyy-MM-dd",maxDate:"<?=  date("Y-m-d")?>"});'/>
                             </td>
                             <td colspan="6" align="right" style=" text-align: right">
                                 <button type='submit' class="btn blue btn-block" style="width: 100px;">搜索 <i class="m-icon-swapright m-icon-white"></i></button>
@@ -87,15 +87,24 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => YiiAsse
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach ($model as $key => $val) : ?>
+                    <?php foreach ($model as $key => $drawRecord) : ?>
                         <tr>
-                            <td><?= $res[$val['uid']]['usercode'] ?></td>
-                            <td><?= $res[$val['uid']]['mobile'] ?></td>
-                            <td><a href="/user/user/detail?id=<?=$val['uid'] ?>"><?= $res[$val['uid']]['real_name'] ?></a></td>
-                            <td class="money"><?= $val['money'] ?></td>
-                            <td><?= date('Y-m-d H:i:s', $val['created_at']) ?></td>
-                            <td><?= Yii::$app->params['draw_status'][$val['status']] ?></td>
-                            <td><button class="btn btn-primary get_order_status" drawid="<?= $val['id'] ?>">查询流水在联动状态</button></td>
+                            <?php
+                                $user = $drawRecord->user;
+                                if (null !== $user) {
+                            ?>
+                                    <td><?= $user->usercode ?></td>
+                                    <td><?= $user->getMobile() ?></td>
+                                    <td><a href="/user/user/detail?id=<?= $drawRecord->uid ?>"><?= $user->real_name ?></a></td>
+                                <?php } else { ?>
+                                    <td>----</td>
+                                    <td>----</td>
+                                    <td>----</td>
+                            <?php } ?>
+                            <td class="money"><?= $drawRecord->money ?></td>
+                            <td><?= date('Y-m-d H:i:s', $drawRecord->created_at) ?></td>
+                            <td><?= Yii::$app->params['draw_status'][$drawRecord->status] ?></td>
+                            <td><button class="btn btn-primary get_order_status" drawid="<?= $drawRecord->id ?>">查询流水在联动状态</button></td>
                     </tr>
                 <?php endforeach; ?>
                 </tbody>
