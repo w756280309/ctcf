@@ -91,7 +91,7 @@ class CouponController extends BaseController
         ];
 
         $selectedCoupon = [];
-        $key = 'loan_'.$request['sn'].'_coupon';
+        $key = 'loan_coupon';
         $couponCount = 0;
         $couponMoney = 0;
 
@@ -156,7 +156,7 @@ class CouponController extends BaseController
             $userCouponId[] = $coupon->id;
         }
 
-        Yii::$app->session->set('loan_'.$request['sn'].'_coupon', ['couponId' => $userCouponId]);
+        Yii::$app->session->set('loan_coupon', ['couponId' => $userCouponId]);
 
         $this->layout = false;
 
@@ -172,7 +172,7 @@ class CouponController extends BaseController
         if (null === $user || !$this->validateLoanWithCoupon($sn, $couponId) || !in_array($opt, ['canceled', 'selected'])) {
             return $this->msg400(1, '参数错误');
         }
-        $key = 'loan_'.$sn.'_coupon';
+        $key = 'loan_coupon';
         $loan = OnlineProduct::findOne(['sn' => $sn]);
         $isSelected = $opt === 'selected';
         $hasSession = Yii::$app->session->has($key);
@@ -228,7 +228,7 @@ class CouponController extends BaseController
                 'money' => $couponMoney,
             ];
 
-            Yii::$app->session->set('loan_'.$sn.'_coupon', ['couponId' => $couponIds]);
+            Yii::$app->session->set('loan_coupon', ['couponId' => $couponIds]);
 
             return $this->msg200('勾选成功', $data);
         } catch (\Exception $ex) {
@@ -268,7 +268,7 @@ class CouponController extends BaseController
     public function actionDelCoupon($sn)
     {
         if ($this->validateLoanWithCoupon($sn, 0)) {
-            Yii::$app->session->set('loan_'.$sn.'_coupon', ['couponId' => []]);
+            Yii::$app->session->set('loan_coupon', ['couponId' => []]);
         }
     }
 
