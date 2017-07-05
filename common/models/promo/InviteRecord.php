@@ -4,9 +4,11 @@ namespace common\models\promo;
 
 use common\models\order\OnlineOrder;
 use common\models\user\User;
+use common\models\user\UserInfo;
 use wap\modules\promotion\models\RankingPromo;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "invite_record".
@@ -62,6 +64,7 @@ class InviteRecord extends ActiveRecord
         $promoKey = [
             'WAP_INVITE_PROMO_160804',
             'promo_invite_12',
+            'promo_170706',
         ];
         $promos = RankingPromo::find()->where(['key' => $promoKey])->all();
         $res = [];
@@ -141,5 +144,34 @@ class InviteRecord extends ActiveRecord
         ])->count();
 
         return intval($count);
+    }
+
+    /**
+     * 获取某一时间段内注册并投资的好友人数
+     *
+     * @param User   $user      账户
+     * @param string $startTime 开始时间
+     * @param string $endTime   结束时间
+     *
+     * @return int
+     */
+    public static function getFriendsCountByUser(User $user, $startTime, $endTime)
+    {
+        $records = InviteRecord::find()
+            ->where(['user_id' => $user->id])
+            ->andWhere(['>=', 'created_at', strtotime($startTime)])
+            ->andWhere(['<=', 'created_at', strtotime($endTime)])
+            ->all();
+        if (empty($records)) {
+            return 0;
+        }
+        $inviteeIds = ArrayHelper::getColumn($records, 'invitee_id');
+
+        return (int) UserInfo::find()
+            ->where(['in', 'user_id', $inviteeIds])
+            ->andWhere(['isInvested' => true])
+            ->andWhere(['>=', 'firstInvestDate', $startTime])
+            ->andWhere(['<=', 'firstInvestDate', $endTime])
+            ->count();
     }
 }

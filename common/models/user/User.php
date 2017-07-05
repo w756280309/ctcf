@@ -785,16 +785,15 @@ class User extends ActiveRecord implements IdentityInterface, UserInterface
         $this->idcard = $identity->idcard;
         $this->safeIdCard = SecurityUtils::encrypt($identity->idcard);
         $this->birthdate = date('Y-m-d', strtotime(substr($identity->idcard, 6, 8)));
-        $mobile = SecurityUtils::decrypt($this->safeMobile);
         $resp = Yii::$container->get('ump')->register($this);
-
-        Yii::info('开户联动返回日志 ump_log user_identify user_id: ' . $this->id . ';real_name:.' . $this->real_name . ';idcard:' . $identity->idcard .  '; ret_code:' . $resp->get('ret_code') . ';ret_msg:' . $resp->get('ret_msg'), 'umplog');
+        Yii::info('开户联动返回日志 ump_log user_identify user_id: ' . $this->id . ';real_name:.' . $this->real_name . ';idcard:' . $identity->idcard . '; ret_code:' . $resp->get('ret_code') . ';ret_msg:' . $resp->get('ret_msg'), 'umplog');
 
         if (!$resp->isSuccessful()) {
             throw new \Exception($resp->get('ret_code') . '：' . $resp->get('ret_msg'), 1);
         }
 
         $transaction = Yii::$app->db->beginTransaction();
+        $flag = false;
         try {
             $epayUser = new EpayUser([
                 'appUserId' => $this->getUserId(),
@@ -814,14 +813,21 @@ class User extends ActiveRecord implements IdentityInterface, UserInterface
             if (!$this->save(false)) {
                 throw new \Exception('开户失败', 1);
             }
-            Yii::info('用户信息变更日志 开户 变更表:user;变更属性:' . (json_encode(['idcard_status' => $this->idcard_status, 'real_name' => $this->real_name, 'idcard' => $identity->idcard])) . ';user_id:' . $this->id .  ';变更依据:联动ret_code ' . $resp->get('ret_code') . ';联动返回信息:' . json_encode($resp->toArray()), 'user_log');
+            Yii::info('用户信息变更日志 开户 变更表:user;变更属性:' . (json_encode(['idcard_status' => $this->idcard_status, 'real_name' => $this->real_name, 'idcard' => $identity->idcard])) . ';user_id:' . $this->id . ';变更依据:联动ret_code ' . $resp->get('ret_code') . ';联动返回信息:' . json_encode($resp->toArray()), 'user_log');
             $transaction->commit();
+            $flag = true;
         } catch (\Exception $ex) {
             $transaction->rollBack();
             throw new \Exception($ex->getMessage(), $ex->getCode());
         }
-    }
 
+        if (true === $flag) {
+            try {
+                PromoService::addTicket($this, 'identity');
+            } catch (\Exception $ex) {
+            }
+        }
+    }
 
     /**
      * 获得线上投资榜单的前$limit名的用户信息(投资开始日期到现在)
