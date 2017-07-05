@@ -42,10 +42,10 @@ class OrderController extends BaseController
         if ($deal->allowUseCoupon) {
             $validCoupons = UserCoupon::fetchValid($user, null, $deal);
 
-            if (Yii::$app->session->has('loan_'.$deal->sn.'_coupon')) {
+            if (Yii::$app->session->has('loan_coupon')) {
                 $c = CouponType::tableName();
                 $uc = UserCoupon::tableName();
-                $session = Yii::$app->session->get('loan_'.$deal->sn.'_coupon');
+                $session = Yii::$app->session->get('loan_coupon');
 
                 $coupons = UserCoupon::find()
                     ->innerJoin($c, "$c.id = $uc.couponType_id")
@@ -57,7 +57,7 @@ class OrderController extends BaseController
                 $coupon = current($validCoupons);
                 $coupons[] = ['amount' => $coupon->couponType->amount];
 
-                Yii::$app->session->set('loan_'.$deal->sn.'_coupon', ['couponId' => [$coupon->id]]);
+                Yii::$app->session->set('loan_coupon', ['couponId' => [$coupon->id]]);
             }
         }
 
@@ -77,7 +77,7 @@ class OrderController extends BaseController
     {
         $deal = $this->findOr404(OnlineProduct::class, ['sn' => $sn]);
         $money = Yii::$app->request->post('money');
-        $session = Yii::$app->session->get('loan_'.$deal->sn.'_coupon');
+        $session = Yii::$app->session->get('loan_coupon');
         $userCouponIds = isset($session['couponId']) ? $session['couponId'] : [];
         $couponConfirm = Yii::$app->request->post('couponConfirm');
         $user = $this->getAuthedUser();
@@ -129,7 +129,7 @@ class OrderController extends BaseController
         }
 
         //删除选中的session
-        Yii::$app->session->remove('loan_'.$deal->sn.'_coupon');
+        Yii::$app->session->remove('loan_coupon');
 
         return $orderManager->createOrder($sn, $money, $userCouponIds, $user->id, $investFrom);
     }
