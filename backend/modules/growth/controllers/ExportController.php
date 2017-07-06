@@ -23,6 +23,8 @@ class ExportController extends BaseController
                 'content' => '统计指定日期回款数据',//导出类型的说明，不可为空
                 'sql' => "SELECT u.real_name AS '姓名',
 u.mobile AS '手机号',
+year(now()) - substring(u.idCard,7,4) as '年龄',
+a.name as '分销商',
 o.order_money AS '投资金额',
 o.yield_rate AS '利率',
 p.title AS '标的标题',
@@ -58,6 +60,8 @@ FROM `online_repayment_plan` AS r
 INNER JOIN user AS u ON r.uid = u.id
 INNER JOIN online_product AS p ON p.id = r.online_pid
 INNER JOIN online_order AS o ON o.id = r.order_id
+left join user_affiliation as ua on ua.user_id = u.id
+left join affiliator as a on a.id = ua.affiliator_id
 WHERE u.type =1
 AND p.isTest = false
 AND p.status
@@ -76,8 +80,8 @@ ORDER BY p.id asc ,r.uid asc",//导出的sql模板, 使用预处理方式调用,
                         'isRequired' => true,//是否必要参数, 默认都是必要参数
                     ],
                 ],
-                'itemLabels' => ['姓名', '手机号', '投资金额', '利率', '标的名称', '还款方式', '标的状态', '标的截止日期', '还款本金', '还款利息', '还款本息', '实际还款时间'],//统计的数据项，不可为空
-                'itemType' => ['string', 'int', 'float', 'float', 'string', 'string', 'string', 'string','float', 'float', 'float', 'date'],
+                'itemLabels' => ['姓名', '手机号', '年龄', '分销商', '投资金额', '利率', '标的名称', '还款方式', '标的状态', '标的截止日期', '还款本金', '还款利息', '还款本息', '实际还款时间'],//统计的数据项，不可为空
+                'itemType' => ['string', 'int', 'int', 'string', 'float', 'float', 'string', 'string', 'string', 'string','float', 'float', 'float', 'date'],
             ],
             'last_ten_day_draw' => [
                 'key' => 'last_ten_day_draw',
