@@ -3,11 +3,13 @@
 namespace backend\modules\product\controllers;
 
 use backend\controllers\BaseController;
+use common\controllers\ContractTrait;
 use common\lib\bchelp\BcRound;
 use common\lib\product\ProductProcessor;
 use common\models\adminuser\AdminLog;
 use common\models\booking\BookingLog;
 use common\models\contract\ContractTemplate;
+use common\models\order\EbaoQuan;
 use common\models\order\OnlineOrder;
 use common\models\order\OnlineRepaymentPlan;
 use common\models\payment\Repayment;
@@ -179,10 +181,10 @@ class ProductonlineController extends BaseController
 
         if ($model->load($data) && ($model = $this->exchangeValues($model, $data)) && $model->validate()) {
             try {
-                 $this->validateContract([
+                $this->validateContract([
                     'title' => $con_name_arr,
                     'content' => $con_content_arr,
-                 ]);
+                ]);
             } catch (\Exception $e) {
                 $model->addError('contract_type', $e->getMessage());
             }
@@ -643,7 +645,7 @@ class ProductonlineController extends BaseController
                 || !in_array($loan->status, [OnlineProduct::STATUS_FULL, OnlineProduct::STATUS_FOUND])
                 || empty($loan->jixi_time)
                 || $loan->is_jixi
-             ) {
+            ) {
                 return ['result' => '0', 'message' => '无法找到该项目,或者项目现阶段不允许开始计息'];
             }
             if ($loan->isCustomRepayment && !$loan->isJixiExamined) {
@@ -982,6 +984,14 @@ class ProductonlineController extends BaseController
                 $userinfo = User::findOne($note['user_id']);
                 $notes[$key]['user'] = $userinfo;
             }
+        }
+        foreach ($notes as $key => $creditOrder) {
+            $notes[$key]['baoquan'] = EbaoQuan::find()->where([
+                'uid' => $creditOrder['user_id'],
+                'itemType' => EbaoQuan::ITEM_TYPE_CREDIT_ORDER,
+                'itemId' => $creditOrder['id'],
+                'success' => 1,
+            ])->all();
         }
 
         $dataProvider = new ArrayDataProvider([

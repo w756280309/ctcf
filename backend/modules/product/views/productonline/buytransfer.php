@@ -1,5 +1,5 @@
 <?php
-
+use common\models\order\EbaoQuan;
 use common\utils\StringUtils;
 use yii\grid\GridView;
 use yii\widgets\LinkPager;
@@ -65,6 +65,34 @@ use yii\widgets\LinkPager;
                     },
                     'contentOptions' => ['class' => 'left'],
                     'headerOptions' => ['class' => 'left'],
+                ],
+                [
+                    'label' => '保全合同',
+                    'format' => 'html',
+                    'value' => function ($data) {
+                        $baoquanData = $data['baoquan'];
+                        $str = '';
+                        foreach ($baoquanData as $baoQuan) {
+                            /**
+                             * @var EbaoQuan $baoQuan
+                             */
+                            $url = \EBaoQuan\Client::contractFileDownload($baoQuan);
+                            if ($baoQuan->type === EbaoQuan::TYPE_LOAN) {
+                                $title = '标的合同';
+                            } elseif ($baoQuan->type === EbaoQuan::TYPE_CREDIT) {
+                                $title = '转让合同';
+                            }
+                            if (empty($url) || empty($title)) {
+                                continue;
+                            }
+
+                            $str .= ' <a href="' . $url . '">' . $title . '</a> |';
+                        }
+                        if (empty($str)) {
+                            $str = '等待生成保全合同';
+                        }
+                        return rtrim($str, '|');
+                    }
                 ],
             ],
             'tableOptions' => ['class' => 'table table-striped table-bordered table-advance table-hover']
