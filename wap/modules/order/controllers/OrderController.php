@@ -11,7 +11,9 @@ use common\models\order\OnlineOrder;
 use common\models\order\OrderManager;
 use common\models\product\OnlineProduct;
 use common\service\PayService;
+use common\utils\StringUtils;
 use Yii;
+use yii\helpers\ArrayHelper;
 
 class OrderController extends BaseController
 {
@@ -84,25 +86,43 @@ class OrderController extends BaseController
         $pay = new PayService(PayService::REQUEST_AJAX);
 
         //检验代金券的使用
-        $couponMoney = 0;
-        try {
-            $checkMoney = $money;
-
-            if (is_array($userCouponIds)) {
-                $userCouponIds = array_filter($userCouponIds);
-                foreach ($userCouponIds as $couponId) {
-                    $coupon = UserCoupon::findOne($couponId);
-                    $couponType = $coupon->couponType;
-                    if (null === $coupon || null === $couponType) {
-                        throw new \Exception('未找到代金券！');
-                    }
-                    UserCoupon::checkAllowUse($coupon, $checkMoney, $user, $deal);
-                    $couponMoney = bcadd($couponMoney, $couponType->amount, 2);
-                    $checkMoney = bcsub($checkMoney, $couponType->minInvest, 2);
+        $couponMoney = 0; //记录可用的代金券金额
+        $couponCount = 0; //记录可用的代金券个数
+        $checkMoney = $money; //校验输入的金额
+        $existUnUseCoupon = false; //是否存在不可用代金券
+        $lastErrMsg = ''; //最后一个不可用代金券的错误提示信息
+        if (is_array($userCouponIds)) {
+            $userCouponIds = array_filter($userCouponIds);
+            $u = UserCoupon::tableName();
+            $userCoupons = UserCoupon::find()
+                ->where(['in', "$u.id", $userCouponIds])
+                ->all();
+            foreach ($userCoupons as $key => $userCoupon) {
+                try {
+                    UserCoupon::checkAllowUse($userCoupon, $checkMoney, $user, $deal);
+                } catch (\Exception $ex) {
+                    $lastErrMsg = $ex->getMessage();
+                    $existUnUseCoupon = true;
+                    unset($userCoupons[$key]);
+                    continue;
                 }
+                $couponCount++;
+                $couponType = $userCoupon->couponType;
+                $couponMoney = bcadd($couponMoney, $couponType->amount, 2);
+                $checkMoney = bcsub($checkMoney, $couponType->minInvest, 2);
             }
-        } catch (\Exception $ex) {
-            return ['code' => 1,  'message' => $ex->getMessage()];
+            $userCouponIds = ArrayHelper::getColumn($userCoupons, 'id');
+        }
+
+        //将所有可用的代金券写入session，并判断是否存在不可用的代金券，返回报错信息
+        Yii::$app->session->set('loan_coupon', ['couponId' => $userCouponIds]);
+        if ($existUnUseCoupon) {
+            $couponMoney = StringUtils::amountFormat2($couponMoney);
+            return [
+                'code' => 2,
+                'message' => $lastErrMsg,
+                'coupon' =>['count' => $couponCount, 'amount' => $couponMoney],
+            ];
         }
 
         $ret = $pay->checkAllowPay($user, $sn, $money, $couponMoney);

@@ -48,7 +48,18 @@ function order() {
                 openPopup();
                 return;
             }
-
+            if (2 === data.code) {
+                var totalCount = data.coupon.count;
+                var totalAmount = data.coupon.amount;
+                if (totalCount > 0) {
+                    $('#selectedCouponCount').val(totalCount);
+                    $('#selectedCouponAmount').val(totalAmount);
+                    var couponBoxInfo = totalAmount + '元（共' + totalCount + '张）';
+                    $('#updateCouponBox').html(couponBoxInfo);
+                } else {
+                    resetCoupon();
+                }
+            }
             toastCenter(data.message);
         }
 
