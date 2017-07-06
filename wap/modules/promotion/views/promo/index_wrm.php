@@ -33,7 +33,7 @@ $config = json_decode($promo->config, true);
 
     <?php if (isset($config['image'])) { ?>
         <div class="banner">
-            <img src="https://static.wenjf.com/upload/link/link1493976622337637.png" alt="">
+            <img src="<?= $config['image'] ?>" alt="">
         </div>
     <?php } ?>
 
