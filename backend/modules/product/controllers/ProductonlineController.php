@@ -423,7 +423,14 @@ class ProductonlineController extends BaseController
     {
         $status = Yii::$app->params['deal_status'];
         $request = Yii::$app->request->get();
-
+        $sn = isset($request['sn']) ? trim($request['sn']) : '';
+        $name = isset($request['name']) ? trim($request['name']) : '';
+        $internalTitle = isset($request['internalTitle']) ? trim($request['internalTitle']) : '';
+        $requestStatus = isset($request['status']) ? $request['status'] : '';
+        $isHide = false;
+        $isTest = isset($request['isTest']) ? $request['isTest'] : Yii::$app->request->cookies->getValue('loanListFilterIsTest', 0);
+        $days = isset($request['days']) ? $request['days'] : '';
+        $requireIsHide = isset($request['isHide']) && $request['isHide'];
         $op = OnlineProduct::tableName();
         $data = OnlineProduct::find()
             ->select("$op.*")
@@ -432,21 +439,30 @@ class ProductonlineController extends BaseController
             ->addSelect(['effect_jixi_time' => 'if(`is_jixi`=1, `jixi_time`, 0)'])
             ->addSelect(['product_status' => "(case $op.`status` when 4 then 7 when 7 then 4 else $op.`status` end)"]);
 
-        //筛选标的sn
-        if (!empty($request['sn'])) {
-            $data->andWhere(['like', "$op.sn", trim($request['sn'])]);
-        }
-        if ($request['name']) {
-            $data->andFilterWhere(['like', 'title', trim($request['name'])]);
-        }
-        if ($request['status'] == '0') {
-            $data->andWhere(['online_status' => $request['status']]);
-        } elseif ($request['status']) {
-            $data->andWhere(['online_status' => OnlineProduct::STATUS_ONLINE, "$op.status" => $request['status']]);
+        //标的sn
+        if ('' !== $sn) {
+            $data->andWhere(['like', "$op.sn", $sn]);
         }
 
-        $isHide = false;
-        if (isset($request['isHide']) && $request['isHide']) {
+        //项目名称
+        if ('' !== $name) {
+            $data->andFilterWhere(['like', "$op.title", $name]);
+        }
+
+        //项目副标题
+        if ('' !== $internalTitle) {
+            $data->andFilterWhere(['like', "$op.internalTitle", $internalTitle]);
+        }
+
+        //状态选择
+        if ('0' === $requestStatus) {
+            $data->andWhere(["online_status" => $requestStatus]);
+        } elseif ($requestStatus) {
+            $data->andWhere(["online_status" => OnlineProduct::STATUS_ONLINE, "$op.status" => $requestStatus]);
+        }
+
+        //标的显示及隐藏列表切换
+        if ($requireIsHide) {
             $data->andWhere([
                 'del_status' => OnlineProduct::STATUS_DEL,
                 'status' => OnlineProduct::STATUS_FOUND,
@@ -457,17 +473,10 @@ class ProductonlineController extends BaseController
         }
 
         //根据是否测试标进行过滤
-        if (isset($request['isTest'])) {
-            $isTest = $request['isTest'];
-        } else {
-            $isTest = Yii::$app->request->cookies->getValue('loanListFilterIsTest', 0);
-        }
         $data->andWhere(['isTest' => $isTest]);
         if ($isTest) {
             Yii::$app->response->cookies->add(new Cookie(['name' => 'loanListFilterIsTest', 'value' => 1, 'expire' => strtotime('next year'), 'httpOnly' => false]));
         }
-
-        $days = $request['days'];
 
         if (!empty($days)) {
             if (in_array($days, [1, 7])) {
@@ -479,7 +488,6 @@ class ProductonlineController extends BaseController
 
         $_data = clone $data;
         $data->orderBy('xs_status desc, isrecommended desc, online_status asc, product_status asc,effect_jixi_time desc, sn desc');
-
         $pages = new Pagination(['totalCount' => $_data->count(), 'pageSize' => '20']);
         $model = $data->offset($pages->offset)->limit($pages->limit)->all();
 
