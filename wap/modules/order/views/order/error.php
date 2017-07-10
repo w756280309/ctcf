@@ -42,7 +42,7 @@ $this->backUrl = false;
 
     <div class="col-xs-12 page_padding">
         <?php if ('success' === $ret) { ?>
-            <div>绑定温都公众号 ：wendujinfu（点击复制），可以及时了解自己的收益，还送10个积分哦</div>
+            <div>绑定温都公众号<font color="#999999">（温都金服全拼）</font>: "<font color="#e33737">wendujinfu</font>" ，可以及时了解自己的收益，还送10个积分哦</div>
         <?php } else { ?>
             <div>遇到问题请联系客服，电话：<a class="contact-tel" href="tel:<?= Yii::$app->params['contact_tel'] ?>"><?= Yii::$app->params['contact_tel'] ?></a></div>
         <?php } ?>
