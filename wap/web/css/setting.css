@@ -257,6 +257,9 @@ a.set:visited {
     padding: 0;
     margin-top: 20px;
 }
+#bind-close1 {
+    margin-top: 3rem;
+}
 .bind-close1 {
     display: block;
     width: 100%;
