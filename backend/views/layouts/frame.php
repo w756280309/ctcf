@@ -115,7 +115,7 @@ $leftLinkArray = Auth::find()
                             <ul class="dropdown-menu">
                                 <li><a href="javascript:void(0)" onclick="openwin('/adminuser/admin/editpass',500,300)"><i class="icon-user"></i> 修改密码</a></li>
                                 <li class="divider"></li>
-                                <li><a href="/login/logout"><i class="icon-key"></i> Log Out</a></li>
+                                <li><a href="/login/logout"><i class="icon-key"></i> 安全退出</a></li>
                             </ul>
                         </li>
                     </ul>
