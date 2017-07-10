@@ -24,12 +24,12 @@ class SplashController extends Controller
             'result' => 'success',
             'msg' => '成功',
             'content' => [
-                'adv_id' => 170520,
-                'img_640x960' => $baseDir . 'images/shanping/170120/img_640x960.png',
-                'img_640x1136' => $baseDir . 'images/shanping/170120/img_640x1136.png',
-                'img_750x1334' => $baseDir . 'images/shanping/170120/img_750x1334.png',
-                'img_1242x2208' => $baseDir . 'images/shanping/170120/img_1242x2208.png',
-                'img_1080x1920' => $baseDir . 'images/shanping/170120/img_1080x1920.png', //安卓端
+                'adv_id' => 201707,
+                'img_640x960' => $baseDir . 'images/shanping/1707/img_640x960.png',
+                'img_640x1136' => $baseDir . 'images/shanping/1707/img_640x1136.png',
+                'img_750x1334' => $baseDir . 'images/shanping/1707/img_750x1334.png',
+                'img_1242x2208' => $baseDir . 'images/shanping/1707/img_1242x2208.png',
+                'img_1080x1920' => $baseDir . 'images/shanping/1707/img_1080x1920.png', //安卓端
                 'title' => '温都金服启动页',
             ],
         ];
