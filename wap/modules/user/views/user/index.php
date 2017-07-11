@@ -4,7 +4,7 @@ $this->title = '账户中心';
 
 ?>
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/wenjfbase.css">
-<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/activeComHeader.css?v=20170323">
+<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/activeComHeader.css?v=20170711">
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/ucenter/css/homePage.css?v=20170629">
 <script src="<?= FE_BASE_URI ?>libs/fastclick.js"></script>
 <script src="<?= FE_BASE_URI ?>libs/lib.flexible3.js"></script>
@@ -12,6 +12,7 @@ $this->title = '账户中心';
 
 <?php if (!defined('IN_APP')) { ?>
     <div class="UtopTitle f18 flex-content">
+        <a class="f14" href="/user/checkin">签到</a>
         账户中心
         <a class="f14" href="/system/system/setting">设置</a>
     </div>

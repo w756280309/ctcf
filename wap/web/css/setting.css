@@ -413,3 +413,18 @@ span.notice {
 .end-list {
     margin-bottom: 60px;
 }
+
+.qiandao {
+    position: absolute;
+    bottom: 1rem;
+    width: 100%;
+    text-align: center;
+}
+
+.qiandao a {
+    color: #007aff;
+}
+
+.note-msg {
+    font-size: 1rem;
+}
