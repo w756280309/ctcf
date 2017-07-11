@@ -58,10 +58,12 @@ use yii\behaviors\TimestampBehavior;
  * @property string  $finish_date   截止日
  * @property bool    $is_jixi
  * @property string  $internalTitle 副标题（仅供内部使用）
+ * @property string  $publishTime   产品上线时间
  */
 class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
 {
     public $is_fdate = 0;//是否启用截止日期
+    private $subSn;      //产品子类序号
 
     //1预告期、 2募集中,3满标,4流标,5还款中,6已还清7募集提前结束  特对设立阀值得标的进行的设置。
     const STATUS_PRE = 1; //
@@ -1195,5 +1197,32 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
     {
         return $this->hasMany(OnlineOrder::className(), ['online_pid' => 'id'])
             ->andFilterWhere(['online_order.status' => OnlineOrder::STATUS_SUCCESS]);
+    }
+
+    /**
+     * 获取产品子类序号.
+     */
+    public function getSubSn()
+    {
+        if (is_null($this->subSn)) {
+            if ($this->is_xs) {
+                $count = (int) OnlineProduct::find()
+                    ->where([
+                        'is_xs' => true,
+                        'del_status' => false,
+                        'isPrivate' => false,
+                        'isTest' => $this->isTest,
+                    ])
+                    ->andWhere("date(publishTime) = date(:pubDate) and created_at < :createAt", [
+                        'pubDate' => $this->publishTime,
+                        'createAt'  => $this->created_at,
+                    ])
+                    ->count();
+
+                return date('md', strtotime($this->publishTime)).sprintf("%02d", ($count + 1));
+            }
+        }
+
+        return $this->subSn;
     }
 }

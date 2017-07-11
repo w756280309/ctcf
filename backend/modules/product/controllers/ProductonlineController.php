@@ -329,7 +329,11 @@ class ProductonlineController extends BaseController
             $loanObj = new OnlineProduct($loan);
             try {
                 $resp = OnlineProduct::createLoan($loanObj, $borrow);
-                $updateData = ['epayLoanAccountId' => $resp, 'online_status' => 1];
+                $updateData = [
+                    'epayLoanAccountId' => $resp,
+                    'online_status' => 1,
+                    'publishTime' => date('Y-m-d H:i:s'),
+                ];
                 //添加标的更改记录
                 $log = AdminLog::initNew(['tableName' => OnlineProduct::tableName(), 'primaryKey' => $loan['id']], Yii::$app->user, $updateData);
                 $log->save();
@@ -570,6 +574,7 @@ class ProductonlineController extends BaseController
     public function actionFound()
     {
         $id = Yii::$app->request->post('id');
+
         if ($id) {
             $model = OnlineProduct::findOne($id);
             if (empty($model) || $model->status != OnlineProduct::STATUS_NOW) {
@@ -578,7 +583,12 @@ class ProductonlineController extends BaseController
                 $bc = new BcRound();
                 $transaction = Yii::$app->db->beginTransaction();
                 //提前成立的标的募集完成率应为100%，即1.0000
-                $updateData = ['status' => OnlineProduct::STATUS_FOUND, 'sort' => OnlineProduct::SORT_FOUND, 'full_time' => time(), 'finish_rate' => 1.0000];
+                $updateData = [
+                    'status' => OnlineProduct::STATUS_FOUND,
+                    'sort' => OnlineProduct::SORT_FOUND,
+                    'full_time' => time(),
+                    'finish_rate' => 1.0000,
+                ];
                 //修改标的修改记录
                 try {
                     $log = AdminLog::initNew($model, Yii::$app->user, $updateData);
@@ -617,7 +627,13 @@ class ProductonlineController extends BaseController
                 }
 
                 if (!empty($model->recommendTime)) {
-                    $count = OnlineProduct::find()->where('recommendTime != 0')->andWhere(['isPrivate' => 0, 'del_status' => 0])->count();
+                    $count = OnlineProduct::find()
+                        ->where('recommendTime != 0')
+                        ->andWhere([
+                            'isPrivate' => 0,
+                            'del_status' => 0,
+                        ])
+                        ->count();
 
                     if ($count > 1) {
                         $model->recommendTime = 0;
