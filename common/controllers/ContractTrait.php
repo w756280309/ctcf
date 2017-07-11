@@ -144,7 +144,13 @@ trait ContractTrait
             } else {
                 $title = Yii::$app->functions->cut_str($loanTemplate->name, 5, 0, '**');
             }
-            $content = $this->loadLoanContract($loanTemplate->content, $user['real_name'], $user['idcard'], $orderTime, $amount);
+
+            $content = $this->loadLoanContract($loanTemplate->content,
+                $user['real_name'],
+                $user['idcard'],
+                $orderTime,
+                $amount,
+                $loanOrder->loan);
 
             $loanContract[$key]  = ['title' => $title, 'content' => $content, 'type' => 'loan'];
         }
@@ -181,16 +187,30 @@ trait ContractTrait
         return ['loanContract' => $loanContract, 'loanAmount' => $loanAmount, 'bqLoan' => $bqLoan];
     }
 
-    private function loadLoanContract($content ,$userName, $idCard, $orderTime, $amount)
+    private function loadLoanContract($content ,$userName, $idCard, $orderTime, $amount, OnlineProduct $loan)
     {
+        $subSn = $loan->getSubSn();
+        $fullTime = $loan->full_time ? date("Y年m月d日", $loan->full_time) : '';
+        $jixiTime = $loan->jixi_time ? date("Y年m月d日", $loan->jixi_time) : '';
+        $finishDate = $loan->finish_date ? date("Y年m月d日", $loan->finish_date) : '';
+
         $content = preg_replace("/{{投资人}}/is", $userName, $content);
         $content = preg_replace("/{{身份证号}}/is", $idCard, $content);
         $content = preg_replace("/{{认购日期}}/is", date("Y年m月d日", $orderTime), $content);
         $content = preg_replace("/{{认购金额}}/is", $amount, $content);
+        $content = preg_replace("/{{产品子类序号}}/is", $subSn, $content);
+        $content = preg_replace("/{{产品成立日}}/is", $fullTime, $content);
+        $content = preg_replace("/{{产品起息日}}/is", $jixiTime, $content);
+        $content = preg_replace("/{{产品到期日}}/is", $finishDate, $content);
         $content = preg_replace("/｛｛投资人｝｝/is", $userName, $content);
         $content = preg_replace("/｛｛身份证号｝｝/is", $idCard, $content);
         $content = preg_replace("/｛｛认购日期｝｝/is", date("Y年m月d日", $orderTime), $content);
         $content = preg_replace("/｛｛认购金额｝｝/is", $amount, $content);
+        $content = preg_replace("/｛｛产品子类序号｝｝/is", $subSn, $content);
+        $content = preg_replace("/｛｛产品成立日｝｝/is", $fullTime, $content);
+        $content = preg_replace("/｛｛产品起息日｝｝/is", $jixiTime, $content);
+        $content = preg_replace("/｛｛产品到期日｝｝/is", $finishDate, $content);
+
         return $content;
     }
 
