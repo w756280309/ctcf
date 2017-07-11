@@ -7,7 +7,7 @@ i {
 .head_part {
   height: 3.56rem;
   background: url("../images/top_bg.png") no-repeat;
-  background-size: contain;
+  background-size: 100% 100%;
   position: relative;
 }
 .head_part .jilu_link {
