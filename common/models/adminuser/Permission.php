@@ -2,10 +2,10 @@
 
 namespace common\models\adminuser;
 
-use common\models\adminuser\Auth;
 use Yii;
+use yii\base\Model;
 
-class Permission extends \yii\base\Model
+class Permission extends Model
 {
     /**
      * 判断权限
@@ -38,15 +38,16 @@ class Permission extends \yii\base\Model
             return true;
         }
 
-        $db = Yii::$app->db;
         $auth_table = Auth::tableName();
         $admin_auth_table = AdminAuth::tableName();
 
-        $sql = AdminAuth::find()->innerJoin($auth_table, $admin_auth_table.".auth_sn=".$auth_table.".sn")
-                ->where(['admin_id' => $admin_id, 'path' => $path])->select("auth_sn,path")->createCommand()->getRawSql();
+        $adminAuth = AdminAuth::find()
+            ->innerJoin($auth_table, $admin_auth_table.'.auth_sn='.$auth_table.'.sn')
+            ->where(['admin_id' => $admin_id])
+            ->andWhere(['or', ['path' => $path], ['path' => $path.'/index']])
+            ->select("auth_sn,path")
+            ->all();
 
-        $res = $db->createCommand($sql)->queryAll();
-
-        return $res ? true : false;
+        return !empty($adminAuth);
     }
 }
