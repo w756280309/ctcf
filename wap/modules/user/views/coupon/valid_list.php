@@ -3,7 +3,8 @@
 use common\utils\StringUtils;
 
 $this->title = '可用代金券';
-$replaceUrl = \Yii::$app->request->referrer;
+$replaceUrl = \Yii::$app->request->referrer.'&_mark='.time();
+$this->replaceUrl = $replaceUrl;
 
 $inApp = defined('IN_APP');
 
