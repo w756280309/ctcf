@@ -9,7 +9,7 @@ class NotifyLog extends ActiveRecord
 {
     public static function tableName()
     {
-        return 'NotifyLog';
+        return 'notifylog';
     }
 
     public function behaviors()

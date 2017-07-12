@@ -16,7 +16,7 @@ $this->title = '后台管理系统';
         <table width="100%" border="0" cellspacing="0" cellpadding="0">
             <tr>
                 <td width="120">程序版本: </td>
-                <td width="250">温都金服 正式版 1.0.0</td>
+                <td width="250">正式版 1.0.0</td>
                 <td width="120">  </td>
                 <td> </td>
             </tr>

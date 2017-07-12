@@ -25,7 +25,7 @@ use yii\console\Controller;
 class ToolController extends Controller
 {
     /**
-     * 更新温都金服钉钉用户:工具脚本
+     * 更新钉钉用户:工具脚本
      */
     public function actionUpdateWdjfDingUser()
     {
@@ -114,7 +114,7 @@ class ToolController extends Controller
                 $ret = $ump->platformTransfer($sn, $fromEPayUser->epayUserId, $amount, $time);
                 if ($ret->isSuccessful()) {
                     //更改温都数据库
-                    $sql = "update user_account set available_balance = available_balance - :amount where uid = ( select appUserId from EpayUser where epayUserId = :epayUserId )";
+                    $sql = "update user_account set available_balance = available_balance - :amount where uid = ( select appUserId from epayuser where epayUserId = :epayUserId )";
                     $res = Yii::$app->db->createCommand($sql, [
                         'amount' => $amount,
                         'epayUserId' => $fromEPayUser->epayUserId,
@@ -188,7 +188,7 @@ class ToolController extends Controller
         }
     }
 
-    //初始化温都金服用户信息加密key:工具脚本 php yii tool/init-key
+    //初始化用户信息加密key:工具脚本 php yii tool/init-key
     public function actionInitKey()
     {
         $randomKey = Yii::$app->security->generateRandomString(255);

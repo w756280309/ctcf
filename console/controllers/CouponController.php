@@ -28,7 +28,7 @@ class CouponController extends Controller
     {
         $u = User::tableName();
         $ct = CouponType::tableName();
-        $contactTel = \Yii::$app->params['contact_tel'];
+        $contactTel = \Yii::$app->params['platform_info.contact_tel'];
         $expiryDate = date('Y-m-d', strtotime('+' . ($expireDay - 1) . 'days'));
 
         $userCoupons = UserCoupon::find()

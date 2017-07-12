@@ -17,6 +17,9 @@ return [
                 [
                     'class' => 'yii\log\FileTarget',
                     'levels' => ['error', 'warning'],
+                    'prefix' => function ($message) {
+                        return "";//去掉消息返回的[IP address][User ID][Session ID][Severity Level]
+                    }
                 ],
                 [
                     'class' => 'yii\log\FileTarget',
@@ -58,11 +61,18 @@ return [
         'user' => [
             'identityClass' => 'common\\models\\user\\User',
         ],
+        'request' => [
+            'class' => 'Zii\Http\Request',
+            'enableCsrfValidation' => false, // 禁用CSRF
+            'enableCookieValidation' => false, // 禁用Cookie值的加密
+        ],
         'cache' => [
             'class' => 'yii\caching\FileCache',
         ],
         'urlManager' => [
             'enableStrictParsing' => false,
+            'enablePrettyUrl' => true,
+            'showScriptName' => false,
             'rules' => [
                 'rest/recharges' => 'v1/rest/recharge/list',
                 'rest/loans' => 'v1/rest/loan/list',
@@ -112,6 +122,9 @@ return [
         ],
         'v2' => [
             'class' => 'api\\modules\\v2\\Module',
+        ],
+        'tx' => [
+            'class' => 'api\\modules\\tx\\Module',
         ],
         'source' => [
             'class' => 'Wcg\\Growth\\Integration\\Yii2Module\\Module',

@@ -87,10 +87,13 @@ class UserController extends BaseController
         $ua = $user->lendAccount;
         $pointPromo = RankingPromo::findOne(['key' => 'loan_order_points']);
 
+        $showPointsArea = false;
         try {
-            $showPointsArea = $pointPromo->isActive($user);
+            if (!is_null($pointPromo)) {
+                $showPointsArea = $pointPromo->isActive($user);
+            }
         } catch (\Exception $e) {
-            $showPointsArea = false;
+
         }
 
         $sumCoupon = 0;

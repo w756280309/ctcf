@@ -8,4 +8,5 @@ Yii::setAlias('borrower', dirname(dirname(__DIR__)).'/borrower');
 Yii::setAlias('console', dirname(dirname(__DIR__)).'/console');
 Yii::setAlias('api', dirname(dirname(__DIR__)).'/api');
 Yii::setAlias('lock', dirname(dirname(__DIR__)).'/console/runtime/lock');
-//Yii::setAlias('channel', dirname(dirname(__DIR__)).'/channel');
+Yii::setAlias('view', dirname(dirname(__DIR__)).'/view');
+Yii::setAlias('fe', dirname(dirname(__DIR__)).'/fe');

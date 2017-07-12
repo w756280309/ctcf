@@ -14,7 +14,7 @@ class AccessToken extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'AccessToken';
+        return 'accesstoken';
     }
 
     public static function initToken(User $user)

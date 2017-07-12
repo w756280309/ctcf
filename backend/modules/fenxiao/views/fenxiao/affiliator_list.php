@@ -75,7 +75,7 @@ $user_id = Html::encode($uid);
                                 <input name="_csrf" type="hidden" id="_csrf" value="<?= Yii::$app->request->csrfToken ?>">
                                 <input type="hidden" name="uid" value="<?= $user_id ?>">
                                 <select name="aff_id">
-                                    <option value="">官方（温都金服）</option>
+                                    <option value="">官方</option>
                                     <?php foreach($affiliators as $affiliator) : ?>
                                         <option value="<?= $affiliator['id'] ?>" <?= $userAffId === (int) $affiliator['id'] ? 'selected' : '' ?>><?= $affiliator['name'] ?>（<?= $affiliator['trackCode'] ?>）</option>
                                     <?php endforeach; ?>

@@ -1,26 +1,28 @@
 <?php
-$this->title = '修改登陆密码 - 温都金服';
 
 use yii\bootstrap\ActiveForm;
 use yii\captcha\Captcha;
 use yii\web\View;
 
-$_js = <<<'JS'
-$(function() {
-    var $form = $('#editpass');
-    $form.on('beforeValidate', function() {
-        var verifycode = $('#verifycode').val();
-        if (verifycode === '') {
-            alert("请填写图形验证码");
-            return false;
-        }
+$this->title = '修改登录密码';
 
-        return true;
-    });
-})
+$_js = <<<'JS'
+    $(function() {
+        var $form = $('#editpass');
+        $form.on('beforeValidate', function() {
+            var verifycode = $('#verifycode').val();
+            if (verifycode === '') {
+                alert("请填写图形验证码");
+                return false;
+            }
+    
+            return true;
+        });
+    })
 JS;
 
 $this->registerJs($_js, View::POS_END, 'body_close');
+
 ?>
 <style>
     .login {

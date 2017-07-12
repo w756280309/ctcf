@@ -18,7 +18,6 @@
 !/backend/web/upload/product/.gitkeep
 
 /*/runtime/
-/*/web/assets/
 
 .htaccess
 php-cs-fixer.phar
@@ -47,5 +46,11 @@ backend/web/upload/
 
 /*/web/upload
 
+params.php.bk
+main.php.bk
 params-local.php.bk
 main-local.php.bk
+
+!/console/config/njfae/keys
+/console/config/njfae/keys/*
+!/console/config/njfae/keys/.gitkeep

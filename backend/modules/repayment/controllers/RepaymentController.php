@@ -423,7 +423,7 @@ class RepaymentController extends BaseController
                     $product->title,
                     $data_arr[0]['benjin'],
                     $data_arr[0]['lixi'],
-                    Yii::$app->params['contact_tel'],
+                    Yii::$app->params['platform_info.contact_tel'],
                 ];
             } elseif (0 === $sum_benxi_yue) {
                 //分期最后一期
@@ -434,7 +434,7 @@ class RepaymentController extends BaseController
                     $qishu,
                     $data_arr[0]['benjin'],
                     $data_arr[0]['lixi'],
-                    Yii::$app->params['contact_tel'],
+                    Yii::$app->params['platform_info.contact_tel'],
                 ];
             } elseif(OnlineProduct::REFUND_METHOD_DEBX === $product->refund_method) {
                 //等额本息不是最后一期
@@ -445,7 +445,7 @@ class RepaymentController extends BaseController
                     $qishu,
                     $data_arr[0]['benjin'],
                     $data_arr[0]['lixi'],
-                    Yii::$app->params['contact_tel'],
+                    Yii::$app->params['platform_info.contact_tel'],
                 ];
             } else {
                 //分期(不是等额本息)不是最后一期
@@ -455,7 +455,7 @@ class RepaymentController extends BaseController
                     $product->title,
                     $qishu,
                     $data_arr[0]['lixi'],
-                    Yii::$app->params['contact_tel'],
+                    Yii::$app->params['platform_info.contact_tel'],
                 ];
             }
 

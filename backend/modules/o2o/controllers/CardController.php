@@ -229,7 +229,7 @@ class CardController extends BaseController
                         $cardInfo,
                         $affiliator->name,
                         '',
-                        Yii::$app->params['contact_tel'],
+                        Yii::$app->params['platform_info.contact_tel'],
                     ];
 
                     SmsService::send($mobile, $templateId, $message, $user);

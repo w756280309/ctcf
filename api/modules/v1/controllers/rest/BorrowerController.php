@@ -11,7 +11,7 @@ class BorrowerController extends Controller
     {
         $query = User::find()
             ->select('user.*')
-            ->innerJoin('EpayUser', 'EpayUser.appUserId = user.id')
+            ->innerJoin('epayuser', 'epayuser.appUserId = user.id')
             ->where('user.type = :userType')
             ->addParams([
                 'userType' => User::USER_TYPE_ORG,

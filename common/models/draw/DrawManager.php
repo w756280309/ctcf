@@ -137,7 +137,7 @@ class DrawManager
             date('Y-m-d H:i', $draw->created_at),
             $draw->money,
             'T+1',
-            Yii::$app->params['contact_tel'],
+            Yii::$app->params['platform_info.contact_tel'],
         ];
 
         $templateId = Yii::$app->params['sms']['tixian_apply'];

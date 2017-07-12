@@ -321,7 +321,7 @@ class ProductonlineController extends BaseController
         $loans = (new \yii\db\Query())
                 ->select('loan.*,eu.epayUserId')
                 ->from(['online_product loan'])
-                ->innerJoin('EpayUser eu', 'loan.borrow_uid=eu.appUserId')
+                ->innerJoin('epayuser eu', 'loan.borrow_uid=eu.appUserId')
                 ->where('loan.id in ('.$ids.')')->all();
 
         $error_loans = '';

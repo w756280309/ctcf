@@ -87,7 +87,30 @@ return [
                         return '';//去掉消息返回的[IP address][User ID][Session ID][Severity Level]
                     },
                 ],
+                [
+                    'class' => 'yii\log\FileTarget',
+                    'levels' => ['trace'],
+                    'categories' => ['credit_order'],
+                    'logFile' => '@app/runtime/credit/credit_order'.date('Ymd').'.log',
+                    'maxFileSize' => 1024 * 2,
+                    'logVars' => ['trace'],
+                    'prefix' => function ($message) {
+                        return '';//去掉消息返回的[IP address][User ID][Session ID][Severity Level]
+                    },
+                ],
             ],
+        ],
+        'njfaeFtp' => [
+            'class' => '\gftp\FtpComponent',
+            'driverOptions' =>  [
+                'class' => \gftp\FtpProtocol::valueOf('sftp')->driver,
+                'user' => 'wdjf',
+                'publicKeyFile' => __DIR__.'/njfae/keys/id_rsa.pub',  //ssh公钥路径
+                'privateKeyFile' => __DIR__.'/njfae/keys/id_rsa', //ssh私钥路径
+                'host' => '123.57.157.2',
+                'port' => 22,
+                'timeout' => 120,
+            ]
         ],
         'beanstalk'=>[
             'class' => 'udokmeci\yii2beanstalk\Beanstalk',
@@ -102,6 +125,8 @@ return [
     ],
     'modules' => [
         'crm' => 'Wcg\Xii\Crm\Module',
+        'njfae' => 'console\modules\njfae\Module',
+        'tx' => 'console\modules\tx\Module',
     ],
     'params' => $params,
 ];

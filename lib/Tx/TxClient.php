@@ -37,9 +37,9 @@ class TxClient
     {
         $client = $this->client;
         $path = ltrim($path, '/');
-        $path = ltrim($path, 'Api/');
+        $path = ltrim($path, 'tx/');
         $path = ltrim($path, '/');
-        $path = 'Api/' . $path;
+        $path = 'tx/' . $path;
         if (!is_string($params)) {
             $params = http_build_query($params);
         }
@@ -69,9 +69,9 @@ class TxClient
     {
         $client = $this->client;
         $path = ltrim($path, '/');
-        $path = ltrim($path, 'Api/');
+        $path = ltrim($path, 'tx/');
         $path = ltrim($path, '/');
-        $path = 'Api/' . $path;
+        $path = 'tx/' . $path;
         try {
             $res = $client->request('POST', $path, [
                 'headers' => empty($headerOptions) ? [

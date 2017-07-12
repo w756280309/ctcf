@@ -3,7 +3,7 @@
 use yii\bootstrap\ActiveForm;
 use yii\captcha\Captcha;
 
-$this->title = '企业登录 - 温都金服';
+$this->title = '企业登录';
 
 ?>
 <style>

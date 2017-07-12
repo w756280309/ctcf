@@ -185,7 +185,7 @@ class Promo1212
                     return $lottery;
                 }
             } catch(\Exception $ex) {
-                throw new \Exception('发奖失败，请联系客服，客服电话' . \Yii::$app->params['contact_tel']);
+                throw new \Exception('发奖失败，请联系客服，客服电话' . \Yii::$app->params['platform_info.contact_tel']);
             }
         }
 
@@ -338,7 +338,7 @@ class Promo1212
             $templateId = \Yii::$app->params['sms']['intro_redpacket'];
             $message = [
                 $cash,
-                \Yii::$app->params['contact_tel'],
+                \Yii::$app->params['platform_info.contact_tel'],
             ];
             SmsService::send(SecurityUtils::decrypt($user->safeMobile), $templateId, $message, $user);
 

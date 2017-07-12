@@ -8,7 +8,7 @@ class OrderQueue extends \yii\db\ActiveRecord
 {
     public static function tableName()
     {
-        return 'OrderQueue';
+        return 'orderqueue';
     }
 
     public function behaviors()
@@ -48,7 +48,7 @@ class OrderQueue extends \yii\db\ActiveRecord
         bcscale(14);
         $rets = (new \yii\db\Query())
                 ->select('q.orderSn,o.*,loan.*')
-                ->from(['OrderQueue q'])
+                ->from(['orderqueue q'])
                 ->innerJoin('online_order o', 'o.sn=q.orderSn')
                 ->innerJoin('online_product loan', 'loan.id=o.online_pid')
                 ->where('q.status=0')->orderBy('o.id asc')->all();

@@ -59,9 +59,6 @@ return [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'enableCookieValidation' => false,
         ],
-        'view' => [
-            'class' => 'common\view\WapView',
-        ],
         'assetManager' => [
             'bundles' => [
                 'yii\web\JqueryAsset' => [

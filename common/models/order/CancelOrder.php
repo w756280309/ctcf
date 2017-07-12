@@ -17,7 +17,7 @@ class CancelOrder extends \yii\db\ActiveRecord implements \P2pl\OrderTxInterface
 
     public static function tableName()
     {
-        return 'CancelOrder';
+        return 'cancelorder';
     }
 
     public function behaviors()

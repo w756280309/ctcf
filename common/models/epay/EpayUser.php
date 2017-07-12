@@ -28,7 +28,7 @@ class EpayUser extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'EpayUser';
+        return 'epayuser';
     }
 
     /**

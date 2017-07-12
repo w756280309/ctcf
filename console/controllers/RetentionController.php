@@ -72,7 +72,7 @@ class RetentionController extends Controller
                             $platAmount,
                             $amount,
                             $this->getUrl($retention->tactic_id),
-                            Yii::$app->params['contact_tel'],
+                            Yii::$app->params['platform_info.contact_tel'],
                         ];
                         SmsService::send(SecurityUtils::decrypt($user->safeMobile), 184056, $message, $user);
                     }

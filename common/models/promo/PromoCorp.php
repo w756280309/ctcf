@@ -159,7 +159,7 @@ class PromoCorp
             $cardInfo,
             $affiliator->name,
             $this->promo->title,
-            Yii::$app->params['contact_tel'],
+            Yii::$app->params['platform_info.contact_tel'],
         ];
 
         return SmsService::send(SecurityUtils::decrypt($user->safeMobile), $templateId, $message, $user);

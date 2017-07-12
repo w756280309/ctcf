@@ -242,7 +242,7 @@ class OnlineRepaymentPlan extends \yii\db\ActiveRecord
                     $user->getName(),
                     $loan->title,
                     date('Y-m-d', $loan->jixi_time),
-                    Yii::$app->params['contact_tel'],
+                    Yii::$app->params['platform_info.contact_tel'],
                 ];
                 //已经发过短信的用户不重复发送短信
                 if (in_array($order->uid, $userIds)) {
@@ -360,23 +360,6 @@ class OnlineRepaymentPlan extends \yii\db\ActiveRecord
                 $val,    //还款日期
                 $principal,   //还款本金
                 $interest,    //还款利息
-            ];
-        }
-
-        //按自然年计息、自定义还款标的,当标的的实际还款日 大于 项目期限/12 时候合并最后两期
-        $term = count($res);
-        if ($loan->refund_method === OnlineProduct::REFUND_METHOD_NATURE_YEAR
-            && $loan->isCustomRepayment
-            && $term >= 2
-            && $term > ceil($loan->expires/12)
-        ) {
-            $lastTermData = $res[$term-1];//最后一期数据
-            $exceptMergeData = $res[$term-2];//倒数第二期，需要合并到最后一期
-            array_pop($res);
-            $res[$term - 2] = [
-                $lastTermData[0],
-                bcadd($lastTermData[1], $exceptMergeData[1], 2),
-                bcadd($lastTermData[2], $exceptMergeData[2], 2)
             ];
         }
 

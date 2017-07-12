@@ -253,7 +253,7 @@ class PageController extends BaseController
         $introduceScope = [];
         $introduceScope['businessImgUrl'] = ASSETS_BASE_URI . '/images/icp.png';
         $introduceScope['businessJumpUrl'] = $appHost . '/news/detail?type=info&id=383';
-        $introduceScope['servicePhone'] = \Yii::$app->params['contact_tel'];
+        $introduceScope['servicePhone'] = \Yii::$app->params['platform_info.contact_tel'];
         $introduceScope['address'] = '温州市鹿城区飞霞南路657号保丰大楼四层';
         $introduceScope['productPlatform'] = '温州报业传媒旗下理财平台';
 

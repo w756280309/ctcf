@@ -21,6 +21,8 @@ class DrawRecord extends \yii\db\ActiveRecord implements \P2pl\WithdrawalInterfa
     const STATUS_SUCCESS = 2; //提现成功
     const STATUS_FAIL = 3; //提现失败
     const STATUS_DENY = 11; //提现驳回
+    const STATUS_LAUNCH_BATCHPAY = 4; //已放款,此时生成批量代付批次
+    const STATUS_DEAL_FINISH = 5; //已经处理
 
     public static function createSN()
     {

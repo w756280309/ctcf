@@ -100,7 +100,7 @@ class Perf extends ActiveRecord
     //实名认证
     public function getIdVerified($date)
     {
-        return Yii::$app->db->createCommand('SELECT COUNT(id) FROM EpayUser WHERE regDate=:date')
+        return Yii::$app->db->createCommand('SELECT COUNT(id) FROM epayuser WHERE regDate=:date')
             ->bindValue('date', $date, \PDO::PARAM_STR)
             ->queryScalar();
     }

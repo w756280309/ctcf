@@ -1,5 +1,7 @@
 <?php
-$this->title = '温都金服首页';
+
+$this->title = '首页';
+
 ?>
 <div style="height: 300px; background: url('/images/banner.png');"></div>
 

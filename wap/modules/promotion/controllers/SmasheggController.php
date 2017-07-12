@@ -99,7 +99,7 @@ class SmasheggController extends Controller
         } catch (\Exception $ex) {
             return [
                 'code' => 400,
-                'msg' => '抽奖失败，请联系客服，客服电话'.\Yii::$app->params['contact_tel'],
+                'msg' => '抽奖失败，请联系客服，客服电话'.\Yii::$app->params['platform_info.contact_tel'],
             ];
         }
     }

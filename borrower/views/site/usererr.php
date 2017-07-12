@@ -6,8 +6,8 @@
                 <p style='color: red; font-size: 20px'>用户已锁定</p>
 
                 <div style="margin: 20px auto; width: 90px; height: 90px;"><img src="/images/false.png"/></div>
-                
-                <p>请联系客服，电话：<?= Yii::$app->params['contact_tel'] ?></p>
+
+                <p>请联系客服，电话：<?= Yii::$app->params['platform_info.contact_tel'] ?></p>
             </div>
     </div>
 </div>

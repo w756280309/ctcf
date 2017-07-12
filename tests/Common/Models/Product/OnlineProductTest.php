@@ -9,18 +9,6 @@ use yii\base\Exception;
 class OnlineProductTest extends YiiAppTestCase
 {
     /**
-     * 测试没有计息时间标的
-     * @expectedException Exception
-     */
-    public function testPaymentDates1()
-    {
-        $loan = new OnlineProduct([
-            'jixi_time' => 0,
-        ]);
-        $loan->getPaymentDates();
-    }
-
-    /**
      * 测试   没有截止日期的到期本息
      */
     public function testPaymentDates2()

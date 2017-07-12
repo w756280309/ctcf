@@ -370,7 +370,7 @@ class OrderManager
             $user->real_name,
             $loan->title,
             $order->paymentAmount,
-            Yii::$app->params['contact_tel'],
+            Yii::$app->params['platform_info.contact_tel'],
         ];
 
         $templateId = Yii::$app->params['sms']['toubiao'];

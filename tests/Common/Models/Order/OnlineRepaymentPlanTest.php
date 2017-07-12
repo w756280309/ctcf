@@ -322,4 +322,25 @@ class OnlineRepaymentPlanTest extends YiiAppTestCase
             ['2017-06-01', '500.42', '0.83'],
         ], OnlineRepaymentPlan::calcBenxi($order));
     }
+
+    public function testMergeRepayment()
+    {
+        $loan = new OnlineProduct([
+            'refund_method' => 9,
+            'jixi_time' => strtotime('2017-06-21'),
+            'finish_date' => strtotime('2018-12-21'),
+            'expires' => 18,
+            'paymentDay' => 20,
+            'isCustomRepayment' => true,
+        ]);
+
+        $ord = $this->getOrderMock($loan);
+        $ord->order_money = 200000.00;
+        $ord->yield_rate = 0.079000;
+
+        $this->assertEquals([
+            ['2017-12-20', 0, '7871.16'],
+            ['2018-12-21', 200000, '15828.84'],
+        ], OnlineRepaymentPlan::calcBenxi($ord));
+    }
 }

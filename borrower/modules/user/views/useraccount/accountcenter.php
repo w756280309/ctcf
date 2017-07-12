@@ -1,5 +1,7 @@
 <?php
-$this->title = '账户中心-温都金服';
+
+$this->title = '账户中心';
+
 ?>
 <style>
     .headpic {
@@ -16,6 +18,7 @@ $this->title = '账户中心-温都金服';
         background-repeat: no-repeat;
     }
 </style>
+
 <div class="container">
     <div style="margin-top: 30px">
         <img class="headpic" src="/images/headpic.png">欢迎您

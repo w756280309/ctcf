@@ -1,6 +1,6 @@
 <?php
 
-$this->title = '首页 - 温都金服后台';
+$this->title = '首页';
 $this->loadAuthJs = false;
 
 ?>

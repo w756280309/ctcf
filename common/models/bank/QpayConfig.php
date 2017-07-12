@@ -12,7 +12,7 @@ class QpayConfig extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'QpayConfig';
+        return 'qpayconfig';
     }
 
     /**

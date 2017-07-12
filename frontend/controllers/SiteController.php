@@ -20,7 +20,6 @@ use common\service\LoginService;
 use common\service\SmsService;
 use common\utils\SecurityUtils;
 use Yii;
-use yii\base\Security;
 use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\filters\VerbFilter;

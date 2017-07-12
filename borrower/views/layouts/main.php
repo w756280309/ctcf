@@ -24,7 +24,7 @@ AppAsset::register($this);
             <div class="container">
                 <div class="navbar-header">
                     <a class="navbar-brand" href="/">
-                        温都金服
+                        充值专用通道
                     </a>
                 </div>
 

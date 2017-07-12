@@ -3,7 +3,7 @@
 use yii\bootstrap\ActiveForm;
 use yii\web\View;
 
-$this->title = '企业充值 - 温都金服';
+$this->title = '企业充值';
 
 $_js = <<<'JS'
 $(function() {
@@ -59,7 +59,7 @@ $this->registerJs($_js, View::POS_END, 'body_close');
 
         <h3>限额提醒</h3>
         <div class="section">
-            <p style="margin-left:63px">具体限额以您在银行协定的额度为准，详细情况下请进入您的网上银行查看，如有疑问，请联系客服：<?= Yii::$app->params['contact_tel'] ?>。</p>
+            <p style="margin-left:63px">具体限额以您在银行协定的额度为准，详细情况下请进入您的网上银行查看，如有疑问，请联系客服：<?= Yii::$app->params['platform_info.contact_tel'] ?>。</p>
         </div>
 
         <h3>请填写充值金额</h3>
@@ -84,7 +84,7 @@ $this->registerJs($_js, View::POS_END, 'body_close');
             <ol>
                 <li>投资人充值过程全程免费，不收取任何手续费；</li>
                 <li>最低充值金额应大于等于1元；</li>
-                <li>充值期间，请勿关闭浏览器，待充值成功并返回账户中心后，所充资金才能入账，如有疑问，请联系客服<?= Yii::$app->params['contact_tel'] ?>。</li>
+                <li>充值期间，请勿关闭浏览器，待充值成功并返回账户中心后，所充资金才能入账，如有疑问，请联系客服<?= Yii::$app->params['platform_info.contact_tel'] ?>。</li>
             </ol>
         </div>
     </div>

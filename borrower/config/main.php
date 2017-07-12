@@ -31,23 +31,6 @@ return [
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
-        'assetManager' => [
-            'bundles' => [
-                'yii\bootstrap\BootstrapAsset' => [
-                    'css' => [],
-                ],
-                'yii\bootstrap\BootstrapPluginAsset' => [
-                    'js' => [],
-                ],
-                'yii\web\JqueryAsset' => [
-                    'sourcePath' => '@app/assets',
-                    'js' => [
-                        'vendor/jquery/dist/jquery.min.js',
-                    ],
-                ],
-            ],
-
-        ],
     ],
 
     'modules' => [

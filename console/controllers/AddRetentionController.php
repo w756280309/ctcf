@@ -11,6 +11,7 @@ use yii\helpers\ArrayHelper;
 
 class AddRetentionController extends Controller
 {
+    //流失客户召回
     public function actionIndex()
     {
         $stamp = time() - 30 * 24 * 60 * 60;
