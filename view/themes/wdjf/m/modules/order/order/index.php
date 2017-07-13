@@ -128,13 +128,8 @@ $this->registerCssFile(ASSETS_BASE_URI.'css/setting.css?v=20170103', ['depends' 
             forceReload_V2();
 
             var money = $('#money').val();
-            var couponCount = '<?= count($coupons) ?>';
 
-            if (money > 0) {
-                if ('0' === couponCount) {
-                    getValidCoupon(money);
-                }
-            } else {
+            if (money <= 0) {
                 resetCoupon();
             }
 
