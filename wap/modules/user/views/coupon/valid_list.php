@@ -3,7 +3,7 @@
 use common\utils\StringUtils;
 
 $this->title = '可用代金券';
-$replaceUrl = \Yii::$app->request->referrer.'&_mark='.time();
+$replaceUrl = '/order/order?sn='.$loan->sn.'&_mark='.time();
 $this->replaceUrl = $replaceUrl;
 
 $inApp = defined('IN_APP');
@@ -43,16 +43,22 @@ $inApp = defined('IN_APP');
     </ul>
 </div>
 
-<?php if ($inApp) : ?>
-    <a href="javascript:void(0)" onclick="history.go(-1);" class="coupon-button">
-<?php else : ?>
-    <a href="javascript:void(0)" onclick="location.replace('<?= $replaceUrl ?>')" class="coupon-button">
-<?php endif; ?>
+<a href="javascript:void(0)" id="submit" class="coupon-button">
     <p class="btn-line1">确认选择</p>
     <p class="btn-line2">（已选<?= $couponCount ?>张，可抵扣<?= StringUtils::amountFormat2($couponMoney) ?>元投资）</p>
 </a>
 
 <script type="text/javascript">
+    $('#submit').on('click', function (e) {
+        e.preventDefault;
+
+        <?php if ($inApp) : ?>
+            history.go(-1);
+        <?php else : ?>
+            location.replace('<?= $replaceUrl ?>');
+        <?php endif; ?>
+    });
+
     var allowClick = true;
 
     $('.coupon-list').on('click', '.coupons', function (e) {

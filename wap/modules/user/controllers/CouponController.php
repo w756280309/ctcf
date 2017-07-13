@@ -10,7 +10,6 @@ use common\utils\StringUtils;
 use Yii;
 use yii\data\ArrayDataProvider;
 use yii\data\Pagination;
-use yii\helpers\ArrayHelper;
 
 class CouponController extends BaseController
 {
@@ -136,6 +135,7 @@ class CouponController extends BaseController
             'header' => $header,
             'couponCount' => $couponCount,
             'couponMoney' => $couponMoney,
+            'loan' => $loan,
         ]));
     }
 
