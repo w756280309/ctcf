@@ -47,7 +47,7 @@ var poptpl = {
 
         var options = $.extend(defaults, options),html;
         html = '<div class="mask"></div>'
-            +'<div class="pop" style="background: '+options.popBackground+';border:'+options.popBorder+';">'
+            +'<div class="pop" style="background: '+options.popBackground+';background-size:100% 100%;border:'+options.popBorder+';">'
         if(options.closeHas){
             html+='<img class="popClose" src='+options.closeUrl+' alt="图" style="top: '+options.closeTop+';right: '+options.closeLeft+';">'
         }
@@ -72,7 +72,7 @@ var poptpl = {
             html+='</div>';
         }
         if(options.popBtmHas){
-            html+='<a href='+options.btnHref+' class="popBtm" style="background:'+options.popBtmBackground+';border-radius:'+options.popBtmBorderRadius+' ;color:'+options.popBtmColor+';font-size:'+options.popBtmFontSize+' ;">'+options.btnMsg+'</a>'
+            html+='<a href='+options.btnHref+' class="popBtm" style="background:'+options.popBtmBackground+';background-size:100% 100%;border-radius:'+options.popBtmBorderRadius+' ;color:'+options.popBtmColor+';font-size:'+options.popBtmFontSize+' ;">'+options.btnMsg+'</a>'
         }
         html+='</div>';
         $('body').on("click",function(){
@@ -85,6 +85,7 @@ var poptpl = {
             $('body').on("click",function(e){
                 e.stopPropagation();
                 if($(event.target).hasClass('popBtm')){
+                    $(this).off('click');
                     /*回调函数要返回一个布尔值来判断对话框是否隐藏*/
                     callback();
                 }
@@ -105,7 +106,7 @@ var poptpl = {
         }, 150)
     },
     confirmBtn : function(){
-        $('body').off('click');
+        // $('body').off('click');
         $(".mask,.pop").remove();
         $('body').off('touchmove');
     },

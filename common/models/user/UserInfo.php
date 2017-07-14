@@ -182,4 +182,25 @@ class UserInfo extends ActiveRecord
             'endDate' => $endDate,
         ])->queryScalar();
     }
+
+    /**
+     * 计算某个人一段时间内的累计投资金额
+     *
+     * @param $userId
+     * @param $startTime
+     * @param $endTime
+     *
+     * @return int
+     */
+    public static function calcInvest($userId, $startTime, $endTime)
+    {
+        $db = \Yii::$app->db;
+        $sql = "select sum(order_money) from online_order where uid = :userId and status = 1 and from_unixtime(order_time) >= :startTime and from_unixtime(order_time) <= :endTime";
+
+        return (int) $db->createCommand($sql, [
+            'userId' => $userId,
+            'startTime' => $startTime,
+            'endTime' => $endTime,
+        ])->queryScalar();
+    }
 }

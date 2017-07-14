@@ -2,8 +2,10 @@
 
 namespace common\models\promo;
 
+use common\models\code\GoodsType;
 use common\models\coupon\UserCoupon;
 use common\models\mall\PointRecord;
+use common\models\transfer\Transfer;
 use common\models\user\MoneyRecord;
 use common\models\user\User;
 use wap\modules\promotion\models\RankingPromo;
@@ -28,6 +30,8 @@ class Award extends ActiveRecord
     const TYPE_CASH = 'cash';//对应 ref_id 存放 money_record_id
     const TYPE_POINTS = 'points';//对应 ref_id 存放 point_record_id
     const TYPE_GOODS = 'goods';//对应 ref_id 存放 goods_type_id
+    const TYPE_TRANSFER = 'transfer';//对应 ref_id 存放 transfer_id
+
 
     public static function tableName()
     {
@@ -36,9 +40,10 @@ class Award extends ActiveRecord
 
     /**
      * 初始化获奖记录
-     * @param User $user
-     * @param RankingPromo $promo
-     * @param PromoLotteryTicket|null $ticket
+     *
+     * @param User                    $user
+     * @param RankingPromo            $promo
+     * @param null|PromoLotteryTicket $ticket
      * @return Award
      */
     public static function initNew(User $user, RankingPromo $promo, PromoLotteryTicket $ticket = null)
@@ -54,10 +59,10 @@ class Award extends ActiveRecord
     /**
      * 初始化代金券类奖励
      *
-     * @param User $user
-     * @param RankingPromo $promo
-     * @param UserCoupon $userCoupon
-     * @param PromoLotteryTicket|null $ticket
+     * @param User                    $user
+     * @param RankingPromo            $promo
+     * @param UserCoupon              $userCoupon
+     * @param null|PromoLotteryTicket $ticket
      * @return Award
      */
     public static function couponAward(User $user, RankingPromo $promo, UserCoupon $userCoupon, PromoLotteryTicket $ticket = null)
@@ -92,10 +97,10 @@ class Award extends ActiveRecord
     /**
      * 初始化积分类奖励
      *
-     * @param User $user
-     * @param RankingPromo $promo
-     * @param PointRecord $pointRecord
-     * @param PromoLotteryTicket|null $ticket
+     * @param User                    $user
+     * @param RankingPromo            $promo
+     * @param PointRecord             $pointRecord
+     * @param null|PromoLotteryTicket $ticket
      * @return Award
      */
     public static function pointsAward(User $user, RankingPromo $promo, PointRecord $pointRecord, PromoLotteryTicket $ticket = null)
@@ -104,6 +109,42 @@ class Award extends ActiveRecord
         $award->amount = $pointRecord->incr_points;
         $award->ref_type = self::TYPE_POINTS;
         $award->ref_id = $pointRecord->id;
+
+        return $award;
+    }
+
+    /**
+     * 初始化实物类奖励
+     *
+     * @param User                    $user
+     * @param RankingPromo            $promo
+     * @param GoodsType               $goodsType
+     * @param null|PromoLotteryTicket $ticket
+     * @return Award
+     */
+    public static function goodsAward(User $user, RankingPromo $promo, GoodsType $goodsType, PromoLotteryTicket $ticket = null)
+    {
+        $award = self::initNew($user, $promo, $ticket);
+        $award->ref_type = self::TYPE_GOODS;
+        $award->ref_id = $goodsType->id;
+
+        return $award;
+    }
+
+    /**
+     * 初始化现金转账类奖励
+     *
+     * @param User                    $user
+     * @param RankingPromo            $promo
+     * @param Transfer                $transfer
+     * @param null|PromoLotteryTicket $ticket
+     * @return Award
+     */
+    public static function transferAward(User $user, RankingPromo $promo, Transfer $transfer, PromoLotteryTicket $ticket = null)
+    {
+        $award = self::initNew($user, $promo, $ticket);
+        $award->ref_type = self::TYPE_TRANSFER;
+        $award->ref_id = $transfer->id;
 
         return $award;
     }

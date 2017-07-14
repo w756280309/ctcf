@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>三伏天翻牌子活动</title>
+    <link rel="stylesheet" href="../../common/css/wenjfbase.css">
+    <link rel="stylesheet" href="../../common/css/popover.css">
+    <link rel="stylesheet" href="css/index.css">
+    <script src="../../libs/lib.flexible3.js"></script>
+    <script src="../../libs/jquery-1.11.1.min.js"></script>
+    <script src="../../libs/fastclick.js"></script>
+    <script src="../../common/js/popover.js?v=1.0"></script>
+    <script src="../../libs/iscroll.js"></script>
+</head>
+<body>
+<div class="flex-content">
+    <div class="banner">
+        <div class="banner_01"></div>
+        <div class="banner_02"></div>
+        <div class="banner_03">
+            <img src="img/leaves_01.png" alt="leaves">
+            <p>剩余翻牌次数<span>1</span>次</p>
+            <div class="prizes">我的奖品</div>
+        </div>
+    </div>
+    <!-- 抽奖 -->
+    <div class="draw-module">
+        <div class="gift-show">
+            <ul>
+                <li class="lf">
+                    <div class="gift"><img alt="" src="img/fruit_02.png"></div>
+                    <div class="noGift"><img alt="" src="img/fanpai_01.png"></div>
+                </li>
+                <li class="lf">
+                    <div class="gift"><img alt="" src="img/fruit_03.png"></div>
+                    <div class="noGift"><img alt="" src="img/fanpai_01.png"></div>
+                </li>
+                <li class="lf">
+                    <div class="gift"><img alt="" src="img/fruit_01.png"></div>
+                    <div class="noGift"><img alt="" src="img/fanpai_01.png"></div>
+                </li>
+                <li class="lf">
+                    <div class="gift"><img alt="" src="img/fruit_04.png"></div>
+                    <div class="noGift"><img alt="" src="img/fanpai_01.png"></div>
+                </li>
+                <li class="shuffle">洗牌中...</li>
+            </ul>
+        </div>
+        <div class="flop">翻个牌子</div>
+        <div class="flopUpgrade">升级奖池</div>
+    </div>
+    <!-- 规则 -->
+    <div class="invite-box">
+        <div class="regular">活动规则</div>
+        <ol>
+            <li>活动时间：2017年7月17日-7月23日；</li>
+            <li>每日获得1次免费翻牌机会，分享本页面（必须分享至朋友圈）后再获得1次机会；</li>
+            <li>活动期间每日年化投资满10万元，将获得1次翻金牌机会，此次奖池将自动升级为更高价值礼品；</li>
+            <li>未使用的次数不能累积到次日；</li>
+            <li>每次翻牌必定获得礼品1份，翻中西瓜牌将额外获得1000元超市卡一张！</li>
+        </ol>
+        <div class="tips">注：实物礼品将于活动结束后7个工作日内发放</div>
+
+        <div class="share invite-btn"><img src="img/share.png" alt="">点击分享</div>
+    </div>
+</div>
+<!--对应的奖品列表-->
+<div class="prizes-box">
+    <div class="outer-box">
+        <img class="pop_close" src="img/pop_close.png" alt="">
+
+        <div class="prizes-pomp">
+
+            <div id="wrapper">
+                <ul>
+                    <li class="prizes-title">我的奖品</li>
+                    <li class="no-prizes">您还没有获得奖品哦！</li>
+                    <!--<li class="clearfix">
+                        <div class="lf"><img src="img/gifts_00.png" alt="礼品"></div>
+                        <div class="lf">
+                            <p>10元代金券</p>
+                            <p>中奖时间:2017-03-16</p>
+                        </div>
+                    </li>
+                    <li class="clearfix">
+                        <div class="lf"><img src="img/gifts_06.png" alt="礼品"></div>
+                        <div class="lf">
+                            <p>10元代金券</p>
+                            <p>中奖时间:2017-03-16</p>
+                        </div>
+                    </li>
+                    <li class="clearfix">
+                        <div class="lf"><img src="img/gifts_07.png" alt="礼品"></div>
+                        <div class="lf">
+                            <p>10元代金券</p>
+                            <p>中奖时间:2017-03-16</p>
+                        </div>
+                    </li>
+                    <li class="clearfix">
+                        <div class="lf"><img src="img/gifts_01.png" alt="礼品"></div>
+                        <div class="lf">
+                            <p>10元代金券</p>
+                            <p>中奖时间:2017-03-16</p>
+                        </div>
+                    </li>
+                    <li class="clearfix">
+                        <div class="lf"><img src="img/gifts_03.png" alt="礼品"></div>
+                        <div class="lf">
+                            <p>10元代金券</p>
+                            <p>中奖时间:2017-03-16</p>
+                        </div>
+                    </li>-->
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--测试弹框按钮-->
+<div class="btn_01">实物礼品按钮</div>
+<div class="btn_02">代金券礼品按钮</div>
+<div class="btn_03">登录按钮</div>
+<div class="btn_04">去投资按钮</div>
+<div class="btn_05">去分享按钮</div>
+<div class="btn_06">投资10w在抽奖</div>
+<div class="btn_07">奖池升级过了提示</div>
+<div class="btn_08">没有抽奖机会 去投资</div>
+<script>
+    $(function() {
+        FastClick.attach(document.body);
+
+        //点击翻牌按钮开始翻牌动画
+        $('.flop').on('click',anim);
+
+        //翻拍动画js
+        function anim() {
+            $(this).off('click');
+            $('.shuffle').show();
+            $('.gift').addClass('firstChild');
+            $('.noGift').addClass('lastChild');
+            $('.gift-show ul li').each(function(){
+                var index = $(this).index();
+                $('.gift-show ul li').eq(index).addClass('animate'+index);
+            });
+            $("#giftBox").addClass('animate4');
+            setTimeout(function(){
+                $('.shuffle').hide();
+                $('.gift-show ul li').each(function(){
+                    var index = $(this).index();
+                    $('ul li').eq(index).removeClass('animate'+index);
+                });
+                $("#giftBox").removeClass('animate4');
+                $('.flop').on('click',anim);
+                $('.gift-show ul li').on('click',function(){
+                    var this_ = $(this);
+//                    setTimeout(function(){
+                    //ajax请求写在这 底下的是ajax成功的回调
+                    var giftNum = parseInt(Math.random()*3+2);
+                    this_.find('.gift img').attr({src:"img/fruit_0"+giftNum+".png"})
+                    this_.find('.gift').toggleClass('firstChild');
+                    this_.find('.noGift').toggleClass('lastChild');
+                    $('.gift-show ul li').off('click');
+//                    },300)
+                })
+            },3000)
+        }
+
+        //  微信和app分享
+        var html =
+            '<div class="mark-box" style="display: none;position: fixed;left: 0;bottom:0;width: 100%;height: 100%;background: #000;opacity: 0.6;z-index: 11;" ></div>'
+            +'<div class="share-box" style="display: none;position: fixed;left: 0;bottom:0;width: 100%;height: 100%;z-index: 12;text-align: right;">'
+            +'<img class="share-box-img" style="float: right;width: 80%;" src="img/weixinShare.png" alt="">'
+            +'</div>';
+
+        $('.share').on('click',function(){
+            $('body').prepend(html);
+            $('.mark-box').show();
+            $('.share-box').show();
+        });
+
+        function closeShare(){
+            $('body').on('click',function(e){
+                if($(e.target).hasClass('share-box') || $(e.target).hasClass('share-box-img')){
+                    $('.share-box').hide().remove();
+                    $('.mark-box').hide().remove();
+                }
+            });
+        }
+        closeShare();
+
+        //升级奖池
+        $('.flopUpgrade').on("click",function () {
+            $('.noGift img').attr({src:"img/fanpai_02.png"})
+        });
+
+        // 1.兑换礼品弹框（实物）
+        $('.btn_01').on('click',function() {
+            var module = poptpl.popComponent({
+                popBackground:'url(img/pop_bg.png) no-repeat',
+                popBorder:0,
+                closeUrl : "img/pop_close.png",
+                btnMsg : "收下礼品",
+                popTopColor:"#fad675",
+                bgSize:"100% 100%",
+                title:'<p style="font-size:0.666667rem;text-shadow: 1px 1px 2px #947e6a;">恭喜您获得</p><p style="font-size:0.4266667rem;text-shadow: 1px 1px 1px #947e6a;">对应奖品名字</p>',
+                popBtmBackground:'url(img/pop_btn_01.png) no-repeat',
+                popMiddleHasDiv:true,
+                contentMsg:"<img style='margin:0 auto;display: block;width: 4.2666667rem;' src='img/gifts_01.png' alt=''/>",
+                popBtmBorderRadius:0,
+                popBtmFontSize : ".50666667rem"
+            },'close');
+        });
+        // 1.兑换礼品弹框（代金券）
+        $('.btn_02').on('click',function() {
+            var module = poptpl.popComponent({
+                popBackground:'url(img/pop_bg.png) no-repeat',
+                popBorder:0,
+                closeUrl : "img/pop_close.png",
+                btnMsg : "分享再抽1次",
+                popTopColor:"#fb3f5a",
+                bgSize:"100% 100%",
+                title:'<p style="font-size:0.666667rem;">恭喜您获得</p><p style="font-size:0.4266667rem;">对应奖品名字</p>',
+                popBtmBackground:'url(img/pop_btn_01.png) no-repeat',
+                popMiddleHasDiv:true,
+                contentMsg:"<img style='margin:0 auto;display: block;width: 4.2666667rem;' src='img/gifts_08.png' alt=''/>",
+                popBtmBorderRadius:0,
+                popBtmFontSize : ".50666667rem"
+            },'close');
+        });
+
+            //登录
+            $('.btn_03').on('click',function() {
+                var module = poptpl.popComponent({
+                    popBackground:'url(img/pop_bg_01.png) no-repeat',
+                    popBorder:0,
+                    closeUrl : "img/pop_close.png",
+                    btnMsg : "去登录",
+                    popTopColor:"#fb3f5a",
+                    title:'<p style="font-size:0.50666667rem;margin: 1rem 0 2.2rem;">您还未登录哦！</p>',
+                    popBtmBackground:'url(img/pop_btn_01.png) no-repeat',
+                    popBtmBorderRadius:0,
+                    popBtmFontSize : ".50666667rem",
+                    btnHref:'/site/login'
+                });
+            });
+
+            //升级奖池
+            $('.btn_04').on('click',function() {
+                var module = poptpl.popComponent({
+                    popBackground:'url(img/pop_bg_01.png) no-repeat',
+                    popBorder:0,
+                    closeUrl : "img/pop_close.png",
+                    btnMsg : "去投资",
+                    popMiddle:false,
+                    popTopColor:"#fb3f5a",
+                    title:'<p style="font-size:0.50666667rem;margin: 1rem 0 1.5rem;">每日年化投资十万元<br>即可升级奖池哦！</p>',
+                    popBtmBackground:'url(img/pop_btn_01.png) no-repeat',
+                    popMiddleHasDiv:true,
+                    popBtmBorderRadius:0,
+                    popBtmFontSize : ".50666667rem",
+                    btnHref:'/site/login'
+                });
+            });
+        //去分享
+        $('.btn_05').on('click',function(e) {
+            e.stopPropagation();
+             poptpl.popComponent({
+                popBackground:'url(img/pop_bg_01.png) no-repeat',
+                popBorder:0,
+                closeUrl : "img/pop_close.png",
+                btnMsg : "去分享",
+                popMiddle:false,
+                popTopColor:"#fb3f5a",
+                title:'<p style="font-size:0.50666667rem;margin: 1rem 0 0.3rem;">您的抽奖机会已用完！</p><p style="color: #21b1e0;font-size: 0.4rem;margin-bottom: 1.4rem;">分享页面还能再抽<span style="color: #ffc155;">1</span>次 </p>',
+                popBtmBackground:'url(img/pop_btn_01.png) no-repeat',
+                popMiddleHasDiv:true,
+                popBtmBorderRadius:0,
+                popBtmFontSize : ".50666667rem"
+            },function(){
+                 $('.share').trigger('click');
+                 poptpl.confirmBtn();
+                 closeShare();
+            });
+        });
+        //去投资
+        $('.btn_06').on('click',function() {
+            var module = poptpl.popComponent({
+                popBackground:'url(img/pop_bg_01.png) no-repeat',
+                popBorder:0,
+                closeUrl : "img/pop_close.png",
+                btnMsg : "去分享",
+                popMiddle:false,
+                popTopColor:"#fb3f5a",
+                title:'<p style="font-size:0.50666667rem;margin: 1rem 0 0.3rem;">您的抽奖机会已用完！</p><p style="color: #21b1e0;font-size: 0.4rem;margin-bottom: 0.8rem;">年化投资十万元即可再抽<span style="color: #ffc155;">1</span>次 ，奖池更丰富！</p>',
+                popBtmBackground:'url(img/pop_btn_01.png) no-repeat',
+                popMiddleHasDiv:true,
+                popBtmBorderRadius:0,
+                popBtmFontSize : ".50666667rem",
+                btnHref:'/site/login'
+            });
+        });
+        //奖池升级过了提示
+        $('.btn_07').on('click',function() {
+            var module = poptpl.popComponent({
+                popBackground:'url(img/pop_bg_01.png) no-repeat',
+                popBorder:0,
+                closeUrl : "img/pop_close.png",
+                popMiddle:false,
+                popTopColor:"#fb3f5a",
+                title:'<p style="font-size:0.50666667rem;margin: 1.2rem 0 0.3rem;">您的抽奖机会已用完！<br>即可升级奖池</p><p style="color: #21b1e0;font-size: 0.4rem;margin-bottom: 0.8rem;">您今天已经升级过了哦！</p>',
+                popBtmBackground:'url(img/pop_btn_01.png) no-repeat',
+                popMiddleHasDiv:true,
+                popBtmHas:false
+            });
+        });
+
+        //没有抽奖机会 去投资
+        $('.btn_08').on('click',function() {
+            var module = poptpl.popComponent({
+                popBackground:'url(img/pop_bg_01.png) no-repeat',
+                popBorder:0,
+                closeUrl : "img/pop_close.png",
+                btnMsg : "去分享",
+                popMiddle:false,
+                popTopColor:"#fb3f5a",
+                title:'<p style="font-size:0.50666667rem;margin: 1rem 0 0.3rem;">您的抽奖机会已用完！</p><p style="color: #21b1e0;font-size: 0.4rem;margin-bottom: 1.4rem;">明天再来吧！ </p>',
+                popBtmBackground:'url(img/pop_btn_01.png) no-repeat',
+                popMiddleHasDiv:true,
+                popBtmBorderRadius:0,
+                popBtmFontSize : ".50666667rem",
+                btnHref:'/site/login'
+            });
+        });
+
+        var myScroll = new iScroll('wrapper',{
+            vScrollbar:false,
+            hScrollbar:false
+        });
+
+        //我的奖品按钮
+        $(".prizes").on("click",function(){
+            $('.prizes-box').show();
+            $('body').on('touchmove',eventTarget, false);
+            myScroll.refresh();//点击后初始化iscroll
+        })
+        $('.prizes-box').on('click',function(){
+            $(this).hide();
+            $('body').off('touchmove');
+        })
+        $('#wrapper').on('click',function(event){
+            event.stopPropagation();
+        })
+
+        function eventTarget(event) {
+            var event = event || window.event;
+            event.preventDefault();
+        }
+    })
+</script>
+</body>
+</html>

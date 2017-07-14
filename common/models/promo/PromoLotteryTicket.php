@@ -25,6 +25,7 @@ use yii\db\ActiveRecord;
  * @property int    $promo_id
  * @property int    $joinSequence  //参加活动序列
  * @property string $duobaoCode    //夺宝码
+ * @property string $expiryTime
  */
 class PromoLotteryTicket extends ActiveRecord
 {
@@ -45,6 +46,7 @@ class PromoLotteryTicket extends ActiveRecord
             [['user_id'], 'required'],
             [['user_id', 'isDrawn', 'isRewarded', 'reward_id', 'created_at', 'updated_at', 'rewardedAt', 'drawAt', 'promo_id'], 'integer'],
             [['ip', 'source'], 'string', 'max' => 30],
+            [['expiryTime'], 'safe'],
         ];
     }
 
@@ -66,6 +68,7 @@ class PromoLotteryTicket extends ActiveRecord
             'ip' => 'Ip',
             'source' => '抽奖机会来源',
             'promo_id' => '活动ID',
+            'expiryTime' => '过期时间',
         ];
     }
 
@@ -91,12 +94,29 @@ class PromoLotteryTicket extends ActiveRecord
         return PromoLotteryTicket::find()->where(['promo_id' => $promoId]);
     }
 
-    public static function initNew(User $user, RankingPromo $promo, $source = null)
+    public static function fetchOneActiveTicket($promo, $user, \DateTime $dateTime = null)
     {
+        if (null === $dateTime) {
+            $dateTime = new \DateTime();
+        }
+        return PromoLotteryTicket::find()
+            ->where(['promo_id' => $promo->id])
+            ->andWhere(['user_id' => $user->id])
+            ->andWhere(['isDrawn' => false])
+            ->andFilterWhere(['>=', 'expiryTime', $dateTime->format('Y-m-d H:i:s')])
+            ->one();
+    }
+
+    public static function initNew(User $user, RankingPromo $promo, $source = null, \DateTime $expiryTime = null)
+    {
+        if (null === $expiryTime) {
+            $expiryTime = $promo->endTime;
+        }
         return new self([
             'user_id' => $user->id,
             'source' => $source,
             'promo_id' => $promo->id,
+            'expiryTime' => $expiryTime->format('Y-m-d H:i:s'),
         ]);
     }
 

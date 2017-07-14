@@ -136,4 +136,11 @@ class Reward extends ActiveRecord
             return false;
         }
     }
+
+    public static function fetchOneBySn($sn)
+    {
+        return reward::find()
+            ->where(['sn' => $sn])
+            ->one();
+    }
 }
