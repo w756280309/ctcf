@@ -52,15 +52,8 @@ $this->title = '获奖列表';
                         ],
                         [
                             'header' => '奖品名称',
-                            'content' => function ($model) use ($promo) {
-                                $class = $promo->promoClass;
-                                if (method_exists($class, 'getAward')) {
-                                    $award = $class::getAward($model['reward_id']);
-                                    if ($award && isset($award['name'])) {
-                                        return Html::encode($award['name']);
-                                    }
-                                }
-                                return '---';
+                            'content' => function ($model) {
+                                return $model['rewardName'];
                             },
                         ],
                         [

@@ -96,18 +96,10 @@ class RankingController extends BaseController
     public function actionAwardList($id)
     {
         $promo = RankingPromo::findOne($id);
-        if (empty($promo) || empty($promo->promoClass) || !class_exists($promo->promoClass) || !method_exists($promo->promoClass, 'getAward')) {
+        if (empty($promo)) {
             throw $this->ex404('数据未找到');
         }
-        $query = (new Query())
-            ->select(['u.real_name', 'u.mobile', 't.drawAt', 't.rewardedAt', 't.reward_id', 'a.name', 't.user_id'])
-            ->from(' `promo_lottery_ticket` AS t')
-            ->innerJoin('user AS u', 't.user_id = u.id')
-            ->leftJoin('user_affiliation AS ua', 't.user_id = ua.user_id')
-            ->leftJoin('affiliator AS a', 'ua.affiliator_id = a.id')
-            ->where(['t.isDrawn' => true, 't.promo_id' => $promo->id])
-            ->andWhere('t.reward_id is not null')
-            ->orderBy(['t.created_at' => SORT_DESC]);
+        $query = $this->getAwardQuery($promo);
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -127,20 +119,8 @@ class RankingController extends BaseController
     public function actionExportAward($id)
     {
         $promo = $this->findOr404(RankingPromo::className(), $id);
-        $class = $promo->promoClass;
-        if (!method_exists($class, 'getAward')) {
-            throw $this->ex404();
-        }
-        $data = (new Query())
-            ->select(['u.real_name', 'u.mobile', 't.drawAt', 't.rewardedAt', 't.reward_id', 'a.name', 't.user_id'])
-            ->from(' `promo_lottery_ticket` AS t')
-            ->innerJoin('user AS u', 't.user_id = u.id')
-            ->leftJoin('user_affiliation AS ua', 't.user_id = ua.user_id')
-            ->leftJoin('affiliator AS a', 'ua.affiliator_id = a.id')
-            ->where(['t.isDrawn' => true, 't.promo_id' => $promo->id])
-            ->andWhere('t.reward_id is not null')
-            ->orderBy(['t.created_at' => SORT_DESC])
-            ->all();
+        $query = $this->getAwardQuery($promo);
+        $data = $query->all();
         if (count($data) > 0) {
             header("Content-Type: text/csv; charset=utf-8");
             header('Content-Disposition: attachment; filename="award_list_' . time() . '.csv"');
@@ -151,11 +131,32 @@ class RankingController extends BaseController
                 echo $value['mobile']."\t,";
                 echo date('Y-m-d H:i:s', $value['drawAt'])."\t,";
                 echo ($value['rewardedAt'] ? date('Y-m-d H:i:s', $value['rewardedAt']) : "")."\t,";
-                $award = $class::getAward($value['reward_id']);
-                echo (($award && isset($award['name'])) ? $award['name'] : '') . "\t,";
+                echo $value['rewardName'] . "\t,";
                 echo ($value['name'] ?: "")."\t\n";
             }
         }
+    }
+
+    private function getAwardQuery($promo)
+    {
+        return (new Query())
+            ->select([
+                'u.real_name',
+                'u.mobile',
+                't.drawAt',
+                't.rewardedAt',
+                't.reward_id',
+                'a.name',
+                't.user_id',
+                'r.name as rewardName'
+            ])->from('promo_lottery_ticket AS t')
+            ->innerJoin('user AS u', 't.user_id = u.id')
+            ->innerJoin('reward As r', 't.reward_id = r.id')
+            ->leftJoin('user_affiliation AS ua', 't.user_id = ua.user_id')
+            ->leftJoin('affiliator AS a', 'ua.affiliator_id = a.id')
+            ->where(['t.isDrawn' => true, 't.promo_id' => $promo->id])
+            ->andWhere('t.reward_id is not null')
+            ->orderBy(['t.created_at' => SORT_DESC]);
     }
 
     /**
