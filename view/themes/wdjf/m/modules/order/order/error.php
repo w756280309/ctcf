@@ -1,10 +1,10 @@
 <?php
 
-$this->title = ("success" === $ret) ? "购买成功" : "购买失败";
+$this->title = ('success' === $ret) ? '购买成功' : '购买失败';
 $this->backUrl = false;
 
 ?>
-<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/setting.css?v=20160711-v">
+<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/setting.css?v=20160714">
 
 <div class="row" id='bind-box'>
     <div class="col-xs-12">
@@ -42,14 +42,14 @@ $this->backUrl = false;
 
     <div class="col-xs-12 page_padding">
         <?php if ('success' === $ret) { ?>
-            <div class="note-msg">绑定公众号<font color="#999999">（温都金服全拼）</font>: "<font color="#FF8000">wendujinfu</font>"</div>
-            <div class="note-msg">可以及时了解自己的收益，还送10个积分哦</div>
+            <div>绑定公众号<font color="#999999">（温都金服全拼）</font>: "<font color="#FF8000">wendujinfu</font>"</div>
+            <div>可以及时了解自己的收益，还送10个积分哦</div>
         <?php } else { ?>
             <div>遇到问题请联系客服，电话：<a class="contact-tel" href="tel:<?= Yii::$app->params['platform_info.contact_tel'] ?>"><?= Yii::$app->params['platform_info.contact_tel'] ?></a></div>
         <?php } ?>
     </div>
 
     <?php if ('success' === $ret) { ?>
-        <div class="qiandao note-msg"><a href="/user/checkin">签到有礼，积分代金券送不停</a></div>
+        <div class="checkin"><a href="/user/checkin"><img src="<?= ASSETS_BASE_URI ?>images/checkin.jpg" alt=""></a></div>
     <?php } ?>
 </div>

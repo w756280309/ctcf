@@ -1,6 +1,8 @@
 <?php
-$this->title = ("success" === $ret) ? "购买成功" : "购买失败";
+
+$this->title = ('success' === $ret) ? '购买成功' : '购买失败';
 $this->backUrl = false;
+
 ?>
 <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/setting.css?v=20160331">
 

@@ -5,14 +5,15 @@ use wap\assets\WapAsset;
 use yii\web\YiiAsset;
 
 $this->title = '我的代金券';
-$this->registerCssFile(ASSETS_BASE_URI.'css/coupon.css?v=2017052203', ['depends' => WapAsset::class]);
+$this->registerCssFile(ASSETS_BASE_URI.'css/coupon.css?v=20170714', ['depends' => WapAsset::class]);
 $this->registerJsFile(ASSETS_BASE_URI.'js/coupon-list.js?v=201705213', ['depends' => YiiAsset::class, 'position' => 3]);
 $this->registerJsFile(ASSETS_BASE_URI.'js/couponcode.js', ['depends' => WapAsset::class]);
 $this->registerJs('var tp='.$header->pageCount.';', 1);
 $isApp = !defined('IN_APP') ? 1 : 0 ;
 $this->registerJs('var isApp='.$isApp.';', 1);
 ?>
-<a href="javascript:" id="couponcode" class="couponcode">我有兑换码</a>
+<a class="checkin" href="/user/checkin">如何获取代金券</a><a href="javascript:" id="couponcode" class="couponcode">我有兑换码</a>
+
 <div style="clear:both"></div>
 <!--有优惠券的状态  -->
 <?php if (!empty($model)) { ?>

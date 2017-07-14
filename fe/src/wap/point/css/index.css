@@ -132,3 +132,14 @@ a.shoprecord:active {
 .container {
   max-width:750px!important;
 }
+.checkin {
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+}
+.checkin img {
+  width: 100%;
+}
+.checkin a {
+  cursor: pointer;
+}

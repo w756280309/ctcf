@@ -299,3 +299,13 @@
 .couponcode-box .code-success .code-info {
     height: 70px;
 }
+
+a.checkin {
+    cursor: pointer;
+    margin-top: 10px;
+    line-height: 28px;
+    display: block;
+    float: left;
+    padding: 0 18px;
+    color: #f44336;
+}

@@ -8,7 +8,7 @@ $this->backUrl = $backUrl ? $backUrl : '/?_mark='.time();
 
 ?>
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/wenjfbase.css">
-<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/point/css/index.css">
+<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/point/css/index.css?v=20170714-v">
 <script src="<?= FE_BASE_URI ?>libs/lib.flexible3.js"></script>
 
 <div class="shoptop">
@@ -37,6 +37,9 @@ $this->backUrl = $backUrl ? $backUrl : '/?_mark='.time();
         </li>
     </ul>
 </div>
-    <a href="/mall/point/prize-list" class="shoprecord">
+<a href="/mall/point/prize-list" class="shoprecord">
     兑换记录
 </a>
+<div class="checkin">
+    <a href="/user/checkin"><img src="<?= ASSETS_BASE_URI ?>images/checkin.jpg" alt=""></a>
+</div>
