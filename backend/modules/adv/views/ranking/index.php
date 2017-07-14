@@ -67,9 +67,7 @@ $this->title = '活动列表';
 
                                 if (!empty($model->promoClass) && class_exists($model->promoClass)) {
                                     $html .= '| <button class="btn mini green ajax_op online_btn" id="'.$model->id.'">'.($model->isOnline ? '下线' : '上线').'</button>';
-                                    if (method_exists($model->promoClass, 'getAward')) {
-                                        $html .= '| <a href="/adv/ranking/award-list?id='.$model->id.'" class="btn mini green ajax_op"></i>查看获奖情况</a>';
-                                    }
+                                    $html .= '| <a href="/adv/ranking/award-list?id='.$model->id.'" class="btn mini green ajax_op"></i>查看获奖情况</a>';
                                 }
 
                                 return $html;
