@@ -587,7 +587,7 @@ body {
 }
 
 .prizes-box .prizes-pomp #wrapper ul li div:first-child {
-  width: 44.18604651%;
+  width: 40%;
 }
 
 .prizes-box .prizes-pomp #wrapper ul li div:first-child img {
@@ -597,7 +597,7 @@ body {
 }
 
 .prizes-box .prizes-pomp #wrapper ul li div:last-child {
-  width: 55.81395349%;
+  width: 60%;
   color: #666666;
   line-height: 1;
 }

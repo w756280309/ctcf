@@ -5,6 +5,7 @@ namespace wap\modules\promotion\controllers;
 use common\controllers\HelpersTrait;
 use common\exception\NotActivePromoException;
 use common\models\promo\DogDays;
+use common\models\promo\PromoLotteryTicket;
 use common\models\promo\PromoService;
 use common\models\promo\TicketToken;
 use wap\modules\promotion\models\RankingPromo;
@@ -27,6 +28,7 @@ class SanfuController extends Controller
         $promoStatus = 0;
         $drawList = [];
         $requireRaise = false;
+        $hasOrderTicket = null;
         $promoClass = new DogDays($promo);
         $user = $this->getAuthedUser();
 
@@ -46,6 +48,11 @@ class SanfuController extends Controller
             $restCount = $promoClass->getActiveTicketCount($user);
             $nowTime = new \DateTime();
             $requireRaise = $promoClass->requireRaisePool($user, $nowTime);
+            $hasOrderTicket = PromoLotteryTicket::findLotteryByPromoId($promo->id)
+                ->andWhere(['user_id' => $user->id])
+                ->andWhere(['source' => 'order'])
+                ->andWhere(['date(from_unixtime(created_at))' => date('Y-m-d')])
+                ->one();
         }
 
         return $this->render('index', [
@@ -54,6 +61,7 @@ class SanfuController extends Controller
             'drawList' => $drawList,
             'requireRaise' => $requireRaise,
             'promoStatus' => $promoStatus,
+            'hasOrderTicket' => $hasOrderTicket,
         ]);
     }
 
@@ -102,7 +110,7 @@ class SanfuController extends Controller
             Yii::$app->response->statusCode = 400;
             return [
                 'code' => 7,
-                'message' => '系统错误，请稍后重试！',
+                'message' => $ex->getMessage(),
             ];
         }
     }

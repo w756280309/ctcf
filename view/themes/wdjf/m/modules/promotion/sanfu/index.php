@@ -8,7 +8,7 @@ $loginUrl = '/site/login?next='.urlencode(Yii::$app->request->absoluteUrl);
 ?>
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/wenjfbase.css">
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/popover.css">
-<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/campaigns/active20170711/css/index.css">
+<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/campaigns/active20170711/css/index.css?v=20170714">
 <script src="<?= FE_BASE_URI ?>libs/lib.flexible3.js"></script>
 <script src="<?= FE_BASE_URI ?>libs/fastclick.js"></script>
 <script src="<?= FE_BASE_URI ?>wap/common/js/popover.js?v=1.0"></script>
@@ -21,7 +21,7 @@ $loginUrl = '/site/login?next='.urlencode(Yii::$app->request->absoluteUrl);
     var feBaseUri = '<?= FE_BASE_URI ?>';
 </script>
 <script src="https://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
-<script src="<?= FE_BASE_URI ?>wap/campaigns/active20170711/js/share.js"></script>
+<script src="<?= FE_BASE_URI ?>wap/campaigns/active20170711/js/share.js?v=20170714"></script>
 
 <div class="flex-content">
     <div class="banner">
@@ -191,15 +191,15 @@ $loginUrl = '/site/login?next='.urlencode(Yii::$app->request->absoluteUrl);
     }
 
     function requireRaise() {
-        <?php if (!$requireRaise) : ?>
-            var module = poptpl.popComponent({
+        <?php if (is_null($hasOrderTicket)) : ?>
+            poptpl.popComponent({
                 popBackground:'url(<?= FE_BASE_URI ?>wap/campaigns/active20170711/img/pop_bg_01.png) no-repeat',
                 popBorder:0,
                 closeUrl : "<?= FE_BASE_URI ?>wap/campaigns/active20170711/img/pop_close.png",
                 btnMsg : "去投资",
                 popMiddle:false,
                 popTopColor:"#fb3f5a",
-                title:'<p style="font-size:0.50666667rem;margin: 1rem 0 1.5rem;">每日年化投资十万元<br>即可升级奖池哦！</p>',
+                title:'<p style="font-size: 0.50666667rem; margin: 1rem 0 1.5rem;">每日年化投资十万元<br>即可升级奖池哦！</p>',
                 popBtmBackground:'url(<?= FE_BASE_URI ?>wap/campaigns/active20170711/img/pop_btn_01.png) no-repeat',
                 popMiddleHasDiv:true,
                 popBtmBorderRadius:0,
@@ -207,7 +207,7 @@ $loginUrl = '/site/login?next='.urlencode(Yii::$app->request->absoluteUrl);
                 btnHref: '/deal/deal'
             });
         <?php else : ?>
-            var module = poptpl.popComponent({
+            poptpl.popComponent({
                 popBackground:'url(<?= FE_BASE_URI ?>wap/campaigns/active20170711/img/pop_bg_01.png) no-repeat',
                 popBorder:0,
                 closeUrl : "<?= FE_BASE_URI ?>wap/campaigns/active20170711/img/pop_close.png",
@@ -223,7 +223,7 @@ $loginUrl = '/site/login?next='.urlencode(Yii::$app->request->absoluteUrl);
 
     //翻拍动画js
     function anim() {
-        $(this).off('click');
+        $('.flop').off('click');
         $('.shuffle').show();
         $('.gift').addClass('firstChild');
         $('.noGift').addClass('lastChild');
@@ -244,12 +244,13 @@ $loginUrl = '/site/login?next='.urlencode(Yii::$app->request->absoluteUrl);
                 var this_ = $(this);
                 draw(this_);
             })
-        }, 3000)
+        }, 3000);
     }
 
     function draw(this_)
     {
         var xhr = $.get('/promotion/sanfu/draw');
+        $('.gift-show ul li').off('click');
 
         xhr.done(function(data) {
             if (data.code === 0) {
@@ -257,25 +258,26 @@ $loginUrl = '/site/login?next='.urlencode(Yii::$app->request->absoluteUrl);
                 this_.find('.gift img').attr({src:"<?= FE_BASE_URI ?>wap/campaigns/active20170711/img/fruit_0"+giftNum+".png"})
                 this_.find('.gift').toggleClass('firstChild');
                 this_.find('.noGift').toggleClass('lastChild');
-                $('.gift-show ul li').off('click');
 
-                var module = poptpl.popComponent({
-                    popBackground: 'url(<?= FE_BASE_URI ?>wap/campaigns/active20170711/img/pop_bg.png) no-repeat',
-                    popBorder: 0,
-                    closeUrl : "<?= FE_BASE_URI ?>wap/campaigns/active20170711/img/pop_close.png",
-                    btnMsg : "收下礼品",
-                    popTopColor: "#fad675",
-                    bgSize: "100% 100%",
-                    title: '<p style="font-size:0.666667rem;text-shadow: 1px 1px 2px #947e6a;">恭喜您获得</p><p style="font-size:0.4266667rem;text-shadow: 1px 1px 1px #947e6a;">'+data.data.name+'</p>',
-                    popBtmBackground:'url(<?= FE_BASE_URI ?>wap/campaigns/active20170711/img/pop_btn_01.png) no-repeat',
-                    popMiddleHasDiv:true,
-                    contentMsg: "<img style='margin:0 auto;display: block;width: 4.2666667rem;' src='<?= FE_BASE_URI ?>"+data.data.imageUrl+"' alt=''/>",
-                    popBtmBorderRadius:0,
-                    popBtmFontSize : ".50666667rem",
-                    afterPop: function () {
-                        location.href = '/promotion/sanfu/?_mark=<?= time() ?>';
-                    }
-                }, 'close');
+                setTimeout(function() {
+                    poptpl.popComponent({
+                        popBackground: 'url(<?= FE_BASE_URI ?>wap/campaigns/active20170711/img/pop_bg.png) no-repeat',
+                        popBorder: 0,
+                        closeUrl: "<?= FE_BASE_URI ?>wap/campaigns/active20170711/img/pop_close.png",
+                        btnMsg: "收下礼品",
+                        popTopColor: "#fad675",
+                        bgSize: "100% 100%",
+                        title: '<p style="font-size:0.666667rem;text-shadow: 1px 1px 2px #947e6a;">恭喜您获得</p><p style="font-size:0.4266667rem;text-shadow: 1px 1px 1px #947e6a;">' + data.data.name + '</p>',
+                        popBtmBackground: 'url(<?= FE_BASE_URI ?>wap/campaigns/active20170711/img/pop_btn_01.png) no-repeat',
+                        popMiddleHasDiv: true,
+                        contentMsg: "<img style='margin:0 auto;display: block;width: 4.2666667rem;' src='<?= FE_BASE_URI ?>" + data.data.imageUrl + "' alt=''/>",
+                        popBtmBorderRadius: 0,
+                        popBtmFontSize: ".50666667rem",
+                        afterPop: function () {
+                            location.href = '/promotion/sanfu/?_mark=<?= time() ?>';
+                        }
+                    }, 'close');
+                }, 1000);
             }
         });
 
@@ -332,7 +334,7 @@ $loginUrl = '/site/login?next='.urlencode(Yii::$app->request->absoluteUrl);
                         popMiddleHasDiv:true,
                         popBtmBorderRadius:0,
                         popBtmFontSize : ".50666667rem",
-                    });
+                    }, 'close');
                 } else {
                     toastCenter('系统繁忙，请稍后重试！', function () {
                         location.href = '/promotion/sanfu/?_mark=<?= time() ?>';

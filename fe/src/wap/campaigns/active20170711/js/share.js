@@ -5,22 +5,19 @@ $(function() {
     closeShare();
 
     $('.share').on('click', function() {
-        //判断域名,用以区别是否是app内嵌网页
-        var protocol = window.location.protocol;
         var host = window.location.host.toLocaleLowerCase();
-        if(host.substr(0,4)==='app.') {
-            $.get('/promotion/sanfu/add-share');
 
+        //判断域名,用以区别是否是app内嵌网页
+        if(host.substr(0,4)==='app.') {
+            share();
             //分享四要素(标题+描述+链接地址+图标地址)
-            var linkurl = linkUrl;
-            var thumurl = imgUrl;
-            var shareObj = {title : title, des:des,linkurl : linkurl, thumurl : thumurl};
+            var shareObj = {title: title, des: desc, linkurl: linkUrl, thumurl: imgUrl};
             if(browser.versions.ios || browser.versions.iPad || browser.versions.iPhone) {
                 //苹果设备
                 window.webkit.messageHandlers.share.postMessage(shareObj);
             } else if(browser.versions.android) {
                 //android 设备,四个参数位置不可颠倒
-                window.shareAction.share(title,des,linkurl,thumurl);
+                window.shareAction.share(title, desc, linkUrl, imgUrl);
             } else {
                 //其它
                 popShare();
@@ -79,7 +76,7 @@ $.get("/weixin/auth", {
             link: linkUrl, // 分享链接
             imgUrl: imgUrl, // 分享图标
             success: function () {
-                $.get('/promotion/sanfu/add-share');
+                share();
             },
         });
     });
