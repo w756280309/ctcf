@@ -247,6 +247,9 @@ class CouponController extends Controller
             $fileName = '/tmp/user-coupon-2.csv';
             $errorFileName = '/tmp/user-coupon-2-error.csv';
         }
+        if (file_exists($errorFileName)) {
+            @unlink($errorFileName);
+        }
         $cQuery = Clone $query;
         $userCount = $query->count();
         $this->stdout('共有' . $userCount . '人待发放代金券');
@@ -259,6 +262,7 @@ class CouponController extends Controller
                 $couponTypes = $couponTypes2;
             }
             $couponAmount = 0;
+            $flag = true;
             foreach ($couponTypes as $couponType) {
                 try {
                     $ticketToken = new TicketToken();
@@ -267,12 +271,15 @@ class CouponController extends Controller
                     UserCoupon::addUserCoupon($user, $couponType)->save();
                 } catch (\Exception $ex) {
                     file_put_contents($errorFileName, $user->id.','.$couponType->id.PHP_EOL, FILE_APPEND);
+                    $flag = false;
                     continue;
                 }
                 $couponAmount = $couponAmount + $couponType->amount;
             }
-            $data = $user->real_name . "\t" . $user->mobile . "\t" . $couponAmount . '元代金券' . PHP_EOL;
-            file_put_contents($fileName, $data, FILE_APPEND);
+            if ($flag) {
+                $data = $user->real_name . "\t" . $user->mobile . "\t" . $couponAmount . '元代金券' . PHP_EOL;
+                file_put_contents($fileName, $data, FILE_APPEND);
+            }
         }
         $this->stdout('发放结束！');
     }
