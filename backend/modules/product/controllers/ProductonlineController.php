@@ -140,7 +140,6 @@ class ProductonlineController extends BaseController
         }
         if ($loan->isCustomRepayment) {
             $loan->isJixiExamined = false;//自定义还款需要计息审核
-            $loan->allowTransfer = false;//自定义还款不支持转让
         }
 
         return $loan;
@@ -740,18 +739,18 @@ class ProductonlineController extends BaseController
             $data = OnlineRepaymentPlan::calcBenxi($order);
             foreach ($data as $key => $value) {
                 $term = $key + 1;
-                $repayment[$term]['repaymentDate'] = $value[0];
+                $repayment[$term]['repaymentDate'] = $value['date'];
                 $repayment[$term]['term'] = $term;
                 $repayment[$term]['totalPrincipal'] = isset($repayment[$term]['totalPrincipal']) ? $repayment[$term]['totalPrincipal'] : 0;
                 $repayment[$term]['totalInterest'] = isset($repayment[$term]['totalInterest']) ? $repayment[$term]['totalInterest'] : 0;
-                $repayment[$term]['totalPrincipal'] = bcadd($repayment[$term]['totalPrincipal'], $value[1], 2);
-                $repayment[$term]['totalInterest'] = bcadd($repayment[$term]['totalInterest'], $value[2], 2);
+                $repayment[$term]['totalPrincipal'] = bcadd($repayment[$term]['totalPrincipal'], $value['principal'], 2);
+                $repayment[$term]['totalInterest'] = bcadd($repayment[$term]['totalInterest'], $value['interest'], 2);
                 $repayment[$term]['orderData'][] = [
                     'userId' => $order->uid,
                     'orderMoney' => $order->order_money,
                     'rate' => $order->yield_rate,
-                    'principal' => $value[1],
-                    'interest' => $value[2],
+                    'principal' => $value['principal'],
+                    'interest' => $value['interest'],
                 ];
             }
         }

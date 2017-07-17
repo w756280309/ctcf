@@ -4,26 +4,22 @@ namespace common\models\order;
 
 use common\models\adminuser\AdminLog;
 use common\models\payment\Repayment;
+use common\models\product\RepaymentHelper;
 use common\models\user\User;
-use common\utils\SecurityUtils;
-use Wcg\DateTime\DT;
-use Wcg\Interest\Builder;
-use Wcg\Math\Bc;
 use yii\behaviors\TimestampBehavior;
 use common\models\product\OnlineProduct;
-use common\lib\product\ProductProcessor;
 use common\lib\bchelp\BcRound;
 use common\service\SmsService;
 use Yii;
 
 /**
  * 还款计划
- * @property int        $qishu
- * @property float      $benjin
- * @property float      $lixi
- * @property int        $refund_time
- * @property int        $status
- * @property int        $asset_id
+ * @property int $qishu
+ * @property float $benjin
+ * @property float $lixi
+ * @property int $refund_time
+ * @property int $status
+ * @property int $asset_id
  */
 class OnlineRepaymentPlan extends \yii\db\ActiveRecord
 {
@@ -35,12 +31,12 @@ class OnlineRepaymentPlan extends \yii\db\ActiveRecord
     {
         $pre_val = 'HP';
         list($usec, $sec) = explode(' ', microtime());
-        $v = ((float) $usec + (float) $sec);
+        $v = ((float)$usec + (float)$sec);
 
         list($usec, $sec) = explode('.', $v);
-        $date = date('ymdHisx'.rand(1000, 9999), $usec);
+        $date = date('ymdHisx' . rand(1000, 9999), $usec);
 
-        return $pre_val.str_replace('x', $sec, $date);
+        return $pre_val . str_replace('x', $sec, $date);
     }
 
     /**
@@ -122,7 +118,7 @@ class OnlineRepaymentPlan extends \yii\db\ActiveRecord
     {
         bcscale(14);
         $bc = new BcRound();
-        if (OnlineProduct::REFUND_METHOD_DAOQIBENXI === (int) $loan->refund_method) {   //到期本息
+        if (OnlineProduct::REFUND_METHOD_DAOQIBENXI === (int)$loan->refund_method) {   //到期本息
             return $bc->bcround(bcdiv(bcmul($ord->order_money, bcmul($loan->expires, $ord->yield_rate)), 365), 2);  //以订单里面的利率为准
         } else {
             return $bc->bcround(bcdiv(bcmul(bcmul($ord->order_money, $ord->yield_rate), $loan->expires), 12), 2);
@@ -156,21 +152,21 @@ class OnlineRepaymentPlan extends \yii\db\ActiveRecord
                     if (!is_null($plan)) {
                         continue;
                     }
-                    $amount = bcadd($value[1], $value[2], 2);
+                    $amount = bcadd($value['principal'], $value['interest'], 2);
                     $planPrepareData = [
                         'qishu' => $term,
                         'benxi' => $amount,
-                        'benjin' => $value[1],
-                        'lixi' => $value[2],
-                        'refund_time' => strtotime($value[0]),
+                        'benjin' => $value['principal'],
+                        'lixi' => $value['interest'],
+                        'refund_time' => strtotime($value['date']),
                     ];
                     $plan = self::initPlan($order, $planPrepareData);
                     $plan->save(false);
                     $repaymentData[$term] = [
                         'amount' => isset($repayment[$term]['amount']) ? bcadd($repayment[$term]['amount'], $amount, 2) : $amount,
-                        'principal' => isset($repayment[$term]['principal']) ? bcadd($repayment[$term]['principal'], $value[1], 2) : $value[1],
-                        'interest' => isset($repayment[$term]['interest']) ? bcadd($repayment[$term]['interest'], $value[2], 2) : $value[2],
-                        'dueDate' => $value[0],
+                        'principal' => isset($repayment[$term]['principal']) ? bcadd($repayment[$term]['principal'], $value['principal'], 2) : $value['principal'],
+                        'interest' => isset($repayment[$term]['interest']) ? bcadd($repayment[$term]['interest'], $value['interest'], 2) : $value['interest'],
+                        'dueDate' => $value['date'],
                     ];
                 }
             }
@@ -282,88 +278,12 @@ class OnlineRepaymentPlan extends \yii\db\ActiveRecord
             throw new \Exception('标的还款日期不能为空');
         }
 
-        $refundMethod = intval($loan->refund_method);//还款方式
-        $jixiDate = (new \DateTime())->setTimestamp($loan->jixi_time)->format('Y-m-d');//计息日期
-        $expires = intval($loan->expires);//项目期限，当 $refundMethod === 1 时候，单位为天，否则单位为月
+        $repaymentMethod = intval($loan->refund_method);//还款方式
+        $startDate = (new \DateTime())->setTimestamp($loan->jixi_time)->format('Y-m-d');//计息日期
+        $duration = intval($loan->expires);//项目期限，当 $refundMethod === 1 时候，单位为天，否则单位为月
         $apr = $ord->yield_rate;//订单的实际利率
-        $orderMoney = $ord->order_money;//订单金额
-        $term = count($paymentDates);
-        $bc = new BcRound();
-        bcscale(14);
-
-        //todo 将不同计息方式的调用设计的更加合理
-        if (OnlineProduct::REFUND_METHOD_DEBX === $refundMethod) {//等额本息
-            $repayPlan = Builder::create(Builder::TYPE_DEBX)
-                ->setStartDate(new DT($jixiDate))
-                ->setMonth($expires)
-                ->setRate($apr)
-                ->build($orderMoney);
-            $res = [];
-            foreach ($repayPlan as $index => $repayTerm) {
-                $res[$index] = [
-                    $repayTerm->getEndDate()->add(new \DateInterval('P1D'))->format('Y-m-d'),
-                    Bc::round($repayTerm->getPrincipal(), 2),
-                    Bc::round($repayTerm->getInterest(), 2),
-                ];
-            }
-            return $res;
-        }
-
-        if (!$loan->isAmortized()) {   //不是分期，即到期本息，只有一期
-            if (1 !== $term) {
-                throw new \Exception('到期本息只能有一期');
-            }
-
-            $interest = $bc->bcround(bcdiv(bcmul($orderMoney, bcmul($expires, $apr)), 365), 2);
-
-            return [
-                [
-                    $paymentDates[0],    //还款日期
-                    $ord->order_money,   //还款本金
-                    $interest,    //还款利息
-                ]
-            ];
-        }
-
-        $res = [];
-        $totalInterest = $bc->bcround(bcdiv(bcmul(bcmul($orderMoney, $apr), $expires), 12), 2);    //计算总利息
-        $isNature = $ord->loan->isNatureRefundMethod();
-
-        if (!bccomp($totalInterest, '0', 2)) {
-            $totalInterest = '0.01';
-        }
-
-        if ($isNature) {
-            $totalDays = (new \DateTime($jixiDate))->diff(new \DateTime(end($paymentDates)))->days;
-        }
-
-        foreach ($paymentDates as $key => $val) {
-            $principal = 0;
-            if ($key === ($term - 1)) {
-                $principal = $ord->order_money;
-                $interest = $bc->bcround(bcsub($totalInterest, array_sum(array_column($res, 2))), 2);   //最后一期分期利息计算,用总的减去前面计算出来的,确保总额没有差错
-            } else {
-                if ($isNature) {
-                    $startDay = !$key ? $jixiDate : $paymentDates[$key - 1];
-                    if ($val <= $startDay) {
-                        throw new \Exception();
-                    }
-
-                    $refundDays = (new \DateTime($startDay))->diff(new \DateTime($val))->days;    //应还款天数
-                    $interest = bcdiv(bcmul($totalInterest, $refundDays), $totalDays, 2);
-                } else {
-                    $interest = bcdiv($totalInterest, $term, 2);    //普通计息和自然计息都按照14位精度严格计算,即从小数位后第三位舍去
-                }
-            }
-
-            $res[$key] = [
-                $val,    //还款日期
-                $principal,   //还款本金
-                $interest,    //还款利息
-            ];
-        }
-
-        return $res;
+        $amount = $ord->order_money;//订单金额
+        return RepaymentHelper::calcRepayment($paymentDates, $repaymentMethod, $startDate, $duration, $amount, $apr);
     }
 
     public function getLoan()
