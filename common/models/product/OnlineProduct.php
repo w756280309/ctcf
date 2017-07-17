@@ -60,6 +60,7 @@ use yii\behaviors\TimestampBehavior;
  * @property bool    $is_jixi
  * @property string  $internalTitle 副标题（仅供内部使用）
  * @property string  $publishTime   产品上线时间
+ * @property int     $kuanxianqi 宽限期
  */
 class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
 {
@@ -241,7 +242,25 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
             [['title', 'internalTitle'], 'trim'],  //去掉项目名称及项目副标题两边多余的空格
             ['allowTransfer', 'boolean'],
             ['internalTitle', 'string', 'max' => 30],
+            ['kuanxianqi', 'validateGraceDay'],
         ];
+    }
+
+    /**
+     * 宽限期做基本校验
+     * 注: 当标的是有截止日、设置了宽限期时候，宽限期 < 截止日 - 当期日期 - 1
+     */
+    public function validateGraceDay()
+    {
+        if ($this->kuanxianqi > 0 && !empty($this->finish_date)) {
+            if ($this->kuanxianqi >= $this->expires) {
+                $this->addError('kuanxianqi', "宽限期必须小于项目期限");
+            }
+            $days = (new \DateTime())->setTimestamp($this->finish_date)->diff(new \DateTime(date('Y-m-d')))->days;
+            if ($this->kuanxianqi >= $days - 1) {
+                $this->addError('kuanxianqi', "宽限期必须小于 截止日 - 当期日期 - 1");
+            }
+        }
     }
 
     //起投金额、递增金额判断
@@ -323,6 +342,9 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
                 $this->addError('end_date', '募集开始时间小于募集结束时间小于项目结束日');
                 $this->addError('finish_date', '募集开始时间小于募集结束时间小于项目结束日');
             }
+            if (date('Y-m-d', $end) >= date('Y-m-d', $finish)) {
+                $this->addError('finish_date', '募集开始时间小于募集结束时间小于项目结束日');
+            }
         }
 
         return true;
@@ -363,7 +385,7 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
     }
 
     /**
-     * 验证项目天数 <= 产品到期日 - 募集开始时间.
+     * 验证项目天数 < 产品到期日 - 募集开始时间.
      *
      * @param type $attribute
      * @param type $params
@@ -373,10 +395,14 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
     public function checkExpires($attribute, $params)
     {
         $expires = $this->$attribute;
-        $diff = \Yii::$app->functions->timediff(strtotime($this->start_date),  strtotime($this->finish_date));
-        if ($expires > $diff['day']) {
-        } else {
-            return true;
+        if ($expires <= 0) {
+            $this->addError($attribute, '项目期限必须大于 0 天');
+        }
+        if (!empty($this->finish_date) && !empty($this->start_date)) {
+            $diff = (new \DateTime(date('Y-m-d', $this->start_date)))->diff(new \DateTime(date('Y-m-d', $this->finish_date)))->days;
+            if ($expires >= $diff) {
+                $this->addError($attribute, '项目期限必须小于 截止日 - 募集开始时间');
+            }
         }
     }
 

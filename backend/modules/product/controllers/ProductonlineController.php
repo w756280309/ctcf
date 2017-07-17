@@ -117,9 +117,8 @@ class ProductonlineController extends BaseController
         }
 
         if (!empty($loan->finish_date) && OnlineProduct::REFUND_METHOD_DAOQIBENXI === $refund_method) {
-            //若截止日期不为空，重新计算项目天数
-            $pp = new ProductProcessor();
-            $loan->expires = $pp->LoanTimes(date('Y-m-d H:i:s', $loan->start_date), null, $loan->finish_date, 'd', true)['days'][1]['period']['days'];
+            //标的未计息时候，项目期限 = 截止日 - 当前日期 - 1 (页面显示的项目期限都是直接计算，没有使用数据库数据)
+            $loan->expires = (new \DateTime(date('Y-m-d', $loan->finish_date)))->diff((new \DateTime(date('Y-m-d'))))->days - 1;
         }
 
         if (0 === $loan->issuer) {   //当发行方没有选择时,发行方项目编号为空

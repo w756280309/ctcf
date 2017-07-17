@@ -200,7 +200,7 @@ class OnlineRepaymentPlan extends \yii\db\ActiveRecord
             $up['finish_date'] = strtotime($endDate);
             $loan->finish_date = $up['finish_date'];
         } else {
-            //有截止日期时候，项目期限=截止日期 - 起息日期 + 1
+            //有截止日期时候，项目期限=截止日期 - 起息日期
             if (OnlineProduct::REFUND_METHOD_DAOQIBENXI === (int)$loan->refund_method) {
                 $expires = (new \DateTime(date('Y-m-d', $loan->finish_date)))->diff((new \DateTime(date('Y-m-d', $loan->jixi_time))))->days;
                 $loan->expires = $expires;
