@@ -5,10 +5,12 @@ namespace console\controllers;
 use common\models\order\OnlineOrder;
 use common\models\payment\Repayment;
 use common\models\product\OnlineProduct;
+use common\models\promo\TicketToken;
 use common\models\sms\SmsConfig;
 use common\models\coupon\UserCoupon;
 use common\models\user\User;
 use common\models\coupon\CouponType;
+use common\models\user\UserInfo;
 use common\service\SmsService;
 use common\utils\StringUtils;
 use Yii;
@@ -178,5 +180,100 @@ class CouponController extends Controller
         $this->stdout('共给'.$count.'位用户发送了短信!', Console::BG_YELLOW);
 
         return Controller::EXIT_CODE_NORMAL;
+    }
+
+    private function getCoupons($type)
+    {
+        $sns = [];
+        switch ($type) {
+            case 1:
+                $sns = ['invest_1000_5'];
+                break;
+            case 2:
+                $sns = ['invest_1000_5', 'invest_5000_10'];
+                break;
+            case 3:
+                $sns = ['invest_10000_20'];
+                break;
+            case 4:
+                $sns = ['invest_10000_20', 'invest_50000_50'];
+                break;
+        }
+
+        return CouponType::find()
+            ->where(['in', 'sn', $sns])
+            ->all();
+    }
+
+    /**
+     * 临时一次性代码 $group = 1 or $group = 2
+     *
+     * 投资一次，首投金额＜10000或投资两次、两次中最高那笔投资额＜10000
+     * php yii coupon/send 1
+     *
+     * 投资一次，首投金额≥10000或投资两次、两次中最高那笔投资额≥10000
+     * php yii coupon/send 2
+     *
+     */
+    public function actionSend($group)
+    {
+        $info = UserInfo::tableName();
+        if (!in_array($group, ['1', '2'])) {
+            $this->stdout('分组不对');
+            return false;
+        }
+        if ('1' === $group) {
+            $query = User::find()
+                ->innerJoinWith('info')
+                ->where(["$info.investCount" => 1])
+                ->andWhere(['<', "$info.firstInvestAmount", 10000])
+                ->orWhere(["$info.investCount" => 2, "if($info.firstInvestAmount < 10000 and $info.lastInvestAmount < 10000, 1, 0)" => 1])
+                ->andWhere(["$info.isInvested" => true])
+                ->andFilterWhere(['<=', "$info.lastInvestDate", date('Y-m-d')]);
+            $couponTypes1 = $this->getCoupons(1);
+            $couponTypes2 = $this->getCoupons(2);
+            $fileName = '/tmp/user-coupon-1.csv';
+            $errorFileName = '/tmp/user-coupon-1-error.csv';
+        } else {
+            $query = User::find()
+                ->innerJoinWith('info')
+                ->where(["$info.investCount" => 1])
+                ->andWhere(['>=', "$info.firstInvestAmount", 10000])
+                ->orWhere(["$info.investCount" => 2, "if($info.firstInvestAmount >= 10000 or $info.lastInvestAmount >= 10000, 1, 0)" => 1])
+                ->andWhere(["$info.isInvested" => true])
+                ->andFilterWhere(['<=', "$info.lastInvestDate", date('Y-m-d')]);
+            $couponTypes1 = $this->getCoupons(3);
+            $couponTypes2 = $this->getCoupons(4);
+            $fileName = '/tmp/user-coupon-2.csv';
+            $errorFileName = '/tmp/user-coupon-2-error.csv';
+        }
+        $cQuery = Clone $query;
+        $userCount = $query->count();
+        $this->stdout('共有' . $userCount . '人待发放代金券');
+        $halfCount = ceil($userCount / 2);
+        $users = $cQuery->all();
+        foreach ($users as $k => $user) {
+            if ($k < $halfCount) {
+                $couponTypes = $couponTypes1;
+            } else {
+                $couponTypes = $couponTypes2;
+            }
+            $couponAmount = 0;
+            foreach ($couponTypes as $couponType) {
+                try {
+                    $ticketToken = new TicketToken();
+                    $ticketToken->key = date('Ymd') . '-' . $user->id . '-' . $couponType->id;
+                    $ticketToken->save(false);
+                    UserCoupon::addUserCoupon($user, $couponType)->save();
+                } catch (\Exception $ex) {
+                    file_put_contents($errorFileName, $user->id.','.$couponType->id.PHP_EOL, FILE_APPEND);
+                    continue;
+                }
+                $couponAmount = $couponAmount + $couponType->amount;
+            }
+            $data = $user->real_name . "\t" . $user->mobile . "\t" . $couponAmount . '元代金券' . PHP_EOL;
+            file_put_contents($fileName, $data, FILE_APPEND);
+        }
+        $this->stdout('发放结束！');
     }
 }
