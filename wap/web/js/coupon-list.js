@@ -1,12 +1,9 @@
-/**
- * Created by lcl on 2015/12/24.
- */
-$(function(){
+$(function() {
     //分页相关
     var currentPage = 2;
     var totalPage = tp;
     var stop = true;
-    var $isApp = isApp;
+
     //自动加载分页数据
     $(window).scroll(function () {
         //当内容滚动到底部时加载新的内容
@@ -33,12 +30,10 @@ $(function(){
                                 var html = "";
                                 $.each(data.data, function (i, item) {
                                     var $desc = '去使用';
-                                    if (!$isApp) {
-                                        $desc = '未使用';
-                                    }
                                     var $div = '';
                                     var $image = 'ok_ticket';
                                     var $todeal = null;
+
                                     if (parseInt(item.isUsed) > 0) {
                                         $desc = '已使用';
                                         $div = '<div class="row over_img over_user_img"></div>';
@@ -54,14 +49,10 @@ $(function(){
                                             $todeal = true;
                                         }
                                     }
-                                    if ($isApp) {
-                                        if ($todeal) {
-                                            html += '<a class="box" href="/deal/deal/index">';
-                                        } else {
-                                            html += '<a class="box" href="javascript:;">';
-                                        }
+                                    if ($todeal) {
+                                        html += '<a class="box" href="/deal/deal/index">';
                                     } else {
-                                        html += '<div class="box">';
+                                        html += '<a class="box" href="javascript:;">';
                                     }
                                     html += '<div class="row coupon_num">' +
                                             '<img src="/images/'+ $image +'.png" alt="券">' +
@@ -86,21 +77,14 @@ $(function(){
                                             '<div class="row pos_box">' +
                                             '<div class="col-xs-8 ticket_time">有效期至'+ item.expiryDate +'</div>';
 
-                                    if ($isApp) {
-                                        if ($todeal) {
-                                            html += '<div class="col-xs-4 no-use"><span class="go-use-coucpon">'+ $desc +'</span></div>';
-                                        } else {
-                                            html += '<div class="col-xs-4 over-use">'+ $desc +'</div>';
-                                        }
+                                    if ($todeal) {
+                                        html += '<div class="col-xs-4 no-use"><span class="go-use-coucpon">'+ $desc +'</span></div>';
                                     } else {
                                         html += '<div class="col-xs-4 over-use">'+ $desc +'</div>';
                                     }
+
                                     html += '</div></div>';
-                                    if ($isApp) {
-                                        html += '</a>';
-                                    } else {
-                                        html += '</div>';
-                                    }
+                                    html += '</a>';
                                 });
 
                                 $('.load').before(html);
@@ -114,13 +98,6 @@ $(function(){
                         } else {
                             $(".load").show();
                         }
-                        //没有数据列表
-                        //if (data.tp === 0) {
-                        //    //显示暂无数据视图
-                        //    $(".nodata").show();
-                        //} else {
-                        //    $(".nodata").hide();
-                        //}
                     } else {
                         alert(data.message);
                     }
