@@ -34,8 +34,8 @@
 .projectContainer .deal-single {
     display: block;
     width: 997px;
-    height: 143px;
     padding-top: 15px;
+    padding-bottom:17px;
     margin-bottom: 30px;
     background-color: #fff;
     border: 1px solid #e4e4e8;
@@ -62,13 +62,12 @@
 .projectContainer .single_left {
     float: left;
     width: 652px;
-    height: 128px;
     border-right: 1px solid #e4e4e4;
     padding-left: 35px;
 }
 .projectContainer .single_left .single_title {
     padding-top: 4px;
-    padding-bottom: 17px;
+    margin-bottom: 17px;
     height: 24px;
 }
 .projectContainer .single_left .center-border{height: 1px;width: 609px;border-bottom: 1px solid #efeff3}
@@ -92,6 +91,39 @@
     height:21px;
     overflow: hidden;
 }
+.projectContainer .single_left .deal_tips{
+    height: 22px;
+    padding-left: 10px;
+    margin:-10px 0 9px;
+}
+.projectContainer .single_left .deal_tips .deal_tips_blue{
+    float: left;
+    height: 20px;
+    line-height: 20px;
+    margin-right:15px;
+    padding: 0 8px;
+    color: #136cfb;
+    font-size: 14px;
+    border: 1px solid #136cfb;
+    -webkit-border-radius:4px;
+    -moz-border-radius:4px;
+    border-radius:4px;
+    text-align: center;
+}
+.projectContainer .single_left .deal_tips .deal_tips_red{
+    float: left;
+    height: 20px;
+    line-height: 20px;
+    margin-right:15px;
+    padding: 0 8px;
+    color: #ff5736;
+    font-size: 14px;
+    border: 1px solid #ff5736;
+    -webkit-border-radius:4px;
+    -moz-border-radius:4px;
+    border-radius:4px;
+    text-align: center;
+}
 .projectContainer .single_content ul {
     float: left;
     margin-top: 24px;
@@ -109,7 +141,7 @@
     line-height: 30px
 }
 .projectContainer .single_ul_left .li_1 i{
-float: left;
+    float: left;
 }
 .projectContainer .single_ul_left .li_1 span {
     color: #f44336;
@@ -121,22 +153,6 @@ float: left;
     font-size: 14px;
     text-align: left;
     line-height: 16px
-}
-.projectContainer .single_ul_left .add_rate {
-    position: relative
-}
-.projectContainer .single_ul_left .add_rate div {
-    width: 54px;
-    height: 18px;
-    line-height: 18px;
-    background-color: #f44336;
-    border-radius: 10px;
-    font-size: 15px;
-    color: #fff;
-    text-align: center;
-    position: absolute;
-    top: -54px;
-    left: 68px
 }
 .projectContainer .single_ul_left .addRadeNumber {
     font-size: 14px;
@@ -208,7 +224,6 @@ float: left;
 }
 .projectContainer .single_right {
     float: left;
-    height: 120px;
     overflow: hidden
 }
 .projectContainer .single_right .single_right_tiao {
@@ -288,12 +303,20 @@ float: left;
     right: 0
 }
 .loan {
-  cursor: pointer;
-  cursor: hand;
+    cursor: pointer;
+    cursor: hand;
 }
 .last {
     margin-bottom: 0px !important;
 }
 .rate-steps-jiaxi {
     font-size: 27px !important;
+}
+.clearfix:after {
+    content: "";
+    display: block;
+    clear: both;
+    visibility: hidden;
+    font-size: 0;
+    height: 0;
 }

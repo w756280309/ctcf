@@ -114,7 +114,7 @@ $this->registerJsFile(ASSETS_BASE_URI . 'js/swiper.min.js', ['depends' => Jquery
         <?php if ($xs) { ?>
             <div class="newnorm hide" id="loginNewPeople">
                 <p class="newnormtitle f12">新手专享
-                    <?= $this->render('tags', ['loan' => $xs]) ?>
+                    <?= $this->renderFile("@common/views/tags.php", ['loan' => $xs]) ?>
                 </p>
                 <?php $ex = $xs->getDuration() ?>
                 <?php if (!$xs->isFlexRate && !$xs->jiaxi) { ?>
@@ -228,7 +228,7 @@ $this->registerJsFile(ASSETS_BASE_URI . 'js/swiper.min.js', ['depends' => Jquery
                                 <div class="tags clearfix">
                                     <?php if (null !== $loan->tags) { ?>
                                         <p class="lf f12">
-                                            <?= $this->render('tags', ['loan' => $loan]) ?>
+                                            <?= $this->renderFile("@common/views/tags.php", ['loan' => $loan]) ?>
                                         </p>
                                     <?php } elseif ($loan->pointsMultiple > 1) { ?>
                                         <p class="lf f12">

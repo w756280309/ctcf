@@ -22,7 +22,7 @@ use yii\helpers\Html;
 
                 <?php if (!empty($deal->tags) || $deal->pointsMultiple > 1) : ?>
                     <div class="col-xs-12 col-sm-12 col-tag">
-                        <?= $this->renderFile("@app/views/site/tags.php", ['loan' => $deal]) ?>
+                        <?= $this->renderFile("@common/views/tags.php", ['loan' => $deal]) ?>
                     </div>
                 <?php endif; ?>
             </div>
