@@ -17,7 +17,7 @@ if (null !== $loan->tags) {
 
     if (false !== $tagKey) {
         unset($tags[$tagKey]);
-        echo '<span class="red deal_tips_blue">慈善专属</span>';
+        echo '<span class="red deal_tips_red">慈善专属</span>';
         --$tagsCount;
     }
 

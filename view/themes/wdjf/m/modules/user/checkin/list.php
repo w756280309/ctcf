@@ -16,7 +16,7 @@ $this->title = '签到记录';
 <div class="flex-content">
     <?php if (!defined('IN_APP')) { ?>
         <div class="topTitle f18">
-            <img class="goback lf" src="<?= FE_BASE_URI ?>wap/tie-card/img/back.png" alt="" onclick="window.location.href='/user/checkin'">
+            <img class="goback lf" src="<?= FE_BASE_URI ?>wap/tie-card/img/back.png" alt="" onclick="history.go(-1)">
             签到记录
         </div>
     <?php } ?>
