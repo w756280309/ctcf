@@ -90,7 +90,12 @@ $pc_cat = Yii::$app->params['pc_cat'];
                     <td>
                         <input id="internalTitle" type="text" class="m-wrap span6" style="margin-bottom: 0px;width:300px" name='internalTitle' value="<?= Yii::$app->request->get('internalTitle') ?>"  placeholder="请输入项目副标题"/>
                     </td>
-                    <td colspan="5"></td>
+                    <td>
+                        <span class="title">序号</span>
+                    </td>
+                    <td>
+                        <input id="internalTitle" type="text" class="m-wrap span6" style="margin-bottom: 0px;width:300px" name='sn' value="<?= Yii::$app->request->get('sn') ?>"  placeholder="请输入序号"/>
+                    </td>
                 </tr>
                 </tbody>
             </table>
