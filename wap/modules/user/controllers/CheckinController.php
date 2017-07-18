@@ -39,12 +39,20 @@ class CheckinController extends BaseController
     /**
      * 签到得积分.
      */
-    public function actionIndex()
+    public function actionIndex($back_url = null)
     {
         $user = $this->getAuthedUser();
         $pointOrders = null;
         $checkInToday = false;
         $checkInDays = 0;
+
+        if (!empty($back_url)) {
+            $back_url = filter_var($back_url, FILTER_VALIDATE_URL);
+
+            if (!$back_url) {
+                $back_url = null;
+            }
+        }
 
         if ($user) {
             $today = date('Y-m-d');
@@ -69,6 +77,7 @@ class CheckinController extends BaseController
             'user' => $user,
             'checkInDays' => $checkInDays,
             'checkInToday' => $checkInToday,
+            'backUrl' => $back_url,
         ]);
     }
 

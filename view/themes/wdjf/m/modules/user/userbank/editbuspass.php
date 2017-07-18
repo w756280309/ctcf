@@ -1,6 +1,9 @@
 <?php
+
 use yii\bootstrap\ActiveForm;
-$this->title="修改第三方交易密码";
+
+$this->title = '修改第三方交易密码';
+
 ?>
 <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/setting.css">
 
@@ -35,7 +38,7 @@ $this->title="修改第三方交易密码";
         <div class="col-xs-12">修改资金托管账户支付密码</div>
 </div>
 <div class="row" id='payment-how'>
-        <div class="col-xs-12">您可以编辑短信<span>“GGMM#原密码#新密码”</span>(例如:GGMM#123456#234567) 发送至优势修改您的支付密码，支付密码只能是6位数字。</div>
+        <div class="col-xs-12">您可以编辑短信<span>“GGMM#原密码#新密码”</span>(例如:GGMM#123456#234567) 发送至联动优势修改您的支付密码，支付密码只能是6位数字。</div>
 </div>
 <div class="row" id='payment-li'>
         <div class="col-xs-12">

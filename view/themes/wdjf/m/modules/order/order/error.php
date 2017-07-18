@@ -50,6 +50,7 @@ $this->backUrl = false;
     </div>
 
     <?php if ('success' === $ret) { ?>
-        <div class="checkin"><a href="/user/checkin"><img src="<?= ASSETS_BASE_URI ?>images/checkin.jpg" alt=""></a></div>
+        <?php $backUrl = urlencode(Yii::$app->request->hostInfo.'/user/user') ?>
+        <div class="checkin"><a href="/user/checkin?back_url=<?= $backUrl ?>"><img src="<?= ASSETS_BASE_URI ?>images/checkin.jpg" alt=""></a></div>
     <?php } ?>
 </div>

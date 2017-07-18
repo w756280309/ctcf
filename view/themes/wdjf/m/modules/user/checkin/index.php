@@ -4,6 +4,7 @@ $this->title = '签到得积分';
 
 $hostInfo = \Yii::$app->request->hostInfo;
 $taps = date('Y-m-d') >= '2017-05-01' && date('Y-m-d') <= '2017-05-31';
+
 ?>
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/wenjfbase.css">
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/activeComHeader.css">
@@ -14,7 +15,13 @@ $taps = date('Y-m-d') >= '2017-05-01' && date('Y-m-d') <= '2017-05-31';
 <div class="flex-content">
     <?php if (!defined('IN_APP')) { ?>
         <div class="topTitle f18">
-            <img class="goback lf" src="<?= FE_BASE_URI ?>wap/tie-card/img/back.png" alt="" onclick="window.location.href='/?_mark=<?= time() ?>'">
+            <img class="goback lf" src="<?= FE_BASE_URI ?>wap/tie-card/img/back.png" alt=""
+                 <?php if ($backUrl) : ?>
+                     onclick="window.location.href='<?= $backUrl ?>'"
+                 <?php else : ?>
+                     onclick="history.go(-1)"
+                 <?php endif; ?>
+            >
             签到得积分
         </div>
     <?php } ?>
