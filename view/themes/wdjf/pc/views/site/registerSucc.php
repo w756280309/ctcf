@@ -13,6 +13,7 @@ $this->title = '注册成功';
             <li><span class="color-txt">开通资金托管</span>账户后即可使用</li>
         </ol>
         <div class="box">
+            <?php if(!$hasAffiliation) {?>
             <p class="media">推荐媒体：
                 <select name="channel" id="channel">
                     <?php foreach ($affArr as $key => $val) { ?>
@@ -21,6 +22,7 @@ $this->title = '注册成功';
                 </select>
                 <input type="hidden" class="lastChannel" name="lastChannel" value="-1">
             </p>
+            <?php }?>
             <a href="/user/identity" class="huifu-open">立即开通</a>
             <a href="/" class="no-open">先去逛逛</a>
         </div>

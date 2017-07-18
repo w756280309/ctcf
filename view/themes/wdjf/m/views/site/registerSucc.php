@@ -22,6 +22,7 @@ $this->title = '温都金服注册成功页面';
         <li>• 288元代金券已经发放至您的账户中心</li>
         <li>• 开通资金托管账户后即可使用</li>
     </ul>
+    <?php if(!$hasAffiliation) {?>
     <div class="registerselect f15">
         <span>推荐媒体:</span>
         <select name="channel" id="channel" style="max-width:3.1rem;">
@@ -31,6 +32,7 @@ $this->title = '温都金服注册成功页面';
         </select>
         <input type="hidden" class="lastChannel" name="lastChannel" value="-1">
     </div>
+    <?php }?>
     <a class="f16 open" href="/user/identity">立即开通</a>
     <a class="f16 stroll" href="/?_mark=170120">先去逛逛</a>
 </div>

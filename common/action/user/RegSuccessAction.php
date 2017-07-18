@@ -32,6 +32,7 @@ class RegSuccessAction extends Action
         return $this->controller->render('registerSucc', [
             'affiliationId' => $affiliationId,
             'affArr' => $affArr,
+            'hasAffiliation' => !is_null($userAffiliation),
         ]);
     }
 }
