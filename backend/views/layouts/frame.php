@@ -20,6 +20,8 @@ $leftLinkArray = Auth::find()
     ])
     ->asArray()
     ->all();
+
+$companyName = \common\models\growth\AppMeta::getValue('company.name');
 ?>
 
 <?php $this->beginPage() ?>
@@ -87,7 +89,7 @@ $leftLinkArray = Auth::find()
         <div class="header navbar navbar-inverse navbar-fixed-top">
             <div class="navbar-inner">
                 <div class="container-fluid">
-                    <a class="brand" href="/">温都金服</a>
+                    <a class="brand" href="/"><?= $companyName ?: 'company.name'?></a>
 
                     <div class="navbar hor-menu hidden-phone hidden-tablet">
                         <div class="navbar-inner">
