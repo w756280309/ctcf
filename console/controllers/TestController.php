@@ -1,12 +1,17 @@
 <?php
 namespace console\controllers;
 
+use common\models\order\OnlineRepaymentPlan;
+use common\models\payment\Repayment;
+use common\models\product\OnlineProduct;
 use common\models\user\MoneyRecord;
 use common\models\promo\Award;
 use common\models\sms\SmsMessage;
 use common\models\user\User;
 use wap\modules\promotion\models\RankingPromo;
 use yii\console\Controller;
+use yii\helpers\ArrayHelper;
+use yii\helpers\Console;
 
 /**
  * 临时脚本
@@ -284,5 +289,72 @@ ORDER BY p.id ASC , rp.order_id ASC , IF( rp.asset_id, rp.asset_id, rp.uid ) ASC
             }
         }
         $this->stdout("失败数据 {$errorCount} \n");
+    }
+
+    /**
+     * 临时代码：修复“重新计息”时候调整还款代码的bug，根据 online_repayment_plan 记录修复 repayment 记录
+     * 开发时间：2017-07-20， 异常数据最早开始于 2017-06-28，脚本命令： php yii test/repayment
+     */
+    public function actionRepayment($run = false, $loanId = null)
+    {
+        $loanIds = [];
+        if (empty($loanId)) {
+            $loans = OnlineProduct::find()->where(['>', 'jixi_time', strtotime('2017-06-28')])->all();
+            $loanIds = ArrayHelper::getColumn($loans, 'id');
+        } else {
+            $loan = OnlineProduct::findOne($loanId);
+            if (!is_null($loan)) {
+                $loans[] = $loan;
+                $loanIds[] = $loan->id;
+            }
+        }
+        $count = count($loanIds);
+        if (empty($loanIds)) {
+            $this->stdout("没有找到符合条件标的 \n");
+            die;
+        }
+        $this->stdout("查到 $count 个标的 \n");
+        $repayments = Repayment::find()->where(['in', 'loan_id', $loanIds])->all();
+        $dirtyRepaymentCount = 0;
+        $successCount = 0;
+        /**
+         * @var Repayment $repayment
+         */
+        foreach ($repayments as $repayment) {
+            $plans = OnlineRepaymentPlan::find()
+                ->where(['online_pid' => $repayment->loan_id])
+                ->andWhere(['qishu' => $repayment->term])
+                ->all();
+            if (empty($plans)) {
+                $this->stderr("没有找到 标的{$repayment->loan_id} 第 {$repayment->term} 期 的还款计划 \n", Console::FG_YELLOW);
+                continue;
+            }
+            $amount = array_sum(ArrayHelper::getColumn($plans, 'benxi'));
+            $principal = array_sum(ArrayHelper::getColumn($plans, 'benjin'));
+            $interest = array_sum(ArrayHelper::getColumn($plans, 'lixi'));
+            if (
+                bccomp($amount, $repayment->amount, 2) !== 0
+                || bccomp($principal, $repayment->principal, 2) !== 0
+                || bccomp($interest, $repayment->interest, 2) !== 0
+            ) {
+                $dirtyRepaymentCount++;
+                if ($run) {
+                    $repayment->amount = $amount;
+                    $repayment->principal = $principal;
+                    $repayment->interest = $interest;
+                    $res = $repayment->save(false);
+                    if ($res) {
+                        $successCount++;
+                    }
+                } else {
+                    $this->stdout("标的{$repayment->loan_id} 第 {$repayment->term} 期数据异常, 根据 online_repayment_plan 得到 总本息、总本金、总利息分别为 {$amount} {$principal} {$interest}, 而 repayment 中本息、本金、利息 分别为 {$repayment->amount} {$repayment->principal} {$repayment->interest} \n");
+                }
+            }
+        }
+
+        $this->stdout("总共有 $dirtyRepaymentCount 条异常数据 \n");
+        if ($run) {
+            $this->stdout("总共成功修复 $successCount 条数据 \n");
+        }
     }
 }

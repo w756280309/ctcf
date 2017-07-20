@@ -163,9 +163,9 @@ class OnlineRepaymentPlan extends \yii\db\ActiveRecord
                     $plan = self::initPlan($order, $planPrepareData);
                     $plan->save(false);
                     $repaymentData[$term] = [
-                        'amount' => isset($repayment[$term]['amount']) ? bcadd($repayment[$term]['amount'], $amount, 2) : $amount,
-                        'principal' => isset($repayment[$term]['principal']) ? bcadd($repayment[$term]['principal'], $value['principal'], 2) : $value['principal'],
-                        'interest' => isset($repayment[$term]['interest']) ? bcadd($repayment[$term]['interest'], $value['interest'], 2) : $value['interest'],
+                        'amount' => isset($repaymentData[$term]['amount']) ? bcadd($repaymentData[$term]['amount'], $amount, 2) : $amount,
+                        'principal' => isset($repaymentData[$term]['principal']) ? bcadd($repaymentData[$term]['principal'], $value['principal'], 2) : $value['principal'],
+                        'interest' => isset($repaymentData[$term]['interest']) ? bcadd($repaymentData[$term]['interest'], $value['interest'], 2) : $value['interest'],
                         'dueDate' => $value['date'],
                     ];
                 }
