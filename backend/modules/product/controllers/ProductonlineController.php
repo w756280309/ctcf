@@ -231,6 +231,74 @@ class ProductonlineController extends BaseController
     }
 
     /**
+     *引用标的项目
+     */
+    public function actionQuote($id)
+    {
+        if (empty($id)) {
+            throw $this->ex404();
+        }
+
+        $model = $this->findOr404(OnlineProduct::class, $id);
+        $model->scenario = 'create';
+        $model->is_fdate = (0 === $model->finish_date) ? 0 : 1;
+        $model->yield_rate = bcmul($model->yield_rate, 100, 2);
+        $model->allowedUids = $model->mobiles;
+        $ctmodel = ContractTemplate::find()->where(['pid' => $id])->all();
+
+        $con_name_arr = Yii::$app->request->post('name');
+        $con_content_arr = Yii::$app->request->post('content');
+        /*需要保留的属性：cid,refund_method,yield_rate,expires,jiaxi,money,borrow_uid,allowedUids,isPrivate,
+        * issuer,issuerSn,filingAmount,start_money,dizeng_money,rateSteps,isFlexRate,paymentDay，allowUseCoupon，
+         * isTest，is_xs，tags，isLicai，pointsMultiple，allowTransfer，isCustomRepayment，description
+         */
+        //清除属性33
+        $model->sn = '';
+        $model->epayLoanAccountId = '';
+        $model->recommendTime = '';
+        $model->fee = '';
+        $model->expires_show = '';
+        $model->kuanxianqi = '';
+        $model->funded_money = '';
+        $model->channel = '';
+        $model->full_time = '';
+        $model->jixi_time = '';
+        $model->fk_examin_time = '';
+        $model->account_name = '';
+        $model->account = '';
+        $model->bank = '';
+        $model->del_status = '';
+        $model->yuqi_faxi = '';
+        $model->order_limit = '';
+        $model->finish_rate = '';
+        $model->is_jixi = '';
+        $model->sort = '';
+        $model->contract_type = '';
+        $model->creator_id = '';
+        $model->created_at = '';
+        $model->updated_at = '';
+        $model->isJixiExamined = '';
+        $model->publishTime = '';
+        $model->id = '';
+        $model->title = '';
+        $model->internalTitle = '';
+        $model->start_date = '';
+        $model->end_date = '';
+        $model->finish_date = '';
+        $model->online_status = '';
+        $model->status = '';
+
+        return $this->render('edit', [
+            'model' => $model,
+            'ctmodel' => $ctmodel,
+            'rongziInfo' => $this->orgUserInfo(),
+            'con_name_arr' => $con_name_arr,
+            'con_content_arr' => $con_content_arr,
+            'issuer' => $this->issuerInfo(),
+        ]);
+    }
+
+    /**
      * 编辑标的项目.
      */
     public function actionEdit($id)

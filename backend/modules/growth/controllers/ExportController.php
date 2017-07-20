@@ -129,6 +129,29 @@ GROUP BY pc.recp_id",
                 'itemLabels' => ['客服姓名', '呼入量', '呼出量'],
                 'itemType' => ['string', 'int', 'int'],
             ],
+
+            'current_custormer_assets_million' => [
+                'key' => 'current_custormer_assets_million',
+                'title' => '资产大于100万的线下用户',
+                'content' => '统计当前持有资产大于100万的线下用户',
+                'sql' => "SELECT 
+u.realName AS 姓名,
+u.mobile AS 手机号,
+IF( SUBSTR( u.idCard, -2, 1 ) %2,  '男',  '女' ) AS 性别,
+( DATE_FORMAT( NOW( ) ,  '%Y' ) - SUBSTRING( u.idCard, 7, 4 ) ) AS 年龄,
+sum(o.money * 10000) AS '持有资产'
+from offline_order as o
+inner join offline_user as u on o.user_id = u.id
+inner join offline_loan as p on o.loan_id = p.id
+where o.isDeleted = 0
+and now() < date(p.finish_date)
+group by o.user_id
+having 持有资产 >= 1000000
+order by 持有资产 desc",
+                'params' => null,
+                'itemLabels' => ['姓名', '手机号', '性别','年龄','持有资产'],
+                'itemType' => ['string', 'string', 'string','int','float'],
+            ],
         ];
         parent::init();
     }

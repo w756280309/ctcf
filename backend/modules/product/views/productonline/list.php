@@ -94,7 +94,7 @@ $pc_cat = Yii::$app->params['pc_cat'];
                         <span class="title">序号</span>
                     </td>
                     <td>
-                        <input id="internalTitle" type="text" class="m-wrap span6" style="margin-bottom: 0px;width:300px" name='sn' value="<?= Yii::$app->request->get('sn') ?>"  placeholder="请输入序号"/>
+                        <input id="sn" type="text" class="m-wrap span4" style="margin-bottom: 0px;width:200px" name='sn' value="<?= Yii::$app->request->get('sn') ?>"  placeholder="请输入序号"/>
                     </td>
                 </tr>
                 </tbody>
@@ -128,6 +128,7 @@ $pc_cat = Yii::$app->params['pc_cat'];
                      * @var \common\models\product\OnlineProduct $val
                      */
                     ?>
+                    <?php if(count($models) < 1) echo '<tr><font color="red">暂无数据</font></tr>'; ?>
                     <?php foreach ($models as $key => $val) : ?>
                         <tr>
                             <td>
@@ -170,6 +171,7 @@ $pc_cat = Yii::$app->params['pc_cat'];
                             <td><?= $val['online_status'] ? $status[$val['status']] : '未上线' ?></td>
                             <td>
                                 <a href="/product/productonline/show?id=<?= $val['id'] ?>" class="btn mini green"><i class="icon-edit"></i> 查看</a>
+                                | <a href="/product/productonline/quote?id=<?= $val['id'] ?>" class="btn mini green"><i class="icon-edit"></i> 引用</a>
                                 | <a href="/product/productonline/edit?id=<?= $val['id'] ?>" class="btn mini green"><i class="icon-edit"></i> 编辑</a>
                                 <?php if ($isHide) : ?>
                                     | <a href="javascript:hideLoan('<?= $val->id ?>', '<?= $val->title ?>')" class="btn mini red"><i class="icon-minus-sign"></i> 还原</a>
