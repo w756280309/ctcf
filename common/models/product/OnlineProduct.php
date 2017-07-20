@@ -5,7 +5,6 @@ namespace common\models\product;
 use common\lib\product\ProductProcessor;
 use common\models\order\OnlineFangkuan;
 use common\models\order\OnlineOrder;
-use common\models\tx\Loan;
 use common\models\user\MoneyRecord;
 use common\models\user\User;
 use P2pl\Borrower;
@@ -235,7 +234,8 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
             [['rateSteps'], 'checkRateSteps'],
             ['paymentDay', 'integer'],
             ['paymentDay', 'compare', 'compareValue' => 1, 'operator' => '>=', 'skipOnEmpty' => true],
-            ['paymentDay', 'compare', 'compareValue' => 28, 'operator' => '<=', 'skipOnEmpty' => true],
+            ['paymentDay', 'compare', 'compareValue' => 31, 'operator' => '<=', 'skipOnEmpty' => true],
+            ['paymentDay', 'validatePaymentDay'],
             [['isTest', 'allowUseCoupon'], 'integer'],
             [['start_money', 'dizeng_money'], 'checkMoney'],
             ['tags', 'checkTags'],
@@ -244,6 +244,32 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
             ['internalTitle', 'string', 'max' => 30],
             ['kuanxianqi', 'validateGraceDay'],
         ];
+    }
+
+    //验证固定还款日
+    public function validatePaymentDay()
+    {
+        if ($this->isNatureRefundMethod()) {
+            switch ($this->refund_method) {
+                case OnlineProduct::REFUND_METHOD_YEAR:
+                    if ($this->paymentDay > 31) {
+                        $this->addError('paymentDay', '按自然年付息时候，固定还款日不能超过 31 号');
+                    }
+                    break;
+                case OnlineProduct::REFUND_METHOD_NATURE_HALF_YEAR:
+                case OnlineProduct::REFUND_METHOD_NATURE_QUARTER:
+                    if ($this->paymentDay > 30) {
+                        $this->addError('paymentDay', '按自然半年或按自然季付息时候，固定还款日不能超过 30 号');
+                    }
+                    break;
+                case OnlineProduct::REFUND_METHOD_NATURE_MONTH:
+                    if ($this->paymentDay > 28) {
+                        $this->addError('paymentDay', '按自然月付息时候，固定还款日不能超过 28 号');
+                    }
+                    break;
+
+            }
+        }
     }
 
     /**
