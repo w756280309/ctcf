@@ -15,7 +15,7 @@ class m170720_200201_alter_online_product extends Migration
             'type' => '2',
             'auth_description' => '贷款管理-引用',
             'status' => '1',
-            'order_code' => '4',
+            'order_code' => '2',
             'updated_at' => time(),
             'created_at' => time(),
         ]);
