@@ -287,6 +287,7 @@ class ProductonlineController extends BaseController
         $model->finish_date = '';
         $model->online_status = '';
         $model->status = '';
+        $model->is_fdate = '';
 
         return $this->render('edit', [
             'model' => $model,

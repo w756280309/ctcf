@@ -128,7 +128,7 @@ $pc_cat = Yii::$app->params['pc_cat'];
                      * @var \common\models\product\OnlineProduct $val
                      */
                     ?>
-                    <?php if(count($models) < 1) echo '<tr><font color="red">暂无数据</font></tr>'; ?>
+                    <?php if(count($models) < 1) echo '<tr><td><font color="red">暂无数据</font></td></tr>'; ?>
                     <?php foreach ($models as $key => $val) : ?>
                         <tr>
                             <td>
