@@ -5,15 +5,17 @@ use common\models\product\OnlineProduct;
 use common\utils\StringUtils;
 use common\view\LoanHelper;
 use yii\helpers\HtmlPurifier;
+use yii\web\JqueryAsset;
 
 $this->title = '项目详情';
 
-$this->registerJsFile(ASSETS_BASE_URI.'js/detail.js?v=161227');
+$this->registerJsFile(ASSETS_BASE_URI.'js/detail.js?v=170720');
 $this->registerCssFile(ASSETS_BASE_URI.'css/deal/buy.css');
 $this->registerCssFile(ASSETS_BASE_URI.'css/deal/deallist.css?v=161124');
 $this->registerCssFile(ASSETS_BASE_URI.'css/deal/detail.css?v=170414');
 $this->registerCssFile(ASSETS_BASE_URI.'css/pagination.css');
 $this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/chargedeposit.css');
+$this->registerJsFile(ASSETS_BASE_URI.'js/jquery.ba-throttle-debounce.min.js?v=161008', ['depends' => JqueryAsset::class]);
 
 ?>
 
@@ -80,7 +82,7 @@ $this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/chargedeposit.css');
             </div>
 
             <?php
-                $graceDaysDescription = LoanHelper::getGraceDaysDescription($deal);
+            $graceDaysDescription = LoanHelper::getGraceDaysDescription($deal);
             ?>
             <?php if (!empty($graceDaysDescription)) { ?>
                 <p class="grace-period"><?= $graceDaysDescription?></p>
@@ -168,7 +170,7 @@ $this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/chargedeposit.css');
                         <form action="/deal/deal/check?sn=<?= $deal->sn ?>" method="post" id="order_form">
                             <input type="hidden" name="_csrf" value="<?= Yii::$app->request->csrfToken ?>"/>
                             <div class="dR-input">
-                                <input type="text" class="dR-money" name="money" id="deal_money" placeholder="<?= StringUtils::amountFormat1('{amount}{unit}', $deal->start_money) ?>起投，<?= StringUtils::amountFormat1('{amount}{unit}', $deal->dizeng_money) ?>递增" autocomplete="off" value="<?= ($money > 0) ? $money : null?>"/>
+                                <input type="text" class="dR-money" name="money" id="deal_money" placeholder="<?= StringUtils::amountFormat1('{amount}{unit}', $deal->start_money) ?>起投，<?= StringUtils::amountFormat1('{amount}{unit}', $deal->dizeng_money) ?>递增" autocomplete="off" value="<?= ($money > 0) ? $money : null ?>"/>
                                 <!--输入款提示信息-->
                                 <div class="tishi tishi-dev">
                                     <img class="jiao-left" src="/images/deal/jiao-right.png" alt="">
@@ -189,40 +191,7 @@ $this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/chargedeposit.css');
 
                             <?php $couponCount = count($coupons); ?>
                             <?php if ($couponCount > 0 && $deal->allowUseCoupon) { ?>
-                                <!--待选代金券-->
-                                <ul class="dR-down clearfix">
-                                    <li class="dR-down-left"  id="coupon_title">
-                                        <img class="dR-add" src="/images/deal/add.png" alt="">选择一张代金券<i id="coupon_count"><?= $couponCount ?></i>
-                                    </li>
-                                    <li class="dR-down-right"><img src="/images/deal/down.png" alt=""></li>
-                                </ul>
-                                <!--代金券选择-->
-                                <div class="dR-quan" id="valid_coupon_list">
-                                    <input type="hidden" name="couponId" class="hide_coupon" value="<?= $coupon_id ?>">
-                                    <input type="hidden" name="couponConfirm" id="couponConfirm" value="">
-                                    <ul>
-                                        <?php foreach ($coupons as $coupon) { ?>
-                                            <li class="quan-false<?php if ($coupon->id === $coupon_id) { ?> picked-box<?php } ?>" cid="<?= $coupon->id ?>">
-                                                <?php $couponMoney = StringUtils::amountFormat2($coupon->couponType->amount); ?>
-                                                <div class="quan-left" id="C<?= $coupon->id ?>" money="<?= $couponMoney ?>">
-                                                    <span>￥</span><?= $couponMoney ?>
-                                                </div>
-                                                <div class="quan-right">
-                                                    <div class="quan-right-content">
-                                                        <div><?= $coupon->couponType->name ?></div>
-                                                        <p>单笔投资满<?= StringUtils::amountFormat1('{amount}{unit}', $coupon->couponType->minInvest) ?>可用</p>
-                                                        <p class="coupon_name" style="display: none"> 单笔投资满<?= StringUtils::amountFormat1('{amount}{unit}', $coupon->couponType->minInvest) ?>可抵扣<?= $coupon->couponType->amount ?>元</p>
-                                                        <p>
-                                                            <?= $coupon->couponType->loanExpires ? '期限满'.$coupon->couponType->loanExpires.'天可用(除转让)' : '新手标、转让不可用' ?>
-                                                        </p>
-                                                        <p>有效期至<?= $coupon->expiryDate ?></p>
-                                                    </div>
-                                                </div>
-                                                <img class="quan-true <?php if ($coupon->id === $coupon_id) { ?>show<?php } ?>" src="/images/deal/quan-true.png" alt="">
-                                            </li>
-                                        <?php } ?>
-                                    </ul>
-                                </div>
+                                <div id="coupons"></div>
                             <?php } ?>
                             <div>
                                 <input type="submit" class="dR-btn" id="order_submit" value="立即投资"/>
@@ -234,8 +203,8 @@ $this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/chargedeposit.css');
                     <?php }?>
                 <?php } elseif ($deal->status == OnlineProduct::STATUS_PRE) { ?>
                     <?php
-                        $start = Yii::$app->functions->getDateDesc($deal['start_date']);
-                        $deal->start_date = $start['desc'].date('H:i', $start['time']);
+                    $start = Yii::$app->functions->getDateDesc($deal['start_date']);
+                    $deal->start_date = $start['desc'].date('H:i', $start['time']);
                     ?>
                     <div class="dR-shouqing"><?= $deal->start_date ?>起售</div>
                     <div class="dR-btn" onclick="window.location = '/licai'">投资其他项目</div>
@@ -289,11 +258,13 @@ $this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/chargedeposit.css');
         });
 
         //获取投资记录
-        getOrderList('/deal/deal/order-list?pid=<?=$deal->id?>');
+        getOrderList('/deal/deal/order-list?pid=<?= $deal->id ?>');
         $('#order_list').on('click', 'a', function (e) {
             e.preventDefault(); // 禁用a标签默认行为
             getOrderList($(this).attr('href'));
         });
+
+        profit($('#deal_money'));
 
         //获取预期收益
         $('#deal_money').keyup(function () {
@@ -362,6 +333,10 @@ $this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/chargedeposit.css');
 
             if ('undefined' !== typeof data.confirm && 1 === data.confirm) {
                 openPopup();
+            }
+
+            if (2 === data.code) {
+                validForLoan();
             }
         });
 
@@ -434,11 +409,7 @@ $this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/chargedeposit.css');
 
     //获取预期收益
     function profit($this) {
-        var yr = "<?= $deal->yield_rate ?>";
-        var qixian = "<?= $deal->getDuration()['value'] ?>";
-        var retmet = <?= $deal->refund_method ?>;
         var sn = "<?= $deal->sn ?>";
-        var isFlexRate = <?= $deal->isFlexRate ?>;
         var csrf = "<?= Yii::$app->request->csrfToken ?>";
         var money = $this.val();
 
@@ -462,94 +433,140 @@ $this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/chargedeposit.css');
         });
     }
 
-
     <?php if ($couponCount > 0 && $deal->allowUseCoupon) { ?>
-        $(function () {
-            //回退时保持选中状态，并保持代金券单笔投资限额提示信息
-            var coupon_id = '<?= $coupon_id ?>';
-            if (coupon_id > 0) {
-                if ($('.picked-box') && $('.picked-box').length > 0) {
-                    $('#coupon_title').html($('.picked-box').find('.coupon_name').text());
-                }
+    $(function () {
+        validForLoan();
+
+        //代金券选择
+        $('#coupons').on('click', '#valid_coupon_list li', function (e) {
+            e.preventDefault();
+
+            var $this = $(this);
+            var sn = '<?= $deal->sn ?>';
+            var couponId = $this.attr('cid');
+            var money = $('#deal_money').val();
+            var opt = 'selected';
+
+            if ($this.hasClass('picked-box')) {
+                opt = 'canceled';
             }
 
-            //代金券选择
-            $('#valid_coupon_list li').bind('click', function () {
-                if (!$(this).hasClass('picked-box')) {
-                    $('.hide_coupon').val($(this).attr('cid'));
-                    $(this).addClass('picked-box').siblings().removeClass('picked-box');
-                    $(this).find('.quan-true').show().end().siblings().find('.quan-true').hide();
-                    $('#coupon_title').html($(this).find('.coupon_name').text());
-                } else {
-                    resetCoupon();
+            request('/user/coupon/add-coupon', {sn: sn, couponId: couponId, money: money, opt: opt}, function (data) {
+                if (0 === data.code) {
+                    $('.dR-tishi-error ').hide();
+                    $('.dR-tishi-error .err_message').html('');
+
+                    if ('selected' === opt) {
+                        $this.addClass('picked-box');
+                        $this.find('.quan-true').show();
+                        $('#coupon_title').html('使用代金券'+data.data.money+'元（共'+data.data.total+'张）');
+                    } else {
+                        $this.removeClass('picked-box');
+                        $this.find('.quan-true').hide();
+
+                        if (data.data.money) {
+                            $('#coupon_title').html('使用代金券'+data.data.money+'元（共'+data.data.total+'张）');
+                        } else {
+                            $('#coupon_title').html('<img class="dR-add" src="/images/deal/add.png" alt="">选择一张代金券<i id="coupon_count"><?= $couponCount ?></i>');
+                        }
+                    }
+
+                    $('#selectedCouponCount').val(data.data.total);
+                    $('#selectedCouponAmount').val(data.data.money);
+                }
+            }, function (data) {
+                if (data.code) {
+                    $('.dR-tishi-error ').show();
+                    $('.dR-tishi-error .err_message').html(data.message);
+
+                    if (2 === data.code) {
+                        validForLoan();
+                    }
                 }
             });
+        });
 
-            //获取有效代金券
-            $('#deal_money').keyup(function () {
-                validForLoan();
+        //获取有效代金券
+        $('#deal_money').on('keyup', $.throttle(500, function () {
+            validForLoan();
+        }));
+    });
+
+    function openPopup() {
+        var validCouponCount = '<?= $couponCount ?>';
+        var count = $('#selectedCouponCount').val();
+        var amount = $('#selectedCouponAmount').val();
+        var message = '';
+
+        if (amount > 0) {
+            message = '您有'+validCouponCount+'张代金券可用，目前已选择'+count+'张代金券可抵扣'+WDJF.numberFormat(amount, true)+'元投资';
+        } else {
+            message = '您有'+validCouponCount+'张代金券可用，本次未使用代金券抵扣，点击确定立即投资';
+        }
+
+        $('.confirmBox-top p').html(message);
+        $('.mask').show();
+        $('.confirmBox').show();
+    }
+
+    function subConfirm() {
+        subClose();
+
+        $('#couponConfirm').val('1');
+        order();
+        $('#couponConfirm').val('');
+    }
+
+    function subClose() {
+        $('.mask').hide();
+        $('.confirmBox').hide();
+    }
+
+    function validForLoan() {
+        var sn = '<?= $deal->sn ?>';
+        var money = $('#deal_money').val();
+
+        if (money >= 0) {
+            request('/user/coupon/valid', {sn: sn, money: money, _mark:Math.random()}, function (data) {
+                if (data) {
+                    $('#coupons').html(data);
+                }
             });
+        }
+    }
 
-            var money = <?= $money ?>;
-            var fromConfirm = <?= $fromConfirm ?>;
+    var allowClick = true;
 
-            if (0 === fromConfirm && money > 0) {
-                validForLoan();
+    function request(url, params, success, fail) {
+        if (!allowClick) {
+            return;
+        }
+
+        allowClick = false;
+
+        var xhr = $.get(url, params);
+
+        xhr.done(function (data) {
+            if ('function' === typeof success) {
+                success(data);
             }
         });
 
-        function resetCoupon() {
-            $('.hide_coupon').val('');
-            $('#valid_coupon_list li').removeClass('picked-box').find('.quan-true').hide();
-            $('#coupon_title').html('<img class="dR-add" src="/images/deal/add.png" alt="">选择一张代金券<i id="coupon_count"><?= $couponCount ?></i>');
-        }
+        xhr.fail(function(jqXHR) {
+            if (400 === jqXHR.status && jqXHR.responseText) {
+                var resp = $.parseJSON(jqXHR.responseText);
 
-        function openPopup() {
-            var validCouponCount = '<?= $couponCount ?>';
-            var couponId = $('.hide_coupon').val();
-            var couponMoney = $('#C'+couponId).attr('money');
-            var message = '';
-
-            if ('' !== couponId) {
-                message = '您有'+validCouponCount+'张代金券可用，将使用'+couponMoney+'元代金券一张，点击确定立即投资';
+                if ('function' === typeof fail) {
+                    fail(resp);
+                }
             } else {
-                message = '您有'+validCouponCount+'张代金券可用，本次未使用代金券抵扣，点击确定立即投资';
+                alert('系统繁忙，请稍后重试！');
             }
+        });
 
-            $('.confirmBox-top p').html(message);
-            $('.mask').show();
-            $('.confirmBox').show();
-        }
-
-        function subConfirm() {
-            subClose();
-
-            $('#couponConfirm').val('1');
-            order();
-            $('#couponConfirm').val('');
-        }
-
-        function subClose() {
-            $('.mask').hide();
-            $('.confirmBox').hide();
-        }
-
-        function validForLoan() {
-            var money = $('#deal_money').val();
-
-            if (money > 0) {
-                $.get('/deal/deal/valid-for-loan?sn=<?= $deal->sn ?>&money='+money, function (data) {
-                    if (0 === data.code) {
-                        $('.hide_coupon').val(data.couponId);
-                        $('#C'+data.couponId).parent().addClass('picked-box').siblings().removeClass('picked-box');
-                        $('#C'+data.couponId).parent().find('.quan-true').show().end().siblings().find('.quan-true').hide();
-                        $('#coupon_title').html($(this).find('.coupon_name').text());
-                        $('#coupon_title').html($('#C'+data.couponId).next().find('.coupon_name').text());
-                    } else {
-                        resetCoupon();
-                    }
-                });
-            }
-        }
+        xhr.always(function () {
+            allowClick = true;
+        });
+    }
     <?php } ?>
 </script>

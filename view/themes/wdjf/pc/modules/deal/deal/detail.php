@@ -5,6 +5,7 @@ use common\models\product\OnlineProduct;
 use common\utils\StringUtils;
 use common\view\LoanHelper;
 use yii\helpers\HtmlPurifier;
+use yii\web\JqueryAsset;
 
 $this->title = '项目详情';
 
@@ -14,6 +15,7 @@ $this->registerCssFile(ASSETS_BASE_URI.'css/deal/deallist.css?v=161124');
 $this->registerCssFile(ASSETS_BASE_URI.'css/deal/detail.css?v=170414');
 $this->registerCssFile(ASSETS_BASE_URI.'css/pagination.css');
 $this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/chargedeposit.css');
+$this->registerJsFile(ASSETS_BASE_URI.'js/jquery.ba-throttle-debounce.min.js?v=161008', ['depends' => JqueryAsset::class]);
 
 ?>
 
@@ -485,9 +487,9 @@ $this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/chargedeposit.css');
             });
 
             //获取有效代金券
-            $('#deal_money').blur(function () {
+            $('#deal_money').on('keyup', $.throttle(500, function () {
                 validForLoan();
-            });
+            }));
         });
 
         function openPopup() {

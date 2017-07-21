@@ -1,9 +1,11 @@
 <?php
+
 use common\utils\StringUtils;
 use common\view\LoanHelper;
 
 $this->title = '确认订单';
-$this->registerCssFile(ASSETS_BASE_URI . 'css/deal/buy.css?v=20161101');
+$this->registerCssFile(ASSETS_BASE_URI.'css/deal/buy.css?v=20161101');
+
 ?>
 <!-- invest BUY start-->
 <div class="invest-box clearfix">
@@ -54,7 +56,7 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/deal/buy.css?v=20161101');
 <script>
     $(function () {
         var allowSub = true;
-        $('#sub_button').bind('click', function () {
+        $('#sub_button').on('click', function () {
             var buy = $(this);
             if ($('#agree').is(':checked')) {
                 if (!allowSub) {
@@ -63,9 +65,8 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/deal/buy.css?v=20161101');
 
                 allowSub = false;
                 buy.html("购买中……");
-                var xhr = $.post('/order/order/doorder?sn=<?= $sn?>', {
-                    'money':<?= $money?>,
-                    'couponId':<?= $coupon?$coupon->id:0 ?>,
+                var xhr = $.post('/order/order/doorder?sn=<?= $sn ?>', {
+                    'money': <?= $money ?>,
                     '_csrf': '<?= Yii::$app->request->csrfToken ?>'
                 }, function (data) {
                     if (data.code == 0) {
