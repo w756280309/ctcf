@@ -11,7 +11,7 @@ use common\service\PayService;
 use frontend\controllers\BaseController;
 use Yii;
 use yii\filters\AccessControl;
-
+use yii\helpers\ArrayHelper;
 
 class OrderController extends BaseController
 {
@@ -40,25 +40,45 @@ class OrderController extends BaseController
         if (empty($sn) || (null === ($deal = OnlineProduct::findOne(['sn' => $sn])))) {
             throw $this->ex404();   //判断参数无效时,抛404异常
         }
-        $money = \Yii::$app->request->post('money');
-        $coupon_id = \Yii::$app->request->post('couponId');
-        $coupon = null;
-        $couponIds = [];
-        $couponMoney = 0;
         $user = $this->getAuthedUser();
-        if ($coupon_id) {
-            $coupon = UserCoupon::findOne($coupon_id);
-            $couponType = $coupon->couponType;
-            try {
-                if (null === $coupon || null === $couponType) {
-                    throw new \Exception('无效的代金券');
+        $money = \Yii::$app->request->post('money');
+        $detailData = Yii::$app->session->get('detail_data');
+        $userCouponIds = isset($detailData[$sn]['couponId']) ? $detailData[$sn]['couponId'] : [];
+
+        //检验代金券的使用
+        $couponMoney = 0; //记录可用的代金券金额
+        $checkMoney = $money; //校验输入的金额
+        $existUnUseCoupon = false; //是否存在不可用代金券
+        $lastErrMsg = ''; //最后一个不可用代金券的错误提示信息
+        if (is_array($userCouponIds) && !empty($userCouponIds)) {
+            $userCouponIds = array_filter($userCouponIds);
+            $u = UserCoupon::tableName();
+            $userCoupons = UserCoupon::find()
+                ->where(['in', "$u.id", $userCouponIds])
+                ->all();
+            foreach ($userCoupons as $key => $userCoupon) {
+                try {
+                    UserCoupon::checkAllowUse($userCoupon, $checkMoney, $user, $deal);
+                } catch (\Exception $ex) {
+                    $lastErrMsg = $ex->getMessage();
+                    $existUnUseCoupon = true;
+                    unset($userCoupons[$key]);
+                    continue;
                 }
-                UserCoupon::checkAllowUse($coupon, $money, $user, $deal);
-            } catch (\Exception $ex) {
-                return ['code' => 1, 'message' => $ex->getMessage()];
+                $couponType = $userCoupon->couponType;
+                $couponMoney = bcadd($couponMoney, $couponType->amount, 2);
+                $checkMoney = bcsub($checkMoney, $couponType->minInvest, 2);
             }
-            array_push($couponIds, $coupon_id);
-            $couponMoney = $couponType->amount;
+            $userCouponIds = ArrayHelper::getColumn($userCoupons, 'id');
+        }
+        //将所有可用的代金券写入session，并判断是否存在不可用的代金券，返回报错信息
+        $detailData[$sn]['couponId'] = $userCouponIds;
+        Yii::$app->session->set('detail_data', $detailData);
+        if ($existUnUseCoupon) {
+            return [
+                'code' => 1,
+                'message' => $lastErrMsg,
+            ];
         }
 
         $pay = new PayService(PayService::REQUEST_AJAX);
@@ -67,16 +87,21 @@ class OrderController extends BaseController
             return $ret;
         }
         //下订单之前删除保存在session中的购买数据
-        if (Yii::$app->session->has('detail_' . $sn . '_data')) {
-            Yii::$app->session['detail_' . $sn . '_data'] = null;
+        if (Yii::$app->session->has('detail_data')) {
+            $detailData = Yii::$app->session->get('detail_data');
+            if (isset($detailData[$sn])) {
+                unset($detailData[$sn]);
+            }
+            Yii::$app->session->set('detail_data', $detailData);
         }
+
         $orderManager = new OrderManager();
         //记录订单来源
         $investFrom = OnlineOrder::INVEST_FROM_PC;
         if ($this->fromWx()) {
             $investFrom = OnlineOrder::INVEST_FROM_WX;
         }
-        return $orderManager->createOrder($sn, $money, $couponIds, $user->id, $investFrom);
+        return $orderManager->createOrder($sn, $money, $userCouponIds, $user->id, $investFrom);
     }
 
     /**

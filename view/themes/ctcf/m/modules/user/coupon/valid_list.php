@@ -71,7 +71,7 @@ $inApp = defined('IN_APP');
             opt = 'canceled';
         }
 
-        var xhr = $.get('/user/coupon/add-coupon-session', {sn: sn, couponId: userCouponId, money: money, opt: opt});
+        var xhr = $.get('/user/coupon/add-coupon', {sn: sn, couponId: userCouponId, money: money, opt: opt});
         allowClick = false;
 
         xhr.done(function(data) {

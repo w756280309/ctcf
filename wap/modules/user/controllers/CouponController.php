@@ -3,6 +3,7 @@
 namespace app\modules\user\controllers;
 
 use app\controllers\BaseController;
+use common\action\user\AddCouponAction;
 use common\models\coupon\CouponType;
 use common\models\coupon\UserCoupon;
 use common\models\product\OnlineProduct;
@@ -13,6 +14,13 @@ use yii\data\Pagination;
 
 class CouponController extends BaseController
 {
+    public function actions()
+    {
+        return [
+            'add-coupon' => AddCouponAction::className(), //添加或取消勾选的代金券
+        ];
+    }
+
     /**
      * 我的代金券.
      */
@@ -161,105 +169,6 @@ class CouponController extends BaseController
         $this->layout = false;
 
         return $this->render('_valid_coupon', ['coupons' => $coupon ? [['amount' => $coupon->couponType->amount]] : []]);
-    }
-
-    /**
-     * 将对应的代金券ID存入session当中.
-     */
-    public function actionAddCouponSession($sn, $couponId, $money, $opt)
-    {
-        $user = $this->getAuthedUser();
-        if (null === $user || !$this->validateLoanWithCoupon($sn, $couponId) || !in_array($opt, ['canceled', 'selected'])) {
-            return $this->msg400(1, '参数错误');
-        }
-        $key = 'loan_coupon';
-        $loan = OnlineProduct::findOne(['sn' => $sn]);
-        $isSelected = $opt === 'selected';
-        $hasSession = Yii::$app->session->has($key);
-        if ($hasSession) {
-            $session = Yii::$app->session->get($key);
-            $couponIds = !empty($session['couponId']) ? $session['couponId'] : [];
-            if ($isSelected) {
-                if (!in_array($couponId, $couponIds)) {
-                    array_push($couponIds, $couponId);
-                }
-            } else {
-                if (!in_array($couponId, $couponIds)) {
-                    return $this->msg400(1, '此代金券不在选中的代金券列表内');
-                } else {
-                    foreach ($couponIds as $k => $id) {
-                        if ("$id" === "$couponId") {
-                            unset($couponIds[$k]);
-                        }
-                    }
-                }
-            }
-        } else {
-            $couponIds = [];
-            if ($isSelected) {
-                if ($this->validateLoanWithCoupon($sn, $couponId)) {
-                    $couponIds[] = $couponId;
-                }
-            } else {
-                return $this->msg400(1, '无可勾选的代金券');
-            }
-        }
-
-        $couponMoney = 0;
-        $couponCount = 0;
-        $totalMinInvest = 0;
-        $checkMoney = $money;
-
-        try {
-            foreach ($couponIds as $couponId) {
-                $coupon = UserCoupon::findOne($couponId);
-                if (is_null($coupon) || is_null($coupon->couponType)) {
-                    throw new \Exception('未找到代金券！');
-                }
-                $couponCount++;
-                $totalMinInvest = bcadd($totalMinInvest, $coupon->couponType->minInvest, 2);
-                UserCoupon::checkAllowUse($coupon, $checkMoney, $user, $loan);
-                $couponMoney = bcadd($couponMoney, $coupon->couponType->amount, 2);
-                $checkMoney = bcsub($checkMoney, $coupon->couponType->minInvest, 2);
-            }
-
-            $data = [
-                'total' => count($couponIds),
-                'money' => $couponMoney,
-            ];
-
-            Yii::$app->session->set('loan_coupon', ['couponId' => $couponIds]);
-
-            return $this->msg200('勾选成功', $data);
-        } catch (\Exception $ex) {
-            $message = $ex->getMessage();
-
-            if (1 === $ex->getCode()) {
-                $message = '选第'.$couponCount.'张代金券需要投资额满'.StringUtils::amountFormat2($totalMinInvest).'元';
-            }
-
-            return $this->msg400(1, $message);
-        }
-    }
-
-    private function msg400($code = 1, $msg = '操作失败', array $data = [])
-    {
-        Yii::$app->response->statusCode = 400;
-
-        return [
-            'code' => $code,
-            'message' => $msg,
-            'data' => $data,
-        ];
-    }
-
-    private function msg200($msg = '操作成功', array $data = [])
-    {
-        return [
-            'code' => 0,
-            'message' => $msg,
-            'data' => $data,
-        ];
     }
 
     /**

@@ -3,6 +3,7 @@
 namespace frontend\modules\deal\controllers;
 
 use common\action\loan\ExpectProfitLoan;
+use common\models\coupon\CouponType;
 use common\models\coupon\UserCoupon;
 use common\models\order\OnlineOrder;
 use common\models\product\OnlineProduct;
@@ -12,6 +13,7 @@ use common\service\PayService;
 use frontend\controllers\BaseController;
 use Yii;
 use yii\data\Pagination;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 
 class DealController extends BaseController
@@ -51,25 +53,17 @@ class DealController extends BaseController
         //获取可用代金券
         $coupons = [];
         $money = 0;
-        $userCouponId = 0;
-        $formConfirm = 0;
 
         if ($deal->allowUseCoupon && $user) {
             $coupons = UserCoupon::fetchValid($user, null, $deal);
         }
 
         //获取session中购买数据
-        $detail_data = Yii::$app->session['detail_'.$sn.'_data'];
-
-        if ($detail_data['money'] > 0) {
-            $money = $detail_data['money'];
-        }
-
-        if ($detail_data['coupon_id'] > 0) {
-            $userCouponId = (int) $detail_data['coupon_id'];
-            $formConfirm = 1;
-        } elseif (!empty($coupons)) {
-            $userCouponId = reset($coupons)->id;
+        $detailData = Yii::$app->session->get('detail_data', []);
+        if (!empty($detailData)) {
+            if (isset($detailData[$sn]['money']) && $detailData[$sn]['money'] > 0) {
+                $money = $detailData[$sn]['money'];
+            }
         }
 
         return $this->render('detail', [
@@ -77,55 +71,7 @@ class DealController extends BaseController
             'coupons' => $coupons,
             'user' => $user,
             'money' => $money,
-            'coupon_id' => $userCouponId,
-            'fromConfirm' => $formConfirm,
         ]);
-    }
-
-    /**
-     * 根据输入的金额自动获取代金券.
-     */
-    public function actionValidForLoan()
-    {
-        $request = array_replace([
-            'sn' => null,
-            'money' => null,
-        ], Yii::$app->request->get());
-
-        if (empty($request['sn']) || !preg_match('/^[A-Za-z0-9]+$/', $request['sn'])) {
-            throw $this->ex404();
-        }
-
-        if (empty($request['money']) || !preg_match('/^[0-9|.]+$/', $request['money'])) {
-            $request['money'] = null;
-        }
-
-        $deal = $this->findOr404(OnlineProduct::class, ['sn' => $request['sn']]);
-
-        if ($deal->allowUseCoupon) {
-            $coupons = UserCoupon::fetchValid($this->getAuthedUser(), $request['money'], $deal);
-
-            if (empty($coupons)) {
-                $backArr = [
-                    'code' => 1,
-                    'message' => '没有可用代金券',
-                ];
-            } else {
-                $backArr = [
-                    'code' => 0,
-                    'message' => '查询成功',
-                    'couponId' => reset($coupons)->id,
-                ];
-            }
-        } else {
-            $backArr = [
-                'code' => 1,
-                'message' => '当前标的不允许使用代金券',
-            ];
-        }
-
-
-        return $backArr;
     }
 
     /**
@@ -158,29 +104,54 @@ class DealController extends BaseController
     {
         $deal = $this->findOr404(OnlineProduct::class, ['sn' => $sn]);
         $money = Yii::$app->request->post('money');
-        $couponId = Yii::$app->request->post('couponId');
+        $detailData = Yii::$app->session->get('detail_data', []);
+        $userCouponIds = isset($detailData[$sn]['couponId']) ? $detailData[$sn]['couponId'] : [];
         $couponConfirm = Yii::$app->request->post('couponConfirm');
-        $couponMoney = 0;
-        $coupon = null;
         $user = $this->getAuthedUser();
 
         //未登录时候保存购买数据
         if (null === $user) {
-            Yii::$app->session['detail_' . $sn . '_data'] = ['money' => $money];
+            Yii::$app->session['detail_data'][$sn] = ['money' => $money];
             return ['code' => 1, 'message' => '请登录', 'tourl' => '/site/login'];
         }
-        if ($deal->allowUseCoupon && $couponId) {
-            $coupon = UserCoupon::findOne($couponId);
-            $couponType = $coupon->couponType;
-            try {
-                if (null === $coupon || null === $couponType) {
-                    throw new \Exception('无效的代金券');
+
+        //检验代金券的使用
+        $couponMoney = 0; //记录可用的代金券金额
+        $couponCount = 0; //记录可用的代金券个数
+        $checkMoney = $money; //校验输入的金额
+        $existUnUseCoupon = false; //是否存在不可用代金券
+        $lastErrMsg = ''; //最后一个不可用代金券的错误提示信息
+        if (is_array($userCouponIds) && !empty($userCouponIds)) {
+            $userCouponIds = array_filter($userCouponIds);
+            $u = UserCoupon::tableName();
+            $userCoupons = UserCoupon::find()
+                ->where(['in', "$u.id", $userCouponIds])
+                ->all();
+            foreach ($userCoupons as $key => $userCoupon) {
+                try {
+                    UserCoupon::checkAllowUse($userCoupon, $checkMoney, $user, $deal);
+                } catch (\Exception $ex) {
+                    $lastErrMsg = $ex->getMessage();
+                    $existUnUseCoupon = true;
+                    unset($userCoupons[$key]);
+                    continue;
                 }
-                UserCoupon::checkAllowUse($coupon, $money, $user, $deal);
-            } catch (\Exception $ex) {
-                return ['code' => 1, 'message' => $ex->getMessage()];
+                $couponCount++;
+                $couponType = $userCoupon->couponType;
+                $couponMoney = bcadd($couponMoney, $couponType->amount, 2);
+                $checkMoney = bcsub($checkMoney, $couponType->minInvest, 2);
             }
-            $couponMoney = $couponType->amount;
+            $userCouponIds = ArrayHelper::getColumn($userCoupons, 'id');
+        }
+        //将所有可用的代金券写入session，并判断是否存在不可用的代金券，返回报错信息
+        $detailData[$sn]['couponId'] = $userCouponIds;
+        Yii::$app->session->set('detail_data', $detailData);
+        if ($existUnUseCoupon) {
+            return [
+                'code' => 2,
+                'message' => $lastErrMsg,
+                'coupon' =>['count' => $couponCount, 'amount' => $couponMoney],
+            ];
         }
 
         $pay = new PayService(PayService::REQUEST_AJAX);
@@ -197,15 +168,13 @@ class DealController extends BaseController
         }
 
         //已登录时候保存购买数据
-        Yii::$app->session['detail_'.$sn.'_data'] = [
-            'money' => $money,
-            'coupon_id' => $couponId,
-        ];
+        $detailData[$sn]['money'] = $money;
+        Yii::$app->session->set('detail_data', $detailData);
 
         return [
             'code' => 0,
             'message' => '',
-            'tourl' => '/deal/deal/confirm?sn='.$sn.'&money='.$money.'&coupon_id='.$couponId,
+            'tourl' => '/deal/deal/confirm?sn='.$sn.'&money='.$money,
         ];
     }
 
@@ -218,22 +187,28 @@ class DealController extends BaseController
             return $this->redirect('/site/login');
         }
 
-        $coupon_id = Yii::$app->request->get('coupon_id');
-        $coupon = null;
-        if ($coupon_id) {
+        $session = Yii::$app->session->get('detail_data', []);
+        $userCouponIds = isset($session[$sn]['couponId']) ? $session[$sn]['couponId'] : [];
+        $cou_money = 0;
+
+        if (is_array($userCouponIds) && !empty($userCouponIds)) {
+            $userCouponIds = array_filter($userCouponIds);
             $loan = $this->findOr404(OnlineProduct::class, ['sn' => $sn]);
             if (!$loan->allowUseCoupon) {
                 throw new \Exception('该标的不能使用代金券');
             }
 
-            $coupon = $this->findOr404(UserCoupon::className(), $coupon_id);
+            $c = CouponType::tableName();
+            $u = UserCoupon::tableName();
+            $cou_money = UserCoupon::find()
+                ->innerJoinWith('couponType')
+                ->where(['in', "$u.id", $userCouponIds])
+                ->sum("$c.amount");
         }
         $deal = $this->findOr404(OnlineProduct::className(), ['online_status' => OnlineProduct::STATUS_ONLINE, 'del_status' => OnlineProduct::STATUS_USE, 'sn' => $sn]);
-        $cou_money = $coupon ? ($coupon->couponType ? $coupon->couponType->amount : 0) : 0;
 
         return $this->render('confirm', [
             'deal' => $deal,
-            'coupon' => $coupon,
             'money' => $money,
             'cou_money' => $cou_money,
             'sn' => $sn,

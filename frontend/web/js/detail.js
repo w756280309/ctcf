@@ -18,7 +18,7 @@ $(function () {
     });
     var dRprogress = $('.dR-progress span').attr('data-progress');
     $('.dR-progress span').css({width: dRprogress + '%'});
-    $('.dR-down').on('click', function () {
+    $('#coupons').on('click', '.dR-down', function () {
         $('.dR-quan').stop(true, false).slideToggle();
     });
 });
