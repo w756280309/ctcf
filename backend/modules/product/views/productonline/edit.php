@@ -230,7 +230,7 @@ TPL;
             <!--/span-->
             <div class="span6 ">
                 <div class="control-group">
-                    <label class="control-label">募集金额<span style="font-size:12px; color:grey">(<?= $desc ?>)</span></label>
+                    <label class="control-label">募集金额<span style="color:grey">(<?= $desc ?>)</span></label>
                     <div class="controls">
                     <?=
                         $form->field($model, 'money', [
@@ -251,7 +251,7 @@ TPL;
         <div class="row-fluid">
             <div class="span6 ">
                 <div class="control-group">
-                    <label class="control-label">募集开始时间<span style="font-size:12px; color:grey">(<?= $desc ?>)</span></label>
+                    <label class="control-label">募集开始时间<span style="color:grey">(<?= $desc ?>)</span></label>
                     <div class="controls">
                     <?php
                         $start_date_input_option = array_merge([
@@ -295,7 +295,7 @@ TPL;
         <div class="row-fluid sourceRfmet">
             <div class="span6 ">
                 <div class="control-group">
-                    <label class="control-label">产品到期日<span style="font-size:12px; color:grey">(<?= $desc ?>)</span></label>
+                    <label class="control-label">产品到期日<span style="color:grey">(<?= $desc ?>)</span></label>
                     <div class="controls">
                         <?= $form->field($model, 'finish_date', ['template'=>'{input}'])->hiddenInput(['value' => 0, 'id' => 'finish_date_hide'])->label(false)?>
                         <?php
@@ -355,7 +355,7 @@ TPL;
         <div class="row-fluid">
             <div class="span6 ">
                 <div class="control-group">
-                    <label class="control-label">融资用户<span style="font-size:12px; color:grey">(<?= $desc ?>)</span></label>
+                    <label class="control-label">融资用户<span style="color:grey">(<?= $desc ?>)</span></label>
                     <div class="controls">
                         <?php
                             $borrow_uid_input_option = array_merge([
@@ -508,7 +508,7 @@ TPL;
         <div class="row-fluid">
             <div class="span6 ">
                 <div class="control-group">
-                    <label class="control-label">允许使用代金券<span style="font-size:12px; color:grey">(<?= $desc ?>)</span></label>
+                    <label class="control-label">允许使用代金券<span style="color:grey">(<?= $desc ?>)</span></label>
                     <div class="controls">
                         <?= $form->field($model, 'allowUseCoupon')->checkbox(array_merge(['autocomplete' => 'on'], $model->online_status ? ['disabled' => 'disabled', 'uncheck' => $model->allowUseCoupon] : []))->label(false) ?>
                     </div>
@@ -526,7 +526,7 @@ TPL;
 
             <div class="span6 fix-offset">
                 <div class="control-group">
-                    <label class="control-label">新手专享标<span style="font-size:12px; color:grey">(<?= $desc ?>)</span></label>
+                    <label class="control-label">新手专享标<span style="color:grey">(<?= $desc ?>)</span></label>
                     <div class="controls">
                         <?=  $form->field($model, 'is_xs')->checkbox(array_merge(['autocomplete' => 'on'], $model->online_status ? ['disabled' => 'disabled', 'uncheck' => $model->is_xs] : []))->label(false) ?>
                     </div>
@@ -535,7 +535,7 @@ TPL;
 
             <div class="span6 ">
                 <div class="control-group">
-                    <label class="control-label">项目标签<span style="font-size:12px; color:grey">(每个标签不超过四个字，且用中文逗号隔开)</span></label>
+                    <label class="control-label">项目标签<span style="color:grey">(每个标签不超过四个字，且用中文逗号隔开)</span></label>
                     <div class="controls">
                         <?=
                             $form->field($model, 'tags', ['template' => '{input}{error}', 'inputOptions' => ['autocomplete' => 'off', 'placeholder' => '标签列表']])->textInput(['class' => 'm-wrap span12'])
@@ -546,7 +546,7 @@ TPL;
 
             <div class="span6 fix-offset">
                 <div class="control-group">
-                    <label class="control-label">理财计划<span style="font-size:12px; color:grey">(<?= $desc ?>)</span></label>
+                    <label class="control-label">理财计划<span style="color:grey">(<?= $desc ?>)</span></label>
                     <div class="controls">
                         <?=  $form->field($model, 'isLicai')->checkbox(array_merge(['autocomplete' => 'on'], $model->online_status ? ['disabled' => 'disabled', 'uncheck' => $model->isLicai] : []))->label(false) ?>
                     </div>
@@ -554,7 +554,7 @@ TPL;
             </div>
             <div class="span6">
                 <div class="control-group">
-                    <label class="control-label">积分倍数<span style="font-size:12px; color:grey">(<?= $desc ?>)</span></label>
+                    <label class="control-label">积分倍数<span style="color:grey">(<?= $desc ?>)</span></label>
                     <div class="controls">
                         <?=  $form->field($model, 'pointsMultiple')->textInput(array_merge(['autocomplete' => 'off', 'value' => $model->pointsMultiple, 'class' => 'm-wrap span2'], $model->online_status ? ['disabled' => 'disabled'] : []))->label(false) ?>
                     </div>
