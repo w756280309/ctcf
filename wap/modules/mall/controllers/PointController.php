@@ -70,7 +70,8 @@ class PointController extends BaseController
             ->joinWith('goodsType')
             ->where([
                 'user_id' => $this->getAuthedUser()->id,
-            ])->orderBy([
+            ])->andWhere(['isOp' => false])
+            ->orderBy([
                 'isRedeemed' => SORT_ASC,
                 'createTime' => SORT_DESC,
             ]);

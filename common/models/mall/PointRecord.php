@@ -6,7 +6,6 @@ use common\models\order\OnlineOrder;
 use common\models\offline\OfflineUser;
 use common\models\user\User;
 use common\utils\TxUtils;
-use Yii;
 use yii\db\ActiveRecord;
 
 /**
@@ -45,7 +44,7 @@ class PointRecord extends ActiveRecord
     const TYPE_PROMO = 'promo'; //活动获得
     const TYPE_CHECK_IN = 'check_in';//签到获取
     const TYPE_WECHAT_CONNECT = 'wechat_connect'; //微信绑定奖励
-
+    const REF_TYPE_CHECK_IN_RETENTION = 'check_in_retention'; //签到回归奖励
 
     /**
      * @inheritdoc
@@ -111,6 +110,7 @@ class PointRecord extends ActiveRecord
             self::TYPE_PROMO => '活动获得',
             self::TYPE_CHECK_IN => '签到获得',
             self::TYPE_WECHAT_CONNECT => '绑定账户奖励',
+            self::REF_TYPE_CHECK_IN_RETENTION => '签到回归奖励',
         ];
         return isset($name[$type]) ? $name[$type] : '';
     }

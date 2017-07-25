@@ -11,7 +11,21 @@ use yii\db\ActiveRecord;
 /**
  * Class Voucher
  *
- * @property string     $orderNum       兑吧订单ID, 是虚拟商品充值ID, 和扣除积分的orderNum 没有关系
+ * @property int         $id           主键
+ * @property null|string $goodsType_sn 商品编号
+ * @property string      $ref_type     关联类型（原因）
+ * @property null|int    $ref_id       关联ID（原因）
+ * @property null|int    $card_id      卡密ID
+ * @property null|int    $promo_id     活动ID
+ * @property int         $user_id      用户ID
+ * @property bool        $isRedeemed   是否领取
+ * @property null|string $redeemTime   领取时间
+ * @property null|string $redeemIp     领取人IP
+ * @property string      $createTime   创建时间
+ * @property string      $orderNum     兑吧订单ID, 是虚拟商品充值ID, 和扣除积分的orderNum 没有关系
+ * @property null|string $expireTime   过期时间
+ * @property bool        $isOp         是否为运营
+ * @property string      $amount       面值
  */
 class Voucher extends ActiveRecord
 {
@@ -39,10 +53,13 @@ class Voucher extends ActiveRecord
             'promo_id' => '活动ID',
             'user_id' => '用户ID',
             'isRedeemed' => '是否领取',
-            'redeemTime' => '领奖时间',
+            'redeemTime' => '领取时间',
             'redeemIp' => '领取人IP',
             'createTime' => '创建时间',
             'orderNum' => '兑吧订单号',
+            'expiryTime' => '过期时间',
+            'isOp' => '是否运营',
+            'amount' => '面值',
         ];
     }
 

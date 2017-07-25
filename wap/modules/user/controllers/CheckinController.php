@@ -3,9 +3,13 @@
 namespace app\modules\user\controllers;
 
 use app\controllers\BaseController;
+use common\models\code\Voucher;
 use common\models\mall\PointRecord;
+use common\models\thirdparty\SocialConnect;
 use common\models\user\CheckIn;
 use common\models\user\User;
+use common\service\PointsService;
+use common\utils\StringUtils;
 use Yii;
 use yii\filters\AccessControl;
 
@@ -45,6 +49,7 @@ class CheckinController extends BaseController
         $pointOrders = null;
         $checkInToday = false;
         $checkInDays = 0;
+        $isBindWx = false;
 
         if (!empty($back_url)) {
             $back_url = filter_var($back_url, FILTER_VALIDATE_URL);
@@ -71,6 +76,11 @@ class CheckinController extends BaseController
                     $checkInDays = 30 === $check->streak ? 0 : $check->streak;   //昨天签到满30天的,且今天未签到的,前端连续签到次数显示为0
                 }
             }
+
+            $isBindWx = null !== SocialConnect::find()
+                ->where(['user_id' => $user->id])
+                ->andWhere(['provider_type' => SocialConnect::PROVIDER_TYPE_WECHAT])
+                ->one();
         }
 
         return $this->render('index', [
@@ -78,6 +88,7 @@ class CheckinController extends BaseController
             'checkInDays' => $checkInDays,
             'checkInToday' => $checkInToday,
             'backUrl' => $back_url,
+            'isBindWx' => $isBindWx,
         ]);
     }
 
@@ -90,10 +101,48 @@ class CheckinController extends BaseController
         $check = CheckIn::check($user, (new \DateTime()));
 
         if ($check) {
+            $extraPoints = 0;
+
+            //签到召回送额外积分
+            $voucher = Voucher::find()
+                ->where(['>=', 'expireTime', date('Y-m-d H:i:s')])
+                ->andWhere(['user_id' => $user->id])
+                ->andWhere(['isOp' => true])
+                ->andWhere(['isRedeemed' => false])
+                ->andWhere(['ref_type' => PointRecord::REF_TYPE_CHECK_IN_RETENTION])
+                ->one();
+
+            if (null !== $voucher) {
+                $db = Yii::$app->db;
+                $transaction = $db->beginTransaction();
+                try {
+                    $sql = "update voucher set isRedeemed = :isRedeemed, redeemTime = :redeemTime, redeemIp = :redeemIp where id = :id and isRedeemed = false ";
+                    $rows = $db->createCommand($sql, [
+                        'isRedeemed' => true,
+                        'redeemTime' => date('Y-m-d H:i:s'),
+                        'redeemIp' => Yii::$app->request->getUserIP(),
+                        'id' => $voucher->id,
+                    ])->execute();
+                    if ($rows > 0) {
+                        $pointRecord = new PointRecord([
+                            'ref_id' => $voucher->id,
+                            'ref_type' => PointRecord::REF_TYPE_CHECK_IN_RETENTION,
+                            'incr_points' => $voucher->amount,
+                            'remark' => PointRecord::getTypeName(PointRecord::REF_TYPE_CHECK_IN_RETENTION),
+                        ]);
+                        PointsService::addUserPoints($pointRecord, false, $user);
+                    }
+                    $transaction->commit();
+                    $extraPoints = $voucher->amount;
+                } catch (\Exception $ex) {
+                    $transaction->rollBack();
+                }
+            }
             $res = [
                 'streak' => $check->streak,
-                'points' => $check->points,
+                'points' => $check->points + $extraPoints,
                 'coupon' => $check->couponType ? $check->couponType->amount : 0,
+                'extraPoints' => $extraPoints,
             ];
         } else {
             Yii::$app->response->statusCode = 400;
