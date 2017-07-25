@@ -2,10 +2,14 @@
 
 namespace console\controllers;
 
+use common\models\code\Voucher;
+use common\models\promo\TicketToken;
 use common\models\user\CheckIn;
 use common\models\mall\PointRecord;
 use common\models\user\User;
+use common\service\SmsService;
 use yii\console\Controller;
+use yii\helpers\ArrayHelper;
 
 Class CheckinController extends Controller
 {
@@ -206,5 +210,80 @@ Class CheckinController extends Controller
             $transaction->rollBack();
             $this->stdout("修复错误：错误信息" . $ex->getMessage(). PHP_EOL);
         }
+    }
+
+    /**
+     * 签到用户召回
+     *
+     * @param string $points 待发放积分奖励
+     *
+     * @return void
+     */
+    public function actionRetention($points = '10')
+    {
+        //筛符合的用户
+        $query = CheckIn::find()
+            ->select('user_id')
+            ->distinct();
+        $cQuery = clone $query;
+        $allCheckIns = $query->column();
+        $fourteenDaysAgo = new \DateTime('-14 day');
+        $hasCheckedInFourteenDays = $cQuery->where([
+            '>=', 'createTime', $fourteenDaysAgo->format('Y-m-d H:i:s')
+        ])->column();
+        $userIds = array_diff($allCheckIns, $hasCheckedInFourteenDays);
+        $hasSendVouchers = Voucher::find()
+            ->where(['ref_type' => PointRecord::REF_TYPE_CHECK_IN_RETENTION])
+            ->all();
+        $hasSendUserIds = ArrayHelper::getColumn($hasSendVouchers, 'user_id');
+        $voucherUserIds = array_diff($userIds, $hasSendUserIds);
+
+        //添加voucher
+        if (empty($voucherUserIds)) {
+            $this->stdout('未筛选到用户');
+            return;
+        }
+
+        $voucherUsers = User::find()
+            ->where(['in', 'id', $voucherUserIds])
+            ->all();
+        $db = \Yii::$app->db;
+        $sendUsers = [];
+        $nowTime = (new \DateTime())->format('Y-m-d H:i:s');
+        $expireTime = (new \DateTime('+30 day'))->format('Y-m-d H:i:s');
+        foreach ($voucherUsers as $user) {
+            try {
+                $transaction = $db->beginTransaction();
+                //新建一个voucher
+                $voucher = new Voucher();
+                $voucher->ref_type = PointRecord::REF_TYPE_CHECK_IN_RETENTION;
+                $voucher->user_id = $user->id;
+                $voucher->isRedeemed = false;
+                $voucher->createTime = $nowTime;
+                $voucher->expireTime = $expireTime;
+                $voucher->isOp = true;
+                $voucher->amount = $points;
+                $voucher->save(false);
+                //防重复添加
+                $ticketToken = new TicketToken();
+                $ticketToken->key = $voucher->ref_type . '.' . $user->id;
+                $ticketToken->save(false);
+                $transaction->commit();
+                $sendUsers[] = $user;
+            } catch (\Exception $ex) {
+                $transaction->rollBack();
+                continue;
+            }
+        }
+        //成功后发送短信
+        $this->stdout('待发送短信的用户共'.count($sendUsers).'人');
+        if (!empty($sendUsers)) {
+            foreach ($sendUsers as $user) {
+                SmsService::send($user->mobile, '191643', [
+                    rtrim(\Yii::$app->params['clientOption']['host']['wap'], '/') . '/' . 'user/checkin',
+                ], $user);
+            }
+        }
+        $this->stdout('发放完成');
     }
 }

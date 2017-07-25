@@ -21,7 +21,7 @@ use yii\grid\GridView;
                 <select name="ref_type" id="point_search_form_type" m-wrap span6>
                     <option value="">---全部---</option>
                     <?php
-                    $types = ['loan_order', 'point_order', 'first_order_1', 'point_order_fail', 'point_fa_fang', 'mall_increase', 'point_batch', 'promo', 'check_in', 'wechat_connect'];
+                    $types = ['loan_order', 'point_order', 'first_order_1', 'point_order_fail', 'point_fa_fang', 'mall_increase', 'point_batch', 'promo', 'check_in', 'wechat_connect', 'check_in_retention'];
                     foreach ($types as $type) {
                     ?>
                         <option value="<?= $type ?>" <?= ($type === $ref_type) ? "selected='selected'" : "" ?> >

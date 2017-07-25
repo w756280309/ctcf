@@ -93,8 +93,10 @@ $taps = date('Y-m-d') >= '2017-05-01' && date('Y-m-d') <= '2017-05-31';
     <p class="pomp-time"><i></i>您已连续签到<span></span>天<i></i></p>
     <p class="pomp-points">获得<span id="pomp-point"></span>积分<i id="pomp-coupon"></i></p>
     <div class="boundWeixin">
+        <?php if (!$isBindWx) { ?>
         <p>绑定微信额外送10积分啦！</p>
-        <p>关注楚天财富微信公账号，<br>点击“绑定账户”即可</p>
+        <?php } ?>
+        <p>关注楚天财富微信公众号，<br>点击“绑定账户”即可</p>
     </div>
     <a href="javascript:void(0);">确认</a>
 </div>
@@ -129,6 +131,9 @@ $taps = date('Y-m-d') >= '2017-05-01' && date('Y-m-d') <= '2017-05-31';
                 $('#pomp-point').html(data.points);
                 if (data.coupon) {
                     $('#pomp-coupon').html('和<span>'+WDJF.numberFormat(data.coupon, true)+'</span>元代金券');
+                }
+                if (data.extraPoints) {
+                    $('.pomp .pomp-points').after('<p class="pomp-points">'+(data.points - data.extraPoints)+'+<span>'+WDJF.numberFormat(data.extraPoints, true)+'</span>积分（老用户回归）</p>');
                 }
                 WDJF.touchmove(false);
                 $('.mask, .pomp').show();
