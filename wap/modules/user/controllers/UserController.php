@@ -11,6 +11,7 @@ use common\models\order\OnlineRepaymentPlan as Plan;
 use common\models\order\OrderManager;
 use common\service\BankService;
 use wap\modules\promotion\models\RankingPromo;
+use Wcg\Xii\Risk\Model\Risk;
 use Yii;
 use yii\data\Pagination;
 use yii\filters\AccessControl;
@@ -106,6 +107,25 @@ class UserController extends BaseController
             $sumCoupon = UserCoupon::findCouponInUse($user->id, date('Y-m-d'))->sum('amount');
             $sumLicai = bcadd($ua->freeze_balance, $ua->investment_balance, 2);
         }
+        $risk = Risk::find()
+            ->where([
+                'user_id' => $user->id,
+                'isDel' => false,
+            ])->one();
+        if (null !== $risk) {
+            $riskResult = Risk::riskResult();
+            $riskContent = [
+                'label' => $riskResult[$risk->grade]['conclusion'],
+                'url' => '/risk/risk/result?grade=' . $risk->grade,
+                'color' => '#8c8c8c',
+            ];
+        } else {
+            $riskContent = [
+                'label' => '未测试',
+                'url' => '/risk/risk/start',
+                'color' => '#ff0f20',
+            ];
+        }
 
         return [
             'sumCoupon' => $sumCoupon,
@@ -113,6 +133,7 @@ class UserController extends BaseController
             'user' => $user,
             'showPointsArea' => $showPointsArea,
             'sumLicai' => $sumLicai,
+            'riskContent' => $riskContent,
         ];
     }
 

@@ -1,0 +1,54 @@
+body {
+  background-color: #fff;
+}
+.flex-content {
+  padding: 1.78666667rem 0.82666667rem 0 0.62666667rem;
+}
+.flex-content .resule-line1 {
+  height: 0.37333333rem;
+  line-height: 0.37333333rem;
+  color: #333;
+  font-size: 0.37333333rem;
+}
+.flex-content .resule-line2 {
+  margin-top: 0.4rem;
+  height: 0.8rem;
+  line-height: 0.8rem;
+  font-size: 1rem;
+  color: #dfdfdf;
+}
+.flex-content .resule-line2 span {
+  color: #f03843;
+  font-size: 0.8rem;
+}
+.flex-content .result-content {
+  margin-top: 0.64rem;
+  font-size: 0.34666667rem;
+  line-height: 0.53333333rem;
+  color: #666;
+}
+.flex-content .go-invest {
+  display: block;
+  width: 7.10666667rem;
+  height: 1rem;
+  line-height: 1rem;
+  margin: 0.73333333rem auto 0.61333333rem;
+  font-size: 0.41333333rem;
+  color: #fff;
+  border-radius: 0.10666667rem;
+  background-color: #ef3945;
+  text-align: center;
+}
+.flex-content .restart {
+  display: block;
+  width: 7.10666667rem;
+  height: 1rem;
+  line-height: 1rem;
+  margin: 0 auto;
+  font-size: 0.41333333rem;
+  color: #333;
+  border: 1px solid #ef3945;
+  border-radius: 0.10666667rem;
+  background-color: #fff;
+  text-align: center;
+}

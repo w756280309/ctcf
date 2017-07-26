@@ -7,8 +7,10 @@ use common\models\product\LoanFinder;
 use common\models\product\OnlineProduct;
 use common\models\order\OnlineOrder;
 use common\models\user\User;
+use common\models\user\UserInfo;
 use common\service\PayService;
 use common\utils\StringUtils;
+use Wcg\Xii\Risk\Model\Risk;
 use Yii;
 use yii\web\Controller;
 use yii\data\Pagination;
@@ -123,7 +125,27 @@ class DealController extends Controller
     public function actionToorder($sn = null)
     {
         $pay = new PayService(PayService::REQUEST_AJAX);
+        $user = $this->getAuthedUser();
         $ret = $pay->toCart($this->getAuthedUser(), $sn);
+        if (0 === $ret['code']) {
+            $isInvested = UserInfo::find()
+                ->select('isInvested')
+                ->where(['user_id' => $user->id])
+                ->scalar();
+            if (!$isInvested) {
+                $risk = Risk::find()
+                    ->where(['user_id' => $user->id])
+                    ->andWhere(['isDel' => false])
+                    ->one();
+                if (null === $risk) {
+                    $ret = [
+                        'code' => 1,
+                        'message' => '您还没有进行风险测评',
+                        'tourl' => '/risk/risk/start',
+                    ];
+                }
+            }
+        }
 
         return $ret;
     }

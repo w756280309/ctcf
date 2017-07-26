@@ -138,6 +138,18 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/fastclick.js', ['depends' => JqueryAss
     </a>
 
     <div class="clear"></div>
+    <a href="<?= isset($riskContent) ? $riskContent['url'] : '/risk/risk/' ?>">
+        <div class="row sm-height border-bottom block" href="/risk/risk/">
+            <div class="col-xs-10 left-txt">风险测评</div>
+            <div class="col-xs-1 arrow">
+                <span class="f11"><?= isset($riskContent['label']) ? $riskContent['label'] : '' ?></span>
+                <img src="<?= ASSETS_BASE_URI ?>images/arrow.png" alt="右箭头">
+            </div>
+        </div>
+        <div class="col-xs-1"></div>
+    </a>
+
+    <div class="clear"></div>
     <a class="row sm-height border-bottom block end-list" href="/user/user/mingxi" >
         <div class="col-xs-10 left-txt">交易明细</div>
         <div class="col-xs-1 arrow">

@@ -122,6 +122,9 @@ return [
         'mall' => [
             'class' => 'wap\modules\mall\Module',
         ],
+        'risk' => [
+            'class' => 'Wcg\Xii\Risk\Module',
+        ],
     ],
     'params' => $params,
     'as requestBehavior' => [
