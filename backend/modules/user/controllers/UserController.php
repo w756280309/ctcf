@@ -607,6 +607,15 @@ IN (" . implode(',', $recordIds) . ")")->queryAll();
     private function normalUserDetail(User $user)
     {
         $id = $user->id;
+        //查询是否绑定微信息
+        if ((new \yii\db\Query())
+            ->from('social_connect')
+            ->where(['user_id' => $id, 'provider_type' => 'wechat'])
+            ->one()) {
+            $is_wechat = 1;
+        }else{
+            $is_wechat = 0;
+        }
         $uabc = new UserAccountBackendCore();
         $recharge = $uabc->getRechargeSuccess($id);
         $draw = $uabc->getDrawSuccess($id);
@@ -640,6 +649,7 @@ IN (" . implode(',', $recordIds) . ")")->queryAll();
             'with' => 'transfer_count,transfer_sum',
         ]);
 
+
         return $this->render('detail', [
             'czTime' => $rcMax,
             'czNum' => $recharge['count'],
@@ -658,6 +668,7 @@ IN (" . implode(',', $recordIds) . ")")->queryAll();
             'transferCount' => $noteData['transferCount'],
             'transferSum' => bcdiv($noteData['transferSum'], 100, 2),
             'userAccount' => $ua,
+            'is_wechat' => $is_wechat,
         ]);
     }
 
