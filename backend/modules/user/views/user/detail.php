@@ -163,6 +163,22 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => YiiAsse
                         <a href="/user/user/update-reg-location?user_id=<?= $normalUser->id ?>">修改</a>
                     </td>
                 </tr>
+                <tr>
+                    <td><strong>是否绑定微信</strong></td>
+                    <td>
+                        <?php
+                        if ($is_wechat == 1) {
+                            echo '已绑定';
+                        } else {
+                            echo '未绑定';
+                        }
+                        ?>
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
             </table>
 
             <div class="detail_font">会员资金详情</div>
