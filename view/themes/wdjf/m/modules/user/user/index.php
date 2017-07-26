@@ -78,6 +78,15 @@ $this->title = '账户中心';
         </div>
     </div>
 </a>
+<a href="<?= isset($riskContent) ? $riskContent['url'] : '/risk/risk/' ?>">
+    <div class="out_ops flex-content">
+        <div class="lf f15 test">风险测评</div>
+        <div class="rg f15">
+            <span class="f11" <?php if (isset($riskContent['color'])) { ?>style="color:<?= $riskContent['color'] ?>" <?php } ?>><?= isset($riskContent['label']) ? $riskContent['label'] : '' ?></span>
+            <img src="<?= FE_BASE_URI ?>wap/ucenter/images/pointer.png" alt="" style="width: 0.253rem;height:0.293rem;">
+        </div>
+    </div>
+</a>
 <a href="/site/help">
     <div class="out_ops flex-content">
         <div class="lf f15" style="background-position: 0 -2.03rem">帮助中心</div>
@@ -116,7 +125,6 @@ $this->title = '账户中心';
 <script type="text/javascript">
     $(function () {
         FastClick.attach(document.body);
-
 
         var xhr = $.get('/user/user/is-login');
         xhr.done(function(data) {

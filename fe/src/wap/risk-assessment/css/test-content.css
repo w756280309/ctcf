@@ -1,0 +1,98 @@
+body {
+  background-color: #ededed;
+}
+.hide {
+  display: none;
+}
+.flex-content .test-progress {
+  position: relative;
+  width: 100%;
+  height: 1.61333333rem;
+  padding-top: 0.61333333rem;
+}
+.flex-content .test-progress .progress-bar {
+  position: relative;
+  width: 8.33333333rem;
+  height: 0.17333333rem;
+  margin: 0 auto;
+  background-color: #fff;
+  border-radius: 0.06666667rem;
+}
+.flex-content .test-progress .progress-bar .progress-bar-now {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 12.8%;
+  height: 100%;
+  background-color: #ef3945;
+  border-radius: 0.06666667rem;
+  z-index: 100;
+}
+.flex-content .test-progress span {
+  position: absolute;
+  top: 0.42rem;
+  font-size: 0.4rem;
+  color: #ef3945;
+}
+.flex-content .test-progress .number-now {
+  left: 0.4rem;
+}
+.flex-content .test-progress .number-total {
+  right: 0.4rem;
+}
+.flex-content .test-content {
+  top: 1.61333333rem;
+  left: 0.56rem;
+  position: absolute;
+  width: 8.88rem;
+  min-height: 13.33333333rem;
+  margin: 0 auto;
+  background-color: #fff;
+  border-radius: 0.10666667rem;
+  box-shadow: 0.2rem 0.2rem 1.2rem 0.2rem #f6eded;
+}
+.flex-content .test-content .question {
+  margin: 0 0.4rem 0;
+  padding: 0.57333333rem 0.30666667rem 0.57333333rem 0.37333333rem;
+  font-size: 0.69333333rem;
+  font-weight: bold;
+  color: #ef3943;
+  line-height: 0.93333333rem;
+  border-bottom: 1px solid #ddd;
+}
+.flex-content .test-content .options {
+  padding: 0 0.4rem;
+}
+.flex-content .test-content .options li {
+  width: 100%;
+  padding-left: 0.36rem;
+  min-height: 1.45333333rem;
+  color: #333;
+  background-color: #fff;
+  font-size: 0.42666667rem;
+}
+.flex-content .test-content .options .single-line {
+  padding-top: 0.52rem;
+}
+.flex-content .test-content .options .many-line {
+  padding-top: 0.2rem;
+  padding-bottom: 0.2rem;
+}
+.flex-content .test-content .options .active {
+  background-color: #fbd8d9;
+  color: #f03845;
+}
+.flex-content .test-content .go-back {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 1.6rem;
+  line-height: 1.6rem;
+  padding-left: 0.76rem;
+  box-shadow: 0 -0.2rem 0.2rem #f6eded;
+}
+.flex-content .test-content .go-back .gobackBtn {
+  display: inline-block;
+  font-size: 0.34666667rem;
+  color: #666;
+}

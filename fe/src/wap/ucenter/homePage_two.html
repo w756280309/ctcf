@@ -110,6 +110,15 @@
     </a>
 </div>
 <div class="out_ops flex-content">
+    <a href="#">
+        <div class="lf f15 test">风险测评</div>
+        <div class="rg f15">
+            <span class="f11">未测试</span>
+            &nbsp;<img src="images/pointer.png" alt="" style="width: 0.253rem;height:0.293rem;">
+        </div>
+    </a>
+</div>
+<div class="out_ops flex-content">
     <div class="lf f15" style="background-position: 0 -2.03rem">帮助中心</div>
     <div class="rg f15">
         &nbsp;<img src="images/pointer.png" alt="" style="width: 0.253rem;height:0.293rem;">
@@ -155,6 +164,19 @@
         if(document.body.clientWidth<330 && String($('#jifen').html()).length>6){
             $('#daijin,#jifen').removeClass('f24').addClass('f20');
         }
+
+      //风险测试弹窗
+      //询问框
+      layer.open({
+        title: ['风险测评','color:#333']
+        , content: '根据相关法规要求，请先完成风险测评了解自身的风险承受能力，以便你更好地做出理性的投资决策。'
+        , btn: ['确认', '取消']
+        , yes: function (index) {
+          //此处是点击确定的跳转
+//		    location.
+          layer.close(index);
+        }
+      });
     })
 </script>
 </body>

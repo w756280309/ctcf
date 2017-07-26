@@ -209,9 +209,16 @@ body {
   background: url("../images/shapes.png") no-repeat;
   background-size: 0.4rem 2.53333333rem;
 }
+.out_ops .test{
+  background: url("../images/shape_test.png") no-repeat;
+  background-size: 0.493rem;
+}
 .out_ops .lf img {
   vertical-align: middle;
   margin-right: 0.29333333rem;
+}
+.out_ops .rg .red{
+  color:#ed3844;
 }
 .out_ops .rg img {
   vertical-align: middle;
