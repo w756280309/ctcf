@@ -137,13 +137,13 @@ class PointsController extends BaseController
             if ($model instanceof PointsBatch) {
                 $isOnline = $model->isOnline;
                 if ($isOnline) {
-                    $user = User::findOne(['safeMobile' => $model->safeMobile]);
+                    $user = User::findOne(['safeMobile' => $model->safeMobile, 'idCard' => SecurityUtils::decrypt($model->idCard)]);
                     if (is_null($user)) {
                         continue;
                     }
                 } else {
                     $mobile = SecurityUtils::decrypt($model->safeMobile);
-                    $user = OfflineUser::findOne(['mobile' => $mobile]);
+                    $user = OfflineUser::findOne(['mobile' => $mobile, 'idCard' => SecurityUtils::decrypt($model->idCard)]);
                     if (is_null($user)) {
                         continue;
                     }
