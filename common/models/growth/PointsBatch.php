@@ -40,7 +40,7 @@ class PointsBatch extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['points', 'isOnline', 'publicMobile', 'safeMobile', 'user_id'], 'required'],
+            [['points', 'isOnline', 'user_id', 'idCard', 'publicMobile', 'safeMobile'], 'required'],
             [['createTime'], 'safe'],
             ['isOnline', 'boolean', 'message' => '“是线上用户”必须是bool类型'],
             [['points', 'status'], 'integer'],
@@ -48,6 +48,7 @@ class PointsBatch extends \yii\db\ActiveRecord
             [['publicMobile'], 'safe'],
             [['safeMobile', 'desc'], 'string', 'max' => 255],
             ['mobile', 'validateMobile'],
+            ['idCard','string'],
         ];
     }
 
@@ -84,6 +85,7 @@ class PointsBatch extends \yii\db\ActiveRecord
             'createTime' => '导入时间',
             'isOnline' => '是线上用户',
             'mobile' => '手机号',
+            'idCard' => '身份证号',
             'publicMobile' => '手机号',
             'safeMobile' => '加密后的手机号',
             'user_id' => '用户',

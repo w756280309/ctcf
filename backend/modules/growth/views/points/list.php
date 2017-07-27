@@ -1,5 +1,6 @@
 <?php
-
+use common\utils\StringUtils;
+use common\utils\SecurityUtils;
 $this->title = '积分批量发放';
 ?>
 <?php $this->beginBlock('blockmain'); ?>
@@ -49,10 +50,17 @@ $this->title = '积分批量发放';
                         'format' => 'raw',
                         'value' => function ($model) {
                             if ($model->isOnline) {
-                                return '<a href="/user/user/detail?id='.$model->user_id.'">'.$model->publicMobile.'</a>';
+                                return '<a href="/user/user/detail?id='.$model->user_id.'">'.StringUtils::obfsMobileNumber(SecurityUtils::decrypt($model->safeMobile)).'</a>';
                             } else {
-                                return '<a href="/user/offline/detail?id='.$model->user_id.'">'.$model->publicMobile.'</a>';
+                                return '<a href="/user/offline/detail?id='.$model->user_id.'">'.StringUtils::obfsMobileNumber(SecurityUtils::decrypt($model->safeMobile)).'</a>';
                             }
+                        }
+                    ],
+                    [
+                        'header' => '身份证号',
+                        'format' => 'raw',
+                        'value' => function ($model) {
+                            return StringUtils::obfsIdCardNo(SecurityUtils::decrypt($model->idCard));
                         }
                     ],
                     [

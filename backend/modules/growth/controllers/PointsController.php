@@ -13,7 +13,6 @@ use common\utils\ExcelUtils;
 use common\utils\SecurityUtils;
 use yii\data\ActiveDataProvider;
 use yii\web\UploadedFile;
-
 class PointsController extends BaseController
 {
     public function actions()
@@ -22,8 +21,8 @@ class PointsController extends BaseController
             'preview' => [
                 'class' => ExcelPreviewAction::className(),
                 'modelClass' => PointsBatch::className(),
-                'maxCol' => 'D',
-                'attributes' => ['mobile', 'isOnline', 'points', 'desc'],
+                'maxCol' => 'E',
+                'attributes' => ['mobile', 'idCard', 'isOnline', 'points', 'desc'],
                 'backUrl' => '/growth/points/init',
             ]
         ];
@@ -58,23 +57,24 @@ class PointsController extends BaseController
         if (!file_exists($file)) {
             return $this->redirect('/growth/points/init');
         }
-        $data = ExcelUtils::readExcelToArray($file, 'D');
+        $data = ExcelUtils::readExcelToArray($file, 'E');
         $time = date('Y-m-d H:i:s');
         $successCount = 0;
         foreach ($data as $value) {
             if (is_array($value)) {
-                list($mobile, $isOnline, $points, $desc) = $value;
+                list($mobile, $idCard, $isOnline, $points, $desc) = $value;
                 $points = intval($points);
-                if (!empty($mobile) && !is_null($isOnline) && $points > 0) {
+                if (!empty($mobile) && !empty($idCard) && !is_null($isOnline) && $points > 0) {
                     $isOnline = boolval($isOnline);
-                    $safeMobile = SecurityUtils::encrypt($mobile);
+                    $safeIdCard = SecurityUtils::encrypt(trim($idCard));
+                    $safeMobile = SecurityUtils::encrypt(trim($mobile));
                     if ($isOnline) {
-                        $user = User::findOne(['safeMobile' => $safeMobile]);
+                        $user = User::findOne(['safeIdCard' => trim($safeIdCard), 'safeMobile' => $safeMobile]);
                         if (is_null($user)) {
                             continue;
                         }
                     } else {
-                        $user = OfflineUser::findOne(['mobile' => $mobile]);
+                        $user = OfflineUser::findOne(['idCard' => trim($idCard), 'mobile' => trim($mobile)]);
                         if (is_null($user)) {
                             continue;
                         }
@@ -84,11 +84,12 @@ class PointsController extends BaseController
                         'batchSn' => $batchSn,
                         'createTime' => $time,
                         'isOnline' => $isOnline,
-                        'publicMobile' => $mobile,
-                        'safeMobile' => $safeMobile,
                         'points' => $points,
                         'desc' => $desc,
                         'status' => 0,
+                        'publicMobile' => $mobile,
+                        'safeMobile' => $safeMobile,
+                        'idCard' => $safeIdCard,
                         'user_id' => $user->id,
                     ]);
                     $res = $model->save();
