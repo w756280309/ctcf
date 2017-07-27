@@ -78,7 +78,7 @@ $this->title = '账户中心';
         </div>
     </div>
 </a>
-<a href="<?= isset($riskContent) ? $riskContent['url'] : '/risk/risk/' ?>">
+<a href="/risk/risk/">
     <div class="out_ops flex-content">
         <div class="lf f15 test">风险测评</div>
         <div class="rg f15">

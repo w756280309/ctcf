@@ -141,7 +141,7 @@ class DealController extends Controller
                     $ret = [
                         'code' => 1,
                         'message' => '您还没有进行风险测评',
-                        'tourl' => '/risk/risk/start',
+                        'tourl' => '/risk/risk/index?backUrl='.Yii::$app->request->getReferrer(),
                     ];
                 }
             }

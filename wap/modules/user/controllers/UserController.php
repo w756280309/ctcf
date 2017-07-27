@@ -116,13 +116,11 @@ class UserController extends BaseController
             $riskResult = Risk::riskResult();
             $riskContent = [
                 'label' => $riskResult[$risk->grade]['conclusion'],
-                'url' => '/risk/risk/result?grade=' . $risk->grade,
                 'color' => '#8c8c8c',
             ];
         } else {
             $riskContent = [
                 'label' => '未测试',
-                'url' => '/risk/risk/start',
                 'color' => '#ff0f20',
             ];
         }

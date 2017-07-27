@@ -138,8 +138,8 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/fastclick.js', ['depends' => JqueryAss
     </a>
 
     <div class="clear"></div>
-    <a href="<?= isset($riskContent) ? $riskContent['url'] : '/risk/risk/' ?>">
-        <div class="row sm-height border-bottom block" href="/risk/risk/">
+    <a href="/risk/risk/">
+        <div class="row sm-height border-bottom block">
             <div class="col-xs-10 left-txt">风险测评</div>
             <div class="col-xs-1 arrow">
                 <span class="f11"><?= isset($riskContent['label']) ? $riskContent['label'] : '' ?></span>
