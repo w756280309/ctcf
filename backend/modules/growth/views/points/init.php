@@ -54,7 +54,7 @@ use yii\widgets\ActiveForm;
         <div class="row-fluid">
             <h4>请选择文件并导入</h4>
             <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data', 'class' => 'form-group' ,'id' => 'import_form']]); ?>
-            <?= \yii\helpers\Html::fileInput('pointsFile', null, ['class' => 'form-control'])?>
+            <?= \yii\helpers\Html::fileInput('pointsFile', null, ['class' => 'form-control', 'accept' => '.xlsx, .xls'])?>
             <?= \yii\helpers\Html::submitButton('预览', ['class' => 'btn btn-default', 'id' => 'submit_btn'])?>
             <?php $form->end(); ?>
         </div>
