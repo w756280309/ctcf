@@ -23,11 +23,6 @@ class CreditNoteController extends Controller
     public function actionCancel()
     {
         $cancelNotes = $this->notesForCancel();
-        if (!empty($cancelNotes)) {
-            $users = User::findAll(['id' => ArrayHelper::getColumn($cancelNotes, 'user_id')]);
-            $users = ArrayHelper::index($users, 'id');
-        }
-
         $currentTime = date('Y-m-d H:i:s');
         $db = Yii::$app->db_tx;
         foreach ($cancelNotes as $cancelNote) {
@@ -63,7 +58,7 @@ class CreditNoteController extends Controller
                         $transaction->commit();
                         //如果是自动撤销，需要发短信
                         if (!$cancelNote->isManualCanceled) {
-                            $user = User::findOne(['id' => $users[$cancelNote->user_id]]);
+                            $user = User::findOne(['id' => $cancelNote->user_id]);
                             $this->sendSmsForNoteAutoCancel($user, $cancelNote);
                         }
                         continue;
