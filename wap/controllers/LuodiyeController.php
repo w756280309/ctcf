@@ -50,6 +50,7 @@ class LuodiyeController extends Controller
 
     public function actionV2()
     {
+        $this->layout = 'normal';
         if (!Yii::$app->user->isGuest) {
             return $this->redirect('/?_mark=' . time());
         }
