@@ -116,6 +116,7 @@ class Adv extends ActiveRecord
             ['title', 'string', 'max' => 15],
             ['share_id', 'integer'],
             ['canShare', 'boolean'],
+            [['start_date', 'timing'], 'safe'],
         ];
     }
 
@@ -139,6 +140,8 @@ class Adv extends ActiveRecord
             'created_at' => '添加时间',
             'canShare'  => '页面可分享',
             'show_order'  => '显示顺序',
+            'start_date' => '开始时间',
+            'timing' => '定时',
         ];
     }
 

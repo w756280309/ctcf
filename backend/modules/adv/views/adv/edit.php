@@ -2,9 +2,10 @@
 
 use common\models\adv\Adv;
 use yii\widgets\ActiveForm;
+use yii\web\YiiAsset;
 
 $this->title = '轮播图添加/编辑';
-
+$this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => YiiAsset::class]);
 ?>
 
 <?php $this->beginBlock('blockmain'); ?>
@@ -78,7 +79,6 @@ $this->title = '轮播图添加/编辑';
                     <?= $form->field($model, 'showOnPc', ['template' => '{error}']) ?>
                 </div>
             </div>
-
             <div class="control-group" id="app">
                 <label class="control-label">APP端不显示</label>
                 <div class="controls">
@@ -148,7 +148,26 @@ $this->title = '轮播图添加/编辑';
                     <?= $form->field($share, 'url', ['template' => '{error}']) ?>
                 </div>
             </div>
+            <div class="control-group">
+                <label class="control-label">上线时间</label>
 
+                <div class="controls picker-start-date">
+                    <?= $form->field($model, 'timing', [
+                        //'template' => '{input}',
+                        'inputOptions' => [
+                            'autocomplete' => 'off',
+
+                        ]])->checkbox(['class' => 'm-wrap span3 Wdate timing']) ?>
+                    <?= $form->field($model, 'start_date', [
+                        'template' => '{input}',
+                        'inputOptions' => [
+                            'autocomplete' => 'off',
+                            'class' => 'm-wrap span4 Wdate',
+                            'placeholder' => '选择开始时间',
+                            'onclick' => 'WdatePicker({dateFmt: \'yyyy-MM-dd HH:mm:ss\'})',
+                        ]])->textInput() ?>
+                </div>
+            </div>
             <!--普通提交-->
             <div class="form-actions">
                 <button type="submit" class="btn blue"><i class="icon-ok"></i> 提交</button>
@@ -161,6 +180,13 @@ $this->title = '轮播图添加/编辑';
 
 <script type="text/javascript">
     $(function() {
+        $('.timing').on('change', function(e) {
+            var $this = $(this);
+            $(this).closest('.picker-start-date')
+                .find('.field-adv-start_date')
+                .toggle($this.prop('checked'));
+        }).trigger('change');
+
         $('.ajax_button').click(function() {
             vals = $("#adv_form").serialize();
             $.post($("#adv_form").attr("action"), vals, function(data)

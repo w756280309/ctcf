@@ -58,7 +58,6 @@ class AdvController extends BaseController
     public function actionEdit($id = null)
     {
         $model = $id ? $this->findOr404(Adv::class, $id) : Adv::initNew($this->admin_id, Adv::TYPE_LUNBO);
-
         if (!$model->showOnPc && $model->share) {
             $model->canShare = true;
         } else {
@@ -77,7 +76,9 @@ class AdvController extends BaseController
             if ($model->showOnPc) {
                 $model->isDisabledInApp = 0;
             }
-
+            if ($model->timing) {  //如果选择定时上线，将状态改为上线
+                $model->status = 0;
+            }
             if (
                 (
                     !$model->showOnPc
@@ -97,7 +98,6 @@ class AdvController extends BaseController
                             $share->url .= '&wx_share_key='.$share->shareKey;
                         }
                     }
-
                     $share->save();
                     $model->share_id = $share->id;
                 } else {

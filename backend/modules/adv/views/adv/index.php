@@ -104,6 +104,9 @@ $menus = AuthSys::getMenus('A100000');
                             </td>
                             <td><?= $val['title'] ?></td>
                             <td><?php
+                                if($val['timing'] && $val['start_date'] > date('Y-m-d H:i:s')){
+                                    echo '<i class="icon-time" data-toggle="tooltip" data-placement="left" title="'.$val['start_date'].'"></i> ';
+                                }
                                 if ($val['status'] == 0) {
                                     echo "上线";
                                 } else {
