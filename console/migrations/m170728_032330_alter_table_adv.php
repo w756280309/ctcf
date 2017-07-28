@@ -7,7 +7,7 @@ class m170728_032330_alter_table_adv extends Migration
     public function Up()
     {
         $this->addColumn('adv', 'start_date', $this->dateTime()->null());
-        $this->addColumn('adv', 'timing', $this->boolean()->default(false));
+        $this->addColumn('adv', 'timing', $this->boolean()->defaultValue(false));
 
     }
 
