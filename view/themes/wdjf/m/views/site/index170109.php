@@ -18,7 +18,7 @@ $this->registerJsFile(FE_BASE_URI . 'libs/jquery.lazyload.min.js', ['depends' =>
 $this->registerJsFile(ASSETS_BASE_URI . 'js/swiper.min.js', ['depends' => JqueryAsset::class]);
 
 ?>
-
+<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/index/css/popover-index.css?v=1.03803">
     <div class="container flex-content relative">
         <!--  签到   -->
         <a class="signature" href="/user/checkin">
@@ -330,6 +330,35 @@ $this->registerJsFile(ASSETS_BASE_URI . 'js/swiper.min.js', ['depends' => Jquery
         <?php } ?>
     </div>
 
+    <div class="mask" style="display: none"></div>
+    <!--新增首页弹框1-->
+    <div class="first-popover" style="display: none">
+        <img class="popover-bg" src="<?= FE_BASE_URI ?>wap/index/images/popover_01.png" alt="">
+        <div class="popover-ctn">
+            <img class="popover-close" src="<?= FE_BASE_URI ?>wap/index/images/popover-close.png" alt="">
+            <p class="popover-title">价值288元代金券<br>已发到您的账户</p>
+            <p class="popover-detail">你也可以在账户-代金券中,查看奖励</p>
+            <a class="btn_01" href="/user/coupon/list">查看详情</a>
+            <a class="btn_02" href="javascript:void(0)">去投资 领取160元超市卡</a>
+        </div>
+    </div>
+
+    <!--新增首页弹框2-->
+    <div class="second-popover" style="display: none">
+        <img class="popover-close" src="<?= FE_BASE_URI ?>wap/index/images/popover-close_01.png" alt="">
+        <p class="popover-title">投资前先开通资金托管账户</p>
+        <p class="popover-detail">开通账户送积分，投资还有更多超市卡等你拿</p>
+        <a class="popover-btn" href="/user/identity">马上去开通</a>
+    </div>
+
+    <!--对应的弹框的js-->
+    <script>
+        $('.popover-close').on('click',function(){
+            $('.first-popover,.second-popover').hide();
+            $('.mask').hide();
+        })
+    </script>
+
 <?php if (null !== $kaiPing && $kaiPing->media) { ?>
     <div class="mask hide"></div>
 
@@ -365,6 +394,14 @@ $this->registerJsFile(ASSETS_BASE_URI . 'js/swiper.min.js', ['depends' => Jquery
                 if (code === 0) {
                     $('#loginNewPeople').removeClass('hide');
                 }
+                if (code >= 0) {
+                    if (Cookies.get('showIndexPop')) {
+
+                        Cookies.remove('showIndexPop');
+                        $('.mask,.first-popover').show();
+                        $('.second-popover').hide();
+                    }
+                }
             });
         }
 
@@ -389,6 +426,11 @@ $this->registerJs(<<<JSFILE
         $("img").lazyload({
             threshold: 200
         });
+        $('.popover-ctn .btn_02').on('click', function(){
+            $('.first-popover').hide();
+            $('.second-popover,.mask').show();
+        });
+
         //开屏图
         $('.close_splash').on('click', closeAdv);
         if (guiZe) {

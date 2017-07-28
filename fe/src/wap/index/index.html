@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="../common/css/wenjfbase.css"> <!-- 后端fe.php下引入（公共）-->
     <link rel="stylesheet" href="../libs/swiper/swiper.min.css">
     <link rel="stylesheet" href="css/index.css?v=1.03802">
+    <link rel="stylesheet" href="css/popover-index.css?v=1.03803">
     <script src="../libs/lib.flexible3.js"></script> <!-- 后端fe.php下引入（公共）-->
     <script src="../libs/jquery-1.11.1.min.js"></script> <!-- 后端fe.php下引入（公共）-->
     <script src="../libs/fastclick.js"></script> <!-- 后端fe.php下引入（公共）-->
@@ -285,6 +286,35 @@
         </div>
     </div>
 </div>
+
+<div class="mask"></div>
+<!--新增首页弹框1-->
+    <div class="first-popover">
+        <img class="popover-bg" src="images/popover_01.png" alt="">
+        <div class="popover-ctn">
+            <img class="popover-close" src="images/popover-close.png" alt="">
+            <p class="popover-title">价值288元代金券<br>已发到您的账户</p>
+            <p class="popover-detail">你也可以在账户-代金券中,查看奖励</p>
+            <a class="btn_01" href="">查看详情</a>
+            <a class="btn_02" href="">去投资 领取160元超市卡</a>
+        </div>
+    </div>
+
+<!--新增首页弹框2-->
+    <div class="second-popover">
+        <img class="popover-close" src="images/popover-close_01.png" alt="">
+        <p class="popover-title">投资前先开通资金托管账户</p>
+        <p class="popover-detail">开通账户送积分，投资还有更多超市卡等你拿</p>
+        <a class="popover-btn" href="">马上去开通</a>
+    </div>
+
+<!--对应的弹框的js-->
+    <script>
+        $('.popover-close').on('click',function(){
+            $('.first-popover,.second-popover').hide();
+            $('.mask').hide();
+        })
+    </script>
 
 <script src="https://static.wenjf.com/m/js/swiper.min.js"></script>
 <script  src="../libs/jquery.lazyload.min.js"></script>
