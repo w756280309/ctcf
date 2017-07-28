@@ -15,13 +15,13 @@ $this->registerJsFile(FE_BASE_URI . 'res/js/js.cookie.js', ['depends' => JqueryA
 <div class="flex-content">
     <div class="banner">
         <img src="<?= FE_BASE_URI ?>wap/20170726luodiye/images/banner.png" alt="">
-        <img onclick="history.go(-1);" src="<?= FE_BASE_URI ?>wap/20170726luodiye/images/home.png" alt="">
+        <img onclick='location.href="/?_mark=<?= time() ?>"' src="<?= FE_BASE_URI ?>wap/20170726luodiye/images/home.png" alt="">
     </div>
     <div class="content-box">
         <!--form表单-->
         <div class="form-action">
             <form action="/site/signup?next=<?= urlencode(Yii::$app->params['clientOption']['host']['wap'].'?_mark'.time()) ?>" method="post" id="signup_new_form">
-            <input type="hidden" name="_csrf" value="<?= Yii::$app->request->getCsrfToken() ?>">
+            <input type="hidden" name="_csrf" id="form_csrf" value="<?= Yii::$app->request->getCsrfToken() ?>">
                 <p class="des">欢迎加入我们</p>
                 <!--点击领取-->
                 <div class="step-one">
@@ -29,7 +29,7 @@ $this->registerJsFile(FE_BASE_URI . 'res/js/js.cookie.js', ['depends' => JqueryA
                     <div class="imgCode-box">
                         <input type="text" AUTOCOMPLETE="off" name="SignupForm[captchaCode]" id="captchaform-captchacode" placeholder="请输入图形验证码" maxlength="4">
                         <div class="form-group field-captchaform-captchacode required">
-                            <img id="captchaform-captchacode-image" class="get-imgCode" src="/site/captcha?v=1" alt="">
+                            <img id="captchaform-captchacode-image" class="get-imgCode" src="/site/captcha?v=<?= time() ?>" alt="">
                         </div>
                     </div>
                     <input id="yzm" type="button" class="btn" value="立即领取">
@@ -40,10 +40,10 @@ $this->registerJsFile(FE_BASE_URI . 'res/js/js.cookie.js', ['depends' => JqueryA
                     <p class="tips">验证码已发送到此手机号</p>
                     <div class="clearfix phoneNum" id="updateMobile"><p class="lf new-mobile"></p><p class="rg">修改手机号</p></div>
                     <div class="imgCode-box">
-                        <input type="tel" name="SignupForm[sms]" placeholder="请输入手机验证码" maxlength="6" AUTOCOMPLETE="off">
+                        <input type="tel" class="input-common" name="SignupForm[sms]" placeholder="请输入手机验证码" maxlength="6" AUTOCOMPLETE="off">
                         <span class="get-imgCode code-special" id="yzm_refresh">获取验证码</span>
                     </div>
-                    <input type="password" name="SignupForm[password]" maxlength="20" placeholder="请输入密码(6-20位字母和数字组合)" AUTOCOMPLETE="off">
+                    <input type="password" class="input-common" name="SignupForm[password]" maxlength="20" placeholder="请输入密码(6-20位字母和数字组合)" AUTOCOMPLETE="off">
                     <input type="button" name="sign-up-mobile" id="final-submit" class="btn" value="立即领取">
                 </div>
 
@@ -184,6 +184,7 @@ $this->registerJsFile(FE_BASE_URI . 'res/js/js.cookie.js', ['depends' => JqueryA
             $('#captchaform-captchacode').val('');
             $('#captchaform-captchacode-image').trigger('click');
             $('.step-two').hide();
+            $('.step-two .input-common').val('');
             $('#yzm_refresh').removeClass('yzm-disabled');
             $('#yzm_refresh').html('重新发送');
             $('.step-one').show();
@@ -219,9 +220,9 @@ $this->registerJsFile(FE_BASE_URI . 'res/js/js.cookie.js', ['depends' => JqueryA
                 $('#final-submit').removeClass('sub-disabled');
                 if (1 === data.code && 'undefined' !== typeof data.tourl) {
                     Cookies.set('showIndexPop', true);
-                    setTimeout(500, function () {
+                    window.setTimeout(function(){
                         location.href = data.tourl;
-                    });
+                    }, 500);
                 } else {
                     toastCenter(data.message);
                 }
@@ -233,7 +234,7 @@ $this->registerJsFile(FE_BASE_URI . 'res/js/js.cookie.js', ['depends' => JqueryA
     {
         var phone = $(phoneId).val();
         var captchaCode = $(captchaCodeId).val();
-        var csrf = $("meta[name=csrf-token]").attr('content');
+        var csrf = $('#form_csrf').val();
         $.post("/luodiye/create-sms", {type: type, phone: phone, captchaCode: captchaCode, _csrf: csrf}, function(data) {
             if (0 === data.code) {
                 if ('undefined' !== typeof trued) {
