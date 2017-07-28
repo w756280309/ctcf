@@ -484,7 +484,9 @@ class SiteController extends Controller
                             $promoAtfr->addTicketForUser($user);
                         }
                     }
-
+                    if (Yii::$app->session->has('lastVerify')) {
+                        Yii::$app->session->remove('lastVerify');
+                    }
                     return ['code' => 1, 'message' => '注册成功', 'tourl' => $tourl];
                 }
             } else {
