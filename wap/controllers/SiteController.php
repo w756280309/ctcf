@@ -168,7 +168,8 @@ class SiteController extends Controller
             ->one();
 
         //热门活动
-        $hotActs = Adv::fetchHomeBanners(Adv::TYPE_LUNBO);
+        $hotActs = Adv::fetchHomeBanners($is_m = 1);
+
 
         //公告专区
         $news = News::find()

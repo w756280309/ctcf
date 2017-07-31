@@ -75,7 +75,7 @@ class SiteController extends Controller
         //轮播图展示
         $now = date('Y-m-d H:i:s');
         $type = Adv::TYPE_LUNBO;
-        $adv = Adv::fetchHomeBanners($type);
+        $adv = Adv::fetchHomeBanners();
         $ic = ItemCategory::tableName();
         $n = News::tableName();
         $c = Category::tableName();

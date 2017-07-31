@@ -241,14 +241,29 @@ class Adv extends ActiveRecord
         ]);
     }
 
-    //首页轮播图
-    public function fetchHomeBanners($type)
+    /*
+     * 首页轮播图
+     */
+    public function fetchHomeBanners($is_m = false)
     {
+
         $now = date('Y-m-d H:i:s');
+        $where = "status = 0 and del_status = 0
+                and (timing = 0 or (timing = 1 and start_date <= '$now'))";
+        if ($is_m) {
+            if (IN_APP) {
+                $where .= " and isDisabledInApp = 1";
+            }
+            $where .= " and showOnPc = 0";
+        } else {
+            $where .= " and showOnPc = 1";
+        }
+        
         return Adv::find()
-            ->where("status = 0 and del_status = 0 and showOnPc = 1 and type = $type
-                and (timing = 0 or (timing = 1 and start_date <= '$now'))")
+            ->where("$where")
+            ->orderBy(['show_order' => SORT_ASC, 'id' => SORT_DESC])
             ->limit(5)
             ->all();
+
     }
 }
