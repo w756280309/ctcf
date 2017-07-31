@@ -73,12 +73,13 @@ class AdvController extends BaseController
             && $model->validate()
             && $this->adv($model, $showOnPc)
         ) {
+
             if ($model->showOnPc) {
                 $model->isDisabledInApp = 0;
             }
             if ($model->timing && $model->start_date) {  //如果选择定时上线并且选择了上线时间，将状态改为上线
-                $model->status = 1;
-            }else{
+                $model->status = 0;
+            } else {
                 $model->timing = false;
                 $model->start_date = '';
             }
