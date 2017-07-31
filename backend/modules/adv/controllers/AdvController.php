@@ -43,7 +43,7 @@ class AdvController extends BaseController
         $model = $advInfo
             ->offset($pages->offset)
             ->limit($pages->limit)
-            ->orderBy(['timing' => SORT_DESC, 'sn' => SORT_DESC])
+            ->orderBy(['timing' => SORT_DESC, 'start_date' => SORT_ASC, 'sn' => SORT_DESC])
             ->all();
 
         return $this->render('index', [
@@ -76,8 +76,11 @@ class AdvController extends BaseController
             if ($model->showOnPc) {
                 $model->isDisabledInApp = 0;
             }
-            if ($model->timing) {  //如果选择定时上线，将状态改为上线
-                $model->status = 0;
+            if ($model->timing && $model->start_date) {  //如果选择定时上线并且选择了上线时间，将状态改为上线
+                $model->status = 1;
+            }else{
+                $model->timing = false;
+                $model->start_date = '';
             }
             if (
                 (

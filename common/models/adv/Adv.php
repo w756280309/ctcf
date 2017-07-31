@@ -252,7 +252,7 @@ class Adv extends ActiveRecord
                 and (timing = 0 or (timing = 1 and start_date <= '$now'))";
         if ($is_m) {
             if (defined('IN_APP')) {
-                $where .= " and isDisabledInApp = 1";
+                $where .= " and isDisabledInApp = 0";
             }
             $where .= " and showOnPc = 0";
         } else {
