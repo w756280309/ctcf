@@ -251,14 +251,14 @@ class Adv extends ActiveRecord
         $where = "status = 0 and del_status = 0
                 and (timing = 0 or (timing = 1 and start_date <= '$now'))";
         if ($is_m) {
-            if (IN_APP) {
+            if (defined('IN_APP')) {
                 $where .= " and isDisabledInApp = 1";
             }
             $where .= " and showOnPc = 0";
         } else {
             $where .= " and showOnPc = 1";
         }
-        
+
         return Adv::find()
             ->where("$where")
             ->orderBy(['show_order' => SORT_ASC, 'id' => SORT_DESC])
