@@ -240,4 +240,15 @@ class Adv extends ActiveRecord
             'created_at' => time(),
         ]);
     }
+
+    //首页轮播图
+    public function fetchHomeBanners($type)
+    {
+        $now = date('Y-m-d H:i:s');
+        return Adv::find()
+            ->where("status = 0 and del_status = 0 and showOnPc = 1 and type = $type
+                and (timing = 0 or (timing = 1 and start_date <= '$now'))")
+            ->limit(5)
+            ->all();
+    }
 }

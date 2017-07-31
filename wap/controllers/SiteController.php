@@ -168,14 +168,7 @@ class SiteController extends Controller
             ->one();
 
         //热门活动
-        $hotActs = $this->advQuery()
-            ->andWhere(['type' => Adv::TYPE_LUNBO])
-            ->orderBy([
-                'show_order' => SORT_ASC,
-                'id' => SORT_DESC,
-            ])
-            ->limit(5)
-            ->all();
+        $hotActs = Adv::fetchHomeBanners(Adv::TYPE_LUNBO);
 
         //公告专区
         $news = News::find()

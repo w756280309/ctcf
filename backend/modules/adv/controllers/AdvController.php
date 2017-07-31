@@ -43,7 +43,7 @@ class AdvController extends BaseController
         $model = $advInfo
             ->offset($pages->offset)
             ->limit($pages->limit)
-            ->orderBy(['sn' => SORT_DESC])
+            ->orderBy(['timing' => SORT_DESC, 'sn' => SORT_DESC])
             ->all();
 
         return $this->render('index', [
