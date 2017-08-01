@@ -47,26 +47,27 @@ class PointsBatch extends \yii\db\ActiveRecord
             [['batchSn'], 'string', 'max' => 32],
             [['publicMobile'], 'safe'],
             [['safeMobile', 'desc'], 'string', 'max' => 255],
-            ['mobile', 'validateMobile'],
+            [['mobile', 'idCard'], 'validateMobile'],
             ['idCard','string'],
         ];
     }
 
     public function validateMobile($attribute)
     {
-        if (strlen($this->$attribute) !== 11) {
+        if (strlen($this->mobile) !== 11) {
             $this->addError($attribute, '手机号格式不正确');
         }
         if (!$this->hasErrors()) {
             $isOnline = $this->isOnline;
             $safeMobile = SecurityUtils::encrypt($this->mobile);
+            $safeIdCard = SecurityUtils::encrypt($this->idCard);
             if ($isOnline) {
-                $user = User::findOne(['safeMobile' => $safeMobile]);
+                $user = User::findOne(['safeMobile' => $safeMobile, 'safeIdCard' => $safeIdCard]);
                 if (is_null($user)) {
                     $this->addError('mobile', '线上用户不存在');
                 }
             } else {
-                $user = OfflineUser::findOne(['mobile' => $this->mobile]);
+                $user = OfflineUser::findOne(['mobile' => $this->mobile, 'idCard' => $this->idCard]);
                 if (is_null($user)) {
                     $this->addError('mobile', '线下用户不存在');
                 }
