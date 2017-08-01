@@ -50,7 +50,7 @@ class PromoController extends Controller
 
         try {
             if ($promo->isActive()) {
-                $back = $this->validateMobile($mobile);
+                $back = $this->validate($mobile, $key);
             }
         } catch (\Exception $e) {
             $back = [
@@ -96,6 +96,7 @@ class PromoController extends Controller
             'captcha' => $captcha,
             'mobile' => $mobile,
             'promo' => $promo,
+            'key' => $key,
         ]);
     }
 
@@ -104,10 +105,21 @@ class PromoController extends Controller
      */
     public function actionBack()
     {
+        if (Yii::$app->user->isGuest) {
+            return $this->redirect('/site/login');
+        }
+        $key = Yii::$app->request->get('key');
+        /**
+         * @var User $user
+         */
         $user = $this->getAuthedUser();
+        $isFromWrm = $key === 'wrm170210';
+        $isIdVerified = $user->isIdVerified();
 
         return $this->render('back', [
             'user' => $user,
+            'isFromWrm' => $isFromWrm,
+            'isIdVerified' => $isIdVerified,
         ]);
     }
 
@@ -134,12 +146,15 @@ class PromoController extends Controller
     /**
      * 校验手机号码.
      */
-    private function validateMobile($mobile)
+    private function validate($mobile, $key)
     {
         $message = '';
         $toUrl = '';
         $back = [];
 
+        /**
+         * @var User $user
+         */
         if (empty($mobile)) {
             $message = '手机号不能为空';
         } else {
@@ -151,7 +166,12 @@ class PromoController extends Controller
                 if ($this->isTraded($user)) {
                     $message = '您已经投资过了，请查看其他活动';
                 } else {
-                    $message = '您已登录,投资即可获得奖励';
+                    if ($user->isIdVerified()) {
+                        $message = '您已登录,投资即可获得奖励';
+                    } elseif ($key === 'wrm170210') {
+                        $message = '您已登录，实名认证/投资领取奖励';
+                        $toUrl = '/promotion/promo/back?key='.$key;
+                    }
                 }
             } else {
                 $user = User::findOne([

@@ -62,6 +62,7 @@ use Zii\Validator\CnMobileValidator;
  * @property string birthdate           生日，形如19920101
  * @property int    promoId             注册参与的活动ID
  * @property string regLocation         注册IP位置
+ * @property string campaign_source     注册渠道
  */
 class User extends ActiveRecord implements IdentityInterface, UserInterface
 {
