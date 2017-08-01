@@ -47,14 +47,14 @@ class PointsBatch extends \yii\db\ActiveRecord
             [['batchSn'], 'string', 'max' => 32],
             [['publicMobile'], 'safe'],
             [['safeMobile', 'desc'], 'string', 'max' => 255],
-            [['mobile', 'idCard'], 'validateMobile'],
+            ['mobile', 'validateMobile'],
             ['idCard','string'],
         ];
     }
 
     public function validateMobile($attribute)
     {
-        if (strlen($this->mobile) !== 11) {
+        if (strlen($this->$attribute) !== 11) {
             $this->addError($attribute, '手机号格式不正确');
         }
         if (!$this->hasErrors()) {

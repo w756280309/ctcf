@@ -30,7 +30,7 @@ use yii\widgets\ActiveForm;
             <table class="table">
                 <tr>
                     <th>手机号</th>
-                    <th>身份证号</th>
+                    <th>身份证号(请使用文本格式，否则可能导入失败)</th>
                     <th>是线上用户(1:线上用户;0:线下用户)</th>
                     <th>待发积分(整数)</th>
                     <th>描述(会显示到前台，请谨慎填写, 默认为"投资奖励")</th>
