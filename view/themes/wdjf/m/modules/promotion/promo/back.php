@@ -32,7 +32,7 @@ if ($isFromWrm && !$isIdVerified) {
     <ul class="liststep f16">
         <li><span class="f24 lf">1</span>注册成功</li>
         <?php if($isFromWrm) {?>
-            <li><span class="f24 lf">1</span>实名认证和投资，领取超市卡</li>
+            <li><span class="f24 lf">2</span>实名认证和投资，领取超市卡</li>
         <?php } else {?>
             <?php if ($user->isO2oRegister()) { ?>
                 <li><span class="f24 lf"><a class="go-deal" href="<?= $toUrl ?>">2</span>首次投资1000元即可获得</a></li>
