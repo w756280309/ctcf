@@ -64,12 +64,12 @@ class PointsController extends BaseController
             if (is_array($value)) {
                 list($mobile, $idCard, $isOnline, $points, $desc) = $value;
                 $points = intval($points);
-                if (!empty($mobile) && !empty($idCard) && !is_null($isOnline) && $points > 0) {
+                if (!empty($mobile) && !is_null($isOnline) && $points > 0) {
                     $isOnline = boolval($isOnline);
                     $safeIdCard = SecurityUtils::encrypt(trim($idCard));
                     $safeMobile = SecurityUtils::encrypt(trim($mobile));
                     if ($isOnline) {
-                        $user = User::findOne(['safeIdCard' => trim($safeIdCard), 'safeMobile' => $safeMobile]);
+                        $user = User::findOne(['safeMobile' => $safeMobile]);
                         if (is_null($user)) {
                             continue;
                         }
@@ -137,7 +137,7 @@ class PointsController extends BaseController
             if ($model instanceof PointsBatch) {
                 $isOnline = $model->isOnline;
                 if ($isOnline) {
-                    $user = User::findOne(['safeMobile' => $model->safeMobile, 'idCard' => SecurityUtils::decrypt($model->idCard)]);
+                    $user = User::findOne(['safeMobile' => $model->safeMobile]);
                     if (is_null($user)) {
                         continue;
                     }

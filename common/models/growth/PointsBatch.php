@@ -40,7 +40,7 @@ class PointsBatch extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['points', 'isOnline', 'user_id', 'idCard', 'publicMobile', 'safeMobile'], 'required'],
+            [['points', 'isOnline', 'user_id', 'publicMobile', 'safeMobile'], 'required'],
             [['createTime'], 'safe'],
             ['isOnline', 'boolean', 'message' => '“是线上用户”必须是bool类型'],
             [['points', 'status'], 'integer'],
@@ -62,7 +62,7 @@ class PointsBatch extends \yii\db\ActiveRecord
             $safeMobile = SecurityUtils::encrypt($this->mobile);
             $safeIdCard = SecurityUtils::encrypt($this->idCard);
             if ($isOnline) {
-                $user = User::findOne(['safeMobile' => $safeMobile, 'safeIdCard' => $safeIdCard]);
+                $user = User::findOne(['safeMobile' => $safeMobile]);
                 if (is_null($user)) {
                     $this->addError('mobile', '线上用户不存在');
                 }
