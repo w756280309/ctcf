@@ -47,10 +47,9 @@ $action = Yii::$app->controller->action->getUniqueId();
                     'user/identity/index',
                     'user/userbank/identity'
                 ]) ? 'selected' : '' ?>"><a href="/user/userbank/identity?from=<?= urlencode(Yii::$app->request->hostInfo.'/user/user') ?>"><span class="star"></span>资金托管账户</a></li>
-                <li class="account <?= in_array($action, [
+                <li class="<?= in_array($action, [
                     'risk/risk/index',
                 ]) ? 'selected' : '' ?>"><a href="/risk/risk"><span class="star"></span>风险测评</a></li>
-
             </ul>
         </li>
     </ul>
