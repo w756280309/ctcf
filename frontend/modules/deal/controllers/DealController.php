@@ -115,6 +115,11 @@ class DealController extends BaseController
             return ['code' => 1, 'message' => '请登录', 'tourl' => '/site/login'];
         }
 
+        //判断是否需要强制测评
+        if (!$user->getUserIsInvested() && !$user->checkRisk()) {
+            return ['code' => 1, 'message' => '需要测评', 'tourl' => '/site/risk'];
+        }
+
         //检验代金券的使用
         $couponMoney = 0; //记录可用的代金券金额
         $couponCount = 0; //记录可用的代金券个数

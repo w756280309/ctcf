@@ -222,6 +222,12 @@ class SiteController extends Controller
         ]);
     }
 
+    //风险测评
+    public function actionRisk()
+    {
+        return $this->renderFile('@frontend/views/site/risk.php');
+    }
+
     public function actionSession()
     {
         return [

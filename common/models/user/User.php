@@ -1055,4 +1055,16 @@ class User extends ActiveRecord implements IdentityInterface, UserInterface
         return $this->hasOne(SocialConnect::className(), ['user_id' => 'id'])
             ->where(['social_connect.provider_type' => SocialConnect::PROVIDER_TYPE_WECHAT]);
     }
+
+    /*
+     * 判断pc用户是否需要测评
+     * 需要测评返回　true ;反之返回false ;
+     */
+    public function checkRisk()
+    {
+        return (new \yii\db\Query())
+            ->from('risk_assessment')
+            ->where(['user_id' => $this->id, 'isDel' => 0])
+            ->count() > 0;
+    }
 }

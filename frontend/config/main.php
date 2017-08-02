@@ -87,6 +87,9 @@ return [
         'credit' => [
             'class' => 'frontend\modules\credit\Module',
         ],
+        'risk' => [
+            'class' => 'Wcg\Xii\Risk\Module',
+        ],
     ],
     'params' => $params,
     'as AjaxJsonFormat' => [

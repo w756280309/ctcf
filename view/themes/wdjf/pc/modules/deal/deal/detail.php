@@ -18,7 +18,6 @@ $this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/chargedeposit.css');
 $this->registerJsFile(ASSETS_BASE_URI.'js/jquery.ba-throttle-debounce.min.js?v=161008', ['depends' => JqueryAsset::class]);
 
 ?>
-
 <div class="project-box clearfix">
     <div class="project-left clearfix">
         <!--pL-top-box-->
@@ -227,7 +226,6 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/jquery.ba-throttle-debounce.min.js?v=1
         </div>
     </div>
 </div>
-
 <!--mask弹框-->
 <div class="detail-mask"></div>
 <!--确认弹框-->
@@ -310,6 +308,8 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/jquery.ba-throttle-debounce.min.js?v=1
         var xhr = $.post(form.attr("action"), vals, function (data) {
             if (data.code == 0 && data.tourl) {
                 location.href = data.tourl;
+            } if (data.code == 5) {
+                //location.href = data.tourl;
             } else {
                 $('.dR-tishi-error ').show();
                 //未免密不提示、不跳转，直接弹框
@@ -318,7 +318,10 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/jquery.ba-throttle-debounce.min.js?v=1
                 }
             }
             var currentUrl = encodeURIComponent(location.href);
-            if ('/site/login' == data.tourl) {
+            if ('/site/risk' == data.tourl) {
+                //获取测评信息
+                risk();
+            } else if ('/site/login' == data.tourl) {
                 //获取登录信息
                 login();
             } else if ('/user/qpay/binding/umpmianmi' == data.tourl) {
@@ -363,6 +366,25 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/jquery.ba-throttle-debounce.min.js?v=1
             //加载登录页面
             getLoginHtml();
         }
+    }
+
+    //获取测评提示页
+    function risk() {
+        document.documentElement.style.overflow = 'hidden';   //禁用页面上下滚动效果
+        $.ajax({
+            beforeSend: function (req) {
+                req.setRequestHeader("Accept", "text/html");
+            },
+            'url': '/site/risk',
+            'type': 'get',
+            'dataType': 'html',
+            'success': function (html) {
+                $('body').append(html);
+                $('.login-mark').fadeIn();
+                $('.loginUp-box').fadeIn();
+            }
+        });
+        return '';
     }
 
     function chongzhi() {
