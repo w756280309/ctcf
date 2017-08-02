@@ -1,10 +1,13 @@
 <?php
-$this->title = '我要理财';
-$this->showBottomNav = true;
-$this->backUrl = false;
 
+use Lhjx\Http\HttpUtils;
 use wap\assets\WapAsset;
 use yii\web\JqueryAsset;
+
+$this->title = '我要理财';
+$this->showBottomNav = true;
+$this->hideHeaderNav = HttpUtils::isWeixinRequest();
+$this->backUrl = false;
 
 $this->registerCssFile(ASSETS_BASE_URI.'css/credit/creditlist.css?v=2017041332', ['depends' => WapAsset::class]);
 $this->registerCssFile(ASSETS_BASE_URI.'css/list_tag.css', ['depends' => WapAsset::class]);
