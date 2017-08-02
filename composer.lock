@@ -1691,7 +1691,7 @@
             "source": {
                 "type": "git",
                 "url": "ssh://vcs@dx.wangcaigu.cn/diffusion/WCGLIBS/wcg-libs.git",
-                "reference": "1b17f58cbc2197b660b08449c1a515d02360f8ce"
+                "reference": "acec7b8bd7549830415c1fdf954c5cf0bda06dbc"
             },
             "require": {
                 "php": ">=5.5.0",
@@ -1715,7 +1715,7 @@
             ],
             "description": "工具库",
             "homepage": "http://dx.wangcaigu.cn/diffusion/WCGLIBS/",
-            "time": "2017-07-27 08:46:35"
+            "time": "2017-08-02 01:43:22"
         },
         {
             "name": "yiisoft/yii2",
