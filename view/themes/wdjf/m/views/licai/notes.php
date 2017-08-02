@@ -1,7 +1,10 @@
 <?php
 
+use Lhjx\Http\HttpUtils;
+
 $this->title = '我要理财';
 $this->showBottomNav = true;
+$this->hideHeaderNav = HttpUtils::isWeixinRequest();
 $this->backUrl = false;
 
 $this->registerCssFile(ASSETS_BASE_URI.'css/credit/creditlist.css?v=20161223', ['depends' => 'wap\assets\WapAsset']);
