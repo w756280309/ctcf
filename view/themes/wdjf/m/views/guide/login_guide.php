@@ -1,6 +1,6 @@
 <?php
 $this->showBottomNav = true;
-$this->title = '登录引导页';
+$this->title = '登录/注册';
 $this->registerJsFile(FE_BASE_URI . 'libs/lib.flexible3.js', ['depends' => \yii\web\JqueryAsset::class, 'position' => 1]);
 $this->registerJsFile(ASSETS_BASE_URI . 'js/swiper.min.js', ['depends' => \yii\web\JqueryAsset::class, 'position' => 1]);
 $this->registerJs('forceReload_V2();');

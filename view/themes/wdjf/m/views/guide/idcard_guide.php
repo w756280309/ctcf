@@ -1,6 +1,6 @@
 <?php
 $this->showBottomNav = true;
-$this->title = '实名引导页';
+$this->title = '实名认证';
 
 $this->registerJsFile(FE_BASE_URI . 'libs/lib.flexible3.js', ['depends' => \yii\web\JqueryAsset::class, 'position' => 1]);
 $this->registerJsFile(FE_BASE_URI . 'libs/fastclick.js', ['depends' => \yii\web\JqueryAsset::class, 'position' => 1]);
@@ -33,7 +33,6 @@ $this->registerJs('forceReload_V2();');
         </ul>
         <a class="go-realName" href="/user/identity">立即实名认证</a>
         <p class="tips">温都金服将严格保密您的个人信息。</p>
-        <div class="go-out">还没想好，先逛逛</div>
     </div>
 </div>
 <div class="mask" style="display: none;"></div>
