@@ -134,4 +134,5 @@ return [
     'as getOpenIdBehavior' => [
         'class' => \common\components\GetOpenIdBehavior::className(),
     ],
+    'as superviseAccessFilter' => \common\filters\SuperviseAccessFilter::className(),
 ];

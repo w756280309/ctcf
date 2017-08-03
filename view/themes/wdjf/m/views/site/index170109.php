@@ -3,6 +3,7 @@
 $this->title = '温都金服';
 $this->params['breadcrumbs'][] = $this->title;
 $this->hideHeaderNav = true;
+$this->showBottomNav = true;
 
 use common\utils\StringUtils;
 use common\view\LoanHelper;
@@ -308,26 +309,10 @@ $this->registerJsFile(ASSETS_BASE_URI . 'js/swiper.min.js', ['depends' => Jquery
         </div>
 
         <footer class="f11"><span></span>温州报业传媒旗下理财平台<span></span></footer>
-
-        <?php if (!defined('IN_APP')) { ?>
-            <div class="navbar-fixed-bottom footer">
-                <div class="footer-title">
-                    <div class="footer-inner">
-                        <a href="/#t=1" class="shouye1 nav-bar special-bar"><span class="shouye"></span>首页</a>
-                    </div>
-                </div>
-                <div class="footer-title">
-                    <div class="footer-inner1">
-                        <a href="/deal/deal/index" class="nav-bar"><span class="licai"></span>理财</a>
-                    </div>
-                </div>
-                <div class="footer-title">
-                    <div class="footer-inner2">
-                        <a class="nav-bar" href="/user/user"><span class="zhanghu"></span>账户</a>
-                    </div>
-                </div>
-            </div>
+        <?php if (!defined('IN_APP') && $this->showBottomNav) { ?>
+            <?= $this->renderFile('@wap/views/layouts/footer.php')?>
         <?php } ?>
+
     </div>
 
     <div class="mask" style="display: none"></div>

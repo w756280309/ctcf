@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>首次投资送超市卡</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0,minimum-scale=1.0, user-scalable=0">
+	<link rel="stylesheet" href="../common/css/wenjfbase.css">
+	<link rel="stylesheet" href="css/index.css">
+	<script src="../libs/lib.flexible3.js"></script>
+	<script src="../libs/jquery-1.11.1.min.js"></script>
+	<script src="../libs/fastclick.js"></script>
+</head>
+<body>
+<div class="flex-content">
+	<div class="section-one">
+		<img src="images/real_name.png" alt="">
+		<h5>实名认证</h5>
+		<p>平台积极响应金融监管对用户投资的安全性要求，您在使用本产品时，请先进行实名认证哦。</p>
+	</div>
+
+	<div class="section-two">
+		<ul>
+			<li>
+				<img src="images/checked.png" alt="">
+				<span>第1步</span>
+				<span class="rg">注册登录成功</span>
+			</li>
+			<li>
+				<img src="images/unchecked.png" alt="">
+				<span>第2步</span>
+				<span class="rg">实名认证</span>
+			</li>
+		</ul>
+		<a class="go-realName" href="">立即实名认证</a>
+		<p class="tips">温都金服将严格保密您的个人信息。</p>
+		<div class="go-out">还没想好，先逛逛</div>
+	</div>
+</div>
+<div class="mask" style="display: none;"></div>
+<div class="popover">
+	<p>未完成实名认证将无法使用该产品， 确定要放弃吗？</p>
+	<dl class="clearfix">
+		<dt class="lf cancel">取消</dt>
+		<dd class="rg confirm">确定</dd>
+	</dl>
+</div>
+<script>
+	$(function(){
+	    FastClick.attach(document.body);
+		$(".go-out").on("click",function(){
+			$(".mask,.popover").fadeIn();
+		})
+		$(".cancel").on("click",function(){
+			$(".mask,.popover").fadeOut();
+		})
+        $(".confirm").on("click",function(){
+            window.location.href = "/";//js控制页面跳转
+            $(".mask,.popover").fadeOut();
+
+        })
+	})
+</script>
+</body>
+</html>

@@ -22,28 +22,14 @@ if ($isFromWrm && !$isIdVerified) {
 <div class="container flex-content">
     <div class="header f16">
         <img src="<?= FE_BASE_URI ?>wap/luodiye/images/tick_01.png" alt="">
-        <?php if (!$isFromWrm) {?>
-            <p>您已成功注册温都金服</p>
-            <p>现在投资即可领取</p>
-        <?php } else {?>
-            <p>您已成功注册温都金服</p>
-        <?php }?>
+        <p>您已成功注册温都金服</p>
     </div>
     <ul class="liststep f16">
         <li><span class="f24 lf">1</span>注册成功</li>
-        <?php if($isFromWrm) {?>
-            <li><span class="f24 lf">2</span>实名认证和投资，领取超市卡</li>
-        <?php } else {?>
-            <?php if ($user->isO2oRegister()) { ?>
-                <li><span class="f24 lf"><a class="go-deal" href="<?= $toUrl ?>">2</span>首次投资1000元即可获得</a></li>
-            <?php } else { ?>
-                <li><span class="f24 lf"><a class="go-deal" href="<?= $toUrl ?>">2</span>首次投资1000元即可获得积分</a></li>
-                <li><span class="f24 lf">3</span>前往积分商城兑换</li>
-            <?php } ?>
-        <?php }?>
+        <li><span class="f24 lf">2</span>实名认证和投资，领取超市卡</li>
     </ul>
 
-    <?php if($isFromWrm && !$isIdVerified) {?>
+    <?php if(!$isIdVerified) {?>
         <a class="f15 invest" href="<?= $toUrl ?>">立即实名认证</a>
     <?php } else { ?>
         <a class="f15 invest" href="<?= $toUrl ?>">去理财</a>

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>首次投资送超市卡</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0,minimum-scale=1.0, user-scalable=0">
+	<meta name="format-detection" content="telephone=no"/>
+	<link rel="stylesheet" href="https://static.wenjf.com/v2/libs/swiper/swiper.min.css">
+	<link rel="stylesheet" href="../common/css/wenjfbase.css">
+	<link rel="stylesheet" href="css/index.css?v=1.6">
+	<script src="../libs/lib.flexible3.js"></script>
+</head>
+<body>
+<div class="flex-content">
+	<div class="logo"><img src="images/logo.png" alt=""></div>
+
+	<div class="section-one">
+		<div class="banner swiper-container">
+			<div class="swiper-wrapper">
+				<img class="swiper-slide" src="images/banner.png" alt="">
+				<img class="swiper-slide" src="images/banner_01.png" alt="">
+				<img class="swiper-slide" src="images/banner_02.png" alt="">
+			</div>
+			<div class="swiper-pagination"></div>
+		</div>
+		<div class="feature">
+			<p class="tips">登录获得更多个性体验</p>
+			<a class="login" href="">老用户登录</a>
+			<a class="register" href="">马上注册</a>
+			<div class="more">
+				<p>了解更多</p>
+				<img src="images/pointer.png" alt="">
+			</div>
+		</div>
+	</div>
+
+	<div class="section-two">
+		<div class="compare">
+			<p>平台累计交易已突破<span>26亿+</span><br>历史兑付率<span>100%</span></p>
+			<ul class="clearfix">
+				<li class="lf">累计兑付<span>12亿+</span></li>
+				<li class="rg">带来<span>1亿+</span>元收益</li>
+			</ul>
+			<div>
+				<img src="images/compare.png" alt="">
+			</div>
+		</div>
+	</div>
+
+	<div class="section-three">
+		<div class="introduce">
+			<div class="intro-header">
+				<img class="intro-bg" src="images/intro_bg.png" alt="">
+			</div>
+			<div class="intro-ctn">
+				<div>
+					<p class="des">什么是温都金服？</p>
+					<p class="detail">温都金服是隶属温州报业传媒旗下的理财平台。甄选各类权威机构的理财产品。提供银行级理财服务，保障用户资金安全，安享稳定收益。</p>
+				</div>
+
+				<div>
+					<p class="des">股东背景</p>
+					<img class="media-img" src="images/media.png" alt="">
+				</div>
+
+				<div>
+					<p class="des">平台优势</p>
+					<img class="intro-img" src="images/intro.png" alt="">
+				</div>
+			</div>
+
+			<div class="intro-footer clearfix">
+				<ul class="lf">
+					<li>400-101-5151<span>（8:30～20:00）</span></li>
+					<li>地址：温州市鹿城区飞霞南路<br>657号保丰大楼四层</li>
+					<li>*理财非存款 产品有风险 投资须谨慎</li>
+				</ul>
+				<img class="erweima" src="images/erweima.png" alt="">
+			</div>
+		</div>
+	</div>
+</div>
+<img class="toTop" src="images/toTop.png" alt="">
+<script src="../libs/jquery-1.11.1.min.js"></script>
+<script src="https://static.wenjf.com/m/js/swiper.min.js"></script>
+<script>
+	$(function(){
+        //轮播图
+        var mySwiper = new Swiper('.swiper-container', {
+//            autoplay: 4000,
+            autoplayDisableOnInteraction: false,
+            loop: true,
+            pagination: '.swiper-pagination'
+        });
+
+        $(window).on("scroll",function(){
+            if($(this).scrollTop()>400){
+                $(".toTop").show();
+            } else {
+                $(".toTop").hide();
+            }
+        });
+        $(".toTop").on('click',function(){
+            $("body,html").animate({scrollTop: 0},500);
+        });
+        $(".more").on('click',function(){
+            var top = $(".section-two").offset().top;
+            $("body,html").animate({scrollTop: top},500);
+        })
+	});
+
+</script>
+</body>
+</html>

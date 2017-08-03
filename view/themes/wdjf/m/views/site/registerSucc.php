@@ -34,7 +34,7 @@ $this->title = '温都金服注册成功页面';
     </div>
     <?php }?>
     <a class="f16 open" href="/user/identity">立即开通</a>
-    <a class="f16 stroll" href="/?_mark=170120">先去逛逛</a>
+    <a class="f16 stroll" href="/user/user">先去逛逛</a>
 </div>
 <script>
     $(function(){

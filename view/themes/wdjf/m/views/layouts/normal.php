@@ -26,6 +26,7 @@ $this->registerMetaTag([
     'name' => 'description',
     'content' => $description,
 ]);
+$this->registerJsFile(FE_BASE_URI . 'res/js/js.cookie.js', ['depends' => \yii\web\JqueryAsset::class]);
 $this->registerJsFile(FE_BASE_URI . 'res/js/lib.js?v=20170216', ['depends' => [\yii\web\JqueryAsset::className()]]);
 $this->registerJs('$(function () {
                 hmsr();

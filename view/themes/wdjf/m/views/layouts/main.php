@@ -117,26 +117,10 @@ $this->registerMetaTag([
     <?php } ?>
 
     <!--footer-->
-    <?php if (!defined('IN_APP')) { ?>
-    <?php if ($this->showBottomNav) { ?>
-    <div class="row navbar-fixed-bottom footer">
-        <div class="col-xs-4 footer-title">
-            <div class="footer-inner">
-                <a href="/?v=1#t=1" class="shouye1"><span class="shouye"></span>首页</a>
-            </div>
-        </div>
-        <div class="col-xs-4 footer-title">
-            <div class="footer-inner1">
-                <a href="/deal/deal/index"><span class="licai"></span>理财</a>
-            </div>
-        </div>
-        <div class="col-xs-4 footer-title">
-            <div class="footer-inner2">
-                <a href="/user/user"><span class="zhanghu"></span>账户</a>
-            </div>
-        </div>
-    </div>
-    <?php } } ?>
+    <?php if (!defined('IN_APP') && $this->showBottomNav) { ?>
+        <?= $this->renderFile('@wap/views/layouts/footer.php')?>
+    <?php } ?>
+
 </div>
 <?php $this->endBody() ?>
 </body>

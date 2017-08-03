@@ -1,7 +1,7 @@
 <?php
 
 $this->title = '账户中心';
-
+$this->showBottomNav = true;
 ?>
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/wenjfbase.css">
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/activeComHeader.css?v=20170711">
@@ -101,25 +101,9 @@ $this->title = '账户中心';
 </a>
 
 <!--footer-->
-<?php if (!defined('IN_APP')) { ?>
+<?php if (!defined('IN_APP') && $this->showBottomNav) { ?>
     <div style="height: 50px;"></div>
-    <div class="navbar-fixed-bottom footer flex-content">
-        <div class="footer-title">
-            <div class="footer-inner">
-                <a href="/?v=1#t=1" class="nav-bar"><span class="shouye"></span>首页</a>
-            </div>
-        </div>
-        <div class="footer-title">
-            <div class="footer-inner">
-                <a href="/deal/deal/index" class="nav-bar"><span class="licai"></span>理财</a>
-            </div>
-        </div>
-        <div class="footer-title">
-            <div class="footer-inner">
-                <a class="nav-bar special-bar" href="/user/user" style="color: #f44336"><span class="zhanghu"></span>账户</a>
-            </div>
-        </div>
-    </div>
+    <?= $this->renderFile('@wap/views/layouts/footer.php')?>
 <?php } ?>
 
 <script type="text/javascript">
