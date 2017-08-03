@@ -134,5 +134,6 @@ return [
     'as getOpenIdBehavior' => [
         'class' => \common\components\GetOpenIdBehavior::className(),
     ],
-    'as superviseAccessFilter' => \common\filters\SuperviseAccessFilter::className(),
+    // XXX 临时关闭限制实名才可浏览理财信息的功能
+    //'as superviseAccessFilter' => \common\filters\SuperviseAccessFilter::className(),
 ];
