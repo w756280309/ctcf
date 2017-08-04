@@ -52,7 +52,7 @@ use common\utils\SecurityUtils;
         <div class="col-xs-2 safe-lf col"></div>
         <div class="col-xs-3 safe-lf"></div>
         <div class="col-xs-3 arrow">
-            <a href="/user/bank">去绑定</a>
+            <a id="bind_card">去绑定</a>
         </div>
     </div>
 <?php } ?>
@@ -72,3 +72,23 @@ use common\utils\SecurityUtils;
     </div>
     <div class="col-xs-3"></div>
 </div>
+<script>
+    $('#bind_card').click(function(){
+        var xhr = $.get('/user/user/check-kuaijie', function (data) {
+            if (data.code && data.tourl) {
+                if (data.tourl !== '/user/bank') {
+                    toastCenter(data.message, function() {
+                        location.href = data.tourl;
+                    });
+                } else {
+                    location.href = data.tourl;
+                }
+
+            }
+        });
+
+        xhr.fail(function () {
+            toastCenter('系统繁忙,请稍后重试!');
+        });
+    })
+</script>
