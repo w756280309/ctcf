@@ -24,7 +24,6 @@ $this->title = '注册成功';
             </p>
             <?php }?>
             <a href="/user/identity" class="huifu-open">立即开通</a>
-            <a href="/" class="no-open">先去逛逛</a>
         </div>
     </div>
 </div>

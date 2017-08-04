@@ -15,7 +15,7 @@ $this->registerJs('forceReload_V2();');
     <div class="section-one">
         <img src="<?= FE_BASE_URI ?>wap/guide-realName/images/real_name.png" alt="">
         <h5>实名认证</h5>
-        <p>平台积极响应金融监管对用户投资的安全性要求，您在使用本产品时，请先进行实名认证哦。</p>
+        <p>平台积极响应金融监管规定，为保障您的投资安全，在使用产品前，请先实名认证。</p>
     </div>
 
     <div class="section-two">

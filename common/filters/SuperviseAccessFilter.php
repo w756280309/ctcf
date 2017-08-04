@@ -18,6 +18,44 @@ class SuperviseAccessFilter extends ActionFilter
     public function beforeAction($action)
     {
         $actionId = $action->getUniqueId();
+        $appId = Yii::$app->id;
+        if ($appId === 'app-wap') {
+            return $this->wapAccess($action, $actionId);
+        } elseif ($appId === 'app-frontend') {
+            return $this->pcAccess($action, $actionId);
+        } else {
+            return true;
+        }
+    }
+
+    private function pcAccess($action, $actionId)
+    {
+        if (in_array($actionId, [
+            'site/index',
+            'licai/index',
+            'deal/deal/detail'
+        ])) {
+            /**
+             * @var Response $response
+             * @var User $user
+             */
+            $response = Yii::$app->response;
+            $user = Yii::$app->getUser()->getIdentity();
+            if (is_null($user)) {
+                $action->controller->layout = '@frontend/views/layouts/main';
+                $response->content = $action->controller->render('@frontend/views/guide/login_guide.php');
+                return false;
+            } elseif (!$user->isIdVerified()) {
+                $action->controller->layout = '@frontend/views/layouts/main';
+                $response->content = $action->controller->render('@frontend/views/guide/idcard_guide.php');
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private function wapAccess($action, $actionId)
+    {
         if (in_array($actionId, [
             'site/index',
             'deal/deal/index',

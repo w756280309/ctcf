@@ -96,4 +96,5 @@ return [
         'class' => \common\components\RequestBehavior::className(),
     ],
     'as userAccountAccess' => \common\filters\UserAccountAcesssControl::className(),
+    'as superviseAccessFilter' => \common\filters\SuperviseAccessFilter::className(),//监管控制：未实名无法查看首页和列表页
 ];
