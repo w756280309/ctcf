@@ -134,6 +134,5 @@ return [
     'as getOpenIdBehavior' => [
         'class' => \common\components\GetOpenIdBehavior::className(),
     ],
-    // XXX 临时关闭限制实名才可浏览理财信息的功能
-    //'as superviseAccessFilter' => \common\filters\SuperviseAccessFilter::className(),
+    'as superviseAccessFilter' => \common\filters\SuperviseAccessFilter::className(),//监管控制：未实名无法查看首页和列表页
 ];

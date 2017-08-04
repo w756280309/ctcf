@@ -65,4 +65,22 @@ class WebRequest extends Request
     {
         return boolval(strpos($this->hostInfo, '//app.'));
     }
+
+    /**
+     * 判断请求是否来自 Android
+     * @return bool
+     */
+    public function isFromAndroid()
+    {
+        return $this->isFromApp() && false !== strpos($this->userAgent, 'WjfAndroid');
+    }
+
+    /**
+     * 判断请求是否来自 Ios
+     * @return bool
+     */
+    public function isFromIos()
+    {
+        return $this->isFromApp() && false !== strpos($this->userAgent, 'WjfApple');
+    }
 }
