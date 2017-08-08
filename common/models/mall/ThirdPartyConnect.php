@@ -222,7 +222,12 @@ class ThirdPartyConnect extends ActiveRecord
         if(!$verify){
             throw new \Exception("sign verify fail");
         }
-        $ret=array("success"=>$request_array["success"],"errorMessage"=>$request_array["errorMessage"],"bizId"=>$request_array["bizId"]);
+        $ret = [
+            "success" => $request_array["success"],
+            "errorMessage" => $request_array["errorMessage"],
+            "bizId" => $request_array["bizId"],
+            "orderNum" => $request_array["orderNum"],
+        ];
         return $ret;
     }
 }
