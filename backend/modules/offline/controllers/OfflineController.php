@@ -210,6 +210,7 @@ class OfflineController extends BaseController
             $user->realName = $order[4];
             $user->idCard = $order[5];
             $user->mobile = $order[6];
+            $user->created_at = time();
             $user->save();
             $user_id = $user->id;
         }
