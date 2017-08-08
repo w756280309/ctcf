@@ -16,6 +16,13 @@ return [
             'password' => 'wdjf',
             'charset' => 'utf8',
         ],
+        'db_tx' => [
+            'class' => 'yii\\db\\Connection',
+            'dsn' => 'mysql:host=localhost;dbname=tx',
+            'username' => 'wdjf',
+            'password' => 'wdjf',
+            'charset' => 'utf8',
+        ],
     ],
     'params' => $params,
 ];

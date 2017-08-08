@@ -8,6 +8,7 @@ use common\lib\bchelp\BcRound;
 use common\lib\err\Err;
 use common\models\adminuser\AdminLog;
 use common\models\epay\EpayUser;
+use common\models\message\RepaymentMessage;
 use common\models\payment\Repayment;
 use common\models\product\OnlineProduct;
 use common\models\order\OnlineRepaymentRecord;
@@ -21,6 +22,7 @@ use common\service\LoanService;
 use common\service\SmsService;
 use common\utils\SecurityUtils;
 use common\utils\TxUtils;
+use Lhjx\Noty\Noty;
 use Yii;
 
 class RepaymentController extends BaseController
@@ -475,6 +477,11 @@ class RepaymentController extends BaseController
 
             if (!$response) {
                 return ['result' => 0, 'message' => '更新用户资产回款状态失败'];
+            }
+        }
+        if ($repayment->isRepaid && $repayment->isRefunded) {
+            foreach ($orders as $repaymentPlan) {
+                Noty::send(new RepaymentMessage($repaymentPlan));
             }
         }
 

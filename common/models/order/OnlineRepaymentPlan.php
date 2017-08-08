@@ -5,6 +5,7 @@ namespace common\models\order;
 use common\models\adminuser\AdminLog;
 use common\models\payment\Repayment;
 use common\models\product\RepaymentHelper;
+use common\models\tx\UserAsset;
 use common\models\user\User;
 use yii\behaviors\TimestampBehavior;
 use common\models\product\OnlineProduct;
@@ -15,11 +16,15 @@ use Yii;
 /**
  * 还款计划
  * @property int $qishu
+ * @property float $benxi
  * @property float $benjin
  * @property float $lixi
  * @property int $refund_time
  * @property int $status
  * @property int $asset_id
+ * @property int $uid
+ * @property int $order_id
+ * @property int $online_pid
  */
 class OnlineRepaymentPlan extends \yii\db\ActiveRecord
 {
@@ -286,8 +291,43 @@ class OnlineRepaymentPlan extends \yii\db\ActiveRecord
         return RepaymentHelper::calcRepayment($paymentDates, $repaymentMethod, $startDate, $duration, $amount, $apr);
     }
 
+    /**
+     * 获取用户剩余未还款金额(包括购买转让).
+     *
+     * 1. 所得到的金额,不包含当前的回款记录;
+     */
+    public function remainingRepaymentAmount()
+    {
+        return self::find()
+            ->where([
+                'uid' => $this->uid,
+                'online_pid' => $this->online_pid,
+                'status' => OnlineRepaymentPlan::STATUS_WEIHUAN,
+            ])
+            ->andWhere(['!=', 'id', $this->id])
+            ->sum('benxi');
+    }
+
     public function getLoan()
     {
         return $this->hasOne(OnlineProduct::className(), ['id' => 'online_pid']);
+    }
+
+    public function getUser()
+    {
+        return $this->hasOne(User::class, ['id' => 'uid']);
+    }
+
+    public function getAsset()
+    {
+        if (!empty($this->asset_id)) {
+            return UserAsset::findOne($this->asset_id);
+        } else {
+            return UserAsset::findOne([
+                'user_id' => $this->uid,
+                'order_id' => $this->order_id,
+                'loan_id' => $this->online_pid,
+            ]);
+        }
     }
 }

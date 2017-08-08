@@ -40,7 +40,7 @@ class OrderMessage extends WechatMessage
             'keyword3' => [$duration['value'].$duration['unit'], '#000000'],
             'keyword4' => [StringUtils::amountFormat3($order->order_money).'元', '#000000'],
             'keyword5' => [StringUtils::amountFormat3($interest).'元', '#000000'],
-            'remark' => ['感谢您的投资，点击查看详情，如有疑问请致电：400-101-5151进行咨询。', '#000000'],
+            'remark' => ['感谢您的投资，点击查看详情，如有疑问请致电：'.Yii::$app->params['contact_tel'].'进行咨询。', '#000000'],
         ];
         $this->user = $order->user;
         $this->linkUrl = Yii::$app->params['clientOption']['host']['wap'].'deal/deal/detail?sn='.$loan->sn;

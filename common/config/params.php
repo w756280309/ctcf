@@ -196,6 +196,7 @@ return [
     'wx.msg_tpl.draw_success' => 'eMnJo8ZdS3UaADDJDoeyi_HqvgZft04_4mMTFw5hZsY',  //微信提现成功消息模板ID
     'wx.msg_tpl.order_success' => '96YFmA0x8p1hYpeGG3rkq6AVjPPnKokFYASLwxao0xQ', //微信交易成功消息模板ID(非正式)
     'wx.msg_tpl.add_points_for_connect_wx' => 'f4KfVJdqIA8Bqu480kY5m_X3GGf57MUZnNIfMMmVgxg',  //微信绑定成功送积分消息模板
+    'wx.msg_tpl.repayment_success' => '6a-yjoNe-hUDILHU9bfFn5aGoU4-UukLWYXNaBwEtJU',//微信消息模板：回款消息
     'white_open_id' => [],
     'mock_wechat_msg' => false,
     'njfae_upload_dir' => 'upload/',   //对应南金交上传的文件夹相对路径，实际使用时添加日期"20161020/"
