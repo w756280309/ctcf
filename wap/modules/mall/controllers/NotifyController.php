@@ -117,9 +117,9 @@ class NotifyController extends Controller
         $appKey = Yii::$app->params['mall_settings']['app_key'];
         $appSecret = Yii::$app->params['mall_settings']['app_secret'];
         $result = ThirdPartyConnect::parseCreditNotify($appKey, $appSecret, $requestParams);
-        $orderId = $result['bizId'];
         $res = $result['success'];
-        $order = PointOrder::findOne(['sn' => $orderId]);
+        $orderNum = $result['orderNum'];
+        $order = PointOrder::findOne(['orderNum' => $orderNum]);
         if (empty($order)) {
             throw new \Exception('参数错误');
         }
