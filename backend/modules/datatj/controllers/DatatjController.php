@@ -17,6 +17,17 @@ use yii\web\NotFoundHttpException;
 
 class DatatjController extends BaseController
 {
+    public function behaviors()
+    {
+        return array_merge(parent::behaviors(), [
+            'pageCatche' => [
+                'class' => 'yii\filters\PageCache',
+                'only' => ['huizongtj', 'daytj', 'monthtj'],
+                'duration' => 300,
+            ],
+        ]);
+    }
+
     /**
      * 汇总统计页面
      */
