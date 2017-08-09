@@ -46,11 +46,11 @@ class DeployController extends Controller
         } else {
             if ($versionCode < 9) {
                 $content = [
-                    'old_updatetype' => 0,  //旧版本更新类型 0:无更新;1:有更新,无提示;2:有更新,有提示;3:有更新,强制更新
+                    'old_updatetype' => 3,  //旧版本更新类型 0:无更新;1:有更新,无提示;2:有更新,有提示;3:有更新,强制更新
                     'updatedesc' => '账户功能增加安全性，优化产品部分交互体验',  //新版本更新说明
                     'versioncode' => '9',   //新版本版本号
                     'versionname' => '1.6.1', //新版本版本名称
-                    'downloadurl' => 'http://dapp.wenjf.com/wjf_v1.6.1.apk',   //新版本下载地址
+                    'downloadurl' => 'https://dapp.wenjf.com/wjf_v1.6.1.apk',   //新版本下载地址
                 ];
             }
         }
