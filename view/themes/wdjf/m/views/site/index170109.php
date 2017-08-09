@@ -24,7 +24,7 @@ $this->registerJsFile(ASSETS_BASE_URI . 'js/swiper.min.js', ['depends' => Jquery
         <a class="signature" href="/user/checkin">
             <img src="<?= FE_BASE_URI ?>wap/index/images/signature.png" alt="签到抽奖">
         </a>
-        <img class="channel hide" src="<?= FE_BASE_URI ?>wap/index/images/channel.png" alt="">
+        <img style="width:100%;" class="channel hide" src="<?= FE_BASE_URI ?>wap/index/images/channel.png" alt="">
 
 
         <?php if (!empty($hotActs)) { ?>

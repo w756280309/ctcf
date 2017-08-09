@@ -107,6 +107,10 @@ class AdvController extends BaseController
                 } else {
                     $model->share_id = null;
                 }
+                //如果没有设置URL，则默认为“/”
+                if (!$model->link) {
+                    $model->link = '/';
+                }
 
                 $model->save(false);
 
