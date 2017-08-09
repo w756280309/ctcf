@@ -1,0 +1,382 @@
+html,body {
+  -webkit-text-size-adjust:100%!important;
+}
+.flex-content {
+  background-color: #e01021;
+  .banner {
+    width:100%;
+    height:579/75rem;
+    position: relative;
+    top:0;
+    left:0;
+    line-height: 1;
+    img.top-banner {
+      display: block;
+      width:100%;
+    }
+    .start-time {
+      color: #fee590;
+      font-size:22/75rem;
+      text-align: center;
+      position: absolute;
+      top:440/75rem;
+      left:0;
+      width:100%;
+    }
+    .gift-des {
+      color: #fee590;
+      font-size:28/75rem;
+      text-align: center;
+      position: absolute;
+      top:495/75rem;
+      left:0;
+      width:100%;
+    }
+    .regular {
+      color: #ffedb3;
+      font-size:30/75rem;
+      text-align: center;
+      position: absolute;
+      top:446/75rem;
+      right:20/75rem;
+    }
+  }
+  .gifts-task {
+    padding:50/75rem 40/7.5% 0.9rem;
+    ul {
+      li {
+        width:206/6.7%;
+        height:353/75rem;
+        background: url(../images/gifts_bg.png) no-repeat;
+        background-size:100% 100%;
+        text-align: center;
+        line-height: 1;
+        .complete {
+          background: url("../images/complete.png") center no-repeat;
+          background-size: 117/75rem 90/75rem;
+        }
+        .task-top {
+          color: #ffe287;
+          font-size:26/75rem;
+          height:120/75rem;
+          width:100%;
+          line-height: 0.4rem;
+          em {
+            padding-top: 15/75rem;
+          }
+        }
+      .task-mid {
+          color: #f03745;
+          font-size:30/75rem;
+          height:108/75rem;
+          width:100%;
+        line-height: 0.46rem;
+          span {
+            font-size:34/75rem;
+            font-weight: 500;
+          }
+        em {
+          padding-top: 20/75rem;
+        }
+        }
+      .task-bot {
+          color: #f03745;
+          font-size:34/75rem;
+        height:(353-228)/75rem;
+        width:100%;
+        em {
+          padding-top: 36/75rem;
+        }
+        }
+      }
+    }
+  }
+  .draw-gifts {
+    .title-bg {
+      height:186/75rem;
+      width:100%;
+      background: url(../images/title_bg.png) no-repeat;
+      background-size: 100%;
+      position: relative;
+      top:0;
+      left:0;
+      p {
+        position: absolute;
+        top:0.3rem;
+        left:0;
+        color: #fee590;
+        font-size:28/75rem;
+        line-height: 1;
+        text-align: center;
+        width:100%;
+      }
+      span {
+        position: absolute;
+        top:98/75rem;
+        right:20/75rem;
+        color: #ffedb3;
+        font-size:30/75rem;
+        line-height: 1;
+      }
+    }
+    .draw-bg {
+      background: url("../images/draw_bg.png") no-repeat;
+      background-size:100% 100%;
+      height:8.885rem;
+      width:661/7.5%;
+      margin: 0 auto;
+      table {
+        width:100%;
+        padding:25/75rem 30/75rem 30/75rem;
+       td {
+          width:33.33%;
+          padding:0.1rem;
+          img {
+            display: block;
+            width:100%;
+          }
+        }
+      }
+    }
+  }
+}
+.tips {
+  font-size:22/75rem;
+  color: #fff;
+  margin-top: 10/75rem;
+}
+.draw-tips {
+  color: #fff;
+  font-size:22/75rem;
+  width: 88.13333333%;
+  position: absolute;
+  bottom:0.1rem;
+  left: 6.2%;
+}
+.marginrg25 {
+  margin-right: (670-3*206)/15%;
+}
+.flex-content .gifts-task ul li .task-top em.paddingtop50 {
+  padding-top:45/75rem;
+}
+em {
+  font-style: normal;
+  display: block;
+}
+mrg0 {
+  margin-right: 0!important;
+}
+.day-clear {
+  margin: 40/75rem 0;
+  text-align: center;
+  font-size:30/75rem;
+  color: #ff929b;
+  background: url("../images/laba.png") 15% no-repeat;
+  background-size: 38/75rem 34/75rem;
+}
+.footer-bg {
+  width:100%;
+  height:358/75rem;
+  position: relative;
+  top:0;
+  left:0;
+  img {
+    width:100%;
+    height:100%;
+  }
+  .invite {
+    display: block;
+    font-size:42/75rem;
+    color: #e01021;
+    text-align: center;
+    width:452/7.5%;
+    height:82/75rem;
+    line-height:82/75rem;
+    position: absolute;
+    top:0;
+    left:(750-452)/15%;
+  }
+}
+.active {
+  box-shadow: 0 0 0.2rem 0.1rem #ffff00;
+  border-radius: 0.2rem;
+}
+.mask-regular {
+  display: none;
+  height: 100%;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100001;
+  /*根据实际情况设定*/
+  background-color: rgba(0, 0, 0, 0.6);
+}
+.active-regular {
+  width: 690/7.5%;
+  max-width: 690/75rem;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  z-index: 100000;
+  /*根据实际情况设定*/
+  transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -50%);
+  -moz-transform: translate(-50%, -50%);
+  border-radius: 0.35rem;
+  padding:0.6rem;
+  background-color: #fff;
+  font-size:28/75rem;
+  .close-btn {
+    width:24/75rem;
+    position: absolute;
+    top:75/75rem;
+    left:65/75rem;
+  }
+  h5 {
+    text-align: center;
+    color: #f03745;
+    font-size:36/75rem;
+    margin-bottom: 40/75rem;
+  }
+  ol {
+    padding-left:1em;
+    li {
+      list-style: decimal;
+      color: #999999;
+      font-size:28/75rem;
+      table {
+        width: 105%;
+        text-align: center;
+        margin: 0.3rem 0 0.2rem;
+        border-collapse: collapse;
+        position: relative;
+        top: 0;
+        left: -5%;
+        tr {
+          td {
+            height:63/75rem;
+            border:1px solid #ccc;
+            border-collapse: collapse;
+            line-height: 1;
+            padding:0.1rem 0;
+          }
+        }
+      }
+    }
+  }
+}
+
+.pop {
+  width:690/7.5%;
+  max-width: 690/75rem;
+  height:735/75rem;
+}
+.popBtm {
+  width:544/7.5%;
+  height:99/75rem;
+  line-height: 1.2rem;
+}
+
+//奖品列表
+.prizes-box {
+  display: none;
+  height: 100%;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100001;
+  /*根据实际情况设定*/
+  background-color: rgba(0, 0, 0, 0.6);
+}
+
+.prizes-box .outer-box {
+  width: 690/7.5%;
+  max-width: 690/75rem;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 10;
+  /*根据实际情况设定*/
+  transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -50%);
+  -moz-transform: translate(-50%, -50%);
+  border-radius: 0.35rem;
+  height: 9.6rem;
+
+}
+
+.prizes-box img.pop_close {
+  width: 0.61333333rem;
+  position: absolute;
+  top: -1.46666667rem;
+  right: -0.15rem;
+  cursor: pointer;
+}
+
+.prizes-box .prizes-pomp {
+  width: 100%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 10;
+  /*根据实际情况设定*/
+  transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -50%);
+  -moz-transform: translate(-50%, -50%);
+  padding: 0.56rem 6.66666667%;
+  border-radius: 0.35rem;
+  height: 10.6rem;
+  overflow: hidden;
+  background-color: #fff;
+}
+
+.prizes-box .prizes-pomp #wrapper {
+  height: 8rem;
+  width: 100%;
+  position: relative;
+  top: 0;
+  left: 0;
+}
+.prizes-box .prizes-pomp  p.prizes-title {
+  color: #f03745;
+  font-size:54/75rem;
+  margin-bottom: 20/75rem;
+  text-align: center;
+}
+.prizes-box .prizes-pomp #wrapper ul {
+  width: 100%;
+}
+
+.prizes-box .prizes-pomp #wrapper ul li {
+  width: 100%;
+  height:227/75rem;
+  background: url("../images/list-bg.png") no-repeat;
+  background-size: 100% 100%;
+  margin-bottom: 30/75rem;
+}
+.prizes-box .prizes-pomp #wrapper ul li:first-child {
+  margin-top: 80/75rem;
+}
+.prizes-box .prizes-pomp #wrapper ul li div.lf img {
+  height:227/75rem;
+}
+.prizes-box .prizes-pomp #wrapper ul li div.rg {
+  font-size:34/75rem;
+  color: #333;
+  line-height: 227/75rem;
+  margin-right: 30/75rem;
+}
+.prizes-box .prizes-pomp #wrapper ul li.no-prizes {
+  color: #333;
+  font-size:38/75rem;
+  text-align: center;
+  background: #fff;
+  margin-top: 2rem;
+}
+.regular-tips {
+  color: #999999;
+  font-size: 0.32rem;
+  margin-top: 0.25rem;
+}

@@ -89,7 +89,7 @@ class SuperviseAccessFilter extends ActionFilter
         if (!$cache->get('index_stats')) {
             $statsData = Perf::getStatsForIndex();
 
-            $cache->set($key, $statsData, 600);   //缓存十分钟
+            $cache->set('index_stats', $statsData, 600);   //缓存十分钟
         }
         $statsData = $cache->get('index_stats');
         $statsData['totalTradeAmount'] = bcdiv($statsData['totalTradeAmount'], 100000000, 0);

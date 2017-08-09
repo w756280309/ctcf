@@ -50,7 +50,7 @@ class DeployController extends Controller
                     'updatedesc' => '账户功能增加安全性，优化产品部分交互体验',  //新版本更新说明
                     'versioncode' => '9',   //新版本版本号
                     'versionname' => '1.6.1', //新版本版本名称
-                    'downloadurl' => 'http://dapp.wenjf.com/wjf_v1.6.1.apk',   //新版本下载地址
+                    'downloadurl' => 'https://dapp.wenjf.com/wjf_v1.6.1.apk',   //新版本下载地址
                 ];
             }
         }

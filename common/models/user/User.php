@@ -23,6 +23,7 @@ use wap\modules\promotion\models\RankingPromo;
 use Yii;
 use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
+use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 use yii\helpers\ArrayHelper;
 use yii\web\IdentityInterface;
@@ -1066,5 +1067,30 @@ class User extends ActiveRecord implements IdentityInterface, UserInterface
             ->from('risk_assessment')
             ->where(['user_id' => $this->id, 'isDel' => 0])
             ->count() > 0;
+    }
+
+    /**
+     * 获取当前用户或者为其好友是否在某一日首投的用户Query对象
+     *
+     * @param \DateTime $dateTime 日期
+     * @param bool      $invited  是否被当前用户邀请
+     * @return ActiveQuery
+     */
+    public function findByFirstInvestTimeAndInvited(\DateTime $dateTime, $invited)
+    {
+        $firstInvestDate = $dateTime->format('Y-m-d');
+        $u = User::tableName();
+        $ui = UserInfo::tableName();
+        $iv = InviteRecord::tableName();
+        $query = User::find()
+            ->innerJoinWith('info')
+            ->where(["$ui.firstInvestDate" => $firstInvestDate]);
+        if ($invited) {
+            $query->leftJoin($iv, "$iv.invitee_id = $u.id");
+            $query->andWhere(["$ui.isAffiliator" => true]);
+            $query->andWhere(["$iv.user_id" => $this->id]);
+        }
+
+        return $query;
     }
 }
