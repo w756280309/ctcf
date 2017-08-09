@@ -42,7 +42,7 @@ if (1 === $promoStatus) {
                 <a  class="task-bot <?= $btnStatusClass ?>" href="/user/checkin"><em>去领取</em></a>
             </li>
             <li class="lf marginrg25">
-                <p class="task-top <?php if ($taskStatus['investFinished']) { ?>complete<?php } ?>"><em>每年化投资5万<br>得10元现金<br><span style="color:#fff;">已投<?= rtrim(rtrim(number_format($todayAnnualInvest / 10000, 1), '0'), '.') ?>万元</span></em></p>
+                <p class="task-top <?php if ($taskStatus['investFinished']) { ?>complete<?php } ?>"><em>每年化投资5万<br>得10元现金<br><span style="color:#fff;">已投<?= rtrim(rtrim(bcdiv($todayAnnualInvest, 10000, 1), '0'), '.') ?>万元</span></em></p>
                 <p class="task-mid"><em><span>最高100元</span><br>现金红包</em></p>
                 <a  class="task-bot <?= $btnStatusClass ?>" href="/deal/deal/index"><em>去理财</em></a>
             </li>
@@ -152,7 +152,7 @@ if (1 === $promoStatus) {
 <script>
     $(function(){
         $('.regular').on("click",function(){
-            if ($(this).hasClass('btn_04')) {
+            if ($(this).hasClass('btn_04') || $(this).hasClass('btn_02')) {
                 return false;
             }
             $(".mask-regular").show();
@@ -173,7 +173,7 @@ if (1 === $promoStatus) {
         });
 
         $(".prizes").on("click",function(){
-            if ($(this).hasClass('btn_04')) {
+            if ($(this).hasClass('btn_04') || $(this).hasClass('btn_02')) {
                 return false;
             }
             $('.prizes-box').show();
@@ -255,7 +255,10 @@ if (1 === $promoStatus) {
                                 popBtmColor:'#e01021',
                                 contentMsg:"<img style='margin:0 auto;display: block;width: 4.2666667rem;margin-bottom: 0.4rem;' src='<?= FE_BASE_URI ?>"+data.ticket.path+"' alt=''/>",
                                 popBtmBorderRadius:0,
-                                popBtmFontSize : ".50666667rem"
+                                popBtmFontSize : ".50666667rem",
+                                afterPop: function () {
+                                    location.href = '/promotion/draw1708/?_mark=<?= time() ?>';
+                                }
                             },'close');
                         };
                         roll();
