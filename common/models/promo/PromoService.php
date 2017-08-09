@@ -10,6 +10,7 @@ use common\models\mall\PointRecord;
 use common\models\order\OnlineOrder;
 use common\models\product\OnlineProduct;
 use common\models\transfer\Transfer;
+use common\models\user\CheckIn;
 use common\models\user\User;
 use common\utils\TxUtils;
 use wap\modules\promotion\models\RankingPromo;
@@ -135,6 +136,26 @@ class PromoService
     }
 
     /**
+     * 签到后统一调用逻辑
+     * @param User $user
+     * @throws \Exception
+     */
+    public static function doAfterCheckIn(CheckIn $checkIn)
+    {
+        $promos = self::getActivePromo();
+        foreach ($promos as $promo) {
+            $model = new $promo->promoClass($promo);
+            if (method_exists($model, 'doAfterCheckIn')) {
+                try {
+                    $model->doAfterCheckIn($checkIn);
+                } catch (\Exception $ex) {
+
+                }
+            }
+        }
+    }
+
+    /**
      * 抽奖方法
      *
      * @param RankingPromo   $promo     活动
@@ -207,7 +228,7 @@ class PromoService
      * @return bool
      * @throws \Exception
      */
-    protected static function award(User $user, Reward $reward, RankingPromo $promo = null, PromoLotteryTicket $ticket = null)
+    public static function award(User $user, Reward $reward, RankingPromo $promo = null, PromoLotteryTicket $ticket = null)
     {
         //减库存
         if (!reward::decStoreBySn($reward->sn)) {

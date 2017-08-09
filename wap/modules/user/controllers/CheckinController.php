@@ -5,6 +5,7 @@ namespace app\modules\user\controllers;
 use app\controllers\BaseController;
 use common\models\code\Voucher;
 use common\models\mall\PointRecord;
+use common\models\promo\PromoService;
 use common\models\thirdparty\SocialConnect;
 use common\models\user\CheckIn;
 use common\models\user\User;
@@ -98,10 +99,12 @@ class CheckinController extends BaseController
     public function actionCheck()
     {
         $user = $this->getAuthedUser();
+        $flag = false;
         $check = CheckIn::check($user, (new \DateTime()));
 
         if ($check) {
             $extraPoints = 0;
+            $flag = true;
 
             //签到召回送额外积分
             $voucher = Voucher::find()
@@ -136,6 +139,12 @@ class CheckinController extends BaseController
                     $extraPoints = $voucher->amount;
                 } catch (\Exception $ex) {
                     $transaction->rollBack();
+                }
+            }
+            if ($flag) {
+                try {
+                    PromoService::doAfterCheckIn($check);
+                } catch (\Exception $ex) {
                 }
             }
             $res = [
