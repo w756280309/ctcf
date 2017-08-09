@@ -22,6 +22,7 @@ use common\models\user\User;
 use common\models\user\UserAccount;
 use common\models\user\UserBanks;
 use common\models\user\RechargeRecord;
+use common\models\user\UserInfo;
 use common\models\user\UserSearch;
 use common\models\user\DrawRecord;
 use common\utils\SecurityUtils;
@@ -325,6 +326,13 @@ class UserController extends BaseController
                 ]);
                 if (!$inviteRecord->save()) {
                     throw new \Exception('【'.Err::code('000003').'】邀请记录添加失败');
+                }
+                $userInfo = UserInfo::find()
+                    ->where(['user_id' => $invitee->id])
+                    ->one();
+                if (null !== $userInfo) {
+                    $userInfo->isAffiliator = true;
+                    $userInfo->save(false);
                 }
 
                 $model->addInviteeCoupon($invitee);  //给被邀请人发放代金券奖励
