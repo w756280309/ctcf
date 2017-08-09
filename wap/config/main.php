@@ -134,5 +134,5 @@ return [
     'as getOpenIdBehavior' => [
         'class' => \common\components\GetOpenIdBehavior::className(),
     ],
-    'as superviseAccessFilter' => \common\filters\SuperviseAccessFilter::className(),//监管控制：未实名无法查看首页和列表页
+    //'as superviseAccessFilter' => \common\filters\SuperviseAccessFilter::className(),//监管控制：未实名无法查看首页和列表页
 ];
