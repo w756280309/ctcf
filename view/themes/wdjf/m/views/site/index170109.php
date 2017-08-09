@@ -13,11 +13,10 @@ use yii\web\JqueryAsset;
 $this->registerCssFile(FE_BASE_URI . "libs/swiper/swiper.min.css");
 $this->registerCss(file_get_contents(Yii::getAlias('@fe/dist/v2/wap/index/css/index.css')));
 $this->registerJsFile(FE_BASE_URI . 'libs/lib.flexible3.js', ['depends' => JqueryAsset::class, 'position' => 1]);
-$this->registerJsFile(FE_BASE_URI . 'res/js/js.cookie.js', ['depends' => JqueryAsset::class]);
+$this->registerJsFile(FE_BASE_URI . 'res/js/js.cookie.js', ['depends' => JqueryAsset::class, 'position' => 1]);
 $this->registerJsFile(FE_BASE_URI . 'libs/fastclick.js', ['depends' => JqueryAsset::class]);
 $this->registerJsFile(FE_BASE_URI . 'libs/jquery.lazyload.min.js', ['depends' => JqueryAsset::class]);
 $this->registerJsFile(ASSETS_BASE_URI . 'js/swiper.min.js', ['depends' => JqueryAsset::class]);
-
 ?>
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/index/css/popover-index.css?v=1.03803">
     <div class="container flex-content relative">
@@ -25,6 +24,8 @@ $this->registerJsFile(ASSETS_BASE_URI . 'js/swiper.min.js', ['depends' => Jquery
         <a class="signature" href="/user/checkin">
             <img src="<?= FE_BASE_URI ?>wap/index/images/signature.png" alt="签到抽奖">
         </a>
+        <img class="channel hide" src="<?= FE_BASE_URI ?>wap/index/images/channel.png" alt="">
+
 
         <?php if (!empty($hotActs)) { ?>
             <div class="banner swiper-container">
@@ -402,6 +403,7 @@ $this->registerJsFile(ASSETS_BASE_URI . 'js/swiper.min.js', ['depends' => Jquery
         }
         ?>
     </script>
+
 <?php
 $this->registerJs(<<<JSFILE
     $(function (){
@@ -415,7 +417,11 @@ $this->registerJs(<<<JSFILE
             $('.first-popover').hide();
             $('.second-popover,.mask').show();
         });
-
+        //瑞安渠道
+        var source = Cookies.get('campaign_source');
+        if (source == 'rarb') {
+            $('.channel').removeClass('hide');
+        }
         //开屏图
         $('.close_splash').on('click', closeAdv);
         if (guiZe) {
