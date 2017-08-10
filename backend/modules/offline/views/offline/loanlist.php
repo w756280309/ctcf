@@ -96,9 +96,15 @@ use yii\helpers\Html;
                         }
                     ],
                     [
+                        'attribute' => 'repaymentMethod',
+                        'value' => function ($model) {
+                            return ($model->repaymentMethod && isset(Yii::$app->params['refund_method'][$model->repaymentMethod])) ? Yii::$app->params['refund_method'][$model->repaymentMethod] : "---";
+                        }
+                    ],
+                    [
                         'class' => 'yii\grid\ActionColumn',
                         'header' => '操作',
-                        'template' => '{repayment} {list} {edit} {confirm_jixi}',//只需要展示删除和更新
+                        'template' => '{repayment} {list} {edit} {confirm_jixi} {letter}',//只需要展示删除和更新
                         'headerOptions' => ['width' => '140'],
                         'buttons' => [
                             'repayment' => function($url, $model, $key){
@@ -130,6 +136,9 @@ use yii\helpers\Html;
                                 }
 
                             },
+                            'letter' => function ($irl, $model, $key) {
+                                return "<a href='/product/growth/letter?loanId=".$model->id."&isOnline=0' class='btn green' target='_blank'>打印确认函</a>";
+                            }
                         ],
                     ],
                 ]

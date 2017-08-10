@@ -9,6 +9,9 @@ use yii\db\ActiveRecord;
  * Description of OfflineProduct
  *
  * @author zhy-pc
+ *
+ *
+ * todo 待清理
  */
 class OfflineProduct extends ActiveRecord {
 

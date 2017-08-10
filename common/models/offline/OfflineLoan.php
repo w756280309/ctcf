@@ -11,6 +11,7 @@ use yii\db\ActiveRecord;
  * @property string  $title   标的名称
  * @property string  $expires 项目期限
  * @property string  $unit    期限单位:天/月
+ * @property int     $repaymentMethod   还款方式
  */
 class OfflineLoan extends ActiveRecord
 {
@@ -18,8 +19,8 @@ class OfflineLoan extends ActiveRecord
     {
         return [
             'confirm' => ['jixi_time'],
-            'default' => ['sn', 'title',  'expires', 'unit', 'jixi_time', 'yield_rate'],
-            'edit' => ['sn', 'title',  'expires', 'unit', 'jixi_time', 'yield_rate'],
+            'default' => ['sn', 'title',  'expires', 'unit', 'jixi_time', 'yield_rate', 'repaymentMethod'],
+            'edit' => ['sn', 'title',  'expires', 'unit', 'jixi_time', 'yield_rate', 'repaymentMethod'],
             'addexcel' => ['title',  'expires', 'unit', 'jixi_time', 'yield_rate'],
         ];
     }
@@ -29,7 +30,7 @@ class OfflineLoan extends ActiveRecord
         return [
             ['sn','unique','message'=>'编号已占用'],
             ['sn', 'string', 'max' => 32],
-            [['sn', 'title', 'expires', 'unit' ,'yield_rate'], 'required'],
+            [['sn', 'title', 'expires', 'unit' ,'yield_rate', 'repaymentMethod'], 'required'],
             ['jixi_time','required', 'on' => ['confirm', 'edit']],
             ['title', 'string', 'max' => 255],
             ['expires','number'],
@@ -37,6 +38,7 @@ class OfflineLoan extends ActiveRecord
             ['yield_rate', 'string', 'max' => 255],
             ['jixi_time', 'string', 'max' => 255],
             ['unit', 'string', 'max' => 20],
+            ['repaymentMethod', 'integer'],
         ];
     }
 
@@ -52,6 +54,7 @@ class OfflineLoan extends ActiveRecord
             'yield_rate' => '利率',
             'jixi_time' => '起息日',
             'finish_date' => '到期日',
+            'repaymentMethod' => '还款方式',
 
         ];
     }

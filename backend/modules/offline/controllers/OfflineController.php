@@ -12,14 +12,11 @@ use common\models\offline\OfflineRepayment;
 use common\models\offline\OfflineStats;
 use common\models\offline\OfflinePointManager;
 use common\models\offline\OfflineUser;
-use common\filters\MyReadFilter;
 use common\models\offline\OfflineUserManager;
-use common\models\order\OnlineOrder;
+use common\utils\ExcelUtils;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\data\Pagination;
-use PHPExcel_Reader_Excel2007;
-use PHPExcel_Reader_Excel5;
 use common\models\mall\PointRecord;
 
 class OfflineController extends BaseController
@@ -41,13 +38,16 @@ class OfflineController extends BaseController
             if (substr($filename, -4, 4) !== '.xls' && substr($filename, -5, 5) !== '.xlsx') {
                 $model->addError('excel', '上传的文件为非.xlsx或.xls文件');
             }
-            $filepath = $_FILES['ImportForm']['tmp_name']['excel'];
+            $filePath = $_FILES['ImportForm']['tmp_name']['excel'];
+            $arr = [];
             try {
-                $arr = $this->readExcelToArray($filepath);
+                $arr = ExcelUtils::readExcelToArray($filePath, 'M', 1002);
+                if (count($arr) > 1001) {
+                    $model->addError('excel', '数据必须小于1000行');
+                }
             } catch (\Exception $ex) {
                 $model->addError('excel', $ex->getMessage());
             }
-
             $db = Yii::$app->db;
             $transaction = $db->beginTransaction();
             if (!$model->hasErrors()) {
@@ -136,42 +136,6 @@ class OfflineController extends BaseController
     }
 
     /**
-     * excel的数据读取到二维数组中
-     *
-     * @param $filePath
-     * @return array
-     * @throws \Exception
-     */
-    private function readExcelToArray($filePath)
-    {
-        $filterSubset = new MyReadFilter(range('A', 'L'));
-        $PHPReader = new \PHPExcel_Reader_Excel2007(); // Reader很关键，用来读excel文件
-        if (!$PHPReader->canRead($filePath)) { // 这里是用Reader尝试去读文件，07不行用05，05不行就报错。
-            $PHPReader = new \PHPExcel_Reader_Excel5();
-            if (!$PHPReader->canRead($filePath)) {
-                throw new \Exception('读取文件错误');
-            }
-        }
-
-        $PHPReader->setReadFilter($filterSubset);
-        $PHPExcel = $PHPReader->load($filePath); // Reader读出来后，加载给Excel实例
-        $currentSheet = $PHPExcel->getSheet(0);
-        $row = $currentSheet->getHighestRow();
-        $max_read_line = MyReadFilter::MAX_READ_LINE;
-        if ($row > $max_read_line) {
-            throw new \Exception('该excel文件行数超出' . $max_read_line . '行');
-        }
-        //将J,K行日期转为php的'Y-m-d'
-        $k = 'K' . $row;
-        $l = 'L' . $row;
-        //excel在‘2016/7/12’识别该列时，日期格式的保持不变，非日期格式的识别为'07-12-06'，或者识别成float(42258),使用下面的是都可以转换成'2016-07-12'
-        $currentSheet->getStyle("K1:$k")->getNumberFormat()->setFormatCode('yyyy-mm-dd');
-        $currentSheet->getStyle("L1:$l")->getNumberFormat()->setFormatCode('yyyy-mm-dd');
-        $content = $currentSheet->toArray('', true, true);
-        return $content;
-    }
-
-    /**
      * 根据order数组，初始化一个新的OfflineOrder model
      *
      * @param $order
@@ -188,6 +152,7 @@ class OfflineController extends BaseController
         $loan = OfflineLoan::find()->where(['sn' => $order[2]])->one();
         $user = OfflineUser::find()->where(['idCard' => $order[5]])->one();
         $affiliator_id = null;
+        $loan_id = null;
         if (null !== $affiliator) {
             $affiliator_id = $affiliator->id;
         }
@@ -223,8 +188,9 @@ class OfflineController extends BaseController
         $model->accBankName = $order[7];
         $model->bankCardNo = $order[8];
         $model->money = $order[9];
-        $model->orderDate = $order[10];
-        $model->valueDate = $order[11];
+        $model->orderDate = (new \DateTime($order[10]))->format('Y-m-d');
+        $model->valueDate = (new \DateTime($order[11]))->format('Y-m-d');
+        $model->apr = bcdiv(rtrim($order[12], '%'), 100, 4);
         $model->created_at = time();
         $model->isDeleted = false;
         return $model;

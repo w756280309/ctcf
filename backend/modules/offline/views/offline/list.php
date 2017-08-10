@@ -109,6 +109,11 @@ $bid = (int)Yii::$app->request->get('bid');
                 </tr>
                 </thead>
                 <tbody>
+                <?php
+                /**
+                 * @var \common\models\offline\OfflineOrder $order
+                 */
+                ?>
                 <?php foreach ($orders as $key => $order) : ?>
                     <tr>
                         <td>
@@ -149,6 +154,9 @@ $bid = (int)Yii::$app->request->get('bid');
                         </td>
                         <td>
                             <?= null === $order->valueDate ? '--' : $order->valueDate ?>
+                        </td>
+                        <td>
+                            <?= empty($order->apr) ? '--' : bcmul($order->apr, 100, 2) . '%'?>
                         </td>
                         <td width="10%">
                             <?php if (null === $order->valueDate) { ?>

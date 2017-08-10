@@ -158,14 +158,22 @@ use common\utils\StringUtils;
                         }
                     ],
                     [
-                        'header' => '保全合同',
+                        'header' => '操作',
                         'format' => 'raw',
-                        'value' => function ($order) {
+                        'value' => function ($order) use ($loan) {
+                            $html = '';
                             if($order->getBaoquanDownloadLink()) {
-                                return "<a href=".$order->getBaoquanDownloadLink()." target='_blank'>下载</a>";
-                            }else {
-                                return '---';
+                                $html = "<a href=".$order->getBaoquanDownloadLink()." target='_blank'>下载保全合同</a> | ";
                             }
+
+                            if ($loan->is_jixi) {
+                                $html .= '<a href="/product/growth/letter?orderId='.$order->id.'&isOnline=1" target="_blank">打印确认函</a>';
+                            }
+                            rtrim($html, ' | ');
+                            if (empty($html)) {
+                                $html = '---';
+                            }
+                            return $html;
                         }
                     ],
                 ]

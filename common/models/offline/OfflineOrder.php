@@ -22,6 +22,7 @@ use common\models\affiliation\Affiliator;
  * @property string  $accBankName   开户行名称
  * @property string  $bankCardNo    银行卡号
  * @property string  $valueDate     起息日
+ * @property string  $apr           利率
  */
 class OfflineOrder extends ActiveRecord
 {
@@ -30,21 +31,22 @@ class OfflineOrder extends ActiveRecord
     {
         return [
             'confirm' => ['valueDate'],
-            'edit' => ['realName', 'accBankName', 'bankCardNo','mobile'],
-            'default' => ['affiliator_id', 'loan_id',  'mobile', 'money', 'orderDate', 'created_at', 'user_id', 'idCard', 'accBankName', 'bankCardNo'],
+            'edit' => ['realName', 'accBankName', 'bankCardNo','mobile', 'apr'],
+            'default' => ['affiliator_id', 'loan_id',  'mobile', 'money', 'orderDate', 'created_at', 'user_id', 'idCard', 'accBankName', 'bankCardNo', 'apr'],
         ];
     }
 
     public function rules()
     {
         return [
-            [['affiliator_id', 'loan_id', 'mobile', 'money', 'orderDate', 'created_at', 'user_id', 'idCard', 'accBankName', 'bankCardNo'], 'required'],
+            [['affiliator_id', 'loan_id', 'mobile', 'money', 'orderDate', 'created_at', 'user_id', 'idCard', 'accBankName', 'bankCardNo', 'apr'], 'required'],
             [['user_id', 'affiliator_id', 'loan_id', 'created_at'], 'integer'],
             [['realName', 'accBankName', 'bankCardNo','mobile'], 'required', 'on' => 'edit'],
             ['mobile', 'string', 'max' => 20],
             [['idCard', 'bankCardNo'], 'string', 'max' => 30],
             ['money', 'number'],
             [['orderDate', 'valueDate'], 'safe'],
+            ['apr', 'number', 'min' => '0.0001', 'max' => '1'],
         ];
     }
 
@@ -65,6 +67,7 @@ class OfflineOrder extends ActiveRecord
             'accBankName' => '开户行名称',
             'bankCardNo' => '银行卡号',
             'valueDate' => '起息日',
+            'apr' => '利率',
         ];
     }
 
