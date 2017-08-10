@@ -136,7 +136,6 @@ class AssetsController extends Controller
     public function actionList()
     {
         $query = $this->request->query;
-
         $userId = $query->getInt('user_id');
         $type = $query->getInt('type');
         $page = $query->getInt('page', 1);
@@ -158,7 +157,7 @@ class AssetsController extends Controller
                 $assetQuery->andWhere(['isRepaid' => true, 'isInvalid' => false]);
             }
 
-            $assets = $assetQuery->orderBy(['id' => SORT_DESC])->asArray()->all();
+            $assets = $assetQuery->asArray()->all();
 
             if (!empty($assets)) {
                 $loansId = ArrayHelper::getColumn($assets, 'loan_id');
@@ -171,7 +170,6 @@ class AssetsController extends Controller
                 } elseif (3 === $type) {
                     $loanQuery->andWhere(['status' => [5, 6]]); //查询已还清项目
                 }
-
                 $loans = $loanQuery->asArray()->all();
                 $loans = ArrayHelper::index($loans, 'id');
             }
@@ -181,6 +179,13 @@ class AssetsController extends Controller
                     $assetsData[$key] = $asset;
                     $assetsData[$key]['loan'] = $loans[$asset['loan_id']];
                 }
+            }
+            if (1 === $type) {
+                ArrayHelper::multisort($assetsData, function ($item) {
+                    return $item['loan']['finish_date'];
+                }, SORT_ASC);
+            } else {
+                ArrayHelper::multisort($assetsData, 'id', SORT_DESC);
             }
         }
 
