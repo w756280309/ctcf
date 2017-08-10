@@ -33,7 +33,9 @@ class SuperviseAccessFilter extends ActionFilter
         if (in_array($actionId, [
             'site/index',
             'licai/index',
-            'deal/deal/detail'
+            'deal/deal/detail',
+            'licai/notes',
+            'credit/note/detail',
         ])) {
             /**
              * @var Response $response
@@ -59,7 +61,9 @@ class SuperviseAccessFilter extends ActionFilter
         if (in_array($actionId, [
             'site/index',
             'deal/deal/index',
-            'deal/deal/detail'
+            'deal/deal/detail',
+            'licai/notes',
+            'credit/note/detail',
         ])) {
             /**
              * @var Response $response
