@@ -198,7 +198,8 @@ if (1 === $promoStatus) {
         }
 
         //登录
-        $('.btn_02').on('click',function() {
+        $('.btn_02').on('click',function(e) {
+            e.preventDefault();
             poptpl.popComponent({
                 popBackground:'url(<?= FE_BASE_URI ?>wap/campaigns/active20170731/images/pop_bg_01.png) no-repeat',
                 popBorder:0,
