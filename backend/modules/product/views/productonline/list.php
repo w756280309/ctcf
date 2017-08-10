@@ -96,6 +96,13 @@ $pc_cat = Yii::$app->params['pc_cat'];
                     <td>
                         <input id="sn" type="text" class="m-wrap span4" style="margin-bottom: 0px;width:200px" name='sn' value="<?= Yii::$app->request->get('sn') ?>"  placeholder="请输入序号"/>
                     </td>
+                    <td>
+                        <span class="title">发行方编号</span>
+                    </td>
+                    <td>
+                        <input id="sn" type="text" class="m-wrap span4" style="margin-bottom: 0px;width:200px" name='issuerSn' value="<?= Yii::$app->request->get('issuerSn') ?>"  placeholder="请输入发行方编号"/>
+                    </td>
+                    <td></td>
                 </tr>
                 </tbody>
             </table>

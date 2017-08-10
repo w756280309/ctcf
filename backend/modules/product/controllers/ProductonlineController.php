@@ -502,7 +502,9 @@ class ProductonlineController extends BaseController
         $isTest = isset($request['isTest']) ? $request['isTest'] : Yii::$app->request->cookies->getValue('loanListFilterIsTest', 0);
         $days = isset($request['days']) ? $request['days'] : '';
         $requireIsHide = isset($request['isHide']) && $request['isHide'];
+        $issuerSn = $request['issuerSn'];
         $op = OnlineProduct::tableName();
+
         $data = OnlineProduct::find()
             ->select("$op.*")
             ->addSelect(['xs_status' => "if(`is_xs` = 1 && $op.`status` < 3, 1, 0)"])
@@ -547,6 +549,10 @@ class ProductonlineController extends BaseController
         $data->andWhere(['isTest' => $isTest]);
         if ($isTest) {
             Yii::$app->response->cookies->add(new Cookie(['name' => 'loanListFilterIsTest', 'value' => 1, 'expire' => strtotime('next year'), 'httpOnly' => false]));
+        }
+        //根据发行方编号筛选标的
+        if (!empty($issuerSn)) {
+            $data->andWhere(['issuerSn' => $issuerSn]);
         }
 
         if (!empty($days)) {
