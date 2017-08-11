@@ -163,11 +163,11 @@ use common\utils\StringUtils;
                         'value' => function ($order) use ($loan) {
                             $html = '';
                             if($order->getBaoquanDownloadLink()) {
-                                $html = "<a href=".$order->getBaoquanDownloadLink()." target='_blank'>下载保全合同</a> | ";
+                                $html = "<a href=".$order->getBaoquanDownloadLink()." target='_blank' class='btn mini green'>下载保全合同</a> | ";
                             }
 
                             if ($loan->is_jixi) {
-                                $html .= '<a href="/product/growth/letter?orderId='.$order->id.'&isOnline=1" target="_blank">打印确认函</a>';
+                                $html .= '<a href="/product/growth/letter?orderId='.$order->id.'&isOnline=1" target="_blank" class="btn mini green">打印确认函</a>';
                             }
                             rtrim($html, ' | ');
                             if (empty($html)) {

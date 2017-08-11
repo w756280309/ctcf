@@ -137,7 +137,7 @@ use yii\helpers\Html;
 
                             },
                             'letter' => function ($irl, $model, $key) {
-                                return "<a href='/product/growth/letter?loanId=".$model->id."&isOnline=0' class='btn green' target='_blank'>打印确认函</a>";
+                                return "<a href='/product/growth/letter?loanId=".$model->id."&isOnline=0' class='btn mini green' target='_blank'>打印确认函</a>";
                             }
                         ],
                     ],
