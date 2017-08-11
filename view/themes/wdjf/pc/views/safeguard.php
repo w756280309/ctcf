@@ -5,7 +5,7 @@ $this->extraKeywords = '平台安全';
 
 ?>
 
-<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/safeguard.css?v=170106">
+<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/safeguard.css?v=170811">
 
 <div class="safeguard-box clearfix">
     <div class="safeguard-banner">
