@@ -79,6 +79,13 @@ use yii\widgets\ActiveForm;
                     <?= $form->field($model, 'bankCardNo', ['template' => '{error}']); ?>
                 </div>
             </div>
+            <div class="control-group">
+                <label class="control-label">利率</label>
+                <div class="controls">
+                    <?= $form->field($model, 'apr', ['template' => '{input}', 'inputOptions' => ['autocomplete' => "off", 'class' => 'm-wrap span4', 'placeholder' => '']])->textInput() ?>
+                    <?= $form->field($model, 'apr', ['template' => '{error}']); ?>
+                </div>
+            </div>
 
             <div class="form-actions">
                 <button type="button" class="btn blue" id="submit_btn"><i class="icon-ok"></i> 提交</button>

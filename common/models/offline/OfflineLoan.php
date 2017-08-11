@@ -12,6 +12,7 @@ use yii\db\ActiveRecord;
  * @property string  $expires 项目期限
  * @property string  $unit    期限单位:天/月
  * @property int     $repaymentMethod   还款方式
+ * @property string  $jixi_time 计息日
  */
 class OfflineLoan extends ActiveRecord
 {

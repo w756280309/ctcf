@@ -188,8 +188,8 @@ class OfflineController extends BaseController
         $model->accBankName = $order[7];
         $model->bankCardNo = $order[8];
         $model->money = $order[9];
-        $model->orderDate = (new \DateTime($order[10]))->format('Y-m-d');
-        $model->valueDate = (new \DateTime($order[11]))->format('Y-m-d');
+        $model->orderDate = !empty($order[10])?(new \DateTime($order[10]))->format('Y-m-d') : null;
+        $model->valueDate = !empty($order[11]) ? (new \DateTime($order[11]))->format('Y-m-d') : null;
         $model->apr = bcdiv(rtrim($order[12], '%'), 100, 4);
         $model->created_at = time();
         $model->isDeleted = false;

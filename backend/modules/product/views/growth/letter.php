@@ -92,8 +92,8 @@ if ($count > 0) {
                     <li style="text-indent: 1.5em;">您于<?= (new DateTime($value['orderDate']))->format('Y年m月d日')?>认购了“<?= $value['title']?>”产品，认购信息如下：</li>
                     <li>认购者姓名：<?= $value['userName']?></li>
                     <li>认购者身份证号：<?= $value['idcard']?></li>
-                    <li>产品成立日：<?= (new DateTime($value['startDate']))->format('Y年m月d日')?></li>
                     <li>资金起息日：<?= (new DateTime($value['startDate']))->format('Y年m月d日')?></li>
+                    <li>产品成立日：<?= (new DateTime($value['startDate']))->format('Y年m月d日')?></li>
                     <li>产品到期日：<?= (new DateTime($value['endDate']))->format('Y年m月d日')?></li>
                     <li>期限：<?= $value['duration']?></li>
                     <li>认购金额：<?= \common\utils\StringUtils::numToRmb($value['orderMoney'])?>人民币（<?= number_format($value['orderMoney'], 2)?>元人民币）</li>
