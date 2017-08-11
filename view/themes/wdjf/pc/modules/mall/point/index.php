@@ -48,7 +48,11 @@ $this->registerCssFile(ASSETS_BASE_URI.'css/pagination.css', ['depends' => Front
         <ul class="detail_content">
             <?php foreach ($points as $point) { ?>
                 <li class="items">
-                    <div class="head1 lf"><?= $point->getTypeName($point->ref_type) ?></div>
+                    <div class="head1 lf"><?php if ($point->ref_type == 'point_fa_fang' || $point->ref_type == 'point_batch') {
+                            echo $point->remark;
+                        } else {
+                            echo $point->getTypeName($point->ref_type);
+                        } ?></div>
                     <div class="head2 lf"><?= $point->recordTime ?></div>
                     <div class="head3 lf <?= $point->decr_points ? 'point_b' : 'point_a' ?>"><?= $point->getDelta() > 0 ? '+' . $point->getDelta() : $point->getDelta() ?></div>
                     <div class="head4 lf"><?= StringUtils::amountFormat2($point->final_points) ?></div>

@@ -69,6 +69,7 @@ $isPersonal = $category === User::USER_TYPE_PERSONAL;
                         <a href="/user/user/edit?id=<?= $val['id'] ?>&type=<?= $category ?>" ><span class="label label-success"><i class="icon-edit"></i> 编辑</span></a>
                         <a href="/user/user/detail?id=<?= $val['id'] ?>" ><span class="label label-success"><i class="icon-edit"></i> 查看用户详情</span></a>
                     <?php } ?>
+                    | <a href="/user/point/add?userId=<?= $val['id'] ?>&backUrl=<?= '/user/user/listt' ?>"><span class="label label-success">给积分</span></a>
                 </center>
                 </td>
             </tr>

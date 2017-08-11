@@ -13,7 +13,11 @@ foreach ($points as $point) {
         <div class="col-xs-1"></div>
         <div class="col-xs-10">
             <div class="col-xs-6 lf">
-                <p  class="way"><?= $point->getTypeName($point->ref_type) ?></p>
+                <p  class="way"><?php if ($point->ref_type == 'point_fa_fang' || $point->ref_type == 'point_batch') {
+                        echo $point->remark;
+                    } else {
+                        echo $point->getTypeName($point->ref_type);
+                    } ?>
                 <p class="revenue">当前积分：
                     <span><?= StringUtils::amountFormat2($point->final_points) ?></span>
                 </p>

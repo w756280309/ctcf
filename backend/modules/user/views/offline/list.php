@@ -80,6 +80,7 @@ $this->title = '线下会员列表';
                         <td>
                             <center>
                                 <a href="/user/offline/detail?id=<?= $user->id ?>" class="btn mini green"><i class="icon-edit"></i> 查看用户详情</a>
+                                |<a href="/user/point/add?userId=<?= $user->id ?>&isOffline=1&backUrl=<?= '/user/offline/list' ?>"" class="btn mini green"> 给积分</a>
                             </center>
                         </td>
                     </tr>

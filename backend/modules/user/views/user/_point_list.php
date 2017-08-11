@@ -68,10 +68,10 @@ use yii\grid\GridView;
                 'label' => '积分数额',
                 'format' => 'html',
                 'value' => function($data) {
-                    if ($data->incr_points) {
-                        return '<span class="red">+'.StringUtils::amountFormat2($data->incr_points).'</span>';
+                    if ($data->incr_points > 0) {
+                        return '<span class="green">+'.StringUtils::amountFormat2($data->incr_points).'</span>';
                     } else {
-                        return '<span class="green">-'.StringUtils::amountFormat2($data->decr_points).'</span>';
+                        return '<span class="red">-'.StringUtils::amountFormat2($data->decr_points).'</span>';
                     }
                 },
                 'contentOptions' => ['class' => 'money'],
