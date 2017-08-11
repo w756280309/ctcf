@@ -105,6 +105,7 @@ $bid = (int)Yii::$app->request->get('bid');
                     <th class="money">认购金额（万）</th>
                     <th>认购日期</th>
                     <th>起息日期</th>
+                    <th>利率</th>
                     <th>操作</th>
                 </tr>
                 </thead>

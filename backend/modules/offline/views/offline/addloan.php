@@ -73,6 +73,13 @@ $this->registerJsFile('/vendor/kindeditor/4.1.11/plugins/code/prettify.js', ['de
                 </div>
             </div>
             <div class="control-group">
+                <label class="control-label">还款方式</label>
+                <div class="controls">
+                    <?= $form->field($model, 'repaymentMethod',['template' => '{input}', 'inputOptions' => ['autocomplete' => "off", 'class' => 'm-wrap span2   ', 'placeholder' => '']])->dropDownList(Yii::$app->params['refund_method'],['prompt'=>'请选择']) ?>
+                    <?= $form->field($model, 'repaymentMethod', ['template' => '{error}']); ?>
+                </div>
+            </div>
+            <div class="control-group">
                 <label class="control-label">期限单位</label>
                 <div class="controls">
                     <?= $form->field($model, 'unit',['template' => '{input}', 'inputOptions' => ['autocomplete' => "off", 'class' => 'm-wrap span4', 'placeholder' => '']])->dropDownList(['天'=>'天','个月'=>'个月'],['prompt'=>'请选择','style'=>'width:120px']) ?>
