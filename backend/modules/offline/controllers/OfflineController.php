@@ -210,7 +210,7 @@ class OfflineController extends BaseController
                 $order->isDeleted = true;
                 //修改标的修改记录
                 $log = AdminLog::initNew($order);
-                if ($order->save() && $log->save(false)) {
+                if ($order->save(false) && $log->save(false)) {
                     //如果存在计息日，才需要更新积分和累计年化投资额
                     if (false !== strtotime($order->valueDate)) {
                         //更新积分和累计年化投资额
