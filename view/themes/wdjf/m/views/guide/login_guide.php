@@ -58,7 +58,7 @@ $this->registerJs('forceReload_V2();');
 
                 <div>
                     <p class="des">股东背景</p>
-                    <img class="media-img" src="<?= FE_BASE_URI ?>wap/guide/images/media.png" alt="">
+                    <img class="media-img" src="<?= FE_BASE_URI ?>wap/guide/images/media_new.png" alt="">
                 </div>
 
                 <div>

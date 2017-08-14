@@ -261,7 +261,7 @@ $this->registerJsFile(ASSETS_BASE_URI . 'js/swiper.min.js', ['depends' => Jquery
             <p class="f15">股东背景</p>
             <ul>
                 <li></li>
-                <li><img data-original="<?= FE_BASE_URI ?>wap/index/images/shareholde_01_new.png" alt=""><img data-original="<?= FE_BASE_URI ?>wap/index/images/shareholde_02.png" alt=""></li>
+                <li><img data-original="<?= FE_BASE_URI ?>wap/index/images/shareholde_02.png" alt=""><img data-original="<?= FE_BASE_URI ?>wap/index/images/shareholde_01_new.png" alt=""></li>
             </ul>
         </div>
 
