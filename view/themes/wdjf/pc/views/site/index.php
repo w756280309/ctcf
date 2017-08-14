@@ -351,7 +351,7 @@ JSFILE
             <img src="<?= ASSETS_BASE_URI ?>images/logo1.png" alt="">
         </div>
         <div class="background-right">
-            <img src="<?= ASSETS_BASE_URI ?>images/logo2.png" alt="">
+            <img src="<?= ASSETS_BASE_URI ?>images/logo2-new.png" alt="">
         </div>
     </div>
 </div>
