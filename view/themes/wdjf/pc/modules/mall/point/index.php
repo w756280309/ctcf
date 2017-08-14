@@ -12,7 +12,15 @@ $this->registerCssFile(FE_BASE_URI.'pc/my_point/css/index.css?v=1.0', ['depends'
 $this->registerCssFile(ASSETS_BASE_URI.'css/pagination.css', ['depends' => FrontAsset::class]);
 
 ?>
-
+<style>
+    .ellipse {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        padding: 0 5px;
+        width: 13%!important;
+    }
+</style>
 <div class="my_point">
     <ul class="my_point_top">
         <li class="top_left">
@@ -48,7 +56,7 @@ $this->registerCssFile(ASSETS_BASE_URI.'css/pagination.css', ['depends' => Front
         <ul class="detail_content">
             <?php foreach ($points as $point) { ?>
                 <li class="items">
-                    <div class="head1 lf"><?php if ($point->ref_type == 'point_fa_fang' || $point->ref_type == 'point_batch') {
+                    <div class="head1 lf ellipse"><?php if ($point->ref_type == 'point_fa_fang' || $point->ref_type == 'point_batch') {
                             echo $point->remark;
                         } else {
                             echo $point->getTypeName($point->ref_type);
