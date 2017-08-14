@@ -228,9 +228,11 @@ class RepaymentController extends BaseController
                 if ('1' !== $orgResp->get('account_state')) {
                     return ['result' => 0, 'message' => '当前联动端商户状态异常'];
                 }
-
-                if (-1 === bccomp($orgResp->get('balance'), $total_repayment * 100)) {
-                    return ['result' => 0, 'message' => '当前联动端商户余额不足'];
+                //没有还款时候才需要判断融资方信息
+                if (!$repayment->isRefunded) {
+                    if (-1 === bccomp($orgResp->get('balance'), $total_repayment * 100)) {
+                        return ['result' => 0, 'message' => '当前联动端商户余额不足'];
+                    }
                 }
             } else {
                 return ['result' => 0, 'message' => $orgResp->get('ret_msg')];
