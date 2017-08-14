@@ -217,7 +217,7 @@ class RepaymentController extends BaseController
         $total_repayment = $bcround->bcround($totalFund, 2);
         $balance = $bcround->bcround(bcsub($saleac->available_balance, $total_repayment), 2);
 
-        if (!$repayment->isRefunded && 0 >= bccomp($balance, 0)) {
+        if (!$repayment->isRepaid && 0 >= bccomp($balance, 0)) {
             return ['result' => 0, 'message' => '融资用户账户余额不足'];
         }
         //当不允许访问联动时候，默认联动测处理成功
@@ -229,7 +229,7 @@ class RepaymentController extends BaseController
                     return ['result' => 0, 'message' => '当前联动端商户状态异常'];
                 }
                 //没有还款时候才需要判断融资方信息
-                if (!$repayment->isRefunded) {
+                if (!$repayment->isRepaid) {
                     if (-1 === bccomp($orgResp->get('balance'), $total_repayment * 100)) {
                         return ['result' => 0, 'message' => '当前联动端商户余额不足'];
                     }
