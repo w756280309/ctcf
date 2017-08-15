@@ -74,7 +74,7 @@ class GrowthController extends BaseController
                     'orderDate' => $order->orderDate,
                     'title' => $loan->title,
                     'idcard' => $user->idCard,
-                    'startDate' => (new \DateTime($loan->jixi_time))->format('Y-m-d'),
+                    'startDate' => (new \DateTime($order->valueDate))->format('Y-m-d'),
                     'endDate' => (new \DateTime($loan->finish_date))->format('Y-m-d'),
                     'duration' => $loan->expires.$loan->unit,
                     'orderMoney' => bcmul($order->money, 10000, 2),
