@@ -564,7 +564,13 @@ class ProductonlineController extends BaseController
         }
 
         $_data = clone $data;
-        $data->orderBy('xs_status desc, isrecommended desc, online_status asc, product_status asc,effect_jixi_time desc, sn desc');
+        //收益中的标的能够按照满标时间降序排列（最新时间在最前面）
+        if ($requestStatus == 5) {
+            $data->orderBy('full_time desc, xs_status desc, isrecommended desc, online_status asc, product_status asc,effect_jixi_time desc, sn desc');
+        } else {
+            $data->orderBy('xs_status desc, isrecommended desc, online_status asc, product_status asc,effect_jixi_time desc, sn desc');
+
+        }
         $pages = new Pagination(['totalCount' => $_data->count(), 'pageSize' => '20']);
         $model = $data->offset($pages->offset)->limit($pages->limit)->all();
 
