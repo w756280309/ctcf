@@ -143,8 +143,16 @@ $taps = date('Y-m-d') >= '2017-05-01' && date('Y-m-d') <= '2017-05-31';
                 if (data.coupon) {
                     $('#pomp-coupon').html('和<span>'+WDJF.numberFormat(data.coupon, true)+'</span>元代金券');
                 }
+                nr = '<p class="pomp-points">'+(data.points - data.extraPoints - data.promo);
                 if (data.extraPoints) {
-                    $('.pomp .pomp-points').after('<p class="pomp-points">'+(data.points - data.extraPoints)+'+<span>'+WDJF.numberFormat(data.extraPoints, true)+'</span>积分（老用户回归）</p>');
+                    nr += '+<span>'+WDJF.numberFormat(data.extraPoints, true)+'</span>（老用户回归)';
+                }
+                if (data.promo) {
+                    nr += '+<span>'+WDJF.numberFormat(data.promo, true)+'</span>(活动奖励)';
+                }
+                nr += '</p>';
+                if (data.extraPoints || data.promo) {
+                    $('.pomp .pomp-points').after(nr);
                 }
                 WDJF.touchmove(false);
                 $('.mask, .pomp').show();
