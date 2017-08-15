@@ -154,14 +154,14 @@ class CheckinController extends BaseController
                 }
             }
             $points = $check->points + $extraPoints;
-            if ($other_point && $other_point->incr_points > 0) {
-                $points += $other_point->incr_points;
+            if (!is_null($other_point) && $other_point->incr_points > 0) {
+                $points +=  $other_point->incr_points;
             }
             $res = [
                 'streak' => $check->streak,
                 'points' => $points,
                 'coupon' => $check->couponType ? $check->couponType->amount : 0,
-                'promo' => $other_point->incr_points ?: 0,
+                'promo' => !is_null($other_point) ? $other_point->incr_points : 0,
                 'extraPoints' => $extraPoints,
             ];
         } else {
