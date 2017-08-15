@@ -6,6 +6,7 @@ use app\controllers\BaseController;
 use common\models\code\Voucher;
 use common\models\mall\PointRecord;
 use common\models\promo\PromoService;
+use common\models\promo\Reward;
 use common\models\thirdparty\SocialConnect;
 use common\models\user\CheckIn;
 use common\models\user\User;
@@ -146,10 +147,19 @@ class CheckinController extends BaseController
                     PromoService::doAfterCheckIn($check);
                 } catch (\Exception $ex) {
                 }
+                //查看奖励金天天领
+                $reward = Reward::findOne(['sn' => '1708_points_5']);
+                if ($reward && $reward->id) {
+                    $other_point = PointRecord::find()->where(['user_id' => $user->id, 'ref_type' => PointRecord::TYPE_PROMO, 'ref_id' => $reward->id])->andwhere(['>', 'recordTime', date('Y-m-d')])->one();
+                }
+            }
+            $points = $check->points + $extraPoints;
+            if ($other_point && $other_point->incr_points > 0) {
+                $points .= '+' . $other_point->incr_points;
             }
             $res = [
                 'streak' => $check->streak,
-                'points' => $check->points + $extraPoints,
+                'points' => $points,
                 'coupon' => $check->couponType ? $check->couponType->amount : 0,
                 'extraPoints' => $extraPoints,
             ];
@@ -160,8 +170,8 @@ class CheckinController extends BaseController
                 'message' => '签到失败, 请稍后重试!',
             ];
         }
-
         return $res;
+
     }
 
     /**
