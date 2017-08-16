@@ -145,7 +145,7 @@ $taps = date('Y-m-d') >= '2017-05-01' && date('Y-m-d') <= '2017-05-31';
                 }
                 nr = '<p class="pomp-points">'+(data.points - data.extraPoints - data.promo);
                 if (data.extraPoints) {
-                    nr += '+<span>'+WDJF.numberFormat(data.extraPoints, true)+'</span>（老用户回归)';
+                    nr += '+<span>'+WDJF.numberFormat(data.extraPoints, true)+'</span>(老用户回归)<br>';
                 }
                 if (data.promo) {
                     nr += '+<span>'+WDJF.numberFormat(data.promo, true)+'</span>(活动奖励)';
