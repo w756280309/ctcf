@@ -29,12 +29,22 @@ use common\utils\StringUtils;
     </div>
 
     <div align="center">
-        <table width="90%">
+        <table class="table">
             <tr>
-                <td width="15%"><strong>标的名称</strong></td>
-                <td width="35%"><?= $loan->title ?></td>
-                <td width="20%"><strong>标的账户余额(联动)</strong></td>
-                <td width="30%"><?= StringUtils::amountFormat2($balance) ?>元</td>
+                <td><strong>标的名称</strong></td>
+                <td><?= $loan->title ?></td>
+                <td><strong>标的账户余额(联动)</strong></td>
+                <td><?= StringUtils::amountFormat2($balance) ?>元</td>
+                <td><strong>募集金额</strong></td>
+                <td><?= StringUtils::amountFormat2($loan->funded_money)?></td>
+            </tr>
+            <tr>
+                <td><strong>用户实际支付金额</strong></td>
+                <td><?= StringUtils::amountFormat2($paymentAmount)?></td>
+                <td><strong>代金券金额</strong></td>
+                <td><?= StringUtils::amountFormat2($couponAmount)?></td>
+                <td><strong>是否已贴现</strong></td>
+                <td><?= $couponTransfer ? '是' : '否'?></td>
             </tr>
         </table>
     </div>

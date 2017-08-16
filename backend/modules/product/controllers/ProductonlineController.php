@@ -12,6 +12,7 @@ use common\models\contract\ContractTemplate;
 use common\models\order\EbaoQuan;
 use common\models\order\OnlineOrder;
 use common\models\order\OnlineRepaymentPlan;
+use common\models\payment\PaymentLog;
 use common\models\payment\Repayment;
 use common\models\product\Issuer;
 use common\models\product\OnlineProduct;
@@ -150,7 +151,11 @@ class ProductonlineController extends BaseController
     public function actionShow($id)
     {
         $loan = $this->findOr404(OnlineProduct::class, $id);
+        $query = OnlineOrder::find()->where(['status' => 1, 'online_pid' => $loan->id]);
+        $couponAmount = $query->sum('couponAmount');
+        $paymentAmount = $query->sum('paymentAmount');
         $umpResp = Yii::$container->get('ump')->getLoanInfo($loan->id);
+        $couponTransfer = $loan->isCouponAmountTransferred();
 
         if ($umpResp->isSuccessful()) {
             $balance = bcdiv($umpResp->get('balance'), 100, 2);
@@ -161,6 +166,9 @@ class ProductonlineController extends BaseController
         return $this->render('show', [
             'loan' => $loan,
             'balance' => $balance,
+            'couponAmount' => $couponAmount,
+            'paymentAmount' => $paymentAmount,
+            'couponTransfer' => $couponTransfer,
         ]);
     }
 

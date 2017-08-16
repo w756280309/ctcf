@@ -580,13 +580,16 @@ class RepaymentController extends BaseController
     private function loanToMer(OnlineFangkuan $fk, OnlineProduct $product)
     {
         if (OnlineFangkuan::STATUS_EXAMINED === $fk->status) {
-            $payLog = PaymentLog::findOne(['loan_id' => $product->id]);
+            //没有贴现过才会进行贴现
+            if (!$product->isCouponAmountTransferred()) {
+                $payLog = PaymentLog::findOne(['loan_id' => $product->id]);
 
-            //当不允许访问联动时候，默认联动处理成功
-            if ($payLog && Yii::$app->params['ump_uat']) {
-                $ret = Yii::$container->get('ump')->merOrder($payLog);
-                if (!$ret->isSuccessful()) {
-                    throw new \Exception('联动一侧：'.$ret->get('ret_msg'));
+                //当不允许访问联动时候，默认联动处理成功
+                if ($payLog && Yii::$app->params['ump_uat']) {
+                    $ret = Yii::$container->get('ump')->merOrder($payLog);
+                    if (!$ret->isSuccessful()) {
+                        throw new \Exception('联动一侧：'.$ret->get('ret_msg'));
+                    }
                 }
             }
 

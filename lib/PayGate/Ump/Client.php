@@ -530,6 +530,19 @@ class Client
         return $this->doRequest($data);
     }
 
+    //查询贴现状态
+    public function getCouponTransferInfo(PaymentTxInterface $payment)
+    {
+        $data = [
+            'service' => 'transfer_search',
+            'order_id' => $payment->getTxSn(),
+            'mer_date' => date('Ymd', $payment->getTxDate()),
+            'busi_type' => '03',
+        ];
+
+        return $this->doRequest($data);
+    }
+
     /**
      * 4.3.3 标的转账【由标的账户转到借款人同步请求】.
      *

@@ -5,6 +5,7 @@ namespace common\models\product;
 use common\lib\product\ProductProcessor;
 use common\models\order\OnlineFangkuan;
 use common\models\order\OnlineOrder;
+use common\models\payment\PaymentLog;
 use common\models\user\MoneyRecord;
 use common\models\user\User;
 use P2pl\Borrower;
@@ -1192,5 +1193,20 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
     public function getRefundMethod()
     {
         return intval($this->refund_method);
+    }
+
+    //获取贴现状态
+    public function isCouponAmountTransferred()
+    {
+        $paymentLog = PaymentLog::findOne(['loan_id' => $this->id]);
+        $couponTransfer = false;
+        if (!is_null($paymentLog)) {
+            $umpResp = Yii::$container->get('ump')->getCouponTransferInfo($paymentLog);
+            if ($umpResp->get('ret_code') === '0000') {
+                $couponTransfer = true;
+            }
+        }
+
+        return $couponTransfer;
     }
 }
