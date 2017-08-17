@@ -40,7 +40,7 @@ use yii\captcha\Captcha;
                 <input id="iphone" name="SignupForm[phone]" type="tel" value="<?= $mobile ?>" maxlength="11" placeholder="请输入手机号">
             </div>
             <div class="piccode">
-                <input id="captchaform-captchacode" name="SignupForm[captchaCode]" maxlength="4" type="text" placeholder="请输入图形验证码" AUTOCOMPLETE="off">
+                <input id="captchaform-captchacode" name="SignupForm[captchaCode]" maxlength="4" type="tel" placeholder="请输入图形验证码" AUTOCOMPLETE="off">
                 <?=
                     $form->field($captcha, 'captchaCode', [
                         'template' => '{input}',
