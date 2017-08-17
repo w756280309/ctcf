@@ -23,7 +23,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <input id="iphone" class="login-info" name="SignupForm[phone]" maxlength="11" type="tel" placeholder="请输入手机号">
         <div class="row sm-height border-bottom" style="line-height: 47px;">
             <div class="col-xs-8 col">
-                <input id="captchaform-captchacode" class="login-info" type="text" name="SignupForm[captchaCode]" maxlength="4" placeholder="请输入图形验证码" autocomplete="off">
+                <input id="captchaform-captchacode" class="login-info" type="tel" name="SignupForm[captchaCode]" maxlength="4" placeholder="请输入图形验证码" autocomplete="off">
             </div>
             <div class="col-xs-4 yz-code text-align-rg col" style="height:51px;background: #fff; overflow: hidden;" >
                 <?=

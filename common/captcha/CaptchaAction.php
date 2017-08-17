@@ -13,8 +13,30 @@ class CaptchaAction extends BaseAction
     protected function renderImage($code)
     {
         $builder = new CaptchaBuilder($code);
+        $builder->setMaxBehindLines(1);
+        $builder->setMaxFrontLines(1);
         $builder->build($this->width, $this->height);
         return $builder->get();
+    }
+
+    protected function generateVerifyCode()
+    {
+        if ($this->minLength > $this->maxLength) {
+            $this->maxLength = $this->minLength;
+        }
+        if ($this->minLength < 3) {
+            $this->minLength = 3;
+        }
+        if ($this->maxLength > 20) {
+            $this->maxLength = 20;
+        }
+        $length = mt_rand($this->minLength, $this->maxLength);
+        $code = '';
+        for ($i = 0; $i < $length; ++$i) {
+            $code .= mt_rand(0, 9);
+        }
+
+        return $code;
     }
 
     public function run()

@@ -52,7 +52,7 @@ $this->registerJsFile(FE_BASE_URI.'wap/luodiye/js/luodiye.js?v=20170413-v', ['de
                     <div class="clear"></div>
                 </div>
                 <div class="text-box">
-                    <input id="captchaform-captchacode" class="login-info text-single" type="text" name="SignupForm[captchaCode]" maxlength="4" placeholder="请输入图形验证码" AUTOCOMPLETE="off">
+                    <input id="captchaform-captchacode" class="login-info text-single" type="tel" name="SignupForm[captchaCode]" maxlength="4" placeholder="请输入图形验证码" AUTOCOMPLETE="off">
                     <?= $form->field($captcha, 'captchaCode', ['template' => '{input}'])->label(false)->widget(Captcha::className(), ['template' => '{image}', 'imageOptions' => ['class' => 'varify-img'], 'captchaAction' => '/site/captcha']) ?>
                     <div class="clear"></div>
                 </div>
