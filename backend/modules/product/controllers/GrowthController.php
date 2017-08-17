@@ -45,8 +45,9 @@ class GrowthController extends BaseController
                 'orderDate' => $order->getOrderDate(),
                 'title' => $loan->title,
                 'idcard' => $user->getIdNo(),
-                'startDate' => $loan->getStartDate(),
-                'endDate' => $loan->getEndDate(),
+                'startDate' => new \DateTime($loan->getStartDate()),//起息日
+                'fullDate' => new \DateTime($loan->getStartDate()),//成立日
+                'endDate' => new \DateTime($loan->getEndDate()),
                 'duration' => $duration['value'].$duration['unit'],
                 'orderMoney' => $order->order_money,
                 'rate' => bcmul($order->yield_rate, 100, 2) . '%',
@@ -74,8 +75,9 @@ class GrowthController extends BaseController
                     'orderDate' => $order->orderDate,
                     'title' => $loan->title,
                     'idcard' => $user->idCard,
-                    'startDate' => (new \DateTime($order->valueDate))->format('Y-m-d'),
-                    'endDate' => (new \DateTime($loan->finish_date))->format('Y-m-d'),
+                    'startDate' => (new \DateTime($order->valueDate)),//起息日
+                    'fullDate' => (new \DateTime($loan->jixi_time)),//成立日
+                    'endDate' => (new \DateTime($loan->finish_date)),
                     'duration' => $loan->expires.$loan->unit,
                     'orderMoney' => bcmul($order->money, 10000, 2),
                     'rate' => bcmul($order->apr, 100, 2) . '%',
