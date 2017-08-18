@@ -20,6 +20,8 @@ use common\lib\bchelp\BcRound;
  * @property string $out_sum
  * @property string $create_at
  * @property string $updated_at
+ * @property string $investment_balance
+ * @property string $profit_balance
  */
 class UserAccount extends \yii\db\ActiveRecord
 {

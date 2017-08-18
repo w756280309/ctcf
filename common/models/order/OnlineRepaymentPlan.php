@@ -25,6 +25,7 @@ use Yii;
  * @property int $uid
  * @property int $order_id
  * @property int $online_pid
+ * @property string $sn
  */
 class OnlineRepaymentPlan extends \yii\db\ActiveRecord
 {

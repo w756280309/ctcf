@@ -1,14 +1,19 @@
 <?php
 namespace console\controllers;
 
+use common\models\order\OnlineOrder;
 use common\models\order\OnlineRepaymentPlan;
+use common\models\order\OnlineRepaymentRecord;
 use common\models\payment\Repayment;
 use common\models\product\OnlineProduct;
 use common\models\user\MoneyRecord;
 use common\models\promo\Award;
 use common\models\sms\SmsMessage;
 use common\models\user\User;
+use common\models\user\UserAccount;
 use wap\modules\promotion\models\RankingPromo;
+use Wcg\Math\Bc;
+use Yii;
 use yii\console\Controller;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Console;
@@ -356,5 +361,137 @@ ORDER BY p.id ASC , rp.order_id ASC , IF( rp.asset_id, rp.asset_id, rp.uid ) ASC
         if ($run) {
             $this->stdout("总共成功修复 $successCount 条数据 \n");
         }
+    }
+
+    /**
+     *  临时代码：修复还款数据，联动已经支付，但是温都未同步状态
+     * php yii test/refund
+     *
+     * @param  int  $loanId     还款计划ID
+     * @param  string   $date   实际支付日期
+     */
+    public function actionRefund($planId, $date = null)
+    {
+        /**
+         * @var OnlineRepaymentPlan $plan
+         * @var OnlineProduct $loan
+         * @var OnlineOrder
+         * @var OnlineRepaymentRecord $record
+         */
+        $plan = OnlineRepaymentPlan::findOne($planId);
+        if (is_null($plan)) {
+            throw new \Exception('没有找到还款计划');
+        }
+
+        if (in_array($plan->status, [OnlineRepaymentPlan::STATUS_YIHUAN, OnlineRepaymentPlan::STATUS_TIQIAM])) {
+            throw new \Exception('温都状态已经是已还');
+        }
+        $loan = $plan->loan;
+        if (empty($date)) {
+            $record = OnlineRepaymentRecord::find()
+                ->where(['online_pid' => $loan->id, 'qishu' => $plan->qishu])
+                ->orderBy(['id' => SORT_DESC])
+                ->one();
+            if (is_null($record)) {
+                throw new \Exception('未提供还款时间，未找到此标的同期还款时间');
+            }
+            $time = $record->refund_time;
+        } else {
+            $time = strtotime($date);
+        }
+        $today = date('Y-m-d');
+        $days = $loan->getHoldingDays($today);
+
+        $umpResp = Yii::$container->get('ump')->getTradeInfo($plan->sn, $time, '03');
+        if ($umpResp->get('ret_code') !== '0000') {
+            throw new \Exception('联动未成功支付, 联动支付状态妈:'.$umpResp->get('ret_code'));
+        }
+
+        if (!$loan->isAmortized()
+            && $loan->is_jixi
+            && $today >= date('Y-m-d', $loan->jixi_time)
+            && $today < date('Y-m-d', $loan->finish_date)
+        ) {
+            $isRefreshCalcLiXi = true;
+        } else {
+            $isRefreshCalcLiXi = false;
+        }
+        if ($isRefreshCalcLiXi) {
+            $plan->lixi = max(0.01, Bc::round(bcdiv(bcmul($days, $plan->lixi), $loan->expires), 2));//更新还款计划的利息
+            $plan->benxi = bcadd($plan->benjin, $plan->lixi);//更新还款计划的本息
+            $plan->refund_time = time();//更新还款计划的还款时间
+        }
+
+        $transaction = \Yii::$app->db->beginTransaction();
+
+        $record = new OnlineRepaymentRecord();
+        $record->online_pid = $plan->online_pid;
+        $record->order_id = $plan->order_id;
+        $record->order_sn = OnlineRepaymentRecord::createSN();
+        $record->qishu = $plan->qishu;
+        $record->uid = $plan->uid;
+        $record->lixi = $plan->lixi;
+        $record->benxi = $plan->benxi;
+        $record->benjin = $plan->benjin;
+        $record->benxi_yue = 0;
+        if ($isRefreshCalcLiXi) {
+            $record->status = OnlineRepaymentRecord::STATUS_BEFORE;
+        } else {
+            $record->status = OnlineRepaymentRecord::STATUS_DID;
+        }
+
+        $record->refund_time = time();
+
+        if (!$record->save()) {
+            $transaction->rollBack();
+
+            throw new \Exception('还款失败，记录失败');
+        }
+        if ($isRefreshCalcLiXi) {
+            $plan->status = OnlineRepaymentPlan::STATUS_TIQIAM;
+        } else {
+            $plan->status = OnlineRepaymentPlan::STATUS_YIHUAN;
+        }
+        $plan->actualRefundTime = date('Y-m-d H:i:s');//保存实际还款时间
+        if (!$plan->save()) {
+            $transaction->rollBack();
+
+            throw new \Exception('还款失败，状态修改失败');
+        }
+
+        $ua = UserAccount::findOne(['uid' => $plan->uid, 'type' => UserAccount::TYPE_LEND]);
+
+        //投资人账户调整
+        $ua->available_balance = bcadd($ua->available_balance, $record->benxi, 2); //将投标的钱再加入到可用余额中
+        $ua->drawable_balance = bcadd($ua->drawable_balance, $record->benxi, 2);
+        $ua->in_sum = bcadd($ua->in_sum, $record->benxi, 2);
+        $ua->investment_balance = bcsub($ua->investment_balance, $record->benjin, 2); //理财
+        $ua->profit_balance = bcadd($ua->profit_balance, $record->lixi, 2); //收益
+
+        if (!$ua->save()) {
+            $transaction->rollBack();
+
+            throw new \Exception('还款失败，投资人账户调整失败');
+        }
+
+        //增加资金记录
+        $money_record = new MoneyRecord();
+        $money_record->account_id = $ua->id;
+        $money_record->sn = MoneyRecord::createSN();
+        $money_record->type = null !== $plan->asset_id ? MoneyRecord::TYPE_CREDIT_HUIKUAN : MoneyRecord::TYPE_HUIKUAN;
+        $money_record->osn = null !== $plan->asset_id ? $plan->asset_id : $plan->sn;
+        $money_record->uid = $plan->uid;
+        $money_record->in_money = $record->benxi;
+        $money_record->balance = $ua->available_balance;
+        $money_record->remark = '第'.$plan->qishu.'期'.'本金:'.$plan->benjin.'元;利息:'.$plan->lixi.'元;';
+
+        if (!$money_record->save()) {
+            $transaction->rollBack();
+
+           throw new \Exception('还款失败，资金记录失败');
+        }
+
+        $transaction->commit();
+
     }
 }

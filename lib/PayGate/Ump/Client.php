@@ -544,6 +544,26 @@ class Client
     }
 
     /**
+     * 查询联动订单状态
+     *
+     * @param   string  $orderId    联动交易订单ID
+     * @param   string  $timestamp  交易日期(时间戳)
+     * @param   string  $orderType  交易类型：01 充值；02 提现；03 标的转账；04 转账
+     */
+    public function getTradeInfo($orderId, $timestamp, $orderType)
+    {
+        $data = [
+            'service' => 'transfer_search',
+            'order_id' => $orderId,
+            'mer_date' => date('Ymd', $timestamp),
+            'busi_type' => $orderType,
+        ];
+
+        return $this->doRequest($data);
+    }
+
+
+    /**
      * 4.3.3 标的转账【由标的账户转到借款人同步请求】.
      *
      * @param LoanFkInterface $fk
