@@ -577,6 +577,14 @@ TPL;
                     </div>
                 </div>
             </div>
+            <div class="span6  fix-offset">
+                <div class="control-group">
+                    <label class="control-label">部分用户可见<span style="color:grey">（累计资金额≥10万的用户可见，累计资金额=累计投资额+账户余额）</span></label>
+                    <div class="controls">
+                        <?=  $form->field($model, 'bfyhkj')->checkbox()->label(false)?>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <h3 class="form-section">项目合同信息</h3>

@@ -65,6 +65,7 @@ use yii\behaviors\TimestampBehavior;
 class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
 {
     public $is_fdate = 0;//是否启用截止日期
+    public $bfyhkj = 0;//部分用户可见
     private $subSn;      //产品子类序号
 
     //1预告期、 2募集中,3满标,4流标,5还款中,6已还清7募集提前结束  特对设立阀值得标的进行的设置。
@@ -486,6 +487,8 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
             'allowTransfer' => '允许转让',
             'isCustomRepayment' => '是否是自定义还款',
             'internalTitle' => '项目副标题',
+            'balance_limit' => '部分用户可见',
+            'bfyhkj' => '部分用户可见',
         ];
     }
 

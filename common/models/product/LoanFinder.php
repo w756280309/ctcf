@@ -1,6 +1,8 @@
 <?php
 
 namespace common\models\product;
+use Yii;
+use common\models\user\UserInfo;
 
 class LoanFinder
 {
@@ -11,6 +13,14 @@ class LoanFinder
      */
     public static function queryPublicLoans()
     {
+        //用户理财余额
+        $user = Yii::$app->user->getIdentity();
+        if (!is_null($user)) {
+            $user_info = UserInfo::find()->where(['user_id' => $user->id])->one();
+            $balance =  $user->lendAccount->available_balance + $user_info->investTotal;
+        } else {
+            $balance = 0;
+        }
         return OnlineProduct::find()
             ->select('*')
             ->addSelect(['xs_status' => 'if(is_xs = 1 && status < 3, 1, 0)'])
@@ -20,7 +30,8 @@ class LoanFinder
             ->where([
                 'isPrivate' => 0,
                 'del_status' => OnlineProduct::STATUS_USE,
-                'online_status' => OnlineProduct::STATUS_ONLINE
-            ]);
+                'online_status' => OnlineProduct::STATUS_ONLINE,
+            ])
+            ->andWhere(['<=', 'balance_limit', $balance]);
     }
 }

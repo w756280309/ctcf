@@ -201,6 +201,7 @@ class ProductonlineController extends BaseController
                 try {
                     $model->yield_rate = bcdiv($model->yield_rate, 100, 14);
                     $model->allowedUids = $model->isPrivate ? LoanService::convertUid($model->allowedUids) : null;
+                    $model->balance_limit = $data['OnlineProduct']['bfyhkj'] ? 100000 : 0;
                     $model->save(false);
 
                     $log = AdminLog::initNew($model);
@@ -252,6 +253,9 @@ class ProductonlineController extends BaseController
         $model->is_fdate = (0 === $model->finish_date) ? 0 : 1;
         $model->yield_rate = bcmul($model->yield_rate, 100, 2);
         $model->allowedUids = $model->mobiles;
+        if ($model->balance_limit > 0) {
+            $model->bfyhkj = 1;
+        }
         $ctmodel = ContractTemplate::find()->where(['pid' => $id])->all();
 
         $con_name_arr = Yii::$app->request->post('name');
@@ -322,11 +326,15 @@ class ProductonlineController extends BaseController
         $model->is_fdate = (0 === $model->finish_date) ? 0 : 1;
         $model->yield_rate = bcmul($model->yield_rate, 100, 2);
         $model->allowedUids = $model->mobiles;
+        if ($model->balance_limit > 0) {
+            $model->bfyhkj = 1;
+        }
         $ctmodel = ContractTemplate::find()->where(['pid' => $id])->all();
 
         $con_name_arr = Yii::$app->request->post('name');
         $con_content_arr = Yii::$app->request->post('content');
         $data = Yii::$app->request->post();
+
 
         if ($model->load($data) && ($model = $this->exchangeValues($model, $data)) && $model->validate()) {
             try {
@@ -344,6 +352,7 @@ class ProductonlineController extends BaseController
                 try {
                     $model->yield_rate = bcdiv($model->yield_rate, 100, 14);
                     $model->allowedUids = $model->isPrivate ? LoanService::convertUid($model->allowedUids) : null;
+                    $model->balance_limit = $data['OnlineProduct']['bfyhkj'] ? 100000 : 0;
                     $model->save(false);
 
                     $log = AdminLog::initNew($model);
