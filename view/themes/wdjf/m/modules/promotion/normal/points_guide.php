@@ -47,12 +47,12 @@ $this->title = '限时积分新品';
     </div>
     <div class="part-three">
         <img src="<?= FE_BASE_URI ?>wap/point-shop/images/pic-howto.png" alt="" class="how-title">
-        <div class="get-box get-one">
-            <a href="/user/checkin">去签到</a>
-        </div>
-        <div class="get-box get-two">
-            <a href="/deal/deal/index">去理财</a>
-        </div>
+        <a href="/user/checkin" class="get-box get-one">
+            <div>去签到</div>
+        </a>
+        <a href="/deal/deal/index" class="get-box get-two">
+            <div>去理财</div>
+        </a>
         <img src="<?= FE_BASE_URI ?>wap/point-shop/images/pic_remind.png" alt="" class="how-remind">
     </div>
 </div>
