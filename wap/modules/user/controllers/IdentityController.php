@@ -9,7 +9,9 @@ namespace app\modules\user\controllers;
 
 
 use app\controllers\BaseController;
+use common\action\user\IdentityResultAction;
 use common\action\user\IdentityVerifyAction;
+use common\models\user\OpenAccount;
 use common\service\BankService;
 
 class IdentityController extends BaseController
@@ -18,6 +20,7 @@ class IdentityController extends BaseController
     {
         return[
             'verify' => IdentityVerifyAction::className(),//开户表单提交页面
+            'res' => IdentityResultAction::className(),//开户结果查询
         ];
     }
 
@@ -28,7 +31,12 @@ class IdentityController extends BaseController
     {
         $this->layout = '@app/views/layouts/fe';
         $data = BankService::check($this->getAuthedUser(), BankService::IDCARDRZ_VALIDATE_Y);
+        $lastOpenAccountRecord = OpenAccount::find()->where([
+            'status' => OpenAccount::STATUS_INIT,
+            'user_id' => \Yii::$app->getUser()->getIdentity()->getId(),
+        ])->orderBy(['id' => SORT_DESC])->one();
 
+        $data['lastRecord'] = $lastOpenAccountRecord;
         return $this->render('index', $data);
     }
 }

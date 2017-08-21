@@ -56,7 +56,45 @@ $this->showViewport = false;
 </div>
 
 <script type="text/javascript">
-var csrf;
+var csrf = $("meta[name=csrf-token]").attr('content');
+var err = '<?= $code ?>';
+var mess = '<?= $message ?>';
+var tourl = '<?= $tourl ?>';
+var t = 0;
+var allowClick = true;
+var idCardBtn = $('#idcardbtn');
+
+if (err === '1') {
+    toastCenter(mess, function () {
+        if (tourl !== '') {
+            location.href = tourl;
+        }
+    });
+}
+
+<?php
+/**
+ * @var \common\models\user\OpenAccount $lastRecord
+ */
+if(!is_null($lastRecord)) {
+?>
+t = setInterval(function () {
+    getIdentityRes(<?= $lastRecord->id?>);
+}, 1000);
+allowClick = false;
+$('#real_name').val('<?= $lastRecord->getName()?>');
+$('#idcard').val('<?= $lastRecord->getIdCard()?>');
+idCardBtn.html('开 通 中...');
+
+<?php
+}
+?>
+
+idCardBtn.on('click', function (e) {
+    e.preventDefault();
+
+    subForm();
+});
 function validateForm()
 {
     if('' === $('#real_name').val()) {
@@ -80,41 +118,17 @@ function validateForm()
     return true;
 }
 
-$(function() {
-   var err = '<?= $code ?>';
-   var mess = '<?= $message ?>';
-   var tourl = '<?= $tourl ?>';
-   if(err === '1') {
-       toastCenter(mess, function() {
-            if (tourl !== '') {
-                location.href = tourl;
-            }
-       });
-   }
-
-   csrf = $("meta[name=csrf-token]").attr('content');
-   allowClick = true;
-
-   $('#idcardbtn').on('click', function(e) {
-       e.preventDefault();
-
-       subForm();
-   });
-
-})
-
-function subForm()
-{
+function subForm() {
     if (!allowClick) {
         return false;
     }
 
     allowClick = false;
-    $('#idcardbtn').html('开 通 中...');
+    idCardBtn.html('开 通 中...');
 
-    if(!validateForm()) {
+    if (!validateForm()) {
         allowClick = true;
-        $('#idcardbtn').html('立 即 开 通');
+        idCardBtn.html('立 即 开 通');
 
         return false;
     }
@@ -125,30 +139,52 @@ function subForm()
         $form.serialize()
     );
 
-    xhr.done(function(data) {
-        if (0 === data.code) {
-            location.href = data.tourl;
-        } else {
-            toastCenter(data.message, function() {
+    xhr.done(function (data) {
+        if (0 !== data.code) {
+            toastCenter(data.message, function () {
                 if (typeof data.tourl !== 'undefined') {
                     location.href = data.tourl;
                 }
             });
+            allowClick = true;
+            idCardBtn.html('立 即 开 通');
+        } else {
+            if (data.id) {
+                t = setInterval(function () {
+                    getIdentityRes(data.id);
+                }, 1000);
+            }
         }
 
+
     });
 
-    xhr.always(function() {
-        allowClick = true;
-        $('#idcardbtn').html('立 即 开 通');
-    });
-
-    xhr.fail(function(jqXHR) {
+    xhr.fail(function (jqXHR) {
         var errMsg = jqXHR.responseJSON && jqXHR.responseJSON.message
             ? jqXHR.responseJSON.message
             : '未知错误，请刷新重试或联系客服';
 
         toastCenter(errMsg);
+        allowClick = true;
+        idCardBtn.html('立 即 开 通');
     });
+}
+
+function getIdentityRes(id) {
+    var xhr = $.get('/user/identity/res?id=' + id);
+    xhr.done(function (data) {
+        if (0 === data.code || 2 === data.code) {
+            clearInterval(t);
+            toastCenter(data.message, function () {
+                if (typeof data.tourl !== 'undefined') {
+                    location.href = data.tourl;
+                }
+            });
+            if (2 === data.code) {
+                allowClick = true;
+                idCardBtn.html('立 即 开 通');
+            }
+        }
+    })
 }
 </script>

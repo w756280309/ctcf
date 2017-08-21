@@ -56,99 +56,135 @@ $this->showViewport = false;
 </div>
 
 <script type="text/javascript">
-var csrf;
-function validateForm()
-{
-    if('' === $('#real_name').val()) {
-        toastCenter('姓名不能为空');
+    var csrf = $("meta[name=csrf-token]").attr('content');
+    var err = '<?= $code ?>';
+    var mess = '<?= $message ?>';
+    var tourl = '<?= $tourl ?>';
+    var t = 0;
+    var allowClick = true;
+    var idCardBtn = $('#idcardbtn');
 
-        return false;
-    }
-
-    if('' === $('#idcard').val()) {
-        toastCenter('身份证号不能为空');
-
-        return false;
-    }
-
-    if(18 !== $('#idcard').val().length) {
-        toastCenter('身份证暂只支持18位');
-
-        return false;
-    }
-
-    return true;
-}
-
-$(function() {
-   var err = '<?= $code ?>';
-   var mess = '<?= $message ?>';
-   var tourl = '<?= $tourl ?>';
-   if(err === '1') {
-       toastCenter(mess, function() {
+    if (err === '1') {
+        toastCenter(mess, function () {
             if (tourl !== '') {
                 location.href = tourl;
             }
-       });
-   }
-
-   csrf = $("meta[name=csrf-token]").attr('content');
-   allowClick = true;
-
-   $('#idcardbtn').on('click', function(e) {
-       e.preventDefault();
-
-       subForm();
-   });
-
-})
-
-function subForm()
-{
-    if (!allowClick) {
-        return false;
+        });
     }
 
+    <?php
+    /**
+     * @var \common\models\user\OpenAccount $lastRecord
+     */
+    if(!is_null($lastRecord)) {
+    ?>
+    t = setInterval(function () {
+        getIdentityRes(<?= $lastRecord->id?>);
+    }, 1000);
     allowClick = false;
-    $('#idcardbtn').html('开 通 中...');
+    $('#real_name').val('<?= $lastRecord->getName()?>');
+    $('#idcard').val('<?= $lastRecord->getIdCard()?>');
+    idCardBtn.html('开 通 中...');
 
-    if(!validateForm()) {
-        allowClick = true;
-        $('#idcardbtn').html('立 即 开 通');
-
-        return false;
+    <?php
     }
+    ?>
 
-    var $form = $('#form');
-    var xhr = $.post(
-        $form.attr('action'),
-        $form.serialize()
-    );
+    idCardBtn.on('click', function (e) {
+        e.preventDefault();
 
-    xhr.done(function(data) {
-        if (0 === data.code) {
-            location.href = data.tourl;
-        } else {
-            toastCenter(data.message, function() {
-                if (typeof data.tourl !== 'undefined') {
-                    location.href = data.tourl;
-                }
-            });
+        subForm();
+    });
+    function validateForm()
+    {
+        if('' === $('#real_name').val()) {
+            toastCenter('姓名不能为空');
+
+            return false;
         }
 
-    });
+        if('' === $('#idcard').val()) {
+            toastCenter('身份证号不能为空');
 
-    xhr.always(function() {
-        allowClick = true;
-        $('#idcardbtn').html('立 即 开 通');
-    });
+            return false;
+        }
 
-    xhr.fail(function(jqXHR) {
-        var errMsg = jqXHR.responseJSON && jqXHR.responseJSON.message
-            ? jqXHR.responseJSON.message
-            : '未知错误，请刷新重试或联系客服';
+        if(18 !== $('#idcard').val().length) {
+            toastCenter('身份证暂只支持18位');
 
-        toastCenter(errMsg);
-    });
-}
+            return false;
+        }
+
+        return true;
+    }
+
+    function subForm() {
+        if (!allowClick) {
+            return false;
+        }
+
+        allowClick = false;
+        idCardBtn.html('开 通 中...');
+
+        if (!validateForm()) {
+            allowClick = true;
+            idCardBtn.html('立 即 开 通');
+
+            return false;
+        }
+
+        var $form = $('#form');
+        var xhr = $.post(
+            $form.attr('action'),
+            $form.serialize()
+        );
+
+        xhr.done(function (data) {
+            if (0 !== data.code) {
+                toastCenter(data.message, function () {
+                    if (typeof data.tourl !== 'undefined') {
+                        location.href = data.tourl;
+                    }
+                });
+                allowClick = true;
+                idCardBtn.html('立 即 开 通');
+            } else {
+                if (data.id) {
+                    t = setInterval(function () {
+                        getIdentityRes(data.id);
+                    }, 1000);
+                }
+            }
+
+
+        });
+
+        xhr.fail(function (jqXHR) {
+            var errMsg = jqXHR.responseJSON && jqXHR.responseJSON.message
+                ? jqXHR.responseJSON.message
+                : '未知错误，请刷新重试或联系客服';
+
+            toastCenter(errMsg);
+            allowClick = true;
+            idCardBtn.html('立 即 开 通');
+        });
+    }
+
+    function getIdentityRes(id) {
+        var xhr = $.get('/user/identity/res?id=' + id);
+        xhr.done(function (data) {
+            if (0 === data.code || 2 === data.code) {
+                clearInterval(t);
+                toastCenter(data.message, function () {
+                    if (typeof data.tourl !== 'undefined') {
+                        location.href = data.tourl;
+                    }
+                });
+                if (2 === data.code) {
+                    allowClick = true;
+                    idCardBtn.html('立 即 开 通');
+                }
+            }
+        })
+    }
 </script>

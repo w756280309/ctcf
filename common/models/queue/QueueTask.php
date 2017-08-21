@@ -36,7 +36,7 @@ class QueueTask extends \yii\db\ActiveRecord
         return 'queue_task';
     }
 
-    public static function initNew(Job $job, $runLimit = 1, $weight = 1)
+    public static function initNew(Job $job, $weight = 1, $runLimit = 1)
     {
         $queueTask = new self([
             'runnable' => get_class($job),

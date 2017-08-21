@@ -781,14 +781,14 @@ class User extends ActiveRecord implements IdentityInterface, UserInterface
     }
 
     //用户开户逻辑
-    public function setIdentity(UserIdentity $identity)
+    public function setIdentity(OpenAccount $openAccount)
     {
-        $this->real_name = Yii::$app->functions->removeWhitespace($identity->real_name);//去除所有空格
-        $this->idcard = $identity->idcard;
-        $this->safeIdCard = SecurityUtils::encrypt($identity->idcard);
-        $this->birthdate = date('Y-m-d', strtotime(substr($identity->idcard, 6, 8)));
+        $this->real_name = Yii::$app->functions->removeWhitespace($openAccount->getName());//去除所有空格
+        $this->idcard = $openAccount->getIdCard();
+        $this->safeIdCard = $openAccount->encryptedIdCard;
+        $this->birthdate = date('Y-m-d', strtotime(substr($openAccount->getIdCard(), 6, 8)));
         $resp = Yii::$container->get('ump')->register($this);
-        Yii::info('开户联动返回日志 ump_log user_identify user_id: ' . $this->id . ';real_name:.' . $this->real_name . ';idcard:' . $identity->idcard . '; ret_code:' . $resp->get('ret_code') . ';ret_msg:' . $resp->get('ret_msg'), 'umplog');
+        Yii::info('开户联动返回日志 ump_log user_identify user_id: ' . $this->id . ';openAccount_id:'.$openAccount->id.'ret_code:' . $resp->get('ret_code') . ';ret_msg:' . $resp->get('ret_msg'), 'umplog');
 
         if (!$resp->isSuccessful()) {
             throw new \Exception($resp->get('ret_code') . '：' . $resp->get('ret_msg'), 1);
@@ -799,7 +799,7 @@ class User extends ActiveRecord implements IdentityInterface, UserInterface
         try {
             $epayUser = new EpayUser([
                 'appUserId' => $this->getUserId(),
-                'clientIp' => ip2long(Yii::$app->request->userIP),
+                'clientIp' => $openAccount->ip,
                 'regDate' => $resp->get('reg_date'),
                 'createTime' => date('Y-m-d H:i:s'),
                 'epayUserId' => $resp->get('user_id'),
@@ -815,7 +815,7 @@ class User extends ActiveRecord implements IdentityInterface, UserInterface
             if (!$this->save(false)) {
                 throw new \Exception('开户失败', 1);
             }
-            Yii::info('用户信息变更日志 开户 变更表:user;变更属性:' . (json_encode(['idcard_status' => $this->idcard_status, 'real_name' => $this->real_name, 'idcard' => $identity->idcard])) . ';user_id:' . $this->id . ';变更依据:联动ret_code ' . $resp->get('ret_code') . ';联动返回信息:' . json_encode($resp->toArray()), 'user_log');
+            Yii::info('用户信息变更日志 开户 变更表:user;变更属性:' . (json_encode(['idcard_status' => $this->idcard_status, 'real_name' => $this->real_name, 'idcard' => $this->idcard])) . ';user_id:' . $this->id . ';变更依据:联动ret_code ' . $resp->get('ret_code') . ';联动返回信息:' . json_encode($resp->toArray()), 'user_log');
             $transaction->commit();
             $flag = true;
         } catch (\Exception $ex) {
@@ -823,12 +823,13 @@ class User extends ActiveRecord implements IdentityInterface, UserInterface
             throw new \Exception($ex->getMessage(), $ex->getCode());
         }
 
-        if (true === $flag) {
+        /*//关闭实名送抽奖机会调用
+        if ($flag) {
             try {
                 PromoService::addTicket($this, 'identity');
             } catch (\Exception $ex) {
             }
-        }
+        }*/
     }
 
     /**

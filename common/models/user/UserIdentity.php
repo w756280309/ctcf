@@ -8,6 +8,7 @@
 namespace common\models\user;
 use yii\base\Model;
 use Zii\Validator\CnIdCardValidator;
+use Zii\Validator\NameValidator;
 
 /**
  * 用户实名认证验证表单
@@ -24,7 +25,7 @@ class UserIdentity extends Model
     {
         return [
             [['idcard'], CnIdCardValidator::className()],
-            [['real_name'], 'string', 'max' => 50],
+            [['real_name'], NameValidator::className()],
         ];
     }
 

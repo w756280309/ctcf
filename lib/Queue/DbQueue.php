@@ -14,9 +14,9 @@ use common\models\queue\QueueTask;
  */
 class DbQueue
 {
-    public function pub(Job $job)
+    public function pub(Job $job, $weight = 1)
     {
-        $model = QueueTask::initNew($job);
+        $model = QueueTask::initNew($job, $weight);
         return $model->save(false);
     }
 

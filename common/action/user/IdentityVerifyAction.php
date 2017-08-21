@@ -7,10 +7,10 @@
 
 namespace common\action\user;
 
-use common\models\queue\QueueTask;
+use common\models\user\OpenAccount;
 use common\models\user\UserIdentity;
 use common\service\BankService;
-
+use console\command\OpenAccountJob;
 use yii\base\Action;
 
 //实名认证表单提交公共action
@@ -26,25 +26,15 @@ class IdentityVerifyAction extends Action
             }
             $model = new UserIdentity();
             if ($model->load(\Yii::$app->request->post(), 'User') && $model->validate()) {
-                try {
-                    $user->setIdentity($model);
-                    if (CLIENT_TYPE === 'pc') {
-                        $toUrl = '/info/success?source=tuoguan';
-                    } else {
-                        $toUrl = '/user/user/mianmi';
-                    }
+                $openAccountRecord = OpenAccount::initNew($user, $model);
+                $openAccountRecord->ip = ip2long(\Yii::$app->request->getUserIP());
+                $openAccountRecord->save(false);
+                $job = new OpenAccountJob([
+                    'openAccountRecordId' => $openAccountRecord->id,
+                ]);
+                \Yii::$container->get('db_queue')->pub($job, 5);
 
-                    return [
-                        'tourl' => $toUrl,
-                        'code' => 0,
-                        'message' => '您已成功开户'
-                    ];
-                } catch (\Exception $ex) {
-                    return [
-                        'code' => 1,
-                        'message' => 1 === $ex->getCode() ? $ex->getMessage() : '系统繁忙，请稍后重试！',
-                    ];
-                }
+                return ['code' => 0, 'message' => '正在进行开户', 'id' => $openAccountRecord->id];
             } else {
                 if ($model->getErrors()) {
                     return ['code' => 1, 'message' => current($model->firstErrors)];

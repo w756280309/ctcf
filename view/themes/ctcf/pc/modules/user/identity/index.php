@@ -43,51 +43,90 @@ $this->title = '开户';
     </div>
 </div>
 
+
 <script>
-    $(function () {
-        $("input").bind('keypress', function(e) {
-            if (e.keyCode === 13) {
-                $('.deposit-content-link').click();
-            }
-        });
-
-        /*点击立即开通*/
-        var allowSub = true;
-        $('.deposit-content-link').on('click', function () {
-            var name = $('.name-text');
-            var idcard = $('.identity-text');
-            var nameisok = validate_name();
-            var identityisok = validate_idcard();
-            if (nameisok != false && identityisok != false) {
-                if (!allowSub) {
-                    return;
-                }
-
-                allowSub = false;
-                $('.deposit-content-link').html('开通中...');
-
-                $.post('/user/identity/verify', {
-                    'User[real_name]': name.val(),
-                    'User[idcard]': idcard.val(),
-                    '_csrf': '<?= Yii::$app->request->csrfToken?>'
-                }, function (data) {
-                    if (!data.code) {
-                        //成功
-                        window.location.href = data.tourl;
-                    } else {
-                        //失败
-                        if (data.tourl) {
-                            location.href = data.tourl;
-                        }
-
-                        $('.identity .err-info').text(data.message);
-                        $('.identity .err-info').show();
-
-                        allowSub = true;
-                        $('.deposit-content-link').html('立即开通');
-                    }
-                });
-            }
-        });
+    $("input").bind('keypress', function(e) {
+        if (e.keyCode === 13) {
+            $('.deposit-content-link').click();
+        }
     });
+
+    /*点击立即开通*/
+    var allowSub = true;
+    var t = 0;
+
+    <?php
+    /**
+     * @var \common\models\user\OpenAccount $lastRecord
+     */
+    if(!is_null($lastRecord)) {
+    ?>
+    t = setInterval(function () {
+        getIdentityRes(<?= $lastRecord->id?>);
+    }, 1000);
+    allowSub = false;
+    $('#real_name').val('<?= $lastRecord->getName()?>');
+    $('#idcard').val('<?= $lastRecord->getIdCard()?>');
+    $('.deposit-content-link').html('开通中...');
+
+    <?php
+    }
+    ?>
+
+    $('.deposit-content-link').on('click', function () {
+        var name = $('.name-text');
+        var idcard = $('.identity-text');
+        var nameisok = validate_name();
+        var identityisok = validate_idcard();
+        if (nameisok != false && identityisok != false) {
+            if (!allowSub) {
+                return;
+            }
+
+            allowSub = false;
+            $('.deposit-content-link').html('开通中...');
+
+            $.post('/user/identity/verify', {
+                'User[real_name]': name.val(),
+                'User[idcard]': idcard.val(),
+                '_csrf': '<?= Yii::$app->request->csrfToken?>'
+            }, function (data) {
+                if (0 === data.code) {
+                    if (data.id) {
+                        t = setInterval(function () {
+                            getIdentityRes(data.id);
+                        }, 1000);
+                    }
+                } else {
+                    //失败
+                    if (data.tourl) {
+                        location.href = data.tourl;
+                    }
+
+                    $('.identity .err-info').text(data.message);
+                    $('.identity .err-info').show();
+
+                    allowSub = true;
+                    $('.deposit-content-link').html('立即开通');
+                }
+            });
+        }
+    });
+
+    function getIdentityRes(id) {
+        var xhr = $.get('/user/identity/res?id=' + id);
+        xhr.done(function (data) {
+            if (0 === data.code || 2 === data.code) {
+                clearInterval(t);
+                if (2 === data.code) {
+                    $('.identity .err-info').text(data.message);
+                    $('.identity .err-info').show();
+                    allowSub = true;
+                    $('.deposit-content-link').html('立即开通');
+                } else {
+                    window.location.href = data.tourl;
+                }
+            }
+        })
+    }
 </script>
