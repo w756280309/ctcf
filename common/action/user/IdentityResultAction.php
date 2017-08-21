@@ -30,7 +30,7 @@ class IdentityResultAction extends Action
                 }
                 return ['code' => 0, 'message' => '您已成功开户', 'tourl' => $toUrl];
             } elseif ($model->status === OpenAccount::STATUS_FAIL) {
-                return ['code' => 2, 'message' => '系统繁忙，请稍后重试！'];
+                return ['code' => 2, 'message' => $model->message];
             }
         }
         return ['code' => 1, 'message' => '', 'toUrl'=> ''];

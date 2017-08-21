@@ -30,6 +30,11 @@ class OpenAccountJob extends Job
             $openAccount->status = OpenAccount::STATUS_SUCCESS;
             $openAccount->save();
         } catch (\Exception $e) {
+            if ($e->getCode() !== 1 || empty($e->getMessage())) {
+                $openAccount->message = '系统繁忙，请稍后重试！';
+            } else {
+                $openAccount->message = $e->getMessage();
+            }
             $openAccount->status = OpenAccount::STATUS_FAIL;
             $openAccount->save();
             throw new $e;
