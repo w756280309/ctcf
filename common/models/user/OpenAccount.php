@@ -17,6 +17,7 @@ use Zii\Behavior\DateTimeBehavior;
  * @property string $encryptedIdCard    加密后的身份证号
  * @property string $status             状态
  * @property string $ip                 实名ip
+ * @property string $message            错误信息
  * @property string $createTime
  * @property string $updateTime
  */
