@@ -30,6 +30,7 @@ class OpenAccountJob extends Job
             $openAccount->status = OpenAccount::STATUS_SUCCESS;
             $openAccount->save();
         } catch (\Exception $e) {
+            \Yii::info('开户Job日志 ump_log user_identify_fail user_id: ' . $user->id . ';message:' . $e->getMessage(), 'umplog');
             if ($e->getCode() !== 1 || empty($e->getMessage())) {
                 $openAccount->message = '系统繁忙，请稍后重试！';
             } else {

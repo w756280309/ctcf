@@ -787,7 +787,12 @@ class User extends ActiveRecord implements IdentityInterface, UserInterface
         $this->idcard = $openAccount->getIdCard();
         $this->safeIdCard = $openAccount->encryptedIdCard;
         $this->birthdate = date('Y-m-d', strtotime(substr($openAccount->getIdCard(), 6, 8)));
-        $resp = Yii::$container->get('ump')->register($this);
+        try {
+            $resp = Yii::$container->get('ump')->register($this);
+        } catch (\Exception $e) {
+            Yii::info('开户联动返回日志 ump_log user_identify_fail user_id: ' . $this->id . ';message:' . $e->getMessage(), 'umplog');
+            throw new \Exception('开户失败', 1);
+        }
         Yii::info('开户联动返回日志 ump_log user_identify user_id: ' . $this->id . ';openAccount_id:'.$openAccount->id.'ret_code:' . $resp->get('ret_code') . ';ret_msg:' . $resp->get('ret_msg'), 'umplog');
 
         if (!$resp->isSuccessful()) {
