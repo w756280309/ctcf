@@ -30,7 +30,6 @@ class PointsService
         try {
             if (
                 empty($pointRecord->ref_type)
-                || empty($pointRecord->incr_points)
                 || is_null($user)
                 || empty($user->id)
             ) {
@@ -50,10 +49,22 @@ class PointsService
                 $table = 'user';
                 $pointRecord->userLevel = $user->level;
             }
+            //用户积分判断
+            if ($pointRecord->decr_points > 0) {
+                if ($user->points == 0) {
+                    $points = 0;
+                } else if ($user->points < $pointRecord->decr_points) {
+                    $points = $user->points;
+                } else {
+                    $points = 0 - $pointRecord->decr_points;
+                }
+            } else {
+                $points = $pointRecord->incr_points;
+            }
             //更新对应的用户表里的points字段
             $sql = 'update ' . $table . ' set points = points + :points where id = :userId';
-            $res = Yii::$app->db->createCommand($sql, ['points' => $pointRecord->incr_points, 'userId' => $user->id])->execute();
-            if (!$res) {
+            $res = Yii::$app->db->createCommand($sql, ['points' => $points, 'userId' => $user->id])->execute();
+            if ($res === false) {
                 throw new \Exception('更改用户积分失败');
             }
 

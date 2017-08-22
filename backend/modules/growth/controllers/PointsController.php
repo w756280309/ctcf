@@ -64,7 +64,7 @@ class PointsController extends BaseController
             if (is_array($value)) {
                 list($mobile, $idCard, $isOnline, $points, $desc) = $value;
                 $points = intval($points);
-                if (!empty($mobile) && !is_null($isOnline) && $points > 0) {
+                if (!empty($mobile) && !is_null($isOnline) && $points != 0) {
                     $isOnline = boolval($isOnline);
                     $safeIdCard = SecurityUtils::encrypt(trim($idCard));
                     $safeMobile = SecurityUtils::encrypt(trim($mobile));
@@ -151,15 +151,18 @@ class PointsController extends BaseController
                 $record = new PointRecord([
                     'ref_type' => PointRecord::TYPE_BACKEND_BATCH,
                     'ref_id' => $model->id,
-                    'incr_points' => $model->points,
                     'remark' => $model->desc
                 ]);
+                if ($model->points < 0) {
+                    $record->decr_points = abs($model->points);
+                } else {
+                    $record->incr_points = $model->points;
+                }
                 $res = PointsService::addUserPoints($record, !$isOnline, $user);
                 $model->status = $res ? 1 : 2;
                 $model->save();
             }
         }
-
         return $this->redirect('/growth/points/list?batchSn=' . $batchSn);
     }
 }
