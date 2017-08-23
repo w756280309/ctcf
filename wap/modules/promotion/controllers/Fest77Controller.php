@@ -58,13 +58,13 @@ class Fest77Controller extends Controller
 
     public function actionNoCode($xcode)
     {
-        $imagePath = ASSETS_BASE_URI.'images/fest77/no_code.jpg';
+        $imagePath = 'images/fest77/no_code.jpg';
         $this->showImage(Image::make($imagePath), $this->getWordsConfig($xcode));
     }
 
     public function actionWithCode($xcode)
     {
-        $imagePath = ASSETS_BASE_URI.'images/fest77/with_code.jpg';
+        $imagePath = 'images/fest77/with_code.jpg';
         $this->showImage(Image::make($imagePath), $this->getWordsConfig($xcode));
     }
 

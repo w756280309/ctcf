@@ -3,10 +3,6 @@ body {
   overflow-x: hidden;
   position: absolute;
   height: 100%;
-  width: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-  -webkit-transform: translateX(-50%);
 }
 .ctn-bg {
   position: relative;
@@ -322,14 +318,20 @@ path {
   background: rgba(0,0,0,.9);
   opacity: 1;
   filter: alpha(opacity:100);
-  z-index: 100000;
+  z-index: 1000001;
   color: #fff;
   font-weight: 600;
   font-size:0.8rem;
   padding-top: 3rem;
   text-align: center;
   letter-spacing: 0.5em;
-  display: none;
   overflow: hidden;
   position: fixed;
+}
+.logo {
+  width:2.0133333rem;
+  position: fixed;
+  top:0.266667rem;
+  right:0.266667rem;
+  z-index: 100000;
 }

@@ -25,8 +25,11 @@ $this->share = new Share([
         <img src="<?= FE_BASE_URI ?>wap/campaigns/active20170821/images/pic_couple.png" alt="">
     </div>
 </div>
+<a id="anchor" href="#Myanchor"></a>
+<div id="Myanchor"></div>
 <script>
     $(function () {
         $(".flex-content").fadeIn(3000);
+        $('#anchor')[0].click();
     })
 </script>
