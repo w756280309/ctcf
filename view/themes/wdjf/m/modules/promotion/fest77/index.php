@@ -15,7 +15,9 @@ $this->share = new Share([
 <script src="<?= FE_BASE_URI ?>wap/common/js/com.js"></script>
 <script src="<?= FE_BASE_URI ?>libs/lib.flexible3.js"></script>
 <script src="<?= FE_BASE_URI ?>libs/jquery-1.11.1.min.js"></script>
+<div class="mask">请在微信端<br>打开链接</div>
 <div class="flex-content">
+    <img class="logo" src="<?= FE_BASE_URI ?>wap/campaigns/active20170821/images/logo.png" alt="">
     <div class="ctn-bg">
         <div class="bg-one">
             <img src="<?= FE_BASE_URI ?>wap/campaigns/active20170821/images/bg_01.png" alt="">
@@ -64,8 +66,8 @@ $this->share = new Share([
         </div>
     </div>
 </div>
-<img src="<?= FE_BASE_URI ?>wap/campaigns/active20170821/images/yaoqian.gif" style="width: 0;height: 0;" alt="">
-<div class="mask">请在微信端<br>打开链接</div>
+<a id="anchor" href="#Myanchor"></a>
+<div id="Myanchor"></div>
 <script>
     $(function () {
         $('.poetry ul li.rg img,.poetry ul li.lf img,.tips').css({opacity: 1});
@@ -84,5 +86,7 @@ $this->share = new Share([
         if(!isWX.weixin){
             $('.mask').show();
         }
+        $('#anchor')[0].click();
     })
 </script>
+<img src="<?= FE_BASE_URI ?>wap/campaigns/active20170821/images/yaoqian.gif" style="width: 0;height: 0;" alt="">

@@ -12,7 +12,9 @@
     <script src="../../libs/jquery-1.11.1.min.js"></script>
 </head>
 <body>
+<div class="mask">请在微信端<br>打开链接</div>
 <div class="flex-content">
+    <img class="logo" src="images/logo.png" alt="">
     <div class="ctn-bg">
         <div class="bg-one">
             <img src="images/bg_01.png" alt="">
@@ -61,6 +63,8 @@
         </div>
     </div>
 </div>
+<a id="anchor" href="#Myanchor"></a>
+<div id="Myanchor"></div>
 <script>
     $(function () {
         $('.poetry ul li.rg img,.poetry ul li.lf img,.tips').css({opacity: 1});
@@ -76,12 +80,12 @@
             },1000)
         }
         var isWX = moduleFn.parseUA();
-        if(!isWX.weixin){
-            $('.mask').show();
+        if(isWX.weixin){
+            $('.mask').hide();
         }
+        $('#anchor')[0].click();
     })
 </script>
 <img src="images/yaoqian.gif" style="width: 0;height: 0;" alt="">
-<div class="mask">请在微信端<br>打开链接</div>
 </body>
 </html>
