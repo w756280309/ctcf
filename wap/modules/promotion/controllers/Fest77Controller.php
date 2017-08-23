@@ -32,26 +32,27 @@ class Fest77Controller extends Controller
 
         return $this->render('result', [
             'xcode' => $xcode,
+            'name' => Yii::$app->session->get('resourceOwnerNickName'),
         ]);
     }
 
-    public function actionNoCode($xcode)
+    public function actionNoCode($xcode, $name)
     {
         $imagePath = 'images/fest77/no_code.jpg';
-        $this->showImage(Image::make($imagePath), $this->getWordsConfig($xcode));
+        $this->showImage(Image::make($imagePath), $this->getWordsConfig($xcode), $name);
     }
 
-    public function actionWithCode($xcode)
+    public function actionWithCode($xcode, $name)
     {
         $imagePath = 'images/fest77/with_code.jpg';
-        $this->showImage(Image::make($imagePath), $this->getWordsConfig($xcode));
+        $this->showImage(Image::make($imagePath), $this->getWordsConfig($xcode), $name);
     }
 
-    private function showImage($image, $wordsConfig)
+    private function showImage($image, $wordsConfig, $name)
     {
         $imageHelper =  new IntervensionHelper($image);
         $imageHelper->column($wordsConfig['name'], 8, 430, 7, $this->getFontConfig('left'));
-        $imageHelper->column($wordsConfig['nickName'].'的月老签', 522, 44, 5, $this->getFontConfig('right'));
+        $imageHelper->column($name.'的月老签', 522, 44, 5, $this->getFontConfig('right'));
         $calcHelper = new ContainerCalcPositionHelper($image->width(), $image->height());
         $words = $wordsConfig['content'];
         $positions = $calcHelper->calcFirstWordXY(count($words), $this->getWordMaxCount($words), 50, 64, 18);
@@ -60,7 +61,7 @@ class Fest77Controller extends Controller
                 $imageHelper->column($word, $positions[$k]['x'], $positions[$k]['y'], 18, $this->getFontConfig('middle'));
             }
         }
-        header("Content-Type: $image->mime()");
+        header("Content-Type: ".$image->mime());
         echo $image->encode('jpg');
         exit;
     }
