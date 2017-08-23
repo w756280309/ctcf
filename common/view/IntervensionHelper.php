@@ -12,7 +12,6 @@ class IntervensionHelper
 
     public function column($words, $x, $y, $padding, $config)
     {
-        $words = mb_convert_encoding($words, 'UTF-8');
         $wordArr = array_map(function ($i) use ($words) {
             return mb_substr($words, $i, 1, 'UTF-8');
         }, range(0, mb_strlen($words) - 1));
