@@ -98,6 +98,17 @@ return [
                         return '';//去掉消息返回的[IP address][User ID][Session ID][Severity Level]
                     },
                 ],
+                [
+                    'class' => 'yii\log\FileTarget',
+                    'levels' => ['info'],
+                    'categories' => ['command'],
+                    'logFile' => '@app/runtime/command_'.date('Ymd').'.log',
+                    'maxFileSize' => 1024 * 2,
+                    'logVars' => ['trace'],
+                    'prefix' => function ($message) {
+                        return '';//去掉消息返回的[IP address][User ID][Session ID][Severity Level]
+                    },
+                ],
             ],
         ],
         'njfaeFtp' => [
