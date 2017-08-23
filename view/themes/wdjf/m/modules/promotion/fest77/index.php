@@ -83,8 +83,8 @@ $this->share = new Share([
             },1000)
         }
         var isWX = moduleFn.parseUA();
-        if(!isWX.weixin){
-            $('.mask').show();
+        if(isWX.weixin){
+            $('.mask').hide();
         }
         $('#anchor')[0].click();
     })
