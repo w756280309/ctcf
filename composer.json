@@ -4,7 +4,7 @@
     "type": "project",
     "autoload": {
         "psr-4": {
-            "App\\": "../w/app/",
+            "App\\": "../w2/app/",
             "": "lib/"
         }
     },
