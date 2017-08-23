@@ -21,6 +21,7 @@ class PromoController extends Controller
      */
     public function actionSendCoupon()
     {
+        Yii::info('[command][promo/send-coupon] 生日当天送代金券　正常开始', 'command');
         $promoKey = 'promo_birthday_coupon';
         $promo = RankingPromo::findOne(['key' => $promoKey]);
         if ($promo && class_exists($promo->promoClass)) {
@@ -34,10 +35,13 @@ class PromoController extends Controller
                     return false;
                 }
             }
+            Yii::info('[command][promo/send-coupon] 生日当天送代金券　准备发代金券', 'command');
             $model = new $promo->promoClass($promo);
             $userList = $model->getAwardUserList();
+            Yii::info('[command][promo/send-coupon] 生日当天送代金券　找到'.count($userList).'个需要发生日券的用户', 'command');
             $model->sendAwardToUsers($userList);
         }
+        Yii::info('[command][promo/send-coupon] 生日当天送代金券　正常结束' . "\n");
     }
 
     /**

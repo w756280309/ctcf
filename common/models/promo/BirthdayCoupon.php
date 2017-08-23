@@ -62,6 +62,9 @@ class BirthdayCoupon
             }
             $couponList[$key] = $coupon;
         }
+        \Yii::info('[command][promo/send-coupon] 生日当天送代金券　代金券数据正常', 'command');
+        $successUser = 0;
+        $successCoupon = 0;
         foreach ($users as $user) {
             if (!$user instanceof User) {
                 continue;
@@ -74,6 +77,7 @@ class BirthdayCoupon
                 'date_format(from_unixtime(rewardedAt),"%Y")' => date('Y', $time),
             ])->one();
             if (!empty($ticket)) {
+                \Yii::info("[command][promo/send-coupon] 生日当天送代金券　用户({$user->id})今年参加过生日代金券活动, 跳过", 'command');
                 continue;
             }
             $translation = \Yii::$app->db->beginTransaction();
@@ -100,6 +104,7 @@ class BirthdayCoupon
                         if (!$res) {
                             throw new \Exception('代金券发送失败');
                         }
+                        $successCoupon++;
                     }
                     //发短信
                     $message = [
@@ -118,8 +123,12 @@ class BirthdayCoupon
                 }
             } catch (\Exception $ex) {
                 $translation->rollBack();
+                \Yii::info('[command][promo/send-coupon] 生日当天送代金券　用户('.$user->id.')发送失败, 失败信息: '. $ex->getMessage(), 'command');
                 throw new \Exception($ex->getMessage());
             }
+            $successUser++;
         }
+
+        \Yii::info("[command][promo/send-coupon] 生日当天送代金券　成功发送{$successUser}个用户, 成功{$successCoupon}个代金券", 'command');
     }
 }
