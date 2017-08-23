@@ -248,7 +248,7 @@ class Adv extends ActiveRecord
     {
 
         $now = date('Y-m-d H:i:s');
-        $where = "status = 0 and del_status = 0
+        $where = "status = 0 and del_status = 0 and `type` = 0
                 and (timing = 0 or (timing = 1 and start_date <= '$now'))";
         if ($is_m) {
             if (defined('IN_APP')) {
