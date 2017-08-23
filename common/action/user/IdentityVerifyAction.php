@@ -29,6 +29,28 @@ class IdentityVerifyAction extends Action
                 $openAccountRecord = OpenAccount::initNew($user, $model);
                 $openAccountRecord->ip = ip2long(\Yii::$app->request->getUserIP());
                 $openAccountRecord->save(false);
+                //查看1小时内是否有相同姓名、相同身份证且联动明确返回失败的记录，如果存在记录那么直接判定此次开户失败
+                /**
+                 * @var OpenAccount $lastRecord
+                 */
+                $lastRecord = OpenAccount::find()
+                    ->where([
+                        'user_id' => $user->id,
+                        'status' => OpenAccount::STATUS_FAIL,
+                        'encryptedName' => $openAccountRecord->encryptedName,
+                        'encryptedIdCard' => $openAccountRecord->encryptedIdCard,
+                    ])
+                    ->andWhere('`code` is not null')
+                    ->andWhere(['>', 'createTime', date('Y-m-d H:i:s', strtotime('-1 hour'))])
+                    ->orderBy(['id' => SORT_DESC])
+                    ->one();
+                if (!is_null($lastRecord)) {
+                    $openAccountRecord->status = OpenAccount::STATUS_FAIL;
+                    $openAccountRecord->message = $lastRecord->message;
+                    $openAccountRecord->save(false);
+                    return ['code' => 1, 'message' => $openAccountRecord->message];
+                }
+
                 $job = new OpenAccountJob([
                     'openAccountRecordId' => $openAccountRecord->id,
                 ]);

@@ -92,9 +92,13 @@ class Client
      *
      * @return Response
      */
-    public function register(UserInterface $user)
+    public function register(UserInterface $user, $sn = null)
     {
-        $orderId = \common\utils\TxUtils::generateSn("REG");
+        if (empty($sn)) {
+            $orderId = \common\utils\TxUtils::generateSn("REG");
+        } else {
+            $orderId = $sn;
+        }
 
         $data = [
             'service' => 'mer_register_person',
