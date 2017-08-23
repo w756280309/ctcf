@@ -17,9 +17,9 @@ $this->share = new Share([
     <div class="part-one"></div>
     <div class="part-two">
         <!--此处放置无二维码的图片-->
-        <img src="/promotion/fest77/no-code?xcode=<?= $xcode ?>" alt="">
+        <img src="/promotion/fest77/no-code?xcode=<?= $xcode ?>&name=<? urlencode($name) ?>" alt="">
         <!--此处放置有二维码的图片-->
-        <img src="/promotion/fest77/with-code?xcode=<?= $xcode ?>" alt="" class="xia">
+        <img src="/promotion/fest77/with-code?xcode=<?= $xcode ?>&name=<? urlencode($name) ?>" alt="" class="xia">
     </div>
     <div class="part-three">
         <img src="<?= FE_BASE_URI ?>wap/campaigns/active20170821/images/pic_couple.png" alt="">
