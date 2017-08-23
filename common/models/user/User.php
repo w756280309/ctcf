@@ -788,17 +788,17 @@ class User extends ActiveRecord implements IdentityInterface, UserInterface
         $this->safeIdCard = $openAccount->encryptedIdCard;
         $this->birthdate = date('Y-m-d', strtotime(substr($openAccount->getIdCard(), 6, 8)));
         try {
-            $resp = Yii::$container->get('ump')->register($this);
+            $resp = Yii::$container->get('ump')->register($this, $openAccount->sn);
         } catch (\Exception $e) {
-            Yii::info('开户联动返回日志 ump_log user_identify_fail user_id: ' . $this->id . ';message:' . $e->getMessage(), 'umplog');
+            Yii::info('开户联动返回日志 ump_log user_identify_fail user_id: ' . $this->id . ';openAccount_id:'.$openAccount->id . ';message:' . $e->getMessage(), 'umplog');
             throw new \Exception('开户失败', 1);
         }
         Yii::info('开户联动返回日志 ump_log user_identify user_id: ' . $this->id . ';openAccount_id:'.$openAccount->id.'ret_code:' . $resp->get('ret_code') . ';ret_msg:' . $resp->get('ret_msg'), 'umplog');
 
+        $openAccount->code = $resp->get('ret_code');
         if (!$resp->isSuccessful()) {
-            throw new \Exception($resp->get('ret_code') . '：' . $resp->get('ret_msg'), 1);
+            throw new \Exception($resp->get('ret_msg'), 1);
         }
-
         $transaction = Yii::$app->db->beginTransaction();
         $flag = false;
         try {

@@ -4,6 +4,7 @@ namespace common\models\user;
 
 
 use common\utils\SecurityUtils;
+use common\utils\TxUtils;
 use yii\db\ActiveRecord;
 use Zii\Behavior\DateTimeBehavior;
 
@@ -18,8 +19,10 @@ use Zii\Behavior\DateTimeBehavior;
  * @property string $status             状态
  * @property string $ip                 实名ip
  * @property string $message            错误信息
+ * @property string $code               联动返回状态码
  * @property string $createTime
  * @property string $updateTime
+ * @property string $sn
  */
 class OpenAccount extends ActiveRecord
 {
@@ -49,6 +52,7 @@ class OpenAccount extends ActiveRecord
             'encryptedName' => SecurityUtils::encrypt($userIdentity->real_name),
             'encryptedIdCard' => SecurityUtils::encrypt($userIdentity->idcard),
             'status' => self::STATUS_INIT,
+            'sn' => TxUtils::generateSn("REG"),
         ]);
     }
 
