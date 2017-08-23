@@ -15,7 +15,7 @@ $this->share = new Share([
 <script src="<?= FE_BASE_URI ?>wap/common/js/com.js"></script>
 <script src="<?= FE_BASE_URI ?>libs/lib.flexible3.js"></script>
 <script src="<?= FE_BASE_URI ?>libs/jquery-1.11.1.min.js"></script>
-<div class="mask">请在微信端<br>打开链接</div>
+<div class="mask" style="display: none">请在微信端<br>打开链接</div>
 <div class="flex-content">
     <img class="logo" src="<?= FE_BASE_URI ?>wap/campaigns/active20170821/images/logo.png" alt="">
     <div class="ctn-bg">
@@ -83,8 +83,8 @@ $this->share = new Share([
             },1000)
         }
         var isWX = moduleFn.parseUA();
-        if(isWX.weixin){
-            $('.mask').hide();
+        if(!isWX.weixin){
+            $('.mask').show();
         }
         $('#anchor')[0].click();
     })

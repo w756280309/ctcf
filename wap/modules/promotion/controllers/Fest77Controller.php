@@ -19,27 +19,6 @@ class Fest77Controller extends Controller
     {
         $isWx = $this->fromWx();
 
-        if ($isWx) {
-            if (null === Yii::$app->session->get('resourceOwnerNickName')) {
-                $wxClient = Yii::$container->get('wxClient');
-                $code = Yii::$app->request->get('code');
-                $state = Yii::$app->request->get('state');
-                if ($code && 'promo77' === $state) {
-                    try {
-                        $grant = $wxClient->getGrant($code);
-                        $Info = $wxClient->getResourceOwnerInfo($grant);
-                    } catch (\Exception $ex) {
-                    }
-                    if (!empty($Info)) {
-                        Yii::$app->session->set('resourceOwnerNickName', $Info['nickName']);
-                    }
-                } else {
-                    $url = $wxClient->getAuthorizationUrl(Yii::$app->request->absoluteUrl, 'snsapi_userinfo', 'promo77');
-                    return Yii::$app->controller->redirect($url);
-                }
-            }
-        }
-
         return $this->render('index', [
             'isWx' => $isWx,
         ]);
