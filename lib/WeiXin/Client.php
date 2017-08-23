@@ -81,11 +81,6 @@ class Client
         }
 
         $data = json_decode($resp->getBody()->getContents(), true);
-        // 可以检查一下data是不是数组，是不是包含该有的键
-
-        if ($data['ret'] < 0) {
-            throw new \Exception($data['msg']);
-        }
 
         return [
             'nickName' => $data['nickname'],
