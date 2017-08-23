@@ -60,7 +60,7 @@ class Fest77Controller extends Controller
                 $imageHelper->column($word, $positions[$k]['x'], $positions[$k]['y'], 18, $this->getFontConfig('middle'));
             }
         }
-        header("Content-Type: $image->mime()");
+        header("Content-Type: ".$image->mime());
         echo $image->encode('jpg');
         exit;
     }
