@@ -44,11 +44,13 @@ class GetOpenIdBehavior extends Behavior
         //将open_id存储在session的resourceOwnerId字段
         //获取方式为Yii::$app->session->get('resourceOwnerId');
         $wxClient = Yii::$container->get('wxClient');
-        if (!Yii::$app->session->has('resourceOwnerId')) {
+        if (!Yii::$app->session->has('resourceOwnerId') || !Yii::$app->session->has('resourceOwnerNickName')) {
             if ($code && $state) {
                 try {
                     $response = $wxClient->getGrant($code);
+                    $Info = $wxClient->getResourceOwnerInfo($response);
                     Yii::$app->session->set('resourceOwnerId', $response['resource_owner_id']);
+                    Yii::$app->session->set('resourceOwnerNickName', $Info['nickName']);
                 } catch (\Exception $ex) {
                     throw $ex;
                 }
