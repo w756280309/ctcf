@@ -13,7 +13,7 @@ use yii\captcha\Captcha;
 <script  src="<?= FE_BASE_URI ?>libs/lib.flexible3.js"></script>
 <script  src="<?= FE_BASE_URI ?>libs/fastclick.js"></script>
 <script src="<?= ASSETS_BASE_URI ?>js/common.js?v=20170413"></script>
-<script src="<?= FE_BASE_URI ?>wap/luodiye/js/luodiye.js?v=20170413-v"></script>
+<script src="<?= FE_BASE_URI ?>wap/luodiye/js/luodiye.js?v=20170821"></script>
 
 <div class="container flex-content">
     <?php if (!defined('IN_APP')) { ?>
@@ -37,10 +37,10 @@ use yii\captcha\Captcha;
             <input name="regContext" type="hidden" value="promo">
             <input name="promoId" type="hidden" value="<?= $promo->id ?>">
             <div class="phonenum">
-                <input id="iphone" name="SignupForm[phone]" type="tel" value="<?= $mobile ?>" maxlength="11" placeholder="请输入手机号">
+                <input id="iphone" class="login-info" name="SignupForm[phone]" type="tel" value="<?= $mobile ?>" maxlength="11" placeholder="请输入手机号">
             </div>
             <div class="piccode">
-                <input id="captchaform-captchacode" name="SignupForm[captchaCode]" maxlength="4" type="tel" placeholder="请输入图形验证码" AUTOCOMPLETE="off">
+                <input id="captchaform-captchacode" class="login-info" name="SignupForm[captchaCode]" maxlength="4" type="tel" placeholder="请输入图形验证码" AUTOCOMPLETE="off">
                 <?=
                     $form->field($captcha, 'captchaCode', [
                         'template' => '{input}',
@@ -56,10 +56,10 @@ use yii\captcha\Captcha;
                 ?>
             </div>
             <div class="phonecode">
-                <input id="yanzhengma" type="tel" name="SignupForm[sms]" maxlength="6" placeholder="请输入短信验证码" AUTOCOMPLETE="off"><input type="button" value="获取验证码" id="yzm">
+                <input id="yanzhengma" type="tel" class="login-info" name="SignupForm[sms]" maxlength="6" placeholder="请输入短信验证码" AUTOCOMPLETE="off"><input type="button" value="获取验证码" id="yzm">
             </div>
             <div class="password">
-                <input id="pass" type="password" name="SignupForm[password]" maxlength="20" placeholder="请输入6到20位的密码" AUTOCOMPLETE="off">
+                <input id="pass" class="login-info" type="password" name="SignupForm[password]" maxlength="20" placeholder="请输入6到20位的密码" AUTOCOMPLETE="off">
                 <img alt="eye-close" src="<?= ASSETS_BASE_URI ?>images/eye-close.png">
             </div>
             <div class="contract">
@@ -89,9 +89,3 @@ use yii\captcha\Captcha;
         <p class="f11">*理财非存款，产品有风险，投资须谨慎</p>
     </div>
 </div>
-
-<script>
-    $(function() {
-        FastClick.attach(document.body);
-    });
-</script>
