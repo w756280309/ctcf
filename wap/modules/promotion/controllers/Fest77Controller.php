@@ -27,7 +27,7 @@ class Fest77Controller extends Controller
     public function actionResult($xcode)
     {
         if (!$this->fromWx()) {
-            return $this->redirect('index');
+           return $this->redirect('index');
         }
 
         return $this->render('result', [

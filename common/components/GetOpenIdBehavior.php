@@ -51,6 +51,8 @@ class GetOpenIdBehavior extends Behavior
                     $Info = $wxClient->getResourceOwnerInfo($response);
                     Yii::$app->session->set('resourceOwnerId', $response['resource_owner_id']);
                     Yii::$app->session->set('resourceOwnerNickName', $Info['nickName']);
+                    $message = $response['resource_owner_id'].':'.$Info['nickName'].':'.Yii::$app->request->getUserIP();
+                    Yii::info($message, 'promo_log');
                 } catch (\Exception $ex) {
                     throw $ex;
                 }
