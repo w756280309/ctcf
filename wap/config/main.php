@@ -61,6 +61,17 @@ return [
                         return '';//去掉消息返回的[IP address][User ID][Session ID][Severity Level]
                     },
                 ],
+                [
+                    'class' => 'yii\log\FileTarget',
+                    'levels' => ['info'],
+                    'categories' => ['promo_log'],
+                    'logFile' => '@app/runtime/logs/promo/user_join_'.date('Ymd').'.log',
+                    'maxFileSize' => 1024 * 2,
+                    'logVars' => ['trace'],
+                    'prefix' => function ($message) {
+                        return '';//去掉消息返回的[IP address][User ID][Session ID][Severity Level]
+                    },
+                ],
             ],
         ],
         'errorHandler' => [
