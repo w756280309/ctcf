@@ -2,6 +2,7 @@
 
 namespace common\models\promo;
 
+use common\models\order\OnlineOrder;
 use common\models\user\User;
 use wap\modules\promotion\models\RankingPromo;
 
@@ -47,5 +48,19 @@ class BasePromo
             ->andWhere(['isDrawn' => true])
             ->orderBy('drawAt desc')
             ->all();
+    }
+
+    /**
+     * 用户首投订单添加ticket，可以设置是否给订单用户的邀请者也发送ticket
+     *
+     * @param OnlineOrder        $order           订单
+     * @param PromoLotteryTicket $waitTicket      ticket
+     * @param bool               $includedInviter 是否送邀请者
+     *
+     * @return bool
+     */
+    public function rewardTicketByOrderIsFirstInvest(OnlineOrder $order, PromoLotteryTicket $waitTicket, $includedInviter)
+    {
+
     }
 }

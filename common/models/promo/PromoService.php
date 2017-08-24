@@ -85,12 +85,12 @@ class PromoService
         $promos = self::getActivePromo();
         foreach ($promos as $promo) {
             $model = new $promo->promoClass($promo);
-            if (method_exists($model, 'doAfterSuccessLoanOrder')) {
-                try {
+            if (method_exists($model, 'doAfterSuccessLoanOrder' && 1 === $order->status && self::isJoinPromo($promo, $order->user, $order->order_time))) {
+                //try {
                     $model->doAfterSuccessLoanOrder($order);
-                } catch (\Exception $ex) {
+                //} catch (\Exception $ex) {
 
-                }
+                //}
             }
         }
     }
@@ -383,5 +383,28 @@ class PromoService
     protected static function canAward(Reward $reward)
     {
         return true;
+    }
+
+    /**
+     * 活动类提供用户是否参加活动
+     *
+     * @param RankingPromo $promo
+     * @param $user
+     * @param null $time
+     *
+     * @return bool
+     */
+    public static function isJoinPromo(RankingPromo $promo, $user, $time = null)
+    {
+        try {
+            $isJoined = $promo->isActive($user, $time);
+        } catch (NotActivePromoException $ex) {
+            $isJoined = false;
+        } catch (\Exception) {
+            $isJoined = false;
+            //记录错误日志
+        }
+
+        return $isJoined;
     }
 }
