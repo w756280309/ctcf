@@ -75,6 +75,9 @@ class PointsBatch extends \yii\db\ActiveRecord
             if ($this->points == 0) {
                 $this->addError('points', '积分不能为0');
             }
+            if (abs($this->points) > 100000) {
+                $this->addError('points', '积分值不能超过100000');
+            }
         }
     }
 
