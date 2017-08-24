@@ -22,7 +22,7 @@ class PointsController extends BaseController
                 'class' => ExcelPreviewAction::className(),
                 'modelClass' => PointsBatch::className(),
                 'maxCol' => 'E',
-                'attributes' => ['mobile', 'idCard', 'isOnline', 'points', 'desc'],
+                'attributes' => ['publicMobile', 'idCard', 'isOnline', 'points', 'desc'],
                 'backUrl' => '/growth/points/init',
             ]
         ];

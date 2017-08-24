@@ -47,7 +47,7 @@ class PointsBatch extends \yii\db\ActiveRecord
             [['batchSn'], 'string', 'max' => 32],
             [['publicMobile'], 'safe'],
             [['safeMobile', 'desc'], 'string', 'max' => 255],
-            ['mobile', 'validateMobile'],
+            ['publicMobile', 'validateMobile'],
             ['idCard','string'],
         ];
     }
@@ -71,6 +71,9 @@ class PointsBatch extends \yii\db\ActiveRecord
                 if (is_null($user)) {
                     $this->addError('mobile', '线下用户不存在');
                 }
+            }
+            if ($this->points == 0) {
+                $this->addError('points', '积分不能为0');
             }
         }
     }
