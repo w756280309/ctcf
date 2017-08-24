@@ -85,12 +85,12 @@ class PromoService
         $promos = self::getActivePromo();
         foreach ($promos as $promo) {
             $model = new $promo->promoClass($promo);
-            if (method_exists($model, 'doAfterSuccessLoanOrder' && 1 === $order->status && self::isJoinPromo($promo, $order->user, $order->order_time))) {
-                //try {
+            if (method_exists($model, 'doAfterSuccessLoanOrder') && self::orderIsInPromo($order, $promo)) {
+                try {
                     $model->doAfterSuccessLoanOrder($order);
-                //} catch (\Exception $ex) {
+                } catch (\Exception $ex) {
 
-                //}
+                }
             }
         }
     }
@@ -385,24 +385,31 @@ class PromoService
         return true;
     }
 
+
     /**
-     * 活动类提供用户是否参加活动
+     * 是否为发生在活动中的订单
      *
-     * @param RankingPromo $promo
-     * @param $user
-     * @param null $time
+     * @param OnlineOrder  $order 订单
+     * @param RankingPromo $promo 活动
      *
      * @return bool
+     * @throws \Exception
      */
-    public static function isJoinPromo(RankingPromo $promo, $user, $time = null)
+    private static function orderIsInPromo(OnlineOrder $order, $promo)
     {
+        if (OnlineOrder::STATUS_SUCCESS !== $order->status) {
+            return false;
+        }
+        $user = $order->user;
+        if (null === $user) {
+            return false;
+        }
         try {
-            $isJoined = $promo->isActive($user, $time);
+            $isJoined = $promo->isActive($user, $order->order_time);
         } catch (NotActivePromoException $ex) {
             $isJoined = false;
-        } catch (\Exception) {
+        } catch (\Exception $ex) {
             $isJoined = false;
-            //记录错误日志
         }
 
         return $isJoined;

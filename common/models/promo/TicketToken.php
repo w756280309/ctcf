@@ -24,4 +24,11 @@ class TicketToken extends ActiveRecord
             'key' => '唯一标识',
         ];
     }
+
+    public static function initNew($key)
+    {
+        return new self([
+            'key' => $key,
+        ]);
+    }
 }
