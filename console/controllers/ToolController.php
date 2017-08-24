@@ -295,4 +295,30 @@ class ToolController extends Controller
             $this->stdout("更新后 online_repayment_plan 记录条数为 {$plansCount} 条，  repayment 记录条数为 {$repaymentsCount} 条 \n");
         }
     }
+
+    /**
+     * 脚本工具：修复标的在温都上标成功但是在联动未发标的数据 php yii tool/publish-loan
+     */
+    public function actionPublishLoan($loanId, $run = false)
+    {
+        $loan = OnlineProduct::find()
+            ->where(['online_status' => 1, 'id' => $loanId])
+            ->andWhere('publishTime is not null')
+            ->one();
+        if (empty($loan)) {
+            throw new \Exception('标的未找到');
+        }
+        $resp = Yii::$container->get('ump')->getLoanInfo($loan->id);
+        if (!$resp->isSuccessful()) {
+            throw new \Exception('标的状态查询失败');
+        }
+        echo '标的在联动状态:' . $resp->get('project_state') . "\n";
+        if ($resp->get('project_state') === '92' && $run) {
+            $resp = Yii::$container->get('ump')->updateLoanState($loan->id, 0);
+            if (!$resp->isSuccessful()) {
+                throw new \Exception('联动状态修改失败');
+            }
+            echo '标的在联动状态:' . $resp->get('project_state') . "\n";
+        }
+    }
 }
