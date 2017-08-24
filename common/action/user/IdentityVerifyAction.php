@@ -29,7 +29,7 @@ class IdentityVerifyAction extends Action
                 $openAccountRecord = OpenAccount::initNew($user, $model);
                 $openAccountRecord->ip = ip2long(\Yii::$app->request->getUserIP());
                 $openAccountRecord->save(false);
-                //查看1小时内是否有相同姓名、相同身份证且联动明确返回失败的记录，如果存在记录那么直接判定此次开户失败
+                //查看1分钟内是否有相同姓名、相同身份证且联动明确返回失败的记录，如果存在记录那么直接判定此次开户失败
                 /**
                  * @var OpenAccount $lastRecord
                  */
@@ -41,7 +41,7 @@ class IdentityVerifyAction extends Action
                         'encryptedIdCard' => $openAccountRecord->encryptedIdCard,
                     ])
                     ->andWhere('`code` is not null')
-                    ->andWhere(['>', 'createTime', date('Y-m-d H:i:s', strtotime('-1 hour'))])
+                    ->andWhere(['>', 'createTime', date('Y-m-d H:i:s', strtotime('-1 minute'))])
                     ->orderBy(['id' => SORT_DESC])
                     ->one();
                 if (!is_null($lastRecord)) {
