@@ -64,41 +64,22 @@ function signup()
     );
 
     xhr.done(function (data) {
+        $('#signup-btn').attr('disabled', false);
         if (data.code) {
             if ('undefined' !== typeof data.tourl) {
                 toastCenter(data.message, function () {
-                    if ('undefined' !== typeof _paq) {
-                        _paq.push(['trackEvent', 'user', 'reg', null, null, function () {
-                            location.href = data.tourl;
-                        }]);
-
-                        setTimeout(function() {
-                            location.href = data.tourl;
-                        }, 1500);
-                    } else {
                         location.href = data.tourl;
-                    }
                 });
             } else if ('undefined' !== typeof data.message) {
-                piwik(data.message);
-
-                toastCenter(data.message, function () {
-                    $('#signup-btn').attr('disabled', false);
-                });
+                toastCenter(data.message);
             }
         }
     });
 
     xhr.fail(function () {
-        piwik('网络繁忙, 请稍后重试!');
+        toastCenter('网络繁忙, 请稍后重试!');
         $('#signup-btn').attr('disabled', false);
     });
-}
-
-function piwik(msg) {
-    if (msg && 'undefined' !== typeof _paq) {
-        _paq.push(['trackEvent', 'user', 'reg-error', msg]);
-    }
 }
 
 $(function () {
@@ -124,12 +105,9 @@ $(function () {
 
         var msg = validateForm();
         if ('' !== msg) {
-            piwik(msg);
-
             toastCenter(msg, function () {
                 $('#signup-btn').attr('disabled', false);
             });
-
             return false;
         }
 
@@ -170,16 +148,12 @@ $(function () {
         }
 
         if ('' !== msg) {
-            piwik(msg);
             toastCenter(msg);
-
             return false;
         }
 
         createSms('#iphone', 1, '#captchaform-captchacode', function () {
             fun_timedown();
-        }, function (data) {
-            piwik(data.message);
         });
     });
 

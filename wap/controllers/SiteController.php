@@ -481,8 +481,8 @@ class SiteController extends Controller
                     if (Yii::$app->session->has('lastVerify')) {
                         Yii::$app->session->remove('lastVerify');
                     }
-                    return ['code' => 1, 'message' => '注册成功', 'tourl' => $tourl];
                 }
+                return ['code' => 1, 'message' => '注册成功', 'tourl' => $tourl];
             } else {
                 $error = $model->firstErrors;
 
