@@ -40,36 +40,41 @@ class PointsBatch extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['points', 'isOnline', 'user_id', 'publicMobile', 'safeMobile'], 'required'],
+            [['points', 'isOnline', 'user_id', 'publicMobile', 'safeMobile', 'mobile'], 'required'],
             [['createTime'], 'safe'],
-            ['isOnline', 'boolean', 'message' => '“是线上用户”必须是bool类型'],
+            ['isOnline', 'boolean', 'message' => '“是线上用户”必须是bool类型(0,1)'],
             [['points', 'status'], 'integer'],
             [['batchSn'], 'string', 'max' => 32],
             [['publicMobile'], 'safe'],
             [['safeMobile', 'desc'], 'string', 'max' => 255],
-            ['publicMobile', 'validateMobile'],
+            ['mobile', 'validateMobile'],
             ['idCard','string'],
         ];
     }
 
     public function validateMobile($attribute)
     {
-        if (strlen($this->$attribute) !== 11) {
+        if (strlen(trim($this->mobile)) !== 11) {
             $this->addError($attribute, '手机号格式不正确');
         }
         if (!$this->hasErrors()) {
             $isOnline = $this->isOnline;
             $safeMobile = SecurityUtils::encrypt($this->mobile);
-            $safeIdCard = SecurityUtils::encrypt($this->idCard);
             if ($isOnline) {
                 $user = User::findOne(['safeMobile' => $safeMobile]);
                 if (is_null($user)) {
                     $this->addError('mobile', '线上用户不存在');
                 }
             } else {
+                if (is_null($this->idCard)) {
+                    $this->addError('idCard', '线下用户身份证号不能为空');
+                }
                 $user = OfflineUser::findOne(['mobile' => $this->mobile, 'idCard' => $this->idCard]);
                 if (is_null($user)) {
-                    $this->addError('mobile', '线下用户不存在');
+                    $user = OfflineUser::findOne(['mobile' => $this->mobile, 'idCard' => SecurityUtils::decrypt($this->idCard)]);
+                    if (is_null($user)) {
+                        $this->addError('mobile', '线下用户不存在');
+                    }
                 }
             }
             if ($this->points == 0) {

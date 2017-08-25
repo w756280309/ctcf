@@ -22,7 +22,7 @@ class PointsController extends BaseController
                 'class' => ExcelPreviewAction::className(),
                 'modelClass' => PointsBatch::className(),
                 'maxCol' => 'E',
-                'attributes' => ['publicMobile', 'idCard', 'isOnline', 'points', 'desc'],
+                'attributes' => ['mobile', 'idCard', 'isOnline', 'points', 'desc'],
                 'backUrl' => '/growth/points/init',
             ]
         ];
@@ -64,7 +64,7 @@ class PointsController extends BaseController
             if (is_array($value)) {
                 list($mobile, $idCard, $isOnline, $points, $desc) = $value;
                 $points = intval($points);
-                if (!empty($mobile) && !is_null($isOnline) && $points != 0) {
+                if (!empty($mobile) && !is_null($isOnline) && $points != 0 && abs($points) <= 100000) {
                     $isOnline = boolval($isOnline);
                     $safeIdCard = SecurityUtils::encrypt(trim($idCard));
                     $safeMobile = SecurityUtils::encrypt(trim($mobile));
@@ -91,6 +91,7 @@ class PointsController extends BaseController
                         'safeMobile' => $safeMobile,
                         'idCard' => $safeIdCard,
                         'user_id' => $user->id,
+                        'mobile' => $mobile,
                     ]);
                     $res = $model->save();
                     if ($res) {
@@ -160,6 +161,7 @@ class PointsController extends BaseController
                 }
                 $res = PointsService::addUserPoints($record, !$isOnline, $user);
                 $model->status = $res ? 1 : 2;
+                $model->mobile = $model->publicMobile;
                 $model->save();
             }
         }
