@@ -2,11 +2,14 @@
 
 namespace api\modules\tx\controllers;
 
+use App\Jobs\DingtalkCorpMessageJob;
+use common\models\order\OnlineOrder;
+use common\models\product\OnlineProduct;
 use common\models\tx\CreditNote;
 use common\models\tx\CreditOrder;
-use common\models\tx\Loan;
 use common\models\user\User;
 use common\models\tx\UserAsset;
+use Illuminate\Queue\Capsule\Manager;
 use yii\helpers\ArrayHelper;
 use yii\web\BadRequestHttpException;
 
@@ -49,8 +52,15 @@ class CreditNoteController extends Controller
         if ($asset->isRepaid) {
             throw $this->ex404('用户资产已经完成放款');
         }
-        $loan = Loan::findOne($asset->loan_id);
-        if (null === $loan || 5 !== $loan->status) {
+        /**
+         * @var OnlineProduct $loan
+         * @var OnlineOrder $order
+         * @var User $user
+         */
+        $loan = OnlineProduct::findOne($asset->loan_id);
+        $order = OnlineOrder::findOne($asset->order_id);
+        $user = User::findOne($asset->user_id);
+        if (null === $loan || is_null($order) || 5 !== $loan->status) {
             throw $this->ex404('用户资产已经完成放款');
         }
         $note = CreditNote::initNew($asset, $requestData['amount'], $discountRate);
@@ -64,6 +74,22 @@ class CreditNoteController extends Controller
             $res = \Yii::$app->db_tx->createCommand($sql, ['amount' => $requestData['amount'], 'id' => $asset->id])->execute();
             if ($res) {
                 $transaction->commit();
+
+                //发起转让完成后通知，满足通知条件：新上转让项目，且剩余期限1年以下，转让客户单笔认购金额 >=100万,  预计年化收益率 >= 8.8%
+                $remainingDuration = $loan->getRemainingDuration();
+                if ($remainingDuration['months'] < 12
+                    && $order->order_money >= 1000000
+                    && $order->yield_rate >= 0.088
+                ) {
+                    /**
+                     * @var Manager $queue
+                     */
+                    $queue = \Yii::$container->get('laraq');
+                    $message = $user->getName() . "(" . $user->getMobile() . ") 转让了 " . $loan->title . ", 剩余期限" . $remainingDuration['months'] . "个月" . $remainingDuration['days'] . "天, 预期年化利率" . bcmul($order->yield_rate, 100, 2) . "%, 转让金额" . number_format(bcdiv($note->amount, 100, 2), 2) . "元";
+                    $job = new DingtalkCorpMessageJob(\Yii::$app->params['ding_notify.user_list.create_note'], $message);
+                    $queue->getConnection()->push($job);
+                }
+
             } else {
                 $transaction->rollBack();
             }

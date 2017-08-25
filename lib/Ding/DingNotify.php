@@ -13,8 +13,6 @@ class DingNotify
     public $agentid;
     public $chatId;
     public $user;
-    public $log_path;
-    public $token_path;
 
     private $_client;
 
@@ -24,13 +22,6 @@ class DingNotify
         if (!$config) {
             throw new \Exception('缺少核心参数');
         }
-        $this->log_path = __DIR__ . '/../../console/runtime/ding/';
-        if (!file_exists($this->log_path)) {
-            if (!mkdir($this->log_path)) {
-                throw new \Exception('无法创建目录 ' . $this->log_path);
-            }
-        }
-        $this->token_path = $this->log_path;
         if (
             !isset($config['corp_id'])
             || !isset($config['corp_secret'])
@@ -52,8 +43,6 @@ class DingNotify
             'corpid' => $this->corpid,
             'corpsecret' => $this->corpsecret,
             'agentid' => $this->agentid,
-            'log_path' => $this->log_path,
-            'token_path' => $this->token_path,
         ]);
         $this->_client = $client;
     }

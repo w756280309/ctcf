@@ -203,4 +203,7 @@ return [
     'channelSn_in_njfae' => 23,   //温都金服在南金交的编号，转让文件名的使用及其内部的营业部会遇到
     'njfae_save_filePath' => '@tmp',    //对接南金交生成的文件保存的相对路径，即在根目录下创建njfae文件夹
     'promo_api_url' => 'https://api.wenjf.com/promo/reward/cash',
+    'ding_notify.user_list.create_note' => [
+
+    ],//发起满足条件转让钉钉提醒通知用户名单(在温都金服公司钉钉ID), 参考 WDJF/data/wdjf_ding_users.json 中用户配置
 ];
