@@ -77,7 +77,10 @@ class CreditNoteController extends Controller
 
                 //发起转让完成后通知，满足通知条件：新上转让项目，且剩余期限1年以下，转让客户单笔认购金额 >=100万,  预计年化收益率 >= 8.8%
                 $remainingDuration = $loan->getRemainingDuration();
-                if ($remainingDuration['months'] < 12
+                $months = isset($remainingDuration['months']) ? $remainingDuration['months'] : 0;
+                $days = $remainingDuration['days'];
+
+                if (($months > 0 && $months < 12 || $months <= 0 && $days < 365)
                     && $order->order_money >= 1000000
                     && $order->yield_rate >= 0.088
                 ) {
@@ -85,7 +88,11 @@ class CreditNoteController extends Controller
                      * @var Manager $queue
                      */
                     $queue = \Yii::$container->get('laraq');
-                    $message = $user->getName() . "(" . $user->getMobile() . ") 转让了 " . $loan->title . ", 剩余期限" . $remainingDuration['months'] . "个月" . $remainingDuration['days'] . "天, 预期年化利率" . bcmul($order->yield_rate, 100, 2) . "%, 转让金额" . number_format(bcdiv($note->amount, 100, 2), 2) . "元";
+                    $message = $user->getName() . "(" . $user->getMobile() . ") 转让了 " . $loan->title . ", 剩余期限";
+                    if ($months > 0) {
+                        $message .= $months . "个月";
+                    }
+                    $message .= $days. "天, 预期年化利率" . bcmul($order->yield_rate, 100, 2) . "%, 转让金额" . number_format(bcdiv($note->amount, 100, 2), 2) . "元";
                     $job = new DingtalkCorpMessageJob(\Yii::$app->params['ding_notify.user_list.create_note'], $message);
                     $queue->getConnection()->push($job);
                 }
