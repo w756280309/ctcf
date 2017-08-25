@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>七夕闯关作战</title>
+	<link rel="stylesheet" href="__FE_BASE_URI__/common/css/wenjfbase.css?v=1.0">
+	<link rel="stylesheet" href="__FE_BASE_URI__wap/campaigns/active20170823/css/invest.css">
+	<script src="__FE_BASE_URI__/libs/lib.flexible3.js"></script>
+	<script src="__FE_BASE_URI__/libs/jquery-1.11.1.min.js"></script>
+</head>
+<body>
+<div class="flex-content">
+	<div class="part-one">
+		<!--未登录显示去登录-->
+		<a href="#" class="go-login">点击登录>></a>
+		<!--登录后显示这行-->
+		<div class="total" style="display:none;">已累计年化<span><span id="number">129.99</span>万元</span></div>
+		<div class="rules">查看规则 >></div>
+	</div>
+	<div class="part-two"></div>
+	<div class="part-three"></div>
+	<div class="part-four">
+		<a href="#" class="go-invest"></a>
+		<a href="#" class="next-level"></a>
+	</div>
+	<div class="mask" style="display: none"></div>
+	<div class="rule-box" style="display: none;">
+		<h5>活动规则</h5>
+		<img class="close-btn" src="__FE_BASE_URI__wap/campaigns/active20170823/images/close.png" alt="">
+		<ol>
+			<li>活动时间2017年8月28日-8月31日，以认购成功时间为准；</li>
+			<li>本次活动面向所有温都金服注册用户；</li>
+			<li>活动期间投资温都金服平台理财产品累计年化金额达到指定额度，即可获得相应礼品（不含转让产品）；
+				<div class="reward-list">
+					<p class="leiji">累计年化金额（元）</p>
+					<p class="lipin">礼品</p>
+					<p class="jifen">对应积分</p>
+					<ul>
+						<li class="clearfix">
+							<p class="lj">5,200,000</p>
+							<p class="lp">周生生黄金手链</p>
+							<p class="jf">77777</p>
+						</li>
+						<li class="clearfix">
+							<p class="lj">1,880,000</p>
+							<p class="lp">周生生足金耳钉</p>
+							<p class="jf">17777</p>
+						</li>
+						<li class="clearfix">
+							<p class="lj">600,000</p>
+							<p class="lp">七夕化妆镜台灯</p>
+							<p class="jf">5777</p>
+						</li>
+						<li class="clearfix">
+							<p class="lj">100,000</p>
+							<p class="lp">车载情侣猪摆件</p>
+							<p class="jf">777</p>
+						</li>
+					</ul>
+				</div>
+			</li>
+			<li>本次活动礼品将在活动结束后7个工作日内以积分形式发放，用户可以进入积分商城进行兑换。</li>
+		</ol>
+		<p class="regular-tips">注：年化投资金额=投资金额*项目期限/365</p>
+		<p class="regular-tips">本次活动最终解释权归温都金服所有</p>
+	</div>
+</div>
+<script>
+	$(function () {
+	  $(".rules").click(function () {
+		  $(".mask ,.rule-box").show();
+      $('body').on('touchmove',eventTarget, false);
+    });
+	  $(".close-btn").click(function () {
+      $(".mask ,.rule-box").hide();
+      $('body').off('touchmove');
+    });
+
+  function eventTarget(event) {
+    var event = event || window.event;
+    event.preventDefault();
+  }
+  })
+</script>
+</body>
+</html>

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>七夕闯关作战</title>
+	<link rel="stylesheet" href="../../common/css/wenjfbase.css?v=1.0">
+	<link rel="stylesheet" href="css/gifts-list.css">
+	<link rel="stylesheet" href="css/index.css">
+	<script src="../../libs/lib.flexible3.js"></script>
+	<script src="../../libs/jquery-1.11.1.min.js"></script>
+	<script src="../../libs/fastclick.js"></script>
+	<script src="../../libs/iscroll.js"></script>
+	<script src="../../libs/handlebars-v4.0.10.js"></script>
+	<script src="../../common/js/popover.js"></script>
+</head>
+<body>
+<div class="flex-content">
+	<div class="part-one"></div>
+	<div class="part-two">
+		<a href="question.html"></a>
+		<a href="invest.html"></a>
+		<a href="third-segment.html"></a>
+		<div class="my-prize"></div>
+	</div>
+</div>
+<script src="js/gifts-list.js"></script>
+<script >
+    giftsList({
+        isGifts:true,//有奖品，无奖品为false
+        closeImg:'images/third-pop-close.png',
+        list:[
+            {gifts_num:'images/gifts_1.png',gifts_title:'小米体重秤',gifts_time:'第一关'},
+            {gifts_num:'images/gifts_2.png',gifts_title:'7.7元现金红包',gifts_time:'第一关'},
+            {gifts_num:'images/gifts_3.png',gifts_title:'50元超市卡',gifts_time:'第二关'},
+            {gifts_num:'images/gifts_4.png',gifts_title:'50元话费卡',gifts_time:'第二关'},
+            {gifts_num:'images/gifts_5.png',gifts_title:'77积分',gifts_time:'第二关'},
+            {gifts_num:'images/gifts_5.png',gifts_title:'520积分',gifts_time:'第二关'},
+            {gifts_num:'images/gifts_6.png',gifts_title:'10元代金券',gifts_time:'第一关'},
+            {gifts_num:'images/gifts_7.png',gifts_title:'20元代金券',gifts_time:'第一关'},
+            {gifts_num:'images/gifts_8.png',gifts_title:'30元代金券',gifts_time:'第二关'},
+            {gifts_num:'images/gifts_9.png',gifts_title:'10元代金券',gifts_time:'第三关'},
+            {gifts_num:'images/gifts_10.png',gifts_title:'20元代金券',gifts_time:'第二关'},
+            {gifts_num:'images/gifts_11.png',gifts_title:'30元代金券',gifts_time:'第二关'}
+        ]
+    });
+</script>
+<script>
+    $(function(){
+        FastClick.attach(document.body);
+        var myScroll = new iScroll('wrapper',{
+            vScrollbar:false,
+            hScrollbar:false
+        });
+
+        //我的奖品按钮
+        $(".my-prize").on("click",function(){
+            $('.prizes-box').show();
+            $('body').on('touchmove',eventTarget, false);
+            myScroll.refresh();//点击后初始化iscroll
+        });
+
+        $('.pop_close').on('click',function(){
+            $('.prizes-box').hide();
+            $('body').off('touchmove');
+        });
+        function eventTarget(event) {
+            var event = event || window.event;
+            event.preventDefault();
+        }
+    });
+</script>
+</body>
+</html>
