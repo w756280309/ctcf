@@ -23,6 +23,7 @@ use yii\db\ActiveRecord;
  * @property float      $amount
  * @property string     $ref_type
  * @property int        $ref_id
+ * @property int        $reward_id
  */
 class Award extends ActiveRecord
 {
@@ -65,12 +66,13 @@ class Award extends ActiveRecord
      * @param null|PromoLotteryTicket $ticket
      * @return Award
      */
-    public static function couponAward(User $user, RankingPromo $promo, UserCoupon $userCoupon, PromoLotteryTicket $ticket = null)
+    public static function couponAward(User $user, RankingPromo $promo, UserCoupon $userCoupon, PromoLotteryTicket $ticket = null, Reward $reward = null)
     {
         $award = self::initNew($user, $promo, $ticket);
         $award->amount = $userCoupon->couponType->amount;
         $award->ref_type = self::TYPE_COUPON;
         $award->ref_id = $userCoupon->id;
+        $award->reward_id = is_null($reward) ? null : $reward->id;
 
         return $award;
     }
@@ -84,12 +86,13 @@ class Award extends ActiveRecord
      * @param PromoLotteryTicket|null $ticket
      * @return Award
      */
-    public static function cashAward(User $user, RankingPromo $promo, MoneyRecord $moneyRecord, PromoLotteryTicket $ticket = null)
+    public static function cashAward(User $user, RankingPromo $promo, MoneyRecord $moneyRecord, PromoLotteryTicket $ticket = null, Reward $reward = null)
     {
         $award = self::initNew($user, $promo, $ticket);
         $award->amount = $moneyRecord->in_money;
         $award->ref_type = self::TYPE_CASH;
         $award->ref_id = $moneyRecord->id;
+        $award->reward_id = is_null($reward) ? null : $reward->id;
 
         return $award;
     }
@@ -103,12 +106,13 @@ class Award extends ActiveRecord
      * @param null|PromoLotteryTicket $ticket
      * @return Award
      */
-    public static function pointsAward(User $user, RankingPromo $promo, PointRecord $pointRecord, PromoLotteryTicket $ticket = null)
+    public static function pointsAward(User $user, RankingPromo $promo, PointRecord $pointRecord, PromoLotteryTicket $ticket = null, Reward $reward = null)
     {
         $award = self::initNew($user, $promo, $ticket);
         $award->amount = $pointRecord->incr_points;
         $award->ref_type = self::TYPE_POINTS;
         $award->ref_id = $pointRecord->id;
+        $award->reward_id = is_null($reward) ? null : $reward->id;
 
         return $award;
     }
@@ -122,11 +126,12 @@ class Award extends ActiveRecord
      * @param null|PromoLotteryTicket $ticket
      * @return Award
      */
-    public static function goodsAward(User $user, RankingPromo $promo, GoodsType $goodsType, PromoLotteryTicket $ticket = null)
+    public static function goodsAward(User $user, RankingPromo $promo, GoodsType $goodsType, PromoLotteryTicket $ticket = null, Reward $reward = null)
     {
         $award = self::initNew($user, $promo, $ticket);
         $award->ref_type = self::TYPE_GOODS;
         $award->ref_id = $goodsType->id;
+        $award->reward_id = is_null($reward) ? null : $reward->id;
 
         return $award;
     }
@@ -140,12 +145,18 @@ class Award extends ActiveRecord
      * @param null|PromoLotteryTicket $ticket
      * @return Award
      */
-    public static function transferAward(User $user, RankingPromo $promo, Transfer $transfer, PromoLotteryTicket $ticket = null)
+    public static function transferAward(User $user, RankingPromo $promo, Transfer $transfer, PromoLotteryTicket $ticket = null, Reward $reward = null)
     {
         $award = self::initNew($user, $promo, $ticket);
         $award->ref_type = self::TYPE_TRANSFER;
         $award->ref_id = $transfer->id;
+        $award->reward_id = is_null($reward) ? null : $reward->id;
 
         return $award;
+    }
+
+    public function getReward()
+    {
+        return ;
     }
 }

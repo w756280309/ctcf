@@ -34,7 +34,7 @@ class BasePromo
     }
 
     /**
-     * 获得某个人已中奖列表
+     * 获得某个人已中奖列表 --- 仅适用通过抽奖机会的获奖列表(暂时保留)
      *
      * @param User $user 无需格外校验
      *
@@ -47,6 +47,28 @@ class BasePromo
             ->andWhere(['user_id' => $user->id])
             ->andWhere(['isDrawn' => true])
             ->orderBy('drawAt desc')
+            ->all();
+    }
+
+    /**
+     * 获取用户活动中所有的中奖记录
+     *
+     * @param User $user
+     *
+     * @return array
+     */
+    public function getAwardList(User $user)
+    {
+        $r = Reward::tableName();
+        $a = Award::tableName();
+
+        return Award::find()
+            ->select("$a.*")
+            ->innerJoin($r, "$a.reward_id = $r.id")
+            ->where(["$a.user_id" => $user->id])
+            ->andWhere(["$a.promo_id" => $this->promo->id])
+            ->orderBy(["$a.createTime" => SORT_DESC])
+            ->asArray()
             ->all();
     }
 }

@@ -270,19 +270,19 @@ class PromoService
                     'remark' => '活动获得',
                 ]);
                 $pointRecord->save(false);
-                Award::pointsAward($user, $promo, $pointRecord, $ticket)->save(false);
+                Award::pointsAward($user, $promo, $pointRecord, $ticket, $reward)->save(false);
                 break;
             case Reward::TYPE_PIKU:
                 $goodsType = GoodsType::findOne($reward->ref_id);
                 if (null !== $goodsType) {
-                    Award::goodsAward($user, $promo, $goodsType, $ticket)->save(false);
+                    Award::goodsAward($user, $promo, $goodsType, $ticket, $reward)->save(false);
                 }
                 break;
             case Reward::TYPE_RED_PACKET:
                 $metadata['promo_id'] = $reward->promo_id;
                 $transfer = Transfer::initNew($user, $reward->ref_amount, $metadata);
                 $transfer->save(false);
-                Award::transferAward($user, $promo, $transfer, $ticket)->save(false);
+                Award::transferAward($user, $promo, $transfer, $ticket, $reward)->save(false);
                 break;
         }
 
