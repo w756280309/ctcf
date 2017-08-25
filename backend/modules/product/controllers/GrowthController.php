@@ -67,7 +67,7 @@ class GrowthController extends BaseController
             if (is_null($loanId)) {
                 $this->ex404();
             }
-            $orders = OfflineOrder::find()->where(['loan_id' => $loan->id])->orderBy(['id' => SORT_ASC])->with('user')->all();
+            $orders = OfflineOrder::find()->where(['loan_id' => $loan->id])->andWhere(['isDeleted' => false])->orderBy(['id' => SORT_ASC])->with('user')->all();
             foreach ($orders as $order) {
                 $user = $order->user;
                 $data[] = [
