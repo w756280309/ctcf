@@ -13,7 +13,7 @@ CSS
         <div class="span12">
             <h3 class="page-title">
                 汇总统计
-                <small style="color: red;">数据实时更新</small>
+                <small style="color: red;">数据缓存５分钟</small>
             </h3>
         </div>
     </div>
