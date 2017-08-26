@@ -53,8 +53,10 @@ $this->share = new Share([
                 <!--此处是不可点击状态下的按钮-->
                 <?php if (!is_null($status) && $status == 1) { ?>
                     <a href="javascript:;" class="lf share qwsz"></a>
-                <?php } else { ?>
+                <?php } else if (!is_null($status) && $status == 2)  { ?>
                     <a href="/promotion/fest-77-in/first" class="lf link-disable"></a>
+                <?php } else { ?>
+                    <a href="javascript:;" class="lf link-disable"></a>
                 <?php } ?>
                 <a href="second" class="rg"></a>
             </div>
