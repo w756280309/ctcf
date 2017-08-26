@@ -83,8 +83,10 @@ class Fest77InController extends BaseController
     public function check($user)
     {
         $redis = $this->redisConnect();
+        //var_dump($redis->get('qixi'));die;
         if (!$redis->hexists('qixi', $user->id)) {
-            $redis->hset('qixi', $user->id, 0, 5*24*3600);
+            $redis->hset('qixi', $user->id, 0);
+            $redis->expire('qixi', 7 * 24 * 3600);
         }
         return $redis->hget('qixi', $user->id);
     }
@@ -170,15 +172,6 @@ class Fest77InController extends BaseController
             return ['code' => 0, 'message' => '您还为参与答题'];
         }
         return ['code' => 0, 'message' => '请登录'];
-    }
-    public function actionText()
-    {
-//        $coupon = CouponType::findOne(97);
-//        var_dump($coupon);die;
-        $user = $this->getAuthedUser();
-        $redis = $this->redisConnect();
-        $redis->hset('qixi', $user->id, 0);
-
     }
 
     /*
