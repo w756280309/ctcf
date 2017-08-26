@@ -25,4 +25,9 @@ class NormalController extends Controller
             'detail' => $config,
         ]);
     }
+
+    public function actionMall77()
+    {
+        return $this->render('points77');
+    }
 }
