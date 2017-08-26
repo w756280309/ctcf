@@ -1,5 +1,13 @@
 <?php
+use common\models\adv\Share;
 $this->title = "七夕大作战";
+
+$this->share = new Share([
+    'title' => '我在这里玩答题闯关获得了大红包！快来一起玩吧！',
+    'description' => '温都金服七夕献礼，海量红包、礼品送不停！',
+    'imgUrl' => FE_BASE_URI.'wap/campaigns/active20170823/images/wx_share.png',
+    'url' => Yii::$app->request->hostInfo.'/promotion/fest-77-in/index',
+]);
 ?>
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/wenjfbase.css?v=1.0">
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/popover.css">
@@ -86,6 +94,11 @@ $this->title = "七夕大作战";
         }
         return arr;
     }
+
+    var shareCallBack = function () {
+        alert('测试回调');
+    };
+
     $(function () {
         var quesArr = createRandom(5, 0, 7);
         var quesLibNow = [];
@@ -152,19 +165,19 @@ $this->title = "七夕大作战";
         });
 
         //分享
-        $(".share").on('click', function(){
-            $.ajax({
-                url: '/promotion/fest-77-in/share',
-                type: "get",
-                dataType: "json",
-                success: function (data) {
-                    toastCenter(data.message);
-                    if (data.code == 1) {
-                        window.location.href = 'first';
-                    }
-                }
-            });
-        });
+//        $(".share").on('click', function(){
+//            $.ajax({
+//                url: '/promotion/fest-77-in/share',
+//                type: "get",
+//                dataType: "json",
+//                success: function (data) {
+//                    toastCenter(data.message);
+//                    if (data.code == 1) {
+//                        window.location.href = 'first';
+//                    }
+//                }
+//            });
+//        });
     })
 </script>
 </body>

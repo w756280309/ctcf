@@ -84,9 +84,7 @@ $this->share = new Share([
         closeImg:'<?= FE_BASE_URI ?>wap/campaigns/active20170823/images/third-pop-close.png',
         list:<?= json_encode($list) ?>
     });
-    var shareCallBack = function () {
-        alert('测试回调');
-    };
+
     $(function(){
         FastClick.attach(document.body);
         var myScroll = new iScroll('wrapper',{
