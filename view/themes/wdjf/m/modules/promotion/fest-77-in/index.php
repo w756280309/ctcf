@@ -1,4 +1,5 @@
 <?php
+$this->title = "七夕大作战";
 $list = [];
 foreach ($awardlist as $k=>$award) {
     $list[$k]['gifts_num'] = FE_BASE_URI.$award['path'];
@@ -6,11 +7,6 @@ foreach ($awardlist as $k=>$award) {
     $list[$k]['gifts_time'] = $award['note'];
 }
 ?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>七夕闯关作战</title>
     <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/wenjfbase.css?v=1.0">
     <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/campaigns/active20170823/css/gifts-list.css">
     <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/campaigns/active20170823/css/index.css">
@@ -22,9 +18,6 @@ foreach ($awardlist as $k=>$award) {
     <script src="<?= FE_BASE_URI ?>libs/iscroll.js"></script>
     <script src="<?= FE_BASE_URI ?>libs/handlebars-v4.0.10.js"></script>
     <script src="<?= FE_BASE_URI ?>wap/common/js/popover.js"></script>
-
-</head>
-<body>
 <div class="flex-content">
     <div class="part-one"></div>
     <div class="part-two">

@@ -1,18 +1,14 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>七夕闯关作战</title>
-    <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/wenjfbase.css?v=1.0">
-    <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/popover.css">
-    <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/campaigns/active20170823/css/question.css?v=1">
+<?php
+$this->title = "七夕大作战";
+?>
+<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/wenjfbase.css?v=1.0">
+<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/popover.css">
+<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/campaigns/active20170823/css/question.css?v=1">
 
-    <script src="<?= ASSETS_BASE_URI ?>js/common.js"></script>
-    <script src="<?= FE_BASE_URI ?>libs/lib.flexible3.js"></script>
-    <script src="<?= FE_BASE_URI ?>libs/jquery-1.11.1.min.js"></script>
-    <script src="<?= FE_BASE_URI ?>wap/common/js/popover.js"></script>
-</head>
-<body>
+<script src="<?= ASSETS_BASE_URI ?>js/common.js"></script>
+<script src="<?= FE_BASE_URI ?>libs/lib.flexible3.js"></script>
+<script src="<?= FE_BASE_URI ?>libs/jquery-1.11.1.min.js"></script>
+<script src="<?= FE_BASE_URI ?>wap/common/js/popover.js"></script>
 <div class="flex-content">
     <div class="part-top"></div>
     <div class="part-middle">

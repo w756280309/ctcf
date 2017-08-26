@@ -124,8 +124,6 @@ class Fest77InController extends BaseController
                 $coupon = CouponType::findOne($gift->ref_id);
             }
         }
-        //$res = null;
-        //var_dump($res);die;
         return $this->render('first', ['status' => $res, 'coupon' => $coupon]);
     }
 
@@ -182,8 +180,9 @@ class Fest77InController extends BaseController
     {
         $user = $this->getAuthedUser();
         $sum = null;
+        $promo = $this->findOr404(RankingPromo::class, ['key' => 'promo_170828']);
         if (!is_null($user)) {
-            $sum = UserInfo::calcAnnualInvest($user->id, '2017-08-28', '2017-08-31');
+            $sum = UserInfo::calcAnnualInvest($user->id, $promo->startTime, $promo->endTime);
         }
         $status = $this->checkPromo();
         return $this->render('second',['sum' => $sum, 'status' => $status]);

@@ -1,15 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>七夕闯关作战</title>
-    <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/wenjfbase.css?v=1.0">
-    <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/campaigns/active20170823/css/invest.css">
-    <script src="<?= ASSETS_BASE_URI ?>js/common.js"></script>
-    <script src="<?= FE_BASE_URI ?>/libs/lib.flexible3.js"></script>
-    <script src="<?= FE_BASE_URI ?>/libs/jquery-1.11.1.min.js"></script>
-</head>
-<body>
+
+<?php
+$this->title = '七夕闯关作战';
+?>
+<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/wenjfbase.css?v=1.0">
+<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/campaigns/active20170823/css/invest.css">
+<script src="<?= ASSETS_BASE_URI ?>js/common.js"></script>
+<script src="<?= FE_BASE_URI ?>/libs/lib.flexible3.js"></script>
+<script src="<?= FE_BASE_URI ?>/libs/jquery-1.11.1.min.js"></script>
 <div class="flex-content">
     <div class="part-one">
         <!--未登录显示去登录-->
