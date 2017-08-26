@@ -17,22 +17,48 @@ class Fest77InController extends BaseController
     {
         $promo = $this->findOr404(RankingPromo::class, ['key' => 'promo_170828']);
         $user = $this->getAuthedUser();
+        try {
+            $promo->isActive($user);
+        } catch (\Exception $ex) {
+            return $this->redirect('index');
+        }
         $awardList = [];
+        $waitAwarded = false;
         $promoClass = new Fest77($promo);
         if (null !== $user) {
             $awardList = $promoClass->getAwardList($user);
+            $waitAwarded = null !== PromoLotteryTicket::fetchOneActiveTicket($promo, $user);
+            $awardKeys = $this->getThreeRewardKey();
+            foreach ($awardList as $k => $award) {
+                $awardList[$k]['note'] = in_array($award['sn'], $awardKeys) ? '第三关' : '第一关';
+            }
         }
+
         //获取当前是否已经领取
         return $this->render('third', [
             'user' => $user,
             'awardList' => $awardList,
+            'waitAwarded' => $waitAwarded,
             'isFinishedThree' => $this->getFinishedThree($awardList),
         ]);
     }
 
     private function getFinishedThree($awardList)
     {
-        $rewardKeys = [
+        $rewardKeys = $this->getThreeRewardKey();
+
+        foreach ($awardList as $award) {
+            if (in_array($award['sn'], $rewardKeys)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private function getThreeRewardKey()
+    {
+        return [
             '170828_coupon_20',
             '170828_coupon_50',
             '170828_card_50',
@@ -40,15 +66,8 @@ class Fest77InController extends BaseController
             '170828_scales',
             '170828_p_520',
             '170828_p_77',
+            '170828_cash_77',
         ];
-
-        foreach ($awardList as $award) {
-            if (in_array($award->sn, $rewardKeys)) {
-                return true;
-            }
-        }
-
-        return false;
     }
 
     public function actionAwardThree()
@@ -75,7 +94,8 @@ class Fest77InController extends BaseController
         }
 
         $promoClass = new Fest77($promo);
-        if (empty($promoClass->getDrawnList($user))) {
+        $list = $promoClass->getAwardList($user);
+        if (!$this->getFinishedThree($list)) {
             return [
                 'code' => 4,
                 'message' => '您还没有完成第三关！',
@@ -93,7 +113,7 @@ class Fest77InController extends BaseController
             $transaction->rollBack();
             return [
                 'code' => 5,
-                'message' => '发放失败！',
+                'message' => $ex->getMessage(),
             ];
         }
 

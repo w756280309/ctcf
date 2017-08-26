@@ -242,7 +242,7 @@ class PromoService
                 }
                 $userCoupon = UserCoupon::addUserCoupon($user, $couponType);
                 $userCoupon->save(false);
-                Award::couponAward($user, $promo, $userCoupon, $ticket)->save(false);
+                Award::couponAward($user, $promo, $userCoupon, $ticket, $reward)->save(false);
                 break;
             case Reward::TYPE_POINT:
                 $point = $reward->ref_amount;
