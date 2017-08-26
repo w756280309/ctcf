@@ -1,5 +1,6 @@
 <?php
 
+use common\models\adv\Share;
 $this->title = '七夕闯关作战';
 
 $topBgUrl = $waitAwarded || $isFinishedThree ? 'third-color-status.png' : 'third-grey-status.png';
@@ -10,6 +11,12 @@ foreach ($awardList as $k=>$award) {
     $list[$k]['gifts_title'] = $award['name'];
     $list[$k]['gifts_time'] = $award['note'];
 }
+$this->share = new Share([
+    'title' => '我在这里玩答题闯关获得了大红包！快来一起玩吧！',
+    'description' => '温都金服七夕献礼，海量红包、礼品送不停！',
+    'imgUrl' => FE_BASE_URI.'wap/campaigns/active20170823/images/wx_share.jpg',
+    'url' => Yii::$app->request->hostInfo.'/promotion/fest-77-in/index',
+]);
 ?>
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/wenjfbase.css">
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/popover.css">
@@ -27,6 +34,8 @@ foreach ($awardList as $k=>$award) {
         <a href="javascript:;" class="active-rule">查看规则>></a>
         <?php if (null === $user) { ?>
             <a href="<?= $loginUrl ?>" class="go-login">点击登录>></a>
+        <?php } else { ?>
+            <a href="<?= $loginUrl ?>" class="go-login hide">点击登录>></a>
         <?php } ?>
             <div class="img-status" style="background: url('<?= FE_BASE_URI ?>wap/campaigns/active20170823/images/<?= $topBgUrl ?>') no-repeat 0 0;background-size: 100% 100%;"></div>
         <?php if ($waitAwarded) { ?>
