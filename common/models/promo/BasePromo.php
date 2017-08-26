@@ -63,7 +63,7 @@ class BasePromo
         $a = Award::tableName();
 
         return Award::find()
-            ->select("$r.*")
+            ->select("$r.*,$a.id")
             ->innerJoin($r, "$a.reward_id = $r.id")
             ->where(["$a.user_id" => $user->id])
             ->andWhere(["$a.promo_id" => $this->promo->id])
