@@ -153,13 +153,14 @@ class Fest77InController extends BaseController
      */
     public function actionShare()
     {
-        $redis = $this->redisConnect();
+        //$redis = $this->redisConnect();
         $user = $this->getAuthedUser();
-        //var_dump($redis->hget('qixi', $user->id));die;
+        //$redis->hset('qixi',$user->id,0);die;
         if (!is_null($user) && $this->check($user) == 1) {
             $this->redisAdd($user);
+            return ['code' => 1, 'message' => '分享成功'];
         }
-        return $this->redirect('first');
+        return ['code' => 0, 'message' => '分享失败'];
     }
 
     /*

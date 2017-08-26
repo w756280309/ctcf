@@ -1,6 +1,12 @@
-
 <?php
+use common\models\adv\Share;
 $this->title = '七夕闯关作战';
+$this->share = new Share([
+    'title' => '我在这里玩答题闯关获得了大红包！快来一起玩吧！',
+    'description' => '温都金服七夕献礼，海量红包、礼品送不停！',
+    'imgUrl' => FE_BASE_URI.'wap/campaigns/active20170823/images/wx_share.png',
+    'url' => Yii::$app->request->hostInfo.'/promotion/fest-77-in/index',
+]);
 ?>
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/wenjfbase.css?v=1.0">
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/campaigns/active20170823/css/invest.css">

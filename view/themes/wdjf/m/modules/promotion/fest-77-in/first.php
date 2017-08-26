@@ -52,9 +52,9 @@ $this->share = new Share([
                 <!--<a href="#" class="lf"></a>-->
                 <!--此处是不可点击状态下的按钮-->
                 <?php if (!is_null($status) && $status == 1) { ?>
-                    <a href="first" class="lf share"></a>
+                    <a href="javascript:;" class="lf share qwsz"></a>
                 <?php } else { ?>
-                    <a href="javascript:;" class="lf link-disable"></a>
+                    <a href="/promotion/fest-77-in/first" class="lf link-disable"></a>
                 <?php } ?>
                 <a href="second" class="rg"></a>
             </div>
@@ -96,7 +96,18 @@ $this->share = new Share([
     }
 
     var shareCallBack = function () {
-        alert('测试回调');
+        $.ajax({
+            url: '/promotion/fest-77-in/share',
+            type: "get",
+            dataType: "json",
+            success: function (data) {
+                if (data.code == 1) {
+                    $(".qwsz").attr('href', '/promotion/fest-77-in/first');
+                    $(".qwsz").removeClass('share');
+                    $(".qwsz").addClass('link-disable');
+                }
+            }
+        });
     };
 
     $(function () {
@@ -163,21 +174,6 @@ $this->share = new Share([
                 return false;
             }
         });
-
-        //分享
-//        $(".share").on('click', function(){
-//            $.ajax({
-//                url: '/promotion/fest-77-in/share',
-//                type: "get",
-//                dataType: "json",
-//                success: function (data) {
-//                    toastCenter(data.message);
-//                    if (data.code == 1) {
-//                        window.location.href = 'first';
-//                    }
-//                }
-//            });
-//        });
     })
 </script>
 </body>
