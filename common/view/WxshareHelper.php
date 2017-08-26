@@ -30,13 +30,13 @@ $(function() {
                 shareCallBack();
             }
             //分享四要素(标题+描述+链接地址+图标地址)
-            var shareObj = {title: title, des: desc, linkurl: linkUrl, thumurl: imgUrl};
+            var shareObj = {title: '$share->title', des: '$share->description', linkurl: '$share->url', thumurl: '$share->imgUrl'};
             if(browser.versions.ios || browser.versions.iPad || browser.versions.iPhone) {
                 //苹果设备
                 window.webkit.messageHandlers.share.postMessage(shareObj);
             } else if(browser.versions.android) {
                 //android 设备,四个参数位置不可颠倒
-                window.shareAction.share(title, desc, linkUrl, imgUrl);
+                window.shareAction.share('$share->title', '$share->description', '$share->url', '$share->imgUrl');
             } else {
                 //其它
                 popShare();
