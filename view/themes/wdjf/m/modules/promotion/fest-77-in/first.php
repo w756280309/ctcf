@@ -133,7 +133,7 @@ $this->share = new Share([
         $(".page-ready .btn-begin").click(function () {
             <?php if(is_null($status)) { ?>
             var module = poptpl.popComponent({
-                popBackground:'url(<?= FE_BASE_URI ?>wap/campaigns/active20170711/img/pop_bg_01.png) no-repeat',
+                popBackground:'url(<?= FE_BASE_URI ?>wap/campaigns/active20170823/images/third-pop-prize-bg.png) no-repeat',
                 popBorder:0,
                 closeUrl : "<?= FE_BASE_URI ?>wap/campaigns/active20170711/img/pop_close.png",
                 btnMsg : "去登录",
