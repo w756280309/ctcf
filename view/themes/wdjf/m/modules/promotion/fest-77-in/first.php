@@ -133,13 +133,13 @@ $this->share = new Share([
         $(".page-ready .btn-begin").click(function () {
             <?php if(is_null($status)) { ?>
             var module = poptpl.popComponent({
-                popBackground:'url(<?= FE_BASE_URI ?>wap/campaigns/active20170823/images/third-pop-prize-bg.png) no-repeat',
+                popBackground:'url(<?= FE_BASE_URI ?>wap/campaigns/active20170823/images/pop_bg_02.png) no-repeat',
                 popBorder:0,
-                closeUrl : "<?= FE_BASE_URI ?>wap/campaigns/active20170711/img/pop_close.png",
+                closeUrl : "<?= FE_BASE_URI ?>wap/campaigns/active20170823/images/third-pop-close.png",
                 btnMsg : "去登录",
                 popTopColor:"#fb3f5a",
-                title:'<p style="font-size:0.50666667rem; margin: 1rem 0 2.2rem;">您还未登录哦！</p>',
-                popBtmBackground:'url(<?= FE_BASE_URI ?>wap/campaigns/active20170711/img/pop_btn_01.png) no-repeat',
+                title:'<p style="font-size:0.60666667rem; margin: 1rem 0 2.2rem;">您还未登录哦！</p>',
+                popBtmBackground:'url(<?= FE_BASE_URI ?>wap/campaigns/active20170823/images/pop_btn_02.png) no-repeat',
                 popBtmBorderRadius:0,
                 popBtmFontSize : ".50666667rem",
                 btnHref:'/site/login?next=<?= urlencode(Yii::$app->request->absoluteUrl) ?>'
