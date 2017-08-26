@@ -169,7 +169,14 @@ $this->share = new Share([
                     }
                     answerNow = quesLibNow[quesIndex - 1].answer;
                 } else {
-                    window.location.href = 'first?success=true';
+                    $.ajax({
+                        url: '/promotion/fest-77-in/answer',
+                        type: "get",
+                        dataType: "json",
+                        success: function (data) {
+                                window.location.href = '/promotion/fest-77-in/first';
+                        }
+                    })
                 }
             } else {
                 $(".question-warning").removeClass('yincang');

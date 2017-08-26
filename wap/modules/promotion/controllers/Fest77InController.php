@@ -96,22 +96,13 @@ class Fest77InController extends BaseController
      * param  $success  boll
      * 限制条件：（1）最多答题两次 （2）必须分享一次才可以第二次答题
      */
-    public function actionFirst($success = false)
+    public function actionFirst()
     {
         $user = $this->getAuthedUser();
         $res = null;
         $coupon = null;
         if (!is_null($user)) {  //登录后判断是否可以参加活动
             $res = $this->check($user);
-            if ($success) {
-                if ($res >= 3 || $res == 1) {  //答题次数最多2
-                    return $this->redirect('index');
-                }
-                if ($this->redisAdd($user)) {
-                    $res = $this->check($user);
-                    $this->reward($user);
-                }
-            }
         }
         if ($res == 1 || $res == 3) {   //查获得的代金券
             $promo = $this->findOr404(RankingPromo::class, ['key' => 'promo_170828']);
@@ -127,6 +118,23 @@ class Fest77InController extends BaseController
         return $this->render('first', ['status' => $res, 'coupon' => $coupon]);
     }
 
+    public function actionAnswer()
+    {
+        $user = $this->getAuthedUser();
+        if (!is_null($user)) {
+            $res = $this->check($user);
+            if ($res == 2 || $res == 0) {  //答题次数最多2
+                if ($this->redisAdd($user)) {
+                    $this->reward($user);
+                    return ['code' => 1, 'message' => '答题成功'];
+                } else {
+                    return ['code' => 0, 'message' => '答题失败'];
+                }
+            }
+            return ['code' => 0, 'message' => '答题失败'];
+        }
+        return ['code' => 0, 'message' => '答题失败'];
+    }
     /*
      *发放奖励
      * 每次答题成功后发放奖励
