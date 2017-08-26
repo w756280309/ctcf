@@ -70,5 +70,6 @@ class BasePromo
             ->orderBy(["$a.createTime" => SORT_DESC])
             ->asArray()
             ->all();
+
     }
 }
