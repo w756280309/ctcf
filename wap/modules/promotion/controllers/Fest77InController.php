@@ -153,23 +153,13 @@ class Fest77InController extends BaseController
      */
     public function actionShare()
     {
-        $promo = $this->findOr404(RankingPromo::class, ['key' => 'promo_170828']);
+        $redis = $this->redisConnect();
         $user = $this->getAuthedUser();
-        if (!is_null($user)) {
-            $res = $this->check($user);
-            if ($res == 1) { //至少答题一次才可以邀请好友
-                if ($this->redisAdd($user)) {
-                    return ['code' => 1, 'message' => '分享成功'];
-                } else {
-                    return ['code' => 0, 'message' => '分享失败'];
-                }
-            }
-            if ($res > 1) {    //参加两次答题并分享，直接返回成功。
-                return ['code' => 1, 'message' => '分享成功'];
-            }
-            return ['code' => 0, 'message' => '您还为参与答题'];
+        //var_dump($redis->hget('qixi', $user->id));die;
+        if (!is_null($user) && $this->check($user) == 1) {
+            $this->redisAdd($user);
         }
-        return ['code' => 0, 'message' => '请登录'];
+        return $this->redirect('first');
     }
 
     /*

@@ -45,8 +45,8 @@ $this->share = new Share([
             <p class="result-correct">您答对了 <span>5</span> 题</p>
             <p class="result-congra">恭喜您获得</p>
             <div class="result-coupon">
-                <p class="coupon-jine"><span><?= !is_null($coupon) ? ceil($coupon->amount) : 0 ?></span>元代金券</p>
-                <p class="coupon-qitou"><span><?= !is_null($coupon) ? ceil($coupon->minInvest) : 0 ?></span>元起投</p>
+                <p class="coupon-jine"><span><?= !is_null($coupon) ? ceil($coupon->amount) : 10 ?></span>元代金券</p>
+                <p class="coupon-qitou"><span><?= !is_null($coupon) ? ceil($coupon->minInvest) : 1000 ?></span>元起投</p>
             </div>
             <div class="result-link clearfix">
                 <!--<a href="#" class="lf"></a>-->
