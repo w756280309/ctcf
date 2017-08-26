@@ -4,7 +4,7 @@ return [
     'components' => [
         'redis_session' => [
             'class' => 'yii\redis\Connection',
-            'hostname' => '127.0.0.1',
+            'hostname' => 'r-bp1cc58258c8bdf4.redis.rds.aliyuncs.com',
             'port' => 6379,
             'database' => 1, // 设为1避免误写，默认是0
             'password' => null, // 不允许提交密码到代码仓库

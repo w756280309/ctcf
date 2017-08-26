@@ -30,6 +30,10 @@ class Fest77InController extends BaseController
         if (null !== $user) {
             $awardList = $promoClass->getAwardList($user);
         }
+        $awardKeys = $this->getThreeRewardKey();
+        foreach ($awardList as $k => $award) {
+            $awardList[$k]['note'] = in_array($award['sn'], $awardKeys) ? '第三关' : '第一关';
+        }
         //$status = null;
         //$user = null;
         return $this->render('index', ['user' => $user, 'promo' => $promo, 'status' => $status, 'awardlist' => $awardList]);

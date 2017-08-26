@@ -3,7 +3,7 @@ $list = [];
 foreach ($awardlist as $k=>$award) {
     $list[$k]['gifts_num'] = FE_BASE_URI.$award['path'];
     $list[$k]['gifts_title'] = $award['name'];
-    $list[$k]['gifts_time'] = '第一关';
+    $list[$k]['gifts_time'] = $award['note'];
 }
 ?>
 <!DOCTYPE html>
