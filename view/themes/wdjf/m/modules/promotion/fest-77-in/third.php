@@ -14,7 +14,7 @@ foreach ($awardList as $k=>$award) {
 $this->share = new Share([
     'title' => '我在这里玩答题闯关获得了大红包！快来一起玩吧！',
     'description' => '温都金服七夕献礼，海量红包、礼品送不停！',
-    'imgUrl' => FE_BASE_URI.'wap/campaigns/active20170823/images/wx_share.jpg',
+    'imgUrl' => FE_BASE_URI.'wap/campaigns/active20170823/images/wx_share.png',
     'url' => Yii::$app->request->hostInfo.'/promotion/fest-77-in/index',
 ]);
 ?>
@@ -84,7 +84,9 @@ $this->share = new Share([
         closeImg:'<?= FE_BASE_URI ?>wap/campaigns/active20170823/images/third-pop-close.png',
         list:<?= json_encode($list) ?>
     });
-
+    var shareCallBack = function () {
+        alert('测试回调');
+    };
     $(function(){
         FastClick.attach(document.body);
         var myScroll = new iScroll('wrapper',{
