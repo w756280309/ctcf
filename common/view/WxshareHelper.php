@@ -19,8 +19,6 @@ class WxshareHelper
 
         $_js = <<<JS
 $(function() {
-    closeShare();
-
     $('.share').on('click', function() {
         var host = window.location.host.toLocaleLowerCase();
 
@@ -95,7 +93,7 @@ $.get("/weixin/auth", {
             link: '$share->url', // 分享链接
             imgUrl: '$share->imgUrl', // 分享图标
             success: function () {
-                closeShare();
+                $('body').trigger('click');
                 if (shareCallBack) {
                     shareCallBack();
                 }
@@ -107,15 +105,13 @@ $.get("/weixin/auth", {
         console.log(res);
     });
 });
-    
-function closeShare() {
-    $('body').on('click',function(e) {
-        if($(e.target).hasClass('share-box') || $(e.target).hasClass('share-box-img')){
-            $('.share-box').hide().remove();
-            $('.mark-box').hide().remove();
-        }
-    });
-}
+
+$('body').on('click',function(e) {
+    if($(e.target).hasClass('share-box') || $(e.target).hasClass('share-box-img') || $(e.target).children('div').hasClass('share-box')){
+        $('.share-box').hide().remove();
+        $('.mark-box').hide().remove();
+    }
+});
 
 function popShare() {
     var html = '<div class="mark-box" style="display: none;position: fixed;left: 0;bottom:0;width: 100%;height: 100%;background: #000;opacity: 0.6;z-index: 11;" ></div>'
