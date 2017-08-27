@@ -95,6 +95,7 @@ $.get("/weixin/auth", {
             link: '$share->url', // 分享链接
             imgUrl: '$share->imgUrl', // 分享图标
             success: function () {
+                closeShare();
                 if (shareCallBack) {
                     shareCallBack();
                 }
