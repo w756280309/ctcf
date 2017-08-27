@@ -1,6 +1,6 @@
 <?php
 use common\models\adv\Share;
-$this->title = "七夕大作战";
+$this->title = "七夕闯关大作战";
 
 $this->share = new Share([
     'title' => '我在这里玩答题闯关获得了大红包！快来一起玩吧！',
@@ -104,9 +104,7 @@ $this->share = new Share([
             dataType: "json",
             success: function (data) {
                 if (data.code == 1) {
-                    $(".qwsz").attr('href', '/promotion/fest-77-in/first');
-                    $(".qwsz").removeClass('share');
-                    $(".qwsz").addClass('link-disable');
+                    $('.result-link .qwsz').replaceWith('<a href="/promotion/fest-77-in/first" class="lf link-disable"></a>');
                 }
             }
         });

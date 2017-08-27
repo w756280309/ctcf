@@ -1,7 +1,7 @@
 <?php
 
 use common\models\adv\Share;
-$this->title = '七夕闯关作战';
+$this->title = '七夕闯关大作战';
 
 $topBgUrl = $waitAwarded || $isFinishedThree ? 'third-color-status.png' : 'third-grey-status.png';
 $loginUrl = '/site/login?next='.urlencode(Yii::$app->request->absoluteUrl);

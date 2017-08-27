@@ -1,6 +1,6 @@
 <?php
 use common\models\adv\Share;
-$this->title = '七夕闯关作战';
+$this->title = '七夕闯关大作战';
 $this->share = new Share([
     'title' => '我在这里玩答题闯关获得了大红包！快来一起玩吧！',
     'description' => '温都金服七夕献礼，海量红包、礼品送不停！',

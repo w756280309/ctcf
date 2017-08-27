@@ -1,5 +1,5 @@
 <?php
-$this->title = "七夕大作战";
+$this->title = "七夕闯关大作战";
 $list = [];
 foreach ($awardlist as $k=>$award) {
     $list[$k]['gifts_num'] = FE_BASE_URI.$award['path'];
