@@ -34,12 +34,10 @@ class Fest77InController extends BaseController
         foreach ($awardList as $k => $award) {
             $awardList[$k]['note'] = in_array($award['sn'], $awardKeys) ? '第三关' : '第一关';
         }
-        //$status = null;
-        //$user = null;
         return $this->render('index', ['user' => $user, 'promo' => $promo, 'status' => $status, 'awardlist' => $awardList]);
     }
     //检查活动状态
-    public function checkPromo()
+    private function checkPromo()
     {
         $promo = $this->findOr404(RankingPromo::class, ['key' => 'promo_170828']);
         $promoStatus = null;
@@ -61,13 +59,13 @@ class Fest77InController extends BaseController
     }
 
     //redis连接
-    public function redisConnect()
+    private function redisConnect()
     {
         $redis = Yii::$app->redis_session;
         return $redis;
     }
     //redis编辑
-    public function redisAdd($user)
+    private function redisAdd($user)
     {
         $redis = $this->redisConnect();
         if ($redis->hincrby('qixi', $user->id, 1)) {
@@ -76,14 +74,13 @@ class Fest77InController extends BaseController
         return false;
     }
 
-    /*
-     *判断用户是否参加活动
-     *如果用户未参加活动奖状太设置为0
+    /**
+     * 判断用户是否参加活动
+     * 如果用户未参加活动奖状太设置为0
      */
-    public function check($user)
+    private function check($user)
     {
         $redis = $this->redisConnect();
-        //var_dump($redis->get('qixi'));die;
         if (!$redis->hexists('qixi', $user->id)) {
             $redis->hset('qixi', $user->id, 0);
             $redis->expire('qixi', 7 * 24 * 3600);
@@ -91,9 +88,8 @@ class Fest77InController extends BaseController
         return $redis->hget('qixi', $user->id);
     }
 
-    /*
+    /**
      * 第一关 ---  答题
-     * param  $success  boll
      * 限制条件：（1）最多答题两次 （2）必须分享一次才可以第二次答题
      */
     public function actionFirst()
@@ -135,14 +131,13 @@ class Fest77InController extends BaseController
         }
         return ['code' => 0, 'message' => '答题失败'];
     }
-    /*
-     *发放奖励
+    /**
+     * 发放奖励
      * 每次答题成功后发放奖励
      */
-    public function reward($user)
+    private function reward($user)
     {
         $promo = $this->findOr404(RankingPromo::class, ['key' => 'promo_170828']);
-        //$user = $this->getAuthedUser();
         if ($user->created_at < (time() - 3600 * 24 * 30)) {    //老用户
             $key = Reward::draw(['170828_lc_10' => '0.5', '170828_lc_20' => '0.2', '170828_lc_50' => '0.3']);
         } else {    //一个月内
@@ -155,8 +150,8 @@ class Fest77InController extends BaseController
         }
     }
 
-    /*
-     *分享好友
+    /**
+     * 分享好友
      * 条件：必须答题一次才可以分享
      */
     public function actionShare()
@@ -171,8 +166,8 @@ class Fest77InController extends BaseController
         return ['code' => 0, 'message' => '分享失败'];
     }
 
-    /*
-     *第二关
+    /**
+     * 第二关
      * 获取用户累计年化
      */
     public function actionSecond()
@@ -187,6 +182,10 @@ class Fest77InController extends BaseController
         return $this->render('second',['sum' => $sum, 'status' => $status]);
     }
 
+    /**
+     * 第三关
+     * 首投，送抽奖机会
+     */
     public function actionThird()
     {
         $promo = $this->findOr404(RankingPromo::class, ['key' => 'promo_170828']);
@@ -244,6 +243,9 @@ class Fest77InController extends BaseController
         ];
     }
 
+    /**
+     * 第三关送固定奖励：7.7现金红包
+     */
     public function actionAwardThree()
     {
         $user = $this->getAuthedUser();
