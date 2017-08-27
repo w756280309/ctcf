@@ -22,7 +22,7 @@ class Fest77InController extends BaseController
     public function actionIndex()
     {
         $user = $this->getAuthedUser();
-        $status = $this->checkPromo();
+        $status = $this->checkPromo($user);
         //奖励
         $promo = $this->findOr404(RankingPromo::class, ['key' => 'promo_170828']);
         $awardList = [];
@@ -37,12 +37,12 @@ class Fest77InController extends BaseController
         return $this->render('index', ['user' => $user, 'promo' => $promo, 'status' => $status, 'awardlist' => $awardList]);
     }
     //检查活动状态
-    private function checkPromo()
+    private function checkPromo($user)
     {
         $promo = $this->findOr404(RankingPromo::class, ['key' => 'promo_170828']);
         $promoStatus = null;
         try {
-            $promo->isActive(null, time());
+            $promo->isActive($user, time());
         } catch (\Exception $e) {
             $promoStatus = $e->getCode();
         }
@@ -156,9 +156,7 @@ class Fest77InController extends BaseController
      */
     public function actionShare()
     {
-        //$redis = $this->redisConnect();
         $user = $this->getAuthedUser();
-        //$redis->hset('qixi',$user->id,0);die;
         if (!is_null($user) && $this->check($user) == 1) {
             $this->redisAdd($user);
             return ['code' => 1, 'message' => '分享成功'];
@@ -178,7 +176,7 @@ class Fest77InController extends BaseController
         if (!is_null($user)) {
             $sum = UserInfo::calcAnnualInvest($user->id, $promo->startTime, $promo->endTime);
         }
-        $status = $this->checkPromo();
+        $status = $this->checkPromo($user);
         return $this->render('second',['sum' => $sum, 'status' => $status]);
     }
 
