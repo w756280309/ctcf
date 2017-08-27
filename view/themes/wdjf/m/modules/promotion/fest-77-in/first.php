@@ -1,6 +1,6 @@
 <?php
 use common\models\adv\Share;
-$this->title = "七夕大作战";
+$this->title = "七夕闯关大作战";
 
 $this->share = new Share([
     'title' => '我在这里玩答题闯关获得了大红包！快来一起玩吧！',
@@ -49,14 +49,13 @@ $this->share = new Share([
                 <p class="coupon-qitou"><span><?= !is_null($coupon) ? ceil($coupon->minInvest) : 1000 ?></span>元起投</p>
             </div>
             <div class="result-link clearfix">
-                <!--<a href="#" class="lf"></a>-->
                 <!--此处是不可点击状态下的按钮-->
                 <?php if (!is_null($status) && $status == 1) { ?>
                     <a href="javascript:;" class="lf share qwsz"></a>
                 <?php } else if (!is_null($status) && $status == 2)  { ?>
                     <a href="/promotion/fest-77-in/first" class="lf2"></a>
                 <?php } else { ?>
-                    <a href="javascript:;" class="lf2"></a>
+                    <a href="javascript:;" class="lf2 link-disable"></a>
                 <?php } ?>
                 <a href="second" class="rg"></a>
             </div>
@@ -65,9 +64,6 @@ $this->share = new Share([
     <div class="part-bottom"></div>
 </div>
 <script>
-    $('.rg').on('click', function(){
-        $('.result-link .qwsz').replaceWith('<a href="/promotion/fest-77-in/first" class="lf2"></a>');
-    })
     <?php if (!is_null($status) && ($status == 1 || $status ==3) ) { ?>
         $(".page-question").hide();
         $(".page-ready").hide();
@@ -107,7 +103,7 @@ $this->share = new Share([
             dataType: "json",
             success: function (data) {
                 if (data.code == 1) {
-                    $('.result-link .qwsz').replaceWith('<a href="/promotion/fest-77-in/first" class="lf link-disable"></a>');
+                    $('.result-link .qwsz').replaceWith('<a href="/promotion/fest-77-in/first" class="lf2 lf"></a>');
                 }
             }
         });
