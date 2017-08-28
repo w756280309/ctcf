@@ -8,10 +8,12 @@ use common\models\order\OnlineOrder;
 use common\models\order\OnlineFangkuan;
 use common\models\product\Issuer;
 use common\models\product\OnlineProduct;
+use common\models\promo\Award;
 use common\models\promo\FirstOrderPoints;
 use common\models\promo\InviteRecord;
 use common\models\promo\LoanOrderPoints;
 use common\models\transfer\Transfer;
+use common\models\user\MoneyRecord;
 use common\models\user\User;
 use common\models\user\UserAccount;
 use common\service\AccountService;
@@ -289,9 +291,19 @@ GROUP BY rp.uid, rp.online_Pid";
                 $count = intval($count);
                 if ($count > 0) {
                     $money = round($order->order_money / 1000, 1);
-                    echo '为ID为 '.$inviteRecord->user_id.' 的用户补发红包 '. $money . ' 元'. PHP_EOL;
-                    $res = $this->sendUserCash($inviteRecord->user_id, $money);
-                    var_dump($res);
+                    $this->stdout('为ID为 '.$inviteRecord->user_id.' 的用户补发红包 '. $money . ' 元'. PHP_EOL);
+                    $moneyRecord = $this->sendUserCash($inviteRecord->user_id, $money);
+                    if (is_bool($moneyRecord) && !$moneyRecord) {
+                        $this->stdout($order->uid.'发送现金红包'.$money.'元失败！');
+                    }
+                    $promo = RankingPromo::find()
+                        ->where(['key' => 'promo_invite_12'])
+                        ->one();
+                    if (null !== $promo && $moneyRecord instanceof MoneyRecord) {
+                        $award = Award::cashAward($inviteRecord->user, $promo, $moneyRecord);
+                        $award->save(false);
+                        $this->stdout($inviteRecord->user_id.$money.'元现金红包成功！');
+                    }
                 }
             }
         }
