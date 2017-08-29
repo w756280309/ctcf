@@ -141,11 +141,18 @@ function subForm() {
 
     xhr.done(function (data) {
         if (0 !== data.code) {
-            //toastCenter(data.message, function () {
+            if (data.message) {
+                toastCenter(data.message, function () {
+                    if (typeof data.tourl !== 'undefined') {
+                        location.href = data.tourl;
+                    }
+                });
+            } else {
                 if (typeof data.tourl !== 'undefined') {
                     location.href = data.tourl;
                 }
-            //});
+            }
+
             allowClick = true;
             idCardBtn.html('立 即 开 通');
         } else {
@@ -175,11 +182,18 @@ function getIdentityRes(id) {
     xhr.done(function (data) {
         if (0 === data.code || 2 === data.code) {
             clearInterval(t);
-            //toastCenter(data.message, function () {
+            if (data.message) {
+                toastCenter(data.message, function () {
+                    if (typeof data.tourl !== 'undefined') {
+                        location.href = data.tourl;
+                    }
+                });
+            } else {
                 if (typeof data.tourl !== 'undefined') {
                     location.href = data.tourl;
                 }
-            //});
+            }
+
             if (2 === data.code) {
                 allowClick = true;
                 idCardBtn.html('立 即 开 通');
