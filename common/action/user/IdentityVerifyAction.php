@@ -45,7 +45,7 @@ class IdentityVerifyAction extends Action
                     ->orderBy(['id' => SORT_DESC])
                     ->one();
                 if (!is_null($lastRecord)) {
-                    if (in_array($lastRecord->code, ['00060022'])) {
+                    if (in_array($lastRecord->code, ['00060022', '00290501'])) {
                         $message = $lastRecord->message;
                     } else {
                         $message = '';
