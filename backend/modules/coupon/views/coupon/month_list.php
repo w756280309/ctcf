@@ -62,22 +62,17 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\we
                     'layout' => '{summary}{items}<div class="pagination"><center>{pager}</center></div>',
                     'columns' => [
                         [
-                            'header' => '用户名称',
+                            'header' => '用户id',
                             'format' => 'html',
                             'value' => function ($model) {
-                                if ($model->user->real_name) {
-                                    return '<a href="/user/user/detail?id='.($model->user->id).'">'.$model->user->real_name.'</a>';
+                                if ($model->user->id) {
+                                    return '<a href="/user/user/detail?id='.($model->user->id).'">'.$model->user->id.'</a>';
                                 } else {
                                     return '---';
                                 }
                             }
                         ],
-                        [
-                            'header' => '用户手机号',
-                            'value' => function ($model) {
-                                return isset($model->user->safeMobile) ? SecurityUtils::decrypt($model->user->safeMobile) : '---';
-                            }
-                        ],
+
                         [
 
                             'contentOptions' => [
