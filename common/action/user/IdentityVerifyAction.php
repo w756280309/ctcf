@@ -45,16 +45,11 @@ class IdentityVerifyAction extends Action
                     ->orderBy(['id' => SORT_DESC])
                     ->one();
                 if (!is_null($lastRecord)) {
-                    if (in_array($lastRecord->code, ['00060022', '00290501'])) {
-                        $message = $lastRecord->message;
-                    } else {
-                        $message = '';
-                    }
                     $openAccountRecord->status = OpenAccount::STATUS_FAIL;
                     $openAccountRecord->message = $lastRecord->message;
                     $openAccountRecord->save(false);
                     sleep(3);
-                    return ['code' => 1, 'message' => $message];
+                    return ['code' => 1, 'message' => $lastRecord->getPromptMessage()];
                 }
 
                 $job = new OpenAccountJob([

@@ -76,4 +76,19 @@ class OpenAccount extends ActiveRecord
     {
         return $this->hasOne(User::className(), ['id' => 'user_id']);
     }
+
+    //获取向用户展示的提示信息
+    public function getPromptMessage()
+    {
+        if (!is_null($this->code) && in_array($this->code, ['00290502', '00160080', '00240632', '00160079', '00290501', '00160104', '00060022'])) {
+            if ($this->code === '00240632') {
+                $message = '您请求太频繁了，请1分钟后重试!';
+            } else {
+                $message = $this->message;
+            }
+        } else {
+            $message = '';
+        }
+        return $message;
+    }
 }
