@@ -5,9 +5,11 @@ namespace console\controllers;
 use common\models\draw\DrawManager;
 use common\models\epay\EpayUser;
 use common\models\mall\ThirdPartyConnect;
+use common\models\order\OnlineOrder;
 use common\models\order\OnlineRepaymentPlan;
 use common\models\payment\Repayment;
 use common\models\product\OnlineProduct;
+use common\models\tx\CreditOrder;
 use common\models\user\DrawRecord;
 use common\models\user\User;
 use common\models\user\UserAccount;
@@ -320,5 +322,188 @@ class ToolController extends Controller
             }
             echo '标的在联动状态:' . $resp->get('project_state') . "\n";
         }
+    }
+
+    /**
+     * 工具脚本:统计平台一段时间的复投率，默认时间段为本月  php yii tool/platform-rate
+     */
+    public function actionPlatformRate($startDate = null, $endDate = null)
+    {
+        if (empty($startDate) || false === strtotime($startDate)) {
+            $startDate = date('Y-m-01');
+        }
+        if (empty($endDate) || false === strtotime($endDate)) {
+            $endDate = date('Y-m-t');
+        }
+
+        //统计投资总人数
+        $allInvestUsers = Yii::$app->db->createCommand("select distinct uid from online_order where `status` = 1 and date(from_unixtime(order_time)) between :startDate and :endDate", [
+            'startDate' => $startDate,
+            'endDate' => $endDate,
+        ])->queryColumn();
+        //统计首次投资人数
+        $firstInvestUsers = Yii::$app->db->createCommand("SELECT distinct user_id FROM `user_info` WHERE `firstInvestDate` = `lastInvestDate` and `firstInvestDate` between :startDate and :endDate", [
+            'startDate' => $startDate,
+            'endDate' => $endDate,
+        ])->queryColumn();
+        //计算复投用户
+        $investUsers = array_diff($allInvestUsers, $firstInvestUsers);
+
+        //统计总投资金额
+        $totalInvestAmount = Yii::$app->db->createCommand("select sum(order_money) from online_order where `status` = 1 and date(from_unixtime(order_time)) between :startDate and :endDate", [
+            'startDate' => $startDate,
+            'endDate' => $endDate,
+        ])->queryScalar();
+        //首次投资金额
+        $firstInvestAmount = Yii::$app->db->createCommand("SELECT sum(`firstInvestAmount`) FROM `user_info` WHERE `firstInvestDate` = `lastInvestDate` and `firstInvestDate` between :startDate and :endDate", [
+            'startDate' => $startDate,
+            'endDate' => $endDate,
+        ])->queryScalar();
+        //复投总额
+        $investAmount = $totalInvestAmount - $firstInvestAmount;
+
+        $refundAmount = Yii::$app->db->createCommand("select sum(benxi) from online_repayment_plan where status in (1,2) and date(`actualRefundTime`)  between :startDate and :endDate", [
+            'startDate' => $startDate,
+            'endDate' => $endDate,
+        ])->queryScalar();
+        $refundCount = Yii::$app->db->createCommand("select count(distinct uid) from online_repayment_plan where status in (1,2) and date(`actualRefundTime`)  between :startDate and :endDate", [
+            'startDate' => $startDate,
+            'endDate' => $endDate,
+        ])->queryScalar();
+
+        if ($refundAmount > 0) {
+            $rate = bcmul(bcdiv($investAmount, $refundAmount, 4), 100, 2);
+        } else {
+            $rate = 0;
+        }
+
+        $this->stdout("$startDate 到 $endDate 平台复投率统计数据如下: \n");
+        $this->stdout("复投总额: " . number_format($investAmount, 2) . "元 ; 复投人数: " . count($investUsers) . " \n");
+        $this->stdout("回款总额: " . number_format($refundAmount, 2) . "元; 回款人数: " . $refundCount . "\n");
+        $this->stdout("平台新增金额: " . number_format($investAmount - $refundAmount, 2) . "元; 平台复投率: " . $rate . "% \n");
+    }
+
+    /**
+     * 工具脚本：根据副标题统计一系列标的在回款 $n 天后的复投情况 php yii tool/loan-rate
+     */
+    public function actionLoanRate($title, $n = 10)
+    {
+
+        $n = intval($n);
+        if ($n <= 0) {
+            $n = 10;
+        }
+        if (empty($title)) {
+            throw new \Exception("副标题不能为空");
+        }
+        $loans = OnlineProduct::find()
+            ->where(['like', 'internalTitle', $title])
+            ->andWhere(['status' => OnlineProduct::STATUS_OVER])
+            ->all();
+        if (count($loans) > 500) {
+            throw new \Exception('根据副标题找到标的超过 100 条');
+        }
+        $validateData = [];
+        foreach ($loans as $key => $loan) {
+            /**
+             * @var Repayment $repayment
+             * @var OnlineProduct $loan
+             */
+            $repayment = Repayment::find()->where(['loan_id' => $loan->id, 'isRefunded' => 1])->orderBy(['term' => SORT_DESC])->one();
+            if (is_null($repayment)) {
+                $this->stdout("没有找到  $loan->title 的还款数据 \n");
+                exit();
+            }
+            $validateData[] = [
+                'loan' => $loan,
+                'repayment' => $repayment,
+                'startTime' => strtotime($repayment->refundedAt),
+                'endTime' => (new \DateTime($repayment->refundedAt))->add(new \DateInterval('P'.$n.'D'))->getTimestamp(),
+            ];
+        }
+
+        $fp = fopen('/tmp/loan.csv' ,'w');
+        fputcsv($fp, [
+            '标的副标题',
+            '标的标题',
+            '标的还款时间',
+            '复投查询截止时间',
+            '还款金额',
+            '还款人数',
+            '复投金额',
+            '复投人数',
+            '复投率',
+        ]);
+        $count = 0;
+        foreach ($validateData as $item) {
+            /**
+             * @var OnlineProduct $loan
+             * @var Repayment $repayment
+             */
+            $loan = $item['loan'];
+            $repayment = $item['repayment'];
+            $startTime = $item['startTime'];
+            $endTime = $item['endTime'];
+
+            //回款金额
+            $refundAmount = $repayment->amount;
+
+            $data = OnlineRepaymentPlan::find()
+                ->select('uid')
+                ->distinct()
+                ->where(['online_pid' => $loan->id])
+                ->andWhere(['status' => [1, 2]])
+                ->asArray()
+                ->all();
+            $userIds = array_column($data, 'uid');
+            //回款人数
+            $refundUserCount = count($userIds);
+            $orderData = OnlineOrder::find()
+                ->select(['uid', 'order_money'])
+                ->where(['in', 'uid', $userIds])
+                ->andWhere(['status' => OnlineOrder::STATUS_SUCCESS])
+                ->andWhere(['between', 'order_time', $startTime, $endTime])
+                ->asArray()
+                ->all();
+            $orderUserIds = array_column($orderData, 'uid');
+            $orderUserIds = empty($orderData) ? [] : array_unique($orderUserIds);
+            $orderMoney = array_column($orderData, 'order_money');
+            $orderMoney = empty($orderMoney) ? 0 : array_sum($orderMoney);
+            $txOrder = CreditOrder::find()
+                ->select(['user_id', 'amount'])
+                ->where(['in', 'user_id', $userIds])
+                ->andWhere(['status' => CreditOrder::STATUS_SUCCESS])
+                ->andWhere(['between', 'createTime', date('Y-m-d H:i:s', $startTime), date('Y-m-d H:i:s', $endTime)])
+                ->asArray()
+                ->all();
+            $txUserIds = array_column($txOrder, 'user_id');
+            $txUserIds = empty($txUserIds) ? [] : array_unique($txUserIds);
+            $txMoney = array_column($txOrder, 'amount');
+            $txMoney = empty($txMoney) ? 0 : array_sum($txMoney);
+            //复投数据
+            $buyUserIds = array_merge($orderUserIds, $txUserIds);
+            $buyUserIds = array_unique($buyUserIds);
+            $buyUserCount = count($buyUserIds);
+            $buyAmount = bcadd($orderMoney, $txMoney, 2);
+
+            $rate = 0;
+            if ($refundAmount > 0) {
+                $rate = bcmul(bcdiv($buyAmount, $refundAmount, 4), 100, 2);
+            }
+            fputcsv($fp, [
+                $loan->internalTitle,
+                $loan->title,
+                $repayment->refundedAt,
+                date('Y-m-d H:i:s', $endTime),
+                number_format($refundAmount, 2),
+                $refundUserCount,
+                number_format($buyAmount, 2),
+                $buyUserCount,
+                $rate . '%',
+            ]);
+            $count++;
+        }
+        $this->stdout("共处理 $count 个标的 \n");
+        fclose($fp);
     }
 }
