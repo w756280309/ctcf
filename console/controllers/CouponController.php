@@ -88,7 +88,7 @@ class CouponController extends Controller
         $users = User::find()
             ->where(['between', 'created_at', $time, $time + 60 * 60 * 24 - 1])
             ->all();
-        $templateId = '155514';
+        $templateId = '198136';
         $count = 0;
 
         $smsConfig = SmsConfig::findOne(['template_id' => $templateId]);
