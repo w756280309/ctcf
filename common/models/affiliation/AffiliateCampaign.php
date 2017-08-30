@@ -5,9 +5,12 @@ namespace common\models\affiliation;
 use yii\db\ActiveRecord;
 
 /**
- * 分销商.
+ * Class AffiliateCampaign
+ * @package common\models\affiliation
  *
- * @author zhanghongyu<zhanghongyu@wangcaigu.com>
+ * @property integer $id
+ * @property string  $trackCode     渠道码
+ * @property string  $affiliator_id 分销商ID
  */
 class AffiliateCampaign extends ActiveRecord
 {

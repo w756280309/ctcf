@@ -4,6 +4,7 @@ namespace common\models\user;
 
 use common\lib\validator\LoginpassValidator;
 use common\models\affiliation\AffiliationManager;
+use common\models\affiliation\Affiliator;
 use common\models\coupon\CouponType;
 use common\models\coupon\UserCoupon;
 use common\models\promo\InviteRecord;
@@ -115,6 +116,7 @@ class SignupForm extends Model
     {
         if ($this->validate()) {
             $transaction = Yii::$app->db->beginTransaction();
+            //初始化User并保存 - 注册模块1
             $user = new User([
                 'usercode' => User::create_code(),
                 'type' => User::USER_TYPE_PERSONAL,
@@ -124,49 +126,43 @@ class SignupForm extends Model
                 'regContext' => $regContext,
                 'safeMobile' => SecurityUtils::encrypt($this->phone),
             ]);
-
             $user->scenario = 'signup';
             $user->setPassword($this->password);
 
-            if (Yii::$app->request->cookies->getValue('campaign_source')) {
-                $user->campaign_source = Yii::$app->request->cookies->getValue('campaign_source');
-            }
+            //获得当前用户的渠道码
+            $campaignSource = Yii::$app->request->cookies->getValue('campaign_source');
+            $user->campaign_source = $campaignSource;
 
-            //添加来源
+            //添加来源 - APP或微信
             if (defined('IN_APP') && IN_APP) {
                 $regFrom = User::REG_FROM_APP;
             }
-
             if ($_SERVER["HTTP_USER_AGENT"] && false !== strpos($_SERVER["HTTP_USER_AGENT"], 'MicroMessenger')) {
                 $regFrom = User::REG_FROM_WX;
             }
 
-            //添加注册IP
+            //添加注册IP、注册来源、活动ID
             $user->registerIp = Yii::$app->request->getUserIP();
-            //添加注册来源
             $user->regFrom = $regFrom;
-            //添加活动ID
             $user->promoId = $promoId;
-
             if (!$user->save()) {
                 $transaction->rollBack();
-
                 return false;
             }
 
+            //初始化UserAccount并保存 - 注册模块2
             $user_acount = new UserAccount();
             $user_acount->uid = $user->id;
             $user_acount->type = UserAccount::TYPE_LEND;
-
             if (!$user_acount->save()) {
                 $transaction->rollBack();
-
                 return false;
             }
 
-            //邀请好友
-            $isAffiliator = false;
+            //判断用户是否存在邀请码，添加邀请关系 - 注册模块3
+            $isInvitee = false; //是否为被邀请者
             $inviteCode = Yii::$app->session->get('inviteCode');
+            $inviterCampaignSource = null;
             if ($inviteCode) {
                 $u = User::findOne(['usercode' => $inviteCode]);
                 if ($u) {
@@ -179,22 +175,23 @@ class SignupForm extends Model
                         $transaction->rollBack();
                         return false;
                     }
-
-                    $isAffiliator = true;
+                    $inviterCampaignSource = $u->campaign_source;
+                    $isInvitee = true;
                 }
             }
 
-            //初始化UserInfo
+            //初始化UserInfo并保存 - 注册模块4
             $userInfo = new UserInfo([
                 'user_id' => $user->id,
-                'isAffiliator' => $isAffiliator,
+                'isAffiliator' => $isInvitee,
             ]);
             if (!$userInfo->save()) {
                 $transaction->rollBack();
                 return false;
             }
 
-            //注册即送代金券
+            //注册即送288元代金券，代金券发送成功后发送短信 - 注册模块5
+            $issuedCoupon = false;
             $regCouponTypes = CouponType::findAll(['sn' => [
                 '0015:10000-20',    //20元，起投1万，有效期30天
                 '0015:20000-30',    //30元，起投2万，有效期30天
@@ -202,8 +199,6 @@ class SignupForm extends Model
                 '0016:100000-80',   //80元，起投10万，有效期30天
                 '0016:200000-150',  //150元，起投20万，有效期30天
             ]]);
-            $issuedCoupon = false;
-
             foreach ($regCouponTypes as $regCouponType) {
                 try {
                     if (UserCoupon::addUserCoupon($user, $regCouponType)->save()) {
@@ -213,22 +208,34 @@ class SignupForm extends Model
                     // do nothing.
                 }
             }
-
             if ($issuedCoupon) {
                 $templateId = '155661';
                 $smsConfig = SmsConfig::findOne(['template_id' => $templateId]);
-
                 if ($smsConfig) {
                     SmsService::send(SecurityUtils::decrypt($user->safeMobile), $templateId, $smsConfig->getConfig(), $user);
                 }
             }
 
+            //提交注册模块 - 事务提交
             $transaction->commit();
+
+            //注册成功后，所有发送的注册短信验证码置为1，已无效 - 注册后续处理模块1
             SmsService::editSms(SecurityUtils::decrypt($user->safeMobile));
-            if (Yii::$app->request->cookies->getValue('campaign_source')) {
-                (new AffiliationManager())->log(Yii::$app->request->cookies->getValue('campaign_source'), $user);
+
+            //记录用户与分销商关系 - 注册后续处理模块2
+            //判断如果当前渠道未被标记，且邀请者属于瑞安分销商，则记录用户属于瑞安分销商
+            if (null === $campaignSource) {
+                //其中2为正式站瑞安分销商ID
+                $affiliator = Affiliator::findOne(2);
+                if (null !== $affiliator && $affiliator->isAffiliatorCampaign($inviterCampaignSource)) {
+                    $campaignSource = $inviterCampaignSource;
+                }
             }
-            //统一活动逻辑
+            if (null !== $campaignSource) {
+                (new AffiliationManager())->log($campaignSource, $user);
+            }
+
+            //用户参与活动逻辑 - 注册后续处理模块3
             try {
                 //新用户注册，添加抽奖机会
                 PromoService::addTicket($user, 'register');
