@@ -162,7 +162,7 @@ class SignupForm extends Model
             //判断用户是否存在邀请码，添加邀请关系 - 注册模块3
             $isInvitee = false; //是否为被邀请者
             $inviteCode = Yii::$app->session->get('inviteCode');
-            $inviterCampaignSource = null;
+            $inviterAffliationCampaignSource = null;
             if ($inviteCode) {
                 $u = User::findOne(['usercode' => $inviteCode]);
                 if ($u) {
@@ -175,7 +175,10 @@ class SignupForm extends Model
                         $transaction->rollBack();
                         return false;
                     }
-                    $inviterCampaignSource = $u->campaign_source;
+                    $inviterAffliation = $u->userAffiliation;
+                    if (null !== $inviterAffliation) {
+                        $inviterAffliationCampaignSource = $inviterAffliation->trackCode;
+                    }
                     $isInvitee = true;
                 }
             }
@@ -227,8 +230,8 @@ class SignupForm extends Model
             if (null === $campaignSource) {
                 //其中2为正式站瑞安分销商ID
                 $affiliator = Affiliator::findOne(2);
-                if (null !== $affiliator && $affiliator->isAffiliatorCampaign($inviterCampaignSource)) {
-                    $campaignSource = $inviterCampaignSource;
+                if (null !== $affiliator && $affiliator->isAffiliatorCampaign($inviterAffliationCampaignSource)) {
+                    $campaignSource = $inviterAffliationCampaignSource;
                 }
             }
             if (null !== $campaignSource) {

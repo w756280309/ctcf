@@ -2,6 +2,7 @@
 
 namespace common\models\user;
 
+use common\models\affiliation\UserAffiliation;
 use common\models\bank\BankCardUpdate;
 use common\models\epay\EpayUser;
 use common\models\mall\ThirdPartyConnect;
@@ -1098,5 +1099,13 @@ class User extends ActiveRecord implements IdentityInterface, UserInterface
         }
 
         return $query;
+    }
+
+    /**
+     * 获得当前用户与分销商关系
+     */
+    public function getUserAffiliation()
+    {
+        return $this->hasOne(UserAffiliation::className(), ['user_id' => 'id']);
     }
 }
