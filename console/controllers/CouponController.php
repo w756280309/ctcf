@@ -91,14 +91,6 @@ class CouponController extends Controller
         $templateId = '198136';
         $count = 0;
 
-        $smsConfig = SmsConfig::findOne(['template_id' => $templateId]);
-
-        if (null === $smsConfig) {
-            $this->stdout('没有找到对应的短信模板!', Console::BG_YELLOW);
-
-            return Controller::EXIT_CODE_ERROR;
-        }
-
         foreach ($users as $user) {
             //开通免密且已投资的用户,跳过
             if ($user->mianmiStatus && $user->orderCount() > 0) {
@@ -111,7 +103,7 @@ class CouponController extends Controller
             }
 
             //发送短信
-            SmsService::send($user->getMobile(), $templateId, $smsConfig->getConfig(), $user);
+            SmsService::send($user->getMobile(), $templateId, ['1400', 'm.wenjf.com'], $user);
             ++$count;
         }
 
