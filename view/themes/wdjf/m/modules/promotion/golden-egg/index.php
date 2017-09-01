@@ -213,7 +213,7 @@ $this->share = new Share([
                                 title: '<p style="font-size:0.72rem;">我的奖品</p>',
                                 popBtmBackground: 'url(<?= FE_BASE_URI ?>wap/campaigns/active20170830/images/pop_btn_01.png) no-repeat',
                                 popMiddleHasDiv: true,
-                                contentMsg: "<img style='margin:0.3rem auto 0.5rem;display: block;width: 4.2666667rem;' src='<?= FE_BASE_URI ?>"+data[0].path+"' alt=''/><p style='color:#fff;margin-top: 1.5rem'>"+data[0].name+"</p>",
+                                contentMsg: "<img style='margin:0.3rem auto 0.5rem;display: block;width: 4.2666667rem;' src='<?= FE_BASE_URI ?>"+data[0].path+"' alt=''/><p style='color:#fff;margin-top: 1rem;font-size:0.7rem;'>"+data[0].name+"</p>",
                             }, 'close');
                         }
                     }
