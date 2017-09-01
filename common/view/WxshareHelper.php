@@ -114,9 +114,9 @@ $('body').on('click',function(e) {
 });
 
 function popShare() {
-    var html = '<div class="mark-box" style="display: none;position: fixed;left: 0;bottom:0;width: 100%;height: 100%;background: #000;opacity: 0.6;z-index: 11;" ></div>'
-        +'<div class="share-box" style="display: none;position: fixed;left: 0;bottom:0;width: 100%;height: 100%;z-index: 12;text-align: right;">'
-        +'<img class="share-box-img" style="float: right;width: 80%;" src="'+FE_BASE_URI+'wap/campaigns/active20170711/img/weixinShare.png" alt="">'
+    var html = '<div class="mark-box" style="cursor:pointer;display: none;position: fixed;left: 0;bottom:0;width: 100%;height: 100%;background: #000;opacity: 0.6;z-index: 11;" ></div>'
+        +'<div class="share-box" style="cursor:pointer;display: none;position: fixed;left: 0;bottom:0;width: 100%;height: 100%;z-index: 12;text-align: right;">'
+        +'<img class="share-box-img" style="cursor:pointer;float: right;width: 80%;" src="'+FE_BASE_URI+'wap/campaigns/active20170711/img/weixinShare.png" alt="">'
         +'</div>';
 
     $('body').prepend(html);
