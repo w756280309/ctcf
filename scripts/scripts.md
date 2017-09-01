@@ -11,7 +11,10 @@
 00 */1 * * * /usr/bin/php /data/www/WDJF/yii data/export-lender-data >> /dev/null 2>&1
 50 23 * * * /usr/bin/php /data/www/WDJF/yii data/export-issuer-record>> /dev/null 2>&1
 # crm数据同步
-*/2 * * * * /usr/bin/php /data/www/WDJF/yii crm/identity/import >> /dev/null 2>&1 
+*/2 * * * * /usr/bin/php /data/www/WDJF/yii crm/identity/importonline >> /dev/null 2>&1 
+*/2 * * * * /usr/bin/php /data/www/WDJF/yii crm/identity/importoffline >> /dev/null 2>&1 
+# crm数据补充
+*/2 * * * * /usr/bin/php /data/www/WDJF/yii crm/identity/sup >> /dev/null 2>&1 
 # 标的
 */1 * * * * /usr/bin/php /data/www/WDJF/yii dealcrontab/now >> /dev/null 2>&1
 */1 * * * * /usr/bin/php /data/www/WDJF/yii dealcrontab/full >> /dev/null 2>&1

@@ -432,7 +432,6 @@ class ProductonlineController extends BaseController
         if ('' !== $error_loans) {
             $error_loans = ',请注意,如下标的联动一侧上线失败'.substr($error_loans, 0, -1);
         }
-
         return ['result' => 1, 'message' => '操作已完成'.$error_loans];
     }
 

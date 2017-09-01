@@ -54,7 +54,7 @@ class DrawManager
         $draw->bank_name = $ubank->bank_name;
         $draw->bank_account = $ubank->card_number;
         $draw->identification_type = $ubank->account_type;
-        $draw->identification_number = $user->idcard;
+        $draw->identification_number = SecurityUtils::decrypt($user->safeIdCard);
         $draw->user_bank_id = $ubank->id;
         $draw->status = DrawRecord::STATUS_ZERO;
         return $draw;

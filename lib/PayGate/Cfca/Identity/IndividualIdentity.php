@@ -39,7 +39,7 @@ class IndividualIdentity
         return $this->idType;
     }
 
-    public function getIdNo()
+    public function getIdcard()
     {
         return $this->idNo;
     }

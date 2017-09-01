@@ -44,7 +44,7 @@ class GrowthController extends BaseController
                 'userName' => $user->getName(),
                 'orderDate' => $order->getOrderDate(),
                 'title' => $loan->title,
-                'idcard' => $user->getIdNo(),
+                'idcard' => $user->getIdcard(),
                 'startDate' => new \DateTime($loan->getStartDate()),//起息日
                 'fullDate' => new \DateTime($loan->getStartDate()),//成立日
                 'endDate' => new \DateTime($loan->getEndDate()),

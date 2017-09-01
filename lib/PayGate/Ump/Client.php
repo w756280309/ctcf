@@ -106,7 +106,7 @@ class Client
             'mer_cust_id' => $user->getUserId(),
             'mer_cust_name' => $this->encrypt($user->getLegalName()),
             'identity_type' => 'IDENTITY_CARD',
-            'identity_code' => $this->encrypt($user->getIdNo()),
+            'identity_code' => $this->encrypt($user->getIdcard()),
             'mobile_id' => $user->getMobile(),
         ];
 
@@ -190,7 +190,7 @@ class Client
             'card_id' => $this->encrypt($bind->getCardNo()),
             'account_name' => $this->encrypt($bind->getLegalName()),
             'identity_type' => $bind->getIdType(),
-            'identity_code' => $this->encrypt($bind->getIdNo()),
+            'identity_code' => $this->encrypt($bind->getIdcard()),
             'is_open_fastPayment' => '1',
         ];
 
@@ -220,7 +220,7 @@ class Client
             'card_id' => $this->encrypt($bind->getCardNo()),
             'account_name' => $this->encrypt($bind->getLegalName()),
             'identity_type' => $bind->getIdType(),
-            'identity_code' => $this->encrypt($bind->getIdNo()),
+            'identity_code' => $this->encrypt($bind->getIdcard()),
         ];
 
         if ('pc' === $channel) {
@@ -826,7 +826,7 @@ class Client
             'service' => 'mer_send_sms_pwd',
             'user_id' => $user->getEpayUserId(),
             'order_id' => $this->generateSn('RP'),
-            'identity_code' => $this->encrypt($user->getIdNo()), //GBK编码后使用联动公钥进行RSA加密，最后使用BASE64编码
+            'identity_code' => $this->encrypt($user->getIdcard()), //GBK编码后使用联动公钥进行RSA加密，最后使用BASE64编码
         ];
 
         return $this->doRequest($data);

@@ -10,5 +10,5 @@ interface QpayBindInterface
     public function getCardNo();
     public function getLegalName();
     public function getIdType();
-    public function getIdNo();
+    public function getIdcard();
 }

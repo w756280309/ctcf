@@ -1,6 +1,7 @@
 <?php
 
 namespace common\models\user;
+use common\utils\SecurityUtils;
 
 /**
  * 用户绑卡申请模型类
@@ -71,9 +72,9 @@ class QpayBinding extends UserBanks implements \P2pl\QpayBindInterface
         return 'IDENTITY_CARD';
     }
 
-    public function getIdNo()
+    public function getIdcard()
     {
-        return $this->user->idcard;
+        return SecurityUtils::decrypt($this->user->safeIdCard);
     }
 
     public function getEpayUserId()

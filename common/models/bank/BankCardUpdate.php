@@ -5,6 +5,7 @@ namespace common\models\bank;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use common\models\user\User;
+use common\utils\SecurityUtils;
 
 /**
  * This is the model class for table "BankCardUpdate".
@@ -110,9 +111,9 @@ class BankCardUpdate extends ActiveRecord implements \P2pl\QpayBindInterface
         return 'IDENTITY_CARD';
     }
 
-    public function getIdNo()
+    public function getIdcard()
     {
-        return $this->user->idcard;
+        return SecurityUtils::decrypt($this->user->safeIdCard);
     }
 
     public function getEpayUserId()

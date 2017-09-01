@@ -6,7 +6,7 @@ interface UserInterface
 {
     public function getUserId();
     public function getLegalName();
-    public function getIdNo();
+    public function getIdcard();
     public function getMobile();
     public function getEpayUserId();
 }

@@ -72,7 +72,7 @@ TPL;
             'realName' => $this->identity->getRealName(),
             'acctNo' => $this->account->getAcctNo(),
             'idType' => $this->identity->getIdType(),
-            'idNo' => $this->identity->getIdNo(),
+            'idNo' => $this->identity->getIdcard(),
             'mobile' => $this->identity->getMobile(),
             'acctType' => $this->account->getAcctType(),
         ]);

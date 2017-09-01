@@ -818,59 +818,62 @@ IN (" . implode(',', $recordIds) . ")")->queryAll();
             && $epayuser->validate()
             && $userBank->validate()
         ) {
-            $ump = Yii::$container->get('ump');
-            $resp = $ump->getMerchantInfo($epayuser->epayUserId);
-            if ($resp->isSuccessful()) {
-                if ('1' === $resp->get('account_state')) {
-                    $epayuser->addErrors(['epayUserId' => '联动商户账号状态不正确']);
+            $model->safeMobile = SecurityUtils::encrypt($model->mobile);
+            if ($model->validate()) {
+                $ump = Yii::$container->get('ump');
+                $resp = $ump->getMerchantInfo($epayuser->epayUserId);
+                if ($resp->isSuccessful()) {
+                    if ('1' === $resp->get('account_state')) {
+                        $epayuser->addErrors(['epayUserId' => '联动商户账号状态不正确']);
+                    }
+
+                    $transaction = Yii::$app->db->beginTransaction();
+                    if (empty($model->password_hash)) {
+                        throw new \Exception('The org_pass is null.');
+                    }
+
+                    $model->setPassword($model->password_hash);
+                    if (!$model->save(false)) {
+                        $transaction->rollBack();
+                        $err = $model->getSingleError();
+                        throw new \Exception($err['attribute'] . ': ' . $err['message']);
+                    }
+
+                    $epayuser->appUserId = strval($model->id);
+
+                    if (!$epayuser->save(false)) {
+                        $transaction->rollBack();
+                        $err = $epayuser->getSingleError();
+                        throw new \Exception($err['attribute'] . ': ' . $err['message']);
+                    }
+
+                    //添加一个融资会员的时候，同时生成对应的一条user_account记录
+                    $userAccount = new UserAccount();
+                    $userAccount->uid = $model->id;
+                    $userAccount->type = UserAccount::TYPE_BORROW;
+
+                    if (!$userAccount->save()) {
+                        $transaction->rollBack();
+                        $err = $userAccount->getSingleError();
+                        throw new \Exception($err['attribute'] . ': ' . $err['message']);
+                    }
+
+                    //添加提现银行卡信息
+                    $userBank->uid = $model->id;
+                    $userBank->epayUserId = $epayuser->epayUserId;
+                    $userBank->bank_name = $bank[$userBank->bank_id];
+
+                    if (!$userBank->save(false)) {
+                        $transaction->rollBack();
+                        $err = $userBank->getSingleError();
+                        throw new \Exception($err['attribute'] . ': ' . $err['message']);
+                    }
+
+                    $transaction->commit();
+                    $this->redirect(['/user/user/listr', 'type' => 2]);
+                } else {
+                    $epayuser->addErrors(['epayUserId' => $resp->get('ret_msg')]);
                 }
-
-                $transaction = Yii::$app->db->beginTransaction();
-                if (empty($model->password_hash)) {
-                    throw new \Exception('The org_pass is null.');
-                }
-
-                $model->setPassword($model->password_hash);
-                if (!$model->save(false)) {
-                    $transaction->rollBack();
-                    $err = $model->getSingleError();
-                    throw new \Exception($err['attribute'] . ': ' . $err['message']);
-                }
-
-                $epayuser->appUserId = strval($model->id);
-
-                if (!$epayuser->save(false)) {
-                    $transaction->rollBack();
-                    $err = $epayuser->getSingleError();
-                    throw new \Exception($err['attribute'] . ': ' . $err['message']);
-                }
-
-                //添加一个融资会员的时候，同时生成对应的一条user_account记录
-                $userAccount = new UserAccount();
-                $userAccount->uid = $model->id;
-                $userAccount->type = UserAccount::TYPE_BORROW;
-
-                if (!$userAccount->save()) {
-                    $transaction->rollBack();
-                    $err = $userAccount->getSingleError();
-                    throw new \Exception($err['attribute'] . ': ' . $err['message']);
-                }
-
-                //添加提现银行卡信息
-                $userBank->uid = $model->id;
-                $userBank->epayUserId = $epayuser->epayUserId;
-                $userBank->bank_name = $bank[$userBank->bank_id];
-
-                if (!$userBank->save(false)) {
-                    $transaction->rollBack();
-                    $err = $userBank->getSingleError();
-                    throw new \Exception($err['attribute'] . ': ' . $err['message']);
-                }
-
-                $transaction->commit();
-                $this->redirect(['/user/user/listr', 'type' => 2]);
-            } else {
-                $epayuser->addErrors(['epayUserId' => $resp->get('ret_msg')]);
             }
         }
 

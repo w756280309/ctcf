@@ -95,6 +95,8 @@ class User extends ActiveRecord implements IdentityInterface, UserInterface
     const REG_FROM_PC = 4;//pc注册
     const REG_FROM_OTHER = 0;//未知
 
+    public $idcard;
+    public $mobile;
     /**
      * 生成用户编号非渠道.
      *
@@ -227,7 +229,7 @@ class User extends ActiveRecord implements IdentityInterface, UserInterface
                 'length' => [5, 16],
             ],
             [['mobile', 'username', 'real_name', 'idcard', 'regContext'], 'required'],
-            [['mobile'], 'unique', 'message' => '该手机号码已被占用，请重试', 'on' => 'add'],
+            [['safeMobile'], 'unique', 'message' => '该手机号码已被占用，请重试', 'on' => 'add'],
             //身份证号码为15位或者18位，15位时全为数字，18位前17位为数字，最后一位是校验位，可能为数字或字符X
             [['idcard', 'law_master_idcard'], 'match', 'pattern' => '/(^\d{15}$)|(^\d{17}(\d|X)$)/', 'message' => '{attribute}身份证号码不正确,必须为15位或者18位'],
             [['real_name'], 'string', 'max' => 50, 'on' => 'idcardrz'],
@@ -623,7 +625,7 @@ class User extends ActiveRecord implements IdentityInterface, UserInterface
         return $this->real_name;
     }
 
-    public function getIdNo()
+    public function getIdcard()
     {
         return SecurityUtils::decrypt($this->safeIdCard);
     }
