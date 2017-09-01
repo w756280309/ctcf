@@ -17,7 +17,7 @@ class SystemController extends BaseController
     {
         $uid = $this->getAuthedUser()->id;
 
-        $user = User::find()->where(['id' => $uid, 'type' => User::USER_TYPE_PERSONAL, 'status' => User::STATUS_ACTIVE])->select('usercode, mobile')->one();
+        $user = User::find()->where(['id' => $uid, 'type' => User::USER_TYPE_PERSONAL, 'status' => User::STATUS_ACTIVE])->select('usercode, safeMobile')->one();
 
         return $this->render('setting', ['model' => $user]);
     }

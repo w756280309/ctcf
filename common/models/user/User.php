@@ -95,8 +95,8 @@ class User extends ActiveRecord implements IdentityInterface, UserInterface
     const REG_FROM_PC = 4;//pc注册
     const REG_FROM_OTHER = 0;//未知
 
-    public $idcard;
-    public $mobile;
+    public $plainIdcard;
+    public $plainMobile;
     /**
      * 生成用户编号非渠道.
      *
@@ -1109,5 +1109,15 @@ class User extends ActiveRecord implements IdentityInterface, UserInterface
     public function getUserAffiliation()
     {
         return $this->hasOne(UserAffiliation::className(), ['user_id' => 'id']);
+    }
+
+    public function setMobile($value)
+    {
+        $this->plainMobile = $value;
+    }
+
+    public function setIdCard($value)
+    {
+        $this->plainIdcard = $value;
     }
 }

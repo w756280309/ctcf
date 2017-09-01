@@ -38,7 +38,7 @@ class RepaymentController extends BaseController
 
         $deal = OnlineProduct::find()->where(['id' => $pid])->one();
         $model = (new \yii\db\Query())
-                ->select('orp.*,u.real_name,u.mobile')
+                ->select('orp.*,u.real_name,u.safeMobile')
                 ->from(['online_repayment_plan orp'])
                 ->innerJoin('user u', 'orp.uid=u.id')
                 ->where(['orp.online_pid' => $pid])->all();
