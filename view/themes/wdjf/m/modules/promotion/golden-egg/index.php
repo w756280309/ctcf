@@ -45,7 +45,7 @@ $this->share = new Share([
         </div>
         <div class="shareAll clearfix">
             <a class="lf" href="/deal/deal/index">投资砸金蛋</a>
-            <a class="rg share" href="javasctipt:viod(0);" style="margin-top: 0;">分享好友玩</a>
+            <a class="rg share" href="javascript:void(0);" style="margin-top: 0;">分享好友玩</a>
         </div>
     </div>
     <div class="section-two">
@@ -117,7 +117,7 @@ $this->share = new Share([
         data: {
             isOpen: false,//砸蛋效果
             totalMoney: <?= $totalMoney ?>,//年化投资额
-            isRotate: true,//规则按钮翻转
+            isRotate: false,//规则按钮翻转
             isShow: false,//活动规则显示数据
             promoStatus:$('input[name=promoStatus]').val(),//活动状态
             isLoggedin:$('input[name=isLoggedin]').val(),//是否登录
@@ -129,7 +129,6 @@ $this->share = new Share([
             },
             goldOpen: function () {
                 if(!this.statusDeal()) return;
-                this.isOpen = !this.isOpen;
                 //ajax回调
                 var _this = this;
                 $.ajax({
@@ -153,6 +152,7 @@ $this->share = new Share([
                                 popBtmBorderRadius: 0,
                                 popBtmFontSize: ".50666667rem"
                             }, 'close');
+                            _this.isOpen = !_this.isOpen;
                         }
                     },
                     error:function(data){
