@@ -2,7 +2,6 @@
 
 namespace common\models\promo;
 
-use common\models\order\OnlineOrder;
 use common\models\user\User;
 use wap\modules\promotion\models\RankingPromo;
 
@@ -63,13 +62,12 @@ class BasePromo
         $a = Award::tableName();
 
         return Award::find()
-            ->select("$r.*,$a.id")
+            ->select("$r.*,$a.id as awardId, $a.createTime as awardTime")
             ->innerJoin($r, "$a.reward_id = $r.id")
             ->where(["$a.user_id" => $user->id])
             ->andWhere(["$a.promo_id" => $this->promo->id])
             ->orderBy(["$a.createTime" => SORT_DESC])
             ->asArray()
             ->all();
-
     }
 }

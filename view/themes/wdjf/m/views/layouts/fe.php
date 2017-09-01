@@ -61,6 +61,11 @@ if ($showHeaderNav) {
     </head>
     <body>
         <?php $this->beginBody(); ?>
+            <?php if (isset($this->params['promoStatus'])) { ?>
+                <input name="promoStatus" type="hidden" value="<?= $this->params['promoStatus'] ?>">
+            <?php } ?>
+            <input name="feBaseUrl" type="hidden" value="<?= FE_BASE_URI ?>">
+            <input name="isLoggedin" type="hidden" value="<?= Yii::$app->user->isGuest ? 'false' : 'true' ?>">
             <?php if ($showHeaderNav) { ?>
                 <div class="header">
                     <ul class="clearfix">
@@ -69,7 +74,6 @@ if ($showHeaderNav) {
                     </ul>
                 </div>
             <?php } ?>
-
             <?= $content ?>
         <?php $this->endBody(); ?>
     </body>

@@ -15,9 +15,10 @@ class BaseController extends Controller
     const ERROR_CODE_NOT_BEGIN = 1; //未开始
     const ERROR_CODE_ALREADY_END = 2; //已结束
     const ERROR_CODE_NOT_LOGIN = 3; //未登录
-    const ERROR_CODE_NO_TICKET = 4; //无抽奖机会
+    const ERROR_CODE_NO_TICKET = 4; //无有效抽奖机会
     const ERROR_CODE_TODAY_NO_TICKET = 5; //无有效抽奖机会且今日未获得抽奖机会
     const ERROR_CODE_SYSTEM = 6; //系统错误（包括参数（promoKey）错误及抽奖其他错误）
+    const ERROR_CODE_NEVER_GOT_TICKET = 7; //活动至今为止从未获得抽奖机会
 
     use HelpersTrait;
 
@@ -50,10 +51,12 @@ class BaseController extends Controller
 
         //没有可用抽奖机会且当天未获得奖品
         $activeTicketExist = null === PromoLotteryTicket::fetchOneActiveTicket($promo, $user);
-        $todayNoTicket = null === PromoLotteryTicket::findLotteryByPromoId($promo->id)
-            ->andWhere(['user_id' => $user->id])
-            ->andWhere(['date(from_unixtime(created_at))' => date('Y-m-d')])
-            ->one();
+        $query = PromoLotteryTicket::findLotteryByPromoId($promo->id)->andWhere(['user_id' => $user->id]);
+        $cQuery = clone $query;
+        if (0 === (int) $cQuery->count()) {
+            return $this->getErrorByCode(self::ERROR_CODE_NEVER_GOT_TICKET);
+        }
+        $todayNoTicket = null === $query->andWhere(['date(from_unixtime(created_at))' => date('Y-m-d')])->one();
         if ($activeTicketExist && $todayNoTicket) {
             return $this->getErrorByCode(self::ERROR_CODE_TODAY_NO_TICKET);
         }
@@ -76,6 +79,24 @@ class BaseController extends Controller
                 return $this->getErrorByCode(self::ERROR_CODE_SYSTEM);
             }
         }
+    }
+
+    public function actionAwardList()
+    {
+        $key = Yii::$app->request->get('key');
+        $user = $this->getAuthedUser();
+        if (empty($key) || null === ($promo = RankingPromo::findOne(['key' => $key])) || null === $user) {
+            return [];
+        }
+
+        if (!empty($promo->promoClass)) {
+            $promoClass = new $promo->promoClass($promo);
+            if (method_exists($promoClass, 'getAwardList')) {
+                return $promoClass->getAwardList($user);
+            }
+        }
+
+        return [];
     }
 
     private function getErrorByCode($code)
@@ -120,6 +141,11 @@ class BaseController extends Controller
             self::ERROR_CODE_SYSTEM => [
                 'code' => 6,
                 'message' => '系统错误，请刷新重试',
+                'ticket' => null,
+            ],
+            self::ERROR_CODE_NEVER_GOT_TICKET => [
+                'code' => 7,
+                'message' => '您还未获得过任何抽奖机会哦！',
                 'ticket' => null,
             ],
         ];
