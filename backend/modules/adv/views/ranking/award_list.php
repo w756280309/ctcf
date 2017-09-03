@@ -1,5 +1,6 @@
 <?php
 use yii\helpers\Html;
+use common\utils\SecurityUtils;
 
 $this->title = '获奖列表';
 ?>
@@ -47,7 +48,7 @@ $this->title = '获奖列表';
                         [
                             'header' => '手机号',
                             'value' => function ($model) {
-                                return $model['mobile'];
+                                return SecurityUtils::decrypt($model['safeMobile']);
                             }
                         ],
                         [

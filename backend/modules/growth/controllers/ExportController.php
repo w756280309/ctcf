@@ -6,6 +6,7 @@ namespace backend\modules\growth\controllers;
 use backend\controllers\BaseController;
 use common\utils\TxUtils;
 use console\command\SqlExportJob;
+use common\utils\SecurityUtils;
 
 //根据sql导出excel
 class ExportController extends BaseController
@@ -87,7 +88,7 @@ ORDER BY p.id asc ,r.uid asc",//导出的sql模板, 使用预处理方式调用,
                 'key' => 'last_ten_day_draw',
                 'title' => '最近10天成功提现数据',
                 'content' => '统计最近10天每天每个用户的累计成功提现金额, 时间以发起提现时间为准',
-                'sql' => "SELECT u.mobile AS  '手机号', u.real_name AS  '姓名', SUM( d.money ) AS  '累计成功提现金额', DATE( FROM_UNIXTIME( d.created_at ) ) AS  '提现发起日期'
+                'sql' => "SELECT u.safeMobile AS  '手机号', u.real_name AS  '姓名', SUM( d.money ) AS  '累计成功提现金额', DATE( FROM_UNIXTIME( d.created_at ) ) AS  '提现发起日期'
 FROM draw_record AS d
 INNER JOIN user AS u ON u.id = d.uid
 WHERE d.status =2
@@ -98,6 +99,10 @@ ORDER BY DATE( FROM_UNIXTIME( d.created_at ) ) DESC , d.uid ASC ",
                 'params' => null,
                 'itemLabels' => ['手机号', '姓名', '累计成功提现金额', '提现发起日期'],
                 'itemType' => ['int', 'string', 'float', 'date'],
+                'beforeExport' => function($row) {
+                    $row['手机号'] = SecurityUtils::decrypt($row['手机号']);
+                    return $row;
+                }
             ],
             'stats_custormer_service_bound' => [
                 'key' => 'stats_custormer_service_bound',

@@ -9,6 +9,7 @@ use wap\modules\promotion\models\RankingPromo;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\helpers\ArrayHelper;
+use common\utils\SecurityUtils;
 
 /**
  * This is the model class for table "invite_record".
@@ -108,7 +109,7 @@ class InviteRecord extends ActiveRecord
                     break;
                 }
             }
-            $res[] = ['name' =>$invitee['real_name'], 'mobile' => $invitee['mobile'], 'day' => date('Y-m-d', $invitee['created_at']), 'coupon' => $coupon];
+            $res[] = ['name' =>$invitee['real_name'], 'mobile' => SecurityUtils::decrypt($invitee['safeMobile']), 'day' => date('Y-m-d', $invitee['created_at']), 'coupon' => $coupon];
         }
         return $res;
     }

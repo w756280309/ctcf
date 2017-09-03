@@ -142,7 +142,7 @@ class RankingController extends BaseController
         return (new Query())
             ->select([
                 'u.real_name',
-                'u.mobile',
+                'u.safeMobile',
                 't.drawAt',
                 't.rewardedAt',
                 't.reward_id',

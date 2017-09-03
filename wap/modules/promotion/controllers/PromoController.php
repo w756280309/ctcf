@@ -11,6 +11,7 @@ use wap\modules\promotion\models\PromoMobile;
 use wap\modules\promotion\models\RankingPromo;
 use Yii;
 use yii\web\Controller;
+use common\utils\SecurityUtils;
 
 /**
  * 首次投资送积分系列活动.
@@ -63,7 +64,7 @@ class PromoController extends Controller
         if (empty($back)) {
             Yii::$app->session->set('promo_mobile', $mobile);
 
-            $promoMobile = PromoMobile::findOne(['promo_id' => $promo->id, 'mobile' => $mobile]);
+            $promoMobile = PromoMobile::findOne(['promo_id' => $promo->id, 'safeMobile' => SecurityUtils::decrypt($mobile)]);
 
             if (null === $promoMobile) {
                 PromoMobile::initNew($promo->id, $mobile)->save();     //跳转落地注册页之前,记录用户手机号

@@ -8,6 +8,7 @@ use common\lib\product\ProductProcessor;
 use common\lib\bchelp\BcRound;
 use common\models\product\OnlineProduct;
 use common\models\user\User;
+use common\utils\SecurityUtils;
 
 /**
  * Desc 主要用于计算利息相关
@@ -111,7 +112,12 @@ class LoanService
         if (empty($mobiles)) {
             return "";
         }
-        $users = User::find()->where('mobile in ('.$mobiles.')')->all();
+        $arr = explode(',', $mobiles);
+        $array = array();
+        foreach ($arr as $value) {
+            $array[] = SecurityUtils::encrypt($value);
+        }
+        $users = User::find()->where(['in', 'safeMobile', $array])->all();
         $uids = '';
         foreach ($users as $user) {
             $uids .= $user->id.',';

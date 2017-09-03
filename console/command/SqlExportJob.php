@@ -30,6 +30,10 @@ class SqlExportJob extends Job
 
         $exportData[] = $itemLabels;
         foreach ($data as $num => $item) {
+            if (!is_null($this->getParam('beforeExport'))) {
+                $callback = $this->getParam('beforeExport');
+                $item = $callback($item);
+            }
             $item = array_values($item);
             if (count($item) !== $labelLength) {
                 throw new \Exception('sql查询数据项和标题项个数不同');
