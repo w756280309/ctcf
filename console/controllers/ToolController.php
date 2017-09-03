@@ -345,31 +345,27 @@ class ToolController extends Controller
         if (!empty($refundUsers)) {
             $refundUserToString = implode(',', $refundUsers);
             //统计投资总人数
-            $allInvestUsers = Yii::$app->db->createCommand("select distinct uid from online_order where `status` = 1 and date(from_unixtime(order_time)) between :startDate and :endDate and uid in (:userString)", [
+            $allInvestUsers = Yii::$app->db->createCommand("select distinct uid from online_order where `status` = 1 and date(from_unixtime(order_time)) between :startDate and :endDate and uid in (".$refundUserToString.")", [
                 'startDate' => $startDate,
                 'endDate' => $endDate,
-                'userString' => $refundUserToString,
             ])->queryColumn();
             //统计首次投资人数
-            $firstInvestUsers = Yii::$app->db->createCommand("SELECT distinct user_id FROM `user_info` WHERE `firstInvestDate` = `lastInvestDate` and `firstInvestDate` between :startDate and :endDate and user_id in (:userString)", [
+            $firstInvestUsers = Yii::$app->db->createCommand("SELECT distinct user_id FROM `user_info` WHERE `firstInvestDate` = `lastInvestDate` and `firstInvestDate` between :startDate and :endDate and user_id in (".$refundUserToString.")", [
                 'startDate' => $startDate,
                 'endDate' => $endDate,
-                'userString' => $refundUserToString,
             ])->queryColumn();
             //计算复投用户
             $investUsers = array_diff($allInvestUsers, $firstInvestUsers);
 
             //统计总投资金额
-            $totalInvestAmount = Yii::$app->db->createCommand("select sum(order_money) from online_order where `status` = 1 and date(from_unixtime(order_time)) between :startDate and :endDate and uid in (:userString)", [
+            $totalInvestAmount = Yii::$app->db->createCommand("select sum(order_money) from online_order where `status` = 1 and date(from_unixtime(order_time)) between :startDate and :endDate and uid in (".$refundUserToString.")", [
                 'startDate' => $startDate,
                 'endDate' => $endDate,
-                'userString' => $refundUserToString,
             ])->queryScalar();
             //首次投资金额
-            $firstInvestAmount = Yii::$app->db->createCommand("SELECT sum(`firstInvestAmount`) FROM `user_info` WHERE `firstInvestDate` = `lastInvestDate` and `firstInvestDate` between :startDate and :endDate and user_id in (:userString)", [
+            $firstInvestAmount = Yii::$app->db->createCommand("SELECT sum(`firstInvestAmount`) FROM `user_info` WHERE `firstInvestDate` = `lastInvestDate` and `firstInvestDate` between :startDate and :endDate and user_id in (".$refundUserToString.")", [
                 'startDate' => $startDate,
                 'endDate' => $endDate,
-                'userString' => $refundUserToString,
             ])->queryScalar();
             //复投总额
             $investAmount = $totalInvestAmount - $firstInvestAmount;
