@@ -80,11 +80,11 @@ $this->registerMetaTag([
                         <?php if (false === $this->backUrl) { ?>
                             <!-- 不显示箭头 -->
                         <?php } elseif ($this->backUrl) { ?>
-                            <img src="<?= ASSETS_BASE_URI ?>images/back.png" alt="" onclick="location.href='<?= $this->backUrl ?>'">
+                            <img src="<?= ASSETS_BASE_URI ?>images/back.png?v=1" alt="" onclick="location.href='<?= $this->backUrl ?>'">
                         <?php } elseif ($this->replaceUrl) { ?>
-                            <img src="<?= ASSETS_BASE_URI ?>images/back.png" alt="" onclick="location.replace('<?= $this->replaceUrl ?>')">
+                            <img src="<?= ASSETS_BASE_URI ?>images/back.png?v=1" alt="" onclick="location.replace('<?= $this->replaceUrl ?>')">
                         <?php } else { ?>
-                            <img src="<?= ASSETS_BASE_URI ?>images/back.png" alt="" onclick="history.go(-1)">
+                            <img src="<?= ASSETS_BASE_URI ?>images/back.png?v=1" alt="" onclick="history.go(-1)">
                         <?php } ?>
                     </div>
                     <div class="col-xs-8 title"><?= Html::encode($this->title) ?></div>

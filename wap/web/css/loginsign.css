@@ -1,21 +1,13 @@
 .back{
-    height: 40px;
-    background: #f44336;
+    /*height: 40px;*/
     text-align: center;
-    line-height: 50px;
+    /*line-height: 50px;*/
 }
 .back img{
-    height: 30px;
+    height: 19px;
     cursor: pointer;
 }
-.title {
-    height: 50px;
-    background: #f44336;
-    text-align: center;
-    line-height: 50px;
-    font-size: 18px;
-    color: #fff;
-}
+
 .nav-height div.sign {
     padding:0;
     margin-left:0;

@@ -2,18 +2,21 @@ body {
   background-color: #f7f7f7;
 }
 .topTitle {
-  background-color: #f44336;
+  background-color: #fafafa;
   text-align: center;
   color: #fff;
-  line-height: 1.2rem;
+  height: 44px;
+  line-height: 44px;
+  border-bottom: 1px solid #d8d8d8;
+  overflow: hidden;
   position: relative;
   top: 0;
   left: 0;
 }
 .goback {
-  height:0.7rem;
+  height:19px;
   position: absolute;
-  top: 0.25rem;
+  top: 0.3rem;
   left: 0.26666667rem;
 }
 .topTitle a {

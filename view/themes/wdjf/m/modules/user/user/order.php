@@ -6,7 +6,7 @@ $this->title = '我的理财';
 $this->backUrl = $backUrl ? $backUrl : '/user/user';
 $back = $backUrl ? urlencode(Yii::$app->request->hostInfo.$backUrl) : '';
 
-$this->registerCssFile(ASSETS_BASE_URI.'css/bind.css', ['depends' => WapAsset::class]);
+$this->registerCssFile(ASSETS_BASE_URI.'css/bind.css?v=1', ['depends' => WapAsset::class]);
 $this->registerCssFile(ASSETS_BASE_URI.'css/licai.css?v=20160927', ['depends' => WapAsset::class]);
 
 ?>

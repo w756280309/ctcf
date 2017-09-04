@@ -12,7 +12,7 @@ $currentUrl = Yii::$app->request->absoluteUrl;
 
 ?>
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/wenjfbase.css">
-<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/activeComHeader.css">
+<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/activeComHeader.css?v=1">
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/ucenter/css/myProperty.css">
 <script src="<?= FE_BASE_URI ?>libs/lib.flexible3.js"></script>
 <script src="<?= FE_BASE_URI ?>libs/zepto.min.js"></script>
@@ -21,7 +21,7 @@ $currentUrl = Yii::$app->request->absoluteUrl;
 <div class="flex-content">
     <?php if (!defined('IN_APP')) { ?>
         <div class="topTitle f18">
-            <img class="goback lf" src="<?= FE_BASE_URI ?>wap/tie-card/img/back.png" alt="" onclick="location.href='/user/user'">
+            <img class="goback lf" src="<?= FE_BASE_URI ?>wap/tie-card/img/back.png?v=1" alt="" onclick="location.href='/user/user'">
             <?= Html::encode($this->title) ?>
         </div>
     <?php } ?>
