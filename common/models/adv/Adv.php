@@ -244,7 +244,7 @@ class Adv extends ActiveRecord
     /*
      * 首页轮播图
      */
-    public function fetchHomeBanners($is_m = false)
+    public static function fetchHomeBanners($is_m = false)
     {
 
         $now = date('Y-m-d H:i:s');
