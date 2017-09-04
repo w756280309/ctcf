@@ -19,12 +19,13 @@ class WxshareHelper
 
         $_js = <<<JS
 $(function() {
+    var shareCallBack = typeof(callBack) == "function" ? callBack : false;
     $('.share').on('click', function() {
         var host = window.location.host.toLocaleLowerCase();
-
+        
         //判断域名,用以区别是否是app内嵌网页
         if(host.substr(0,4)==='app.') {
-            if (shareCallBack) {
+            if (shareCallBack && typeof(shareCallBack) == "function") {
                 shareCallBack();
             }
             //分享四要素(标题+描述+链接地址+图标地址)
@@ -94,8 +95,8 @@ $.get("/weixin/auth", {
             imgUrl: '$share->imgUrl', // 分享图标
             success: function () {
                 $('body').trigger('click');
-                if (shareCallBack) {
-                    shareCallBack();
+                if (typeof(callBack) == "function") {
+                    callBack();
                 }
             },
         });
