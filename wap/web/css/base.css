@@ -58,12 +58,14 @@ body{
 
 /* 标题高度 */
 .nav-height {
-    height: 52px;
-    line-height: 50px;
-    background: #f44336;
+    height: 44px;
+    line-height: 44px;
+    background: #fafafa;
+    border-bottom: 1px solid #d8d8d8;
+    overflow: hidden;
 }
 .nav-height img {
-    height:30px!important;
+    height:19px!important;
 }
 /* 1.行共用的高度  */
 .bg-height {
@@ -267,7 +269,7 @@ a.back-index {
 }
 /* header */
 .back{
-    background: #f44336;
+    /*background: #f44336;*/
     text-align: center;
 }
 .back img{
@@ -275,13 +277,13 @@ a.back-index {
     cursor: pointer;
 }
 .title {
-    background: #f44336;
+    /*background: #f44336;*/
     text-align: center;
-    font-size: 18px;
-    color: #fff;
+    font-size: 17px;
+    color: #333;
 }
 .title-box .signup {
-    color:#fff;
+    color:#333;
     font-size: 16px;
     line-height: 40px;
 }

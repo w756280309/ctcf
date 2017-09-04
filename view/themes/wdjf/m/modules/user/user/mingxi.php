@@ -3,7 +3,7 @@ $this->title = '交易明细';
 
 use wap\assets\WapAsset;
 
-$this->registerCssFile(ASSETS_BASE_URI.'css/jiaoyimingxi.css', ['depends' => WapAsset::class]);
+$this->registerCssFile(ASSETS_BASE_URI.'css/jiaoyimingxi.css?v=1', ['depends' => WapAsset::class]);
 ?>
 <script type="text/javascript">
     var url = '/user/user/mingxi';

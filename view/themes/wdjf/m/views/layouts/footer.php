@@ -41,7 +41,7 @@
     <div class="footer-title">
         <div class="footer-inner2">
             <?php if($uniqueActionId === 'user/user/index') {?>
-                <a class="nav-bar special-bar" href="/user/user"><span class="zhanghu"></span>账户</a>
+                <a class="nav-bar special-bar" href="/user/user" style="color: rgb(244, 67, 54)"><span class="zhanghu"></span>账户</a>
             <?php } else {?>
                 <a class="nav-bar" href="/user/user"><span class="zhanghu"></span>账户</a>
             <?php }?>

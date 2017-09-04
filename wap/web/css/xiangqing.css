@@ -21,11 +21,11 @@ i,em {
 }
 /*hesder*/
 .title-box{
-    background: #f34334;
+    background: #fafafa;
 }
 .back{
     height: 50px;
-    background: #f34334;
+    /*background: #f34334;*/
     text-align: center;
     line-height: 46px;
 
@@ -35,12 +35,12 @@ i,em {
     cursor: pointer;
 }
 .title {
-    height: 50px;
-    background: #f34334;
+    height: 44px;
+    /*background: #f34334;*/
     text-align: center;
-    line-height: 50px;
+    line-height: 44px;
     font-size: 18px;
-    color: #fff;
+    color: #333;
 }
 /*预告期*/
 .column {

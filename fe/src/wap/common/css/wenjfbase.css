@@ -347,16 +347,6 @@ body.new{
     text-align:center;
 }
 
-/* 标题高度 */
-.nav-height {
-    height: 52px;
-    line-height: 50px;
-    background: #f44336;
-}
-.nav-height img {
-    height:30px!important;
-}
-
 .error-info {
     position: absolute;
     margin: auto auto;
@@ -557,20 +547,7 @@ a.back-index {
     border:1px solid #fabab5;
 }
 /* header */
-.back{
-    background: #f44336;
-    text-align: center;
-}
-.back img{
-    height: 50px;
-    cursor: pointer;
-}
-.title {
-    background: #f44336;
-    text-align: center;
-    font-size: 18px;
-    color: #fff;
-}
+
 .title-box .signup {
     color:#fff;
     font-size: 16px;
