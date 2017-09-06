@@ -19,5 +19,26 @@ return [
         'functions' => [
             'class' => 'common\components\Functions',
         ],
+        'db' => [
+            'class' => 'yii\db\Connection',
+            'dsn' => 'mysql:host='.env('DB_HOST').';dbname='.env('DB_DATABASE'),
+            'username' => env('DB_USERNAME'),
+            'password' => env('DB_PASSWORD'),
+            'charset' => 'utf8',
+        ],
+        'db_fin' => [
+            'class' => 'yii\db\Connection',
+            'dsn' => 'mysql:host='.env('DB_FIN_HOST').';dbname='.env('DB_FIN_DATABASE'),
+            'username' => env('DB_FIN_USERNAME'),
+            'password' => env('DB_FIN_PASSWORD'),
+            'charset' => 'utf8',
+        ],
+        'db_tx' => [
+            'class' => 'yii\db\Connection',
+            'dsn' => 'mysql:host='.env('DB_TX_HOST').';dbname='.env('DB_TX_DATABASE'),
+            'username' => env('DB_TX_USERNAME'),
+            'password' => env('DB_TX_PASSWORD'),
+            'charset' => 'utf8',
+        ],
     ],
 ];
