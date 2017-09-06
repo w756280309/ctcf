@@ -332,6 +332,24 @@ class ToolController extends Controller
         if (empty($endDate) || false === strtotime($endDate)) {
             $endDate = date('Y-m-t');
         }
+        //提现数据
+        $drawCount = 0;
+        $drawAmount = 0;
+        $drawData = Yii::$app->db->createCommand("SELECT COUNT( DISTINCT uid ) as drawUser, SUM( money ) as drawAmount 
+FROM  `draw_record` 
+WHERE STATUS =2
+AND DATE( FROM_UNIXTIME( created_at ) ) 
+BETWEEN  :startDate
+AND  :endDate", [
+            'startDate' => $startDate,
+            'endDate' => $endDate,
+        ])->queryOne();
+        $this->stdout("$startDate 到 $endDate 平台成功提现数据如下: \n");
+        if (!empty($drawData)) {
+            $drawCount = $drawData['drawUser'];
+            $drawAmount = $drawData['drawAmount'];
+        }
+        $this->stdout("提现人数: $drawCount 人; 提现金额: ".number_format($drawAmount, 2)." 元; \n");
 
         //回款数据
         $refundData = Yii::$app->db->createCommand("SELECT uid, SUM( benxi ) AS amount
