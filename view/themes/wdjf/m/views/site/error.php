@@ -42,7 +42,7 @@ $this->registerCss("
     }
 ");
 ?>
-<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/wenjfbase.css">
+<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/wenjfbase.css?v=20170906">
 <script src="<?= FE_BASE_URI ?>libs/lib.flexible3.js"></script>
 <div class="flex-content">
     <img src="<?= FE_BASE_URI ?>wap/page-404/images/pic_404.png" alt="">

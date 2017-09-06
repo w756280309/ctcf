@@ -7,7 +7,7 @@ $this->title = '注册';
 $this->params['breadcrumbs'][] = $this->title;
 
 ?>
-<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/loginsign.css">
+<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/loginsign.css?v=20170906">
 <script  src="<?= FE_BASE_URI ?>libs/fastclick.js"></script>
 <script src="<?= FE_BASE_URI ?>wap/luodiye/js/luodiye.js?v=20170821"></script>
 

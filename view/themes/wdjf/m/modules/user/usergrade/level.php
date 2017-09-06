@@ -2,7 +2,7 @@
 $this->title = '如何获得';
 ?>
 
-<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/wenjfbase.css">
+<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/wenjfbase.css?v=20170906">
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/memberlevel/css/member.css">
 <script src="<?= FE_BASE_URI ?>libs/lib.flexible3.js"></script>
 

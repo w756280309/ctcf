@@ -7,7 +7,7 @@ $backUrl = \Yii::$app->request->referrer;
 $this->backUrl = $backUrl ? $backUrl : '/?_mark='.time();
 
 ?>
-<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/wenjfbase.css?v=1">
+<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/wenjfbase.css??v=20170906">
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/point/css/index.css?v=20170714-v">
 <script src="<?= FE_BASE_URI ?>libs/lib.flexible3.js"></script>
 

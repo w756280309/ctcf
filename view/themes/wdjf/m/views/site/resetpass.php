@@ -5,7 +5,7 @@ use yii\captcha\Captcha;
 $this->title = '密码找回';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/loginsign.css">
+<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/loginsign.css?v=20170906">
 
 <div class="row kongxi">
     <?php $form = ActiveForm::begin(['id' => 'resetpass_form', 'action' => '/site/resetpass', 'options' => ['data-to' => '1']]); ?>
