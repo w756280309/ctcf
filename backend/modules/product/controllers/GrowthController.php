@@ -8,6 +8,7 @@ use common\models\offline\OfflineOrder;
 use common\models\offline\OfflineUser;
 use common\models\order\OnlineOrder;
 use common\models\product\OnlineProduct;
+use common\models\tx\CreditOrder;
 use common\models\user\User;
 
 class GrowthController extends BaseController
@@ -90,5 +91,90 @@ class GrowthController extends BaseController
         return $this->renderFile('@backend/modules/product/views/growth/letter.php', [
             'data' => $data,
         ]);
+    }
+
+    public function actionOrderCert()
+    {
+        $orderId = \Yii::$app->request->get('orderId');
+
+        if (empty($orderId)) {
+            $this->ex404();
+        }
+        $order = OnlineOrder::findOne($orderId);
+        $loanOrder = $order;
+        if (is_null($order)) {
+            $this->ex404();
+        }
+
+        $loan = $order->loan;
+        if (is_null($loan)) {
+            $this->ex404();
+        }
+
+        return $this->createData($loan, $order, $loanOrder);
+    }
+
+    public function actionTransferCert()
+    {
+        $orderId = \Yii::$app->request->get('orderId');
+
+        if (empty($orderId)) {
+            $this->ex404();
+        }
+        $order = CreditOrder::findOne($orderId);
+        if (is_null($order)) {
+            $this->ex404();
+        }
+        $note = $order->note;
+        if (is_null($note)) {
+            $this->ex404();
+        }
+        $loanOrder = $note->order;
+        if (is_null($loanOrder) || is_null($loan = OnlineProduct::findOne($loanOrder->getLoan_id()))) {
+            $this->ex404();
+        }
+
+        return $this->createData($loan, $order, $loanOrder);
+    }
+
+    private function createData($loan, $order, $loanOrder)
+    {
+        $user = $order->user;
+        $duration = $loan->getDuration();
+        $ebaoquan = $order->fetchBaoQuan();
+        if (null === $ebaoquan) {
+            throw $this->ex404();
+        }
+        $orderInfo = $this->getOrderInfo($order);
+        $data = [
+            'ebaoquanId' => $ebaoquan->baoId,
+            'ebaoquanDate' => (new \DateTime(date('Y-m-d H:i:s',$ebaoquan->updated_at))),
+            'userName' => $user->getName(),
+            'idcard' => $user->getIdNo(),
+            'title' => $order instanceof CreditOrder ? '【转让】 '.$loan->title : $loan->title,
+            'duration' => $duration['value'].$duration['unit'],
+            'rate' => bcmul($loanOrder->yield_rate, 100, 2) . '%',
+            'orderMoney' => $orderInfo['orderMoney'],
+            'refundMethod' => \Yii::$app->params['refund_method'][$loan->getRefundMethod()],
+            'orderDate' => $orderInfo['orderDate'],
+            'date' => (new \DateTime()),
+        ];
+
+        return $this->renderFile('@backend/modules/product/views/growth/certificate.php', [
+            'data' => $data,
+        ]);
+    }
+
+    private function getOrderInfo($order)
+    {
+        if ($order instanceof OnlineOrder) {
+            $orderInfo['orderMoney'] = $order->order_money;
+            $orderInfo['orderDate'] = (new \DateTime($order->orderDate));
+        } else {
+            $orderInfo['orderMoney'] = $order->principal;
+            $orderInfo['orderDate'] = (new \DateTime($order->createTime));
+        }
+
+        return $orderInfo;
     }
 }

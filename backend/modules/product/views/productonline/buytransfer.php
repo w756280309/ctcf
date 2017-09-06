@@ -86,12 +86,15 @@ use yii\widgets\LinkPager;
                                 continue;
                             }
 
-                            $str .= ' <a href="' . $url . '">' . $title . '</a> |';
+                            $str .= ' <a href="' . $url . '" class="btn mini green">' . $title . '</a> | ';
                         }
                         if (empty($str)) {
-                            $str = '等待生成保全合同';
+                            $str = '等待生成保全合同 | ';
+                            $str .= '<a href="javascript:void(0)" target="_blank" class="btn mini">交易凭证</a>';
+                        } else {
+                            $str .= '<a href="/product/growth/transfer-cert?orderId='.$data['id'].'" target="_blank" class="btn mini" style="background-color:#36A9CE;color: white;">交易凭证</a>';
                         }
-                        return rtrim($str, '|');
+                        return rtrim($str, '| ');
                     }
                 ],
             ],
