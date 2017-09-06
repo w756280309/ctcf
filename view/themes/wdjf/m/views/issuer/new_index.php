@@ -5,7 +5,7 @@ extract(unserialize($jxPage->content));
 
 ?>
 
-<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/wenjfbase.css">
+<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/wenjfbase.css?v=20170906">
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>libs/videojs/video-js.min.css">
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/introduce/css/zkj.css?v=1.2">
 <script src="<?= FE_BASE_URI ?>libs/flex.js"></script>

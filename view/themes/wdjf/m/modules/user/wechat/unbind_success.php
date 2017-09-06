@@ -3,7 +3,7 @@
 $this->title = '温都金服_解除成功';
 
 ?>
-<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/wenjfbase.css">
+<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/wenjfbase.css?v=20170906">
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/weixin-bound/css/unbind-success.css">
 <script src="<?= FE_BASE_URI ?>libs/lib.flexible3.js"></script>
 

@@ -3,7 +3,7 @@
 $this->title = '温都金服_绑定成功';
 
 ?>
-<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/wenjfbase.css">
+<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/wenjfbase.css?v=20170906">
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/weixin-bound/css/bind-success.css">
 <script src="<?= FE_BASE_URI ?>libs/lib.flexible3.js"></script>
 
