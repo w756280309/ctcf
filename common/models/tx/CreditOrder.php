@@ -3,6 +3,7 @@
 namespace common\models\tx;
 
 use common\models\epay\EpayUser;
+use common\models\order\EbaoQuan;
 use common\models\user\User;
 use Zii\Behavior\DateTimeBehavior;
 use Zii\Model\ActiveRecord;
@@ -130,4 +131,14 @@ class CreditOrder extends ActiveRecord
         return $this->hasOne(User::class, ['id' => 'user_id']);
     }
 
+    public function fetchBaoQuan()
+    {
+        return EbaoQuan::find()->where([
+            'itemType' => EbaoQuan::ITEM_TYPE_CREDIT_ORDER,
+            'type' => EbaoQuan::TYPE_CREDIT,
+            'success' => 1,
+            'uid' => $this->user_id,
+            'itemId' => $this->id,
+        ])->one();
+    }
 }
