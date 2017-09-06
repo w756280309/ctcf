@@ -359,7 +359,7 @@ class User extends ActiveRecord implements IdentityInterface, UserInterface
     public static function findByUsername($username, $mobile = null)
     {
         if ($mobile) {
-            return static::findOne(['mobile' => $mobile, 'status' => self::STATUS_ACTIVE]);
+            return static::findOne(['safeMobile' => SecurityUtils::encrypt($mobile), 'status' => self::STATUS_ACTIVE]);
         }
 
         return static::findOne(['username' => $username, 'status' => self::STATUS_ACTIVE]);
@@ -1119,5 +1119,10 @@ class User extends ActiveRecord implements IdentityInterface, UserInterface
     public function setIdCard($value)
     {
         $this->plainIdcard = $value;
+    }
+
+    public static function findByMobile($mobile)
+    {
+        return User::find(['safeMobile' => SecurityUtils::encrypt($mobile)]);
     }
 }

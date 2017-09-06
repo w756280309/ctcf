@@ -64,7 +64,7 @@ class PromoController extends Controller
         if (empty($back)) {
             Yii::$app->session->set('promo_mobile', $mobile);
 
-            $promoMobile = PromoMobile::findOne(['promo_id' => $promo->id, 'safeMobile' => SecurityUtils::decrypt($mobile)]);
+            $promoMobile = PromoMobile::findOne(['promo_id' => $promo->id, 'mobile' => $mobile]);
 
             if (null === $promoMobile) {
                 PromoMobile::initNew($promo->id, $mobile)->save();     //跳转落地注册页之前,记录用户手机号
@@ -176,7 +176,7 @@ class PromoController extends Controller
                 }
             } else {
                 $user = User::findOne([
-                    'mobile' => $mobile,
+                    'safeMobile' => SecurityUtils::encrypt($mobile),
                     'type' => User::USER_TYPE_PERSONAL,
                 ]);
 
