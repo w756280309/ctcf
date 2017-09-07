@@ -11,7 +11,7 @@ class WapAsset extends AssetBundle
     public $baseUrl = ASSETS_BASE_URI;
     public $css = [
         'css/bootstrap.min.css?v=20160407',
-        'css/base.css?v=20160628',
+        'css/base.css?v=20160907',
     ];
     public $js = [
         'js/common.js?v=20160413',
