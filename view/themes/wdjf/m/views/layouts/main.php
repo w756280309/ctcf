@@ -75,8 +75,8 @@ $this->registerMetaTag([
                     <div class="col-xs-1"></div>
                 </div>
             <?php } else { ?>
-                <div class="row title-box nav-height">
-                    <div class="col-xs-2 back">
+                <div class="row title-box nav-height" style="height: 44px;line-height: 44px;background: #fafafa;border-bottom: 1px solid #d8d8d8;overflow: hidden;">
+                    <div class="col-xs-2 back" style="height: 44px;text-align: center;line-height: 44px;">
                         <?php if (false === $this->backUrl) { ?>
                             <!-- 不显示箭头 -->
                         <?php } elseif ($this->backUrl) { ?>
@@ -87,7 +87,7 @@ $this->registerMetaTag([
                             <img src="<?= ASSETS_BASE_URI ?>images/back.png?v=1" alt="" onclick="history.go(-1)">
                         <?php } ?>
                     </div>
-                    <div class="col-xs-8 title"><?= Html::encode($this->title) ?></div>
+                    <div class="col-xs-8 title" style="height: 44px;text-align: center;line-height: 44px;font-size: 18px;color: #333;"><?= Html::encode($this->title) ?></div>
                     <div class="col-xs-2"></div>
                 </div>
             <?php }
