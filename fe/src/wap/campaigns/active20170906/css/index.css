@@ -1,0 +1,66 @@
+.flex-content .part-one {
+  width: 100%;
+  height: 4.66666667rem;
+  background: url("../images/bg_one.png") no-repeat;
+  background-size: contain;
+}
+.flex-content .part-two {
+  width: 100%;
+  height: 6.8rem;
+  background: url("../images/bg_two.png") no-repeat;
+  background-size: contain;
+}
+.flex-content .part-three {
+  width: 100%;
+  height: 5.33333333rem;
+  background: url("../images/bg_three.png") no-repeat;
+  background-size: contain;
+}
+.flex-content .part-four {
+  width: 100%;
+  height: 5.10666667rem;
+  background: url("../images/bg_four.png") no-repeat;
+  background-size: contain;
+}
+.flex-content .part-five {
+  position: relative;
+  width: 100%;
+  height: 7.97333333rem;
+  background: url("../images/bg_five.png") no-repeat;
+  background-size: contain;
+}
+.flex-content .part-five .go-invest {
+  position: absolute;
+  left: 50%;
+  top: 0.54666667rem;
+  display: block;
+  width: 4.49333333rem;
+  height: 1.25333333rem;
+  line-height: 1.25333333rem;
+  margin-left: -2.24666667rem;
+  background: url("../images/bg_button.png") no-repeat;
+  background-size: contain;
+  color: #fff;
+  font-size: 0.48rem;
+  text-align: center;
+}
+.flex-content .part-five .rules {
+  position: absolute;
+  top: 3.48rem;
+  left: 1.22666667rem;
+}
+.flex-content .part-five .rules li {
+  width: 8.5rem;
+  list-style-type: decimal;
+  font-size: 0.34666667rem;
+  color: #444;
+  line-height: 0.72rem;
+}
+.flex-content .part-five .remind{
+  position: absolute;
+  bottom:0.5rem;
+  width: 100%;
+  text-align: center;
+  font-size: 0.24rem;
+  color: #ff2c2c;
+}
