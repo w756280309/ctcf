@@ -13,6 +13,7 @@ use common\models\user\User;
  * @property string $message
  * @property int    $uid
  * @property int    $created_at
+ * @property string $serviceProvider
  */
 class SmsMessage extends \yii\db\ActiveRecord
 {

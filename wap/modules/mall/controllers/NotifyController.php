@@ -48,6 +48,7 @@ class NotifyController extends Controller
         }
         Yii::$app->response->format = Response::FORMAT_JSON;
         $translation = Yii::$app->db->beginTransaction();
+        $finalPoints = $user->points;
         try {
             $order = PointOrder::findOne(['orderNum' => $orderNum]);
             if (!empty($order)) {
@@ -61,6 +62,9 @@ class NotifyController extends Controller
                 throw new \Exception('系统繁忙');
             }
             $user->refresh();
+            if ($user->points < 0) {
+                throw new \Exception('积分不足');
+            }
             $finalPoints = $user->points;
             $order = new PointOrder([
                 'sn' => TxUtils::generateSn('PO'),
@@ -103,7 +107,7 @@ class NotifyController extends Controller
             return [
                 'status' => 'fail',
                 'errorMessage' => $ex->getMessage(),
-                'credits' => $user->points,
+                'credits' => $finalPoints,
             ];
         }
     }
