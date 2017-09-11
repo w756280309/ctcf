@@ -6,8 +6,8 @@ $this->title="绑定银行卡";
 $this->showViewport = false;
 
 ?>
-<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/wenjfbase.css?v=1.0">
-<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/tie-card/css/step.css?v=20170327">
+<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/wenjfbase.css?v=20170906">
+<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/tie-card/css/step.css?v=20170906">
 <script src="<?= FE_BASE_URI ?>libs/lib.flexible3.js"></script>
 <script src="<?= FE_BASE_URI ?>libs/fastclick.js"></script>
 <script src="<?= FE_BASE_URI ?>libs/iscroll.js"></script>
@@ -17,7 +17,7 @@ $this->showViewport = false;
 <div class="flex-content">
     <?php if (!defined('IN_APP')) { ?>
         <div class="topTitle f18">
-            <img class="goback" src="<?= FE_BASE_URI ?>wap/tie-card/img/back.png" alt="" onclick="window.location.href='/user/user'">
+            <img class="goback" src="<?= FE_BASE_URI ?>wap/tie-card/img/back.png?v=1" alt="" onclick="window.location.href='/user/user'">
             <div><?= Html::encode($this->title) ?></div>
             <a class="rg" href="tel:<?= Yii::$app->params['platform_info.contact_tel'] ?>"><img src="<?= FE_BASE_URI ?>wap/tie-card/img/phone.png" alt=""></a>
         </div>

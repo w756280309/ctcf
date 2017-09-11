@@ -4,9 +4,11 @@ body {
   color: #666666;
 }
 .registertop {
-  background-color: #f44336;
-  color: #fff;
-  line-height: 1.2rem;
+  background-color: #fafafa;
+  color: #333;
+  line-height: 44px;
+  height: 44px;
+  font-size: 17px;
 }
 .registermildle {
   padding-top: 1.86666667rem;

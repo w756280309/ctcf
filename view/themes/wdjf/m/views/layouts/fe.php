@@ -34,7 +34,7 @@ $this->registerMetaTag([
 $showHeaderNav = $this->headerNavOn && !defined('IN_APP');
 
 if ($showHeaderNav) {
-    $this->registerCssFile(FE_BASE_URI.'wap/common/css/activeComHeader.css?v=20170630', ['depends' => FeAsset::class]);
+    $this->registerCssFile(FE_BASE_URI.'wap/common/css/activeComHeader.css?v=20170906', ['depends' => FeAsset::class]);
 }
 
 ?>

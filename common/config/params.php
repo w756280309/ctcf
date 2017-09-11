@@ -210,4 +210,10 @@ return [
     'ding_notify.user_list.create_note' => [
 
     ],//发起满足条件转让钉钉提醒通知用户名单(在温都金服公司钉钉ID), 参考 WDJF/data/wdjf_ding_users.json 中用户配置
+    //阿里云通讯
+    'sms.ali.accessKeyId' => env('SMS_ALI_ACCESS_KEY_ID'),
+    'sms.ali.accessKeySecret' => env('SMS_ALI_ACCESS_KEY_SECRET'),
+    //阿里短信模板
+    'sms.ali.template.register' => env('SMS_ALI_TEMPLATE_REGISTER'),
+    'sms.ali.template.forget.password' => env('SMS_ALI_TEMPLATE_FIND_PASSWORD'),
 ];

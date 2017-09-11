@@ -7,7 +7,7 @@ $this->share = new Share([
     'title' => '温都金服交易额突破30亿，全民砸金蛋，100%中奖！快来加入狂欢盛宴吧！',
     'description' => '温都金服，温州报业旗下理财平台，累计交易额突破30亿！',
     'imgUrl' => FE_BASE_URI.'wap/campaigns/active20170830/images/wx_share.jpg',
-    'url' => Yii::$app->request->hostInfo.'/promotion/golden-egg/',
+    'url' => Yii::$app->params['clientOption']['host']['wap'].'promotion/golden-egg/',
 ]);
 ?>
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/wenjfbase.css">

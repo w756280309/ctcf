@@ -33,11 +33,12 @@
 
 .topTitle {
     position: relative;
-    background-color: #f44336;
+    background-color: #fafafa;
     text-align: center;
-    color: #fff;
-    line-height: 52px;
-    height: 52px;
+    color: #333;
+    height: 44px;
+    line-height: 44px;
+    border-bottom: 1px solid #d8d8d8;
 }
 .UtopTitle {
     position: relative;
@@ -57,7 +58,7 @@
     right: 0.52rem;
 }
 .goback {
-    height: 30px;
+    height:19px!important;
     position: absolute;
     top: 50%;
     -webkit-transform: translateY(-50%);

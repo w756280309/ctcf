@@ -162,14 +162,18 @@ use common\utils\StringUtils;
                         'format' => 'raw',
                         'value' => function ($order) use ($loan) {
                             $html = '';
-                            if($order->getBaoquanDownloadLink()) {
+                            $hasCreatedBaoquan = $order->getBaoquanDownloadLink();
+                            if($hasCreatedBaoquan) {
                                 $html = "<a href=".$order->getBaoquanDownloadLink()." target='_blank' class='btn mini green'>下载保全合同</a> | ";
+                                $html .= '<a href="/product/growth/order-cert?orderId='.$order->id.'" target="_blank" class="btn mini" style="background-color:#36A9CE;color: white;">&emsp;交易凭证&emsp;</a> | ';
+                            } else {
+                                $html = '<a href="javascript:void(0)" target="_blank" class="btn mini">&emsp;交易凭证&emsp;</a> | ';
                             }
 
                             if ($loan->is_jixi) {
                                 $html .= '<a href="/product/growth/letter?orderId='.$order->id.'&isOnline=1" target="_blank" class="btn mini green">打印确认函</a>';
                             }
-                            rtrim($html, ' | ');
+                            $html = rtrim($html, ' | ');
                             if (empty($html)) {
                                 $html = '---';
                             }

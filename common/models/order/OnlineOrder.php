@@ -382,13 +382,7 @@ class OnlineOrder extends ActiveRecord implements OrderTxInterface
     public function getBaoquanDownloadLink()
     {
         if (is_null($this->baoquanＤownloadLink)) {
-            $baoQuan = EbaoQuan::find()->where([
-                'itemType' => EbaoQuan::ITEM_TYPE_LOAN_ORDER,
-                'type' => EbaoQuan::TYPE_LOAN,
-                'success' => 1,
-                'uid' => $this->uid,
-                'itemId' => $this->id,
-            ])->one();
+            $baoQuan = $this->fetchBaoQuan();
 
             $this->baoquanＤownloadLink = is_null($baoQuan) ? null : Client::contractFileDownload($baoQuan);
         }
@@ -398,5 +392,19 @@ class OnlineOrder extends ActiveRecord implements OrderTxInterface
     public function getCoupon()
     {
         return $this->hasMany(UserCoupon::className(), ['order_id' => 'id']);
+    }
+
+    /**
+     * 获取保全合同
+     */
+    public function fetchBaoQuan()
+    {
+        return EbaoQuan::find()->where([
+            'itemType' => EbaoQuan::ITEM_TYPE_LOAN_ORDER,
+            'type' => EbaoQuan::TYPE_LOAN,
+            'success' => 1,
+            'uid' => $this->uid,
+            'itemId' => $this->id,
+        ])->one();
     }
 }

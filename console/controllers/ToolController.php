@@ -17,6 +17,7 @@ use common\utils\TxUtils;
 use Ding\DingNotify;
 use Yii;
 use yii\console\Controller;
+use yii\helpers\ArrayHelper;
 
 /**
  * 工具脚本
@@ -132,7 +133,6 @@ class ToolController extends Controller
 
 
                     $this->stdout('转账方 转账成功' . PHP_EOL);
-
                 } else {
                     $this->stdout('转账方 转账失败，联动返回信息：' . $ret->get('ret_msg') . PHP_EOL);
                 }
@@ -152,7 +152,6 @@ class ToolController extends Controller
                     $this->stdout('收款方账户余额：' . $ret->get('balance') . PHP_EOL);
 
                     $this->stdout('收款方 转账成功' . PHP_EOL);
-
                 } else {
                     $this->stdout('收款方 转账失败，联动返回信息：' . $ret->get('ret_msg') . PHP_EOL);
                 }
@@ -184,9 +183,7 @@ class ToolController extends Controller
                         $this->stdout('将收款方提现记录改为失败' . PHP_EOL);
                     }
                 }
-
             }
-
         }
     }
 
@@ -240,7 +237,7 @@ class ToolController extends Controller
             ->andWhere('jixi_time is not null')
             ->andWhere(['is_jixi' => true])
             ->one();
-        if(is_null($loan)) {
+        if (is_null($loan)) {
             throw new \Exception('没有找到符合条件标的');
         }
 
@@ -335,60 +332,92 @@ class ToolController extends Controller
         if (empty($endDate) || false === strtotime($endDate)) {
             $endDate = date('Y-m-t');
         }
-
-        //回款用户
-        $refundUsers = Yii::$app->db->createCommand("select distinct uid from online_repayment_plan where status in (1,2) and date(`actualRefundTime`)  between :startDate and :endDate", [
+        //提现数据
+        $drawCount = 0;
+        $drawAmount = 0;
+        $drawData = Yii::$app->db->createCommand("SELECT COUNT( DISTINCT uid ) as drawUser, SUM( money ) as drawAmount 
+FROM  `draw_record` 
+WHERE STATUS =2
+AND DATE( FROM_UNIXTIME( created_at ) ) 
+BETWEEN  :startDate
+AND  :endDate", [
             'startDate' => $startDate,
             'endDate' => $endDate,
-        ])->queryColumn();
-        $refundCount = count($refundUsers);
-        if (!empty($refundUsers)) {
-            $refundUserToString = implode(',', $refundUsers);
-            //统计投资总人数
-            $allInvestUsers = Yii::$app->db->createCommand("select distinct uid from online_order where `status` = 1 and date(from_unixtime(order_time)) between :startDate and :endDate and uid in (".$refundUserToString.")", [
-                'startDate' => $startDate,
-                'endDate' => $endDate,
-            ])->queryColumn();
-            //统计首次投资人数
-            $firstInvestUsers = Yii::$app->db->createCommand("SELECT distinct user_id FROM `user_info` WHERE `firstInvestDate` = `lastInvestDate` and `firstInvestDate` between :startDate and :endDate and user_id in (".$refundUserToString.")", [
-                'startDate' => $startDate,
-                'endDate' => $endDate,
-            ])->queryColumn();
-            //计算复投用户
-            $investUsers = array_diff($allInvestUsers, $firstInvestUsers);
-
-            //统计总投资金额
-            $totalInvestAmount = Yii::$app->db->createCommand("select sum(order_money) from online_order where `status` = 1 and date(from_unixtime(order_time)) between :startDate and :endDate and uid in (".$refundUserToString.")", [
-                'startDate' => $startDate,
-                'endDate' => $endDate,
-            ])->queryScalar();
-            //首次投资金额
-            $firstInvestAmount = Yii::$app->db->createCommand("SELECT sum(`firstInvestAmount`) FROM `user_info` WHERE `firstInvestDate` = `lastInvestDate` and `firstInvestDate` between :startDate and :endDate and user_id in (".$refundUserToString.")", [
-                'startDate' => $startDate,
-                'endDate' => $endDate,
-            ])->queryScalar();
-            //复投总额
-            $investAmount = $totalInvestAmount - $firstInvestAmount;
-        } else {
-            $investAmount = 0;
-            $investUsers = [];
+        ])->queryOne();
+        $this->stdout("$startDate 到 $endDate 平台成功提现数据如下: \n");
+        if (!empty($drawData)) {
+            $drawCount = $drawData['drawUser'];
+            $drawAmount = $drawData['drawAmount'];
         }
+        $this->stdout("提现人数: $drawCount 人; 提现金额: ".number_format($drawAmount, 2)." 元; \n");
 
-        $refundAmount = Yii::$app->db->createCommand("select sum(benxi) from online_repayment_plan where status in (1,2) and date(`actualRefundTime`)  between :startDate and :endDate", [
+        //回款数据
+        $refundData = Yii::$app->db->createCommand("SELECT uid, SUM( benxi ) AS amount
+FROM online_repayment_plan
+WHERE STATUS IN ( 1, 2 ) 
+AND DATE(  `actualRefundTime` ) 
+BETWEEN  :startDate
+AND  :endDate
+AND benxi >0
+GROUP BY uid", [
             'startDate' => $startDate,
             'endDate' => $endDate,
-        ])->queryScalar();
-
-        if ($refundAmount > 0) {
-            $rate = bcmul(bcdiv($investAmount, $refundAmount, 4), 100, 2);
-        } else {
-            $rate = 0;
+        ])->queryAll();
+        $refundCount = count($refundData);
+        if ($refundCount === 0) {
+            $this->stdout("指定时间段内没有还款数据 \n");
+            exit();
         }
+        $refundAllUsers = array_column($refundData, 'uid');
+        $refundAllAmount = ArrayHelper::index($refundData, 'uid');
+        $refundUserToString = implode(',', $refundAllUsers);
+        $refundAmount = array_sum(array_column($refundAllAmount, 'amount'));
+        $reinvestAmount = 0;
+        $increaseInvestAmount = 0;
+
+        //既有回款又有投资，并且不是首投用户 投资数据
+        $sql = "SELECT o.uid,sum(o.order_money) as amount
+FROM online_order AS o
+INNER JOIN user_info AS i ON o.uid = i.user_id
+WHERE o.`status` =1
+AND DATE( FROM_UNIXTIME( o.order_time ) ) 
+BETWEEN  :startDate
+AND  :endDate
+AND o.uid
+IN (" . $refundUserToString . ")
+AND i.firstInvestDate != i.lastInvestDate
+AND o.order_money > 0.1
+group by o.uid
+";
+        $userInvestData = Yii::$app->db->createCommand($sql, [
+            'startDate' => $startDate,
+            'endDate' => $endDate,
+        ])->queryAll();
+        $reinvestUserCount = count($userInvestData);
+
+        //统计每个用户的 复投金额 和 新增金额
+        foreach ($userInvestData as $item) {
+            $userId = $item['uid'];
+            $amount = $item['amount'];
+            if (!isset($refundAllAmount[$userId])) {
+                throw new \Exception("没有找到 $userId 的还款数据");
+            }
+            //回款金额
+            $userRefundAmount = $refundAllAmount[$userId]['amount'];
+            //复投金额
+            if ($amount > $userRefundAmount) {
+                $reinvestAmount = bcadd($reinvestAmount, $userRefundAmount, 2);
+                $increaseInvestAmount = bcadd($increaseInvestAmount, bcsub($amount, $userRefundAmount, 2), 2);
+            } else {
+                $reinvestAmount = bcadd($reinvestAmount, $amount, 2);
+            }
+        }
+        $rate = bcmul(bcdiv($reinvestAmount, $refundAmount, 4), 100, 2);
 
         $this->stdout("$startDate 到 $endDate 平台复投率统计数据如下: \n");
-        $this->stdout("复投总额: " . number_format($investAmount, 2) . "元 ; 复投人数: " . count($investUsers) . " \n");
+        $this->stdout("复投总额: " . number_format($reinvestAmount, 2) . "元 ; 复投人数: " . $reinvestUserCount . " \n");
         $this->stdout("回款总额: " . number_format($refundAmount, 2) . "元; 回款人数: " . $refundCount . "\n");
-        $this->stdout("平台新增金额: " . number_format(max($investAmount - $refundAmount, 0), 2) . "元; 平台复投率: " . $rate . "% \n");
+        $this->stdout("平台新增金额: " . number_format($increaseInvestAmount, 2) . "元; 平台复投率: " . $rate . "% \n");
     }
 
     /**
@@ -430,7 +459,7 @@ class ToolController extends Controller
             ];
         }
 
-        $fp = fopen('/tmp/loan.csv' ,'w');
+        $fp = fopen('/tmp/loan.csv', 'w');
         fputcsv($fp, [
             '标的副标题',
             '标的标题',

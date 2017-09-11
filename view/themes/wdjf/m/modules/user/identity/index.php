@@ -6,17 +6,17 @@ $this->title = '开通资金托管账户';
 $this->showViewport = false;
 
 ?>
-<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/wenjfbase.css?v=1.0">
-<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/tie-card/css/step.css?v=20170327">
+<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/wenjfbase.css?v=20170906">
+<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/tie-card/css/step.css?v=20170906">
 <script src="<?= FE_BASE_URI ?>libs/lib.flexible3.js"></script>
 <script src="<?= FE_BASE_URI ?>wap/common/js/pop.js?v=2"></script>
 
 <div class="flex-content">
     <?php if (!defined('IN_APP')) { ?>
         <div class="topTitle f18">
-            <img class="goback" src="<?= FE_BASE_URI ?>wap/tie-card/img/back.png" alt="" onclick="history.go(-1)">
-            <div><?= Html::encode($this->title) ?></div>
-            <a class="rg" href="tel:<?= Yii::$app->params['platform_info.contact_tel'] ?>"><img src="<?= FE_BASE_URI ?>wap/tie-card/img/phone.png" alt=""></a>
+            <img class="goback" src="<?= FE_BASE_URI ?>wap/tie-card/img/back.png?v=1" alt="" onclick="history.go(-1)">
+            <div style="color: #333;"><?= Html::encode($this->title) ?></div>
+            <a class="rg" href="tel:<?= Yii::$app->params['platform_info.contact_tel'] ?>"><img src="<?= FE_BASE_URI ?>wap/tie-card/img/phone.png?v=1" alt=""></a>
         </div>
     <?php } ?>
 

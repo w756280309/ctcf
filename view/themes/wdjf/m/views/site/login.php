@@ -6,7 +6,7 @@ use yii\captcha\Captcha;
 $this->title = '登录';
 
 ?>
-<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/loginsign.css?v=20160531">
+<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/loginsign.css?v=20160532">
 
 <?php if (!empty($aff)) { ?>
     <div>

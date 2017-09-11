@@ -5,7 +5,7 @@ $this->title = '温都金服';
 use yii\web\JqueryAsset;
 $this->registerJsFile(FE_BASE_URI . 'res/js/js.cookie.js', ['depends' => JqueryAsset::class]);
 ?>
-<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/wenjfbase.css">
+<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/wenjfbase.css?v=20170906">
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/20170726luodiye/css/index.css">
 <script src="<?= ASSETS_BASE_URI ?>js/common.js"></script>
 <script src="<?= FE_BASE_URI ?>libs/lib.flexible3.js"></script>

@@ -41,3 +41,8 @@ Yii::$container->set('laraq', function () {
 
     return $queue;
 });
+Yii::$container->set('alisms', \common\service\AliSmsService::class, [
+    Yii::$app->params['sms.ali.accessKeyId'],
+    Yii::$app->params['sms.ali.accessKeySecret'],
+]);
+

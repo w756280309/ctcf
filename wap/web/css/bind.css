@@ -23,24 +23,19 @@ body{
 }
 /*hesder*/
 .title-box{
-    background: #f34334;
+    /*background: #f34334;*/
 }
-.back{
-    height: 50px;
-    line-height: 45px;
-    background: #f34334;
-    text-align: center;
-}
+/*.back{*/
+    /*height: 50px;*/
+    /*line-height: 45px;*/
+    /*background: #f34334;*/
+    /*text-align: center;*/
+/*}*/
 .back img{
-    height: 30px!important;
+    height: 19px!important;
     cursor: pointer;
 }
-.title {
-    margin-bottom: 0!important;
-    text-align: center;
-    font-size: 18px;
-    color: #fff;
-}
+
 /*tishi*/
 .tishi {
     height: 30px;

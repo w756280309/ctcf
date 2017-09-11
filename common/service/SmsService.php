@@ -6,7 +6,9 @@ use common\models\Sms;
 use common\models\sms\SmsTable;
 use common\models\sms\SmsMessage;
 use common\models\user\User;
+use common\service\AliSmsService;
 use common\utils\SecurityUtils;
+use common\utils\TxUtils;
 use Yii;
 
 /**
@@ -18,6 +20,9 @@ use Yii;
  */
 class SmsService
 {
+    const DEFAULT_SERVICE_PROVIDER = 'ytx';
+    const PROVIDER_YTX = 'ytx';
+    const PROVIDER_ALI = 'ali';
     /**
      * 生成短信验证码
      *
@@ -55,7 +60,7 @@ class SmsService
             'safeMobile' => SecurityUtils::encrypt($phone),
         ]);
 
-        $model->time_len = 5;
+        $model->time_len = 15;
         $model->end_time = $time + $model->time_len * 60;
         $mockSms = Yii::$app->params['mock_sms'];
 
@@ -73,15 +78,14 @@ class SmsService
 
             if (1 === $type) {
                 $message = [
-                    $model->code,
-                    $model->time_len,
+                    'code' => $model->code,
                 ];
-                $templateId = Yii::$app->params['sms']['yzm'];
+                $templateId = Yii::$app->params['sms.ali.template.register'];
             } elseif (2 === $type) {
                 $message = [
-                    $model->code,
+                    'code' => $model->code,
                 ];
-                $templateId = Yii::$app->params['sms']['forget'];
+                $templateId = Yii::$app->params['sms.ali.template.forget.password'];
             }
 
             if (!empty($message)) {
@@ -89,7 +93,13 @@ class SmsService
                 $msg = '';
 
                 try {
-                    if (self::sendNow($phone, $templateId, $message)) {
+                    /**
+                     * @var AliSmsService $aliSms
+                     */
+                    $aliSms = Yii::$container->get('alisms');
+                    $sn = TxUtils::generateSn('AliSms');
+                    $signName = '温都金服';
+                    if ($aliSms->send($sn, $phone, $signName, $templateId, $message)) {
                         $user = new User([
                             'id' => 0,
                             'safeMobile' => SecurityUtils::encrypt($phone),
@@ -97,6 +107,7 @@ class SmsService
 
                         $smsMessage = SmsMessage::initSms($user, $message, $templateId);
                         $smsMessage->status = SmsMessage::STATUS_SENT;
+                        $smsMessage->serviceProvider = SmsService::PROVIDER_ALI;
                         $smsMessage->save(false);
                     }
                 } catch (\Exception $ex) {

@@ -38,7 +38,8 @@
         "intervention/image": "2.4.0",
         "illuminate/queue":"5.4.*",
         "illuminate/bus":"5.4.*",
-        "illuminate/redis":"5.4.*"
+        "illuminate/redis":"5.4.*",
+        "vlucas/phpdotenv": "^2.4"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "*",

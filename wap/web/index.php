@@ -8,9 +8,12 @@ require(__DIR__ . '/../../vendor/yiisoft/yii2/Yii.php');
 require(__DIR__ . '/../../common/config/bootstrap.php');
 require(__DIR__ . '/../config/bootstrap.php');
 
+#引入 dotenv
+$dotenv = new Dotenv\Dotenv(__DIR__ . '/../../');
+$dotenv->load();
+
 $config = yii\helpers\ArrayHelper::merge(
     require(__DIR__ . '/../../common/config/main.php'),
-    require(__DIR__ . '/../../common/config/main-local.php'),
     require(__DIR__ . '/../../common/config/session.php'),
     require(__DIR__ . '/../../common/config/session-local.php'),
     require(__DIR__ . '/../config/main.php'),
@@ -27,7 +30,7 @@ if (!defined('UPLOAD_BASE_URI')) {
 if (!defined('FE_BASE_URI')) {
     define('FE_BASE_URI', Yii::$app->params['fe_base_uri']);
 }
-if (!defined('IN_APP') && false !== strpos(Yii::$app->request->hostInfo,'//app.')) {
+if (!defined('IN_APP') && false !== strpos(Yii::$app->request->hostInfo, '//app.')) {
     define('IN_APP', true);
 }
 if (!defined('CLIENT_TYPE')) {
