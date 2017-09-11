@@ -40,5 +40,12 @@ return [
             'password' => env('DB_TX_PASSWORD'),
             'charset' => 'utf8',
         ],
+        'db_mig' => [
+            'class' => 'yii\db\Connection',
+            'dsn' => 'mysql:host=localhost;dbname=mig;port:3306',
+            'username' => 'mig',
+            'password' => 'mig123456',
+            'charset' => 'utf8',
+        ],
     ],
 ];
