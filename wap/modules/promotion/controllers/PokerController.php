@@ -6,6 +6,7 @@ use common\controllers\HelpersTrait;
 use common\models\promo\Award;
 use common\models\promo\Poker;
 use common\models\promo\PokerUser;
+use common\utils\StringUtils;
 use wap\modules\promotion\models\RankingPromo;
 use Yii;
 use yii\data\Pagination;
@@ -200,7 +201,7 @@ class PokerController extends BaseController
                         ->andWhere(['date(createTime)' => $poker['term']])
                         ->one();
                     if (null !== $award) {
-                        $title = $level === '幸运奖' ? $award->amount.'积分' : '200元超市卡';
+                        $title = $level === '幸运奖' ? StringUtils::amountFormat2($award->amount).'积分' : '200元超市卡';
                     }
                     $data[$k] = [
                         'status' => 1,

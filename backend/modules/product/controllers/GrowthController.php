@@ -31,11 +31,11 @@ class GrowthController extends BaseController
              * @var OnlineOrder $order
              */
             if (empty($orderId)) {
-                $this->ex404();
+                throw $this->ex404();
             }
             $order = OnlineOrder::findOne($orderId);
             if (is_null($order)) {
-                $this->ex404();
+                throw $this->ex404();
             }
             $loan = $order->loan;
             $user = $order->user;
@@ -57,7 +57,7 @@ class GrowthController extends BaseController
             ];
         } else {
             if (empty($loanId)) {
-                $this->ex404();
+                throw $this->ex404();
             }
             /**
              * @var OfflineLoan     $loan
@@ -98,17 +98,17 @@ class GrowthController extends BaseController
         $orderId = \Yii::$app->request->get('orderId');
 
         if (empty($orderId)) {
-            $this->ex404();
+            throw $this->ex404();
         }
         $order = OnlineOrder::findOne($orderId);
         $loanOrder = $order;
         if (is_null($order)) {
-            $this->ex404();
+            throw $this->ex404();
         }
 
         $loan = $order->loan;
         if (is_null($loan)) {
-            $this->ex404();
+            throw $this->ex404();
         }
 
         return $this->createData($loan, $order, $loanOrder);
@@ -119,19 +119,19 @@ class GrowthController extends BaseController
         $orderId = \Yii::$app->request->get('orderId');
 
         if (empty($orderId)) {
-            $this->ex404();
+            throw $this->ex404();
         }
         $order = CreditOrder::findOne($orderId);
         if (is_null($order)) {
-            $this->ex404();
+            throw $this->ex404();
         }
         $note = $order->note;
         if (is_null($note)) {
-            $this->ex404();
+            throw $this->ex404();
         }
         $loanOrder = $note->order;
         if (is_null($loanOrder) || is_null($loan = OnlineProduct::findOne($loanOrder->getLoan_id()))) {
-            $this->ex404();
+            throw $this->ex404();
         }
 
         return $this->createData($loan, $order, $loanOrder);
@@ -150,7 +150,7 @@ class GrowthController extends BaseController
             'ebaoquanId' => $ebaoquan->baoId,
             'ebaoquanDate' => (new \DateTime(date('Y-m-d H:i:s',$ebaoquan->updated_at))),
             'userName' => $user->getName(),
-            'idcard' => $user->getIdCard(),
+            'idcard' => $user->getIdcard(),
             'title' => $order instanceof CreditOrder ? '【转让】 '.$loan->title : $loan->title,
             'duration' => $duration['value'].$duration['unit'],
             'rate' => bcmul($loanOrder->yield_rate, 100, 2) . '%',

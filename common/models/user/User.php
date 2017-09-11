@@ -1125,4 +1125,9 @@ class User extends ActiveRecord implements IdentityInterface, UserInterface
     {
         return User::find(['safeMobile' => SecurityUtils::encrypt($mobile)]);
     }
+
+    public function getIdcard()
+    {
+        return SecurityUtils::decrypt($this->safeIdCard);
+    }
 }

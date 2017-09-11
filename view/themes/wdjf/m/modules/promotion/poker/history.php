@@ -2,7 +2,7 @@
 $this->title = '周周乐结果';
 ?>
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/wenjfbase.css">
-<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/happy-week/css/record.css">
+<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/happy-week/css/record.css?v=20170911">
 <script src="<?= FE_BASE_URI ?>/libs/lib.flexible3.js"></script>
 <script src="<?= FE_BASE_URI ?>/libs/vue.min.js"></script>
 <style>
@@ -119,6 +119,4 @@ $this->title = '周周乐结果';
         });
 
     });
-
-    Vue.config.devtools = true
 </script>
