@@ -5,7 +5,7 @@ $this->title = '周周乐';
 <meta http-equiv="Cache-Control" CONTENT="no-cache">
 <meta http-equiv="Pragma" CONTENT="no-cache">
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/wenjfbase.css">
-<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/happy-week/css/index.css?v=1.0">
+<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/happy-week/css/index.css?v=20170911">
 <script src="<?= FE_BASE_URI ?>/libs/lib.flexible3.js"></script>
 <script src="<?= FE_BASE_URI ?>/libs/iscroll.js"></script>
 <script src="<?= FE_BASE_URI ?>/libs/vue.min.js"></script>
@@ -372,5 +372,4 @@ $this->title = '周周乐';
             }, 1000);
         }
     })(data.restSecond);
-    Vue.config.devtools = true
 </script>
