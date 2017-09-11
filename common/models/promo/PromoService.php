@@ -244,6 +244,7 @@ class PromoService
                 $userCoupon->save(false);
                 Award::couponAward($user, $promo, $userCoupon, $ticket, $reward)->save(false);
                 break;
+            case Reward::TYPE_RANDOM_POINT:
             case Reward::TYPE_POINT:
                 $point = $reward->ref_amount;
                 if (!is_numeric($point) || $point <= 0) {
