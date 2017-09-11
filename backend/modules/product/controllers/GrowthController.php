@@ -150,7 +150,7 @@ class GrowthController extends BaseController
             'ebaoquanId' => $ebaoquan->baoId,
             'ebaoquanDate' => (new \DateTime(date('Y-m-d H:i:s',$ebaoquan->updated_at))),
             'userName' => $user->getName(),
-            'idcard' => $user->getIdNo(),
+            'idcard' => $user->getIdCard(),
             'title' => $order instanceof CreditOrder ? '【转让】 '.$loan->title : $loan->title,
             'duration' => $duration['value'].$duration['unit'],
             'rate' => bcmul($loanOrder->yield_rate, 100, 2) . '%',
