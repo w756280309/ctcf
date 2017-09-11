@@ -1108,4 +1108,9 @@ class User extends ActiveRecord implements IdentityInterface, UserInterface
     {
         return $this->hasOne(UserAffiliation::className(), ['user_id' => 'id']);
     }
+
+    public function getIdcard()
+    {
+        return SecurityUtils::decrypt($this->safeIdCard);
+    }
 }
