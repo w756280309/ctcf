@@ -10,6 +10,7 @@ class Reward extends ActiveRecord
     const TYPE_POINT = 'POINT'; //积分
     const TYPE_COUPON = 'COUPON'; //代金券
     const TYPE_RED_PACKET = 'RED_PACKET'; //红包
+    const TYPE_RANDOM_POINT = 'RANDOM_POINT';//随机积分
 
     public function rules()
     {

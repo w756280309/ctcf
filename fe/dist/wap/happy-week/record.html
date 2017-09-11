@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>周周乐</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0,minimum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="__FE_BASE_URI__/common/css/wenjfbase.css">
+    <link rel="stylesheet" href="__FE_BASE_URI__wap/happy-week/css/record.css">
+    <script src="__FE_BASE_URI__/libs/lib.flexible3.js"></script>
+    <script src="__FE_BASE_URI__/libs/jquery-1.11.1.min.js"></script>
+    <script src="__FE_BASE_URI__/libs/vue.min.js"></script>
+    <style>
+        [v-cloak] { display: none }
+    </style>
+</head>
+<body>
+<div class="flex-content" id="record">
+    <ul class="happyWeek-list">
+        <li v-for="rewardInfo in rewardInfos" v-cloak>
+            <p class="til">{{rewardInfo.qishu}}期</p>
+            <div class="ctn">
+                <div class="lucky-draw not-lottery-draw" v-if="rewardInfo.status==0">待开奖</div>
+                <div class="lucky-draw" v-if="rewardInfo.status==1">已中奖</div>
+                <div class="lucky-draw" v-if="rewardInfo.status==2">未中奖</div>
+                <ul class="luck-Num clearfix">
+                    <li class="lf mr8">
+                        <img class="lucky-num" src="__FE_BASE_URI__wap/happy-week/images/lucky-num.png" alt="">
+                        <img class="com-num" :src="baseUrlB+rewardInfo.userCard[0]+imgFormatUrl" alt="">
+                        <img class="com-num-btm" :src="baseUrlB+rewardInfo.userCard[0]+imgFormatUrl" alt="">
+                    </li>
+                    <li class="lf mr8">
+                        <img class="login-num" src="__FE_BASE_URI__wap/happy-week/images/login-num.png" alt="">
+                        <img class="com-num" :src="baseUrlR+rewardInfo.userCard[1]+imgFormatUrl" alt="">
+                        <img class="com-num-btm" :src="baseUrlR+rewardInfo.userCard[1]+imgFormatUrl" alt="">
+                    </li>
+                   <li class="lf mr8">
+                        <img class="sigin-num" src="__FE_BASE_URI__wap/happy-week/images/sigin-num.png" alt="">
+                        <img v-if="!!rewardInfo.userCard[2]" class="com-num" :src="baseUrlB+rewardInfo.userCard[2]+imgFormatUrl" alt="">
+                        <img v-if="!!rewardInfo.userCard[2]" class="com-num-btm" :src="baseUrlB+rewardInfo.userCard[2]+imgFormatUrl" alt="">
+                        <img v-if="!rewardInfo.userCard[2]" class="com-bg" src="__FE_BASE_URI__wap/happy-week/images/type-bg_03.png" alt="">
+                    </li>
+                    <li class="lf">
+                        <img class="invest-num" src="__FE_BASE_URI__wap/happy-week/images/invest-num.png" alt="">
+                        <img v-if="!!rewardInfo.userCard[3]" class="com-num" :src="baseUrlR+rewardInfo.userCard[3]+imgFormatUrl" alt="">
+                        <img v-if="!!rewardInfo.userCard[3]" class="com-num-btm" :src="baseUrlR+rewardInfo.userCard[3]+imgFormatUrl" alt="">
+                        <img v-if="!rewardInfo.userCard[3]" class="com-bg" src="__FE_BASE_URI__wap/happy-week/images/type-bg_04.png" alt="">
+                    </li>
+                </ul>
+                <p v-if="rewardInfo.status==1||rewardInfo.status==2" class="win-num clearfix">
+                    <span class="com-til lf">中奖号码：</span>
+                    <img class="com-card lf" src="__FE_BASE_URI__wap/happy-week/images/type_04.png" alt=""><span class="com-fz lf grey mr8">{{rewardInfo.rewardCard[0]}}</span>
+                    <img class="com-card lf mt3" src="__FE_BASE_URI__wap/happy-week/images/type_03.png" alt=""><span class="com-fz lf red mr8">{{rewardInfo.rewardCard[1]}}</span>
+                    <img class="com-card lf mt3" src="__FE_BASE_URI__wap/happy-week/images/type_02.png" alt=""><span class="com-fz lf grey mr8">{{rewardInfo.rewardCard[2]}}</span>
+                    <img class="com-card lf" src="__FE_BASE_URI__wap/happy-week/images/type_01.png" alt=""><span class="com-fz lf red mr8">{{rewardInfo.rewardCard[3]}}</span>
+                </p>
+                <p v-if="rewardInfo.status==1||rewardInfo.status==2" class="u-gifts">
+                    <span class="com-til lf">您的奖品：</span>
+                    <span class="gifts-detail red lf">{{rewardInfo.title}}</span>
+                </p>
+                <p v-if="rewardInfo.status==0" class="win-num clearfix">
+                    <span class="com-til lf">中奖号码：</span>
+                    <span class="not-lottery lh">待公布</span>
+                </p>
+                <p v-if="rewardInfo.status==0" class="u-gifts">
+                    <span class="com-til lf">您的奖品：</span>
+                    <span class="gifts-detail not-lottery lf">待开奖</span>
+                </p>
+            </div>
+        </li>
+    </ul>
+</div>
+<script>
+    $(function(){
+        var rewardInfo = [
+            {
+                'status' : 0, // 0 待开奖 1 已中奖 2未中奖
+                'rewardCard' : ['A', 8, 5, 'K'], //1为A ～ 13为K，0为背面，顺序为黑桃、红桃、梅花、方片
+                'userCard' : [8, 'A', 'J', 'K'], //1为A ～ 13为K，0为背面，顺序为黑桃、红桃、梅花、方片
+                'qishu' : '20170904',
+                'level' : '一等奖',
+                'title' : 'xxxx积分'
+            },
+            {
+                'status' : 1, // 0 待开奖 1 已中奖 2未中奖
+                'rewardCard' : ['A', 8, 9, 'K'], //1为A ～ 13为K，0为背面，顺序为黑桃、红桃、梅花、方片
+                'userCard' : [8, 'Q', 0, 0], //1为A ～ 13为K，0为背面，顺序为黑桃、红桃、梅花、方片
+                'qishu' : '20170904',
+                'level' : '一等奖',
+                'title' : 'xxxx积分'
+            },
+            {
+                'status' : 2, // 0 待开奖 1 已中奖 2未中奖
+                'rewardCard' : ['A', 8, 9, 'K'], //1为A ～ 13为K，0为背面，顺序为黑桃、红桃、梅花、方片
+                'userCard' : [8, 'Q', 0, 'A'], //1为A ～ 13为K，0为背面，顺序为黑桃、红桃、梅花、方片
+                'qishu' : '20170904',
+                'level' : '一等奖',
+                'title' : 'xxxx积分'
+            }
+        ],
+        rewardInfo1 = [
+            {
+                'status' : 0, // 0 待开奖 1 已中奖 2未中奖
+                'rewardCard' : ['A', 8, 5, 'K'], //1为A ～ 13为K，0为背面，顺序为黑桃、红桃、梅花、方片
+                'userCard' : [8, 'A', 'J', 'K'], //1为A ～ 13为K，0为背面，顺序为黑桃、红桃、梅花、方片
+                'qishu' : '20170904',
+                'level' : '一等奖',
+                'title' : 'xxxx积分'
+            },
+            {
+                'status' : 1, // 0 待开奖 1 已中奖 2未中奖
+                'rewardCard' : ['A', 8, 9, 'K'], //1为A ～ 13为K，0为背面，顺序为黑桃、红桃、梅花、方片
+                'userCard' : [8, 'A', 0, 0], //1为A ～ 13为K，0为背面，顺序为黑桃、红桃、梅花、方片
+                'qishu' : '20170904',
+                'level' : '一等奖',
+                'title' : 'xxxx积分'
+            },
+            {
+                'status' : 2, // 0 待开奖 1 已中奖 2未中奖
+                'rewardCard' : ['A', 8, 9, 'K'], //1为A ～ 13为K，0为背面，顺序为黑桃、红桃、梅花、方片
+                'userCard' : [8, 'Q', 0, 'A'], //1为A ～ 13为K，0为背面，顺序为黑桃、红桃、梅花、方片
+                'qishu' : '20170904',
+                'level' : '一等奖',
+                'title' : 'xxxx积分'
+            }
+        ];
+
+
+        var vm = new Vue({
+            el: '#record',
+            data:{
+                rewardInfos:rewardInfo,
+                baseUrlB: 'images/',
+                baseUrlR: 'images/r',
+                imgFormatUrl: '.png',
+                stop:true,
+            },
+            methods:{
+                loadMore:function(){
+                    if(this.scroll>=0){
+                        console.log(this.scroll);
+                    }
+                    /*$.ajax({
+                        type: 'GET',
+                        url: req_url,
+                        data: {page: currentPage},
+                        dataType: 'json',
+                        success: function(data){},
+                        error: function(){}
+                    })*/
+                    if(this.stop){
+                        this.stop = false;
+                        var _this = this;
+                        setTimeout(function(){
+                            for(var i=0 ,len=rewardInfo1.length;i<len;i++){
+                                _this.rewardInfos.push(rewardInfo1[i]);
+                            }
+                            console.log(rewardInfo1.length);
+                            _this.stop = true;
+                        },1000)
+                    }
+                }
+            },
+        });
+
+        $(window).scroll(function() {
+            if ($(this).scrollTop() + $(window).height() + 20 >= $(document).height() && $(this).scrollTop() > 20) {
+                vm.loadMore();
+            }
+        });
+
+    });
+
+    Vue.config.devtools = true
+</script>
+</body>
+</html>
