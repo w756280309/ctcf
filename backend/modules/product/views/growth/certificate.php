@@ -116,9 +116,9 @@ $feUrl = Yii::$app->params['fe_base_uri'];
         }
         .container .inner .organization p .stamps {
             position: absolute;
-            top: -122px;
+            top: -106px;
             right: -7px;
-            width: 182px;
+            width: 169px;
             z-index: -1;
         }
         .container .inner .bottom-txt:before {
@@ -180,7 +180,7 @@ $feUrl = Yii::$app->params['fe_base_uri'];
         </div>
         <div class="organization">
             <p class="name">温州温都金融信息服务股份有限公司</p>
-            <p class="time"><?= $data['date']->format('Y') ?><span>年<img class="stamps" src="<?= $feUrl ?>pc/print-product/images/stamps.png" /></span><?= $data['date']->format('m月d日') ?></p>
+            <p class="time"><?= $data['date']->format('Y') ?><span>年<img class="stamps" src="<?= $feUrl ?>pc/print-product/images/stamps-new.png" /></span><?= $data['date']->format('m月d日') ?></p>
         </div>
         <div class="bottom-txt">
             <div class="content">客服电话：400-101-5151</div>
