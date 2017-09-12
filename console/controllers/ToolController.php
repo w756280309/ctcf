@@ -11,6 +11,7 @@ use common\models\payment\Repayment;
 use common\models\product\OnlineProduct;
 use common\models\tx\CreditOrder;
 use common\models\user\DrawRecord;
+use common\models\user\MoneyRecord;
 use common\models\user\User;
 use common\models\user\UserAccount;
 use common\utils\TxUtils;
@@ -542,5 +543,78 @@ group by o.uid
         }
         $this->stdout("共处理 $count 个标的 \n");
         fclose($fp);
+    }
+
+    /**
+     * 修复重复满标数据 php yii tool/duplicate-establish
+     */
+    public function actionDuplicateEstablish($loanId, $run = false)
+    {
+        $loan = OnlineProduct::find()->where(['id' => $loanId])->one();
+        if (is_null($loan)) {
+            throw new \Exception('没有找到数据');
+        }
+        $orders = OnlineOrder::find()->where([
+            'online_pid' => $loanId,
+            'status' => 1,
+        ])->all();
+        $count = count($orders);
+        $dirtyCount = 0;
+        $successCount = 0;
+        $errorCount = 0;
+        $this->stdout("共找到 $count 个订单 \n");
+        if ($count <= 0) {
+            throw new \Exception('没有找到数据');
+        }
+        foreach ($orders as $order) {
+            /**
+             * @var OnlineOrder $order
+             */
+            $moneyRecords = MoneyRecord::find()->where([
+                'osn' => $order->sn,
+                'type' => MoneyRecord::TYPE_FULL_TX,
+            ])->orderBy(['id' => SORT_DESC])->all();
+            $recordCount = count($moneyRecords);
+            if ($recordCount === 1) {
+                continue;
+            }
+            $this->stdout("订单 {$order->id} 用户 {$order->uid} 标的成立流程处理重复, 同一笔订单有 $recordCount 条满标流水 \n");
+            if ($recordCount > 2) {
+                throw new \Exception('暂时不支持超过２次重复执行情况');
+            }
+            $dirtyCount++;
+            if ($run) {
+                $transaction = Yii::$app->db->beginTransaction();
+                try {
+                    /**
+                     * @var MoneyRecord $moneyRecord
+                     */
+                    $moneyRecord = current($moneyRecords);
+                    if (is_null($moneyRecord)) {
+                        throw new \Exception("没有获取到订单 {$order->id} 的重复资金流水");
+                    }
+                    if (bccomp($moneyRecord->in_money, $order->order_money, 2) !== 0) {
+                        throw new \Exception("资金流水记录的变动资金和订单金额不相等 \n");
+                    }
+                    //删除　money_record　
+                    $moneyRecord->delete();
+                    //更新　user_account 账户信息
+                    $sql = "update user_account set freeze_balance = freeze_balance + :orderMoney, investment_balance = investment_balance - :orderMoney where uid = :userId";
+                    Yii::$app->db->createCommand($sql, [
+                        'orderMoney' => $order->order_money,
+                        'userId' => $order->uid,
+                    ])->execute();
+
+                    $transaction->commit();
+                    $successCount++;
+                } catch (\Exception $e) {
+                    $transaction->rollBack();
+                    $errorCount++;
+                    $this->stdout("修改数据库失败，" . $e->getMessage() . "\n");
+                }
+            }
+        }
+
+        $this->stdout("需要修复数据个数 $dirtyCount, 成功修复订单个数 $successCount, 修复失败个数 $errorCount \n");
     }
 }
