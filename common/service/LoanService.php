@@ -93,7 +93,7 @@ class LoanService
         if (null !== $umpLoanState) {
             $resp = Yii::$container->get('ump')->updateLoanState($deal->id, $umpLoanState);
             if (!$resp->isSuccessful()) {
-                throw new Exception('联动状态修改失败');
+                throw new Exception('联动状态修改失败:' . $resp->get('ret_msg'));
             }
         }
         $loanval = [
