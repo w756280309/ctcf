@@ -27,7 +27,7 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\we
             </ul>
         </div>
         <?php if($fileExists) { ?>
-             <?= $exportModel['title']?>下载 <a href="/growth/export/download?sn=<?= $sn?>" target="_blank"><?= $sn . '.xlsx'?></a>
+             <?= $title?>下载 <a href="/growth/export/download?sn=<?= $sn?>" target="_blank"><?= $sn . '.xlsx'?></a>
         <?php } else { ?>
             <div class="span12 alert alert-info">
                 后台程序正在下载数据, 请稍后刷新页面

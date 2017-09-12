@@ -215,16 +215,19 @@ order by 持有资产 desc",
     }
 
     //导出等待页面
-    public function actionResult($sn, $key)
+    public function actionResult($sn, $key = '', $title = '')
     {
         $path = rtrim(\Yii::$app->params['backend_tmp_share_path'], '/');
         $file = $path . '/' . $sn . '.xlsx';//todo 暂时不做下载sn和对应文件名的关联
-        $exportModel = $this->exportConfig[$key];
+        if (!empty($key)) {
+            $exportModel = $this->exportConfig[$key];
+            $title = $exportModel['title'];
+        }
 
         return $this->render('result', [
             'sn' => $sn,
             'fileExists' => file_exists($file),
-            'exportModel' => $exportModel,
+            'title' => $title,
         ]);
     }
 

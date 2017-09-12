@@ -3,6 +3,7 @@
 namespace backend\modules\product\controllers;
 
 use backend\controllers\BaseController;
+use backend\modules\product\models\LoanSearch;
 use common\controllers\ContractTrait;
 use common\lib\bchelp\BcRound;
 use common\lib\product\ProductProcessor;
@@ -23,9 +24,12 @@ use common\models\user\User;
 use common\models\user\UserAccount;
 use common\service\LoanService;
 use common\utils\TxUtils;
+use console\command\SqlExportJob;
 use P2pl\Borrower;
+use Queue\DbQueue;
 use Yii;
 use yii\data\Pagination;
+use yii\db\Query;
 use yii\web\Cookie;
 use yii\data\ArrayDataProvider;
 
@@ -509,96 +513,84 @@ class ProductonlineController extends BaseController
      */
     public function actionList()
     {
-        $status = Yii::$app->params['deal_status'];
-        $request = Yii::$app->request->get();
-        $sn = isset($request['sn']) ? trim($request['sn']) : '';
-        $name = isset($request['name']) ? trim($request['name']) : '';
-        $internalTitle = isset($request['internalTitle']) ? trim($request['internalTitle']) : '';
-        $requestStatus = isset($request['status']) ? $request['status'] : '';
-        $isHide = false;
-        $isTest = isset($request['isTest']) ? $request['isTest'] : Yii::$app->request->cookies->getValue('loanListFilterIsTest', 0);
-        $days = isset($request['days']) ? $request['days'] : '';
-        $requireIsHide = isset($request['isHide']) && $request['isHide'];
-        $issuerSn = $request['issuerSn'];
-        $op = OnlineProduct::tableName();
-
-        $data = OnlineProduct::find()
-            ->select("$op.*")
-            ->addSelect(['xs_status' => "if(`is_xs` = 1 && $op.`status` < 3, 1, 0)"])
-            ->addSelect(['isrecommended' => 'if(`online_status`=1 && `isPrivate`=0, `recommendTime`, 0)'])
-            ->addSelect(['effect_jixi_time' => 'if(`is_jixi`=1, `jixi_time`, 0)'])
-            ->addSelect(['product_status' => "(case $op.`status` when 4 then 7 when 7 then 4 else $op.`status` end)"]);
-
-        //标的sn
-        if ('' !== $sn) {
-            $data->andWhere(['like', "$op.sn", $sn]);
-        }
-
-        //项目名称
-        if ('' !== $name) {
-            $data->andFilterWhere(['like', "$op.title", $name]);
-        }
-
-        //项目副标题
-        if ('' !== $internalTitle) {
-            $data->andFilterWhere(['like', "$op.internalTitle", $internalTitle]);
-        }
-
-        //状态选择
-        if ('0' === $requestStatus) {
-            $data->andWhere(["online_status" => $requestStatus]);
-        } elseif ($requestStatus) {
-            $data->andWhere(["online_status" => OnlineProduct::STATUS_ONLINE, "$op.status" => $requestStatus]);
-        }
-
-        //标的显示及隐藏列表切换
-        if ($requireIsHide) {
-            $data->andWhere([
-                'del_status' => OnlineProduct::STATUS_DEL,
-                'status' => OnlineProduct::STATUS_FOUND,
-            ]);
-            $isHide = true;
-        } else {
-            $data->andWhere(['del_status' => OnlineProduct::STATUS_USE]);
-        }
-
-        //根据是否测试标进行过滤
-        $data->andWhere(['isTest' => $isTest]);
-        if ($isTest) {
+        $loanStatus = Yii::$app->params['deal_status'];
+        $loanTable = OnlineProduct::tableName();
+        $loanSearch = new LoanSearch();
+        $loanSearch->load(Yii::$app->request->get(), '');
+        $loanSearch->isTest = !is_null($loanSearch->isTest) ? $loanSearch->isTest : Yii::$app->request->cookies->getValue('loanListFilterIsTest', 0);
+        if ($loanSearch->isTest) {
             Yii::$app->response->cookies->add(new Cookie(['name' => 'loanListFilterIsTest', 'value' => 1, 'expire' => strtotime('next year'), 'httpOnly' => false]));
         }
-        //根据发行方编号筛选标的
-        if (!empty($issuerSn)) {
-            $data->andWhere(['issuerSn' => $issuerSn]);
-        }
 
-        if (!empty($days)) {
-            if (in_array($days, [1, 7])) {
-                $data->andWhere(["$op.id" => $this->HkStats(intval($days))]);
-            } else {
-                throw $this->ex404();
-            }
-        }
-
-        $_data = clone $data;
+        /**
+         * @var Query $query
+         */
+        $query = $loanSearch->search();
+        $query->select("$loanTable.*")
+            ->addSelect(['xs_status' => "if($loanTable.`is_xs` = 1 && $loanTable.`status` < 3, 1, 0)"])
+            ->addSelect(['isrecommended' => "if($loanTable.`online_status`=1 && $loanTable.`isPrivate`=0, $loanTable.`recommendTime`, 0)"])
+            ->addSelect(['effect_jixi_time' => "if($loanTable.`is_jixi`=1, $loanTable.`jixi_time`, 0)"])
+            ->addSelect(['product_status' => "(case $loanTable.`status` when 4 then 7 when 7 then 4 else $loanTable.`status` end)"]);
+        $totalCount = $query->count();
         //收益中的标的能够按照满标时间降序排列（最新时间在最前面）
-        if ($requestStatus == 5) {
-            $data->orderBy('full_time desc, xs_status desc, isrecommended desc, online_status asc, product_status asc,effect_jixi_time desc, sn desc');
+        if ($loanSearch->status === 5) {
+            $query->orderBy("full_time desc, xs_status desc, isrecommended desc, online_status asc, product_status asc,effect_jixi_time desc, sn desc");
         } else {
-            $data->orderBy('xs_status desc, isrecommended desc, online_status asc, product_status asc,effect_jixi_time desc, sn desc');
+            $query->orderBy("xs_status desc, isrecommended desc, online_status asc, product_status asc,effect_jixi_time desc, sn desc");
 
         }
-        $pages = new Pagination(['totalCount' => $_data->count(), 'pageSize' => '20']);
-        $model = $data->offset($pages->offset)->limit($pages->limit)->all();
+        $pages = new Pagination(['totalCount' => $totalCount, 'pageSize' => '20']);
+        $models = $query->offset($pages->offset)->limit($pages->limit)->all();
 
         return $this->render('list', [
-            'models' => $model,
+            'models' => $models,
             'pages' => $pages,
-            'status' => $status,
-            'days' => $days,
-            'isTest' => $isTest,
-            'isHide' => $isHide,
+            'loanStatus' => $loanStatus,
+            'loanSearch' => $loanSearch,
         ]);
+    }
+
+    /**
+     * 标的相关信息导出
+     */
+    public function actionExport($exportType)
+    {
+        if (in_array($exportType, ['loan_invest_data', 'user_invest_data'])) {
+            $loanSearch = new LoanSearch();
+            $loanSearch->load(Yii::$app->request->get(), '');
+            /**
+             * @var Query $query
+             * @var DbQueue $dbQueue
+             */
+            $query = $loanSearch->search();
+            $dbQueue = Yii::$container->get('db_queue');
+            $sn = TxUtils::generateSn('Export');
+
+            if ($exportType === 'loan_invest_data') {
+
+            } elseif ($exportType === 'user_invest_data') {
+                $ids = $query->select("online_product.id")->column();
+                if (empty($ids)) {
+                    echo '没有找到符合条件的标的';
+                    return false;
+                }
+
+                //导出投资过指定标的的所有用户的投资记录
+                $job = new SqlExportJob([
+                    'sql' => $exportModel['sql'],
+                    'queryParams' => null,
+                    'exportSn' => $sn,
+                    'itemLabels' => ['标的名称', '标的副标题', '标的状态', '是否是新手标', '用户ID', '用户姓名', '投资金额', '年化投资金额', '实际利率', '产品期限', '起息日', '到期日'],
+                    'itemType' => ['string', 'string', 'string', 'string', 'string', 'string', 'float', 'float', 'float', 'string', 'string', 'string'],
+                ]);
+                if (\Yii::$container->get('db_queue')->pub($job)) {
+                    return $this->redirect('/growth/export/result?sn='.$sn.'&key=&title=导出投资过指定标的的所有用户的投资记录');
+                }
+            }
+        }else {
+            return $this->redirect('/product/productonline/list');
+        }
+
     }
 
     /**
