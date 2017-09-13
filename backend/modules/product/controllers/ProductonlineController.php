@@ -567,27 +567,105 @@ class ProductonlineController extends BaseController
             $sn = TxUtils::generateSn('Export');
 
             if ($exportType === 'loan_invest_data') {
+                $loanTable = OnlineProduct::tableName();
+                $orderTable = OnlineOrder::tableName();
+                $sql = $query
+                    ->select(["$loanTable.title", "$loanTable.internalTitle"])
+                    ->addSelect(["loanStatus" => "(CASE $loanTable.status WHEN 2 THEN '募集中' WHEN 3 THEN '满标' WHEN 5 THEN '还款中' WHEN 6 THEN '已还清' WHEN 7 THEN '提前结束' END)"])
+                    ->addSelect(["isXs" => "IF($loanTable.is_xs, '新手标', '非新手标')"])
+                    ->addSelect(["isJiXi" => "IF($loanTable.is_jixi, '已计息', '未计息')"])
+                    ->addSelect(["expires" => "IF($loanTable.refund_method = 1,CONCAT(IF($loanTable.finish_date > 0 && ! $loanTable.is_jixi,DATEDIFF(DATE(NOW()),DATE(FROM_UNIXTIME($loanTable.finish_date))), $loanTable.expires ),'天'),CONCAT($loanTable.expires, '月'))"])
+                    ->addSelect(["jiXiDate" => " DATE( IF($loanTable.is_jixi,FROM_UNIXTIME($loanTable.jixi_time),''))"])
+                    ->addSelect(["finishDate" => "DATE(IF($loanTable.finish_date > 0, FROM_UNIXTIME($loanTable.finish_date),''))"])
+                    ->addSelect(["orderMoney" => "sum($orderTable.order_money)"])
+                    ->addSelect(["userCount" => "count(distinct $orderTable.uid)"])
+                    ->addSelect(["rate" => "CONCAT(FORMAT($loanTable.yield_rate * 100,2), IF($loanTable.isFlexRate && INSTR(REVERSE($loanTable.rateSteps), ',') > 0, CONCAT('-', REVERSE(SUBSTRING(REVERSE($loanTable.rateSteps), 1, INSTR(REVERSE($loanTable.rateSteps), ',') - 1 ) ) ), '' ) , '%')"])
+                    ->createCommand()
+                    ->getRawSql();
+                //导出标的的投资信息
+                $job = new SqlExportJob([
+                    'sql' => $sql,
+                    'queryParams' => null,
+                    'exportSn' => $sn,
+                    'itemLabels' => ['标的名称', '标的副标题', '标的状态', '是否是新手标', '是否计息', '产品期限', '起息日', '到期日', '投资金额', '投资用户数', '项目利率'],
+                    'itemType' => ['string', 'string', 'string', 'string', 'string', 'string', 'string', 'string', 'float', 'int', 'string'],
+                ]);
+                if ($dbQueue->pub($job)) {
+                    return $this->redirect('/growth/export/result?sn=' . $sn . '&key=&title=导出标的的投资信息');
+                }
 
             } elseif ($exportType === 'user_invest_data') {
-                $ids = $query->select("online_product.id")->column();
-                if (empty($ids)) {
+                $loanIds = $query->select("online_product.id")->column();
+                if (empty($loanIds)) {
                     echo '没有找到符合条件的标的';
                     return false;
                 }
+                $sql = "SELECT
+    p.title,
+    p.internalTitle,
+    CASE p.status WHEN 2 THEN '募集中' WHEN 3 THEN '满标' WHEN 5 THEN '还款中' WHEN 6 THEN '已还清' WHEN 7 THEN '提前结束' END as loanStatus,
+    IF(p.is_xs, '新手标', '非新手标') AS is_xs,
+    IF(p.is_jixi, '已计息', '未计息') AS is_jixi,
+    IF(
+        p.refund_method = 1,
+        CONCAT(
+            IF(
+                p.finish_date > 0 && ! p.is_jixi,
+                DATEDIFF(
+                    DATE(NOW()),
+                    DATE(FROM_UNIXTIME(p.finish_date))
+                ),
+                p.expires
+            ),
+            '天'
+        ),
+        CONCAT(p.expires, '月')
+    ) AS expires,
+    DATE(
+        IF(
+            p.is_jixi,
+            FROM_UNIXTIME(p.jixi_time),
+            ''
+        )
+    ) as jixi_date,
+    DATE(
+        IF(
+            p.finish_date > 0,
+            FROM_UNIXTIME(p.finish_date),
+            ''
+        )
+    ) as finishDate,
+    o.uid,
+    u.real_name,
+    o.order_money,
+    o.yield_rate
+FROM
+    online_order AS o
+INNER JOIN 
+    online_product AS p
+ON
+    p.id = o.online_pid
+INNER JOIN 
+    `user` AS u
+ON
+    o.uid = u.id
+WHERE
+    o.status = 1
+    and p.id in (" . implode(',', $loanIds) . ")";
 
                 //导出投资过指定标的的所有用户的投资记录
                 $job = new SqlExportJob([
-                    'sql' => $exportModel['sql'],
+                    'sql' => $sql,
                     'queryParams' => null,
                     'exportSn' => $sn,
-                    'itemLabels' => ['标的名称', '标的副标题', '标的状态', '是否是新手标', '用户ID', '用户姓名', '投资金额', '年化投资金额', '实际利率', '产品期限', '起息日', '到期日'],
-                    'itemType' => ['string', 'string', 'string', 'string', 'string', 'string', 'float', 'float', 'float', 'string', 'string', 'string'],
+                    'itemLabels' => ['标的名称', '标的副标题', '标的状态', '是否是新手标', '是否计息', '产品期限', '起息日', '到期日', '用户ID', '用户姓名', '投资金额', '实际利率'],
+                    'itemType' => ['string', 'string', 'string', 'string', 'string', 'string', 'string', 'string', 'string', 'string', 'float', 'float'],
                 ]);
-                if (\Yii::$container->get('db_queue')->pub($job)) {
-                    return $this->redirect('/growth/export/result?sn='.$sn.'&key=&title=导出投资过指定标的的所有用户的投资记录');
+                if ($dbQueue->pub($job)) {
+                    return $this->redirect('/growth/export/result?sn=' . $sn . '&key=&title=导出投资过指定标的的所有用户的投资记录');
                 }
             }
-        }else {
+        } else {
             return $this->redirect('/product/productonline/list');
         }
 

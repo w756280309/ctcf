@@ -223,10 +223,17 @@ order by 持有资产 desc",
             $exportModel = $this->exportConfig[$key];
             $title = $exportModel['title'];
         }
+        $fileExists = file_exists($file);
+        if (\Yii::$app->request->isAjax) {
+            return [
+                'fileExists' => $fileExists,
+                'file' => $file,
+            ];
+        }
 
         return $this->render('result', [
             'sn' => $sn,
-            'fileExists' => file_exists($file),
+            'fileExists' => $fileExists,
             'title' => $title,
         ]);
     }
