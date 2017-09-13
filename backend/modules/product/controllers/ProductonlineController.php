@@ -569,6 +569,11 @@ class ProductonlineController extends BaseController
             if ($exportType === 'loan_invest_data') {
                 $loanTable = OnlineProduct::tableName();
                 $orderTable = OnlineOrder::tableName();
+                if (!$loanSearch->hasInnerJoinOrder) {
+                    $query->innerJoin("$orderTable", "$orderTable.online_pid = $loanTable.id");
+                    $query->groupBy("$loanTable.id");
+                    $loanSearch->hasInnerJoinOrder = true;
+                }
                 $sql = $query
                     ->select(["$loanTable.title", "$loanTable.internalTitle"])
                     ->addSelect(["loanStatus" => "(CASE $loanTable.status WHEN 2 THEN '募集中' WHEN 3 THEN '满标' WHEN 5 THEN '还款中' WHEN 6 THEN '已还清' WHEN 7 THEN '提前结束' END)"])

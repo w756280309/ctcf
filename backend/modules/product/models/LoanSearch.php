@@ -35,6 +35,8 @@ class LoanSearch extends Model
     public $investDateStart;
     public $investDateEnd;
 
+    public $hasInnerJoinOrder = false;
+
     public function rules()
     {
         return [
@@ -68,7 +70,6 @@ class LoanSearch extends Model
         $this->validate();
         $loanTable = OnlineProduct::tableName();
         $orderTable = OnlineOrder::tableName();
-        $innerJoinOrder = false;
 
         $query = OnlineProduct::find();
 
@@ -118,17 +119,17 @@ class LoanSearch extends Model
         //根据投资时间筛选标的
         if ($this->investDateStart) {
             $query->innerJoin("$orderTable", "$orderTable.online_pid = $loanTable.id");
-            $innerJoinOrder = true;
+            $this->hasInnerJoinOrder = true;
             $query->andWhere([">=", "$orderTable.order_time", (new \DateTime($this->investDateStart . ' 00:00:00'))->getTimestamp()]);
         }
         if ($this->investDateEnd) {
-            if (!$innerJoinOrder) {
+            if (!$this->hasInnerJoinOrder) {
                 $query->innerJoin("$orderTable", "$orderTable.online_pid = $loanTable.id");
-                $innerJoinOrder = true;
+                $this->hasInnerJoinOrder = true;
             }
             $query->andWhere(["<=", "$orderTable.order_time", (new \DateTime($this->investDateEnd . ' 23:59:59'))->getTimestamp()]);
         }
-        if ($innerJoinOrder) {
+        if ($this->hasInnerJoinOrder) {
             $query->groupBy("$loanTable.id");
         }
 
