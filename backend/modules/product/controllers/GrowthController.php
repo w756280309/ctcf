@@ -171,7 +171,7 @@ class GrowthController extends BaseController
             $orderInfo['orderMoney'] = $order->order_money;
             $orderInfo['orderDate'] = (new \DateTime($order->orderDate));
         } else {
-            $orderInfo['orderMoney'] = $order->principal;
+            $orderInfo['orderMoney'] = $order->principal / 100;
             $orderInfo['orderDate'] = (new \DateTime($order->createTime));
         }
 
