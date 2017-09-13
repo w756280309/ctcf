@@ -167,7 +167,7 @@ $feUrl = Yii::$app->params['fe_base_uri'];
             <span class="left">产品期限</span>：<span class="rig"><?= $data['duration'] ?>(实际期限以项目计息后为准)</span>
         </div>
         <div class="content">
-            <span class="left">预期年化收益率</span>：<span class="rig">8.0%</span>
+            <span class="left">预期年化收益率</span>：<span class="rig"><?= $data['rate'] ?></span>
         </div>
         <div class="content">
             <span class="left">认购金额</span>：<span class="rig"><?= StringUtils::numToRmb($data['orderMoney']) ?>（¥<?= number_format($data['orderMoney'], 2)?>）</span>
