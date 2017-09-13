@@ -650,7 +650,8 @@ INNER JOIN
 ON
     o.uid = u.id
 WHERE
-    o.status = 1
+    o.status = 1 
+    and u.type = 1
     and p.id in (" . implode(',', $loanIds) . ")";
 
                 //导出投资过指定标的的所有用户的投资记录

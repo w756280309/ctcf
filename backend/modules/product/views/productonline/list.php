@@ -125,16 +125,16 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\we
                     <td>
                         <span class="title">到期日</span>
                     </td>
-                    <td>
-                        <input type="text" name="finishDateStart" value="<?= $loanSearch->finishDateStart?>" class="m-wrap span3" style="margin-bottom: 0px;" onclick="WdatePicker()"> -
-                        <input type="text" name="finishDateEnd" value="<?= $loanSearch->finishDateEnd?>" class="m-wrap span3" style="margin-bottom: 0px;" onclick="WdatePicker()">
+                    <td style="line-height: 30px;">
+                        <input type="text" name="finishDateStart" value="<?= $loanSearch->finishDateStart?>" class="m-wrap" style="margin-bottom: 0px;width:80px;" onclick="WdatePicker()"> -
+                        <input type="text" name="finishDateEnd" value="<?= $loanSearch->finishDateEnd?>" class="m-wrap" style="margin-bottom: 0px;width:80px;" onclick="WdatePicker()">
                     </td>
                     <td>
                         <span class="title">投资时间</span>
                     </td>
-                    <td>
-                        <input type="text" name="investDateStart" value="<?= $loanSearch->investDateStart?>" class="m-wrap span3" style="margin-bottom: 0px;" onclick="WdatePicker()"> -
-                        <input type="text" name="investDateEnd" value="<?= $loanSearch->investDateEnd?>" class="m-wrap span3" style="margin-bottom: 0px;" onclick="WdatePicker()">
+                    <td style="line-height: 30px;">
+                        <input type="text" name="investDateStart" value="<?= $loanSearch->investDateStart?>" class="m-wrap" style="margin-bottom: 0px;width:80px;" onclick="WdatePicker()"> -
+                        <input type="text" name="investDateEnd" value="<?= $loanSearch->investDateEnd?>" class="m-wrap" style="margin-bottom: 0px;width:80px;" onclick="WdatePicker()">
                     </td>
                     <td>
                         <div align="right" style="margin-right: 20px">
