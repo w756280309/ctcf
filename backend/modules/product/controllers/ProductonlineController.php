@@ -580,6 +580,7 @@ class ProductonlineController extends BaseController
                     ->addSelect(["orderMoney" => "sum($orderTable.order_money)"])
                     ->addSelect(["userCount" => "count(distinct $orderTable.uid)"])
                     ->addSelect(["rate" => "CONCAT(FORMAT($loanTable.yield_rate * 100,2), IF($loanTable.isFlexRate && INSTR(REVERSE($loanTable.rateSteps), ',') > 0, CONCAT('-', REVERSE(SUBSTRING(REVERSE($loanTable.rateSteps), 1, INSTR(REVERSE($loanTable.rateSteps), ',') - 1 ) ) ), '' ) , '%')"])
+                    ->orderBy(["$loanTable.id" => SORT_ASC])
                     ->createCommand()
                     ->getRawSql();
                 //导出标的的投资信息
@@ -652,7 +653,8 @@ ON
 WHERE
     o.status = 1 
     and u.type = 1
-    and p.id in (" . implode(',', $loanIds) . ")";
+    and p.id in (" . implode(',', $loanIds) . ")
+ORDER BY p.id ASC,u.id ASC,o.id ASC";
 
                 //导出投资过指定标的的所有用户的投资记录
                 $job = new SqlExportJob([
