@@ -1,17 +1,5 @@
 <?php
-/*$fromNb = false;//来自宁波分销商
-if (Yii::$app->request->getCookies()->get('campaign_source')) {
-    $source = Yii::$app->request->getCookies()->get('campaign_source');
-    $nbCodes = ['nbxdjb'];
-    if (in_array($source, $nbCodes)) {
-        $fromNb = true;
-    }
-}
-if ($fromNb) {
-    $this->title = '现代金报-温都金服';
-} else {
-    $this->title = '温都金服';
-}*/
+$this->title = '温都金服';
 $this->params['breadcrumbs'][] = $this->title;
 $this->hideHeaderNav = true;
 $this->showBottomNav = true;
