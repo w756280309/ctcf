@@ -23,8 +23,8 @@ class ExportController extends BaseController
                 'title' => '指定日期还款数据',//导出类型的标题，不可为空
                 'content' => '统计指定日期回款数据',//导出类型的说明，不可为空
                 'sql' => "SELECT u.real_name AS '姓名',
-u.mobile AS '手机号',
-year(now()) - substring(u.idCard,7,4) as '年龄',
+u.safeMobile AS '手机号',
+u.safeIdCard as '年龄',
 a.name as '分销商',
 o.order_money AS '投资金额',
 o.yield_rate AS '利率',
@@ -83,6 +83,11 @@ ORDER BY p.id asc ,r.uid asc",//导出的sql模板, 使用预处理方式调用,
                 ],
                 'itemLabels' => ['姓名', '手机号', '年龄', '分销商', '投资金额', '利率', '标的名称', '还款方式', '标的状态', '标的截止日期', '还款本金', '还款利息', '还款本息', '实际还款时间'],//统计的数据项，不可为空
                 'itemType' => ['string', 'int', 'int', 'string', 'float', 'float', 'string', 'string', 'string', 'string','float', 'float', 'float', 'date'],
+                'beforeExport' => function($row) {
+                    $row['手机号'] = SecurityUtils::decrypt($row['手机号']);
+                    $row['年龄'] = date('Y') - substr(SecurityUtils::decrypt($row['年龄']), 6, 4);
+                    return $row;
+                }
             ],
             'last_ten_day_draw' => [
                 'key' => 'last_ten_day_draw',
