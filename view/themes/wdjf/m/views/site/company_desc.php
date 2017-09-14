@@ -127,7 +127,7 @@ AnalyticsHelper::registerTo($this);
                                 </ul>
                                 <div class="third">
                                         <img src="<?= FE_BASE_URI ?>wap/campaigns/h5-161114/img/wdjf-img7.png" alt="">
-                                        <img class="center-img" src="<?= FE_BASE_URI ?>wap/campaigns/h5-161114/img/wdjf-img8.png" alt="">
+                                        <img class="center-img" src="<?= FE_BASE_URI ?>wap/campaigns/h5-161114/img/wdjf-img8-new.png" alt="">
                                         <img src="<?= FE_BASE_URI ?>wap/campaigns/h5-161114/img/wdjf_img9_new.png" alt="">
                                 </div>
                         </div>
