@@ -277,7 +277,6 @@ $config = json_decode($promo->config, true);
             }
 
             allowClick = false;
-
             if (!validateMobile()) {
                 allowClick = true;
                 return;
@@ -287,6 +286,7 @@ $config = json_decode($promo->config, true);
             var xhr = $.get('/promotion/promo/validate-mobile?key='+key+'&mobile='+phonenum);
 
             xhr.done(function(data) {
+                allowClick = true;
                 var toUrl = data.toUrl;
 
                 if (data.code) {
@@ -294,20 +294,20 @@ $config = json_decode($promo->config, true);
                         if ('' !== toUrl) {
                             location.href = toUrl;
                         }
-
-                        allowClick = true;
                     });
                 } else {
                     location.href = toUrl;
-                    allowClick = true;
                 }
             });
 
             xhr.fail(function () {
-                toastCenter('系统繁忙,请稍后重试!', function() {
-                    allowClick = true;
-                });
-            })
+                allowClick = true;
+                toastCenter('系统繁忙,请稍后重试!');
+            });
+
+            xhr.always(function(){
+                allowClick = true;
+            });
         })
     });
 </script>
