@@ -26,13 +26,34 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\we
                 </li>
             </ul>
         </div>
-        <?php if($fileExists) { ?>
-             <?= $exportModel['title']?>下载 <a href="/growth/export/download?sn=<?= $sn?>" target="_blank"><?= $sn . '.xlsx'?></a>
-        <?php } else { ?>
-            <div class="span12 alert alert-info">
+        <div id="result">
+            <div id="downloan-link" style="display:<?= $fileExists ? 'block' : 'none'?>">
+                <?= $title?>下载 <a href="/growth/export/download?sn=<?= $sn?>" target="_blank"><?= $sn . '.xlsx'?></a>
+            </div>
+            <div class="span12 alert alert-info" id="alter-info" style="display:<?= !$fileExists ? 'block' : 'none'?>">
                 后台程序正在下载数据, 请稍后刷新页面
             </div>
-        <?php }?>
+            <?php if(!$fileExists) { ?>
+                <script>
+                    var t =  t = setInterval(function () {
+                        getResult();
+                    }, 1000);
+                    getResult();
+                    function getResult() {
+                        var url = '<?= Yii::$app->request->absoluteUrl?>';
+                        $.get(url,function(data) {
+                            console.log(data);
+                            if (data.fileExists) {
+                                $('#downloan-link').show();
+                                $('#alter-info').hide();
+                                clearInterval(t);
+                            }
+                        })
+                    }
+                </script>
+            <?php } ?>
+        </div>
+
     </div>
 </div>
 <?php $this->endBlock(); ?>
