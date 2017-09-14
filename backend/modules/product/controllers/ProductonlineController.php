@@ -579,7 +579,7 @@ class ProductonlineController extends BaseController
                     ->addSelect(["loanStatus" => "(CASE $loanTable.status WHEN 2 THEN '募集中' WHEN 3 THEN '满标' WHEN 5 THEN '还款中' WHEN 6 THEN '已还清' WHEN 7 THEN '提前结束' END)"])
                     ->addSelect(["isXs" => "IF($loanTable.is_xs, '新手标', '非新手标')"])
                     ->addSelect(["isJiXi" => "IF($loanTable.is_jixi, '已计息', '未计息')"])
-                    ->addSelect(["expires" => "IF($loanTable.refund_method = 1,CONCAT(IF($loanTable.finish_date > 0 && ! $loanTable.is_jixi,DATEDIFF(DATE(NOW()),DATE(FROM_UNIXTIME($loanTable.finish_date))), $loanTable.expires ),'天'),CONCAT($loanTable.expires, '月'))"])
+                    ->addSelect(["expires" => "IF($loanTable.refund_method = 1,CONCAT(IF($loanTable.finish_date > 0 && ! $loanTable.is_jixi,ABS(DATEDIFF(DATE(FROM_UNIXTIME($loanTable.finish_date)), DATE(NOW()))), $loanTable.expires ),'天'),CONCAT($loanTable.expires, '月'))"])
                     ->addSelect(["jiXiDate" => " DATE( IF($loanTable.is_jixi,FROM_UNIXTIME($loanTable.jixi_time),''))"])
                     ->addSelect(["finishDate" => "DATE(IF($loanTable.finish_date > 0, FROM_UNIXTIME($loanTable.finish_date),''))"])
                     ->addSelect(["orderMoney" => "sum($orderTable.order_money)"])
@@ -617,9 +617,11 @@ class ProductonlineController extends BaseController
         CONCAT(
             IF(
                 p.finish_date > 0 && ! p.is_jixi,
-                DATEDIFF(
-                    DATE(NOW()),
-                    DATE(FROM_UNIXTIME(p.finish_date))
+                ABS(
+                    DATEDIFF(
+                        DATE(FROM_UNIXTIME(p.finish_date)),
+                        DATE(NOW())
+                    )
                 ),
                 p.expires
             ),
