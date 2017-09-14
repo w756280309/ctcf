@@ -1,4 +1,21 @@
 <?php
+$fromNb = false;//来自宁波分销商
+if (!empty(Yii::$app->request->get('hmsr'))) {
+    $source = Yii::$app->request->get('hmsr');
+}
+if (!empty(Yii::$app->request->get('utm_source'))) {
+    $source = Yii::$app->request->get('utm_source');
+}
+if (!empty(Yii::$app->request->get('trk_s'))) {
+    $source = Yii::$app->request->get('trk_s');
+}
+if (empty($source) && Yii::$app->request->getCookies()->get('campaign_source')) {
+    $source = Yii::$app->request->getCookies()->get('campaign_source');
+}
+$nbCodes = ['nbxdjb'];
+if (!empty($source) && in_array($source, $nbCodes)) {
+    $fromNb = true;
+}
 
 $this->title = '签到得积分';
 
@@ -55,7 +72,7 @@ $taps = date('Y-m-d') >= '2017-05-01' && date('Y-m-d') <= '2017-05-31';
     </div>
     <div class="rule_box" style="padding-top: 0.5rem;">
         <?= $taps ? '<p class="rule_top f15">热烈庆祝温都金服成立一周年！</p>' : '' ?>
-        <p class="rule_top f15" style="color: #f44336;">关注温都金服公众号（wendujinfu），绑定账户送积分啦！</p>
+        <p class="rule_top f15" style="color: #f44336; display: <?= $fromNb ? "none" : "block"?>">关注温都金服公众号（wendujinfu），绑定账户送积分啦！</p>
         <p class="rule_top f15">每天签到2积分，<?= $taps ? '5月签到积分直升3倍起！' : '7天后增至5积分。' ?></p>
         <p class="rule_top f15">连续签到可得代金券！</p>
         <p class="rule_title f15">签到规则</p>
@@ -103,7 +120,7 @@ $taps = date('Y-m-d') >= '2017-05-01' && date('Y-m-d') <= '2017-05-31';
     <img src="<?= FE_BASE_URI ?>wap/qiandao/images/pomp-header.png" alt="">
     <p class="pomp-time"><i></i>您已连续签到<span></span>天<i></i></p>
     <p class="pomp-points">获得<span id="pomp-point"></span>积分<i id="pomp-coupon"></i></p>
-    <div class="boundWeixin">
+    <div class="boundWeixin" style=" display: <?= $fromNb ? "none" : "block"?>">
         <?php if (!$isBindWx) { ?>
         <p>绑定微信额外送10积分啦！</p>
         <?php } ?>
