@@ -9,7 +9,11 @@ use yii\widgets\LinkPager;
 use yii\helpers\Html;
 
 $pc_cat = Yii::$app->params['pc_cat'];
+$this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\web\YiiAsset']);
 
+/**
+ * @var \backend\modules\product\models\LoanSearch $loanSearch
+ */
 ?>
 
 <?php $this->beginBlock('blockmain'); ?>
@@ -45,16 +49,16 @@ $pc_cat = Yii::$app->params['pc_cat'];
                     <td>
                         <span class="title">项目名称</span>
                     </td>
-                    <td><input id="name" type="text" class="m-wrap span6" style="margin-bottom: 0px;width:300px" name='name' value="<?= Yii::$app->request->get('name') ?>"  placeholder="请输入项目名称"/></td>
+                    <td><input id="name" type="text" class="m-wrap span6" style="margin-bottom: 0px;width:300px" name='title' value="<?= $loanSearch->title ?>"  placeholder="请输入项目名称"/></td>
                     <td><span class="title">状态</span></td>
                     <td>
                         <select id="type" class="m-wrap" style="width:200px" name = 'status'>
                             <option value="">--请选择--</option>
                             <option value="0" <?= Yii::$app->request->get('status') == '0' ? 'selected' : '' ?>>未上线</option>
-                            <?php foreach ($status as $key => $val): ?>
+                            <?php foreach ($loanStatus as $key => $val): ?>
                                 <option value="<?= $key ?>"
                                     <?php
-                                        if (Yii::$app->request->get('status') == $key) {
+                                        if ($loanSearch->status == $key) {
                                             echo 'selected';
                                         }
                                     ?> >
@@ -62,18 +66,17 @@ $pc_cat = Yii::$app->params['pc_cat'];
                                 </option>
                             <?php endforeach; ?>
                         </select>
-                        <input type="hidden" name="days" value="<?= Html::encode($days) ?>">
                     </td>
                     <td>
                         <select class="m-wrap" name="isTest" id="isTest" style="width: 80px;">
-                            <option value="0" <?= $isTest ? '' : 'selected'?>>正式标</option>
-                            <option value="1" <?= $isTest ? 'selected' : '' ?>>测试标</option>
+                            <option value="0" <?= $loanSearch->isTest ? '' : 'selected'?>>正式标</option>
+                            <option value="1" <?= $loanSearch->isTest ? 'selected' : '' ?>>测试标</option>
                         </select>
                     </td>
                     <td>
                         <select class="m-wrap" name="isHide">
-                            <option value="0" <?= $isHide ? '' : 'selected'?>>显示可见标的列表</option>
-                            <option value="1" <?= $isHide ? 'selected' : '' ?>>显示隐藏标的列表</option>
+                            <option value="0" <?= $loanSearch->isHide ? '' : 'selected'?>>显示可见标的</option>
+                            <option value="1" <?= $loanSearch->isHide ? 'selected' : '' ?>>显示隐藏标的</option>
                         </select>
                     </td>
                     <td>
@@ -88,21 +91,56 @@ $pc_cat = Yii::$app->params['pc_cat'];
                         <span class="title">项目副标题</span>
                     </td>
                     <td>
-                        <input id="internalTitle" type="text" class="m-wrap span6" style="margin-bottom: 0px;width:300px" name='internalTitle' value="<?= Yii::$app->request->get('internalTitle') ?>"  placeholder="请输入项目副标题"/>
+                        <input id="internalTitle" type="text" class="m-wrap span6" style="margin-bottom: 0px;width:300px" name='internalTitle' value="<?= $loanSearch->internalTitle ?>"  placeholder="请输入项目副标题"/>
                     </td>
                     <td>
                         <span class="title">序号</span>
                     </td>
                     <td>
-                        <input id="sn" type="text" class="m-wrap span4" style="margin-bottom: 0px;width:200px" name='sn' value="<?= Yii::$app->request->get('sn') ?>"  placeholder="请输入序号"/>
+                        <input id="sn" type="text" class="m-wrap span4" style="margin-bottom: 0px;width:200px" name='sn' value="<?= $loanSearch->sn ?>"  placeholder="请输入序号"/>
                     </td>
                     <td>
                         <span class="title">发行方编号</span>
                     </td>
                     <td>
-                        <input id="sn" type="text" class="m-wrap span4" style="margin-bottom: 0px;width:200px" name='issuerSn' value="<?= Yii::$app->request->get('issuerSn') ?>"  placeholder="请输入发行方编号"/>
+                        <input id="sn" type="text" class="m-wrap span4" style="margin-bottom: 0px;width:200px" name='issuerSn' value="<?= $loanSearch->issuerSn ?>"  placeholder="请输入发行方编号"/>
                     </td>
-                    <td></td>
+                    <td>
+                        <div align="right" style="margin-right: 20px">
+                            <a href="/product/productonline/export?exportType=loan_invest_data&<?= parse_url(Yii::$app->request->getAbsoluteUrl(), PHP_URL_QUERY)?>" class="btn" target="_blank">导出标的投资信息</a>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="title">新手标</span>
+                    </td>
+                    <td>
+                        <select class="m-wrap" name="isXs" id="isTest" style="width: 120px;">
+                            <option value="" <?= is_null($loanSearch->isXs) ? 'selected' : ''?>>--请选择--</option>
+                            <option value="0" <?= !is_null($loanSearch->isXs) && !$loanSearch->isXs ? 'selected' : ''?>>非新手标</option>
+                            <option value="1" <?= !is_null($loanSearch->isXs) && $loanSearch->isXs ? 'selected' : '' ?>>新手标</option>
+                        </select>
+                    </td>
+                    <td>
+                        <span class="title">到期日</span>
+                    </td>
+                    <td style="line-height: 30px;">
+                        <input type="text" name="finishDateStart" value="<?= $loanSearch->finishDateStart?>" class="m-wrap" style="margin-bottom: 0px;width:80px;" onclick="WdatePicker()"> -
+                        <input type="text" name="finishDateEnd" value="<?= $loanSearch->finishDateEnd?>" class="m-wrap" style="margin-bottom: 0px;width:80px;" onclick="WdatePicker()">
+                    </td>
+                    <td>
+                        <span class="title">投资时间</span>
+                    </td>
+                    <td style="line-height: 30px;">
+                        <input type="text" name="investDateStart" value="<?= $loanSearch->investDateStart?>" class="m-wrap" style="margin-bottom: 0px;width:80px;" onclick="WdatePicker()"> -
+                        <input type="text" name="investDateEnd" value="<?= $loanSearch->investDateEnd?>" class="m-wrap" style="margin-bottom: 0px;width:80px;" onclick="WdatePicker()">
+                    </td>
+                    <td>
+                        <div align="right" style="margin-right: 20px">
+                            <a href="/product/productonline/export?exportType=user_invest_data&<?= parse_url(Yii::$app->request->getAbsoluteUrl(), PHP_URL_QUERY)?>" class="btn" target="_blank">导出用户投资记录</a>
+                        </div>
+                    </td>
                 </tr>
                 </tbody>
             </table>
@@ -126,6 +164,7 @@ $pc_cat = Yii::$app->params['pc_cat'];
                         <th>起息时间</th>
                         <th>放款时间</th>
                         <th>状态</th>
+                        <th>到期日</th>
                         <th><center>操作</center></th>
                     </tr>
                 </thead>
@@ -175,7 +214,8 @@ $pc_cat = Yii::$app->params['pc_cat'];
                             <td>
                                 <?= !empty($val['fk_examin_time']) ? date('Y-m-d', $val['fk_examin_time']) : '--'?>
                             </td>
-                            <td><?= $val['online_status'] ? $status[$val['status']] : '未上线' ?></td>
+                            <td><?= $val['online_status'] ? $loanStatus[$val['status']] : '未上线' ?></td>
+                            <td><?= $val['finish_date'] ? date('Y-m-d', $val['finish_date']) : ''?></td>
                             <td>
                                 <a href="/product/productonline/show?id=<?= $val['id'] ?>" class="btn mini green"><i class="icon-edit"></i> 查看</a>
                                 | <a href="/product/productonline/quote?id=<?= $val['id'] ?>" class="btn mini green"><i class="icon-edit"></i> 引用</a>
