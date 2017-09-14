@@ -220,30 +220,28 @@ $config = json_decode($promo->config, true);
         var key = '<?= $promo->key ?>';
         $('.phonenum a').on('click',function(e) {
             e.preventDefault();
-
             if (!allowClick) {
+
                 return;
             }
-
             allowClick = false;
 
             var phonenum =  $('.inputphone input').val();
             if (phonenum.length < 11) {
-                toastCenter('请输入正确的手机号', function () {
-                    allowClick = true;
-                });
+                allowClick = true;
+                toastCenter('请输入正确的手机号');
 
                 return;
             } else if (!moduleFn.check.mobile(phonenum)) {
-                toastCenter('手机号格式不正确', function () {
-                    allowClick = true;
-                });
+                allowClick = true;
+                toastCenter('手机号格式不正确');
 
                 return;
             } else {
                 var xhr = $.get('/promotion/promo/validate-mobile?key='+key+'&mobile='+phonenum);
 
                 xhr.done(function(data) {
+                    allowClick = true;
                     var toUrl = data.toUrl;
 
                     if (data.code) {
@@ -251,20 +249,20 @@ $config = json_decode($promo->config, true);
                             if ('' !== toUrl) {
                                 location.href = toUrl;
                             }
-
-                            allowClick = true;
                         });
                     } else {
                         location.href = toUrl;
-                        allowClick = true;
                     }
                 });
 
                 xhr.fail(function () {
-                    toastCenter('系统繁忙,请稍后重试!', function() {
-                        allowClick = true;
-                    });
-                })
+                    allowClick = true;
+                    toastCenter('系统繁忙,请稍后重试!');
+                });
+
+                xhr.always(function(){
+                    allowClick = true;
+                });
             }
         })
     });
