@@ -584,6 +584,7 @@ class ProductonlineController extends BaseController
                     ->addSelect(["orderMoney" => "sum($orderTable.order_money)"])
                     ->addSelect(["userCount" => "count(distinct $orderTable.uid)"])
                     ->addSelect(["rate" => "CONCAT(FORMAT($loanTable.yield_rate * 100,2), IF($loanTable.isFlexRate && INSTR(REVERSE($loanTable.rateSteps), ',') > 0, CONCAT('-', REVERSE(SUBSTRING(REVERSE($loanTable.rateSteps), 1, INSTR(REVERSE($loanTable.rateSteps), ',') - 1 ) ) ), '' ) , '%')"])
+                    ->andWhere(["$orderTable.status" => 1])
                     ->orderBy(["$loanTable.id" => SORT_ASC])
                     ->createCommand()
                     ->getRawSql();
