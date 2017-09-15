@@ -25,7 +25,7 @@ $this->title = '中秋佳品放送';
         </ul>
         <ul class="reward-box clearfix">
             <li class="first clearfix">
-                <a href="#" class="clearfix">
+                <a href="/mall/portal/guest?dbredirect=https://m.wenjf.com/mall/portal/guest?dbredirect=https://goods.m.duiba.com.cn/mobile/appItemDetail?appItemId=1379080&from=login&spm=19702.1.1.1" class="clearfix">
                     <img class="lf" src="<?= FE_BASE_URI ?>wap/campaigns/active20170912/images/gift-1-1.png" alt="">
                     <p style="padding-top:0.2rem">1088积分</p>
                     <p>桂新园月饼</p>
