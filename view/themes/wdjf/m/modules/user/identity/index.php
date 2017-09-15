@@ -128,7 +128,7 @@ function subForm() {
 
     if (!validateForm()) {
         allowClick = true;
-        idCardBtn.html('立 即 开 通');
+        idCardBtn.html('立 即 认 证');
 
         return false;
     }
@@ -154,7 +154,7 @@ function subForm() {
             }
 
             allowClick = true;
-            idCardBtn.html('立 即 开 通');
+            idCardBtn.html('立 即 认 证');
         } else {
             if (data.id) {
                 t = setInterval(function () {
@@ -173,7 +173,7 @@ function subForm() {
 
         toastCenter(errMsg);
         allowClick = true;
-        idCardBtn.html('立 即 开 通');
+        idCardBtn.html('立 即 认 证');
     });
 }
 
@@ -196,7 +196,7 @@ function getIdentityRes(id) {
 
             if (2 === data.code) {
                 allowClick = true;
-                idCardBtn.html('立 即 开 通');
+                idCardBtn.html('立 即 认 证');
             }
         }
     })
