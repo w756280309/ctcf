@@ -165,6 +165,8 @@ $(function () {
             $('#yzm').removeClass('yzm-disabled');
             $('#yzm').val('重新发送');
         } else {
+            $('#yzm').addClass('yzm-disabled');
+            $('#yzm').attr('disabled', 'true');
             curCount--;
             $('#yzm').val(curCount + 's后重发');
         }
