@@ -23,7 +23,7 @@ $this->title = '注册成功';
                 <input type="hidden" class="lastChannel" name="lastChannel" value="-1">
             </p>
             <?php }?>
-            <a href="/user/identity" class="huifu-open">立即开通</a>
+            <a href="/user/identity" class="huifu-open">实名认证</a>
         </div>
     </div>
 </div>
