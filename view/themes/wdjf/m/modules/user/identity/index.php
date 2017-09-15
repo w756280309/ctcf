@@ -2,7 +2,7 @@
 
 use yii\helpers\Html;
 
-$this->title = '开通资金托管账户';
+$this->title = '实名认证';
 $this->showViewport = false;
 
 ?>
@@ -47,7 +47,7 @@ $this->showViewport = false;
         </div>
     </form>
 
-    <a class="instant f18" id="idcardbtn" href="javascript:void(0)">立 即 开 通</a>
+    <a class="instant f18" id="idcardbtn" href="javascript:void(0)">立 即 认 证</a>
 
     <div class="f12">
         <p class="tipsCtn">*实名认证信息由公安部进行认证</p>
