@@ -4,6 +4,7 @@ use common\utils\StringUtils;
 $this->registerCssFile(ASSETS_BASE_URI.'css/header.css', ['depends' => 'frontend\assets\FrontAsset']);
 
 $action = Yii::$app->controller->action->getUniqueId();
+$fromNb = \common\models\affiliation\Affiliator::isFromNb(Yii::$app->request);
 ?>
 
 <div id="header-top-box">
@@ -36,7 +37,11 @@ $action = Yii::$app->controller->action->getUniqueId();
     <div class="header-nav-box">
         <a href="/">
             <div class="header-logo">
-                <img src="<?= ASSETS_BASE_URI ?>images/logo.png" alt="">
+                <?php if ($fromNb) { ?>
+                    <img src="<?= ASSETS_BASE_URI ?>images/logo_wdjf_nb.png?v=<?= random_int(1, 1000)?>" alt="">
+                <?php } else {?>
+                    <img src="<?= ASSETS_BASE_URI ?>images/logo.png?v=<?= random_int(1, 1000)?>" alt="">
+                <?php }?>
             </div>
         </a>
         <div class="header-nav">
