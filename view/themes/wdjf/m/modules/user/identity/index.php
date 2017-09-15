@@ -29,7 +29,7 @@ $this->showViewport = false;
             <li class="lf f15">3</li>
         </ul>
         <ul class="clearfix f12 stepIntro">
-            <li class="lf">开通资金托管账户</li>
+            <li class="lf">实名认证</li>
             <li>开通免密服务</li>
             <li class="rg">绑定银行卡</li>
         </ul>
@@ -51,7 +51,7 @@ $this->showViewport = false;
 
     <div class="f12">
         <p class="tipsCtn">*实名认证信息由公安部进行认证</p>
-        <p class="tipsCtn">*开通资金托管账户是为了确保您的账户资金安全</p>
+        <p class="tipsCtn">*平台为保障您的资金安全，投资前请先进行实名认证</p>
     </div>
 </div>
 
@@ -84,7 +84,7 @@ t = setInterval(function () {
 allowClick = false;
 $('#real_name').val('<?= $lastRecord->getName()?>');
 $('#idcard').val('<?= $lastRecord->getIdCard()?>');
-idCardBtn.html('开 通 中...');
+idCardBtn.html('认 证 中...');
 
 <?php
 }
@@ -124,7 +124,7 @@ function subForm() {
     }
 
     allowClick = false;
-    idCardBtn.html('开 通 中...');
+    idCardBtn.html('认 证 中...');
 
     if (!validateForm()) {
         allowClick = true;
