@@ -13,11 +13,11 @@ $this->title = '注册成功';
             <li><span class="color-txt">开通资金托管</span>账户后即可使用</li>
         </ol>
         <div class="box">
-            <?php if(!$hasAffiliation) {?>
-            <p class="media">推荐媒体：
+            <?php if(!empty($affArr)) {?>
+            <p class="media"><?= $fromNb ? '推荐渠道' : '推荐媒体'?>:
                 <select name="channel" id="channel">
                     <?php foreach ($affArr as $key => $val) { ?>
-                        <option value="<?= $key ?>" <?= $key === $affiliationId ? 'selected' : '' ?>><?= $val ?></option>
+                        <option value="<?= $key ?>" <?= $key === $affiliatorId ? 'selected' : '' ?>><?= $val ?></option>
                     <?php } ?>
                 </select>
                 <input type="hidden" class="lastChannel" name="lastChannel" value="-1">

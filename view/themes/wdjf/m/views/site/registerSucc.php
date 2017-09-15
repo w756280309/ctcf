@@ -22,12 +22,12 @@ $this->title = '温都金服注册成功页面';
         <li>• 288元代金券已经发放至您的账户中心</li>
         <li>• 开通资金托管账户后即可使用</li>
     </ul>
-    <?php if(!$hasAffiliation) {?>
+    <?php if(!empty($affArr)) {?>
     <div class="registerselect f15">
-        <span>推荐媒体:</span>
+        <span><?= $fromNb ? '推荐渠道' : '推荐媒体'?>:</span>
         <select name="channel" id="channel" style="max-width:3.1rem;">
             <?php foreach ($affArr as $key => $val) { ?>
-                <option value="<?= $key ?>" <?= $key === $affiliationId ? 'selected' : '' ?>><?= $val ?></option>
+                <option value="<?= $key ?>" <?= $key === $affiliatorId ? 'selected' : '' ?>><?= $val ?></option>
             <?php } ?>
         </select>
         <input type="hidden" class="lastChannel" name="lastChannel" value="-1">

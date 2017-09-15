@@ -43,6 +43,7 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\we
         <!--search start-->
         <div class="portlet-body">
             <form action="/product/productonline/list" method="get" target="_self" id="loanFilter">
+                <input type="hidden" name="days" value="<?= $loanSearch->days?>">
             <table class="table">
                 <tbody>
                 <tr>
@@ -107,7 +108,7 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\we
                     </td>
                     <td>
                         <div align="right" style="margin-right: 20px">
-                            <a href="/product/productonline/export?exportType=loan_invest_data&<?= parse_url(Yii::$app->request->getAbsoluteUrl(), PHP_URL_QUERY)?>" class="btn" target="_blank">导出标的投资信息</a>
+                            <a href="/product/productonline/export?exportType=user_invest_data&<?= parse_url(Yii::$app->request->getAbsoluteUrl(), PHP_URL_QUERY)?>" class="btn" target="_blank">导出用户投资记录</a>
                         </div>
                     </td>
                 </tr>
@@ -138,7 +139,7 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\we
                     </td>
                     <td>
                         <div align="right" style="margin-right: 20px">
-                            <a href="/product/productonline/export?exportType=user_invest_data&<?= parse_url(Yii::$app->request->getAbsoluteUrl(), PHP_URL_QUERY)?>" class="btn" target="_blank">导出用户投资记录</a>
+                            <a href="/product/productonline/export?exportType=loan_invest_data&<?= parse_url(Yii::$app->request->getAbsoluteUrl(), PHP_URL_QUERY)?>" class="btn" target="_blank">导出标的投资信息</a>
                         </div>
                     </td>
                 </tr>
