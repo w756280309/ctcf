@@ -33,7 +33,7 @@ $this->title = '温都金服注册成功页面';
         <input type="hidden" class="lastChannel" name="lastChannel" value="-1">
     </div>
     <?php }?>
-    <a class="f16 open" href="/user/identity">立即开通</a>
+    <a class="f16 open" href="/user/identity">实名认证</a>
     <a class="f16 stroll" href="/user/user">先去逛逛</a>
 </div>
 <script>
