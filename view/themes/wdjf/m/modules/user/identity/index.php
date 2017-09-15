@@ -29,8 +29,8 @@ $this->showViewport = false;
             <li class="lf f15">3</li>
         </ul>
         <ul class="clearfix f12 stepIntro">
-            <li class="lf">实名认证</li>
-            <li>开通免密服务</li>
+            <li class="lf">&nbsp;&nbsp;&nbsp;&nbsp;实名认证&nbsp;&nbsp;&nbsp;&nbsp;</li>
+            <li>&nbsp;&nbsp;&nbsp;&nbsp;开通免密服务</li>
             <li class="rg">绑定银行卡</li>
         </ul>
     </div>
