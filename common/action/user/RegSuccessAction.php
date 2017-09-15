@@ -24,7 +24,7 @@ class RegSuccessAction extends Action
         $fromNb = Affiliator::isFromNb(\Yii::$app->request);
 
         //没有分销商时候可以选推荐媒体
-        if (null !== $userAffiliation && !$fromNb) {
+        if (null === $userAffiliation && !$fromNb) {
             $recommendAff = Affiliator::findAll(['isRecommend' => true]);
             $affArr = ArrayHelper::map($recommendAff, 'id', 'name');
             $affArr = ArrayHelper::merge([0 => '官方'], $affArr);
