@@ -1,6 +1,7 @@
 <?php
 namespace console\controllers;
 
+use common\models\affiliation\Affiliator;
 use common\models\order\OnlineOrder;
 use common\models\order\OnlineRepaymentPlan;
 use common\models\order\OnlineRepaymentRecord;
@@ -493,5 +494,14 @@ ORDER BY p.id ASC , rp.order_id ASC , IF( rp.asset_id, rp.asset_id, rp.uid ) ASC
 
         $transaction->commit();
 
+    }
+
+    /**
+     * 更新宁波分销商渠道码缓存
+     */
+    public function actionUpdateNbCodesCash($expires = null)
+    {
+        $nbCodes = Affiliator::getAllCodesByCode('nbxdjb');
+        \Yii::$app->cache->set('nb_affiliator_codes', $nbCodes, is_null($expires) ? 60 * 60 * 24 : $expires);
     }
 }

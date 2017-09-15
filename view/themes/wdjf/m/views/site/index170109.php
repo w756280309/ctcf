@@ -1,5 +1,11 @@
 <?php
-$this->title = '温都金服';
+$fromNb = \common\models\affiliation\Affiliator::isFromNb(Yii::$app->request);
+if ($fromNb) {
+    $this->title = '现代金报-温都金服';
+} else {
+    $this->title = '温都金服';
+}
+
 $this->params['breadcrumbs'][] = $this->title;
 $this->hideHeaderNav = true;
 $this->showBottomNav = true;
@@ -420,12 +426,6 @@ $this->registerJs(<<<JSFILE
         var source = Cookies.get('campaign_source');
         if (source == 'rarb') {
             $('.channel').removeClass('hide');
-        }
-        //宁波渠道
-        if (source == 'nbxdjb') {
-            $('title').html('现代金报-温都金服');
-        } else {
-            $('title').html('温都金服');
         }
         //开屏图
         $('.close_splash').on('click', closeAdv);

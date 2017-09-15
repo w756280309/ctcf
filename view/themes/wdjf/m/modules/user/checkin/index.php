@@ -1,22 +1,5 @@
 <?php
-$fromNb = false;//来自宁波分销商
-if (!empty(Yii::$app->request->get('hmsr'))) {
-    $source = Yii::$app->request->get('hmsr');
-}
-if (!empty(Yii::$app->request->get('utm_source'))) {
-    $source = Yii::$app->request->get('utm_source');
-}
-if (!empty(Yii::$app->request->get('trk_s'))) {
-    $source = Yii::$app->request->get('trk_s');
-}
-if (empty($source) && Yii::$app->request->getCookies()->get('campaign_source')) {
-    $source = Yii::$app->request->getCookies()->get('campaign_source');
-}
-$nbCodes = ['nbxdjb'];
-if (!empty($source) && in_array($source, $nbCodes)) {
-    $fromNb = true;
-}
-
+$fromNb = \common\models\affiliation\Affiliator::isFromNb(Yii::$app->request);
 $this->title = '签到得积分';
 
 $hostInfo = \Yii::$app->request->hostInfo;

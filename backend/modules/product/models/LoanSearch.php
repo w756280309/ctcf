@@ -3,6 +3,7 @@
 namespace backend\modules\product\models;
 
 use common\models\order\OnlineOrder;
+use common\models\payment\Repayment;
 use common\models\product\OnlineProduct;
 use yii\base\Model;
 
@@ -19,6 +20,7 @@ use yii\base\Model;
  * @property string $finishDateEnd
  * @property string $investDateStart
  * @property string $investDateEnd
+ * @property int    $days
  */
 class LoanSearch extends Model
 {
@@ -34,13 +36,14 @@ class LoanSearch extends Model
     public $finishDateEnd;
     public $investDateStart;
     public $investDateEnd;
+    public $days;
 
     public $hasInnerJoinOrder = false;
 
     public function rules()
     {
         return [
-            [['status'], 'filter', 'filter' => function ($value) {
+            [['status', 'days'], 'filter', 'filter' => function ($value) {
                 if (!is_null($value) && $value !== '') {
                     return intval($value);
                 } else {
@@ -131,6 +134,23 @@ class LoanSearch extends Model
         }
         if ($this->hasInnerJoinOrder) {
             $query->groupBy("$loanTable.id");
+        }
+        //最近 $days 天待还款
+        if ($this->days > 0) {
+            $endDay = date('Y-m-d', strtotime("+{$this->days} days"));    //所有区段都要统计自截止日之前的所有待还款项目
+            $repaymentTable = Repayment::tableName();
+            $loanIds = Repayment::find()
+                ->innerJoin(["$loanTable", "$repaymentTable.loan_id = $loanTable.id"])
+                ->where(['<', "$repaymentTable.dueDate", $endDay])
+                ->andWhere([
+                    "$repaymentTable.isRefunded" => 0,
+                    "$loanTable.status" => OnlineProduct::STATUS_HUAN,
+                    "$loanTable.isTest" => 0
+                ])
+                ->select("$repaymentTable.loan_id")
+                ->distinct()
+                ->column();
+            $query->andWhere(['in', "$loanTable.id", $loanIds]);
         }
 
         return $query;
