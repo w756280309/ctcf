@@ -150,4 +150,17 @@ class BaseController extends Controller
             ],
         ];
     }
+
+    protected function getPromoStatus(RankingPromo $promo, $timeAt = null)
+    {
+        $promoStatus = 0;
+        $user = $this->getAuthedUser();
+        try {
+            $promo->isActive($user, $timeAt);
+        } catch (\Exception $e) {
+            $promoStatus = $e->getCode();
+        }
+
+        return $promoStatus;
+    }
 }
