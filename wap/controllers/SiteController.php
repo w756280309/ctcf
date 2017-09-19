@@ -623,4 +623,16 @@ class SiteController extends Controller
     {
         return $this->render('privacy');
     }
+
+    /**
+     * App下载页 - 积分商城暂时无法用
+     */
+    public function actionAppDownload($redirect = null)
+    {
+        if (!$this->fromWx()) {
+            return $this->redirect($redirect);
+        }
+
+        return $this->render('v2');
+    }
 }
