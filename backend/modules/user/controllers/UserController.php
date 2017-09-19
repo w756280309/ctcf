@@ -752,6 +752,11 @@ IN (" . implode(',', $recordIds) . ")")->queryAll();
                 && $model->validate()
                 && $userBank->validate()
             ) {
+                $data = Yii::$app->request->post();
+
+                $model->safeMobile = SecurityUtils::encrypt($data['User']['mobile']);
+                $model->safeIdCard = SecurityUtils::encrypt($data['User']['idcard']);
+
                 if (!empty($model->password_hash)) {
                     $model->setPassword($model->password_hash);
                 } else {
