@@ -419,6 +419,9 @@ class OrderManager
     {
         //生成本地订单
         try {
+            $redis = Yii::$app->redis_session;
+            $redisKey = 'isXs_'.$uid;
+            $redisSetFlag = false;
             if (empty($sn)) {
                 throw new \Exception('缺少参数', PayService::ERROR_LAW);
             }
@@ -431,6 +434,16 @@ class OrderManager
             $user = User::findOne($uid);
             if (null === $user) {
                 throw new \Exception('找不到用户信息', PayService::ERROR_SYSTEM);
+            }
+
+            if ($model->is_xs) {
+                if (!$redis->exists($redisKey)) {
+                    $redis->set($redisKey, true);
+                    $redis->expire($redisKey, 5 * 60);
+                    $redisSetFlag = true;
+                } else {
+                    throw new \Exception('您已经参与过新手专享体验', 1);
+                }
             }
 
             $order = new OnlineOrder();
@@ -456,6 +469,9 @@ class OrderManager
             }
             $order->save(false);
         } catch (\Exception $ex) {
+            if ($redisSetFlag && $redis->exists($redisKey)) {
+                $redis->del($redisKey);
+            }
             return [
                 'code' => is_int($ex->getCode()) ? $ex->getCode() : PayService::ERROR_ORDER_CREATE,
                 'message' => $ex->getMessage(),
