@@ -30,7 +30,7 @@ $this->backUrl = $backUrl ? $backUrl : '/?_mark='.time();
             </a>
         </li>
         <li class="lf">
-            <a href="/mall/portal">
+            <a href="/site/app-download?redirect=/mall/portal">
                 <img src="<?= FE_BASE_URI ?>wap/point/img/icon_08.png" alt="">
                 <p>积分商城</p>
             </a>
