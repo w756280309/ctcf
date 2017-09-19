@@ -645,6 +645,7 @@ class ProductonlineController extends BaseController
     ) as finishDate,
     o.uid,
     u.real_name,
+    FROM_UNIXTIME(o.order_time),
     o.order_money,
     o.yield_rate
 FROM
@@ -668,8 +669,8 @@ ORDER BY p.id ASC,u.id ASC,o.id ASC";
                     'sql' => $sql,
                     'queryParams' => null,
                     'exportSn' => $sn,
-                    'itemLabels' => ['标的名称', '标的副标题', '标的状态', '是否是新手标', '是否计息', '产品期限', '起息日', '到期日', '用户ID', '用户姓名', '投资金额', '实际利率'],
-                    'itemType' => ['string', 'string', 'string', 'string', 'string', 'string', 'string', 'string', 'string', 'string', 'float', 'float'],
+                    'itemLabels' => ['标的名称', '标的副标题', '标的状态', '是否是新手标', '是否计息', '产品期限', '起息日', '到期日', '用户ID', '用户姓名', '投资时间', '投资金额', '实际利率'],
+                    'itemType' => ['string', 'string', 'string', 'string', 'string', 'string', 'string', 'string', 'string', 'string', 'string', 'float', 'float'],
                 ]);
                 if ($dbQueue->pub($job)) {
                     return $this->redirect('/growth/export/result?sn=' . $sn . '&key=&title=导出投资过指定标的的所有用户的投资记录');
