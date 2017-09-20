@@ -7,6 +7,7 @@ use common\models\growth\AppMeta;
 use common\models\mall\ThirdPartyConnect;
 use common\models\product\LoanFinder;
 use common\models\stats\Perf;
+use common\models\user\UserInfo;
 use common\service\SmsService;
 use common\service\LoginService;
 use common\models\adv\Adv;
@@ -213,15 +214,33 @@ class SiteController extends Controller
      * 查询是否是登录/新手.
      *
      * @return int -1 表示没有登录, 0 表示新手, 大于等于1 表示投过新手标
+     *  "isLoggedIn" => false, // 已登录？ "isInvestor" => false, // 是投资者？如果是新手，应该是true "showPlatformStats" => false // 显示平台统计值
      */
     public function actionXs()
     {
+        $json = array(
+            'isLoggedIn' => true,
+        );
         if (\Yii::$app->user->isGuest) {
-            return -1;
+             $json['isLoggedIn'] = false;
+             return $json;
         }
         $user = $this->getAuthedUser();
-
-        return $user->xsCount();
+        $count = $user->xsCount();
+        //当返回结果是新手时
+        if ($count === 0) {
+            $json['isInvestor'] = false;
+        }
+        //当返回结果投过新手标时
+        if ($count >= 0) {
+            $json['isInvestor'] = true;
+        }
+        $investTotal = $user->info->investTotal;
+        //个人投资总额大于五万时
+        if ($investTotal > 50000) {
+            $json['showplatformStats'] = true;
+        }
+        return $json;
     }
 
     /**
