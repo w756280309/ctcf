@@ -37,18 +37,19 @@ class RechargerecordController extends BaseController
 
         $r = RechargeRecord::tableName();
         $u = UserBanks::tableName();
+        $b = Bank::tableName();
         if ($type === User::USER_TYPE_PERSONAL) {
             $query = (new \yii\db\Query)    //连表查询,获取充值记录银行名称
-                ->select("$r.*, $u.bank_name")
+                ->select("$r.*, $b.bankName")
                 ->from($r)
-                ->innerJoin($u, "$r.bank_id = $u.id")
+                ->innerJoin($b, "$r.bank_id = $b.id")
                 ->where(["$r.uid" => $id]);
         } else {
             $m = MoneyRecord::tableName();
             $query = (new \yii\db\Query)    //连表查询,获取充值记录银行名称
-                ->select("$r.*, $u.bank_name, ($m.balance - $m.in_money) balance")
+                ->select("$r.*, $b.bankName, ($m.balance - $m.in_money) balance")
                 ->from($r)
-                ->innerJoin($u, "$r.bank_id = $u.id")
+                ->innerJoin($b, "$r.bank_id = $b.id")
                 ->innerJoin($m, "$m.osn = $r.sn")
                 ->where(["$r.uid" => $id]);
         }
@@ -71,25 +72,6 @@ class RechargerecordController extends BaseController
         //正常显示详情页
         $pages = new Pagination(['totalCount' => $query->count(), 'pageSize' => '10']);
         $model = $query->offset($pages->offset)->limit($pages->limit)->orderBy('id desc')->all();
-
-        $arr = [];
-        foreach ($model as $key => $val) {
-            if (RechargeRecord::PAY_TYPE_NET === (int)$val['pay_type']) {
-                $arr[$key] = $val['bank_id'];
-            }
-        }
-
-        if (!empty($arr)) {
-            $bank = Bank::findAll(['id' => $arr]);       //获取所有通过网银充值用户的充值银行卡信息
-
-            foreach ($arr as $key => $val) {      //替换前台显示内容
-                foreach ($bank as $v) {
-                    if ((int)$arr[$key] === $v['id']) {
-                        $model[$key]['bank_name'] = $v['bankName'];
-                    }
-                }
-            }
-        }
 
         //取出用户
         $user = User::findOne(['id' => $id]);
