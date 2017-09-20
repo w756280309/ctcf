@@ -146,7 +146,7 @@ $type = (int) $type;
                                 <?= StringUtils::amountFormat3($val['balance']) ?>
                             </td>
                         <?php } ?>
-                        <td><?= $val['bank_name'] ?></td>
+                        <td><?= $val['bankName'] ?></td>
                         <td><?= date('Y-m-d H:i:s', $val['created_at']) ?></td>
                         <td>
                             <?php
