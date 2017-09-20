@@ -7,7 +7,7 @@ $this->registerJsFile(FE_BASE_URI . 'res/js/js.cookie.js', ['depends' => JqueryA
 ?>
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/wenjfbase.css?v=20170906">
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/20170726luodiye/css/index.css">
-<script src="<?= ASSETS_BASE_URI ?>js/common.js?v=20170915"></script>
+<script src="<?= ASSETS_BASE_URI ?>js/common.js?v=20170920"></script>
 <script src="<?= FE_BASE_URI ?>libs/lib.flexible3.js"></script>
 <script src="<?= FE_BASE_URI ?>libs/jquery-1.11.1.min.js"></script>
 <script src="<?= FE_BASE_URI ?>libs/jquery.lazyload.min.js"></script>
@@ -236,7 +236,15 @@ $this->registerJsFile(FE_BASE_URI . 'res/js/js.cookie.js', ['depends' => JqueryA
         var phone = $(phoneId).val();
         var captchaCode = $(captchaCodeId).val();
         var csrf = $('#form_csrf').val();
-        var xhr = $.post("/luodiye/create-sms", {type: type, phone: phone, captchaCode: captchaCode, _csrf: csrf}, function(data) {
+        var xhr = $.ajax({
+            url: '/luodiye/create-sms',
+            method: 'POST',
+            timeout: 10000,
+            data: {type: type, phone: phone, captchaCode: captchaCode, _csrf: csrf},
+            dataType: 'json'
+        });
+
+        xhr.done(function (data) {
             $('#yzm_refresh').removeClass('yzm-disabled');
             if (0 === data.code) {
                 if ('undefined' !== typeof trued) {
@@ -247,10 +255,13 @@ $this->registerJsFile(FE_BASE_URI . 'res/js/js.cookie.js', ['depends' => JqueryA
                 $('#captchaform-captchacode-image').trigger('click');
             }
         });
+
         xhr.fail(function () {
             $('#yzm_refresh').removeClass('yzm-disabled');
+            $('#captchaform-captchacode-image').trigger('click');
             toastCenter('网络繁忙, 请稍后重试!');
         });
+
         xhr.always(function() {
             var yzmString = $('#yzm_refresh').html();
             if ('获取验证码' === yzmString || '重新发送' === yzmString) {

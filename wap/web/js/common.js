@@ -228,7 +228,15 @@ function createSms(phoneId, type, captchaCodeId, trued, failed)
     var captchaCode = $(captchaCodeId).val();
 
     var csrf = $("meta[name=csrf-token]").attr('content');
-    var xhr = $.post("/site/createsmscode", {type: type, phone: phone, captchaCode: captchaCode, _csrf: csrf}, function(data) {
+    var xhr = $.ajax({
+        url: '/site/createsmscode',
+        method: 'POST',
+        timeout: 10000,
+        data: {type: type, phone: phone, captchaCode: captchaCode, _csrf: csrf},
+        dataType: 'json'
+    });
+
+    xhr.done(function(data) {
         $('#yzm').removeAttr('disabled');//启用按钮
         if (data.code == 0) {
             if ('undefined' !== typeof trued) {
@@ -244,10 +252,13 @@ function createSms(phoneId, type, captchaCodeId, trued, failed)
             $("#captchaform-captchacode-image").click();
         }
     });
+
     xhr.fail(function () {
         $('#yzm').removeAttr('disabled');//启用按钮
+        $("#captchaform-captchacode-image").click();
         toastCenter('网络繁忙, 请稍后重试!');
     });
+
     xhr.always(function() {
         var yzmString = $('#yzm').val();
         if ('获取验证码' === yzmString || '重新发送' === yzmString) {
