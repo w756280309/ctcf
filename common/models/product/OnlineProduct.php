@@ -113,7 +113,7 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
 
     const SORT_PRE = 10;
     const SORT_NOW = 20;
-    const SORT_FULL = 30;
+    const SORT_FULL = 80;
     const SORT_FOUND = 31;
     const SORT_LIU = 40;
     const SORT_HKZ = 70;
