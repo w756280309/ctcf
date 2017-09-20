@@ -227,12 +227,23 @@ class SiteController extends Controller
     {
         return $this->renderFile('@frontend/views/site/risk.php');
     }
+    /**
+     * 查询是否是登录/新手.
+     *
+     *  "isLoggedIn" => false, // 已登录？ "showPlatformStats" => false // 显示平台统计值
+     */
 
     public function actionSession()
     {
-        return [
-            'isLoggedin' => !Yii::$app->user->isGuest,
-        ];
+        if (\Yii::$app->user->isGuest) {
+            return ['isLoggedin' => false];
+        }
+        $user = $this->getAuthedUser();
+        $investTotal = $user->info->investTotal;
+        //个人投资金额大于五万时
+        if ($investTotal > 50000) {
+            return ['showplatformStats' => true];
+        }
     }
 
     /**

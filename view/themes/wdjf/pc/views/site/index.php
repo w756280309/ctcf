@@ -365,6 +365,7 @@ JSFILE
         $.get('/site/top-list', function(data) {
             $('.top-list-show').html(data);
         });
+        $("#turnover-box").hide();
         //处理ajax登录
         function login() {
             //document.documentElement.style.overflow = 'hidden';   //禁用页面上下滚动效果
@@ -412,6 +413,10 @@ JSFILE
                     var wgt = $('#wgt');
                     wgt.find('a').attr("class", "is_loggedin");
                     wgt.css('cursor', 'pointer');
+                }
+                //判断个人投资总额大于五万时，前端页面显示总金额
+                if (data.showplatformStats) {
+                    $("#turnover-box").show();
                 }
             });
         }

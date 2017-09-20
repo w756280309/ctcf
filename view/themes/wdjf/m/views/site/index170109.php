@@ -55,7 +55,7 @@ $this->registerJsFile(ASSETS_BASE_URI . 'js/swiper.min.js', ['depends' => Jquery
             <a class="f15 rg" href="/site/signup">注册</a>
         </div>
 
-        <div class="cash-box">
+        <div class="cash-box hide">
             <p class="f15 volume-of-trad" id="totalTradeAmount">平台累计交易额：<i></i><span>亿元</span></p>
             <p class="f13 cash-rate"><i class="cash-icon"></i>历史兑付率100%</p>
 
@@ -374,26 +374,33 @@ $this->registerJsFile(ASSETS_BASE_URI . 'js/swiper.min.js', ['depends' => Jquery
 
         function checkStatus()
         {
-            var xhr = $.get('/site/xs');
-            xhr.done(function(code) {
-                if (code === -1) {
-                    $('#login').removeClass('hide');
-                    $('#loginNewPeople').removeClass('hide');
-                } else {
-                    $('.relative .signature').css('top','5.2rem');
-                }
-                if (code === 0) {
-                    $('#loginNewPeople').removeClass('hide');
-                }
-                if (code >= 0) {
-                    if (Cookies.get('showIndexPop')) {
-
-                        Cookies.remove('showIndexPop');
-                        $('.mask,.first-popover').show();
-                        $('.second-popover').hide();
+            $.ajax({
+                type:'get',
+                url:'/site/xs',
+                success:function (code) {
+                    //会员是否是登录状态
+                    if (!code.isLoggedIn) {
+                        $('#login').removeClass('hide');
+                        $('#loginNewPeople').removeClass('hide');
+                    } else {
+                        $('.relative .signature').css('top','5.2rem');
+                    }
+                    //判断是否是投资者
+                    if (!code.isInvestor) {
+                        $('#loginNewPeople').removeClass('hide');
+                    } else {
+                        if (Cookies.get('showIndexPop')) {
+                            Cookies.remove('showIndexPop');
+                            $('.mask,.first-popover').show();
+                            $('.second-popover').hide();
+                        }
+                    }
+                    //判断个人投资总额大于五万时，前端页面显示总金额
+                    if (code.showplatformStats) {
+                        $("div.cash-box").removeClass('hide');
                     }
                 }
-            });
+            })
         }
 
         var guiZe = '<?= (empty($kaiPing) || empty($kaiPing->media)) ? '' : $kaiPing->media->uri ?>';
