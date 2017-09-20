@@ -14,7 +14,7 @@ class WapAsset extends AssetBundle
         'css/base.css?v=20170907',
     ];
     public $js = [
-        'js/common.js?v=20170915',
+        'js/common.js?v=20170920',
     ];
     public $depends = [
         FeAsset::class,
