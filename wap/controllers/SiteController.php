@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use common\controllers\HelpersTrait;
+use common\models\growth\AppMeta;
 use common\models\mall\ThirdPartyConnect;
 use common\models\product\LoanFinder;
 use common\models\stats\Perf;
@@ -629,10 +630,15 @@ class SiteController extends Controller
      */
     public function actionAppDownload($redirect = null)
     {
-        if (!$this->fromWx()) {
-            return $this->redirect($redirect);
+        $isShowAppDownload = AppMeta::getValue('is_show_app_download');
+        //'on'为未开启状态,'off'为关闭状态
+        if ('on' === $isShowAppDownload) {
+            if (!$this->fromWx()) {
+                return $this->redirect($redirect);
+            }
+            return $this->render('v2');
         }
 
-        return $this->render('v2');
+        return $this->redirect($redirect);
     }
 }

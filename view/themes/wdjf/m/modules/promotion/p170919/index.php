@@ -25,7 +25,7 @@ $this->title = '中秋佳品放送';
         </ul>
         <ul class="reward-box clearfix">
             <li class="first clearfix">
-                <a href="/site/app-download?redirect=/mall/portal/guest?dbredirect=https://m.wenjf.com/mall/portal/guest?dbredirect=https://goods.m.duiba.com.cn/mobile/appItemDetail?appItemId=1379080&from=login&spm=19702.1.1.1" class="clearfix">
+                <a href="/site/app-download?redirect=/mall/portal/guest?dbredirect=https://goods.m.duiba.com.cn/mobile/appItemDetail?appItemId=1379080" class="clearfix">
                     <img class="lf" src="<?= FE_BASE_URI ?>wap/campaigns/active20170912/images/gift-1-1.png" alt="">
                     <p style="padding-top:0.2rem">1088积分</p>
                     <p>桂新园月饼</p>
@@ -33,7 +33,7 @@ $this->title = '中秋佳品放送';
                 </a>
             </li>
             <li class="lf">
-                <a href="/site/app-download?redirect=/mall/portal/guest?dbredirect=https://goods.m.duiba.com.cn/mobile/appItemDetail?appItemId=716676&dbnewopen&dpm=19702.30.42.1&dcm=102.716676.0.0">
+                <a href="/site/app-download?redirect=/mall/portal/guest?dbredirect=https://goods.m.duiba.com.cn/mobile/appItemDetail?appItemId=716676">
                     <img class="" src="<?= FE_BASE_URI ?>wap/campaigns/active20170912/images/gift-1-3.png" alt="" style="border-radius: .2rem">
                     <p>1000积分</p>
                     <p>金龙鱼玉米油4L</p>
@@ -41,7 +41,7 @@ $this->title = '中秋佳品放送';
                 </a>
             </li>
             <li class="rg">
-                <a href="/site/app-download?redirect=/mall/portal/guest?dbredirect=https://goods.m.duiba.com.cn/mobile/appItemDetail?appItemId=913535&dbnewopen&dpm=19702.30.62.1&dcm=102.913535.0.0">
+                <a href="/site/app-download?redirect=/mall/portal/guest?dbredirect=https://goods.m.duiba.com.cn/mobile/appItemDetail?appItemId=913535">
                     <img class="" src="<?= FE_BASE_URI ?>wap/campaigns/active20170912/images/gift-1-2.png" alt="" style="border-radius: .2rem">
                     <p>600积分</p>
                     <p>天堂伞</p>
@@ -49,7 +49,7 @@ $this->title = '中秋佳品放送';
                 </a>
             </li>
             <li class="lf">
-                <a href="/site/app-download?redirect=/mall/portal/guest?dbredirect=https://goods.m.duiba.com.cn/mobile/appItemDetail?appItemId=716684&dbnewopen&dpm=19702.33.25.1&dcm=102.716684.0.0">
+                <a href="/site/app-download?redirect=/mall/portal/guest?dbredirect=https://goods.m.duiba.com.cn/mobile/appItemDetail?appItemId=716684">
                     <img class="" src="<?= FE_BASE_URI ?>wap/campaigns/active20170912/images/gift-1-4.png" alt="" style="border-radius: .2rem">
                     <p>500积分</p>
                     <p>Aquafresh三色牙膏</p>
@@ -57,7 +57,7 @@ $this->title = '中秋佳品放送';
                 </a>
             </li>
             <li class="rg">
-                <a href="/site/app-download?redirect=/mall/portal/guest?dbredirect=https://goods.m.duiba.com.cn/mobile/appItemDetail?appItemId=1161571&dbnewopen&dpm=19702.30.31.1&dcm=102.1161571.0.0">
+                <a href="/site/app-download?redirect=/mall/portal/guest?dbredirect=https://goods.m.duiba.com.cn/mobile/appItemDetail?appItemId=1161571">
                     <img class="" src="<?= FE_BASE_URI ?>wap/campaigns/active20170912/images/gift-1-5.png" alt="" style="border-radius: .2rem">
                     <p>400积分</p>
                     <p>意大利公鸡头皂</p>
@@ -67,7 +67,7 @@ $this->title = '中秋佳品放送';
         </ul>
         <ul style="display: none" class="reward-box clearfix">
             <li class="first clearfix">
-                <a href="/site/app-download?redirect=/mall/portal/guest?dbredirect=https://goods.m.duiba.com.cn/mobile/appItemDetail?appItemId=1333647&dbnewopen&dpm=19702.33.4.1&dcm=102.1333647.0.0" class="clearfix">
+                <a href="/site/app-download?redirect=/mall/portal/guest?dbredirect=https://goods.m.duiba.com.cn/mobile/appItemDetail?appItemId=1333647" class="clearfix">
                     <img class="lf" src="<?= FE_BASE_URI ?>wap/campaigns/active20170912/images/gift-2-1.png" alt="">
                     <p style="padding-top:0.2rem">2000积分</p>
                     <p>100元人本超市卡</p>
@@ -76,7 +76,7 @@ $this->title = '中秋佳品放送';
 
             </li>
             <li class="lf">
-                <a href="/site/app-download?redirect=/mall/portal/guest?dbredirect=https://goods.m.duiba.com.cn/mobile/appItemDetail?appItemId=1333659&dbnewopen&dpm=19702.33.3.1&dcm=102.1333659.0.0">
+                <a href="/site/app-download?redirect=/mall/portal/guest?dbredirect=https://goods.m.duiba.com.cn/mobile/appItemDetail?appItemId=1333659">
                     <img class="" src="<?= FE_BASE_URI ?>wap/campaigns/active20170912/images/gift-2-2.png" alt="">
                     <p>1400积分</p>
                     <p>50元人本超市卡</p>
@@ -85,7 +85,7 @@ $this->title = '中秋佳品放送';
 
             </li>
             <li class="rg">
-                <a href="/site/app-download?redirect=/mall/portal/guest?dbredirect=https://goods.m.duiba.com.cn/mobile/appItemDetail?appItemId=981034&dbnewopen&dpm=19702.33.22.1&dcm=102.981034.0.0">
+                <a href="/site/app-download?redirect=/mall/portal/guest?dbredirect=https://goods.m.duiba.com.cn/mobile/appItemDetail?appItemId=981034">
                     <img class="" src="<?= FE_BASE_URI ?>wap/campaigns/active20170912/images/gift-2-3.png" alt="">
                     <p>1400积分</p>
                     <p>50元沃尔玛超市卡</p>
@@ -94,7 +94,7 @@ $this->title = '中秋佳品放送';
 
             </li>
             <li class="lf">
-                <a href="/site/app-download?redirect=/mall/portal/guest?dbredirect=https://goods.m.duiba.com.cn/mobile/appItemDetail?appItemId=1108956&dbnewopen&dpm=19702.33.15.1&dcm=102.1108956.0.0">
+                <a href="/site/app-download?redirect=/mall/portal/guest?dbredirect=https://goods.m.duiba.com.cn/mobile/appItemDetail?appItemId=1108956">
                     <img class="" src="<?= FE_BASE_URI ?>wap/campaigns/active20170912/images/gift-2-4.png" alt="">
                     <p>1400积分</p>
                     <p>50元浙北超市卡</p>
@@ -103,7 +103,7 @@ $this->title = '中秋佳品放送';
 
             </li>
             <li class="rg">
-                <a href="/site/app-download?redirect=/mall/portal/guest?dbredirect=https://goods.m.duiba.com.cn/mobile/appItemDetail?appItemId=1108961&dbnewopen&dpm=19702.33.16.1&dcm=102.1108961.0.0">
+                <a href="/site/app-download?redirect=/mall/portal/guest?dbredirect=https://goods.m.duiba.com.cn/mobile/appItemDetail?appItemId=1108961">
                     <img class="" src="<?= FE_BASE_URI ?>wap/campaigns/active20170912/images/gift-2-5.png" alt="">
                     <p>1400积分</p>
                     <p>50元大润发超市卡</p>
@@ -114,7 +114,7 @@ $this->title = '中秋佳品放送';
         </ul>
         <ul style="display: none;" class="reward-box clearfix">
             <li class="first clearfix">
-                <a href="/site/app-download?redirect=/mall/portal/guest?dbredirect=https://goods.m.duiba.com.cn/mobile/appItemDetail?appItemId=1268417&dbnewopen&dpm=19702.33.4.1&dcm=102.1268417.0.0" class="clearfix">
+                <a href="/site/app-download?redirect=/mall/portal/guest?dbredirect=https://goods.m.duiba.com.cn/mobile/appItemDetail?appItemId=1268417" class="clearfix">
                     <img class="lf" src="<?= FE_BASE_URI ?>wap/campaigns/active20170912/images/gift-3-1.png" alt="">
                     <p style="padding-top:0.2rem">8880积分</p>
                     <p>小米智能电饭煲</p>
@@ -123,7 +123,7 @@ $this->title = '中秋佳品放送';
 
             </li>
             <li class="lf">
-                <a href="/site/app-download?redirect=/mall/portal/guest?dbredirect=https://goods.m.duiba.com.cn/mobile/appItemDetail?appItemId=1224971&dbnewopen&dpm=19702.33.9.1&dcm=102.1224971.0.0">
+                <a href="/site/app-download?redirect=/mall/portal/guest?dbredirect=https://goods.m.duiba.com.cn/mobile/appItemDetail?appItemId=1224971">
                     <img class="" src="<?= FE_BASE_URI ?>wap/campaigns/active20170912/images/gift-3-2.png" alt="">
                     <p>1580积分</p>
                     <p>小米充电宝</p>
@@ -132,7 +132,7 @@ $this->title = '中秋佳品放送';
 
             </li>
             <li class="rg">
-                <a href="/site/app-download?redirect=/mall/portal/guest?dbredirect=https://goods.m.duiba.com.cn/mobile/appItemDetail?appItemId=716686&dbnewopen&dpm=19702.33.21.1&dcm=102.716686.0.0">
+                <a href="/site/app-download?redirect=/mall/portal/guest?dbredirect=https://goods.m.duiba.com.cn/mobile/appItemDetail?appItemId=716686">
                     <img class="" src="<?= FE_BASE_URI ?>wap/campaigns/active20170912/images/gift-3-3.png" alt="">
                     <p>980积分</p>
                     <p>小米插线板</p>
@@ -141,7 +141,7 @@ $this->title = '中秋佳品放送';
 
             </li>
             <li class="lf">
-                <a href="/site/app-download?redirect=/mall/portal/guest?dbredirect=https://goods.m.duiba.com.cn/mobile/appItemDetail?appItemId=1225006&dbnewopen&dpm=19702.33.7.1&dcm=102.1225006.0.0">
+                <a href="/site/app-download?redirect=/mall/portal/guest?dbredirect=https://goods.m.duiba.com.cn/mobile/appItemDetail?appItemId=1225006">
                     <img class="" src="<?= FE_BASE_URI ?>wap/campaigns/active20170912/images/gift-3-4.png" alt="">
                     <p>1980积分</p>
                     <p>小米体重秤</p>
@@ -150,7 +150,7 @@ $this->title = '中秋佳品放送';
 
             </li>
             <li class="rg">
-                <a href="/site/app-download?redirect=/mall/portal/guest?dbredirect=https://goods.m.duiba.com.cn/mobile/appItemDetail?appItemId=1090180&dbnewopen&dpm=19702.33.14.1&dcm=102.1090180.0.0">
+                <a href="/site/app-download?redirect=/mall/portal/guest?dbredirect=https://goods.m.duiba.com.cn/mobile/appItemDetail?appItemId=1090180">
                     <img class="" src="<?= FE_BASE_URI ?>wap/campaigns/active20170912/images/gift-3-5.png" alt="">
                     <p>198积分</p>
                     <p>数据线苹果安卓二合一</p>
