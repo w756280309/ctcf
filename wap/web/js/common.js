@@ -227,6 +227,11 @@ function createSms(phoneId, type, captchaCodeId, trued, failed)
     var phone = $(phoneId).val();
     var captchaCode = $(captchaCodeId).val();
 
+    if ($('#yzm').attr('disabled')) {
+        return false;
+    }
+    $('#yzm').attr('disabled', true);
+
     var csrf = $("meta[name=csrf-token]").attr('content');
     var xhr = $.ajax({
         url: '/site/createsmscode',

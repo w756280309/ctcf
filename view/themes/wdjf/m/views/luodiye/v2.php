@@ -160,6 +160,11 @@ $this->registerJsFile(FE_BASE_URI . 'res/js/js.cookie.js', ['depends' => JqueryA
                 return false;
             }
 
+            if ($('#yzm').hasClass('yzm-disabled')) {
+                return false;
+            }
+            $('#yzm').addClass('yzm-disabled');
+
             createSmsNew('#iphone', 1, '#captchaform-captchacode', function () {
                 fun_timedown();
                 $('.step-two').show();
@@ -246,6 +251,7 @@ $this->registerJsFile(FE_BASE_URI . 'res/js/js.cookie.js', ['depends' => JqueryA
 
         xhr.done(function (data) {
             $('#yzm_refresh').removeClass('yzm-disabled');
+            $('#yzm').removeClass('yzm-disabled');
             if (0 === data.code) {
                 if ('undefined' !== typeof trued) {
                     trued();
@@ -257,12 +263,14 @@ $this->registerJsFile(FE_BASE_URI . 'res/js/js.cookie.js', ['depends' => JqueryA
         });
 
         xhr.fail(function () {
+            $('#yzm').removeClass('yzm-disabled');
             $('#yzm_refresh').removeClass('yzm-disabled');
             $('#captchaform-captchacode-image').trigger('click');
             toastCenter('网络繁忙, 请稍后重试!');
         });
 
         xhr.always(function() {
+            $('#yzm').removeClass('yzm-disabled');
             var yzmString = $('#yzm_refresh').html();
             if ('获取验证码' === yzmString || '重新发送' === yzmString) {
                 $('#yzm_refresh').removeClass('yzm-disabled');
