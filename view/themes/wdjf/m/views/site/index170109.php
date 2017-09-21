@@ -55,8 +55,8 @@ $this->registerJsFile(ASSETS_BASE_URI . 'js/swiper.min.js', ['depends' => Jquery
             <a class="f15 rg" href="/site/signup">注册</a>
         </div>
 
-        <div class="cash-box hide">
-            <p class="f15 volume-of-trad" id="totalTradeAmount">平台累计交易额：<i></i><span>亿元</span></p>
+        <div class="cash-box">
+            <p class="f15 volume-of-trad hide" id="totalTradeAmount">平台累计交易额：<i></i><span>亿元</span></p>
             <p class="f13 cash-rate"><i class="cash-icon"></i>历史兑付率100%</p>
 
             <div class="total">
@@ -397,7 +397,7 @@ $this->registerJsFile(ASSETS_BASE_URI . 'js/swiper.min.js', ['depends' => Jquery
                     }
                     //判断个人投资总额大于五万时，前端页面显示总金额
                     if (code.showplatformStats) {
-                        $("div.cash-box").removeClass('hide');
+                        $("#totalTradeAmount").removeClass('hide');
                     }
                 }
             })
