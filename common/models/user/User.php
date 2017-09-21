@@ -869,6 +869,13 @@ class User extends ActiveRecord implements IdentityInterface, UserInterface
                     throw new \Exception();
                 }
                 $data = ArrayHelper::toArray($bind);
+                //去除safeMobile,safeIdCard字段
+                if (isset($data['safeMobile'])) {
+                    unset($data['safeMobile']);
+                }
+                if (isset($data['safeIdCard'])) {
+                    unset($data['safeIdCard']);
+                }
                 unset($data['id']);
                 unset($data['status']);
                 $userBanks = new UserBanks($data);
