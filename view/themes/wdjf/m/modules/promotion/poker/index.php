@@ -101,7 +101,6 @@ $this->title = '周周乐';
         </dd>
     </dl>
 
-
     <!--规则弹框-->
     <div class="prizes-box" v-show="rulesIsShow" v-cloak>
         <div class="outer-box">
@@ -110,30 +109,32 @@ $this->title = '周周乐';
                 <p class="prizes-title">活动规则</p>
                 <div id="wrapper">
                     <ol>
-                        <li>一等奖：<span style="color:#ef5b4f">200元超市卡</span><br>幸运奖：<span style="color:#ef5b4f">随机积分奖励</span></li>
+                        <li>奖品介绍<span style="color:#ef5b4f">200元超市卡</span>（每周至少一位哦）<br>幸运奖：<span style="color:#ef5b4f">随机积分奖励</span>（不限人数）</li>
                         <li>开奖时间：每周一上午10点；</li>
-                        <li>活动周期：上周一上午10点至当期开奖前；</li>
-                        <li>周周乐扑克牌中黑桃幸运牌、红桃登录牌必定点亮；梅花、方块分别需要完成签到、投资才能点亮。扑克牌号码获取规则如下：
+                        <li>中奖规则一等奖：用户抽奖码与系统公布号码完全一致，即获奖（如果当期没有任何用户号码完全一致，系统将在幸运奖用户中，选取投资最早的用户作为一等奖得主）。<br>幸运奖：黑桃卡片数字和系统公布的黑桃幸运数字一致即可中奖。</li>
+                        <li>卡片点亮秘诀<br>黑桃卡片：幸运卡片，进入活动页面即可点亮；<br>红桃卡片：登录即可点亮；<br>梅花卡片：签到即可点亮；<br>方块卡片：任意投资即可点亮（活动期间尽早投资可能有惊喜哦）；</li>
+                        <li>积分奖励将立即发放到您的账户，实物奖励将在中奖后7个工作日内联系发放，如有疑问请联系客服电话400-101-5151。</li>
+
+                        <div class="last_li">播种一个行动，收获一个惊喜，中奖不靠人品，因为我们是有算法的：<i v-on:click="showRegular" class="regular_tips">号码生成规则<span :class="{rot180:isShowRegular}">>></span></i></div>
+                        <div class="regular_detail" v-if="isShowRegular">
+                            <div class="user_code">用户抽奖码：</div>
                             <div><img src="<?= FE_BASE_URI ?>wap/happy-week/images/type_04.png" alt="">每周专属幸运号码(完全随机)</div>
                             <div><img src="<?= FE_BASE_URI ?>wap/happy-week/images/type_03.png" alt="">每周首次登录时间(秒数) T1 %13，0=K</div>
                             <div><img src="<?= FE_BASE_URI ?>wap/happy-week/images/type_02.png" alt="">每周首次签到时间(秒数) T2 %13，0=K</div>
                             <div><img src="<?= FE_BASE_URI ?>wap/happy-week/images/type_01.png" alt="">每周首次投资时间(秒数) T3 %13，0=K</div>
-                        </li>
-                        <li>开奖遵循完全随机、公平的原则，中奖号码的具体生成规则如下：
+                            <div class="plat_code">平台中奖码：</div>
                             <div><img src="<?= FE_BASE_URI ?>wap/happy-week/images/type_04.png" alt="">每周总交易额&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;S %13，0=K</div>
                             <div><img src="<?= FE_BASE_URI ?>wap/happy-week/images/type_03.png" alt="">每周登录用户数&nbsp;&nbsp;&nbsp;N1 %13，0=K</div>
                             <div><img src="<?= FE_BASE_URI ?>wap/happy-week/images/type_02.png" alt="">每周签到用户数&nbsp;&nbsp;&nbsp;N2 %13，0=K</div>
                             <div><img src="<?= FE_BASE_URI ?>wap/happy-week/images/type_01.png" alt="">每周投资用户数&nbsp;&nbsp;&nbsp;N3 %13，0=K</div>
-                        </li>
-                        <li>用户抽奖号码与当期中奖号码完全一致，将获得一等奖；若第一位号码一致，将获得幸运奖；两种奖励不可同时获取。</li>
-                        <li>积分奖励将立即发放到您的账户，实物奖励将在中奖后7个工作日内联系发放，如有疑问请联系客服电话400-101-5151。</li>
-                        <p>本活动最终解释权归温都金服所有</p>
+                        </div>
+                        <p style="margin-top: 0.3rem;">本活动最终解释权归温都金服所有</p>
                     </ol>
+
                 </div>
             </div>
         </div>
     </div>
-
 
     <!--中奖弹框-->
     <div class="mask-gift" v-cloak v-if="isShowMaskList">
@@ -202,6 +203,7 @@ $this->title = '周周乐';
             isShowTips:isLoggedin && data.requirePop,//每周一上午十点中奖用户信息提示
             isShowLogin:false,
             isFirstshow:!!data.rewardInfo.rewardCard[0],//往期中奖第一次展示
+            isShowRegular:false,
             options:{
                 state:"",
                 num:"",
@@ -220,6 +222,10 @@ $this->title = '周周乐';
             }
         },
         methods: {
+            showRegular:function(){
+                setTimeout(function(){myScroll.refresh();},20);
+                this.isShowRegular = !this.isShowRegular;
+            },
             regularShow: function () {
                 this.rulesIsShow = !this.rulesIsShow;
                 setTimeout(function(){myScroll.refresh();},20)
@@ -232,19 +238,29 @@ $this->title = '周周乐';
             closeLoginTips:function(){
                 this.isShowLogin = !this.isShowLogin;
             },
-            remake: function (event) {
-                var state = $(event.target).data('state');
+            isFirstShow:function(){
+                this.options.state = "<?= FE_BASE_URI ?>wap/happy-week/images/bg_01.png";
+                this.options.title = "幸运号码";
+                this.options.content = "您本期的个人专属幸运号码是"+data.card[0]+"。每周一上午10点记得来开奖哦！";
+                this.options.num = this.oneCardUrl;
+                this.options.btn = '';
+                this.options.btnIsShow = false;
+                this.isShowMaskList = !this.isShowMaskList;
+            },
+            remake: function (event,state) {
+                var state = $(event.target).data('state') || state;
                 switch (state) {
                     case 'state1':
                         this.options.state = "<?= FE_BASE_URI ?>wap/happy-week/images/bg_01.png";
                         this.options.title = "幸运号码";
-                        this.options.content = "登录平台即可获得本期个人专属幸运号码。有幸运号码就有机会获得幸运奖哦！";
                         if (this.isLoggedin == false) {
+                            this.options.content = "登录平台即可获得本期个人专属幸运号码。有幸运号码就有机会获得幸运奖哦！";
                             this.options.num = "<?= FE_BASE_URI ?>wap/happy-week/images/doNot.png";
                             this.options.btn = '去登录';
                             this.options.href = '/site/login?next=/promotion/poker/';
                             this.options.btnIsShow = true;
                         } else if (this.isLoggedin == true) {
+                            this.options.content = "您本期的个人专属幸运号码是"+data.card[0]+"。每周一上午10点记得来开奖哦！";
                             this.options.num = this.oneCardUrl;
                             this.options.btn = '';
                             this.options.btnIsShow = false;
@@ -352,6 +368,10 @@ $this->title = '周周乐';
         }
     });
     vm.isTouchMove(vm.isShowTips);
+    if(data.isFirstLogin && data.requirePop == false){
+        vm.isFirstShow();
+    }
+
     /*倒计时*/
     (function(timers){
         if(timers<86400){

@@ -21,4 +21,24 @@ class Poker extends ActiveRecord
 
         return $term;
     }
+
+    /**
+     * 生成第一个幸运(黑桃)号码(中奖号码)
+     *
+     * @param string $term
+     *
+     * @return int
+     */
+    public static function createWinningNumber($term)
+    {
+        $termMd5 = md5($term);
+        $finalNumber = substr($termMd5, -1);
+        if (is_numeric($finalNumber)) {
+            $number = $finalNumber % 13 + 1;
+        } else {
+            $number = ord($finalNumber) % 13 + 1;
+        }
+
+        return $number;
+    }
 }

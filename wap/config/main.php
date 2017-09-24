@@ -146,5 +146,5 @@ return [
         'class' => \common\components\GetOpenIdBehavior::className(),
     ],
     //'as superviseAccessFilter' => \common\filters\SuperviseAccessFilter::className(),//监管控制：未实名无法查看首页和列表页
-    'as logFirstVisitTime' => \common\filters\logFirstVisitTime::className(),//记录用户首次访问时间
+    'as logFirstVisitTime' => \common\filters\LogFirstVisitTime::className(),//记录用户首次访问时间
 ];

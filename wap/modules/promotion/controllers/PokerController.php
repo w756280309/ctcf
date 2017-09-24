@@ -36,6 +36,9 @@ class PokerController extends BaseController
         /*设置当前用户卡片（未登录时为4个背面）*/
         $card = [0, 0, 0, 0];
 
+        /* 首次弹幸运框 */
+        $isFirstLogin = false;
+
         /*设置是否需要弹窗-弹获奖信息*/
         $requirePop = false;
 
@@ -65,31 +68,24 @@ class PokerController extends BaseController
 
         $user = $this->getAuthedUser();
         if (null !== $user) {
-
-            //判断如果session存的有效截止时间小于当前时间，则直接删除该键
-            $effectPopRewardTime = Yii::$app->session->get('effectPop');
-            if (null !== $effectPopRewardTime) {
-                $popRewardAt = strtotime($effectPopRewardTime);
-                if ($nowAt > $popRewardAt) {
-                    Yii::$app->session->remove('effectPop');
-                }
-            }
-
+            //取当前用户的卡牌号码
             $currentCard = PokerUser::find()
                 ->select(['spade', 'heart', 'club', 'diamond'])
                 ->where(['user_id' => $user->id])
                 ->andWhere(['term' => $term])
                 ->one();
-
             if (!empty($currentCard)) {
-                $card = [$currentCard->spade, $currentCard->heart, $currentCard->club, $currentCard->diamond];
+                $cardOrigin = [$currentCard->spade, $currentCard->heart, $currentCard->club, $currentCard->diamond];
                 $card = array_map(function($value) {
                     return $this->showPokerValue($value);
-                }, $card);
+                }, $cardOrigin);
             }
 
+            //取中奖记录第一条
             $record = $this->actionRecord(1, 1);
             $rewardInfo = isset($record['data'][0]) ? $record['data'][0] : $rewardInfo;
+
+            //弹中奖窗逻辑(弹出过一次后不再弹出)
             $redis = Yii::$app->redis_session;
             if ($redis->hexists('effectPop', $user->id)) {
                 $expireAt = $redis->hget('effectPop', $user->id);
@@ -97,18 +93,32 @@ class PokerController extends BaseController
                     $redis->hdel('effectPop', $user->id);
                 }
             }
-
             if (!empty($rewardInfo) && 1 === $rewardInfo['status'] && !$redis->hexists('effectPop', $user->id)) {
                 $requirePop = true;
                 $redis->hset('effectPop', $user->id, strtotime($rewardNextOpenTime));
             }
+
+            //2017-09-25日弹出新的号码
+            if ($redis->hexists('effectPopLuckyNumber', $user->id)) {
+                $expireAt = $redis->hget('effectPopLuckyNumber', $user->id);
+                if ($nowAt >= $expireAt) {
+                    $redis->hdel('effectPopLuckyNumber', $user->id);
+                }
+            }
+
+            if (!$redis->hexists('effectPopLuckyNumber', $user->id) && $cardOrigin[0] > 0) {
+                $isFirstLogin = true;
+                $redis->hset('effectPopLuckyNumber', $user->id, strtotime($rewardNextOpenTime));
+            }
         }
+
         $data = [
             'qishu' => $term,
             'restSecond' => $restSecond,
             'card' => $card,
             'requirePop' => $requirePop,
             'rewardInfo' => $rewardInfo,
+            'isFirstLogin' => $isFirstLogin,
         ];
 
         return $this->render('index', [

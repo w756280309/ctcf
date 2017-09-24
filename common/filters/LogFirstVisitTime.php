@@ -7,7 +7,7 @@ use wap\modules\promotion\models\RankingPromo;
 use Yii;
 use yii\base\ActionFilter;
 
-class logFirstVisitTime extends ActionFilter
+class LogFirstVisitTime extends ActionFilter
 {
     public function beforeAction($action)
     {
@@ -29,6 +29,7 @@ class logFirstVisitTime extends ActionFilter
             return true;
         }
 
+        $actionId = $action->getUniqueId();
         try {
             $promoPoker = new PromoPoker($promo);
             $promoPoker->deal($user, [
@@ -36,6 +37,14 @@ class logFirstVisitTime extends ActionFilter
                 'issueTime' => (new \DateTime()),
                 'order_id' => null,
             ]);
+
+            if ('promotion/poker/index' === $actionId) {
+                $promoPoker->deal($user, [
+                    'poker_type' => 'spade',
+                    'issueTime' => (new \DateTime()),
+                    'order_id' => null,
+                ]);
+            }
         } catch (\Exception $ex) {
             //防止重复插入时报错
         }

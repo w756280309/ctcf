@@ -40,46 +40,73 @@ class LotterController extends Controller
              * 中奖号码第一位
              * 开奖前一周的总交易额 % 13
              */
-            $model->spade = OnlineOrder::find()
-                    ->where(['status' => 1])
-                    ->andWhere(['between', 'created_at', strtotime($start), strtotime($end)])
-                    ->sum('order_money') % 13;
-            if ($model->spade == 0) {
-                $model->spade += 13;
-            }
+            $spade = Poker::createWinningNumber($term);
 
             /*
              * 第二位，开奖前一周，登录用户数 % 13
              */
-            $model->heart = PokerUser::find()
+            $heart = PokerUser::find()
                     ->where(['between', 'createTime', $start, $end])
                     ->count() % 13;
-            if ($model->heart == 0) {
-                $model->heart += 13;
+            if ($heart == 0) {
+                $heart += 13;
             }
 
             /*
              * 第三位，开奖前一期，签到用户数 % 13
              */
-            $model->club = PokerUser::find()
+            $club = PokerUser::find()
                     ->where(['between', 'createTime', $start, $end])
                     ->andWhere(['>', 'club', 0])
                     ->count() % 13;
-            if ($model->club == 0) {
-                $model->club += 13;
+            if ($club == 0) {
+                $club += 13;
             }
 
             /*
              * 第四位，开奖前一周，投资用户数 % 13
              */
-            $model->diamond = PokerUser::find()
+            $diamond = PokerUser::find()
                     ->where(['between', 'createTime', $start, $end])
                     ->andWhere(['>', 'diamond', 0])
                     ->count() % 13;
-            if ($model->diamond == 0) {
-                $model->diamond += 13;
+            if ($diamond == 0) {
+                $diamond += 13;
             }
 
+            //查询当前的poker_user,判断当前用户是否有中一等奖,若没有,取第一个投资用户的所有号码作为中奖号码
+            //按order_id正序,取第一个
+            $pokerUser = PokerUser::find()
+                ->where(['term' => $term])
+                ->andWhere(['spade' => $spade])
+                ->andWhere(['heart' => $heart])
+                ->andWhere(['club' => $club])
+                ->andWhere(['diamond' => $diamond])
+                ->one();
+            if (null === $pokerUser) {
+                $rewardUser = PokerUser::find()
+                    ->where(['term' => $term])
+                    ->andWhere(['spade' => $spade])
+                    ->andFilterWhere(['>', 'diamond', 0])
+                    ->andFilterWhere(['>', 'order_id', 0])
+                    ->orderBy(['order_id' => SORT_ASC])
+                    ->limit(1)
+                    ->one();
+                if (null !== $rewardUser) {
+                    $spade = $rewardUser->spade;
+                    $heart = $rewardUser->heart;
+                    $club = $rewardUser->club;
+                    $diamond = $rewardUser->diamond;
+                }
+            }
+
+            //添加开奖号码
+            $model->spade = $spade;
+            $model->heart = $heart;
+            $model->club = $club;
+            $model->diamond = $diamond;
+
+            //添加开奖token防重
             $tokenKey = 'poker_'.$term;
             TicketToken::initNew($tokenKey)->save(false);
             $model->save(false);
