@@ -1,9 +1,7 @@
 <?php
 $this->title = '周周乐';
+$this->registerJs('forceReload_V2();');
 ?>
-<meta http-equiv="Expires" CONTENT="0">
-<meta http-equiv="Cache-Control" CONTENT="no-cache">
-<meta http-equiv="Pragma" CONTENT="no-cache">
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/wenjfbase.css">
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/happy-week/css/index.css?v=20170911">
 <script src="<?= FE_BASE_URI ?>/libs/lib.flexible3.js"></script>
