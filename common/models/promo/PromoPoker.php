@@ -79,7 +79,7 @@ class PromoPoker extends BasePromo
             return false;
         }
         $color = $data['poker_type'];
-        if (!in_array($color, ['heart', 'club', 'diamond'])) {
+        if (!in_array($color, ['spade', 'heart', 'club', 'diamond'])) {
             return false;
         }
         $term = PokerUser::calcTerm(time());
@@ -98,11 +98,12 @@ class PromoPoker extends BasePromo
         $model->user_id = $user->id;
         $model->term = $term;
         $issueTime = $data['issueTime']->format('Y-m-d H:i:s');
-        if ($model->spade <= 0) {
-            $model->spade = mt_rand(1, 13);
-        }
 
+        //2017-09-25日上午10点采用新的方案
         switch ($color) {
+            case 'spade':
+                $model->spade = $this->createSpade($term);
+                break;
             case 'heart':
                 $model->firstVisitTime = $issueTime;
                 break;
@@ -123,5 +124,25 @@ class PromoPoker extends BasePromo
         $model->{$color} = $poker_value;
 
         return $model->save(false);
+    }
+
+    /**
+     * 构造一个中奖
+     */
+    private function createSpade($term)
+    {
+        $winNumber = Poker::createWinningNumber($term);
+        $keys = range(1, 13);
+        $pool = [];
+
+        foreach ($keys as $k => $v) {
+            if ($winNumber === $k) {
+                $pool[$k] = '0.4';
+            } else {
+                $pool[$k] = '0.05';
+            }
+        }
+
+        return Reward::draw($pool);
     }
 }
