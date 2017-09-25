@@ -86,7 +86,7 @@ class OnlineorderController extends BaseController
         $u = User::tableName();
         $o = OnlineOrder::tableName();
         $lists = OnlineOrder::find()
-            ->select(['sn', "$o.status", "$o.username", "$u.safeMobile", 'order_money', 'yield_rate', "$u.created_at as regAt", "$o.created_at", "$u.idcard"])
+            ->select(['sn', "$o.status", "$o.username", "$u.safeMobile", 'order_money', 'yield_rate', "$u.created_at as regAt", "$o.created_at", "$u.safeIdCard"])
             ->where(["$o.online_pid" => $id, "$o.status" => OnlineOrder::STATUS_SUCCESS])
             ->innerJoin($u, "$o.uid = $u.id")
             ->asArray()
@@ -107,7 +107,7 @@ class OnlineorderController extends BaseController
                     strval($list['sn']),
                     $list['username'],
                     floatval(SecurityUtils::decrypt($list['safeMobile'])),
-                    $list['idcard'] ? substr($list['idcard'], 0, 14) . '****' : '',
+                    $list['safeIdCard'] ? substr(SecurityUtils::decrypt($list['safeIdCard']), 0, 14) . '****' : '',
                     floatval($list['order_money']),
                     StringUtils::amountFormat2(bcmul($list['yield_rate'], 100, 2)),
                     date('Y-m-d H:i:s', $list['regAt']),
