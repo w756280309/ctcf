@@ -17,6 +17,7 @@ use common\models\user\MoneyRecord;
 use common\models\user\User;
 use common\models\user\UserAccount;
 use common\service\AccountService;
+use common\utils\SecurityUtils;
 use common\utils\StringUtils;
 use common\utils\TxUtils;
 use common\view\LoanHelper;
@@ -341,5 +342,52 @@ GROUP BY rp.uid, rp.online_Pid";
             $count++;
         }
         $this->stdout("成功处理{$count}条 \n");
+    }
+
+    /**
+     * 返回投资新手标在xx-xx日之间还款的客户信息-excel文件
+     *
+     * @param string      $startDate 开始日期 形如：20170901
+     * @param null|string $endDate   结束日期 形如：20170915
+     *
+     */
+    public function actionXsDueListExport($startDate, $endDate = null)
+    {
+        if (null === $endDate) {
+            $endDate = date('Ymd');
+        }
+        $file = Yii::getAlias('@app/runtime/xs_'.$startDate.'_'.$endDate.'.xlsx');
+        $exportData[] = ['姓名', '手机号', '到期时间', '到期金额', '分销商'];
+        $sql = "select u.real_name,u.safeMobile,from_unixtime(o.refund_time) as refund_time,o.benxi,a.name 
+from online_repayment_record o 
+inner join online_product p on o.online_pid = p.id 
+inner join user u on u.id = o.uid 
+left join user_affiliation ua on ua.user_id = o.uid 
+left join affiliator a on a.id = ua.affiliator_id 
+where date(from_unixtime(o.refund_time)) >= :startDate 
+and date(from_unixtime(o.refund_time)) <= :endDate 
+and o.status in (1,2) 
+and p.is_xs = 1 
+and p.isTest = 0 
+order by o.refund_time asc";
+        $result = Yii::$app->db->createCommand($sql, [
+            'startDate' => $startDate,
+            'endDate' => $endDate,
+        ])->queryAll();
+
+        foreach ($result as $data) {
+            $exportData[] = [
+                $data['real_name'],
+                strval(SecurityUtils::decrypt($data['safeMobile'])),
+                $data['refund_time'],
+                $data['benxi'],
+                $data['name'],
+            ];
+        }
+
+        $objPHPExcel = UserStats::initPhpExcelObject($exportData);
+        $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+        $objWriter->save($file);
+        exit();
     }
 }
