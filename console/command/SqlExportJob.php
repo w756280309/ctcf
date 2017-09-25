@@ -6,6 +6,7 @@ namespace console\command;
 use common\lib\user\UserStats;
 use common\models\queue\Job;
 use Yii;
+use common\utils\SecurityUtils;
 
 class SqlExportJob extends Job
 {
