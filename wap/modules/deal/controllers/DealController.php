@@ -9,6 +9,7 @@ use common\models\order\OnlineOrder;
 use common\models\user\User;
 use common\models\user\UserInfo;
 use common\service\PayService;
+use common\utils\SecurityUtils;
 use common\utils\StringUtils;
 use Wcg\Xii\Risk\Model\Risk;
 use Yii;
@@ -107,9 +108,9 @@ class DealController extends Controller
         }
         $u = User::tableName();
         $o = OnlineOrder::tableName();
-        $data = OnlineOrder::find()->innerJoin('user', "$u.id = $o.uid")->select("$u.mobile,order_time time,order_money money")->where(['online_pid' => $pid, "$o.status" => 1])->orderBy("$o.id desc")->asArray()->all();
+        $data = OnlineOrder::find()->innerJoin('user', "$u.id = $o.uid")->select("$u.safeMobile,order_time time,order_money money")->where(['online_pid' => $pid, "$o.status" => 1])->orderBy("$o.id desc")->asArray()->all();
         foreach ($data as $key => $dat) {
-            $data[$key]['mobile'] = StringUtils::obfsMobileNumber($dat['mobile']);
+            $data[$key]['mobile'] = StringUtils::obfsMobileNumber(SecurityUtils::decrypt($dat['safeMobile']));
             $data[$key]['time'] = date('Y-m-d', $dat['time']);
             $data[$key]['his'] = date('H:i:s', $dat['time']);
             $data[$key]['money'] = rtrim(rtrim(number_format($dat['money'], 2), '0'), '.');
