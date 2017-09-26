@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta name="format-detection" content="telphone=no, email=no"/>
+    <title>中秋国庆活动</title>
+    <link rel="stylesheet" href="../../common/css/wenjfbase.css">
+    <link rel="stylesheet" href="../../common/css/popover.css">
+    <link rel="stylesheet" href="css/index.css">
+    <script src="../../libs/lib.flexible3.js"></script>
+    <script src="../../libs/jquery-1.11.1.min.js"></script>
+    <script src="../../common/js/popover.js"></script>
+    <script src="../../libs/iscroll.js"></script>
+    <script src="../../libs/vue.min.js"></script>
+</head>
+<body>
+<div class="flex-content national-day" id="app">
+    <div class="module">
+        <img src="images/national-bg-01.png" alt="">
+    </div>
+    <div class="module">
+        <img src="images/national-bg-02.png" alt="">
+        <p class="txt-tip">活动期间任意投资一笔，可获得抽奖机会(最多1次)。</p>
+        <a href="javascript:;" class="a-my-prize" @click="checkMyPrize($event)" data-num="1">我的奖品>></a>
+        <a href="javascript:;" class="click-prize" @click="drawing($event)" data-num="2">点击抽奖</a>
+    </div>
+    <div class="module">
+        <img src="images/national-bg-03.png" alt="">
+        <p class="txt-tip">活动期间年化投资每累积10万元(不含转让产品)，可获得50元超市卡一张，上不封顶！</p>
+        <p class="sum">已累计年化:<span v-cloak>0</span>万元</p>
+        <a class="to-invest" @click="goToInvest($event)" data-num="3">去投资</a>
+    </div>
+    <div class="module">
+        <img src="images/national-bg-04.png" alt="">
+        <p class="txt-tip">活动期间投资指定项目(附带<i>积分2倍</i>标志)，所获得的积分翻倍！</p>
+        <a href="javascript:;" class="link-details" @click="understandDetails($event)" data-num="4"><span>了解详情</span></a>
+        <p class="interpretation">本活动最终解释权归温都金服所有</p>
+    </div>
+
+    <input type="hidden" name="promoStatus" value="0">
+    <input type="hidden" name="isLoggedin" value="true">
+    <!--抽奖机会-->
+    <div class="draw-box" :class="[ isNeedInvest ? 'show' : '' ]">
+        <div class="draw-chance">
+            <img src="images/draw-close.png" @click="closeDraw()" class="draw-close" alt="关闭按钮">
+            <div class="draw-top" v-if="canDraw==2" v-cloak>您已经抽过奖了哦！去看看其他活动吧</div>
+            <div class="draw-top" v-else="canDraw==1" v-cloak>您还没有完成投资任务哦</div>
+            <a class="draw-bottom" v-if="canDraw==2" @click="closeDraw()" v-cloak>我知道了</a>
+            <a class="draw-bottom" v-else="canDraw==1" v-cloak href="/deal/deal/inde">去投资</a>
+        </div>
+    </div>
+
+    <!--对应的奖品列表-->
+    <div class="prizes-box" :class="[ isActive ? 'show' : '' ]">
+        <div class="outer-box">
+            <img class="pop_close" src="images/pop_close.png" @click="closePrizeList()" alt="">
+
+            <div class="prizes-pomp">
+                <div id="wrapper">
+                    <ul>
+                        <li class="prizes-title">我的奖品</li>
+                        <li class="clearfix">
+                            <div class="lf"><img v-bind:src="ticket.path" alt="礼品"></div>
+                            <div class="lf">
+                                <p>{{ticket.name}}</p>
+                                <p>中奖时间:{{ticket.time}}</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+<script>
+    var myScroll = new iScroll('wrapper',{
+        vScrollbar:false,
+        hScrollbar:false
+    });
+
+    var promoStatus = $('input[name=promoStatus]').val();
+    var isLoggedin = $('input[name=isLoggedin]').val();
+
+    var app = new Vue({
+        el: '#app',
+        data: {
+            obj: '',
+            canDraw: '',
+            promoStatus: promoStatus,
+            isLoggedin: isLoggedin,
+            ticket: {path:'images/gifts_coupon_10.png',name:'10元代金券',time:'2017-03-16'},
+            isActive: false,
+            isNeedInvest: false, // 显示弹框（登录后，去投资按钮，非中奖情况）
+            showStatusBall: true, // 显示活动状态的弹框
+            showLoginBall: false // 显示登录的弹框
+        },
+        created: function(){
+            this.isActive = false;
+            this.showStatusBall = true;
+        },
+        methods: {
+            computNum: function (n){
+                var n = event.target.getAttribute('data-num');
+                switch(n) {
+                    case '1':
+                        this.obj = 'prizeList';
+                        break;
+                    case '2':
+                        this.obj = 'draw';
+                        break;
+                    case '3':
+                        this.obj = 'invest';
+                        break;
+                    case '4':
+                        this.obj = 'link';
+                        break;
+                }
+            },
+            eventTarget:function (event) {
+                var event = event || window.event;
+                event.preventDefault();
+            },
+            checkMyPrize: function(prizeList) {
+                this.showPromoStatus(prizeList);
+            },
+            drawing: function(draw) {
+                this.showPromoStatus(draw);
+            },
+            goToInvest: function(invest) {
+                this.showPromoStatus(invest);
+            },
+            understandDetails: function(link) {
+                this.showPromoStatus(link);
+            },
+            showPromoStatus: function(event) {
+                this.computNum();
+                if (this.promoStatus == 0){ //进行中
+                    console.log('活动进行中');
+                    this.showStatusBall = false;
+                    this.showLoginPop(this.obj);
+                    return false;
+                } else if (this.promoStatus == 1) {
+                    toastCenter('活动未开始');
+                } else if (this.promoStatus == 2) {
+                    if (this.obj === 'prizeList') {
+                        this.showLoginPop(this.obj);
+                        return false;
+                    } else {
+                        toastCenter('活动已结束');
+                    }
+                }
+            },
+            showLoginPop: function(event) {
+                this.computNum();
+                if (this.isLoggedin === 'true') { //已登录
+                    if (!this.showStatusBall) { // 活动进行中
+                        if (this.obj === 'prizeList') {
+                            this.innerPrizeList('我的奖品');
+                        } else if (this.obj === 'draw') {
+                            this.onePrize('点击抽奖');
+                        } else if (this.obj === 'invest') {
+                            window.location.href = '/deal/deal/index';//  ('去投资');
+                        } else if (this.obj === 'link') {
+                            window.location.href = 'www.baidu.com';//  ('了解详情');
+                        }
+//                        console.log(this.showLoginBall + ';奖品弹框');
+                    } else {
+                        if (this.obj === 'prizeList') {
+                            this.innerPrizeList('我的奖品');
+                        }
+                    }
+                } else if (this.isLoggedin === 'false') {
+                    if (!this.showStatusBall) { // 活动进行中
+                        this.goToLogin('未登录,  去登录弹框');
+                        return false;
+                    } else if (this.showStatusBall){
+                        toastCenter('活动已结束');
+                    }
+                }
+            },
+            innerPrizeList: function() { // 我的奖品 奖品列表弹框
+                //调接口获取对应的数据信息
+//                $.ajax({
+//                    type: "GET",
+//                    url: "/promotion/控制器/award-list?key=活动key",
+//                    dataType: "json",
+//                    success: function (data) {
+//                        var length = data.length
+                        var length = 1;
+                        if(length == 0){ //无奖品
+                            poptpl.popComponent({
+                                popBackground: 'url(images/pop_bg_01.png) no-repeat',
+                                popBorder: 0,
+                                closeUrl: "images/pop_close.png",
+                                popBtmHas: false,
+                                popTopColor: "#fff",
+                                bgSize: "100% 100%",
+                                title: '<p style="font-size:0.72rem;">我的奖品</p>',
+                                popBtmBackground: 'url(images/pop_btn_01.png) no-repeat',
+                                popMiddleHasDiv: true,
+                                contentMsg: "<p style='color:#fff;margin-top: 2rem;font-size:0.56rem;'>您还没有获得奖品哦！</p>",
+                            }, 'close');
+                        } else { //奖品列表 ?????????
+//                            this.ticket= data.ticket;
+                            this.isActive = true;
+                        }
+//                    }
+//                });
+            },
+            onePrize: function () {  //抽奖 弹框
+                this.canDraw = '0';
+                //ajax回调
+//                $.ajax({
+//                    type: "GET",
+//                    url: "/promotion/控制器/draw?key=活动key",
+//                    dataType: "json",
+//                    success: function (data) {
+//                        this.canDraw = data.code;
+                        if(this.canDraw === '0') { // 领取奖品弹框
+                            poptpl.popComponent({
+                                popBackground: 'url(images/pop_bg_02.png) no-repeat',
+                                popBorder: 0,
+                                closeUrl: "images/pop_close.png",
+                                btnMsg: "收下礼品",
+                                popTopColor: "#fff",
+                                bgSize: "100% 100%",
+                                title: '<p style="font-size:0.72rem;">恭喜您获得了<span style="display:block;font-size: 0.50666667rem">'+this.ticket.name+'</span></p>',
+                                popBtmBackground: 'url(images/pop_btn_01.png) no-repeat',
+                                popMiddleHasDiv: true,
+                                popBtmColor: '#e01021',
+                                contentMsg: "<img style='margin: -0.5rem auto 0.5rem;display: block;width: 4.8rem;' src='"+this.ticket.path+"' alt=''/>",
+                                popBtmBorderRadius: 0,
+                                popBtmFontSize: ".50666667rem"
+                            }, 'close');
+                        } else if(this.canDraw === '1') { // 去投资弹框
+                            this.isNeedInvest = true; // ('去投资弹框');
+                        }  else if(this.canDraw === '2') { // 已使用抽奖机会
+                            this.isNeedInvest = true; //('已抽过奖弹框');
+                        } else {
+                            alert(data.message);
+                        }
+//                    }
+//                });
+            },
+            closeDraw: function() {
+                this.isNeedInvest = false;
+            },
+            closePrizeList: function() {
+                this.isActive = false;
+            },
+            goToLogin: function () {//登录
+                poptpl.popComponent({
+                    popBackground: 'url(images/pop_bg_01.png) no-repeat',
+                    popBorder: 0,
+                    closeUrl: "images/pop_close.png",
+                    btnMsg: "马上登录",
+                    title: '<p style="font-size:0.72rem;margin: 2.8rem 0 2rem;color: #fff;">您还没有登录哦！</p>',
+                    popBtmBackground: 'url(../active20170830/images/pop_btn_01.png) no-repeat',
+                    popBtmBorderRadius: 0,
+                    popBtmColor: '#e01021',
+                    popBtmFontSize: ".50666667rem",
+                    btnHref: '/site/login'
+                });
+            }
+        }
+
+    });
+    Vue.config.devtools = true;
+
+
+    function toastCenter(val, active) {
+        var $alert = $('<div class="error-info" style="display: block; position: fixed;font-size: .4rem;"><div>' + val + '</div></div>');
+        $('body').append($alert);
+        $alert.find('div').width($alert.width());
+        setTimeout(function () {
+            $alert.fadeOut();
+            setTimeout(function () {
+                $alert.remove();
+            }, 200);
+            if (active) {
+                active();
+            }
+        }, 2000);
+    }
+
+</script>
