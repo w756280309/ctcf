@@ -39,7 +39,8 @@
         "illuminate/queue":"5.4.*",
         "illuminate/bus":"5.4.*",
         "illuminate/redis":"5.4.*",
-        "vlucas/phpdotenv": "^2.4"
+        "vlucas/phpdotenv": "^2.4",
+        "dmstr/yii2-adminlte-asset": "2.*"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "*",

@@ -238,6 +238,9 @@ Gritter Notifications
 .gritter-item-wrapper a:hover {
   color: #0b6694;
 }
+div.span12{
+  margin-top: 60px;
+}
 /* begin: boxed page */
 @media (min-width: 980px) {
   .page-boxed {
