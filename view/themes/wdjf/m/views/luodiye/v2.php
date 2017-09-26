@@ -60,7 +60,7 @@ $this->registerJsFile(FE_BASE_URI . 'res/js/js.cookie.js', ['depends' => JqueryA
                 <p>收益稳健</p>
                 <p>5万元存一年，预期获得收益对比</p>
                 <div class="chart">
-                    <img data-original="<?= FE_BASE_URI ?>wap/20170726luodiye/images/chart.png" alt="">
+                    <img data-original="<?= FE_BASE_URI ?>wap/20170726luodiye/images/chart_new.png" alt="">
                 </div>
             </div>
             <div class="second-reason">
@@ -79,7 +79,7 @@ $this->registerJsFile(FE_BASE_URI . 'res/js/js.cookie.js', ['depends' => JqueryA
                     </dl>
                     <dl class="dl-one">
                         <dt class="dt-com m60">平台优势</dt>
-                        <dd><img data-original="<?= FE_BASE_URI ?>wap/20170726luodiye/images/introduce.png" alt=""></dd>
+                        <dd><img data-original="<?= FE_BASE_URI ?>wap/20170726luodiye/images/introduce_new.png" alt=""></dd>
                     </dl>
                 </div>
 
