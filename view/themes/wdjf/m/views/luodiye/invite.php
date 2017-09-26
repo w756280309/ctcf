@@ -72,12 +72,12 @@ if ($isLuodiye) {
     <div class="licai-img">
         <div class="col-xs-6 licai-img">
             <a href="/deal/deal/index/">
-                <img src="<?= ASSETS_BASE_URI ?>images/luodiye/prod-left.png" alt="温盈金">
+                <img src="<?= ASSETS_BASE_URI ?>images/luodiye/wyj.png" alt="温盈金">
             </a>
         </div>
         <div class="col-xs-6 licai-img">
             <a href="/deal/deal/index/">
-                <img src="<?= ASSETS_BASE_URI ?>images/luodiye/prod-right.png" alt="温盈宝">
+                <img src="<?= ASSETS_BASE_URI ?>images/luodiye/wyb.png" alt="温盈宝">
             </a>
         </div>
         <div class="clear"></div>
@@ -86,7 +86,7 @@ if ($isLuodiye) {
 <div class="row choose-box">
     <h3>为什么选择温都金服？</h3>
     <div class="choose-content">
-        <img src="<?= ASSETS_BASE_URI ?>images/luodiye/choose-top.png" alt="">
+        <img src="<?= ASSETS_BASE_URI ?>images/luodiye/choose_new.png" alt="">
         <img src="<?= ASSETS_BASE_URI ?>images/luodiye/why-wdjf-new.png" alt="">
     </div>
 </div>
