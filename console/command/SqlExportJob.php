@@ -17,7 +17,7 @@ class SqlExportJob extends Job
         $exportSn = $this->getParam('exportSn');
         $itemLabels = $this->getParam('itemLabels');
         $itemType = $this->getParam('itemType');
-        $key = $this->getParam('key');
+        $paramKey = $this->getParam('key');
         $labelLength = count($itemLabels);
         if (count($itemType) !== $labelLength) {
             $itemType = null;
@@ -32,10 +32,10 @@ class SqlExportJob extends Job
 
         $exportData[] = $itemLabels;
         foreach ($data as $num => $item) {
-            if ($key == 'repayment_expire_interest') {
+            if ('repayment_expire_interest' === $paramKey) {
                 $item['手机号'] = SecurityUtils::decrypt($item['手机号']);
                 $item['年龄'] = date('Y') - substr(SecurityUtils::decrypt($item['年龄']), 6, 4);
-            } else if ($key == 'last_ten_day_draw') {
+            } else if ('last_ten_day_draw' === $paramKey) {
                 $item['手机号'] = SecurityUtils::decrypt($item['手机号']);
             }
             $item = array_values($item);
@@ -62,6 +62,7 @@ class SqlExportJob extends Job
             }
             $data[$num] = $item;
         }
+
         if (!empty($data)) {
             $exportData = array_merge($exportData, $data);
         }
