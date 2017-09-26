@@ -36,17 +36,12 @@ class BirthdayCoupon
 
     public function getAwardUserList()
     {
-        //todo 有直接使用身份证， 需要调整
-        $users = User::find()->where(['type' => 1])->andWhere(['like', 'idcard', date('md')])->all();
-        $day = date('m-d');
-        $data = [];
-        foreach ($users as $user) {
-            $birthday = $user->getBirthday();
-            if (substr($birthday, 5) === $day) {
-                $data[] = $user;
-            }
-        }
-        return $data;
+        $users = User::find()
+            ->where(['type' => 1])
+            ->andWhere(['like', 'birthdate', date('m-d')])
+            ->all();
+
+        return $users;
     }
 
     public function sendAwardToUsers(array  $users)
