@@ -212,6 +212,7 @@ order by 持有资产 desc",
                     'exportSn' => $sn,
                     'itemLabels' => $exportModel['itemLabels'],
                     'itemType' => $exportModel['itemType'],
+                    'key' => $key,
                 ]);
                 if (\Yii::$container->get('db_queue')->pub($job)) {
                     return $this->redirect('/growth/export/result?sn='.$sn.'&key='.$key);
