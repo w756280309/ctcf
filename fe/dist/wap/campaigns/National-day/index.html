@@ -103,7 +103,7 @@
         },
         methods: {
             computNum: function (n){
-                var n = event.target.getAttribute('data-num');
+                var n = event.currentTarget.getAttribute('data-num');
                 switch(n) {
                     case '1':
                         this.obj = 'prizeList';
