@@ -36,7 +36,13 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\we
         div.item_content {
             width: 180px;
         }
-
+        div.item_label{
+            float: left;
+        }
+        div.item_label span{
+            height: 34px;
+            line-height: 34px;
+        }
         div.item {
             margin: 5px 0;
             padding: 0;

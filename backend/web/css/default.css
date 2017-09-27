@@ -266,8 +266,12 @@ Landscape phone to portrait tablet
   .page-sidebar {
     background-color: #292929 !important;
   }
+
   ul.page-sidebar-menu > li > a {
     border-top: 1px solid #4a4a4a !important;
+  }
+  ul.page-sidebar-menu{
+    display: none;
   }
   ul.page-sidebar-menu > li:last-child > a {
     border-bottom: 0 !important;
