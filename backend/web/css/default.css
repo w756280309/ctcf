@@ -18,10 +18,6 @@ Page header
 .header .btn-navbar {
   background-color: #212121 !important;
 }
-.header .nav .dropdown-toggle:hover,
-.header .nav .dropdown.open .dropdown-toggle {
-  background-color: #383838 !important;
-}
 .header .nav li.dropdown .dropdown-toggle i {
   color: #8a8a8a !important;
 }
@@ -237,9 +233,6 @@ Gritter Notifications
 }
 .gritter-item-wrapper a:hover {
   color: #0b6694;
-}
-div.span12{
-  margin-top: 60px;
 }
 /* begin: boxed page */
 @media (min-width: 980px) {

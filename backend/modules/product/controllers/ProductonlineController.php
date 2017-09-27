@@ -512,6 +512,7 @@ class ProductonlineController extends BaseController
      */
     public function actionList()
     {
+        $this->layout="@app/views/layouts/frame_productline_list";
         $loanStatus = Yii::$app->params['deal_status'];
         $loanTable = OnlineProduct::tableName();
         $loanSearch = new LoanSearch();

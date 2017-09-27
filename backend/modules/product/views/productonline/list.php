@@ -250,11 +250,11 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\we
             </div>
             <div class="group_buttons">
                 <div class="button_right">
-                    <input type="button" class="btn" value="重置" onclick="formReset()"/>
-                </div>
-                <div class="button_right">
                     <button type='submit' class="btn blue" style="width: 100px;">查询 <i
                                 class="m-icon-swapright m-icon-white"></i></button>
+                </div>
+                <div class="button_right">
+                    <input type="button" class="btn" value="重置" onclick="formReset()"/>
                 </div>
                 <div class="button_left">
                     <a href="/product/productonline/export?exportType=user_invest_data&
