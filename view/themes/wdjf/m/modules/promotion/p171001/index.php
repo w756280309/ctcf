@@ -3,7 +3,7 @@ $this->title = '国庆中秋三重大礼回馈';
 ?>
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/wenjfbase.css">
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/popover.css">
-<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/campaigns/National-day/css/index.css?v=0.1">
+<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/campaigns/National-day/css/index.css?v=0.3">
 <script src="<?= FE_BASE_URI ?>libs/lib.flexible3.js"></script>
 <script src="<?= FE_BASE_URI ?>libs/jquery-1.11.1.min.js"></script>
 <script src="<?= FE_BASE_URI ?>wap/common/js/popover.js"></script>
@@ -95,7 +95,7 @@ $this->title = '国庆中秋三重大礼回馈';
         },
         methods: {
             computNum: function (n){
-                var n = event.target.getAttribute('data-num');
+                var n = event.currentTarget.getAttribute('data-num');
                 switch(n) {
                     case '1':
                         this.obj = 'prizeList';
@@ -123,7 +123,7 @@ $this->title = '国庆中秋三重大礼回馈';
             understandDetails: function(link) {
                 this.showPromoStatus(link);
             },
-            showPromoStatus: function(event) {
+            showPromoStatus: function() {
                 this.computNum();
                 if (this.promoStatus == 0){ //进行中
                     this.showStatusBall = false;
@@ -140,7 +140,7 @@ $this->title = '国庆中秋三重大礼回馈';
                     }
                 }
             },
-            showLoginPop: function(event) {
+            showLoginPop: function() {
                 this.computNum();
                 if (this.isLoggedin === 'true') { //已登录
                     if (!this.showStatusBall) { // 活动进行中
