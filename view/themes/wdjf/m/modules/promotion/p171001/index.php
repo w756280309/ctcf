@@ -3,7 +3,7 @@ $this->title = '国庆中秋三重大礼回馈';
 ?>
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/wenjfbase.css">
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/popover.css">
-<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/campaigns/National-day/css/index.css?v=0.3">
+<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/campaigns/National-day/css/index.css?v=0.4">
 <script src="<?= FE_BASE_URI ?>libs/lib.flexible3.js"></script>
 <script src="<?= FE_BASE_URI ?>libs/jquery-1.11.1.min.js"></script>
 <script src="<?= FE_BASE_URI ?>wap/common/js/popover.js"></script>
