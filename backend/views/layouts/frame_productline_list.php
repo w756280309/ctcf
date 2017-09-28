@@ -47,6 +47,8 @@ $companyName = \common\models\growth\AppMeta::getValue('company.name');
     <link href="/css/default.css" rel="stylesheet" type="text/css" id="style_color"/>
     <script src="/js/jquery-1.10.1.min.js" type="text/javascript"></script>
     <script type="text/javascript" src="/js/showres.js"></script>
+    <script type="text/javascript" src="/js/layer/layer.min.js"></script>
+    <script type="text/javascript" src="/js/layer/extend/layer.ext.js"></script>
     <style type="text/css">
         body{
             padding-top: 50px!important;
