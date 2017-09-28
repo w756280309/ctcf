@@ -47,5 +47,18 @@ return [
             'password' => 'mig123456',
             'charset' => 'utf8',
         ],
+        'queue' => [
+            'class' => 'yii\queue\redis\Queue',
+        ],
+        'redis' => [
+            'class' => 'yii\redis\Connection',
+            'hostname' => env('QUEUE_REDIS_HOST'),
+            'port' => env('QUEUE_REDIS_PORT'),
+            'password' => env('QUEUE_REDIS_PASSWORD'),
+            'database' => env('QUEUE_REDIS_DATABASE'),
+        ],
+    ],
+    'bootstrap' => [
+        'queue',
     ],
 ];

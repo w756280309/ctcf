@@ -2,7 +2,7 @@
 
 namespace api\modules\tx\controllers;
 
-use App\Jobs\DingtalkCorpMessageJob;
+use common\jobs\DingtalkCorpMessageJob;
 use common\models\order\OnlineOrder;
 use common\models\product\OnlineProduct;
 use common\models\tx\CreditNote;
@@ -83,15 +83,14 @@ class CreditNoteController extends Controller
                 /**
                  * @var Manager $queue
                  */
-                $queue = \Yii::$container->get('laraq');
+                $queue = \Yii::$app->queue;
                 $message = $user->getName() . "(" . $user->getMobile() . ") 转让了 " . $loan->title . ", 剩余期限";
                 if ($months > 0) {
                     $message .= $months . "个月";
                 }
                 $message .= $days. "天, 预期年化利率" . bcmul($order->yield_rate, 100, 2) . "%, 转让金额" . number_format(bcdiv($note->amount, 100, 2), 2) . "元";
                 $job = new DingtalkCorpMessageJob(\Yii::$app->params['ding_notify.user_list.create_note'], $message);
-                $queue->getConnection()->push($job);
-
+                $queue->push($job);
             } else {
                 $transaction->rollBack();
             }

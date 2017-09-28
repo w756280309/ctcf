@@ -45,4 +45,12 @@ Yii::$container->set('alisms', \common\service\AliSmsService::class, [
     Yii::$app->params['sms.ali.accessKeyId'],
     Yii::$app->params['sms.ali.accessKeySecret'],
 ]);
-
+Yii::$container->set('dingTalk', DingNotify\Clients::class, [
+    [
+        'wdjf' => [
+            'corpid' => env('DING_TALK_CONFIG_WDJF_CROP_ID'),
+            'corpsecret' => env('DING_TALK_CONFIG_WDJF_CROP_SECRET'),
+            'agentid' => env('DING_TALK_CONFIG_WDJF_DEFAULT_AGENT_ID'),
+        ],
+    ],
+]);
