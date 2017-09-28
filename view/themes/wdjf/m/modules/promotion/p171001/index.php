@@ -18,26 +18,26 @@ $this->title = '国庆中秋三重大礼回馈';
     <div class="module">
         <img src="<?= FE_BASE_URI ?>wap/campaigns/National-day/images/national-bg-02.png" alt="">
         <p class="txt-tip">活动期间任意投资一笔，可获得抽奖机会(最多1次)。</p>
-        <a href="javascript:;" class="a-my-prize" @click="checkMyPrize($event)" data-num="1">我的奖品>></a>
-        <a href="javascript:;" class="click-prize" @click="drawing($event)" data-num="2">点击抽奖</a>
+        <a href="javascript:;" class="a-my-prize" @click="computNum" data-num="1">我的奖品>></a>
+        <a href="javascript:;" class="click-prize" @click="computNum" data-num="2">点击抽奖</a>
     </div>
     <div class="module">
         <img src="<?= FE_BASE_URI ?>wap/campaigns/National-day/images/national-bg-03.png" alt="">
         <p class="txt-tip">活动期间年化投资每累积10万元(不含转让产品)，可获得50元超市卡一张，上不封顶！</p>
         <p class="sum">已累计年化:<span v-cloak><?= $totalMoney ?></span>万元</p>
-        <a class="to-invest" @click="goToInvest($event)" data-num="3">去投资</a>
+        <a class="to-invest" @click="computNum" data-num="3">去投资</a>
     </div>
     <div class="module">
         <img src="<?= FE_BASE_URI ?>wap/campaigns/National-day/images/national-bg-04.png" alt="">
         <p class="txt-tip">活动期间投资指定项目(附带<i>积分2倍</i>标志)，所获得的积分翻倍！</p>
-        <a href="javascript:;" class="link-details" @click="understandDetails($event)" data-num="4"><span>了解详情</span></a>
+        <a href="javascript:;" class="link-details" @click="computNum" data-num="4"><span>了解详情</span></a>
         <p class="interpretation">本活动最终解释权归温都金服所有</p>
     </div>
 
     <!--抽奖机会-->
     <div class="draw-box" :class="[ isNeedInvest ? 'show' : '' ]">
         <div class="draw-chance">
-            <img src="<?= FE_BASE_URI ?>wap/campaigns/National-day/images/draw-close.png" @click="closeDraw()" class="draw-close" alt="关闭按钮">
+            <img src="<?= FE_BASE_URI ?>wap/campaigns/National-day/images/draw-close.png" @click="closeDraw" class="draw-close" alt="关闭按钮">
             <div class="draw-top" v-if="canDraw===1" v-cloak>您已经抽过奖了哦！去看看其他活动吧</div>
             <div class="draw-top" v-else="canDraw===7" v-cloak>您还没有完成投资任务哦</div>
             <a class="draw-bottom" v-if="canDraw===1" @click="closeDraw()" v-cloak>我知道了</a>
@@ -94,37 +94,29 @@ $this->title = '国庆中秋三重大礼回馈';
             this.showStatusBall = true;
         },
         methods: {
-            computNum: function (n){
+            computNum: function (event){
+                var event = event || window.event;
                 var n = event.currentTarget.getAttribute('data-num');
                 switch(n) {
                     case '1':
                         this.obj = 'prizeList';
+                        this.showPromoStatus('prizeList');
                         break;
                     case '2':
                         this.obj = 'draw';
+                        this.showPromoStatus('draw');
                         break;
                     case '3':
                         this.obj = 'invest';
+                        this.showPromoStatus('invest');
                         break;
                     case '4':
                         this.obj = 'link';
+                        this.showPromoStatus('link');
                         break;
                 }
             },
-            checkMyPrize: function(prizeList) {
-                this.showPromoStatus(prizeList);
-            },
-            drawing: function(draw) {
-                this.showPromoStatus(draw);
-            },
-            goToInvest: function(invest) {
-                this.showPromoStatus(invest);
-            },
-            understandDetails: function(link) {
-                this.showPromoStatus(link);
-            },
             showPromoStatus: function() {
-                this.computNum();
                 if (this.promoStatus == 0){ //进行中
                     this.showStatusBall = false;
                     this.showLoginPop(this.obj);
@@ -141,7 +133,6 @@ $this->title = '国庆中秋三重大礼回馈';
                 }
             },
             showLoginPop: function() {
-                this.computNum();
                 if (this.isLoggedin === 'true') { //已登录
                     if (!this.showStatusBall) { // 活动进行中
                         if (this.obj === 'prizeList') {
