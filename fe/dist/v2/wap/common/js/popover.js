@@ -75,7 +75,7 @@ var poptpl = {
             html+='<a href='+options.btnHref+' class="popBtm" style="background:'+options.popBtmBackground+';background-size:100% 100%;border-radius:'+options.popBtmBorderRadius+' ;color:'+options.popBtmColor+';font-size:'+options.popBtmFontSize+' ;">'+options.btnMsg+'</a>'
         }
         html+='</div>';
-        $('body').on("click",function(){
+        $('body').on("click",function(event){
             if($(event.target).hasClass('popClose')){
                 poptpl.confirmBtn();
                 options.afterPop();
