@@ -21,7 +21,10 @@ $this->title = '登录';
 
     <div class="row sm-height">
         <div class="col">
-            <input id="pass" class="login-info" name="LoginForm[password]" maxlength="20" type="password" placeholder="请输入密码" autocomplete="off" />
+            <input id="pass" style="width: 75%;" class="login-info lf" name="LoginForm[password]" maxlength="20" type="password" placeholder="请输入密码" autocomplete="off" />
+            <div class="col-xs-3 col border-bottom login-eye password lf">
+                <img src="<?= ASSETS_BASE_URI ?>images/eye-close.png" width="26" height="20" alt=" 闭眼">
+            </div>
         </div>
     </div>
 
@@ -78,8 +81,19 @@ $this->title = '登录';
     }
 
     $(function() {
-        csrf = $('meta[name=csrf-token]').attr('content');
+        $('.password img').on('click', function () {
+            if ($('#pass').attr('type') === 'password') {
+                $('#pass').attr('type', 'text');
+                $(this).removeAttr('src', '/images/eye-close.png');
+                $(this).attr({src: '/images/eye-open.png', alt: 'eye-open'});
+            } else {
+                $('#pass').attr('type', 'password');
+                $(this).removeAttr('src', '/images/eye-open.png');
+                $(this).attr({src: '/images/eye-close.png', alt: 'eye-close'});
+            }
+        });
 
+        csrf = $('meta[name=csrf-token]').attr('content');
         $('#login-btn').on('click',function () {
             $(this).addClass('btn-press').removeClass('btn-normal');
             var tel = $('#iphone').val();
