@@ -680,7 +680,9 @@ TPL;
     $(function() {
         var $productForm = $('#product_product_form');
         var $submit = $productForm.find('button[type=submit]');
-
+        if(parseInt($("#onlineproduct-refund_method").val())===1){
+            $('#onlineproduct-kuanxianqi').removeAttr('readonly');
+        }
         KindEditor.ready(function(K) {
             K.create('#company', {
                 cssPath: '/vendor/kindeditor/4.1.11/plugins/code/prettify.css',
@@ -772,10 +774,12 @@ TPL;
 
         if ($(obj).val() === '1') {
             $('#onlineproduct-is_fdate').removeAttr('disabled');
+            $('#onlineproduct-kuanxianqi').removeAttr('readonly');
         } else {
             disabledIsFdate(1);
             $('#onlineproduct-is_fdate').attr('disabled', 'disabled');
             $('#onlineproduct-is_fdate').parent().removeClass('checked');
+            $('#onlineproduct-kuanxianqi').attr('readonly', 'readonly');
         }
     }
 
@@ -847,7 +851,6 @@ TPL;
             $('#onlineproduct-kuanxianqi').val('');
             $('#onlineproduct-finish_date').val('');
             $('#onlineproduct-finish_date').attr('readonly', 'readonly');
-            $('#onlineproduct-kuanxianqi').attr('readonly', 'readonly');
             $('#onlineproduct-finish_date').replaceWith($('#onlineproduct-finish_date').clone());
         } else {
             $('#onlineproduct-finish_date').removeAttr('readonly');

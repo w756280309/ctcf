@@ -329,7 +329,7 @@ class ProductonlineController extends BaseController
         $model->scenario = 'create';
         $model->is_fdate = (0 === $model->finish_date) ? 0 : 1;
         $model->yield_rate = bcmul($model->yield_rate, 100, 2);
-        $model->allowedUids = $model->mobiles;
+        $model->allowedUids = $model->mobiles;   //获取user中电话列表
         if ($model->balance_limit > 0) {
             $model->bfyhkj = 1;
         }
