@@ -4,6 +4,7 @@ namespace common\models\offline;
 
 use yii\db\ActiveRecord;
 use common\models\affiliation\Affiliator;
+use Zii\Validator\CnIdCardValidator;
 
 /**
  * This is the model class for table "offline_order".
@@ -44,6 +45,7 @@ class OfflineOrder extends ActiveRecord
             [['realName', 'accBankName', 'bankCardNo','mobile'], 'required', 'on' => 'edit'],
             ['mobile', 'string', 'max' => 20],
             [['idCard', 'bankCardNo'], 'string', 'max' => 30],
+            [['idCard'], CnIdCardValidator::className()],
             ['money', 'number'],
             [['orderDate', 'valueDate'], 'safe'],
             ['apr', 'number', 'min' => '0.0001', 'max' => '1'],

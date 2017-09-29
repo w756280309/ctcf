@@ -63,7 +63,6 @@ class OfflineController extends BaseController
                         }
                         //初始化model，寻找行号，使用batchInsert插入
                         $neworder = $this->initModel($order);
-
                         if ($neworder->validate()) {
                             $neworder->save();
                             if ($neworder->valueDate) {
@@ -77,6 +76,9 @@ class OfflineController extends BaseController
                             }
                             if ($neworder->hasErrors('affiliator_id')) {
                                 throw new \Exception('文件内容有错,行号' . $error_index . ',请在后台添加分销商' . $order[0]);
+                            }
+                            if ($neworder->hasErrors('idCard')) {
+                                throw new \Exception('身份证号不正确,行号' . $error_index . ',请更正身份证号' . $order[5]);
                             }
                             throw new \Exception('文件内容有错,行号' . $error_index);
                         }
