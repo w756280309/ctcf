@@ -175,7 +175,7 @@ $sidebar = $_COOKIE['page-sidebar-closed'];
 </script>
 <!-- END JAVASCRIPTS -->
 <?php if ($this->loadAuthJs) { ?>
-    <script type="text/javascript" src="/js/ajax.js"></script>
+    <script type="text/javascript" src="/js/ajax.js?v=20170930"></script>
 <?php } ?>
 </body>
 </html>
