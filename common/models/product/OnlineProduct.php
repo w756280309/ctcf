@@ -276,11 +276,11 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
 
     /**
      * 宽限期做基本校验
-     * 注: 当标的是有截止日、设置了宽限期时候，宽限期 < 截止日 - 当期日期 - 1
+     * 注: 当标的设置了宽限期时候，宽限期 < 截止日 - 当期日期 - 1
      */
     public function validateGraceDay()
     {
-        if ($this->kuanxianqi > 0 && !empty($this->finish_date)) {
+        if ($this->kuanxianqi > 0) {
             if ($this->kuanxianqi >= $this->expires) {
                 $this->addError('kuanxianqi', "宽限期必须小于项目期限");
             }

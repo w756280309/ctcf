@@ -40,8 +40,7 @@ class LoanHelper
      */
     public static function getGraceDaysDescription(OnlineProduct $loan)
     {
-        if ($loan->finish_date
-            && $loan->kuanxianqi > 0
+        if ($loan->kuanxianqi > 0
             && $loan->refund_method === OnlineProduct::REFUND_METHOD_DAOQIBENXI
         ) {
             $duration = $loan->getDuration();
