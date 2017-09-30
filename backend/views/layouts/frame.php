@@ -172,7 +172,7 @@ $sidebar = $_COOKIE['page-sidebar-closed'];
 <script src="/js/jquery.cookie.min.js" type="text/javascript"></script>
 <script src="/js/jquery.uniform.min.js" type="text/javascript" ></script>
 <!-- END CORE PLUGINS -->
-<script src="/js/app.js"></script>
+<script src="/js/app.js?v=20170930"></script>
 <script>
     jQuery(document).ready(function() {
         App.init();
@@ -180,7 +180,7 @@ $sidebar = $_COOKIE['page-sidebar-closed'];
 </script>
 <!-- END JAVASCRIPTS -->
 <?php if ($this->loadAuthJs) { ?>
-    <script type="text/javascript" src="/js/ajax.js?v=20170930"></script>
+    <script type="text/javascript" src="/js/ajax.js"></script>
 <?php } ?>
 </body>
 </html>
