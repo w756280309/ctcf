@@ -22,6 +22,7 @@ $leftLinkArray = Auth::find()
     ->all();
 
 $companyName = \common\models\growth\AppMeta::getValue('company.name');
+$sidebar = $_COOKIE['page-sidebar-closed'];
 ?>
 
 <?php $this->beginPage() ?>
@@ -78,7 +79,7 @@ $companyName = \common\models\growth\AppMeta::getValue('company.name');
         });
     </script>
 </head>
-<body>
+<body class="<?= $sidebar ?>">
 <?php $this->beginBody() ?>
 <nav class="header navbar navbar-inverse navbar-fixed-top" >
     <div class="container-fluid">

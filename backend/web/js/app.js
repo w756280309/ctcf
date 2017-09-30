@@ -313,11 +313,13 @@ var App = function () {
             $(".sidebar-search", sidebar).removeClass("open");
 
             if (body.hasClass("page-sidebar-closed")) {
+                $.cookie('page-sidebar-closed','',{path:'/'});
                 body.removeClass("page-sidebar-closed");
                 if (body.hasClass('page-sidebar-fixed')) {
                     sidebar.css('width', '');
                 }
             } else {
+                $.cookie('page-sidebar-closed','page-sidebar-closed',{path:'/'});
                 body.addClass("page-sidebar-closed");
             }
             runResponsiveHandlers();

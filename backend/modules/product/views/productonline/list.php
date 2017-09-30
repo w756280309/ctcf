@@ -95,7 +95,7 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\we
             }
         }
     </style>
-    <div class="container-fluid" style="background-color: white;min-width: 1350px;">
+    <div class="container-fluid" style="background-color: white;min-width: 1300px;min-height: 800px">
     <!-- BEGIN PAGE HEADER-->
     <div class="row-fluid">
     <div class="span12">
@@ -286,8 +286,8 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\we
                 <th width="50">类型</th>
                 <th width="50">期限</th>
                 <th width="100">利率（%）</th>
-                <th width="120" class="money">募集金额（元）</th>
-                <th width="150" class="money">实际募集金额（元）</th>
+                <th width="90" class="money">募集(元)</th>
+                <th width="120" class="money">实际募集(元)</th>
                 <th width="80">满标时间</th>
                 <th width="80">起息时间</th>
                 <th width="80">放款时间</th>
