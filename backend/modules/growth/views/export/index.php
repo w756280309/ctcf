@@ -37,14 +37,18 @@ $this->title = '导出类型选择';
             ]);
             ?>
 
-            <?php foreach($exportConfig as $config) { ?>
-            <div class="span3">
+            <?php
+                $num = 0;
+                foreach($exportConfig as $k => $config) {
+                    $num++;
+            ?>
+            <div class="span3" <?php if (1 === $num % 4) { ?> style="margin-left: 0;" <?php } ?>>
                 <label class="control-label">
                     <input type="radio" name="key"  value="<?= $config['key']?>">
                     <?= $config['title']?>
                 </label>
             </div>
-            <?php }?>
+            <?php } ?>
 
             <div class="span12">
                 <button type="submit" class="btn blue sub-btn">提交</button>&nbsp;&nbsp;&nbsp;

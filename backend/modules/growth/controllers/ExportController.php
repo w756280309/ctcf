@@ -162,6 +162,41 @@ order by 持有资产 desc",
                 'itemLabels' => ['姓名', '手机号', '性别','年龄','持有资产'],
                 'itemType' => ['string', 'string', 'string','int','float'],
             ],
+            'custormer_annual_invest' => [
+                'key' => 'custormer_annual_invest',
+                'title' => '指定日期累计年化',
+                'content' => '指定日期累计年化',
+                'sql' => "SELECT 
+u.real_name 姓名, 
+u.safeMobile 手机号,
+sum(truncate((if(p.refund_method > 1, o.order_money*p.expires/12, o.order_money*p.expires/365)), 2)) as 累计年化金额 
+from online_order o 
+inner join online_product p on o.online_pid = p.id 
+inner join user u on u.id = o.uid 
+where date(from_unixtime(o.order_time)) >= :startDate 
+and date(from_unixtime(o.order_time)) <= :endDate 
+and o.status = 1 
+group by o.uid 
+order by 累计年化金额 desc;",
+                'params' => [//如果没有必要参数, 可以为null, 但是必须是isset
+                    'startDate' => [//参数列表， key 是参数名， 不可为空
+                        'name' => 'startDate',//参数名
+                        'type' => 'date',//参数的数据类型
+                        'value' => date('Y-m-d', strtotime('-1 month')),//参数的默认值
+                        'title' => '开始日期',//参数标题
+                        'isRequired' => true,//是否必要参数, 默认都是必要参数
+                    ],
+                    'endDate' => [//参数列表， key 是参数名， 不可为空
+                        'name' => 'endDate',//参数名
+                        'type' => 'date',//参数的数据类型
+                        'value' => date('Y-m-d', strtotime('-1 day')),//参数的默认值
+                        'title' => '结束日期',//参数标题
+                        'isRequired' => true,//是否必要参数, 默认都是必要参数
+                    ],
+                ],
+                'itemLabels' => ['姓名', '手机号', '累计年化金额'],
+                'itemType' => ['string', 'string', 'string'],
+            ],
         ];
         parent::init();
     }

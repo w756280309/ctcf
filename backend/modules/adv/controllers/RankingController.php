@@ -7,6 +7,7 @@ use common\models\adminuser\AdminLog;
 use common\models\promo\DuoBao;
 use common\models\promo\PromoLotteryTicket;
 use common\models\user\User;
+use common\utils\SecurityUtils;
 use wap\modules\promotion\models\RankingPromo;
 use Yii;
 use yii\data\ActiveDataProvider;
@@ -128,7 +129,7 @@ class RankingController extends BaseController
             echo "姓名\t,手机号\t,抽奖时间\t,发奖时间\t,奖品\t,注册渠道\t\n";
             foreach ($data as $value) {
                 echo $value['real_name']."\t,";
-                echo $value['mobile']."\t,";
+                echo SecurityUtils::decrypt($value['safeMobile'])."\t,";
                 echo date('Y-m-d H:i:s', $value['drawAt'])."\t,";
                 echo ($value['rewardedAt'] ? date('Y-m-d H:i:s', $value['rewardedAt']) : "")."\t,";
                 echo $value['rewardName'] . "\t,";
