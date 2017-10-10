@@ -7,7 +7,7 @@ use console\command\ProcessCommand;
 use console\command\WorkerCommand;
 use yii\console\Controller;
 
-class QueueController extends Controller
+class QueueXiiController extends Controller
 {
     public function actions()
     {

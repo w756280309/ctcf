@@ -23,16 +23,6 @@ class OrderMessage extends WechatMessage
             $duration['value'],
             $order->yield_rate
         );
-//        $this->data = [
-//            'first' => ['尊敬的客户，您于'.date('Y-m-d H:i:s', $order->order_time).'在温都金服成功投资。', 'black'],
-//            'loanTitle' => [$loan->title, 'black'],
-//            'apr' => StringUtils::amountFormat2(bcmul($order->yield_rate, 100, 2)).'%',
-//            'loanDuration' => $duration['value'].$duration['unit'],
-//            'repaymentMethod' => \Yii::$app->params['refund_method'][$loan->refund_method],
-//            'orderAmount' => StringUtils::amountFormat3($order->order_money).'元',
-//            'interest' => StringUtils::amountFormat3($interest).'元',
-//            'remark' => ['感谢您的投资，点击查看详情，如有疑问请致电：400-101-5151进行咨询。', 'black'],
-//        ];
         $this->data = [
             'first' => ['尊敬的客户，您于'.date('Y-m-d H:i:s', $order->order_time).'在温都金服成功投资。', '#000000'],
             'keyword1' => [$loan->title, '#000000'],
@@ -40,7 +30,7 @@ class OrderMessage extends WechatMessage
             'keyword3' => [$duration['value'].$duration['unit'], '#000000'],
             'keyword4' => [StringUtils::amountFormat3($order->order_money).'元', '#000000'],
             'keyword5' => [StringUtils::amountFormat3($interest).'元', '#000000'],
-            'remark' => ['感谢您的投资，点击查看详情，如有疑问请致电：'.Yii::$app->params['contact_tel'].'进行咨询。', '#000000'],
+            'remark' => ['感谢您的投资，点击查看详情，如有疑问请致电：400-101-5151进行咨询。', '#000000'],
         ];
         $this->user = $order->user;
         $this->linkUrl = Yii::$app->params['clientOption']['host']['wap'].'deal/deal/detail?sn='.$loan->sn;

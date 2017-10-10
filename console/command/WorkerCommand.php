@@ -148,7 +148,7 @@ class WorkerCommand extends Action
                     $task->lastRunTime = date('Y-m-d H:i:s');
                     $task->save();
 
-                    $process = new Process('php ' . __DIR__ . '/../../yii queue/process ' . $task->id);
+                    $process = new Process('php ' . __DIR__ . '/../../yii queue-xii/process ' . $task->id);
                     $this->processList[$num] = $process;
                     $process->start();
                     \Yii::info('num为[' . $num . '] ID为[' . $task->id . ']的消息的子进程编号为[' . $num . ']', 'queue');
