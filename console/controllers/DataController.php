@@ -24,6 +24,7 @@ use common\view\LoanHelper;
 use wap\modules\promotion\models\RankingPromo;
 use yii\console\Controller;
 use Yii;
+use yii\helpers\ArrayHelper;
 
 class DataController extends Controller
 {
@@ -386,6 +387,118 @@ order by o.refund_time asc";
         }
 
         $objPHPExcel = UserStats::initPhpExcelObject($exportData);
+        $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+        $objWriter->save($file);
+        exit();
+    }
+
+    /**
+     * 返回理财资产大于等于一定值的用户信息EXCE文件名（包含线上线下）
+     * 文件名 order_asset_ge_'.$assetMoney.'_'.date('YmdHis').'.xlsx'
+     *
+     * 导出项： 姓名、手机号、身份证号、年龄、理财资产、性别
+     *
+     * @param int $assetMoney 资产金额限制
+     */
+    public function actionPickUserOrderAsset($assetMoney = 1000000)
+    {
+        $db = Yii::$app->db;
+        /**
+         * 线上用户信息构造
+         * [
+         *      'idCard1' => [
+         *          'realName' => 'xxxx',
+         *          'mobile' => '14558541343',
+         *          'idCard' => '110106199108010447',
+         *          'age' => '26',
+         *          'orderAsset' => '46100.00',
+         *          'gender' => '女',
+         *      ],
+         *      'idCard2' => [
+         *          ...
+         *      ],
+         *      ...
+         * ]
+         */
+        $onlineSql = "select 
+u.real_name as realName, 
+u.safeMobile as mobile, 
+u.safeIdCard as idCard, 
+(DATE_FORMAT(NOW(), '%Y') - SUBSTRING(u.birthdate, 1, 4)) as age, 
+ua.investment_balance as orderAsset
+from user u 
+inner join user_account ua on ua.uid = u.id 
+where ua.type = 1 
+and u.idcard_status = 1
+and ua.investment_balance >= 0";
+        $users = $db->createCommand($onlineSql)
+            ->queryAll();
+        $onlineUsers = [];
+        foreach ($users as $user) {
+            $idCard = SecurityUtils::decrypt($user['idCard']);
+            $user['idCard'] = $idCard;
+            $user['mobile'] = SecurityUtils::decrypt($user['mobile']);
+            $user['gender'] = substr($idCard, -2, 1) % 2 ? '男' : '女';
+            $onlineUsers[$idCard] = $user;
+        }
+
+        /**
+         * 线下用户信息构造
+         * [
+         *      'idCard1' => [
+         *          'realName' => 'xxxx',
+         *          'mobile' => '14558541343',
+         *          'idCard' => '110106199108010447',
+         *          'age' => '26',
+         *          'orderAsset' => '46100.00',
+         *          'gender' => '女',
+         *      ],
+         *      'idCard2' => [
+         *          ...
+         *      ],
+         *      ...
+         * ]
+         */
+        $offlineSql = "SELECT 
+u.realName, 
+u.mobile, 
+UPPER(u.idCard) AS idCard, 
+(DATE_FORMAT(NOW(), '%Y') - SUBSTRING(u.idCard, 7, 4)) AS age,
+sum(o.money * 10000) AS orderAsset,
+IF(SUBSTR(u.idCard, -2, 1) % 2, '男', '女') AS gender
+from offline_order as o
+inner join offline_user as u on o.user_id = u.id
+inner join offline_loan as p on o.loan_id = p.id
+where o.isDeleted = 0
+and curDate() < date(p.finish_date)
+group by o.user_id
+having orderAsset >= 0";
+        $offUsers = $db->createCommand($offlineSql)
+            ->queryAll();
+        $offlineUsers = ArrayHelper::index($offUsers, 'idCard');
+
+        //合并成最后的导出数组，并按照元素order排序，截取大于$assetMoney的用户信息
+        foreach ($onlineUsers as $idCard => $onlineUser) {
+            if (isset($offlineUsers[$idCard])) {
+                $onlineUsers[$idCard]['orderAsset'] = bcadd($onlineUsers[$idCard]['orderAsset'], $offlineUsers[$idCard]['orderAsset'], 2);
+                unset($offlineUsers[$idCard]);
+            }
+        }
+        $realUsers = array_merge($onlineUsers, $offlineUsers);
+        ArrayHelper::multisort($realUsers, 'orderAsset', SORT_DESC, SORT_REGULAR);
+        $chunkUsers = [];
+        foreach ($realUsers as $k => $realUser) {
+            if ($realUser['orderAsset'] < $assetMoney) {
+                break;
+            }
+            $chunkUsers[$k] = $realUser;
+        }
+
+        //生成excel
+        $title = ['姓名', '手机号', '身份证号', '年龄', '理财资产', '性别'];
+        array_unshift($chunkUsers, $title);
+        $file = Yii::getAlias('@app/runtime/order_asset_ge_'.$assetMoney.'_'.date('YmdHis').'.xlsx');
+        $objPHPExcel = UserStats::initPhpExcelObject($chunkUsers);
         $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
         $objWriter->save($file);
         exit();
