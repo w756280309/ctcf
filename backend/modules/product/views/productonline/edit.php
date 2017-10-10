@@ -138,7 +138,7 @@ TPL;
                     <label class="control-label">项目副标题</label>
                     <div class="controls">
                         <?=
-                        $form->field($model, 'internalTitle', ['template' => '{input}{error}', 'inputOptions' => ['autocomplete' => 'off', 'placeholder' => '项目副标题（30字以内）', 'class' => 'm-wrap span12']])->textInput()
+                        $form->field($model, 'internalTitle', ['template' => '{input}{error}', 'inputOptions' => ['autocomplete' => 'off', 'placeholder' => '项目副标题（60字以内）', 'class' => 'm-wrap span12']])->textInput()
                         ?>
                     </div>
                 </div>

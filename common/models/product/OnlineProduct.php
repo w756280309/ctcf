@@ -243,7 +243,7 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
             ['tags', 'checkTags'],
             [['title', 'internalTitle'], 'trim'],  //去掉项目名称及项目副标题两边多余的空格
             ['allowTransfer', 'boolean'],
-            ['internalTitle', 'string', 'max' => 30],
+            ['internalTitle', 'string', 'max' => 60],
             ['kuanxianqi', 'validateGraceDay'],
         ];
     }
