@@ -96,9 +96,9 @@ class Miit
             $info['users'] = $userinfo;
             $info['ecode'] = $ecode;
             $info['ename'] = $ename;
-            $info['effectTime'] = self::getTime19($signTime);
-            $info['signTime'] = self::getTime19($signTime);
-            $info['dueTime'] = self::getTime19($signTime + 5 * 365 * 24 * 3600);  //合同到期时间还未定(5年)
+            $info['effectTime'] = str_pad($signTime, 13, '0');
+            $info['signTime'] = str_pad($signTime, 13, '0');
+            $info['dueTime'] = str_pad($signTime + 5 * 365 * 24 * 3600, 13, '0');  //合同到期时间还未定(5年)
             $info['contentMd5'] = md5($contractData);
             $info['ticket'] = $this->ticket;
 
@@ -175,18 +175,6 @@ class Miit
         fclose($fp);
         return $content;
     }
-    /**
-     * 生成13位时间戳
-     */
-    private function getTime19($time = null)
-    {
-        if ($time) {
-            return $time . '000000000';
-        } else {
-            return '0000000000000000000';
-        }
-    }
-
     /**
      * 生成soap的命名空间
      */
