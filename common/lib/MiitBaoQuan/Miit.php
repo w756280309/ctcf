@@ -127,7 +127,7 @@ class Miit
             $model->success = $result['data']['status'] == 1 ? 1 : 0;
             $model->errMessage = $result['data']['status'] == 1 ? '成功' : json_encode($result);//失败的话 就返回的信息保存
             $model->baoId = $ecode;
-            $model->preservationTime = $this->getTime13($signTime);
+            $model->preservationTime = str_pad($signTime, 13, '0');
             $model->save();
         } catch (\Exception $e) {
             var_dump($e->getMessage());
