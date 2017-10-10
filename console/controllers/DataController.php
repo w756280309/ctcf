@@ -462,7 +462,7 @@ and ua.investment_balance >= 0";
         $offlineSql = "SELECT 
 u.realName, 
 u.mobile, 
-u.idCard, 
+UPPER(u.idCard) AS idCard, 
 (DATE_FORMAT(NOW(), '%Y') - SUBSTRING(u.idCard, 7, 4)) AS age,
 sum(o.money * 10000) AS orderAsset,
 IF(SUBSTR(u.idCard, -2, 1) % 2, '男', '女') AS gender
@@ -496,7 +496,7 @@ having orderAsset >= 0";
 
         //生成excel
         $title = ['姓名', '手机号', '身份证号', '年龄', '理财资产', '性别'];
-        array_unshift($realUsers, $title);
+        array_unshift($chunkUsers, $title);
         $file = Yii::getAlias('@app/runtime/order_asset_ge_'.$assetMoney.'_'.date('YmdHis').'.xlsx');
         $objPHPExcel = UserStats::initPhpExcelObject($chunkUsers);
         $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
