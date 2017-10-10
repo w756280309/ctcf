@@ -5,6 +5,7 @@ namespace app\modules\order\controllers;
 use app\controllers\BaseController;
 use common\action\loan\ExpectProfitLoan;
 use common\controllers\ContractTrait;
+use common\lib\MiitBaoQuan\Miit;
 use common\models\coupon\CouponType;
 use common\models\coupon\UserCoupon;
 use common\models\order\OnlineOrder;
@@ -222,13 +223,16 @@ class OrderController extends BaseController
         if (Yii::$app->request->isAjax) {
             return $this->renderFile('@wap/modules/order/views/order/_contract.php', ['content' => $contracts[$key]['content'], 'bq' => $bq, 'isDisDownload' => $isDisDownload]);
         }
-
+        //工信部保权合同
+        $miit = new Miit();
+        $miitBQ = $miit->viewHetong($asset['order_id']);
         return $this->render('contract', [
             'contracts' => $contracts,
             'fk' => $key,
             'content' => $contracts[$key]['content'],
             'asset_id' => $asset_id,
             'bq' => $bq,
+            'miiBq' => $miitBQ,
             'isDisDownload' => $isDisDownload,  //APP端,以及非安卓微信端打开此页面,不允许下载
         ]);
     }

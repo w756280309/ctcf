@@ -62,8 +62,11 @@ $this->registerCssFile(ASSETS_BASE_URI.'css/deal/productcontract.css', ['depends
                         <div class="content"><?= html_entity_decode($loanContracts[0]['content']) ?></div>
                         <div class="a-btn bq_div">
                             <?php if (isset($bqLoan)) {?>
+                                <?php if (!is_null($miitBQ)) : ?>
+                                    <a class="a-lf down" href="<?= $miitBQ ?>" target="_blank">工信部合同查看</a>
+                                <?php endif; ?>
                                 <?php if (isset($bqLoan['downUrl'])) : ?>
-                                    <a class="a-lf down" href="<?= $bqLoan['downUrl'] ?>">下载合同</a>
+                                    <a class="a-lf down" href="<?= $bqLoan['downUrl'] ?>">医保权合同下载</a>
                                 <?php endif; ?>
                                 <?php if (isset($bqLoan['linkUrl'])) : ?>
                                     <a class="a-rg view" href="<?= $bqLoan['linkUrl'] ?>">保全证书</a>

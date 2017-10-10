@@ -51,7 +51,7 @@ trait ContractTrait
             //产看购买债权保全
             $bq = EbaoQuan::find()->where([
                 'itemType' => EbaoQuan::ITEM_TYPE_CREDIT_ORDER,
-                'type' => EbaoQuan::TYPE_CREDIT,
+                'type' => EbaoQuan::TYPE_E_CREDIT,
                 'success' => 1,
                 'uid' => $user->id,
                 'itemId' => $asset['credit_order_id'],
@@ -100,7 +100,7 @@ trait ContractTrait
                     //产看债权卖家保全
                     $bq = EbaoQuan::find()->where([
                         'itemType' => EbaoQuan::ITEM_TYPE_CREDIT_NOTE,
-                        'type' => EbaoQuan::TYPE_CREDIT,
+                        'type' => EbaoQuan::TYPE_E_CREDIT,
                         'success' => 1,
                         'uid' => $asset['user_id'],
                         'itemId' => $noteId,
@@ -160,7 +160,7 @@ trait ContractTrait
         if ($asset['note_id'] && $asset['credit_order_id']) {
             $bq = EbaoQuan::find()->where([
                 'itemType' => EbaoQuan::ITEM_TYPE_CREDIT_ORDER,
-                'type' => EbaoQuan::TYPE_LOAN,
+                'type' => EbaoQuan::TYPE_E_LOAN,
                 'success' => 1,
                 'uid' => $user->id,
                 'itemId' => $asset['credit_order_id'],
@@ -168,7 +168,7 @@ trait ContractTrait
         } else {
             $bq = EbaoQuan::find()->where([
                 'itemType' => EbaoQuan::ITEM_TYPE_LOAN_ORDER,
-                'type' => EbaoQuan::TYPE_LOAN,
+                'type' => EbaoQuan::TYPE_E_LOAN,
                 'success' => 1,
                 'uid' => $user->id,
                 'itemId' => $loanOrder->id,

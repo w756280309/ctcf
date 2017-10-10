@@ -8,6 +8,9 @@
 
 <?php if (isset($bq)) { ?>
     <div class="bao_quan_button">
+        <?php if (!is_null($miitBQ)) : ?>
+            <button class="btn btn-primary ybq" onclick="window.location = '<?= $miitBQ ?>'">工信部保权合同</button>
+        <?php endif; ?>
         <?php if (isset($bq['downUrl'])) : ?>
             <button class="btn btn-primary download-ybq" <?php if (!(isset($isDisDownload) && $isDisDownload)) : ?>onclick="window.location = '<?= $bq['downUrl'] ?>'"<?php endif; ?>>下载合同</button>
         <?php endif; ?>

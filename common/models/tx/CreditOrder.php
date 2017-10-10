@@ -135,7 +135,7 @@ class CreditOrder extends ActiveRecord
     {
         return EbaoQuan::find()->where([
             'itemType' => EbaoQuan::ITEM_TYPE_CREDIT_ORDER,
-            'type' => EbaoQuan::TYPE_CREDIT,
+            'type' => EbaoQuan::TYPE_E_CREDIT,
             'success' => 1,
             'uid' => $this->user_id,
             'itemId' => $this->id,

@@ -6,15 +6,18 @@ namespace console\controllers;
 
 use common\controllers\ContractTrait;
 use common\models\order\BaoQuanQueue;
+use common\models\order\EbaoQuan;
 use common\models\order\OnlineOrder;
 use common\models\product\OnlineProduct;
 use common\models\user\User;
 use EBaoQuan\Client;
+use MiitBaoQuan\Client as MClient;
 use Wcg\Lock\FileLock;
 use yii\base\Exception;
 use yii\console\Controller;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Console;
+use Yii;
 
 class BaoQuanController extends Controller
 {
@@ -114,11 +117,22 @@ class BaoQuanController extends Controller
             $asset = $assets[$queue['itemId']];
             $user = User::findOne($asset['user_id']);
             try {
+//                $asset['type'] = EbaoQuan::TYPE_E_CREDIT;
                 $contracts = $this->getUserContract($asset);
                 Client::createCreditBq($contracts, $user, $asset);
-
                 $queue->status = BaoQuanQueue::STATUS_SUCCESS;
                 $queue->save(false);
+
+//                //工信部保权
+//                $asset['type'] = EbaoQuan::TYPE_M_CREDIT;
+//                Yii::$app->queue->push(new MClient([
+//                    'contracts' => $this->getUserContract($asset),
+//                    'item_type' => 'credit_order',
+//                    'order' => OnlineOrder::findOne($asset['order_id']),
+//                    'user' => $user,
+//                    'asset' => $asset,
+//                ]));
+
             } catch (\Exception $ex) {
                 $queue->status = BaoQuanQueue::STATUS_FAILED;
                 $queue->save(false);
@@ -190,6 +204,15 @@ class BaoQuanController extends Controller
             $queue->save(false);
             try {
                 Client::createCreditSellerBq($content, $user, $amount, $loan, $noteId, $seller);
+//                //工信部保权-卖方合同
+//                Yii::$app->queue->push(new MClient([
+//                    'type' => EbaoQuan::ITEM_TYPE_CREDIT_NOTE,
+//                    'content' => $content,
+//                    'loan' => $loan,
+//                    'noteId' => $noteId,
+//                    'seller' => $seller,
+//                    'closeTime' => $note['closeTime'],
+//                ]));
             } catch (\Exception $ex) {
                 $queue->status = BaoQuanQueue::STATUS_FAILED;
                 $queue->save(false);

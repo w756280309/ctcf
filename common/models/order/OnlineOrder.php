@@ -401,7 +401,7 @@ class OnlineOrder extends ActiveRecord implements OrderTxInterface
     {
         return EbaoQuan::find()->where([
             'itemType' => EbaoQuan::ITEM_TYPE_LOAN_ORDER,
-            'type' => EbaoQuan::TYPE_LOAN,
+            'type' => EbaoQuan::TYPE_E_LOAN,
             'success' => 1,
             'uid' => $this->uid,
             'itemId' => $this->id,

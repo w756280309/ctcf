@@ -21,6 +21,7 @@ use common\utils\SecurityUtils;
 use Ding\DingNotify;
 use Exception;
 use Lhjx\Noty\Noty;
+use common\jobs\MiitBaoQuanJob;
 use Yii;
 use yii\helpers\ArrayHelper;
 
@@ -522,6 +523,13 @@ class OrderManager
                 if (null === OrderQueue::findOne(['orderSn' => $order->sn])) {
                     OrderQueue::initForQueue($order)->save();
                 }
+                //工信部保全队列
+
+                Yii::$app->queue->push(new MiitBaoQuanJob([
+                    'order' => $order,
+                    'item_type' => 'loan_order',
+                ]));
+
                 return [
                     'code' => PayService::ERROR_SUCCESS,
                     'message' => '',

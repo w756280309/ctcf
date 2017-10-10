@@ -58,7 +58,7 @@ class Client
                 if (file_exists($file)) {
                     //生成保全
                     $responseJson = self::contractFileCreate($file, $user, $order->order_money, $loan->title);
-                    self::addBaoQuan($responseJson, EbaoQuan::TYPE_LOAN, $order->id, EbaoQuan::ITEM_TYPE_LOAN_ORDER, $loan->title, $user->id);
+                    self::addBaoQuan($responseJson, EbaoQuan::TYPE_E_LOAN, $order->id, EbaoQuan::ITEM_TYPE_LOAN_ORDER, $loan->title, $user->id);
                     unlink($file);
                 }
             } catch (Exception $e) {
@@ -67,7 +67,6 @@ class Client
             }
         }
     }
-
 
     /**
      * 债权保全（买方标的合同和买方转让合同）
@@ -92,7 +91,7 @@ class Client
             if (file_exists($file)) {
                 //生成保全
                 $responseJson = self::contractFileCreate($file, $user, $loanAmount, $loan->title);
-                self::addBaoQuan($responseJson, EbaoQuan::TYPE_LOAN, $asset['credit_order_id'], EbaoQuan::ITEM_TYPE_CREDIT_ORDER, $loan->title, $user->id);
+                self::addBaoQuan($responseJson, EbaoQuan::TYPE_E_LOAN, $asset['credit_order_id'], EbaoQuan::ITEM_TYPE_CREDIT_ORDER, $loan->title, $user->id);
                 unlink($file);
             }
         } catch (\Exception $ex) {
@@ -113,7 +112,7 @@ class Client
                     if (file_exists($file)) {
                         //生成保全
                         $responseJson = self::contractFileCreate($file, $user, $contract['amount'], $loan->title);
-                        self::addBaoQuan($responseJson, EbaoQuan::TYPE_CREDIT, $asset['credit_order_id'], EbaoQuan::ITEM_TYPE_CREDIT_ORDER, $loan->title, $user->id);
+                        self::addBaoQuan($responseJson, EbaoQuan::TYPE_E_CREDIT, $asset['credit_order_id'], EbaoQuan::ITEM_TYPE_CREDIT_ORDER, $loan->title, $user->id);
                         unlink($file);
                     }
                 } catch (\Exception $ex) {
@@ -131,7 +130,7 @@ class Client
             if (file_exists($file)) {
                 //生成保全
                 $responseJson = self::contractFileCreate($file, $seller, $amount, $loan->title);
-                self::addBaoQuan($responseJson, EbaoQuan::TYPE_CREDIT, $noteId, EbaoQuan::ITEM_TYPE_CREDIT_NOTE, $loan->title, $seller->id);
+                self::addBaoQuan($responseJson, EbaoQuan::TYPE_E_CREDIT, $noteId, EbaoQuan::ITEM_TYPE_CREDIT_NOTE, $loan->title, $seller->id);
                 unlink($file);
             }
         } catch (\Exception $ex) {

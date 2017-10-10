@@ -77,9 +77,9 @@ use yii\widgets\LinkPager;
                              * @var EbaoQuan $baoQuan
                              */
                             $url = \EBaoQuan\Client::contractFileDownload($baoQuan);
-                            if ($baoQuan->type === EbaoQuan::TYPE_LOAN) {
+                            if ($baoQuan->type === EbaoQuan::TYPE_E_LOAN) {
                                 $title = '标的合同';
-                            } elseif ($baoQuan->type === EbaoQuan::TYPE_CREDIT) {
+                            } elseif ($baoQuan->type === EbaoQuan::TYPE_E_CREDIT) {
                                 $title = '转让合同';
                             }
                             if (empty($url) || empty($title)) {

@@ -22,8 +22,10 @@ use yii\behaviors\TimestampBehavior;
  */
 class EbaoQuan extends \yii\db\ActiveRecord
 {
-    const TYPE_LOAN = 0;//标的合同
-    const TYPE_CREDIT = 1;//债权合同
+    const TYPE_E_LOAN = 0;//医保权标的合同
+    const TYPE_E_CREDIT = 1;//医保权债权合同
+    const TYPE_M_LOAN = 2;//工信部保权标的合同
+    const TYPE_M_CREDIT = 3;//工信部保权债权合同
 
     const ITEM_TYPE_LOAN_ORDER = 'loan_order';//从标的订单新建的保全
     const ITEM_TYPE_CREDIT_ORDER = 'credit_order';//从债权订单新建的保全,买方
@@ -45,7 +47,7 @@ class EbaoQuan extends \yii\db\ActiveRecord
         return [
             [['itemId', 'uid', 'baoId', 'itemType', 'type'], 'required'],
             [['itemId', 'uid', 'baoId', 'success', 'type', 'created_at', 'updated_at'], 'integer'],
-            [['preservationTime'], 'integer', 'max' => 13],
+            [['preservationTime'], 'integer'],
             [['docHash', 'errMessage', 'title'], 'string', 'max' => 200],
             [['itemType'], 'string'],
         ];

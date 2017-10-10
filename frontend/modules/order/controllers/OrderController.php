@@ -3,6 +3,7 @@
 namespace frontend\modules\order\controllers;
 
 use common\controllers\ContractTrait;
+use common\lib\MiitBaoQuan\Miit;
 use common\models\coupon\UserCoupon;
 use common\models\order\OnlineOrder;
 use common\models\order\OrderManager;
@@ -129,15 +130,20 @@ class OrderController extends BaseController
     {
         $txClient = \Yii::$container->get('txClient');
         $asset = $txClient->get('assets/detail', ['id' => $asset_id, 'validate' => false]);
+
         if ($asset['user_id'] !== $this->getAuthedUser()->id) {
             throw new \Exception('不能查看他人的合同');
         }
         $contracts = $this->getUserContract($asset);
         $bqLoan = $contracts['bqLoan'];
+        //查看工信部保权
+        $miit = new Miit();
+        $miitBQ = $miit->viewHetong($asset['order_id']);
         return $this->render('contract', [
             'loanContracts' => $contracts['loanContract'],
             'creditContracts' => $contracts['creditContract'],
             'bqLoan' => $bqLoan,
+            'miitBQ' => $miitBQ,
         ]);
     }
 

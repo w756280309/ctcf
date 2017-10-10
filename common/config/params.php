@@ -101,6 +101,17 @@ return [
             'max' => null,
         ],
     ],
+    //工信部保权密钥
+    'miit' => [
+        'wdjf_private_key' => __DIR__ . env('WDJF_PRIVATE_KEY'),
+        'wdjf_public_key' => __DIR__ . env('WDJF_PUBLIC_KEY'),
+        'MiitPublicKey' => __DIR__ . env('MIITPUBLICKEY'),
+        'MiitContractUrl' => env('MIITCONTRACTURL'),
+        'MiitGetHetongUrl' => env('MIITGETHETONGURL'),
+        'MiitGetTicketUrl' => env('MIITGETTICKETURL'),
+        'idcode' => env('IDCODE'),
+        'aesKey' => env('AESKEY'),
+    ],
     //todo-待添加
     'weixin' => [
         'appId' => '',
