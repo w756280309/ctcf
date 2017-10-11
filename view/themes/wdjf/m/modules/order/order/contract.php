@@ -107,5 +107,5 @@ $action = Yii::$app->controller->action->getUniqueId();
     </div>
 </div>
 <div id="content">
-    <?= $this->renderFile('@wap/modules/order/views/order/_contract.php', array_merge(['content' => $content], 'order/order/agreement' === $action ? [] : ['bq' => $bq, 'isDisDownload' => $isDisDownload])) ?>
+    <?= $this->renderFile('@wap/modules/order/views/order/_contract.php', array_merge(['content' => $content], 'order/order/agreement' === $action ? [] : ['bq' => $bq, 'isDisDownload' => $isDisDownload, 'miitBQ' => $miitBQ])) ?>
 </div>

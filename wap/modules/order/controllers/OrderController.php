@@ -226,13 +226,14 @@ class OrderController extends BaseController
         //工信部保权合同
         $miit = new Miit();
         $miitBQ = $miit->viewHetong($asset['order_id']);
+
         return $this->render('contract', [
             'contracts' => $contracts,
             'fk' => $key,
             'content' => $contracts[$key]['content'],
             'asset_id' => $asset_id,
             'bq' => $bq,
-            'miiBq' => $miitBQ,
+            'miitBQ' => $miitBQ,
             'isDisDownload' => $isDisDownload,  //APP端,以及非安卓微信端打开此页面,不允许下载
         ]);
     }
