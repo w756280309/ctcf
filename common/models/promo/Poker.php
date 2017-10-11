@@ -13,10 +13,10 @@ class Poker extends ActiveRecord
     {
         //周一当天十点之前
         if ('1' === date('w', $timeAt) && date('H:i:s', $timeAt) < '10:00:00') {
-            $term = date('Ymd');
+            $term = date('Ymd', $timeAt);
         } else {
             //其余时间
-            $term = date('Ymd', strtotime('next Monday'));
+            $term = date('Ymd', strtotime('next Monday', $timeAt));
         }
 
         return $term;

@@ -60,7 +60,7 @@ class PromoPoker extends BasePromo
      * @param User  $user 用户
      * @param array $data 牌面信息
      * [
-     *      'poker_type' => 'heart' or 'club' or 'diamond',
+     *      'poker_type' => 'spade', 'heart' or 'club' or 'diamond',
      *      'issueTime' => (new \DateTime()),
      *      'order_id' => null or 123,
      * ]
@@ -117,11 +117,13 @@ class PromoPoker extends BasePromo
                 break;
         }
 
-        $poker_value = mb_substr($issueTime, -2) % 13;
-        if ($poker_value == 0) {
-            $poker_value += 13;
+        if ('spade' !== $color) {
+            $poker_value = mb_substr($issueTime, -2) % 13;
+            if ($poker_value == 0) {
+                $poker_value += 13;
+            }
+            $model->{$color} = $poker_value;
         }
-        $model->{$color} = $poker_value;
 
         return $model->save(false);
     }
@@ -131,18 +133,25 @@ class PromoPoker extends BasePromo
      */
     private function createSpade($term)
     {
+        $pool = $this->createPool($term);
+
+        return Reward::draw($pool);
+    }
+
+    private function createPool($term)
+    {
         $winNumber = Poker::createWinningNumber($term);
         $keys = range(1, 13);
         $pool = [];
 
         foreach ($keys as $k => $v) {
-            if ($winNumber === $k) {
-                $pool[$k] = '0.4';
+            if ($winNumber === $v) {
+                $pool[$v] = '0.4';
             } else {
-                $pool[$k] = '0.05';
+                $pool[$v] = '0.05';
             }
         }
 
-        return Reward::draw($pool);
+        return $pool;
     }
 }
