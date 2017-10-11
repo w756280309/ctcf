@@ -302,7 +302,7 @@ $this->registerJs('forceReload_V2();');
                     case 'state4':
                         this.options.state = "<?= FE_BASE_URI ?>wap/happy-week/images/bg_04.png";
                         this.options.title = "投资理财";
-                        this.options.content = "任意投资即可点亮本期红桃扑克牌。点亮4张扑克可参与本期抽奖。";
+                        this.options.content = "任意投资即可点亮本期方片扑克牌。点亮4张扑克可参与本期抽奖。";
                         this.options.btnIsShow = true;
                         this.options.btn = '去投资';
                         this.options.href = "/deal/deal/index";
