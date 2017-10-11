@@ -37,8 +37,7 @@ class SqlExportJob extends Job
                 $item['年龄'] = date('Y') - substr(SecurityUtils::decrypt($item['年龄']), 6, 4);
             } else if ('last_ten_day_draw' === $paramKey) {
                 $item['手机号'] = SecurityUtils::decrypt($item['手机号']);
-                $time_diff = strtotime(date('Y-m-d H:i:s')) - strtotime($item['未投资时长']);
-                $item['未投资时长'] = ceil($time_diff/(24*3600));
+                $item['未投资时长'] = (new \DateTime)->diff(new \DateTime($item['未投资时长']))->days;
             } else if ('custormer_annual_invest' === $paramKey) {
                 $item['手机号'] = SecurityUtils::decrypt($item['手机号']);
             }
