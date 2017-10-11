@@ -35,10 +35,12 @@ class SqlExportJob extends Job
             if ('repayment_expire_interest' === $paramKey) {
                 $item['手机号'] = SecurityUtils::decrypt($item['手机号']);
                 $item['年龄'] = date('Y') - substr(SecurityUtils::decrypt($item['年龄']), 6, 4);
-            } else if ('last_ten_day_draw' === $paramKey || 'custormer_annual_invest' === $paramKey) {
+            } else if ('last_ten_day_draw' === $paramKey) {
                 $item['手机号'] = SecurityUtils::decrypt($item['手机号']);
                 $time_diff = strtotime(date('Y-m-d H:i:s')) - strtotime($item['未投资时长']);
                 $item['未投资时长'] = ceil($time_diff/(24*3600));
+            } else if ('custormer_annual_invest' === $paramKey) {
+                $item['手机号'] = SecurityUtils::decrypt($item['手机号']);
             }
             $item = array_values($item);
             if (count($item) !== $labelLength) {
