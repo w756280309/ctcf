@@ -56,13 +56,15 @@ date(from_unixtime(p.finish_date)) as '标的截止日期',
  r.benjin AS '还款本金',
  r.lixi AS '还款利息',
  r.benxi AS '还款本息',
-DATE(r.`actualRefundTime`) AS '实际还款时间'
+DATE(r.`actualRefundTime`) AS '实际还款时间',
+uc.available_balance AS '可用余额'
 FROM `online_repayment_plan` AS r
 INNER JOIN user AS u ON r.uid = u.id
 INNER JOIN online_product AS p ON p.id = r.online_pid
 INNER JOIN online_order AS o ON o.id = r.order_id
 left join user_affiliation as ua on ua.user_id = u.id
 left join affiliator as a on a.id = ua.affiliator_id
+left join user_account as uc on u.id = uc.uid
 WHERE u.type =1
 AND p.isTest = false
 AND p.status
@@ -81,7 +83,7 @@ ORDER BY p.id asc ,r.uid asc",//导出的sql模板, 使用预处理方式调用,
                         'isRequired' => true,//是否必要参数, 默认都是必要参数
                     ],
                 ],
-                'itemLabels' => ['姓名', '手机号', '年龄', '分销商', '投资金额', '利率', '标的名称', '还款方式', '标的状态', '标的截止日期', '还款本金', '还款利息', '还款本息', '实际还款时间'],//统计的数据项，不可为空
+                'itemLabels' => ['姓名', '手机号', '年龄', '分销商', '投资金额', '利率', '标的名称', '还款方式', '标的状态', '标的截止日期', '还款本金', '还款利息', '还款本息', '实际还款时间', '可用余额'],//统计的数据项，不可为空
                 'itemType' => ['string', 'int', 'int', 'string', 'float', 'float', 'string', 'string', 'string', 'string','float', 'float', 'float', 'date'],
                 'beforeExport' => function($row) {
                     $row['手机号'] = SecurityUtils::decrypt($row['手机号']);
@@ -93,16 +95,20 @@ ORDER BY p.id asc ,r.uid asc",//导出的sql模板, 使用预处理方式调用,
                 'key' => 'last_ten_day_draw',
                 'title' => '最近10天成功提现数据',
                 'content' => '统计最近10天每天每个用户的累计成功提现金额, 时间以发起提现时间为准',
-                'sql' => "SELECT u.safeMobile AS  '手机号', u.real_name AS  '姓名', SUM( d.money ) AS  '累计成功提现金额', DATE( FROM_UNIXTIME( d.created_at ) ) AS  '提现发起日期'
+                'sql' => "SELECT u.safeMobile AS  '手机号', u.real_name AS  '姓名', SUM( d.money ) AS  '累计成功提现金额', DATE( FROM_UNIXTIME( d.created_at ) ) AS  '提现发起日期', 
+ui.lastInvestDate AS '未投资时长',
+ua.available_balance AS '可用余额',
 FROM draw_record AS d
 INNER JOIN user AS u ON u.id = d.uid
+INNER JOIN user_info AS ui ON ui.user_id = d.uid
+INNER JOIN user_account AS ua ON ua.uid = d.uid
 WHERE d.status =2
 AND u.type =1
 AND FROM_UNIXTIME( d.created_at ) >= date_sub(curdate(), INTERVAL 10 DAY)
 GROUP BY d.uid, DATE( FROM_UNIXTIME( d.created_at ) ) 
 ORDER BY DATE( FROM_UNIXTIME( d.created_at ) ) DESC , d.uid ASC ",
                 'params' => null,
-                'itemLabels' => ['手机号', '姓名', '累计成功提现金额', '提现发起日期'],
+                'itemLabels' => ['手机号', '姓名', '累计成功提现金额', '提现发起日期', '未投资时长', '可用余额'],
                 'itemType' => ['int', 'string', 'float', 'date'],
                 'beforeExport' => function($row) {
                     $row['手机号'] = SecurityUtils::decrypt($row['手机号']);
