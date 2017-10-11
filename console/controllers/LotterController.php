@@ -3,6 +3,7 @@
 namespace console\controllers;
 
 use common\models\order\OnlineOrder;
+use common\models\product\OnlineProduct;
 use common\models\promo\PromoPoker;
 use common\models\promo\Reward;
 use common\models\promo\TicketToken;
@@ -84,9 +85,15 @@ class LotterController extends Controller
                 ->andWhere(['diamond' => $diamond])
                 ->one();
             if (null === $pokerUser) {
+                $o = OnlineOrder::tableName();
+                $pu = PokerUser::tableName();
+                $p = OnlineProduct::tableName();
                 $rewardUser = PokerUser::find()
+                    ->innerJoin($o, "$o.id = $pu.order_id")
+                    ->innerJoin($p, "$p.id = $o.online_pid")
                     ->where(['term' => $term])
                     ->andWhere(['spade' => $spade])
+                    ->andWhere(["$p.isTest" => false])
                     ->andFilterWhere(['>', 'diamond', 0])
                     ->andFilterWhere(['>', 'order_id', 0])
                     ->orderBy(['order_id' => SORT_ASC])
