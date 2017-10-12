@@ -32,6 +32,8 @@ class BaoQuanController extends Controller
         }
         $cmdLock = new FileLock(\Yii::getAlias('@lock'), 'bao_quan_credit_order', 120);
         if (!$cmdLock->acquire()) {
+            sleep(3);
+
             exit;
         }
 
@@ -46,6 +48,8 @@ class BaoQuanController extends Controller
         }
 
         $cmdLock->release();
+
+        sleep(3);
     }
 
     private function dealLoanOrderBaoQuan($queues)
