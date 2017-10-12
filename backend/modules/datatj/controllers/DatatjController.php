@@ -495,6 +495,127 @@ FROM perf WHERE DATE_FORMAT(bizDate,'%Y-%m') < DATE_FORMAT(NOW(),'%Y-%m')  GROUP
     }
 
     /**
+     * 平台复投率(根据开始日期和结束日期输出提现金额，提现人数，复投总额，复投人数，回款总额，回款人数，新增总额，复投率),
+     * @param string $startDate 没有选择开始日期时默认值为null，获取到的是当前月份1日，选择开始日期并搜索时值为选择月份1日
+     * @param string $endDate   没有选择结束日期时默认值为null，获取到的是当前日期前一天，选择结束日期并搜索时值为选择月份最后一天
+     * @param string $aff_id    复投率种类：平台复投
+     * @throws \Exception     回款数据表(online_repayment_plan)中没有找到相应用户的userId还款数据时，抛出异常
+     */
+    public function actionPlatformRate($aff_id = '1',$startDate = null, $endDate = null)
+    {
+        $startDate = $startDate ? date('Y-m-01',strtotime($startDate)) : null;
+        $endDate = $startDate ? date('Y-m-t',strtotime($endDate)) : null;
+        if (empty($startDate) || false === strtotime($startDate)) {
+            $startDate = date('Y-m-01');
+        }
+        if (empty($endDate) || false === strtotime($endDate)) {
+            $endDate = date('Y-m-d',strtotime('-1 day'));
+        }
+
+        //提现数据
+        $drawCount = 0;
+        $drawAmount = 0;
+        $drawData = Yii::$app->db->createCommand(
+            "SELECT COUNT( DISTINCT uid ) as drawUser, SUM( money ) as drawAmount 
+            FROM  `draw_record` 
+            WHERE STATUS =2
+            AND DATE( FROM_UNIXTIME( created_at ) ) 
+            BETWEEN  :startDate
+            AND  :endDate", [
+                'startDate' => $startDate,
+                'endDate' => $endDate,
+            ])->queryOne();
+
+        if (!empty($drawData)) {
+            $drawCount = $drawData['drawUser'];
+            $drawAmount = $drawData['drawAmount'];
+        }
+
+        //输出到页面数据
+        $fileData['drawAmount'] = number_format($drawAmount,2);  //提现金额
+        $fileData['drawCount'] = $drawCount;                              //提现人数
+        $fileData['startDate'] = $startDate;                              //开始日期
+        $fileData['endDate'] = $endDate;                                  //结束日期
+        $fileData['aff_id'] = $aff_id;                                    //复投率种类，平台复投
+
+        //回款数据
+        $refundData = Yii::$app->db->createCommand(
+            "SELECT uid, SUM( benxi ) AS amount
+            FROM online_repayment_plan
+            WHERE STATUS IN ( 1, 2 ) 
+            AND DATE(  `actualRefundTime` ) 
+            BETWEEN  :startDate
+            AND  :endDate
+            AND benxi >0
+            GROUP BY uid", [
+                'startDate' => $startDate,
+                'endDate' => $endDate,
+            ])->queryAll();
+        $refundCount = count($refundData);
+        if ($refundCount === 0) {
+            $fileData['message'] = "指定时间段内没有还款数据 ";
+        }else {
+            $refundAllUsers = array_column($refundData, 'uid');
+            $refundAllAmount = ArrayHelper::index($refundData, 'uid');
+            $refundUserToString = implode(',', $refundAllUsers);
+            $refundAmount = array_sum(array_column($refundAllAmount, 'amount'));
+            $reinvestAmount = 0;
+            $increaseInvestAmount = 0;
+
+            //既有回款又有投资，并且不是首投用户 投资数据
+            $sql = "SELECT o.uid,sum(o.order_money) as amount
+                    FROM online_order AS o
+                    INNER JOIN user_info AS i ON o.uid = i.user_id
+                    WHERE o.`status` =1
+                    AND DATE( FROM_UNIXTIME( o.order_time ) ) 
+                    BETWEEN  :startDate
+                    AND  :endDate
+                    AND o.uid
+                    IN (" . $refundUserToString . ")
+                    AND i.firstInvestDate != i.lastInvestDate
+                    AND o.order_money > 0.1
+                    group by o.uid
+                    ";
+            $userInvestData = Yii::$app->db->createCommand($sql, [
+                'startDate' => $startDate,
+                'endDate' => $endDate,
+            ])->queryAll();
+            $reinvestUserCount = count($userInvestData);
+
+            //统计每个用户的 复投金额 和 新增金额
+            foreach ($userInvestData as $item) {
+                $userId = $item['uid'];
+                $amount = $item['amount'];
+                if (!isset($refundAllAmount[$userId])) {
+                    throw new \Exception("没有找到 $userId 的还款数据");
+                }
+
+                //回款金额
+                $userRefundAmount = $refundAllAmount[$userId]['amount'];
+
+                //复投金额
+                if ($amount > $userRefundAmount) {
+                    $reinvestAmount = bcadd($reinvestAmount, $userRefundAmount, 2);
+                    $increaseInvestAmount = bcadd($increaseInvestAmount, bcsub($amount, $userRefundAmount, 2), 2);
+                } else {
+                    $reinvestAmount = bcadd($reinvestAmount, $amount, 2);
+                }
+            }
+            $rate = bcmul(bcdiv($reinvestAmount, $refundAmount, 4), 100, 2);
+            $fileData['reinvestAmount'] = number_format($reinvestAmount, 2);                  //复投总额
+            $fileData['reinvestUserCount'] = $reinvestUserCount;                                       //复投人数
+            $fileData['refundAmount'] = number_format($refundAmount, 2);                      //回款总额
+            $fileData['refundCount'] = $refundCount;                                                   //回款人数
+            $fileData['increaseInvestAmount'] = number_format($increaseInvestAmount, 2);      //新增总额
+            $fileData['rate'] = $rate;                                                                 //复投率
+            $fileData['message'] = null;
+        }
+
+        return $this->render('platform_rate', $fileData);
+    }
+
+
+    /**
      * 根据订单日期区间查询分销商统计数据.
      */
     private function affiliationStats($start, $end)
