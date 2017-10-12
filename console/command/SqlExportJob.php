@@ -31,10 +31,12 @@ class SqlExportJob extends Job
         $data = $command->queryAll();
 
         $exportData[] = $itemLabels;
+        
         foreach ($data as $num => $item) {
             if ('repayment_expire_interest' === $paramKey) {
                 $item['手机号'] = SecurityUtils::decrypt($item['手机号']);
                 $item['年龄'] = date('Y') - substr(SecurityUtils::decrypt($item['年龄']), 6, 4);
+                $item['原计划还款时间'] = date('Y-m-d', $item['原计划还款时间']);
             } else if ('last_ten_day_draw' === $paramKey) {
                 $item['手机号'] = SecurityUtils::decrypt($item['手机号']);
                 $item['未投资时长'] = (new \DateTime)->diff(new \DateTime($item['未投资时长']))->days;

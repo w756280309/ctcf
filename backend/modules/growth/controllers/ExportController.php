@@ -57,6 +57,7 @@ date(from_unixtime(p.finish_date)) as '标的截止日期',
  r.lixi AS '还款利息',
  r.benxi AS '还款本息',
 DATE(r.`actualRefundTime`) AS '实际还款时间',
+p.finish_date AS '原计划还款时间',
 uc.available_balance AS '可用余额'
 FROM `online_repayment_plan` AS r
 INNER JOIN user AS u ON r.uid = u.id
@@ -83,8 +84,8 @@ ORDER BY p.id asc ,r.uid asc",//导出的sql模板, 使用预处理方式调用,
                         'isRequired' => true,//是否必要参数, 默认都是必要参数
                     ],
                 ],
-                'itemLabels' => ['姓名', '手机号', '年龄', '分销商', '投资金额', '利率', '标的名称', '还款方式', '标的状态', '标的截止日期', '还款本金', '还款利息', '还款本息', '实际还款时间', '可用余额'],//统计的数据项，不可为空
-                'itemType' => ['string', 'int', 'int', 'string', 'float', 'float', 'string', 'string', 'string', 'string','float', 'float', 'float', 'date', 'float'],
+                'itemLabels' => ['姓名', '手机号', '年龄', '分销商', '投资金额', '利率', '标的名称', '还款方式', '标的状态', '标的截止日期', '还款本金', '还款利息', '还款本息', '实际还款时间', '原计划还款时间', '可用余额'],//统计的数据项，不可为空
+                'itemType' => ['string', 'int', 'int', 'string', 'float', 'float', 'string', 'string', 'string', 'string','float', 'float', 'float', 'date', 'date', 'float'],
                 'beforeExport' => function($row) {
                     $row['手机号'] = SecurityUtils::decrypt($row['手机号']);
                     $row['年龄'] = date('Y') - substr(SecurityUtils::decrypt($row['年龄']), 6, 4);
