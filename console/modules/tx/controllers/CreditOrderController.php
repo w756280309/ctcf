@@ -93,7 +93,7 @@ class CreditOrderController extends Controller
                 }
             }
         } else {
-            usleep(500000);
+            sleep(3);
         }
         exit(0);
     }
