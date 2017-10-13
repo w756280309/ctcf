@@ -7,6 +7,7 @@ use common\models\adv\Share;
 use common\models\order\OnlineOrder;
 use common\models\user\CaptchaForm;
 use common\models\user\User;
+use common\utils\SecurityUtils;
 use wap\modules\promotion\models\PromoMobile;
 use wap\modules\promotion\models\RankingPromo;
 use Yii;
@@ -69,7 +70,7 @@ class P170118Controller extends Controller
                     }
                 } else {
                     $user = User::findOne([
-                        'mobile' => $mobile,
+                        'safeMobile' => SecurityUtils::encrypt($mobile),
                         'type' => User::USER_TYPE_PERSONAL,
                     ]);
 
