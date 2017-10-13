@@ -50,7 +50,7 @@ class OpenAccount extends ActiveRecord
         return new self([
             'user_id' => $user->id,
             'encryptedName' => SecurityUtils::encrypt($userIdentity->real_name),
-            'encryptedIdCard' => SecurityUtils::encrypt($userIdentity->idcard),
+            'encryptedIdCard' => SecurityUtils::encrypt(strtoupper($userIdentity->idcard)),
             'status' => self::STATUS_INIT,
             'sn' => TxUtils::generateSn("REG"),
         ]);
