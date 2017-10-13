@@ -149,10 +149,11 @@ class OfflineController extends BaseController
         $order = array_map(function ($val) {
             return Yii::$app->functions->removeWhitespace($val);
         }, $order);
+        $idCard = strtoupper($order[5]);
         $model = new OfflineOrder();
         $affiliator = Affiliator::find()->where(['name' => $order[0]])->one();
         $loan = OfflineLoan::find()->where(['sn' => $order[2]])->one();
-        $user = OfflineUser::find()->where(['idCard' => $order[5]])->one();
+        $user = OfflineUser::find()->where(['idCard' => $idCard])->one();
         $affiliator_id = null;
         $loan_id = null;
         if (null !== $affiliator) {
@@ -175,7 +176,7 @@ class OfflineController extends BaseController
         } else {
             $user = new OfflineUser();
             $user->realName = $order[4];
-            $user->idCard = $order[5];
+            $user->idCard = $idCard;
             $user->mobile = $order[6];
             $user->created_at = time();
             $user->save();
@@ -185,7 +186,7 @@ class OfflineController extends BaseController
         $model->affiliator_id = $affiliator_id;
         $model->loan_id = $loan_id;
         $model->user_id = $user_id;
-        $model->idCard = $order[5];
+        $model->idCard = $idCard;
         $model->mobile = $order[6];
         $model->accBankName = $order[7];
         $model->bankCardNo = $order[8];
