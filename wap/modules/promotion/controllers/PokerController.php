@@ -6,6 +6,7 @@ use common\controllers\HelpersTrait;
 use common\models\promo\Award;
 use common\models\promo\Poker;
 use common\models\promo\PokerUser;
+use common\models\promo\PromoPoker;
 use common\utils\StringUtils;
 use wap\modules\promotion\models\RankingPromo;
 use Yii;
@@ -68,6 +69,23 @@ class PokerController extends BaseController
 
         $user = $this->getAuthedUser();
         if (null !== $user) {
+            //发幸运号码牌
+            $promo = RankingPromo::find()
+                ->where(['key' => 'promo_poker'])
+                ->one();
+            if (null === $promo) {
+                throw $this->ex404();
+            }
+            try {
+                $promoPoker = new PromoPoker($promo);
+                $promoPoker->deal($user, [
+                    'poker_type' => 'spade',
+                    'issueTime' => (new \DateTime()),
+                    'order_id' => null,
+                ]);
+            } catch (\Exception $ex) {
+                //防止重复插入时报错
+            }
             //取当前用户的卡牌号码
             $currentCard = PokerUser::find()
                 ->select(['spade', 'heart', 'club', 'diamond'])
