@@ -72,7 +72,7 @@ class Reward extends ActiveRecord
             }
         }
 
-        if (array_sum($poolSetting) <= 0 || array_sum($poolSetting) > 1) {
+        if (bccomp(array_sum($poolSetting), 0, 4) <= 0 || bccomp(array_sum($poolSetting), 1, 4) > 0) {
 
             return false;
         }

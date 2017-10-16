@@ -315,7 +315,7 @@ class PromoService
         }
 
         //验证当前的概率之和是否满足条件
-        if (array_sum($awardPool) <= 0 || bccomp(array_sum($awardPool), 1, 4) > 0) {
+        if (bccomp(array_sum($awardPool), 0, 4) <= 0 || bccomp(array_sum($awardPool), 1, 4) > 0) {
             return false;
         }
 
