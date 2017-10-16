@@ -11,13 +11,13 @@ class LogFirstVisitTime extends ActionFilter
 {
     public function beforeAction($action)
     {
-        //判断当前请求是Ajax，返回false
+        //判断当前请求是Ajax，返回true
         if (Yii::$app->request->isAjax) {
             return true;
         }
 
         $user = Yii::$app->user->identity;
-        //判断当前用户是否登录，返回false
+        //判断当前用户是否登录，返回true
         if (null === $user) {
             return true;
         }
@@ -29,7 +29,7 @@ class LogFirstVisitTime extends ActionFilter
             return true;
         }
 
-        $actionId = $action->getUniqueId();
+        //发红桃号码牌（每周首次登录状态下访问网站页面）
         try {
             $promoPoker = new PromoPoker($promo);
             $promoPoker->deal($user, [
@@ -37,14 +37,6 @@ class LogFirstVisitTime extends ActionFilter
                 'issueTime' => (new \DateTime()),
                 'order_id' => null,
             ]);
-
-            if ('promotion/poker/index' === $actionId) {
-                $promoPoker->deal($user, [
-                    'poker_type' => 'spade',
-                    'issueTime' => (new \DateTime()),
-                    'order_id' => null,
-                ]);
-            }
         } catch (\Exception $ex) {
             //防止重复插入时报错
         }

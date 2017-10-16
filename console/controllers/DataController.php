@@ -12,6 +12,8 @@ use common\models\promo\Award;
 use common\models\promo\FirstOrderPoints;
 use common\models\promo\InviteRecord;
 use common\models\promo\LoanOrderPoints;
+use common\models\promo\Poker;
+use common\models\promo\PokerUser;
 use common\models\transfer\Transfer;
 use common\models\user\MoneyRecord;
 use common\models\user\User;
@@ -499,6 +501,52 @@ having orderAsset >= 0";
         array_unshift($chunkUsers, $title);
         $file = Yii::getAlias('@app/runtime/order_asset_ge_'.$assetMoney.'_'.date('YmdHis').'.xlsx');
         $objPHPExcel = UserStats::initPhpExcelObject($chunkUsers);
+        $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+        $objWriter->save($file);
+        exit();
+    }
+
+    /**
+     * 周周乐活动 - 中奖名单excel文件
+     *
+     * @param string $term  期数，如：20171016
+     *
+     * @return int
+     */
+    public function actionExportPokerAwardList($term)
+    {
+        $poker = Poker::find()
+            ->where(['term' => $term])
+            ->one();
+        if (null === $poker) {
+            $this->stdout($term.'期暂未开奖，无中奖结果');
+            return self::EXIT_CODE_ERROR;
+        }
+
+        //获得本期开奖号码并查询所有的中奖用户
+        $spade = $poker->spade;
+        $u = User::tableName();
+        $p = PokerUser::tableName();
+        $list = PokerUser::find()
+            ->select([
+                "$u.safeMobile",
+                "$u.real_name",
+            ])->innerJoin($u, "$p.user_id = $u.id")
+            ->where(['term' => $term])
+            ->andWhere(['spade' => $spade])
+            ->asArray()
+            ->all();
+        $awardList = [];
+        foreach ($list as $k=>$value) {
+            $awardList[$k]['mobile'] = SecurityUtils::decrypt($value['safeMobile']);
+            $awardList[$k]['realName'] = null === $value['real_name'] ? '' : $value['real_name'];
+        }
+
+        //生成中奖名单excel
+        $title = ['手机号','姓名'];
+        array_unshift($awardList, $title);
+        $file = Yii::getAlias('@app/runtime/poker_'.$term.'_'.date('YmdHis').'.xlsx');
+        $objPHPExcel = UserStats::initPhpExcelObject($awardList);
         $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
         $objWriter->save($file);
         exit();
