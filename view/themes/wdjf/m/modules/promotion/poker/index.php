@@ -3,7 +3,8 @@ $this->title = '周周乐';
 $this->registerJs('forceReload_V2();');
 ?>
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/wenjfbase.css">
-<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/happy-week/css/index.css?v=20170911">
+<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/happy-week/css/index.css?v=20171013">
+<link rel="stylesheet" href="<?= FE_BASE_URI ?>/libs/swiper/swiper-3.4.2.min.css">
 <script src="<?= FE_BASE_URI ?>/libs/lib.flexible3.js"></script>
 <script src="<?= FE_BASE_URI ?>/libs/iscroll.js"></script>
 <script src="<?= FE_BASE_URI ?>/libs/vue.min.js"></script>
@@ -17,7 +18,23 @@ $this->registerJs('forceReload_V2();');
 <div class="flex-content" id="weekly-happy">
     <mask-list v-show="true" v-cloak></mask-list>
     <div class="banner">
-        <img src="<?= FE_BASE_URI ?>wap/happy-week/images/banner.png" alt="">
+        <img src="<?= FE_BASE_URI ?>wap/happy-week/images/logo_banner.png" alt="">
+	    <div class="swiper-container">
+		    <div class="swiper-wrapper">
+			    <div class="swiper-slide swiper-one">
+				    <p class="line-one">{{qishu}}期</p>
+				    <p class="line-two">一等奖中奖用户</p>
+				    <p class="line-three">{{userMobile}}</p>
+			    </div>
+			    <div class="swiper-slide swiper-two">
+				    <p class="line-one">点亮卡牌赢大奖</p>
+				    <p class="line-two">200元超市卡</p>
+				    <p class="line-three">幸运号码送积分</p>
+			    </div>
+		    </div>
+		    <!-- 如果需要分页器 -->
+		    <div class="swiper-pagination"></div>
+	    </div>
         <div class="left-timer">
             <p v-cloak v-if="!lottery">开奖时间：每周一上午10点</p>
             <p v-cloak v-if="lottery">距离开奖还剩: <span id="timer"><i>--</i>:<i>--</i>:<i>--</i></span></p>
@@ -179,6 +196,15 @@ $this->registerJs('forceReload_V2();');
             vScrollbar: false,
             hScrollbar: false
         });
+      var mySwiper = new Swiper ('.swiper-container', {
+        loop: true,
+        autoplay : 3000,
+        autoplayDisableOnInteraction : false,
+        spaceBetween: 10,
+        // 如果需要分页器
+        pagination: '.swiper-pagination',
+
+      })
     });
 
     var data = <?= $data ?>;
@@ -212,6 +238,7 @@ $this->registerJs('forceReload_V2();');
                 btnIsShow:false
             },
             qishu:data.rewardInfo.qishu,
+            userMobile:data.userMobile,
             rewardInfo:{
                 qishu : '恭喜您在'+data.rewardInfo.qishu+'期',
                 level : '获得'+data.rewardInfo.level,
@@ -391,3 +418,4 @@ $this->registerJs('forceReload_V2();');
         }
     })(data.restSecond);
 </script>
+<script src="<?= FE_BASE_URI ?>/libs/swiper/swiper-3.4.2.min.js"></script>

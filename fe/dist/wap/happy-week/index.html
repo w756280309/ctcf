@@ -6,6 +6,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0,minimum-scale=1.0, user-scalable=0">
 	<link rel="stylesheet" href="__FE_BASE_URI__/common/css/wenjfbase.css">
 	<link rel="stylesheet" href="__FE_BASE_URI__wap/happy-week/css/index.css">
+	<link rel="stylesheet" href="__FE_BASE_URI__/libs/swiper/swiper-3.4.2.min.css">
 	<script src="__FE_BASE_URI__/libs/lib.flexible3.js"></script>
 	<script src="__FE_BASE_URI__/libs/jquery-1.11.1.min.js"></script>
 	<script src="__FE_BASE_URI__/libs/iscroll.js"></script>
@@ -18,7 +19,23 @@
 <div class="flex-content" id="weekly-happy">
 	<mask-list v-show="true" v-cloak></mask-list>
 	<div class="banner">
-		<img src="__FE_BASE_URI__wap/happy-week/images/banner.png" alt="">
+		<img src="__FE_BASE_URI__wap/happy-week/images/logo_banner.png" alt="">
+		<div class="swiper-container">
+			<div class="swiper-wrapper">
+				<div class="swiper-slide swiper-one">
+					<p class="line-one">20171009期</p>
+					<p class="line-two">一等奖中奖用户</p>
+					<p class="line-three">137****4317</p>
+				</div>
+				<div class="swiper-slide swiper-two">
+					<p class="line-one">点亮卡牌赢大奖</p>
+					<p class="line-two">200元超市卡</p>
+					<p class="line-three">幸运号码送积分</p>
+				</div>
+			</div>
+			<!-- 如果需要分页器 -->
+			<div class="swiper-pagination"></div>
+		</div>
 		<div class="left-timer">
 			<p v-cloak v-if="!lottery">开奖时间：每周一上午10点</p>
 			<p v-cloak v-if="lottery">距离开奖还剩: <span id="timer"><i>24</i>:<i>00</i>:<i>00</i></span></p>
@@ -181,7 +198,16 @@
             vScrollbar: false,
             hScrollbar: false
         });
+    var mySwiper = new Swiper ('.swiper-container', {
+      loop: true,
+      autoplay : 3000,
+      autoplayDisableOnInteraction : false,
+      spaceBetween: 10,
+      // 如果需要分页器
+      pagination: '.swiper-pagination',
+
     })
+  })
     data = {
 	    'isFirstLogin':true,
         'rewardOpenTime' : '2017-09-11 10:00:00',
@@ -249,19 +275,29 @@
             closeLoginTips:function(){
                 this.isShowLogin = !this.isShowLogin;
 			},
+			isFirstShow:function () {
+                this.options.state = "images/bg_01.png";
+                this.options.title = "幸运号码";
+                this.options.content = "您本期的个人专属幸运号码是"+data.card[0]+"。每周一上午10点记得来开 奖哦！";
+                this.options.num = this.oneCardUrl;
+                this.options.btn = '';
+                this.options.btnIsShow = false;
+                this.isShowMaskList = !this.isShowMaskList;
+			},
             remake: function (event) {
                 var state = $(event.target).data('state');
                 switch (state) {
                     case 'state1':
                         this.options.state = "images/bg_01.png";
                         this.options.title = "幸运号码";
-                        this.options.content = "登录平台即可获得本期个人专属幸运号码。有幸运号码就有机会获得幸运奖哦！";
                         if (this.isLoggedin == false) {
+                            this.options.content = "登录平台即可获得本期个人专属幸运号码。有幸运号码就有机会获得幸运奖哦！";
                             this.options.num = "images/doNot.png";
                             this.options.btn = '去登录';
                             this.options.href = '/site/login';
                             this.options.btnIsShow = true;
                         } else if (this.isLoggedin == true) {
+                            this.options.content = "您本期的个人专属幸运号码是"+data.card[0]+"。每周一上午10点记得来开 奖哦！";
                             this.options.num = this.oneCardUrl;
                             this.options.btn = '';
                             this.options.btnIsShow = false;
@@ -352,7 +388,7 @@
 		}
     });
     if(data.isFirstLogin){
-        vm.remake(event,'state1');
+        vm.isFirstShow();
 	}
     /*倒计时*/
 	(function(timers){
@@ -376,5 +412,6 @@
     })(data.restSecond);
     Vue.config.devtools = true
 </script>
+<script src="__FE_BASE_URI__/libs/swiper/swiper-3.4.2.min.js"></script>
 </body>
 </html>

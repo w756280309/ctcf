@@ -67,6 +67,7 @@ class PokerController extends BaseController
         ];
 
         $user = $this->getAuthedUser();
+        $userMobile = StringUtils::obfsMobileNumber($user->mobile);
         if (null !== $user) {
             //取当前用户的卡牌号码
             $currentCard = PokerUser::find()
@@ -114,6 +115,7 @@ class PokerController extends BaseController
 
         $data = [
             'qishu' => $term,
+            'userMobile' => $userMobile,
             'restSecond' => $restSecond,
             'card' => $card,
             'requirePop' => $requirePop,
