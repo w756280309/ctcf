@@ -2,6 +2,7 @@
 
 namespace common\models\promo;
 
+use common\models\user\User;
 use yii\db\ActiveRecord;
 use Zii\Behavior\DateTimeBehavior;
 
@@ -32,6 +33,12 @@ class PokerUser extends ActiveRecord
                 'updateTimeAttribute' => 'updateTime',
             ],
         ];
+    }
+
+    //关联用户对象
+    public function getUser()
+    {
+        return $this->hasOne(User::class, ['id' => 'user_id']);
     }
 
 }

@@ -46,6 +46,7 @@ class PokerController extends BaseController
         /*设置上一期默认期数及默认中奖号码（无上一期）*/
         $rewardCard = [0, 0, 0, 0];
         $qishu = null;
+        $userMobile = null;
         //获取上一周中奖号码
         $poker = Poker::find()
             ->where(['<', 'term', $term])
@@ -55,8 +56,20 @@ class PokerController extends BaseController
         if (null !== $poker) {
             $rewardCard = [$poker->spade, $poker->heart, $poker->club, $poker->diamond];
             $qishu = $poker->term;
+            //获取一等奖用户的手机号码,并对中间6位数进行加密
+            $pokerUser = PokerUser::find()
+                ->where([
+                    'spade' => $poker->spade,
+                    'heart' => $poker->heart,
+                    'club' => $poker->club,
+                    'diamond' => $poker->diamond,
+                    'term' => $qishu
+                ])->one();
+            if (null !== $pokerUser) {
+                $userMobile = $pokerUser->user->mobile;
+                $userMobile = StringUtils::obfsMobileNumber($userMobile);
+            }
         }
-
         //设置默认未登录下rewardInfo的内容
         $rewardInfo = [
             'status' => 0,
@@ -66,9 +79,7 @@ class PokerController extends BaseController
             'level' => null,
             'title' => null,
         ];
-
         $user = $this->getAuthedUser();
-        $userMobile = StringUtils::obfsMobileNumber($user->mobile);
         if (null !== $user) {
             //发幸运号码牌
             $promo = RankingPromo::find()
