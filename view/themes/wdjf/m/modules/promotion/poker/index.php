@@ -3,7 +3,7 @@ $this->title = '周周乐';
 $this->registerJs('forceReload_V2();');
 ?>
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/wenjfbase.css">
-<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/happy-week/css/index.css?v=20171013">
+<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/happy-week/css/index.css?v=20171016">
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>/libs/swiper/swiper-3.4.2.min.css">
 <script src="<?= FE_BASE_URI ?>/libs/lib.flexible3.js"></script>
 <script src="<?= FE_BASE_URI ?>/libs/iscroll.js"></script>

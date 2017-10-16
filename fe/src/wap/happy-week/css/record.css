@@ -63,8 +63,8 @@ img {
   bottom: 0.1rem;
   right: 0.05rem;
   width: 0.4rem;
-  -webkit-transform: rotateX(180deg);
-  transform: rotateX(180deg);
+  -webkit-transform: rotate(180deg);
+  transform: rotate(180deg);
 }
 .happyWeek-list li div.ctn .win-num {
   line-height: 1;
