@@ -503,8 +503,8 @@ FROM perf WHERE DATE_FORMAT(bizDate,'%Y-%m') < DATE_FORMAT(NOW(),'%Y-%m')  GROUP
      */
     public function actionPlatformRate($aff_id = '1',$startDate = null, $endDate = null)
     {
-        $startDate = $startDate ? date('Y-m-01',strtotime($startDate)) : null;
-        $endDate = $startDate ? date('Y-m-t',strtotime($endDate)) : null;
+        $startDate = $startDate ? date('Y-m-d',strtotime($startDate)) : null;
+        $endDate = $startDate ? date('Y-m-d',strtotime($endDate)) : null;
         if (empty($startDate) || false === strtotime($startDate)) {
             $startDate = date('Y-m-01');
         }
