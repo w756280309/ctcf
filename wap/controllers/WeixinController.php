@@ -2,6 +2,8 @@
 
 namespace app\controllers;
 
+use common\models\thirdparty\SocialConnect;
+use common\models\user\User;
 use common\models\weixin\WeixinAuth;
 use Yii;
 use yii\base\Exception;

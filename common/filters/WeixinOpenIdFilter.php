@@ -3,11 +3,8 @@
 namespace common\filters;
 
 use common\controllers\HelpersTrait;
-use common\models\thirdparty\SocialConnect;
-use common\models\user\User;
 use Yii;
 use yii\base\ActionFilter;
-use yii\web\Controller;
 
 class WeixinOpenIdFilter extends ActionFilter
 {
