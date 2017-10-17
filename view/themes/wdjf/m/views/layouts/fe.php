@@ -20,23 +20,17 @@ if (null !== $meta) {
     $keywords = Yii::$app->params['wap_page_keywords'].','.trim($this->extraKeywords, ', ');
     $description = Yii::$app->params['wap_page_descritpion'];
 }
-
 $this->registerMetaTag([
     'name' => 'keywords',
     'content' => $keywords,
 ]);
 
-$this->registerMetaTag([
-    'name' => 'description',
-    'content' => $description,
-]);
-
 $showHeaderNav = $this->headerNavOn && !defined('IN_APP');
-
 if ($showHeaderNav) {
     $this->registerCssFile(FE_BASE_URI.'wap/common/css/activeComHeader.css?v=20170906', ['depends' => FeAsset::class]);
 }
 
+$pageTitle = isset($ctitle) ? $ctitle : Html::encode($this->title);
 ?>
 
 <?php $this->beginPage(); ?>
@@ -49,7 +43,7 @@ if ($showHeaderNav) {
         <?php } ?>
         <meta name="renderer" content="webkit">
         <meta name="format-detection" content="telephone=no"/>
-        <title><?= isset($ctitle) ? $ctitle : Html::encode($this->title) ?></title>
+        <title><?= '' !== $pageTitle ? $pageTitle : '温都金服活动' ?></title>
         <?= Html::csrfMetaTags() ?>
         <?php $this->head(); ?>
         <script type="text/javascript">

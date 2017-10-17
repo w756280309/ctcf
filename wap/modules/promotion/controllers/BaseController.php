@@ -5,6 +5,7 @@ namespace wap\modules\promotion\controllers;
 use common\controllers\HelpersTrait;
 use common\models\promo\PromoLotteryTicket;
 use common\models\promo\PromoService;
+use common\models\user\UserInfo;
 use wap\modules\promotion\models\RankingPromo;
 use Yii;
 use yii\web\Controller;
@@ -162,5 +163,24 @@ class BaseController extends Controller
         }
 
         return $promoStatus;
+    }
+
+    protected function getPromoAnnualInvest(RankingPromo $promo, $user)
+    {
+        $totalMoney = 0;
+        $startTime = new \DateTime($promo->startTime);
+        $endTime = new \DateTime($promo->endTime);
+        if (null !== $user) {
+            $totalMoney = UserInfo::calcAnnualInvest($user->id, $startTime->format('Y-m-d'), $endTime->format('Y-m-d'));
+        }
+
+        return $totalMoney;
+    }
+
+    protected function registerPromoStatusInView($promo)
+    {
+        $promoStatus = $this->getPromoStatus($promo);
+        $view = \Yii::$app->view;
+        $view->params['promoStatus'] = $promoStatus;
     }
 }
