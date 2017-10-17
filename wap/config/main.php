@@ -144,6 +144,9 @@ return [
     'as userAccountAccessControl'=> \common\filters\UserAccountAcesssControl::className(),
     'as getOpenIdBehavior' => [
         'class' => \common\components\GetOpenIdBehavior::className(),
+        'except' => [
+            'weixin/callback',
+        ],
     ],
     //'as superviseAccessFilter' => \common\filters\SuperviseAccessFilter::className(),//监管控制：未实名无法查看首页和列表页
     'as logFirstVisitTime' => \common\filters\LogFirstVisitTime::className(),//记录用户首次访问时间
