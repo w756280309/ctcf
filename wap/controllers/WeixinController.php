@@ -4,11 +4,16 @@ namespace app\controllers;
 
 use common\models\weixin\WeixinAuth;
 use Yii;
+use yii\base\Exception;
 use yii\web\Controller;
+use yii\web\ForbiddenHttpException;
 use yii\web\Response;
+use common\controllers\HelpersTrait;
 
 class WeixinController extends Controller
 {
+    use HelpersTrait;
+
     public function actionAuth($appId, $url)
     {
         try {
@@ -113,5 +118,30 @@ class WeixinController extends Controller
         $params['sign'] = sha1(implode('&', $pairs));
 
         return $params;
+    }
+
+    /**
+     * 用户授权
+     * @param $url 获取用户信息后跳转的地址
+     */
+    public function actionCallback()
+    {
+        $isWx = $this->fromWx();
+        if (!$isWx || Yii::$app->request->isAjax) {
+            throw new ForbiddenHttpException();
+        }
+        $code = Yii::$app->request->get('code');
+        $state = Yii::$app->request->get('state');
+        $redirect = Yii::$app->request->get('redirect');
+        if (!Yii::$app->session->has('resourceOwnerId') || !Yii::$app->session->has('resourceOwnerNickName')) {
+            if ($code && $state == Yii::$app->session->get('getGrantState')) {
+                $wxClient = Yii::$container->get('wxClient');
+                $response = $wxClient->getGrant($code);
+                $Info = $wxClient->getResourceOwnerInfo($response);
+                Yii::$app->session->set('resourceOwnerId', $response['resource_owner_id']);
+                Yii::$app->session->set('resourceOwnerNickName', $Info['nickName']);
+            }
+        }
+        return Yii::$app->controller->redirect($redirect);
     }
 }
