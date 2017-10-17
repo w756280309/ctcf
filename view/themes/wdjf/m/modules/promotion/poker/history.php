@@ -17,8 +17,8 @@ $this->title = '周周乐结果';
             <p class="til">{{rewardInfo.qishu}}期</p>
             <div class="ctn">
                 <div class="lucky-draw not-lottery-draw" v-if="rewardInfo.status==0">待开奖</div>
-                <div class="lucky-draw" v-if="rewardInfo.status==1">已中奖</div>
-                <div class="lucky-draw" v-if="rewardInfo.status==2">未中奖</div>
+                <div class="lucky-draw" v-if="rewardInfo.status==1">已开奖</div>
+                <div class="lucky-draw" v-if="rewardInfo.status==2">未开奖</div>
                 <ul class="luck-Num clearfix">
                     <li class="lf mr8">
                         <img class="lucky-num" src="<?= FE_BASE_URI ?>wap/happy-week/images/lucky-num.png" alt="">
@@ -46,7 +46,7 @@ $this->title = '周周乐结果';
                     </li>
                 </ul>
                 <p v-if="rewardInfo.status==1||rewardInfo.status==2" class="win-num clearfix">
-                    <span class="com-til lf">中奖号码：</span>
+                    <span class="com-til lf">开奖号码：</span>
                     <img class="com-card lf" src="<?= FE_BASE_URI ?>wap/happy-week/images/type_04.png" alt=""><span class="com-fz lf grey mr8">{{rewardInfo.rewardCard[0]}}</span>
                     <img class="com-card lf mt3" src="<?= FE_BASE_URI ?>wap/happy-week/images/type_03.png" alt=""><span class="com-fz lf red mr8">{{rewardInfo.rewardCard[1]}}</span>
                     <img class="com-card lf mt3" src="<?= FE_BASE_URI ?>wap/happy-week/images/type_02.png" alt=""><span class="com-fz lf grey mr8">{{rewardInfo.rewardCard[2]}}</span>

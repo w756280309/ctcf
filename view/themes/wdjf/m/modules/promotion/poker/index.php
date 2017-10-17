@@ -87,11 +87,11 @@ $this->registerJs('forceReload_V2();');
             </ul>
         </div>
     </div>
-	<a class="record"  :href="linkTo" v-on:click="goLogin"><img src="<?= FE_BASE_URI ?>wap/happy-week/images/clock.png" alt="">历史中奖号码</a>
+	<a class="record"  :href="linkTo" v-on:click="goLogin"><img src="<?= FE_BASE_URI ?>wap/happy-week/images/clock.png" alt="">历史开奖号码</a>
 
 
-	<p v-if="isFirstshow"  v-cloak class="win-num clearfix">
-        <span class="com-til lf">{{qishu}} 期中奖号码：</span>
+	<p v-if="isFirstshow"  v-cloak class="win-num clearfix" style="margin: 0.4rem 0 0.3rem 4.32277%">
+        <span class="com-til lf">{{qishu}} 期开奖号码：</span>
         <img class="com-card lf" src="<?= FE_BASE_URI ?>wap/happy-week/images/type_04.png" alt=""><span class="com-fz lf grey mr8" v-html="rewardInfo.rewardCard[0]"></span>
         <img class="com-card lf mt3" src="<?= FE_BASE_URI ?>wap/happy-week/images/type_03.png" alt=""><span class="com-fz lf red mr8" v-html="rewardInfo.rewardCard[1]"></span>
         <img class="com-card lf mt3" src="<?= FE_BASE_URI ?>wap/happy-week/images/type_02.png" alt=""><span class="com-fz lf grey mr8" v-html="rewardInfo.rewardCard[2]"></span>
