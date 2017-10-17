@@ -87,20 +87,21 @@ $this->registerJs('forceReload_V2();');
             </ul>
         </div>
     </div>
+	<a class="record"  :href="linkTo" v-on:click="goLogin"><img src="<?= FE_BASE_URI ?>wap/happy-week/images/clock.png" alt="">历史中奖号码</a>
 
-    <p v-if="isFirstshow"  v-cloak class="win-num clearfix">
+
+	<p v-if="isFirstshow"  v-cloak class="win-num clearfix">
         <span class="com-til lf">{{qishu}} 期中奖号码：</span>
         <img class="com-card lf" src="<?= FE_BASE_URI ?>wap/happy-week/images/type_04.png" alt=""><span class="com-fz lf grey mr8" v-html="rewardInfo.rewardCard[0]"></span>
         <img class="com-card lf mt3" src="<?= FE_BASE_URI ?>wap/happy-week/images/type_03.png" alt=""><span class="com-fz lf red mr8" v-html="rewardInfo.rewardCard[1]"></span>
         <img class="com-card lf mt3" src="<?= FE_BASE_URI ?>wap/happy-week/images/type_02.png" alt=""><span class="com-fz lf grey mr8" v-html="rewardInfo.rewardCard[2]"></span>
         <img class="com-card lf" src="<?= FE_BASE_URI ?>wap/happy-week/images/type_01.png" alt=""><span class="com-fz lf red mr8" v-html="rewardInfo.rewardCard[3]"></span>
     </p>
-    <p v-if="isLoggedin && isFirstshow" v-cloak class="u-gifts clearfix">
+    <p v-if="isLoggedin && isFirstshow" v-cloak class="u-gifts clearfix" >
         <span class="com-til lf">{{qishu}} 期您的奖品：</span>
         <span class="gifts-detail red lf" v-html="rewardInfo.title">8积分</span>
     </p>
 
-    <a class="record"  :href="linkTo" v-on:click="goLogin"><img src="<?= FE_BASE_URI ?>wap/happy-week/images/clock.png" alt="">历史中奖号码</a>
     <dl class="des clearfix">
         <dt class="lf" style="width: 50%;">
             <p>活动周期</p>
