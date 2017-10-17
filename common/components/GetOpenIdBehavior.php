@@ -38,28 +38,15 @@ class GetOpenIdBehavior extends Behavior
             return false;
         }
 
-        $code = Yii::$app->request->get('code');
-        $state = Yii::$app->request->get('state');
-
         //将open_id存储在session的resourceOwnerId字段
         //获取方式为Yii::$app->session->get('resourceOwnerId');
-        $wxClient = Yii::$container->get('wxClient');
         if (!Yii::$app->session->has('resourceOwnerId') || !Yii::$app->session->has('resourceOwnerNickName')) {
-            if ($code && $state) {
-                try {
-                    $response = $wxClient->getGrant($code);
-                    $Info = $wxClient->getResourceOwnerInfo($response);
-                    Yii::$app->session->set('resourceOwnerId', $response['resource_owner_id']);
-                    Yii::$app->session->set('resourceOwnerNickName', $Info['nickName']);
-                    $message = $response['resource_owner_id'].':'.$Info['nickName'].':'.Yii::$app->request->getUserIP();
-                    Yii::info($message, 'promo_log');
-                } catch (\Exception $ex) {
-                    throw $ex;
-                }
-            } else {
-                $url = $wxClient->getAuthorizationUrl(Yii::$app->request->absoluteUrl, 'snsapi_userinfo', time());
-                return Yii::$app->controller->redirect($url);
-            }
+            $wxClient = Yii::$container->get('wxClient');
+            $getGrantState = bin2hex(random_bytes(8));
+            Yii::$app->session->set('getGrantState', $getGrantState);
+            $callbackUrl = Yii::$app->request->hostInfo . '/weixin/callback?redirect=' . urlencode(Yii::$app->request->absoluteUrl);
+            $url = $wxClient->getAuthorizationUrl($callbackUrl, 'snsapi_userinfo', $getGrantState);
+            return Yii::$app->controller->redirect($url);
         }
 
         $resourceOwnerId = Yii::$app->session->get('resourceOwnerId');
