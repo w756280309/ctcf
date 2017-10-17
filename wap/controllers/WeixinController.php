@@ -152,17 +152,12 @@ class WeixinController extends Controller
                     'provider_type' => SocialConnect::PROVIDER_TYPE_WECHAT,
                 ]);
 
-                if (is_null($social)) {
-                    return new ForbiddenHttpException();
+                if (!is_null($social)) {
+                    $user = User::findOne($social->user_id);
+                    if (!is_null($user)) {
+                        Yii::$app->user->login($user);    //微信绑定,自动登录
+                    }
                 }
-
-                $user = User::findOne($social->user_id);
-
-                if (is_null($user)) {
-                    return new ForbiddenHttpException();
-                }
-
-                Yii::$app->user->login($user);    //微信绑定,自动登录
             }
         }
 
