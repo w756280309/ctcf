@@ -137,11 +137,33 @@ class WeixinController extends Controller
             if ($code && $state == Yii::$app->session->get('getGrantState')) {
                 $wxClient = Yii::$container->get('wxClient');
                 $response = $wxClient->getGrant($code);
-                $Info = $wxClient->getResourceOwnerInfo($response);
+                $info = $wxClient->getResourceOwnerInfo($response);
                 Yii::$app->session->set('resourceOwnerId', $response['resource_owner_id']);
-                Yii::$app->session->set('resourceOwnerNickName', $Info['nickName']);
+                Yii::$app->session->set('resourceOwnerNickName', $info['nickName']);
+            }
+
+            $resourceOwnerId = Yii::$app->session->get('resourceOwnerId');
+
+            if ($resourceOwnerId && Yii::$app->user->isGuest) {
+                $social = SocialConnect::findOne([
+                    'resourceOwner_id' => $resourceOwnerId,
+                    'provider_type' => SocialConnect::PROVIDER_TYPE_WECHAT,
+                ]);
+
+                if (is_null($social)) {
+                    return new ForbiddenHttpException();
+                }
+
+                $user = User::findOne($social->user_id);
+
+                if (is_null($user)) {
+                    return new ForbiddenHttpException();
+                }
+
+                Yii::$app->user->login($user);    //微信绑定,自动登录
             }
         }
+
         return Yii::$app->controller->redirect($redirect);
     }
 }

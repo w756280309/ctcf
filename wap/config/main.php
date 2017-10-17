@@ -142,9 +142,10 @@ return [
         'class' => \common\components\RequestBehavior::className(),
     ],
     'as userAccountAccessControl'=> \common\filters\UserAccountAcesssControl::className(),
-    'as getOpenIdBehavior' => [
-        'class' => \common\components\GetOpenIdBehavior::className(),
+    'as weixinOpenIdFilter' => [
+        'class' => \common\filters\WeixinOpenIdFilter::className(),
         'except' => [
+            'site/error',
             'weixin/callback',
         ],
     ],

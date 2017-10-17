@@ -1,24 +1,17 @@
 <?php
 
-namespace common\components;
+namespace common\filters;
 
 use common\controllers\HelpersTrait;
 use common\models\thirdparty\SocialConnect;
 use common\models\user\User;
 use Yii;
-use yii\base\Behavior;
+use yii\base\ActionFilter;
 use yii\web\Controller;
 
-class GetOpenIdBehavior extends Behavior
+class WeixinOpenIdFilter extends ActionFilter
 {
     use HelpersTrait;
-
-    public function events()
-    {
-        return [
-            Controller::EVENT_BEFORE_ACTION => 'beforeAction',
-        ];
-    }
 
     /**
      * 微信绑定后,在微信端可以自动登录:
@@ -31,11 +24,11 @@ class GetOpenIdBehavior extends Behavior
      *
      * 满足以上条件,即可自动登录温都金服账号;
      */
-    public function beforeAction()
+    public function beforeAction($action)
     {
         $isWx = $this->fromWx();
         if (!$isWx || Yii::$app->request->isAjax) {
-            return false;
+            return true;
         }
 
         //将open_id存储在session的resourceOwnerId字段
@@ -46,28 +39,10 @@ class GetOpenIdBehavior extends Behavior
             Yii::$app->session->set('getGrantState', $getGrantState);
             $callbackUrl = Yii::$app->request->hostInfo . '/weixin/callback?redirect=' . urlencode(Yii::$app->request->absoluteUrl);
             $url = $wxClient->getAuthorizationUrl($callbackUrl, 'snsapi_userinfo', $getGrantState);
+
             return Yii::$app->controller->redirect($url);
         }
 
-        $resourceOwnerId = Yii::$app->session->get('resourceOwnerId');
-
-        if ($resourceOwnerId && Yii::$app->user->isGuest) {
-            $social = SocialConnect::findOne([
-                'resourceOwner_id' => $resourceOwnerId,
-                'provider_type' => SocialConnect::PROVIDER_TYPE_WECHAT,
-            ]);
-
-            if (is_null($social)) {
-                return false;
-            }
-
-            $user = User::findOne($social->user_id);
-
-            if (is_null($user)) {
-                return false;
-            }
-
-            Yii::$app->user->login($user);    //微信绑定,自动登录
-        }
+        return true;
     }
 }
