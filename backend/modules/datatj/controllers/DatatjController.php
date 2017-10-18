@@ -436,8 +436,18 @@ FROM perf WHERE DATE_FORMAT(bizDate,'%Y-%m') < DATE_FORMAT(NOW(),'%Y-%m')  GROUP
         $end = $end ? strtotime($end.' 23:59:59') : null;
 
         $data = $this->affiliationStats($start, $end);
+        $data1 = $this->affiliationBalance();       //分销商的贷后余额
+        $count = count($data);
+        $allData = [];
+        for ($i = 0; $i < $count; $i++) {
+            if (count($data1[$i]) > 0) {
+                $allData[$i] = array_merge($data[$i], $data1[$i]);
+            } else {
+                $allData[$i] = $data[$i];
+            }
+        }
         $dataProvider = new ArrayDataProvider([
-            'allModels' => $data,
+            'allModels' => $allData,
         ]);
         $pages = new Pagination([
             'totalCount' => count($data),
@@ -632,12 +642,37 @@ FROM perf WHERE DATE_FORMAT(bizDate,'%Y-%m') < DATE_FORMAT(NOW(),'%Y-%m')  GROUP
             $userCond .= " AND u.created_at <= $end";
             $orderCond .= " AND o.created_at <= $end";
         }
+        $sql = "SELECT 
+            a.id, 
+            a.name, 
+            COUNT(DISTINCT u.id) AS uc, 
+            COUNT(DISTINCT o.`uid`) AS oc, 
+            SUM(o.`order_money`) AS m
+            FROM affiliator AS a
+            LEFT JOIN user_affiliation AS ua ON a.id = ua.`affiliator_id`
+            LEFT JOIN `user` AS u ON ".$userCond."
+            LEFT JOIN online_order AS o ON ".$orderCond." GROUP BY a.id;";
 
-        $sql = "SELECT a.id, a.name, COUNT(DISTINCT u.id) AS uc, COUNT(DISTINCT o.`uid`) AS oc, SUM(o.`order_money`) AS m
-FROM affiliator AS a
-LEFT JOIN user_affiliation AS ua ON a.id = ua.`affiliator_id`
-LEFT JOIN `user` AS u ON ".$userCond."
-LEFT JOIN online_order AS o ON ".$orderCond." GROUP BY a.id;";
+        return Yii::$app->db->createCommand($sql)->queryAll();
+    }
+    /**
+     * 查询分销商的贷后余额
+     */
+    private function affiliationBalance()
+    {
+        $orderCond = "o.`uid` = ua.`user_id` AND o.status = 1";
+        $productCond = "o.`online_pid` = op.`id` 
+        where 
+        op.status = 2 OR 
+        op.status = 3 OR 
+        op.status = 5 OR 
+        op.status = 7 ";
+        $sql = "SELECT 
+            SUM(o.`order_money`)  AS fm
+            FROM affiliator AS a
+            LEFT JOIN user_affiliation AS ua ON a.id = ua.`affiliator_id`
+            LEFT JOIN online_order AS o ON ".$orderCond." 
+            LEFT JOIN online_product AS op ON ".$productCond." GROUP BY a.id;";
 
         return Yii::$app->db->createCommand($sql)->queryAll();
     }

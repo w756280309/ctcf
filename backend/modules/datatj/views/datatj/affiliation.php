@@ -62,7 +62,7 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => YiiAsse
         </form>
     </div>
     <!--search end -->
-
+    <p style="color: red;">*贷后余额为平台实时数据，与统计日期无关</p>
     <div class="portlet-body">
         <?= GridView::widget([
             'dataProvider' => $dataProvider,
@@ -91,6 +91,13 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => YiiAsse
                     'label' => '投资用户数（人）',
                     'value' => function ($data) {
                         return intval($data['oc']);
+                    }
+                ],
+                [
+                    'attribute' => 'fm',
+                    'label' => '贷后余额（元）',
+                    'value' => function ($data) {
+                        return StringUtils::amountFormat2($data['fm']);
                     }
                 ],
                 [
