@@ -47,6 +47,7 @@ class PokerController extends BaseController
         $rewardCard = [0, 0, 0, 0];
         $qishu = null;
         $userMobile = null;
+
         //获取上一周中奖号码
         $poker = Poker::find()
             ->where(['<', 'term', $term])
@@ -56,7 +57,7 @@ class PokerController extends BaseController
         if (null !== $poker) {
             $rewardCard = [$poker->spade, $poker->heart, $poker->club, $poker->diamond];
             $qishu = $poker->term;
-            //获取一等奖用户的手机号码,并对中间6位数进行加密
+            //获取一等奖用户的手机号码,并对中间6位数进行混淆
             $pokerUser = PokerUser::find()
                 ->where([
                     'spade' => $poker->spade,
@@ -69,7 +70,12 @@ class PokerController extends BaseController
                 $userMobile = $pokerUser->user->mobile;
                 $userMobile = StringUtils::obfsMobileNumber($userMobile);
             }
+            //将历史中奖号码11,12,13转变为J,Q,K
+            $rewardCard = array_map(function($value) {
+                return $this->showPokerValue($value);
+            }, $rewardCard);
         }
+
         //设置默认未登录下rewardInfo的内容
         $rewardInfo = [
             'status' => 0,
@@ -81,7 +87,7 @@ class PokerController extends BaseController
         ];
         $user = $this->getAuthedUser();
         if (null !== $user) {
-            //发幸运号码牌
+            //发幸运号码牌-黑桃
             $promo = RankingPromo::find()
                 ->where(['key' => 'promo_poker'])
                 ->one();
@@ -98,6 +104,7 @@ class PokerController extends BaseController
             } catch (\Exception $ex) {
                 //防止重复插入时报错
             }
+
             //取当前用户的卡牌号码
             $currentCard = PokerUser::find()
                 ->select(['spade', 'heart', 'club', 'diamond'])
@@ -128,20 +135,20 @@ class PokerController extends BaseController
                 $redis->hset('effectPop', $user->id, strtotime($rewardNextOpenTime));
             }
 
-            //2017-09-25日弹出新的号码
+            //每周一上午10点弹出新的幸运号码
             if ($redis->hexists('effectPopLuckyNumber', $user->id)) {
                 $expireAt = $redis->hget('effectPopLuckyNumber', $user->id);
                 if ($nowAt >= $expireAt) {
                     $redis->hdel('effectPopLuckyNumber', $user->id);
                 }
             }
-
             if (!$redis->hexists('effectPopLuckyNumber', $user->id) && $cardOrigin[0] > 0) {
                 $isFirstLogin = true;
                 $redis->hset('effectPopLuckyNumber', $user->id, strtotime($rewardNextOpenTime));
             }
         }
 
+        //最后页面返回数据
         $data = [
             'qishu' => $term,
             'userMobile' => $userMobile,
