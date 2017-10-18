@@ -65,10 +65,17 @@ class PokerController extends BaseController
                     'club' => $poker->club,
                     'diamond' => $poker->diamond,
                     'term' => $qishu
-                ])->one();
+                ])->all();
             if (null !== $pokerUser) {
-                $userMobile = $pokerUser->user->mobile;
-                $userMobile = StringUtils::obfsMobileNumber($userMobile);
+                $count = count($pokerUser);
+                if ($count == 1) {
+                    $userMobile = $pokerUser[0]->user->mobile;
+                    $userMobile = StringUtils::obfsMobileNumber($userMobile);
+                } else if ($count == 2) {
+                    $userMobile1 = StringUtils::obfsMobileNumber($pokerUser[0]->user->mobile);
+                    $userMobile2 = StringUtils::obfsMobileNumber($pokerUser[1]->user->mobile);
+                    $userMobile = $userMobile1 . ' , ' . $userMobile2;
+                }
             }
             //将历史中奖号码11,12,13转变为J,Q,K
             $rewardCard = array_map(function($value) {
