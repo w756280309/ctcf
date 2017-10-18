@@ -26,6 +26,13 @@ return [
             'password' => env('DB_PASSWORD'),
             'charset' => 'utf8',
         ],
+        'db_read' => [
+            'class' => 'yii\db\Connection',
+            'dsn' => 'mysql:host='.env('DB_READ_HOST').';dbname='.env('DB_READ_DATABASE'),
+            'username' => env('DB_READ_USERNAME'),
+            'password' => env('DB_READ_PASSWORD'),
+            'charset' => 'utf8',
+        ],
         'db_fin' => [
             'class' => 'yii\db\Connection',
             'dsn' => 'mysql:host='.env('DB_FIN_HOST').';dbname='.env('DB_FIN_DATABASE'),
