@@ -74,6 +74,7 @@ class DatatjController extends Controller
             'investorData' => $investorData,//不同来源的购买人数、购买金额
             'onlineProPay' => $onlineProPay,//平台累计已还清项目数
         ];
+        $fileData['lastUpdateTime'] = date('Y-m-d H:i:s');
 
         $redis = Yii::$app->redis;
         $redis->set('datatj.actionHuizongtj', json_encode($fileData));
