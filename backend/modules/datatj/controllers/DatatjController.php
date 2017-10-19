@@ -371,18 +371,9 @@ FROM perf WHERE DATE_FORMAT(bizDate,'%Y-%m') < DATE_FORMAT(NOW(),'%Y-%m')  GROUP
     {
         $start = $start ? strtotime($start) : null;
         $end = $end ? strtotime($end.' 23:59:59') : null;
-
         $data = $this->affiliationStats($start, $end);
-        $data1 = $this->affiliationBalance();       //分销商的贷后余额
-        $count = count($data);
-        $allData = [];
-        for ($i = 0; $i < $count; $i++) {
-            if (count($data1[$i]) > 0) {
-                $allData[$i] = array_merge($data[$i], $data1[$i]);
-            } else {
-                $allData[$i] = $data[$i];
-            }
-        }
+        $loanBalance = $this->affiliationBalance();                      //分销商的贷后余额
+        $allData = $this->mergeAffiliationData($data, $loanBalance);     //分销商数据统计合并贷后余额
         $dataProvider = new ArrayDataProvider([
             'allModels' => $allData,
         ]);
@@ -413,10 +404,25 @@ FROM perf WHERE DATE_FORMAT(bizDate,'%Y-%m') < DATE_FORMAT(NOW(),'%Y-%m')  GROUP
         }
 
         $data = $this->affiliationStats($start, $end);
-
-        $record = implode(',', ['分销商ID', '分销商名称', '注册人数（人）', '投资人数（人）', '投资金额（元）']) . "\n";
-        foreach ($data as $v) {
-            $array = [$v['id'], Html::encode($v['name']), intval($v['uc']), intval($v['oc']), floatval($v['m'])];
+        $loanBalance = $this->affiliationBalance();       //分销商的贷后余额
+        $allData = $this->mergeAffiliationData($data, $loanBalance);  //分销商数据统计合并贷后余额
+        $record = implode(',', [
+                '分销商ID',
+                '分销商名称',
+                '注册人数（人）',
+                '投资人数（人）',
+                '贷后余额（元）',
+                '投资金额（元）'
+            ]) . "\n";
+        foreach ($allData as $v) {
+            $array = [
+                $v['id'],
+                Html::encode($v['name']),
+                intval($v['uc']),
+                intval($v['oc']),
+                floatval($v['fm']),
+                floatval($v['m'])
+            ];
             $record .= implode(',', $array) . "\n";
         }
         if (null !== $record) {
@@ -605,6 +611,7 @@ FROM perf WHERE DATE_FORMAT(bizDate,'%Y-%m') < DATE_FORMAT(NOW(),'%Y-%m')  GROUP
         op.status = 5 OR 
         op.status = 7 ";
         $sql = "SELECT 
+            a.id,
             SUM(o.`order_money`)  AS fm
             FROM affiliator AS a
             LEFT JOIN user_affiliation AS ua ON a.id = ua.`affiliator_id`
@@ -612,5 +619,23 @@ FROM perf WHERE DATE_FORMAT(bizDate,'%Y-%m') < DATE_FORMAT(NOW(),'%Y-%m')  GROUP
             LEFT JOIN online_product AS op ON ".$productCond." GROUP BY a.id;";
 
         return Yii::$app->db->createCommand($sql)->queryAll();
+    }
+
+    /**
+     *  分销商数据统计数据合并贷后余额数据
+     * @param array $data  分销上统计数据
+     * @param array $loanBalance  分销商贷后余额
+     * @return array  合并后返回的数组
+     */
+    private function mergeAffiliationData($data,$loanBalance)
+    {
+        foreach ($data as $key => $value) {
+            foreach ($loanBalance as $v) {
+                if ($value['id'] === $v['id']) {
+                    $data[$key]['fm'] = $v['fm'];
+                }
+            }
+        }
+        return $data;
     }
 }

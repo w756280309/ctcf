@@ -62,7 +62,7 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => YiiAsse
         </form>
     </div>
     <!--search end -->
-    <p style="color: red;">*贷后余额为平台实时数据，与统计日期无关</p>
+    <p style="color: red;">*贷后余额为搜索查询时刻的状态，与输入的起止时间段无关</p>
     <div class="portlet-body">
         <?= GridView::widget([
             'dataProvider' => $dataProvider,
