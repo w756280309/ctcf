@@ -9,6 +9,7 @@ use yii\grid\GridView;
         <div class="span12">
             <h3 class="page-title">
                 月历史数据
+                <small style="color: red;">每5分钟更新一次，上次更新时间：<?= $lastUpdateTime ?></small>
             </h3>
             <a class="btn green btn-block" style="width: 140px;" href="/datatj/datatj/month-export">月统计数据导出</a>
             <ul class="breadcrumb">
@@ -168,6 +169,9 @@ use yii\grid\GridView;
             ],
             'tableOptions' => ['class' => 'table table-striped table-bordered table-advance table-hover']
         ]) ?>
+        <div class="pagination" style="text-align:center;clear: both">
+            <?= \yii\widgets\LinkPager::widget(['pagination' => $pages]); ?>
+        </div>
     </div>
 
     <?php $this->endBlock(); ?>

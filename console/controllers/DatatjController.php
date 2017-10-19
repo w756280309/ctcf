@@ -6,6 +6,7 @@ use common\models\stats\Perf;
 use common\models\product\OnlineProduct;
 use Yii;
 use yii\console\Controller;
+use yii\helpers\ArrayHelper;
 
 class DatatjController extends Controller
 {
@@ -76,8 +77,51 @@ class DatatjController extends Controller
         ];
         $fileData['lastUpdateTime'] = date('Y-m-d H:i:s');
 
+        //存入redis
         $redis = Yii::$app->redis;
         $redis->set('datatj.actionHuizongtj', json_encode($fileData));
         $redis->expire('datatj.actionHuizongtj', 7 * 24 * 3600);
+    }
+
+    public function actionMonth()
+    {
+        //获取月投资人数
+        $monthInvestor = Perf::getMonthInvestor();
+
+        //获取当月数据
+        $month = Perf::getThisMonthCount();
+
+        //存入redis
+        $redis = Yii::$app->redis;
+        $redis->hset('datatj.actionMonthtj', 'monthData', json_encode($month));
+        $redis->hset('datatj.actionMonthtj', 'monthInvestor', json_encode($monthInvestor));
+        $redis->hset('datatj.actionMonthtj', 'lastUpdateTime', date('Y-m-d H:i:s'));
+        $redis->expire('datatj.actionMonthtj', 31 * 24 * 3600);
+    }
+
+    public function actionHistoryMonth()
+    {
+        $dbRead = Yii::$app->db_read;
+        //历史数据，不包含当月
+        $sql = "SELECT DATE_FORMAT(bizDate,'%Y-%m') as bizDate, SUM(totalInvestment) AS totalInvestment, SUM(onlineInvestment) AS onlineInvestment,SUM(offlineInvestment) AS offlineInvestment,SUM(rechargeMoney) AS rechargeMoney,SUM(drawAmount) AS drawAmount,SUM(rechargeCost) AS rechargeCost ,SUM(reg) AS reg,SUM(idVerified) AS idVerified,SUM(successFound) AS successFound, SUM(qpayEnabled) AS qpayEnabled, SUM(investor) AS investor, SUM(newRegisterAndInvestor) AS newRegisterAndInvestor, SUM(newInvestor) AS newInvestor,SUM(investmentInWyb) AS investmentInWyb, SUM(investmentInWyj) AS investmentInWyj
+FROM perf WHERE DATE_FORMAT(bizDate,'%Y-%m') < DATE_FORMAT(NOW(),'%Y-%m')  GROUP BY DATE_FORMAT(bizDate,'%Y-%m') ORDER BY DATE_FORMAT(bizDate,'%Y-%m') DESC";
+        $data = $dbRead->createCommand($sql)->queryAll();
+
+        //存入redis
+        $redis = Yii::$app->redis;
+        $redis->hset('datatj.actionMonthtj', 'historyMonthData', json_encode($data));
+        $redis->expire('datatj.actionMonthtj', 31 * 24 * 3600);
+    }
+
+    public function actionDay()
+    {
+        //获取当天数据
+        $todayData = Perf::getTodayCount();
+
+        //存入redis
+        $redis = Yii::$app->redis;
+        $redis->hset('datatj.actionDaytj', 'todayData', json_encode($todayData));
+        $redis->hset('datatj.actionDaytj', 'lastUpdateTime', date('Y-m-d H:i:s'));
+        $redis->expire('datatj.actionDaytj', 31 * 24 * 3600);
     }
 }

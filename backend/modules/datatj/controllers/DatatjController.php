@@ -4,7 +4,6 @@ namespace backend\modules\datatj\controllers;
 
 use backend\controllers\BaseController;
 use common\lib\user\UserStats;
-use common\models\product\OnlineProduct;
 use common\models\stats\Perf;
 use common\models\user\User;
 use yii\bootstrap\Html;
@@ -33,64 +32,72 @@ class DatatjController extends BaseController
         return $this->render('huizongtj', $data);
     }
 
+    /**
+     * 月统计页面
+     */
     public function actionMonthtj()
     {
-        $url = Yii::$app->request->getAbsoluteUrl();
-        $key = md5($url);
-        if (Yii::$app->cache->get($key)) {
-            $fileData = Yii::$app->cache->get($key);
-        } else {
-            //获取月投资人数
-            $monthInvestor = Perf::getMonthInvestor();
-            //获取当月数据
-            $month = Perf::getThisMonthCount();
-            //历史数据，不包含当月
-            $sql = "SELECT DATE_FORMAT(bizDate,'%Y-%m') as bizDate, SUM(totalInvestment) AS totalInvestment, SUM(onlineInvestment) AS onlineInvestment,SUM(offlineInvestment) AS offlineInvestment,SUM(rechargeMoney) AS rechargeMoney,SUM(drawAmount) AS drawAmount,SUM(rechargeCost) AS rechargeCost ,SUM(reg) AS reg,SUM(idVerified) AS idVerified,SUM(successFound) AS successFound, SUM(qpayEnabled) AS qpayEnabled, SUM(investor) AS investor, SUM(newRegisterAndInvestor) AS newRegisterAndInvestor, SUM(newInvestor) AS newInvestor,SUM(investmentInWyb) AS investmentInWyb, SUM(investmentInWyj) AS investmentInWyj
-FROM perf WHERE DATE_FORMAT(bizDate,'%Y-%m') < DATE_FORMAT(NOW(),'%Y-%m')  GROUP BY DATE_FORMAT(bizDate,'%Y-%m') ORDER BY DATE_FORMAT(bizDate,'%Y-%m') DESC";
-            $data = Yii::$app->db->createCommand($sql)->queryAll();
-            $allData = array_merge([$month], $data);
-            $dataProvider = new ArrayDataProvider([
-                'allModels' => $allData,
-            ]);
-            $fileData = [
-                'dataProvider' => $dataProvider,
-                'monthInvestor' => $monthInvestor
-            ];
-            Yii::$app->cache->set($key, $fileData, 300);
+        $redis = Yii::$app->redis;
+        $historyMonthData = [];
+        $monthData = [];
+        $monthInvestor = [];
+        $lastUpdateTime = null;
+        if ($redis->hexists('datatj.actionMonthtj', 'historyMonthData')
+            && $redis->hexists('datatj.actionMonthtj', 'monthData')
+            && $redis->hexists('datatj.actionMonthtj', 'monthInvestor')
+        ) {
+            $historyMonthData = json_decode($redis->hget('datatj.actionMonthtj', 'historyMonthData'), true);
+            $monthData = json_decode($redis->hget('datatj.actionMonthtj', 'monthData'), true);
+            $monthInvestor = json_decode($redis->hget('datatj.actionMonthtj', 'monthInvestor'), true);
+            $lastUpdateTime = $redis->hget('datatj.actionMonthtj', 'lastUpdateTime');
         }
+
+        $allData = array_merge([$monthData], $historyMonthData);
+        $pages = new Pagination(['totalCount' => count($allData), 'pageSize' => 20]);
+        $dataProvider = new ArrayDataProvider([
+            'allModels' => $allData,
+        ]);
+
+        $fileData = [
+            'pages' => $pages,
+            'dataProvider' => $dataProvider,
+            'monthInvestor' => $monthInvestor,
+            'lastUpdateTime' => $lastUpdateTime,
+        ];
 
         return $this->render('monthtj', $fileData);
     }
 
+    /**
+     * 日统计页面
+     */
     public function actionDaytj()
     {
-        $url = Yii::$app->request->getAbsoluteUrl();
-        $key = md5($url);
-        if (Yii::$app->cache->get($key)) {
-            $fileData = Yii::$app->cache->get($key);
-        } else {
-            //获取历史数据
-            $query = Perf::find()->where(['<', 'bizDate', date('Y-m-d')]);
-            $pages = new Pagination(['totalCount' => $query->count(), 'pageSize' => 20]);
-            $query = $query->orderBy(['bizDate' => SORT_DESC])->offset($pages->offset)->limit($pages->limit);
-            $data = $query->asArray()->all();
-            $page = Yii::$app->request->get('page');
-            if (!isset($page) || 1 === intval($page)) {
-                //获取今日数据
-                $today = Perf::getTodayCount();
-                $allData = array_merge([$today], $data);
-            } else {
-                $allData = $data;
-            }
-            $dataProvider = new ArrayDataProvider([
-                'allModels' => $allData,
-            ]);
-            $fileData = [
-                'pages' => $pages,
-                'dataProvider' => $dataProvider,
-            ];
-            Yii::$app->cache->set($key, $fileData, 300);
+        $redis = Yii::$app->redis;
+        $allData = [];
+        $todayData = [];
+        $lastUpdateTime = null;
+        if ($redis->hexists('datatj.actionDaytj', 'todayData')) {
+            $todayData = json_decode($redis->hget('datatj.actionDaytj', 'todayData'), true);
+            $lastUpdateTime = $redis->hget('datatj.actionDaytj', 'lastUpdateTime');
         }
+
+        $sql = "SELECT * FROM perf WHERE bizDate < DATE_FORMAT(NOW(),'%Y-%m-%d') order by bizDate desc";
+        $allData = Yii::$app->db_read->createCommand($sql)->queryAll();
+        $pages = new Pagination(['totalCount' => count($allData), 'pageSize' => 20]);
+        $page = Yii::$app->request->get('page');
+        if (!isset($page) || 1 === intval($page)) {
+            $allData = array_merge([$todayData], $allData);
+        }
+
+        $dataProvider = new ArrayDataProvider([
+            'allModels' => $allData,
+        ]);
+        $fileData = [
+            'pages' => $pages,
+            'dataProvider' => $dataProvider,
+            'lastUpdateTime' => $lastUpdateTime,
+        ];
 
         return $this->render('daytj', $fileData);
     }

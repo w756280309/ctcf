@@ -64,10 +64,15 @@ class Perf extends ActiveRecord
     private $loanOrderUids;
     private $visitorUids;
 
+    private static function getDbRead()
+    {
+        return Yii::$app->db_read;
+    }
+
     //获取统计开始时间
     public static function getStartDate()
     {
-        $date = Yii::$app->db->createCommand('SELECT MIN(DATE(FROM_UNIXTIME(created_at))) FROM user WHERE type=1')
+        $date = self::getDbRead()->createCommand('SELECT MIN(DATE(FROM_UNIXTIME(created_at))) FROM user WHERE type=1')
             ->queryScalar();
         return $date;
     }
@@ -81,7 +86,7 @@ class Perf extends ActiveRecord
     //获取上次统计时间
     public static function getLastTime()
     {
-        $time = Yii::$app->db->createCommand('SELECT MAX(created_at) FROM perf')->queryScalar();
+        $time = self::getDbRead()->createCommand('SELECT MAX(created_at) FROM perf')->queryScalar();
         if (null === $time) {
             return time();
         } else {
@@ -92,7 +97,7 @@ class Perf extends ActiveRecord
     //注册数
     public function getReg($date)
     {
-        return Yii::$app->db->createCommand('SELECT COUNT(id) FROM user WHERE type=1 AND DATE(FROM_UNIXTIME(created_at))=:date')
+        return self::getDbRead()->createCommand('SELECT COUNT(id) FROM user WHERE type=1 AND DATE(FROM_UNIXTIME(created_at))=:date')
             ->bindValue('date', $date, \PDO::PARAM_STR)
             ->queryScalar();
     }
@@ -100,7 +105,7 @@ class Perf extends ActiveRecord
     //实名认证
     public function getIdVerified($date)
     {
-        return Yii::$app->db->createCommand('SELECT COUNT(id) FROM epayuser WHERE regDate=:date')
+        return self::getDbRead()->createCommand('SELECT COUNT(id) FROM epayuser WHERE regDate=:date')
             ->bindValue('date', $date, \PDO::PARAM_STR)
             ->queryScalar();
     }
@@ -108,7 +113,7 @@ class Perf extends ActiveRecord
     //绑卡
     public function getQpayEnabled($date)
     {
-        return Yii::$app->db->createCommand('SELECT COUNT(id) FROM user_bank WHERE DATE(FROM_UNIXTIME(created_at))=:date')
+        return self::getDbRead()->createCommand('SELECT COUNT(id) FROM user_bank WHERE DATE(FROM_UNIXTIME(created_at))=:date')
             ->bindValue('date', $date, \PDO::PARAM_STR)
             ->queryScalar();
     }
@@ -116,7 +121,7 @@ class Perf extends ActiveRecord
     //投资人数
     public function getInvestor($date)
     {
-        return Yii::$app->db->createCommand('SELECT COUNT(DISTINCT(o.`uid`)) FROM online_order AS o INNER JOIN online_product AS p ON o.`online_pid` = p.`id` WHERE o.`status`=1 AND p.`isTest` = 0 AND DATE(FROM_UNIXTIME(o.created_at))=:date')
+        return self::getDbRead()->createCommand('SELECT COUNT(DISTINCT(o.`uid`)) FROM online_order AS o INNER JOIN online_product AS p ON o.`online_pid` = p.`id` WHERE o.`status`=1 AND p.`isTest` = 0 AND DATE(FROM_UNIXTIME(o.created_at))=:date')
             ->bindValue('date', $date, \PDO::PARAM_STR)
             ->queryScalar();
     }
@@ -124,10 +129,10 @@ class Perf extends ActiveRecord
     //新增投资人数（以前注册未投资，但今日投资了的）
     public function getNewInvestor($date)
     {
-        $totalInvestor = Yii::$app->db->createCommand('SELECT COUNT(DISTINCT(o.uid)) FROM online_order AS o LEFT JOIN `user` AS u ON o.uid = u.id INNER JOIN online_product AS p ON o.online_pid = p.id WHERE o.`status`= 1 AND p.isTest = 0 AND DATE(FROM_UNIXTIME(u.`created_at`)) < :date AND DATE(FROM_UNIXTIME(o.created_at))<=:date')
+        $totalInvestor = self::getDbRead()->createCommand('SELECT COUNT(DISTINCT(o.uid)) FROM online_order AS o LEFT JOIN `user` AS u ON o.uid = u.id INNER JOIN online_product AS p ON o.online_pid = p.id WHERE o.`status`= 1 AND p.isTest = 0 AND DATE(FROM_UNIXTIME(u.`created_at`)) < :date AND DATE(FROM_UNIXTIME(o.created_at))<=:date')
             ->bindValue('date', $date, \PDO::PARAM_STR)
             ->queryScalar();
-        $investor = Yii::$app->db->createCommand('SELECT COUNT(DISTINCT(o.uid)) FROM online_order AS o LEFT JOIN `user` AS u ON o.uid = u.id INNER JOIN online_product AS p ON o.online_pid = p.id WHERE o.`status`= 1 AND p.isTest = 0 AND DATE(FROM_UNIXTIME(u.`created_at`)) < :date AND DATE(FROM_UNIXTIME(o.created_at)) <:date')
+        $investor = self::getDbRead()->createCommand('SELECT COUNT(DISTINCT(o.uid)) FROM online_order AS o LEFT JOIN `user` AS u ON o.uid = u.id INNER JOIN online_product AS p ON o.online_pid = p.id WHERE o.`status`= 1 AND p.isTest = 0 AND DATE(FROM_UNIXTIME(u.`created_at`)) < :date AND DATE(FROM_UNIXTIME(o.created_at)) <:date')
             ->bindValue('date', $date, \PDO::PARAM_STR)
             ->queryScalar();
 
@@ -137,7 +142,7 @@ class Perf extends ActiveRecord
     //当日注册当日投资人数
     public function getNewRegisterAndInvestor($date)
     {
-        $investor = Yii::$app->db->createCommand('SELECT COUNT(DISTINCT(o.uid)) FROM online_order AS o LEFT JOIN `user` AS u ON o.uid = u.id INNER JOIN online_product AS p ON o.`online_pid` = p.`id` WHERE o.`status`= 1 AND p.isTest = 0 AND DATE(FROM_UNIXTIME(u.`created_at`)) = :date AND DATE(FROM_UNIXTIME(o.created_at)) = :date')
+        $investor = self::getDbRead()->createCommand('SELECT COUNT(DISTINCT(o.uid)) FROM online_order AS o LEFT JOIN `user` AS u ON o.uid = u.id INNER JOIN online_product AS p ON o.`online_pid` = p.`id` WHERE o.`status`= 1 AND p.isTest = 0 AND DATE(FROM_UNIXTIME(u.`created_at`)) = :date AND DATE(FROM_UNIXTIME(o.created_at)) = :date')
             ->bindValue('date', $date, \PDO::PARAM_STR)
             ->queryScalar();
 
@@ -155,7 +160,7 @@ WHERE o.`status` =1
 AND p.isTest =0
 AND DATE( FROM_UNIXTIME( u.`created_at` ) ) =  :date
 AND DATE( FROM_UNIXTIME( o.created_at ) ) =  :date";
-        return Yii::$app->db->createCommand($sql, ['date' => $date])->queryScalar();
+        return self::getDbRead()->createCommand($sql, ['date' => $date])->queryScalar();
     }
 
     //非当日注册当日投资金额
@@ -174,7 +179,7 @@ AND p.isTest =0
 AND u.id
 IN ( ". implode(', ', $ids) ." ) 
 AND DATE( FROM_UNIXTIME( o.created_at ) ) =  :date";
-            return Yii::$app->db->createCommand($sql, ['date' => $date])->queryScalar();
+            return self::getDbRead()->createCommand($sql, ['date' => $date])->queryScalar();
         }
     }
 
@@ -201,7 +206,7 @@ AND DATE( FROM_UNIXTIME( o.created_at ) ) <  :date
 )
 AND p.isLicai = 1
 ";
-        return Yii::$app->db->createCommand($sql, ['date' => $date])->queryScalar();
+        return self::getDbRead()->createCommand($sql, ['date' => $date])->queryScalar();
     }
     //理财计划（胜券在握）新增用户的投资金额
     public function getLicaiNewInvSum($date)
@@ -226,7 +231,7 @@ AND DATE( FROM_UNIXTIME( o.created_at ) ) <  :date
 )
 AND p.isLicai = 1
 ";
-        return Yii::$app->db->createCommand($sql, ['date' => $date])->queryScalar();
+        return self::getDbRead()->createCommand($sql, ['date' => $date])->queryScalar();
     }
 
     //理财计划（胜券在握）当日总投人数
@@ -242,7 +247,7 @@ AND u.type = 1
 AND DATE( FROM_UNIXTIME( o.created_at ) ) = :date
 AND p.isLicai = 1
 ";
-        return Yii::$app->db->createCommand($sql, ['date' => $date])->queryScalar();
+        return self::getDbRead()->createCommand($sql, ['date' => $date])->queryScalar();
     }
     //理财计划（胜券在握）当日总投资金额
     public function getLicaiInvSum($date)
@@ -257,7 +262,7 @@ AND u.type = 1
 AND DATE( FROM_UNIXTIME( o.created_at ) ) = :date
 AND p.isLicai = 1
 ";
-        return Yii::$app->db->createCommand($sql, ['date' => $date])->queryScalar();
+        return self::getDbRead()->createCommand($sql, ['date' => $date])->queryScalar();
     }
 
     //新手标新增投资人数（包括当日注册当日投资和非当日注册当日投资的，投资新手标前未投资过的）
@@ -283,7 +288,7 @@ AND DATE( FROM_UNIXTIME( o.created_at ) ) <  :date
 )
 AND p.is_xs = 1
 ";
-        return Yii::$app->db->createCommand($sql, ['date' => $date])->queryScalar();
+        return self::getDbRead()->createCommand($sql, ['date' => $date])->queryScalar();
     }
     //新手标新增用户的投资金额
     public function getXsNewInvSum($date)
@@ -308,7 +313,7 @@ AND DATE( FROM_UNIXTIME( o.created_at ) ) <  :date
 )
 AND p.is_xs = 1
 ";
-        return Yii::$app->db->createCommand($sql, ['date' => $date])->queryScalar();
+        return self::getDbRead()->createCommand($sql, ['date' => $date])->queryScalar();
     }
 
     //新手标当日总投人数
@@ -324,7 +329,7 @@ AND u.type = 1
 AND DATE( FROM_UNIXTIME( o.created_at ) ) = :date
 AND p.is_xs = 1
 ";
-        return Yii::$app->db->createCommand($sql, ['date' => $date])->queryScalar();
+        return self::getDbRead()->createCommand($sql, ['date' => $date])->queryScalar();
     }
     //新手标当日总投资金额
     public function getXsInvSum($date)
@@ -339,14 +344,14 @@ AND u.type = 1
 AND DATE( FROM_UNIXTIME( o.created_at ) ) = :date
 AND p.is_xs = 1
 ";
-        return Yii::$app->db->createCommand($sql, ['date' => $date])->queryScalar();
+        return self::getDbRead()->createCommand($sql, ['date' => $date])->queryScalar();
     }
 
 
     //POS充值
     public function getChargeViaPos($date)
     {
-        return Yii::$app->db->createCommand('SELECT SUM(r.fund) FROM recharge_record r LEFT JOIN user u ON r.uid=u.id WHERE r.status=1 AND r.pay_type=3 AND u.type=1 AND DATE(FROM_UNIXTIME(r.created_at))=:date')
+        return self::getDbRead()->createCommand('SELECT SUM(r.fund) FROM recharge_record r LEFT JOIN user u ON r.uid=u.id WHERE r.status=1 AND r.pay_type=3 AND u.type=1 AND DATE(FROM_UNIXTIME(r.created_at))=:date')
             ->bindValue('date', $date, \PDO::PARAM_STR)
             ->queryScalar();
     }
@@ -354,7 +359,7 @@ AND p.is_xs = 1
     //线上充值
     public function getChargeViaEpay($date)
     {
-        return Yii::$app->db->createCommand('SELECT SUM(r.fund) FROM recharge_record r LEFT JOIN user u ON r.uid=u.id WHERE r.status=1 AND r.pay_type<>3 AND u.type=1 AND DATE(FROM_UNIXTIME(r.created_at))=:date')
+        return self::getDbRead()->createCommand('SELECT SUM(r.fund) FROM recharge_record r LEFT JOIN user u ON r.uid=u.id WHERE r.status=1 AND r.pay_type<>3 AND u.type=1 AND DATE(FROM_UNIXTIME(r.created_at))=:date')
             ->bindValue('date', $date, \PDO::PARAM_STR)
             ->queryScalar();
     }
@@ -362,7 +367,7 @@ AND p.is_xs = 1
     //提现
     public function getDrawAmount($date)
     {
-        return Yii::$app->db->createCommand('SELECT SUM(r.money) FROM draw_record r LEFT JOIN user u on r.uid=u.id WHERE r.status=2 and u.type=1 and DATE(FROM_UNIXTIME(r.created_at))=:date')
+        return self::getDbRead()->createCommand('SELECT SUM(r.money) FROM draw_record r LEFT JOIN user u on r.uid=u.id WHERE r.status=2 and u.type=1 and DATE(FROM_UNIXTIME(r.created_at))=:date')
             ->bindValue('date', $date, \PDO::PARAM_STR)
             ->queryScalar();
     }
@@ -370,7 +375,7 @@ AND p.is_xs = 1
     //温盈金
     public function getInvestmentInWyj($date)
     {
-        return Yii::$app->db->createCommand('select sum(o.order_money) from online_order o left join online_product l on o.online_pid=l.id where l.cid=1 and l.isTest=0 and o.status=1 and DATE(FROM_UNIXTIME(o.created_at))=:date')
+        return self::getDbRead()->createCommand('select sum(o.order_money) from online_order o left join online_product l on o.online_pid=l.id where l.cid=1 and l.isTest=0 and o.status=1 and DATE(FROM_UNIXTIME(o.created_at))=:date')
             ->bindValue('date', $date, \PDO::PARAM_STR)
             ->queryScalar();
     }
@@ -378,7 +383,7 @@ AND p.is_xs = 1
     //温盈宝
     public function getInvestmentInWyb($date)
     {
-        return Yii::$app->db->createCommand('select sum(o.order_money) from online_order o left join online_product l on o.online_pid=l.id where l.cid=2 and l.isTest = 0 and o.status=1 and DATE(FROM_UNIXTIME(o.created_at))=:date')
+        return self::getDbRead()->createCommand('select sum(o.order_money) from online_order o left join online_product l on o.online_pid=l.id where l.cid=2 and l.isTest = 0 and o.status=1 and DATE(FROM_UNIXTIME(o.created_at))=:date')
             ->bindValue('date', $date, \PDO::PARAM_STR)
             ->queryScalar();
     }
@@ -387,7 +392,7 @@ AND p.is_xs = 1
     public function getOnlineInvestment($date)
     {
 
-        return Yii::$app->db->createCommand('select sum(o.order_money) from online_order o INNER JOIN online_product AS p ON o.`online_pid` = p.`id` where o.status=1 AND p.isTest = 0 and DATE(FROM_UNIXTIME(o.created_at))=:date')
+        return self::getDbRead()->createCommand('select sum(o.order_money) from online_order o INNER JOIN online_product AS p ON o.`online_pid` = p.`id` where o.status=1 AND p.isTest = 0 and DATE(FROM_UNIXTIME(o.created_at))=:date')
             ->bindValue('date', $date, \PDO::PARAM_STR)
             ->queryScalar();
     }
@@ -395,7 +400,7 @@ AND p.is_xs = 1
     //线下交易额(以元为单位)
     public function getOfflineInvestment($date)
     {
-        return Yii::$app->db->createCommand('SELECT SUM( money ) * 10000 FROM offline_order WHERE orderDate =:date AND `isDeleted` = 0')
+        return self::getDbRead()->createCommand('SELECT SUM( money ) * 10000 FROM offline_order WHERE orderDate =:date AND `isDeleted` = 0')
             ->bindValue('date', $date, \PDO::PARAM_STR)
             ->queryScalar();
     }
@@ -410,21 +415,21 @@ AND p.is_xs = 1
     public function getSuccessFound($date)
     {
         $sql = 'SELECT COUNT(*) FROM online_product WHERE `status` IN (5,6,7) AND isTest = 0 AND DATE(FROM_UNIXTIME(full_time))=:date;';
-        return Yii::$app->db->createCommand($sql, ['date' => $date])->queryScalar();
+        return self::getDbRead()->createCommand($sql, ['date' => $date])->queryScalar();
     }
 
     //贷后余额,募集了但是还没有还款的那部分资金(只是已经成立但是还没有还款的项目,不包含募集中)，status [5,7]
     public static function getRemainMoney()
     {
         $sql = 'SELECT SUM(funded_money) FROM online_product WHERE `status` IN(5,7) AND isTest = 0';
-        return Yii::$app->db->createCommand($sql)->queryScalar();
+            return self::getDbRead()->createCommand($sql)->queryScalar();
     }
 
     //可用余额,网站所有用户的可用余额总和
     public static function getUsableMoney()
     {
         $sql = 'SELECT SUM(a.available_balance) FROM user_account AS a LEFT JOIN `user` AS u ON a.uid = u.id WHERE u.type = 1';
-        return Yii::$app->db->createCommand($sql)->queryScalar();
+        return self::getDbRead()->createCommand($sql)->queryScalar();
     }
 
     //充值金额，先下+线上
@@ -438,13 +443,13 @@ AND p.is_xs = 1
     {
         //快捷充值
         $sql = "SELECT SUM(r.fund * 0.0012) FROM recharge_record AS r LEFT JOIN `user` AS u ON r.uid = u.id WHERE r.status = 1 AND r.pay_type = 1 AND u.type = 1 AND DATE(FROM_UNIXTIME(r.created_at)) = :date";
-        $k = Yii::$app->db->createCommand($sql, ['date' => $date])->queryScalar();
+        $k = self::getDbRead()->createCommand($sql, ['date' => $date])->queryScalar();
         //网银充值
         $sql = "SELECT SUM(r.fund * 0.0018) FROM recharge_record AS r LEFT JOIN `user` AS u ON r.uid = u.id WHERE r.status = 1 AND r.pay_type = 2 AND u.type = 1 AND DATE(FROM_UNIXTIME(r.created_at)) = :date";
-        $w = Yii::$app->db->createCommand($sql, ['date' => $date])->queryScalar();
+        $w = self::getDbRead()->createCommand($sql, ['date' => $date])->queryScalar();
         //POS充值
         $sql = "SELECT SUM(LEAST(r.fund * 0.0125,80))  FROM recharge_record r LEFT JOIN user u ON r.uid=u.id WHERE r.status=1 AND r.pay_type=3 AND u.type=1 AND DATE(FROM_UNIXTIME(r.created_at))=:date";
-        $pos = Yii::$app->db->createCommand($sql, ['date' => $date])->queryScalar();
+        $pos = self::getDbRead()->createCommand($sql, ['date' => $date])->queryScalar();
         return floatval($k) + floatval($w) + floatval($pos);
     }
 
@@ -452,7 +457,7 @@ AND p.is_xs = 1
     public function getDraw($date)
     {
         $sql = 'SELECT SUM(money) FROM draw_record AS r LEFT JOIN `user` AS u ON r.uid = u.id WHERE r.`status` = 2 AND u.type = 1 AND DATE(FROM_UNIXTIME(r.created_at)) = :date';
-        return Yii::$app->db->createCommand($sql, ['date' => $date])->queryScalar();
+        return self::getDbRead()->createCommand($sql, ['date' => $date])->queryScalar();
     }
 
     //获取已投用户登录
@@ -460,7 +465,7 @@ AND p.is_xs = 1
     {
         if (is_null($this->loanOrderUids) || !isset($this->loanOrderUids[$date])) {
             $sql = "select distinct uid from online_order as o where o.status = 1 and date(from_unixtime(o.order_time)) <= :date";
-            $res = Yii::$app->db->createCommand($sql, [
+            $res = self::getDbRead()->createCommand($sql, [
                 'date' => $date,
             ])->queryAll();
             $this->loanOrderUids[$date] = array_column($res, 'uid');
@@ -480,7 +485,7 @@ AND p.is_xs = 1
     {
         if (is_null($this->loanOrderUids) || !isset($this->loanOrderUids[$date])) {
             $sql = "select distinct uid from online_order as o where o.status = 1 and date(from_unixtime(o.order_time)) <= :date";
-            $res = Yii::$app->db->createCommand($sql, [
+            $res = self::getDbRead()->createCommand($sql, [
                 'date' => $date,
             ])->queryAll();
             $this->loanOrderUids[$date] = array_column($res, 'uid');
@@ -506,7 +511,7 @@ AND p.is_xs = 1
         } else {
             $sql = "SELECT couponType_id AS cid,COUNT(couponType_id) AS cou FROM user_coupon GROUP BY couponType_id";
         }
-        $result = Yii::$app->db->createCommand($sql)->queryAll();
+        $result = self::getDbRead()->createCommand($sql)->queryAll();
         if (count($result) > 0) {
             $num = ArrayHelper::map($result, 'cid', 'cou');
         } else {
@@ -514,7 +519,7 @@ AND p.is_xs = 1
         }
         $cids = '(' . implode(',', ArrayHelper::getColumn($result, 'cid')) . ')';
         $sql = "SELECT id,amount FROM coupon_type WHERE id in " . $cids;
-        $result = Yii::$app->db->createCommand($sql)->queryAll();
+        $result = self::getDbRead()->createCommand($sql)->queryAll();
         if (count($result) > 0) {
             $amount = ArrayHelper::map($result, 'id', 'amount');
         }
@@ -547,7 +552,38 @@ AND p.is_xs = 1
     public static function getThisMonthCount()
     {
         //当月数据，排除当天
-        $month = Yii::$app->db->createCommand("
+        $month = [
+            'bizDate' => date('Y-m'),
+            'totalInvestment' => 0.00,
+            'onlineInvestment' => 0.00,
+            'offlineInvestment' => 0.00,
+            'rechargeMoney' => 0.00,
+            'drawAmount' => 0.00,
+            'rechargeCost' => 0.00,
+            'reg' => 0,
+            'idVerified' => 0,
+            'successFound' => 0,
+            'qpayEnabled' => 0,
+            'investor' => 0,
+            'newRegisterAndInvestor' => 0,
+            'newInvestor' => 0,
+            'newRegAndNewInveAmount' => 0.00,
+            'preRegAndNewInveAmount' => 0.00,
+            'investmentInWyb' => 0.00,
+            'investmentInWyj' => 0.00,
+            'licaiNewInvCount' => 0,
+            'licaiNewInvSum' => 0.00,
+            'licaiInvCount' => 0,
+            'licaiInvSum' => 0.00,
+            'xsNewInvCount' => 0,
+            'xsNewInvSum' => 0.00,
+            'xsInvCount' => 0,
+            'xsInvSum' => 0.00,
+            'checkIn' => 0,
+            'repayMoney' => 0.00,
+            'repayLoanCount' => 0,
+        ];
+        $monthBySql = self::getDbRead()->createCommand("
 SELECT DATE_FORMAT(bizDate,'%Y-%m') as bizDate,
 SUM(totalInvestment) AS totalInvestment,
 SUM(onlineInvestment) AS onlineInvestment,
@@ -578,6 +614,9 @@ SUM(checkIn) as checkIn,
 SUM(repayMoney) as repayMoney,
 SUM(repayLoanCount) as repayLoanCount
 FROM perf WHERE DATE_FORMAT(bizDate,'%Y-%m-%d') < DATE_FORMAT(NOW(),'%Y-%m-%d') AND DATE_FORMAT(bizDate,'%Y-%m')=DATE_FORMAT(NOW(),'%Y-%m') GROUP BY DATE_FORMAT(bizDate,'%Y-%m')")->queryOne();
+        if (false !== $monthBySql) {
+            $month = $monthBySql;
+        }
         //当天数据
         $today = Perf::getTodayCount();
         //获取当月实时数据
@@ -616,7 +655,7 @@ FROM perf WHERE DATE_FORMAT(bizDate,'%Y-%m-%d') < DATE_FORMAT(NOW(),'%Y-%m-%d') 
     //获取当天投资用户
     public function getDayInvestor($date)
     {
-        $investor = Yii::$app->db->createCommand('SELECT DISTINCT(o.uid) FROM online_order AS o INNER JOIN online_product AS p ON o.`online_pid` = p.`id` WHERE o.status=1 AND p.isTest=0 AND DATE(FROM_UNIXTIME(o.created_at))=:date')
+        $investor = self::getDbRead()->createCommand('SELECT DISTINCT(o.uid) FROM online_order AS o INNER JOIN online_product AS p ON o.`online_pid` = p.`id` WHERE o.status=1 AND p.isTest=0 AND DATE(FROM_UNIXTIME(o.created_at))=:date')
             ->bindValue('date', $date, \PDO::PARAM_STR)
             ->queryAll();
         return ArrayHelper::getColumn($investor, 'uid');
@@ -625,7 +664,7 @@ FROM perf WHERE DATE_FORMAT(bizDate,'%Y-%m-%d') < DATE_FORMAT(NOW(),'%Y-%m-%d') 
     //当日注册当日投资用户
     public function getDayNewRegisterAndInvestor($date)
     {
-        $investor = Yii::$app->db->createCommand('SELECT DISTINCT(o.uid) FROM online_order AS o LEFT JOIN `user` AS u ON o.uid = u.id INNER JOIN online_product AS p ON o.`online_pid` = p.`id` WHERE o.`status`= 1 AND p.isTest = 0 AND DATE(FROM_UNIXTIME(u.`created_at`)) = :date AND DATE(FROM_UNIXTIME(o.created_at)) = :date')
+        $investor = self::getDbRead()->createCommand('SELECT DISTINCT(o.uid) FROM online_order AS o LEFT JOIN `user` AS u ON o.uid = u.id INNER JOIN online_product AS p ON o.`online_pid` = p.`id` WHERE o.`status`= 1 AND p.isTest = 0 AND DATE(FROM_UNIXTIME(u.`created_at`)) = :date AND DATE(FROM_UNIXTIME(o.created_at)) = :date')
             ->bindValue('date', $date, \PDO::PARAM_STR)
             ->queryAll();
         return ArrayHelper::getColumn($investor, 'uid');
@@ -634,11 +673,11 @@ FROM perf WHERE DATE_FORMAT(bizDate,'%Y-%m-%d') < DATE_FORMAT(NOW(),'%Y-%m-%d') 
     //新增投资用户（以前注册未投资，但今日投资了的）
     public function getDayNewInvestor($date)
     {
-        $totalInvestor = Yii::$app->db->createCommand('SELECT DISTINCT(o.uid) FROM online_order AS o LEFT JOIN `user` AS u ON o.uid = u.id INNER JOIN online_product AS p ON o.`online_pid` = p.`id` WHERE o.`status`= 1 AND p.isTest=0 AND DATE(FROM_UNIXTIME(u.`created_at`)) < :date AND DATE(FROM_UNIXTIME(o.created_at))<=:date')
+        $totalInvestor = self::getDbRead()->createCommand('SELECT DISTINCT(o.uid) FROM online_order AS o LEFT JOIN `user` AS u ON o.uid = u.id INNER JOIN online_product AS p ON o.`online_pid` = p.`id` WHERE o.`status`= 1 AND p.isTest=0 AND DATE(FROM_UNIXTIME(u.`created_at`)) < :date AND DATE(FROM_UNIXTIME(o.created_at))<=:date')
             ->bindValue('date', $date, \PDO::PARAM_STR)
             ->queryAll();
         $totalInvestor = ArrayHelper::getColumn($totalInvestor, 'uid');
-        $investor = Yii::$app->db->createCommand('SELECT DISTINCT(o.uid) FROM online_order AS o LEFT JOIN `user` AS u ON o.uid = u.id INNER JOIN online_product AS p ON o.`online_pid` = p.`id` WHERE o.`status`= 1 AND p.isTest = 0 AND DATE(FROM_UNIXTIME(u.`created_at`)) < :date AND DATE(FROM_UNIXTIME(o.created_at)) <:date')
+        $investor = self::getDbRead()->createCommand('SELECT DISTINCT(o.uid) FROM online_order AS o LEFT JOIN `user` AS u ON o.uid = u.id INNER JOIN online_product AS p ON o.`online_pid` = p.`id` WHERE o.`status`= 1 AND p.isTest = 0 AND DATE(FROM_UNIXTIME(u.`created_at`)) < :date AND DATE(FROM_UNIXTIME(o.created_at)) <:date')
             ->bindValue('date', $date, \PDO::PARAM_STR)
             ->queryAll();
         $investor = ArrayHelper::getColumn($investor, 'uid');
@@ -649,7 +688,7 @@ FROM perf WHERE DATE_FORMAT(bizDate,'%Y-%m-%d') < DATE_FORMAT(NOW(),'%Y-%m-%d') 
     public function getDayInvestAndLogin($date)
     {
         $sql = "SELECT id FROM `user` WHERE `type` = 1 AND DATE(FROM_UNIXTIME(last_login)) = :date AND id  IN (SELECT DISTINCT o.uid FROM online_order AS o INNER JOIN online_product AS p ON o.`online_pid` = p.`id` WHERE o.`status` = 1 AND p.isTest = 0)";
-        $res = Yii::$app->db->createCommand($sql, ['date' => $date])->queryAll();
+        $res = self::getDbRead()->createCommand($sql, ['date' => $date])->queryAll();
         return ArrayHelper::getColumn($res, 'id');
     }
 
@@ -657,7 +696,7 @@ FROM perf WHERE DATE_FORMAT(bizDate,'%Y-%m-%d') < DATE_FORMAT(NOW(),'%Y-%m-%d') 
     public function getDayNotInvestAndLogin($date)
     {
         $sql = "SELECT id FROM `user` WHERE `type` = 1 AND DATE(FROM_UNIXTIME(last_login)) = :date AND id NOT IN (SELECT DISTINCT o.uid FROM online_order AS o INNER JOIN online_product AS p ON o.`online_pid` = p.`id` WHERE o.`status` = 1 and p.isTest = 0)";
-        $res = Yii::$app->db->createCommand($sql, ['date' => $date])->queryAll();
+        $res = self::getDbRead()->createCommand($sql, ['date' => $date])->queryAll();
         return ArrayHelper::getColumn($res, 'id');
     }
 
@@ -670,7 +709,7 @@ FROM perf WHERE DATE_FORMAT(bizDate,'%Y-%m-%d') < DATE_FORMAT(NOW(),'%Y-%m-%d') 
         $result = [];
         while ($startDate <= $date) {
             $sql = "SELECT COUNT(DISTINCT o.uid) FROM online_order AS o INNER JOIN online_product AS p ON o.`online_pid` = p.`id` WHERE o.`status`=1  AND DATE_FORMAT(FROM_UNIXTIME(o.created_at),'%Y-%m')= :date";
-            $res = Yii::$app->db->createCommand($sql, ['date' => $startDate])->queryScalar();
+            $res = self::getDbRead()->createCommand($sql, ['date' => $startDate])->queryScalar();
             $result[$startDate] = $res;
             $startDate = (new \DateTime($startDate))->add(new \DateInterval('P1M'))->format('Y-m');
         }
@@ -681,28 +720,28 @@ FROM perf WHERE DATE_FORMAT(bizDate,'%Y-%m-%d') < DATE_FORMAT(NOW(),'%Y-%m-%d') 
     public function getRepayMoney($date)
     {
         $sql = "SELECT SUM( op.`benxi` ) FROM  `online_repayment_plan` AS op LEFT JOIN online_product AS p ON p.id = op.online_pid WHERE p.isTest =0 AND op.status IN ( 1, 2 ) AND DATE_FORMAT( op.`actualRefundTime` ,  '%Y-%m-%d' ) =  :date";
-        return Yii::$app->db->createCommand($sql,['date' => $date])->queryScalar();
+        return self::getDbRead()->createCommand($sql,['date' => $date])->queryScalar();
     }
 
     //统计每天回款项目
     public function getRepayLoanCount($date)
     {
         $sql = "SELECT COUNT( DISTINCT  op.`online_pid` ) FROM  `online_repayment_plan` AS op LEFT JOIN online_product AS p ON p.id = op.online_pid WHERE p.isTest =0 AND op.status IN ( 1, 2 ) AND DATE_FORMAT( op.`actualRefundTime` ,  '%Y-%m-%d' ) =  :date";
-        return Yii::$app->db->createCommand($sql,['date' => $date])->queryScalar();
+        return self::getDbRead()->createCommand($sql,['date' => $date])->queryScalar();
     }
 
     //统计每天回款用户数
     public function getRepayUserCount($date)
     {
         $sql = "SELECT COUNT( DISTINCT  op.`uid` ) FROM  `online_repayment_plan` AS op LEFT JOIN online_product AS p ON p.id = op.online_pid WHERE p.isTest =0  AND op.status IN ( 1, 2 ) AND DATE_FORMAT( op.`actualRefundTime` ,  '%Y-%m-%d' ) =  :date";
-        return Yii::$app->db->createCommand($sql,['date' => $date])->queryScalar();
+        return self::getDbRead()->createCommand($sql,['date' => $date])->queryScalar();
     }
 
     //获取每日已经还款的用户ID
     public function getDayRepayUser($date)
     {
         $sql = "SELECT DISTINCT  op.`uid` FROM  `online_repayment_plan` AS op LEFT JOIN online_product AS p ON p.id = op.online_pid WHERE p.isTest =0 AND op.status IN ( 1, 2 ) AND DATE_FORMAT( op.`actualRefundTime` ,  '%Y-%m-%d' ) =  :date";
-        $data = Yii::$app->db->createCommand($sql,['date' => $date])->queryAll();
+        $data = self::getDbRead()->createCommand($sql,['date' => $date])->queryAll();
         return ArrayHelper::getColumn($data, 'uid');
     }
 
@@ -762,13 +801,13 @@ FROM perf WHERE DATE_FORMAT(bizDate,'%Y-%m-%d') < DATE_FORMAT(NOW(),'%Y-%m-%d') 
     public function getCheckIn($date)
     {
         $sql = "select count(distinct user_id) from check_in where checkDate = :date";
-        return Yii::$app->db->createCommand($sql, ['date' => $date])->queryScalar();
+        return self::getDbRead()->createCommand($sql, ['date' => $date])->queryScalar();
     }
 
     //统计每月还款用户数
     public static function getMonthRepayUserCount()
     {
         $sql = "SELECT date_format(op.actualRefundTime, '%Y-%m') as m,count(distinct op.uid) as c FROM `online_repayment_plan` as op left join online_product as p on p.id = op.online_pid where p.isTest = 0 and op.status in (1,2) and op.actualRefundTime is not null group by m";
-        return Yii::$app->db->createCommand($sql)->queryAll();
+        return self::getDbRead()->createCommand($sql)->queryAll();
     }
 }
