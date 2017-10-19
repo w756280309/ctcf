@@ -13,7 +13,7 @@ CSS
         <div class="span12">
             <h3 class="page-title">
                 汇总统计
-                <small style="color: red;">每5分钟更新一次</small>
+                <small style="color: red;">上次更新时间：<?= $lastUpdateTime ?></small>
             </h3>
         </div>
     </div>
