@@ -425,6 +425,21 @@ AND p.is_xs = 1
             return self::getDbRead()->createCommand($sql)->queryScalar();
     }
 
+    /**
+     * 贷后年化余额，募集结束和收益中正式标的的贷后余额 总值为=到期本息年化余额+非到期本息年化余额
+     * 到期本息贷后年化余额=投资金额×项目期限/365
+     * 非到期本息贷后年化余额=投资金额×项目期限/12
+     */
+    public static function getAnnualInvestment()
+    {
+        $productCond = 'CASE refund_method WHEN 1 THEN 365 ELSE 12 END'; //还款方式为到期本息时为365天，非到期本息时为12个月
+        $sql = 'SELECT 
+            SUM(funded_money * expires / ' . $productCond . ' ) 
+            FROM online_product WHERE `status` IN(5,7) AND isTest = 0';
+        return self::getDbRead()->createCommand($sql)->queryScalar();
+    }
+
+
     //可用余额,网站所有用户的可用余额总和
     public static function getUsableMoney()
     {

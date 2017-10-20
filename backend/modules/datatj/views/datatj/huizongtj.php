@@ -44,6 +44,7 @@ CSS
     </div>
     <div class="row-fluid">
         <div class="span4">贷后余额： <?= number_format($remainMoney, 2) ?>元</div>
+        <div class="span4">贷后年化余额： <?= number_format($annualInvestment, 2) ?>元</div>
         <div class="span4">平台可用余额：<?= number_format($usableMoney, 2) ?>元</div>
     </div>
     <div class="row-fluid">

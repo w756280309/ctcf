@@ -22,6 +22,7 @@ class DatatjController extends Controller
         $month = $dbRead->createCommand("SELECT SUM(onlineInvestment) as onlineInvestment, SUM(offlineInvestment) as offlineInvestment, SUM(totalInvestment) AS monthTotalInvestment,SUM(successFound) AS monthSuccessFound FROM perf WHERE DATE_FORMAT(bizDate,'%Y-%m-%d') < DATE_FORMAT(NOW(),'%Y-%m-%d') AND DATE_FORMAT(bizDate,'%Y-%m')=DATE_FORMAT(NOW(),'%Y-%m')")->queryOne();
         //贷后余额、平台可用余额
         $remainMoney = Perf::getRemainMoney();
+        $annualInvestment = Perf::getAnnualInvestment();
         $usableMoney = Perf::getUsableMoney();
 
         //代金券统计
@@ -67,6 +68,7 @@ class DatatjController extends Controller
             'monthTotalInvestment' => $month['monthTotalInvestment'] + $today['totalInvestment'],//本月交易额 线上 + 线下
             'monthSuccessFound' => $month['monthSuccessFound'] + $today['successFound'],//本月融资项目
             'remainMoney' => $remainMoney,//贷后余额
+            'annualInvestment' => $annualInvestment, //贷后年化余额
             'usableMoney' => $usableMoney,//可用余额
             'usedCoupon' => $usedCoupon,//已使用代金券
             'unusedCoupon' => $unusedCoupon,//未使用代金券
