@@ -31,11 +31,11 @@ class SuperviseAccessFilter extends ActionFilter
     private function pcAccess($action, $actionId)
     {
         if (in_array($actionId, [
-            'site/index',
             'licai/index',
             'deal/deal/detail',
             'licai/notes',
             'credit/note/detail',
+            'upload/showpic',
         ])) {
             /**
              * @var Response $response
@@ -59,11 +59,12 @@ class SuperviseAccessFilter extends ActionFilter
     private function wapAccess($action, $actionId)
     {
         if (in_array($actionId, [
-            'site/index',
             'deal/deal/index',
             'deal/deal/detail',
             'licai/notes',
             'credit/note/detail',
+            '/issuer/index',
+            'upload/showpic',
         ])) {
             /**
              * @var Response $response
