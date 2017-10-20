@@ -112,6 +112,7 @@ return [
         'idcode' => env('IDCODE'),
         'aesKey' => env('AESKEY'),
     ],
+    'udesk_key' => env('UDESK_KEY'),
     //todo-待添加
     'weixin' => [
         'appId' => '',

@@ -78,6 +78,18 @@ $this->params['breadcrumbs'][] = $this->title;
                             </div>
                     </div>
                     <div class="control-group">
+                        <label class="control-label">udesk外呼邮箱</label>
+                        <div class="controls">
+                            <div class="input-prepend">
+
+                                <?= $form->field($model, 'udesk_email', ['template' => '<span class="add-on">@</span>{input}', 'inputOptions'=>['autocomplete'=>"off",'class'=>'m-wrap span16','placeholder'=>'udesk外呼邮箱','style'=>"width:225px"]])->textInput() ?>
+
+                            </div>
+
+                            <?= $form->field($model, 'udesk_email', ['template' => '{error}']); ?>
+                        </div>
+                    </div>
+                    <div class="control-group">
 
                             <label class="control-label">管理员姓名</label>
 

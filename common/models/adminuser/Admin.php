@@ -39,7 +39,7 @@ class Admin extends \yii\db\ActiveRecord implements IdentityInterface, AdminInte
     public function scenarios()
     {
         return [
-            'register' => ['id', 'username', 'email', 'real_name', 'status', 'password_hash', 'user_pass', 'role_sn', 'auths'],
+            'register' => ['id', 'username', 'email', 'real_name', 'status', 'password_hash', 'user_pass', 'role_sn', 'auths', 'udesk_email'],
             'active' => ['status'],
             'log' => ['last_login_ip', 'last_login_time'],
             'editpass' => ['password_hash'],
@@ -73,6 +73,7 @@ class Admin extends \yii\db\ActiveRecord implements IdentityInterface, AdminInte
             }", 'on' => 'register'],
             [['role_sn'], 'compare', 'compareValue' => 0, 'operator' => '!=', 'message' => '请选择角色!'],
             ['email', 'email', 'message' => ' 必须为email格式', 'on' => 'register'],
+            ['udesk_email', 'email', 'message' => ' 必须为email格式', 'on' => 'register'],
             [['status'], 'integer', 'on' => 'register'],
             [
                 'username',
@@ -105,6 +106,7 @@ class Admin extends \yii\db\ActiveRecord implements IdentityInterface, AdminInte
             'updated_at' => '创建时间',
             'created_at' => '更新时间',
             'user_pass' => '密码',
+            'udesk_email' => 'udesk外呼邮箱'
         ];
     }
 

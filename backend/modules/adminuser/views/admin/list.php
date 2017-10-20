@@ -69,6 +69,7 @@ use common\models\AuthSys;
                         <th>管理员用户名</th>
                         <th>管理员姓名</th>
                         <th>管理员Email</th>
+                        <th>udesk外呼Email</th>
                         <th style="text-align: center">操作</th>
                     </tr>
                 </thead>
@@ -86,6 +87,9 @@ use common\models\AuthSys;
                                     </td>
                                     <td>
                                         <b><?= $val['email'] ?></b>
+                                    </td>
+                                    <td>
+                                        <b><?= $val['udesk_email'] ?></b>
                                     </td>
                                     <td style="text-align: center">
                                         <a href="/adminuser/admin/edit?id=<?= $val['id'] ?>" class="btn mini green"><i class="icon-edit"></i> 编辑</a>
