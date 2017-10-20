@@ -23,8 +23,8 @@ $this->registerJs('forceReload_V2();');
         </div>
         <div class="feature">
             <p class="tips">登录获得更多个性体验</p>
-            <a class="login" href="/site/login">老用户登录</a>
-            <a class="register" href="/site/signup">马上注册</a>
+            <a class="login" href="/site/login">登录</a>
+            <a class="register" href="/site/signup">注册</a>
             <div class="more">
                 <p>了解更多</p>
                 <img src="<?= FE_BASE_URI ?>wap/guide/images/pointer.png" alt="">
@@ -34,11 +34,7 @@ $this->registerJs('forceReload_V2();');
 
     <div class="section-two">
         <div class="compare">
-            <p>平台累计交易已突破<span><?=$statsData['totalTradeAmount']?>亿+</span><br>历史兑付率<span>100%</span></p>
-            <ul class="clearfix">
-                <li class="lf">累计兑付<span><?= $statsData['totalRefundAmount']?>亿+</span></li>
-                <li class="rg">带来<span><?= $statsData['totalRefundInterest']?>亿+</span>元收益</li>
-            </ul>
+            <p>温都金服平台已安全运营<span><?= (new \DateTime(date('Y-m-d')))->diff(new DateTime('2016-05-20'))->days ?>天
             <div>
                 <img src="<?= FE_BASE_URI ?>wap/guide/images/compare.png" alt="">
             </div>
