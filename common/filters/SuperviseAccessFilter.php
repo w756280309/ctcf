@@ -63,7 +63,7 @@ class SuperviseAccessFilter extends ActionFilter
             'deal/deal/detail',
             'licai/notes',
             'credit/note/detail',
-            '/issuer/index',
+            'issuer/index',
             'upload/showpic',
         ])) {
             /**
