@@ -8,6 +8,7 @@ use common\controllers\ContractTrait;
 use common\lib\MiitBaoQuan\Miit;
 use common\models\coupon\CouponType;
 use common\models\coupon\UserCoupon;
+use common\models\mall\PointRecord;
 use common\models\order\OnlineOrder;
 use common\models\order\OrderManager;
 use common\models\product\OnlineProduct;
@@ -166,6 +167,7 @@ class OrderController extends BaseController
 
         $order = OnlineOrder::ensureOrder($osn);
         $deal = null;
+        $incrPoints = null;
         if (null  !== $order && 1 !== $order->status) {
             $deal = OnlineProduct::findOne($order->online_pid);
         }
@@ -173,9 +175,20 @@ class OrderController extends BaseController
             return ['status' => $order->status];
         }
 
+        //获取该订单增加了多少积分
+        if (null !== $order && 1 === $order->status){
+            $incrPoints = PointRecord::find()
+                ->select('incr_points')
+                ->where([
+                    'user_id' => $order->user->id,
+                    'ref_id' => $order->id])
+                ->scalar();
+        }
+
         return $this->render('error', [
             'order' => $order,
             'deal' => $deal,
+            'incrPoints' => $incrPoints,
             'ret' => (null  !== $order && 1 === $order->status) ? 'success' : 'fail',
         ]);
     }

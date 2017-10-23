@@ -5,7 +5,8 @@ $this->backUrl = false;
 
 ?>
 <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/setting.css?v=20160714">
-
+<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/qiandao/css/index.css?v=20170711">
+<script src="<?= FE_BASE_URI ?>libs/lib.flexible3.js"></script>
 <div class="row" id='bind-box'>
     <div class="col-xs-12">
         <?php if ('success' === $ret) { ?>
@@ -19,9 +20,9 @@ $this->backUrl = false;
 <div class="row" id='bind-true'>
     <div class="col-xs-12">
         <?php if ('success' === $ret) { ?>
-        <img src="<?= ASSETS_BASE_URI ?>images/bind_true.png" alt="">
+            <img src="<?= ASSETS_BASE_URI ?>images/bind_true.png" alt="">
         <?php } else { ?>
-        <img src="<?= ASSETS_BASE_URI ?>images/bind-false.png" alt="">
+            <img src="<?= ASSETS_BASE_URI ?>images/bind-false.png" alt="">
         <?php } ?>
     </div>
 </div>
@@ -54,3 +55,22 @@ $this->backUrl = false;
         <div class="checkin"><a href="/user/checkin?back_url=<?= $backUrl ?>"><img src="<?= ASSETS_BASE_URI ?>images/checkin.jpg" alt=""></a></div>
     <?php } ?>
 </div>
+
+<?php if ('success' === $ret) { ?>
+    <!--添加签到蒙层-->
+    <div class="mask" style="display: block"></div>
+    <div class="pomp" style="display: block;">
+        <img src="<?= FE_BASE_URI ?>wap/point/img/point-header.png" alt="">
+        <p class="pomp-time"><i></i>恭喜您获得<span></span><i></i></p>
+        <p class="pomp-points"><span id="pomp-point"><?= $incrPoints ?></span>积分<i id="pomp-coupon"></i></p>
+        <p>本次投资奖励</p>
+        <p style=""><a href="/mall/point/list" style="background-color: transparent; color: #6A7FA6; font-size: 0.27rem;">查看积分</a></p>
+        <a href="javascript:closePomp();">关闭</a>
+    </div>
+<?php } ?>
+
+<script>
+    function closePomp() {
+        $(".mask, .pomp").hide();
+    }
+</script>
