@@ -2,11 +2,22 @@
 
 $this->title = ('success' === $ret) ? '购买成功' : '购买失败';
 $this->backUrl = false;
-
+$cookies = Yii::$app->request->cookies;
+if (isset($cookies['pointPopUp'])) {
+    $popUpOnce = $cookies['pointPopUp']->value;
+}
 ?>
 <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/setting.css?v=20160714">
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/qiandao/css/index.css?v=20170711">
 <script src="<?= FE_BASE_URI ?>libs/lib.flexible3.js"></script>
+<style>
+    .container{
+        height: 100vh;
+    }
+    #bind-close1{
+        margin-top: 0.8rem;
+    }
+</style>
 <div class="row" id='bind-box'>
     <div class="col-xs-12">
         <?php if ('success' === $ret) { ?>
@@ -58,8 +69,8 @@ $this->backUrl = false;
 
 <?php if ('success' === $ret) { ?>
     <!--添加签到蒙层-->
-    <div class="mask" style="display: block"></div>
-    <div class="pomp" style="display: block;">
+    <div class="mask"></div>
+    <div class="pomp">
         <img src="<?= FE_BASE_URI ?>wap/point/img/point-header.png" alt="">
         <p class="pomp-time"><i></i>恭喜您获得<span></span><i></i></p>
         <p class="pomp-points"><span id="pomp-point"><?= $incrPoints ?></span>积分<i id="pomp-coupon"></i></p>
@@ -70,6 +81,13 @@ $this->backUrl = false;
 <?php } ?>
 
 <script>
+    $(function () {
+        if ("<?= isset($popUpOnce) ?>") {
+            $(".mask, .pomp").show();
+            "<?php Yii::$app->response->cookies->remove('pointPopUp') ?>"    //投资成功后弹出框弹出一次后销毁此cookie
+        }
+    })
+
     function closePomp() {
         $(".mask, .pomp").hide();
     }

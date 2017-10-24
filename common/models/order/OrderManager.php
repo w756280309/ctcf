@@ -24,6 +24,7 @@ use Lhjx\Noty\Noty;
 use common\jobs\MiitBaoQuanJob;
 use Yii;
 use yii\helpers\ArrayHelper;
+use yii\web\Cookie;
 
 /**
  * 订单manager.
@@ -469,6 +470,8 @@ class OrderManager
                 throw new \Exception(current($order->firstErrors), PayService::ERROR_MONEY_FORMAT);
             }
             $order->save(false);
+            //M端订单投资成功后弹出本次投资增加了多少积分的弹出框，该弹出框只弹出一次，设置此cookie用于控制弹出框弹出次数
+            Yii::$app->response->cookies->add(new Cookie(['name' => 'pointPopUp', 'value' => 'onlyPopUpOnce']));
         } catch (\Exception $ex) {
             if ($redisSetFlag && $redis->exists($redisKey)) {
                 $redis->del($redisKey);
