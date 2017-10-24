@@ -972,7 +972,7 @@ IN (" . implode(',', $recordIds) . ")")->queryAll();
         $u = User::tableName();
         $ua = UserAccount::tableName();
         $query = (new Query())
-            ->select("$u.id, count(*) as total, $u.usercode, $u.mobile, $u.real_name, from_unixtime($u.created_at) as createTime, $ua.available_balance")
+            ->select("$u.id, count(*) as total, $u.usercode, $u.safeMobile, $u.real_name, from_unixtime($u.created_at) as createTime, $ua.available_balance")
             ->from($d)
             ->innerJoin($u, "$u.id = $d.uid")
             ->innerJoin($ua, "$ua.uid = $d.uid")

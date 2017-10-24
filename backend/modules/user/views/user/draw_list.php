@@ -45,7 +45,7 @@ use yii\grid\GridView;
                     'attribute' => 'mobile',
                     'label' => '手机号',
                     'value' => function ($model) {
-                        return $model['mobile'];
+                        return \common\utils\SecurityUtils::decrypt($model['safeMobile']);
                     }
                 ],
                 [
