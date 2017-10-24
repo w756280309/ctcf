@@ -136,6 +136,9 @@ return [
         'risk' => [
             'class' => 'Wcg\Xii\Risk\Module',
         ],
+        'wechat' => [
+            'class' => 'app\modules\wechat\Module',
+        ],
     ],
     'params' => $params,
     'as requestBehavior' => [

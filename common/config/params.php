@@ -117,6 +117,7 @@ return [
     'weixin' => [
         'appId' => '',
         'appSecret' => '',
+        'token' => 'dx1234',
     ],
     'm_assets_base_uri' => '',
     'pc_assets_base_uri' => '',

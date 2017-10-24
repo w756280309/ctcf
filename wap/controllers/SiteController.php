@@ -2,12 +2,17 @@
 
 namespace app\controllers;
 
+use app\modules\wechat\controllers\PushController;
 use common\controllers\HelpersTrait;
 use common\models\growth\AppMeta;
+use common\models\mall\PointRecord;
 use common\models\mall\ThirdPartyConnect;
+use common\models\message\PointMessage;
 use common\models\product\LoanFinder;
 use common\models\stats\Perf;
+use common\models\thirdparty\SocialConnect;
 use common\models\user\UserInfo;
+use common\service\PointsService;
 use common\service\SmsService;
 use common\service\LoginService;
 use common\models\adv\Adv;
@@ -29,6 +34,7 @@ use common\models\user\EditpassForm;
 use common\models\user\User;
 use common\models\user\CaptchaForm;
 use common\utils\SecurityUtils;
+use Lhjx\Noty\Noty;
 use wap\modules\promotion\models\RankingPromo;
 use Yii;
 use yii\filters\AccessControl;
@@ -502,6 +508,54 @@ class SiteController extends Controller
                         Yii::$app->session->remove('lastVerify');
                     }
                 }
+                /**
+                 * 绑定微信号和渠道
+                 * 注：微信推送可能延时到达
+                 */
+                if (Yii::$app->session->has('resourceOwnerId')) {
+                    $openId = Yii::$app->session->get('resourceOwnerId');
+                    //绑定微信
+                    SocialConnect::connect($user, $openId, SocialConnect::PROVIDER_TYPE_WECHAT);
+                    $social = SocialConnect::findOne([
+                        'user_id' => $user->id,
+                        'provider_type' => SocialConnect::PROVIDER_TYPE_WECHAT,
+                        'resourceOwner_id' => $openId,
+                    ]);
+                    //发积分
+                    if (!is_null($social)) {
+                        $pointRecord = PointRecord::findOne([
+                            'ref_type' => PointRecord::TYPE_WECHAT_CONNECT,
+                            'user_id' => $user->id,
+                        ]);
+
+                        if (is_null($pointRecord)) {
+                            //绑定成功,发放10积分
+                            $pointRecord = new PointRecord([
+                                'ref_type' => PointRecord::TYPE_WECHAT_CONNECT,
+                                'ref_id' => $social->id,
+                                'incr_points' => 10,
+                            ]);
+
+                            $res = PointsService::addUserPoints($pointRecord, false, $user);
+
+                            if ($res) {
+                                $pointRecord = PointRecord::findOne([
+                                    'ref_type' => PointRecord::TYPE_WECHAT_CONNECT,
+                                    'ref_id' => $social->id,
+                                    'incr_points' => 10,
+                                    'user_id' => $user->id,
+                                ]);
+
+                                if ($pointRecord) {
+                                    Noty::send(new PointMessage($pointRecord));
+                                }
+                            }
+                        }
+                    }
+                    //绑定渠道
+                    PushController::bindQD($user, $openId);
+                }
+
                 return ['code' => 1, 'message' => '注册成功', 'tourl' => $tourl];
             } else {
                 $error = $model->firstErrors;
