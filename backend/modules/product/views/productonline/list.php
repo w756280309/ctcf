@@ -223,6 +223,18 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\we
                                    value="<?= $loanSearch->issuerSn ?>" placeholder="请输入发行方编号"/>
                         </div>
                     </div>
+                    <div class="item">
+                        <div class="item_label">
+                            <span class="title">类型</span>
+                        </div>
+                        <div class="item_content">
+                            <select class="m-wrap" name="cid">
+                                <option value="" >全部</option>
+                                <option value="1" <?= $loanSearch->cid === 1 ? 'selected' : '' ?>><?= $pc_cat['1'] ?></option>
+                                <option value="2" <?= $loanSearch->cid === 2 ? 'selected' : '' ?>><?= $pc_cat['2'] ?></option>
+                            </select>
+                        </div>
+                    </div>
                 </div>
                 <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
                     <div class="item">

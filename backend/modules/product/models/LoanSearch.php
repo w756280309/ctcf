@@ -37,13 +37,14 @@ class LoanSearch extends Model
     public $investDateStart;
     public $investDateEnd;
     public $days;
+    public $cid;
 
     public $hasInnerJoinOrder = false;
 
     public function rules()
     {
         return [
-            [['status', 'days'], 'filter', 'filter' => function ($value) {
+            [['status', 'days', 'cid'], 'filter', 'filter' => function ($value) {
                 if (!is_null($value) && $value !== '') {
                     return intval($value);
                 } else {
@@ -118,6 +119,9 @@ class LoanSearch extends Model
         if ($this->finishDateEnd) {
             $query->andWhere(["<=", "$loanTable.finish_date" , (new \DateTime($this->finishDateEnd . ' 23:59:59'))->getTimestamp()]);
         }
+
+        //根据标的类型是温盈金还是温盈宝进行筛选1,温盈金   2,温盈宝
+        $query->andFilterWhere(["$loanTable.cid" => $this->cid]);
 
         //根据投资时间筛选标的
         if ($this->investDateStart) {
