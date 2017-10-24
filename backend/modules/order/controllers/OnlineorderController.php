@@ -188,19 +188,24 @@ class OnlineorderController extends BaseController
         }
         $user = $this->findOr404(User::class, $id);
         $status = Yii::$app->request->get('status');
+        $loan_status = Yii::$app->request->get('loan_status');
         $start = Yii::$app->request->get('start');
         $end = Yii::$app->request->get('end');
-        $query = OnlineOrder::find()->where(['uid' => $id]);
+        $query = OnlineOrder::find()->where(['online_order.uid' => $id]);
         if ($status != null) {
-            $query->andWhere(['status' => $status]);
+            $query->andWhere(['online_order.status' => $status]);
+        }
+        if ($loan_status != null) {
+            $query->leftJoin('online_product', 'online_product.id = online_order.online_pid');
+            $query->andWhere(['online_product.status' => $loan_status]);
         }
         if (!empty($start)) {
-            $query->andFilterWhere(['>=', 'created_at', strtotime($start.' 0:00:00')]);
+            $query->andFilterWhere(['>=', 'online_order.created_at', strtotime($start.' 0:00:00')]);
         }
         if (!empty($end)) {
-            $query->andFilterWhere(['<=', 'created_at', strtotime($end.' 23:59:59')]);
+            $query->andFilterWhere(['<=', 'online_order.created_at', strtotime($end.' 23:59:59')]);
         }
-        $query->orderBy(['created_at' =>SORT_DESC]);
+        $query->orderBy(['online_order.created_at' =>SORT_DESC]);
         $query->with('loan');
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -208,10 +213,12 @@ class OnlineorderController extends BaseController
                 'pageSize' => 10,
             ],
         ]);
+        $loanStatus = Yii::$app->params['deal_status'];
 
         return $this->renderFile('@backend/modules/order/views/onlineorder/listt.php', [
             'dataProvider' => $dataProvider,
             'user' => $user,
+            'loanStatus' => $loanStatus
         ]);
     }
 }

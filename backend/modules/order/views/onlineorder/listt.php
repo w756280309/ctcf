@@ -4,6 +4,7 @@ use common\models\offline\OfflineOrder;
 use common\models\offline\OfflineUser;
 use common\models\order\OnlineOrder;
 $status = Yii::$app->request->get('status');
+$loan_status = Yii::$app->request->get('loan_status');
 ?>
 <?php if (!$user instanceof OfflineUser) { ?>
 <div class="portlet-body">
@@ -11,7 +12,7 @@ $status = Yii::$app->request->get('status');
     <table class="table">
         <tr>
             <td>
-                <span class="title">状态</span>
+                <span class="title">投资状态</span>
                 <select name="status" id="loan_order_form_type" m-wrap span6>
                     <option value="">---全部---</option>
                     <option value="1" <?= ($status === '1') ? "selected='selected'" : "" ?> >投标成功</option>
@@ -29,10 +30,31 @@ $status = Yii::$app->request->get('status');
                 <input id="loan_order_form_end" type="text" value="<?= Yii::$app->request->get('end') ?>" name="end"
                        onclick='WdatePicker();' class="m-wrap span8"/>
             </td>
+        </tr>
+        <tr>
+            <td>
+                <span class="title">标的状态</span>
+                <select name="loan_status" id="loan_status" m-wrap span6>
+                    <option value="">---全部---</option>
+                    <option value="0">
+                        未上线
+                    </option>
+                    <?php foreach ($loanStatus as $key => $val): ?>
+                        <option value="<?= $key ?>"
+                            <?php
+                            if ($loan_status == $key) {
+                                echo 'selected';
+                            }
+                            ?> >
+                            <?= $val ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+            </td>
             <td>
                 <div align="right" class="search-btn">
                     <button class="btn blue btn-block loan_order_search" style="width: 100px;">搜索 <i
-                                class="m-icon-swapright m-icon-white"></i></button>
+                            class="m-icon-swapright m-icon-white"></i></button>
                 </div>
             </td>
         </tr>
@@ -185,7 +207,8 @@ HTML;
             var status = $('#loan_order_form_type').val();
             var start = $('#loan_order_form_start').val();
             var end = $('#loan_order_form_end').val();
-            getLoanOrderList('/order/onlineorder/detailt?id=<?= $user->id?>&start='+start+'&end='+end+'&status='+status);
+            var loan_status = $('#loan_status').val();
+            getLoanOrderList('/order/onlineorder/detailt?id=<?= $user->id?>&start='+start+'&end='+end+'&status='+status+'&loan_status='+loan_status);
         });
         $('.loan_title').click(function () {
             var _this = $(this);
