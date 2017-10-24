@@ -49,67 +49,34 @@ class PushController extends Controller
         }
         //todo 验证请求来源，只许微信服务器访问
         $data = file_get_contents("php://input"); //接收post数据
-        if (empty($data)) throw new \Exception('数据为空');
-        $postObj = simplexml_load_string($data, 'SimpleXMLElement', LIBXML_NOCDATA); //转换post数据为simplexml对象
+        if (!empty($data)) {
+            $postObj = simplexml_load_string($data, 'SimpleXMLElement', LIBXML_NOCDATA); //转换post数据为simplexml对象
+            if ($postObj->Event == 'subscribe' && $postObj->FromUserName) {
+                //欢迎信息
+                self::hello($postObj->FromUserName);
 
-        //推送欢迎消息
-        $url = 'https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token=';
-        $appId = Yii::$app->params['weixin']['appId'];
-        $appSecret = Yii::$app->params['weixin']['appSecret'];
-        if (empty($appId) || empty($appSecret)) {
-            throw new \Exception();
-        }
-        $app = new AccessToken($appId, $appSecret);
-        $accessToken = $app->getToken();
-        $url = $url . $accessToken;
-        $post_data = '{
-            "touser":"'.$postObj->FromUserName.'",
-            "msgtype":"text",
-    "text":
-    {
-         "content":"亲！欢迎来到温都金服！
-国资平台，靠谱！优质项目，赚钱！全程监管，放心！
-初次见面，先送您二重好礼略表心意！
-一重注册礼：注册就送288红包！
-二重首投礼：首次投资送积分、送购物卡！
-
-<a href=\"https://m.wenjf.com/user/wechat/bind\">账户绑定点这里</a>
-
-<a href=\"https://m.wenjf.com/promotion/wrm170210\">领豪礼点这里</a>
-
-<a href=\"\">往期精彩点这里</a>
-
-<a href=\"https://www.wenjf.com\">官方网站</a>",
-    }
-}';
-        self::post($url, $post_data);
-
-        //接受的推送是用户未关注时，进行关注后的事件推送
-        if ($postObj->Event != 'subscribe') throw new \Exception('推送事件不是subscribe');
-        
-        //渠道是否存在
-        if (!Affiliator::findOne(mb_substr($postObj->EventKey, 8))) {
-            throw new \Exception('缺少渠道');
-        }
-        //redis保存微信用户渠道信息
-        $redis = Yii::$app->redis;
-        if (!$redis->hexists('wechat-push', $postObj->FromUserName)) {
-            $redis->hset('wechat-push', $postObj->FromUserName, mb_substr($postObj->EventKey, 8));
-        }
-        /**
-         * 推送有可能在用户注册后到达
-         */
-
-        $social = SocialConnect::findOne([
-            'provider_type' => SocialConnect::PROVIDER_TYPE_WECHAT,
-            'resourceOwner_id' => $postObj->FromUserName,
-        ]);
-        if (!is_null($social)) {
-            //绑定渠道
-            $user = User::findOne($social->user_id);
-            $openId = $postObj->FromUserName;
-            if (!UserAffiliation::findOne(['user_id' => $user->id])) {
-                self::bindQD($user, $openId);
+                //绑定渠道
+                if ($postObj->EventKey && Affiliator::findOne(mb_substr($postObj->EventKey, 8))) {
+                    $redis = Yii::$app->redis;
+                    if (!$redis->hexists('wechat-push', $postObj->FromUserName)) {
+                        $redis->hset('wechat-push', $postObj->FromUserName, mb_substr($postObj->EventKey, 8));
+                    }
+                    /**
+                     * 推送有可能在用户注册后到达
+                     */
+                    $social = SocialConnect::findOne([
+                        'provider_type' => SocialConnect::PROVIDER_TYPE_WECHAT,
+                        'resourceOwner_id' => $postObj->FromUserName,
+                    ]);
+                    if (!is_null($social)) {
+                        //绑定渠道
+                        $user = User::findOne($social->user_id);
+                        $openId = $postObj->FromUserName;
+                        if (!UserAffiliation::findOne(['user_id' => $user->id])) {
+                            self::bindQD($user, $openId);
+                        }
+                    }
+                }
             }
         }
     }
@@ -130,7 +97,7 @@ class PushController extends Controller
                 $redis->hdel('wechat-push', $openId);
             }
         } else {
-            throw new \Exception('用户[$user->id]已经绑定渠道');
+            //throw new \Exception('用户[$user->id]已经绑定渠道');
         }
     }
     private function post($requestUrl, $post_string)
@@ -147,6 +114,42 @@ class PushController extends Controller
         $result = curl_exec($ch);
         curl_close($ch);
         return $result;
+    }
+
+    //发送欢迎消息
+    private function hello($openid)
+    {
+        //推送欢迎消息
+        $url = 'https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token=';
+        $appId = Yii::$app->params['weixin']['appId'];
+        $appSecret = Yii::$app->params['weixin']['appSecret'];
+        if (empty($appId) || empty($appSecret)) {
+            throw new \Exception();
+        }
+        $app = new AccessToken($appId, $appSecret);
+        $accessToken = $app->getToken();
+        $url = $url . $accessToken;
+        $post_data = '{
+            "touser":"'.$openid.'",
+            "msgtype":"text",
+    "text":
+    {
+         "content":"亲！欢迎来到温都金服！
+国资平台，靠谱！优质项目，赚钱！全程监管，放心！
+初次见面，先送您二重好礼略表心意！
+一重注册礼：注册就送288红包！
+二重首投礼：首次投资送积分、送购物卡！
+
+<a href=\"https://m.wenjf.com/user/wechat/bind\">账户绑定点这里</a>
+
+<a href=\"https://m.wenjf.com/promotion/wrm170210\">领豪礼点这里</a>
+
+<a href=\"\">往期精彩点这里</a>
+
+<a href=\"https://www.wenjf.com\">官方网站</a>",
+    }
+}';
+        return self::post($url, $post_data);
     }
 
 }
