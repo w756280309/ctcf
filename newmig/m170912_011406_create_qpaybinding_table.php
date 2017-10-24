@@ -15,7 +15,7 @@ class m170912_011406_create_qpaybinding_table extends Migration
         $this->createTable('qpaybinding', [
             'id' => $this->primaryKey(10)->unsigned(),
             'binding_sn'=>$this->string(32)->unique()->notNull()->comment('绑卡流水号'),
-            'uid'=>$this->integer(10)->unsigned()->defaultValue(Null)->comment('用户Id'),
+            'uid'=>$this->integer(10)->unsigned()->defaultValue(Null),
             'epayUserId'=>$this->string(60)->notNull()->comment('托管平台用户号'),
             'bank_id'=>$this->string(255)->defaultValue(Null)->comment('银行id'),
             'bank_name'=>$this->string(255)->defaultValue(Null)->comment('银行名称'),
@@ -28,9 +28,9 @@ class m170912_011406_create_qpaybinding_table extends Migration
             'status'=>$this->smallInteger()->unsigned()->defaultValue(0)->comment('状态 0-未绑定 1-已绑定 3-处理中'),
             'created_at'=>$this->integer(10)->unsigned()->defaultValue(Null),
             'updated_at'=>$this->integer(10)->unsigned()->defaultValue(Null),
-            'safeMobile'=>$this->string(32)->unsigned()->defaultValue(Null)->comment('预留手机号码'),
-            'extCardId'=>$this->string(32)->unsigned()->defaultValue(Null)->comment('卡ID'),
-            'extTicket'=>$this->string(32)->unsigned()->defaultValue(Null)->comment('后续推进需要的参数'),
+//            'safeMobile'=>$this->string(32)->unsigned()->defaultValue(Null)->comment('预留手机号码'),
+//            'extCardId'=>$this->string(32)->unsigned()->defaultValue(Null)->comment('卡ID'),
+//            'extTicket'=>$this->string(32)->unsigned()->defaultValue(Null)->comment('后续推进需要的参数'),
         ]);
         $this->createIndex(
             'binding_sn_2',

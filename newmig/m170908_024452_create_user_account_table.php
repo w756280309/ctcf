@@ -14,7 +14,7 @@ class m170908_024452_create_user_account_table extends Migration
     {
         $this->createTable('user_account', [
             'id' => $this->primaryKey()->unsigned(),
-            'type' => $this->boolean()->defaultValue(0)->notNull()->comment('类型 1投资账户 2融资账户'),
+            'type' => $this->boolean()->defaultValue(0)->notNull()->comment('类型 1,投资账户 2，融资账户'),
             'uid' => $this->integer(10)->unsigned()->notNull(),
             'account_balance' => $this->decimal(14,2)->defaultValue(0.00)->comment('账户余额'),
             'available_balance' => $this->decimal(14,2)->defaultValue(0.00)->notNull()->comment('可用余额'),
@@ -27,6 +27,11 @@ class m170908_024452_create_user_account_table extends Migration
             'created_at' => $this->integer(10)->unsigned()->comment('创建时间'),
             'updated_at' => $this->integer(10)->unsigned(),
         ]);
+        $this->createIndex(
+            'idx_uid',
+            'user_account',
+            'uid'
+        );
     }
     /**
      * @inheritdoc

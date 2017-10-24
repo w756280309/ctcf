@@ -27,9 +27,9 @@ class m170908_093411_create_online_order_table extends Migration
             'created_at'=>$this->integer(10)->unsigned()->defaultValue(Null),
             'updated_at'=>$this->integer(10)->unsigned()->defaultValue(Null),
             'campaign_source'=>$this->string(50)->defaultValue(Null)->comment('百度统计来源标志'),
-            'couponAmount'=>$this->decimal(6,2)->notNull()->comment('代金券使用金额'),
-            'paymentAmount'=>$this->decimal(14,2)->notNull()->comment('用户支付金额'),
-            'investFrom'=>$this->integer(1)->defaultValue(0)->comment('投资来源（0表示未知，1表示wap，2表示wx，3表示app，4表示pc）'),
+            'couponAmount'=>$this->decimal(6,2)->notNull(),
+            'paymentAmount'=>$this->decimal(14,2)->notNull(),
+            'investFrom'=>$this->integer(1)->defaultValue(0),
         ]);
         $this->createIndex(
             'online_pid',
