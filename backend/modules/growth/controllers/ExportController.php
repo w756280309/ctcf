@@ -204,6 +204,33 @@ order by 累计年化金额 desc;",
                 'itemLabels' => ['姓名', '手机号', '累计年化金额'],
                 'itemType' => ['string', 'string', 'string'],
             ],
+            'order_no_licai_plan' => [
+                'key' => 'order_no_licai_plan',
+                'title' => '贷后余额用户投资明细',
+                'content' => '贷后余额用户投资明细（不含理财计划）',
+                'sql' => 'select 
+p.title 标的名称,
+p.sn 标的sn,
+o.yield_rate 实际购买利率,
+o.username 购买人姓名,
+cc.obfsNumber 购买人手机号,
+ci.obfsIdNo 购买人身份证号,
+o.order_money 购买金额
+from online_order o 
+inner join online_product p on o.online_pid = p.id
+inner join user u on u.id = o.uid
+left join crm_identity ci on ci.account_id = u.crmAccount_id
+left join crm_contact cc on cc.encryptedNumber = u.safeMobile
+where p.status in (5,7) 
+and o.status = 1 
+and p.isLicai= 0 
+and p.funded_money > 0 
+and p.isTest = 0
+order by p.id asc',
+            'params' => null,
+            'itemLabels' => ['标的名称', '标的sn', '实际购买利率', '购买人姓名', '购买人手机号', '购买人身份证号', '购买金额'],
+            'itemType' => ['string', 'string', 'string', 'string', 'string', 'string', 'string'],
+            ],
         ];
         parent::init();
     }
