@@ -58,9 +58,7 @@ class PushController extends Controller
                 //绑定渠道
                 if ($postObj->EventKey && Affiliator::findOne(mb_substr($postObj->EventKey, 8))) {
                     $redis = Yii::$app->redis;
-                    if (!$redis->hexists('wechat-push', $postObj->FromUserName)) {
-                        $redis->hset('wechat-push', $postObj->FromUserName, mb_substr($postObj->EventKey, 8));
-                    }
+                    $redis->hset('wechat-push', $postObj->FromUserName, mb_substr($postObj->EventKey, 8));
                     /**
                      * 推送有可能在用户注册后到达
                      */
