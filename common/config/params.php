@@ -229,4 +229,11 @@ return [
     //阿里短信模板
     'sms.ali.template.register' => env('SMS_ALI_TEMPLATE_REGISTER'),
     'sms.ali.template.forget.password' => env('SMS_ALI_TEMPLATE_FIND_PASSWORD'),
+    //沃动短信通道配置
+    'WoDong' => [
+        'userid' => env('WODONGUSERID'),
+        'password' => env('WODONGPASSWORD'),
+        'account' => env('WODONGACCOUNT'),
+        'url' => env('WODONGURL'),
+    ],
 ];

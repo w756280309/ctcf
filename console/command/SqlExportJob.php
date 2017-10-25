@@ -42,6 +42,9 @@ class SqlExportJob extends Job
                 $item['未投资时长'] = (new \DateTime)->diff(new \DateTime($item['未投资时长']))->days;
             } else if ('custormer_annual_invest' === $paramKey) {
                 $item['手机号'] = SecurityUtils::decrypt($item['手机号']);
+            } else if ('order_no_licai_plan' === $paramKey) {
+                $item['手机号'] = SecurityUtils::decrypt($item['手机号']);
+                $item['身份证号'] = SecurityUtils::decrypt($item['身份证号']);
             }
             $item = array_values($item);
             if (count($item) !== $labelLength) {
