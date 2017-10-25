@@ -3,6 +3,9 @@
 namespace common\service;
 
 use common\helpers\HttpHelper;
+use common\models\sms\SmsMessage;
+use common\models\user\User;
+use common\utils\SecurityUtils;
 use Yii;
 
 /**
@@ -27,17 +30,31 @@ class WDSmsService
 
     public function send($mobile, $content)
     {
-        $data = [
-            'action' => 'send',
-            'userid' => $this->userid,
-            'password' => $this->password,
-            'mobile' => $mobile,
-            'account' => $this->account,
-            'content' => $content,
-            'json' => 1,
-        ];
-        $url = $this->url . http_build_query($data);
+        $user = User::findOne(['safeMobile' => SecurityUtils::encrypt($mobile)]);
+        if (!is_null($user)) {
+            $smsMessage = SmsMessage::initSms($user, ['content' => $content], 'wodong', SmsMessage::LEVEL_MIDDLE);
+            $data = [
+                'action' => 'send',
+                'userid' => $this->userid,
+                'password' => $this->password,
+                'mobile' => $mobile,
+                'account' => $this->account,
+                'content' => $content,
+                'json' => 1,
+            ];
+            $url = $this->url . http_build_query($data);
+            $res =json_decode(HttpHelper::doGet($url));
 
-        return(HttpHelper::doGet($url));
+            if (strtolower($res->code) == 'success') {
+                $smsMessage->status = SmsMessage::STATUS_SENT;
+                $smsMessage->save();
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+
     }
 }

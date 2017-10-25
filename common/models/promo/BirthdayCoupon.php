@@ -116,8 +116,8 @@ class BirthdayCoupon
 //                    }
                     //沃动短信通道
                     $wodong = new WDSmsService();
-                    $res = json_decode($wodong->send('18210265214', '【温都金服】尊敬的双先生，温都金服祝您生日快乐！赠您生日感恩代金券礼包，180天有效，赶紧登陆官网https://www.wenjf.com/ 看看吧，客服热线400-101-5151，退订回N'));
-                    if ($res->code != 'success') {
+                    $res = $wodong->send(SecurityUtils::decrypt($user->safeMobile), '【温都金服】尊敬的' .$user->realname. '，温都金服祝您生日快乐！赠您生日感恩代金券礼包，180天有效，赶紧登陆官网https://www.wenjf.com/ 看看吧，客服热线400-101-5151，退订回N');
+                    if (!$res) {
                         throw new \Exception();
                     }
                     $translation->commit();
