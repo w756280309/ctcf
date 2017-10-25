@@ -4,6 +4,7 @@ use common\utils\StringUtils;
 use yii\grid\GridView;
 use yii\widgets\LinkPager;
 
+
 ?>
     <style>
         .left {
@@ -67,6 +68,7 @@ use yii\widgets\LinkPager;
                             $loanRate = $loanRate.'+'.\common\utils\StringUtils::amountFormat2($loan->jiaxi).'%';
                         }
                         $refundMethod = Yii::$app->params['refund_method'][$loan->refund_method];
+                        $productList = '/product/productonline/list?title=' . $title;    //跳转到贷款管理列表页，并通过项目名称筛选出该标的
                         $detailUrl = rtrim(Yii::$app->params['clientOption']['host']['frontend'], '/') . '/deal/deal/detail?sn='.$loan->sn;
                         $html = <<<HTML
 <button type="button" class="btn btn-primary loan_title">
@@ -76,12 +78,15 @@ use yii\widgets\LinkPager;
     <div class="arrow"></div>
     <div class="popover-content">
      <table>
-        <tr><td><span>起息日:</span>$startDate</td></tr>
-        <tr><td><span>到期日:</span>$endDate</td></tr>
-        <tr><td><span>期限:</span>$expires</td></tr>
-        <tr><td><span>项目利率:</span>$loanRate</td></tr>
-        <tr><td><span>还款方式:</span>$refundMethod</td></tr>
-        <tr><td> <a href="$detailUrl" target="_blank" class="btn">查看更多</a></td></tr>
+        <tr><td colspan="2"><span>起息日:</span>$startDate</td></tr>
+        <tr><td colspan="2"><span>到期日:</span>$endDate</td></tr>
+        <tr><td colspan="2"><span>期限:</span>$expires</td></tr>
+        <tr><td colspan="2"><span>项目利率:</span>$loanRate</td></tr>
+        <tr><td colspan="2"><span>还款方式:</span>$refundMethod</td></tr>
+        <tr>
+            <td><a style="white-space: nowrap;font-size: 12px;" href="$productList" class="btn">项目基本信息</a></td>
+            <td><a style="white-space: nowrap;font-size: 12px;" href="$detailUrl" target="_blank" class="btn">标的详情(前端)</a></td>
+        </tr>
     </table>
 </div>
 </div>

@@ -59,7 +59,7 @@ use yii\bootstrap\ActiveForm;
     $(function(){
         var c_flag = '<?= $c_flag ?>';
         if(c_flag === 'close') {
-            window.parent.location.href = '/product/productonline/list';
+            window.parent.location.href = '/product/productonline/list?title=<?= $model->title ?>';
         }
     })
 </script>
