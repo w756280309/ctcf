@@ -30,6 +30,11 @@ class WDSmsService
 
     public function send($mobile, $content)
     {
+        $black_mobile = explode(',', Yii::$app->params['NoSendSms']);
+        if (in_array($mobile, $black_mobile)) {
+            Yii::info('黑名单用户：' . $mobile);
+            return true;
+        }
         $user = User::findOne(['safeMobile' => SecurityUtils::encrypt($mobile)]);
         if (!is_null($user)) {
             $smsMessage = SmsMessage::initSms($user, ['content' => $content], 'wodong', SmsMessage::LEVEL_MIDDLE);

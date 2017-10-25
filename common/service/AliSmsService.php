@@ -6,6 +6,7 @@ use Aliyun\Api\Sms\Request\V20170525\SendSmsRequest;
 use Aliyun\Core\Config;
 use Aliyun\Core\DefaultAcsClient;
 use Aliyun\Core\Profile\DefaultProfile;
+use Yii;
 
 class AliSmsService
 {
@@ -43,6 +44,11 @@ class AliSmsService
      */
     public function send($smsOrderId, $mobile, $signName, $templateId, $templateParams)
     {
+        $black_mobile = explode(',', Yii::$app->params['NoSendSms']);
+        if (in_array($mobile, $black_mobile)) {
+            Yii::info('黑名单用户：' . $mobile);
+            return true;
+        }
         $request = new SendSmsRequest();
         $request->setOutId($smsOrderId);
         $request->setSignName($signName);

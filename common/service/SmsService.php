@@ -161,6 +161,11 @@ class SmsService
      */
     public static function send($mobile, $templateId, array $data = [], User $user = null, $level = SmsMessage::LEVEL_MIDDLE)
     {
+        $black_mobile = explode(',', Yii::$app->params['NoSendSms']);
+        if (in_array($mobile, $black_mobile)) {
+            Yii::info('黑名单用户：' . $mobile);
+            return true;
+        }
         if (null === $user) {
             $user = new User([
                 'id' => 0,
@@ -182,6 +187,11 @@ class SmsService
      */
     public static function sendNow($mobile, $templateId, array $data = [], User $user = null, $level = SmsMessage::LEVEL_MIDDLE)
     {
+        $black_mobile = explode(',', Yii::$app->params['NoSendSms']);
+        if (in_array($mobile, $black_mobile)) {
+            Yii::info('黑名单用户：' . $mobile);
+            return true;
+        }
         if (self::canSend($mobile) && !empty($data)) {
             $sms = new Sms();
             $data = $sms->sendTemplateSMS($mobile, $data, $templateId);
