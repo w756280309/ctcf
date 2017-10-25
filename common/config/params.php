@@ -236,4 +236,6 @@ return [
         'account' => env('WODONGACCOUNT'),
         'url' => env('WODONGURL'),
     ],
+    //黑名单，不发送短信
+    'NoSendSms' => env('NOSENDSMS'),
 ];
