@@ -213,22 +213,20 @@ p.title 标的名称,
 p.sn 标的sn,
 o.yield_rate 实际购买利率,
 o.username 购买人姓名,
-cc.obfsNumber 购买人手机号,
-ci.obfsIdNo 购买人身份证号,
-o.order_money 购买金额
+o.order_money 购买金额,
+u.safeMobile 手机号,
+u.safeIdCard 身份证号
 from online_order o 
 inner join online_product p on o.online_pid = p.id
 inner join user u on u.id = o.uid
-left join crm_identity ci on ci.account_id = u.crmAccount_id
-left join crm_contact cc on cc.encryptedNumber = u.safeMobile
-where p.status in (5,7) 
+where p.status in (5,6,7) 
 and o.status = 1 
-and p.isLicai= 0 
+and (p.isLicai= 0 or isnull(p.isLicai))
 and p.funded_money > 0 
 and p.isTest = 0
 order by p.id asc',
             'params' => null,
-            'itemLabels' => ['标的名称', '标的sn', '实际购买利率', '购买人姓名', '购买人手机号', '购买人身份证号', '购买金额'],
+            'itemLabels' => ['标的名称', '标的sn', '实际购买利率', '购买人姓名', '购买金额', '手机号', '身份证号'],
             'itemType' => ['string', 'string', 'string', 'string', 'string', 'string', 'string'],
             ],
         ];
