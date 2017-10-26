@@ -49,6 +49,8 @@ use yii\widgets\LinkPager;
                             <center>
                                 <a href="/fenxiao/fenxiao/edit?id=<?= $val['id'] ?>" class="btn mini green">
                                     <i class="icon-edit"></i> 编辑</a>
+                                <a href="#" class="btn mini green code" id="<?= $val['affiliator_id'] ?>">
+                                    <i class="icon-edit"></i>二维码（公众号）</a>
                             </center>
                         </td>
                     </tr>
@@ -60,4 +62,14 @@ use yii\widgets\LinkPager;
         <div class="pagination" style="text-align:center"><?= LinkPager::widget(['pagination' => $pages]); ?></div>
     </div>
 </div>
+    <script>
+        $('.code').on('click', function(){
+            var id = $(this).attr('id');
+            $.get('/fenxiao/fenxiao/code', {'id':id}, function(str){
+                if (str.code == 1) {
+                    window.open('/fenxiao/fenxiao/code-view?ticket='+str.ticket);
+                }
+            })
+        })
+    </script>
 <?php $this->endBlock(); ?>

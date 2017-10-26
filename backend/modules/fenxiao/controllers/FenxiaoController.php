@@ -3,12 +3,14 @@
 namespace backend\modules\fenxiao\controllers;
 
 use backend\controllers\BaseController;
+use common\helpers\HttpHelper;
 use common\models\adminuser\AdminLog;
 use common\models\affiliation\Affiliator;
 use common\models\affiliation\AffiliateCampaign;
 use common\models\affiliation\UserAffiliation;
 use common\models\fenxiao\Admin;
 use common\models\fenxiao\FenxiaoForm;
+use EasyWeChat\Core\AccessToken;
 use Yii;
 use yii\data\Pagination;
 use yii\db\Query;
@@ -301,5 +303,54 @@ class FenxiaoController extends BaseController
             'code' => $code ? 0 : 1,
             'message' => $code ? '操作成功' : '操作失败',
         ];
+    }
+
+    //生成渠道二维码
+    public function actionCode()
+    {
+        $id = Yii::$app->request->get('id');
+        if (Affiliator::findOne($id)) {
+            $appId = Yii::$app->params['weixin']['appId'];
+            $appSecret = Yii::$app->params['weixin']['appSecret'];
+            if (empty($appId) || empty($appSecret)) {
+                throw new \Exception();
+            }
+            $app = new AccessToken($appId, $appSecret);
+            $accessToken = $app->getToken();
+
+            $res = self::affCode($accessToken, $id);
+            if ($res->code == '40001') {
+                $accessToken = $app->getToken(true);
+                $res = self::affCode($accessToken, $id);
+            }
+            if ($res->ticket) {
+                $get_url = 'https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket=';
+                return ['code' => 1, 'ticket' => $get_url . $res->ticket];
+            }
+        }
+
+    }
+    //查看二维码
+    public function actionCodeView($ticket)
+    {
+        return $this->render('code_view', ['ticket' => $ticket]);
+    }
+
+    /**
+     * 生成渠道二维码
+     */
+    static function affCode($accessToken, $aff_id)
+    {
+        $url = 'api.weixin.qq.com/cgi-bin/qrcode/create?access_token=';
+        $data = '{
+                "action_name" : "QR_LIMIT_SCENE",
+                "action_info" : {
+                    "scene" : {
+                        "scene_id" : "'.$aff_id.'"
+                    }
+                }
+            }';
+        $url = $url . $accessToken;
+        return json_decode(HttpHelper::doRequest($url, $data));
     }
 }

@@ -51,14 +51,24 @@ class PushController extends Controller
         $data = file_get_contents("php://input"); //接收post数据
         if (!empty($data)) {
             $postObj = simplexml_load_string($data, 'SimpleXMLElement', LIBXML_NOCDATA); //转换post数据为simplexml对象
-            if ($postObj->Event == 'subscribe' && $postObj->FromUserName) {
+            if ($postObj->Event == 'subscribe') {
                 //欢迎信息
-                self::hello($postObj->FromUserName);
-
+                $res = self::hello($postObj->FromUserName);
+                if ($res->errcode == '40001') {
+                    self::hello($postObj->FromUserName, true);
+                }
+            }
+            if (($postObj->Event == 'subscribe' || $postObj->Event == 'SCAN') && $postObj->FromUserName) {
                 //绑定渠道
-                if ($postObj->EventKey && Affiliator::findOne(mb_substr($postObj->EventKey, 8))) {
+                if ($postObj->Event == 'subscribe') {
+                    $event_key = mb_substr($postObj->EventKey, 8);
+                } else {
+                    $event_key = $postObj->EventKey;
+                }
+                if (Affiliator::findOne($event_key)) {
                     $redis = Yii::$app->redis;
-                    $redis->hset('wechat-push', $postObj->FromUserName, mb_substr($postObj->EventKey, 8));
+                    $redis->hset('wechat-push', $postObj->FromUserName, $event_key);
+
                     /**
                      * 推送有可能在用户注册后到达
                      */
@@ -73,6 +83,9 @@ class PushController extends Controller
                         if (!UserAffiliation::findOne(['user_id' => $user->id])) {
                             self::bindQD($user, $openId);
                         }
+                    } else {
+                        //已经绑定微信的则删除缓存
+//                        $redis->hdel('wechat-push', $postObj->FromUserName);
                     }
                 }
             }
@@ -115,7 +128,7 @@ class PushController extends Controller
     }
 
     //发送欢迎消息
-    private function hello($openid)
+    private function hello($openid, $reflash = false)
     {
         //推送欢迎消息
         $url = 'https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token=';
@@ -125,7 +138,7 @@ class PushController extends Controller
             throw new \Exception();
         }
         $app = new AccessToken($appId, $appSecret);
-        $accessToken = $app->getToken();
+        $accessToken = $app->getToken($reflash);
         $url = $url . $accessToken;
         $post_data = '{
             "touser":"'.$openid.'",
@@ -147,7 +160,7 @@ class PushController extends Controller
 <a href=\"https://www.wenjf.com\">官方网站</a>",
     }
 }';
-        return self::post($url, $post_data);
+        return json_decode(self::post($url, $post_data));
     }
 
 }

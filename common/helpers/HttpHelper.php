@@ -16,7 +16,12 @@ class HttpHelper {
      * @return mixed
      */
     public static function doRequest($requestUrl, $postData = array()) {
-        $post_string = self::postArrayToString($postData);
+        if (is_array($postData)) {
+            $post_string = self::postArrayToString($postData);
+        } else {
+            $post_string = $postData;
+        }
+
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $requestUrl);
         curl_setopt($ch, CURLOPT_POST, strlen($post_string));
@@ -80,5 +85,4 @@ class HttpHelper {
         }
         return "unknown";
     }
-
 }
