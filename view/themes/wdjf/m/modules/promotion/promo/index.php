@@ -78,22 +78,41 @@ $config = json_decode($promo->config, true);
             <li><img data-original="<?= FE_BASE_URI ?>wap/luodiye/images/chart_02.png" alt=""></li>
         </ul>
     </div>
-    <div class="newnorm">
-        <p class="newnormtitle f15">新手专享<span class="f12">专享体验</span><span class="f12">灵活稳健</span></p>
-        <a href="/deal/deal/index">
-            <p class="f15">新手专享标</p>
-            <p class="f45"><em>10<i class="f25">%</i><span class="f15"></span></em></p>
-            <p class="f12">预期年化率</p>
-            <ul class="clearfix">
-                <li class="f14 lf text-align-lf"><img class="icon5"  data-original="<?= FE_BASE_URI ?>wap/luodiye/images/icon_05.png" alt=""> 1,000元起投</li>
-                <li class="f14 lf comred"><img class="icon6"  data-original="<?= FE_BASE_URI ?>wap/luodiye/images/icon_06.png" alt=""> 15天理财期限</li>
-                <li class="f14 lf text-align-rg"><img class="icon7"  data-original="<?= FE_BASE_URI ?>wap/luodiye/images/icon_07.png" alt=""> 限购一万</li>
-                <li class="f18 lf">去理财</li>
-            </ul>
-        </a>
-        <p class="f15 intro"><img  data-original="<?= FE_BASE_URI ?>wap/luodiye/images/icon_02.png" alt=""> 温都金服历史兑付率100%</p>
-    </div>
 
+    <?php if ('carshow11' === $promo->key) { ?>
+        <div class="newnorm">
+            <p class="newnormtitle f15">温盈恒<span class="f12">温州项目</span><span class="f12">民生工程</span></p>
+            <a href="/issuer?id=19">
+                <p class="f15">温盈恒-(2017010296)102601</p>
+                <p class="f45"><em>7.5～8<i class="f25">%</i><span class="f15"></span></em></p>
+                <p class="f12">预期年化率</p>
+                <ul class="clearfix">
+                    <li class="f14 lf text-align-lf"><img class="icon5"  data-original="<?= FE_BASE_URI ?>wap/luodiye/images/icon_05.png" alt=""> 100,000起投</li>
+                    <li class="f14 lf comred"><img class="icon6"  data-original="<?= FE_BASE_URI ?>wap/luodiye/images/icon_06.png" alt=""> 18月理财期限</li>
+                    <li class="f14 lf text-align-rg"><img class="icon7"  data-original="<?= FE_BASE_URI ?>wap/luodiye/images/icon_07.png" alt=""> 万元递增</li>
+                    <li class="f18 lf">去理财</li>
+                </ul>
+            </a>
+            <p class="f15 intro"><img  data-original="<?= FE_BASE_URI ?>wap/luodiye/images/icon_02.png" alt=""> 温都金服历史兑付率100%</p>
+            <p class="f15 intro"><img  data-original="<?= FE_BASE_URI ?>wap/luodiye/images/icon_02.png" alt="">累计兑付186,019.88万元</p>
+        </div>
+    <?php } else { ?>
+        <div class="newnorm">
+            <p class="newnormtitle f15">新手专享<span class="f12">专享体验</span><span class="f12">灵活稳健</span></p>
+            <a href="/deal/deal/index">
+                <p class="f15">新手专享标</p>
+                <p class="f45"><em>10<i class="f25">%</i><span class="f15"></span></em></p>
+                <p class="f12">预期年化率</p>
+                <ul class="clearfix">
+                    <li class="f14 lf text-align-lf"><img class="icon5"  data-original="<?= FE_BASE_URI ?>wap/luodiye/images/icon_05.png" alt=""> 1,000元起投</li>
+                    <li class="f14 lf comred"><img class="icon6"  data-original="<?= FE_BASE_URI ?>wap/luodiye/images/icon_06.png" alt=""> 15天理财期限</li>
+                    <li class="f14 lf text-align-rg"><img class="icon7"  data-original="<?= FE_BASE_URI ?>wap/luodiye/images/icon_07.png" alt=""> 限购一万</li>
+                    <li class="f18 lf">去理财</li>
+                </ul>
+            </a>
+            <p class="f15 intro"><img  data-original="<?= FE_BASE_URI ?>wap/luodiye/images/icon_02.png" alt=""> 温都金服历史兑付率100%</p>
+        </div>
+    <?php } ?>
     <div class="choosereason2">
         <span class="reasonone f15" style="margin-bottom: 0.2666667rem;">02  股东强势 国资背景</span>
         <div class="shareholder">
@@ -170,7 +189,7 @@ $config = json_decode($promo->config, true);
             <li><img  data-original="<?= FE_BASE_URI ?>wap/luodiye/images/media_01.png" alt=""></li>
             <li><img  data-original="<?= FE_BASE_URI ?>wap/luodiye/images/media_02.png" alt=""></li>
             <li><img  data-original="<?= FE_BASE_URI ?>wap/luodiye/images/media_03.png" alt=""></li>
-            <li><img  data-original="<?= FE_BASE_URI ?>wap/luodiye/images/media_04.png" alt=""></li>
+            <li><img  data-original="<?= FE_BASE_URI ?>wap/luodiye/images/media_04_new.png" alt=""></li>
         </ul>
     </div>
 
