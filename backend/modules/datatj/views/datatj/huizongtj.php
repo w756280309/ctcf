@@ -26,14 +26,14 @@ CSS
         </div>
     </div>
     <div class="row-fluid">
-<!--        <div class="span4">平台累计交易额：<span style="color: red;">--><?//= number_format($totalTotalInve, 2) ?><!--</span> 元</div>-->
+        <div class="span4">平台累计交易额：<span style="color: red;"><?= number_format($totalTotalInve, 2) ?></span> 元</div>
         <div class="span4">线上累计交易额：<?= number_format($totalOnlineInve, 2) ?>元</div>
-<!--        <div class="span4">线下累计交易额：--><?//= number_format($totalOfflineInve, 2) ?><!--元</div>-->
+        <div class="span4">线下累计交易额：<?= number_format($totalOfflineInve, 2) ?>元</div>
     </div>
     <div class="row-fluid">
-<!--        <div class="span4">本月交易额：<span style="color: red;">--><?//= number_format($monthTotalInvestment, 2) ?><!--</span> 元</div>-->
-        <div class="span4">本月交易额：<?= number_format($monthOnlineInvestment, 2) ?>元</div>
-<!--        <div class="span4">线下本月交易额：--><?//= number_format($monthOfflineInvestment, 2) ?><!--元</div>-->
+        <div class="span4">本月交易额：<span style="color: red;"><?= number_format($monthTotalInvestment, 2) ?></span> 元</div>
+        <div class="span4">线上本月交易额：<?= number_format($monthOnlineInvestment, 2) ?>元</div>
+        <div class="span4">线下本月交易额：<?= number_format($monthOfflineInvestment, 2) ?>元</div>
     </div>
     <div class="row-fluid">
         <div class="span12">今日线上交易额：<?= number_format($todayOnlineInvestment, 2) ?>元</div>
@@ -44,7 +44,6 @@ CSS
     </div>
     <div class="row-fluid">
         <div class="span4">贷后余额： <?= number_format($remainMoney, 2) ?>元</div>
-        <div class="span4">贷后年化余额： <?= number_format($annualInvestment, 2) ?>元</div>
         <div class="span4">平台可用余额：<?= number_format($usableMoney, 2) ?>元</div>
     </div>
     <div class="row-fluid">

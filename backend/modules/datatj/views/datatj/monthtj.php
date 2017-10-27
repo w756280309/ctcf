@@ -41,7 +41,7 @@ use yii\grid\GridView;
                         return $data['bizDate'];
                     }
                 ],
-                /**[
+                [
                     'attribute' => 'totalInvestment',
                     'label' => '总交易额',
                     'value' => function ($data) {
@@ -49,17 +49,17 @@ use yii\grid\GridView;
                     },
                     'contentOptions' => ['class' => 'money'],
                     'headerOptions' => ['class' => 'money'],
-                ],*/
+                ],
                 [
                     'attribute' => 'onlineInvestment',
-                    'label' => '交易额',
+                    'label' => '线上交易额',
                     'value' => function ($data) {
                         return number_format($data['onlineInvestment'], 2);
                     },
                     'contentOptions' => ['class' => 'money'],
                     'headerOptions' => ['class' => 'money'],
                 ],
-                /**[
+                [
                     'attribute' => 'offlineInvestment',
                     'label' => '线下交易金额',
                     'value' => function ($data) {
@@ -67,7 +67,7 @@ use yii\grid\GridView;
                     },
                     'contentOptions' => ['class' => 'money'],
                     'headerOptions' => ['class' => 'money'],
-                ],*/
+                ],
                 [
                     'attribute' => 'rechargeMoney',
                     'label' => '充值金额',

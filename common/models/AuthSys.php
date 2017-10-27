@@ -53,20 +53,19 @@ class AuthSys
     public static function getMenus($psn = '0')
     {
         $admin = Yii::$app->user->getIdentity();
+
         if ('R001' === $admin->role_sn) {
             $menus = Auth::find()
                 ->where(['psn' => $psn])
-                ->andWhere(['<>', 'path', 'offline/offline/list'])
                 ->asArray()
                 ->all();
         } else {
             $auth_table = Auth::tableName();
             $admin_auth_table = AdminAuth::tableName();
             $menus = AdminAuth::find()
-                ->select("$auth_table.auth_name, $auth_table.psn, auth_sn, path")
                 ->innerJoin($auth_table, "$admin_auth_table.auth_sn = $auth_table.sn")
                 ->where(["admin_id" => $admin->id, "$auth_table.psn" => $psn])
-                ->andWhere(['<>', 'path', 'offline/offline/list'])
+                ->select("$auth_table.auth_name, $auth_table.psn, auth_sn, path")
                 ->asArray()
                 ->all();
         }

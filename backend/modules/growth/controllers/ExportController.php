@@ -147,7 +147,7 @@ GROUP BY pc.recp_id",
                 'itemType' => ['string', 'int', 'int'],
             ],
 
-            /**'current_custormer_assets_million' => [
+            'current_custormer_assets_million' => [
                 'key' => 'current_custormer_assets_million',
                 'title' => '资产大于100万的线下用户',
                 'content' => '统计当前持有资产大于100万的线下用户',
@@ -168,7 +168,7 @@ order by 持有资产 desc",
                 'params' => null,
                 'itemLabels' => ['姓名', '手机号', '性别','年龄','持有资产'],
                 'itemType' => ['string', 'string', 'string','int','float'],
-            ],*/
+            ],
             'custormer_annual_invest' => [
                 'key' => 'custormer_annual_invest',
                 'title' => '指定日期累计年化',
