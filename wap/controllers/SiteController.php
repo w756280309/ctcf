@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\modules\wechat\controllers\PushController;
 use common\controllers\HelpersTrait;
 use common\models\growth\AppMeta;
 use common\models\mall\PointRecord;
@@ -33,6 +34,7 @@ use common\models\user\EditpassForm;
 use common\models\user\User;
 use common\models\user\CaptchaForm;
 use common\utils\SecurityUtils;
+use EasyWeChat\Message\Text;
 use Lhjx\Noty\Noty;
 use wap\modules\promotion\models\RankingPromo;
 use Yii;

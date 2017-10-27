@@ -238,4 +238,9 @@ return [
     ],
     //黑名单，不发送短信
     'NoSendSms' => env('NOSENDSMS'),
+    'redis_config' => [
+        'hostname' => env('QUEUE_REDIS_HOST'),
+        'port' => env('QUEUE_REDIS_PORT'),
+        'password' => env('QUEUE_REDIS_PASSWORD'),
+    ]
 ];

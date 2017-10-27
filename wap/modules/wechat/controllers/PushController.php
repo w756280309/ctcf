@@ -2,21 +2,14 @@
 
 namespace app\modules\wechat\controllers;
 
-use common\models\Functions;
 use common\models\user\User;
-use EasyWeChat\Core\Http;
-use EasyWeChat\Foundation\Application;
-use GuzzleHttp\Client;
+use EasyWeChat\Message\Text;
 use yii\web\Controller;
 use Yii;
 use common\models\thirdparty\SocialConnect;
 use common\models\affiliation\Affiliator;
 use common\models\affiliation\AffiliateCampaign;
 use common\models\affiliation\UserAffiliation;
-use common\helpers\HttpHelper;
-use GuzzleHttp\Client as HttpClient;
-use EasyWeChat\Core\AccessToken;
-
 /**
  * 微信推送服务
  * 目前记录用户关注微信号的渠道信息
@@ -55,26 +48,20 @@ class PushController extends Controller
             if ($postObj->Event == 'subscribe') {
                 //欢迎信息
                 $res = self::hello($postObj->FromUserName);
-                if ($res->errcode == '40001') {
-                    self::hello($postObj->FromUserName, true);
-                }
             } else if (strtolower($postObj->Event) == 'click') {
                 $res = self::sendMessage($postObj->EventKey, $postObj->FromUserName);
-                if ($res->errcode == '40001') {
-                    self::sendMessage($postObj->EventEventKeyKey, $postObj->FromUserName, true);
-                }
             }
+
             if (($postObj->Event == 'subscribe' || $postObj->Event == 'SCAN') && $postObj->FromUserName) {
                 //绑定渠道
                 if ($postObj->Event == 'subscribe') {
-                    $event_key = mb_substr($postObj->EventKey, 8);
+                    $event_key = mb_substr(strval($postObj->EventKey), 8);
                 } else {
-                    $event_key = $postObj->EventKey;
+                    $event_key = strval($postObj->EventKey);
                 }
                 if (Affiliator::findOne($event_key)) {
                     $redis = Yii::$app->redis;
                     $redis->hset('wechat-push', $postObj->FromUserName, $event_key);
-
                     /**
                      * 推送有可能在用户注册后到达
                      */
@@ -119,45 +106,31 @@ class PushController extends Controller
     }
 
     //发送欢迎消息
-    private function hello($openid, $reflash = false)
+    private function hello($openid)
     {
         //推送欢迎消息
-        $url = 'https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token=';
-
-        $accessToken = Functions::getAccessToken($reflash);
-        $url = $url . $accessToken;
-        $post_data = '{
-            "touser":"'.$openid.'",
-            "msgtype":"text",
-    "text":
-    {
-         "content":"亲！欢迎来到温都金服！
+        $message = new Text(['content' => '亲！欢迎来到温都金服！
 国资平台，靠谱！优质项目，赚钱！全程监管，放心！
 初次见面，先送您二重好礼略表心意！
 一重注册礼：注册就送288红包！
 二重首投礼：首次投资送积分、送购物卡！
 
-<a href=\"https://m.wenjf.com/user/wechat/bind\">账户绑定点这里</a>
+' .'<a href="https://m.wenjf.com/user/wechat/bind">账户绑定点这里</a>
 
-<a href=\"https://m.wenjf.com/promotion/wrm170210\">领豪礼点这里</a>
+'. '<a href="https://m.wenjf.com/promotion/wrm170210">领豪礼点这里</a>
 
-<a href=\"\">往期精彩点这里</a>
+' . '<a href="">往期精彩点这里</a>
 
-<a href=\"https://www.wenjf.com\">官方网站</a>",
-    }
-}';
-        return json_decode(HttpHelper::doRequest($url, $post_data));
+' . '<a href="https://www.wenjf.com">官方网站</a>'
+        ]);
+        Yii::$container->get('weixin_wdjf')->staff->message($message)->to(strval($openid))->send();
     }
     /**
      * 自定义菜单事件的推送
      */
-    static function sendMessage($key, $openid, $reflash = false)
+    static function sendMessage($key, $openid)
     {
-
         $key = strval($key);
-        $url = 'https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token=';
-        $accessToken = Functions::getAccessToken($reflash);
-        $url = $url . $accessToken;
         $message = [
             'COMPANYINTRODUC' => '温州温都金融信息服务股份有限公司简称[温都金服]，是温州报业传媒旗下理财平台，重要股东为温州报业传媒有限公司和南京金融资产交易中心，双方整合自身强大的公信力、受众、行业资源优势，以及专业的风控能力、理财产品采集能力、网络技术能力等，为用户呈现更契合自身需求的理财产品，为用户创造更多的价值，为社会营造诚信良好的金融环境，有效推动普惠金融的发展。',
             'OPINIONFEEDBACK' => '温都金服上线啦/鼓掌/鼓掌/鼓掌，这是咱们温州自己的金融服务平台，刚刚上线，有什么问题或意见可以告诉我们，好的建议我们会给予一定奖励哟~/呲牙/呲牙/呲牙/握手/握手。请点击左侧键盘，回复内容[意见：+正文]',
@@ -174,15 +147,7 @@ class PushController extends Controller
         ];
         if (array_key_exists($key, $message)) {
             $content = $message[$key];
-            $post_data = '{
-            "touser":"'.$openid.'",
-            "msgtype":"text",
-            "text":
-                { 
-                    "content":"'.$content.'",
-                }
-        }';
-            return json_decode(HttpHelper::doRequest($url, $post_data));
+            Yii::$container->get('weixin_wdjf')->staff->message($content)->to(strval($openid))->send();
         }
     }
 

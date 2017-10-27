@@ -54,3 +54,22 @@ Yii::$container->set('dingTalk', DingNotify\Clients::class, [
         ],
     ],
 ]);
+Yii::$container->set('weixin_wdjf', function(){
+    $options = [
+        'debug' => false,       //所有日志均不会记录
+        'app_id' => Yii::$app->params['weixin']['appId'],
+        'secret' => Yii::$app->params['weixin']['appSecret'],
+    ];
+    $app = new \EasyWeChat\Foundation\Application($options);
+    $cache = new \Doctrine\Common\Cache\RedisCache();
+    // 创建 redis 实例
+    $redis = new \Redis();
+    $params = Yii::$app->params['redis_config'];
+    $redis->connect($params['hostname'], $params['port']);
+    if ($params['password']) {
+        $redis->auth($params['password']);
+    }
+    $cache->setRedis($redis);
+    $app->access_token->setCache($cache);
+    return $app;
+});
