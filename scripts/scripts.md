@@ -51,6 +51,9 @@
 10 3 * * * /usr/bin/php /data/www/WDJF/yii njfae/njfae/init-payments >> /dev/null 2>&1
 20 3 * * * /usr/bin/php /data/www/WDJF/yii njfae/njfae/init-credits >> /dev/null 2>&1
 
+# 公众号菜单
+*/5 * * * * /usr/bin/php /data/www/WDJF/yii wechat-menu/menu-del >> /dev/null 2>&1
+*/5 * * * * /usr/bin/php /data/www/WDJF/yii wechat-menu/menu-add >> /dev/null 2>&1
 ```
 
 # 常驻进程脚本

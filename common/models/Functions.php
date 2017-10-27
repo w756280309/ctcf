@@ -2,6 +2,9 @@
 
 namespace common\models;
 
+use EasyWeChat\Core\AccessToken;
+use Yii;
+
 class Functions {
 
     public function passport_encrypt($txt, $key) {
@@ -113,6 +116,22 @@ class Functions {
             }
         }
         return $ret;
+    }
+
+    /**
+     * 获取公众号access_token
+     * 默认读缓存，微信返回40001，需要重新请求
+     */
+    public static function getAccessToken($reflash = false)
+    {
+        $appId = Yii::$app->params['weixin']['appId'];
+        $appSecret = Yii::$app->params['weixin']['appSecret'];
+        if (empty($appId) || empty($appSecret)) {
+            throw new \Exception();
+        }
+        $app = new AccessToken($appId, $appSecret);
+        $accessToken = $app->getToken($reflash);
+        return $accessToken;
     }
 
 }

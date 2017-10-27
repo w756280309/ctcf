@@ -2,7 +2,6 @@
 
 namespace app\controllers;
 
-use app\modules\wechat\controllers\PushController;
 use common\controllers\HelpersTrait;
 use common\models\growth\AppMeta;
 use common\models\mall\PointRecord;
