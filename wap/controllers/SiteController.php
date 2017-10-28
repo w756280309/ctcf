@@ -117,7 +117,7 @@ class SiteController extends Controller
      *
      * 1. 理财专区和新手专区只显示预告期或募集中项目,没有就不显示;
      */
-    public function actionIndex()
+/*    public function actionIndex()
     {
         $this->layout = 'normal';
         $cond = [OnlineProduct::STATUS_PRE, OnlineProduct::STATUS_NOW];
@@ -195,6 +195,38 @@ class SiteController extends Controller
             'xs' => $xs,
             'loans' => $loans,
             'issuers' => $issuers,
+            'hotActs' => $hotActs,
+            'news' => $news,
+            'kaiPing' => $queryKaiping,
+        ]);
+    }*/
+
+    public function actionIndex()
+    {
+        $this->layout = 'normal';
+        //热门活动
+        $hotActs = Adv::fetchHomeBanners($is_m = 1);
+
+        //开屏图
+        $queryKaiping = $this->advQuery()
+            ->andWhere(['type' => Adv::TYPE_KAIPING])
+            ->orderBy([
+                'show_order' => SORT_ASC,
+                'updated_at' => SORT_DESC,
+            ])
+            ->one();
+
+        //公告专区
+        $news = News::find()
+            ->where([
+                'status' => News::STATUS_PUBLISH,
+                'allowShowInList' => true,
+            ])
+            ->orderBy(['news_time' => SORT_DESC])
+            ->limit(3)
+            ->all();
+
+        return $this->render('index171028', [
             'hotActs' => $hotActs,
             'news' => $news,
             'kaiPing' => $queryKaiping,

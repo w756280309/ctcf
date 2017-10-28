@@ -1,0 +1,57 @@
+.footer-nav {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    max-width: 750px;
+    margin:0 auto;
+    background-color: #fff;
+    padding-top: 0.18666667rem;
+    padding-bottom: 0.12rem;
+    box-sizing: border-box;
+    z-index: 99999;
+}
+.footer-nav .footer-links {
+    display: block;
+    width: 33%;
+    height: 100%;
+    text-align: center;
+    z-index: 99999;
+}
+.footer-nav .footer-links div {
+    display: block;
+    height: 0.56rem;
+    margin: 0 auto 0.2rem;
+}
+.footer-nav .footer-links .footer-links-icon1.icon2{
+    background: url("../img/icon_footer_home2.png") center no-repeat;
+    background-size: contain;
+}
+.footer-nav .footer-links .footer-links-icon1.icon1{
+    background: url("../img/icon_footer_home.png") center no-repeat;
+    background-size: contain;
+}
+.footer-nav .footer-links .footer-links-icon2.icon2{
+    background: url("../img/icon_footer_list2.png") center no-repeat;
+    background-size: contain;
+}
+.footer-nav .footer-links .footer-links-icon2.icon1{
+    background: url("../img/icon_footer_list.png") center no-repeat;
+    background-size: contain;
+}
+.footer-nav .footer-links .footer-links-icon3.icon2{
+    background: url("../img/icon_footer_account2.png") center no-repeat;
+    background-size: contain;
+}
+.footer-nav .footer-links .footer-links-icon3.icon1{
+    background: url("../img/icon_footer_account.png") center no-repeat;
+    background-size: contain;
+}
+.footer-nav .footer-links p {
+    color: #acb2b9;
+    height: 0.24rem;
+    line-height: 0.24rem;
+    font-size: 0.24rem;
+}
+.footer-nav .footer-links .active {
+    color: #fc6358;
+}
