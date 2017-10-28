@@ -119,7 +119,7 @@ class PushController extends Controller
 
 '. '<a href="https://m.wenjf.com/promotion/wrm170210">领豪礼点这里</a>
 
-' . '<a href="">往期精彩点这里</a>
+' . '<a href="https://mp.weixin.qq.com/mp/profile_ext?action=home&scene=115&__biz=MzI0MTIwOTQxMQ==#wechat_redirect">往期精彩点这里</a>
 
 ' . '<a href="https://www.wenjf.com">官方网站</a>'
         ]);
