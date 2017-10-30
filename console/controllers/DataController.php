@@ -551,4 +551,37 @@ having orderAsset >= 0";
         $objWriter->save($file);
         exit();
     }
+
+    /**
+     * 统计一段时间内通过指定渠道码注册的用户信息情况
+     * 脚本命令： php yii data/user-info-by-campaign-source 2017-10-24 2017-10-30
+     * campaign_source由$this->getExportCampaignSources()提供
+     *
+     * @param string $startDate 注册开始日期
+     * @param string $endDate   注册结束日期
+     */
+    public function actionUserInfoByCampaignSource($startDate, $endDate)
+    {
+        $sql = "select 
+from_unixtime(u.created_at) 注册时间,u.campaign_source 渠道码,u.real_name 姓名,u.safeMobile 手机号,if(ub.id>0, 1, 0) 是否绑卡,ui.investTotal 投资总金额
+from user u
+left join user_info ui on ui.user_id = u.id
+left join user_bank ub on ub.uid = u.id
+where u.campaign_source in ('wzdsbczggt','zswzczggt','wzcjczggt')
+and date(from_unixtime(u.created_at)) >= :startDate
+and date(from_unixtime(u.created_at)) <= :endDate";
+        $userInfo = Yii::$app->db->createCommand($sql, [
+            'startDate' => $startDate,
+            'endDate' => $endDate,
+        ])->queryAll();
+
+        //生成用户信息excel
+        $title = ['注册时间', '渠道码', '姓名', '手机号', '是否绑卡', '投资总金额'];
+        array_unshift($userInfo, $title);
+        $file = Yii::getAlias('@app/runtime/userInfo_by_campaignSources_'.date('YmdHis').'.xlsx');
+        $objPHPExcel = UserStats::initPhpExcelObject($userInfo);
+        $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+        $objWriter->save($file);
+        exit();
+    }
 }
