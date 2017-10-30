@@ -24,12 +24,28 @@ class SqlExportJob extends Job
         }
         $itemType = array_values($itemType);
 
+        if ('export_referral_user_info' === $paramKey && !empty($queryParams['campaignSource'])) {
+            $campaignSource = trim($queryParams['campaignSource'], ',');
+            unset($queryParams['campaignSource']);
+            $campaignArr = explode(',', $campaignSource);
+            $len = count($campaignArr);
+            $paramKeysIn = [];
+            $pdoKeys = '';
+            for ($i = 0; $i < $len; $i++) {
+                $keyV = 'v' . $i;
+                $pdoKeys = $pdoKeys . ':v' . $i . ',';
+                $paramKeysIn[] = $keyV;
+            }
+            $pdoKeys = rtrim($pdoKeys, ',');
+            $sql = str_replace(":campaignSource", $pdoKeys, $sql);
+            $campaignSources = array_combine($paramKeysIn, $campaignArr);
+            $queryParams = array_merge($queryParams, $campaignSources);
+        }
         $command = Yii::$app->db->createCommand($sql);
         if (!empty($queryParams)) {
             $command = $command->bindValues($queryParams);
         }
         $data = $command->queryAll();
-
         $exportData[] = $itemLabels;
         
         foreach ($data as $num => $item) {
@@ -45,6 +61,8 @@ class SqlExportJob extends Job
             } else if ('order_no_licai_plan' === $paramKey) {
                 $item['手机号'] = SecurityUtils::decrypt($item['手机号']);
                 $item['身份证号'] = SecurityUtils::decrypt($item['身份证号']);
+            } else if ('export_referral_user_info' === $paramKey) {
+                $item['手机号'] = SecurityUtils::decrypt($item['手机号']);
             }
             $item = array_values($item);
             if (count($item) !== $labelLength) {

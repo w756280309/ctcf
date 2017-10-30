@@ -229,6 +229,44 @@ order by p.id asc',
             'itemLabels' => ['标的名称', '标的sn', '实际购买利率', '购买人姓名', '购买金额', '手机号', '身份证号'],
             'itemType' => ['string', 'string', 'string', 'string', 'string', 'string', 'string'],
             ],
+            'export_referral_user_info' => [
+                'key' => 'export_referral_user_info',
+                'title' => '渠道用户信息导出',
+                'content' => '渠道用户信息导出',
+                'sql' => 'select 
+from_unixtime(u.created_at) 注册时间,u.campaign_source 渠道码,u.real_name 姓名,u.safeMobile 手机号,if(ub.id>0, 1, 0) 是否绑卡,ui.investTotal 投资总金额
+from user u
+left join user_info ui on ui.user_id = u.id
+left join user_bank ub on ub.uid = u.id
+where u.campaign_source in (:campaignSource)
+and date(from_unixtime(u.created_at)) >= :startDate
+and date(from_unixtime(u.created_at)) <= :endDate',
+                'params' => [
+                    'startDate' => [//参数列表， key 是参数名， 不可为空
+                        'name' => 'startDate',//参数名
+                        'type' => 'date',//参数的数据类型
+                        'value' => date('Y-m-d', strtotime('-2 day')),//参数的默认值
+                        'title' => '开始日期',//参数标题
+                        'isRequired' => true,//是否必要参数, 默认都是必要参数
+                    ],
+                    'endDate' => [//参数列表， key 是参数名， 不可为空
+                        'name' => 'endDate',//参数名
+                        'type' => 'date',//参数的数据类型
+                        'value' => date('Y-m-d', strtotime('-1 day')),//参数的默认值
+                        'title' => '结束日期',//参数标题
+                        'isRequired' => true,//是否必要参数, 默认都是必要参数
+                    ],
+                    'campaignSource' => [//参数列表， key 是参数名， 不可为空
+                        'name' => '渠道信息',//参数名
+                        'type' => 'string',//参数的数据类型
+                        'value' => 'wzdsbczggt,zswzczggt,wzcjczggt',//参数的默认值
+                        'title' => '渠道用户信息导出',//参数标题
+                        'isRequired' => true,//是否必要参数, 默认都是必要参数
+                    ],
+                ],
+                'itemLabels' => ['注册时间', '渠道码', '姓名', '手机号', '是否绑卡', '投资总金额'],
+                'itemType' => ['date', 'string', 'string', 'string', 'int', 'string'],
+            ],
         ];
         parent::init();
     }
