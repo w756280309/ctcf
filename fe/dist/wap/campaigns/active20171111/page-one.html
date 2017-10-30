@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>11月理财节</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+	<meta name="format-detection" content="telphone=no, email=no"/>
+	<link rel="stylesheet" href="__FE_BASE_URI__/common/css/wenjfbase.css">
+	<!--<link rel="stylesheet" href="css/first-page.css">-->
+	<link rel="stylesheet" href="__FE_BASE_URI__wap/campaigns/active20171111/less/change-one.css">
+	<script src="__FE_BASE_URI__/libs/lib.flexible3.js"></script>
+	<script src="__FE_BASE_URI__/libs/jquery-1.11.1.min.js"></script>
+	<script src="__FE_BASE_URI__/libs/vue.min.js"></script>
+</head>
+<body>
+<div class="flex-content" id="app">
+	<img class="top-part" src="__FE_BASE_URI__wap/campaigns/active20171111/images/banner-one.png" alt="图">
+	<img class="text-tip" src="__FE_BASE_URI__wap/campaigns/active20171111/images/text-tip.png" alt="空心字">
+	<div class="bottom-part ">
+		<img class="card-box" src="__FE_BASE_URI__wap/campaigns/active20171111/images/pic_card.png" alt="图">
+		<div class="result-box clearfix">
+			<div class="result-box-task lf">
+				<p >成功邀请好友</p>
+				<p >注册并投资</p>
+				<p class="center-txt"><span class="inviteTask">0</span>/1</p>
+				<a href="#" class="link">去邀请</a>
+			</div>
+			<div class="result-box-task rg">
+				<p class="top-invest">任意投资一笔</p>
+				<p class="center-txt"><span class="investTask">0</span>/1</p>
+				<a href="#" class="link">去投资</a>
+			</div>
+		</div>
+		<p class="last-tips">本活动最终解释权归温都金服所有</p>
+	</div>
+</div>
+<script>
+	$(function(){
+	   $.ajax({
+			type: "GET",
+			url: "/promotion/控制器/award-list?key=活动key",
+			dataType: "json",
+			success: function (data) {
+               $('.inviteTask').html(data.inviteTask); // 邀请
+               $('.investTask').html(data.investTask);// 投资
+               if (data.inviteTask == 1) {
+                   $('.inviteTask').parents('.result-box-task').addClass('finished');
+			   }
+				if (data.investTask == 1) {
+					$('.investTask').parents('.result-box-task').addClass('finished');
+				}
+            }
+	   })
+	});
+	var app = new Vue({
+	    el: 'app',
+		data: {
+            inviteTask: 1,
+            investTask: 0
+		},
+        created: function() {
+            this.init();
+		},
+		methods: {
+            init: function () {
+                var _this = this;
+                $.ajax({
+                    type: "GET",
+                    url: "/promotion/控制器/award-list?key=活动key",
+                    dataType: "json",
+                    success: function (data) {
+                        _this.inviteTask = data.inviteTask;
+                        _this.investTask = data.investTask;
+                        $('.inviteTask').html(_this.inviteTask); // 邀请
+                        $('.investTask').html(_this.investTask);// 投资
+                        if (_this.inviteTask == '1') {
+                            $('.inviteTask').parents('.result-box-task').addClass('finished');
+                        }
+                        if (_this.investTask == '1') {
+                            $('.investTask').parents('.result-box-task').addClass('finished');
+                        }
+                    }
+                });
+            }
+		}
+	});
+    Vue.config.devtools = false;
+</script>
+</body>
+</html>

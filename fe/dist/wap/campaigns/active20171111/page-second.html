@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta name="format-detection" content="telphone=no, email=no"/>
+    <title>11月理财节</title>
+    <link rel="stylesheet" href="__FE_BASE_URI__/common/css/wenjfbase.css"><link rel="stylesheet" href="__FE_BASE_URI__/common/css/popover.css">
+    <link rel="stylesheet" href="__FE_BASE_URI__/common/css/popover.css">
+    <link rel="stylesheet" href="__FE_BASE_URI__wap/campaigns/active20171111/less/page-second.css">
+    <script src="__FE_BASE_URI__/libs/lib.flexible3.js"></script>
+    <script src="__FE_BASE_URI__/libs/jquery-1.11.1.min.js"></script>
+    <script src="__FE_BASE_URI__/common/js/popover.js"></script>
+    <script src="__FE_BASE_URI__/libs/iscroll.js"></script>
+    <script src="__FE_BASE_URI__/libs/vue.min.js"></script>
+    <style>
+        [v-cloak]{display: none}
+    </style>
+</head>
+<body>
+
+<div class="flex-content" id="app">
+    <div class="banner">
+        <img src="__FE_BASE_URI__wap/campaigns/active20171111/images/page-second/banner-top.png" alt="banner">
+    </div>
+    <div class="banner banner-bottom">
+        <div class="time" v-for="l in list" >预约倒计时：<span>{{l.time}}</span></div>
+    </div>
+    <!-- 一、预约理财 -->
+    <div class="slide slide-one">
+        <div class="order-before order" :class="[ orderPop == '0' ? 'show': '']">
+            <p class="txt-tip">活动期间预约11月9-11日理财，可获得对应金额加息券1张。</p>
+            <div class="select-box">
+                <div class="money input-box">
+                    <label for="">预约金额</label>
+                    <input type="tel" placeholder="请输入金额" @click="inputListener('input')" value="" onafterpaste="this.value=this.value.replace(/\D/g,'')">
+                    <i class="unit">万元</i>
+                </div>
+                <div class="select-item input-box clearfix">
+                    <label for="">预约标</label>
+                    <span class="item-txt" @click="selectInput" v-cloak v-if="appointmentId == true">温盈恒<i class="bracket">(180天以上）</i></span>
+                    <span class="item-txt" @click="selectInput"  v-cloak v-if="appointmentId == false">温盈金(180天及以下)</span>
+                    <img class="down-icon" src="__FE_BASE_URI__wap/campaigns/active20171111/images/page-second/down-icon.png" alt="下拉箭头">
+                    <div class="down-pop" @click="selectBox" v-cloak v-if="appointmentId == false">温盈恒(180天以上)</div>
+                    <div class="down-pop" @click="selectBox" v-cloak v-if="appointmentId == true">温盈金(180天及以下)</div>
+                </div>
+            </div>
+            <p class="down-txt"><span v-cloak v-if="appointmentId == false">选择预约温盈恒系列标，能获得更高价值加息券哦！</span></p>
+            <!-- 立即预约 -->
+            <a class="btn-order now-order" @click="nowOrder"><img src="__FE_BASE_URI__wap/campaigns/active20171111/images/page-second/btn-now-order.png" alt="立即预约"></a>
+            <p class="tel">电话预约：400-101-5151</p>
+        </div>
+        <div class="order-after order"  :class="[ orderPop == '1' ? 'show': '']">
+            <h4 class="result-title">恭喜您预约成功，<br>获得加息券一张！</h4>
+            <div class="coupon clearfix coupon-shadow">
+                <div class="coupon-left lf">
+                    <p class="lf-top"><span>+</span><i>{{rateCoupon.couponRate}}</i>%</p>
+                    <p class="lf-bottom">{{rateCoupon.couponStartMoney}}万元起投</p>
+                </div>
+                <div class="coupon-right rg">
+                    <p class="lf-top">加息券-<span>{{rateCoupon.couponLength}}</span>天</p>
+                    <p class="lf-bottom" v-if="rateCoupon.couponType == 0">仅限温盈恒<i class="bracket">(180天以上)</i>使用</p>
+                    <p class="lf-bottom" v-else="rateCoupon.couponType == 1">仅限温盈金<i class="bracket">(180天及以下)</i>使用</p>
+                </div>
+            </div>
+            <p class="result-tip">加息券将在11月9日发放到您的账户, 仅限11月9-11日期间使用。</p>
+            <!--重新预约-->
+            <a class="btn-order re-order" @click="reOrder"><img src="__FE_BASE_URI__wap/campaigns/active20171111/images/page-second/btn-re-order.png" alt="重新预约"></a>
+            <p class="tel">电话预约：400-101-5151</p>
+        </div>
+
+    </div>
+    <div class="slide slide-two">
+        <div class="seckill">
+            <!--@click="prizeRecord"-->
+            <a class="seckill-record" v-if="secondKillRecord == '0'" v-cloak >秒杀记录>></a>
+            <div class="seckill-nav clearfix">
+                <ul>
+                    <li v-cloak v-for="(item,index) in timeNav" :class="[ activeNav == index ?'active':'']" @click="toggle(index)">
+                        <span>{{item}}</span>点开抢
+                    </li>
+                </ul>
+            </div>
+            <div class="seckill-content clearfix">
+                <ul>
+                    <li v-cloak v-for="(item, index) in seckillList" :class="[ activeNav == index ?'active':'']" >
+                        <img :src="item.path" alt="item.activityNumber">
+                        <span class="seckill-time-btn" v-cloak  @click="seckillAction" v-if="item.giftStatus == 1" data-num="item.activityNumber" v-for="l in list">{{l.giftTime}}</span>
+                        <span class="seckill-btn" v-cloak @click="seckillAction" v-if="item.giftStatus == 0" data-num="item.activityNumber" ></span>
+                        <span class="seckill-btn-over" v-cloak @click="seckillAction" v-if="item.giftStatus == 2" data-num="item.activityNumber" ></span>
+                    </li>
+                </ul>
+            </div>
+            <p class="time-txt">每日10点、15点、20点准点开启秒杀，数量有限，先到先得！</p>
+        </div>
+    </div>
+    <div class="slide slide-third">
+        <div class="order-third">
+            <p class="txt-tip">喜卡可以在11月9-11日期间兑换现金红包，最高1111元哦！</p>
+            <div class="result-box-task lf ">
+                <img class="finished" v-if="isAppointmenged == 1" src="__FE_BASE_URI__wap/campaigns/active20171111/images/icon_finished.png" alt="">
+                <p class="top-invest">成功预约理财</p>
+                <p class="center-txt"><span class="orderTask">{{isAppointmenged}}</span>/1</p>
+                <a href="#" class="link">去预约</a>
+            </div>
+            <div class="result-box-task rg">
+                <img class="finished" v-if="isVested == 1" src="__FE_BASE_URI__wap/campaigns/active20171111/images/icon_finished.png" alt="">
+                <p class="top-invest">任意投资一笔</p>
+                <p class="center-txt"><span class="investTask">{{isVested}}</span>/1</p>
+                <a href="/deal/deal/index" class="link">去投资</a>
+            </div>
+        </div>
+    </div>
+    <p class="last-tips">本活动最终解释权归温都金服所有</p>
+    <div @click="success">秒杀成功</div>
+    <div @click="waiting">秒杀排队中</div>
+    <div @click="noStarting">秒杀未开始</div>
+
+    <!--对应的奖品列表-->
+    <div class="prizes-boxs" :class="[!!isActive ? 'showed': '' ]">
+        <div class="outer-boxs">
+            <!--@click="closePrizeList()"-->
+            <img class="pop_close close-prize-list" src="__FE_BASE_URI__wap/campaigns/active20171111/images/pop_close.png"  alt="">
+            <div class="prizes-pomps">
+                <div id="wrapper">
+                    <ul>
+                        <li class="prizes-title">奖品列表</li>
+                        <li class="clearfix" v-for="item in ticket">
+                            <div class="lf"><img :src="item.path" alt="礼品"></div>
+                            <div class="lf">
+                                <p>{{item.name}}</p>
+                                <p>中奖时间:{{item.time}}</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <input type="hidden" name="promoStatus2" value="0">
+    <input type="hidden" name="isLoggedin" value="true">
+</div>
+<script>
+    var promoStatus = $('input[name=promoStatus2]').val();
+    var isLoggedin = $('input[name=isLoggedin]').val();
+    var app = new Vue({
+        el: '#app',
+        data: {
+            ticket: [
+                {path:'images/page-second/prizes-2017110610.png',name:'2017110610',time:'2017-03-16'},
+                {path:'images/page-second/prizes-2017110610.png',name:'2017110610',time:'2017-03-16'},
+                {path:'images/page-second/prizes-2017110710.png',name:'2017110610',time:'2017-03-16'},
+                {path:'images/page-second/prizes-2017110820.png',name:'2017110820',time:'2017-03-16'}
+            ],
+            prize: {
+                path:'images/page-second/prizes-2017110710.png',name:'2017110820',time:'2017-03-16'
+            },
+            promoStatus: promoStatus,
+            isLoggedin: isLoggedin,
+            isSeckillActive: '',
+            secondKillRecord: 0,
+            timeNav: [10,15,20],
+            seckillList: [
+                {giftStatus: 2,path:'images/page-second/gifts-2017110610.png',activityNumber:'2017110610'},
+                {giftStatus: 0,path:'images/page-second/gifts-2017110615.png',activityNumber:'2017110615'},
+                {giftStatus: 1,path:'images/page-second/gifts-2017110620.png',activityNumber:'2017110620'}
+//                {giftStatus: 0,path:'images/page-second/gifts-2017110710.png',activityNumber:'2017110610'},
+//                {giftStatus: 0,path:'images/page-second/gifts-2017110715.png',activityNumber:'2017110615'},
+//                {giftStatus: 0,path:'images/page-second/gifts-2017110720.png',activityNumber:'2017110620'}
+//                {giftStatus: 0,path:'images/page-second/gifts-2017110810.png',activityNumber:'2017110610'},
+//                {giftStatus: 0,path:'images/page-second/gifts-2017110815.png',activityNumber:'2017110615'},
+//                {giftStatus: 0,path:'images/page-second/gifts-2017110820.png',activityNumber:'2017110620'}
+            ],
+            orderPop: '', //预约框  1：已预约  0：未预约
+            isVested: '1', //喜卡－投资状态
+            appointmentId: true,
+            isAppointmenged: '1',// 是否预约 1：已预约  0：未预约
+            appointObject: [  // 预约标的
+                { appointmentObjectId: 0, appointmentObjectName: '温盈恒180天以上'}
+            ],
+            rateCoupon :{
+                couponStartMoney:  50,     //最低投资金额
+                couponRate:  1.5,            //利率
+                couponLength: 50,          //天数
+                couponType: 1    //类型 (0 －－ 温盈恒180天以上，1 －－ 温盈金180天及以下)
+            },
+            appointmentTime: '1509933600', // 时间戳  Math.round(new Date() / 1000)
+            appointmentTimeLast: '1510156800', // 8号24点时间戳
+            appointmentTimeGap: 0, // 倒计时
+            list: [{}],
+            timeGapBtn: '40', // 倒计时
+            activeNav: '1',
+            isActive: false,
+            showStatusBall: true, // 显示活动状态的弹框
+            showLoginBall: false // 显示登录的弹框
+        },
+        created: function(){
+            this.orderPop = this.isAppointmenged;
+            this.isActive = false;
+            this.showStatusBall = true;
+            this.isSeckillActive = true;
+            var count = this.appointmentTimeLast - this.appointmentTime; //倒计时/
+            var _this = this;
+            var t =setInterval(function () {
+                count--;
+                if (count <= 223180) {
+                    clearInterval(t)
+
+                }
+                var a = app.theTimeGap(count);
+                for (var i = 0; i < _this.list.length; i++) {
+                    Vue.set(_this.list[i],'time',a);
+                    Vue.set(_this.list[i],'giftTime',a);
+                }
+            }, 1000);
+            this.init();
+        },
+        methods: {
+            theTimeGap: function(s){
+                var hour = Math.floor(s/3600);
+                var minute = Math.floor( (s- hour*3600) /60 );
+                var second = s - (hour*3600)- (minute*60);
+                if (hour < 10) {
+                    hour = "0"+hour;
+                }
+                if (minute < 10) {
+                    minute = "0"+minute;
+                }
+                if (second < 10) {
+                    second = "0"+second;
+                }
+                return  hour +" : " + minute + " : " + second;
+            },
+            computNum: function (event){
+                var e = event || window.event;
+                var n = e.currentTarget.getAttribute('data-num');
+                switch(n) {
+                    case '2017110610':
+                        this.timeGapBtn = '1509933600';
+                        this.showPromoStatus('prizeList');
+                        break;
+                    case '2017110615':
+                        this.timeGapBtn = '1509951600';
+                        this.showPromoStatus('draw');
+                        break;
+                    case '2017110620':
+                        this.timeGapBtn = '1509969600';
+                        this.showPromoStatus('invest');
+                        break;
+                    case '2017110710':
+                        this.timeGapBtn = '1510020000';
+                        this.showPromoStatus('link');
+                        break;
+                    case '2017110715':
+                        this.timeGapBtn = '1510038000';
+                        this.showPromoStatus('link');
+                        break;
+                    case '2017110720':
+                        this.timeGapBtn = '1510056000';
+                        this.showPromoStatus('link');
+                        break;
+                    case '2017110810':
+                        this.timeGapBtn = '1510106400';
+                        this.showPromoStatus('link');
+                        break;
+                    case '2017110815':
+                        this.timeGapBtn = '1510124400';
+                        this.showPromoStatus('link');
+                        break;
+                    case '2017110820':
+                        this.timeGapBtn = '1510142400';
+                        this.showPromoStatus('link');
+                        break;
+                }
+            },
+            eventTarget:function (event) {
+                var e = event || window.event;
+                e.preventDefault();
+            },
+            inputListener: function(obj) {
+                document.querySelector(obj).addEventListener('input', function () {
+                    var _this = this;
+                    _this.onkeyup = function() {
+                        _this.value = _this.value.replace(/\D/g,'');
+                        if (_this.value.length > 8) {
+                            _this.value = _this.value.substr(0,8);
+                            return false;
+                        }
+                    }
+                });
+            },
+            init: function () {
+//                var xhr = $.get('/promotion/p171001/draw?key=promo_171106');
+                var xhr = $.get('view/themes/wdjf/m/modules/promotion/p171111/get_intilize');
+                xhr.done(function(data) {
+                    var data = {
+                        code: 0,
+                        isAppointmenged: 0,
+                        rateCoupon: {
+                            lowestInvestMoney: 50,
+                            couponRate: 5,
+                            couponLength: 50,
+                            appointmentObjectId: 0
+                        },
+                        appointmentTime: 1456997580,
+                        appointObject: [{
+                            ppointmentObjectId:  0,
+                            appointmentObjectName: '温盈恒180天以上'
+                        }, {
+                            appointmentObjectId: 1,
+                            appointmentObjectName: '温盈恒180天及以下'
+                        }],
+                        secondKillRecord: 0 ,
+                        secondKillList: [
+                            {giftStatus: 2,activityNumber:'2017110610'},
+                            {giftStatus: 0,activityNumber:'2017110615'},
+                            {giftStatus: 1,activityNumber:'2017110620'}
+                        ],
+                        activeNav: 0,
+                        isVested: 0
+                    }
+                    if (data.code == 0) {
+                        this.appointmentTime = data.appointmentTime; // 时间戳
+                        this.orderPop = data.isAppointmenged; //预约状态
+                        this.isAppointmenged = data.isAppointmenged; //预约框状态
+                        this.isVested  = data.isVested;//投资状态
+                        this.appointObject = data.appointObject;
+                    }
+                });
+//                this.showPromoStatus();
+            },
+            secondsFormat: function (s) {
+                var hour = Math.floor(s/3600);
+                var minute = Math.floor( (s- hour*3600) /60 );
+                var second = s - (hour*3600)- (minute*60);
+                return this.appointmentTimeGap = hour + ":" + minute + ":" + second;
+            },
+            seckillAction: function () { //秒杀
+                this.showPromoStatus();
+            },
+            showLoginPop: function() {
+                if (this.isLoggedin === 'true') { //已登录
+                    this.seckillResult();
+                } else if (this.isLoggedin === 'false') {
+                    this.goToLogin('未登录,  去登录弹框');
+                }
+            },
+            showPromoStatus: function() { //活动状态
+                if (this.promoStatus == 0){ //进行中
+                    console.log('活动进行中');
+                    this.showLoginPop();
+                    return false;
+                } else if (this.promoStatus == 1) {
+                    toastCenter('活动未开始');
+                } else if (this.promoStatus == 2) {
+                    toastCenter('活动已结束');
+                }
+            },
+            goToLogin: function () { //登录弹框
+                poptpl.popComponent({
+                    popBackground: 'url(images/page-second/pop_bg_waiting.png) no-repeat',
+                    popBorder: 0,
+                    closeUrl: "images/pop_close.png",
+                    btnMsg: "马上登录",
+                    title: '<p style="font-size:0.72rem;margin: 2.8rem 0 2rem;color: #f03350;">您还没有登录哦！</p>',
+                    popBtmBackground: 'url(images/page-second/pop_btn.png) no-repeat',
+                    popBtmBorderRadius: 0,
+                    popBtmColor: '#f03350',
+                    popBtmFontSize: ".45333333rem",
+                    btnHref: '/site/login'
+                });
+            },
+            noStarting: function () { //未开始秒杀 弹框
+                poptpl.popComponent({
+                    popBackground: 'url(images/page-second/pop_bg_waiting.png) no-repeat',
+                    popBorder: 0,
+                    closeUrl: "images/pop_close.png",
+                    btnMsg: "我知道了",
+                    title: '<p style="font-size:0.72rem;margin: 2.8rem 0 2rem;color: #f03350;">秒杀还未开始哦！</p>',
+                    popBtmBackground: 'url(images/page-second/pop_btn.png) no-repeat',
+                    popBtmBorderRadius: 0,
+                    popBtmColor: '#f03350',
+                    popBtmFontSize: ".45333333rem"
+                });
+            },
+            seckillResult: function (code) {
+                var _this = this;
+                window.clearTimeout(_this.tId);
+                _this.tId = window.setTimeout(function () {
+//                    var xhr = $.get('/promotion/p171001/draw?key=promo_171106');
+//                    xhr.done(function(data) {
+                    var data = _this;
+                    data.prize = _this.prize;
+                    data.code = code;
+                    if( data.code == 0) { // 领取奖品弹框
+                        poptpl.popComponent({
+                            popBackground: 'url(images/page-second/pop_bg_success.png) no-repeat',
+                            popBorder: 0,
+                            closeUrl: "images/pop_close.png",
+                            btnMsg: "收下礼品",
+                            popTopColor: "#f03350",
+                            bgSize: "100% 100%",
+                            title: '<p style="font-size:0.72rem;">恭喜您秒杀成功!<span style="display:block;font-size: 0.50666667rem">'+data.prize.name+'</span></p>',
+                            popBtmBackground: 'url(images/page-second/pop_btn.png) no-repeat',
+                            popMiddleHasDiv: true,
+                            contentMsg: "<img style='margin: -0.5rem auto 0.5rem;display: block;width: 4.8rem;' src='"+data.prize.path+"' alt='图片地址'/>",
+                            popBtmBorderRadius: 0,
+                            popBtmFontSize: ".45333333rem",
+                            popBtmColor: '#f03350'
+                        }, 'close');
+                    } else if( data.code == 1) { //排队中
+                        poptpl.popComponent({
+                            popBackground: 'url(images/page-second/pop_bg_waiting.png) no-repeat',
+                            popBorder: 0,
+                            closeUrl: "images/pop_close.png",
+                            btnMsg: "",
+                            popTopColor: "#f03350",
+                            bgSize: "100% 100%",
+                            title: '<p style="height: 1.4rem;"></p>',
+                            popBtmBackground: 'none',
+                            popMiddleHasDiv: true,
+                            contentMsg: "<div style='margin: 0 auto 0.5rem;display: block;width: auto;line-height: 1.62666667rem; color: #f03350;font-size: 1.06666667rem'>秒杀排队中<br>请稍候...</div>",
+                            popBtmBorderRadius: 0,
+                            popBtmFontSize: ".45333333rem",
+                            popBtmColor: '#f03350'
+                        }, 'close');
+                    } else { //遗憾
+                        poptpl.popComponent({
+                            popBackground: 'url(images/page-second/pop_bg_fair.png) no-repeat',
+                            popBorder: 0,
+                            closeUrl: "images/pop_close.png",
+                            btnMsg: "知道了",
+                            popTopColor: "#f03350",
+                            bgSize: "100% 100%",
+                            title: '<p style="font-size:0.72rem;">很遗憾，<span style="display:block;font-size: 0.72rem;">商品已被抢完了哦！</span></p>',
+                            popBtmBackground: 'url(images/page-second/pop_btn.png) no-repeat',
+                            popMiddleHasDiv: true,
+                            contentMsg: "<div style='margin: 0 auto 0.5rem;display: block;width: 4.8rem;height: 3rem;'></div>",
+                            popBtmBorderRadius: 0,
+                            popBtmFontSize: ".45333333rem",
+                            popBtmColor: '#f03350'
+                        }, 'close');
+                    }
+//                    });
+
+                },400);
+
+            },
+            toggle: function (index) {
+                $(".seckill-content ul li").hide().eq(index).show();
+                $(".seckill-nav ul li").removeClass('active').eq(index).addClass('active');
+            },
+            closePrizeList: function() {
+//                $('body').off('touchmove');
+                this.isActive = false;
+                console.log('23')
+            },
+            selectInput: function() {
+                $('.down-pop').show();
+            },
+            selectBox: function() {
+                this.appointmentId = !this.appointmentId;
+                $('.down-pop').hide();
+            },
+            success: function () {
+                var data = this;
+                data.prize = this.prize;
+                poptpl.popComponent({
+                    popBackground: 'url(images/page-second/pop_bg_success.png) no-repeat',
+                    popBorder: 0,
+                    closeUrl: "images/pop_close.png",
+                    btnMsg: "收下礼品",
+                    popTopColor: "#f03350",
+                    bgSize: "100% 100%",
+                    title: '<p style="font-size:0.72rem;">恭喜您秒杀成功!<span style="display:block;font-size: 0.50666667rem"></span></p>',
+                    popBtmBackground: 'url(images/page-second/pop_btn.png) no-repeat',
+                    popMiddleHasDiv: true,
+                    contentMsg: "<img style='margin: -0.5rem auto 0.5rem;display: block;width: 4.8rem;' src='"+data.prize.path+"' alt='图片地址'/>",
+                    popBtmBorderRadius: 0,
+                    popBtmFontSize: ".45333333rem",
+                    popBtmColor: '#f03350'
+                }, 'close');
+                console.log('dd:'+$('input').val());
+            },
+            waiting: function() {
+                poptpl.popComponent({
+                    popBackground: 'url(images/page-second/pop_bg_waiting.png) no-repeat',
+                    popBorder: 0,
+                    closeUrl: "images/pop_close.png",
+                    btnMsg: "",
+                    popTopColor: "#f03350",
+                    bgSize: "100% 100%",
+                    title: '<p style="height: 1.4rem;"></p>',
+                    popBtmBackground: 'none',
+                    popMiddleHasDiv: true,
+                    contentMsg: "<div style='margin: 0 auto 0.5rem;display: block;width: auto;line-height: 1.62666667rem; color: #f03350;font-size: 1.06666667rem'>秒杀排队中<br>请稍候...</div>",
+                    popBtmBorderRadius: 0,
+                    popBtmFontSize: ".45333333rem",
+                    popBtmColor: '#f03350'
+                }, 'close');
+            },
+            reOrder: function() {
+                this.orderPop = 0;
+            },
+            nowOrder: function() { //预约
+                this.orderPop = 1;
+            }
+
+        }
+    });
+    Vue.config.devtools = true;
+
+    function toastCenter(val, active) {
+        var $alert = $('<div class="error-info" style="display: block; position: fixed;font-size: .4rem;"><div>' + val + '</div></div>');
+        $('body').append($alert);
+        $alert.find('div').width($alert.width());
+        setTimeout(function () {
+            $alert.fadeOut();
+            setTimeout(function () {
+                $alert.remove();
+            }, 200);
+            if (active) {
+                active();
+            }
+        }, 2000);
+    }
+
+
+    $(function(){
+        var myScroll = new iScroll('wrapper',{
+            vScrollbar:false,
+            hScrollbar:false
+        });
+        //我的奖品按钮
+        $(".seckill-record").on("click",function(){
+            $('.prizes-boxs').show();
+            $('body').on('touchmove',app.eventTarget, false);
+            myScroll.refresh();//点击后初始化iscroll
+        });
+        $('.close-prize-list').on('click', function(){
+            $('.prizes-boxs').hide();
+            $('body').off('touchmove');
+        });
+        $('#wrapper').on('click',function(event){
+            var e = event || window.event;
+            e.stopPropagation();
+        });
+    })
+</script>
+</body>
+</html>

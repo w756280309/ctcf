@@ -1,0 +1,66 @@
+.flex-content {
+  height: 100vh;
+}
+.flex-content .top-part {
+  width: 100%;
+  height: 32.6vh;
+  background: url("../images/bg_top.png") no-repeat;
+  background-size: contain;
+}
+.flex-content .bottom-part {
+  position: relative;
+  width: 100%;
+  height: 67.4vh;
+  padding-top: 1rem;
+  background: linear-gradient(#fbd771, #ffb11a);
+}
+.flex-content .bottom-part .card-box {
+  width: 5.81333333rem;
+  height: 3.48rem;
+  margin: 0 auto;
+  background: url("../images/pic_card.png") no-repeat;
+  background-size: contain;
+}
+.flex-content .bottom-part .result-box {
+  width: 9.22666667rem;
+  padding-top: 0.22666667rem;
+  margin: 1.4rem auto 0;
+  background-color: #ffe7ae;
+  border-radius: 0.16rem;
+  border: 4px solid #e4a91c;
+  box-sizing: border-box;
+}
+.flex-content .bottom-part .result-box .result-box-title {
+  height: 0.50666667rem;
+  line-height: 0.50666667rem;
+  font-size: 0.50666667rem;
+  color: #fd7f26;
+  text-align: center;
+}
+.flex-content .bottom-part .result-box .result-box-task {
+  padding-top: 0.4rem;
+  width: 50%;
+  height: 3.42666667rem;
+}
+.flex-content .bottom-part .result-box .result-box-task p {
+  font-size: 0.42666667rem;
+  line-height: 0.62666667rem;
+  color: #fe4560;
+}
+.flex-content .bottom-part .result-box .result-box-task a {
+  display: block;
+  width: 3.25333333rem;
+  height: 0.93333333rem;
+  line-height: 0.93333333rem;
+  margin: 0 auto;
+  background: url("../images/bg_btn.png") no-repeat;
+  background-size: contain;
+  text-align: center;
+  font-size: 0.49333333rem;
+  color: #fff;
+}
+.flex-content .bottom-part .finished {
+  background: url("../images/icon_finished.png") no-repeat;
+  background-position: 2.76rem 0.13333333rem;
+  background-size: 1.76rem;
+}
