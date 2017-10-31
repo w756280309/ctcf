@@ -108,12 +108,31 @@ AnalyticsHelper::registerTo($this);
                                 <div class="title page1-title"><img src="<?= FE_BASE_URI ?>wap/campaigns/h5-161114/img/first-title.png" ></div>
                                 <p class="title-h2"><span >温都金服，隶属温州报业传媒旗下的理财平台</span></p>
                                 <div class="hexagon">
-                                        <img src="<?= FE_BASE_URI ?>wap/campaigns/h5-161114/img/six-fg.png" alt="六边形">
-                                        <span class="hexagon-txt text-indent">平台甄选各类金融机构、优质企业理财产品。提供银行级理财服务，保障用户资金稳妥，安享稳健收益。</span>
+                                        <img src="<?= FE_BASE_URI ?>wap/campaigns/h5-161114/img/six-fg-new.png" alt="六边形">
+                                        <span class="hexagon-txt" style="top: -23px;left: 26.6%;width: 51%;">平台甄选各类金融机构、优质企业理财产品。提供银行级理财服务，保障用户资金稳妥，安享稳健收益。</span>
                                 </div>
                                 <div class="arrow"></div>
                         </div>
                 </div>
+                <!-- 第三页开始 -->
+                <div class="page page4" style="-webkit-overflow-scrolling: touch;">
+                    <div class="page__inner" style="position: relative; height: 100%">
+                        <div class="top-empt"></div>
+                        <div class="page4-title page-title">
+                        </div>
+                        <div class="top-empt4-1"></div>
+                        <div class="top-empt4-2"></div>
+                        <ul class="page4-content page-content">
+                            <li class="page4-content1"></li>
+                            <li class="page4-content2"></li>
+                            <li class="page4-content3"></li>
+                            <li class="page4-content4"></li>
+                            <li class="page4-content5" style="margin-bottom:0;"></li>
+                        </ul>
+                        <div class="arrow"></div>
+                    </div>
+                </div>
+                <!-- 第四页开始 -->
                 <div class="page page3">
                         <div class="page3-title"></div>
                         <div class="padding">
@@ -132,24 +151,6 @@ AnalyticsHelper::registerTo($this);
                                 </div>
                         </div>
                         <div class="arrow"></div>
-                </div>
-                <!-- 第四页开始 -->
-                <div class="page page4" style="-webkit-overflow-scrolling: touch;">
-                        <div class="page__inner" style="position: relative; height: 100%">
-                                <div class="top-empt"></div>
-                                <div class="page4-title page-title">
-                                </div>
-                                <div class="top-empt4-1"></div>
-                                <div class="top-empt4-2"></div>
-                                <ul class="page4-content page-content">
-                                        <li class="page4-content1"></li>
-                                        <li class="page4-content2"></li>
-                                        <li class="page4-content3"></li>
-                                        <li class="page4-content4"></li>
-                                        <li class="page4-content5" style="margin-bottom:0;"></li>
-                                </ul>
-                                <div class="arrow"></div>
-                        </div>
                 </div>
                 <div class="page page5">
                         <div class="top-empt"></div>
