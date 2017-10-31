@@ -471,9 +471,9 @@ u.mobile,
 UPPER(u.idCard) AS idCard, 
 (DATE_FORMAT(NOW(), '%Y') - SUBSTRING(u.idCard, 7, 4)) AS age, 
 sum(o.money * 10000) AS orderAsset, 
-IF(SUBSTR(u.idCard, -2, 1) % 2, '男', '女') AS gender, 
 SUBSTRING(u.idCard, 7, 8) as birthDate, 
-af.name as affiliatorName
+af.name as affiliatorName, 
+IF(SUBSTR(u.idCard, -2, 1) % 2, '男', '女') AS gender
 from offline_order as o
 inner join offline_user as u on o.user_id = u.id
 inner join offline_loan as p on o.loan_id = p.id
