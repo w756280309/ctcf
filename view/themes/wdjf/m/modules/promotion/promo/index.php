@@ -58,15 +58,17 @@ $config = json_decode($promo->config, true);
     <?php } ?>
 
     <?php if (!$promo->isO2O) { ?>
-    <div class="gift">
-        <p class="f18 "><img  data-original="<?= FE_BASE_URI ?>wap/luodiye/images/icon_01.png" alt=""> 积分商城，更多好礼等你拿 <img  data-original="<?= FE_BASE_URI ?>wap/luodiye/images/icon_01.png" alt=""></p>
-        <ul class="clearfix">
-            <li class="lf"><img  data-original="<?= FE_BASE_URI ?>wap/luodiye/images/gift_01.png" alt=""></li>
-            <li class="lf"><img  data-original="<?= FE_BASE_URI ?>wap/luodiye/images/gift_02.png" alt=""></li>
-            <li class="lf"><img  data-original="<?= FE_BASE_URI ?>wap/luodiye/images/gift_03.png" alt=""></li>
-            <li class="lf"><img  data-original="<?= FE_BASE_URI ?>wap/luodiye/images/gift_04.png" alt=""></li>
-        </ul>
-    </div>
+        <?php if ('carshow11' !== $promo->key) { ?>
+            <div class="gift">
+                <p class="f18 "><img  data-original="<?= FE_BASE_URI ?>wap/luodiye/images/icon_01.png" alt=""> 积分商城，更多好礼等你拿 <img  data-original="<?= FE_BASE_URI ?>wap/luodiye/images/icon_01.png" alt=""></p>
+                <ul class="clearfix">
+                    <li class="lf"><img  data-original="<?= FE_BASE_URI ?>wap/luodiye/images/gift_01.png" alt=""></li>
+                    <li class="lf"><img  data-original="<?= FE_BASE_URI ?>wap/luodiye/images/gift_02.png" alt=""></li>
+                    <li class="lf"><img  data-original="<?= FE_BASE_URI ?>wap/luodiye/images/gift_03.png" alt=""></li>
+                    <li class="lf"><img  data-original="<?= FE_BASE_URI ?>wap/luodiye/images/gift_04.png" alt=""></li>
+                </ul>
+            </div>
+        <?php } ?>
     <?php } ?>
 
     <div class="choosereason">
