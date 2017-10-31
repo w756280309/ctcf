@@ -113,11 +113,11 @@ class PushController extends Controller
 国资平台，靠谱！优质项目，赚钱！全程监管，放心！
 初次见面，先送您二重好礼略表心意！
 一重注册礼：注册就送288红包！
-二重首投礼：首次投资送积分、送购物卡！
+二重首投礼：首次投资送最高160元超市卡！
+
+' .'<a href="https://m.wenjf.com/luodiye/v2">领超市卡点这里</a>
 
 ' .'<a href="https://m.wenjf.com/user/wechat/bind">账户绑定点这里</a>
-
-'. '<a href="https://m.wenjf.com/promotion/wrm170210">领豪礼点这里</a>
 
 ' . '<a href="https://mp.weixin.qq.com/mp/profile_ext?action=home&scene=115&__biz=MzI0MTIwOTQxMQ==#wechat_redirect">往期精彩点这里</a>
 
