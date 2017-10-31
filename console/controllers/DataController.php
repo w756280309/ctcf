@@ -427,9 +427,13 @@ u.real_name as realName,
 u.safeMobile as mobile, 
 u.safeIdCard as idCard, 
 (DATE_FORMAT(NOW(), '%Y') - SUBSTRING(u.birthdate, 1, 4)) as age, 
-ua.investment_balance as orderAsset
+ua.investment_balance as orderAsset, 
+u.birthdate as birthDate, 
+af.name as affiliatorName
 from user u 
 inner join user_account ua on ua.uid = u.id 
+left join user_affiliation uf on uf.user_id = u.id
+left join affiliator af on af.id = uf.affiliator_id
 where ua.type = 1 
 and u.idcard_status = 1
 and ua.investment_balance >= 0";
@@ -465,12 +469,15 @@ and ua.investment_balance >= 0";
 u.realName, 
 u.mobile, 
 UPPER(u.idCard) AS idCard, 
-(DATE_FORMAT(NOW(), '%Y') - SUBSTRING(u.idCard, 7, 4)) AS age,
-sum(o.money * 10000) AS orderAsset,
+(DATE_FORMAT(NOW(), '%Y') - SUBSTRING(u.idCard, 7, 4)) AS age, 
+sum(o.money * 10000) AS orderAsset, 
+SUBSTRING(u.idCard, 7, 8) as birthDate, 
+af.name as affiliatorName, 
 IF(SUBSTR(u.idCard, -2, 1) % 2, '男', '女') AS gender
 from offline_order as o
 inner join offline_user as u on o.user_id = u.id
 inner join offline_loan as p on o.loan_id = p.id
+left join affiliator as af on af.id = o.affiliator_id 
 where o.isDeleted = 0
 and curDate() < date(p.finish_date)
 group by o.user_id
@@ -483,6 +490,7 @@ having orderAsset >= 0";
         foreach ($onlineUsers as $idCard => $onlineUser) {
             if (isset($offlineUsers[$idCard])) {
                 $onlineUsers[$idCard]['orderAsset'] = bcadd($onlineUsers[$idCard]['orderAsset'], $offlineUsers[$idCard]['orderAsset'], 2);
+                $onlineUsers[$idCard]['affiliatorName'] = $onlineUsers[$idCard]['affiliatorName'].','.$offlineUsers[$idCard]['affiliatorName'];
                 unset($offlineUsers[$idCard]);
             }
         }
@@ -497,7 +505,7 @@ having orderAsset >= 0";
         }
 
         //生成excel
-        $title = ['姓名', '手机号', '身份证号', '年龄', '理财资产', '性别'];
+        $title = ['姓名', '手机号', '身份证号', '年龄', '理财资产', '生日', '分销商', '性别'];
         array_unshift($chunkUsers, $title);
         $file = Yii::getAlias('@app/runtime/order_asset_ge_'.$assetMoney.'_'.date('YmdHis').'.xlsx');
         $objPHPExcel = UserStats::initPhpExcelObject($chunkUsers);

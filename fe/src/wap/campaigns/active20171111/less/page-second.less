@@ -457,7 +457,6 @@
       top: 50%;
       left: 50%;
       z-index: 10;
-      /*根据实际情况设定*/
       transform: translate(-50%, -50%);
       -webkit-transform: translate(-50%, -50%);
       -moz-transform: translate(-50%, -50%);
@@ -468,6 +467,14 @@
       background: url("../images/pop_bg.png") #fff center top no-repeat;
       background-size: cover;
       border: 0.05333333rem solid #fa3151;
+      .prizes-title {
+        padding-bottom: 0.65rem;
+        line-height: 1;
+        font-size: 0.66666667rem;
+        color: salmon;
+        text-align: center;
+        border: none;
+      }
       #wrapper {
         height: 9rem;
         width: 100%;
@@ -505,14 +512,6 @@
         li:last-child {
           padding-bottom: 1.6rem;
           border-bottom: none;
-        }
-        li.prizes-title {
-          font-size: 0.66666667rem;
-          color: salmon;
-          text-align: center;
-          padding-bottom: 0.53333333rem;
-          border: none;
-          line-height: 1;
         }
         li.no-prizes {
           color: #21b1e0;
