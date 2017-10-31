@@ -453,7 +453,6 @@
   top: 50%;
   left: 50%;
   z-index: 10;
-  /*根据实际情况设定*/
   transform: translate(-50%, -50%);
   -webkit-transform: translate(-50%, -50%);
   -moz-transform: translate(-50%, -50%);
@@ -464,6 +463,14 @@
   background: url("../images/pop_bg.png") #fff center top no-repeat;
   background-size: cover;
   border: 0.05333333rem solid #fa3151;
+}
+.prizes-boxs .outer-boxs .prizes-pomps .prizes-title {
+  padding-bottom: 0.65rem;
+  line-height: 1;
+  font-size: 0.66666667rem;
+  color: salmon;
+  text-align: center;
+  border: none;
 }
 .prizes-boxs .outer-boxs .prizes-pomps #wrapper {
   height: 9rem;
@@ -503,14 +510,6 @@
 .prizes-boxs .outer-boxs .prizes-pomps #wrapper li:last-child {
   padding-bottom: 1.6rem;
   border-bottom: none;
-}
-.prizes-boxs .outer-boxs .prizes-pomps #wrapper li.prizes-title {
-  font-size: 0.66666667rem;
-  color: salmon;
-  text-align: center;
-  padding-bottom: 0.53333333rem;
-  border: none;
-  line-height: 1;
 }
 .prizes-boxs .outer-boxs .prizes-pomps #wrapper li.no-prizes {
   color: #21b1e0;

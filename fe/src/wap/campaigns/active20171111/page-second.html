@@ -7,7 +7,7 @@
     <title>11月理财节</title>
     <link rel="stylesheet" href="../../common/css/wenjfbase.css"><link rel="stylesheet" href="../../common/css/popover.css">
     <link rel="stylesheet" href="../../common/css/popover.css">
-    <link rel="stylesheet" href="less/page-second.css">
+    <link rel="stylesheet" href="less/page-second.css?v=1.0">
     <script src="../../libs/lib.flexible3.js"></script>
     <script src="../../libs/jquery-1.11.1.min.js"></script>
     <script src="../../common/js/popover.js"></script>
@@ -85,7 +85,7 @@
                 <ul>
                     <li v-cloak v-for="(item, index) in seckillList" :class="[ activeNav == index ?'active':'']" >
                         <img :src="item.path" alt="item.activityNumber">
-                        <span class="seckill-time-btn" v-cloak  @click="seckillAction" v-if="item.giftStatus == 1" data-num="item.activityNumber" v-for="l in list">{{l.giftTime}}</span>
+                        <span class="seckill-time-btn" v-cloak  @click="seckillAction" v-if="item.giftStatus == 1" data-num="item.activityNumber" >{{item.time}}</span>
                         <span class="seckill-btn" v-cloak @click="seckillAction" v-if="item.giftStatus == 0" data-num="item.activityNumber" ></span>
                         <span class="seckill-btn-over" v-cloak @click="seckillAction" v-if="item.giftStatus == 2" data-num="item.activityNumber" ></span>
                     </li>
@@ -122,9 +122,9 @@
             <!--@click="closePrizeList()"-->
             <img class="pop_close close-prize-list" src="images/pop_close.png"  alt="">
             <div class="prizes-pomps">
+                <div class="prizes-title">奖品列表</div>
                 <div id="wrapper">
                     <ul>
-                        <li class="prizes-title">奖品列表</li>
                         <li class="clearfix" v-for="item in ticket">
                             <div class="lf"><img :src="item.path" alt="礼品"></div>
                             <div class="lf">
@@ -149,7 +149,7 @@
             ticket: [
                 {path:'images/page-second/prizes-2017110610.png',name:'2017110610',time:'2017-03-16'},
                 {path:'images/page-second/prizes-2017110610.png',name:'2017110610',time:'2017-03-16'},
-                {path:'images/page-second/prizes-2017110710.png',name:'2017110610',time:'2017-03-16'},
+//                {path:'images/page-second/prizes-2017110710.png',name:'2017110610',time:'2017-03-16'},
                 {path:'images/page-second/prizes-2017110820.png',name:'2017110820',time:'2017-03-16'}
             ],
             prize: {
@@ -161,9 +161,9 @@
             secondKillRecord: 0,
             timeNav: [10,15,20],
             seckillList: [
-                {giftStatus: 2,path:'images/page-second/gifts-2017110610.png',activityNumber:'2017110610'},
-                {giftStatus: 0,path:'images/page-second/gifts-2017110615.png',activityNumber:'2017110615'},
-                {giftStatus: 1,path:'images/page-second/gifts-2017110620.png',activityNumber:'2017110620'}
+                {giftStatus: 1,path:'images/page-second/gifts-2017110610.png',activityNumber:'2017110610',time:''},
+                {giftStatus: 1,path:'images/page-second/gifts-2017110615.png',activityNumber:'2017110615',time:''},
+                {giftStatus: 1,path:'images/page-second/gifts-2017110620.png',activityNumber:'2017110620',time:''}
 //                {giftStatus: 0,path:'images/page-second/gifts-2017110710.png',activityNumber:'2017110610'},
 //                {giftStatus: 0,path:'images/page-second/gifts-2017110715.png',activityNumber:'2017110615'},
 //                {giftStatus: 0,path:'images/page-second/gifts-2017110720.png',activityNumber:'2017110620'}
@@ -188,6 +188,7 @@
             appointmentTimeLast: '1510156800', // 8号24点时间戳
             appointmentTimeGap: 0, // 倒计时
             list: [{}],
+            giftsTimeList: [1509933600,1509933610,1509969600],
             timeGapBtn: '40', // 倒计时
             activeNav: '1',
             isActive: false,
@@ -199,23 +200,49 @@
             this.isActive = false;
             this.showStatusBall = true;
             this.isSeckillActive = true;
-            var count = this.appointmentTimeLast - this.appointmentTime; //倒计时/
-            var _this = this;
-            var t =setInterval(function () {
-                count--;
-                if (count <= 223180) {
-                    clearInterval(t)
-
-                }
-                var a = app.theTimeGap(count);
-                for (var i = 0; i < _this.list.length; i++) {
-                    Vue.set(_this.list[i],'time',a);
-                    Vue.set(_this.list[i],'giftTime',a);
-                }
-            }, 1000);
             this.init();
+            this.downTime();
         },
         methods: {
+            downTime: function() {
+                var _this = this;
+//                var count = _this.appointmentTimeLast - _this.appointmentTime; //倒计时/
+                var count = 1509984000 - 1509897600; //倒计时
+                var giftsTime1 = _this.giftsTimeList[0] - 1509933600;
+                var giftsTime2 = _this.giftsTimeList[1] - 1509933600;
+                var giftsTime3 = _this.giftsTimeList[2] - 1509933600;
+                var t = setInterval(function () {
+                    count--;
+                    if (count <= count-2 ) {
+                        clearInterval(t);
+                    }
+                    var a = app.theTimeGap(count);
+                    Vue.set(_this.list[0],'time',a);
+                }, 1000);
+                var t1 = setInterval(function () {
+                    if (giftsTime1 <= 0 ) {
+                        Vue.set(_this.seckillList[0],'giftStatus',0);
+                    }
+                    if (giftsTime2 <= 0 ) {
+                        Vue.set(_this.seckillList[1],'giftStatus',0);
+                    }
+                    if (giftsTime3 <= 0 ) {
+                        clearInterval(t1);
+                        Vue.set(_this.seckillList[2],'giftStatus',0);
+                    }
+                    giftsTime1--;
+                    giftsTime2--;
+                    giftsTime3--;
+                    var a1 = app.theTimeGap(giftsTime1);
+                    var a2 = app.theTimeGap(giftsTime2);
+                    var a3 = app.theTimeGap(giftsTime3);
+                    for (var i = 0; i < _this.seckillList.length; i++) {
+                        Vue.set(_this.seckillList[0],'time',a1);
+                        Vue.set(_this.seckillList[1],'time',a2);
+                        Vue.set(_this.seckillList[2],'time',a3);
+                    }
+                }, 1000);
+            },
             theTimeGap: function(s){
                 var hour = Math.floor(s/3600);
                 var minute = Math.floor( (s- hour*3600) /60 );
@@ -291,7 +318,7 @@
             },
             init: function () {
 //                var xhr = $.get('/promotion/p171001/draw?key=promo_171106');
-                var xhr = $.get('view/themes/wdjf/m/modules/promotion/p171111/get_intilize');
+                var xhr = $.get('view/themes/wdjf/m/modules/promotion/p171111/get_initialize');
                 xhr.done(function(data) {
                     var data = {
                         code: 0,
@@ -326,6 +353,8 @@
                         this.isVested  = data.isVested;//投资状态
                         this.appointObject = data.appointObject;
                     }
+                    this.secondKillList = data.secondKillList; // 当天秒杀商品
+                    console.log(this.secondKillList)
                 });
 //                this.showPromoStatus();
             },
@@ -376,12 +405,14 @@
                     popBorder: 0,
                     closeUrl: "images/pop_close.png",
                     btnMsg: "我知道了",
+                    popTopColor: "#f03350",
+                    bgSize: "100% 100%",
                     title: '<p style="font-size:0.72rem;margin: 2.8rem 0 2rem;color: #f03350;">秒杀还未开始哦！</p>',
                     popBtmBackground: 'url(images/page-second/pop_btn.png) no-repeat',
                     popBtmBorderRadius: 0,
                     popBtmColor: '#f03350',
                     popBtmFontSize: ".45333333rem"
-                });
+                },'close');
             },
             seckillResult: function (code) {
                 var _this = this;
