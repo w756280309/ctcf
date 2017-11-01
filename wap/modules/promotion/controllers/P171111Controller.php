@@ -9,7 +9,7 @@ use common\models\promo\TicketToken;
 class P171111Controller extends BaseController
 {
     public $layout = '@app/views/layouts/fe';
-    const SOURCE_ORDER = 'order';
+    const SOURCE_ORDER = 'appointment';
     /**
      * 活动总览页
      */
