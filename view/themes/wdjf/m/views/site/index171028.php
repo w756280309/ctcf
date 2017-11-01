@@ -112,7 +112,7 @@ $this->registerJsFile(FE_BASE_URI . 'libs/swiper/swiper-3.4.2.min.js', ['depends
         <div class="data-box-show">
             <p class="data-box-show-line1">温都金服平台已安全运营</p>
             <p class="data-box-show-line2"><span><?= (new \DateTime(date('Y-m-d')))->diff(new DateTime('2016-05-20'))->days ?></span>天</p>
-            <p class="data-box-show-line3">累计兑付<span id="totalRefundAmount"></span>  带来<span id="totalRefundInterest"></span>元收益</p>
+            <p class="data-box-show-line3" style="width: auto;display: inline-block;padding: 0 .5rem"><i class="totalTradeBox" style="font-style: normal;display: none">累计投资额<span id="totalTradeAmount"></span></i>  兑付<span id="totalRefundAmount"></span>  带来<span id="totalRefundInterest"></span>元收益</p>
         </div>
     </div>
     <div class="aboutus-box swiper-container">
@@ -190,8 +190,6 @@ $this->registerJsFile(FE_BASE_URI . 'libs/swiper/swiper-3.4.2.min.js', ['depends
             url:'/site/xs',
             success:function (code) {
                 //会员是否是登录状态
-
-                console.log(!code.isLoggedIn);
                 if (!code.isLoggedIn) {
                     $('.newbid-box').css('display', 'block');
                 }
@@ -202,6 +200,10 @@ $this->registerJsFile(FE_BASE_URI . 'libs/swiper/swiper-3.4.2.min.js', ['depends
                         $('.mask,.first-popover').show();
                         $('.second-popover').hide();
                     }
+                }
+                //判断个人投资总额大于五万时，前端页面显示总金额
+                if (code.showplatformStats) {
+                    $(".totalTradeBox").css('display', 'inline-block');
                 }
             }
         })
@@ -250,6 +252,7 @@ $this->registerJs(<<<JSFILE
         }
         //统计数据
         $.get('/site/stats-for-index', function (data) {
+            $('#totalTradeAmount').html(Math.floor(WDJF.numberFormat(accDiv(data.totalTradeAmount, 100000000), 0))+'亿\+');
             $('#totalRefundAmount').html(Math.floor(WDJF.numberFormat(accDiv(data.totalRefundAmount, 100000000), 0))+'亿\+');
             $('#totalRefundInterest').html(Math.floor(WDJF.numberFormat(accDiv(data.totalRefundInterest, 100000000), 0))+'亿\+');
         });
