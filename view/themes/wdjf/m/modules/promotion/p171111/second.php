@@ -152,13 +152,9 @@ $this->title = '11月理财节';
             isAppointmented: '0',// 是否预约 1：已预约  0：未预约
             appointObject: { appointmentObjectId: 0, appointmentObjectName: '温盈恒180天以上'}, // 预约标的
             rateCoupon: [{}],
-            1510020000: '', // 时间戳
             appointmentTimeLast: '1510156800', // 8号24点时间戳
             todayDater: '', // 日期
             appointmentTimeGap: 0, // 倒计时格式
-            firstGiftSeckillTime: '', // 10点钟倒计时
-            secondGiftSeckillTime: '', // 15点钟倒计时
-            thirdGiftSeckillTime: '', // 20点钟倒计时
             list: [{}],
             giftsTimeList: [1509933600,1509951600,1509969600],
             timeGapBtn: '', // 商品提交id
@@ -560,25 +556,6 @@ $this->title = '11月理财节';
                 }
                 $('.down-pop').hide();
             },
-            success: function () {  // 按钮配置 上线前 删除
-                var data = this;
-                data.prize = this.prize;
-                poptpl.popComponent({
-                    popBackground: 'url(<?= FE_BASE_URI ?>wap/campaigns/active20171111/images/page-second/pop_bg_success.png) no-repeat',
-                    popBorder: 0,
-                    closeUrl: "<?= FE_BASE_URI ?>wap/campaigns/active20171111/images/pop_close.png",
-                    btnMsg: "收下礼品",
-                    popTopColor: "#f03350",
-                    bgSize: "100% 100%",
-                    title: '<p style="font-size:0.72rem;">恭喜您秒杀成功!<span style="display:block;font-size: 0.50666667rem"></span></p>',
-                    popBtmBackground: 'url(<?= FE_BASE_URI ?>wap/campaigns/active20171111/images/page-second/pop_btn.png) no-repeat',
-                    popMiddleHasDiv: true,
-                    contentMsg: "<img style='margin: -0.5rem auto 0.5rem;display: block;width: 4.8rem;' src='"+data.prize.path+"' alt='图片地址'/>",
-                    popBtmBorderRadius: 0,
-                    popBtmFontSize: ".45333333rem",
-                    popBtmColor: '#f03350'
-                }, 'close');
-            },
             waiting: function() {
                 poptpl.popComponent({
                     popBackground: 'url(<?= FE_BASE_URI ?>wap/campaigns/active20171111/images/page-second/pop_bg_waiting.png) no-repeat',
@@ -599,6 +576,7 @@ $this->title = '11月理财节';
             reOrder: function() {
                 this.appointObject =  { appointmentObjectId: 0, appointmentObjectName: '温盈恒180天以上'};
                 this.orderPop = 0;
+                this.appointmentId = true
             },
             newArrayVue: function(str) {
                 var arrayList = new Array();

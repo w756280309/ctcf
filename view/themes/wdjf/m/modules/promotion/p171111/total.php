@@ -64,6 +64,8 @@ $this->title = '11月理财节';
                     this.indexActive[i] = this.status[0];
                     if (0 === i) {
                         $('.a-link').eq(i).attr('href',"/promotion/p171111/first");
+                    } else if (1 === i) {
+                        $('.a-link').eq(i).attr('href',"/promotion/p171111/second");
                     }
                 } else if (this.promoStatus[i] == '1') { // 未开始
                     this.indexActive[i] = this.status[1];
