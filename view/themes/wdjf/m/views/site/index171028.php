@@ -267,7 +267,8 @@ $this->registerJs(<<<JSFILE
         $('#index_banner').html($('#banner_text').text());
         //轮播图
         var bannerSwiper = new Swiper('.banner-box', {
-            autoplay: 1000,//可选选项，自动滑动
+            autoplay: 3000,//可选选项，自动滑动
+            speed: 500,
             loop:true,
             pagination : '.swiper-pagination',
             autoplayDisableOnInteraction: false
