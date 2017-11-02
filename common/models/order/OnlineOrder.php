@@ -2,9 +2,11 @@
 
 namespace common\models\order;
 
+use common\models\coupon\CouponType;
 use common\models\coupon\UserCoupon;
 use common\models\epay\EpayUser;
 use common\models\product\OnlineProduct;
+use common\models\product\RepaymentHelper;
 use common\models\user\MoneyRecord;
 use common\models\user\UserAccount;
 use common\models\user\User;
@@ -406,5 +408,40 @@ class OnlineOrder extends ActiveRecord implements OrderTxInterface
             'uid' => $this->uid,
             'itemId' => $this->id,
         ])->one();
+    }
+
+    /**
+     * 获得订单使用的加息券对象
+     *
+     * @return null|ActiveRecord
+     */
+    public function getBonusCoupon()
+    {
+        $ct = CouponType::tableName();
+        $uc = UserCoupon::tableName();
+
+        return UserCoupon::find()
+            ->innerJoinWith('couponType')
+            ->where(["$uc.isUsed" => true])
+            ->andWhere(["$uc.order_id" => $this->id])
+            ->andWhere(["$ct.type" => 1])
+            ->one();
+    }
+
+    /**
+     * 获得订单加息券对应的预期收益
+     *
+     * return string
+     */
+    public function getBonusProfit()
+    {
+        $profit = '0';
+        $bonusCoupon = $this->bonusCoupon;
+        if (null !== $bonusCoupon) {
+            $bonusCouponType = $bonusCoupon->couponType;
+            $profit = RepaymentHelper::calcBonusProfit($this->order_money, $bonusCouponType->bonusRate, $bonusCouponType->bonusDays);
+        }
+
+        return $profit;
     }
 }

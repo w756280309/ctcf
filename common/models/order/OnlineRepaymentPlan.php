@@ -289,7 +289,18 @@ class OnlineRepaymentPlan extends \yii\db\ActiveRecord
         $duration = intval($loan->expires);//项目期限，当 $refundMethod === 1 时候，单位为天，否则单位为月
         $apr = $ord->yield_rate;//订单的实际利率
         $amount = $ord->order_money;//订单金额
-        return RepaymentHelper::calcRepayment($paymentDates, $repaymentMethod, $startDate, $duration, $amount, $apr);
+
+        //原有计算订单的还款本息数组
+        $repaymentData = RepaymentHelper::calcRepayment($paymentDates, $repaymentMethod, $startDate, $duration, $amount, $apr);
+
+        //原有最后一期还款利息（不包含加息）
+        $lastRepaymentKey = end(array_keys($repaymentData));
+        $lastRepaymentInterest = $repaymentData[$lastRepaymentKey]['interest'];
+
+        //最后一期还款利息 = 原有最后一期还款利息 + 加息券产生收益
+        $repaymentData[$lastRepaymentKey]['interest'] = bcadd($lastRepaymentInterest, $ord->getBonusProfit(), 2);
+
+        return $repaymentData;
     }
 
     /**

@@ -213,4 +213,20 @@ class RepaymentHelper
         $repaymentDates = self::calcRepaymentDate($startDate, $endDate, $repaymentMethod, $duration, $paymentDay, $isCustomRepayment);
         return self::calcRepayment($repaymentDates, $repaymentMethod, $startDate, $duration, $amount, $apr);
     }
+
+    /**
+     * 计算加息券产生的收益
+     *
+     * @param string $amount           金额
+     * @param string $apr              利率
+     * @param string $duration         期限（默认：天）
+     * @param string $baseDurationUnit 期限单位/按年（默认：365天）
+     *
+     * @return string 收益
+     */
+    public static function calcBonusProfit($amount, $apr, $duration, $baseDurationUnit = '365')
+    {
+        //标的投资本金 x 加息券加息利率 x 加息天数 / 365
+        return bcdiv(bcmul(bcmul($amount, $apr, 14), $duration, 14), $baseDurationUnit, 2) ;
+    }
 }
