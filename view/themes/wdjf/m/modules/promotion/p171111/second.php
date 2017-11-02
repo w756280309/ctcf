@@ -5,7 +5,6 @@ $this->title = '11月理财节';
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/popover.css">
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/campaigns/active20171111/css/page-second.css">
 <script src="<?= FE_BASE_URI ?>libs/lib.flexible3.js"></script>
-<script src="<?= FE_BASE_URI ?>libs/jquery-1.11.1.min.js"></script>
 <script src="<?= FE_BASE_URI ?>wap/common/js/popover.js"></script>
 <script src="<?= FE_BASE_URI ?>libs/iscroll.js"></script>
 <script src="<?= FE_BASE_URI ?>libs/vue.min.js"></script>
@@ -166,7 +165,10 @@ $this->title = '11月理财节';
             this.isActive = false;
             this.showStatusBall = true;
             this.isSeckillActive = true;
-            this.init();
+            var that = this;
+            $(function () {
+                that.init();
+            });
         },
         methods: {
             init: function () {
