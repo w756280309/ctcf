@@ -5,7 +5,6 @@ $this->title = '11月理财节';
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/wenjfbase.css">
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/campaigns/active20171111/less/change-one.css">
 <script src="<?= FE_BASE_URI ?>libs/lib.flexible3.js"></script>
-<script src="<?= FE_BASE_URI ?>libs/jquery-1.11.1.min.js"></script>
 <script src="<?= FE_BASE_URI ?>libs/vue.min.js"></script>
 <div class="flex-content" id="app">
     <img class="top-part" src="<?= FE_BASE_URI ?>wap/campaigns/active20171111/images/banner-one.png" alt="图">
