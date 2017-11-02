@@ -65,7 +65,8 @@ $this->title = '11月理财节';
     </div>
     <div class="slide slide-two">
         <div class="seckill">
-            <a class="seckill-record" v-if="secondKillRecord == '1'" v-cloak @click="prizeRecord">秒杀记录>></a>
+            <a class="seckill-record" v-cloak @click="prizeRecord">秒杀记录>></a>
+<!--            <a class="seckill-record" v-if="secondKillRecord == '1'" v-cloak @click="prizeRecord">秒杀记录>></a>-->
             <div class="seckill-nav clearfix">
                 <ul>
                     <li v-cloak v-for="(item,index) in timeNav" :class="[ activeNav == index ?'active':'']" @click="toggle(index)">
@@ -128,14 +129,17 @@ $this->title = '11月理财节';
 <script>
     var promoStatus = $('input[name=promoStatus]').val();
     var isLoggedin = $('input[name=isLoggedin]').val();
-    var myScroll = new iScroll('wrapper',{
-        vScrollbar:false,
-        hScrollbar:false
-    });
+    var myScroll;
     var app = new Vue({
         el: '#app',
         data: {
-            ticket: [],
+//            ticket: [],
+            ticket: [
+                {path:'images/page-second/prizes-2017110610.png',name:'2017110610',time:'2017-03-16'},
+                {path:'images/page-second/prizes-2017110610.png',name:'2017110610',time:'2017-03-16'},
+                {path:'images/page-second/prizes-2017110710.png',name:'2017110610',time:'2017-03-16'},
+                {path:'images/page-second/prizes-2017110820.png',name:'2017110820',time:'2017-03-16'}
+            ],
             prize: {},
             promoStatus: promoStatus,
             isLoggedin: isLoggedin,
@@ -205,8 +209,6 @@ $this->title = '11月理财节';
                     }
                     for(var j = 0; j < data.secondKillList.length; j++) {
                         _this.secondKillList[j].secondKillStatus = data.secondKillList[j].secondKillStatus;
-//                        Vue.set(_this.secondKillList[j],'secondKillStatus',data.secondKillList[j].secondKillStatus);
-
                         _this.secondKillList[j].time = '';
                         _this.secondKillList[j].activityNumber = data.secondKillList[j].activityNumber;
                         _this.secondKillList[j].path = '<?= FE_BASE_URI ?>wap/campaigns/active20171111/images/page-second/gifts-'+data.secondKillList[j].activityNumber+'.png';
@@ -400,8 +402,9 @@ $this->title = '11月理财节';
                     popBtmFontSize: ".45333333rem"
                 },'close');
             },
-            prizeRecord: function() { // 秒杀记录
+            prizeRecord: function(event) { // 秒杀记录
                 var _this = this;
+                var e = event || window.event;
                 $.ajax({
                     url: '/promotion/p171111/second-kill-record',
                     dataType: 'json',
@@ -421,6 +424,8 @@ $this->title = '11月理财节';
                                 var day = myDate.getDate();
                                 _this.ticket[i].time = year+'年'+month+'月'+day+'日';
                             }
+                            $('body').on('touchmove',_this.eventTarget(e), false);
+                            setTimeout(function(){ _this.loaded(); },50);
                         } else {
                             alert(data.message);
                         }
@@ -611,6 +616,12 @@ $this->title = '11月理财节';
                 var arrayList = new Array();
                 arrayList = str;
                 return arrayList;
+            },
+            loaded: function() {
+                myScroll = new iScroll('wrapper',{
+                    vScrollbar:false,
+                    hScrollbar:false
+                });
             }
         }
     });
@@ -630,16 +641,16 @@ $this->title = '11月理财节';
         }, 2000);
     }
     $(function(){
-        var myScroll = new iScroll('wrapper',{
-            vScrollbar:false,
-            hScrollbar:false
-        });
-       //我的奖品按钮
-        $(".seckill-record").on("click",function(){
-            $('.prizes-boxs').show();
-            $('body').on('touchmove',app.eventTarget, false);
-            myScroll.refresh();//点击后初始化iscroll
-        });
+//        var myScroll = new iScroll('wrapper',{
+//            vScrollbar:false,
+//            hScrollbar:false
+//        });
+//       //我的奖品按钮
+//        $(".seckill-record").on("click",function(){
+//            $('.prizes-boxs').show();
+//            $('body').on('touchmove',app.eventTarget, false);
+//            myScroll.refresh();//点击后初始化iscroll
+//        });
         $('#wrapper').on('click',function(event){
             var e = event || window.event;
             e.stopPropagation();

@@ -73,7 +73,8 @@
     <div class="slide slide-two">
         <div class="seckill">
             <!--@click="prizeRecord"-->
-            <a class="seckill-record" v-if="secondKillRecord == '0'" v-cloak >秒杀记录>></a>
+            <a class="seckill-record"  v-cloak >秒杀记录>></a>
+            <!--<a class="seckill-record" v-if="secondKillRecord == '1'" v-cloak >秒杀记录>></a>-->
             <div class="seckill-nav clearfix">
                 <ul>
                     <li v-cloak v-for="(item,index) in timeNav" :class="[ activeNav == index ?'active':'']" @click="toggle(index)">
@@ -143,6 +144,7 @@
 <script>
     var promoStatus = $('input[name=promoStatus2]').val();
     var isLoggedin = $('input[name=isLoggedin]').val();
+    var myScroll;
     var app = new Vue({
         el: '#app',
         data: {
@@ -201,46 +203,71 @@
             this.showStatusBall = true;
             this.isSeckillActive = true;
             this.init();
-            this.downTime();
         },
         methods: {
             downTime: function() {
                 var _this = this;
-//                var count = _this.appointmentTimeLast - _this.appointmentTime; //倒计时/
-                var count = 1509984000 - 1509897600; //倒计时
-                var giftsTime1 = _this.giftsTimeList[0] - 1509933600;
-                var giftsTime2 = _this.giftsTimeList[1] - 1509933600;
-                var giftsTime3 = _this.giftsTimeList[2] - 1509933600;
+                var count = _this.appointmentTimeLast - _this.appointmentTime; //倒计时
+                var giftsTime1 = _this.giftsTimeList[0] - _this.appointmentTime;
+                var giftsTime2 = _this.giftsTimeList[1] - _this.appointmentTime;
+                var giftsTime3 = _this.giftsTimeList[2] - _this.appointmentTime;
                 var t = setInterval(function () {
-                    count--;
-                    if (count <= count-2 ) {
-                        clearInterval(t);
-                    }
                     var a = app.theTimeGap(count);
-                    Vue.set(_this.list[0],'time',a);
+                    for (var i = 0; i < _this.list.length; i++) {
+                        Vue.set(_this.list[i],'time',a);
+                    }
+                    if (count === 0 ) {
+                        clearInterval(t);
+                        Vue.set(_this.list[0],'time',"00:00:00");
+                        return false;
+                    }
+                    count--;
                 }, 1000);
+
                 var t1 = setInterval(function () {
-                    if (giftsTime1 <= 0 ) {
-                        Vue.set(_this.seckillList[0],'giftStatus',0);
+                    var a1 = app.theTimeGap(giftsTime1);
+                    for (var i = 0; i < _this.secondKillList.length; i++) {
+                        Vue.set(_this.secondKillList[0],'time',a1);
                     }
-                    if (giftsTime2 <= 0 ) {
-                        Vue.set(_this.seckillList[1],'giftStatus',0);
-                    }
-                    if (giftsTime3 <= 0 ) {
+                    if (giftsTime1 < 0 ) {
                         clearInterval(t1);
-                        Vue.set(_this.seckillList[2],'giftStatus',0);
+                        if (_this.secondKillList[0].secondKillStatus == 2) {
+                            return
+                        } else {
+                            _this.secondKillList[0].secondKillStatus = 0;
+                        }
                     }
                     giftsTime1--;
-                    giftsTime2--;
-                    giftsTime3--;
-                    var a1 = app.theTimeGap(giftsTime1);
+                }, 1000);
+                var t2 = setInterval(function () {
                     var a2 = app.theTimeGap(giftsTime2);
-                    var a3 = app.theTimeGap(giftsTime3);
-                    for (var i = 0; i < _this.seckillList.length; i++) {
-                        Vue.set(_this.seckillList[0],'time',a1);
-                        Vue.set(_this.seckillList[1],'time',a2);
-                        Vue.set(_this.seckillList[2],'time',a3);
+                    for (var i = 0; i < _this.secondKillList.length; i++) {
+                        Vue.set(_this.secondKillList[1],'time',a2);
                     }
+                    if (giftsTime2 < 0 ) {
+                        clearInterval(t2);
+                        if (_this.secondKillList[1].secondKillStatus == 2) {
+                            return
+                        } else {
+                            _this.secondKillList[1].secondKillStatus = 0;
+                        }
+                    }
+                    giftsTime2--;
+                }, 1000);
+                var t3 = setInterval(function () {
+                    var a3 = app.theTimeGap(giftsTime3);
+                    for (var i = 0; i < _this.secondKillList.length; i++) {
+                        Vue.set(_this.secondKillList[2],'time',a3);
+                    }
+                    if (giftsTime3 < 0 ) {
+                        clearInterval(t3);
+                        if (_this.secondKillList[2].secondKillStatus == 2) {
+                            return
+                        } else {
+                            _this.secondKillList[2].secondKillStatus = 0;
+                        }
+                    }
+                    giftsTime3--;
                 }, 1000);
             },
             theTimeGap: function(s){
