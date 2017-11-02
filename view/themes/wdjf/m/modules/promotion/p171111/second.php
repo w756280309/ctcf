@@ -65,8 +65,7 @@ $this->title = '11月理财节';
     </div>
     <div class="slide slide-two">
         <div class="seckill">
-            <a class="seckill-record" v-cloak @click="prizeRecord">秒杀记录>></a>
-<!--            <a class="seckill-record" v-if="secondKillRecord == '1'" v-cloak @click="prizeRecord">秒杀记录>></a>-->
+            <a class="seckill-record" v-if="secondKillRecord == '1'" v-cloak @click="prizeRecord">秒杀记录>></a>
             <div class="seckill-nav clearfix">
                 <ul>
                     <li v-cloak v-for="(item,index) in timeNav" :class="[ activeNav == index ?'active':'']" @click="toggle(index)">
@@ -105,20 +104,15 @@ $this->title = '11月理财节';
         </div>
     </div>
     <p class="last-tips">本活动最终解释权归温都金服所有</p>
-    <!--对应的奖品列表-->
-    <div class="prizes-boxs" :class="[!!isActive ? 'showed': '' ]">
-        <div class="outer-boxs">
-            <img @click="closePrizeList" class="pop_close close-prize-list" src="<?= FE_BASE_URI ?>wap/campaigns/active20171111/images/pop_close.png"  alt="">
-            <div class="prizes-pomps">
+    <div class="prizes-box" :class="[ !!isActive ? 'show' : '' ]">
+        <div class="outer-box">
+            <img class="pop_close" src="<?= FE_BASE_URI ?>wap/campaigns/active20171111/images/pop_close.png" alt="">
+            <div class="prizes-pomp">
+                <p class="prizes-title">奖品列表</p>
                 <div id="wrapper">
                     <ul>
-                        <li class="prizes-title">奖品列表</li>
                         <li class="clearfix" v-for="item in ticket">
-                            <div class="lf"><img :src="item.path" alt="礼品"></div>
-                            <div class="lf">
-                                <p>{{item.name}}</p>
-                                <p>中奖时间:{{item.time}}</p>
-                            </div>
+                            <div class="lf"><img src="<?= FE_BASE_URI ?>wap/campaigns/active20171111/images/page-second/prizes-2017110610.png" alt="礼品"></div>
                         </li>
                     </ul>
                 </div>
@@ -133,13 +127,7 @@ $this->title = '11月理财节';
     var app = new Vue({
         el: '#app',
         data: {
-//            ticket: [],
-            ticket: [
-                {path:'images/page-second/prizes-2017110610.png',name:'2017110610',time:'2017-03-16'},
-                {path:'images/page-second/prizes-2017110610.png',name:'2017110610',time:'2017-03-16'},
-                {path:'images/page-second/prizes-2017110710.png',name:'2017110610',time:'2017-03-16'},
-                {path:'images/page-second/prizes-2017110820.png',name:'2017110820',time:'2017-03-16'}
-            ],
+            ticket: [],
             prize: {},
             promoStatus: promoStatus,
             isLoggedin: isLoggedin,
@@ -233,7 +221,6 @@ $this->title = '11月理财节';
                     }
                     count--;
                 }, 1000);
-
                 var t1 = setInterval(function () {
                     var a1 = app.theTimeGap(giftsTime1);
                     for (var i = 0; i < _this.secondKillList.length; i++) {
@@ -641,16 +628,6 @@ $this->title = '11月理财节';
         }, 2000);
     }
     $(function(){
-//        var myScroll = new iScroll('wrapper',{
-//            vScrollbar:false,
-//            hScrollbar:false
-//        });
-//       //我的奖品按钮
-//        $(".seckill-record").on("click",function(){
-//            $('.prizes-boxs').show();
-//            $('body').on('touchmove',app.eventTarget, false);
-//            myScroll.refresh();//点击后初始化iscroll
-//        });
         $('#wrapper').on('click',function(event){
             var e = event || window.event;
             e.stopPropagation();

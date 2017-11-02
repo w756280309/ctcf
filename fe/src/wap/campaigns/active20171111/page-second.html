@@ -118,26 +118,43 @@
     <div @click="noStarting">秒杀未开始</div>
 
     <!--对应的奖品列表-->
-    <div class="prizes-boxs" :class="[!!isActive ? 'showed': '' ]">
-        <div class="outer-boxs">
-            <!--@click="closePrizeList()"-->
-            <img class="pop_close close-prize-list" src="images/pop_close.png"  alt="">
-            <div class="prizes-pomps">
-                <div class="prizes-title">奖品列表</div>
+    <div class="prizes-box" :class="[ !!isActive ? 'show' : '' ]">
+        <div class="outer-box">
+            <img class="pop_close" src="images/pop_close.png" alt="">
+            <div class="prizes-pomp">
+                <p class="prizes-title">奖品列表</p>
                 <div id="wrapper">
                     <ul>
                         <li class="clearfix" v-for="item in ticket">
-                            <div class="lf"><img :src="item.path" alt="礼品"></div>
-                            <div class="lf">
-                                <p>{{item.name}}</p>
-                                <p>中奖时间:{{item.time}}</p>
-                            </div>
+                            <div class="lf"><img src="images/page-second/prizes-2017110610.png" alt="礼品"></div>
                         </li>
                     </ul>
                 </div>
             </div>
         </div>
     </div>
+
+    <!--对应的奖品列表-->
+    <!--<div class="prizes-boxs" :class="[!!isActive ? 'showed': '' ]">-->
+        <!--<div class="outer-boxs">-->
+            <!--&lt;!&ndash;@click="closePrizeList()"&ndash;&gt;-->
+            <!--<img class="pop_close close-prize-list" src="images/pop_close.png"  alt="">-->
+            <!--<div class="prizes-pomps">-->
+                <!--<div class="prizes-title">奖品列表</div>-->
+                <!--<div id="wrapper">-->
+                    <!--<ul>-->
+                        <!--<li class="clearfix" v-for="item in ticket">-->
+                            <!--<div class="lf"><img :src="item.path" alt="礼品"></div>-->
+                            <!--<div class="lf">-->
+                                <!--<p>{{item.name}}</p>-->
+                                <!--<p>中奖时间:{{item.time}}</p>-->
+                            <!--</div>-->
+                        <!--</li>-->
+                    <!--</ul>-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
+    <!--</div>-->
     <input type="hidden" name="promoStatus2" value="0">
     <input type="hidden" name="isLoggedin" value="true">
 </div>
