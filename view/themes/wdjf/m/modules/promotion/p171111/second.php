@@ -13,7 +13,6 @@ $this->title = '11月理财节';
     [v-cloak]{display: none}
 </style>
 <div class="flex-content" id="app">
-    <input id="time" name="time" type="hidden" value="<?=  $time ?>">
     <div class="banner">
         <img src="<?= FE_BASE_URI ?>wap/campaigns/active20171111/images/page-second/banner-top.png" alt="banner">
     </div>
@@ -129,7 +128,6 @@ $this->title = '11月理财节';
 <script>
     var promoStatus = $('input[name=promoStatus]').val();
     var isLoggedin = $('input[name=isLoggedin]').val();
-    var activeTime = $('input[name="time"]').val();
     var myScroll = new iScroll('wrapper',{
         vScrollbar:false,
         hScrollbar:false
@@ -141,7 +139,6 @@ $this->title = '11月理财节';
             prize: {},
             promoStatus: promoStatus,
             isLoggedin: isLoggedin,
-            activeTime: activeTime,
             isSeckillActive: '',
             secondKillRecord: 0, //秒杀记录
             timeNav: [10,15,20],
@@ -152,6 +149,7 @@ $this->title = '11月理财节';
             isAppointmented: '0',// 是否预约 1：已预约  0：未预约
             appointObject: { appointmentObjectId: 0, appointmentObjectName: '温盈恒180天以上'}, // 预约标的
             rateCoupon: [{}],
+            appointmentTime: '',
             appointmentTimeLast: '1510156800', // 8号24点时间戳
             todayDater: '', // 日期
             appointmentTimeGap: 0, // 倒计时格式
@@ -173,8 +171,7 @@ $this->title = '11月理财节';
         methods: {
             init: function () {
                 var _this = this;
-                var activeTime = _this.activeTime;
-                var xhr = $.get('/promotion/p171111/get-initialize?time='+activeTime);
+                var xhr = $.get('/promotion/p171111/get-initialize');
                 xhr.done(function(data) {
                     _this.appointmentTime = data.appointmentTime; // 时间戳 1
                     _this.orderPop = data.isAppointmented; //预约框状态 2
@@ -208,6 +205,8 @@ $this->title = '11月理财节';
                     }
                     for(var j = 0; j < data.secondKillList.length; j++) {
                         _this.secondKillList[j].secondKillStatus = data.secondKillList[j].secondKillStatus;
+//                        Vue.set(_this.secondKillList[j],'secondKillStatus',data.secondKillList[j].secondKillStatus);
+
                         _this.secondKillList[j].time = '';
                         _this.secondKillList[j].activityNumber = data.secondKillList[j].activityNumber;
                         _this.secondKillList[j].path = '<?= FE_BASE_URI ?>wap/campaigns/active20171111/images/page-second/gifts-'+data.secondKillList[j].activityNumber+'.png';
@@ -240,7 +239,11 @@ $this->title = '11月理财节';
                     }
                     if (giftsTime1 < 0 ) {
                         clearInterval(t1);
-                        Vue.set(_this.secondKillList[0],'secondKillStatus',0);
+                        if (_this.secondKillList[0].secondKillStatus == 2) {
+                            return
+                        } else {
+                            _this.secondKillList[0].secondKillStatus = 0;
+                        }
                     }
                     giftsTime1--;
                 }, 1000);
@@ -251,7 +254,11 @@ $this->title = '11月理财节';
                     }
                     if (giftsTime2 < 0 ) {
                         clearInterval(t2);
-                        Vue.set(_this.secondKillList[1],'secondKillStatus',0);
+                        if (_this.secondKillList[1].secondKillStatus == 2) {
+                            return
+                        } else {
+                            _this.secondKillList[1].secondKillStatus = 0;
+                        }
                     }
                     giftsTime2--;
                 }, 1000);
@@ -262,7 +269,11 @@ $this->title = '11月理财节';
                     }
                     if (giftsTime3 < 0 ) {
                         clearInterval(t3);
-                        Vue.set(_this.secondKillList[2],'secondKillStatus',0);
+                        if (_this.secondKillList[2].secondKillStatus == 2) {
+                            return
+                        } else {
+                            _this.secondKillList[2].secondKillStatus = 0;
+                        }
                     }
                     giftsTime3--;
                 }, 1000);
@@ -284,9 +295,9 @@ $this->title = '11月理财节';
             },
             computNum: function (event){
                 var e = event || window.event;
-                var n = e.currentTarget.getAttribute('num');
+                var num = e.currentTarget.getAttribute('num');
                 var _this = this;
-                switch(n) {
+                switch(num) {
                     case '2017110610':
                         _this.timeGapBtn = '1509933600';
                         break;
@@ -339,19 +350,22 @@ $this->title = '11月理财节';
                 return this.appointmentTimeGap = hour + ":" + minute + ":" + second;
             },
             seckillAction: function (event) { //秒杀
-                this.computNum(event);
-                this.showPromoStatus();
+                var e = event || window.event;
+                this.computNum(e);
+                this.showPromoStatus(e);
             },
-            showLoginPop: function() {
+            showLoginPop: function(event) {
+                var e = event || window.event;
                 if (this.isLoggedin === 'true') { //已登录
-                    this.seckillResult();
+                    this.seckillResult(e);
                 } else if (this.isLoggedin === 'false') {
                     this.goToLogin('未登录,  去登录弹框');
                 }
             },
-            showPromoStatus: function() { //活动状态
+            showPromoStatus: function(event) { //活动状态
+                var e = event || window.event;
                 if (this.promoStatus == 0){ //进行中
-                    this.showLoginPop();
+                    this.showLoginPop(e);
                     return false;
                 } else if (this.promoStatus == 1) {
                     toastCenter('活动未开始');
@@ -388,9 +402,8 @@ $this->title = '11月理财节';
             },
             prizeRecord: function() { // 秒杀记录
                 var _this = this;
-                var activeTime = _this.activeTime;
                 $.ajax({
-                    url: '/promotion/p171111/second-kill-record?time='+activeTime,
+                    url: '/promotion/p171111/second-kill-record',
                     dataType: 'json',
                     type: 'get',
                     success: function (data) {
@@ -427,9 +440,8 @@ $this->title = '11月理财节';
                     _this.goToLogin('未登录,  去登录弹框');
                     return false;
                 }
-                var activeTime = _this.activeTime;
                 $.ajax({
-                    url: '/promotion/p171111/appointment?time='+activeTime,
+                    url: '/promotion/p171111/appointment',
                     type: 'get',
                     data: {
                         appointmentAward: money,
@@ -462,9 +474,8 @@ $this->title = '11月理财节';
                 var e = event || window.event;
                 _this.timeGapBtn = e.currentTarget.getAttribute('num');
                 var number = _this.timeGapBtn;
-                var activeTime = _this.activeTime;
                 $.ajax({
-                    url: '/promotion/p171111/second-kill?time='+activeTime,
+                    url: '/promotion/p171111/second-kill',
                     dataType: 'json',
                     type: 'get',
                     data: { activeNumber: number},
@@ -491,6 +502,23 @@ $this->title = '11月理财节';
                             _this.secondKillRecord = 1; //秒杀记录 3
                         } else if (data.code == 1) {
                             _this.noStarting();
+                        }  else if (data.code == 8) { // 积分不够
+                            poptpl.popComponent({
+                                popBackground: 'url(<?= FE_BASE_URI ?>wap/campaigns/active20171111/images/page-second/pop_bg_fair.png) no-repeat',
+                                popBorder: 0,
+                                closeUrl: "<?= FE_BASE_URI ?>wap/campaigns/active20171111/images/pop_close.png",
+                                btnMsg: "去投资",
+                                popTopColor: "#f03350",
+                                bgSize: "100% 100%",
+                                title: '<p style="font-size:0.72rem;">您的积分不足，<span style="display:block;font-size: 0.72rem;">您快去投资赚积分吧！</span></p>',
+                                popBtmBackground: 'url(<?= FE_BASE_URI ?>wap/campaigns/active20171111/images/page-second/pop_btn.png) no-repeat',
+                                popMiddleHasDiv: true,
+                                contentMsg: "<div style='margin: 0 auto 0.5rem;display: block;width: 4.8rem;height: 3rem;'></div>",
+                                popBtmBorderRadius: 0,
+                                popBtmFontSize: ".45333333rem",
+                                popBtmColor: '#f03350',
+                                btnHref: "/deal/deal/index"
+                            }, 'close');
                         } else if (data.code == 2 || data.code == 3) { //遗憾
                             _this.waiting();
                             setTimeout(function() {
@@ -513,6 +541,7 @@ $this->title = '11月理财节';
                                     $('div.pop').eq(0).prev($('.mask')).remove();
                                     $('div.pop').eq(0).remove();
                                 }
+                                _this.init();
                             },2000);
                         } else if (data.code == 5) { // 不能再次秒杀了
                             poptpl.popComponent({

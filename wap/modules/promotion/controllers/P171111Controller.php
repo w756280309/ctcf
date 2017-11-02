@@ -2,14 +2,13 @@
 
 namespace wap\modules\promotion\controllers;
 
+use common\models\mall\PointRecord;
 use wap\modules\promotion\models\RankingPromo;
-use common\models\promo\PromoLotteryTicket;
-use common\models\promo\TicketToken;
 
 class P171111Controller extends BaseController
 {
     public $layout = '@app/views/layouts/fe';
-    const SOURCE_ORDER = 'appointment';
+    const SOURCE_APPOINTMENT = 'appointment';
     /**
      * 活动总览页
      */
@@ -77,7 +76,7 @@ class P171111Controller extends BaseController
     public function actionSecond($time = null)
     {
         $promoStatus = 1;
-        $time = !empty($time) ? $time : time();
+        $time = time();
         $current = date('Y-m-d H:i:s',$time);
         $promo = $this->findOr404(RankingPromo::class, ['key' => 'promo_171108']);
         $startTime = $promo->startTime;
@@ -93,10 +92,10 @@ class P171111Controller extends BaseController
         return $this->render('second',['time' => $time]);
     }
     //活动二页面初始化接口
-    public function actionGetInitialize($time = null)
+    public function actionGetInitialize()
     {
         //活动状态
-        $time = !empty($time) ? $time : time();
+        $time = time();
         $currentDate = date('Ymd',$time);
         $currentDate = !($currentDate < '20171106') ? $currentDate : '20171106';
         $currentDate = !($currentDate > '20171108') ? $currentDate : '20171108';
@@ -210,17 +209,8 @@ class P171111Controller extends BaseController
 
         if ($appointmentNumber == 0) {
             $promo = RankingPromo::findOne(['key' => 'promo_171108']);
-            $expireTime = new \DateTime($promo->endTime);
-            $tranaction = \Yii::$app->db->beginTransaction();
-            try {
-                $key = $promo->id . '-' . $user->id . '-' . self::SOURCE_ORDER;
-                TicketToken::initNew($key)->save(false);
-                PromoLotteryTicket::initNew($user, $promo, self::SOURCE_ORDER, $expireTime)->save(false);
-                $tranaction->commit();
-            } catch (\Exception $ex){
-                $tranaction->rollBack();
-                throw $ex;
-            }
+            $promoClass = new $promo->promoClass($promo);
+            $promoClass->addUserTicket($user, self::SOURCE_APPOINTMENT);
         }
         $record = \Yii::$app->db->createCommand(
             "insert into appliament(`userId`,`appointmentTime`,`appointmentAward`,`appointmentObjectId`) VALUES 
@@ -237,7 +227,7 @@ class P171111Controller extends BaseController
         return $appliamentResult;
     }
     //活动二立即秒杀接口
-    public function actionSecondKill($activeNumber = null, $time = null)
+    public function actionSecondKill($activeNumber = null)
     {
         $returnValue = [
             1 => ['code' => 0, 'message' => '秒杀成功', 'prize' => ['activityNumber'=> $activeNumber]],
@@ -246,9 +236,11 @@ class P171111Controller extends BaseController
             4 => ['code' => 3, 'message' => '已秒杀完', 'prize' =>['activityNumber'=> $activeNumber]],
             5 => ['code' => 5, 'message' => '不能再次秒杀', 'prize' => ['activityNumber'=> $activeNumber]],
             6 => ['code' => 6, 'message' => '尚未登录！', 'prize' => ['activityNumber'=> $activeNumber]],
-            7 => ['code' => 7, 'message' => '奖品编号错误', 'prize' => ['activityNumber'=> $activeNumber]]
+            7 => ['code' => 7, 'message' => '奖品编号错误', 'prize' => ['activityNumber'=> $activeNumber]],
+            8 => ['code' => 8, 'message' => '积分不足', 'prize' => ['activityNumber'=> $activeNumber]]
         ];
-        $time = !empty($time) ? $time : time();
+        $time = time();
+        $redis = \Yii::$app->redis;
         $current = date('YmdH',$time);
         $db = \Yii::$app->db;
         //判断是否是奖池中的商品
@@ -265,29 +257,36 @@ class P171111Controller extends BaseController
         if ($current < $activeNumber) {
             return $returnValue[2];
         }
-        $secondKillCount = $db->createCommand(
-            "select count(id) from second_kill where term=".$activeNumber)
-            ->queryScalar();
         $repertoryInfo = $this->getRepertoryInfo($activeNumber);
+        $secondKillCount = $redis->LLEN($activeNumber);
         if ($secondKillCount >= $repertoryInfo['repertoryCount']) {
             return $returnValue[4];
-        } else {
-            try {
-                $record = $db->createCommand(
-                    "insert into second_kill(`userId`,`createTime`,`term`) VALUES ($user->id,$time,$activeNumber)")
-                    ->execute();
-            } catch (\Exception $e) {
-                if (23000 === $e->getCode()) {
-                    return $returnValue[5];
-                }
-                throw $e;
-            }
+        }
 
-            if (!$record) {
+        $tranaction = \Yii::$app->db->beginTransaction();
+        try {
+            $db->createCommand(
+                "insert into second_kill(`userId`,`createTime`,`term`) VALUES ($user->id,$time,$activeNumber)")
+                ->execute();
+            $points = $repertoryInfo['repertoryPoints'];
+            PointRecord::subtractUserPoints($user, $points);
+            $tranaction->commit();
+        } catch (\Exception $e) {
+            $tranaction->rollBack();
+            if (23000 === $e->getCode()) {
+                return $returnValue[5];
+            }
+            if(8 === $e->getCode()) {
+                return $returnValue[8];
+            }
+            if(9 === $e->getCode()) {
                 return $returnValue[3];
             }
-            return $returnValue[1];
+            throw $e;
         }
+
+        $redis->LPUSH($activeNumber,$user->id);
+        return $returnValue[1];
     }
     //活动二秒杀记录接口
     public function actionSecondKillRecord()
@@ -383,38 +382,47 @@ class P171111Controller extends BaseController
             case '2017110610':
                 $repertoryInfo['repertoryCount'] = 3;
                 $repertoryInfo['repertoryName'] = '50元人本超市卡';
+                $repertoryInfo['repertoryPoints'] = 1;
                 break;
             case '2017110615':
                 $repertoryInfo['repertoryCount'] = 39;
                 $repertoryInfo['repertoryName'] = '海天调味礼盒';
+                $repertoryInfo['repertoryPoints'] = 1666;
                 break;
             case '2017110620':
                 $repertoryInfo['repertoryCount'] = 30;
                 $repertoryInfo['repertoryName'] = 'Aquafresh三色牙膏';
+                $repertoryInfo['repertoryPoints'] = 299;
                 break;
             case '2017110710':
                 $repertoryInfo['repertoryCount'] = 3;
                 $repertoryInfo['repertoryName'] = '空气加湿器';
+                $repertoryInfo['repertoryPoints'] = 1;
                 break;
             case '2017110715':
                 $repertoryInfo['repertoryCount'] = 11;
                 $repertoryInfo['repertoryName'] = '电子血压计';
+                $repertoryInfo['repertoryPoints'] = 3626;
                 break;
             case '2017110720':
                 $repertoryInfo['repertoryCount'] = 5;
                 $repertoryInfo['repertoryName'] = '美的养生壶';
+                $repertoryInfo['repertoryPoints'] = 3266;
                 break;
             case '2017110810':
                 $repertoryInfo['repertoryCount'] = 10;
                 $repertoryInfo['repertoryName'] = '特质纸巾';
+                $repertoryInfo['repertoryPoints'] = 1;
                 break;
             case '2017110815':
                 $repertoryInfo['repertoryCount'] = 6;
                 $repertoryInfo['repertoryName'] = '美的电水壶';
+                $repertoryInfo['repertoryPoints'] = 1680;
                 break;
             case '2017110820':
                 $repertoryInfo['repertoryCount'] = 2;
                 $repertoryInfo['repertoryName'] = '小米电饭煲';
+                $repertoryInfo['repertoryPoints'] = 6660;
                 break;
         }
         return $repertoryInfo;
