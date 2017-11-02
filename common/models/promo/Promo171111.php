@@ -62,7 +62,7 @@ class Promo171111 extends BasePromo
         $this->addUserTicket($inviter, $ticketSource);
     }
 
-    private function addUserTicket($user, $source)
+    public function addUserTicket($user, $source)
     {
         $expireTime = new \DateTime($this->ticketEffectEndTime);
         $transaction = \Yii::$app->db->beginTransaction();

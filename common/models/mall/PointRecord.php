@@ -7,6 +7,7 @@ use common\models\offline\OfflineUser;
 use common\models\user\User;
 use common\utils\TxUtils;
 use yii\db\ActiveRecord;
+use Yii;
 
 /**
  * 积分流水表
@@ -182,5 +183,36 @@ class PointRecord extends ActiveRecord
     public function getUser()
     {
         return $this->hasOne(User::class, ['id' => 'user_id']);
+    }
+//根据用户信息和相应的积分减掉用户的积分以及在用户积分流水表（point_record）中添加记录
+    public static function subtractUserPoints(User $user, $points)
+    {
+            if ($user->points < $points) {
+                throw new \Exception('积分不足',8);
+            }
+            $res = Yii::$app->db->createCommand(
+                "UPDATE `user` SET `points` = `points` - :points WHERE `id` = :userId", ['points' => $points, 'userId' => $user->id])
+                ->execute();
+            if (!$res) {
+                throw new \Exception('系统繁忙',9);
+            }
+            $user->refresh();
+            if ($user->points < 0) {
+                throw new \Exception('积分不足',8);
+            }
+            $finalPoints = $user->points;
+            $record = new PointRecord([
+                'sn' => TxUtils::generateSn('PR'),
+                'user_id' => $user->id,
+                'ref_type' => PointRecord::TYPE_POINT_ORDER,
+                'ref_id' => '',
+                'decr_points' => $points,
+                'final_points' => $finalPoints,
+                'recordTime' => date('Y-m-d H:i:s'),
+            ]);
+            $res = $record->save();
+            if (!$res) {
+                throw new \Exception('系统繁忙',9);
+            }
     }
 }
