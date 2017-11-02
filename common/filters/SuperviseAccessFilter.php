@@ -1,6 +1,7 @@
 <?php
 namespace common\filters;
 
+use common\controllers\HelpersTrait;
 use common\models\stats\Perf;
 use common\models\user\User;
 use Yii;
@@ -15,6 +16,8 @@ use yii\web\Response;
  */
 class SuperviseAccessFilter extends ActionFilter
 {
+    use HelpersTrait;
+
     public function beforeAction($action)
     {
         $actionId = $action->getUniqueId();
@@ -73,6 +76,12 @@ class SuperviseAccessFilter extends ActionFilter
             $response = Yii::$app->response;
             $user = Yii::$app->getUser()->getIdentity();
             if (is_null($user)) {
+                //如果是m站且App版本大于1.6.2
+                if (!defined('IN_APP') || (defined('IN_APP') && strcmp($this->getAppVersion(), '1.6.2') > 0)) {
+                    if ('deal/deal/index' === $actionId) {
+                        return true;
+                    }
+                }
                 $action->controller->layout = '@app/views/layouts/normal';
                 $response->content = $action->controller->render('@wap/views/guide/login_guide.php', [
                     'statsData' => $this->getStatsData(),
