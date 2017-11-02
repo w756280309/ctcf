@@ -160,7 +160,11 @@ class FenxiaoController extends BaseController
     public function actionList()
     {
         $query = Admin::find();
-
+        //设置搜索条件
+        $name = Yii::$app->request->get('name');
+        if ($name) {
+            $query->andFilterWhere(['like', 'name', $name]);
+        }
         $pages = new Pagination(['totalCount' => $query->count(), 'pageSize' => '15']);
         $model = $query->offset($pages->offset)->limit($pages->limit)->orderBy('id desc')->all();
 
@@ -212,13 +216,13 @@ class FenxiaoController extends BaseController
     {
         $obj->imageFile = UploadedFile::getInstance($obj, 'imageFile');
 
-        $path = Yii::getAlias('@backend').'/web/upload/fenxiao';
+        $path = Yii::getAlias('@backend') . '/web/upload/fenxiao';
         if (!file_exists($path)) {
             mkdir($path);
         }
 
         if ($obj->imageFile) {
-            $picPath = 'upload/fenxiao/fx'.time().'.'.$obj->imageFile->extension;
+            $picPath = 'upload/fenxiao/fx' . time() . '.' . $obj->imageFile->extension;
 
             $obj->imageFile->saveAs($picPath);
             $obj->imageFile = $picPath;
@@ -282,11 +286,11 @@ class FenxiaoController extends BaseController
                 ]);
 
                 $code = $userAff->save();
-            } elseif ($userAff->affiliator_id !== (int) $data['aff_id']) {    //修改分销商
+            } elseif ($userAff->affiliator_id !== (int)$data['aff_id']) {    //修改分销商
                 $userAff->trackCode = $affCam->trackCode;
                 $userAff->affiliator_id = $data['aff_id'];
 
-                $dataForLog =  clone $userAff;
+                $dataForLog = clone $userAff;
                 $code = $userAff->save();
             } else {     //如果没有修改,则忽略,直接返回成功
                 $code = true;
@@ -317,6 +321,7 @@ class FenxiaoController extends BaseController
         }
 
     }
+
     //查看二维码
     public function actionCodeView($ticket)
     {
