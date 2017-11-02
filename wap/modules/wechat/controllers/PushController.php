@@ -51,7 +51,18 @@ class PushController extends Controller
             } else if (strtolower($postObj->Event) == 'click') {
                 $res = self::sendMessage($postObj->EventKey, $postObj->FromUserName);
             }
-
+            //被动回复
+            if (strtolower($postObj->MsgType) == 'text' && !is_null($postObj->Content)) {
+                if(strpos(strval($postObj->Content), '答案') !== false) {
+                    return "<xml>
+<ToUserName><![CDATA[".$postObj->FromUserName."]]></ToUserName>
+<FromUserName><![CDATA[]]></FromUserName>
+<CreateTime>".time()."</CreateTime>
+<MsgType><![CDATA[text]]></MsgType>
+<Content><![CDATA[".'白色（北极熊）。北极熊从北极点出发，向南向东向北走了个三角形回到北极点。'."]]></Content>
+</xml>";
+                }
+            }
             if (($postObj->Event == 'subscribe' || $postObj->Event == 'SCAN') && $postObj->FromUserName) {
                 //绑定渠道
                 if ($postObj->Event == 'subscribe') {
