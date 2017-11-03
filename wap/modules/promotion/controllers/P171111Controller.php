@@ -199,6 +199,21 @@ class P171111Controller extends BaseController
         if(\Yii::$app->user->isGuest) {
             return [
                 'code' => 2,
+                'message' => '没有登录',
+                'rateCoupon' => null,
+            ];
+        }
+        if (!preg_match("/^\d*$/",$appointmentAward)) {
+            return [
+                'code' => 3,
+                'message' => '预约金额必须是数字',
+                'rateCoupon' => null,
+            ];
+        }
+        if($appointmentAward <= 0 || $appointmentAward > 9999) {
+            return [
+                'code' => 4,
+                'message' => '预约金额在0-9999之间',
                 'rateCoupon' => null,
             ];
         }
@@ -219,9 +234,11 @@ class P171111Controller extends BaseController
         if ($record) {
             $rateCoupon = $this->getCouponInfo($appointmentAward, $appointmentObjectId);
             $appliamentResult['code'] = 0;
+            $appliamentResult['message'] = '预约成功';
             $appliamentResult['rateCoupon'] = $rateCoupon;
         } else {
             $appliamentResult['code'] = 1;
+            $appliamentResult['message'] = '预约失败';
             $appliamentResult['rateCoupon'] = null;
         }
         return $appliamentResult;
