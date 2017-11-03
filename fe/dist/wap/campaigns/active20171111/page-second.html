@@ -33,7 +33,7 @@
             <div class="select-box">
                 <div class="money input-box">
                     <label for="">预约金额</label>
-                    <input type="tel" placeholder="请输入金额" @click="inputListener('input')" value="" onafterpaste="this.value=this.value.replace(/\D/g,'')">
+                    <input id="order-money" type="tel" placeholder="请输入金额"  @click="inputListener" value="" onafterpaste="this.value=this.value.replace(/\D/g,'')">
                     <i class="unit">万元</i>
                 </div>
                 <div class="select-item input-box clearfix">
@@ -348,13 +348,13 @@
                 var e = event || window.event;
                 e.preventDefault();
             },
-            inputListener: function(obj) {
-                document.querySelector(obj).addEventListener('input', function () {
+            inputListener: function() {
+                document.querySelector('#order-money').addEventListener('input', function () {
                     var _this = this;
                     _this.onkeyup = function() {
                         _this.value = _this.value.replace(/\D/g,'');
-                        if (_this.value.length > 8) {
-                            _this.value = _this.value.substr(0,8);
+                        if (_this.value.length > 4) {
+                            _this.value = _this.value.substr(0,4);
                             return false;
                         }
                     }

@@ -491,6 +491,7 @@
 .prizes-box .prizes-pomp #wrapper ul li {
   width: 100%;
   padding: 0.33333333rem 0;
+  height: 2.88rem;
   border-bottom: 1px dashed #ffb7bd;
 }
 .prizes-box .prizes-pomp #wrapper ul li div:first-child {
@@ -526,6 +527,7 @@
 }
 .prizes-box .prizes-pomp #wrapper ul li:first-child {
   padding: 0 0 0.33333333rem 0;
+  height: 2.55rem;
 }
 .showed {
   display: block;
