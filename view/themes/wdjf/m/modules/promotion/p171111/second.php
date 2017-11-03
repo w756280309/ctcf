@@ -161,13 +161,10 @@ $this->title = '11月理财节';
             this.isActive = false;
             this.showStatusBall = true;
             this.isSeckillActive = true;
-//            var that = this;
-//            $(function () {
-//                that.init();
-//            });
-        },
-        mounted:function(){
-           this.init();
+            var that = this;
+            $(function () {
+                that.init();
+            });
         },
         methods: {
             init: function () {
