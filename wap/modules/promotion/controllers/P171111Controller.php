@@ -125,7 +125,7 @@ class P171111Controller extends BaseController
                 ->queryScalar();
             $repertoryInfo[$i] = $this->getRepertoryInfo($currentDate . $activeTime[$i]);
         }
-        $isActiveDate = in_array($newDate,['20171106','20171107','201711087']);
+        $isActiveDate = in_array($newDate,['20171106','20171107','20171108']);
         if ($currentTime >= '10:00:00' && $isActiveDate){
             if ($perSecondKillCount[0] >= $repertoryInfo[0]['repertoryCount']) {
                 $activeNav = 1;
