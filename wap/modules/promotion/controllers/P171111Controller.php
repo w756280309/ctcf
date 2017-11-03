@@ -97,6 +97,7 @@ class P171111Controller extends BaseController
         //活动状态
         $time = time();
         $currentDate = date('Ymd',$time);
+        $newDate = $currentDate;
         $currentDate = !($currentDate < '20171106') ? $currentDate : '20171106';
         $currentDate = !($currentDate > '20171108') ? $currentDate : '20171108';
         $currentTime = date('H:i:s',$time);
@@ -124,7 +125,8 @@ class P171111Controller extends BaseController
                 ->queryScalar();
             $repertoryInfo[$i] = $this->getRepertoryInfo($currentDate . $activeTime[$i]);
         }
-        if ($currentTime >= '10:00:00'){
+        $isActiveDate = in_array($newDate,['20171106','20171107','201711087']);
+        if ($currentTime >= '10:00:00' && $isActiveDate){
             if ($perSecondKillCount[0] >= $repertoryInfo[0]['repertoryCount']) {
                 $activeNav = 1;
                 $secondKillList[0]['secondKillStatus'] = 2;
@@ -132,7 +134,7 @@ class P171111Controller extends BaseController
                 $secondKillList[0]['secondKillStatus'] = 0;
             }
         }
-        if ($currentTime >= '15:00:00') {
+        if ($currentTime >= '15:00:00' && $isActiveDate) {
             $activeNav = 1;
             if ($perSecondKillCount[1] >= $repertoryInfo[1]['repertoryCount']) {
                 $activeNav = 2;
@@ -141,7 +143,7 @@ class P171111Controller extends BaseController
                 $secondKillList[1]['secondKillStatus'] = 0;
             }
         }
-        if ($currentTime >= '20:00:00' && $currentTime < '23:59:59') {
+        if ($currentTime >= '20:00:00' && $isActiveDate) {
             $activeNav = 2;
             if ($perSecondKillCount[2] >= $repertoryInfo[2]['repertoryCount']) {
                 $secondKillList[2]['secondKillStatus'] = 2;
