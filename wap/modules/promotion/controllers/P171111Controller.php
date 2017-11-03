@@ -191,6 +191,7 @@ class P171111Controller extends BaseController
         $json['secondKillList'] = $secondKillList;
         $json['isVested'] = $isVested;
         $json['isLogin'] =$isLogin;
+        $json['dddd'] = $data;
         return $json;
     }
     //活动二预约接口
