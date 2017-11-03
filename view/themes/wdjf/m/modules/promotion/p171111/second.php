@@ -25,7 +25,7 @@ $this->title = '11月理财节';
             <div class="select-box">
                 <div class="money input-box">
                     <label for="">预约金额</label>
-                    <input type="tel" placeholder="请输入金额" @click="inputListener('input')" value="" onafterpaste="this.value=this.value.replace(/\D/g,'')">
+                    <input id="order-money" type="tel" placeholder="请输入金额" @click="inputListener('#order-money')" value="" onafterpaste="this.value=this.value.replace(/\D/g,'')">
                     <i class="unit">万元</i>
                 </div>
                 <div class="select-item input-box clearfix">
@@ -331,8 +331,12 @@ $this->title = '11月理财节';
                     var _this = this;
                     _this.onkeyup = function() {
                         _this.value = _this.value.replace(/\D/g,'');
-                        if (_this.value.length > 8) {
-                            _this.value = _this.value.substr(0,8);
+                        var FirstChar= _this.value.substr(0,1);
+                        if (FirstChar == 0) {
+                            _this.value = ''+_this.value.substr(1);
+                        }
+                        if (_this.value.length > 4) {
+                            _this.value = _this.value.substr(0,4);
                             return false;
                         }
                     }
@@ -427,7 +431,7 @@ $this->title = '11月理财节';
             },
             nowOrder: function() { //预约
                 var _this = this;
-                var reg = /^\d{0,8}$/;
+                var reg = /^\d{0,4}$/;
                 var money = $('input[type="tel"]').val();
                 $('input[type="tel"]').css('border','none');
                 if (money == '' || !reg.test(money)) {
