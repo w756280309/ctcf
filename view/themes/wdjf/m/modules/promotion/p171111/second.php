@@ -421,10 +421,8 @@ $this->title = '11月理财节';
                                 var day = myDate.getDate();
                                 _this.ticket[i].time = year+'年'+month+'月'+day+'日';
                             }
-                            $('body').on('touchmove',function(e) {
-                                _this.eventTarget(e);
-                                setTimeout(function(){ _this.loaded(); },50);
-                            }, false);
+                            $('body').on('touchmove',function(e) {_this.eventTarget(e);}, false);
+                            setTimeout(function(){ _this.loaded(); },100);
                         } else {
                             alert(data.message);
                         }
