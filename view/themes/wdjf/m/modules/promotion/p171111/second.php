@@ -64,8 +64,7 @@ $this->title = '11月理财节';
     </div>
     <div class="slide slide-two">
         <div class="seckill">
-            <a class="seckill-record" v-if="secondKillRecord == '0'" v-cloak @click="prizeRecord">秒杀记录>></a>
-<!--            <a class="seckill-record" v-if="secondKillRecord == '1'" v-cloak @click="prizeRecord">秒杀记录>></a>-->
+            <a class="seckill-record" v-if="secondKillRecord == '1'" v-cloak @click="prizeRecord">秒杀记录>></a>
             <div class="seckill-nav clearfix">
                 <ul>
                     <li v-cloak v-for="(item,index) in timeNav" :class="[ activeNav == index ?'active':'']" @click="toggle(index)">
