@@ -12,7 +12,7 @@
   padding-top: 1.6rem;
   width: 100%;
   height: 2.64rem;
-  background: url("../images/page-second/banner-times.png") no-repeat center center;
+  background: url("__FE_BASE_URI__wap/campaigns/active20171111/images/page-second/banner-times.png") no-repeat center center;
   background-size: 100% 100%;
 }
 .flex-content .banner-bottom .time {
@@ -22,13 +22,13 @@
   color: #fff;
   font-size: 0.34666667rem;
   text-align: center;
-  background: url("../images/page-second/times-bg.png") no-repeat center center;
+  background: url("__FE_BASE_URI__wap/campaigns/active20171111/images/page-second/times-bg.png") no-repeat center center;
   background-size: 100% 100%;
 }
 .flex-content .slide-one {
   width: 100%;
   height: 10.84rem;
-  background: url("../images/page-second/orders-bg.png") no-repeat center center;
+  background: url("__FE_BASE_URI__wap/campaigns/active20171111/images/page-second/orders-bg.png") no-repeat center center;
   background-size: 100% 100%;
 }
 .flex-content .slide-one .order {
@@ -56,7 +56,7 @@
 .flex-content .slide-one .order .coupon .coupon-left {
   width: 2.68rem;
   height: 2.48rem;
-  background: #fff url("../images/page-second/coupons-bg.png") no-repeat center center;
+  background: #fff url("__FE_BASE_URI__wap/campaigns/active20171111/images/page-second/coupons-bg.png") no-repeat center center;
   background-size: cover;
 }
 .flex-content .slide-one .order .coupon .coupon-left p {
@@ -235,7 +235,7 @@
   margin-top: 0.34666667rem;
   width: 100%;
   height: 7.06666667rem;
-  background: url("../images/page-second/seckill-bg.png") no-repeat center center;
+  background: url("__FE_BASE_URI__wap/campaigns/active20171111/images/page-second/seckill-bg.png") no-repeat center center;
   background-size: 100% 100%;
 }
 .flex-content .slide-two .seckill {
@@ -320,15 +320,15 @@
   display: block;
 }
 .flex-content .slide-two .seckill .seckill-content .seckill-time-btn {
-  background: url("../images/page-second/seckill-time-btn.png") no-repeat center center;
+  background: url("__FE_BASE_URI__wap/campaigns/active20171111/images/page-second/seckill-time-btn.png") no-repeat center center;
   background-size: cover;
 }
 .flex-content .slide-two .seckill .seckill-content .seckill-btn {
-  background: url("../images/page-second/seckill-btn.png") no-repeat center center;
+  background: url("__FE_BASE_URI__wap/campaigns/active20171111/images/page-second/seckill-btn.png") no-repeat center center;
   background-size: cover;
 }
 .flex-content .slide-two .seckill .seckill-content .seckill-btn-over {
-  background: url("../images/page-second/seckill-over-btn.png") no-repeat center center;
+  background: url("__FE_BASE_URI__wap/campaigns/active20171111/images/page-second/seckill-over-btn.png") no-repeat center center;
   background-size: cover;
 }
 .flex-content .slide-two .seckill .time-txt {
@@ -345,7 +345,7 @@
   margin-top: 0.37333333rem;
   width: 100%;
   height: 6.46666667rem;
-  background: url("../images/page-second/joyous-card.png") no-repeat center center;
+  background: url("__FE_BASE_URI__wap/campaigns/active20171111/images/page-second/joyous-card.png") no-repeat center center;
   background-size: 100% 100%;
 }
 .flex-content .slide-third .order-third {
@@ -381,7 +381,7 @@
   width: 2.82666667rem;
   height: 0.8rem;
   line-height: 0.8rem;
-  background: url("../images/bg_btn.png") no-repeat;
+  background: url("__FE_BASE_URI__wap/campaigns/active20171111/images/bg_btn.png") no-repeat;
   background-size: contain;
   text-align: center;
   font-size: 0.45333333rem;
@@ -459,7 +459,7 @@
   border-radius: 0.35rem;
   max-height: 11rem;
   overflow: hidden;
-  background: url("../images/pop_bg.png") #fff center top no-repeat;
+  background: url("__FE_BASE_URI__wap/campaigns/active20171111/images/pop_bg.png") #fff center top no-repeat;
   background-size: cover;
   border: 0.05333333rem solid #fa3151;
 }
@@ -522,8 +522,8 @@
   border: none;
 }
 .prizes-box .prizes-pomp #wrapper ul li:last-child {
-  padding-bottom: 1.4rem;
-  height: 4.28rem;
+  padding-bottom: .8rem;
+  height: 3.68rem;
   border-bottom: none;
 }
 .prizes-box .prizes-pomp #wrapper ul li:first-child {
