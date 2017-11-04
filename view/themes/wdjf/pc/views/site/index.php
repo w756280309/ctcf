@@ -347,10 +347,10 @@ JSFILE
 <div class="background-box">
     <div class="background-title">股东背景</div>
     <div class="background-bottom">
-        <div class="background-left">
+        <div class="background-left" style="width: 100%;text-align: center">
             <img src="<?= ASSETS_BASE_URI ?>images/logo1.png" alt="">
         </div>
-        <div class="background-right">
+        <div class="background-right" style="display: none">
             <img src="<?= ASSETS_BASE_URI ?>images/logo2-new.png" alt="">
         </div>
     </div>
