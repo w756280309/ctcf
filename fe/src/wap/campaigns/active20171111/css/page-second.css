@@ -441,7 +441,7 @@
 .prizes-box img.pop_close {
   width: 0.61333333rem;
   position: absolute;
-  top: -1.06666667rem;
+  top: -1.5rem;
   right: -0.15rem;
   cursor: pointer;
   z-index: 1000002;

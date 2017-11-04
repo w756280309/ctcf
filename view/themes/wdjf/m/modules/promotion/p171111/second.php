@@ -3,7 +3,7 @@ $this->title = '11月理财节';
 ?>
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/wenjfbase.css">
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/popover.css">
-<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/campaigns/active20171111/css/page-second.css?v=0.2">
+<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/campaigns/active20171111/css/page-second.css?v=0.21">
 <script src="<?= FE_BASE_URI ?>libs/lib.flexible3.js"></script>
 <script src="<?= FE_BASE_URI ?>wap/common/js/popover.js?v=2.0"></script>
 <script src="<?= FE_BASE_URI ?>libs/iscroll.js"></script>
