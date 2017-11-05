@@ -130,13 +130,7 @@ $this->title = '11月理财节';
     var app = new Vue({
         el: '#app',
         data: {
-//            ticket: [],
-            ticket: [
-                {path:'<?= FE_BASE_URI ?>wap/campaigns/active20171111/images/page-second/prizes-2017110610.png',name:'2017110610',time:'2017-03-16'},
-                {path:'<?= FE_BASE_URI ?>wap/campaigns/active20171111/images/page-second/prizes-2017110610.png',name:'2017110610',time:'2017-03-16'},
-                {path:'<?= FE_BASE_URI ?>wap/campaigns/active20171111/images/page-second/prizes-2017110710.png',name:'2017110610',time:'2017-03-16'},
-                {path:'<?= FE_BASE_URI ?>wap/campaigns/active20171111/images/page-second/prizes-2017110820.png',name:'2017110820',time:'2017-03-16'}
-            ],
+            ticket: [],
             prize: {},
             promoStatus: promoStatus,
             isLoggedin: isLoggedin,
