@@ -86,6 +86,7 @@ class P171111Controller extends BaseController
         } else if ($current >= $endTime) {
             $promoStatus = 2;
         }
+
         //写入layout文件
         $view = \Yii::$app->view;
         $view->params['promoStatus'] = $promoStatus;
@@ -175,12 +176,12 @@ class P171111Controller extends BaseController
                 if ($secondKillRecordCount > 0) {
                     $secondKillRecord = 1;
                 }
-                //投资接口
-                $promo = $this->findOr404(RankingPromo::class, ['key' => 'promo_171108']);
-                $promoClass = new $promo->promoClass($promo);
-                $data = $promoClass->getPromoTaskStatus($user);
-                $isVested = $data['investTask'];
             }
+            //投资接口
+            $promo = $this->findOr404(RankingPromo::class, ['key' => 'promo_171108']);
+            $promoClass = new $promo->promoClass($promo);
+            $data = $promoClass->getPromoTaskStatus($user);
+            $isVested = $data['investTask'];
         }
         $json['isLogin'] = $isLogin;
         $json['isAppointmented'] = $isAppointmented;
@@ -191,7 +192,6 @@ class P171111Controller extends BaseController
         $json['secondKillList'] = $secondKillList;
         $json['isVested'] = $isVested;
         $json['isLogin'] =$isLogin;
-        $json['dddd'] = $data;
         return $json;
     }
     //活动二预约接口
