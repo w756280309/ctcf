@@ -3,9 +3,9 @@ $this->title = '11月理财节';
 ?>
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/wenjfbase.css">
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/popover.css">
-<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/campaigns/active20171111/css/page-second.css">
+<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/campaigns/active20171111/css/page-second.css?v=0.21">
 <script src="<?= FE_BASE_URI ?>libs/lib.flexible3.js"></script>
-<script src="<?= FE_BASE_URI ?>wap/common/js/popover.js"></script>
+<script src="<?= FE_BASE_URI ?>wap/common/js/popover.js?v=2.0"></script>
 <script src="<?= FE_BASE_URI ?>libs/iscroll.js"></script>
 <script src="<?= FE_BASE_URI ?>libs/vue.min.js"></script>
 <style>
@@ -25,7 +25,7 @@ $this->title = '11月理财节';
             <div class="select-box">
                 <div class="money input-box">
                     <label for="">预约金额</label>
-                    <input type="tel" placeholder="请输入金额" @click="inputListener('input')" value="" onafterpaste="this.value=this.value.replace(/\D/g,'')">
+                    <input id="order-money" type="tel" placeholder="请输入金额" @click="inputListener('#order-money')" value="" onafterpaste="this.value=this.value.replace(/\D/g,'')">
                     <i class="unit">万元</i>
                 </div>
                 <div class="select-item input-box clearfix">
@@ -103,14 +103,13 @@ $this->title = '11月理财节';
         </div>
     </div>
     <p class="last-tips">本活动最终解释权归温都金服所有</p>
-    <!--对应的奖品列表-->
-    <div class="prizes-boxs" :class="[!!isActive ? 'showed': '' ]">
-        <div class="outer-boxs">
-            <img @click="closePrizeList" class="pop_close close-prize-list" src="<?= FE_BASE_URI ?>wap/campaigns/active20171111/images/pop_close.png"  alt="">
-            <div class="prizes-pomps">
+    <div class="prizes-box" :class="[ !!isActive ? 'show' : '' ]">
+        <div class="outer-box">
+            <img class="pop_close" @click="closePrizeList" src="<?= FE_BASE_URI ?>wap/campaigns/active20171111/images/pop_close.png" alt="">
+            <div class="prizes-pomp">
+                <p class="prizes-title">奖品列表</p>
                 <div id="wrapper">
                     <ul>
-                        <li class="prizes-title">奖品列表</li>
                         <li class="clearfix" v-for="item in ticket">
                             <div class="lf"><img :src="item.path" alt="礼品"></div>
                             <div class="lf">
@@ -127,10 +126,7 @@ $this->title = '11月理财节';
 <script>
     var promoStatus = $('input[name=promoStatus]').val();
     var isLoggedin = $('input[name=isLoggedin]').val();
-    var myScroll = new iScroll('wrapper',{
-        vScrollbar:false,
-        hScrollbar:false
-    });
+    var myScroll;
     var app = new Vue({
         el: '#app',
         data: {
@@ -207,8 +203,6 @@ $this->title = '11月理财节';
                     }
                     for(var j = 0; j < data.secondKillList.length; j++) {
                         _this.secondKillList[j].secondKillStatus = data.secondKillList[j].secondKillStatus;
-//                        Vue.set(_this.secondKillList[j],'secondKillStatus',data.secondKillList[j].secondKillStatus);
-
                         _this.secondKillList[j].time = '';
                         _this.secondKillList[j].activityNumber = data.secondKillList[j].activityNumber;
                         _this.secondKillList[j].path = '<?= FE_BASE_URI ?>wap/campaigns/active20171111/images/page-second/gifts-'+data.secondKillList[j].activityNumber+'.png';
@@ -233,7 +227,6 @@ $this->title = '11月理财节';
                     }
                     count--;
                 }, 1000);
-
                 var t1 = setInterval(function () {
                     var a1 = app.theTimeGap(giftsTime1);
                     for (var i = 0; i < _this.secondKillList.length; i++) {
@@ -338,8 +331,12 @@ $this->title = '11月理财节';
                     var _this = this;
                     _this.onkeyup = function() {
                         _this.value = _this.value.replace(/\D/g,'');
-                        if (_this.value.length > 8) {
-                            _this.value = _this.value.substr(0,8);
+                        var FirstChar= _this.value.substr(0,1);
+                        if (FirstChar == 0) {
+                            _this.value = ''+_this.value.substr(1);
+                        }
+                        if (_this.value.length > 4) {
+                            _this.value = _this.value.substr(0,4);
                             return false;
                         }
                     }
@@ -402,8 +399,9 @@ $this->title = '11月理财节';
                     popBtmFontSize: ".45333333rem"
                 },'close');
             },
-            prizeRecord: function() { // 秒杀记录
+            prizeRecord: function(event) { // 秒杀记录
                 var _this = this;
+                var e = event || window.event;
                 $.ajax({
                     url: '/promotion/p171111/second-kill-record',
                     dataType: 'json',
@@ -423,6 +421,8 @@ $this->title = '11月理财节';
                                 var day = myDate.getDate();
                                 _this.ticket[i].time = year+'年'+month+'月'+day+'日';
                             }
+                            $('body').on('touchmove',function(e) {_this.eventTarget(e);}, false);
+                            setTimeout(function(){ _this.loaded(); },100);
                         } else {
                             alert(data.message);
                         }
@@ -431,7 +431,7 @@ $this->title = '11月理财节';
             },
             nowOrder: function() { //预约
                 var _this = this;
-                var reg = /^\d{0,8}$/;
+                var reg = /^\d{0,4}$/;
                 var money = $('input[type="tel"]').val();
                 $('input[type="tel"]').css('border','none');
                 if (money == '' || !reg.test(money)) {
@@ -501,7 +501,7 @@ $this->title = '11月理财节';
                                 popBtmFontSize: ".45333333rem",
                                 popBtmColor: '#f03350'
                             }, 'close');
-                            _this.secondKillRecord = 1; //秒杀记录 3
+                            _this.init();
                         } else if (data.code == 1) {
                             _this.noStarting();
                         }  else if (data.code == 8) { // 积分不够
@@ -613,6 +613,12 @@ $this->title = '11月理财节';
                 var arrayList = new Array();
                 arrayList = str;
                 return arrayList;
+            },
+            loaded: function() {
+                myScroll = new iScroll('wrapper',{
+                    vScrollbar:false,
+                    hScrollbar:false
+                });
             }
         }
     });
@@ -632,20 +638,9 @@ $this->title = '11月理财节';
         }, 2000);
     }
     $(function(){
-        var myScroll = new iScroll('wrapper',{
-            vScrollbar:false,
-            hScrollbar:false
-        });
-       //我的奖品按钮
-        $(".seckill-record").on("click",function(){
-            $('.prizes-boxs').show();
-            $('body').on('touchmove',app.eventTarget, false);
-            myScroll.refresh();//点击后初始化iscroll
-        });
         $('#wrapper').on('click',function(event){
             var e = event || window.event;
             e.stopPropagation();
         });
     });
-
 </script>

@@ -86,6 +86,7 @@ class P171111Controller extends BaseController
         } else if ($current >= $endTime) {
             $promoStatus = 2;
         }
+
         //写入layout文件
         $view = \Yii::$app->view;
         $view->params['promoStatus'] = $promoStatus;
@@ -97,6 +98,7 @@ class P171111Controller extends BaseController
         //活动状态
         $time = time();
         $currentDate = date('Ymd',$time);
+        $newDate = $currentDate;
         $currentDate = !($currentDate < '20171106') ? $currentDate : '20171106';
         $currentDate = !($currentDate > '20171108') ? $currentDate : '20171108';
         $currentTime = date('H:i:s',$time);
@@ -124,7 +126,8 @@ class P171111Controller extends BaseController
                 ->queryScalar();
             $repertoryInfo[$i] = $this->getRepertoryInfo($currentDate . $activeTime[$i]);
         }
-        if ($currentTime >= '10:00:00'){
+        $isActiveDate = in_array($newDate,['20171106','20171107','20171108']);
+        if ($currentTime >= '10:00:00' && $isActiveDate){
             if ($perSecondKillCount[0] >= $repertoryInfo[0]['repertoryCount']) {
                 $activeNav = 1;
                 $secondKillList[0]['secondKillStatus'] = 2;
@@ -132,7 +135,7 @@ class P171111Controller extends BaseController
                 $secondKillList[0]['secondKillStatus'] = 0;
             }
         }
-        if ($currentTime >= '15:00:00') {
+        if ($currentTime >= '15:00:00' && $isActiveDate) {
             $activeNav = 1;
             if ($perSecondKillCount[1] >= $repertoryInfo[1]['repertoryCount']) {
                 $activeNav = 2;
@@ -141,9 +144,9 @@ class P171111Controller extends BaseController
                 $secondKillList[1]['secondKillStatus'] = 0;
             }
         }
-        if ($currentTime >= '20:00:00' && $currentTime < '23:59:59') {
+        if ($currentTime >= '20:00:00' && $isActiveDate) {
             $activeNav = 2;
-            if ($perSecondKillCount[2] >= $repertoryInfo[1]['repertoryCount']) {
+            if ($perSecondKillCount[2] >= $repertoryInfo[2]['repertoryCount']) {
                 $secondKillList[2]['secondKillStatus'] = 2;
             } else {
                 $secondKillList[2]['secondKillStatus'] = 0;
@@ -166,19 +169,19 @@ class P171111Controller extends BaseController
                 $appointmentObjectId = $appointmentInfo['appointmentObjectId'];       //预约类型
                 //利率
                 $rateCoupon = $this->getCouponInfo($appointmentAward, $appointmentObjectId);
-                //秒杀记录是否显示
-                $secondKillRecordCount = $db->createCommand(
-                    "select count(id) from second_kill WHERE userId = $user->id"
-                )->queryScalar();
-                if ($secondKillRecordCount > 0) {
-                    $secondKillRecord = 1;
-                }
-                //投资接口
-                $promo = $this->findOr404(RankingPromo::class, ['key' => 'promo_171108']);
-                $promoClass = new $promo->promoClass($promo);
-                $data = $promoClass->getPromoTaskStatus($user);
-                $isVested = $data['investTask'];
             }
+            //秒杀记录是否显示
+            $secondKillRecordCount = $db->createCommand(
+                "select count(id) from second_kill WHERE userId = $user->id"
+            )->queryScalar();
+            if ($secondKillRecordCount > 0) {
+                $secondKillRecord = 1;
+            }
+            //投资接口
+            $promo = $this->findOr404(RankingPromo::class, ['key' => 'promo_171108']);
+            $promoClass = new $promo->promoClass($promo);
+            $data = $promoClass->getPromoTaskStatus($user);
+            $isVested = $data['investTask'];
         }
         $json['isLogin'] = $isLogin;
         $json['isAppointmented'] = $isAppointmented;
@@ -199,6 +202,21 @@ class P171111Controller extends BaseController
         if(\Yii::$app->user->isGuest) {
             return [
                 'code' => 2,
+                'message' => '没有登录',
+                'rateCoupon' => null,
+            ];
+        }
+        if (!preg_match("/^\d*$/",$appointmentAward)) {
+            return [
+                'code' => 3,
+                'message' => '预约金额必须是数字',
+                'rateCoupon' => null,
+            ];
+        }
+        if($appointmentAward <= 0 || $appointmentAward > 9999) {
+            return [
+                'code' => 4,
+                'message' => '预约金额在0-9999之间',
                 'rateCoupon' => null,
             ];
         }
@@ -219,9 +237,11 @@ class P171111Controller extends BaseController
         if ($record) {
             $rateCoupon = $this->getCouponInfo($appointmentAward, $appointmentObjectId);
             $appliamentResult['code'] = 0;
+            $appliamentResult['message'] = '预约成功';
             $appliamentResult['rateCoupon'] = $rateCoupon;
         } else {
             $appliamentResult['code'] = 1;
+            $appliamentResult['message'] = '预约失败';
             $appliamentResult['rateCoupon'] = null;
         }
         return $appliamentResult;

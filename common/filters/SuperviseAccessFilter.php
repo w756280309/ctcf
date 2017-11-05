@@ -2,6 +2,7 @@
 namespace common\filters;
 
 use common\controllers\HelpersTrait;
+use common\models\growth\AppMeta;
 use common\models\stats\Perf;
 use common\models\user\User;
 use Yii;
@@ -55,6 +56,14 @@ class SuperviseAccessFilter extends ActionFilter
                 $response->content = $action->controller->render('@frontend/views/guide/idcard_guide.php');
                 return false;
             }
+
+            if ('on' === AppMeta::getValue('xs_require_hide_deal')) {
+                if (!$user->getUserIsInvested()) {
+                    $action->controller->layout = '@frontend/views/layouts/main';
+                    $response->content = $action->controller->render('@frontend/views/guide/invest_guide.php');
+                    return false;
+                }
+            }
         }
         return true;
     }
@@ -91,6 +100,43 @@ class SuperviseAccessFilter extends ActionFilter
                 $action->controller->layout = '@app/views/layouts/normal';
                 $response->content = $action->controller->render('@wap/views/guide/idcard_guide.php');
                 return false;
+            }
+
+            if ('on' === AppMeta::getValue('xs_require_hide_deal') && 'deal/deal/index' === $actionId) {
+                if (!$user->getUserIsInvested()) {
+                    $view = \Yii::$app->view;
+                    $view->registerJsFile(ASSETS_BASE_URI.'layer/layer.js');
+                    $view->registerCssFile(ASSETS_BASE_URI.'layer/need/layer.css', ['position' => 1]);
+                    $view->registerCss(<<<CSS
+.customer-layer-popuo .layui-m-layercont {
+    text-align:left;
+}
+.customer-layer-popuo .layui-m-layerbtn span[yes] {
+    color :#ff6058;
+}
+
+.layui-m-layershade {
+    background-color:rgba(0,0,0,0.97) !important;
+} 
+CSS
+);
+                    $view->registerJs(<<<JS
+layer.open({
+        title: [
+            '温馨提示',
+            'background-color: #ff6058; color:#fff;'
+        ]
+        ,content: '您好，目前理财产品正在更新，您可以先浏览其他内容。   (详情可拨打客服电话400-101-5151)'
+        ,shadeClose:false
+        ,className: 'customer-layer-popuo'
+        ,btn: ['先逛一逛']
+        ,yes: function(index){
+            location.href ="/?mark="+Math.random()*100000;
+        }
+    });
+JS
+);
+                }
             }
         }
         return true;

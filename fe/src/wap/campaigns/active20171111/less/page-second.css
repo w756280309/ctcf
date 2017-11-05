@@ -415,7 +415,7 @@
   height: 1.17333333rem;
   line-height: 1.17333333rem;
 }
-.prizes-boxs {
+.prizes-box {
   display: none;
   height: 100%;
   width: 100%;
@@ -423,31 +423,30 @@
   top: 0;
   left: 0;
   z-index: 11;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.6);
 }
-.prizes-boxs .outer-boxs {
+.prizes-box .outer-box {
   width: 91.2%;
   max-width: 9.12rem;
+  height: 10rem;
   position: absolute;
   top: 50%;
   left: 50%;
   z-index: 10;
-  /*根据实际情况设定*/
   transform: translate(-50%, -50%);
   -webkit-transform: translate(-50%, -50%);
   -moz-transform: translate(-50%, -50%);
   border-radius: 0.35rem;
-  min-height: 8.3rem;
 }
-.prizes-boxs .outer-boxs img.pop_close {
+.prizes-box img.pop_close {
   width: 0.61333333rem;
   position: absolute;
-  top: -1.06666667rem;
+  top: -1.5rem;
   right: -0.15rem;
   cursor: pointer;
-  z-index: 10000;
+  z-index: 1000002;
 }
-.prizes-boxs .outer-boxs .prizes-pomps {
+.prizes-box .prizes-pomp {
   width: 100%;
   position: absolute;
   top: 50%;
@@ -458,65 +457,78 @@
   -moz-transform: translate(-50%, -50%);
   padding: 0.56rem 6.66666667%;
   border-radius: 0.35rem;
-  height: 8.3rem;
+  max-height: 11rem;
   overflow: hidden;
   background: url("../images/pop_bg.png") #fff center top no-repeat;
   background-size: cover;
   border: 0.05333333rem solid #fa3151;
 }
-.prizes-boxs .outer-boxs .prizes-pomps .prizes-title {
-  padding-bottom: 0.65rem;
-  line-height: 1;
+.prizes-box .prizes-pomp p.prizes-title {
+  position: absolute;
+  top: .35rem;
+  left: 50%;
+  transform: translate(-50%, 0);
+  -webkit-transform: translate(-50%, 0);
+  -moz-transform: translate(-50%, 0);
   font-size: 0.66666667rem;
   color: salmon;
   text-align: center;
   border: none;
+  line-height: 1;
 }
-.prizes-boxs .outer-boxs .prizes-pomps #wrapper {
-  height: 9rem;
+.prizes-box .prizes-pomp #wrapper {
+  height: 10rem;
   width: 100%;
   position: relative;
-  top: 0;
+  top: 1rem;
   left: 0;
+  -webkit-overflow-scrolling: touch;
 }
-.prizes-boxs .outer-boxs .prizes-pomps #wrapper ul {
+.prizes-box .prizes-pomp #wrapper ul {
   width: 100%;
+  height: auto;
 }
-.prizes-boxs .outer-boxs .prizes-pomps #wrapper li {
+.prizes-box .prizes-pomp #wrapper ul li {
   width: 100%;
   padding: 0.33333333rem 0;
+  height: 2.88rem;
   border-bottom: 1px dashed #ffb7bd;
 }
-.prizes-boxs .outer-boxs .prizes-pomps #wrapper li div:first-child {
+.prizes-box .prizes-pomp #wrapper ul li div:first-child {
   width: 40%;
 }
-.prizes-boxs .outer-boxs .prizes-pomps #wrapper li div:first-child img {
+.prizes-box .prizes-pomp #wrapper ul li div:first-child img {
   width: 2.26666667rem;
   display: block;
   margin: 0 auto;
 }
-.prizes-boxs .outer-boxs .prizes-pomps #wrapper li div:last-child {
+.prizes-box .prizes-pomp #wrapper ul li div:last-child {
   width: 60%;
-  color: #666;
+  color: #666666;
   line-height: 1;
 }
-.prizes-boxs .outer-boxs .prizes-pomps #wrapper li div:last-child p:first-child {
+.prizes-box .prizes-pomp #wrapper ul li div:last-child p:first-child {
   font-size: 0.45333333rem;
   margin: 0.5rem 0 .32rem;
 }
-.prizes-boxs .outer-boxs .prizes-pomps #wrapper li div:last-child p:last-child {
+.prizes-box .prizes-pomp #wrapper ul li div:last-child p:last-child {
   font-size: 0.34666667rem;
 }
-.prizes-boxs .outer-boxs .prizes-pomps #wrapper li:last-child {
-  padding-bottom: 1.6rem;
-  border-bottom: none;
-}
-.prizes-boxs .outer-boxs .prizes-pomps #wrapper li.no-prizes {
+.prizes-box .prizes-pomp #wrapper ul li.no-prizes {
   color: #21b1e0;
   font-size: 0.4rem;
   margin-top: 2.53333333rem;
   text-align: center;
   border: none;
+}
+.prizes-box .prizes-pomp #wrapper ul li:last-child {
+  padding-bottom: 1.4rem;
+  height: 4.28rem;
+  border-bottom: none;
+}
+.prizes-box .prizes-pomp #wrapper ul li:first-child {
+  padding: 0 0 0.33333333rem 0;
+  height: 2.55rem;
 }
 .showed {
   display: block;
