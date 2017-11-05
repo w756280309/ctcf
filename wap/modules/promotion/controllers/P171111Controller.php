@@ -169,13 +169,13 @@ class P171111Controller extends BaseController
                 $appointmentObjectId = $appointmentInfo['appointmentObjectId'];       //预约类型
                 //利率
                 $rateCoupon = $this->getCouponInfo($appointmentAward, $appointmentObjectId);
-                //秒杀记录是否显示
-                $secondKillRecordCount = $db->createCommand(
-                    "select count(id) from second_kill WHERE userId = $user->id"
-                )->queryScalar();
-                if ($secondKillRecordCount > 0) {
-                    $secondKillRecord = 1;
-                }
+            }
+            //秒杀记录是否显示
+            $secondKillRecordCount = $db->createCommand(
+                "select count(id) from second_kill WHERE userId = $user->id"
+            )->queryScalar();
+            if ($secondKillRecordCount > 0) {
+                $secondKillRecord = 1;
             }
             //投资接口
             $promo = $this->findOr404(RankingPromo::class, ['key' => 'promo_171108']);
