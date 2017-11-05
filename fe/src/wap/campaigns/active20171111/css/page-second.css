@@ -441,7 +441,7 @@
 .prizes-box img.pop_close {
   width: 0.61333333rem;
   position: absolute;
-  top: -1.06666667rem;
+  top: -1.5rem;
   right: -0.15rem;
   cursor: pointer;
   z-index: 1000002;
@@ -477,7 +477,7 @@
   line-height: 1;
 }
 .prizes-box .prizes-pomp #wrapper {
-  height: 9rem;
+  height: 9.7rem;
   width: 100%;
   position: relative;
   top: 1rem;
@@ -491,6 +491,7 @@
 .prizes-box .prizes-pomp #wrapper ul li {
   width: 100%;
   padding: 0.33333333rem 0;
+  height: 2.88rem;
   border-bottom: 1px dashed #ffb7bd;
 }
 .prizes-box .prizes-pomp #wrapper ul li div:first-child {
@@ -521,11 +522,13 @@
   border: none;
 }
 .prizes-box .prizes-pomp #wrapper ul li:last-child {
-  padding-bottom: .8rem;
+  padding-bottom: 1.4rem;
+  height: 4.28rem;
   border-bottom: none;
 }
 .prizes-box .prizes-pomp #wrapper ul li:first-child {
   padding: 0 0 0.33333333rem 0;
+  height: 2.55rem;
 }
 .showed {
   display: block;

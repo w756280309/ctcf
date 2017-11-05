@@ -3,7 +3,7 @@ $this->title = '11月理财节';
 ?>
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/wenjfbase.css">
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/popover.css">
-<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/campaigns/active20171111/css/page-second.css?v=0.1">
+<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/campaigns/active20171111/css/page-second.css?v=0.21">
 <script src="<?= FE_BASE_URI ?>libs/lib.flexible3.js"></script>
 <script src="<?= FE_BASE_URI ?>wap/common/js/popover.js?v=2.0"></script>
 <script src="<?= FE_BASE_URI ?>libs/iscroll.js"></script>
@@ -130,7 +130,13 @@ $this->title = '11月理财节';
     var app = new Vue({
         el: '#app',
         data: {
-            ticket: [],
+//            ticket: [],
+            ticket: [
+                {path:'<?= FE_BASE_URI ?>wap/campaigns/active20171111/images/page-second/prizes-2017110610.png',name:'2017110610',time:'2017-03-16'},
+                {path:'<?= FE_BASE_URI ?>wap/campaigns/active20171111/images/page-second/prizes-2017110610.png',name:'2017110610',time:'2017-03-16'},
+                {path:'<?= FE_BASE_URI ?>wap/campaigns/active20171111/images/page-second/prizes-2017110710.png',name:'2017110610',time:'2017-03-16'},
+                {path:'<?= FE_BASE_URI ?>wap/campaigns/active20171111/images/page-second/prizes-2017110820.png',name:'2017110820',time:'2017-03-16'}
+            ],
             prize: {},
             promoStatus: promoStatus,
             isLoggedin: isLoggedin,
@@ -421,8 +427,8 @@ $this->title = '11月理财节';
                                 var day = myDate.getDate();
                                 _this.ticket[i].time = year+'年'+month+'月'+day+'日';
                             }
-                            $('body').on('touchmove',_this.eventTarget(e), false);
-                            setTimeout(function(){ _this.loaded(); },50);
+                            $('body').on('touchmove',function(e) {_this.eventTarget(e);}, false);
+                            setTimeout(function(){ _this.loaded(); },100);
                         } else {
                             alert(data.message);
                         }
@@ -502,7 +508,6 @@ $this->title = '11月理财节';
                                 popBtmColor: '#f03350'
                             }, 'close');
                             _this.init();
-//                            _this.secondKillRecord = 1; //秒杀记录 3
                         } else if (data.code == 1) {
                             _this.noStarting();
                         }  else if (data.code == 8) { // 积分不够
@@ -644,5 +649,4 @@ $this->title = '11月理财节';
             e.stopPropagation();
         });
     });
-
 </script>
