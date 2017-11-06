@@ -98,7 +98,9 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => YiiAsse
                     'label' => '贷后余额（元）',
                     'value' => function ($data) {
                         return StringUtils::amountFormat2($data['fm']);
-                    }
+                    },
+                    'contentOptions' => ['class' => 'money'],
+                    'headerOptions' => ['class' => 'money'],
                 ],
                 [
                     'attribute' => 'm',

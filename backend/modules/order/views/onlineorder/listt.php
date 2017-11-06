@@ -21,18 +21,6 @@ $loan_status = Yii::$app->request->get('loan_status');
                 </select>
             </td>
             <td>
-                <span class="title">开始时间</span>
-                <input id="loan_order_form_start" type="text" value="<?= Yii::$app->request->get('start') ?>"
-                       name="start" onclick='WdatePicker();' class="m-wrap span8"/>
-            </td>
-            <td>
-                <span class="title">结束时间</span>
-                <input id="loan_order_form_end" type="text" value="<?= Yii::$app->request->get('end') ?>" name="end"
-                       onclick='WdatePicker();' class="m-wrap span8"/>
-            </td>
-        </tr>
-        <tr>
-            <td>
                 <span class="title">标的状态</span>
                 <select name="loan_status" id="loan_status" m-wrap span6>
                     <option value="">---全部---</option>
@@ -52,6 +40,18 @@ $loan_status = Yii::$app->request->get('loan_status');
                 </select>
             </td>
             <td>
+                <span class="title">开始时间</span>
+                <input id="loan_order_form_start" type="text" value="<?= Yii::$app->request->get('start') ?>"
+                       name="start" onclick='WdatePicker();' class="m-wrap span8"/>
+            </td>
+            <td>
+                <span class="title">结束时间</span>
+                <input id="loan_order_form_end" type="text" value="<?= Yii::$app->request->get('end') ?>" name="end"
+                       onclick='WdatePicker();' class="m-wrap span8"/>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="4">
                 <div align="right" class="search-btn">
                     <button class="btn blue btn-block loan_order_search" style="width: 100px;">搜索 <i
                             class="m-icon-swapright m-icon-white"></i></button>
