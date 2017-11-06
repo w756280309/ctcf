@@ -5,7 +5,7 @@ $this->title = '11月理财节';
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/popover.css">
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/campaigns/active20171111/css/page-second.css?v=0.1">
 <script src="<?= FE_BASE_URI ?>libs/lib.flexible3.js"></script>
-<script src="<?= FE_BASE_URI ?>wap/common/js/popover.js"></script>
+<script src="<?= FE_BASE_URI ?>wap/common/js/popover.js?v=2.0"></script>
 <script src="<?= FE_BASE_URI ?>libs/iscroll.js"></script>
 <script src="<?= FE_BASE_URI ?>libs/vue.min.js"></script>
 <style>
@@ -161,10 +161,13 @@ $this->title = '11月理财节';
             this.isActive = false;
             this.showStatusBall = true;
             this.isSeckillActive = true;
-            var that = this;
-            $(function () {
-                that.init();
-            });
+//            var that = this;
+//            $(function () {
+//                that.init();
+//            });
+        },
+        mounted:function(){
+           this.init();
         },
         methods: {
             init: function () {
@@ -501,7 +504,8 @@ $this->title = '11月理财节';
                                 popBtmFontSize: ".45333333rem",
                                 popBtmColor: '#f03350'
                             }, 'close');
-                            _this.secondKillRecord = 1; //秒杀记录 3
+                            _this.init();
+//                            _this.secondKillRecord = 1; //秒杀记录 3
                         } else if (data.code == 1) {
                             _this.noStarting();
                         }  else if (data.code == 8) { // 积分不够
