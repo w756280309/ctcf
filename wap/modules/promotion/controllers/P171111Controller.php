@@ -3,7 +3,9 @@
 namespace wap\modules\promotion\controllers;
 
 use common\models\mall\PointRecord;
+use common\models\user\UserInfo;
 use wap\modules\promotion\models\RankingPromo;
+use yii\helpers\ArrayHelper;
 
 class P171111Controller extends BaseController
 {
@@ -446,5 +448,81 @@ class P171111Controller extends BaseController
                 break;
         }
         return $repertoryInfo;
+    }
+
+    /**
+     * 活动三
+     */
+    public function actionThird()
+    {
+        //判断是否开过宝箱
+        $drawBoxStatus = 'false';
+        $promo = $this->findOr404(RankingPromo::class, ['key' => 'promo_million_1111']);
+        $promo11 = $this->findOr404(RankingPromo::class, ['key' => 'promo_171111']);
+        $promoClass = new $promo->promoClass($promo);
+        $promo11Class = new $promo11->promoClass($promo11);
+        $activeTicketCount = 0; //双11活动剩余有效喜卡个数
+        $totalMoney = 0; //双11活动期间累计年化
+        if (null !== ($user = $this->getAuthedUser())) {
+            try {
+                $promoClass->addUserTicket($user, 'free');
+            } catch (\Exception $ex) {
+                //防止重复插入抽奖机会
+            }
+            $ticketCount = $promoClass->getActiveTicketCount($user);
+            if ($ticketCount > 0) {
+                $drawBoxStatus = 'true';
+            }
+            $activeTicketCount = $promo11Class->getActiveTicketCount($user);
+            $startTime = new \DateTime('2017-11-01 00:00:00');
+            $endTime = new \DateTime($promo11->endTime);
+            if (null !== $user) {
+                $totalMoney = UserInfo::calcAnnualInvest($user->id, $startTime->format('Y-m-d'), $endTime->format('Y-m-d'));
+            }
+        }
+        $this->registerPromoStatusInView($promo11);
+
+        return $this->render('third', [
+            'drawBoxStatus' => $drawBoxStatus,
+            'activeTicketCount' => $activeTicketCount,
+            'totalMoney' => rtrim(rtrim(bcdiv($totalMoney, 10000, 2), '0'), '.'),
+        ]);
+    }
+
+    /**
+     * 喜卡兑换列表与百万红包获奖列表合并
+     * 列表按照获奖时间倒序排序
+     */
+    public function actionThirdAwardList()
+    {
+        $user = $this->getAuthedUser();
+        if (null === $user) {
+            return [];
+        }
+        $promo = RankingPromo::findOne(['key' => 'promo_million_1111']);
+        $promoCard = RankingPromo::findOne(['key' => 'promo_171111']);
+        if (null === $promo || null === $promoCard) {
+            return [];
+        }
+
+        //获得百万红包的获奖列表
+        $promoMillionClass = new $promo->promoClass($promo);
+        $millionList = $promoMillionClass->getAwardList($user);
+        //获得双11喜卡的获奖列表
+        $promoCardClass = new $promo->promoClass($promoCard);
+        $cardList = $promoCardClass->getAwardList($user);
+
+        //合并数组
+        $awardList = ArrayHelper::merge($cardList, $millionList);
+        foreach ($awardList as $k => $award) {
+            if (empty($award)) {
+                unset($awardList[$k]);
+            }
+        }
+
+        //按照获奖时间排序
+        ArrayHelper::multisort($awardList, 'awardTime', SORT_DESC);
+
+        return $awardList;
     }
 }
